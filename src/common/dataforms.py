@@ -170,7 +170,7 @@ class BooleanField(DataField):
 			v = self.getTagData('value')
 			if v in ('0', 'false'): return False
 			if v in ('1', 'true'): return True
-			if v is None: return None
+			if v is None: return False # default value is False
 			raise WrongFieldValue
 		def fset(self, value):
 			self.setTagData('value', value and '1' or '0')

@@ -4,14 +4,19 @@
 ## Copyright (C) 2006 Gustavo Carneiro <gjcarneiro@gmail.com>
 ## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 import gobject
 if __name__ == '__main__':
@@ -46,6 +51,13 @@ class MusicTrackListener(gobject.GObject):
 		
 		bus = dbus.SessionBus()
 
+		## MPRIS
+		bus.add_signal_receiver(self._mpris_music_track_change_cb, 'TrackChange',
+			'org.freedesktop.MediaPlayer')
+		bus.add_signal_receiver(self._player_playing_changed_cb, 'StatusChange',
+			'org.freedesktop.MediaPlayer')
+			
+
 		## Muine
 		bus.add_signal_receiver(self._muine_music_track_change_cb, 'SongChanged',
 			'org.gnome.Muine.Player')
@@ -63,7 +75,7 @@ class MusicTrackListener(gobject.GObject):
 			'playingChanged', 'org.gnome.Rhythmbox.Player')
 		bus.add_signal_receiver(self._player_playing_song_property_changed_cb,
 			'playingSongPropertyChanged', 'org.gnome.Rhythmbox.Player')
-			
+
 		## Banshee
 		banshee_bus = dbus.SessionBus()
 		dubus = banshee_bus.get_object('org.freedesktop.DBus',
@@ -111,6 +123,18 @@ class MusicTrackListener(gobject.GObject):
 		if b == 'rb:stream-song-title':
 			self.emit('music-track-changed', self._last_playing_music)
 
+	def _mpris_properties_extract(self, song):
+		info = MusicTrackInfo()
+		info.title = song['title']
+		info.album = song['album']
+		info.artist = song['artist']
+		info.duration = int(song['length'])
+		return info
+
+	def _mpris_music_track_change_cb(self, arg):
+		info = self._mpris_properties_extract(arg)
+		self.emit('music-track-changed', info)
+
 	def _muine_properties_extract(self, song_string):
 		d = dict((x.strip() for x in  s1.split(':', 1)) for s1 in \
 			song_string.split('\n'))
@@ -136,6 +160,8 @@ class MusicTrackListener(gobject.GObject):
 		return info
 	
 	def _rhythmbox_music_track_change_cb(self, uri):
+		if not uri:
+			return
 		bus = dbus.SessionBus()
 		rbshellobj = bus.get_object('org.gnome.Rhythmbox',
 			'/org/gnome/Rhythmbox/Shell')
@@ -233,6 +259,8 @@ class MusicTrackListener(gobject.GObject):
 				'/org/gnome/Rhythmbox/Player'), 'org.gnome.Rhythmbox.Player')
 			rbshell = dbus.Interface(rbshellobj, 'org.gnome.Rhythmbox.Shell')
 			uri = player.getPlayingUri()
+			if not uri:
+				return None
 			props = rbshell.getSongProperties(uri)
 			info = self._rhythmbox_properties_extract(props)
 			self._last_playing_music = info

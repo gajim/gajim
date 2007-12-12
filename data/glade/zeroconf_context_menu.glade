@@ -1,49 +1,41 @@
-<?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
-<!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
-
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
+<!--*- mode: xml -*-->
 <glade-interface>
-
-<widget class="GtkMenu" id="zeroconf_context_menu">
-
-  <child>
-    <widget class="GtkImageMenuItem" id="status_menuitem">
-      <property name="visible">True</property>
-      <property name="label" translatable="yes">_Status</property>
-      <property name="use_underline">True</property>
-
-      <child internal-child="image">
-	<widget class="GtkImage" id="image1258">
-	  <property name="visible">True</property>
-	  <property name="stock">gtk-network</property>
-	  <property name="icon_size">1</property>
-	  <property name="xalign">0.5</property>
-	  <property name="yalign">0.5</property>
-	  <property name="xpad">0</property>
-	  <property name="ypad">0</property>
-	</widget>
-      </child>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkImageMenuItem" id="zeroconf_properties_menuitem">
-      <property name="visible">True</property>
-      <property name="label" translatable="yes">_Modify Account...</property>
-      <property name="use_underline">True</property>
-
-      <child internal-child="image">
-	<widget class="GtkImage" id="image1259">
-	  <property name="visible">True</property>
-	  <property name="stock">gtk-preferences</property>
-	  <property name="icon_size">1</property>
-	  <property name="xalign">0.5</property>
-	  <property name="yalign">0.5</property>
-	  <property name="xpad">0</property>
-	  <property name="ypad">0</property>
-	</widget>
-      </child>
-    </widget>
-  </child>
-</widget>
-
+  <widget class="GtkMenu" id="zeroconf_context_menu">
+    <child>
+      <widget class="GtkImageMenuItem" id="status_menuitem">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">_Status</property>
+        <property name="use_underline">True</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="image1258">
+            <property name="visible">True</property>
+            <property name="stock">gtk-network</property>
+            <property name="icon_size">1</property>
+          </widget>
+        </child>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkSeparatorMenuItem" id="separatormenuitem1">
+        <property name="visible">True</property>
+        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkImageMenuItem" id="zeroconf_properties_menuitem">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">_Modify Account...</property>
+        <property name="use_underline">True</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="image1259">
+            <property name="visible">True</property>
+            <property name="stock">gtk-preferences</property>
+            <property name="icon_size">1</property>
+          </widget>
+        </child>
+      </widget>
+    </child>
+  </widget>
 </glade-interface>

@@ -3,17 +3,22 @@
 ##
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import gtk
@@ -26,7 +31,6 @@ import gtkgui_helpers
 
 from common import gajim
 from common import helpers
-from common import i18n
 
 class BaseTooltip:
 	''' Base Tooltip class;
@@ -65,6 +69,8 @@ class BaseTooltip:
 		self.win.set_border_width(3)
 		self.win.set_resizable(False)
 		self.win.set_name('gtk-tooltips')
+		if gtk.gtk_version >= (2, 10, 0) and gtk.pygtk_version >= (2, 10, 0):
+			self.win.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLTIP)
 		
 		self.win.set_events(gtk.gdk.POINTER_MOTION_MASK)
 		self.win.connect_after('expose_event', self.expose)
@@ -90,7 +96,7 @@ class BaseTooltip:
 		half_width = requisition.width / 2 + 1
 		if self.preferred_position[0] < half_width: 
 			self.preferred_position[0] = 0
-		elif self.preferred_position[0]  + requisition.width > \
+		elif self.preferred_position[0] + requisition.width > \
 			self.screen.get_width() + half_width:
 			self.preferred_position[0] = self.screen.get_width() - \
 				requisition.width
@@ -100,7 +106,7 @@ class BaseTooltip:
 		if self.preferred_position[1] + requisition.height > \
 			self.screen.get_height():
 			# flip tooltip up
-			self.preferred_position[1] -= requisition.height  + \
+			self.preferred_position[1] -= requisition.height + \
 				self.widget_height + 8
 		if self.preferred_position[1] < 0:
 			self.preferred_position[1] = 0
@@ -437,8 +443,8 @@ class RosterTooltip(NotificationAreaTooltip):
 			transport = gajim.get_transport_name_from_jid(
 				prim_contact.jid)
 			if transport:
-				file_path = os.path.join(gajim.DATA_DIR, 'iconsets', 
-					'transports', transport , '16x16')
+				file_path = os.path.join(helpers.get_transport_path(transport),
+					'16x16')
 			else:
 				iconset = gajim.config.get('iconset')
 				if not iconset:
@@ -576,7 +582,7 @@ class RosterTooltip(NotificationAreaTooltip):
 			if property[1]:
 				label.set_markup(property[0])
 				vcard_table.attach(label, 1, 2, vcard_current_row,
-					vcard_current_row + 1, gtk.FILL,  vertical_fill, 0, 0)
+					vcard_current_row + 1, gtk.FILL, vertical_fill, 0, 0)
 				label = gtk.Label()
 				label.set_alignment(0, 0)
 				label.set_markup(property[1])
@@ -617,7 +623,7 @@ class FileTransfersTooltip(BaseTooltip):
 		properties.append((_('Name: '), 
 			gobject.markup_escape_text(file_name)))
 		if file_props['type'] == 'r':
-			type =  _('Download')
+			type = _('Download')
 			actor = _('Sender: ') 
 			sender = unicode(file_props['sender']).split('/')[0]
 			name = gajim.contacts.get_first_contact_from_jid( 
@@ -639,18 +645,18 @@ class FileTransfersTooltip(BaseTooltip):
 		properties.append((_('Transferred: '), helpers.convert_bytes(transfered_len)))
 		status = '' 
 		if not file_props.has_key('started') or not file_props['started']:
-			status =  _('Not started')
+			status = _('Not started')
 		elif file_props.has_key('connected'):
 			if file_props.has_key('stopped') and \
 			file_props['stopped'] == True:
 				status = _('Stopped')
 			elif file_props['completed']:
-					status = _('Completed')
+				status = _('Completed')
 			elif file_props['connected'] == False:
 				if file_props['completed']:
 					status = _('Completed')
 			else:
-				if file_props.has_key('paused') and  \
+				if file_props.has_key('paused') and \
 				file_props['paused'] == True:
 					status = _('?transfer status:Paused')
 				elif file_props.has_key('stalled') and \
@@ -660,8 +666,12 @@ class FileTransfersTooltip(BaseTooltip):
 				else:
 					status = _('Transferring')
 		else:
-			status =  _('Not started')
+			status = _('Not started')
 		properties.append((_('Status: '), status))
+		if 'desc' in file_props:
+			file_desc = file_props['desc']
+			properties.append((_('Description: '), gobject.markup_escape_text(
+				file_desc)))
 		while properties:
 			property = properties.pop(0)
 			current_row += 1
@@ -669,7 +679,7 @@ class FileTransfersTooltip(BaseTooltip):
 			label.set_alignment(0, 0)
 			label.set_markup(property[0])
 			ft_table.attach(label, 1, 2, current_row, current_row + 1, 
-				gtk.FILL,  gtk.FILL, 0, 0)
+				gtk.FILL, gtk.FILL, 0, 0)
 			label = gtk.Label()
 			label.set_alignment(0, 0)
 			label.set_line_wrap(True)

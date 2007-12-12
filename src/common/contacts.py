@@ -1,19 +1,24 @@
 ## common/contacts.py
 ##
-## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
-## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2006 Yann Leboulanger <asterix@lagaule.org>
+##                    Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
-## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
+##                    Julien Pivotto <roidelapluie@gmail.com>
+##                    Stephan Erb <steve-e@h3c.de> 
 ##
+## This file is part of Gajim.
 ##
-## This program is free software; you can redistribute it and/or modify
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import common.gajim
@@ -41,9 +46,9 @@ class Contact:
 
 		# Capabilities; filled by caps.py/ConnectionCaps object
 		# every time it gets these from presence stanzas
-		self.caps_node=None
-		self.caps_ver=None
-		self.caps_exts=None
+		self.caps_node = None
+		self.caps_ver = None
+		self.caps_exts = None
 
 		# please read jep-85 http://www.jabber.org/jeps/jep-0085.html
 		# we keep track of jep85 support with the peer by three extra states:
@@ -206,6 +211,9 @@ class Contacts:
 		if len(self._contacts[account][contact.jid]) == 0:
 			del self._contacts[account][contact.jid]
 
+	def clear_contacts(self, account):
+		self._contacts[account] = {}
+
 	def remove_jid(self, account, jid):
 		'''Removes all contacts for a given jid'''
 		if not self._contacts.has_key(account):
@@ -281,6 +289,10 @@ class Contacts:
 		for account in accounts:
 			our_jid = common.gajim.get_jid_from_account(account)
 			for jid in self.get_jid_list(account):
+				if self.has_brother(account, jid) and not \
+					self.is_big_brother(account, jid):
+					# count metacontacts only once
+					continue
 				if jid == our_jid:
 					continue
 				if common.gajim.jid_is_transport(jid) and not \
@@ -300,6 +312,8 @@ class Contacts:
 						# Transports group
 						if common.gajim.jid_is_transport(jid):
 							contact_groups = [_('Transports')]
+						if contact.is_observer():
+							contact_groups = [_('Observers')]
 						else:
 							contact_groups = [_('General')]
 					for group in groups:
@@ -362,7 +376,7 @@ class Contacts:
 					found = data
 					break
 			if found:
-				self._metacontacts_tags[account][tag].remove(data)
+				self._metacontacts_tags[account][tag].remove(found)
 				break
 		common.gajim.connections[account].store_metacontacts(
 			self._metacontacts_tags[account])
@@ -371,6 +385,17 @@ class Contacts:
 		for account in self._metacontacts_tags:
 			tag = self.get_metacontacts_tag(account, jid)
 			if tag and len(self._metacontacts_tags[account][tag]) > 1:
+				return True
+		return False
+
+	def is_big_brother(self, account, jid):
+		tag = self.get_metacontacts_tag(account, jid)
+		if tag:
+			family = self.get_metacontacts_family(account, jid)
+			bb_data = self.get_metacontacts_big_brother(family)
+			bb_jid = bb_data['jid']
+			bb_account = bb_data['account']
+			if bb_jid == jid and bb_account == account: 
 				return True
 		return False
 
@@ -399,48 +424,71 @@ class Contacts:
 					answers.append(data)
 		return answers
 
-	def _get_data_score(self, data):
-		'''compute thescore of a gived data
-		data is {'jid': jid, 'account': account, 'order': order}
-		order is optional
-		score = (max_order - order)*10000 + is_jabber*priority*10 + status'''
-		jid = data['jid']
-		account = data['account']
-		max_order = 0
-		order = 0
-		if data.has_key('order'):
-			order = data['order']
-		if order:
-			family = self.get_metacontacts_family(account, jid)
-			for data_ in family:
-				if data_.has_key('order') and data_['order'] > max_order:
-					max_order = data_['order']
-		contact = self.get_contact_with_highest_priority(account, jid)
-		score = (max_order - order)*10000
-		
-		if common.gajim.get_transport_name_from_jid(jid) is None and \
-		contact.show not in ('error', 'offline'):
-			score += 10
-			if contact.priority > 0:
-				score += contact.priority * 10
-		score += ['not in roster', 'error', 'offline', 'invisible', 'dnd', 'xa',
-		'away', 'chat', 'online', 'requested', 'message'].index(contact.show)
-		if contact.show == 'offline' and contact.status:
-			# Offline contacts with a status message have highest score
-			score += 1
-		return score
+	def compare_metacontacts(self, data1, data2):
+		'''compare 2 metacontacts.
+		Data is {'jid': jid, 'account': account, 'order': order}
+		order is optional'''
+		jid1 = data1['jid']
+		jid2 = data2['jid']
+		account1 = data1['account']
+		account2 = data2['account']
+		contact1 = self.get_contact_with_highest_priority(account1, jid1)
+		contact2 = self.get_contact_with_highest_priority(account2, jid2)
+		show_list = ['not in roster', 'error', 'offline', 'invisible', 'dnd',
+			'xa', 'away', 'chat', 'online', 'requested', 'message']
+		# contact can be null when we fill the roster on connection
+		if not contact1:
+			show1 = 0
+			priority1 = 0
+		else:
+			show1 = show_list.index(contact1.show)
+			priority1 = contact1.priority
+		if not contact2:
+			show2 = 0
+			priority2 = 0
+		else:
+			show2 = show_list.index(contact2.show)
+			priority2 = contact2.priority
+		# If only one is offline, it's always second
+		if show1 > 2 and show2 < 3:
+			return 1
+		if show2 > 2 and show1 < 3:
+			return -1
+		if 'order' in data1 and 'order' in data2:
+			if data1['order'] > data2['order']:
+				return 1
+			if data1['order'] < data2['order']:
+				return -1
+		transport1 = common.gajim.get_transport_name_from_jid(jid1)
+		transport2 = common.gajim.get_transport_name_from_jid(jid2)
+		if transport2 and not transport1:
+			return 1
+		if transport1 and not transport2:
+			return -1
+		if priority1 > priority2:
+			return 1
+		if priority2 > priority1:
+			return -1
+		if show1 > show2:
+			return 1
+		if show2 > show1:
+			return -1
+		if jid1 > jid2:
+			return 1
+		if jid2 > jid1:
+			return -1
+		# If all is the same, compare accounts, they can't be the same
+		if account1 > account2:
+			return 1
+		if account2 > account1:
+			return -1
+		return 0
 
 	def get_metacontacts_big_brother(self, family):
 		'''which of the family will be the big brother under wich all
 		others will be ?'''
-		max_score = 0
-		max_data = family[0]
-		for data in family:
-			score = self._get_data_score(data)
-			if score > max_score:
-				max_score = score
-				max_data = data
-		return max_data
+		family.sort(cmp=self.compare_metacontacts)
+		return family[-1]
 
 	def is_pm_from_jid(self, account, jid):
 		'''Returns True if the given jid is a private message jid'''

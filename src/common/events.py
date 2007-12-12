@@ -1,23 +1,29 @@
 ## common/events.py
 ##
 ## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
+##	- Yann Leboulanger <asterix@lagaule.org>
 ##
-## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2006 Yann Leboulanger <asterix@lagaule.org>
 ##                    Vincent Hanquez <tab@snarc.org>
 ##                    Nikos Kouremenos <kourem@gmail.com>
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import time
@@ -159,12 +165,22 @@ class Events:
 		return self._get_nb_events(types = types, account = account)
 
 	def get_events(self, account, jid = None, types = []):
-		'''if event is not specified, get all events from this jid,
+		'''returns all events from the given account of the form
+		{jid1: [], jid2: []}
+		if jid is given, returns all events from the given jid in a list: []
 		optionnaly only from given type'''
 		if not self._events.has_key(account):
 			return []
 		if not jid:
-			return self._events[account]
+			events_list = {} # list of events
+			for jid_ in self._events[account]:
+				events = []
+				for ev in self._events[account][jid_]:
+					if not types or ev.type_ in types:
+						events.append(ev)
+				if events:
+					events_list[jid_] = events
+			return events_list
 		if not self._events[account].has_key(jid):
 			return []
 		events_list = [] # list of events

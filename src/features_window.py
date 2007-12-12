@@ -1,18 +1,25 @@
 ##	features_window.py
 ##
-## Copyright (C) 2007 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2007 Yann Leboulanger <asterix@lagaule.org>
+##                    Stephan Erb <steve-e@h3c.de> 
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 ##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+##
 
 import os
+import sys
 import gtk
 import gobject
 import gtkgui_helpers
@@ -66,7 +73,7 @@ class FeaturesWindow:
 				_('Requires gnome-keyring and python-gnome2-desktop.'),
 				_('Feature not available under Windows.')),
 			_('SRV'): (self.srv_available,
-				_('Ability to connect to servers which is using SRV records.'),
+				_('Ability to connect to servers which are using SRV records.'),
 				_('Requires dnsutils.'),
 				_('Requires nslookup to use SRV records.')),
 			_('Spell Checker'): (self.speller_available,
@@ -89,6 +96,18 @@ class FeaturesWindow:
 				_('Transform LaTeX espressions between $$ $$.'),
 				_('Requires texlive-latex-base, dvips and imagemagick. You have to set \'use_latex\' to True in the Advanced Configuration Editor.'),
 				_('Feature not available under Windows.')),
+			_('End to end encryption'): (self.pycrypto_available,
+				_('Encrypting chatmessages.'),
+				_('Requires python-crypto.'),
+				_('Requires python-crypto.')),
+			_('RST Generator'): (self.docutils_available,
+				_('Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html).'),
+				_('Requires python-docutils.'),
+				_('Requires python-docutils.')),
+			_('libsexy'): (self.pysexy_available,
+				_('Ability to have clickable URLs in chat and groupchat window banners.'),
+				_('Requires python-sexy.'),
+				_('Requires python-sexy.')),
 		}
 
 		# name, supported
@@ -124,7 +143,7 @@ class FeaturesWindow:
 		selection = widget.get_selection()
 		path = selection.get_selected_rows()[1][0]
 		available = self.model[path][1]
-		feature = self.model[path][0]
+		feature = self.model[path][0].decode('utf-8')
 		text = self.features[feature][1] + '\n'
 		if os.name == 'nt':
 			text = text + self.features[feature][3]
@@ -201,6 +220,12 @@ class FeaturesWindow:
 	def notification_available(self):
 		if os.name == 'nt':
 			return False
+		elif sys.platform == 'darwin':
+			try:
+				import osx.growler
+			except:
+				return False
+			return True
 		from common import dbus_support
 		if self.dbus_available() and dbus_support.get_notifications_interface():
 			return True
@@ -274,3 +299,18 @@ class FeaturesWindow:
 		if exitcode == 0:
 			return True
 		return False
+
+	def pycrypto_available(self):
+		from common import gajim
+		return gajim.HAVE_PYCRYPTO
+
+	def docutils_available(self):
+		try:
+			import docutils
+		except:
+			return False
+		return True
+
+	def pysexy_available(self):
+		from common import gajim
+		return gajim.HAVE_PYSEXY

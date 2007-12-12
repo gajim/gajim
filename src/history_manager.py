@@ -3,22 +3,44 @@
 ##
 ## Copyright (C) 2006-2007 Nikos Kouremenos <kourem@gmail.com>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 ## NOTE: some method names may match those of logger.py but that's it
 ## someday (TM) should have common class that abstracts db connections and helpers on it
 ## the same can be said for history_window.py
 
-import sys
 import os
+
+if os.name == 'nt':
+	import warnings
+	warnings.filterwarnings(action='ignore')
+
+# Used to create windows installer with GTK included
+#	paths = os.environ['PATH']
+#	list_ = paths.split(';')
+#	new_list = []
+#	for p in list_:
+#		if p.find('gtk') < 0 and p.find('GTK') < 0:
+#			new_list.append(p)
+#	new_list.insert(0, 'gtk/lib')
+#	new_list.insert(0, 'gtk/bin')
+#	os.environ['PATH'] = ';'.join(new_list)
+#	os.environ['GTK_BASEPATH'] = 'gtk'
+
+import sys
 import signal
 import gtk
 import gobject
@@ -26,7 +48,10 @@ import time
 import locale
 
 from common import i18n
-import exceptions
+import common.configpaths 
+common.configpaths.gajimpaths.init()
+common.configpaths.gajimpaths.init_profile()
+from common import exceptions
 import dialogs
 import gtkgui_helpers
 from common.logger import LOG_DB_PATH, constants
@@ -75,7 +100,7 @@ class HistoryManager:
 		self.logs_scrolledwindow = xml.get_widget('logs_scrolledwindow')
 		self.search_results_scrolledwindow = xml.get_widget(
 			'search_results_scrolledwindow')
-		self.welcome_label = xml.get_widget('welcome_label')
+		self.welcome_vbox = xml.get_widget('welcome_vbox')
 
 		self.jids_already_in = [] # holds jids that we already have in DB
 		self.AT_LEAST_ONE_DELETION_DONE = False
@@ -211,7 +236,7 @@ class HistoryManager:
 
 		self.logs_liststore.clear() # clear the store
 		
-		self.welcome_label.hide()
+		self.welcome_vbox.hide()
 		self.search_results_scrolledwindow.hide()
 		self.logs_scrolledwindow.show()
 
@@ -478,9 +503,8 @@ class HistoryManager:
 		if paths_len == 0: # nothing is selected
 			return
 
-		def on_ok(widget, liststore, list_of_paths):
+		def on_ok(liststore, list_of_paths):
 			# delete all rows from db that match jid_id
-			self.dialog.destroy()
 			list_of_rowrefs = []
 			for path in list_of_paths: # make them treerowrefs (it's needed)
 				list_of_rowrefs.append(gtk.TreeRowReference(liststore, path))
@@ -511,7 +535,7 @@ class HistoryManager:
 			'Do you really want to delete logs of the selected contact?',
 			'Do you really want to delete logs of the selected contacts?',
 			paths_len)
-		self.dialog = dialogs.ConfirmationDialog(pri_text,
+		dialogs.ConfirmationDialog(pri_text,
 			_('This is an irreversible operation.'), on_response_ok = (on_ok,
 			liststore, list_of_paths))
 
@@ -520,8 +544,7 @@ class HistoryManager:
 		if paths_len == 0: # nothing is selected
 			return
 
-		def on_ok(widget, liststore, list_of_paths):
-			self.dialog.destroy()
+		def on_ok(liststore, list_of_paths):
 			# delete rows from db that match log_line_id
 			list_of_rowrefs = []
 			for path in list_of_paths: # make them treerowrefs (it's needed)
@@ -547,7 +570,7 @@ class HistoryManager:
 		pri_text = i18n.ngettext(
 			'Do you really want to delete the selected message?',
 			'Do you really want to delete the selected messages?', paths_len)
-		self.dialog = dialogs.ConfirmationDialog(pri_text,
+		dialogs.ConfirmationDialog(pri_text,
 			_('This is an irreversible operation.'), on_response_ok = (on_ok,
 			liststore, list_of_paths))
 
@@ -556,7 +579,7 @@ class HistoryManager:
 		if text == '':
 			return
 
-		self.welcome_label.hide()
+		self.welcome_vbox.hide()
 		self.logs_scrolledwindow.hide()
 		self.search_results_scrolledwindow.show()
 		

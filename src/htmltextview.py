@@ -10,6 +10,9 @@
 ### but WITHOUT ANY WARRANTY; without even the implied warranty of
 ### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ### Lesser General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ###
 ### You should have received a copy of the GNU Lesser General Public
 ### License along with this library; if not, write to the
@@ -910,6 +913,7 @@ class HtmlTextView(gtk.TextView):
 		self.set_wrap_mode(gtk.WRAP_CHAR)
 		self.set_editable(False)
 		self._changed_cursor = False
+		self.connect('destroy', self.__destroy_event)
 		self.connect('motion-notify-event', self.__motion_notify_event)
 		self.connect('leave-notify-event', self.__leave_event)
 		self.connect('enter-notify-event', self.__motion_notify_event)
@@ -919,6 +923,10 @@ class HtmlTextView(gtk.TextView):
 		self.interface = gajim.interface
 		# end big hack
 		build_patterns(self,gajim.config,gajim.interface)
+
+	def __destroy_event(self, widget):
+		if self.tooltip.timeout != 0:
+			self.tooltip.hide_tooltip()
 
 	def __leave_event(self, widget, event):
 		if self._changed_cursor:

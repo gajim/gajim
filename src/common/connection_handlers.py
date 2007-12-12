@@ -2,19 +2,24 @@
 ## Copyright (C) 2006 Gajim Team
 ##
 ## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
+##	- Yann Leboulanger <asterix@lagaule.org>
 ##	- Nikos Kouremenos <kourem@gmail.com>
 ##	- Dimitur Kirov <dkirov@gmail.com>
 ##	- Travis Shirk <travis@pobox.com>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import os
@@ -24,7 +29,7 @@ import socket
 import sys
 
 from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
-                  time as time_time, timezone, tzname)
+	time as time_time, timezone, tzname)
 from calendar import timegm
 
 import socks5
@@ -45,6 +50,8 @@ if dbus_support.supported:
 	import dbus
 	from music_track_listener import MusicTrackListener
 
+from common.stanza_session import EncryptedStanzaSession 
+
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible', 'error']
 # kind of events we can wait for an answer
@@ -64,8 +71,8 @@ except:
 class ConnectionBytestream:
 	def __init__(self):
 		self.files_props = {}
-	
-	def is_transfer_stoped(self, file_props):
+
+	def is_transfer_stopped(self, file_props):
 		if file_props.has_key('error') and file_props['error'] != 0:
 			return True
 		if file_props.has_key('completed') and file_props['completed']:
@@ -94,7 +101,7 @@ class ConnectionBytestream:
 	def remove_transfers_for_contact(self, contact):
 		''' stop all active transfer for contact '''
 		for file_props in self.files_props.values():
-			if self.is_transfer_stoped(file_props):
+			if self.is_transfer_stopped(file_props):
 				continue
 			receiver_jid = unicode(file_props['receiver']).split('/')[0]
 			if contact.jid == receiver_jid:
@@ -182,11 +189,7 @@ class ConnectionBytestream:
 			ft_add_hosts_to_send = map(lambda e:e.strip(),
 				ft_add_hosts_to_send.split(','))
 			for ft_host in ft_add_hosts_to_send:
-				try:
-					ft_host = socket.gethostbyname(ft_host)
-					ft_add_hosts.append(ft_host)
-				except socket.gaierror:
-					self.dispatch('ERROR', (_('Wrong host'), _('The host %s you configured as the ft_add_hosts_to_send advanced option is not valid, so ignored.') % ft_host))
+			    	ft_add_hosts.append(ft_host)
 		listener = gajim.socks5queue.start_listener(port,
 			sha_str, self._result_socks5_sid, file_props['sid'])
 		if listener == None:
@@ -212,17 +215,16 @@ class ConnectionBytestream:
 			ostreamhost.setAttr('port', unicode(port))
 			ostreamhost.setAttr('host', ft_host)
 			ostreamhost.setAttr('jid', sender)
-		for thehost in self.peerhost:
-			try:
-				thehost = self.peerhost[0]
-				streamhost = common.xmpp.Node(tag = 'streamhost') # My IP
-				query.addChild(node = streamhost)
-				streamhost.setAttr('port', unicode(port))
-				streamhost.setAttr('host', thehost)
-				streamhost.setAttr('jid', sender)
-			except socket.gaierror:
-				self.dispatch('ERROR', (_('Wrong host'),
-					_('Invalid local address? :-O')))
+		try:
+			thehost = self.peerhost[0]
+			streamhost = common.xmpp.Node(tag = 'streamhost') # My IP
+			query.addChild(node = streamhost)
+			streamhost.setAttr('port', unicode(port))
+			streamhost.setAttr('host', thehost)
+			streamhost.setAttr('jid', sender)
+		except socket.gaierror:
+			self.dispatch('ERROR', (_('Wrong host'),
+				_('Invalid local address? :-O')))
 
 		if fast and proxyhosts != [] and gajim.config.get_per('accounts',
 		self.name, 'use_ft_proxies'):
@@ -353,7 +355,7 @@ class ConnectionBytestream:
 		iq.setID(auth_id)
 		query = iq.setTag('query')
 		query.setNamespace(common.xmpp.NS_BYTESTREAM)
-		query.setAttr('sid',  proxy['sid'])
+		query.setAttr('sid', proxy['sid'])
 		activate = query.setTag('activate')
 		activate.setData(file_props['proxy_receiver'])
 		iq.setID(auth_id)
@@ -444,7 +446,7 @@ class ConnectionBytestream:
 		gajim.proxy65_manager.resolve_result(frm, query)
 		
 		try:
-			streamhost =  query.getTag('streamhost-used')
+			streamhost = query.getTag('streamhost-used')
 		except: # this bytestream result is not what we need
 			pass
 		id = real_id[3:]
@@ -473,7 +475,10 @@ class ConnectionBytestream:
 			raise common.xmpp.NodeProcessed
 
 		if real_id[:3] == 'au_':
-			gajim.socks5queue.send_file(file_props, self.name)
+			if file.has_key('stopped') and file_props['stopped']:
+				self.remove_transfer(file_props)
+			else:
+				gajim.socks5queue.send_file(file_props, self.name)
 			raise common.xmpp.NodeProcessed
 
 		proxy = None
@@ -495,7 +500,10 @@ class ConnectionBytestream:
 			raise common.xmpp.NodeProcessed
 
 		else:
-			gajim.socks5queue.send_file(file_props, self.name)
+			if file_props.has_key('stopped') and file_props['stopped']:
+				self.remove_transfer(file_props)
+			else:
+				gajim.socks5queue.send_file(file_props, self.name)
 			if file_props.has_key('fast'):
 				fasts = file_props['fast']
 				if len(fasts) > 0:
@@ -657,7 +665,8 @@ class ConnectionDisco:
 			common.xmpp.NS_DISCO, frm = to)
 		iq.setAttr('id', id)
 		query = iq.setTag('query')
-		query.setAttr('node','http://gajim.org/caps#' + gajim.version)
+		query.setAttr('node','http://gajim.org/caps#' + gajim.version.split('-',
+			1)[0])
 		for f in (common.xmpp.NS_BYTESTREAM, common.xmpp.NS_SI, \
 						common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS):
 			feature = common.xmpp.Node('feature')
@@ -709,8 +718,10 @@ class ConnectionDisco:
 
 	def _DiscoverItemsGetCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverItemsGetCB')
+		if self.commandItemsQuery(con, iq_obj):
+			raise common.xmpp.NodeProcessed
 		node = iq_obj.getTagAttr('query', 'node')
-                if node is None:
+		if node is None:
 			result = iq_obj.buildReply('result')
 			self.connection.send(result)
 			raise common.xmpp.NodeProcessed
@@ -723,7 +734,7 @@ class ConnectionDisco:
 		q = iq_obj.getTag('query')
 		node = q.getAttr('node')
 
-		if self.commandQuery(con, iq_obj):
+		if self.commandInfoQuery(con, iq_obj):
 			raise common.xmpp.NodeProcessed
 		
 		else:
@@ -736,7 +747,8 @@ class ConnectionDisco:
 			extension = None
 			if node and node.find('#') != -1:
 				extension = node[node.index('#') + 1:]
-			client_version = 'http://gajim.org/caps#' + gajim.version
+			client_version = 'http://gajim.org/caps#' + gajim.version.split('-',
+				1)[0]
 
 			if node in (None, client_version):
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_BYTESTREAM})
@@ -745,12 +757,14 @@ class ConnectionDisco:
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_COMMANDS})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_DISCO_INFO})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_ACTIVITY})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_ACTIVITY + '+notify'})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_TUNE})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_TUNE + '+notify'})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_MOOD})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_MOOD + '+notify'})
+				if gajim.config.get('use_pep'):
+					q.addChild('feature', attrs = {'var': common.xmpp.NS_ACTIVITY})
+					q.addChild('feature', attrs = {'var': common.xmpp.NS_ACTIVITY + '+notify'})
+					q.addChild('feature', attrs = {'var': common.xmpp.NS_TUNE})
+					q.addChild('feature', attrs = {'var': common.xmpp.NS_TUNE + '+notify'})
+					q.addChild('feature', attrs = {'var': common.xmpp.NS_MOOD})
+					q.addChild('feature', attrs = {'var': common.xmpp.NS_MOOD + '+notify'})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_ESESSION_INIT})
 
 			if (node is None or extension == 'cstates') and gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_CHATSTATES})
@@ -792,12 +806,12 @@ class ConnectionDisco:
 				for key in i.getAttrs().keys():
 					attr[key] = i.getAttr(key)
 				if attr.has_key('category') and \
-				   attr['category'] in ('gateway', 'headline') and \
-				   attr.has_key('type'):
+					attr['category'] in ('gateway', 'headline') and \
+					attr.has_key('type'):
 					transport_type = attr['type']
 				if attr.has_key('category') and \
-				   attr['category'] == 'conference' and \
-				   attr.has_key('type') and attr['type'] == 'text':
+					attr['category'] == 'conference' and \
+					attr.has_key('type') and attr['type'] == 'text':
 					is_muc = True
 				identities.append(attr)
 			elif i.getName() == 'feature':
@@ -868,7 +882,7 @@ class ConnectionVcard:
  
 		if len(ext):
 			c.setAttr('ext', ' '.join(ext))
-		c.setAttr('ver', gajim.version)
+		c.setAttr('ver', gajim.version.split('-', 1)[0])
 		return p
 	
 	def node_to_dict(self, node):
@@ -1082,6 +1096,10 @@ class ConnectionVcard:
 					tag = meta.getAttr('tag')
 					data = {'jid': jid}
 					order = meta.getAttr('order')
+					try:
+						order = int(order)
+					except:
+						order = 0
 					if order != None:
 						data['order'] = order
 					if meta_list.has_key(tag):
@@ -1090,7 +1108,8 @@ class ConnectionVcard:
 						meta_list[tag] = [data]
 				self.dispatch('METACONTACTS', meta_list)
 			else:
-				self.metacontacts_supported = False
+				if iq_obj.getErrorCode() not in ('403', '406', '404'):
+					self.private_storage_supported = False
 			# We can now continue connection by requesting the roster
 			self.connection.initRoster()
 		elif self.awaiting_answers[id][0] == PRIVACY_ARRIVED:
@@ -1207,7 +1226,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		ConnectionBytestream.__init__(self)
 		ConnectionCommands.__init__(self)
 		ConnectionPubSub.__init__(self)
-		self.gmail_url=None
+		self.gmail_url = None
 		# List of IDs we are waiting answers for {id: (type_of_request, data), }
 		self.awaiting_answers = {}
 		# List of IDs that will produce a timeout is answer doesn't arrive
@@ -1216,14 +1235,17 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		# keep the jids we auto added (transports contacts) to not send the
 		# SUBSCRIBED event to gui
 		self.automatically_added = []
-		# keep the latest subscribed event for each jid to prevent loop when we 
+		# keep the latest subscribed event for each jid to prevent loop when we
 		# acknoledge presences
 		self.subscribed_events = {}
+
+		# keep track of sessions this connection has with other JIDs
+		self.sessions = {}
 		try:
 			idle.init()
 		except:
 			HAS_IDLE = False
-	
+
 	def build_http_auth_answer(self, iq_obj, answer):
 		if answer == 'yes':
 			self.connection.send(iq_obj.buildReply('result'))
@@ -1243,6 +1265,33 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			url = iq_obj.getTagAttr('confirm', 'url')
 			msg = iq_obj.getTagData('body') # In case it's a message with a body
 			self.dispatch('HTTP_AUTH', (method, url, id, iq_obj, msg));
+		raise common.xmpp.NodeProcessed
+
+	def _FeatureNegCB(self, con, stanza, session):
+		gajim.log.debug('FeatureNegCB')
+		feature = stanza.getTag(name='feature', namespace=common.xmpp.NS_FEATURE)
+		form = common.xmpp.DataForm(node=feature.getTag('x'))
+
+		if form['FORM_TYPE'] == 'urn:xmpp:ssn':
+			self.dispatch('SESSION_NEG', (stanza.getFrom(), session, form))
+		else:
+			reply = stanza.buildReply()
+			reply.setType('error')
+
+			reply.addChild(feature)
+			reply.addChild(node=xmpp.ErrorNode('service-unavailable', typ='cancel'))
+
+			con.send(reply)
+		
+		raise common.xmpp.NodeProcessed
+
+	def _InitE2ECB(self, con, stanza, session):
+		gajim.log.debug('InitE2ECB')
+		init = stanza.getTag(name='init', namespace=common.xmpp.NS_ESESSION_INIT)
+		form = common.xmpp.DataForm(node=init.getTag('x'))
+
+		self.dispatch('SESSION_NEG', (stanza.getFrom(), session, form))
+
 		raise common.xmpp.NodeProcessed
 
 	def _ErrorCB(self, con, iq_obj):
@@ -1313,7 +1362,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if storage_tag:
 			ns = storage_tag.getNamespace()
 			if ns == 'storage:metacontacts':
-				self.metacontacts_supported = False
+				self.private_storage_supported = False
 				# Private XML Storage (XEP49) is not supported by server
 				# Continue connecting
 				self.connection.initRoster()
@@ -1321,10 +1370,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 	def _rosterSetCB(self, con, iq_obj):
 		gajim.log.debug('rosterSetCB')
 		for item in iq_obj.getTag('query').getChildren():
-			jid  = helpers.parse_jid(item.getAttr('jid'))
+			jid = helpers.parse_jid(item.getAttr('jid'))
 			name = item.getAttr('name')
-			sub  = item.getAttr('subscription')
-			ask  = item.getAttr('ask')
+			sub = item.getAttr('subscription')
+			ask = item.getAttr('ask')
 			groups = []
 			for group in item.getTags('group'):
 				groups.append(group.getData())
@@ -1399,7 +1448,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		qp = iq_obj.getTag('query')
 		qp.setTagData('utc', strftime('%Y%m%dT%T', gmtime()))
 		qp.setTagData('tz', tzname[daylight])
-		qp.setTagData('display', strftime('%c', localtime()))
+		qp.setTagData('display', helpers.decode_string(strftime('%c',
+			localtime())))
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
 
@@ -1407,7 +1457,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		gajim.log.debug('TimeRevisedCB')
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.setTag('time',
-                                   namespace=common.xmpp.NS_TIME_REVISED)
+			namespace=common.xmpp.NS_TIME_REVISED)
 		qp.setTagData('utc', strftime('%Y-%m-%dT%TZ', gmtime()))
 		zone = -(timezone, altzone)[daylight] / 60
 		tzo = (zone / 60, abs(zone % 60))
@@ -1460,6 +1510,19 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _messageCB(self, con, msg):
 		'''Called when we receive a message'''
+		frm = helpers.get_full_jid_from_iq(msg)
+		mtype = msg.getType()
+		thread_id = msg.getThread()
+
+		if not mtype:
+			mtype = 'normal'
+
+		if not mtype == 'groupchat':
+			session = self.get_session(frm, thread_id, mtype)
+
+		if thread_id and not session.received_thread_id:
+			session.received_thread_id = True
+
 		# check if the message is pubsub#event
 		if msg.getTag('event') is not None:
 			self._pubsubEventCB(con, msg)
@@ -1469,9 +1532,31 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		common.xmpp.NS_HTTP_AUTH:
 			self._HttpAuthCB(con, msg)
 			return
+		if msg.getTag('feature') and msg.getTag('feature').namespace == \
+		common.xmpp.NS_FEATURE:
+			if gajim.HAVE_PYCRYPTO:
+				self._FeatureNegCB(con, msg, session)
+			return
+		if msg.getTag('init') and msg.getTag('init').namespace == \
+		common.xmpp.NS_ESESSION_INIT:
+			self._InitE2ECB(con, msg, session)
+		
+		encrypted = False
+		tim = msg.getTimestamp()
+		tim = helpers.datetime_tuple(tim)
+		tim = localtime(timegm(tim))
+
+		e2e_tag = msg.getTag('c', namespace = common.xmpp.NS_STANZA_CRYPTO)
+		if e2e_tag:
+			encrypted = True
+
+			try:
+				msg = session.decrypt_stanza(msg)
+			except:
+				self.dispatch('FAILED_DECRYPT', (frm, tim))
+
 		msgtxt = msg.getBody()
 		msghtml = msg.getXHTML()
-		mtype = msg.getType()
 		subject = msg.getSubject() # if not there, it's None
 		tim = msg.getTimestamp()
 		tim = helpers.datetime_tuple(tim)
@@ -1490,7 +1575,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if not no_log_for:
 			no_log_for = ''
 		no_log_for = no_log_for.split()
-		encrypted = False
 		chatstate = None
 		encTag = msg.getTag('x', namespace = common.xmpp.NS_ENCRYPTED)
 		decmsg = ''
@@ -1510,8 +1594,17 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		for xtag in xtags:
 			if xtag.getNamespace() == common.xmpp.NS_CONFERENCE and not invite:
 				room_jid = xtag.getAttr('jid')
-				self.dispatch('GC_INVITATION', (room_jid, frm, '', None))
+				is_continued = False
+				if xtag.getTag('continue'):
+					is_continued = True
+				self.dispatch('GC_INVITATION', (room_jid, frm, '', None,
+					is_continued))
 				return
+		form_node = None
+		for xtag in xtags:
+			if xtag.getNamespace() == common.xmpp.NS_DATA:
+				form_node = xtag
+				break
 		# chatstates - look for chatstate tags in a message if not delayed
 		if not delayed:
 			composing_xep = False
@@ -1537,10 +1630,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if encTag and GnuPG.USE_GPG:
 			#decrypt
 			encmsg = encTag.getData()
-			
+
 			keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 			if keyID:
 				decmsg = self.gpg.decrypt(encmsg, keyID)
+				# \x00 chars are not allowed in C (so in GTK)
+				decmsg = decmsg.replace('\x00', '')
 		if decmsg:
 			msgtxt = decmsg
 			encrypted = True
@@ -1549,7 +1644,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if not error_msg:
 				error_msg = msgtxt
 				msgtxt = None
-			if self.name not in no_log_for:
+			if session.is_loggable():
 				try:
 					gajim.logger.write('error', frm, error_msg, tim = tim,
 						subject = subject)
@@ -1565,20 +1660,21 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if subject != None:
 				self.dispatch('GC_SUBJECT', (frm, subject, msgtxt, has_timestamp))
 			else:
+				statusCode = msg.getStatusCode()
 				if not msg.getTag('body'): #no <body>
 					# It could be a config change. See
 					# http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
 					if msg.getTag('x'):
-						statusCode = msg.getStatusCode()
 						if statusCode != []:
 							self.dispatch('GC_CONFIG_CHANGE', (jid, statusCode))
 					return
 				# Ignore message from room in which we are not
 				if not self.last_history_line.has_key(jid):
 					return
-				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msghtml))
-				if self.name not in no_log_for and not int(float(mktime(tim)))\
-				<= self.last_history_line[jid] and msgtxt:
+				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msghtml,
+					statusCode))
+				if self.name not in no_log_for and jid not in no_log_for and not \
+				int(float(mktime(tim))) <= self.last_history_line[jid] and msgtxt:
 					try:
 						gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
 					except exceptions.PysqliteOperationalError, e:
@@ -1587,8 +1683,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		elif mtype == 'chat': # it's type 'chat'
 			if not msg.getTag('body') and chatstate is None: #no <body>
 				return
-			if msg.getTag('body') and self.name not in no_log_for and jid not in\
-				no_log_for and msgtxt:
+			if msg.getTag('body') and session.is_loggable() and msgtxt:
 				try:
 					msg_id = gajim.logger.write('chat_msg_recv', frm, msgtxt,
 						tim = tim, subject = subject)
@@ -1601,9 +1696,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				reason = item.getTagData('reason')
 				item = invite.getTag('password')
 				password = invite.getTagData('password')
-				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password))
+				is_continued = False
+				if invite.getTag('invite').getTag('continue'):
+					is_continued = True
+				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password,
+					is_continued))
 				return
-			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
+			if session.is_loggable()and msgtxt:
 				try:
 					gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
 						subject = subject)
@@ -1614,8 +1713,86 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if treat_as:
 			mtype = treat_as
 		self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype,
-			subject, chatstate, msg_id, composing_xep, user_nick, msghtml))
+			subject, chatstate, msg_id, composing_xep, user_nick, msghtml,
+			session, form_node))
 	# END messageCB
+
+	def get_session(self, jid, thread_id, type):
+		'''returns an existing session between this connection and 'jid', returns a new one if none exist.'''
+		session = self.find_session(jid, thread_id, type)
+
+		if session:
+			return session
+		else:
+			# it's possible we initiated a session with a bare JID and this is the
+			# first time we've seen a resource
+			bare_jid = gajim.get_jid_without_resource(jid)
+			if bare_jid != jid:
+				session = self.find_session(bare_jid, thread_id, type)
+				if session:
+					if not session.received_thread_id:
+						thread_id = session.thread_id
+
+					self.move_session(bare_jid, thread_id, jid.split("/")[1])
+					return session
+
+		return self.make_new_session(jid, thread_id, type)
+
+	def find_session(self, jid, thread_id, type):
+		try:
+			if type == 'chat' and not thread_id:
+				return self.find_null_session(jid)
+			else:
+				return self.sessions[jid][thread_id]
+		except KeyError:
+			return None
+
+	def delete_session(self, jid, thread_id):
+		try:
+			del self.sessions[jid][thread_id]
+			
+			if not self.sessions[jid]:
+				del self.sessions[jid]
+		except KeyError:
+			pass
+
+	def move_session(self, original_jid, thread_id, to_resource):
+		'''moves a session to another resource.'''
+		session = self.sessions[original_jid][thread_id]
+
+		del self.sessions[original_jid][thread_id]
+
+		new_jid = gajim.get_jid_without_resource(original_jid) + '/' + to_resource
+		session.jid = common.xmpp.JID(new_jid)
+
+		if not new_jid in self.sessions:
+			self.sessions[new_jid] = {}
+
+		self.sessions[new_jid][thread_id] = session
+
+	def find_null_session(self, jid):
+		'''finds all of the sessions between us and jid that jid hasn't sent a thread_id in yet.
+
+returns the session that we last sent a message to.'''
+		
+		sessions_with_jid = self.sessions[jid].values()
+		no_threadid_sessions = filter(lambda s: not s.received_thread_id, sessions_with_jid)
+
+		if no_threadid_sessions:
+			no_threadid_sessions.sort(key=lambda s: s.last_send)
+			return no_threadid_sessions[-1]
+		else:
+			return None
+
+	def make_new_session(self, jid, thread_id = None, type = 'chat'):
+		sess = EncryptedStanzaSession(self, common.xmpp.JID(jid), thread_id, type)
+
+		if not jid in self.sessions:
+			self.sessions[jid] = {}
+
+		self.sessions[jid][sess.thread_id] = sess
+
+		return sess
 
 	def _pubsubEventCB(self, con, msg):
 		''' Called when we receive <message/> with pubsub event. '''
@@ -1663,12 +1840,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			who = helpers.get_full_jid_from_iq(prs)
 		except:
 			if prs.getTag('error').getTag('jid-malformed'):
-				# wrong jid, we probably tried to change our nick in a room to a non valid
-				# one
+				# wrong jid, we probably tried to change our nick in a room to a non
+				# valid one
 				who = str(prs.getFrom())
 				jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 				self.dispatch('GC_MSG', (jid_stripped,
-					_('Nickname not allowed: %s') % resource, None, False, None))
+					_('Nickname not allowed: %s') % resource, None, False, None, []))
 			return
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		timestamp = None
@@ -1722,8 +1899,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		except:
 			prio = 0
 		keyID = ''
-		if sigTag and GnuPG.USE_GPG:
-			#verify
+		if sigTag and self.gpg:
+			# verify
 			sigmsg = sigTag.getData()
 			keyID = self.gpg.verify(status, sigmsg)
 
@@ -1827,7 +2004,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			else:
 				if not status:
 					status = _('I would like to add you to my roster.')
-				self.dispatch('SUBSCRIBE', (who, status, user_nick))
+				self.dispatch('SUBSCRIBE', (jid_stripped, status, user_nick))
 		elif ptype == 'subscribed':
 			if jid_stripped in self.automatically_added:
 				self.automatically_added.remove(jid_stripped)
@@ -1894,8 +2071,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					gajim.logger.write('status', jid_stripped, status, show)
 				except exceptions.PysqliteOperationalError, e:
 					self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
-			self.dispatch('NOTIFY', (jid_stripped, show, status, resource, prio,
-				keyID, timestamp, contact_nickname))
+			our_jid = gajim.get_jid_from_account(self.name)
+			if jid_stripped == our_jid and resource == self.server_resource:
+				# We got our own presence
+				self.dispatch('STATUS', show)
+			else:
+				self.dispatch('NOTIFY', (jid_stripped, show, status, resource, prio,
+					keyID, timestamp, contact_nickname))
 	# END presenceCB
 
 	def _StanzaArrivedCB(self, con, obj):
@@ -1993,41 +2175,62 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		# continue connection
 		if self.connected > 1 and self.continue_connect_info:
-			show = self.continue_connect_info[0]
 			msg = self.continue_connect_info[1]
-			signed = self.continue_connect_info[2]
-			self.connected = STATUS_LIST.index(show)
-			sshow = helpers.get_xmpp_show(show)
-			# send our presence
-			if show == 'invisible':
-				self.send_invisible_presence(msg, signed, True)
-				return
-			priority = gajim.get_priority(self.name, sshow)
-			vcard = self.get_cached_vcard(jid)
-			if vcard and vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
-				self.vcard_sha = vcard['PHOTO']['SHA']
-			p = common.xmpp.Presence(typ = None, priority = priority, show = sshow)
-			p = self.add_sha(p)
-			if msg:
-				p.setStatus(msg)
-			if signed:
-				p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
+			sign_msg = self.continue_connect_info[2]
+			signed = ''
+			if sign_msg:
+				signed = self.get_signed_presence(msg, self._send_first_presence)
+				if signed is None:
+					self.dispatch('GPG_PASSWORD_REQUIRED',
+						(self._send_first_presence,))
+					# _send_first_presence will be called when user enter passphrase
+					return
+			self._send_first_presence(signed)
 
-			if self.connection:
-				self.connection.send(p)
-				self.priority = priority
-			self.dispatch('STATUS', show)
-			# ask our VCard
-			self.request_vcard(None)
+	def _send_first_presence(self, signed = ''):
+		show = self.continue_connect_info[0]
+		msg = self.continue_connect_info[1]
+		sign_msg = self.continue_connect_info[2]
+		if sign_msg and not signed:
+			signed = self.get_signed_presence(msg)
+			if signed is None:
+				self.dispatch('ERROR', (_('OpenPGP passphrase was not given'),
+					#%s is the account name here
+					_('You will be connected to %s without OpenPGP.') % self.name))
+				signed = ''
+		self.connected = STATUS_LIST.index(show)
+		sshow = helpers.get_xmpp_show(show)
+		# send our presence
+		if show == 'invisible':
+			self.send_invisible_presence(msg, signed, True)
+			return
+		priority = gajim.get_priority(self.name, sshow)
+		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
+		vcard = self.get_cached_vcard(our_jid)
+		if vcard and vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
+			self.vcard_sha = vcard['PHOTO']['SHA']
+		p = common.xmpp.Presence(typ = None, priority = priority, show = sshow)
+		p = self.add_sha(p)
+		if msg:
+			p.setStatus(msg)
+		if signed:
+			p.setTag(common.xmpp.NS_SIGNED + ' x').setData(signed)
 
-			# Get bookmarks from private namespace
-			self.get_bookmarks()
+		if self.connection:
+			self.connection.send(p)
+			self.priority = priority
+		self.dispatch('STATUS', show)
+		# ask our VCard
+		self.request_vcard(None)
 
-			# Get annotations from private namespace
-			self.get_annotations()
+		# Get bookmarks from private namespace
+		self.get_bookmarks()
 
-			#Inform GUI we just signed in
-			self.dispatch('SIGNED_IN', ())
+		# Get annotations from private namespace
+		self.get_annotations()
+
+		# Inform GUI we just signed in
+		self.dispatch('SIGNED_IN', ())
 		self.continue_connect_info = None
 	
 	def request_gmail_notifications(self):

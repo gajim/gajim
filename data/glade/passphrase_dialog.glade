@@ -19,6 +19,7 @@
   <property name="focus_on_map">True</property>
   <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
+  <signal name="destroy" handler="on_passphrase_dialog_destroy" last_modification_time="Sun, 11 Mar 2007 11:32:38 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox4">

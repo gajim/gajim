@@ -1,14 +1,19 @@
 ##
 ## Copyright (C) 2006 Gajim Team
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import xmpp
@@ -162,7 +167,7 @@ def find_current_groupchats(account):
 
 class LeaveGroupchatsCommand(AdHocCommand):
 	commandnode = 'leave-groupchats'
-	commandname = 'Leave Groupchats'
+	commandname = _('Leave Groupchats')
 
 	@staticmethod
 	def isVisibleFor(samejid):
@@ -288,6 +293,8 @@ class ConnectionCommands:
 		iq = iq_obj.buildReply('result')
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		q = iq.getTag('query')
+		# buildReply don't copy the node attribute. Re-add it
+		q.setAttr('node', xmpp.NS_COMMANDS)
 
 		for node, cmd in self.__commands.iteritems():
 			if cmd.isVisibleFor(self.isSameJID(jid)):
@@ -299,8 +306,8 @@ class ConnectionCommands:
 
 		self.connection.send(iq)
 
-	def commandQuery(self, con, iq_obj):
-		''' Send disco result for query for command (JEP-0050, example 6.).
+	def commandInfoQuery(self, con, iq_obj):
+		''' Send disco#info result for query for command (JEP-0050, example 6.).
 		Return True if the result was sent, False if not. '''
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		node = iq_obj.getTagAttr('query', 'node')
@@ -318,6 +325,22 @@ class ConnectionCommands:
 			for feature in cmd.commandfeatures:
 				q.addChild('feature', attrs = {'var': feature})
 
+			self.connection.send(iq)
+			return True
+
+		return False
+
+	def commandItemsQuery(self, con, iq_obj):
+		''' Send disco#items result for query for command.
+		Return True if the result was sent, False if not. '''
+		jid = helpers.get_full_jid_from_iq(iq_obj)
+		node = iq_obj.getTagAttr('query', 'node')
+
+		if node not in self.__commands: return False
+
+		cmd = self.__commands[node]
+		if cmd.isVisibleFor(self.isSameJID(jid)):
+			iq = iq_obj.buildReply('result')
 			self.connection.send(iq)
 			return True
 

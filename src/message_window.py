@@ -1,24 +1,30 @@
 ##	message_window.py
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2004 Yann Leboulanger <asterix@lagaule.org>
 ##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005 Yann Leboulanger <asterix@lagaule.org>
 ##                    Vincent Hanquez <tab@snarc.org>
 ##                    Nikos Kouremenos <kourem@gmail.com>
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
 ## Copyright (C) 2006 Travis Shirk <travis@pobox.com>
-## Copyright (C) 2006 Geobert Quach <geobert@gmail.com>
+##                    Geobert Quach <geobert@gmail.com>
+## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import gtk
@@ -68,6 +74,17 @@ class MessageWindow:
 		self.handlers[id] = self.window
 		id = self.window.connect('focus-in-event', self._on_window_focus)
 		self.handlers[id] = self.window
+
+		keys=['<Control>h', '<Control>i', '<Control><Shift>Tab',
+				'<Control>Tab', '<Control>F4', '<Control>w',
+				'<Alt>Right', '<Alt>Left', '<Alt>c', 'Escape'] +\
+				['<Alt>'+str(i) for i in xrange(10)]
+		accel_group = gtk.AccelGroup()
+		for key in keys:
+			keyval, mod = gtk.accelerator_parse(key)
+			accel_group.connect_group(keyval, mod, gtk.ACCEL_VISIBLE,
+				self.accel_group_func)
+		self.window.add_accel_group(accel_group)
 
 		# gtk+ doesn't make use of the motion notify on gtkwindow by default
 		# so this line adds that
@@ -240,6 +257,52 @@ class MessageWindow:
 			elif event.keyval == gtk.keysyms.Page_Up: # CTRL + PAGE UP
 				self.notebook.emit('key_press_event', event)
 
+	def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
+		st = '1234567890' # alt+1 means the first tab (tab 0)
+		control = self.get_active_control()
+		if not control:
+			# No more control in this window
+			return
+		
+		# CTRL mask
+		if modifier & gtk.gdk.CONTROL_MASK:
+			if keyval == gtk.keysyms.h:
+				control._on_history_menuitem_activate()
+			elif control.type_id == message_control.TYPE_CHAT and \
+			keyval == gtk.keysyms.i:
+				control._on_contact_information_menuitem_activate(None)
+			# Tab switch bindings
+			elif keyval == gtk.keysyms.ISO_Left_Tab: # CTRL + SHIFT + TAB
+				self.move_to_next_unread_tab(False)
+			elif keyval == gtk.keysyms.Tab: # CTRL + TAB
+				self.move_to_next_unread_tab(True)
+			elif keyval == gtk.keysyms.F4: # CTRL + F4
+				self.remove_tab(control, self.CLOSE_CTRL_KEY)
+			elif keyval == gtk.keysyms.w: # CTRL + W
+				self.remove_tab(control, self.CLOSE_CTRL_KEY)
+
+		# MOD1 (ALT) mask
+		elif modifier & gtk.gdk.MOD1_MASK:
+			# Tab switch bindings
+			if keyval == gtk.keysyms.Right: # ALT + RIGHT
+				new = self.notebook.get_current_page() + 1
+				if new >= self.notebook.get_n_pages(): 
+					new = 0
+				self.notebook.set_current_page(new)
+			elif keyval == gtk.keysyms.Left: # ALT + LEFT
+				new = self.notebook.get_current_page() - 1
+				if new < 0:
+					new = self.notebook.get_n_pages() - 1
+				self.notebook.set_current_page(new)
+			elif chr(keyval) in st: # ALT + 1,2,3..
+				self.notebook.set_current_page(st.index(chr(keyval)))
+			elif keyval == gtk.keysyms.c: # ALT + C toggles chat buttons
+				control.chat_buttons_set_visible(not control.hide_chat_buttons)
+		# Close tab bindings
+		elif keyval == gtk.keysyms.Escape and \
+				gajim.config.get('escape_key_closes'): # Escape
+			self.remove_tab(control, self.CLOSE_ESC)
+
 	def _on_close_button_clicked(self, button, control):
 		'''When close button is pressed: close a tab'''
 		self.remove_tab(control, self.CLOSE_CLOSE_BUTTON)
@@ -349,7 +412,6 @@ class MessageWindow:
 			gajim.interface.msg_win_mgr._on_window_delete(self.window, None)
 			gajim.interface.msg_win_mgr._on_window_destroy(self.window)
 			# dnd clean up
-			self.notebook.disconnect(self.hid)
 			self.notebook.drag_dest_unset()
 			self.window.destroy()
 			return # don't show_title, we are dead
@@ -454,6 +516,20 @@ class MessageWindow:
 			nth_child = notebook.get_nth_page(page_num)
 			return self._widget_to_control(nth_child)
 
+	def change_key(self, old_jid, new_jid, acct):
+		'''Change the key of a control'''
+		try:
+			# Check if control exists
+			ctrl = self._controls[acct][old_jid]
+		except:
+			return
+		self._controls[acct][new_jid] = self._controls[acct][old_jid]
+		del self._controls[acct][old_jid]
+		if old_jid in gajim.last_message_time[acct]:
+			gajim.last_message_time[acct][new_jid] = \
+				gajim.last_message_time[acct][old_jid]
+			del gajim.last_message_time[acct][old_jid]
+
 	def controls(self):
 		for ctrl_dict in self._controls.values():
 			for ctrl in ctrl_dict.values():
@@ -520,49 +596,15 @@ class MessageWindow:
 		self.show_title(control = new_ctrl)
 
 	def _on_notebook_key_press(self, widget, event):
-		st = '1234567890' # alt+1 means the first tab (tab 0)
-		ctrl = self.get_active_control()
-
-		# CTRL mask
-		if event.state & gtk.gdk.CONTROL_MASK:
-			# Tab switch bindings
-			if event.keyval == gtk.keysyms.ISO_Left_Tab: # CTRL + SHIFT + TAB
-				self.move_to_next_unread_tab(False)
-			elif event.keyval == gtk.keysyms.Tab: # CTRL + TAB
-				self.move_to_next_unread_tab(True)
-			elif event.keyval == gtk.keysyms.F4: # CTRL + F4
-				self.remove_tab(ctrl, self.CLOSE_CTRL_KEY)
-			elif event.keyval == gtk.keysyms.w: # CTRL + W
-				self.remove_tab(ctrl, self.CLOSE_CTRL_KEY)
-
-		# MOD1 (ALT) mask
-		elif event.state & gtk.gdk.MOD1_MASK:
-			# Tab switch bindings
-			if event.keyval == gtk.keysyms.Right: # ALT + RIGHT
-				new = self.notebook.get_current_page() + 1
-				if new >= self.notebook.get_n_pages(): 
-					new = 0
-				self.notebook.set_current_page(new)
-			elif event.keyval == gtk.keysyms.Left: # ALT + LEFT
-				new = self.notebook.get_current_page() - 1
-				if new < 0:
-					new = self.notebook.get_n_pages() - 1
-				self.notebook.set_current_page(new)
-			elif event.string and event.string in st and \
-					(event.state & gtk.gdk.MOD1_MASK): # ALT + 1,2,3..
-				self.notebook.set_current_page(st.index(event.string))
-			elif event.keyval == gtk.keysyms.c: # ALT + C toggles chat buttons
-				ctrl.chat_buttons_set_visible(not ctrl.hide_chat_buttons)
-		# Close tab bindings
-		elif event.keyval == gtk.keysyms.Escape and \
-				gajim.config.get('escape_key_closes'): # Escape
-			self.remove_tab(ctrl, self.CLOSE_ESC)
-		else:
-			# If the active control has a message_textview pass the event to it
-			active_ctrl = self.get_active_control()
-			if isinstance(active_ctrl, ChatControlBase):
-				active_ctrl.msg_textview.emit('key_press_event', event)
-				active_ctrl.msg_textview.grab_focus()
+		control = self.get_active_control()
+		# Ctrl+PageUP / DOWN has to be handled by notebook
+		if event.state & gtk.gdk.CONTROL_MASK and event.keyval in (
+		gtk.keysyms.Page_Down, gtk.keysyms.Page_Up):
+			return False
+		if isinstance(control, ChatControlBase):
+			# we forwarded it to message textview
+			control.msg_textview.emit('key_press_event', event)
+			control.msg_textview.grab_focus()
 
 	def setup_tab_dnd(self, child):
 		'''Set tab label as drag source and connect the drag_data_get signal'''
@@ -780,6 +822,17 @@ class MessageWindowMgr:
 
 		self._windows[key] = win
 		return win
+
+	def change_key(self, old_jid, new_jid, acct):
+		win = self.get_window(old_jid, acct)
+		if self.mode == self.ONE_MSG_WINDOW_NEVER:
+			old_key = acct + old_jid
+			if old_jid not in self._windows:
+				return
+			new_key = acct + new_jid
+			self._windows[new_key] = self._windows[old_key]
+			del self._windows[old_key]
+		win.change_key(old_jid, new_jid, acct)
 
 	def _on_window_delete(self, win, event):
 		self.save_state(self._gtk_win_to_msg_win(win))

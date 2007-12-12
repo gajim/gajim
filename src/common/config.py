@@ -1,25 +1,32 @@
 ##	common/config.py
 ##
-## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2007 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
-## Copyright (C) 2005 Travis Shirk <travis@pobox.com>
-## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
+##                    Travis Shirk <travis@pobox.com>
+##                    Norman Rasmussen <norman@rasmussen.co.za>
 ## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
+##                    Stephan Erb <steve-e@h3c.de> 
 ## 
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 ##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+##
 
 
+import sys
 import re
 import copy
 import defs
@@ -44,6 +51,16 @@ opt_treat_incoming_messages = ['', 'chat', 'normal']
 class Config:
 
 	DEFAULT_ICONSET = 'dcraven'
+	if sys.platform == 'darwin':
+		DEFAULT_OPENWITH = 'open'
+		DEFAULT_BROWSER = 'open -a Safari'
+		DEFAULT_MAILAPP = 'open -a Mail'
+		DEFAULT_FILE_MANAGER = 'open -a Finder'
+	else:
+		DEFAULT_OPENWITH = 'gnome-open'
+		DEFAULT_BROWSER = 'firefox'
+		DEFAULT_MAILAPP = 'mozilla-thunderbird -compose'
+		DEFAULT_FILE_MANAGER = 'xffm'
 
 	__options = {
 		# name: [ type, default_value, help_string ]
@@ -102,10 +119,10 @@ class Config:
 		'sounds_on': [ opt_bool, True ],
 		# 'aplay', 'play', 'esdplay', 'artsplay' detected first time only
 		'soundplayer': [ opt_str, '' ],
-		'openwith': [ opt_str, 'gnome-open' ],
-		'custombrowser': [ opt_str, 'firefox' ],
-		'custommailapp': [ opt_str, 'mozilla-thunderbird -compose' ],
-		'custom_file_manager': [ opt_str, 'xffm' ],
+		'openwith': [ opt_str, DEFAULT_OPENWITH ],
+		'custombrowser': [ opt_str, DEFAULT_BROWSER ],
+		'custommailapp': [ opt_str, DEFAULT_MAILAPP ],
+		'custom_file_manager': [ opt_str, DEFAULT_FILE_MANAGER ],
 		'gc-hpaned-position': [opt_int, 430],
 		'gc_refer_to_nick_char': [opt_str, ',', _('Character to add after nickname when using nick completion (tab) in group chat.')],
 		'gc_proposed_nick_char': [opt_str, '_', _('Character to propose to add after desired nickname when desired nickname is used by someone else in group chat.')],
@@ -127,7 +144,7 @@ class Config:
 		'single-msg-height': [opt_int, 280],
 		'roster_x-position': [ opt_int, 0 ],
 		'roster_y-position': [ opt_int, 0 ],
-		'roster_width': [ opt_int, 150 ],
+		'roster_width': [ opt_int, 200 ],
 		'roster_height': [ opt_int, 400 ],
 		'latest_disco_addresses': [ opt_str, '' ],
 		'recently_groupchat': [ opt_str, '' ],
@@ -136,9 +153,10 @@ class Config:
 		'after_nickname': [ opt_str, ':', _('Characters that are printed after the nickname in conversations') ],
 		'send_os_info': [ opt_bool, True ],
 		'set_status_msg_from_current_music_track': [ opt_bool, False ],
+		'set_status_msg_from_lastfm': [ opt_bool, False, _('If checked, Gajim can regularly poll a Last.fm account and adjust the status message to reflect recently played songs. set_status_msg_from_current_music_track option must be False.') ],
+		'lastfm_username': [ opt_str, '', _('The username used to identify the Last.fm account.')],
 		'notify_on_new_gmail_email': [ opt_bool, True ],
 		'notify_on_new_gmail_email_extra': [ opt_bool, False ],
-		'usegpg': [ opt_bool, False, '', True ],
 		'use_gpg_agent': [ opt_bool, False ],
 		'change_roster_title': [ opt_bool, True, _('Add * and [n] in roster title?')],
 		'restore_lines': [opt_int, 4, _('How many lines to remember from previous conversation when a chat tab/window is reopened.')],
@@ -175,6 +193,8 @@ class Config:
 		'tabs_always_visible': [opt_bool, False, _('Show tab when only one conversation?')],
 		'tabs_border': [opt_bool, False, _('Show tabbed notebook border in chat windows?')],
 		'tabs_close_button': [opt_bool, True, _('Show close button in tab?')],
+		'log_encrypted_sessions': [opt_bool, False, _('When negotiating an encrypted session, should Gajim assume you want your messages to be logged?')],
+		'e2e_public_key': [opt_bool, False, _('When negotiating an encrypted session, should Gajim prefer to use public keys for identification?')],
 		'chat_avatar_width': [opt_int, 52],
 		'chat_avatar_height': [opt_int, 52],
 		'roster_avatar_width': [opt_int, 32],
@@ -218,6 +238,7 @@ class Config:
 		'hide_groupchat_occupants_list': [opt_bool, False, _('Hides the group chat occupants list in group chat window.')],
 		'chat_merge_consecutive_nickname': [opt_bool, False, _('In a chat, show the nickname at the beginning of a line only when it\'s not the same person talking than in previous message.')],
 		'chat_merge_consecutive_nickname_indent': [opt_str, '  ', _('Indentation when using merge consecutive nickname.')],
+		'use_smooth_scrolling': [opt_bool, True, _('Smooth scroll message in conversation window')],
 		'gc_nicknames_colors': [ opt_str, '#a34526:#c000ff:#0012ff:#388a99:#045723:#7c7c7c:#ff8a00:#94452d:#244b5a:#32645a', _('List of colors that will be used to color nicknames in group chats.'), True ],
 		'ctrl_tab_go_to_next_composing': [opt_bool, True, _('Ctrl-Tab go to next composing tab when none is unread.')],
 		'confirm_metacontacts': [ opt_str, '', _('Should we show the confirm metacontacts creation dialog or not? Empty string means we never show the dialog.')],
@@ -235,6 +256,8 @@ class Config:
 		'subscribe_mood': [opt_bool, True],
 		'subscribe_activity': [opt_bool, True],
 		'subscribe_tune': [opt_bool, True],
+		'attach_notifications_to_systray': [opt_bool, False, _('If True, notification windows from notification-daemon will be attached to systray icon.')],
+		'use_pep': [opt_bool, False, 'temporary variable to enable pep support'],
 	}
 
 	__options_per_key = {
@@ -257,14 +280,14 @@ class Config:
 			'active': [ opt_bool, True],
 			'proxy': [ opt_str, '', '', True ],
 			'keyid': [ opt_str, '', '', True ],
+			'gpg_sign_presence': [ opt_bool, True, _('If disabled, don\'t sign presences with GPG key, even if GPG is configured.') ],
 			'keyname': [ opt_str, '', '', True ],
 			'usessl': [ opt_bool, False, '', True ],
+			'ssl_fingerprint_sha1': [ opt_str, '', '', True ],
 			'use_srv': [ opt_bool, True, '', True ],
 			'use_custom_host': [ opt_bool, False, '', True ],
 			'custom_port': [ opt_int, 5222, '', True ],
 			'custom_host': [ opt_str, '', '', True ],
-			'savegpgpass': [ opt_bool, False, '', True ],
-			'gpgpassword': [ opt_str, '' ],
 			'sync_with_global_status': [ opt_bool, False, ],
 			'no_log_for': [ opt_str, '' ],
 			'minimized_gc': [ opt_str, '' ],

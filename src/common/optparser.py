@@ -1,15 +1,21 @@
 ##
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import os
@@ -57,9 +63,10 @@ class OptionsParser:
 			if os.path.exists(self.__filename):
 				#we talk about a file
 				print _('error: cannot open %s for reading') % self.__filename
-			return
+			return False
 
 		new_version = gajim.config.get('version')
+		new_version = new_version.split('-', 1)[0]
 		for line in fd.readlines():
 			try:
 				line = line.decode('utf-8')
@@ -67,11 +74,13 @@ class OptionsParser:
 				line = line.decode(locale.getpreferredencoding())
 			self.read_line(line)
 		old_version = gajim.config.get('version')
+		old_version = old_version.split('-', 1)[0]
 
 		self.update_config(old_version, new_version)
 		self.old_values = {} # clean mem
 
 		fd.close()
+		return True
 
 	def write_line(self, fd, opt, parents, value):
 		if value == None:
@@ -163,6 +172,10 @@ class OptionsParser:
 			self.update_config_to_01114()
 		if old < [0, 11, 1, 5] and new >= [0, 11, 1, 5]:
 			self.update_config_to_01115()
+		if old < [0, 11, 2, 1] and new >= [0, 11, 2, 1]:
+			self.update_config_to_01121()
+		if old < [0, 11, 2, 2] and new >= [0, 11, 2, 2]:
+			self.update_config_to_01122()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -476,3 +489,40 @@ class OptionsParser:
 			pass
 		con.close()
 		gajim.config.set('version', '0.11.1.5')
+
+	def update_config_to_01121(self):
+		# remove old unencrypted secrets file
+		from common.configpaths import gajimpaths
+
+		new_file = gajimpaths['SECRETS_FILE']
+
+		old_file = os.path.dirname(new_file) + '/secrets'
+
+		if os.path.exists(old_file):
+			os.remove(old_file)
+
+		gajim.config.set('version', '0.11.2.1')
+
+	def update_config_to_01122(self):
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE IF NOT EXISTS caps_cache (
+					node TEXT,
+					ver TEXT,
+					ext TEXT,
+					data BLOB
+				);
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError, e:
+			pass
+		con.close()
+		gajim.config.set('version', '0.11.2.2')
+

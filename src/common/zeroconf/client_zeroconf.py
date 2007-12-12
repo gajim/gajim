@@ -3,14 +3,19 @@
 ## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
 ## 				2006 Dimitur Kirov <dkirov@gmail.com>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 from common import gajim
 import common.xmpp
@@ -74,7 +79,16 @@ class ZeroconfListener(IdleObject):
 	def pollin(self):
 		''' accept a new incomming connection and notify queue'''
 		sock = self.accept_conn()
-		P2PClient(sock[0], sock[1][0], sock[1][1], self.conn_holder)
+		''' loop through roster to find who has connected to us'''
+		from_jid = None
+		nameinfo = socket.getnameinfo(sock[1], 0)
+		ipaddr = socket.gethostbyname(nameinfo[0])
+		for jid in self.conn_holder.getRoster().keys():
+			entry = self.conn_holder.getRoster().getItem(jid)
+			if (entry['address'] == ipaddr):
+				from_jid = jid
+				break;
+		P2PClient(sock[0], sock[1][0], sock[1][1], self.conn_holder, [], from_jid)
 	
 	def disconnect(self):
 		''' free all resources, we are not listening anymore '''
@@ -212,11 +226,11 @@ class P2PClient(IdleObject):
 	
 	def on_disconnect(self):
 		if self.conn_holder:
-			if self.conn_holder.number_of_awaiting_messages.has_key(self.conn_holder.fd):
-				if self.conn_holder.number_of_awaiting_messages[self.conn_holder.fd] > 0:
+			if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
+				if self.conn_holder.number_of_awaiting_messages[self.fd] > 0:
 					self._caller.dispatch('MSGERROR',[unicode(self.to), -1, \
 					_('Connection to host could not be established'), None, None])
-				del self.conn_holder.number_of_awaiting_messages[self.conn_holder.fd]
+				del self.conn_holder.number_of_awaiting_messages[self.fd]
 			self.conn_holder.remove_connection(self.sock_hash) 
 		if self.__dict__.has_key('Dispatcher'):
 			self.Dispatcher.PlugOut()

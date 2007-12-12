@@ -1,23 +1,29 @@
 # -*- coding: utf-8 -*-
 ##	dialogs.py
 ##
-## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2007 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2003-2004 Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
-## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
+##                    Julien Pivotto <roidelapluie@gmail.com>
+##                    Stephan Erb <steve-e@h3c.de> 
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import gtk
@@ -28,6 +34,9 @@ import gtkgui_helpers
 import vcard
 import conversation_textview
 import message_control
+import dataforms_widget
+
+from random import randrange
 
 try:
 	import gtkspell
@@ -43,6 +52,7 @@ from advanced import AdvancedConfigurationWindow
 
 from common import gajim
 from common import helpers
+from common import dataforms
 from common.exceptions import GajimGeneralException
 
 class EditGroupsDialog:
@@ -197,7 +207,7 @@ class EditGroupsDialog:
 		for group in groups:
 			if group not in helpers.special_groups or groups[group] > 0:
 				group_list.append(group)
-		group_list.sort()			
+		group_list.sort()	
 		for group in group_list:
 			iter = store.append()
 			store.set(iter, 0, group) # Group name
@@ -235,22 +245,71 @@ class PassphraseDialog:
 			passphrase = self.passphrase_entry.get_text().decode('utf-8')
 		else:
 			passphrase = -1
-		save_passphrase_checkbutton = self.xml.\
-			get_widget('save_passphrase_checkbutton')
-		self.window.destroy()
-		return passphrase, save_passphrase_checkbutton.get_active()
 
-	def __init__(self, titletext, labeltext, checkbuttontext):
+		if self.check:
+			save_passphrase_checkbutton = self.xml.\
+				get_widget('save_passphrase_checkbutton')
+			checked = save_passphrase_checkbutton.get_active()
+		else:
+			checked = False
+
+		self.window.destroy()
+		return passphrase, checked
+
+	def __init__(self, titletext, labeltext, checkbuttontext=None, is_modal = True, 
+	ok_handler = None, cancel_handler = None):
 		self.xml = gtkgui_helpers.get_glade('passphrase_dialog.glade')
 		self.window = self.xml.get_widget('passphrase_dialog')
 		self.passphrase_entry = self.xml.get_widget('passphrase_entry')
 		self.passphrase = -1
 		self.window.set_title(titletext)
 		self.xml.get_widget('message_label').set_text(labeltext)
-		self.xml.get_widget('save_passphrase_checkbutton').set_label(
-			checkbuttontext)
+
+		self.ok = False
+
+		self.cancel_handler = cancel_handler
+		self.is_modal = is_modal
+		if not is_modal and ok_handler is not None:
+			self.ok_handler = ok_handler
+			okbutton = self.xml.get_widget('ok_button')
+			okbutton.connect('clicked', self.on_okbutton_clicked)
+			cancelbutton = self.xml.get_widget('cancel_button')
+			cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
+
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
+		
+		self.check = bool(checkbuttontext)
+		checkbutton =	self.xml.get_widget('save_passphrase_checkbutton')
+		if self.check:
+			checkbutton.set_label(checkbuttontext)
+		else:
+			checkbutton.hide()
+	
+	def on_okbutton_clicked(self, widget):
+		passph = self.passphrase_entry.get_text().decode('utf-8')
+
+		if self.check:
+			checked = self.xml.get_widget('save_passphrase_checkbutton').\
+				get_active()
+		else:
+			checked = False
+
+		self.ok = True
+
+		self.window.destroy()
+
+		if isinstance(self.ok_handler, tuple):
+			self.ok_handler[0](passph, checked, *self.ok_handler[1:])
+		else:
+			self.ok_handler(passph, checked)
+
+	def on_cancelbutton_clicked(self, widget):
+		self.window.destroy()
+
+	def on_passphrase_dialog_destroy(self, widget):
+		if self.cancel_handler and not self.ok:
+			self.cancel_handler()
 
 class ChooseGPGKeyDialog:
 	'''Class for GPG key dialog'''
@@ -268,11 +327,13 @@ class ChooseGPGKeyDialog:
 		self.keys_treeview.set_model(model)
 		#columns
 		renderer = gtk.CellRendererText()
-		self.keys_treeview.insert_column_with_attributes(-1, _('KeyID'),
+		col = self.keys_treeview.insert_column_with_attributes(-1, _('KeyID'),
 			renderer, text = 0)
+		col.set_sort_column_id(0)
 		renderer = gtk.CellRendererText()
-		self.keys_treeview.insert_column_with_attributes(-1, _('Contact name'),
-			renderer, text = 1)
+		col = self.keys_treeview.insert_column_with_attributes(-1,
+			_('Contact name'), renderer, text = 1)
+		col.set_sort_column_id(1)
 		self.keys_treeview.set_search_column(1)
 		self.fill_tree(secret_keys, selected)
 		self.window.show_all()
@@ -520,7 +581,7 @@ class ChangeStatusMessageDialog:
 	def on_change_status_message_dialog_key_press_event(self, widget, event):
 		self.countdown_enabled = False
 		if event.keyval == gtk.keysyms.Return or \
-		event.keyval == gtk.keysyms.KP_Enter:  # catch CTRL+ENTER
+		event.keyval == gtk.keysyms.KP_Enter: # catch CTRL+ENTER
 			if (event.state & gtk.gdk.CONTROL_MASK):
 				self.window.response(gtk.RESPONSE_OK)
 				# Stop the event
@@ -555,14 +616,14 @@ class ChangeStatusMessageDialog:
 				resp = dlg2.run()
 				if resp != gtk.RESPONSE_OK:
 					return
+				self.preset_messages_dict[msg_name] = msg_text
 			else:
+				self.preset_messages_dict[msg_name] = msg_text
 				iter_ = self.message_liststore.append((msg_name,))
 				gajim.config.add_per('statusmsg', msg_name)
 				# select in combobox the one we just saved 
 				self.message_combobox.set_active_iter(iter_)
 			gajim.config.set_per('statusmsg', msg_name, 'message', msg_text_1l)
-			self.preset_messages_dict[msg_name] = msg_text
-
 
 class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
@@ -597,6 +658,7 @@ class AddNewContactWindow:
 			return
 		location['add_contact'] = self
 		self.xml = gtkgui_helpers.get_glade('add_new_contact_window.glade')
+		self.xml.signal_autoconnect(self)
 		self.window = self.xml.get_widget('add_new_contact_window')
 		for w in ('account_combobox', 'account_hbox', 'account_label',
 		'uid_label', 'uid_entry', 'protocol_combobox', 'protocol_jid_combobox',
@@ -668,7 +730,6 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		self.auto_authorize_checkbutton.show()
 		liststore = gtk.ListStore(str)
 		self.protocol_jid_combobox.set_model(liststore)
-		self.xml.signal_autoconnect(self)
 		if jid:
 			type_ = gajim.get_transport_name_from_jid(jid)
 			if not type_:
@@ -718,18 +779,17 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				self.group_comboboxentry.set_active(i)
 			i += 1
 
+		self.window.show_all()
+
 		if self.account:
 			self.account_label.hide()
 			self.account_hbox.hide()
-			self.account_label.set_no_show_all(True)
-			self.account_hbox.set_no_show_all(True)
 		else:
 			liststore = gtk.ListStore(str, str)
 			for acct in accounts:
 				liststore.append([acct, acct])
 			self.account_combobox.set_model(liststore)
 			self.account_combobox.set_active(0)
-		self.window.show_all()
 
 	def on_add_new_contact_window_destroy(self, widget):
 		if self.account:
@@ -820,8 +880,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				model.append([jid_])
 			self.protocol_jid_combobox.set_active(0)
 		if len(self.agents[type_]) > 1:
-			self.protocol_jid_combobox.set_no_show_all(False)
-			self.protocol_jid_combobox.show_all()
+			self.protocol_jid_combobox.show()
 		else:
 			self.protocol_jid_combobox.hide()
 		if type_ in self.uid_labels:
@@ -833,8 +892,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		else:
 			self.message_scrolledwindow.hide()
 		if type_ in self.available_types:
-			self.register_hbox.set_no_show_all(False)
-			self.register_hbox.show_all()
+			self.register_hbox.show()
 			self.auto_authorize_checkbutton.hide()
 			self.connected_label.hide()
 			self.subscription_table.hide()
@@ -851,8 +909,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 					self.add_button.set_sensitive(False)
 					self.auto_authorize_checkbutton.hide()
 					return
-			self.subscription_table.set_no_show_all(False)
-			self.subscription_table.show_all()
+			self.subscription_table.show()
 			self.auto_authorize_checkbutton.show()
 			self.connected_label.hide()
 			self.add_button.set_sensitive(True)
@@ -861,13 +918,14 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		if self.protocol_jid_combobox.get_active_text() == jid:
 			self.register_hbox.hide()
 			self.connected_label.hide()
-			self.subscription_table.set_no_show_all(False)
-			self.subscription_table.show_all()
+			self.subscription_table.show()
+			self.auto_authorize_checkbutton.show()
 			self.add_button.set_sensitive(True)
 
 	def transport_signed_out(self, jid):
 		if self.protocol_jid_combobox.get_active_text() == jid:
 			self.subscription_table.hide()
+			self.auto_authorize_checkbutton.hide()
 			self.connected_label.show()
 			self.add_button.set_sensitive(False)
 
@@ -942,7 +1000,9 @@ class AboutDialog:
 		artists = ['Anders Ström', 'Christophe Got', 'Dennis Craven',
 			'Guillaume Morin', 'Josef Vybíral', 'Membris Khan']
 		dlg.set_artists(artists)
+		gobject.idle_add(self.dorun, dlg)
 
+	def dorun(self, dlg):
 		rep = dlg.run()
 		dlg.destroy()
 
@@ -1084,19 +1144,55 @@ class ConfirmationDialog(HigDialog):
 	'''HIG compliant confirmation dialog.'''
 	def __init__(self, pritext, sectext='', on_response_ok = None,
 	on_response_cancel = None):
+		self.user_response_ok = on_response_ok
+		self.user_response_cancel = on_response_cancel
 		HigDialog.__init__(self, None, 
 			gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL, pritext, sectext,
-			on_response_ok, on_response_cancel)
+			self.on_response_ok, self.on_response_cancel)
 		self.popup()
+
+	def on_response_ok(self, widget):
+		if self.user_response_ok:
+			if isinstance(self.user_response_ok, tuple):
+				self.user_response_ok[0](*self.user_response_ok[1:])
+			else:
+				self.user_response_ok()
+		self.destroy()
+
+	def on_response_cancel(self, widget):
+		if self.user_response_cancel:
+			if isinstance(self.user_response_cancel, tuple):
+				self.user_response_cancel[0](*self.user_response_ok[1:])
+			else:
+				self.user_response_cancel()
+		self.destroy()
 
 class NonModalConfirmationDialog(HigDialog):
 	'''HIG compliant non modal confirmation dialog.'''
 	def __init__(self, pritext, sectext='', on_response_ok = None,
 	on_response_cancel = None):
+		self.user_response_ok = on_response_ok
+		self.user_response_cancel = on_response_cancel
 		HigDialog.__init__(self, None, 
 			gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL, pritext, sectext,
-			on_response_ok, on_response_cancel)
+			self.on_response_ok, self.on_response_cancel)
 		self.set_modal(False)
+
+	def on_response_ok(self, widget):
+		if self.user_response_ok:
+			if isinstance(self.user_response_ok, tuple):
+				self.user_response_ok[0](*self.user_response_ok[1:])
+			else:
+				self.user_response_ok()
+		self.destroy()
+
+	def on_response_cancel(self, widget):
+		if self.user_response_cancel:
+			if isinstance(self.user_response_cancel, tuple):
+				self.user_response_cancel[0](*self.user_response_cancel[1:])
+			else:
+				self.user_response_cancel()
+		self.destroy()
 
 class WarningDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
@@ -1130,15 +1226,19 @@ class YesNoDialog(HigDialog):
 		HigDialog.__init__( self, None, 
 			gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, pritext, sectext,
 				on_response_yes = on_response_yes, on_response_no = on_response_no)
+		self.set_modal(False)
 		self.popup()
 
 class ConfirmationDialogCheck(ConfirmationDialog):
 	'''HIG compliant confirmation dialog with checkbutton.'''
 	def __init__(self, pritext, sectext='', checktext = '',
-	on_response_ok = None, on_response_cancel = None):
+	on_response_ok = None, on_response_cancel = None, is_modal = True):
+		self.user_response_ok = on_response_ok
+		self.user_response_cancel = on_response_cancel
+
 		HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION,
-			gtk.BUTTONS_OK_CANCEL, pritext, sectext, on_response_ok,
-			on_response_cancel)
+			gtk.BUTTONS_OK_CANCEL, pritext, sectext, self.on_response_ok,
+			self.on_response_cancel)
 
 		self.set_default_response(gtk.RESPONSE_OK)
 
@@ -1147,7 +1247,27 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 
 		self.checkbutton = gtk.CheckButton(checktext)
 		self.vbox.pack_start(self.checkbutton, expand = False, fill = True)
+		self.set_modal(is_modal)
 		self.popup()
+
+	# XXX should cancel if somebody closes the dialog
+
+	def on_response_ok(self, widget):
+		if self.user_response_ok:
+			if isinstance(self.user_response_ok, tuple):
+				self.user_response_ok[0](self.is_checked(),
+					*self.user_response_ok[1:])
+			else:
+				self.user_response_ok(self.is_checked())
+		self.destroy()
+
+	def on_response_cancel(self, widget):
+		if self.user_response_cancel:
+			if isinstance(self.user_response_cancel, tuple):
+				self.user_response_cancel[0](*self.user_response_ok[1:])
+			else:
+				self.user_response_cancel()
+		self.destroy()
 
 	def is_checked(self):
 		''' Get active state of the checkbutton '''
@@ -1408,6 +1528,9 @@ class JoinGroupchatWindow:
 		if len(self._empty_required_widgets):
 			self.xml.get_widget('join_button').set_sensitive(False)
 
+		if not gajim.connections[account].private_storage_supported:
+			self.xml.get_widget('auto_join_checkbutton').set_sensitive(False)
+
 		self.window.show_all()
 
 	def on_join_groupchat_window_destroy(self, widget):
@@ -1544,7 +1667,7 @@ class SynchroniseSelectAccountDialog:
 		if not iter:
 			return
 		remote_account = model.get_value(iter, 0).decode('utf-8')
-		
+
 		if gajim.connections[remote_account].connected < 2:
 			ErrorDialog(_('This account is not connected to the server'),
 				_('You cannot synchronize with an account unless it is connected.'))
@@ -1643,7 +1766,7 @@ class NewChatDialog(InputDialog):
 		keys.sort()
 		for jid in keys:
 			contact = self.completion_dict[jid]
-			img =  gajim.interface.roster.jabber_state_images['16'][contact.show]
+			img = gajim.interface.roster.jabber_state_images['16'][contact.show]
 			liststore.append((img.get_pixbuf(), jid))
 
 		self.ok_handler = self.new_chat_response
@@ -1825,8 +1948,11 @@ class SingleMessageWindow:
 	singled message depending on action argument which can be 'send'
 	or 'receive'.
 	'''
-	def __init__(self, account, to = '', action = '', from_whom = '',
-	subject = '', message = '', resource = ''):
+	# Keep a reference on windows so garbage collector don't restroy them
+	instances = []
+	def __init__(self, account, to='', action='', from_whom='', subject='',
+	message='', resource='', session=None, form_node=None):
+		self.instances.append(self)
 		self.account = account
 		self.action = action
 
@@ -1835,6 +1961,7 @@ class SingleMessageWindow:
 		self.to = to
 		self.from_whom = from_whom
 		self.resource = resource
+		self.session = session
 
 		self.xml = gtkgui_helpers.get_glade('single_message_window.glade')
 		self.window = self.xml.get_widget('single_message_window')
@@ -1856,6 +1983,18 @@ class SingleMessageWindow:
 		self.conversation_tv_buffer = self.conversation_textview.tv.get_buffer()
 		self.xml.get_widget('conversation_scrolledwindow').add(
 			self.conversation_textview.tv)
+
+		self.form_widget = None
+		parent_box = self.xml.get_widget('conversation_scrolledwindow').get_parent()
+		if form_node:
+			dataform = dataforms.ExtendForm(node = form_node)
+			self.form_widget = dataforms_widget.DataFormWidget(dataform)
+			self.form_widget.show_all()
+			parent_box.add(self.form_widget)
+			parent_box.child_set_property(self.form_widget, 'position',
+				parent_box.child_get_property(self.xml.get_widget('conversation_scrolledwindow'), 'position'))
+			self.action = 'form'
+
 		self.send_button = self.xml.get_widget('send_button')
 		self.reply_button = self.xml.get_widget('reply_button')
 		self.send_and_close_button = self.xml.get_widget('send_and_close_button')
@@ -1878,7 +2017,7 @@ class SingleMessageWindow:
 					spell1.set_language(lang)
 					spell2.set_language(lang)
 			except gobject.GError, msg:
-				dialogs.AspellDictError(lang)
+				AspellDictError(lang)
 
 		self.prepare_widgets_for(self.action)
 
@@ -1911,6 +2050,9 @@ class SingleMessageWindow:
 				gajim.config.get('single-msg-width'),
 				gajim.config.get('single-msg-height'))
 		self.window.show_all()
+
+	def on_single_message_window_destroy(self, widget):
+		self.instances.remove(self)
 
 	def set_cursor_to_end(self):
 			end_iter = self.message_tv_buffer.get_end_iter()
@@ -1985,6 +2127,17 @@ class SingleMessageWindow:
 			self.reply_button.grab_focus()
 			self.cancel_button.hide()
 			self.close_button.show()
+		elif action == 'form': # prepare UI for Receiving
+			title = _('Form %s') % title 
+			self.send_button.show() 
+			self.send_and_close_button.show() 
+			self.to_label.show() 
+			self.to_entry.show() 
+			self.reply_button.hide() 
+			self.from_label.hide() 
+			self.from_entry.hide() 
+			self.conversation_scrolledwindow.hide() 
+			self.message_scrolledwindow.hide() 
 
 		self.window.set_title(title)
 
@@ -2023,9 +2176,19 @@ class SingleMessageWindow:
 					message)
 				return
 
+			if self.session:
+				session = self.session
+			else:
+				session = gajim.connections[self.account].make_new_session(to_whom_jid)
+
+			if self.form_widget:
+				form_node = self.form_widget.data_form
+			else:
+				form_node = None
 			# FIXME: allow GPG message some day
 			gajim.connections[self.account].send_message(to_whom_jid, message,
-				keyID = None, type = 'normal', subject=subject)
+				keyID=None, type='normal', subject=subject, session=session,
+				form_node=form_node)
 
 		self.subject_entry.set_text('') # we sent ok, clear the subject
 		self.message_tv_buffer.set_text('') # we sent ok, clear the textview
@@ -2042,7 +2205,7 @@ class SingleMessageWindow:
 		self.window.destroy()
 		SingleMessageWindow(self.account, to = self.from_whom,
 			action = 'send',	from_whom = self.from_whom, subject = self.subject,
-			message = self.message)
+			message = self.message, session = self.session)
 
 	def on_send_and_close_button_clicked(self, widget):
 		self.send_single_message()
@@ -2228,7 +2391,6 @@ class PrivacyListWindow:
 		jid_entry_completion.set_model(jids_list_store)
 		jid_entry_completion.set_popup_completion(True)
 		self.edit_type_jabberid_entry.set_completion(jid_entry_completion)
-
 		if action == 'EDIT':
 			self.refresh_rules()
 
@@ -2470,101 +2632,6 @@ class PrivacyListWindow:
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 
-class BlockedContactsWindow:
-	'''Window that is the main window for ContactWindows;'''
-	def __init__(self, account):
-		self.account = account
-		self.xml = gtkgui_helpers.get_glade('blocked_contacts_window.glade')
-		self.window = self.xml.get_widget('blocked_contacts_window')
-		self.remove_button = self.xml.get_widget('remove_button')
-		self.contacts_treeview = self.xml.get_widget('contacts_treeview')
-		renderer = gtk.CellRendererText()
-		
-		self.store = gtk.ListStore(str)
-		self.contacts_treeview.set_model(self.store)
-		
-		column = gtk.TreeViewColumn('Contact', renderer, text=0)
-		self.contacts_treeview.append_column(column)
-	
-		if len(gajim.connections) > 1:
-			title = _('Blocked Contacts for %s') % self.account
-		else:
-			title = _('Blocked Contacts')
-		self.window.set_title(title)
-		self.window.show_all()
-		self.xml.signal_autoconnect(self)
-		gajim.connections[self.account].get_privacy_list('block')
-	
-	def on_blocked_contacts_window_destroy(self, widget):
-		key_name = 'blocked_contacts'
-		if key_name in gajim.interface.instances[self.account]:
-			del gajim.interface.instances[self.account][key_name]
-
-	def on_remove_button_clicked(self, widget):
-		if self.contacts_treeview.get_selection().get_selected()[1] == None:
-			return
-		tags = []
-		rule_selected = self.store.get_path(
-			self.contacts_treeview.get_selection().get_selected()[1])[0]
-		for i in range(0, len(self.global_rules)):
-			if i != rule_selected:
-				tags.append(self.global_rules[i])
-			else:
-				deleted_rule = self.global_rules[i]
-		for rule in self.global_rules_to_append:
-			tags.append(rule)
-		gajim.connections[self.account].set_privacy_list(
-			'block', tags)
-		gajim.connections[self.account].get_privacy_list('block')
-		if len(tags) == 0:
-			self.privacy_list_received([])
-			gajim.connections[self.account].blocked_contacts = []
-			gajim.connections[self.account].blocked_groups = []
-			gajim.connections[self.account].blocked_list = []
-			gajim.connections[self.account].set_default_list('')
-			gajim.connections[self.account].set_active_list('')
-			gajim.connections[self.account].del_privacy_list('block')
-		status = gajim.connections[self.account].connected
-		msg = gajim.connections[self.account].status
-		show = gajim.SHOW_LIST[gajim.connections[self.account].connected]
-		if deleted_rule['type'] == 'jid':
-			jid = deleted_rule['value']
-			gajim.connections[self.account].send_custom_status(show, msg, jid)
-			# needed for draw_contact:
-			if jid in gajim.connections[self.account].blocked_contacts:
-				gajim.connections[self.account].blocked_contacts.remove(jid)
-			gajim.interface.roster.draw_contact(jid, self.account)
-		else:
-			group = deleted_rule['value']
-			# needed for draw_group:
-			if group in gajim.connections[self.account].blocked_groups:
-				gajim.connections[self.account].blocked_groups.remove(group)
-			gajim.interface.roster.draw_group(group, self.account)
-			for jid in gajim.contacts.get_jid_list(self.account):
-				contact = gajim.contacts.get_contact_with_highest_priority(
-					self.account, jid)
-				if group in contact.groups:
-					gajim.connections[self.account].send_custom_status(show, msg,
-						contact.jid)
-					gajim.interface.roster.draw_contact(contact.jid, self.account)
-	
-	def privacy_list_received(self, rules):
-		self.store.clear()
-		self.global_rules = []
-		self.global_rules_to_append = []
-		for rule in rules:
-			if rule['type'] == 'jid' and rule['action'] == 'deny':
-				#self.global_rules[text_item] = rule
-				self.store.append([rule['value']])
-				self.global_rules.append(rule)
-			elif rule['type'] == 'group' and rule['action'] == 'deny':
-				text_item = _('Group %s') % rule['value']
-				self.store.append([text_item])
-				self.global_rules.append(rule)
-			else:
-				self.global_rules_to_append.append(rule)
-
-
 class PrivacyListsWindow:
 	'''Window that is the main window for Privacy Lists;
 	we can list there the privacy lists and ask to create a new one
@@ -2688,17 +2755,21 @@ class PrivacyListsWindow:
 
 class InvitationReceivedDialog:
 	def __init__(self, account, room_jid, contact_jid, password = None,
-	comment = None):
+	comment = None, is_continued = False):
 
 		self.room_jid = room_jid
 		self.account = account
 		self.password = password
+		self.is_continued = is_continued
 		xml = gtkgui_helpers.get_glade('invitation_received_dialog.glade')
 		self.dialog = xml.get_widget('invitation_received_dialog')
 
 		#Don't translate $Contact
-		pritext = _('$Contact has invited you to group chat %(room_jid)s')\
-			% {'room_jid': room_jid}
+		if is_continued:
+			pritext = _('$Contact has invited you to join a discussion')
+		else:
+			pritext = _('$Contact has invited you to group chat %(room_jid)s')\
+				% {'room_jid': room_jid}
 		contact = gajim.contacts.get_first_contact_from_jid(account, contact_jid)
 		if contact and contact.name:
 			contact_text = '%s (%s)' % (contact.name, contact_jid)
@@ -2709,6 +2780,7 @@ class InvitationReceivedDialog:
 		label_text = '<big><b>%s</b></big>' % pritext
 
 		if comment: # only if not None and not ''
+			comment = gobject.markup_escape_text(comment)
 			sectext = _('Comment: %s') % comment
 			label_text += '\n\n%s' % sectext
 
@@ -2726,8 +2798,11 @@ class InvitationReceivedDialog:
 	def on_accept_button_clicked(self, widget):
 		self.dialog.destroy()
 		try:
-			JoinGroupchatWindow(self.account, self.room_jid,
-				password=self.password)
+			if self.is_continued:
+				gajim.interface.roster.join_gc_room(self.account, self.room_jid,
+					gajim.nicks[self.account], None, is_continued=True)
+			else:
+				JoinGroupchatWindow(self.account, self.room_jid)
 		except GajimGeneralException:
 			pass
 
@@ -2829,6 +2904,9 @@ class ImageChooserDialog(FileChooserDialog):
 			on_response_ok = (on_ok, on_response_ok),
 			on_response_cancel = on_response_cancel)
 
+		if on_response_cancel:
+			self.connect('destroy', on_response_cancel)
+
 		filter = gtk.FileFilter()
 		filter.set_name(_('All files'))
 		filter.add_pattern('*')
@@ -2840,6 +2918,7 @@ class ImageChooserDialog(FileChooserDialog):
 		filter.add_mime_type('image/jpeg')
 		filter.add_mime_type('image/gif')
 		filter.add_mime_type('image/tiff')
+		filter.add_mime_type('image/svg+xml')
 		filter.add_mime_type('image/x-xpixmap') # xpm
 		self.add_filter(filter)
 		self.set_filter(filter)
@@ -3394,3 +3473,134 @@ class AdvancedNotificationsWindow:
 
 	def on_close_window(self, widget):
 		self.window.destroy()
+
+class TransformChatToMUC:
+	# Keep a reference on windows so garbage collector don't restroy them
+	instances = []
+	def __init__(self, account, jids, preselected = None):
+		'''This window is used to trasform a one-to-one chat to a MUC.
+		We do 2 things: first select the server and then make a guests list.'''
+
+		self.instances.append(self)
+		self.account = account
+		self.auto_jids = jids
+		self.preselected_jids = preselected
+
+		self.xml = gtkgui_helpers.get_glade('chat_to_muc_window.glade')
+		self.window = self.xml.get_widget('chat_to_muc_window')
+
+		for widget_to_add in ('invite_button', 'cancel_button',
+		'server_list_comboboxentry', 'guests_treeview',
+		'server_and_guests_hseparator', 'server_select_label'):
+			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
+
+		# set comboboxentry
+		renderer_servers = gtk.CellRendererText()
+
+		server_list = []
+		self.servers = gtk.ListStore(str)
+		self.server_list_comboboxentry.set_model(self.servers)
+
+		self.server_list_comboboxentry.set_text_column(0)
+
+		# get the muc server of our server
+		if 'jabber' in gajim.connections[account].muc_jid:
+			server_list.append(gajim.connections[account].muc_jid['jabber'])
+		# add servers or recently joined groupchats
+		recently_groupchat = gajim.config.get('recently_groupchat').split()
+		for g in recently_groupchat:
+			server = gajim.get_server_from_jid(g)
+			if server not in server_list and not server.startswith('irc'):
+				server_list.append(server)
+		# add a default server
+		if not server_list:
+			server_list.append('conference.jabber.org')
+
+		for s in server_list:
+			self.servers.append([s])
+
+		self.server_list_comboboxentry.set_active(0)
+
+		# set treeview
+		# name, jid
+		self.store = gtk.ListStore(gtk.gdk.Pixbuf, str, str)
+		self.store.set_sort_column_id(1, gtk.SORT_ASCENDING)
+		self.guests_treeview.set_model(self.store)
+
+		renderer1 = gtk.CellRendererText()
+		renderer2 = gtk.CellRendererPixbuf()
+		column = gtk.TreeViewColumn('Status', renderer2, pixbuf=0)
+		self.guests_treeview.append_column(column)
+		column = gtk.TreeViewColumn('Name', renderer1, text=1)
+		self.guests_treeview.append_column(column)
+
+		self.guests_treeview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
+
+		# set jabber id and pseudos
+		for account in gajim.contacts.get_accounts():
+			if gajim.connections[account].is_zeroconf:
+				continue
+			for jid in gajim.contacts.get_jid_list(account):
+				contact = \
+					gajim.contacts.get_contact_with_highest_priority(account, jid)
+				contact_transport = gajim.get_transport_name_from_jid(jid)
+				# do not add transports, zeroconf contacs, minimized groupchats
+				# and selfjid to list of invitable jids
+				if contact.jid not in self.auto_jids and contact.jid != \
+				gajim.get_jid_from_account(self.account) and not contact_transport \
+				and not contact.is_transport() and contact.jid not in \
+				gajim.interface.minimized_controls[account]:
+					if contact.show not in ('offline', 'error'):
+						img = gajim.interface.roster.jabber_state_images['16'][
+							contact.show]
+						name = contact.name
+						if name == '':
+							name = jid.split('@')[0]
+						iter = self.store.append([img.get_pixbuf(), name, jid])
+						# preselect treeview rows
+						if self.preselected_jids and jid in self.preselected_jids:
+							path = self.store.get_path(iter)
+							self.guests_treeview.get_selection().\
+								select_path(path)
+
+		# show all
+		self.window.show_all()
+
+		self.xml.signal_autoconnect(self)
+
+	def on_chat_to_muc_window_destroy(self, widget):
+		self.instances.remove(self)
+
+	def on_chat_to_muc_window_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.Escape: # ESCAPE
+			self.window.destroy()
+
+	def on_invite_button_clicked(self, widget):
+		server = self.server_list_comboboxentry.get_active_text()
+		if server == '':
+			return
+		room_id = gajim.nicks[self.account] + str(randrange(9999999))
+		gajim.connections[self.account].check_unique_room_id_support(server, self)
+
+	def unique_room_id_supported(self, server, room_id):
+		guest_list = []
+		guests = self.guests_treeview.get_selection().get_selected_rows()
+		for guest in guests[1]:
+			iter = self.store.get_iter(guest)
+			guest_list.append(self.store[iter][2].decode('utf-8'))
+		for guest in self.auto_jids:
+			guest_list.append(guest)
+		room_jid = room_id + '@' + server
+		gajim.automatic_rooms[self.account][room_jid] = {}
+		gajim.automatic_rooms[self.account][room_jid]['invities'] = guest_list 
+		gajim.automatic_rooms[self.account][room_jid]['continue_tag'] = True
+		gajim.interface.roster.join_gc_room(self.account, room_jid,
+			gajim.nicks[self.account], None, is_continued=True)
+		self.window.destroy()
+
+	def on_cancel_button_clicked(self, widget):
+		self.window.destroy()
+
+	def unique_room_id_error(self, server):
+		self.unique_room_id_supported(server,
+			gajim.nicks[self.account] + str(randrange(9999999)))

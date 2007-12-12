@@ -1,18 +1,23 @@
 # -*- coding: utf-8 -*-
 ##	config.py
 ##
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Stéphan Kochen <stephan@kochen.nl>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 # The appearance of the treeview, and parts of the dialog, are controlled by
@@ -67,6 +72,7 @@ def _gen_agent_type_info():
 		# Jabber server
 		('server', 'im'):				(ToplevelAgentBrowser, 'jabber.png'),
 		('services', 'jabber'):		(ToplevelAgentBrowser, 'jabber.png'),
+		('hierarchy', 'branch'):	(AgentBrowser, 'jabber.png'),
 
 		# Services
 		('conference', 'text'):		(MucBrowser, 'conference.png'),
@@ -79,6 +85,7 @@ def _gen_agent_type_info():
 		('pubsub', 'generic'):		(PubSubBrowser, 'pubsub.png'),
 		('pubsub', 'service'):		(PubSubBrowser, 'pubsub.png'),
 		('proxy', 'bytestreams'):	(None, 'bytestreams.png'), # Socks5 FT proxy
+		('headline', 'newmail'):	(ToplevelAgentBrowser, 'mail.png'),
 
 		# Transports
 		('conference', 'irc'):		(ToplevelAgentBrowser, 'irc.png'),
@@ -444,7 +451,6 @@ _('Without a connection, you can not browse available services'))
 		self.style_event_id = 0
 		self.banner.realize()
 		self.paint_banner()
-		self.filter_hbox = self.xml.get_widget('filter_hbox')
 		self.action_buttonbox = self.xml.get_widget('action_buttonbox')
 
 		# Address combobox
@@ -954,6 +960,7 @@ _('This service does not contain any items to browse.'))
 		disco#items query.'''
 		self.model.append((jid, node, item.get('name', ''),
 			get_agent_address(jid, node)))
+		self.cache.get_info(jid, node, self._agent_info, force = force)
 
 	def _update_item(self, iter, jid, node, item):
 		'''Called when an item should be updated in the model. The result of a
@@ -964,7 +971,9 @@ _('This service does not contain any items to browse.'))
 	def _update_info(self, iter, jid, node, identities, features, data):
 		'''Called when an item should be updated in the model with further info.
 		The result of a disco#info query.'''
-		self.model[iter][2] = identities[0].get('name', '')
+		name = identities[0].get('name', '')
+		if name:
+			self.model[iter][2] = name
 
 	def _update_error(self, iter, jid, node):
 		'''Called when a disco#info query failed for an item.'''
@@ -1195,26 +1204,6 @@ class ToplevelAgentBrowser(AgentBrowser):
 			self.search_button = None
 		AgentBrowser._clean_actions(self)
 
-	def cleanup(self):
-		self.tooltip.hide_tooltip()
-		AgentBrowser.cleanup(self)
-
-	def update_theme(self):
-		theme = gajim.config.get('roster_theme')
-		bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
-		if bgcolor:
-			self._renderer.set_property('cell-background', bgcolor)
-		self.window.services_treeview.queue_draw()
-
-	def on_execute_button_clicked(self, widget = None):
-		'''When we want to execute a command:
-		open adhoc command window'''
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if not iter:
-			return
-		service = model[iter][0].decode('utf-8')
-		adhoc_commands.CommandWindow(self.account, service)
-
 	def on_search_button_clicked(self, widget = None):
 		'''When we want to search something:
 		open search window'''
@@ -1227,20 +1216,6 @@ class ToplevelAgentBrowser(AgentBrowser):
 		else:
 			gajim.interface.instances[self.account]['search'][service] = \
 				search_window.SearchWindow(self.account, service)
-
-	def on_register_button_clicked(self, widget = None):
-		'''When we want to register an agent:
-		request information about registering with the agent and close the
-		window.'''
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if not iter:
-			return
-		jid = model[iter][0].decode('utf-8')
-		if jid:
-			gajim.connections[self.account].request_register_agent_info(jid)
-			self.window.destroy(chain = True)
-
-		AgentBrowser._clean_actions(self)
 
 	def cleanup(self):
 		self.tooltip.hide_tooltip()

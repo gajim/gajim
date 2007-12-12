@@ -1,21 +1,26 @@
 # -*- coding: utf-8 -*-
 ##	search_window.py
 ##
-## Copyright (C) 2007 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2007 Yann Leboulanger <asterix@lagaule.org>
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
 import gobject
 import gtk
 
-from common import xmpp, gajim, dataforms
+from common import gajim, dataforms
 
 import gtkgui_helpers
 import dialogs
@@ -191,6 +196,11 @@ class SearchWindow:
 			return
 
 		self.dataform = dataforms.ExtendForm(node = form)
+		if len(self.dataform.items) == 0:
+			# No result
+			self.label.set_text(_('No result'))
+			self.label.show()
+			return
 
 		self.data_form_widget.set_sensitive(True)
 		try:

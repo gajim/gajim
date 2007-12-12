@@ -1,3 +1,4 @@
+# coding=utf-8
 emoticons = {
 	':-)': 'smile.png',
 	':)': 'smile.png',
@@ -54,6 +55,9 @@ emoticons = {
 #		
 	':-[': 'bat.png',
 	':[': 'bat.png',
+#
+	'>:3': 'lion.png',
+	':3': 'lion.png',
 #
 	#MSN ones
 	'(@)': 'pussy.png',

@@ -1,14 +1,19 @@
 ##
 ## Copyright (C) 2006 Gajim Team
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 from itertools import *
@@ -244,7 +249,7 @@ class ConnectionCaps(object):
 		if not contact: return
 		if not contact.caps_node: return # we didn't asked for that?
 		if not node.startswith(contact.caps_node+'#'): return
-		node, ext = node.split('#')
+		node, ext = node.split('#', 1)
 		if ext==contact.caps_ver:	# this can be also version (like '0.9')
 			exts=None
 		else:

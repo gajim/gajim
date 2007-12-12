@@ -2,19 +2,25 @@
 ##
 ## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 from common import gajim
 import sys
 import select
+import re
 from string import split
 from common.zeroconf.zeroconf import C_BARE_NAME, C_DOMAIN
 
@@ -109,7 +115,8 @@ class Zeroconf:
 		r'\064': '@',
 		}
 
-		name, stype, protocol, domain, dummy = split(fullname, '.')
+		# Split on '.' but do not split on '\.'
+		name, stype, protocol, domain, dummy = re.split('(?<!\\\\)\.', fullname)
 		
 		# Replace the escaped values
 		for src, trg in escaping.items():

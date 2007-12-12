@@ -1,22 +1,28 @@
 ##	conversation_textview.py
 ##
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import random
 from tempfile import gettempdir
 from subprocess import Popen
+from threading import Timer # for smooth scrolling
 
 import gtk
 import pango
@@ -37,12 +43,117 @@ from common.fuzzyclock import FuzzyClock
 from htmltextview import HtmlTextView
 from common.exceptions import GajimGeneralException
 
+
+def is_selection_modified(mark):
+	name = mark.get_name()
+	if name and name in ('selection_bound', 'insert'):
+		return True
+	else:
+		return False
+
+def has_focus(widget):
+	return widget.flags() & gtk.HAS_FOCUS == gtk.HAS_FOCUS
+
+class TextViewImage(gtk.Image):
+
+	def __init__(self, anchor):
+		super(TextViewImage, self).__init__()
+		self.anchor = anchor
+		self._selected = False
+		self._disconnect_funcs = []
+		self.connect("parent-set", self.on_parent_set)
+		self.connect("expose-event", self.on_expose)
+
+	def _get_selected(self):
+		parent = self.get_parent()
+		if not parent or not self.anchor: return False
+		buffer = parent.get_buffer()
+		position = buffer.get_iter_at_child_anchor(self.anchor)
+		bounds = buffer.get_selection_bounds()
+		if bounds and position.in_range(*bounds):
+			return True
+		else:
+			return False
+	
+	def get_state(self):
+		parent = self.get_parent()
+		if not parent:
+			return gtk.STATE_NORMAL
+		if self._selected:
+			if has_focus(parent):
+				return gtk.STATE_SELECTED
+			else:
+				return gtk.STATE_ACTIVE
+		else:
+			return gtk.STATE_NORMAL
+
+	def _update_selected(self):
+		selected = self._get_selected()
+		if self._selected != selected:
+			self._selected = selected
+			self.queue_draw()
+
+	def _do_connect(self, widget, signal, callback):
+		id = widget.connect(signal, callback)
+		def disconnect():
+			widget.disconnect(id)
+		self._disconnect_funcs.append(disconnect)
+
+	def _disconnect_signals(self):
+		for func in self._disconnect_funcs:
+			func()
+		self._disconnect_funcs = []
+
+	def on_parent_set(self, widget, old_parent):
+		parent = self.get_parent()
+		if not parent:
+			self._disconnect_signals()
+			return
+
+		self._do_connect(parent, "style-set", self.do_queue_draw)
+		self._do_connect(parent, "focus-in-event", self.do_queue_draw)
+		self._do_connect(parent, "focus-out-event", self.do_queue_draw)
+
+		textbuf = parent.get_buffer()
+		self._do_connect(textbuf, "mark-set", self.on_mark_set)
+		self._do_connect(textbuf, "mark-deleted", self.on_mark_deleted)
+	
+	def do_queue_draw(self, *args):
+		self.queue_draw()
+		return False
+	
+	def on_mark_set(self, buf, iterat, mark):
+		self.on_mark_modified(mark)
+		return False
+	
+	def on_mark_deleted(self, buf, mark):
+		self.on_mark_modified(mark)
+		return False
+
+	def on_mark_modified(self, mark):
+		if is_selection_modified(mark):
+			self._update_selected()
+
+	def on_expose(self, widget, event):
+		state = self.get_state()
+		if state != gtk.STATE_NORMAL:
+			gc = widget.get_style().base_gc[state]
+			area = widget.allocation
+			widget.window.draw_rectangle(gc, True, area.x, area.y,
+				area.width, area.height)
+		return False
+	
+
 class ConversationTextview:
 	'''Class for the conversation textview (where user reads already said messages)
 	for chat/groupchat windows'''
 	
 	path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
 	FOCUS_OUT_LINE_PIXBUF = gtk.gdk.pixbuf_new_from_file(path_to_file)
+
+	# smooth scroll constants
+	MAX_SCROLL_TIME = 0.4 # seconds
+	SCROLL_DELAY = 33 # milliseconds
 
 	def __init__(self, account, used_in_history_window = False):
 		'''if used_in_history_window is True, then we do not show
@@ -62,6 +173,8 @@ class ConversationTextview:
 		self.tv.set_left_margin(2)
 		self.tv.set_right_margin(2)
 		self.handlers = {}
+		self.images = []
+		self.image_cache = {}
 
 		# connect signals
 		id = self.tv.connect('motion_notify_event',
@@ -72,6 +185,11 @@ class ConversationTextview:
 		id = self.tv.connect('button_press_event',
 			self.on_textview_button_press_event)
 		self.handlers[id] = self.tv
+		
+		id = self.tv.connect("expose-event",
+			self.on_textview_expose_event)
+		self.handlers[id] = self.tv
+
 
 		self.account = account
 		self.change_cursor = None
@@ -154,6 +272,7 @@ class ConversationTextview:
 		self.line_tooltip = tooltips.BaseTooltip()
 		# use it for hr too
 		self.tv.focus_out_line_pixbuf = ConversationTextview.FOCUS_OUT_LINE_PIXBUF
+		self.smooth_id = None
 
 	def del_handlers(self):
 		for i in self.handlers.keys():
@@ -181,6 +300,48 @@ class ConversationTextview:
 			return True
 		return False
 
+	# Smooth scrolling inspired by Pidgin code
+	def smooth_scroll(self):
+		parent = self.tv.get_parent()
+		if not parent:
+			return False
+		vadj = parent.get_vadjustment()
+		max_val = vadj.upper - vadj.page_size + 1
+		cur_val = vadj.get_value()
+		# scroll by 1/3rd of remaining distance
+		onethird = cur_val + ((max_val - cur_val) / 3.0)
+		vadj.set_value(onethird)
+		if max_val - onethird < 0.01:
+			self.smooth_id = None
+			self.smooth_scroll_timer.cancel()
+			return False
+		return True		   
+
+	def smooth_scroll_timeout(self):
+		gobject.idle_add(self.do_smooth_scroll_timeout)
+		return
+
+	def do_smooth_scroll_timeout(self):
+		if not self.smooth_id:
+			# we finished scrolling
+			return
+		gobject.source_remove(self.smooth_id)
+		self.smooth_id = None
+		parent = self.tv.get_parent()
+		if parent:
+			vadj = parent.get_vadjustment()
+			vadj.set_value(vadj.upper - vadj.page_size + 1)
+
+	def smooth_scroll_to_end(self):
+		if None != self.smooth_id: # already scrolling
+			return False
+		self.smooth_id = gobject.timeout_add(self.SCROLL_DELAY,
+											 self.smooth_scroll)
+		self.smooth_scroll_timer = Timer(self.MAX_SCROLL_TIME,
+										 self.smooth_scroll_timeout)
+		self.smooth_scroll_timer.start()
+		return False
+
 	def scroll_to_end(self):
 		parent = self.tv.get_parent()
 		buffer = self.tv.get_buffer()
@@ -192,7 +353,9 @@ class ConversationTextview:
 		adjustment.set_value(0)
 		return False # when called in an idle_add, just do it once
 
-	def bring_scroll_to_end(self, diff_y = 0):
+	def bring_scroll_to_end(self, diff_y = 0,\
+							use_smooth =\
+							gajim.config.get('use_smooth_scrolling')):
 		''' scrolls to the end of textview if end is not visible '''
 		buffer = self.tv.get_buffer()
 		end_iter = buffer.get_end_iter()
@@ -200,7 +363,10 @@ class ConversationTextview:
 		visible_rect = self.tv.get_visible_rect()
 		# scroll only if expected end is not visible
 		if end_rect.y >= (visible_rect.y + visible_rect.height + diff_y):
-			gobject.idle_add(self.scroll_to_end_iter)
+			if use_smooth:
+				gobject.idle_add(self.smooth_scroll_to_end)
+			else:
+				gobject.idle_add(self.scroll_to_end_iter)
 
 	def scroll_to_end_iter(self):
 		buffer = self.tv.get_buffer()
@@ -287,6 +453,32 @@ class ConversationTextview:
 			position = self.tv.window.get_origin()
 			self.line_tooltip.show_tooltip(_('Text below this line is what has '
 			'been said since the last time you paid attention to this group chat'),	8, position[1] + pointer[1])
+
+	def on_textview_expose_event(self, widget, event):
+		expalloc = event.area
+		exp_x0 = expalloc.x
+		exp_y0 = expalloc.y
+		exp_x1 = exp_x0 + expalloc.width
+		exp_y1 = exp_y0 + expalloc.height
+		
+		try:
+			tryfirst = [self.image_cache[(exp_x0, exp_y0)]]
+		except KeyError:
+			tryfirst = []
+
+		for image in tryfirst + self.images:
+			imgalloc = image.allocation
+			img_x0 = imgalloc.x
+			img_y0 = imgalloc.y
+			img_x1 = img_x0 + imgalloc.width
+			img_y1 = img_y0 + imgalloc.height
+
+			if img_x0 <= exp_x0 and img_y0 <= exp_y0 and \
+			exp_x1 <= img_x1 and exp_y1 <= img_y1:
+				self.image_cache[(img_x0, img_y0)] = image
+				widget.propagate_expose(image, event)
+				return True
+		return False
 
 	def on_textview_motion_notify_event(self, widget, event):
 		'''change the cursor to a hand when we are over a mail or an url'''
@@ -407,7 +599,7 @@ class ConversationTextview:
 				item.set_property('sensitive', False)
 			else:
 				item = gtk.MenuItem(_('Web _Search for it'))
-				link =  search_link % self.selected_phrase
+				link =	search_link % self.selected_phrase
 				id = item.connect('activate', self.visit_url_from_menuitem, link)
 				self.handlers[id] = item
 			submenu.append(item)
@@ -548,6 +740,7 @@ class ConversationTextview:
 		if event.type == gtk.gdk.BUTTON_PRESS:
 			if event.button == 3: # right click
 				self.make_link_menu(event, kind, href)
+				return True
 			else:
 				# we launch the correct application
 				helpers.launch_browser_mailer(kind, href)
@@ -632,7 +825,7 @@ class ConversationTextview:
 				cwd=gettempdir())
 			exitcode = p.wait()
 
-		if exitcode == 0:	    
+		if exitcode == 0:		
 			p = Popen(['dvips', '-E', '-o', tmpfile + '.ps', tmpfile + '.dvi'],
 				cwd=gettempdir())
 			exitcode = p.wait()
@@ -670,13 +863,14 @@ class ConversationTextview:
 			emot_ascii = possible_emot_ascii_caps
 			end_iter = buffer.get_end_iter()
 			anchor = buffer.create_child_anchor(end_iter)
-			img = gtk.Image()
+			img = TextViewImage(anchor)
 			animations = gajim.interface.emoticons_animations
 			if not emot_ascii in animations:
 				animations[emot_ascii] = gtk.gdk.PixbufAnimation(
 					gajim.interface.emoticons[emot_ascii])
 			img.set_from_animation(animations[emot_ascii])
 			img.show()
+			self.images.append(img)
 			# add with possible animation
 			self.tv.add_child_at_anchor(img, anchor)
 		#FIXME: one day, somehow sync with regexp in gajim.py
@@ -857,7 +1051,10 @@ class ConversationTextview:
 		if at_the_end or kind == 'outgoing':
 			# we are at the end or we are sending something
 			# scroll to the end (via idle in case the scrollbar has appeared)
-			gobject.idle_add(self.scroll_to_end)
+			if gajim.config.get('use_smooth_scrolling'):
+				gobject.idle_add(self.smooth_scroll_to_end)
+			else:
+				gobject.idle_add(self.scroll_to_end)
 
 		buffer.end_user_action()
 

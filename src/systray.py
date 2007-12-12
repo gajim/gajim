@@ -1,6 +1,6 @@
 ##	systray.py
 ##
-## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2007 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2003-2004 Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
@@ -8,14 +8,19 @@
 ## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import gtk
@@ -285,7 +290,8 @@ class Systray:
 	def on_left_click(self):
 		win = gajim.interface.roster.window
 		# toggle visible/hidden for roster window
-		if win.get_property('visible'): # visible in ANY virtual desktop?
+		if win.get_property('visible') and win.get_property('has-toplevel-focus'):
+			# visible in ANY virtual desktop?
 
 			# we could be in another VD right now. eg vd2
 			# and we want to show it in vd2
@@ -326,7 +332,12 @@ class Systray:
 		l = ['online', 'chat', 'away', 'xa', 'dnd', 'invisible', 'SEPARATOR',
 			'CHANGE_STATUS_MSG_MENUITEM', 'SEPARATOR', 'offline']
 		index = l.index(show)
-		gajim.interface.roster.status_combobox.set_active(index)
+		if not helpers.statuses_unified():
+			gajim.interface.roster.status_combobox.set_active(index + 2)
+			return
+		current = gajim.interface.roster.status_combobox.get_active()
+		if index != current:
+			gajim.interface.roster.status_combobox.set_active(index)
 
 	def on_change_status_message_activate(self, widget):
 		model = gajim.interface.roster.status_combobox.get_model()

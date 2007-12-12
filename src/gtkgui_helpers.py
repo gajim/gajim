@@ -1,20 +1,26 @@
 ##	gtkgui_helpers.py
 ##
-## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2007 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
-## Copyright (C) 2005 Travis Shirk <travis@pobox.com>
-## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
+##                    Travis Shirk <travis@pobox.com>
+##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de>
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import xml.sax.saxutils
@@ -121,7 +127,7 @@ def get_theme_font_for_option(theme, option):
 	
 def get_default_font():
 	'''Get the desktop setting for application font
-	first check for GNOME, then XFCE and last KDE
+	first check for GNOME, then Xfce and last KDE
 	it returns None on failure or else a string 'Font Size' '''
 	
 	try:
@@ -180,6 +186,8 @@ def autodetect_browser_mailer():
 		gajim.config.set('openwith', 'kfmclient exec')
 	elif user_runs_xfce():
 		gajim.config.set('openwith', 'exo-open')
+	elif user_runs_osx():
+		gajim.config.set('openwith', 'open')
 	else:
 		gajim.config.set('openwith', 'custom')
 
@@ -194,6 +202,9 @@ def user_runs_xfce():
 	if 'startxfce4' in procs or 'xfce4-session' in procs:
 		return True
 	return False
+
+def user_runs_osx():
+	return sys.platform == 'darwin'
 
 def get_running_processes():
 	'''returns running processes or None (if not /proc exists)'''
@@ -605,7 +616,7 @@ def get_path_to_generic_or_avatar(generic, jid = None, suffix = None):
 		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + suffix
 		filepath, extension = os.path.splitext(path_to_file) 
 		path_to_local_file = filepath + '_local' + extension 
-		if os.path.exists(path_to_local_file): 
+		if os.path.exists(path_to_local_file):
 			return path_to_local_file
 		if os.path.exists(path_to_file):
 			return path_to_file
@@ -643,12 +654,10 @@ def possibly_set_gajim_as_xmpp_handler():
 	else:
 		path_to_kde_file = None
 
-	def set_gajim_as_xmpp_handler(widget = None):
-		if widget:
+	def set_gajim_as_xmpp_handler(is_checked=None):
+		if is_checked != None:
 			# come from confirmation dialog
-			gajim.config.set('check_if_gajim_is_default',
-				dlg.checkbutton.get_active())
-			dlg.destroy()
+			gajim.config.set('check_if_gajim_is_default', is_checked)
 		path_to_gajim_script, typ = get_abspath_for_script('gajim-remote', True)
 		if path_to_gajim_script:
 			if typ == 'svn':
@@ -711,10 +720,9 @@ Description=xmpp
 		sectext = _('Would you like to make Gajim the default Jabber client?')
 		checktext = _('Always check to see if Gajim is the default Jabber client '
 			'on startup')
-		def on_cancel(widget):
+		def on_cancel():
 			gajim.config.set('check_if_gajim_is_default',
-				dlg.checkbutton.get_active())
-			dlg.destroy()
+				dlg.is_checked())
 		dlg = dialogs.ConfirmationDialogCheck(pritext, sectext, checktext,
 			set_gajim_as_xmpp_handler, on_cancel)
 		if gajim.config.get('check_if_gajim_is_default'):
@@ -752,9 +760,8 @@ def destroy_widget(widget):
 def on_avatar_save_as_menuitem_activate(widget, jid, account,
 default_name = ''):
 	def on_ok(widget):
-		def on_ok2(widget, file_path, pixbuf):
+		def on_ok2(file_path, pixbuf):
 			pixbuf.save(file_path, 'jpeg')
-			dialog2.destroy()
 			dialog.destroy()
 
 		file_path = dialog.get_filename()
@@ -808,7 +815,7 @@ default_name = ''):
 			if os.path.exists(file_path):
 				os.remove(file_path)
 			new_file_path = '.'.join(file_path.split('.')[:-1]) + '.jpeg'
-			dialog2 = dialogs.ConfirmationDialog(_('Extension not supported'),
+			dialogs.ConfirmationDialog(_('Extension not supported'),
 				_('Image cannot be saved in %(type)s format. Save as %(new_filename)s?') % {'type': type_, 'new_filename': new_file_path},
 				on_response_ok = (on_ok2, new_file_path, pixbuf))
 		else:

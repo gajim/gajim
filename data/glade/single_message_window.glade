@@ -8,6 +8,7 @@
     <property name="default_height">280</property>
     <signal name="key_press_event" handler="on_single_message_window_key_press_event"/>
     <signal name="delete_event" handler="on_single_message_window_delete_event"/>
+    <signal name="destroy" handler="on_single_message_window_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox97">
         <property name="visible">True</property>

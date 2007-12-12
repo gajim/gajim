@@ -1,16 +1,21 @@
 ## logger.py
 ##
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 ''' This module allows to access the on-disk database of logs. '''
@@ -137,6 +142,9 @@ class Logger:
 		for row in rows:
 			# row[0] is first item of row (the only result here, the jid)
 			self.jids_already_in.append(row[0])
+	
+	def get_jids_in_db(self):
+		return self.jids_already_in
 
 	def jid_is_from_pm(self, jid):
 		'''if jid is gajim@conf/nkour it's likely a pm one, how we know
@@ -181,7 +189,13 @@ class Logger:
 			typ = constants.JID_ROOM_TYPE
 		else:
 			typ = constants.JID_NORMAL_TYPE
-		self.cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid, typ))
+		try:
+			self.cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid,
+				typ))
+		except sqlite.IntegrityError, e:
+			# Jid already in DB, maybe added by another instance. re-read DB
+			self.get_jids_already_in_db()
+			return self.get_jid_id(jid, typestr)
 		try:
 			self.con.commit()
 		except sqlite.OperationalError, e:

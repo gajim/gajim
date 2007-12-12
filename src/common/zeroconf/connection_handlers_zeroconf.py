@@ -2,20 +2,25 @@
 ## Copyright (C) 2006 Gajim Team
 ##
 ## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
+##	- Yann Leboulanger <asterix@lagaule.org>
 ##	- Nikos Kouremenos <nkour@jabber.org>
 ##	- Dimitur Kirov <dkirov@gmail.com>
 ##	- Travis Shirk <travis@pobox.com>
 ## - Stefan Bethge <stefan@lanpartei.de> 
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import os
@@ -43,6 +48,8 @@ try:
 except:
 	gajim.log.debug(_('Unable to load idle module'))
 	HAS_IDLE = False
+
+from common.stanza_session import EncryptedStanzaSession 
 
 class ConnectionVcard:
 	def __init__(self): 
@@ -138,7 +145,7 @@ class ConnectionBytestream:
 	def __init__(self):
 		self.files_props = {}
 	
-	def is_transfer_stoped(self, file_props):
+	def is_transfer_stopped(self, file_props):
 		if file_props.has_key('error') and file_props['error'] != 0:
 			return True
 		if file_props.has_key('completed') and file_props['completed']:
@@ -167,7 +174,7 @@ class ConnectionBytestream:
 	def remove_transfers_for_contact(self, contact):
 		''' stop all active transfer for contact '''
 		for file_props in self.files_props.values():
-			if self.is_transfer_stoped(file_props):
+			if self.is_transfer_stopped(file_props):
 				continue
 			receiver_jid = unicode(file_props['receiver']).split('/')[0]
 			if contact.jid == receiver_jid:
@@ -593,6 +600,7 @@ class ConnectionBytestream:
 		file_props['sender'] = unicode(iq_obj.getFrom())
 		file_props['request-id'] = unicode(iq_obj.getAttr('id'))
 		file_props['sid'] = unicode(si.getAttr('id'))
+		file_props['transfered_size'] = []
 		gajim.socks5queue.add_file_props(self.name, file_props)
 		self.dispatch('FILE_REQUEST', (jid, file_props))
 		raise common.xmpp.NodeProcessed
@@ -628,6 +636,8 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 		# keep the jids we auto added (transports contacts) to not send the
 		# SUBSCRIBED event to gui
 		self.automatically_added = []
+		# keep track of sessions this connection has with other JIDs
+		self.sessions = {}
 		try:
 			idle.init()
 		except:
@@ -635,26 +645,55 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 			
 	def _messageCB(self, ip, con, msg):
 		'''Called when we receive a message'''
-		msgtxt = msg.getBody()
-		msghtml = msg.getXHTML()
 		mtype = msg.getType()
-		subject = msg.getSubject() # if not there, it's None
+		thread_id = msg.getThread()
 		tim = msg.getTimestamp()
 		tim = helpers.datetime_tuple(tim)
 		tim = time.localtime(timegm(tim))
 		frm = msg.getFrom()
+
 		if frm == None:
 			for key in self.connection.zeroconf.contacts:
 				if ip == self.connection.zeroconf.contacts[key][zeroconf.C_ADDRESS]:
 					frm = key
 		frm = unicode(frm)
 		jid  = frm
+
+		session = self.get_session(frm, thread_id, mtype)
+
+		if thread_id and not session.received_thread_id:
+			session.received_thread_id = True
+		
+		if msg.getTag('feature') and msg.getTag('feature').namespace == \
+		common.xmpp.NS_FEATURE:
+			if gajim.HAVE_PYCRYPTO:
+				self._FeatureNegCB(con, msg, session)
+			return
+		if msg.getTag('init') and msg.getTag('init').namespace == \
+		common.xmpp.NS_ESESSION_INIT:
+			self._InitE2ECB(con, msg, session)
+
 		no_log_for = gajim.config.get_per('accounts', self.name,
 			'no_log_for').split()
 		encrypted = False
 		chatstate = None
+
+		e2e_tag = msg.getTag('c', namespace = common.xmpp.NS_STANZA_CRYPTO)
+		if e2e_tag:
+			encrypted = True
+
+			try:
+				msg = session.decrypt_stanza(msg)
+			except:
+				self.dispatch('FAILED_DECRYPT', (frm, tim))
+		
+		msgtxt = msg.getBody()
+		msghtml = msg.getXHTML()
+		subject = msg.getSubject() # if not there, it's None
+
 		encTag = msg.getTag('x', namespace = common.xmpp.NS_ENCRYPTED)
 		decmsg = ''
+		form_node = msg.getTag('x', namespace = common.xmpp.NS_DATA)
 		# invitations
 		invite = None
 		if not encTag:
@@ -715,16 +754,122 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 				msg_id = gajim.logger.write('chat_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
 			self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype, subject,
-				chatstate, msg_id, composing_xep, user_nick, msghtml))
+				chatstate, msg_id, composing_xep, user_nick, msghtml, session,
+				form_node))
 		elif mtype == 'normal': # it's single message
 			if self.name not in no_log_for and jid not in no_log_for and msgtxt:
 				gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
 					subject = subject)
 			if invite:
 				self.dispatch('MSG', (frm, msgtxt, tim, encrypted, 'normal',
-					subject, chatstate, msg_id, composing_xep, user_nick))
+					subject, chatstate, msg_id, composing_xep, user_nick, msghtml,
+					session, form_node))
 	# END messageCB
 	
+	def _FeatureNegCB(self, con, stanza, session):
+		gajim.log.debug('FeatureNegCB')
+		feature = stanza.getTag(name='feature', namespace=common.xmpp.NS_FEATURE)
+		form = common.xmpp.DataForm(node=feature.getTag('x'))
+
+		if form['FORM_TYPE'] == 'urn:xmpp:ssn':
+			self.dispatch('SESSION_NEG', (stanza.getFrom(), session, form))
+		else:
+			reply = stanza.buildReply()
+			reply.setType('error')
+
+			reply.addChild(feature)
+			reply.addChild(node=xmpp.ErrorNode('service-unavailable', typ='cancel'))
+
+			con.send(reply)
+		
+		raise common.xmpp.NodeProcessed
+
+	def _InitE2ECB(self, con, stanza, session):
+		gajim.log.debug('InitE2ECB')
+		init = stanza.getTag(name='init', namespace=common.xmpp.NS_ESESSION_INIT)
+		form = common.xmpp.DataForm(node=init.getTag('x'))
+
+		self.dispatch('SESSION_NEG', (stanza.getFrom(), session, form))
+
+		raise common.xmpp.NodeProcessed
+
+	def get_session(self, jid, thread_id, type):
+		'''returns an existing session between this connection and 'jid', returns a new one if none exist.'''
+		session = self.find_session(jid, thread_id, type)
+
+		if session:
+			return session
+		else:
+			# it's possible we initiated a session with a bare JID and this is the
+			# first time we've seen a resource
+			bare_jid = gajim.get_jid_without_resource(jid)
+			if bare_jid != jid:
+				session = self.find_session(bare_jid, thread_id, type)
+				if session:
+					if not session.received_thread_id:
+						thread_id = session.thread_id
+
+					self.move_session(bare_jid, thread_id, jid.split("/")[1])
+					return session
+
+		return self.make_new_session(jid, thread_id, type)
+
+	def find_session(self, jid, thread_id, type):
+		try:
+			if type == 'chat' and not thread_id:
+				return self.find_null_session(jid)
+			else:
+				return self.sessions[jid][thread_id]
+		except KeyError:
+			return None
+
+	def delete_session(self, jid, thread_id):
+		try:
+			del self.sessions[jid][thread_id]
+			
+			if not self.sessions[jid]:
+				del self.sessions[jid]
+		except KeyError:
+			print "jid %s should have been in %s, but it wasn't. missing session?" % (repr(jid), repr(self.sessions.keys()))
+
+	def move_session(self, original_jid, thread_id, to_resource):
+		'''moves a session to another resource.'''
+		session = self.sessions[original_jid][thread_id]
+
+		del self.sessions[original_jid][thread_id]
+
+		new_jid = gajim.get_jid_without_resource(original_jid) + '/' + to_resource
+		session.jid = common.xmpp.JID(new_jid)
+
+		if not new_jid in self.sessions:
+			self.sessions[new_jid] = {}
+
+		self.sessions[new_jid][thread_id] = session
+
+	def find_null_session(self, jid):
+		'''finds all of the sessions between us and jid that jid hasn't sent a thread_id in yet.
+
+returns the session that we last sent a message to.'''
+		
+		sessions_with_jid = self.sessions[jid].values()
+		no_threadid_sessions = filter(lambda s: not s.received_thread_id, sessions_with_jid)
+
+		if no_threadid_sessions:
+			no_threadid_sessions.sort(key=lambda s: s.last_send)
+			return no_threadid_sessions[-1]
+		else:
+			return None
+
+	def make_new_session(self, jid, thread_id = None, type = 'chat'):
+		sess = EncryptedStanzaSession(self, common.xmpp.JID(jid), thread_id, type)
+
+		if not jid in self.sessions:
+			self.sessions[jid] = {}
+
+		self.sessions[jid][sess.thread_id] = sess
+
+		return sess
+
 	def parse_data_form(self, node):
 		dic = {}
 		tag = node.getTag('title')

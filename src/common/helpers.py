@@ -1,20 +1,25 @@
 ##	common/helpers.py
 ##
-## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2007 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2005
-##                    Dimitur Kirov <dkirov@gmail.com>
+## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
+##                    Stephan Erb <steve-e@h3c.de> 
+##			
+## This file is part of Gajim.
 ##
-## This program is free software; you can redistribute it and/or modify
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import re
@@ -25,6 +30,7 @@ import urllib
 import errno
 import select
 import sha
+import sys
 from encodings.punycode import punycode_encode
 from encodings import idna
 
@@ -33,6 +39,9 @@ from i18n import Q_
 from i18n import ngettext
 from xmpp_stringprep import nodeprep, resourceprep, nameprep
 
+
+if sys.platform == 'darwin':
+	from osx import nsapp
 
 try:
 	import winsound # windows-only built-in module for playing wav
@@ -420,6 +429,9 @@ def launch_browser_mailer(kind, uri):
 			command = 'kfmclient exec'
 		elif gajim.config.get('openwith') == 'exo-open':
 			command = 'exo-open'
+		elif ((sys.platform == 'darwin') and
+			  (gajim.config.get('openwith') == 'open')):
+			command = 'open'
 		elif gajim.config.get('openwith') == 'custom':
 			if kind == 'url':
 				command = gajim.config.get('custombrowser')
@@ -447,6 +459,9 @@ def launch_file_manager(path_to_open):
 			command = 'kfmclient exec'
 		elif gajim.config.get('openwith') == 'exo-open':
 			command = 'exo-open'
+		elif ((sys.platform == 'darwin') and
+			  (gajim.config.get('openwith') == 'open')):
+			command = 'open'
 		elif gajim.config.get('openwith') == 'custom':
 			command = gajim.config.get('custom_file_manager')
 		if command == '': # if no app is configured
@@ -469,7 +484,9 @@ def play_sound_file(path_to_soundfile):
 		return
 	if path_to_soundfile is None or not os.path.exists(path_to_soundfile):
 		return
-	if os.name == 'nt':
+	if sys.platform == 'darwin':
+		nsapp.playFile(path_to_soundfile)
+	elif os.name == 'nt':
 		try:
 			winsound.PlaySound(path_to_soundfile,
 				winsound.SND_FILENAME|winsound.SND_ASYNC)
@@ -489,7 +506,11 @@ def get_file_path_from_dnd_dropped_uri(uri):
 	if path.startswith('file:\\\\\\'): # windows
 		path = path[8:] # 8 is len('file:///')
 	elif path.startswith('file://'): # nautilus, rox
-		path = path[7:] # 7 is len('file://')
+		if sys.platform == 'darwin':
+			# OS/X includes hostname in file:// URI
+			path = re.sub('file://[^/]*', '', path)
+		else:
+			path = path[7:] # 7 is len('file://')
 	elif path.startswith('file:'): # xffm
 		path = path[5:] # 5 is len('file:')
 	return path
@@ -543,6 +564,19 @@ def get_global_status():
 			maxi = connected
 			status = gajim.connections[account].status
 	return status
+
+def statuses_unified(): 
+	'''testing if all statuses are the same.'''
+	reference = None
+	for account in gajim.connections:
+		if not gajim.config.get_per('accounts', account,
+		'sync_with_global_status'):
+			continue
+		if reference == None:
+			reference = gajim.connections[account].connected
+		elif reference != gajim.connections[account].connected:
+			return False
+	return True
 
 def get_icon_name_to_show(contact, account = None):
 	'''Get the icon name to show in online, away, requested, ...'''
@@ -1050,3 +1084,11 @@ def get_iconset_path(iconset):
 		return os.path.join(gajim.DATA_DIR, 'iconsets', iconset)
 	elif os.path.isdir(os.path.join(gajim.MY_ICONSETS_PATH, iconset)):
 		return os.path.join(gajim.MY_ICONSETS_PATH, iconset)
+
+def get_transport_path(transport):
+	if os.path.isdir(os.path.join(gajim.DATA_DIR, 'iconsets', 'transports',
+	transport)):
+		return os.path.join(gajim.DATA_DIR, 'iconsets', 'transports', transport)
+	elif os.path.isdir(os.path.join(gajim.MY_ICONSETS_PATH, 'transports',
+	transport)):
+		return os.path.join(gajim.MY_ICONSETS_PATH, 'transports', transport)

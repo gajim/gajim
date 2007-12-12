@@ -780,42 +780,19 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkHBox" id="hbox4">
+                                      <widget class="GtkCheckButton" id="use_gpg_agent_checkbutton1">
                                         <property name="visible">True</property>
-                                        <property name="spacing">6</property>
-                                        <child>
-                                          <widget class="GtkCheckButton" id="gpg_save_password_checkbutton1">
-                                            <property name="visible">True</property>
-                                            <property name="sensitive">False</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="tooltip" translatable="yes">If checked, Gajim will store the password in ~/.gajim/config with 'read' permission only for you</property>
-                                            <property name="label" translatable="yes">Save _passphrase (insecure)</property>
-                                            <property name="use_underline">True</property>
-                                            <property name="draw_indicator">True</property>
-                                            <signal name="toggled" handler="on_gpg_save_password_checkbutton_toggled"/>
-                                          </widget>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <widget class="GtkEntry" id="gpg_password_entry1">
-                                            <property name="visible">True</property>
-                                            <property name="sensitive">False</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="visibility">False</property>
-                                            <property name="invisible_char">*</property>
-                                            <signal name="changed" handler="on_gpg_password_entry_changed"/>
-                                          </widget>
-                                          <packing>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
+                                        <property name="sensitive">False</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="tooltip" translatable="yes">If checked, Gajim will get the password from a GPG agent like seahorse</property>
+                                        <property name="label" translatable="yes">Use GPG _Agent</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="draw_indicator">True</property>
+                                        <signal name="toggled" handler="on_use_gpg_agent_checkbutton_toggled"/>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="position">1</property>
+                                        <property name="fill">False</property>
                                       </packing>
                                     </child>
                                   </widget>
@@ -1218,40 +1195,18 @@ You might consider to change possible firewall settings.</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkHBox" id="hbox7">
+                                  <widget class="GtkCheckButton" id="use_gpg_agent_checkbutton2">
                                     <property name="visible">True</property>
-                                    <property name="spacing">6</property>
-                                    <child>
-                                      <widget class="GtkCheckButton" id="gpg_save_password_checkbutton2">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="tooltip" translatable="yes">If checked, Gajim will store the password in ~/.gajim/config with 'read' permission only for you</property>
-                                        <property name="label" translatable="yes">Save _passphrase (insecure)</property>
-                                        <property name="use_underline">True</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="on_gpg_save_password_checkbutton_toggled"/>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkEntry" id="gpg_password_entry2">
-                                        <property name="visible">True</property>
-                                        <property name="sensitive">False</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="visibility">False</property>
-                                        <property name="invisible_char">*</property>
-                                        <signal name="changed" handler="on_gpg_password_entry_changed"/>
-                                      </widget>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip" translatable="yes">If checked, Gajim will get the password from a GPG agent like seahorse</property>
+                                    <property name="label" translatable="yes">Use GPG _Agent</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="on_use_gpg_agent_checkbutton_toggled"/>
                                   </widget>
                                   <packing>
-                                    <property name="position">2</property>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
                                   </packing>
                                 </child>
                               </widget>

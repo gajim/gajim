@@ -4,14 +4,19 @@
 ## Contributors for this file:
 ##	- Dimitur Kirov <dkirov@gmail.com>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 import socket 
 import struct
@@ -108,9 +113,8 @@ class ProxyResolver:
 		query.setNamespace(common.xmpp.NS_BYTESTREAM)
 		query.setAttr('sid',  self.sid)
 		
-		query.setTag('activate')
-		# activate = query.setTag('activate')
-		# activate.setData(self.jid + "/" + self.sid)
+		activate = query.setTag('activate')
+		activate.setData(self.jid + "/" + self.sid)
 
 		if self.active_connection:
 			self.active_connection.send(iq)
@@ -253,7 +257,8 @@ class HostTester(Socks5, IdleObject):
 			self._recv=self._sock.recv
 		except Exception, ee:
 			(errnum, errstr) = ee
-			if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK): 
+			# 56 is for freebsd
+			if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):
 				# still trying to connect
 				return
 			# win32 needs this

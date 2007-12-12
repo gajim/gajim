@@ -1,15 +1,21 @@
 ##	message_control.py
 ##
 ## Copyright (C) 2006 Travis Shirk <travis@pobox.com>
+## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 import gtkgui_helpers
 
@@ -110,14 +116,42 @@ class MessageControl:
 	def get_specific_unread(self):
 		return len(gajim.events.get_events(self.account, self.contact.jid))
 
+	def set_session(self, session):
+		if hasattr(self, 'session') and session == self.session:
+			return
+
+		was_encrypted = False
+
+		if hasattr(self, 'session') and self.session:
+			if self.session.enable_encryption:
+				was_encrypted = True
+
+			print "starting a new session, dropping the old one!"
+			gajim.connections[self.account].delete_session(self.session.jid, self.session.thread_id)
+
+		self.session = session
+
+		if session:
+			session.control = self
+
+			if was_encrypted:
+				self.print_esession_details()
+
 	def send_message(self, message, keyID = '', type = 'chat',
 	chatstate = None, msg_id = None, composing_xep = None, resource = None,
 	user_nick = None):
 		'''Send the given message to the active tab. Doesn't return None if error
 		'''
 		jid = self.contact.jid
+
+		if not self.session:
+			fjid = self.contact.get_full_jid()
+			new_session = gajim.connections[self.account].make_new_session(fjid)
+
+			self.set_session(new_session)
+
 		# Send and update history
 		return gajim.connections[self.account].send_message(jid, message, keyID,
 			type = type, chatstate = chatstate, msg_id = msg_id,
 			composing_xep = composing_xep, resource = self.resource,
-			user_nick = user_nick)
+			user_nick = user_nick, session = self.session)

@@ -31,7 +31,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="new_chat_menuitem">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">_Start Chat</property>
+                        <property name="label" translatable="yes">_Start Chat...</property>
                         <property name="use_underline">True</property>
                         <child internal-child="image">
                           <widget class="GtkImage" id="image1605">
@@ -43,9 +43,22 @@
                       </widget>
                     </child>
                     <child>
+                      <widget class="GtkImageMenuItem" id="send_single_message_menuitem">
+                        <property name="label" translatable="yes">_Send Single Message...</property>
+                        <property name="use_underline">True</property>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="menu-item-image5">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-new</property>
+                            <property name="icon_size">1</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
                       <widget class="GtkImageMenuItem" id="join_gc_menuitem">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">_Group Chat</property>
+                        <property name="label" translatable="yes">Join _Group Chat...</property>
                         <property name="use_underline">True</property>
                         <child internal-child="image">
                           <widget class="GtkImage" id="image1606">
@@ -64,7 +77,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="add_new_contact_menuitem">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Add _Contact</property>
+                        <property name="label" translatable="yes">Add _Contact...</property>
                         <property name="use_underline">True</property>
                         <child internal-child="image">
                           <widget class="GtkImage" id="image1607">
@@ -232,7 +245,24 @@
                         <child internal-child="image">
                           <widget class="GtkImage" id="image1613">
                             <property name="visible">True</property>
-                            <property name="stock">gtk-missing-image</property>
+                            <property name="stock">gtk-save</property>
+                            <property name="icon_size">1</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkImageMenuItem" id="history_menuitem">
+                        <property name="visible">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="label" translatable="yes">_History</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_history_menuitem_activate"/>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="menu-item-image14">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="stock">gtk-justify-fill</property>
                             <property name="icon_size">1</property>
                           </widget>
                         </child>
@@ -341,6 +371,7 @@
                 <signal name="row_expanded" handler="on_roster_treeview_row_expanded"/>
                 <signal name="key_press_event" handler="on_roster_treeview_key_press_event"/>
                 <signal name="row_activated" handler="on_roster_treeview_row_activated"/>
+                <signal name="button_release_event" handler="on_roster_treeview_button_release_event"/>
                 <signal name="scroll_event" handler="on_roster_treeview_scroll_event"/>
                 <signal name="style_set" handler="on_roster_treeview_style_set"/>
               </widget>

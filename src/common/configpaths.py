@@ -79,9 +79,9 @@ class ConfigPaths:
 
 		# LOG is deprecated
 		k = ( 'LOG',   'LOG_DB',   'VCARD',   'AVATAR',   'MY_EMOTS',
-			'MY_ICONSETS' )
+			'MY_ICONSETS', 'MY_CACERTS')
 		v = (u'logs', u'logs.db', u'vcards', u'avatars', u'emoticons',
-			u'iconsets')
+			u'iconsets',  u'cacerts.pem')
 
 		if os.name == 'nt':
 			v = map(lambda x: x.capitalize(), v)
@@ -102,16 +102,19 @@ class ConfigPaths:
 		# for k, v in paths.iteritems():
 		# 	print "%s: %s" % (repr(k), repr(v))
 
-	def init_profile(self, profile):
+	def init_profile(self, profile = ''):
 		conffile = windowsify(u'config')
 		pidfile = windowsify(u'gajim')
+		secretsfile = windowsify(u'secrets')
 
 		if len(profile) > 0:
 			conffile += u'.' + profile
 			pidfile += u'.' + profile
+			secretsfile += u'.' + profile
 		pidfile += u'.pid'
 		self.add_from_root('CONFIG_FILE', conffile)
 		self.add_from_root('PID_FILE', pidfile)
+		self.add_from_root('SECRETS_FILE', secretsfile)
 
 		# for k, v in paths.iteritems():
 		# 	print "%s: %s" % (repr(k), repr(v))

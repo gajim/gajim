@@ -1,20 +1,26 @@
 ##	notify.py
 ##
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Andrew Sayman <lorien420@myrealbox.com>
+## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
 ##
 ## Notification daemon connection via D-Bus code:
 ## Copyright (C) 2005 by Sebastian Estienne
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import os
@@ -39,6 +45,14 @@ try:
 	pynotify.init('Gajim Notification')
 except ImportError:
 	USER_HAS_PYNOTIFY = False
+
+USER_HAS_GROWL = True
+try:
+	import osx.growler
+	osx.growler.init()
+except:
+	USER_HAS_GROWL = False
+
 
 def get_show_in_roster(event, account, contact):
 	'''Return True if this event must be shown in roster, else False'''
@@ -191,12 +205,12 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 			transport_name = gajim.get_transport_name_from_jid(jid)
 			img = None
 			if transport_name:
-				img = os.path.join(gajim.DATA_DIR, 'iconsets',
-					'transports', transport_name, '48x48', show_image) 
+				img = os.path.join(helpers.get_transport_path(transport_name),
+					'48x48', show_image) 
 			if not img or not os.path.isfile(img):
 				iconset = gajim.config.get('iconset')
-				img = os.path.join(gajim.DATA_DIR, 'iconsets',
-						iconset, '48x48', show_image)
+				img = os.path.join(helpers.get_iconset_path(iconset), '48x48',
+					show_image)
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img,
 				jid = jid, suffix = suffix)
 			if event == 'status_change':
@@ -206,7 +220,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 					{'nick': gajim.get_name_from_jid(account, jid),\
 					'status': helpers.get_uf_show(gajim.SHOW_LIST[new_show])}
 				if status_message:
-					text =  text + " : " + status_message
+					text = text + " : " + status_message
 				popup(_('Contact Changed Status'), jid, account,
 					path_to_image = path, title = title, text = text)
 			elif event == 'contact_connected':
@@ -338,6 +352,11 @@ def popup(event_type, jid, account, msg_type = '', path_to_image = None,
 		except gobject.GError, e:
 			# Connection to notification-daemon failed, see #2893
 			gajim.log.debug(str(e))
+	# try os/x growl
+	if USER_HAS_GROWL:
+		osx.growler.notify(event_type, jid, account, msg_type, path_to_image,
+			title, text)
+		return
 
 	# go old style
 	instance = dialogs.PopupNotificationWindow(event_type, jid, account,
@@ -484,8 +503,17 @@ class DesktopNotification:
 			except AttributeError:
 				version = [0, 3, 1] # we're actually dealing with the newer version
 		if version > [0, 3]:
-			if version >= [0, 3, 2]:
+			if gajim.interface.systray_enabled and \
+			gajim.config.get('attach_notifications_to_systray'):
+				x, y = gajim.interface.systray.img_tray.window.get_position()
+				x_, y_, width, height, depth = \
+					gajim.interface.systray.img_tray.window.get_geometry()
+				pos_x = x + (width / 2)
+				pos_y = y + (height / 2)
+				hints = {'x': pos_x, 'y': pos_y}
+			else:
 				hints = {}
+			if version >= [0, 3, 2]:
 				hints['urgency'] = dbus.Byte(0) # Low Urgency
 				hints['category'] = dbus.String(ntype)
 				self.notif.Notify(
@@ -507,7 +535,7 @@ class DesktopNotification:
 					dbus.String(self.title),
 					dbus.String(self.text),
 					dbus.String(''),
-					{},
+					hints,
 					dbus.UInt32(timeout*1000),
 					reply_handler=self.attach_by_id,
 					error_handler=self.notify_another_way)

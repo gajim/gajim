@@ -1,20 +1,26 @@
 ##	chat_control.py
 ##
-## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2006 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2006-2007 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2006 Travis Shirk <travis@pobox.com>
-## Copyright (C) 2006 Dimitur Kirov <dkirov@gmail.com>
+##                    Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
-## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
+##                    Julien Pivotto <roidelapluie@gmail.com>
+##                    Stephan Erb <steve-e@h3c.de> 
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import os
@@ -27,6 +33,7 @@ import message_control
 import dialogs
 import history_window
 import notify
+import re
 
 from common import gajim
 from common import helpers
@@ -45,21 +52,24 @@ try:
 except:
 	HAS_GTK_SPELL = False
 
-
 # the next script, executed in the "po" directory,
 # generates the following list.
 ##!/bin/sh
-#LANG=$(for i in *.po; do  j=${i/.po/}; echo -n "_('"$j"')":" '"$j"', " ; done)
+#LANG=$(for i in *.po; do j=${i/.po/}; echo -n "_('"$j"')":" '"$j"', " ; done)
 #echo "{_('en'):'en'",$LANG"}"
 langs = {_('English'): 'en', _('Belarusian'): 'be', _('Bulgarian'): 'bg', _('Breton'): 'br', _('Czech'): 'cs', _('German'): 'de', _('Greek'): 'el', _('British'): 'en_GB', _('Esperanto'): 'eo', _('Spanish'): 'es', _('Basque'): 'eu', _('French'): 'fr', _('Croatian'): 'hr', _('Italian'): 'it', _('Norwegian (b)'): 'nb', _('Dutch'): 'nl', _('Norwegian'): 'no', _('Polish'): 'pl', _('Portuguese'): 'pt', _('Brazilian Portuguese'): 'pt_BR', _('Russian'): 'ru', _('Serbian'): 'sr', _('Slovak'): 'sk', _('Swedish'): 'sv', _('Chinese (Ch)'): 'zh_CN'}
-
 
 ################################################################################
 class ChatControlBase(MessageControl):
 	'''A base class containing a banner, ConversationTextview, MessageTextView
 	'''
+	def make_href(self, match):
+		url_color = gajim.config.get('urlmsgcolor')
+		return '<a href="%s"><span color="%s">%s</span></a>' % (match.group(),
+			url_color, match.group())
+
 	def get_font_attrs(self):
-		''' get pango font  attributes for banner from theme settings '''
+		''' get pango font attributes for banner from theme settings '''
 		theme = gajim.config.get('roster_theme')
 		bannerfont = gajim.config.get_per('themes', theme, 'bannerfont')
 		bannerfontattrs = gajim.config.get_per('themes', theme, 'bannerfontattrs')
@@ -119,6 +129,9 @@ class ChatControlBase(MessageControl):
 	event_keymod):
 		pass # Derived should implement this rather than connecting to the event itself.
 
+	def status_url_clicked(self, widget, url):
+		helpers.launch_browser_mailer('url', url)
+
 	def __init__(self, type_id, parent_win, widget_name, contact, acct, 
 	resource = None):
 		MessageControl.__init__(self, type_id, parent_win, widget_name,
@@ -137,6 +150,22 @@ class ChatControlBase(MessageControl):
 		id = widget.connect('button-press-event',
 			self._on_banner_eventbox_button_press_event)
 		self.handlers[id] = widget
+
+		self.urlfinder = re.compile(r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
+
+		if gajim.HAVE_PYSEXY:
+			import sexy
+			self.banner_status_label = sexy.UrlLabel()
+			self.banner_status_label.connect('url_activated', self.status_url_clicked)
+		else:
+			self.banner_status_label = gtk.Label()
+		self.banner_status_label.set_selectable(True)
+		self.banner_status_label.set_alignment(0,0.5)
+
+		banner_vbox = self.xml.get_widget('banner_vbox')
+		banner_vbox.pack_start(self.banner_status_label)
+		self.banner_status_label.show()
+
 		# Init DND
 		self.TARGET_TYPE_URI_LIST = 80
 		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ),
@@ -151,6 +180,9 @@ class ChatControlBase(MessageControl):
 
 		# Create textviews and connect signals
 		self.conv_textview = ConversationTextview(self.account)
+		id = self.conv_textview.tv.connect('key_press_event',
+			self._conv_textview_key_press_event)
+		self.handlers[id] = self.conv_textview.tv
 		# FIXME: DND on non editable TextView, find a better way
 		self.drag_entered = False
 		id = self.conv_textview.tv.connect('drag_data_received',
@@ -246,12 +278,13 @@ class ChatControlBase(MessageControl):
 					spell.set_language(lang)
 			except (gobject.GError, RuntimeError), msg:
 				dialogs.AspellDictError(lang)
-		self.style_event_id = 0
 		self.conv_textview.tv.show()
 		self._paint_banner()
 
 		# For JEP-0172
 		self.user_nick = None
+
+		self.smooth = True
 
 	def on_msg_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend an option to switch languages'''
@@ -321,6 +354,7 @@ class ChatControlBase(MessageControl):
 		banner_eventbox = self.xml.get_widget('banner_eventbox')
 		banner_name_label = self.xml.get_widget('banner_name_label')
 		self.disconnect_style_event(banner_name_label)
+		self.disconnect_style_event(self.banner_status_label)
 		if bgcolor:
 			banner_eventbox.modify_bg(gtk.STATE_NORMAL, 
 				gtk.gdk.color_parse(bgcolor))
@@ -330,25 +364,33 @@ class ChatControlBase(MessageControl):
 		if textcolor:
 			banner_name_label.modify_fg(gtk.STATE_NORMAL,
 				gtk.gdk.color_parse(textcolor))
+			self.banner_status_label.modify_fg(gtk.STATE_NORMAL,
+				gtk.gdk.color_parse(textcolor))
 			default_fg = False
 		else:
 			default_fg = True
 		if default_bg or default_fg:
 			self._on_style_set_event(banner_name_label, None, default_fg,
 				default_bg)
-	
+			self._on_style_set_event(self.banner_status_label, None, default_fg,
+				default_bg)
+
 	def disconnect_style_event(self, widget):
-		if self.style_event_id:
-			widget.disconnect(self.style_event_id)
-			del self.handlers[self.style_event_id]
-			self.style_event_id = 0	
+		# Try to find the event_id
+		found = False
+		for id in self.handlers:
+			if self.handlers[id] == widget:
+				found = True
+				break
+		if found:
+			widget.disconnect(id)
+			del self.handlers[id]
 	
 	def connect_style_event(self, widget, set_fg = False, set_bg = False):
 		self.disconnect_style_event(widget)
-		self.style_event_id = widget.connect('style-set',
-			self._on_style_set_event, set_fg, set_bg)
-		self.handlers[self.style_event_id] = widget
-	
+		id = widget.connect('style-set', self._on_style_set_event, set_fg, set_bg)
+		self.handlers[id] = widget
+
 	def _on_style_set_event(self, widget, style, *opts):
 		'''set style of widget from style class *.Frame.Eventbox 
 			opts[0] == True -> set fg color
@@ -362,7 +404,14 @@ class ChatControlBase(MessageControl):
 			fg_color = widget.style.fg[gtk.STATE_SELECTED]
 			widget.modify_fg(gtk.STATE_NORMAL, fg_color)
 		self.connect_style_event(widget, opts[0], opts[1])
-	
+
+	def _conv_textview_key_press_event(self, widget, event):
+		if gtk.gtk_version < (2, 12, 0):
+			return
+		if event.state & (gtk.gdk.SHIFT_MASK | gtk.gdk.CONTROL_MASK):
+			return False
+		self.parent_win.notebook.emit('key_press_event', event)
+
 	def _on_keypress_event(self, widget, event):
 		if event.state & gtk.gdk.CONTROL_MASK:
 			# CTRL + l|L: clear conv_textview
@@ -389,6 +438,7 @@ class ChatControlBase(MessageControl):
 					event.keyval == gtk.keysyms.Page_Up:
 				self.parent_win.notebook.emit('key_press_event', event)
 				return True
+
 		elif event.keyval == gtk.keysyms.m and \
 			(event.state & gtk.gdk.MOD1_MASK): # alt + m opens emoticons menu
 			if gajim.config.get('emoticons_theme'):
@@ -402,7 +452,7 @@ class ChatControlBase(MessageControl):
 					# get the cursor position
 					cursor = msg_tv.get_iter_location(buf.get_iter_at_mark(
 						buf.get_insert()))
-					cursor =  msg_tv.buffer_to_window_coords(gtk.TEXT_WINDOW_TEXT,
+					cursor = msg_tv.buffer_to_window_coords(gtk.TEXT_WINDOW_TEXT,
 						cursor.x, cursor.y)
 					x = origin[0] + cursor[0]
 					y = origin[1] + size[1]
@@ -519,7 +569,7 @@ class ChatControlBase(MessageControl):
 
 	def _on_drag_data_received(self, widget, context, x, y, selection,
 		target_type, timestamp):
-		pass  # Derived classes SHOULD implement this method
+		pass # Derived classes SHOULD implement this method
 
 	def _on_drag_leave(self, widget, context, time):
 		# FIXME: DND on non editable TextView, find a better way
@@ -614,7 +664,7 @@ class ChatControlBase(MessageControl):
 
 		if kind in ('incoming', 'incoming_queue'):
 			gc_message = False
-			if self.type_id  == message_control.TYPE_GC:
+			if self.type_id == message_control.TYPE_GC:
 				gc_message = True
 
 			if ((self.parent_win and (not self.parent_win.get_active_jid() or \
@@ -712,10 +762,11 @@ class ChatControlBase(MessageControl):
 		if not jid:
 			jid = self.contact.jid
 
-		if gajim.interface.instances['logs'].has_key(jid):
-			gajim.interface.instances['logs'][jid].window.present()
+		if gajim.interface.instances.has_key('logs'):
+			gajim.interface.instances['logs'].window.present()
+			gajim.interface.instances['logs'].open_history(jid, self.account)
 		else:
-			gajim.interface.instances['logs'][jid] = \
+			gajim.interface.instances['logs'] = \
 				history_window.HistoryWindow(jid, self.account)
 
 	def on_minimize_menuitem_toggled(self, widget):
@@ -795,7 +846,7 @@ class ChatControlBase(MessageControl):
 		# but we also want to avoid window resizing so if we reach that 
 		# minimum for conversation_textview and maximum for message_textview
 		# we set to automatic the scrollbar policy
-		diff_y =  message_height - requisition.height
+		diff_y = message_height - requisition.height
 		if diff_y != 0:
 			if conversation_height + diff_y < min_height:
 				if message_height + conversation_height - min_height > min_height:
@@ -812,9 +863,10 @@ class ChatControlBase(MessageControl):
 				self.msg_scrolledwindow.set_property('vscrollbar-policy', 
 					gtk.POLICY_NEVER)
 				self.msg_scrolledwindow.set_property('height-request', -1)
-
-		self.conv_textview.bring_scroll_to_end(diff_y - 18)
-		
+			self.conv_textview.bring_scroll_to_end(diff_y - 18, False)
+		else:
+			self.conv_textview.bring_scroll_to_end(diff_y - 18, self.smooth)
+		self.smooth = True # reinit the flag
 		# enable scrollbar automatic policy for horizontal scrollbar
 		# if message we have in message_textview is too big
 		if requisition.width > message_width:
@@ -895,6 +947,7 @@ class ChatControlBase(MessageControl):
 			if self.sent_history_pos == 0:
 				return
 			self.sent_history_pos = self.sent_history_pos - 1
+			self.smooth = False
 			conv_buf.set_text(self.sent_history[self.sent_history_pos])
 		elif direction == 'down':
 			if self.sent_history_pos >= size - 1:
@@ -904,6 +957,7 @@ class ChatControlBase(MessageControl):
 				return
 
 			self.sent_history_pos = self.sent_history_pos + 1
+			self.smooth = False
 			conv_buf.set_text(self.sent_history[self.sent_history_pos])
 
 	def lighten_color(self, color):
@@ -948,11 +1002,11 @@ class ChatControl(ChatControlBase):
 	TYPE_ID = message_control.TYPE_CHAT
 	old_msg_kind = None # last kind of the printed message
 	CHAT_CMDS = ['clear', 'compact', 'help', 'me', 'ping', 'say']
-	
-	def __init__(self, parent_win, contact, acct, resource = None):
+
+	def __init__(self, parent_win, contact, acct, session, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
 			'chat_child_vbox', contact, acct, resource)
-			
+
 		# for muc use:
 		# widget = self.xml.get_widget('muc_window_actions_button')
 		widget = self.xml.get_widget('message_window_actions_button')
@@ -968,7 +1022,7 @@ class ChatControl(ChatControlBase):
 		# it is on enter-notify and leave-notify so no need to be per jid
 		self.show_bigger_avatar_timeout_id = None
 		self.bigger_avatar_window = None
-		self.show_avatar(self.contact.resource)			
+		self.show_avatar(self.contact.resource)
 
 		# chatstate timers and state
 		self.reset_kbd_mouse_timeout_vars()
@@ -982,7 +1036,7 @@ class ChatControl(ChatControlBase):
 		id = message_tv_buffer.connect('changed',
 			self._on_message_tv_buffer_changed)
 		self.handlers[id] = message_tv_buffer
-		
+
 		widget = self.xml.get_widget('avatar_eventbox')
 		id = widget.connect('enter-notify-event',
 			self.on_avatar_eventbox_enter_notify_event)
@@ -1002,7 +1056,9 @@ class ChatControl(ChatControlBase):
 
 		if self.contact.jid in gajim.encrypted_chats[self.account]:
 			self.xml.get_widget('gpg_togglebutton').set_active(True)
-		
+
+		self.set_session(session)
+
 		self.status_tooltip = gtk.Tooltips()
 		self.update_ui()
 		# restore previous conversation
@@ -1045,7 +1101,7 @@ class ChatControl(ChatControlBase):
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
 			id = menuitem.connect('activate', 
 				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-				self.contact.jid, self.account, self.contact.get_shown_name() +  
+				self.contact.jid, self.account, self.contact.get_shown_name() + \
 					'.jpeg')
 			self.handlers[id] = menuitem
 			menu.append(menuitem)
@@ -1146,11 +1202,10 @@ class ChatControl(ChatControlBase):
 
 		status = contact.status
 		if status is not None:
-			self.status_tooltip.set_tip(banner_eventbox, status)
-			self.status_tooltip.enable()
 			banner_name_label.set_ellipsize(pango.ELLIPSIZE_END)
-			status = helpers.reduce_chars_newlines(status, max_lines = 1)
-		status_escaped = gobject.markup_escape_text(status)
+			self.banner_status_label.set_ellipsize(pango.ELLIPSIZE_END)
+			status_reduced = helpers.reduce_chars_newlines(status, max_lines = 1)
+		status_escaped = gobject.markup_escape_text(status_reduced)
 
 		font_attrs, font_attrs_small = self.get_font_attrs()
 		st = gajim.config.get('displayed_chat_state_notifications')
@@ -1179,11 +1234,23 @@ class ChatControl(ChatControlBase):
 			# weight="heavy" size="x-large"
 			label_text = '<span %s>%s</span><span %s>%s</span>' % \
 				(font_attrs, name, font_attrs_small, acct_info)
+
 		if status_escaped:
-			label_text += '\n<span %s>%s</span>' %\
-				(font_attrs_small, status_escaped)
+			if gajim.HAVE_PYSEXY:
+				status_text = self.urlfinder.sub(self.make_href, status_escaped)
+				status_text = '<span %s>%s</span>' % (font_attrs_small, status_text)
+			else:
+				status_text = '<span %s>%s</span>' % (font_attrs_small, status_escaped)
+			self.status_tooltip.set_tip(banner_eventbox, status)
+			self.banner_status_label.show()
+			self.banner_status_label.set_no_show_all(False)
 		else:
+			status_text = ''
 			self.status_tooltip.disable()
+			self.banner_status_label.hide()
+			self.banner_status_label.set_no_show_all(True)
+
+		self.banner_status_label.set_markup(status_text)
 		# setup the label that holds name and jid
 		banner_name_label.set_markup(label_text)
 
@@ -1231,7 +1298,11 @@ class ChatControl(ChatControlBase):
 			message_array = []
 
 		if command == 'me':
-			return False # This is not really a command
+			if len(message_array):
+				return False # /me is not really a command
+			else:
+				self.get_command_help(command)
+				return True # do not send "/me" as message
 
 		if command == 'help':
 			if len(message_array):
@@ -1295,12 +1366,12 @@ class ChatControl(ChatControlBase):
 
 		contact = self.contact
 
+		encrypted = bool(self.session) and self.session.enable_encryption
+
 		keyID = ''
-		encrypted = False
 		if self.xml.get_widget('gpg_togglebutton').get_active():
 			keyID = contact.keyID
 			encrypted = True
-
 
 		chatstates_on = gajim.config.get('outgoing_chat_state_notifications') != \
 			'disabled'
@@ -1313,7 +1384,7 @@ class ChatControl(ChatControlBase):
 				# this is here (and not in send_chatstate)
 				# because we want it sent with REAL message
 				# (not standlone) eg. one that has body
-				
+
 				if contact.our_chatstate:
 					# We already asked for xep 85, don't ask it twice
 					composing_xep = 'asked_once'
@@ -1393,6 +1464,26 @@ class ChatControl(ChatControlBase):
 		self.mouse_over_in_last_30_secs = False
 		self.kbd_activity_in_last_30_secs = False
 
+	def on_cancel_session_negotiation(self):
+		msg = _('Session negotiation cancelled')
+		ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+
+	# print esession settings to textview
+	def print_esession_details(self):
+		if self.session and self.session.enable_encryption:
+			msg = _('E2E encryption enabled')
+			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+
+			if self.session.loggable:
+				msg = _('Session WILL be logged')
+			else:
+				msg = _('Session WILL NOT be logged')
+
+			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+		else:
+			msg = _('E2E encryption disabled')
+			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+
 	def print_conversation(self, text, frm = '', tim = None,
 		encrypted = False, subject = None, xhtml = None):
 		'''Print a line in the conversation:
@@ -1412,18 +1503,26 @@ class ChatControl(ChatControlBase):
 			kind = 'info'
 			name = ''
 		else:
-			ec = gajim.encrypted_chats[self.account]
-			if encrypted and jid not in ec:
-				msg = _('Encryption enabled')
-				ChatControlBase.print_conversation_line(self, msg, 
-					'status', '', tim)
-				ec.append(jid)
-			elif not encrypted and jid in ec:
-				msg = _('Encryption disabled')
-				ChatControlBase.print_conversation_line(self, msg,
-					'status', '', tim)
-				ec.remove(jid)
-			self.xml.get_widget('gpg_togglebutton').set_active(encrypted)
+			if self.session and self.session.enable_encryption:
+				if not encrypted:
+					msg = _('The following message was NOT encrypted')
+					ChatControlBase.print_conversation_line(self, msg, 
+						'status', '', tim)
+			else:
+				# GPG encryption
+				ec = gajim.encrypted_chats[self.account]
+				if encrypted and jid not in ec:
+					msg = _('OpenPGP Encryption enabled')
+					ChatControlBase.print_conversation_line(self, msg, 
+						'status', '', tim)
+					ec.append(jid)
+				elif not encrypted and jid in ec:
+					msg = _('OpenPGP Encryption disabled')
+					ChatControlBase.print_conversation_line(self, msg,
+						'status', '', tim)
+					ec.remove(jid)
+				self.xml.get_widget('gpg_togglebutton').set_active(encrypted)
+
 			if not frm:
 				kind = 'incoming'
 				name = contact.get_shown_name()
@@ -1530,27 +1629,41 @@ class ChatControl(ChatControlBase):
 		'''
 		xml = gtkgui_helpers.get_glade('chat_control_popup_menu.glade')
 		menu = xml.get_widget('chat_control_popup_menu')
-		
+
 		history_menuitem = xml.get_widget('history_menuitem')
 		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
+		toggle_e2e_menuitem = xml.get_widget('toggle_e2e_menuitem')
 		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
 		information_menuitem = xml.get_widget('information_menuitem')
-		
+		convert_to_gc_menuitem = xml.get_widget('convert_to_groupchat')
+		muc_icon = gajim.interface.roster.load_icon('muc_active')
+		if muc_icon:
+			convert_to_gc_menuitem.set_image(muc_icon) 
+
+		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
+		history_menuitem.add_accelerator('activate', ag, gtk.keysyms.h, gtk.gdk.CONTROL_MASK,
+			gtk.ACCEL_VISIBLE)
+		information_menuitem.add_accelerator('activate', ag, gtk.keysyms.i,
+			gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+
 		contact = self.parent_win.get_active_contact()
 		jid = contact.jid
-		
-		# history_menuitem
-		if gajim.jid_is_transport(jid):
-			history_menuitem.set_sensitive(False)
-		
+
 		# check if gpg capabitlies or else make gpg toggle insensitive
 		gpg_btn = self.xml.get_widget('gpg_togglebutton')
 		isactive = gpg_btn.get_active()
 		is_sensitive = gpg_btn.get_property('sensitive')
 		toggle_gpg_menuitem.set_active(isactive)
 		toggle_gpg_menuitem.set_property('sensitive', is_sensitive)
-		
+
+		# TODO: check that the remote client supports e2e
+		if not gajim.HAVE_PYCRYPTO:
+			toggle_e2e_menuitem.set_sensitive(False)
+		else:
+			isactive = int(self.session != None and self.session.enable_encryption)
+			toggle_e2e_menuitem.set_active(isactive)
+
 		# If we don't have resource, we can't do file transfer
 		# in transports, contact holds our info we need to disable it too
 		if self.TYPE_ID == message_control.TYPE_PM and self.gc_contact.jid and \
@@ -1560,7 +1673,12 @@ class ChatControl(ChatControlBase):
 			send_file_menuitem.set_sensitive(True)
 		else:
 			send_file_menuitem.set_sensitive(False)
-		
+
+		# check if it's possible to convert to groupchat
+		if gajim.get_transport_name_from_jid(jid) or \
+		gajim.connections[self.account].is_zeroconf:
+			convert_to_gc_menuitem.set_sensitive(False)
+
 		# add_to_roster_menuitem
 		if _('Not in Roster') in contact.groups:
 			add_to_roster_menuitem.show()
@@ -1568,8 +1686,7 @@ class ChatControl(ChatControlBase):
 		else:
 			add_to_roster_menuitem.hide()
 			add_to_roster_menuitem.set_no_show_all(True)
-		
-		
+
 		# connect signals
 		id = history_menuitem.connect('activate', 
 			self._on_history_menuitem_activate)
@@ -1582,12 +1699,26 @@ class ChatControl(ChatControlBase):
 		self.handlers[id] = add_to_roster_menuitem 
 		id = toggle_gpg_menuitem.connect('activate', 
 			self._on_toggle_gpg_menuitem_activate)
+		id = toggle_e2e_menuitem.connect('activate', 
+			self._on_toggle_e2e_menuitem_activate)
 		self.handlers[id] = toggle_gpg_menuitem 
 		id = information_menuitem.connect('activate', 
 			self._on_contact_information_menuitem_activate)
 		self.handlers[id] = information_menuitem
-		menu.connect('selection-done', lambda w:w.destroy())	
+		id = convert_to_gc_menuitem.connect('activate',
+			self._on_convert_to_gc_menuitem_activate)
+		self.handlers[id] = convert_to_gc_menuitem
+		menu.connect('selection-done', self.destroy_menu, history_menuitem,
+			information_menuitem)
 		return menu
+
+	def destroy_menu(self, menu, history_menuitem, information_menuitem):
+		# destroy accelerators
+		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
+		history_menuitem.remove_accelerator(ag, gtk.keysyms.h, gtk.gdk.CONTROL_MASK)
+		information_menuitem.remove_accelerator(ag, gtk.keysyms.i, gtk.gdk.CONTROL_MASK)
+		# destroy menu
+		menu.destroy()
 
 	def send_chatstate(self, state, contact = None):
 		''' sends OUR chatstate as STANDLONE chat state message (eg. no body)
@@ -1766,15 +1897,14 @@ class ChatControl(ChatControlBase):
 
 	def _on_drag_data_received(self, widget, context, x, y, selection,
 		target_type, timestamp):
-		# If no resource is known, we can't send a file
+		if not selection.data:
+			return
 		if self.TYPE_ID == message_control.TYPE_PM:
 			c = self.gc_contact
 		else:
 			c = self.contact
-		if not c.resource:
-			return
 		if target_type == self.TARGET_TYPE_URI_LIST:
-			if not selection.data:
+			if not c.resource: # If no resource is known, we can't send a file
 				return
 			uri = selection.data.strip()
 			uri_splitted = uri.split() # we may have more than one file dropped
@@ -1783,6 +1913,26 @@ class ChatControl(ChatControlBase):
 				if os.path.isfile(path): # is it file?
 					ft = gajim.interface.instances['file_transfers']
 					ft.send_file(self.account, c, path)
+			return
+
+		# chat2muc
+		treeview = gajim.interface.roster.tree
+		model = treeview.get_model()
+		data = selection.data
+		path = treeview.get_selection().get_selected_rows()[1][0]
+		iter = model.get_iter(path)
+		type = model[iter][2]
+		account = model[iter][4].decode('utf-8')
+		if type != 'contact': # source is not a contact
+			return
+		dropped_jid = data.decode('utf-8')
+
+		dropped_transport = gajim.get_transport_name_from_jid(dropped_jid)
+		c_transport = gajim.get_transport_name_from_jid(c.jid)
+		if dropped_transport or c_transport:
+			return # transport contacts cannot be invited
+
+		dialogs.TransformChatToMUC(self.account, [c.jid], [dropped_jid])
 
 	def _on_message_tv_buffer_changed(self, textbuffer):
 		self.kbd_activity_in_last_5_secs = True
@@ -1850,11 +2000,15 @@ class ChatControl(ChatControlBase):
 
 	def read_queue(self):
 		'''read queue and print messages containted in it'''
+
 		jid = self.contact.jid
 		jid_with_resource = jid
 		if self.resource:
 			jid_with_resource += '/' + self.resource
 		events = gajim.events.get_events(self.account, jid_with_resource)
+
+		if hasattr(self, 'session') and self.session and self.session.enable_encryption:
+			self.print_esession_details()
 
 		# Is it a pm ?
 		is_pm = False
@@ -1877,6 +2031,9 @@ class ChatControl(ChatControlBase):
 				encrypted = data[4], subject = data[1], xhtml = data[7])
 			if len(data) > 6 and isinstance(data[6], int):
 				message_ids.append(data[6])
+
+			if len(data) > 8:
+				self.set_session(data[8])
 		if message_ids:
 			gajim.logger.set_read_messages(message_ids)
 		gajim.events.remove_events(self.account, jid_with_resource,
@@ -1943,6 +2100,8 @@ class ChatControl(ChatControlBase):
 		# so this line adds that
 		window.set_events(gtk.gdk.POINTER_MOTION_MASK)
 		window.set_app_paintable(True)
+		if gtk.gtk_version >= (2, 10, 0) and gtk.pygtk_version >= (2, 10, 0):
+			window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLTIP)
 		
 		window.realize()
 		window.window.set_back_pixmap(pixmap, False) # make it transparent
@@ -1999,6 +2158,31 @@ class ChatControl(ChatControlBase):
 		# this is reverse logic, as we are on 'activate' (before change happens)
 		tb = self.xml.get_widget('gpg_togglebutton')
 		tb.set_active(not tb.get_active())
+
+	def _on_convert_to_gc_menuitem_activate(self, widget):
+		'''user want to invite some friends to chat'''
+		dialogs.TransformChatToMUC(self.account, [self.contact.jid])
+
+	def _on_toggle_e2e_menuitem_activate(self, widget):
+		if self.session and self.session.enable_encryption:
+			self.session.terminate_e2e()
+
+			self.print_esession_details()
+
+			jid = str(self.session.jid)
+
+			gajim.connections[self.account].delete_session(jid,
+				self.session.thread_id)
+
+			self.set_session(gajim.connections[self.account].make_new_session(jid))
+		else:
+			if not self.session:
+				fjid = self.contact.get_full_jid()
+				new_sess = gajim.connections[self.account].make_new_session(fjid)
+				self.set_session(new_sess)
+
+			# XXX decide whether to use 4 or 3 message negotiation
+			self.session.negotiate_e2e(False)
 
 	def got_connected(self):
 		ChatControlBase.got_connected(self)

@@ -1,20 +1,25 @@
 ##	remote_control.py
 ##
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005-2006 Andrew Sayman <lorien420@myrealbox.com>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import gobject
@@ -434,11 +439,11 @@ class SignalObject(dbus.service.Object):
 				'accounts', con.name, 'resource')))
 		return result
 
-	@dbus.service.method(INTERFACE, in_signature='s', out_signature='av')
+	@dbus.service.method(INTERFACE, in_signature='s', out_signature='aa{sv}')
 	def list_contacts(self, account):
 		'''list all contacts in the roster. If the first argument is specified,
 		then return the contacts for the specified account'''
-		result = dbus.Array([], signature='a{sv}')
+		result = dbus.Array([], signature='aa{sv}')
 		accounts = gajim.contacts.get_accounts()
 		if len(accounts) == 0:
 			return result

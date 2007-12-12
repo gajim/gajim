@@ -2,14 +2,19 @@
 ##
 ## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 from common import gajim
@@ -171,7 +176,7 @@ class Zeroconf:
 
 	def service_add_fail_callback(self, err):
 		gajim.log.debug('Error while adding service. %s' % str(err))
-		if str(err) == 'Local name collision':
+		if 'Local name collision' in str(err):
 			alternative_name = self.server.GetAlternativeServiceName(self.username)
 			self.name_conflictCB(alternative_name)
 			return
@@ -179,9 +184,12 @@ class Zeroconf:
 		self.disconnect()
 
 	def server_state_changed_callback(self, state, error):
+		gajim.log.debug('server state changed to %s' % state)
 		if state == self.avahi.SERVER_RUNNING:
 			self.create_service()
-		elif state == self.avahi.SERVER_COLLISION:
+		elif state in (self.avahi.SERVER_COLLISION,
+				self.avahi.SERVER_REGISTERING):
+			self.disconnect()
 			self.entrygroup.Reset()
 		elif state == self.avahi.CLIENT_FAILURE:
 			# does it ever go here?
@@ -190,8 +198,11 @@ class Zeroconf:
 	def entrygroup_state_changed_callback(self, state, error):
 		# the name is already present, so recreate
 		if state == self.avahi.ENTRY_GROUP_COLLISION:
+			gajim.log.debug('zeroconf.py: local name collision')
 			self.service_add_fail_callback('Local name collision')
 		elif state == self.avahi.ENTRY_GROUP_FAILURE:
+			self.disconnect()
+			self.entrygroup.Reset()
 			gajim.log.debug('zeroconf.py: ENTRY_GROUP_FAILURE reached(that'
 				' should not happen)')
 
@@ -238,8 +249,13 @@ class Zeroconf:
 				txt['status'] = 'avail'
 
 			self.txt = txt
-			gajim.log.debug('Publishing service %s of type %s' % (self.name, self.stype))
-			self.entrygroup.AddService(self.avahi.IF_UNSPEC, self.avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '', '', self.port, self.avahi_txt(), reply_handler=self.service_added_callback, error_handler=self.service_add_fail_callback)
+			gajim.log.debug('Publishing service %s of type %s' % (self.name,
+				self.stype))
+			self.entrygroup.AddService(self.avahi.IF_UNSPEC,
+				self.avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '',
+				'', dbus.UInt16(self.port), self.avahi_txt(),
+				reply_handler=self.service_added_callback,
+				error_handler=self.service_add_fail_callback)
 			
 			self.entrygroup.Commit(reply_handler=self.service_committed_callback, 
 				error_handler=self.entrygroup_commit_error_CB)
@@ -268,8 +284,7 @@ class Zeroconf:
 				self.entrygroup.Reset()
 				self.entrygroup.Free()
 				# .Free() has mem leaks
-				obj = self.entrygroup._obj
-				obj._bus = None
+				self.entrygroup._obj._bus = None
 				self.entrygroup._obj = None
 				self.entrygroup = None
 				self.announced = False

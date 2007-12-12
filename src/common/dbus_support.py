@@ -1,21 +1,26 @@
 ##  dbus_support.py
 ##
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005 Andrew Sayman <lorien420@myrealbox.com>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 ##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+##
 
-import os
+import os, sys
 
 from common import gajim
 from common import exceptions
@@ -23,10 +28,13 @@ from common import exceptions
 _GAJIM_ERROR_IFACE = 'org.gajim.dbus.Error'
 
 try:
+	if sys.platform == 'darwin':
+		import osx.dbus
+		osx.dbus.load(True)
 	import dbus
 	import dbus.service
 	import dbus.glib
-	supported = True # does use have D-Bus bindings?
+	supported = True # does user have D-Bus bindings?
 except ImportError:
 	supported = False
 	if not os.name == 'nt': # only say that to non Windows users
@@ -98,7 +106,7 @@ class SessionBus:
 session_bus = SessionBus()
 
 def get_interface(interface, path):
-	'''Returns an interface on the current SessionBus. If the interface isn't 
+	'''Returns an interface on the current SessionBus. If the interface isn\'t 
 	running, it tries to start it first.'''
 	if not supported:
 		return None

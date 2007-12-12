@@ -1,17 +1,22 @@
 ##	advanced.py
 ##
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005 Vincent Hanquez <tab@snarc.org>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import gtk
@@ -98,8 +103,7 @@ class AdvancedConfigurationWindow(object):
 		make the cellrenderertext not editable else it's editable'''
 		optname = model[iter][C_PREFNAME]
 		opttype = model[iter][C_TYPE]
-		if opttype == self.types['boolean'] or optname in ('password', 
-			'gpgpassword'):
+		if opttype == self.types['boolean'] or optname == 'password':
 			cell.set_property('editable', False)
 		else:
 			cell.set_property('editable', True)
@@ -234,7 +238,7 @@ class AdvancedConfigurationWindow(object):
 			type = val[OPT_TYPE][0]
 			type = self.types[type] # i18n
 		value = val[OPT_VAL]
-		if name in ('password', 'gpgpassword'):
+		if name == 'password':
 			#we talk about password
 			value = _('Hidden') # override passwords with this string
 		if value in self.right_true_dict:

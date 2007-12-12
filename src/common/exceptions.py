@@ -1,16 +1,21 @@
 ## exceptions.py
 ##
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 class PysqliteNotAvailable(Exception):
@@ -54,8 +59,20 @@ class SessionBusNotPresent(Exception):
 	def __str__(self):
 		return _('Session bus is not available.\nTry reading http://trac.gajim.org/wiki/GajimDBus')
 
+class NegotiationError(Exception):
+	'''A session negotiation failed'''
+	pass
+
+class DecryptionError(Exception):
+	'''A message couldn't be decrypted into usable XML'''
+	pass
+
+class Cancelled(Exception):
+	'''The user cancelled an operation'''
+	pass
+
 class GajimGeneralException(Exception):
-	'''This exception ir our general exception'''
+	'''This exception is our general exception'''
 	def __init__(self, text=''):
 		Exception.__init__(self)
 		self.text = text
