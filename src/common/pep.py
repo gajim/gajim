@@ -74,7 +74,6 @@ def user_activity(items, name, jid):
 					contact.activity['text'] = ch.getData()
 
 def user_send_mood(account, mood, message = ''):
-	print "Sending %s: %s" % (mood, message)
 	if gajim.config.get('publish_mood') == False:
 		return
 	item = xmpp.Node('mood', {'xmlns': xmpp.NS_MOOD})
@@ -101,11 +100,9 @@ def user_send_activity(account, activity, subactivity = '', message = ''):
 	gajim.connections[account].send_pb_publish('', xmpp.NS_ACTIVITY, item, '0')
 
 def user_send_tune(account, artist = '', title = '', source = '', track = 0,length = 0, items = None):
-	print "Tune to be created"
 	if (gajim.config.get('publish_tune') == False) or \
 	(gajim.connections[account].pep_supported == False):
 		return
-	print "publish_tune == True and pep_supported"
 	item = xmpp.Node('tune', {'xmlns': xmpp.NS_TUNE})
 	if artist != '':
 		i = item.addChild('artist')
@@ -126,4 +123,3 @@ def user_send_tune(account, artist = '', title = '', source = '', track = 0,leng
 		item.addChild(payload=items)
 
 	gajim.connections[account].send_pb_publish('', xmpp.NS_TUNE, item, '0')
-	print "Tune published"
