@@ -3796,7 +3796,6 @@ class RosterWindow:
 				title = music_track_info.title
 				source = music_track_info.album
 			if account == '':
-				print "Multi accounts"
 				for account in accounts:
 					if not gajim.account_is_connected(account):
 						continue
@@ -3807,7 +3806,6 @@ class RosterWindow:
 						continue
 					pep.user_send_tune(account, artist, title, source)
 			else:
-				print "Single account"
 				pep.user_send_tune(account, artist, title, source)
 			return
 		# No PEP

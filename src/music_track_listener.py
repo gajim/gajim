@@ -68,11 +68,9 @@ class MusicTrackListener(gobject.GObject):
 			'org.gnome.Muine.Player')
 
 		## Rhythmbox
-		bus.add_signal_receiver(self._rhythmbox_music_track_change_cb,
-			'playingUriChanged', 'org.gnome.Rhythmbox.Player')
 		bus.add_signal_receiver(self._player_name_owner_changed,
 			'NameOwnerChanged', 'org.freedesktop.DBus', arg0='org.gnome.Rhythmbox')
-		bus.add_signal_receiver(self._player_playing_changed_cb,
+		bus.add_signal_receiver(self._rhythmbox_playing_changed_cb,
 			'playingChanged', 'org.gnome.Rhythmbox.Player')
 		bus.add_signal_receiver(self._player_playing_song_property_changed_cb,
 			'playingSongPropertyChanged', 'org.gnome.Rhythmbox.Player')
@@ -159,6 +157,13 @@ class MusicTrackListener(gobject.GObject):
 		info = self._muine_properties_extract(arg)
 		self.emit('music-track-changed', info)
 
+	def _rhythmbox_playing_changed_cb(self, playing):
+		if playing:
+			info = self.get_playing_track()
+			self.emit('music-track-changed', info)
+		else:
+			self.emit('music-track-changed', None)
+
 	def _rhythmbox_properties_extract(self, props):
 		info = MusicTrackInfo()
 		info.title = props['title']
@@ -167,17 +172,6 @@ class MusicTrackListener(gobject.GObject):
 		info.duration = int(props['duration'])
 		info.track_number = int(props['track-number'])
 		return info
-	
-	def _rhythmbox_music_track_change_cb(self, uri):
-		if not uri:
-			return
-		bus = dbus.SessionBus()
-		rbshellobj = bus.get_object('org.gnome.Rhythmbox',
-			'/org/gnome/Rhythmbox/Shell')
-		rbshell = dbus.Interface(rbshellobj, 'org.gnome.Rhythmbox.Shell')
-		props = rbshell.getSongProperties(uri)
-		info = self._rhythmbox_properties_extract(props)
-		self.emit('music-track-changed', info)
 
 	def _banshee_check_track_status(self):
 		if self.dubus_methods.NameHasOwner('org.gnome.Banshee') and \
