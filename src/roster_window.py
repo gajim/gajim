@@ -933,6 +933,9 @@ class RosterWindow:
 		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')
 		pep_services_menuitem = self.xml.get_widget('pep_services_menuitem')
 
+		if not gajim.config.get('use_pep'):
+			pep_services_menuitem.set_no_show_all(True)
+			pep_services_menuitem.hide()
 		# destroy old advanced menus
 		for m in self.advanced_menus:
 			m.destroy()
@@ -3046,7 +3049,7 @@ class RosterWindow:
 			item.connect('activate', self.change_status, account, 'offline')
 
 			pep_menuitem = xml.get_widget('pep_menuitem')
-			if gajim.connections[account].pep_supported:
+			if gajim.connections[account].pep_supported and gajim.config.get('use_pep'):
 				pep_submenu = gtk.Menu()
 				pep_menuitem.set_submenu(pep_submenu)
 				if gajim.config.get('publish_mood'):
@@ -3056,7 +3059,8 @@ class RosterWindow:
 				if gajim.config.get('publish_activity'):
 					item = gtk.MenuItem('Activity')
 					pep_submenu.append(item)
-					item.connect('activate', self.on_change_activity_activate, account)
+					item.connect('activate', self.on_change_activity_activate,
+						account)
 			else:
 				pep_menuitem.set_no_show_all(True)
 				pep_menuitem.hide()
