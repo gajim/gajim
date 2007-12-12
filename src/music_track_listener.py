@@ -18,6 +18,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
+import os
 import gobject
 if __name__ == '__main__':
 	# install _() func before importing dbus_support
@@ -54,7 +55,7 @@ class MusicTrackListener(gobject.GObject):
 		## MPRIS
 		bus.add_signal_receiver(self._mpris_music_track_change_cb, 'TrackChange',
 			'org.freedesktop.MediaPlayer')
-		bus.add_signal_receiver(self._player_playing_changed_cb, 'StatusChange',
+		bus.add_signal_receiver(self._mpris_playing_changed_cb, 'StatusChange',
 			'org.freedesktop.MediaPlayer')
 			
 
@@ -77,20 +78,24 @@ class MusicTrackListener(gobject.GObject):
 			'playingSongPropertyChanged', 'org.gnome.Rhythmbox.Player')
 
 		## Banshee
-		banshee_bus = dbus.SessionBus()
-		dubus = banshee_bus.get_object('org.freedesktop.DBus',
-			'/org/freedesktop/dbus')
-		self.dubus_methods = dbus.Interface(dubus, 'org.freedesktop.DBus')
-		self.current_banshee_title = ''
-		self.banshee_paused_before = False
-		self.banshee_is_here = False
-		gobject.timeout_add(10000, self._check_if_banshee_bus)
-		if self.dubus_methods.NameHasOwner('org.gnome.Banshee'):
-			self._get_banshee_bus()
-			self.banshee_is_here = True
-		# Otherwise, it opens Banshee!
-		self.banshee_props ={}
-		gobject.timeout_add(1000, self._banshee_check_track_status)
+		# Banshee sucks because it only supports polling.
+		# Thus, we only register this is we are very sure that it's
+		# installed.
+		if os.name == 'posix' and os.system('which banshee >/dev/null 2>&1') == 0:
+			banshee_bus = dbus.SessionBus()
+			dubus = banshee_bus.get_object('org.freedesktop.DBus',
+				'/org/freedesktop/dbus')
+			self.dubus_methods = dbus.Interface(dubus, 'org.freedesktop.DBus')
+			self.current_banshee_title = ''
+			self.banshee_paused_before = False
+			self.banshee_is_here = False
+			gobject.timeout_add(10000, self._check_if_banshee_bus)
+			if self.dubus_methods.NameHasOwner('org.gnome.Banshee'):
+				self._get_banshee_bus()
+				self.banshee_is_here = True
+			# Otherwise, it opens Banshee!
+			self.banshee_props ={}
+			gobject.timeout_add(1000, self._banshee_check_track_status)
 
 	def _check_if_banshee_bus(self):
 		if self.dubus_methods.NameHasOwner('org.gnome.Banshee'):
@@ -130,6 +135,10 @@ class MusicTrackListener(gobject.GObject):
 		info.artist = song['artist']
 		info.duration = int(song['length'])
 		return info
+
+	def _mpris_playing_changed_cb(self, playing):
+		if playing == 2:
+			self.emit('music-track-changed', None)
 
 	def _mpris_music_track_change_cb(self, arg):
 		info = self._mpris_properties_extract(arg)
