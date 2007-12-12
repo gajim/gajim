@@ -3798,6 +3798,8 @@ class RosterWindow:
 			if account == '':
 				print "Multi accounts"
 				for account in accounts:
+					if not gajim.account_is_connected(account):
+						continue
 					if not gajim.config.get_per('accounts', account,
 					'sync_with_global_status'):
 						continue
