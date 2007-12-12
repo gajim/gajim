@@ -34,6 +34,10 @@ class Contact:
 		self.groups = groups
 		self.show = show
 		self.status = status
+		# FIXME
+		self.mood = dict()
+		self.activity = dict()
+		self.tune = dict()
 		self.sub = sub
 		self.ask = ask
 		self.resource = resource
@@ -169,8 +173,8 @@ class Contacts:
 	
 	def copy_contact(self, contact):
 		return self.create_contact(jid = contact.jid, name = contact.name,
-			groups = contact.groups, show = contact.show, status = contact.status,
-			sub = contact.sub, ask = contact.ask, resource = contact.resource,
+			groups = contact.groups, show = contact.show, status =
+			contact.status, sub = contact.sub, ask = contact.ask, resource = contact.resource,
 			priority = contact.priority, keyID = contact.keyID,
 			our_chatstate = contact.our_chatstate, chatstate = contact.chatstate,
 			last_status_time = contact.last_status_time)

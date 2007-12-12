@@ -39,10 +39,16 @@ from common import GnuPG
 from common import helpers
 from common import gajim
 from common import atom
+from common import pep
 from common import exceptions
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.caps import ConnectionCaps
+
+from common import dbus_support
+if dbus_support.supported:
+	import dbus
+	from music_track_listener import MusicTrackListener
 
 from common.stanza_session import EncryptedStanzaSession 
 
@@ -54,6 +60,7 @@ VCARD_ARRIVED = 'vcard_arrived'
 AGENT_REMOVED = 'agent_removed'
 METACONTACTS_ARRIVED = 'metacontacts_arrived'
 PRIVACY_ARRIVED = 'privacy_arrived'
+PEP_ACCESS_MODEL = 'pep_access_model'
 HAS_IDLE = True
 try:
 	import idle
@@ -750,6 +757,13 @@ class ConnectionDisco:
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_COMMANDS})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_DISCO_INFO})
+				if gajim.config.get('use_pep'):
+					q.addChild('feature', attrs = {'var': common.xmpp.NS_ACTIVITY})
+					q.addChild('feature', attrs = {'var': common.xmpp.NS_ACTIVITY + '+notify'})
+					q.addChild('feature', attrs = {'var': common.xmpp.NS_TUNE})
+					q.addChild('feature', attrs = {'var': common.xmpp.NS_TUNE + '+notify'})
+					q.addChild('feature', attrs = {'var': common.xmpp.NS_MOOD})
+					q.addChild('feature', attrs = {'var': common.xmpp.NS_MOOD + '+notify'})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_ESESSION_INIT})
 
 			if (node is None or extension == 'cstates') and gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
@@ -821,6 +835,11 @@ class ConnectionDisco:
 					if identity['category'] == 'pubsub' and identity['type'] == \
 					'pep':
 						self.pep_supported = True
+						listener = MusicTrackListener.get()
+						track = listener.get_playing_track()
+						if gajim.config.get('publish_tune'):
+							gajim.interface.roster._music_track_changed(listener,
+									track, self.name)
 						break
 			if features.__contains__(common.xmpp.NS_BYTESTREAM):
 				gajim.proxy65_manager.resolve(jid, self.connection, self.name)
@@ -1099,6 +1118,15 @@ class ConnectionVcard:
 				self.get_privacy_list('block')
 			# Ask metacontacts before roster
 			self.get_metacontacts()
+		elif self.awaiting_answers[id][0] == PEP_ACCESS_MODEL:
+			conf = iq_obj.getTag('pubsub').getTag('configure')
+			node = conf.getAttr('node')
+			form_tag = conf.getTag('x', namespace=common.xmpp.NS_DATA)
+			form = common.dataforms.ExtendForm(node=form_tag)
+			for field in form.iter_fields():
+				if field.var == 'pubsub#access_model':
+					self.dispatch('PEP_ACCESS_MODEL', (node, field.value))
+					break
 
 		del self.awaiting_answers[id]
 
@@ -1770,7 +1798,21 @@ returns the session that we last sent a message to.'''
 		''' Called when we receive <message/> with pubsub event. '''
 		# TODO: Logging? (actually services where logging would be useful, should
 		# TODO: allow to access archives remotely...)
+		jid = helpers.get_full_jid_from_iq(msg)
 		event = msg.getTag('event')
+
+		# XEP-0107: User Mood
+		items = event.getTag('items', {'node': common.xmpp.NS_MOOD})
+		if items: pep.user_mood(items, self.name, jid)
+		# XEP-0118: User Tune
+		items = event.getTag('items', {'node': common.xmpp.NS_TUNE})
+		if items: pep.user_tune(items, self.name, jid)
+		# XEP-0080: User Geolocation
+		items = event.getTag('items', {'node': common.xmpp.NS_GEOLOC})
+		if items: pep.user_geoloc(items, self.name, jid)
+		# XEP-0108: User Activity
+		items = event.getTag('items', {'node': common.xmpp.NS_ACTIVITY})
+		if items: pep.user_activity(items, self.name, jid)
 
 		items = event.getTag('items')
 		if items is None: return

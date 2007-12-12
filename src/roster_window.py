@@ -931,7 +931,11 @@ class RosterWindow:
 		service_disco_menuitem = self.xml.get_widget('service_disco_menuitem')
 		advanced_menuitem = self.xml.get_widget('advanced_menuitem')
 		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')
+		pep_services_menuitem = self.xml.get_widget('pep_services_menuitem')
 
+		if not gajim.config.get('use_pep'):
+			pep_services_menuitem.set_no_show_all(True)
+			pep_services_menuitem.hide()
 		# destroy old advanced menus
 		for m in self.advanced_menus:
 			m.destroy()
@@ -954,6 +958,11 @@ class RosterWindow:
 				self.new_chat_menuitem_handler_id)
 			self.new_chat_menuitem_handler_id = None
 
+		if self.pep_services_menuitem_handler_id:
+			pep_services_menuitem.handler_disconnect(
+				self.pep_services_menuitem_handler_id)
+			self.pep_services_menuitem_handler_id = None
+
 		if self.single_message_menuitem_handler_id:
 			single_message_menuitem.handler_disconnect(
 				self.single_message_menuitem_handler_id)
@@ -964,7 +973,6 @@ class RosterWindow:
 				self.profile_avatar_menuitem_handler_id)
 			self.profile_avatar_menuitem_handler_id = None
 
-
 		# remove the existing submenus
 		add_new_contact_menuitem.remove_submenu()
 		service_disco_menuitem.remove_submenu()
@@ -973,6 +981,7 @@ class RosterWindow:
 		new_chat_menuitem.remove_submenu()
 		advanced_menuitem.remove_submenu()
 		profile_avatar_menuitem.remove_submenu()
+		pep_services_menuitem.remove_submenu()
 
 		# remove the existing accelerator
 		if self.have_new_chat_accel:
@@ -1131,7 +1140,21 @@ class RosterWindow:
 		if len(connected_accounts_with_vcard) > 1:
 			# 2 or more accounts? make submenus
 			profile_avatar_sub_menu = gtk.Menu()
+			pep_services_sub_menu = gtk.Menu()
 			for account in connected_accounts_with_vcard:
+				if gajim.connections[account].pep_supported:
+					# profile, avatar
+					profile_avatar_item = gtk.MenuItem(_('of account %s') % account,
+						False)
+					profile_avatar_sub_menu.append(profile_avatar_item)
+					profile_avatar_item.connect('activate',
+						self.on_profile_avatar_menuitem_activate, account)
+					# PEP services
+					pep_services_item = gtk.MenuItem(_('of account %s') % account,
+						False)
+					pep_services_sub_menu.append(pep_services_item)
+					pep_services_item.connect('activate',
+						self.on_pep_services_menuitem_activate, account)
 				# profile, avatar
 				profile_avatar_item = gtk.MenuItem(_('of account %s') % account,
 					False)
@@ -1140,18 +1163,27 @@ class RosterWindow:
 					self.on_profile_avatar_menuitem_activate, account)
 			profile_avatar_menuitem.set_submenu(profile_avatar_sub_menu)
 			profile_avatar_sub_menu.show_all()
+			pep_services_menuitem.set_submenu(pep_services_sub_menu)
+			pep_services_sub_menu.show_all()
 		elif len(connected_accounts_with_vcard) == 1: # user has only one account
 			account = connected_accounts_with_vcard[0]
 			# profile, avatar
 			if not self.profile_avatar_menuitem_handler_id:
 				self.profile_avatar_menuitem_handler_id = \
-				profile_avatar_menuitem.connect('activate', self.\
-				on_profile_avatar_menuitem_activate, account)
+					profile_avatar_menuitem.connect('activate',
+					self.on_profile_avatar_menuitem_activate, account)
+			# PEP services
+			if not self.pep_services_menuitem_handler_id:
+				self.pep_services_menuitem_handler_id = \
+					pep_services_menuitem.connect('activate',
+					self.on_pep_services_menuitem_activate, account)
 
 		if len(connected_accounts_with_vcard) == 0:
 			profile_avatar_menuitem.set_sensitive(False)
+			pep_services_menuitem.set_sensitive(False)
 		else:
 			profile_avatar_menuitem.set_sensitive(True)
+			pep_services_menuitem.set_sensitive(True)
 
 		# Advanced Actions
 		if len(gajim.connections) == 0: # user has no accounts
@@ -2945,6 +2977,12 @@ class RosterWindow:
 		if url:
 			helpers.launch_browser_mailer('url', url)
 
+	def on_change_activity_activate(self, widget, account):
+		dlg = dialogs.ChangeActivityDialog(account)
+
+	def on_change_mood_activate(self, widget, account):
+		dlg = dialogs.ChangeMoodDialog(account)
+
 	def on_change_status_message_activate(self, widget, account):
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
 		dlg = dialogs.ChangeStatusMessageDialog(show)
@@ -3010,6 +3048,23 @@ class RosterWindow:
 			sub_menu.append(item)
 			item.connect('activate', self.change_status, account, 'offline')
 
+			pep_menuitem = xml.get_widget('pep_menuitem')
+			if gajim.connections[account].pep_supported and gajim.config.get('use_pep'):
+				pep_submenu = gtk.Menu()
+				pep_menuitem.set_submenu(pep_submenu)
+				if gajim.config.get('publish_mood'):
+					item = gtk.MenuItem('Mood')
+					pep_submenu.append(item)
+					item.connect('activate', self.on_change_mood_activate, account)
+				if gajim.config.get('publish_activity'):
+					item = gtk.MenuItem('Activity')
+					pep_submenu.append(item)
+					item.connect('activate', self.on_change_activity_activate,
+						account)
+			else:
+				pep_menuitem.set_no_show_all(True)
+				pep_menuitem.hide()
+
 			if not gajim.connections[account].gmail_url:
 				open_gmail_inbox_menuitem.set_no_show_all(True)
 				open_gmail_inbox_menuitem.hide()
@@ -3038,8 +3093,7 @@ class RosterWindow:
 			# make some items insensitive if account is offline
 			if gajim.connections[account].connected < 2:
 				for widget in [add_contact_menuitem, service_discovery_menuitem,
-				join_group_chat_menuitem,
-				execute_command_menuitem,
+				join_group_chat_menuitem, execute_command_menuitem, pep_menuitem,
 				start_chat_menuitem]:
 					widget.set_sensitive(False)
 		else:
@@ -3663,14 +3717,14 @@ class RosterWindow:
 				listener = MusicTrackListener.get()
 				self._music_track_changed_signal = listener.connect(
 					'music-track-changed', self._music_track_changed)
-				track = listener.get_playing_track()
-				self._music_track_changed(listener, track)
+			track = listener.get_playing_track()
+			self._music_track_changed(listener, track)
 		else:
 			if self._music_track_changed_signal is not None:
 				listener = MusicTrackListener.get()
 				listener.disconnect(self._music_track_changed_signal)
 				self._music_track_changed_signal = None
-				self._music_track_changed(None, None)
+			self._music_track_changed(None, None)
 
 	## enable setting status msg from a Last.fm account
 	def enable_syncing_status_msg_from_lastfm(self, enabled):
@@ -3718,7 +3772,43 @@ class RosterWindow:
 		except Exception, e:
 			pass
 
-	def _music_track_changed(self, unused_listener, music_track_info):
+	def _music_track_changed(self, unused_listener, music_track_info,
+	account=''):
+		if gajim.config.get('use_pep'):
+			from common import pep
+			if account == '':
+				accounts = gajim.connections.keys()
+			if music_track_info is None:
+					artist = ''
+					title = ''
+					source = ''
+					track = ''
+					length = ''
+			elif hasattr(music_track_info, 'paused') and \
+			music_track_info.paused == 0:
+				artist = ''
+				title = ''
+				source = ''
+				track = ''
+				length = ''
+			else:
+				artist = music_track_info.artist
+				title = music_track_info.title
+				source = music_track_info.album
+			if account == '':
+				print "Multi accounts"
+				for account in accounts:
+					if not gajim.config.get_per('accounts', account,
+					'sync_with_global_status'):
+						continue
+					if not gajim.connections[account].pep_supported:
+						continue
+					pep.user_send_tune(account, artist, title, source)
+			else:
+				print "Single account"
+				pep.user_send_tune(account, artist, title, source)
+			return
+		# No PEP
 		accounts = gajim.connections.keys()
 		if music_track_info is None:
 			status_message = ''
@@ -4001,6 +4091,13 @@ class RosterWindow:
 			gajim.interface.instances['preferences'].window.present()
 		else:
 			gajim.interface.instances['preferences'] = config.PreferencesWindow()
+
+	def on_pep_services_menuitem_activate(self, widget, account):
+		if gajim.interface.instances[account].has_key('pep_services'):
+			gajim.interface.instances[account]['pep_services'].window.present()
+		else:
+			gajim.interface.instances[account]['pep_services'] = \
+				config.ManagePEPServicesWindow(account)
 
 	def on_add_new_contact(self, widget, account):
 		dialogs.AddNewContactWindow(account)
@@ -5249,6 +5346,7 @@ class RosterWindow:
 		self.new_chat_menuitem_handler_id = False
 		self.single_message_menuitem_handler_id = False
 		self.profile_avatar_menuitem_handler_id = False
+		self.pep_services_menuitem_handler_id = False
 		self.actions_menu_needs_rebuild = True
 		self.regroup = gajim.config.get('mergeaccounts')
 		self.clicked_path = None # Used remember on wich row we clicked
@@ -5414,18 +5512,20 @@ class RosterWindow:
 		self.tooltip = tooltips.RosterTooltip()
 		self.draw_roster()
 
-		## Music Track notifications
-		## FIXME: we use a timeout because changing status of
-		## accounts has no effect until they are connected.
-		st = gajim.config.get('set_status_msg_from_current_music_track')
-		if st:
-			gobject.timeout_add(1000,
-				self.enable_syncing_status_msg_from_current_music_track,
-				st)
+		if gajim.config.get('use_pep'):
+			self.enable_syncing_status_msg_from_current_music_track(gajim.config.get('publish_tune'))
 		else:
-			gobject.timeout_add(1000,
-				self.enable_syncing_status_msg_from_lastfm,
-				gajim.config.get('set_status_msg_from_lastfm'))
+			## Music Track notifications
+			## FIXME: we use a timeout because changing status of
+			## accounts has no effect until they are connected.
+			st = gajim.config.get('set_status_msg_from_current_music_track')
+			if st:
+				gobject.timeout_add(1000,
+					self.enable_syncing_status_msg_from_current_music_track, st)
+			else:
+				gobject.timeout_add(1000,
+					self.enable_syncing_status_msg_from_lastfm,
+					gajim.config.get('set_status_msg_from_lastfm'))
 
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()

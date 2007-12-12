@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##	tooltips.py
 ##
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
@@ -463,6 +464,10 @@ class RosterTooltip(NotificationAreaTooltip):
 						contact.last_status_time)
 			properties.append((self.table,	None))
 		else: # only one resource
+
+			#FIXME: User {Mood, Activity, Tune} not shown if there are
+			#multiple resources
+			#FIXME: User {Mood, Activity, Tune} not shown for self
 			if contact.show:
 				show = helpers.get_uf_show(contact.show) 
 				if contact.last_status_time:
@@ -494,6 +499,42 @@ class RosterTooltip(NotificationAreaTooltip):
 				show = '<i>' + show + '</i>'
 				# we append show below
 				
+				if contact.mood.has_key('mood'):
+					mood_string = 'Mood: <b>%s</b>' % contact.mood['mood'].strip()
+					if contact.mood.has_key('text') and contact.mood['text'] != '':
+						mood_string += ' (%s)' % contact.mood['text'].strip()
+					properties.append((mood_string, None))
+
+				if contact.activity.has_key('activity'):
+					activity = contact.activity['activity'].strip()
+					activity_string = 'Activity: <b>%s' % activity
+					if contact.activity.has_key('subactivity'):
+						activity_sub = contact.activity['subactivity'].strip()
+						activity_string += ' (%s)</b>' % activity_sub
+					else:
+						activity_string += '</b>'
+					if contact.activity.has_key('text'):
+						activity_text = contact.activity['text'].strip()
+						activity_string += ' (%s)' % activity_text
+					properties.append((activity_string, None))
+
+				if contact.tune.has_key('artist') or contact.tune.has_key('title'):
+					if contact.tune.has_key('artist'):
+						artist = contact.tune['artist'].strip()
+					else:
+						artist = _('Unknown Artist')
+					if contact.tune.has_key('title'):
+						title = contact.tune['title'].strip()
+					else:
+						title = _('Unknown Title')
+					if contact.tune.has_key('source'):
+						source = contact.tune['source'].strip()
+					else:
+						source = _('Unknown Source')
+					tune_string = '♪ ' + _('<b>"%(title)s"</b> by <i>%(artist)s</i>\nfrom <i>%(source)s</i>' %\
+							{'title': title, 'artist': artist, 'source': source}) + ' ♪'
+					properties.append((tune_string, None))
+
 				if contact.status:
 					status = contact.status.strip()
 					if status:

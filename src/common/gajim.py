@@ -56,7 +56,7 @@ If you start gajim from svn:
 
 interface = None # The actual interface (the gtk one for the moment)
 config = config.Config()
-version = config.get('version')
+version = config.get('version') + 'dh'
 connections = {} # 'account name': 'account (connection.Connection) instance'
 verbose = False
 

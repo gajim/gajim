@@ -370,6 +370,125 @@ class ChooseGPGKeyDialog:
 				self.keys_treeview.set_cursor(path)
 
 
+class ChangeActivityDialog:
+	activities = [_('doing_chores'), _('drinking'), _('eating'),
+	_('excercising'), _('grooming'), _('having_appointment'),
+	_('inactive'), _('relaxing'), _('talking'), _('traveling'),
+	_('working'), ]
+	subactivities = [_('at_the_spa'), _('brushing_teeth'),
+			_('buying_groceries'), _('cleaning'), _('coding'),
+			_('commuting'), _('cooking'), _('cycling'), _('day_off'),
+			_('doing_maintenance'), _('doing_the_dishes'),
+			_('doing_the_laundry'), _('driving'), _('gaming'),
+			_('gardening'), _('getting_a_haircut'), _('going_out'),
+			_('hanging_out'), _('having_a_beer'), _('having_a_snack'),
+			_('having_breakfast'), _('having_coffee'),
+			_('having_dinner'), _('having_lunch'), _('having_tea'),
+			_('hiking'), _('in_a_car'), _('in_a_meeting'),
+			_('in_real_life'), _('jogging'), _('on_a_bus'),
+			_('on_a_plane'), _('on_a_train'), _('on_a_trip'),
+			_('on_the_phone'), _('on_vacation'), _('other'),
+			_('partying'), _('playing_sports'), _('reading'),
+			_('rehearsing'), _('running'), _('running_an_errand'),
+			_('scheduled_holiday'), _('shaving'), _('shopping'),
+			_('skiing'), _('sleeping'), _('socializing'),
+			_('studying'), _('sunbathing'), _('swimming'),
+			_('taking_a_bath'), _('taking_a_shower'), _('walking'),
+			_('walking_the_dog'), _('watching_tv'),
+			_('watching_a_movie'), _('working_out'), _('writing'), ]
+	def __init__(self, account):
+		self.account = account
+		self.xml = gtkgui_helpers.get_glade('change_activity_dialog.glade')
+		self.window = self.xml.get_widget('change_activity_dialog')
+		self.window.set_transient_for(gajim.interface.roster.window)
+		self.window.set_title(_('Activity'))
+
+		self.entry = self.xml.get_widget('entry')
+
+		self.combo1 = self.xml.get_widget('combobox1')
+		self.liststore1 = gtk.ListStore(str)
+		self.combo1.set_model(self.liststore1)
+
+		for activity in self.activities:
+			self.liststore1.append((activity,))
+
+		cellrenderertext = gtk.CellRendererText()
+		self.combo1.pack_start(cellrenderertext, True)
+		self.combo1.add_attribute(cellrenderertext, 'text', 0)
+
+		self.combo2 = self.xml.get_widget('combobox2')
+		self.liststore2 = gtk.ListStore(str)
+		self.combo2.set_model(self.liststore2)
+
+		for subactivity in self.subactivities:
+			self.liststore2.append((subactivity,))
+
+		cellrenderertext = gtk.CellRendererText()
+		self.combo2.pack_start(cellrenderertext, True)
+		self.combo2.add_attribute(cellrenderertext, 'text', 0)
+
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
+
+	def on_ok_button_clicked(self, widget):
+		'''Return activity and messsage (None if no activity selected)'''
+		activity = None 
+		subactivity = None
+		message = None
+		active1 = self.combo1.get_active()
+		active2 = self.combo2.get_active()
+		if active1 > -1:
+			activity = self.liststore1[active1][0].decode('utf-8')
+			if active2 > -1:
+				subactivity = self.liststore2[active2][0].decode('utf-8')
+			message = self.entry.get_text().decode('utf-8')
+			from common import pep
+			pep.user_send_activity(self.account, activity,
+					subactivity, message)
+			self.window.destroy()
+
+	def on_cancel_button_clicked(self, widget):
+		self.window.destroy()
+
+class ChangeMoodDialog:
+	moods = [_('afraid'), _('amazed'), _('angry'), _('annoyed'), _('anxious'), _('aroused'), _('ashamed'), _('bored'), _('brave'), _('calm'), _('cold'), _('confused'), _('contented'), _('cranky'), _('curious'), _('depressed'), _('disappointed'), _('disgusted'), _('distracted'), _('embarrassed'), _('excited'), _('flirtatious'), _('frustrated'), _('grumpy'), _('guilty'), _('happy'), _('hot'), _('humbled'), _('humiliated'), _('hungry'), _('hurt'), _('impressed'), _('in_awe'), _('in_love'), _('indignant'), _('interested'), _('intoxicated'), _('invincible'), _('jealous'), _('lonely'), _('mean'), _('moody'), _('nervous'), _('neutral'), _('offended'), _('playful'), _('proud'), _('relieved'), _('remorseful'), _('restless'), _('sad'), _('sarcastic'), _('serious'), _('shocked'), _('shy'), _('sick'), _('sleepy'), _('stressed'), _('surprised'), _('thirsty'), _('worried')]
+	def __init__(self, account):
+		self.account = account
+		self.xml = gtkgui_helpers.get_glade('change_mood_dialog.glade')
+		self.window = self.xml.get_widget('change_mood_dialog')
+		self.window.set_transient_for(gajim.interface.roster.window)
+		self.window.set_title(_('Mood'))
+
+		self.entry = self.xml.get_widget('entry')
+
+		self.combo = self.xml.get_widget('combobox')
+		self.liststore = gtk.ListStore(str)
+		self.combo.set_model(self.liststore)
+
+		for mood in self.moods:
+			self.liststore.append((mood,))
+
+		cellrenderertext = gtk.CellRendererText()
+		self.combo.pack_start(cellrenderertext, True)
+		self.combo.add_attribute(cellrenderertext, 'text', 0)
+		self.xml.signal_autoconnect(self)
+		self.window.show_all()
+
+	def on_ok_button_clicked(self, widget):
+		'''Return mood and messsage (None if no mood selected)'''
+		mood = None 
+		message = None
+		active = self.combo.get_active()
+		if active > -1:
+			mood = self.liststore[active][0].decode('utf-8')
+			message = self.entry.get_text().decode('utf-8')
+			from common import pep
+			pep.user_send_mood(self.account, mood, message)
+			self.window.destroy()
+
+	def on_cancel_button_clicked(self, widget):
+		self.window.destroy()
+
 class ChangeStatusMessageDialog:
 	def __init__(self, show = None):
 		self.show = show
