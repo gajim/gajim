@@ -1447,7 +1447,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.getTag('query')
 		qp.setTagData('utc', strftime('%Y%m%dT%T', gmtime()))
-		qp.setTagData('tz', tzname[daylight])
+		qp.setTagData('tz', helpers.decode_string(tzname[daylight]))
 		qp.setTagData('display', helpers.decode_string(strftime('%c',
 			localtime())))
 		self.connection.send(iq_obj)
