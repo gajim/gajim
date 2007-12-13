@@ -3799,8 +3799,8 @@ class RosterWindow:
 				for account in accounts:
 					if not gajim.account_is_connected(account):
 						continue
-					if not gajim.config.get_per('accounts', account,
-					'sync_with_global_status'):
+					if not gajim.config.get('use_pep') and not gajim.config.get_per(
+					'accounts', account, 'sync_with_global_status'):
 						continue
 					if not gajim.connections[account].pep_supported:
 						continue
