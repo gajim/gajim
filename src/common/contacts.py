@@ -27,17 +27,14 @@ class Contact:
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
 	ask='', resource='', priority=0, keyID='', our_chatstate=None,
-	chatstate=None, last_status_time=None, msg_id = None, composing_xep = None):
+	chatstate=None, last_status_time=None, msg_id = None, composing_xep = None,
+	mood={}, tune={}, activity={}):
 		self.jid = jid
 		self.name = name
 		self.contact_name = '' # nick choosen by contact
 		self.groups = groups
 		self.show = show
 		self.status = status
-		# FIXME
-		self.mood = dict()
-		self.activity = dict()
-		self.tune = dict()
 		self.sub = sub
 		self.ask = ask
 		self.resource = resource
@@ -66,6 +63,10 @@ class Contact:
 		# this is contact's chatstate
 		self.chatstate = chatstate
 		self.last_status_time = last_status_time
+
+		self.mood = mood.copy()
+		self.tune = tune.copy()
+		self.activity = activity.copy()
 
 	def get_full_jid(self):
 		if self.resource:
@@ -166,10 +167,11 @@ class Contacts:
 
 	def create_contact(self, jid='', name='', groups=[], show='', status='',
 		sub='', ask='', resource='', priority=0, keyID='', our_chatstate=None,
-		chatstate=None, last_status_time=None, composing_xep=None):
+		chatstate=None, last_status_time=None, composing_xep=None,
+		mood={}, tune={}, activity={}):
 		return Contact(jid, name, groups, show, status, sub, ask, resource,
 			priority, keyID, our_chatstate, chatstate, last_status_time,
-			composing_xep)
+			None, composing_xep, mood, tune, activity)
 	
 	def copy_contact(self, contact):
 		return self.create_contact(jid = contact.jid, name = contact.name,

@@ -142,6 +142,9 @@ class Connection(ConnectionHandlers):
 		self.blocked_contacts = []
 		self.blocked_groups = []
 		self.pep_supported = False
+		self.mood = {}
+		self.tune = {}
+		self.activity = {}
 		# Do we continue connection when we get roster (send presence,get vcard..)
 		self.continue_connect_info = None
 		# To know the groupchat jid associated with a sranza ID. Useful to

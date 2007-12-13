@@ -1530,7 +1530,10 @@ class RosterWindow:
 					name = account_name, show = connection.get_status(), sub = '',
 					status = connection.status,
 					resource = connection.server_resource,
-					priority = connection.priority)
+					priority = connection.priority,
+					mood = connection.mood,
+					tune = connection.tune,
+					activity = connection.activity)
 				if gajim.connections[account].gpg:
 					contact.keyID = gajim.config.get_per('accounts', connection.name,
 						'keyid')

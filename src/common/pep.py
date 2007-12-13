@@ -1,77 +1,172 @@
 from common import gajim, xmpp
 
 def user_mood(items, name, jid):
-	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
-	contact = gajim.contacts.get_contact(name, user, resource=resource)
-	if not contact:
-		return
+	has_child = False
+	mood = None
+	text = None
 	for item in items.getTags('item'):
 		child = item.getTag('mood')
 		if child is not None:
-			if contact.mood.has_key('mood'):
-				del contact.mood['mood']
-			if contact.mood.has_key('text'):
-				del contact.mood['text']
+			has_child = True
 			for ch in child.getChildren():
 				if ch.getName() != 'text':
-					contact.mood['mood'] = ch.getName()
+					mood = ch.getName()
 				else:
-					contact.mood['text'] = ch.getData()
+					text = ch.getData()
+	if jid == gajim.get_jid_from_account(name):
+		acc = gajim.connections[name]
+		if has_child:
+			if acc.mood.has_key('mood'):
+				del acc.mood['mood']
+			if acc.mood.has_key('text'):
+				del acc.mood['text']
+			if mood != None:
+				acc.mood['mood'] = mood
+			if text != None:
+				acc.mood['text'] = text
 
-def user_tune(items, name, jid):
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
 	contact = gajim.contacts.get_contact(name, user, resource=resource)
 	if not contact:
 		return
+	if has_child:
+		if contact.mood.has_key('mood'):
+			del contact.mood['mood']
+		if contact.mood.has_key('text'):
+			del contact.mood['text']
+		if mood != None:
+			contact.mood['mood'] = mood
+		if text != None:
+			contact.mood['text'] = text
+
+def user_tune(items, name, jid):
+	has_child = False
+	artist = None
+	title = None
+	source = None
+	track = None
+	length = None
+
 	for item in items.getTags('item'):
 		child = item.getTag('tune')
 		if child is not None:
-			if contact.tune.has_key('artist'):
-				del contact.tune['artist']
-			if contact.tune.has_key('title'):
-				del contact.tune['title']
-			if contact.tune.has_key('source'):
-				del contact.tune['source']
-			if contact.tune.has_key('track'):
-				del contact.tune['track']
-			if contact.tune.has_key('length'):
-				del contact.tune['length']
+			has_child = True
 			for ch in child.getChildren():
 				if ch.getName() == 'artist':
-					contact.tune['artist'] = ch.getData()
+					artist = ch.getData()
 				elif ch.getName() == 'title':
-					contact.tune['title'] = ch.getData()
+					title = ch.getData()
 				elif ch.getName() == 'source':
-					contact.tune['source'] = ch.getData()
+					source = ch.getData()
 				elif ch.getName() == 'track':
-					contact.tune['track'] = ch.getData()
+					track = ch.getData()
 				elif ch.getName() == 'length':
-					contact.tune['length'] = ch.getData()
+					length = ch.getData()
+
+	if jid == gajim.get_jid_from_account(name):
+		acc = gajim.connections[name]
+		if has_child:
+			if acc.tune.has_key('artist'):
+				del acc.tune['artist']
+			if acc.tune.has_key('title'):
+				del acc.tune['title']
+			if acc.tune.has_key('source'):
+				del acc.tune['source']
+			if acc.tune.has_key('track'):
+				del acc.tune['track']
+			if acc.tune.has_key('length'):
+				del acc.tune['length']
+			if artist != None:
+				acc.tune['artist'] = artist
+			if title != None:
+				acc.tune['title'] = title
+			if source != None:
+				acc.tune['source'] = source
+			if track != None:
+				acc.tune['track'] = track
+			if length != None:
+				acc.tune['length'] = length
+
+	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
+	contact = gajim.contacts.get_contact(name, user, resource=resource)
+	if not contact:
+		return
+	if has_child:
+		if contact.tune.has_key('artist'):
+			del contact.tune['artist']
+		if contact.tune.has_key('title'):
+			del contact.tune['title']
+		if contact.tune.has_key('source'):
+			del contact.tune['source']
+		if contact.tune.has_key('track'):
+			del contact.tune['track']
+		if contact.tune.has_key('length'):
+			del contact.tune['length']
+		if artist != None:
+			contact.tune['artist'] = artist
+		if title != None:
+			contact.tune['title'] = title
+		if source != None:
+			contact.tune['source'] = source
+		if track != None:
+			contact.tune['track'] = track
+		if length != None:
+			contact.tune['length'] = length
 
 def user_geoloc(items, name, jid):
 	pass
 
 def user_activity(items, name, jid):
+	has_child = False
+	activity = None
+	subactivity = None
+	text = None
+
+	for item in items.getTags('item'):
+		child = item.getTag('activity')
+		if child is not None:
+			has_child = True
+			for ch in child.getChildren():
+				if ch.getName() != 'text':
+					activity = ch.getName()
+					for chi in ch.getChildren():
+						subactivity = chi.getName()
+				else:
+					text = ch.getData()
+
+	if jid == gajim.get_jid_from_account(name):
+		acc = gajim.connections[name]
+		if has_child:
+			if acc.activity.has_key('activity'):
+				del acc.activity['activity']
+			if acc.activity.has_key('subactivity'):
+				del acc.activity['subactivity']
+			if acc.activity.has_key('text'):
+				del acc.activity['text']
+			if activity != None:
+				acc.activity['activity'] = activity
+			if subactivity != None:
+				acc.activity['subactivity'] = subactivity
+			if text != None:
+				acc.activity['text'] = text
+
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
 	contact = gajim.contacts.get_contact(name, user, resource=resource)
 	if not contact:
 		return
-	for item in items.getTags('item'):
-		child = item.getTag('activity')
-		if child is not None:
-			if contact.activity.has_key('activity'):
-				del contact.activity['activity']
-			if contact.activity.has_key('subactivity'):
-				del contact.activity['subactivity']
-			if contact.activity.has_key('text'):
-				del contact.activity['text']
-			for ch in child.getChildren():
-				if ch.getName() != 'text':
-					contact.activity['activity'] = ch.getName()
-					for chi in ch.getChildren():
-						contact.activity['subactivity'] = chi.getName()
-				else:
-					contact.activity['text'] = ch.getData()
+	if has_child:
+		if contact.activity.has_key('activity'):
+			del contact.activity['activity']
+		if contact.activity.has_key('subactivity'):
+			del contact.activity['subactivity']
+		if contact.activity.has_key('text'):
+			del contact.activity['text']
+		if activity != None:
+			contact.activity['activity'] = activity
+		if subactivity != None:
+			contact.activity['subactivity'] = subactivity
+		if text != None:
+			contact.activity['text'] = text
 
 def user_send_mood(account, mood, message = ''):
 	if gajim.config.get('publish_mood') == False:

@@ -500,14 +500,14 @@ class RosterTooltip(NotificationAreaTooltip):
 				# we append show below
 				
 				if contact.mood.has_key('mood'):
-					mood_string = 'Mood: <b>%s</b>' % contact.mood['mood'].strip()
+					mood_string = _('Mood:') + ' <b>%s</b>' % contact.mood['mood'].strip()
 					if contact.mood.has_key('text') and contact.mood['text'] != '':
 						mood_string += ' (%s)' % contact.mood['text'].strip()
 					properties.append((mood_string, None))
 
 				if contact.activity.has_key('activity'):
 					activity = contact.activity['activity'].strip()
-					activity_string = 'Activity: <b>%s' % activity
+					activity_string = _('Activity:') + ' <b>%s' % activity
 					if contact.activity.has_key('subactivity'):
 						activity_sub = contact.activity['subactivity'].strip()
 						activity_string += ' (%s)</b>' % activity_sub
@@ -531,8 +531,8 @@ class RosterTooltip(NotificationAreaTooltip):
 						source = contact.tune['source'].strip()
 					else:
 						source = _('Unknown Source')
-					tune_string = '♪ ' + _('<b>"%(title)s"</b> by <i>%(artist)s</i>\nfrom <i>%(source)s</i>' %\
-							{'title': title, 'artist': artist, 'source': source}) + ' ♪'
+					tune_string = _('Tune:') + ' ' + _('<b>"%(title)s"</b> by <i>%(artist)s</i>\nfrom <i>%(source)s</i>' %\
+							{'title': title, 'artist': artist, 'source': source})
 					properties.append((tune_string, None))
 
 				if contact.status:
