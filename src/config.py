@@ -542,7 +542,7 @@ class PreferencesWindow:
 		
 		self.notebook.set_current_page(0)
 		if not gajim.config.get('use_pep'):
-			self.notebook.remove_page(5)
+			self.notebook.remove_page(4)
 		self.window.show_all()
 		gtkgui_helpers.possibly_move_window_in_current_desktop(self.window)
 
