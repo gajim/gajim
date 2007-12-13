@@ -1122,11 +1122,12 @@ class ConnectionVcard:
 			conf = iq_obj.getTag('pubsub').getTag('configure')
 			node = conf.getAttr('node')
 			form_tag = conf.getTag('x', namespace=common.xmpp.NS_DATA)
-			form = common.dataforms.ExtendForm(node=form_tag)
-			for field in form.iter_fields():
-				if field.var == 'pubsub#access_model':
-					self.dispatch('PEP_ACCESS_MODEL', (node, field.value))
-					break
+			if form_tag:
+				form = common.dataforms.ExtendForm(node=form_tag)
+				for field in form.iter_fields():
+					if field.var == 'pubsub#access_model':
+						self.dispatch('PEP_ACCESS_MODEL', (node, field.value))
+						break
 
 		del self.awaiting_answers[id]
 
