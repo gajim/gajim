@@ -86,7 +86,7 @@ class MessageControl:
 		pass # NOTE: Derived classes SHOULD implement this
 
 	def get_tab_label(self, chatstate):
-		'''Return a suitable the tab label string.  Returns a tuple such as:
+		'''Return a suitable tab label string.  Returns a tuple such as:
 		(label_str, color) either of which can be None
 		if chatstate is given that means we have HE SENT US a chatstate and
 		we want it displayed'''
