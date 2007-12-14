@@ -373,7 +373,6 @@ class SignalObject(dbus.service.Object):
 		if not specified status is changed for all accounts. '''
 		if status not in ('offline', 'online', 'chat', 
 			'away', 'xa', 'dnd', 'invisible'):
-			raise InvalidArgument
 			return DBUS_BOOLEAN(False)
 		if account:
 			gobject.idle_add(gajim.interface.roster.send_status, account,
