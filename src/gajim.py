@@ -2914,7 +2914,7 @@ if __name__ == '__main__':
 			print >> sys.stderr, _('Session Management support not available (missing gnome.ui module)')
 		else:
 			def die_cb(cli):
-				gtk.main_quit()
+				gajim.interface.roster.quit_gtkgui_interface()
 			gnome.program_init('gajim', gajim.version)
 			cli = gnome.ui.master_client()
 			cli.connect('die', die_cb)
