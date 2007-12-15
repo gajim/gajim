@@ -761,15 +761,18 @@ class NonBlockingTLS(PlugIn):
 			for line in lines:
 				if 'BEGIN CERTIFICATE' in line:
 					begin = i
-					continue
 				elif 'END CERTIFICATE' in line and begin > -1:
 					cert = ''.join(lines[begin:i+2])
 					try:
 						X509cert = OpenSSL.crypto.load_certificate(
 							OpenSSL.crypto.FILETYPE_PEM, cert)
 						store.add_cert(X509cert)
+					except OpenSSL.crypto.Error, exception_obj:
+						log.warning('Unable to load a certificate from file %s: %s' %\
+							(gajim.MY_CACERTS, exception_obj.message[0][2]))
 					except:
-						log.warning('Unable to load a certificate from file %s' % \
+						log.warning(
+							'Unknown error while loading certificate from file %s' % \
 							gajim.MY_CACERTS)
 					begin = -1
 				i += 1
