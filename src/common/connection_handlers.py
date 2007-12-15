@@ -835,11 +835,12 @@ class ConnectionDisco:
 					if identity['category'] == 'pubsub' and identity['type'] == \
 					'pep':
 						self.pep_supported = True
-						listener = MusicTrackListener.get()
-						track = listener.get_playing_track()
-						if gajim.config.get('publish_tune'):
-							gajim.interface.roster._music_track_changed(listener,
-									track, self.name)
+						if dbus_support.supported:
+							listener = MusicTrackListener.get()
+							track = listener.get_playing_track()
+							if gajim.config.get('publish_tune'):
+								gajim.interface.roster._music_track_changed(listener,
+										track, self.name)
 						break
 			if features.__contains__(common.xmpp.NS_BYTESTREAM):
 				gajim.proxy65_manager.resolve(jid, self.connection, self.name)
