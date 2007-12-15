@@ -1114,7 +1114,7 @@ class Connection(ConnectionHandlers):
 	def send_new_account_infos(self, form, is_form):
 		if is_form:
 			# Get username and password and put them in new_account_info
-			for field in self._data_form.iter_fields():
+			for field in form.iter_fields():
 				if field.var == 'username':
 					self.new_account_info['name'] = field.value
 				if field.var == 'password':
