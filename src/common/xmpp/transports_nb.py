@@ -769,7 +769,7 @@ class NonBlockingTLS(PlugIn):
 						store.add_cert(X509cert)
 					except OpenSSL.crypto.Error, exception_obj:
 						log.warning('Unable to load a certificate from file %s: %s' %\
-							(gajim.MY_CACERTS, exception_obj.message[0][2]))
+							(gajim.MY_CACERTS, exception_obj.args[0][0][2]))
 					except:
 						log.warning(
 							'Unknown error while loading certificate from file %s' % \
