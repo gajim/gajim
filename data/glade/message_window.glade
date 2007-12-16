@@ -399,6 +399,7 @@
             </child>
             <child>
               <widget class="GtkVBox" id="muc_child_vbox">
+                <property name="can_focus">True</property>
                 <property name="border_width">3</property>
                 <child>
                   <widget class="GtkAlignment" id="alignment103">
