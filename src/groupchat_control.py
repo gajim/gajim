@@ -813,6 +813,13 @@ class GroupchatControl(ChatControlBase):
 							return False
 					else: # Special word == word, no char after in word
 						return True 
+		for special_word in special_words:
+			if special_word.find(' ') > -1: 
+				# There is a space in this special word, do a global search
+				# without splitting by words as previously
+				# We don't search this in all cases so we don't loose time
+				if text.find(special_word) > -1:
+					return True 
 		return False
 
 	def set_subject(self, subject):
