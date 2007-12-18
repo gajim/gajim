@@ -3,6 +3,7 @@
 ##
 ## Copyright (C) 2003-2007 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
+##                         Travis Shirk <travis@pobox.com> 
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
@@ -1019,7 +1020,7 @@ class RosterWindow:
 
 				if gajim.config.get_per('accounts', account, 'is_zeroconf'):
 					continue
-				
+
 				# single message
 				single_message_item = gtk.MenuItem(_('using account %s') % account,
 					False)
@@ -1378,8 +1379,7 @@ class RosterWindow:
 				if contact.resource != '':
 					name += '/' + contact.resource
 				jid_with_resource = contact.jid + '/' + contact.resource
-				if gajim.interface.msg_win_mgr.has_window(jid_with_resource,
-				account):
+				if gajim.interface.msg_win_mgr.has_window(jid_with_resource, account):
 					win = gajim.interface.msg_win_mgr.get_window(jid_with_resource,
 						account)
 					ctrl = win.get_control(jid_with_resource, account)
@@ -2661,7 +2661,7 @@ class RosterWindow:
 		ctrl = gajim.interface.minimized_controls[account][jid]
 		mw = gajim.interface.msg_win_mgr.get_window(ctrl.contact.jid, ctrl.account)
 		if not mw:
-			mw = gajim.interface.msg_win_mgr.create_window(ctrl.contact, \
+			mw = gajim.interface.msg_win_mgr.create_window(ctrl.contact,
 				ctrl.account, ctrl.type_id)
 		ctrl.parent_win = mw
 		mw.new_tab(ctrl)
@@ -3085,8 +3085,8 @@ class RosterWindow:
 			contact = gajim.contacts.create_contact(jid = hostname) # Fake contact
 			execute_command_menuitem.connect('activate',
 				self.on_execute_command, contact, account)
-			
-			start_chat_menuitem.connect('activate', 
+
+			start_chat_menuitem.connect('activate',
 				self.on_new_chat_menuitem_activate, account)
 
 			gc_sub_menu = gtk.Menu() # gc is always a submenu
@@ -4150,7 +4150,7 @@ class RosterWindow:
 			gajim.interface.instances['file_transfers'].window.present()
 		else:
 			gajim.interface.instances['file_transfers'].window.show_all()
-	
+
 	def on_history_menuitem_activate(self, widget):
 		if gajim.interface.instances.has_key('logs'):
 			gajim.interface.instances['logs'].window.present()
@@ -4252,6 +4252,7 @@ class RosterWindow:
 	def quit_gtkgui_interface(self):
 		'''When we quit the gtk interface :
 		tell that to the core and exit gtk'''
+		msgwin_width_adjust = 0
 		if gajim.config.get('saveposition'):
 			# in case show_roster_on_start is False and roster is never shown
 			# window.window is None
@@ -4260,12 +4261,21 @@ class RosterWindow:
 				gajim.config.set('roster_x-position', x)
 				gajim.config.set('roster_y-position', y)
 				width, height = self.window.get_size()
+				# For the width use the size of the vbox containing the tree and
+				# status combo, this will cancel out any hpaned width 
+				width = self.xml.get_widget('roster_vbox2').allocation.width
 				gajim.config.set('roster_width', width)
 				gajim.config.set('roster_height', height)
+				if not self.xml.get_widget('roster_vbox2').get_property('visible'):
+					# The roster vbox is hidden, so the message window is larger
+					# then we want to save (i.e. the window will grow every startup)
+					# so adjust.
+					msgwin_width_adjust = -1 * width
+
 
 		gajim.config.set('show_roster_on_startup',
 			self.window.get_property('visible'))
-		gajim.interface.msg_win_mgr.shutdown()
+		gajim.interface.msg_win_mgr.shutdown(msgwin_width_adjust)
 
 		gajim.config.set('collapsed_rows', '\t'.join(self.collapsed_rows))
 		gajim.interface.save_config()
@@ -4667,6 +4677,25 @@ class RosterWindow:
 		gajim.config.set('showoffline', not gajim.config.get('showoffline'))
 		self.draw_roster()
 
+	def on_view_menu_activate(self, widget):
+		# Hide the show roster menu if we are not in the right windowing mode.
+		if self.hpaned.get_child2() is not None:
+			self.xml.get_widget('show_roster_menuitem').show()
+		else:
+			self.xml.get_widget('show_roster_menuitem').hide()
+
+	def on_show_roster_menuitem_toggled(self, widget):
+		# when num controls is 0 this menuitem is hidden, but still need to
+		# disable keybinding
+		if self.hpaned.get_child2() is not None:
+			self.show_roster_vbox(widget.get_active())
+
+	def show_roster_vbox(self, active):
+		if active:
+			self.xml.get_widget('roster_vbox2').show()
+		else:
+			self.xml.get_widget('roster_vbox2').hide()
+
 	def set_renderer_color(self, renderer, style, set_background = True):
 		'''set style for treeview cell, using PRELIGHT system color'''
 		if set_background:
@@ -4986,7 +5015,7 @@ class RosterWindow:
 			# FIXME: Why do groups have to be redrawn by hand?
 			for g in old_groups:
 				self.draw_group(g, account_source)
-			self.draw_account(account_source)	
+			self.draw_account(account_source)
 			context.finish(True, True, etime)
 
 		confirm_metacontacts = gajim.config.get('confirm_metacontacts')
@@ -5058,7 +5087,7 @@ class RosterWindow:
 			return
 		if position == gtk.TREE_VIEW_DROP_BEFORE and len(path_dest) == 2:
 			# dropped before a group: we drop it in the previous group every time
-			path_dest = (path_dest[0], path_dest[1]-1)	
+			path_dest = (path_dest[0], path_dest[1]-1)
 		# destination: the row something got dropped on
 		iter_dest = model.get_iter(path_dest)
 		type_dest = model[iter_dest][C_TYPE].decode('utf-8')
@@ -5112,7 +5141,7 @@ class RosterWindow:
 				uri_splitted))
 			dialog.popup()
 			return
-		
+
 		# a roster entry was dragged and dropped somewhere in the roster
 
 		# source: the row that was dragged
@@ -5120,9 +5149,9 @@ class RosterWindow:
 		iter_source = model.get_iter(path_source)
 		type_source = model[iter_source][C_TYPE]
 		account_source = model[iter_source][C_ACCOUNT].decode('utf-8')
-		
+
 		# Only normal contacts can be dragged	
-		if type_source != 'contact': 
+		if type_source != 'contact':
 			return
 		if gajim.config.get_per('accounts', account_source, 'is_zeroconf'):
 			return
@@ -5172,7 +5201,7 @@ class RosterWindow:
 			if grp_source == grp_dest and account_source == account_dest:
 				# Drop on self
 				return
-		
+
 		# contact drop somewhere in or on a foreign account
 		if (type_dest == 'account' or not self.regroup) and \
 				account_source != account_dest:
@@ -5180,7 +5209,7 @@ class RosterWindow:
 			dialogs.AddNewContactWindow(account = account_dest, jid = jid_source,
 				user_nick = c_source.name, group = grp_dest)
 			return
-		
+
 		# we may not add contacts from special_groups
 		if grp_source in helpers.special_groups :
 			return
@@ -5194,7 +5223,7 @@ class RosterWindow:
 			self.on_drop_in_group(None, account_source, c_source, grp_dest,
 				is_big_brother, context, etime, grp_source)
 			return
-		
+
 		# Contact drop on another contact, make meta contacts
 		if position == gtk.TREE_VIEW_DROP_INTO_OR_AFTER or \
 				position == gtk.TREE_VIEW_DROP_INTO_OR_BEFORE:
@@ -5209,21 +5238,30 @@ class RosterWindow:
 
 	def show_title(self):
 		change_title_allowed = gajim.config.get('change_roster_title')
+		if not change_title_allowed:
+			return
+
+		if gajim.config.get('one_message_window') == 'always_with_roster':
+			# always_with_roster mode defers to the MessageWindow
+			if not gajim.interface.msg_win_mgr.one_window_opened():
+				# No MessageWindow to defer to
+				self.window.set_title('Gajim')
+			return
+
 		nb_unread = 0
-		if change_title_allowed:
-			start = ''
-			for account in gajim.connections:
-				# Count events in roster title only if we don't auto open them
-				if not helpers.allow_popup_window(account):
-					nb_unread += gajim.events.get_nb_events(['chat', 'normal',
-						'file-request', 'file-error', 'file-completed',
-						'file-request-error', 'file-send-error', 'file-stopped',
-						'printed_chat'], account)
-			if nb_unread > 1:
-				start = '[' + str(nb_unread) + ']  '
-			elif nb_unread == 1:
-				start = '*  '
-			self.window.set_title(start + 'Gajim')
+		start = ''
+		for account in gajim.connections:
+			# Count events in roster title only if we don't auto open them
+			if not helpers.allow_popup_window(account):
+				nb_unread += gajim.events.get_nb_events(['chat', 'normal',
+					'file-request', 'file-error', 'file-completed',
+					'file-request-error', 'file-send-error', 'file-stopped',
+					'printed_chat'], account)
+		if nb_unread > 1:
+			start = '[' + str(nb_unread) + ']  '
+		elif nb_unread == 1:
+			start = '*  '
+		self.window.set_title(start + 'Gajim')
 
 		gtkgui_helpers.set_unset_urgency_hint(self.window, nb_unread)
 
@@ -5304,7 +5342,7 @@ class RosterWindow:
 		accels = gtk.AccelGroup()
 		self.xml.get_widget('roster_window').add_accel_group(accels)
 		prefs_item.add_accelerator('activate', accels, ord(','),
-								   gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+						gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
 		app_menu.append(prefs_item)
 		app_menu.append(gtk.MenuItem('__SKIP__'))
 		app_menu.append(gtk.MenuItem('__SKIP__'))
@@ -5322,11 +5360,20 @@ class RosterWindow:
 		#self.xml.get_widget('menubar').hide()
 		return
 
+	def _on_message_window_delete(self, win_mgr, msg_win):
+		if gajim.config.get('one_message_window') == 'always_with_roster':
+			self.show_roster_vbox(True)
+			gtkgui_helpers.resize_window(self.window,
+				gajim.config.get('roster_width'),
+				gajim.config.get('roster_height'))
+
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('roster_window.glade')
 		self.window = self.xml.get_widget('roster_window')
+		self.hpaned = self.xml.get_widget('roster_hpaned')
 		self._music_track_changed_signal = None
-		gajim.interface.msg_win_mgr = MessageWindowMgr()
+		gajim.interface.msg_win_mgr = MessageWindowMgr(self.window, self.hpaned)
+		gajim.interface.msg_win_mgr.connect('window-delete', self._on_message_window_delete)
 		self.advanced_menus = [] # We keep them to destroy them
 		if gajim.config.get('roster_window_skip_taskbar'):
 			self.window.set_property('skip-taskbar-hint', True)
@@ -5460,6 +5507,8 @@ class RosterWindow:
 		self.xml.get_widget('show_transports_menuitem').set_active(
 			show_transports_group)
 
+		self.xml.get_widget('show_roster_menuitem').set_active(True)
+
 		# columns
 
 		# this col has 3 cells:
@@ -5549,3 +5598,4 @@ class RosterWindow:
 
 		if sys.platform == 'darwin':
 			self.setup_for_osx()
+

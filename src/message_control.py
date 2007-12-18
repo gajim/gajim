@@ -1,6 +1,6 @@
 ##	message_control.py
 ##
-## Copyright (C) 2006 Travis Shirk <travis@pobox.com>
+## Copyright (C) 2006-2007 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
 ##
 ## This file is part of Gajim.
@@ -34,7 +34,7 @@ class MessageControl:
 	def __init__(self, type_id, parent_win, widget_name, contact, account, resource = None):
 		# dict { cb id : widget} 
 		# keep all registered callbacks of widgets, created by self.xml
-		self.handlers = {} 
+		self.handlers = {}
 		self.type_id = type_id
 		self.parent_win = parent_win
 		self.widget_name = widget_name
@@ -126,8 +126,8 @@ class MessageControl:
 			if self.session.enable_encryption:
 				was_encrypted = True
 
-			print "starting a new session, dropping the old one!"
-			gajim.connections[self.account].delete_session(self.session.jid, self.session.thread_id)
+			gajim.connections[self.account].delete_session(self.session.jid,
+									self.session.thread_id)
 
 		self.session = session
 

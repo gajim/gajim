@@ -6,6 +6,7 @@
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
 ## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
+## Copyright (C) 2007 Travis Shirk <travis@pobox.com>
 ##
 ## This file is part of Gajim.
 ##
@@ -174,7 +175,7 @@ class PreferencesWindow:
 		# iconset
 		iconsets_list = os.listdir(os.path.join(gajim.DATA_DIR, 'iconsets'))
 		if os.path.isdir(gajim.MY_ICONSETS_PATH):
-			iconsets_list += os.listdir(gajim.MY_ICONSETS_PATH) 
+			iconsets_list += os.listdir(gajim.MY_ICONSETS_PATH)
 		# new model, image in 0, string in 1
 		model = gtk.ListStore(gtk.Image, str)
 		renderer_image = cell_renderer_image.CellRendererImage(0, 0)
@@ -537,9 +538,9 @@ class PreferencesWindow:
 					self.on_msg_treemodel_row_deleted)
 		self.default_msg_tree.get_model().connect('row-changed',
 					self.on_default_msg_treemodel_row_changed)
-		
+
 		self.theme_preferences = None
-		
+
 		self.notebook.set_current_page(0)
 		if not gajim.config.get('use_pep'):
 			self.notebook.remove_page(4)

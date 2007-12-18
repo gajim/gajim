@@ -6,6 +6,7 @@
 ## Copyright (C) 2005-2006 Andrew Sayman <lorien420@myrealbox.com>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
+## Copyright (C) 2007 Travis Shirk <travis@pobox.com> 
 ##
 ## This file is part of Gajim.
 ##

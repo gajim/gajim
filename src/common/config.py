@@ -45,7 +45,7 @@ opt_int = [ 'integer', 0 ]
 opt_str = [ 'string', 0 ]
 opt_bool = [ 'boolean', 0 ]
 opt_color = [ 'color', '^(#[0-9a-fA-F]{6})|()$' ]
-opt_one_window_types = ['never', 'always', 'peracct', 'pertype']
+opt_one_window_types = ['never', 'always', 'always_with_roster', 'peracct', 'pertype']
 opt_treat_incoming_messages = ['', 'chat', 'normal']
 
 class Config:
@@ -229,7 +229,7 @@ class Config:
 		'send_sha_in_gc_presence': [opt_bool, True, _('Jabberd1.4 does not like sha info when one join a password protected group chat. Turn this option to False to stop sending sha info in group chat presences.')],
 		'one_message_window': [opt_str, 'always',
 #always, never, peracct, pertype should not be translated
-			_('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g., chats vs. groupchats) are sent to a specific window. Note, changing this option requires restarting Gajim before the changes will take effect.')],
+			_('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'always_with_roster\' - Like \'always\' but the messages are in a single window along with the roster.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g., chats vs. groupchats) are sent to a specific window.')],
 		'show_avatar_in_chat': [opt_bool, True, _('If False, you will no longer see the avatar in the chat window.')],
 		'escape_key_closes': [opt_bool, True, _('If True, pressing the escape key closes a tab/window.')],
 		'compact_view': [opt_bool, False, _('Hides the buttons in chat windows.')],
