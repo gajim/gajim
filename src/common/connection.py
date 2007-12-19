@@ -428,6 +428,39 @@ class Connection(ConnectionHandlers):
 			proxy['user'] = gajim.config.get_per('proxies', p, 'user')
 			proxy['password'] = gajim.config.get_per('proxies', p, 'pass')
 			proxy['type'] = gajim.config.get_per('proxies', p, 'type')
+		elif gajim.config.get_per('accounts', self.name, 'use_env_http_proxy'):
+			try:
+				try:
+					env_http_proxy = os.environ['HTTP_PROXY']
+				except:
+					env_http_proxy = os.environ['http_proxy']
+				env_http_proxy = env_http_proxy.strip('"')
+				# Dispose of the http:// prefix
+				env_http_proxy = env_http_proxy.split('://')
+				env_http_proxy = env_http_proxy[len(env_http_proxy)-1]
+				env_http_proxy = env_http_proxy.split('@')
+
+				if len(env_http_proxy) == 2:
+					login = env_http_proxy[0].split(':')
+					addr = env_http_proxy[1].split(':')
+				else:
+					login = ['', '']
+					addr = env_http_proxy[0].split(':')
+
+				proxy = {'host': addr[0], 'type' : u'http', 'user':login[0]}
+
+				if len(addr) == 2:
+					proxy['port'] = addr[1]
+				else:
+					proxy['port'] = 3128
+
+				if len(login) == 2:
+					proxy['password'] = login[1]
+				else:
+					proxy['password'] = u''
+
+			except:
+				proxy = None
 		else:
 			proxy = None
 

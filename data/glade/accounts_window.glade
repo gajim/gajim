@@ -51,6 +51,7 @@
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="label" translatable="yes">gtk-add</property>
                     <property name="use_stock">True</property>
+                    <property name="response_id">0</property>
                     <signal name="clicked" handler="on_add_button_clicked"/>
                   </widget>
                   <packing>
@@ -66,6 +67,7 @@
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="label" translatable="yes">gtk-remove</property>
                     <property name="use_stock">True</property>
+                    <property name="response_id">0</property>
                     <signal name="clicked" handler="on_remove_button_clicked"/>
                   </widget>
                   <packing>
@@ -79,6 +81,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="response_id">0</property>
                     <signal name="clicked" handler="on_rename_button_clicked"/>
                     <child>
                       <widget class="GtkHBox" id="hbox8">
@@ -138,6 +141,7 @@
               </widget>
               <packing>
                 <property name="resize">False</property>
+                <property name="shrink">True</property>
               </packing>
             </child>
             <child>
@@ -152,9 +156,6 @@
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                   </widget>
-                  <packing>
-                    <property name="tab_expand">False</property>
-                  </packing>
                 </child>
                 <child>
                   <placeholder/>
@@ -222,6 +223,7 @@
                                     <property name="tooltip" translatable="yes">Click to request authorization to all contacts of another account</property>
                                     <property name="label" translatable="yes">Synchronise contacts</property>
                                     <property name="use_underline">True</property>
+                                    <property name="response_id">0</property>
                                     <signal name="clicked" handler="on_synchronise_contacts_button1_clicked"/>
                                   </widget>
                                   <packing>
@@ -235,6 +237,7 @@
                                     <property name="tooltip" translatable="yes">Click to change account's password</property>
                                     <property name="label" translatable="yes">Chan_ge Password</property>
                                     <property name="use_underline">True</property>
+                                    <property name="response_id">0</property>
                                     <signal name="clicked" handler="on_change_password_button1_clicked"/>
                                   </widget>
                                   <packing>
@@ -288,6 +291,7 @@
                             <property name="tooltip" translatable="yes">Priority will change automatically according to your status.</property>
                             <property name="label" translatable="yes">_Adjust to status</property>
                             <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_adjust_priority_with_status_checkbutton1_toggled"/>
                           </widget>
@@ -336,6 +340,7 @@
                             <property name="label" translatable="yes">Save pass_word</property>
                             <property name="use_underline">True</property>
                             <property name="focus_on_click">False</property>
+                            <property name="response_id">0</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_save_password_checkbutton1_toggled"/>
                           </widget>
@@ -394,9 +399,6 @@
                           </packing>
                         </child>
                       </widget>
-                      <packing>
-                        <property name="tab_expand">False</property>
-                      </packing>
                     </child>
                     <child>
                       <widget class="GtkLabel" id="label7">
@@ -405,7 +407,6 @@
                       </widget>
                       <packing>
                         <property name="type">tab</property>
-                        <property name="tab_expand">False</property>
                         <property name="tab_fill">False</property>
                       </packing>
                     </child>
@@ -421,6 +422,7 @@
                             <property name="tooltip" translatable="yes">If checked, Gajim, when launched, will automatically connect to jabber using this account</property>
                             <property name="label" translatable="yes">C_onnect on Gajim startup</property>
                             <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_autoconnect_checkbutton_toggled"/>
                           </widget>
@@ -435,6 +437,7 @@
                             <property name="can_focus">True</property>
                             <property name="label" translatable="yes">Auto-reconnect when connection is lost</property>
                             <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_autoreconnect_checkbutton_toggled"/>
                           </widget>
@@ -450,6 +453,7 @@
                             <property name="can_focus">True</property>
                             <property name="label" translatable="yes">Save conversation _logs for all contacts</property>
                             <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_log_history_checkbutton_toggled"/>
@@ -467,6 +471,7 @@
                             <property name="tooltip" translatable="yes">If checked, any change to the global status (handled by the combobox at the bottom of the roster window) will change the status of this account accordingly</property>
                             <property name="label" translatable="yes">Synch_ronize account status with global status</property>
                             <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_sync_with_global_status_checkbutton_toggled"/>
                           </widget>
@@ -483,6 +488,7 @@
                             <property name="tooltip" translatable="yes">If checked, Gajim will also broadcast some more IPs except from just your IP, so file transfer has higher chances of working.</property>
                             <property name="label" translatable="yes">Use file transfer proxies</property>
                             <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_use_ft_proxies_checkbutton1_toggled"/>
                           </widget>
@@ -495,7 +501,6 @@
                       </widget>
                       <packing>
                         <property name="position">1</property>
-                        <property name="tab_expand">False</property>
                       </packing>
                     </child>
                     <child>
@@ -507,7 +512,6 @@
                       <packing>
                         <property name="type">tab</property>
                         <property name="position">1</property>
-                        <property name="tab_expand">False</property>
                         <property name="tab_fill">False</property>
                       </packing>
                     </child>
@@ -517,48 +521,84 @@
                         <property name="border_width">6</property>
                         <property name="spacing">12</property>
                         <child>
-                          <widget class="GtkHBox" id="hbox2">
+                          <widget class="GtkFrame" id="frame3">
                             <property name="visible">True</property>
-                            <property name="border_width">6</property>
-                            <property name="spacing">6</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="label_xalign">0</property>
+                            <property name="shadow_type">GTK_SHADOW_NONE</property>
+                            <child>
+                              <widget class="GtkAlignment" id="alignment4">
+                                <property name="visible">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="left_padding">12</property>
+                                <child>
+                                  <widget class="GtkVBox" id="vbox11">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="border_width">6</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <widget class="GtkCheckButton" id="use_env_http_proxy_checkbutton1">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="label" translatable="yes">use HTTP_PROXY environment variable</property>
+                                        <property name="response_id">0</property>
+                                        <property name="draw_indicator">True</property>
+                                        <signal name="toggled" handler="on_use_env_http_proxy_checkbutton1_toggled"/>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkHBox" id="proxy_hbox1">
+                                        <property name="visible">True</property>
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <widget class="GtkComboBox" id="proxies_combobox1">
+                                            <property name="visible">True</property>
+                                            <property name="items" translatable="yes" comments="None means no proxy profile selected">None</property>
+                                            <signal name="changed" handler="on_proxies_combobox1_changed"/>
+                                          </widget>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkButton" id="manage_proxies_button1">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="label" translatable="yes">Manage...</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="response_id">0</property>
+                                            <signal name="clicked" handler="on_manage_proxies_button1_clicked"/>
+                                          </widget>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">False</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </widget>
+                                </child>
+                              </widget>
+                            </child>
                             <child>
                               <widget class="GtkLabel" id="label9">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Proxy:</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Proxy&lt;/b&gt;</property>
+                                <property name="use_markup">True</property>
                               </widget>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkComboBox" id="proxies_combobox1">
-                                <property name="visible">True</property>
-                                <property name="items" translatable="yes" comments="None means no proxy profile selected">None</property>
-                                <signal name="changed" handler="on_proxies_combobox1_changed"/>
-                              </widget>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkButton" id="manage_proxies_button1">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="label" translatable="yes">Manage...</property>
-                                <property name="use_underline">True</property>
-                                <signal name="clicked" handler="on_manage_proxies_button1_clicked"/>
-                              </widget>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">2</property>
+                                <property name="type">label_item</property>
                               </packing>
                             </child>
                           </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                          </packing>
                         </child>
                         <child>
                           <widget class="GtkFrame" id="misc_frame1">
@@ -581,6 +621,7 @@
                                         <property name="tooltip" translatable="yes">Check this so Gajim will connect in port 5223 where legacy servers are expected to have SSL capabilities. Note that Gajim uses TLS encryption by default if broadcasted by the server, and with this option enabled TLS will be disabled</property>
                                         <property name="label" translatable="yes">Use _SSL (legacy)</property>
                                         <property name="use_underline">True</property>
+                                        <property name="response_id">0</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="on_use_ssl_checkbutton1_toggled"/>
                                       </widget>
@@ -596,6 +637,7 @@
                                         <property name="tooltip" translatable="yes">If checked, Gajim will send keep-alive packets to prevent connection timeout which results in disconnection</property>
                                         <property name="label" translatable="yes">Send keep-alive packets</property>
                                         <property name="use_underline">True</property>
+                                        <property name="response_id">0</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="on_send_keepalive_checkbutton1_toggled"/>
@@ -612,6 +654,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="label" translatable="yes">Use custom hostname/port</property>
                                         <property name="use_underline">True</property>
+                                        <property name="response_id">0</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="on_custom_host_port_checkbutton1_toggled"/>
                                       </widget>
@@ -700,7 +743,6 @@
                       </widget>
                       <packing>
                         <property name="position">2</property>
-                        <property name="tab_expand">False</property>
                       </packing>
                     </child>
                     <child>
@@ -711,7 +753,6 @@
                       <packing>
                         <property name="type">tab</property>
                         <property name="position">2</property>
-                        <property name="tab_expand">False</property>
                         <property name="tab_fill">False</property>
                       </packing>
                     </child>
@@ -766,6 +807,7 @@
                                             <property name="can_focus">True</property>
                                             <property name="label" translatable="yes">Choose _Key...</property>
                                             <property name="use_underline">True</property>
+                                            <property name="response_id">0</property>
                                             <signal name="clicked" handler="on_gpg_choose_button_clicked"/>
                                           </widget>
                                           <packing>
@@ -787,12 +829,14 @@
                                         <property name="tooltip" translatable="yes">If checked, Gajim will get the password from a GPG agent like seahorse</property>
                                         <property name="label" translatable="yes">Use GPG _Agent</property>
                                         <property name="use_underline">True</property>
+                                        <property name="response_id">0</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="on_use_gpg_agent_checkbutton_toggled"/>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">False</property>
+                                        <property name="position">1</property>
                                       </packing>
                                     </child>
                                   </widget>
@@ -831,6 +875,7 @@
                                     <property name="tooltip" translatable="yes">Information about you, as stored in the server</property>
                                     <property name="label" translatable="yes">Edit Personal Information...</property>
                                     <property name="use_underline">True</property>
+                                    <property name="response_id">0</property>
                                     <signal name="clicked" handler="on_edit_details_button1_clicked"/>
                                   </widget>
                                 </child>
@@ -855,7 +900,6 @@
                       </widget>
                       <packing>
                         <property name="position">3</property>
-                        <property name="tab_expand">False</property>
                       </packing>
                     </child>
                     <child>
@@ -866,14 +910,12 @@
                       <packing>
                         <property name="type">tab</property>
                         <property name="position">3</property>
-                        <property name="tab_expand">False</property>
                         <property name="tab_fill">False</property>
                       </packing>
                     </child>
                   </widget>
                   <packing>
                     <property name="position">1</property>
-                    <property name="tab_expand">False</property>
                   </packing>
                 </child>
                 <child>
@@ -892,6 +934,7 @@
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="label" translatable="yes">Enable</property>
+                        <property name="response_id">0</property>
                         <property name="draw_indicator">True</property>
                         <signal name="toggled" handler="on_enable_zeroconf_checkbutton2_toggled"/>
                       </widget>
@@ -915,6 +958,7 @@
                                 <property name="tooltip" translatable="yes">If checked, Gajim, when launched, will automatically connect to jabber using this account</property>
                                 <property name="label" translatable="yes">C_onnect on Gajim startup</property>
                                 <property name="use_underline">True</property>
+                                <property name="response_id">0</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="on_autoconnect_checkbutton_toggled"/>
                               </widget>
@@ -929,6 +973,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="label" translatable="yes">Save conversation _logs for all contacts</property>
                                 <property name="use_underline">True</property>
+                                <property name="response_id">0</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="on_log_history_checkbutton_toggled"/>
                               </widget>
@@ -945,6 +990,7 @@
                                 <property name="tooltip" translatable="yes">If checked, any change to the global status (handled by the combobox at the bottom of the roster window) will change the status of this account accordingly</property>
                                 <property name="label" translatable="yes">Synch_ronize account status with global status</property>
                                 <property name="use_underline">True</property>
+                                <property name="response_id">0</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="on_sync_with_global_status_checkbutton_toggled"/>
                               </widget>
@@ -965,6 +1011,7 @@
 You might consider to change possible firewall settings.</property>
                                     <property name="label" translatable="yes">Use custom port:</property>
                                     <property name="use_underline">True</property>
+                                    <property name="response_id">0</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="on_custom_port_checkbutton2_toggled"/>
                                   </widget>
@@ -994,9 +1041,6 @@ You might consider to change possible firewall settings.</property>
                               </packing>
                             </child>
                           </widget>
-                          <packing>
-                            <property name="tab_expand">False</property>
-                          </packing>
                         </child>
                         <child>
                           <widget class="GtkLabel" id="label11">
@@ -1006,7 +1050,6 @@ You might consider to change possible firewall settings.</property>
                           </widget>
                           <packing>
                             <property name="type">tab</property>
-                            <property name="tab_expand">False</property>
                             <property name="tab_fill">False</property>
                           </packing>
                         </child>
@@ -1181,6 +1224,7 @@ You might consider to change possible firewall settings.</property>
                                         <property name="can_focus">True</property>
                                         <property name="label" translatable="yes">Choose _Key...</property>
                                         <property name="use_underline">True</property>
+                                        <property name="response_id">0</property>
                                         <signal name="clicked" handler="on_gpg_choose_button_clicked"/>
                                       </widget>
                                       <packing>
@@ -1201,12 +1245,14 @@ You might consider to change possible firewall settings.</property>
                                     <property name="tooltip" translatable="yes">If checked, Gajim will get the password from a GPG agent like seahorse</property>
                                     <property name="label" translatable="yes">Use GPG _Agent</property>
                                     <property name="use_underline">True</property>
+                                    <property name="response_id">0</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="on_use_gpg_agent_checkbutton_toggled"/>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
+                                    <property name="position">2</property>
                                   </packing>
                                 </child>
                               </widget>
@@ -1218,7 +1264,6 @@ You might consider to change possible firewall settings.</property>
                           </widget>
                           <packing>
                             <property name="position">1</property>
-                            <property name="tab_expand">False</property>
                           </packing>
                         </child>
                         <child>
@@ -1229,7 +1274,6 @@ You might consider to change possible firewall settings.</property>
                           <packing>
                             <property name="type">tab</property>
                             <property name="position">1</property>
-                            <property name="tab_expand">False</property>
                             <property name="tab_fill">False</property>
                           </packing>
                         </child>
@@ -1241,7 +1285,6 @@ You might consider to change possible firewall settings.</property>
                   </widget>
                   <packing>
                     <property name="position">2</property>
-                    <property name="tab_expand">False</property>
                   </packing>
                 </child>
                 <child>
@@ -1251,6 +1294,10 @@ You might consider to change possible firewall settings.</property>
                   </packing>
                 </child>
               </widget>
+              <packing>
+                <property name="resize">True</property>
+                <property name="shrink">True</property>
+              </packing>
             </child>
           </widget>
         </child>
@@ -1261,6 +1308,7 @@ You might consider to change possible firewall settings.</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <property name="label" translatable="yes">Mer_ge accounts</property>
             <property name="use_underline">True</property>
+            <property name="response_id">0</property>
             <property name="draw_indicator">True</property>
             <signal name="toggled" handler="on_merge_checkbutton_toggled"/>
           </widget>
@@ -1293,6 +1341,7 @@ You might consider to change possible firewall settings.</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label" translatable="yes">gtk-close</property>
                 <property name="use_stock">True</property>
+                <property name="response_id">0</property>
                 <signal name="clicked" handler="on_close_button_clicked"/>
               </widget>
             </child>

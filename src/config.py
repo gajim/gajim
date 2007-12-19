@@ -1647,6 +1647,12 @@ class AccountsWindow:
 			'priority'))
 
 		# Connection tab
+		use_env_http_proxy = gajim.config.get_per('accounts', account,
+			'use_env_http_proxy')
+		self.xml.get_widget('use_env_http_proxy_checkbutton1').set_active(
+			use_env_http_proxy)
+		self.xml.get_widget('proxy_hbox1').set_sensitive(not use_env_http_proxy)
+
 		usessl = gajim.config.get_per('accounts', account, 'usessl')
 		self.xml.get_widget('use_ssl_checkbutton1').set_active(usessl)
 
@@ -1978,6 +1984,14 @@ class AccountsWindow:
 			return
 		self.on_checkbutton_toggled(widget, 'use_ft_proxies',
 			account=self.current_account)
+
+	def on_use_env_http_proxy_checkbutton1_toggled(self, widget):
+		if self.ignore_events:
+			return
+		self.on_checkbutton_toggled(widget, 'use_env_http_proxy',
+			account=self.current_account)
+		hbox = self.xml.get_widget('proxy_hbox1')
+		hbox.set_sensitive(not widget.get_active())
 
 	def on_proxies_combobox1_changed(self, widget):
 		active = widget.get_active()

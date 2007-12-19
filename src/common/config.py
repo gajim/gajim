@@ -313,6 +313,7 @@ class Config:
 			'zeroconf_last_name': [ opt_str, '', '', True ],
 			'zeroconf_jabber_id': [ opt_str, '', '', True ],
 			'zeroconf_email': [ opt_str, '', '', True ],
+			'use_env_http_proxy' : [opt_bool, False],
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],
