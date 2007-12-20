@@ -643,7 +643,7 @@ class ChatControlBase(MessageControl):
 		self.orig_msg = None
 
 	def print_conversation_line(self, text, kind, name, tim,
-		other_tags_for_name = [], other_tags_for_time = [], 
+		other_tags_for_name = [], other_tags_for_time = [],
 		other_tags_for_text = [], count_as_new = True,
 		subject = None, old_kind = None, xhtml = None):
 		'''prints 'chat' type messages'''

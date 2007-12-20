@@ -238,7 +238,10 @@ class MessageWindow(object):
 			self.setup_tab_dnd(control.widget)
 
 		self.redraw_tab(control)
-		self.notebook.show_all()
+		if self.parent_paned:
+			self.notebook.show_all()
+		else:
+			self.window.show_all()
 		# NOTE: we do not call set_control_active(True) since we don't know whether
 		# the tab is the active one.
 		self.show_title()
@@ -437,7 +440,6 @@ class MessageWindow(object):
 				# Don't close parent window, just remove the child
 				child = self.parent_paned.get_child2()
 				self.parent_paned.remove(child)
-				# FIXME: restore preferred roster size
 			else:
 				self.window.destroy()
 			return # don't show_title, we are dead
@@ -925,8 +927,10 @@ class MessageWindowMgr(gobject.GObject):
 	def shutdown(self, width_adjust=0):
 		for w in self.windows():
 			self.save_state(w, width_adjust)
-			w.window.hide()
-			w.window.destroy()
+			if not w.parent_paned:
+				w.window.hide()
+				w.window.destroy()
+
 		gajim.interface.save_config()
 
 	def save_state(self, msg_win, width_adjust=0):
@@ -993,7 +997,10 @@ class MessageWindowMgr(gobject.GObject):
 
 		controls = []
 		for w in self.windows():
-			w.window.hide()
+			# Note, we are taking care not to hide/delete the roster window when the
+			# MessageWindow is embedded.
+			if not w.parent_paned:
+				w.window.hide()
 			while w.notebook.get_n_pages():
 				page = w.notebook.get_nth_page(0)
 				ctrl = w._widget_to_control(page)
@@ -1002,7 +1009,12 @@ class MessageWindowMgr(gobject.GObject):
 				controls.append(ctrl)
 			# Must clear _controls from window to prevent MessageControl.shutdown calls
 			w._controls = {}
-			w.window.destroy()
+			if not w.parent_paned:
+				w.window.destroy()
+			else:
+				# Don't close parent window, just remove the child
+				child = w.parent_paned.get_child2()
+				w.parent_paned.remove(child)
 
 		self._windows = {}
 
