@@ -1092,3 +1092,5 @@ def get_transport_path(transport):
 	elif os.path.isdir(os.path.join(gajim.MY_ICONSETS_PATH, 'transports',
 	transport)):
 		return os.path.join(gajim.MY_ICONSETS_PATH, 'transports', transport)
+	# No transport folder found, use default jabber one
+	return get_iconset_path(gajim.config.get('iconset'))
