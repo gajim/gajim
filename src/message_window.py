@@ -238,7 +238,7 @@ class MessageWindow(object):
 			self.setup_tab_dnd(control.widget)
 
 		self.redraw_tab(control)
-		self.window.show_all()
+		self.notebook.show_all()
 		# NOTE: we do not call set_control_active(True) since we don't know whether
 		# the tab is the active one.
 		self.show_title()

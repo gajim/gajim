@@ -1244,7 +1244,7 @@ class RosterWindow:
 		item.set_image(icon)
 		item.connect('activate', self.on_join_gc_activate, account)
 		gc_sub_menu.append(item)
-		
+
 		if len(gajim.connections[account].bookmarks) > 0: # user has at least one bookmark
 			item = gtk.SeparatorMenuItem() # separator
 			gc_sub_menu.append(item)
