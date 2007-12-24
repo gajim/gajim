@@ -141,6 +141,8 @@ class FeaturesWindow:
 
 	def on_features_treeview_cursor_changed(self, widget):
 		selection = widget.get_selection()
+		if not selection:
+			return
 		path = selection.get_selected_rows()[1][0]
 		available = self.model[path][1]
 		feature = self.model[path][0].decode('utf-8')
