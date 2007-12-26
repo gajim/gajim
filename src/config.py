@@ -3225,12 +3225,22 @@ class AccountCreationWizardWindow:
 			if checked:
 				hostname = gajim.connections[self.account].new_account_info[
 					'hostname']
-				f = open(gajim.MY_CACERTS, 'a')
-				f.write(hostname + '\n')
-				f.write(self.ssl_cert + '\n\n')
-				f.close()
-				gajim.connections[self.account].new_account_info[
-					'ssl_fingerprint_sha1'] = self.ssl_fingerprint
+				# Check if cert is already in file
+				certs = ''
+				if os.path.isfile(gajim.MY_CACERTS):
+					f = open(gajim.MY_CACERTS)
+					certs = f.read()
+					f.close()
+				if self.ssl_cert in certs:
+					dialogs.ErrorDialog(_('Certificate Already in File'),
+						_('This certificate is already in file %s, so it\'s not added again.') % gajim.MY_CACERTS)
+				else:
+					f = open(gajim.MY_CACERTS, 'a')
+					f.write(hostname + '\n')
+					f.write(self.ssl_cert + '\n\n')
+					f.close()
+					gajim.connections[self.account].new_account_info[
+						'ssl_fingerprint_sha1'] = self.ssl_fingerprint
 			self.notebook.set_current_page(4) # show fom page
 		elif cur_page == 4:
 			if self.is_form:
@@ -3271,7 +3281,7 @@ class AccountCreationWizardWindow:
 		self.progressbar.pulse()
 		return True # loop forever
 
-	def new_acc_connected(self, form, is_form, ssl_msg, ssl_cert,
+	def new_acc_connected(self, form, is_form, ssl_msg, ssl_err, ssl_cert,
 	ssl_fingerprint):
 		'''connection to server succeded, present the form to the user.'''
 		if self.update_progressbar_timeout_id is not None:
@@ -3296,8 +3306,12 @@ class AccountCreationWizardWindow:
 				'SSL Error: %s\n'
 				'Do you still want to connect to this server?') % (hostname,
 				ssl_msg))
-			text = _('Add this certificate to the list of trusted certificates.\nSHA1 fingerprint of the certificate:\n%s') % ssl_fingerprint
-			self.xml.get_widget('ssl_checkbutton').set_label(text)
+			if ssl_err in (18, 27):
+				text = _('Add this certificate to the list of trusted certificates.\nSHA1 fingerprint of the certificate:\n%s') % ssl_fingerprint
+				self.xml.get_widget('ssl_checkbutton').set_label(text)
+			else:
+				self.xml.get_widget('ssl_checkbutton').set_no_show_all(True)
+				self.xml.get_widget('ssl_checkbutton').hide()
 			self.notebook.set_current_page(3) # show SSL page
 		else:
 			self.notebook.set_current_page(4) # show form page

@@ -318,7 +318,7 @@ class Connection(ConnectionHandlers):
 						ssl_fingerprint = \
 							self.connection.Connection.ssl_fingerprint_sha1
 					self.dispatch('NEW_ACC_CONNECTED', (conf, is_form, ssl_msg,
-						ssl_cert, ssl_fingerprint))
+						errnum, ssl_cert, ssl_fingerprint))
 					self.connection.UnregisterDisconnectHandler(
 						self._on_new_account)
 					self.disconnect(on_purpose=True)
@@ -589,7 +589,7 @@ class Connection(ConnectionHandlers):
 				text += _('\nSSL Error: %s') % ssl_error[errnum]
 			else:
 				text += _('\nUnknown SSL error: %d') % errnum
-			self.dispatch('SSL_ERROR', (text, con.Connection.ssl_cert_pem,
+			self.dispatch('SSL_ERROR', (text, errnum, con.Connection.ssl_cert_pem,
 				con.Connection.ssl_fingerprint_sha1))
 			return True
 		if hasattr(con.Connection, 'ssl_fingerprint_sha1'):

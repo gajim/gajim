@@ -1019,11 +1019,11 @@ class Interface:
 			return
 
 	def handle_event_new_acc_connected(self, account, array):
-		#('NEW_ACC_CONNECTED', account, (infos, is_form, ssl_msg, ssl_cert,
-		# ssl_fingerprint))
+		#('NEW_ACC_CONNECTED', account, (infos, is_form, ssl_msg, ssl_err,
+		# ssl_cert, ssl_fingerprint))
 		if self.instances.has_key('account_creation_wizard'):
 			self.instances['account_creation_wizard'].new_acc_connected(array[0],
-				array[1], array[2], array[3], array[4])
+				array[1], array[2], array[3], array[4], array[5])
 
 	def handle_event_new_acc_not_connected(self, account, array):
 		#('NEW_ACC_NOT_CONNECTED', account, (reason))
@@ -2191,25 +2191,39 @@ class Interface:
 		instance.unique_room_id_error(data[0])
 
 	def handle_event_ssl_error(self, account, data):
-		# ('SSL_ERROR', account, (text, cert, sha1_fingerprint))
+		# ('SSL_ERROR', account, (text, errnum, cert, sha1_fingerprint))
 		server = gajim.config.get_per('accounts', account, 'hostname')
-		def on_ok(is_checked):
+		def on_ok(is_checked=False):
 			if is_checked:
-				f = open(gajim.MY_CACERTS, 'a')
-				f.write(server + '\n')
-				f.write(data[1] + '\n\n')
-				f.close()
+				# Check if cert is already in file
+				certs = ''
+				if os.path.isfile(gajim.MY_CACERTS):
+					f = open(gajim.MY_CACERTS)
+					certs = f.read()
+					f.close()
+				if data[2] in certs:
+					dialogs.ErrorDialog(_('Certificate Already in File'),
+						_('This certificate is already in file %s, so it\'s not added again.') % gajim.MY_CACERTS)
+				else:
+					f = open(gajim.MY_CACERTS, 'a')
+					f.write(server + '\n')
+					f.write(data[2] + '\n\n')
+					f.close()
 				gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
-					data[2])
+					data[3])
 			gajim.connections[account].ssl_certificate_accepted()
 		def on_cancel():
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
 		pritext = _('Error verifying SSL certificate')
 		sectext = _('There was an error verifying the SSL certificate of your jabber server: %(error)s\nDo you still want to connect to this server?') % {'error': data[0]}
-		checktext = _('Add this certificate to the list of trusted certificates.\nSHA1 fingerprint of the certificate:\n%s') % data[2]
-		dialogs.ConfirmationDialogCheck(pritext, sectext, checktext,
-			on_response_ok=on_ok, on_response_cancel=on_cancel)
+		if data[1] in (18, 27):
+			checktext = _('Add this certificate to the list of trusted certificates.\nSHA1 fingerprint of the certificate:\n%s') % data[3]
+			dialogs.ConfirmationDialogCheck(pritext, sectext, checktext,
+				on_response_ok=on_ok, on_response_cancel=on_cancel)
+		else:
+			dialogs.ConfirmationDialog(pritext, sectext,
+				on_response_ok=on_ok, on_response_cancel=on_cancel)
 
 	def handle_event_fingerprint_error(self, account, data):
 		# ('FINGERPRINT_ERROR', account, (fingerprint,))
