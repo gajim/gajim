@@ -1352,6 +1352,7 @@ class AccountsWindow:
 		del gajim.interface.instances['accounts']
 
 	def on_close_button_clicked(self, widget):
+		self.check_resend_relog()
 		self.window.destroy()
 
 	def __init__(self):
@@ -1399,6 +1400,7 @@ class AccountsWindow:
 
 	def on_accounts_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
+			self.check_resend_relog()
 			self.window.destroy()
 
 	def select_account(self, account):
@@ -1428,37 +1430,7 @@ class AccountsWindow:
 		status = gajim.connections[self.current_account].status
 		gajim.connections[self.current_account].change_status(show, status)
 
-	def on_accounts_treeview_cursor_changed(self, widget):
-		'''Activate modify buttons when a row is selected, update accounts info'''
-		sel = self.accounts_treeview.get_selection()
-		(model, iter) = sel.get_selected()
-		if iter:
-			account = model[iter][0].decode('utf-8')
-		else:
-			account = None
-		if self.current_account and self.current_account == account:
-			# We're comming back to our current account, no need to update widgets
-			return
-		# Save config for previous account if needed cause focus_out event is
-		# called after the changed event
-		if self.current_account:
-			focused_widget = self.window.get_focus()
-			focused_widget_name = focused_widget.get_name()
-			if focused_widget_name in ('jid_entry1', 'resource_entry1',
-			'custom_port_entry'):
-				if focused_widget_name == 'jid_entry1':
-					func = self.on_jid_entry1_focus_out_event
-				elif focused_widget_name == 'resource_entry1':
-					func = self.on_resource_entry1_focus_out_event
-				elif focused_widget_name == 'custom_port_entry':
-					func = self.on_custom_port_entry_focus_out_event
-				if func(focused_widget, None):
-					# Error detected in entry, don't change account, re-put cursor on
-					# previous row
-					self.select_account(self.current_account)
-					return True
-				self.window.set_focus(widget)
-
+	def check_resend_relog(self):
 		if self.need_relogin and self.current_account == gajim.ZEROCONF_ACC_NAME:
 			if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME):
 				gajim.connections[gajim.ZEROCONF_ACC_NAME].update_details()
@@ -1497,6 +1469,40 @@ class AccountsWindow:
 
 		self.need_relogin = False
 		self.resend_presence = False
+
+	def on_accounts_treeview_cursor_changed(self, widget):
+		'''Activate modify buttons when a row is selected, update accounts info'''
+		sel = self.accounts_treeview.get_selection()
+		(model, iter) = sel.get_selected()
+		if iter:
+			account = model[iter][0].decode('utf-8')
+		else:
+			account = None
+		if self.current_account and self.current_account == account:
+			# We're comming back to our current account, no need to update widgets
+			return
+		# Save config for previous account if needed cause focus_out event is
+		# called after the changed event
+		if self.current_account:
+			focused_widget = self.window.get_focus()
+			focused_widget_name = focused_widget.get_name()
+			if focused_widget_name in ('jid_entry1', 'resource_entry1',
+			'custom_port_entry'):
+				if focused_widget_name == 'jid_entry1':
+					func = self.on_jid_entry1_focus_out_event
+				elif focused_widget_name == 'resource_entry1':
+					func = self.on_resource_entry1_focus_out_event
+				elif focused_widget_name == 'custom_port_entry':
+					func = self.on_custom_port_entry_focus_out_event
+				if func(focused_widget, None):
+					# Error detected in entry, don't change account, re-put cursor on
+					# previous row
+					self.select_account(self.current_account)
+					return True
+				self.window.set_focus(widget)
+
+		self.check_resend_relog()
+
 		self.remove_button.set_sensitive(True)
 		self.rename_button.set_sensitive(True)
 		if iter:
@@ -2068,7 +2074,8 @@ class AccountsWindow:
 			custom_port)
 
 	def on_gpg_choose_button_clicked(self, widget, data = None):
-		if gajim.connections.has_key(self.current_account):
+		if gajim.connections.has_key(self.current_account) and \
+		gajim.connections[self.current_account].gpg:
 			secret_keys = gajim.connections[self.current_account].\
 				ask_gpg_secrete_keys()
 
