@@ -128,19 +128,37 @@ class MusicTrackListener(gobject.GObject):
 
 	def _mpris_properties_extract(self, song):
 		info = MusicTrackInfo()
-		info.title = song['title']
-		info.album = song['album']
-		info.artist = song['artist']
-		info.duration = int(song['length'])
+
+		if song.has_key('title'):
+			info.title = song['title']
+		else:
+			info.title = ''
+
+		if song.has_key('album'):
+			info.album = song['album']
+		else:
+			info.album = ''
+
+		if song.has_key('artist'):
+			info.artist = song['artist']
+		else:
+			info.artist = ''
+
+		if song.has_key('length'):
+			info.duration = int(song['length'])
+		else:
+			info.duration = 0
+
 		return info
 
 	def _mpris_playing_changed_cb(self, playing):
-		if playing == 2:
+		if playing == 0:
+			self.emit('music-track-changed', self._last_playing_music)
+		else:
 			self.emit('music-track-changed', None)
 
 	def _mpris_music_track_change_cb(self, arg):
-		info = self._mpris_properties_extract(arg)
-		self.emit('music-track-changed', info)
+		self._last_playing_music = self._mpris_properties_extract(arg)
 
 	def _muine_properties_extract(self, song_string):
 		d = dict((x.strip() for x in  s1.split(':', 1)) for s1 in \
