@@ -3716,8 +3716,8 @@ class RosterWindow:
 			# do nothing if user doesn't have D-Bus bindings
 			return
 		if enabled:
+			listener = MusicTrackListener.get()
 			if self._music_track_changed_signal is None:
-				listener = MusicTrackListener.get()
 				self._music_track_changed_signal = listener.connect(
 					'music-track-changed', self._music_track_changed)
 			track = listener.get_playing_track()
