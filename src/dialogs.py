@@ -1041,7 +1041,7 @@ class HigDialog(gtk.MessageDialog):
 				gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
 				type, buttons, message_format = pritext)
 
-		self.format_secondary_text(sectext)
+		self.format_secondary_markup(sectext)
 
 		buttons = self.action_area.get_children()
 		possible_responses = {gtk.STOCK_OK: on_response_ok,

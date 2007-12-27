@@ -584,7 +584,7 @@ class Connection(ConnectionHandlers):
 			text = _('The authenticity of the %s certificate could be invalid.') %\
 				hostname
 			if errnum in ssl_error:
-				text += _('\nSSL Error: %s') % ssl_error[errnum]
+				text += _('\nSSL Error: <b>%s</b>') % ssl_error[errnum]
 			else:
 				text += _('\nUnknown SSL error: %d') % errnum
 			self.dispatch('SSL_ERROR', (text, errnum, con.Connection.ssl_cert_pem,
