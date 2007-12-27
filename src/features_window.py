@@ -21,7 +21,6 @@
 import os
 import sys
 import gtk
-import gobject
 import gtkgui_helpers
 
 import dialogs

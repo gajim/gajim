@@ -30,7 +30,6 @@ import gobject
 import os
 import sys
 import time
-import urllib
 
 import common.sleepy
 import history_window

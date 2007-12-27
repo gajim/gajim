@@ -44,7 +44,6 @@ if os.name == 'nt':
 #	os.environ['GTK_BASEPATH'] = 'gtk'
 
 import sys
-import urllib
 
 import logging
 consoleloghandler = logging.StreamHandler()
@@ -222,7 +221,6 @@ import gobject
 
 import re
 import signal
-import getopt
 import time
 import math
 

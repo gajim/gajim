@@ -1281,7 +1281,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			reply.setType('error')
 
 			reply.addChild(feature)
-			reply.addChild(node=xmpp.ErrorNode('service-unavailable', typ='cancel'))
+			reply.addChild(node=common.xmpp.ErrorNode('service-unavailable', typ='cancel'))
 
 			con.send(reply)
 		

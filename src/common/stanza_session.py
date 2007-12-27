@@ -1,7 +1,6 @@
 from common import gajim
 
 from common import xmpp
-from common import helpers
 from common import exceptions
 
 import random

@@ -1,6 +1,5 @@
 import xmpp
 import gajim
-import dataforms
 import connection_handlers
 
 class ConnectionPubSub:
@@ -61,7 +60,7 @@ class ConnectionPubSub:
 		if configure:
 			conf = c.addChild('configure')
 			if configure_form is not None:
-				conf.addChild(node=configuration_form)
+				conf.addChild(node=configure_form)
 
 		self.connection.send(query)
 

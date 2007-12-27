@@ -56,8 +56,6 @@ from string import Template
 import logging
 log = logging.getLogger('gajim.c.connection')
 
-import gtkgui_helpers
-
 ssl_error = {
 2: _("Unable to get issuer certificate"),
 3: _("Unable to get certificate CRL"),
