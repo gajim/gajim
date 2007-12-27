@@ -503,6 +503,7 @@ class RosterTooltip(NotificationAreaTooltip):
 					mood_string = _('Mood:') + ' <b>%s</b>' % contact.mood['mood'].strip()
 					if contact.mood.has_key('text') and contact.mood['text'] != '':
 						mood_string += ' (%s)' % contact.mood['text'].strip()
+					mood_string = gobject.markup_escape_text(mood_string)
 					properties.append((mood_string, None))
 
 				if contact.activity.has_key('activity'):
@@ -516,6 +517,7 @@ class RosterTooltip(NotificationAreaTooltip):
 					if contact.activity.has_key('text'):
 						activity_text = contact.activity['text'].strip()
 						activity_string += ' (%s)' % activity_text
+					activity_string = gobject.markup_escape_text(activity_string)
 					properties.append((activity_string, None))
 
 				if contact.tune.has_key('artist') or contact.tune.has_key('title'):
@@ -533,6 +535,7 @@ class RosterTooltip(NotificationAreaTooltip):
 						source = _('Unknown Source')
 					tune_string = _('Tune:') + ' ' + _('<b>"%(title)s"</b> by <i>%(artist)s</i>\nfrom <i>%(source)s</i>' %\
 							{'title': title, 'artist': artist, 'source': source})
+					tune_string = gobject.markup_escape_text(tune_string)
 					properties.append((tune_string, None))
 
 				if contact.status:
@@ -592,8 +595,7 @@ class RosterTooltip(NotificationAreaTooltip):
 						vertical_fill, 0, 0)
 			else:
 				if isinstance(property[0], (unicode, str)): #FIXME: rm unicode?
-					markup = gobject.markup_escape_text(property[0])
-					label.set_markup(markup)
+					label.set_markup(property[0]) 
 					label.set_line_wrap(True)
 				else:
 					label = property[0]
