@@ -189,7 +189,7 @@ class ConnectionBytestream:
 			ft_add_hosts_to_send = map(lambda e:e.strip(),
 				ft_add_hosts_to_send.split(','))
 			for ft_host in ft_add_hosts_to_send:
-			    	ft_add_hosts.append(ft_host)
+				ft_add_hosts.append(ft_host)
 		listener = gajim.socks5queue.start_listener(port,
 			sha_str, self._result_socks5_sid, file_props['sid'])
 		if listener == None:
@@ -880,7 +880,7 @@ class ConnectionVcard:
 			ext.append('xhtml')
 		if gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
 			ext.append('cstates')
- 
+
 		if len(ext):
 			c.setAttr('ext', ' '.join(ext))
 		c.setAttr('ver', gajim.version.split('-', 1)[0])

@@ -336,9 +336,9 @@ class ConversationTextview:
 		if None != self.smooth_id: # already scrolling
 			return False
 		self.smooth_id = gobject.timeout_add(self.SCROLL_DELAY,
-											 self.smooth_scroll)
+			self.smooth_scroll)
 		self.smooth_scroll_timer = Timer(self.MAX_SCROLL_TIME,
-										 self.smooth_scroll_timeout)
+			self.smooth_scroll_timeout)
 		self.smooth_scroll_timer.start()
 		return False
 

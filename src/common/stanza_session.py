@@ -571,9 +571,9 @@ class EncryptedStanzaSession(StanzaSession):
 		self.d = crypto.powmod(g, self.y, p)
 
 		to_add = { 'my_nonce': self.n_s,
-							 'dhkeys': crypto.encode_mpi(self.d),
-							 'counter': crypto.encode_mpi(self.c_o),
-							 'nonce': self.n_o }
+						'dhkeys': crypto.encode_mpi(self.d),
+						'counter': crypto.encode_mpi(self.c_o),
+						'nonce': self.n_o }
 
 		for name in to_add:
 			b64ed = base64.b64encode(to_add[name])

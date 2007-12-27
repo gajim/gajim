@@ -429,8 +429,8 @@ def launch_browser_mailer(kind, uri):
 			command = 'kfmclient exec'
 		elif gajim.config.get('openwith') == 'exo-open':
 			command = 'exo-open'
-		elif ((sys.platform == 'darwin') and
-			  (gajim.config.get('openwith') == 'open')):
+		elif ((sys.platform == 'darwin') and\
+		(gajim.config.get('openwith') == 'open')):
 			command = 'open'
 		elif gajim.config.get('openwith') == 'custom':
 			if kind == 'url':
@@ -459,8 +459,8 @@ def launch_file_manager(path_to_open):
 			command = 'kfmclient exec'
 		elif gajim.config.get('openwith') == 'exo-open':
 			command = 'exo-open'
-		elif ((sys.platform == 'darwin') and
-			  (gajim.config.get('openwith') == 'open')):
+		elif ((sys.platform == 'darwin') and\
+		(gajim.config.get('openwith') == 'open')):
 			command = 'open'
 		elif gajim.config.get('openwith') == 'custom':
 			command = gajim.config.get('custom_file_manager')
