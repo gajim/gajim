@@ -419,7 +419,7 @@ class PreferencesWindow:
 				self.applications_combobox.set_active(2)
 			elif gajim.config.get('openwith') == 'exo-open':
 				self.applications_combobox.set_active(3)
-			elif ((sys.platform == 'darwin') and\ 
+			elif ((sys.platform == 'darwin') and\
 			(gajim.config.get('openwith') == 'open')):
 				self.applications_combobox.set_active(1)
 			elif gajim.config.get('openwith') == 'custom':
