@@ -2953,4 +2953,7 @@ if __name__ == '__main__':
 		osx.init()
 
 	Interface()
-	gtk.main()
+	try:
+		gtk.main()
+	except KeyboardInterrupt:
+		print >> sys.stderr, 'KeyboardInterrupt'
