@@ -592,7 +592,8 @@ class RosterTooltip(NotificationAreaTooltip):
 						vertical_fill, 0, 0)
 			else:
 				if isinstance(property[0], (unicode, str)): #FIXME: rm unicode?
-					label.set_markup(property[0])
+					markup = gobject.markup_escape_text(property[0])
+					label.set_markup(markup)
 					label.set_line_wrap(True)
 				else:
 					label = property[0]
