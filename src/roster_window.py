@@ -63,7 +63,6 @@ if dbus_support.supported:
 	import dbus
 from lastfm_track_listener import LastFMTrackListener
 
-import sys
 if sys.platform == 'darwin':
 	from osx import syncmenu
 
@@ -257,7 +256,7 @@ class RosterWindow:
 		'show_contacts_number'):
 			nbr_on, nbr_total = gajim.contacts.get_nb_online_total_contacts(
 				accounts = accounts)
-			account_name += ' (%s/%s)' % (repr(nbr_on),repr(nbr_total))
+			account_name += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
 		model[iter][C_NAME] = account_name
 
 	def remove_newly_added(self, jid, account):
@@ -1245,7 +1244,8 @@ class RosterWindow:
 		item.connect('activate', self.on_join_gc_activate, account)
 		gc_sub_menu.append(item)
 
-		if len(gajim.connections[account].bookmarks) > 0: # user has at least one bookmark
+		# user has at least one bookmark
+		if len(gajim.connections[account].bookmarks) > 0: 
 			item = gtk.SeparatorMenuItem() # separator
 			gc_sub_menu.append(item)
 
@@ -3342,7 +3342,6 @@ class RosterWindow:
 				model, list_of_paths = self.tree.get_selection().get_selected_rows()
 			except TypeError:
 				list_of_paths = []
-				pass
 			if path not in list_of_paths:
 				self.tree.get_selection().unselect_all()
 				self.tree.get_selection().select_path(path)
@@ -3353,7 +3352,6 @@ class RosterWindow:
 				model, list_of_paths = self.tree.get_selection().get_selected_rows()
 			except TypeError:
 				list_of_paths = []
-				pass
 			if list_of_paths != [path]:
 				self.tree.get_selection().unselect_all()
 				self.tree.get_selection().select_path(path)
@@ -3404,8 +3402,8 @@ class RosterWindow:
 				# We just save on which row we press button, and open chat window on
 				# button release to be able to do DND without opening chat window
 				self.clicked_path = path
-				return
 				self.on_row_activated(widget, path)
+				return
 			else:
 				if type_ == 'group' and x < 27:
 					# first cell in 1st column (the arrow SINGLE clicked)
@@ -3508,7 +3506,8 @@ class RosterWindow:
 					text = _('Enter your password for account %s') % account
 					if passwords.USER_HAS_GNOMEKEYRING and \
 					not passwords.USER_USES_GNOMEKEYRING:
-						text += '\n' + _('Gnome Keyring is installed but not correctly started (environment variable probably not correctly set)')
+						text += '\n' + _('Gnome Keyring is installed but not correctly started\
+								(environment variable probably not correctly set)')
 					w = dialogs.PassphraseDialog(_('Password Required'), text,
 						_('Save password'))
 					passphrase, save = w.run()
@@ -3639,9 +3638,9 @@ class RosterWindow:
 			self.update_status_combobox()
 			return
 		status = model[active][2].decode('utf-8')
-		statuses_unified = helpers.statuses_unified()
+		statuses_unified = helpers.statuses_unified() # status "desync'ed" or not
 		if (active == 7 and statuses_unified) or (active == 9 and not statuses_unified):
-			# We choose change status message (7 is that, or 9 if there is the "desync'ed" option)
+			# 'Change status message' selected: 
 			# do not change show, just show change status dialog
 			status = model[self.previous_status_combobox_active][2].decode('utf-8')
 			dlg = dialogs.ChangeStatusMessageDialog(status)
@@ -3782,11 +3781,11 @@ class RosterWindow:
 			if account == '':
 				accounts = gajim.connections.keys()
 			if music_track_info is None:
-					artist = ''
-					title = ''
-					source = ''
-					track = ''
-					length = ''
+				artist = ''
+				title = ''
+				source = ''
+				track = ''
+				length = ''
 			elif hasattr(music_track_info, 'paused') and \
 			music_track_info.paused == 0:
 				artist = ''
@@ -3861,8 +3860,8 @@ class RosterWindow:
 			uf_show = helpers.get_uf_show(show)
 			liststore = self.status_combobox.get_model()
 			liststore.prepend(['SEPARATOR', None, '', True])
-			liststore.prepend([uf_show+" "+"(desync'ed)", self.jabber_state_images['16'][show],
-			show, False])
+			liststore.prepend([uf_show+" "+"(desync'ed)", 
+				self.jabber_state_images['16'][show], show, False])
 			self.status_combobox.set_active(0)
 		self._change_awn_icon_status(show)
 		self.combobox_callback_active = True
@@ -5565,7 +5564,8 @@ class RosterWindow:
 		self.draw_roster()
 
 		if gajim.config.get('use_pep'):
-			self.enable_syncing_status_msg_from_current_music_track(gajim.config.get('publish_tune'))
+			self.enable_syncing_status_msg_from_current_music_track(
+					gajim.config.get('publish_tune'))
 		else:
 			## Music Track notifications
 			## FIXME: we use a timeout because changing status of
