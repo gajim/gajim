@@ -2153,6 +2153,21 @@ returns the session that we last sent a message to.'''
 		raw_roster = roster.getRaw()
 		roster = {}
 		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
+		if self.connected > 1 and self.continue_connect_info:
+			msg = self.continue_connect_info[1]
+			sign_msg = self.continue_connect_info[2]
+			signed = ''
+			send_first_presence = True
+			if sign_msg:
+				signed = self.get_signed_presence(msg, self._send_first_presence)
+				if signed is None:
+					self.dispatch('GPG_PASSWORD_REQUIRED',
+						(self._send_first_presence,))
+					# _send_first_presence will be called when user enter passphrase
+					send_first_presence = False
+			if send_first_presence:
+				self._send_first_presence(signed)
+
 		for jid in raw_roster:
 			try:
 				j = helpers.parse_jid(jid)
@@ -2174,20 +2189,6 @@ returns the session that we last sent a message to.'''
 						self.discoverInfo(jid)
 
 		self.dispatch('ROSTER', roster)
-
-		# continue connection
-		if self.connected > 1 and self.continue_connect_info:
-			msg = self.continue_connect_info[1]
-			sign_msg = self.continue_connect_info[2]
-			signed = ''
-			if sign_msg:
-				signed = self.get_signed_presence(msg, self._send_first_presence)
-				if signed is None:
-					self.dispatch('GPG_PASSWORD_REQUIRED',
-						(self._send_first_presence,))
-					# _send_first_presence will be called when user enter passphrase
-					return
-			self._send_first_presence(signed)
 
 	def _send_first_presence(self, signed = ''):
 		show = self.continue_connect_info[0]
