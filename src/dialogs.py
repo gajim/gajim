@@ -3536,6 +3536,15 @@ class TransformChatToMUC:
 
 		self.guests_treeview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
 
+		# All contacts beside the following can be invited:
+		# 	transports, zeroconf contacts, minimized groupchats
+		invitable = lambda contact, contact_transport = None:\
+				contact.jid not in self.auto_jids and\
+				contact.jid != gajim.get_jid_from_account(self.account) and\
+				contact.jid not in gajim.interface.minimized_controls[account] and\
+				not contact.is_transport() and\
+				not contact_transport 
+				
 		# set jabber id and pseudos
 		for account in gajim.contacts.get_accounts():
 			if gajim.connections[account].is_zeroconf:
@@ -3544,24 +3553,20 @@ class TransformChatToMUC:
 				contact = \
 					gajim.contacts.get_contact_with_highest_priority(account, jid)
 				contact_transport = gajim.get_transport_name_from_jid(jid)
-				# do not add transports, zeroconf contacs, minimized groupchats
-				# and selfjid to list of invitable jids
-				if contact.jid not in self.auto_jids and contact.jid != \
-				gajim.get_jid_from_account(self.account) and not contact_transport \
-				and not contact.is_transport() and contact.jid not in \
-				gajim.interface.minimized_controls[account]:
-					if contact.show not in ('offline', 'error'):
-						img = gajim.interface.roster.jabber_state_images['16'][
-							contact.show]
-						name = contact.name
-						if name == '':
-							name = jid.split('@')[0]
-						iter = self.store.append([img.get_pixbuf(), name, jid])
-						# preselect treeview rows
-						if self.preselected_jids and jid in self.preselected_jids:
-							path = self.store.get_path(iter)
-							self.guests_treeview.get_selection().\
-								select_path(path)
+				# Add contact if it can be invited
+				if invitable(contact, contact_transport) and \
+						contact.show not in ('offline', 'error'):
+					img = gajim.interface.roster.jabber_state_images['16'][
+						contact.show]
+					name = contact.name
+					if name == '':
+						name = jid.split('@')[0]
+					iter = self.store.append([img.get_pixbuf(), name, jid])
+					# preselect treeview rows
+					if self.preselected_jids and jid in self.preselected_jids:
+						path = self.store.get_path(iter)
+						self.guests_treeview.get_selection().\
+							select_path(path)
 
 		# show all
 		self.window.show_all()
@@ -3579,7 +3584,6 @@ class TransformChatToMUC:
 		server = self.server_list_comboboxentry.get_active_text()
 		if server == '':
 			return
-		room_id = gajim.nicks[self.account] + str(randrange(9999999))
 		gajim.connections[self.account].check_unique_room_id_support(server, self)
 
 	def unique_room_id_supported(self, server, room_id):

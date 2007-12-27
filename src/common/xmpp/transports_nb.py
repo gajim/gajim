@@ -1030,7 +1030,7 @@ class NBSOCKS5PROXYsocket(NonBlockingTcp):
 		# use the IPv4 address request even if remote resolving was specified.
 		try:
 			self.ipaddr = socket.inet_aton(self.server[0])
-			req = req + "\x01" + ipaddr
+			req = req + "\x01" + self.ipaddr
 		except socket.error:
 			# Well it's not an IP number,  so it's probably a DNS name.
 #			if self.__proxy[3]==True:
