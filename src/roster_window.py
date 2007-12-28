@@ -2396,7 +2396,7 @@ class RosterWindow:
 				widget.set_sensitive(False)
 
 		if gajim.connections[account] and gajim.connections[account].\
-			privacy_rules_supported:
+		privacy_rules_supported:
 			if jid in gajim.connections[account].blocked_contacts:
 				block_menuitem.set_no_show_all(True)
 				unblock_menuitem.connect('activate', self.on_unblock, iter, None)
@@ -2831,28 +2831,6 @@ class RosterWindow:
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		menu = gtk.Menu()
 
-		# Connect/Didconnect
-		show = contact.show
-		if (show != 'offline' and show != 'error') or\
-			gajim.account_is_disconnected(account):
-			# Log Off
-			item = gtk.ImageMenuItem(_('_Log off'))
-			icon = gtk.image_new_from_stock(gtk.STOCK_DISCONNECT, gtk.ICON_SIZE_MENU)
-			item.connect('activate', self.on_agent_logging, jid, 'unavailable',
-				account)
-		else:
-			# Log on
-			item = gtk.ImageMenuItem(_('_Log on'))
-			icon = gtk.image_new_from_stock(gtk.STOCK_CONNECT, gtk.ICON_SIZE_MENU)
-			item.connect('activate', self.on_agent_logging, jid, None, account)
-		item.set_image(icon)
-		menu.append(item)
-		if show == 'error':
-			item.set_sensitive(False)
-
-		item = gtk.SeparatorMenuItem() # separator
-		menu.append(item)
-
 		# Send single message
 		item = gtk.ImageMenuItem(_('Send Single Message'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
@@ -2861,30 +2839,38 @@ class RosterWindow:
 			self.on_send_single_message_menuitem_activate, account, contact)
 		menu.append(item)
 
+		blocked = False
+		if jid in gajim.connections[account].blocked_contacts:
+			blocked = True
+
 		# Send Custom Status
 		send_custom_status_menuitem = gtk.ImageMenuItem(_('Send Cus_tom Status'))
 		# add a special img for this menuitem
-		if gajim.interface.status_sent_to_users.has_key(account) and \
-			jid in gajim.interface.status_sent_to_users[account]:
-			send_custom_status_menuitem.set_image(self.load_icon(
-				gajim.interface.status_sent_to_users[account][jid]))
+		if blocked:
+			send_custom_status_menuitem.set_image(self.load_icon('offline'))
+			send_custom_status_menuitem.set_sensitive(False)
 		else:
-			icon = gtk.image_new_from_stock(gtk.STOCK_NETWORK,
-				gtk.ICON_SIZE_MENU)
-			send_custom_status_menuitem.set_image(icon)
-		status_menuitems = gtk.Menu()
-		send_custom_status_menuitem.set_submenu(status_menuitems)
-		iconset = gajim.config.get('iconset')
-		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-		for s in ['online', 'chat', 'away', 'xa', 'dnd', 'offline']:
-			# icon MUST be different instance for every item
-			state_images = self.load_iconset(path)
-			status_menuitem = gtk.ImageMenuItem(helpers.get_uf_show(s))
-			status_menuitem.connect('activate', self.on_send_custom_status,
-				[(contact, account)], s)
-			icon = state_images[s]
-			status_menuitem.set_image(icon)
-			status_menuitems.append(status_menuitem)
+			if gajim.interface.status_sent_to_users.has_key(account) and \
+			jid in gajim.interface.status_sent_to_users[account]:
+				send_custom_status_menuitem.set_image(self.load_icon(
+					gajim.interface.status_sent_to_users[account][jid]))
+			else:
+				icon = gtk.image_new_from_stock(gtk.STOCK_NETWORK,
+					gtk.ICON_SIZE_MENU)
+				send_custom_status_menuitem.set_image(icon)
+			status_menuitems = gtk.Menu()
+			send_custom_status_menuitem.set_submenu(status_menuitems)
+			iconset = gajim.config.get('iconset')
+			path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
+			for s in ['online', 'chat', 'away', 'xa', 'dnd', 'offline']:
+				# icon MUST be different instance for every item
+				state_images = self.load_iconset(path)
+				status_menuitem = gtk.ImageMenuItem(helpers.get_uf_show(s))
+				status_menuitem.connect('activate', self.on_send_custom_status,
+					[(contact, account)], s)
+				icon = state_images[s]
+				status_menuitem.set_image(icon)
+				status_menuitems.append(status_menuitem)
 		menu.append(send_custom_status_menuitem)
 
 		item = gtk.SeparatorMenuItem() # separator
@@ -2932,6 +2918,20 @@ class RosterWindow:
 
 		item = gtk.SeparatorMenuItem() # separator
 		manage_transport_submenu.append(item)
+
+		# Block
+		if blocked:
+			item = gtk.ImageMenuItem(_('_Unblock'))
+			item.connect('activate', self.on_unblock, iter, None)
+		else:
+			item = gtk.ImageMenuItem(_('_Block'))
+			item.connect('activate', self.on_block, iter, None)
+
+		icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
+		item.set_image(icon)
+		manage_transport_submenu.append(item)
+		if gajim.account_is_disconnected(account):
+			item.set_sensitive(False)
 
 		# Remove
 		item = gtk.ImageMenuItem(_('_Remove'))
