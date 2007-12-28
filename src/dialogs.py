@@ -351,10 +351,10 @@ class ChooseGPGKeyDialog:
 
 	def run(self):
 		rep = self.window.run()
-		if rep == gtk.RESPONSE_OK:
-			selection = self.keys_treeview.get_selection()
-			(model, iter) = selection.get_selected()
-			keyID = [ model[iter][0].decode('utf-8'),
+		selection = self.keys_treeview.get_selection()
+		(model, iter) = selection.get_selected()
+		if iter and rep == gtk.RESPONSE_OK:
+				keyID = [ model[iter][0].decode('utf-8'),
 				model[iter][1].decode('utf-8') ]
 		else:
 			keyID = None

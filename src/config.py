@@ -1362,8 +1362,6 @@ class AccountsWindow:
 		self.accounts_treeview = self.xml.get_widget('accounts_treeview')
 		self.remove_button = self.xml.get_widget('remove_button')
 		self.rename_button = self.xml.get_widget('rename_button')
-		#FIXME: I don't understand why this import is necessary
-		import os
 		path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
 			'kbd_input.png')
 		img = self.xml.get_widget('rename_image')
