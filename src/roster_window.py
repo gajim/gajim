@@ -3,11 +3,11 @@
 ##
 ## Copyright (C) 2003-2007 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
-##                         Travis Shirk <travis@pobox.com> 
+##                         Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
-## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
+## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -1244,7 +1244,7 @@ class RosterWindow:
 		gc_sub_menu.append(item)
 
 		# user has at least one bookmark
-		if len(gajim.connections[account].bookmarks) > 0: 
+		if len(gajim.connections[account].bookmarks) > 0:
 			item = gtk.SeparatorMenuItem() # separator
 			gc_sub_menu.append(item)
 
@@ -1944,7 +1944,7 @@ class RosterWindow:
 			if os.path.isfile(path_to_file):
 				stat = os.stat(path_to_file)
 				if stat[6] == 0:
-					invalid_file = True 
+					invalid_file = True
 					msg = _('File is empty')
 			else:
 				invalid_file = True
@@ -2034,7 +2034,7 @@ class RosterWindow:
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if not contact:
 			return
-		
+
 		# Zeroconf Account
 		if gajim.config.get_per('accounts', account, 'is_zeroconf'):
 			xml = gtkgui_helpers.get_glade('zeroconf_contact_context_menu.glade')
@@ -2190,7 +2190,7 @@ class RosterWindow:
 		jid in gajim.interface.status_sent_to_users[account]:
 			send_custom_status_menuitem.set_image(
 				self.load_icon(gajim.interface.status_sent_to_users[account][jid]))
-		else:	
+		else:
 			icon = gtk.image_new_from_stock(gtk.STOCK_NETWORK, gtk.ICON_SIZE_MENU)
 			send_custom_status_menuitem.set_image(icon)
 
@@ -2502,7 +2502,7 @@ class RosterWindow:
 			menu.append(send_group_message_item)
 			send_group_message_item.connect('activate',
 				self.on_send_single_message_menuitem_activate, account, list_)
-		
+
 		# Invite to Groupchat
 		invite_item = gtk.ImageMenuItem(_('In_vite to'))
 		muc_icon = self.load_icon('muc_active')
@@ -2559,7 +2559,7 @@ class RosterWindow:
 		manage_contacts_submenu = gtk.Menu()
 		item.set_submenu(manage_contacts_submenu)
 		menu.append(item)
-		
+
 		# Edit Groups
 		edit_groups_item = gtk.ImageMenuItem(_('Edit _Groups'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
@@ -2587,7 +2587,7 @@ class RosterWindow:
 			if not gajim.connections[account].privacy_rules_supported:
 				block_menuitem.set_sensitive(False)
 
-		# Remove 
+		# Remove
 		remove_item = gtk.ImageMenuItem(_('_Remove'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
 		remove_item.set_image(icon)
@@ -2620,17 +2620,17 @@ class RosterWindow:
 			maximize_menuitem.connect('activate', self.on_groupchat_maximized, \
 				jid, account)
 			menu.append(maximize_menuitem)
-			
+
 		disconnect_menuitem = gtk.ImageMenuItem(_('_Disconnect'))
 		disconnect_icon = gtk.image_new_from_stock(gtk.STOCK_DISCONNECT, \
 			gtk.ICON_SIZE_MENU)
 		disconnect_menuitem.set_image(disconnect_icon)
 		disconnect_menuitem .connect('activate', self.on_disconnect, jid, account)
-		menu.append(disconnect_menuitem)		
-		
+		menu.append(disconnect_menuitem)
+
 		item = gtk.SeparatorMenuItem() # separator
 		menu.append(item)
-		
+
 		history_menuitem = gtk.ImageMenuItem(_('_History'))
 		history_icon = gtk.image_new_from_stock(gtk.STOCK_JUSTIFY_FILL, \
 			gtk.ICON_SIZE_MENU)
@@ -2751,7 +2751,7 @@ class RosterWindow:
 				status_menuitem.set_image(icon)
 				status_menuitems.append(status_menuitem)
 			menu.append(send_custom_status_menuitem)
-			
+
 			# there is no singlemessage and custom status for zeroconf
 			if gajim.config.get_per('accounts', account, 'is_zeroconf'):
 				send_custom_status_menuitem.set_sensitive(False)
@@ -2804,11 +2804,11 @@ class RosterWindow:
 			menu.append(remove_item)
 			remove_item.connect('activate', self.on_remove_group_item_activated,
 				group, account)
-				
+
 			# unsensitive if account is not connected
 			if gajim.connections[account].connected < 2:
 				rename_item.set_sensitive(False)
-			
+
 			# General group cannot be changed
 			if group == _('General'):
 				rename_item.set_sensitive(False)
@@ -2832,7 +2832,7 @@ class RosterWindow:
 		menu = gtk.Menu()
 
 		# Connect/Didconnect
-		show = contact.show	
+		show = contact.show
 		if (show != 'offline' and show != 'error') or\
 			gajim.account_is_disconnected(account):
 			# Log Off
@@ -2849,10 +2849,10 @@ class RosterWindow:
 		menu.append(item)
 		if show == 'error':
 			item.set_sensitive(False)
-		
+
 		item = gtk.SeparatorMenuItem() # separator
 		menu.append(item)
-		
+
 		# Send single message
 		item = gtk.ImageMenuItem(_('Send Single Message'))
 		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
@@ -2886,7 +2886,7 @@ class RosterWindow:
 			status_menuitem.set_image(icon)
 			status_menuitems.append(status_menuitem)
 		menu.append(send_custom_status_menuitem)
-		
+
 		item = gtk.SeparatorMenuItem() # separator
 		menu.append(item)
 
@@ -2929,7 +2929,7 @@ class RosterWindow:
 		item.connect('activate', self.on_rename, iter, path)
 		if gajim.account_is_disconnected(account):
 			item.set_sensitive(False)
-		
+
 		item = gtk.SeparatorMenuItem() # separator
 		manage_transport_submenu.append(item)
 
@@ -2941,7 +2941,7 @@ class RosterWindow:
 		item.connect('activate', self.on_remove_agent, [(contact, account)])
 		if gajim.account_is_disconnected(account):
 			item.set_sensitive(False)
-		
+
 		item = gtk.SeparatorMenuItem() # separator
 		menu.append(item)
 
@@ -3639,7 +3639,7 @@ class RosterWindow:
 		status = model[active][2].decode('utf-8')
 		statuses_unified = helpers.statuses_unified() # status "desync'ed" or not
 		if (active == 7 and statuses_unified) or (active == 9 and not statuses_unified):
-			# 'Change status message' selected: 
+			# 'Change status message' selected:
 			# do not change show, just show change status dialog
 			status = model[self.previous_status_combobox_active][2].decode('utf-8')
 			dlg = dialogs.ChangeStatusMessageDialog(status)
@@ -3859,7 +3859,7 @@ class RosterWindow:
 			uf_show = helpers.get_uf_show(show)
 			liststore = self.status_combobox.get_model()
 			liststore.prepend(['SEPARATOR', None, '', True])
-			liststore.prepend([uf_show+" "+"(desync'ed)", 
+			liststore.prepend([uf_show+" "+"(desync'ed)",
 				self.jabber_state_images['16'][show], show, False])
 			self.status_combobox.set_active(0)
 		self._change_awn_icon_status(show)
@@ -4260,7 +4260,7 @@ class RosterWindow:
 				gajim.config.set('roster_y-position', y)
 				width, height = self.window.get_size()
 				# For the width use the size of the vbox containing the tree and
-				# status combo, this will cancel out any hpaned width 
+				# status combo, this will cancel out any hpaned width
 				width = self.xml.get_widget('roster_vbox2').allocation.width
 				gajim.config.set('roster_width', width)
 				gajim.config.set('roster_height', height)
@@ -5148,13 +5148,13 @@ class RosterWindow:
 		type_source = model[iter_source][C_TYPE]
 		account_source = model[iter_source][C_ACCOUNT].decode('utf-8')
 
-		# Only normal contacts can be dragged	
+		# Only normal contacts can be dragged
 		if type_source != 'contact':
 			return
 		if gajim.config.get_per('accounts', account_source, 'is_zeroconf'):
 			return
 
-		# A contact was dropped 	
+		# A contact was dropped
 		if gajim.config.get_per('accounts', account_dest, 'is_zeroconf'):
 			# drop on zeroconf account, adding not possible
 			return
