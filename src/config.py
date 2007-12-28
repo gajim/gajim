@@ -2079,8 +2079,7 @@ class AccountsWindow:
 
 		# self.current_account is None and/or gajim.connections is {}
 		else:
-			from common import GnuPG
-			if GnuPG.USE_GPG:
+			if gajim.HAVE_GPG:
 				secret_keys = GnuPG.GnuPG().get_secret_keys()
 			else:
 				secret_keys = []
@@ -3674,8 +3673,7 @@ class ZeroconfPropertiesWindow:
 
 		# self.account is None and/or gajim.connections is {}
 		else:
-			from common import GnuPG
-			if GnuPG.USE_GPG:
+			if gajim.HAVE_GPG:
 				secret_keys = GnuPG.GnuPG().get_secret_keys()
 			else:
 				secret_keys = []

@@ -48,7 +48,6 @@ from common import passwords
 from common import exceptions
 
 from connection_handlers import *
-USE_GPG = GnuPG.USE_GPG
 
 from common.rst_xhtml_generator import create_xhtml
 
@@ -105,7 +104,9 @@ class Connection(ConnectionHandlers):
 		self.last_connection = None # last ClientCommon instance
 		self.is_zeroconf = False
 		self.gpg = None
-		if USE_GPG:
+		self.USE_GPG = False
+		if gajim.HAVE_GPG:
+			self.USE_GPG = True
 			self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 		self.status = ''
 		self.priority = gajim.get_priority(name, 'offline')
@@ -179,7 +180,7 @@ class Connection(ConnectionHandlers):
 			self.dispatch('STATUS', 'connecting')
 			self.retrycount += 1
 			self.on_connect_auth = self._init_roster
-			self.connect_and_init(self.old_show, self.status, self.gpg != None)
+			self.connect_and_init(self.old_show, self.status, self.USE_GPG)
 		else:
 			# reconnect succeeded
 			self.time_to_reconnect = None
@@ -268,7 +269,8 @@ class Connection(ConnectionHandlers):
 							if not common.xmpp.isResultNode(result):
 								self.dispatch('ACC_NOT_OK', (result.getError()))
 								return
-							if USE_GPG:
+							if gajim.HAVE_GPG:
+								self.USE_GPG = True
 								self.gpg = GnuPG.GnuPG(gajim.config.get(
 									'use_gpg_agent'))
 							self.dispatch('ACC_OK', (self.new_account_info))
@@ -796,7 +798,7 @@ class Connection(ConnectionHandlers):
 		callback is the function to call when user give the passphrase'''
 		signed = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
-		if keyID and self.gpg:
+		if keyID and self.USE_GPG:
 			use_gpg_agent = gajim.config.get('use_gpg_agent')
 			if self.gpg.passphrase is None and not use_gpg_agent:
 				# We didn't set a passphrase
@@ -804,7 +806,7 @@ class Connection(ConnectionHandlers):
 			if self.gpg.passphrase is not None or use_gpg_agent:
 				signed = self.gpg.sign(msg, keyID)
 				if signed == 'BAD_PASSPHRASE':
-					self.gpg = None
+					self.USE_GPG = False
 					signed = ''
 					self.dispatch('BAD_PASSPHRASE', ())
 		return signed
@@ -881,7 +883,8 @@ class Connection(ConnectionHandlers):
 					safe_substitute({
 						'hostname': socket.gethostname()
 					})
-			if USE_GPG:
+			if gajim.HAVE_GPG:
+				self.USE_GPG = True
 				self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 			self.connect_and_init(show, msg, sign_msg)
 
@@ -958,7 +961,7 @@ class Connection(ConnectionHandlers):
 			fjid += '/' + resource
 		msgtxt = msg
 		msgenc = ''
-		if keyID and self.gpg:
+		if keyID and self.USE_GPG:
 			#encrypt
 			msgenc, error = self.gpg.encrypt(msg, [keyID])
 			if msgenc and not error:

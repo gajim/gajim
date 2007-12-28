@@ -49,8 +49,6 @@ from common.zeroconf import client_zeroconf
 from common.zeroconf import zeroconf
 from connection_handlers_zeroconf import *
 
-USE_GPG = GnuPG.USE_GPG
-
 class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	'''Connection class'''
 	def __init__(self, name):
@@ -62,7 +60,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.connected = 0 # offline
 		self.connection = None
 		self.gpg = None
-		if USE_GPG:
+		self.USE_GPG = False
+		if gajim.HAVE_GPG:
+			self.USE_GPG = True
 			self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 		self.is_zeroconf = True
 		self.privacy_rules_supported = False
@@ -91,7 +91,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.activity = {}
 		# Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
-		if USE_GPG:
+		if gajim.HAVE_GPG:
+			self.USE_GPG = True
 			self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 		
 		self.get_config_values_or_default()
@@ -163,7 +164,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def get_signed_msg(self, msg):
 		signed = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
-		if keyID and USE_GPG:
+		if keyID and self.USE_GPG:
 			use_gpg_agent = gajim.config.get('use_gpg_agent')
 			if self.connected < 2 and self.gpg.passphrase is None and \
 				not use_gpg_agent:
@@ -373,7 +374,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 		msgtxt = msg
 		msgenc = ''
-		if keyID and USE_GPG:
+		if keyID and self.USE_GPG:
 			# encrypt
 			msgenc, error = self.gpg.encrypt(msg, [keyID])
 			if msgenc and not error:
@@ -510,7 +511,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		gajim.log.debug('This should not happen (send_agent_status)')
 
 	def gpg_passphrase(self, passphrase):
-		if USE_GPG:
+		if self.gpg:
 			use_gpg_agent = gajim.config.get('use_gpg_agent')
 			if use_gpg_agent:
 				self.gpg.passphrase = None
@@ -518,13 +519,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				self.gpg.passphrase = passphrase
 
 	def ask_gpg_keys(self):
-		if USE_GPG:
+		if self.gpg:
 			keys = self.gpg.get_keys()
 			return keys
 		return None
 
 	def ask_gpg_secrete_keys(self):
-		if USE_GPG:
+		if self.gpg:
 			keys = self.gpg.get_secret_keys()
 			return keys
 		return None

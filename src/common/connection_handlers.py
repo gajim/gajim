@@ -35,7 +35,6 @@ from calendar import timegm
 import socks5
 import common.xmpp
 
-from common import GnuPG
 from common import helpers
 from common import gajim
 from common import atom
@@ -1629,7 +1628,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if not user_nick:
 			user_nick = ''
 
-		if encTag and GnuPG.USE_GPG:
+		if encTag and self.USE_GPG:
 			#decrypt
 			encmsg = encTag.getData()
 
@@ -1901,7 +1900,7 @@ returns the session that we last sent a message to.'''
 		except:
 			prio = 0
 		keyID = ''
-		if sigTag and self.gpg:
+		if sigTag and self.USE_GPG:
 			# verify
 			sigmsg = sigTag.getData()
 			keyID = self.gpg.verify(status, sigmsg)

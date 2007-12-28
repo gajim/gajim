@@ -154,6 +154,17 @@ try:
 except ImportError:
 	HAVE_PYSEXY = False
 
+HAVE_GPG = True
+try:
+	import GnuPGInterface 
+except ImportError:
+	HAVE_GPG = False
+else:
+	import os
+	status = os.system('gpg -h >/dev/null 2>&1')
+	if status != 0:
+		HAVE_GPG = False
+
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
 	return jid[:pos]

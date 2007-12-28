@@ -179,8 +179,8 @@ class FeaturesWindow:
 	def gpg_available(self):
 		if os.name == 'nt':
 			return False
-		from common import GnuPG
-		return GnuPG.USE_GPG
+		from common import gajim
+		return gajim.HAVE_GPG
 
 	def network_manager_available(self):
 		if os.name == 'nt':
