@@ -45,8 +45,6 @@ if gajim.HAVE_GPG:
 			self.options.armor = 1
 			self.options.meta_interactive = 0
 			self.options.extra_args.append('--no-secmem-warning')
-			# Nolith's patch - prevent crashs on non fully-trusted keys
-			self.options.extra_args.append('--always-trust')
 			if self.use_agent:
 				self.options.extra_args.append('--use-agent')
 
@@ -173,7 +171,7 @@ if gajim.HAVE_GPG:
 
 			try: proc.wait()
 			except IOError: pass
-
+			
 			keyid = ''
 			if resp.has_key('GOODSIG'):
 				keyid = resp['GOODSIG'].split()[0]

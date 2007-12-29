@@ -579,10 +579,11 @@ class Interface:
 		jid = array[0].split('/')[0]
 		keyID = array[5]
 		contact_nickname = array[7]
-		attached_keys = gajim.config.get_per('accounts', account,
-			'attached_gpg_keys').split()
-		if jid in attached_keys:
-			keyID = attached_keys[attached_keys.index(jid) + 1]
+		
+		# Get the proper keyID
+		keyID = helpers.prepare_and_validate_gpg_keyID(account, 
+				jid, keyID)
+
 		resource = array[3]
 		if not resource:
 			resource = ''

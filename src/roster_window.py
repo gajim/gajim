@@ -1912,12 +1912,11 @@ class RosterWindow:
 		if keyID[0] == _('None'):
 			if contact.jid in keys:
 				del keys[contact.jid]
-			for u in gajim.contacts.get_contacts(account, contact.jid):
-				u.keyID = ''
+			keyID = ''
 		else:
-			keys[contact.jid] = keyID[0]
-			for u in gajim.contacts.get_contacts(account, contact.jid):
-				u.keyID = keyID[0]
+			keyID = keyID[0]
+			keys[contact.jid] = keyID
+
 		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
 			ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
 			ctrl.update_ui()
@@ -1925,6 +1924,9 @@ class RosterWindow:
 		for jid in keys:
 			keys_str += jid + ' ' + keys[jid] + ' '
 		gajim.config.set_per('accounts', account, 'attached_gpg_keys', keys_str)
+		for u in gajim.contacts.get_contacts(account, contact.jid):
+			u.keyID = helpers.prepare_and_validate_gpg_keyID(account, 
+					contact.jid, keyID)
 
 	def update_avatar_in_gui(self, jid, account):
 		# Update roster

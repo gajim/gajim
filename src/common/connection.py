@@ -961,9 +961,15 @@ class Connection(ConnectionHandlers):
 			fjid += '/' + resource
 		msgtxt = msg
 		msgenc = ''
+
 		if keyID and self.USE_GPG:
-			#encrypt
-			msgenc, error = self.gpg.encrypt(msg, [keyID])
+			if keyID ==  'UNKNOWN':
+				error = _('Neither the remote presence is signed, nor a key was assigned.')
+			elif keyID[8:] == 'MISMATCH':
+				error =  _('The contact\'s key does not match the key assigned in Gajim.')
+			else:
+				#encrypt
+				msgenc, error = self.gpg.encrypt(msg, [keyID])
 			if msgenc and not error:
 				msgtxt = '[This message is encrypted]'
 				lang = os.getenv('LANG')

@@ -2199,6 +2199,7 @@ returns the session that we last sent a message to.'''
 				self.dispatch('ERROR', (_('OpenPGP passphrase was not given'),
 					#%s is the account name here
 					_('You will be connected to %s without OpenPGP.') % self.name))
+				self.USE_GPG = False
 				signed = ''
 		self.connected = STATUS_LIST.index(show)
 		sshow = helpers.get_xmpp_show(show)
