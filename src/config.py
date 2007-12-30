@@ -287,7 +287,7 @@ class PreferencesWindow:
 
 		# sounds treeview
 		self.sound_tree = self.xml.get_widget('sounds_treeview')
-		
+
 		# active, event ui name, path to sound file, event_config_name
 		model = gtk.ListStore(bool, str, str, str)
 		self.sound_tree.set_model(model)
@@ -428,7 +428,7 @@ class PreferencesWindow:
 				else:
 					self.applications_combobox.set_active(4)
 				self.xml.get_widget('custom_apps_frame').show()
-				
+
 			self.xml.get_widget('custom_browser_entry').set_text(
 				gajim.config.get('custombrowser'))
 			self.xml.get_widget('custom_mail_client_entry').set_text(
@@ -724,7 +724,7 @@ class PreferencesWindow:
 	def update_theme_list(self):
 		theme_combobox = self.xml.get_widget('theme_combobox')
 		model = gtk.ListStore(str)
-		theme_combobox.set_model(model) 
+		theme_combobox.set_model(model)
 		i = 0
 		for config_theme in gajim.config.get_per('themes'):
 			theme = config_theme.replace('_', ' ')
@@ -856,7 +856,7 @@ class PreferencesWindow:
 
 	def on_conversation_fontbutton_font_set(self, widget):
 		self.on_preference_widget_font_set(widget, 'conversation_font')
-	
+
 	def on_default_chat_font_toggled(self, widget):
 		font_widget = self.xml.get_widget('conversation_fontbutton')
 		if widget.get_active():
@@ -961,7 +961,7 @@ class PreferencesWindow:
 			val = model[iter][0].decode('utf-8')
 			if model[iter][1]: # we have a preset message
 				if not val: # no title, use message text for title
-					val = model[iter][1] 
+					val = model[iter][1]
 				gajim.config.add_per('statusmsg', val)
 				msg = helpers.to_one_line(model[iter][1].decode('utf-8'))
 				gajim.config.set_per('statusmsg', val, 'message', msg)
@@ -1092,7 +1092,7 @@ class PreferencesWindow:
 	def fill_sound_treeview(self):
 		model = self.sound_tree.get_model()
 		model.clear()
-		
+
 		# NOTE: sounds_ui_names MUST have all items of
 		# sounds = gajim.config.get_per('soundevents') as keys 
 		sounds_dict = {
@@ -1111,7 +1111,7 @@ class PreferencesWindow:
 			if gajim.get_server_from_jid(jid) in gajim.gmail_domains:
 				sounds_dict['gmail_received'] = _('GMail Email Received')
 				break
-		
+
 		for sound_event_config_name, sound_ui_name in sounds_dict.items():
 			enabled = gajim.config.get_per('soundevents',
 				sound_event_config_name, 'enabled')
@@ -1433,7 +1433,7 @@ class AccountsWindow:
 			if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME):
 				gajim.connections[gajim.ZEROCONF_ACC_NAME].update_details()
 				return
-			
+
 		elif self.need_relogin and self.current_account and \
 		gajim.connections[self.current_account].connected > 0:
 			def login(account, show_before, status_before):
@@ -1553,7 +1553,7 @@ class AccountsWindow:
 		st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
 			'autoconnect')
 		self.xml.get_widget('autoconnect_checkbutton2').set_active(st)
-		
+
 		list_no_log_for = gajim.config.get_per('accounts',
 			gajim.ZEROCONF_ACC_NAME, 'no_log_for').split()
 		if gajim.ZEROCONF_ACC_NAME in list_no_log_for:
@@ -1897,7 +1897,7 @@ class AccountsWindow:
 			passwords.save_password(self.current_account, password)
 		else:
 			passwords.save_password(self.current_account, '')
-		
+
 	def on_resource_entry1_focus_out_event(self, widget, event):
 		if self.ignore_events:
 			return
@@ -1971,7 +1971,8 @@ class AccountsWindow:
 			'no_log_for').split()
 		if self.current_account in list_no_log_for:
 			list_no_log_for.remove(self.current_account)
-		if not self.xml.get_widget('log_history_checkbutton').get_active():
+
+		if not widget.get_active():
 			list_no_log_for.append(self.current_account)
 		gajim.config.set_per('accounts', self.current_account, 'no_log_for',
 			' '.join(list_no_log_for))
@@ -2203,8 +2204,8 @@ class AccountsWindow:
 			del gajim.transport_avatar[gajim.ZEROCONF_ACC_NAME]
 			if len(gajim.connections) >= 2:
 				# Do not merge accounts if only one exists
-				gajim.interface.roster.regroup = gajim.config.get('mergeaccounts') 
-			else: 
+				gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
+			else:
 				gajim.interface.roster.regroup = False
 			gajim.interface.roster.draw_roster()
 			gajim.interface.roster.set_actions_menu_needs_rebuild()
@@ -2238,8 +2239,8 @@ class AccountsWindow:
 			# refresh roster
 			if len(gajim.connections) >= 2:
 				# Do not merge accounts if only one exists
-				gajim.interface.roster.regroup = gajim.config.get('mergeaccounts') 
-			else: 
+				gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
+			else:
 				gajim.interface.roster.regroup = False
 			gajim.interface.roster.draw_roster()
 			gajim.interface.roster.set_actions_menu_needs_rebuild()
@@ -2504,7 +2505,7 @@ class GroupchatConfigWindow:
 				'3. domain/resource (only that resource matches).\n'
 				'4. domain (the domain itself matches, as does any user@domain,\n'
 				'domain/resource, or address containing a subdomain.')
-			
+
 		instance = dialogs.InputDialog(title, prompt)
 		response = instance.get_response()
 		if response != gtk.RESPONSE_OK:
@@ -2637,7 +2638,7 @@ class RemoveAccountWindow:
 				on_response_ok = remove)
 		else:
 			remove()
-	
+
 	def _on_remove_success(self, res):
 		# action of unregistration has failed, we don't remove the account
 		# Error message is send by connect_and_auth()
@@ -2665,8 +2666,8 @@ class RemoveAccountWindow:
 		del gajim.status_before_autoaway[self.account]
 		del gajim.transport_avatar[self.account]
 		if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
-			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts') 
-		else: 
+			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
+		else:
 			gajim.interface.roster.regroup = False
 		gajim.interface.roster.draw_roster()
 		gajim.interface.roster.set_actions_menu_needs_rebuild()
@@ -3494,8 +3495,8 @@ class AccountCreationWizardWindow:
 			gajim.interface.instances['accounts'].init_accounts()
 		# refresh roster
 		if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
-			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts') 
-		else: 
+			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
+		else:
 			gajim.interface.roster.regroup = False
 		gajim.interface.roster.draw_roster()
 		gajim.interface.roster.set_actions_menu_needs_rebuild()
@@ -3514,13 +3515,13 @@ class ZeroconfPropertiesWindow:
 
 		self.xml.get_widget('save_button').grab_focus()
 		self.window.show_all()
-	
+
 	def init_account(self):
 		st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
 			'autoconnect')
 		if st:
 			self.xml.get_widget('autoconnect_checkbutton').set_active(st)
-		
+
 		list_no_log_for = gajim.config.get_per('accounts',
 			gajim.ZEROCONF_ACC_NAME,'no_log_for').split()
 		if gajim.ZEROCONF_ACC_NAME in list_no_log_for:
@@ -3545,12 +3546,12 @@ class ZeroconfPropertiesWindow:
 			'custom_port')
 		if st:
 			self.xml.get_widget('custom_port_entry').set_text(str(st))
-		
+
 		st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
 			'use_custom_host')
 		if st:
 			self.xml.get_widget('custom_port_checkbutton').set_active(st)
-	
+
 		self.xml.get_widget('custom_port_entry').set_sensitive(bool(st))
 
 		if not st:
@@ -3585,14 +3586,14 @@ class ZeroconfPropertiesWindow:
 		# close window
 		if gajim.interface.instances.has_key('zeroconf_properties'):
 			del gajim.interface.instances['zeroconf_properties']
-	
+
 	def on_custom_port_checkbutton_toggled(self, widget):
 		st = self.xml.get_widget('custom_port_checkbutton').get_active()
 		self.xml.get_widget('custom_port_entry').set_sensitive(bool(st))
-	
+
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
-	
+
 	def on_save_button_clicked(self, widget):
 		config = {}
 
@@ -3605,14 +3606,14 @@ class ZeroconfPropertiesWindow:
 		if not self.xml.get_widget('log_history_checkbutton').get_active():
 			list_no_log_for.append(gajim.ZEROCONF_ACC_NAME)
 		config['no_log_for'] =  ' '.join(list_no_log_for)
-		
+
 		st = self.xml.get_widget('sync_with_global_status_checkbutton').\
 			get_active()
 		config['sync_with_global_status'] = st
 
 		st = self.xml.get_widget('first_name_entry').get_text()
 		config['zeroconf_first_name'] = st.decode('utf-8')
-		
+
 		st = self.xml.get_widget('last_name_entry').get_text()
 		config['zeroconf_last_name'] = st.decode('utf-8')
 
@@ -3632,9 +3633,9 @@ class ZeroconfPropertiesWindow:
 			port = self.xml.get_widget('custom_port_entry').get_text()
 		else:
 			port = 5298
-			
+
 		config['custom_port'] = port
-	
+
 		config['keyname'] = self.xml.get_widget('gpg_name_label').get_text().\
 			decode('utf-8')
 		if config['keyname'] == '': # no key selected
