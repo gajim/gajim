@@ -932,7 +932,7 @@ class Socks5Receiver(Socks5, IdleObject):
 		elif self.state == 3: # send 'connect' request
 			self.send_raw(self._get_request_buff(self._get_sha1_auth()))
 		elif self.file_props['type'] != 'r':
-			if self.file_props['paused'] == True:
+			if self.file_props['paused']:
 				self.idlequeue.plug_idle(self, False, False)
 				return
 			result = self.write_next()
