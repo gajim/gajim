@@ -1053,10 +1053,13 @@ class ChatControl(ChatControlBase):
 		self.set_session(session)
 
 		# Enable ecryption if needed
+		e2e_is_active = hasattr(self, 'session') and self.session and self.session.enable_encryption
+		self.gpg_is_active = False
 		gpg_pref = gajim.config.get_per('contacts', contact.jid,
 				'gpg_enabled')
-		if gpg_pref and gajim.config.get_per('accounts', self.account, 'keyid') and\
+		if not e2e_is_active and gpg_pref and gajim.config.get_per('accounts', self.account, 'keyid') and\
 		gajim.connections[self.account].USE_GPG:
+			self.gpg_is_active = True
 			gajim.encrypted_chats[self.account].append(contact.jid)
 			msg = _('GPG encryption enabled')
 			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
@@ -1256,15 +1259,15 @@ class ChatControl(ChatControlBase):
 
 	def _toggle_gpg(self):
 		ec = gajim.encrypted_chats[self.account]
-		if self.contact.jid in ec:
+		if self.gpg_is_active:
 			# Disable encryption
 			ec.remove(self.contact.jid)
-			gpg_is_active = False
+			self.gpg_is_active = False
 			msg = _('GPG encryption disabled')
 		else:
 			# Enable encryption
 			ec.append(self.contact.jid)
-			gpg_is_active = True
+			self.gpg_is_active = True
 			msg = _('GPG encryption enabled')
 
 		gpg_pref = gajim.config.get_per('contacts', self.contact.jid,
@@ -1272,7 +1275,7 @@ class ChatControl(ChatControlBase):
 		if gpg_pref is None:
 			gajim.config.add_per('contacts', self.contact.jid)
 		gajim.config.set_per('contacts', self.contact.jid, 'gpg_enabled',
-			gpg_is_active)
+			self.gpg_is_active)
 		ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
 
 	def _process_command(self, message):
@@ -1361,9 +1364,7 @@ class ChatControl(ChatControlBase):
 		encrypted = bool(self.session) and self.session.enable_encryption
 
 		keyID = ''
-		gpg_pref = gajim.config.get_per('contacts', contact.jid,
-			'gpg_enabled')
-		if gpg_pref:
+		if self.gpg_is_active:
 			keyID = contact.keyID
 			encrypted = True
 			if keyID == '':
@@ -1506,13 +1507,12 @@ class ChatControl(ChatControlBase):
 						'status', '', tim)
 			else:
 				# GPG encryption
-				ec = gajim.encrypted_chats[self.account]
-				if encrypted and jid not in ec:
+				if encrypted and not self.gpg_is_active:
 					msg = _('The following message was encrypted')
 					ChatControlBase.print_conversation_line(self, msg, 
 						'status', '', tim)
 					self._toggle_gpg()
-				elif not encrypted and jid in ec:
+				elif not encrypted and self.gpg_is_active:
 					msg = _('The following message was NOT encrypted')
 					ChatControlBase.print_conversation_line(self, msg,
 						'status', '', tim)
@@ -1649,10 +1649,9 @@ class ChatControl(ChatControlBase):
 		gajim.jid_is_transport(jid):
 			toggle_gpg_menuitem.set_sensitive(False)
 		else:
-			toggle_gpg_menuitem.set_sensitive(True)
-			gpg_pref = gajim.config.get_per('contacts', jid,
-				'gpg_enabled')
-			toggle_gpg_menuitem.set_active(bool(gpg_pref))
+			e2e_is_active = int(self.session != None and self.session.enable_encryption)
+			toggle_gpg_menuitem.set_sensitive(not e2e_is_active)
+			toggle_gpg_menuitem.set_active(self.gpg_is_active)
 
 		# TODO: check that the remote client supports e2e
 		if not gajim.HAVE_PYCRYPTO:
@@ -1660,6 +1659,7 @@ class ChatControl(ChatControlBase):
 		else:
 			isactive = int(self.session != None and self.session.enable_encryption)
 			toggle_e2e_menuitem.set_active(isactive)
+			toggle_e2e_menuitem.set_sensitive(not self.gpg_is_active)
 
 		# If we don't have resource, we can't do file transfer
 		# in transports, contact holds our info we need to disable it too
