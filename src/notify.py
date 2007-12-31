@@ -170,6 +170,8 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 		nickname = parameters[2]
 		if gajim.config.get('notification_preview_message'):
 			message = parameters[3]
+			if message.startswith('/me ') or message.startswith('/me\n'):
+				message = '* ' + nickname + message[3:]
 		else:
 			# We don't want message preview, do_preview = False
 			message = ''
