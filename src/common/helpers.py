@@ -1100,7 +1100,7 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
 	If the given keyID is None, return UNKNOWN; if the key does not match the assigned key
 	XXXXXXXXMISMATCH is returned. If the key is trusted and not yet assigned, assign it'''
 	if gajim.connections[account].USE_GPG:	
-		if len(keyID) == 16:
+		if keyID and len(keyID) == 16:
 			keyID = keyID[8:]
 		
 		attached_keys = gajim.config.get_per('accounts', account,

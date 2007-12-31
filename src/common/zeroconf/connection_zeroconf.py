@@ -167,14 +167,16 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		if keyID and self.USE_GPG:
 			use_gpg_agent = gajim.config.get('use_gpg_agent')
 			if self.connected < 2 and self.gpg.passphrase is None and \
-				not use_gpg_agent:
+			not use_gpg_agent:
 				# We didn't set a passphrase
 				self.dispatch('ERROR', (_('OpenPGP passphrase was not given'),
 					#%s is the account name here
 					_('You will be connected to %s without OpenPGP.') % self.name))
+				self.USE_GPG = False
 			elif self.gpg.passphrase is not None or use_gpg_agent:
 				signed = self.gpg.sign(msg, keyID)
 				if signed == 'BAD_PASSPHRASE':
+					self.USE_GPG = False
 					signed = ''
 					if self.connected < 2:
 						self.dispatch('BAD_PASSPHRASE', ())
@@ -375,8 +377,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		msgtxt = msg
 		msgenc = ''
 		if keyID and self.USE_GPG:
-			# encrypt
-			msgenc, error = self.gpg.encrypt(msg, [keyID])
+			if keyID ==  'UNKNOWN':
+				error = _('Neither the remote presence is signed, nor a key was assigned.')
+			elif keyID[8:] == 'MISMATCH':
+				error = _('The contact\'s key (%s) does not match the key assigned in Gajim.' % keyID[:8])
+			else:
+				# encrypt
+				msgenc, error = self.gpg.encrypt(msg, [keyID])
 			if msgenc and not error:
 				msgtxt = '[This message is encrypted]'
 				lang = os.getenv('LANG')

@@ -1367,7 +1367,7 @@ class ChatControl(ChatControlBase):
 		if self.gpg_is_active:
 			keyID = contact.keyID
 			encrypted = True
-			if keyID == '':
+			if not keyID:
 				keyID = 'UNKNOWN'
 
 		chatstates_on = gajim.config.get('outgoing_chat_state_notifications') != \

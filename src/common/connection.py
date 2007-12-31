@@ -966,7 +966,7 @@ class Connection(ConnectionHandlers):
 			if keyID ==  'UNKNOWN':
 				error = _('Neither the remote presence is signed, nor a key was assigned.')
 			elif keyID[8:] == 'MISMATCH':
-				error =  _('The contact\'s key does not match the key assigned in Gajim.')
+				error = _('The contact\'s key (%s) does not match the key assigned in Gajim.' % keyID[:8]) 
 			else:
 				#encrypt
 				msgenc, error = self.gpg.encrypt(msg, [keyID])
