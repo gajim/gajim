@@ -3384,11 +3384,17 @@ class RosterWindow:
 		elif event.button == 1: # Left click
 			model = self.tree.get_model()
 			type_ = model[path][C_TYPE]
+			# x_min is the x start position of status icon column
+			if gajim.config.get('avatar_position_in_roster') == 'left':
+				x_min = gajim.config.get('roster_avatar_width')
+			else:
+				x_min = 0
 			if gajim.single_click and not event.state & gtk.gdk.SHIFT_MASK and \
 			not event.state & gtk.gdk.CONTROL_MASK:
 				# Don't handle dubble click if we press icon of a metacontact
 				iter = model.get_iter(path)
-				if x < 27 and type_ == 'contact' and model.iter_has_child(iter):
+				if x > xmin and x < x_min + 27 and type_ == 'contact' and \
+				model.iter_has_child(iter):
 					account = model[path][C_ACCOUNT].decode('utf-8')
 					jid = model[path][C_JID].decode('utf-8')
 					# first cell in 1st column (the arrow SINGLE clicked)
@@ -3406,14 +3412,14 @@ class RosterWindow:
 				self.on_row_activated(widget, path)
 				return
 			else:
-				if type_ == 'group' and x < 27:
+				if type_ == 'group' and x > x_min and x < x_min + 27:
 					# first cell in 1st column (the arrow SINGLE clicked)
 					if (self.tree.row_expanded(path)):
 						self.tree.collapse_row(path)
 					else:
 						self.tree.expand_row(path, False)
 
-				elif type_ == 'contact' and x < 27:
+				elif type_ == 'contact' and x > x_min and x < x_min + 27:
 					account = model[path][C_ACCOUNT].decode('utf-8')
 					jid = model[path][C_JID].decode('utf-8')
 					# first cell in 1st column (the arrow SINGLE clicked)
@@ -4819,7 +4825,8 @@ class RosterWindow:
 		theme = gajim.config.get('roster_theme')
 		type_ = model[iter][C_TYPE]
 		# allocate space for the icon only if needed
-		if model[iter][C_SECPIXBUF]:
+		if model[iter][C_SECPIXBUF] or \
+		gajim.config.get('avatar_position_in_roster') == 'left':
 			renderer.set_property('visible', True)
 		else:
 			renderer.set_property('visible', False)
@@ -4853,7 +4860,11 @@ class RosterWindow:
 					renderer.set_property('cell-background', color)
 				else:
 					renderer.set_property('cell-background', None)
-		renderer.set_property('xalign', 1) # align pixbuf to the right
+		if gajim.config.get('avatar_position_in_roster') == 'left':
+			renderer.set_property('width', gajim.config.get('roster_avatar_width'))
+			renderer.set_property('xalign', 0.5)
+		else:
+			renderer.set_property('xalign', 1) # align pixbuf to the right
 
 	def get_show(self, lcontact):
 		prio = lcontact[0].priority
@@ -5515,6 +5526,13 @@ class RosterWindow:
 		# first one img, second one text, third is sec pixbuf
 		col = gtk.TreeViewColumn()
 
+		if gajim.config.get('avatar_position_in_roster') == 'left':
+			render_pixbuf = gtk.CellRendererPixbuf() # tls or avatar img
+			col.pack_start(render_pixbuf, expand = False)
+			col.add_attribute(render_pixbuf, 'pixbuf', C_SECPIXBUF)
+			col.set_cell_data_func(render_pixbuf,
+				self.fill_secondary_pixbuf_rederer, None)
+
 		render_image = cell_renderer_image.CellRendererImage(0, 0)
 		# show img or +-
 		col.pack_start(render_image, expand = False)
@@ -5527,15 +5545,16 @@ class RosterWindow:
 		col.add_attribute(render_text, 'markup', C_NAME) # where we hold the name
 		col.set_cell_data_func(render_text, self.nameCellDataFunc, None)
 
-		render_pixbuf = gtk.CellRendererPixbuf() # tls or avatar img
-		col.pack_start(render_pixbuf, expand = False)
-		col.add_attribute(render_pixbuf, 'pixbuf', C_SECPIXBUF)
-		col.set_cell_data_func(render_pixbuf, self.fill_secondary_pixbuf_rederer,
-			None)
+		if gajim.config.get('avatar_position_in_roster') == 'right':
+			render_pixbuf = gtk.CellRendererPixbuf() # tls or avatar img
+			col.pack_start(render_pixbuf, expand = False)
+			col.add_attribute(render_pixbuf, 'pixbuf', C_SECPIXBUF)
+			col.set_cell_data_func(render_pixbuf,
+				self.fill_secondary_pixbuf_rederer, None)
 
 		self.tree.append_column(col)
 
-		#do not show gtk arrows workaround
+		# do not show gtk arrows workaround
 		col = gtk.TreeViewColumn()
 		render_pixbuf = gtk.CellRendererPixbuf()
 		col.pack_start(render_pixbuf, expand = False)
@@ -5543,7 +5562,7 @@ class RosterWindow:
 		col.set_visible(False)
 		self.tree.set_expander_column(col)
 
-		#signals
+		# signals
 		self.TARGET_TYPE_URI_LIST = 80
 		TARGETS = [('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_APP | gtk.TARGET_SAME_WIDGET,
 			0)]
