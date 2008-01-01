@@ -1307,18 +1307,18 @@ class RosterWindow:
 		gajim.contacts.clear_contacts(account)
 		for jid in array.keys():
 			jids = jid.split('/')
-			#get jid
+			# get jid
 			ji = jids[0]
-			#get resource
+			# get resource
 			resource = ''
 			if len(jids) > 1:
 				resource = '/'.join(jids[1:])
-			#get name
+			# get name
 			name = array[jid]['name']
 			if not name:
 				name = ''
 			show = 'offline' # show is offline by default
-			status = '' #no status message by default
+			status = '' # no status message by default
 
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,
