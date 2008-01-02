@@ -1145,12 +1145,6 @@ class RosterWindow:
 			pep_services_sub_menu = gtk.Menu()
 			for account in connected_accounts_with_vcard:
 				if gajim.connections[account].pep_supported:
-					# profile, avatar
-					profile_avatar_item = gtk.MenuItem(_('of account %s') % account,
-						False)
-					profile_avatar_sub_menu.append(profile_avatar_item)
-					profile_avatar_item.connect('activate',
-						self.on_profile_avatar_menuitem_activate, account)
 					# PEP services
 					pep_services_item = gtk.MenuItem(_('of account %s') % account,
 						False)

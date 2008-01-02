@@ -2240,7 +2240,7 @@ class GroupchatControl(ChatControlBase):
 			gajim.interface.instances[self.account]['infos'][c2.jid].window.\
 				present()
 		else:
-		gajim.interface.instances[self.account]['infos'][c2.jid] = \
+			gajim.interface.instances[self.account]['infos'][c2.jid] = \
 				vcard.VcardWindow(c2, self.account, c)
 
 	def on_history(self, widget, nick):
