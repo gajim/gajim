@@ -73,8 +73,9 @@ C_NAME, # cellrenderer text that holds contact nickame
 C_TYPE, # account, group or contact?
 C_JID, # the jid of the row
 C_ACCOUNT, # cellrenderer text that holds account name
-C_SECPIXBUF, # secondary_pixbuf (holds avatar or padlock)
-) = range(6)
+C_AVATAR_PIXBUF, # avatar_pixbuf
+C_PADLOCK_PIXBUF, # use for account row only
+) = range(7)
 
 class RosterWindow:
 	'''Class for main window of the GTK+ interface'''
@@ -190,7 +191,7 @@ class RosterWindow:
 		if self.regroup:
 			show = helpers.get_global_show()
 			model.append(None, [self.jabber_state_images['16'][show],
-				_('Merged accounts'), 'account', '', 'all', None])
+				_('Merged accounts'), 'account', '', 'all', None, None])
 			self.draw_account(account)
 			return
 
@@ -205,7 +206,7 @@ class RosterWindow:
 
 		model.append(None, [self.jabber_state_images['16'][show],
 			gobject.markup_escape_text(account),
-			'account', our_jid, account, tls_pixbuf])
+			'account', our_jid, account, None, tls_pixbuf])
 
 	def draw_account(self, account):
 		model = self.tree.get_model()
@@ -238,9 +239,9 @@ class RosterWindow:
 						new_pixels += chr(128)
 				tls_pixbuf = gtk.gdk.pixbuf_new_from_data(new_pixels, colorspace,
 					True, bps, width, height, rowstride)
-			model[iter][C_SECPIXBUF] = tls_pixbuf
+			model[iter][C_PADLOCK_PIXBUF] = tls_pixbuf
 		else:
-			model[iter][C_SECPIXBUF] = None
+			model[iter][C_PADLOCK_PIXBUF] = None
 		path = model.get_path(iter)
 		account_name = account
 		accounts = [account]
@@ -342,7 +343,8 @@ class RosterWindow:
 				name = contact.get_shown_name()
 				for i in parent_iters:
 					# we add some values here. see draw_contact for more
-					model.append(i, (None, name, 'contact', jid, account, None))
+					model.append(i, (None, name, 'contact', jid, account, None,
+						None))
 				self.draw_contact(jid, account)
 				self.draw_avatar(jid, account)
 				self.draw_account(account)
@@ -377,7 +379,7 @@ class RosterWindow:
 				iterG = model.append(IterAcct, [
 					self.jabber_state_images['16']['closed'],
 					gobject.markup_escape_text(group), 'group',
-					group, account, None])
+					group, account, None, None])
 				self.draw_group(group, account)
 				if model.iter_n_children(IterAcct) == 1: # We added the first one
 					self.draw_account(account)
@@ -398,7 +400,8 @@ class RosterWindow:
 
 			name = contact.get_shown_name()
 			# we add some values here. see draw_contact for more
-			model.append(iterG, (None, name, typestr, contact.jid, account, None))
+			model.append(iterG, (None, name, typestr, contact.jid, account, None,
+				None))
 
 			if gajim.groups[account][group]['expand']:
 				self.tree.expand_row(model.get_path(iterG), False)
@@ -493,7 +496,7 @@ class RosterWindow:
 		model = self.tree.get_model()
 		iterAcct = self.get_account_iter(account)
 		model.append(iterAcct, (None, gajim.nicks[account], 'self_contact', jid,
-			account, None))
+			account, None, None))
 		self.draw_contact(jid, account)
 		self.draw_avatar(jid, account)
 
@@ -762,7 +765,7 @@ class RosterWindow:
 		else:
 			scaled_pixbuf = None
 		for iter in iters:
-			model[iter][C_SECPIXBUF] = scaled_pixbuf
+			model[iter][C_AVATAR_PIXBUF] = scaled_pixbuf
 
 	def join_gc_room(self, account, room_jid, nick, password, minimize=False,
 		is_continued=False):
@@ -3412,7 +3415,7 @@ class RosterWindow:
 				self.on_row_activated(widget, path)
 				return
 			else:
-				if type_ == 'group' and x > x_min and x < x_min + 27:
+				if type_ == 'group' and x < 27:
 					# first cell in 1st column (the arrow SINGLE clicked)
 					if (self.tree.row_expanded(path)):
 						self.tree.collapse_row(path)
@@ -3902,7 +3905,7 @@ class RosterWindow:
 			else:
 				# No need to redraw contacts if we're quitting
 				if accountIter:
-					model[accountIter][C_SECPIXBUF] = None
+					model[accountIter][C_AVATAR_PIXBUF] = None
 				if gajim.con_types.has_key(account):
 					gajim.con_types[account] = None
 				for jid in gajim.contacts.get_jid_list(account):
@@ -4818,33 +4821,24 @@ class RosterWindow:
 			else:
 				renderer.set_property('xpad', 8)
 
-	def fill_secondary_pixbuf_rederer(self, column, renderer, model, iter,
+	def fill_avatar_pixbuf_rederer(self, column, renderer, model, iter,
 	data = None):
-		'''When a row is added, set properties for secondary renderer (avatar or
-		padlock)'''
+		'''When a row is added, set properties for avatar renderer'''
 		theme = gajim.config.get('roster_theme')
 		type_ = model[iter][C_TYPE]
+		if type_ in ('group', 'account'):
+			renderer.set_property('visible', False)
+			return
+
 		# allocate space for the icon only if needed
-		if model[iter][C_SECPIXBUF] or \
+		if model[iter][C_AVATAR_PIXBUF] or \
 		gajim.config.get('avatar_position_in_roster') == 'left':
 			renderer.set_property('visible', True)
 		else:
 			renderer.set_property('visible', False)
-		if type_ == 'account':
-			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
-			if color:
-				renderer.set_property('cell-background', color)
-			else:
-				self.set_renderer_color(renderer, gtk.STATE_ACTIVE)
-		elif type_ == 'group':
-			color = gajim.config.get_per('themes', theme, 'groupbgcolor')
-			if color:
-				renderer.set_property('cell-background', color)
-			else:
-				self.set_renderer_color(renderer, gtk.STATE_PRELIGHT)
-		elif type_: # prevent type_ = None, see http://trac.gajim.org/ticket/2534
+		if type_: # prevent type_ = None, see http://trac.gajim.org/ticket/2534
 			if not model[iter][C_JID] or not model[iter][C_ACCOUNT]:
-				# This can append when at the moment we add the row
+				# This can append at the moment we add the row
 				return
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
@@ -4865,6 +4859,23 @@ class RosterWindow:
 			renderer.set_property('xalign', 0.5)
 		else:
 			renderer.set_property('xalign', 1) # align pixbuf to the right
+
+	def fill_padlock_pixbuf_rederer(self, column, renderer, model, iter,
+	data = None):
+		'''When a row is added, set properties for padlock renderer'''
+		theme = gajim.config.get('roster_theme')
+		type_ = model[iter][C_TYPE]
+		# allocate space for the icon only if needed
+		if type_ == 'account' and model[iter][C_PADLOCK_PIXBUF]:
+			renderer.set_property('visible', True)
+			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
+			if color:
+				renderer.set_property('cell-background', color)
+			else:
+				self.set_renderer_color(renderer, gtk.STATE_ACTIVE)
+			renderer.set_property('xalign', 1) # align pixbuf to the right
+		else:
+			renderer.set_property('visible', False)
 
 	def get_show(self, lcontact):
 		prio = lcontact[0].priority
@@ -5427,8 +5438,9 @@ class RosterWindow:
 		self.popups_notification_height = 0
 		self.popup_notification_windows = []
 
-		#(icon, name, type, jid, account, editable, secondary_pixbuf)
-		model = gtk.TreeStore(gtk.Image, str, str, str, str, gtk.gdk.Pixbuf)
+		#(icon, name, type, jid, account, editable, avatar_pixbuf, padlock_pixbuf)
+		model = gtk.TreeStore(gtk.Image, str, str, str, str, gtk.gdk.Pixbuf,
+			gtk.gdk.Pixbuf)
 
 		model.set_sort_func(1, self.compareIters)
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
@@ -5526,12 +5538,15 @@ class RosterWindow:
 		# first one img, second one text, third is sec pixbuf
 		col = gtk.TreeViewColumn()
 
-		if gajim.config.get('avatar_position_in_roster') == 'left':
-			render_pixbuf = gtk.CellRendererPixbuf() # tls or avatar img
+		def add_avatar_renderer():
+			render_pixbuf = gtk.CellRendererPixbuf() # avatar img
 			col.pack_start(render_pixbuf, expand = False)
-			col.add_attribute(render_pixbuf, 'pixbuf', C_SECPIXBUF)
+			col.add_attribute(render_pixbuf, 'pixbuf', C_AVATAR_PIXBUF)
 			col.set_cell_data_func(render_pixbuf,
-				self.fill_secondary_pixbuf_rederer, None)
+				self.fill_avatar_pixbuf_rederer, None)
+
+		if gajim.config.get('avatar_position_in_roster') == 'left':
+			add_avatar_renderer()
 
 		render_image = cell_renderer_image.CellRendererImage(0, 0)
 		# show img or +-
@@ -5540,18 +5555,19 @@ class RosterWindow:
 		col.set_cell_data_func(render_image, self.iconCellDataFunc, None)
 
 		render_text = gtk.CellRendererText() # contact or group or account name
-		render_text.set_property("ellipsize", pango.ELLIPSIZE_END)
+		render_text.set_property('ellipsize', pango.ELLIPSIZE_END)
 		col.pack_start(render_text, expand = True)
 		col.add_attribute(render_text, 'markup', C_NAME) # where we hold the name
 		col.set_cell_data_func(render_text, self.nameCellDataFunc, None)
 
 		if gajim.config.get('avatar_position_in_roster') == 'right':
-			render_pixbuf = gtk.CellRendererPixbuf() # tls or avatar img
-			col.pack_start(render_pixbuf, expand = False)
-			col.add_attribute(render_pixbuf, 'pixbuf', C_SECPIXBUF)
-			col.set_cell_data_func(render_pixbuf,
-				self.fill_secondary_pixbuf_rederer, None)
+			add_avatar_renderer()
 
+		render_pixbuf = gtk.CellRendererPixbuf() # tls/ssl img
+		col.pack_start(render_pixbuf, expand = False)
+		col.add_attribute(render_pixbuf, 'pixbuf', C_PADLOCK_PIXBUF)
+		col.set_cell_data_func(render_pixbuf,
+			self.fill_padlock_pixbuf_rederer, None)
 		self.tree.append_column(col)
 
 		# do not show gtk arrows workaround

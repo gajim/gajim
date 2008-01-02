@@ -72,12 +72,19 @@ def tree_cell_data_func(column, renderer, model, iter, tv=None):
 	# reference to GroupchatControl instance (self)
 	theme = gajim.config.get('roster_theme')
 	# allocate space for avatar only if needed
+	parent_iter = model.iter_parent(iter)
 	if isinstance(renderer, gtk.CellRendererPixbuf):
-		if model[iter][C_AVATAR]:
+		avatar_position = gajim.config.get('avatar_position_in_roster')
+		if avatar_position == 'right':
+			renderer.set_property('xalign', 1) # align pixbuf to the right
+		else:
+			renderer.set_property('xalign', 0.5)
+		if parent_iter and (model[iter][C_AVATAR] or avatar_position == 'left'):
 			renderer.set_property('visible', True)
+			renderer.set_property('width', gajim.config.get('roster_avatar_width'))
 		else:
 			renderer.set_property('visible', False)
-	if model.iter_parent(iter):
+	if parent_iter:
 		bgcolor = gajim.config.get_per('themes', theme, 'contactbgcolor')
 		if bgcolor:
 			renderer.set_property('cell-background', bgcolor)
@@ -301,6 +308,16 @@ class GroupchatControl(ChatControlBase):
 		# first one img, second one text, third is sec pixbuf
 		column = gtk.TreeViewColumn()
 
+		def add_avatar_renderer():
+			renderer_pixbuf = gtk.CellRendererPixbuf() # avatar image
+			column.pack_start(renderer_pixbuf, expand = False)
+			column.add_attribute(renderer_pixbuf, 'pixbuf', C_AVATAR)
+			column.set_cell_data_func(renderer_pixbuf, tree_cell_data_func,
+				self.list_treeview)
+
+		if gajim.config.get('avatar_position_in_roster') == 'left':
+			add_avatar_renderer()
+
 		renderer_image = cell_renderer_image.CellRendererImage(0, 0) # status img
 		renderer_image.set_property('width', 26)
 		column.pack_start(renderer_image, expand = False)
@@ -315,12 +332,8 @@ class GroupchatControl(ChatControlBase):
 		column.set_cell_data_func(renderer_text, tree_cell_data_func,
 			self.list_treeview)
 
-		renderer_pixbuf = gtk.CellRendererPixbuf() # avatar image
-		column.pack_start(renderer_pixbuf, expand = False)
-		column.add_attribute(renderer_pixbuf, 'pixbuf', C_AVATAR)
-		column.set_cell_data_func(renderer_pixbuf, tree_cell_data_func,
-			self.list_treeview)
-		renderer_pixbuf.set_property('xalign', 1) # align pixbuf to the right
+		if gajim.config.get('avatar_position_in_roster') == 'right':
+			add_avatar_renderer()
 
 		self.list_treeview.append_column(column)
 
@@ -2086,12 +2099,7 @@ class GroupchatControl(ChatControlBase):
 				if not nick in gajim.contacts.get_nick_list(self.account,
 				self.room_jid):
 					# it's a group
-					col = widget.get_column(0)
-					avatar_cell = col.get_cell_renderers()[0]
-					(pos, avatar_size) = col.cell_get_position(avatar_cell)
-					status_cell = col.get_cell_renderers()[1]
-					(pos, status_size) = col.cell_get_position(status_cell)
-					if x > avatar_size and x < avatar_size + status_size:
+					if x < 27:
 						if (widget.row_expanded(path)):
 							widget.collapse_row(path)
 						else:
@@ -2232,7 +2240,7 @@ class GroupchatControl(ChatControlBase):
 			gajim.interface.instances[self.account]['infos'][c2.jid].window.\
 				present()
 		else:
-			gajim.interface.instances[self.account]['infos'][c2.jid] = \
+		gajim.interface.instances[self.account]['infos'][c2.jid] = \
 				vcard.VcardWindow(c2, self.account, c)
 
 	def on_history(self, widget, nick):
