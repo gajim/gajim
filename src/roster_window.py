@@ -3390,7 +3390,7 @@ class RosterWindow:
 			not event.state & gtk.gdk.CONTROL_MASK:
 				# Don't handle dubble click if we press icon of a metacontact
 				iter = model.get_iter(path)
-				if x > xmin and x < x_min + 27 and type_ == 'contact' and \
+				if x > x_min and x < x_min + 27 and type_ == 'contact' and \
 				model.iter_has_child(iter):
 					account = model[path][C_ACCOUNT].decode('utf-8')
 					jid = model[path][C_JID].decode('utf-8')
