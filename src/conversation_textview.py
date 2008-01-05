@@ -213,10 +213,9 @@ class ConversationTextview:
 
 		colors = gajim.config.get('gc_nicknames_colors')
 		colors = colors.split(':')
-		for color in xrange(len(colors)):
-			tagname = 'gc_nickname_color_' + str(color)
+		for i,color in enumerate(colors):
+			tagname = 'gc_nickname_color_' + str(i)
 			tag = buffer.create_tag(tagname)
-			color = colors[color]
 			tag.set_property('foreground', color)
 
 		tag = buffer.create_tag('marked')

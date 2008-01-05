@@ -235,6 +235,12 @@ class GroupchatControl(ChatControlBase):
 
 		self.tooltip = tooltips.GCTooltip()
 
+		# nickname coloring
+		self.gc_count_nicknames_colors = 0
+		self.gc_custom_colors = {} 
+		self.number_of_colors = len(gajim.config.get('gc_nicknames_colors').\
+			split(':'))
+
 		# connect the menuitems to their respective functions
 		xm = gtkgui_helpers.get_glade('gc_control_popup_menu.glade')
 
@@ -652,9 +658,6 @@ class GroupchatControl(ChatControlBase):
 				fin = True
 		return None
 
-	gc_count_nicknames_colors = 0
-	gc_custom_colors = {}  
-
 	def print_old_conversation(self, text, contact = '', tim = None,
 	xhtml = None):
 		if isinstance(text, str):
@@ -705,9 +708,7 @@ class GroupchatControl(ChatControlBase):
 					str(self.gc_custom_colors[contact]))
 			else:
 				self.gc_count_nicknames_colors += 1
-				number_of_colors = len(gajim.config.get('gc_nicknames_colors').\
-					split(':'))
-				if self.gc_count_nicknames_colors == number_of_colors:
+				if self.gc_count_nicknames_colors == self.number_of_colors:
 					self.gc_count_nicknames_colors = 0				
 				self.gc_custom_colors[contact] = \
 					self.gc_count_nicknames_colors
