@@ -475,6 +475,15 @@ class Contacts:
 			return 1
 		if show2 > show1:
 			return -1
+		server1 = gajim.get_server_from_jid(jid1)
+		server2 = gajim.get_server_from_jid(jid2)
+		myserver1 = gajim.config.get_per('accounts', account1, 'hostname')
+		myserver2 = gajim.config.get_per('accounts', account2, 'hostname')
+		if server1 == myserver1:
+			if server2 != myserver2:
+				return 1
+		elif server2 == myserver2:
+			return -1
 		if jid1 > jid2:
 			return 1
 		if jid2 > jid1:
