@@ -85,7 +85,7 @@ class FeaturesWindow:
 				_('Feature not available under Windows.')),
 			_('Trayicon'): (self.trayicon_available,
 				_('A icon in systemtray reflecting the current presence.'), 
-				_('Requires python-gnome2-extras or compiled  trayicon module from Gajim sources.'),
+				_('Requires python-gnome2-extras or compiled trayicon module from Gajim sources.'),
 				_('Requires PyGTK >= 2.10.')),
 			_('Idle'): (self.idle_available,
 				_('Ability to measure idle time, in order to set auto status.'),
