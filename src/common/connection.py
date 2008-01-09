@@ -737,6 +737,17 @@ class Connection(ConnectionHandlers):
 	def send_invisible_presence(self, msg, signed, initial = False):
 		if not self.connection:
 			return
+		# If we are already connected, and privacy rules are supported, send
+		# offline presence first as it's required by XEP-0126
+		if self.connected > 1 and self.privacy_rules_supported:
+			self.on_purpose = True
+			p = common.xmpp.Presence(typ = 'unavailable')
+			p = self.add_sha(p, False)
+			if msg:
+				p.setStatus(msg)
+			self.remove_all_transfers()
+			self.connection.send(p)
+
 		# try to set the privacy rule
 		iq = self.build_privacy_rule('invisible', 'deny')
 		self.connection.SendAndCallForResponse(iq, self._continue_invisible,
@@ -745,8 +756,7 @@ class Connection(ConnectionHandlers):
 	def _continue_invisible(self, con, iq_obj, msg, signed, initial):
 		ptype = ''
 		show = ''
-		# FIXME: JEP 126 need some modifications (see http://lists.jabber.ru/pipermail/ejabberd/2005-July/001252.html). So I disable it for the moment
-		if 1 or iq_obj.getType() == 'error': #server doesn't support privacy lists
+		if iq_obj.getType() == 'error': # server doesn't support privacy lists
 			# We use the old way which is not xmpp complient
 			ptype = 'invisible'
 			show = 'invisible'
