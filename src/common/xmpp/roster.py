@@ -87,7 +87,11 @@ class Roster(PlugIn):
     def PresenceHandler(self,dis,pres):
         """ Presence tracker. Used internally for setting items' resources state in
             internal roster representation. """
-        jid=JID(pres.getFrom())
+        jid=pres.getFrom()
+        if not jid:
+            # If no from attribue, it's from server
+            jid=self._owner.Server
+        jid=JID(jid)
         if not self._data.has_key(jid.getStripped()): self._data[jid.getStripped()]={'name':None,'ask':None,'subscription':'none','groups':['Not in roster'],'resources':{}}
         if type(self._data[jid.getStripped()]['resources'])!=type(dict()):
             self._data[jid.getStripped()]['resources']={}
