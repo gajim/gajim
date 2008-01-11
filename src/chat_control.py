@@ -1017,7 +1017,11 @@ class ChatControl(ChatControlBase):
 		self.chat_buttons_set_visible(compact_view)
 		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
 			gajim.config.get('hide_chat_banner'))
-
+		
+		# Add lock image to show chat encryption
+		self.lock_image = self.xml.get_widget('lock_image')
+		self.lock_tooltip = gtk.Tooltips()
+		
 		# keep timeout id and window obj for possible big avatar
 		# it is on enter-notify and leave-notify so no need to be per jid
 		self.show_bigger_avatar_timeout_id = None
@@ -1063,6 +1067,7 @@ class ChatControl(ChatControlBase):
 			gajim.encrypted_chats[self.account].append(contact.jid)
 			msg = _('GPG encryption enabled')
 			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+			self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active, True)
 		
 		self.status_tooltip = gtk.Tooltips()
 		self.update_ui()
@@ -1277,6 +1282,18 @@ class ChatControl(ChatControlBase):
 		gajim.config.set_per('contacts', self.contact.jid, 'gpg_enabled',
 			self.gpg_is_active)
 		ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+		self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active, True)
+	
+	def _show_lock_image(self, visible, enc_type = '', enc_enabled = False, chat_logged = False):
+		'''Set lock icon visibiity and create tooltip''' 
+		status_string = enc_enabled and 'is' or 'is NOT'
+		logged_string = chat_logged and 'will' or 'will NOT'
+		tooltip = '%s Encryption %s active. \nYour chat session %s be logged.' %\
+			(enc_type, status_string, logged_string)
+
+		self.lock_tooltip.set_tip(self.lock_image, tooltip)
+		self.widget_set_visible(self.lock_image, not visible)
+		self.lock_image.set_sensitive(enc_enabled)
 
 	def _process_command(self, message):
 		if message[0] != '/':
@@ -1465,9 +1482,10 @@ class ChatControl(ChatControlBase):
 		msg = _('Session negotiation cancelled')
 		ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
 
-	# print esession settings to textview
 	def print_esession_details(self):
-		if self.session and self.session.enable_encryption:
+		'''print esession settings to textview'''
+		e2e_is_active = self.session and self.session.enable_encryption
+		if e2e_is_active:
 			msg = _('E2E encryption enabled')
 			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
 
@@ -1480,6 +1498,8 @@ class ChatControl(ChatControlBase):
 		else:
 			msg = _('E2E encryption disabled')
 			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+		self._show_lock_image(e2e_is_active, 'E2E', e2e_is_active, self.session and \
+				self.session.loggable) 
 
 	def print_conversation(self, text, frm = '', tim = None,
 		encrypted = False, subject = None, xhtml = None):
