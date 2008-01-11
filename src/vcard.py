@@ -178,8 +178,6 @@ class VcardWindow:
 			pass
 
 	def set_values(self, vcard):
-		if not 'PHOTO' in vcard:
-			self.xml.get_widget('no_user_avatar_label').show()
 		for i in vcard.keys():
 			if i == 'PHOTO' and self.xml.get_widget('information_notebook').\
 			get_n_pages() > 4:
@@ -187,6 +185,7 @@ class VcardWindow:
 					get_avatar_pixbuf_encoded_mime(vcard[i])
 				image = self.xml.get_widget('PHOTO_image')
 				image.show()
+				self.xml.get_widget('user_avatar_label').show()
 				if not pixbuf:
 					image.set_from_icon_name('stock_person',
 						gtk.ICON_SIZE_DIALOG)

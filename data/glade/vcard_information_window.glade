@@ -54,6 +54,7 @@
                                 <property name="xpad">5</property>
                                 <property name="ypad">5</property>
                                 <property name="selectable">True</property>
+                                <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
                               </widget>
                             </child>
                           </widget>
@@ -218,24 +219,13 @@
                         <property name="visible">True</property>
                         <property name="spacing">6</property>
                         <child>
-                          <widget class="GtkLabel" id="label59">
-                            <property name="visible">True</property>
+                          <widget class="GtkLabel" id="user_avatar_label">
+                            <property name="no_show_all">True</property>
                             <property name="label" translatable="yes">User avatar:</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="no_user_avatar_label">
-                            <property name="no_show_all">True</property>
-                            <property name="label" translatable="yes">None</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
@@ -254,7 +244,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">2</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
@@ -265,7 +255,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">3</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                         <child>
@@ -277,11 +267,12 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">4</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                       </widget>
                       <packing>
+                        <property name="expand">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -384,9 +375,6 @@
                   </packing>
                 </child>
               </widget>
-              <packing>
-                <property name="tab_expand">False</property>
-              </packing>
             </child>
             <child>
               <widget class="GtkLabel" id="label3">
@@ -397,7 +385,6 @@
               </widget>
               <packing>
                 <property name="type">tab</property>
-                <property name="tab_expand">False</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -1014,7 +1001,6 @@
               </widget>
               <packing>
                 <property name="position">1</property>
-                <property name="tab_expand">False</property>
               </packing>
             </child>
             <child>
@@ -1027,7 +1013,6 @@
               <packing>
                 <property name="type">tab</property>
                 <property name="position">1</property>
-                <property name="tab_expand">False</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -1459,7 +1444,6 @@
               </widget>
               <packing>
                 <property name="position">2</property>
-                <property name="tab_expand">False</property>
               </packing>
             </child>
             <child>
@@ -1472,7 +1456,6 @@
               <packing>
                 <property name="type">tab</property>
                 <property name="position">2</property>
-                <property name="tab_expand">False</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -1497,7 +1480,6 @@
               </widget>
               <packing>
                 <property name="position">3</property>
-                <property name="tab_expand">False</property>
               </packing>
             </child>
             <child>
@@ -1510,7 +1492,6 @@
               <packing>
                 <property name="type">tab</property>
                 <property name="position">3</property>
-                <property name="tab_expand">False</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -1533,7 +1514,6 @@
               </widget>
               <packing>
                 <property name="position">4</property>
-                <property name="tab_expand">False</property>
               </packing>
             </child>
             <child>
@@ -1544,7 +1524,6 @@
               <packing>
                 <property name="type">tab</property>
                 <property name="position">4</property>
-                <property name="tab_expand">False</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -1588,6 +1567,7 @@
             </child>
           </widget>
           <packing>
+            <property name="expand">False</property>
             <property name="position">2</property>
           </packing>
         </child>
