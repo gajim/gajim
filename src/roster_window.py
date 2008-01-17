@@ -5323,6 +5323,11 @@ class RosterWindow:
 			self._last_selected_contact.append((jid, account))
 			self.draw_contact(jid, account, selected = True)
 
+	def search_roster_func(self, model, column, key, iter):
+		if model[iter][C_NAME].decode('utf-8').startswith(gobject.markup_escape_text(key)):
+			return False
+		return True
+
 	def setup_for_osx(self):
 		# Massage the GTK menu so it will match up to the OS/X nib style menu
 		# when passed to sync-menu and merged
@@ -5564,6 +5569,9 @@ class RosterWindow:
 		self.tree.append_column(col)
 		col.set_visible(False)
 		self.tree.set_expander_column(col)
+
+		# set search function
+		self.tree.set_search_equal_func(self.search_roster_func)
 
 		# signals
 		self.TARGET_TYPE_URI_LIST = 80
