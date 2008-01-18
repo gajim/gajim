@@ -286,7 +286,7 @@ class TestCommand(Command_Handler_Prototype):
         reply = request.buildReply('result')
         form = DataForm(title='Select type of operation',data=['Use the combobox to select the type of calculation you would like to do, then click Next',DataField(name='calctype',label='Calculation Type',value=sessions[session]['data']['type'],options=[['circlediameter','Calculate the Diameter of a circle'],['circlearea','Calculate the area of a circle']],typ='list-single',required=1)])
         replypayload = [Node('actions',attrs={'execute':'next'},payload=[Node('next')]),form]
-        reply.addChild(name='command',attrs={'xmlns':NS_COMMAND,'node':request.getTagAttr('command','node'),'sessionid':session,'status':'executing'},payload=replypayload)
+        reply.addChild(name='command',namespace=NS_COMMAND,attrs={'node':request.getTagAttr('command','node'),'sessionid':session,'status':'executing'},payload=replypayload)
         self._owner.send(reply)
         raise NodeProcessed
 
@@ -301,7 +301,7 @@ class TestCommand(Command_Handler_Prototype):
         reply = request.buildReply('result')
         form = DataForm(title = 'Enter the radius', data=['Enter the radius of the circle (numbers only)',DataField(label='Radius',name='radius',typ='text-single')])
         replypayload = [Node('actions',attrs={'execute':'complete'},payload=[Node('complete'),Node('prev')]),form]
-        reply.addChild(name='command',attrs={'xmlns':NS_COMMAND,'node':request.getTagAttr('command','node'),'sessionid':request.getTagAttr('command','sessionid'),'status':'executing'},payload=replypayload)
+        reply.addChild(name='command',namespace=NS_COMMAND,attrs={'node':request.getTagAttr('command','node'),'sessionid':request.getTagAttr('command','sessionid'),'status':'executing'},payload=replypayload)
         self._owner.send(reply)
         raise NodeProcessed
         
@@ -317,13 +317,13 @@ class TestCommand(Command_Handler_Prototype):
             result = num*2*pi
         reply = result.buildReply(request)
         form = DataForm(typ='result',data=[DataField(label='result',name='result',value=result)])
-        reply.addChild(name='command',attrs={'xmlns':NS_COMMAND,'node':request.getTagAttr('command','node'),'sessionid':request.getTagAttr('command','sessionid'),'status':'completed'},payload=form)
+        reply.addChild(name='command',namespace=NS_COMMAND,attrs={'node':request.getTagAttr('command','node'),'sessionid':request.getTagAttr('command','sessionid'),'status':'completed'},payload=form)
         self._owner.send(reply)
         raise NodeProcessed
         
     def cmdCancel(self,conn,request):
         reply = request.buildReply('result')
-        reply.addChild(name='command',attrs={'xmlns':NS_COMMAND,'node':request.getTagAttr('command','node'),'sessionid':request.getTagAttr('command','sessionid'),'status':'cancelled'})
+        reply.addChild(name='command',namespace=NS_COMMAND,attrs={'node':request.getTagAttr('command','node'),'sessionid':request.getTagAttr('command','sessionid'),'status':'cancelled'})
         self._owner.send(reply)
         del sessions[request.getTagAttr('command','sessionid')]
             

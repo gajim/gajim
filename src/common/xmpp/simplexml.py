@@ -12,7 +12,8 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-# $Id: simplexml.py,v 1.27 2005/04/30 07:20:27 snakeru Exp $
+# Based on:
+# $Id: simplexml.py,v 1.33 2007/09/11 12:46:16 normanr Exp $
 
 """Simplexml module provides xmpppy library with all needed tools to handle XML nodes and XML streams.
 I'm personally using it in many other separate projects. It is designed to be as standalone as possible."""
@@ -77,7 +78,7 @@ class Node(object):
 		if isinstance(payload, basestring): payload=[payload]
 		for i in payload:
 			if isinstance(i, Node): self.addChild(node=i)
-			else: self.data.append(ustr(i))
+			else: self.addData(i)
 
 	def __str__(self,fancy=0):
 		""" Method used to dump node into textual representation.
@@ -96,7 +97,7 @@ class Node(object):
 			for a in self.kids:
 				if not fancy and (len(self.data)-1)>=cnt: s=s+XMLescape(self.data[cnt])
 				elif (len(self.data)-1)>=cnt: s=s+XMLescape(self.data[cnt].strip())
-				s = s + a.__str__(fancy and fancy+1)
+				if a: s = s + a.__str__(fancy and fancy+1)
 				cnt=cnt+1
 		if not fancy and (len(self.data)-1) >= cnt: s = s + XMLescape(self.data[cnt])
 		elif (len(self.data)-1) >= cnt: s = s + XMLescape(self.data[cnt].strip())
@@ -108,19 +109,36 @@ class Node(object):
 			s = s + "</" + self.name + ">"
 			if fancy: s = s + "\n"
 		return s
+	def getCDATA(self):
+		""" Serialise node, dropping all tags and leaving CDATA intact.
+			That is effectively kills all formatiing, leaving only text were contained in XML.
+		"""
+		s = ""
+		cnt = 0
+		if self.kids:
+			for a in self.kids:
+				s=s+self.data[cnt]
+				if a: s = s + a.getCDATA()
+				cnt=cnt+1
+		if (len(self.data)-1) >= cnt: s = s + self.data[cnt]
+		return s
 	def addChild(self, name=None, attrs={}, payload=[], namespace=None, node=None):
 		""" If "node" argument is provided, adds it as child node. Else creates new node from
 			the other arguments' values and adds it as well."""
+		if attrs.has_key('xmlns'):
+			raise AttributeError("Use namespace=x instead of attrs={'xmlns':x}")
 		if namespace: name=namespace+' '+name
 		if node:
 			newnode=node
 			node.parent = self
 		else: newnode=Node(tag=name, parent=self, attrs=attrs, payload=payload)
 		self.kids.append(newnode)
+		self.data.append(u'')
 		return newnode
 	def addData(self, data):
 		""" Adds some CDATA to node. """
 		self.data.append(ustr(data))
+		self.kids.append(None)
 	def clearData(self):
 		""" Removes all CDATA from the node. """
 		self.data=[]
@@ -131,7 +149,7 @@ class Node(object):
 		""" Deletes the "node" from the node's childs list, if "node" is an instance.
 			Else deletes the first node that have specified name and (optionally) attributes. """
 		if not isinstance(node, Node): node=self.getTag(node,attrs)
-		self.kids.remove(node)
+		self.kids[self.kids.index(node)]=None
 		return node
 	def getAttrs(self):
 		""" Returns all node's attributes as dictionary. """
@@ -160,12 +178,9 @@ class Node(object):
 			F.e. for "<node>text1<nodea/><nodeb/> text2</node>" will be returned list:
 			['text1', <nodea instance>, <nodeb instance>, ' text2']. """
 		ret=[]
-		for i in range(len(self.kids)+len(self.data)+1):
-			try:
-				if self.data[i]: ret.append(self.data[i])
-			except IndexError: pass
-			try: ret.append(self.kids[i])
-			except IndexError: pass
+		for i in range(max(len(self.data),len(self.kids))):
+			if i < len(self.data) and self.data[i]: ret.append(self.data[i])
+			if i < len(self.kids) and self.kids[i]: ret.append(self.kids[i])
 		return ret
 	def getTag(self, name, attrs={}, namespace=None): 
 		""" Filters all child nodes using specified arguments as filter.
@@ -195,6 +210,7 @@ class Node(object):
 	def iterTags(self, name, attrs={}, namespace=None):
 		""" Iterate over all children using specified arguments as filter. """
 		for node in self.kids:
+			if not node: continue
 			if namespace is not None and namespace!=node.getNamespace(): continue
 			if node.getName() == name:
 				for key in attrs.keys():
@@ -266,7 +282,7 @@ class Node(object):
 class T:
 	""" Auxiliary class used to quick access to node's child nodes. """
 	def __init__(self,node): self.__dict__['node']=node
-	def __getattr__(self,attr): return self.node.setTag(attr)
+	def __getattr__(self,attr): return self.node.getTag(attr)
 	def __setattr__(self,attr,val):
 		if isinstance(val,Node): Node.__init__(self.node.setTag(attr),node=val)
 		else: return self.node.setTagData(attr,val)

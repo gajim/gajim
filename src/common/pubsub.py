@@ -8,7 +8,7 @@ class ConnectionPubSub:
 
 	def send_pb_subscription_query(self, jid, cb, *args, **kwargs):
 		query = xmpp.Iq('get', to=jid)
-		pb = query.addChild('pubsub', {'xmlns': xmpp.NS_PUBSUB})
+		pb = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
 		pb.addChild('subscriptions')
 
 		id = self.connection.send(query)
