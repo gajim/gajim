@@ -3111,7 +3111,7 @@ class AccountCreationWizardWindow:
 		elif cur_page == 1:
 			# We are adding an existing account
 			username = self.xml.get_widget('username_entry').get_text().decode(
-				'utf-8')
+				'utf-8').strip()
 			if not username:
 				pritext = _('Invalid username')
 				sectext = _(
@@ -3119,7 +3119,7 @@ class AccountCreationWizardWindow:
 				dialogs.ErrorDialog(pritext, sectext)
 				return
 			server = self.xml.get_widget('server_comboboxentry').child.get_text().\
-				decode('utf-8')
+				decode('utf-8').strip()
 			savepass = self.xml.get_widget('save_password_checkbutton').\
 				get_active()
 			password = self.xml.get_widget('password_entry').get_text().decode(
