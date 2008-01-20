@@ -470,9 +470,8 @@ class CommandWindow:
 		assert action in ('execute', 'prev', 'next', 'complete')
 
 		stanza = xmpp.Iq(typ='set', to=self.jid)
-		cmdnode = stanza.addChild('command', 
-			namespace=xmpp.NS_COMMANDS,
-			attrs={
+		cmdnode = stanza.addChild('command', attrs={
+				'xmlns':xmpp.NS_COMMANDS,
 				'node':self.commandnode,
 				'action':action
 			})
@@ -502,9 +501,8 @@ class CommandWindow:
 		if self.sessionid and self.account.connection:
 			# we already have sessionid, so the service sent at least one reply.
 			stanza = xmpp.Iq(typ='set', to=self.jid)
-			stanza.addChild('command',
-				namespace=xmpp.NS_COMMANDS,
-				attrs={
+			stanza.addChild('command', attrs={
+					'xmlns':xmpp.NS_COMMANDS,
 					'node':self.commandnode,
 					'sessionid':self.sessionid,
 					'action':'cancel'

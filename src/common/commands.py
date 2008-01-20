@@ -45,10 +45,10 @@ class AdHocCommand:
 
 		response = request.buildReply('result')
 		cmd = response.addChild('command', {
+			'xmlns': xmpp.NS_COMMANDS,
 			'sessionid': self.sessionid,
 			'node': self.commandnode,
-			'status': status},
-			namespace=xmpp.NS_COMMANDS)
+			'status': status})
 		if defaultaction is not None or actions is not None:
 			if defaultaction is not None:
 				assert defaultaction in ('cancel', 'execute', 'prev', 'next',
