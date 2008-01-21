@@ -3570,7 +3570,7 @@ msgstr "Fichier"
 
 #: ../src/filetransfers_window.py:87
 msgid "Time"
-msgstr "Moment"
+msgstr "Durée"
 
 #: ../src/filetransfers_window.py:99
 msgid "Progress"
