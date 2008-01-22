@@ -29,6 +29,8 @@ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"], [Gettext package])
 AM_GLIB_GNU_GETTEXT
 AM_NLS
 
+FARSIGHT_CFLAGS=`$PKG_CONFIG --libs farsight-0.1`
+AC_SUBST([FARSIGHT_CFLAGS])
 
 dnl ****
 dnl pygtk and gtk+
@@ -159,6 +161,7 @@ AC_CONFIG_FILES([
 	data/defs.py
 	src/Makefile
 	src/common/Makefile
+	src/common/farsight/Makefile
 	scripts/gajim
 	scripts/gajim-remote
 	po/Makefile.in

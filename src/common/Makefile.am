@@ -1,3 +1,4 @@
+SUBDIRS = farsight
 
 INCLUDES = \
 	$(PYTHON_INCLUDES) 
