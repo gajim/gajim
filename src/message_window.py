@@ -782,9 +782,6 @@ class MessageWindowMgr(gobject.GObject):
 
 	def _resize_window(self, win, acct, type):
 		'''Resizes window according to config settings'''
-		if not gajim.config.get('saveposition'):
-			return
-
 		if self.mode in (self.ONE_MSG_WINDOW_ALWAYS,
 				self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER):
 			size = (gajim.config.get('msgwin-width'),
@@ -807,9 +804,8 @@ class MessageWindowMgr(gobject.GObject):
 
 	def _position_window(self, win, acct, type):
 		'''Moves window according to config settings'''
-		if (not gajim.config.get('saveposition') or
-		self.mode in [self.ONE_MSG_WINDOW_NEVER,
-				self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER]):
+		if (self.mode in [self.ONE_MSG_WINDOW_NEVER,
+		self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER]):
 			return
 
 		if self.mode == self.ONE_MSG_WINDOW_ALWAYS:
@@ -934,9 +930,6 @@ class MessageWindowMgr(gobject.GObject):
 		gajim.interface.save_config()
 
 	def save_state(self, msg_win, width_adjust=0):
-		if not gajim.config.get('saveposition'):
-			return
-
 		# Save window size and position
 		pos_x_key = 'msgwin-x-position'
 		pos_y_key = 'msgwin-y-position'

@@ -2061,14 +2061,14 @@ class SingleMessageWindow:
 			self.completion_dict = {}
 		self.xml.signal_autoconnect(self)
 
-		if gajim.config.get('saveposition'):
-			# get window position and size from config
-			gtkgui_helpers.resize_window(self.window,
-				gajim.config.get('single-msg-width'),
-				gajim.config.get('single-msg-height'))
-			gtkgui_helpers.move_window(self.window,
-				gajim.config.get('single-msg-x-position'),
-				gajim.config.get('single-msg-y-position'))
+		# get window position and size from config
+		gtkgui_helpers.resize_window(self.window,
+			gajim.config.get('single-msg-width'),
+			gajim.config.get('single-msg-height'))
+		gtkgui_helpers.move_window(self.window,
+			gajim.config.get('single-msg-x-position'),
+			gajim.config.get('single-msg-y-position'))
+
 		self.window.show_all()
 
 	def on_single_message_window_destroy(self, widget):
@@ -2079,15 +2079,14 @@ class SingleMessageWindow:
 			self.message_tv_buffer.place_cursor(end_iter)
 
 	def save_pos(self):
-		if gajim.config.get('saveposition'):
-			# save the window size and position
-			x, y = self.window.get_position()
-			gajim.config.set('single-msg-x-position', x)
-			gajim.config.set('single-msg-y-position', y)
-			width, height = self.window.get_size()
-			gajim.config.set('single-msg-width', width)
-			gajim.config.set('single-msg-height', height)
-			gajim.interface.save_config()
+		# save the window size and position
+		x, y = self.window.get_position()
+		gajim.config.set('single-msg-x-position', x)
+		gajim.config.set('single-msg-y-position', y)
+		width, height = self.window.get_size()
+		gajim.config.set('single-msg-width', width)
+		gajim.config.set('single-msg-height', height)
+		gajim.interface.save_config()
 
 	def on_single_message_window_delete_event(self, window, ev):
 		self.save_pos()

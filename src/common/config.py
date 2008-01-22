@@ -100,7 +100,6 @@ class Config:
 		'urlmsgcolor': [ opt_color, '#0000ff', '', True ],
 		'collapsed_rows': [ opt_str, '', _('List (space separated) of rows (accounts and groups) that are collapsed.'), True ],
 		'roster_theme': [ opt_str, _('default'), '', True ],
-		'saveposition': [ opt_bool, True ],
 		'mergeaccounts': [ opt_bool, False, '', True ],
 		'sort_by_show': [ opt_bool, True, '', True ],
 		'enable_zeroconf': [opt_bool, False, _('Enable link-local/zeroconf messaging')],

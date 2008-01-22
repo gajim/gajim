@@ -4249,24 +4249,24 @@ class RosterWindow:
 		'''When we quit the gtk interface :
 		tell that to the core and exit gtk'''
 		msgwin_width_adjust = 0
-		if gajim.config.get('saveposition'):
-			# in case show_roster_on_start is False and roster is never shown
-			# window.window is None
-			if self.window.window is not None:
-				x, y = self.window.window.get_root_origin()
-				gajim.config.set('roster_x-position', x)
-				gajim.config.set('roster_y-position', y)
-				width, height = self.window.get_size()
-				# For the width use the size of the vbox containing the tree and
-				# status combo, this will cancel out any hpaned width
-				width = self.xml.get_widget('roster_vbox2').allocation.width
-				gajim.config.set('roster_width', width)
-				gajim.config.set('roster_height', height)
-				if not self.xml.get_widget('roster_vbox2').get_property('visible'):
-					# The roster vbox is hidden, so the message window is larger
-					# then we want to save (i.e. the window will grow every startup)
-					# so adjust.
-					msgwin_width_adjust = -1 * width
+
+		# in case show_roster_on_start is False and roster is never shown
+		# window.window is None
+		if self.window.window is not None:
+			x, y = self.window.window.get_root_origin()
+			gajim.config.set('roster_x-position', x)
+			gajim.config.set('roster_y-position', y)
+			width, height = self.window.get_size()
+			# For the width use the size of the vbox containing the tree and
+			# status combo, this will cancel out any hpaned width
+			width = self.xml.get_widget('roster_vbox2').allocation.width
+			gajim.config.set('roster_width', width)
+			gajim.config.set('roster_height', height)
+			if not self.xml.get_widget('roster_vbox2').get_property('visible'):
+				# The roster vbox is hidden, so the message window is larger
+				# then we want to save (i.e. the window will grow every startup)
+				# so adjust.
+				msgwin_width_adjust = -1 * width
 
 
 		gajim.config.set('show_roster_on_startup',
@@ -5419,13 +5419,12 @@ class RosterWindow:
 		#FIXME: When list_accel_closures will be wrapped in pygtk
 		# no need of this variable
 		self.have_new_chat_accel = False # Is the "Ctrl+N" shown ?
-		if gajim.config.get('saveposition'):
-			gtkgui_helpers.resize_window(self.window,
-				gajim.config.get('roster_width'),
-				gajim.config.get('roster_height'))
-			gtkgui_helpers.move_window(self.window,
-				gajim.config.get('roster_x-position'),
-				gajim.config.get('roster_y-position'))
+		gtkgui_helpers.resize_window(self.window,
+			gajim.config.get('roster_width'),
+			gajim.config.get('roster_height'))
+		gtkgui_helpers.move_window(self.window,
+			gajim.config.get('roster_x-position'),
+			gajim.config.get('roster_y-position'))
 
 		self.popups_notification_height = 0
 		self.popup_notification_windows = []

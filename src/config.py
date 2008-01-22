@@ -591,9 +591,6 @@ class PreferencesWindow:
 	def on_subscribe_tune_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'subscribe_tune')
 
-	def on_save_position_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'saveposition')
-
 	def on_sort_by_show_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sort_by_show')
 		gajim.interface.roster.draw_roster()
