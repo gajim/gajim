@@ -405,7 +405,7 @@ class Contacts:
 		max_order = 0
 		order = 0
 		if data.has_key('order'):
-			order = data['order']
+			order = int(data['order'])
 		if order:
 			family = self.get_metacontacts_family(account, jid)
 			for data_ in family:
