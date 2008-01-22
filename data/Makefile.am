@@ -14,7 +14,13 @@ sounds_DATA = $(srcdir)/sounds/*.wav
 otherdir = $(pkgdatadir)/data/other
 other_DATA = other/servers.xml other/cacerts.pem
 
-man_MANS = gajim.1 gajim-remote.1
+if BUILD_REMOTE_CONTROL
+OPTIONAL_MAN = gajim-remote.1
+else
+OPTIONAL_MAN =
+endif
+
+man_MANS = gajim.1 $(OPTIONAL_MAN)
 
 
 EXTRA_DIST = $(desktop_in_files) \
