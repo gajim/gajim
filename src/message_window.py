@@ -870,8 +870,8 @@ class MessageWindowMgr(gobject.GObject):
 
 		# Position and size window based on saved state and window mode
 		if not self.one_window_opened(contact, acct, type):
-			self._position_window(win, acct, type)
 			self._resize_window(win, acct, type)
+			self._position_window(win, acct, type)
 
 		self._windows[win_key] = win
 		return win

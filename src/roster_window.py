@@ -5420,12 +5420,12 @@ class RosterWindow:
 		# no need of this variable
 		self.have_new_chat_accel = False # Is the "Ctrl+N" shown ?
 		if gajim.config.get('saveposition'):
-			gtkgui_helpers.move_window(self.window,
-				gajim.config.get('roster_x-position'),
-				gajim.config.get('roster_y-position'))
 			gtkgui_helpers.resize_window(self.window,
 				gajim.config.get('roster_width'),
 				gajim.config.get('roster_height'))
+			gtkgui_helpers.move_window(self.window,
+				gajim.config.get('roster_x-position'),
+				gajim.config.get('roster_y-position'))
 
 		self.popups_notification_height = 0
 		self.popup_notification_windows = []

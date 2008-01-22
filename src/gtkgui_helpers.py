@@ -247,6 +247,11 @@ def move_window(window, x, y):
 		x = 0
 	if y < 0:
 		y = 0
+	w, h = window.get_size()
+	if x + w > screen_w:
+		x = screen_w - w
+	if y + h > screen_h:
+		y = screen_h - h
 	window.move(x, y)
 
 def resize_window(window, w, h):
