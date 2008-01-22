@@ -455,7 +455,7 @@ class Interface:
 
 	def handle_event_http_auth(self, account, data):
 		#('HTTP_AUTH', account, (method, url, transaction_id, iq_obj, msg))
-		def response(widget, account, iq_obj, answer):
+		def response(account, iq_obj, answer):
 			self.dialog.destroy()
 			gajim.connections[account].build_http_auth_answer(iq_obj, answer)
 
@@ -948,12 +948,21 @@ class Interface:
 			self.remote_ctrl.raise_signal('Subscribed', (account, array))
 
 	def handle_event_unsubscribed(self, account, jid):
-		dialogs.InformationDialog(_('Contact "%s" removed subscription from you')\
-			% jid, _('You will always see him or her as offline.'))
-		# FIXME: Per RFC 3921, we can "deny" ack as well, but the GUI does not show deny
 		gajim.connections[account].ack_unsubscribed(jid)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('Unsubscribed', (account, jid))
+
+		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+		if not contact:
+			return
+		def on_yes(list_):
+			self.roster.on_req_usub(None, list_)
+		list_ = [(contact, account)]
+		dialogs.YesNoDialog(
+			_('Contact "%s" removed subscription from you') % jid,
+			_('You will always see him or her as offline.\nDo you want to remove him or her from your contact list?'),
+			on_response_yes = (on_yes, list_))
+		# FIXME: Per RFC 3921, we can "deny" ack as well, but the GUI does not show deny
 
 	def handle_event_agent_info_error(self, account, agent):
 		#('AGENT_ERROR_INFO', account, (agent))
@@ -1932,12 +1941,12 @@ class Interface:
 					negotiated, not_acceptable, ask_user = session.verify_options_bob(form)
 
 					if ask_user:
-						def accept_nondefault_options(widget):
+						def accept_nondefault_options():
 							self.dialog.destroy()
 							negotiated.update(ask_user)
 							session.respond_e2e_bob(form, negotiated, not_acceptable)
 
-						def reject_nondefault_options(widget):
+						def reject_nondefault_options():
 							self.dialog.destroy()
 							for key in ask_user.keys():
 								not_acceptable.append(key)
@@ -1973,7 +1982,7 @@ class Interface:
 					session.check_identity = _cb
 
 				if ask_user:
-					def accept_nondefault_options(widget):
+					def accept_nondefault_options():
 						dialog.destroy()
 
 						negotiated.update(ask_user)
@@ -1983,7 +1992,7 @@ class Interface:
 						except exceptions.NegotiationError, details:
 							session.fail_bad_negotiation(details)
 
-					def reject_nondefault_options(widget):
+					def reject_nondefault_options():
 						session.reject_negotiation()
 						dialog.destroy()
 
@@ -2237,7 +2246,7 @@ class Interface:
 			gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
 				data[0])
 			gajim.connections[account].ssl_certificate_accepted()
-		def on_no(widget):
+		def on_no():
 			dialog.destroy()
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
