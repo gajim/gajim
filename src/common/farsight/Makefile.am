@@ -16,9 +16,7 @@ nodist_farsight_la_SOURCES = farsight.c
 farsight_la_LDFLAGS = \
 	-module -avoid-version
 
-FARSIGHT_CFLAGS = @FARSIGHT_CFLAGS@
 farsight_la_CFLAGS = $(FARSIGHT_CFLAGS) $(PYGTK_CFLAGS) $(PYTHON_INCLUDES) -I farsight/
-#farsight_la_CFLAGS = -pthread -I/usr/include/farsight-0.1 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/gstreamer-0.10 -I/usr/include/libxml2 $(PYGTK_CFLAGS) $(PYTHON_INCLUDES) -I farsight/
 
 farsight.c: farsight.defs farsight.override
 	pygtk-codegen-2.0 \
