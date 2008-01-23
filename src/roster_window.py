@@ -211,34 +211,14 @@ class RosterWindow:
 	def draw_account(self, account):
 		model = self.tree.get_model()
 		iter = self.get_account_iter(account)
-		if self.regroup:
-			accounts = gajim.connections.keys()
-		else:
-			accounts = [account]
-		num_of_accounts = len(accounts)
+		
+		num_of_accounts = gajim.get_number_of_connected_accounts()
 		num_of_secured = gajim.get_number_of_securely_connected_accounts()
-		if num_of_secured and gajim.con_types.has_key(account) and \
-		gajim.con_types[account] in ('tls', 'ssl'):
+		
+		if gajim.account_is_securely_connected(account) and not self.regroup or \
+		self.regroup and num_of_secured and num_of_secured == num_of_accounts:
 			tls_pixbuf = self.window.render_icon(gtk.STOCK_DIALOG_AUTHENTICATION,
 				gtk.ICON_SIZE_MENU) # the only way to create a pixbuf from stock
-			if num_of_secured < num_of_accounts:
-				# Make it transparent
-				colorspace = tls_pixbuf.get_colorspace()
-				bps = tls_pixbuf.get_bits_per_sample()
-				rowstride = tls_pixbuf.get_rowstride()
-				pixels = tls_pixbuf.get_pixels()
-				new_pixels = ''
-				width = tls_pixbuf.get_width()
-				height = tls_pixbuf.get_height()
-				for i in range(0, width*height):
-					rgb = pixels[4*i:4*i+3]
-					new_pixels += rgb
-					if rgb == chr(0)*3:
-						new_pixels += chr(0)
-					else:
-						new_pixels += chr(128)
-				tls_pixbuf = gtk.gdk.pixbuf_new_from_data(new_pixels, colorspace,
-					True, bps, width, height, rowstride)
 			model[iter][C_PADLOCK_PIXBUF] = tls_pixbuf
 		else:
 			model[iter][C_PADLOCK_PIXBUF] = None
@@ -1439,7 +1419,6 @@ class RosterWindow:
 				# don't show info on offline contacts
 				return
 			info[contact.jid] = vcard.ZeroconfVcardWindow(contact, account)
-
 
 	def show_tooltip(self, contact):
 		pointer = self.tree.get_pointer()

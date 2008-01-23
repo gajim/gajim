@@ -1876,6 +1876,7 @@ class Interface:
 		# block signed in notifications for 30 seconds
 		gajim.block_signed_in_notifications[account] = True
 		self.roster.set_actions_menu_needs_rebuild()
+		self.roster.draw_account(account)
 		if self.sleeper.getState() != common.sleepy.STATE_UNKNOWN and \
 		gajim.connections[account].connected in (2, 3):
 			# we go online or free for chat, so we activate auto status
