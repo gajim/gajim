@@ -790,7 +790,8 @@ class NonBlockingTLS(PlugIn):
 		try:
 			self.starttls='in progress'
 			tcpsock._sslObj.do_handshake()
-		except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError), e:
+		# Errors are handeled in _do_receive function
+		except:
 			pass
 		tcpsock._sslObj.setblocking(False)
 		log.debug("Synchronous handshake completed")
