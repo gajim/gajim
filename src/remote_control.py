@@ -657,4 +657,4 @@ class SignalObject(dbus.service.Object):
 			gajim.interface.instances[account]['join_gc'] = \
 					JoinGroupchatWindow(account, room_jid, nick)
 		else:
-			gajim.connections[account].join_gc(nick, room_jid, password)
+			gajim.interface.roster.join_gc_room(account, room_jid, nick, password)
