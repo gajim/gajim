@@ -3587,13 +3587,17 @@ class RosterWindow:
 		message = dlg.run()
 		if message is not None: # None if user pressed Cancel
 			for (contact, account) in contact_list:
+				our_jid = gajim.get_jid_from_account(account)
 				accounts = []
 				if group and account not in accounts:
 					if not gajim.interface.status_sent_to_groups.has_key(account):
 						gajim.interface.status_sent_to_groups[account] = {}
 					gajim.interface.status_sent_to_groups[account][group] = show
 					accounts.append(group)
-				self.send_status(account, show, message, to = contact.jid)
+				jid = contact.jid
+				if jid == our_jid:
+					jid += '/' + contact.resource
+				self.send_status(account, show, message, to=jid)
 				if not gajim.interface.status_sent_to_users.has_key(account):
 					gajim.interface.status_sent_to_users[account] = {}
 				gajim.interface.status_sent_to_users[account][contact.jid] = show
