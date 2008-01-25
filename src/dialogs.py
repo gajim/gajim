@@ -1237,7 +1237,7 @@ class YesNoDialog(HigDialog):
 			if isinstance(self.user_response_yes, tuple):
 				self.user_response_yes[0](*self.user_response_yes[1:])
 			else:
-				self.user_response_yes(self.is_checked())
+				self.user_response_yes()
 		self.destroy()
 
 	def on_response_no(self, widget):
