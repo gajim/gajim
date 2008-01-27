@@ -1089,12 +1089,15 @@ class PreferencesWindow:
 	def fill_sound_treeview(self):
 		model = self.sound_tree.get_model()
 		model.clear()
+		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 
 		# NOTE: sounds_ui_names MUST have all items of
 		# sounds = gajim.config.get_per('soundevents') as keys 
 		sounds_dict = {
 			'first_message_received': _('First Message Received'),
-			'next_message_received': _('Next Message Received'),
+			'next_message_received_focused': _('Next Message Received Focused'),
+			'next_message_received_unfocused':
+				_('Next Message Received Unfocused'),
 			'contact_connected': _('Contact Connected'),
 			'contact_disconnected': _('Contact Disconnected'),
 			'message_sent': _('Message Sent'),

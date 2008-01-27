@@ -847,8 +847,14 @@ class Interface:
 		msg = message
 		if subject:
 			msg = _('Subject: %s') % subject + '\n' + msg
+		focused = False
+		if chat_control:
+			parent_win = chat_control.parent_win
+			if chat_control == parent_win.get_active_control() and \
+			parent_win.window.has_focus:
+				focused = True
 		notify.notify('new_message', jid_of_control, account, [msg_type,
-			first, nickname, msg], advanced_notif_num)
+			first, nickname, msg, focused], advanced_notif_num)
 
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewMessage', (account, array))

@@ -408,7 +408,8 @@ class Config:
 
 	soundevents_default = {
 		'first_message_received': [ True, '../data/sounds/message1.wav' ],
-		'next_message_received': [ True, '../data/sounds/message2.wav' ],
+		'next_message_received_focused': [ True, '../data/sounds/message2.wav' ],
+		'next_message_received_unfocused': [ True, '../data/sounds/message2.wav' ],
 		'contact_connected': [ True, '../data/sounds/connected.wav' ],
 		'contact_disconnected': [ True, '../data/sounds/disconnected.wav' ],
 		'message_sent': [ True, '../data/sounds/sent.wav' ],

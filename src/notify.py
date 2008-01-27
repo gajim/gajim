@@ -175,14 +175,20 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 		else:
 			# We don't want message preview, do_preview = False
 			message = ''
+		focused = parameters[4]
 		if helpers.allow_showing_notification(account, 'notify_on_new_message',
 		advanced_notif_num, is_first_message):
 			do_popup = True
 		if is_first_message and helpers.allow_sound_notification(
 		'first_message_received', advanced_notif_num):
 			do_sound = True
-		elif not is_first_message and helpers.allow_sound_notification(
-		'next_message_received', advanced_notif_num):
+		elif not is_first_message and focused and \
+		helpers.allow_sound_notification('next_message_received_focused',
+		advanced_notif_num):
+			do_sound = True
+		elif not is_first_message and not focused and \
+		helpers.allow_sound_notification('next_message_received_unfocused',
+		advanced_notif_num):
 			do_sound = True
 	else:
 		print '*Event not implemeted yet*'
@@ -285,8 +291,10 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 				pass # do not set snd_event
 			elif is_first_message:
 				snd_event = 'first_message_received'
+			elif focused:
+				snd_event = 'next_message_received_focused'
 			else:
-				snd_event = 'next_message_received'
+				snd_event = 'next_message_received_unfocused'
 		elif event in ('contact_connected', 'contact_disconnected'):
 			snd_event = event
 		if snd_file:
