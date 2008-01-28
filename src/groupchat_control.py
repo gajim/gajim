@@ -2000,7 +2000,8 @@ class GroupchatControl(ChatControlBase):
 		self.handlers[id] = item
 
 		item = xml.get_widget('add_to_roster_menuitem')
-		if not jid:
+		our_jid = gajim.get_jid_from_account(self.account)
+		if not jid or jid == our_jid:
 			item.set_sensitive(False)
 		else:
 			id = item.connect('activate', self.on_add_to_roster, jid)
