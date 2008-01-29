@@ -830,7 +830,7 @@ class ConversationTextview:
 			exitcode = p.wait()
 
 		if exitcode == 0:
-			p = Popen(['convert', tmpfile + '.ps', tmpfile + '.png'],
+			p = Popen(['convert', '-alpha', 'off', tmpfile + '.ps', tmpfile + '.png'],
 				cwd=gettempdir())
 			exitcode = p.wait()
 
