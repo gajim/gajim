@@ -193,8 +193,10 @@ if gajim.HAVE_GPG:
 				sline = line.split(':')
 				if (sline[0] == 'sec' and secret) or \
 						(sline[0] == 'pub' and not secret):
+					# decode escaped chars
+					name = eval('"' + sline[9].replace('"', '\\"') + '"')
 					# make it unicode instance
-					keys[sline[4][8:]] = helpers.decode_string(sline[9])
+					keys[sline[4][8:]] = helpers.decode_string(name)
 			return keys
 			try: proc.wait()
 			except IOError: pass
