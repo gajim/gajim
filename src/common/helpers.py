@@ -793,7 +793,7 @@ def get_os_info():
 				return text
 
 		# our last chance, ask uname and strip it
-		uname_output = get_output_of_command('uname -a | cut -d" " -f1,3')
+		uname_output = get_output_of_command('uname -sr')
 		if uname_output is not None:
 			return uname_output[0] # only first line
 	return 'N/A'
