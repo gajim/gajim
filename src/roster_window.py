@@ -520,7 +520,15 @@ class RosterWindow:
 		gajim.account_is_disconnected(account))) and nb_events == 0:
 			self.remove_contact(contact, account)
 		else:
-			self.draw_contact(contact.jid, account)
+			# If it's a metacontact, big brother may have changed, so remove and
+			# re-add
+			model = self.tree.get_model()
+			iters = self.get_contact_iter(contact.jid, account)
+			if iters and model.iter_has_child(iters[0]):
+				self.remove_contact(contact, account)
+				self.add_contact_to_roster(contact.jid, account)
+			else:
+				self.draw_contact(contact.jid, account)
 
 	def remove_contact(self, contact, account):
 		'''Remove a contact from the roster'''
