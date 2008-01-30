@@ -71,9 +71,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.status = ''
 		self.old_show = ''
 		self.priority = 0
-	
+
 		self.call_resolve_timeout = False
-		
+
 		self.time_to_reconnect = None
 		#self.new_account_info = None
 		self.bookmarks = []
@@ -94,17 +94,17 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		if gajim.HAVE_GPG:
 			self.USE_GPG = True
 			self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
-		
+
 		self.get_config_values_or_default()
-		
+
 		self.muc_jid = {} # jid of muc server for each transport type
 		self.vcard_supported = False
 		self.private_storage_supported = False
 
 	def get_config_values_or_default(self):
-		''' get name, host, port from config, or 
+		''' get name, host, port from config, or
 		create zeroconf account with default values'''
-		
+
 		if not gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'name'):
 			gajim.log.debug('Creating zeroconf account')
 			gajim.config.add_per('accounts', gajim.ZEROCONF_ACC_NAME)
@@ -150,7 +150,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def quit(self, kill_core):
 		if kill_core and self.connected > 1:
 			self.disconnect()
-	
+
 	def disable_account(self):
 		self.disconnect()
 
@@ -195,12 +195,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				#XXX open chat windows don't get refreshed (full name), add that
 		return self.call_resolve_timeout
 
-	# callbacks called from zeroconf	
+	# callbacks called from zeroconf
 	def _on_new_service(self,jid):
 		self.roster.setItem(jid)
 		self.dispatch('ROSTER_INFO', (jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
 		self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0, None))
-	
+
 	def _on_remove_service(self, jid):
 		self.roster.delItem(jid)
 		# 'NOTIFY' (account, (jid, status, status message, resource, priority,
@@ -332,7 +332,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		elif show == 'offline' and self.connected:
 			self.disconnect()
 			self.time_to_reconnect = None
-			
+
 		# update status
 		elif show != 'offline' and self.connected:
 			was_invisible = self.connected == STATUS_LIST.index('invisible')
@@ -350,18 +350,18 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		if check:
 			self.dispatch('STATUS', show)
 		else:
-			# show notification that avahi or system bus is down	
+			# show notification that avahi or system bus is down
 			self.dispatch('STATUS', 'offline')
 			self.status = 'offline'
 			self.dispatch('CONNECTION_LOST',
 				(_('Could not change status of account "%s"') % self.name,
 				_('Please check if avahi-daemon is running.')))
-			
+
 	def get_status(self):
 		return STATUS_LIST[self.connected]
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
-	chatstate = None, msg_id = None, composing_xep = None, resource = None, 
+	chatstate = None, msg_id = None, composing_xep = None, resource = None,
 	user_nick = None, session=None):
 		fjid = jid
 
@@ -425,8 +425,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 						msg_id = ''
 					chatstate_node.setTagData('id', msg_id)
 				# when msgtxt, requests JEP-0022 composing notification
-				if chatstate is 'composing' or msgtxt: 
-					chatstate_node.addChild(name = 'composing') 
+				if chatstate is 'composing' or msgtxt:
+					chatstate_node.addChild(name = 'composing')
 
 		if session:
 			session.last_send = time.time()
@@ -451,15 +451,15 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				else:
 					kind = 'single_msg_sent'
 				gajim.logger.write(kind, jid, log_msg)
-		
+
 		self.dispatch('MSGSENT', (jid, msg, keyID))
-		
+
 	def send_stanza(self, stanza):
 		# send a stanza untouched
 		if not self.connection:
 			return
 		self.connection.send(stanza)
-	
+
 	def ack_subscribed(self, jid):
 		gajim.log.debug('This should not happen (ack_subscribed)')
 
@@ -482,11 +482,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def unsubscribe_agent(self, agent):
 		gajim.log.debug('This should not happen (unsubscribe_agent)')
 
-	def update_contact(self, jid, name, groups):	
+	def update_contact(self, jid, name, groups):
 		if self.connection:
 			self.connection.getRoster().setItem(jid = jid, name = name,
 				groups = groups)
-	
+
 	def new_account(self, name, config, sync = False):
 		gajim.log.debug('This should not happen (new_account)')
 
@@ -507,13 +507,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 	def get_bookmarks(self):
 		gajim.log.debug('This should not happen (get_bookmarks)')
-		
+
 	def store_bookmarks(self):
 		gajim.log.debug('This should not happen (store_bookmarks)')
-		
+
 	def get_metacontacts(self):
 		gajim.log.debug('This should not happen (get_metacontacts)')
-		
+
 	def send_agent_status(self, agent, ptype):
 		gajim.log.debug('This should not happen (send_agent_status)')
 
