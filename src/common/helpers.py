@@ -784,7 +784,8 @@ def get_os_info():
 						'sourcemage') or not\
 						os.path.basename(path_to_file).startswith('slackware'):
 							text = distro_name + ' ' + text
-					elif path_to_file.endswith('aurox-release'):
+					elif path_to_file.endswith('aurox-release') or \
+					path_to_file.endswith('arch-release'):
 						# file doesn't have version
 						text = distro_name
 					elif path_to_file.endswith('lfs-release'): # file just has version
