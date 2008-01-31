@@ -4933,6 +4933,16 @@ class RosterWindow:
 				show2 = cshow[s]
 			else:
 				show2 = 9
+			removing1 = False
+			removing2 = False
+			if show1 == 6 and jid1 in gajim.to_be_removed[account1]:
+				removing1 = True
+			if show2 == 6 and jid2 in gajim.to_be_removed[account2]:
+				removing2 = True
+			if removing1 and not removing2:
+				return -1
+			if removing2 and not removing1:
+				return 1
 			if show1 < show2:
 				return -1
 			elif show1 > show2:
