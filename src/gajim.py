@@ -2248,7 +2248,7 @@ class Interface:
 
 	def handle_event_fingerprint_error(self, account, data):
 		# ('FINGERPRINT_ERROR', account, (fingerprint,))
-		def on_yes(widget):
+		def on_yes():
 			dialog.destroy()
 			gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
 				data[0])
