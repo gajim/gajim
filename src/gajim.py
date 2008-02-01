@@ -2247,7 +2247,7 @@ class Interface:
 				on_response_ok=on_ok, on_response_cancel=on_cancel)
 
 	def handle_event_fingerprint_error(self, account, data):
-		# ('FINGERPRINT_ERROR', account, (fingerprint,))
+		# ('FINGERPRINT_ERROR', account, (new_fingerprint,))
 		def on_yes():
 			dialog.destroy()
 			gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
@@ -2258,9 +2258,11 @@ class Interface:
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
 		pritext = _('SSL certificate error')
-		sectext = _('It seems SSL certificate has changed or your connection is '
-			'being hacked. Do you still want to connect and update the fingerprint'
-			'of the certificate?')
+		sectext = _('It seems the SSL certificate has changed or your connection '
+			'is being hacked.\nOld fingerprint: %s\nNew fingerprint: %s\n\nDo you '
+			'still want to connect and update the fingerprint of the certificate?'\
+			) % (gajim.config.get_per('accounts', account, 'ssl_fingerprint_sha1'),
+			data[0])
 		dialog = dialogs.YesNoDialog(pritext, sectext, on_response_yes=on_yes,
 			on_response_no=on_no)
 
