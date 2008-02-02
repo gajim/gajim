@@ -326,7 +326,8 @@ class RosterWindow:
 					model.append(i, (None, name, 'contact', jid, account, None,
 						None))
 				self.draw_contact(jid, account)
-				self.draw_avatar(jid, account)
+				if gajim.config.get('show_avatars_in_roster'):
+					self.draw_avatar(jid, account)
 				self.draw_account(account)
 				# Redraw parent to change icon
 				self.draw_contact(big_brother_jid, big_brother_account)
@@ -386,7 +387,8 @@ class RosterWindow:
 			if gajim.groups[account][group]['expand']:
 				self.tree.expand_row(model.get_path(iterG), False)
 		self.draw_contact(jid, account)
-		self.draw_avatar(jid, account)
+		if gajim.config.get('show_avatars_in_roster'):
+			self.draw_avatar(jid, account)
 		self.draw_account(account)
 		# put the children under this iter
 		for data in shown_family:
