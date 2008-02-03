@@ -210,13 +210,13 @@ class RosterWindow:
 
 	def draw_account(self, account):
 		if account in self.draw_account_id:
-			gobject.source_remove(self.draw_account_id[account])
+			return
 		self.draw_account_id[account] = gobject.timeout_add(500,
 			self.really_draw_account, account)
 
 	def really_draw_account(self, account):
 		if account in self.draw_account_id:
-			return
+			del self.draw_account_id[account]
 		model = self.tree.get_model()
 		iter = self.get_account_iter(account)
 		
