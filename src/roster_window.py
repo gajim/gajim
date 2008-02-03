@@ -1358,22 +1358,20 @@ class RosterWindow:
 		# name is to show in conversation window
 		name = contact.get_shown_name()
 
-		if show in ('offline', 'error') and \
-		len(gajim.events.get_events(account, contact.get_full_jid())) == 0:
-			if len(contact_instances) > 1:
-				# if multiple resources
-				if contact.resource != '':
-					name += '/' + contact.resource
+		if len(contact_instances) > 1:
+			if contact.resource != '':
+				name += '/' + contact.resource
+			if show in ('offline', 'error') and \
+			len(gajim.events.get_events(account, contact.get_full_jid())) == 0:
 				jid_with_resource = contact.jid + '/' + contact.resource
-				if gajim.interface.msg_win_mgr.has_window(jid_with_resource, account):
+				if gajim.interface.msg_win_mgr.has_window(jid_with_resource,
+				account):
 					win = gajim.interface.msg_win_mgr.get_window(jid_with_resource,
 						account)
 					ctrl = win.get_control(jid_with_resource, account)
 					ctrl.update_ui()
 					win.redraw_tab(ctrl)
 				gajim.contacts.remove_contact(account, contact)
-		elif len(contact_instances) > 1 and contact.resource != '':
-			name += '/' + contact.resource
 		self.remove_contact(contact, account)
 		self.add_contact_to_roster(contact.jid, account)
 		# print status in chat window and update status/GPG image
@@ -3890,10 +3888,7 @@ class RosterWindow:
 					gajim.con_types[account] = None
 				for jid in gajim.contacts.get_jid_list(account):
 					lcontact = gajim.contacts.get_contacts(account, jid)
-					lcontact_copy = []
-					for contact in lcontact:
-						lcontact_copy.append(contact)
-					for contact in lcontact_copy:
+					for contact in [c for c in lcontact if c.show != 'offline']:
 						self.chg_contact_status(contact, 'offline', '', account)
 			self.actions_menu_needs_rebuild = True
 		self.update_status_combobox()
