@@ -216,7 +216,7 @@ class RosterWindow:
 
 	def really_draw_account(self, account):
 		if account in self.draw_account_id:
-			del self.draw_account_id[account]
+			return
 		model = self.tree.get_model()
 		iter = self.get_account_iter(account)
 		
@@ -407,7 +407,7 @@ class RosterWindow:
 	def draw_group(self, group, account):
 		key = (group, account)
 		if key in self.draw_group_id:
-			gobject.source_remove(self.draw_group_id[key])
+			return
 		self.draw_group_id[key] = gobject.timeout_add(500,
 			self.really_draw_group, group, account)
 
