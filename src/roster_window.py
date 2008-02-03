@@ -209,6 +209,14 @@ class RosterWindow:
 			'account', our_jid, account, None, tls_pixbuf])
 
 	def draw_account(self, account):
+		if account in self.draw_account_id:
+			gobject.source_remove(self.draw_account_id[account])
+		self.draw_account_id[account] = gobject.timeout_add(500,
+			self.really_draw_account, account)
+
+	def really_draw_account(self, account):
+		if account in self.draw_account_id:
+			del self.draw_account_id[account]
 		model = self.tree.get_model()
 		iter = self.get_account_iter(account)
 		
@@ -397,6 +405,16 @@ class RosterWindow:
 			self.add_contact_to_roster(data['jid'], data['account'])
 
 	def draw_group(self, group, account):
+		key = (group, account)
+		if key in self.draw_group_id:
+			gobject.source_remove(self.draw_group_id[key])
+		self.draw_group_id[key] = gobject.timeout_add(500,
+			self.really_draw_group, group, account)
+
+	def really_draw_group(self, group, account):
+		key = (group, account)
+		if key in self.draw_group_id:
+			del self.draw_group_id[key]
 		iter = self.get_group_iter(group, account)
 		if not iter:
 			return
@@ -5412,6 +5430,8 @@ class RosterWindow:
 		self.actions_menu_needs_rebuild = True
 		self.regroup = gajim.config.get('mergeaccounts')
 		self.clicked_path = None # Used remember on wich row we clicked
+		self.draw_group_id = {}
+		self.draw_account_id = {}
 		if len(gajim.connections) < 2: # Do not merge accounts if only one exists
 			self.regroup = False
 		#FIXME: When list_accel_closures will be wrapped in pygtk
