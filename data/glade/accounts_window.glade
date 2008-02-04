@@ -1310,7 +1310,6 @@ You might consider to change possible firewall settings.</property>
             <property name="use_underline">True</property>
             <property name="response_id">0</property>
             <property name="draw_indicator">True</property>
-            <signal name="toggled" handler="on_merge_checkbutton_toggled"/>
           </widget>
           <packing>
             <property name="expand">False</property>

@@ -71,8 +71,6 @@ class PreferencesWindow:
 		self.window = self.xml.get_widget('preferences_window')
 		self.window.set_transient_for(gajim.interface.roster.window)
 		self.notebook = self.xml.get_widget('preferences_notebook')
-		self.treat_incoming_messages_combobox =\
-			self.xml.get_widget('treat_incoming_messages_combobox')
 		self.one_window_type_combobox =\
 			self.xml.get_widget('one_window_type_combobox')
 		self.iconset_combobox = self.xml.get_widget('iconset_combobox')
@@ -91,8 +89,6 @@ class PreferencesWindow:
 		self.auto_xa_time_spinbutton = self.xml.get_widget(
 			'auto_xa_time_spinbutton')
 		self.auto_xa_message_entry = self.xml.get_widget('auto_xa_message_entry')
-
-		w = self.xml.get_widget('anc_hbox')
 
 		### General tab ###
 		# Display avatars in roster
@@ -134,14 +130,6 @@ class PreferencesWindow:
 		if not gajim.config.get('emoticons_theme'):
 			emoticons_combobox.set_active(len(l)-1)
 
-		# Set default for treat incoming messages
-		choices = common.config.opt_treat_incoming_messages
-		type = gajim.config.get('treat_incoming_messages')
-		if type in choices:
-			self.treat_incoming_messages_combobox.set_active(choices.index(type))
-		else:
-			self.treat_incoming_messages_combobox.set_active(0)
-
 		# Set default for single window type
 		choices = common.config.opt_one_window_types
 		type = gajim.config.get('one_message_window')
@@ -165,6 +153,7 @@ class PreferencesWindow:
 		else:
 			self.xml.get_widget('speller_checkbutton').set_sensitive(False)
 
+		### Style tab ###
 		# Themes
 		theme_combobox = self.xml.get_widget('theme_combobox')
 		cell = gtk.CellRendererText()
@@ -208,12 +197,42 @@ class PreferencesWindow:
 			model.append([preview, l[i]])
 			if gajim.config.get('iconset') == l[i]:
 				self.iconset_combobox.set_active(i)
-
+	
 		# Use transports iconsets
 		st = gajim.config.get('use_transports_iconsets')
 		self.xml.get_widget('transports_iconsets_checkbutton').set_active(st)
 
-		### Privacy tab ###
+		# Color for incoming messages
+		colSt = gajim.config.get('inmsgcolor')
+		self.xml.get_widget('incoming_msg_colorbutton').set_color(
+			gtk.gdk.color_parse(colSt))
+
+		# Color for outgoing messages
+		colSt = gajim.config.get('outmsgcolor')
+		self.xml.get_widget('outgoing_msg_colorbutton').set_color(
+			gtk.gdk.color_parse(colSt))
+
+		# Color for status messages
+		colSt = gajim.config.get('statusmsgcolor')
+		self.xml.get_widget('status_msg_colorbutton').set_color(
+			gtk.gdk.color_parse(colSt))
+
+		# Color for hyperlinks
+		colSt = gajim.config.get('urlmsgcolor')
+		self.xml.get_widget('url_msg_colorbutton').set_color(
+			gtk.gdk.color_parse(colSt))
+
+		# Font for messages
+		font = gajim.config.get('conversation_font')
+		# try to set default font for the current desktop env
+		fontbutton = self.xml.get_widget('conversation_fontbutton')
+		if font == '':
+			fontbutton.set_sensitive(False)
+			self.xml.get_widget('default_chat_font').set_active(True)
+		else:
+			fontbutton.set_font_name(font)
+
+		### Personal Events tab ###
 		# outgoing send chat state notifications
 		st = gajim.config.get('outgoing_chat_state_notifications')
 		combo = self.xml.get_widget('outgoing_chat_states_combobox')
@@ -234,11 +253,29 @@ class PreferencesWindow:
 		else: # disabled
 			combo.set_active(2)
 
-		# Ignore messages from unknown contacts
-		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
-			set_active(gajim.config.get('ignore_unknown_contacts'))
+		# PEP
+		st = gajim.config.get('publish_mood')
+		self.xml.get_widget('publish_mood_checkbutton').set_active(st)
 
-		### Events tab ###
+		st = gajim.config.get('publish_activity')
+		self.xml.get_widget('publish_activity_checkbutton').set_active(st)
+
+		st = gajim.config.get('publish_tune')
+		self.xml.get_widget('publish_tune_checkbutton').set_active(st)
+
+		st = gajim.config.get('subscribe_mood')
+		self.xml.get_widget('subscribe_mood_checkbutton').set_active(st)
+
+		st = gajim.config.get('subscribe_activity')
+		self.xml.get_widget('subscribe_activity_checkbutton').set_active(st)
+
+		st = gajim.config.get('subscribe_tune')
+		self.xml.get_widget('subscribe_tune_checkbutton').set_active(st)
+
+		if not gajim.config.get('use_pep'):
+			self.xml.get_widget('frame_pep').set_sensitive(False)
+
+		### Notifications tab ###
 		# On new event
 		on_event_combobox = self.xml.get_widget('on_event_combobox')
 		if gajim.config.get('autopopup'):
@@ -308,6 +345,24 @@ class PreferencesWindow:
 
 		self.fill_sound_treeview()
 
+		# Notify user of new gmail e-mail messages,
+		# make checkbox sensitive if user has a gtalk account
+		frame_gmail = self.xml.get_widget('frame_gmail')
+		notify_gmail_checkbutton = self.xml.get_widget('notify_gmail_checkbutton')
+		notify_gmail_extra_checkbutton = self.xml.get_widget(
+			'notify_gmail_extra_checkbutton')
+
+		for account in gajim.config.get_per('accounts'):
+			jid = gajim.get_jid_from_account(account)
+			if gajim.get_server_from_jid(jid) in gajim.gmail_domains:
+				frame_gmail.set_sensitive(True)
+				st = gajim.config.get('notify_on_new_gmail_email')
+				notify_gmail_checkbutton.set_active(st)
+				st = gajim.config.get('notify_on_new_gmail_email_extra')
+				notify_gmail_extra_checkbutton.set_active(st)
+				break
+
+		#### Status tab ###
 		# Autoaway
 		st = gajim.config.get('autoaway')
 		self.auto_away_checkbutton.set_active(st)
@@ -358,7 +413,7 @@ class PreferencesWindow:
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer, False)
 		col.set_attributes(renderer, text = 1)
-		col = gtk.TreeViewColumn('Message')
+		col = gtk.TreeViewColumn('Default Message')
 		self.default_msg_tree.append_column(col)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer, True)
@@ -389,6 +444,7 @@ class PreferencesWindow:
 		buf = self.xml.get_widget('msg_textview').get_buffer()
 		buf.connect('changed', self.on_msg_textview_changed)
 
+		### Advanced tab ###
 		# open links with
 		if os.name == 'nt':
 			applications_frame = self.xml.get_widget('applications_frame')
@@ -440,93 +496,21 @@ class PreferencesWindow:
 		st = gajim.config.get('log_contact_status_changes')
 		self.xml.get_widget('log_show_changes_checkbutton').set_active(st)
 
+		# log encrypted chat sessions
+		st = gajim.config.get('log_encrypted_sessions')
+		self.xml.get_widget('log_encrypted_chats_checkbutton').set_active(st)
+
 		# send os info
 		st = gajim.config.get('send_os_info')
 		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
 
-		# send os info
+		# check if gajm is default
 		st = gajim.config.get('check_if_gajim_is_default')
 		self.xml.get_widget('check_default_client_checkbutton').set_active(st)
 
-		# set status msg from currently playing music track
-		widget = self.xml.get_widget(
-			'set_status_msg_from_current_music_track_checkbutton')
-		if os.name == 'nt':
-			widget.set_no_show_all(True)
-			widget.hide()
-		elif dbus_support.supported:
-			st = gajim.config.get('set_status_msg_from_current_music_track')
-			widget.set_active(st)
-		else:
-			widget.set_sensitive(False)
-
-		# PEP
-		st = gajim.config.get('publish_mood')
-		self.xml.get_widget('publish_mood_checkbutton').set_active(st)
-
-		st = gajim.config.get('publish_activity')
-		self.xml.get_widget('publish_activity_checkbutton').set_active(st)
-
-		st = gajim.config.get('publish_tune')
-		self.xml.get_widget('publish_tune_checkbutton').set_active(st)
-
-		st = gajim.config.get('subscribe_mood')
-		self.xml.get_widget('subscribe_mood_checkbutton').set_active(st)
-
-		st = gajim.config.get('subscribe_activity')
-		self.xml.get_widget('subscribe_activity_checkbutton').set_active(st)
-
-		st = gajim.config.get('subscribe_tune')
-		self.xml.get_widget('subscribe_tune_checkbutton').set_active(st)
-
-		# Notify user of new gmail e-mail messages,
-		# only show checkbox if user has a gtalk account
-		frame_gmail = self.xml.get_widget('frame_gmail')
-		notify_gmail_checkbutton = self.xml.get_widget('notify_gmail_checkbutton')
-		notify_gmail_extra_checkbutton = self.xml.get_widget(
-			'notify_gmail_extra_checkbutton')
-
-		for account in gajim.config.get_per('accounts'):
-			jid = gajim.get_jid_from_account(account)
-			if gajim.get_server_from_jid(jid) in gajim.gmail_domains:
-				frame_gmail.show_all()
-				st = gajim.config.get('notify_on_new_gmail_email')
-				notify_gmail_checkbutton.set_active(st)
-				st = gajim.config.get('notify_on_new_gmail_email_extra')
-				notify_gmail_extra_checkbutton.set_active(st)
-				break
-		else:
-			frame_gmail.hide()
-
-		# Color for incoming messages
-		colSt = gajim.config.get('inmsgcolor')
-		self.xml.get_widget('incoming_msg_colorbutton').set_color(
-			gtk.gdk.color_parse(colSt))
-
-		# Color for outgoing messages
-		colSt = gajim.config.get('outmsgcolor')
-		self.xml.get_widget('outgoing_msg_colorbutton').set_color(
-			gtk.gdk.color_parse(colSt))
-
-		# Color for status messages
-		colSt = gajim.config.get('statusmsgcolor')
-		self.xml.get_widget('status_msg_colorbutton').set_color(
-			gtk.gdk.color_parse(colSt))
-
-		# Color for hyperlinks
-		colSt = gajim.config.get('urlmsgcolor')
-		self.xml.get_widget('url_msg_colorbutton').set_color(
-			gtk.gdk.color_parse(colSt))
-
-		# Font for messages
-		font = gajim.config.get('conversation_font')
-		# try to set default font for the current desktop env
-		fontbutton = self.xml.get_widget('conversation_fontbutton')
-		if font == '':
-			fontbutton.set_sensitive(False)
-			self.xml.get_widget('default_chat_font').set_active(True)
-		else:
-			fontbutton.set_font_name(font)
+		# Ignore messages from unknown contacts
+		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
+			set_active(gajim.config.get('ignore_unknown_contacts'))
 
 		self.xml.signal_autoconnect(self)
 
@@ -542,8 +526,7 @@ class PreferencesWindow:
 		self.theme_preferences = None
 
 		self.notebook.set_current_page(0)
-		if not gajim.config.get('use_pep'):
-			self.notebook.remove_page(4)
+		
 		self.window.show_all()
 		gtkgui_helpers.possibly_move_window_in_current_desktop(self.window)
 
@@ -634,11 +617,6 @@ class PreferencesWindow:
 		'''Update emoticons state in Opened Chat Windows'''
 		for win in gajim.interface.msg_win_mgr.windows():
 			win.toggle_emoticons()
-
-	def on_treat_incoming_messages_combobox_changed(self, widget):
-		active = widget.get_active()
-		config_type = common.config.opt_treat_incoming_messages[active]
-		gajim.config.set('treat_incoming_messages', config_type)
 
 	def on_one_window_type_combo_changed(self, widget):
 		active = widget.get_active()
@@ -1013,6 +991,9 @@ class PreferencesWindow:
 
 	def on_log_show_changes_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'log_contact_status_changes')
+	
+	def on_log_encrypted_chats_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'log_encrypted_sessions')
 
 	def on_send_os_info_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'send_os_info')
@@ -1102,15 +1083,9 @@ class PreferencesWindow:
 			'contact_disconnected': _('Contact Disconnected'),
 			'message_sent': _('Message Sent'),
 			'muc_message_highlight': _('Group Chat Message Highlight'),
-			'muc_message_received': _('Group Chat Message Received')
+			'muc_message_received': _('Group Chat Message Received'),
+			'gmail_received': _('GMail Email Received')
 		}
-
-		# In case of a GMail account we provide a sound notification option
-		for account in gajim.config.get_per('accounts'):
-			jid = gajim.get_jid_from_account(account)
-			if gajim.get_server_from_jid(jid) in gajim.gmail_domains:
-				sounds_dict['gmail_received'] = _('GMail Email Received')
-				break
 
 		for sound_event_config_name, sound_ui_name in sounds_dict.items():
 			enabled = gajim.config.get_per('soundevents',
@@ -1388,7 +1363,10 @@ class AccountsWindow:
 
 		# Merge accounts
 		st = gajim.config.get('mergeaccounts')
-		self.xml.get_widget('merge_checkbutton').set_active(st)
+		checkbutton = self.xml.get_widget('merge_checkbutton')
+		checkbutton.set_active(st)
+		# prevent roster redraws by connecting the signal after button state is set
+		checkbutton.connect('toggled', self.on_merge_checkbutton_toggled)
 
 		self.avahi_available = True
 		try:
@@ -1416,7 +1394,6 @@ class AccountsWindow:
 		self.remove_button.set_sensitive(False)
 		self.rename_button.set_sensitive(False)
 		self.current_account = None
-		self.init_account()
 		model = self.accounts_treeview.get_model()
 		model.clear()
 		for account in gajim.config.get_per('accounts'):
