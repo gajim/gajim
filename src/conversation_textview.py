@@ -352,9 +352,8 @@ class ConversationTextview:
 		adjustment.set_value(0)
 		return False # when called in an idle_add, just do it once
 
-	def bring_scroll_to_end(self, diff_y = 0,\
-							use_smooth =\
-							gajim.config.get('use_smooth_scrolling')):
+	def bring_scroll_to_end(self, diff_y = 0,
+	use_smooth=gajim.config.get('use_smooth_scrolling')):
 		''' scrolls to the end of textview if end is not visible '''
 		buffer = self.tv.get_buffer()
 		end_iter = buffer.get_end_iter()
@@ -904,12 +903,12 @@ class ConversationTextview:
 			use_other_tags = False
 		elif special_text.startswith('*'): # it's a bold text
 			tags.append('bold')
-			if special_text[1] == '/' and special_text[-2] == '/' and
+			if special_text[1] == '/' and special_text[-2] == '/' and\
 			len(special_text) > 4: # it's also italic
 				tags.append('italic')
 				if not show_ascii_formatting_chars:
 					special_text = special_text[2:-2] # remove */ /*
-			elif special_text[1] == '_' and special_text[-2] == '_' and
+			elif special_text[1] == '_' and special_text[-2] == '_' and \
 			len(special_text) > 4: # it's also underlined
 				tags.append('underline')
 				if not show_ascii_formatting_chars:
@@ -919,12 +918,12 @@ class ConversationTextview:
 					special_text = special_text[1:-1] # remove * *
 		elif special_text.startswith('/'): # it's an italic text
 			tags.append('italic')
-			if special_text[1] == '*' and special_text[-2] == '*' and
+			if special_text[1] == '*' and special_text[-2] == '*' and \
 			len(special_text) > 4: # it's also bold
 				tags.append('bold')
 				if not show_ascii_formatting_chars:
 					special_text = special_text[2:-2] # remove /* */
-			elif special_text[1] == '_' and special_text[-2] == '_' and
+			elif special_text[1] == '_' and special_text[-2] == '_' and \
 			len(special_text) > 4: # it's also underlined
 				tags.append('underline')
 				if not show_ascii_formatting_chars:
@@ -934,12 +933,12 @@ class ConversationTextview:
 					special_text = special_text[1:-1] # remove / /
 		elif special_text.startswith('_'): # it's an underlined text
 			tags.append('underline')
-			if special_text[1] == '*' and special_text[-2] == '*' and
+			if special_text[1] == '*' and special_text[-2] == '*' and \
 			len(special_text) > 4: # it's also bold
 				tags.append('bold')
 				if not show_ascii_formatting_chars:
 					special_text = special_text[2:-2] # remove _* *_
-			elif special_text[1] == '/' and special_text[-2] == '/' and
+			elif special_text[1] == '/' and special_text[-2] == '/' and \
 			len(special_text) > 4: # it's also italic
 				tags.append('italic')
 				if not show_ascii_formatting_chars:
