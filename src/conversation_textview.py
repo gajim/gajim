@@ -61,8 +61,8 @@ class TextViewImage(gtk.Image):
 		self.anchor = anchor
 		self._selected = False
 		self._disconnect_funcs = []
-		self.connect("parent-set", self.on_parent_set)
-		self.connect("expose-event", self.on_expose)
+		self.connect('parent-set', self.on_parent_set)
+		self.connect('expose-event', self.on_expose)
 
 	def _get_selected(self):
 		parent = self.get_parent()
@@ -74,7 +74,7 @@ class TextViewImage(gtk.Image):
 			return True
 		else:
 			return False
-	
+
 	def get_state(self):
 		parent = self.get_parent()
 		if not parent:
@@ -110,22 +110,22 @@ class TextViewImage(gtk.Image):
 			self._disconnect_signals()
 			return
 
-		self._do_connect(parent, "style-set", self.do_queue_draw)
-		self._do_connect(parent, "focus-in-event", self.do_queue_draw)
-		self._do_connect(parent, "focus-out-event", self.do_queue_draw)
+		self._do_connect(parent, 'style-set', self.do_queue_draw)
+		self._do_connect(parent, 'focus-in-event', self.do_queue_draw)
+		self._do_connect(parent, 'focus-out-event', self.do_queue_draw)
 
 		textbuf = parent.get_buffer()
-		self._do_connect(textbuf, "mark-set", self.on_mark_set)
-		self._do_connect(textbuf, "mark-deleted", self.on_mark_deleted)
-	
+		self._do_connect(textbuf, 'mark-set', self.on_mark_set)
+		self._do_connect(textbuf, 'mark-deleted', self.on_mark_deleted)
+
 	def do_queue_draw(self, *args):
 		self.queue_draw()
 		return False
-	
+
 	def on_mark_set(self, buf, iterat, mark):
 		self.on_mark_modified(mark)
 		return False
-	
+
 	def on_mark_deleted(self, buf, mark):
 		self.on_mark_modified(mark)
 		return False
@@ -142,12 +142,12 @@ class TextViewImage(gtk.Image):
 			widget.window.draw_rectangle(gc, True, area.x, area.y,
 				area.width, area.height)
 		return False
-	
+
 
 class ConversationTextview:
 	'''Class for the conversation textview (where user reads already said messages)
 	for chat/groupchat windows'''
-	
+
 	path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
 	FOCUS_OUT_LINE_PIXBUF = gtk.gdk.pixbuf_new_from_file(path_to_file)
 
@@ -159,7 +159,7 @@ class ConversationTextview:
 		'''if used_in_history_window is True, then we do not show
 		Clear menuitem in context menu'''
 		self.used_in_history_window = used_in_history_window
-		
+
 		# no need to inherit TextView, use it as atrribute is safer
 		self.tv = HtmlTextView()
 		self.tv.html_hyperlink_handler = self.html_hyperlink_handler
@@ -185,8 +185,8 @@ class ConversationTextview:
 		id = self.tv.connect('button_press_event',
 			self.on_textview_button_press_event)
 		self.handlers[id] = self.tv
-		
-		id = self.tv.connect("expose-event",
+
+		id = self.tv.connect('expose-event',
 			self.on_textview_expose_event)
 		self.handlers[id] = self.tv
 
@@ -281,7 +281,7 @@ class ConversationTextview:
 		self.tv.destroy()
 		#FIXME:
 		# self.line_tooltip.destroy()
-	
+
 	def update_tags(self):
 		self.tagIn.set_property('foreground', gajim.config.get('inmsgcolor'))
 		self.tagOut.set_property('foreground', gajim.config.get('outmsgcolor'))
@@ -314,7 +314,7 @@ class ConversationTextview:
 			self.smooth_id = None
 			self.smooth_scroll_timer.cancel()
 			return False
-		return True		   
+		return True
 
 	def smooth_scroll_timeout(self):
 		gobject.idle_add(self.do_smooth_scroll_timeout)
@@ -417,12 +417,13 @@ class ConversationTextview:
 			# add the new focus out line
 			end_iter = buffer.get_end_iter()
 			buffer.insert(end_iter, '\n')
-			buffer.insert_pixbuf(end_iter, 
+			buffer.insert_pixbuf(end_iter,
 				ConversationTextview.FOCUS_OUT_LINE_PIXBUF)
 
 			end_iter = buffer.get_end_iter()
 			before_img_iter = end_iter.copy()
-			before_img_iter.backward_char() # one char back (an image also takes one char)
+			# one char back (an image also takes one char)
+			before_img_iter.backward_char()
 			buffer.apply_tag_by_name('focus-out-line', before_img_iter, end_iter)
 
 			self.allow_focus_out_line = False
@@ -451,7 +452,8 @@ class ConversationTextview:
 			# check if the current pointer is still over the line
 			position = self.tv.window.get_origin()
 			self.line_tooltip.show_tooltip(_('Text below this line is what has '
-			'been said since the last time you paid attention to this group chat'),	8, position[1] + pointer[1])
+			'been said since the last time you paid attention to this group chat'),
+				8, position[1] + pointer[1])
 
 	def on_textview_expose_event(self, widget, event):
 		expalloc = event.area
@@ -459,7 +461,7 @@ class ConversationTextview:
 		exp_y0 = expalloc.y
 		exp_x1 = exp_x0 + expalloc.width
 		exp_y1 = exp_y0 + expalloc.height
-		
+
 		try:
 			tryfirst = [self.image_cache[(exp_x0, exp_y0)]]
 		except KeyError:
@@ -581,7 +583,8 @@ class ConversationTextview:
 			else:
 				if dict_link.find('%s') == -1:
 					# we must have %s in the url if not WIKTIONARY
-					item = gtk.MenuItem(_('Dictionary URL is missing an "%s" and it is not WIKTIONARY'))
+					item = gtk.MenuItem(_(
+						'Dictionary URL is missing an "%s" and it is not WIKTIONARY'))
 					item.set_property('sensitive', False)
 				else:
 					link = dict_link % self.selected_phrase
@@ -602,7 +605,7 @@ class ConversationTextview:
 				id = item.connect('activate', self.visit_url_from_menuitem, link)
 				self.handlers[id] = item
 			submenu.append(item)
-			
+
 			item = gtk.MenuItem(_('Open as _Link'))
 			id = item.connect('activate', self.visit_url_from_menuitem, link)
 			self.handlers[id] = item
@@ -638,7 +641,8 @@ class ConversationTextview:
 		if return_val: # if sth was selected when we right-clicked
 			# get the selected text
 			start_sel, finish_sel = return_val[0], return_val[1]
-			self.selected_phrase = buffer.get_text(start_sel, finish_sel).decode('utf-8')
+			self.selected_phrase = buffer.get_text(start_sel, finish_sel).decode(
+				'utf-8')
 
 	def on_open_link_activate(self, widget, kind, text):
 		helpers.launch_browser_mailer(kind, text)
@@ -672,7 +676,8 @@ class ConversationTextview:
 		if kind == 'url':
 			id = childs[0].connect('activate', self.on_copy_link_activate, text)
 			self.handlers[id] = childs[0]
-			id = childs[1].connect('activate', self.on_open_link_activate, kind, text)
+			id = childs[1].connect('activate', self.on_open_link_activate, kind,
+				text)
 			self.handlers[id] = childs[1]
 			childs[2].hide() # copy mail address
 			childs[3].hide() # open mail composer
@@ -684,13 +689,14 @@ class ConversationTextview:
 			# load muc icon
 			join_group_chat_menuitem = xml.get_widget('join_group_chat_menuitem')
 			muc_icon = gajim.interface.roster.load_icon('muc_active')
-			if muc_icon: 
-				join_group_chat_menuitem.set_image(muc_icon) 
+			if muc_icon:
+				join_group_chat_menuitem.set_image(muc_icon)
 
 			text = text.lower()
 			id = childs[2].connect('activate', self.on_copy_link_activate, text)
 			self.handlers[id] = childs[2]
-			id = childs[3].connect('activate', self.on_open_link_activate, kind, text)
+			id = childs[3].connect('activate', self.on_open_link_activate, kind,
+				text)
 			self.handlers[id] = childs[3]
 			id = childs[5].connect('activate', self.on_start_chat_activate, text)
 			self.handlers[id] = childs[5]
@@ -707,7 +713,8 @@ class ConversationTextview:
 				allow_add = True
 
 			if allow_add:
-				id = childs[7].connect('activate', self.on_add_to_roster_activate, text)
+				id = childs[7].connect('activate', self.on_add_to_roster_activate,
+					text)
 				self.handlers[id] = childs[7]
 				childs[7].show() # show add to roster menuitem
 			else:
@@ -728,7 +735,8 @@ class ConversationTextview:
 			# we get the end of the tag
 			while not end_iter.ends_tag(texttag):
 				end_iter.forward_char()
-			word = self.tv.get_buffer().get_text(begin_iter, end_iter).decode('utf-8')
+			word = self.tv.get_buffer().get_text(begin_iter, end_iter).decode(
+				'utf-8')
 			if event.button == 3: # right click
 				self.make_link_menu(event, kind, word)
 			else:
@@ -785,16 +793,16 @@ class ConversationTextview:
 		exitcode = 0
 
 		# some latex commands are really bad
-		blacklist = ["\\def", "\\let", "\\futurelet",
-			"\\newcommand", "\\renewcomment", "\\else", "\\fi", "\\write",
-			"\\input", "\\include", "\\chardef", "\\catcode", "\\makeatletter",
-			"\\noexpand", "\\toksdef", "\\every", "\\errhelp", "\\errorstopmode",
-			"\\scrollmode", "\\nonstopmode", "\\batchmode", "\\read", "\\csname",
-			"\\newhelp", "\\relax", "\\afterground", "\\afterassignment",
-			"\\expandafter", "\\noexpand", "\\special", "\\command", "\\loop",
-			"\\repeat", "\\toks", "\\output", "\\line", "\\mathcode", "\\name",
-			"\\item", "\\section", "\\mbox", "\\DeclareRobustCommand", "\\[",
-			"\\]"]
+		blacklist = ['\\def', '\\let', '\\futurelet',
+			'\\newcommand', '\\renewcomment', '\\else', '\\fi', '\\write',
+			'\\input', '\\include', '\\chardef', '\\catcode', '\\makeatletter',
+			'\\noexpand', '\\toksdef', '\\every', '\\errhelp', '\\errorstopmode',
+			'\\scrollmode', '\\nonstopmode', '\\batchmode', '\\read', '\\csname',
+			'\\newhelp', '\\relax', '\\afterground', '\\afterassignment',
+			'\\expandafter', '\\noexpand', '\\special', '\\command', '\\loop',
+			'\\repeat', '\\toks', '\\output', '\\line', '\\mathcode', '\\name',
+			'\\item', '\\section', '\\mbox', '\\DeclareRobustCommand', '\\[',
+			'\\]']
 
 		str = str[2:len(str)-2]
 
@@ -806,16 +814,18 @@ class ConversationTextview:
 
 		if exitcode == 0:
 			random.seed()
-			tmpfile = os.path.join(gettempdir(), "gajimtex_" + random.randint(0,
+			tmpfile = os.path.join(gettempdir(), 'gajimtex_' + random.randint(0,
 				100).__str__())
 
 			# build latex string
-			texstr = "\\documentclass[12pt]{article}\\usepackage[dvips]{graphicx}\\usepackage{amsmath}\\usepackage{amssymb}\\pagestyle{empty}"
-			texstr += "\\begin{document}\\begin{large}\\begin{gather*}"
+			texstr = '\\documentclass[12pt]{article}\\usepackage[dvips]{graphicx}'
+			texstr += '\\usepackage{amsmath}\\usepackage{amssymb}'
+			texstr += '\\pagestyle{empty}'
+			texstr += '\\begin{document}\\begin{large}\\begin{gather*}'
 			texstr += str
-			texstr += "\\end{gather*}\\end{large}\\end{document}"
+			texstr += '\\end{gather*}\\end{large}\\end{document}'
 
-			file = open(os.path.join(tmpfile + ".tex"), "w+")
+			file = open(os.path.join(tmpfile + '.tex'), 'w+')
 			file.write(texstr)
 			file.flush()
 			file.close()
@@ -824,17 +834,17 @@ class ConversationTextview:
 				cwd=gettempdir())
 			exitcode = p.wait()
 
-		if exitcode == 0:		
+		if exitcode == 0:
 			p = Popen(['dvips', '-E', '-o', tmpfile + '.ps', tmpfile + '.dvi'],
 				cwd=gettempdir())
 			exitcode = p.wait()
 
 		if exitcode == 0:
-			p = Popen(['convert', '-alpha', 'off', tmpfile + '.ps', tmpfile + '.png'],
-				cwd=gettempdir())
+			p = Popen(['convert', '-alpha', 'off', tmpfile + '.ps',
+				tmpfile + '.png'], cwd=gettempdir())
 			exitcode = p.wait()
 
-		extensions = [".tex", ".log", ".aux", ".dvi", ".ps"]
+		extensions = ['.tex', '.log', '.aux', '.dvi', '.ps']
 		for ext in extensions:
 			try:
 				os.remove(tmpfile + ext)
@@ -894,11 +904,13 @@ class ConversationTextview:
 			use_other_tags = False
 		elif special_text.startswith('*'): # it's a bold text
 			tags.append('bold')
-			if special_text[1] == '/' and special_text[-2] == '/' and len(special_text) > 4: # it's also italic
+			if special_text[1] == '/' and special_text[-2] == '/' and
+			len(special_text) > 4: # it's also italic
 				tags.append('italic')
 				if not show_ascii_formatting_chars:
 					special_text = special_text[2:-2] # remove */ /*
-			elif special_text[1] == '_' and special_text[-2] == '_' and len(special_text) > 4: # it's also underlined
+			elif special_text[1] == '_' and special_text[-2] == '_' and
+			len(special_text) > 4: # it's also underlined
 				tags.append('underline')
 				if not show_ascii_formatting_chars:
 					special_text = special_text[2:-2] # remove *_ _*
@@ -907,11 +919,13 @@ class ConversationTextview:
 					special_text = special_text[1:-1] # remove * *
 		elif special_text.startswith('/'): # it's an italic text
 			tags.append('italic')
-			if special_text[1] == '*' and special_text[-2] == '*' and len(special_text) > 4: # it's also bold
+			if special_text[1] == '*' and special_text[-2] == '*' and
+			len(special_text) > 4: # it's also bold
 				tags.append('bold')
 				if not show_ascii_formatting_chars:
 					special_text = special_text[2:-2] # remove /* */
-			elif special_text[1] == '_' and special_text[-2] == '_' and len(special_text) > 4: # it's also underlined
+			elif special_text[1] == '_' and special_text[-2] == '_' and
+			len(special_text) > 4: # it's also underlined
 				tags.append('underline')
 				if not show_ascii_formatting_chars:
 					special_text = special_text[2:-2] # remove /_ _/
@@ -920,11 +934,13 @@ class ConversationTextview:
 					special_text = special_text[1:-1] # remove / /
 		elif special_text.startswith('_'): # it's an underlined text
 			tags.append('underline')
-			if special_text[1] == '*' and special_text[-2] == '*' and len(special_text) > 4: # it's also bold
+			if special_text[1] == '*' and special_text[-2] == '*' and
+			len(special_text) > 4: # it's also bold
 				tags.append('bold')
 				if not show_ascii_formatting_chars:
 					special_text = special_text[2:-2] # remove _* *_
-			elif special_text[1] == '/' and special_text[-2] == '/' and len(special_text) > 4: # it's also italic
+			elif special_text[1] == '/' and special_text[-2] == '/' and
+			len(special_text) > 4: # it's also italic
 				tags.append('italic')
 				if not show_ascii_formatting_chars:
 					special_text = special_text[2:-2] # remove _/ /_
@@ -1122,8 +1138,8 @@ class ConversationTextview:
 				self.tv.display_html(xhtml.encode('utf-8'))
 				return
 			except Exception, e:
-				gajim.log.debug(str("Error processing xhtml")+str(e))
-				gajim.log.debug(str("with |"+xhtml+"|"))
+				gajim.log.debug(str('Error processing xhtml')+str(e))
+				gajim.log.debug(str('with |'+xhtml+'|'))
 
 		buffer = self.tv.get_buffer()
 		# /me is replaced by name if name is given
@@ -1135,4 +1151,3 @@ class ConversationTextview:
 		# add the rest of text located in the index and after
 		end_iter = buffer.get_end_iter()
 		buffer.insert_with_tags_by_name(end_iter, text[index:], *text_tags)
-
