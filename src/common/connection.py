@@ -508,7 +508,7 @@ class Connection(ConnectionHandlers):
 		self.dispatch('CONNECTION_LOST',
 			(_('Connection to proxy failed'), reason))
 
-	def connect_to_next_type(self):
+	def connect_to_next_type(self, retry=False):
 		if len(self._connection_types):
 			self._current_type = self._connection_types.pop(0)
 			if self.last_connection:
@@ -547,7 +547,7 @@ class Connection(ConnectionHandlers):
 			con.connect((self._current_host['host'], port), proxy=self._proxy,
 				secure = secur)
 		else:
-			self.connect_to_next_host()
+			self.connect_to_next_host(retry)
 
 	def connect_to_next_host(self, retry = False):
 		if len(self._hosts):
