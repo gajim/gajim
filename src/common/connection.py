@@ -551,8 +551,12 @@ class Connection(ConnectionHandlers):
 
 	def connect_to_next_host(self, retry = False):
 		if len(self._hosts):
-			self._connection_types = gajim.config.get_per('accounts', self.name,
-				'connection_types').split()
+			# No config option exist when creating a new account
+			if self.name in gajim.config.get_per('accounts'):
+				self._connection_types = gajim.config.get_per('accounts', self.name,
+					'connection_types').split()
+			else:
+				self._connection_types = ['tls', 'ssl', 'plain']
 			host = self.select_next_host(self._hosts)
 			self._current_host = host
 			self._hosts.remove(host)
