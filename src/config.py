@@ -1657,8 +1657,10 @@ class AccountsWindow:
 			use_env_http_proxy)
 		self.xml.get_widget('proxy_hbox1').set_sensitive(not use_env_http_proxy)
 
-		usessl = gajim.config.get_per('accounts', account, 'usessl')
-		self.xml.get_widget('use_ssl_checkbutton1').set_active(usessl)
+		warn_when_insecure = gajim.config.get_per('accounts', account,
+			'warn_when_insecure_connection')
+		self.xml.get_widget('warn_when_insecure_connection_checkbutton1').\
+			set_active(warn_when_insecure)
 
 		self.xml.get_widget('send_keepalive_checkbutton1').set_active(
 			gajim.config.get_per('accounts', account, 'keep_alives_enabled'))
@@ -2015,20 +2017,11 @@ class AccountsWindow:
 		else:
 			gajim.interface.instances['manage_proxies'] = ManageProxiesWindow()
 
-	def on_use_ssl_checkbutton1_toggled(self, widget):
+	def on_warn_when_insecure_connection_checkbutton1_toggled(self, widget):
 		if self.ignore_events:
 			return
 
-		if self.option_changed('usessl', widget.get_active()):
-			self.need_relogin = True
-
-		isactive = widget.get_active()
-		if isactive:
-			self.xml.get_widget('custom_port_entry1').set_text('5223')
-		else:
-			self.xml.get_widget('custom_port_entry1').set_text('5222')
-
-		self.on_checkbutton_toggled(widget, 'usessl',
+		self.on_checkbutton_toggled(widget, 'warn_when_insecure_connection',
 			account=self.current_account)
 
 	def on_send_keepalive_checkbutton1_toggled(self, widget):

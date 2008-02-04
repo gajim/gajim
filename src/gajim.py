@@ -459,6 +459,9 @@ class Interface:
 			self.dialog.destroy()
 			gajim.connections[account].build_http_auth_answer(iq_obj, answer)
 
+		def on_yes(is_checked, account, iq_obj):
+			response(account, iq_obj, 'yes')
+
 		sec_msg = _('Do you accept this request?')
 		if gajim.get_number_of_connected_accounts() > 1:
 			sec_msg = _('Do you accept this request on account %s?') % account
@@ -466,8 +469,8 @@ class Interface:
 			sec_msg = data[4] + '\n' + sec_msg
 		self.dialog = dialogs.YesNoDialog(_('HTTP (%s) Authorization for %s (id: %s)') \
 			% (data[0], data[1], data[2]), sec_msg,
-			on_response_yes = (response, account, data[3], 'yes'),
-			on_response_no = (response, account, data[3], 'no'))
+			on_response_yes=(on_yes, account, data[3]),
+			on_response_no=(response, account, data[3], 'no'))
 
 	def handle_event_error_answer(self, account, array):
 		#('ERROR_ANSWER', account, (id, jid_from, errmsg, errcode))
@@ -961,13 +964,13 @@ class Interface:
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if not contact:
 			return
-		def on_yes(list_):
+		def on_yes(is_checked, list_):
 			self.roster.on_req_usub(None, list_)
 		list_ = [(contact, account)]
 		dialogs.YesNoDialog(
 			_('Contact "%s" removed subscription from you') % jid,
 			_('You will always see him or her as offline.\nDo you want to remove him or her from your contact list?'),
-			on_response_yes = (on_yes, list_))
+			on_response_yes=(on_yes, list_))
 		# FIXME: Per RFC 3921, we can "deny" ack as well, but the GUI does not show deny
 
 	def handle_event_agent_info_error(self, account, agent):
@@ -1948,7 +1951,7 @@ class Interface:
 					negotiated, not_acceptable, ask_user = session.verify_options_bob(form)
 
 					if ask_user:
-						def accept_nondefault_options():
+						def accept_nondefault_options(is_checked):
 							self.dialog.destroy()
 							negotiated.update(ask_user)
 							session.respond_e2e_bob(form, negotiated, not_acceptable)
@@ -1965,8 +1968,8 @@ class Interface:
 		%s
 
 		Are these options acceptable?''') % (negotiation.describe_features(ask_user)),
-								on_response_yes = accept_nondefault_options,
-								on_response_no = reject_nondefault_options)
+								on_response_yes=accept_nondefault_options,
+								on_response_no=reject_nondefault_options)
 					else:
 						session.respond_e2e_bob(form, negotiated, not_acceptable)
 
@@ -1989,7 +1992,7 @@ class Interface:
 					session.check_identity = _cb
 
 				if ask_user:
-					def accept_nondefault_options():
+					def accept_nondefault_options(is_checked):
 						dialog.destroy()
 
 						negotiated.update(ask_user)
@@ -2248,13 +2251,11 @@ class Interface:
 
 	def handle_event_fingerprint_error(self, account, data):
 		# ('FINGERPRINT_ERROR', account, (new_fingerprint,))
-		def on_yes():
-			dialog.destroy()
+		def on_yes(is_checked):
 			gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
 				data[0])
 			gajim.connections[account].ssl_certificate_accepted()
 		def on_no():
-			dialog.destroy()
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
 		pritext = _('SSL certificate error')
@@ -2265,6 +2266,24 @@ class Interface:
 			data[0])
 		dialog = dialogs.YesNoDialog(pritext, sectext, on_response_yes=on_yes,
 			on_response_no=on_no)
+
+	def handle_event_plain_connection(self, account, data):
+		# ('PLAIN_CONNECTION', account, (connection))
+		server = gajim.config.get_per('accounts', account, 'hostname')
+		def on_yes(is_checked):
+			if is_checked:
+				gajim.config.set_per('accounts', account,
+					'warn_when_insecure_connection', False)
+			gajim.connections[account].connection_accepted(data[0], 'tcp')
+		def on_no():
+			gajim.connections[account].disconnect(on_purpose=True)
+			self.handle_event_status(account, 'offline')
+		pritext = _('Insecure connection')
+		sectext = _('You are about to send your password on an insecure '
+			'conection. Are you sure you want to do that?')
+		checktext = _('Do _not ask me again')
+		dialog = dialogs.YesNoDialog(pritext, sectext, checktext,
+			on_response_yes=on_yes, on_response_no=on_no)
 
 	def read_sleepy(self):
 		'''Check idle status and change that status if needed'''
@@ -2606,6 +2625,7 @@ class Interface:
 			'GPG_PASSWORD_REQUIRED': self.handle_event_gpg_password_required,
 			'SSL_ERROR': self.handle_event_ssl_error,
 			'FINGERPRINT_ERROR': self.handle_event_fingerprint_error,
+			'PLAIN_CONNECTION': self.handle_event_plain_connection,
 		}
 		gajim.handlers = self.handlers
 

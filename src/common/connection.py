@@ -466,22 +466,18 @@ class Connection(ConnectionHandlers):
 
 		h = hostname
 		p = 5222
-		# autodetect [for SSL in 5223/443 and for TLS if broadcasted]
-		secur = None
-		if usessl:
-			p = 5223
-			secur = 1 # 1 means force SSL no matter what the port will be
-			use_srv = False # wants ssl? disable srv lookup
+		ssl_p = 5223
+#			use_srv = False # wants ssl? disable srv lookup
 		if use_custom:
 			h = custom_h
 			p = custom_p
+			ssl_p = custom_p
 			use_srv = False
 
-		hosts = []
 		# SRV resolver
 		self._proxy = proxy
-		self._secure = secur
-		self._hosts = [ {'host': h, 'port': p, 'prio': 10, 'weight': 10} ]
+		self._hosts = [ {'host': h, 'port': p, 'ssl_port': ssl_p, 'prio': 10,
+			'weight': 10} ]
 		self._hostname = hostname
 		if use_srv:
 			# add request for srv query to the resolve, on result '_on_resolve'
@@ -495,6 +491,12 @@ class Connection(ConnectionHandlers):
 		# SRV query returned at least one valid result, we put it in hosts dict
 		if len(result_array) != 0:
 			self._hosts = [i for i in result_array]
+			# Add ssl port
+			ssl_p = 5223
+			if gajim.config.get_per('accounts', self.name, 'use_custom_host'):
+				ssl_p = gajim.config.get_per('accounts', self.name, 'custom_port')
+			for i in self._hosts:
+				i['ssl_port'] = ssl_p
 		self.connect_to_next_host()
 
 	def on_proxy_failure(self, reason):
@@ -506,8 +508,9 @@ class Connection(ConnectionHandlers):
 		self.dispatch('CONNECTION_LOST',
 			(_('Connection to proxy failed'), reason))
 
-	def connect_to_next_host(self, retry = False):
-		if len(self._hosts):
+	def connect_to_next_type(self):
+		if len(self._connection_types):
+			self._current_type = self._connection_types.pop(0)
 			if self.last_connection:
 				self.last_connection.socket.disconnect()
 				self.last_connection = None
@@ -516,27 +519,45 @@ class Connection(ConnectionHandlers):
 				con = common.xmpp.NonBlockingClient(self._hostname, caller = self,
 					on_connect = self.on_connect_success,
 					on_proxy_failure = self.on_proxy_failure,
-					on_connect_failure = self.connect_to_next_host)
+					on_connect_failure = self.connect_to_next_type)
 			else:
-				con = common.xmpp.NonBlockingClient(self._hostname, debug = [], caller = self,
-					on_connect = self.on_connect_success,
+				con = common.xmpp.NonBlockingClient(self._hostname, debug = [],
+					caller = self, on_connect = self.on_connect_success,
 					on_proxy_failure = self.on_proxy_failure,
-					on_connect_failure = self.connect_to_next_host)
+					on_connect_failure = self.connect_to_next_type)
 			self.last_connection = con
 			# increase default timeout for server responses
 			common.xmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = self.try_connecting_for_foo_secs
 			con.set_idlequeue(gajim.idlequeue)
-			host = self.select_next_host(self._hosts)
-			self._current_host = host
-			self._hosts.remove(host)
-
 			# FIXME: this is a hack; need a better way
 			if self.on_connect_success == self._on_new_account:
 				con.RegisterDisconnectHandler(self._on_new_account)
 
-			log.info("Connecting to %s: [%s:%d]", self.name, host['host'], host['port'])
-			con.connect((host['host'], host['port']), proxy = self._proxy,
-				secure = self._secure)
+			if self._current_type == 'ssl':
+				port = self._current_host['ssl_port']
+				secur = 1
+			else:
+				port = self._current_host['port']
+				if self._current_type == 'plain':
+					secur = 0
+				else:
+					secur = None
+			log.info('Connecting to %s: [%s:%d]', self.name,
+				self._current_host['host'], port)
+			con.connect((self._current_host['host'], port), proxy=self._proxy,
+				secure = secur)
+		else:
+			self.connect_to_next_host()
+
+	def connect_to_next_host(self, retry = False):
+		if len(self._hosts):
+			self._connection_types = gajim.config.get_per('accounts', self.name,
+				'connection_types').split()
+			host = self.select_next_host(self._hosts)
+			self._current_host = host
+			self._hosts.remove(host)
+			self.connect_to_next_type()
+
 		else:
 			if not retry and self.retrycount == 0:
 				log.debug("Out of hosts, giving up connecting to %s", self.name)
@@ -565,15 +586,26 @@ class Connection(ConnectionHandlers):
 		if not self.connected: # We went offline during connecting process
 			# FIXME - not possible, maybe it was when we used threads
 			return
+		_con_type = con_type
+		# xmpp returns 'tcp', but we set 'plain' in connection_types in config
+		if _con_type == 'tcp':
+			_con_type = 'plain'
+		if _con_type != self._current_type:
+			self.connect_to_next_type()
+			return
+		if _con_type == 'plain' and gajim.config.get_per('accounts', self.name,
+		'warn_when_insecure_connection'):
+			self.dispatch('PLAIN_CONNECTION', (con,))
+			return True
+		return self.connection_accepted(con, con_type)
+
+	def connection_accepted(self, con, con_type):
 		self.hosts = []
-		if not con_type:
-			log.debug('Could not connect to %s:%s' % (self._current_host['host'],
-				self._current_host['port']))
 		self.connected_hostname = self._current_host['host']
 		self.on_connect_failure = None
 		con.RegisterDisconnectHandler(self._disconnectedReconnCB)
-		log.debug(_('Connected to server %s:%s with %s') % (self._current_host['host'],
-			self._current_host['port'], con_type))
+		log.debug('Connected to server %s:%s with %s' % (
+			self._current_host['host'], self._current_host['port'], con_type))
 
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
@@ -603,11 +635,17 @@ class Connection(ConnectionHandlers):
 		self._register_handlers(con, con_type)
 		con.auth(name, self.password, self.server_resource, 1, self.__on_auth)
 
-
 	def ssl_certificate_accepted(self):
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		self._register_handlers(self.connection, 'ssl')
-		self.connection.auth(name, self.password, self.server_resource, 1, self.__on_auth)
+		self.connection.auth(name, self.password, self.server_resource, 1,
+			self.__on_auth)
+
+	def plain_connection_accepted(self):
+		name = gajim.config.get_per('accounts', self.name, 'name')
+		self._register_handlers(self.connection, 'tcp')
+		self.connection.auth(name, self.password, self.server_resource, 1,
+			self.__on_auth)
 
 	def _register_handlers(self, con, con_type):
 		self.peerhost = con.get_peerhost()

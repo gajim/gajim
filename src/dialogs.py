@@ -1220,8 +1220,8 @@ class ErrorDialog(HigDialog):
 		self.popup()
 
 class YesNoDialog(HigDialog):
-	def __init__(self, pritext, sectext='', on_response_yes = None,
-	on_response_no = None):
+	def __init__(self, pritext, sectext='', checktext='', on_response_yes=None,
+	on_response_no=None):
 		'''HIG compliant YesNo dialog.'''
 		self.user_response_yes = on_response_yes
 		self.user_response_no = on_response_no
@@ -1229,15 +1229,22 @@ class YesNoDialog(HigDialog):
 			gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, pritext, sectext,
 				on_response_yes=self.on_response_yes,
 				on_response_no=self.on_response_no)
+
+		if checktext:
+			self.checkbutton = gtk.CheckButton(checktext)
+			self.vbox.pack_start(self.checkbutton, expand=False, fill=True)
+		else:
+			self.checkbutton = None
 		self.set_modal(False)
 		self.popup()
 
 	def on_response_yes(self, widget):
 		if self.user_response_yes:
 			if isinstance(self.user_response_yes, tuple):
-				self.user_response_yes[0](*self.user_response_yes[1:])
+				self.user_response_yes[0](self.is_checked(),
+					*self.user_response_yes[1:])
 			else:
-				self.user_response_yes()
+				self.user_response_yes(self.is_checked())
 		self.destroy()
 
 	def on_response_no(self, widget):
@@ -1248,6 +1255,11 @@ class YesNoDialog(HigDialog):
 				self.user_response_no()
 		self.destroy()
 
+	def is_checked(self):
+		''' Get active state of the checkbutton '''
+		if not self.checkbutton:
+			return False
+		return self.checkbutton.get_active()
 
 class ConfirmationDialogCheck(ConfirmationDialog):
 	'''HIG compliant confirmation dialog with checkbutton.'''
