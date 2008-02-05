@@ -482,7 +482,8 @@ class RosterWindow:
 		jid = gajim.get_jid_from_account(account)
 		if self.get_self_contact_iter(account):
 			self.draw_contact(jid, account)
-			self.draw_avatar(jid, account)
+			if gajim.config.get('show_avatars_in_roster'):
+				self.draw_avatar(jid, account)
 			return
 
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
@@ -498,7 +499,8 @@ class RosterWindow:
 		model.append(iterAcct, (None, gajim.nicks[account], 'self_contact', jid,
 			account, None, None))
 		self.draw_contact(jid, account)
-		self.draw_avatar(jid, account)
+		if gajim.config.get('show_avatars_in_roster'):
+			self.draw_avatar(jid, account)
 
 	def add_transport_to_roster(self, account, transport):
 		c = gajim.contacts.create_contact(jid = transport, name = transport,
@@ -1932,7 +1934,8 @@ class RosterWindow:
 
 	def update_avatar_in_gui(self, jid, account):
 		# Update roster
-		self.draw_avatar(jid, account)
+		if gajim.config.get('show_avatars_in_roster'):
+			self.draw_avatar(jid, account)
 		# Update chat window
 		if gajim.interface.msg_win_mgr.has_window(jid, account):
 			win = gajim.interface.msg_win_mgr.get_window(jid, account)

@@ -943,15 +943,12 @@ class GroupchatControl(ChatControlBase):
 		iter = self.get_contact_iter(nick)
 		if not iter:
 			return
-		if gajim.config.get('show_avatars_in_roster'):
-			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.room_jid + \
-				'/' + nick, True)
-			if pixbuf in ('ask', None):
-				scaled_pixbuf = None
-			else:
-				scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
-		else:
+		pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.room_jid + \
+			'/' + nick, True)
+		if pixbuf in ('ask', None):
 			scaled_pixbuf = None
+		else:
+			scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
 		model[iter][C_AVATAR] = scaled_pixbuf
 
 	def chg_contact_status(self, nick, show, status, role, affiliation, jid,
@@ -1198,7 +1195,8 @@ class GroupchatControl(ChatControlBase):
 				affiliation = affiliation, jid = j, resource = resource)
 			gajim.contacts.add_gc_contact(self.account, gc_contact)
 		self.draw_contact(nick)
-		self.draw_avatar(nick)
+		if gajim.config.get('show_avatars_in_roster'):
+			self.draw_avatar(nick)
 		# Do not ask avatar to irc rooms as irc transports reply with messages
 		server = gajim.get_server_from_jid(self.room_jid)
 		if gajim.config.get('ask_avatars_on_startup') and \
