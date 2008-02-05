@@ -1257,6 +1257,7 @@ class Connection(ConnectionHandlers):
 		iq.setID(id)
 		if groupchat_jid:
 			self.groupchat_jids[id] = groupchat_jid
+		self.last_ids.append(id)
 		self.connection.send(iq)
 
 	def request_os_info(self, jid, resource, groupchat_jid=None):
@@ -1277,6 +1278,7 @@ class Connection(ConnectionHandlers):
 		iq.setID(id)
 		if groupchat_jid:
 			self.groupchat_jids[id] = groupchat_jid
+		self.version_ids.append(id)
 		self.connection.send(iq)
 
 	def get_settings(self):

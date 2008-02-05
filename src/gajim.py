@@ -1124,6 +1124,10 @@ class Interface:
 
 	def handle_event_last_status_time(self, account, array):
 		# ('LAST_STATUS_TIME', account, (jid, resource, seconds, status))
+		tim = array[2]
+		if tim < 0:
+			# Ann error occured
+			return
 		win = None
 		if self.instances[account]['infos'].has_key(array[0]):
 			win = self.instances[account]['infos'][array[0]]
@@ -1132,7 +1136,7 @@ class Interface:
 		if win:
 			c = gajim.contacts.get_contact(account, array[0], array[1])
 			if c: # c can be none if it's a gc contact
-				c.last_status_time = time.localtime(time.time() - array[2])
+				c.last_status_time = time.localtime(time.time() - tim)
 				if array[3]:
 					c.status = array[3]
 				win.set_last_status_time()

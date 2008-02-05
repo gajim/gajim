@@ -1239,6 +1239,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		# keep the latest subscribed event for each jid to prevent loop when we
 		# acknoledge presences
 		self.subscribed_events = {}
+		# IDs of jabber:iq:last requests
+		self.last_ids = []
+		# IDs of jabber:iq:version requests
+		self.version_ids = []
 
 		# keep track of sessions this connection has with other JIDs
 		self.sessions = {}
@@ -1297,15 +1301,19 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _ErrorCB(self, con, iq_obj):
 		gajim.log.debug('ErrorCB')
-		if iq_obj.getQueryNS() == common.xmpp.NS_VERSION:
-			who = helpers.get_full_jid_from_iq(iq_obj)
-			jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
+		jid_from = helpers.get_full_jid_from_iq(iq_obj)
+		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(jid_from)
+		id = unicode(iq_obj.getID())
+		if id in self.version_ids:
 			self.dispatch('OS_INFO', (jid_stripped, resource, '', ''))
+			self.version_ids.remove(id)
+			return
+		if id in self.last_ids:
+			self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, -1, ''))
+			self.last_ids.remove(id)
 			return
 		errmsg = iq_obj.getErrorMsg()
 		errcode = iq_obj.getErrorCode()
-		jid_from = helpers.get_full_jid_from_iq(iq_obj)
-		id = unicode(iq_obj.getID())
 		self.dispatch('ERROR_ANSWER', (id, jid_from, errmsg, errcode))
 	
 	def _PrivateCB(self, con, iq_obj):
@@ -1420,6 +1428,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			del self.groupchat_jids[id]
 		else:
 			who = helpers.get_full_jid_from_iq(iq_obj)
+		if id in self.last_ids:
+			self.last_ids.remove(id)
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, seconds, status))
 	
@@ -1441,6 +1451,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		else:
 			who = helpers.get_full_jid_from_iq(iq_obj)
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
+		if id in self.version_ids:
+			self.version_ids.remove(id)
 		self.dispatch('OS_INFO', (jid_stripped, resource, client_info, os_info))
 
 	def _TimeCB(self, con, iq_obj):
