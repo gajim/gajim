@@ -44,7 +44,6 @@ if os.name == 'nt':
 #	os.environ['GTK_BASEPATH'] = 'gtk'
 
 import sys
-import urllib
 
 import logging
 consoleloghandler = logging.StreamHandler()
@@ -222,7 +221,6 @@ import gobject
 
 import re
 import signal
-import getopt
 import time
 import math
 
@@ -457,9 +455,12 @@ class Interface:
 
 	def handle_event_http_auth(self, account, data):
 		#('HTTP_AUTH', account, (method, url, transaction_id, iq_obj, msg))
-		def response(widget, account, iq_obj, answer):
+		def response(account, iq_obj, answer):
 			self.dialog.destroy()
 			gajim.connections[account].build_http_auth_answer(iq_obj, answer)
+
+		def on_yes(is_checked, account, iq_obj):
+			response(account, iq_obj, 'yes')
 
 		sec_msg = _('Do you accept this request?')
 		if gajim.get_number_of_connected_accounts() > 1:
@@ -468,8 +469,8 @@ class Interface:
 			sec_msg = data[4] + '\n' + sec_msg
 		self.dialog = dialogs.YesNoDialog(_('HTTP (%s) Authorization for %s (id: %s)') \
 			% (data[0], data[1], data[2]), sec_msg,
-			on_response_yes = (response, account, data[3], 'yes'),
-			on_response_no = (response, account, data[3], 'no'))
+			on_response_yes=(on_yes, account, data[3]),
+			on_response_no=(response, account, data[3], 'no'))
 
 	def handle_event_error_answer(self, account, array):
 		#('ERROR_ANSWER', account, (id, jid_from, errmsg, errcode))
@@ -581,10 +582,11 @@ class Interface:
 		jid = array[0].split('/')[0]
 		keyID = array[5]
 		contact_nickname = array[7]
-		attached_keys = gajim.config.get_per('accounts', account,
-			'attached_gpg_keys').split()
-		if jid in attached_keys:
-			keyID = attached_keys[attached_keys.index(jid) + 1]
+		
+		# Get the proper keyID
+		keyID = helpers.prepare_and_validate_gpg_keyID(account, 
+				jid, keyID)
+
 		resource = array[3]
 		if not resource:
 			resource = ''
@@ -723,7 +725,7 @@ class Interface:
 			# remove in 2007
 			# It's maybe a GC_NOTIFY (specialy for MSN gc)
 			self.handle_event_gc_notify(account, (jid, array[1], status_message,
-				array[3], None, None, None, None, None, None, None, None))
+				array[3], None, None, None, None, None, [], None, None))
 
 
 	def handle_event_msg(self, account, array):
@@ -848,8 +850,14 @@ class Interface:
 		msg = message
 		if subject:
 			msg = _('Subject: %s') % subject + '\n' + msg
+		focused = False
+		if chat_control:
+			parent_win = chat_control.parent_win
+			if chat_control == parent_win.get_active_control() and \
+			parent_win.window.has_focus:
+				focused = True
 		notify.notify('new_message', jid_of_control, account, [msg_type,
-			first, nickname, msg], advanced_notif_num)
+			first, nickname, msg, focused], advanced_notif_num)
 
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewMessage', (account, array))
@@ -949,12 +957,21 @@ class Interface:
 			self.remote_ctrl.raise_signal('Subscribed', (account, array))
 
 	def handle_event_unsubscribed(self, account, jid):
-		dialogs.InformationDialog(_('Contact "%s" removed subscription from you')\
-			% jid, _('You will always see him or her as offline.'))
-		# FIXME: Per RFC 3921, we can "deny" ack as well, but the GUI does not show deny
 		gajim.connections[account].ack_unsubscribed(jid)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('Unsubscribed', (account, jid))
+
+		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+		if not contact:
+			return
+		def on_yes(is_checked, list_):
+			self.roster.on_req_usub(None, list_)
+		list_ = [(contact, account)]
+		dialogs.YesNoDialog(
+			_('Contact "%s" removed subscription from you') % jid,
+			_('You will always see him or her as offline.\nDo you want to remove him or her from your contact list?'),
+			on_response_yes=(on_yes, list_))
+		# FIXME: Per RFC 3921, we can "deny" ack as well, but the GUI does not show deny
 
 	def handle_event_agent_info_error(self, account, agent):
 		#('AGENT_ERROR_INFO', account, (agent))
@@ -999,6 +1016,11 @@ class Interface:
 
 	def handle_event_agent_info_items(self, account, array):
 		#('AGENT_INFO_ITEMS', account, (agent, node, items))
+		our_jid = gajim.get_jid_from_account(account)
+		if gajim.interface.instances[account].has_key('pep_services') and \
+		array[0] == our_jid:
+			gajim.interface.instances[account]['pep_services'].items_received(
+				array[2])
 		try:
 			gajim.connections[account].services_cache.agent_items(array[0],
 				array[1], array[2])
@@ -1014,11 +1036,11 @@ class Interface:
 			return
 
 	def handle_event_new_acc_connected(self, account, array):
-		#('NEW_ACC_CONNECTED', account, (infos, is_form, ssl_msg, ssl_cert,
-		# ssl_fingerprint))
+		#('NEW_ACC_CONNECTED', account, (infos, is_form, ssl_msg, ssl_err,
+		# ssl_cert, ssl_fingerprint))
 		if self.instances.has_key('account_creation_wizard'):
 			self.instances['account_creation_wizard'].new_acc_connected(array[0],
-				array[1], array[2], array[3], array[4])
+				array[1], array[2], array[3], array[4], array[5])
 
 	def handle_event_new_acc_not_connected(self, account, array):
 		#('NEW_ACC_NOT_CONNECTED', account, (reason))
@@ -1407,14 +1429,19 @@ class Interface:
 			gajim.connections[account].gpg_passphrase(self.gpg_passphrase[keyid])
 			callback()
 			return
+		if self.gpg_dialog:
+			# A GPG dialog is already open, retry in 0.5 second
+			gobject.timeout_add(500, self.handle_event_gpg_password_required,
+				account, array)
+			return
 		password_ok = False
 		count = 0
 		title = _('Passphrase Required')
 		second = _('Enter GPG key passphrase for account %s.') % account
 		while not password_ok and count < 3:
 			count += 1
-			w = dialogs.PassphraseDialog(title, second, '')
-			passphrase, save = w.run()
+			self.gpg_dialog = dialogs.PassphraseDialog(title, second, '')
+			passphrase, save = self.gpg_dialog.run()
 			if passphrase == -1:
 				# User pressed cancel
 				passphrase = None
@@ -1424,6 +1451,7 @@ class Interface:
 					test_gpg_passphrase(passphrase)
 				title = _('Wrong Passphrase')
 				second = _('Please retype your GPG passphrase or press Cancel.')
+		self.gpg_dialog = None
 		if passphrase != None:
 			self.gpg_passphrase[keyid] = passphrase
 			gobject.timeout_add(30000, self.forget_gpg_passphrase, keyid)
@@ -1857,6 +1885,7 @@ class Interface:
 		# block signed in notifications for 30 seconds
 		gajim.block_signed_in_notifications[account] = True
 		self.roster.set_actions_menu_needs_rebuild()
+		self.roster.draw_account(account)
 		if self.sleeper.getState() != common.sleepy.STATE_UNKNOWN and \
 		gajim.connections[account].connected in (2, 3):
 			# we go online or free for chat, so we activate auto status
@@ -1922,12 +1951,12 @@ class Interface:
 					negotiated, not_acceptable, ask_user = session.verify_options_bob(form)
 
 					if ask_user:
-						def accept_nondefault_options(widget):
+						def accept_nondefault_options(is_checked):
 							self.dialog.destroy()
 							negotiated.update(ask_user)
 							session.respond_e2e_bob(form, negotiated, not_acceptable)
 
-						def reject_nondefault_options(widget):
+						def reject_nondefault_options():
 							self.dialog.destroy()
 							for key in ask_user.keys():
 								not_acceptable.append(key)
@@ -1939,8 +1968,8 @@ class Interface:
 		%s
 
 		Are these options acceptable?''') % (negotiation.describe_features(ask_user)),
-								on_response_yes = accept_nondefault_options,
-								on_response_no = reject_nondefault_options)
+								on_response_yes=accept_nondefault_options,
+								on_response_no=reject_nondefault_options)
 					else:
 						session.respond_e2e_bob(form, negotiated, not_acceptable)
 
@@ -1963,7 +1992,7 @@ class Interface:
 					session.check_identity = _cb
 
 				if ask_user:
-					def accept_nondefault_options(widget):
+					def accept_nondefault_options(is_checked):
 						dialog.destroy()
 
 						negotiated.update(ask_user)
@@ -1973,7 +2002,7 @@ class Interface:
 						except exceptions.NegotiationError, details:
 							session.fail_bad_negotiation(details)
 
-					def reject_nondefault_options(widget):
+					def reject_nondefault_options():
 						session.reject_negotiation()
 						dialog.destroy()
 
@@ -2169,6 +2198,11 @@ class Interface:
 			_('You are already connected to this account with the same resource. Please type a new one'), input_str = gajim.connections[account].server_resource,
 			is_modal = False, ok_handler = on_ok)
 
+	def handle_event_pep_access_model(self, account, data):
+		# ('PEP_ACCESS_MODEL', account, (node, model))
+		if self.instances[account].has_key('pep_services'):
+			self.instances[account]['pep_services'].new_service(data[0], data[1])
+
 	def handle_event_unique_room_id_supported(self, account, data):
 		'''Receive confirmation that unique_room_id are supported'''
 		# ('UNIQUE_ROOM_ID_SUPPORTED', server, instance, room_id)
@@ -2181,43 +2215,75 @@ class Interface:
 		instance.unique_room_id_error(data[0])
 
 	def handle_event_ssl_error(self, account, data):
-		# ('SSL_ERROR', account, (text, cert, sha1_fingerprint))
+		# ('SSL_ERROR', account, (text, errnum, cert, sha1_fingerprint))
 		server = gajim.config.get_per('accounts', account, 'hostname')
-		def on_ok(is_checked):
+		def on_ok(is_checked=False):
 			if is_checked:
-				f = open(gajim.MY_CACERTS, 'a')
-				f.write(server + '\n')
-				f.write(data[1] + '\n\n')
-				f.close()
+				# Check if cert is already in file
+				certs = ''
+				if os.path.isfile(gajim.MY_CACERTS):
+					f = open(gajim.MY_CACERTS)
+					certs = f.read()
+					f.close()
+				if data[2] in certs:
+					dialogs.ErrorDialog(_('Certificate Already in File'),
+						_('This certificate is already in file %s, so it\'s not added again.') % gajim.MY_CACERTS)
+				else:
+					f = open(gajim.MY_CACERTS, 'a')
+					f.write(server + '\n')
+					f.write(data[2] + '\n\n')
+					f.close()
 				gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
-					data[2])
+					data[3])
 			gajim.connections[account].ssl_certificate_accepted()
 		def on_cancel():
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
 		pritext = _('Error verifying SSL certificate')
 		sectext = _('There was an error verifying the SSL certificate of your jabber server: %(error)s\nDo you still want to connect to this server?') % {'error': data[0]}
-		checktext = _('Add this certificate to the list of trusted certificates.\nSHA1 fingerprint of the certificate:\n%s') % data[2]
-		dialogs.ConfirmationDialogCheck(pritext, sectext, checktext,
-			on_response_ok=on_ok, on_response_cancel=on_cancel)
+		if data[1] in (18, 27):
+			checktext = _('Add this certificate to the list of trusted certificates.\nSHA1 fingerprint of the certificate:\n%s') % data[3]
+			dialogs.ConfirmationDialogCheck(pritext, sectext, checktext,
+				on_response_ok=on_ok, on_response_cancel=on_cancel)
+		else:
+			dialogs.ConfirmationDialog(pritext, sectext,
+				on_response_ok=on_ok, on_response_cancel=on_cancel)
 
 	def handle_event_fingerprint_error(self, account, data):
-		# ('FINGERPRINT_ERROR', account, (fingerprint,))
-		def on_yes(widget):
-			dialog.destroy()
+		# ('FINGERPRINT_ERROR', account, (new_fingerprint,))
+		def on_yes(is_checked):
 			gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
 				data[0])
 			gajim.connections[account].ssl_certificate_accepted()
-		def on_no(widget):
-			dialog.destroy()
+		def on_no():
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
 		pritext = _('SSL certificate error')
-		sectext = _('It seems SSL certificate has changed or your connection is '
-			'being hacked. Do you still want to connect and update the fingerprint'
-			'of the certificate?')
+		sectext = _('It seems the SSL certificate has changed or your connection '
+			'is being hacked.\nOld fingerprint: %s\nNew fingerprint: %s\n\nDo you '
+			'still want to connect and update the fingerprint of the certificate?'\
+			) % (gajim.config.get_per('accounts', account, 'ssl_fingerprint_sha1'),
+			data[0])
 		dialog = dialogs.YesNoDialog(pritext, sectext, on_response_yes=on_yes,
 			on_response_no=on_no)
+
+	def handle_event_plain_connection(self, account, data):
+		# ('PLAIN_CONNECTION', account, (connection))
+		server = gajim.config.get_per('accounts', account, 'hostname')
+		def on_yes(is_checked):
+			if is_checked:
+				gajim.config.set_per('accounts', account,
+					'warn_when_insecure_connection', False)
+			gajim.connections[account].connection_accepted(data[0], 'tcp')
+		def on_no():
+			gajim.connections[account].disconnect(on_purpose=True)
+			self.handle_event_status(account, 'offline')
+		pritext = _('Insecure connection')
+		sectext = _('You are about to send your password on an insecure '
+			'conection. Are you sure you want to do that?')
+		checktext = _('Do _not ask me again')
+		dialog = dialogs.YesNoDialog(pritext, sectext, checktext,
+			on_response_yes=on_yes, on_response_no=on_no)
 
 	def read_sleepy(self):
 		'''Check idle status and change that status if needed'''
@@ -2328,7 +2394,7 @@ class Interface:
 
 		#FIXME: recognize xmpp: and treat it specially
 
-		links = r'\b(%s)\S*[\w\/\=]|' % prefixes
+		links = r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]"
 		#2nd one: at_least_one_char@at_least_one_char.at_least_one_char
 		mail = r'\bmailto:\S*[^\s\W]|' r'\b\S+@\S+\.\S*[^\s\W]'
 
@@ -2340,7 +2406,7 @@ class Interface:
 
 		latex = r'|\$\$[^$\\]*?([\]\[0-9A-Za-z()|+*/-]|[\\][\]\[0-9A-Za-z()|{}$])(.*?[^\\])?\$\$'
 
-		basic_pattern = links + mail
+		basic_pattern = links + '|' + mail
 
 		if gajim.config.get('use_latex'):
 			basic_pattern += latex
@@ -2551,6 +2617,7 @@ class Interface:
 			'SEARCH_FORM': self.handle_event_search_form,
 			'SEARCH_RESULT': self.handle_event_search_result,
 			'RESOURCE_CONFLICT': self.handle_event_resource_conflict,
+			'PEP_ACCESS_MODEL': self.handle_event_pep_access_model,
 			'UNIQUE_ROOM_ID_UNSUPPORTED': \
 				self.handle_event_unique_room_id_unsupported,
 			'UNIQUE_ROOM_ID_SUPPORTED': self.handle_event_unique_room_id_supported,
@@ -2558,6 +2625,7 @@ class Interface:
 			'GPG_PASSWORD_REQUIRED': self.handle_event_gpg_password_required,
 			'SSL_ERROR': self.handle_event_ssl_error,
 			'FINGERPRINT_ERROR': self.handle_event_fingerprint_error,
+			'PLAIN_CONNECTION': self.handle_event_plain_connection,
 		}
 		gajim.handlers = self.handlers
 
@@ -2674,6 +2742,7 @@ class Interface:
 		self.status_sent_to_users = {}
 		self.status_sent_to_groups = {}
 		self.gpg_passphrase = {}
+		self.gpg_dialog = None
 		self.default_colors = {
 			'inmsgcolor': gajim.config.get('inmsgcolor'),
 			'outmsgcolor': gajim.config.get('outmsgcolor'),
@@ -2903,7 +2972,7 @@ if __name__ == '__main__':
 			print >> sys.stderr, _('Session Management support not available (missing gnome.ui module)')
 		else:
 			def die_cb(cli):
-				gtk.main_quit()
+				gajim.interface.roster.quit_gtkgui_interface()
 			gnome.program_init('gajim', gajim.version)
 			cli = gnome.ui.master_client()
 			cli.connect('die', die_cb)
@@ -2928,4 +2997,7 @@ if __name__ == '__main__':
 		osx.init()
 
 	Interface()
-	gtk.main()
+	try:
+		gtk.main()
+	except KeyboardInterrupt:
+		print >> sys.stderr, 'KeyboardInterrupt'

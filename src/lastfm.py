@@ -25,7 +25,7 @@ __version__ = '$Revision: 64 $'
 
 from urllib import urlopen
 from xml.dom import minidom
-from time import time, strftime
+from time import time
 
 class LastFM:
 	# Where to fetch the played song information

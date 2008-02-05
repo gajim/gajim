@@ -72,12 +72,19 @@ def tree_cell_data_func(column, renderer, model, iter, tv=None):
 	# reference to GroupchatControl instance (self)
 	theme = gajim.config.get('roster_theme')
 	# allocate space for avatar only if needed
+	parent_iter = model.iter_parent(iter)
 	if isinstance(renderer, gtk.CellRendererPixbuf):
-		if model[iter][C_AVATAR]:
+		avatar_position = gajim.config.get('avatar_position_in_roster')
+		if avatar_position == 'right':
+			renderer.set_property('xalign', 1) # align pixbuf to the right
+		else:
+			renderer.set_property('xalign', 0.5)
+		if parent_iter and (model[iter][C_AVATAR] or avatar_position == 'left'):
 			renderer.set_property('visible', True)
+			renderer.set_property('width', gajim.config.get('roster_avatar_width'))
 		else:
 			renderer.set_property('visible', False)
-	if model.iter_parent(iter):
+	if parent_iter:
 		bgcolor = gajim.config.get_per('themes', theme, 'contactbgcolor')
 		if bgcolor:
 			renderer.set_property('cell-background', bgcolor)
@@ -228,6 +235,12 @@ class GroupchatControl(ChatControlBase):
 
 		self.tooltip = tooltips.GCTooltip()
 
+		# nickname coloring
+		self.gc_count_nicknames_colors = 0
+		self.gc_custom_colors = {} 
+		self.number_of_colors = len(gajim.config.get('gc_nicknames_colors').\
+			split(':'))
+
 		# connect the menuitems to their respective functions
 		xm = gtkgui_helpers.get_glade('gc_control_popup_menu.glade')
 
@@ -301,6 +314,16 @@ class GroupchatControl(ChatControlBase):
 		# first one img, second one text, third is sec pixbuf
 		column = gtk.TreeViewColumn()
 
+		def add_avatar_renderer():
+			renderer_pixbuf = gtk.CellRendererPixbuf() # avatar image
+			column.pack_start(renderer_pixbuf, expand = False)
+			column.add_attribute(renderer_pixbuf, 'pixbuf', C_AVATAR)
+			column.set_cell_data_func(renderer_pixbuf, tree_cell_data_func,
+				self.list_treeview)
+
+		if gajim.config.get('avatar_position_in_roster') == 'left':
+			add_avatar_renderer()
+
 		renderer_image = cell_renderer_image.CellRendererImage(0, 0) # status img
 		renderer_image.set_property('width', 26)
 		column.pack_start(renderer_image, expand = False)
@@ -315,12 +338,8 @@ class GroupchatControl(ChatControlBase):
 		column.set_cell_data_func(renderer_text, tree_cell_data_func,
 			self.list_treeview)
 
-		renderer_pixbuf = gtk.CellRendererPixbuf() # avatar image
-		column.pack_start(renderer_pixbuf, expand = False)
-		column.add_attribute(renderer_pixbuf, 'pixbuf', C_AVATAR)
-		column.set_cell_data_func(renderer_pixbuf, tree_cell_data_func,
-			self.list_treeview)
-		renderer_pixbuf.set_property('xalign', 1) # align pixbuf to the right
+		if gajim.config.get('avatar_position_in_roster') == 'right':
+			add_avatar_renderer()
 
 		self.list_treeview.append_column(column)
 
@@ -639,9 +658,6 @@ class GroupchatControl(ChatControlBase):
 				fin = True
 		return None
 
-	gc_count_nicknames_colors = 0
-	gc_custom_colors = {}  
-
 	def print_old_conversation(self, text, contact = '', tim = None,
 	xhtml = None):
 		if isinstance(text, str):
@@ -692,9 +708,7 @@ class GroupchatControl(ChatControlBase):
 					str(self.gc_custom_colors[contact]))
 			else:
 				self.gc_count_nicknames_colors += 1
-				number_of_colors = len(gajim.config.get('gc_nicknames_colors').\
-					split(':'))
-				if self.gc_count_nicknames_colors == number_of_colors:
+				if self.gc_count_nicknames_colors == self.number_of_colors:
 					self.gc_count_nicknames_colors = 0				
 				self.gc_custom_colors[contact] = \
 					self.gc_count_nicknames_colors
@@ -813,6 +827,13 @@ class GroupchatControl(ChatControlBase):
 							return False
 					else: # Special word == word, no char after in word
 						return True 
+		for special_word in special_words:
+			if special_word.find(' ') > -1: 
+				# There is a space in this special word, do a global search
+				# without splitting by words as previously
+				# We don't search this in all cases so we don't loose time
+				if text.find(special_word) > -1:
+					return True 
 		return False
 
 	def set_subject(self, subject):
@@ -1979,7 +2000,8 @@ class GroupchatControl(ChatControlBase):
 		self.handlers[id] = item
 
 		item = xml.get_widget('add_to_roster_menuitem')
-		if not jid:
+		our_jid = gajim.get_jid_from_account(self.account)
+		if not jid or jid == our_jid:
 			item.set_sensitive(False)
 		else:
 			id = item.connect('activate', self.on_add_to_roster, jid)
@@ -2079,12 +2101,7 @@ class GroupchatControl(ChatControlBase):
 				if not nick in gajim.contacts.get_nick_list(self.account,
 				self.room_jid):
 					# it's a group
-					col = widget.get_column(0)
-					avatar_cell = col.get_cell_renderers()[0]
-					(pos, avatar_size) = col.cell_get_position(avatar_cell)
-					status_cell = col.get_cell_renderers()[1]
-					(pos, status_size) = col.cell_get_position(status_cell)
-					if x > avatar_size and x < avatar_size + status_size:
+					if x < 27:
 						if (widget.row_expanded(path)):
 							widget.collapse_row(path)
 						else:
@@ -2142,6 +2159,9 @@ class GroupchatControl(ChatControlBase):
 				self.tooltip.hide_tooltip()
 
 	def show_tooltip(self, contact):
+		if not self.list_treeview.window:
+			# control has been destroyed since tooltip was requested
+			return
 		pointer = self.list_treeview.get_pointer()
 		props = self.list_treeview.get_path_at_pos(pointer[0], pointer[1])
 		# check if the current pointer is at the same path

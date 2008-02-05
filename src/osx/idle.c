@@ -114,6 +114,7 @@ static PyObject * idle_getIdleSec(PyObject *self, PyObject *args)
     else
     {
         printf("Couldn't grab properties of system\n");
+        return NULL;
     }
 
     if (obj)

@@ -151,7 +151,7 @@ class ChatControlBase(MessageControl):
 			self._on_banner_eventbox_button_press_event)
 		self.handlers[id] = widget
 
-		self.urlfinder = re.compile("(https?://|www|ftp)[^ ]+")
+		self.urlfinder = re.compile(r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
 
 		if gajim.HAVE_PYSEXY:
 			import sexy
@@ -643,7 +643,7 @@ class ChatControlBase(MessageControl):
 		self.orig_msg = None
 
 	def print_conversation_line(self, text, kind, name, tim,
-		other_tags_for_name = [], other_tags_for_time = [], 
+		other_tags_for_name = [], other_tags_for_time = [],
 		other_tags_for_text = [], count_as_new = True,
 		subject = None, old_kind = None, xhtml = None):
 		'''prints 'chat' type messages'''
@@ -1017,7 +1017,11 @@ class ChatControl(ChatControlBase):
 		self.chat_buttons_set_visible(compact_view)
 		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
 			gajim.config.get('hide_chat_banner'))
-
+		
+		# Add lock image to show chat encryption
+		self.lock_image = self.xml.get_widget('lock_image')
+		self.lock_tooltip = gtk.Tooltips()
+		
 		# keep timeout id and window obj for possible big avatar
 		# it is on enter-notify and leave-notify so no need to be per jid
 		self.show_bigger_avatar_timeout_id = None
@@ -1050,15 +1054,25 @@ class ChatControl(ChatControlBase):
 			self.on_avatar_eventbox_button_press_event)
 		self.handlers[id] = widget
 
-		widget = self.xml.get_widget('gpg_togglebutton')
-		id = widget.connect('clicked', self.on_toggle_gpg_togglebutton)
-		self.handlers[id] = widget
-
-		if self.contact.jid in gajim.encrypted_chats[self.account]:
-			self.xml.get_widget('gpg_togglebutton').set_active(True)
-
 		self.set_session(session)
 
+		# Enable ecryption if needed
+		e2e_is_active = hasattr(self, 'session') and self.session and self.session.enable_encryption
+		self.gpg_is_active = False
+		gpg_pref = gajim.config.get_per('contacts', contact.jid, 'gpg_enabled')
+
+		if not e2e_is_active and gpg_pref and gajim.config.get_per('accounts', self.account, 'keyid') and\
+		gajim.connections[self.account].USE_GPG:
+			self.gpg_is_active = True
+			gajim.encrypted_chats[self.account].append(contact.jid)
+			msg = _('GPG encryption enabled')
+			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+			
+			if self.session:
+				self.session.loggable = gajim.config.get('log_encrypted_sessions')
+			self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active, self.session and \
+					self.session.is_loggable())
+		
 		self.status_tooltip = gtk.Tooltips()
 		self.update_ui()
 		# restore previous conversation
@@ -1164,8 +1178,6 @@ class ChatControl(ChatControlBase):
 									gtk.gdk.INTERP_BILINEAR)
 					banner_status_img.set_from_pixbuf(scaled_pix)
 
-		self._update_gpg()
-
 	def draw_banner_text(self):
 		'''Draw the text in the fat line at the top of the window that 
 		houses the name, jid. 
@@ -1254,34 +1266,52 @@ class ChatControl(ChatControlBase):
 		# setup the label that holds name and jid
 		banner_name_label.set_markup(label_text)
 
-	def on_toggle_gpg_togglebutton(self, widget):
-		gajim.config.set_per('contacts', self.contact.jid, 'gpg_enabled',
-			widget.get_active())
-
-	def _update_gpg(self):
-		tb = self.xml.get_widget('gpg_togglebutton')
-		# we can do gpg
-		# if self.contact is our own contact info (transports), 
-		# don't enable pgp
-		if self.contact.keyID and not gajim.jid_is_transport(self.contact.jid): 
-			tb.set_sensitive(True)
-			tt = _('OpenPGP Encryption')
-
-			# restore gpg pref
-			gpg_pref = gajim.config.get_per('contacts', self.contact.jid,
-				'gpg_enabled')
-			if gpg_pref == None:
-				gajim.config.add_per('contacts', self.contact.jid)
-				gpg_pref = gajim.config.get_per('contacts', self.contact.jid,
-					'gpg_enabled')
-			tb.set_active(gpg_pref)
+	def _toggle_gpg(self):
+		ec = gajim.encrypted_chats[self.account]
+		if self.gpg_is_active:
+			# Disable encryption
+			ec.remove(self.contact.jid)
+			self.gpg_is_active = False
+			msg = _('GPG encryption disabled')
+			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)	
+			if self.session:
+				self.session.loggable = True
 
 		else:
-			tb.set_sensitive(False)
-			#we talk about a contact here
-			tt = _('%s has not broadcast an OpenPGP key, nor has one been assigned') %\
-					self.contact.get_shown_name()
-		gtk.Tooltips().set_tip(self.xml.get_widget('gpg_eventbox'), tt)
+			# Enable encryption
+			ec.append(self.contact.jid)
+			self.gpg_is_active = True
+			msg = _('GPG encryption enabled')
+			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+
+			if self.session:
+				self.session.loggable = gajim.config.get('log_encrypted_sessions');
+			if self.session and not self.session.is_loggable():
+				msg = _('Session WILL NOT be logged')
+			else:
+				msg = _('Session WILL be logged')
+			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+
+		gpg_pref = gajim.config.get_per('contacts', self.contact.jid,
+			'gpg_enabled')
+		if gpg_pref is None:
+			gajim.config.add_per('contacts', self.contact.jid)
+		gajim.config.set_per('contacts', self.contact.jid, 'gpg_enabled',
+			self.gpg_is_active)
+		
+		self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active, self.session and \
+				self.session.is_loggable())
+	
+	def _show_lock_image(self, visible, enc_type = '', enc_enabled = False, chat_logged = False):
+		'''Set lock icon visibiity and create tooltip''' 
+		status_string = enc_enabled and 'is' or 'is NOT'
+		logged_string = chat_logged and 'will' or 'will NOT'
+		tooltip = '%s Encryption %s active. \nYour chat session %s be logged.' %\
+			(enc_type, status_string, logged_string)
+
+		self.lock_tooltip.set_tip(self.lock_image, tooltip)
+		self.widget_set_visible(self.lock_image, not visible)
+		self.lock_image.set_sensitive(enc_enabled)
 
 	def _process_command(self, message):
 		if message[0] != '/':
@@ -1369,9 +1399,11 @@ class ChatControl(ChatControlBase):
 		encrypted = bool(self.session) and self.session.enable_encryption
 
 		keyID = ''
-		if self.xml.get_widget('gpg_togglebutton').get_active():
+		if self.gpg_is_active:
 			keyID = contact.keyID
 			encrypted = True
+			if not keyID:
+				keyID = 'UNKNOWN'
 
 		chatstates_on = gajim.config.get('outgoing_chat_state_notifications') != \
 			'disabled'
@@ -1401,7 +1433,7 @@ class ChatControl(ChatControlBase):
 				gobject.source_remove(self.possible_paused_timeout_id)
 				gobject.source_remove(self.possible_inactive_timeout_id)
 				self._schedule_activity_timers()
-				
+
 		if not ChatControlBase.send_message(self, message, keyID, type = 'chat',
 		chatstate = chatstate_to_send, composing_xep = composing_xep,
 		process_command = process_command):
@@ -1468,13 +1500,14 @@ class ChatControl(ChatControlBase):
 		msg = _('Session negotiation cancelled')
 		ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
 
-	# print esession settings to textview
 	def print_esession_details(self):
-		if self.session and self.session.enable_encryption:
+		'''print esession settings to textview'''
+		e2e_is_active = self.session and self.session.enable_encryption
+		if e2e_is_active:
 			msg = _('E2E encryption enabled')
 			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
 
-			if self.session.loggable:
+			if self.session.is_loggable():
 				msg = _('Session WILL be logged')
 			else:
 				msg = _('Session WILL NOT be logged')
@@ -1483,6 +1516,8 @@ class ChatControl(ChatControlBase):
 		else:
 			msg = _('E2E encryption disabled')
 			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+		self._show_lock_image(e2e_is_active, 'E2E', e2e_is_active, self.session and \
+				self.session.is_loggable()) 
 
 	def print_conversation(self, text, frm = '', tim = None,
 		encrypted = False, subject = None, xhtml = None):
@@ -1510,19 +1545,15 @@ class ChatControl(ChatControlBase):
 						'status', '', tim)
 			else:
 				# GPG encryption
-				ec = gajim.encrypted_chats[self.account]
-				if encrypted and jid not in ec:
-					msg = _('OpenPGP Encryption enabled')
+				if encrypted and not self.gpg_is_active:
+					msg = _('The following message was encrypted')
 					ChatControlBase.print_conversation_line(self, msg, 
 						'status', '', tim)
-					ec.append(jid)
-				elif not encrypted and jid in ec:
-					msg = _('OpenPGP Encryption disabled')
+					self._toggle_gpg()
+				elif not encrypted and self.gpg_is_active:
+					msg = _('The following message was NOT encrypted')
 					ChatControlBase.print_conversation_line(self, msg,
 						'status', '', tim)
-					ec.remove(jid)
-				self.xml.get_widget('gpg_togglebutton').set_active(encrypted)
-
 			if not frm:
 				kind = 'incoming'
 				name = contact.get_shown_name()
@@ -1649,13 +1680,16 @@ class ChatControl(ChatControlBase):
 
 		contact = self.parent_win.get_active_contact()
 		jid = contact.jid
-
-		# check if gpg capabitlies or else make gpg toggle insensitive
-		gpg_btn = self.xml.get_widget('gpg_togglebutton')
-		isactive = gpg_btn.get_active()
-		is_sensitive = gpg_btn.get_property('sensitive')
-		toggle_gpg_menuitem.set_active(isactive)
-		toggle_gpg_menuitem.set_property('sensitive', is_sensitive)
+		
+		# check if we support and use gpg
+		if not gajim.config.get_per('accounts', self.account, 'keyid') or\
+		not gajim.connections[self.account].USE_GPG or\
+		gajim.jid_is_transport(jid):
+			toggle_gpg_menuitem.set_sensitive(False)
+		else:
+			e2e_is_active = int(self.session != None and self.session.enable_encryption)
+			toggle_gpg_menuitem.set_sensitive(not e2e_is_active)
+			toggle_gpg_menuitem.set_active(self.gpg_is_active)
 
 		# TODO: check that the remote client supports e2e
 		if not gajim.HAVE_PYCRYPTO:
@@ -1663,6 +1697,7 @@ class ChatControl(ChatControlBase):
 		else:
 			isactive = int(self.session != None and self.session.enable_encryption)
 			toggle_e2e_menuitem.set_active(isactive)
+			toggle_e2e_menuitem.set_sensitive(not self.gpg_is_active)
 
 		# If we don't have resource, we can't do file transfer
 		# in transports, contact holds our info we need to disable it too
@@ -1694,14 +1729,15 @@ class ChatControl(ChatControlBase):
 		id = send_file_menuitem.connect('activate', 
 			self._on_send_file_menuitem_activate)
 		self.handlers[id] = send_file_menuitem 
-		id = add_to_roster_menuitem.connect('activate', 
+		id = add_to_roster_menuitem.connect('activate',
 			self._on_add_to_roster_menuitem_activate)
-		self.handlers[id] = add_to_roster_menuitem 
-		id = toggle_gpg_menuitem.connect('activate', 
+		self.handlers[id] = add_to_roster_menuitem
+		id = toggle_gpg_menuitem.connect('activate',
 			self._on_toggle_gpg_menuitem_activate)
+		self.handlers[id] = toggle_gpg_menuitem
 		id = toggle_e2e_menuitem.connect('activate', 
 			self._on_toggle_e2e_menuitem_activate)
-		self.handlers[id] = toggle_gpg_menuitem 
+		self.handlers[id] = toggle_e2e_menuitem 
 		id = information_menuitem.connect('activate', 
 			self._on_contact_information_menuitem_activate)
 		self.handlers[id] = information_menuitem
@@ -2154,10 +2190,7 @@ class ChatControl(ChatControlBase):
 		gajim.interface.roster.on_info(widget, self.contact, self.account)
 
 	def _on_toggle_gpg_menuitem_activate(self, widget):
-		# update the button
-		# this is reverse logic, as we are on 'activate' (before change happens)
-		tb = self.xml.get_widget('gpg_togglebutton')
-		tb.set_active(not tb.get_active())
+		self._toggle_gpg()	
 
 	def _on_convert_to_gc_menuitem_activate(self, widget):
 		'''user want to invite some friends to chat'''

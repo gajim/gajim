@@ -6,10 +6,9 @@
 ##                    Vincent Hanquez <tab@snarc.org>
 ##                    Nikos Kouremenos <kourem@gmail.com>
 ##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
-## Copyright (C) 2006 Travis Shirk <travis@pobox.com>
-##                    Geobert Quach <geobert@gmail.com>
+## Copyright (C) 2005-2007 Travis Shirk <travis@pobox.com>
+## Copyright (C) 2006 Geobert Quach <geobert@gmail.com>
 ## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
 ##
 ## This file is part of Gajim.
@@ -39,7 +38,7 @@ from common import gajim
 
 ####################
 
-class MessageWindow:
+class MessageWindow(object):
 	'''Class for windows which contain message like things; chats,
 	groupchats, etc.'''
 
@@ -53,8 +52,8 @@ class MessageWindow:
 		CLOSE_COMMAND,
 		CLOSE_CTRL_KEY
 	) = range(5)
-	
-	def __init__(self, acct, type):
+
+	def __init__(self, acct, type, parent_window=None, parent_paned=None):
 		# A dictionary of dictionaries where _contacts[account][jid] == A MessageControl
 		self._controls = {}
 		# If None, the window is not tied to any specific account
@@ -68,6 +67,18 @@ class MessageWindow:
 		self.widget_name = 'message_window'
 		self.xml = gtkgui_helpers.get_glade('%s.glade' % self.widget_name)
 		self.window = self.xml.get_widget(self.widget_name)
+		self.notebook = self.xml.get_widget('notebook')
+		self.parent_paned = None
+
+		if parent_window:
+			orig_window = self.window
+			self.window = parent_window
+			self.parent_paned = parent_paned
+			self.notebook.reparent(self.parent_paned)
+			self.parent_paned.pack2(self.notebook, resize=True, shrink=True)
+			orig_window.destroy()
+			del orig_window
+
 		id = self.window.connect('delete-event', self._on_window_delete)
 		self.handlers[id] = self.window
 		id = self.window.connect('destroy', self._on_window_destroy)
@@ -91,7 +102,6 @@ class MessageWindow:
 		self.window.add_events(gtk.gdk.POINTER_MOTION_MASK)
 		self.alignment = self.xml.get_widget('alignment')
 
-		self.notebook = self.xml.get_widget('notebook')
 		id = self.notebook.connect('switch-page',
 			self._on_notebook_switch_page)
 		self.handlers[id] = self.notebook
@@ -144,6 +154,9 @@ class MessageWindow:
 			n += len(dict)
 		return n
 
+	def resize(self, width, height):
+		gtkgui_helpers.resize_window(self.window, width, height)
+
 	def _on_window_focus(self, widget, event):
 		# window received focus, so if we had urgency REMOVE IT
 		# NOTE: we do not have to read the message (it maybe in a bg tab)
@@ -179,6 +192,8 @@ class MessageWindow:
 		for ctrl in self.controls():
 			ctrl.shutdown()
 		self._controls.clear()
+		# Clean up handlers connected to the parent window, this is important since
+		# self.window may be the RosterWindow
 		for i in self.handlers.keys():
 			if self.handlers[i].handler_is_connected(i):
 				self.handlers[i].disconnect(i)
@@ -210,8 +225,9 @@ class MessageWindow:
 		widget =  xml.get_widget('tab_close_button')
 		id = widget.connect('clicked', self._on_close_button_clicked, control)
 		control.handlers[id] = widget
-		
-		id = tab_label_box.connect('button-press-event', self.on_tab_eventbox_button_press_event, control.widget)
+
+		id = tab_label_box.connect('button-press-event', self.on_tab_eventbox_button_press_event,
+					control.widget)
 		control.handlers[id] = tab_label_box
 		self.notebook.append_page(control.widget, tab_label_box)
 
@@ -222,7 +238,10 @@ class MessageWindow:
 			self.setup_tab_dnd(control.widget)
 
 		self.redraw_tab(control)
-		self.window.show_all()
+		if self.parent_paned:
+			self.notebook.show_all()
+		else:
+			self.window.show_all()
 		# NOTE: we do not call set_control_active(True) since we don't know whether
 		# the tab is the active one.
 		self.show_title()
@@ -263,7 +282,7 @@ class MessageWindow:
 		if not control:
 			# No more control in this window
 			return
-		
+
 		# CTRL mask
 		if modifier & gtk.gdk.CONTROL_MASK:
 			if keyval == gtk.keysyms.h:
@@ -286,7 +305,7 @@ class MessageWindow:
 			# Tab switch bindings
 			if keyval == gtk.keysyms.Right: # ALT + RIGHT
 				new = self.notebook.get_current_page() + 1
-				if new >= self.notebook.get_n_pages(): 
+				if new >= self.notebook.get_n_pages():
 					new = 0
 				self.notebook.set_current_page(new)
 			elif keyval == gtk.keysyms.Left: # ALT + LEFT
@@ -307,7 +326,7 @@ class MessageWindow:
 		'''When close button is pressed: close a tab'''
 		self.remove_tab(control, self.CLOSE_CLOSE_BUTTON)
 
-	def show_title(self, urgent = True, control = None):
+	def show_title(self, urgent=True, control=None):
 		'''redraw the window's title'''
 		if not control:
 			control = self.get_active_control()
@@ -341,10 +360,7 @@ class MessageWindow:
 				name += '/' + control.resource
 
 		window_mode = gajim.interface.msg_win_mgr.mode
-
-		if self.get_num_controls() == 1:
-			label = name
-		elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE:
+		if window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE:
 			# Show the plural form since number of tabs > 1
 			if self.type == 'chat':
 				label = _('Chats')
@@ -352,9 +368,16 @@ class MessageWindow:
 				label = _('Group Chats')
 			else:
 				label = _('Private Chats')
+		elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
+			label = None
+		elif self.get_num_controls() == 1:
+			label = name
 		else:
 			label = _('Messages')
-		title = _('%s - Gajim') % label
+
+		title = 'Gajim'
+		if label:
+			title = _('%s - %s') % (label, title)
 
 		if window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERACCT:
 			title = title + ": " + control.account
@@ -370,7 +393,7 @@ class MessageWindow:
 		ctrl = self._controls[acct][jid]
 		ctrl_page = self.notebook.page_num(ctrl.widget)
 		self.notebook.set_current_page(ctrl_page)
-	
+
 	def remove_tab(self, ctrl, method, reason = None, force = False):
 		'''reason is only for gc (offline status message)
 		if force is True, do not ask any confirmation'''
@@ -413,7 +436,12 @@ class MessageWindow:
 			gajim.interface.msg_win_mgr._on_window_destroy(self.window)
 			# dnd clean up
 			self.notebook.drag_dest_unset()
-			self.window.destroy()
+			if self.parent_paned:
+				# Don't close parent window, just remove the child
+				child = self.parent_paned.get_child2()
+				self.parent_paned.remove(child)
+			else:
+				self.window.destroy()
 			return # don't show_title, we are dead
 		elif self.get_num_controls() == 1: # we are going from two tabs to one
 			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
@@ -542,7 +570,7 @@ class MessageWindow:
 		first_composing_ind = -1 # id of first composing ctrl to switch to
 										# if no others controls have awaiting events
 		# loop until finding an unread tab or having done a complete cycle
-		while True: 
+		while True:
 			if forward == True: # look for the first unread tab on the right
 				ind = ind + 1
 				if ind >= self.notebook.get_n_pages():
@@ -590,7 +618,7 @@ class MessageWindow:
 		if old_no >= 0:
 			old_ctrl = self._widget_to_control(notebook.get_nth_page(old_no))
 			old_ctrl.set_control_active(False)
-		
+
 		new_ctrl = self._widget_to_control(notebook.get_nth_page(page_num))
 		new_ctrl.set_control_active(True)
 		self.show_title(control = new_ctrl)
@@ -598,8 +626,8 @@ class MessageWindow:
 	def _on_notebook_key_press(self, widget, event):
 		control = self.get_active_control()
 		# Ctrl+PageUP / DOWN has to be handled by notebook
-		if event.state & gtk.gdk.CONTROL_MASK and event.keyval in (
-		gtk.keysyms.Page_Down, gtk.keysyms.Page_Up):
+		if (event.state & gtk.gdk.CONTROL_MASK and
+				event.keyval in (gtk.keysyms.Page_Down, gtk.keysyms.Page_Up)):
 			return False
 		if isinstance(control, ChatControlBase):
 			# we forwarded it to message textview
@@ -609,7 +637,7 @@ class MessageWindow:
 	def setup_tab_dnd(self, child):
 		'''Set tab label as drag source and connect the drag_data_get signal'''
 		tab_label = self.notebook.get_tab_label(child)
-		tab_label.dnd_handler = tab_label.connect('drag_data_get', 
+		tab_label.dnd_handler = tab_label.connect('drag_data_get',
 			self.on_tab_label_drag_data_get_cb)
 		self.handlers[tab_label.dnd_handler] = tab_label
 		tab_label.drag_source_set(gtk.gdk.BUTTON1_MASK, self.DND_TARGETS,
@@ -630,11 +658,11 @@ class MessageWindow:
 		source_child = self.notebook.get_nth_page(source_page_num)
 		if dest_page_num != source_page_num:
 			self.notebook.reorder_child(source_child, dest_page_num)
-		
+
 	def get_tab_at_xy(self, x, y):
 		'''Thanks to Gaim
 		Return the tab under xy and
-		if its nearer from left or right side of the tab	
+		if its nearer from left or right side of the tab
 		'''
 		page_num = -1
 		to_right = False
@@ -655,7 +683,7 @@ class MessageWindow:
 				if (y >= tab_alloc.y) and \
 				(y <= (tab_alloc.y + tab_alloc.height)):
 					page_num = i
-				
+
 					if y > tab_alloc.y + (tab_alloc.height / 2.0):
 						to_right = True
 					break
@@ -679,36 +707,53 @@ class MessageWindow:
 		tab_label.disconnect(tab_label.dnd_handler)
 
 ################################################################################
-class MessageWindowMgr:
+class MessageWindowMgr(gobject.GObject):
 	'''A manager and factory for MessageWindow objects'''
+	__gsignals__ = {
+		'window-delete': (gobject.SIGNAL_RUN_LAST, None, (object,)),
+	}
 
 	# These constants map to common.config.opt_one_window_types indices
 	(
 	ONE_MSG_WINDOW_NEVER,
 	ONE_MSG_WINDOW_ALWAYS,
+	ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER,
 	ONE_MSG_WINDOW_PERACCT,
-	ONE_MSG_WINDOW_PERTYPE
-	) = range(4)
-	# A key constant for the main window for all messages
+	ONE_MSG_WINDOW_PERTYPE,
+	) = range(5)
+	# A key constant for the main window in ONE_MSG_WINDOW_ALWAYS mode
 	MAIN_WIN = 'main'
+	# A key constant for the main window in ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER mode
+	ROSTER_MAIN_WIN = 'roster'
 
-	def __init__(self):
+	def __init__(self, parent_window, parent_paned):
 		''' A dictionary of windows; the key depends on the config:
 		ONE_MSG_WINDOW_NEVER: The key is the contact JID
-		ONE_MSG_WINDOW_ALWAYS: The key is MessageWindowMgr.MAIN_WIN 
+		ONE_MSG_WINDOW_ALWAYS: The key is MessageWindowMgr.MAIN_WIN
+		ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER: The key is MessageWindowMgr.MAIN_WIN
 		ONE_MSG_WINDOW_PERACCT: The key is the account name
 		ONE_MSG_WINDOW_PERTYPE: The key is a message type constant'''
+		gobject.GObject.__init__(self)
 		self._windows = {}
+
 		# Map the mode to a int constant for frequent compares
 		mode = gajim.config.get('one_message_window')
 		self.mode = common.config.opt_one_window_types.index(mode)
+
+		self.parent_win = parent_window
+		self.parent_paned = parent_paned
 
 	def change_account_name(self, old_name, new_name):
 		for win in self.windows():
 			win.change_account_name(old_name, new_name)
 
 	def _new_window(self, acct, type):
-		win = MessageWindow(acct, type)
+		parent_win = None
+		parent_paned = None
+		if self.mode == self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
+			parent_win = self.parent_win
+			parent_paned = self.parent_paned
+		win = MessageWindow(acct, type, parent_win, parent_paned)
 		# we track the lifetime of this window
 		win.window.connect('delete-event', self._on_window_delete)
 		win.window.connect('destroy', self._on_window_destroy)
@@ -729,7 +774,7 @@ class MessageWindowMgr:
 	def has_window(self, jid, acct):
 		return self.get_window(jid, acct) != None
 
-	def one_window_opened(self, contact, acct, type):
+	def one_window_opened(self, contact=None, acct=None, type=None):
 		try:
 			return self._windows[self._mode_to_key(contact, acct, type)] != None
 		except KeyError:
@@ -737,12 +782,13 @@ class MessageWindowMgr:
 
 	def _resize_window(self, win, acct, type):
 		'''Resizes window according to config settings'''
-		if not gajim.config.get('saveposition'):
-			return
-			
-		if self.mode == self.ONE_MSG_WINDOW_ALWAYS:
+		if self.mode in (self.ONE_MSG_WINDOW_ALWAYS,
+				self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER):
 			size = (gajim.config.get('msgwin-width'),
 				gajim.config.get('msgwin-height'))
+			if self.mode == self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
+				parent_size = win.window.get_size()
+				size = (parent_size[0] + size[0], size[1])
 		elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			size = (gajim.config.get_per('accounts', acct, 'msgwin-width'),
 				gajim.config.get_per('accounts', acct, 'msgwin-height'))
@@ -754,13 +800,12 @@ class MessageWindowMgr:
 			size = (gajim.config.get(opt_width), gajim.config.get(opt_height))
 		else:
 			return
+		win.resize(size[0], size[1])
 
-		gtkgui_helpers.resize_window(win.window, size[0], size[1])
-	
 	def _position_window(self, win, acct, type):
 		'''Moves window according to config settings'''
-		if not gajim.config.get('saveposition') or\
-		self.mode == self.ONE_MSG_WINDOW_NEVER:
+		if (self.mode in [self.ONE_MSG_WINDOW_NEVER,
+		self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER]):
 			return
 
 		if self.mode == self.ONE_MSG_WINDOW_ALWAYS:
@@ -782,21 +827,22 @@ class MessageWindowMgr:
 			key = acct + contact.jid
 			if resource:
 				key += '/' + resource
+			return key
 		elif self.mode == self.ONE_MSG_WINDOW_ALWAYS:
-			key = self.MAIN_WIN
+			return self.MAIN_WIN
+		elif self.mode == self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
+			return self.ROSTER_MAIN_WIN
 		elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
-			key = acct
+			return acct
 		elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
-			key = type
-		return key
+			return type
 
 	def create_window(self, contact, acct, type, resource = None):
-		key = None
 		win_acct = None
 		win_type = None
-		win_role = 'messages'
+		win_role = None  # X11 window role
 
-		key = self._mode_to_key(contact, acct, type, resource)
+		win_key = self._mode_to_key(contact, acct, type, resource)
 		if self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			win_acct = acct
 			win_role = acct
@@ -806,21 +852,24 @@ class MessageWindowMgr:
 		elif self.mode == self.ONE_MSG_WINDOW_NEVER:
 			win_type = type
 			win_role = contact.jid
+		elif self.mode == self.ONE_MSG_WINDOW_ALWAYS:
+			win_role = 'messages'
 
 		win = None
 		try:
-			win = self._windows[key]
+			win = self._windows[win_key]
 		except KeyError:
 			win = self._new_window(win_acct, win_type)
 
-		win.window.set_role(win_role)
+		if win_role:
+			win.window.set_role(win_role)
 
 		# Position and size window based on saved state and window mode
 		if not self.one_window_opened(contact, acct, type):
-			self._position_window(win, acct, type)
 			self._resize_window(win, acct, type)
+			self._position_window(win, acct, type)
 
-		self._windows[key] = win
+		self._windows[win_key] = win
 		return win
 
 	def change_key(self, old_jid, new_jid, acct):
@@ -842,6 +891,7 @@ class MessageWindowMgr:
 	def _on_window_destroy(self, win):
 		for k in self._windows.keys():
 			if self._windows[k].window == win:
+				self.emit('window-delete', self._windows[k])
 				del self._windows[k]
 				return
 
@@ -870,17 +920,16 @@ class MessageWindowMgr:
 			for c in w.controls():
 				yield c
 
-	def shutdown(self):
+	def shutdown(self, width_adjust=0):
 		for w in self.windows():
-			self.save_state(w)
-			w.window.hide()
-			w.window.destroy()
+			self.save_state(w, width_adjust)
+			if not w.parent_paned:
+				w.window.hide()
+				w.window.destroy()
+
 		gajim.interface.save_config()
 
-	def save_state(self, msg_win):
-		if not gajim.config.get('saveposition'):
-			return
-		
+	def save_state(self, msg_win, width_adjust=0):
 		# Save window size and position
 		pos_x_key = 'msgwin-x-position'
 		pos_y_key = 'msgwin-y-position'
@@ -907,6 +956,9 @@ class MessageWindowMgr:
 			type = msg_win.type
 			size_width_key = type + '-msgwin-width'
 			size_height_key = type + '-msgwin-height'
+		elif self.mode == self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
+			# Ignore any hpaned width
+			width = msg_win.notebook.allocation.width
 
 		if acct:
 			gajim.config.set_per('accounts', acct, size_width_key, width)
@@ -915,11 +967,12 @@ class MessageWindowMgr:
 			if self.mode != self.ONE_MSG_WINDOW_NEVER:
 				gajim.config.set_per('accounts', acct, pos_x_key, x)
 				gajim.config.set_per('accounts', acct, pos_y_key, y)
-		
+
 		else:
+			width += width_adjust
 			gajim.config.set(size_width_key, width)
 			gajim.config.set(size_height_key, height)
-			
+
 			if self.mode != self.ONE_MSG_WINDOW_NEVER:
 				gajim.config.set(pos_x_key, x)
 				gajim.config.set(pos_y_key, y)
@@ -937,17 +990,24 @@ class MessageWindowMgr:
 
 		controls = []
 		for w in self.windows():
-			w.window.hide()
+			# Note, we are taking care not to hide/delete the roster window when the
+			# MessageWindow is embedded.
+			if not w.parent_paned:
+				w.window.hide()
 			while w.notebook.get_n_pages():
 				page = w.notebook.get_nth_page(0)
 				ctrl = w._widget_to_control(page)
 				w.notebook.remove_page(0)
 				page.unparent()
 				controls.append(ctrl)
-			# Must clear _controls from window to prevent
-			# MessageControl.shutdown calls
+			# Must clear _controls from window to prevent MessageControl.shutdown calls
 			w._controls = {}
-			w.window.destroy()
+			if not w.parent_paned:
+				w.window.destroy()
+			else:
+				# Don't close parent window, just remove the child
+				child = w.parent_paned.get_child2()
+				w.parent_paned.remove(child)
 
 		self._windows = {}
 

@@ -22,7 +22,6 @@
 import sys
 import gtk
 import systray
-import gobject
 
 from common import gajim
 from common import helpers
@@ -60,7 +59,7 @@ class StatusIcon(systray.Systray):
 		self.unsubscribe_events()
 
 	def on_status_icon_left_clicked(self, widget):
-		gobject.idle_add(self.on_left_click)
+		self.on_left_click()
 
 	def set_img(self):
 		'''apart from image, we also update tooltip text here'''

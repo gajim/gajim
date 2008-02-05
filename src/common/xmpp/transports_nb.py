@@ -761,15 +761,18 @@ class NonBlockingTLS(PlugIn):
 			for line in lines:
 				if 'BEGIN CERTIFICATE' in line:
 					begin = i
-					continue
 				elif 'END CERTIFICATE' in line and begin > -1:
 					cert = ''.join(lines[begin:i+2])
 					try:
 						X509cert = OpenSSL.crypto.load_certificate(
 							OpenSSL.crypto.FILETYPE_PEM, cert)
 						store.add_cert(X509cert)
+					except OpenSSL.crypto.Error, exception_obj:
+						log.warning('Unable to load a certificate from file %s: %s' %\
+							(gajim.MY_CACERTS, exception_obj.args[0][0][2]))
 					except:
-						log.warning('Unable to load a certificate from file %s' % \
+						log.warning(
+							'Unknown error while loading certificate from file %s' % \
 							gajim.MY_CACERTS)
 					begin = -1
 				i += 1
@@ -787,7 +790,8 @@ class NonBlockingTLS(PlugIn):
 		try:
 			self.starttls='in progress'
 			tcpsock._sslObj.do_handshake()
-		except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError), e:
+		# Errors are handeled in _do_receive function
+		except:
 			pass
 		tcpsock._sslObj.setblocking(False)
 		log.debug("Synchronous handshake completed")
@@ -1027,7 +1031,7 @@ class NBSOCKS5PROXYsocket(NonBlockingTcp):
 		# use the IPv4 address request even if remote resolving was specified.
 		try:
 			self.ipaddr = socket.inet_aton(self.server[0])
-			req = req + "\x01" + ipaddr
+			req = req + "\x01" + self.ipaddr
 		except socket.error:
 			# Well it's not an IP number,  so it's probably a DNS name.
 #			if self.__proxy[3]==True:

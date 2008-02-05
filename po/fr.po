@@ -3570,7 +3570,7 @@ msgstr "Fichier"
 
 #: ../src/filetransfers_window.py:87
 msgid "Time"
-msgstr "Moment"
+msgstr "Durée"
 
 #: ../src/filetransfers_window.py:99
 msgid "Progress"
@@ -6536,6 +6536,406 @@ msgstr "Connecté"
 
 msgid "Disconnected"
 msgstr "Déconnecté"
+
+#pep
+msgid "afraid"
+msgstr "appeuré"
+
+msgid "amazed"
+msgstr "surpris, amusé"
+
+msgid "angry"
+msgstr "en colère"
+
+msgid "annoyed"
+msgstr "dérangé"
+
+msgid "anxious"
+msgstr "anxieux"
+
+msgid "aroused"
+msgstr "excité"
+
+msgid "ashamed"
+msgstr "honteux/éhonté"
+
+msgid "bored"
+msgstr "ennuyé"
+
+msgid "brave"
+msgstr "courageux"
+
+msgid "calm"
+msgstr "calme"
+
+msgid "cold"
+msgstr "froid"
+
+msgid "confused"
+msgstr "confus"
+
+msgid "contented"
+msgstr "contenté"
+
+msgid "cranky"
+msgstr "excentrique"
+
+msgid "curious"
+msgstr "curieux"
+
+msgid "depressed"
+msgstr "déprimé"
+
+msgid "disappointed"
+msgstr "décu"
+
+msgid "disgusted"
+msgstr "dégouté"
+
+msgid "distracted"
+msgstr "distrait"
+
+msgid "embarrassed"
+msgstr "embarssé"
+
+msgid "excited"
+msgstr "excité"
+
+msgid "flirtatious"
+msgstr "coquet"
+
+msgid "frustrated"
+msgstr "frustré"
+
+msgid "grumpy"
+msgstr "grognon"
+
+msgid "guilty"
+msgstr "coupable"
+
+msgid "happy"
+msgstr "joyeux"
+
+msgid "hot"
+msgstr "chaud"
+
+msgid "humbled"
+msgstr "humilié"
+
+msgid "humiliated"
+msgstr "humilié"
+
+msgid "hungry"
+msgstr "affamé"
+
+msgid "hurt"
+msgstr "blessé"
+
+msgid "impressed"
+msgstr "impressionné"
+
+msgid "in_awe"
+msgstr "dans la crainte"
+
+msgid "in_love"
+msgstr "amoureux"
+
+msgid "indignant"
+msgstr "indigné"
+
+msgid "interested"
+msgstr "interessé"
+
+msgid "intoxicated"
+msgstr "intoxiqué"
+
+msgid "invincible"
+msgstr "invincible"
+
+msgid "jealous"
+msgstr "jaloux"
+
+msgid "lonely"
+msgstr "seul/esseulé"
+
+msgid "mean"
+msgstr "méchant"
+
+msgid "moody"
+msgstr "déprimé"
+
+msgid "nervous"
+msgstr "nerveux"
+
+msgid "neutral"
+msgstr "neutre"
+
+msgid "offended"
+msgstr "offensé"
+
+msgid "playful"
+msgstr "joueur"
+
+msgid "proud"
+msgstr "fier"
+
+msgid "relieved"
+msgstr "soulagé"
+
+msgid "remorseful"
+msgstr "plein de remord"
+
+msgid "restless"
+msgstr "infatiguable"
+
+msgid "sad"
+msgstr "triste"
+
+msgid "sarcastic"
+msgstr "sarcastique"
+
+msgid "serious"
+msgstr "serieux"
+
+msgid "shocked"
+msgstr "choqué"
+
+msgid "shy"
+msgstr "timide"
+
+msgid "sick"
+msgstr "malade"
+
+msgid "sleepy"
+msgstr "endormi"
+
+msgid "stressed"
+msgstr "stressé"
+
+msgid "surprised"
+msgstr "surpris"
+
+msgid "thirsty"
+msgstr "assoiffé"
+
+msgid "worried"
+msgstr "inquiet"
+
+msgid "_Personnal Events"
+msgstr "Évènements _Personnels"
+
+msgid "Activity"
+msgstr "Activité"
+
+msgid "doing_chores"
+msgstr "fait des corvées"
+
+msgid "buying_groceries"
+msgstr "achète des épiceries"
+
+msgid "cleaning"
+msgstr "nettoie"
+
+msgid "cooking"
+msgstr "cuisine"
+
+msgid "doing_maintenance"
+msgstr "fait de la maintenance"
+
+msgid "doing_the_dishes"
+msgstr "fait la vaiselle"
+
+msgid "doing_the_laundry"
+msgstr "fait la blanchisserie"
+
+msgid "gardening"
+msgstr "jardine"
+
+msgid "running_an_errand"
+msgstr "fait une course"
+
+msgid "walking_the_dog"
+msgstr "promène le chien"
+
+msgid "drinking"
+msgstr "boit"
+
+msgid "having_a_beer"
+msgstr "prend une bière"
+
+msgid "having_coffee"
+msgstr "prend un café"
+
+msgid "having_tea"
+msgstr "prend un thé"
+
+msgid "eating"
+msgstr "mange"
+
+msgid "having_a_snack"
+msgstr "prend un snack"
+
+msgid "having_breakfast"
+msgstr "prend le petit-déjeuner"
+
+msgid "having_dinner"
+msgstr "soupe"
+
+msgid "having_lunch"
+msgstr "dîne"
+
+msgid "exercising"
+msgstr "fait de l'exercice"
+
+msgid "cycling"
+msgstr "fait du vélo"
+
+msgid "hiking"
+msgstr "fait de la randonnée"
+
+msgid "jogging"
+msgstr "fait un jogging"
+
+msgid "playing_sports"
+msgstr "fait du sport"
+
+msgid "running"
+msgstr "court"
+
+msgid "skiing"
+msgstr "skie"
+
+msgid "swimming"
+msgstr "nage"
+
+msgid "working_out"
+msgstr "élabore"
+
+msgid "grooming"
+msgstr "se toilette"
+
+msgid "at_the_spa"
+msgstr "à la station thermale"
+
+msgid "brushing_teeth"
+msgstr "se brosse les dents"
+
+msgid "getting_a_haircut"
+msgstr "se fait couper les cheveux"
+
+msgid "shaving"
+msgstr "se rase"
+
+msgid "taking_a_bath"
+msgstr "prend un bain"
+
+msgid "taking_a_shower"
+msgstr "prend une douche"
+
+msgid "having_appointment"
+msgstr "à un rendez-vous"
+
+msgid "inactive"
+msgstr "inactif"
+
+msgid "day_off"
+msgstr "en congé"
+
+msgid "hanging_out"
+msgstr "traîne"
+
+msgid "on_vacation"
+msgstr "en vacances"
+
+msgid "scheduled_holiday"
+msgstr "en vacances organisées"
+
+msgid "sleeping"
+msgstr "dort"
+
+msgid "relaxing"
+msgstr "se relaxe"
+
+msgid "gaming"
+msgstr "joue"
+
+msgid "going_out"
+msgstr "sort"
+
+msgid "partying"
+msgstr "fait la fête"
+
+msgid "reading"
+msgstr "lit"
+
+msgid "rehearsing"
+msgstr "se prépare"
+
+msgid "shopping"
+msgstr "fait les magasins"
+
+msgid "socializing"
+msgstr "se socialise"
+
+msgid "sunbathing"
+msgstr "prend un bain de soleil"
+
+msgid "watching_tv"
+msgstr "regarde la TV"
+
+msgid "watching_a_movie"
+msgstr "regarde un film"
+
+msgid "talking"
+msgstr "discute"
+
+msgid "in_real_life"
+msgstr "dans la vraie vie"
+
+msgid "on_the_phone"
+msgstr "au téléphone"
+
+msgid "traveling"
+msgstr "voyage"
+
+msgid "commuting"
+msgstr "permute"
+
+msgid "driving"
+msgstr "conduit"
+
+msgid "in_a_car"
+msgstr "en voiture"
+
+msgid "on_a_bus"
+msgstr "en bus"
+
+msgid "on_a_plane"
+msgstr "en avion"
+
+msgid "on_a_train"
+msgstr "en train"
+
+msgid "on_a_trip"
+msgstr "en séjour"
+
+msgid "walking"
+msgstr "marche"
+
+msgid "working"
+msgstr "travaille"
+
+msgid "coding"
+msgstr "programme"
+
+msgid "in_a_meeting"
+msgstr "en réunion"
+
+msgid "studying"
+msgstr "étudie"
+
+msgid "writing"
+msgstr "écrit"
 
 #~ msgid "2003-12-13T18:30:02Z"
 #~ msgstr "2003-12-13T18:30:02Z"

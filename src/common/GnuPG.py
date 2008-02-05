@@ -28,24 +28,12 @@
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import os
+import gajim
 from os import tmpfile
 from common import helpers
 
-USE_GPG = True
-
-try:
-	import GnuPGInterface # Debian package doesn't distribute 'our' file
-except ImportError:
-	try:
-		from common import GnuPGInterface # use 'our' file
-	except ImportError:
-		USE_GPG = False # user can't do OpenGPG only if he or she removed the file!
-	
-else:
-	status = os.system('gpg -h >/dev/null 2>&1')
-	if status != 0:
-		USE_GPG = False
+if gajim.HAVE_GPG:
+	import GnuPGInterface
 
 	class GnuPG(GnuPGInterface.GnuPG):
 		def __init__(self, use_agent = False):
@@ -57,8 +45,6 @@ else:
 			self.options.armor = 1
 			self.options.meta_interactive = 0
 			self.options.extra_args.append('--no-secmem-warning')
-			# Nolith's patch - prevent crashs on non fully-trusted keys
-			self.options.extra_args.append('--always-trust')
 			if self.use_agent:
 				self.options.extra_args.append('--use-agent')
 
@@ -88,8 +74,6 @@ else:
 			return resp
 
 		def encrypt(self, str, recipients):
-			if not USE_GPG:
-				return str, 'GnuPG not usable'
 			self.options.recipients = recipients   # a list!
 
 			proc = self.run(['--encrypt'], create_fhs=['stdin', 'stdout', 'status',
@@ -125,8 +109,6 @@ else:
 			return self._stripHeaderFooter(output), error
 
 		def decrypt(self, str, keyID):
-			if not USE_GPG:
-				return str
 			proc = self.run(['--decrypt', '-q', '-u %s'%keyID], create_fhs=['stdin', 'stdout'])
 			enc = self._addHeaderFooter(str, 'MESSAGE')
 			proc.handles['stdin'].write(enc)
@@ -140,8 +122,6 @@ else:
 			return output
 
 		def sign(self, str, keyID):
-			if not USE_GPG:
-				return str
 			proc = self.run(['-b', '-u %s'%keyID], create_fhs=['stdin', 'stdout', 'status', 'stderr'])
 			proc.handles['stdin'].write(str)
 			try:
@@ -170,8 +150,6 @@ else:
 			return 'BAD_PASSPHRASE'
 
 		def verify(self, str, sign):
-			if not USE_GPG:
-				return str
 			if str == None:
 				return ''
 			f = tmpfile()
@@ -193,15 +171,13 @@ else:
 
 			try: proc.wait()
 			except IOError: pass
-
+			
 			keyid = ''
 			if resp.has_key('GOODSIG'):
 				keyid = resp['GOODSIG'].split()[0]
 			return keyid
 
 		def get_keys(self, secret = False):
-			if not USE_GPG:
-				return {}
 			if secret:
 				opt = '--list-secret-keys'
 			else:
@@ -217,8 +193,10 @@ else:
 				sline = line.split(':')
 				if (sline[0] == 'sec' and secret) or \
 						(sline[0] == 'pub' and not secret):
+					# decode escaped chars
+					name = eval('"' + sline[9].replace('"', '\\"') + '"')
 					# make it unicode instance
-					keys[sline[4][8:]] = helpers.decode_string(sline[9])
+					keys[sline[4][8:]] = helpers.decode_string(name)
 			return keys
 			try: proc.wait()
 			except IOError: pass

@@ -45,7 +45,7 @@ opt_int = [ 'integer', 0 ]
 opt_str = [ 'string', 0 ]
 opt_bool = [ 'boolean', 0 ]
 opt_color = [ 'color', '^(#[0-9a-fA-F]{6})|()$' ]
-opt_one_window_types = ['never', 'always', 'peracct', 'pertype']
+opt_one_window_types = ['never', 'always', 'always_with_roster', 'peracct', 'pertype']
 opt_treat_incoming_messages = ['', 'chat', 'normal']
 
 class Config:
@@ -100,7 +100,6 @@ class Config:
 		'urlmsgcolor': [ opt_color, '#0000ff', '', True ],
 		'collapsed_rows': [ opt_str, '', _('List (space separated) of rows (accounts and groups) that are collapsed.'), True ],
 		'roster_theme': [ opt_str, _('default'), '', True ],
-		'saveposition': [ opt_bool, True ],
 		'mergeaccounts': [ opt_bool, False, '', True ],
 		'sort_by_show': [ opt_bool, True, '', True ],
 		'enable_zeroconf': [opt_bool, False, _('Enable link-local/zeroconf messaging')],
@@ -214,6 +213,7 @@ class Config:
 		'show_unread_tab_icon': [opt_bool, False, _('If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated.')],
 		'show_status_msgs_in_roster': [opt_bool, True, _('If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window.'), True],
 		'show_avatars_in_roster': [opt_bool, True, '', True],
+		'avatar_position_in_roster': [opt_str, 'right', _('Define the position of the avatar in roster. Can be left or right'), True],
 		'ask_avatars_on_startup': [opt_bool, True, _('If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cached that is too old.')],
 		'print_status_in_chats': [opt_bool, True, _('If False, Gajim will no longer print status line in chats when a contact changes his or her status and/or his or her status message.')],
 		'print_status_in_muc': [opt_str, 'in_and_out', _('can be "none", "all" or "in_and_out". If "none", Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message. If "all" Gajim will print all status messages. If "in_and_out", Gajim will only print FOO enters/leaves group chat.')],
@@ -229,7 +229,7 @@ class Config:
 		'send_sha_in_gc_presence': [opt_bool, True, _('Jabberd1.4 does not like sha info when one join a password protected group chat. Turn this option to False to stop sending sha info in group chat presences.')],
 		'one_message_window': [opt_str, 'always',
 #always, never, peracct, pertype should not be translated
-			_('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g., chats vs. groupchats) are sent to a specific window. Note, changing this option requires restarting Gajim before the changes will take effect.')],
+			_('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'always_with_roster\' - Like \'always\' but the messages are in a single window along with the roster.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g., chats vs. groupchats) are sent to a specific window.')],
 		'show_avatar_in_chat': [opt_bool, True, _('If False, you will no longer see the avatar in the chat window.')],
 		'escape_key_closes': [opt_bool, True, _('If True, pressing the escape key closes a tab/window.')],
 		'compact_view': [opt_bool, False, _('Hides the buttons in chat windows.')],
@@ -250,7 +250,14 @@ class Config:
 		'use_latex': [opt_bool, False, _('If True, Gajim will convert string between $$ and $$ to an image using dvips and convert before insterting it in chat window.')],
 		'change_status_window_timeout': [opt_int, 15, _('Time of inactivity needed before the change status window closes down.')],
 		'max_conversation_lines': [opt_int, 500, _('Maximum number of lines that are printed in conversations. Oldest lines are cleared.')],
+		'publish_mood': [opt_bool, False],
+		'publish_activity': [opt_bool, False],
+		'publish_tune': [opt_bool, False],
+		'subscribe_mood': [opt_bool, True],
+		'subscribe_activity': [opt_bool, True],
+		'subscribe_tune': [opt_bool, True],
 		'attach_notifications_to_systray': [opt_bool, False, _('If True, notification windows from notification-daemon will be attached to systray icon.')],
+		'use_pep': [opt_bool, False, 'temporary variable to enable pep support'],
 	}
 
 	__options_per_key = {
@@ -275,7 +282,8 @@ class Config:
 			'keyid': [ opt_str, '', '', True ],
 			'gpg_sign_presence': [ opt_bool, True, _('If disabled, don\'t sign presences with GPG key, even if GPG is configured.') ],
 			'keyname': [ opt_str, '', '', True ],
-			'usessl': [ opt_bool, False, '', True ],
+			'connection_types': [ opt_str, 'tls ssl plain', _('Ordered list (space separated) of connection type to try. Can contain tls, ssl or plain')],
+			'warn_when_insecure_connection': [ opt_bool, True, _('Show a warning dialog before sending password on an insecure connection.') ],
 			'ssl_fingerprint_sha1': [ opt_str, '', '', True ],
 			'use_srv': [ opt_bool, True, '', True ],
 			'use_custom_host': [ opt_bool, False, '', True ],
@@ -306,6 +314,7 @@ class Config:
 			'zeroconf_last_name': [ opt_str, '', '', True ],
 			'zeroconf_jabber_id': [ opt_str, '', '', True ],
 			'zeroconf_email': [ opt_str, '', '', True ],
+			'use_env_http_proxy' : [opt_bool, False],
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],
@@ -354,7 +363,7 @@ class Config:
 			'state_muc_directed_msg_color': [ opt_color, 'red2' ],
 		}, {}),
 		'contacts': ({
-			'gpg_enabled': [ opt_bool, True, _('Is OpenPGP enabled for this contact?')],
+			'gpg_enabled': [ opt_bool, False, _('Is OpenPGP enabled for this contact?')],
 			'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
 		}, {}),
 		'rooms': ({
@@ -400,7 +409,8 @@ class Config:
 
 	soundevents_default = {
 		'first_message_received': [ True, '../data/sounds/message1.wav' ],
-		'next_message_received': [ True, '../data/sounds/message2.wav' ],
+		'next_message_received_focused': [ True, '../data/sounds/message2.wav' ],
+		'next_message_received_unfocused': [ True, '../data/sounds/message2.wav' ],
 		'contact_connected': [ True, '../data/sounds/connected.wav' ],
 		'contact_disconnected': [ True, '../data/sounds/disconnected.wav' ],
 		'message_sent': [ True, '../data/sounds/sent.wav' ],

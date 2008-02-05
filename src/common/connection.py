@@ -48,15 +48,12 @@ from common import passwords
 from common import exceptions
 
 from connection_handlers import *
-USE_GPG = GnuPG.USE_GPG
 
 from common.rst_xhtml_generator import create_xhtml
 
 from string import Template
 import logging
 log = logging.getLogger('gajim.c.connection')
-
-import gtkgui_helpers
 
 ssl_error = {
 2: _("Unable to get issuer certificate"),
@@ -75,9 +72,9 @@ ssl_error = {
 15: _("Format error in CRL's lastUpdate field"),
 16: _("Format error in CRL's nextUpdate field"),
 17: _("Out of memory"),
-18: _("Self signed certificate in certificate chain"),
-19: _("Unable to get local issuer certificate"),
-20: _("Unable to verify the first certificate"),
+18: _("Self signed certificate"),
+19: _("Self signed certificate in certificate chain"),
+20: _("Unable to get local issuer certificate"),
 21: _("Unable to verify the first certificate"),
 22: _("Certificate chain too long"),
 23: _("Certificate revoked"),
@@ -107,7 +104,9 @@ class Connection(ConnectionHandlers):
 		self.last_connection = None # last ClientCommon instance
 		self.is_zeroconf = False
 		self.gpg = None
-		if USE_GPG:
+		self.USE_GPG = False
+		if gajim.HAVE_GPG:
+			self.USE_GPG = True
 			self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 		self.status = ''
 		self.priority = gajim.get_priority(name, 'offline')
@@ -142,6 +141,9 @@ class Connection(ConnectionHandlers):
 		self.blocked_contacts = []
 		self.blocked_groups = []
 		self.pep_supported = False
+		self.mood = {}
+		self.tune = {}
+		self.activity = {}
 		# Do we continue connection when we get roster (send presence,get vcard..)
 		self.continue_connect_info = None
 		# To know the groupchat jid associated with a sranza ID. Useful to
@@ -178,7 +180,7 @@ class Connection(ConnectionHandlers):
 			self.dispatch('STATUS', 'connecting')
 			self.retrycount += 1
 			self.on_connect_auth = self._init_roster
-			self.connect_and_init(self.old_show, self.status, self.gpg != None)
+			self.connect_and_init(self.old_show, self.status, self.USE_GPG)
 		else:
 			# reconnect succeeded
 			self.time_to_reconnect = None
@@ -186,6 +188,8 @@ class Connection(ConnectionHandlers):
 
 	# We are doing disconnect at so many places, better use one function in all
 	def disconnect(self, on_purpose=False):
+		#FIXME: set the Tune to None before disconnection per account
+		#gajim.interface.roster._music_track_changed(None, None)
 		self.on_purpose = on_purpose
 		self.connected = 0
 		self.time_to_reconnect = None
@@ -265,7 +269,8 @@ class Connection(ConnectionHandlers):
 							if not common.xmpp.isResultNode(result):
 								self.dispatch('ACC_NOT_OK', (result.getError()))
 								return
-							if USE_GPG:
+							if gajim.HAVE_GPG:
+								self.USE_GPG = True
 								self.gpg = GnuPG.GnuPG(gajim.config.get(
 									'use_gpg_agent'))
 							self.dispatch('ACC_OK', (self.new_account_info))
@@ -279,7 +284,7 @@ class Connection(ConnectionHandlers):
 						# typed, so send them
 						if is_form:
 							#TODO: Check if form has changed
-							iq = Iq('set', NS_REGISTER, to=self._hostname)
+							iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to=self._hostname)
 							iq.setTag('query').addChild(node=self.new_account_form)
 							self.connection.SendAndCallForResponse(iq,
 								_on_register_result)
@@ -313,7 +318,7 @@ class Connection(ConnectionHandlers):
 						ssl_fingerprint = \
 							self.connection.Connection.ssl_fingerprint_sha1
 					self.dispatch('NEW_ACC_CONNECTED', (conf, is_form, ssl_msg,
-						ssl_cert, ssl_fingerprint))
+						errnum, ssl_cert, ssl_fingerprint))
 					self.connection.UnregisterDisconnectHandler(
 						self._on_new_account)
 					self.disconnect(on_purpose=True)
@@ -423,27 +428,56 @@ class Connection(ConnectionHandlers):
 			proxy['user'] = gajim.config.get_per('proxies', p, 'user')
 			proxy['password'] = gajim.config.get_per('proxies', p, 'pass')
 			proxy['type'] = gajim.config.get_per('proxies', p, 'type')
+		elif gajim.config.get_per('accounts', self.name, 'use_env_http_proxy'):
+			try:
+				try:
+					env_http_proxy = os.environ['HTTP_PROXY']
+				except:
+					env_http_proxy = os.environ['http_proxy']
+				env_http_proxy = env_http_proxy.strip('"')
+				# Dispose of the http:// prefix
+				env_http_proxy = env_http_proxy.split('://')
+				env_http_proxy = env_http_proxy[len(env_http_proxy)-1]
+				env_http_proxy = env_http_proxy.split('@')
+
+				if len(env_http_proxy) == 2:
+					login = env_http_proxy[0].split(':')
+					addr = env_http_proxy[1].split(':')
+				else:
+					login = ['', '']
+					addr = env_http_proxy[0].split(':')
+
+				proxy = {'host': addr[0], 'type' : u'http', 'user':login[0]}
+
+				if len(addr) == 2:
+					proxy['port'] = addr[1]
+				else:
+					proxy['port'] = 3128
+
+				if len(login) == 2:
+					proxy['password'] = login[1]
+				else:
+					proxy['password'] = u''
+
+			except:
+				proxy = None
 		else:
 			proxy = None
 
 		h = hostname
 		p = 5222
-		# autodetect [for SSL in 5223/443 and for TLS if broadcasted]
-		secur = None
-		if usessl:
-			p = 5223
-			secur = 1 # 1 means force SSL no matter what the port will be
-			use_srv = False # wants ssl? disable srv lookup
+		ssl_p = 5223
+#			use_srv = False # wants ssl? disable srv lookup
 		if use_custom:
 			h = custom_h
 			p = custom_p
+			ssl_p = custom_p
 			use_srv = False
 
-		hosts = []
 		# SRV resolver
 		self._proxy = proxy
-		self._secure = secur
-		self._hosts = [ {'host': h, 'port': p, 'prio': 10, 'weight': 10} ]
+		self._hosts = [ {'host': h, 'port': p, 'ssl_port': ssl_p, 'prio': 10,
+			'weight': 10} ]
 		self._hostname = hostname
 		if use_srv:
 			# add request for srv query to the resolve, on result '_on_resolve'
@@ -457,6 +491,12 @@ class Connection(ConnectionHandlers):
 		# SRV query returned at least one valid result, we put it in hosts dict
 		if len(result_array) != 0:
 			self._hosts = [i for i in result_array]
+			# Add ssl port
+			ssl_p = 5223
+			if gajim.config.get_per('accounts', self.name, 'use_custom_host'):
+				ssl_p = gajim.config.get_per('accounts', self.name, 'custom_port')
+			for i in self._hosts:
+				i['ssl_port'] = ssl_p
 		self.connect_to_next_host()
 
 	def on_proxy_failure(self, reason):
@@ -468,8 +508,9 @@ class Connection(ConnectionHandlers):
 		self.dispatch('CONNECTION_LOST',
 			(_('Connection to proxy failed'), reason))
 
-	def connect_to_next_host(self, retry = False):
-		if len(self._hosts):
+	def connect_to_next_type(self, retry=False):
+		if len(self._connection_types):
+			self._current_type = self._connection_types.pop(0)
 			if self.last_connection:
 				self.last_connection.socket.disconnect()
 				self.last_connection = None
@@ -478,27 +519,49 @@ class Connection(ConnectionHandlers):
 				con = common.xmpp.NonBlockingClient(self._hostname, caller = self,
 					on_connect = self.on_connect_success,
 					on_proxy_failure = self.on_proxy_failure,
-					on_connect_failure = self.connect_to_next_host)
+					on_connect_failure = self.connect_to_next_type)
 			else:
-				con = common.xmpp.NonBlockingClient(self._hostname, debug = [], caller = self,
-					on_connect = self.on_connect_success,
+				con = common.xmpp.NonBlockingClient(self._hostname, debug = [],
+					caller = self, on_connect = self.on_connect_success,
 					on_proxy_failure = self.on_proxy_failure,
-					on_connect_failure = self.connect_to_next_host)
+					on_connect_failure = self.connect_to_next_type)
 			self.last_connection = con
 			# increase default timeout for server responses
 			common.xmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = self.try_connecting_for_foo_secs
 			con.set_idlequeue(gajim.idlequeue)
-			host = self.select_next_host(self._hosts)
-			self._current_host = host
-			self._hosts.remove(host)
-
 			# FIXME: this is a hack; need a better way
 			if self.on_connect_success == self._on_new_account:
 				con.RegisterDisconnectHandler(self._on_new_account)
 
-			log.info("Connecting to %s: [%s:%d]", self.name, host['host'], host['port'])
-			con.connect((host['host'], host['port']), proxy = self._proxy,
-				secure = self._secure)
+			if self._current_type == 'ssl':
+				port = self._current_host['ssl_port']
+				secur = 1
+			else:
+				port = self._current_host['port']
+				if self._current_type == 'plain':
+					secur = 0
+				else:
+					secur = None
+			log.info('Connecting to %s: [%s:%d]', self.name,
+				self._current_host['host'], port)
+			con.connect((self._current_host['host'], port), proxy=self._proxy,
+				secure = secur)
+		else:
+			self.connect_to_next_host(retry)
+
+	def connect_to_next_host(self, retry = False):
+		if len(self._hosts):
+			# No config option exist when creating a new account
+			if self.name in gajim.config.get_per('accounts'):
+				self._connection_types = gajim.config.get_per('accounts', self.name,
+					'connection_types').split()
+			else:
+				self._connection_types = ['tls', 'ssl', 'plain']
+			host = self.select_next_host(self._hosts)
+			self._current_host = host
+			self._hosts.remove(host)
+			self.connect_to_next_type()
+
 		else:
 			if not retry and self.retrycount == 0:
 				log.debug("Out of hosts, giving up connecting to %s", self.name)
@@ -527,15 +590,26 @@ class Connection(ConnectionHandlers):
 		if not self.connected: # We went offline during connecting process
 			# FIXME - not possible, maybe it was when we used threads
 			return
+		_con_type = con_type
+		# xmpp returns 'tcp', but we set 'plain' in connection_types in config
+		if _con_type == 'tcp':
+			_con_type = 'plain'
+		if _con_type != self._current_type:
+			self.connect_to_next_type()
+			return
+		if _con_type == 'plain' and gajim.config.get_per('accounts', self.name,
+		'warn_when_insecure_connection'):
+			self.dispatch('PLAIN_CONNECTION', (con,))
+			return True
+		return self.connection_accepted(con, con_type)
+
+	def connection_accepted(self, con, con_type):
 		self.hosts = []
-		if not con_type:
-			log.debug('Could not connect to %s:%s' % (self._current_host['host'],
-				self._current_host['port']))
 		self.connected_hostname = self._current_host['host']
 		self.on_connect_failure = None
 		con.RegisterDisconnectHandler(self._disconnectedReconnCB)
-		log.debug(_('Connected to server %s:%s with %s') % (self._current_host['host'],
-			self._current_host['port'], con_type))
+		log.debug('Connected to server %s:%s with %s' % (
+			self._current_host['host'], self._current_host['port'], con_type))
 
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
@@ -548,10 +622,10 @@ class Connection(ConnectionHandlers):
 			text = _('The authenticity of the %s certificate could be invalid.') %\
 				hostname
 			if errnum in ssl_error:
-				text += _('\nSSL Error: %s') % ssl_error[errnum]
+				text += _('\nSSL Error: <b>%s</b>') % ssl_error[errnum]
 			else:
 				text += _('\nUnknown SSL error: %d') % errnum
-			self.dispatch('SSL_ERROR', (text, con.Connection.ssl_cert_pem,
+			self.dispatch('SSL_ERROR', (text, errnum, con.Connection.ssl_cert_pem,
 				con.Connection.ssl_fingerprint_sha1))
 			return True
 		if hasattr(con.Connection, 'ssl_fingerprint_sha1'):
@@ -565,11 +639,17 @@ class Connection(ConnectionHandlers):
 		self._register_handlers(con, con_type)
 		con.auth(name, self.password, self.server_resource, 1, self.__on_auth)
 
-
 	def ssl_certificate_accepted(self):
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		self._register_handlers(self.connection, 'ssl')
-		self.connection.auth(name, self.password, self.server_resource, 1, self.__on_auth)
+		self.connection.auth(name, self.password, self.server_resource, 1,
+			self.__on_auth)
+
+	def plain_connection_accepted(self):
+		name = gajim.config.get_per('accounts', self.name, 'name')
+		self._register_handlers(self.connection, 'tcp')
+		self.connection.auth(name, self.password, self.server_resource, 1,
+			self.__on_auth)
 
 	def _register_handlers(self, con, con_type):
 		self.peerhost = con.get_peerhost()
@@ -699,6 +779,17 @@ class Connection(ConnectionHandlers):
 	def send_invisible_presence(self, msg, signed, initial = False):
 		if not self.connection:
 			return
+		# If we are already connected, and privacy rules are supported, send
+		# offline presence first as it's required by XEP-0126
+		if self.connected > 1 and self.privacy_rules_supported:
+			self.on_purpose = True
+			p = common.xmpp.Presence(typ = 'unavailable')
+			p = self.add_sha(p, False)
+			if msg:
+				p.setStatus(msg)
+			self.remove_all_transfers()
+			self.connection.send(p)
+
 		# try to set the privacy rule
 		iq = self.build_privacy_rule('invisible', 'deny')
 		self.connection.SendAndCallForResponse(iq, self._continue_invisible,
@@ -707,8 +798,7 @@ class Connection(ConnectionHandlers):
 	def _continue_invisible(self, con, iq_obj, msg, signed, initial):
 		ptype = ''
 		show = ''
-		# FIXME: JEP 126 need some modifications (see http://lists.jabber.ru/pipermail/ejabberd/2005-July/001252.html). So I disable it for the moment
-		if 1 or iq_obj.getType() == 'error': #server doesn't support privacy lists
+		if iq_obj.getType() == 'error': # server doesn't support privacy lists
 			# We use the old way which is not xmpp complient
 			ptype = 'invisible'
 			show = 'invisible'
@@ -760,7 +850,7 @@ class Connection(ConnectionHandlers):
 		callback is the function to call when user give the passphrase'''
 		signed = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
-		if keyID and self.gpg:
+		if keyID and self.USE_GPG:
 			use_gpg_agent = gajim.config.get('use_gpg_agent')
 			if self.gpg.passphrase is None and not use_gpg_agent:
 				# We didn't set a passphrase
@@ -768,7 +858,7 @@ class Connection(ConnectionHandlers):
 			if self.gpg.passphrase is not None or use_gpg_agent:
 				signed = self.gpg.sign(msg, keyID)
 				if signed == 'BAD_PASSPHRASE':
-					self.gpg = None
+					self.USE_GPG = False
 					signed = ''
 					self.dispatch('BAD_PASSPHRASE', ())
 		return signed
@@ -845,7 +935,8 @@ class Connection(ConnectionHandlers):
 					safe_substitute({
 						'hostname': socket.gethostname()
 					})
-			if USE_GPG:
+			if gajim.HAVE_GPG:
+				self.USE_GPG = True
 				self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 			self.connect_and_init(show, msg, sign_msg)
 
@@ -922,9 +1013,15 @@ class Connection(ConnectionHandlers):
 			fjid += '/' + resource
 		msgtxt = msg
 		msgenc = ''
-		if keyID and self.gpg:
-			#encrypt
-			msgenc, error = self.gpg.encrypt(msg, [keyID])
+
+		if keyID and self.USE_GPG:
+			if keyID ==  'UNKNOWN':
+				error = _('Neither the remote presence is signed, nor a key was assigned.')
+			elif keyID[8:] == 'MISMATCH':
+				error = _('The contact\'s key (%s) does not match the key assigned in Gajim.' % keyID[:8]) 
+			else:
+				#encrypt
+				msgenc, error = self.gpg.encrypt(msg, [keyID])
 			if msgenc and not error:
 				msgtxt = '[This message is encrypted]'
 				lang = os.getenv('LANG')
@@ -1109,7 +1206,7 @@ class Connection(ConnectionHandlers):
 	def send_new_account_infos(self, form, is_form):
 		if is_form:
 			# Get username and password and put them in new_account_info
-			for field in self._data_form.iter_fields():
+			for field in form.iter_fields():
 				if field.var == 'username':
 					self.new_account_info['name'] = field.value
 				if field.var == 'password':

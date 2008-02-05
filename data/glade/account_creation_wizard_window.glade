@@ -117,7 +117,7 @@ to the Jabber network.</property>
                   <widget class="GtkLabel" id="label270">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Please fill in the data for your new account&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Please fill in the data for your existing account&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </widget>
                   <packing>

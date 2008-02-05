@@ -429,8 +429,8 @@ def launch_browser_mailer(kind, uri):
 			command = 'kfmclient exec'
 		elif gajim.config.get('openwith') == 'exo-open':
 			command = 'exo-open'
-		elif ((sys.platform == 'darwin') and
-			  (gajim.config.get('openwith') == 'open')):
+		elif ((sys.platform == 'darwin') and\
+		(gajim.config.get('openwith') == 'open')):
 			command = 'open'
 		elif gajim.config.get('openwith') == 'custom':
 			if kind == 'url':
@@ -459,8 +459,8 @@ def launch_file_manager(path_to_open):
 			command = 'kfmclient exec'
 		elif gajim.config.get('openwith') == 'exo-open':
 			command = 'exo-open'
-		elif ((sys.platform == 'darwin') and
-			  (gajim.config.get('openwith') == 'open')):
+		elif ((sys.platform == 'darwin') and\
+		(gajim.config.get('openwith') == 'open')):
 			command = 'open'
 		elif gajim.config.get('openwith') == 'custom':
 			command = gajim.config.get('custom_file_manager')
@@ -784,7 +784,8 @@ def get_os_info():
 						'sourcemage') or not\
 						os.path.basename(path_to_file).startswith('slackware'):
 							text = distro_name + ' ' + text
-					elif path_to_file.endswith('aurox-release'):
+					elif path_to_file.endswith('aurox-release') or \
+					path_to_file.endswith('arch-release'):
 						# file doesn't have version
 						text = distro_name
 					elif path_to_file.endswith('lfs-release'): # file just has version
@@ -792,7 +793,7 @@ def get_os_info():
 				return text
 
 		# our last chance, ask uname and strip it
-		uname_output = get_output_of_command('uname -a | cut -d" " -f1,3')
+		uname_output = get_output_of_command('uname -sr')
 		if uname_output is not None:
 			return uname_output[0] # only first line
 	return 'N/A'
@@ -1092,3 +1093,38 @@ def get_transport_path(transport):
 	elif os.path.isdir(os.path.join(gajim.MY_ICONSETS_PATH, 'transports',
 	transport)):
 		return os.path.join(gajim.MY_ICONSETS_PATH, 'transports', transport)
+	# No transport folder found, use default jabber one
+	return get_iconset_path(gajim.config.get('iconset'))
+
+def prepare_and_validate_gpg_keyID(account, jid, keyID):
+	'''Returns an eight char long keyID that can be used with for GPG encryption with this contact.
+	If the given keyID is None, return UNKNOWN; if the key does not match the assigned key
+	XXXXXXXXMISMATCH is returned. If the key is trusted and not yet assigned, assign it'''
+	if gajim.connections[account].USE_GPG:	
+		if keyID and len(keyID) == 16:
+			keyID = keyID[8:]
+		
+		attached_keys = gajim.config.get_per('accounts', account,
+			'attached_gpg_keys').split()
+		
+		if jid in attached_keys and keyID:
+			attachedkeyID = attached_keys[attached_keys.index(jid) + 1]
+			if attachedkeyID != keyID:
+				# Mismatch! Another gpg key was expected
+				keyID += 'MISMATCH'
+		elif jid in attached_keys:
+			# An unsigned presence, just use the assigned key
+			keyID = attached_keys[attached_keys.index(jid) + 1]
+		elif keyID: 
+			public_keys = gajim.connections[account].ask_gpg_keys()
+			# Assign the corresponding key, if we have it in our keyring
+			if public_keys.has_key(keyID):
+				for u in gajim.contacts.get_contacts(account, jid):
+					u.keyID = keyID
+				keys_str = gajim.config.get_per('accounts', account, 'attached_gpg_keys')
+				keys_str += jid + ' ' + keyID + ' '
+				gajim.config.set_per('accounts', account, 'attached_gpg_keys', keys_str)
+		elif keyID is None:
+			keyID = 'UNKNOWN'
+	return keyID
+

@@ -44,26 +44,26 @@ trayicon.c:
 		    $(srcdir)/trayicon.defs > $@
 endif
 gajimsrcdir = $(pkgdatadir)/src
-gajimsrc_DATA = $(srcdir)/*.py 
+gajimsrc_PYTHON = $(srcdir)/*.py 
 
 gajimsrc1dir = $(pkgdatadir)/src/common
-gajimsrc1_DATA = \
+gajimsrc1_PYTHON = \
 				$(srcdir)/common/*.py 
 
 gajimsrc2dir = $(pkgdatadir)/src/common/xmpp
-gajimsrc2_DATA = \
+gajimsrc2_PYTHON = \
 				$(srcdir)/common/xmpp/*.py 
 
 gajimsrc3dir = $(pkgdatadir)/src/common/zeroconf
-gajimsrc3_DATA = \
+gajimsrc3_PYTHON = \
 				$(srcdir)/common/zeroconf/*.py 
 
 DISTCLEANFILES = 
 
-EXTRA_DIST = $(gajimsrc_DATA) \
-			$(gajimsrc1_DATA) \
-			$(gajimsrc2_DATA) \
-			$(gajimsrc3_DATA) \
+EXTRA_DIST = $(gajimsrc_PYTHON) \
+			$(gajimsrc1_PYTHON) \
+			$(gajimsrc2_PYTHON) \
+			$(gajimsrc3_PYTHON) \
 			gtkspellmodule.c \
 			eggtrayicon.c \
 			trayiconmodule.c \

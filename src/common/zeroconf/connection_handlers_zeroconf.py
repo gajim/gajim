@@ -32,7 +32,6 @@ from calendar import timegm
 from common import socks5
 import common.xmpp
 
-from common import GnuPG
 from common import helpers
 from common import gajim
 from common.zeroconf import zeroconf
@@ -726,13 +725,15 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 		if not user_nick:
 			user_nick = ''
 
-		if encTag and GnuPG.USE_GPG:
+		if encTag and self.USE_GPG:
 			#decrypt
 			encmsg = encTag.getData()
 			
 			keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 			if keyID:
 				decmsg = self.gpg.decrypt(encmsg, keyID)
+				# \x00 chars are not allowed in C (so in GTK)
+				decmsg = decmsg.replace('\x00', '')
 		if decmsg:
 			msgtxt = decmsg
 			encrypted = True

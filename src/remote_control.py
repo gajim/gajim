@@ -6,6 +6,7 @@
 ## Copyright (C) 2005-2006 Andrew Sayman <lorien420@myrealbox.com>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
+## Copyright (C) 2007 Travis Shirk <travis@pobox.com> 
 ##
 ## This file is part of Gajim.
 ##
@@ -373,7 +374,6 @@ class SignalObject(dbus.service.Object):
 		if not specified status is changed for all accounts. '''
 		if status not in ('offline', 'online', 'chat', 
 			'away', 'xa', 'dnd', 'invisible'):
-			raise InvalidArgument
 			return DBUS_BOOLEAN(False)
 		if account:
 			gobject.idle_add(gajim.interface.roster.send_status, account,
@@ -615,7 +615,10 @@ class SignalObject(dbus.service.Object):
 		for contact in contacts:
 			resource_props = dbus.Struct((DBUS_STRING(contact.resource),
 				dbus.Int32(contact.priority), DBUS_STRING(contact.status)))
-			contact_dict['resources'].append(resource_props)
+		contact_dict['resources'].append(resource_props)
+		contact_dict['groups'] = dbus.Array([], signature='s')
+		for group in prim_contact.groups:
+			contact_dict['groups'].append(DBUS_STRING(group))
 		return contact_dict
 
 	@dbus.service.method(INTERFACE, in_signature='', out_signature='s')
@@ -654,4 +657,4 @@ class SignalObject(dbus.service.Object):
 			gajim.interface.instances[account]['join_gc'] = \
 					JoinGroupchatWindow(account, room_jid, nick)
 		else:
-			gajim.connections[account].join_gc(nick, room_jid, password)
+			gajim.interface.roster.join_gc_room(account, room_jid, nick, password)

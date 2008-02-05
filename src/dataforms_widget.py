@@ -342,7 +342,7 @@ class SingleForm(gtk.Table, object):
 					for value, label in field.iter_options():
 						radio = gtk.RadioButton(first_radio, label=label)
 						radio.connect('toggled',
-							 self.on_list_single_radiobutton_toggled, field, value)
+							self.on_list_single_radiobutton_toggled, field, value)
 						if first_radio is None:
 							first_radio = radio
 							if field.value == '':	# TODO: is None when done

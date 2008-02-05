@@ -138,9 +138,6 @@ SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 
 # zeroconf account name
 ZEROCONF_ACC_NAME = 'Local'
-priority_dict = {}
-for status in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
-	priority_dict[status] = config.get('autopriority' + status)
 
 HAVE_PYCRYPTO = True
 try:
@@ -153,6 +150,17 @@ try:
 	import sexy
 except ImportError:
 	HAVE_PYSEXY = False
+
+HAVE_GPG = True
+try:
+	import GnuPGInterface 
+except ImportError:
+	HAVE_GPG = False
+else:
+	import os
+	status = os.system('gpg -h >/dev/null 2>&1')
+	if status != 0:
+		HAVE_GPG = False
 
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
@@ -260,13 +268,14 @@ def account_is_disconnected(account):
 def get_number_of_securely_connected_accounts():
 	'''returns the number of the accounts that are SSL/TLS connected'''
 	num_of_secured = 0
-	for account in connections:
+	for account in connections.keys():
 		if account_is_securely_connected(account):
 			num_of_secured += 1
 	return num_of_secured
 
 def account_is_securely_connected(account):
-	if account in con_types and con_types[account] in ('tls', 'ssl'):
+	if account_is_connected(account) and \
+	account in con_types and con_types[account] in ('tls', 'ssl'):
 		return True
 	else:
 		return False

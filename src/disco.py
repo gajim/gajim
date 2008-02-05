@@ -46,7 +46,6 @@ import inspect
 import weakref
 import gobject
 import gtk
-import gobject
 import pango
 
 import dialogs

@@ -21,7 +21,6 @@
 import os
 import sys
 import gtk
-import gobject
 import gtkgui_helpers
 
 import dialogs
@@ -53,7 +52,7 @@ class FeaturesWindow:
 				_('Requires python-avahi.'),
 				_('Requires pybonjour (http://o2s.csail.mit.edu/o2s-wiki/pybonjour).')),
 			_('gajim-remote'): (self.dbus_available,
-				_('A script to controle gajim via commandline.'),
+				_('A script to controle Gajim via commandline.'),
 				_('Requires python-dbus.'),
 				_('Feature not available under Windows.')),
 			_('OpenGPG'): (self.gpg_available,
@@ -86,14 +85,14 @@ class FeaturesWindow:
 				_('Feature not available under Windows.')),
 			_('Trayicon'): (self.trayicon_available,
 				_('A icon in systemtray reflecting the current presence.'), 
-				_('Requires python-gnome2-extras or compiled  trayicon module from Gajim sources.'),
+				_('Requires python-gnome2-extras or compiled trayicon module from Gajim sources.'),
 				_('Requires PyGTK >= 2.10.')),
 			_('Idle'): (self.idle_available,
 				_('Ability to measure idle time, in order to set auto status.'),
 				_('Requires compilation of the idle module from Gajim sources.'),
 				_('Requires compilation of the idle module from Gajim sources.')),
 			_('LaTeX'): (self.latex_available,
-				_('Transform LaTeX espressions between $$ $$.'),
+				_('Transform LaTeX expressions between $$ $$.'),
 				_('Requires texlive-latex-base, dvips and imagemagick. You have to set \'use_latex\' to True in the Advanced Configuration Editor.'),
 				_('Feature not available under Windows.')),
 			_('End to end encryption'): (self.pycrypto_available,
@@ -141,6 +140,8 @@ class FeaturesWindow:
 
 	def on_features_treeview_cursor_changed(self, widget):
 		selection = widget.get_selection()
+		if not selection:
+			return
 		path = selection.get_selected_rows()[1][0]
 		available = self.model[path][1]
 		feature = self.model[path][0].decode('utf-8')
@@ -178,8 +179,8 @@ class FeaturesWindow:
 	def gpg_available(self):
 		if os.name == 'nt':
 			return False
-		from common import GnuPG
-		return GnuPG.USE_GPG
+		from common import gajim
+		return gajim.HAVE_GPG
 
 	def network_manager_available(self):
 		if os.name == 'nt':
