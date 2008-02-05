@@ -142,7 +142,10 @@ class FeaturesWindow:
 		selection = widget.get_selection()
 		if not selection:
 			return
-		path = selection.get_selected_rows()[1][0]
+		rows = selection.get_selected_rows()[1]
+		if not rows:
+			return
+		path = rows[0]
 		available = self.model[path][1]
 		feature = self.model[path][0].decode('utf-8')
 		text = self.features[feature][1] + '\n'
