@@ -760,7 +760,7 @@ class RosterWindow:
 
 	def draw_avatar(self, jid, account):
 		'''draw the avatar'''
-		if gajim.config.get('show_avatars_in_roster'):
+		if not gajim.config.get('show_avatars_in_roster'):
 			return
 		model = self.tree.get_model()
 		iters = self.get_contact_iter(jid, account)

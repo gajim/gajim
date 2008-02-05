@@ -939,7 +939,7 @@ class GroupchatControl(ChatControlBase):
 		model[iter][C_TEXT] = name
 
 	def draw_avatar(self, nick):
-		if gajim.config.get('show_avatars_in_roster'):
+		if not gajim.config.get('show_avatars_in_roster'):
 			return
 		model = self.list_treeview.get_model()
 		iter = self.get_contact_iter(nick)
