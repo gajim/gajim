@@ -939,6 +939,8 @@ class GroupchatControl(ChatControlBase):
 		model[iter][C_TEXT] = name
 
 	def draw_avatar(self, nick):
+		if gajim.config.get('show_avatars_in_roster'):
+			return
 		model = self.list_treeview.get_model()
 		iter = self.get_contact_iter(nick)
 		if not iter:
@@ -1195,8 +1197,7 @@ class GroupchatControl(ChatControlBase):
 				affiliation = affiliation, jid = j, resource = resource)
 			gajim.contacts.add_gc_contact(self.account, gc_contact)
 		self.draw_contact(nick)
-		if gajim.config.get('show_avatars_in_roster'):
-			self.draw_avatar(nick)
+		self.draw_avatar(nick)
 		# Do not ask avatar to irc rooms as irc transports reply with messages
 		server = gajim.get_server_from_jid(self.room_jid)
 		if gajim.config.get('ask_avatars_on_startup') and \

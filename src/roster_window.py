@@ -334,8 +334,7 @@ class RosterWindow:
 					model.append(i, (None, name, 'contact', jid, account, None,
 						None))
 				self.draw_contact(jid, account)
-				if gajim.config.get('show_avatars_in_roster'):
-					self.draw_avatar(jid, account)
+				self.draw_avatar(jid, account)
 				self.draw_account(account)
 				# Redraw parent to change icon
 				self.draw_contact(big_brother_jid, big_brother_account)
@@ -395,8 +394,7 @@ class RosterWindow:
 			if gajim.groups[account][group]['expand']:
 				self.tree.expand_row(model.get_path(iterG), False)
 		self.draw_contact(jid, account)
-		if gajim.config.get('show_avatars_in_roster'):
-			self.draw_avatar(jid, account)
+		self.draw_avatar(jid, account)
 		self.draw_account(account)
 		# put the children under this iter
 		for data in shown_family:
@@ -482,8 +480,7 @@ class RosterWindow:
 		jid = gajim.get_jid_from_account(account)
 		if self.get_self_contact_iter(account):
 			self.draw_contact(jid, account)
-			if gajim.config.get('show_avatars_in_roster'):
-				self.draw_avatar(jid, account)
+			self.draw_avatar(jid, account)
 			return
 
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
@@ -499,8 +496,7 @@ class RosterWindow:
 		model.append(iterAcct, (None, gajim.nicks[account], 'self_contact', jid,
 			account, None, None))
 		self.draw_contact(jid, account)
-		if gajim.config.get('show_avatars_in_roster'):
-			self.draw_avatar(jid, account)
+		self.draw_avatar(jid, account)
 
 	def add_transport_to_roster(self, account, transport):
 		c = gajim.contacts.create_contact(jid = transport, name = transport,
@@ -764,6 +760,8 @@ class RosterWindow:
 
 	def draw_avatar(self, jid, account):
 		'''draw the avatar'''
+		if gajim.config.get('show_avatars_in_roster'):
+			return
 		model = self.tree.get_model()
 		iters = self.get_contact_iter(jid, account)
 		if gajim.config.get('show_avatars_in_roster'):
@@ -1934,8 +1932,7 @@ class RosterWindow:
 
 	def update_avatar_in_gui(self, jid, account):
 		# Update roster
-		if gajim.config.get('show_avatars_in_roster'):
-			self.draw_avatar(jid, account)
+		self.draw_avatar(jid, account)
 		# Update chat window
 		if gajim.interface.msg_win_mgr.has_window(jid, account):
 			win = gajim.interface.msg_win_mgr.get_window(jid, account)
