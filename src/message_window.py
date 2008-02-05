@@ -4,12 +4,12 @@
 ##                         Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2005 Yann Leboulanger <asterix@lagaule.org>
 ##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
 ## Copyright (C) 2005-2007 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2006 Geobert Quach <geobert@gmail.com>
 ## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
+## Copyright (C) 2005-2008 Nikos Kouremenos <kourem@gmail.com>
 ##
 ## This file is part of Gajim.
 ##
@@ -628,6 +628,9 @@ class MessageWindow(object):
 		# Ctrl+PageUP / DOWN has to be handled by notebook
 		if (event.state & gtk.gdk.CONTROL_MASK and
 				event.keyval in (gtk.keysyms.Page_Down, gtk.keysyms.Page_Up)):
+			return False
+		# when tab itselft is selected, make sure <- and -> are allowed for navigating between tabs
+		if event.keyval in (gtk.keysyms.Left, gtk.keysyms.Right):
 			return False
 		if isinstance(control, ChatControlBase):
 			# we forwarded it to message textview
