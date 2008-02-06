@@ -281,7 +281,7 @@ class ChatControlBase(MessageControl):
 		self.conv_textview.tv.show()
 		self._paint_banner()
 
-		# For JEP-0172
+		# For XEP-0172
 		self.user_nick = None
 
 		self.smooth = True
