@@ -49,7 +49,8 @@ if dbus_support.supported:
 	import dbus
 	from music_track_listener import MusicTrackListener
 
-from common.stanza_session import EncryptedStanzaSession 
+# XXX interface leaking into the back end?
+import session
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible', 'error']
@@ -1713,9 +1714,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		treat_as = gajim.config.get('treat_incoming_messages')
 		if treat_as:
 			mtype = treat_as
-		self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype,
-			subject, chatstate, msg_id, composing_xep, user_nick, msghtml,
-			session, form_node))
+
+		session.received(frm, msgtxt, tim, encrypted, mtype, subject, chatstate,
+      msg_id, composing_xep, user_nick, msghtml, form_node)
 	# END messageCB
 
 	def get_session(self, jid, thread_id, type):
@@ -1786,7 +1787,7 @@ returns the session that we last sent a message to.'''
 			return None
 
 	def make_new_session(self, jid, thread_id = None, type = 'chat'):
-		sess = EncryptedStanzaSession(self, common.xmpp.JID(jid), thread_id, type)
+		sess = session.ChatControlSession(self, common.xmpp.JID(jid), thread_id, type)
 
 		if not jid in self.sessions:
 			self.sessions[jid] = {}

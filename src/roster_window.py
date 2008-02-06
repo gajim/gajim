@@ -3929,7 +3929,7 @@ class RosterWindow:
 			# We call this here to avoid race conditions with widget validation
 			chat_control.read_queue()
 
-	def new_chat(self, contact, account, resource = None, session = None):
+	def new_chat(self, session, contact, account, resource = None):
 		# Get target window, create a control, and associate it with the window
 		type_ = message_control.TYPE_CHAT
 
@@ -3945,9 +3945,7 @@ class RosterWindow:
 
 		mw.new_tab(chat_control)
 
-		if len(gajim.events.get_events(account, fjid)):
-			# We call this here to avoid race conditions with widget validation
-			chat_control.read_queue()
+		return chat_control
 
 	def new_chat_from_jid(self, account, fjid):
 		jid, resource = gajim.get_room_and_nick_from_fjid(fjid)
@@ -3963,7 +3961,12 @@ class RosterWindow:
 				resource = resource)
 
 		if not gajim.interface.msg_win_mgr.has_window(fjid, account):
-			self.new_chat(contact, account, resource = resource)
+			session = account.make_new_session(account, fjid)
+			self.control = self.new_chat(session, contact, account, resource = resource)
+
+			if len(gajim.events.get_events(account, fjid)):
+				chat_control.read_queue()
+
 		mw = gajim.interface.msg_win_mgr.get_window(fjid, account)
 		mw.set_active_tab(fjid, account)
 		mw.window.present()
@@ -3982,114 +3985,6 @@ class RosterWindow:
 		gc_control = GroupchatControl(mw, contact, account,
 			is_continued=is_continued)
 		mw.new_tab(gc_control)
-
-	def on_message(self, jid, msg, tim, account, encrypted=False, msg_type='',
-	subject=None, resource='', msg_id=None, user_nick='',
-	advanced_notif_num=None, xhtml=None, session=None, form_node=None):
-		'''when we receive a message'''
-		contact = None
-		# if chat window will be for specific resource
-		resource_for_chat = resource
-		fjid = jid
-		# Try to catch the contact with correct resource
-		if resource:
-			fjid = jid + '/' + resource
-			contact = gajim.contacts.get_contact(account, jid, resource)
-		highest_contact = gajim.contacts.get_contact_with_highest_priority(
-			account, jid)
-		if not contact:
-			# If there is another resource, it may be a message from an invisible
-			# resource
-			lcontact = gajim.contacts.get_contacts(account, jid)
-			if (len(lcontact) > 1 or (lcontact and lcontact[0].resource and \
-			lcontact[0].show != 'offline')) and jid.find('@') > 0:
-				contact = gajim.contacts.copy_contact(highest_contact)
-				contact.resource = resource
-				if resource:
-					fjid = jid + '/' + resource
-				contact.priority = 0
-				contact.show = 'offline'
-				contact.status = ''
-				gajim.contacts.add_contact(account, contact)
-
-			else:
-				# Default to highest prio
-				fjid = jid
-				resource_for_chat = None
-				contact = highest_contact
-		if not contact:
-			# contact is not in roster
-			contact = self.add_to_not_in_the_roster(account, jid, user_nick)
-
-		path = self.get_path(jid, account) # Try to get line of contact in roster
-
-		# Look for a chat control that has the given resource
-		ctrl = gajim.interface.msg_win_mgr.get_control(fjid, account)
-		if not ctrl:
-			# if not, if message comes from highest prio, get control or open one
-			# without resource
-			if highest_contact and contact.resource == highest_contact.resource \
-			and not jid == gajim.get_jid_from_account(account):
-				ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
-				fjid = jid
-				resource_for_chat = None
-
-		# Do we have a queue?
-		no_queue = len(gajim.events.get_events(account, fjid)) == 0
-
-		popup = helpers.allow_popup_window(account, advanced_notif_num)
-
-		if msg_type == 'normal' and popup: # it's single message to be autopopuped
-			dialogs.SingleMessageWindow(account, contact.jid, action='receive',
-				from_whom=jid, subject=subject, message=msg, resource=resource,
-				session=session, form_node=form_node)
-			return
-
-		# We print if window is opened and it's not a single message
-		if ctrl and msg_type != 'normal':
-			typ = ''
-			if msg_type == 'error':
-				typ = 'status'
-			if session:
-				ctrl.set_session(session)
-			ctrl.print_conversation(msg, typ, tim = tim, encrypted = encrypted,
-						subject = subject, xhtml = xhtml)
-			if msg_id:
-				gajim.logger.set_read_messages([msg_id])
-			return
-
-		# We save it in a queue
-		type_ = 'chat'
-		event_type = 'message_received'
-		if msg_type == 'normal':
-			type_ = 'normal'
-			event_type = 'single_message_received'
-		show_in_roster = notify.get_show_in_roster(event_type, account, contact)
-		show_in_systray = notify.get_show_in_systray(event_type, account, contact)
-		event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
-			encrypted, resource, msg_id, xhtml, session, form_node),
-			show_in_roster=show_in_roster, show_in_systray=show_in_systray)
-		gajim.events.add_event(account, fjid, event)
-		if popup:
-			if not ctrl:
-				self.new_chat(contact, account, resource=resource_for_chat)
-				if path and not self.dragging and gajim.config.get(
-				'scroll_roster_to_last_message'):
-					# we curently see contact in our roster OR he
-					# is not in the roster at all.
-					# show and select his line in roster
-					# do not change selection while DND'ing
-					self.tree.expand_row(path[0:1], False)
-					self.tree.expand_row(path[0:2], False)
-					self.tree.scroll_to_cell(path)
-					self.tree.set_cursor(path)
-		else:
-			if no_queue: # We didn't have a queue: we change icons
-				self.draw_contact(jid, account)
-			self.show_title() # we show the * or [n]
-			# Show contact in roster (if he is invisible for example) and select
-			# line
-			self.show_and_select_path(path, jid, account)
 
 	def on_preferences_menuitem_activate(self, widget):
 		if gajim.interface.instances.has_key('preferences'):
@@ -4399,7 +4294,7 @@ class RosterWindow:
 			fjid += '/' + resource
 		win = gajim.interface.msg_win_mgr.get_window(fjid, account)
 		if not win:
-			self.new_chat(contact, account, resource = resource, session = session)
+			self.new_chat(session, contact, account, resource = resource)
 			win = gajim.interface.msg_win_mgr.get_window(fjid, account)
 			ctrl = win.get_control(fjid, account)
 			# last message is long time ago
