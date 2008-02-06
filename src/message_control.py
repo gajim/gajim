@@ -145,6 +145,7 @@ class MessageControl:
 		jid = self.contact.jid
 
 		if not self.session:
+			print('uhoh new session')
 			fjid = self.contact.get_full_jid()
 			new_session = gajim.connections[self.account].make_new_session(fjid)
 

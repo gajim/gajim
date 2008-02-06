@@ -1752,7 +1752,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 	def delete_session(self, jid, thread_id):
 		try:
 			del self.sessions[jid][thread_id]
-			
+
 			if not self.sessions[jid]:
 				del self.sessions[jid]
 		except KeyError:

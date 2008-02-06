@@ -1299,8 +1299,7 @@ class RosterWindow:
 
 			for result in results:
 				tim = time.localtime(float(result[2]))
-				self.on_message(jid, result[1], tim, account, msg_type = 'chat',
-					msg_id = result[0], session = session)
+				session.roster_message(jid, result[1], tim, msg_type='chat', msg_id=result[0])
 
 	def fill_contacts_and_groups_dicts(self, array, account):
 		'''fill gajim.contacts and gajim.groups'''
@@ -3960,12 +3959,13 @@ class RosterWindow:
 			contact = self.add_to_not_in_the_roster(account, jid,
 				resource = resource)
 
+		session = gajim.connections[account].get_session(fjid, None, 'chat')
+
 		if not gajim.interface.msg_win_mgr.has_window(fjid, account):
-			session = account.make_new_session(account, fjid)
-			self.control = self.new_chat(session, contact, account, resource = resource)
+			session.control = self.new_chat(session, contact, account, resource = resource)
 
 			if len(gajim.events.get_events(account, fjid)):
-				chat_control.read_queue()
+				session.control.read_queue()
 
 		mw = gajim.interface.msg_win_mgr.get_window(fjid, account)
 		mw.set_active_tab(fjid, account)
@@ -4292,16 +4292,25 @@ class RosterWindow:
 		fjid = contact.jid
 		if resource:
 			fjid += '/' + resource
+
+		conn = gajim.connections[account]
+
+		if not session:
+			session = conn.get_session(fjid, None, 'chat')
+
 		win = gajim.interface.msg_win_mgr.get_window(fjid, account)
 		if not win:
-			self.new_chat(session, contact, account, resource = resource)
+			session.control = self.new_chat(session, contact, account, resource=resource)
+
+			if len(gajim.events.get_events(account, fjid)):
+				session.control.read_queue()
+
 			win = gajim.interface.msg_win_mgr.get_window(fjid, account)
-			ctrl = win.get_control(fjid, account)
 			# last message is long time ago
-			gajim.last_message_time[account][ctrl.get_full_jid()] = 0
+			gajim.last_message_time[account][session.control.get_full_jid()] = 0
+
 		win.set_active_tab(fjid, account)
-		if gajim.connections[account].is_zeroconf and \
-				gajim.connections[account].status in ('offline', 'invisible'):
+		if conn.is_zeroconf and conn.status in ('offline', 'invisible'):
 			win.get_control(fjid, account).got_disconnected()
 
 		win.window.present()

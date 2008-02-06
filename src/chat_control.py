@@ -678,7 +678,7 @@ class ChatControlBase(MessageControl):
 				type_ = 'printed_' + self.type_id
 				event = 'message_received'
 				show_in_roster = notify.get_show_in_roster(event,
-					self.account, self.contact)
+					self.account, self.contact, self.session)
 				show_in_systray = notify.get_show_in_systray(event,
 					self.account, self.contact)
 				if gc_message:
@@ -1841,10 +1841,14 @@ class ChatControl(ChatControlBase):
 	def shutdown(self):
 		# destroy banner tooltip - bug #pygtk for that!
 		self.status_tooltip.destroy()
+
 		# Send 'gone' chatstate
 		self.send_chatstate('gone', self.contact)
 		self.contact.chatstate = None
 		self.contact.our_chatstate = None
+
+		self.session.control = None
+
 		# Disconnect timer callbacks
 		gobject.source_remove(self.possible_paused_timeout_id)
 		gobject.source_remove(self.possible_inactive_timeout_id)

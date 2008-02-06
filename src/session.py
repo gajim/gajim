@@ -51,7 +51,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 					contact.chatstate = chatstate
 					if contact.our_chatstate == 'ask': # we were jep85 disco?
 						contact.our_chatstate = 'active' # no more
-					self.control.handle_incoming_chatstate()
+					#self.control.handle_incoming_chatstate() XXX
 				elif contact.chatstate != 'active':
 					# got no valid jep85 answer, peer does not support it
 					contact.chatstate = False
@@ -109,7 +109,10 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			first, nickname, msg, focused], advanced_notif_num)
 
 		if gajim.interface.remote_ctrl:
-			gajim.interface.remote_ctrl.raise_signal('NewMessage', (self.conn.name, [full_jid_with_resource, message, tim, encrypted, msg_type, subject, chatstate, msg_id, composing_xep, user_nick, xhtml, form_node]))
+			gajim.interface.remote_ctrl.raise_signal('NewMessage',
+					(self.conn.name, [full_jid_with_resource, message, tim,
+						encrypted, msg_type, subject, chatstate, msg_id,
+						composing_xep, user_nick, xhtml, form_node]))
 
 	def roster_message(self, jid, msg, tim, encrypted=False, msg_type='',
 	subject=None, resource='', msg_id=None, user_nick='',
@@ -188,7 +191,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			type_ = 'normal'
 			event_type = 'single_message_received'
 
-		show_in_roster = notify.get_show_in_roster(event_type, self.conn.name, contact)
+		show_in_roster = notify.get_show_in_roster(event_type, self.conn.name, contact, self)
 		show_in_systray = notify.get_show_in_systray(event_type, self.conn.name, contact)
 
 		event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
@@ -199,7 +202,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		if popup:
 			if not self.control:
-				self.control = self.new_chat(self, contact, self.conn.name, resource=resource_for_chat)
+				self.control = gajim.interface.roster.new_chat(self, contact, self.conn.name, resource=resource_for_chat)
 
 				if len(gajim.events.get_events(self.conn.name, fjid)):
 					self.control.read_queue()
