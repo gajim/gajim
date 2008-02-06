@@ -123,7 +123,9 @@ class MessageWindow(object):
 		else:
 			nb_pos = gtk.POS_TOP
 		self.notebook.set_tab_pos(nb_pos)
-		if gajim.config.get('tabs_always_visible'):
+		window_mode = gajim.interface.msg_win_mgr.mode
+		if gajim.config.get('tabs_always_visible') or \
+		window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
 			self.notebook.set_show_tabs(True)
 			self.alignment.set_property('top-padding', 2)
 		else:
@@ -444,7 +446,9 @@ class MessageWindow(object):
 				self.window.destroy()
 			return # don't show_title, we are dead
 		elif self.get_num_controls() == 1: # we are going from two tabs to one
-			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
+			window_mode = gajim.interface.msg_win_mgr.mode
+			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible') or \
+				window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER
 			self.notebook.set_show_tabs(show_tabs_if_one_tab)
 			if not show_tabs_if_one_tab:
 				self.alignment.set_property('top-padding', 0)
