@@ -427,6 +427,9 @@ class ConnectionBytestream:
 		real_id = unicode(iq_obj.getAttr('id'))
 		if real_id[:3] != 'au_':
 			return
+		if real_id == self.awaiting_xmpp_ping_id:
+			self.awaiting_xmpp_ping_id = None
+			return
 		frm = helpers.get_full_jid_from_iq(iq_obj)
 		id = real_id[3:]
 		if self.files_props.has_key(id):
@@ -666,8 +669,8 @@ class ConnectionDisco:
 		query = iq.setTag('query')
 		query.setAttr('node','http://gajim.org/caps#' + gajim.version.split('-',
 			1)[0])
-		for f in (common.xmpp.NS_BYTESTREAM, common.xmpp.NS_SI, \
-						common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS):
+		for f in (common.xmpp.NS_BYTESTREAM, common.xmpp.NS_SI,
+		common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS):
 			feature = common.xmpp.Node('feature')
 			feature.setAttr('var', f)
 			query.addChild(node=feature)
@@ -1243,6 +1246,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.last_ids = []
 		# IDs of jabber:iq:version requests
 		self.version_ids = []
+		# ID of urn:xmpp:ping requests
+		self.awaiting_xmpp_ping_id = None
 
 		# keep track of sessions this connection has with other JIDs
 		self.sessions = {}
@@ -1312,6 +1317,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, -1, ''))
 			self.last_ids.remove(id)
 			return
+		if id == self.awaiting_xmpp_ping_id:
+			self.awaiting_xmpp_ping_id = None
 		errmsg = iq_obj.getErrorMsg()
 		errcode = iq_obj.getErrorCode()
 		self.dispatch('ERROR_ANSWER', (id, jid_from, errmsg, errcode))
@@ -1400,9 +1407,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			qp.setTagData('os', helpers.get_os_info())
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
-	
+
 	def _LastCB(self, con, iq_obj):
-		gajim.log.debug('IdleCB')
+		gajim.log.debug('LastCB')
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.getTag('query')
 		if not HAS_IDLE:
@@ -1412,7 +1419,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
-	
+
 	def _LastResultCB(self, con, iq_obj):
 		gajim.log.debug('LastResultCB')
 		qp = iq_obj.getTag('query')
@@ -1432,7 +1439,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			self.last_ids.remove(id)
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, seconds, status))
-	
+
 	def _VersionResultCB(self, con, iq_obj):
 		gajim.log.debug('VersionResultCB')
 		client_info = ''
