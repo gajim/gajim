@@ -298,27 +298,20 @@ class PreferencesWindow:
 		self.auto_popup_away_checkbutton.set_active(st)
 
 		# sounds
-		if ((os.name == 'nt') or (sys.platform == 'darwin')):
-			# if windows, player must not become visible on show_all
-			soundplayer_hbox = self.xml.get_widget('soundplayer_hbox')
-			soundplayer_hbox.set_no_show_all(True)
 		if gajim.config.get('sounds_on'):
 			self.xml.get_widget('play_sounds_checkbutton').set_active(True)
 		else:
-			self.xml.get_widget('soundplayer_hbox').set_sensitive(False)
 			self.xml.get_widget('sounds_scrolledwindow').set_sensitive(False)
 			self.xml.get_widget('browse_sounds_hbox').set_sensitive(False)
 
 		# sound player
 		player = gajim.config.get('soundplayer')
-		self.xml.get_widget('soundplayer_entry').set_text(player)
 		if player == '': # only on first time Gajim starts
 			commands = ('aplay', 'play', 'esdplay', 'artsplay')
 			for command in commands:
 				if helpers.is_in_path(command):
 					if command == 'aplay':
 						command += ' -q'
-					self.xml.get_widget('soundplayer_entry').set_text(command)
 					gajim.config.set('soundplayer', command)
 					break
 
@@ -775,13 +768,8 @@ class PreferencesWindow:
 
 	def on_play_sounds_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sounds_on',
-				[self.xml.get_widget('soundplayer_hbox'),
-				self.xml.get_widget('sounds_scrolledwindow'),
+				[self.xml.get_widget('sounds_scrolledwindow'),
 				self.xml.get_widget('browse_sounds_hbox')])
-
-	def on_soundplayer_entry_changed(self, widget):
-		gajim.config.set('soundplayer', widget.get_text().decode('utf-8'))
-		gajim.interface.save_config()
 
 	def on_sounds_treemodel_row_changed(self, model, path, iter):
 		sound_event = model[iter][3].decode('utf-8')
