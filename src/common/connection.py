@@ -732,7 +732,8 @@ class Connection(ConnectionHandlers):
 			self.connection.SendAndCallForResponse(iq, _on_response)
 		else:
 			self.connection.send(iq)
-			gajim.idlequeue.set_alarm(self.check_keepalive, 5)
+			gajim.idlequeue.set_alarm(self.check_keepalive, gajim.config.get_per(
+				'accounts', self.name, 'time_for_keep_alive_answer')
 
 	def get_active_default_lists(self):
 		if not self.connection:
