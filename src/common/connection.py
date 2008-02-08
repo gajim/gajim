@@ -936,7 +936,7 @@ class Connection(ConnectionHandlers):
 		if not auto and not show == 'offline':
 			sign_msg = True
 		self.status = msg
-		if show != 'offline' and not self.connected:
+		if show != 'offline' and self.connected < 1:
 			# set old_show to requested 'show' in case we need to
 			# recconect before we auth to server
 			self.old_show = show
@@ -969,7 +969,7 @@ class Connection(ConnectionHandlers):
 				self.time_to_reconnect = None
 				self._on_disconnected()
 
-		elif show != 'offline' and self.connected:
+		elif show != 'offline' and self.connected > 0:
 			# dont'try to connect, when we are in state 'connecting'
 			if self.connected == 1:
 				return
