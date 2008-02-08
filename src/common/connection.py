@@ -1618,7 +1618,7 @@ class Connection(ConnectionHandlers):
 	def check_keepalive(self):
 		if self.awaiting_xmpp_ping_id:
 			# We haven't got the pong in time, disco and reconnect
-			self.disconnect()
+			self._disconnectedReconnCB()
 
 	def _reconnect_alarm(self):
 		if self.time_to_reconnect:
