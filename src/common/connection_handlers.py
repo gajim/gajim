@@ -425,10 +425,10 @@ class ConnectionBytestream:
 		# if we want to respect xep-0065 we have to check for proxy
 		# activation result in any result iq
 		real_id = unicode(iq_obj.getAttr('id'))
-		if real_id[:3] != 'au_':
-			return
 		if real_id == self.awaiting_xmpp_ping_id:
 			self.awaiting_xmpp_ping_id = None
+			return
+		if real_id[:3] != 'au_':
 			return
 		frm = helpers.get_full_jid_from_iq(iq_obj)
 		id = real_id[3:]
