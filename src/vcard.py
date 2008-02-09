@@ -388,7 +388,12 @@ class VcardWindow:
 		self.fill_status_label()
 
 		if self.gc_contact:
-			gajim.connections[self.account].request_vcard(self.real_jid,
+			# If we know the real jid, remove the resource from vcard request
+			if self.gc_contact.jid:
+				jid = self.gc_contact.jid
+			else:
+				jid = self.real_jid
+			gajim.connections[self.account].request_vcard(jid,
 				self.gc_contact.get_full_jid())
 		else:
 			gajim.connections[self.account].request_vcard(self.contact.jid)
