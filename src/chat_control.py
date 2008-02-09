@@ -675,12 +675,6 @@ class ChatControlBase(MessageControl):
 			kind in ('incoming', 'incoming_queue'):
 				# we want to have save this message in events list
 				# other_tags_for_text == ['marked'] --> highlighted gc message
-				type_ = 'printed_' + self.type_id
-				event = 'message_received'
-				show_in_roster = notify.get_show_in_roster(event,
-					self.account, self.contact, self.session)
-				show_in_systray = notify.get_show_in_systray(event,
-					self.account, self.contact)
 				if gc_message:
 					type_ = 'printed_gc_msg'
 					event = 'gc_message_received'
@@ -690,6 +684,14 @@ class ChatControlBase(MessageControl):
 						show_in_systray = True
 					if other_tags_for_text == ['marked']:
 						type_ = 'printed_marked_gc_msg'
+				else:
+					type_ = 'printed_' + self.type_id
+					event = 'message_received'
+					show_in_roster = notify.get_show_in_roster(event,
+						self.account, self.contact, self.session)
+					show_in_systray = notify.get_show_in_systray(event,
+						self.account, self.contact)
+
 				event = gajim.events.create_event(type_, None,
 					show_in_roster = show_in_roster,
 					show_in_systray = show_in_systray)
