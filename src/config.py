@@ -2910,9 +2910,9 @@ class ManageBookmarksWindow:
 	def on_server_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
 		if iter:
-			room_jid = self.room_entry.get_text().decode('utf-8') + '@' + \
-				self.server_entry.get_text().decode('utf-8')
-			model[iter][2] = room_jid
+			room_jid = self.room_entry.get_text().decode('utf-8').strip() + '@' + \
+				self.server_entry.get_text().decode('utf-8').strip()
+			model[iter][2] = room_jid.replace(' ', '')
 
 	def on_room_entry_changed(self, widget):
 		(model, iter) = self.selection.get_selected()
