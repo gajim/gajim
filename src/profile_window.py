@@ -248,7 +248,7 @@ class ProfileWindow:
 				self.statusbar.remove(self.context_id, self.message_id)
 			self.message_id = self.statusbar.push(self.context_id,
 				_('Information received'))
-			self.remove_statusbar_timeout_id = gobject.timeout_add(3000,
+			self.remove_statusbar_timeout_id = gobject.timeout_add_seconds(3,
 				self.remove_statusbar, self.message_id)
 			gobject.source_remove(self.update_progressbar_timeout_id)
 			self.progressbar.hide()
@@ -344,7 +344,7 @@ class ProfileWindow:
 			self.statusbar.remove(self.context_id, self.message_id)
 		self.message_id = self.statusbar.push(self.context_id,
 			_('Information NOT published'))
-		self.remove_statusbar_timeout_id = gobject.timeout_add(3000,
+		self.remove_statusbar_timeout_id = gobject.timeout_add_seconds(3,
 			self.remove_statusbar, self.message_id)
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
