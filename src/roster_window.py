@@ -5620,10 +5620,10 @@ class RosterWindow:
 			## accounts has no effect until they are connected.
 			st = gajim.config.get('set_status_msg_from_current_music_track')
 			if st:
-				gobject.timeout_add_seconds(1,
+				gobject.timeout_add(1000,
 					self.enable_syncing_status_msg_from_current_music_track, st)
 			else:
-				gobject.timeout_add_seconds(1,
+				gobject.timeout_add(1000,
 					self.enable_syncing_status_msg_from_lastfm,
 					gajim.config.get('set_status_msg_from_lastfm'))
 

@@ -87,13 +87,13 @@ class MusicTrackListener(gobject.GObject):
 			self.current_banshee_title = ''
 			self.banshee_paused_before = False
 			self.banshee_is_here = False
-			gobject.timeout_add_seconds(10, self._check_if_banshee_bus)
+			gobject.timeout_add(10000, self._check_if_banshee_bus)
 			if self.dubus_methods.NameHasOwner('org.gnome.Banshee'):
 				self._get_banshee_bus()
 				self.banshee_is_here = True
 			# Otherwise, it opens Banshee!
 			self.banshee_props ={}
-			gobject.timeout_add_seconds(1, self._banshee_check_track_status)
+			gobject.timeout_add(1000, self._banshee_check_track_status)
 
 	def _check_if_banshee_bus(self):
 		if self.dubus_methods.NameHasOwner('org.gnome.Banshee'):

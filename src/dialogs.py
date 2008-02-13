@@ -1942,8 +1942,8 @@ class PopupNotificationWindow:
 
 		xml.signal_autoconnect(self)
 		self.window.show_all()
-		timeout = gajim.config.get('notification_timeout')
-		gobject.timeout_add_seconds(timeout, self.on_timeout)
+		timeout = gajim.config.get('notification_timeout') * 1000 # make it ms
+		gobject.timeout_add(timeout, self.on_timeout)
 
 	def on_close_button_clicked(self, widget):
 		self.adjust_height_and_move_popup_notification_windows()

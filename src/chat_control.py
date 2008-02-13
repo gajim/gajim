@@ -1134,9 +1134,9 @@ class ChatControl(ChatControlBase):
 			self.mouse_over_in_last_30_secs = True
 
 	def _schedule_activity_timers(self):
-		self.possible_paused_timeout_id = gobject.timeout_add_seconds(5,
+		self.possible_paused_timeout_id = gobject.timeout_add(5000,
 			self.check_for_possible_paused_chatstate, None)
-		self.possible_inactive_timeout_id = gobject.timeout_add_seconds(30,
+		self.possible_inactive_timeout_id = gobject.timeout_add(30000,
 			self.check_for_possible_inactive_chatstate, None)
 
 	def update_ui(self):
