@@ -277,7 +277,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 		# refresh all contacts data every five seconds
 		self.call_resolve_timeout = True
-		gobject.timeout_add(5000, self._on_resolve_timeout)
+		gobject.timeout_add_seconds(5, self._on_resolve_timeout)
 		return True
 
 	def disconnect(self, on_purpose = False):

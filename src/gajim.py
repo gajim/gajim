@@ -218,6 +218,10 @@ if '.svn' in os.listdir(path) or '_svn' in os.listdir(path):
 del path
 
 import gobject
+if not hasattr(gobject, 'timeout_add_seconds'):
+	def timeout_add_seconds_fake(time_sec, *args):
+		return gobject.timeout_add(time_sec * 1000, *args)
+	gobject.timeout_add_seconds = timeout_add_seconds_fake
 
 import re
 import signal
@@ -533,7 +537,7 @@ class Interface:
 			# we stop blocking notifications of any kind
 			# this prevents from getting the roster items as 'just signed in'
 			# contacts. 30 seconds should be enough time
-			gobject.timeout_add(30000, self.unblock_signed_in_notifications, account)
+			gobject.timeout_add_seconds(30, self.unblock_signed_in_notifications, account)
 			# sensitivity for this menuitem
 			model[self.roster.status_message_menuitem_iter][3] = True
 
@@ -648,7 +652,7 @@ class Interface:
 						gajim.newly_added[account].append(contact1.jid)
 					if contact1.jid in gajim.to_be_removed[account]:
 						gajim.to_be_removed[account].remove(contact1.jid)
-					gobject.timeout_add(5000, self.roster.remove_newly_added,
+					gobject.timeout_add_seconds(5, self.roster.remove_newly_added,
 						contact1.jid, account)
 				elif old_show > 1 and new_show == 0 and gajim.connections[account].\
 					connected > 1:
@@ -657,7 +661,7 @@ class Interface:
 					if contact1.jid in gajim.newly_added[account]:
 						gajim.newly_added[account].remove(contact1.jid)
 					self.roster.draw_contact(contact1.jid, account)
-					gobject.timeout_add(5000, self.roster.really_remove_contact,
+					gobject.timeout_add_seconds(5, self.roster.really_remove_contact,
 						contact1, account)
 			contact1.show = array[1]
 			contact1.status = status_message
@@ -684,7 +688,7 @@ class Interface:
 				# for 30s
 				account_ji = account + '/' + ji
 				gajim.block_signed_in_notifications[account_ji] = True
-				gobject.timeout_add(30000, self.unblock_signed_in_notifications,
+				gobject.timeout_add_seconds(30, self.unblock_signed_in_notifications,
 					account_ji)
 			locations = (self.instances, self.instances[account])
 			for location in locations:
@@ -2948,8 +2952,8 @@ class Interface:
 		if os.name == 'nt':
 			gobject.timeout_add(200, self.process_connections)
 		else:
-			gobject.timeout_add(2000, self.process_connections)
-		gobject.timeout_add(10000, self.read_sleepy)
+			gobject.timeout_add_seconds(2, self.process_connections)
+		gobject.timeout_add_seconds(10, self.read_sleepy)
 
 if __name__ == '__main__':
 	def sigint_cb(num, stack):

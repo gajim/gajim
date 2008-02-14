@@ -152,7 +152,7 @@ class CacheDictionary:
 		if item.source:
 			gobject.source_remove(item.source)
 		if self.lifetime:
-			source = gobject.timeout_add(self.lifetime, self._expire_timeout, key)
+			source = gobject.timeout_add_seconds(self.lifetime/1000, self._expire_timeout, key)
 			item.source = source
 
 	def __getitem__(self, key):
@@ -1364,12 +1364,12 @@ class ToplevelAgentBrowser(AgentBrowser):
 			fraction = float(self._progress) / float(self._total_items)
 			if self._progress >= self._total_items:
 				# We show the progressbar for just a bit before hiding it.
-				id = gobject.timeout_add(1500, self._hide_progressbar_cb)
+				id = gobject.timeout_add_seconds(2, self._hide_progressbar_cb)
 				self._progressbar_sourceid = id
 			else:
 				self.window.progressbar.show()
 				# Hide the progressbar if we're timing out anyways. (20 secs)
-				id = gobject.timeout_add(20000, self._hide_progressbar_cb)
+				id = gobject.timeout_add_seconds(20, self._hide_progressbar_cb)
 				self._progressbar_sourceid = id
 		self.window.progressbar.set_fraction(fraction)
 
