@@ -104,6 +104,8 @@ msgid ""
 "Add this certificate to the list of trusted certificates.\n"
 "SHA1 fingerprint of the certificate:\n"
 msgstr ""
+"Dieses Zertifikat der Liste von Vertrauenswürdigen Zertifikaten hinzufügen\n"
+"SHA1 Fingerabdruck von dem Zertifikat:\n"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:10
 msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
@@ -597,7 +599,7 @@ msgstr ""
 
 #: ../data/glade/accounts_window.glade.h:62
 msgid "use HTTP_PROXY environment variable"
-msgstr ""
+msgstr "Umgebungsvariable HTTP_PROXY benutzen"
 
 #: ../data/glade/add_new_contact_window.glade.h:1
 msgid "A_ccount:"
