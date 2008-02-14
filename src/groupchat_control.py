@@ -939,19 +939,18 @@ class GroupchatControl(ChatControlBase):
 		model[iter][C_TEXT] = name
 
 	def draw_avatar(self, nick):
+		if not gajim.config.get('show_avatars_in_roster'):
+			return
 		model = self.list_treeview.get_model()
 		iter = self.get_contact_iter(nick)
 		if not iter:
 			return
-		if gajim.config.get('show_avatars_in_roster'):
-			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.room_jid + \
-				'/' + nick, True)
-			if pixbuf in ('ask', None):
-				scaled_pixbuf = None
-			else:
-				scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
-		else:
+		pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.room_jid + \
+			'/' + nick, True)
+		if pixbuf in ('ask', None):
 			scaled_pixbuf = None
+		else:
+			scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
 		model[iter][C_AVATAR] = scaled_pixbuf
 
 	def chg_contact_status(self, nick, show, status, role, affiliation, jid,

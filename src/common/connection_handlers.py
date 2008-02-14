@@ -426,6 +426,9 @@ class ConnectionBytestream:
 		# if we want to respect xep-0065 we have to check for proxy
 		# activation result in any result iq
 		real_id = unicode(iq_obj.getAttr('id'))
+		if real_id == self.awaiting_xmpp_ping_id:
+			self.awaiting_xmpp_ping_id = None
+			return
 		if real_id[:3] != 'au_':
 			return
 		frm = helpers.get_full_jid_from_iq(iq_obj)
@@ -667,8 +670,8 @@ class ConnectionDisco:
 		query = iq.setTag('query')
 		query.setAttr('node','http://gajim.org/caps#' + gajim.version.split('-',
 			1)[0])
-		for f in (common.xmpp.NS_BYTESTREAM, common.xmpp.NS_SI, \
-						common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS):
+		for f in (common.xmpp.NS_BYTESTREAM, common.xmpp.NS_SI,
+		common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS):
 			feature = common.xmpp.Node('feature')
 			feature.setAttr('var', f)
 			query.addChild(node=feature)
@@ -1240,6 +1243,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		# keep the latest subscribed event for each jid to prevent loop when we
 		# acknoledge presences
 		self.subscribed_events = {}
+		# IDs of jabber:iq:last requests
+		self.last_ids = []
+		# IDs of jabber:iq:version requests
+		self.version_ids = []
+		# ID of urn:xmpp:ping requests
+		self.awaiting_xmpp_ping_id = None
 
 		# keep track of sessions this connection has with other JIDs
 		self.sessions = {}
@@ -1298,15 +1307,21 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _ErrorCB(self, con, iq_obj):
 		gajim.log.debug('ErrorCB')
-		if iq_obj.getQueryNS() == common.xmpp.NS_VERSION:
-			who = helpers.get_full_jid_from_iq(iq_obj)
-			jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
+		jid_from = helpers.get_full_jid_from_iq(iq_obj)
+		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(jid_from)
+		id = unicode(iq_obj.getID())
+		if id in self.version_ids:
 			self.dispatch('OS_INFO', (jid_stripped, resource, '', ''))
+			self.version_ids.remove(id)
 			return
+		if id in self.last_ids:
+			self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, -1, ''))
+			self.last_ids.remove(id)
+			return
+		if id == self.awaiting_xmpp_ping_id:
+			self.awaiting_xmpp_ping_id = None
 		errmsg = iq_obj.getErrorMsg()
 		errcode = iq_obj.getErrorCode()
-		jid_from = helpers.get_full_jid_from_iq(iq_obj)
-		id = unicode(iq_obj.getID())
 		self.dispatch('ERROR_ANSWER', (id, jid_from, errmsg, errcode))
 	
 	def _PrivateCB(self, con, iq_obj):
@@ -1393,9 +1408,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			qp.setTagData('os', helpers.get_os_info())
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
-	
+
 	def _LastCB(self, con, iq_obj):
-		gajim.log.debug('IdleCB')
+		gajim.log.debug('LastCB')
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.getTag('query')
 		if not HAS_IDLE:
@@ -1405,7 +1420,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
-	
+
 	def _LastResultCB(self, con, iq_obj):
 		gajim.log.debug('LastResultCB')
 		qp = iq_obj.getTag('query')
@@ -1421,9 +1436,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			del self.groupchat_jids[id]
 		else:
 			who = helpers.get_full_jid_from_iq(iq_obj)
+		if id in self.last_ids:
+			self.last_ids.remove(id)
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, seconds, status))
-	
+
 	def _VersionResultCB(self, con, iq_obj):
 		gajim.log.debug('VersionResultCB')
 		client_info = ''
@@ -1442,6 +1459,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		else:
 			who = helpers.get_full_jid_from_iq(iq_obj)
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
+		if id in self.version_ids:
+			self.version_ids.remove(id)
 		self.dispatch('OS_INFO', (jid_stripped, resource, client_info, os_info))
 
 	def _TimeCB(self, con, iq_obj):

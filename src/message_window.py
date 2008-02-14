@@ -4,12 +4,12 @@
 ##                         Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2005 Yann Leboulanger <asterix@lagaule.org>
 ##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
 ## Copyright (C) 2005-2007 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2006 Geobert Quach <geobert@gmail.com>
 ## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
+## Copyright (C) 2005-2008 Nikos Kouremenos <kourem@gmail.com>
 ##
 ## This file is part of Gajim.
 ##
@@ -123,7 +123,9 @@ class MessageWindow(object):
 		else:
 			nb_pos = gtk.POS_TOP
 		self.notebook.set_tab_pos(nb_pos)
-		if gajim.config.get('tabs_always_visible'):
+		window_mode = gajim.interface.msg_win_mgr.mode
+		if gajim.config.get('tabs_always_visible') or \
+		window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
 			self.notebook.set_show_tabs(True)
 			self.alignment.set_property('top-padding', 2)
 		else:
@@ -444,7 +446,9 @@ class MessageWindow(object):
 				self.window.destroy()
 			return # don't show_title, we are dead
 		elif self.get_num_controls() == 1: # we are going from two tabs to one
-			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible')
+			window_mode = gajim.interface.msg_win_mgr.mode
+			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible') or \
+				window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER
 			self.notebook.set_show_tabs(show_tabs_if_one_tab)
 			if not show_tabs_if_one_tab:
 				self.alignment.set_property('top-padding', 0)
@@ -624,11 +628,15 @@ class MessageWindow(object):
 		self.show_title(control = new_ctrl)
 
 	def _on_notebook_key_press(self, widget, event):
-		control = self.get_active_control()
 		# Ctrl+PageUP / DOWN has to be handled by notebook
 		if (event.state & gtk.gdk.CONTROL_MASK and
 				event.keyval in (gtk.keysyms.Page_Down, gtk.keysyms.Page_Up)):
 			return False
+		# when tab itself is selected, make sure <- and -> are allowed for navigating between tabs
+		if event.keyval in (gtk.keysyms.Left, gtk.keysyms.Right):
+			return False
+
+		control = self.get_active_control()
 		if isinstance(control, ChatControlBase):
 			# we forwarded it to message textview
 			control.msg_textview.emit('key_press_event', event)

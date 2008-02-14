@@ -720,12 +720,6 @@ class Interface:
 			elif new_show > 1: # Status change (not connected/disconnected or error (<1))
 				notify.notify('status_change', jid, account, [new_show,
 					status_message])
-		else:
-			# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) doesn't follow the JEP
-			# remove in 2007
-			# It's maybe a GC_NOTIFY (specialy for MSN gc)
-			self.handle_event_gc_notify(account, (jid, array[1], status_message,
-				array[3], None, None, None, None, None, [], None, None))
 
 	def handle_event_msgerror(self, account, array):
 		#'MSGERROR' (account, (jid, error_code, error_msg, msg, time))
@@ -989,6 +983,10 @@ class Interface:
 
 	def handle_event_last_status_time(self, account, array):
 		# ('LAST_STATUS_TIME', account, (jid, resource, seconds, status))
+		tim = array[2]
+		if tim < 0:
+			# Ann error occured
+			return
 		win = None
 		if self.instances[account]['infos'].has_key(array[0]):
 			win = self.instances[account]['infos'][array[0]]
@@ -997,7 +995,7 @@ class Interface:
 		if win:
 			c = gajim.contacts.get_contact(account, array[0], array[1])
 			if c: # c can be none if it's a gc contact
-				c.last_status_time = time.localtime(time.time() - array[2])
+				c.last_status_time = time.localtime(time.time() - tim)
 				if array[3]:
 					c.status = array[3]
 				win.set_last_status_time()

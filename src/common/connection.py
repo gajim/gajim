@@ -705,11 +705,21 @@ class Connection(ConnectionHandlers):
 			return
 		common.xmpp.features_nb.getPrivacyLists(self.connection)
 
-	def sendPing(self, pingTo):
+	def sendPing(self, pingTo=None):
+		'''Send XMPP Ping (XEP-0199) request. If pingTo is not set, ping is sent
+		to server to detect connection failure at application level.'''
 		if not self.connection:
 			return
-		iq = common.xmpp.Iq('get', to = pingTo.get_full_jid())
+		id = self.connection.getAnID()
+		if pingTo:
+			to = pingTo.get_full_jid()
+			self.dispatch('PING_SENT', (pingTo))
+		else:
+			to = gajim.config.get_per('accounts', self.name, 'hostname')
+			self.awaiting_xmpp_ping_id = id
+		iq = common.xmpp.Iq('get', to=to)
 		iq.addChild(name = 'ping', namespace = common.xmpp.NS_PING)
+		iq.setID(id)
 		def _on_response(resp):
 			timePong = time_time()
 			if not common.xmpp.isResultNode(resp):
@@ -717,9 +727,13 @@ class Connection(ConnectionHandlers):
 				return
 			timeDiff = round(timePong - timePing,2)
 			self.dispatch('PING_REPLY', (pingTo, timeDiff))
-		self.dispatch('PING_SENT', (pingTo))
-		timePing = time_time()
-		self.connection.SendAndCallForResponse(iq, _on_response)
+		if pingTo:
+			timePing = time_time()
+			self.connection.SendAndCallForResponse(iq, _on_response)
+		else:
+			self.connection.send(iq)
+			gajim.idlequeue.set_alarm(self.check_keepalive, gajim.config.get_per(
+				'accounts', self.name, 'time_for_keep_alive_answer'))
 
 	def get_active_default_lists(self):
 		if not self.connection:
@@ -877,7 +891,7 @@ class Connection(ConnectionHandlers):
 		self.connection = con
 		if not self.connection:
 			return
-		self.connection.set_send_timeout(self.keepalives, self.send_keepalive)
+		self.connection.set_send_timeout(self.keepalives, self.sendPing)
 		self.connection.onreceive(None)
 		iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')
 		id = self.connection.getAnID()
@@ -922,7 +936,7 @@ class Connection(ConnectionHandlers):
 		if not auto and not show == 'offline':
 			sign_msg = True
 		self.status = msg
-		if show != 'offline' and not self.connected:
+		if show != 'offline' and self.connected < 1:
 			# set old_show to requested 'show' in case we need to
 			# recconect before we auth to server
 			self.old_show = show
@@ -955,7 +969,7 @@ class Connection(ConnectionHandlers):
 				self.time_to_reconnect = None
 				self._on_disconnected()
 
-		elif show != 'offline' and self.connected:
+		elif show != 'offline' and self.connected > 0:
 			# dont'try to connect, when we are in state 'connecting'
 			if self.connected == 1:
 				return
@@ -1257,6 +1271,7 @@ class Connection(ConnectionHandlers):
 		iq.setID(id)
 		if groupchat_jid:
 			self.groupchat_jids[id] = groupchat_jid
+		self.last_ids.append(id)
 		self.connection.send(iq)
 
 	def request_os_info(self, jid, resource, groupchat_jid=None):
@@ -1277,6 +1292,7 @@ class Connection(ConnectionHandlers):
 		iq.setID(id)
 		if groupchat_jid:
 			self.groupchat_jids[id] = groupchat_jid
+		self.version_ids.append(id)
 		self.connection.send(iq)
 
 	def get_settings(self):
@@ -1599,10 +1615,10 @@ class Connection(ConnectionHandlers):
 			c.setTagData('reason', reason)
 		self.connection.send(message)
 
-	def send_keepalive(self):
-		# nothing received for the last foo seconds (60 secs by default)
-		if self.connection:
-			self.connection.send(' ')
+	def check_keepalive(self):
+		if self.awaiting_xmpp_ping_id:
+			# We haven't got the pong in time, disco and reconnect
+			self._disconnectedReconnCB()
 
 	def _reconnect_alarm(self):
 		if self.time_to_reconnect:
