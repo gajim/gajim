@@ -3681,44 +3681,21 @@ class ManagePEPServicesWindow:
 		'''close window'''
 		del gajim.interface.instances[self.account]['pep_services']
 
-	def on_ok_button_clicked(self, widget):
-		pass
-
-	def on_cancel_button_clicked(self, widget):
+	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 
-	def cellrenderer_combo_edited(self, cellrenderer, path, new_text):
-		self.treestore[path][1] = new_text
-
 	def init_services(self):
-		treeview = self.xml.get_widget('services_treeview')
+		self.treeview = self.xml.get_widget('services_treeview')
 		# service, access_model, group
-		self.treestore = gtk.ListStore(str, str, str)
-		treeview.set_model(self.treestore)
+		self.treestore = gtk.ListStore(str)
+		self.treeview.set_model(self.treestore)
 
 		col = gtk.TreeViewColumn('Service')
-		treeview.append_column(col)
+		self.treeview.append_column(col)
 
 		cellrenderer_text = gtk.CellRendererText()
 		col.pack_start(cellrenderer_text)
 		col.add_attribute(cellrenderer_text, 'text', 0)
-
-		col = gtk.TreeViewColumn('access model')
-		treeview.append_column(col)
-
-		model = gtk.ListStore(str)
-		model.append(['open'])
-		model.append(['presence'])
-		model.append(['roster'])
-		model.append(['whitelist'])
-		cellrenderer_combo = gtk.CellRendererCombo()
-		cellrenderer_combo.set_property('text-column', 0)
-		cellrenderer_combo.set_property('model', model)
-		cellrenderer_combo.set_property('has-entry', False)
-		cellrenderer_combo.set_property('editable', True)
-		cellrenderer_combo.connect('edited', self.cellrenderer_combo_edited)
-		col.pack_start(cellrenderer_combo)
-		col.add_attribute(cellrenderer_combo, 'text', 1)
 
 		our_jid = gajim.get_jid_from_account(self.account)
 		gajim.connections[self.account].discoverItems(our_jid)
@@ -3727,9 +3704,21 @@ class ManagePEPServicesWindow:
 		our_jid = gajim.get_jid_from_account(self.account)
 		for item in items:
 			if 'jid' in item and item['jid'] == our_jid and 'node' in item:
-				# ask <configure> to have access model
-				gajim.connections[self.account].request_pb_configuration(
-					item['jid'], item['node'])
+				self.treestore.append([item['node']])
 
-	def new_service(self, node, model):
-		self.treestore.append([node, model, ''])
+	def on_configure_button_clicked(self, widget):
+		selection = self.treeview.get_selection()
+		if not selection:
+			return
+		model, iter = selection.get_selected()
+		node = model[iter][0]
+		our_jid = gajim.get_jid_from_account(self.account)
+		gajim.connections[self.account].request_pb_configuration(our_jid, node)
+
+	def config(self, node, form):
+		def on_ok(form, node):
+			form.type = 'submit'
+			our_jid = gajim.get_jid_from_account(self.account)
+			gajim.connections[self.account].send_pb_configure(our_jid, node, form)
+		window = dialogs.DataFormWindow(form, (on_ok, node))
+		window.show_all()

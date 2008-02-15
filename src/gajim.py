@@ -2199,10 +2199,10 @@ class Interface:
 			_('You are already connected to this account with the same resource. Please type a new one'), input_str = gajim.connections[account].server_resource,
 			is_modal = False, ok_handler = on_ok)
 
-	def handle_event_pep_access_model(self, account, data):
-		# ('PEP_ACCESS_MODEL', account, (node, model))
+	def handle_event_pep_config(self, account, data):
+		# ('PEP_ACCESS_MODEL', account, (node, form))
 		if self.instances[account].has_key('pep_services'):
-			self.instances[account]['pep_services'].new_service(data[0], data[1])
+			self.instances[account]['pep_services'].config(data[0], data[1])
 
 	def handle_event_unique_room_id_supported(self, account, data):
 		'''Receive confirmation that unique_room_id are supported'''
@@ -2629,7 +2629,7 @@ class Interface:
 			'SEARCH_FORM': self.handle_event_search_form,
 			'SEARCH_RESULT': self.handle_event_search_result,
 			'RESOURCE_CONFLICT': self.handle_event_resource_conflict,
-			'PEP_ACCESS_MODEL': self.handle_event_pep_access_model,
+			'PEP_CONFIG': self.handle_event_pep_config,
 			'UNIQUE_ROOM_ID_UNSUPPORTED': \
 				self.handle_event_unique_room_id_unsupported,
 			'UNIQUE_ROOM_ID_SUPPORTED': self.handle_event_unique_room_id_supported,

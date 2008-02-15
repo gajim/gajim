@@ -64,28 +64,13 @@ class ConnectionPubSub:
 
 		self.connection.send(query)
 
-	def send_pb_configure(self, jid, node, cb, *cbargs, **cbkwargs):
+	def send_pb_configure(self, jid, node, form):
 		query = xmpp.Iq('set', to=jid)
-		c = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
+		c = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB_OWNER)
 		c = c.addChild('configure', {'node': node})
+		c.addChild(node=form)
 
-		id = self.connection.send(query)
-
-		def on_configure(self, connection, query):
-			try:
-				filledform = cb(stanza['pubsub']['configure']['x'], *cbargs, **cbkwargs)
-				#TODO: Build a form
-				#TODO: Send it
-
-			except CancelConfigure:
-				cancel = xmpp.Iq('set', to=jid)
-				ca = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
-				ca = ca.addChild('configure', {'node': node})
-				#ca = ca.addChild('x', namespace=xmpp.NS_DATA, {'type': 'cancel'})
-
-				self.connection.send(cancel)
-
-		self.__callbacks[id] = (on_configure, (), {})
+		self.connection.send(query)
 
 	def _PubSubCB(self, conn, stanza):
 		try:
@@ -100,5 +85,5 @@ class ConnectionPubSub:
 		e = e.addChild('configure', {'node': node})
 		id = self.connection.getAnID()
 		query.setID(id)
-		self.awaiting_answers[id] = (connection_handlers.PEP_ACCESS_MODEL,)
+		self.awaiting_answers[id] = (connection_handlers.PEP_CONFIG,)
 		self.connection.send(query)

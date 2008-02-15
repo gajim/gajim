@@ -340,6 +340,8 @@ class SingleForm(gtk.Table, object):
 					widget = gtk.VBox()
 					first_radio = None
 					for value, label in field.iter_options():
+						if not label:
+							label = value
 						radio = gtk.RadioButton(first_radio, label=label)
 						radio.connect('toggled',
 							self.on_list_single_radiobutton_toggled, field, value)

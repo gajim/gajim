@@ -1013,20 +1013,48 @@ class AboutDialog:
 		return str_[0:-1] # remove latest .
 
 class Dialog(gtk.Dialog):
-	def __init__(self, parent, title, buttons, default = None):
-		gtk.Dialog.__init__(self, title, parent, gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL | gtk.DIALOG_NO_SEPARATOR)
+	def __init__(self, parent, title, buttons, default = None,
+	on_response_ok=None, on_response_cancel=None):
+		gtk.Dialog.__init__(self, title, parent, gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_NO_SEPARATOR)
 
+		self.user_response_ok = on_response_ok
+		self.user_response_cancel = on_response_cancel
 		self.set_border_width(6)
 		self.vbox.set_spacing(12)
 		self.set_resizable(False)
 
+		possible_responses = {gtk.STOCK_OK: self.on_response_ok,
+			gtk.STOCK_CANCEL: self.on_response_cancel}
 		for stock, response in buttons:
-			self.add_button(stock, response)
+			b = self.add_button(stock, response)
+			for response in possible_responses:
+				if stock == response:
+					b.connect('clicked', possible_responses[response])
+					break
 
 		if default is not None:
 			self.set_default_response(default)
 		else:
 			self.set_default_response(buttons[-1][1])
+
+	def on_response_ok(self, widget):
+		if self.user_response_ok:
+			if isinstance(self.user_response_ok, tuple):
+				self.user_response_ok[0](*self.user_response_ok[1:])
+			else:
+				self.user_response_ok()
+		self.destroy()
+
+	def on_response_cancel(self, widget):
+		if self.user_response_cancel:
+			if isinstance(self.user_response_cancel, tuple):
+				self.user_response_cancel[0](*self.user_response_ok[1:])
+			else:
+				self.user_response_cancel()
+		self.destroy()
+
+	def just_destroy(self, widget):
+		self.destroy()
 
 	def get_button(self, index):
 		buttons = self.action_area.get_children()
@@ -3700,3 +3728,25 @@ class TransformChatToMUC:
 	def unique_room_id_error(self, server):
 		self.unique_room_id_supported(server,
 			gajim.nicks[self.account] + str(randrange(9999999)))
+
+class DataFormWindow(Dialog):
+	def __init__(self, form, on_response_ok):
+		self.df_response_ok = on_response_ok
+		Dialog.__init__(self, None, 'test', [(gtk.STOCK_CANCEL,
+			gtk.RESPONSE_REJECT), (gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)],
+			on_response_ok=self.on_ok)
+		self.set_resizable(True)
+		self.dataform_widget =  dataforms_widget.DataFormWidget()
+		self.dataform = dataforms.ExtendForm(node = form)
+		self.dataform_widget.set_sensitive(True)
+		self.dataform_widget.data_form = self.dataform
+		self.dataform_widget.show_all()
+		self.vbox.pack_start(self.dataform_widget)
+	
+	def on_ok(self):
+		form = self.dataform_widget.data_form
+		if isinstance(self.df_response_ok, tuple):
+			self.df_response_ok[0](form, *self.df_response_ok[1:])
+		else:
+			self.df_response_ok(form)
+		self.destroy()

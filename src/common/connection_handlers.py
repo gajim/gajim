@@ -59,7 +59,7 @@ VCARD_ARRIVED = 'vcard_arrived'
 AGENT_REMOVED = 'agent_removed'
 METACONTACTS_ARRIVED = 'metacontacts_arrived'
 PRIVACY_ARRIVED = 'privacy_arrived'
-PEP_ACCESS_MODEL = 'pep_access_model'
+PEP_CONFIG = 'pep_config'
 HAS_IDLE = True
 try:
 	import idle
@@ -1121,16 +1121,13 @@ class ConnectionVcard:
 				self.get_privacy_list('block')
 			# Ask metacontacts before roster
 			self.get_metacontacts()
-		elif self.awaiting_answers[id][0] == PEP_ACCESS_MODEL:
+		elif self.awaiting_answers[id][0] == PEP_CONFIG:
 			conf = iq_obj.getTag('pubsub').getTag('configure')
 			node = conf.getAttr('node')
 			form_tag = conf.getTag('x', namespace=common.xmpp.NS_DATA)
 			if form_tag:
 				form = common.dataforms.ExtendForm(node=form_tag)
-				for field in form.iter_fields():
-					if field.var == 'pubsub#access_model':
-						self.dispatch('PEP_ACCESS_MODEL', (node, field.value))
-						break
+				self.dispatch('PEP_CONFIG', (node, form))
 
 		del self.awaiting_answers[id]
 
