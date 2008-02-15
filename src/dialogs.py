@@ -1305,6 +1305,67 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 		''' Get active state of the checkbutton '''
 		return self.checkbutton.get_active()
 
+class ConfirmationDialogDubbleCheck(ConfirmationDialog):
+	'''HIG compliant confirmation dialog with 2 checkbuttons.'''
+	def __init__(self, pritext, sectext='', checktext1 = '', checktext2 = '',
+	on_response_ok = None, on_response_cancel = None, is_modal = True):
+		self.user_response_ok = on_response_ok
+		self.user_response_cancel = on_response_cancel
+
+		HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION,
+			gtk.BUTTONS_OK_CANCEL, pritext, sectext, self.on_response_ok,
+			self.on_response_cancel)
+
+		self.set_default_response(gtk.RESPONSE_OK)
+
+		ok_button = self.action_area.get_children()[0] # right to left
+		ok_button.grab_focus()
+
+		if checktext1:
+			self.checkbutton1 = gtk.CheckButton(checktext1)
+			self.vbox.pack_start(self.checkbutton1, expand = False, fill = True)
+		else:
+			self.checkbutton1 = None
+		if checktext2:
+			self.checkbutton2 = gtk.CheckButton(checktext2)
+			self.vbox.pack_start(self.checkbutton2, expand = False, fill = True)
+		else:
+			self.checkbutton2 = None
+
+		self.set_modal(is_modal)
+		self.popup()
+
+	# XXX should cancel if somebody closes the dialog
+
+	def on_response_ok(self, widget):
+		if self.user_response_ok:
+			if isinstance(self.user_response_ok, tuple):
+				self.user_response_ok[0](self.is_checked(),
+					*self.user_response_ok[1:])
+			else:
+				self.user_response_ok(self.is_checked())
+		self.destroy()
+
+	def on_response_cancel(self, widget):
+		if self.user_response_cancel:
+			if isinstance(self.user_response_cancel, tuple):
+				self.user_response_cancel[0](*self.user_response_cancel[1:])
+			else:
+				self.user_response_cancel()
+		self.destroy()
+
+	def is_checked(self):
+		''' Get active state of the checkbutton '''
+		if self.checkbutton1:
+			is_checked_1 = self.checkbutton1.get_active()
+		else:
+			is_checked_1 = False
+		if self.checkbutton2:
+			is_checked_2 = self.checkbutton2.get_active()
+		else:
+			is_checked_2 = False
+		return [is_checked_1, is_checked_2]
+
 class FTOverwriteConfirmationDialog(ConfirmationDialog):
 	'''HIG compliant confirmation dialog to overwrite or resume a file transfert'''
 	def __init__(self, pritext, sectext='', propose_resume=True):

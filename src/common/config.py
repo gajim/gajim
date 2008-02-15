@@ -285,6 +285,7 @@ class Config:
 			'connection_types': [ opt_str, 'tls ssl plain', _('Ordered list (space separated) of connection type to try. Can contain tls, ssl or plain')],
 			'warn_when_insecure_connection': [ opt_bool, True, _('Show a warning dialog before sending password on an insecure connection.') ],
 			'ssl_fingerprint_sha1': [ opt_str, '', '', True ],
+			'ignore_ssl_errors': [ opt_str, '', _('Space separated list of ssl errors to ignore.') ],
 			'use_srv': [ opt_bool, True, '', True ],
 			'use_custom_host': [ opt_bool, False, '', True ],
 			'custom_port': [ opt_int, 5222, '', True ],

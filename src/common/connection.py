@@ -618,7 +618,8 @@ class Connection(ConnectionHandlers):
 			errnum = con.Connection.ssl_errnum
 		except AttributeError:
 			errnum = -1 # we don't have an errnum
-		if errnum > 0:
+		if errnum > 0 and str(errnum) not in gajim.config.get_per('accounts',
+		self.name, 'ignore_ssl_errors'):
 			text = _('The authenticity of the %s certificate could be invalid.') %\
 				hostname
 			if errnum in ssl_error:

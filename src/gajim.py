@@ -2218,8 +2218,9 @@ class Interface:
 	def handle_event_ssl_error(self, account, data):
 		# ('SSL_ERROR', account, (text, errnum, cert, sha1_fingerprint))
 		server = gajim.config.get_per('accounts', account, 'hostname')
-		def on_ok(is_checked=False):
-			if is_checked:
+
+		def on_ok(is_checked):
+			if is_checked[0]:
 				# Check if cert is already in file
 				certs = ''
 				if os.path.isfile(gajim.MY_CACERTS):
@@ -2236,25 +2237,35 @@ class Interface:
 					f.close()
 				gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
 					data[3])
+			if is_checked[1]:
+				ignore_ssl_errors = gajim.config.get_per('accounts', account,
+					'ignore_ssl_errors').split()
+				ignore_ssl_errors.append(str(data[1]))
+				gajim.config.set_per('accounts', account, 'ignore_ssl_errors',
+					' '.join(ignore_ssl_errors))
 			gajim.connections[account].ssl_certificate_accepted()
+
 		def on_cancel():
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
+
 		pritext = _('Error verifying SSL certificate')
 		sectext = _('There was an error verifying the SSL certificate of your jabber server: %(error)s\nDo you still want to connect to this server?') % {'error': data[0]}
 		if data[1] in (18, 27):
-			checktext = _('Add this certificate to the list of trusted certificates.\nSHA1 fingerprint of the certificate:\n%s') % data[3]
-			dialogs.ConfirmationDialogCheck(pritext, sectext, checktext,
-				on_response_ok=on_ok, on_response_cancel=on_cancel)
+			checktext1 = _('Add this certificate to the list of trusted certificates.\nSHA1 fingerprint of the certificate:\n%s') % data[3]
 		else:
-			dialogs.ConfirmationDialog(pritext, sectext,
-				on_response_ok=on_ok, on_response_cancel=on_cancel)
+			checktext1 = ''
+		checktext2 = _('Ignore this error for this certificate.')
+		dialogs.ConfirmationDialogDubbleCheck(pritext, sectext, checktext1,
+			checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel)
 
 	def handle_event_fingerprint_error(self, account, data):
 		# ('FINGERPRINT_ERROR', account, (new_fingerprint,))
 		def on_yes(is_checked):
 			gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
 				data[0])
+			# Reset the ignored ssl errors
+			gajim.config.set_per('accounts', account, 'ignore_ssl_errors', '')
 			gajim.connections[account].ssl_certificate_accepted()
 		def on_no():
 			gajim.connections[account].disconnect(on_purpose=True)
