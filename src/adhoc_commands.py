@@ -110,7 +110,7 @@ class CommandWindow:
 		return self.stage_adhoc_commands_window_delete_event(self.window)
 
 	def __del__(self):
-		print "Object has been deleted."
+		print 'Object has been deleted.'
 
 # stage 1: waiting for command list
 	def stage1(self):
@@ -248,8 +248,8 @@ class CommandWindow:
 			return False
 
 		dialog = dialogs.HigDialog(self.window, gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
-			gtk.BUTTONS_YES_NO, 'Cancel confirmation',
-			'You are in process of executing command. Do you really want to cancel it?')
+			gtk.BUTTONS_YES_NO, _('Cancel confirmation'),
+			_('You are in process of executing command. Do you really want to cancel it?'))
 		dialog.popup()
 		if dialog.get_response()==gtk.RESPONSE_YES:
 			self.send_cancel()
@@ -291,7 +291,11 @@ class CommandWindow:
 		self.remove_pulsing()
 		self.sending_form_progressbar.hide()
 
-		self.sessionid = command.getAttr('sessionid')
+		if not self.sessionid:
+			self.sessionid = command.getAttr('sessionid')
+		elif self.sessionid != command.getAttr('sessionid'):
+			self.stage5(error=_('Service changed the session identifier.'),
+				senderror=True)
 
 		self.form_status = command.getAttr('status')
 
@@ -303,12 +307,11 @@ class CommandWindow:
 			try:
 				self.data_form_widget.data_form=self.dataform
 			except dataforms.Error:
-				# FIXME: translate
-				self.stage5(error='Service sent malformed data', senderror=True)
+				self.stage5(error=_('Service sent malformed data'), senderror=True)
 				return
 			self.data_form_widget.show()
 			if self.data_form_widget.title:
-				self.window.set_title("%s - Ad-hoc Commands - Gajim" % \
+				self.window.set_title('%s - Ad-hoc Commands - Gajim' % \
 					self.data_form_widget.title)
 		else:
 			self.data_form_widget.hide()
@@ -385,7 +388,7 @@ class CommandWindow:
 				error = errordesc.decode('utf-8')
 				del errorname, errordesc
 			except KeyError:	# when stanza doesn't have error description
-				error = 'Service returned an error.'
+				error = _('Service returned an error.')
 		elif error:
 			# we've got error message
 			pass
