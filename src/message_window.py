@@ -300,7 +300,11 @@ class MessageWindow(object):
 			elif keyval == gtk.keysyms.F4: # CTRL + F4
 				self.remove_tab(control, self.CLOSE_CTRL_KEY)
 			elif keyval == gtk.keysyms.w: # CTRL + W
-				self.remove_tab(control, self.CLOSE_CTRL_KEY)
+				# CTRL + W removes latest word before sursor when User uses emacs
+				# theme
+				if not gtk.settings_get_default().get_property(
+				'gtk-key-theme-name') == 'Emacs':
+					self.remove_tab(control, self.CLOSE_CTRL_KEY)
 
 		# MOD1 (ALT) mask
 		elif modifier & gtk.gdk.MOD1_MASK:
