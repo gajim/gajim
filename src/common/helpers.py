@@ -382,7 +382,7 @@ def is_in_path(name_of_command, return_abs_path = False):
 	# on failures False is returned
 	is_in_dir = False
 	found_in_which_dir = None
-	path = os.getenv('PATH').split(':')
+	path = os.getenv('PATH').split(os.pathsep)
 	for path_to_directory in path:
 		try:
 			contents = os.listdir(path_to_directory)
