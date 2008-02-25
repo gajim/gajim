@@ -1176,11 +1176,6 @@ class Interface:
 			control.chg_contact_status(nick, show, status, array[4], array[5],
 				array[6], array[7], array[8], array[9], array[10], array[11])
 
-		contact = gajim.contacts.\
-			get_contact_with_highest_priority(account, room_jid)
-		if contact:
-			self.roster.draw_contact(room_jid, account)
-
 		ctrl = self.msg_win_mgr.get_control(fjid, account)
 
 		# print status in chat window and update status/GPG image
@@ -1239,11 +1234,6 @@ class Interface:
 			nick = jids[1]
 
 		gc_control.on_message(nick, array[1], array[2], array[3], xhtml, array[5])
-
-		contact = gajim.contacts.\
-			get_contact_with_highest_priority(account, room_jid)
-		if contact:
-			self.roster.draw_contact(room_jid, account)
 
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('GCMessage', (account, array))
