@@ -797,7 +797,6 @@ class ChatControlBase(MessageControl):
 				types = type_):
 					# There were events to remove
 					self.redraw_after_event_removed(jid)
-			self.msg_textview.grab_focus()
 			# Note, we send None chatstate to preserve current
 			self.parent_win.redraw_tab(self)
 
