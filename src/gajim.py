@@ -2324,6 +2324,13 @@ class Interface:
 				auto_message = gajim.config.get('autoaway_message')
 				if not auto_message:
 					auto_message = gajim.connections[account].status
+				else:
+					auto_message = auto_message.replace('$S','%(status)s')
+					auto_message = auto_message.replace('$T','%(time)s')
+					auto_message = auto_message % {
+						'status': gajim.status_before_autoaway[account],
+						'time': gajim.config.get('autoawaytime')
+						}
 				self.roster.send_status(account, 'away', auto_message, auto=True)
 				gajim.sleeper_state[account] = 'autoaway'
 			elif state == common.sleepy.STATE_XA and (\
@@ -2334,6 +2341,13 @@ class Interface:
 				auto_message = gajim.config.get('autoxa_message')
 				if not auto_message:
 					auto_message = gajim.connections[account].status
+				else:
+					auto_message = auto_message.replace('$S','%(status)s')
+					auto_message = auto_message.replace('$T','%(time)s')
+					auto_message = auto_message % {
+						'status': gajim.status_before_autoaway[account], 
+						'time': gajim.config.get('autoxatime')
+						}
 				self.roster.send_status(account, 'xa', auto_message, auto=True)
 				gajim.sleeper_state[account] = 'autoxa'
 		return True # renew timeout (loop for ever)
