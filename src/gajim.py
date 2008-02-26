@@ -1204,7 +1204,6 @@ class Interface:
 					ctrl.print_conversation(' (', 'status', simple=True)
 					ctrl.print_conversation('%s' % (status), 'status', simple=True)
 					ctrl.print_conversation(')', 'status', simple=True)
-				else:
 				ctrl.parent_win.redraw_tab(ctrl)
 				ctrl.update_ui()
 			if self.remote_ctrl:
