@@ -982,8 +982,8 @@ class ConversationTextview:
 		buffer.insert_with_tags_by_name(end_iter, '\n', 'eol')
 
 	def print_conversation_line(self, text, jid, kind, name, tim,
-	other_tags_for_name = [], other_tags_for_time = [], other_tags_for_text = [],
-	subject = None, old_kind = None, xhtml = None):
+	other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
+	subject=None, old_kind=None, xhtml=None, simple=False):
 		'''prints 'chat' type messages'''
 		buffer = self.tv.get_buffer()
 		buffer.begin_user_action()
@@ -1004,7 +1004,8 @@ class ConversationTextview:
 		# else twice (one for end bound, one for start bound)
 		mark = None
 		if buffer.get_char_count() > 0:
-			buffer.insert_with_tags_by_name(end_iter, '\n', 'eol')
+			if not simple:
+				buffer.insert_with_tags_by_name(end_iter, '\n', 'eol')
 			mark = buffer.create_mark(None, end_iter, left_gravity=True)
 			self.marks_queue.put(mark)
 		if not mark:
@@ -1019,12 +1020,12 @@ class ConversationTextview:
 			# We don't have tim for outgoing messages...
 			tim = time.localtime()
 		current_print_time = gajim.config.get('print_time')
-		if current_print_time == 'always' and kind != 'info':
+		if current_print_time == 'always' and kind != 'info' and not simple:
 			timestamp_str = self.get_time_to_show(tim)
 			timestamp = time.strftime(timestamp_str, tim)
 			buffer.insert_with_tags_by_name(end_iter, timestamp,
 				*other_tags_for_time)
-		elif current_print_time == 'sometimes' and kind != 'info':
+		elif current_print_time == 'sometimes' and kind != 'info' and not simple:
 			every_foo_seconds = 60 * gajim.config.get(
 				'print_ichat_every_foo_minutes')
 			seconds_passed = time.mktime(tim) - self.last_time_printout

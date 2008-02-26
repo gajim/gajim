@@ -643,9 +643,8 @@ class ChatControlBase(MessageControl):
 		self.orig_msg = None
 
 	def print_conversation_line(self, text, kind, name, tim,
-		other_tags_for_name = [], other_tags_for_time = [],
-		other_tags_for_text = [], count_as_new = True,
-		subject = None, old_kind = None, xhtml = None):
+	other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
+	count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False):
 		'''prints 'chat' type messages'''
 		jid = self.contact.jid
 		full_jid = self.get_full_jid()
@@ -655,7 +654,7 @@ class ChatControlBase(MessageControl):
 			end = True
 		textview.print_conversation_line(text, jid, kind, name, tim,
 			other_tags_for_name, other_tags_for_time, other_tags_for_text,
-			subject, old_kind, xhtml)
+			subject, old_kind, xhtml, simple=simple)
 
 		if not count_as_new:
 			return
@@ -1518,8 +1517,8 @@ class ChatControl(ChatControlBase):
 		self._show_lock_image(e2e_is_active, 'E2E', e2e_is_active, self.session and \
 				self.session.is_loggable()) 
 
-	def print_conversation(self, text, frm = '', tim = None,
-		encrypted = False, subject = None, xhtml = None):
+	def print_conversation(self, text, frm='', tim=None, encrypted=False,
+	subject=None, xhtml=None, simple=False):
 		'''Print a line in the conversation:
 		if contact is set to status: it's a status message
 		if contact is set to another value: it's an outgoing message
@@ -1567,7 +1566,8 @@ class ChatControl(ChatControlBase):
 					if xhtml:
 						xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)
 		ChatControlBase.print_conversation_line(self, text, kind, name, tim,
-			subject = subject, old_kind = self.old_msg_kind, xhtml = xhtml)
+			subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
+			simple=simple)
 		if text.startswith('/me ') or text.startswith('/me\n'):
 			self.old_msg_kind = None
 		else:

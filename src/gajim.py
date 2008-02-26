@@ -1198,12 +1198,13 @@ class Interface:
 				contact.show = show
 				contact.status = status
 				uf_show = helpers.get_uf_show(show)
+				ctrl.print_conversation(_('%s is now %s') % (nick, uf_show),
+					'status')
 				if status:
-					ctrl.print_conversation(_('%s is now %s (%s)') % (nick, uf_show,
-						status), 'status')
+					ctrl.print_conversation(' (', 'status', simple=True)
+					ctrl.print_conversation('%s' % (status), 'status', simple=True)
+					ctrl.print_conversation(')', 'status', simple=True)
 				else:
-					ctrl.print_conversation(_('%s is now %s') % (nick, uf_show),
-						'status')
 				ctrl.parent_win.redraw_tab(ctrl)
 				ctrl.update_ui()
 			if self.remote_ctrl:

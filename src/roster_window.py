@@ -1402,12 +1402,12 @@ class RosterWindow:
 			win.redraw_tab(ctrl)
 
 			uf_show = helpers.get_uf_show(show)
+			ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
+				'status')
 			if status:
-				ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show,
-					status), 'status')
-			else: # No status message
-				ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
-					'status')
+				ctrl.print_conversation(' (', 'status', simple=True)
+				ctrl.print_conversation('%s' % (status), 'status', simple=True)
+				ctrl.print_conversation(')', 'status', simple=True)
 
 		# unset custom status
 		if gajim.interface.status_sent_to_users.has_key(account) and \
