@@ -220,6 +220,7 @@ def build_patterns(view, config, interface):
 	except:
 		pass
 
+	view.emot_pattern_re = re.compile(emoticons_pattern, re.IGNORECASE)
 	# because emoticons match later (in the string) they need to be after
 	# basic matches that may occur earlier
 	emot_and_basic_pattern = basic_pattern + emoticons_pattern
@@ -732,10 +733,16 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 	def handle_specials(self, text):
 		index = 0
 		se = self.textview.config.get('show_ascii_formatting_chars')
+		af = gajim.config.get('ascii_formatting')
 		if self.textview.config.get('emoticons_theme'):
-			iterator = self.textview.emot_and_basic_re.finditer(text)
-		else:
+			if af:
+				iterator = self.textview.emot_and_basic_re.finditer(text)
+			else:
+				iterator = self.textview.emot_pattern_re.finditer(text)
+		elif af:
 			iterator = self.textview.basic_pattern_re.finditer(text)
+		else:
+			iterator = []
 		for match in iterator:
 			start, end = match.span()
 			special_text = text[start:end]
@@ -754,7 +761,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				img.show()
 				# TODO: add alt/tooltip with the special_text (a11y) 
 				self.textview.add_child_at_anchor(img, anchor)
-			else:
+			elif af:
 				# now print it
 				if special_text.startswith('/'): # it's explicit italics
 					self.startElement('i', {})
