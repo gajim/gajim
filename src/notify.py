@@ -70,7 +70,7 @@ def get_show_in_roster(event, account, contact):
 			return False
 	return True
 
-def get_show_in_systray(event, account, contact):
+def get_show_in_systray(event, account, contact, type_=None):
 	'''Return True if this event must be shown in systray, else False'''
 	num = get_advanced_notification(event, account, contact)
 	if num != None:
@@ -78,6 +78,10 @@ def get_show_in_systray(event, account, contact):
 			return True
 		if gajim.config.get_per('notifications', str(num), 'systray') == 'no':
 			return False
+	if type_ == 'printed_gc_msg' and not gajim.config.get(
+	'notify_on_all_muc_messages'):
+		# it's not an highlighted message, don't show in systray
+		return False
 	return gajim.config.get('trayicon_notification_on_events')
 
 def get_advanced_notification(event, account, contact):
