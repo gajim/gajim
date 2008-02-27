@@ -5340,7 +5340,8 @@ class RosterWindow:
 			self.draw_contact(jid, account, selected = True)
 
 	def search_roster_func(self, model, column, key, iter):
-		if model[iter][C_NAME].decode('utf-8').startswith(gobject.markup_escape_text(key)):
+		if model[iter][C_NAME].decode('utf-8').lower().startswith(
+		gobject.markup_escape_text(key.lower())):
 			return False
 		return True
 
