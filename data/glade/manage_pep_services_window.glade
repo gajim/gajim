@@ -29,33 +29,7 @@
           <widget class="GtkHButtonBox" id="hbuttonbox1">
             <property name="visible">True</property>
             <property name="spacing">6</property>
-            <child>
-              <widget class="GtkButton" id="add_button">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="label">gtk-add</property>
-                <property name="use_stock">True</property>
-                <property name="response_id">-5</property>
-                <signal name="clicked" handler="on_add_button_clicked"/>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkButton" id="delete_button">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="label">gtk-delete</property>
-                <property name="use_stock">True</property>
-                <property name="response_id">-5</property>
-                <signal name="clicked" handler="on_delete_button_clicked"/>
-              </widget>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
               <widget class="GtkButton" id="configure_button">
                 <property name="visible">True</property>
@@ -89,9 +63,6 @@
                   </widget>
                 </child>
               </widget>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
             <child>
               <widget class="GtkButton" id="close_button">
@@ -104,7 +75,7 @@
                 <signal name="clicked" handler="on_close_button_clicked"/>
               </widget>
               <packing>
-                <property name="position">3</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </widget>
