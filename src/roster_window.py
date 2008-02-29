@@ -941,11 +941,7 @@ class RosterWindow:
 		service_disco_menuitem = self.xml.get_widget('service_disco_menuitem')
 		advanced_menuitem = self.xml.get_widget('advanced_menuitem')
 		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')
-		pep_services_menuitem = self.xml.get_widget('pep_services_menuitem')
 
-		if not gajim.config.get('use_pep'):
-			pep_services_menuitem.set_no_show_all(True)
-			pep_services_menuitem.hide()
 		# destroy old advanced menus
 		for m in self.advanced_menus:
 			m.destroy()
@@ -968,11 +964,6 @@ class RosterWindow:
 				self.new_chat_menuitem_handler_id)
 			self.new_chat_menuitem_handler_id = None
 
-		if self.pep_services_menuitem_handler_id:
-			pep_services_menuitem.handler_disconnect(
-				self.pep_services_menuitem_handler_id)
-			self.pep_services_menuitem_handler_id = None
-
 		if self.single_message_menuitem_handler_id:
 			single_message_menuitem.handler_disconnect(
 				self.single_message_menuitem_handler_id)
@@ -991,7 +982,6 @@ class RosterWindow:
 		new_chat_menuitem.remove_submenu()
 		advanced_menuitem.remove_submenu()
 		profile_avatar_menuitem.remove_submenu()
-		pep_services_menuitem.remove_submenu()
 
 		# remove the existing accelerator
 		if self.have_new_chat_accel:
@@ -1150,15 +1140,7 @@ class RosterWindow:
 		if len(connected_accounts_with_vcard) > 1:
 			# 2 or more accounts? make submenus
 			profile_avatar_sub_menu = gtk.Menu()
-			pep_services_sub_menu = gtk.Menu()
 			for account in connected_accounts_with_vcard:
-				if gajim.connections[account].pep_supported:
-					# PEP services
-					pep_services_item = gtk.MenuItem(_('of account %s') % account,
-						False)
-					pep_services_sub_menu.append(pep_services_item)
-					pep_services_item.connect('activate',
-						self.on_pep_services_menuitem_activate, account)
 				# profile, avatar
 				profile_avatar_item = gtk.MenuItem(_('of account %s') % account,
 					False)
@@ -1167,8 +1149,6 @@ class RosterWindow:
 					self.on_profile_avatar_menuitem_activate, account)
 			profile_avatar_menuitem.set_submenu(profile_avatar_sub_menu)
 			profile_avatar_sub_menu.show_all()
-			pep_services_menuitem.set_submenu(pep_services_sub_menu)
-			pep_services_sub_menu.show_all()
 		elif len(connected_accounts_with_vcard) == 1: # user has only one account
 			account = connected_accounts_with_vcard[0]
 			# profile, avatar
@@ -1176,18 +1156,11 @@ class RosterWindow:
 				self.profile_avatar_menuitem_handler_id = \
 					profile_avatar_menuitem.connect('activate',
 					self.on_profile_avatar_menuitem_activate, account)
-			# PEP services
-			if not self.pep_services_menuitem_handler_id:
-				self.pep_services_menuitem_handler_id = \
-					pep_services_menuitem.connect('activate',
-					self.on_pep_services_menuitem_activate, account)
 
 		if len(connected_accounts_with_vcard) == 0:
 			profile_avatar_menuitem.set_sensitive(False)
-			pep_services_menuitem.set_sensitive(False)
 		else:
 			profile_avatar_menuitem.set_sensitive(True)
-			pep_services_menuitem.set_sensitive(True)
 
 		# Advanced Actions
 		if len(gajim.connections) == 0: # user has no accounts
@@ -3052,14 +3025,18 @@ class RosterWindow:
 				pep_submenu = gtk.Menu()
 				pep_menuitem.set_submenu(pep_submenu)
 				if gajim.config.get('publish_mood'):
-					item = gtk.MenuItem('Mood')
+					item = gtk.MenuItem(_('Mood'))
 					pep_submenu.append(item)
 					item.connect('activate', self.on_change_mood_activate, account)
 				if gajim.config.get('publish_activity'):
-					item = gtk.MenuItem('Activity')
+					item = gtk.MenuItem(_('Activity'))
 					pep_submenu.append(item)
 					item.connect('activate', self.on_change_activity_activate,
 						account)
+				item = gtk.MenuItem(_('Configure...'))
+				pep_submenu.append(item)
+				item.connect('activate', self.on_pep_services_menuitem_activate,
+					account)
 			else:
 				pep_menuitem.set_no_show_all(True)
 				pep_menuitem.hide()
@@ -5427,7 +5404,6 @@ class RosterWindow:
 		self.new_chat_menuitem_handler_id = False
 		self.single_message_menuitem_handler_id = False
 		self.profile_avatar_menuitem_handler_id = False
-		self.pep_services_menuitem_handler_id = False
 		self.actions_menu_needs_rebuild = True
 		self.regroup = gajim.config.get('mergeaccounts')
 		self.clicked_path = None # Used remember on wich row we clicked
