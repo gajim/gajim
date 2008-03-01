@@ -3671,10 +3671,13 @@ class ManagePEPServicesWindow:
 		self.xml = gtkgui_helpers.get_glade('manage_pep_services_window.glade')
 		self.window = self.xml.get_widget('manage_pep_services_window')
 		self.window.set_transient_for(gajim.interface.roster.window)
+		self.xml.get_widget('configure_button').set_sensitive(False)
 		self.xml.signal_autoconnect(self)
 		self.account = account
 
 		self.init_services()
+		self.xml.get_widget('services_treeview').get_selection().connect(
+			'changed', self.on_services_selection_changed)
 		self.window.show_all()
 
 	def on_manage_pep_services_window_destroy(self, widget):
@@ -3683,6 +3686,9 @@ class ManagePEPServicesWindow:
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
+
+	def on_services_selection_changed(self, sel):
+		self.xml.get_widget('configure_button').set_sensitive(True)
 
 	def init_services(self):
 		self.treeview = self.xml.get_widget('services_treeview')
