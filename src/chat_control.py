@@ -677,7 +677,7 @@ class ChatControlBase(MessageControl):
 				type_ = 'printed_' + self.type_id
 				event = 'message_received'
 				if gc_message:
-					if other_tags_for_text == ['marked']:
+					if 'marked' in other_tags_for_text:
 						type_ = 'printed_marked_gc_msg'
 					else:
 						type_ = 'printed_gc_msg'
