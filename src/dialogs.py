@@ -3736,6 +3736,7 @@ class DataFormWindow(Dialog):
 			gtk.RESPONSE_REJECT), (gtk.STOCK_OK, gtk.RESPONSE_ACCEPT)],
 			on_response_ok=self.on_ok)
 		self.set_resizable(True)
+		gtkgui_helpers.resize_window(self, 600, 400)
 		self.dataform_widget =  dataforms_widget.DataFormWidget()
 		self.dataform = dataforms.ExtendForm(node = form)
 		self.dataform_widget.set_sensitive(True)
