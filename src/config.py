@@ -1858,9 +1858,11 @@ class AccountsWindow:
 		if self.ignore_events:
 			return
 		active = widget.get_active()
+		password_entry = self.xml.get_widget('password_entry1')
+		password_entry.set_sensitive(active)
 		gajim.config.set_per('accounts', self.current_account, 'savepass', active)
 		if active:
-			password = self.xml.get_widget('password_entry1').get_text()
+			password = password_entry.get_text()
 			passwords.save_password(self.current_account, password)
 		else:
 			passwords.save_password(self.current_account, '')
