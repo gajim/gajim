@@ -3674,6 +3674,7 @@ class ManagePEPServicesWindow:
 		self.window = self.xml.get_widget('manage_pep_services_window')
 		self.window.set_transient_for(gajim.interface.roster.window)
 		self.xml.get_widget('configure_button').set_sensitive(False)
+		self.xml.get_widget('delete_button').set_sensitive(False)
 		self.xml.signal_autoconnect(self)
 		self.account = account
 
@@ -3691,6 +3692,7 @@ class ManagePEPServicesWindow:
 
 	def on_services_selection_changed(self, sel):
 		self.xml.get_widget('configure_button').set_sensitive(True)
+		self.xml.get_widget('delete_button').set_sensitive(True)
 
 	def init_services(self):
 		self.treeview = self.xml.get_widget('services_treeview')
@@ -3713,6 +3715,24 @@ class ManagePEPServicesWindow:
 		for item in items:
 			if 'jid' in item and item['jid'] == our_jid and 'node' in item:
 				self.treestore.append([item['node']])
+
+	def node_removed(self, node):
+		model = self.treeview.get_model()
+		iter = model.get_iter_root()
+		while iter:
+			if model[iter][0] == node:
+				model.remove(iter)
+				break
+			iter = model.get_iter_next(iter)
+
+	def on_delete_button_clicked(self, widget):
+		selection = self.treeview.get_selection()
+		if not selection:
+			return
+		model, iter = selection.get_selected()
+		node = model[iter][0]
+		our_jid = gajim.get_jid_from_account(self.account)
+		gajim.connections[self.account].send_pb_delete(our_jid, node)
 
 	def on_configure_button_clicked(self, widget):
 		selection = self.treeview.get_selection()

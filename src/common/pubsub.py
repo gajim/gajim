@@ -50,7 +50,15 @@ class ConnectionPubSub:
 		d = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
 		d = d.addChild('delete', {'node': node})
 
-		self.connection.send(query)
+		def response(con, resp, jid, node):
+			if resp.getType() == 'result':
+				self.dispatch('PUBSUB_NODE_REMOVED', (jid, node))
+			else:
+				msg = resp.getErrorMsg()
+				self.dispatch('PUBSUB_NODE_NOT_REMOVED', (jid, node, msg))
+
+		self.connection.SendAndCallForResponse(query, response, {'jid': jid,
+			'node': node})
 
 	def send_pb_create(self, jid, node, configure = False, configure_form = None):
 		'''Creates new node.'''

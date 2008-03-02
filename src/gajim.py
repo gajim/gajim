@@ -2196,7 +2196,7 @@ class Interface:
 			is_modal = False, ok_handler = on_ok)
 
 	def handle_event_pep_config(self, account, data):
-		# ('PEP_ACCESS_MODEL', account, (node, form))
+		# ('PEP_CONFIG', account, (node, form))
 		if self.instances[account].has_key('pep_services'):
 			self.instances[account]['pep_services'].config(data[0], data[1])
 
@@ -2292,6 +2292,18 @@ class Interface:
 		checktext = _('Do _not ask me again')
 		dialog = dialogs.YesNoDialog(pritext, sectext, checktext,
 			on_response_yes=on_yes, on_response_no=on_no)
+
+	def handle_event_pubsub_node_removed(self, account, data):
+		# ('PUBSUB_NODE_REMOVED', account, (jid, node))
+		if self.instances[account].has_key('pep_services'):
+			if data[0] == gajim.get_jid_from_account(account):
+				self.instances[account]['pep_services'].node_removed(data[1])
+
+	def handle_event_pubsub_node_not_removed(self, account, data):
+		# ('PUBSUB_NODE_NOT_REMOVED', account, (jid, node, msg))
+		if data[0] == gajim.get_jid_from_account(account):
+			dialogs.WarningDialog(_('PEP node was not removed'),
+				_('PEP node %s was not removed: %s') % (data[1], data[2]))
 
 	def read_sleepy(self):
 		'''Check idle status and change that status if needed'''
@@ -2648,6 +2660,8 @@ class Interface:
 			'SSL_ERROR': self.handle_event_ssl_error,
 			'FINGERPRINT_ERROR': self.handle_event_fingerprint_error,
 			'PLAIN_CONNECTION': self.handle_event_plain_connection,
+			'PUBSUB_NODE_REMOVED': self.handle_event_pubsub_node_removed,
+			'PUBSUB_NODE_NOT_REMOVED': self.handle_event_pubsub_node_not_removed,
 		}
 		gajim.handlers = self.handlers
 
