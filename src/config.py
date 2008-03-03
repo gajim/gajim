@@ -272,9 +272,6 @@ class PreferencesWindow:
 		st = gajim.config.get('subscribe_tune')
 		self.xml.get_widget('subscribe_tune_checkbutton').set_active(st)
 
-		if not gajim.config.get('use_pep'):
-			self.xml.get_widget('frame_pep').set_sensitive(False)
-
 		### Notifications tab ###
 		# On new event
 		on_event_combobox = self.xml.get_widget('on_event_combobox')

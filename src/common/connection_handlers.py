@@ -759,7 +759,7 @@ class ConnectionDisco:
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_COMMANDS})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_DISCO_INFO})
-				if gajim.config.get('use_pep'):
+				if self.pep_supported:
 					q.addChild('feature', attrs = {'var': common.xmpp.NS_ACTIVITY})
 					q.addChild('feature', attrs = {'var': common.xmpp.NS_ACTIVITY + '+notify'})
 					q.addChild('feature', attrs = {'var': common.xmpp.NS_TUNE})

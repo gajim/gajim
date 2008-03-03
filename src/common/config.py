@@ -151,8 +151,7 @@ class Config:
 		'before_nickname': [ opt_str, '', _('Characters that are printed before the nickname in conversations') ],
 		'after_nickname': [ opt_str, ':', _('Characters that are printed after the nickname in conversations') ],
 		'send_os_info': [ opt_bool, True ],
-		'set_status_msg_from_current_music_track': [ opt_bool, False ],
-		'set_status_msg_from_lastfm': [ opt_bool, False, _('If checked, Gajim can regularly poll a Last.fm account and adjust the status message to reflect recently played songs. set_status_msg_from_current_music_track option must be False.') ],
+		'set_status_msg_from_lastfm': [ opt_bool, False, _('If checked, Gajim can regularly poll a Last.fm account and sends recently played songs through PEP.') ],
 		'lastfm_username': [ opt_str, '', _('The username used to identify the Last.fm account.')],
 		'notify_on_new_gmail_email': [ opt_bool, True ],
 		'notify_on_new_gmail_email_extra': [ opt_bool, False ],
@@ -257,7 +256,6 @@ class Config:
 		'subscribe_activity': [opt_bool, True],
 		'subscribe_tune': [opt_bool, True],
 		'attach_notifications_to_systray': [opt_bool, False, _('If True, notification windows from notification-daemon will be attached to systray icon.')],
-		'use_pep': [opt_bool, False, 'temporary variable to enable pep support'],
 	}
 
 	__options_per_key = {

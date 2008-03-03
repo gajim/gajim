@@ -3021,7 +3021,7 @@ class RosterWindow:
 			item.connect('activate', self.change_status, account, 'offline')
 
 			pep_menuitem = xml.get_widget('pep_menuitem')
-			if gajim.connections[account].pep_supported and gajim.config.get('use_pep'):
+			if gajim.connections[account].pep_supported:
 				pep_submenu = gtk.Menu()
 				pep_menuitem.set_submenu(pep_submenu)
 				if gajim.config.get('publish_mood'):
@@ -3038,8 +3038,7 @@ class RosterWindow:
 				item.connect('activate', self.on_pep_services_menuitem_activate,
 					account)
 			else:
-				pep_menuitem.set_no_show_all(True)
-				pep_menuitem.hide()
+				pep_menuitem.set_sensitive(False)
 
 			if not gajim.connections[account].gmail_url:
 				open_gmail_inbox_menuitem.set_no_show_all(True)
@@ -3759,69 +3758,34 @@ class RosterWindow:
 
 	def _music_track_changed(self, unused_listener, music_track_info,
 	account=''):
-		if gajim.config.get('use_pep'):
-			from common import pep
-			if account == '':
-				accounts = gajim.connections.keys()
-			if music_track_info is None:
-				artist = ''
-				title = ''
-				source = ''
-				track = ''
-				length = ''
-			elif hasattr(music_track_info, 'paused') and \
-			music_track_info.paused == 0:
-				artist = ''
-				title = ''
-				source = ''
-				track = ''
-				length = ''
-			else:
-				artist = music_track_info.artist
-				title = music_track_info.title
-				source = music_track_info.album
-			if account == '':
-				for account in accounts:
-					if not gajim.account_is_connected(account):
-						continue
-					if not gajim.config.get('use_pep') and not gajim.config.get_per(
-					'accounts', account, 'sync_with_global_status'):
-						continue
-					if not gajim.connections[account].pep_supported:
-						continue
-					pep.user_send_tune(account, artist, title, source)
-			else:
-				pep.user_send_tune(account, artist, title, source)
-			return
-		# No PEP
-		accounts = gajim.connections.keys()
+		from common import pep
+		if account == '':
+			accounts = gajim.connections.keys()
 		if music_track_info is None:
-			status_message = ''
+			artist = ''
+			title = ''
+			source = ''
+			track = ''
+			length = ''
+		elif hasattr(music_track_info, 'paused') and music_track_info.paused == 0:
+			artist = ''
+			title = ''
+			source = ''
+			track = ''
+			length = ''
 		else:
-			if hasattr(music_track_info, 'paused') and \
-			music_track_info.paused == 0:
-				status_message = ''
-			else:
-				status_message = '♪ ' + _('"%(title)s" by %(artist)s') % \
-				{'title': music_track_info.title,
-					'artist': music_track_info.artist } + ' ♪'
-		for account in accounts:
-			if not gajim.config.get_per('accounts', account,
-			'sync_with_global_status'):
-				continue
-			if gajim.connections[account].connected < gajim.SHOW_LIST.index(
-			'online') or gajim.connections[account].connected > gajim.SHOW_LIST.\
-			index('invisible'):
-				continue
-			current_show = gajim.SHOW_LIST[gajim.connections[account].connected]
-			# Keep the last status message, replacing only the current song part
-			current_status_message = gajim.connections[account].status
-			song_offset = current_status_message.find('♪')
-			if song_offset >= 0:
-				current_status_message = current_status_message[0:song_offset]
-			current_status_message = current_status_message.strip() + '\n' + \
-				status_message
-			self.send_status(account, current_show, current_status_message.strip())
+			artist = music_track_info.artist
+			title = music_track_info.title
+			source = music_track_info.album
+		if account == '':
+			for account in accounts:
+				if not gajim.account_is_connected(account):
+					continue
+				if not gajim.connections[account].pep_supported:
+					continue
+				pep.user_send_tune(account, artist, title, source)
+		elif gajim.connections[account].pep_supported:
+			pep.user_send_tune(account, artist, title, source)
 
 	def update_status_combobox(self):
 		# table to change index in connection.connected to index in combobox
@@ -5588,21 +5552,14 @@ class RosterWindow:
 		self.tooltip = tooltips.RosterTooltip()
 		self.draw_roster()
 
-		if gajim.config.get('use_pep'):
-			self.enable_syncing_status_msg_from_current_music_track(
-					gajim.config.get('publish_tune'))
-		else:
-			## Music Track notifications
-			## FIXME: we use a timeout because changing status of
-			## accounts has no effect until they are connected.
-			st = gajim.config.get('set_status_msg_from_current_music_track')
-			if st:
-				gobject.timeout_add_seconds(1,
-					self.enable_syncing_status_msg_from_current_music_track, st)
+		publish_tune = gajim.config.get('publish_tune')
+		if publish_tune:
+			if gajim.config.get('set_status_msg_from_lastfm'):
+				self.enable_syncing_status_msg_from_lastfm(True)
 			else:
-				gobject.timeout_add_seconds(1,
-					self.enable_syncing_status_msg_from_lastfm,
-					gajim.config.get('set_status_msg_from_lastfm'))
+				self.enable_syncing_status_msg_from_current_music_track(True)
+		else:
+			self.enable_syncing_status_msg_from_current_music_track(False)
 
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()
