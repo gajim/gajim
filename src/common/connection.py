@@ -29,6 +29,7 @@ import random
 import socket
 
 import time
+import locale
 
 try:
 	randomsource = random.SystemRandom()
@@ -102,6 +103,9 @@ class Connection(ConnectionHandlers):
 		self.connection = None # xmpppy ClientCommon instance
 		# this property is used to prevent double connections
 		self.last_connection = None # last ClientCommon instance
+		self.lang = None
+		if locale.getdefaultlocale()[0]:
+			self.lang = locale.getdefaultlocale()[0].split('_')[0]
 		self.is_zeroconf = False
 		self.gpg = None
 		self.USE_GPG = False
@@ -700,6 +704,10 @@ class Connection(ConnectionHandlers):
 	def quit(self, kill_core):
 		if kill_core and gajim.account_is_connected(self.name):
 			self.disconnect(on_purpose=True)
+
+	def add_lang(self, stanza):
+		if self.lang:
+			stanza.setAttr('xml:lang', self.lang)
 
 	def get_privacy_lists(self):
 		if not self.connection:
@@ -1426,6 +1434,7 @@ class Connection(ConnectionHandlers):
 			show = show, status = self.status)
 		if gajim.config.get('send_sha_in_gc_presence'):
 			p = self.add_sha(p)
+		self.add_lang(p)
 		t = p.setTag(common.xmpp.NS_MUC + ' x')
 		if password:
 			t.setTagData('password', password)
@@ -1465,6 +1474,7 @@ class Connection(ConnectionHandlers):
 			return
 		iq = common.xmpp.Iq(typ = 'get', queryNS = common.xmpp.NS_MUC_OWNER,
 			to = room_jid)
+		self.add_lang(iq)
 		self.connection.send(iq)
 
 	def destroy_gc_room(self, room_jid, reason = '', jid = ''):
@@ -1492,6 +1502,7 @@ class Connection(ConnectionHandlers):
 			show = xmpp_show, status = status)
 		if gajim.config.get('send_sha_in_gc_presence') and show != 'offline':
 			p = self.add_sha(p, ptype != 'unavailable')
+		self.add_lang(p)
 		# send instantly so when we go offline, status is sent to gc before we
 		# disconnect from jabber server
 		self.connection.send(p)
