@@ -760,7 +760,7 @@ class PreferencesWindow:
 	def on_auto_popup_away_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autopopupaway')
 
-	def on_open_advanced_notifications_button_clicked(self, widget):
+	def on_advanced_notifications_button_clicked(self, widget):
 		dialogs.AdvancedNotificationsWindow()
 
 	def on_play_sounds_checkbutton_toggled(self, widget):
