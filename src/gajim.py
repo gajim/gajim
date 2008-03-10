@@ -724,12 +724,12 @@ class Interface:
 			elif new_show > 1: # Status change (not connected/disconnected or error (<1))
 				notify.notify('status_change', jid, account, [new_show,
 					status_message])
-			else:
-				# FIXME: Msn transport (CMSN1.2.1 and PyMSN) doesn't follow the XEP
-				# still the case in 2008
-				# It's maybe a GC_NOTIFY (specialy for MSN gc)
-				self.handle_event_gc_notify(account, (jid, array[1], status_message,
-					array[3], None, None, None, None, None, [], None, None))
+		else:
+			# FIXME: Msn transport (CMSN1.2.1 and PyMSN) doesn't follow the XEP
+			# still the case in 2008
+			# It's maybe a GC_NOTIFY (specialy for MSN gc)
+			self.handle_event_gc_notify(account, (jid, array[1], status_message,
+				array[3], None, None, None, None, None, [], None, None))
 
 	def handle_event_msg(self, account, array):
 		# 'MSG' (account, (jid, msg, time, encrypted, msg_type, subject,
