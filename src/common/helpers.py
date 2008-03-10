@@ -756,11 +756,10 @@ def get_os_info():
 		full_path_to_executable = is_in_path(executable, return_abs_path = True)
 		if full_path_to_executable:
 			command = executable + params
-			child_stdin, child_stdout = os.popen2(command)
-			output = temp_failure_retry(child_stdout.readline).strip()
-			child_stdout.close()
-			child_stdin.close()
-			os.wait()
+			p = Popen([command], shell=True, stdin=subprocess.PIPE, 
+				stdout=subprocess.PIPE, close_fds=True) 
+			p.wait() 
+			output = temp_failure_retry(p.stdout.readline).strip()
 			# some distros put n/a in places, so remove those
 			output = output.replace('n/a', '').replace('N/A', '')
 			return output
