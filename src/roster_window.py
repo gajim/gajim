@@ -3847,7 +3847,8 @@ class RosterWindow:
 					gajim.con_types[account] = None
 				for jid in gajim.contacts.get_jid_list(account):
 					lcontact = gajim.contacts.get_contacts(account, jid)
-					for contact in [c for c in lcontact if c.show != 'offline']:
+					for contact in [c for c in lcontact if (c.show != 'offline' or \
+					c.is_transport())]:
 						self.chg_contact_status(contact, 'offline', '', account)
 			self.actions_menu_needs_rebuild = True
 		self.update_status_combobox()
