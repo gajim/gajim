@@ -4182,6 +4182,11 @@ class RosterWindow:
 
 	def on_roster_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
+			if gajim.interface.msg_win_mgr.mode == \
+			MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER and \
+			gajim.interface.msg_win_mgr.one_window_opened():
+				# let message window close the tab
+				return
 			model, list_of_paths = self.tree.get_selection().get_selected_rows()
 			if not len(list_of_paths) and gajim.interface.systray_enabled and \
 			not gajim.config.get('quit_on_roster_x_button'):
