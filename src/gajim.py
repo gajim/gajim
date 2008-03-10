@@ -2562,19 +2562,20 @@ class Interface:
 			# we need to reload else that doesn't work when changing emoticon set
 			reload(emoticons)
 		emots = emoticons.emoticons
-		for emot in emots:
-			emot_file = os.path.join(path, emots[emot])
-			emot = emot.decode('utf-8')
+		for emot_filename in emots:
+			emot_file = os.path.join(path, emot_filename)
 			if not self.image_is_ok(emot_file):
 				continue
-			# This avoids duplicated emoticons with the same image eg. :) and :-)
-			if not emot_file in self.emoticons.values():
-				if emot_file.endswith('.gif'):
-					pix = gtk.gdk.PixbufAnimation(emot_file)
-				else:
-					pix = gtk.gdk.pixbuf_new_from_file(emot_file)
-				self.emoticons_images.append((emot, pix))
-			self.emoticons[emot.upper()] = emot_file
+			for emot in emots[emot_filename]:
+				emot = emot.decode('utf-8')
+				# This avoids duplicated emoticons with the same image eg. :) and :-)
+				if not emot_file in self.emoticons.values():
+					if emot_file.endswith('.gif'):
+						pix = gtk.gdk.PixbufAnimation(emot_file)
+					else:
+						pix = gtk.gdk.pixbuf_new_from_file(emot_file)
+					self.emoticons_images.append((emot, pix))
+				self.emoticons[emot.upper()] = emot_file
 		sys.path.remove(path)
 		del emoticons
 		if self.emoticons_menu:
