@@ -176,6 +176,9 @@ class ConversationTextview:
 		self.images = []
 		self.image_cache = {}
 
+		# It's True when we scroll in the code, so we can detect scroll from user
+		self.auto_scrolling = False
+
 		# connect signals
 		id = self.tv.connect('motion_notify_event',
 			self.on_textview_motion_notify_event)
@@ -309,7 +312,9 @@ class ConversationTextview:
 		cur_val = vadj.get_value()
 		# scroll by 1/3rd of remaining distance
 		onethird = cur_val + ((max_val - cur_val) / 3.0)
+		self.auto_scrolling = True
 		vadj.set_value(onethird)
+		self.auto_scrolling = False
 		if max_val - onethird < 0.01:
 			self.smooth_id = None
 			self.smooth_scroll_timer.cancel()
@@ -329,7 +334,9 @@ class ConversationTextview:
 		parent = self.tv.get_parent()
 		if parent:
 			vadj = parent.get_vadjustment()
+			self.auto_scrolling = True
 			vadj.set_value(vadj.upper - vadj.page_size + 1)
+			self.auto_scrolling = False
 
 	def smooth_scroll_to_end(self):
 		if None != self.smooth_id: # already scrolling
@@ -347,9 +354,11 @@ class ConversationTextview:
 		end_mark = buffer.get_mark('end')
 		if not end_mark:
 			return False
+		self.auto_scrolling = True
 		self.tv.scroll_to_mark(end_mark, 0, True, 0, 1)
 		adjustment = parent.get_hadjustment()
 		adjustment.set_value(0)
+		self.auto_scrolling = False
 		return False # when called in an idle_add, just do it once
 
 	def bring_scroll_to_end(self, diff_y = 0,
@@ -373,6 +382,12 @@ class ConversationTextview:
 			return False
 		self.tv.scroll_to_iter(end_iter, 0, False, 1, 1)
 		return False # when called in an idle_add, just do it once
+
+	def stop_scrolling(self):
+		if self.smooth_id:
+			gobject.source_remove(self.smooth_id)
+			self.smooth_id = None
+			self.smooth_scroll_timer.cancel()
 
 	def show_focus_out_line(self):
 		if not self.allow_focus_out_line:
