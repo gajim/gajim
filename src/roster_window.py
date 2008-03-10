@@ -261,14 +261,14 @@ class RosterWindow:
 		showOffline = gajim.config.get('showoffline')
 		model = self.tree.get_model()
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+		if not contact:
+			return
 		nb_events = gajim.events.get_nb_roster_events(account, contact.jid)
 		# count events from all resources
 		for contact_ in gajim.contacts.get_contacts(account, jid):
 			if contact_.resource:
 				nb_events += gajim.events.get_nb_roster_events(account,
 					contact_.get_full_jid())
-		if not contact:
-			return
 		# If contact already in roster, do not add it
 		if len(self.get_contact_iter(jid, account)):
 			return
