@@ -1596,7 +1596,7 @@ class RosterWindow:
 				jids += '\n  ' + contact.get_shown_name() + ','
 			jids = jids[:-1] + '.'
 			sectext = _('You will no longer be able to send and receive messages '
-				'to contacts from these transports:%s') % jids
+				'to contacts from these transports: %s') % jids
 		dialogs.ConfirmationDialog(pritext, sectext,
 			on_response_ok = (remove, list_))
 
