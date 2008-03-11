@@ -76,7 +76,7 @@
                               <widget class="GtkCheckButton" id="sort_by_show_checkbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">If checked, Gajim will sort contacts in roster window and groupcahts by their status and not by the shown name</property>
+                                <property name="tooltip" translatable="yes">If checked, Gajim will sort contacts in roster window and groupchats by their status and not by the shown name</property>
                                 <property name="label" translatable="yes">_Sort contacts by status</property>
                                 <property name="use_underline">True</property>
                                 <property name="response_id">0</property>
