@@ -629,14 +629,17 @@ class ChatControlBase(MessageControl):
 		message_buffer.set_text('') # clear message buffer (and tv of course)
 
 	def save_sent_message(self, message):
-		#save the message, so user can scroll though the list with key up/down
+		# save the message, so user can scroll though the list with key up/down
 		size = len(self.sent_history)
-		#we don't want size of the buffer to grow indefinately
+		# we don't want size of the buffer to grow indefinately
 		max_size = gajim.config.get('key_up_lines')
 		if size >= max_size:
 			for i in xrange(0, size - 1): 
 				self.sent_history[i] = self.sent_history[i + 1]
 			self.sent_history[max_size - 1] = message
+			# self.sent_history_pos has changed if we browsed sent_history,
+			# reset to real value
+			self.sent_history_pos = max_size
 		else:
 			self.sent_history.append(message)
 			self.sent_history_pos = size + 1
