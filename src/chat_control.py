@@ -892,12 +892,16 @@ class ChatControlBase(MessageControl):
 			jid = self.contact.get_full_jid()
 		else:
 			jid = self.contact.jid
+		types_list = []
 		type_ = self.type_id
 		if type_ == message_control.TYPE_GC:
 			type_ = 'gc_msg'
-		if not len(gajim.events.get_events(self.account, jid, ['printed_' + type_,
-		type_])):
-			return
+			types_list = ['printed_' + type_, type_, 'printed_marked_gc_msg']
+		else: # Not a GC
+			types_list = ['printed_' + type_, type_]
+
+		if not len(gajim.events.get_events(self.account, jid, types_list)):
+			return 
 		if not self.parent_win:
 			return
 		if self.conv_textview.at_the_end() and \
@@ -905,7 +909,7 @@ class ChatControlBase(MessageControl):
 		self.parent_win.window.is_active():
 			# we are at the end
 			if not gajim.events.remove_events(self.account, self.get_full_jid(),
-			types = ['printed_' + type_, type_]):
+			types = types_list):
 				# There were events to remove
 				self.redraw_after_event_removed(jid)
 
