@@ -1416,6 +1416,7 @@ Disabled</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="response_id">0</property>
+                                <signal name="font_set" handler="on_conversation_fontbutton_font_set"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
