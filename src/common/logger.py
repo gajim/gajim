@@ -343,7 +343,6 @@ class Logger:
 		''' get unread messages for jid '''
 		if not jid:
 			return
-		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
 		all_messages = []
 		try:
@@ -379,7 +378,6 @@ class Logger:
 		if self.jids_already_in == []: # only happens if we just created the db
 			self.open_db()
 
-		jid = jid.lower()
 		contact_name_col = None # holds nickname for kinds gcstatus, gc_msg
 		# message holds the message unless kind is status or gcstatus,
 		# then it holds status message
@@ -438,7 +436,6 @@ class Logger:
 		and are already logged but pending to be viewed,
 		returns a list of tupples containg time, kind, message,
 		list with empty tupple if nothing found to meet our demands'''
-		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
 		where_sql = self._build_contact_where(account, jid)
 		
@@ -473,7 +470,6 @@ class Logger:
 		'''returns contact_name, time, kind, show, message
 		for each row in a list of tupples,
 		returns list with empty tupple if we found nothing to meet our demands'''
-		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
 		where_sql = self._build_contact_where(account, jid)
 
@@ -495,7 +491,6 @@ class Logger:
 		'''returns contact_name, time, kind, show, message
 		for each row in a list of tupples,
 		returns list with empty tupple if we found nothing to meet our demands'''
-		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
 
 		if False: #query.startswith('SELECT '): # it's SQL query (FIXME)
@@ -519,7 +514,6 @@ class Logger:
 
 	def get_days_with_logs(self, jid, year, month, max_day, account):
 		'''returns the list of days that have logs (not status messages)'''
-		jid = jid.lower()
 		jid_id = self.get_jid_id(jid)
 		days_with_logs = []
 		where_sql = self._build_contact_where(account, jid)
@@ -569,8 +563,6 @@ class Logger:
 	def get_last_date_that_has_logs(self, jid, account = None, is_room = False):
 		'''returns last time (in seconds since EPOCH) for which
 		we had logs (excluding statuses)'''
-		jid = jid.lower()
-	
 		where_sql = ''
 		if not is_room:
 			where_sql = self._build_contact_where(account, jid)
