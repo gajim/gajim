@@ -136,7 +136,7 @@ class HistoryWindow:
 		self.jid_entry.set_text(self.jid)
 		
 		xml.signal_autoconnect(self)
-		self.jid_entry.emit('activate')
+		self.load_history()
 		self.window.show_all()
 
 	def on_history_window_destroy(self, widget):
@@ -156,8 +156,12 @@ class HistoryWindow:
 
 	def on_jid_entry_activate(self, widget):
 		self.jid = self.jid_entry.get_text().decode('utf-8')
-		
-		if self.completion_dict.has_key(self.jid): # a full qualified jid or a contact name was entered
+		self.account = None # Could be a new account, will be searched
+		self.load_history()
+
+	def load_history(self):
+		if self.completion_dict.has_key(self.jid): 
+			# a full qualified jid or a contact name was entered
 			contact = self.completion_dict[self.jid]
 			if contact: # we have got additional info, jid enhanced with contact
 				self.jid = contact.jid
@@ -165,30 +169,36 @@ class HistoryWindow:
 				self.jids_to_search = [contact.jid]
 			else:
 				self.jids_to_search = [self.jid]
-			
-			# Try to find the corresponding account of the jid
-			accounts = gajim.contacts.get_accounts()
-			self.account = None
-			for account in accounts:
-				contact = gajim.contacts.get_first_contact_from_jid(account ,self.jid)
-				if contact:
-					self.account = account
-					break
+
 			if self.account is None:
-				# We do not know an account. This can only happen if the contact is offine,
-				# or if we browse a groupchat history. The account is not really needed, a dummy can
-				# be set.
-				# FIXME: This may leed to wrong self nick in the displayed history
-				self.account = gajim.contacts.get_accounts()[0]
+				# Try to find the corresponding account of the jid
+				accounts = gajim.contacts.get_accounts()
+				self.account = None
+				for account in accounts:
+					jid_list = gajim.contacts.get_jid_list(account)
+					gc_list = gajim.contacts.get_gc_list(account)
+					if self.jid in jid_list or self.jid in gc_list:
+						self.account = account
+						break
+			if self.account is None: 
+				# We still don't know account ! Probably a gc not opened or an
+				# account not connected.
+				# Disable possibility to say if we want to log or not
 				self.checkbutton.set_sensitive(False)
 			else:
-				# The logging checkbutton, can only work if we have got an account.
-				log = True
-				if self.jid in gajim.config.get_per('accounts', self.account,
+				# Are log disabled for account ?
+				if self.account in gajim.config.get_per('accounts', self.account,
 					'no_log_for').split(' '):
-					log = False
-				self.checkbutton.set_active(log)
-				self.checkbutton.set_sensitive(True)
+					self.checkbutton.set_active(False)
+					self.checkbutton.set_sensitive(False)
+				else:
+					# Are log disabled for jid ?
+					log = True
+					if self.jid in gajim.config.get_per('accounts', self.account,
+						'no_log_for').split(' '):
+						log = False
+					self.checkbutton.set_active(log)
+					self.checkbutton.set_sensitive(True)
 
 			# select logs for last date we have logs with contact
 			self.calendar.set_sensitive(True)
