@@ -48,7 +48,7 @@ class Constants:
 			self.JID_NORMAL_TYPE,
 			self.JID_ROOM_TYPE
 		) = range(2)
-		
+
 		(
 			self.KIND_STATUS,
 			self.KIND_GCSTATUS,
@@ -59,7 +59,7 @@ class Constants:
 			self.KIND_CHAT_MSG_SENT,
 			self.KIND_ERROR
 		) = range(8)
-		
+
 		(
 			self.SHOW_ONLINE,
 			self.SHOW_CHAT,
@@ -142,7 +142,7 @@ class Logger:
 		for row in rows:
 			# row[0] is first item of row (the only result here, the jid)
 			self.jids_already_in.append(row[0])
-	
+
 	def get_jids_in_db(self):
 		return self.jids_already_in
 
@@ -154,19 +154,19 @@ class Logger:
 		pm (so higly unlikely) and if we fail we do not go chaos
 		(user will see the first pm as if it was message in room's public chat)
 		and after that all okay'''
-		
+
 		possible_room_jid, possible_nick = jid.split('/', 1)
 		return self.jid_is_room_jid(possible_room_jid)
 
 	def jid_is_room_jid(self, jid):
-		self.cur.execute('SELECT jid_id FROM jids WHERE jid=?  AND type=?', 
+		self.cur.execute('SELECT jid_id FROM jids WHERE jid=?  AND type=?',
 			(jid, constants.JID_ROOM_TYPE))
 		row = self.cur.fetchone()
 		if row is None:
 			return False
 		else:
 			return True
-	
+
 	def get_jid_id(self, jid, typestr = None):
 		'''jids table has jid and jid_id
 		logs table has log_id, jid_id, contact_name, time, kind, show, message
@@ -203,7 +203,7 @@ class Logger:
 		jid_id = self.cur.lastrowid
 		self.jids_already_in.append(jid)
 		return jid_id
-	
+
 	def convert_human_values_to_db_api_values(self, kind, show):
 		'''coverts from string style to constant ints for db'''
 		if kind == 'status':
@@ -240,7 +240,7 @@ class Logger:
 		else: # invisible in GC when someone goes invisible
 			# it's a RFC violation .... but we should not crash
 			show_col = 'UNKNOWN'
-		
+
 		return kind_col, show_col
 
 	def convert_human_transport_type_to_db_api_values(self, type_):
@@ -319,7 +319,7 @@ class Logger:
 		if message_id:
 			self.insert_unread_events(message_id, values[0])
 		return message_id
-	
+
 	def insert_unread_events(self, message_id, jid_id):
 		''' add unread message with id: message_id'''
 		sql = 'INSERT INTO unread_messages VALUES (%d, %d)' % (message_id, jid_id)
@@ -328,7 +328,7 @@ class Logger:
 			self.con.commit()
 		except sqlite.OperationalError, e:
 			print >> sys.stderr, str(e)
-	
+
 	def set_read_messages(self, message_ids):
 		''' mark all messages with ids in message_ids as read'''
 		ids = ','.join([str(i) for i in message_ids])
@@ -338,7 +338,7 @@ class Logger:
 			self.con.commit()
 		except sqlite.OperationalError, e:
 			print >> sys.stderr, str(e)
-	
+
 	def get_unread_msgs_for_jid(self, jid):
 		''' get unread messages for jid '''
 		if not jid:
@@ -362,7 +362,7 @@ class Logger:
 			results = self.cur.fetchall()
 			all_messages.append(results[0])
 		return all_messages
-		
+
 	def write(self, kind, jid, message = None, show = None, tim = None,
 	subject = None):
 		'''write a row (status, gcstatus, message etc) to logs database
@@ -370,7 +370,7 @@ class Logger:
 		single_msg_recv, chat_msg_recv, chat_msg_sent, single_msg_sent
 		we cannot know if it is pm or normal chat message, we try to guess
 		see jid_is_from_pm() which is called by get_jid_id()
-		
+
 		we analyze jid and store it as follows:
 		jids.jid text column will hold JID if TC-related, room_jid if GC-related,
 		ROOM_JID/nick if pm-related.'''
@@ -387,12 +387,12 @@ class Logger:
 			time_col = int(float(time.mktime(tim)))
 		else:
 			time_col = int(float(time.time()))
-		
+
 		kind_col, show_col = self.convert_human_values_to_db_api_values(kind,
 			show)
-		
+
 		write_unread = False
-		
+
 		# now we may have need to do extra care for some values in columns
 		if kind == 'status': # we store (not None) time, jid, show, msg
 			# status for roster items
@@ -421,14 +421,14 @@ class Logger:
 			jid_id = self.get_jid_id(jid)
 			if kind == 'chat_msg_recv':
 				write_unread = True
-		
+
 		if show_col == 'UNKNOWN': # unknown show, do not log
 			return
-			
+
 		values = (jid_id, contact_name_col, time_col, kind_col, show_col,
 			message_col, subject_col)
 		return self.commit_to_db(values, write_unread)
-		
+
 	def get_last_conversation_lines(self, jid, restore_how_many_rows,
 		pending_how_many, timeout, account):
 		'''accepts how many rows to restore and when to time them out (in minutes)
@@ -438,7 +438,7 @@ class Logger:
 		list with empty tupple if nothing found to meet our demands'''
 		jid_id = self.get_jid_id(jid)
 		where_sql = self._build_contact_where(account, jid)
-		
+
 		now = int(float(time.time()))
 		timed_out = now - (timeout * 60) # before that they are too old
 		# so if we ask last 5 lines and we have 2 pending we get
@@ -456,16 +456,17 @@ class Logger:
 		results = self.cur.fetchall()
 		results.reverse()
 		return results
-	
+
 	def get_unix_time_from_date(self, year, month, day):
 		# year (fe 2005), month (fe 11), day (fe 25)
 		# returns time in seconds for the second that starts that date since epoch
 		# gimme unixtime from year month day:
 		d = datetime.date(year, month, day)
 		local_time = d.timetuple() # time tupple (compat with time.localtime())
-		start_of_day = int(time.mktime(local_time)) # we have time since epoch baby :)
+		# we have time since epoch baby :)
+		start_of_day = int(time.mktime(local_time))
 		return start_of_day
-	
+
 	def get_conversation_for_date(self, jid, year, month, day, account):
 		'''returns contact_name, time, kind, show, message
 		for each row in a list of tupples,
@@ -476,14 +477,14 @@ class Logger:
 		start_of_day = self.get_unix_time_from_date(year, month, day)
 		seconds_in_a_day = 86400 # 60 * 60 * 24
 		last_second_of_day = start_of_day + seconds_in_a_day - 1
-		
+
 		self.cur.execute('''
 			SELECT contact_name, time, kind, show, message FROM logs
 			WHERE (%s)
 			AND time BETWEEN %d AND %d
 			ORDER BY time
 			''' % (where_sql, start_of_day, last_second_of_day))
-		
+
 		results = self.cur.fetchall()
 		return results
 
@@ -499,7 +500,7 @@ class Logger:
 			except sqlite.OperationalError, e:
 				results = [('', '', '', '', str(e))]
 				return results
-			
+
 		else: # user just typed something, we search in message column
 			where_sql = self._build_contact_where(account, jid)
 			like_sql = '%' + query.replace("'", "''") + '%'
@@ -517,7 +518,7 @@ class Logger:
 		jid_id = self.get_jid_id(jid)
 		days_with_logs = []
 		where_sql = self._build_contact_where(account, jid)
-		
+
 		# First select all date of month whith logs we want
 		start_of_month = self.get_unix_time_from_date(year, month, 1)
 		seconds_in_a_day = 86400 # 60 * 60 * 24
@@ -533,30 +534,30 @@ class Logger:
 			constants.KIND_STATUS, constants.KIND_GCSTATUS))
 		result = self.cur.fetchall()
 
-		# Copy all interesting times in a temporary table 
-		self.cur.execute('CREATE TEMPORARY TABLE blabla(time,INTEGER)') 
-		for line in result: 
-			self.cur.execute(''' 
-				INSERT INTO blabla (time) VALUES (%d) 
-				''' % (line[0])) 
+		# Copy all interesting times in a temporary table
+		self.cur.execute('CREATE TEMPORARY TABLE blabla(time,INTEGER)')
+		for line in result:
+			self.cur.execute('''
+				INSERT INTO blabla (time) VALUES (%d)
+				''' % (line[0]))
 
-		# then search in this small temp table for each day 
+		# then search in this small temp table for each day
 		for day in xrange(1, max_day + 1):  # count from 1 to 28 or to 30 or to 31
-			start_of_day = self.get_unix_time_from_date(year, month, day) 
-			last_second_of_day = start_of_day + seconds_in_a_day - 1 
+			start_of_day = self.get_unix_time_from_date(year, month, day)
+			last_second_of_day = start_of_day + seconds_in_a_day - 1
 
-			# just ask one row to see if we have sth for this date 
-			self.cur.execute(''' 
-				SELECT time FROM blabla 
-				WHERE time BETWEEN %d AND %d 
-				LIMIT 1 
-				''' % (start_of_day, last_second_of_day)) 
-			result = self.cur.fetchone() 
-			if result: 
+			# just ask one row to see if we have sth for this date
+			self.cur.execute('''
+				SELECT time FROM blabla
+				WHERE time BETWEEN %d AND %d
+				LIMIT 1
+				''' % (start_of_day, last_second_of_day))
+			result = self.cur.fetchone()
+			if result:
 				days_with_logs[0:0]=[day]
 
-		# Delete temporary table 
-		self.cur.execute('DROP TABLE blabla') 
+		# Delete temporary table
+		self.cur.execute('DROP TABLE blabla')
 		result = self.cur.fetchone()
 		return days_with_logs
 
@@ -568,10 +569,10 @@ class Logger:
 			where_sql = self._build_contact_where(account, jid)
 		else:
 			jid_id = self.get_jid_id(jid, 'ROOM')
-			where_sql = 'jid_id = %s' % jid_id	
+			where_sql = 'jid_id = %s' % jid_id
 		self.cur.execute('''
 			SELECT MAX(time) FROM logs
-			WHERE (%s) 
+			WHERE (%s)
 			AND kind NOT IN (%d, %d)
 			''' % (where_sql, constants.KIND_STATUS, constants.KIND_GCSTATUS))
 
@@ -586,17 +587,17 @@ class Logger:
 	def _build_contact_where(self, account, jid):
 		'''build the where clause for a jid, including metacontacts
 		jid(s) if any'''
-		where_sql = ''   
-		# will return empty list if jid is not associated with 
-		# any metacontacts 
+		where_sql = ''
+		# will return empty list if jid is not associated with
+		# any metacontacts
 		family = gajim.contacts.get_metacontacts_family(account, jid)
 		if family:
 			for user in family:
 				jid_id = self.get_jid_id(user['jid'])
-				where_sql += 'jid_id = %s' % jid_id 
+				where_sql += 'jid_id = %s' % jid_id
 				if user != family[-1]:
 					where_sql += ' OR '
-		else: # if jid was not associated with metacontacts 
+		else: # if jid was not associated with metacontacts
 			jid_id = self.get_jid_id(jid)
 			where_sql = 'jid_id = %s' % jid_id
 		return where_sql
@@ -615,8 +616,8 @@ class Logger:
 			if result == type_id:
 				return
 			self.cur.execute(
-				'UPDATE transports_cache SET type = %d WHERE transport = "%s"' % (type_id,
-					jid))
+				'UPDATE transports_cache SET type = %d WHERE transport = "%s"' % (
+				type_id, jid))
 			try:
 				self.con.commit()
 			except sqlite.OperationalError, e:
@@ -638,7 +639,8 @@ class Logger:
 			return {}
 		answer = {}
 		for result in results:
-			answer[result[0]] = self.convert_api_values_to_human_transport_type(result[1])
+			answer[result[0]] = self.convert_api_values_to_human_transport_type(
+				result[1])
 		return answer
 
 	# A longer note here:
@@ -664,13 +666,13 @@ class Logger:
 			#self.con.text_factory = tmp
 			return
 		#self.con.text_factory = tmp
-			
+
 		for node, ver, ext, data in self.cur:
 			# for each row: unpack the data field
 			# (format: (category, type, name, category, type, name, ...
 			#   ..., 'FEAT', feature1, feature2, ...).join(' '))
 			# NOTE: if there's a need to do more gzip, put that to a function
-			data=GzipFile(fileobj=StringIO(str(data))).read().split('\0') # (2) -- note above
+			data=GzipFile(fileobj=StringIO(str(data))).read().split('\0')
 			i=0
 			identities=set()
 			features=set()
@@ -701,7 +703,8 @@ class Logger:
 		data.append('FEAT')
 		data.extend(features)
 		data = '\0'.join(data)
-		string = StringIO()	# if there's a need to do more gzip, put that to a function
+		# if there's a need to do more gzip, put that to a function
+		string = StringIO()
 		gzip=GzipFile(fileobj=string, mode='w')
 		gzip.write(data)
 		gzip.close()
