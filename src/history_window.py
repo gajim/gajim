@@ -326,25 +326,35 @@ class HistoryWindow:
 			tag_name = 'incoming'
 		elif kind in (constants.KIND_SINGLE_MSG_RECV,
 		constants.KIND_CHAT_MSG_RECV):
-			contact = gajim.contacts.get_first_contact_from_jid(self.account,
-				self.jid)
-			if contact:
-				# he is in our roster, use the name
-				contact_name = contact.get_shown_name()
-			else:
-				room_jid, nick = gajim.get_room_and_nick_from_fjid(self.jid)
-				# do we have him as gc_contact?
-				gc_contact = gajim.contacts.get_gc_contact(self.account, room_jid,
-					nick)
-				if gc_contact:
-					# so yes, it's pm!
-					contact_name = nick
+			if self.account:
+				contact = gajim.contacts.get_first_contact_from_jid(self.account,
+					self.jid)
+				if contact:
+					# he is in our roster, use the name
+					contact_name = contact.get_shown_name()
 				else:
-					contact_name = self.jid.split('@')[0]
+					room_jid, nick = gajim.get_room_and_nick_from_fjid(self.jid)
+					# do we have him as gc_contact?
+					gc_contact = gajim.contacts.get_gc_contact(self.account,
+						room_jid, nick)
+					if gc_contact:
+						# so yes, it's pm!
+						contact_name = nick
+					else:
+						contact_name = self.jid.split('@')[0]
+			else:
+				# we don't have roster
+				contact_name = self.jid.split('@')[0]
 			tag_name = 'incoming'
 		elif kind in (constants.KIND_SINGLE_MSG_SENT,
 		constants.KIND_CHAT_MSG_SENT):
-			contact_name = gajim.nicks[self.account]
+			if self.account:
+				contact_name = gajim.nicks[self.account]
+			else: 
+				# we don't have roster, we don't know our own nick, use first
+				# account one (urk!)
+				account = gajim.contacts.get_accounts()[0] 
+				contact_name = gajim.nicks[account]
 			tag_name = 'outgoing'
 		elif kind == constants.KIND_GCSTATUS:
 			# message here (if not None) is status message
