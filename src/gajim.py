@@ -2580,7 +2580,7 @@ class Interface:
 				self.emoticons[emot.upper()] = emot_file
 		sys.path.remove(path)
 		del emoticons
-				  if len(self.emoticons) == 0:
+		if len(self.emoticons) == 0:
 			dialogs.WarningDialog(_('Emoticons disabled'),
 				_('Your configured emoticons theme cannot been loaded. You maybe need to update the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons for more details.'))
 		if self.emoticons_menu:
