@@ -2554,6 +2554,8 @@ class Interface:
 			# It's maybe a user theme
 			path = os.path.join(gajim.MY_EMOTS_PATH, emot_theme)
 			if not os.path.exists(path): # theme doesn't exist, disable emoticons
+				dialogs.WarningDialog(_('Emoticons disabled'),
+					_('Your configured emoticons theme has not been found, so emoticons have been disabled.'))
 				gajim.config.set('emoticons_theme', '')
 				return
 		sys.path.append(path)
@@ -2578,6 +2580,9 @@ class Interface:
 				self.emoticons[emot.upper()] = emot_file
 		sys.path.remove(path)
 		del emoticons
+				  if len(self.emoticons) == 0:
+			dialogs.WarningDialog(_('Emoticons disabled'),
+				_('Your configured emoticons theme cannot been loaded. You maybe need to update the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons for more details.'))
 		if self.emoticons_menu:
 			self.emoticons_menu.destroy()
 		self.emoticons_menu = self.prepare_emoticons_menu()
