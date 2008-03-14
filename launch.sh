@@ -1,5 +1,9 @@
 #!/bin/bash
-BASE=`pwd`/`dirname $0`
+if [[ $0 == /* ]]; then
+	BASE=`dirname $0`
+else
+	BASE=`pwd`/`dirname $0`
+fi
 OS=`uname -s`
 
 if [ "x${OS}" == "xDarwin" ]; then
