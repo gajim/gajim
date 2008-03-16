@@ -615,7 +615,7 @@ class SignalObject(dbus.service.Object):
 		for contact in contacts:
 			resource_props = dbus.Struct((DBUS_STRING(contact.resource),
 				dbus.Int32(contact.priority), DBUS_STRING(contact.status)))
-		contact_dict['resources'].append(resource_props)
+			contact_dict['resources'].append(resource_props)
 		contact_dict['groups'] = dbus.Array([], signature='(s)')
 		for group in prim_contact.groups:
 			contact_dict['groups'].append((DBUS_STRING(group),))
