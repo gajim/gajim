@@ -145,57 +145,56 @@ except Warning, msg:
 		sys.exit()
 warnings.resetwarnings()
 
-import message_control
-
-from chat_control import ChatControlBase
-from atom_window import AtomWindow
-
-import negotiation
+pritext = ''
 
 from common import exceptions
-from common.zeroconf import connection_zeroconf
-from common import dbus_support
-if dbus_support.supported:
-	import dbus
-
-if os.name == 'posix': # dl module is Unix Only
-	try: # rename the process name to gajim
-		import dl
-		libc = dl.open('/lib/libc.so.6')
-		libc.call('prctl', 15, 'gajim\0', 0, 0, 0)
-	except:
-		pass
-
-pritext = ''
-if gtk.pygtk_version < (2, 8, 0):
-	pritext = _('Gajim needs PyGTK 2.8 or above')
-	sectext = _('Gajim needs PyGTK 2.8 or above to run. Quiting...')
-elif gtk.gtk_version < (2, 8, 0):
-	pritext = _('Gajim needs GTK 2.8 or above')
-	sectext = _('Gajim needs GTK 2.8 or above to run. Quiting...')
-
 try:
-	import gtk.glade # check if user has libglade (in pygtk and in gtk)
-except ImportError:
-	pritext = _('GTK+ runtime is missing libglade support')
-	if os.name == 'nt':
-		sectext = _('Please remove your current GTK+ runtime and install the latest stable version from %s') % 'http://gladewin32.sourceforge.net'
-	else:
-		sectext = _('Please make sure that GTK+ and PyGTK have libglade support in your system.')
+	from common import gajim
+except exceptions.DatabaseMalformed:
+	pritext = _('Database Error')
+	sectext = _('The database file (%s) cannot be read. Try to repare it or remove it (all history will be lost).') % common.logger.LOG_DB_PATH
+else:
+	from common import dbus_support
+	if dbus_support.supported:
+		import dbus
 
-try:
-	from common import check_paths
-except exceptions.PysqliteNotAvailable, e:
-	pritext = _('Gajim needs PySQLite2 to run')
-	sectext = str(e)
+	if os.name == 'posix': # dl module is Unix Only
+		try: # rename the process name to gajim
+			import dl
+			libc = dl.open('/lib/libc.so.6')
+			libc.call('prctl', 15, 'gajim\0', 0, 0, 0)
+		except:
+			pass
 
-if os.name == 'nt':
+	if gtk.pygtk_version < (2, 8, 0):
+		pritext = _('Gajim needs PyGTK 2.8 or above')
+		sectext = _('Gajim needs PyGTK 2.8 or above to run. Quiting...')
+	elif gtk.gtk_version < (2, 8, 0):
+		pritext = _('Gajim needs GTK 2.8 or above')
+		sectext = _('Gajim needs GTK 2.8 or above to run. Quiting...')
+
 	try:
-		import winsound # windows-only built-in module for playing wav
-		import win32api # do NOT remove. we req this module
-	except:
-		pritext = _('Gajim needs pywin32 to run')
-		sectext = _('Please make sure that Pywin32 is installed on your system. You can get it at %s') % 'http://sourceforge.net/project/showfiles.php?group_id=78018'
+		import gtk.glade # check if user has libglade (in pygtk and in gtk)
+	except ImportError:
+		pritext = _('GTK+ runtime is missing libglade support')
+		if os.name == 'nt':
+			sectext = _('Please remove your current GTK+ runtime and install the latest stable version from %s') % 'http://gladewin32.sourceforge.net'
+		else:
+			sectext = _('Please make sure that GTK+ and PyGTK have libglade support in your system.')
+
+	try:
+		from common import check_paths
+	except exceptions.PysqliteNotAvailable, e:
+		pritext = _('Gajim needs PySQLite2 to run')
+		sectext = str(e)
+
+	if os.name == 'nt':
+		try:
+			import winsound # windows-only built-in module for playing wav
+			import win32api # do NOT remove. we req this module
+		except:
+			pritext = _('Gajim needs pywin32 to run')
+			sectext = _('Please make sure that Pywin32 is installed on your system. You can get it at %s') % 'http://sourceforge.net/project/showfiles.php?group_id=78018'
 
 if pritext:
 	dlg = gtk.MessageDialog(None,
@@ -230,14 +229,19 @@ import math
 
 import gtkgui_helpers
 import notify
+import message_control
+import negotiation
+
+from chat_control import ChatControlBase
+from atom_window import AtomWindow
 
 import common.sleepy
 
 from common.xmpp import idlequeue
+from common.zeroconf import connection_zeroconf
 from common import nslookup
 from common import proxy65_manager
 from common import socks5
-from common import gajim
 from common import helpers
 from common import optparser
 from common import dataforms

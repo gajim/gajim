@@ -35,6 +35,14 @@ class PysqliteOperationalError(Exception):
 	def __str__(self):
 		return self.text
 
+class DatabaseMalformed(Exception):
+	'''The databas can't be read'''
+	def __init__(self):
+		Exception.__init__(self)
+
+	def __str__(self):
+		return _('Database cannot be read.')
+
 class ServiceNotAvailable(Exception):
 	'''This exception is raised when we cannot use Gajim remotely'''
 	def __init__(self):

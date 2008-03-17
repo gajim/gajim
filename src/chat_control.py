@@ -37,6 +37,7 @@ import re
 
 from common import gajim
 from common import helpers
+from common import exceptions
 from message_control import MessageControl
 from conversation_textview import ConversationTextview
 from message_textview import MessageTextView
@@ -2004,8 +2005,13 @@ class ChatControl(ChatControlBase):
 			pending_how_many += len(gajim.events.get_events(self.account,
 				self.contact.get_full_jid(), ['chat', 'pm']))
 
-		rows = gajim.logger.get_last_conversation_lines(jid, restore_how_many,
-			pending_how_many, timeout, self.account)
+		try:
+			rows = gajim.logger.get_last_conversation_lines(jid, restore_how_many,
+				pending_how_many, timeout, self.account)
+		except exceptions.DatabaseMalformed:
+			dialogs.ErrorDialog(_('Database Error'),
+				_('The database file (%s) cannot be read. Try to repare it or remove it (all history will be lost).') % common.logger.LOG_DB_PATH)
+			rows = []
 		local_old_kind = None
 		for row in rows: # row[0] time, row[1] has kind, row[2] the message
 			if not row[2]: # message is empty, we don't print it

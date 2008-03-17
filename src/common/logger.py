@@ -136,8 +136,11 @@ class Logger:
 		self.get_jids_already_in_db()
 
 	def get_jids_already_in_db(self):
-		self.cur.execute('SELECT jid FROM jids')
-		rows = self.cur.fetchall() # list of tupples: [(u'aaa@bbb',), (u'cc@dd',)]
+		try:
+			self.cur.execute('SELECT jid FROM jids')
+			rows = self.cur.fetchall() # list of tupples: [(u'aaa@bbb',), (u'cc@dd',)]
+		except sqlite.DatabaseError:
+			raise exceptions.DatabaseMalformed
 		self.jids_already_in = []
 		for row in rows:
 			# row[0] is first item of row (the only result here, the jid)
@@ -443,17 +446,20 @@ class Logger:
 		timed_out = now - (timeout * 60) # before that they are too old
 		# so if we ask last 5 lines and we have 2 pending we get
 		# 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
-		self.cur.execute('''
-			SELECT time, kind, message FROM logs
-			WHERE (%s) AND kind IN (%d, %d, %d, %d, %d) AND time > %d
-			ORDER BY time DESC LIMIT %d OFFSET %d
-			''' % (where_sql, constants.KIND_SINGLE_MSG_RECV,
-				constants.KIND_CHAT_MSG_RECV, constants.KIND_SINGLE_MSG_SENT,
-				constants.KIND_CHAT_MSG_SENT, constants.KIND_ERROR,
-				timed_out, restore_how_many_rows, pending_how_many)
-			)
+		try:
+			self.cur.execute('''
+				SELECT time, kind, message FROM logs
+				WHERE (%s) AND kind IN (%d, %d, %d, %d, %d) AND time > %d
+				ORDER BY time DESC LIMIT %d OFFSET %d
+				''' % (where_sql, constants.KIND_SINGLE_MSG_RECV,
+					constants.KIND_CHAT_MSG_RECV, constants.KIND_SINGLE_MSG_SENT,
+					constants.KIND_CHAT_MSG_SENT, constants.KIND_ERROR,
+					timed_out, restore_how_many_rows, pending_how_many)
+				)
 
-		results = self.cur.fetchall()
+			results = self.cur.fetchall()
+		except sqlite.DatabaseError:
+			raise exceptions.DatabaseMalformed
 		results.reverse()
 		return results
 
