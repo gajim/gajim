@@ -306,10 +306,11 @@ class Logger:
 			return 'weather'
 
 	def commit_to_db(self, values, write_unread = False):
-		#print 'saving', values
 		sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message, subject) VALUES (?, ?, ?, ?, ?, ?, ?)'
 		try:
 			self.cur.execute(sql, values)
+		except sqlite.DatabaseError:
+			raise exceptions.DatabaseMalformed 
 		except sqlite.OperationalError, e:
 			raise exceptions.PysqliteOperationalError(str(e))
 		message_id = None
