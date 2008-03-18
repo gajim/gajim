@@ -112,7 +112,7 @@ class CellRendererImage(gtk.GenericCellRenderer):
 		window.draw_pixbuf(widget.style.black_gc, pix,
 					draw_rect.x - pix_rect.x,
 					draw_rect.y - pix_rect.y,
-					draw_rect.x, draw_rect.y + 2,
+					draw_rect.x, draw_rect.y,
 					draw_rect.width, draw_rect.height,
 					gtk.gdk.RGB_DITHER_NONE, 0, 0)
 
