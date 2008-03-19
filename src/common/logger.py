@@ -365,7 +365,8 @@ class Logger:
 				''' % msg_id
 				)
 			results = self.cur.fetchall()
-			all_messages.append(results[0])
+			if len(results) > 0:
+				all_messages.append(results[0])
 		return all_messages
 
 	def write(self, kind, jid, message = None, show = None, tim = None,
