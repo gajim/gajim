@@ -157,9 +157,13 @@ class Logger:
 		pm (so higly unlikely) and if we fail we do not go chaos
 		(user will see the first pm as if it was message in room's public chat)
 		and after that all okay'''
-
-		possible_room_jid, possible_nick = jid.split('/', 1)
-		return self.jid_is_room_jid(possible_room_jid)
+		
+		if jid.find('/') > -1: 
+			possible_room_jid, possible_nick = jid.split('/', 1)
+			return self.jid_is_room_jid(possible_room_jid)
+		else:
+			# it's not a full jid, so it's not a pm one
+			return False
 
 	def jid_is_room_jid(self, jid):
 		self.cur.execute('SELECT jid_id FROM jids WHERE jid=?  AND type=?',
