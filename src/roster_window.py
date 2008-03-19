@@ -1265,18 +1265,27 @@ class RosterWindow:
 		self.draw_account(account)
 
 	def fire_up_unread_messages_events(self, account):
-		'''reads from db the unread messages, and fire them up'''
-		for jid in gajim.contacts.get_jid_list(account):
-			results = gajim.logger.get_unread_msgs_for_jid(jid)
-
-			# XXX unread messages should probably have their session saved with them
-			if results:
+		'''reads from db the unread messages, and fire them up, and
+		if we find very old unread messages, delete them from unread table'''
+		results = gajim.logger.get_unread_msgs()
+		for result in results:
+			jid = result[4]
+			if gajim.contacts.get_first_contact_from_jid(account, jid):
+				# We have this jid in our contacts list
+				# XXX unread messages should probably have their session saved with
+				# them
 				session = gajim.connections[account].make_new_session(jid)
 
-			for result in results:
 				tim = time.localtime(float(result[2]))
 				self.on_message(jid, result[1], tim, account, msg_type = 'chat',
 					msg_id = result[0], session = session)
+		
+			elif (time.time() - result[2]) > 2592000:
+				# ok, here we see that we have a message in unread messages table
+				# that is older than a month. It is probably from someone not in our 
+				# roster for accounts we usually launch, so we will delete this id 
+				# from unread message tables.
+				gajim.logger.set_read_messages([result[0]])
 
 	def fill_contacts_and_groups_dicts(self, array, account):
 		'''fill gajim.contacts and gajim.groups'''
@@ -4275,19 +4284,13 @@ class RosterWindow:
 						< 2:
 							recent = True
 							break
-			if unread:
+			if unread or recent:
 				dialog = dialogs.ConfirmationDialog(_('You have unread messages'),
 					_('Messages will only be available for reading them later if you'
-					' have history enabled.'))
+					' have history enabled and contact is in your roster.'))
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					return
 
-			if recent:
-				dialog = dialogs.ConfirmationDialog(_('You have unread messages'),
-					_('Messages will only be available for reading them later if you'
-					' have history enabled.'))
-				if dialog.get_response() != gtk.RESPONSE_OK:
-					return
 			self.quit_on_next_offline = 0
 			for acct in accounts:
 				if gajim.connections[acct].connected:

@@ -343,25 +343,26 @@ class Logger:
 		except sqlite.OperationalError, e:
 			print >> sys.stderr, str(e)
 
-	def get_unread_msgs_for_jid(self, jid):
-		''' get unread messages for jid '''
-		if not jid:
-			return
-		jid_id = self.get_jid_id(jid)
+	def get_unread_msgs(self):
+		''' get all unread messages '''
 		all_messages = []
 		try:
 			self.cur.execute(
-				'SELECT message_id from unread_messages WHERE jid_id = %d' % jid_id)
+				'SELECT message_id from unread_messages')
 			results = self.cur.fetchall()
 		except:
 			pass
-
 		for message in results:
 			msg_id = message[0]
+			# here we get infos for that message, and related jid from jids table
+			# do NOT change order of SELECTed things, unless you change function(s) 
+			# that called this function
 			self.cur.execute('''
-				SELECT log_line_id, message, time, subject FROM logs
-				WHERE jid_id = %d AND log_line_id = %d
-				''' % (jid_id, msg_id)
+				SELECT logs.log_line_id, logs.message, logs.time, logs.subject,
+				jids.jid
+				FROM logs, jids
+				WHERE logs.log_line_id = %d AND logs.jid_id = jids.jid_id
+				''' % msg_id
 				)
 			results = self.cur.fetchall()
 			all_messages.append(results[0])
@@ -373,7 +374,7 @@ class Logger:
 		kind can be status, gcstatus, gc_msg, (we only recv for those 3),
 		single_msg_recv, chat_msg_recv, chat_msg_sent, single_msg_sent
 		we cannot know if it is pm or normal chat message, we try to guess
-		see jid_is_from_pm() which is called by get_jid_id()
+		see jid_is_from_pm()
 
 		we analyze jid and store it as follows:
 		jids.jid text column will hold JID if TC-related, room_jid if GC-related,
@@ -424,7 +425,9 @@ class Logger:
 		else:
 			jid_id = self.get_jid_id(jid)
 			if kind == 'chat_msg_recv':
-				write_unread = True
+				if not self.jid_is_from_pm(jid):
+					# Save in unread table only if it's not a pm
+					write_unread = True
 
 		if show_col == 'UNKNOWN': # unknown show, do not log
 			return
