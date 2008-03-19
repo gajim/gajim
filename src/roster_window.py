@@ -3392,7 +3392,6 @@ class RosterWindow:
 				# We just save on which row we press button, and open chat window on
 				# button release to be able to do DND without opening chat window
 				self.clicked_path = path
-				self.on_row_activated(widget, path)
 				return
 			else:
 				if type_ == 'group' and x < 27:
