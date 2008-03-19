@@ -602,10 +602,13 @@ class RosterWindow:
 		transport: transport iconset doesn't contain all icons, so we fall back
 		to jabber one'''
 		transport = gajim.get_transport_name_from_jid(jid)
-		if transport and self.transports_state_images.has_key(size) and \
-		self.transports_state_images[size].has_key(transport) and icon_name in \
-		self.transports_state_images[size][transport]:
-			return self.transports_state_images[size][transport]
+		if transport and self.transports_state_images.has_key(size):
+			if not self.transports_state_images[size].has_key(transport):
+				# we don't have iconset for this transport loaded yet. Let's do it
+				self.make_transport_state_images(transport)
+			if self.transports_state_images[size].has_key(transport) and \
+			icon_name in self.transports_state_images[size][transport]:
+				return self.transports_state_images[size][transport]
 		return self.jabber_state_images[size]
 
 	def draw_contact(self, jid, account, selected = False, focus = False):
@@ -4507,6 +4510,29 @@ class RosterWindow:
 		icon_list = self._load_icon_list([icon_name], path)
 		return icon_list[icon_name]
 
+	def load_icons_meta(self):
+		'''load and return  - AND + small icons to put on top left of an icon
+		for meta contacts.'''
+		iconset = gajim.config.get('iconset')
+		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
+		# try to find opened_meta.png file, else opened.png else nopixbuf merge
+		path_opened = os.path.join(path, 'opened_meta.png')
+		if not os.path.isfile(path_opened):
+			path_opened = os.path.join(path, 'opened.png')
+		if os.path.isfile(path_opened):
+			pixo = gtk.gdk.pixbuf_new_from_file(path_opened)
+		else:
+			pixo = None
+		# Same thing for closed
+		path_closed = os.path.join(path, 'opened_meta.png')
+		if not os.path.isfile(path_closed):
+			path_closed = os.path.join(path, 'closed.png')
+		if os.path.isfile(path_closed):
+			pixc = gtk.gdk.pixbuf_new_from_file(path_closed)
+		else:
+			pixc = None
+		return pixo, pixc
+
 	def _load_icon_list(self, icons_list, path, pixbuf2 = None):
 		'''load icons in icons_list from the given path,
 		and add pixbuf2 on top left of each static images'''
@@ -4549,42 +4575,27 @@ class RosterWindow:
 
 		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 		self.jabber_state_images['16'] = self.load_iconset(path)
-		# try to find opened_meta.png file, else opened.png else nopixbuf merge
-		path_opened = os.path.join(path, 'opened_meta.png')
-		if not os.path.isfile(path_opened):
-			path_opened = os.path.join(path, 'opened.png')
-		if os.path.isfile(path_opened):
-			pixo = gtk.gdk.pixbuf_new_from_file(path_opened)
-		else:
-			pixo = None
+		
+		pixo, pixc = self.load_icons_meta()
 		self.jabber_state_images['opened'] = self.load_iconset(path, pixo)
-		# Same thing for closed
-		path_closed = os.path.join(path, 'opened_meta.png')
-		if not os.path.isfile(path_closed):
-			path_closed = os.path.join(path, 'closed.png')
-		if os.path.isfile(path_closed):
-			pixc = gtk.gdk.pixbuf_new_from_file(path_closed)
-		else:
-			pixc = None
 		self.jabber_state_images['closed'] = self.load_iconset(path, pixc)
-
+	
+	def make_transport_state_images(self, transport):
+		'''initialise opened and closed 'transport' iconset dict'''
 		if gajim.config.get('use_transports_iconsets'):
-			# update opened and closed transport iconsets
-			# standard transport iconsets are loaded one time in init()
-			t_path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports')
-			folders = os.listdir(t_path)
-			if os.path.isdir(os.path.join(gajim.MY_ICONSETS_PATH, 'transports')):
-				t_path = os.path.join(gajim.MY_ICONSETS_PATH, 'transports')
-				folders += os.listdir(t_path)
-			for transport in folders:
-				if transport == '.svn':
-					continue
-				folder = os.path.join(helpers.get_transport_path(transport),
-					'16x16')
-				self.transports_state_images['opened'][transport] = \
-					self.load_iconset(folder, pixo, transport = True)
-				self.transports_state_images['closed'][transport] = \
-					self.load_iconset(folder, pixc, transport = True)
+			folder = os.path.join(helpers.get_transport_path(transport),
+				'16x16')
+			pixo, pixc = self.load_icons_meta()
+			self.transports_state_images['opened'][transport] = \
+				self.load_iconset(folder, pixo, transport = True)
+			self.transports_state_images['closed'][transport] = \
+				self.load_iconset(folder, pixc, transport = True)
+			folder = os.path.join(helpers.get_transport_path(transport), '32x32')
+			self.transports_state_images['32'][transport] = self.load_iconset(
+				folder, transport = True)
+			folder = os.path.join(helpers.get_transport_path(transport), '16x16')
+			self.transports_state_images['16'][transport] = self.load_iconset(
+				folder, transport = True)
 
 	def reload_jabber_state_images(self):
 		self.make_jabber_state_images()
@@ -5404,21 +5415,6 @@ class RosterWindow:
 		# when this value become 0 we quit main application
 		self.quit_on_next_offline = -1
 		self.make_jabber_state_images()
-
-		path = os.path.join(gajim.DATA_DIR, 'iconsets', 'transports')
-		folders = os.listdir(path)
-		if os.path.isdir(os.path.join(gajim.MY_ICONSETS_PATH, 'transports')):
-			path = os.path.join(gajim.MY_ICONSETS_PATH, 'transports')
-			folders += os.listdir(path)
-		for transport in folders:
-			if transport == '.svn':
-				continue
-			folder = os.path.join(helpers.get_transport_path(transport), '32x32')
-			self.transports_state_images['32'][transport] = self.load_iconset(
-				folder, transport = True)
-			folder = os.path.join(helpers.get_transport_path(transport), '16x16')
-			self.transports_state_images['16'][transport] = self.load_iconset(
-				folder, transport = True)
 
 		# uf_show, img, show, sensitive
 		liststore = gtk.ListStore(str, gtk.Image, str, bool)
