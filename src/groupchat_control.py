@@ -845,6 +845,7 @@ class GroupchatControl(ChatControlBase):
 		ChatControlBase.got_connected(self)
 		# We don't redraw the whole banner here, because only icon change
 		self._update_banner_state_image()
+		self.parent_win.redraw_tab(self)
 
 	def got_disconnected(self):
 		self.list_treeview.get_model().clear()
@@ -866,6 +867,7 @@ class GroupchatControl(ChatControlBase):
 		ChatControlBase.got_disconnected(self)
 		# We don't redraw the whole banner here, because only icon change
 		self._update_banner_state_image()
+		self.parent_win.redraw_tab(self)
 
 	def draw_roster(self):
 		self.list_treeview.get_model().clear()
@@ -1133,8 +1135,6 @@ class GroupchatControl(ChatControlBase):
 					gc_c.affiliation = affiliation
 					gc_c.status = status
 					self.draw_contact(nick)
-		if self.parent_win:
-			self.parent_win.redraw_tab(self)
 		if (time.time() - self.room_creation) > 30 and \
 				nick != self.nick and (not statusCode or \
 				'303' not in statusCode):

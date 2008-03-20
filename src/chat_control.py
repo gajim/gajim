@@ -797,8 +797,7 @@ class ChatControlBase(MessageControl):
 				types = type_):
 					# There were events to remove
 					self.redraw_after_event_removed(jid)
-			# Note, we send None chatstate to preserve current
-			self.parent_win.redraw_tab(self)
+
 
 	def bring_scroll_to_end(self, textview, diff_y = 0):
 		''' scrolls to the end of textview if end is not visible '''
