@@ -663,7 +663,13 @@ class ChatControlBase(MessageControl):
 		if not count_as_new:
 			return
 		if kind == 'incoming':
-			gajim.last_message_time[self.account][full_jid] = time.time()
+			if not self.type_id == message_control.TYPE_GC or \
+			gajim.config.get('notify_on_all_muc_messages') or \
+			'marked' in other_tags_for_text:
+				# it's a normal message, or a muc message with want to be
+				# notified about if quitting just after
+				# other_tags_for_text == ['marked'] --> highlighted gc message
+				gajim.last_message_time[self.account][full_jid] = time.time()
 
 		if kind in ('incoming', 'incoming_queue'):
 			gc_message = False

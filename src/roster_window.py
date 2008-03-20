@@ -4245,45 +4245,38 @@ class RosterWindow:
 			if message is None:
 				# user pressed Cancel to change status message dialog
 				return
-			# check if we have unread or recent mesages
-			unread = False
-			recent = False
-			if gajim.events.get_nb_events() > 0:
-				unread = True
-			for win in gajim.interface.msg_win_mgr.windows():
-				unrd = 0
-				for ctrl in win.controls():
-					if ctrl.type_id == message_control.TYPE_GC:
-						if gajim.config.get('notify_on_all_muc_messages'):
-							unrd += ctrl.get_nb_unread()
-						else:
-							if ctrl.attention_flag:
-								unrd += 1
-				if unrd:
-					unread = True
-					break
 
-				for ctrl in win.controls():
-					fjid = ctrl.get_full_jid()
-					if gajim.last_message_time[ctrl.account].has_key(fjid):
-						if time.time() - gajim.last_message_time[ctrl.account][fjid]\
-						< 2:
-							recent = True
-							break
-			if unread or recent:
-				dialog = dialogs.ConfirmationDialog(_('You have unread messages'),
-					_('Messages will only be available for reading them later if you'
-					' have history enabled and contact is in your roster.'))
-				if dialog.get_response() != gtk.RESPONSE_OK:
-					return
+		# check if we have unread messages
+		unread = gajim.events.get_nb_events()
+		if not gajim.config.get('notify_on_all_muc_messages'):
+			unread_not_to_notify = gajim.events.get_nb_events(['printed_gc_msg'])
+			unread -= unread_not_to_notify 
 
-			self.quit_on_next_offline = 0
-			for acct in accounts:
-				if gajim.connections[acct].connected:
-					self.quit_on_next_offline += 1
-					self.send_status(acct, 'offline', message)
-		else:
-			self.quit_on_next_offline = 0
+		# check if we have recent messages
+		recent = False
+		for win in gajim.interface.msg_win_mgr.windows():
+			for ctrl in win.controls():
+				fjid = ctrl.get_full_jid()
+				if gajim.last_message_time[ctrl.account].has_key(fjid):
+					if time.time() - gajim.last_message_time[ctrl.account][fjid] < 2:
+						recent = True
+						break
+			if recent:
+				break
+
+		if unread or recent:
+			dialog = dialogs.ConfirmationDialog(_('You have unread messages'),
+				_('Messages will only be available for reading them later if you'
+				' have history enabled and contact is in your roster.'))
+			if dialog.get_response() != gtk.RESPONSE_OK:
+				return
+
+		self.quit_on_next_offline = 0
+		for acct in accounts:
+			if gajim.connections[acct].connected:
+				self.quit_on_next_offline += 1
+				self.send_status(acct, 'offline', message)
+
 		if not self.quit_on_next_offline:
 			self.quit_gtkgui_interface()
 
