@@ -281,7 +281,7 @@ class Systray:
 			gajim.interface.instances['preferences'] = config.PreferencesWindow()
 
 	def on_quit_menuitem_activate(self, widget):	
-		gajim.interface.roster.on_quit_menuitem_activate(widget)
+		gajim.interface.roster.on_quit_request()
 
 	def on_left_click(self):
 		win = gajim.interface.roster.window

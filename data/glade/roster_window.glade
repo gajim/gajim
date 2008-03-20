@@ -119,7 +119,7 @@
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">_Quit</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="on_quit_menuitem_activate"/>
+                        <signal name="activate" handler="on_quit_request"/>
                         <accelerator key="Q" modifiers="GDK_CONTROL_MASK" signal="activate"/>
                         <child internal-child="image">
                           <widget class="GtkImage" id="image1609">

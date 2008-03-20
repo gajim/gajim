@@ -3847,8 +3847,10 @@ class RosterWindow:
 		self.set_account_status_icon(account)
 		if status == 'offline':
 			if self.quit_on_next_offline > -1:
+				# we want to quit, we are waiting for all accounts to be offline
 				self.quit_on_next_offline -= 1
 				if self.quit_on_next_offline < 1:
+					# all accounts offline, quit
 					self.quit_gtkgui_interface()
 			else:
 				# No need to redraw contacts if we're quitting
@@ -4142,32 +4144,14 @@ class RosterWindow:
 				force = force)
 
 	def on_roster_window_delete_event(self, widget, event):
-		'''When we want to close the window'''
+		'''Main window X button was clicked'''
 		if gajim.interface.systray_enabled and not gajim.config.get(
 		'quit_on_roster_x_button'):
 			self.tooltip.hide_tooltip()
 			self.window.hide()
 		else:
-			accounts = gajim.connections.keys()
-			get_msg = False
-			self.quit_on_next_offline = 0
-			for acct in accounts:
-				if gajim.connections[acct].connected:
-					get_msg = True
-					break
-			if get_msg:
-				message = self.get_status_message('offline')
-				if message is None:
-					# user pressed Cancel to change status message dialog
-					message = ''
-
-				for acct in accounts:
-					if gajim.connections[acct].connected:
-						self.quit_on_next_offline += 1
-						self.send_status(acct, 'offline', message)
-			if not self.quit_on_next_offline:
-				self.quit_gtkgui_interface()
-		return True # do NOT destory the window
+			self.on_quit_request()
+		return True # do NOT destroy the window
 
 	def on_roster_window_focus_in_event(self, widget, event):
 		# roster received focus, so if we had urgency REMOVE IT
@@ -4246,7 +4230,10 @@ class RosterWindow:
 			gajim.interface.hide_systray()
 		gtk.main_quit()
 
-	def on_quit_menuitem_activate(self, widget):
+	def on_quit_request(self, widget = None):
+		''' user want to quit. Check if he should be warned about messages
+		pending. Send offline to all connected account. We do NOT really quit
+		gajim here '''
 		accounts = gajim.connections.keys()
 		get_msg = False
 		for acct in accounts:
@@ -5414,8 +5401,12 @@ class RosterWindow:
 		model.set_sort_func(1, self.compareIters)
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.tree.set_model(model)
-		# when this value become 0 we quit main application
+
+		# when this value become 0 we quit main application. If it's more than 0
+		# it means we are waiting for this number of accounts to disconnect before
+		# quitting
 		self.quit_on_next_offline = -1
+
 		self.make_jabber_state_images()
 
 		# uf_show, img, show, sensitive
