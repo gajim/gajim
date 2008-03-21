@@ -2103,7 +2103,7 @@ class RosterWindow:
 				menuitem = gtk.MenuItem(room_jid.split('@')[0])
 				if len(contact_list) > 1: # several resources
 					menuitem.set_submenu(self.build_resources_submenu(
-						contact_list, account, self.on_invite_to_new_room, room_jid,
+						contact_list, account, self.on_invite_to_room, room_jid,
 						account))
 				else:
 					menuitem.connect('activate', self.on_invite_to_room, list_,
