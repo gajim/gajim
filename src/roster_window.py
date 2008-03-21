@@ -445,8 +445,7 @@ class RosterWindow:
 		self.add_contact_to_roster(contact.jid, account)
 		return contact
 
-	def add_groupchat_to_roster(self, account, jid, nick = '', resource = '',
-		status = ''):
+	def add_groupchat_to_roster(self, account, jid, resource = '', status = ''):
 		''' add groupchat to roster '''
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if contact == None:
