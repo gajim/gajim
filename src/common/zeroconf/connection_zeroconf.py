@@ -435,24 +435,32 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			if session.enable_encryption:
 				msg_iq = session.encrypt_stanza(msg_iq)
 
-		if not self.connection.send(msg_iq, msg != None):
-			return
+		def on_send_ok():
+			no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
+			ji = gajim.get_jid_without_resource(jid)
+			if session.is_loggable() and self.name not in no_log_for and\
+			ji not in no_log_for:
+				log_msg = msg
+				if subject:
+					log_msg = _('Subject: %s\n%s') % (subject, msg)
+				if log_msg:
+					if type == 'chat':
+						kind = 'chat_msg_sent'
+					else:
+						kind = 'single_msg_sent'
+					gajim.logger.write(kind, jid, log_msg)
 
-		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
-		ji = gajim.get_jid_without_resource(jid)
-		if session.is_loggable() and self.name not in no_log_for and\
-		ji not in no_log_for:
-			log_msg = msg
-			if subject:
-				log_msg = _('Subject: %s\n%s') % (subject, msg)
-			if log_msg:
-				if type == 'chat':
-					kind = 'chat_msg_sent'
-				else:
-					kind = 'single_msg_sent'
-				gajim.logger.write(kind, jid, log_msg)
+			self.dispatch('MSGSENT', (jid, msg, keyID))
 
-		self.dispatch('MSGSENT', (jid, msg, keyID))
+		def on_send_not_ok(reason):
+			reason += ' ' + _('Your message could not be sent.')
+			self.dispatch('MSGERROR', [jid, '-1', reason, None, None])
+
+		ret = self.connection.send(msg_iq, msg != None, on_ok=on_send_ok,
+			on_not_ok=on_send_not_ok)
+		if ret == -1:
+			# Contact Offline
+			self.dispatch('MSGERROR', [jid, '-1', _('Contact is offline. Your message could not be sent.'), None, None])
 
 	def send_stanza(self, stanza):
 		# send a stanza untouched

@@ -30,6 +30,9 @@ import socket
 import errno
 import sys
 
+import logging
+log = logging.getLogger('gajim.c.z.client_zeroconf')
+
 from common.zeroconf import roster_zeroconf
 
 MAX_BUFF_LEN = 65536
@@ -109,7 +112,7 @@ class ZeroconfListener(IdleObject):
 		return _sock
 
 class P2PClient(IdleObject):
-	def __init__(self, _sock, host, port, conn_holder, stanzaqueue = [], to = None):
+	def __init__(self, _sock, host, port, conn_holder, stanzaqueue = [], to = None, on_ok=None, on_not_ok=None):
 		self._owner = self
 		self.Namespace = 'jabber:client'
 		self.defaultNamespace = self.Namespace
@@ -120,6 +123,8 @@ class P2PClient(IdleObject):
 		self.stanzaqueue = stanzaqueue
 		self.to = to
 		self.Server = host
+		self.on_ok = on_ok
+		self.on_not_ok = on_not_ok
 		self.DBG = 'client'
 		self.Connection = None
 		if gajim.verbose:
@@ -137,6 +142,11 @@ class P2PClient(IdleObject):
 			self.sock_type = TYPE_CLIENT
 		self.fd = -1
 		conn = P2PConnection('', _sock, host, port, self._caller, self.on_connect, self)
+		if not self.conn_holder:
+			# An error occured, disconnect() has been called
+			if on_not_ok:
+				on_not_ok('Connection to host could not be established.')
+			return
 		self.sock_hash = conn._sock.__hash__
 		self.fd = conn.fd
 		self.conn_holder.add_connection(self, self.Server, port, self.to)
@@ -145,14 +155,14 @@ class P2PClient(IdleObject):
 			stanza, is_message = val
 			if is_message:
 				if self.fd == -1:
-					self._caller.dispatch('MSGERROR',[unicode(self.to), -1, \
-                                        _('Connection to host could not be established'), None, None])
+					if on_not_ok:
+						on_not_ok('Connection to host could not be established.')
+					return
+				if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
+					self.conn_holder.number_of_awaiting_messages[self.fd]+=1
 				else:
-					if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
-						self.conn_holder.number_of_awaiting_messages[self.fd]+=1
-					else:
-						self.conn_holder.number_of_awaiting_messages[self.fd]=1
-	
+					self.conn_holder.number_of_awaiting_messages[self.fd]=1
+
 	def add_stanza(self, stanza, is_message = False):
 		if self.Connection:
 			if self.Connection.state == -1:
@@ -177,6 +187,8 @@ class P2PClient(IdleObject):
 		self.Connection.PlugIn(self)
 		dispatcher_nb.Dispatcher().PlugIn(self)
 		self._register_handlers()
+		if self.on_ok:
+			self.on_ok()
 
 	def StreamInit(self):
 		''' Send an initial stream header. '''
@@ -202,10 +214,10 @@ class P2PClient(IdleObject):
 	
 	def _check_stream_start(self, ns, tag, attrs):
 		if ns<>NS_STREAMS or tag<>'stream':
-			self._caller.dispatch('MSGERROR',[unicode(self.to), -1, \
-				_('Connection to host could not be established: Incorrect answer from server.'), None, None])
 			self.Connection.DEBUG('Incorrect stream start: (%s,%s).Terminating! ' % (tag, ns), 'error')
 			self.Connection.disconnect()
+			if self.on_not_ok:
+				self.on_not_ok('Connection to host could not be established: Incorrect answer from server.')
 			return
 		if self.sock_type == TYPE_SERVER:
 			if attrs.has_key('from'):
@@ -227,9 +239,6 @@ class P2PClient(IdleObject):
 	def on_disconnect(self):
 		if self.conn_holder:
 			if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
-				if self.conn_holder.number_of_awaiting_messages[self.fd] > 0:
-					self._caller.dispatch('MSGERROR',[unicode(self.to), -1, \
-					_('Connection to host could not be established'), None, None])
 				del self.conn_holder.number_of_awaiting_messages[self.fd]
 			self.conn_holder.remove_connection(self.sock_hash) 
 		if self.__dict__.has_key('Dispatcher'):
@@ -302,13 +311,35 @@ class P2PConnection(IdleObject, PlugIn):
 			self.on_connect(self)
 		else:
 			self.state = 0
-			self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+			try:
+				self.ais = socket.getaddrinfo(host, port, socket.AF_UNSPEC, socket.SOCK_STREAM)
+			except socket.gaierror, e:
+				log.info("Lookup failure for %s: %s[%s]", host, e[1], repr(e[0]), exc_info=True)
+			else:
+				self.connect_to_next_ip()
+
+	def connect_to_next_ip(self):
+		if len(self.ais) == 0:
+			log.error('Connection failure to %s', self.host, exc_info=True)
+			self.disconnect()
+			return
+		ai = self.ais.pop(0)
+		log.info('Trying to connect to %s through %s:%s', self.host, ai[4][0],
+			ai[4][1], exc_info=True)
+		try:
+			self._sock = socket.socket(*ai[:3])
 			self._sock.setblocking(False)
-			self.fd = self._sock.fileno()
-			gajim.idlequeue.plug_idle(self, True, False)
-			self.set_timeout(CONNECT_TIMEOUT_SECONDS)
-			self.do_connect()
-	
+			self._server=ai[4]
+		except:
+			if sys.exc_value[0] != errno.EINPROGRESS:
+				#for all errors, we try other addresses
+				self.connect_to_next_ip()
+				return
+		self.fd = self._sock.fileno()
+		gajim.idlequeue.plug_idle(self, True, False)
+		self.set_timeout(CONNECT_TIMEOUT_SECONDS)
+		self.do_connect()
+
 	def set_timeout(self, timeout):
 		gajim.idlequeue.remove_timeout(self.fd)
 		if self.state >= 0:
@@ -370,7 +401,7 @@ class P2PConnection(IdleObject, PlugIn):
 	def do_connect(self):
 		errnum = 0
 		try:
-			self._sock.connect((self.host, self.port))
+			self._sock.connect(self._server)
 			self._sock.setblocking(False)
 		except Exception, ee:
 			(errnum, errstr) = ee
@@ -378,13 +409,15 @@ class P2PConnection(IdleObject, PlugIn):
 			return
 		# win32 needs this
 		elif errnum not in (0, 10056, errno.EISCONN) or self.state != 0:
-			self.disconnect()
-			return None
+			log.error('Could not connect to %s: %s [%s]', self.host, errnum,
+				errstr)
+			self.connect_to_next_ip()
+			return
 		else: # socket is already connected
 			self._sock.setblocking(False)
 		self.state = 1 # connected
+		# we are connected
 		self.on_connect(self)
-		return 1 # we are connected
 	
 	
 	def pollout(self):
@@ -642,28 +675,33 @@ class ClientZeroconf:
 			return self.roster.getRoster()
 		return {}
 
-	def send(self, stanza, is_message = False, now = False):
+	def send(self, stanza, is_message = False, now = False, on_ok=None,
+	on_not_ok=None):
 		stanza.setFrom(self.roster.zeroconf.name)
 		to = stanza.getTo()
-		
+
 		try:
 			item = self.roster[to]
 		except KeyError:
-			self.caller.dispatch('MSGERROR', [unicode(to), '-1', _('Contact is offline. Your message could not be sent.'), None, None])
-			return False
-	
+			# Contact offline
+			return -1
+
 		# look for hashed connections
 		if to in self.recipient_to_hash:
 			conn = self.connections[self.recipient_to_hash[to]]
 			if conn.add_stanza(stanza, is_message):
-				return
+				if on_ok:
+					on_ok()
+				return 0
 
 		if item['address'] in self.ip_to_hash:
 			hash = self.ip_to_hash[item['address']]
 			if self.hash_to_port[hash] == item['port']:
 				conn = self.connections[hash]
 				if conn.add_stanza(stanza, is_message):
-					return
+					if on_ok:
+						on_ok()
+					return 0
 
 		# otherwise open new connection
-		P2PClient(None, item['address'], item['port'], self, [(stanza, is_message)], to)
+		P2PClient(None, item['address'], item['port'], self, [(stanza, is_message)], to, on_ok=on_ok, on_not_ok=on_not_ok)
