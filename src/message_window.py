@@ -6,7 +6,7 @@
 ##                    Vincent Hanquez <tab@snarc.org>
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
-## Copyright (C) 2005-2007 Travis Shirk <travis@pobox.com>
+## Copyright (C) 2005-2008 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2006 Geobert Quach <geobert@gmail.com>
 ## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
 ## Copyright (C) 2005-2008 Nikos Kouremenos <kourem@gmail.com>
