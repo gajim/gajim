@@ -800,7 +800,10 @@ class MessageWindowMgr(gobject.GObject):
 				gajim.config.get('msgwin-height'))
 			if self.mode == self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
 				parent_size = win.window.get_size()
-				size = (parent_size[0] + size[0], size[1])
+				# Need to add the size of the now visible paned handle, otherwise
+				# the saved width of the message window decreases by this amount
+				handle_size = win.parent_paned.style_get_property('handle-size')
+				size = (parent_size[0] + size[0] + handle_size, size[1])
 		elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			size = (gajim.config.get_per('accounts', acct, 'msgwin-width'),
 				gajim.config.get_per('accounts', acct, 'msgwin-height'))
@@ -813,6 +816,8 @@ class MessageWindowMgr(gobject.GObject):
 		else:
 			return
 		win.resize(size[0], size[1])
+		if win.parent_paned:
+			win.parent_paned.set_position(parent_size[0])
 
 	def _position_window(self, win, acct, type):
 		'''Moves window according to config settings'''
