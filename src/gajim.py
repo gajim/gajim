@@ -2296,7 +2296,7 @@ class Interface:
 			self.handle_event_status(account, 'offline')
 		pritext = _('Insecure connection')
 		sectext = _('You are about to send your password on an insecure '
-			'conection. Are you sure you want to do that?')
+			'connection. Are you sure you want to do that?')
 		checktext = _('Do _not ask me again')
 		dialog = dialogs.YesNoDialog(pritext, sectext, checktext,
 			on_response_yes=on_yes, on_response_no=on_no)
