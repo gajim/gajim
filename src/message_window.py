@@ -993,7 +993,6 @@ class MessageWindowMgr(gobject.GObject):
 		for w in self.windows():
 			self.save_state(w)
 		gajim.interface.save_config()
-		# Map the mode to a int constant for frequent compares
 		mode = gajim.config.get('one_message_window')
 		if self.mode == common.config.opt_one_window_types.index(mode):
 			# No change
@@ -1006,13 +1005,20 @@ class MessageWindowMgr(gobject.GObject):
 			# MessageWindow is embedded.
 			if not w.parent_paned:
 				w.window.hide()
+			else:
+				# Stash current size so it can be restored if the MessageWindow
+				# is not longer embedded
+				roster_width =  w.parent_paned.get_child1().allocation.width
+				gajim.config.set('roster_width', roster_width)
+
 			while w.notebook.get_n_pages():
 				page = w.notebook.get_nth_page(0)
 				ctrl = w._widget_to_control(page)
 				w.notebook.remove_page(0)
 				page.unparent()
 				controls.append(ctrl)
-			# Must clear _controls from window to prevent MessageControl.shutdown calls
+
+			# Must clear _controls to prevent MessageControl.shutdown calls
 			w._controls = {}
 			if not w.parent_paned:
 				w.window.destroy()
@@ -1020,6 +1026,9 @@ class MessageWindowMgr(gobject.GObject):
 				# Don't close parent window, just remove the child
 				child = w.parent_paned.get_child2()
 				w.parent_paned.remove(child)
+				gtkgui_helpers.resize_window(w.window,
+					gajim.config.get('roster_width'),
+					gajim.config.get('roster_height'))
 
 		self._windows = {}
 
