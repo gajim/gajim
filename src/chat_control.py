@@ -1217,8 +1217,9 @@ class ChatControl(ChatControlBase):
 			if acct_info: # We already found a contact with same nick
 				break
 			for jid in gajim.contacts.get_jid_list(account):
-				contact_ = gajim.contacts.get_first_contact_from_jid(account, jid)
-				if contact_.get_shown_name() == self.contact.get_shown_name():
+				other_contact_ = \
+					gajim.contacts.get_first_contact_from_jid(account, jid)
+				if other_contact_.get_shown_name() == self.contact.get_shown_name():
 					acct_info = ' (%s)' % \
 						gobject.markup_escape_text(self.account)
 					break

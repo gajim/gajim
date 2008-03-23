@@ -4350,6 +4350,7 @@ class RosterWindow:
 		type_ = model[path][C_TYPE]
 		jid = model[path][C_JID].decode('utf-8')
 		resource = None
+		contact = None
 		iter = model.get_iter(path)
 		if type_ in ('group', 'account'):
 			if self.tree.row_expanded(path):
@@ -4386,12 +4387,15 @@ class RosterWindow:
 					fjid += '/' + resource
 				if self.open_event(account, fjid, first_ev):
 					return
-			c = gajim.contacts.get_contact(account, jid, resource)
-			if not c or isinstance(c, list):
-				c = gajim.contacts.get_contact_with_highest_priority(account, jid)
+				# else
+				contact = gajim.contacts.get_contact(account, jid, resource)
+			if not contact or isinstance(contact, list):
+				contact = \
+					gajim.contacts.get_contact_with_highest_priority(account, jid)
 			if jid == gajim.get_jid_from_account(account):
-				resource = c.resource
-			self.on_open_chat_window(widget, c, account, resource = resource, session = session)
+				resource = contact.resource
+			self.on_open_chat_window(widget, contact, account, \
+				resource = resource, session = session)
 
 	def on_roster_treeview_row_activated(self, widget, path, col = 0):
 		'''When an iter is double clicked: open the first event window'''
