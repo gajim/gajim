@@ -13,7 +13,7 @@ DEB_MAKE_BUILD_TARGET    := all PYTHON=python$(PYTHONVER)
 DEB_MAKE_INSTALL_TARGET = install PYTHON=python$(PYTHONVER) DESTDIR=$(DEB_DESTDIR)
 
 binary-install/gajim::
-	rm $(DEB_DESTDIR)/usr/share/gajim/src/common/GnuPGInterface.py
+	rm $(DEB_DESTDIR)/usr/share/gajim/src/common/GnuPGInterface.py*
 	dh_pysupport -pgajim
 	convert $(DEB_DESTDIR)/usr/share/pixmaps/gajim.png -resize 32x32 $(DEB_DESTDIR)/usr/share/pixmaps/gajim.xpm
 	install -m 0644 debian/gajim.lintian $(DEB_DESTDIR)/usr/share/lintian/overrides/gajim
