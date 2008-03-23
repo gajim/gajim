@@ -1000,11 +1000,11 @@ class AboutDialog:
 		artists = ['Anders Ström', 'Christophe Got', 'Dennis Craven',
 			'Guillaume Morin', 'Josef Vybíral', 'Membris Khan']
 		dlg.set_artists(artists)
-		gobject.idle_add(self.dorun, dlg)
-
-	def dorun(self, dlg):
-		rep = dlg.run()
-		dlg.destroy()
+		# connect close button to destroy() function
+		for button in dlg.action_area.get_children():
+			if button.get_property('label') == gtk.STOCK_CLOSE:
+				button.connect('clicked', lambda x:dlg.destroy())
+		dlg.show_all()
 
 	def tuple2str(self, tuple_):
 		str_ = ''
