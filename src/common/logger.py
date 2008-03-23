@@ -369,8 +369,16 @@ class Logger:
 				''' % msg_id
 				)
 			results = self.cur.fetchall()
-			if len(results) > 0:
-				all_messages.append(results[0])
+			if len(results) == 0:
+				# Log line is no more in logs table. remove it from unread_messages
+				sql = 'DELETE FROM unread_messages WHERE message_id=%s' % msg_id
+				self.cur.execute(sql)
+				try:
+					self.con.commit()
+				except sqlite.OperationalError, e:
+					print >> sys.stderr, str(e)
+				continue
+			all_messages.append(results[0])
 		return all_messages
 
 	def write(self, kind, jid, message = None, show = None, tim = None,
