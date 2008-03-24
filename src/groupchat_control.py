@@ -1017,18 +1017,18 @@ class GroupchatControl(ChatControlBase):
 						s = _('You are now known as %s') % new_nick
 					else:
 						s = _('%s is now known as %s') % (nick, new_nick)
-						# We add new nick to muc roster here, so we don't see 
-						# that "new_nick has joined the room" when he just changed nick.
-						# add_contact_to_roster will be called a second time 
-						# after that, but that doesn't hurt
-						self.add_contact_to_roster(new_nick, show, role, affiliation,
-							status, jid)
-						if nick in self.attention_list:
-							self.attention_list.remove(nick)
-						# keep nickname color
-						if nick in self.gc_custom_colors:
-							self.gc_custom_colors[new_nick] = \
-								self.gc_custom_colors[nick]
+					# We add new nick to muc roster here, so we don't see 
+					# that "new_nick has joined the room" when he just changed nick.
+					# add_contact_to_roster will be called a second time 
+					# after that, but that doesn't hurt
+					self.add_contact_to_roster(new_nick, show, role, affiliation,
+						status, jid)
+					if nick in self.attention_list:
+						self.attention_list.remove(nick)
+					# keep nickname color
+					if nick in self.gc_custom_colors:
+						self.gc_custom_colors[new_nick] = \
+							self.gc_custom_colors[nick]
 					# rename vcard / avatar
 					puny_jid = helpers.sanitize_filename(self.room_jid)
 					puny_nick = helpers.sanitize_filename(nick)
