@@ -34,7 +34,7 @@
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip" translatable="yes">Choose the chatlog you want to view. 
-Enter the jid of a groupchat or a contact here. For online accounts you can even enter a a contact's nickname.</property>
+Enter the jid of a groupchat or a contact here. For online accounts you can even enter a contact's nickname.</property>
                         <signal name="activate" handler="on_jid_entry_activate"/>
                       </widget>
                     </child>
