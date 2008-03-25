@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-24 20:39+0100\n"
+"POT-Creation-Date: 2008-03-25 09:21+0100\n"
 "PO-Revision-Date: 2008-03-24 20:40+0100\n"
 "Last-Translator: Nico Gulden <cilugnedon@gmx.de>\n"
 "Language-Team: German <translators@gajim.org>\n"
@@ -1353,12 +1353,12 @@ msgid ""
 "Use this program to delete or export logs. You can select logs from the left "
 "and/or search database from below."
 msgstr ""
-"Dieser Log-Manager ist nicht zum Ansehen der Logeinträge gedacht. Wenn Sie nach einer "
-"solchen Funktion suchen, benutzen Sie sattdessen das Verlaufsfenster unter "
-"Ansicht - Verlauf.\n"
+"Dieser Log-Manager ist nicht zum Ansehen der Logeinträge gedacht. Wenn Sie "
+"nach einer solchen Funktion suchen, benutzen Sie sattdessen das "
+"Verlaufsfenster unter Ansicht - Verlauf.\n"
 "\n"
-"Benutzen Sie dieses Programm, um Logs zu löschen oder zu exportieren. Sie können "
-"Logeinträge links auswählen und/oder unten die Datenbank durchsuchen."
+"Benutzen Sie dieses Programm, um Logs zu löschen oder zu exportieren. Sie "
+"können Logeinträge links auswählen und/oder unten die Datenbank durchsuchen."
 
 #: ../data/glade/history_manager.glade.h:10
 msgid "_Search Database"
@@ -1379,8 +1379,8 @@ msgid ""
 "even enter a contact's nickname."
 msgstr ""
 "Wählen Sie das Chatlog, dass Sie ansehen möchten. \n"
-"Geben Sie die Jabber-ID eines Gruppenchats oder eines Kontakts hier ein. "
-"Für Kontakte, die online sind, können Sie sogar deren Spitzname eintragen."
+"Geben Sie die Jabber-ID eines Gruppenchats oder eines Kontakts hier ein. Für "
+"Kontakte, die online sind, können Sie sogar deren Spitzname eintragen."
 
 #: ../data/glade/history_window.glade.h:5 ../src/history_window.py:234
 msgid "Conversation History"
@@ -1489,14 +1489,6 @@ msgstr "Server:"
 #: ../data/glade/manage_bookmarks_window.glade.h:10
 msgid "Title:"
 msgstr "Titel:"
-
-#: ../data/glade/manage_pep_services_window.glade.h:1
-msgid "_Configure"
-msgstr "_Einstellen"
-
-#: ../data/glade/manage_pep_services_window.glade.h:2
-msgid "gtk-delete"
-msgstr "gtk-delete"
 
 #: ../data/glade/manage_proxies_window.glade.h:1
 msgid "<b>Properties</b>"
@@ -4264,7 +4256,7 @@ msgstr ""
 "Benjamin Drung <benjamin.drung@gmail.com>\n"
 "Fabian Fingerle <fabian@datensalat.eu>\n"
 "Sebastian Schäfer <sarek@uliweb.de>\n"
-"Nico Gulden\n"
+"Nico Gulden"
 
 #: ../src/dialogs.py:1158
 #, python-format
@@ -4414,65 +4406,55 @@ msgstr "Die Passwörter in beiden Feldern müssen identisch sein."
 #. img to display
 #. default value
 #: ../src/dialogs.py:1992 ../src/notify.py:244 ../src/notify.py:458
-#: ../src/osx/growler.py:12
 msgid "Contact Signed In"
 msgstr "Kontakt hat sich angemeldet"
 
 #: ../src/dialogs.py:1994 ../src/notify.py:252 ../src/notify.py:460
-#: ../src/osx/growler.py:12
 msgid "Contact Signed Out"
 msgstr "Kontakt hat sich abgemeldet"
 
 #. chat message
 #: ../src/dialogs.py:1996 ../src/notify.py:275 ../src/notify.py:462
-#: ../src/osx/growler.py:12
 msgid "New Message"
 msgstr "Neue Nachricht"
 
 #. single message
 #: ../src/dialogs.py:1996 ../src/notify.py:256 ../src/notify.py:462
-#: ../src/osx/growler.py:13
 msgid "New Single Message"
 msgstr "Neue einzelne Nachricht"
 
 #. private message
 #: ../src/dialogs.py:1997 ../src/notify.py:263 ../src/notify.py:463
-#: ../src/osx/growler.py:13
 msgid "New Private Message"
 msgstr "Neue private Nachricht"
 
 #: ../src/dialogs.py:1997 ../src/gajim.py:1581 ../src/notify.py:471
-#: ../src/osx/growler.py:13
 msgid "New E-mail"
 msgstr "Neue E-Mail"
 
 #: ../src/dialogs.py:1999 ../src/gajim.py:1760 ../src/notify.py:465
-#: ../src/osx/growler.py:14
 msgid "File Transfer Request"
 msgstr "Dateitransfer Anfrage"
 
 #: ../src/dialogs.py:2001 ../src/gajim.py:1553 ../src/gajim.py:1727
-#: ../src/notify.py:467 ../src/osx/growler.py:14
+#: ../src/notify.py:467
 msgid "File Transfer Error"
 msgstr "Dateitransfer-Fehler"
 
 #: ../src/dialogs.py:2003 ../src/gajim.py:1799 ../src/gajim.py:1821
-#: ../src/gajim.py:1838 ../src/notify.py:469 ../src/osx/growler.py:15
+#: ../src/gajim.py:1838 ../src/notify.py:469
 msgid "File Transfer Completed"
 msgstr "Dateitransfer beendet"
 
 #: ../src/dialogs.py:2004 ../src/gajim.py:1802 ../src/notify.py:469
-#: ../src/osx/growler.py:15
 msgid "File Transfer Stopped"
 msgstr "Dateitransfer gestoppt"
 
 #: ../src/dialogs.py:2006 ../src/gajim.py:1404 ../src/notify.py:473
-#: ../src/osx/growler.py:16
 msgid "Groupchat Invitation"
 msgstr "Gruppenchat-Einladung"
 
 #: ../src/dialogs.py:2008 ../src/notify.py:236 ../src/notify.py:475
-#: ../src/osx/growler.py:16
 msgid "Contact Changed Status"
 msgstr "Kontakt hat Status verändert"
 
@@ -5271,7 +5253,7 @@ msgstr "Akzeptieren Sie diese Anfrage vom %s Konto?"
 msgid "HTTP (%s) Authorization for %s (id: %s)"
 msgstr "HTTP (%s) Autorisierung für %s (id: %s)"
 
-#: ../src/gajim.py:525 ../src/notify.py:477 ../src/osx/growler.py:17
+#: ../src/gajim.py:525 ../src/notify.py:477
 msgid "Connection Failed"
 msgstr "Verbindung fehlgeschlagen"
 
@@ -5391,7 +5373,7 @@ msgstr "Sie wurden ohne ihren GPG-Schlüssel verbunden"
 msgid "Your passphrase is incorrect"
 msgstr "Ihre Passphrase ist falsch"
 
-#: ../src/gajim.py:1440 ../src/secrets.py:44
+#: ../src/gajim.py:1440
 msgid "Passphrase Required"
 msgstr "Passphrase benötigt"
 
@@ -5539,8 +5521,8 @@ msgid ""
 "(error)s\n"
 "Do you still want to connect to this server?"
 msgstr ""
-"Es trat ein Fehler bei der Überprüfung des SSL-Zertifikats deines Jabber-Servers auf: %"
-"(error)s\n"
+"Es trat ein Fehler bei der Überprüfung des SSL-Zertifikats deines Jabber-"
+"Servers auf: %(error)s\n"
 "Möchtest du dich dennoch zum Server verbinden?"
 
 #: ../src/gajim.py:2262
@@ -5561,7 +5543,8 @@ msgid ""
 "\n"
 "Do you still want to connect and update the fingerprint of the certificate?"
 msgstr ""
-"Das SSL-Zertifikat scheint sich geändert zu haben oder die Verbindung wurde gehackt.\n"
+"Das SSL-Zertifikat scheint sich geändert zu haben oder die Verbindung wurde "
+"gehackt.\n"
 "Alter Fingerprint: %s\n"
 "Neuer Fingerprint: %s\n"
 "\n"
@@ -5603,7 +5586,8 @@ msgid ""
 "Your configured emoticons theme has not been found, so emoticons have been "
 "disabled."
 msgstr ""
-"Das konfigurierte Emoticon-Thema wurde nicht gefunden. Emoticans sind deaktiviert."
+"Das konfigurierte Emoticon-Thema wurde nicht gefunden. Emoticans sind "
+"deaktiviert."
 
 #: ../src/gajim.py:2593
 msgid ""
@@ -5612,8 +5596,8 @@ msgid ""
 "for more details."
 msgstr ""
 "Dein konfiguriertes Emoticon-Thema kann nicht geladen werden. Du musst "
-"vielleicht das Format der Datei emoticons.py aktualisieren. Gehe auf "
-"http://trac.gajim.org/wiki/Emoticons für mehr Informationen."
+"vielleicht das Format der Datei emoticons.py aktualisieren. Gehe auf http://"
+"trac.gajim.org/wiki/Emoticons für mehr Informationen."
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
@@ -5954,7 +5938,9 @@ msgstr "Kein aktives Konto"
 
 #: ../src/gajim-remote.py:368
 msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr "Gajim scheint nicht gestartet zu sein. gajim-remote kann somit nicht genutzt werden."
+msgstr ""
+"Gajim scheint nicht gestartet zu sein. gajim-remote kann somit nicht genutzt "
+"werden."
 
 #: ../src/gajim-remote.py:397
 #, python-format
@@ -6974,8 +6960,9 @@ msgstr ""
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled and contact is in your roster."
-msgstr "Nachrichten werden nur für das spätere Lesen verfügbar sein, wenn der Verlauf "
-"aktiviert wurde und der Kontakt sich in der Kontaktliste befindet."
+msgstr ""
+"Nachrichten werden nur für das spätere Lesen verfügbar sein, wenn der "
+"Verlauf aktiviert wurde und der Kontakt sich in der Kontaktliste befindet."
 
 #: ../src/roster_window.py:4946
 msgid "Metacontacts storage not supported by your server"
@@ -7035,35 +7022,6 @@ msgstr "Fehler den empfangenen Daten"
 #: ../src/search_window.py:165 ../src/search_window.py:201
 msgid "No result"
 msgstr "Kein Ergebnis"
-
-#: ../src/secrets.py:45
-msgid ""
-"To continue, Gajim needs to access your stored secrets. Enter your passphrase"
-msgstr ""
-"Um fortzufahren benötigt Gajim Zugriff auf Ihre gespeicherten Passwörter. "
-"Geben Sie Ihre Passphrase ein"
-
-#: ../src/secrets.py:89
-msgid "Confirm Passphrase"
-msgstr "Passphrase bestätigen"
-
-#: ../src/secrets.py:90
-msgid "Enter your new passphrase again for confirmation"
-msgstr "Passphrase zur Bestätigung erneut eingeben"
-
-#: ../src/secrets.py:95 ../src/secrets.py:107
-msgid "Create Passphrase"
-msgstr "Passphrase erstellen"
-
-#: ../src/secrets.py:96
-msgid "Passphrases did not match.\n"
-msgstr "Passphrasen stimmen nicht überein.\n"
-
-#: ../src/secrets.py:97 ../src/secrets.py:108
-msgid "Gajim needs you to create a passphrase to encrypt stored secrets"
-msgstr ""
-"Sie müssen eine Passphrase angeben um Ihre gespeicherten Passwörter zu "
-"verschlüsseln"
 
 #: ../src/systray.py:169
 msgid "_Change Status Message..."
@@ -7381,7 +7339,9 @@ msgstr "$S (Abwesend wegen Untätigkeit für mehr als $T Minuten)"
 
 #: ../src/common/config.py:80
 msgid "$S will be replaced by current status message, $T by autoaway time."
-msgstr "$S wird mit der aktuellen Statusnachricht ersetzt, $T durch die Abwesenheitszeit."
+msgstr ""
+"$S wird mit der aktuellen Statusnachricht ersetzt, $T durch die "
+"Abwesenheitszeit."
 
 #: ../src/common/config.py:82
 msgid "Time in minutes, after which your status changes to not available."
@@ -7393,7 +7353,9 @@ msgstr "$S (Nicht verfügbar wegen Untätigkeit seit mehr als $T Minuten)"
 
 #: ../src/common/config.py:83
 msgid "$S will be replaced by current status message, $T by autoxa time."
-msgstr "$S wird mit der aktuellen Statusnachricht ersetzt, $T durch die Nicht-Verfügbar-Zeit."
+msgstr ""
+"$S wird mit der aktuellen Statusnachricht ersetzt, $T durch die Nicht-"
+"Verfügbar-Zeit."
 
 #: ../src/common/config.py:101
 msgid ""
@@ -7492,7 +7454,8 @@ msgstr "Zeichen, die nach dem Spitznamen gedruckt werden"
 msgid ""
 "If checked, Gajim can regularly poll a Last.fm account and sends recently "
 "played songs through PEP."
-msgstr "Wenn aktiviert, kann Gajim regelmäßig ein Last.FM Konto abfragen und "
+msgstr ""
+"Wenn aktiviert, kann Gajim regelmäßig ein Last.FM Konto abfragen und "
 "kürzlich gespielte Songs über PEP senden."
 
 #: ../src/common/config.py:155
@@ -7688,7 +7651,9 @@ msgstr ""
 
 #: ../src/common/config.py:215
 msgid "Define the position of the avatar in roster. Can be left or right"
-msgstr "Definiere die Position des Avatars in der Kontaktliste. Links oder rechts sind mögliche Optionen."
+msgstr ""
+"Definiere die Position des Avatars in der Kontaktliste. Links oder rechts "
+"sind mögliche Optionen."
 
 #: ../src/common/config.py:216
 msgid ""
@@ -7918,8 +7883,9 @@ msgstr ""
 msgid ""
 "If True, notification windows from notification-daemon will be attached to "
 "systray icon."
-msgstr "Wenn wahr, werden Benachrichtigungsfenster vom Benachrichtigungsdienst "
-"an das Systray-Icon angehängt."
+msgstr ""
+"Wenn wahr, werden Benachrichtigungsfenster vom Benachrichtigungsdienst an "
+"das Systray-Icon angehängt."
 
 #: ../src/common/config.py:269
 msgid ""
@@ -7933,20 +7899,23 @@ msgstr ""
 msgid ""
 "If disabled, don't sign presences with GPG key, even if GPG is configured."
 msgstr ""
-"Wenn deaktiviert, wird die Anwesenheit nicht mit einem GPG-Schlüssel signiert, wenn GPG konfiguriert ist."
+"Wenn deaktiviert, wird die Anwesenheit nicht mit einem GPG-Schlüssel "
+"signiert, wenn GPG konfiguriert ist."
 
 #: ../src/common/config.py:283
 msgid ""
 "Ordered list (space separated) of connection type to try. Can contain tls, "
 "ssl or plain"
-msgstr "Geordnete Liste (mit Leerzeichen getrennt) zu versuchender Verbindungstypen. "
+msgstr ""
+"Geordnete Liste (mit Leerzeichen getrennt) zu versuchender Verbindungstypen. "
 "Kann tls, ssl oder plain enthalten"
 
 #: ../src/common/config.py:284
 msgid ""
 "Show a warning dialog before sending password on an insecure connection."
 msgstr ""
-"Zeige einen Warndialog bevor das Passwort über eine unsichere Verbindung geschickt wird."
+"Zeige einen Warndialog bevor das Passwort über eine unsichere Verbindung "
+"geschickt wird."
 
 #: ../src/common/config.py:286
 msgid "Space separated list of ssl errors to ignore."
@@ -8440,13 +8409,17 @@ msgstr ""
 #: ../src/common/connection.py:1042
 #: ../src/common/zeroconf/connection_zeroconf.py:381
 msgid "Neither the remote presence is signed, nor a key was assigned."
-msgstr "Weder die entfernte Präsenz ist signiert, noch wurde ein Schlüssel zugewiesen."
+msgstr ""
+"Weder die entfernte Präsenz ist signiert, noch wurde ein Schlüssel "
+"zugewiesen."
 
 #: ../src/common/connection.py:1044
 #: ../src/common/zeroconf/connection_zeroconf.py:383
 #, python-format
 msgid "The contact's key (%s) does not match the key assigned in Gajim."
-msgstr "Der Kontaktschlüssel (%s) stimmt nicht mit dem in Gajim zugewiesenen Schlüssel überein."
+msgstr ""
+"Der Kontaktschlüssel (%s) stimmt nicht mit dem in Gajim zugewiesenen "
+"Schlüssel überein."
 
 #. we're not english
 #. one  in locale and one en
@@ -8993,10 +8966,39 @@ msgstr "Kontakt ist offline. Ihre Nachricht konnte nicht versendet werden."
 msgid "Error while adding service. %s"
 msgstr "Fehler beim Hinzufügen des Dienstes. %s"
 
-#: ../src/osx/growler.py:10
+#~ msgid "_Configure"
+#~ msgstr "_Einstellen"
+
+#~ msgid "gtk-delete"
+#~ msgstr "gtk-delete"
+
+#~ msgid ""
+#~ "To continue, Gajim needs to access your stored secrets. Enter your "
+#~ "passphrase"
+#~ msgstr ""
+#~ "Um fortzufahren benötigt Gajim Zugriff auf Ihre gespeicherten Passwörter. "
+#~ "Geben Sie Ihre Passphrase ein"
+
+#~ msgid "Confirm Passphrase"
+#~ msgstr "Passphrase bestätigen"
+
+#~ msgid "Enter your new passphrase again for confirmation"
+#~ msgstr "Passphrase zur Bestätigung erneut eingeben"
+
+#~ msgid "Create Passphrase"
+#~ msgstr "Passphrase erstellen"
+
+#~ msgid "Passphrases did not match.\n"
+#~ msgstr "Passphrasen stimmen nicht überein.\n"
+
+#~ msgid "Gajim needs you to create a passphrase to encrypt stored secrets"
+#~ msgstr ""
+#~ "Sie müssen eine Passphrase angeben um Ihre gespeicherten Passwörter zu "
+#~ "verschlüsseln"
+
 #, fuzzy
-msgid "Generic"
-msgstr "Allgemein"
+#~ msgid "Generic"
+#~ msgstr "Allgemein"
 
 #, fuzzy
 #~ msgid "Select the account with which to synchronise"
