@@ -106,7 +106,7 @@ def parseOpts():
 		sys.exit(2)
 	for o, a in opts:
 		if o in ('-h', '--help'):
-			print 'gajim [--help] [--quiet] [--verbose] [--loglevel subsystem=level[,subsystem=level[...]]] [--profile name]'
+			print 'gajim [--help] [--quiet] [--verbose] [--loglevel subsystem=level[,subsystem=level[...]]] [--profile name] [--config-path]'
 			sys.exit()
 		elif o in ('-q', '--quiet'):
 			consoleloghandler.setLevel(logging.CRITICAL)
