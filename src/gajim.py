@@ -2381,7 +2381,6 @@ class Interface:
 					shows[show] = [a]
 				else:
 					shows[show].append(a)
-				break
 		for show in shows:
 			message = self.roster.get_status_message(show)
 			if message == None:
