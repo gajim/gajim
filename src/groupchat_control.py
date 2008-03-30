@@ -814,19 +814,14 @@ class GroupchatControl(ChatControlBase):
 					char_position = len(special_word)
 					refer_to_nick_char = \
 						word[char_position:char_position+1]
+					refer_to_nick_char = str(refer_to_nick_char)
 					if (refer_to_nick_char != ''):
-						refer_to_nick_char_code = ord(refer_to_nick_char)
-						if ((refer_to_nick_char_code < 65 or \
-						refer_to_nick_char_code > 122) or \
-						(refer_to_nick_char_code < 97 and \
-						refer_to_nick_char_code > 90)):
-							return True
-						else: 
-							# This is A->Z or a->z, we can be sure our nick is the
-							# beginning of a real word, do not highlight. Note that we
-							# can probably do a better detection of non-punctuation
-							# characters
+						if refer_to_nick_char.isalpha():
+							# This is A->Z, a->z or 0-9, we can be sure our nick is the
+							# beginning of a real word, do not highlight. 
 							return False
+						else: 
+							return True
 					else: # Special word == word, no char after in word
 						return True 
 		for special_word in special_words:
