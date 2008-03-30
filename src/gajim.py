@@ -2370,18 +2370,24 @@ class Interface:
 
 	def autoconnect(self):
 		'''auto connect at startup'''
-		ask_message = False
+		# dict of account that want to connect sorted by status
+		shows = {}
 		for a in gajim.connections:
 			if gajim.config.get_per('accounts', a, 'autoconnect'):
-				ask_message = True
+				show = gajim.config.get_per('accounts', a, 'autoconnect_as')
+				if not show in gajim.SHOW_LIST:
+					continue
+				if not show in shows:
+					shows[show] = [a]
+				else:
+					shows[show].append(a)
 				break
-		if ask_message:
-			message = self.roster.get_status_message('online')
+		for show in shows:
+			message = self.roster.get_status_message(show)
 			if message == None:
-				return
-			for a in gajim.connections:
-				if gajim.config.get_per('accounts', a, 'autoconnect'):
-					self.roster.send_status(a, 'online', message)
+				continue
+			for a in shows[show]:
+				self.roster.send_status(a, show, message)
 		return False
 
 	def show_systray(self):

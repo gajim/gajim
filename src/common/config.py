@@ -274,6 +274,7 @@ class Config:
 			'autopriority_dnd': [ opt_int, 20],
 			'autopriority_invisible': [ opt_int, 10],
 			'autoconnect': [ opt_bool, False, '', True ],
+			'autoconnect_as': [ opt_str, 'online', _('Status used to autoconnect as. Can be online, chat, away, xa, dnd, invisible.'), True ],
 			'autoreconnect': [ opt_bool, True ],
 			'active': [ opt_bool, True],
 			'proxy': [ opt_str, '', '', True ],
