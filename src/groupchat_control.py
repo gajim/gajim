@@ -761,9 +761,6 @@ class GroupchatControl(ChatControlBase):
 		text, the second, what sound to play.'''
 		highlight, sound = (None, None)
 
-		# Do we play a sound on every muc message?
-		if gajim.config.get_per('soundevents', 'muc_message_received', 'enabled'):
-			sound = 'received'
 
 		# Are any of the defined highlighting words in the text?
 		if self.needs_visual_notification(text):
@@ -771,6 +768,11 @@ class GroupchatControl(ChatControlBase):
 			if gajim.config.get_per('soundevents', 'muc_message_highlight',
 			'enabled'):
 				sound = 'highlight'
+
+		# Do we play a sound on every muc message?
+		elif gajim.config.get_per('soundevents', 'muc_message_received', \
+		'enabled'):
+			sound = 'received'
 
 		# Is it a history message? Don't want sound-floods when we join.
 		if tim != time.localtime():
@@ -815,7 +817,7 @@ class GroupchatControl(ChatControlBase):
 					if (refer_to_nick_char != ''):
 						refer_to_nick_char_code = ord(refer_to_nick_char)
 						if ((refer_to_nick_char_code < 65 or \
-						refer_to_nick_char_code > 123) or \
+						refer_to_nick_char_code > 122) or \
 						(refer_to_nick_char_code < 97 and \
 						refer_to_nick_char_code > 90)):
 							return True
