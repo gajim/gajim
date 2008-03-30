@@ -1050,8 +1050,8 @@ class Connection(ConnectionHandlers):
 				lang = os.getenv('LANG')
 				if lang is not None and lang != 'en': # we're not english
 					# one  in locale and one en
-					msgtxt = _('[This message is *encrypted* (See :JEP:`27`]') +\
-						' ([This message is *encrypted* (See :JEP:`27`])'
+					msgtxt = _('[This message is *encrypted* (See :XEP:`27`]') +\
+						' ([This message is *encrypted* (See :XEP:`27`])'
 			else:
 				# Encryption failed, do not send message
 				tim = localtime()
@@ -1077,7 +1077,7 @@ class Connection(ConnectionHandlers):
 		if form_node:
 			msg_iq.addChild(node=form_node)
 
-		# JEP-0172: user_nickname
+		# XEP-0172: user_nickname
 		if user_nick:
 			msg_iq.setTag('nick', namespace = common.xmpp.NS_NICK).setData(
 				user_nick)
@@ -1098,7 +1098,7 @@ class Connection(ConnectionHandlers):
 					if not msg_id: # avoid putting 'None' in <id> tag
 						msg_id = ''
 					chatstate_node.setTagData('id', msg_id)
-				# when msgtxt, requests JEP-0022 composing notification
+				# when msgtxt, requests XEP-0022 composing notification
 				if chatstate is 'composing' or msgtxt:
 					chatstate_node.addChild(name = 'composing')
 
@@ -1305,7 +1305,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 	def get_settings(self):
-		''' Get Gajim settings as described in JEP 0049 '''
+		''' Get Gajim settings as described in XEP 0049 '''
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
@@ -1314,7 +1314,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 	def get_bookmarks(self):
-		'''Get Bookmarks from storage as described in JEP 0048'''
+		'''Get Bookmarks from storage as described in XEP 0048'''
 		self.bookmarks = [] #avoid multiple bookmarks when re-connecting
 		if not self.connection:
 			return
@@ -1373,7 +1373,7 @@ class Connection(ConnectionHandlers):
 
 
 	def get_metacontacts(self):
-		'''Get metacontacts list from storage as described in JEP 0049'''
+		'''Get metacontacts list from storage as described in XEP 0049'''
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')

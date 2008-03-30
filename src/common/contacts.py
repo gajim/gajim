@@ -47,18 +47,18 @@ class Contact:
 		self.caps_ver = None
 		self.caps_exts = None
 
-		# please read jep-85 http://www.jabber.org/jeps/jep-0085.html
-		# we keep track of jep85 support with the peer by three extra states:
+		# please read xep-85 http://www.xmpp.org/extensions/xep-0085.html
+		# we keep track of xep85 support with the peer by three extra states:
 		# None, False and 'ask'
 		# None if no info about peer
-		# False if peer does not support jep85
+		# False if peer does not support xep85
 		# 'ask' if we sent the first 'active' chatstate and are waiting for reply
 		# this holds what WE SEND to contact (our current chatstate)
 		self.our_chatstate = our_chatstate
 		self.msg_id = msg_id
-		# tell which JEP we're using for composing state
-		# None = have to ask, XEP-0022 = use this jep,
-		# XEP-0085 = use this jep, False = no composing support
+		# tell which XEP we're using for composing state
+		# None = have to ask, XEP-0022 = use this xep,
+		# XEP-0085 = use this xep, False = no composing support
 		self.composing_xep = composing_xep
 		# this is contact's chatstate
 		self.chatstate = chatstate
