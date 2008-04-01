@@ -854,8 +854,16 @@ class ConversationTextview:
 			exitcode = p.wait()
 
 		if exitcode == 0:
-			p = Popen(['convert', '-alpha', 'off', tmpfile + '.ps',
-				tmpfile + '.png'], cwd=gettempdir())
+			convert_version = helpers.get_output_of_command(
+				'convert -version')[0].split()[2]
+			convert_version = [int(n) for n in convert_version.split('.')]
+			if convert_version > [6, 3, 4]:
+				# -alpha option was added in 6.3.5 release
+				alpha = ['-alpha', 'off']
+			else:
+				alpha = []
+			p = Popen(['convert'] + alpha + [tmpfile + '.ps', tmpfile + '.png'],
+				cwd=gettempdir())
 			exitcode = p.wait()
 
 		extensions = ['.tex', '.log', '.aux', '.dvi', '.ps']
