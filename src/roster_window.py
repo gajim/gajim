@@ -1294,7 +1294,7 @@ class RosterWindow:
 			gajim.groups[account] = {}
 		for jid in array.keys():
 			# Remove old Contact instances
-			gajim.contacts.remove_jid(account, jid)
+			gajim.contacts.remove_jid(account, jid, remove_meta=False)
 			jids = jid.split('/')
 			# get jid
 			ji = jids[0]

@@ -216,15 +216,16 @@ class Contacts:
 	def clear_contacts(self, account):
 		self._contacts[account] = {}
 
-	def remove_jid(self, account, jid):
+	def remove_jid(self, account, jid, remove_meta=True):
 		'''Removes all contacts for a given jid'''
 		if not self._contacts.has_key(account):
 			return
 		if not self._contacts[account].has_key(jid):
 			return
 		del self._contacts[account][jid]
-		# remove metacontacts info
-		self.remove_metacontact(account, jid)
+		if remove_meta:
+			# remove metacontacts info
+			self.remove_metacontact(account, jid)
 
 	def get_contacts(self, account, jid):
 		'''Returns the list of contact instances for this jid.'''
