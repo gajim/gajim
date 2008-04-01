@@ -818,8 +818,8 @@ class GroupchatControl(ChatControlBase):
 					if (refer_to_nick_char != ''):
 						if refer_to_nick_char.isalpha():
 							# This is A->Z, a->z or 0-9, we can be sure our nick is the
-							# beginning of a real word, do not highlight. 
-							return False
+							# beginning of a real word, do not highlight for this one.
+							break
 						else: 
 							return True
 					else: # Special word == word, no char after in word
