@@ -12,7 +12,7 @@
 ##                    Dimitur Kirov <dkirov@gmail.com>
 ##                    Travis Shirk <travis@pobox.com>
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
-## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de>
+## Copyright (C) 2007-2008 Stephan Erb <steve-e@h3c.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -44,6 +44,14 @@ from common.logger import Constants
 
 constants = Constants()
 
+# Completion dict
+(
+C_INFO_JID,
+C_INFO_ACCOUNT,
+C_INFO_NAME,
+C_INFO_COMPLETION
+) = range(4)
+
 # contact_name, date, message, time
 (
 C_LOG_JID,
@@ -57,15 +65,8 @@ class HistoryWindow:
 	'''Class for browsing logs of conversations with contacts'''
 
 	def __init__(self, jid = None, account = None):
-		if jid is None:
-			# Use self.jid to pass text to input_entry
-			self.jid = 'Enter jid or contact name here'
-		else:
-			self.jid = jid
-		self.account = account
-
 		self.mark_days_idle_call_id = None
-		
+				
 		xml = gtkgui_helpers.get_glade('history_window.glade')
 		self.window = xml.get_widget('history_window')
 		self.jid_entry = xml.get_widget('jid_entry')
@@ -77,36 +78,14 @@ class HistoryWindow:
 		self.history_buffer = self.history_textview.tv.get_buffer()
 		self.history_buffer.create_tag('highlight', background = 'yellow')
 		self.checkbutton = xml.get_widget('log_history_checkbutton')
-		self.checkbutton.connect('toggled', self.on_log_history_checkbutton_toggled)
+		self.checkbutton.connect('toggled',
+			self.on_log_history_checkbutton_toggled)
 		self.query_entry = xml.get_widget('query_entry')
-		self.expander_vbox = xml.get_widget('expander_vbox')
 		self.query_combobox = xml.get_widget('query_combobox')
 		self.query_combobox.set_active(0)
 		self.results_treeview = xml.get_widget('results_treeview')
+		self.results_window = xml.get_widget('results_scrolledwindow')
 		
-		# create jid dict for auto completion  
-		self.completion_dict = {}
-		liststore = gtkgui_helpers.get_completion_liststore(self.jid_entry)
-		
-		# Add all jids in logs.db:
-		# he only info we have got to fill the dict is the JID, use it as key
-		db_jids = gajim.logger.get_jids_in_db()
-		for jid in db_jids:
-			self.completion_dict[jid] = None
-		
-		# Enhance contacts of online accounts with their contact reference and their name
-		for account in gajim.contacts.get_accounts():
-			self.completion_dict.update(helpers.get_contact_dict_for_account(account))
-		keys = self.completion_dict.keys()
-		keys.sort()
-		# Add icons
-		for jid in keys:
-			if gajim.logger.jid_is_room_jid(jid):
-				img = gajim.interface.roster.load_icon('muc_active')
-			else:
-				img = gajim.interface.roster.jabber_state_images['16']['online']
-			liststore.append((img.get_pixbuf(), jid))
-
 		# contact_name, date, message, time
 		model = gtk.ListStore(str, str, str, str, str)
 		self.results_treeview.set_model(model)
@@ -132,12 +111,89 @@ class HistoryWindow:
 		col.pack_start(renderer)
 		col.set_attributes(renderer, text = C_MESSAGE)
 		col.set_resizable(True)
-		
-		self.jid_entry.set_text(self.jid)
-		
+	
+		self.jid = None # The history we are currently viewing
+		self.account = None
+		self.completion_dict = {}
+		self.accounts_seen_online = [] # Update dict when new accounts connect
+		self.jids_to_search = []
+		self._fill_completion_dict()
+
+		if jid:
+			self.jid_entry.set_text(jid)	
+
 		xml.signal_autoconnect(self)
-		self.load_history()
+		self._load_history(jid, account)
 		self.window.show_all()
+
+	def _fill_completion_dict(self):
+		'''Fill completion_dict for key auto completion. 
+		Key will be either jid or full_completion_name  
+		(contact name or long description like "pm-contact from groupchat....")
+		
+		{key : (jid, account, nick_name, full_completion_name}'''
+
+		liststore = gtkgui_helpers.get_completion_liststore(self.jid_entry)
+
+		# Add all jids in logs.db:
+		db_jids = gajim.logger.get_jids_in_db()
+		self.completion_dict = dict.fromkeys(db_jids)
+		
+		self.accounts_seen_online = gajim.contacts.get_accounts()[:]
+
+		# Enhance contacts of online accounts with contact. Needed for mapping below
+		for account in self.accounts_seen_online:
+			self.completion_dict.update(
+				helpers.get_contact_dict_for_account(account))
+		
+		keys = self.completion_dict.keys()
+		# Map jid to info tuple
+		for key in keys:
+			completed = key
+			contact = self.completion_dict[completed]
+			if contact:
+				info_name = contact.get_shown_name()
+				info_completion = info_name
+				info_jid = contact.jid
+			else:
+				# Corrensponding account is offline, we know nothing
+				info_name = completed.split('@')[0]
+				info_completion = completed
+				info_jid = completed
+		
+			info_acc = self._get_account_for_jid(info_jid)
+			
+			if gajim.logger.jid_is_room_jid(completed) or\
+			gajim.logger.jid_is_from_pm(completed):
+				img = gajim.interface.roster.load_icon('muc_active')
+				if gajim.logger.jid_is_from_pm(completed):
+					# It's PM. Make it easier to find
+					room, nick = gajim.get_room_and_nick_from_fjid(completed)
+					info_completion = '%s from %s' % (nick, room)
+					completed = info_completion
+					info_name = nick
+			else:
+				img = gajim.interface.roster.jabber_state_images['16']['online']
+			
+			liststore.append((img.get_pixbuf(), completed))
+			self.completion_dict[key] = (info_jid, info_acc, info_name,
+				info_completion)
+			self.completion_dict[completed] = (info_jid, info_acc,
+				info_name, info_completion)
+		keys.sort()
+	
+	def _get_account_for_jid(self, jid):
+		'''Return the corresponding account of the jid.
+		May be None if an account could not be found'''
+		accounts = gajim.contacts.get_accounts()
+		account = None
+		for acc in accounts:
+			jid_list = gajim.contacts.get_jid_list(acc)
+			gc_list = gajim.contacts.get_gc_list(acc)
+			if jid in jid_list or jid in gc_list:
+				account = acc
+				break
+		return account
 
 	def on_history_window_destroy(self, widget):
 		if self.mark_days_idle_call_id:
@@ -155,33 +211,32 @@ class HistoryWindow:
 		self.window.destroy()
 
 	def on_jid_entry_activate(self, widget):
-		self.jid = self.jid_entry.get_text().decode('utf-8')
-		self.account = None # Could be a new account, will be searched
-		self.load_history()
+		if not self.query_combobox.get_active() < 0:
+			# Don't disable querybox when we have changed the combobox
+			# to GC or All and hit enter
+			return
+		jid = self.jid_entry.get_text().decode('utf-8')
+		account = None # we don't know the account, could be any. Search for it!
+		self._load_history(jid, account)
+		self.results_window.set_property('visible', False)
 
-	def load_history(self):
-		if self.completion_dict.has_key(self.jid): 
+	def on_jid_entry_focus(self, widget, event):
+			widget.select_region(0, -1) # select text
+
+	def _load_history(self, jid_or_name, account = None):
+		'''Load history for the given jid/name and show it''' 
+		if jid_or_name and self.completion_dict.has_key(jid_or_name): 
 			# a full qualified jid or a contact name was entered
-			contact = self.completion_dict[self.jid]
-			if contact: # we have got additional info, jid enhanced with contact
-				self.jid = contact.jid
-				self.jid_entry.set_text(contact.get_shown_name())
-				self.jids_to_search = [contact.jid]
-			else:
-				self.jids_to_search = [self.jid]
+			info_jid, info_account, info_name, info_completion = self.completion_dict[jid_or_name]
+			self.jids_to_search = [info_jid]
+			self.jid = info_jid
 
-			if self.account is None:
-				# Try to find the corresponding account of the jid
-				accounts = gajim.contacts.get_accounts()
-				self.account = None
-				for account in accounts:
-					jid_list = gajim.contacts.get_jid_list(account)
-					gc_list = gajim.contacts.get_gc_list(account)
-					if self.jid in jid_list or self.jid in gc_list:
-						self.account = account
-						break
+			if account:
+				self.account = account
+			else:
+				self.account = info_account
 			if self.account is None: 
-				# We still don't know account ! Probably a gc not opened or an
+				# We don't know account. Probably a gc not opened or an
 				# account not connected.
 				# Disable possibility to say if we want to log or not
 				self.checkbutton.set_sensitive(False)
@@ -199,6 +254,8 @@ class HistoryWindow:
 						log = False
 					self.checkbutton.set_active(log)
 					self.checkbutton.set_sensitive(True)
+			
+			self.jids_to_search = [info_jid]
 
 			# select logs for last date we have logs with contact
 			self.calendar.set_sensitive(True)
@@ -214,22 +271,25 @@ class HistoryWindow:
 			self.calendar.select_day(d)
 			
 			self.query_entry.set_sensitive(True)
+			self.query_entry.grab_focus()
 
-			if contact:
-				title = _('Conversation History with %s') % contact.get_shown_name()
-			else:
-				title = _('Conversation History with %s') % self.jid
+			title = _('Conversation History with %s') % info_name
 			self.window.set_title(title)
-
+			self.jid_entry.set_text(info_completion)
 
 		else:	# neither a valid jid, nor an existing contact name was entered
 			# we have got nothing to show or to search in
+			self.jid = None
+			self.account = None
+			
 			self.history_buffer.set_text('') # clear the buffer
 			self.query_entry.set_sensitive(False)
 
 			self.checkbutton.set_sensitive(False)
 			self.calendar.set_sensitive(False)
 			self.calendar.clear_marks()
+
+			self.results_window.set_property('visible', False)
 			
 			title = _('Conversation History')
 			self.window.set_title(title)
@@ -237,7 +297,7 @@ class HistoryWindow:
 	def on_calendar_day_selected(self, widget):
 		year, month, day = widget.get_date() # integers
 		month = gtkgui_helpers.make_gtk_month_python_month(month)
-		self.add_lines_for_date(year, month, day)
+		self._add_lines_for_date(year, month, day)
 		
 	def do_possible_mark_for_days_in_this_month(self, widget, year, month):
 		'''this is a generator and does pseudo-threading via idle_add()
@@ -265,7 +325,7 @@ class HistoryWindow:
 		self.mark_days_idle_call_id = gobject.idle_add(
 			self.do_possible_mark_for_days_in_this_month(widget, year, month).next)
 
-	def get_string_show_from_constant_int(self, show):
+	def _get_string_show_from_constant_int(self, show):
 		if show == constants.SHOW_ONLINE:
 			show = 'online'
 		elif show == constants.SHOW_CHAT:
@@ -281,7 +341,7 @@ class HistoryWindow:
 
 		return show
 
-	def add_lines_for_date(self, year, month, day):
+	def _add_lines_for_date(self, year, month, day):
 		'''adds all the lines for given date in textbuffer'''
 		self.history_buffer.set_text('') # clear the buffer first
 		self.last_time_printout = 0
@@ -292,9 +352,9 @@ class HistoryWindow:
 		for line in lines:
 			# line[0] is contact_name, line[1] is time of message
 			# line[2] is kind, line[3] is show, line[4] is message
-			self.add_new_line(line[0], line[1], line[2], line[3], line[4])
+			self._add_new_line(line[0], line[1], line[2], line[3], line[4])
 	
-	def add_new_line(self, contact_name, tim, kind, show, message):
+	def _add_new_line(self, contact_name, tim, kind, show, message):
 		'''add a new line in textbuffer'''
 		if not message and kind not in (constants.KIND_STATUS,
 			constants.KIND_GCSTATUS):
@@ -320,31 +380,13 @@ class HistoryWindow:
 		tag_name = ''
 		tag_msg = ''
 		
-		show = self.get_string_show_from_constant_int(show)
+		show = self._get_string_show_from_constant_int(show)
 		
 		if kind == constants.KIND_GC_MSG:
 			tag_name = 'incoming'
 		elif kind in (constants.KIND_SINGLE_MSG_RECV,
 		constants.KIND_CHAT_MSG_RECV):
-			if self.account:
-				contact = gajim.contacts.get_first_contact_from_jid(self.account,
-					self.jid)
-				if contact:
-					# he is in our roster, use the name
-					contact_name = contact.get_shown_name()
-				else:
-					room_jid, nick = gajim.get_room_and_nick_from_fjid(self.jid)
-					# do we have him as gc_contact?
-					gc_contact = gajim.contacts.get_gc_contact(self.account,
-						room_jid, nick)
-					if gc_contact:
-						# so yes, it's pm!
-						contact_name = nick
-					else:
-						contact_name = self.jid.split('@')[0]
-			else:
-				# we don't have roster
-				contact_name = self.jid.split('@')[0]
+			contact_name = self.completion_dict[self.jid][C_INFO_NAME]
 			tag_name = 'incoming'
 		elif kind in (constants.KIND_SINGLE_MSG_SENT,
 		constants.KIND_CHAT_MSG_SENT):
@@ -393,54 +435,25 @@ class HistoryWindow:
 		else:
 			self.history_textview.print_real_text(message)
 
-	def set_unset_expand_on_expander(self, widget):
-		'''expander has to have expand to TRUE so scrolledwindow resizes properly
-		and does not have a static size. when expander is not expanded we set
-		expand property (note the Box one) to FALSE
-		to do this, we first get the box and then apply to expander widget
-		the True/False thingy depending if it's expanded or not
-		this function is called in a timeout just after expanded state changes'''
-		parent = widget.get_parent() # vbox
-		if not parent:
-			# Windows closed since we launch timeout
-			return
-		expanded = widget.get_expanded()
-		w, h = self.window.get_size()
-		if expanded: # resize to larger in height the window
-			self.window.resize(w, int(h*1.3))
-		else: # resize to smaller in height the window
-			self.window.resize(w, int(h/1.3))
-		# now set expand so if manually resizing scrolledwindow resizes too
-		parent.child_set_property(widget, 'expand', expanded)
-	
-	def on_search_expander_activate(self, widget):
-		if widget.get_expanded(): # it's the OPPOSITE!, it's not expanded
-			gobject.timeout_add(200, self.set_unset_expand_on_expander, widget)
-		else:
-			gobject.timeout_add(200, self.set_unset_expand_on_expander, widget)
-			self.query_entry.grab_focus()
-	
 	def on_query_entry_activate(self, widget):
 		text = self.query_entry.get_text()
 		model = self.results_treeview.get_model()
 		model.clear()
 		if text == '':
+			self.results_window.set_property('visible', False)	
 			return
+		else:
+			self.results_window.set_property('visible', True)
 
-		# perform search in preselected jids. jids are preselected with the query_combobox (all, current...)
+		# perform search in preselected jids
+		# jids are preselected with the query_combobox (all, single jid...)
 		for jid in self.jids_to_search:
-			accounts = gajim.contacts.get_accounts()	
-			account = None
-			for acc in accounts:
-				contact = gajim.contacts.get_first_contact_from_jid(acc ,jid)
-				if contact:
-					account = acc
-					break
+			account = self.completion_dict[jid][C_INFO_ACCOUNT]
 			if account is None:
 				# We do not know an account. This can only happen if the contact is offine,
 				# or if we browse a groupchat history. The account is not needed, a dummy can
 				# be set.
-				# FIXME: This may leed to wrong self nick in the displayed history
+				# This may leed to wrong self nick in the displayed history (Uggh!)
 				account = gajim.contacts.get_accounts()[0]
 
 			# contact_name, time, kind, show, message, subject
@@ -456,11 +469,7 @@ class HistoryWindow:
 					if kind == constants.KIND_CHAT_MSG_SENT: # it's us! :)
 						contact_name = gajim.nicks[account]
 					else:
-						contact = self.completion_dict[jid]
-						if contact:
-							contact_name = contact.get_shown_name()
-						else:
-							contact_name = jid
+						contact_name = self.completion_dict[jid][C_INFO_NAME]
 				tim = row[1]
 				message = row[4]
 				local_time = time.localtime(tim)
@@ -469,25 +478,29 @@ class HistoryWindow:
 				model.append((jid, contact_name, date, message, tim))
 
 	def on_query_combobox_changed(self, widget):
+		if self.query_combobox.get_active() < 0:
+			return # custom entry
+		self.account = None
+		self.jid = None
 		self.jids_to_search = []
-		if self.query_combobox.get_active() == 0:
-			# Search current contact
-			if self.completion_dict.has_key(self.jid):
-				self.query_entry.set_sensitive(True)
-				contact = self.completion_dict[self.jid]
-				if contact: 
-					self.jids_to_search = [contact.jid]
-				else:
-					self.jids_to_search = [self.jid]
-			else:
-				# We cannot search in logs of an non-existing jid
-				self.query_entry.set_sensitive(False)
-		if self.query_combobox.get_active() == 1:
-			# Search all histories
-			self.query_entry.set_sensitive(True)
-			self.jids_to_search = gajim.logger.get_jids_in_db()
+		self._load_history(None) # clear textview
 
-			
+		if self.query_combobox.get_active() == 0:
+			# JID or Contact name
+			self.query_entry.set_sensitive(False)
+			self.jid_entry.grab_focus()
+		if self.query_combobox.get_active() == 1:
+			# Groupchat Histories
+			self.query_entry.set_sensitive(True)
+			self.query_entry.grab_focus()
+			self.jids_to_search = (jid for jid in gajim.logger.get_jids_in_db() 
+					if gajim.logger.jid_is_room_jid(jid))
+		if self.query_combobox.get_active() == 2:
+			# All Chat Histories
+			self.query_entry.set_sensitive(True)
+			self.query_entry.grab_focus()
+			self.jids_to_search = gajim.logger.get_jids_in_db()
+				
 	def on_results_treeview_row_activated(self, widget, path, column):
 		'''a row was double clicked, get date from row, and select it in calendar
 		which results to showing conversation logs for that date'''
@@ -505,7 +518,7 @@ class HistoryWindow:
 		# switch to belonging logfile if necessary
 		log_jid = model[path][C_LOG_JID]
 		if log_jid != self.jid:
-			self.open_history(log_jid, None)
+			self._load_history(log_jid, None)
 
 		# avoid reruning mark days algo if same month and year!
 		if year != cur_year or gtk_month != cur_month:
@@ -513,12 +526,12 @@ class HistoryWindow:
 		
 		self.calendar.select_day(day)
 		unix_time = model[path][C_TIME]
-		self.scroll_to_result(unix_time)
+		self._scroll_to_result(unix_time)
 		#FIXME: one day do not search just for unix_time but the whole and user
 		# specific format of the textbuffer line [time] nick: message
 		# and highlight all that
 
-	def scroll_to_result(self, unix_time):
+	def _scroll_to_result(self, unix_time):
 		'''scrolls to the result using unix_time and highlight line'''
 		start_iter = self.history_buffer.get_start_iter()
 		local_time = time.localtime(float(unix_time))
@@ -553,7 +566,10 @@ class HistoryWindow:
 				' '.join(no_log_for))
 
 	def open_history(self, jid, account):
-		'''Simulate that the jid was entered by hand'''
+		'''Load chat history of the specified jid'''
+		if account and account not in self.accounts_seen_online:
+			# Update dict to not only show bare jid
+			self._fill_completion_dict
 		self.jid_entry.set_text(jid)
-		self.jid_entry.emit('activate')
-
+		self._load_history(jid, account)
+		self.results_window.set_property('visible', False)
