@@ -3746,4 +3746,6 @@ class ManagePEPServicesWindow:
 			our_jid = gajim.get_jid_from_account(self.account)
 			gajim.connections[self.account].send_pb_configure(our_jid, node, form)
 		window = dialogs.DataFormWindow(form, (on_ok, node))
+		title = "Configure %s" % node
+		window.set_title(title) 
 		window.show_all()

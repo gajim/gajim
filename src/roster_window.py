@@ -7,7 +7,7 @@
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
-## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de>
+## Copyright (C) 2007-2008 Stephan Erb <steve-e@h3c.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -3033,21 +3033,35 @@ class RosterWindow:
 
 			pep_menuitem = xml.get_widget('pep_menuitem')
 			if gajim.connections[account].pep_supported:
+				have_mood = gajim.config.get('publish_mood')
+				have_activity = gajim.config.get('publish_activity')
+				have_tune = gajim.config.get('publish_tune')
 				pep_submenu = gtk.Menu()
 				pep_menuitem.set_submenu(pep_submenu)
-				if gajim.config.get('publish_mood'):
+				if have_mood:
 					item = gtk.MenuItem(_('Mood'))
 					pep_submenu.append(item)
 					item.connect('activate', self.on_change_mood_activate, account)
-				if gajim.config.get('publish_activity'):
+				if have_activity:
 					item = gtk.MenuItem(_('Activity'))
 					pep_submenu.append(item)
 					item.connect('activate', self.on_change_activity_activate,
 						account)
-				item = gtk.MenuItem(_('Configure...'))
-				pep_submenu.append(item)
-				item.connect('activate', self.on_pep_services_menuitem_activate,
+
+				pep_config = gtk.ImageMenuItem(_('Configure Services...'))
+				if have_mood or have_activity or have_tune:
+					item = gtk.SeparatorMenuItem()
+					pep_submenu.append(item)
+					pep_config.set_sensitive(True)
+				else:
+					pep_config.set_sensitive(False)
+				pep_submenu.append(pep_config)
+				pep_config.connect('activate', self.on_pep_services_menuitem_activate,
 					account)
+				img = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES,
+					gtk.ICON_SIZE_MENU)
+				pep_config.set_image(img)
+
 			else:
 				pep_menuitem.set_sensitive(False)
 

@@ -9,7 +9,7 @@
 ## Copyright (C) 2005 Norman Rasmussen <norman@rasmussen.co.za>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
 ##                    Julien Pivotto <roidelapluie@gmail.com>
-##                    Stephan Erb <steve-e@h3c.de>
+## Copyright (C) 2007-2008 Stephan Erb <steve-e@h3c.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -372,9 +372,9 @@ class ChooseGPGKeyDialog:
 
 class ChangeActivityDialog:
 	activities = [_('doing_chores'), _('drinking'), _('eating'),
-	_('excercising'), _('grooming'), _('having_appointment'),
-	_('inactive'), _('relaxing'), _('talking'), _('traveling'),
-	_('working'), ]
+			_('excercising'), _('grooming'), _('having_appointment'),
+			_('inactive'), _('relaxing'), _('talking'), _('traveling'),
+			_('working'), ]
 	subactivities = [_('at_the_spa'), _('brushing_teeth'),
 			_('buying_groceries'), _('cleaning'), _('coding'),
 			_('commuting'), _('cooking'), _('cycling'), _('day_off'),
@@ -401,31 +401,30 @@ class ChangeActivityDialog:
 		self.xml = gtkgui_helpers.get_glade('change_activity_dialog.glade')
 		self.window = self.xml.get_widget('change_activity_dialog')
 		self.window.set_transient_for(gajim.interface.roster.window)
-		self.window.set_title(_('Activity'))
 
-		self.entry = self.xml.get_widget('entry')
+		self.entry = self.xml.get_widget('description_entry')
 
-		self.combo1 = self.xml.get_widget('combobox1')
+		self.activity_combo = self.xml.get_widget('activity_combobox')
 		self.liststore1 = gtk.ListStore(str)
-		self.combo1.set_model(self.liststore1)
+		self.activity_combo.set_model(self.liststore1)
 
 		for activity in self.activities:
 			self.liststore1.append((activity,))
 
 		cellrenderertext = gtk.CellRendererText()
-		self.combo1.pack_start(cellrenderertext, True)
-		self.combo1.add_attribute(cellrenderertext, 'text', 0)
+		self.activity_combo.pack_start(cellrenderertext, True)
+		self.activity_combo.add_attribute(cellrenderertext, 'text', 0)
 
-		self.combo2 = self.xml.get_widget('combobox2')
+		self.subactivity_combo = self.xml.get_widget('subactivity_combobox')
 		self.liststore2 = gtk.ListStore(str)
-		self.combo2.set_model(self.liststore2)
+		self.subactivity_combo.set_model(self.liststore2)
 
 		for subactivity in self.subactivities:
 			self.liststore2.append((subactivity,))
 
 		cellrenderertext = gtk.CellRendererText()
-		self.combo2.pack_start(cellrenderertext, True)
-		self.combo2.add_attribute(cellrenderertext, 'text', 0)
+		self.subactivity_combo.pack_start(cellrenderertext, True)
+		self.subactivity_combo.add_attribute(cellrenderertext, 'text', 0)
 
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -435,8 +434,8 @@ class ChangeActivityDialog:
 		activity = None
 		subactivity = None
 		message = None
-		active1 = self.combo1.get_active()
-		active2 = self.combo2.get_active()
+		active1 = self.activity_combo.get_active()
+		active2 = self.subactivity_combo.get_active()
 		if active1 > -1:
 			activity = self.liststore1[active1][0].decode('utf-8')
 			if active2 > -1:
@@ -451,17 +450,29 @@ class ChangeActivityDialog:
 		self.window.destroy()
 
 class ChangeMoodDialog:
-	moods = [_('afraid'), _('amazed'), _('angry'), _('annoyed'), _('anxious'), _('aroused'), _('ashamed'), _('bored'), _('brave'), _('calm'), _('cold'), _('confused'), _('contented'), _('cranky'), _('curious'), _('depressed'), _('disappointed'), _('disgusted'), _('distracted'), _('embarrassed'), _('excited'), _('flirtatious'), _('frustrated'), _('grumpy'), _('guilty'), _('happy'), _('hot'), _('humbled'), _('humiliated'), _('hungry'), _('hurt'), _('impressed'), _('in_awe'), _('in_love'), _('indignant'), _('interested'), _('intoxicated'), _('invincible'), _('jealous'), _('lonely'), _('mean'), _('moody'), _('nervous'), _('neutral'), _('offended'), _('playful'), _('proud'), _('relieved'), _('remorseful'), _('restless'), _('sad'), _('sarcastic'), _('serious'), _('shocked'), _('shy'), _('sick'), _('sleepy'), _('stressed'), _('surprised'), _('thirsty'), _('worried')]
+	moods = [_('afraid'), _('amazed'), _('angry'), _('annoyed'), _('anxious'),
+		_('aroused'), _('ashamed'), _('bored'), _('brave'), _('calm'),
+		_('cold'), _('confused'), _('contented'), _('cranky'), _('curious'),
+		_('depressed'), _('disappointed'), _('disgusted'), _('distracted'), 
+		_('embarrassed'), _('excited'), _('flirtatious'), _('frustrated'), 
+		_('grumpy'), _('guilty'), _('happy'), _('hot'), _('humbled'), 
+		_('humiliated'), _('hungry'), _('hurt'), _('impressed'), _('in_awe'), 
+		_('in_love'), _('indignant'), _('interested'), _('intoxicated'), 
+		_('invincible'), _('jealous'), _('lonely'), _('mean'), _('moody'), 
+		_('nervous'), _('neutral'), _('offended'), _('playful'), _('proud'), 
+		_('relieved'), _('remorseful'), _('restless'), _('sad'), _('sarcastic'), 
+		_('serious'), _('shocked'), _('shy'), _('sick'), _('sleepy'), 
+		_('stressed'), _('surprised'), _('thirsty'), _('worried')]
 	def __init__(self, account):
 		self.account = account
 		self.xml = gtkgui_helpers.get_glade('change_mood_dialog.glade')
 		self.window = self.xml.get_widget('change_mood_dialog')
 		self.window.set_transient_for(gajim.interface.roster.window)
-		self.window.set_title(_('Mood'))
+		self.window.set_title(_('Set Mood'))
 
-		self.entry = self.xml.get_widget('entry')
+		self.entry = self.xml.get_widget('description_entry')
 
-		self.combo = self.xml.get_widget('combobox')
+		self.combo = self.xml.get_widget('type_combobox')
 		self.liststore = gtk.ListStore(str)
 		self.combo.set_model(self.liststore)
 
