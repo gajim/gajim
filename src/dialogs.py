@@ -371,31 +371,31 @@ class ChooseGPGKeyDialog:
 
 
 class ChangeActivityDialog:
-	activities = [_('doing_chores'), _('drinking'), _('eating'),
-			_('excercising'), _('grooming'), _('having_appointment'),
-			_('inactive'), _('relaxing'), _('talking'), _('traveling'),
-			_('working'), ]
-	subactivities = [_('at_the_spa'), _('brushing_teeth'),
-			_('buying_groceries'), _('cleaning'), _('coding'),
-			_('commuting'), _('cooking'), _('cycling'), _('day_off'),
-			_('doing_maintenance'), _('doing_the_dishes'),
-			_('doing_the_laundry'), _('driving'), _('gaming'),
-			_('gardening'), _('getting_a_haircut'), _('going_out'),
-			_('hanging_out'), _('having_a_beer'), _('having_a_snack'),
-			_('having_breakfast'), _('having_coffee'),
-			_('having_dinner'), _('having_lunch'), _('having_tea'),
-			_('hiking'), _('in_a_car'), _('in_a_meeting'),
-			_('in_real_life'), _('jogging'), _('on_a_bus'),
-			_('on_a_plane'), _('on_a_train'), _('on_a_trip'),
-			_('on_the_phone'), _('on_vacation'), _('other'),
-			_('partying'), _('playing_sports'), _('reading'),
-			_('rehearsing'), _('running'), _('running_an_errand'),
-			_('scheduled_holiday'), _('shaving'), _('shopping'),
-			_('skiing'), _('sleeping'), _('socializing'),
-			_('studying'), _('sunbathing'), _('swimming'),
-			_('taking_a_bath'), _('taking_a_shower'), _('walking'),
-			_('walking_the_dog'), _('watching_tv'),
-			_('watching_a_movie'), _('working_out'), _('writing'), ]
+	activities = ['doing_chores', 'drinking', 'eating',
+			'excercising', 'grooming', 'having_appointment',
+			'inactive', 'relaxing', 'talking', 'traveling',
+			'working', ]
+	subactivities = ['at_the_spa', 'brushing_teeth',
+			'buying_groceries', 'cleaning', 'coding',
+			'commuting', 'cooking', 'cycling', 'day_off',
+			'doing_maintenance', 'doing_the_dishes',
+			'doing_the_laundry', 'driving', 'gaming',
+			'gardening', 'getting_a_haircut', 'going_out',
+			'hanging_out', 'having_a_beer', 'having_a_snack',
+			'having_breakfast', 'having_coffee',
+			'having_dinner', 'having_lunch', 'having_tea',
+			'hiking', 'in_a_car', 'in_a_meeting',
+			'in_real_life', 'jogging', 'on_a_bus',
+			'on_a_plane', 'on_a_train', 'on_a_trip',
+			'on_the_phone', 'on_vacation', 'other',
+			'partying', 'playing_sports', 'reading',
+			'rehearsing', 'running', 'running_an_errand',
+			'scheduled_holiday', 'shaving', 'shopping',
+			'skiing', 'sleeping', 'socializing',
+			'studying', 'sunbathing', 'swimming',
+			'taking_a_bath', 'taking_a_shower', 'walking',
+			'walking_the_dog', 'watching_tv',
+			'watching_a_movie', 'working_out', 'writing', ]
 	def __init__(self, account):
 		self.account = account
 		self.xml = gtkgui_helpers.get_glade('change_activity_dialog.glade')
@@ -450,19 +450,19 @@ class ChangeActivityDialog:
 		self.window.destroy()
 
 class ChangeMoodDialog:
-	moods = [_('afraid'), _('amazed'), _('angry'), _('annoyed'), _('anxious'),
-		_('aroused'), _('ashamed'), _('bored'), _('brave'), _('calm'),
-		_('cold'), _('confused'), _('contented'), _('cranky'), _('curious'),
-		_('depressed'), _('disappointed'), _('disgusted'), _('distracted'), 
-		_('embarrassed'), _('excited'), _('flirtatious'), _('frustrated'), 
-		_('grumpy'), _('guilty'), _('happy'), _('hot'), _('humbled'), 
-		_('humiliated'), _('hungry'), _('hurt'), _('impressed'), _('in_awe'), 
-		_('in_love'), _('indignant'), _('interested'), _('intoxicated'), 
-		_('invincible'), _('jealous'), _('lonely'), _('mean'), _('moody'), 
-		_('nervous'), _('neutral'), _('offended'), _('playful'), _('proud'), 
-		_('relieved'), _('remorseful'), _('restless'), _('sad'), _('sarcastic'), 
-		_('serious'), _('shocked'), _('shy'), _('sick'), _('sleepy'), 
-		_('stressed'), _('surprised'), _('thirsty'), _('worried')]
+	moods = ['afraid', 'amazed', 'angry', 'annoyed', 'anxious',
+		'aroused', 'ashamed', 'bored', 'brave', 'calm',
+		'cold', 'confused', 'contented', 'cranky', 'curious',
+		'depressed', 'disappointed', 'disgusted', 'distracted', 
+		'embarrassed', 'excited', 'flirtatious', 'frustrated', 
+		'grumpy', 'guilty', 'happy', 'hot', 'humbled', 
+		'humiliated', 'hungry', 'hurt', 'impressed', 'in_awe', 
+		'in_love', 'indignant', 'interested', 'intoxicated', 
+		'invincible', 'jealous', 'lonely', 'mean', 'moody', 
+		'nervous', 'neutral', 'offended', 'playful', 'proud', 
+		'relieved', 'remorseful', 'restless', 'sad', 'sarcastic', 
+		'serious', 'shocked', 'shy', 'sick', 'sleepy', 
+		'stressed', 'surprised', 'thirsty', 'worried']
 	def __init__(self, account):
 		self.account = account
 		self.xml = gtkgui_helpers.get_glade('change_mood_dialog.glade')
