@@ -145,6 +145,10 @@ except Warning, msg:
 		sys.exit()
 warnings.resetwarnings()
 
+if os.name == 'nt':
+	import warnings
+	warnings.filterwarnings(action='ignore')
+
 pritext = ''
 
 from common import exceptions
