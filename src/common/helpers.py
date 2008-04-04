@@ -190,8 +190,8 @@ def convert_bytes(string):
 					suffix = _('%s MB')
 		else:
 			if use_kib_mib:
-					#KiB means kibibyte
-					suffix = _('%s KiB')
+				#KiB means kibibyte
+				suffix = _('%s KiB')
 			else:
 				#KB means kilo bytes
 				suffix = _('%s KB')
@@ -247,7 +247,7 @@ def get_uf_show(show, use_mnemonic = False):
 		else:
 			uf_show = _('Available')
 	elif show == 'connecting':
-			uf_show = _('Connecting')
+		uf_show = _('Connecting')
 	elif show == 'away':
 		if use_mnemonic:
 			uf_show = _('A_way')
