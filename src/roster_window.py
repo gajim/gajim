@@ -290,7 +290,6 @@ class RosterWindow:
 		if hide and contact.sub != 'from':
 			return
 		observer = contact.is_observer()
-		groupchat = contact.is_groupchat()
 
 		if observer:
 			# if he has a tag, remove it
@@ -3439,10 +3438,6 @@ class RosterWindow:
 				for c in gajim.contacts.get_contacts(account, contact.jid):
 					self.remove_contact(c, account)
 				gajim.contacts.remove_jid(account, contact.jid)
-				# redraw group rows for contact numbers
-				for group in c.groups:
-					self.draw_group(group, account)
-				# redraw account rows for contact numbers
 				self.draw_account(account)
 				if not remove_auth and contact.sub == 'both':
 					contact.name = ''
