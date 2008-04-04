@@ -792,9 +792,9 @@ class Connection(ConnectionHandlers):
 		return iq
 
 	def activate_privacy_rule(self, name):
+		'''activate a privacy rule'''
 		if not self.connection:
 			return
-		'''activate a privacy rule'''
 		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
 		iq.getTag('query').setTag('active', {'name': name})
 		self.connection.send(iq)

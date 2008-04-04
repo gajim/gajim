@@ -305,11 +305,11 @@ class VcardWindow:
 		subscription_label = self.xml.get_widget('subscription_label')
 		ask_label = self.xml.get_widget('ask_label')
 		if self.gc_contact:
-			self.xml.get_widget('subscription_title_label').set_text(_("Role:"))
+			self.xml.get_widget('subscription_title_label').set_markup(_("<b>Role:</b>"))
 			uf_role = helpers.get_uf_role(self.gc_contact.role)
 			subscription_label.set_text(uf_role)
 
-			self.xml.get_widget('ask_title_label').set_text(_("Affiliation:"))
+			self.xml.get_widget('ask_title_label').set_markup(_("<b>Affiliation:</b>"))
 			uf_affiliation = helpers.get_uf_affiliation(self.gc_contact.affiliation)
 			ask_label.set_text(uf_affiliation)
 		else:
@@ -330,8 +330,10 @@ class VcardWindow:
 			ask_label.set_text(uf_ask)
 			eb = self.xml.get_widget('ask_label_eventbox')
 			if self.contact.ask == 'subscribe':
-				tooltips.set_tip(eb,
-				_("You are waiting contact's answer about your subscription request"))
+				tt_text = _("You are waiting contact's answer about your subscription request")
+			else:
+				tt_text = _("There is no pending subscription request.")
+			tooltips.set_tip(eb, tt_text)
 
 		resources = '%s (%s)' % (self.contact.resource, unicode(
 			self.contact.priority))
