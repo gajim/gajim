@@ -1835,8 +1835,8 @@ class GroupchatControl(ChatControlBase):
 			if begin.endswith(gc_refer_to_nick_char):
 				with_refer_to_nick_char = True
 			if len(self.nick_hits) and self.last_key_tabs and \
-					(text[:-1].endswith(self.nick_hits[0]) or \
-					text[:-2].endswith(self.nick_hits[0])): # we should cycle
+			(text[:-1].endswith(self.nick_hits[0]) or \
+			text[:-2].endswith(self.nick_hits[0])): # we should cycle
 				# Previous nick in list may had a space inside, so we check text and
 				# not splitted_text and store it into 'begin' var
 				self.nick_hits.append(self.nick_hits[0])
