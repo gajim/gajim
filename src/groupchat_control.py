@@ -1831,12 +1831,16 @@ class GroupchatControl(ChatControlBase):
 				begin = ''
 
 			gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
-			if len(self.nick_hits) and \
-					self.nick_hits[0].startswith(begin.replace(
-					gc_refer_to_nick_char, '')) and \
-					self.last_key_tabs: # we should cycle
+			with_refer_to_nick_char = False
+			if begin.endswith(gc_refer_to_nick_char):
+				with_refer_to_nick_char = True
+			if len(self.nick_hits) and self.last_key_tabs and \
+					(text[:-1].endswith(self.nick_hits[0]) or \
+					text[:-2].endswith(self.nick_hits[0])): # we should cycle
+				# Previous nick in list may had a space inside, so we check text and
+				# not splitted_text and store it into 'begin' var
 				self.nick_hits.append(self.nick_hits[0])
-				self.nick_hits.pop(0)
+				begin = self.nick_hits.pop(0)
 			else:
 				self.nick_hits = [] # clear the hit list
 				list_nick = gajim.contacts.get_nick_list(self.account,
@@ -1854,12 +1858,14 @@ class GroupchatControl(ChatControlBase):
 						# the word is the begining of a nick
 						self.nick_hits.append(nick)
 			if len(self.nick_hits):
-				if len(splitted_text)  < 2: # This is the 1st word of the line or no word
+				if len(splitted_text) < 2 or with_refer_to_nick_char: 
+				# This is the 1st word of the line or no word or we are cycling
+				# at the beginning, possibly with a space in one nick
 					add = gc_refer_to_nick_char + ' '
 				else:
 					add = ' '
 				start_iter = end_iter.copy()
-				if self.last_key_tabs and begin.endswith(', '):
+				if self.last_key_tabs and with_refer_to_nick_char:
 					# have to accomodate for the added space from last
 					# completion
 					start_iter.backward_chars(len(begin) + 2)
