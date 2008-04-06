@@ -59,13 +59,16 @@ class ZeroconfListener(IdleObject):
 		self.conn_holder = conn_holder
 
 	def bind(self):
-		self._serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		try:
+			self._serv = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+		except socket.error:
+			self._serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
 		self._serv.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
 		# will fail when port is busy, or we don't have rights to bind
 		try:
-			self._serv.bind(('0.0.0.0', self.port))
+			self._serv.bind(('', self.port))
 		except Exception, e:
 			# unable to bind, show error dialog
 			return None
@@ -84,14 +87,13 @@ class ZeroconfListener(IdleObject):
 		sock = self.accept_conn()
 		''' loop through roster to find who has connected to us'''
 		from_jid = None
-		nameinfo = socket.getnameinfo(sock[1], 0)
-		ipaddr = socket.gethostbyname(nameinfo[0])
+		ipaddr = sock[1][0]
 		for jid in self.conn_holder.getRoster().keys():
 			entry = self.conn_holder.getRoster().getItem(jid)
 			if (entry['address'] == ipaddr):
 				from_jid = jid
 				break;
-		P2PClient(sock[0], sock[1][0], sock[1][1], self.conn_holder, [], from_jid)
+		P2PClient(sock[0], ipaddr, sock[1][1], self.conn_holder, [], from_jid)
 
 	def disconnect(self):
 		''' free all resources, we are not listening anymore '''
