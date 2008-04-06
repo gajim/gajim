@@ -59,16 +59,15 @@ class ZeroconfListener(IdleObject):
 		self.conn_holder = conn_holder
 
 	def bind(self):
-		try:
-			self._serv = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
-		except socket.error:
-			self._serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		ai = socket.getaddrinfo(None, self.port, socket.AF_UNSPEC,
+			socket.SOCK_STREAM, 0, socket.AI_PASSIVE | socket.AI_ADDRCONFIG)[0]
+		self._serv = socket.socket(ai[0], ai[1])
 		self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
 		self._serv.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
 		# will fail when port is busy, or we don't have rights to bind
 		try:
-			self._serv.bind(('', self.port))
+			self._serv.bind((ai[4][0], self.port))
 		except Exception, e:
 			# unable to bind, show error dialog
 			return None
