@@ -2642,6 +2642,7 @@ class ManageBookmarksWindow:
 		# Account-JID, RoomName, Room-JID, Autojoin, Minimize, Passowrd, Nick,
 		# Show_Status
 		self.treestore = gtk.TreeStore(str, str, str, bool, bool, str, str, str)
+		self.treestore.set_sort_column_id(1, gtk.SORT_ASCENDING)
 
 		# Store bookmarks in treeview.
 		for account in gajim.connections:

@@ -1740,9 +1740,20 @@ class GroupchatControl(ChatControlBase):
 					_('Group Chat "%s" is already in your bookmarks.') % bm['jid'])
 				return
 
-		gajim.connections[self.account].bookmarks.append(bm)
-		gajim.connections[self.account].store_bookmarks()
+		place_found = False		
+		index = 0
+		# Respect alpha order
+		for bookmark in gajim.connections[self.account].bookmarks:
+			if bookmark['name'] > bm['name']:
+				place_found = True
+				break
+			index += 1
+		if place_found:
+			gajim.connections[self.account].bookmarks.insert(index, bm)
+		else:
+			gajim.connections[self.account].bookmarks.append(bm)
 
+		gajim.connections[self.account].store_bookmarks()
 		gajim.interface.roster.set_actions_menu_needs_rebuild()
 
 		dialogs.InformationDialog(
