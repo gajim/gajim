@@ -1733,21 +1733,20 @@ class GroupchatControl(ChatControlBase):
 			'nick': self.nick
 		}
 
+		place_found = False		
+		index = 0
+		# check for duplicate entry and espect alpha order
 		for bookmark in gajim.connections[self.account].bookmarks:
 			if bookmark['jid'] == bm['jid']:
 				dialogs.ErrorDialog(
 					_('Bookmark already set'),
 					_('Group Chat "%s" is already in your bookmarks.') % bm['jid'])
 				return
-
-		place_found = False		
-		index = 0
-		# Respect alpha order
-		for bookmark in gajim.connections[self.account].bookmarks:
 			if bookmark['name'] > bm['name']:
 				place_found = True
 				break
 			index += 1
+
 		if place_found:
 			gajim.connections[self.account].bookmarks.insert(index, bm)
 		else:
