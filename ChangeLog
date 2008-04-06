@@ -1,6 +1,7 @@
 Gajim 0.XX.X (svn)
 
   * Modified the format of emoticons list file, so we can choose the default code (#3696)
+  * List of bookmarked rooms is now sorted alphabetically
 
 Gajim 0.11.4 (06 December 2007)
 
