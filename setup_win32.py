@@ -19,6 +19,8 @@ import glob
 import sys
 
 sys.path.append('src')
+# Use local gtk folder instead of the one in PATH that is not latest gtk
+sys.path.append('gtk/bin')
 includes = ['encodings', 'encodings.utf-8',]
 
 opts = {
