@@ -371,31 +371,27 @@ class ChooseGPGKeyDialog:
 
 
 class ChangeActivityDialog:
-	activities = ['doing_chores', 'drinking', 'eating',
-			'excercising', 'grooming', 'having_appointment',
-			'inactive', 'relaxing', 'talking', 'traveling',
-			'working', ]
-	subactivities = ['at_the_spa', 'brushing_teeth',
-			'buying_groceries', 'cleaning', 'coding',
-			'commuting', 'cooking', 'cycling', 'day_off',
-			'doing_maintenance', 'doing_the_dishes',
-			'doing_the_laundry', 'driving', 'gaming',
-			'gardening', 'getting_a_haircut', 'going_out',
-			'hanging_out', 'having_a_beer', 'having_a_snack',
-			'having_breakfast', 'having_coffee',
-			'having_dinner', 'having_lunch', 'having_tea',
-			'hiking', 'in_a_car', 'in_a_meeting',
-			'in_real_life', 'jogging', 'on_a_bus',
-			'on_a_plane', 'on_a_train', 'on_a_trip',
-			'on_the_phone', 'on_vacation', 'other',
-			'partying', 'playing_sports', 'reading',
-			'rehearsing', 'running', 'running_an_errand',
-			'scheduled_holiday', 'shaving', 'shopping',
-			'skiing', 'sleeping', 'socializing',
-			'studying', 'sunbathing', 'swimming',
-			'taking_a_bath', 'taking_a_shower', 'walking',
-			'walking_the_dog', 'watching_tv',
-			'watching_a_movie', 'working_out', 'writing', ]
+	activities = \
+		{'doing_chores': ['buying_groceries', 'cleaning', 'cooking',
+			'doing_maintenance', 'doing_the_dishes' 'doing_the_laundry',
+			'gardening', 'running_an_errand', 'walking_the_dog'],
+		'drinking': ['having_a_beer', 'having_coffee', 'having_tea'],
+		'eating': ['having_a_snack', 'having_breakfast', 'having_dinner',
+			'having_lunch'],
+		'excercising': ['cycling', 'hiking', 'jogging', 'playing_sports',
+			'running', 'skiing', 'swimming', 'working_out'],
+		'grooming': ['at_the_spa', 'brushing_teeth', 'getting_a_haircut',
+			'shaving','taking_a_bath', 'taking_a_shower'],
+		'having_appointment': [],
+		'inactive': ['day_off', 'hanging_out', 'on_vacation', 'scheduled_holiday',
+			'sleeping'],
+		'relaxing': ['gaming', 'going_out', 'partying', 'reading', 'rehearsing',
+			'shopping', 'socializing', 'sunbathing', 'watching_tv',
+			'watching_a_movie'],
+		'talking': ['in_real_life', 'on_the_phone', 'on_video_phone'],
+		'traveling': ['commuting', 'cycling', 'driving', 'in_a_car', 'on_a_bus',
+			'on_a_plane', 'on_a_train', 'on_a_trip', 'walking'],
+		'working': ['coding', 'in_a_meeting', 'studying', 'writing']}
 	def __init__(self, account):
 		self.account = account
 		self.xml = gtkgui_helpers.get_glade('change_activity_dialog.glade')
@@ -405,22 +401,19 @@ class ChangeActivityDialog:
 		self.entry = self.xml.get_widget('description_entry')
 
 		self.activity_combo = self.xml.get_widget('activity_combobox')
-		self.liststore1 = gtk.ListStore(str)
+		self.liststore1 = gtk.ListStore(str, str) # translated, english
 		self.activity_combo.set_model(self.liststore1)
 
 		for activity in self.activities:
-			self.liststore1.append((activity,))
+			self.liststore1.append((helpers.get_uf_activity(activity), activity))
 
 		cellrenderertext = gtk.CellRendererText()
 		self.activity_combo.pack_start(cellrenderertext, True)
 		self.activity_combo.add_attribute(cellrenderertext, 'text', 0)
 
 		self.subactivity_combo = self.xml.get_widget('subactivity_combobox')
-		self.liststore2 = gtk.ListStore(str)
+		self.liststore2 = gtk.ListStore(str, str) # translated, english
 		self.subactivity_combo.set_model(self.liststore2)
-
-		for subactivity in self.subactivities:
-			self.liststore2.append((subactivity,))
 
 		cellrenderertext = gtk.CellRendererText()
 		self.subactivity_combo.pack_start(cellrenderertext, True)
@@ -428,6 +421,15 @@ class ChangeActivityDialog:
 
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
+
+	def on_activity_combobox_changed(self, widget):
+		self.liststore2.clear()
+		selected_activity = self.activity_combo.get_active()
+		if selected_activity > -1:
+			selected_activity = self.liststore1[selected_activity][1]
+			for subactivity in self.activities[selected_activity]:
+				self.liststore2.append((helpers.get_uf_activity(subactivity),
+					subactivity))
 
 	def on_ok_button_clicked(self, widget):
 		'''Return activity and messsage (None if no activity selected)'''
@@ -437,9 +439,9 @@ class ChangeActivityDialog:
 		active1 = self.activity_combo.get_active()
 		active2 = self.subactivity_combo.get_active()
 		if active1 > -1:
-			activity = self.liststore1[active1][0].decode('utf-8')
+			activity = self.liststore1[active1][1].decode('utf-8')
 			if active2 > -1:
-				subactivity = self.liststore2[active2][0].decode('utf-8')
+				subactivity = self.liststore2[active2][1].decode('utf-8')
 			message = self.entry.get_text().decode('utf-8')
 			from common import pep
 			pep.user_send_activity(self.account, activity,
@@ -473,11 +475,11 @@ class ChangeMoodDialog:
 		self.entry = self.xml.get_widget('description_entry')
 
 		self.combo = self.xml.get_widget('type_combobox')
-		self.liststore = gtk.ListStore(str)
+		self.liststore = gtk.ListStore(str, str) # translated, english
 		self.combo.set_model(self.liststore)
 
 		for mood in self.moods:
-			self.liststore.append((mood,))
+			self.liststore.append((helpers.get_uf_mood(mood), mood))
 
 		cellrenderertext = gtk.CellRendererText()
 		self.combo.pack_start(cellrenderertext, True)
@@ -491,7 +493,7 @@ class ChangeMoodDialog:
 		message = None
 		active = self.combo.get_active()
 		if active > -1:
-			mood = self.liststore[active][0].decode('utf-8')
+			mood = self.liststore[active][1].decode('utf-8')
 			message = self.entry.get_text().decode('utf-8')
 			from common import pep
 			pep.user_send_mood(self.account, mood, message)

@@ -501,6 +501,8 @@ class RosterTooltip(NotificationAreaTooltip):
 				
 				if contact.mood.has_key('mood'):
 					mood = contact.mood['mood'].strip()
+					# translate it
+					mood = helpers.get_uf_mood(mood)
 					mood = gobject.markup_escape_text(mood)
 					mood_string = _('Mood:') + ' <b>%s</b>' % mood
 					if contact.mood.has_key('text') and contact.mood['text'] != '':
@@ -511,10 +513,14 @@ class RosterTooltip(NotificationAreaTooltip):
 
 				if contact.activity.has_key('activity'):
 					activity = contact.activity['activity'].strip()
+					# translate it
+					activity = helpers.get_uf_activity(activity)
 					activity = gobject.markup_escape_text(activity)
 					activity_string = _('Activity:') + ' <b>%s' % activity
 					if contact.activity.has_key('subactivity'):
 						activity_sub = contact.activity['subactivity'].strip()
+						# translate it
+						activity_sub = helpers.get_uf_activity(activity_sub)
 						activity_sub = gobject.markup_escape_text(activity_sub)
 						activity_string += ' (%s)</b>' % activity_sub
 					else:
