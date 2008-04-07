@@ -13,7 +13,8 @@ Installing
 ----------
 
 Install the GTK+ framework into your /Library/Frameworks directory. It can be
-found at http://codepunks.org/misc/gtk/osx.
+found at http://codepunks.org/gajim.
+NOTE: If you're able to make it work with official GTK release, we are VERY interested !!
 
 Copy the Gajim.app into the /Applications directory or any other directory.
 
