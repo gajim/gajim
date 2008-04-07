@@ -3180,7 +3180,7 @@ class RosterWindow:
 		menu.attach_to_widget(self.tree, None)
 		menu.connect('selection-done', gtkgui_helpers.destroy_widget)
 		menu.show_all()
-		menu.popup(None, self.tree, None, event_button, event.time)
+		menu.popup(None, None, None, event_button, event.time)
 
 	def on_add_to_roster(self, widget, contact, account):
 		dialogs.AddNewContactWindow(account, contact.jid, contact.name)
