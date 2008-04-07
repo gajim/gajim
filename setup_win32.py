@@ -21,8 +21,12 @@ from distutils.core import setup
 import py2exe
 import glob
 import sys
+import os
 
 sys.path.append('src')
+# Use local gtk folder instead of the one in PATH that is not latest gtk
+if 'gtk' in os.listdir('.'):
+    sys.path.append('gtk/bin')
 includes = ['encodings', 'encodings.utf-8',]
 
 opts = {
