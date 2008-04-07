@@ -373,7 +373,7 @@ class ChooseGPGKeyDialog:
 class ChangeActivityDialog:
 	activities = \
 		{'doing_chores': ['buying_groceries', 'cleaning', 'cooking',
-			'doing_maintenance', 'doing_the_dishes' 'doing_the_laundry',
+			'doing_maintenance', 'doing_the_dishes', 'doing_the_laundry',
 			'gardening', 'running_an_errand', 'walking_the_dog'],
 		'drinking': ['having_a_beer', 'having_coffee', 'having_tea'],
 		'eating': ['having_a_snack', 'having_breakfast', 'having_dinner',
@@ -427,9 +427,13 @@ class ChangeActivityDialog:
 		selected_activity = self.activity_combo.get_active()
 		if selected_activity > -1:
 			selected_activity = self.liststore1[selected_activity][1]
-			for subactivity in self.activities[selected_activity]:
-				self.liststore2.append((helpers.get_uf_activity(subactivity),
-					subactivity))
+			if self.activities[selected_activity]:
+				for subactivity in self.activities[selected_activity]:
+					self.liststore2.append((helpers.get_uf_activity(subactivity),
+						subactivity))
+				self.subactivity_combo.set_sensitive(True)
+			else:
+				self.subactivity_combo.set_sensitive(False)
 
 	def on_ok_button_clicked(self, widget):
 		'''Return activity and messsage (None if no activity selected)'''

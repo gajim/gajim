@@ -385,7 +385,7 @@ def get_uf_activity(activity):
 		'buying_groceries':_('buying groceries'), 'shaving':_('shaving'),
 		'getting_a_haircut':_('getting a haircut'), 'gaming':_('gaming'),
 		'having_dinner':_('having dinner'), 'doing_maintenance':_('doing maintenance'),
-		'doing_the_laundry': _('doing the laundry'),
+		'doing_the_laundry':_('doing the laundry'), 'on_video_phone':_('on video phone'),
 		'scheduled_holiday':_('scheduled holiday'), 'going_out':_('going out'),
 		'partying':_('partying'), 'having_a_snack':_('having a snack'),
 		'having_lunch':_('having lunch'), 'working_out':_('working out'),
@@ -396,7 +396,7 @@ def get_uf_activity(activity):
 		'shopping':_('shopping'), 'on_a_train':_('on a train'), 'running':_('running'),
 		'taking_a_shower':_('taking a shower'), 'jogging':_('jogging'),
 		'in_a_meeting': _('in a meeting'), 'in_a_car':_('in a car'),
-		'studying': _('studying'), 'swimming': _('swimming'), 'other': _('other'), 
+		'studying': _('studying'), 'swimming': _('swimming'),
 		'having_coffee': _('having coffee')}
 	if activities.has_key(activity):
 		return activities[activity]
