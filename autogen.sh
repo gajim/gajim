@@ -8,7 +8,7 @@
   fi
 
   echo "[encoding: UTF-8]" > po/POTFILES.in \
-  && ls -1 -U data/gajim.desktop.in.in data/glade/*.glade \
+  && ls -1 data/gajim.desktop.in.in data/glade/*.glade \
   src/*py src/common/*py src/common/zeroconf/*.py src/osx/*.py >> \
   po/POTFILES.in || exit 1
   if test -z `which pkg-config 2>/dev/null`;then
