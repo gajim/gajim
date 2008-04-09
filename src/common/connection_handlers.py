@@ -1080,7 +1080,8 @@ class ConnectionVcard:
 				if frm and frm != our_jid:
 					# Write an empty file
 					self.save_vcard_to_hd(frm, '')
-					self.dispatch('VCARD', {'jid': frm})
+					jid, resource = gajim.get_room_and_nick_from_fjid(frm)
+					self.dispatch('VCARD', {'jid': jid, 'resource': resource})
 				elif frm == our_jid:
 					self.dispatch('MYVCARD', {'jid': frm})
 		elif self.awaiting_answers[id][0] == AGENT_REMOVED:
