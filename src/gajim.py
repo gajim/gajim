@@ -2930,6 +2930,9 @@ class Interface:
 			def gnome_screensaver_ActiveChanged_cb(active):
 				if not active:
 					return
+				if not gajim.config.get('autoaway'):
+					# Don't go auto away if user disabled the option
+					return
 				for account in gajim.connections:
 					if not gajim.sleeper_state.has_key(account) or \
 							not gajim.sleeper_state[account]:
