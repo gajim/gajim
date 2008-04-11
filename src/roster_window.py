@@ -2345,6 +2345,9 @@ class RosterWindow:
 				contacts, account, self.on_execute_command))
 
 		else: # one resource
+			tictactoe_menuitem = xml.get_widget( 'tictactoe_menuitem')
+			tictactoe_menuitem.connect('activate', self.play_tictactoe, contact, account, contact.resource)
+
 			start_chat_menuitem.connect('activate',
 				self.on_open_chat_window, contact, account)
 			execute_command_menuitem.connect('activate', self.on_execute_command,
@@ -4277,6 +4280,17 @@ class RosterWindow:
 			gajim.interface.remove_first_event(account, jid, event.type_)
 			return True
 		return False
+
+	def play_tictactoe(self, widget, contact, account, resource=None):
+		jid = contact.jid
+
+		if resource is not None:
+			jid = jid + u'/' + resource
+
+		import tictactoe
+
+		sess = gajim.connections[account].make_new_session(jid, klass=tictactoe.TicTacToeSession)
+		sess.begin()
 
 	def on_execute_command(self, widget, contact, account, resource=None):
 		'''Execute command. Full JID needed; if it is other contact,

@@ -50,7 +50,8 @@ if dbus_support.supported:
 	from music_track_listener import MusicTrackListener
 
 # XXX interface leaking into the back end?
-import session
+from session import ChatControlSession
+import tictactoe
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible', 'error']
@@ -768,6 +769,7 @@ class ConnectionDisco:
 					q.addChild('feature', attrs = {'var': common.xmpp.NS_MOOD})
 					q.addChild('feature', attrs = {'var': common.xmpp.NS_MOOD + '+notify'})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_ESESSION_INIT})
+				q.addChild('feature', attrs = {'var': 'http://jabber.org/protocol/games'})
 
 			if (node is None or extension == 'cstates') and gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_CHATSTATES})
@@ -778,6 +780,9 @@ class ConnectionDisco:
 			if node is None:
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_PING})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_TIME_REVISED})
+
+			if node == 'http://jabber.org/protocol/games':
+				q.addChild('feature', attrs = {'var': 'http://jabber.org/protocol/games/tictactoe'})
 
 			if q.getChildren():
 				self.connection.send(iq)
@@ -1538,7 +1543,20 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if not mtype:
 			mtype = 'normal'
 
-		if not mtype == 'groupchat':
+		game_invite = msg.getTag('invite', namespace='http://jabber.org/protocol/games')
+		if game_invite:
+			game = game_invite.getTag('game')
+
+			if game.getAttr('var') == 'http://jabber.org/protocol/games/tictactoe':
+				klass = tictactoe.TicTacToeSession
+
+			# this assumes that the invitation came with a thread_id we haven't seen
+			session = self.make_new_session(frm, thread_id, klass=klass)
+
+			session.invited(msg)
+
+			return
+		elif mtype != 'groupchat':
 			session = self.get_session(frm, thread_id, mtype)
 
 		if thread_id and not session.received_thread_id:
@@ -1550,27 +1568,23 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			return
 
 		# check if the message is a xep70-confirmation-request
-		if msg.getTag('confirm') and msg.getTag('confirm').namespace == \
-		common.xmpp.NS_HTTP_AUTH:
+		if msg.getTag('confirm', namespace=common.xmpp.NS_HTTP_AUTH):
 			self._HttpAuthCB(con, msg)
 			return
 
 		# check if the message is a XEP 0020 feature negotiation request
-		if msg.getTag('feature') and msg.getTag('feature').namespace == \
-		common.xmpp.NS_FEATURE:
+		if msg.getTag('feature', namespace=common.xmpp.NS_FEATURE):
 			if gajim.HAVE_PYCRYPTO:
 				self._FeatureNegCB(con, msg, session)
 			return
 
 		# check if the message is initiating an ESession negotiation
-		if msg.getTag('init') and msg.getTag('init').namespace == \
-		common.xmpp.NS_ESESSION_INIT:
+		if msg.getTag('init', namespace=common.xmpp.NS_ESESSION_INIT):
 			self._InitE2ECB(con, msg, session)
 
 		encrypted = False
 
-		e2e_tag = msg.getTag('c', namespace = common.xmpp.NS_STANZA_CRYPTO)
-		if e2e_tag:
+		if msg.getTag('c', namespace = common.xmpp.NS_STANZA_CRYPTO):
 			encrypted = True
 
 			try:
@@ -1701,12 +1715,16 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if treat_as:
 			mtype = treat_as
 
-		session.received(frm, msgtxt, tim, encrypted, mtype, subject, chatstate,
-      msg_id, composing_xep, user_nick, msghtml, form_node)
+		# XXX horrible hack
+		if isinstance(session, ChatControlSession):
+			session.received(frm, msgtxt, tim, encrypted, mtype, subject, chatstate,
+				msg_id, composing_xep, user_nick, msghtml, form_node)
+		else:
+			session.received(msg)
 	# END messageCB
 
 	# process and dispatch an error message
-	def dispatch_error_message(self, msg, msgtxt, session, frm, tim, subject)
+	def dispatch_error_message(self, msg, msgtxt, session, frm, tim, subject):
 		error_msg = msg.getError()
 
 		if not error_msg:
@@ -1761,7 +1779,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				except exceptions.PysqliteOperationalError, e:
 					self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 
-	def dispatch_invite_message(self, invite, frm)
+	def dispatch_invite_message(self, invite, frm):
 		item = invite.getTag('invite')
 
 		jid_from = item.getAttr('from')
@@ -1833,7 +1851,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		'''finds all of the sessions between us and jid that jid hasn't sent a thread_id in yet.
 
 returns the session that we last sent a message to.'''
-		
+
 		sessions_with_jid = self.sessions[jid].values()
 		no_threadid_sessions = filter(lambda s: not s.received_thread_id, sessions_with_jid)
 
@@ -1843,8 +1861,11 @@ returns the session that we last sent a message to.'''
 		else:
 			return None
 
-	def make_new_session(self, jid, thread_id = None, type = 'chat'):
-		sess = session.ChatControlSession(self, common.xmpp.JID(jid), thread_id, type)
+	def make_new_session(self, jid, thread_id=None, type='chat', klass=None):
+		if not klass:
+			klass = ChatControlSession
+
+		sess = klass(self, common.xmpp.JID(jid), thread_id, type)
 
 		if not jid in self.sessions:
 			self.sessions[jid] = {}

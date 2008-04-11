@@ -1,0 +1,276 @@
+from common import stanza_session
+from common import xmpp
+
+import pygtk
+pygtk.require('2.0')
+import gtk
+from gtk import gdk
+import cairo
+
+# implements <http://pidgin-games.sourceforge.net/xep/tictactoe.html#invite>
+
+class InvalidMove(Exception):
+	pass
+
+class TicTacToeSession(stanza_session.StanzaSession):
+	def begin(self, rows = 3, cols = 3, role_s = 'x'):
+		self.rows = rows
+		self.cols = cols
+
+		self.role_s = role_s
+
+		if self.role_s == 'x':
+			self.role_o = 'o'
+		else:
+			self.role_o = 'x'
+
+		msg = xmpp.Message()
+
+		invite = msg.NT.invite
+		invite.setNamespace('http://jabber.org/protocol/games')
+
+		game = invite.NT.game
+		game.setAttr('var', 'http://jabber.org/protocol/games/tictactoe')
+
+		x = xmpp.DataForm(typ='submit')
+
+		game.addChild(node=x)
+
+		self.send(msg)
+
+		self.next_move_id = 1
+		self.state = 'sent_invite'
+
+	# received an invitation
+	def invited(self, msg):
+		invite = msg.getTag('invite', namespace='http://jabber.org/protocol/games')
+		game = invite.getTag('game')
+		x = game.getTag('x', namespace='jabber:x:data')
+
+		form = xmpp.DataForm(node=x)
+
+		if form.getField('role'):
+			self.role_o = form.getField('role').getValues()[0]
+
+		if form.getField('rows'):
+			self.rows = int(form.getField('rows').getValues()[0])
+
+		if form.getField('cols'):
+			self.cols = int(form.getField('cols').getValues()[0])
+
+		# XXX 'strike'
+
+		if not hasattr(self, 'rows'):
+			self.rows = 3
+
+		if not hasattr(self, 'cols'):
+			self.cols = 3
+
+		# the number of the move about to be made
+		self.next_move_id = 1
+
+		self.board = TicTacToeBoard(self, self.rows, self.cols)
+
+		# accept the invitation, join the game
+		response = xmpp.Message()
+
+		join = response.NT.join
+		join.setNamespace('http://jabber.org/protocol/games')
+
+		self.send(response)
+
+		if not hasattr(self, 'role_o') or self.role_o == 'x':
+			self.role_s = 'o'
+			self.role_o = 'x'
+
+			self.their_turn()
+		else:
+			self.role_s = 'x'
+			self.role_o = 'o'
+
+			self.our_turn()
+
+	def is_my_turn(self):
+		return self.state == 'get_input'
+
+	def received(self, msg):
+		# just sent an invitation, expecting a reply
+		if self.state == 'sent_invite':
+			if msg.getTag('join', namespace='http://jabber.org/protocol/games'):
+				self.board = TicTacToeBoard(self, self.rows, self.cols)
+
+				if self.role_s == 'x':
+					self.our_turn()
+				else:
+					self.their_turn()
+
+			return
+
+		# ignore messages unless we're expecting a move
+		if self.state != 'waiting':
+			return
+
+		turn = msg.getTag('turn', namespace='http://jabber.org/protocol/games')
+
+		move = turn.getTag('move', namespace='http://jabber.org/protocol/games/tictactoe')
+
+		row = int(move.getAttr('row'))
+		col = int(move.getAttr('col'))
+		id = int(move.getAttr('id'))
+
+		if id != self.next_move_id:
+			print 'unexpected move id, lost a move somewhere?'
+			raise
+
+		try:
+			self.board.mark(row, col, self.role_o)
+		except InvalidMove, e:
+			print 'received invalid move'
+			return
+
+		# XXX check win conditions
+
+		self.next_move_id += 1
+
+		self.our_turn()
+
+	def our_turn(self):
+		self.state = 'get_input'
+		self.board.win.set_title(self.board.title + ': your turn')
+
+	def their_turn(self):
+		self.state = 'waiting'
+		self.board.win.set_title(self.board.title + ': their turn')
+
+	# called when the board receives input
+	def move(self, row, column):
+		try:
+			self.board.mark(row, column, self.role_s)
+		except InvalidMove, e:
+			print 'invalid move'
+			return
+
+		self.send_move(row, column)
+
+		# XXX check win conditions
+
+	def send_move(self, row, column):
+		msg = xmpp.Message()
+
+		turn = msg.NT.turn
+		turn.setNamespace('http://jabber.org/protocol/games')
+
+		move = turn.NT.move
+		move.setNamespace('http://jabber.org/protocol/games/tictactoe')
+
+		move.setAttr('row', str(row))
+		move.setAttr('col', str(column))
+		move.setAttr('id', str(self.next_move_id))
+
+		self.send(msg)
+
+		self.next_move_id += 1
+
+		self.their_turn()
+
+class TicTacToeBoard:
+	def __init__(self, session, rows, cols):
+		self.session = session
+
+		self.rows = rows
+		self.cols = cols
+
+		self.board = [ [None] * self.cols for r in xrange(self.rows) ]
+
+		self.setup_window()
+
+	def setup_window(self):
+		self.win = gtk.Window()
+
+		self.title = 'tic-tac-toe with %s' % self.session.jid
+
+		self.win.set_title(self.title)
+		self.win.set_app_paintable(True)
+
+		self.win.add_events(gdk.BUTTON_PRESS_MASK)
+		self.win.connect('button-press-event', self.clicked)
+		self.win.connect('expose-event', self.expose)
+
+		self.win.show_all()
+
+	def clicked(self, widget, event):
+		if not self.session.is_my_turn():
+			return
+
+		(height, width) = widget.get_size()
+
+		# convert click co-ordinates to row and column
+
+		row_height = height	// self.rows
+		col_width = width	// self.cols
+
+		row    = int(event.y // row_height) + 1
+		column = int(event.x // col_width) + 1
+
+		self.session.move(row, column)
+
+	def expose(self, widget, event):
+		win = widget.window
+
+		cr = win.cairo_create()
+
+		cr.set_source_rgb(1.0, 1.0, 1.0)
+
+		cr.set_operator(cairo.OPERATOR_SOURCE)
+		cr.paint()
+
+		(width, height) = widget.get_size()
+
+		row_height = height // self.rows
+		col_width  = width	// self.cols
+
+		for i in xrange(self.rows):
+			for j in xrange(self.cols):
+				if self.board[i][j] == 'x':
+					self.draw_x(cr, i, j, row_height, col_width)
+				elif self.board[i][j] == 'o':
+					self.draw_o(cr, i, j, row_height, col_width)
+
+	def draw_x(self, cr, row, col, row_height, col_width):
+		cr.set_source_rgb(0, 0, 0)
+
+		top = row_height * (row + 0.2)
+		bottom = row_height * (row + 0.8)
+
+		left = col_width * (col + 0.2)
+		right = col_width * (col + 0.8)
+
+		cr.set_line_width(row_height / 5)
+
+		cr.move_to(left, top)
+		cr.line_to(right, bottom)
+
+		cr.move_to(right, top)
+		cr.line_to(left, bottom)
+
+		cr.stroke()
+
+	def draw_o(self, cr, row, col, row_height, col_width):
+		cr.set_source_rgb(0, 0, 0)
+
+		x = col_width * (col + 0.5)
+		y = row_height * (row + 0.5)
+
+		cr.arc(x, y, row_height/4, 0, 2.0*3.2) # slightly further than 2*pi
+
+		cr.set_line_width(row_height / 5)
+		cr.stroke()
+
+	# mark a move on the board
+	def mark(self, row, column, player):
+		if self.board[row-1][column-1]:
+			raise InvalidMove
+		else:
+			self.board[row-1][column-1] = player
+
+		self.win.queue_draw()

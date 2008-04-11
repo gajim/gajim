@@ -16,6 +16,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		self.control = None
 
+	# dispatch a received <message> stanza
 	def received(self, full_jid_with_resource, message, tim, encrypted, msg_type, subject, chatstate, msg_id, composing_xep, user_nick, xhtml, form_node):
 
 		jid = gajim.get_jid_without_resource(full_jid_with_resource)
@@ -114,6 +115,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 						encrypted, msg_type, subject, chatstate, msg_id,
 						composing_xep, user_nick, xhtml, form_node]))
 
+	# display the message or show notification in the roster
 	def roster_message(self, jid, msg, tim, encrypted=False, msg_type='',
 	subject=None, resource='', msg_id=None, user_nick='',
 	advanced_notif_num=None, xhtml=None, form_node=None):

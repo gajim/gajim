@@ -32,9 +32,22 @@ class StanzaSession(object):
 			else:
 				self.thread_id = self.generate_thread_id()
 
+		self.loggable = True
+
 		self.last_send = 0
 		self.status = None
 		self.negotiated = {}
+
+	def is_loggable(self):
+		account = self.conn.name
+		no_log_for = gajim.config.get_per('accounts', account, 'no_log_for')
+
+		if not no_log_for:
+			no_log_for = ''
+
+		no_log_for = no_log_for.split()
+
+		return self.loggable and account not in no_log_for and self.jid not in no_log_for
 
 	def generate_thread_id(self):
 		return "".join([random.choice(string.ascii_letters) for x in xrange(0,32)])
@@ -131,8 +144,6 @@ if gajim.HAVE_PYCRYPTO:
 class EncryptedStanzaSession(StanzaSession):
 	def __init__(self, conn, jid, thread_id, type = 'chat'):
 		StanzaSession.__init__(self, conn, jid, thread_id, type = 'chat')
-
-		self.loggable = True
 
 		self.xes = {}
 		self.es = {}
@@ -890,17 +901,6 @@ otherwise, list the fields we haven't implemented'''
 		# this prevents the MAC check on decryption from succeeding,
 		# preventing falsified messages from going through.
 		self.km_o = ''
-
-	def is_loggable(self):
-		account = self.conn.name
-		no_log_for = gajim.config.get_per('accounts', account, 'no_log_for')
-
-		if not no_log_for:
-			no_log_for = ''
-
-		no_log_for = no_log_for.split()
-
-		return self.loggable and account not in no_log_for and self.jid not in no_log_for
 
 	def cancelled_negotiation(self):
 		StanzaSession.cancelled_negotiation(self)
