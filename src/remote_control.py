@@ -474,6 +474,16 @@ class SignalObject(dbus.service.Object):
 			else:
 				win.window.focus(long(time()))
 
+	@dbus.service.method(INTERFACE, in_signature='', out_signature='')
+	def toggle_ipython(self):
+		''' shows/hides the ipython window '''
+		win = gajim.ipython_window
+		if win:
+			win.destroy()
+			gajim.ipython_window = None
+		else:
+			gajim.interface.create_ipython_window()
+
 	@dbus.service.method(INTERFACE, in_signature='', out_signature='a{ss}')
 	def prefs_list(self):
 		prefs_dict = DBUS_DICT_SS()

@@ -59,6 +59,7 @@ config = config.Config()
 version = config.get('version')
 connections = {} # 'account name': 'account (connection.Connection) instance'
 verbose = False
+ipython_window = None
 
 h = logging.StreamHandler()
 f = logging.Formatter('%(asctime)s %(name)s: %(message)s', '%d %b %Y %H:%M:%S')

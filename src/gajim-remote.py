@@ -22,6 +22,7 @@
 # gajim-remote help will show you the D-BUS API of Gajim
 
 import sys
+import os
 import locale
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
@@ -267,11 +268,23 @@ class GajimRemote:
 					_('Check if Gajim is running'),
 					[]
 				],
+			'toggle_ipython' : [
+					_('Shows or hides the ipython window'),
+					[]
+				],
 
 			}
+
+		path = os.getcwd()
+		if '.svn' in os.listdir(path) or '_svn' in os.listdir(path):
+			# command only for svn
+			self.commands['toggle_ipython'] = [
+					_('Shows or hides the ipython window'),
+					[]
+				]
 		self.sbus = None
-		if self.argv_len  < 2 or \
-			sys.argv[1] not in self.commands.keys(): # no args or bad args
+		if self.argv_len  < 2 or sys.argv[1] not in self.commands.keys():
+			# no args or bad args
 			send_error(self.compose_help())
 		self.command = sys.argv[1]
 		if self.command == 'help':

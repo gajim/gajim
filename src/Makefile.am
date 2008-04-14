@@ -71,4 +71,7 @@ EXTRA_DIST = $(gajimsrc_PYTHON) \
 			trayicon.defs \
 			trayicon.override 
 
+dist-hook:
+			rm -f $(distdir)/ipython_view.py
+
 MAINTAINERCLEANFILES = Makefile.in

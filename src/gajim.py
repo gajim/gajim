@@ -2790,6 +2790,38 @@ class Interface:
 				tv = ctrl.conv_textview
 				tv.scroll_to_end()
 
+	def create_ipython_window(self):
+		try:
+			from ipython_view import IPythonView
+		except ImportError:
+			print 'ipython_view not found'
+			return
+		import pango
+
+		if os.name == 'nt':
+			font = 'Lucida Console 9'
+		else:
+			font = 'Luxi Mono 10'
+
+		window = gtk.Window()
+		window.set_size_request(750,550)
+		window.set_resizable(True)
+		sw = gtk.ScrolledWindow()
+		sw.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)
+		view = IPythonView()
+		view.modify_font(pango.FontDescription(font))
+		view.set_wrap_mode(gtk.WRAP_CHAR)
+		sw.add(view)
+		window.add(sw)
+		window.show_all()
+		window.connect('delete_event',lambda x,y:False)
+		def on_destroy(win):
+			gajim.ipython_window = None
+			return True
+		window.connect('destroy', on_destroy)
+		view.updateNamespace({'gajim': gajim})
+		gajim.ipython_window = window
+
 	def __init__(self):
 		gajim.interface = self
 		# This is the manager and factory of message windows set by the module
@@ -3059,6 +3091,7 @@ if __name__ == '__main__':
 		osx.init()
 
 	Interface()
+
 	try:
 		gtk.main()
 	except KeyboardInterrupt:
