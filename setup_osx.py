@@ -143,7 +143,7 @@ def finishApp():
 	# setup gajim dirs
 	copytree("build/inst/share/gajim/data", APP_RS + "/data")
 	copy("data/pixmaps/gajim.icns", APP_RS + "/data/pixmaps")
-	copytree("build/inst/locale", APP_RS + "/locale")
+	copytree("build/inst/share/locale", APP_RS + "/locale")
 	copytree("build/inst/share/man", APP_RS + "/man")
 	force(lambda:unlink("dist/Gajim.app/Contents/data"))
 	symlink("Resources/data", "dist/Gajim.app/Contents/data")
