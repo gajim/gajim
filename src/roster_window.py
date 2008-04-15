@@ -3826,7 +3826,7 @@ class RosterWindow:
 			uf_show = helpers.get_uf_show(show)
 			liststore = self.status_combobox.get_model()
 			liststore.prepend(['SEPARATOR', None, '', True])
-			liststore.prepend([uf_show+" "+"(desync'ed)",
+			liststore.prepend([uf_show + ' ' + "(desync'ed)",
 				self.jabber_state_images['16'][show], show, False])
 			self.status_combobox.set_active(0)
 		self._change_awn_icon_status(show)
