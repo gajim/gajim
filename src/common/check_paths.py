@@ -86,6 +86,10 @@ def create_log_db():
 			ver TEXT,
 			ext TEXT,
 			data BLOB);
+
+		CREATE TABLE IF NOT EXISTS rooms_last_message_time(
+			jid_id INTEGER PRIMARY KEY UNIQUE,
+			time INTEGER
 		'''
 		)
 

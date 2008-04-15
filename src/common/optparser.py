@@ -178,6 +178,8 @@ class OptionsParser:
 			self.update_config_to_01141()
 		if old < [0, 11, 4, 2] and new >= [0, 11, 4, 2]:
 			self.update_config_to_01142()
+		if old < [0, 11, 4, 3] and new >= [0, 11, 4, 3]:
+			self.update_config_to_01143()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -543,3 +545,25 @@ class OptionsParser:
 			gajim.config.set_per('soundevents', 'next_message_received_focused',
 				'path', path)
 		gajim.config.set('version', '0.11.1.2')
+
+	def update_config_to_01143(self):
+		print "updating"
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE IF NOT EXISTS rooms_last_message_time(
+		        jid_id INTEGER PRIMARY KEY UNIQUE,
+      		  time INTEGER
+				);
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError, e:
+			pass
+		con.close()
+		gajim.config.set('version', '0.11.4.3')

@@ -553,10 +553,10 @@ class Logger:
 		result = self.cur.fetchall()
 
 		# Copy all interesting times in a temporary table
-		self.cur.execute('CREATE TEMPORARY TABLE blabla(time,INTEGER)')
+		self.cur.execute('CREATE TEMPORARY TABLE temp_table(time,INTEGER)')
 		for line in result:
 			self.cur.execute('''
-				INSERT INTO blabla (time) VALUES (%d)
+				INSERT INTO temp_table (time) VALUES (%d)
 				''' % (line[0]))
 
 		# then search in this small temp table for each day
@@ -566,7 +566,7 @@ class Logger:
 
 			# just ask one row to see if we have sth for this date
 			self.cur.execute('''
-				SELECT time FROM blabla
+				SELECT time FROM temp_table
 				WHERE time BETWEEN %d AND %d
 				LIMIT 1
 				''' % (start_of_day, last_second_of_day))
@@ -575,7 +575,7 @@ class Logger:
 				days_with_logs[0:0]=[day]
 
 		# Delete temporary table
-		self.cur.execute('DROP TABLE blabla')
+		self.cur.execute('DROP TABLE temp_table')
 		result = self.cur.fetchone()
 		return days_with_logs
 
@@ -599,8 +599,37 @@ class Logger:
 			result = results[0]
 		else:
 			result = None
-
 		return result
+
+	def get_room_last_message_time(self, jid):
+		'''returns FASTLY last time (in seconds since EPOCH) for which
+		we had logs for that room from rooms_last_message_time table'''
+		jid_id = self.get_jid_id(jid, 'ROOM')
+		where_sql = 'jid_id = %s' % jid_id
+		self.cur.execute('''
+			SELECT time FROM rooms_last_message_time
+			WHERE (%s)
+			''' % (where_sql))
+
+		results = self.cur.fetchone()
+		if results is not None:
+			result = results[0]
+		else:
+			result = None
+		return result
+
+	def set_room_last_message_time(self, jid, time):
+		'''set last time (in seconds since EPOCH) for which
+		we had logs for that room in rooms_last_message_time table'''
+		jid_id = self.get_jid_id(jid, 'ROOM')
+		# jid_id is unique in this table, create or update :
+		sql = 'REPLACE INTO rooms_last_message_time VALUES (%d, %d)' % \
+			(jid_id, time)
+		self.cur.execute(sql)
+		try:
+			self.con.commit()
+		except sqlite.OperationalError, e:
+			print >> sys.stderr, str(e)
 
 	def _build_contact_where(self, account, jid):
 		'''build the where clause for a jid, including metacontacts

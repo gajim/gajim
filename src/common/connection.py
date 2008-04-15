@@ -1443,13 +1443,19 @@ class Connection(ConnectionHandlers):
 		# last date/time in history to avoid duplicate
 		if not self.last_history_line.has_key(room_jid):
 			# Not in memory, get it from DB
-			last_log = None
 			no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')\
 				.split()
-			if self.name not in no_log_for and room_jid not in no_log_for:
+			last_log = None
 			# Do not check if we are not logging for this room
-				last_log = gajim.logger.get_last_date_that_has_logs(room_jid,
-					is_room = True)
+			if self.name not in no_log_for and room_jid not in no_log_for:
+				# Check time first in the FAST table
+				last_log = gajim.logger.get_room_last_message_time(room_jid)
+				if last_log is None:
+					# Not in special table, get it from messages DB
+					last_log = gajim.logger.get_last_date_that_has_logs(room_jid,
+						is_room = True)
+				# Create self.last_history_line[room_jid] even if not logging, 
+				# could be used in connection_handlers
 			if last_log is None:
 				last_log = 0
 			self.last_history_line[room_jid]= last_log
@@ -1497,6 +1503,12 @@ class Connection(ConnectionHandlers):
 		ptype = None
 		if show == 'offline':
 			ptype = 'unavailable'
+			# Save the time we quit to avoid duplicate logs AND be faster than
+			# get that date from DB. Save it in mem AND in a small table (with 
+			# fast access)
+			log_time = time_time()
+			self.last_history_line[jid] = log_time
+			gajim.logger.set_room_last_message_time(jid, log_time)
 		xmpp_show = helpers.get_xmpp_show(show)
 		p = common.xmpp.Presence(to = '%s/%s' % (jid, nick), typ = ptype,
 			show = xmpp_show, status = status)
@@ -1506,9 +1518,6 @@ class Connection(ConnectionHandlers):
 		# send instantly so when we go offline, status is sent to gc before we
 		# disconnect from jabber server
 		self.connection.send(p)
-		# Save the time we quit to avoid duplicate logs AND be faster than
-		# get that date from DB
-		self.last_history_line[jid] = time_time()
 
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
 		'''role is for all the life of the room so it's based on nick'''
