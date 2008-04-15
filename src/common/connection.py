@@ -1454,8 +1454,8 @@ class Connection(ConnectionHandlers):
 					# Not in special table, get it from messages DB
 					last_log = gajim.logger.get_last_date_that_has_logs(room_jid,
 						is_room = True)
-				# Create self.last_history_line[room_jid] even if not logging, 
-				# could be used in connection_handlers
+			# Create self.last_history_line[room_jid] even if not logging, 
+			# could be used in connection_handlers
 			if last_log is None:
 				last_log = 0
 			self.last_history_line[room_jid]= last_log
