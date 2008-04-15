@@ -2562,25 +2562,12 @@ class Interface:
 		menu.show_all()
 		return menu
 
-	def init_emoticons(self, need_reload = False):
-		emot_theme = gajim.config.get('emoticons_theme')
-		if not emot_theme:
-			return
-
+	def _init_emoticons(self, path, need_reload = False):
 		#initialize emoticons dictionary and unique images list
 		self.emoticons_images = list()
 		self.emoticons = dict()
 		self.emoticons_animations = dict()
 
-		path = os.path.join(gajim.DATA_DIR, 'emoticons', emot_theme)
-		if not os.path.exists(path):
-			# It's maybe a user theme
-			path = os.path.join(gajim.MY_EMOTS_PATH, emot_theme)
-			if not os.path.exists(path): # theme doesn't exist, disable emoticons
-				dialogs.WarningDialog(_('Emoticons disabled'),
-					_('Your configured emoticons theme has not been found, so emoticons have been disabled.'))
-				gajim.config.set('emoticons_theme', '')
-				return
 		sys.path.append(path)
 		import emoticons
 		if need_reload:
@@ -2601,11 +2588,42 @@ class Interface:
 						pix = gtk.gdk.pixbuf_new_from_file(emot_file)
 					self.emoticons_images.append((emot, pix))
 				self.emoticons[emot.upper()] = emot_file
-		sys.path.remove(path)
 		del emoticons
+		sys.path.remove(path)
+
+	def init_emoticons(self, need_reload = False):
+		emot_theme = gajim.config.get('emoticons_theme')
+		if not emot_theme:
+			return
+
+		path = os.path.join(gajim.DATA_DIR, 'emoticons', emot_theme)
+		if not os.path.exists(path):
+			# It's maybe a user theme
+			path = os.path.join(gajim.MY_EMOTS_PATH, emot_theme)
+			if not os.path.exists(path): # theme doesn't exist, disable emoticons
+				dialogs.WarningDialog(_('Emoticons disabled'),
+					_('Your configured emoticons theme has not been found, so emoticons have been disabled.'))
+				gajim.config.set('emoticons_theme', '')
+				return
+		self._init_emoticons(path, need_reload)
 		if len(self.emoticons) == 0:
-			dialogs.WarningDialog(_('Emoticons disabled'),
-				_('Your configured emoticons theme cannot been loaded. You maybe need to update the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons for more details.'))
+			# maybe old format of emoticons file, try to convert it
+			try:
+				import pprint
+				import emoticons
+				emots = emoticons.emoticons
+				fd = open(os.path.join(path, 'emoticons.py'), 'w')
+				fd.write('emoticons = ')
+				pprint.pprint( dict([(file, [i for i in emots.keys() if emots[i] ==\
+					file]) for file in set(emots.values())]), fd)
+				fd.close()
+				del emoticons
+				self._init_emoticons(path, need_reload=True)
+			except:
+				pass
+			if len(self.emoticons) == 0:
+				dialogs.WarningDialog(_('Emoticons disabled'),
+					_('Your configured emoticons theme cannot been loaded. You maybe need to update the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons for more details.'))
 		if self.emoticons_menu:
 			self.emoticons_menu.destroy()
 		self.emoticons_menu = self.prepare_emoticons_menu()
