@@ -1593,7 +1593,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				self.dispatch('FAILED_DECRYPT', (frm, tim))
 
 		msgtxt = msg.getBody()
-		msghtml = msg.getXHTML()
 		subject = msg.getSubject() # if not there, it's None
 
 		tim = msg.getTimestamp()
@@ -1612,18 +1611,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				frm = address.getAttr('jid')
 				jid = gajim.get_jid_without_resource(frm)
 
-		encTag = msg.getTag('x', namespace = common.xmpp.NS_ENCRYPTED)
 		# invitations
 		invite = None
+		encTag = msg.getTag('x', namespace = common.xmpp.NS_ENCRYPTED)
 
 		if not encTag:
 			invite = msg.getTag('x', namespace = common.xmpp.NS_MUC_USER)
 			if invite and not invite.getTag('invite'):
 				invite = None
-
-		delayed = msg.getTag('x', namespace = common.xmpp.NS_DELAY) != None
-		msg_id = None
-		composing_xep = None
 
 		# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED
 		# invitation
@@ -1639,37 +1634,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					is_continued))
 				return
 
-		form_node = None
-		for xtag in xtags:
-			if xtag.getNamespace() == common.xmpp.NS_DATA:
-				form_node = xtag
-				break
-
-		chatstate = None
-
-		# chatstates - look for chatstate tags in a message if not delayed
-		if not delayed:
-			composing_xep = False
-			children = msg.getChildren()
-			for child in children:
-				if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
-					chatstate = child.getName()
-					composing_xep = 'XEP-0085'
-					break
-			# No XEP-0085 support, fallback to XEP-0022
-			if not chatstate:
-				chatstate_child = msg.getTag('x', namespace = common.xmpp.NS_EVENT)
-				if chatstate_child:
-					chatstate = 'active'
-					composing_xep = 'XEP-0022'
-					if not msgtxt and chatstate_child.getTag('composing'):
-						chatstate = 'composing'
-
-		# XEP-0172 User Nickname
-		user_nick = msg.getTagData('nick')
-		if not user_nick:
-			user_nick = ''
-
 		if encTag and self.USE_GPG:
 			encmsg = encTag.getData()
 
@@ -1683,44 +1647,16 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		if mtype == 'error':
 			self.dispatch_error_message(msg, msgtxt, session, frm, tim, subject)
-
-			return
 		elif mtype == 'groupchat':
-			self.dispatch_gc_message(msg, subject, frm, msgtxt, jid, tim, msghtml)
-
-			return
+			self.dispatch_gc_message(msg, subject, frm, msgtxt, jid, tim)
 		elif invite is not None:
 			self.dispatch_invite_message(invite, frm)
-
-			return
-		elif mtype == 'chat':
-			if not msg.getTag('body') and chatstate is None: # no <body>
-				return
-
-			log_type = 'chat_msg_recv'
-		else: # it's a single message
-			log_type = 'single_msg_recv'
-
-			mtype = 'normal'
-
-		if session.is_loggable() and msgtxt:
-			try:
-				msg_id = gajim.logger.write(log_type, frm, msgtxt,
-					tim = tim, subject = subject)
-			except exceptions.PysqliteOperationalError, e:
-				self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
-
-		treat_as = gajim.config.get('treat_incoming_messages')
-
-		if treat_as:
-			mtype = treat_as
-
-		# XXX horrible hack
-		if isinstance(session, ChatControlSession):
-			session.received(frm, msgtxt, tim, encrypted, mtype, subject, chatstate,
-				msg_id, composing_xep, user_nick, msghtml, form_node)
 		else:
-			session.received(msg)
+			# XXX horrible hack
+			if isinstance(session, ChatControlSession):
+				session.received(frm, msgtxt, tim, encrypted, subject, msg)
+			else:
+				session.received(msg)
 	# END messageCB
 
 	# process and dispatch an error message
@@ -1741,7 +1677,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt, tim))
 
 	# process and dispatch a groupchat message
-	def dispatch_gc_message(self, msg, subject, frm, msgtxt, jid, tim, msghtml):
+	def dispatch_gc_message(self, msg, subject, frm, msgtxt, jid, tim):
 		has_timestamp = bool(msg.timestamp)
 
 		if subject != None:
@@ -1761,7 +1697,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if not self.last_history_line.has_key(jid):
 				return
 
-			self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msghtml,
+			self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msg.getXHTML(),
 				statusCode))
 
 			no_log_for = gajim.config.get_per('accounts', self.name,

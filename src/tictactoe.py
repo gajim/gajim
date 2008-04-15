@@ -9,6 +9,8 @@ import cairo
 
 # implements <http://pidgin-games.sourceforge.net/xep/tictactoe.html#invite>
 
+games_ns = 'http://jabber.org/protocol/games'
+
 class InvalidMove(Exception):
 	pass
 
@@ -24,13 +26,19 @@ class TicTacToeSession(stanza_session.StanzaSession):
 		else:
 			self.role_o = 'x'
 
+		self.send_invitation()
+
+		self.next_move_id = 1
+		self.received = self.wait_for_invite_response
+
+	def send_invitation(self):
 		msg = xmpp.Message()
 
 		invite = msg.NT.invite
-		invite.setNamespace('http://jabber.org/protocol/games')
+		invite.setNamespace(games_ns)
 
 		game = invite.NT.game
-		game.setAttr('var', 'http://jabber.org/protocol/games/tictactoe')
+		game.setAttr('var', games_ns + '/tictactoe')
 
 		x = xmpp.DataForm(typ='submit')
 
@@ -38,12 +46,8 @@ class TicTacToeSession(stanza_session.StanzaSession):
 
 		self.send(msg)
 
-		self.next_move_id = 1
-		self.state = 'sent_invite'
-
-	# received an invitation
-	def invited(self, msg):
-		invite = msg.getTag('invite', namespace='http://jabber.org/protocol/games')
+	def read_invitation(self, msg):
+		invite = msg.getTag('invite', namespace=games_ns)
 		game = invite.getTag('game')
 		x = game.getTag('x', namespace='jabber:x:data')
 
@@ -51,37 +55,47 @@ class TicTacToeSession(stanza_session.StanzaSession):
 
 		if form.getField('role'):
 			self.role_o = form.getField('role').getValues()[0]
+		else:
+			self.role_o = 'x'
 
 		if form.getField('rows'):
 			self.rows = int(form.getField('rows').getValues()[0])
+		else:
+			self.rows = 3
 
 		if form.getField('cols'):
 			self.cols = int(form.getField('cols').getValues()[0])
-
-		# XXX 'strike'
-
-		if not hasattr(self, 'rows'):
-			self.rows = 3
-
-		if not hasattr(self, 'cols'):
+		else:
 			self.cols = 3
+
+		if form.getField('strike'):
+			self.strike = int(form.getField('strike').getValues()[0])
+		else:
+			self.strike = 3
+
+	# received an invitation
+	def invited(self, msg):
+		self.read_invitation(msg)
+
+		# XXX prompt user
+		#   "accept, reject, ignore"
 
 		# the number of the move about to be made
 		self.next_move_id = 1
 
+		# display the board
 		self.board = TicTacToeBoard(self, self.rows, self.cols)
 
 		# accept the invitation, join the game
 		response = xmpp.Message()
 
 		join = response.NT.join
-		join.setNamespace('http://jabber.org/protocol/games')
+		join.setNamespace(games_ns)
 
 		self.send(response)
 
-		if not hasattr(self, 'role_o') or self.role_o == 'x':
+		if self.role_o == 'x':
 			self.role_s = 'o'
-			self.role_o = 'x'
 
 			self.their_turn()
 		else:
@@ -91,27 +105,28 @@ class TicTacToeSession(stanza_session.StanzaSession):
 			self.our_turn()
 
 	def is_my_turn(self):
-		return self.state == 'get_input'
+		# XXX not great semantics
+		return self.received == self.ignore
 
-	def received(self, msg):
-		# just sent an invitation, expecting a reply
-		if self.state == 'sent_invite':
-			if msg.getTag('join', namespace='http://jabber.org/protocol/games'):
-				self.board = TicTacToeBoard(self, self.rows, self.cols)
+	# just sent an invitation, expecting a reply
+	def wait_for_invite_response(self, msg):
+		if msg.getTag('join', namespace=games_ns):
+			self.board = TicTacToeBoard(self, self.rows, self.cols)
 
-				if self.role_s == 'x':
-					self.our_turn()
-				else:
-					self.their_turn()
+			if self.role_s == 'x':
+				self.our_turn()
+			else:
+				self.their_turn()
 
-			return
+		elif msg.getTag('decline', namespace=games_ns):
+			self.XXX()
 
-		# ignore messages unless we're expecting a move
-		if self.state != 'waiting':
-			return
+	# silently ignores any received messages
+	def ignore(self, msg):
+		pass
 
-		turn = msg.getTag('turn', namespace='http://jabber.org/protocol/games')
-
+	def wait_for_move(self, msg):
+		turn = msg.getTag('turn', namespace=games_ns)
 		move = turn.getTag('move', namespace='http://jabber.org/protocol/games/tictactoe')
 
 		row = int(move.getAttr('row'))
@@ -128,40 +143,54 @@ class TicTacToeSession(stanza_session.StanzaSession):
 			print 'received invalid move'
 			return
 
-		# XXX check win conditions
+		# check win conditions
+		if self.board.check_for_strike(self.role_o, row, col, self.strike):
+			self.lost()
+		elif self.board.full():
+			self.drawn()
+		else:
+			self.next_move_id += 1
 
-		self.next_move_id += 1
-
-		self.our_turn()
+			self.our_turn()
 
 	def our_turn(self):
-		self.state = 'get_input'
+		# ignore messages until we've made our move
+		self.received = self.ignore
 		self.board.win.set_title(self.board.title + ': your turn')
 
 	def their_turn(self):
-		self.state = 'waiting'
+		self.received = self.wait_for_move
 		self.board.win.set_title(self.board.title + ': their turn')
 
 	# called when the board receives input
-	def move(self, row, column):
+	def move(self, row, col):
 		try:
-			self.board.mark(row, column, self.role_s)
+			self.board.mark(row, col, self.role_s)
 		except InvalidMove, e:
-			print 'invalid move'
+			print 'you made an invalid move'
 			return
 
-		self.send_move(row, column)
+		self.send_move(row, col)
 
-		# XXX check win conditions
+		# check win conditions
+		if self.board.check_for_strike(self.role_s, row, col,self.strike):
+			self.won()
+		elif self.board.full():
+			self.drawn()
+		else:
+			self.next_move_id += 1
+
+			self.their_turn()
 
 	def send_move(self, row, column):
 		msg = xmpp.Message()
+		msg.setType('chat')
 
 		turn = msg.NT.turn
-		turn.setNamespace('http://jabber.org/protocol/games')
+		turn.setNamespace(games_ns)
 
 		move = turn.NT.move
-		move.setNamespace('http://jabber.org/protocol/games/tictactoe')
+		move.setNamespace(games_ns+'/tictactoe')
 
 		move.setAttr('row', str(row))
 		move.setAttr('col', str(column))
@@ -169,11 +198,49 @@ class TicTacToeSession(stanza_session.StanzaSession):
 
 		self.send(msg)
 
-		self.next_move_id += 1
-
-		self.their_turn()
-
 class TicTacToeBoard:
+	def check_for_strike(self, p, r, c, strike):
+		# up and down, left and right
+		tallyI = 0
+		tally_ = 0
+
+		# right triangles: L\ , F/
+		tallyL = 0
+		tallyF = 0
+
+		# convert real columns to internal columns
+		r -= 1
+		c -= 1
+
+		for d in xrange(-strike, strike):
+			# vertical check
+			try:
+				tallyI = tallyI + 1 if self.board[r+d][c] == p else 0
+			except IndexError:
+				pass
+
+			# horizontal check
+			try:
+				tally_ = tally_ + 1 if self.board[r][c+d] == p else 0
+			except IndexError:
+				pass
+
+			# diagonal checks
+			try:
+				tallyL = tallyL + 1 if self.board[r+d][c+d] == p else 0
+			except IndexError:
+				pass
+
+			try:
+				tallyF = tallyF + 1 if self.board[r+d][c-d] == p else 0
+			except IndexError:
+				pass
+
+			if any([t == strike for t in (tallyL, tallyF, tallyI, tally_)]):
+				return True
+
+		return False
+
 	def __init__(self, session, rows, cols):
 		self.session = session
 
@@ -183,6 +250,15 @@ class TicTacToeBoard:
 		self.board = [ [None] * self.cols for r in xrange(self.rows) ]
 
 		self.setup_window()
+
+	# is the board full?
+	def full(self):
+		for r in xrange(self.rows):
+			for c in xrange(self.cols):
+				if self.board[r][c] == None:
+					return False
+
+		return True
 
 	def setup_window(self):
 		self.win = gtk.Window()
@@ -214,6 +290,7 @@ class TicTacToeBoard:
 
 		self.session.move(row, column)
 
+	# this actually draws the board
 	def expose(self, widget, event):
 		win = widget.window
 

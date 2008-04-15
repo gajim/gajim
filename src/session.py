@@ -1,8 +1,11 @@
 from common import helpers
 
+from common import exceptions
 from common import gajim
 from common import stanza_session
 from common import contacts
+
+import common.xmpp
 
 import dialogs
 
@@ -16,8 +19,70 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		self.control = None
 
+	# extracts chatstate from a <message/> stanza
+	def get_chatstate(self, msg, msgtxt):
+		composing_xep = None
+		chatstate = None
+
+		# chatstates - look for chatstate tags in a message if not delayed
+		delayed = msg.getTag('x', namespace=common.xmpp.NS_DELAY) != None
+		if not delayed:
+			composing_xep = False
+			children = msg.getChildren()
+			for child in children:
+				if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
+					chatstate = child.getName()
+					composing_xep = 'XEP-0085'
+					break
+			# No XEP-0085 support, fallback to XEP-0022
+			if not chatstate:
+				chatstate_child = msg.getTag('x', namespace = common.xmpp.NS_EVENT)
+				if chatstate_child:
+					chatstate = 'active'
+					composing_xep = 'XEP-0022'
+					if not msgtxt and chatstate_child.getTag('composing'):
+						chatstate = 'composing'
+
+		return (composing_xep, chatstate)
+
 	# dispatch a received <message> stanza
-	def received(self, full_jid_with_resource, message, tim, encrypted, msg_type, subject, chatstate, msg_id, composing_xep, user_nick, xhtml, form_node):
+	def received(self, full_jid_with_resource, msgtxt, tim, encrypted, subject, msg):
+		msg_type = msg.getType()
+		msg_id = None
+
+		# XEP-0172 User Nickname
+		user_nick = msg.getTagData('nick')
+		if not user_nick:
+			user_nick =''
+
+		form_node = None
+		for xtag in msg.getTags('x'):
+			if xtag.getNamespace() == common.xmpp.NS_DATA:
+				form_node = xtag
+				break
+
+		composing_xep, chatstate = self.get_chatstate(msg, msgtxt)
+
+		xhtml = msg.getXHTML()
+
+		if msg_type == 'chat':
+			if not msg.getTag('body') and chatstate is None:
+				return
+
+			log_type = 'chat_msg_recv'
+		else:
+			log_type = 'single_msg_recv'
+
+		if self.is_loggable() and msgtxt:
+			try:
+				msg_id = gajim.logger.write(log_type, full_jid_with_resource, msgtxt,
+						tim=tim, subject=subject)
+			except exceptions.PysqliteOperationalError, e:
+				gajim.dispatch('ERROR', (_('Disk WriteError'), str(e)))
+
+		treat_as = gajim.config.get('treat_incoming_messages')
+		if treat_as:
+			msg_type = treat_as
 
 		jid = gajim.get_jid_without_resource(full_jid_with_resource)
 		resource = gajim.get_resource_from_jid(full_jid_with_resource)
@@ -65,7 +130,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		# THIS MUST BE AFTER chatstates handling
 		# AND BEFORE playsound (else we ear sounding on chatstates!)
-		if not message: # empty message text
+		if not msgtxt: # empty message text
 			return
 
 		if gajim.config.get('ignore_unknown_contacts') and \
@@ -86,16 +151,16 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		if pm:
 			nickname = resource
-			groupchat_control.on_private_message(nickname, message, array[2],
+			groupchat_control.on_private_message(nickname, msgtxt, array[2],
 				xhtml, session, msg_id)
 		else:
-			self.roster_message(jid, message, tim, encrypted, msg_type,
+			self.roster_message(jid, msgtxt, tim, encrypted, msg_type,
 				subject, resource, msg_id, user_nick, advanced_notif_num,
 				xhtml=xhtml, form_node=form_node)
 
 			nickname = gajim.get_name_from_jid(self.conn.name, jid)
 		# Check and do wanted notifications
-		msg = message
+		msg = msgtxt
 		if subject:
 			msg = _('Subject: %s') % subject + '\n' + msg
 		focused = False
@@ -111,7 +176,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		if gajim.interface.remote_ctrl:
 			gajim.interface.remote_ctrl.raise_signal('NewMessage',
-					(self.conn.name, [full_jid_with_resource, message, tim,
+					(self.conn.name, [full_jid_with_resource, msgtxt, tim,
 						encrypted, msg_type, subject, chatstate, msg_id,
 						composing_xep, user_nick, xhtml, form_node]))
 
