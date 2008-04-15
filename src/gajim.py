@@ -2820,11 +2820,10 @@ class Interface:
 		sw.add(view)
 		window.add(sw)
 		window.show_all()
-		window.connect('delete_event',lambda x,y:False)
-		def on_destroy(win):
-			gajim.ipython_window = None
+		def on_delete(win, event):
+			win.hide()
 			return True
-		window.connect('destroy', on_destroy)
+		window.connect('delete_event',on_delete)
 		view.updateNamespace({'gajim': gajim})
 		gajim.ipython_window = window
 

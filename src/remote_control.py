@@ -479,8 +479,11 @@ class SignalObject(dbus.service.Object):
 		''' shows/hides the ipython window '''
 		win = gajim.ipython_window
 		if win:
-			win.destroy()
-			gajim.ipython_window = None
+			if win.window.is_visible():
+				gobject.idle_add(win.hide)
+			else:
+				win.show_all()
+				win.present()
 		else:
 			gajim.interface.create_ipython_window()
 
