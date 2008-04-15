@@ -59,8 +59,11 @@ class ZeroconfListener(IdleObject):
 		self.conn_holder = conn_holder
 
 	def bind(self):
+		flags = socket.AI_PASSIVE
+		if hasattr(socket, 'AI_ADDRCONFIG'):
+			flags |= socket.AI_ADDRCONFIG)
 		ai = socket.getaddrinfo(None, self.port, socket.AF_UNSPEC,
-			socket.SOCK_STREAM, 0, socket.AI_PASSIVE | socket.AI_ADDRCONFIG)[0]
+			socket.SOCK_STREAM, 0, flags)[0]
 		self._serv = socket.socket(ai[0], ai[1])
 		self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)

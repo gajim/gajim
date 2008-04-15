@@ -32,6 +32,8 @@ def test_bonjour():
 		import pybonjour
 	except ImportError:
 		return False
+	except WindowsError:
+		return False
 	return True
 
 def test_zeroconf():
