@@ -2178,7 +2178,8 @@ class Interface:
 		ctrl = self.msg_win_mgr.get_control(contact.get_full_jid(), account)
 		if ctrl == None:
 			ctrl = self.msg_win_mgr.get_control(contact.jid, account)
-		ctrl.print_conversation(_('Error.'), 'status')
+		if ctrl:
+			ctrl.print_conversation(_('Error.'), 'status')
 
 	def handle_event_search_form(self, account, data):
 		# ('SEARCH_FORM', account, (jid, dataform, is_dataform))
