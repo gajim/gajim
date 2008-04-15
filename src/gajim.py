@@ -2172,7 +2172,8 @@ class Interface:
 		ctrl = self.msg_win_mgr.get_control(contact.get_full_jid(), account)
 		if ctrl == None:
 			ctrl = self.msg_win_mgr.get_control(contact.jid, account)
-		ctrl.print_conversation(_('Pong! (%s s.)') % seconds, 'status')
+		if ctrl:
+			ctrl.print_conversation(_('Pong! (%s s.)') % seconds, 'status')
 
 	def handle_event_ping_error(self, account, contact):
 		ctrl = self.msg_win_mgr.get_control(contact.get_full_jid(), account)
