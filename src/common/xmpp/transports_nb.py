@@ -274,6 +274,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		# This prevents replug of same object with the same flags
 		self.writable = True
 		self.readable = False
+		self.ais = None
 	
 	def plugin(self, owner):
 		''' Fire up connection. Return non-empty string on success.
@@ -296,46 +297,34 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			if self.on_timeout:
 				self.on_timeout()
 			self.renew_send_timeout()
-		
+
 	def connect(self,server=None, proxy = None, secure = None):
-		''' Try to establish connection. Returns True/False on success/failure. '''
+		''' Try to establish connection. '''
 		if not server:
 			server=self._server
 		else: 
 			self._server = server
 		self.printed_error = False
 		self.state = 0
-		success = False
 		try:
-			for ai in socket.getaddrinfo(server[0],server[1],socket.AF_UNSPEC,socket.SOCK_STREAM):
-				try:
-					self._sock=socket.socket(*ai[:3])
-					self._sock.setblocking(False)
-					self._server=ai[4]
-					success = True
-					break
-				except:
-					if sys.exc_value[0] == errno.EINPROGRESS:
-						success = True
-						break
-					#for all errors, we try other addresses
-					continue
+			self.set_timeout(CONNECT_TIMEOUT_SECONDS)
+			if len(server) == 2 and type(server[0]) in (str, unicode) and not \
+			self.ais:
+				# FIXME: blocks here
+				self.ais = socket.getaddrinfo(server[0],server[1],socket.AF_UNSPEC,socket.SOCK_STREAM)
+				log.info('Found IPs: %s', self.ais)
+			else:
+				self.ais = (server,)
+			self.connect_to_next_ip()
+			return
 		except socket.gaierror, e:
-			log.info("Lookup failure for %s: %s[%s]", self.getName(), e[1], repr(e[0]), exc_info=True)
+			log.info('Lookup failure for %s: %s[%s]', self.getName(), e[1], repr(e[0]), exc_info=True)
 		except:
-			log.error("Exception trying to connect to %s:", self.getName(), exc_info=True)
+			log.error('Exception trying to connect to %s:', self.getName(), exc_info=True)
 
-		if not success:
-			if self.on_connect_failure:
-				self.on_connect_failure()
-			return False
+		if self.on_connect_failure:
+			self.on_connect_failure()
 
-		self.fd = self._sock.fileno()
-		self.idlequeue.plug_idle(self, True, False)
-		self.set_timeout(CONNECT_TIMEOUT_SECONDS)
-		self._do_connect()
-		return True
-	
 	def _plug_idle(self):
 		readable = self.state != 0
 		if self.sendqueue or self.sendbuff:
@@ -347,8 +336,9 @@ class NonBlockingTcp(PlugIn, IdleObject):
 	
 	def pollout(self):
 		if self.state == 0:
-			return self._do_connect()
-		return self._do_send()
+			self.connect_to_next_ip()
+			return
+		self._do_send()
 	
 	def plugout(self):
 		''' Disconnect from the remote server and unregister self.disconnected method from
@@ -538,19 +528,22 @@ class NonBlockingTcp(PlugIn, IdleObject):
 				return
 		return True
 
-	def _do_connect(self):
+	def connect_to_next_ip(self):
 		if self.state != 0:
 			return
-		self._sock.setblocking(False)
-		self._send = self._sock.send
-		self._recv = self._sock.recv
-		errnum = 0
+		if len(self.ais) == 0:
+			if self.on_connect_failure:
+				self.on_connect_failure()
+			return
+		ai = self.ais.pop(0)
+		log.info('Trying to connect to %s:%s', ai[4][0], ai[4][1])
 		try:
-			self._sock.connect(self._server)
+			self._sock = socket.socket(*ai[:3])
+			self._server=ai[4]
 		except socket.error, e:
-			errnum = e[0]
-
-			# Ignore "Socket already connected". 
+			errnum, errstr = e
+			
+			# Ignore "Socket already connected".
 			# FIXME: This happens when we switch an already
 			# connected socket to SSL (STARTTLS). Instead of
 			# ignoring the error, the socket should only be
@@ -559,28 +552,45 @@ class NonBlockingTcp(PlugIn, IdleObject):
 
 			# 10035 - winsock equivalent of EINPROGRESS
 			if errnum not in (errno.EINPROGRESS, 10035) + workaround:
-				log.error("_do_connect:", exc_info=True)
+				log.error('Could not connect to %s: %s [%s]', ai[4][0], errnum,
+					errstr, exc_info=True)
 				#traceback.print_exc()
+				self.connect_to_next_ip()
+				return
+		self.fd = self._sock.fileno()
+		self.idlequeue.plug_idle(self, True, False)
+		self._send = self._sock.send
+		self._recv = self._sock.recv
+		self._do_connect()
+
+	def _do_connect(self):
+		errnum = 0
+
+		try:
+			self._sock.connect(self._server)
+			self._sock.setblocking(False)
+		except Exception, ee:
+			(errnum, errstr) = ee
 		# in progress, or would block
-		if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK): 
+		if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):
+			self.state = 1
 			return
 		# 10056  - already connected, only on win32
 		# code 'WS*' is not available on GNU, so we use its numeric value
-		elif errnum not in (0, 10056, errno.EISCONN): 
-			self.remove_timeout()
-			if self.on_connect_failure:
-				self.on_connect_failure()
+		elif errnum not in (0, 10056, errno.EISCONN):
+			log.error('Could not connect to %s: %s [%s]', self._server[0], errnum,
+				errstr)
+			self.connect_to_next_ip()
 			return
 		self.remove_timeout()
 		self._owner.Connection=self
 		self.state = 1
-		
+
 		self._sock.setblocking(False)
 		self._plug_idle()
 		if self.on_connect:
 			self.on_connect()
-			self.on_connect = None
-		return True
+		self.on_connect = None
 
 	def send(self, raw_data, now = False):
 		'''Append raw_data to the queue of messages to be send. 
