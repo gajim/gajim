@@ -1093,7 +1093,7 @@ class GroupchatControl(ChatControlBase):
 				# We do that here because we may request it to the real JID if we
 				# knows it. connections.py doesn't know it.
 				con = gajim.connections[self.account]
-				if gc_c.jid:
+				if gc_c and gc_c.jid:
 					real_jid = gc_c.jid
 					if gc_c.resource:
 						real_jid += '/' + gc_c.resource
