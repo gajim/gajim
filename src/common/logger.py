@@ -748,8 +748,11 @@ class Logger:
 		gzip.write(data)
 		gzip.close()
 		data = string.getvalue()
-		sql = '''
+		self.cur.execute('''
 			INSERT INTO caps_cache ( node, ver, ext, data )
-			VALUES (%s, %s, %s, %s);
-			''' % (node, ver, ext, buffer(data)) # (1) -- note above
-		self.simple_commit(sql)
+			VALUES (?, ?, ?, ?);
+			''' % (node, ver, ext, buffer(data))) # (1) -- note above
+		try:
+			self.con.commit()
+		except sqlite.OperationalError, e:
+			print >> sys.stderr, str(e)
