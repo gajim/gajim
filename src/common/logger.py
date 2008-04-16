@@ -135,6 +135,14 @@ class Logger:
 		self.open_db()
 		self.get_jids_already_in_db()
 
+	def simple_commit(self, sql_to_commit):
+		'''helper to commit'''
+		self.cur.execute(sql_to_commit)
+		try:
+			self.con.commit()
+		except sqlite.OperationalError, e:
+			print >> sys.stderr, str(e)
+
 	def get_jids_already_in_db(self):
 		try:
 			self.cur.execute('SELECT jid FROM jids')
@@ -144,7 +152,11 @@ class Logger:
 		self.jids_already_in = []
 		for row in rows:
 			# row[0] is first item of row (the only result here, the jid)
-			self.jids_already_in.append(row[0])
+			if row[0] == '':
+				# malformed jid, ignore line
+				pass
+			else:
+				self.jids_already_in.append(row[0])
 
 	def get_jids_in_db(self):
 		return self.jids_already_in
@@ -331,21 +343,13 @@ class Logger:
 	def insert_unread_events(self, message_id, jid_id):
 		''' add unread message with id: message_id'''
 		sql = 'INSERT INTO unread_messages VALUES (%d, %d)' % (message_id, jid_id)
-		self.cur.execute(sql)
-		try:
-			self.con.commit()
-		except sqlite.OperationalError, e:
-			print >> sys.stderr, str(e)
+		self.simple_commit(sql)
 
 	def set_read_messages(self, message_ids):
 		''' mark all messages with ids in message_ids as read'''
 		ids = ','.join([str(i) for i in message_ids])
 		sql = 'DELETE FROM unread_messages WHERE message_id IN (%s)' % ids
-		self.cur.execute(sql)
-		try:
-			self.con.commit()
-		except sqlite.OperationalError, e:
-			print >> sys.stderr, str(e)
+		self.simple_commit(sql)
 
 	def get_unread_msgs(self):
 		''' get all unread messages '''
@@ -625,11 +629,7 @@ class Logger:
 		# jid_id is unique in this table, create or update :
 		sql = 'REPLACE INTO rooms_last_message_time VALUES (%d, %d)' % \
 			(jid_id, time)
-		self.cur.execute(sql)
-		try:
-			self.con.commit()
-		except sqlite.OperationalError, e:
-			print >> sys.stderr, str(e)
+		self.simple_commit(sql)
 
 	def _build_contact_where(self, account, jid):
 		'''build the where clause for a jid, including metacontacts
@@ -662,20 +662,12 @@ class Logger:
 			result = results[0][0]
 			if result == type_id:
 				return
-			self.cur.execute(
-				'UPDATE transports_cache SET type = %d WHERE transport = "%s"' % (
-				type_id, jid))
-			try:
-				self.con.commit()
-			except sqlite.OperationalError, e:
-				print >> sys.stderr, str(e)
+			sql = 'UPDATE transports_cache SET type = %d WHERE transport = "%s"' %\
+				(type_id, jid)
+			self.simple_commit(sql)
 			return
-		self.cur.execute(
-			'INSERT INTO transports_cache VALUES ("%s", %d)' % (jid, type_id))
-		try:
-			self.con.commit()
-		except sqlite.OperationalError, e:
-			print >> sys.stderr, str(e)
+		sql = 'INSERT INTO transports_cache VALUES ("%s", %d)' % (jid, type_id)
+		self.simple_commit(sql)
 
 	def get_transports_type(self):
 		'''return all the type of the transports in DB'''
@@ -756,11 +748,8 @@ class Logger:
 		gzip.write(data)
 		gzip.close()
 		data = string.getvalue()
-		self.cur.execute('''
+		sql = '''
 			INSERT INTO caps_cache ( node, ver, ext, data )
 			VALUES (?, ?, ?, ?);
-			''', (node, ver, ext, buffer(data))) # (1) -- note above
-		try:
-			self.con.commit()
-		except sqlite.OperationalError, e:
-			print >> sys.stderr, str(e)
+			''', (node, ver, ext, buffer(data)) # (1) -- note above
+		self.simple_commit(sql)
