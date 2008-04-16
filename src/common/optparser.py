@@ -547,7 +547,6 @@ class OptionsParser:
 		gajim.config.set('version', '0.11.1.2')
 
 	def update_config_to_01143(self):
-		print "updating"
 		back = os.getcwd()
 		os.chdir(logger.LOG_DB_FOLDER)
 		con = sqlite.connect(logger.LOG_DB_FILE)
