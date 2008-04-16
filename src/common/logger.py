@@ -751,7 +751,7 @@ class Logger:
 		self.cur.execute('''
 			INSERT INTO caps_cache ( node, ver, ext, data )
 			VALUES (?, ?, ?, ?);
-			''' % (node, ver, ext, buffer(data))) # (1) -- note above
+			''', (node, ver, ext, buffer(data))) # (1) -- note above
 		try:
 			self.con.commit()
 		except sqlite.OperationalError, e:
