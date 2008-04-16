@@ -750,6 +750,6 @@ class Logger:
 		data = string.getvalue()
 		sql = '''
 			INSERT INTO caps_cache ( node, ver, ext, data )
-			VALUES (?, ?, ?, ?);
-			''', (node, ver, ext, buffer(data)) # (1) -- note above
+			VALUES (%s, %s, %s, %s);
+			''' % (node, ver, ext, buffer(data)) # (1) -- note above
 		self.simple_commit(sql)
