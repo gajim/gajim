@@ -5564,7 +5564,8 @@ class RosterWindow:
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()
 		else:
-			if not gajim.config.get('trayicon') or not gajim.interface.systray_capabilities:
+			if not gajim.config.get('trayicon') or not \
+			gajim.interface.systray_capabilities:
 				# cannot happen via GUI, but I put this incase user touches
 				# config. without trayicon, he or she should see the roster!
 				self.window.show_all()
