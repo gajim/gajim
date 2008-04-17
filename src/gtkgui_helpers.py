@@ -4,8 +4,8 @@
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab@snarc.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+##						  Travis Shirk <travis@pobox.com>
+##						  Norman Rasmussen <norman@rasmussen.co.za>
 ## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de>
 ##
 ## This file is part of Gajim.
@@ -862,3 +862,100 @@ def create_combobox(value_list, selected_value = None):
 		combobox.set_active(i)
 	combobox.show_all()
 	return combobox
+
+def load_iconset(path, pixbuf2 = None, transport = False):
+	'''load full iconset from the given path, and add
+	pixbuf2 on top left of each static images'''
+	path += '/'
+	if transport:
+		list = ('online', 'chat', 'away', 'xa', 'dnd', 'offline',
+			'not in roster')
+	else:
+		list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
+			'invisible', 'offline', 'error', 'requested', 'event', 'opened',
+			'closed', 'not in roster', 'muc_active', 'muc_inactive')
+		if pixbuf2:
+			list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
+				'offline', 'error', 'requested', 'event', 'not in roster')
+	return _load_icon_list(list, path, pixbuf2)
+
+def load_icon(icon_name):
+	'''load an icon from the iconset in 16x16'''
+	iconset = gajim.config.get('iconset')
+	path = os.path.join(helpers.get_iconset_path(iconset), '16x16' + '/')
+	icon_list = _load_icon_list([icon_name], path)
+	return icon_list[icon_name]
+
+def load_icons_meta():
+	'''load and return  - AND + small icons to put on top left of an icon
+	for meta contacts.'''
+	iconset = gajim.config.get('iconset')
+	path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
+	# try to find opened_meta.png file, else opened.png else nopixbuf merge
+	path_opened = os.path.join(path, 'opened_meta.png')
+	if not os.path.isfile(path_opened):
+		path_opened = os.path.join(path, 'opened.png')
+	if os.path.isfile(path_opened):
+		pixo = gtk.gdk.pixbuf_new_from_file(path_opened)
+	else:
+		pixo = None
+	# Same thing for closed
+	path_closed = os.path.join(path, 'opened_meta.png')
+	if not os.path.isfile(path_closed):
+		path_closed = os.path.join(path, 'closed.png')
+	if os.path.isfile(path_closed):
+		pixc = gtk.gdk.pixbuf_new_from_file(path_closed)
+	else:
+		pixc = None
+	return pixo, pixc
+
+def _load_icon_list(icons_list, path, pixbuf2 = None):
+	'''load icons in icons_list from the given path,
+	and add pixbuf2 on top left of each static images'''
+	imgs = {}
+	for icon in icons_list:
+		# try to open a pixfile with the correct method
+		icon_file = icon.replace(' ', '_')
+		files = []
+		files.append(path + icon_file + '.gif')
+		files.append(path + icon_file + '.png')
+		image = gtk.Image()
+		image.show()
+		imgs[icon] = image
+		for file in files: # loop seeking for either gif or png
+			if os.path.exists(file):
+				image.set_from_file(file)
+				if pixbuf2 and image.get_storage_type() == gtk.IMAGE_PIXBUF:
+					# add pixbuf2 on top-left corner of image
+					pixbuf1 = image.get_pixbuf()
+					pixbuf2.composite(pixbuf1, 0, 0,
+						pixbuf2.get_property('width'),
+						pixbuf2.get_property('height'), 0, 0, 1.0, 1.0,
+						gtk.gdk.INTERP_NEAREST, 255)
+					image.set_from_pixbuf(pixbuf1)
+				break
+	return imgs
+
+def make_jabber_state_images():
+	'''initialise jabber_state_images dict'''
+	iconset = gajim.config.get('iconset')
+	if iconset:
+		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
+		if not os.path.exists(path):
+			iconset = gajim.config.DEFAULT_ICONSET
+	else:
+		iconset = gajim.config.DEFAULT_ICONSET
+
+	path = os.path.join(helpers.get_iconset_path(iconset), '32x32')
+	gajim.interface.jabber_state_images['32'] = load_iconset(path)
+
+	path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
+	gajim.interface.jabber_state_images['16'] = load_iconset(path)
+
+	pixo, pixc = load_icons_meta()
+	gajim.interface.jabber_state_images['opened'] = load_iconset(path, pixo)
+	gajim.interface.jabber_state_images['closed'] = load_iconset(path, pixc)
+
+def reload_jabber_state_images():
+	make_jabber_state_images()
+	gajim.interface.roster.update_jabber_state_images()

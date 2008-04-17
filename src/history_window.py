@@ -165,7 +165,7 @@ class HistoryWindow:
 			
 			if gajim.logger.jid_is_room_jid(completed) or\
 			gajim.logger.jid_is_from_pm(completed):
-				img = gajim.interface.roster.load_icon('muc_active')
+				img = gtkgui_helpers.load_icon('muc_active')
 				if gajim.logger.jid_is_from_pm(completed):
 					# It's PM. Make it easier to find
 					room, nick = gajim.get_room_and_nick_from_fjid(completed)
@@ -173,7 +173,7 @@ class HistoryWindow:
 					completed = info_completion
 					info_name = nick
 			else:
-				img = gajim.interface.roster.jabber_state_images['16']['online']
+				img = gajim.interface.jabber_state_images['16']['online']
 			
 			liststore.append((img.get_pixbuf(), completed))
 			self.completion_dict[key] = (info_jid, info_acc, info_name,

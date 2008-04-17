@@ -1681,7 +1681,7 @@ class ChatControl(ChatControlBase):
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
 		information_menuitem = xml.get_widget('information_menuitem')
 		convert_to_gc_menuitem = xml.get_widget('convert_to_groupchat')
-		muc_icon = gajim.interface.roster.load_icon('muc_active')
+		muc_icon = gtkgui_helpers.load_icon('muc_active')
 		if muc_icon:
 			convert_to_gc_menuitem.set_image(muc_icon) 
 

@@ -4,11 +4,11 @@
 ##
 ## Copyright (C) 2003-2007 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
-##                         Dimitur Kirov <dkirov@gmail.com>
+##								 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005 Travis Shirk <travis@pobox.com>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
-##                    Julien Pivotto <roidelapluie@gmail.com>
-##                    Stephan Erb <steve-e@h3c.de>
+##						  Julien Pivotto <roidelapluie@gmail.com>
+##						  Stephan Erb <steve-e@h3c.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -2435,7 +2435,7 @@ class Interface:
 		# + means 1 or more times
 		# ? means 0 or 1 time
 		# | means or
-		# [^*] anything but '*'   (inside [] you don't have to escape metachars)
+		# [^*] anything but '*'	(inside [] you don't have to escape metachars)
 		# [^\s*] anything but whitespaces and '*'
 		# (?<!\S) is a one char lookbehind assertion and asks for any leading whitespace
 		# and mathces beginning of lines so we have correct formatting detection
@@ -2498,8 +2498,8 @@ class Interface:
 			# whitespace, or another emoticon next to it to match successfully
 			# [\w.] alphanumeric and dot (for not matching 8) in (2.8))
 			emoticons_pattern = '|' + \
-				'(?:(?<![\w.]' + emoticons_pattern_prematch[:-1]   + '))' + \
-				'(?:'       + emoticons_pattern[:-1]            + ')'  + \
+				'(?:(?<![\w.]' + emoticons_pattern_prematch[:-1]	+ '))' + \
+				'(?:'		 + emoticons_pattern[:-1]				+ ')'  + \
 				'(?:(?![\w.]'  + emoticons_pattern_postmatch[:-1]  + '))'
 
 		# because emoticons match later (in the string) they need to be after
@@ -2849,6 +2849,8 @@ class Interface:
 		gajim.interface = self
 		# This is the manager and factory of message windows set by the module
 		self.msg_win_mgr = None
+		self.jabber_state_images = {'16': {}, '32': {}, 'opened': {},
+			'closed': {}}
 		self.emoticons_menu = None
 		# handler when an emoticon is clicked in emoticons_menu
 		self.emoticon_menuitem_clicked = None
@@ -3014,6 +3016,8 @@ class Interface:
 		self.sleeper = common.sleepy.Sleepy(
 			gajim.config.get('autoawaytime') * 60, # make minutes to seconds
 			gajim.config.get('autoxatime') * 60)
+
+		gtkgui_helpers.make_jabber_state_images()
 
 		self.systray_enabled = False
 		self.systray_capabilities = False

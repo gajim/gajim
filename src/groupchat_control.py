@@ -461,9 +461,9 @@ class GroupchatControl(ChatControlBase):
 		# Set tab image (always 16x16)
 		tab_image = None
 		if gajim.gc_connected[self.account][self.room_jid]:
-			tab_image = gajim.interface.roster.load_icon('muc_active')
+			tab_image = gtkgui_helpers.load_icon('muc_active')
 		else:
-			tab_image = gajim.interface.roster.load_icon('muc_inactive')
+			tab_image = gtkgui_helpers.load_icon('muc_inactive')
 		return tab_image
 
 	def update_ui(self):
@@ -484,7 +484,7 @@ class GroupchatControl(ChatControlBase):
 
 	def _update_banner_state_image(self):
 		banner_status_img = self.xml.get_widget('gc_banner_status_image')
-		images = gajim.interface.roster.jabber_state_images
+		images = gajim.interface.jabber_state_images
 		if gajim.gc_connected[self.account].has_key(self.room_jid) and \
 		gajim.gc_connected[self.account][self.room_jid]:
 			image = 'muc_active'
@@ -916,7 +916,7 @@ class GroupchatControl(ChatControlBase):
 		model = self.list_treeview.get_model()
 		gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid,
 			nick)
-		state_images = gajim.interface.roster.jabber_state_images['16']
+		state_images = gajim.interface.jabber_state_images['16']
 		if len(gajim.events.get_events(self.account, self.room_jid + '/' + nick)):
 			image = state_images['event']
 		else:
@@ -1187,7 +1187,7 @@ class GroupchatControl(ChatControlBase):
 		role_iter = self.get_role_iter(role)
 		if not role_iter:
 			role_iter = model.append(None,
-				(gajim.interface.roster.jabber_state_images['16']['closed'], role, 
+				(gajim.interface.jabber_state_images['16']['closed'], role, 
 				'role', '%s' % role_name,  None))
 		iter = model.append(role_iter, (None, nick, 'contact', name, None))
 		if not nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
@@ -1903,13 +1903,13 @@ class GroupchatControl(ChatControlBase):
 	def on_list_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded: change the icon of the arrow'''
 		model = widget.get_model()
-		image = gajim.interface.roster.jabber_state_images['16']['opened']
+		image = gajim.interface.jabber_state_images['16']['opened']
 		model[iter][C_IMG] = image
 
 	def on_list_treeview_row_collapsed(self, widget, iter, path):
 		'''When a row is collapsed: change the icon of the arrow'''
 		model = widget.get_model()
-		image = gajim.interface.roster.jabber_state_images['16']['closed']
+		image = gajim.interface.jabber_state_images['16']['closed']
 		model[iter][C_IMG] = image
 
 	def kick(self, widget, nick):

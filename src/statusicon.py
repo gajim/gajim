@@ -77,7 +77,7 @@ class StatusIcon(systray.Systray):
 			self.status_icon.set_blinking(False)
 		
 		#FIXME: do not always use 16x16 (ask actually used size and use that)
-		image = gajim.interface.roster.jabber_state_images['16'][state]
+		image = gajim.interface.jabber_state_images['16'][state]
 		if image.get_storage_type() == gtk.IMAGE_PIXBUF:
 			self.status_icon.set_from_pixbuf(image.get_pixbuf())
 		#FIXME: oops they forgot to support GIF animation?

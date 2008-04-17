@@ -702,7 +702,7 @@ class ConversationTextview:
 		else: # It's a mail or a JID
 			# load muc icon
 			join_group_chat_menuitem = xml.get_widget('join_group_chat_menuitem')
-			muc_icon = gajim.interface.roster.load_icon('muc_active')
+			muc_icon = gtkgui_helpers.load_icon('muc_active')
 			if muc_icon:
 				join_group_chat_menuitem.set_image(muc_icon)
 

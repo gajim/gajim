@@ -728,7 +728,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 		uf_type = {'jabber': 'Jabber', 'aim': 'AIM', 'gadu-gadu': 'Gadu Gadu',
 			'icq': 'ICQ', 'msn': 'MSN', 'yahoo': 'Yahoo'}
 		# Jabber as first
-		img = gajim.interface.roster.jabber_state_images['16']['online']
+		img = gajim.interface.jabber_state_images['16']['online']
 		liststore.append(['Jabber', img.get_pixbuf(), 'jabber'])
 		for type_ in self.agents:
 			if type_ == 'jabber':
@@ -1904,7 +1904,7 @@ class NewChatDialog(InputDialog):
 		keys.sort()
 		for jid in keys:
 			contact = self.completion_dict[jid]
-			img = gajim.interface.roster.jabber_state_images['16'][contact.show]
+			img = gajim.interface.jabber_state_images['16'][contact.show]
 			liststore.append((img.get_pixbuf(), jid))
 
 		self.ok_handler = self.new_chat_response
@@ -2172,8 +2172,7 @@ class SingleMessageWindow:
 			keys.sort()
 			for jid in keys:
 				contact = self.completion_dict[jid]
-				img = gajim.interface.roster.jabber_state_images['16'][
-						contact.show]
+				img = gajim.interface.jabber_state_images['16'][contact.show]
 				liststore.append((img.get_pixbuf(), jid))
 		else:
 			self.completion_dict = {}
@@ -3693,8 +3692,7 @@ class TransformChatToMUC:
 				# Add contact if it can be invited
 				if invitable(contact, contact_transport) and \
 						contact.show not in ('offline', 'error'):
-					img = gajim.interface.roster.jabber_state_images['16'][
-						contact.show]
+					img = gajim.interface.jabber_state_images['16'][contact.show]
 					name = contact.name
 					if name == '':
 						name = jid.split('@')[0]

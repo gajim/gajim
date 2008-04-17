@@ -91,7 +91,7 @@ class Systray:
 			state = 'event'
 		else:
 			state = self.status
-		image = gajim.interface.roster.jabber_state_images['16'][state]
+		image = gajim.interface.jabber_state_images['16'][state]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			self.img_tray.set_from_animation(image.get_animation())
 		elif image.get_storage_type() == gtk.IMAGE_PIXBUF:
@@ -151,7 +151,7 @@ class Systray:
 		# We need our own set of status icons, let's make 'em!
 		iconset = gajim.config.get('iconset')
 		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-		state_images = gajim.interface.roster.load_iconset(path)
+		state_images = gajim.interface.load_iconset(path)
 
 		if state_images.has_key('muc_active'):
 			join_gc_menuitem.set_image(state_images['muc_active'])

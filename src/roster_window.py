@@ -190,7 +190,7 @@ class RosterWindow:
 		# if we merge accounts...
 		if self.regroup:
 			show = helpers.get_global_show()
-			model.append(None, [self.jabber_state_images['16'][show],
+			model.append(None, [gajim.interface.jabber_state_images['16'][show],
 				_('Merged accounts'), 'account', '', 'all', None, None])
 			self.draw_account(account)
 			return
@@ -204,7 +204,7 @@ class RosterWindow:
 
 		our_jid = gajim.get_jid_from_account(account)
 
-		model.append(None, [self.jabber_state_images['16'][show],
+		model.append(None, [gajim.interface.jabber_state_images['16'][show],
 			gobject.markup_escape_text(account),
 			'account', our_jid, account, None, tls_pixbuf])
 
@@ -364,7 +364,7 @@ class RosterWindow:
 			if not iterG:
 				IterAcct = self.get_account_iter(account)
 				iterG = model.append(IterAcct, [
-					self.jabber_state_images['16']['closed'],
+					gajim.interface.jabber_state_images['16']['closed'],
 					gobject.markup_escape_text(group), 'group',
 					group, account, None, None])
 				self.draw_group(group, account)
@@ -607,7 +607,7 @@ class RosterWindow:
 			if self.transports_state_images[size].has_key(transport) and \
 			icon_name in self.transports_state_images[size][transport]:
 				return self.transports_state_images[size][transport]
-		return self.jabber_state_images[size]
+		return gajim.interface.jabber_state_images[size]
 
 	def draw_contact(self, jid, account, selected = False, focus = False):
 		'''draw the correct state image, name BUT not avatar'''
@@ -935,7 +935,7 @@ class RosterWindow:
 		new_chat_menuitem = self.xml.get_widget('new_chat_menuitem')
 		single_message_menuitem = self.xml.get_widget('send_single_message_menuitem')
 		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
-		muc_icon = self.load_icon('muc_active')
+		muc_icon = gtkgui_helpers.load_icon('muc_active')
 		if muc_icon:
 			join_gc_menuitem.set_image(muc_icon)
 		add_new_contact_menuitem = self.xml.get_widget('add_new_contact_menuitem')
@@ -2023,7 +2023,7 @@ class RosterWindow:
 		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 		for c in contacts:
 			# icon MUST be different instance for every item
-			state_images = self.load_iconset(path)
+			state_images = gtkgui_helpers.load_iconset(path)
 			item = gtk.ImageMenuItem('%s (%s)' % (c.resource, str(c.priority)))
 			icon_name = helpers.get_icon_name_to_show(c, account)
 			icon = state_images[icon_name]
@@ -2158,7 +2158,7 @@ class RosterWindow:
 				path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 				for c in contacts:
 					# icon MUST be different instance for every item
-					state_images = self.load_iconset(path)
+					state_images = gtkgui_helpers.load_iconset(path)
 					item = gtk.ImageMenuItem('%s (%s)' % (c.resource,
 						str(c.priority)))
 					icon_name = helpers.get_icon_name_to_show(c, account)
@@ -2269,12 +2269,14 @@ class RosterWindow:
 					blocked = True
 					break
 		if blocked:
-			send_custom_status_menuitem.set_image(self.load_icon('offline'))
+			send_custom_status_menuitem.set_image(gtkgui_helpers.load_icon(
+				'offline'))
 			send_custom_status_menuitem.set_sensitive(False)
 		elif gajim.interface.status_sent_to_users.has_key(account) and \
 		jid in gajim.interface.status_sent_to_users[account]:
 			send_custom_status_menuitem.set_image(
-				self.load_icon(gajim.interface.status_sent_to_users[account][jid]))
+				gtkgui_helpers.load_icon(gajim.interface.status_sent_to_users[
+					account][jid]))
 		else:
 			icon = gtk.image_new_from_stock(gtk.STOCK_NETWORK, gtk.ICON_SIZE_MENU)
 			send_custom_status_menuitem.set_image(icon)
@@ -2287,7 +2289,7 @@ class RosterWindow:
 			img.set_from_file(path_to_kbd_input_img)
 			rename_menuitem.set_image(img)
 
-		muc_icon = self.load_icon('muc_active')
+		muc_icon = gtkgui_helpers.load_icon('muc_active')
 		if muc_icon:
 			invite_menuitem.set_image(muc_icon)
 
@@ -2313,7 +2315,7 @@ class RosterWindow:
 		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 		for s in ['online', 'chat', 'away', 'xa', 'dnd', 'offline']:
 			# icon MUST be different instance for every item
-			state_images = self.load_iconset(path)
+			state_images = gtkgui_helpers.load_iconset(path)
 			status_menuitem = gtk.ImageMenuItem(helpers.get_uf_show(s))
 			status_menuitem.connect('activate', self.on_send_custom_status,
 				[(contact, account)], s)
@@ -2513,7 +2515,7 @@ class RosterWindow:
 
 		# Invite to Groupchat
 		invite_item = gtk.ImageMenuItem(_('In_vite to'))
-		muc_icon = self.load_icon('muc_active')
+		muc_icon = gtkgui_helpers.load_icon('muc_active')
 		if muc_icon:
 			invite_item.set_image(muc_icon)
 
@@ -2700,7 +2702,7 @@ class RosterWindow:
 
 			# Invite to
 			invite_menuitem = gtk.ImageMenuItem(_('In_vite to'))
-			muc_icon = self.load_icon('muc_active')
+			muc_icon = gtkgui_helpers.load_icon('muc_active')
 			if muc_icon:
 				invite_menuitem.set_image(muc_icon)
 
@@ -2711,7 +2713,8 @@ class RosterWindow:
 			send_custom_status_menuitem = gtk.ImageMenuItem(_('Send Cus_tom Status'))
 			# add a special img for this menuitem
 			if group in gajim.connections[account].blocked_groups:
-				send_custom_status_menuitem.set_image(self.load_icon('offline'))
+				send_custom_status_menuitem.set_image(gtkgui_helpers.load_icon(
+					'offline'))
 				send_custom_status_menuitem.set_sensitive(False)
 			else:
 				icon = gtk.image_new_from_stock(gtk.STOCK_NETWORK,
@@ -2723,7 +2726,7 @@ class RosterWindow:
 			path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 			for s in ['online', 'chat', 'away', 'xa', 'dnd', 'offline']:
 				# icon MUST be different instance for every item
-				state_images = self.load_iconset(path)
+				state_images = gtkgui_helpers.load_iconset(path)
 				status_menuitem = gtk.ImageMenuItem(helpers.get_uf_show(s))
 				status_menuitem.connect('activate', self.on_send_custom_status, list_,
 					s, group)
@@ -2827,12 +2830,13 @@ class RosterWindow:
 		send_custom_status_menuitem = gtk.ImageMenuItem(_('Send Cus_tom Status'))
 		# add a special img for this menuitem
 		if blocked:
-			send_custom_status_menuitem.set_image(self.load_icon('offline'))
+			send_custom_status_menuitem.set_image(gtkgui_helpers.load_icon(
+				'offline'))
 			send_custom_status_menuitem.set_sensitive(False)
 		else:
 			if gajim.interface.status_sent_to_users.has_key(account) and \
 			jid in gajim.interface.status_sent_to_users[account]:
-				send_custom_status_menuitem.set_image(self.load_icon(
+				send_custom_status_menuitem.set_image(gtkgui_helpers.load_icon(
 					gajim.interface.status_sent_to_users[account][jid]))
 			else:
 				icon = gtk.image_new_from_stock(gtk.STOCK_NETWORK,
@@ -2844,7 +2848,7 @@ class RosterWindow:
 			path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 			for s in ['online', 'chat', 'away', 'xa', 'dnd', 'offline']:
 				# icon MUST be different instance for every item
-				state_images = self.load_iconset(path)
+				state_images = gtkgui_helpers.load_iconset(path)
 				status_menuitem = gtk.ImageMenuItem(helpers.get_uf_show(s))
 				status_menuitem.connect('activate', self.on_send_custom_status,
 					[(contact, account)], s)
@@ -2977,7 +2981,7 @@ class RosterWindow:
 		# using self.jabber_status_images is poopoo
 		iconset = gajim.config.get('iconset')
 		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-		state_images = self.load_iconset(path)
+		state_images = gtkgui_helpers.load_iconset(path)
 
 		if not gajim.config.get_per('accounts', account, 'is_zeroconf'):
 			xml = gtkgui_helpers.get_glade('account_context_menu.glade')
@@ -2986,7 +2990,7 @@ class RosterWindow:
 			status_menuitem = xml.get_widget('status_menuitem')
 			start_chat_menuitem = xml.get_widget('start_chat_menuitem')
 			join_group_chat_menuitem = xml.get_widget('join_group_chat_menuitem')
-			muc_icon = self.load_icon('muc_active')
+			muc_icon = gtkgui_helpers.load_icon('muc_active')
 			if muc_icon:
 				join_group_chat_menuitem.set_image(muc_icon)
 			open_gmail_inbox_menuitem = xml.get_widget('open_gmail_inbox_menuitem')
@@ -3166,7 +3170,7 @@ class RosterWindow:
 				accounts.append(account)
 			accounts.sort()
 			for account in accounts:
-				state_images = self.load_iconset(path)
+				state_images = gtkgui_helpers.load_iconset(path)
 				item = gtk.ImageMenuItem(account)
 				show = gajim.SHOW_LIST[gajim.connections[account].connected]
 				icon = state_images[show]
@@ -3487,7 +3491,8 @@ class RosterWindow:
 		model = self.tree.get_model()
 		accountIter = self.get_account_iter(account)
 		if accountIter:
-			model[accountIter][0] =	self.jabber_state_images['16']['connecting']
+			model[accountIter][0] =	gajim.interface.jabber_state_images['16'][
+				'connecting']
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.change_status('connecting')
 
@@ -3510,8 +3515,8 @@ class RosterWindow:
 					passphrase, save = w.run()
 					if passphrase == -1:
 						if accountIter:
-							model[accountIter][0] =	self.jabber_state_images['16']\
-								['offline']
+							model[accountIter][0] =	gajim.interface.\
+								jabber_state_images['16']['offline']
 						if gajim.interface.systray_enabled:
 							gajim.interface.systray.change_status('offline')
 						self.update_status_combobox()
@@ -3827,7 +3832,7 @@ class RosterWindow:
 			liststore = self.status_combobox.get_model()
 			liststore.prepend(['SEPARATOR', None, '', True])
 			liststore.prepend([uf_show + ' ' + "(desync'ed)",
-				self.jabber_state_images['16'][show], show, False])
+				gajim.interface.jabber_state_images['16'][show], show, False])
 			self.status_combobox.set_active(0)
 		self._change_awn_icon_status(show)
 		self.combobox_callback_active = True
@@ -3844,7 +3849,8 @@ class RosterWindow:
 			show = gajim.SHOW_LIST[status]
 		else:	# accounts merged
 			show = helpers.get_global_show()
-		model[accountIter][C_IMG] = self.jabber_state_images['16'][show]
+		model[accountIter][C_IMG] = gajim.interface.jabber_state_images['16'][
+			show]
 
 	def on_status_changed(self, account, status):
 		'''the core tells us that our status has changed'''
@@ -4420,7 +4426,8 @@ class RosterWindow:
 			accounts = [model[iter][C_ACCOUNT].decode('utf-8')]
 		type_ = model[iter][C_TYPE]
 		if type_ == 'group':
-			model.set_value(iter, 0, self.jabber_state_images['16']['opened'])
+			model.set_value(iter, 0, gajim.interface.jabber_state_images['16'][
+				'opened'])
 			jid = model[iter][C_JID].decode('utf-8')
 			for account in accounts:
 				if gajim.groups[account].has_key(jid): # This account has this group
@@ -4452,7 +4459,8 @@ class RosterWindow:
 			accounts = [model[iter][C_ACCOUNT].decode('utf-8')]
 		type_ = model[iter][C_TYPE]
 		if type_ == 'group':
-			model.set_value(iter, 0, self.jabber_state_images['16']['closed'])
+			model.set_value(iter, 0, gajim.interface.jabber_state_images['16'][
+				'closed'])
 			jid = model[iter][C_JID].decode('utf-8')
 			for account in accounts:
 				if gajim.groups[account].has_key(jid): # This account has this group
@@ -4481,118 +4489,24 @@ class RosterWindow:
 			except GajimGeneralException:
 				pass
 
-	def load_iconset(self, path, pixbuf2 = None, transport = False):
-		'''load full iconset from the given path, and add
-		pixbuf2 on top left of each static images'''
-		path += '/'
-		if transport:
-			list = ('online', 'chat', 'away', 'xa', 'dnd', 'offline',
-				'not in roster')
-		else:
-			list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-				'invisible', 'offline', 'error', 'requested', 'event', 'opened',
-				'closed', 'not in roster', 'muc_active', 'muc_inactive')
-			if pixbuf2:
-				list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-					'offline', 'error', 'requested', 'event', 'not in roster')
-		return self._load_icon_list(list, path, pixbuf2)
-
-	def load_icon(self, icon_name):
-		'''load an icon from the iconset in 16x16'''
-		iconset = gajim.config.get('iconset')
-		path = os.path.join(helpers.get_iconset_path(iconset), '16x16'+ '/')
-		icon_list = self._load_icon_list([icon_name], path)
-		return icon_list[icon_name]
-
-	def load_icons_meta(self):
-		'''load and return  - AND + small icons to put on top left of an icon
-		for meta contacts.'''
-		iconset = gajim.config.get('iconset')
-		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-		# try to find opened_meta.png file, else opened.png else nopixbuf merge
-		path_opened = os.path.join(path, 'opened_meta.png')
-		if not os.path.isfile(path_opened):
-			path_opened = os.path.join(path, 'opened.png')
-		if os.path.isfile(path_opened):
-			pixo = gtk.gdk.pixbuf_new_from_file(path_opened)
-		else:
-			pixo = None
-		# Same thing for closed
-		path_closed = os.path.join(path, 'opened_meta.png')
-		if not os.path.isfile(path_closed):
-			path_closed = os.path.join(path, 'closed.png')
-		if os.path.isfile(path_closed):
-			pixc = gtk.gdk.pixbuf_new_from_file(path_closed)
-		else:
-			pixc = None
-		return pixo, pixc
-
-	def _load_icon_list(self, icons_list, path, pixbuf2 = None):
-		'''load icons in icons_list from the given path,
-		and add pixbuf2 on top left of each static images'''
-		imgs = {}
-		for icon in icons_list:
-			# try to open a pixfile with the correct method
-			icon_file = icon.replace(' ', '_')
-			files = []
-			files.append(path + icon_file + '.gif')
-			files.append(path + icon_file + '.png')
-			image = gtk.Image()
-			image.show()
-			imgs[icon] = image
-			for file in files: # loop seeking for either gif or png
-				if os.path.exists(file):
-					image.set_from_file(file)
-					if pixbuf2 and image.get_storage_type() == gtk.IMAGE_PIXBUF:
-						# add pixbuf2 on top-left corner of image
-						pixbuf1 = image.get_pixbuf()
-						pixbuf2.composite(pixbuf1, 0, 0,
-							pixbuf2.get_property('width'),
-							pixbuf2.get_property('height'), 0, 0, 1.0, 1.0,
-							gtk.gdk.INTERP_NEAREST, 255)
-						image.set_from_pixbuf(pixbuf1)
-					break
-		return imgs
-
-	def make_jabber_state_images(self):
-		'''initialise jabber_state_images dict'''
-		iconset = gajim.config.get('iconset')
-		if iconset:
-			path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-			if not os.path.exists(path):
-				iconset = gajim.config.DEFAULT_ICONSET
-		else:
-			iconset = gajim.config.DEFAULT_ICONSET
-
-		path = os.path.join(helpers.get_iconset_path(iconset), '32x32')
-		self.jabber_state_images['32'] = self.load_iconset(path)
-
-		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-		self.jabber_state_images['16'] = self.load_iconset(path)
-		
-		pixo, pixc = self.load_icons_meta()
-		self.jabber_state_images['opened'] = self.load_iconset(path, pixo)
-		self.jabber_state_images['closed'] = self.load_iconset(path, pixc)
-	
 	def make_transport_state_images(self, transport):
 		'''initialise opened and closed 'transport' iconset dict'''
 		if gajim.config.get('use_transports_iconsets'):
 			folder = os.path.join(helpers.get_transport_path(transport),
 				'16x16')
-			pixo, pixc = self.load_icons_meta()
+			pixo, pixc = gtkgui_helpers.load_icons_meta()
 			self.transports_state_images['opened'][transport] = \
-				self.load_iconset(folder, pixo, transport = True)
+				gtkgui_helpers.load_iconset(folder, pixo, transport = True)
 			self.transports_state_images['closed'][transport] = \
-				self.load_iconset(folder, pixc, transport = True)
+				gtkgui_helpers.load_iconset(folder, pixc, transport = True)
 			folder = os.path.join(helpers.get_transport_path(transport), '32x32')
-			self.transports_state_images['32'][transport] = self.load_iconset(
-				folder, transport = True)
+			self.transports_state_images['32'][transport] = \
+				gtkgui_helpers.load_iconset(folder, transport = True)
 			folder = os.path.join(helpers.get_transport_path(transport), '16x16')
-			self.transports_state_images['16'][transport] = self.load_iconset(
-				folder, transport = True)
+			self.transports_state_images['16'][transport] = \
+				gtkgui_helpers.load_iconset(folder, transport = True)
 
-	def reload_jabber_state_images(self):
-		self.make_jabber_state_images()
+	def update_jabber_state_images(self):
 		# Update the roster
 		self.draw_roster()
 		# Update the status combobox
@@ -4602,7 +4516,8 @@ class RosterWindow:
 			if model[iter][2] != '':
 				# If it's not change status message iter
 				# eg. if it has show parameter not ''
-				model[iter][1] = self.jabber_state_images['16'][model[iter][2]]
+				model[iter][1] = gajim.interface.jabber_state_images['16'][model[
+					iter][2]]
 			iter = model.iter_next(iter)
 		# Update the systray
 		if gajim.interface.systray_enabled:
@@ -5367,8 +5282,6 @@ class RosterWindow:
 			self._on_treeview_selection_changed)
 
 		self._last_selected_contact = [] # holds a list of (jid, account) tupples
-		self.jabber_state_images = {'16': {}, '32': {}, 'opened': {},
-			'closed': {}}
 		self.transports_state_images = {'16': {}, '32': {}, 'opened': {},
 			'closed': {}}
 
@@ -5412,8 +5325,6 @@ class RosterWindow:
 		# quitting
 		self.quit_on_next_offline = -1
 
-		self.make_jabber_state_images()
-
 		# uf_show, img, show, sensitive
 		liststore = gtk.ListStore(str, gtk.Image, str, bool)
 		self.status_combobox = self.xml.get_widget('status_combobox')
@@ -5440,8 +5351,8 @@ class RosterWindow:
 
 		for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
 			uf_show = helpers.get_uf_show(show)
-			liststore.append([uf_show, self.jabber_state_images['16'][show], show,
-				True])
+			liststore.append([uf_show, gajim.interface.jabber_state_images['16'][
+				show], show, True])
 		# Add a Separator (self.iter_is_separator() checks on string SEPARATOR)
 		liststore.append(['SEPARATOR', None, '', True])
 
@@ -5455,8 +5366,8 @@ class RosterWindow:
 		liststore.append(['SEPARATOR', None, '', True])
 
 		uf_show = helpers.get_uf_show('offline')
-		liststore.append([uf_show, self.jabber_state_images['16']['offline'],
-			'offline', True])
+		liststore.append([uf_show, gajim.interface.jabber_state_images['16'][
+			'offline'], 'offline', True])
 
 		status_combobox_items = ['online', 'chat', 'away', 'xa', 'dnd',
 			'invisible', 'separator1', 'change_status_msg', 'separator2',
