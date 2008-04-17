@@ -151,7 +151,7 @@ class Systray:
 		# We need our own set of status icons, let's make 'em!
 		iconset = gajim.config.get('iconset')
 		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-		state_images = gajim.interface.load_iconset(path)
+		state_images = gtkgui_helpers.load_iconset(path)
 
 		if state_images.has_key('muc_active'):
 			join_gc_menuitem.set_image(state_images['muc_active'])
