@@ -2964,8 +2964,6 @@ class Interface:
 			gajim.status_before_autoaway[a] = ''
 			gajim.transport_avatar[a] = {}
 
-		self.roster = roster_window.RosterWindow()
-
 		if gajim.config.get('remote_control'):
 			try:
 				import remote_control
@@ -3013,11 +3011,6 @@ class Interface:
 
 		self.show_vcard_when_connect = []
 
-		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'gajim.png')
-		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
-		# set the icon to all newly opened windows
-		gtk.window_set_default_icon(pix)
-		self.roster.window.set_icon_from_file(path_to_file) # and to roster window
 		self.sleeper = common.sleepy.Sleepy(
 			gajim.config.get('autoawaytime') * 60, # make minutes to seconds
 			gajim.config.get('autoxatime') * 60)
@@ -3041,6 +3034,14 @@ class Interface:
 
 		if self.systray_capabilities and gajim.config.get('trayicon'):
 			self.show_systray()
+
+		self.roster = roster_window.RosterWindow()
+
+		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'gajim.png')
+		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
+		# set the icon to all newly opened windows
+		gtk.window_set_default_icon(pix)
+		self.roster.window.set_icon_from_file(path_to_file) # and to roster window
 
 		self.init_emoticons()
 		self.make_regexps()
