@@ -760,7 +760,7 @@ class ConnectionDisco:
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC_USER})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC_ADMIN})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC_OWNER})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC + '#roomconfig'})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC_CONFIG})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_COMMANDS})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_DISCO_INFO})
 				q.addChild('feature', attrs = {'var': 'ipv6'})
