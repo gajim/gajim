@@ -973,7 +973,7 @@ class ConversationTextview:
 			imagepath = self.latex_to_image(special_text)
 			end_iter = buffer.get_end_iter()
 			anchor = buffer.create_child_anchor(end_iter)
-			if imagepath != None:
+			if imagepath is not None:
 				img = gtk.Image()
 				img.set_from_file(imagepath)
 				img.show()

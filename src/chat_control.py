@@ -1700,7 +1700,7 @@ class ChatControl(ChatControlBase):
 		gajim.jid_is_transport(jid):
 			toggle_gpg_menuitem.set_sensitive(False)
 		else:
-			e2e_is_active = int(self.session != None and self.session.enable_encryption)
+			e2e_is_active = int(self.session is not None and self.session.enable_encryption)
 			toggle_gpg_menuitem.set_sensitive(not e2e_is_active)
 			toggle_gpg_menuitem.set_active(self.gpg_is_active)
 
@@ -1708,7 +1708,8 @@ class ChatControl(ChatControlBase):
 		if not gajim.HAVE_PYCRYPTO:
 			toggle_e2e_menuitem.set_sensitive(False)
 		else:
-			isactive = int(self.session != None and self.session.enable_encryption)
+			isactive = int(self.session is not None and \
+				self.session.enable_encryption)
 			toggle_e2e_menuitem.set_active(isactive)
 			toggle_e2e_menuitem.set_sensitive(not self.gpg_is_active)
 

@@ -20,9 +20,9 @@ def user_mood(items, name, jid):
 				del acc.mood['mood']
 			if acc.mood.has_key('text'):
 				del acc.mood['text']
-			if mood != None:
+			if mood is not None:
 				acc.mood['mood'] = mood
-			if text != None:
+			if text is not None:
 				acc.mood['text'] = text
 
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
@@ -34,9 +34,9 @@ def user_mood(items, name, jid):
 			del contact.mood['mood']
 		if contact.mood.has_key('text'):
 			del contact.mood['text']
-		if mood != None:
+		if mood is not None:
 			contact.mood['mood'] = mood
-		if text != None:
+		if text is not None:
 			contact.mood['text'] = text
 
 def user_tune(items, name, jid):
@@ -76,15 +76,15 @@ def user_tune(items, name, jid):
 				del acc.tune['track']
 			if acc.tune.has_key('length'):
 				del acc.tune['length']
-			if artist != None:
+			if artist is not None:
 				acc.tune['artist'] = artist
-			if title != None:
+			if title is not None:
 				acc.tune['title'] = title
-			if source != None:
+			if source is not None:
 				acc.tune['source'] = source
-			if track != None:
+			if track is not None:
 				acc.tune['track'] = track
-			if length != None:
+			if length is not None:
 				acc.tune['length'] = length
 
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
@@ -102,15 +102,15 @@ def user_tune(items, name, jid):
 			del contact.tune['track']
 		if contact.tune.has_key('length'):
 			del contact.tune['length']
-		if artist != None:
+		if artist is not None:
 			contact.tune['artist'] = artist
-		if title != None:
+		if title is not None:
 			contact.tune['title'] = title
-		if source != None:
+		if source is not None:
 			contact.tune['source'] = source
-		if track != None:
+		if track is not None:
 			contact.tune['track'] = track
-		if length != None:
+		if length is not None:
 			contact.tune['length'] = length
 
 def user_geoloc(items, name, jid):
@@ -143,11 +143,11 @@ def user_activity(items, name, jid):
 				del acc.activity['subactivity']
 			if acc.activity.has_key('text'):
 				del acc.activity['text']
-			if activity != None:
+			if activity is not None:
 				acc.activity['activity'] = activity
-			if subactivity != None:
+			if subactivity is not None:
 				acc.activity['subactivity'] = subactivity
-			if text != None:
+			if text is not None:
 				acc.activity['text'] = text
 
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
@@ -161,11 +161,11 @@ def user_activity(items, name, jid):
 			del contact.activity['subactivity']
 		if contact.activity.has_key('text'):
 			del contact.activity['text']
-		if activity != None:
+		if activity is not None:
 			contact.activity['activity'] = activity
-		if subactivity != None:
+		if subactivity is not None:
 			contact.activity['subactivity'] = subactivity
-		if text != None:
+		if text is not None:
 			contact.activity['text'] = text
 
 def user_send_mood(account, mood, message = ''):

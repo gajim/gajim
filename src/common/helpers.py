@@ -908,7 +908,7 @@ advanced_notif_num = None, is_first_message = True):
 
 def allow_popup_window(account, advanced_notif_num = None):
 	'''is it allowed to popup windows?'''
-	if advanced_notif_num != None:
+	if advanced_notif_num is not None:
 		popup = gajim.config.get_per('notifications', str(advanced_notif_num),
 			'auto_open')
 		if popup == 'yes':

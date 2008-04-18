@@ -59,7 +59,7 @@ def get_show_in_roster(event, account, contact):
 	if event == 'gc_message_received':
 		return True
 	num = get_advanced_notification(event, account, contact)
-	if num != None:
+	if num is not None:
 		if gajim.config.get_per('notifications', str(num), 'roster') == 'yes':
 			return True
 		if gajim.config.get_per('notifications', str(num), 'roster') == 'no':
@@ -73,7 +73,7 @@ def get_show_in_roster(event, account, contact):
 def get_show_in_systray(event, account, contact, type_=None):
 	'''Return True if this event must be shown in systray, else False'''
 	num = get_advanced_notification(event, account, contact)
-	if num != None:
+	if num is not None:
 		if gajim.config.get_per('notifications', str(num), 'systray') == 'yes':
 			return True
 		if gajim.config.get_per('notifications', str(num), 'systray') == 'no':

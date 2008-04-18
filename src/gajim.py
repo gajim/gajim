@@ -1457,7 +1457,7 @@ class Interface:
 				title = _('Wrong Passphrase')
 				second = _('Please retype your GPG passphrase or press Cancel.')
 		self.gpg_dialog = None
-		if passphrase != None:
+		if passphrase is not None:
 			self.gpg_passphrase[keyid] = passphrase
 			gobject.timeout_add(30000, self.forget_gpg_passphrase, keyid)
 		gajim.connections[account].gpg_passphrase(passphrase)

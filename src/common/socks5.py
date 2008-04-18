@@ -201,7 +201,7 @@ class SocksQueue:
 		self.idx += 1
 		result = sock5_receiver.connect()
 		self.connected += 1
-		if result != None:
+		if result is not None:
 			result = sock5_receiver.main()
 			self.process_result(result, sock5_receiver)
 			return 1
@@ -547,7 +547,7 @@ class Socks5:
 				self.file_props['completed'] = True
 				return 0
 			# return number of read bytes. It can be used in progressbar
-		if fd != None:
+		if fd is not None:
 			self.file_props['stalled'] = False
 		if fd is None and self.file_props['stalled'] is False:
 			return None

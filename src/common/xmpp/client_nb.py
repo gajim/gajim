@@ -354,7 +354,7 @@ class Component(NBCommonClient):
 			on_connect = self._on_connect, on_connect_failure = self.on_connect_failure)
 		
 	def _on_connect(self):
-		if self.typ=='jabberd2' or not self.typ and self.Dispatcher.Stream.features != None:
+		if self.typ=='jabberd2' or not self.typ and self.Dispatcher.Stream.features is not None:
 				self.defaultNamespace=auth.NS_CLIENT
 				self.Dispatcher.RegisterNamespace(self.defaultNamespace)
 				self.Dispatcher.RegisterProtocol('iq',dispatcher.Iq)

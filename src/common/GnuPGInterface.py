@@ -350,7 +350,7 @@ class GnuPG:
         
         handle_passphrase = 0
         
-        if self.passphrase != None \
+        if self.passphrase is not None \
            and not attach_fhs.has_key('passphrase') \
            and 'passphrase' not in create_fhs:
             handle_passphrase = 1
@@ -567,11 +567,16 @@ class Options:
     def get_standard_args( self ):
         """Generate a list of standard, non-meta or extra arguments"""
         args = []
-        if self.homedir != None: args.extend( [ '--homedir', self.homedir ] )
-        if self.options != None: args.extend( [ '--options', self.options ] )
-        if self.comment != None: args.extend( [ '--comment', self.comment ] )
-        if self.compress_algo != None: args.extend( [ '--compress-algo', self.compress_algo ] )
-        if self.default_key != None: args.extend( [ '--default-key', self.default_key ] )
+        if self.homedir is not None:
+            args.extend( [ '--homedir', self.homedir ] )
+        if self.options is not None:
+            args.extend( [ '--options', self.options ] )
+        if self.comment is not None:
+            args.extend( [ '--comment', self.comment ] )
+        if self.compress_algo is not None:
+            args.extend( [ '--compress-algo', self.compress_algo ] )
+        if self.default_key is not None:
+            args.extend( [ '--default-key', self.default_key ] )
         
         if self.no_options: args.append( '--no-options' )
         if self.armor: args.append( '--armor' )

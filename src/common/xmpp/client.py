@@ -283,7 +283,7 @@ class Component(CommonClient):
             self.Namespace=auth.NS_COMPONENT_1
             self.Server=server[0]
         CommonClient.connect(self,server=server,proxy=proxy)
-        if self.connected and (self.typ=='jabberd2' or not self.typ and self.Dispatcher.Stream.features != None):
+        if self.connected and (self.typ=='jabberd2' or not self.typ and self.Dispatcher.Stream.features is not None):
                 self.defaultNamespace=auth.NS_CLIENT
                 self.Dispatcher.RegisterNamespace(self.defaultNamespace)
                 self.Dispatcher.RegisterProtocol('iq',dispatcher.Iq)

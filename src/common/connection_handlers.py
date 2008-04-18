@@ -489,7 +489,7 @@ class ConnectionBytestream:
 				if proxyhost['jid'] == jid:
 					proxy = proxyhost
 
-		if proxy != None:
+		if proxy is not None:
 			file_props['streamhost-used'] = True
 			if not file_props.has_key('streamhosts'):
 				file_props['streamhosts'] = []
@@ -1104,7 +1104,7 @@ class ConnectionVcard:
 						order = int(order)
 					except:
 						order = 0
-					if order != None:
+					if order is not None:
 						data['order'] = order
 					if meta_list.has_key(tag):
 						meta_list[tag].append(data)
@@ -1602,7 +1602,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			invite = msg.getTag('x', namespace = common.xmpp.NS_MUC_USER)
 			if invite and not invite.getTag('invite'):
 				invite = None
-		delayed = msg.getTag('x', namespace = common.xmpp.NS_DELAY) != None
+		delayed = msg.getTag('x', namespace = common.xmpp.NS_DELAY) is not None
 		msg_id = None
 		composing_xep = None
 		# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED
@@ -1675,7 +1675,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			has_timestamp = False
 			if msg.timestamp:
 				has_timestamp = True
-			if subject != None:
+			if subject is not None:
 				self.dispatch('GC_SUBJECT', (frm, subject, msgtxt, has_timestamp))
 			else:
 				statusCode = msg.getStatusCode()

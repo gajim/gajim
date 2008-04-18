@@ -192,7 +192,7 @@ class LastFM:
 		if songTuple is None:
 			songTuple = self.getLastRecentSong()
 
-		if songTuple != None:
+		if songTuple is not None:
 			dict = {
 				'a': songTuple[0],
 				'n': songTuple[1],

@@ -784,11 +784,12 @@ class MessageWindowMgr(gobject.GObject):
 		return None
 
 	def has_window(self, jid, acct):
-		return self.get_window(jid, acct) != None
+		return self.get_window(jid, acct) is not None
 
 	def one_window_opened(self, contact=None, acct=None, type=None):
 		try:
-			return self._windows[self._mode_to_key(contact, acct, type)] != None
+			return \
+				self._windows[self._mode_to_key(contact, acct, type)] is not None
 		except KeyError:
 			return False
 

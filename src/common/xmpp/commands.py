@@ -115,7 +115,7 @@ class Commands(PlugIn):
             if items != []:
                 for each in items:
                     i = self._handlers[each[0]][each[1]]['disco'](conn,request,'list')
-                    if i != None:
+                    if i is not None:
                         list.append(Node(tag='item',attrs={'jid':i[0],'node':i[1],'name':i[2]}))
                 iq = request.buildReply('result')
                 if request.getQuerynode(): iq.setQuerynode(request.getQuerynode())
@@ -243,7 +243,7 @@ class Command_Handler_Prototype(PlugIn):
                 # Jid and session don't match. Go away imposter
                 self._owner.send(Error(request,ERR_BAD_REQUEST))
                 raise NodeProcessed
-        elif session != None:
+        elif session is not None:
             # Not on this sessionid you won't.
             self._owner.send(Error(request,ERR_BAD_REQUEST))
             raise NodeProcessed

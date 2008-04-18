@@ -660,7 +660,7 @@ def possibly_set_gajim_as_xmpp_handler():
 		path_to_kde_file = None
 
 	def set_gajim_as_xmpp_handler(is_checked=None):
-		if is_checked != None:
+		if is_checked is not None:
 			# come from confirmation dialog
 			gajim.config.set('check_if_gajim_is_default', is_checked)
 		path_to_gajim_script, typ = get_abspath_for_script('gajim-remote', True)
