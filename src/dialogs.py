@@ -653,7 +653,7 @@ class AddNewContactWindow:
 	def __init__(self, account = None, jid = None, user_nick = None,
 	group = None):
 		self.account = account
-		if account == None:
+		if account is None:
 			# fill accounts with active accounts
 			accounts = []
 			for account in gajim.connections.keys():

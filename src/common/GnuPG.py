@@ -150,7 +150,7 @@ if gajim.HAVE_GPG:
 			return 'BAD_PASSPHRASE'
 
 		def verify(self, str, sign):
-			if str == None:
+			if str is None:
 				return ''
 			f = tmpfile()
 			fd = f.fileno()

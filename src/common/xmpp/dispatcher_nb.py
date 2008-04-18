@@ -287,7 +287,7 @@ class Dispatcher(PlugIn):
 
 		if not direct and self._owner._component:
 			if name == 'route':
-				if stanza.getAttr('error') == None:
+				if stanza.getAttr('error') is None:
 					if len(stanza.getChildren()) == 1:
 						stanza = stanza.getChildren()[0]
 						name=stanza.getName()

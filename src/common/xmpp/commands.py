@@ -227,7 +227,7 @@ class Command_Handler_Prototype(PlugIn):
             action = request.getTagAttr('command','action')
         except:
             action = None
-        if action == None: action = 'execute'
+        if action is None: action = 'execute'
         # Check session is in session list
         if self.sessions.has_key(session):
             if self.sessions[session]['jid']==request.getFrom():
@@ -279,7 +279,7 @@ class TestCommand(Command_Handler_Prototype):
             session = request.getTagAttr('command','sessionid')
         except:
             session = None
-        if session == None:
+        if session is None:
             session = self.getSessionID()
             sessions[session]={'jid':request.getFrom(),'actions':{'cancel':self.cmdCancel,'next':self.cmdSecondStage},'data':{'type':None}}
         # As this is the first stage we only send a form

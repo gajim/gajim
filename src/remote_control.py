@@ -610,7 +610,7 @@ class SignalObject(dbus.service.Object):
 			return None
 		prim_contact = None # primary contact
 		for contact in contacts:
-			if prim_contact == None or contact.priority > prim_contact.priority:
+			if prim_contact is None or contact.priority > prim_contact.priority:
 				prim_contact = contact
 		contact_dict = DBUS_DICT_SV()
 		contact_dict['name'] = DBUS_STRING(prim_contact.name)

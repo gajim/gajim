@@ -339,9 +339,9 @@ class GnuPG:
         and can be written to.
         """
         
-        if args == None: args = []
-        if create_fhs == None: create_fhs = []
-        if attach_fhs == None: attach_fhs = {}
+        if args is None: args = []
+        if create_fhs is None: create_fhs = []
+        if attach_fhs is None: attach_fhs = {}
         
         for std in _stds:
             if not attach_fhs.has_key(std) \

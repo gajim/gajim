@@ -644,7 +644,7 @@ def statuses_unified():
 		if not gajim.config.get_per('accounts', account,
 		'sync_with_global_status'):
 			continue
-		if reference == None:
+		if reference is None:
 			reference = gajim.connections[account].connected
 		elif reference != gajim.connections[account].connected:
 			return False

@@ -547,7 +547,7 @@ class MessageWindow(object):
 		else:
 			page_num = key
 			notebook = self.notebook
-			if page_num == None:
+			if page_num is None:
 				page_num = notebook.get_current_page()
 			nth_child = notebook.get_nth_page(page_num)
 			return self._widget_to_control(nth_child)

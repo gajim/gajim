@@ -147,7 +147,7 @@ class LastFM:
 		lst, the Unix time at which a song has been scrobbled, defaults to that
 		of the last song
 		"""
-		if lst == None:
+		if lst is None:
 			lst = self.getLastScrobbledTime()
 		return int(time()) - lst
 
@@ -158,7 +158,7 @@ class LastFM:
 
 		delay, the delay to use, defaults to self.MAX_DELAY
 		"""
-		if delay == None:
+		if delay is None:
 			delay = self.MAX_DELAY
 		return self.timeSinceLastScrobbled() < delay
 
@@ -189,7 +189,7 @@ class LastFM:
 		songTuple, the tuple representing the song, defaults to the last song
 		"""
 		str = ''
-		if songTuple == None:
+		if songTuple is None:
 			songTuple = self.getLastRecentSong()
 
 		if songTuple != None:

@@ -191,7 +191,7 @@ class ConnectionBytestream:
 				ft_add_hosts.append(ft_host)
 		listener = gajim.socks5queue.start_listener(port,
 			sha_str, self._result_socks5_sid, file_props['sid'])
-		if listener == None:
+		if listener is None:
 			file_props['error'] = -5
 			self.dispatch('FILE_REQUEST_ERROR', (unicode(receiver), file_props,
 				''))

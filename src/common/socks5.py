@@ -81,7 +81,7 @@ class SocksQueue:
 		and do a socks5 authentication using sid for generated sha
 		'''
 		self.sha_handlers[sha_str] = (sha_handler, sid)
-		if self.listener == None:
+		if self.listener is None:
 			self.listener = Socks5Listener(self.idlequeue, port)
 			self.listener.queue = self
 			self.listener.bind()
@@ -372,7 +372,7 @@ class Socks5:
 		self.file = None
 	
 	def open_file_for_reading(self):
-		if self.file == None:
+		if self.file is None:
 			try:
 				self.file = open(self.file_props['file-name'],'rb')
 				if self.file_props.has_key('offset') and self.file_props['offset']:
@@ -549,7 +549,7 @@ class Socks5:
 			# return number of read bytes. It can be used in progressbar
 		if fd != None:
 			self.file_props['stalled'] = False
-		if fd == None and self.file_props['stalled'] is False:
+		if fd is None and self.file_props['stalled'] is False:
 			return None
 		if self.file_props.has_key('received-len'):
 			if self.file_props['received-len'] != 0:
@@ -1019,7 +1019,7 @@ class Socks5Receiver(Socks5, IdleObject):
 			if version != 0x05 or method == 0xff:
 				self.disconnect()
 		elif self.state == 4: # get approve of our request
-			if buff == None:
+			if buff is None:
 				return None
 			sub_buff = buff[:4]
 			if len(sub_buff) < 4:

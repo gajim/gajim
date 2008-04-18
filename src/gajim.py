@@ -2166,7 +2166,7 @@ class Interface:
 
 	def handle_event_ping_sent(self, account, contact):
 		ctrl = self.msg_win_mgr.get_control(contact.get_full_jid(), account)
-		if ctrl == None:
+		if ctrl is None:
 			ctrl = self.msg_win_mgr.get_control(contact.jid, account)
 		ctrl.print_conversation(_('Ping?'), 'status')
 
@@ -2174,14 +2174,14 @@ class Interface:
 		contact = data[0]
 		seconds = data[1]
 		ctrl = self.msg_win_mgr.get_control(contact.get_full_jid(), account)
-		if ctrl == None:
+		if ctrl is None:
 			ctrl = self.msg_win_mgr.get_control(contact.jid, account)
 		if ctrl:
 			ctrl.print_conversation(_('Pong! (%s s.)') % seconds, 'status')
 
 	def handle_event_ping_error(self, account, contact):
 		ctrl = self.msg_win_mgr.get_control(contact.get_full_jid(), account)
-		if ctrl == None:
+		if ctrl is None:
 			ctrl = self.msg_win_mgr.get_control(contact.jid, account)
 		if ctrl:
 			ctrl.print_conversation(_('Error.'), 'status')
@@ -2393,7 +2393,7 @@ class Interface:
 					shows[show].append(a)
 		for show in shows:
 			message = self.roster.get_status_message(show)
-			if message == None:
+			if message is None:
 				continue
 			for a in shows[show]:
 				self.roster.send_status(a, show, message)

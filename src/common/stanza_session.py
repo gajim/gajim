@@ -226,11 +226,11 @@ class EncryptedStanzaSession(StanzaSession):
 						self.hmac(k, 'Responder SIGMA Key')		)
 
 	def compress(self, plaintext):
-		if self.compression == None:
+		if self.compression is None:
 			return plaintext
 
 	def decompress(self, compressed):
-		if self.compression == None:
+		if self.compression is None:
 			return compressed
 
 	def encrypt(self, encryptable):
@@ -865,7 +865,7 @@ class EncryptedStanzaSession(StanzaSession):
 	def fail_bad_negotiation(self, reason, fields = None):
 		'''sends an error and cancels everything.
 
-if fields == None, the remote party has given us a bad cryptographic value of some kind
+if fields is None, the remote party has given us a bad cryptographic value of some kind
 
 otherwise, list the fields we haven't implemented'''
 

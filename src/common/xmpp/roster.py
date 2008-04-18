@@ -65,7 +65,7 @@ class Roster(PlugIn):
         """ Subscription tracker. Used internally for setting items state in
             internal roster representation. """
         sender = stanza.getAttr('from')
-        if not sender == None and not sender.bareMatch(
+        if not sender is None and not sender.bareMatch(
         self._owner.User + '@' + self._owner.Server):
             return
         for item in stanza.getTag('query').getTags('item'):

@@ -83,7 +83,7 @@ class OptionsParser:
 		return True
 
 	def write_line(self, fd, opt, parents, value):
-		if value == None:
+		if value is None:
 			return
 		value = value[1]
 		# convert to utf8 before writing to file if needed

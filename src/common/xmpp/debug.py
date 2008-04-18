@@ -355,7 +355,7 @@ class Debug:
                 lst2 = self._as_one_list( l )
                 for l2 in lst2: 
                     self._append_unique_str(r, l2 )
-            elif l == None:
+            elif l is None:
                 continue
             else:
                 self._append_unique_str(r, l )
