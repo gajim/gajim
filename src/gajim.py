@@ -3039,13 +3039,12 @@ class Interface:
 		if self.systray_capabilities and gajim.config.get('trayicon'):
 			self.show_systray()
 
-		self.roster = roster_window.RosterWindow()
-
 		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'gajim.png')
 		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
-		# set the icon to all newly opened windows
+		# set the icon to all windows
 		gtk.window_set_default_icon(pix)
-		self.roster.window.set_icon_from_file(path_to_file) # and to roster window
+
+		self.roster = roster_window.RosterWindow()
 
 		self.init_emoticons()
 		self.make_regexps()
