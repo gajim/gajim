@@ -1434,22 +1434,16 @@ class FTOverwriteConfirmationDialog(ConfirmationDialog):
 		label.set_use_underline(True)
 		self.add_action_widget(b, 200)
 
-class InputDialog:
+class CommonInputDialog:
 	'''Class for Input dialog'''
-	def __init__(self, title, label_str, input_str = None, is_modal = True,
-	ok_handler = None, cancel_handler = None):
+	def __init__(self, title, label_str, is_modal, ok_handler, cancel_handler):
 		# if modal is True you also need to call get_response()
 		# and ok_handler won't be used
-		self.xml = gtkgui_helpers.get_glade('input_dialog.glade')
 		self.dialog = self.xml.get_widget('input_dialog')
 		label = self.xml.get_widget('label')
-		self.input_entry = self.xml.get_widget('input_entry')
 		self.dialog.set_title(title)
 		label.set_markup(label_str)
 		self.cancel_handler = cancel_handler
-		if input_str:
-			self.input_entry.set_text(input_str)
-			self.input_entry.select_region(0, -1) # select all
 
 		self.is_modal = is_modal
 		if not is_modal and ok_handler is not None:
@@ -1466,7 +1460,7 @@ class InputDialog:
 			self.cancel_handler()
 
 	def on_okbutton_clicked(self, widget):
-		user_input = self.input_entry.get_text().decode('utf-8')
+		user_input = self.get_text()
 		self.cancel_handler = None
 		self.dialog.destroy()
 		if isinstance(self.ok_handler, tuple):
@@ -1482,6 +1476,38 @@ class InputDialog:
 			response = self.dialog.run()
 			self.dialog.destroy()
 		return response
+
+class InputDialog(CommonInputDialog):
+	'''Class for Input dialog'''
+	def __init__(self, title, label_str, input_str = None, is_modal = True,
+	ok_handler = None, cancel_handler = None):
+		self.xml = gtkgui_helpers.get_glade('input_dialog.glade')
+		CommonInputDialog.__init__(self, title, label_str, is_modal, ok_handler,
+			cancel_handler)
+		self.input_entry = self.xml.get_widget('input_entry')
+		if input_str:
+			self.input_entry.set_text(input_str)
+			self.input_entry.select_region(0, -1) # select all
+
+	def get_text(self):
+		return self.input_entry.get_text().decode('utf-8')
+
+class InputTextDialog(CommonInputDialog):
+	'''Class for Input dialog'''
+	def __init__(self, title, label_str, input_str = None, is_modal = True,
+	ok_handler = None, cancel_handler = None):
+		self.xml = gtkgui_helpers.get_glade('input_text_dialog.glade')
+		CommonInputDialog.__init__(self, title, label_str, is_modal, ok_handler,
+			cancel_handler)
+		self.input_buffer = self.xml.get_widget('input_textview').get_buffer()
+		if input_str:
+			self.input_buffer.set_text(input_str)
+			start_iter, end_iter = self.input_buffer.get_bounds()
+			self.input_buffer.select_range(start_iter, end_iter) # select all
+
+	def get_text(self):
+		start_iter, end_iter = self.input_buffer.get_bounds()
+		return self.input_buffer.get_text(start_iter, end_iter).decode('utf-8')
 
 class DubbleInputDialog:
 	'''Class for Dubble Input dialog'''

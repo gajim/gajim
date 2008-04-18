@@ -1675,13 +1675,15 @@ class GroupchatControl(ChatControlBase):
 		return nb
 
 	def _on_change_subject_menuitem_activate(self, widget):
-		instance = dialogs.InputDialog(_('Changing Subject'),
+		instance = dialogs.InputTextDialog(_('Changing Subject'),
 			_('Please specify the new subject:'), self.subject)
 		response = instance.get_response()
 		if response == gtk.RESPONSE_OK:
 			# Note, we don't update self.subject since we don't know whether it
 			# will work yet
-			subject = instance.input_entry.get_text().decode('utf-8')
+			start_iter, end_iter = instance.input_buffer.get_bounds()
+			subject = instance.input_buffer.get_text(start_iter, end_iter).decode(
+				'utf-8')
 			gajim.connections[self.account].send_gc_subject(self.room_jid, subject)
 
 	def _on_change_nick_menuitem_activate(self, widget):
