@@ -1675,7 +1675,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			msgtxt = decmsg
 			encrypted = True
 		if mtype == 'error':
-			error_msg = msg.getError()
+			error_msg = msg.getErrorMsg()
 			if not error_msg:
 				error_msg = msgtxt
 				msgtxt = None
