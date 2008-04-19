@@ -3562,15 +3562,7 @@ class RosterWindow:
 						gc_control.room_jid, None)
 			if was_invisible and status != 'offline':
 				# We come back from invisible, join bookmarks
-				for bm in gajim.connections[account].bookmarks:
-					if bm['autojoin'] not in ('1', 'true'):
-						continue
-					room_jid = bm['jid']
-					if room_jid in gajim.gc_connected[account] and \
-					gajim.gc_connected[account][room_jid]:
-						continue
-					self.join_gc_room(account, room_jid, bm['nick'], bm['password'],
-						minimize = bm['minimize'])
+				self.auto_join_bookmarks(account)
 
 	def get_status_message(self, show):
 		if show in gajim.config.get_per('defaultstatusmsg'):
@@ -3584,6 +3576,18 @@ class RosterWindow:
 		dlg.window.present() # show it on current workspace
 		message = dlg.run()
 		return message
+
+	def auto_join_bookmarks(self, account):
+		'''autojoin bookmarks that have 'auto join' on for this account'''
+		for bm in gajim.connections[account].bookmarks:
+			if bm['autojoin'] in ('1', 'true'):
+				jid = bm['jid']
+				if not gajim.gc_connected[account].has_key(jid) or \
+				not gajim.gc_connected[account][jid]:
+					# we are not already connected
+					minimize = bm['minimize'] in ('1', 'true')
+					self.join_gc_room(account, jid, bm['nick'],
+						bm['password'], minimize = minimize)
 
 	def connected_rooms(self, account):
 		if True in gajim.gc_connected[account].values():

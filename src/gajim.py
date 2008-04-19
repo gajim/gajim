@@ -1532,16 +1532,7 @@ class Interface:
 		if gajim.connections[account].connected == invisible_show:
 			return
 
-		# join autojoinable rooms
-		for bm in bms:
-			if bm['autojoin'] in ('1', 'true'):
-				jid = bm['jid']
-				if not gajim.gc_connected[account].has_key(jid) or \
-				not gajim.gc_connected[account][jid]:
-					# we are not already connected
-					minimize = bm['minimize'] in ('1', 'true')
-					self.roster.join_gc_room(account, jid, bm['nick'],
-						bm['password'], minimize = minimize)
+		self.roster.auto_join_bookmarks(account)
 
 	def handle_event_file_send_error(self, account, array):
 		jid = array[0]
