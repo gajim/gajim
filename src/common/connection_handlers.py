@@ -776,13 +776,12 @@ class ConnectionDisco:
 				q.addChild('feature', attrs = {'var': 'sslc2s'})
 				q.addChild('feature', attrs = {'var': 'stringprep'})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_PING})
-				if self.pep_supported:
-					q.addChild('feature', attrs = {'var': common.xmpp.NS_ACTIVITY})
-					q.addChild('feature', attrs = {'var': common.xmpp.NS_ACTIVITY + '+notify'})
-					q.addChild('feature', attrs = {'var': common.xmpp.NS_TUNE})
-					q.addChild('feature', attrs = {'var': common.xmpp.NS_TUNE + '+notify'})
-					q.addChild('feature', attrs = {'var': common.xmpp.NS_MOOD})
-					q.addChild('feature', attrs = {'var': common.xmpp.NS_MOOD + '+notify'})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_ACTIVITY})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_ACTIVITY + '+notify'})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_TUNE})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_TUNE + '+notify'})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_MOOD})
+				q.addChild('feature', attrs = {'var': common.xmpp.NS_MOOD + '+notify'})
 				q.addChild('feature', attrs = {'var': common.xmpp.NS_ESESSION_INIT})
 
 			if (node is None or extension == 'cstates') and gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
