@@ -160,11 +160,9 @@ try:
 except ImportError:
 	HAVE_GPG = False
 else:
-	import os
-	status = os.system('gpg -h >/dev/null 2>&1')
-	if status != 0:
+	from os import system
+	if system('gpg -h >/dev/null 2>&1'):
 		HAVE_GPG = False
-	del status
 
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
