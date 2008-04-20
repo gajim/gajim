@@ -245,6 +245,11 @@ class Contacts:
 					return c
 		return None
 
+	def iter_contacts(self, account):
+		for jid in self._contacts[account]:
+			for contact in self._contacts[account][jid]:
+				yield contact
+
 	def get_contact_from_full_jid(self, account, fjid):
 		''' Get Contact object for specific resource of given jid'''
 		barejid, resource = common.gajim.get_room_and_nick_from_fjid(fjid)
@@ -292,10 +297,6 @@ class Contacts:
 		for account in accounts:
 			our_jid = common.gajim.get_jid_from_account(account)
 			for jid in self.get_jid_list(account):
-				if self.has_brother(account, jid) and not \
-					self.is_big_brother(account, jid):
-					# count metacontacts only once
-					continue
 				if jid == our_jid:
 					continue
 				if common.gajim.jid_is_transport(jid) and not \

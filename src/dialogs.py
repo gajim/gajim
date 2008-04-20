@@ -91,63 +91,21 @@ class EditGroupsDialog:
 		if response_id == gtk.RESPONSE_CLOSE:
 			self.dialog.destroy()
 
-	def update_contact(self):
-		for (contact, account) in self.list_:
-			tag = gajim.contacts.get_metacontacts_tag(account, contact.jid)
-			if not tag:
-				gajim.interface.roster.remove_contact(contact, account)
-				gajim.interface.roster.add_contact_to_roster(contact.jid, account)
-				gajim.connections[account].update_contact(contact.jid, contact.name,
-					contact.groups)
-				continue
-			all_jid = gajim.contacts.get_metacontacts_jids(tag)
-			for _account in all_jid:
-				if not gajim.interface.roster.regroup and _account != account:
-					continue
-				for _jid in all_jid[_account]:
-					c = gajim.contacts.get_first_contact_from_jid(_account, _jid)
-					if not c:
-						continue
-					gajim.interface.roster.remove_contact(c, _account)
-					gajim.interface.roster.add_contact_to_roster(_jid, _account)
-					gajim.connections[_account].update_contact(_jid, c.name,
-						c.groups)
-
 	def remove_group(self, group):
 		'''remove group group from all contacts and all their brothers'''
 		for (contact, account) in self.list_:
-			tag = gajim.contacts.get_metacontacts_tag(account, contact.jid)
-			if not tag:
-				if group in contact.groups:
-					contact.groups.remove(group)
-				continue
-			all_jid = gajim.contacts.get_metacontacts_jids(tag)
-			for _account in all_jid:
-				if not gajim.interface.roster.regroup and _account != account:
-					continue
-				for _jid in all_jid[_account]:
-					contacts = gajim.contacts.get_contacts(_account, _jid)
-					for c in contacts:
-						if group in c.groups:
-							c.groups.remove(group)
+			gajim.interface.roster.remove_contact_from_groups(contact.jid, account, [group])
+
+		# FIXME: Ugly workaround.
+		gajim.interface.roster.draw_group(_('General'), account)
 
 	def add_group(self, group):
 		'''add group group to all contacts and all their brothers'''
 		for (contact, account) in self.list_:
-			tag = gajim.contacts.get_metacontacts_tag(account, contact.jid)
-			if not tag:
-				if group not in contact.groups:
-					contact.groups.append(group)
-				continue
-			all_jid = gajim.contacts.get_metacontacts_jids(tag)
-			for _account in all_jid:
-				if not gajim.interface.roster.regroup and _account != account:
-					continue
-				for _jid in all_jid[_account]:
-					contacts = gajim.contacts.get_contacts(_account, _jid)
-					for c in contacts:
-						if not group in c.groups:
-							c.groups.append(group)
+			gajim.interface.roster.add_contact_to_groups(contact.jid, account, [group])
+		
+		# FIXME: Ugly workaround. Maybe we haven't been in any group (defaults to General)
+		gajim.interface.roster.draw_group(_('General'), account)
 
 	def on_add_button_clicked(self, widget):
 		group = self.xml.get_widget('group_entry').get_text().decode('utf-8')
@@ -166,7 +124,6 @@ class EditGroupsDialog:
 		self.changes_made = True
 		model.append((group, True, False))
 		self.add_group(group)
-		self.update_contact()
 		self.init_list() # Re-draw list to sort new item
 
 	def group_toggled_cb(self, cell, path):
@@ -182,7 +139,6 @@ class EditGroupsDialog:
 			self.add_group(group)
 		else:
 			self.remove_group(group)
-		self.update_contact()
 
 	def init_list(self):
 		store = gtk.ListStore(str, bool, bool)
@@ -200,7 +156,11 @@ class EditGroupsDialog:
 					if g in groups:
 						continue
 					groups[g] = 0
-			for g in contact.groups:
+			c_groups = contact.groups
+			# FIXME: Move to backend
+			if not c_groups:
+				c_groups = [_('General')]
+			for g in c_groups:
 				groups[g] += 1
 		group_list = []
 		# Remove special groups if they are empty

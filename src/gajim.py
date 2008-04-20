@@ -644,7 +644,6 @@ class Interface:
 					old_show = 0
 					gajim.contacts.add_contact(account, contact1)
 					lcontact.append(contact1)
-					self.roster.add_self_contact(account)
 				elif contact1.show in statuss:
 					old_show = statuss.index(contact1.show)
 				if (resources != [''] and (len(lcontact) != 1 or
@@ -653,6 +652,9 @@ class Interface:
 					contact1 = gajim.contacts.copy_contact(contact1)
 					lcontact.append(contact1)
 				contact1.resource = resource
+			# FIXME ugly workaround for self contact
+			self.roster.add_contact(contact1.jid, account)
+
 			if contact1.jid.find('@') > 0 and len(lcontact) == 1:
 				# It's not an agent
 				if old_show == 0 and new_show > 1:
@@ -669,8 +671,8 @@ class Interface:
 					if contact1.jid in gajim.newly_added[account]:
 						gajim.newly_added[account].remove(contact1.jid)
 					self.roster.draw_contact(contact1.jid, account)
-					gobject.timeout_add_seconds(5, self.roster.really_remove_contact,
-						contact1, account)
+					gobject.timeout_add_seconds(5, self.roster.remove_to_be_removed,
+						contact1.jid, account)
 			contact1.show = array[1]
 			contact1.status = status_message
 			contact1.priority = priority
@@ -686,6 +688,7 @@ class Interface:
 			# It must be an agent
 			if ji in jid_list:
 				# Update existing iter
+				self.roster.modelfilter.refilter()
 				self.roster.draw_contact(ji, account)
 				self.roster.draw_group(_('Transports'), account)
 				if new_show > 1 and ji in gajim.transport_avatar[account]:
@@ -942,10 +945,10 @@ class Interface:
 		if jid in gajim.contacts.get_jid_list(account):
 			c = gajim.contacts.get_first_contact_from_jid(account, jid)
 			c.resource = array[1]
-			self.roster.remove_contact(c, account)
+			self.roster.remove_contact(c.jid, account)
 			if _('Not in Roster') in c.groups:
 				c.groups.remove(_('Not in Roster'))
-			self.roster.add_contact_to_roster(c.jid, account)
+			self.roster.add_contact(c.jid, account)
 		else:
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,
@@ -958,7 +961,7 @@ class Interface:
 				groups = [], show = 'online', status = 'online',
 				ask = 'to', resource = array[1], keyID = keyID)
 			gajim.contacts.add_contact(account, contact1)
-			self.roster.add_contact_to_roster(jid, account)
+			self.roster.add_contact(jid, account)
 		dialogs.InformationDialog(_('Authorization accepted'),
 				_('The contact "%s" has authorized you to see his or her status.')
 				% jid)
@@ -1013,7 +1016,7 @@ class Interface:
 					# This way we'll really remove it
 					gajim.to_be_removed[account].remove(c.jid)
 				gajim.contacts.remove_jid(account, c.jid)
-				self.roster.remove_contact(c, account)
+				self.roster.remove_contact(c.jid, account)
 
 	def handle_event_register_agent_info(self, account, array):
 		# ('REGISTER_AGENT_INFO', account, (agent, infos, is_form))
@@ -1476,7 +1479,7 @@ class Interface:
 		not name and not groups:
 			if contacts:
 				c = contacts[0]
-				self.roster.remove_contact(c, account)
+				self.roster.remove_contact(c.jid, account)
 				gajim.contacts.remove_jid(account, jid)
 				self.roster.draw_account(account)
 				if gajim.events.get_events(account, c.jid):
@@ -1490,7 +1493,7 @@ class Interface:
 						show = 'not in roster', status = '', sub = 'none',
 						keyID = keyID)
 					gajim.contacts.add_contact(account, contact)
-					self.roster.add_contact_to_roster(contact.jid, account)
+					self.roster.add_contact(contact.jid, account)
 				#FIXME if it was the only one in its group, remove the group
 				return
 		elif not contacts:
@@ -1500,12 +1503,12 @@ class Interface:
 			contact = gajim.contacts.create_contact(jid = jid, name = name,
 				groups = groups, show = 'offline', sub = sub, ask = ask)
 			gajim.contacts.add_contact(account, contact)
-			self.roster.add_contact_to_roster(jid, account)
+			self.roster.add_contact(jid, account)
 		else:
 			re_add = False
 			# if sub changed: remove and re-add, maybe observer status changed
 			if contacts[0].sub != sub:
-				self.roster.remove_contact(contacts[0], account)
+				self.roster.remove_contact(contacts[0].jid, account)
 				re_add = True
 			for contact in contacts:
 				if not name:
@@ -1516,7 +1519,7 @@ class Interface:
 				if groups:
 					contact.groups = groups
 			if re_add:
-				self.roster.add_contact_to_roster(jid, account)
+				self.roster.add_contact(jid, account)
 		self.roster.draw_contact(jid, account)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('RosterInfo', (account, array))
@@ -1666,7 +1669,7 @@ class Interface:
 		if no_queue: # We didn't have a queue: we change icons
 			if not gajim.contacts.get_contact_with_highest_priority(account, jid):
 				if type_ == 'gc-invitation':
-					self.roster.add_groupchat_to_roster(account, jid,
+					self.roster.add_groupchat(account, jid,
 						status='offline')
 				else:
 					# add contact to roster ("Not In The Roster") if he is not
@@ -1674,8 +1677,7 @@ class Interface:
 			self.roster.draw_contact(jid, account)
 
 		# Show contact in roster (if he is invisible for example) and select line
-		path = self.roster.get_path(jid, account)
-		self.roster.show_and_select_path(path, jid, account)
+		self.roster.show_and_select_contact_if_having_events(jid, account)
 
 	def remove_first_event(self, account, jid, type_ = None):
 		event = gajim.events.get_first_event(account, jid, type_)
@@ -1693,7 +1695,7 @@ class Interface:
 			if contact and (contact.show in ('error', 'offline') and \
 			not gajim.config.get('showoffline') or (
 			gajim.jid_is_transport(jid) and not show_transport)):
-				self.roster.really_remove_contact(contact, account)
+				self.roster.remove_contact(contact.jid, account)
 		self.roster.show_title()
 		self.roster.draw_contact(jid, account)
 
@@ -1739,7 +1741,7 @@ class Interface:
 				groups = [_('Not in Roster')], show = 'not in roster', status = '',
 				sub = 'none', keyID = keyID)
 			gajim.contacts.add_contact(account, contact)
-			self.roster.add_contact_to_roster(contact.jid, account)
+			self.roster.add_contact(contact.jid, account)
 		file_props = array[1]
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 

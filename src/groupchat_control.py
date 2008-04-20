@@ -1587,7 +1587,7 @@ class GroupchatControl(ChatControlBase):
 
 		del win._controls[self.account][self.contact.jid]
 
-		gajim.interface.roster.add_groupchat_to_roster(self.account,
+		gajim.interface.roster.add_groupchat(self.account,
 			self.contact.jid, status = self.subject)
 
 	def shutdown(self, status='offline'):

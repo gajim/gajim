@@ -2108,7 +2108,7 @@ class ChatControl(ChatControlBase):
 			if (not show_transports and gajim.jid_is_transport(jid)) or \
 			(not show_offline and typ == 'chat' and \
 			len(gajim.contacts.get_contacts(self.account, jid)) < 2):
-				gajim.interface.roster.really_remove_contact(self.contact,
+				gajim.interface.roster.remove_to_be_removed(self.contact.jid,
 					self.account)
 			elif typ == 'pm':
 				control.remove_contact(nick)
