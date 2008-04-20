@@ -33,7 +33,7 @@ import thread
 import logging
 log = logging.getLogger('gajim.c.x.transports_nb')
 
-from common import gajim
+import common.gajim
 
 USE_PYOPENSSL = False
 
@@ -755,16 +755,16 @@ class NonBlockingTLS(PlugIn):
 		#tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv23_METHOD)
 		tcpsock.ssl_errnum = 0
 		tcpsock._sslContext.set_verify(OpenSSL.SSL.VERIFY_PEER, self._ssl_verify_callback)
-		cacerts = os.path.join(gajim.DATA_DIR, 'other', 'cacerts.pem')
+		cacerts = os.path.join(common.gajim.DATA_DIR, 'other', 'cacerts.pem')
 		try:
 			tcpsock._sslContext.load_verify_locations(cacerts)
 		except:
 			log.warning('Unable to load SSL certificats from file %s' % \
 				os.path.abspath(cacerts))
 		# load users certs
-		if os.path.isfile(gajim.MY_CACERTS):
+		if os.path.isfile(common.gajim.MY_CACERTS):
 			store = tcpsock._sslContext.get_cert_store()
-			f = open(gajim.MY_CACERTS)
+			f = open(common.gajim.MY_CACERTS)
 			lines = f.readlines()
 			i = 0
 			begin = -1
@@ -779,11 +779,11 @@ class NonBlockingTLS(PlugIn):
 						store.add_cert(X509cert)
 					except OpenSSL.crypto.Error, exception_obj:
 						log.warning('Unable to load a certificate from file %s: %s' %\
-							(gajim.MY_CACERTS, exception_obj.args[0][0][2]))
+							(common.gajim.MY_CACERTS, exception_obj.args[0][0][2]))
 					except:
 						log.warning(
 							'Unknown error while loading certificate from file %s' % \
-							gajim.MY_CACERTS)
+							common.gajim.MY_CACERTS)
 					begin = -1
 				i += 1
 		tcpsock._sslObj = OpenSSL.SSL.Connection(tcpsock._sslContext, tcpsock._sock)

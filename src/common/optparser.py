@@ -180,6 +180,8 @@ class OptionsParser:
 			self.update_config_to_01142()
 		if old < [0, 11, 4, 3] and new >= [0, 11, 4, 3]:
 			self.update_config_to_01143()
+		if old < [0, 11, 4, 4] and new >= [0, 11, 4, 4]:
+			self.update_config_to_01144()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -566,3 +568,30 @@ class OptionsParser:
 			pass
 		con.close()
 		gajim.config.set('version', '0.11.4.3')
+
+	def update_config_to_01144(self):
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript('DROP TABLE caps_cache;')
+			con.commit()
+		except sqlite.OperationalError, e:
+			pass
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE caps_cache (
+					hash_method TEXT,
+					hash TEXT,
+					data BLOB
+				);
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError, e:
+			pass
+		con.close()
+		gajim.config.set('version', '0.11.4.4')

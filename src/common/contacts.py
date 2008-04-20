@@ -44,8 +44,8 @@ class Contact:
 		# Capabilities; filled by caps.py/ConnectionCaps object
 		# every time it gets these from presence stanzas
 		self.caps_node = None
-		self.caps_ver = None
-		self.caps_exts = None
+		self.caps_hash_method = None
+		self.caps_hash = None
 
 		# please read xep-85 http://www.xmpp.org/extensions/xep-0085.html
 		# we keep track of xep85 support with the peer by three extra states:

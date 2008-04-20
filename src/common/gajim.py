@@ -27,6 +27,7 @@ import locale
 import config
 from contacts import Contacts
 from events import Events
+import xmpp
 
 try:
 	import defs
@@ -163,6 +164,21 @@ else:
 	from os import system
 	if system('gpg -h >/dev/null 2>&1'):
 		HAVE_GPG = False
+
+gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
+gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI,
+	xmpp.NS_FILE, xmpp.NS_MUC, xmpp.NS_MUC_USER,
+	xmpp.NS_MUC_ADMIN, xmpp.NS_MUC_OWNER,
+	xmpp.NS_MUC_CONFIG, xmpp.NS_COMMANDS,
+	xmpp.NS_DISCO_INFO, 'ipv6', 'jabber:iq:gateway', xmpp.NS_LAST,
+	xmpp.NS_PRIVACY, xmpp.NS_PRIVATE, xmpp.NS_REGISTER,
+	xmpp.NS_VERSION, xmpp.NS_DATA, xmpp.NS_ENCRYPTED,
+	'msglog', 'sslc2s', 'stringprep', xmpp.NS_PING,
+	xmpp.NS_TIME_REVISED]
+# Optional features gajim supports
+gajim_optional_features = []
+
+caps_hash = ''
 
 def get_nick_from_jid(jid):
 	pos = jid.find('@')

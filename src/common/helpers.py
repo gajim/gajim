@@ -30,6 +30,8 @@ import urllib
 import errno
 import select
 import sha
+import hashlib
+import base64
 import sys
 from encodings.punycode import punycode_encode
 from encodings import idna
@@ -38,7 +40,7 @@ import gajim
 from i18n import Q_
 from i18n import ngettext
 from xmpp_stringprep import nodeprep, resourceprep, nameprep
-
+import xmpp
 
 if sys.platform == 'darwin':
 	from osx import nsapp
@@ -1199,3 +1201,93 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
 			keyID = 'UNKNOWN'
 	return keyID
 
+def sort_identities_func(i1, i2):
+	cat1 = i1['category']
+	cat2 = i2['category']
+	if cat1 < cat2:
+		return -1
+	if cat1 > cat2:
+		return 1
+	if i1.has_key('type'):
+		type1 = i1['type']
+	else:
+		type1 = ''
+	if i2.has_key('type'):
+		type2 = i2['type']
+	else:
+		type2 = ''
+	if type1 < type2:
+		return -1
+	if type1 > type2:
+		return 1
+	if i1.has_key('xml:lang'):
+		lang1 = i1['xml:lang']
+	else:
+		lang1 = ''
+	if i2.has_key('xml:lang'):
+		lang2 = i2['xml:lang']
+	else:
+		lang2 = ''
+	if lang1 < lang2:
+		return -1
+	if lang1 > lang2:
+		return 1
+	return 0
+
+def compute_caps_hash(identities, features, hash_method='sha-1'):
+	S = ''
+	identities.sort(cmp=sort_identities_func)
+	for i in identities:
+		c = i['category']
+		if i.has_key('type'):
+			type_ = i['type']
+		else:
+			type_ = ''
+		if i.has_key('xml:lang'):
+			lang = i['xml:lang']
+		else:
+			lang = ''
+		if i.has_key('name'):
+			name = i['name']
+		else:
+			name = ''
+		S += '%s/%s/%s/%s<' % (c, type_, lang, name)
+	features.sort()
+	for f in features:
+		S += '%s<' % f
+	if hash_method == 'sha-1':
+		hash = hashlib.sha1(S)
+	elif hash_method == 'md5':
+		hash = hashlib.md5(S)
+	else:
+		return ''
+	return base64.b64encode(hash.digest())
+
+def update_optional_features():
+	gajim.gajim_optional_features = []
+	if gajim.config.get('publish_mood'):
+		gajim.gajim_optional_features.append(xmpp.NS_MOOD)
+	if gajim.config.get('subscribe_mood'):
+		gajim.gajim_optional_features.append(xmpp.NS_MOOD + '+notify')
+	if gajim.config.get('publish_activity'):
+		gajim.gajim_optional_features.append(xmpp.NS_ACTIVITY)
+	if gajim.config.get('subscribe_activity'):
+		gajim.gajim_optional_features.append(xmpp.NS_ACTIVITY + '+notify')
+	if gajim.config.get('publish_tune'):
+		gajim.gajim_optional_features.append(xmpp.NS_TUNE)
+	if gajim.config.get('subscribe_tune'):
+		gajim.gajim_optional_features.append(xmpp.NS_TUNE + '+notify')
+	if gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
+		gajim.gajim_optional_features.append(xmpp.NS_CHATSTATES)
+	if not gajim.config.get('ignore_incoming_xhtml'):
+		gajim.gajim_optional_features.append(xmpp.NS_XHTML_IM)
+	if gajim.HAVE_PYCRYPTO:
+		gajim.gajim_optional_features.append(xmpp.NS_ESESSION_INIT)
+	gajim.caps_hash = compute_caps_hash([gajim.gajim_identity],
+		gajim.gajim_common_features + gajim.gajim_optional_features)
+	# re-send presence with new hash
+	for account in gajim.connections:
+		connected = gajim.connections[account].connected
+		if connected > 1 and gajim.SHOW_LIST[connected] != 'invisible':
+			gajim.connections[account].change_status(gajim.SHOW_LIST[connected],
+				gajim.connections[account].status)

@@ -538,6 +538,7 @@ class PreferencesWindow:
 				if gajim.connections[account].pep_supported:
 					pep.user_send_mood(account, '')
 		self.on_checkbutton_toggled(widget, 'publish_mood')
+		helpers.update_optional_features()
 
 	def on_publish_activity_checkbutton_toggled(self, widget):
 		if widget.get_active() == False:
@@ -545,6 +546,7 @@ class PreferencesWindow:
 				if gajim.connections[account].pep_supported:
 					pep.user_send_activity(account, '')
 		self.on_checkbutton_toggled(widget, 'publish_activity')
+		helpers.update_optional_features()
 
 	def on_publish_tune_checkbutton_toggled(self, widget):
 		if widget.get_active() == False:
@@ -552,17 +554,21 @@ class PreferencesWindow:
 				if gajim.connections[account].pep_supported:
 					pep.user_send_tune(account, '')
 		self.on_checkbutton_toggled(widget, 'publish_tune')
+		helpers.update_optional_features()
 		gajim.interface.roster.enable_syncing_status_msg_from_current_music_track(
 			widget.get_active())
 
 	def on_subscribe_mood_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'subscribe_mood')
+		helpers.update_optional_features()
 
 	def on_subscribe_activity_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'subscribe_activity')
+		helpers.update_optional_features()
 
 	def on_subscribe_tune_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'subscribe_tune')
+		helpers.update_optional_features()
 
 	def on_sort_by_show_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sort_by_show')
@@ -625,6 +631,7 @@ class PreferencesWindow:
 
 	def on_xhtml_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'ignore_incoming_xhtml')
+		helpers.update_optional_features()
 
 	def apply_speller(self):
 		for acct in gajim.connections:
@@ -719,12 +726,17 @@ class PreferencesWindow:
 
 	def on_outgoing_chat_states_combobox_changed(self, widget):
 		active = widget.get_active()
+		old_value = gajim.config.get('outgoing_chat_state_notifications')
 		if active == 0: # all
 			gajim.config.set('outgoing_chat_state_notifications', 'all')
 		elif active == 1: # only composing
 			gajim.config.set('outgoing_chat_state_notifications', 'composing_only')
 		else: # disabled
 			gajim.config.set('outgoing_chat_state_notifications', 'disabled')
+		new_value = gajim.config.get('outgoing_chat_state_notifications')
+		if 'disabled' in (old_value, new_value):
+			# we changed from disabled to sth else or vice versa
+			helpers.update_optional_features()
 
 	def on_displayed_chat_states_combobox_changed(self, widget):
 		active = widget.get_active()

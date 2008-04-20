@@ -667,7 +667,7 @@ class ConnectionDisco:
 			common.xmpp.NS_DISCO, frm = to)
 		iq.setAttr('id', id)
 		query = iq.setTag('query')
-		query.setAttr('node','http://gajim.org/caps#' + gajim.version.split('-',
+		query.setAttr('node','http://gajim.org#' + gajim.version.split('-',
 			1)[0])
 		for f in (common.xmpp.NS_BYTESTREAM, common.xmpp.NS_SI,
 		common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS):
@@ -744,55 +744,17 @@ class ConnectionDisco:
 			q = iq.getTag('query')
 			if node:
 				q.setAttr('node', node)
-			q.addChild('identity', attrs = {'type': 'pc', 'category': 'client',
-				'name': 'Gajim'})
+			q.addChild('identity', attrs = gajim.gajim_identity)
 			extension = None
 			if node and node.find('#') != -1:
 				extension = node[node.index('#') + 1:]
-			client_version = 'http://gajim.org/caps#' + gajim.version.split('-',
-				1)[0]
+			client_version = 'http://gajim.org#' + gajim.caps_hash
 
 			if node in (None, client_version):
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_BYTESTREAM})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_SI})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_FILE})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC_USER})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC_ADMIN})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC_OWNER})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_MUC_CONFIG})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_COMMANDS})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_DISCO_INFO})
-				q.addChild('feature', attrs = {'var': 'ipv6'})
-				q.addChild('feature', attrs = {'var': 'jabber:iq:gateway'})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_LAST})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_PRIVACY})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_PRIVATE})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_REGISTER})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_VERSION})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_DATA})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_ENCRYPTED})
-				q.addChild('feature', attrs = {'var': 'msglog'})
-				q.addChild('feature', attrs = {'var': 'sslc2s'})
-				q.addChild('feature', attrs = {'var': 'stringprep'})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_PING})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_ACTIVITY})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_ACTIVITY + '+notify'})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_TUNE})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_TUNE + '+notify'})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_MOOD})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_MOOD + '+notify'})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_ESESSION_INIT})
-
-			if (node is None or extension == 'cstates') and gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_CHATSTATES})
-
-			if (node is None or extension == 'xhtml') and not gajim.config.get('ignore_incoming_xhtml'):
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_XHTML_IM})
-
-			if node is None:
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_PING})
-				q.addChild('feature', attrs = {'var': common.xmpp.NS_TIME_REVISED})
+				for f in gajim.gajim_common_features:
+					q.addChild('feature', attrs = {'var': f})
+				for f in gajim.gajim_optional_features:
+					q.addChild('feature', attrs = {'var': f})
 
 			if q.getChildren():
 				self.connection.send(iq)
@@ -892,16 +854,9 @@ class ConnectionVcard:
 	def add_caps(self, p):
 		''' advertise our capabilities in presence stanza (xep-0115)'''
 		c = p.setTag('c', namespace = common.xmpp.NS_CAPS)
-		c.setAttr('node', 'http://gajim.org/caps')
-		ext = []
-		if not gajim.config.get('ignore_incoming_xhtml'):
-			ext.append('xhtml')
-		if gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
-			ext.append('cstates')
-
-		if len(ext):
-			c.setAttr('ext', ' '.join(ext))
-		c.setAttr('ver', gajim.version.split('-', 1)[0])
+		c.setAttr('hash', 'sha-1')
+		c.setAttr('node', 'http://gajim.org')
+		c.setAttr('ver', gajim.caps_hash)
 		return p
 	
 	def node_to_dict(self, node):

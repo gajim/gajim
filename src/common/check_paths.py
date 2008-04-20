@@ -82,9 +82,8 @@ def create_log_db():
 		CREATE INDEX idx_logs_jid_id_kind ON logs (jid_id, kind);
 
 		CREATE TABLE caps_cache (
-			node TEXT,
-			ver TEXT,
-			ext TEXT,
+			hash_method TEXT,
+			hash TEXT,
 			data BLOB);
 
 		CREATE TABLE IF NOT EXISTS rooms_last_message_time(
