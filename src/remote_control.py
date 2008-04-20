@@ -130,6 +130,10 @@ class SignalObject(dbus.service.Object):
 		pass
 
 	@dbus.service.signal(INTERFACE, signature='av')
+	def ContactStatus(self, account_and_array):
+		pass
+
+	@dbus.service.signal(INTERFACE, signature='av')
 	def NewMessage(self, account_and_array):
 		pass
 

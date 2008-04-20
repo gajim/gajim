@@ -735,6 +735,8 @@ class Interface:
 			elif new_show > 1: # Status change (not connected/disconnected or error (<1))
 				notify.notify('status_change', jid, account, [new_show,
 					status_message])
+				if self.remote_ctrl:
+					self.remote_ctrl.raise_signal('ContactStatus', (account, array))
 		else:
 			# FIXME: Msn transport (CMSN1.2.1 and PyMSN) doesn't follow the XEP
 			# still the case in 2008
