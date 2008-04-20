@@ -1574,7 +1574,7 @@ class SubscriptionRequestWindow:
 
 	def on_start_chat_activate(self, widget):
 		'''open chat'''
-		gajim.interface.roster.new_chat_from_jid(self.account, self.jid)
+		gajim.interface.new_chat_from_jid(self.account, self.jid)
 
 	def on_deny_button_clicked(self, widget):
 		'''refuse the request'''
@@ -1736,8 +1736,7 @@ class JoinGroupchatWindow:
 
 		if self.automatic:
 			gajim.automatic_rooms[self.account][room_jid] = self.automatic
-		gajim.interface.roster.join_gc_room(self.account, room_jid, nickname,
-			password)
+		gajim.interface.join_gc_room(self.account, room_jid, nickname,	password)
 
 		self.window.destroy()
 
@@ -1919,7 +1918,7 @@ class NewChatDialog(InputDialog):
 			except:
 				ErrorDialog(_('Invalid JID'), _('Unable to parse "%s".') % jid)
 				return
-		gajim.interface.roster.new_chat_from_jid(self.account, jid)
+		gajim.interface.new_chat_from_jid(self.account, jid)
 
 class ChangePasswordDialog:
 	def __init__(self, account):
@@ -2921,7 +2920,7 @@ class InvitationReceivedDialog:
 		self.dialog.destroy()
 		try:
 			if self.is_continued:
-				gajim.interface.roster.join_gc_room(self.account, self.room_jid,
+				gajim.interface.join_gc_room(self.account, self.room_jid,
 					gajim.nicks[self.account], None, is_continued=True)
 			else:
 				JoinGroupchatWindow(self.account, self.room_jid)
@@ -3719,7 +3718,7 @@ class TransformChatToMUC:
 		gajim.automatic_rooms[self.account][room_jid] = {}
 		gajim.automatic_rooms[self.account][room_jid]['invities'] = guest_list
 		gajim.automatic_rooms[self.account][room_jid]['continue_tag'] = True
-		gajim.interface.roster.join_gc_room(self.account, room_jid,
+		gajim.interface.join_gc_room(self.account, room_jid,
 			gajim.nicks[self.account], None, is_continued=True)
 		self.window.destroy()
 

@@ -237,6 +237,9 @@ import message_control
 import negotiation
 
 from chat_control import ChatControlBase
+from chat_control import ChatControl
+from groupchat_control import GroupchatControl
+from groupchat_control import PrivateChatControl
 from atom_window import AtomWindow
 
 import common.sleepy
@@ -432,6 +435,11 @@ class GlibIdleQueue(idlequeue.IdleQueue):
 		self.check_time_events()
 
 class Interface:
+
+################################################################################		
+### Methods handling events from connection 
+################################################################################	
+
 	def handle_event_roster(self, account, data):
 		#('ROSTER', account, array)
 		self.roster.fill_contacts_and_groups_dicts(data, account)
@@ -903,7 +911,7 @@ class Interface:
 						show = 'offline'
 					gc_c = gajim.contacts.create_gc_contact(room_jid = jid,
 						name = nick, show = show)
-					self.roster.new_private_chat(gc_c, account)
+					self.new_private_chat(gc_c, account)
 				ctrl = self.msg_win_mgr.get_control(full_jid_with_resource, account)
 				ctrl.print_conversation('Error %s: %s' % (array[1], array[2]),
 							'status')
@@ -1588,119 +1596,6 @@ class Interface:
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewGmail', (account, array))
 
-	def save_avatar_files(self, jid, photo, puny_nick = None, local = False):
-		'''Saves an avatar to a separate file, and generate files for dbus notifications. An avatar can be given as a pixmap directly or as an decoded image.'''
-		puny_jid = helpers.sanitize_filename(jid)
-		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid)
-		if puny_nick:
-			path_to_file = os.path.join(path_to_file, puny_nick)
-		# remove old avatars
-		for typ in ('jpeg', 'png'):
-			if local:
-				path_to_original_file = path_to_file + '_local'+  '.' + typ
-			else:
-				path_to_original_file = path_to_file + '.' + typ
-			if os.path.isfile(path_to_original_file):
-				os.remove(path_to_original_file)
-		if local and photo:
-			pixbuf = photo
-			type = 'png'
-			extension = '_local.png' # save local avatars as png file
-		else:
-			pixbuf, typ = gtkgui_helpers.get_pixbuf_from_data(photo, want_type = True)
-			if  pixbuf is None:
-				return
-			extension = '.' + typ
-			if typ not in ('jpeg', 'png'):
-				gajim.log.debug('gtkpixbuf cannot save other than jpeg and png formats. saving %s\'avatar as png file (originaly %s)' % (jid, typ))
-				typ = 'png'
-				extension = '.png'
-		path_to_original_file = path_to_file + extension
-		pixbuf.save(path_to_original_file, typ)
-		# Generate and save the resized, color avatar
-		pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'notification')
-		if pixbuf:
-			path_to_normal_file = path_to_file + '_notif_size_colored' + extension
-			pixbuf.save(path_to_normal_file, 'png')
-			# Generate and save the resized, black and white avatar
-			bwbuf = gtkgui_helpers.get_scaled_pixbuf(
-				gtkgui_helpers.make_pixbuf_grayscale(pixbuf), 'notification')
-			if bwbuf:
-				path_to_bw_file = path_to_file + '_notif_size_bw' + extension
-				bwbuf.save(path_to_bw_file, 'png')
-
-	def remove_avatar_files(self, jid, puny_nick = None, local = False):
-		'''remove avatar files of a jid'''
-		puny_jid = helpers.sanitize_filename(jid)
-		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid)
-		if puny_nick:
-			path_to_file = os.path.join(path_to_file, puny_nick)
-		for ext in ('.jpeg', '.png'):
-			if local:
-				ext = '_local' + ext
-			path_to_original_file = path_to_file + ext
-			if os.path.isfile(path_to_file + ext):
-				os.remove(path_to_file + ext)
-			if os.path.isfile(path_to_file + '_notif_size_colored' + ext):
-				os.remove(path_to_file + '_notif_size_colored' + ext)
-			if os.path.isfile(path_to_file + '_notif_size_bw' + ext):
-				os.remove(path_to_file + '_notif_size_bw' + ext)
-
-	def add_event(self, account, jid, type_, event_args):
-		'''add an event to the gajim.events var'''
-		# We add it to the gajim.events queue
-		# Do we have a queue?
-		jid = gajim.get_jid_without_resource(jid)
-		no_queue = len(gajim.events.get_events(account, jid)) == 0
-		event_type = None
-		# type_ can be gc-invitation file-send-error file-error file-request-error
-		# file-request file-completed file-stopped
-		# event_type can be in advancedNotificationWindow.events_list
-		event_types = {'file-request': 'ft_request',
-			'file-completed': 'ft_finished'}
-		if type_ in event_types:
-			event_type = event_types[type_]
-		show_in_roster = notify.get_show_in_roster(event_type, account, jid)
-		show_in_systray = notify.get_show_in_systray(event_type, account, jid)
-		event = gajim.events.create_event(type_, event_args,
-			show_in_roster = show_in_roster,
-			show_in_systray = show_in_systray)
-		gajim.events.add_event(account, jid, event)
-
-		self.roster.show_title()
-		if no_queue: # We didn't have a queue: we change icons
-			if not gajim.contacts.get_contact_with_highest_priority(account, jid):
-				if type_ == 'gc-invitation':
-					self.roster.add_groupchat(account, jid,
-						status='offline')
-				else:
-					# add contact to roster ("Not In The Roster") if he is not
-					self.roster.add_to_not_in_the_roster(account, jid)
-			self.roster.draw_contact(jid, account)
-
-		# Show contact in roster (if he is invisible for example) and select line
-		self.roster.show_and_select_contact_if_having_events(jid, account)
-
-	def remove_first_event(self, account, jid, type_ = None):
-		event = gajim.events.get_first_event(account, jid, type_)
-		self.remove_event(account, jid, event)
-
-	def remove_event(self, account, jid, event):
-		if gajim.events.remove_events(account, jid, event):
-			# No such event found
-			return
-		# no other event?
-		if not len(gajim.events.get_events(account, jid)):
-			contact = gajim.contacts.get_contact_with_highest_priority(account,
-				jid)
-			show_transport = gajim.config.get('show_transports_group')
-			if contact and (contact.show in ('error', 'offline') and \
-			not gajim.config.get('showoffline') or (
-			gajim.jid_is_transport(jid) and not show_transport)):
-				self.roster.remove_contact(contact.jid, account)
-		self.roster.show_title()
-		self.roster.draw_contact(jid, account)
-
 	def handle_event_file_request_error(self, account, array):
 		# ('FILE_REQUEST_ERROR', account, (jid, file_props, error_msg))
 		jid, file_props, errmsg = array
@@ -2077,7 +1972,7 @@ class Interface:
 		# non-esession negotiation. this isn't very useful, but i'm keeping it around
 		# to test my test suite.
 		if form.getType() == 'form':
-			ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
+			ctrl = self.msg_win_mgr.get_control(str(jid), account)
 			if not ctrl:
 				resource = jid.getResource()
 				contact = gajim.contacts.get_contact(account, str(jid), resource)
@@ -2085,9 +1980,9 @@ class Interface:
 					connection = gajim.connections[account]
 					contact = gajim.contacts.create_contact(jid = jid.getStripped(), 
 							resource = resource, show = connection.get_status())
-				self.roster.new_chat(contact, account, resource = resource)
+				self.new_chat(contact, account, resource = resource)
 
-				ctrl = gajim.interface.msg_win_mgr.get_control(str(jid), account)
+				ctrl = self.msg_win_mgr.get_control(str(jid), account)
 
 			ctrl.set_session(session)
 
@@ -2318,89 +2213,238 @@ class Interface:
 			dialogs.WarningDialog(_('PEP node was not removed'),
 				_('PEP node %s was not removed: %s') % (data[1], data[2]))
 
-	def read_sleepy(self):
-		'''Check idle status and change that status if needed'''
-		if not self.sleeper.poll():
-			# idle detection is not supported in that OS
-			return False # stop looping in vain
-		state = self.sleeper.getState()
-		for account in gajim.connections:
-			if not gajim.sleeper_state.has_key(account) or \
-					not gajim.sleeper_state[account]:
-				continue
-			if state == common.sleepy.STATE_AWAKE and \
-				gajim.sleeper_state[account] in ('autoaway', 'autoxa'):
-				# we go online
-				self.roster.send_status(account, 'online',
-					gajim.status_before_autoaway[account])
-				gajim.status_before_autoaway[account] = ''
-				gajim.sleeper_state[account] = 'online'
-			elif state == common.sleepy.STATE_AWAY and \
-				gajim.sleeper_state[account] == 'online' and \
-				gajim.config.get('autoaway'):
-				# we save out online status
-				gajim.status_before_autoaway[account] = \
-					gajim.connections[account].status
-				# we go away (no auto status) [we pass True to auto param]
-				auto_message = gajim.config.get('autoaway_message')
-				if not auto_message:
-					auto_message = gajim.connections[account].status
-				else:
-					auto_message = auto_message.replace('$S','%(status)s')
-					auto_message = auto_message.replace('$T','%(time)s')
-					auto_message = auto_message % {
-						'status': gajim.status_before_autoaway[account],
-						'time': gajim.config.get('autoawaytime')
-						}
-				self.roster.send_status(account, 'away', auto_message, auto=True)
-				gajim.sleeper_state[account] = 'autoaway'
-			elif state == common.sleepy.STATE_XA and (\
-				gajim.sleeper_state[account] == 'autoaway' or \
-				gajim.sleeper_state[account] == 'online') and \
-				gajim.config.get('autoxa'):
-				# we go extended away [we pass True to auto param]
-				auto_message = gajim.config.get('autoxa_message')
-				if not auto_message:
-					auto_message = gajim.connections[account].status
-				else:
-					auto_message = auto_message.replace('$S','%(status)s')
-					auto_message = auto_message.replace('$T','%(time)s')
-					auto_message = auto_message % {
-						'status': gajim.status_before_autoaway[account], 
-						'time': gajim.config.get('autoxatime')
-						}
-				self.roster.send_status(account, 'xa', auto_message, auto=True)
-				gajim.sleeper_state[account] = 'autoxa'
-		return True # renew timeout (loop for ever)
+	def register_handlers(self):
+		self.handlers = {
+			'ROSTER': self.handle_event_roster,
+			'WARNING': self.handle_event_warning,
+			'ERROR': self.handle_event_error,
+			'INFORMATION': self.handle_event_information,
+			'ERROR_ANSWER': self.handle_event_error_answer,
+			'STATUS': self.handle_event_status,
+			'NOTIFY': self.handle_event_notify,
+			'MSG': self.handle_event_msg,
+			'MSGERROR': self.handle_event_msgerror,
+			'MSGSENT': self.handle_event_msgsent,
+			'MSGNOTSENT': self.handle_event_msgnotsent,
+			'SUBSCRIBED': self.handle_event_subscribed,
+			'UNSUBSCRIBED': self.handle_event_unsubscribed,
+			'SUBSCRIBE': self.handle_event_subscribe,
+			'AGENT_ERROR_INFO': self.handle_event_agent_info_error,
+			'AGENT_ERROR_ITEMS': self.handle_event_agent_items_error,
+			'AGENT_REMOVED': self.handle_event_agent_removed,
+			'REGISTER_AGENT_INFO': self.handle_event_register_agent_info,
+			'AGENT_INFO_ITEMS': self.handle_event_agent_info_items,
+			'AGENT_INFO_INFO': self.handle_event_agent_info_info,
+			'QUIT': self.handle_event_quit,
+			'NEW_ACC_CONNECTED': self.handle_event_new_acc_connected,
+			'NEW_ACC_NOT_CONNECTED': self.handle_event_new_acc_not_connected,
+			'ACC_OK': self.handle_event_acc_ok,
+			'ACC_NOT_OK': self.handle_event_acc_not_ok,
+			'MYVCARD': self.handle_event_myvcard,
+			'VCARD': self.handle_event_vcard,
+			'LAST_STATUS_TIME': self.handle_event_last_status_time,
+			'OS_INFO': self.handle_event_os_info,
+			'GC_NOTIFY': self.handle_event_gc_notify,
+			'GC_MSG': self.handle_event_gc_msg,
+			'GC_SUBJECT': self.handle_event_gc_subject,
+			'GC_CONFIG': self.handle_event_gc_config,
+			'GC_CONFIG_CHANGE': self.handle_event_gc_config_change,
+			'GC_INVITATION': self.handle_event_gc_invitation,
+			'GC_AFFILIATION': self.handle_event_gc_affiliation,
+			'GC_PASSWORD_REQUIRED': self.handle_event_gc_password_required,
+			'BAD_PASSPHRASE': self.handle_event_bad_passphrase,
+			'ROSTER_INFO': self.handle_event_roster_info,
+			'BOOKMARKS': self.handle_event_bookmarks,
+			'CON_TYPE': self.handle_event_con_type,
+			'CONNECTION_LOST': self.handle_event_connection_lost,
+			'FILE_REQUEST': self.handle_event_file_request,
+			'GMAIL_NOTIFY': self.handle_event_gmail_notify,
+			'FILE_REQUEST_ERROR': self.handle_event_file_request_error,
+			'FILE_SEND_ERROR': self.handle_event_file_send_error,
+			'STANZA_ARRIVED': self.handle_event_stanza_arrived,
+			'STANZA_SENT': self.handle_event_stanza_sent,
+			'HTTP_AUTH': self.handle_event_http_auth,
+			'VCARD_PUBLISHED': self.handle_event_vcard_published,
+			'VCARD_NOT_PUBLISHED': self.handle_event_vcard_not_published,
+			'ASK_NEW_NICK': self.handle_event_ask_new_nick,
+			'SIGNED_IN': self.handle_event_signed_in,
+			'METACONTACTS': self.handle_event_metacontacts,
+			'ATOM_ENTRY': self.handle_atom_entry,
+			'FAILED_DECRYPT': self.handle_event_failed_decrypt,
+			'PRIVACY_LISTS_RECEIVED': self.handle_event_privacy_lists_received,
+			'PRIVACY_LIST_RECEIVED': self.handle_event_privacy_list_received,
+			'PRIVACY_LISTS_ACTIVE_DEFAULT': \
+				self.handle_event_privacy_lists_active_default,
+			'PRIVACY_LIST_REMOVED': self.handle_event_privacy_list_removed,
+			'ZC_NAME_CONFLICT': self.handle_event_zc_name_conflict,
+			'PING_SENT': self.handle_event_ping_sent,
+			'PING_REPLY': self.handle_event_ping_reply,
+			'PING_ERROR': self.handle_event_ping_error,
+			'SEARCH_FORM': self.handle_event_search_form,
+			'SEARCH_RESULT': self.handle_event_search_result,
+			'RESOURCE_CONFLICT': self.handle_event_resource_conflict,
+			'PEP_CONFIG': self.handle_event_pep_config,
+			'UNIQUE_ROOM_ID_UNSUPPORTED': \
+				self.handle_event_unique_room_id_unsupported,
+			'UNIQUE_ROOM_ID_SUPPORTED': self.handle_event_unique_room_id_supported,
+			'SESSION_NEG': self.handle_session_negotiation,
+			'GPG_PASSWORD_REQUIRED': self.handle_event_gpg_password_required,
+			'SSL_ERROR': self.handle_event_ssl_error,
+			'FINGERPRINT_ERROR': self.handle_event_fingerprint_error,
+			'PLAIN_CONNECTION': self.handle_event_plain_connection,
+			'PUBSUB_NODE_REMOVED': self.handle_event_pubsub_node_removed,
+			'PUBSUB_NODE_NOT_REMOVED': self.handle_event_pubsub_node_not_removed,
+		}
+		gajim.handlers = self.handlers
 
-	def autoconnect(self):
-		'''auto connect at startup'''
-		# dict of account that want to connect sorted by status
-		shows = {}
-		for a in gajim.connections:
-			if gajim.config.get_per('accounts', a, 'autoconnect'):
-				show = gajim.config.get_per('accounts', a, 'autoconnect_as')
-				if not show in gajim.SHOW_LIST:
-					continue
-				if not show in shows:
-					shows[show] = [a]
+################################################################################		
+### Methods dealing with gajim.events
+################################################################################
+
+	def add_event(self, account, jid, type_, event_args):
+		'''add an event to the gajim.events var'''
+		# We add it to the gajim.events queue
+		# Do we have a queue?
+		jid = gajim.get_jid_without_resource(jid)
+		no_queue = len(gajim.events.get_events(account, jid)) == 0
+		event_type = None
+		# type_ can be gc-invitation file-send-error file-error file-request-error
+		# file-request file-completed file-stopped
+		# event_type can be in advancedNotificationWindow.events_list
+		event_types = {'file-request': 'ft_request',
+			'file-completed': 'ft_finished'}
+		if type_ in event_types:
+			event_type = event_types[type_]
+		show_in_roster = notify.get_show_in_roster(event_type, account, jid)
+		show_in_systray = notify.get_show_in_systray(event_type, account, jid)
+		event = gajim.events.create_event(type_, event_args,
+			show_in_roster = show_in_roster,
+			show_in_systray = show_in_systray)
+		gajim.events.add_event(account, jid, event)
+
+		self.roster.show_title()
+		if no_queue: # We didn't have a queue: we change icons
+			if not gajim.contacts.get_contact_with_highest_priority(account, jid):
+				if type_ == 'gc-invitation':
+					self.roster.add_groupchat(account, jid,
+						status='offline')
 				else:
-					shows[show].append(a)
-		for show in shows:
-			message = self.roster.get_status_message(show)
-			if message is None:
-				continue
-			for a in shows[show]:
-				self.roster.send_status(a, show, message)
-		return False
+					# add contact to roster ("Not In The Roster") if he is not
+					self.roster.add_to_not_in_the_roster(account, jid)
+			self.roster.draw_contact(jid, account)
 
-	def show_systray(self):
-		self.systray_enabled = True
-		self.systray.show_icon()
+		# Show contact in roster (if he is invisible for example) and select line
+		self.roster.show_and_select_contact_if_having_events(jid, account)
 
-	def hide_systray(self):
-		self.systray_enabled = False
-		self.systray.hide_icon()
+	def remove_first_event(self, account, jid, type_ = None):
+		event = gajim.events.get_first_event(account, jid, type_)
+		self.remove_event(account, jid, event)
+
+	def remove_event(self, account, jid, event):
+		if gajim.events.remove_events(account, jid, event):
+			# No such event found
+			return
+		# no other event?
+		if not len(gajim.events.get_events(account, jid)):
+			contact = gajim.contacts.get_contact_with_highest_priority(account,
+				jid)
+			show_transport = gajim.config.get('show_transports_group')
+			if contact and (contact.show in ('error', 'offline') and \
+			not gajim.config.get('showoffline') or (
+			gajim.jid_is_transport(jid) and not show_transport)):
+				self.roster.remove_contact(contact.jid, account)
+		self.roster.show_title()
+		self.roster.draw_contact(jid, account)
+
+	def handle_event(self, account, fjid, type_):
+		w = None
+		resource = gajim.get_resource_from_jid(fjid)
+		jid = gajim.get_jid_without_resource(fjid)
+		if type_ in ('printed_gc_msg', 'printed_marked_gc_msg', 'gc_msg'):
+			w = self.msg_win_mgr.get_window(jid, account)
+			if self.minimized_controls[account].has_key(jid):
+				if not w:
+					ctrl = self.minimized_controls[account][jid]
+					w = self.msg_win_mgr.create_window(ctrl.contact, \
+						ctrl.account, ctrl.type_id)
+				self.roster.on_groupchat_maximized(None, jid, account)
+		elif type_ in ('printed_chat', 'chat', ''):
+			# '' is for log in/out notifications
+			if self.msg_win_mgr.has_window(fjid, account):
+				w = self.msg_win_mgr.get_window(fjid, account)
+			else:
+				highest_contact = gajim.contacts.get_contact_with_highest_priority(
+					account, jid)
+				# jid can have a window if this resource was lower when he sent
+				# message and is now higher because the other one is offline
+				if resource and highest_contact.resource == resource and \
+				not self.msg_win_mgr.has_window(jid, account):
+					# remove resource of events too
+					gajim.events.change_jid(account, fjid, jid)
+					resource = None
+					fjid = jid
+				contact = None
+				if resource:
+					contact = gajim.contacts.get_contact(account, jid, resource)
+				if not contact:
+					contact = highest_contact
+				self.new_chat(contact, account, resource = resource)
+				w = self.msg_win_mgr.get_window(fjid, account)
+				gajim.last_message_time[account][jid] = 0 # long time ago
+		elif type_ in ('printed_pm', 'pm'):
+			if self.msg_win_mgr.has_window(fjid, account):
+				w = self.msg_win_mgr.get_window(fjid, account)
+			else:
+				room_jid = jid
+				nick = resource
+				gc_contact = gajim.contacts.get_gc_contact(account, room_jid,
+					nick)
+				if gc_contact:
+					show = gc_contact.show
+				else:
+					show = 'offline'
+					gc_contact = gajim.contacts.create_gc_contact(
+						room_jid = room_jid, name = nick, show = show)
+				self.new_private_chat(gc_contact, account)
+				w = self.msg_win_mgr.get_window(fjid, account)
+		elif type_ in ('normal', 'file-request', 'file-request-error',
+		'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
+			# Get the first single message event
+			event = gajim.events.get_first_event(account, fjid, type_)
+			if not event:
+				# default to jid without resource
+				event = gajim.events.get_first_event(account, jid, type_)
+				if not event:
+					return
+				# Open the window
+				self.roster.open_event(account, jid, event)
+			else:
+				# Open the window
+				self.roster.open_event(account, fjid, event)
+		elif type_ == 'gmail':
+			url=gajim.connections[account].gmail_url
+			if url:
+				helpers.launch_browser_mailer('url', url)
+		elif type_ == 'gc-invitation':
+			event = gajim.events.get_first_event(account, jid, type_)
+			data = event.parameters
+			dialogs.InvitationReceivedDialog(account, data[0], jid, data[2],
+				data[1], data[3])
+			gajim.events.remove_events(account, jid, event)
+			self.roster.draw_contact(jid, account)
+		if w:
+			w.set_active_tab(fjid, account)
+			w.window.present()
+			w.window.window.focus()
+			ctrl = w.get_control(fjid, account)
+			# Using isinstance here because we want to catch all derived types
+			if isinstance(ctrl, ChatControlBase):
+				tv = ctrl.conv_textview
+				tv.scroll_to_end()
+
+################################################################################		
+### Methods dealing with emoticons
+################################################################################
 
 	def image_is_ok(self, image):
 		if not os.path.exists(image):
@@ -2517,9 +2561,6 @@ class Interface:
 			return -1
 		return 0
 
-	def on_launch_browser_mailer(self, widget, url, kind):
-		helpers.launch_browser_mailer(kind, url)
-
 	def popup_emoticons_under_button(self, button, parent_win):
 		''' pops emoticons menu under button, located in parent_win'''
 		gtkgui_helpers.popup_emoticons_under_button(self.emoticons_menu,
@@ -2623,89 +2664,226 @@ class Interface:
 			self.emoticons_menu.destroy()
 		self.emoticons_menu = self.prepare_emoticons_menu()
 
-	def register_handlers(self):
-		self.handlers = {
-			'ROSTER': self.handle_event_roster,
-			'WARNING': self.handle_event_warning,
-			'ERROR': self.handle_event_error,
-			'INFORMATION': self.handle_event_information,
-			'ERROR_ANSWER': self.handle_event_error_answer,
-			'STATUS': self.handle_event_status,
-			'NOTIFY': self.handle_event_notify,
-			'MSG': self.handle_event_msg,
-			'MSGERROR': self.handle_event_msgerror,
-			'MSGSENT': self.handle_event_msgsent,
-			'MSGNOTSENT': self.handle_event_msgnotsent,
-			'SUBSCRIBED': self.handle_event_subscribed,
-			'UNSUBSCRIBED': self.handle_event_unsubscribed,
-			'SUBSCRIBE': self.handle_event_subscribe,
-			'AGENT_ERROR_INFO': self.handle_event_agent_info_error,
-			'AGENT_ERROR_ITEMS': self.handle_event_agent_items_error,
-			'AGENT_REMOVED': self.handle_event_agent_removed,
-			'REGISTER_AGENT_INFO': self.handle_event_register_agent_info,
-			'AGENT_INFO_ITEMS': self.handle_event_agent_info_items,
-			'AGENT_INFO_INFO': self.handle_event_agent_info_info,
-			'QUIT': self.handle_event_quit,
-			'NEW_ACC_CONNECTED': self.handle_event_new_acc_connected,
-			'NEW_ACC_NOT_CONNECTED': self.handle_event_new_acc_not_connected,
-			'ACC_OK': self.handle_event_acc_ok,
-			'ACC_NOT_OK': self.handle_event_acc_not_ok,
-			'MYVCARD': self.handle_event_myvcard,
-			'VCARD': self.handle_event_vcard,
-			'LAST_STATUS_TIME': self.handle_event_last_status_time,
-			'OS_INFO': self.handle_event_os_info,
-			'GC_NOTIFY': self.handle_event_gc_notify,
-			'GC_MSG': self.handle_event_gc_msg,
-			'GC_SUBJECT': self.handle_event_gc_subject,
-			'GC_CONFIG': self.handle_event_gc_config,
-			'GC_CONFIG_CHANGE': self.handle_event_gc_config_change,
-			'GC_INVITATION': self.handle_event_gc_invitation,
-			'GC_AFFILIATION': self.handle_event_gc_affiliation,
-			'GC_PASSWORD_REQUIRED': self.handle_event_gc_password_required,
-			'BAD_PASSPHRASE': self.handle_event_bad_passphrase,
-			'ROSTER_INFO': self.handle_event_roster_info,
-			'BOOKMARKS': self.handle_event_bookmarks,
-			'CON_TYPE': self.handle_event_con_type,
-			'CONNECTION_LOST': self.handle_event_connection_lost,
-			'FILE_REQUEST': self.handle_event_file_request,
-			'GMAIL_NOTIFY': self.handle_event_gmail_notify,
-			'FILE_REQUEST_ERROR': self.handle_event_file_request_error,
-			'FILE_SEND_ERROR': self.handle_event_file_send_error,
-			'STANZA_ARRIVED': self.handle_event_stanza_arrived,
-			'STANZA_SENT': self.handle_event_stanza_sent,
-			'HTTP_AUTH': self.handle_event_http_auth,
-			'VCARD_PUBLISHED': self.handle_event_vcard_published,
-			'VCARD_NOT_PUBLISHED': self.handle_event_vcard_not_published,
-			'ASK_NEW_NICK': self.handle_event_ask_new_nick,
-			'SIGNED_IN': self.handle_event_signed_in,
-			'METACONTACTS': self.handle_event_metacontacts,
-			'ATOM_ENTRY': self.handle_atom_entry,
-			'FAILED_DECRYPT': self.handle_event_failed_decrypt,
-			'PRIVACY_LISTS_RECEIVED': self.handle_event_privacy_lists_received,
-			'PRIVACY_LIST_RECEIVED': self.handle_event_privacy_list_received,
-			'PRIVACY_LISTS_ACTIVE_DEFAULT': \
-				self.handle_event_privacy_lists_active_default,
-			'PRIVACY_LIST_REMOVED': self.handle_event_privacy_list_removed,
-			'ZC_NAME_CONFLICT': self.handle_event_zc_name_conflict,
-			'PING_SENT': self.handle_event_ping_sent,
-			'PING_REPLY': self.handle_event_ping_reply,
-			'PING_ERROR': self.handle_event_ping_error,
-			'SEARCH_FORM': self.handle_event_search_form,
-			'SEARCH_RESULT': self.handle_event_search_result,
-			'RESOURCE_CONFLICT': self.handle_event_resource_conflict,
-			'PEP_CONFIG': self.handle_event_pep_config,
-			'UNIQUE_ROOM_ID_UNSUPPORTED': \
-				self.handle_event_unique_room_id_unsupported,
-			'UNIQUE_ROOM_ID_SUPPORTED': self.handle_event_unique_room_id_supported,
-			'SESSION_NEG': self.handle_session_negotiation,
-			'GPG_PASSWORD_REQUIRED': self.handle_event_gpg_password_required,
-			'SSL_ERROR': self.handle_event_ssl_error,
-			'FINGERPRINT_ERROR': self.handle_event_fingerprint_error,
-			'PLAIN_CONNECTION': self.handle_event_plain_connection,
-			'PUBSUB_NODE_REMOVED': self.handle_event_pubsub_node_removed,
-			'PUBSUB_NODE_NOT_REMOVED': self.handle_event_pubsub_node_not_removed,
-		}
-		gajim.handlers = self.handlers
+################################################################################		
+### Methods for opening new messages controls
+################################################################################
+
+	def join_gc_room(self, account, room_jid, nick, password, minimize=False,
+		is_continued=False):
+		'''joins the room immediately'''
+		if self.msg_win_mgr.has_window(room_jid, account) and \
+				gajim.gc_connected[account][room_jid]:
+			win = self.msg_win_mgr.get_window(room_jid, account)
+			win.window.present()
+			win.set_active_tab(room_jid, account)
+			dialogs.ErrorDialog(_('You are already in group chat %s') % room_jid)
+			return
+		minimized_control_exists = False
+		if room_jid in gajim.interface.minimized_controls[account]:
+			minimized_control_exists = True
+		invisible_show = gajim.SHOW_LIST.index('invisible')
+		if gajim.connections[account].connected == invisible_show:
+			dialogs.ErrorDialog(
+				_('You cannot join a group chat while you are invisible'))
+			return
+		if minimize and not minimized_control_exists and \
+		not self.msg_win_mgr.has_window(room_jid, account):
+			contact = gajim.contacts.create_contact(jid = room_jid, name = nick)
+			gc_control = GroupchatControl(None, contact, account)
+			self.minimized_controls[account][room_jid] = gc_control
+			gajim.connections[account].join_gc(nick, room_jid, password)
+			if password:
+				gajim.gc_passwords[room_jid] = password
+			self.roster.add_groupchat(account, room_jid)
+			return
+		if not minimized_control_exists and \
+			not self.msg_win_mgr.has_window(room_jid, account):
+			self.new_room(room_jid, nick, account, is_continued=is_continued)
+		if not minimized_control_exists:
+			gc_win = self.msg_win_mgr.get_window(room_jid, account)
+			gc_win.set_active_tab(room_jid, account)
+			gc_win.window.present()
+		gajim.connections[account].join_gc(nick, room_jid, password)
+		if password:
+			gajim.gc_passwords[room_jid] = password
+		contact = gajim.contacts.get_contact_with_highest_priority(account, \
+			room_jid)
+		if contact or minimized_control_exists:
+			self.roster.add_groupchat(account, room_jid)
+
+	def new_room(self, room_jid, nick, account, is_continued=False):
+		# Get target window, create a control, and associate it with the window
+		contact = gajim.contacts.create_contact(jid = room_jid, name = nick)
+		mw = self.msg_win_mgr.get_window(contact.jid, account)
+		if not mw:
+			mw = self.msg_win_mgr.create_window(contact, account,
+				GroupchatControl.TYPE_ID)
+		gc_control = GroupchatControl(mw, contact, account,
+			is_continued=is_continued)
+		mw.new_tab(gc_control)
+
+	def new_private_chat(self, gc_contact, account, session = None):
+		contact = gajim.contacts.contact_from_gc_contact(gc_contact)
+		type_ = message_control.TYPE_PM
+		fjid = gc_contact.room_jid + '/' + gc_contact.name
+		mw = self.msg_win_mgr.get_window(fjid, account)
+		if not mw:
+			mw = self.msg_win_mgr.create_window(contact, account, type_)
+
+		chat_control = \
+			PrivateChatControl(mw, gc_contact, contact, account, session)
+		mw.new_tab(chat_control)
+		if len(gajim.events.get_events(account, fjid)):
+			# We call this here to avoid race conditions with widget validation
+			chat_control.read_queue()
+
+	def new_chat(self, contact, account, resource = None, session = None):
+		# Get target window, create a control, and associate it with the window
+		type_ = message_control.TYPE_CHAT
+
+		fjid = contact.jid
+		if resource:
+			fjid += '/' + resource
+
+		mw = self.msg_win_mgr.get_window(fjid, account)
+		if not mw:
+			mw = self.msg_win_mgr.create_window(contact, account, type_)
+
+		chat_control = ChatControl(mw, contact, account, session, resource)
+
+		mw.new_tab(chat_control)
+
+		if len(gajim.events.get_events(account, fjid)):
+			# We call this here to avoid race conditions with widget validation
+			chat_control.read_queue()
+
+	def new_chat_from_jid(self, account, fjid):
+		jid, resource = gajim.get_room_and_nick_from_fjid(fjid)
+		contact = gajim.contacts.get_contact(account, jid, resource)
+		added_to_roster = False
+		if not contact:
+			added_to_roster = True
+			contact = self.roster.add_to_not_in_the_roster(account, jid,
+				resource = resource)
+
+		if not self.msg_win_mgr.has_window(fjid, account):
+			self.new_chat(contact, account, resource = resource)
+		mw = self.msg_win_mgr.get_window(fjid, account)
+		mw.set_active_tab(fjid, account)
+		mw.window.present()
+		# For JEP-0172
+		if added_to_roster:
+			mc = mw.get_control(fjid, account)
+			mc.user_nick = gajim.nicks[account]
+
+	def on_open_chat_window(self, contact, account, resource = None, session = None):
+		# Get the window containing the chat
+		fjid = contact.jid
+		if resource:
+			fjid += '/' + resource
+		win = self.msg_win_mgr.get_window(fjid, account)
+		if not win:
+			self.new_chat(contact, account, resource = resource, session = session)
+			win = self.msg_win_mgr.get_window(fjid, account)
+			ctrl = win.get_control(fjid, account)
+			# last message is long time ago
+			gajim.last_message_time[account][ctrl.get_full_jid()] = 0
+		win.set_active_tab(fjid, account)
+		if gajim.connections[account].is_zeroconf and \
+				gajim.connections[account].status in ('offline', 'invisible'):
+			win.get_control(fjid, account).got_disconnected()
+		win.window.present()
+
+################################################################################		
+### Other Methods
+################################################################################	
+
+	def read_sleepy(self):
+		'''Check idle status and change that status if needed'''
+		if not self.sleeper.poll():
+			# idle detection is not supported in that OS
+			return False # stop looping in vain
+		state = self.sleeper.getState()
+		for account in gajim.connections:
+			if not gajim.sleeper_state.has_key(account) or \
+					not gajim.sleeper_state[account]:
+				continue
+			if state == common.sleepy.STATE_AWAKE and \
+				gajim.sleeper_state[account] in ('autoaway', 'autoxa'):
+				# we go online
+				self.roster.send_status(account, 'online',
+					gajim.status_before_autoaway[account])
+				gajim.status_before_autoaway[account] = ''
+				gajim.sleeper_state[account] = 'online'
+			elif state == common.sleepy.STATE_AWAY and \
+				gajim.sleeper_state[account] == 'online' and \
+				gajim.config.get('autoaway'):
+				# we save out online status
+				gajim.status_before_autoaway[account] = \
+					gajim.connections[account].status
+				# we go away (no auto status) [we pass True to auto param]
+				auto_message = gajim.config.get('autoaway_message')
+				if not auto_message:
+					auto_message = gajim.connections[account].status
+				else:
+					auto_message = auto_message.replace('$S','%(status)s')
+					auto_message = auto_message.replace('$T','%(time)s')
+					auto_message = auto_message % {
+						'status': gajim.status_before_autoaway[account],
+						'time': gajim.config.get('autoawaytime')
+						}
+				self.roster.send_status(account, 'away', auto_message, auto=True)
+				gajim.sleeper_state[account] = 'autoaway'
+			elif state == common.sleepy.STATE_XA and (\
+				gajim.sleeper_state[account] == 'autoaway' or \
+				gajim.sleeper_state[account] == 'online') and \
+				gajim.config.get('autoxa'):
+				# we go extended away [we pass True to auto param]
+				auto_message = gajim.config.get('autoxa_message')
+				if not auto_message:
+					auto_message = gajim.connections[account].status
+				else:
+					auto_message = auto_message.replace('$S','%(status)s')
+					auto_message = auto_message.replace('$T','%(time)s')
+					auto_message = auto_message % {
+						'status': gajim.status_before_autoaway[account], 
+						'time': gajim.config.get('autoxatime')
+						}
+				self.roster.send_status(account, 'xa', auto_message, auto=True)
+				gajim.sleeper_state[account] = 'autoxa'
+		return True # renew timeout (loop for ever)
+
+	def autoconnect(self):
+		'''auto connect at startup'''
+		# dict of account that want to connect sorted by status
+		shows = {}
+		for a in gajim.connections:
+			if gajim.config.get_per('accounts', a, 'autoconnect'):
+				show = gajim.config.get_per('accounts', a, 'autoconnect_as')
+				if not show in gajim.SHOW_LIST:
+					continue
+				if not show in shows:
+					shows[show] = [a]
+				else:
+					shows[show].append(a)
+		for show in shows:
+			message = self.roster.get_status_message(show)
+			if message is None:
+				continue
+			for a in shows[show]:
+				self.roster.send_status(a, show, message)
+		return False
+
+	def show_systray(self):
+		self.systray_enabled = True
+		self.systray.show_icon()
+
+	def hide_systray(self):
+		self.systray_enabled = False
+		self.systray.hide_icon()
+
+	def on_launch_browser_mailer(self, widget, url, kind):
+		helpers.launch_browser_mailer(kind, url)
 
 	def process_connections(self):
 		''' called each foo (200) miliseconds. Check for idlequeue timeouts.
@@ -2723,91 +2901,63 @@ class Interface:
 				err_str)
 			sys.exit()
 
-	def handle_event(self, account, fjid, type_):
-		w = None
-		resource = gajim.get_resource_from_jid(fjid)
-		jid = gajim.get_jid_without_resource(fjid)
-		if type_ in ('printed_gc_msg', 'printed_marked_gc_msg', 'gc_msg'):
-			w = self.msg_win_mgr.get_window(jid, account)
-			if self.minimized_controls[account].has_key(jid):
-				if not w:
-					ctrl = self.minimized_controls[account][jid]
-					w = self.msg_win_mgr.create_window(ctrl.contact, \
-						ctrl.account, ctrl.type_id)
-				self.roster.on_groupchat_maximized(None, jid, account)
-		elif type_ in ('printed_chat', 'chat', ''):
-			# '' is for log in/out notifications
-			if self.msg_win_mgr.has_window(fjid, account):
-				w = self.msg_win_mgr.get_window(fjid, account)
+	def save_avatar_files(self, jid, photo, puny_nick = None, local = False):
+		'''Saves an avatar to a separate file, and generate files for dbus notifications. An avatar can be given as a pixmap directly or as an decoded image.'''
+		puny_jid = helpers.sanitize_filename(jid)
+		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid)
+		if puny_nick:
+			path_to_file = os.path.join(path_to_file, puny_nick)
+		# remove old avatars
+		for typ in ('jpeg', 'png'):
+			if local:
+				path_to_original_file = path_to_file + '_local'+  '.' + typ
 			else:
-				highest_contact = gajim.contacts.get_contact_with_highest_priority(
-					account, jid)
-				# jid can have a window if this resource was lower when he sent
-				# message and is now higher because the other one is offline
-				if resource and highest_contact.resource == resource and \
-				not self.msg_win_mgr.has_window(jid, account):
-					# remove resource of events too
-					gajim.events.change_jid(account, fjid, jid)
-					resource = None
-					fjid = jid
-				contact = None
-				if resource:
-					contact = gajim.contacts.get_contact(account, jid, resource)
-				if not contact:
-					contact = highest_contact
-				self.roster.new_chat(contact, account, resource = resource)
-				w = self.msg_win_mgr.get_window(fjid, account)
-				gajim.last_message_time[account][jid] = 0 # long time ago
-		elif type_ in ('printed_pm', 'pm'):
-			if self.msg_win_mgr.has_window(fjid, account):
-				w = self.msg_win_mgr.get_window(fjid, account)
-			else:
-				room_jid = jid
-				nick = resource
-				gc_contact = gajim.contacts.get_gc_contact(account, room_jid,
-					nick)
-				if gc_contact:
-					show = gc_contact.show
-				else:
-					show = 'offline'
-					gc_contact = gajim.contacts.create_gc_contact(
-						room_jid = room_jid, name = nick, show = show)
-				self.roster.new_private_chat(gc_contact, account)
-				w = self.msg_win_mgr.get_window(fjid, account)
-		elif type_ in ('normal', 'file-request', 'file-request-error',
-		'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
-			# Get the first single message event
-			event = gajim.events.get_first_event(account, fjid, type_)
-			if not event:
-				# default to jid without resource
-				event = gajim.events.get_first_event(account, jid, type_)
-				if not event:
-					return
-				# Open the window
-				self.roster.open_event(account, jid, event)
-			else:
-				# Open the window
-				self.roster.open_event(account, fjid, event)
-		elif type_ == 'gmail':
-			url=gajim.connections[account].gmail_url
-			if url:
-				helpers.launch_browser_mailer('url', url)
-		elif type_ == 'gc-invitation':
-			event = gajim.events.get_first_event(account, jid, type_)
-			data = event.parameters
-			dialogs.InvitationReceivedDialog(account, data[0], jid, data[2],
-				data[1], data[3])
-			gajim.events.remove_events(account, jid, event)
-			self.roster.draw_contact(jid, account)
-		if w:
-			w.set_active_tab(fjid, account)
-			w.window.present()
-			w.window.window.focus()
-			ctrl = w.get_control(fjid, account)
-			# Using isinstance here because we want to catch all derived types
-			if isinstance(ctrl, ChatControlBase):
-				tv = ctrl.conv_textview
-				tv.scroll_to_end()
+				path_to_original_file = path_to_file + '.' + typ
+			if os.path.isfile(path_to_original_file):
+				os.remove(path_to_original_file)
+		if local and photo:
+			pixbuf = photo
+			type = 'png'
+			extension = '_local.png' # save local avatars as png file
+		else:
+			pixbuf, typ = gtkgui_helpers.get_pixbuf_from_data(photo, want_type = True)
+			if  pixbuf is None:
+				return
+			extension = '.' + typ
+			if typ not in ('jpeg', 'png'):
+				gajim.log.debug('gtkpixbuf cannot save other than jpeg and png formats. saving %s\'avatar as png file (originaly %s)' % (jid, typ))
+				typ = 'png'
+				extension = '.png'
+		path_to_original_file = path_to_file + extension
+		pixbuf.save(path_to_original_file, typ)
+		# Generate and save the resized, color avatar
+		pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'notification')
+		if pixbuf:
+			path_to_normal_file = path_to_file + '_notif_size_colored' + extension
+			pixbuf.save(path_to_normal_file, 'png')
+			# Generate and save the resized, black and white avatar
+			bwbuf = gtkgui_helpers.get_scaled_pixbuf(
+				gtkgui_helpers.make_pixbuf_grayscale(pixbuf), 'notification')
+			if bwbuf:
+				path_to_bw_file = path_to_file + '_notif_size_bw' + extension
+				bwbuf.save(path_to_bw_file, 'png')
+
+	def remove_avatar_files(self, jid, puny_nick = None, local = False):
+		'''remove avatar files of a jid'''
+		puny_jid = helpers.sanitize_filename(jid)
+		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid)
+		if puny_nick:
+			path_to_file = os.path.join(path_to_file, puny_nick)
+		for ext in ('.jpeg', '.png'):
+			if local:
+				ext = '_local' + ext
+			path_to_original_file = path_to_file + ext
+			if os.path.isfile(path_to_file + ext):
+				os.remove(path_to_file + ext)
+			if os.path.isfile(path_to_file + '_notif_size_colored' + ext):
+				os.remove(path_to_file + '_notif_size_colored' + ext)
+			if os.path.isfile(path_to_file + '_notif_size_bw' + ext):
+				os.remove(path_to_file + '_notif_size_bw' + ext)
 
 	def create_ipython_window(self):
 		try:

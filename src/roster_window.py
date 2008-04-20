@@ -52,9 +52,6 @@ from common.exceptions import GajimGeneralException
 from common import i18n
 
 from message_window import MessageWindowMgr
-from chat_control import ChatControl
-from groupchat_control import GroupchatControl
-from groupchat_control import PrivateChatControl
 
 from common import dbus_support
 if dbus_support.supported:
@@ -1512,7 +1509,7 @@ class RosterWindow:
 					not gajim.gc_connected[account][jid]:
 					# we are not already connected
 					minimize = bm['minimize'] in ('1', 'true')
-					self.join_gc_room(account, jid, bm['nick'],
+					gajim.interface.join_gc_room(account, jid, bm['nick'],
 					bm['password'], minimize = minimize)
 			
 	def open_event(self, account, jid, event):
@@ -1814,67 +1811,6 @@ class RosterWindow:
 		else:
 			change(account, status)
 					
-	def on_open_chat_window(self, widget, contact, account, resource = None, session = None):
-		# Get the window containing the chat
-		fjid = contact.jid
-		if resource:
-			fjid += '/' + resource
-		win = gajim.interface.msg_win_mgr.get_window(fjid, account)
-		if not win:
-			self.new_chat(contact, account, resource = resource, session = session)
-			win = gajim.interface.msg_win_mgr.get_window(fjid, account)
-			ctrl = win.get_control(fjid, account)
-			# last message is long time ago
-			gajim.last_message_time[account][ctrl.get_full_jid()] = 0
-		win.set_active_tab(fjid, account)
-		if gajim.connections[account].is_zeroconf and \
-				gajim.connections[account].status in ('offline', 'invisible'):
-			win.get_control(fjid, account).got_disconnected()
-		win.window.present()
-		
-	def join_gc_room(self, account, room_jid, nick, password, minimize=False,
-		is_continued=False):
-		'''joins the room immediatelly'''
-		if gajim.interface.msg_win_mgr.has_window(room_jid, account) and \
-				gajim.gc_connected[account][room_jid]:
-			win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
-			win.window.present()
-			win.set_active_tab(room_jid, account)
-			dialogs.ErrorDialog(_('You are already in group chat %s') % room_jid)
-			return
-		minimized_control_exists = False
-		if room_jid in gajim.interface.minimized_controls[account]:
-			minimized_control_exists = True
-		invisible_show = gajim.SHOW_LIST.index('invisible')
-		if gajim.connections[account].connected == invisible_show:
-			dialogs.ErrorDialog(
-				_('You cannot join a group chat while you are invisible'))
-			return
-		if minimize and not minimized_control_exists and \
-		not gajim.interface.msg_win_mgr.has_window(room_jid, account):
-			contact = gajim.contacts.create_contact(jid = room_jid, name = nick)
-			gc_control = GroupchatControl(None, contact, account)
-			gajim.interface.minimized_controls[account][room_jid] = gc_control
-			gajim.connections[account].join_gc(nick, room_jid, password)
-			if password:
-				gajim.gc_passwords[room_jid] = password
-			self.add_groupchat(account, room_jid)
-			return
-		if not minimized_control_exists and \
-			not gajim.interface.msg_win_mgr.has_window(room_jid, account):
-			self.new_room(room_jid, nick, account, is_continued=is_continued)
-		if not minimized_control_exists:
-			gc_win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
-			gc_win.set_active_tab(room_jid, account)
-			gc_win.window.present()
-		gajim.connections[account].join_gc(nick, room_jid, password)
-		if password:
-			gajim.gc_passwords[room_jid] = password
-		contact = gajim.contacts.get_contact_with_highest_priority(account, \
-			room_jid)
-		if contact or minimized_control_exists:
-			self.add_groupchat(account, room_jid)
-				
 	def update_status_combobox(self):
 		# table to change index in connection.connected to index in combobox
 		table = {'offline':9, 'connecting':9, 'online':0, 'chat':1, 'away':2,
@@ -1902,70 +1838,6 @@ class RosterWindow:
 		self.combobox_callback_active = True
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.change_status(show)
-
-	def new_private_chat(self, gc_contact, account, session = None):
-		contact = gajim.contacts.contact_from_gc_contact(gc_contact)
-		type_ = message_control.TYPE_PM
-		fjid = gc_contact.room_jid + '/' + gc_contact.name
-		mw = gajim.interface.msg_win_mgr.get_window(fjid, account)
-		if not mw:
-			mw = gajim.interface.msg_win_mgr.create_window(contact, account, type_)
-
-		chat_control = PrivateChatControl(mw, gc_contact, contact, account, session)
-		mw.new_tab(chat_control)
-		if len(gajim.events.get_events(account, fjid)):
-			# We call this here to avoid race conditions with widget validation
-			chat_control.read_queue()
-
-	def new_chat(self, contact, account, resource = None, session = None):
-		# Get target window, create a control, and associate it with the window
-		type_ = message_control.TYPE_CHAT
-
-		fjid = contact.jid
-		if resource:
-			fjid += '/' + resource
-
-		mw = gajim.interface.msg_win_mgr.get_window(fjid, account)
-		if not mw:
-			mw = gajim.interface.msg_win_mgr.create_window(contact, account, type_)
-
-		chat_control = ChatControl(mw, contact, account, session, resource)
-
-		mw.new_tab(chat_control)
-
-		if len(gajim.events.get_events(account, fjid)):
-			# We call this here to avoid race conditions with widget validation
-			chat_control.read_queue()
-
-	def new_chat_from_jid(self, account, fjid):
-		jid, resource = gajim.get_room_and_nick_from_fjid(fjid)
-		contact = gajim.contacts.get_contact(account, jid, resource)
-		added_to_roster = False
-		if not contact:
-			added_to_roster = True
-			contact = self.add_to_not_in_the_roster(account, jid,
-				resource = resource)
-
-		if not gajim.interface.msg_win_mgr.has_window(fjid, account):
-			self.new_chat(contact, account, resource = resource)
-		mw = gajim.interface.msg_win_mgr.get_window(fjid, account)
-		mw.set_active_tab(fjid, account)
-		mw.window.present()
-		# For JEP-0172
-		if added_to_roster:
-			mc = mw.get_control(fjid, account)
-			mc.user_nick = gajim.nicks[account]
-
-	def new_room(self, room_jid, nick, account, is_continued=False):
-		# Get target window, create a control, and associate it with the window
-		contact = gajim.contacts.create_contact(jid = room_jid, name = nick)
-		mw = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
-		if not mw:
-			mw = gajim.interface.msg_win_mgr.create_window(contact, account,
-				GroupchatControl.TYPE_ID)
-		gc_control = GroupchatControl(mw, contact, account,
-			is_continued=is_continued)
-		mw.new_tab(gc_control)	
 
 	def get_show(self, lcontact):
 		prio = lcontact[0].priority
@@ -2077,7 +1949,8 @@ class RosterWindow:
 		if popup:
 			# FIXME: What is happening here. What does "OR he is not in the roster at all" mean
 			if not ctrl:
-				self.new_chat(contact, account, resource=resource_for_chat)
+				gajim.interface.new_chat(contact, account, \
+					resource=resource_for_chat)
 				if path and not self.dragging and gajim.config.get(
 				'scroll_roster_to_last_message'):
 					# we curently see contact in our roster OR he
@@ -2222,7 +2095,7 @@ class RosterWindow:
 		self.make_menu()
 
 	def on_bookmark_menuitem_activate(self, widget, account, bookmark):
-		self.join_gc_room(account, bookmark['jid'], bookmark['nick'],
+		gajim.interface.join_gc_room(account, bookmark['jid'], bookmark['nick'],
 			bookmark['password'])
 
 	def on_send_server_message_menuitem_activate(self, widget, account):
@@ -3424,7 +3297,7 @@ class RosterWindow:
 					gajim.contacts.get_contact_with_highest_priority(account, jid)
 			if jid == gajim.get_jid_from_account(account):
 				resource = contact.resource
-			self.on_open_chat_window(widget, contact, account, \
+			gajim.interface.on_open_chat_window(contact, account, \
 				resource = resource, session = session)
 
 	def on_roster_treeview_row_activated(self, widget, path, col = 0):
@@ -4940,8 +4813,8 @@ class RosterWindow:
 					icon = state_images[icon_name]
 					item.set_image(icon)
 					sub_menu.append(item)
-					item.connect('activate', self.on_open_chat_window, c, account,
-						c.resource)
+					item.connect('activate', gajim.interface.on_open_chat_window, \
+						c, account,	c.resource)
 
 			else: # one resource
 				start_chat_menuitem.connect('activate',
@@ -5043,12 +4916,14 @@ class RosterWindow:
 					blocked = True
 					break
 		if blocked:
-			send_custom_status_menuitem.set_image(gtkgui_helpers.load_icon('offline'))
+			send_custom_status_menuitem.set_image( \
+				gtkgui_helpers.load_icon('offline'))
 			send_custom_status_menuitem.set_sensitive(False)
 		elif gajim.interface.status_sent_to_users.has_key(account) and \
 		jid in gajim.interface.status_sent_to_users[account]:
 			send_custom_status_menuitem.set_image(
-				gtkgui_helpers.load_icon(gajim.interface.status_sent_to_users[account][jid]))
+				gtkgui_helpers.load_icon( \
+					gajim.interface.status_sent_to_users[account][jid]))
 		else:
 			icon = gtk.image_new_from_stock(gtk.STOCK_NETWORK, gtk.ICON_SIZE_MENU)
 			send_custom_status_menuitem.set_image(icon)
@@ -5096,7 +4971,7 @@ class RosterWindow:
 			status_menuitems.append(status_menuitem)
 		if len(contacts) > 1: # several resources
 			start_chat_menuitem.set_submenu(self.build_resources_submenu(contacts,
-				account, self.on_open_chat_window))
+				account, gajim.interface.on_open_chat_window))
 			send_file_menuitem.set_submenu(self.build_resources_submenu(contacts,
 				account, self.on_send_file_menuitem_activate))
 			execute_command_menuitem.set_submenu(self.build_resources_submenu(
@@ -5104,7 +4979,7 @@ class RosterWindow:
 
 		else: # one resource
 			start_chat_menuitem.connect('activate',
-				self.on_open_chat_window, contact, account)
+				gajim.interface.on_open_chat_window, contact, account)
 			execute_command_menuitem.connect('activate', self.on_execute_command,
 				contact, account, contact.resource)
 

@@ -666,7 +666,7 @@ class ConversationTextview:
 		clip.set_text(text)
 
 	def on_start_chat_activate(self, widget, jid):
-		gajim.interface.roster.new_chat_from_jid(self.account, jid)
+		gajim.interface.new_chat_from_jid(self.account, jid)
 
 	def on_join_group_chat_menuitem_activate(self, widget, room_jid):
 		if 'join_gc' in gajim.interface.instances[self.account]:

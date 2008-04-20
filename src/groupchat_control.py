@@ -1737,7 +1737,7 @@ class GroupchatControl(ChatControlBase):
 
 		place_found = False		
 		index = 0
-		# check for duplicate entry and espect alpha order
+		# check for duplicate entry and respect alpha order
 		for bookmark in gajim.connections[self.account].bookmarks:
 			if bookmark['jid'] == bm['jid']:
 				dialogs.ErrorDialog(
@@ -2045,7 +2045,7 @@ class GroupchatControl(ChatControlBase):
 
 		win = gajim.interface.msg_win_mgr.get_window(nick_jid, self.account)
 		if not win:
-			gajim.interface.roster.new_private_chat(gc_c, self.account)
+			gajim.interface.new_private_chat(gc_c, self.account)
 			win = gajim.interface.msg_win_mgr.get_window(nick_jid, self.account)
 		win.set_active_tab(nick_jid, self.account)
 		win.window.present()

@@ -363,7 +363,7 @@ class SignalObject(dbus.service.Object):
 			connected_account = first_connected_acct
 
 		if connected_account:
-			gajim.interface.roster.new_chat_from_jid(connected_account, jid)
+			gajim.interface.new_chat_from_jid(connected_account, jid)
 			# preserve the 'steal focus preservation'
 			win = gajim.interface.msg_win_mgr.get_window(jid,
 				connected_account).window
@@ -674,4 +674,4 @@ class SignalObject(dbus.service.Object):
 			gajim.interface.instances[account]['join_gc'] = \
 					JoinGroupchatWindow(account, room_jid, nick)
 		else:
-			gajim.interface.roster.join_gc_room(account, room_jid, nick, password)
+			gajim.interface.join_gc_room(account, room_jid, nick, password)
