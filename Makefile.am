@@ -17,6 +17,7 @@ docfiles_DATA = README \
 				ChangeLog \
 				COPYING \
 				THANKS \
+				THANKS.artists \
 				AUTHORS 
 
 EXTRA_DIST = \
