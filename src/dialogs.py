@@ -915,11 +915,7 @@ class AboutDialog:
 		dlg.set_version(gajim.version)
 		s = u'Copyright © 2003-2008 Gajim Team'
 		dlg.set_copyright(s)
-		copying_file_path = None
-		if os.path.isfile(os.path.join(gajim.defs.docdir, 'COPYING')):
-			copying_file_path = os.path.join(gajim.defs.docdir, 'COPYING')
-		elif os.path.isfile('../COPYING'):
-			copying_file_path = '../COPYING'
+		copying_file_path = self.get_path('COPYING')
 		if copying_file_path:
 			text = open(copying_file_path).read()
 			dlg.set_license(text)
@@ -930,11 +926,7 @@ class AboutDialog:
 			_('PyGTK Version:'), self.tuple2str(gtk.pygtk_version)))
 		dlg.set_website('http://www.gajim.org/')
 
-		authors_file_path = None
-		if os.path.isfile(os.path.join(gajim.defs.docdir, 'AUTHORS')):
-			authors_file_path = os.path.join(gajim.defs.docdir, 'AUTHORS')
-		elif os.path.isfile('../AUTHORS'):
-			authors_file_path = '../AUTHORS'
+		authors_file_path = self.get_path('AUTHORS')
 		if authors_file_path:
 			authors = []
 			authors_file = open(authors_file_path).read()
@@ -947,11 +939,7 @@ class AboutDialog:
 				elif author != '': # Real author line
 					authors.append(author)
 
-			thanks_file_path = None
-			if os.path.isfile(os.path.join(gajim.defs.docdir, 'THANKS')):
-				thanks_file_path = os.path.join(gajim.defs.docdir, 'THANKS')
-			elif os.path.isfile('../THANKS'):
-				thanks_file_path = '../THANKS'
+			thanks_file_path = self.get_path('THANKS')
 			if thanks_file_path:
 				authors.append('\n' + _('THANKS:'))
 
@@ -973,10 +961,12 @@ class AboutDialog:
 		dlg.set_logo(pixbuf)
 		#here you write your name in the form Name FamilyName <someone@somewhere>
 		dlg.set_translator_credits(_('translator-credits'))
-
-		artists = ['Anders Ström', 'Christophe Got', 'Dennis Craven',
-			'Guillaume Morin', 'Josef Vybíral', 'Membris Khan']
-		dlg.set_artists(artists)
+		
+		thanks_artists_file_path = self.get_path('THANKS.artists')
+		if thanks_artists_file_path:
+			artists_text = open(thanks_artists_file_path).read()
+			artists = artists_text.split('\n')
+			dlg.set_artists(artists)
 		# connect close button to destroy() function
 		for button in dlg.action_area.get_children():
 			if button.get_property('label') == gtk.STOCK_CLOSE:
@@ -988,6 +978,15 @@ class AboutDialog:
 		for num in tuple_:
 			str_ += str(num) + '.'
 		return str_[0:-1] # remove latest .
+
+	def get_path(self, filename):
+		'''where can we find this Credits file ?'''
+		if os.path.isfile(os.path.join(gajim.defs.docdir, filename)):
+			return os.path.join(gajim.defs.docdir, filename)
+		elif os.path.isfile('../' + filename):
+			return ('../' + filename)
+		else:
+			return None
 
 class Dialog(gtk.Dialog):
 	def __init__(self, parent, title, buttons, default = None,
