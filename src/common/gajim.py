@@ -66,6 +66,8 @@ f = logging.Formatter('%(asctime)s %(name)s: %(message)s', '%d %b %Y %H:%M:%S')
 h.setFormatter(f)
 log = logging.getLogger('Gajim')
 log.addHandler(h)
+del h
+del f
 
 import logger
 logger = logger.Logger() # init the logger
@@ -162,6 +164,7 @@ else:
 	status = os.system('gpg -h >/dev/null 2>&1')
 	if status != 0:
 		HAVE_GPG = False
+	del status
 
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
