@@ -455,7 +455,7 @@ class SignalObject(dbus.service.Object):
 			if acct in accounts:
 				for jid in gajim.contacts.get_jid_list(acct):
 					item = self._contacts_as_dbus_structure(
-						gajim.contacts.get_contacts(acct, jid), acct)
+						gajim.contacts.get_contacts(acct, jid))
 					if item:
 						result.append(item)
 		return result
@@ -604,7 +604,7 @@ class SignalObject(dbus.service.Object):
 		# We have not found it as jid nor as nick, probably a not in roster jid
 		return jid
 
-	def _contacts_as_dbus_structure(self, contacts, account):
+	def _contacts_as_dbus_structure(self, contacts):
 		''' get info from list of Contact objects and create dbus dict '''
 		if not contacts:
 			return None
@@ -632,8 +632,6 @@ class SignalObject(dbus.service.Object):
 		contact_dict['groups'] = dbus.Array([], signature='(s)')
 		for group in prim_contact.groups:
 			contact_dict['groups'].append((DBUS_STRING(group),))
-		contact_dict['unread_msgs_number'] = DBUS_STRING(
-			gajim.events.get_nb_roster_events(account, prim_contact.jid))
 		return contact_dict
 
 	@dbus.service.method(INTERFACE, in_signature='', out_signature='s')
