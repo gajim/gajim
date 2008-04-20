@@ -1545,7 +1545,7 @@ class Interface:
 		if gajim.connections[account].connected == invisible_show:
 			return
 
-		self.roster.auto_join_bookmarks(account)
+		self.auto_join_bookmarks(account)
 
 	def handle_event_file_send_error(self, account, array):
 		jid = array[0]
@@ -2776,7 +2776,8 @@ class Interface:
 			mc = mw.get_control(fjid, account)
 			mc.user_nick = gajim.nicks[account]
 
-	def on_open_chat_window(self, contact, account, resource = None, session = None):
+	def on_open_chat_window(self, contact, account, resource = None, 
+		session = None):
 		# Get the window containing the chat
 		fjid = contact.jid
 		if resource:
@@ -2958,6 +2959,53 @@ class Interface:
 				os.remove(path_to_file + '_notif_size_colored' + ext)
 			if os.path.isfile(path_to_file + '_notif_size_bw' + ext):
 				os.remove(path_to_file + '_notif_size_bw' + ext)
+
+	def auto_join_bookmarks(self, account):
+		'''autojoin bookmarked GCs that have 'auto join' on for this account'''
+		for bm in gajim.connections[account].bookmarks:
+			if bm['autojoin'] in ('1', 'true'):
+				jid = bm['jid']
+				if not gajim.gc_connected[account].has_key(jid) or\
+					not gajim.gc_connected[account][jid]:
+					# we are not already connected
+					minimize = bm['minimize'] in ('1', 'true')
+					gajim.interface.join_gc_room(account, jid, bm['nick'],
+					bm['password'], minimize = minimize)
+
+	def add_gc_bookmark(self, account, name, jid, autojoin, minimize, password,
+		nick):
+		'''add a bookmark for this account, sorted in bookmark list'''
+		bm = {
+			'name': name,
+			'jid': jid,
+			'autojoin': autojoin,
+			'minimize': minimize,
+			'password': password,
+			'nick': nick
+		}
+		place_found = False		
+		index = 0
+		# check for duplicate entry and respect alpha order
+		for bookmark in gajim.connections[account].bookmarks:
+			if bookmark['jid'] == bm['jid']:
+				dialogs.ErrorDialog(
+					_('Bookmark already set'),
+					_('Group Chat "%s" is already in your bookmarks.') % bm['jid'])
+				return
+			if bookmark['name'] > bm['name']:
+				place_found = True
+				break
+			index += 1
+		if place_found:
+			gajim.connections[account].bookmarks.insert(index, bm)
+		else:
+			gajim.connections[account].bookmarks.append(bm)
+		gajim.connections[account].store_bookmarks()
+		self.roster.set_actions_menu_needs_rebuild()
+		dialogs.InformationDialog(
+				_('Bookmark has been added successfully'),
+				_('You can manage your bookmarks via Actions menu in your roster.'))
+
 
 	def create_ipython_window(self):
 		try:

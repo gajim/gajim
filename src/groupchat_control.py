@@ -1726,40 +1726,12 @@ class GroupchatControl(ChatControlBase):
 			jid)
 
 	def _on_bookmark_room_menuitem_activate(self, widget):
-		bm = {
-			'name': self.name,
-			'jid': self.room_jid,
-			'autojoin': '0',
-			'minimize': '0',
-			'password': '',
-			'nick': self.nick
-		}
-
-		place_found = False		
-		index = 0
-		# check for duplicate entry and respect alpha order
-		for bookmark in gajim.connections[self.account].bookmarks:
-			if bookmark['jid'] == bm['jid']:
-				dialogs.ErrorDialog(
-					_('Bookmark already set'),
-					_('Group Chat "%s" is already in your bookmarks.') % bm['jid'])
-				return
-			if bookmark['name'] > bm['name']:
-				place_found = True
-				break
-			index += 1
-
-		if place_found:
-			gajim.connections[self.account].bookmarks.insert(index, bm)
-		else:
-			gajim.connections[self.account].bookmarks.append(bm)
-
-		gajim.connections[self.account].store_bookmarks()
-		gajim.interface.roster.set_actions_menu_needs_rebuild()
-
-		dialogs.InformationDialog(
-				_('Bookmark has been added successfully'),
-				_('You can manage your bookmarks via Actions menu in your roster.'))
+		'''bookmark the room, without autojoin and not minimized'''
+		password = ''
+		if gajim.gc_passwords.has_key(self.room_jid):
+			password = gajim.gc_passwords[self.room_jid]
+		gajim.interface.add_gc_bookmark(self.account, self.name, self.room_jid, \
+			'0', '0', password, self.nick)
 
 	def _on_drag_data_received(self, widget, context, x, y, selection, 
 			target_type, timestamp):	

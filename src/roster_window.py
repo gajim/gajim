@@ -1693,7 +1693,7 @@ class RosterWindow:
 						gc_control.room_jid, None)
 			if was_invisible and status != 'offline':
 				# We come back from invisible, join bookmarks
-				self.auto_join_bookmarks(account)
+				gajim.interface.auto_join_bookmarks(account)
 						
 	def chg_contact_status(self, contact, show, status, account):
 		'''When a contact changes his or her status'''
