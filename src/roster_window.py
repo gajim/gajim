@@ -1831,7 +1831,8 @@ class RosterWindow:
 			uf_show = helpers.get_uf_show(show)
 			liststore = self.status_combobox.get_model()
 			liststore.prepend(['SEPARATOR', None, '', True])
-			liststore.prepend([uf_show + ' ' +"(desync'ed)",
+			status_combobox_text = uf_show + ' (' + _("desync'ed") +')'
+			liststore.prepend([status_combobox_text,
 				gajim.interface.jabber_state_images['16'][show], show, False])
 			self.status_combobox.set_active(0)
 		self._change_awn_icon_status(show)

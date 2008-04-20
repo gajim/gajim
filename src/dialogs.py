@@ -1621,7 +1621,8 @@ class JoinGroupchatWindow:
 		if password:
 			self._password_entry.set_text(password)
 		self.xml.signal_autoconnect(self)
-		gajim.interface.instances[account]['join_gc'] = self #now add us to open windows
+		# now add us to open windows
+		gajim.interface.instances[account]['join_gc'] = self 
 		if len(gajim.connections) > 1:
 			title = _('Join Group Chat with account %s') % account
 		else:
