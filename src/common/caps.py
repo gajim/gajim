@@ -115,7 +115,7 @@ class CapsCache(object):
 				for feature in value:
 					ciself._features.append(self.__names.setdefault(feature,
 						feature))
-			features = property(ciself._get_features, ciself._set_features)
+			features = property(_get_features, _set_features)
 
 			def _get_identities(ciself):
 				return ciself._identities
@@ -124,7 +124,7 @@ class CapsCache(object):
 				for identity in value:
 					ciself._identities.append(self.__names.setdefault(identity,
 						identity))
-			identities = property(ciself._get_identities, ciself._set_identities)
+			identities = property(_get_identities, _set_identities)
 
 			def update(ciself, identities, features):
 				# NOTE: self refers to CapsCache object, not to CacheItem
