@@ -1663,7 +1663,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msghtml,
 					statusCode))
 				if self.name not in no_log_for and jid not in no_log_for and not \
-				int(float(mktime(tim))) <= self.last_history_line[jid] and msgtxt:
+				int(float(mktime(tim))) <= self.last_history_line[jid] and msgtxt \
+				and frm.find('/') >= 0:
+					# if frm.find('/') < 0, it means message comes from room itself
+					# usually it hold description and can be send at each connection
+					# so don't store it in logs
 					try:
 						gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
 					except exceptions.PysqliteOperationalError, e:
