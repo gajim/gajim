@@ -2668,12 +2668,8 @@ class RosterWindow:
 		ctrl.shutdown()
 
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
-		if not contact:
-			return
 		if contact.groups == [_('Groupchats')]:
-			# FIXME: use proper API
-			gajim.contacts.remove_contact(account, contact)
-			self.remove_contact(contact.jid, account)
+			self.remove_groupchat(contact.jid, account)
 
 	def on_send_single_message_menuitem_activate(self, widget, account,
 	contact = None):
