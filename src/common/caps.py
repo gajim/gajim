@@ -98,26 +98,8 @@ class CapsCache(object):
 				# cached into db
 				ciself.hash_method = hash_method
 				ciself.hash = hash
-
-				@property
-				def features():
-					def fget(self):
-						return self.getAttr('features')
-					def fset(self, value):
-						list_ = []
-						for feature in value:
-							list_.append(self.__names.setdefault(feature, feature))
-						self.setAttr('features', list_)
-
-				@property
-				def identities():
-					def fget(self):
-						return self.getAttr('identities')
-					def fset(self, value):
-						list_ = []
-						for identity in value:
-							list_.append(self.__names.setdefault(identity, identity))
-						self.setAttr('identities', list_)
+				ciself._features = []
+				ciself._identities = []
 
 				# not cached into db:
 				# have we sent the query?
@@ -125,6 +107,24 @@ class CapsCache(object):
 				# 1 == queried
 				# 2 == got the answer
 				ciself.queried = 0
+
+			def _get_features(ciself):
+				return ciself._features
+			def _set_features(ciself, value):
+				ciself._features = []
+				for feature in value:
+					ciself._features.append(self.__names.setdefault(feature,
+						feature))
+			features = property(ciself._get_features, ciself._set_features)
+
+			def _get_identities(ciself):
+				return ciself._identities
+			def _set_identities(ciself, value):
+				ciself._identities = []
+				for identity in value:
+					ciself._identities.append(self.__names.setdefault(identity,
+						identity))
+			identities = property(ciself._get_identities, ciself._set_identities)
 
 			def update(ciself, identities, features):
 				# NOTE: self refers to CapsCache object, not to CacheItem
@@ -213,7 +213,7 @@ class ConnectionCaps(object):
 		contact.caps_hash_method = hash_method
 		contact.caps_hash = hash
 
-	def _capsDiscoCB(self, jid, node, identities, features, data):
+	def _capsDiscoCB(self, jid, node, identities, features, dataforms):
 		contact = gajim.contacts.get_contact_from_full_jid(self.name, jid)
 		if not contact:
 			return
