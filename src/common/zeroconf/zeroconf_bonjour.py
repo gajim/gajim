@@ -245,7 +245,7 @@ class Zeroconf:
 		return True
 
 	def remove_announce(self):
-		if self.announced == False:
+		if not self.announced:
 			return False
 		try:
 			self.service_sdRef.close()

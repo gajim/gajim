@@ -533,7 +533,7 @@ class PreferencesWindow:
 		gajim.interface.save_config()
 
 	def on_publish_mood_checkbutton_toggled(self, widget):
-		if widget.get_active() == False:
+		if not widget.get_active():
 			for account in gajim.connections:
 				if gajim.connections[account].pep_supported:
 					pep.user_send_mood(account, '')
@@ -541,7 +541,7 @@ class PreferencesWindow:
 		helpers.update_optional_features()
 
 	def on_publish_activity_checkbutton_toggled(self, widget):
-		if widget.get_active() == False:
+		if not widget.get_active():
 			for account in gajim.connections:
 				if gajim.connections[account].pep_supported:
 					pep.user_send_activity(account, '')
@@ -549,7 +549,7 @@ class PreferencesWindow:
 		helpers.update_optional_features()
 
 	def on_publish_tune_checkbutton_toggled(self, widget):
-		if widget.get_active() == False:
+		if not widget.get_active():
 			for account in gajim.connections:
 				if gajim.connections[account].pep_supported:
 					pep.user_send_tune(account, '')
