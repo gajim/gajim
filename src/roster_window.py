@@ -641,7 +641,7 @@ class RosterWindow:
 		Return the added contact instance.
 		'''
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
-		if contact == None:
+		if contact is None:
 			contact = gajim.contacts.create_contact(jid = jid, name = jid,
 				groups = [_('Groupchats')], show = 'online',
 				status = status, sub = 'none',
@@ -2331,7 +2331,7 @@ class RosterWindow:
 		model = self.tree.get_model()
 		accounts = []
 		msg = self.get_status_message('offline')
-		if group_list == None:
+		if group_list is None:
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			accounts.append(account)
@@ -2343,7 +2343,7 @@ class RosterWindow:
 			gajim.connections[account].blocked_contacts.append(jid)
 			self.draw_contact(jid, account)
 		else:
-			if iter == None:
+			if iter is None:
 				for (contact, account) in group_list:
 					if account not in accounts:
 						if not gajim.connections[account].privacy_rules_supported:
@@ -2384,7 +2384,7 @@ class RosterWindow:
 		''' When clicked on the 'unblock' button in context menu. '''
 		model = self.tree.get_model()
 		accounts = []
-		if group_list == None:
+		if group_list is None:
 			jid = model[iter][C_JID].decode('utf-8')
 			jid_account = model[iter][C_ACCOUNT].decode('utf-8')
 			accounts.append(jid_account)
@@ -2398,7 +2398,7 @@ class RosterWindow:
 				gajim.connections[jid_account].blocked_contacts.remove(jid)
 			self.draw_contact(jid, jid_account)
 		else:
-			if iter == None:
+			if iter is None:
 				for (contact, account) in group_list:
 					if account not in accounts:
 						if gajim.connections[account].privacy_rules_supported:
@@ -2449,7 +2449,7 @@ class RosterWindow:
 				if gajim.interface.instances[account].has_key('blocked_contacts'):
 					gajim.interface.instances[account]['blocked_contacts'].\
 						privacy_list_received([])
-		if group_list == None:
+		if group_list is None:
 			status = gajim.connections[jid_account].connected
 			msg = gajim.connections[jid_account].status
 			if not self.regroup:
@@ -3511,7 +3511,7 @@ class RosterWindow:
 				'So those information will not be saved on next reconnection.'))
 
 		def merge_contacts(is_checked=None):
-			if is_checked != None: # dialog has been shown
+			if is_checked is not None: # dialog has been shown
 				if is_checked: # user does not want to be asked again
 					gajim.config.set('confirm_metacontacts', 'no')
 				else:
