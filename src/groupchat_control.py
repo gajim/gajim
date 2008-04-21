@@ -1595,6 +1595,10 @@ class GroupchatControl(ChatControlBase):
 		self.subject_tooltip.destroy()
 		gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,
 							show='offline', status=status)
+		# save in fast table in DB at what time we had last message
+		last_history_time = \
+			gajim.connections[self.account].last_history_time[self.room_jid]
+		gajim.logger.set_room_last_message_time(self.room_jid, last_history_time)
 		nick_list = gajim.contacts.get_nick_list(self.account, self.room_jid)
 		for nick in nick_list:
 			# Update pm chat window

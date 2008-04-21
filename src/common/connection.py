@@ -128,7 +128,7 @@ class Connection(ConnectionHandlers):
 		self.on_purpose = False
 		self.last_io = gajim.idlequeue.current_time()
 		self.last_sent = []
-		self.last_history_line = {}
+		self.last_history_time = {}
 		self.password = passwords.get_password(name)
 		self.server_resource = gajim.config.get_per('accounts', name, 'resource')
 		# All valid resource substitution strings should be added to this hash.
@@ -1441,7 +1441,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(p)
 
 		# last date/time in history to avoid duplicate
-		if not self.last_history_line.has_key(room_jid):
+		if not self.last_history_time.has_key(room_jid):
 			# Not in memory, get it from DB
 			no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')\
 				.split()
@@ -1454,11 +1454,11 @@ class Connection(ConnectionHandlers):
 					# Not in special table, get it from messages DB
 					last_log = gajim.logger.get_last_date_that_has_logs(room_jid,
 						is_room = True)
-			# Create self.last_history_line[room_jid] even if not logging, 
+			# Create self.last_history_time[room_jid] even if not logging, 
 			# could be used in connection_handlers
 			if last_log is None:
 				last_log = 0
-			self.last_history_line[room_jid]= last_log
+			self.last_history_time[room_jid]= last_log
 
 	def send_gc_message(self, jid, msg, xhtml = None):
 		if not self.connection:
@@ -1503,12 +1503,6 @@ class Connection(ConnectionHandlers):
 		ptype = None
 		if show == 'offline':
 			ptype = 'unavailable'
-			# Save the time we quit to avoid duplicate logs AND be faster than
-			# get that date from DB. Save it in mem AND in a small table (with 
-			# fast access)
-			log_time = time_time()
-			self.last_history_line[jid] = log_time
-			gajim.logger.set_room_last_message_time(jid, log_time)
 		xmpp_show = helpers.get_xmpp_show(show)
 		p = common.xmpp.Presence(to = '%s/%s' % (jid, nick), typ = ptype,
 			show = xmpp_show, status = status)

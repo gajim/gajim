@@ -1658,18 +1658,20 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 							self.dispatch('GC_CONFIG_CHANGE', (jid, statusCode))
 					return
 				# Ignore message from room in which we are not
-				if not self.last_history_line.has_key(jid):
+				if not self.last_history_time.has_key(jid):
 					return
 				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msghtml,
 					statusCode))
 				if self.name not in no_log_for and jid not in no_log_for and not \
-				int(float(mktime(tim))) <= self.last_history_line[jid] and msgtxt \
+				int(float(mktime(tim))) <= self.last_history_time[jid] and msgtxt \
 				and frm.find('/') >= 0:
 					# if frm.find('/') < 0, it means message comes from room itself
 					# usually it hold description and can be send at each connection
 					# so don't store it in logs
 					try:
 						gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
+						# save the time we quit to avoid duplicate logs
+						self.last_history_time[jid] = time_time()
 					except exceptions.PysqliteOperationalError, e:
 						self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 			return
