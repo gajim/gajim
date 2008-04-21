@@ -118,12 +118,25 @@ class CapsCache(object):
 			features = property(_get_features, _set_features)
 
 			def _get_identities(ciself):
-				return ciself._identities
+				list_ = []
+				for i in ciself._identities:
+					# transforms it back in a dict
+					d = dict()
+					d['category'] = i[0]
+					if i[1]:
+						d['type'] = i[1]
+					if i[2]:
+						d['xml:lang'] = i[2]
+					if i[3]:
+						d['name'] = i[3]
+					list.append(d)
+				return list_
 			def _set_identities(ciself, value):
 				ciself._identities = []
 				for identity in value:
-					ciself._identities.append(ciself.__names.setdefault(identity,
-						identity))
+					# dict are not hashable, so transform it into a tuple
+					t = (identity.get('category'), identity.get('type'), identity.get('xml:lang'), identity.get('name'))
+					ciself._identities.append(ciself.__names.setdefault(t, t))
 			identities = property(_get_identities, _set_identities)
 
 			def update(ciself, identities, features):
