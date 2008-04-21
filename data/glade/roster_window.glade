@@ -377,15 +377,20 @@
                         <property name="headers_visible">False</property>
                         <property name="reorderable">True</property>
                         <signal name="leave_notify_event" handler="on_roster_treeview_leave_notify_event"/>
+                        <signal name="drag_data_get" handler="self.drag_data_get_data"/>
                         <signal name="button_press_event" handler="on_roster_treeview_button_press_event"/>
+                        <signal name="drag_begin" handler="self.drag_begin"/>
                         <signal name="motion_notify_event" handler="on_roster_treeview_motion_notify_event"/>
                         <signal name="row_collapsed" handler="on_roster_treeview_row_collapsed"/>
                         <signal name="row_expanded" handler="on_roster_treeview_row_expanded"/>
                         <signal name="key_press_event" handler="on_roster_treeview_key_press_event"/>
                         <signal name="row_activated" handler="on_roster_treeview_row_activated"/>
                         <signal name="button_release_event" handler="on_roster_treeview_button_release_event"/>
+                        <signal name="drag_drop" handler="self.drag_drop"/>
+                        <signal name="drag_data_received" handler="self.drag_data_received_data"/>
                         <signal name="scroll_event" handler="on_roster_treeview_scroll_event"/>
                         <signal name="style_set" handler="on_roster_treeview_style_set"/>
+                        <signal name="drag_end" handler="self.drag_end"/>
                       </widget>
                     </child>
                   </widget>

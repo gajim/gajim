@@ -5831,11 +5831,6 @@ class RosterWindow:
 		self.tree.enable_model_drag_source(gtk.gdk.BUTTON1_MASK, TARGETS,
 			gtk.gdk.ACTION_DEFAULT | gtk.gdk.ACTION_MOVE | gtk.gdk.ACTION_COPY)
 		self.tree.enable_model_drag_dest(TARGETS2, gtk.gdk.ACTION_DEFAULT)
-		self.tree.connect('drag_begin', self.drag_begin)
-		self.tree.connect('drag_end', self.drag_end)
-		self.tree.connect('drag_drop', self.drag_drop)
-		self.tree.connect('drag_data_get', self.drag_data_get_data)
-		self.tree.connect('drag_data_received', self.drag_data_received_data)
 		self.dragging = False
 		self.xml.signal_autoconnect(self)
 		self.combobox_callback_active = True
