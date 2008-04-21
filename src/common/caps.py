@@ -89,11 +89,11 @@ class CapsCache(object):
 		#   to CapsCacheItem object
 		# __CacheItem is a class that stores data about particular
 		#   client (node/version pair)
-		self.__names = {}
 		self.__cache = {}
 
 		class CacheItem(object):
 			''' TODO: logging data into db '''
+			self.__names = {}
 			def __init__(ciself, hash_method, hash):
 				# cached into db
 				ciself.hash_method = hash_method
