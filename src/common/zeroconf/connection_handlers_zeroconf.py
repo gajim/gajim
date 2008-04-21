@@ -454,7 +454,7 @@ class ConnectionBytestream:
 		# if we want to respect jep-0065 we have to check for proxy
 		# activation result in any result iq
 		real_id = unicode(iq_obj.getAttr('id'))
-		if real_id[:3] != 'au_':
+		if not real_id.startswith('au_'):
 			return
 		frm = unicode(iq_obj.getFrom())
 		id = real_id[3:]

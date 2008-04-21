@@ -428,7 +428,7 @@ class ConnectionBytestream:
 		if real_id == self.awaiting_xmpp_ping_id:
 			self.awaiting_xmpp_ping_id = None
 			return
-		if real_id[:3] != 'au_':
+		if not real_id.startswith('au_'):
 			return
 		frm = helpers.get_full_jid_from_iq(iq_obj)
 		id = real_id[3:]
