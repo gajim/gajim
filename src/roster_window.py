@@ -862,10 +862,6 @@ class RosterWindow:
 		'''draw the correct state image, name BUT not avatar'''
 		# focus is about if the roster window has toplevel-focus or not
 	
-		# FIXME Remove functionality but check before if all cases
-		# are handled by GTK
-		selected = False 
-
 		child_iters = self._get_contact_iter(jid, account, self.model)
 		if not child_iters:
 			return False 
@@ -939,6 +935,7 @@ class RosterWindow:
 			if status != '':
 				status = helpers.reduce_chars_newlines(status, max_lines = 1)
 				# escape markup entities and make them small italic and fg color
+				# color is calcuted to be always readable
 				color = gtkgui_helpers._get_fade_color(self.tree, selected, focus)
 				colorstring = '#%04x%04x%04x' % (color.red, color.green, color.blue)
 				name += \
@@ -3423,35 +3420,34 @@ class RosterWindow:
 				# Prevent endless loops
 				gobject.idle_add(self.draw_contact, jid, account)
 
-	
-	# FIXME: Looks like it is unneeded: If yes, remove it
+	def on_treeview_selection_changed(self, selection):
+		'''Called when selection in TreeView has changed.
 
-	#def on_treeview_selection_changed(self, selection):
-	#	if self.filtering:
-	#		print "async problem"
-	#		return
-	#	model, list_of_paths = selection.get_selected_rows()
-	#	if len(self._last_selected_contact):
-	#		# update unselected rows
-	#		for (jid, account) in self._last_selected_contact:
-	#			#try:
-	#			self.draw_contact(jid, account)
-	#			#except:
-	#				# This can fail when last selected row was on an account we just
-	#				# removed. So we don't care if that fail
-	#		#	pass
-	#	self._last_selected_contact = []
-	#	if len(list_of_paths) == 0:
-	#		return
-	#	for path in list_of_paths:
-	#		row = model[path]
-	#		if row[C_TYPE] != 'contact':
-	#			self._last_selected_contact = []
-	#			return
-	#		jid = row[C_JID].decode('utf-8')
-	#		account = row[C_ACCOUNT].decode('utf-8')
-	#		self._last_selected_contact.append((jid, account))
-	#		self.draw_contact(jid, account, selected = True)	
+		Redraw unselected rows to make status message readable
+		on all possible backgrounds.
+		'''
+		# Selection can change when the model is filtered
+		# Only write to the model when filtering is finished!
+		
+		# FIXME: When we are filtering our custom colors are somehow lost
+
+		model, list_of_paths = selection.get_selected_rows()
+		if len(self._last_selected_contact):
+			# update unselected rows
+			for (jid, account) in self._last_selected_contact:
+				gobject.idle_add(self.draw_contact, jid, account)
+		self._last_selected_contact = []
+		if len(list_of_paths) == 0:
+			return
+		for path in list_of_paths:
+			row = model[path]
+			if row[C_TYPE] != 'contact':
+				self._last_selected_contact = []
+				return
+			jid = row[C_JID].decode('utf-8')
+			account = row[C_ACCOUNT].decode('utf-8')
+			self._last_selected_contact.append((jid, account))
+			gobject.idle_add(self.draw_contact, jid, account, True)	
 
 	def on_service_disco_menuitem_activate(self, widget, account):
 		server_jid = gajim.config.get_per('accounts', account, 'hostname')
@@ -5651,9 +5647,8 @@ class RosterWindow:
 		self.tree = self.xml.get_widget('roster_treeview')
 		sel = self.tree.get_selection()
 		sel.set_mode(gtk.SELECTION_MULTIPLE)
-		#FIXME: talk to asterix, why is this needed?
-		#sel.connect('changed',
-		#	self.on_treeview_selection_changed)
+		sel.connect('changed',
+			self.on_treeview_selection_changed)
 
 		self._last_selected_contact = [] # holds a list of (jid, account) tupples
 		self.transports_state_images = {'16': {}, '32': {}, 'opened': {},
