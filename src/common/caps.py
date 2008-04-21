@@ -80,11 +80,6 @@ class CapsCache(object):
 	def __init__(self, logger=None):
 		''' Create a cache for entity capabilities. '''
 		# our containers:
-		# __names is a string cache; every string long enough is given
-		#   another object, and we will have plenty of identical long
-		#   strings. therefore we can cache them
-		#   TODO: maybe put all known xmpp namespace strings here
-		#   (strings given in xmpppy)?
 		# __cache is a dictionary mapping: pair of node and version maps
 		#   to CapsCacheItem object
 		# __CacheItem is a class that stores data about particular
@@ -93,7 +88,12 @@ class CapsCache(object):
 
 		class CacheItem(object):
 			''' TODO: logging data into db '''
-			self.__names = {}
+			# __names is a string cache; every string long enough is given
+			#   another object, and we will have plenty of identical long
+			#   strings. therefore we can cache them
+			#   TODO: maybe put all known xmpp namespace strings here
+			#   (strings given in xmpppy)?
+			__names = {}
 			def __init__(ciself, hash_method, hash):
 				# cached into db
 				ciself.hash_method = hash_method
@@ -113,7 +113,7 @@ class CapsCache(object):
 			def _set_features(ciself, value):
 				ciself._features = []
 				for feature in value:
-					ciself._features.append(self.__names.setdefault(feature,
+					ciself._features.append(ciself.__names.setdefault(feature,
 						feature))
 			features = property(_get_features, _set_features)
 
@@ -122,7 +122,7 @@ class CapsCache(object):
 			def _set_identities(ciself, value):
 				ciself._identities = []
 				for identity in value:
-					ciself._identities.append(self.__names.setdefault(identity,
+					ciself._identities.append(ciself.__names.setdefault(identity,
 						identity))
 			identities = property(_get_identities, _set_identities)
 
