@@ -833,9 +833,6 @@ class RosterWindow:
 			# Eg. We redraw groups after we removed a entitiy
 			# and its empty groups
 			return
-		key = (group, account)
-		if key in self.draw_group_id:
-			del self.draw_group_id[key]
 		if self.regroup:
 			accounts = []
 		else:
@@ -5672,8 +5669,6 @@ class RosterWindow:
 		self.actions_menu_needs_rebuild = True
 		self.regroup = gajim.config.get('mergeaccounts')
 		self.clicked_path = None # Used remember on wich row we clicked
-		self.draw_group_id = {}
-		self.draw_account_id = {}
 		if len(gajim.connections) < 2: # Do not merge accounts if only one exists
 			self.regroup = False
 		#FIXME: When list_accel_closures will be wrapped in pygtk
