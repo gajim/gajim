@@ -195,8 +195,8 @@ def user_send_activity(account, activity, subactivity = '', message = ''):
 	gajim.connections[account].send_pb_publish('', xmpp.NS_ACTIVITY, item, '0')
 
 def user_send_tune(account, artist = '', title = '', source = '', track = 0,length = 0, items = None):
-	if gajim.config.get('publish_tune') and \
-	gajim.connections[account].pep_supported:
+	if not (gajim.config.get('publish_tune') and \
+	gajim.connections[account].pep_supported):
 		return
 	item = xmpp.Node('tune', {'xmlns': xmpp.NS_TUNE})
 	if artist != '':
