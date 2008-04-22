@@ -812,7 +812,7 @@ class ConnectionDisco:
 					gajim.gmail_domains.append(jid)
 					self.request_gmail_notifications()
 				for identity in identities:
-					if identity['category'] == 'pubsub' and identity['type'] == \
+					if identity['category'] == 'pubsub' and identity.get('type') == \
 					'pep':
 						self.pep_supported = True
 						if dbus_support.supported:
