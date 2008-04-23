@@ -232,7 +232,7 @@ class RosterWindow:
 ################################################################################
 	
 	def add_account(self, account):
-		'''Add account to roster but do nothing if it is already in.'''
+		'''Add account to roster and draw it. Do nothing if it is already in.'''
 		# no redraw, add only
 		if self._get_account_iter(account):
 			# Will happen on reconnect or for merged accounts 
@@ -255,6 +255,9 @@ class RosterWindow:
 			self.model.append(None, [gajim.interface.jabber_state_images['16'][show],
 				gobject.markup_escape_text(account),
 				'account', our_jid, account, None, tls_pixbuf])	
+		
+		if not self.starting:
+			self.draw_account(account)
 
 
 	def add_account_contacts(self, account):
@@ -264,14 +267,17 @@ class RosterWindow:
 		c1 = time.clock()
 		jids = gajim.contacts.get_jid_list(account)
 		
-		self.starting = True # don't draw contacts
 		self.tree.freeze_child_notify()
 		c5 = time.clock()
 		for jid in jids:
 			self.add_contact(jid, account)
 		c6 = time.clock()
 		self.tree.thaw_child_notify()
-		self.starting = False
+
+		# Do not freeze the GUI when drawing the contacts
+		if jids:
+			# Overhead is big, only invoke when needed
+			self._idle_draw_jids_of_account(jids, account)
 
 		c9 = time.clock()
 		# Draw all known groups
@@ -280,15 +286,11 @@ class RosterWindow:
 		self.draw_account(account)
 		c10 = time.clock()
 		
-		# Do not freeze the GUI when drawing the contacts
 		if jids:
-			# Overhead is big, only invoke when needed
-			self._idle_draw_jids_of_account(jids, account)
-
 			c4 = time.clock()
 		
 			print ""
-			print "--- Add account contacts -----------------------------"
+			print "--- Add account contacts of %s ---------" % account
 			print "Total Time", c4-c1	
 			print "Add contact without draw", c6-c5	
 			print "Draw groups and account", c10-c9
@@ -542,11 +544,10 @@ class RosterWindow:
 		if jid == gajim.get_jid_from_account(account):
 			if contact.resource != gajim.connections[account].server_resource:
 				return self._add_self_contact(account)
-			#FIXME When does this happen?	
-			assert False
 			return
-	
-		if contact.is_observer():
+		
+		is_observer = contact.is_observer()
+		if is_observer:
 			# if he has a tag, remove it
 			tag = gajim.contacts.get_metacontacts_tag(account, jid)
 			if tag:
@@ -567,7 +568,7 @@ class RosterWindow:
 		# Draw all groups of the contact
 		if contact.is_transport():
 			contact.groups = [_('Transports')]
-		if contact.is_observer():
+		if is_observer:
 			contact.groups = [_('Observers')]
 		groups = contact.groups
 		if not groups:
@@ -581,8 +582,8 @@ class RosterWindow:
 				ishidden = True
 				gajim.groups[account][group] = {'expand': ishidden}
 
-			#if not self.starting:			
-			self.draw_group(group, account)
+			if not self.starting:			
+				self.draw_group(group, account)
 		
 		if not self.starting:	
 			for c, acc in contacts:
@@ -636,7 +637,7 @@ class RosterWindow:
 		return True
 		
 
-	def add_groupchat(self, account, jid, resource = '', status = ''):
+	def add_groupchat(self, jid, account, status = ''):
 		'''Add groupchat to roster and draw it.
 		Return the added contact instance.
 		'''
@@ -647,9 +648,10 @@ class RosterWindow:
 				status = status, sub = 'none',
 				resource = resource)
 			gajim.contacts.add_contact(account, contact)
+			self.add_contact(jid, account)
 		else:
 			contact.show = 'online'	
-		self.add_contact(jid, account)
+			self.draw_contact(jid, account)	
 		return contact
 		
 
@@ -658,27 +660,35 @@ class RosterWindow:
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		self.remove_contact(jid, account)
 		gajim.contacts.remove_contact(account, contact)
-		#FIXME: stupid hack.
 		# When we redraw the group in remove_contact the
 		# contact does still exist and so the group is still showing 
 		# the old numbers.
-		# Maybe use timeout to draw groups so that there is enough time
-		# to remove the contact instance.
 		self.draw_group(_('Groupchats'), account)
 		return True
 		
 
-	def add_transport(self, account, transport):
+	def add_transport(self, jid, account):
 		'''Add transport to roster and draw it.
 		Return the added contact instance.'''
-		contact = gajim.contacts.create_contact(jid = transport, name = transport,
+		contact = gajim.contacts.create_contact(jid = jid, name = jid,
 			groups = [_('Transports')], show = 'offline', 
 			status = 'offline', sub = 'from')
 		gajim.contacts.add_contact(account, contact)
 		self.add_contact(transport, account)
 		return contact
 		
-	# FIXME: remove_transport method is missing
+
+	def remove_transport(self, jid, account):
+		'''Remove transport from roster and redraw account and group.'''
+		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
+		self.remove_contact(jid, account)
+		gajim.contacts.remove_contact(account, contact)
+		# When we redraw the group in remove_contact the
+		# contact does still exist and so the group is still showing 
+		# the old numbers.
+		self.draw_group(_('Transports'), account)
+		return True
+
 
 	#FIXME: Better never even remove....
 	def _readd_contact_to_roster_if_needed(self, contact, account):
@@ -857,6 +867,7 @@ class RosterWindow:
 		parent_jid = self.model[parent_iter][C_JID].decode('utf-8')
 		parent_account = self.model[parent_iter][C_ACCOUNT].decode('utf-8')
 		self.draw_contact(parent_jid, parent_account)
+		return False
 	
 	def draw_contact(self, jid, account, selected = False, focus = False):
 		'''draw the correct state image, name BUT not avatar'''
@@ -968,7 +979,9 @@ class RosterWindow:
 			else:
 				# We are a simple brother
 				# Let our big brother know of our existence (and possible events)
-				self.draw_contact(big_brother_jid, big_brother_account)
+				if not self.starting:
+					# Our account is currently added. Parent will be drawn anyway.
+					self.draw_contact(big_brother_jid, big_brother_account)
 
 		icon_name = helpers.get_icon_name_to_show(contact, account)
 		# look if another resource has awaiting events
@@ -1084,7 +1097,7 @@ class RosterWindow:
 				self.draw_contact(jid, account)
 				self.draw_avatar(jid, account)
 				yield True
-			print "--- Idle draw -----------------"
+			print "--- Idle draw of %s -----------" % account
 			print "Draw contact and avatar", time.clock() - t
 			print "-------------------------------"
 			yield False
@@ -1098,9 +1111,11 @@ class RosterWindow:
 		# clear the model, only if it is not empty
 		if self.model:
 			self.model.clear()
+		self.starting = True
 		for acct in gajim.connections:
 			self.add_account(acct)
 			self.add_account_contacts(acct)
+		self.starting = False
 		# Recalculate column width for ellipsizing
 		self.tree.columns_autosize()
 		
