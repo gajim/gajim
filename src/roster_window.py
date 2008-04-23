@@ -808,6 +808,9 @@ class RosterWindow:
 
 	def draw_account(self, account):
 		child_iter = self._get_account_iter(account, self.model)
+		if not child_iter:
+			assert False, 'Account iter of %s could not be found.' % account
+			return
 
 		num_of_accounts = gajim.get_number_of_connected_accounts()
 		num_of_secured = gajim.get_number_of_securely_connected_accounts()
@@ -860,6 +863,8 @@ class RosterWindow:
 		
 	def draw_parent_contact(self, jid, account):
 		child_iters = self._get_contact_iter(jid, account, self.model)
+		if not child_iters:
+			return False
 		parent_iter = self.model.iter_parent(child_iters[0])
 		if self.model[parent_iter][C_TYPE] != 'contact':
 			# parent is not a contact
@@ -1046,12 +1051,7 @@ class RosterWindow:
 
 	def draw_avatar(self, jid, account):
 		iters = self._get_contact_iter(jid, account, self.model)
-		self.draw_avatar_from_iters(iters)
-		
-	def draw_avatar_from_iters(self, iters):
-		'''draw the avatar
-		iters are iters in treemodel, not treemodelfilter'''
-		if not gajim.config.get('show_avatars_in_roster'):
+		if not iters or not gajim.config.get('show_avatars_in_roster'):
 			return
 		jid = self.model[iters[0]][C_JID]
 		jid = jid.decode('utf-8')
@@ -1069,7 +1069,6 @@ class RosterWindow:
 		Show contact if it has pending events
 		'''
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-		self.draw_contact(jid, account)
 
 		groups = contact.groups
 		if contact.is_transport():
