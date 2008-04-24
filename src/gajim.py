@@ -2326,8 +2326,7 @@ class Interface:
 		if no_queue: # We didn't have a queue: we change icons
 			if not gajim.contacts.get_contact_with_highest_priority(account, jid):
 				if type_ == 'gc-invitation':
-					self.roster.add_groupchat(jid, account,
-						status = 'offline')
+					self.roster.add_groupchat(jid, account, status='offline')
 				else:
 					# add contact to roster ("Not In The Roster") if he is not
 					self.roster.add_to_not_in_the_roster(account, jid)
