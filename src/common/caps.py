@@ -135,7 +135,7 @@ class CapsCache(object):
 				ciself._identities = []
 				for identity in value:
 					# dict are not hashable, so transform it into a tuple
-					t = (identity.get('category'), identity.get('type'), identity.get('xml:lang'), identity.get('name'))
+					t = (identity['category'], identity.get('type'), identity.get('xml:lang'), identity.get('name'))
 					ciself._identities.append(ciself.__names.setdefault(t, t))
 			identities = property(_get_identities, _set_identities)
 
