@@ -645,8 +645,7 @@ class RosterWindow:
 		if contact is None:
 			contact = gajim.contacts.create_contact(jid = jid, name = jid,
 				groups = [_('Groupchats')], show = 'online',
-				status = status, sub = 'none',
-				resource = resource)
+				status = status, sub = 'none')
 			gajim.contacts.add_contact(account, contact)
 			self.add_contact(jid, account)
 		else:
