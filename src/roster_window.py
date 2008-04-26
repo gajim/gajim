@@ -298,7 +298,8 @@ class RosterWindow:
 			print ""
 
 	
-	def _add_entity(self, contact, account, groups = None, big_brother_contact = None):
+	def _add_entity(self, contact, account, groups = None, big_brother_contact = None, 
+	big_brother_account = None):
 		'''Add the given contact to roster data model.
 		
 		Contact is added regardless if he is already in roster or not.
@@ -316,7 +317,7 @@ class RosterWindow:
 			# Add contact under big brother
 
 			parent_iters = self._get_contact_iter(big_brother_contact.jid,
-				account, self.model)
+				big_brother_account, self.model)
 			assert len(parent_iters) > 0,\
 				"Big brother is not yet in roster!"
 
@@ -356,6 +357,11 @@ class RosterWindow:
 				i_ = self.model.append(child_iterG, (None, contact.get_shown_name(),
 					typestr, contact.jid, account, None, None))
 				added_iters.append(i_)
+
+				# Restore the group expand state
+				if group not in gajim.groups[account]:
+					# FIXME: care about expand/collapse state
+					gajim.groups[account][group] = {'expand': True}
 		
 		assert len(added_iters), "%s has not been added to roster!" % contact.jid 
 		return added_iters 
@@ -406,7 +412,7 @@ class RosterWindow:
 			return True
 
 
-	def _add_metacontact_family(self, family):
+	def _add_metacontact_family(self, family, account):
 		'''Add the give Metacontact family to roster data model.
 		
 		Add Big Brother to his groups and all others under him. 
@@ -416,17 +422,27 @@ class RosterWindow:
 		Keyword arguments:
 		family -- the family, see Contacts.get_metacontacts_family()
 		'''
-		big_brother_data = gajim.contacts.get_metacontacts_big_brother(family)
+
+		if self.regroup:
+			# group all together
+			nearby_family = family
+		else:
+			# we want one nearby_family per account
+			nearby_family = [data for data in family 
+				if account == data['account']]
+
+		big_brother_data = gajim.contacts.get_metacontacts_big_brother(nearby_family)
 		big_brother_jid = big_brother_data['jid']
 		big_brother_account = big_brother_data['account']
 		big_brother_contact = gajim.contacts.get_first_contact_from_jid(big_brother_account, big_brother_jid)
 
 		assert len(self._get_contact_iter(big_brother_jid, big_brother_account, self.model)) == 0,\
-			"Big brother %s already in roster" % big_brother_jid
+			"Big brother %s already in roster  \n Family: %s" % (big_brother_jid, family)
 		self._add_entity(big_brother_contact, big_brother_account)
 		
 		brothers = []
-		for data in family:
+		# Filter family members
+		for data in nearby_family:
 			if data == big_brother_data:
 				continue # already added
 
@@ -437,34 +453,46 @@ class RosterWindow:
 			if not _contact:
 				# Corresponding account is not connected
 				continue
-
+			
 			assert len(self._get_contact_iter(_jid, _account, self.model)) == 0,\
-			"%s already in roster" % _jid
-			self._add_entity(_contact, _account, big_brother_contact = big_brother_contact)
+				"%s already in roster. \n Family: " % (_jid, nearby_family)
+			self._add_entity(_contact, _account, big_brother_contact = big_brother_contact,
+				big_brother_account = big_brother_account)
 			brothers.append((_contact, _account))
 
 		brothers.insert(0, (big_brother_contact, big_brother_account))
 		return brothers
 
 
-	def _remove_metacontact_family(self, family):
+	def _remove_metacontact_family(self, family, account):
 		'''Remove the give Metacontact family from roster data model.
 		
 		See Contacts.get_metacontacts_family() and RosterWindow._remove_entity()
 		'''
+		if self.regroup:
+			# remove all
+			nearby_family = family
+		else:
+			# remove nearby_family per account
+			nearby_family = [data for data in family 
+				if account == data['account']]
+
 		# Family might has changed (actual big brother not on top). 
-		# Remove in correct order: Childs first
-		for data in family:
+		# Remove childs first then big brother
+		family_in_roster = False
+		for data in nearby_family:
 			_account = data['account']
 			_jid = data['jid']
 			_contact = gajim.contacts.get_first_contact_from_jid(_account, _jid)
 			
-			if not _contact:
-				# Corresponding account is not online
-				continue
-			
 			iters = self._get_contact_iter(_jid, _account, self.model)
-			assert iters, "%s shall be removed but is not in roster" % _jid
+			if not iters or not _contact:
+				# Family might not be up to date.
+				# Only try to remove what is actually in the roster
+				continue
+			assert iters, "%s shall be removed but is not in roster \n Family: %s" % (_jid, family)
+
+			family_in_roster = True
 
 			parent_iter = self.model.iter_parent(iters[0])
 			parent_type = self.model[parent_iter][C_TYPE]
@@ -480,7 +508,10 @@ class RosterWindow:
 			assert ok, "%s was not removed" % _jid
 			assert len(self._get_contact_iter(_jid, _account, self.model)) == 0,\
 				"%s is removed but still in roster" % _jid
-		
+	
+		if not family_in_roster:
+			return False
+
 		iters = self._get_contact_iter(old_big_jid, old_big_account, self.model)
 		assert len(iters) > 0, "Old Big Brother %s is not in roster anymore" % old_big_jid
 		assert not self.model.iter_children(iters[0]),\
@@ -558,14 +589,17 @@ class RosterWindow:
 		contacts = []
 		if family:
 			# We have a family. So we are a metacontact.
-			# Add our whole family
-			contacts = self._add_metacontact_family(family)
+			# Add all family members that we shall be grouped with
+			if self.regroup:
+				# remove existing family members to regroup them
+				self._remove_metacontact_family(family, account)
+			contacts = self._add_metacontact_family(family, account)
 		else:
 			# We are a normal contact
 			contacts = [(contact, account),]
 			self._add_entity(contact, account)
 
-		# Draw all groups of the contact
+		# Draw the contact and its groups contact
 		if contact.is_transport():
 			contact.groups = [_('Transports')]
 		if is_observer:
@@ -573,24 +607,14 @@ class RosterWindow:
 		groups = contact.groups
 		if not groups:
 			groups = [_('General')]
-		for group in groups:			
-			# Restore the group expand state
-			if group not in gajim.groups[account]:
-				#if account + group in self.collapsed_rows:
-				#ishidden = False
-				#else:
-				ishidden = True
-				gajim.groups[account][group] = {'expand': ishidden}
-
-			if not self.starting:			
-				self.draw_group(group, account)
-		
 		if not self.starting:	
 			for c, acc in contacts:
 				self.draw_contact(c.jid, acc)
 				self.draw_avatar(c.jid, acc)
+			for group in groups:			
+				self.draw_group(group, account)
 			self.draw_account(account)
-			
+
 		return contacts[0][0] # it's contact/big brother with highest priority
 
 
@@ -617,7 +641,7 @@ class RosterWindow:
 		family = gajim.contacts.get_metacontacts_family(account, jid)
 		if family:
 			# We have a family. So we are a metacontact.
-			self._remove_metacontact_family(family)
+			self._remove_metacontact_family(family, account)
 		else: 
 			self._remove_entity(contact, account)
 
@@ -730,7 +754,7 @@ class RosterWindow:
 		for contact in gajim.contacts.get_contacts(account, jid):
 			for group in groups:
 				if group not in contact.groups:
-					# statement needed for drap from meta to group
+					# we might be dropped from meta to group
 					contact.groups.append(group)
 			gajim.connections[account].update_contact(jid, contact.name,
 				contact.groups)
@@ -961,7 +985,16 @@ class RosterWindow:
 		brothers = []
 		family = gajim.contacts.get_metacontacts_family(account, jid)
 		if family: # Are we a metacontact (have a familiy)
-			big_brother_data = gajim.contacts.get_metacontacts_big_brother(family)
+
+			if self.regroup:
+				# group all together
+				nearby_family = family
+			else:
+				# we want one nearby_family per account
+				nearby_family = [data for data in family 
+					if account == data['account']]
+
+			big_brother_data = gajim.contacts.get_metacontacts_big_brother(nearby_family)
 			big_brother_jid = big_brother_data['jid']
 			big_brother_account = big_brother_data['account']
 
@@ -975,8 +1008,8 @@ class RosterWindow:
 				else:
 					# We are the new big brother but haven't been before
 					# Remove us and all our brothers and then re-add us so that
-					self._remove_metacontact_family(family)
-					brothers = self._add_metacontact_family(family)
+					self._remove_metacontact_family(family, account)
+					brothers = self._add_metacontact_family(family, account)
 					big_brother_c, big_brother_acc = brothers[0]
 					brothers = brothers[1:]
 					self.draw_avatar(big_brother_c.jid, big_brother_acc)
@@ -1177,11 +1210,22 @@ class RosterWindow:
 		if not type_:
 			return False
 		if type_ == 'account':
+			# Always show account
 			return True
+
 		account = model[iter][C_ACCOUNT]
 		if not account:
 			return False
+
 		account = account.decode('utf-8')
+		if self.regroup:
+			# C_ACCOUNT for groups depends on the order
+			# accounts were connected
+			# Check all accounts for online group contacts
+			accounts = gajim.contacts.get_accounts()
+		else:
+			accounts = [account]
+
 		jid = model[iter][C_JID]
 		if not jid:
 			return False
@@ -1191,12 +1235,13 @@ class RosterWindow:
 			group = jid
 			if group == _('Transports'):
 				return gajim.config.get('show_transports_group')
-			for contact in gajim.contacts.iter_contacts(account):
-				# Is this contact in this group ?
-				if group in contact.groups or (group == _('General') and not \
-				contact.groups):
-					if self.contact_is_visible(contact, account):
-						return True
+			for _acc in accounts:
+				for contact in gajim.contacts.iter_contacts(_acc):
+					# Is this contact in this group ?
+					if group in contact.groups or (group == _('General') and not \
+					contact.groups):
+						if self.contact_is_visible(contact, _acc):
+							return True
 			return False
 		if type_ == 'contact':
 			contact = gajim.contacts.get_first_contact_from_jid(account, jid)
@@ -1903,6 +1948,7 @@ class RosterWindow:
 
 		
 		# If visible, try to get first line of contact in roster
+		path = None
 		iters = self._get_contact_iter(jid, account)
 		if iters:
 			path = self.modelfilter.get_path(iters[0])
@@ -3526,11 +3572,12 @@ class RosterWindow:
 				else:
 					gajim.config.set('confirm_metacontacts', 'yes')
 			
-			# We might have dropped on a metacontact. Readd it.
+			# We might have dropped on a metacontact.
+			# Remove it and readd later with updated family info
 			dest_family = gajim.contacts.get_metacontacts_family(account_dest,
 				c_dest.jid)
 			if dest_family:
-				self._remove_metacontact_family(dest_family)
+				self._remove_metacontact_family(dest_family, account_dest)
 			else:
 				self._remove_entity(c_dest, account_dest)
 
@@ -3541,18 +3588,25 @@ class RosterWindow:
 			# Remove old source contact(s) 
 			if was_big_brother:
 				# We have got little brothers. Readd them all
-				self._remove_metacontact_family(old_family)
+				self._remove_metacontact_family(old_family, account_source)
 			else:	
 				# We are only a litle brother. Simply remove us from our big brother
-				self._remove_entity(c_source, account_source)
+				if self._get_contact_iter(c_source.jid, account_source):
+					# When we have been in the group before.
+					# Do not try to remove us again
+					self._remove_entity(c_source, account_source)
 
-			own_data = {}
-			own_data['jid'] = c_source.jid
-			own_data['account'] = account_source
-			old_family.append(own_data)
+				own_data = {}
+				own_data['jid'] = c_source.jid
+				own_data['account'] = account_source
+				# Don't touch the rest of the family
+				old_family = [own_data]
 			
 			# Apply new tag and update contact
 			for data in old_family:
+				if account_source != data['account'] and not self.regroup:
+					continue
+
 				_account = data['account']
 				_jid = data['jid']
 				_contact = gajim.contacts.get_first_contact_from_jid(_account, _jid)
@@ -3566,7 +3620,7 @@ class RosterWindow:
 			# Re-add all and update GUI
 			new_family = gajim.contacts.get_metacontacts_family(account_source,
 				c_source.jid)
-			brothers = self._add_metacontact_family(new_family)
+			brothers = self._add_metacontact_family(new_family, account_source)
 			
 			for c, acc in brothers:
 				self.draw_contact(c.jid, acc)
@@ -3608,10 +3662,13 @@ class RosterWindow:
 				# Little brother
 				# Remove whole family. Remove us from the family.
 				# Then re-add other family members.
-				self._remove_metacontact_family(family)
+				self._remove_metacontact_family(family, account)
 				gajim.contacts.remove_metacontact(account, c_source.jid)
 				for data in family:
-					if data['jid'] == c_source.jid:
+					if account != data['account'] and not self.regroup:
+						continue
+					if data['jid'] == c_source.jid and\
+					data['account'] == account:
 						continue
 					self.add_contact(data['jid'], data['account'])
 					break;
@@ -3619,7 +3676,7 @@ class RosterWindow:
 				self.add_contact_to_groups(c_source.jid, account, [grp_dest,])
 
 			else:
-				# Simple contact
+				# Normal contact
 				self.remove_contact_from_groups(c_source.jid, account, [grp_source,])
 				self.add_contact_to_groups(c_source.jid, account, [grp_dest,])
 
@@ -5656,8 +5713,8 @@ class RosterWindow:
 		self.tree = self.xml.get_widget('roster_treeview')
 		sel = self.tree.get_selection()
 		sel.set_mode(gtk.SELECTION_MULTIPLE)
-		sel.connect('changed',
-			self.on_treeview_selection_changed)
+		#sel.connect('changed',
+		#	self.on_treeview_selection_changed)
 
 		self._last_selected_contact = [] # holds a list of (jid, account) tupples
 		self.transports_state_images = {'16': {}, '32': {}, 'opened': {},
