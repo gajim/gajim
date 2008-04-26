@@ -83,7 +83,7 @@ class StanzaSession(object):
 	def cancelled_negotiation(self):
 		'''A negotiation has been cancelled, so reset this session to its default state.'''
 
-		if hasattr(self, 'control'):
+		if self.control:
 			self.control.on_cancel_session_negotiation()
 
 		self.status = None
@@ -778,7 +778,7 @@ class EncryptedStanzaSession(StanzaSession):
 		self.status = 'active'
 		self.enable_encryption = True
 
-		if hasattr(self, 'control'):
+		if self.control:
 			self.control.print_esession_details()
 
 	def final_steps_alice(self, form):
@@ -798,15 +798,14 @@ class EncryptedStanzaSession(StanzaSession):
 
 		self.do_retained_secret(k, srs)
 
-		# don't need to calculate ks_s here
-
+		# ks_s doesn't need to be calculated here
 		self.kc_s, self.km_s, self.ks_s = self.generate_initiator_keys(k)
 		self.kc_o, self.km_o, self.ks_o = self.generate_responder_keys(k)
 
 		# 4.6.2 Verifying Bob's Identity
 
 		self.verify_identity(form, self.d, False, 'b')
-# Note: If Alice discovers an error then she SHOULD ignore any encrypted content she received in the stanza.
+		# Note: If Alice discovers an error then she SHOULD ignore any encrypted content she received in the stanza.
 
 		if self.negotiated['logging'] == 'mustnot':
 			self.loggable = False
@@ -814,7 +813,7 @@ class EncryptedStanzaSession(StanzaSession):
 		self.status = 'active'
 		self.enable_encryption = True
 
-		if hasattr(self, 'control'):
+		if self.control:
 			self.control.print_esession_details()
 
 	# calculate and store the new retained secret
