@@ -2775,7 +2775,7 @@ class Interface:
 			mc = mw.get_control(fjid, account)
 			mc.user_nick = gajim.nicks[account]
 
-	def on_open_chat_window(self, contact, account, resource = None, 
+	def on_open_chat_window(self, widget, contact, account, resource = None, 
 		session = None):
 		# Get the window containing the chat
 		fjid = contact.jid

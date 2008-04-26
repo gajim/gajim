@@ -3347,7 +3347,7 @@ class RosterWindow:
 					gajim.contacts.get_contact_with_highest_priority(account, jid)
 			if jid == gajim.get_jid_from_account(account):
 				resource = contact.resource
-			gajim.interface.on_open_chat_window(contact, account, \
+			gajim.interface.on_open_chat_window(None, contact, account, \
 				resource = resource, session = session)
 
 	def on_roster_treeview_row_activated(self, widget, path, col = 0):
