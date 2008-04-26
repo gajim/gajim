@@ -15,11 +15,14 @@ class InvalidMove(Exception):
 	pass
 
 class TicTacToeSession(stanza_session.StanzaSession):
+	# initiate a session
 	def begin(self, rows = 3, cols = 3, role_s = 'x'):
 		self.rows = rows
 		self.cols = cols
 
 		self.role_s = role_s
+
+		self.strike = 3
 
 		if self.role_s == 'x':
 			self.role_o = 'o'
@@ -68,6 +71,7 @@ class TicTacToeSession(stanza_session.StanzaSession):
 		else:
 			self.cols = 3
 
+		# number in a row needed to win
 		if form.getField('strike'):
 			self.strike = int(form.getField('strike').getValues()[0])
 		else:
@@ -104,10 +108,6 @@ class TicTacToeSession(stanza_session.StanzaSession):
 
 			self.our_turn()
 
-	def is_my_turn(self):
-		# XXX not great semantics
-		return self.received == self.ignore
-
 	# just sent an invitation, expecting a reply
 	def wait_for_invite_response(self, msg):
 		if msg.getTag('join', namespace=games_ns):
@@ -119,11 +119,21 @@ class TicTacToeSession(stanza_session.StanzaSession):
 				self.their_turn()
 
 		elif msg.getTag('decline', namespace=games_ns):
-			self.XXX()
+			# XXX notify the user
+
+			# XXX end session
+			pass
 
 	# silently ignores any received messages
 	def ignore(self, msg):
 		pass
+
+	def game_over(self, msg):
+		invite = msg.getTag('invite', namespace=games_ns)
+
+		# ignore messages unless they're renewing the game
+		if invite and invite.getAttr('type') == 'renew':
+			self.invited(msg)
 
 	def wait_for_move(self, msg):
 		turn = msg.getTag('turn', namespace=games_ns)
@@ -135,12 +145,15 @@ class TicTacToeSession(stanza_session.StanzaSession):
 
 		if id != self.next_move_id:
 			print 'unexpected move id, lost a move somewhere?'
-			raise
+			return
 
 		try:
 			self.board.mark(row, col, self.role_o)
 		except InvalidMove, e:
-			print 'received invalid move'
+			# received an invalid move, end the game.
+
+			# XXX notify the user
+			self.terminate('cheating')
 			return
 
 		# check win conditions
@@ -153,14 +166,18 @@ class TicTacToeSession(stanza_session.StanzaSession):
 
 			self.our_turn()
 
+	def is_my_turn(self):
+		# XXX not great semantics
+		return self.received == self.ignore
+
 	def our_turn(self):
 		# ignore messages until we've made our move
 		self.received = self.ignore
-		self.board.win.set_title(self.board.title + ': your turn')
+		self.board.set_title('your turn')
 
 	def their_turn(self):
 		self.received = self.wait_for_move
-		self.board.win.set_title(self.board.title + ': their turn')
+		self.board.set_title('their turn')
 
 	# called when the board receives input
 	def move(self, row, col):
@@ -173,7 +190,7 @@ class TicTacToeSession(stanza_session.StanzaSession):
 		self.send_move(row, col)
 
 		# check win conditions
-		if self.board.check_for_strike(self.role_s, row, col,self.strike):
+		if self.board.check_for_strike(self.role_s, row, col, self.strike):
 			self.won()
 		elif self.board.full():
 			self.drawn()
@@ -182,6 +199,7 @@ class TicTacToeSession(stanza_session.StanzaSession):
 
 			self.their_turn()
 
+	# sends a move message
 	def send_move(self, row, column):
 		msg = xmpp.Message()
 		msg.setType('chat')
@@ -198,13 +216,50 @@ class TicTacToeSession(stanza_session.StanzaSession):
 
 		self.send(msg)
 
+	# sends a termination message and ends the game
+	def terminate(self, reason):
+		msg = xmpp.Message()
+
+		terminate = msg.NT.terminate
+		terminate.setNamespace(games_ns)
+		terminate.setAttr('reason', reason)
+
+		self.send(msg)
+
+		self.received = self.game_over
+
+	def won(self):
+		self.terminate('won')
+		self.board.won()
+
+	def lost(self):
+		self.terminate('lost')
+		self.board.lost()
+
+	def drawn(self):
+		self.terminate('draw')
+		self.board.drawn()
+
 class TicTacToeBoard:
+	def __init__(self, session, rows, cols):
+		self.session = session
+
+		self.state = 'None'
+
+		self.rows = rows
+		self.cols = cols
+
+		self.board = [ [None] * self.cols for r in xrange(self.rows) ]
+
+		self.setup_window()
+
 	def check_for_strike(self, p, r, c, strike):
-		# up and down, left and right
+		# number in a row: up and down, left and right
 		tallyI = 0
 		tally_ = 0
 
-		# right triangles: L\ , F/
+		# number in a row: diagonal
+		# (imagine L or F as two sides of a right triangle: L\ or F/)
 		tallyL = 0
 		tallyF = 0
 
@@ -241,16 +296,6 @@ class TicTacToeBoard:
 
 		return False
 
-	def __init__(self, session, rows, cols):
-		self.session = session
-
-		self.rows = rows
-		self.cols = cols
-
-		self.board = [ [None] * self.cols for r in xrange(self.rows) ]
-
-		self.setup_window()
-
 	# is the board full?
 	def full(self):
 		for r in xrange(self.rows):
@@ -263,9 +308,9 @@ class TicTacToeBoard:
 	def setup_window(self):
 		self.win = gtk.Window()
 
-		self.title = 'tic-tac-toe with %s' % self.session.jid
+		self.title_prefix = 'tic-tac-toe with %s' % self.session.jid
+		self.set_title()
 
-		self.win.set_title(self.title)
 		self.win.set_app_paintable(True)
 
 		self.win.add_events(gdk.BUTTON_PRESS_MASK)
@@ -313,6 +358,8 @@ class TicTacToeBoard:
 				elif self.board[i][j] == 'o':
 					self.draw_o(cr, i, j, row_height, col_width)
 
+		# XXX draw 'won', 'lost', 'draw'
+
 	def draw_x(self, cr, row, col, row_height, col_width):
 		cr.set_source_rgb(0, 0, 0)
 
@@ -350,4 +397,27 @@ class TicTacToeBoard:
 		else:
 			self.board[row-1][column-1] = player
 
+		self.win.queue_draw()
+
+	def set_title(self, suffix = None):
+		str = self.title_prefix
+
+		if suffix:
+			str += ': ' + suffix
+
+		self.win.set_title(str)
+
+	def won(self):
+		self.state = 'won'
+		self.set_title('you won!')
+		self.win.queue_draw()
+
+	def lost(self):
+		self.state = 'lost'
+		self.set_title('you lost.')
+		self.win.queue_draw()
+
+	def drawn(self):
+		self.state = 'drawn'
+		self.win.set_title(self.title_prefix + ': a draw.')
 		self.win.queue_draw()
