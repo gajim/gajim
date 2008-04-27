@@ -30,7 +30,6 @@ import urllib
 import errno
 import select
 import sha
-import hashlib
 import base64
 import sys
 from encodings.punycode import punycode_encode
@@ -41,6 +40,18 @@ from i18n import Q_
 from i18n import ngettext
 from xmpp_stringprep import nodeprep, resourceprep, nameprep
 import xmpp
+
+try:
+	# Python 2.5
+	import hashlib
+	hash_md5  = hashlib.md5
+	hash_sha1 = hashlib.sha1
+except:
+	# Python 2.4
+	import md5
+	import sha
+	hash_md5 = md5.new
+	hash_sha1 = sha.new
 
 if sys.platform == 'darwin':
 	from osx import nsapp
@@ -1256,9 +1267,9 @@ def compute_caps_hash(identities, features, hash_method='sha-1'):
 	for f in features:
 		S += '%s<' % f
 	if hash_method == 'sha-1':
-		hash = hashlib.sha1(S)
+		hash = hash_sha1(S)
 	elif hash_method == 'md5':
-		hash = hashlib.md5(S)
+		hash = hash_md5(S)
 	else:
 		return ''
 	return base64.b64encode(hash.digest())
