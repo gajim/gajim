@@ -233,7 +233,6 @@ class RosterWindow:
 	
 	def add_account(self, account):
 		'''Add account to roster and draw it. Do nothing if it is already in.'''
-		# no redraw, add only
 		if self._get_account_iter(account):
 			# Will happen on reconnect or for merged accounts 
 			return
@@ -255,7 +254,7 @@ class RosterWindow:
 			self.model.append(None, [gajim.interface.jabber_state_images['16'][show],
 				gobject.markup_escape_text(account),
 				'account', our_jid, account, None, tls_pixbuf])	
-		
+
 		if not self.starting:
 			self.draw_account(account)
 
@@ -325,7 +324,6 @@ class RosterWindow:
 				it = self.model.append(child_iter, (None, contact.get_shown_name(),
 					'contact', contact.jid,	account, None, None))
 				added_iters.append(it)
-
 		else:
 			# We are a normal contact. Add us to our groups.
 			if not groups:
@@ -359,9 +357,15 @@ class RosterWindow:
 				added_iters.append(i_)
 
 				# Restore the group expand state
+				path = self.model.get_path(child_iterG)
+				if account + group in self.collapsed_rows:
+					is_expanded = False
+					self.tree.collapse_row(path)
+				else:
+					is_expanded = True
+					self.tree.expand_row(path, False)
 				if group not in gajim.groups[account]:
-					# FIXME: care about expand/collapse state
-					gajim.groups[account][group] = {'expand': True}
+					gajim.groups[account][group] = {'expand': is_expanded}
 		
 		assert len(added_iters), "%s has not been added to roster!" % contact.jid 
 		return added_iters 
@@ -845,21 +849,25 @@ class RosterWindow:
 			self.model[child_iter][C_PADLOCK_PIXBUF] = tls_pixbuf
 		else:
 			self.model[child_iter][C_PADLOCK_PIXBUF] = None
-		path = self.model.get_path(child_iter)
-		account_name = account
-		accounts = [account]
+
 		if self.regroup:
 			account_name = _('Merged accounts')
 			accounts = []
-		iter = self._get_account_iter(account)
-		if not self.tree.row_expanded(path):
+		else:
+			account_name = account
+			accounts = [account]
+
+		path = self.model.get_path(child_iter)
+		if not self.tree.row_expanded(path) and self.model.iter_has_child(child_iter):
 			account_name = '[%s]' % account_name
+
 		if (gajim.account_is_connected(account) or (self.regroup and \
 		gajim.get_number_of_connected_accounts())) and gajim.config.get(
 		'show_contacts_number'):
 			nbr_on, nbr_total = gajim.contacts.get_nb_online_total_contacts(
 				accounts = accounts)
 			account_name += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
+
 		self.model[child_iter][C_NAME] = account_name
 		return False
 	
@@ -1168,6 +1176,34 @@ class RosterWindow:
 		self.tree.scroll_to_cell(path)
 		self.tree.set_cursor(path)
 
+
+	def _adjust_account_expand_collapse_state(self, account):
+		'''Expand/collapse account row based on self.collapsed_rows'''
+		iterA = self._get_account_iter(account)
+		if not iterA:
+			# thank you modelfilter
+			return
+		path = self.modelfilter.get_path(iterA)
+		if account in self.collapsed_rows:
+			self.tree.collapse_row(path)
+		else:
+			self.tree.expand_row(path, False)
+		return False
+
+
+	def _adjust_group_expand_collapse_state(self, group, account):
+		'''Expand/collapse group row based on self.collapsed_rows'''
+		iterG = self._get_group_iter(group, account)
+		if not iterG:
+			# Group not visible
+			return
+		path = self.modelfilter.get_path(iterG)
+		if account + group in self.collapsed_rows:
+			self.tree.collapse_row(path)
+		else:
+			self.tree.expand_row(path, False)
+		return False
+
 ################################################################################
 ### Roster and Modelfilter handling
 ################################################################################			
@@ -1413,17 +1449,6 @@ class RosterWindow:
 				resource = resource, keyID = keyID)
 			gajim.contacts.add_contact(account, contact1)
 
-			# when we draw the roster, we avoid having the same contact
-			# more than once (f.e. we avoid showing it twice when 2 resources)
-			for g in array[jid]['groups']:
-				if g in gajim.groups[account].keys():
-					continue
-
-				#if account + g in self.collapsed_rows:
-				#ishidden = False
-				#else:
-				ishidden = True
-				gajim.groups[account][g] = { 'expand': ishidden }
 			if gajim.config.get('ask_avatars_on_startup'):
 				pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(ji)
 				if pixbuf == 'ask':
@@ -2970,16 +2995,17 @@ class RosterWindow:
 				iter = model.get_iter(path)
 				if x > x_min and x < x_min + 27 and type_ == 'contact' and \
 				model.iter_has_child(iter):
-					account = model[path][C_ACCOUNT].decode('utf-8')
-					jid = model[path][C_JID].decode('utf-8')
+					# FIXME: Expand all meta contacts or only the current one?
+					#account = model[path][C_ACCOUNT].decode('utf-8')
+					#jid = model[path][C_JID].decode('utf-8')
 					# first cell in 1st column (the arrow SINGLE clicked)
-					iters = self._get_contact_iter(jid, account)
-					for iter in iters:
-						path = model.get_path(iter)
-						if (self.tree.row_expanded(path)):
-							self.tree.collapse_row(path)
-						else:
-							self.tree.expand_row(path, False)
+					#iters = self._get_contact_iter(jid, account)
+					#for iter in iters:
+					#	path = model.get_path(iter)
+					if (self.tree.row_expanded(path)):
+						self.tree.collapse_row(path)
+					else:
+						self.tree.expand_row(path, False)
 					return
 				# We just save on which row we press button, and open chat window on
 				# button release to be able to do DND without opening chat window
@@ -2994,16 +3020,17 @@ class RosterWindow:
 						self.tree.expand_row(path, False)
 
 				elif type_ == 'contact' and x > x_min and x < x_min + 27:
-					account = model[path][C_ACCOUNT].decode('utf-8')
-					jid = model[path][C_JID].decode('utf-8')
+					# FIXME: Expand all meta contacts or only the current one?
+					#account = model[path][C_ACCOUNT].decode('utf-8')
+					#jid = model[path][C_JID].decode('utf-8')
 					# first cell in 1st column (the arrow SINGLE clicked)
-					iters = self._get_contact_iter(jid, account)
-					for iter in iters:
-						path = model.get_path(iter)
-						if (self.tree.row_expanded(path)):
-							self.tree.collapse_row(path)
-						else:
-							self.tree.expand_row(path, False)
+					#iters = self._get_contact_iter(jid, account)
+					#for iter in iters:
+					#	path = model.get_path(iter)
+					if (self.tree.row_expanded(path)):
+						self.tree.collapse_row(path)
+					else:
+						self.tree.expand_row(path, False)
 
 	def on_req_usub(self, widget, list_):
 		'''Remove a contact. list_ is a list of (contact, account) tuples'''
@@ -3358,34 +3385,39 @@ class RosterWindow:
 	def on_roster_treeview_row_expanded(self, widget, iter, path):
 		'''When a row is expanded change the icon of the arrow'''
 		self._toggeling_row = True
-		model = self.tree.get_model()
+		model = widget.get_model()
 		child_model = model.get_model()
 		child_iter =  model.convert_iter_to_child_iter(iter)
+
 		if self.regroup: # merged accounts
 			accounts = gajim.connections.keys()
 		else:
 			accounts = [model[iter][C_ACCOUNT].decode('utf-8')]
+			
 		type_ = model[iter][C_TYPE]
 		if type_ == 'group':
-			child_model[child_iter][C_IMG] = gajim.interface.jabber_state_images['16'][
-				'opened']
-			jid = model[iter][C_JID].decode('utf-8')
+			child_model[child_iter][C_IMG] = gajim.interface.jabber_state_images[
+				'16']['opened']
+			group = model[iter][C_JID].decode('utf-8')
 			for account in accounts:
-				if gajim.groups[account].has_key(jid): # This account has this group
-					gajim.groups[account][jid]['expand'] = True
-					#if account + jid in self.collapsed_rows:
-					#	self.collapsed_rows.remove(account + jid)
+				if group in gajim.groups[account]: # This account has this group
+					gajim.groups[account][group]['expand'] = True
+					if account + group in self.collapsed_rows:
+						self.collapsed_rows.remove(account + group)
 		elif type_ == 'account':
 			account = accounts[0] # There is only one cause we don't use merge
-			#if account in self.collapsed_rows:
-			#	self.collapsed_rows.remove(account)
-			for g in gajim.groups[account]:
-				groupIter = self._get_group_iter(g, account)
-				if groupIter and gajim.groups[account][g]['expand']:
-					pathG = model.get_path(groupIter)
-					self.tree.expand_row(pathG, False)
+			if account in self.collapsed_rows:
+				self.collapsed_rows.remove(account)
 			self.draw_account(account)
+			# When we expand, groups are collapsed. Restore expand state
+			for group in gajim.groups[account]:
+				if gajim.groups[account][group]['expand']:
+					iter = self._get_group_iter(group, account)
+					if iter:	
+						path = model.get_path(iter)
+						self.tree.expand_row(path, False)
 		elif type_ == 'contact':
+			# Metacontact got toggled, update icon
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			self.draw_contact(jid, account)
@@ -3395,49 +3427,49 @@ class RosterWindow:
 	def on_roster_treeview_row_collapsed(self, widget, iter, path):
 		'''When a row is collapsed change the icon of the arrow'''
 		self._toggeling_row = True
-		model = self.tree.get_model()
+		model = widget.get_model()
 		child_model = model.get_model()
 		child_iter =  model.convert_iter_to_child_iter(iter)
+
 		if self.regroup: # merged accounts
 			accounts = gajim.connections.keys()
 		else:
 			accounts = [model[iter][C_ACCOUNT].decode('utf-8')]
+			
 		type_ = model[iter][C_TYPE]
 		if type_ == 'group':
-			child_model[child_iter][C_IMG] = gajim.interface.jabber_state_images['16'][
-				'closed']
-			jid = model[iter][C_JID].decode('utf-8')
+			child_model[child_iter][C_IMG] = gajim.interface.jabber_state_images[
+				'16']['closed']
+			group = model[iter][C_JID].decode('utf-8')
 			for account in accounts:
-				if gajim.groups[account].has_key(jid): # This account has this group
-					gajim.groups[account][jid]['expand'] = False
-					#if not account + jid in self.collapsed_rows:
-					#	self.collapsed_rows.append(account + jid)
+				if group in gajim.groups[account]: # This account has this group
+					gajim.groups[account][group]['expand'] = False
+					if not account + group in self.collapsed_rows:
+						self.collapsed_rows.append(account + group)
 		elif type_ == 'account':
 			account = accounts[0] # There is only one cause we don't use merge
-			#if not account in self.collapsed_rows:
-			#	self.collapsed_rows.append(account)
+			if not account in self.collapsed_rows:
+				self.collapsed_rows.append(account)
 			self.draw_account(account)
 		elif type_ == 'contact':
+			# Metacontact got toggled, update icon
 			jid = model[iter][C_JID].decode('utf-8')
 			account = model[iter][C_ACCOUNT].decode('utf-8')
 			self.draw_contact(jid, account)
 			
 		self._toggeling_row = False
 
-
 	def on_model_row_has_child_toggled(self, model, path, iter):
 		'''This signal is emitted when a row has gotten the first child row or lost its last child row.
 		Expand Parent if necessary.
 		'''
 		if self._toggeling_row:
-			# Ugly hack: (workaround)
 			# Signal is emitted when we write to our model
 			return
 			
 		type_ = model[iter][C_TYPE]
 		account = model[iter][C_ACCOUNT]
 		if not account:
-			print "Yet another thing that SHOULD NOT happend....", model,path,iter,account,type_
 			return
 
 		account = account.decode('utf-8')
@@ -3445,34 +3477,16 @@ class RosterWindow:
 
 		if type_ == 'account':
 			if not self.filtering:
-				# Only expand row when we create and add the account to the roster
-				self.tree.expand_row(path, False)
-	
-		if type_ == 'group':
-			group = model[iter][C_JID].decode('utf-8')
-			if not group:
-				return
-			if gajim.groups[account].has_key(group) and gajim.groups[account][group]['expand']:
-				# Ugly workaround. When we expand the last groupchat the entry is removd from the dict
-				self.tree.expand_row(path, False)
-			else:
-				self.tree.collapse_row(path)
-			
-			#if account in self.collapsed_rows or\
-			#account + group in self.collapsed_rows:
-			#	print "collapsing group", group
-			#	self.tree.collapse_row(path, False)
-			#else:
-			#	#self.tree.collapse_row(path[:-1], False)
-			#	print "expanding group", group
-			#	self.tree.expand_to_path(path)
+				# We just added the account to roster and it got its first contacts
+				# Restore expand collapse state
+				self._adjust_account_expand_collapse_state(account)
 
 		if type_ == 'contact' and self.model.iter_has_child(child_iter):
 			# we are a bigbrother metacontact
 			# redraw us to show/hide expand icon
-			jid = model[iter][C_JID].decode('utf-8')
 			if self.filtering:
 				# Prevent endless loops
+				jid = model[iter][C_JID].decode('utf-8')
 				gobject.idle_add(self.draw_contact, jid, account)
 
 	def on_treeview_selection_changed(self, selection):
