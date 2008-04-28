@@ -1394,7 +1394,7 @@ class FTOverwriteConfirmationDialog(ConfirmationDialog):
 		self.add_action_widget(b, 200)
 
 class CommonInputDialog:
-	'''Class for Input dialog'''
+	'''Common Class for Input dialogs'''
 	def __init__(self, title, label_str, is_modal, ok_handler, cancel_handler):
 		# if modal is True you also need to call get_response()
 		# and ok_handler won't be used
@@ -1452,7 +1452,7 @@ class InputDialog(CommonInputDialog):
 		return self.input_entry.get_text().decode('utf-8')
 
 class InputTextDialog(CommonInputDialog):
-	'''Class for Input dialog'''
+	'''Class for multilines Input dialog (more place than InputDialog)'''
 	def __init__(self, title, label_str, input_str = None, is_modal = True,
 	ok_handler = None, cancel_handler = None):
 		self.xml = gtkgui_helpers.get_glade('input_text_dialog.glade')

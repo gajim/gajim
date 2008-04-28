@@ -4,6 +4,7 @@
 <glade-interface>
   <widget class="GtkDialog" id="input_dialog">
     <property name="border_width">6</property>
+    <property name="default_width">400</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="has_separator">False</property>
     <signal name="destroy" handler="on_input_dialog_destroy"/>
@@ -49,12 +50,13 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                <property name="vscrollbar_policy">GTK_POLICY_NEVER</property>
                 <property name="shadow_type">GTK_SHADOW_IN</property>
                 <child>
                   <widget class="GtkTextView" id="input_textview">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="wrap_mode">GTK_WRAP_WORD</property>
                   </widget>
                 </child>
               </widget>
