@@ -3481,13 +3481,16 @@ class RosterWindow:
 				# Restore expand collapse state
 				self._adjust_account_expand_collapse_state(account)
 
-		if type_ == 'contact' and self.model.iter_has_child(child_iter):
+		elif type_ == 'contact' and self.model.iter_has_child(child_iter):
 			# we are a bigbrother metacontact
 			# redraw us to show/hide expand icon
 			if self.filtering:
 				# Prevent endless loops
 				jid = model[iter][C_JID].decode('utf-8')
 				gobject.idle_add(self.draw_contact, jid, account)
+		elif type_ == 'group':
+			group = model[iter][C_JID].decode('utf-8')
+			self._adjust_group_expand_collapse_state(group, account)
 
 	def on_treeview_selection_changed(self, selection):
 		'''Called when selection in TreeView has changed.
