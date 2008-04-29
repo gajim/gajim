@@ -125,7 +125,6 @@
               <widget class="GtkEntry" id="uid_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">*</property>
                 <property name="activates_default">True</property>
                 <signal name="changed" handler="on_uid_entry_changed"/>
               </widget>
@@ -154,7 +153,6 @@
               <widget class="GtkEntry" id="nickname_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">*</property>
                 <property name="activates_default">True</property>
               </widget>
               <packing>

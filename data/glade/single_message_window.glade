@@ -51,7 +51,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="no_show_all">True</property>
-                <property name="invisible_char">*</property>
               </widget>
               <packing>
                 <property name="left_attach">1</property>
@@ -79,7 +78,6 @@
               <widget class="GtkEntry" id="subject_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">*</property>
               </widget>
               <packing>
                 <property name="left_attach">1</property>
@@ -94,7 +92,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="no_show_all">True</property>
-                <property name="invisible_char">*</property>
               </widget>
               <packing>
                 <property name="left_attach">1</property>

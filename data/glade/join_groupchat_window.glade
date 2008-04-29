@@ -46,7 +46,6 @@
 	      <property name="max_length">0</property>
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
-	      <property name="invisible_char">*</property>
 	      <property name="activates_default">True</property>
 	      <signal name="changed" handler="on_required_entry_changed" last_modification_time="Sat, 14 Jan 2006 21:51:39 GMT"/>
 	    </widget>
@@ -68,7 +67,6 @@
 	      <property name="max_length">0</property>
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
-	      <property name="invisible_char">*</property>
 	      <property name="activates_default">True</property>
 	      <signal name="changed" handler="on_required_entry_changed" last_modification_time="Sat, 14 Jan 2006 21:51:24 GMT"/>
 	    </widget>
@@ -219,7 +217,6 @@
 	      <property name="max_length">0</property>
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
-	      <property name="invisible_char">*</property>
 	      <property name="activates_default">True</property>
 	    </widget>
 	    <packing>

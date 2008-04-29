@@ -234,7 +234,6 @@ SOCKS5</property>
 			      <property name="max_length">0</property>
 			      <property name="text" translatable="yes"></property>
 			      <property name="has_frame">True</property>
-			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
 			      <signal name="changed" handler="on_proxyname_entry_changed" last_modification_time="Wed, 08 Jun 2005 17:43:44 GMT"/>
 			    </widget>
@@ -349,7 +348,6 @@ SOCKS5</property>
 			      <property name="max_length">0</property>
 			      <property name="text" translatable="yes"></property>
 			      <property name="has_frame">True</property>
-			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
 			      <signal name="changed" handler="on_proxyhost_entry_changed" last_modification_time="Wed, 08 Jun 2005 20:56:20 GMT"/>
 			    </widget>
@@ -371,7 +369,6 @@ SOCKS5</property>
 			      <property name="max_length">0</property>
 			      <property name="text"></property>
 			      <property name="has_frame">True</property>
-			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
 			      <signal name="changed" handler="on_proxyport_entry_changed" last_modification_time="Wed, 08 Jun 2005 20:57:45 GMT"/>
 			    </widget>
@@ -480,7 +477,6 @@ SOCKS5</property>
 			      <property name="max_length">0</property>
 			      <property name="text" translatable="yes"></property>
 			      <property name="has_frame">True</property>
-			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
 			      <signal name="changed" handler="on_proxypass_entry_changed" last_modification_time="Wed, 08 Jun 2005 20:58:01 GMT"/>
 			    </widget>
@@ -502,7 +498,6 @@ SOCKS5</property>
 			      <property name="max_length">0</property>
 			      <property name="text" translatable="yes"></property>
 			      <property name="has_frame">True</property>
-			      <property name="invisible_char">*</property>
 			      <property name="activates_default">False</property>
 			      <signal name="changed" handler="on_proxyuser_entry_changed" last_modification_time="Wed, 08 Jun 2005 20:57:53 GMT"/>
 			    </widget>

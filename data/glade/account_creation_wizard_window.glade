@@ -143,7 +143,6 @@ to the Jabber network.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="has_focus">True</property>
-                        <property name="invisible_char">*</property>
                         <signal name="changed" handler="on_username_entry_changed"/>
                         <signal name="key_press_event" handler="on_username_entry_key_press_event"/>
                       </widget>
@@ -227,7 +226,6 @@ to the Jabber network.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="visibility">False</property>
-                        <property name="invisible_char">*</property>
                         <property name="activates_default">True</property>
                       </widget>
                       <packing>

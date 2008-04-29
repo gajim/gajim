@@ -181,7 +181,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="tooltip" translatable="yes">Resource is sent to the Jabber server in order to separate the same JID in two or more parts depending on the number of the clients connected in the same server with the same account. So you might be connected in the same account with resource 'Home' and 'Work' at the same time. The resource which has the highest priority will get the events. (see below)</property>
-                            <property name="invisible_char">*</property>
                             <property name="text" translatable="yes">Gajim</property>
                             <signal name="focus_out_event" handler="on_resource_entry1_focus_out_event"/>
                           </widget>
@@ -198,7 +197,6 @@
                           <widget class="GtkEntry" id="jid_entry1">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">*</property>
                             <property name="activates_default">True</property>
                             <signal name="focus_out_event" handler="on_jid_entry1_focus_out_event"/>
                           </widget>
@@ -360,7 +358,6 @@
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="visibility">False</property>
-                            <property name="invisible_char">*</property>
                             <property name="activates_default">True</property>
                             <signal name="changed" handler="on_password_entry1_changed"/>
                           </widget>
@@ -684,7 +681,6 @@
                                           <widget class="GtkEntry" id="custom_host_entry1">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="invisible_char">*</property>
                                             <signal name="changed" handler="on_custom_host_entry1_changed"/>
                                           </widget>
                                           <packing>
@@ -706,7 +702,6 @@
                                           <widget class="GtkEntry" id="custom_port_entry1">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="invisible_char">*</property>
                                             <property name="width_chars">6</property>
                                             <property name="text">5222</property>
                                             <signal name="focus_out_event" handler="on_custom_port_entry_focus_out_event"/>
