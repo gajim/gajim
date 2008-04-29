@@ -255,15 +255,15 @@ class RosterWindow:
 				gobject.markup_escape_text(account),
 				'account', our_jid, account, None, tls_pixbuf])	
 
-		if not self.starting:
-			self.draw_account(account)
+		self.draw_account(account)
 
 
 	def add_account_contacts(self, account):
-		'''Add all contacts and groups of the given account to roster
-		and draw them.
+		'''Add all contacts and groups of the given account to roster,
+		draw them and account.
 		'''
 		c1 = time.clock()
+		self.starting = True
 		jids = gajim.contacts.get_jid_list(account)
 		
 		self.tree.freeze_child_notify()
@@ -283,6 +283,7 @@ class RosterWindow:
 		for group in gajim.groups[account].keys():
 			self.draw_group(group, account)
 		self.draw_account(account)
+		self.starting = False
 		c10 = time.clock()
 		
 		if jids:
@@ -556,9 +557,10 @@ class RosterWindow:
 	
 	
 	def add_contact(self, jid, account):
-		'''Add contact to roster
+		'''Add contact to roster and draw him.
 		
-		Add contact to all its group. If it's a Metacontact, add the whole family.
+		Add contact to all its group and redraw the groups, the contact and the
+		account. If it's a Metacontact, add and draw the whole family.
 		Do nothing if the contact is already in roster.		
 		
 		Return the added contact instance. If it is a Metacontact return 
@@ -601,6 +603,22 @@ class RosterWindow:
 			# We are a normal contact
 			contacts = [(contact, account),]
 			self._add_entity(contact, account)
+
+		# Draw the contact and its groups contact
+		if contact.is_transport():
+			contact.groups = [_('Transports')]
+		if is_observer:
+			contact.groups = [_('Observers')]
+		groups = contact.groups
+		if not groups:
+			groups = [_('General')]
+		if not self.starting:
+			for c, acc in contacts:
+				self.draw_contact(c.jid, acc)
+				self.draw_avatar(c.jid, acc)
+			for group in groups:			
+				self.draw_group(group, account)
+			self.draw_account(account)
 
 		return contacts[0][0] # it's contact/big brother with highest priority
 
@@ -1133,11 +1151,9 @@ class RosterWindow:
 		# clear the model, only if it is not empty
 		if self.model:
 			self.model.clear()
-		self.starting = True
 		for acct in gajim.connections:
 			self.add_account(acct)
 			self.add_account_contacts(acct)
-		self.starting = False
 		# Recalculate column width for ellipsizing
 		self.tree.columns_autosize()
 		
@@ -1264,6 +1280,8 @@ class RosterWindow:
 							return True
 			return False
 		if type_ == 'contact':
+			if gajim.config.get('showoffline'):
+				return True
 			contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 			return self.contact_is_visible(contact, account)
 		if type_ == 'agent':
@@ -3472,9 +3490,8 @@ class RosterWindow:
 				jid = model[iter][C_JID].decode('utf-8')
 				gobject.idle_add(self.draw_contact, jid, account)
 		elif type_ == 'group':
-			if self.filtering:
-				group = model[iter][C_JID].decode('utf-8')
-				self._adjust_group_expand_collapse_state(group, account)
+			group = model[iter][C_JID].decode('utf-8')
+			self._adjust_group_expand_collapse_state(group, account)
 
 	def on_treeview_selection_changed(self, selection):
 		'''Called when selection in TreeView has changed.
