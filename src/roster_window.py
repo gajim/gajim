@@ -4312,18 +4312,18 @@ class RosterWindow:
 		if not session:
 			session = conn.get_session(fjid, None, 'chat')
 
-		win = gajim.interface.msg_win_mgr.get_window(fjid, account)
-		if not win:
+		if not session.control:
 			session.control = self.new_chat(session, contact, account, resource=resource)
 
 			if len(gajim.events.get_events(account, fjid)):
 				session.control.read_queue()
 
-			win = gajim.interface.msg_win_mgr.get_window(fjid, account)
 			# last message is long time ago
 			gajim.last_message_time[account][session.control.get_full_jid()] = 0
 
-		win.set_active_tab(fjid, account)
+		win = session.control.parent_win
+		win.set_active_tab(session)
+
 		if conn.is_zeroconf and conn.status in ('offline', 'invisible'):
 			win.get_control(fjid, account).got_disconnected()
 
@@ -5204,6 +5204,7 @@ class RosterWindow:
 			start = '[' + str(nb_unread) + ']  '
 		elif nb_unread == 1:
 			start = '*  '
+
 		self.window.set_title(start + 'Gajim')
 
 		gtkgui_helpers.set_unset_urgency_hint(self.window, nb_unread)

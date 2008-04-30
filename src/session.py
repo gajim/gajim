@@ -19,6 +19,21 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		self.control = None
 
+	# remove events associated with this session from the queue
+	def remove_events(self, types):
+		any_removed = False
+
+		for event in gajim.events.get_events(self.conn, self.jid, types=types):
+			if event.parameters[8] != self:
+				continue
+
+			r = gajim.events.remove_events(self.conn, self.jid, event)
+
+			if not_any_removed:
+				any_removed = r
+
+		return any_removed
+
 	# extracts chatstate from a <message/> stanza
 	def get_chatstate(self, msg, msgtxt):
 		composing_xep = None
@@ -93,16 +108,18 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			jid = jid.replace('@', '')
 
 		groupchat_control = gajim.interface.msg_win_mgr.get_control(jid, self.conn.name)
-		if not groupchat_control and \
-		jid in gajim.interface.minimized_controls[self.conn.name]:
-			groupchat_control = self.minimized_controls[self.conn.name][jid]
+
+# XXX fixme
+#		if not groupchat_control and \
+#		jid in gajim.interface.minimized_controls[self.conn.name]:
+#			groupchat_control = self.minimized_controls[self.conn.name][jid]
 
 		pm = False
-		if groupchat_control and groupchat_control.type_id == \
-		message_control.TYPE_GC:
+#		if groupchat_control and groupchat_control.type_id == \
+#		message_control.TYPE_GC:
 			# It's a Private message
-			pm = True
-			msg_type = 'pm'
+#			pm = True
+#			msg_type = 'pm'
 
 		jid_of_control = full_jid_with_resource
 
@@ -184,6 +201,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 	def roster_message(self, jid, msg, tim, encrypted=False, msg_type='',
 	subject=None, resource='', msg_id=None, user_nick='',
 	advanced_notif_num=None, xhtml=None, form_node=None):
+
 		contact = None
 		# if chat window will be for specific resource
 		resource_for_chat = resource

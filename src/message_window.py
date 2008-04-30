@@ -152,8 +152,9 @@ class MessageWindow(object):
 
 	def get_num_controls(self):
 		n = 0
-		for dict in self._controls.values():
-			n += len(dict)
+		for jid_dict in self._controls.values():
+			for dict in jid_dict.values():
+				n += len(dict)
 		return n
 
 	def resize(self, width, height):
@@ -206,7 +207,11 @@ class MessageWindow(object):
 		if not self._controls.has_key(control.account):
 			self._controls[control.account] = {}
 		fjid = control.get_full_jid()
-		self._controls[control.account][fjid] = control
+
+		if not self._controls[control.account].has_key(fjid):
+			self._controls[control.account][fjid] = {}
+
+		self._controls[control.account][fjid][control.session.thread_id] = control
 
 		if self.get_num_controls() == 2:
 			# is first conversation_textview scrolled down ?
@@ -391,8 +396,8 @@ class MessageWindow(object):
 		else:
 			gtkgui_helpers.set_unset_urgency_hint(self.window, False)
 
-	def set_active_tab(self, jid, acct):
-		ctrl = self._controls[acct][jid]
+	def set_active_tab(self, session):
+		ctrl = self._controls[session.conn.name][session.jid][session.thread_id]
 		ctrl_page = self.notebook.page_num(ctrl.widget)
 		self.notebook.set_current_page(ctrl_page)
 
@@ -424,7 +429,12 @@ class MessageWindow(object):
 		self.notebook.remove_page(self.notebook.page_num(ctrl.widget))
 
 		fjid = ctrl.get_full_jid()
-		del self._controls[ctrl.account][fjid]
+		thread_id = ctrl.session.thread_id
+		del self._controls[ctrl.account][fjid][thread_id]
+
+		if len(self._controls[ctrl.account][fjid]) == 0:
+			del self._controls[ctrl.account][fjid]
+
 		if len(self._controls[ctrl.account]) == 0:
 			del self._controls[ctrl.account]
 
@@ -563,9 +573,10 @@ class MessageWindow(object):
 			del gajim.last_message_time[acct][old_jid]
 
 	def controls(self):
-		for ctrl_dict in self._controls.values():
-			for ctrl in ctrl_dict.values():
-				yield ctrl
+		for jid_dict in self._controls.values():
+			for ctrl_dict in jid_dict.values():
+				for ctrl in ctrl_dict.values():
+					yield ctrl
 
 	def move_to_next_unread_tab(self, forward):
 		ind = self.notebook.get_current_page()
