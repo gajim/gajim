@@ -859,7 +859,8 @@ class RosterWindow:
 			accounts = [account]
 
 		path = self.model.get_path(child_iter)
-		if not self.tree.row_expanded(path) and self.model.iter_has_child(child_iter):
+		if account in self.collapsed_rows and \
+		self.model.iter_has_child(child_iter):
 			account_name = '[%s]' % account_name
 
 		if (gajim.account_is_connected(account) or (self.regroup and \
