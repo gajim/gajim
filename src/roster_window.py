@@ -3475,23 +3475,24 @@ class RosterWindow:
 			return
 
 		account = account.decode('utf-8')
-		child_iter = model.convert_iter_to_child_iter(iter)
-
-		if type_ == 'account':
+		
+		if type_ == 'contact':
+			child_iter = model.convert_iter_to_child_iter(iter)
+		 	if self.model.iter_has_child(child_iter):
+				# we are a bigbrother metacontact
+				# redraw us to show/hide expand icon
+				if self.filtering:
+					# Prevent endless loops
+					jid = model[iter][C_JID].decode('utf-8')
+					gobject.idle_add(self.draw_contact, jid, account)
+		elif type_ == 'group':
+			group = model[iter][C_JID].decode('utf-8')
+			self._adjust_group_expand_collapse_state(group, account)
+		elif type_ == 'account':
 			if not self.filtering:
 				# We just added the account to roster and it got its first contacts
 				# Restore expand collapse state
 				self._adjust_account_expand_collapse_state(account)
-		elif type_ == 'contact' and self.model.iter_has_child(child_iter):
-			# we are a bigbrother metacontact
-			# redraw us to show/hide expand icon
-			if self.filtering:
-				# Prevent endless loops
-				jid = model[iter][C_JID].decode('utf-8')
-				gobject.idle_add(self.draw_contact, jid, account)
-		elif type_ == 'group':
-			group = model[iter][C_JID].decode('utf-8')
-			self._adjust_group_expand_collapse_state(group, account)
 
 	def on_treeview_selection_changed(self, selection):
 		'''Called when selection in TreeView has changed.
