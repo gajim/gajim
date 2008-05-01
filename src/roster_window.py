@@ -112,7 +112,7 @@ class RosterWindow:
 		if not model:
 			model = self.modelfilter
 		if not account_iter:
-		 	account_iter = self._get_account_iter(account, model)
+			account_iter = self._get_account_iter(account, model)
 		group_iter = model.iter_children(account_iter)
 		# C_NAME column contacts the pango escaped group name
 		while group_iter:
@@ -3488,7 +3488,7 @@ class RosterWindow:
 		
 		if type_ == 'contact':
 			child_iter = model.convert_iter_to_child_iter(iter)
-		 	if self.model.iter_has_child(child_iter):
+			if self.model.iter_has_child(child_iter):
 				# we are a bigbrother metacontact
 				# redraw us to show/hide expand icon
 				if self.filtering:
