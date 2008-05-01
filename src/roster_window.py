@@ -810,6 +810,7 @@ class RosterWindow:
 		if jid in gajim.newly_added[account]:
 			gajim.newly_added[account].remove(jid)
 			self.draw_contact(jid, account)
+			# redraw group visibility
 			self.refilter_shown_roster_items()
 
 	# FIXME: maybe move to gajim.py
@@ -3706,11 +3707,6 @@ class RosterWindow:
 					if data['jid'] == c_source.jid and\
 					data['account'] == account:
 						continue
-					if len(family) == 2:
-						# we deleted last remaining little brother, remove the meta 
-						# tag for the parent
-						gajim.contacts.remove_metacontact(data['account'], \
-							data['jid'])
 					self.add_contact(data['jid'], data['account'])
 					break
 
