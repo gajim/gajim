@@ -99,19 +99,21 @@ class RosterWindow:
 		return account_iter
 
 
-	def _get_group_iter(self, name, account, model = None):
+	def _get_group_iter(self, name, account, account_iter = None, model = None):
 		''' Return the gtk.TreeIter of the given group or None if not found.
 
     		Keyword arguments:
     		name -- the group name
 		account -- the account name
+		account_iter -- the iter of the account the model (default None)
     		model -- the data model (default TreeFilterModel)
 		
 		'''
 		if not model:
 			model = self.modelfilter
-		root = self._get_account_iter(account, model)
-		group_iter = model.iter_children(root)
+		if not account_iter:
+		 	account_iter = self._get_account_iter(account, model)
+		group_iter = model.iter_children(account_iter)
 		# C_NAME column contacts the pango escaped group name
 		while group_iter:
 			group_name = model[group_iter][C_JID].decode('utf-8')
@@ -139,62 +141,71 @@ class RosterWindow:
 		return None
 
 
-	def _get_contact_iter(self, jid, account, model = None):
-		''' Return a list of gtk.TreeIter of the given jid.
+	def _get_contact_iter(self, jid, account, contact = None, model = None):
+		''' Return a list of gtk.TreeIter of the given contact.
 
     		Keyword arguments:
 		jid -- the jid without resource
     		account -- the account
+		contact -- the contact (default None)
     		model -- the data model (default TreeFilterModel)
 		
 		'''
 		if not model:
 			model = self.modelfilter
+			if model is None: # when closing Gajim model can be none (async pbs?)
+				return []
+
 		if jid == gajim.get_jid_from_account(account):
 			iter = self._get_self_contact_iter(account, model)
 			if iter:
 				return [iter]
 			else:
 				return []
+
+		if not contact:
+			contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+			if not contact:
+				# We don't know this contact
+				return
+
+		groups = contact.groups
+		if not groups:
+			groups = [_('General')]
 		acct = self._get_account_iter(account, model)
-		found = []
-		if model is None: # when closing Gajim model can be none (async pbs?)
-			return found
-		group_iter = model.iter_children(acct)
-		while group_iter:
+		found = [] # the contact iters. One per group
+		for group in groups:
+			group_iter = self._get_group_iter(group, account, acct,  model)
 			contact_iter = model.iter_children(group_iter)
+
 			while contact_iter:
+				# Loop over all contacts in this group
 				iter_jid = model[contact_iter][C_JID]
 				if iter_jid and jid == iter_jid.decode('utf-8') and \
-					account == model[contact_iter][C_ACCOUNT].decode('utf-8'):
+				account == model[contact_iter][C_ACCOUNT].decode('utf-8'):
+					# only one iter per group
 					found.append(contact_iter)
-				# find next contact iter
-				if model.iter_has_child(contact_iter):
-					# his first child if it has some
+					contact_iter = None
+				elif model.iter_has_child(contact_iter):
+					# it's a big brother and has children
 					contact_iter = model.iter_children(contact_iter)
-				else:
+				else:	
+					# try to find next contact:
+					# other contact in this group or brother contact
 					next_contact_iter = model.iter_next(contact_iter)
-					if not next_contact_iter:
-						# now we need to go up
+					if next_contact_iter:
+						contact_iter = next_contact_iter
+					else:
+						# It's the last one. Go up if we are big brother
 						parent_iter = model.iter_parent(contact_iter)
-						parent_type = model[parent_iter][C_TYPE]
-						while parent_type != 'group':
+						if parent_iter and model[parent_iter][C_TYPE] == 'contact':
 							contact_iter = model.iter_next(parent_iter)
-							if contact_iter:
-								break
-							else:
-								parent_iter = model.iter_parent(parent_iter)
-								parent_type = model[parent_iter][C_TYPE]
 						else:
 							# we tested all contacts in this group
 							contact_iter = None
-					else:
-						# his brother if he has
-						contact_iter = next_contact_iter
-			group_iter = model.iter_next(group_iter)
 		return found
-		
-
+	
+	
 	def _iter_is_separator(self, model, iter):
 		''' Return True if the given iter is a separator.
 		
@@ -317,7 +328,7 @@ class RosterWindow:
 			# Add contact under big brother
 
 			parent_iters = self._get_contact_iter(big_brother_contact.jid,
-				big_brother_account, self.model)
+				big_brother_account, big_brother_contact, self.model)
 			assert len(parent_iters) > 0,\
 				"Big brother is not yet in roster!"
 
@@ -336,7 +347,7 @@ class RosterWindow:
 				if not groups:
 					groups = [_('General')]
 			for group in groups:
-				child_iterG = self._get_group_iter(group, account, self.model)
+				child_iterG = self._get_group_iter(group, account, model = self.model)
 				if not child_iterG:
 					# Group is not yet in roster, add it!
 					child_iterA = self._get_account_iter(account, self.model)
@@ -386,7 +397,7 @@ class RosterWindow:
     		groups -- list of groups to remove the contact from. (default groups in contact.groups).
 
 		'''
-		iters = self._get_contact_iter(contact.jid, account, self.model)
+		iters = self._get_contact_iter(contact.jid, account, contact, self.model)
 		assert iters, "%s shall be removed but is not in roster" % contact.jid
 
 		parent_iter = self.model.iter_parent(iters[0])
@@ -442,7 +453,7 @@ class RosterWindow:
 		big_brother_account = big_brother_data['account']
 		big_brother_contact = gajim.contacts.get_first_contact_from_jid(big_brother_account, big_brother_jid)
 
-		assert len(self._get_contact_iter(big_brother_jid, big_brother_account, self.model)) == 0,\
+		assert len(self._get_contact_iter(big_brother_jid, big_brother_account, big_brother_contact, self.model)) == 0,\
 			"Big brother %s already in roster  \n Family: %s" % (big_brother_jid, family)
 		self._add_entity(big_brother_contact, big_brother_account)
 		
@@ -460,7 +471,7 @@ class RosterWindow:
 				# Corresponding account is not connected
 				continue
 			
-			assert len(self._get_contact_iter(_jid, _account, self.model)) == 0,\
+			assert len(self._get_contact_iter(_jid, _account, _contact, self.model)) == 0,\
 				"%s already in roster. \n Family: " % (_jid, nearby_family)
 			self._add_entity(_contact, _account, big_brother_contact = big_brother_contact,
 				big_brother_account = big_brother_account)
@@ -491,7 +502,7 @@ class RosterWindow:
 			_jid = data['jid']
 			_contact = gajim.contacts.get_first_contact_from_jid(_account, _jid)
 			
-			iters = self._get_contact_iter(_jid, _account, self.model)
+			iters = self._get_contact_iter(_jid, _account, _contact, self.model)
 			if not iters or not _contact:
 				# Family might not be up to date.
 				# Only try to remove what is actually in the roster
@@ -512,13 +523,13 @@ class RosterWindow:
 
 			ok = self._remove_entity(_contact, _account)
 			assert ok, "%s was not removed" % _jid
-			assert len(self._get_contact_iter(_jid, _account, self.model)) == 0,\
+			assert len(self._get_contact_iter(_jid, _account, _contact, self.model)) == 0,\
 				"%s is removed but still in roster" % _jid
 	
 		if not family_in_roster:
 			return False
 
-		iters = self._get_contact_iter(old_big_jid, old_big_account, self.model)
+		iters = self._get_contact_iter(old_big_jid, old_big_account, old_big_contact, self.model)
 		assert len(iters) > 0, "Old Big Brother %s is not in roster anymore" % old_big_jid
 		assert not self.model.iter_children(iters[0]),\
 			"Old Big Brother still has children" % old_big_jid
@@ -529,7 +540,7 @@ class RosterWindow:
 		
 		ok = self._remove_entity(old_big_contact, old_big_account)
 		assert ok, "Old Big Brother %s not removed" % old_big_jid
-		assert len(self._get_contact_iter(old_big_jid, old_big_account, self.model)) == 0,\
+		assert len(self._get_contact_iter(old_big_jid, old_big_account, old_big_contact, self.model)) == 0,\
 			"Old Big Brother %s is removed but still in roster" % old_big_jid
 			
 		return True
@@ -543,7 +554,7 @@ class RosterWindow:
 		jid = gajim.get_jid_from_account(account)
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 			
-		assert len(self._get_contact_iter(jid, account, self.model)) == 0,\
+		assert len(self._get_contact_iter(jid, account, contact, self.model)) == 0,\
 			"Self contact %s already in roster" % jid
 
 		child_iterA = self._get_account_iter(account, self.model)
@@ -572,11 +583,10 @@ class RosterWindow:
 		account -- the corresponding account.
 		
 		'''
-		if len(self._get_contact_iter(jid, account, self.model)):
+		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
+		if len(self._get_contact_iter(jid, account, contact, self.model)):
 			# If contact already in roster, do nothing
 			return
-
-		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 
 		if jid == gajim.get_jid_from_account(account):
 			if contact.resource != gajim.connections[account].server_resource:
@@ -637,11 +647,11 @@ class RosterWindow:
 		account -- the corresponding account.
 		
 		'''
-		iters = self._get_contact_iter(jid, account, self.model)
+		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
+
+		iters = self._get_contact_iter(jid, account, contact, self.model)
 		if not iters:
 			return
-
-		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 
 		# Remove contact from roster
 		family = gajim.contacts.get_metacontacts_family(account, jid)
@@ -872,7 +882,7 @@ class RosterWindow:
 		return False
 	
 	def draw_group(self, group, account):
-		child_iter = self._get_group_iter(group, account, self.model)
+		child_iter = self._get_group_iter(group, account, model = self.model)
 		if not child_iter:
 			# Eg. We redraw groups after we removed a entitiy
 			# and its empty groups
@@ -908,14 +918,14 @@ class RosterWindow:
 	def draw_contact(self, jid, account, selected = False, focus = False):
 		'''draw the correct state image, name BUT not avatar'''
 		# focus is about if the roster window has toplevel-focus or not
-	
-		child_iters = self._get_contact_iter(jid, account, self.model)
-		if not child_iters:
-			return False 
-			
 		contact_instances = gajim.contacts.get_contacts(account, jid)
 		contact = gajim.contacts.get_highest_prio_contact_from_contacts(
 			contact_instances)
+
+		child_iters = self._get_contact_iter(jid, account, contact, self.model)
+		if not child_iters:
+			return False 
+
 		name = gobject.markup_escape_text(contact.get_shown_name())
 
 		# gets number of unread gc marked messages
@@ -1008,8 +1018,7 @@ class RosterWindow:
 
 			if big_brother_jid == jid and big_brother_account == account:
 				# We are the big brother. But have also been before?
-				iters = self._get_contact_iter(jid, account, self.model)
-				if self.model.iter_has_child(iters[0]):
+				if self.model.iter_has_child(child_iters[0]):
 					# We have children. We must have been
 					# big brother even before
 					pass
@@ -1035,8 +1044,8 @@ class RosterWindow:
 			if c_icon_name in ('event', 'muc_active', 'muc_inactive'):
 				icon_name = c_icon_name
 				break
- 	
-		iters = self._get_contact_iter(jid, account)
+
+		iters = self._get_contact_iter(jid, account, contact)
 		if iters and self.modelfilter.iter_has_child(iters[0]):
 			# We are big brother contact and visible in the roster
 			iter = iters[0]
@@ -1078,7 +1087,8 @@ class RosterWindow:
 				icon_name = icon_name)
 
 		img = state_images[icon_name]
-		child_iters = self._get_contact_iter(jid, account, self.model)
+		# Old iters might be invalid!
+		child_iters = self._get_contact_iter(jid, account, model = self.model)
 		for child_iter in child_iters:
 			self.model[child_iter][C_IMG] = img
 			self.model[child_iter][C_NAME] = name
@@ -1090,7 +1100,7 @@ class RosterWindow:
 
 
 	def draw_avatar(self, jid, account):
-		iters = self._get_contact_iter(jid, account, self.model)
+		iters = self._get_contact_iter(jid, account, model = self.model)
 		if not iters or not gajim.config.get('show_avatars_in_roster'):
 			return
 		jid = self.model[iters[0]][C_JID]
@@ -1976,7 +1986,7 @@ class RosterWindow:
 		
 		# If visible, try to get first line of contact in roster
 		path = None
-		iters = self._get_contact_iter(jid, account)
+		iters = self._get_contact_iter(jid, account, contact = contact)
 		if iters:
 			path = self.modelfilter.get_path(iters[0])
 
