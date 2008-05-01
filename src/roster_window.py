@@ -344,6 +344,7 @@ class RosterWindow:
 						gajim.interface.jabber_state_images['16']['closed'],
 						gobject.markup_escape_text(group), 'group',
 						group, account, None, None])
+					self.draw_group(group, account)
 
 				if contact.is_transport():
 					typestr = 'agent'
@@ -616,7 +617,7 @@ class RosterWindow:
 			for c, acc in contacts:
 				self.draw_contact(c.jid, acc)
 				self.draw_avatar(c.jid, acc)
-			for group in groups:			
+			for group in groups:
 				self.draw_group(group, account)
 			self.draw_account(account)
 
@@ -763,9 +764,8 @@ class RosterWindow:
 					contact.groups.append(group)
 			gajim.connections[account].update_contact(jid, contact.name,
 				contact.groups)
-		
-		self.add_contact(jid, account)
 
+		self.add_contact(jid, account)
 
 	def remove_contact_from_groups(self, jid, account, groups):
 		'''Remove contact from given groups and redraw them. 
@@ -794,13 +794,12 @@ class RosterWindow:
 		for group in groups:
 			self.draw_group(group, account)
 		
-		
 	# FIXME: maybe move to gajim.py	
 	def remove_newly_added(self, jid, account):
 		if jid in gajim.newly_added[account]:
 			gajim.newly_added[account].remove(jid)
 			self.draw_contact(jid, account)
-
+			self.refilter_shown_roster_items()
 
 	# FIXME: maybe move to gajim.py
 	def remove_to_be_removed(self, jid, account):
@@ -812,8 +811,6 @@ class RosterWindow:
 		if jid in gajim.to_be_removed[account]:
 			gajim.to_be_removed[account].remove(jid)
 			self.draw_contact(jid, account)
-		self.refilter_shown_roster_items()
-	
 	
 	#FIXME: integrate into add_contact()
 	def add_to_not_in_the_roster(self, account, jid, nick = '', resource = ''):
@@ -991,10 +988,10 @@ class RosterWindow:
 					'\n<span size="small" style="italic" foreground="%s">%s</span>' \
 					% (colorstring, gobject.markup_escape_text(status))
 		
-		# Check if our metacontacts familiy has changed
+		# Check if our metacontacts family has changed
 		brothers = []
 		family = gajim.contacts.get_metacontacts_family(account, jid)
-		if family: # Are we a metacontact (have a familiy)
+		if family: # Are we a metacontact (have a family)
 
 			if self.regroup:
 				# group all together
@@ -1119,12 +1116,13 @@ class RosterWindow:
 			contact.groups = [_('Observers')]
 		if not groups:
 			groups = [_('General')]
-		for group in groups:
-			self.draw_group(group, account)
-			self._adjust_group_expand_collapse_state(group, account)
 
 		self.draw_account(account)
 		self.draw_contact(jid, account)
+
+		for group in groups:
+			self.draw_group(group, account)
+			self._adjust_group_expand_collapse_state(group, account)
 
 	def _idle_draw_jids_of_account(self, jids, account):
 		'''Draw given contacts and their avatars in a lazy fashion.
@@ -3677,8 +3675,9 @@ class RosterWindow:
 		context, etime, grp_source = None):
 		if is_big_brother:
 			# add whole metacontact to new group
-			self.remove_contact_from_groups(c_source.jid, account, [grp_source,])
 			self.add_contact_to_groups(c_source.jid, account, [grp_dest,])
+			# remove after we have so contact is not moved in General between
+			self.remove_contact_from_groups(c_source.jid, account, [grp_source,])
 		else:
 			# Normal contact or little brother
 			family = gajim.contacts.get_metacontacts_family(account,
@@ -3702,8 +3701,9 @@ class RosterWindow:
 
 			else:
 				# Normal contact
-				self.remove_contact_from_groups(c_source.jid, account, [grp_source,])
 				self.add_contact_to_groups(c_source.jid, account, [grp_dest,])
+				# remove after we have so contact is not moved in General between
+				self.remove_contact_from_groups(c_source.jid, account, [grp_source,])
 
 		if context.action in (gtk.gdk.ACTION_MOVE, gtk.gdk.ACTION_COPY):
 			context.finish(True, True, etime)
