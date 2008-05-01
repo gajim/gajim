@@ -482,7 +482,7 @@ class RosterWindow:
 
 
 	def _remove_metacontact_family(self, family, account):
-		'''Remove the give Metacontact family from roster data model.
+		'''Remove the given Metacontact family from roster data model.
 		
 		See Contacts.get_metacontacts_family() and RosterWindow._remove_entity()
 		'''
@@ -751,7 +751,6 @@ class RosterWindow:
 				keyID = contact.keyID)
 			gajim.contacts.add_contact(account, c)
 			self.add_contact(contact.jid, account)
-			
 
 	def add_contact_to_groups(self, jid, account, groups):
 		'''Add contact to given groups and redraw them. 
@@ -776,6 +775,8 @@ class RosterWindow:
 				contact.groups)
 
 		self.add_contact(jid, account)
+		for group in groups:
+			self._adjust_group_expand_collapse_state(group, account)
 
 	def remove_contact_from_groups(self, jid, account, groups):
 		'''Remove contact from given groups and redraw them. 
@@ -3705,9 +3706,14 @@ class RosterWindow:
 					if data['jid'] == c_source.jid and\
 					data['account'] == account:
 						continue
+					if len(family) == 2:
+						# we deleted last remaining little brother, remove the meta 
+						# tag for the parent
+						gajim.contacts.remove_metacontact(data['account'], \
+							data['jid'])
 					self.add_contact(data['jid'], data['account'])
-					break;
-				
+					break
+
 				self.add_contact_to_groups(c_source.jid, account, [grp_dest,])
 
 			else:
