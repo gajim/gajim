@@ -1129,13 +1129,13 @@ class FileChooserDialog(gtk.FileChooserDialog):
 	def just_destroy(self, widget):
 		self.destroy()
 
-class BindPortError():
+class BindPortError:
 	def __init__(self, port):
 		ErrorDialog(_('Unable to bind to port %s.') % port,
 			_('Maybe you have another running instance of Gajim. '
 			'File Transfer will be cancelled.'))
 
-class AspellDictError():
+class AspellDictError:
 	def __init__(self, lang):
 		ErrorDialog(
 			_('Dictionary for lang %s not available') % lang,
