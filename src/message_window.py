@@ -396,8 +396,7 @@ class MessageWindow(object):
 		else:
 			gtkgui_helpers.set_unset_urgency_hint(self.window, False)
 
-	def set_active_tab(self, session):
-		ctrl = self._controls[session.conn.name][session.jid][session.thread_id]
+	def set_active_tab(self, ctrl):
 		ctrl_page = self.notebook.page_num(ctrl.widget)
 		self.notebook.set_current_page(ctrl_page)
 
@@ -538,16 +537,16 @@ class MessageWindow(object):
 		for ctrl in self.controls():
 			ctrl.update_tags()
 
-	def get_control(self, key, acct):
+	def get_control(self, key, acct, thread_id):
 		'''Return the MessageControl for jid or n, where n is a notebook page index.
-		When key is an int index acct may be None'''
+		When key is an int index acct and thread_id may be None'''
 		if isinstance(key, str):
 			key = unicode(key, 'utf-8')
 
 		if isinstance(key, unicode):
 			jid = key
 			try:
-				return self._controls[acct][jid]
+				return self._controls[acct][jid][thread_id]
 			except:
 				return None
 		else:
@@ -557,6 +556,15 @@ class MessageWindow(object):
 				page_num = notebook.get_current_page()
 			nth_child = notebook.get_nth_page(page_num)
 			return self._widget_to_control(nth_child)
+
+	def get_gc_control(self, jid, acct):
+		return self.get_control(jid, acct, 'gc')
+
+	def get_controls(self, jid, acct):
+		try:
+			return self._controls[acct][jid].values()
+		except KeyError:
+			return []
 
 	def change_key(self, old_jid, new_jid, acct):
 		'''Change the key of a control'''
@@ -594,7 +602,7 @@ class MessageWindow(object):
 				ind = ind - 1
 				if ind < 0:
 					ind = self.notebook.get_n_pages() - 1
-			ctrl = self.get_control(ind, None)
+			ctrl = self.get_control(ind, None, None)
 			if ctrl.get_nb_unread() > 0:
 				found = True
 				break # found
@@ -786,8 +794,19 @@ class MessageWindowMgr(gobject.GObject):
 
 	def get_window(self, jid, acct):
 		for win in self.windows():
-			if win.get_control(jid, acct):
-				return win
+			try:
+				if win._controls[acct][jid]:
+					return win
+			except KeyError:
+				pass
+		return None
+
+	def get_gc_control(self, jid, acct):
+		win = self.get_window(jid, acct)
+
+		if win:
+			return win.get_gc_control(jid, acct)
+
 		return None
 
 	def has_window(self, jid, acct):
@@ -914,11 +933,11 @@ class MessageWindowMgr(gobject.GObject):
 				del self._windows[k]
 				return
 
-	def get_control(self, jid, acct):
+	def get_control(self, jid, acct, session):
 		'''Amongst all windows, return the MessageControl for jid'''
 		win = self.get_window(jid, acct)
 		if win:
-			return win.get_control(jid, acct)
+			return win.get_control(jid, acct, session)
 		return None
 
 	def get_controls(self, type = None, acct = None):
@@ -929,6 +948,14 @@ class MessageWindowMgr(gobject.GObject):
 			if not type or c.type_id == type:
 				ctrls.append(c)
 		return ctrls
+
+	def get_chat_controls(self, jid, acct):
+		win = self.get_window(jid, acct)
+
+		if win:
+			return win.get_controls(jid, acct)
+		else:
+			return []
 
 	def windows(self):
 		for w in self._windows.values():

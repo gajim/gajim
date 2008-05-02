@@ -777,12 +777,13 @@ class RosterWindow:
 
 	def join_gc_room(self, account, room_jid, nick, password, minimize=False,
 		is_continued=False):
-		'''joins the room immediatelly'''
+		'''joins the room immediately'''
 		if gajim.interface.msg_win_mgr.has_window(room_jid, account) and \
 				gajim.gc_connected[account][room_jid]:
 			win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
+			ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid, account)
 			win.window.present()
-			win.set_active_tab(room_jid, account)
+			win.set_active_tab(ctrl)
 			dialogs.ErrorDialog(_('You are already in group chat %s') % room_jid)
 			return
 		minimized_control_exists = False
@@ -808,7 +809,8 @@ class RosterWindow:
 			self.new_room(room_jid, nick, account, is_continued=is_continued)
 		if not minimized_control_exists:
 			gc_win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
-			gc_win.set_active_tab(room_jid, account)
+			gc_control = gc_win.get_gc_control(room_jid, account)
+			gc_win.set_active_tab(gc_control)
 			gc_win.window.present()
 		gajim.connections[account].join_gc(nick, room_jid, password)
 		if password:
@@ -1361,10 +1363,10 @@ class RosterWindow:
 							gajim.transport_avatar[account][host] = [contact1.jid]
 						else:
 							gajim.transport_avatar[account][host].append(contact1.jid)
-			# If we already have a chat window opened, update it with new contact
+
+			# If we already have chat windows opened, update them with new contact
 			# instance
-			chat_control = gajim.interface.msg_win_mgr.get_control(ji, account)
-			if chat_control:
+			for chat_control in gajim.interface.msg_win_mgr.get_chat_controls(ji, account):
 				chat_control.contact = contact1
 
 	def chg_contact_status(self, contact, show, status, account):
@@ -1385,28 +1387,30 @@ class RosterWindow:
 				account):
 					win = gajim.interface.msg_win_mgr.get_window(jid_with_resource,
 						account)
-					ctrl = win.get_control(jid_with_resource, account)
-					ctrl.update_ui()
-					win.redraw_tab(ctrl)
+					for ctrl in win.get_controls(jid_with_resource, account):
+						ctrl.update_ui()
+						win.redraw_tab(ctrl)
+
 				gajim.contacts.remove_contact(account, contact)
 		self.remove_contact(contact, account)
 		self.add_contact_to_roster(contact.jid, account)
 		# print status in chat window and update status/GPG image
 		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
 			win = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
-			ctrl = win.get_control(contact.jid, account)
-			ctrl.contact = gajim.contacts.get_contact_with_highest_priority(
-				account, contact.jid)
-			ctrl.update_ui()
-			win.redraw_tab(ctrl)
-
 			uf_show = helpers.get_uf_show(show)
-			if status:
-				ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show,
-					status), 'status')
-			else: # No status message
-				ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
-					'status')
+
+			for ctrl in win.get_controls(contact.jid, account):
+				ctrl.contact = gajim.contacts.get_contact_with_highest_priority(
+					account, contact.jid)
+				ctrl.update_ui()
+				win.redraw_tab(ctrl)
+
+				if status:
+					ctrl.print_conversation(_('%s is now %s (%s)') % (name, uf_show,
+						status), 'status')
+				else: # No status message
+					ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
+						'status')
 
 		# unset custom status
 		if gajim.interface.status_sent_to_users.has_key(account) and \
@@ -1808,9 +1812,8 @@ class RosterWindow:
 					u.name = new_text
 				gajim.connections[account].update_contact(jid, new_text, u.groups)
 				self.draw_contact(jid, account)
-				# Update opened chat
-				ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
-				if ctrl:
+				# Update opened chats
+				for ctrl in gajim.interface.msg_win_mgr.get_controls(jid, account):
 					ctrl.update_ui()
 					win = gajim.interface.msg_win_mgr.get_window(jid, account)
 					win.redraw_tab(ctrl)
@@ -1858,8 +1861,9 @@ class RosterWindow:
 				# Close chat window
 				msg_win = gajim.interface.msg_win_mgr.get_window(contact.jid,
 					account)
-				ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
-				msg_win.remove_tab(ctrl, msg_win.CLOSE_CLOSE_BUTTON)
+				for ctrl in gajim.interface.msg_win_mgr.get_controls(contact.jid,
+						account):
+					msg_win.remove_tab(ctrl, msg_win.CLOSE_CLOSE_BUTTON)
 			else:
 				need_readd = True
 		if need_readd:
@@ -1918,8 +1922,7 @@ class RosterWindow:
 			keyID = keyID[0]
 			keys[contact.jid] = keyID
 
-		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
-			ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+		for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(contact.jid, account):
 			ctrl.update_ui()
 		keys_str = ''
 		for jid in keys:
@@ -1934,10 +1937,9 @@ class RosterWindow:
 		self.draw_avatar(jid, account)
 		# Update chat window
 		if gajim.interface.msg_win_mgr.has_window(jid, account):
-			win = gajim.interface.msg_win_mgr.get_window(jid, account)
-			ctrl = win.get_control(jid, account)
-			if win and ctrl.type_id != message_control.TYPE_GC:
-				ctrl.show_avatar()
+			for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(jid, account):
+				if ctrl.type_id != message_control.TYPE_GC:
+					ctrl.show_avatar()
 
 	def on_set_custom_avatar_activate(self, widget, contact, account):
 		def on_ok(widget, path_to_file):
@@ -2654,7 +2656,7 @@ class RosterWindow:
 				ctrl.account, ctrl.type_id)
 		ctrl.parent_win = mw
 		mw.new_tab(ctrl)
-		mw.set_active_tab(jid, account)
+		mw.set_active_tab(ctrl)
 		mw.window.present()
 		del gajim.interface.minimized_controls[account][jid]
 
@@ -3971,12 +3973,12 @@ class RosterWindow:
 				session.control.read_queue()
 
 		mw = gajim.interface.msg_win_mgr.get_window(fjid, account)
-		mw.set_active_tab(fjid, account)
+		mw.set_active_tab(session.control)
 		mw.window.present()
 		# For JEP-0172
 		if added_to_roster:
-			mc = mw.get_control(fjid, account)
-			mc.user_nick = gajim.nicks[account]
+			for mc in mw.get_controls(fjid, account):
+				mc.user_nick = gajim.nicks[account]
 
 	def new_room(self, room_jid, nick, account, is_continued=False):
 		# Get target window, create a control, and associate it with the window
@@ -4322,10 +4324,11 @@ class RosterWindow:
 			gajim.last_message_time[account][session.control.get_full_jid()] = 0
 
 		win = session.control.parent_win
-		win.set_active_tab(session)
+		win.set_active_tab(session.control)
 
 		if conn.is_zeroconf and conn.status in ('offline', 'invisible'):
-			win.get_control(fjid, account).got_disconnected()
+			for ctrl in win.get_controls(fjid, account):
+				ctrl.got_disconnected()
 
 		win.window.present()
 

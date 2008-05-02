@@ -43,6 +43,7 @@ import cell_renderer_image
 
 from common import gajim
 from common import helpers
+from common.stanza_session import StanzaSession
 
 from chat_control import ChatControl
 from chat_control import ChatControlBase
@@ -57,7 +58,7 @@ C_TYPE, # type of the row ('contact' or 'role')
 C_TEXT, # text shown in the cellrenderer
 C_AVATAR, # avatar of the contact
 ) = range(5)
-	
+
 def set_renderer_color(treeview, renderer, set_background = True):
 	'''set style for group row, using PRELIGHT system color'''
 	if set_background:
@@ -209,6 +210,9 @@ class GroupchatControl(ChatControlBase):
 		self.nick = contact.name.decode('utf-8')
 		self.new_nick = ''
 		self.name = self.room_jid.split('@')[0]
+
+		self.session = StanzaSession(gajim.connections[self.account],
+			self.room_jid, 'gc', 'gc')
 
 		compact_view = gajim.config.get('compact_view')
 		self.chat_buttons_set_visible(compact_view)
@@ -852,10 +856,9 @@ class GroupchatControl(ChatControlBase):
 		for nick in nick_list:
 			# Update pm chat window
 			fjid = self.room_jid + '/' + nick
-			ctrl = gajim.interface.msg_win_mgr.get_control(fjid, self.account)
 			gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid,
 				nick)
-			if ctrl:
+			for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(fjid, self.account):
 				gc_contact.show = 'offline'
 				gc_contact.status = ''
 				ctrl.update_ui()
@@ -2022,7 +2025,7 @@ class GroupchatControl(ChatControlBase):
 		menu.show_all()
 		menu.popup(None, None, None, event.button, event.time)
 
-	def _start_private_message(self, nick, session = None):
+	def _start_private_message(self, nick):
 		gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 		nick_jid = gc_c.get_full_jid()
 

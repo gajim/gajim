@@ -1298,7 +1298,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			reply.addChild(node=common.xmpp.ErrorNode('service-unavailable', typ='cancel'))
 
 			con.send(reply)
-		
+
 		raise common.xmpp.NodeProcessed
 
 	def _InitE2ECB(self, con, stanza, session):
@@ -1328,7 +1328,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		errmsg = iq_obj.getErrorMsg()
 		errcode = iq_obj.getErrorCode()
 		self.dispatch('ERROR_ANSWER', (id, jid_from, errmsg, errcode))
-	
+
 	def _PrivateCB(self, con, iq_obj):
 		'''
 		Private Data (XEP 048 and 049)
@@ -1590,7 +1590,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			try:
 				msg = session.decrypt_stanza(msg)
 			except:
-				self.dispatch('FAILED_DECRYPT', (frm, tim))
+				self.dispatch('FAILED_DECRYPT', (frm, tim, session))
 
 		msgtxt = msg.getBody()
 		subject = msg.getSubject() # if not there, it's None

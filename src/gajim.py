@@ -446,7 +446,7 @@ class Interface:
 		title = data[1]
 		prompt = data[2]
 		proposed_nick = data[3]
-		gc_control = self.msg_win_mgr.get_control(room_jid, account)
+		gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
 		if not gc_control and \
 		room_jid in self.minimized_controls[account]:
 			gc_control = self.minimized_controls[account][room_jid]
@@ -500,9 +500,10 @@ class Interface:
 					(jid_from, file_props))
 				conn.disconnect_transfer(file_props)
 				return
-		ctrl = self.msg_win_mgr.get_control(jid_from, account)
-		if ctrl and ctrl.type_id == message_control.TYPE_GC:
-			ctrl.print_conversation('Error %s: %s' % (array[2], array[1]))
+
+		for ctrl in self.msg_win_mgr.get_chat_controls(jid_from, account):
+			if ctrl.type_id == message_control.TYPE_GC:
+				ctrl.print_conversation('Error %s: %s' % (array[2], array[1]))
 
 	def handle_event_con_type(self, account, con_type):
 		# ('CON_TYPE', account, con_type) which can be 'ssl', 'tls', 'tcp'
@@ -956,21 +957,22 @@ class Interface:
 			win.set_values(vcard)
 
 		# show avatar in chat
-		win = None
-		ctrl = None
+		ctrls = []
 		if resource and self.msg_win_mgr.has_window(
 		jid + '/' + resource, account):
 			win = self.msg_win_mgr.get_window(jid + '/' + resource,
 				account)
-			ctrl = win.get_control(jid + '/' + resource, account)
+			ctrls = win.get_controls(jid + '/' + resource, account)
 		elif self.msg_win_mgr.has_window(jid, account):
 			win = self.msg_win_mgr.get_window(jid, account)
-			ctrl = win.get_control(jid, account)
-		if win and ctrl.type_id != message_control.TYPE_GC:
-			ctrl.show_avatar()
+			ctrls = win.get_controls(jid, account)
+
+		for ctrl in ctrls:
+			if ctrl.type_id != message_control.TYPE_GC:
+				ctrl.show_avatar()
 
 		# Show avatar in roster or gc_roster
-		gc_ctrl = self.msg_win_mgr.get_control(jid, account)
+		gc_ctrl = self.msg_win_mgr.get_gc_control(jid, account)
 		if not gc_ctrl and \
 		jid in self.minimized_controls[account]:
 			gc_ctrl = self.minimized_controls[account][jid]
@@ -1027,26 +1029,25 @@ class Interface:
 
 		# Get the window and control for the updated status, this may be a
 		# PrivateChatControl
-		control = self.msg_win_mgr.get_control(room_jid, account)
+		control = self.msg_win_mgr.get_gc_control(room_jid, account)
+
 		if not control and \
 		room_jid in self.minimized_controls[account]:
 			control = self.minimized_controls[account][room_jid]
 
-		if control and control.type_id != message_control.TYPE_GC:
+		if not control or (control and control.type_id != message_control.TYPE_GC):
 			return
-		if control:
-			control.chg_contact_status(nick, show, status, array[4], array[5],
-				array[6], array[7], array[8], array[9], array[10], array[11])
+
+		control.chg_contact_status(nick, show, status, array[4], array[5],
+			array[6], array[7], array[8], array[9], array[10], array[11])
 
 		contact = gajim.contacts.\
 			get_contact_with_highest_priority(account, room_jid)
 		if contact:
 			self.roster.draw_contact(room_jid, account)
 
-		ctrl = self.msg_win_mgr.get_control(fjid, account)
-
-		# print status in chat window and update status/GPG image
-		if ctrl:
+		# print status in chat windows and update status/GPG image
+		for ctrl in self.msg_win_mgr.get_chat_controls(fjid, account):
 			statusCode = array[9]
 			if '303' in statusCode:
 				new_nick = array[10]
@@ -1082,7 +1083,7 @@ class Interface:
 		jids = array[0].split('/', 1)
 		room_jid = jids[0]
 
-		gc_control = self.msg_win_mgr.get_control(room_jid, account)
+		gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
 		if not gc_control and \
 		room_jid in self.minimized_controls[account]:
 			gc_control = self.minimized_controls[account][room_jid]
@@ -1115,7 +1116,7 @@ class Interface:
 		jids = array[0].split('/', 1)
 		jid = jids[0]
 
-		gc_control = self.msg_win_mgr.get_control(jid, account)
+		gc_control = self.msg_win_mgr.get_gc_control(jid, account)
 
 		if not gc_control and \
 		jid in self.minimized_controls[account]:
@@ -1180,7 +1181,7 @@ class Interface:
 		jid = array[0]
 		statusCode = array[1]
 
-		gc_control = self.msg_win_mgr.get_control(jid, account)
+		gc_control = self.msg_win_mgr.get_gc_control(jid, account)
 		if not gc_control and \
 		jid in self.minimized_controls[account]:
 			gc_control = self.minimized_controls[account][jid]
@@ -1239,7 +1240,7 @@ class Interface:
 				self.roster.on_disconnect(None, room_jid, account)
 			else:
 				win = self.msg_win_mgr.get_window(room_jid, account)
-				ctrl = win.get_control(room_jid, account)
+				ctrl = win.get_gc_control(room_jid, account)
 				win.remove_tab(ctrl, 3)
 
 		dlg = dialogs.InputDialog(_('Password Required'),
@@ -1782,9 +1783,9 @@ class Interface:
 		AtomWindow.newAtomEntry(atom_entry)
 
 	def handle_event_failed_decrypt(self, account, data):
-		jid, tim = data
+		jid, tim, session = data
 
-		ctrl = self.msg_win_mgr.get_control(jid, account)
+		ctrl = self.msg_win_mgr.get_control(jid, account, session.thread_id)
 		if ctrl:
 			ctrl.print_conversation_line('Unable to decrypt message from %s\nIt may have been tampered with.' % (jid), 'status', '', tim)
 		else:
@@ -2583,6 +2584,7 @@ class Interface:
 				data[1], data[3])
 			gajim.events.remove_events(account, jid, event)
 			self.roster.draw_contact(jid, account)
+
 		if w:
 			w.set_active_tab(fjid, account)
 			w.window.present()

@@ -916,7 +916,7 @@ class ChatControlBase(MessageControl):
 		# TODO : get the contact and check notify.get_show_in_roster()
 		if self.type_id == message_control.TYPE_PM:
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-			groupchat_control = gajim.interface.msg_win_mgr.get_control(
+			groupchat_control = gajim.interface.msg_win_mgr.get_gc_control(
 				room_jid, self.account)
 			if room_jid in gajim.interface.minimized_controls[self.account]:
 				groupchat_control = \
@@ -927,7 +927,7 @@ class ChatControlBase(MessageControl):
 			if contact:
 				gajim.interface.roster.draw_contact(room_jid, self.account)
 			groupchat_control.draw_contact(nick)
-			mw = gajim.interface.msg_win_mgr.get_window(room_jid, self.account)
+			mw = gajim.interface.msg_win_mgr.get_gc_window(room_jid, self.account)
 			if mw:
 				mw.redraw_tab(groupchat_control)
 		else:

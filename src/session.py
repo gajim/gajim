@@ -107,7 +107,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		if gajim.jid_is_transport(jid):
 			jid = jid.replace('@', '')
 
-		groupchat_control = gajim.interface.msg_win_mgr.get_control(jid, self.conn.name)
+		#groupchat_control = gajim.interface.msg_win_mgr.get_control(jid, self.conn.name)
 
 # XXX fixme
 #		if not groupchat_control and \
