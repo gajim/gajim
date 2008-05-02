@@ -30,7 +30,6 @@ import locale
 import os
 
 import gtkgui_helpers
-import dialogs
 import message_control
 
 from common import helpers
