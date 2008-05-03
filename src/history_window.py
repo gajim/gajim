@@ -132,7 +132,7 @@ class HistoryWindow:
 		(contact name or long description like "pm-contact from groupchat....")
 		
 		{key : (jid, account, nick_name, full_completion_name}'''
-
+		c1 = time.clock()
 		liststore = gtkgui_helpers.get_completion_liststore(self.jid_entry)
 
 		# Add all jids in logs.db:
@@ -145,6 +145,9 @@ class HistoryWindow:
 		for account in self.accounts_seen_online:
 			self.completion_dict.update(
 				helpers.get_contact_dict_for_account(account))
+		
+		muc_active_img = gtkgui_helpers.load_icon('muc_active')
+		status_img = gajim.interface.jabber_state_images['16']['online']
 		
 		keys = self.completion_dict.keys()
 		# Map jid to info tuple
@@ -165,7 +168,7 @@ class HistoryWindow:
 			
 			if gajim.logger.jid_is_room_jid(completed) or\
 			gajim.logger.jid_is_from_pm(completed):
-				img = gtkgui_helpers.load_icon('muc_active')
+				img = muc_active_img
 				if gajim.logger.jid_is_from_pm(completed):
 					# It's PM. Make it easier to find
 					room, nick = gajim.get_room_and_nick_from_fjid(completed)
@@ -173,7 +176,7 @@ class HistoryWindow:
 					completed = info_completion
 					info_name = nick
 			else:
-				img = gajim.interface.jabber_state_images['16']['online']
+				img = status_img
 			
 			liststore.append((img.get_pixbuf(), completed))
 			self.completion_dict[key] = (info_jid, info_acc, info_name,
