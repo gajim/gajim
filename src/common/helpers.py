@@ -46,7 +46,7 @@ try:
 	import hashlib
 	hash_md5  = hashlib.md5
 	hash_sha1 = hashlib.sha1
-except:
+except ImportError:
 	# Python 2.4
 	import md5
 	import sha
