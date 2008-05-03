@@ -128,11 +128,12 @@ class HistoryWindow:
 
 	def _fill_completion_dict(self):
 		'''Fill completion_dict for key auto completion. 
+
 		Key will be either jid or full_completion_name  
 		(contact name or long description like "pm-contact from groupchat....")
 		
-		{key : (jid, account, nick_name, full_completion_name}'''
-		c1 = time.clock()
+		{key : (jid, account, nick_name, full_completion_name}
+		'''
 		liststore = gtkgui_helpers.get_completion_liststore(self.jid_entry)
 
 		# Add all jids in logs.db:
