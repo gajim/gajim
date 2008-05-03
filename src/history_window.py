@@ -148,10 +148,12 @@ class HistoryWindow:
 				helpers.get_contact_dict_for_account(account))
 		
 		muc_active_img = gtkgui_helpers.load_icon('muc_active')
-		status_img = gajim.interface.jabber_state_images['16']['online']
-		
+		contact_img = gajim.interface.jabber_state_images['16']['online']
+		muc_active_pix = muc_active_img.get_pixbuf()
+		contact_pix = contact_img.get_pixbuf()			
 		keys = self.completion_dict.keys()
 		# Map jid to info tuple
+		# Warning : This for is time critical with big DB 
 		for key in keys:
 			completed = key
 			contact = self.completion_dict[completed]
@@ -169,7 +171,7 @@ class HistoryWindow:
 			
 			if gajim.logger.jid_is_room_jid(completed) or\
 			gajim.logger.jid_is_from_pm(completed):
-				img = muc_active_img
+				pix = muc_active_pix
 				if gajim.logger.jid_is_from_pm(completed):
 					# It's PM. Make it easier to find
 					room, nick = gajim.get_room_and_nick_from_fjid(completed)
@@ -177,9 +179,9 @@ class HistoryWindow:
 					completed = info_completion
 					info_name = nick
 			else:
-				img = status_img
+				pix = contact_pix
 			
-			liststore.append((img.get_pixbuf(), completed))
+			liststore.append((pix, completed))
 			self.completion_dict[key] = (info_jid, info_acc, info_name,
 				info_completion)
 			self.completion_dict[completed] = (info_jid, info_acc,
