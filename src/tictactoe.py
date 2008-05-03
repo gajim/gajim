@@ -253,6 +253,7 @@ class TicTacToeBoard:
 
 		self.setup_window()
 
+	# check if the last move (at row r and column c) won the game
 	def check_for_strike(self, p, r, c, strike):
 		# number in a row: up and down, left and right
 		tallyI = 0
@@ -268,36 +269,31 @@ class TicTacToeBoard:
 		c -= 1
 
 		for d in xrange(-strike, strike):
+			r_in_range = 0 <= r+d < self.rows
+			c_in_range = 0 <= c+d < self.cols
+
 			# vertical check
-			try:
+			if r_in_range:
 				tallyI = tallyI + 1
 				if self.board[r+d][c] != p:
 					tallyI = 0
-			except IndexError:
-				pass
 
 			# horizontal check
-			try:
+			if c_in_range:
 				tally_ = tally_ + 1
 				if self.board[r][c+d] != p:
 					tally_ = 0
-			except IndexError:
-				pass
 
 			# diagonal checks
-			try:
+			if r_in_range and c_in_range:
 				tallyL = tallyL + 1
 				if self.board[r+d][c+d] != p:
 					tallyL = 0
-			except IndexError:
-				pass
 
-			try:
+			if r_in_range and 0 <= c-d < self.cols:
 				tallyF = tallyF + 1
 				if self.board[r+d][c-d] != p:
 					tallyF = 0
-			except IndexError:
-				pass
 
 			if any([t == strike for t in (tallyL, tallyF, tallyI, tally_)]):
 				return True
