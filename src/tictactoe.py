@@ -270,24 +270,32 @@ class TicTacToeBoard:
 		for d in xrange(-strike, strike):
 			# vertical check
 			try:
-				tallyI = tallyI + 1 if self.board[r+d][c] == p else 0
+				tallyI = tallyI + 1
+				if self.board[r+d][c] != p:
+					tallyI = 0
 			except IndexError:
 				pass
 
 			# horizontal check
 			try:
-				tally_ = tally_ + 1 if self.board[r][c+d] == p else 0
+				tally_ = tally_ + 1
+				if self.board[r][c+d] != p:
+					tally_ = 0
 			except IndexError:
 				pass
 
 			# diagonal checks
 			try:
-				tallyL = tallyL + 1 if self.board[r+d][c+d] == p else 0
+				tallyL = tallyL + 1
+				if self.board[r+d][c+d] != p:
+					tallyL = 0
 			except IndexError:
 				pass
 
 			try:
-				tallyF = tallyF + 1 if self.board[r+d][c-d] == p else 0
+				tallyF = tallyF + 1
+				if self.board[r+d][c-d] != p:
+					tallyF = 0
 			except IndexError:
 				pass
 
