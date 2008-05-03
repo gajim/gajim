@@ -56,6 +56,8 @@ from chat_control import ChatControl
 from groupchat_control import GroupchatControl
 from groupchat_control import PrivateChatControl
 
+from session import ChatControlSession
+
 from common import dbus_support
 if dbus_support.supported:
 	from music_track_listener import MusicTrackListener
@@ -3390,7 +3392,7 @@ class RosterWindow:
 				x_min = 0
 			if gajim.single_click and not event.state & gtk.gdk.SHIFT_MASK and \
 			not event.state & gtk.gdk.CONTROL_MASK:
-				# Don't handle dubble click if we press icon of a metacontact
+				# Don't handle double click if we press icon of a metacontact
 				iter = model.get_iter(path)
 				if x > x_min and x < x_min + 27 and type_ == 'contact' and \
 				model.iter_has_child(iter):
@@ -3928,7 +3930,7 @@ class RosterWindow:
 			mw = gajim.interface.msg_win_mgr.create_window(contact, account, type_)
 
 		if not session:
-			session = gajim.connections[account].get_session(fjid, None, 'pm')
+			session = gajim.connections[account].get_or_create_session(fjid, None, 'pm')
 
 		chat_control = PrivateChatControl(mw, gc_contact, contact, account, session)
 		mw.new_tab(chat_control)
@@ -3967,7 +3969,7 @@ class RosterWindow:
 			contact = self.add_to_not_in_the_roster(account, jid,
 				resource = resource)
 
-		session = gajim.connections[account].get_session(fjid, None, 'chat')
+		session = gajim.connections[account].get_or_create_session(fjid, None, 'chat')
 
 		if not gajim.interface.msg_win_mgr.has_window(fjid, account):
 			session.control = self.new_chat(session, contact, account, resource = resource)
@@ -4314,10 +4316,26 @@ class RosterWindow:
 
 		conn = gajim.connections[account]
 
+		if not session and fjid in conn.sessions:
+			sessions = filter(lambda s: isinstance(s, ChatControlSession),
+					conn.sessions[fjid].values())
+
+			# look for an existing session with a chat control
+			for s in sessions:
+				if s.control:
+					session = s
+					break
+
+			if not session and not len(sessions) == 0:
+				# there are no sessions with chat controls, just take the first one
+				session = sessions[0]
+
 		if not session:
-			session = conn.get_session(fjid, None, 'chat')
+			# couldn't find an existing ChatControlSession, just make a new one
+			session = conn.make_new_session(fjid, None, 'chat')
 
 		if not session.control:
+			# open a new chat control
 			session.control = self.new_chat(session, contact, account, resource=resource)
 
 			if len(gajim.events.get_events(account, fjid)):
@@ -4336,8 +4354,8 @@ class RosterWindow:
 		win.window.present()
 
 	def on_row_activated(self, widget, path):
-		'''When an iter is activated (dubblick or single click if gnome is set
-		this way'''
+		'''When an iter is activated (double-click or single click if gnome is
+		set this way'''
 		model = self.tree.get_model()
 		account = model[path][C_ACCOUNT].decode('utf-8')
 		type_ = model[path][C_TYPE]
@@ -4384,6 +4402,7 @@ class RosterWindow:
 				c = gajim.contacts.get_contact_with_highest_priority(account, jid)
 			if jid == gajim.get_jid_from_account(account):
 				resource = c.resource
+
 			self.on_open_chat_window(widget, c, account, resource = resource, session = session)
 
 	def on_roster_treeview_row_activated(self, widget, path, col = 0):

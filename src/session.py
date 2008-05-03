@@ -19,6 +19,12 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		self.control = None
 
+	def acknowledge_termination(self):
+		# the other party terminated the session. we'll keep the control around, though.
+		stanza_session.EncryptedStanzaSession.acknowledge_termination(self)
+
+		self.control.session = None
+
 	# remove events associated with this session from the queue
 	def remove_events(self, types):
 		any_removed = False

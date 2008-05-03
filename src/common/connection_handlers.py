@@ -1558,7 +1558,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 			return
 		elif mtype != 'groupchat':
-			session = self.get_session(frm, thread_id, mtype)
+			session = self.get_or_create_session(frm, thread_id, mtype)
 
 		if thread_id and not session.received_thread_id:
 			session.received_thread_id = True
@@ -1731,7 +1731,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.dispatch('GC_INVITATION',(frm, jid_from, reason, password,
 			is_continued))
 
-	def get_session(self, jid, thread_id, type):
+	def get_or_create_session(self, jid, thread_id, type):
 		'''returns an existing session between this connection and 'jid', returns a new one if none exist.'''
 		session = self.find_session(jid, thread_id, type)
 
