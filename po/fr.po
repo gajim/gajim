@@ -1532,7 +1532,7 @@ msgstr "<b>Notifications visuelles</b>"
 #. a header for custom browser/client/file manager. so translate sth like: Custom Settings
 #: ../data/glade/preferences_window.glade.h:8
 msgid "<b>Custom</b>"
-msgstr "<b<Paramètres personnalisés</b>"
+msgstr "<b>Paramètres personnalisés</b>"
 
 #: ../data/glade/preferences_window.glade.h:9
 msgid "<b>Font</b>"
@@ -6893,7 +6893,7 @@ msgstr "Ne pas afficher d'avatars particuliers pour les passerelles."
 
 #: ../src/common/config.py:225
 msgid "Don't show roster in the system taskbar."
-msgstr "Ne pas afficher d'icône dans la zone de notifications du système."
+msgstr "Ne pas afficher d'icône dans la barre des tâches."
 
 #: ../src/common/config.py:226
 msgid "If True and installed GTK+ and PyGTK versions are at least 2.8, make the window flash (the default behaviour in most Window Managers) when holding pending events."
