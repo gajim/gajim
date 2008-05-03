@@ -121,7 +121,7 @@ class PrivateChatControl(ChatControl):
 
 	def __init__(self, parent_win, gc_contact, contact, account, session):
 		room_jid = contact.jid.split('/')[0]
-		room_ctrl = gajim.interface.msg_win_mgr.get_control(room_jid, account)
+		room_ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid, account)
 		if gajim.interface.minimized_controls[account].has_key(room_jid):
 			room_ctrl = gajim.interface.minimized_controls[account][room_jid]
 		self.room_name = room_ctrl.name
@@ -448,9 +448,9 @@ class GroupchatControl(ChatControlBase):
 					'state_muc_msg_color')
 		if color_name:
 			color = gtk.gdk.colormap_get_system().alloc_color(color_name)
-			
+
 		label_str = self.name
-		
+
 		# count waiting highlighted messages
 		unread = ''
 		num_unread = self.get_nb_unread()
@@ -604,9 +604,11 @@ class GroupchatControl(ChatControlBase):
 		no_queue = len(gajim.events.get_events(self.account, fjid)) == 0
 
 		# We print if window is opened
-		pm_control = gajim.interface.msg_win_mgr.get_control(fjid, self.account)
+		pm_control = gajim.interface.msg_win_mgr.get_control(fjid, self.account, session)
+
 		if pm_control:
 			pm_control.print_conversation(msg, tim = tim, xhtml = xhtml)
+
 			return
 
 		event = gajim.events.create_event('pm', (msg, '', 'incoming', tim,
@@ -883,7 +885,7 @@ class GroupchatControl(ChatControlBase):
 
 	def on_send_pm(self, widget = None, model = None, iter = None, nick = None,
 	msg = None):
-		'''opens a chat window and msg is not None sends private message to a
+		'''opens a chat window and if msg is not None sends private message to a
 		contact in a room'''
 		if nick is None:
 			nick = model[iter][C_NICK].decode('utf-8')
@@ -1603,7 +1605,7 @@ class GroupchatControl(ChatControlBase):
 		for nick in nick_list:
 			# Update pm chat window
 			fjid = self.room_jid + '/' + nick
-			ctrl = gajim.interface.msg_win_mgr.get_control(fjid, self.account)
+			ctrl = gajim.interface.msg_win_mgr.get_gc_control(fjid, self.account)
 			if ctrl:
 				contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 				contact.show = 'offline'
@@ -2033,7 +2035,10 @@ class GroupchatControl(ChatControlBase):
 		if not win:
 			gajim.interface.roster.new_private_chat(gc_c, self.account)
 			win = gajim.interface.msg_win_mgr.get_window(nick_jid, self.account)
-		win.set_active_tab(nick_jid, self.account)
+
+		ctrl = win.get_controls(nick_jid, self.account)[0]
+
+		win.set_active_tab(ctrl)
 		win.window.present()
 
 	def on_row_activated(self, widget, path):

@@ -107,19 +107,18 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		if gajim.jid_is_transport(jid):
 			jid = jid.replace('@', '')
 
-		#groupchat_control = gajim.interface.msg_win_mgr.get_control(jid, self.conn.name)
+		groupchat_control = gajim.interface.msg_win_mgr.get_gc_control(jid, self.conn.name)
 
-# XXX fixme
-#		if not groupchat_control and \
-#		jid in gajim.interface.minimized_controls[self.conn.name]:
-#			groupchat_control = self.minimized_controls[self.conn.name][jid]
+		if not groupchat_control and \
+		jid in gajim.interface.minimized_controls[self.conn.name]:
+			groupchat_control = self.minimized_controls[self.conn.name][jid]
 
 		pm = False
-#		if groupchat_control and groupchat_control.type_id == \
-#		message_control.TYPE_GC:
+		if groupchat_control and groupchat_control.type_id == \
+		message_control.TYPE_GC:
 			# It's a Private message
-#			pm = True
-#			msg_type = 'pm'
+			pm = True
+			msg_type = 'pm'
 
 		jid_of_control = full_jid_with_resource
 
@@ -134,7 +133,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 					contact.chatstate = chatstate
 					if contact.our_chatstate == 'ask': # we were jep85 disco?
 						contact.our_chatstate = 'active' # no more
-					#self.control.handle_incoming_chatstate() XXX
+					self.control.handle_incoming_chatstate()
 				elif contact.chatstate != 'active':
 					# got no valid jep85 answer, peer does not support it
 					contact.chatstate = False
@@ -168,8 +167,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		if pm:
 			nickname = resource
-			groupchat_control.on_private_message(nickname, msgtxt, array[2],
-				xhtml, session, msg_id)
+			groupchat_control.on_private_message(nickname, msgtxt, tim,
+				xhtml, self, msg_id)
 		else:
 			self.roster_message(jid, msgtxt, tim, encrypted, msg_type,
 				subject, resource, msg_id, user_nick, advanced_notif_num,

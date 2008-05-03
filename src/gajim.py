@@ -727,7 +727,7 @@ class Interface:
 		full_jid_with_resource = array[0]
 		jids = full_jid_with_resource.split('/', 1)
 		jid = jids[0]
-		gc_control = self.msg_win_mgr.get_control(jid, account)
+		gc_control = self.msg_win_mgr.get_gc_control(jid, account)
 		if not gc_control and \
 		jid in self.minimized_controls[account]:
 			gc_control = self.minimized_controls[account][jid]

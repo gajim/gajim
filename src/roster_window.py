@@ -3927,6 +3927,9 @@ class RosterWindow:
 		if not mw:
 			mw = gajim.interface.msg_win_mgr.create_window(contact, account, type_)
 
+		if not session:
+			session = gajim.connections[account].get_session(fjid, None, 'pm')
+
 		chat_control = PrivateChatControl(mw, gc_contact, contact, account, session)
 		mw.new_tab(chat_control)
 		if len(gajim.events.get_events(account, fjid)):

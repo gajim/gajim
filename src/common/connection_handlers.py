@@ -1029,7 +1029,7 @@ class ConnectionVcard:
 			gajim.interface.remove_avatar_files(our_jid)
 
 		self.awaiting_answers[id] = (VCARD_PUBLISHED, iq2)
-	
+
 	def _IqCB(self, con, iq_obj):
 		id = iq_obj.getID()
 
@@ -1081,6 +1081,7 @@ class ConnectionVcard:
 			our_jid = gajim.get_jid_from_account(self.name)
 			if iq_obj.getType() == 'error' and jid == our_jid:
 				# our server doesn't support vcard
+				gajim.log.debug('xxx error xxx')
 				self.vcard_supported = False
 			if not iq_obj.getTag('vCard') or iq_obj.getType() == 'error':
 				if frm and frm != our_jid:
