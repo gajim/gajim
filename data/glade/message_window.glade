@@ -332,7 +332,7 @@
                                   <widget class="GtkImage" id="image1339">
                                     <property name="visible">True</property>
                                     <property name="stock">gtk-jump-to</property>
-                                    <property name="icon_size">2</property>
+                                    <property name="icon_size">4</property>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
