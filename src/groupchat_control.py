@@ -604,7 +604,7 @@ class GroupchatControl(ChatControlBase):
 		no_queue = len(gajim.events.get_events(self.account, fjid)) == 0
 
 		# We print if window is opened
-		pm_control = gajim.interface.msg_win_mgr.get_control(fjid, self.account, session)
+		pm_control = session.control
 
 		if pm_control:
 			pm_control.print_conversation(msg, tim = tim, xhtml = xhtml)
@@ -632,7 +632,7 @@ class GroupchatControl(ChatControlBase):
 				self.parent_win.show_title()
 				self.parent_win.redraw_tab(self)
 		else:
-			self._start_private_message(nick, session)
+			self._start_private_message(nick)
 		# Scroll to line
 		self.list_treeview.expand_row(path[0:1], False)
 		self.list_treeview.scroll_to_cell(path)
@@ -891,10 +891,9 @@ class GroupchatControl(ChatControlBase):
 			nick = model[iter][C_NICK].decode('utf-8')
 		fjid = gajim.construct_fjid(self.room_jid, nick) # 'fake' jid
 
-		self._start_private_message(nick)
+		ctrl = self._start_private_message(nick)
 		if msg:
-			gajim.interface.msg_win_mgr.get_control(fjid, self.account).\
-				send_message(msg)
+			ctrl.send_message(msg)
 
 	def on_send_file(self, widget, gc_contact):
 		'''sends a file to a contact in the room'''
@@ -2041,6 +2040,8 @@ class GroupchatControl(ChatControlBase):
 		win.set_active_tab(ctrl)
 		win.window.present()
 
+		return ctrl
+
 	def on_row_activated(self, widget, path):
 		'''When an iter is activated (dubblick or single click if gnome is set
 		this way'''
@@ -2099,7 +2100,7 @@ class GroupchatControl(ChatControlBase):
 				return
 
 			if gajim.single_click and not event.state & gtk.gdk.SHIFT_MASK:
-				self.on_row_activated(widget, path)			
+				self.on_row_activated(widget, path)
 				return True
 			else:
 				model = widget.get_model()

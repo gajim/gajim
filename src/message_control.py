@@ -117,25 +117,24 @@ class MessageControl:
 		return len(gajim.events.get_events(self.account, self.contact.jid))
 
 	def set_session(self, session):
-		if hasattr(self, 'session') and session == self.session:
+		oldsession = None
+		if hasattr(self, 'session'):
+			oldsession = self.session
+
+		if oldsession and session == oldsession:
 			return
-
-		was_encrypted = False
-
-		if hasattr(self, 'session') and self.session:
-			if self.session.enable_encryption:
-				was_encrypted = True
-
-			gajim.connections[self.account].delete_session(self.session.jid,
-									self.session.thread_id)
 
 		self.session = session
 
 		if session:
 			session.control = self
 
-			if was_encrypted:
-				self.print_esession_details()
+			if oldsession:
+				self.parent_win.change_thread_key(self.contact.jid,
+						self.account, oldsession.thread_id, session.thread_id)
+
+				if oldsession.enable_encryption:
+					self.print_esession_details()
 
 	def send_message(self, message, keyID = '', type = 'chat',
 	chatstate = None, msg_id = None, composing_xep = None, resource = None,
@@ -143,13 +142,6 @@ class MessageControl:
 		'''Send the given message to the active tab. Doesn't return None if error
 		'''
 		jid = self.contact.jid
-
-		if not self.session:
-			print('uhoh new session')
-			fjid = self.contact.get_full_jid()
-			new_session = gajim.connections[self.account].make_new_session(fjid)
-
-			self.set_session(new_session)
 
 		# Send and update history
 		return gajim.connections[self.account].send_message(jid, message, keyID,

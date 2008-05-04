@@ -429,6 +429,7 @@ class MessageWindow(object):
 
 		fjid = ctrl.get_full_jid()
 		thread_id = ctrl.session.thread_id
+
 		del self._controls[ctrl.account][fjid][thread_id]
 
 		if len(self._controls[ctrl.account][fjid]) == 0:
@@ -567,18 +568,29 @@ class MessageWindow(object):
 			return []
 
 	def change_key(self, old_jid, new_jid, acct):
-		'''Change the key of a control'''
+		'''Change the JID key of a control'''
 		try:
-			# Check if control exists
-			ctrl = self._controls[acct][old_jid]
-		except:
+			# Check if controls exists
+			ctrls = self._controls[acct][old_jid]
+		except KeyError:
 			return
-		self._controls[acct][new_jid] = self._controls[acct][old_jid]
+		self._controls[acct][new_jid] = ctrls
 		del self._controls[acct][old_jid]
 		if old_jid in gajim.last_message_time[acct]:
 			gajim.last_message_time[acct][new_jid] = \
 				gajim.last_message_time[acct][old_jid]
 			del gajim.last_message_time[acct][old_jid]
+
+	def change_thread_key(self, jid, acct, old_thread_id, new_thread_id):
+		'''Change the thread_id key of a control'''
+		try:
+			# Check if control exists
+			ctrl = self._controls[acct][jid][old_thread_id]
+		except KeyError:
+			return
+
+		self._controls[acct][jid][new_thread_id] = ctrl
+		del self._controls[acct][jid][old_thread_id]
 
 	def controls(self):
 		for jid_dict in self._controls.values():

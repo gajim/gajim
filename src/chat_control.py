@@ -1586,7 +1586,7 @@ class ChatControl(ChatControlBase):
 		elif num_unread > 1:
 			unread = '[' + unicode(num_unread) + ']'
 
-		# Draw tab label using chatstate 
+		# Draw tab label using chatstate
 		theme = gajim.config.get('roster_theme')
 		color = None
 		if not chatstate:
@@ -1846,6 +1846,7 @@ class ChatControl(ChatControlBase):
 		self.contact.chatstate = None
 		self.contact.our_chatstate = None
 
+		# terminate session
 		self.session.control = None
 
 		# Disconnect timer callbacks
@@ -2077,12 +2078,11 @@ class ChatControl(ChatControlBase):
 		# reset to status image in gc if it is a pm
 		# Is it a pm ?
 		room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-# XXX fixme somehow
-#		control = gajim.interface.msg_win_mgr.get_control(room_jid, self.account)
-#		if control and control.type_id == message_control.TYPE_GC:
-#			control.update_ui()
-#			control.parent_win.show_title()
-#			typ = 'pm'
+		control = gajim.interface.msg_win_mgr.get_gc_control(room_jid, self.account)
+		if control and control.type_id == message_control.TYPE_GC:
+			control.update_ui()
+			control.parent_win.show_title()
+			typ = 'pm'
 
 		self.redraw_after_event_removed(jid)
 		if (self.contact.show in ('offline', 'error')):
@@ -2093,8 +2093,8 @@ class ChatControl(ChatControlBase):
 			len(gajim.contacts.get_contacts(self.account, jid)) < 2):
 				gajim.interface.roster.really_remove_contact(self.contact,
 					self.account)
-#			elif typ == 'pm':
-#				control.remove_contact(nick)
+			elif typ == 'pm':
+				control.remove_contact(nick)
 
 	def show_bigger_avatar(self, small_avatar):
 		'''resizes the avatar, if needed, so it has at max half the screen size
@@ -2140,18 +2140,18 @@ class ChatControl(ChatControlBase):
 		window.set_app_paintable(True)
 		if gtk.gtk_version >= (2, 10, 0) and gtk.pygtk_version >= (2, 10, 0):
 			window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLTIP)
-		
+
 		window.realize()
 		window.window.set_back_pixmap(pixmap, False) # make it transparent
 		window.window.shape_combine_mask(mask, 0, 0)
 
-		# make the bigger avatar window show up centered 
+		# make the bigger avatar window show up centered
 		x0, y0 = small_avatar.window.get_origin()
 		x0 += small_avatar.allocation.x
 		y0 += small_avatar.allocation.y
 		center_x= x0 + (small_avatar.allocation.width / 2)
 		center_y = y0 + (small_avatar.allocation.height / 2)
-		pos_x, pos_y = center_x - (avatar_w / 2), center_y - (avatar_h / 2) 
+		pos_x, pos_y = center_x - (avatar_w / 2), center_y - (avatar_h / 2)
 		window.move(pos_x, pos_y)
 		# make the cursor invisible so we can see the image
 		invisible_cursor = gtkgui_helpers.get_invisible_cursor()

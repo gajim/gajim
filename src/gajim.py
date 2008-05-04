@@ -1924,6 +1924,7 @@ class Interface:
 			if ctrl:
 				new_sess = gajim.connections[account].make_new_session(str(jid))
 				ctrl.set_session(new_sess)
+				gajim.connections[account].delete_session(str(jid), session.thread_id)
 
 				if was_encrypted:
 					ctrl.print_esession_details()
