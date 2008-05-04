@@ -137,6 +137,31 @@ class ChatControlBase(MessageControl):
 	resource = None):
 		MessageControl.__init__(self, type_id, parent_win, widget_name,
 			contact, acct, resource = resource);
+
+		widget = self.xml.get_widget('contact_information_button')
+		# FIXME: Required as it's not in GC yet
+		if widget != None:
+			id = widget.connect('clicked', self._on_contact_information_menuitem_activate)
+			self.handlers[id] = widget
+
+		widget = self.xml.get_widget('history_button')
+		# FIXME: Required as it's not in GC yet
+		if widget != None:
+			id = widget.connect('clicked', self._on_history_menuitem_activate)
+			self.handlers[id] = widget
+
+		widget = self.xml.get_widget('send_file_button')
+		# FIXME: Required as it's not in GC yet
+		if widget != None:
+			id = widget.connect('clicked', self._on_send_file_menuitem_activate)
+			self.handlers[id] = widget
+
+		widget = self.xml.get_widget('convert_to_gc_button')
+		# FIXME: Required as it's not in GC yet
+		if widget != None:
+			id = widget.connect('clicked', self._on_convert_to_gc_menuitem_activate)
+			self.handlers[id] = widget
+
 		# when/if we do XHTML we will put formatting buttons back
 		widget = self.xml.get_widget('emoticons_button')
 		id = widget.connect('clicked', self.on_emoticons_button_clicked)
@@ -1032,6 +1057,10 @@ class ChatControl(ChatControlBase):
 		# Add lock image to show chat encryption
 		self.lock_image = self.xml.get_widget('lock_image')
 		self.lock_tooltip = gtk.Tooltips()
+
+		# Convert to GC icon
+		img = self.xml.get_widget('convert_to_gc_button_image')
+		img.set_from_pixbuf(gtkgui_helpers.load_icon('muc_active').get_pixbuf())
 		
 		# keep timeout id and window obj for possible big avatar
 		# it is on enter-notify and leave-notify so no need to be per jid

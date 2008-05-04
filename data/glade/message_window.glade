@@ -34,7 +34,7 @@
                               <widget class="GtkImage" id="banner_status_image">
                                 <property name="visible">True</property>
                                 <property name="ypad">5</property>
-                                <property name="stock">None</property>
+                                <property name="stock">gtk-missing-image</property>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
@@ -96,7 +96,6 @@
                     <child>
                       <widget class="GtkScrolledWindow" id="conversation_scrolledwindow">
                         <property name="height_request">60</property>
-                        <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="border_width">3</property>
                         <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -116,9 +115,11 @@
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="no_show_all">True</property>
                             <property name="stock">gtk-dialog-authentication</property>
+                            <property name="icon_size">1</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="padding">2</property>
                           </packing>
                         </child>
                         <child>
@@ -152,168 +153,212 @@
                   <widget class="GtkHBox" id="actions_hbox">
                     <property name="visible">True</property>
                     <child>
-                      <widget class="GtkHBox" id="hbox3006">
+                      <widget class="GtkButton" id="emoticons_button">
                         <property name="visible">True</property>
-                        <property name="spacing">1</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip" translatable="yes">Show a list of emoticons</property>
+                        <property name="relief">GTK_RELIEF_NONE</property>
+                        <property name="focus_on_click">False</property>
+                        <property name="response_id">0</property>
+                        <child>
+                          <widget class="GtkImage" id="emoticons_button_image">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="stock">gtk-missing-image</property>
+                            <property name="icon_size">1</property>
+                          </widget>
+                        </child>
                       </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                      </packing>
                     </child>
                     <child>
-                      <widget class="GtkHBox" id="hbox3007">
+                      <widget class="GtkVSeparator" id="vseparator1">
                         <property name="visible">True</property>
-                        <property name="border_width">3</property>
-                        <property name="spacing">6</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="send_file_button">
+                        <property name="visible">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip" translatable="yes">Send a file</property>
+                        <property name="relief">GTK_RELIEF_NONE</property>
+                        <property name="focus_on_click">False</property>
+                        <property name="response_id">0</property>
                         <child>
-                          <widget class="GtkButton" id="emoticons_button">
+                          <widget class="GtkImage" id="image3">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip" translatable="yes">Click to insert an emoticon (Alt+M)</property>
-                            <property name="response_id">0</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="stock">gtk-save</property>
+                            <property name="icon_size">1</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="convert_to_gc_button">
+                        <property name="visible">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip" translatable="yes">Invite contacts to conversation</property>
+                        <property name="relief">GTK_RELIEF_NONE</property>
+                        <property name="focus_on_click">False</property>
+                        <property name="response_id">0</property>
+                        <child>
+                          <widget class="GtkImage" id="convert_to_gc_button_image">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="stock">gtk-missing-image</property>
+                            <property name="icon_size">1</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="contact_information_button">
+                        <property name="visible">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip" translatable="yes">Show contact information</property>
+                        <property name="relief">GTK_RELIEF_NONE</property>
+                        <property name="focus_on_click">False</property>
+                        <property name="response_id">0</property>
+                        <child>
+                          <widget class="GtkImage" id="image2">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="stock">gtk-info</property>
+                            <property name="icon_size">2</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="history_button">
+                        <property name="visible">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip" translatable="yes">Browse history</property>
+                        <property name="relief">GTK_RELIEF_NONE</property>
+                        <property name="focus_on_click">False</property>
+                        <property name="response_id">0</property>
+                        <child>
+                          <widget class="GtkImage" id="image5">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="stock">gtk-justify-fill</property>
+                            <property name="icon_size">1</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkVSeparator" id="vseparator3">
+                        <property name="visible">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">6</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="message_window_actions_button">
+                        <property name="visible">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip" translatable="yes">Show a menu of advanced functions</property>
+                        <property name="relief">GTK_RELIEF_NONE</property>
+                        <property name="response_id">0</property>
+                        <child>
+                          <widget class="GtkImage" id="image1">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="stock">gtk-execute</property>
+                            <property name="icon_size">1</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">7</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkAlignment" id="alignment1">
+                        <property name="visible">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="position">8</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="send_button">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="response_id">0</property>
+                        <child>
+                          <widget class="GtkAlignment" id="alignment102">
+                            <property name="visible">True</property>
+                            <property name="xscale">0</property>
+                            <property name="yscale">0</property>
                             <child>
-                              <widget class="GtkHBox" id="hbox3008">
+                              <widget class="GtkHBox" id="hbox3010">
                                 <property name="visible">True</property>
+                                <property name="spacing">2</property>
                                 <child>
-                                  <widget class="GtkImage" id="emoticons_button_image">
+                                  <widget class="GtkImage" id="image1339">
                                     <property name="visible">True</property>
-                                    <property name="xpad">2</property>
-                                    <property name="stock">None</property>
-                                  </widget>
-                                </child>
-                                <child>
-                                  <widget class="GtkArrow" id="arrow3">
-                                    <property name="visible">True</property>
-                                    <property name="arrow_type">GTK_ARROW_DOWN</property>
+                                    <property name="stock">gtk-jump-to</property>
+                                    <property name="icon_size">2</property>
                                   </widget>
                                   <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkLabel" id="label373">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)">_Send</property>
+                                    <property name="use_underline">True</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
                               </widget>
                             </child>
                           </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="message_window_actions_button">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="response_id">0</property>
-                            <child>
-                              <widget class="GtkAlignment" id="alignment101">
-                                <property name="visible">True</property>
-                                <property name="xscale">0</property>
-                                <property name="yscale">0</property>
-                                <child>
-                                  <widget class="GtkHBox" id="hbox3009">
-                                    <property name="visible">True</property>
-                                    <property name="spacing">2</property>
-                                    <child>
-                                      <widget class="GtkImage" id="image1338">
-                                        <property name="visible">True</property>
-                                        <property name="stock">gtk-execute</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkLabel" id="label372">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)">_Actions</property>
-                                        <property name="use_underline">True</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkArrow" id="arrow4">
-                                        <property name="visible">True</property>
-                                        <property name="arrow_type">GTK_ARROW_DOWN</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">2</property>
-                                      </packing>
-                                    </child>
-                                  </widget>
-                                </child>
-                              </widget>
-                            </child>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkVSeparator" id="vseparator5">
-                            <property name="visible">True</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="send_button">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="response_id">0</property>
-                            <child>
-                              <widget class="GtkAlignment" id="alignment102">
-                                <property name="visible">True</property>
-                                <property name="xscale">0</property>
-                                <property name="yscale">0</property>
-                                <child>
-                                  <widget class="GtkHBox" id="hbox3010">
-                                    <property name="visible">True</property>
-                                    <property name="spacing">2</property>
-                                    <child>
-                                      <widget class="GtkImage" id="image1339">
-                                        <property name="visible">True</property>
-                                        <property name="stock">gtk-jump-to</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkLabel" id="label373">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)">_Send</property>
-                                        <property name="use_underline">True</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </widget>
-                                </child>
-                              </widget>
-                            </child>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">3</property>
-                          </packing>
                         </child>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">1</property>
+                        <property name="position">9</property>
                       </packing>
                     </child>
                   </widget>
@@ -335,7 +380,7 @@
                     <child>
                       <widget class="GtkImage" id="tab_image">
                         <property name="visible">True</property>
-                        <property name="stock">None</property>
+                        <property name="stock">gtk-missing-image</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -403,7 +448,7 @@
                             <child>
                               <widget class="GtkImage" id="gc_banner_status_image">
                                 <property name="visible">True</property>
-                                <property name="stock">None</property>
+                                <property name="stock">gtk-missing-image</property>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
@@ -551,7 +596,7 @@
                                   <widget class="GtkImage" id="emoticons_button_image">
                                     <property name="visible">True</property>
                                     <property name="xpad">2</property>
-                                    <property name="stock">None</property>
+                                    <property name="stock">gtk-missing-image</property>
                                   </widget>
                                 </child>
                                 <child>
@@ -714,7 +759,7 @@
                     <child>
                       <widget class="GtkImage" id="image1346">
                         <property name="visible">True</property>
-                        <property name="stock">None</property>
+                        <property name="stock">gtk-missing-image</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
