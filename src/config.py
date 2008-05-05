@@ -2362,7 +2362,7 @@ class GroupchatConfigWindow:
 		self.remove_button = {}
 		self.affiliation_treeview = {}
 		self.list_init = {} # list at the beginning
-		ui_list = {'outcast': _('Ban List'),
+		self.affiliation_labels = {'outcast': _('Ban List'),
 			'member': _('Member List'),
 			'owner': _('Owner List'),
 			'admin':_('Administrator List')}
@@ -2386,12 +2386,12 @@ class GroupchatConfigWindow:
 		# Draw the edit affiliation list things
 		add_on_vbox = self.xml.get_widget('add_on_vbox')
 
-		for affiliation in ('outcast', 'member', 'owner', 'admin'):
+		for affiliation in self.affiliation_labels.keys():
 			self.list_init[affiliation] = {}
 			hbox = gtk.HBox(spacing = 5)
 			add_on_vbox.pack_start(hbox, False)
 
-			label = gtk.Label(ui_list[affiliation])
+			label = gtk.Label(self.affiliation_labels[affiliation])
 			hbox.pack_start(label, False)
 
 			bb = gtk.HButtonBox()
@@ -2501,14 +2501,17 @@ class GroupchatConfigWindow:
 	def on_affiliation_treeview_cursor_changed(self, widget, affiliation):
 		self.remove_button[affiliation].set_sensitive(True)
 
-	def affiliation_list_received(self, affiliation, list):
+	def affiliation_list_received(self, list):
 		'''Fill the affiliation treeview'''
-		self.list_init[affiliation] = list
-		if not affiliation:
-			return
-		tv = self.affiliation_treeview[affiliation]
-		model = tv.get_model()
 		for jid in list:
+			if list[jid].has_key('affiliation'):
+				affiliation = list[jid]['affiliation']
+				if affiliation not in self.affiliation_labels.keys():
+					# Unknown affiliation or 'none' affiliation, do not show it
+					continue
+				self.list_init[affiliation][jid] = list[jid]
+			tv = self.affiliation_treeview[affiliation]
+			model = tv.get_model()
 			reason = ''
 			if list[jid].has_key('reason'):
 				reason = list[jid]['reason']
@@ -2518,7 +2521,7 @@ class GroupchatConfigWindow:
 			role = ''
 			if list[jid].has_key('role'):
 				role = list[jid]['role']
-			model.append((jid,reason, nick, role))
+			model.append((jid, reason, nick, role))
 
 	def on_data_form_window_destroy(self, widget):
 		del gajim.interface.instances[self.account]['gc_config'][self.room_jid]
@@ -2527,7 +2530,7 @@ class GroupchatConfigWindow:
 		if self.form:
 			form = self.data_form_widget.data_form
 			gajim.connections[self.account].send_gc_config(self.room_jid, form)
-		for affiliation in ('outcast', 'member', 'owner', 'admin'):
+		for affiliation in self.affiliation_labels.keys():
 			list = {}
 			actual_jid_list = []
 			model = self.affiliation_treeview[affiliation].get_model()

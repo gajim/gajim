@@ -2094,7 +2094,6 @@ returns the session that we last sent a message to.'''
 		gajim.log.debug('MucAdminCB')
 		items = iq_obj.getTag('query', namespace = common.xmpp.NS_MUC_ADMIN).getTags('item')
 		list = {}
-		affiliation = ''
 		for item in items:
 			if item.has_attr('jid') and item.has_attr('affiliation'):
 				jid = item.getAttr('jid')
@@ -2109,7 +2108,7 @@ returns the session that we last sent a message to.'''
 					list[jid]['reason'] = reason
 
 		self.dispatch('GC_AFFILIATION', (helpers.get_full_jid_from_iq(iq_obj), 
-															affiliation, list))
+															list))
 
 	def _MucErrorCB(self, con, iq_obj):
 		gajim.log.debug('MucErrorCB')

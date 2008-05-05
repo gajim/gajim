@@ -1373,11 +1373,11 @@ class Interface:
 			gc_control.print_conversation(change)
 
 	def handle_event_gc_affiliation(self, account, array):
-		#('GC_AFFILIATION', account, (room_jid, affiliation, list)) list is list
+		#('GC_AFFILIATION', account, (room_jid, list)) list is list
 		room_jid = array[0]
 		if self.instances[account]['gc_config'].has_key(room_jid):
 			self.instances[account]['gc_config'][room_jid].\
-				affiliation_list_received(array[1], array[2])
+				affiliation_list_received(array[1])
 
 	def handle_event_gc_password_required(self, account, array):
 		#('GC_PASSWORD_REQUIRED', account, (room_jid, nick))
