@@ -3451,6 +3451,8 @@ class AccountCreationWizardWindow:
 			'gc_config': {}, 'search': {}}
 		gajim.interface.minimized_controls[self.account] = {}
 		gajim.connections[self.account].connected = 0
+		gajim.connections[self.account].keepalives = gajim.config.get_per(
+			'accounts', self.account, 'keep_alive_every_foo_secs')
 		gajim.groups[self.account] = {}
 		gajim.contacts.add_account(self.account)
 		gajim.gc_connected[self.account] = {}
