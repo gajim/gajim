@@ -1390,12 +1390,6 @@ class ChatControl(ChatControlBase):
 				self.get_command_help(command)
 			self.clear(self.msg_textview)
 			return True
-		elif command == 'say':
-			return False
-		else:
-			self.print_conversation(_('No such command: /%s (if you want to send '
-				'this, prefix it with /say)') % command, 'info')
-			return True
 		return False
 
 	def get_command_help(self, command):
