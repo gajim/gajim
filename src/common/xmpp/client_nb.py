@@ -207,6 +207,7 @@ class NonBlockingClient(NBCommonClient):
 		self.onreceive(None)
 		if self.on_connect:
 			self.on_connect(self, self.connected)
+			self.on_connect_failure = None
 			self.on_connect = None
 	
 	def _on_tcp_stream_start(self):
