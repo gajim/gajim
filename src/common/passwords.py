@@ -48,8 +48,8 @@ class SimplePasswordStorage(PasswordStorage):
 
 class GnomePasswordStorage(PasswordStorage):
 	def __init__(self):
-		 self.keyring = gnomekeyring.get_default_keyring_sync()
-		 if self.keyring is None:
+		self.keyring = gnomekeyring.get_default_keyring_sync()
+		if self.keyring is None:
 			self.keyring = 'default'
 		try:
 			gnomekeyring.create_sync(self.keyring, None)
