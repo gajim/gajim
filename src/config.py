@@ -2504,12 +2504,11 @@ class GroupchatConfigWindow:
 	def affiliation_list_received(self, list):
 		'''Fill the affiliation treeview'''
 		for jid in list:
-			if list[jid].has_key('affiliation'):
-				affiliation = list[jid]['affiliation']
-				if affiliation not in self.affiliation_labels.keys():
-					# Unknown affiliation or 'none' affiliation, do not show it
-					continue
-				self.list_init[affiliation][jid] = list[jid]
+			affiliation = list[jid]['affiliation']
+			if affiliation not in self.affiliation_labels.keys():
+				# Unknown affiliation or 'none' affiliation, do not show it
+				continue
+			self.list_init[affiliation][jid] = list[jid]
 			tv = self.affiliation_treeview[affiliation]
 			model = tv.get_model()
 			reason = ''
