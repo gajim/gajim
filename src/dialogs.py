@@ -332,7 +332,8 @@ class ChooseGPGKeyDialog:
 
 class ChangeActivityDialog:
 	activities = \
-		{'doing_chores': ['buying_groceries', 'cleaning', 'cooking',
+		{'None': [],
+		'doing_chores': ['buying_groceries', 'cleaning', 'cooking',
 			'doing_maintenance', 'doing_the_dishes', 'doing_the_laundry',
 			'gardening', 'running_an_errand', 'walking_the_dog'],
 		'drinking': ['having_a_beer', 'having_coffee', 'having_tea'],
@@ -408,7 +409,10 @@ class ChangeActivityDialog:
 				subactivity = self.liststore2[active2][1].decode('utf-8')
 			message = self.entry.get_text().decode('utf-8')
 			from common import pep
-			pep.user_send_activity(self.account, activity,
+			if activity == 'None':
+				pep.user_retract_activity(self.account)
+			else:
+				pep.user_send_activity(self.account, activity,
 					subactivity, message)
 			self.window.destroy()
 
@@ -416,7 +420,7 @@ class ChangeActivityDialog:
 		self.window.destroy()
 
 class ChangeMoodDialog:
-	moods = ['afraid', 'amazed', 'angry', 'annoyed', 'anxious',
+	moods = ['None', 'afraid', 'amazed', 'angry', 'annoyed', 'anxious',
 		'aroused', 'ashamed', 'bored', 'brave', 'calm',
 		'cold', 'confused', 'contented', 'cranky', 'curious',
 		'depressed', 'disappointed', 'disgusted', 'distracted', 
@@ -460,7 +464,10 @@ class ChangeMoodDialog:
 			mood = self.liststore[active][1].decode('utf-8')
 			message = self.entry.get_text().decode('utf-8')
 			from common import pep
-			pep.user_send_mood(self.account, mood, message)
+			if mood == 'None':
+				pep.user_retract_mood(self.account)
+			else:
+				pep.user_send_mood(self.account, mood, message)
 			self.window.destroy()
 
 	def on_cancel_button_clicked(self, widget):

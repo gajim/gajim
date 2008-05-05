@@ -536,7 +536,7 @@ class PreferencesWindow:
 		if not widget.get_active():
 			for account in gajim.connections:
 				if gajim.connections[account].pep_supported:
-					pep.user_send_mood(account, '')
+					pep.user_retract_mood(account)
 		self.on_checkbutton_toggled(widget, 'publish_mood')
 		helpers.update_optional_features()
 
@@ -544,7 +544,7 @@ class PreferencesWindow:
 		if not widget.get_active():
 			for account in gajim.connections:
 				if gajim.connections[account].pep_supported:
-					pep.user_send_activity(account, '')
+					pep.user_retract_activity(account)
 		self.on_checkbutton_toggled(widget, 'publish_activity')
 		helpers.update_optional_features()
 
@@ -552,7 +552,9 @@ class PreferencesWindow:
 		if not widget.get_active():
 			for account in gajim.connections:
 				if gajim.connections[account].pep_supported:
+					# As many implementations don't support retracting items, we send a "Stopped" event first
 					pep.user_send_tune(account, '')
+					pep.user_retract_tune(account)
 		self.on_checkbutton_toggled(widget, 'publish_tune')
 		helpers.update_optional_features()
 		gajim.interface.roster.enable_syncing_status_msg_from_current_music_track(

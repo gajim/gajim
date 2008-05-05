@@ -2,6 +2,7 @@ from common import gajim, xmpp
 
 def user_mood(items, name, jid):
 	has_child = False
+	retract = False
 	mood = None
 	text = None
 	for item in items.getTags('item'):
@@ -13,6 +14,9 @@ def user_mood(items, name, jid):
 					mood = ch.getName()
 				else:
 					text = ch.getData()
+	if items.getTag('retract') is not None:
+		retract = True
+
 	if jid == gajim.get_jid_from_account(name):
 		acc = gajim.connections[name]
 		if has_child:
@@ -24,6 +28,11 @@ def user_mood(items, name, jid):
 				acc.mood['mood'] = mood
 			if text is not None:
 				acc.mood['text'] = text
+		elif retract:
+			if acc.mood.has_key('mood'):
+				del acc.mood['mood']
+			if acc.mood.has_key('text'):
+				del acc.mood['text']
 
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
 	contact = gajim.contacts.get_contact(name, user, resource=resource)
@@ -38,9 +47,15 @@ def user_mood(items, name, jid):
 			contact.mood['mood'] = mood
 		if text is not None:
 			contact.mood['text'] = text
+	elif retract:
+		if contact.mood.has_key('mood'):
+			del contact.mood['mood']
+		if contact.mood.has_key('text'):
+			del contact.mood['text']
 
 def user_tune(items, name, jid):
 	has_child = False
+	retract = False
 	artist = None
 	title = None
 	source = None
@@ -62,6 +77,8 @@ def user_tune(items, name, jid):
 					track = ch.getData()
 				elif ch.getName() == 'length':
 					length = ch.getData()
+	if items.getTag('retract') is not None:
+		retract = True
 
 	if jid == gajim.get_jid_from_account(name):
 		acc = gajim.connections[name]
@@ -86,6 +103,17 @@ def user_tune(items, name, jid):
 				acc.tune['track'] = track
 			if length is not None:
 				acc.tune['length'] = length
+		elif retract:
+			if acc.tune.has_key('artist'):
+				del acc.tune['artist']
+			if acc.tune.has_key('title'):
+				del acc.tune['title']
+			if acc.tune.has_key('source'):
+				del acc.tune['source']
+			if acc.tune.has_key('track'):
+				del acc.tune['track']
+			if acc.tune.has_key('length'):
+				del acc.tune['length']
 
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
 	contact = gajim.contacts.get_contact(name, user, resource=resource)
@@ -112,12 +140,24 @@ def user_tune(items, name, jid):
 			contact.tune['track'] = track
 		if length is not None:
 			contact.tune['length'] = length
+	elif retract:
+		if contact.tune.has_key('artist'):
+			del contact.tune['artist']
+		if contact.tune.has_key('title'):
+			del contact.tune['title']
+		if contact.tune.has_key('source'):
+			del contact.tune['source']
+		if contact.tune.has_key('track'):
+			del contact.tune['track']
+		if contact.tune.has_key('length'):
+			del contact.tune['length']
 
 def user_geoloc(items, name, jid):
 	pass
 
 def user_activity(items, name, jid):
 	has_child = False
+	retract = False
 	activity = None
 	subactivity = None
 	text = None
@@ -133,6 +173,8 @@ def user_activity(items, name, jid):
 						subactivity = chi.getName()
 				else:
 					text = ch.getData()
+	if items.getTag('retract') is not None:
+		retract = True
 
 	if jid == gajim.get_jid_from_account(name):
 		acc = gajim.connections[name]
@@ -149,6 +191,13 @@ def user_activity(items, name, jid):
 				acc.activity['subactivity'] = subactivity
 			if text is not None:
 				acc.activity['text'] = text
+		elif retract:
+			if acc.activity.has_key('activity'):
+				del acc.activity['activity']
+			if acc.activity.has_key('subactivity'):
+				del acc.activity['subactivity']
+			if acc.activity.has_key('text'):
+				del acc.activity['text']
 
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
 	contact = gajim.contacts.get_contact(name, user, resource=resource)
@@ -167,6 +216,13 @@ def user_activity(items, name, jid):
 			contact.activity['subactivity'] = subactivity
 		if text is not None:
 			contact.activity['text'] = text
+	elif retract:
+		if contact.activity.has_key('activity'):
+			del contact.activity['activity']
+		if contact.activity.has_key('subactivity'):
+			del contact.activity['subactivity']
+		if contact.activity.has_key('text'):
+			del contact.activity['text']
 
 def user_send_mood(account, mood, message = ''):
 	if not gajim.config.get('publish_mood'):
@@ -218,3 +274,12 @@ def user_send_tune(account, artist = '', title = '', source = '', track = 0,leng
 		item.addChild(payload=items)
 
 	gajim.connections[account].send_pb_publish('', xmpp.NS_TUNE, item, '0')
+
+def user_retract_mood(account):
+	gajim.connections[account].send_pb_retract('', xmpp.NS_MOOD, '0')
+
+def user_retract_activity(account):
+	gajim.connections[account].send_pb_retract('', xmpp.NS_ACTIVITY, '0')
+
+def user_retract_tune(account):
+	gajim.connections[account].send_pb_retract('', xmpp.NS_TUNE, '0')

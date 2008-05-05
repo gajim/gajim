@@ -44,6 +44,15 @@ class ConnectionPubSub:
 
 		self.connection.send(query)
 
+	def send_pb_retract(self, jid, node, id):
+		'''Delete item from a node'''
+		query = xmpp.Iq('set', to=jid)
+		r = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
+		r = r.addChild('retract', {'node': node, 'notify': '1'})
+		r = r.addChild('item', {'id': id})
+
+		self.connection.send(query)
+
 	def send_pb_delete(self, jid, node):
 		'''Deletes node.'''
 		query = xmpp.Iq('set', to=jid)
