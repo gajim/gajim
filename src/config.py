@@ -2361,7 +2361,7 @@ class GroupchatConfigWindow:
 		self.form = form
 		self.remove_button = {}
 		self.affiliation_treeview = {}
-		self.list_init = {} # list at the beginning
+		self.start_users_dict = {} # list at the beginning
 		self.affiliation_labels = {'outcast': _('Ban List'),
 			'member': _('Member List'),
 			'owner': _('Owner List'),
@@ -2387,7 +2387,7 @@ class GroupchatConfigWindow:
 		add_on_vbox = self.xml.get_widget('add_on_vbox')
 
 		for affiliation in self.affiliation_labels.keys():
-			self.list_init[affiliation] = {}
+			self.start_users_dict[affiliation] = {}
 			hbox = gtk.HBox(spacing = 5)
 			add_on_vbox.pack_start(hbox, False)
 
@@ -2501,25 +2501,25 @@ class GroupchatConfigWindow:
 	def on_affiliation_treeview_cursor_changed(self, widget, affiliation):
 		self.remove_button[affiliation].set_sensitive(True)
 
-	def affiliation_list_received(self, list):
+	def affiliation_list_received(self, users_dict):
 		'''Fill the affiliation treeview'''
-		for jid in list:
-			affiliation = list[jid]['affiliation']
+		for jid in users_dict:
+			affiliation = users_dict[jid]['affiliation']
 			if affiliation not in self.affiliation_labels.keys():
 				# Unknown affiliation or 'none' affiliation, do not show it
 				continue
-			self.list_init[affiliation][jid] = list[jid]
+			self.start_users_dict[affiliation][jid] = users_dict[jid]
 			tv = self.affiliation_treeview[affiliation]
 			model = tv.get_model()
 			reason = ''
-			if list[jid].has_key('reason'):
-				reason = list[jid]['reason']
+			if users_dict[jid].has_key('reason'):
+				reason = users_dict[jid]['reason']
 			nick = ''
-			if list[jid].has_key('nick'):
-				nick = list[jid]['nick']
+			if users_dict[jid].has_key('nick'):
+				nick = users_dict[jid]['nick']
 			role = ''
-			if list[jid].has_key('role'):
-				role = list[jid]['role']
+			if users_dict[jid].has_key('role'):
+				role = users_dict[jid]['role']
 			model.append((jid, reason, nick, role))
 
 	def on_data_form_window_destroy(self, widget):
@@ -2530,7 +2530,7 @@ class GroupchatConfigWindow:
 			form = self.data_form_widget.data_form
 			gajim.connections[self.account].send_gc_config(self.room_jid, form)
 		for affiliation in self.affiliation_labels.keys():
-			list = {}
+			users_dict = {}
 			actual_jid_list = []
 			model = self.affiliation_treeview[affiliation].get_model()
 			iter = model.get_iter_first()
@@ -2538,21 +2538,21 @@ class GroupchatConfigWindow:
 			while iter:
 				jid = model[iter][0].decode('utf-8')
 				actual_jid_list.append(jid)
-				if jid not in self.list_init[affiliation] or \
-				(affiliation == 'outcast' and self.list_init[affiliation]\
-				[jid].has_key('reason') and self.list_init[affiliation][jid]\
+				if jid not in self.start_users_dict[affiliation] or \
+				(affiliation == 'outcast' and self.start_users_dict[affiliation]\
+				[jid].has_key('reason') and self.start_users_dict[affiliation][jid]\
 				['reason'] != model[iter][1].decode('utf-8')):
-					list[jid] = {'affiliation': affiliation}
+					users_dict[jid] = {'affiliation': affiliation}
 					if affiliation == 'outcast':
-						list[jid]['reason'] = model[iter][1].decode('utf-8')
+						users_dict[jid]['reason'] = model[iter][1].decode('utf-8')
 				iter = model.iter_next(iter)
 			# remove removed one
-			for jid in self.list_init[affiliation]:
+			for jid in self.start_users_dict[affiliation]:
 				if jid not in actual_jid_list:
-					list[jid] = {'affiliation': 'none'}
-			if list:
+					users_dict[jid] = {'affiliation': 'none'}
+			if users_dict:
 				gajim.connections[self.account].send_gc_affiliation_list(
-					self.room_jid, list)
+					self.room_jid, users_dict)
 		self.window.destroy()
 
 #---------- RemoveAccountWindow class -------------#

@@ -1373,7 +1373,7 @@ class Interface:
 			gc_control.print_conversation(change)
 
 	def handle_event_gc_affiliation(self, account, array):
-		#('GC_AFFILIATION', account, (room_jid, list)) list is list
+		#('GC_AFFILIATION', account, (room_jid, users_dict))
 		room_jid = array[0]
 		if self.instances[account]['gc_config'].has_key(room_jid):
 			self.instances[account]['gc_config'][room_jid].\

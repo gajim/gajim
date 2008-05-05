@@ -1539,17 +1539,17 @@ class Connection(ConnectionHandlers):
 			item.addChild(name = 'reason', payload = reason)
 		self.connection.send(iq)
 
-	def send_gc_affiliation_list(self, room_jid, list):
+	def send_gc_affiliation_list(self, room_jid, users_dict):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS = \
 			common.xmpp.NS_MUC_ADMIN)
 		item = iq.getTag('query')
-		for jid in list:
+		for jid in users_dict:
 			item_tag = item.addChild('item', {'jid': jid,
-				'affiliation': list[jid]['affiliation']})
-			if list[jid].has_key('reason') and list[jid]['reason']:
-				item_tag.setTagData('reason', list[jid]['reason'])
+				'affiliation': users_dict[jid]['affiliation']})
+			if users_dict[jid].has_key('reason') and users_dict[jid]['reason']:
+				item_tag.setTagData('reason', users_dict[jid]['reason'])
 		self.connection.send(iq)
 
 	def get_affiliation_list(self, room_jid, affiliation):
