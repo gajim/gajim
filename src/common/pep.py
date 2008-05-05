@@ -224,6 +224,44 @@ def user_activity(items, name, jid):
 		if contact.activity.has_key('text'):
 			del contact.activity['text']
 
+def user_nickname(items, name, jid):
+	has_child = False
+	retract = False
+	nick = None
+
+	for item in items.getTags('item'):
+		child = item.getTag('nick')
+		if child is not None:
+			has_child = True
+			nick = child.getData()
+			break
+
+	if items.getTag('retract') is not None:
+		retract = True
+
+	if jid == gajim.get_jid_from_account(name):
+		if has_child:
+			gajim.nicks[name] = nick
+		if retract:
+			gajim.nicks[name] = gajim.config.get_per('accounts', name, 'name')
+
+	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
+	contact = gajim.contacts.get_contact(name, user, resource=resource)
+	if not contact:
+		return
+	if has_child:
+		if nick is not None:
+			contact.contact_name = nick
+			gajim.interface.roster.draw_contact(user, name)
+			ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
+			if ctrl:
+				ctrl.update_ui()
+				win = gajim.interface.msg_win_mgr.get_window(user, name)
+				win.redraw_tab(ctrl)
+				win.show_title()
+	elif retract:
+		contact.contact_name = ''
+
 def user_send_mood(account, mood, message = ''):
 	if not gajim.config.get('publish_mood'):
 		return
@@ -275,6 +313,15 @@ def user_send_tune(account, artist = '', title = '', source = '', track = 0,leng
 
 	gajim.connections[account].send_pb_publish('', xmpp.NS_TUNE, item, '0')
 
+def user_send_nickname(account, nick):
+	if not (gajim.config.get('publish_nick') and \
+	gajim.connections[account].pep_supported):
+		return
+	item = xmpp.Node('nick', {'xmlns': xmpp.NS_NICK})
+	item.addData(nick)
+
+	gajim.connections[account].send_pb_publish('', xmpp.NS_NICK, item, '0')
+
 def user_retract_mood(account):
 	gajim.connections[account].send_pb_retract('', xmpp.NS_MOOD, '0')
 
@@ -283,3 +330,6 @@ def user_retract_activity(account):
 
 def user_retract_tune(account):
 	gajim.connections[account].send_pb_retract('', xmpp.NS_TUNE, '0')
+
+def user_retract_nickname(account):
+	gajim.connections[account].send_pb_retract('', xmpp.NS_NICK, '0')

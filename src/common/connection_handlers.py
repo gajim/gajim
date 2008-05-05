@@ -1809,6 +1809,9 @@ returns the session that we last sent a message to.'''
 		# XEP-0108: User Activity
 		items = event.getTag('items', {'node': common.xmpp.NS_ACTIVITY})
 		if items: pep.user_activity(items, self.name, jid)
+		# XEP-0172: User Nickname
+		items = event.getTag('items', {'node': common.xmpp.NS_NICK})
+		if items: pep.user_nickname(items, self.name, jid)
 
 		items = event.getTag('items')
 		if items is None: return

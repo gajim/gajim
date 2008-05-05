@@ -252,9 +252,11 @@ class Config:
 		'publish_mood': [opt_bool, False],
 		'publish_activity': [opt_bool, False],
 		'publish_tune': [opt_bool, False],
+		'publish_nick': [opt_bool, True],
 		'subscribe_mood': [opt_bool, True],
 		'subscribe_activity': [opt_bool, True],
 		'subscribe_tune': [opt_bool, True],
+		'subscribe_nick': [opt_bool, True],
 		'attach_notifications_to_systray': [opt_bool, False, _('If True, notification windows from notification-daemon will be attached to systray icon.')],
 		'check_idle_every_foo_seconds': [opt_int, 2, _('Choose interval between 2 checks of idleness.')],
 	}

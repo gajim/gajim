@@ -263,6 +263,9 @@ class PreferencesWindow:
 		st = gajim.config.get('publish_tune')
 		self.xml.get_widget('publish_tune_checkbutton').set_active(st)
 
+		st = gajim.config.get('publish_nick')
+		self.xml.get_widget('publish_nick_checkbutton').set_active(st)
+
 		st = gajim.config.get('subscribe_mood')
 		self.xml.get_widget('subscribe_mood_checkbutton').set_active(st)
 
@@ -271,6 +274,9 @@ class PreferencesWindow:
 
 		st = gajim.config.get('subscribe_tune')
 		self.xml.get_widget('subscribe_tune_checkbutton').set_active(st)
+
+		st = gajim.config.get('subscribe_nick')
+		self.xml.get_widget('subscribe_nick_checkbutton').set_active(st)
 
 		### Notifications tab ###
 		# On new event
@@ -560,6 +566,14 @@ class PreferencesWindow:
 		gajim.interface.roster.enable_syncing_status_msg_from_current_music_track(
 			widget.get_active())
 
+	def on_publish_nick_checkbutton_toggled(self, widget):
+		if not widget.get_active():
+			for account in gajim.connections:
+				if gajim.connections[account].pep_supported:
+					pep.user_retract_nickname(account)
+		self.on_checkbutton_toggled(widget, 'publish_nick')
+		helpers.update_optional_features()
+
 	def on_subscribe_mood_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'subscribe_mood')
 		helpers.update_optional_features()
@@ -570,6 +584,10 @@ class PreferencesWindow:
 
 	def on_subscribe_tune_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'subscribe_tune')
+		helpers.update_optional_features()
+
+	def on_subscribe_nick_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'subscribe_nick')
 		helpers.update_optional_features()
 
 	def on_sort_by_show_checkbutton_toggled(self, widget):

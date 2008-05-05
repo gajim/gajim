@@ -323,6 +323,8 @@ class ProfileWindow:
 		nick = ''
 		if vcard_.has_key('NICKNAME'):
 			nick = vcard_['NICKNAME']
+			from common import pep
+			pep.user_send_nickname(self.account, nick)
 		if nick == '':
 			nick = gajim.config.get_per('accounts', self.account, 'name')
 		gajim.nicks[self.account] = nick

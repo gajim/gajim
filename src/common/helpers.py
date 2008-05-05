@@ -1288,6 +1288,10 @@ def update_optional_features():
 		gajim.gajim_optional_features.append(xmpp.NS_TUNE)
 	if gajim.config.get('subscribe_tune'):
 		gajim.gajim_optional_features.append(xmpp.NS_TUNE + '+notify')
+	if gajim.config.get('publish_nick'):
+		gajim.gajim_optional_features.append(xmpp.NS_NICK)
+	if gajim.config.get('subscribe_nick'):
+		gajim.gajim_optional_features.append(xmpp.NS_NICK + '+notify')
 	if gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
 		gajim.gajim_optional_features.append(xmpp.NS_CHATSTATES)
 	if not gajim.config.get('ignore_incoming_xhtml'):
