@@ -1445,16 +1445,9 @@ class GroupchatControl(ChatControlBase):
 			self.clear(self.msg_textview)
 			return True
 		elif command == 'say':
-			if len(message_array):
-				gajim.connections[self.account].send_gc_message(self.room_jid,
-										message[4:])
-				self.clear(self.msg_textview)
-			else:
-				self.get_command_help(command)
-			return True
-		else:
-			self.print_conversation(_('No such command: /%s (if you want to send '
-				'this, prefix it with /say)') % command, 'info')
+			gajim.connections[self.account].send_gc_message(self.room_jid,
+									message[4:])
+			self.clear(self.msg_textview)
 			return True
 
 		return False
