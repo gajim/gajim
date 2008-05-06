@@ -343,8 +343,6 @@ class RosterWindow:
 		else:
 			# We are a normal contact. Add us to our groups.
 			if not groups:
-				if contact.is_transport():
-					contact.groups = [_('Transports')]
 				if contact.is_observer():
 					contact.groups = [_('Observers')]
 				groups = contact.groups
@@ -620,8 +618,6 @@ class RosterWindow:
 			self._add_entity(contact, account)
 
 		# Draw the contact and its groups contact
-		if contact.is_transport():
-			contact.groups = [_('Transports')]
 		if is_observer:
 			contact.groups = [_('Observers')]
 		groups = contact.groups
@@ -667,8 +663,6 @@ class RosterWindow:
 
 		# Draw all groups of the contact
 		groups = contact.groups
-		if contact.is_transport():
-			contact.groups = [_('Transports')]
 		if contact.is_observer():
 			contact.groups = [_('Observers')]
 		if not groups:
@@ -1127,8 +1121,6 @@ class RosterWindow:
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 
 		groups = contact.groups
-		if contact.is_transport():
-			contact.groups = [_('Transports')]
 		if contact.is_observer():
 			contact.groups = [_('Observers')]
 		if not groups:
@@ -1461,6 +1453,9 @@ class RosterWindow:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
+
+			if gajim.jid_is_transport(jid):
+				array[jid]['groups'] = [_('Transports')]
 			contact1 = gajim.contacts.create_contact(jid = ji, name = name,
 				groups = array[jid]['groups'], show = show, status = status,
 				sub = array[jid]['subscription'], ask = array[jid]['ask'],
