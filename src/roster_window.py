@@ -332,6 +332,10 @@ class RosterWindow:
 			assert len(parent_iters) > 0,\
 				"Big brother is not yet in roster!"
 
+			# Do not confuse get_contact_iter 
+			# Sync groups of family members
+			contact.groups = big_brother_contact.groups[:]
+
 			for child_iter in parent_iters:
 				it = self.model.append(child_iter, (None, contact.get_shown_name(),
 					'contact', contact.jid,	account, None, None))
