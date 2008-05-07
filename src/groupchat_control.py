@@ -177,6 +177,18 @@ class GroupchatControl(ChatControlBase):
 		id = widget.connect('clicked', self.on_actions_button_clicked)
 		self.handlers[id] = widget
 
+		widget = self.xml.get_widget('change_nick_button')
+		id = widget.connect('clicked', self._on_change_nick_menuitem_activate)
+		self.handlers[id] = widget
+
+		widget = self.xml.get_widget('change_subject_button')
+		id = widget.connect('clicked', self._on_change_subject_menuitem_activate)
+		self.handlers[id] = widget
+
+		widget = self.xml.get_widget('bookmark_button')
+		id = widget.connect('clicked', self._on_bookmark_room_menuitem_activate)
+		self.handlers[id] = widget
+
 		widget = self.xml.get_widget('list_treeview')
 		id = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
 		self.handlers[id] = widget

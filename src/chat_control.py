@@ -138,29 +138,9 @@ class ChatControlBase(MessageControl):
 		MessageControl.__init__(self, type_id, parent_win, widget_name,
 			contact, acct, resource = resource);
 
-		widget = self.xml.get_widget('contact_information_button')
-		# FIXME: Required as it's not in GC yet
-		if widget != None:
-			id = widget.connect('clicked', self._on_contact_information_menuitem_activate)
-			self.handlers[id] = widget
-
 		widget = self.xml.get_widget('history_button')
-		# FIXME: Required as it's not in GC yet
-		if widget != None:
-			id = widget.connect('clicked', self._on_history_menuitem_activate)
-			self.handlers[id] = widget
-
-		widget = self.xml.get_widget('send_file_button')
-		# FIXME: Required as it's not in GC yet
-		if widget != None:
-			id = widget.connect('clicked', self._on_send_file_menuitem_activate)
-			self.handlers[id] = widget
-
-		widget = self.xml.get_widget('convert_to_gc_button')
-		# FIXME: Required as it's not in GC yet
-		if widget != None:
-			id = widget.connect('clicked', self._on_convert_to_gc_menuitem_activate)
-			self.handlers[id] = widget
+		id = widget.connect('clicked', self._on_history_menuitem_activate)
+		self.handlers[id] = widget
 
 		# when/if we do XHTML we will put formatting buttons back
 		widget = self.xml.get_widget('emoticons_button')
@@ -1047,6 +1027,18 @@ class ChatControl(ChatControlBase):
 		# widget = self.xml.get_widget('muc_window_actions_button')
 		widget = self.xml.get_widget('message_window_actions_button')
 		id = widget.connect('clicked', self.on_actions_button_clicked)
+		self.handlers[id] = widget
+
+		widget = self.xml.get_widget('send_file_button')
+		id = widget.connect('clicked', self._on_send_file_menuitem_activate)
+		self.handlers[id] = widget
+
+		widget = self.xml.get_widget('convert_to_gc_button')
+		id = widget.connect('clicked', self._on_convert_to_gc_menuitem_activate)
+		self.handlers[id] = widget
+
+		widget = self.xml.get_widget('contact_information_button')
+		id = widget.connect('clicked', self._on_contact_information_menuitem_activate)
 		self.handlers[id] = widget
 
 		compact_view = gajim.config.get('compact_view')
