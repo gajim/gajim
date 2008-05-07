@@ -542,7 +542,7 @@ class RosterWindow:
 		iters = self._get_contact_iter(old_big_jid, old_big_account, old_big_contact, self.model)
 		assert len(iters) > 0, "Old Big Brother %s is not in roster anymore" % old_big_jid
 		assert not self.model.iter_children(iters[0]),\
-			"Old Big Brother still has children" % old_big_jid
+			"Old Big Brother %s still has children" % old_big_jid
 		
 		# This one is strange but necessary:
 		# Refilter filtered model to not crash hard. It thinks it still has children.
