@@ -480,6 +480,10 @@ class ChatControlBase(MessageControl):
 				gajim.interface.emoticon_menuitem_clicked = self.append_emoticon
 				gajim.interface.emoticons_menu.popup(None, None,
 					set_emoticons_menu_position, 1, 0)
+
+		elif event.keyval == gtk.keysyms.a and \
+			(event.state & gtk.gdk.MOD1_MASK): # alt + a opens actions menu
+				self.on_actions_button_clicked(None)
 		return False
 
 	def _on_message_textview_key_press_event(self, widget, event):
