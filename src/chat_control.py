@@ -483,7 +483,7 @@ class ChatControlBase(MessageControl):
 
 		elif event.keyval == gtk.keysyms.a and \
 			(event.state & gtk.gdk.MOD1_MASK): # alt + a opens actions menu
-				self.on_actions_button_clicked(None)
+				self.on_actions_button_clicked(self.actions_button)
 		return False
 
 	def _on_message_textview_key_press_event(self, widget, event):
@@ -1029,9 +1029,9 @@ class ChatControl(ChatControlBase):
 
 		# for muc use:
 		# widget = self.xml.get_widget('muc_window_actions_button')
-		widget = self.xml.get_widget('message_window_actions_button')
-		id = widget.connect('clicked', self.on_actions_button_clicked)
-		self.handlers[id] = widget
+		self.actions_button = self.xml.get_widget('message_window_actions_button')
+		id = self.actions_button.connect('clicked', self.on_actions_button_clicked)
+		self.handlers[id] = self.actions_button
 
 		widget = self.xml.get_widget('send_file_button')
 		id = widget.connect('clicked', self._on_send_file_menuitem_activate)

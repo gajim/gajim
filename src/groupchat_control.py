@@ -173,9 +173,9 @@ class GroupchatControl(ChatControlBase):
 		self.is_continued=is_continued
 		self.is_anonymous = True
 
-		widget = self.xml.get_widget('muc_window_actions_button')
-		id = widget.connect('clicked', self.on_actions_button_clicked)
-		self.handlers[id] = widget
+		self.actions_button = self.xml.get_widget('muc_window_actions_button')
+		id = self.actions_button.connect('clicked', self.on_actions_button_clicked)
+		self.handlers[id] = self.actions_button
 
 		widget = self.xml.get_widget('change_nick_button')
 		id = widget.connect('clicked', self._on_change_nick_menuitem_activate)
