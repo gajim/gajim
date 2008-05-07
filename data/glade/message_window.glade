@@ -70,7 +70,7 @@
                                 <child>
                                   <widget class="GtkImage" id="avatar_image">
                                     <property name="visible">True</property>
-                                    <property name="stock">gtk-missing-image</property>
+                                    <property name="stock">None</property>
                                   </widget>
                                 </child>
                               </widget>
@@ -763,7 +763,6 @@
                                   <widget class="GtkImage" id="image1345">
                                     <property name="visible">True</property>
                                     <property name="stock">gtk-jump-to</property>
-                                    <property name="icon_size">2</property>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
