@@ -1698,6 +1698,12 @@ class JoinGroupchatWindow:
 		nickname = self._nickname_entry.get_text().decode('utf-8')
 		room_jid = self._room_jid_entry.get_text().decode('utf-8')
 		password = self._password_entry.get_text().decode('utf-8')
+		try:
+			nickname = helpers.parse_resource(nickname)
+		except:
+			ErrorDialog(_('Invalid Nickname'),
+				_('The nickname has not allowed characters.'))
+			return
 		user, server, resource = helpers.decompose_jid(room_jid)
 		if not user or not server or resource:
 			ErrorDialog(_('Invalid group chat Jabber ID'),
