@@ -741,9 +741,11 @@ class RosterWindow:
 		return True
 
 
-	#FIXME: Better never even remove....
+	#FIXME: 
+	# We need to define a generic way to keep contacts in roster
+	# as long as they have pending events or as we
+	# still chat with them
 	def _readd_contact_to_roster_if_needed(self, contact, account):
-		# FIXME What am I REALLY needed for
 		need_readd = False
 		if len(gajim.events.get_events(account, contact.jid)):
 			need_readd = True
@@ -1719,20 +1721,15 @@ class RosterWindow:
 			_('Now "%s" will always see you as offline.') %jid)
 
 	def set_connecting_state(self, account):
-		model = self.modelfilter
-		child_model = model.get_model()
-		IterA = self._get_account_iter(account)
-		if IterA:
-			child_iterA = model.convert_iter_to_child_iter(IterA)
-			child_model[child_iterA][0] = \
+		child_iterA = self._get_account_iter(account, self.model)
+		if child_iterA:
+			self.model[child_iterA][0] = \
 				gajim.interface.jabber_state_images['16']['connecting']
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.change_status('connecting')
 
 	def send_status(self, account, status, txt, auto = False, to = None):
-		model = self.modelfilter
-		child_model = model.get_model()
-		iterA = self._get_account_iter(account)
+		child_iterA = self._get_account_iter(account, self.model)
 		if status != 'offline':
 			if gajim.connections[account].connected < 2:
 				self.set_connecting_state(account)
@@ -1748,9 +1745,8 @@ class RosterWindow:
 						_('Save password'))
 					passphrase, save = w.run()
 					if passphrase == -1:
-						if iterA:
-							child_iterA = model.convert_iter_to_child_iter(iterA)
-							child_model[child_iterA][0] = gajim.interface.jabber_state_images[
+						if child_iterA:
+							self.model[child_iterA][0] = gajim.interface.jabber_state_images[
 								'16']['offline']
 						if gajim.interface.systray_enabled:
 							gajim.interface.systray.change_status('offline')
@@ -2053,15 +2049,12 @@ class RosterWindow:
 			show_in_roster=show_in_roster, show_in_systray=show_in_systray)
 		gajim.events.add_event(account, fjid, event)
 		if popup:
-			# FIXME: What is happening here.
-			# What does "OR he is not in the roster at all" mean
 			if not ctrl:
 				gajim.interface.new_chat(contact, account, \
 					resource=resource_for_chat)
 				if path and not self.dragging and gajim.config.get(
 				'scroll_roster_to_last_message'):
-					# we curently see contact in our roster OR he
-					# is not in the roster at all.
+					# we curently see contact in our roster
 					# show and select his line in roster
 					# do not change selection while DND'ing
 					self.tree.expand_row(path[0:1], False)
@@ -3023,13 +3016,6 @@ class RosterWindow:
 				titer = model.get_iter(path)
 				if x > x_min and x < x_min + 27 and type_ == 'contact' and \
 				model.iter_has_child(titer):
-					# FIXME: Expand all meta contacts or only the current one?
-					#account = model[path][C_ACCOUNT].decode('utf-8')
-					#jid = model[path][C_JID].decode('utf-8')
-					# first cell in 1st column (the arrow SINGLE clicked)
-					#iters = self._get_contact_iter(jid, account)
-					#for titer in iters:
-					#	path = model.get_path(titer)
 					if (self.tree.row_expanded(path)):
 						self.tree.collapse_row(path)
 					else:
@@ -3048,13 +3034,6 @@ class RosterWindow:
 						self.tree.expand_row(path, False)
 
 				elif type_ == 'contact' and x > x_min and x < x_min + 27:
-					# FIXME: Expand all meta contacts or only the current one?
-					#account = model[path][C_ACCOUNT].decode('utf-8')
-					#jid = model[path][C_JID].decode('utf-8')
-					# first cell in 1st column (the arrow SINGLE clicked)
-					#iters = self._get_contact_iter(jid, account)
-					#for titer in iters:
-					#	path = model.get_path(titer)
 					if (self.tree.row_expanded(path)):
 						self.tree.collapse_row(path)
 					else:
@@ -3974,17 +3953,14 @@ class RosterWindow:
 		
 	def set_account_status_icon(self, account):
 		status = gajim.connections[account].connected
-		model = self.modelfilter
-		child_model = model.get_model()
-		iterA = self._get_account_iter(account)
-		if not iterA:
+		child_iterA = self._get_account_iter(account, self.model)
+		if not child_iterA:
 			return
-		child_iterA = model.convert_iter_to_child_iter(iterA)
 		if not self.regroup:
 			show = gajim.SHOW_LIST[status]
 		else:	# accounts merged
 			show = helpers.get_global_show()
-		child_model[child_iterA][C_IMG] = gajim.interface.jabber_state_images['16'][show]	
+		self.model[child_iterA][C_IMG] = gajim.interface.jabber_state_images['16'][show]	
 
 ################################################################################
 ### Style and theme related methods
@@ -4025,9 +4001,7 @@ class RosterWindow:
 			model[titer][C_NAME] = model[titer][C_NAME]
 
 	def change_roster_style(self, option):
-		model = self.modelfilter
-		child_model = model.get_model()
-		child_model.foreach(self._change_style, option)
+		self.model.foreach(self._change_style, option)
 		for win in gajim.interface.msg_win_mgr.windows():
 			win.repaint_themed_widgets()
 
