@@ -718,14 +718,17 @@ class RosterWindow:
 		return True
 		
 
+	# TODO: This function is yet unused! Port to new API
 	def add_transport(self, jid, account):
 		'''Add transport to roster and draw it.
 		Return the added contact instance.'''
-		contact = gajim.contacts.create_contact(jid = jid, name = jid,
-			groups = [_('Transports')], show = 'offline', 
-			status = 'offline', sub = 'from')
-		gajim.contacts.add_contact(account, contact)
-		self.add_contact(transport, account)
+		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
+		if contact is None:	
+			contact = gajim.contacts.create_contact(jid = jid, name = jid,
+				groups = [_('Transports')], show = 'offline', 
+				status = 'offline', sub = 'from')
+			gajim.contacts.add_contact(account, contact)
+		self.add_contact(jid, account)
 		return contact
 		
 
