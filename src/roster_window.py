@@ -246,9 +246,9 @@ class RosterWindow:
 			account_iter = model.iter_next(account_iter)
 		
 			
-################################################################################		
+#############################################################################		
 ### Methods for adding and removing roster window items
-################################################################################
+#############################################################################
 	
 	def add_account(self, account):
 		'''Add account to roster and draw it. Do nothing if it is already in.'''
@@ -317,8 +317,8 @@ class RosterWindow:
 			print ""
 
 	
-	def _add_entity(self, contact, account, groups = None, big_brother_contact = None, 
-	big_brother_account = None):
+	def _add_entity(self, contact, account, groups = None,
+	big_brother_contact = None, big_brother_account = None):
 		'''Add the given contact to roster data model.
 		
 		Contact is added regardless if he is already in roster or not.
@@ -417,7 +417,8 @@ class RosterWindow:
 			# Only remove from specified groups
 			all_iters = iters[:]
 			group_iters = [self._get_group_iter(group, account) for group in groups]
-			iters = [iter for iter in all_iters if self.model.iter_parent(iter) in group_iters] 
+			iters = [iter for iter in all_iters 
+				if self.model.iter_parent(iter) in group_iters] 
 
 		iter_children = self.model.iter_children(iters[0])
 
@@ -461,9 +462,11 @@ class RosterWindow:
 		big_brother_data = gajim.contacts.get_metacontacts_big_brother(nearby_family)
 		big_brother_jid = big_brother_data['jid']
 		big_brother_account = big_brother_data['account']
-		big_brother_contact = gajim.contacts.get_first_contact_from_jid(big_brother_account, big_brother_jid)
+		big_brother_contact = gajim.contacts.get_first_contact_from_jid(
+			big_brother_account, big_brother_jid)
 
-		assert len(self._get_contact_iter(big_brother_jid, big_brother_account, big_brother_contact, self.model)) == 0,\
+		assert len(self._get_contact_iter(big_brother_jid, big_brother_account,
+			big_brother_contact, self.model)) == 0,\
 			"Big brother %s already in roster  \n Family: %s" % (big_brother_jid, family)
 		self._add_entity(big_brother_contact, big_brother_account)
 		
@@ -481,8 +484,8 @@ class RosterWindow:
 				# Corresponding account is not connected
 				continue
 			
-			assert len(self._get_contact_iter(_jid, _account, _contact, self.model)) == 0,\
-				"%s already in roster. \n Family: " % (_jid, nearby_family)
+			assert len(self._get_contact_iter(_jid, _account, _contact, self.model)
+				) == 0, "%s already in roster. \n Family: " % (_jid, nearby_family)
 			self._add_entity(_contact, _account, big_brother_contact = big_brother_contact,
 				big_brother_account = big_brother_account)
 			brothers.append((_contact, _account))
@@ -517,7 +520,8 @@ class RosterWindow:
 				# Family might not be up to date.
 				# Only try to remove what is actually in the roster
 				continue
-			assert iters, "%s shall be removed but is not in roster \n Family: %s" % (_jid, family)
+			assert iters, "%s shall be removed but is not in roster \
+				\n Family: %s" % (_jid, family)
 
 			family_in_roster = True
 
@@ -539,7 +543,8 @@ class RosterWindow:
 		if not family_in_roster:
 			return False
 
-		iters = self._get_contact_iter(old_big_jid, old_big_account, old_big_contact, self.model)
+		iters = self._get_contact_iter(old_big_jid, old_big_account, old_big_contact,
+			self.model)
 		assert len(iters) > 0, "Old Big Brother %s is not in roster anymore" % old_big_jid
 		assert not self.model.iter_children(iters[0]),\
 			"Old Big Brother %s still has children" % old_big_jid
@@ -550,7 +555,8 @@ class RosterWindow:
 		
 		ok = self._remove_entity(old_big_contact, old_big_account)
 		assert ok, "Old Big Brother %s not removed" % old_big_jid
-		assert len(self._get_contact_iter(old_big_jid, old_big_account, old_big_contact, self.model)) == 0,\
+		assert len(self._get_contact_iter(old_big_jid, old_big_account, old_big_contact,
+			self.model)) == 0,\
 			"Old Big Brother %s is removed but still in roster" % old_big_jid
 			
 		return True
@@ -1219,9 +1225,9 @@ class RosterWindow:
 			self.tree.expand_row(path, False)
 		return False
 
-################################################################################
+##############################################################################
 ### Roster and Modelfilter handling
-################################################################################			
+##############################################################################			
 		
 	def _search_roster_func(self, model, column, key, iter):
 		if model[iter][C_NAME].decode('utf-8').lower().startswith(
@@ -2047,7 +2053,8 @@ class RosterWindow:
 			show_in_roster=show_in_roster, show_in_systray=show_in_systray)
 		gajim.events.add_event(account, fjid, event)
 		if popup:
-			# FIXME: What is happening here. What does "OR he is not in the roster at all" mean
+			# FIXME: What is happening here.
+			# What does "OR he is not in the roster at all" mean
 			if not ctrl:
 				gajim.interface.new_chat(contact, account, \
 					resource=resource_for_chat)
@@ -3481,7 +3488,8 @@ class RosterWindow:
 		self._toggeling_row = False
 
 	def on_model_row_has_child_toggled(self, model, path, iter):
-		'''This signal is emitted when a row has gotten the first child row or lost its last child row.
+		'''Called when a row has gotten the first or lost its last child row.
+
 		Expand Parent if necessary.
 		'''
 		if self._toggeling_row:
@@ -5751,7 +5759,8 @@ class RosterWindow:
 		self.hpaned = self.xml.get_widget('roster_hpaned')
 		self._music_track_changed_signal = None
 		gajim.interface.msg_win_mgr = MessageWindowMgr(self.window, self.hpaned)
-		gajim.interface.msg_win_mgr.connect('window-delete', self.on_message_window_delete)
+		gajim.interface.msg_win_mgr.connect('window-delete',
+			self.on_message_window_delete)
 		self.advanced_menus = [] # We keep them to destroy them
 		if gajim.config.get('roster_window_skip_taskbar'):
 			self.window.set_property('skip-taskbar-hint', True)
@@ -5798,13 +5807,11 @@ class RosterWindow:
 		self.model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		self.modelfilter = self.model.filter_new()
 		self.modelfilter.set_visible_func(self._visible_func)
-		
-		
-		self.modelfilter.connect('row-has-child-toggled', self.on_model_row_has_child_toggled)
+		self.modelfilter.connect('row-has-child-toggled',
+			self.on_model_row_has_child_toggled)
+		self.tree.set_model(self.modelfilter)
 		# Workaroung: For strange reasons signal is behaving like row-changed
 		self._toggeling_row = False
-		
-		self.tree.set_model(self.modelfilter)
 
 		# when this value become 0 we quit main application. If it's more than 0
 		# it means we are waiting for this number of accounts to disconnect before
@@ -5837,8 +5844,8 @@ class RosterWindow:
 
 		for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
 			uf_show = helpers.get_uf_show(show)
-			liststore.append([uf_show, gajim.interface.jabber_state_images['16'][show], show,
-				True])
+			liststore.append([uf_show, gajim.interface.jabber_state_images['16'][show],
+				show, True])
 		# Add a Separator (self._iter_is_separator() checks on string SEPARATOR)
 		liststore.append(['SEPARATOR', None, '', True])
 
