@@ -1024,7 +1024,7 @@ class Connection(ConnectionHandlers):
 
 	def send_message(self, jid, msg, keyID, type='chat', subject='',
 	chatstate=None, msg_id=None, composing_xep=None, resource=None,
-	user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None):
+	user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None, original_message=None):
 		if not self.connection:
 			return 1
 		if msg and not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
@@ -1116,13 +1116,16 @@ class Connection(ConnectionHandlers):
 			if session.enable_encryption:
 				msg_iq = session.encrypt_stanza(msg_iq)
 
+
 		self.connection.send(msg_iq)
-		if not forward_from and session.is_loggable():
+		if not forward_from and session and session.is_loggable():
 			no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')\
 				.split()
 			ji = gajim.get_jid_without_resource(jid)
 			if self.name not in no_log_for and ji not in no_log_for:
 				log_msg = msg
+				if original_message != None:
+					log_msg = original_message
 				if subject:
 					log_msg = _('Subject: %s\n%s') % (subject, msg)
 				if log_msg:

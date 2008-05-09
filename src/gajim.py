@@ -253,6 +253,172 @@ from common import helpers
 from common import optparser
 from common import dataforms
 
+from common.xmpp import Message as XmppMessage
+
+try:
+	import otr, otr_windows
+	
+	gajim.otr_module = otr
+	gajim.otr_windows = otr_windows
+except ImportError:
+	gajim.otr_module = None
+	gajim.otr_windows = None
+
+def add_appdata(data=None, context=None):
+	account = data
+	context.app_data = otr_windows.ContactOtrSMPWindow(unicode(context.username),
+		account)
+
+gajim.otr_add_appdata = add_appdata
+
+
+def otr_dialog_destroy(widget, *args, **kwargs):
+	widget.destroy()
+
+class OtrlMessageAppOps:
+
+	def gajim_log(self, msg, account, fjid, no_print=False):
+		if not isinstance(fjid, unicode):
+			fjid = unicode(fjid)
+		if not isinstance(account, unicode):
+			account = unicode(account)
+		resource=gajim.get_resource_from_jid(fjid)
+		tim = time.localtime()
+
+		if not no_print:
+			ctrl = gajim.interface.msg_win_mgr.get_control(
+					gajim.get_jid_without_resource(fjid), account)
+			if ctrl:
+				ctrl.print_conversation_line(u" [OTR] %s"%msg, 'status', '', None)
+		id = gajim.logger.write('chat_msg_recv', fjid, message=msg, tim=tim)
+		gajim.logger.set_read_messages([id])
+
+	def policy(self, opdata=None, context=None):
+		policy = gajim.config.get_per("contacts",
+			gajim.get_jid_without_resource(context.username), "otr_flags")
+		if policy <= 0:
+			policy = gajim.config.get_per("accounts", opdata['account'], "otr_flags")
+		return policy
+
+	def create_privkey(self, opdata="", accountname="", protocol=""):
+		dialog = gtk.Dialog(title=_("Generating..."), parent=gajim.interface.roster.window,
+			flags=gtk.DIALOG_MODAL, buttons=(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE))
+		permlabel = gtk.Label("Generating a private key for %s..."%accountname)
+		permlabel.set_padding(20,20)
+		dialog.set_response_sensitive(gtk.RESPONSE_CLOSE, False)
+		dialog.connect("destroy", otr_dialog_destroy)
+		dialog.connect("response", otr_dialog_destroy)
+		dialog.vbox.pack_start(permlabel)
+		dialog.get_root_window().raise_()
+		dialog.show_all()
+		dialog.map()
+		for c in dialog.get_children():
+			c.show_now()
+			c.map()
+
+		while gtk.events_pending():
+			gtk.main_iteration(block=False)
+
+		otr.otrl_privkey_generate(gajim.otr_userstates[opdata['account']],
+			os.path.join(gajimpaths.root, "%s.key"%opdata['account']).encode(),
+			accountname, gajim.OTR_PROTO)
+		permlabel.set_text("Generating a private key for %s...\ndone."%accountname)
+		dialog.set_response_sensitive(gtk.RESPONSE_CLOSE, True)
+
+	def is_logged_in(self, opdata={}, accountname="", protocol="", recipient=""):
+		return gajim.contacts.get_contact_from_full_jid(opdata['account'], recipient).show \
+			in ['dnd', 'xa', 'chat', 'online', 'away', 'invisible']
+
+	def inject_message(self, opdata=None, accountname="", protocol="", recipient="",
+			message=""):
+		msg_type = otr.otrl_proto_message_type(message)
+
+		if 'kwargs' not in opdata or 'urgent' in opdata:
+			# don't use send_message here to have the message sent immediatly.
+			# this results in being able to disconnect from OTR sessions before
+			# quitting
+			stanza = XmppMessage(to=recipient, body=message, typ="chat")
+			gajim.connections[opdata['account']].connection.send(stanza, now=True)
+			return
+
+		if msg_type == otr.OTRL_MSGTYPE_QUERY:
+			# split away XHTML-contaminated explanatory message
+			message = unicode(message.splitlines()[0])
+			message += u"\n%s has requested an Off-the-Record private " \
+				"conversation.  However, you do not have a plugin to " \
+				"support that.\nSee http://otr.cypherpunks.ca/ for more "\
+				"information."%gajim.get_jid_from_account(opdata['account'])
+
+		gajim.connections[opdata['account']].send_message(recipient, message,
+			**opdata['kwargs'])
+
+	def notify(sef, opdata=None, username="", **kwargs):
+		self.gajim_log("Notify: "+str(kwargs), opdata['account'], username)
+
+	def display_otr_message(self, opdata=None, username="", msg="", **kwargs):
+		self.gajim_log("OTR Message: "+msg, opdata['account'], username)
+		return 0
+
+	def update_context_list(self, **kwargs):
+		# FIXME stub FIXME #
+		pass
+
+	def protocol_name(self, opdata=None, protocol=""):
+		return "XMPP"
+
+	def new_fingerprint(self, opdata=None, username="", fingerprint="", **kwargs):
+		self.gajim_log("New fingerprint for %s: %s"%(username,
+			otr.otrl_privkey_hash_to_human(fingerprint)), opdata['account'], username)
+
+	def write_fingerprints(self, opdata=""):
+		otr.otrl_privkey_write_fingerprints(gajim.otr_userstates[opdata['account']],
+			os.path.join(gajimpaths.root, "%s.fpr"%opdata['account']).encode())
+
+	def gone_secure(self, opdata="", context=None):
+		trust = context.active_fingerprint.trust
+		if trust:
+			trust = "verified"
+		else:
+			trust = "unverified"
+		self.gajim_log("%s secured OTR connection started"%trust,
+				opdata['account'], context.username, no_print=True)
+		
+		ctrl = gajim.interface.msg_win_mgr.get_control(
+			gajim.get_jid_without_resource(unicode(context.username)),
+				opdata['account'])
+		if ctrl:
+			ctrl.update_otr(True)
+
+	def gone_insecure(self, opdata="", context=None):
+		self.gajim_log("Private conversation with %s lost.", opdata['account'], context.username)
+
+		ctrl = gajim.interface.msg_win_mgr.get_control(
+			gajim.get_jid_without_resource(unicode(context.username)),
+			opdata['account'])
+		if ctrl:
+			ctrl.update_otr()
+
+	def still_secure(self, opdata=None, context=None, is_reply=0):
+		ctrl = gajim.interface.msg_win_mgr.get_control(
+			gajim.get_jid_without_resource(unicode(context.username)),
+			opdata['account'])
+		if ctrl:
+			ctrl.update_otr(True)
+
+		self.gajim_log("OTR connection was refreshed", opdata['account'],
+				context.username)
+
+	def log_message(self, opdata=None, message=""):
+		gajim.log.debug(message)
+
+	def max_message_size(self, **kwargs):
+		return 0
+
+	def account_name(self, opdata=None, account="",protocol=""):
+		return gajim.get_name_from_jid(opdata['account'], unicode(account))
+
+gajim.otr_ui_ops = OtrlMessageAppOps()
+
 if verbose: gajim.verbose = True
 del verbose
 
@@ -3159,6 +3325,25 @@ class Interface:
 			gajim.last_message_time[a] = {}
 			gajim.status_before_autoaway[a] = ''
 			gajim.transport_avatar[a] = {}
+
+			if gajim.otr_module:
+				gajim.otr_userstates[a] = otr.otrl_userstate_create()
+				try:
+					otr.otrl_privkey_read(gajim.otr_userstates[a],
+						os.path.join(gajimpaths.root, "%s.key"%a).encode())
+				except Exception, e:
+					if hasattr(e,"os_errno") and e.os_errno == 2:
+						print "didn't find otr keyfile "+ \
+							(os.path.join(gajimpaths.root, "%s.key"%a).encode())
+						pass
+				try:
+					otr.otrl_privkey_read_fingerprints(gajim.otr_userstates[a],
+						os.path.join(gajimpaths.root, "%s.fpr"%a).encode(), (add_appdata, a))
+				except Exception, e:
+					if hasattr(e,"os_errno") and e.os_errno == 2:
+						print "didn't find otr fingerprint file "+ \
+							(os.path.join(gajimpaths.root, "%s.fpr"%a).encode())
+						pass
 
 		if gajim.config.get('remote_control'):
 			try:

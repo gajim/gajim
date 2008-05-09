@@ -319,6 +319,7 @@ class Config:
 			'zeroconf_jabber_id': [ opt_str, '', '', True ],
 			'zeroconf_email': [ opt_str, '', '', True ],
 			'use_env_http_proxy' : [opt_bool, False],
+			'otr_flags': [opt_int, 59 ],
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],
@@ -369,6 +370,7 @@ class Config:
 		'contacts': ({
 			'gpg_enabled': [ opt_bool, False, _('Is OpenPGP enabled for this contact?')],
 			'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
+			'otr_flags': [opt_int, -1 ],
 		}, {}),
 		'rooms': ({
 			'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
