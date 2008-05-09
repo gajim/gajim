@@ -86,9 +86,11 @@ class MessageWindow(object):
 		id = self.window.connect('focus-in-event', self._on_window_focus)
 		self.handlers[id] = self.window
 
-		keys=['<Control>h', '<Control>i', '<Control><Shift>Tab',
-				'<Control>Tab', '<Control>F4', '<Control>w',
-				'<Alt>Right', '<Alt>Left', '<Alt>c', 'Escape'] +\
+		keys=['<Control>f', '<Control>g', '<Control>h', '<Control>i', 
+				'<Control>n', '<Control>t', '<Control>b',
+				'<Control><Shift>Tab', '<Control>Tab',
+				'<Control>F4', '<Control>w', '<Alt>Right',
+				'<Alt>Left', '<Alt>c', 'Escape'] +\
 				['<Alt>'+str(i) for i in xrange(10)]
 		accel_group = gtk.AccelGroup()
 		for key in keys:
@@ -290,8 +292,23 @@ class MessageWindow(object):
 			if keyval == gtk.keysyms.h:
 				control._on_history_menuitem_activate()
 			elif control.type_id == message_control.TYPE_CHAT and \
+			keyval == gtk.keysyms.f:
+				control._on_send_file_menuitem_activate(None)
+			elif control.type_id == message_control.TYPE_CHAT and \
+			keyval == gtk.keysyms.g:
+				control._on_convert_to_gc_menuitem_activate(None)
+			elif control.type_id == message_control.TYPE_CHAT and \
 			keyval == gtk.keysyms.i:
 				control._on_contact_information_menuitem_activate(None)
+			elif control.type_id == message_control.TYPE_GC and \
+			keyval == gtk.keysyms.n:
+				control._on_change_nick_menuitem_activate(None)
+			elif control.type_id == message_control.TYPE_GC and \
+			keyval == gtk.keysyms.t:
+				control._on_change_subject_menuitem_activate(None)
+			elif control.type_id == message_control.TYPE_GC and \
+			keyval == gtk.keysyms.b:
+				control._on_bookmark_room_menuitem_activate(None)
 			# Tab switch bindings
 			elif keyval == gtk.keysyms.ISO_Left_Tab: # CTRL + SHIFT + TAB
 				self.move_to_next_unread_tab(False)

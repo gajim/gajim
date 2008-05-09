@@ -187,7 +187,7 @@
                       <widget class="GtkButton" id="send_file_button">
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="tooltip" translatable="yes">Send a file</property>
+                        <property name="tooltip" translatable="yes">Send a file (Ctrl-F)</property>
                         <property name="relief">GTK_RELIEF_NONE</property>
                         <property name="focus_on_click">False</property>
                         <property name="response_id">0</property>
@@ -209,7 +209,7 @@
                       <widget class="GtkButton" id="convert_to_gc_button">
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="tooltip" translatable="yes">Invite contacts to the conversation</property>
+                        <property name="tooltip" translatable="yes">Invite contacts to the conversation (Ctrl-G)</property>
                         <property name="relief">GTK_RELIEF_NONE</property>
                         <property name="focus_on_click">False</property>
                         <property name="response_id">0</property>
@@ -611,7 +611,7 @@
                       <widget class="GtkButton" id="change_nick_button">
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="tooltip" translatable="yes">Change your nickname</property>
+                        <property name="tooltip" translatable="yes">Change your nickname (Ctrl-N)</property>
                         <property name="relief">GTK_RELIEF_NONE</property>
                         <property name="response_id">0</property>
                         <child>
@@ -633,7 +633,7 @@
                       <widget class="GtkButton" id="change_subject_button">
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="tooltip" translatable="yes">Change the room's subject</property>
+                        <property name="tooltip" translatable="yes">Change the room's subject (Ctrl-T)</property>
                         <property name="relief">GTK_RELIEF_NONE</property>
                         <property name="response_id">0</property>
                         <child>
@@ -655,7 +655,7 @@
                       <widget class="GtkButton" id="bookmark_button">
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="tooltip" translatable="yes">Bookmark this room</property>
+                        <property name="tooltip" translatable="yes">Bookmark this room (Ctrl-B)</property>
                         <property name="relief">GTK_RELIEF_NONE</property>
                         <property name="response_id">0</property>
                         <child>

@@ -1705,6 +1705,10 @@ class ChatControl(ChatControlBase):
 			convert_to_gc_menuitem.set_image(muc_icon) 
 
 		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
+		send_file_menuitem.add_accelerator('activate', ag, gtk.keysyms.f, gtk.gdk.CONTROL_MASK,
+			gtk.ACCEL_VISIBLE)
+		convert_to_gc_menuitem.add_accelerator('activate', ag, gtk.keysyms.g, gtk.gdk.CONTROL_MASK,
+			gtk.ACCEL_VISIBLE)
 		history_menuitem.add_accelerator('activate', ag, gtk.keysyms.h, gtk.gdk.CONTROL_MASK,
 			gtk.ACCEL_VISIBLE)
 		information_menuitem.add_accelerator('activate', ag, gtk.keysyms.i,
