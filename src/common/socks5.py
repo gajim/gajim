@@ -899,6 +899,9 @@ class Socks5Receiver(Socks5, IdleObject):
 	
 	def connect(self):
 		''' create the socket and plug it to the idlequeue '''
+		if self.ais == None:
+			return None
+
 		for ai in self.ais:
 			try:
 				self._sock=socket.socket(*ai[:3])
