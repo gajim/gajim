@@ -95,10 +95,14 @@ class FeaturesWindow:
 				_('Transform LaTeX expressions between $$ $$.'),
 				_('Requires texlive-latex-base, dvips and imagemagick. You have to set \'use_latex\' to True in the Advanced Configuration Editor.'),
 				_('Feature not available under Windows.')),
-			_('End to end encryption'): (self.pycrypto_available,
+			_('End to End Encryption'): (self.pycrypto_available,
 				_('Encrypting chatmessages.'),
 				_('Requires python-crypto.'),
 				_('Requires python-crypto.')),
+			_('Off the Record Encryption'): (self.otr_available,
+				_('Encrypting chatmessages in a way that even works through gateways.'),
+				_('Requires pyotr and libotr.'),
+				_('Requires pyotr and libotr.')),
 			_('RST Generator'): (self.docutils_available,
 				_('Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html).'),
 				_('Requires python-docutils.'),
@@ -307,6 +311,11 @@ class FeaturesWindow:
 	def pycrypto_available(self):
 		from common import gajim
 		return gajim.HAVE_PYCRYPTO
+
+	def otr_available(self):
+		if gajim.otr_module:
+			return True
+		return False
 
 	def docutils_available(self):
 		try:
