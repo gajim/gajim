@@ -319,7 +319,7 @@ class OtrlMessageAppOps:
 		while gtk.events_pending():
 			gtk.main_iteration(block=False)
 
-		otr.otrl_privkey_generate(gajim.otr_userstates[opdata['account']],
+		otr.otrl_privkey_generate(gajim.connections[opdata['account']].otr_userstates,
 			os.path.join(gajimpaths.root, "%s.key"%opdata['account']).encode(),
 			accountname, gajim.OTR_PROTO)
 		permlabel.set_text("Generating a private key for %s...\ndone."%accountname)
@@ -371,7 +371,7 @@ class OtrlMessageAppOps:
 			otr.otrl_privkey_hash_to_human(fingerprint)), opdata['account'], username)
 
 	def write_fingerprints(self, opdata=""):
-		otr.otrl_privkey_write_fingerprints(gajim.otr_userstates[opdata['account']],
+		otr.otrl_privkey_write_fingerprints(gajim.connections[opdata['account']].otr_userstates,
 			os.path.join(gajimpaths.root, "%s.fpr"%opdata['account']).encode())
 
 	def gone_secure(self, opdata="", context=None):
@@ -3325,25 +3325,6 @@ class Interface:
 			gajim.last_message_time[a] = {}
 			gajim.status_before_autoaway[a] = ''
 			gajim.transport_avatar[a] = {}
-
-			if gajim.otr_module:
-				gajim.otr_userstates[a] = otr.otrl_userstate_create()
-				try:
-					otr.otrl_privkey_read(gajim.otr_userstates[a],
-						os.path.join(gajimpaths.root, "%s.key"%a).encode())
-				except Exception, e:
-					if hasattr(e,"os_errno") and e.os_errno == 2:
-						print "didn't find otr keyfile "+ \
-							(os.path.join(gajimpaths.root, "%s.key"%a).encode())
-						pass
-				try:
-					otr.otrl_privkey_read_fingerprints(gajim.otr_userstates[a],
-						os.path.join(gajimpaths.root, "%s.fpr"%a).encode(), (add_appdata, a))
-				except Exception, e:
-					if hasattr(e,"os_errno") and e.os_errno == 2:
-						print "didn't find otr fingerprint file "+ \
-							(os.path.join(gajimpaths.root, "%s.fpr"%a).encode())
-						pass
 
 		if gajim.config.get('remote_control'):
 			try:

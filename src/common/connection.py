@@ -164,6 +164,26 @@ class Connection(ConnectionHandlers):
 		# server {'icq': ['icq.server.com', 'icq2.server.com'], }
 		self.vcard_supported = True
 		self.private_storage_supported = True
+
+		if gajim.otr_module:
+			self.otr_userstates = gajim.otr_module.otrl_userstate_create()
+
+			try:
+				gajim.otr_module.otrl_privkey_read(self.otr_userstates,
+					os.path.join(gajimpaths.root,
+					'%s.key' % self.name).encode())
+			except Exception, e:
+				if hasattr(e, 'os_errno') and e.os_errno == 2:
+					pass
+
+			try:
+				gajim.otr_module.otrl_privkey_read_fingerprints(
+					self.otr_userstates, os.path.join(
+					gajimpaths.root, '%s.fpr' % self.name
+					).encode(), (add_appdata, a))
+			except Exception, e:
+				if hasattr(e, 'os_errno') and e.os_errno == 2:
+					pass
 	# END __init__
 
 	def put_event(self, ev):

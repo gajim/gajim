@@ -160,18 +160,16 @@ class MessageControl:
 						'original_message':original_message}, 'account':self.account}
 	
 				new_msg = gajim.otr_module.otrl_message_sending(
-					gajim.otr_userstates[self.account],
+					gajim.connections[self.account].otr_userstates,
 					(gajim.otr_ui_ops, d),
 					gajim.get_jid_from_account(self.account).encode(), gajim.OTR_PROTO,
 					self.contact.get_full_jid().encode(), message.encode(), None)
 
 				context = gajim.otr_module.otrl_context_find(
-						gajim.otr_userstates[self.account],
+						gajim.connections[self.account].otr_userstates,
 						self.contact.get_full_jid().encode(),
 						gajim.get_jid_from_account(self.account).encode(),
 						gajim.OTR_PROTO, 1)[0]
-
-				print repr(context.accountname), repr(context.username)
 
 				# we send all because inject_message can filter on HTML stuff then
 				gajim.otr_module.otrl_message_fragment_and_send(

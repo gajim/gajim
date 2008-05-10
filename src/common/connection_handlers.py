@@ -1680,7 +1680,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 			if gajim.otr_module and isinstance(msgtxt, unicode):
 				otr_msg_tuple = gajim.otr_module.otrl_message_receiving(
-					gajim.otr_userstates[self.name],
+					gajim.connections[self.name].otr_userstates,
 					(gajim.otr_ui_ops, {'account':self.name}),
 					gajim.get_jid_from_account(self.name).encode(),
 					gajim.OTR_PROTO, frm.encode(), msgtxt.encode(),
@@ -1699,7 +1699,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					if ctrl:
 						ctrl.update_ui()
 
-				ctx = gajim.otr_module.otrl_context_find(gajim.otr_userstates[self.name], frm.encode(),
+				ctx = gajim.otr_module.otrl_context_find(gajim.connections[self.name].otr_userstates, frm.encode(),
 						gajim.get_jid_from_account(self.name).encode(), gajim.OTR_PROTO, 1,
 						(gajim.otr_add_appdata, self.name))[0]
 				tlvs = otr_msg_tuple[2]

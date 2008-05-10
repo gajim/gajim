@@ -1208,7 +1208,7 @@ class ChatControl(ChatControlBase):
 
 	def update_otr(self, print_status=False):
 		# retrieve the OTR context from the chat's contact data
-		ctx = gajim.otr_module.otrl_context_find(gajim.otr_userstates[self.account],
+		ctx = gajim.otr_module.otrl_context_find(gajim.connections[self.account].otr_userstates,
 			self.contact.get_full_jid().encode(),
 			gajim.get_jid_from_account(self.account).encode(), gajim.OTR_PROTO, 1,
 			(gajim.otr_add_appdata, self.account))[0]
@@ -1851,7 +1851,7 @@ class ChatControl(ChatControlBase):
 				self._on_smp_otr_menuitem_activate)
 			self.handlers[id] = smp_otr_menuitem
 
-			ctx = gajim.otr_module.otrl_context_find(gajim.otr_userstates[self.account],
+			ctx = gajim.otr_module.otrl_context_find(gajim.connections[self.account].otr_userstates,
 				self.contact.get_full_jid().encode(),
 				gajim.get_jid_from_account(self.account).encode(), gajim.OTR_PROTO, 1,
 				(gajim.otr_add_appdata, self.account))[0]
@@ -2349,7 +2349,7 @@ class ChatControl(ChatControlBase):
 		MessageControl.send_message(self, u"?OTR?", type="chat")
 	def _on_end_otr_menuitem_activate(self, widget):
 		fjid = self.contact.get_full_jid()
-		gajim.otr_module.otrl_message_disconnect(gajim.otr_userstates[self.account],
+		gajim.otr_module.otrl_message_disconnect(gajim.connections[self.account].otr_userstates,
 				(gajim.otr_ui_ops, {'account':self.account,'urgent':True}),
 				gajim.get_jid_from_account(self.account).encode(), gajim.OTR_PROTO,
 				fjid.encode())
@@ -2359,7 +2359,7 @@ class ChatControl(ChatControlBase):
 	def _on_otr_settings_menuitem_activate(self, widget):
 		gajim.otr_windows.ContactOtrWindow(self.contact, self.account, self)
 	def _on_smp_otr_menuitem_activate(self, widget):
-		ctx = gajim.otr_module.otrl_context_find(gajim.otr_userstates[self.account],
+		ctx = gajim.otr_module.otrl_context_find(gajim.connections[self.account].otr_userstates,
 			self.contact.get_full_jid().encode(),
 			gajim.get_jid_from_account(self.account).encode(), gajim.OTR_PROTO, 1,
 			(gajim.otr_add_appdata, self.account))[0]

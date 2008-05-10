@@ -1776,11 +1776,11 @@ class RosterWindow:
 				# disconnect from ENCRYPTED OTR contexts when going
 				# offline/invisible
 				if status == 'offline' or status == 'invisible':
-					ctx = gajim.otr_userstates[account].context_root
+					ctx = gajim.connections[account].otr_userstates.context_root
 					while ctx is not None:
 						if ctx.msgstate == gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED:
 							disconnected = True
-							gajim.otr_module.otrl_message_disconnect(gajim.otr_userstates[account],
+							gajim.otr_module.otrl_message_disconnect(gajim.connections[account].otr_userstates,
 									(gajim.otr_ui_ops,
 									{'account':account,'urgent':True}), ctx.accountname,
 									ctx.protocol, ctx.username)

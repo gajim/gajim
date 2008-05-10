@@ -49,7 +49,7 @@ class ContactOtrSMPWindow:
 				self.contact.get_full_jid())
 
 		self.ctx = gajim.otr_module.otrl_context_find(
-			gajim.otr_userstates[self.account],
+			gajim.connections[self.account].otr_userstates,
 			self.fjid.encode(), gajim.get_jid_from_account(self.account).encode(),
 			gajim.OTR_PROTO, 1, (gajim.otr_add_appdata, self.account))[0]
 
@@ -79,7 +79,7 @@ class ContactOtrSMPWindow:
 
 	def _abort(self, text=None):
 		self.smp_running = False
-		gajim.otr_module.otrl_message_abort_smp(gajim.otr_userstates[self.account],
+		gajim.otr_module.otrl_message_abort_smp(gajim.connections[self.account].otr_userstates,
 				(gajim.otr_ui_ops, {'account':self.account}), self.ctx)
 		if text:
 			gajim.otr_ui_ops.gajim_log(text, self.account, self.contact.get_full_jid())
@@ -152,10 +152,10 @@ class ContactOtrSMPWindow:
 			return
 		secret = self.gw("secret_entry").get_text()
 		if self.response:
-			gajim.otr_module.otrl_message_respond_smp(gajim.otr_userstates[self.account],
+			gajim.otr_module.otrl_message_respond_smp(gajim.connections[self.account].otr_userstates,
 					(gajim.otr_ui_ops, {'account':self.account}), self.ctx, secret)
 		else:
-			gajim.otr_module.otrl_message_initiate_smp(gajim.otr_userstates[self.account],
+			gajim.otr_module.otrl_message_initiate_smp(gajim.connections[self.account].otr_userstates,
 					(gajim.otr_ui_ops, {'account':self.account}), self.ctx, secret)
 			self.gw("progressbar").set_fraction(0.3)
 		self.smp_running = True
@@ -174,7 +174,7 @@ class ContactOtrWindow:
 		self.ctrl = ctrl
 
 		self.ctx = gajim.otr_module.otrl_context_find(
-			gajim.otr_userstates[self.account],
+			gajim.connections[self.account].otr_userstates,
 			self.contact.get_full_jid().encode(),
 			gajim.get_jid_from_account(self.account).encode(),
 			gajim.OTR_PROTO, 1, (gajim.otr_add_appdata, self.account))[0]
@@ -193,7 +193,7 @@ class ContactOtrWindow:
 		# always set the label containing our fingerprint
 		self.gw("our_fp_label").set_markup(our_fp_text%
 			gajim.otr_module.otrl_privkey_fingerprint(
-				gajim.otr_userstates[self.account],
+				gajim.connections[self.account].otr_userstates,
 				gajim.get_jid_from_account(self.account).encode(),
 				gajim.OTR_PROTO))
 
