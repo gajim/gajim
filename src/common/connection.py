@@ -167,19 +167,6 @@ class Connection(ConnectionHandlers):
 
 		if gajim.otr_module:
 			self.otr_userstates = gajim.otr_module.otrl_userstate_create()
-
-			try:
-				gajim.otr_module.otrl_privkey_read(self.otr_userstates,
-					os.path.join(gajim.gajimpaths.root,
-					'%s.key' % self.name).encode())
-				gajim.otr_module.otrl_privkey_read_fingerprints(
-					self.otr_userstates, os.path.join(
-					gajim.gajimpaths.root, '%s.fpr' %
-					self.name).encode(),
-					(gajim.otr_add_appdata, self.name))
-			except Exception, e:
-				if not hasattr(e, 'os_errno') or e.os_errno != 2:
-					raise
 	# END __init__
 
 	def put_event(self, ev):
@@ -911,6 +898,20 @@ class Connection(ConnectionHandlers):
 		self.continue_connect_info = [show, msg, sign_msg]
 		self.on_connect_auth = self._init_roster
 		self.connect_and_auth()
+
+		if gajim.otr_module:
+			try:
+				gajim.otr_module.otrl_privkey_read(self.otr_userstates,
+					os.path.join(gajim.gajimpaths.root,
+					'%s.key' % self.name).encode())
+				gajim.otr_module.otrl_privkey_read_fingerprints(
+					self.otr_userstates, os.path.join(
+					gajim.gajimpaths.root, '%s.fpr' %
+					self.name).encode(),
+					(gajim.otr_add_appdata, self.name))
+			except Exception, e:
+				if not hasattr(e, 'os_errno') or e.os_errno != 2:
+					raise
 
 	def _init_roster(self, con):
 		self.connection = con
