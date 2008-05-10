@@ -593,6 +593,7 @@ class GroupchatControl(ChatControlBase):
 			self.destroy_room_menuitem.set_sensitive(False)
 			self.change_subject_menuitem.set_sensitive(False)
 			self.change_nick_menuitem.set_sensitive(False)
+
 		return self.gc_popup_menu
 
 	def on_message(self, nick, msg, tim, has_timestamp = False, xhtml = None,

@@ -5,7 +5,7 @@
   <widget class="GtkMenu" id="chat_control_popup_menu">
     <child>
       <widget class="GtkImageMenuItem" id="add_to_roster_menuitem">
-        <property name="visible">True</property>
+        <property name="no_show_all">True</property>
         <property name="label" translatable="yes">_Add to Roster</property>
         <property name="use_underline">True</property>
         <signal name="activate" handler="_on_add_to_roster_menuitem_activate"/>
@@ -73,7 +73,8 @@
     </child>
     <child>
       <widget class="GtkMenuItem" id="otr_submenu">
-        <property name="no_show_all">True</property>
+        <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="label" translatable="yes">Off-the-Record Encryption</property>
         <property name="use_underline">True</property>
         <child>

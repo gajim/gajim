@@ -1033,17 +1033,21 @@ class ChatControl(ChatControlBase):
 		id = self.actions_button.connect('clicked', self.on_actions_button_clicked)
 		self.handlers[id] = self.actions_button
 
-		widget = self.xml.get_widget('send_file_button')
-		id = widget.connect('clicked', self._on_send_file_menuitem_activate)
-		self.handlers[id] = widget
+		add_to_roster_button = self.xml.get_widget('add_to_roster_button')
+		id = add_to_roster_button.connect('clicked', self._on_add_to_roster_menuitem_activate)
+		self.handlers[id] = add_to_roster_button
 
-		widget = self.xml.get_widget('convert_to_gc_button')
-		id = widget.connect('clicked', self._on_convert_to_gc_menuitem_activate)
-		self.handlers[id] = widget
+		send_file_button = self.xml.get_widget('send_file_button')
+		id = send_file_button.connect('clicked', self._on_send_file_menuitem_activate)
+		self.handlers[id] = send_file_button
 
-		widget = self.xml.get_widget('contact_information_button')
-		id = widget.connect('clicked', self._on_contact_information_menuitem_activate)
-		self.handlers[id] = widget
+		convert_to_gc_button = self.xml.get_widget('convert_to_gc_button')
+		id = convert_to_gc_button.connect('clicked', self._on_convert_to_gc_menuitem_activate)
+		self.handlers[id] = convert_to_gc_button
+
+		contact_information_button = self.xml.get_widget('contact_information_button')
+		id = contact_information_button.connect('clicked', self._on_contact_information_menuitem_activate)
+		self.handlers[id] = contact_information_button
 
 		compact_view = gajim.config.get('compact_view')
 		self.chat_buttons_set_visible(compact_view)
@@ -1057,6 +1061,25 @@ class ChatControl(ChatControlBase):
 		# Convert to GC icon
 		img = self.xml.get_widget('convert_to_gc_button_image')
 		img.set_from_pixbuf(gtkgui_helpers.load_icon('muc_active').get_pixbuf())
+
+		# Add to roster button
+		if _('Not in Roster') in contact.groups:
+			add_to_roster_button.show()
+
+		# If we don't have resource, we can't do file transfer
+		# in transports, contact holds our info we need to disable it too
+		if self.TYPE_ID == message_control.TYPE_PM and self.gc_contact.jid and \
+		self.gc_contact.resource:
+			send_file_button.set_sensitive(True)
+		elif contact.resource and contact.jid.find('@') != -1:
+			send_file_button.set_sensitive(True)
+		else:
+			send_file_button.set_sensitive(False)
+
+		# check if it's possible to convert to groupchat
+		if gajim.get_transport_name_from_jid(self.contact.jid) or \
+		gajim.connections[self.account].is_zeroconf:
+			convert_to_gc_button.set_sensitive(False)
 		
 		# keep timeout id and window obj for possible big avatar
 		# it is on enter-notify and leave-notify so no need to be per jid
@@ -1110,6 +1133,10 @@ class ChatControl(ChatControlBase):
 					self.session.is_loggable())
 		
 		self.status_tooltip = gtk.Tooltips()
+
+	    	if gajim.otr_module:
+			self.update_otr(True)
+
 		self.update_ui()
 		# restore previous conversation
 		self.restore_conversation()
@@ -1176,8 +1203,6 @@ class ChatControl(ChatControlBase):
 			self.check_for_possible_inactive_chatstate, None)
 
 	def update_ui(self):
-	    	if gajim.otr_module:
-			self.update_otr(True)
 		# The name banner is drawn here
 		ChatControlBase.update_ui(self)
 
@@ -1721,6 +1746,7 @@ class ChatControl(ChatControlBase):
 		xml = gtkgui_helpers.get_glade('chat_control_popup_menu.glade')
 		menu = xml.get_widget('chat_control_popup_menu')
 
+		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
 		history_menuitem = xml.get_widget('history_menuitem')
 		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
 		toggle_e2e_menuitem = xml.get_widget('toggle_e2e_menuitem')
@@ -1729,7 +1755,6 @@ class ChatControl(ChatControlBase):
 		smp_otr_menuitem = xml.get_widget('smp_otr_menuitem')
 		start_otr_menuitem = xml.get_widget('start_otr_menuitem')
 		end_otr_menuitem = xml.get_widget('end_otr_menuitem')
-		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
 		information_menuitem = xml.get_widget('information_menuitem')
 		convert_to_gc_menuitem = xml.get_widget('convert_to_groupchat')
@@ -1769,6 +1794,10 @@ class ChatControl(ChatControlBase):
 			toggle_e2e_menuitem.set_active(isactive)
 			toggle_e2e_menuitem.set_sensitive(not self.gpg_is_active)
 
+		# add_to_roster_menuitem
+		if _('Not in Roster') in contact.groups:
+			add_to_roster_menuitem.show()
+
 		# If we don't have resource, we can't do file transfer
 		# in transports, contact holds our info we need to disable it too
 		if self.TYPE_ID == message_control.TYPE_PM and self.gc_contact.jid and \
@@ -1783,14 +1812,6 @@ class ChatControl(ChatControlBase):
 		if gajim.get_transport_name_from_jid(jid) or \
 		gajim.connections[self.account].is_zeroconf:
 			convert_to_gc_menuitem.set_sensitive(False)
-
-		# add_to_roster_menuitem
-		if _('Not in Roster') in contact.groups:
-			add_to_roster_menuitem.show()
-			add_to_roster_menuitem.set_no_show_all(False)
-		else:
-			add_to_roster_menuitem.hide()
-			add_to_roster_menuitem.set_no_show_all(True)
 
 		# connect signals
 		id = history_menuitem.connect('activate', 
@@ -1816,7 +1837,7 @@ class ChatControl(ChatControlBase):
 		self.handlers[id] = convert_to_gc_menuitem
 
 		if gajim.otr_module:
-			otr_submenu.show()
+			otr_submenu.set_sensitive(True)
 			id = otr_settings_menuitem.connect('activate',
 				self._on_otr_settings_menuitem_activate)
 			self.handlers[id] = otr_settings_menuitem
@@ -1841,15 +1862,19 @@ class ChatControl(ChatControlBase):
 			smp_otr_menuitem.set_sensitive(ctx.msgstate ==
 				gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED)
 
-		menu.connect('selection-done', self.destroy_menu, history_menuitem,
-			information_menuitem)
+		menu.connect('selection-done', self.destroy_menu,
+			send_file_menuitem, convert_to_gc_menuitem,
+			information_menuitem, history_menuitem)
 		return menu
 
-	def destroy_menu(self, menu, history_menuitem, information_menuitem):
+	def destroy_menu(self, menu, send_file_menuitem,
+	convert_to_gc_menuitem, information_menuitem, history_menuitem):
 		# destroy accelerators
 		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
-		history_menuitem.remove_accelerator(ag, gtk.keysyms.h, gtk.gdk.CONTROL_MASK)
+		send_file_menuitem.remove_accelerator(ag, gtk.keysyms.f, gtk.gdk.CONTROL_MASK)
+		convert_to_gc_menuitem.remove_accelerator(ag, gtk.keysyms.g, gtk.gdk.CONTROL_MASK)
 		information_menuitem.remove_accelerator(ag, gtk.keysyms.i, gtk.gdk.CONTROL_MASK)
+		history_menuitem.remove_accelerator(ag, gtk.keysyms.h, gtk.gdk.CONTROL_MASK)
 		# destroy menu
 		menu.destroy()
 
