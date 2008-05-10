@@ -170,20 +170,16 @@ class Connection(ConnectionHandlers):
 
 			try:
 				gajim.otr_module.otrl_privkey_read(self.otr_userstates,
-					os.path.join(gajimpaths.root,
+					os.path.join(gajim.gajimpaths.root,
 					'%s.key' % self.name).encode())
-			except Exception, e:
-				if hasattr(e, 'os_errno') and e.os_errno == 2:
-					pass
-
-			try:
 				gajim.otr_module.otrl_privkey_read_fingerprints(
 					self.otr_userstates, os.path.join(
-					gajimpaths.root, '%s.fpr' % self.name
-					).encode(), (add_appdata, a))
+					gajim.gajimpaths.root, '%s.fpr' %
+					self.name).encode(),
+					(gajim.otr_add_appdata, self.name))
 			except Exception, e:
-				if hasattr(e, 'os_errno') and e.os_errno == 2:
-					pass
+				if not hasattr(e, 'os_errno') or e.os_errno != 2:
+					raise
 	# END __init__
 
 	def put_event(self, ev):
