@@ -1509,8 +1509,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if not mtype == 'groupchat':
 			session = self.get_session(frm, thread_id, mtype)
 
-		if thread_id and not session.received_thread_id:
-			session.received_thread_id = True
+			if thread_id and not session.received_thread_id:
+				session.received_thread_id = True
 
 		# check if the message is pubsub#event
 		if msg.getTag('event') is not None:
