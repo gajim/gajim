@@ -3781,6 +3781,10 @@ class RosterWindow:
 				jid_dest)
 			uri = data.strip()
 			uri_splitted = uri.split() # we may have more than one file dropped
+			try:
+				uri_splitted.remove('\0') # This is always the last element in windows
+			except ValueError:
+				pass
 			nb_uri = len(uri_splitted)
 			# Check the URIs
 			bad_uris = []

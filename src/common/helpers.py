@@ -585,10 +585,10 @@ def play_sound_file(path_to_soundfile):
 		exec_command(command)
 
 def get_file_path_from_dnd_dropped_uri(uri):
-	path = urllib.url2pathname(uri) # escape special chars
+	path = urllib.unquote(uri) # escape special chars
 	path = path.strip('\r\n\x00') # remove \r\n and NULL
 	# get the path to file
-	if path.startswith('file:\\\\\\'): # windows
+	if re.match('^file:///[a-zA-Z]:/', path): # windows
 		path = path[8:] # 8 is len('file:///')
 	elif path.startswith('file://'): # nautilus, rox
 		if sys.platform == 'darwin':
