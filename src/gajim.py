@@ -369,10 +369,10 @@ class OtrlMessageAppOps:
 		if msg_type == otr.OTRL_MSGTYPE_QUERY:
 			# split away XHTML-contaminated explanatory message
 			message = unicode(message.splitlines()[0])
-			message += u"\n%s has requested an Off-the-Record private " \
+			message += u"\nThis user has requested an Off-the-Record private " \
 				"conversation.  However, you do not have a plugin to " \
 				"support that.\nSee http://otr.cypherpunks.ca/ for more "\
-				"information."%gajim.get_jid_from_account(opdata['account'])
+				"information.")
 
 		gajim.connections[opdata['account']].send_message(recipient, message,
 			**opdata['kwargs'])

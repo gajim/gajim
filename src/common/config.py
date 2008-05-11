@@ -319,7 +319,7 @@ class Config:
 			'zeroconf_jabber_id': [ opt_str, '', '', True ],
 			'zeroconf_email': [ opt_str, '', '', True ],
 			'use_env_http_proxy' : [opt_bool, False],
-			'otr_flags': [opt_int, 59 ],
+			'otr_flags': [opt_int, 58 ],
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],
