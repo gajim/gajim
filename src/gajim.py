@@ -327,8 +327,12 @@ class OtrlMessageAppOps:
 		dialog.set_response_sensitive(gtk.RESPONSE_CLOSE, True)
 
 	def is_logged_in(self, opdata={}, accountname="", protocol="", recipient=""):
-		return gajim.contacts.get_contact_from_full_jid(opdata['account'], recipient).show \
-			in ['dnd', 'xa', 'chat', 'online', 'away', 'invisible']
+		contact = gajim.contacts.get_contact_from_full_jid(opdata['account'], recipient)
+		if contact:
+			return contact.show \
+				in ['dnd', 'xa', 'chat', 'online', 'away',
+				'invisible']
+		return 0
 
 	def inject_message(self, opdata=None, accountname="", protocol="", recipient="",
 			message=""):
