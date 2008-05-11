@@ -291,7 +291,8 @@ class OtrlMessageAppOps:
 			if ctrl:
 				ctrl.print_conversation_line(u" [OTR] %s"%msg, 'status', '', None)
 		id = gajim.logger.write('chat_msg_recv', fjid, message=msg, tim=tim)
-		gajim.logger.set_read_messages([id])
+		if id:
+			gajim.logger.set_read_messages([id])
 
 	def policy(self, opdata=None, context=None):
 		policy = gajim.config.get_per("contacts",
@@ -384,8 +385,7 @@ class OtrlMessageAppOps:
 				opdata['account'], context.username, no_print=True)
 		
 		ctrl = gajim.interface.msg_win_mgr.get_control(
-			gajim.get_jid_without_resource(unicode(context.username)),
-				opdata['account'])
+			unicode(context.username), opdata['account'])
 		if ctrl:
 			ctrl.update_otr(True)
 
