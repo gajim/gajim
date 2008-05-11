@@ -372,7 +372,7 @@ class OtrlMessageAppOps:
 			message += u"\nThis user has requested an Off-the-Record private " \
 				"conversation.  However, you do not have a plugin to " \
 				"support that.\nSee http://otr.cypherpunks.ca/ for more "\
-				"information.")
+				"information."
 
 		gajim.connections[opdata['account']].send_message(recipient, message,
 			**opdata['kwargs'])
