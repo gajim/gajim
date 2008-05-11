@@ -286,17 +286,37 @@ class OtrlMessageAppOps:
 		tim = time.localtime()
 
 		if not no_print:
-			ctrl = gajim.interface.msg_win_mgr.get_control(
-					gajim.get_jid_without_resource(fjid), account)
+			ctrl = self.get_control(fjid, account)
 			if ctrl:
 				ctrl.print_conversation_line(u" [OTR] %s"%msg, 'status', '', None)
 		id = gajim.logger.write('chat_msg_recv', fjid, message=msg, tim=tim)
+		# gajim.logger.write() only marks a message as unread (and so only
+		# returns an id) when fjid is a real contact (NOT if it's a GC private
+		# chat)
 		if id:
 			gajim.logger.set_read_messages([id])
+	
+	def get_control(self, fjid, account):
+		# first try to get the window with the full jid
+		ctrl = gajim.interface.msg_win_mgr.get_control(fjid, account)
+		if ctrl:
+			# got one, be happy
+			return ctrl
+		
+		# otherwise try without the resource
+		ctrl = gajim.interface.msg_win_mgr.get_control(
+			gajim.get_jid_without_resource(fjid), account)
+		# but only use it when it is not a GC window
+		if ctrl and ctrl.TYPE_ID == message_control.TYPE_CHAT:
+			return ctrl
 
 	def policy(self, opdata=None, context=None):
-		policy = gajim.config.get_per("contacts",
-			gajim.get_jid_without_resource(context.username), "otr_flags")
+		policy = gajim.config.get_per("contacts", context.username,
+			"otr_flags")
+		if policy <= 0:
+			policy = gajim.config.get_per("contacts",
+					gajim.get_jid_without_resource(context.username),
+					"otr_flags")
 		if policy <= 0:
 			policy = gajim.config.get_per("accounts", opdata['account'], "otr_flags")
 		return policy

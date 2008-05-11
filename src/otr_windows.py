@@ -224,7 +224,7 @@ class ContactOtrWindow:
 		otr_flags = gajim.config.get_per("contacts", self.contact.jid,
 			"otr_flags")
 
-		if otr_flags > 0:
+		if otr_flags >= 0:
 			self.gw("otr_default_checkbutton").set_active(0)
 			for w in self.gw("otr_settings_vbox").get_children():
 				w.set_sensitive(True)
