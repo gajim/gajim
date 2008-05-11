@@ -117,25 +117,24 @@ class MessageControl:
 		return len(gajim.events.get_events(self.account, self.contact.jid))
 
 	def set_session(self, session):
-		if hasattr(self, 'session') and session == self.session:
+		oldsession = None
+		if hasattr(self, 'session'):
+			oldsession = self.session
+
+		if oldsession and session == oldsession:
 			return
-
-		was_encrypted = False
-
-		if hasattr(self, 'session') and self.session:
-			if self.session.enable_encryption:
-				was_encrypted = True
-
-			gajim.connections[self.account].delete_session(self.session.jid,
-									self.session.thread_id)
 
 		self.session = session
 
 		if session:
 			session.control = self
 
-			if was_encrypted:
-				self.print_esession_details()
+			if oldsession:
+				self.parent_win.change_thread_key(self.contact.jid, self.account,
+					oldsession.thread_id, session.thread_id)
+
+				if oldsession.enable_encryption:
+					self.print_esession_details()
 
 	def send_message(self, message, keyID = '', type = 'chat',
 	chatstate = None, msg_id = None, composing_xep = None, resource = None,
@@ -145,12 +144,6 @@ class MessageControl:
 		jid = self.contact.jid
 		original_message = message
 
-		if not self.session:
-			fjid = self.contact.get_full_jid()
-			new_session = gajim.connections[self.account].make_new_session(fjid)
-
-			self.set_session(new_session)
-
 		if gajim.otr_module:
 			if type == 'chat' and isinstance(message, unicode):
 				d = {'kwargs':{'keyID':keyID, 'type':type,
@@ -158,7 +151,7 @@ class MessageControl:
 						'composing_xep':composing_xep, 'resource':self.resource,
 						'user_nick':user_nick, 'session':self.session,
 						'original_message':original_message}, 'account':self.account}
-	
+
 				new_msg = gajim.otr_module.otrl_message_sending(
 					gajim.connections[self.account].otr_userstates,
 					(gajim.otr_ui_ops, d),

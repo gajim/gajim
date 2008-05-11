@@ -116,7 +116,7 @@ class Events:
 
 	def remove_events(self, account, jid, event = None, types = []):
 		'''if event is not specified, remove all events from this jid,
-		optionnaly only from given type
+		optionally only from given type
 		return True if no such event found'''
 		if not self._events.has_key(account):
 			return True
@@ -168,7 +168,7 @@ class Events:
 		'''returns all events from the given account of the form
 		{jid1: [], jid2: []}
 		if jid is given, returns all events from the given jid in a list: []
-		optionnaly only from given type'''
+		optionally only from given type'''
 		if not self._events.has_key(account):
 			return []
 		if not jid:

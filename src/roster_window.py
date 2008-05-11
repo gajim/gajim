@@ -53,6 +53,8 @@ from common import i18n
 
 from message_window import MessageWindowMgr
 
+from session import ChatControlSession
+
 from common import dbus_support
 if dbus_support.supported:
 	from music_track_listener import MusicTrackListener
@@ -1133,6 +1135,51 @@ class RosterWindow:
 			self.model[child_iter][C_AVATAR_PIXBUF] = scaled_pixbuf
 		return False
 
+	def join_gc_room(self, account, room_jid, nick, password, minimize=False,
+		is_continued=False):
+		'''joins the room immediately'''
+		if gajim.interface.msg_win_mgr.has_window(room_jid, account) and \
+		gajim.gc_connected[account][room_jid]:
+			win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
+			ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid, account)
+			win.window.present()
+			win.set_active_tab(ctrl)
+			dialogs.ErrorDialog(_('You are already in group chat %s') % room_jid)
+			return
+		minimized_control_exists = False
+		if room_jid in gajim.interface.minimized_controls[account]:
+			minimized_control_exists = True
+		invisible_show = gajim.SHOW_LIST.index('invisible')
+		if gajim.connections[account].connected == invisible_show:
+			dialogs.ErrorDialog(
+				_('You cannot join a group chat while you are invisible'))
+			return
+		if minimize and not minimized_control_exists and \
+		not gajim.interface.msg_win_mgr.has_window(room_jid, account):
+			contact = gajim.contacts.create_contact(jid = room_jid, name = nick)
+			gc_control = GroupchatControl(None, contact, account)
+			gajim.interface.minimized_controls[account][room_jid] = gc_control
+			gajim.connections[account].join_gc(nick, room_jid, password)
+			if password:
+				gajim.gc_passwords[room_jid] = password
+			self.add_groupchat_to_roster(account, room_jid)
+			return
+		if not minimized_control_exists and \
+			not gajim.interface.msg_win_mgr.has_window(room_jid, account):
+			self.new_room(room_jid, nick, account, is_continued=is_continued)
+		if not minimized_control_exists:
+			gc_win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
+			gc_control = gc_win.get_gc_control(room_jid, account)
+			gc_win.set_active_tab(gc_control)
+			gc_win.window.present()
+		gajim.connections[account].join_gc(nick, room_jid, password)
+		if password:
+			gajim.gc_passwords[room_jid] = password
+		contact = gajim.contacts.get_contact_with_highest_priority(account, \
+			room_jid)
+		if contact or minimized_control_exists:
+			self.add_groupchat_to_roster(account, room_jid)
+
 	def draw_completely_and_show_if_needed(self, jid, account):
 		'''Draw contact, account and groups of given jid
 		Show contact if it has pending events
@@ -1434,9 +1481,9 @@ class RosterWindow:
 				session = gajim.connections[account].make_new_session(jid)
 
 				tim = time.localtime(float(result[2]))
-				self.on_message(jid, result[1], tim, account, msg_type = 'chat',
-					msg_id = result[0], session = session)
-		
+				session.roster_message(jid, result[1], tim, msg_type='chat',
+					msg_id=result[0])
+
 			elif (time.time() - result[2]) > 2592000:
 				# ok, here we see that we have a message in unread messages table
 				# that is older than a month. It is probably from someone not in our 
@@ -1496,10 +1543,10 @@ class RosterWindow:
 							gajim.transport_avatar[account][host] = [contact1.jid]
 						else:
 							gajim.transport_avatar[account][host].append(contact1.jid)
-			# If we already have a chat window opened, update it with new contact
+
+			# If we already have chat windows opened, update them with new contact
 			# instance
-			chat_control = gajim.interface.msg_win_mgr.get_control(ji, account)
-			if chat_control:
+			for chat_control in gajim.interface.msg_win_mgr.get_chat_controls(ji, account):
 				chat_control.contact = contact1
 	
 	def enable_syncing_status_msg_from_current_music_track(self, enabled):
@@ -1830,9 +1877,10 @@ class RosterWindow:
 				account):
 					win = gajim.interface.msg_win_mgr.get_window(jid_with_resource,
 						account)
-					ctrl = win.get_control(jid_with_resource, account)
-					ctrl.update_ui()
-					win.redraw_tab(ctrl)
+					for ctrl in win.get_controls(jid_with_resource, account):
+						ctrl.update_ui()
+						win.redraw_tab(ctrl)
+
 				gajim.contacts.remove_contact(account, contact)
 		elif contact.jid == gajim.get_jid_from_account(account) and show == 'offline':
 			# Our SelfContact went offline. Remove him
@@ -1841,19 +1889,20 @@ class RosterWindow:
 		# print status in chat window and update status/GPG image
 		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
 			win = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
-			ctrl = win.get_control(contact.jid, account)
-			ctrl.contact = gajim.contacts.get_contact_with_highest_priority(
-				account, contact.jid)
-			ctrl.update_ui()
-			win.redraw_tab(ctrl)
-
 			uf_show = helpers.get_uf_show(show)
-			ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
-				'status')
-			if status:
-				ctrl.print_conversation(' (', 'status', simple=True)
-				ctrl.print_conversation('%s' % (status), 'status', simple=True)
-				ctrl.print_conversation(')', 'status', simple=True)
+
+			for ctrl in win.get_controls(contact.jid, account):
+				ctrl.contact = gajim.contacts.get_contact_with_highest_priority(
+					account, contact.jid)
+				ctrl.update_ui()
+				win.redraw_tab(ctrl)
+
+				ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
+					'status')
+				if status:
+					ctrl.print_conversation(' (', 'status', simple=True)
+					ctrl.print_conversation('%s' % (status), 'status', simple=True)
+					ctrl.print_conversation(')', 'status', simple=True)
 
 		# unset custom status
 		if gajim.interface.status_sent_to_users.has_key(account) and \
@@ -1973,119 +2022,6 @@ class RosterWindow:
 				gajim.config.get('roster_width'),
 				gajim.config.get('roster_height'))		
 
-	def on_message(self, jid, msg, tim, account, encrypted=False, msg_type='',
-	subject=None, resource='', msg_id=None, user_nick='',
-	advanced_notif_num=None, xhtml=None, session=None, form_node=None):
-		'''when we receive a message'''
-		contact = None
-		# if chat window will be for specific resource
-		resource_for_chat = resource
-		fjid = jid
-		# Try to catch the contact with correct resource
-		if resource:
-			fjid = jid + '/' + resource
-			contact = gajim.contacts.get_contact(account, jid, resource)
-		highest_contact = gajim.contacts.get_contact_with_highest_priority(
-			account, jid)
-		if not contact:
-			# If there is another resource, it may be a message from an invisible
-			# resource
-			lcontact = gajim.contacts.get_contacts(account, jid)
-			if (len(lcontact) > 1 or (lcontact and lcontact[0].resource and \
-			lcontact[0].show != 'offline')) and jid.find('@') > 0:
-				contact = gajim.contacts.copy_contact(highest_contact)
-				contact.resource = resource
-				if resource:
-					fjid = jid + '/' + resource
-				contact.priority = 0
-				contact.show = 'offline'
-				contact.status = ''
-				gajim.contacts.add_contact(account, contact)
-
-			else:
-				# Default to highest prio
-				fjid = jid
-				resource_for_chat = None
-				contact = highest_contact
-		if not contact:
-			# contact is not in roster
-			contact = self.add_to_not_in_the_roster(account, jid, user_nick)
-
-		
-		# If visible, try to get first line of contact in roster
-		path = None
-		iters = self._get_contact_iter(jid, account, contact = contact)
-		if iters:
-			path = self.modelfilter.get_path(iters[0])
-
-		# Look for a chat control that has the given resource
-		ctrl = gajim.interface.msg_win_mgr.get_control(fjid, account)
-		if not ctrl:
-			# if not, if message comes from highest prio, get control or open one
-			# without resource
-			if highest_contact and contact.resource == highest_contact.resource \
-			and not jid == gajim.get_jid_from_account(account):
-				ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
-				fjid = jid
-				resource_for_chat = None
-
-		# Do we have a queue?
-		no_queue = len(gajim.events.get_events(account, fjid)) == 0
-
-		popup = helpers.allow_popup_window(account, advanced_notif_num)
-
-		if msg_type == 'normal' and popup: # it's single message to be autopopuped
-			dialogs.SingleMessageWindow(account, contact.jid, action='receive',
-				from_whom=jid, subject=subject, message=msg, resource=resource,
-				session=session, form_node=form_node)
-			return
-
-		# We print if window is opened and it's not a single message
-		if ctrl and msg_type != 'normal':
-			typ = ''
-			if msg_type == 'error':
-				typ = 'status'
-			if session:
-				ctrl.set_session(session)
-			ctrl.print_conversation(msg, typ, tim = tim, encrypted = encrypted,
-						subject = subject, xhtml = xhtml)
-			if msg_id:
-				gajim.logger.set_read_messages([msg_id])
-			return
-
-		# We save it in a queue
-		type_ = 'chat'
-		event_type = 'message_received'
-		if msg_type == 'normal':
-			type_ = 'normal'
-			event_type = 'single_message_received'
-		show_in_roster = notify.get_show_in_roster(event_type, account, contact)
-		show_in_systray = notify.get_show_in_systray(event_type, account, contact)
-		event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
-			encrypted, resource, msg_id, xhtml, session, form_node),
-			show_in_roster=show_in_roster, show_in_systray=show_in_systray)
-		gajim.events.add_event(account, fjid, event)
-		if popup:
-			if not ctrl:
-				gajim.interface.new_chat(contact, account, \
-					resource=resource_for_chat)
-				if path and not self.dragging and gajim.config.get(
-				'scroll_roster_to_last_message'):
-					# we curently see contact in our roster
-					# show and select his line in roster
-					# do not change selection while DND'ing
-					self.tree.expand_row(path[0:1], False)
-					self.tree.expand_row(path[0:2], False)
-					self.tree.scroll_to_cell(path)
-					self.tree.set_cursor(path)
-		else:
-			if no_queue: # We didn't have a queue: we change icons
-				self.draw_contact(jid, account)
-			self.show_title() # we show the * or [n]
-			# Show contact in roster (if he is invisible for example) and select
-			# line
-			self.show_and_select_contact_if_having_events(jid, account)
-
 	def close_all_from_dict(self, dic):
 		'''close all the windows in the given dictionary'''
 		for w in dic.values():
@@ -2151,8 +2087,8 @@ class RosterWindow:
 
 	def on_quit_request(self, widget = None):
 		''' user want to quit. Check if he should be warned about messages
-		pending. Send offline to all connected account. We do NOT really quit
-		gajim here '''
+		pending. Terminate all sessions and send offline to all connected
+		account. We do NOT really quit gajim here '''
 		accounts = gajim.connections.keys()
 		get_msg = False
 		for acct in accounts:
@@ -2169,7 +2105,7 @@ class RosterWindow:
 		unread = gajim.events.get_nb_events()
 		if not gajim.config.get('notify_on_all_muc_messages'):
 			unread_not_to_notify = gajim.events.get_nb_events(['printed_gc_msg'])
-			unread -= unread_not_to_notify 
+			unread -= unread_not_to_notify
 
 		# check if we have recent messages
 		recent = False
@@ -2192,13 +2128,15 @@ class RosterWindow:
 
 		self.quit_on_next_offline = 0
 		for acct in accounts:
+			gajim.connections[acct].terminate_sessions()
+
 			if gajim.connections[acct].connected:
 				self.quit_on_next_offline += 1
 				self.send_status(acct, 'offline', message)
 
 		if not self.quit_on_next_offline:
 			self.quit_gtkgui_interface()
-	
+
 ################################################################################
 ### Menu and GUI callbacks
 ### FIXME: order callbacks in itself...
@@ -2630,9 +2568,8 @@ class RosterWindow:
 					u.name = new_text
 				gajim.connections[account].update_contact(jid, new_text, u.groups)
 				self.draw_contact(jid, account)
-				# Update opened chat
-				ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
-				if ctrl:
+				# Update opened chats
+				for ctrl in gajim.interface.msg_win_mgr.get_controls(jid, account):
 					ctrl.update_ui()
 					win = gajim.interface.msg_win_mgr.get_window(jid, account)
 					win.redraw_tab(ctrl)
@@ -2719,8 +2656,7 @@ class RosterWindow:
 			keyID = keyID[0]
 			keys[contact.jid] = keyID
 
-		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
-			ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+		for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(contact.jid, account):
 			ctrl.update_ui()
 		keys_str = ''
 		for jid in keys:
@@ -2866,7 +2802,7 @@ class RosterWindow:
 				ctrl.account, ctrl.type_id)
 		ctrl.parent_win = mw
 		mw.new_tab(ctrl)
-		mw.set_active_tab(jid, account)
+		mw.set_active_tab(ctrl)
 		mw.window.present()
 		del gajim.interface.minimized_controls[account][jid]
 
@@ -3029,7 +2965,7 @@ class RosterWindow:
 				x_min = 0
 			if gajim.single_click and not event.state & gtk.gdk.SHIFT_MASK and \
 			not event.state & gtk.gdk.CONTROL_MASK:
-				# Don't handle dubble click if we press icon of a metacontact
+				# Don't handle double click if we press icon of a metacontact
 				titer = model.get_iter(path)
 				if x > x_min and x < x_min + 27 and type_ == 'contact' and \
 				model.iter_has_child(titer):
@@ -3296,7 +3232,19 @@ class RosterWindow:
 
 	def on_profile_avatar_menuitem_activate(self, widget, account):
 		gajim.interface.edit_own_details(account)
-		
+
+	def play_tictactoe(self, widget, contact, account, resource=None):
+		jid = contact.jid
+
+		if resource is not None:
+			jid = jid + u'/' + resource
+
+		import tictactoe
+
+		sess = gajim.connections[account].make_new_session(jid,
+			klass=tictactoe.TicTacToeSession)
+		sess.begin()
+
 	def on_execute_command(self, widget, contact, account, resource=None):
 		'''Execute command. Full JID needed; if it is other contact,
 		resource is necessary. Widget is unnecessary, only to be
@@ -3347,8 +3295,8 @@ class RosterWindow:
 		self.show_treeview_menu(event)
 
 	def on_row_activated(self, widget, path):
-		'''When an iter is activated (dubblick or single click if gnome is set
-		this way'''
+		'''When an iter is activated (double-click or single click if gnome is
+		set this way'''
 		model = self.modelfilter
 		account = model[path][C_ACCOUNT].decode('utf-8')
 		type_ = model[path][C_TYPE]
@@ -4012,6 +3960,7 @@ class RosterWindow:
 			start = '[' + str(nb_unread) + ']  '
 		elif nb_unread == 1:
 			start = '*  '
+
 		self.window.set_title(start + 'Gajim')
 
 		gtkgui_helpers.set_unset_urgency_hint(self.window, nb_unread)
@@ -4864,7 +4813,7 @@ class RosterWindow:
 		menu.connect('selection-done', gtkgui_helpers.destroy_widget)
 		menu.show_all()
 		menu.popup(None, None, None, event_button, event.time)	
-		
+
 	def make_contact_menu(self, event, titer):
 		'''Make contact\'s popup menu'''
 		model = self.modelfilter
@@ -5008,6 +4957,10 @@ class RosterWindow:
 			'add_special_notification_menuitem')
 		execute_command_menuitem = xml.get_widget(
 			'execute_command_menuitem')
+
+		tictactoe_menuitem = xml.get_widget('tictactoe_menuitem')
+		tictactoe_menuitem.connect('activate', self.play_tictactoe, contact,
+			account, contact.resource)
 
 		# send custom status icon
 		blocked = False
