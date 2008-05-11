@@ -407,25 +407,20 @@ class OtrlMessageAppOps:
 			trust = "unverified"
 		self.gajim_log("%s secured OTR connection started"%trust,
 				opdata['account'], context.username, no_print=True)
-		
-		ctrl = gajim.interface.msg_win_mgr.get_control(
-			unicode(context.username), opdata['account'])
+
+		ctrl = self.get_control(context.username, opdata['account'])
 		if ctrl:
 			ctrl.update_otr(True)
 
 	def gone_insecure(self, opdata="", context=None):
 		self.gajim_log("Private conversation with %s lost.", opdata['account'], context.username)
 
-		ctrl = gajim.interface.msg_win_mgr.get_control(
-			gajim.get_jid_without_resource(unicode(context.username)),
-			opdata['account'])
+		ctrl = self.get_control(context.username, opdata['account'])
 		if ctrl:
-			ctrl.update_otr()
+			ctrl.update_otr(True)
 
 	def still_secure(self, opdata=None, context=None, is_reply=0):
-		ctrl = gajim.interface.msg_win_mgr.get_control(
-			gajim.get_jid_without_resource(unicode(context.username)),
-			opdata['account'])
+		ctrl = self.get_control(context.username, opdata['account'])
 		if ctrl:
 			ctrl.update_otr(True)
 
