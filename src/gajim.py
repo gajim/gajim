@@ -289,7 +289,7 @@ class OtrlMessageAppOps:
 			ctrl = self.get_control(fjid, account)
 			if ctrl:
 				ctrl.print_conversation_line(u" [OTR] %s"%msg, 'status', '', None)
-		id = gajim.logger.write('chat_msg_recv', fjid, message=msg, tim=tim)
+		id = gajim.logger.write('chat_msg_recv', fjid, message='[OTR: %s]' % msg, tim=tim)
 		# gajim.logger.write() only marks a message as unread (and so only
 		# returns an id) when fjid is a real contact (NOT if it's a GC private
 		# chat)
