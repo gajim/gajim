@@ -53,7 +53,8 @@ try:
 except:
 	USER_HAS_GROWL = False
 
-def get_show_in_roster(event, account, contact, session = None):
+
+def get_show_in_roster(event, account, contact):
 	'''Return True if this event must be shown in roster, else False'''
 	if event == 'gc_message_received':
 		return True
@@ -64,10 +65,8 @@ def get_show_in_roster(event, account, contact, session = None):
 		if gajim.config.get_per('notifications', str(num), 'roster') == 'no':
 			return False
 	if event == 'message_received':
-		if session:
-			if session.control:
-				return False
-		elif helpers.get_chat_control(account, contact):
+		chat_control = helpers.get_chat_control(account, contact)
+		if chat_control:
 			return False
 	return True
 

@@ -178,7 +178,7 @@ gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI,
 	xmpp.NS_PRIVACY, xmpp.NS_PRIVATE, xmpp.NS_REGISTER,
 	xmpp.NS_VERSION, xmpp.NS_DATA, xmpp.NS_ENCRYPTED,
 	'msglog', 'sslc2s', 'stringprep', xmpp.NS_PING,
-	xmpp.NS_TIME_REVISED, xmpp.NS_GAMING]
+	xmpp.NS_TIME_REVISED]
 # Optional features gajim supports
 gajim_optional_features = []
 
@@ -218,7 +218,7 @@ def get_real_jid_from_fjid(account, fjid):
 	if not nick: # It's not a fake_jid, it is a real jid
 		return fjid # we return the real jid
 	real_jid = fjid
-	if interface.msg_win_mgr.get_gc_control(room_jid, account):
+	if interface.msg_win_mgr.get_control(room_jid, account):
 		# It's a pm, so if we have real jid it's in contact.jid
 		gc_contact = contacts.get_gc_contact(account, room_jid, nick)
 		if not gc_contact:

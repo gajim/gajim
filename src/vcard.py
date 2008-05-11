@@ -122,9 +122,11 @@ class VcardWindow:
 		jid = self.contact.jid
 		# Update roster
 		gajim.interface.roster.draw_avatar(jid, self.account)
-		# Update chat windows
-		for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(jid, self.account):
-			if ctrl.type_id != message_control.TYPE_GC:
+		# Update chat window
+		if gajim.interface.msg_win_mgr.has_window(jid, self.account):
+			win = gajim.interface.msg_win_mgr.get_window(jid, self.account)
+			ctrl = win.get_control(jid, self.account)
+			if win and ctrl.type_id != message_control.TYPE_GC:
 				ctrl.show_avatar()
 
 	def on_vcard_information_window_destroy(self, widget):

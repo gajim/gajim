@@ -32,22 +32,9 @@ class StanzaSession(object):
 			else:
 				self.thread_id = self.generate_thread_id()
 
-		self.loggable = True
-
 		self.last_send = 0
 		self.status = None
 		self.negotiated = {}
-
-	def is_loggable(self):
-		account = self.conn.name
-		no_log_for = gajim.config.get_per('accounts', account, 'no_log_for')
-
-		if not no_log_for:
-			no_log_for = ''
-
-		no_log_for = no_log_for.split()
-
-		return self.loggable and account not in no_log_for and self.jid not in no_log_for
 
 	def generate_thread_id(self):
 		return "".join([random.choice(string.ascii_letters) for x in xrange(0,32)])
@@ -83,7 +70,7 @@ class StanzaSession(object):
 	def cancelled_negotiation(self):
 		'''A negotiation has been cancelled, so reset this session to its default state.'''
 
-		if self.control:
+		if hasattr(self, 'control'):
 			self.control.on_cancel_session_negotiation()
 
 		self.status = None
@@ -144,6 +131,8 @@ if gajim.HAVE_PYCRYPTO:
 class EncryptedStanzaSession(StanzaSession):
 	def __init__(self, conn, jid, thread_id, type = 'chat'):
 		StanzaSession.__init__(self, conn, jid, thread_id, type = 'chat')
+
+		self.loggable = True
 
 		self.xes = {}
 		self.es = {}
@@ -778,7 +767,7 @@ class EncryptedStanzaSession(StanzaSession):
 		self.status = 'active'
 		self.enable_encryption = True
 
-		if self.control:
+		if hasattr(self, 'control'):
 			self.control.print_esession_details()
 
 	def final_steps_alice(self, form):
@@ -798,14 +787,15 @@ class EncryptedStanzaSession(StanzaSession):
 
 		self.do_retained_secret(k, srs)
 
-		# ks_s doesn't need to be calculated here
+		# don't need to calculate ks_s here
+
 		self.kc_s, self.km_s, self.ks_s = self.generate_initiator_keys(k)
 		self.kc_o, self.km_o, self.ks_o = self.generate_responder_keys(k)
 
 		# 4.6.2 Verifying Bob's Identity
 
 		self.verify_identity(form, self.d, False, 'b')
-		# Note: If Alice discovers an error then she SHOULD ignore any encrypted content she received in the stanza.
+# Note: If Alice discovers an error then she SHOULD ignore any encrypted content she received in the stanza.
 
 		if self.negotiated['logging'] == 'mustnot':
 			self.loggable = False
@@ -813,7 +803,7 @@ class EncryptedStanzaSession(StanzaSession):
 		self.status = 'active'
 		self.enable_encryption = True
 
-		if self.control:
+		if hasattr(self, 'control'):
 			self.control.print_esession_details()
 
 	# calculate and store the new retained secret
@@ -900,6 +890,17 @@ otherwise, list the fields we haven't implemented'''
 		# this prevents the MAC check on decryption from succeeding,
 		# preventing falsified messages from going through.
 		self.km_o = ''
+
+	def is_loggable(self):
+		account = self.conn.name
+		no_log_for = gajim.config.get_per('accounts', account, 'no_log_for')
+
+		if not no_log_for:
+			no_log_for = ''
+
+		no_log_for = no_log_for.split()
+
+		return self.loggable and account not in no_log_for and self.jid not in no_log_for
 
 	def cancelled_negotiation(self):
 		StanzaSession.cancelled_negotiation(self)

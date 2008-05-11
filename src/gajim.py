@@ -241,7 +241,6 @@ from chat_control import ChatControl
 from groupchat_control import GroupchatControl
 from groupchat_control import PrivateChatControl
 from atom_window import AtomWindow
-from session import ChatControlSession
 
 import common.sleepy
 
@@ -258,7 +257,7 @@ from common.xmpp import Message as XmppMessage
 
 try:
 	import otr, otr_windows
-
+	
 	gajim.otr_module = otr
 	gajim.otr_windows = otr_windows
 except ImportError:
@@ -637,7 +636,7 @@ class Interface:
 		title = data[1]
 		prompt = data[2]
 		proposed_nick = data[3]
-		gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
+		gc_control = self.msg_win_mgr.get_control(room_jid, account)
 		if not gc_control and \
 		room_jid in self.minimized_controls[account]:
 			gc_control = self.minimized_controls[account][room_jid]
@@ -691,10 +690,9 @@ class Interface:
 					(jid_from, file_props))
 				conn.disconnect_transfer(file_props)
 				return
-
-		for ctrl in self.msg_win_mgr.get_chat_controls(jid_from, account):
-			if ctrl.type_id == message_control.TYPE_GC:
-				ctrl.print_conversation('Error %s: %s' % (array[2], array[1]))
+		ctrl = self.msg_win_mgr.get_control(jid_from, account)
+		if ctrl and ctrl.type_id == message_control.TYPE_GC:
+			ctrl.print_conversation('Error %s: %s' % (array[2], array[1]))
 
 	def handle_event_con_type(self, account, con_type):
 		# ('CON_TYPE', account, con_type) which can be 'ssl', 'tls', 'tcp'
@@ -924,12 +922,146 @@ class Interface:
 			self.handle_event_gc_notify(account, (jid, array[1], status_message,
 				array[3], None, None, None, None, None, [], None, None))
 
+	def handle_event_msg(self, account, array):
+		# 'MSG' (account, (jid, msg, time, encrypted, msg_type, subject,
+		# chatstate, msg_id, composing_xep, user_nick, xhtml, session, form_node))
+		# user_nick is JEP-0172
+
+		full_jid_with_resource = array[0]
+		jid = gajim.get_jid_without_resource(full_jid_with_resource)
+		resource = gajim.get_resource_from_jid(full_jid_with_resource)
+
+		message = array[1]
+		encrypted = array[3]
+		msg_type = array[4]
+		subject = array[5]
+		chatstate = array[6]
+		msg_id = array[7]
+		composing_xep = array[8]
+		xhtml = array[10]
+		session = array[11]
+		if gajim.config.get('ignore_incoming_xhtml'):
+			xhtml = None
+		if gajim.jid_is_transport(jid):
+			jid = jid.replace('@', '')
+
+		groupchat_control = self.msg_win_mgr.get_control(jid, account)
+		if not groupchat_control and \
+		jid in self.minimized_controls[account]:
+			groupchat_control = self.minimized_controls[account][jid]
+		pm = False
+		if groupchat_control and groupchat_control.type_id == \
+		message_control.TYPE_GC:
+			# It's a Private message
+			pm = True
+			msg_type = 'pm'
+
+		chat_control = None
+		jid_of_control = full_jid_with_resource
+		highest_contact = gajim.contacts.get_contact_with_highest_priority(
+			account, jid)
+		# Look for a chat control that has the given resource, or default to one
+		# without resource
+		ctrl = self.msg_win_mgr.get_control(full_jid_with_resource, account)
+		if ctrl:
+			chat_control = ctrl
+		elif not pm and (not highest_contact or not highest_contact.resource):
+			# unknow contact or offline message
+			jid_of_control = jid
+			chat_control = self.msg_win_mgr.get_control(jid, account)
+		elif highest_contact and resource != highest_contact.resource and \
+		highest_contact.show != 'offline':
+			jid_of_control = full_jid_with_resource
+			chat_control = None
+		elif not pm:
+			jid_of_control = jid
+			chat_control = self.msg_win_mgr.get_control(jid, account)
+
+		# Handle chat states
+		contact = gajim.contacts.get_contact(account, jid, resource)
+		if contact:
+			if contact.composing_xep != 'XEP-0085': # We cache xep85 support
+				contact.composing_xep = composing_xep
+			if chat_control and chat_control.type_id == message_control.TYPE_CHAT:
+				if chatstate is not None:
+					# other peer sent us reply, so he supports jep85 or jep22
+					contact.chatstate = chatstate
+					if contact.our_chatstate == 'ask': # we were jep85 disco?
+						contact.our_chatstate = 'active' # no more
+					chat_control.handle_incoming_chatstate()
+				elif contact.chatstate != 'active':
+					# got no valid jep85 answer, peer does not support it
+					contact.chatstate = False
+			elif chatstate == 'active':
+				# Brand new message, incoming.
+				contact.our_chatstate = chatstate
+				contact.chatstate = chatstate
+				if msg_id: # Do not overwrite an existing msg_id with None
+					contact.msg_id = msg_id
+
+		# THIS MUST BE AFTER chatstates handling
+		# AND BEFORE playsound (else we ear sounding on chatstates!)
+		if not message: # empty message text
+			return
+
+		if gajim.config.get('ignore_unknown_contacts') and \
+			not gajim.contacts.get_contacts(account, jid) and not pm:
+			return
+		if not contact:
+			# contact is not in the roster, create a fake one to display
+			# notification
+			contact = common.contacts.Contact(jid = jid, resource = resource)
+		advanced_notif_num = notify.get_advanced_notification('message_received',
+			account, contact)
+
+		# Is it a first or next message received ?
+		first = False
+		if msg_type == 'normal':
+			if not gajim.events.get_events(account, jid, ['normal']):
+				first = True
+		elif not chat_control and not gajim.events.get_events(account,
+		jid_of_control, [msg_type]): # msg_type can be chat or pm
+			first = True
+
+		if pm:
+			nickname = resource
+			groupchat_control.on_private_message(nickname, message, array[2],
+				xhtml, session, msg_id)
+		else:
+			# array: (jid, msg, time, encrypted, msg_type, subject)
+			if encrypted:
+				self.roster.on_message(jid, message, array[2], account, array[3],
+					msg_type, subject, resource, msg_id, array[9],
+					advanced_notif_num, session=session, form_node=array[12])
+			else:
+				# xhtml in last element
+				self.roster.on_message(jid, message, array[2], account, array[3],
+					msg_type, subject, resource, msg_id, array[9],
+					advanced_notif_num, xhtml=xhtml, session=session,
+					form_node=array[12])
+			nickname = gajim.get_name_from_jid(account, jid)
+		# Check and do wanted notifications
+		msg = message
+		if subject:
+			msg = _('Subject: %s') % subject + '\n' + msg
+		focused = False
+		if chat_control:
+			parent_win = chat_control.parent_win
+			if chat_control == parent_win.get_active_control() and \
+			parent_win.window.has_focus:
+				focused = True
+		notify.notify('new_message', jid_of_control, account, [msg_type,
+			first, nickname, msg, focused], advanced_notif_num)
+
+		if self.remote_ctrl:
+			self.remote_ctrl.raise_signal('NewMessage', (account, array))
+
 	def handle_event_msgerror(self, account, array):
 		#'MSGERROR' (account, (jid, error_code, error_msg, msg, time))
 		full_jid_with_resource = array[0]
 		jids = full_jid_with_resource.split('/', 1)
 		jid = jids[0]
-		gc_control = self.msg_win_mgr.get_gc_control(jid, account)
+		gc_control = self.msg_win_mgr.get_control(jid, account)
 		if not gc_control and \
 		jid in self.minimized_controls[account]:
 			gc_control = self.minimized_controls[account][jid]
@@ -1159,22 +1291,21 @@ class Interface:
 			win.set_values(vcard)
 
 		# show avatar in chat
-		ctrls = []
+		win = None
+		ctrl = None
 		if resource and self.msg_win_mgr.has_window(
 		jid + '/' + resource, account):
 			win = self.msg_win_mgr.get_window(jid + '/' + resource,
 				account)
-			ctrls = win.get_controls(jid + '/' + resource, account)
+			ctrl = win.get_control(jid + '/' + resource, account)
 		elif self.msg_win_mgr.has_window(jid, account):
 			win = self.msg_win_mgr.get_window(jid, account)
-			ctrls = win.get_controls(jid, account)
-
-		for ctrl in ctrls:
-			if ctrl.type_id != message_control.TYPE_GC:
-				ctrl.show_avatar()
+			ctrl = win.get_control(jid, account)
+		if win and ctrl.type_id != message_control.TYPE_GC:
+			ctrl.show_avatar()
 
 		# Show avatar in roster or gc_roster
-		gc_ctrl = self.msg_win_mgr.get_gc_control(jid, account)
+		gc_ctrl = self.msg_win_mgr.get_control(jid, account)
 		if not gc_ctrl and \
 		jid in self.minimized_controls[account]:
 			gc_ctrl = self.minimized_controls[account][jid]
@@ -1231,25 +1362,21 @@ class Interface:
 
 		# Get the window and control for the updated status, this may be a
 		# PrivateChatControl
-		control = self.msg_win_mgr.get_gc_control(room_jid, account)
-
+		control = self.msg_win_mgr.get_control(room_jid, account)
 		if not control and \
 		room_jid in self.minimized_controls[account]:
 			control = self.minimized_controls[account][room_jid]
 
-		if not control or (control and control.type_id != message_control.TYPE_GC):
+		if control and control.type_id != message_control.TYPE_GC:
 			return
+		if control:
+			control.chg_contact_status(nick, show, status, array[4], array[5],
+				array[6], array[7], array[8], array[9], array[10], array[11])
 
-		control.chg_contact_status(nick, show, status, array[4], array[5],
-			array[6], array[7], array[8], array[9], array[10], array[11])
+		ctrl = self.msg_win_mgr.get_control(fjid, account)
 
-		contact = gajim.contacts.\
-			get_contact_with_highest_priority(account, room_jid)
-		if contact:
-			self.roster.draw_contact(room_jid, account)
-
-		# print status in chat windows and update status/GPG image
-		for ctrl in self.msg_win_mgr.get_chat_controls(fjid, account):
+		# print status in chat window and update status/GPG image
+		if ctrl:
 			statusCode = array[9]
 			if '303' in statusCode:
 				new_nick = array[10]
@@ -1285,7 +1412,7 @@ class Interface:
 		jids = array[0].split('/', 1)
 		room_jid = jids[0]
 
-		gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
+		gc_control = self.msg_win_mgr.get_control(room_jid, account)
 		if not gc_control and \
 		room_jid in self.minimized_controls[account]:
 			gc_control = self.minimized_controls[account][room_jid]
@@ -1313,7 +1440,7 @@ class Interface:
 		jids = array[0].split('/', 1)
 		jid = jids[0]
 
-		gc_control = self.msg_win_mgr.get_gc_control(jid, account)
+		gc_control = self.msg_win_mgr.get_control(jid, account)
 
 		if not gc_control and \
 		jid in self.minimized_controls[account]:
@@ -1378,7 +1505,7 @@ class Interface:
 		jid = array[0]
 		statusCode = array[1]
 
-		gc_control = self.msg_win_mgr.get_gc_control(jid, account)
+		gc_control = self.msg_win_mgr.get_control(jid, account)
 		if not gc_control and \
 		jid in self.minimized_controls[account]:
 			gc_control = self.minimized_controls[account][jid]
@@ -1437,7 +1564,7 @@ class Interface:
 				self.roster.on_disconnect(None, room_jid, account)
 			else:
 				win = self.msg_win_mgr.get_window(room_jid, account)
-				ctrl = win.get_gc_control(room_jid, account)
+				ctrl = win.get_control(room_jid, account)
 				win.remove_tab(ctrl, 3)
 
 		dlg = dialogs.InputDialog(_('Password Required'),
@@ -1865,9 +1992,9 @@ class Interface:
 		AtomWindow.newAtomEntry(atom_entry)
 
 	def handle_event_failed_decrypt(self, account, data):
-		jid, tim, session = data
+		jid, tim = data
 
-		ctrl = self.msg_win_mgr.get_control(jid, account, session.thread_id)
+		ctrl = self.msg_win_mgr.get_control(jid, account)
 		if ctrl:
 			ctrl.print_conversation_line('Unable to decrypt message from %s\nIt may have been tampered with.' % (jid), 'status', '', tim)
 		else:
@@ -2006,8 +2133,6 @@ class Interface:
 			if ctrl:
 				new_sess = gajim.connections[account].make_new_session(str(jid))
 				ctrl.set_session(new_sess)
-				gajim.connections[account].delete_session(str(jid),
-					session.thread_id)
 
 				if was_encrypted:
 					ctrl.print_esession_details()
@@ -2267,6 +2392,7 @@ class Interface:
 			'ERROR_ANSWER': self.handle_event_error_answer,
 			'STATUS': self.handle_event_status,
 			'NOTIFY': self.handle_event_notify,
+			'MSG': self.handle_event_msg,
 			'MSGERROR': self.handle_event_msgerror,
 			'MSGSENT': self.handle_event_msgsent,
 			'MSGNOTSENT': self.handle_event_msgnotsent,
@@ -2716,10 +2842,9 @@ class Interface:
 		'''joins the room immediately'''
 		if self.msg_win_mgr.has_window(room_jid, account) and \
 				gajim.gc_connected[account][room_jid]:
-			gc_ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
-			win = gc_ctrl.parent_win
+			win = self.msg_win_mgr.get_window(room_jid, account)
 			win.window.present()
-			win.set_active_tab(gc_ctrl)
+			win.set_active_tab(room_jid, account)
 			dialogs.ErrorDialog(_('You are already in group chat %s') % room_jid)
 			return
 		minimized_control_exists = False
@@ -2744,9 +2869,9 @@ class Interface:
 			not self.msg_win_mgr.has_window(room_jid, account):
 			self.new_room(room_jid, nick, account, is_continued=is_continued)
 		if not minimized_control_exists:
-			gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
-			gc_control.parent_win.set_active_tab(gc_control)
-			gc_control.parent_win.window.present()
+			gc_win = self.msg_win_mgr.get_window(room_jid, account)
+			gc_win.set_active_tab(room_jid, account)
+			gc_win.window.present()
 		gajim.connections[account].join_gc(nick, room_jid, password)
 		if password:
 			gajim.gc_passwords[room_jid] = password
@@ -2770,42 +2895,18 @@ class Interface:
 		contact = gajim.contacts.contact_from_gc_contact(gc_contact)
 		type_ = message_control.TYPE_PM
 		fjid = gc_contact.room_jid + '/' + gc_contact.name
+		mw = self.msg_win_mgr.get_window(fjid, account)
+		if not mw:
+			mw = self.msg_win_mgr.create_window(contact, account, type_)
 
-		conn = gajim.connections[account]
-
-		if not session and fjid in conn.sessions:
-			sessions = filter(lambda s: isinstance(s, ChatControlSession),
-				conn.sessions[fjid].values())
-
-			# look for an existing session with a chat control
-			for s in sessions:
-				if s.control:
-					session = s
-					break
-
-			if not session and not len(sessions) == 0:
-				# there are no sessions with chat controls, just take the first one
-				session = sessions[0]
-
-		if not session:
-			# couldn't find an existing ChatControlSession, just make a new one
-
-			session = conn.make_new_session(fjid, None, 'pm')
-
-		if not session.control:
-			mw = self.msg_win_mgr.get_window(fjid, account)
-			if not mw:
-				mw = self.msg_win_mgr.create_window(contact, account, type_)
-
-			session.control = PrivateChatControl(mw, gc_contact, contact, account,
-				session)
-			mw.new_tab(session.control)
-
+		chat_control = \
+			PrivateChatControl(mw, gc_contact, contact, account, session)
+		mw.new_tab(chat_control)
 		if len(gajim.events.get_events(account, fjid)):
 			# We call this here to avoid race conditions with widget validation
-			session.control.read_queue()
+			chat_control.read_queue()
 
-	def new_chat(self, session, contact, account, resource = None):
+	def new_chat(self, contact, account, resource = None, session = None):
 		# Get target window, create a control, and associate it with the window
 		type_ = message_control.TYPE_CHAT
 
@@ -2821,7 +2922,9 @@ class Interface:
 
 		mw.new_tab(chat_control)
 
-		return chat_control
+		if len(gajim.events.get_events(account, fjid)):
+			# We call this here to avoid race conditions with widget validation
+			chat_control.read_queue()
 
 	def new_chat_from_jid(self, account, fjid):
 		jid, resource = gajim.get_room_and_nick_from_fjid(fjid)
@@ -2830,68 +2933,35 @@ class Interface:
 		if not contact:
 			added_to_roster = True
 			contact = self.roster.add_to_not_in_the_roster(account, jid,
-				resource=resource)
-
-		session = gajim.connections[account].get_or_create_session(fjid, None)
+				resource = resource)
 
 		if not self.msg_win_mgr.has_window(fjid, account):
-			session.control = self.new_chat(session, contact, account,
-				resource=resource)
-			if len(gajim.events.get_events(account, fjid)):
-				session.control.read_queue()
-
-		mw = session.control.parent_win
-		mw.set_active_tab(session.control)
+			self.new_chat(contact, account, resource = resource)
+		mw = self.msg_win_mgr.get_window(fjid, account)
+		mw.set_active_tab(fjid, account)
 		mw.window.present()
 		# For JEP-0172
 		if added_to_roster:
-			session.control.user_nick = gajim.nicks[account]
+			mc = mw.get_control(fjid, account)
+			mc.user_nick = gajim.nicks[account]
 
-	def on_open_chat_window(self, widget, contact, account, resource=None,
-	session=None):
+	def on_open_chat_window(self, widget, contact, account, resource = None, 
+		session = None):
 		# Get the window containing the chat
 		fjid = contact.jid
 		if resource:
 			fjid += '/' + resource
-
-		conn = gajim.connections[account]
-
-		if not session and contact.jid in conn.sessions:
-			sessions = filter(lambda s: isinstance(s, ChatControlSession),
-				conn.sessions[contact.jid].values())
-
-			# look for an existing session with a chat control
-			for s in sessions:
-				if s.control:
-					session = s
-					break
-
-			if not session and not len(sessions) == 0:
-				# there are no sessions with chat controls, just take the first one
-				session = sessions[0]
-
-		if not session:
-			# couldn't find an existing ChatControlSession, just make a new one
-			session = conn.make_new_session(fjid, None, 'chat')
-
-		if not session.control:
-			# open a new chat control
-			session.control = self.new_chat(session, contact, account,
-				resource=resource)
-
-			if len(gajim.events.get_events(account, fjid)):
-				session.control.read_queue()
-
+		win = self.msg_win_mgr.get_window(fjid, account)
+		if not win:
+			self.new_chat(contact, account, resource = resource, session = session)
+			win = self.msg_win_mgr.get_window(fjid, account)
+			ctrl = win.get_control(fjid, account)
 			# last message is long time ago
-			gajim.last_message_time[account][session.control.get_full_jid()] = 0
-
-		win = session.control.parent_win
-		win.set_active_tab(session.control)
-
-		if conn.is_zeroconf and conn.status in ('offline', 'invisible'):
-			for ctrl in win.get_controls(fjid, account):
-				ctrl.got_disconnected()
-
+			gajim.last_message_time[account][ctrl.get_full_jid()] = 0
+		win.set_active_tab(fjid, account)
+		if gajim.connections[account].is_zeroconf and \
+				gajim.connections[account].status in ('offline', 'invisible'):
+			win.get_control(fjid, account).got_disconnected()
 		win.window.present()
 
 ################################################################################		
@@ -3082,7 +3152,7 @@ class Interface:
 			'password': password,
 			'nick': nick
 		}
-		place_found = False
+		place_found = False		
 		index = 0
 		# check for duplicate entry and respect alpha order
 		for bookmark in gajim.connections[account].bookmarks:
@@ -3105,18 +3175,6 @@ class Interface:
 				_('Bookmark has been added successfully'),
 				_('You can manage your bookmarks via Actions menu in your roster.'))
 
-
-	# does JID exist only within a groupchat?
-	def is_pm_contact(self, fjid, account):
-		bare_jid = gajim.get_jid_without_resource(fjid)
-
-		gc_ctrl = self.msg_win_mgr.get_gc_control(bare_jid, account)
-
-		if not gc_ctrl and \
-		bare_jid in self.minimized_controls[account]:
-			gc_ctrl = self.minimized_controls[self.name][bare_jid]
-
-		return gc_ctrl and gc_ctrl.type_id == message_control.TYPE_GC
 
 	def create_ipython_window(self):
 		try:
