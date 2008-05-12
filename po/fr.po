@@ -1239,7 +1239,7 @@ msgstr "_Gérer le Salon"
 
 #: ../data/glade/gc_control_popup_menu.glade.h:9
 msgid "_Minimize on close"
-msgstr "_Minimiser à la fermeteure"
+msgstr "_Minimiser à la fermeture"
 
 #: ../data/glade/gc_occupants_menu.glade.h:1
 msgid "Mo_derator"
