@@ -81,9 +81,9 @@ class RosterWindow:
 	def _get_account_iter(self, name, model = None):
 		''' Return the gtk.TreeIter of the given account or None if not found.
 
-    		Keyword arguments:
-    		name -- the account name
-    		model -- the data model (default TreeFilterModel)
+		Keyword arguments:
+		name -- the account name
+		model -- the data model (default TreeFilterModel)
 		
 		'''
 		if not model:
@@ -104,11 +104,11 @@ class RosterWindow:
 	def _get_group_iter(self, name, account, account_iter = None, model = None):
 		''' Return the gtk.TreeIter of the given group or None if not found.
 
-    		Keyword arguments:
-    		name -- the group name
+		Keyword arguments:
+		name -- the group name
 		account -- the account name
 		account_iter -- the iter of the account the model (default None)
-    		model -- the data model (default TreeFilterModel)
+		model -- the data model (default TreeFilterModel)
 		
 		'''
 		if not model:
@@ -128,10 +128,10 @@ class RosterWindow:
 	def _get_self_contact_iter(self, jid, account, model = None):
 		''' Return the gtk.TreeIter of SelfContact or None if not found.
 
-    		Keyword arguments:
+		Keyword arguments:
 		jid -- the jid of SelfContact
-    		account -- the account of SelfContact
-    		model -- the data model (default TreeFilterModel)
+		account -- the account of SelfContact
+		model -- the data model (default TreeFilterModel)
 		
 		'''
 		
@@ -154,11 +154,11 @@ class RosterWindow:
 	def _get_contact_iter(self, jid, account, contact = None, model = None):
 		''' Return a list of gtk.TreeIter of the given contact.
 
-    		Keyword arguments:
+			Keyword arguments:
 		jid -- the jid without resource
-    		account -- the account
+			account -- the account
 		contact -- the contact (default None)
-    		model -- the data model (default TreeFilterModel)
+			model -- the data model (default TreeFilterModel)
 		
 		'''
 		if not model:
@@ -220,7 +220,7 @@ class RosterWindow:
 		''' Return True if the given iter is a separator.
 		
 		Keyword arguments:
-    		model -- the data model
+			model -- the data model
 		iter -- the gtk.TreeIter to test 
 		'''
 		if model[titer][0] == 'SEPARATOR':
@@ -232,7 +232,7 @@ class RosterWindow:
 		'''Iterate over all contact rows in given model.
 		
 		Keyword arguments:
-    		model -- the data model (default TreeFilterModel)
+			model -- the data model (default TreeFilterModel)
 		'''
 		if not model:
 			model = self.modelfilter
@@ -328,9 +328,9 @@ class RosterWindow:
 		
 		Keyword arguments:
 		contact -- the contact to add
-    		account -- the contacts account
-    		groups -- list of groups to add the contact to. (default groups in contact.groups).
-    		          Parameter ignored when big_brother_contact is specified.
+			account -- the contacts account
+			groups -- list of groups to add the contact to. (default groups in contact.groups).
+					  Parameter ignored when big_brother_contact is specified.
 		big_brother_contact -- if specified contact is added as child big_brother_contact. (default None)
 		'''
 		added_iters = []
@@ -405,8 +405,8 @@ class RosterWindow:
 		
 		Keyword arguments:
 		contact -- the contact to add
-    		account -- the contacts account
-    		groups -- list of groups to remove the contact from. (default groups in contact.groups).
+			account -- the contacts account
+			groups -- list of groups to remove the contact from. (default groups in contact.groups).
 
 		'''
 		iters = self._get_contact_iter(contact.jid, account, contact, self.model)
@@ -1465,7 +1465,7 @@ class RosterWindow:
 
 ################################################################################
 ### FIXME: Methods that don't belong to roster window... 
-###        ... atleast not in there current form
+###		... atleast not in there current form
 ################################################################################
 
 	def fire_up_unread_messages_events(self, account):
