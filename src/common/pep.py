@@ -253,10 +253,9 @@ def user_nickname(items, name, jid):
 		if nick is not None:
 			contact.contact_name = nick
 			gajim.interface.roster.draw_contact(user, name)
-			ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
-			if ctrl:
+			for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(user, name):
 				ctrl.update_ui()
-				win = gajim.interface.msg_win_mgr.get_window(user, name)
+				win = ctrl.parent_win
 				win.redraw_tab(ctrl)
 				win.show_title()
 	elif retract:

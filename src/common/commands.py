@@ -204,7 +204,7 @@ class LeaveGroupchatsCommand(AdHocCommand):
 
 		# for next invocation
 		self.execute = self.leavegroupchats
-		
+
 		return True	# keep the session
 
 	def leavegroupchats(self, request):
@@ -225,7 +225,7 @@ class LeaveGroupchatsCommand(AdHocCommand):
 		account = self.connection.name
 		try:
 			for room_jid in gc:
-				gc_control = gajim.interface.msg_win_mgr.get_control(room_jid,
+				gc_control = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
 					account)
 				gc_control.parent_win.remove_tab(gc_control, None, force = True)
 		except:	# KeyError if there's no presence-type field in form or

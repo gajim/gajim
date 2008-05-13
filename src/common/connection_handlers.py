@@ -49,7 +49,8 @@ if dbus_support.supported:
 	import dbus
 	from music_track_listener import MusicTrackListener
 
-from common.stanza_session import EncryptedStanzaSession 
+from session import ChatControlSession
+import tictactoe
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible', 'error']
@@ -994,7 +995,7 @@ class ConnectionVcard:
 			gajim.interface.remove_avatar_files(our_jid)
 
 		self.awaiting_answers[id] = (VCARD_PUBLISHED, iq2)
-	
+
 	def _IqCB(self, con, iq_obj):
 		id = iq_obj.getID()
 
@@ -1046,6 +1047,7 @@ class ConnectionVcard:
 			our_jid = gajim.get_jid_from_account(self.name)
 			if iq_obj.getType() == 'error' and jid == our_jid:
 				# our server doesn't support vcard
+				gajim.log.debug('xxx error xxx')
 				self.vcard_supported = False
 			if not iq_obj.getTag('vCard') or iq_obj.getType() == 'error':
 				if frm and frm != our_jid:
@@ -1261,7 +1263,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			reply.addChild(node=common.xmpp.ErrorNode('service-unavailable', typ='cancel'))
 
 			con.send(reply)
-		
+
 		raise common.xmpp.NodeProcessed
 
 	def _InitE2ECB(self, con, stanza, session):
@@ -1291,7 +1293,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		errmsg = iq_obj.getErrorMsg()
 		errcode = iq_obj.getErrorCode()
 		self.dispatch('ERROR_ANSWER', (id, jid_from, errmsg, errcode))
-	
+
 	def _PrivateCB(self, con, iq_obj):
 		'''
 		Private Data (XEP 048 and 049)
@@ -1499,6 +1501,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _messageCB(self, con, msg):
 		'''Called when we receive a message'''
+		gajim.log.debug('MessageCB')
+
 		frm = helpers.get_full_jid_from_iq(msg)
 		mtype = msg.getType()
 		thread_id = msg.getThread()
@@ -1506,8 +1510,23 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if not mtype:
 			mtype = 'normal'
 
-		if not mtype == 'groupchat':
-			session = self.get_session(frm, thread_id, mtype)
+		game_invite = msg.getTag('invite', namespace='http://jabber.org/protocol/games')
+		if game_invite:
+			game = game_invite.getTag('game')
+
+			if game.getAttr('var') == \
+			'http://jabber.org/protocol/games/tictactoe':
+				klass = tictactoe.TicTacToeSession
+
+			# this assumes that the invitation came with a thread_id we haven't
+			# seen
+			session = self.make_new_session(frm, thread_id, klass=klass)
+
+			session.invited(msg)
+
+			return
+		elif mtype != 'groupchat':
+			session = self.get_or_create_session(frm, thread_id)
 
 			if thread_id and not session.received_thread_id:
 				session.received_thread_id = True
@@ -1516,66 +1535,57 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if msg.getTag('event') is not None:
 			self._pubsubEventCB(con, msg)
 			return
-		# check if the message is a xep70-confirmation-request
-		if msg.getTag('confirm') and msg.getTag('confirm').namespace == \
-		common.xmpp.NS_HTTP_AUTH:
+
+		# check if the message is a XEP-0070 confirmation request
+		if msg.getTag('confirm', namespace=common.xmpp.NS_HTTP_AUTH):
 			self._HttpAuthCB(con, msg)
 			return
-		if msg.getTag('feature') and msg.getTag('feature').namespace == \
-		common.xmpp.NS_FEATURE:
+
+		# check if the message is a XEP-0020 feature negotiation request
+		if msg.getTag('feature', namespace=common.xmpp.NS_FEATURE):
 			if gajim.HAVE_PYCRYPTO:
 				self._FeatureNegCB(con, msg, session)
 			return
-		if msg.getTag('init') and msg.getTag('init').namespace == \
-		common.xmpp.NS_ESESSION_INIT:
+		if msg.getTag('init', namespace=common.xmpp.NS_ESESSION_INIT):
 			self._InitE2ECB(con, msg, session)
-		
+
 		encrypted = False
 		tim = msg.getTimestamp()
 		tim = helpers.datetime_tuple(tim)
 		tim = localtime(timegm(tim))
 
-		e2e_tag = msg.getTag('c', namespace = common.xmpp.NS_STANZA_CRYPTO)
-		if e2e_tag:
+		if msg.getTag('c', namespace=common.xmpp.NS_STANZA_CRYPTO):
 			encrypted = True
 
 			try:
 				msg = session.decrypt_stanza(msg)
 			except:
-				self.dispatch('FAILED_DECRYPT', (frm, tim))
+				self.dispatch('FAILED_DECRYPT', (frm, tim, session))
 
 		msgtxt = msg.getBody()
-		msghtml = msg.getXHTML()
 		subject = msg.getSubject() # if not there, it's None
-		tim = msg.getTimestamp()
-		tim = helpers.datetime_tuple(tim)
-		tim = localtime(timegm(tim))
+
 		frm = helpers.get_full_jid_from_iq(msg)
 		jid = helpers.get_jid_from_iq(msg)
+
 		addressTag = msg.getTag('addresses', namespace = common.xmpp.NS_ADDRESS)
+
 		# Be sure it comes from one of our resource, else ignore address element
 		if addressTag and jid == gajim.get_jid_from_account(self.name):
 			address = addressTag.getTag('address', attrs={'type': 'ofrom'})
 			if address:
 				frm = address.getAttr('jid')
 				jid = gajim.get_jid_without_resource(frm)
-		no_log_for = gajim.config.get_per('accounts', self.name,
-			'no_log_for')
-		if not no_log_for:
-			no_log_for = ''
-		no_log_for = no_log_for.split()
-		chatstate = None
-		encTag = msg.getTag('x', namespace = common.xmpp.NS_ENCRYPTED)
-		decmsg = ''
+
 		# invitations
 		invite = None
+		encTag = msg.getTag('x', namespace=common.xmpp.NS_ENCRYPTED)
+
 		if not encTag:
 			invite = msg.getTag('x', namespace = common.xmpp.NS_MUC_USER)
 			if invite and not invite.getTag('invite'):
 				invite = None
-		delayed = msg.getTag('x', namespace = common.xmpp.NS_DELAY) is not None
-		msg_id = None
-		composing_xep = None
+
 		# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED
 		# invitation
 		# stanza (MUC XEP) remove in 2007, as we do not do NOT RECOMMENDED
@@ -1589,218 +1599,185 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				self.dispatch('GC_INVITATION', (room_jid, frm, '', None,
 					is_continued))
 				return
-		form_node = None
-		for xtag in xtags:
-			if xtag.getNamespace() == common.xmpp.NS_DATA:
-				form_node = xtag
-				break
-		# chatstates - look for chatstate tags in a message if not delayed
-		if not delayed:
-			composing_xep = False
-			children = msg.getChildren()
-			for child in children:
-				if child.getNamespace() == 'http://jabber.org/protocol/chatstates':
-					chatstate = child.getName()
-					composing_xep = 'XEP-0085'
-					break
-			# No XEP-0085 support, fallback to XEP-0022
-			if not chatstate:
-				chatstate_child = msg.getTag('x', namespace = common.xmpp.NS_EVENT)
-				if chatstate_child:
-					chatstate = 'active'
-					composing_xep = 'XEP-0022'
-					if not msgtxt and chatstate_child.getTag('composing'):
-						chatstate = 'composing'
-		# XEP-0172 User Nickname
-		user_nick = msg.getTagData('nick')
-		if not user_nick:
-			user_nick = ''
 
 		if encTag and self.USE_GPG:
-			#decrypt
 			encmsg = encTag.getData()
 
 			keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 			if keyID:
 				decmsg = self.gpg.decrypt(encmsg, keyID)
 				# \x00 chars are not allowed in C (so in GTK)
-				decmsg = decmsg.replace('\x00', '')
-		if decmsg:
-			msgtxt = decmsg
-			encrypted = True
+				msgtxt = decmsg.replace('\x00', '')
+				encrypted = True
 		if mtype == 'error':
-			error_msg = msg.getErrorMsg()
-			if not error_msg:
-				error_msg = msgtxt
-				msgtxt = None
-			if session.is_loggable():
-				try:
-					gajim.logger.write('error', frm, error_msg, tim = tim,
-						subject = subject)
-				except exceptions.PysqliteOperationalError, e:
-					self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
-			self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt,
-				tim))
-			return
+			self.dispatch_error_message(msg, msgtxt, session, frm, tim, subject)
 		elif mtype == 'groupchat':
-			has_timestamp = False
-			if msg.timestamp:
-				has_timestamp = True
-			if subject is not None:
-				self.dispatch('GC_SUBJECT', (frm, subject, msgtxt, has_timestamp))
+			self.dispatch_gc_message(msg, subject, frm, msgtxt, jid, tim)
+		elif invite is not None:
+			self.dispatch_invite_message(invite, frm)
+		else:
+			# XXX this shouldn't be hardcoded
+			if isinstance(session, ChatControlSession):
+				if gajim.otr_module and isinstance(msgtxt, unicode):
+					otr_msg_tuple = gajim.otr_module.otrl_message_receiving(
+						gajim.connections[self.name].otr_userstates,
+						(gajim.otr_ui_ops, {'account':self.name}),
+						gajim.get_jid_from_account(self.name).encode(),
+						gajim.OTR_PROTO, frm.encode(), msgtxt.encode(),
+						(gajim.otr_add_appdata, self.name))
+					msgtxt = unicode(otr_msg_tuple[1])
+					# OTR messages are unformatted, or rather contain the same
+					# text in <body> and <html>
+					msghtml = msgtxt
+
+
+					if gajim.otr_module.otrl_tlv_find(otr_msg_tuple[2],
+							gajim.otr_module.OTRL_TLV_DISCONNECTED) != None:
+						gajim.otr_ui_ops.gajim_log("%s has ended his/her private conversation"
+															" with you; you should do the same."%frm, self.name,
+															frm)
+						if session.control:
+							session.control.update_ui()
+
+					ctx = gajim.otr_module.otrl_context_find(gajim.connections[self.name].otr_userstates, frm.encode(),
+							gajim.get_jid_from_account(self.name).encode(), gajim.OTR_PROTO, 1,
+							(gajim.otr_add_appdata, self.name))[0]
+
+					tlvs = otr_msg_tuple[2]
+					ctx.app_data.handle_tlv(tlvs)
+
+				session.received(frm, msgtxt, tim, encrypted, subject, msg)
 			else:
-				statusCode = msg.getStatusCode()
-				if not msg.getTag('body'): #no <body>
-					# It could be a config change. See
-					# http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
-					if msg.getTag('x'):
-						if statusCode != []:
-							self.dispatch('GC_CONFIG_CHANGE', (jid, statusCode))
-					return
-				# Ignore message from room in which we are not
-				if not self.last_history_time.has_key(jid):
-					return
-				self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msghtml,
-					statusCode))
-				tim_int = int(float(mktime(tim)))
-				if self.name not in no_log_for and jid not in no_log_for and not \
-				tim_int <= self.last_history_time[jid] and msgtxt \
-				and frm.find('/') >= 0:
-					# if frm.find('/') < 0, it means message comes from room itself
-					# usually it hold description and can be send at each connection
-					# so don't store it in logs
-					try:
-						gajim.logger.write('gc_msg', frm, msgtxt, tim = tim)
-						# save the time we log to avoid duplicate logs
-						self.last_history_time[jid] = tim_int
-					except exceptions.PysqliteOperationalError, e:
-						self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
-			return
-		elif mtype == 'chat': # it's type 'chat'
-
-			if gajim.otr_module and isinstance(msgtxt, unicode):
-				otr_msg_tuple = gajim.otr_module.otrl_message_receiving(
-					gajim.connections[self.name].otr_userstates,
-					(gajim.otr_ui_ops, {'account':self.name}),
-					gajim.get_jid_from_account(self.name).encode(),
-					gajim.OTR_PROTO, frm.encode(), msgtxt.encode(),
-					(gajim.otr_add_appdata, self.name))
-				msgtxt = unicode(otr_msg_tuple[1])
-				# OTR messages are unformatted, or rather contain the same
-				# text in <body> and <html>
-				msghtml = msgtxt
-
-				if gajim.otr_module.otrl_tlv_find(otr_msg_tuple[2],
-						gajim.otr_module.OTRL_TLV_DISCONNECTED) != None:
-					gajim.otr_ui_ops.gajim_log("%s has ended his/her private conversation"
-							" with you; you should do the same."%frm, self.name,
-							frm)
-					ctrl = gajim.interface.msg_win_mgr.get_control(frm, self.name)
-					if ctrl:
-						ctrl.update_ui()
-
-				ctx = gajim.otr_module.otrl_context_find(gajim.connections[self.name].otr_userstates, frm.encode(),
-						gajim.get_jid_from_account(self.name).encode(), gajim.OTR_PROTO, 1,
-						(gajim.otr_add_appdata, self.name))[0]
-				tlvs = otr_msg_tuple[2]
-				ctx.app_data.handle_tlv(tlvs)
-
-			if not msg.getTag('body') and chatstate is None: #no <body>
-				return
-			if msg.getTag('body') and session.is_loggable() and msgtxt:
-				try:
-					msg_id = gajim.logger.write('chat_msg_recv', frm, msgtxt,
-						tim = tim, subject = subject)
-				except exceptions.PysqliteOperationalError, e:
-					self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
-		else: # it's single message
-			if invite is not None:
-				item = invite.getTag('invite')
-				jid_from = item.getAttr('from')
-				reason = item.getTagData('reason')
-				item = invite.getTag('password')
-				password = invite.getTagData('password')
-				is_continued = False
-				if invite.getTag('invite').getTag('continue'):
-					is_continued = True
-				self.dispatch('GC_INVITATION',(frm, jid_from, reason, password,
-					is_continued))
-				return
-			if session.is_loggable()and msgtxt:
-				try:
-					gajim.logger.write('single_msg_recv', frm, msgtxt, tim = tim,
-						subject = subject)
-				except exceptions.PysqliteOperationalError, e:
-					self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
-			mtype = 'normal'
-		treat_as = gajim.config.get('treat_incoming_messages')
-		if treat_as:
-			mtype = treat_as
-		self.dispatch('MSG', (frm, msgtxt, tim, encrypted, mtype,
-			subject, chatstate, msg_id, composing_xep, user_nick, msghtml,
-			session, form_node))
+				session.received(msg)
 	# END messageCB
 
-	def get_session(self, jid, thread_id, type):
+	# process and dispatch an error message
+	def dispatch_error_message(self, msg, msgtxt, session, frm, tim, subject):
+		error_msg = msg.getErrorMsg()
+
+		if not error_msg:
+			error_msg = msgtxt
+			msgtxt = None
+
+		if session.is_loggable():
+			try:
+				gajim.logger.write('error', frm, error_msg, tim=tim,
+					subject=subject)
+			except exceptions.PysqliteOperationalError, e:
+				self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+		self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt,
+			tim, session))
+
+	# process and dispatch a groupchat message
+	def dispatch_gc_message(self, msg, subject, frm, msgtxt, jid, tim):
+		has_timestamp = bool(msg.timestamp)
+
+		if subject is not None:
+			self.dispatch('GC_SUBJECT', (frm, subject, msgtxt, has_timestamp))
+			return
+
+		statusCode = msg.getStatusCode()
+
+		if not msg.getTag('body'): # no <body>
+			# It could be a config change. See
+			# http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
+			if msg.getTag('x'):
+				if statusCode != []:
+					self.dispatch('GC_CONFIG_CHANGE', (jid, statusCode))
+			return
+
+		# Ignore message from room in which we are not
+		if not self.last_history_time.has_key(jid):
+			return
+
+		self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msg.getXHTML(),
+			statusCode))
+
+		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for') 
+
+		if not no_log_for: 
+			no_log_for = '' 
+
+		no_log_for = no_log_for.split()
+
+		tim_int = int(float(mktime(tim)))
+
+		if self.name not in no_log_for and jid not in no_log_for and not \
+		tim_int <= self.last_history_time[jid] and msgtxt and frm.find('/') >= 0:
+			# if frm.find('/') < 0, it means message comes from room itself
+			# usually it hold description and can be send at each connection
+			# so don't store it in logs
+			try:
+				gajim.logger.write('gc_msg', frm, msgtxt, tim=tim)
+				# save the time we log to avoid duplicate logs
+				self.last_history_time[jid] = tim_int
+			except exceptions.PysqliteOperationalError, e:
+				self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+
+	def dispatch_invite_message(self, invite, frm):
+		item = invite.getTag('invite')
+		jid_from = item.getAttr('from')
+		reason = item.getTagData('reason')
+		item = invite.getTag('password')
+		password = invite.getTagData('password')
+
+		is_continued = False
+		if invite.getTag('invite').getTag('continue'):
+			is_continued = True
+		self.dispatch('GC_INVITATION',(frm, jid_from, reason, password,
+			is_continued))
+
+	def get_or_create_session(self, jid, thread_id):
 		'''returns an existing session between this connection and 'jid', returns a new one if none exist.'''
-		session = self.find_session(jid, thread_id, type)
+
+		pm = True
+		if not gajim.interface.is_pm_contact(jid, self.name):
+			pm = False
+			jid = gajim.get_jid_without_resource(jid)
+
+		session = self.find_session(jid, thread_id)
 
 		if session:
 			return session
+
+		if pm:
+			return self.make_new_session(jid, thread_id, type = 'pm')
 		else:
-			# it's possible we initiated a session with a bare JID and this is the
-			# first time we've seen a resource
-			bare_jid = gajim.get_jid_without_resource(jid)
-			if bare_jid != jid:
-				session = self.find_session(bare_jid, thread_id, type)
-				if session:
-					if not session.received_thread_id:
-						thread_id = session.thread_id
+			return self.make_new_session(jid, thread_id)
 
-					self.move_session(bare_jid, thread_id, jid.split("/")[1])
-					return session
-
-		return self.make_new_session(jid, thread_id, type)
-
-	def find_session(self, jid, thread_id, type):
+	def find_session(self, jid, thread_id):
 		try:
-			if type == 'chat' and not thread_id:
+			if not thread_id:
 				return self.find_null_session(jid)
 			else:
 				return self.sessions[jid][thread_id]
 		except KeyError:
 			return None
 
+	def terminate_sessions(self):
+		'''send termination messages and delete all active sessions'''
+		for jid in self.sessions:
+			for thread_id in self.sessions[jid]:
+				self.sessions[jid][thread_id].terminate()
+
+		self.sessions = {}
+
 	def delete_session(self, jid, thread_id):
 		try:
 			del self.sessions[jid][thread_id]
-			
+
 			if not self.sessions[jid]:
 				del self.sessions[jid]
 		except KeyError:
 			pass
 
-	def move_session(self, original_jid, thread_id, to_resource):
-		'''moves a session to another resource.'''
-		session = self.sessions[original_jid][thread_id]
-
-		del self.sessions[original_jid][thread_id]
-
-		new_jid = gajim.get_jid_without_resource(original_jid) + '/' + to_resource
-		session.jid = common.xmpp.JID(new_jid)
-
-		if not new_jid in self.sessions:
-			self.sessions[new_jid] = {}
-
-		self.sessions[new_jid][thread_id] = session
-
 	def find_null_session(self, jid):
-		'''finds all of the sessions between us and jid that jid hasn't sent a thread_id in yet.
+		'''finds all of the sessions between us and a remote jid in which we
+haven't received a thread_id yet and returns the session that we last
+sent a message to.'''
 
-returns the session that we last sent a message to.'''
-		
-		sessions_with_jid = self.sessions[jid].values()
-		no_threadid_sessions = filter(lambda s: not s.received_thread_id, sessions_with_jid)
+		sessions = self.sessions[jid].values()
+		no_threadid_sessions = filter(lambda s: not s.received_thread_id, sessions)
 
 		if no_threadid_sessions:
 			no_threadid_sessions.sort(key=lambda s: s.last_send)
@@ -1808,8 +1785,16 @@ returns the session that we last sent a message to.'''
 		else:
 			return None
 
-	def make_new_session(self, jid, thread_id = None, type = 'chat'):
-		sess = EncryptedStanzaSession(self, common.xmpp.JID(jid), thread_id, type)
+	def make_new_session(self, jid, thread_id=None, type='chat', klass=None):
+		if not klass:
+			klass = ChatControlSession
+
+		# determine if this session is a pm session
+		# if not, discard the resource
+		if not type == 'pm':
+			jid = gajim.get_jid_without_resource(jid)
+
+		sess = klass(self, common.xmpp.JID(jid), thread_id, type)
 
 		if not jid in self.sessions:
 			self.sessions[jid] = {}
@@ -2303,7 +2288,7 @@ returns the session that we last sent a message to.'''
 			self.dispatch('RESOURCE_CONFLICT', ())
 
 	def _register_handlers(self, con, con_type):
-		# try to find another way to register handlers in each class 
+		# try to find another way to register handlers in each class
 		# that defines handlers
 		con.RegisterHandler('message', self._messageCB)
 		con.RegisterHandler('presence', self._presenceCB)

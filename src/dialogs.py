@@ -1717,7 +1717,7 @@ class JoinGroupchatWindow:
 			return
 
 		if gajim.interface.msg_win_mgr.has_window(room_jid, self.account):
-			ctrl = gajim.interface.msg_win_mgr.get_control(room_jid, self.account)
+			ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid, self.account)
 			if ctrl.type_id != message_control.TYPE_GC:
 				ErrorDialog(_('This is not a group chat'),
 					_('%s is not the name of a group chat.') % room_jid)

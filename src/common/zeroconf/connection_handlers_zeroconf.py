@@ -658,7 +658,7 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 		frm = unicode(frm)
 		jid  = frm
 
-		session = self.get_session(frm, thread_id, mtype)
+		session = self.get_or_create_session(frm, thread_id, mtype)
 
 		if thread_id and not session.received_thread_id:
 			session.received_thread_id = True
@@ -794,7 +794,12 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream):
 
 		raise common.xmpp.NodeProcessed
 
-	def get_session(self, jid, thread_id, type):
+	def terminate_sessions(self):
+		'''send termination messages and delete all active sessions'''
+		# XXX
+		pass
+
+	def get_or_create_session(self, jid, thread_id, type):
 		'''returns an existing session between this connection and 'jid', returns a new one if none exist.'''
 		session = self.find_session(jid, thread_id, type)
 

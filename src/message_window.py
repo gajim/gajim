@@ -154,8 +154,9 @@ class MessageWindow(object):
 
 	def get_num_controls(self):
 		n = 0
-		for dict in self._controls.values():
-			n += len(dict)
+		for jid_dict in self._controls.values():
+			for dict in jid_dict.values():
+				n += len(dict)
 		return n
 
 	def resize(self, width, height):
@@ -208,7 +209,11 @@ class MessageWindow(object):
 		if not self._controls.has_key(control.account):
 			self._controls[control.account] = {}
 		fjid = control.get_full_jid()
-		self._controls[control.account][fjid] = control
+
+		if not self._controls[control.account].has_key(fjid):
+			self._controls[control.account][fjid] = {}
+
+		self._controls[control.account][fjid][control.session.thread_id] = control
 
 		if self.get_num_controls() == 2:
 			# is first conversation_textview scrolled down ?
@@ -412,8 +417,7 @@ class MessageWindow(object):
 		else:
 			gtkgui_helpers.set_unset_urgency_hint(self.window, False)
 
-	def set_active_tab(self, jid, acct):
-		ctrl = self._controls[acct][jid]
+	def set_active_tab(self, ctrl):
 		ctrl_page = self.notebook.page_num(ctrl.widget)
 		self.notebook.set_current_page(ctrl_page)
 
@@ -445,7 +449,13 @@ class MessageWindow(object):
 		self.notebook.remove_page(self.notebook.page_num(ctrl.widget))
 
 		fjid = ctrl.get_full_jid()
-		del self._controls[ctrl.account][fjid]
+		thread_id = ctrl.session.thread_id
+
+		del self._controls[ctrl.account][fjid][thread_id]
+
+		if len(self._controls[ctrl.account][fjid]) == 0:
+			del self._controls[ctrl.account][fjid]
+
 		if len(self._controls[ctrl.account]) == 0:
 			del self._controls[ctrl.account]
 
@@ -549,16 +559,16 @@ class MessageWindow(object):
 		for ctrl in self.controls():
 			ctrl.update_tags()
 
-	def get_control(self, key, acct):
+	def get_control(self, key, acct, thread_id):
 		'''Return the MessageControl for jid or n, where n is a notebook page index.
-		When key is an int index acct may be None'''
+		When key is an int index acct and thread_id may be None'''
 		if isinstance(key, str):
 			key = unicode(key, 'utf-8')
 
 		if isinstance(key, unicode):
 			jid = key
 			try:
-				return self._controls[acct][jid]
+				return self._controls[acct][jid][thread_id]
 			except:
 				return None
 		else:
@@ -569,24 +579,45 @@ class MessageWindow(object):
 			nth_child = notebook.get_nth_page(page_num)
 			return self._widget_to_control(nth_child)
 
-	def change_key(self, old_jid, new_jid, acct):
-		'''Change the key of a control'''
+	def get_gc_control(self, jid, acct):
+		return self.get_control(jid, acct, 'gc')
+
+	def get_controls(self, jid, acct):
 		try:
-			# Check if control exists
-			ctrl = self._controls[acct][old_jid]
-		except:
+			return self._controls[acct][jid].values()
+		except KeyError:
+			return []
+
+	def change_key(self, old_jid, new_jid, acct):
+		'''Change the JID key of a control'''
+		try:
+			# Check if controls exists
+			ctrls = self._controls[acct][old_jid]
+		except KeyError:
 			return
-		self._controls[acct][new_jid] = self._controls[acct][old_jid]
+		self._controls[acct][new_jid] = ctrls
 		del self._controls[acct][old_jid]
 		if old_jid in gajim.last_message_time[acct]:
 			gajim.last_message_time[acct][new_jid] = \
 				gajim.last_message_time[acct][old_jid]
 			del gajim.last_message_time[acct][old_jid]
 
+	def change_thread_key(self, jid, acct, old_thread_id, new_thread_id): 
+ 		'''Change the thread_id key of a control''' 
+		try: 
+			# Check if control exists 
+			ctrl = self._controls[acct][jid][old_thread_id] 
+		except KeyError: 
+			return 
+
+		self._controls[acct][jid][new_thread_id] = ctrl 
+		del self._controls[acct][jid][old_thread_id]
+
 	def controls(self):
-		for ctrl_dict in self._controls.values():
-			for ctrl in ctrl_dict.values():
-				yield ctrl
+		for jid_dict in self._controls.values():
+			for ctrl_dict in jid_dict.values():
+				for ctrl in ctrl_dict.values():
+					yield ctrl
 
 	def move_to_next_unread_tab(self, forward):
 		ind = self.notebook.get_current_page()
@@ -604,7 +635,7 @@ class MessageWindow(object):
 				ind = ind - 1
 				if ind < 0:
 					ind = self.notebook.get_n_pages() - 1
-			ctrl = self.get_control(ind, None)
+			ctrl = self.get_control(ind, None, None)
 			if ctrl.get_nb_unread() > 0:
 				found = True
 				break # found
@@ -796,8 +827,19 @@ class MessageWindowMgr(gobject.GObject):
 
 	def get_window(self, jid, acct):
 		for win in self.windows():
-			if win.get_control(jid, acct):
-				return win
+			try:
+				if win._controls[acct][jid]:
+					return win
+			except KeyError:
+				pass
+		return None
+
+	def get_gc_control(self, jid, acct):
+		win = self.get_window(jid, acct)
+
+		if win:
+			return win.get_gc_control(jid, acct)
+
 		return None
 
 	def has_window(self, jid, acct):
@@ -930,11 +972,11 @@ class MessageWindowMgr(gobject.GObject):
 				del self._windows[k]
 				return
 
-	def get_control(self, jid, acct):
+	def get_control(self, jid, acct, session):
 		'''Amongst all windows, return the MessageControl for jid'''
 		win = self.get_window(jid, acct)
 		if win:
-			return win.get_control(jid, acct)
+			return win.get_control(jid, acct, session)
 		return None
 
 	def get_controls(self, type = None, acct = None):
@@ -945,6 +987,14 @@ class MessageWindowMgr(gobject.GObject):
 			if not type or c.type_id == type:
 				ctrls.append(c)
 		return ctrls
+
+	def get_chat_controls(self, jid, acct):
+		win = self.get_window(jid, acct)
+
+		if win:
+			return win.get_controls(jid, acct)
+		else:
+			return []
 
 	def windows(self):
 		for w in self._windows.values():

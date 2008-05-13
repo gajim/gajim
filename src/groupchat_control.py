@@ -43,6 +43,7 @@ import cell_renderer_image
 
 from common import gajim
 from common import helpers
+from common.stanza_session import StanzaSession
 
 from chat_control import ChatControl
 from chat_control import ChatControlBase
@@ -57,7 +58,7 @@ C_TYPE, # type of the row ('contact' or 'role')
 C_TEXT, # text shown in the cellrenderer
 C_AVATAR, # avatar of the contact
 ) = range(5)
-	
+
 def set_renderer_color(treeview, renderer, set_background = True):
 	'''set style for group row, using PRELIGHT system color'''
 	if set_background:
@@ -120,7 +121,7 @@ class PrivateChatControl(ChatControl):
 
 	def __init__(self, parent_win, gc_contact, contact, account, session):
 		room_jid = contact.jid.split('/')[0]
-		room_ctrl = gajim.interface.msg_win_mgr.get_control(room_jid, account)
+		room_ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid, account)
 		if gajim.interface.minimized_controls[account].has_key(room_jid):
 			room_ctrl = gajim.interface.minimized_controls[account][room_jid]
 		self.room_name = room_ctrl.name
@@ -221,6 +222,9 @@ class GroupchatControl(ChatControlBase):
 		self.nick = contact.name.decode('utf-8')
 		self.new_nick = ''
 		self.name = self.room_jid.split('@')[0]
+
+		self.session = StanzaSession(gajim.connections[self.account],
+			self.room_jid, 'gc', 'gc')
 
 		compact_view = gajim.config.get('compact_view')
 		self.chat_buttons_set_visible(compact_view)
@@ -456,9 +460,9 @@ class GroupchatControl(ChatControlBase):
 					'state_muc_msg_color')
 		if color_name:
 			color = gtk.gdk.colormap_get_system().alloc_color(color_name)
-			
+
 		label_str = self.name
-		
+
 		# count waiting highlighted messages
 		unread = ''
 		num_unread = self.get_nb_unread()
@@ -619,9 +623,8 @@ class GroupchatControl(ChatControlBase):
 		no_queue = len(gajim.events.get_events(self.account, fjid)) == 0
 
 		# We print if window is opened
-		pm_control = gajim.interface.msg_win_mgr.get_control(fjid, self.account)
-		if pm_control:
-			pm_control.print_conversation(msg, tim = tim, xhtml = xhtml)
+		if session.control:
+			session.control.print_conversation(msg, tim = tim, xhtml = xhtml)
 			return
 
 		event = gajim.events.create_event('pm', (msg, '', 'incoming', tim,
@@ -645,7 +648,7 @@ class GroupchatControl(ChatControlBase):
 				self.parent_win.show_title()
 				self.parent_win.redraw_tab(self)
 		else:
-			self._start_private_message(nick, session)
+			self._start_private_message(nick)
 		# Scroll to line
 		self.list_treeview.expand_row(path[0:1], False)
 		self.list_treeview.scroll_to_cell(path)
@@ -870,10 +873,9 @@ class GroupchatControl(ChatControlBase):
 		for nick in nick_list:
 			# Update pm chat window
 			fjid = self.room_jid + '/' + nick
-			ctrl = gajim.interface.msg_win_mgr.get_control(fjid, self.account)
 			gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid,
 				nick)
-			if ctrl:
+			for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(fjid, self.account):
 				gc_contact.show = 'offline'
 				gc_contact.status = ''
 				ctrl.update_ui()
@@ -898,18 +900,17 @@ class GroupchatControl(ChatControlBase):
 		# Recalculate column width for ellipsizin
 		self.list_treeview.columns_autosize()
 
-	def on_send_pm(self, widget = None, model = None, iter = None, nick = None,
-	msg = None):
-		'''opens a chat window and msg is not None sends private message to a
+	def on_send_pm(self, widget=None, model=None, iter=None, nick=None,
+	msg=None):
+		'''opens a chat window and if msg is not None sends private message to a
 		contact in a room'''
 		if nick is None:
 			nick = model[iter][C_NICK].decode('utf-8')
 		fjid = gajim.construct_fjid(self.room_jid, nick) # 'fake' jid
 
-		self._start_private_message(nick)
+		ctrl = self._start_private_message(nick)
 		if msg:
-			gajim.interface.msg_win_mgr.get_control(fjid, self.account).\
-				send_message(msg)
+			ctrl.send_message(msg)
 
 	def on_send_file(self, widget, gc_contact):
 		'''sends a file to a contact in the room'''
@@ -1585,7 +1586,7 @@ class GroupchatControl(ChatControlBase):
 		# Minimize it
 		win = gajim.interface.msg_win_mgr.get_window(self.contact.jid,
 			self.account)
-		ctrl = win.get_control(self.contact.jid, self.account)
+		ctrl = win.get_gc_control(self.contact.jid, self.account)
 
 		ctrl_page = win.notebook.page_num(ctrl.widget)
 		control = win.notebook.get_nth_page(ctrl_page)
@@ -1615,7 +1616,7 @@ class GroupchatControl(ChatControlBase):
 		for nick in nick_list:
 			# Update pm chat window
 			fjid = self.room_jid + '/' + nick
-			ctrl = gajim.interface.msg_win_mgr.get_control(fjid, self.account)
+			ctrl = gajim.interface.msg_win_mgr.get_gc_control(fjid, self.account)
 			if ctrl:
 				contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 				contact.show = 'offline'
@@ -2028,7 +2029,7 @@ class GroupchatControl(ChatControlBase):
 		menu.show_all()
 		menu.popup(None, None, None, event.button, event.time)
 
-	def _start_private_message(self, nick, session = None):
+	def _start_private_message(self, nick):
 		gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 		nick_jid = gc_c.get_full_jid()
 
@@ -2036,8 +2037,13 @@ class GroupchatControl(ChatControlBase):
 		if not win:
 			gajim.interface.new_private_chat(gc_c, self.account)
 			win = gajim.interface.msg_win_mgr.get_window(nick_jid, self.account)
-		win.set_active_tab(nick_jid, self.account)
+
+		ctrl = win.get_controls(nick_jid, self.account)[0]
+
+		win.set_active_tab(ctrl)
 		win.window.present()
+
+		return ctrl
 
 	def on_row_activated(self, widget, path):
 		'''When an iter is activated (dubblick or single click if gnome is set
@@ -2097,7 +2103,7 @@ class GroupchatControl(ChatControlBase):
 				return
 
 			if gajim.single_click and not event.state & gtk.gdk.SHIFT_MASK:
-				self.on_row_activated(widget, path)			
+				self.on_row_activated(widget, path)
 				return True
 			else:
 				model = widget.get_model()

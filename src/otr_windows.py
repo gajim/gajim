@@ -92,8 +92,7 @@ class ContactOtrSMPWindow:
 		self.gw("progressbar").set_fraction(1)
 		gajim.otr_ui_ops.gajim_log(text, self.account, self.contact.get_full_jid())
 		self.gw("desc_label").set_markup(text)
-		ctrl = gajim.interface.msg_win_mgr.get_control(self.contact.jid, self.account)
-		if ctrl:
+		for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(self.contact.jid, self.account):
 			ctrl.update_ui()
 		gajim.otr_ui_ops.write_fingerprints({'account':self.account})
 
