@@ -440,16 +440,23 @@ class MessageWindow(object):
 		# Update external state
 		gajim.events.remove_events(ctrl.account, ctrl.get_full_jid,
 			types = ['printed_msg', 'chat', 'gc_msg'])
-		del gajim.last_message_time[ctrl.account][ctrl.get_full_jid()]
+
+		fjid = ctrl.get_full_jid()
+		jid = gajim.get_jid_without_resource(fjid)
+		thread_id = ctrl.session.thread_id
+
+		fctrls = self.get_controls(fjid, ctrl.account)
+		bctrls = self.get_controls(jid, ctrl.account)
+		# keep last_message_time around unless this was our last control with
+		# that jid
+		if not fctrls and not bctrls:
+			del gajim.last_message_time[ctrl.account][fjid]
 
 		# Disconnect tab DnD only if GTK version < 2.10
 		if gtk.pygtk_version < (2, 10, 0) or gtk.gtk_version < (2, 10, 0):
 			self.disconnect_tab_dnd(ctrl.widget)
 
 		self.notebook.remove_page(self.notebook.page_num(ctrl.widget))
-
-		fjid = ctrl.get_full_jid()
-		thread_id = ctrl.session.thread_id
 
 		del self._controls[ctrl.account][fjid][thread_id]
 
