@@ -314,8 +314,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 				if len(gajim.events.get_events(self.conn.name, fjid)):
 					self.control.read_queue()
 
-				if path and not gajim.interface.dragging and gajim.config.get(
-				'scroll_roster_to_last_message'):
+				if path and not gajim.interface.roster.dragging and \
+				gajim.config.get('scroll_roster_to_last_message'):
 					# we curently see contact in our roster
 					# show and select his line in roster
 					# do not change selection while DND'ing
