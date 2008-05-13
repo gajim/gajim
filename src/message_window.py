@@ -231,7 +231,7 @@ class MessageWindow(object):
 		# Add notebook page and connect up to the tab's close button
 		xml = gtkgui_helpers.get_glade('message_window.glade', 'chat_tab_ebox')
 		tab_label_box = xml.get_widget('chat_tab_ebox')
-		widget =  xml.get_widget('tab_close_button')
+		widget = xml.get_widget('tab_close_button')
 		id = widget.connect('clicked', self._on_close_button_clicked, control)
 		control.handlers[id] = widget
 
@@ -610,7 +610,7 @@ class MessageWindow(object):
 			del gajim.last_message_time[acct][old_jid]
 
 	def change_thread_key(self, jid, acct, old_thread_id, new_thread_id): 
- 		'''Change the thread_id key of a control''' 
+		'''Change the thread_id key of a control''' 
 		try: 
 			# Check if control exists 
 			ctrl = self._controls[acct][jid][old_thread_id] 
@@ -924,7 +924,7 @@ class MessageWindowMgr(gobject.GObject):
 	def create_window(self, contact, acct, type, resource = None):
 		win_acct = None
 		win_type = None
-		win_role = None  # X11 window role
+		win_role = None # X11 window role
 
 		win_key = self._mode_to_key(contact, acct, type, resource)
 		if self.mode == self.ONE_MSG_WINDOW_PERACCT:
@@ -1088,7 +1088,7 @@ class MessageWindowMgr(gobject.GObject):
 			else:
 				# Stash current size so it can be restored if the MessageWindow
 				# is not longer embedded
-				roster_width =  w.parent_paned.get_child1().allocation.width
+				roster_width = w.parent_paned.get_child1().allocation.width
 				gajim.config.set('roster_width', roster_width)
 
 			while w.notebook.get_n_pages():
