@@ -1133,7 +1133,7 @@ class ChatControl(ChatControlBase):
 
 		self.status_tooltip = gtk.Tooltips()
 
-	    	if gajim.otr_module:
+		if gajim.otr_module:
 			self.update_otr(True)
 
 		self.update_ui()
