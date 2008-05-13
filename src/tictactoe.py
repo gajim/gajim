@@ -327,7 +327,7 @@ class TicTacToeBoard:
 		if not self.session.is_my_turn():
 			return
 
-		(height, width) = widget.get_size()
+		(width, height) = widget.get_size()
 
 		# convert click co-ordinates to row and column
 
