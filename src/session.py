@@ -316,10 +316,11 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 					# we curently see contact in our roster
 					# show and select his line in roster
 					# do not change selection while DND'ing
-					self.tree.expand_row(path[0:1], False)
-					self.tree.expand_row(path[0:2], False)
-					self.tree.scroll_to_cell(path)
-					self.tree.set_cursor(path)
+					tree = gajim.interface.roster.tree
+					tree.expand_row(path[0:1], False)
+					tree.expand_row(path[0:2], False)
+					tree.scroll_to_cell(path)
+					tree.set_cursor(path)
 		else:
 			if no_queue: # We didn't have a queue: we change icons
 				gajim.interface.roster.draw_contact(jid, self.conn.name)
