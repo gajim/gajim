@@ -236,7 +236,7 @@ class ConnectionCaps(object):
 			return
 		node, hash = node.split('#', 1)
 		computed_hash = helpers.compute_caps_hash(identities, features,
-			contact.caps_hash_method)
+			dataforms=dataforms, hash_method=contact.caps_hash_method)
 		if computed_hash != hash:
 			# wrong hash, forget it
 			contact.caps_node = ''

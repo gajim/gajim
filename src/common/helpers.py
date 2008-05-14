@@ -1245,7 +1245,18 @@ def sort_identities_func(i1, i2):
 		return 1
 	return 0
 
-def compute_caps_hash(identities, features, hash_method='sha-1'):
+def sort_dataforms_func(d1, d2):
+	f1 = d1.getField('FORM_TYPE')
+	f2 = d2.getField('FORM_TYPE')
+	if f1 and f2 and (f1.getValue() < f2.getValue()):
+		return -1
+	return 1
+
+def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
+	'''Compute caps hash according to XEP-0115, V1.5
+	
+	dataforms are xmpp.DataForms objects as common.dataforms don't allow several
+	values without a field type list-multi'''
 	S = ''
 	identities.sort(cmp=sort_identities_func)
 	for i in identities:
@@ -1266,6 +1277,26 @@ def compute_caps_hash(identities, features, hash_method='sha-1'):
 	features.sort()
 	for f in features:
 		S += '%s<' % f
+	dataforms.sort(cmp=sort_dataforms_func)
+	for dataform in dataforms:
+		# fields indexed by var
+		fields = {}
+		for f in dataform.getChildren():
+			fields[f.getVar()] = f
+		form_type = fields.get('FORM_TYPE')
+		if form_type:
+			S += form_type.getValue() + '<'
+			del fields['FORM_TYPE']
+		vars = fields.keys()
+		vars.sort()
+		for var in vars:
+			S += '%s<' % var
+			values = fields[var].getValues()
+			values.sort()
+			for value in values:
+				S += '%s<' % value
+
+	print S
 	if hash_method == 'sha-1':
 		hash = hash_sha1(S)
 	elif hash_method == 'md5':
