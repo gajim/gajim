@@ -49,6 +49,26 @@ class StanzaSession(object):
 
 		return self.loggable and account not in no_log_for and self.jid not in no_log_for
 
+	# remove events associated with this session from the queue
+	# returns True if any events were removed (unlike gajim.events.remove_events)
+	def remove_events(self, types):
+		any_removed = False
+
+		for event in gajim.events.get_events(self.conn.name, self.jid, types=types):
+			# the event wasn't in this session
+			if (event.type_ == 'chat' and event.parameters[8] != self) or \
+					(event.type_ == 'printed_chat' and event.parameters[0] != self):
+				continue
+
+			# events.remove_events returns True when there were no events
+			# for some reason
+			r = gajim.events.remove_events(self.conn.name, self.jid, event)
+
+			if not r:
+				any_removed = True
+
+		return any_removed
+
 	def generate_thread_id(self):
 		return "".join([random.choice(string.ascii_letters) for x in xrange(0,32)])
 

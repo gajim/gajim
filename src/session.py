@@ -26,21 +26,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		if self.control:
 			self.control.session = None
 
-	# remove events associated with this session from the queue
-	def remove_events(self, types):
-		any_removed = False
-
-		for event in gajim.events.get_events(self.conn, self.jid, types=types):
-			if event.parameters[8] != self:
-				continue
-
-			r = gajim.events.remove_events(self.conn, self.jid, event)
-
-			if not_any_removed:
-				any_removed = r
-
-		return any_removed
-
 	# extracts chatstate from a <message/> stanza
 	def get_chatstate(self, msg, msgtxt):
 		composing_xep = None

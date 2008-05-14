@@ -924,7 +924,7 @@ class ChatControlBase(MessageControl):
 		self.parent_win.get_active_control() == self and \
 		self.parent_win.window.is_active():
 			# we are at the end
-			if not self.session.remove_events(types_list):
+			if self.session.remove_events(types_list):
 				# There were events to remove
 				self.redraw_after_event_removed(jid)
 
