@@ -2920,9 +2920,9 @@ class Interface:
 
 		conn = gajim.connections[account]
 
-		if not session and contact.jid in conn.sessions:
+		if not session and fjid in conn.sessions:
 			sessions = filter(lambda s: isinstance(s, ChatControlSession),
-				conn.sessions[contact.jid].values())
+				conn.sessions[fjid].values())
 
 			# look for an existing session with a chat control
 			for s in sessions:
