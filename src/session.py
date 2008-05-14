@@ -55,6 +55,10 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 	# dispatch a received <message> stanza
 	def received(self, full_jid_with_resource, msgtxt, tim, encrypted, subject, msg):
 		msg_type = msg.getType()
+
+		if not msg_type:
+			msg_type = 'normal'
+
 		msg_id = None
 
 		# XEP-0172 User Nickname
@@ -113,6 +117,14 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			msg_type = 'pm'
 
 		jid_of_control = full_jid_with_resource
+
+		highest_contact = gajim.contacts.get_contact_with_highest_priority(
+			self.conn.name, jid)
+
+		if not pm:
+			if not highest_contact or not highest_contact.resource or \
+			resource == highest_contact.resource or highest_contact.show == 'offline':
+				jid_of_control = jid
 
 		# Handle chat states
 		contact = gajim.contacts.get_contact(self.conn.name, jid, resource)
