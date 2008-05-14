@@ -1777,11 +1777,17 @@ haven't received a thread_id yet and returns the session that we last
 sent a message to.'''
 
 		sessions = self.sessions[jid].values()
-		no_threadid_sessions = filter(lambda s: not s.received_thread_id, sessions)
 
-		if no_threadid_sessions:
-			no_threadid_sessions.sort(key=lambda s: s.last_send)
-			return no_threadid_sessions[-1]
+		# sessions that we haven't received a thread ID in
+		idless = filter(lambda s: not s.received_thread_id, sessions)
+
+		# filter out everything exceptthe default session type
+		chat_sessions = filter(lambda s: isinstance(s, ChatControlSession), idless)
+
+		if chat_sessions:
+			# return the session that we last sent a message in
+			chat_sessions.sort(key=lambda s: s.last_send)
+			return chat_sessions[-1]
 		else:
 			return None
 
