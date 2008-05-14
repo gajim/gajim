@@ -1296,7 +1296,6 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 			for value in values:
 				S += '%s<' % value
 
-	print S
 	if hash_method == 'sha-1':
 		hash = hash_sha1(S)
 	elif hash_method == 'md5':
