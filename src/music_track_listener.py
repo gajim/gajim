@@ -159,6 +159,7 @@ class MusicTrackListener(gobject.GObject):
 
 	def _mpris_music_track_change_cb(self, arg):
 		self._last_playing_music = self._mpris_properties_extract(arg)
+		self.emit('music-track-changed', self._last_playing_music)
 
 	def _muine_properties_extract(self, song_string):
 		d = dict((x.strip() for x in  s1.split(':', 1)) for s1 in \
