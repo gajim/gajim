@@ -820,7 +820,7 @@ class ConnectionDisco:
 							listener = MusicTrackListener.get()
 							track = listener.get_playing_track()
 							if gajim.config.get('publish_tune'):
-								gajim.interface.roster._music_track_changed(listener,
+								gajim.interface.roster.music_track_changed(listener,
 										track, self.name)
 						break
 			if features.__contains__(common.xmpp.NS_BYTESTREAM):

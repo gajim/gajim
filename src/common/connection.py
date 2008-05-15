@@ -195,8 +195,7 @@ class Connection(ConnectionHandlers):
 
 	# We are doing disconnect at so many places, better use one function in all
 	def disconnect(self, on_purpose=False):
-		#FIXME: set the Tune to None before disconnection per account
-		#gajim.interface.roster._music_track_changed(None, None)
+		gajim.interface.roster.music_track_changed(None, None)
 		self.on_purpose = on_purpose
 		self.connected = 0
 		self.time_to_reconnect = None

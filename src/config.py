@@ -54,6 +54,10 @@ from common import pep
 
 from common.exceptions import GajimGeneralException
 
+if dbus_support.supported:
+	from music_track_listener import MusicTrackListener
+	import dbus
+
 #---------- PreferencesWindow class -------------#
 class PreferencesWindow:
 	'''Class for Preferences window'''
@@ -555,7 +559,15 @@ class PreferencesWindow:
 		helpers.update_optional_features()
 
 	def on_publish_tune_checkbutton_toggled(self, widget):
-		if not widget.get_active():
+		if widget.get_active():
+			listener = MusicTrackListener.get()
+			gajim.interface.roster.music_track_changed_signal = listener.connect(
+				'music-track-changed', gajim.interface.roster.music_track_changed)
+			track = listener.get_playing_track()
+			gajim.interface.roster.music_track_changed(listener, track)
+		else:
+			gajim.interface.roster.music_track_changed_signal = None
+			
 			for account in gajim.connections:
 				if gajim.connections[account].pep_supported:
 					# As many implementations don't support retracting items, we send a "Stopped" event first
@@ -563,8 +575,6 @@ class PreferencesWindow:
 					pep.user_retract_tune(account)
 		self.on_checkbutton_toggled(widget, 'publish_tune')
 		helpers.update_optional_features()
-		gajim.interface.roster.enable_syncing_status_msg_from_current_music_track(
-			widget.get_active())
 
 	def on_publish_nick_checkbutton_toggled(self, widget):
 		if not widget.get_active():
@@ -1168,13 +1178,6 @@ class PreferencesWindow:
 		else:
 			gajim.interface.instances['advanced_config'] = \
 				dialogs.AdvancedConfigurationWindow()
-
-	def set_status_msg_from_current_music_track_checkbutton_toggled(self,
-		widget):
-		self.on_checkbutton_toggled(widget,
-			'set_status_msg_from_current_music_track')
-		gajim.interface.roster.enable_syncing_status_msg_from_current_music_track(
-			widget.get_active())
 
 #---------- ManageProxiesWindow class -------------#
 class ManageProxiesWindow:

@@ -151,7 +151,6 @@ class Config:
 		'before_nickname': [ opt_str, '', _('Characters that are printed before the nickname in conversations') ],
 		'after_nickname': [ opt_str, ':', _('Characters that are printed after the nickname in conversations') ],
 		'send_os_info': [ opt_bool, True ],
-		'set_status_msg_from_lastfm': [ opt_bool, False, _('If checked, Gajim can regularly poll a Last.fm account and sends recently played songs through PEP.') ],
 		'lastfm_username': [ opt_str, '', _('The username used to identify the Last.fm account.')],
 		'notify_on_new_gmail_email': [ opt_bool, True ],
 		'notify_on_new_gmail_email_extra': [ opt_bool, False ],

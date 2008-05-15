@@ -1548,50 +1548,6 @@ class RosterWindow:
 			# instance
 			for chat_control in gajim.interface.msg_win_mgr.get_chat_controls(ji, account):
 				chat_control.contact = contact1
-	
-	def enable_syncing_status_msg_from_current_music_track(self, enabled):
-		'''enable setting status msg from currently playing music track
-		
-		if enabled is True, we listen to events from music players about
-		currently played music track, and we update our
-		status message accordinly'''
-		if not dbus_support.supported:
-			# do nothing if user doesn't have D-Bus bindings
-			return
-		if enabled:
-			listener = MusicTrackListener.get()
-			if self._music_track_changed_signal is None:
-				self._music_track_changed_signal = listener.connect(
-					'music-track-changed', self._music_track_changed)
-			track = listener.get_playing_track()
-			self._music_track_changed(listener, track)
-		else:
-			if self._music_track_changed_signal is not None:
-				listener = MusicTrackListener.get()
-				listener.disconnect(self._music_track_changed_signal)
-				self._music_track_changed_signal = None
-			self._music_track_changed(None, None)
- 
-	def enable_syncing_status_msg_from_lastfm(self, enabled):
-		''' enable setting status msg from a Last.fm account
-		
-		if enabled is True, we start polling the Last.fm server,
-		and we update our status message accordinly'''
-		if enabled:
-			if self._music_track_changed_signal is None:
-				listener = LastFMTrackListener.get(
-					gajim.config.get('lastfm_username'))
-				self._music_track_changed_signal = listener.connect(
-					'music-track-changed', self._music_track_changed)
-				track = listener.get_playing_track()
-				self._music_track_changed(listener, track)
-		else:
-			if self._music_track_changed_signal is not None:
-				listener = LastFMTrackListener.get(
-					gajim.config.get('lastfm_username'))
-				listener.disconnect(self._music_track_changed_signal)
-				self._music_track_changed_signal = None
-				self._music_track_changed(None, None)
 
 	def _change_awn_icon_status(self, status):
 		if not dbus_support.supported:
@@ -1619,7 +1575,7 @@ class RosterWindow:
 		except Exception, e:
 			pass
 
-	def _music_track_changed(self, unused_listener, music_track_info,
+	def music_track_changed(self, unused_listener, music_track_info,
 	account=''):
 		from common import pep
 		if account == '':
@@ -1654,7 +1610,6 @@ class RosterWindow:
 			if self._music_track_info != music_track_info:
 				pep.user_send_tune(account, artist, title, source)
 				self._music_track_info = music_track_info
-
 
 	def connected_rooms(self, account):
 		if account in gajim.gc_connected[account].values():
@@ -5711,7 +5666,7 @@ class RosterWindow:
 		self.xml = gtkgui_helpers.get_glade('roster_window.glade')
 		self.window = self.xml.get_widget('roster_window')
 		self.hpaned = self.xml.get_widget('roster_hpaned')
-		self._music_track_changed_signal = None
+		self.music_track_changed_signal = None
 		gajim.interface.msg_win_mgr = MessageWindowMgr(self.window, self.hpaned)
 		gajim.interface.msg_win_mgr.connect('window-delete',
 			self.on_message_window_delete)
@@ -5915,12 +5870,11 @@ class RosterWindow:
 
 		publish_tune = gajim.config.get('publish_tune')
 		if publish_tune:
-			if gajim.config.get('set_status_msg_from_lastfm'):
-				self.enable_syncing_status_msg_from_lastfm(True)
-			else:
-				self.enable_syncing_status_msg_from_current_music_track(True)
-		else:
-			self.enable_syncing_status_msg_from_current_music_track(False)
+			listener = MusicTrackListener.get()
+			self.music_track_changed_signal = listener.connect(
+				'music-track-changed', self.music_track_changed)
+			track = listener.get_playing_track()
+			self.music_track_changed(listener, track)
 
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()
