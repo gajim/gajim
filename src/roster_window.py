@@ -1602,14 +1602,14 @@ class RosterWindow:
 					continue
 				if not gajim.connections[account].pep_supported:
 					continue
-				if self._music_track_info == music_track_info:
+				if gajim.connections[account].music_track_info == music_track_info:
 					continue
 				pep.user_send_tune(account, artist, title, source)
-				self._music_track_info = music_track_info
+				gajim.connections[account].music_track_info = music_track_info
 		elif gajim.connections[account].pep_supported:
-			if self._music_track_info != music_track_info:
+			if gajim.connections[account].music_track_info != music_track_info:
 				pep.user_send_tune(account, artist, title, source)
-				self._music_track_info = music_track_info
+				gajim.connections[account].music_track_info = music_track_info
 
 	def connected_rooms(self, account):
 		if account in gajim.gc_connected[account].values():
@@ -5726,8 +5726,6 @@ class RosterWindow:
 		# it means we are waiting for this number of accounts to disconnect before
 		# quitting
 		self.quit_on_next_offline = -1
-
-		self._music_track_info = None
 
 		# uf_show, img, show, sensitive
 		liststore = gtk.ListStore(str, gtk.Image, str, bool)
