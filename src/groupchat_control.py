@@ -295,6 +295,9 @@ class GroupchatControl(ChatControlBase):
 			self.on_minimize_menuitem_toggled)
 		self.handlers[id] = self.minimize_menuitem
 
+		self.separatormenuitem1 = xm.get_widget('separatormenuitem1')
+		self.separatormenuitem2 = xm.get_widget('separatormenuitem2')
+
 		self.gc_popup_menu = xm.get_widget('gc_control_popup_menu')
 
 		self.name_label = self.xml.get_widget('banner_name_label')
@@ -562,7 +565,7 @@ class GroupchatControl(ChatControlBase):
 
 		self.banner_status_label.set_markup(subject_text)
 
-	def prepare_context_menu(self):
+	def prepare_context_menu(self, hide_buttonbar_entries = False):
 		'''sets sensitivity state for configure_room'''
 		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
 		self.change_nick_menuitem.add_accelerator('activate', ag, gtk.keysyms.n,
@@ -573,6 +576,22 @@ class GroupchatControl(ChatControlBase):
 			gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
 		self.history_menuitem.add_accelerator('activate', ag, gtk.keysyms.h,
 			gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+
+		if hide_buttonbar_entries:
+			self.change_nick_menuitem.hide()
+			self.change_subject_menuitem.hide()
+			self.bookmark_room_menuitem.hide()
+			self.history_menuitem.hide()
+			self.separatormenuitem1.hide()
+			self.separatormenuitem2.hide()
+		else:
+			self.change_nick_menuitem.show()
+			self.change_subject_menuitem.show()
+			self.bookmark_room_menuitem.show()
+			self.history_menuitem.show()
+			self.separatormenuitem1.show()
+			self.separatormenuitem2.show()
+
 		if self.contact.jid in gajim.config.get_per('accounts', self.account,
 		'minimized_gc').split(' '):
 			self.minimize_menuitem.set_active(True)
