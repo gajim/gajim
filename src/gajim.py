@@ -1384,6 +1384,8 @@ class Interface:
 				for f in form.iter_fields():
 					if f.var == 'muc#roomconfig_allowinvites':
 						f.value = True
+					elif f.var == 'muc#roomconfig_publicroom':
+						f.value = False
 				gajim.connections[account].send_gc_config(room_jid, form)
 			else:
 				# use default configuration
