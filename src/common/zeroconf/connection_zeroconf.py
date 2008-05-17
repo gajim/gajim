@@ -196,7 +196,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		return self.call_resolve_timeout
 
 	# callbacks called from zeroconf
-	def _on_new_service(self,jid):
+	def _on_new_service(self, jid):
 		self.roster.setItem(jid)
 		self.dispatch('ROSTER_INFO', (jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
 		self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0, None))
@@ -362,7 +362,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
 	chatstate = None, msg_id = None, composing_xep = None, resource = None,
-	user_nick = None, session=None):
+	user_nick = None, session=None, forward_from=None, form_node=None, original_message=None):
 		fjid = jid
 
 		if not self.connection:
@@ -454,13 +454,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 		def on_send_not_ok(reason):
 			reason += ' ' + _('Your message could not be sent.')
-			self.dispatch('MSGERROR', [jid, '-1', reason, None, None])
+			self.dispatch('MSGERROR', [jid, '-1', reason, None, None, session])
 
 		ret = self.connection.send(msg_iq, msg != None, on_ok=on_send_ok,
 			on_not_ok=on_send_not_ok)
 		if ret == -1:
 			# Contact Offline
-			self.dispatch('MSGERROR', [jid, '-1', _('Contact is offline. Your message could not be sent.'), None, None])
+			self.dispatch('MSGERROR', [jid, '-1', _('Contact is offline. Your message could not be sent.'), None, None, session])
 
 	def send_stanza(self, stanza):
 		# send a stanza untouched
