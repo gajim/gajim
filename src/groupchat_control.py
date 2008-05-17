@@ -464,7 +464,11 @@ class GroupchatControl(ChatControlBase):
 		if color_name:
 			color = gtk.gdk.colormap_get_system().alloc_color(color_name)
 
-		label_str = self.name
+		if self.is_continued:
+			# if this is a continued conversation
+			label_str = self.get_continued_conversation_name()
+		else:
+			label_str = self.name
 
 		# count waiting highlighted messages
 		unread = ''
@@ -521,6 +525,23 @@ class GroupchatControl(ChatControlBase):
 		scaled_pix = pix.scale_simple(32, 32, gtk.gdk.INTERP_BILINEAR)
 		banner_status_img.set_from_pixbuf(scaled_pix)
 
+	def get_continued_conversation_name(self):
+		'''Get the name of a continued conversation.
+		Will return Continued Conversation if there isn't any other
+		contact in the room
+		'''
+		nicks = []
+		for nick in gajim.contacts.get_nick_list(self.account,
+		self.room_jid):
+			if nick != self.nick:
+				nicks.append(nick)
+		if nicks != []:
+			title = ', '
+			title = _('Conversation with ') + title.join(nicks)
+		else:
+			title = _('Continued conversation')
+		return title
+
 	def draw_banner_text(self):
 		'''Draw the text in the fat line at the top of the window that 
 		houses the room jid, subject. 
@@ -529,18 +550,10 @@ class GroupchatControl(ChatControlBase):
 		self.banner_status_label.set_ellipsize(pango.ELLIPSIZE_END)
 		font_attrs, font_attrs_small = self.get_font_attrs()
 		if self.is_continued:
-			nicks = []
-			for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
-				if nick != self.nick:
-					nicks.append(nick)
-			if nicks != []:
-				title = ', '
-				title = 'Conversation with ' + title.join(nicks)
-			else:
-				title = 'Continued conversation'
-			text = '<span %s>%s</span>' % (font_attrs, title)
+			name = self.get_continued_conversation_name()
 		else:
-			text = '<span %s>%s</span>' % (font_attrs, self.room_jid)
+			name = self.room_jid
+		text = '<span %s>%s</span>' % (font_attrs, name)
 		self.name_label.set_markup(text)
 
 		if self.subject:
