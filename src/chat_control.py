@@ -755,7 +755,7 @@ class ChatControlBase(MessageControl):
 
 	def on_actions_button_clicked(self, widget):
 		'''popup action menu'''
-		menu = self.prepare_context_menu()
+		menu = self.prepare_context_menu(True)
 		menu.show_all()
 		gtkgui_helpers.popup_emoticons_under_button(menu, widget,
 			self.parent_win)
@@ -1735,7 +1735,7 @@ class ChatControl(ChatControlBase):
 
 		return tab_img
 
-	def prepare_context_menu(self):
+	def prepare_context_menu(self, hide_buttonbar_entries = False):
 		'''sets compact view menuitem active state
 		sets active and sensitivity state for toggle_gpg_menuitem
 		sets sensitivity for history_menuitem (False for tranasports)
@@ -1757,9 +1757,20 @@ class ChatControl(ChatControlBase):
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
 		information_menuitem = xml.get_widget('information_menuitem')
 		convert_to_gc_menuitem = xml.get_widget('convert_to_groupchat')
+		separatormenuitem1 = xml.get_widget('separatormenuitem1')
+		separatormenuitem2 = xml.get_widget('separatormenuitem2')
+
 		muc_icon = gtkgui_helpers.load_icon('muc_active')
 		if muc_icon:
 			convert_to_gc_menuitem.set_image(muc_icon)
+
+		if not hide_buttonbar_entries:
+			history_menuitem.show()
+			send_file_menuitem.show()
+			information_menuitem.show()
+			convert_to_gc_menuitem.show()
+			separatormenuitem1.show()
+			separatormenuitem2.show()
 
 		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
 		send_file_menuitem.add_accelerator('activate', ag, gtk.keysyms.f, gtk.gdk.CONTROL_MASK,
@@ -1794,7 +1805,7 @@ class ChatControl(ChatControlBase):
 			toggle_e2e_menuitem.set_sensitive(not self.gpg_is_active)
 
 		# add_to_roster_menuitem
-		if _('Not in Roster') in contact.groups:
+		if not hide_buttonbar_entries and _('Not in Roster') in contact.groups:
 			add_to_roster_menuitem.show()
 
 		# If we don't have resource, we can't do file transfer
