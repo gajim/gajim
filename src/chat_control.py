@@ -1421,8 +1421,8 @@ class ChatControl(ChatControlBase):
 		else:
 			authenticated_string = ''
 
-		tooltip = ('%s Encryption %s active%s. \n' + \
-			'Your chat session %s be logged.') % \
+		tooltip = '%s Encryption %s active%s.\n' \
+			'Your chat session %s be logged.' % \
 			(enc_type, status_string, authenticated_string, 
 			logged_string)
 
