@@ -1886,7 +1886,7 @@ class GroupchatControl(ChatControlBase):
 						list_nick.insert(0, nick)
 
 				list_nick.remove(self.nick) # Skip self
-				list_nick.reverse()
+				list_nick.sort()
 				for nick in list_nick:
 					if nick.lower().startswith(begin.lower()):
 						# the word is the begining of a nick
