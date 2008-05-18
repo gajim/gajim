@@ -287,11 +287,13 @@ class OtrlMessageAppOps:
 		if not no_print:
 			ctrl = self.get_control(fjid, account)
 			if ctrl:
-				ctrl.print_conversation_line(u" [OTR] %s"%msg, 'status', '', None)
-		id = gajim.logger.write('chat_msg_recv', fjid, message='[OTR: %s]' % msg, tim=tim)
-		# gajim.logger.write() only marks a message as unread (and so only
-		# returns an id) when fjid is a real contact (NOT if it's a GC private
-		# chat)
+				ctrl.print_conversation_line(u'[OTR] %s' % \
+					msg, 'status', '', None)
+		id = gajim.logger.write('chat_msg_recv', fjid,
+			message='[OTR: %s]' % msg, tim=tim)
+		# gajim.logger.write() only marks a message as unread
+		# (and so only returns an id) when fjid is a real contact
+		# (NOT if it's a GC private chat)
 		if id:
 			gajim.logger.set_read_messages([id])
 
@@ -310,24 +312,29 @@ class OtrlMessageAppOps:
 			return ctrls[0]
 
 	def policy(self, opdata=None, context=None):
-		policy = gajim.config.get_per("contacts", context.username,
+		policy = gajim.config.get_per('contacts', context.username,
 			"otr_flags")
 		if policy <= 0:
-			policy = gajim.config.get_per("contacts",
-					gajim.get_jid_without_resource(context.username),
-					"otr_flags")
+			policy = gajim.config.get_per('contacts',
+				gajim.get_jid_without_resource(
+				context.username), 'otr_flags')
 		if policy <= 0:
-			policy = gajim.config.get_per("accounts", opdata['account'], "otr_flags")
+			policy = gajim.config.get_per('accounts',
+				opdata['account'], 'otr_flags')
 		return policy
 
-	def create_privkey(self, opdata="", accountname="", protocol=""):
-		dialog = gtk.Dialog(title=_("Generating..."), parent=gajim.interface.roster.window,
-			flags=gtk.DIALOG_MODAL, buttons=(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE))
-		permlabel = gtk.Label("Generating a private key for %s..."%accountname)
-		permlabel.set_padding(20,20)
+	def create_privkey(self, opdata='', accountname='', protocol=''):
+		dialog = gtk.Dialog(
+			title   = _('Generating...'),
+			parent  = gajim.interface.roster.window,
+			flags   = gtk.DIALOG_MODAL,
+			buttons = (gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE))
+		permlabel = gtk.Label(_('Generating a private key for %s...') \
+			% accountname)
+		permlabel.set_padding(20, 20)
 		dialog.set_response_sensitive(gtk.RESPONSE_CLOSE, False)
-		dialog.connect("destroy", otr_dialog_destroy)
-		dialog.connect("response", otr_dialog_destroy)
+		dialog.connect('destroy', otr_dialog_destroy)
+		dialog.connect('response', otr_dialog_destroy)
 		dialog.vbox.pack_start(permlabel)
 		dialog.get_root_window().raise_()
 		dialog.show_all()
@@ -337,55 +344,66 @@ class OtrlMessageAppOps:
 			c.map()
 
 		while gtk.events_pending():
-			gtk.main_iteration(block=False)
+			gtk.main_iteration(block = False)
 
-		otr.otrl_privkey_generate(gajim.connections[opdata['account']].otr_userstates,
-			os.path.join(gajimpaths.root, "%s.key"%opdata['account']).encode(),
+		otr.otrl_privkey_generate(
+			gajim.connections[opdata['account']].otr_userstates,
+			os.path.join(gajimpaths.root,
+			'%s.key' % opdata['account']).encode(),
 			accountname, gajim.OTR_PROTO)
-		permlabel.set_text("Generating a private key for %s...\ndone."%accountname)
+		permlabel.set_text(_('Generating a private key for %s...\n' \
+			'done.') % accountname)
 		dialog.set_response_sensitive(gtk.RESPONSE_CLOSE, True)
 
-	def is_logged_in(self, opdata={}, accountname="", protocol="", recipient=""):
-		contact = gajim.contacts.get_contact_from_full_jid(opdata['account'], recipient)
+	def is_logged_in(self, opdata={}, accountname='', protocol='',
+	recipient=""):
+		contact = gajim.contacts.get_contact_from_full_jid(
+			opdata['account'], recipient)
 		if contact:
 			return contact.show \
 				in ['dnd', 'xa', 'chat', 'online', 'away',
 				'invisible']
 		return 0
 
-	def inject_message(self, opdata=None, accountname="", protocol="", recipient="",
-			message=""):
+	def inject_message(self, opdata=None, accountname='', protocol='',
+	recipient='', message=''):
 		msg_type = otr.otrl_proto_message_type(message)
 
 		if 'kwargs' not in opdata or 'urgent' in opdata:
-			# don't use send_message here to have the message sent immediatly.
-			# this results in being able to disconnect from OTR sessions before
-			# quitting
-			stanza = XmppMessage(to=recipient, body=message, typ="chat")
-			gajim.connections[opdata['account']].connection.send(stanza, now=True)
+			# don't use send_message here to have the message
+			# sent immediatly. This results in being able to
+			# disconnect from OTR sessions before quitting
+			stanza = XmppMessage(to = recipient,
+				body = message, typ='chat')
+			gajim.connections[opdata['account']].connection. \
+				send(stanza, now = True)
 			return
 
 		if msg_type == otr.OTRL_MSGTYPE_QUERY:
 			# split away XHTML-contaminated explanatory message
 			message = unicode(message.splitlines()[0])
-			message += _(u"\nThis user has requested an Off-the-Record private " \
-				"conversation.  However, you do not have a plugin to " \
-				"support that.\nSee http://otr.cypherpunks.ca/ for more "\
-				"information.")
+			message += _(u'\nThis user has requested an ' \
+				'Off-the-Record private conversation. ' \
+				'However, you do not have a plugin to ' \
+				'support that.\n' \
+				'See http://otr.cypherpunks.ca/ for more ' \
+				'information.')
 
 			gajim.connections[opdata['account']].connection.send(
 				common.xmpp.Message(to = recipient,
 				body = message, typ = 'chat'))
 			return
 
-		gajim.connections[opdata['account']].send_message(recipient, message,
-			**opdata['kwargs'])
+		gajim.connections[opdata['account']].send_message(recipient,
+			message, **opdata['kwargs'])
 
-	def notify(sef, opdata=None, username="", **kwargs):
-		self.gajim_log("Notify: "+str(kwargs), opdata['account'], username)
+	def notify(sef, opdata=None, username='', **kwargs):
+		self.gajim_log('Notify: ' + str(kwargs), opdata['account'], 
+			username)
 
 	def display_otr_message(self, opdata=None, username="", msg="", **kwargs):
-		self.gajim_log("OTR Message: "+msg, opdata['account'], username)
+		self.gajim_log('OTR Message: ' + msg, opdata['account'],
+			username)
 		return 0
 
 	def update_context_list(self, **kwargs):
@@ -393,31 +411,33 @@ class OtrlMessageAppOps:
 		pass
 
 	def protocol_name(self, opdata=None, protocol=""):
-		return "XMPP"
+		return 'XMPP'
 
-	def new_fingerprint(self, opdata=None, username="", fingerprint="", **kwargs):
-		self.gajim_log("New fingerprint for %s: %s"%(username,
-			otr.otrl_privkey_hash_to_human(fingerprint)), opdata['account'], username)
+	def new_fingerprint(self, opdata=None, username='', fingerprint='',
+	**kwargs):
+		self.gajim_log('New fingerprint for %s: %s' % (username,
+			otr.otrl_privkey_hash_to_human(fingerprint)),
+			opdata['account'], username)
 
-	def write_fingerprints(self, opdata=""):
-		otr.otrl_privkey_write_fingerprints(gajim.connections[opdata['account']].otr_userstates,
-			os.path.join(gajimpaths.root, "%s.fpr"%opdata['account']).encode())
+	def write_fingerprints(self, opdata=''):
+		otr.otrl_privkey_write_fingerprints(
+			gajim.connections[opdata['account']].otr_userstates,
+			os.path.join(gajimpaths.root, '%s.fpr' % \
+			opdata['account']).encode())
 
-	def gone_secure(self, opdata="", context=None):
-		trust = context.active_fingerprint.trust
-		if trust:
-			trust = "verified"
-		else:
-			trust = "unverified"
-		self.gajim_log("%s secured OTR connection started"%trust,
-				opdata['account'], context.username, no_print=True)
+	def gone_secure(self, opdata='', context=None):
+		trust = context.active_fingerprint.trust \
+			and 'verified' or 'unverified'
+		self.gajim_log('%s secured OTR connection started' % trust,
+			opdata['account'], context.username, no_print = True)
 
 		ctrl = self.get_control(context.username, opdata['account'])
 		if ctrl:
 			ctrl.update_otr(True)
 
-	def gone_insecure(self, opdata="", context=None):
-		self.gajim_log("Private conversation with %s lost.", opdata['account'], context.username)
+	def gone_insecure(self, opdata='', context=None):
+		self.gajim_log('Private conversation with %s lost.',
+			opdata['account'], context.username)
 
 		ctrl = self.get_control(context.username, opdata['account'])
 		if ctrl:
@@ -428,17 +448,18 @@ class OtrlMessageAppOps:
 		if ctrl:
 			ctrl.update_otr(True)
 
-		self.gajim_log("OTR connection was refreshed", opdata['account'],
-				context.username)
+		self.gajim_log('OTR connection was refreshed',
+			opdata['account'], context.username)
 
-	def log_message(self, opdata=None, message=""):
+	def log_message(self, opdata=None, message=''):
 		gajim.log.debug(message)
 
 	def max_message_size(self, **kwargs):
 		return 0
 
-	def account_name(self, opdata=None, account="",protocol=""):
-		return gajim.get_name_from_jid(opdata['account'], unicode(account))
+	def account_name(self, opdata=None, account='',protocol=''):
+		return gajim.get_name_from_jid(opdata['account'],
+			unicode(account))
 
 gajim.otr_ui_ops = OtrlMessageAppOps()
 

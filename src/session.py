@@ -103,9 +103,9 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 				if gajim.otr_module.otrl_tlv_find(
 				otr_msg_tuple[2],
 				gajim.otr_module.OTRL_TLV_DISCONNECTED) != None:
-					gajim.otr_ui_ops.gajim_log(_("%s " + \
-						"has ended his/her private " + \
-						"conversation with you; " + \
+					gajim.otr_ui_ops.gajim_log(_("%s " \
+						"has ended his/her private " \
+						"conversation with you; " \
 						"should do the same.") % \
 						full_jid_with_resource,
 						self.conn.name,
