@@ -131,7 +131,7 @@ def get_advanced_notification(event, account, contact):
 		notif = gajim.config.get_per('notifications', str(num))
 
 def notify(event, jid, account, parameters, advanced_notif_num = None):
-	'''Check what type of notifications we want, depending on basic 
+	'''Check what type of notifications we want, depending on basic
 	and the advanced configuration of notifications and do these notifications;
 	advanced_notif_num holds the number of the first (top most) advanced
 	notification'''
@@ -198,8 +198,8 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 	if advanced_notif_num is not None and gajim.config.get_per('notifications',
 	str(advanced_notif_num), 'run_command'):
 		do_cmd = True
-			
-	# Do the wanted notifications	
+
+	# Do the wanted notifications
 	if do_popup:
 		if event in ('contact_connected', 'contact_disconnected',
 		'status_change'): # Common code for popup for these three events
@@ -208,15 +208,15 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 				suffix = '_notif_size_bw.png'
 			else: #Status Change or Connected
 				# FIXME: for status change,
-				# we don't always 'online.png', but we 
+				# we don't always 'online.png', but we
 				# first need 48x48 for all status
 				show_image = 'online.png'
-				suffix = '_notif_size_colored.png'	
+				suffix = '_notif_size_colored.png'
 			transport_name = gajim.get_transport_name_from_jid(jid)
 			img = None
 			if transport_name:
 				img = os.path.join(helpers.get_transport_path(transport_name),
-					'48x48', show_image) 
+					'48x48', show_image)
 			if not img or not os.path.isfile(img):
 				iconset = gajim.config.get('iconset')
 				img = os.path.join(helpers.get_iconset_path(iconset), '48x48',
@@ -340,12 +340,12 @@ def popup(event_type, jid, account, msg_type = '', path_to_image = None,
 			path_to_image = os.path.abspath(
 				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 					'chat_msg_recv.png')) # img to display
-		
-		
+
+
 		notification = pynotify.Notification(title, text)
 		timeout = gajim.config.get('notification_timeout') * 1000 # make it ms
 		notification.set_timeout(timeout)
-		
+
 		notification.set_category(event_type)
 		notification.set_data('event_type', event_type)
 		notification.set_data('jid', jid)
@@ -497,14 +497,14 @@ class DesktopNotification:
 				self.notif.Notify(
 					dbus.String(_('Gajim')),
 					dbus.String(self.path_to_image),
-					dbus.UInt32(0), 
-					ntype, 
+					dbus.UInt32(0),
+					ntype,
 					dbus.Byte(0),
 					dbus.String(self.title),
 					dbus.String(self.text),
 					[dbus.String(self.path_to_image)],
-					{'default': 0}, 
-					[''], 
+					{'default': 0},
+					[''],
 					True,
 					dbus.UInt32(timeout),
 					reply_handler=self.attach_by_id,
@@ -530,16 +530,16 @@ class DesktopNotification:
 					dbus.UInt32(0), # this notification does not replace other
 					dbus.String(self.path_to_image),
 					dbus.String(self.title),
-					dbus.String(self.text), 
+					dbus.String(self.text),
 					( dbus.String('default'), dbus.String(self.event_type) ),
-					hints, 
+					hints,
 					dbus.UInt32(timeout*1000),
 					reply_handler=self.attach_by_id,
 					error_handler=self.notify_another_way)
 			else:
 				self.notif.Notify(
 					dbus.String(_('Gajim')),
-					dbus.String(self.path_to_image), 
+					dbus.String(self.path_to_image),
 					dbus.UInt32(0),
 					dbus.String(self.title),
 					dbus.String(self.text),
@@ -563,8 +563,7 @@ class DesktopNotification:
 			return
 		self.notif.CloseNotification(dbus.UInt32(id))
 		self.notif = None
-		if not self.msg_type:
-			self.msg_type = 'chat'
+
 		gajim.interface.handle_event(self.account, self.jid, self.msg_type)
 
 	def version_reply_handler(self, name, vendor, version, spec_version = None):
