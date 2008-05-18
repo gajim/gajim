@@ -1225,7 +1225,7 @@ class ChatControl(ChatControlBase):
 	def update_otr(self, print_status=False):
 		otr_status_text = ''
 		otr_status = self.get_otr_status()
-		authenticated = True
+		authenticated = False
 
 		if otr_status > 0:
 			enc_status = True
