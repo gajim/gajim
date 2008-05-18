@@ -112,7 +112,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 						full_jid_with_resource.encode())
 
 					if self.control:
-						control.update_ui()
+						self.control.update_ui()
 
 					ctx = gajim.otr_module. \
 						otrl_context_find(
