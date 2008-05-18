@@ -256,26 +256,13 @@ from common import dataforms
 
 from common.xmpp import Message as XmppMessage
 
-## We disable OTR for now as libotr's API is just totally broken.
-## If you don't care about losing messages because they were unencrypted
-## and libotr only noticing us via a HTML string about this (which is only
-## displayed as a notice) and don't fear other bugs, you can manually
-## enable it here.
-##
-## OTR will *NOT* be reenabled by default until the developers of libotr
-## fix their very broken API!
-
-#try:
-#	import otr, otr_windows
-#
-#	gajim.otr_module = otr
-#	gajim.otr_windows = otr_windows
-#except ImportError:
-#	gajim.otr_module = None
-#	gajim.otr_windows = None
-
-gajim.otr_module = None
-gajim.otr_windows = None
+try:
+	import otr, otr_windows
+	gajim.otr_module = otr
+	gajim.otr_windows = otr_windows
+except ImportError:
+	gajim.otr_module = None
+	gajim.otr_windows = None
 
 def add_appdata(data=None, context=None):
 	account = data
@@ -289,7 +276,6 @@ def otr_dialog_destroy(widget, *args, **kwargs):
 	widget.destroy()
 
 class OtrlMessageAppOps:
-
 	def gajim_log(self, msg, account, fjid, no_print=False):
 		if not isinstance(fjid, unicode):
 			fjid = unicode(fjid)

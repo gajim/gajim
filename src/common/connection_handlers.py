@@ -1711,36 +1711,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		elif invite is not None:
 			self.dispatch_invite_message(invite, frm)
 		else:
-			# XXX this shouldn't be hardcoded
 			if isinstance(session, ChatControlSession):
-				if gajim.otr_module and isinstance(msgtxt, unicode):
-					otr_msg_tuple = gajim.otr_module.otrl_message_receiving(
-						gajim.connections[self.name].otr_userstates,
-						(gajim.otr_ui_ops, {'account':self.name}),
-						gajim.get_jid_from_account(self.name).encode(),
-						gajim.OTR_PROTO, frm.encode(), msgtxt.encode(),
-						(gajim.otr_add_appdata, self.name))
-					msgtxt = unicode(otr_msg_tuple[1])
-					# OTR messages are unformatted, or rather contain the same
-					# text in <body> and <html>
-					msghtml = msgtxt
-
-
-					if gajim.otr_module.otrl_tlv_find(otr_msg_tuple[2],
-							gajim.otr_module.OTRL_TLV_DISCONNECTED) != None:
-						gajim.otr_ui_ops.gajim_log("%s has ended his/her private conversation"
-															" with you; you should do the same."%frm, self.name,
-															frm)
-						if session.control:
-							session.control.update_ui()
-
-					ctx = gajim.otr_module.otrl_context_find(gajim.connections[self.name].otr_userstates, frm.encode(),
-							gajim.get_jid_from_account(self.name).encode(), gajim.OTR_PROTO, 1,
-							(gajim.otr_add_appdata, self.name))[0]
-
-					tlvs = otr_msg_tuple[2]
-					ctx.app_data.handle_tlv(tlvs)
-
 				session.received(frm, msgtxt, tim, encrypted, subject, msg)
 			else:
 				session.received(msg)

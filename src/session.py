@@ -81,6 +81,55 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 				return
 
 			log_type = 'chat_msg_recv'
+
+			if gajim.otr_module and \
+			isinstance(msgtxt, unicode) and \
+			msgtxt.find('?OTR') != -1:
+				# TODO: Do we really need .encode()?
+				otr_msg_tuple = \
+					gajim.otr_module.otrl_message_receiving(
+					self.conn.otr_userstates,
+					(gajim.otr_ui_ops,
+					{'account': self.conn.name}),
+					gajim.get_jid_from_account(
+					self.conn.name).encode(),
+					gajim.OTR_PROTO,
+					full_jid_with_resource.encode(),
+					msgtxt.encode(),
+					(gajim.otr_add_appdata, self.conn.name))
+				msgtxt = unicode(otr_msg_tuple[1])
+				xhtml = None
+
+				if gajim.otr_module.otrl_tlv_find(
+				otr_msg_tuple[2],
+				gajim.otr_module.OTRL_TLV_DISCONNECTED) != None:
+					gajim.otr_ui_ops.gajim_log(_("%s " + \
+						"has ended his/her private " + \
+						"conversation with you; " + \
+						"should do the same.") % \
+						full_jid_with_resource,
+						self.conn.name,
+						full_jid_with_resource.encode())
+
+					if self.control:
+						control.update_ui()
+
+					ctx = gajim.otr_module. \
+						otrl_context_find(
+						self.conn.otr_userstates,
+						full_jid_with_resource.encode(),
+						gajim.get_jid_from_account(
+						self.conn.name).encode(),
+						gajim.OTR_PROTO, 1,
+						(gajim.otr_add_appdata,
+						self.conn.name))[0]
+					tlvs = otr_msg_tuple[2]
+					ctx.app_data.handle_tlv(tlvs)
+
+				encrypted = True
+
+				if msgtxt == '':
+					return
 		else:
 			log_type = 'single_msg_recv'
 

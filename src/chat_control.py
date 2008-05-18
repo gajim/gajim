@@ -1205,31 +1205,48 @@ class ChatControl(ChatControlBase):
 		# The name banner is drawn here
 		ChatControlBase.update_ui(self)
 
-	def update_otr(self, print_status=False):
-		# retrieve the OTR context from the chat's contact data
-		ctx = gajim.otr_module.otrl_context_find(gajim.connections[self.account].otr_userstates,
+	def get_otr_status(self):
+		ctx = gajim.otr_module.otrl_context_find(
+			self.session.conn.otr_userstates,
 			self.contact.get_full_jid().encode(),
-			gajim.get_jid_from_account(self.account).encode(), gajim.OTR_PROTO, 1,
-			(gajim.otr_add_appdata, self.account))[0]
-		
-		enc_status = False
-		otr_status_text = ""
+			gajim.get_jid_from_account(self.account).encode(),
+			gajim.OTR_PROTO, 1, (gajim.otr_add_appdata,
+			self.account))[0]
+
 		if ctx.msgstate == gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED:
-			enc_status = True
 			if ctx.active_fingerprint.trust:
-				otr_status_text = u"authenticated secure OTR connection"
+				return 2
 			else:
-				otr_status_text = u'*unauthenticated* secure OTR connection'
+				return 1
 		elif ctx.msgstate == gajim.otr_module.OTRL_MSGSTATE_FINISHED:
+			return 3
+		return 0
+
+	def update_otr(self, print_status=False):
+		otr_status_text = ''
+		otr_status = self.get_otr_status()
+		authenticated = True
+
+		if otr_status > 0:
 			enc_status = True
-			otr_status_text = u"finished OTR connection"
 		else:
-			# nothing to print
-			print_status = False
-		self._show_lock_image(enc_status, u'OTR', enc_status, True)
-		if print_status:
-			self.print_conversation_line(u" [OTR] %s"%otr_status_text, 'status',
-					'', None)
+			enc_status = False
+
+		if otr_status == 1:
+			otr_status_text = u'*unauthenticated* secure OTR ' + \
+				u'connection'
+		elif otr_status == 2:
+			otr_status_text = u'authenticated secure OTR ' + \
+				u'connection'
+			authenticated = True
+		elif otr_status == 3:
+			otr_status_text = u'finished OTR connection'
+
+		self._show_lock_image(enc_status, u'OTR', enc_status, True,
+			authenticated)
+		if print_status and otr_status_text != '':
+			self.print_conversation_line(u'[OTR] %s' % \
+				otr_status_text, 'status', '', None)
 
 	def _update_banner_state_image(self):
 		contact = gajim.contacts.get_contact_with_highest_priority(self.account,
@@ -1391,12 +1408,23 @@ class ChatControl(ChatControlBase):
 		self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active, self.session and \
 				self.session.is_loggable())
 
-	def _show_lock_image(self, visible, enc_type = '', enc_enabled = False, chat_logged = False):
+	def _show_lock_image(self, visible, enc_type = '', enc_enabled = False, chat_logged = False, authenticated = False):
 		'''Set lock icon visibility and create tooltip'''
+		# TODO: Make translatable
 		status_string = enc_enabled and 'is' or 'is NOT'
 		logged_string = chat_logged and 'will' or 'will NOT'
-		tooltip = '%s Encryption %s active. \nYour chat session %s be logged.' %\
-			(enc_type, status_string, logged_string)
+
+		if enc_type == 'OTR':
+			authenticated_string = authenticated \
+				and ' and authenticated' \
+				or ' and NOT authenticated'
+		else:
+			authenticated_string = ''
+
+		tooltip = ('%s Encryption %s active%s. \n' + \
+			'Your chat session %s be logged.') % \
+			(enc_type, status_string, authenticated_string, 
+			logged_string)
 
 		self.lock_tooltip.set_tip(self.lock_image, tooltip)
 		self.widget_set_visible(self.lock_image, not visible)
@@ -1604,6 +1632,7 @@ class ChatControl(ChatControlBase):
 
 	def print_conversation(self, text, frm='', tim=None, encrypted=False,
 	subject=None, xhtml=None, simple=False):
+		# TODO: contact? ITYM frm.
 		'''Print a line in the conversation:
 		if contact is set to status: it's a status message
 		if contact is set to another value: it's an outgoing message
@@ -1622,21 +1651,34 @@ class ChatControl(ChatControlBase):
 			name = ''
 		else:
 			if self.session and self.session.enable_encryption:
+				# ESessions
 				if not encrypted:
-					msg = _('The following message was NOT encrypted')
-					ChatControlBase.print_conversation_line(self, msg,
-						'status', '', tim)
+					msg = _('The following message was ' + \
+						'NOT encrypted')
+					ChatControlBase.print_conversation_line(
+						self, msg, 'status', '', tim)
+			elif gajim.otr_module and self.get_otr_status() > 0:
+				# OTR
+				# TODO: This is not shown when the window
+				#       isn't open - needs fixing!
+				if not encrypted and frm == '':
+					msg = _('The following message was ' + \
+						'NOT encrypted')
+					ChatControlBase.print_conversation_line(
+						self, msg, 'status', '', tim)
 			else:
 				# GPG encryption
 				if encrypted and not self.gpg_is_active:
-					msg = _('The following message was encrypted')
-					ChatControlBase.print_conversation_line(self, msg,
-						'status', '', tim)
+					msg = _('The following message was ' + \
+						'encrypted')
+					ChatControlBase.print_conversation_line(
+						self, msg, 'status', '', tim)
 					self._toggle_gpg()
 				elif not encrypted and self.gpg_is_active:
-					msg = _('The following message was NOT encrypted')
-					ChatControlBase.print_conversation_line(self, msg,
-						'status', '', tim)
+					msg = _('The following message was ' + \
+						'NOT encrypted')
+					ChatControlBase.print_conversation_line(
+						self, msg, 'status', '', tim)
 			if not frm:
 				kind = 'incoming'
 				name = contact.get_shown_name()
