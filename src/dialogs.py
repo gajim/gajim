@@ -3731,7 +3731,7 @@ class TransformChatToMUC:
 
 	def unique_room_id_error(self, server):
 		self.unique_room_id_supported(server,
-			gajim.nicks[self.account] + str(randrange(9999999)))
+			gajim.nicks[self.account].lower().replace(' ','') + str(randrange(9999999)))
 
 class DataFormWindow(Dialog):
 	def __init__(self, form, on_response_ok):
