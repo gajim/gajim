@@ -1599,6 +1599,40 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		gajim.log.debug('MessageCB')
 
 		frm = helpers.get_full_jid_from_iq(msg)
+
+		# check if the message is pubsub#event
+		if msg.getTag('event') is not None:
+			self._pubsubEventCB(con, msg)
+			return
+
+		# check if the message is a XEP-0070 confirmation request
+		if msg.getTag('confirm', namespace=common.xmpp.NS_HTTP_AUTH):
+			self._HttpAuthCB(con, msg)
+			return
+
+		# invitations
+		invite = None
+		encTag = msg.getTag('x', namespace=common.xmpp.NS_ENCRYPTED)
+
+		if not encTag:
+			invite = msg.getTag('x', namespace = common.xmpp.NS_MUC_USER)
+			if invite and not invite.getTag('invite'):
+				invite = None
+
+		# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED
+		# invitation
+		# stanza (MUC XEP) remove in 2007, as we do not do NOT RECOMMENDED
+		xtags = msg.getTags('x')
+		for xtag in xtags:
+			if xtag.getNamespace() == common.xmpp.NS_CONFERENCE and not invite:
+				room_jid = xtag.getAttr('jid')
+				is_continued = False
+				if xtag.getTag('continue'):
+					is_continued = True
+				self.dispatch('GC_INVITATION', (room_jid, frm, '', None,
+					is_continued))
+				return
+
 		mtype = msg.getType()
 		thread_id = msg.getThread()
 
@@ -1626,16 +1660,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if thread_id and not session.received_thread_id:
 				session.received_thread_id = True
 
-		# check if the message is pubsub#event
-		if msg.getTag('event') is not None:
-			self._pubsubEventCB(con, msg)
-			return
-
-		# check if the message is a XEP-0070 confirmation request
-		if msg.getTag('confirm', namespace=common.xmpp.NS_HTTP_AUTH):
-			self._HttpAuthCB(con, msg)
-			return
-
 		# check if the message is a XEP-0020 feature negotiation request
 		if msg.getTag('feature', namespace=common.xmpp.NS_FEATURE):
 			if gajim.HAVE_PYCRYPTO:
@@ -1660,7 +1684,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		msgtxt = msg.getBody()
 		subject = msg.getSubject() # if not there, it's None
 
-		frm = helpers.get_full_jid_from_iq(msg)
 		jid = helpers.get_jid_from_iq(msg)
 
 		addressTag = msg.getTag('addresses', namespace = common.xmpp.NS_ADDRESS)
@@ -1671,29 +1694,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if address:
 				frm = address.getAttr('jid')
 				jid = gajim.get_jid_without_resource(frm)
-
-		# invitations
-		invite = None
-		encTag = msg.getTag('x', namespace=common.xmpp.NS_ENCRYPTED)
-
-		if not encTag:
-			invite = msg.getTag('x', namespace = common.xmpp.NS_MUC_USER)
-			if invite and not invite.getTag('invite'):
-				invite = None
-
-		# FIXME: Msn transport (CMSN1.2.1 and PyMSN0.10) do NOT RECOMMENDED
-		# invitation
-		# stanza (MUC XEP) remove in 2007, as we do not do NOT RECOMMENDED
-		xtags = msg.getTags('x')
-		for xtag in xtags:
-			if xtag.getNamespace() == common.xmpp.NS_CONFERENCE and not invite:
-				room_jid = xtag.getAttr('jid')
-				is_continued = False
-				if xtag.getTag('continue'):
-					is_continued = True
-				self.dispatch('GC_INVITATION', (room_jid, frm, '', None,
-					is_continued))
-				return
 
 		if encTag and self.USE_GPG:
 			encmsg = encTag.getData()
