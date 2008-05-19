@@ -910,7 +910,6 @@ class Interface:
 			# It must be an agent
 			if ji in jid_list:
 				# Update existing iter
-				self.roster.modelfilter.refilter()
 				self.roster.draw_contact(ji, account)
 				self.roster.draw_group(_('Transports'), account)
 				if new_show > 1 and ji in gajim.transport_avatar[account]:

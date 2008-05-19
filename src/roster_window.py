@@ -829,8 +829,6 @@ class RosterWindow:
 		if jid in gajim.newly_added[account]:
 			gajim.newly_added[account].remove(jid)
 			self.draw_contact(jid, account)
-			# redraw group visibility
-			self.refilter_shown_roster_items()
 
 	# FIXME: maybe move to gajim.py
 	def remove_to_be_removed(self, jid, account):
@@ -842,7 +840,6 @@ class RosterWindow:
 		if jid in gajim.to_be_removed[account]:
 			gajim.to_be_removed[account].remove(jid)
 			self.draw_contact(jid, account)
-		self.refilter_shown_roster_items()
 	
 	#FIXME: integrate into add_contact()
 	def add_to_not_in_the_roster(self, account, jid, nick = '', resource = ''):
