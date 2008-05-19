@@ -90,6 +90,12 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			(msgtxt.find('?OTR') != -1 or msgtxt.find(
 			'\x20\x09\x20\x20\x09\x09\x09\x09' \
 			'\x20\x09\x20\x09\x20\x09\x20\x20') != -1):
+				# If it doesn't include ?OTR, it wasn't an
+				# encrypted message, but a tagged plaintext
+				# message.
+				if msgtxt.find('?OTR') != -1:
+					encrypted = True
+
 				# TODO: Do we really need .encode()?
 				otr_msg_tuple = \
 					gajim.otr_module.otrl_message_receiving(
@@ -108,12 +114,24 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 				if gajim.otr_module.otrl_tlv_find(
 				otr_msg_tuple[2],
 				gajim.otr_module.OTRL_TLV_DISCONNECTED) != None:
-					gajim.otr_ui_ops.gajim_log(_("%s " \
-						"has ended his/her private " \
-						"conversation with you; " \
-						"should do the same.") % \
+					gajim.otr_ui_ops.gajim_log(_('%s ' \
+						'has ended his/her private ' \
+						'conversation with you.') % \
 						full_jid_with_resource,
 						self.conn.name,
+						full_jid_with_resource.encode())
+
+					# The other end closed the connection,
+					# so we do the same.
+					gajim.otr_module. \
+						otrl_message_disconnect(
+						self.conn.otr_userstates,
+						(gajim.otr_ui_ops,
+						{'account': self.conn.name,
+						'urgent': True}),
+						gajim.get_jid_from_account(
+						self.conn.name).encode(),
+						gajim.OTR_PROTO,
 						full_jid_with_resource.encode())
 
 					if self.control:
@@ -130,8 +148,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 						self.conn.name))[0]
 					tlvs = otr_msg_tuple[2]
 					ctx.app_data.handle_tlv(tlvs)
-
-				encrypted = True
 
 				if msgtxt == '':
 					return
