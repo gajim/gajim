@@ -104,7 +104,7 @@ class ContactOtrSMPWindow:
 		self.gw('desc_label').set_markup(text)
 		for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(
 		self.contact.jid, self.account):
-			ctrl.update_ui()
+			ctrl.update_otr()
 		gajim.otr_ui_ops.write_fingerprints({'account': self.account})
 
 	def handle_tlv(self, tlvs):
@@ -310,7 +310,7 @@ class ContactOtrWindow:
 			self.ctrl = gajim.interface.msg_win_mgr.get_control(
 					self.contact.jid, self.account)
 		if self.ctrl:
-			self.ctrl.update_ui()
+			self.ctrl.update_otr()
 
 		if self.gw('otr_default_checkbutton').get_active():
 			# default is enabled, so remove any user-specific
