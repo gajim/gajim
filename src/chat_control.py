@@ -2411,7 +2411,7 @@ class ChatControl(ChatControlBase):
 				fjid.encode())
 		gajim.otr_ui_ops.gajim_log("Private conversation with %s lost."%fjid,
 				self.account, fjid.encode())
-		self.update_ui()
+		self.update_otr()
 	def _on_otr_settings_menuitem_activate(self, widget):
 		gajim.otr_windows.ContactOtrWindow(self.contact, self.account, self)
 	def _on_smp_otr_menuitem_activate(self, widget):
