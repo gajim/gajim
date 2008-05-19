@@ -393,6 +393,11 @@ class NonBlockingTcp(PlugIn, IdleObject):
 	
 	def start_disconnect(self, to_send, on_disconnect):
 		self.on_disconnect = on_disconnect
+
+		# flush the sendqueue
+		while self.sendqueue:
+			self._do_send()
+
 		self.sendqueue = []
 		self.send(to_send)
 		self.send('</stream:stream>')
@@ -596,6 +601,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		'''Append raw_data to the queue of messages to be send. 
 		If supplied data is unicode string, encode it to utf-8.
 		'''
+
 		if self.state <= 0:
 			return
 		r = raw_data
@@ -608,6 +614,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self._do_send()
 		else:
 			self.sendqueue.append(r)
+
 		self._plug_idle()
 
 	def _on_send(self):
