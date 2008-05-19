@@ -949,6 +949,12 @@ class RosterWindow:
 
 		name = gobject.markup_escape_text(contact.get_shown_name())
 
+		groups = contact.groups
+		if contact.is_observer():
+			groups = [_('Observers')]
+		elif not groups:
+			groups = [_('General')]
+
 		# gets number of unread gc marked messages
 		if jid in gajim.interface.minimized_controls[account]:
 			nb_unread = len(gajim.events.get_events(account, jid,
@@ -966,11 +972,6 @@ class RosterWindow:
 		if jid in gajim.connections[account].blocked_contacts:
 			strike = True
 		else:
-			groups = contact.groups
-			if contact.is_observer():
-				groups = [_('Observers')]
-			elif not groups:
-				groups = [_('General')]
 			for group in groups:
 				if group in gajim.connections[account].blocked_groups:
 					strike = True
@@ -1117,6 +1118,13 @@ class RosterWindow:
 		for c, acc in brothers:
 			self.draw_contact(c.jid, acc)
 			self.draw_avatar(c.jid, acc)
+
+		for group in groups:
+			# We need to make sure that _visible_func is called for
+			# our groups otherwise we might not be shown
+			iterG = self._get_group_iter(group, account, model = self.model)
+			self.model[iterG][C_JID] = self.model[iterG][C_JID]
+
 		return False
 
 
@@ -1232,10 +1240,13 @@ class RosterWindow:
 		self.tree.columns_autosize()
 		
 	
-	def show_and_select_contact_if_having_events(self, jid, account):
+	def select_contact(self, jid, account):
 		'''Select contact in roster. If contact is hidden but has eventsi,
 		show him.'''
-		self.refilter_shown_roster_items() 
+		# Refiltering SHOULD NOT be needed:
+		# When a contact gets a new event he will be redrawn and his
+		# icon changes, so _visible_func WILL be called on him anyway
+
 		iters = self._get_contact_iter(jid, account)
 		if not iters:
 			# Not visible in roster

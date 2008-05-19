@@ -2419,8 +2419,8 @@ class Interface:
 					self.roster.add_to_not_in_the_roster(account, jid)
 			self.roster.draw_contact(jid, account)
 
-		# Show contact in roster (if he is invisible for example) and select line
-		self.roster.show_and_select_contact_if_having_events(jid, account)
+		# Select the contact in roster, it's visible because it has events.
+		self.roster.select_contact(jid, account)
 
 	def remove_first_event(self, account, jid, type_ = None):
 		event = gajim.events.get_first_event(account, jid, type_)

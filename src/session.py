@@ -330,13 +330,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			contact = gajim.interface.roster.add_to_not_in_the_roster(
 				self.conn.name, jid, user_nick)
 
-		# If visible, try to get first line of contact in roster
-		path = None
-		iters = gajim.interface.roster._get_contact_iter(jid, self.conn.name,
-			contact=contact)
-		if iters:
-			path = gajim.interface.roster.modelfilter.get_path(iters[0])
-
 		if not self.control:
 			# if no control exists and message comes from highest prio, the new
 			# control shouldn't have a resource
@@ -395,23 +388,10 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 				if len(gajim.events.get_events(self.conn.name, fjid)):
 					self.control.read_queue()
-
-				if path and not gajim.interface.roster.dragging and \
-				gajim.config.get('scroll_roster_to_last_message'):
-					# we curently see contact in our roster
-					# show and select his line in roster
-					# do not change selection while DND'ing
-					tree = gajim.interface.roster.tree
-					tree.expand_row(path[0:1], False)
-					tree.expand_row(path[0:2], False)
-					tree.scroll_to_cell(path)
-					tree.set_cursor(path)
 		else:
 			if no_queue: # We didn't have a queue: we change icons
 				gajim.interface.roster.draw_contact(jid, self.conn.name)
 
 			gajim.interface.roster.show_title() # we show the * or [n]
-			# Show contact in roster (if he is invisible for example) and select
-			# line
-			gajim.interface.roster.show_and_select_contact_if_having_events(jid,
-				self.conn.name)
+		# Select contact row in roster.
+		gajim.interface.roster.select_contact(jid, self.conn.name)
