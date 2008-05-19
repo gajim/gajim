@@ -15,4 +15,4 @@ if [ "x${OS}" == "xDarwin" ]; then
 fi
 
 cd ${BASE}/src
-exec -a gajim python -OOt gajim.py $@
+exec -a gajim python -t gajim.py $@
