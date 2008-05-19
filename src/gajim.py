@@ -1014,9 +1014,9 @@ class Interface:
 			helpers.play_sound('message_sent')
 
 	def handle_event_msgnotsent(self, account, array):
-		#('MSGNOTSENT', account, (jid, ierror_msg, msg, time))
+		#('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
 		msg = _('error while sending %s ( %s )') % (array[2], array[1])
-		self.roster.on_message(array[0], msg, array[3], account,
+		array[4].roster_message(array[0], msg, array[3], account,
 			msg_type='error')
 
 	def handle_event_subscribe(self, account, array):

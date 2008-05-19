@@ -1058,7 +1058,7 @@ class Connection(ConnectionHandlers):
 			if keyID ==  'UNKNOWN':
 				error = _('Neither the remote presence is signed, nor a key was assigned.')
 			elif keyID[8:] == 'MISMATCH':
-				error = _('The contact\'s key (%s) does not match the key assigned in Gajim.' % keyID[:8]) 
+				error = _('The contact\'s key (%s) does not match the key assigned in Gajim.' % keyID[:8])
 			else:
 				#encrypt
 				msgenc, error = self.gpg.encrypt(msg, [keyID])
@@ -1072,7 +1072,7 @@ class Connection(ConnectionHandlers):
 			else:
 				# Encryption failed, do not send message
 				tim = localtime()
-				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim))
+				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim, session))
 				return 3
 		if msgtxt and not xhtml and gajim.config.get(
 			'rst_formatting_outgoing_messages'):

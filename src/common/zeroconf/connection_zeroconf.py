@@ -393,7 +393,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			else:
 				# Encryption failed, do not send message
 				tim = time.localtime()
-				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim))
+				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim, session))
 				return 3
 
 		if type == 'chat':
