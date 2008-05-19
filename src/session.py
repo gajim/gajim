@@ -158,13 +158,14 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 				# We're also here if we just don't support OTR.
 				# Thus, we should strip the tags from plaintext
 				# messages since they look ugly.
-				msgtxt = msgtxt.replace('\x20\x09\x20\x20\x09' \
-					'\x09\x09\x09\x20\x09\x20\x09\x20\x09' \
-					'\x20\x20', '')
-				msgtxt = msgtxt.replace('\x20\x09\x20\x09\x20' \
-					'\x20\x09\x20', '')
-				msgtxt = msgtxt.replace('\x20\x20\x09\x09\x20' \
-					'\x20\x09\x20', '')
+				if msgtxt:
+					msgtxt = msgtxt.replace('\x20\x09\x20' \
+						'\x20\x09\x09\x09\x09\x20\x09' \
+						'\x20\x09\x20\x09\x20\x20', '')
+					msgtxt = msgtxt.replace('\x20\x09\x20' \
+						'\x09\x20\x20\x09\x20', '')
+					msgtxt = msgtxt.replace('\x20\x20\x09' \
+						'\x09\x20\x20\x09\x20', '')
 		else:
 			log_type = 'single_msg_recv'
 
