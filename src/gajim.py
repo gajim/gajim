@@ -652,6 +652,8 @@ class Interface:
 
 	def handle_event_roster(self, account, data):
 		#('ROSTER', account, array)
+		# FIXME: Those methods depend to highly on each other
+		# and the order in which they are called
 		self.roster.fill_contacts_and_groups_dicts(data, account)
 		self.roster.add_account_contacts(account)
 		self.roster.fire_up_unread_messages_events(account)

@@ -1501,11 +1501,15 @@ class RosterWindow:
 
 	def fill_contacts_and_groups_dicts(self, array, account):
 		'''fill gajim.contacts and gajim.groups'''
+		# FIXME: This function needs to be splitted
+		# Most of the logic SHOULD NOT be done at GUI level
 		if account not in gajim.contacts.get_accounts():
 			gajim.contacts.add_account(account)
 		if not gajim.groups.has_key(account):
 			gajim.groups[account] = {}
 		for jid in array.keys():
+			# Remove the contact in roster. It might has changed
+			self.remove_contact(jid, account)
 			# Remove old Contact instances
 			gajim.contacts.remove_jid(account, jid, remove_meta=False)
 			jids = jid.split('/')
