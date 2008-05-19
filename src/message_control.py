@@ -139,37 +139,47 @@ class MessageControl:
 	def send_message(self, message, keyID = '', type = 'chat',
 	chatstate = None, msg_id = None, composing_xep = None, resource = None,
 	user_nick = None):
-		'''Send the given message to the active tab. Doesn't return None if error
-		'''
+		# Send the given message to the active tab.
+		# Doesn't return None if error
 		jid = self.contact.jid
 		original_message = message
 
-		if gajim.otr_module:
+		if gajim.otr_module and self.session.append_otr_tag:
 			if type == 'chat' and isinstance(message, unicode):
-				d = {'kwargs':{'keyID':keyID, 'type':type,
-						'chatstate':chatstate, 'msg_id':msg_id,
-						'composing_xep':composing_xep, 'resource':self.resource,
-						'user_nick':user_nick, 'session':self.session,
-						'original_message':original_message}, 'account':self.account}
+				d = {'kwargs': {'keyID': keyID, 'type': type,
+					'chatstate': chatstate,
+					'msg_id': msg_id,
+					'composing_xep': composing_xep,
+					'resource': self.resource,
+					'user_nick': user_nick,
+					'session': self.session,
+					'original_message': original_message},
+					'account': self.account}
 
 				new_msg = gajim.otr_module.otrl_message_sending(
-					gajim.connections[self.account].otr_userstates,
+					self.session.conn.otr_userstates,
 					(gajim.otr_ui_ops, d),
-					gajim.get_jid_from_account(self.account).encode(),
-					gajim.OTR_PROTO, self.contact.get_full_jid().encode(),
-					message.encode(), None, (gajim.otr_add_appdata, self.account))
+					gajim.get_jid_from_account(
+					self.account).encode(),
+					gajim.OTR_PROTO,
+					self.contact.get_full_jid().encode(),
+					message.encode(), None,
+					(gajim.otr_add_appdata, self.account))
 
-				context = gajim.otr_module.otrl_context_find(
-						gajim.connections[self.account].otr_userstates,
-						self.contact.get_full_jid().encode(),
-						gajim.get_jid_from_account(self.account).encode(),
-						gajim.OTR_PROTO, 1, (gajim.otr_add_appdata,
-						self.account))[0]
+				ctx = gajim.otr_module.otrl_context_find(
+					self.session.conn.otr_userstates,
+					self.contact.get_full_jid().encode(),
+					gajim.get_jid_from_account(
+					self.account).encode(),
+					gajim.OTR_PROTO, 1,
+					(gajim.otr_add_appdata,
+					self.account))[0]
 
-				# we send all because inject_message can filter on HTML stuff then
+				# we send all because inject_message can filter
+				# on HTML stuff then
 				gajim.otr_module.otrl_message_fragment_and_send(
-						(gajim.otr_ui_ops, d),
-						context, new_msg, gajim.otr_module.OTRL_FRAGMENT_SEND_ALL)
+					(gajim.otr_ui_ops, d), ctx, new_msg,
+					gajim.otr_module.OTRL_FRAGMENT_SEND_ALL)
 				return
 
 		# Send and update history

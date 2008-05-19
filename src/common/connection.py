@@ -167,7 +167,8 @@ class Connection(ConnectionHandlers):
 		self.private_storage_supported = True
 
 		if gajim.otr_module:
-			self.otr_userstates = gajim.otr_module.otrl_userstate_create()
+			self.otr_userstates = \
+				gajim.otr_module.otrl_userstate_create()
 	# END __init__
 
 	def put_event(self, ev):

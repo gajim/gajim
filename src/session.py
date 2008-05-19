@@ -18,6 +18,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		stanza_session.EncryptedStanzaSession.__init__(self, conn, jid, thread_id, type = 'chat')
 
 		self.control = None
+		self.append_otr_tag = True
 
 	def acknowledge_termination(self):
 		# the other party terminated the session. we'll keep the control around, though.
@@ -151,6 +152,19 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 				if msgtxt == '':
 					return
+			else:
+				self.append_otr_tag = False
+
+				# We're also here if we just don't support OTR.
+				# Thus, we should strip the tags from plaintext
+				# messages since they look ugly.
+				msgtxt = msgtxt.replace('\x20\x09\x20\x20\x09' \
+					'\x09\x09\x09\x20\x09\x20\x09\x20\x09' \
+					'\x20\x20', '')
+				msgtxt = msgtxt.replace('\x20\x09\x20\x09\x20' \
+					'\x20\x09\x20', '')
+				msgtxt = msgtxt.replace('\x20\x20\x09\x09\x20' \
+					'\x20\x09\x20', '')
 		else:
 			log_type = 'single_msg_recv'
 
