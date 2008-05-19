@@ -392,7 +392,6 @@ class RosterTooltip(NotificationAreaTooltip):
 			self.win.add(self.table)
 			return
 		
-		
 		# primary contact
 		prim_contact = gajim.contacts.get_highest_prio_contact_from_contacts(
 			contacts)
@@ -463,11 +462,8 @@ class RosterTooltip(NotificationAreaTooltip):
 					self.add_status_row(file_path, icon_name, status_line,
 						contact.last_status_time)
 			properties.append((self.table,	None))
-		else: # only one resource
 
-			#FIXME: User {Mood, Activity, Tune} not shown if there are
-			#multiple resources
-			#FIXME: User {Mood, Activity, Tune} not shown for self
+		else: # only one resource
 			if contact.show:
 				show = helpers.get_uf_show(contact.show) 
 				if contact.last_status_time:
@@ -499,58 +495,6 @@ class RosterTooltip(NotificationAreaTooltip):
 				show = '<i>' + show + '</i>'
 				# we append show below
 				
-				if contact.mood.has_key('mood'):
-					mood = contact.mood['mood'].strip()
-					# translate it
-					mood = helpers.get_uf_mood(mood)
-					mood = gobject.markup_escape_text(mood)
-					mood_string = _('Mood:') + ' <b>%s</b>' % mood
-					if contact.mood.has_key('text') and contact.mood['text'] != '':
-						mood_text = contact.mood['text'].strip()
-						mood_text = gobject.markup_escape_text(mood_text)
-						mood_string += ' (%s)' % mood_text
-					properties.append((mood_string, None))
-
-				if contact.activity.has_key('activity'):
-					activity = contact.activity['activity'].strip()
-					# translate it
-					activity = helpers.get_uf_activity(activity)
-					activity = gobject.markup_escape_text(activity)
-					activity_string = _('Activity:') + ' <b>%s' % activity
-					if contact.activity.has_key('subactivity'):
-						activity_sub = contact.activity['subactivity'].strip()
-						# translate it
-						activity_sub = helpers.get_uf_activity(activity_sub)
-						activity_sub = gobject.markup_escape_text(activity_sub)
-						activity_string += ' (%s)</b>' % activity_sub
-					else:
-						activity_string += '</b>'
-					if contact.activity.has_key('text'):
-						activity_text = contact.activity['text'].strip()
-						activity_text = gobject.markup_escape_text(activity_text)
-						activity_string += ' (%s)' % activity_text
-					properties.append((activity_string, None))
-
-				if contact.tune.has_key('artist') or contact.tune.has_key('title'):
-					if contact.tune.has_key('artist'):
-						artist = contact.tune['artist'].strip()
-						artist = gobject.markup_escape_text(artist)
-					else:
-						artist = _('Unknown Artist')
-					if contact.tune.has_key('title'):
-						title = contact.tune['title'].strip()
-						title = gobject.markup_escape_text(title)
-					else:
-						title = _('Unknown Title')
-					if contact.tune.has_key('source'):
-						source = contact.tune['source'].strip()
-						source = gobject.markup_escape_text(source)
-					else:
-						source = _('Unknown Source')
-					tune_string = _('Tune:') + ' ' + _('<b>"%(title)s"</b> by <i>%(artist)s</i>\nfrom <i>%(source)s</i>' %\
-							{'title': title, 'artist': artist, 'source': source})
-					properties.append((tune_string, None))
-
 				if contact.status:
 					status = contact.status.strip()
 					if status:
@@ -562,6 +506,8 @@ class RosterTooltip(NotificationAreaTooltip):
 						status = gobject.markup_escape_text(status)
 						properties.append(('<i>%s</i>' % status, None))
 				properties.append((show, None))
+				
+		self._append_pep_info(contact, properties)
 		
 		properties.append((_('Jabber ID: '), prim_contact.jid ))
 
@@ -619,6 +565,57 @@ class RosterTooltip(NotificationAreaTooltip):
 			vcard_table.attach(self.avatar_image, 3, 4, 2,
 				vcard_current_row + 1, gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 3)
 		self.win.add(vcard_table)
+
+	def _append_pep_info(self, contact, properties):
+		'''Append Tune, Mood, Activity information of the specified contact
+		to the given property list.
+		'''
+		if contact.mood.has_key('mood'):
+			mood = contact.mood['mood'].strip()
+			mood = gobject.markup_escape_text(mood)
+			mood_string = _('Mood:') + ' <b>%s</b>' % mood
+			if contact.mood.has_key('text') and contact.mood['text'] != '':
+				mood_text = contact.mood['text'].strip()
+				mood_text = gobject.markup_escape_text(mood_text)
+				mood_string += ' (%s)' % mood_text
+			properties.append((mood_string, None))
+
+		if contact.activity.has_key('activity'):
+			activity = contact.activity['activity'].strip()
+			activity = gobject.markup_escape_text(activity)
+			activity_string = _('Activity:') + ' <b>%s' % activity
+			if contact.activity.has_key('subactivity'):
+				activity_sub = contact.activity['subactivity'].strip()
+				activity_sub = gobject.markup_escape_text(activity_sub)
+				activity_string += ' (%s)</b>' % activity_sub
+			else:
+				activity_string += '</b>'
+			if contact.activity.has_key('text'):
+				activity_text = contact.activity['text'].strip()
+				activity_text = gobject.markup_escape_text(activity_text)
+				activity_string += ' (%s)' % activity_text
+			properties.append((activity_string, None))
+
+		if contact.tune.has_key('artist') or contact.tune.has_key('title'):
+			if contact.tune.has_key('artist'):
+				artist = contact.tune['artist'].strip()
+				artist = gobject.markup_escape_text(artist)
+			else:
+				artist = _('Unknown Artist')
+			if contact.tune.has_key('title'):
+				title = contact.tune['title'].strip()
+				title = gobject.markup_escape_text(title)
+			else:
+				title = _('Unknown Title')
+			if contact.tune.has_key('source'):
+				source = contact.tune['source'].strip()
+				source = gobject.markup_escape_text(source)
+			else:
+				source = _('Unknown Source')
+			tune_string = _('Tune:') + ' ' + _('<b>"%(title)s"</b> by <i>%(artist)s</i>\nfrom <i>%(source)s</i>' %\
+					{'title': title, 'artist': artist, 'source': source})
+			properties.append((tune_string, None))
+			
 
 class FileTransfersTooltip(BaseTooltip):
 	''' Tooltip that is shown in the notification area '''
