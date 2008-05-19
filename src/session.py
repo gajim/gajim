@@ -82,9 +82,14 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 			log_type = 'chat_msg_recv'
 
+			# I don't trust libotr, that's why I only pass the
+			# message to it if it either contains the magic
+			# ?OTR string or a plaintext tagged message.
 			if gajim.otr_module and \
 			isinstance(msgtxt, unicode) and \
-			msgtxt.find('?OTR') != -1:
+			(msgtxt.find('?OTR') != -1 or msgtxt.find(
+			'\x20\x09\x20\x20\x09\x09\x09\x09' \
+			'\x20\x09\x20\x09\x20\x09\x20\x20') != -1):
 				# TODO: Do we really need .encode()?
 				otr_msg_tuple = \
 					gajim.otr_module.otrl_message_receiving(

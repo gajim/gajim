@@ -265,13 +265,12 @@ except ImportError:
 	gajim.otr_module = None
 	gajim.otr_windows = None
 
-def add_appdata(data=None, context=None):
+def add_appdata(data, context):
 	account = data
-	context.app_data = otr_windows.ContactOtrSMPWindow(unicode(context.username),
-		account)
+	context.app_data = otr_windows.ContactOtrSMPWindow(
+		unicode(context.username), account)
 
 gajim.otr_add_appdata = add_appdata
-
 
 def otr_dialog_destroy(widget, *args, **kwargs):
 	widget.destroy()
@@ -458,7 +457,7 @@ class OtrlMessageAppOps:
 	def max_message_size(self, **kwargs):
 		return 0
 
-	def account_name(self, opdata=None, account='',protocol=''):
+	def account_name(self, opdata=None, account='', protocol=''):
 		return gajim.get_name_from_jid(opdata['account'],
 			unicode(account))
 
