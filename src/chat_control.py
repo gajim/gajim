@@ -2406,9 +2406,8 @@ class ChatControl(ChatControlBase):
 	def _on_end_otr_menuitem_activate(self, widget):
 		fjid = self.contact.get_full_jid()
 		gajim.otr_module.otrl_message_disconnect(
-			self.session.conn.otr_userstates,
-			(gajim.otr_ui_ops, {'account': self.account,
-			'urgent': True, 'session': self.session}),
+			self.session.conn.otr_userstates, (gajim.otr_ui_ops,
+			{'account': self.account, 'urgent': True}),
 			gajim.get_jid_from_account(self.account).encode(),
 			gajim.OTR_PROTO, fjid.encode())
 		gajim.otr_ui_ops.gajim_log(_('Private conversation with ' \

@@ -375,9 +375,6 @@ class OtrlMessageAppOps:
 			# disconnect from OTR sessions before quitting
 			stanza = XmppMessage(to = recipient,
 				body = message, typ='chat')
-			if 'session' in opdata:
-				stanza.setThread(opdata['session'].thread_id)
-
 			gajim.connections[opdata['account']].connection. \
 				send(stanza, now = True)
 			return
