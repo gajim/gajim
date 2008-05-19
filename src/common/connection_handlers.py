@@ -1216,6 +1216,9 @@ class ConnectionHandlersBase:
 		# keep track of sessions this connection has with other JIDs
 		self.sessions = {}
 
+		if gajim.otr_module:
+			self.otr_userstates = gajim.otr_module.otrl_userstate_create()
+
 	def _FeatureNegCB(self, con, stanza, session):
 		gajim.log.debug('FeatureNegCB')
 		feature = stanza.getTag(name='feature', namespace=common.xmpp.NS_FEATURE)
