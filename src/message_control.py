@@ -96,7 +96,8 @@ class MessageControl:
 		pass
 
 	def get_tab_image(self):
-		'''Return a suitable tab image for display.  None clears any current label.'''
+		# Return a suitable tab image for display.
+		# None clears any current label.
 		return None
 
 	def prepare_context_menu(self):
@@ -114,7 +115,8 @@ class MessageControl:
 		pass
 
 	def get_specific_unread(self):
-		return len(gajim.events.get_events(self.account, self.contact.jid))
+		return len(gajim.events.get_events(self.account,
+			self.contact.jid))
 
 	def set_session(self, session):
 		oldsession = None
@@ -130,7 +132,8 @@ class MessageControl:
 			session.control = self
 
 			if oldsession:
-				self.parent_win.change_thread_key(self.contact.jid, self.account,
+				self.parent_win.change_thread_key(
+					self.contact.jid, self.account,
 					oldsession.thread_id, session.thread_id)
 
 				if oldsession.enable_encryption:
@@ -183,7 +186,9 @@ class MessageControl:
 				return
 
 		# Send and update history
-		return gajim.connections[self.account].send_message(jid, message, keyID,
-			type = type, chatstate = chatstate, msg_id = msg_id,
-			composing_xep = composing_xep, resource = self.resource,
-			user_nick = user_nick, session = self.session, original_message = original_message)
+		return gajim.connections[self.account].send_message(jid,
+			message, keyID, type = type, chatstate = chatstate,
+			msg_id = msg_id, composing_xep = composing_xep,
+			resource = self.resource, user_nick = user_nick,
+			session = self.session,
+			original_message = original_message)
