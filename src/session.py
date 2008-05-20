@@ -18,7 +18,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		stanza_session.EncryptedStanzaSession.__init__(self, conn, jid, thread_id, type = 'chat')
 
 		self.control = None
-		self.append_otr_tag = True
 
 	def acknowledge_termination(self):
 		# the other party terminated the session. we'll keep the control around, though.
@@ -82,90 +81,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 				return
 
 			log_type = 'chat_msg_recv'
-
-			# I don't trust libotr, that's why I only pass the
-			# message to it if it either contains the magic
-			# ?OTR string or a plaintext tagged message.
-			if gajim.otr_module and \
-			isinstance(msgtxt, unicode) and \
-			(msgtxt.find('?OTR') != -1 or msgtxt.find(
-			'\x20\x09\x20\x20\x09\x09\x09\x09' \
-			'\x20\x09\x20\x09\x20\x09\x20\x20') != -1):
-				# If it doesn't include ?OTR, it wasn't an
-				# encrypted message, but a tagged plaintext
-				# message.
-				if msgtxt.find('?OTR') != -1:
-					encrypted = True
-
-				# TODO: Do we really need .encode()?
-				otr_msg_tuple = \
-					gajim.otr_module.otrl_message_receiving(
-					self.conn.otr_userstates,
-					(gajim.otr_ui_ops,
-					{'account': self.conn.name}),
-					gajim.get_jid_from_account(
-					self.conn.name).encode(),
-					gajim.OTR_PROTO,
-					full_jid_with_resource.encode(),
-					msgtxt.encode(),
-					(gajim.otr_add_appdata, self.conn.name))
-				msgtxt = unicode(otr_msg_tuple[1])
-				xhtml = None
-
-				if gajim.otr_module.otrl_tlv_find(
-				otr_msg_tuple[2],
-				gajim.otr_module.OTRL_TLV_DISCONNECTED) != None:
-					gajim.otr_ui_ops.gajim_log(_('%s ' \
-						'has ended his/her private ' \
-						'conversation with you.') % \
-						full_jid_with_resource,
-						self.conn.name,
-						full_jid_with_resource.encode())
-
-					# The other end closed the connection,
-					# so we do the same.
-					gajim.otr_module. \
-						otrl_message_disconnect(
-						self.conn.otr_userstates,
-						(gajim.otr_ui_ops,
-						{'account': self.conn.name,
-						'urgent': True}),
-						gajim.get_jid_from_account(
-						self.conn.name).encode(),
-						gajim.OTR_PROTO,
-						full_jid_with_resource.encode())
-
-					if self.control:
-						self.control.update_otr()
-
-					ctx = gajim.otr_module. \
-						otrl_context_find(
-						self.conn.otr_userstates,
-						full_jid_with_resource.encode(),
-						gajim.get_jid_from_account(
-						self.conn.name).encode(),
-						gajim.OTR_PROTO, 1,
-						(gajim.otr_add_appdata,
-						self.conn.name))[0]
-					tlvs = otr_msg_tuple[2]
-					ctx.app_data.handle_tlv(tlvs)
-
-				if msgtxt == '':
-					return
-			elif msgtxt != None and msgtxt != '':
-				self.append_otr_tag = False
-
-				# We're also here if we just don't
-				# support OTR. Thus, we should strip
-				# the tags from plaintext messages
-				# since they look ugly.
-				msgtxt = msgtxt.replace('\x20\x09\x20' \
-					'\x20\x09\x09\x09\x09\x20\x09' \
-					'\x20\x09\x20\x09\x20\x20', '')
-				msgtxt = msgtxt.replace('\x20\x09\x20' \
-					'\x09\x20\x20\x09\x20', '')
-				msgtxt = msgtxt.replace('\x20\x20\x09' \
-					'\x09\x20\x20\x09\x20', '')
 		else:
 			log_type = 'single_msg_recv'
 
@@ -246,6 +161,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			# contact is not in the roster, create a fake one to display
 			# notification
 			contact = contacts.Contact(jid = jid, resource = resource)
+
 		advanced_notif_num = notify.get_advanced_notification('message_received',
 			self.conn.name, contact)
 

@@ -147,8 +147,7 @@ class MessageControl:
 		jid = self.contact.jid
 		original_message = message
 
-		if gajim.otr_module and (self.session.append_otr_tag or \
-			message == '?OTR?'):
+		if gajim.otr_module and jid not in gajim.otr_dont_append_tag:
 			if type == 'chat' and isinstance(message, unicode):
 				d = {'kwargs': {'keyID': keyID, 'type': type,
 					'chatstate': chatstate,

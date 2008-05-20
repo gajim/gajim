@@ -1691,6 +1691,87 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		addressTag = msg.getTag('addresses', namespace = common.xmpp.NS_ADDRESS)
 
+		# I don't trust libotr, that's why I only pass the
+		# message to it if it either contains the magic
+		# ?OTR string or a plaintext tagged message.
+		if gajim.otr_module and \
+		isinstance(msgtxt, unicode) and \
+		('\x20\x09\x20\x20\x09\x09\x09\x09\x20\x09\x20\x09\x20\x09\x20\x20' \
+		in msgtxt or '?OTR' in msgtxt):
+			# If it doesn't include ?OTR, it wasn't an
+			# encrypted message, but a tagged plaintext
+			# message.
+			if '?OTR' in msgtxt:
+				encrypted = True
+
+			# TODO: Do we really need .encode()?
+			otr_msg_tuple = \
+				gajim.otr_module.otrl_message_receiving(
+				self.otr_userstates,
+				(gajim.otr_ui_ops, {'account': self.name}),
+				gajim.get_jid_from_account(self.name).encode(),
+				gajim.OTR_PROTO,
+				frm.encode(),
+				msgtxt.encode(),
+				(gajim.otr_add_appdata, self.name))
+			msgtxt = unicode(otr_msg_tuple[1])
+			xhtml = None
+
+			if gajim.otr_module.otrl_tlv_find(
+			otr_msg_tuple[2],
+			gajim.otr_module.OTRL_TLV_DISCONNECTED) != None:
+				gajim.otr_ui_ops.gajim_log(_('%s ' \
+					'has ended his/her private ' \
+					'conversation with you.') % frm,
+					self.name,
+					frm.encode())
+
+				# The other end closed the connection,
+				# so we do the same.
+				gajim.otr_module. \
+					otrl_message_disconnect(
+					self.otr_userstates,
+					(gajim.otr_ui_ops,
+					{'account': self.name,
+					'urgent': True}),
+					gajim.get_jid_from_account(
+					self.name).encode(),
+					gajim.OTR_PROTO,
+					frm.encode())
+
+				ctrls = gajim.interface.msg_win_mgr.get_chat_controls(jid, self.name)
+				for ctrl in ctrls:
+					ctrl.update_otr()
+
+				ctx = gajim.otr_module. \
+					otrl_context_find(
+					self.otr_userstates,
+					frm.encode(),
+					gajim.get_jid_from_account(
+					self.name).encode(),
+					gajim.OTR_PROTO, 1,
+					(gajim.otr_add_appdata,
+					self.name))[0]
+				tlvs = otr_msg_tuple[2]
+				ctx.app_data.handle_tlv(tlvs)
+
+			if msgtxt == '':
+				return
+		elif msgtxt != None and msgtxt != '':
+			gajim.otr_dont_append_tag[frm] = True
+
+			# We're also here if we just don't
+			# support OTR. Thus, we should strip
+			# the tags from plaintext messages
+			# since they look ugly.
+			msgtxt = msgtxt.replace('\x20\x09\x20' \
+				'\x20\x09\x09\x09\x09\x20\x09' \
+				'\x20\x09\x20\x09\x20\x20', '')
+			msgtxt = msgtxt.replace('\x20\x09\x20' \
+				'\x09\x20\x20\x09\x20', '')
+			msgtxt = msgtxt.replace('\x20\x20\x09' \
+				'\x09\x20\x20\x09\x20', '')
+
 		# Be sure it comes from one of our resource, else ignore address element
 		if addressTag and jid == gajim.get_jid_from_account(self.name):
 			address = addressTag.getTag('address', attrs={'type': 'ofrom'})
