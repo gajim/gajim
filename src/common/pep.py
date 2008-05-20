@@ -35,7 +35,7 @@ def user_mood(items, name, jid):
 				del acc.mood['text']
 
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
-	for contact in gajim.contacts.get_contacts(name, user)
+	for contact in gajim.contacts.get_contacts(name, user):
 		if has_child:
 			if contact.mood.has_key('mood'):
 				del contact.mood['mood']
@@ -114,7 +114,7 @@ def user_tune(items, name, jid):
 				del acc.tune['length']
 
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
-	for contact in gajim.contacts.get_contacts(name, user)
+	for contact in gajim.contacts.get_contacts(name, user):
 		if has_child:
 			if contact.tune.has_key('artist'):
 				del contact.tune['artist']
@@ -196,7 +196,7 @@ def user_activity(items, name, jid):
 				del acc.activity['text']
 
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
-	for contact in gajim.contacts.get_contacts(name, user)
+	for contact in gajim.contacts.get_contacts(name, user):
 		if has_child:
 			if contact.activity.has_key('activity'):
 				del contact.activity['activity']
@@ -242,7 +242,7 @@ def user_nickname(items, name, jid):
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
 	if has_child:
 		if nick is not None:
-			for contact in gajim.contacts.get_contacts(name, user)
+			for contact in gajim.contacts.get_contacts(name, user):
 				contact.contact_name = nick
 			gajim.interface.roster.draw_contact(user, name)
 			for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(user, name):
