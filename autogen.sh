@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
   AM_ARGS="--add-missing --gnu --copy"
   CONF_ARGS=""
-  if test x`uname -s 2>/dev/null` = 'xDarwin';then
+  if test x`uname -s 2>/dev/null` = 'xDarwin' -a -f /Library/Frameworks/GTK+.framework/Versions/Current/env; then
     . /Library/Frameworks/GTK+.framework/Versions/Current/env
     AM_ARGS="${AM_ARGS} --ignore-deps"
     CONF_ARGS="${CONF_ARGS} --disable-idle --without-x"
