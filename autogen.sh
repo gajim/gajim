@@ -17,9 +17,11 @@
 	exit 1
   fi
 
+  which glibtoolize >/dev/null 2>&1 && LIBTOOLIZE="glibtoolize" || LIBTOOLIZE="libtoolize"
+
   intltoolize --force --automake \
   && aclocal -I ./m4 \
-  && libtoolize --copy --force --automake \
+  && $LIBTOOLIZE --copy --force --automake \
   && autoheader \
   && autoconf  \
   && automake ${AM_ARGS} \
