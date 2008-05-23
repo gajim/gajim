@@ -128,16 +128,18 @@ class MessageControl:
 
 		self.session = session
 
+		new_key = None
 		if session:
 			session.control = self
+			new_key = session.thread_id
 
-			if oldsession:
-				self.parent_win.change_thread_key(
-					self.contact.jid, self.account,
-					oldsession.thread_id, session.thread_id)
+		if oldsession:
+			self.parent_win.change_thread_key(
+				self.contact.jid, self.account,
+				oldsession.thread_id, new_key)
 
-				if oldsession.enable_encryption:
-					self.print_esession_details()
+			if oldsession.enable_encryption:
+				self.print_esession_details()
 
 	def send_message(self, message, keyID = '', type = 'chat',
 	chatstate = None, msg_id = None, composing_xep = None, resource = None,
@@ -147,7 +149,14 @@ class MessageControl:
 		jid = self.contact.jid
 		original_message = message
 
-		if gajim.otr_module and jid not in gajim.otr_dont_append_tag:
+		if not self.session:
+			sess = gajim.connections[self.account].make_new_session(jid)
+			self.set_session(sess)
+			self.parent_win.move_from_sessionless(self)
+
+		xep_200 = bool(self.session) and self.session.enable_encryption
+
+		if gajim.otr_module and not xep_200 and (jid not in gajim.otr_dont_append_tag):
 			if type == 'chat' and isinstance(message, unicode):
 				d = {'kwargs': {'keyID': keyID, 'type': type,
 					'chatstate': chatstate,

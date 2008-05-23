@@ -20,11 +20,19 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		self.control = None
 
 	def acknowledge_termination(self):
-		# the other party terminated the session. we'll keep the control around, though.
 		stanza_session.EncryptedStanzaSession.acknowledge_termination(self)
 
 		if self.control:
-			self.control.session = None
+			if self.enable_encryption:
+				self.control.print_esession_details()
+
+			self.control.set_session(None)
+
+	def terminate(self):
+		stanza_session.EncryptedStanzaSession.terminate(self)
+
+		if self.control:
+			self.control.set_session(None)
 
 	# extracts chatstate from a <message/> stanza
 	def get_chatstate(self, msg, msgtxt):
@@ -53,8 +61,9 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		return (composing_xep, chatstate)
 
 	# dispatch a received <message> stanza
-	def received(self, full_jid_with_resource, msgtxt, tim, encrypted, subject, msg):
+	def received(self, full_jid_with_resource, msgtxt, tim, encrypted, msg):
 		msg_type = msg.getType()
+		subject = msg.getSubject()
 
 		if not msg_type:
 			msg_type = 'normal'
@@ -245,6 +254,19 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			# contact is not in roster
 			contact = gajim.interface.roster.add_to_not_in_the_roster(
 				self.conn.name, jid, user_nick)
+
+		if not self.control:
+			# look for an existing chat control without a session
+			mw = gajim.interface.msg_win_mgr.get_window(jid, self.conn.name)
+
+			if mw:
+				ctrls = mw.sessionless_controls(self.conn.name, jid)
+
+				if len(ctrls):
+					ctrl = ctrls[0]
+					self.control = ctrl
+					ctrl.set_session(self)
+					ctrl.parent_win.move_from_sessionless(ctrl)
 
 		if not self.control:
 			# if no control exists and message comes from highest prio, the new

@@ -1206,6 +1206,9 @@ class ChatControl(ChatControlBase):
 		ChatControlBase.update_ui(self)
 
 	def get_otr_status(self):
+		if not self.session:
+			return 0
+
 		ctx = gajim.otr_module.otrl_context_find(
 			self.session.conn.otr_userstates,
 			self.contact.get_full_jid().encode(),
@@ -1613,7 +1616,7 @@ class ChatControl(ChatControlBase):
 
 	def print_esession_details(self):
 		'''print esession settings to textview'''
-		e2e_is_active = self.session and self.session.enable_encryption
+		e2e_is_active = bool(self.session) and self.session.enable_encryption
 		if e2e_is_active:
 			msg = _('E2E encryption enabled')
 			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
@@ -2022,7 +2025,8 @@ class ChatControl(ChatControlBase):
 		self.contact.our_chatstate = None
 
 		# disconnect self from session
-		self.session.control = None
+		if self.session:
+			self.session.control = None
 
 		# Disconnect timer callbacks
 		gobject.source_remove(self.possible_paused_timeout_id)

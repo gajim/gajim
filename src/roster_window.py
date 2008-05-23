@@ -1830,7 +1830,7 @@ class RosterWindow:
 			if was_invisible and status != 'offline':
 				# We come back from invisible, join bookmarks
 				gajim.interface.auto_join_bookmarks(account)
-						
+
 	def chg_contact_status(self, contact, show, status, account):
 		'''When a contact changes his or her status'''
 		contact_instances = gajim.contacts.get_contacts(account, contact.jid)
@@ -2100,8 +2100,6 @@ class RosterWindow:
 
 		self.quit_on_next_offline = 0
 		for acct in accounts:
-			gajim.connections[acct].terminate_sessions()
-
 			if gajim.connections[acct].connected:
 				self.quit_on_next_offline += 1
 				self.send_status(acct, 'offline', message)
@@ -3214,7 +3212,7 @@ class RosterWindow:
 		import tictactoe
 
 		sess = gajim.connections[account].make_new_session(jid,
-			klass=tictactoe.TicTacToeSession)
+			cls=tictactoe.TicTacToeSession)
 		sess.begin()
 
 	def on_execute_command(self, widget, contact, account, resource=None):

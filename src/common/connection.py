@@ -980,6 +980,8 @@ class Connection(ConnectionHandlers):
 		elif show == 'offline':
 			self.connected = 0
 			if self.connection:
+				self.terminate_sessions()
+
 				self.on_purpose = True
 				p = common.xmpp.Presence(typ = 'unavailable')
 				p = self.add_sha(p, False)

@@ -2038,30 +2038,12 @@ class Interface:
 
 		if form.getField('terminate') and\
 		form.getField('terminate').getValue() in ('1', 'true'):
-			was_encrypted = session.enable_encryption
-			ctrl = session.control
 			jid = str(jid)
 
 			session.acknowledge_termination()
-			gajim.connections[account].delete_session(jid, session.thread_id)
 
-			if ctrl:
-				# replace the old session in this control with a new one
-				new_sess = gajim.connections[account].make_new_session(jid)
-				win = ctrl.parent_win
-
-				ctrl.set_session(new_sess)
-				gajim.connections[account].delete_session(jid,
-					session.thread_id)
-
-				if not jid in win._controls[account]:
-					jid = gajim.get_jid_without_resource(jid)
-
-				del win._controls[account][jid][session.thread_id]
-				win._controls[account][jid][new_sess.thread_id] = ctrl
-
-				if was_encrypted:
-					ctrl.print_esession_details()
+			conn = gajim.connections[account]
+			conn.delete_session(jid, session.thread_id)
 
 			return
 

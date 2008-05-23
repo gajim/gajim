@@ -1282,13 +1282,13 @@ class ConnectionHandlersBase:
 		self.sessions = {}
 
 	def delete_session(self, jid, thread_id):
-		try:
-			del self.sessions[jid][thread_id]
+		if not jid in self.sessions:
+			jid = gajim.get_jid_without_resource(jid)
 
-			if not self.sessions[jid]:
-				del self.sessions[jid]
-		except KeyError:
-			pass
+		del self.sessions[jid][thread_id]
+
+		if not self.sessions[jid]:
+			del self.sessions[jid]
 
 	def find_null_session(self, jid):
 		'''finds all of the sessions between us and a remote jid in which we
@@ -1644,17 +1644,17 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			mtype = 'normal'
 
 		msgtxt = msg.getBody()
-		subject = msg.getSubject() # if not there, it's None
 
 		jid = helpers.get_jid_from_iq(msg)
 
 		encrypted = False
+		xep_200_encrypted = msg.getTag('c', namespace=common.xmpp.NS_STANZA_CRYPTO)
 
 		# I don't trust libotr, that's why I only pass the
 		# message to it if it either contains the magic
 		# ?OTR string or a plaintext tagged message.
-		if gajim.otr_module and \
-		isinstance(msgtxt, unicode) and \
+		if gajim.otr_module and not xep_200_encrypted \
+		and isinstance(msgtxt, unicode) and \
 		('\x20\x09\x20\x20\x09\x09\x09\x09\x20\x09\x20\x09\x20\x09\x20\x20' \
 		in msgtxt or '?OTR' in msgtxt):
 			# If it doesn't include ?OTR, it wasn't an
@@ -1764,11 +1764,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		tim = helpers.datetime_tuple(tim)
 		tim = localtime(timegm(tim))
 
-		if msg.getTag('c', namespace=common.xmpp.NS_STANZA_CRYPTO):
+		if xep_200_encrypted:
 			encrypted = True
 
 			try:
 				msg = session.decrypt_stanza(msg)
+				msgtxt = msg.getBody()
 			except:
 				self.dispatch('FAILED_DECRYPT', (frm, tim, session))
 
@@ -1791,25 +1792,27 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				msgtxt = decmsg.replace('\x00', '')
 				encrypted = True
 		if mtype == 'error':
-			self.dispatch_error_message(msg, msgtxt, session, frm, tim, subject)
+			self.dispatch_error_message(msg, msgtxt, session, frm, tim)
 		elif mtype == 'groupchat':
-			self.dispatch_gc_message(msg, subject, frm, msgtxt, jid, tim)
+			self.dispatch_gc_message(msg, frm, msgtxt, jid, tim)
 		elif invite is not None:
 			self.dispatch_invite_message(invite, frm)
 		else:
 			if isinstance(session, ChatControlSession):
-				session.received(frm, msgtxt, tim, encrypted, subject, msg)
+				session.received(frm, msgtxt, tim, encrypted, msg)
 			else:
 				session.received(msg)
 	# END messageCB
 
 	# process and dispatch an error message
-	def dispatch_error_message(self, msg, msgtxt, session, frm, tim, subject):
+	def dispatch_error_message(self, msg, msgtxt, session, frm, tim):
 		error_msg = msg.getErrorMsg()
 
 		if not error_msg:
 			error_msg = msgtxt
 			msgtxt = None
+
+		subject = msg.getSubject()
 
 		if session.is_loggable():
 			try:
@@ -1821,8 +1824,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			tim, session))
 
 	# process and dispatch a groupchat message
-	def dispatch_gc_message(self, msg, subject, frm, msgtxt, jid, tim):
+	def dispatch_gc_message(self, msg, frm, msgtxt, jid, tim):
 		has_timestamp = bool(msg.timestamp)
+
+		subject = msg.getSubject()
 
 		if subject is not None:
 			self.dispatch('GC_SUBJECT', (frm, subject, msgtxt, has_timestamp))
