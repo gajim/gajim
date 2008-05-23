@@ -1310,16 +1310,17 @@ sent a message to.'''
 		else:
 			return None
 
-	def make_new_session(self, jid, thread_id=None, type='chat', klass=None):
-		if not klass:
-			klass = ChatControlSession
+	# if deferred is true, the thread ID we're generating is tem
+	def make_new_session(self, jid, thread_id=None, type='chat', cls=None):
+		if not cls:
+			cls = ChatControlSession
 
 		# determine if this session is a pm session
 		# if not, discard the resource
 		if not type == 'pm':
 			jid = gajim.get_jid_without_resource(jid)
 
-		sess = klass(self, common.xmpp.JID(jid), thread_id, type)
+		sess = cls(self, common.xmpp.JID(jid), thread_id, type)
 
 		if not jid in self.sessions:
 			self.sessions[jid] = {}
@@ -1642,54 +1643,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if not mtype:
 			mtype = 'normal'
 
-		game_invite = msg.getTag('invite', namespace='http://jabber.org/protocol/games')
-		if game_invite:
-			game = game_invite.getTag('game')
-
-			if game.getAttr('var') == \
-			'http://jabber.org/protocol/games/tictactoe':
-				klass = tictactoe.TicTacToeSession
-
-			# this assumes that the invitation came with a thread_id we haven't
-			# seen
-			session = self.make_new_session(frm, thread_id, klass=klass)
-
-			session.invited(msg)
-
-			return
-		elif mtype != 'groupchat':
-			session = self.get_or_create_session(frm, thread_id)
-
-			if thread_id and not session.received_thread_id:
-				session.received_thread_id = True
-
-		# check if the message is a XEP-0020 feature negotiation request
-		if msg.getTag('feature', namespace=common.xmpp.NS_FEATURE):
-			if gajim.HAVE_PYCRYPTO:
-				self._FeatureNegCB(con, msg, session)
-			return
-		if msg.getTag('init', namespace=common.xmpp.NS_ESESSION_INIT):
-			self._InitE2ECB(con, msg, session)
-
-		encrypted = False
-		tim = msg.getTimestamp()
-		tim = helpers.datetime_tuple(tim)
-		tim = localtime(timegm(tim))
-
-		if msg.getTag('c', namespace=common.xmpp.NS_STANZA_CRYPTO):
-			encrypted = True
-
-			try:
-				msg = session.decrypt_stanza(msg)
-			except:
-				self.dispatch('FAILED_DECRYPT', (frm, tim, session))
-
 		msgtxt = msg.getBody()
 		subject = msg.getSubject() # if not there, it's None
 
 		jid = helpers.get_jid_from_iq(msg)
 
-		addressTag = msg.getTag('addresses', namespace = common.xmpp.NS_ADDRESS)
+		encrypted = False
 
 		# I don't trust libotr, that's why I only pass the
 		# message to it if it either contains the magic
@@ -1771,6 +1730,49 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				'\x09\x20\x20\x09\x20', '')
 			msgtxt = msgtxt.replace('\x20\x20\x09' \
 				'\x09\x20\x20\x09\x20', '')
+
+		game_invite = msg.getTag('invite', namespace='http://jabber.org/protocol/games')
+		if game_invite:
+			game = game_invite.getTag('game')
+
+			if game.getAttr('var') == \
+			'http://jabber.org/protocol/games/tictactoe':
+				cls = tictactoe.TicTacToeSession
+
+			# this assumes that the invitation came with a thread_id we haven't
+			# seen
+			session = self.make_new_session(frm, thread_id, cls=cls)
+
+			session.invited(msg)
+
+			return
+		elif mtype != 'groupchat':
+			session = self.get_or_create_session(frm, thread_id)
+
+			if thread_id and not session.received_thread_id:
+				session.received_thread_id = True
+
+		# check if the message is a XEP-0020 feature negotiation request
+		if msg.getTag('feature', namespace=common.xmpp.NS_FEATURE):
+			if gajim.HAVE_PYCRYPTO:
+				self._FeatureNegCB(con, msg, session)
+			return
+		if msg.getTag('init', namespace=common.xmpp.NS_ESESSION_INIT):
+			self._InitE2ECB(con, msg, session)
+
+		tim = msg.getTimestamp()
+		tim = helpers.datetime_tuple(tim)
+		tim = localtime(timegm(tim))
+
+		if msg.getTag('c', namespace=common.xmpp.NS_STANZA_CRYPTO):
+			encrypted = True
+
+			try:
+				msg = session.decrypt_stanza(msg)
+			except:
+				self.dispatch('FAILED_DECRYPT', (frm, tim, session))
+
+		addressTag = msg.getTag('addresses', namespace = common.xmpp.NS_ADDRESS)
 
 		# Be sure it comes from one of our resource, else ignore address element
 		if addressTag and jid == gajim.get_jid_from_account(self.name):
