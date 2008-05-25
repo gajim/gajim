@@ -1752,6 +1752,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if thread_id and not session.received_thread_id:
 				session.received_thread_id = True
 
+			session.last_receive = time_time()
+
 		# check if the message is a XEP-0020 feature negotiation request
 		if msg.getTag('feature', namespace=common.xmpp.NS_FEATURE):
 			if gajim.HAVE_PYCRYPTO:

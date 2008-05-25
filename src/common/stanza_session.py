@@ -35,6 +35,7 @@ class StanzaSession(object):
 		self.loggable = True
 
 		self.last_send = 0
+		self.last_receive = 0
 		self.status = None
 		self.negotiated = {}
 
@@ -110,17 +111,19 @@ class StanzaSession(object):
 		self.negotiated = {}
 
 	def terminate(self):
-		msg = xmpp.Message()
-		feature = msg.NT.feature
-		feature.setNamespace(xmpp.NS_FEATURE)
+		# only send termination message if we think they might have XEP-0201 support
+		if self.received_thread_id or self.last_receive == 0:
+			msg = xmpp.Message()
+			feature = msg.NT.feature
+			feature.setNamespace(xmpp.NS_FEATURE)
 
-		x = xmpp.DataForm(typ='submit')
-		x.addChild(node=xmpp.DataField(name='FORM_TYPE', value='urn:xmpp:ssn'))
-		x.addChild(node=xmpp.DataField(name='terminate', value='1'))
+			x = xmpp.DataForm(typ='submit')
+			x.addChild(node=xmpp.DataField(name='FORM_TYPE', value='urn:xmpp:ssn'))
+			x.addChild(node=xmpp.DataField(name='terminate', value='1'))
 
-		feature.addChild(node=x)
+			feature.addChild(node=x)
 
-		self.send(msg)
+			self.send(msg)
 
 		self.status = None
 
