@@ -180,6 +180,20 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 																							jid_of_control, [msg_type]):
 			first = True
 
+		if not self.control:
+			# look for an existing chat control without a session
+			mw = gajim.interface.msg_win_mgr.get_window(jid, self.conn.name)
+
+			if mw:
+				ctrls = mw.sessionless_controls(self.conn.name, jid)
+
+				if len(ctrls):
+					ctrl = ctrls[0]
+					self.control = ctrl
+					ctrl.set_session(self)
+					ctrl.parent_win.move_from_sessionless(ctrl)
+					first = False
+
 		if pm:
 			nickname = resource
 			groupchat_control.on_private_message(nickname, msgtxt, tim,
@@ -254,19 +268,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			# contact is not in roster
 			contact = gajim.interface.roster.add_to_not_in_the_roster(
 				self.conn.name, jid, user_nick)
-
-		if not self.control:
-			# look for an existing chat control without a session
-			mw = gajim.interface.msg_win_mgr.get_window(jid, self.conn.name)
-
-			if mw:
-				ctrls = mw.sessionless_controls(self.conn.name, jid)
-
-				if len(ctrls):
-					ctrl = ctrls[0]
-					self.control = ctrl
-					ctrl.set_session(self)
-					ctrl.parent_win.move_from_sessionless(ctrl)
 
 		if not self.control:
 			# if no control exists and message comes from highest prio, the new
