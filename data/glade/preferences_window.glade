@@ -1875,7 +1875,7 @@ Custom</property>
                               <widget class="GtkCheckButton" id="log_encrypted_chats_checkbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">If checked, Gajim log GPG or E2E encrypted messages. However, when using E2E encryption the remote site has to agree on logging. If the other side has declined logging, your messages will NOT be logged.</property>
+                                <property name="tooltip" translatable="yes">If checked, Gajim will keep logs for encrypted messages. Please note that when using E2E encryption the remote party has to agree on logging, else the messages will not be logged.</property>
                                 <property name="label" translatable="yes">Log _encrypted chat session</property>
                                 <property name="use_underline">True</property>
                                 <property name="response_id">0</property>
