@@ -1650,20 +1650,20 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		encrypted = False
 		xep_200_encrypted = msg.getTag('c', namespace=common.xmpp.NS_STANZA_CRYPTO)
 
-		# I don't trust libotr, that's why I only pass the
-		# message to it if it either contains the magic
-		# ?OTR string or a plaintext tagged message.
+		# We don't trust libotr, that's why we only pass the message
+		# to it if necessary. otrl_proto_message_type does this check.
 		if gajim.otr_module and not xep_200_encrypted \
 		and isinstance(msgtxt, unicode) and \
-		('\x20\x09\x20\x20\x09\x09\x09\x09\x20\x09\x20\x09\x20\x09\x20\x20' \
-		in msgtxt or '?OTR' in msgtxt):
-			# If it doesn't include ?OTR, it wasn't an
-			# encrypted message, but a tagged plaintext
-			# message.
-			if '?OTR' in msgtxt:
+		gajim.otr_module.otrl_proto_message_type(msgtxt.encode()) != \
+		gajim.otr_module.OTRL_MSGTYPE_NOTOTR:
+			# set to encrypted if it's really encrypted.
+			if gajim.otr_module.otrl_proto_message_type(
+			msgtxt.encode()) != \
+			gajim.otr_module.OTRL_MSGTYPE_TAGGEDPLAINTEXT:
 				encrypted = True
 
 			# TODO: Do we really need .encode()?
+			# yes we do. OTR can't handle unicode.
 			otr_msg_tuple = \
 				gajim.otr_module.otrl_message_receiving(
 				self.otr_userstates,
@@ -1674,28 +1674,20 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				msgtxt.encode(),
 				(gajim.otr_add_appdata, self.name))
 			msgtxt = unicode(otr_msg_tuple[1])
-			xhtml = None
+
+			html_node = msg.getTag('html')
+			if html_node:
+				msg.delChild(html_node)
+			msg.setBody(msgtxt)
 
 			if gajim.otr_module.otrl_tlv_find(
 			otr_msg_tuple[2],
 			gajim.otr_module.OTRL_TLV_DISCONNECTED) != None:
 				gajim.otr_ui_ops.gajim_log(_('%s ' \
 					'has ended his/her private ' \
-					'conversation with you.') % frm,
+					'conversation with you. You should ' \
+					'do the same.') % frm,
 					self.name,
-					frm.encode())
-
-				# The other end closed the connection,
-				# so we do the same.
-				gajim.otr_module. \
-					otrl_message_disconnect(
-					self.otr_userstates,
-					(gajim.otr_ui_ops,
-					{'account': self.name,
-					'urgent': True}),
-					gajim.get_jid_from_account(
-					self.name).encode(),
-					gajim.OTR_PROTO,
 					frm.encode())
 
 				ctrls = gajim.interface.msg_win_mgr.get_chat_controls(jid, self.name)
