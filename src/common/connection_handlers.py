@@ -749,12 +749,12 @@ class ConnectionDisco:
 			extension = None
 			if node and node.find('#') != -1:
 				extension = node[node.index('#') + 1:]
-			client_version = 'http://gajim.org#' + gajim.caps_hash
+			client_version = 'http://gajim.org#' + gajim.caps_hash[self.name]
 
 			if node in (None, client_version):
 				for f in gajim.gajim_common_features:
 					q.addChild('feature', attrs = {'var': f})
-				for f in gajim.gajim_optional_features:
+				for f in gajim.gajim_optional_features[self.name]:
 					q.addChild('feature', attrs = {'var': f})
 
 			if q.getChildren():
@@ -857,7 +857,7 @@ class ConnectionVcard:
 		c = p.setTag('c', namespace = common.xmpp.NS_CAPS)
 		c.setAttr('hash', 'sha-1')
 		c.setAttr('node', 'http://gajim.org')
-		c.setAttr('ver', gajim.caps_hash)
+		c.setAttr('ver', gajim.caps_hash[self.name])
 		return p
 
 	def node_to_dict(self, node):

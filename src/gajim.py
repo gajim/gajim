@@ -3349,6 +3349,8 @@ class Interface:
 			gajim.last_message_time[a] = {}
 			gajim.status_before_autoaway[a] = ''
 			gajim.transport_avatar[a] = {}
+			gajim.gajim_optional_features[a] = []
+			gajim.caps_hash[a] = ''
 
 		if gajim.config.get('remote_control'):
 			try:

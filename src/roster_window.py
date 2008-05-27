@@ -3130,6 +3130,25 @@ class RosterWindow:
 		else:
 			gajim.interface.instances['preferences'] = config.PreferencesWindow()
 
+	def on_publish_tune_checkbutton_toggled(self, widget, account):
+		if widget.get_active():
+			listener = MusicTrackListener.get()
+			self.music_track_changed_signal = listener.connect(
+				'music-track-changed', gajim.interface.roster.music_track_changed)
+			track = listener.get_playing_track()
+			self.music_track_changed(listener, track)
+		else:
+			self.music_track_changed_signal = None
+
+			for account in gajim.connections:
+				if gajim.connections[account].pep_supported:
+					# As many implementations don't support retracting items, we send a "Stopped" event first
+					pep.user_send_tune(account, '')
+					pep.user_retract_tune(account)
+		#TODO:
+		#self.on_checkbutton_toggled(widget, 'publish_tune')
+		helpers.update_optional_features(account)
+
 	def on_pep_services_menuitem_activate(self, widget, account):
 		if gajim.interface.instances[account].has_key('pep_services'):
 			gajim.interface.instances[account]['pep_services'].window.present()

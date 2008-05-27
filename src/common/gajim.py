@@ -182,10 +182,12 @@ gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI,
 	xmpp.NS_VERSION, xmpp.NS_DATA, xmpp.NS_ENCRYPTED,
 	'msglog', 'sslc2s', 'stringprep', xmpp.NS_PING,
 	xmpp.NS_TIME_REVISED, xmpp.NS_GAMING]
-# Optional features gajim supports
-gajim_optional_features = []
 
-caps_hash = ''
+# Optional features gajim supports per account
+gajim_optional_features = {}
+
+# Capabilities hash per account
+caps_hash = {}
 
 def get_nick_from_jid(jid):
 	pos = jid.find('@')

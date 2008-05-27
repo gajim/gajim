@@ -1304,35 +1304,39 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 		return ''
 	return base64.b64encode(hash.digest())
 
-def update_optional_features():
-	gajim.gajim_optional_features = []
-	if gajim.config.get('publish_mood'):
-		gajim.gajim_optional_features.append(xmpp.NS_MOOD)
-	if gajim.config.get('subscribe_mood'):
-		gajim.gajim_optional_features.append(xmpp.NS_MOOD + '+notify')
-	if gajim.config.get('publish_activity'):
-		gajim.gajim_optional_features.append(xmpp.NS_ACTIVITY)
-	if gajim.config.get('subscribe_activity'):
-		gajim.gajim_optional_features.append(xmpp.NS_ACTIVITY + '+notify')
-	if gajim.config.get('publish_tune'):
-		gajim.gajim_optional_features.append(xmpp.NS_TUNE)
-	if gajim.config.get('subscribe_tune'):
-		gajim.gajim_optional_features.append(xmpp.NS_TUNE + '+notify')
-	if gajim.config.get('publish_nick'):
-		gajim.gajim_optional_features.append(xmpp.NS_NICK)
-	if gajim.config.get('subscribe_nick'):
-		gajim.gajim_optional_features.append(xmpp.NS_NICK + '+notify')
-	if gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
-		gajim.gajim_optional_features.append(xmpp.NS_CHATSTATES)
-	if not gajim.config.get('ignore_incoming_xhtml'):
-		gajim.gajim_optional_features.append(xmpp.NS_XHTML_IM)
-	if gajim.HAVE_PYCRYPTO:
-		gajim.gajim_optional_features.append(xmpp.NS_ESESSION_INIT)
-	gajim.caps_hash = compute_caps_hash([gajim.gajim_identity],
-		gajim.gajim_common_features + gajim.gajim_optional_features)
-	# re-send presence with new hash
-	for account in gajim.connections:
-		connected = gajim.connections[account].connected
+def update_optional_features(account = None):
+	if account:
+		accounts = [account]
+	else:
+		accounts = [a for a in gajim.connections]
+	for a in accounts:
+		gajim.gajim_optional_features[a] = []
+		if gajim.config.get_per('accounts', a, 'publish_mood'):
+			gajim.gajim_optional_features[a].append(xmpp.NS_MOOD)
+		if gajim.config.get_per('accounts', a, 'subscribe_mood'):
+			gajim.gajim_optional_features[a].append(xmpp.NS_MOOD + '+notify')
+		if gajim.config.get_per('accounts', a, 'publish_activity'):
+			gajim.gajim_optional_features[a].append(xmpp.NS_ACTIVITY)
+		if gajim.config.get_per('accounts', a, 'subscribe_activity'):
+			gajim.gajim_optional_features[a].append(xmpp.NS_ACTIVITY + '+notify')
+		if gajim.config.get_per('accounts', a, 'publish_tune'):
+			gajim.gajim_optional_features[a].append(xmpp.NS_TUNE)
+		if gajim.config.get_per('accounts', a, 'subscribe_tune'):
+			gajim.gajim_optional_features[a].append(xmpp.NS_TUNE + '+notify')
+		if gajim.config.get_per('accounts', a, 'publish_nick'):
+			gajim.gajim_optional_features[a].append(xmpp.NS_NICK)
+		if gajim.config.get_per('accounts', a, 'subscribe_nick'):
+			gajim.gajim_optional_features[a].append(xmpp.NS_NICK + '+notify')
+		if gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
+			gajim.gajim_optional_features[a].append(xmpp.NS_CHATSTATES)
+		if not gajim.config.get('ignore_incoming_xhtml'):
+			gajim.gajim_optional_features[a].append(xmpp.NS_XHTML_IM)
+		if gajim.HAVE_PYCRYPTO:
+			gajim.gajim_optional_features[a].append(xmpp.NS_ESESSION_INIT)
+		gajim.caps_hash[a] = compute_caps_hash([gajim.gajim_identity],
+			gajim.gajim_common_features + gajim.gajim_optional_features[a])
+		# re-send presence with new hash
+		connected = gajim.connections[a].connected
 		if connected > 1 and gajim.SHOW_LIST[connected] != 'invisible':
-			gajim.connections[account].change_status(gajim.SHOW_LIST[connected],
-				gajim.connections[account].status)
+			gajim.connections[a].change_status(gajim.SHOW_LIST[connected],
+				gajim.connections[a].status)

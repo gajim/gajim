@@ -48,15 +48,10 @@ from common import gajim
 from common import connection
 from common import passwords
 from common import zeroconf
-from common import dbus_support
 from common import dataforms
 from common import pep
 
 from common.exceptions import GajimGeneralException
-
-if dbus_support.supported:
-	from music_track_listener import MusicTrackListener
-	import dbus
 
 #---------- PreferencesWindow class -------------#
 class PreferencesWindow:
@@ -257,30 +252,6 @@ class PreferencesWindow:
 		else: # disabled
 			combo.set_active(2)
 
-		# PEP
-		st = gajim.config.get('publish_mood')
-		self.xml.get_widget('publish_mood_checkbutton').set_active(st)
-
-		st = gajim.config.get('publish_activity')
-		self.xml.get_widget('publish_activity_checkbutton').set_active(st)
-
-		st = gajim.config.get('publish_tune')
-		self.xml.get_widget('publish_tune_checkbutton').set_active(st)
-
-		st = gajim.config.get('publish_nick')
-		self.xml.get_widget('publish_nick_checkbutton').set_active(st)
-
-		st = gajim.config.get('subscribe_mood')
-		self.xml.get_widget('subscribe_mood_checkbutton').set_active(st)
-
-		st = gajim.config.get('subscribe_activity')
-		self.xml.get_widget('subscribe_activity_checkbutton').set_active(st)
-
-		st = gajim.config.get('subscribe_tune')
-		self.xml.get_widget('subscribe_tune_checkbutton').set_active(st)
-
-		st = gajim.config.get('subscribe_nick')
-		self.xml.get_widget('subscribe_nick_checkbutton').set_active(st)
 
 		### Notifications tab ###
 		# On new event
@@ -541,64 +512,6 @@ class PreferencesWindow:
 			for w in change_sensitivity_widgets:
 				w.set_sensitive(widget.get_active())
 		gajim.interface.save_config()
-
-	def on_publish_mood_checkbutton_toggled(self, widget):
-		if not widget.get_active():
-			for account in gajim.connections:
-				if gajim.connections[account].pep_supported:
-					pep.user_retract_mood(account)
-		self.on_checkbutton_toggled(widget, 'publish_mood')
-		helpers.update_optional_features()
-
-	def on_publish_activity_checkbutton_toggled(self, widget):
-		if not widget.get_active():
-			for account in gajim.connections:
-				if gajim.connections[account].pep_supported:
-					pep.user_retract_activity(account)
-		self.on_checkbutton_toggled(widget, 'publish_activity')
-		helpers.update_optional_features()
-
-	def on_publish_tune_checkbutton_toggled(self, widget):
-		if widget.get_active():
-			listener = MusicTrackListener.get()
-			gajim.interface.roster.music_track_changed_signal = listener.connect(
-				'music-track-changed', gajim.interface.roster.music_track_changed)
-			track = listener.get_playing_track()
-			gajim.interface.roster.music_track_changed(listener, track)
-		else:
-			gajim.interface.roster.music_track_changed_signal = None
-			
-			for account in gajim.connections:
-				if gajim.connections[account].pep_supported:
-					# As many implementations don't support retracting items, we send a "Stopped" event first
-					pep.user_send_tune(account, '')
-					pep.user_retract_tune(account)
-		self.on_checkbutton_toggled(widget, 'publish_tune')
-		helpers.update_optional_features()
-
-	def on_publish_nick_checkbutton_toggled(self, widget):
-		if not widget.get_active():
-			for account in gajim.connections:
-				if gajim.connections[account].pep_supported:
-					pep.user_retract_nickname(account)
-		self.on_checkbutton_toggled(widget, 'publish_nick')
-		helpers.update_optional_features()
-
-	def on_subscribe_mood_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'subscribe_mood')
-		helpers.update_optional_features()
-
-	def on_subscribe_activity_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'subscribe_activity')
-		helpers.update_optional_features()
-
-	def on_subscribe_tune_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'subscribe_tune')
-		helpers.update_optional_features()
-
-	def on_subscribe_nick_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'subscribe_nick')
-		helpers.update_optional_features()
 
 	def on_sort_by_show_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sort_by_show')
@@ -1796,6 +1709,9 @@ class AccountsWindow:
 			gajim.status_before_autoaway[new_name] = \
 				gajim.status_before_autoaway[old_name]
 			gajim.transport_avatar[new_name] = gajim.transport_avatar[old_name]
+			gajim.gajim_optional_features[new_name] = \
+				gajim.gajim_optional_features[old_name]
+			gajim.caps_hash[new_name] = gajim.caps_hash[old_name]
 
 			gajim.contacts.change_account_name(old_name, new_name)
 			gajim.events.change_account_name(old_name, new_name)
@@ -1824,6 +1740,8 @@ class AccountsWindow:
 			del gajim.last_message_time[old_name]
 			del gajim.status_before_autoaway[old_name]
 			del gajim.transport_avatar[old_name]
+			del gajim.gajim_optional_features[old_name]
+			del gajim.caps_hash[old_name]
 			gajim.connections[old_name].name = new_name
 			gajim.connections[new_name] = gajim.connections[old_name]
 			del gajim.connections[old_name]
@@ -2194,6 +2112,8 @@ class AccountsWindow:
 			del gajim.last_message_time[gajim.ZEROCONF_ACC_NAME]
 			del gajim.status_before_autoaway[gajim.ZEROCONF_ACC_NAME]
 			del gajim.transport_avatar[gajim.ZEROCONF_ACC_NAME]
+			del gajim.gajim_optional_features[gajim.ZEROCONF_ACC_NAME]
+			del gajim.caps_hash[gajim.ZEROCONF_ACC_NAME]
 			if len(gajim.connections) >= 2:
 				# Do not merge accounts if only one exists
 				gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
@@ -2228,6 +2148,8 @@ class AccountsWindow:
 			gajim.last_message_time[gajim.ZEROCONF_ACC_NAME] = {}
 			gajim.status_before_autoaway[gajim.ZEROCONF_ACC_NAME] = ''
 			gajim.transport_avatar[gajim.ZEROCONF_ACC_NAME] = {}
+			gajim.gajim_optional_features[gajim.ZEROCONF_ACC_NAME] = []
+			gajim.caps_hash[gajim.ZEROCONF_ACC_NAME] = ''
 			# refresh roster
 			if len(gajim.connections) >= 2:
 				# Do not merge accounts if only one exists
@@ -2659,6 +2581,8 @@ class RemoveAccountWindow:
 		del gajim.last_message_time[self.account]
 		del gajim.status_before_autoaway[self.account]
 		del gajim.transport_avatar[self.account]
+		del gajim.gajim_optional_features[self.account]
+		del gajim.caps_hash[self.account]
 		if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
 			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
 		else:
@@ -3487,6 +3411,8 @@ class AccountCreationWizardWindow:
 		gajim.last_message_time[self.account] = {}
 		gajim.status_before_autoaway[self.account] = ''
 		gajim.transport_avatar[self.account] = {}
+		gajim.gajim_optional_features[self.account] = []
+		gajim.caps_hash[self.account] = ''
 		# refresh accounts window
 		if gajim.interface.instances.has_key('accounts'):
 			gajim.interface.instances['accounts'].init_accounts()
