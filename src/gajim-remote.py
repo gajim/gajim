@@ -523,6 +523,10 @@ class GajimRemote:
 		sys.argv[2] = jid
 		if action == 'join':
 			self.command = sys.argv[1] = 'join_room'
+			# Move account parameter from position 3 to 5
+			sys.argv.append('')
+			sys.argv.append(sys.argv[3])
+			sys.argv[3] = ''
 			return
 
 		sys.exit(0)
