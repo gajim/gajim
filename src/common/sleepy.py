@@ -35,22 +35,22 @@ STATE_AWAKE	= 'awake'
 
 SUPPORTED = True
 try:
-		if os.name == 'nt':
-			import ctypes
+	if os.name == 'nt':
+		import ctypes
 
-			GetTickCount = ctypes.windll.kernel32.GetTickCount
-			GetLastInputInfo = ctypes.windll.user32.GetLastInputInfo
+		GetTickCount = ctypes.windll.kernel32.GetTickCount
+		GetLastInputInfo = ctypes.windll.user32.GetLastInputInfo
 
-			class LASTINPUTINFO(ctypes.Structure):
-				_fields_ = [('cbSize', ctypes.c_uint), ('dwTime', ctypes.c_uint)]
+		class LASTINPUTINFO(ctypes.Structure):
+			_fields_ = [('cbSize', ctypes.c_uint), ('dwTime', ctypes.c_uint)]
 
-			lastInputInfo = LASTINPUTINFO()
-			lastInputInfo.cbSize = ctypes.sizeof(lastInputInfo)
+		lastInputInfo = LASTINPUTINFO()
+		lastInputInfo.cbSize = ctypes.sizeof(lastInputInfo)
 
-		elif sys.platform == 'darwin':
-			import osx.idle as idle
-		else: # unix
-			import idle
+	elif sys.platform == 'darwin':
+		import osx.idle as idle
+	else: # unix
+		import idle
 except:
 	gajim.log.debug('Unable to load idle module')
 	SUPPORTED = False
