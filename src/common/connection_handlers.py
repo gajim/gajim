@@ -1694,17 +1694,17 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				for ctrl in ctrls:
 					ctrl.update_otr()
 
-				ctx = gajim.otr_module. \
-					otrl_context_find(
-					self.otr_userstates,
-					frm.encode(),
-					gajim.get_jid_from_account(
-					self.name).encode(),
-					gajim.OTR_PROTO, 1,
-					(gajim.otr_add_appdata,
-					self.name))[0]
-				tlvs = otr_msg_tuple[2]
-				ctx.app_data.handle_tlv(tlvs)
+			ctx = gajim.otr_module. \
+				otrl_context_find(
+				self.otr_userstates,
+				frm.encode(),
+				gajim.get_jid_from_account(
+				self.name).encode(),
+				gajim.OTR_PROTO, 1,
+				(gajim.otr_add_appdata,
+				self.name))[0]
+			tlvs = otr_msg_tuple[2]
+			ctx.app_data.handle_tlv(tlvs)
 
 			if msgtxt == '':
 				return

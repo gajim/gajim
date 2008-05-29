@@ -68,6 +68,11 @@ class ContactOtrSMPWindow:
 		self.smp_running = False
 		self.finished = False
 
+		self.gw('smp_cancel_button').set_sensitive(True)
+		self.gw('smp_ok_button').set_sensitive(True)
+		self.gw('progressbar').set_fraction(0)
+		self.gw('secret_entry').set_text('')
+
 		self.response = response
 		if response:
 			self.gw('desc_label').set_markup(_('<b>%s is trying ' \
@@ -104,7 +109,7 @@ class ContactOtrSMPWindow:
 		self.gw('desc_label').set_markup(text)
 		for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(
 		self.contact.jid, self.account):
-			ctrl.update_otr()
+			ctrl.update_otr(True)
 		gajim.otr_ui_ops.write_fingerprints({'account': self.account})
 
 	def handle_tlv(self, tlvs):
@@ -310,7 +315,7 @@ class ContactOtrWindow:
 			self.ctrl = gajim.interface.msg_win_mgr.get_control(
 					self.contact.jid, self.account)
 		if self.ctrl:
-			self.ctrl.update_otr()
+			self.ctrl.update_otr(True)
 
 		if self.gw('otr_default_checkbutton').get_active():
 			# default is enabled, so remove any user-specific
