@@ -934,6 +934,17 @@ class MessageWindowMgr(gobject.GObject):
 
 		return None
 
+	def get_sessionless_ctrl(self, acct, jid):
+		'''returns a ChatControl associated with jid, that doesn't have a
+		session attached'''
+		mw = self.get_window(jid, acct)
+
+		if mw:
+			ctrls = mw.sessionless_controls(acct, jid)
+
+			if len(ctrls):
+				return ctrls[0]
+
 	def has_window(self, jid, acct):
 		return self.get_window(jid, acct) is not None
 

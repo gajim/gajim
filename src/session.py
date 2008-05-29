@@ -182,17 +182,12 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		if not self.control:
 			# look for an existing chat control without a session
-			mw = gajim.interface.msg_win_mgr.get_window(jid, self.conn.name)
-
-			if mw:
-				ctrls = mw.sessionless_controls(self.conn.name, jid)
-
-				if len(ctrls):
-					ctrl = ctrls[0]
-					self.control = ctrl
-					ctrl.set_session(self)
-					ctrl.parent_win.move_from_sessionless(ctrl)
-					first = False
+			ctrl = gajim.interface.msg_win_mgr.get_sessionless_ctrl(jid, self.conn.name)
+			if ctrl:
+				self.control = ctrl
+				self.control.set_session(self)
+				self.control.parent_win.move_from_sessionless(self.control)
+				first = False
 
 		if pm:
 			nickname = resource
