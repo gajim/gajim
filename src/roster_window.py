@@ -391,7 +391,7 @@ class RosterWindow:
 					self.tree.expand_row(path, False)
 				if group not in gajim.groups[account]:
 					gajim.groups[account][group] = {'expand': is_expanded}
-		
+				
 		assert len(added_iters), "%s has not been added to roster!" % contact.jid 
 		return added_iters 
 		
@@ -785,7 +785,7 @@ class RosterWindow:
 		Keyword Arguments:
 		jid -- the jid
 		account -- the corresponding account
-		groups -- list of Groups to add the contact too.
+		groups -- list of Groups to add the contact to.
 		
 		'''
 		self.remove_contact(jid, account, force = True)
@@ -799,8 +799,10 @@ class RosterWindow:
 				contact.groups)
 
 		self.add_contact(jid, account)
-		for group in groups:
-			self._adjust_group_expand_collapse_state(group, account)
+
+		# FIXME: Jim, what was the exact need of this?
+#		for group in groups:
+#			self._adjust_group_expand_collapse_state(group, account)
 
 	def remove_contact_from_groups(self, jid, account, groups):
 		'''Remove contact from given groups and redraw them. 
@@ -922,7 +924,7 @@ class RosterWindow:
 				accounts = accounts, groups = [group])
 			text += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
 			
-		self.model.set_value(child_iter, 1 , gobject.markup_escape_text(text))
+		self.model[child_iter][C_NAME] = gobject.markup_escape_text(text)
 		return False
 		
 	def draw_parent_contact(self, jid, account):
@@ -1205,12 +1207,13 @@ class RosterWindow:
 		if not groups:
 			groups = [_('General')]
 
-		self.draw_account(account)
 		self.draw_contact(jid, account)
+		self.draw_account(account)
 
 		for group in groups:
 			self.draw_group(group, account)
-			self._adjust_group_expand_collapse_state(group, account)
+			# FIXME: Is this needed, Jim?
+			#self._adjust_group_expand_collapse_state(group, account)
 
 	def _idle_draw_jids_of_account(self, jids, account):
 		'''Draw given contacts and their avatars in a lazy fashion.
@@ -3460,7 +3463,7 @@ class RosterWindow:
 			
 		self._toggeling_row = False
 
-	def on_model_row_has_child_toggled(self, model, path, titer):
+	def on_modelfilter_row_has_child_toggled(self, model, path, titer):
 		'''Called when a row has gotten the first or lost its last child row.
 
 		Expand Parent if necessary.
@@ -3489,10 +3492,7 @@ class RosterWindow:
 			group = model[titer][C_JID].decode('utf-8')
 			self._adjust_group_expand_collapse_state(group, account)
 		elif type_ == 'account':
-			if not self.filtering:
-				# We just added the account to roster and it got its first contacts
-				# Restore expand collapse state
-				self._adjust_account_expand_collapse_state(account)
+			self._adjust_account_expand_collapse_state(account)
 
 	def on_treeview_selection_changed(self, selection):
 		'''Called when selection in TreeView has changed.
@@ -5794,7 +5794,7 @@ class RosterWindow:
 		self.modelfilter = self.model.filter_new()
 		self.modelfilter.set_visible_func(self._visible_func)
 		self.modelfilter.connect('row-has-child-toggled',
-			self.on_model_row_has_child_toggled)
+			self.on_modelfilter_row_has_child_toggled)
 		self.tree.set_model(self.modelfilter)
 		# Workaroung: For strange reasons signal is behaving like row-changed
 		self._toggeling_row = False
