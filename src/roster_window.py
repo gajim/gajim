@@ -154,11 +154,11 @@ class RosterWindow:
 	def _get_contact_iter(self, jid, account, contact = None, model = None):
 		''' Return a list of gtk.TreeIter of the given contact.
 
-			Keyword arguments:
+		Keyword arguments:
 		jid -- the jid without resource
-			account -- the account
+		account -- the account
 		contact -- the contact (default None)
-			model -- the data model (default TreeFilterModel)
+		model -- the data model (default TreeFilterModel)
 		
 		'''
 		if not model:
@@ -220,7 +220,7 @@ class RosterWindow:
 		''' Return True if the given iter is a separator.
 		
 		Keyword arguments:
-			model -- the data model
+		model -- the data model
 		iter -- the gtk.TreeIter to test 
 		'''
 		if model[titer][0] == 'SEPARATOR':
@@ -231,8 +231,8 @@ class RosterWindow:
 	def _iter_contact_rows(self, model = None):
 		'''Iterate over all contact rows in given model.
 		
-		Keyword arguments:
-			model -- the data model (default TreeFilterModel)
+		Keyword argument
+		model -- the data model (default TreeFilterModel)
 		'''
 		if not model:
 			model = self.modelfilter
@@ -328,9 +328,9 @@ class RosterWindow:
 		
 		Keyword arguments:
 		contact -- the contact to add
-			account -- the contacts account
-			groups -- list of groups to add the contact to. (default groups in contact.groups).
-					  Parameter ignored when big_brother_contact is specified.
+		account -- the contacts account
+		groups -- list of groups to add the contact to. (default groups in contact.groups).
+			Parameter ignored when big_brother_contact is specified.
 		big_brother_contact -- if specified contact is added as child big_brother_contact. (default None)
 		'''
 		added_iters = []
@@ -405,8 +405,8 @@ class RosterWindow:
 		
 		Keyword arguments:
 		contact -- the contact to add
-			account -- the contacts account
-			groups -- list of groups to remove the contact from. (default groups in contact.groups).
+		account -- the contacts account
+		groups -- list of groups to remove the contact from. (default groups in contact.groups).
 
 		'''
 		iters = self._get_contact_iter(contact.jid, account, contact, self.model)
@@ -650,7 +650,7 @@ class RosterWindow:
 		return contacts[0][0] # it's contact/big brother with highest priority
 
 
-	def remove_contact(self, jid, account):
+	def remove_contact(self, jid, account, force = False, backend = False):
 		'''Remove contact from roster.
 		
 		Remove contact from all its group. Remove empty groups or redraw otherwise.
@@ -661,6 +661,8 @@ class RosterWindow:
 		Keyword arguments:
 		jid -- the contact's jid or SelfJid to remove SelfContact
 		account -- the corresponding account.
+		force -- remove contact even it has pending evens (Default False)
+		backend -- also remove contact instance (Default False)
 		
 		'''
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
@@ -669,27 +671,40 @@ class RosterWindow:
 		if not iters:
 			return
 
-		# Remove contact from roster
-		family = gajim.contacts.get_metacontacts_family(account, jid)
-		if family:
-			# We have a family. So we are a metacontact.
-			self._remove_metacontact_family(family, account)
-		else: 
-			self._remove_entity(contact, account)
+		if not force and self.contact_has_pending_roster_events(contact, account):
+			# Contact has pending events
+			key = (jid, account)
+			if not key in self.contacts_to_be_removed.keys():
+				self.contacts_to_be_removed[key] = {'backend': backend}
+			return False
+		else:
+			# no more pending events
+			# Remove contact from roster directly
+			family = gajim.contacts.get_metacontacts_family(account, jid)
+			if family:
+				# We have a family. So we are a metacontact.
+				self._remove_metacontact_family(family, account)
+			else: 
+				self._remove_entity(contact, account)
 
-		# Draw all groups of the contact
-		groups = contact.groups
-		if contact.is_observer():
-			contact.groups = [_('Observers')]
-		if not groups:
-			groups = [_('General')]
-		for group in groups:
-			self.draw_group(group, account)
+			# Draw all groups of the contact
+			groups = contact.groups
+			if contact.is_observer():
+				contact.groups = [_('Observers')]
+			if not groups:
+				groups = [_('General')]
 
-		self.draw_account(account)
-		
-		return True
-		
+			if backend:	
+				# Remove contact before redrawing, otherwise the old
+				# numbers will still be show
+				gajim.contacts.remove_jid(account, jid)
+
+			for group in groups:
+				self.draw_group(group, account)
+			self.draw_account(account)
+
+			return True
+
 
 	def add_groupchat(self, jid, account, status = ''):
 		'''Add groupchat to roster and draw it.
@@ -711,12 +726,7 @@ class RosterWindow:
 	def remove_groupchat(self, jid, account):
 		'''Remove groupchat from roster and redraw account and group.'''
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
-		self.remove_contact(jid, account)
-		gajim.contacts.remove_contact(account, contact)
-		# When we redraw the group in remove_contact the
-		# contact does still exist and so the group is still showing 
-		# the old numbers.
-		self.draw_group(_('Groupchats'), account)
+		self.remove_contact(jid, account, force = True, backend = True)
 		return True
 		
 
@@ -737,14 +747,8 @@ class RosterWindow:
 	def remove_transport(self, jid, account):
 		'''Remove transport from roster and redraw account and group.'''
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
-		self.remove_contact(jid, account)
-		gajim.contacts.remove_contact(account, contact)
-		# When we redraw the group in remove_contact the
-		# contact does still exist and so the group is still showing 
-		# the old numbers.
-		self.draw_group(_('Transports'), account)
+		self.remove_contact(jid, account, force = True, backend = True)
 		return True
-
 
 	#FIXME: 
 	# We need to define a generic way to keep contacts in roster
@@ -771,6 +775,7 @@ class RosterWindow:
 			gajim.contacts.add_contact(account, c)
 			self.add_contact(contact.jid, account)
 
+
 	def add_contact_to_groups(self, jid, account, groups):
 		'''Add contact to given groups and redraw them. 
 		
@@ -783,7 +788,7 @@ class RosterWindow:
 		groups -- list of Groups to add the contact too.
 		
 		'''
-		self.remove_contact(jid, account)
+		self.remove_contact(jid, account, force = True)
 	
 		for contact in gajim.contacts.get_contacts(account, jid):
 			for group in groups:
@@ -809,7 +814,7 @@ class RosterWindow:
 		groups -- list of Groups to remove the contact from
 		
 		'''
-		self.remove_contact(jid, account)
+		self.remove_contact(jid, account, force = True)
 
 		for contact in gajim.contacts.get_contacts(account, jid):
 			for group in groups:
@@ -843,6 +848,9 @@ class RosterWindow:
 	
 	#FIXME: integrate into add_contact()
 	def add_to_not_in_the_roster(self, account, jid, nick = '', resource = ''):
+		print "add to not in the roster"
+		import traceback
+		traceback.print_stack()
 		keyID = ''
 		attached_keys = gajim.config.get_per('accounts', account,
 			'attached_gpg_keys').split()
@@ -1238,7 +1246,7 @@ class RosterWindow:
 		
 	
 	def select_contact(self, jid, account):
-		'''Select contact in roster. If contact is hidden but has eventsi,
+		'''Select contact in roster. If contact is hidden but has events,
 		show him.'''
 		# Refiltering SHOULD NOT be needed:
 		# When a contact gets a new event he will be redrawn and his
@@ -1299,16 +1307,22 @@ class RosterWindow:
 		self.filtering = True
 		self.modelfilter.refilter()
 		self.filtering = False	
-		
-	def contact_is_visible(self, contact, account):
-		# show it if pending events
+	
+	def contact_has_pending_roster_events(self, contact, account):
+		''' Return True if the contact or one if it resources has pending events'''
+		# jid has pending events
 		if gajim.events.get_nb_roster_events(account, contact.jid) > 0:
 			return True
-		# count events from all resources
+		# check events of all resources
 		for contact_ in gajim.contacts.get_contacts(account, contact.jid):
 			if contact_.resource and gajim.events.get_nb_roster_events(account,
 			contact_.get_full_jid()) > 0:
 				return True
+		return False
+
+	def contact_is_visible(self, contact, account):
+		if self.contact_has_pending_roster_events(contact, account):
+			return True
 		# XEP-0162
 		hide = contact.is_hidden_from_roster()
 		if hide and contact.sub != 'from':
@@ -1639,6 +1653,24 @@ class RosterWindow:
 					minimize = bm['minimize'] in ('1', 'true')
 					gajim.interface.join_gc_room(account, jid, bm['nick'],
 					bm['password'], minimize = minimize)
+	
+	def on_event_removed(self, event_list):
+		'''Remove contacts on last events removed. 
+
+		Only performed if removal was requested before 	but the contact
+		still had pending events
+		'''
+		no_more_pending = ((event.jid.split('/')[0], event.account) for event in event_list 
+			if len(gajim.events.get_events(event.account, event.jid)))
+
+		for jid, account in no_more_pending:
+			self.draw_contact(jid, account)
+			# Remove contacts in roster if removal was requested
+			key = (jid, account)
+			if key in self.contacts_to_be_removed.keys():
+				del self.contacts_to_be_removed[key]
+				self.remove_contact(jid, account, backend = True)
+		self.show_title()
 			
 	def open_event(self, account, jid, event):
 		'''If an event was handled, return True, else return False'''
@@ -1648,31 +1680,31 @@ class RosterWindow:
 			dialogs.SingleMessageWindow(account, jid,
 				action='receive', from_whom=jid, subject=data[1], message=data[0],
 				resource=data[5], session=data[8], form_node=data[9])
-			gajim.interface.remove_first_event(account, jid, event.type_)
+			gajim.events.get_first_event(account, jid, event.type_)
 			return True
 		elif event.type_ == 'file-request':
 			contact = gajim.contacts.get_contact_with_highest_priority(account,
 				jid)
-			gajim.interface.remove_first_event(account, jid, event.type_)
+			gajim.events.get_first_event(account, jid, event.type_)
 			ft.show_file_request(account, contact, data)
 			return True
 		elif event.type_ in ('file-request-error', 'file-send-error'):
-			gajim.interface.remove_first_event(account, jid, event.type_)
+			gajim.events.get_first_event(account, jid, event.type_)
 			ft.show_send_error(data)
 			return True
 		elif event.type_ in ('file-error', 'file-stopped'):
-			gajim.interface.remove_first_event(account, jid, event.type_)
+			gajim.events.get_first_event(account, jid, event.type_)
 			ft.show_stopped(jid, data)
 			return True
 		elif event.type_ == 'file-completed':
-			gajim.interface.remove_first_event(account, jid, event.type_)
+			gajim.events.get_first_event(account, jid, event.type_)
 			ft.show_completed(jid, data)
 			return True
 		elif event.type_ == 'gc-invitation':
 			dialogs.InvitationReceivedDialog(account, data[0], jid, data[2],
 				data[1])
-			gajim.interface.remove_first_event(account, jid, event.type_)
-			return True
+			gajim.events.get_first_event(account, jid, event.type_)
+			return True		
 		return False
 
 ################################################################################
@@ -2311,14 +2343,14 @@ class RosterWindow:
 	def on_remove_agent(self, widget, list_):
 		'''When an agent is requested to be removed. list_ is a list of
 		(contact, account) tuple'''
+		# FIXME remove transport contacts
 		for (contact, account) in list_:
 			if gajim.config.get_per('accounts', account, 'hostname') == \
 			contact.jid:
 				# We remove the server contact
 				# remove it from treeview
 				gajim.connections[account].unsubscribe(contact.jid)
-				self.remove_contact(contact.jid, account)
-				gajim.contacts.remove_contact(account, contact)
+				self.remove_contact(contact.jid, account, backend = True)
 				return
 
 		def remove(list_):
@@ -2326,9 +2358,7 @@ class RosterWindow:
 				full_jid = contact.get_full_jid()
 				gajim.connections[account].unsubscribe_agent(full_jid)
 				# remove transport from treeview
-				self.remove_contact(contact.jid, account)
-				gajim.contacts.remove_jid(account, contact.jid)
-				gajim.contacts.remove_contact(account, contact)
+				self.remove_contact(contact.jid, account, backend = True)
 
 		# Check if there are unread events from some contacts
 		has_unread_events = False
@@ -5750,6 +5780,11 @@ class RosterWindow:
 		self.tree.set_model(self.modelfilter)
 		# Workaroung: For strange reasons signal is behaving like row-changed
 		self._toggeling_row = False
+
+ 		# Remove contact from roster when last event opened
+		# { (contact, account): { backend: boolean }
+		self.contacts_to_be_removed = {}
+		gajim.events.event_removed_subscribe(self.on_event_removed)
 
 		# when this value become 0 we quit main application. If it's more than 0
 		# it means we are waiting for this number of accounts to disconnect before

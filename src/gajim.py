@@ -1573,22 +1573,7 @@ class Interface:
 		not name and not groups:
 			if contacts:
 				c = contacts[0]
-				self.roster.remove_contact(c.jid, account)
-				gajim.contacts.remove_jid(account, jid)
-				self.roster.draw_account(account)
-				if gajim.events.get_events(account, c.jid):
-					keyID = ''
-					attached_keys = gajim.config.get_per('accounts', account,
-						'attached_gpg_keys').split()
-					if jid in attached_keys:
-						keyID = attached_keys[attached_keys.index(jid) + 1]
-					contact = gajim.contacts.create_contact(jid = c.jid,
-						name = '', groups = [_('Not in Roster')],
-						show = 'not in roster', status = '', sub = 'none',
-						keyID = keyID)
-					gajim.contacts.add_contact(account, contact)
-					self.roster.add_contact(contact.jid, account)
-				#FIXME if it was the only one in its group, remove the group
+				self.roster.remove_contact(c.jid, account, backend = True)
 				return
 		elif not contacts:
 			if sub == 'remove':
@@ -1602,7 +1587,7 @@ class Interface:
 			re_add = False
 			# if sub changed: remove and re-add, maybe observer status changed
 			if contacts[0].sub != sub:
-				self.roster.remove_contact(contacts[0].jid, account)
+				self.roster.remove_contact(contacts[0].jid, account, force = True)
 				re_add = True
 			for contact in contacts:
 				if not name:
@@ -1614,7 +1599,6 @@ class Interface:
 					contact.groups = groups
 			if re_add:
 				self.roster.add_contact(jid, account)
-		self.roster.draw_contact(jid, account)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('RosterInfo', (account, array))
 
@@ -2404,26 +2388,6 @@ class Interface:
 
 		# Select the contact in roster, it's visible because it has events.
 		self.roster.select_contact(jid, account)
-
-	def remove_first_event(self, account, jid, type_ = None):
-		event = gajim.events.get_first_event(account, jid, type_)
-		self.remove_event(account, jid, event)
-
-	def remove_event(self, account, jid, event):
-		if gajim.events.remove_events(account, jid, event):
-			# No such event found
-			return
-		# no other event?
-		if not len(gajim.events.get_events(account, jid)):
-			contact = gajim.contacts.get_contact_with_highest_priority(account,
-				jid)
-			show_transport = gajim.config.get('show_transports_group')
-			if contact and (contact.show in ('error', 'offline') and \
-			not gajim.config.get('showoffline') or (
-			gajim.jid_is_transport(jid) and not show_transport)):
-				self.roster.remove_contact(contact.jid, account)
-		self.roster.show_title()
-		self.roster.draw_contact(jid, account)
 
 	def handle_event(self, account, fjid, type_):
 		w = None

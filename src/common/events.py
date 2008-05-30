@@ -48,6 +48,9 @@ class Event:
 		self.parameters = parameters
 		self.show_in_roster = show_in_roster
 		self.show_in_systray = show_in_systray
+		# Set when adding the event
+		self.jid = None
+		self.account = None
 
 class Events:
 	'''Information concerning all events'''
@@ -112,6 +115,8 @@ class Events:
 			self._events[account][jid] = [event]
 		else:
 			self._events[account][jid].append(event)
+		event.jid = jid
+		event.account = account
 		self.fire_event_added(event)
 
 	def remove_events(self, account, jid, event = None, types = []):
