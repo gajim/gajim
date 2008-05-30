@@ -1660,15 +1660,15 @@ class RosterWindow:
 		Only performed if removal was requested before 	but the contact
 		still had pending events
 		'''
-		no_more_pending = ((event.jid.split('/')[0], event.account) for event in event_list 
-			if len(gajim.events.get_events(event.account, event.jid)))
+		contact_list = ((event.jid.split('/')[0], event.account) for event in event_list)
 
-		for jid, account in no_more_pending:
+		for jid, account in contact_list:
 			self.draw_contact(jid, account)
 			# Remove contacts in roster if removal was requested
 			key = (jid, account)
 			if key in self.contacts_to_be_removed.keys():
 				del self.contacts_to_be_removed[key]
+				# Remove contact will delay removal if there are more events pending
 				self.remove_contact(jid, account, backend = True)
 		self.show_title()
 			
@@ -1676,34 +1676,35 @@ class RosterWindow:
 		'''If an event was handled, return True, else return False'''
 		data = event.parameters
 		ft = gajim.interface.instances['file_transfers']
+		event = gajim.events.get_first_event(account, jid, event.type_)
 		if event.type_ == 'normal':
 			dialogs.SingleMessageWindow(account, jid,
 				action='receive', from_whom=jid, subject=data[1], message=data[0],
 				resource=data[5], session=data[8], form_node=data[9])
-			gajim.events.get_first_event(account, jid, event.type_)
+			gajim.events.remove_events(account, jid, event)
 			return True
 		elif event.type_ == 'file-request':
 			contact = gajim.contacts.get_contact_with_highest_priority(account,
 				jid)
-			gajim.events.get_first_event(account, jid, event.type_)
 			ft.show_file_request(account, contact, data)
+			gajim.events.remove_events(account, jid, event)
 			return True
 		elif event.type_ in ('file-request-error', 'file-send-error'):
-			gajim.events.get_first_event(account, jid, event.type_)
 			ft.show_send_error(data)
+			gajim.events.remove_events(account, jid, event)
 			return True
 		elif event.type_ in ('file-error', 'file-stopped'):
-			gajim.events.get_first_event(account, jid, event.type_)
 			ft.show_stopped(jid, data)
+			gajim.events.remove_events(account, jid, event)
 			return True
 		elif event.type_ == 'file-completed':
-			gajim.events.get_first_event(account, jid, event.type_)
 			ft.show_completed(jid, data)
+			gajim.events.remove_events(account, jid, event)
 			return True
 		elif event.type_ == 'gc-invitation':
 			dialogs.InvitationReceivedDialog(account, data[0], jid, data[2],
 				data[1])
-			gajim.events.get_first_event(account, jid, event.type_)
+			gajim.events.remove_events(account, jid, event)
 			return True		
 		return False
 
