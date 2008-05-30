@@ -1044,10 +1044,13 @@ class RosterWindow:
 			big_brother_account = big_brother_data['account']
 
 			if big_brother_jid == jid and big_brother_account == account:
+				parent_iter = self.model.iter_parent(child_iters[0])
+				parent_type = self.model[parent_iter][C_TYPE]
+
 				# We are the big brother. But have also been before?
-				if self.model.iter_has_child(child_iters[0]):
-					# We have children. We must have been
-					# big brother even before
+				if parent_type == 'group':
+					# We don't have a big brother. We must have been
+					# big brother then.
 					pass
 				else:
 					# We are the new big brother but haven't been before
