@@ -685,8 +685,8 @@ class ChatControlBase(MessageControl):
 			if self.type_id == message_control.TYPE_GC:
 				gc_message = True
 
-			if ((self.parent_win and (not self.parent_win.get_active_jid() or \
-			full_jid != self.parent_win.get_active_jid() or \
+			if ((self.parent_win and (not self.parent_win.get_active_control() or \
+			self != self.parent_win.get_active_control() or \
 			not self.parent_win.is_active() or not end)) or \
 			(gc_message and \
 			jid in gajim.interface.minimized_controls[self.account])) and \
@@ -719,8 +719,8 @@ class ChatControlBase(MessageControl):
 		if not self.parent_win:
 			return
 
-		if (not self.parent_win.get_active_jid() or \
-		full_jid != self.parent_win.get_active_jid() or \
+		if (not self.parent_win.get_active_control() or \
+		self != self.parent_win.get_active_control() or \
 		not self.parent_win.is_active() or not end) and \
 		kind in ('incoming', 'incoming_queue'):
 			self.parent_win.redraw_tab(self)
