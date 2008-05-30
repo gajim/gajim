@@ -848,9 +848,6 @@ class RosterWindow:
 	
 	#FIXME: integrate into add_contact()
 	def add_to_not_in_the_roster(self, account, jid, nick = '', resource = ''):
-		print "add to not in the roster"
-		import traceback
-		traceback.print_stack()
 		keyID = ''
 		attached_keys = gajim.config.get_per('accounts', account,
 			'attached_gpg_keys').split()
