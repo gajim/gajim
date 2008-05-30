@@ -380,6 +380,18 @@ class ChangeActivityDialog:
 		self.subactivity_combo.pack_start(cellrenderertext, True)
 		self.subactivity_combo.add_attribute(cellrenderertext, 'text', 0)
 
+		con = gajim.connections[account]
+		if 'activity' in con.activity and con.activity['activity'] in \
+		self.activities:
+			self.activity_combo.set_active(self.activities.keys().index(
+				con.activity['activity']))
+			self.on_activity_combobox_changed(self.activity_combo)
+		else:
+			self.activity_combo.set_active(0)
+
+		if 'text' in con.activity:
+			self.entry.set_text(con.activity['text'])
+
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
@@ -393,6 +405,14 @@ class ChangeActivityDialog:
 					self.liststore2.append((helpers.get_uf_activity(subactivity),
 						subactivity))
 				self.subactivity_combo.set_sensitive(True)
+				con = gajim.connections[self.account]
+				if 'subactivity' in con.activity and con.activity['subactivity'] in\
+				self.activities[selected_activity]:
+					self.subactivity_combo.set_active(self.activities[
+						selected_activity].index(con.activity['subactivity']))
+				else:
+					self.subactivity_combo.set_active(0)
+
 			else:
 				self.subactivity_combo.set_sensitive(False)
 
@@ -448,6 +468,15 @@ class ChangeMoodDialog:
 
 		for mood in self.moods:
 			self.liststore.append((helpers.get_uf_mood(mood), mood))
+
+		con = gajim.connections[account]
+		if 'mood' in con.mood and con.mood['mood'] in self.moods:
+			self.combo.set_active(self.moods.index(con.mood['mood']))
+		else:
+			self.combo.set_active(0)
+
+		if 'text' in con.mood:
+			self.entry.set_text(con.mood['text'])
 
 		cellrenderertext = gtk.CellRendererText()
 		self.combo.pack_start(cellrenderertext, True)
