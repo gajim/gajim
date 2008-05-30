@@ -3671,8 +3671,9 @@ class RosterWindow:
 		if is_big_brother:
 			# add whole metacontact to new group
 			self.add_contact_to_groups(c_source.jid, account, [grp_dest,])
-			# remove after we have so contact is not moved in General between
-			self.remove_contact_from_groups(c_source.jid, account, [grp_source,])
+			# remove afterwards so the contact is not moved to General in the meantime
+			if grp_dest != grp_source:
+				self.remove_contact_from_groups(c_source.jid, account, [grp_source,])
 		else:
 			# Normal contact or little brother
 			family = gajim.contacts.get_metacontacts_family(account,
@@ -3697,8 +3698,9 @@ class RosterWindow:
 			else:
 				# Normal contact
 				self.add_contact_to_groups(c_source.jid, account, [grp_dest,])
-				# remove after we have so contact is not moved in General between
-				self.remove_contact_from_groups(c_source.jid, account, [grp_source,])
+				# remove afterwards so the contact is not moved to General in the meantime
+				if grp_dest != grp_source:
+					self.remove_contact_from_groups(c_source.jid, account, [grp_source,])
 
 		if context.action in (gtk.gdk.ACTION_MOVE, gtk.gdk.ACTION_COPY):
 			context.finish(True, True, etime)
