@@ -3142,8 +3142,9 @@ class Interface:
 		for bm in gajim.connections[account].bookmarks:
 			if bm['autojoin'] in ('1', 'true'):
 				jid = bm['jid']
-				if not gajim.gc_connected[account].has_key(jid) or\
-					not gajim.gc_connected[account][jid]:
+				# Only join non-opened groupchats. Opened one are already
+				# auto-joined on re-connection
+				if not gajim.gc_connected[account].has_key(jid):
 					# we are not already connected
 					minimize = bm['minimize'] in ('1', 'true')
 					gajim.interface.join_gc_room(account, jid, bm['nick'],
