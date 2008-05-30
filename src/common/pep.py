@@ -254,7 +254,7 @@ def user_nickname(items, name, jid):
 		contact.contact_name = ''
 
 def user_send_mood(account, mood, message = ''):
-	if not gajim.config.get('publish_mood'):
+	if not gajim.config.get_per('accounts', account, 'publish_mood'):
 		return
 	item = xmpp.Node('mood', {'xmlns': xmpp.NS_MOOD})
 	if mood != '':
@@ -266,7 +266,7 @@ def user_send_mood(account, mood, message = ''):
 	gajim.connections[account].send_pb_publish('', xmpp.NS_MOOD, item, '0')
 
 def user_send_activity(account, activity, subactivity = '', message = ''):
-	if not gajim.config.get('publish_activity'):
+	if not gajim.config.get_per('accounts', account, 'publish_activity'):
 		return
 	item = xmpp.Node('activity', {'xmlns': xmpp.NS_ACTIVITY})
 	if activity != '':
@@ -280,7 +280,7 @@ def user_send_activity(account, activity, subactivity = '', message = ''):
 	gajim.connections[account].send_pb_publish('', xmpp.NS_ACTIVITY, item, '0')
 
 def user_send_tune(account, artist = '', title = '', source = '', track = 0,length = 0, items = None):
-	if not (gajim.config.get('publish_tune') and \
+	if not (gajim.config.get_per('accounts', account, 'publish_tune') and \
 	gajim.connections[account].pep_supported):
 		return
 	item = xmpp.Node('tune', {'xmlns': xmpp.NS_TUNE})
@@ -305,7 +305,7 @@ def user_send_tune(account, artist = '', title = '', source = '', track = 0,leng
 	gajim.connections[account].send_pb_publish('', xmpp.NS_TUNE, item, '0')
 
 def user_send_nickname(account, nick):
-	if not (gajim.config.get('publish_nick') and \
+	if not (gajim.config.get_per('accounts', account, 'publish_nick') and \
 	gajim.connections[account].pep_supported):
 		return
 	item = xmpp.Node('nick', {'xmlns': xmpp.NS_NICK})

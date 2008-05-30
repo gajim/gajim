@@ -819,7 +819,8 @@ class ConnectionDisco:
 						if dbus_support.supported:
 							listener = MusicTrackListener.get()
 							track = listener.get_playing_track()
-							if gajim.config.get('publish_tune'):
+							if gajim.config.get_per('accounts', self.name,
+							'publish_tune'):
 								gajim.interface.roster.music_track_changed(listener,
 										track, self.name)
 						break

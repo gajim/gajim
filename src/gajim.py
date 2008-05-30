@@ -3260,8 +3260,6 @@ class Interface:
 		if gajim.config.get('autodetect_browser_mailer') or not cfg_was_read:
 			gtkgui_helpers.autodetect_browser_mailer()
 
-		helpers.update_optional_features()
-
 		if gajim.verbose:
 			gajim.log.setLevel(gajim.logging.DEBUG)
 		else:
@@ -3316,6 +3314,8 @@ class Interface:
 			gajim.transport_avatar[a] = {}
 			gajim.gajim_optional_features[a] = []
 			gajim.caps_hash[a] = ''
+
+		helpers.update_optional_features()
 
 		if gajim.config.get('remote_control'):
 			try:

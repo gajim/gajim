@@ -3161,23 +3161,31 @@ class RosterWindow:
 		else:
 			gajim.interface.instances['preferences'] = config.PreferencesWindow()
 
-	def on_publish_tune_checkbutton_toggled(self, widget, account):
-		if widget.get_active():
-			listener = MusicTrackListener.get()
-			self.music_track_changed_signal = listener.connect(
-				'music-track-changed', gajim.interface.roster.music_track_changed)
-			track = listener.get_playing_track()
-			self.music_track_changed(listener, track)
+	def on_publish_tune_toggled(self, widget, account):
+		act = widget.get_active()
+		gajim.config.set_per('accounts', account, 'publish_tune', act)
+		if act:
+			if not self.music_track_changed_signal:
+				listener = MusicTrackListener.get()
+				self.music_track_changed_signal = listener.connect(
+					'music-track-changed', self.music_track_changed)
+				track = listener.get_playing_track()
+				self.music_track_changed(listener, track)
 		else:
-			self.music_track_changed_signal = None
+			# disable it only if no other account use it
+			for acct in gajim.connections:
+				if gajim.config.get_per('accounts', acct, 'publish_tune'):
+					break
+			else:
+				listener = MusicTrackListener.get()
+				listener.disconnect(self.music_track_changed_signal)
+				self.music_track_changed_signal = None
 
-			for account in gajim.connections:
-				if gajim.connections[account].pep_supported:
-					# As many implementations don't support retracting items, we send a "Stopped" event first
-					pep.user_send_tune(account, '')
-					pep.user_retract_tune(account)
-		#TODO:
-		#self.on_checkbutton_toggled(widget, 'publish_tune')
+			if gajim.connections[account].pep_supported:
+				# As many implementations don't support retracting items, we send a
+				# "Stopped" event first
+				pep.user_send_tune(account, '')
+				pep.user_retract_tune(account)
 		helpers.update_optional_features(account)
 
 	def on_pep_services_menuitem_activate(self, widget, account):
@@ -4533,11 +4541,18 @@ class RosterWindow:
 
 			pep_menuitem = xml.get_widget('pep_menuitem')
 			if gajim.connections[account].pep_supported:
-				have_mood = gajim.config.get('publish_mood')
-				have_activity = gajim.config.get('publish_activity')
-				have_tune = gajim.config.get('publish_tune')
+				have_mood = gajim.config.get_per('accounts', account,
+					'publish_mood')
+				have_activity = gajim.config.get_per('accounts', account,
+					'publish_activity')
+				have_tune = gajim.config.get_per('accounts', account,
+					'publish_tune')
 				pep_submenu = gtk.Menu()
 				pep_menuitem.set_submenu(pep_submenu)
+				item = gtk.CheckMenuItem(_('Publish Tune'))
+				pep_submenu.append(item)
+				item.set_active(have_tune)
+				item.connect('toggled', self.on_publish_tune_toggled, account)
 				if have_mood:
 					item = gtk.MenuItem(_('Mood'))
 					pep_submenu.append(item)
@@ -5933,13 +5948,14 @@ class RosterWindow:
 		self.tooltip = tooltips.RosterTooltip()
 		self.draw_roster()
 
-		publish_tune = gajim.config.get('publish_tune')
-		if publish_tune:
-			listener = MusicTrackListener.get()
-			self.music_track_changed_signal = listener.connect(
-				'music-track-changed', self.music_track_changed)
-			track = listener.get_playing_track()
-			self.music_track_changed(listener, track)
+		for account in gajim.connections:
+			if gajim.config.get_per('accounts', account, 'publish_tune'):
+				listener = MusicTrackListener.get()
+				self.music_track_changed_signal = listener.connect(
+					'music-track-changed', self.music_track_changed)
+				track = listener.get_playing_track()
+				self.music_track_changed(listener, track)
+				break
 
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()
