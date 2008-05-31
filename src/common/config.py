@@ -313,7 +313,7 @@ class Config:
 			'otr_flags': [opt_int, 58 ],
 			'publish_mood': [opt_bool, True],
 			'publish_activity': [opt_bool, True],
-			'publish_tune': [opt_bool, True],
+			'publish_tune': [opt_bool, False],
 			'publish_nick': [opt_bool, True],
 			'subscribe_mood': [opt_bool, True],
 			'subscribe_activity': [opt_bool, True],
