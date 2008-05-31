@@ -272,10 +272,10 @@ class HistoryWindow:
 
 			# select logs for last date we have logs with contact
 			self.calendar.set_sensitive(True)
-			lastlog = gajim.logger.get_last_date_that_has_logs(self.jid, self.account)
+			last_log = \
+				gajim.logger.get_last_date_that_has_logs(self.jid, self.account)
 
-			tim = lastlog
-			date = time.localtime(tim)
+			date = time.localtime(last_log)
 
 			y, m, d = date[0], date[1], date[2]
 			gtk_month = gtkgui_helpers.make_python_month_gtk_month(m)
