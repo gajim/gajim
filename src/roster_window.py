@@ -382,6 +382,7 @@ class RosterWindow:
 				added_iters.append(i_)
 
 				# Restore the group expand state
+				# FIXME path may be invalid at this point!
 				path = self.model.get_path(child_iterG)
 				if account + group in self.collapsed_rows:
 					is_expanded = False
@@ -1254,7 +1255,6 @@ class RosterWindow:
 		# Refiltering SHOULD NOT be needed:
 		# When a contact gets a new event he will be redrawn and his
 		# icon changes, so _visible_func WILL be called on him anyway
-
 		iters = self._get_contact_iter(jid, account)
 		if not iters:
 			# Not visible in roster
@@ -1263,8 +1263,7 @@ class RosterWindow:
 		if self.dragging or not gajim.config.get('scroll_roster_to_last_message'):
 			# do not change selection while DND'ing
 			return
-		self.tree.expand_row(path[0:1], False)
-		self.tree.expand_row(path[0:2], False)
+		self.tree.expand_to_path(path)
 		self.tree.scroll_to_cell(path)
 		self.tree.set_cursor(path)
 
