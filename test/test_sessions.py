@@ -34,6 +34,8 @@ common.configpaths.gajimpaths.init_profile()
 from common import gajim
 from common import xmpp
 
+gajim.DATA_DIR = gajim_root + '/data'
+
 from common.stanza_session import StanzaSession
 
 # name to use for the test account
