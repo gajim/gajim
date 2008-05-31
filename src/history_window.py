@@ -117,22 +117,25 @@ class HistoryWindow:
 		self.completion_dict = {}
 		self.accounts_seen_online = [] # Update dict when new accounts connect
 		self.jids_to_search = []
-		self._fill_completion_dict()
+
+		# This will load history too
+		gobject.idle_add(self._fill_completion_dict().next)
 
 		if jid:
 			self.jid_entry.set_text(jid)	
 
 		xml.signal_autoconnect(self)
-		self._load_history(jid, account)
 		self.window.show_all()
 
 	def _fill_completion_dict(self):
-		'''Fill completion_dict for key auto completion. 
+		'''Fill completion_dict for key auto completion. Then load history for 
+		current jid (by calling another function).
 
 		Key will be either jid or full_completion_name  
 		(contact name or long description like "pm-contact from groupchat....")
 		
 		{key : (jid, account, nick_name, full_completion_name}
+		this is a generator and does pseudo-threading via idle_add()
 		'''
 		liststore = gtkgui_helpers.get_completion_liststore(self.jid_entry)
 
@@ -150,8 +153,13 @@ class HistoryWindow:
 		muc_active_img = gtkgui_helpers.load_icon('muc_active')
 		contact_img = gajim.interface.jabber_state_images['16']['online']
 		muc_active_pix = muc_active_img.get_pixbuf()
-		contact_pix = contact_img.get_pixbuf()			
+		contact_pix = contact_img.get_pixbuf()
+		
 		keys = self.completion_dict.keys()
+		# Move the actual jid at first so we load history faster
+		actual_jid = self.jid_entry.get_text().decode('utf-8')
+		keys.remove(actual_jid)
+		keys.insert(0, actual_jid)
 		# Map jid to info tuple
 		# Warning : This for is time critical with big DB 
 		for key in keys:
@@ -180,13 +188,17 @@ class HistoryWindow:
 					info_name = nick
 			else:
 				pix = contact_pix
-			
+
 			liststore.append((pix, completed))
 			self.completion_dict[key] = (info_jid, info_acc, info_name,
 				info_completion)
 			self.completion_dict[completed] = (info_jid, info_acc,
 				info_name, info_completion)
+			if key == actual_jid:
+				self._load_history(info_jid, info_acc)
+			yield True
 		keys.sort()
+		yield False
 	
 	def _get_account_for_jid(self, jid):
 		'''Return the corresponding account of the jid.
@@ -480,7 +492,8 @@ class HistoryWindow:
 				message = row[4]
 				local_time = time.localtime(tim)
 				date = time.strftime('%x', local_time)
-				#  jid (to which log is assigned to), name, date, message, time (full unix time)
+				#  jid (to which log is assigned to), name, date, message, 
+				# time (full unix time)
 				model.append((jid, contact_name, date, message, tim))
 
 	def on_query_combobox_changed(self, widget):
@@ -573,9 +586,12 @@ class HistoryWindow:
 
 	def open_history(self, jid, account):
 		'''Load chat history of the specified jid'''
+		self.jid_entry.set_text(jid)
 		if account and account not in self.accounts_seen_online:
 			# Update dict to not only show bare jid
-			self._fill_completion_dict
-		self.jid_entry.set_text(jid)
-		self._load_history(jid, account)
+			gobject.idle_add(self._fill_completion_dict().next)
+		else:
+			# Only in that case because it's called by self._fill_completion_dict()
+			# otherwise 
+			self._load_history(jid, account)
 		self.results_window.set_property('visible', False)
