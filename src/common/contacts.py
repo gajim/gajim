@@ -246,9 +246,10 @@ class Contacts:
 		return None
 
 	def iter_contacts(self, account):
-		for jid in self._contacts[account]:
-			for contact in self._contacts[account][jid]:
-				yield contact
+		if account in self._contacts:
+			for jid in self._contacts[account]:
+				for contact in self._contacts[account][jid]:
+					yield contact
 
 	def get_contact_from_full_jid(self, account, fjid):
 		''' Get Contact object for specific resource of given jid'''
