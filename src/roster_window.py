@@ -382,7 +382,6 @@ class RosterWindow:
 				added_iters.append(i_)
 
 				# Restore the group expand state
-				# FIXME path may be invalid at this point!
 				path = self.model.get_path(child_iterG)
 				if account + group in self.collapsed_rows:
 					is_expanded = False
@@ -432,14 +431,14 @@ class RosterWindow:
 			# Remove us and empty groups from the model
 			for i in iters:
 				parent_i = self.model.iter_parent(i)
-				self.model.remove(i)
-				
 				if parent_type == 'group' and \
-				self.model.iter_n_children(parent_i) == 0:
+				self.model.iter_n_children(parent_i) == 1:	
 					group = self.model[parent_i][C_JID].decode('utf-8')
 					if gajim.groups[account].has_key(group):
 						del gajim.groups[account][group]
 					self.model.remove(parent_i)
+				else:
+					self.model.remove(i)
 			return True
 
 
@@ -551,10 +550,6 @@ class RosterWindow:
 		assert len(iters) > 0, "Old Big Brother %s is not in roster anymore" % old_big_jid
 		assert not self.model.iter_children(iters[0]),\
 			"Old Big Brother %s still has children" % old_big_jid
-		
-		# This one is strange but necessary:
-		# Refilter filtered model to not crash hard. It thinks it still has children.
-		self.refilter_shown_roster_items()
 		
 		ok = self._remove_entity(old_big_contact, old_big_account)
 		assert ok, "Old Big Brother %s not removed" % old_big_jid
@@ -1237,7 +1232,7 @@ class RosterWindow:
 		task = _draw_all_contacts(jids, account, t)
 		gobject.idle_add(task.next)
 		
-	def draw_roster(self):
+	def setup_and_draw_roster(self):
 		'''create new empty model and draw roster'''
 		#(icon, name, type, jid, account, editable, avatar_pixbuf, padlock_pixbuf)
 		self.model = gtk.TreeStore(gtk.Image, str, str, str, str, gtk.gdk.Pixbuf,
@@ -3938,7 +3933,7 @@ class RosterWindow:
 				
 	def update_jabber_state_images(self):
 		# Update the roster
-		self.draw_roster()
+		self.setup_and_draw_roster()
 		# Update the status combobox
 		model = self.status_combobox.get_model()
 		titer = model.get_iter_root()
@@ -5942,7 +5937,7 @@ class RosterWindow:
 		self.tooltip = tooltips.RosterTooltip()
 		# Workaroung: For strange reasons signal is behaving like row-changed
 		self._toggeling_row = False
-		self.draw_roster()
+		self.setup_and_draw_roster()
 
 		for account in gajim.connections:
 			if gajim.config.get_per('accounts', account, 'publish_tune'):

@@ -515,11 +515,11 @@ class PreferencesWindow:
 
 	def on_sort_by_show_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sort_by_show')
-		gajim.interface.roster.draw_roster()
+		gajim.interface.roster.setup_and_draw_roster()
 
 	def on_show_avatars_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_avatars_in_roster')
-		gajim.interface.roster.draw_roster()
+		gajim.interface.roster.setup_and_draw_roster()
 		# Redraw connected groupchats (in an ugly way)
 		for account in gajim.connections:
 			if gajim.connections[account].connected:
@@ -530,14 +530,14 @@ class PreferencesWindow:
 
 	def on_show_status_msgs_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_status_msgs_in_roster')
-		gajim.interface.roster.draw_roster()
+		gajim.interface.roster.setup_and_draw_roster()
 		for ctl in gajim.interface.msg_win_mgr.controls():
 			if ctl.type_id == message_control.TYPE_GC:
 				ctl.update_ui()
 
 	def on_sort_by_show_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sort_by_show')
-		gajim.interface.roster.draw_roster()
+		gajim.interface.roster.setup_and_draw_roster()
 
 	def on_emoticons_combobox_changed(self, widget):
 		active = widget.get_active()
@@ -570,7 +570,7 @@ class PreferencesWindow:
 			ctl.chat_buttons_set_visible(active)
 		gajim.config.set('compact_view', active)
 		gajim.interface.save_config()
-		gajim.interface.roster.draw_roster()
+		gajim.interface.roster.setup_and_draw_roster()
 
 	def on_xhtml_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'ignore_incoming_xhtml')
@@ -1753,7 +1753,7 @@ class AccountsWindow:
 			if self.current_account == old_name:
 				self.current_account = new_name
 			# refresh roster
-			gajim.interface.roster.draw_roster()
+			gajim.interface.roster.setup_and_draw_roster()
 			self.init_accounts()
 			self.select_account(new_name)
 
@@ -2077,7 +2077,7 @@ class AccountsWindow:
 			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
 		else:
 			gajim.interface.roster.regroup = False
-		gajim.interface.roster.draw_roster()
+		gajim.interface.roster.setup_and_draw_roster()
 
 	def on_enable_zeroconf_checkbutton2_toggled(self, widget):
 		# don't do anything if there is an account with the local name but is a 
@@ -2119,7 +2119,7 @@ class AccountsWindow:
 				gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
 			else:
 				gajim.interface.roster.regroup = False
-			gajim.interface.roster.draw_roster()
+			gajim.interface.roster.setup_and_draw_roster()
 			gajim.interface.roster.set_actions_menu_needs_rebuild()
 
 		elif not gajim.config.get('enable_zeroconf') and widget.get_active():
@@ -2156,7 +2156,7 @@ class AccountsWindow:
 				gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
 			else:
 				gajim.interface.roster.regroup = False
-			gajim.interface.roster.draw_roster()
+			gajim.interface.roster.setup_and_draw_roster()
 			gajim.interface.roster.set_actions_menu_needs_rebuild()
 			gajim.interface.save_config()
 
@@ -2587,7 +2587,7 @@ class RemoveAccountWindow:
 			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
 		else:
 			gajim.interface.roster.regroup = False
-		gajim.interface.roster.draw_roster()
+		gajim.interface.roster.setup_and_draw_roster()
 		gajim.interface.roster.set_actions_menu_needs_rebuild()
 		if gajim.interface.instances.has_key('accounts'):
 			gajim.interface.instances['accounts'].init_accounts()
@@ -3421,7 +3421,7 @@ class AccountCreationWizardWindow:
 			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
 		else:
 			gajim.interface.roster.regroup = False
-		gajim.interface.roster.draw_roster()
+		gajim.interface.roster.setup_and_draw_roster()
 		gajim.interface.roster.set_actions_menu_needs_rebuild()
 		gajim.interface.save_config()
 
