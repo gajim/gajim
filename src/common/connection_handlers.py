@@ -50,7 +50,6 @@ if dbus_support.supported:
 	from music_track_listener import MusicTrackListener
 
 from session import ChatControlSession
-import tictactoe
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible', 'error']
@@ -1723,22 +1722,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				'\x09\x20\x20\x09\x20', '')
 			msgtxt = msgtxt.replace('\x20\x20\x09' \
 				'\x09\x20\x20\x09\x20', '')
-
-		game_invite = msg.getTag('invite', namespace='http://jabber.org/protocol/games')
-		if game_invite:
-			game = game_invite.getTag('game')
-
-			if game.getAttr('var') == \
-			'http://jabber.org/protocol/games/tictactoe':
-				cls = tictactoe.TicTacToeSession
-
-			# this assumes that the invitation came with a thread_id we haven't
-			# seen
-			session = self.make_new_session(frm, thread_id, cls=cls)
-
-			session.invited(msg)
-
-			return
 		elif mtype != 'groupchat':
 			session = self.get_or_create_session(frm, thread_id)
 

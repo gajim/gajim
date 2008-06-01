@@ -3267,18 +3267,6 @@ class RosterWindow:
 	def on_profile_avatar_menuitem_activate(self, widget, account):
 		gajim.interface.edit_own_details(account)
 
-	def play_tictactoe(self, widget, contact, account, resource=None):
-		jid = contact.jid
-
-		if resource is not None:
-			jid = jid + u'/' + resource
-
-		import tictactoe
-
-		sess = gajim.connections[account].make_new_session(jid,
-			cls=tictactoe.TicTacToeSession)
-		sess.begin()
-
 	def on_execute_command(self, widget, contact, account, resource=None):
 		'''Execute command. Full JID needed; if it is other contact,
 		resource is necessary. Widget is unnecessary, only to be
@@ -4998,10 +4986,6 @@ class RosterWindow:
 			'add_special_notification_menuitem')
 		execute_command_menuitem = xml.get_widget(
 			'execute_command_menuitem')
-
-		tictactoe_menuitem = xml.get_widget('tictactoe_menuitem')
-		tictactoe_menuitem.connect('activate', self.play_tictactoe, contact,
-			account, contact.resource)
 
 		# send custom status icon
 		blocked = False
