@@ -2750,6 +2750,8 @@ class Interface:
 	def join_gc_room(self, account, room_jid, nick, password, minimize=False,
 		is_continued=False):
 		'''joins the room immediately'''
+		if not nick:
+			nick = gajim.nicks[account]
 		if self.msg_win_mgr.has_window(room_jid, account) and \
 				gajim.gc_connected[account][room_jid]:
 			gc_ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
