@@ -1139,6 +1139,8 @@ class ChatControl(ChatControlBase):
 		self.update_ui()
 		# restore previous conversation
 		self.restore_conversation()
+		
+		gajim.plugin_manager.gui_extension_point('chat_control', self)
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		'''we enter the eventbox area so we under conditions add a timeout

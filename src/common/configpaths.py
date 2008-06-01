@@ -92,6 +92,10 @@ class ConfigPaths:
 		self.add('DATA', os.path.join(u'..', windowsify(u'data')))
 		self.add('HOME', fse(os.path.expanduser('~')))
 		self.add('TMP', fse(tempfile.gettempdir()))
+		
+		# dirs for plugins
+		self.add('PLUGINS_BASE', os.path.join(u'..', windowsify(u'plugins')))
+		self.add_from_root('PLUGINS_USER', u'plugins')
 
 		try:
 			import svn_config

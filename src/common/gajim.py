@@ -61,6 +61,7 @@ version = config.get('version')
 connections = {} # 'account name': 'account (connection.Connection) instance'
 verbose = False
 ipython_window = None
+plugin_manager = None
 
 h = logging.StreamHandler()
 f = logging.Formatter('%(asctime)s %(name)s: %(message)s', '%d %b %Y %H:%M:%S')
@@ -85,6 +86,8 @@ MY_CACERTS =  gajimpaths['MY_CACERTS']
 TMP = gajimpaths['TMP']
 DATA_DIR = gajimpaths['DATA']
 HOME_DIR = gajimpaths['HOME']
+PLUGINS_DIRS = [gajimpaths['PLUGINS_BASE'],
+				gajimpaths['PLUGINS_USER']]
 
 try:
 	LANG = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..
