@@ -1238,10 +1238,19 @@ class RosterWindow:
 		gobject.idle_add(task.next)
 		
 	def draw_roster(self):
-		'''clear and draw roster'''
-		# clear the model, only if it is not empty
-		if self.model:
-			self.model.clear()
+		'''create new empty model and draw roster'''
+		#(icon, name, type, jid, account, editable, avatar_pixbuf, padlock_pixbuf)
+		self.model = gtk.TreeStore(gtk.Image, str, str, str, str, gtk.gdk.Pixbuf,
+			gtk.gdk.Pixbuf)
+
+		self.model.set_sort_func(1, self._compareIters)
+		self.model.set_sort_column_id(1, gtk.SORT_ASCENDING)
+		self.modelfilter = self.model.filter_new()
+		self.modelfilter.set_visible_func(self._visible_func)
+		self.modelfilter.connect('row-has-child-toggled',
+			self.on_modelfilter_row_has_child_toggled)
+		self.tree.set_model(self.modelfilter)
+
 		for acct in gajim.connections:
 			self.add_account(acct)
 			self.add_account_contacts(acct)
@@ -5784,20 +5793,6 @@ class RosterWindow:
 		self.popups_notification_height = 0
 		self.popup_notification_windows = []
 
-		#(icon, name, type, jid, account, editable, avatar_pixbuf, padlock_pixbuf)
-		self.model = gtk.TreeStore(gtk.Image, str, str, str, str, gtk.gdk.Pixbuf,
-			gtk.gdk.Pixbuf)
-
-		self.model.set_sort_func(1, self._compareIters)
-		self.model.set_sort_column_id(1, gtk.SORT_ASCENDING)
-		self.modelfilter = self.model.filter_new()
-		self.modelfilter.set_visible_func(self._visible_func)
-		self.modelfilter.connect('row-has-child-toggled',
-			self.on_modelfilter_row_has_child_toggled)
-		self.tree.set_model(self.modelfilter)
-		# Workaroung: For strange reasons signal is behaving like row-changed
-		self._toggeling_row = False
-
  		# Remove contact from roster when last event opened
 		# { (contact, account): { backend: boolean }
 		self.contacts_to_be_removed = {}
@@ -5945,6 +5940,8 @@ class RosterWindow:
 
 		self.collapsed_rows = gajim.config.get('collapsed_rows').split('\t')
 		self.tooltip = tooltips.RosterTooltip()
+		# Workaroung: For strange reasons signal is behaving like row-changed
+		self._toggeling_row = False
 		self.draw_roster()
 
 		for account in gajim.connections:
