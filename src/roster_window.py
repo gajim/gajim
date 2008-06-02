@@ -550,13 +550,13 @@ class RosterWindow:
 			old_big_contact, self.model)
 		assert len(iters) > 0, 'Old Big Brother %s is not in roster anymore' % \
 			old_big_jid
-		assert not self.model.iter_children(iters[0]),
+		assert not self.model.iter_children(iters[0]),\
 			'Old Big Brother %s still has children' % old_big_jid
 
 		ok = self._remove_entity(old_big_contact, old_big_account)
 		assert ok, "Old Big Brother %s not removed" % old_big_jid
 		assert len(self._get_contact_iter(old_big_jid, old_big_account,
-			old_big_contact, self.model)) == 0,
+			old_big_contact, self.model)) == 0,\
 			'Old Big Brother %s is removed but still in roster' % old_big_jid
 
 		return True
