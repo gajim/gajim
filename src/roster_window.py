@@ -5021,7 +5021,10 @@ class RosterWindow:
 				if group in gajim.connections[account].blocked_groups:
 					blocked = True
 					break
-		if blocked:
+		if gajim.get_transport_name_from_jid(jid, use_config_setting=False):
+			# Transport contact, send custom status unavailable
+			send_custom_status_menuitem.set_sensitive(False)
+		elif blocked:
 			send_custom_status_menuitem.set_image( \
 				gtkgui_helpers.load_icon('offline'))
 			send_custom_status_menuitem.set_sensitive(False)
@@ -5137,7 +5140,8 @@ class RosterWindow:
 				ask_auth_menuitem.connect('activate', self.req_sub, jid,
 					_('I would like to add you to my roster'), account,
 					contact.groups, contact.name)
-			if contact.sub in ('to', 'none'):
+			if contact.sub in ('to', 'none') or gajim.get_transport_name_from_jid(
+			jid, use_config_setting=False):
 				revoke_auth_menuitem.set_sensitive(False)
 			else:
 				revoke_auth_menuitem.connect('activate', self.revoke_auth, jid,
