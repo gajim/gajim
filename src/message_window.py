@@ -695,7 +695,7 @@ class MessageWindow(object):
 		if not self._controls.has_key(acct):
 			self._controls[acct] = {}
 
-		if not self.sessionless_ctrls[acct].has_key(jid):
+		if not self._controls[acct].has_key(jid):
 			self._controls[acct][jid] = {}
 
 		thread_id = ctrl.session.thread_id
