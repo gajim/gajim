@@ -3224,6 +3224,10 @@ class Interface:
 		if os.name != 'nt' and gajim.config.get('check_if_gajim_is_default'):
 			gtkgui_helpers.possibly_set_gajim_as_xmpp_handler()
 
+		for account in gajim.config.get_per('accounts'):
+			if gajim.config.get_per('accounts', account, 'is_zeroconf'):
+				gajim.ZEROCONF_ACC_NAME = account
+				break
 		# Is gnome configured to activate row on single click ?
 		try:
 			import gconf

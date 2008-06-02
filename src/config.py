@@ -1417,7 +1417,6 @@ class AccountsWindow:
 			self.current_account = account
 			if account == gajim.ZEROCONF_ACC_NAME:
 				self.remove_button.set_sensitive(False)
-				self.rename_button.set_sensitive(False)
 		self.init_account()
 		self.update_proxy_list()
 
@@ -1752,6 +1751,8 @@ class AccountsWindow:
 			gajim.config.del_per('accounts', old_name)
 			if self.current_account == old_name:
 				self.current_account = new_name
+			if old_name == gajim.ZEROCONF_ACC_NAME:
+				gajim.ZEROCONF_ACC_NAME = new_name
 			# refresh roster
 			gajim.interface.roster.setup_and_draw_roster()
 			self.init_accounts()
