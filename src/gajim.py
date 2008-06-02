@@ -2898,15 +2898,23 @@ class Interface:
 		if resource:
 			fjid += '/' + resource
 
-		win = self.msg_win_mgr.get_window(fjid, account)
+		ctrl = None
 
-		if win:
-			ctrl = win.get_controls(fjid, account)
+		if session:
+			ctrl = session.control
 		else:
-			ctrl = self.new_chat(contact, account, resource = resource)
 			win = self.msg_win_mgr.get_window(fjid, account)
+
+			if win:
+				ctrl = win.get_controls(fjid, account)[0]
+
+		if not ctrl:
+			ctrl = self.new_chat(contact, account,
+				resource = resource, session = session)
 			# last message is long time ago
 			gajim.last_message_time[account][ctrl.get_full_jid()] = 0
+
+		win = ctrl.parent_win
 
 		win.set_active_tab(ctrl)
 

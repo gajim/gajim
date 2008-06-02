@@ -153,9 +153,14 @@ class MessageControl:
 		# Doesn't return None if error
 		jid = self.contact.jid
 		original_message = message
+		conn = gajim.connections[self.account]
 
 		if not self.session:
-			sess = gajim.connections[self.account].make_new_session(jid)
+			sess = conn.find_controlless_session(jid)
+
+			if not sess:
+				sess = conn.make_new_session(jid)
+
 			self.set_session(sess)
 
 		xep_200 = bool(self.session) and self.session.enable_encryption
@@ -199,9 +204,7 @@ class MessageControl:
 				return
 
 		# Send and update history
-		return gajim.connections[self.account].send_message(jid,
-			message, keyID, type = type, chatstate = chatstate,
-			msg_id = msg_id, composing_xep = composing_xep,
+		return conn.send_message(jid, message, keyID, type = type,
+			chatstate = chatstate, msg_id = msg_id, composing_xep = composing_xep,
 			resource = self.resource, user_nick = user_nick,
-			session = self.session,
-			original_message = original_message)
+			session = self.session, original_message = original_message)

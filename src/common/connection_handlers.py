@@ -51,6 +51,8 @@ if dbus_support.supported:
 
 from session import ChatControlSession
 
+gajim.default_session_type = ChatControlSession
+
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible', 'error']
 # kind of events we can wait for an answer
@@ -1300,8 +1302,9 @@ sent a message to.'''
 		# sessions that we haven't received a thread ID in
 		idless = filter(lambda s: not s.received_thread_id, sessions)
 
-		# filter out everything exceptthe default session type
-		chat_sessions = filter(lambda s: isinstance(s, ChatControlSession), idless)
+		# filter out everything except the default session type
+		p = lambda s: isinstance(s, gajim.default_session_type)
+		chat_sessions = filter(p, idless)
 
 		if chat_sessions:
 			# return the session that we last sent a message in
@@ -1310,10 +1313,25 @@ sent a message to.'''
 		else:
 			return None
 
-	# if deferred is true, the thread ID we're generating is tem
+	def find_controlless_session(self, jid):
+		'''find an active session that doesn't have a control attached'''
+
+		try:
+			sessions = self.sessions[jid].values()
+
+			# filter out everything except the default session type
+			p = lambda s: isinstance(s, gajim.default_session_type)
+			chat_sessions = filter(p, sessions)
+
+			orphaned = filter(lambda s: not s.control, chat_sessions)
+
+			return orphaned[0]
+		except KeyError:
+			return None
+
 	def make_new_session(self, jid, thread_id=None, type='chat', cls=None):
 		if not cls:
-			cls = ChatControlSession
+			cls = gajim.default_session_type
 
 		# determine if this session is a pm session
 		# if not, discard the resource
