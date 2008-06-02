@@ -2596,23 +2596,17 @@ class RosterWindow:
 				for g in helpers.special_groups:
 					if g in (new_text, old_text):
 						return
-				# get all contacts in that group
-				for jid in gajim.contacts.get_jid_list(account):
-					contact = gajim.contacts.get_contact_with_highest_priority(
-						account, jid)
-					if old_text in contact.groups:
-						# set them in the new one and remove it from the old
-						contact.groups.remove(old_text)
-						self.remove_contact(contact.jid, account)
-						if new_text not in contact.groups:
-							contact.groups.append(new_text)
-						self.add_contact(contact.jid, account)
-						gajim.connections[account].update_contact(contact.jid,
-							contact.name, contact.groups)
-				# If last removed iter was not visible, gajim.groups is not cleaned
-				if gajim.groups[account].has_key(old_text):
-					del gajim.groups[account][old_text]
-				self.draw_group(new_text, account)
+				# update all contacts in the given group
+				if self.regroup:
+					accounts = gajim.connections.keys()
+				else:
+					accounts = [account,]
+				for acc in accounts:
+					for jid in gajim.contacts.get_jid_list(acc):
+						contact = gajim.contacts.get_first_contact_from_jid(acc, jid)
+						if old_text in contact.groups:
+							self.remove_contact_from_groups(jid, acc, [old_text,])
+							self.add_contact_to_groups(jid, acc, [new_text,])
 
 		def on_canceled():
 			if gajim.interface.instances.has_key('rename'):
