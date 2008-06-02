@@ -250,6 +250,7 @@ class Config:
 		'max_conversation_lines': [opt_int, 500, _('Maximum number of lines that are printed in conversations. Oldest lines are cleared.')],
 		'attach_notifications_to_systray': [opt_bool, False, _('If True, notification windows from notification-daemon will be attached to systray icon.')],
 		'check_idle_every_foo_seconds': [opt_int, 2, _('Choose interval between 2 checks of idleness.')],
+		'latex_png_dpi': [opt_str, '108',_('Change the value to change the size of latex formulas displayed. The higher is larger.') ],
 	}
 
 	__options_per_key = {
