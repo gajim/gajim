@@ -310,13 +310,13 @@ class RosterWindow:
 		if jids:
 			c4 = time.clock()
 		
-			print ""
-			print "--- Add account contacts of %s ---------" % account
-			print "Total Time", c4-c1	
-			print "Add contact without draw", c6-c5	
-			print "Draw groups and account", c10-c9
-			print "--- contacts added -----------------------------"
-			print ""
+			#print ""
+			#print "--- Add account contacts of %s ---------" % account
+			#print "Total Time", c4-c1	
+			#print "Add contact without draw", c6-c5	
+			#print "Draw groups and account", c10-c9
+			#print "--- contacts added -----------------------------"
+			#print ""
 
 	
 	def _add_entity(self, contact, account, groups = None,
@@ -1216,9 +1216,9 @@ class RosterWindow:
 				self.draw_contact(jid, account)
 				self.draw_avatar(jid, account)
 				yield True
-			print "--- Idle draw of %s -----------" % account
-			print "Draw contact and avatar", time.clock() - t
-			print "-------------------------------"
+			#print "--- Idle draw of %s -----------" % account
+			#print "Draw contact and avatar", time.clock() - t
+			#print "-------------------------------"
 			yield False
 		
 		t = time.clock()

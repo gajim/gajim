@@ -16,7 +16,7 @@
 ##
 
 '''
-Helper code related to plug-ins management system.
+Plug-in management related classes.
 
 :author: Mateusz Biliński <mateusz@bilinski.it>
 :since: 05/30/2008
@@ -32,29 +32,91 @@ import fnmatch
 
 import common.gajim as gajim
 
-from helpers import log, log_calls, Singleton
-from plugin import GajimPlugin
+from plugins.helpers import log, log_calls, Singleton
+from plugins.plugin import GajimPlugin
 
 class PluginManager(object):
+	'''
+	Main plug-in management class.
+	
+	Currently: 
+		- scans for plugins
+		- activates them
+		- handles GUI extension points, when called by GUI objects after plugin 
+		  is activated (by dispatching info about call to handlers in plugins)
+	
+	:todo: add more info about how GUI extension points work
+	:todo: add list of available GUI extension points
+	:todo: implement mechanism to dynamically load plugins where GUI extension
+		   points have been already called (i.e. when plugin is activated
+		   after GUI object creation)
+	:todo: implement mechanism to dynamically deactive plugins (call plugin's
+		   deactivation handler)
+	
+	'''
+	
 	__metaclass__ = Singleton
 
 	@log_calls('PluginManager')
 	def __init__(self):
 		self.plugins = []
-		self.active = []
+		'''
+		Detected plugin classes.
+		
+		Each class object in list is `GajimPlugin` subclass.
+		
+		:type: [] of class objects
+		'''
+		self.active_plugins = []
+		'''
+		Objectsof active plugins.
+		
+		These are object instances of classes held `plugins`, but only those
+		that were activated.
+		
+		:type: [] of `GajimPlugin` based objects
+		'''
 		self.gui_extension_points = {}
+		'''
+		Registered GUI extension points.
+		'''
 
 		for path in gajim.PLUGINS_DIRS:
-			self.plugins.extend(self._scan_dir_for_plugins(path))
+			self.plugins.extend(PluginManager.scan_dir_for_plugins(path))
 
 		log.debug('plugins: %s'%(self.plugins))
-		
+
 		self._activate_all_plugins()
-		
-		log.debug('active: %s'%(self.active))
-	
+
+		log.debug('active: %s'%(self.active_plugins))
+
 	@log_calls('PluginManager')
 	def gui_extension_point(self, gui_extpoint_name, *args):
+		'''
+		Invokes all handlers (from plugins) for particular GUI extension point.
+		
+		:param gui_extpoint_name: name of GUI extension point.
+		:type gui_extpoint_name: unicode
+		:param args: parameters to be passed to extension point handlers 
+			(typically and object that invokes `gui_extension_point`; however, 
+			this can be practically anything)
+		:type args: tuple
+
+		:todo: GUI extension points must be documented well - names with
+			parameters that will be passed to handlers (in plugins). Such
+			documentation must be obeyed both in core and in plugins. This
+			is a loosely coupled approach and is pretty natural in Python.
+			   
+		:bug: what if only some handlers are successfully connected? we should
+			revert all those connections that where successfully made. Maybe
+			call 'self._deactivate_plugin()' or sth similar.
+			Looking closer - we only rewrite tuples here. Real check should be
+			made in method that invokes gui_extpoints handlers.
+
+		'''
+
+		log.debug(type(args))
+
 		if gui_extpoint_name in self.gui_extension_points:
 			for handlers in self.gui_extension_points[gui_extpoint_name]:
 				handlers[0](*args)
@@ -62,36 +124,53 @@ class PluginManager(object):
 	@log_calls('PluginManager')
 	def _activate_plugin(self, plugin):
 		'''
-		:param plugin: Plugin to be activated.
-		:type plugin: class object of GajimPlugin subclass
+		:param plugin: plugin to be activated
+		:type plugin: class object of `GajimPlugin` subclass
 		'''
-		p = plugin()
 		
+		plugin_object = plugin()
+
 		success = True
-		
-		# :fix: what if only some handlers are successfully connected? we should
-		# revert all those connections that where successfully made. Maybe
-		# call 'self._deactivate_plugin()' or sth similar.
-		# Looking closer - we only rewrite tuples here. Real check should be
-		# made in method that invokes gui_extpoints handlers.
+
 		for gui_extpoint_name, gui_extpoint_handlers in \
-				p.gui_extension_points.iteritems():
-			self.gui_extension_points.setdefault(gui_extpoint_name,[]).append(
+				plugin_object.gui_extension_points.iteritems():
+			self.gui_extension_points.setdefault(gui_extpoint_name, []).append(
 					gui_extpoint_handlers)
-			
+
 		if success:
-			self.active.append(p)
-			
+			self.active_plugins.append(plugin_object)
+
 		return success
-		
+
 	@log_calls('PluginManager')
 	def _activate_all_plugins(self):
-		self.active = []
+		'''
+		Activates all plugins in `plugins`.
+		
+		Activated plugins are appended to `active_plugins` list.
+		'''
+		self.active_plugins = []
 		for plugin in self.plugins:
 			self._activate_plugin(plugin)
 
+	@staticmethod
 	@log_calls('PluginManager')
-	def _scan_dir_for_plugins(self, path):
+	def scan_dir_for_plugins(path):
+		'''
+		Scans given directory for plugin classes.
+		
+		:param path: directory to scan for plugins
+		:type path: unicode
+		
+		:return: list of found plugin classes (subclasses of `GajimPlugin`
+		:rtype: [] of class objects
+		
+		:note: currently it only searches for plugin classes in '\*.py' files
+			present in given direcotory `path` (no recursion here)
+		
+		:todo: add scanning packages
+		:todo: add scanning zipped modules
+		'''
 		plugins_found = []
 		if os.path.isdir(path):
 			dir_list = os.listdir(path)
@@ -100,30 +179,28 @@ class PluginManager(object):
 			sys.path.insert(0, path)
 			log.debug(sys.path)
 
-			for file in fnmatch.filter(dir_list, '*.py'):
-				log.debug('- "%s"'%(file))
-				file_path = os.path.join(path, file)
+			for file_name in fnmatch.filter(dir_list, '*.py'):
+				log.debug('- "%s"'%(file_name))
+				file_path = os.path.join(path, file_name)
 				log.debug('  "%s"'%(file_path))
 				if os.path.isfile(file_path):
-					module_name = os.path.splitext(file)[0]
+					module_name = os.path.splitext(file_name)[0]
 					module = __import__(module_name)
-					filter_out_bad_names = \
-										 lambda x: not (x.startswith('__') or 
-														x.endswith('__'))
-					for module_attr_name in filter(filter_out_bad_names,
-												   dir(module)):
+					for module_attr_name in [f_name for f_name in dir(module) 
+								if not (f_name.startswith('__') or 
+										f_name.endswith('__'))]:
 						module_attr = getattr(module, module_attr_name)
 						log.debug('%s : %s'%(module_attr_name, module_attr))
-						
+
 						try:
 							if issubclass(module_attr, GajimPlugin) and \
-									not module_attr is GajimPlugin:
+							   not module_attr is GajimPlugin:
 								log.debug('is subclass of GajimPlugin')
 								plugins_found.append(module_attr)
-						except TypeError, e:
+						except TypeError, type_error:
 							log.debug('module_attr: %s, error : %s'%(
-									module_name+'.'+module_attr_name,
-									e))
+								module_name+'.'+module_attr_name,
+								type_error))
 
 					log.debug(module)
 

@@ -32,30 +32,62 @@ import unittest
 gajim_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
 sys.path.append(gajim_root + '/src')
 
+# a temporary version of ~/.gajim for testing
+configdir = gajim_root + '/test/tmp'
+
+import time
+
+# define _ for i18n
+import __builtin__
+__builtin__._ = lambda x: x
+
+# wipe config directory
+import os
+if os.path.isdir(configdir):
+	import shutil
+	shutil.rmtree(configdir)
+
+os.mkdir(configdir)
+
+import common.configpaths
+common.configpaths.gajimpaths.init(configdir)
+common.configpaths.gajimpaths.init_profile()
+
+# for some reason common.gajim needs to be imported before xmpppy?
+from common import gajim
+from common import xmpp
+
+gajim.DATA_DIR = gajim_root + '/data'
+
+from common.stanza_session import StanzaSession
+
+# name to use for the test account
+account_name = 'test'
+
 from plugins import PluginManager
 
 class PluginManagerTestCase(unittest.TestCase):
-    def setUp(self):
-        self.pluginmanager = PluginManager()
-    
-    def tearDown(self):
-        pass
-    
-    def test_01_Singleton(self):
-        """ 1. Checking whether PluginManger class is singleton. """
-        self.pluginmanager.test_arg = 1
-        secondPluginManager = PluginManager()
-        
-        self.failUnlessEqual(id(secondPluginManager), id(self.pluginmanager),
-            'Different IDs in references to PluginManager objects (not a singleton)')
-        self.failUnlessEqual(secondPluginManager.test_arg, 1, 
-            'References point to different PluginManager objects (not a singleton')
-    
+	def setUp(self):
+		self.pluginmanager = PluginManager()
+
+	def tearDown(self):
+		pass
+
+	def test_01_Singleton(self):
+		""" 1. Checking whether PluginManger class is singleton. """
+		self.pluginmanager.test_arg = 1
+		secondPluginManager = PluginManager()
+
+		self.failUnlessEqual(id(secondPluginManager), id(self.pluginmanager),
+							 'Different IDs in references to PluginManager objects (not a singleton)')
+		self.failUnlessEqual(secondPluginManager.test_arg, 1, 
+							 'References point to different PluginManager objects (not a singleton')
+
 def suite():
-    suite = unittest.TestLoader().loadTestsFromTestCase(PluginManagerTestCase)
-    return suite
+	suite = unittest.TestLoader().loadTestsFromTestCase(PluginManagerTestCase)
+	return suite
 
 if __name__=='__main__':
-    runner = unittest.TextTestRunner()
-    test_suite = suite()
-    runner.run(test_suite)
+	runner = unittest.TextTestRunner()
+	test_suite = suite()
+	runner.run(test_suite)
