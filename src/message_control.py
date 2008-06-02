@@ -134,12 +134,17 @@ class MessageControl:
 			new_key = session.thread_id
 
 		if oldsession:
-			self.parent_win.change_thread_key(
-				self.contact.jid, self.account,
+			jid = self.contact.jid
+			if self.resource:
+				jid += '/' + self.resource
+
+			self.parent_win.change_thread_key(jid, self.account,
 				oldsession.thread_id, new_key)
 
 			if oldsession.enable_encryption:
 				self.print_esession_details()
+		else:
+			self.parent_win.move_from_sessionless(self)
 
 	def send_message(self, message, keyID = '', type = 'chat',
 	chatstate = None, msg_id = None, composing_xep = None, resource = None,
@@ -152,7 +157,6 @@ class MessageControl:
 		if not self.session:
 			sess = gajim.connections[self.account].make_new_session(jid)
 			self.set_session(sess)
-			self.parent_win.move_from_sessionless(self)
 
 		xep_200 = bool(self.session) and self.session.enable_encryption
 

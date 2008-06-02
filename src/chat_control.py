@@ -1112,7 +1112,9 @@ class ChatControl(ChatControlBase):
 			self.on_avatar_eventbox_button_press_event)
 		self.handlers[id] = widget
 
-		self.set_session(session)
+		self.session = session
+		if session:
+			session.control = self
 
 		# Enable ecryption if needed
 		e2e_is_active = hasattr(self, 'session') and self.session and self.session.enable_encryption

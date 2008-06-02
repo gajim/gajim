@@ -2041,7 +2041,7 @@ class Interface:
 					connection = gajim.connections[account]
 					contact = gajim.contacts.create_contact(jid = jid.getStripped(), 
 							resource = resource, show = connection.get_status())
-				self.new_chat(session, contact, account, resource = resource)
+				self.new_chat(contact, account, resource = resource, session = session)
 
 			negotiation.FeatureNegotiationWindow(account, jid, session, form)
 
@@ -2446,7 +2446,7 @@ class Interface:
 				if not session:
 					session = gajim.connections[account].get_or_create_session(fjid, None)
 
-				self.new_chat(session, contact, account, resource = resource)
+				self.new_chat(contact, account, resource = resource, session = session)
 				ctrl = session.control
 
 				gajim.last_message_time[account][jid] = 0 # long time ago
@@ -2843,7 +2843,7 @@ class Interface:
 			# We call this here to avoid race conditions with widget validation
 			session.control.read_queue()
 
-	def new_chat(self, session, contact, account, resource = None):
+	def new_chat(self, contact, account, resource = None, session = None):
 		# Get target window, create a control, and associate it with the window
 		type_ = message_control.TYPE_CHAT
 
@@ -2877,8 +2877,8 @@ class Interface:
 		session = gajim.connections[account].get_or_create_session(fjid, None)
 
 		if not self.msg_win_mgr.has_window(fjid, account):
-			session.control = self.new_chat(session, contact, account,
-				resource=resource)
+			session.control = self.new_chat(contact, account,
+				resource=resource, session=session)
 			if len(gajim.events.get_events(account, fjid)):
 				session.control.read_queue()
 
@@ -2898,41 +2898,20 @@ class Interface:
 		if resource:
 			fjid += '/' + resource
 
-		conn = gajim.connections[account]
+		win = self.msg_win_mgr.get_window(fjid, account)
 
-		if not session and fjid in conn.sessions:
-			sessions = filter(lambda s: isinstance(s, ChatControlSession),
-				conn.sessions[fjid].values())
-
-			# look for an existing session with a chat control
-			for s in sessions:
-				if s.control:
-					session = s
-					break
-
-			if not session and not len(sessions) == 0:
-				# there are no sessions with chat controls, just take the first one
-				session = sessions[0]
-
-		if not session:
-			# couldn't find an existing ChatControlSession, just make a new one
-			session = conn.make_new_session(fjid, None, 'chat')
-
-		if not session.control:
-			# open a new chat control
-			session.control = self.new_chat(session, contact, account,
-				resource=resource)
-
-			if len(gajim.events.get_events(account, fjid)):
-				session.control.read_queue()
-
+		if win:
+			ctrl = win.get_controls(fjid, account)
+		else:
+			ctrl = self.new_chat(contact, account, resource = resource)
+			win = self.msg_win_mgr.get_window(fjid, account)
 			# last message is long time ago
-			gajim.last_message_time[account][session.control.get_full_jid()] = 0
+			gajim.last_message_time[account][ctrl.get_full_jid()] = 0
 
-		win = session.control.parent_win
-		win.set_active_tab(session.control)
+		win.set_active_tab(ctrl)
 
-		if conn.is_zeroconf and conn.status in ('offline', 'invisible'):
+		if gajim.connections[account].is_zeroconf and \
+				gajim.connections[account].status in ('offline', 'invisible'):
 			for ctrl in win.get_controls(fjid, account):
 				ctrl.got_disconnected()
 

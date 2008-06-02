@@ -186,7 +186,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			if ctrl:
 				self.control = ctrl
 				self.control.set_session(self)
-				self.control.parent_win.move_from_sessionless(self.control)
 				first = False
 
 		if pm:
