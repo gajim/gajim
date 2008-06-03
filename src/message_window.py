@@ -692,6 +692,9 @@ class MessageWindow(object):
 
 		del self.sessionless_ctrls[acct][jid][idx]
 
+		if len(self.sessionless_ctrls[acct][jid]) == 0:
+			del self.sessionless_ctrls[acct][jid]
+
 		if not self._controls.has_key(acct):
 			self._controls[acct] = {}
 
