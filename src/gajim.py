@@ -1648,18 +1648,26 @@ class Interface:
 				gmail_new_messages, gmail_new_messages)
 
 			if gajim.config.get('notify_on_new_gmail_email_extra'):
+				cnt = 0
 				for gmessage in gmail_messages_list:
-					#FIXME: emulate Gtalk client popups. find out what they parse and how
-					#they decide what to show
-					# each message has a 'From', 'Subject' and 'Snippet' field
-					text += _('\nFrom: %(from_address)s') % \
-						{'from_address': gmessage['From']}
+					#FIXME: emulate Gtalk client popups. find out what they parse and
+					# how they decide what to show each message has a 'From',
+					# 'Subject' and 'Snippet' field
+					if cnt >=5:
+						break
+					senders = reduce(lambda b, a: a + ',\n     ' + b,
+						gmessage['From'])
+					text += _('\n\nFrom: %(from_address)s\nSubject: %(subject)s\n%(snippet)s') % \
+						{'from_address': senders, 'subject': gmessage['Subject'],
+						'snippet': gmessage['Snippet']} 
+					cnt += 1 
 
 			if gajim.config.get_per('soundevents', 'gmail_received', 'enabled'):
 				helpers.play_sound('gmail_received')
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			notify.popup(_('New E-mail'), jid, account, 'gmail',
-				path_to_image = path, title = title, text = text)
+				path_to_image=path, title=title,
+				text=gobject.markup_escape_text(text))
 
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewGmail', (account, array))

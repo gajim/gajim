@@ -1371,6 +1371,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		except:
 			HAS_IDLE = False
 
+		self.gmail_last_tid = None
+		self.gmail_last_time = None
+
 	def build_http_auth_answer(self, iq_obj, answer):
 		if answer == 'yes':
 			self.connection.send(iq_obj.buildReply('result'))
@@ -1582,9 +1585,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			jid = gajim.get_jid_from_account(self.name)
 			gajim.log.debug('Got notification of new gmail e-mail on %s. Asking the server for more info.' % jid)
 			iq = common.xmpp.Iq(typ = 'get')
-			iq.setAttr('id', '13')
+			iq.setID(self.connection.getAnID())
 			query = iq.setTag('query')
 			query.setNamespace(common.xmpp.NS_GMAILNOTIFY)
+			# we want only be notified about newer mails
+			if self.gmail_last_tid:
+				query.setAttr('newer-than-tid', self.gmail_last_tid)
+			if self.gmail_last_time:
+				query.setAttr('newer-than-time', self.gmail_last_time)
 			self.connection.send(iq)
 			raise common.xmpp.NodeProcessed
 
@@ -1601,16 +1609,34 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				if gm.getTag('mailbox').getTag('mail-thread-info'):
 					gmail_messages = gm.getTag('mailbox').getTags('mail-thread-info')
 					for gmessage in gmail_messages:
-						sender = gmessage.getTag('senders').getTag('sender')
-						if not sender:
+						unread_senders = []
+						for sender in gmessage.getTag('senders').getTags('sender'):
+							if sender.getAttr('unread') != '1':
+								continue
+							if sender.getAttr('name'):
+								unread_senders.append(sender.getAttr('name') + '< ' + \
+									sender.getAttr('address') + '>')
+							else:
+								unread_senders.append(sender.getAttr('address'))
+
+						if not unread_senders:
 							continue
-						gmail_from = sender.getAttr('address')
 						gmail_subject = gmessage.getTag('subject').getData()
 						gmail_snippet = gmessage.getTag('snippet').getData()
+						tid = int(gmessage.getAttr('tid'))
+						if not self.gmail_last_tid or tid > self.gmail_last_tid:
+							self.gmail_last_tid = tid
 						gmail_messages_list.append({ \
-							'From': gmail_from, \
+							'From': unread_senders, \
 							'Subject': gmail_subject, \
-							'Snippet': gmail_snippet})
+							'Snippet': gmail_snippet, \
+							'url': gmessage.getAttr('url'), \
+							'participation': gmessage.getAttr('participation'), \
+							'messages': gmessage.getAttr('messages'), \
+							'date': gmessage.getAttr('date')})
+					self.gmail_last_time = int(gm.getTag('mailbox').getAttr(
+						'result-time'))
+
 				jid = gajim.get_jid_from_account(self.name)
 				gajim.log.debug(('You have %s new gmail e-mails on %s.') % (newmsgs, jid))
 				self.dispatch('GMAIL_NOTIFY', (jid, newmsgs, gmail_messages_list))
