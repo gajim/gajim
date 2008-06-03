@@ -52,7 +52,6 @@ class PluginManager(object):
 		   after GUI object creation)
 	:todo: implement mechanism to dynamically deactive plugins (call plugin's
 		   deactivation handler)
-	
 	'''
 	
 	__metaclass__ = Singleton
@@ -80,13 +79,18 @@ class PluginManager(object):
 		'''
 		Registered GUI extension points.
 		'''
+		
+		self.gui_extension_points_handlers = {}
+		'''
+		Registered handlers of GUI extension points.
+		'''
 
 		for path in gajim.PLUGINS_DIRS:
 			self.plugins.extend(PluginManager.scan_dir_for_plugins(path))
 
 		log.debug('plugins: %s'%(self.plugins))
 
-		self._activate_all_plugins()
+		#self._activate_all_plugins()
 
 		log.debug('active: %s'%(self.active_plugins))
 
@@ -115,10 +119,17 @@ class PluginManager(object):
 
 		'''
 
-		log.debug(type(args))
-
-		if gui_extpoint_name in self.gui_extension_points:
-			for handlers in self.gui_extension_points[gui_extpoint_name]:
+		self._add_gui_extension_point_call_to_list(gui_extpoint_name, *args)
+		self._execute_all_handlers_of_gui_extension_point(gui_extpoint_name, *args)
+				
+	@log_calls('PluginManager')
+	def _add_gui_extension_point_call_to_list(self, gui_extpoint_name, *args):
+		self.gui_extension_points.setdefault(gui_extpoint_name, []).append(args)
+	
+	@log_calls('PluginManager')
+	def _execute_all_handlers_of_gui_extension_point(self, gui_extpoint_name, *args):
+		if gui_extpoint_name in self.gui_extension_points_handlers:
+			for handlers in self.gui_extension_points_handlers[gui_extpoint_name]:
 				handlers[0](*args)
 
 	@log_calls('PluginManager')
@@ -132,15 +143,28 @@ class PluginManager(object):
 
 		success = True
 
-		for gui_extpoint_name, gui_extpoint_handlers in \
-				plugin_object.gui_extension_points.iteritems():
-			self.gui_extension_points.setdefault(gui_extpoint_name, []).append(
-					gui_extpoint_handlers)
+		self._add_gui_extension_points_handlers_from_plugin(plugin_object)
+		self._handle_all_gui_extension_points_with_plugin(plugin_object)
 
 		if success:
 			self.active_plugins.append(plugin_object)
 
 		return success
+	
+	@log_calls('PluginManager')
+	def _add_gui_extension_points_handlers_from_plugin(self, plugin_object):
+		for gui_extpoint_name, gui_extpoint_handlers in \
+				plugin_object.gui_extension_points.iteritems():
+			self.gui_extension_points_handlers.setdefault(gui_extpoint_name, []).append(
+					gui_extpoint_handlers)
+	
+	@log_calls('PluginManager')
+	def _handle_all_gui_extension_points_with_plugin(self, plugin_object):
+		for gui_extpoint_name, gui_extpoint_handlers in \
+				plugin_object.gui_extension_points.iteritems():
+			if gui_extpoint_name in self.gui_extension_points:
+				for gui_extension_point_args in self.gui_extension_points[gui_extpoint_name]:
+					gui_extpoint_handlers[0](*gui_extension_point_args)
 
 	@log_calls('PluginManager')
 	def _activate_all_plugins(self):

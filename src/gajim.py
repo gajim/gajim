@@ -3208,6 +3208,7 @@ class Interface:
 			font = 'Lucida Console 9'
 		else:
 			font = 'Luxi Mono 10'
+		font="Terminus 10"
 
 		window = gtk.Window()
 		window.set_size_request(750,550)
@@ -3217,6 +3218,8 @@ class Interface:
 		view = IPythonView()
 		view.modify_font(pango.FontDescription(font))
 		view.set_wrap_mode(gtk.WRAP_CHAR)
+		view.modify_base(gtk.STATE_NORMAL, gtk.gdk.color_parse("black"));
+		view.modify_text(gtk.STATE_NORMAL, gtk.gdk.color_parse("white"));
 		sw.add(view)
 		window.add(sw)
 		window.show_all()
