@@ -1297,16 +1297,15 @@ msgstr "_Gérer le Salon"
 
 #: ../data/glade/gc_control_popup_menu.glade.h:9
 msgid "_Minimize on close"
-msgstr "_Minimiser à la fermeteure"
+msgstr "_Minimiser à la fermeture"
 
 #: ../data/glade/gc_occupants_menu.glade.h:1
 msgid "Mo_derator"
 msgstr "Mo_dérer"
 
 #: ../data/glade/gc_occupants_menu.glade.h:2
-#, fuzzy
 msgid "Occupant Actions"
-msgstr "Actions des occupants"
+msgstr "Actions des Occupants"
 
 #: ../data/glade/gc_occupants_menu.glade.h:5
 msgid "_Admin"
@@ -1538,52 +1537,44 @@ msgid "_Host:"
 msgstr "_Serveur :"
 
 #: ../data/glade/message_window.glade.h:1
-#, fuzzy
 msgid "Add this contact to roster (Ctrl-D)"
-msgstr "Ajouter le contact à la liste"
+msgstr "Ajouter le contact à la liste (Ctrl-D)"
 
 #: ../data/glade/message_window.glade.h:2
-#, fuzzy
 msgid "Bookmark this room (Ctrl-B)"
-msgstr "Enregistrer ce salon dans les marque-pages"
+msgstr "Enregistrer ce salon dans les marque-pages (Ctrl-B)"
 
 #: ../data/glade/message_window.glade.h:3
 msgid "Browse the chat history (Ctrl-H)"
 msgstr "Parcourir l'historique des conversations (Ctrl+H)"
 
 #: ../data/glade/message_window.glade.h:4
-#, fuzzy
 msgid "Change the room's subject (Ctrl-T)"
-msgstr "Changer le sujet du salon"
+msgstr "Changer le sujet du salon (Ctrl-T)"
 
 #: ../data/glade/message_window.glade.h:5
-#, fuzzy
 msgid "Change your nickname (Ctrl-N)"
-msgstr "Changer votre surnom"
+msgstr "Changer votre surnom (Ctrl-N)"
 
 #: ../data/glade/message_window.glade.h:6
-#, fuzzy
 msgid "Invite contacts to the conversation (Ctrl-G)"
-msgstr "Inviter des contacts dans la conversation"
+msgstr "Inviter des contacts dans la conversation (Ctrl-G)"
 
 #: ../data/glade/message_window.glade.h:7
-#, fuzzy
 msgid "Send a file (Ctrl-F)"
-msgstr "Envoyer un fichier"
+msgstr "Envoyer un fichier (Ctrl-F)"
 
 #: ../data/glade/message_window.glade.h:8
 msgid "Show a list of emoticons (Alt-M)"
 msgstr "Afficher une liste des émoticônes (Alt+M)"
 
 #: ../data/glade/message_window.glade.h:9
-#, fuzzy
 msgid "Show a menu of advanced functions (Alt-A)"
-msgstr "Affiche un menu de fonctions avancées"
+msgstr "Affiche un menu de fonctions avancées (Alt-A)"
 
 #: ../data/glade/message_window.glade.h:10
-#, fuzzy
 msgid "Show the contact's profile (Ctrl-I)"
-msgstr "Afficher le profil du contact (Ctrl+I)"
+msgstr "Afficher le profil du contact (Ctrl-I)"
 
 #. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
 #: ../data/glade/message_window.glade.h:12
@@ -4509,7 +4500,6 @@ msgstr ""
 "« use_latex » à True dans l'éditeur de configuration avancée."
 
 #: ../src/features_window.py:98
-#, fuzzy
 msgid "End to End Encryption"
 msgstr "Chiffrement de bout en bout"
 
