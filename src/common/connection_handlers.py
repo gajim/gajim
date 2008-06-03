@@ -1740,7 +1740,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				'\x09\x20\x20\x09\x20', '')
 			msgtxt = msgtxt.replace('\x20\x20\x09' \
 				'\x09\x20\x20\x09\x20', '')
-		elif mtype != 'groupchat':
+
+		if mtype != 'groupchat':
 			session = self.get_or_create_session(frm, thread_id)
 
 			if thread_id and not session.received_thread_id:
