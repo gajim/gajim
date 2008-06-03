@@ -156,9 +156,12 @@ class HistoryWindow:
 		keys = self.completion_dict.keys()
 		# Move the actual jid at first so we load history faster
 		actual_jid = self.jid_entry.get_text().decode('utf-8')
-		if actual_jid in keys:
-			keys.remove(actual_jid)
-		keys.insert(0, actual_jid)
+		if actual_jid.find('@') > 0:
+			# it's not 'Enter JID or Contact name' or something, but a real jid,
+			# we can really move it at first
+			if actual_jid in keys:
+				keys.remove(actual_jid)
+				keys.insert(0, actual_jid)
 		# Map jid to info tuple
 		# Warning : This for is time critical with big DB 
 		for key in keys:
