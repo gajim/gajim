@@ -10,10 +10,6 @@ sys.path.append(gajim_root + '/src')
 # a temporary version of ~/.gajim for testing
 configdir = gajim_root + '/test/tmp'
 
-import time
-
-from mock import Mock
-
 # define _ for i18n
 import __builtin__
 __builtin__._ = lambda x: x
@@ -30,9 +26,14 @@ import common.configpaths
 common.configpaths.gajimpaths.init(configdir)
 common.configpaths.gajimpaths.init_profile()
 
+import time
+
 # for some reason common.gajim needs to be imported before xmpppy?
 from common import gajim
 from common import xmpp
+
+from mock import Mock, expectParams
+from mocks import *
 
 gajim.DATA_DIR = gajim_root + '/data'
 
@@ -41,16 +42,10 @@ from common.stanza_session import StanzaSession
 # name to use for the test account
 account_name = 'test'
 
-class MockConnection(Mock):
-	def __init__(self, *args):
-		Mock.__init__(self, *args)
-		self.name = account_name
-		gajim.connections[self.name] = self
-
 class TestStanzaSession(unittest.TestCase):
 	def setUp(self):
 		self.jid = 'test@example.org/Gajim'
-		self.conn = MockConnection({'send_stanza': None})
+		self.conn = MockConnection(account_name, {'send_stanza': None})
 		self.sess = StanzaSession(self.conn, self.jid, None, 'chat')
 
 	def test_generate_thread_id(self):
@@ -77,7 +72,7 @@ class TestStanzaSession(unittest.TestCase):
 
 		self.assertEqual(msg.getThread(), self.sess.thread_id)
 
-	def test_terminate_without_sendng(self):
+	def test_terminate_without_sending(self):
 		# no termination is sent if no messages have been sent in the session
 		self.sess.terminate()
 
@@ -100,45 +95,7 @@ class TestStanzaSession(unittest.TestCase):
 
 from session import ChatControlSession
 
-class MockWindow(Mock):
-	def __init__(self, *args):
-		Mock.__init__(self, *args)
-		self.window = Mock()
-
-class MockChatControl(Mock):
-	def __init__(self, *args):
-		Mock.__init__(self, *args)
-
-		self.parent_win = MockWindow({'get_active_control': self})
-		self.session = None
-
-	def set_session(self, sess):
-		self.session = sess
-
-	def __nonzero__(self):
-		return True
-
-	def __eq__(self, other):
-		return self is other
-
-class MockInterface(Mock):
-	def __init__(self, *args):
-		Mock.__init__(self, *args)
-		self.msg_win_mgr = Mock()
-		self.roster = Mock()
-
-		self.remote_ctrl = None
-		self.minimized_controls = { account_name: {} }
-
-class MockLogger(Mock):
-	def __init__(self):
-		Mock.__init__(self, {'write': None})
-
-class MockContact(Mock):
-	def __nonzero__(self):
-		return True
-
-gajim.interface = MockInterface()
+gajim.interface = MockInterface(account_name)
 gajim.contacts.add_account(account_name)
 
 import notify
@@ -146,7 +103,7 @@ import notify
 class TestChatControlSession(unittest.TestCase):
 	def setUp(self):
 		self.jid = 'test@example.org/Gajim'
-		self.conn = MockConnection({'send_stanza': None})
+		self.conn = MockConnection(account_name, {'send_stanza': None})
 		self.sess = ChatControlSession(self.conn, self.jid, None)
 		gajim.logger = MockLogger()
 
@@ -217,6 +174,7 @@ class TestChatControlSession(unittest.TestCase):
 
 	def test_receive_already_has_control(self):
 		'''test receiving a message with a session already attached to a control'''
+
 		jid = 'bct@necronomicorp.com/Gajim'
 		msgtxt = 'testing one two three'
 
@@ -240,13 +198,16 @@ class TestChatControlSession(unittest.TestCase):
 	def test_received_orphaned_control(self):
 		'''test receiving a message when a control that doesn't have a session attached exists'''
 
-		jid = 'bct@necronomicorp.com/Gajim'
+		jid = 'bct@necronomicorp.com'
+		fjid = jid + '/Gajim'
 		msgtxt = 'testing one two three'
 
 		ctrl = MockChatControl()
 		gajim.interface.msg_win_mgr = Mock({'get_sessionless_ctrl': ctrl})
+		gajim.interface.msg_win_mgr.mockSetExpectation('get_sessionless_ctrl',
+			expectParams(account_name, jid))
 
-		self.receive_chat_msg(jid, msgtxt)
+		self.receive_chat_msg(fjid, msgtxt)
 
 		# message was logged
 		calls = gajim.logger.mockGetNamedCalls('write')
