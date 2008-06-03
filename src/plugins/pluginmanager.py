@@ -49,14 +49,22 @@ class PluginManager(object):
 	:todo: add list of available GUI extension points
 	:todo: implement mechanism to dynamically load plugins where GUI extension
 		   points have been already called (i.e. when plugin is activated
-		   after GUI object creation)
+		   after GUI object creation). [DONE?]
 	:todo: implement mechanism to dynamically deactive plugins (call plugin's
-		   deactivation handler)
+		   deactivation handler) [DONE?]
+	:todo: when plug-in is deactivated all GUI extension points are removed
+		   from `PluginManager.gui_extension_points_handlers`. But when
+		   object that invoked GUI extension point is abandoned by Gajim, eg.
+		   closed ChatControl object, the reference to called GUI extension
+		   points is still in `PluginManager.gui_extension_points`. These
+		   should be removed, so that object can be destroyed by Python.
+		   Possible solution: add call to clean up method in classes
+		   'destructors' (classes that register GUI extension points)
 	'''
 	
 	__metaclass__ = Singleton
 
-	@log_calls('PluginManager')
+	#@log_calls('PluginManager')
 	def __init__(self):
 		self.plugins = []
 		'''
@@ -68,7 +76,7 @@ class PluginManager(object):
 		'''
 		self.active_plugins = []
 		'''
-		Objectsof active plugins.
+		Instance objects of active plugins.
 		
 		These are object instances of classes held `plugins`, but only those
 		that were activated.
@@ -90,7 +98,7 @@ class PluginManager(object):
 
 		log.debug('plugins: %s'%(self.plugins))
 
-		#self._activate_all_plugins()
+		self.activate_all_plugins()
 
 		log.debug('active: %s'%(self.active_plugins))
 
@@ -133,7 +141,7 @@ class PluginManager(object):
 				handlers[0](*args)
 
 	@log_calls('PluginManager')
-	def _activate_plugin(self, plugin):
+	def activate_plugin(self, plugin):
 		'''
 		:param plugin: plugin to be activated
 		:type plugin: class object of `GajimPlugin` subclass
@@ -151,6 +159,28 @@ class PluginManager(object):
 
 		return success
 	
+	def deactivate_plugin(self, plugin_object):
+		# detaching plug-in from handler GUI extension points (calling
+		# cleaning up method that must be provided by plug-in developer
+		# for each handled GUI extension point)
+		for gui_extpoint_name, gui_extpoint_handlers in \
+				plugin_object.gui_extension_points.iteritems():
+			for gui_extension_point_args in self.gui_extension_points[gui_extpoint_name]:
+				gui_extpoint_handlers[1](*gui_extension_point_args)
+				
+		# remove GUI extension points handlers (provided by plug-in) from
+		# handlers list
+		for gui_extpoint_name, gui_extpoint_handlers in \
+				plugin_object.gui_extension_points.iteritems():
+			self.gui_extension_points_handlers[gui_extpoint_name].remove(gui_extpoint_handlers)
+			
+		# removing plug-in from active plug-ins list
+		self.active_plugins.remove(plugin_object)
+		
+	def deactivate_all_plugins(self):
+		for plugin_object in self.active_plugins:
+			self.deactivate_plugin(plugin_object)
+	
 	@log_calls('PluginManager')
 	def _add_gui_extension_points_handlers_from_plugin(self, plugin_object):
 		for gui_extpoint_name, gui_extpoint_handlers in \
@@ -167,7 +197,7 @@ class PluginManager(object):
 					gui_extpoint_handlers[0](*gui_extension_point_args)
 
 	@log_calls('PluginManager')
-	def _activate_all_plugins(self):
+	def activate_all_plugins(self):
 		'''
 		Activates all plugins in `plugins`.
 		
@@ -175,7 +205,7 @@ class PluginManager(object):
 		'''
 		self.active_plugins = []
 		for plugin in self.plugins:
-			self._activate_plugin(plugin)
+			self.activate_plugin(plugin)
 
 	@staticmethod
 	@log_calls('PluginManager')

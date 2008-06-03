@@ -74,9 +74,17 @@ length of message is exceeded.'''
 		if self.jid_is_ok(jid):
 			d = {'prev_color' : None}
 			tv = chat_control.msg_textview
-			b = tv.get_buffer()
-			h_id = b.connect('changed', self.textview_length_warning, chat_control)
+			tb = tv.get_buffer()
+			h_id = tb.connect('changed', self.textview_length_warning, chat_control)
 			d['h_id'] = h_id
+			
+			t = tb.get_text(tb.get_start_iter(), tb.get_end_iter())
+			if t:
+				len_t = len(t)
+				if len_t>self.MESSAGE_WARNING_LENGTH:
+					d['prev_color'] = tv.style.copy().base[gtk.STATE_NORMAL]
+					tv.modify_base(gtk.STATE_NORMAL, self.WARNING_COLOR)
+				
 			chat_control.length_notifier_plugin_data = d
 			
 			return True
@@ -86,9 +94,10 @@ length of message is exceeded.'''
 	@log_calls('LengthNotifierPlugin')
 	def disconnect_from_chat_control(self, chat_control):
 		d = chat_control.length_notifier_plugin_data
-		chat_control.msg_textview.get_buffer().disconnect(d['h_id'])
+		tv = chat_control.msg_textview
+		tv.get_buffer().disconnect(d['h_id'])
 		if d['prev_color']:
-			tv.modify_base(gtk.STATE_NORMAL, self.PREV_COLOR)
+			tv.modify_base(gtk.STATE_NORMAL, d['prev_color'])
 	
 	@log_calls('LengthNotifierPlugin')
 	def jid_is_ok(self, jid):
