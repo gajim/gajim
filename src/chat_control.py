@@ -2039,7 +2039,7 @@ class ChatControl(ChatControlBase):
 		# Clean events
 		gajim.events.remove_events(self.account, self.get_full_jid(),
 			types = ['printed_' + self.type_id, self.type_id])
-		# remove all register handlers on wigets, created by self.xml
+		# remove all register handlers on widgets, created by self.xml
 		# to prevent circular references among objects
 		for i in self.handlers.keys():
 			if self.handlers[i].handler_is_connected(i):

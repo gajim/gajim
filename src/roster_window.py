@@ -1156,7 +1156,6 @@ class RosterWindow:
 		gajim.gc_connected[account][room_jid]:
 			win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
 			ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid, account)
-			win.window.present()
 			win.set_active_tab(ctrl)
 			dialogs.ErrorDialog(_('You are already in group chat %s') % room_jid)
 			return
@@ -1185,7 +1184,6 @@ class RosterWindow:
 			gc_win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
 			gc_control = gc_win.get_gc_control(room_jid, account)
 			gc_win.set_active_tab(gc_control)
-			gc_win.window.present()
 		gajim.connections[account].join_gc(nick, room_jid, password)
 		if password:
 			gajim.gc_passwords[room_jid] = password
@@ -2813,7 +2811,6 @@ class RosterWindow:
 		ctrl.parent_win = mw
 		mw.new_tab(ctrl)
 		mw.set_active_tab(ctrl)
-		mw.window.present()
 		del gajim.interface.minimized_controls[account][jid]
 
 		self.remove_groupchat(jid, account)

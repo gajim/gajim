@@ -2076,7 +2076,6 @@ class GroupchatControl(ChatControlBase):
 		ctrl = win.get_controls(nick_jid, self.account)[0]
 
 		win.set_active_tab(ctrl)
-		win.window.present()
 
 		return ctrl
 

@@ -2522,7 +2522,6 @@ class Interface:
 			self.roster.draw_contact(jid, account)
 		if w:
 			w.set_active_tab(ctrl)
-			w.window.present()
 			w.window.window.focus()
 			# Using isinstance here because we want to catch all derived types
 			if isinstance(ctrl, ChatControlBase):
@@ -2764,7 +2763,6 @@ class Interface:
 				gajim.gc_connected[account][room_jid]:
 			gc_ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
 			win = gc_ctrl.parent_win
-			win.window.present()
 			win.set_active_tab(gc_ctrl)
 			dialogs.ErrorDialog(_('You are already in group chat %s') % room_jid)
 			return
@@ -2792,7 +2790,6 @@ class Interface:
 		if not minimized_control_exists:
 			gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
 			gc_control.parent_win.set_active_tab(gc_control)
-			gc_control.parent_win.window.present()
 		gajim.connections[account].join_gc(nick, room_jid, password)
 		if password:
 			gajim.gc_passwords[room_jid] = password
@@ -2892,7 +2889,6 @@ class Interface:
 
 		mw = session.control.parent_win
 		mw.set_active_tab(session.control)
-		mw.window.present()
 		# For JEP-0172
 		if added_to_roster:
 			session.control.user_nick = gajim.nicks[account]
@@ -2930,8 +2926,6 @@ class Interface:
 				gajim.connections[account].status in ('offline', 'invisible'):
 			for ctrl in win.get_controls(fjid, account):
 				ctrl.got_disconnected()
-
-		win.window.present()
 
 ################################################################################		
 ### Other Methods
