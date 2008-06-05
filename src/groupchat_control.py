@@ -916,6 +916,8 @@ class GroupchatControl(ChatControlBase):
 			gajim.contacts.remove_gc_contact(self.account, gc_contact)
 		gajim.gc_connected[self.account][self.room_jid] = False
 		ChatControlBase.got_disconnected(self)
+		# Tell connection to note the date we disconnect to avoid duplicate logs
+		gajim.connections[self.account].gc_got_disconnected(self.room_jid)
 		# We don't redraw the whole banner here, because only icon change
 		self._update_banner_state_image()
 		if self.parent_win:
@@ -1638,12 +1640,13 @@ class GroupchatControl(ChatControlBase):
 	def shutdown(self, status='offline'):
 		# destroy banner tooltip - bug #pygtk for that!
 		self.subject_tooltip.destroy()
+		if gajim.gc_connected[self.account][self.room_jid]:
+			# Tell connection to note the date we disconnect to avoid duplicate 
+			# logs. We do it only when connected because if connection was lost
+			# there may be new messages since disconnection.
+			gajim.connections[self.account].gc_got_disconnected(self.room_jid)
 		gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,
 							show='offline', status=status)
-		# save in fast table in DB at what time we had last message
-		last_history_time = \
-			gajim.connections[self.account].last_history_time[self.room_jid]
-		gajim.logger.set_room_last_message_time(self.room_jid, last_history_time)
 		nick_list = gajim.contacts.get_nick_list(self.account, self.room_jid)
 		for nick in nick_list:
 			# Update pm chat window

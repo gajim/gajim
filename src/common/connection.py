@@ -1532,6 +1532,15 @@ class Connection(ConnectionHandlers):
 		# disconnect from jabber server
 		self.connection.send(p)
 
+	def gc_got_disconnected(self, room_jid):
+		''' A groupchat got disconnected. This can be or purpose or not.
+		Save the time we quit to avoid duplicate logs AND be faster than get that
+ 		date from DB. Save it in mem AND in a small table (with fast access)
+		'''
+		log_time = time_time()
+		self.last_history_time[room_jid] = log_time
+		gajim.logger.set_room_last_message_time(room_jid, log_time)
+
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
 		'''role is for all the life of the room so it's based on nick'''
 		if not self.connection:

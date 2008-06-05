@@ -1879,7 +1879,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			no_log_for = '' 
 
 		no_log_for = no_log_for.split()
-
 		tim_int = int(float(mktime(tim)))
 
 		if self.name not in no_log_for and jid not in no_log_for and not \
@@ -1889,8 +1888,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			# so don't store it in logs
 			try:
 				gajim.logger.write('gc_msg', frm, msgtxt, tim=tim)
-				# save the time we log to avoid duplicate logs
-				self.last_history_time[jid] = tim_int
 			except exceptions.PysqliteOperationalError, e:
 				self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 
