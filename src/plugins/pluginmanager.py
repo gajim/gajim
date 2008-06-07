@@ -94,7 +94,7 @@ class PluginManager(object):
 		'''
 
 		for path in gajim.PLUGINS_DIRS:
-			self.plugins.extend(PluginManager.scan_dir_for_plugins(path))
+			self._add_plugins(PluginManager.scan_dir_for_plugins(path))
 
 		log.debug('plugins: %s'%(self.plugins))
 
@@ -102,6 +102,22 @@ class PluginManager(object):
 
 		log.debug('active: %s'%(self.active_plugins))
 
+		
+	@log_calls('PluginManager')
+	def _add_plugin(self, plugin_class):
+		'''
+		:todo: what about adding plug-ins that are already added? Module reload
+		and adding class from reloaded module or ignoring adding plug-in?
+		'''
+		plugin_class._active = False
+		plugin_class._instance = None
+		self.plugins.append(plugin_class)
+	
+	@log_calls('PluginManager')
+	def _add_plugins(self, plugin_classes):
+		for plugin_class in plugin_classes:
+			self._add_plugin(plugin_class)
+		
 	@log_calls('PluginManager')
 	def gui_extension_point(self, gui_extpoint_name, *args):
 		'''
@@ -124,7 +140,6 @@ class PluginManager(object):
 			call 'self._deactivate_plugin()' or sth similar.
 			Looking closer - we only rewrite tuples here. Real check should be
 			made in method that invokes gui_extpoints handlers.
-
 		'''
 
 		self._add_gui_extension_point_call_to_list(gui_extpoint_name, *args)
@@ -141,13 +156,13 @@ class PluginManager(object):
 				handlers[0](*args)
 
 	@log_calls('PluginManager')
-	def activate_plugin(self, plugin):
+	def activate_plugin(self, plugin_class):
 		'''
 		:param plugin: plugin to be activated
 		:type plugin: class object of `GajimPlugin` subclass
 		'''
 		
-		plugin_object = plugin()
+		plugin_object = plugin_class()
 
 		success = True
 
@@ -156,6 +171,8 @@ class PluginManager(object):
 
 		if success:
 			self.active_plugins.append(plugin_object)
+			plugin_class._instance = plugin_object
+			plugin_class._active = True
 
 		return success
 	
@@ -165,8 +182,9 @@ class PluginManager(object):
 		# for each handled GUI extension point)
 		for gui_extpoint_name, gui_extpoint_handlers in \
 				plugin_object.gui_extension_points.iteritems():
-			for gui_extension_point_args in self.gui_extension_points[gui_extpoint_name]:
-				gui_extpoint_handlers[1](*gui_extension_point_args)
+			if gui_extpoint_name in self.gui_extension_points:
+				for gui_extension_point_args in self.gui_extension_points[gui_extpoint_name]:
+					gui_extpoint_handlers[1](*gui_extension_point_args)
 				
 		# remove GUI extension points handlers (provided by plug-in) from
 		# handlers list
@@ -176,6 +194,8 @@ class PluginManager(object):
 			
 		# removing plug-in from active plug-ins list
 		self.active_plugins.remove(plugin_object)
+		plugin_object.__class__._active = False
+		del plugin_object
 		
 	def deactivate_all_plugins(self):
 		for plugin_object in self.active_plugins:

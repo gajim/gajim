@@ -32,12 +32,12 @@ from plugins import GajimPlugin
 from plugins.helpers import log, log_calls
 
 class LengthNotifierPlugin(GajimPlugin):
-	name = 'Message Length Notifier'
-	short_name = 'length_notifier'
-	version = '0.1'
-	description = '''Highlights message entry field in chat window when given 
-length of message is exceeded.'''
-	authors = ['Mateusz Biliński <mateusz@bilinski.it>']
+	name = u'Message Length Notifier'
+	short_name = u'length_notifier'
+	version = u'0.1'
+	description = u'''Highlights message entry field in chat window when given length of message is exceeded.'''
+	authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
+	homepage = u'http://blog.bilinski.it'
 
 	@log_calls('LengthNotifierPlugin')
 	def __init__(self):

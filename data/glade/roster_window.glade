@@ -193,6 +193,21 @@
                         </child>
                       </widget>
                     </child>
+                    <child>
+                      <widget class="GtkImageMenuItem" id="plugins_menuitem">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">P_lugins</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_plugins_menuitem_activate"/>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="menu-item-image16">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-disconnect</property>
+                            <property name="icon_size">1</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
                   </widget>
                 </child>
               </widget>

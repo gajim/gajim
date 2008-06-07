@@ -26,6 +26,8 @@
 ##
 
 import os
+import pycallgraph
+
 
 if os.name == 'nt':
 	import warnings
@@ -602,6 +604,8 @@ def on_exit():
 	if sys.platform == 'darwin':
 		import osx
 		osx.shutdown()
+	
+	#pycallgraph.make_dot_graph('common.xmpp-only.dot', format='dot')
 
 import atexit
 atexit.register(on_exit)
@@ -3231,6 +3235,9 @@ class Interface:
 		gajim.ipython_window = window
 
 	def __init__(self):
+		#filter_func = pycallgraph.GlobbingFilter(include=['common.xmpp.*'])
+		#pycallgraph.start_trace(filter_func=filter_func)
+		
 		gajim.interface = self
 		# This is the manager and factory of message windows set by the module
 		self.msg_win_mgr = None

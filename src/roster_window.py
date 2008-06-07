@@ -44,6 +44,8 @@ import message_control
 import adhoc_commands
 import notify
 import features_window
+import plugins
+import plugins.gui
 
 from common import gajim
 from common import helpers
@@ -3129,6 +3131,12 @@ class RosterWindow:
 			gajim.interface.instances['preferences'].window.present()
 		else:
 			gajim.interface.instances['preferences'] = config.PreferencesWindow()
+			
+	def on_plugins_menuitem_activate(self, widget):
+		if gajim.interface.instances.has_key('plugins'):
+			gajim.interface.instances['plugins'].window.present()
+		else:
+			gajim.interface.instances['plugins'] = plugins.gui.PluginsWindow()
 
 	def on_publish_tune_checkbutton_toggled(self, widget, account):
 		if widget.get_active():
