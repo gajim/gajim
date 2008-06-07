@@ -27,7 +27,10 @@ from common import gajim
 from common import helpers
 
 if sys.platform == 'darwin':
-	import osx
+	try:
+		import osx
+	except:
+		pass
 
 class StatusIcon(systray.Systray):
 	'''Class for the notification area icon'''

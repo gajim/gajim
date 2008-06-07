@@ -29,8 +29,11 @@ _GAJIM_ERROR_IFACE = 'org.gajim.dbus.Error'
 
 try:
 	if sys.platform == 'darwin':
-		import osx.dbus
-		osx.dbus.load(True)
+		try:
+			import osx.dbus
+			osx.dbus.load(True)
+		except:
+			pass
 	import dbus
 	import dbus.service
 	import dbus.glib

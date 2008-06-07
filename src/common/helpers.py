@@ -53,8 +53,10 @@ except ImportError:
 	hash_md5 = md5.new
 	hash_sha1 = sha.new
 
-if sys.platform == 'darwin':
+try:
 	from osx import nsapp
+except:
+	pass
 
 try:
 	import winsound # windows-only built-in module for playing wav
@@ -570,7 +572,10 @@ def play_sound_file(path_to_soundfile):
 	if path_to_soundfile is None or not os.path.exists(path_to_soundfile):
 		return
 	if sys.platform == 'darwin':
-		nsapp.playFile(path_to_soundfile)
+		try:
+			nsapp.playFile(path_to_soundfile)
+		except:
+			pass
 	elif os.name == 'nt':
 		try:
 			winsound.PlaySound(path_to_soundfile,

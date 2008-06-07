@@ -61,8 +61,10 @@ if dbus_support.supported:
 	import dbus
 from lastfm_track_listener import LastFMTrackListener
 
-if sys.platform == 'darwin':
+try:
 	from osx import syncmenu
+except:
+	pass
 
 #(icon, name, type, jid, account, editable, second pixbuf)
 (
@@ -4476,7 +4478,10 @@ class RosterWindow:
 			advanced_sub_menu.show_all()
 
 		if sys.platform == 'darwin':
-			syncmenu.takeover_menu(self.xml.get_widget('menubar'))
+			try:
+				syncmenu.takeover_menu(self.xml.get_widget('menubar'))
+			except:
+				pass
 
 		self.actions_menu_needs_rebuild = False
 
@@ -5692,6 +5697,8 @@ class RosterWindow:
 		return True
 
 	def setup_for_osx(self):
+		# This is broken
+		return
 		'''Massage the GTK menu so it will match up to the OS/X nib style menu
 		when passed to sync-menu and merged'''
 		main_menu = self.xml.get_widget('menubar')

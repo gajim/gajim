@@ -600,8 +600,11 @@ def on_exit():
 	if os.path.exists(pid_filename):
 		os.remove(pid_filename)
 	if sys.platform == 'darwin':
-		import osx
-		osx.shutdown()
+		try:
+			import osx
+			osx.shutdown()
+		except:
+			pass
 
 import atexit
 atexit.register(on_exit)
@@ -3461,8 +3464,11 @@ if __name__ == '__main__':
 	check_paths.check_and_possibly_create_paths()
 
 	if sys.platform == 'darwin':
-		import osx
-		osx.init()
+		try:
+			import osx
+			osx.init()
+		except:
+			pass
 
 	Interface()
 
