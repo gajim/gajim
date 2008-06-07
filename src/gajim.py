@@ -142,8 +142,16 @@ try:
 	import gtk
 except Warning, msg:
 	if str(msg) == 'could not open display':
-		print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
-		sys.exit()
+		if sys.platform == 'darwin':
+			os.system('/Applications/Utilities/X11.app/Contents/MacOS/X11 &')
+			try:
+				import gtk
+			except Warning, msg:
+				print >> sys.stderr, _('No X11 running and failed to start it! Quitting...')
+				sys.exit()
+		else:
+			print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
+			sys.exit()
 warnings.resetwarnings()
 
 if os.name == 'nt':
