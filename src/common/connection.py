@@ -1123,6 +1123,14 @@ class Connection(ConnectionHandlers):
 				namespace=common.xmpp.NS_ADDRESS)
 			addresses.addChild('address', attrs = {'type': 'ofrom',
 				'jid': forward_from})
+
+		# TODO: We should also check if the other end supports it
+		#       as XEP 0184 says checking is a SHOULD. Maybe we should
+		#       implement section 6 of the XEP as well?
+		if msgtxt and gajim.config.get_per('accounts', self.name,
+		'request_receipt'):
+			msg_iq.setTag('request', namespace='urn:xmpp:receipts')
+
 		if session:
 			# XEP-0201
 			session.last_send = time.time()
@@ -1131,7 +1139,6 @@ class Connection(ConnectionHandlers):
 			# XEP-0200
 			if session.enable_encryption:
 				msg_iq = session.encrypt_stanza(msg_iq)
-
 
 		self.connection.send(msg_iq)
 		if not forward_from and session and session.is_loggable():

@@ -1693,6 +1693,16 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		encrypted = False
 		xep_200_encrypted = msg.getTag('c', namespace=common.xmpp.NS_STANZA_CRYPTO)
+		
+		# Receipt requested
+		if msg.getTag('request', namespace='urn:xmpp:receipts') and \
+		gajim.config.get_per('accounts', self.name, 'answer_receipt'):
+			receipt = common.xmpp.Message(to = jid, typ = 'chat')
+			receipt.setID(msg.getID())
+			receipt.setTag('received',
+				namespace='urn:xmpp:receipts')
+			receipt.setThread(thread_id)
+			con.send(receipt)
 
 		# We don't trust libotr, that's why we only pass the message
 		# to it if necessary. otrl_proto_message_type does this check.
