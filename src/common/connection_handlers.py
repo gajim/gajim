@@ -1695,6 +1695,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		xep_200_encrypted = msg.getTag('c', namespace=common.xmpp.NS_STANZA_CRYPTO)
 		
 		# Receipt requested
+		# TODO: We shouldn't answer if we're invisible!
 		if msg.getTag('request', namespace='urn:xmpp:receipts') and \
 		gajim.config.get_per('accounts', self.name, 'answer_receipt'):
 			receipt = common.xmpp.Message(to = jid, typ = 'chat')
