@@ -181,12 +181,9 @@ class RosterWindow:
 				# We don't know this contact
 				return
 
-		groups = contact.groups
-		if not groups:
-			groups = [_('General')]
 		acct = self._get_account_iter(account, model)
 		found = [] # the contact iters. One per group
-		for group in groups:
+		for group in contact.groups:
 			group_iter = self._get_group_iter(group, account, acct,  model)
 			contact_iter = model.iter_children(group_iter)
 
@@ -356,11 +353,7 @@ class RosterWindow:
 		else:
 			# We are a normal contact. Add us to our groups.
 			if not groups:
-				if contact.is_observer():
-					contact.groups = [_('Observers')]
 				groups = contact.groups
-				if not groups:
-					groups = [_('General')]
 			for group in groups:
 				child_iterG = self._get_group_iter(group, account, model=self.model)
 				if not child_iterG:
@@ -630,16 +623,11 @@ class RosterWindow:
 			self._add_entity(contact, account)
 
 		# Draw the contact and its groups contact
-		if is_observer:
-			contact.groups = [_('Observers')]
-		groups = contact.groups
-		if not groups:
-			groups = [_('General')]
 		if not self.starting:
 			for c, acc in contacts:
 				self.draw_contact(c.jid, acc)
 				self.draw_avatar(c.jid, acc)
-			for group in groups:
+			for group in contact.groups:
 				self.draw_group(group, account)
 			self.draw_account(account)
 
@@ -685,18 +673,13 @@ class RosterWindow:
 				self._remove_entity(contact, account)
 
 			# Draw all groups of the contact
-			groups = contact.groups
-			if contact.is_observer():
-				contact.groups = [_('Observers')]
-			if not groups:
-				groups = [_('General')]
 
 			if backend:
 				# Remove contact before redrawing, otherwise the old
 				# numbers will still be show
 				gajim.contacts.remove_jid(account, jid)
 
-			for group in groups:
+			for group in contact.groups:
 				self.draw_group(group, account)
 			self.draw_account(account)
 
@@ -950,14 +933,6 @@ class RosterWindow:
 
 		name = gobject.markup_escape_text(contact.get_shown_name())
 
-		groups = contact.groups
-		if contact.is_observer():
-			groups = [_('Observers')]
-		elif not groups and \
-		not contact.jid == gajim.get_jid_from_account(account):
-			# no group, and not self contact
-			groups = [_('General')]
-
 		# gets number of unread gc marked messages
 		if jid in gajim.interface.minimized_controls[account]:
 			nb_unread = len(gajim.events.get_events(account, jid,
@@ -975,7 +950,7 @@ class RosterWindow:
 		if jid in gajim.connections[account].blocked_contacts:
 			strike = True
 		else:
-			for group in groups:
+			for group in contact.groups:
 				if group in gajim.connections[account].blocked_groups:
 					strike = True
 					break
@@ -1126,11 +1101,13 @@ class RosterWindow:
 			self.draw_contact(c.jid, acc)
 			self.draw_avatar(c.jid, acc)
 
-		for group in groups:
+		for group in contact.groups:
 			# We need to make sure that _visible_func is called for
 			# our groups otherwise we might not be shown
 			iterG = self._get_group_iter(group, account, model = self.model)
-			self.model[iterG][C_JID] = self.model[iterG][C_JID]
+			if iterG:
+				# it's not self contact
+				self.model[iterG][C_JID] = self.model[iterG][C_JID]
 
 		return False
 
@@ -1199,16 +1176,10 @@ class RosterWindow:
 		'''
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 
-		groups = contact.groups
-		if contact.is_observer():
-			contact.groups = [_('Observers')]
-		if not groups:
-			groups = [_('General')]
-
 		self.draw_contact(jid, account)
 		self.draw_account(account)
 
-		for group in groups:
+		for group in contact.groups:
 			self.draw_group(group, account)
 			# FIXME: Is this needed, Jim?
 			#self._adjust_group_expand_collapse_state(group, account)
@@ -1379,9 +1350,7 @@ class RosterWindow:
 				for contact in gajim.contacts.iter_contacts(_acc):
 					# Is this contact in this group ? (last part of if check if it's 
 					# self contact) 
-					if group in contact.groups or (group == _('General') and not \
-					contact.groups and \
-					not contact.jid == gajim.get_jid_from_account(account)):
+					if group in contact.groups:
 						if self.contact_is_visible(contact, _acc):
 							return True
 			return False
@@ -1889,9 +1858,9 @@ class RosterWindow:
 				gajim.contacts.remove_contact(account, contact)
 		elif contact.jid == gajim.get_jid_from_account(account) and \
 		show == 'offline':
-			# Our SelfContact went offline. Remove him
+			# Our SelfContact went offline. Remove him from roster and contacts
 			self.remove_contact(contact.jid, account)
-
+			gajim.contacts.remove_contact(account, contact) 
 		# print status in chat window and update status/GPG image
 		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
 			win = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
@@ -1943,9 +1912,11 @@ class RosterWindow:
 					for contact in [c for c in lcontact if (c.show != 'offline' or \
 					c.is_transport())]:
 						self.chg_contact_status(contact, 'offline', '', account)
-				# Remove SelfContact from roster. It might be gone when we return
-				self.remove_contact(gajim.get_jid_from_account(account), account)
-
+				# Remove SelfContact from roster and remove it.
+				# It might be gone when we return
+				self_jid = gajim.get_jid_from_account(account)
+				self.remove_contact(self_jid, account)
+				gajim.contacts.remove_jid(account, self_jid)
 			self.actions_menu_needs_rebuild = True
 		self.update_status_combobox()
 		# Force the rebuild now since the on_activates on the menu itself does
@@ -2323,7 +2294,7 @@ class RosterWindow:
 							if not show:
 								show = 'online'
 							contact = gajim.contacts.create_contact(jid = jid,
-								name = account, show = show,
+								name = account, groups = ['self_contact'], show = show,
 								status = roster.getStatus(jid+'/'+resource),
 								resource = resource,
 								priority = roster.getPriority(jid+'/'+resource))
@@ -4704,8 +4675,7 @@ class RosterWindow:
 		for jid in gajim.contacts.get_jid_list(account):
 			contact = gajim.contacts.get_contact_with_highest_priority(account,
 					jid)
-			if group in contact.groups or (contact.groups == [] and group == \
-			_('General')):
+			if group in contact.groups:
 				if contact.show not in ('offline', 'error'):
 					list_online.append((contact, account))
 				list_.append((contact, account))
@@ -4996,12 +4966,7 @@ class RosterWindow:
 		if jid in gajim.connections[account].blocked_contacts:
 			blocked = True
 		else:
-			groups = contact.groups
-			if contact.is_observer():
-				groups = [_('Observers')]
-			elif not groups:
-				groups = [_('General')]
-			for group in groups:
+			for group in contact.groups:
 				if group in gajim.connections[account].blocked_groups:
 					blocked = True
 					break

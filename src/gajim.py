@@ -664,7 +664,7 @@ class Interface:
 					if resource == gajim.connections[account].server_resource:
 						return
 					contact1 = gajim.contacts.create_contact(jid = ji,
-						name = gajim.nicks[account], groups = [],
+						name = gajim.nicks[account], groups = ['self_contact'],
 						show = array[1], status = status_message, sub = 'both',
 						ask = 'none', priority = priority, keyID = keyID,
 						resource = resource)

@@ -1496,7 +1496,7 @@ class ChatControl(ChatControlBase):
 			# if peer supports jep85 and we are not 'ask', send 'active'
 			# NOTE: first active and 'ask' is set in gajim.py
 			elif composing_xep is not False:
-				#send active chatstate on every message (as JEP says)
+				# send active chatstate on every message (as XEP says)
 				chatstate_to_send = 'active'
 				contact.our_chatstate = 'active'
 

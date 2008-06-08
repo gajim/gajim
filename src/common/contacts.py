@@ -32,7 +32,7 @@ class Contact:
 		self.jid = jid
 		self.name = name
 		self.contact_name = '' # nick choosen by contact
-		self.groups = groups
+		self.groups = groups # See below for what we do if it's empty
 		self.show = show
 		self.status = status
 		self.sub = sub
@@ -63,7 +63,11 @@ class Contact:
 		# this is contact's chatstate
 		self.chatstate = chatstate
 		self.last_status_time = last_status_time
-
+		if not self.groups:
+			if self.is_observer():
+				self.groups = [_('Observers')]
+			else:
+				self.groups = [_('General')]
 		self.mood = mood.copy()
 		self.tune = tune.copy()
 		self.activity = activity.copy()
@@ -311,18 +315,8 @@ class Contacts:
 				if groups == []:
 					in_groups = True
 				else:
-					contact_groups = contact.groups
-					if not contact_groups:
-						# Contact is not in a group, so count it in General or
-						# Transports group
-						if common.gajim.jid_is_transport(jid):
-							contact_groups = [_('Transports')]
-						if contact.is_observer():
-							contact_groups = [_('Observers')]
-						else:
-							contact_groups = [_('General')]
 					for group in groups:
-						if group in contact_groups:
+						if group in contact.groups:
 							in_groups = True
 							break
 
