@@ -32,7 +32,7 @@ try:
 		try:
 			import osx.dbus
 			osx.dbus.load(True)
-		except:
+		except ImportError:
 			pass
 	import dbus
 	import dbus.service

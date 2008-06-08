@@ -29,7 +29,7 @@ from common import helpers
 if sys.platform == 'darwin':
 	try:
 		import osx
-	except:
+	except ImportError:
 		pass
 
 class StatusIcon(systray.Systray):

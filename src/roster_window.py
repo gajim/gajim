@@ -63,7 +63,7 @@ from lastfm_track_listener import LastFMTrackListener
 
 try:
 	from osx import syncmenu
-except:
+except ImportError:
 	pass
 
 #(icon, name, type, jid, account, editable, second pixbuf)
@@ -4480,7 +4480,7 @@ class RosterWindow:
 		if sys.platform == 'darwin':
 			try:
 				syncmenu.takeover_menu(self.xml.get_widget('menubar'))
-			except:
+			except NameError:
 				pass
 
 		self.actions_menu_needs_rebuild = False

@@ -55,7 +55,7 @@ except ImportError:
 
 try:
 	from osx import nsapp
-except:
+except ImportError:
 	pass
 
 try:
@@ -574,7 +574,7 @@ def play_sound_file(path_to_soundfile):
 	if sys.platform == 'darwin':
 		try:
 			nsapp.playFile(path_to_soundfile)
-		except:
+		except NameError:
 			pass
 	elif os.name == 'nt':
 		try:

@@ -143,6 +143,7 @@ try:
 except Warning, msg:
 	if str(msg) == 'could not open display':
 		if sys.platform == 'darwin':
+			# TODO: This starts also xterm by default. Find a better way
 			os.system('/Applications/Utilities/X11.app/Contents/MacOS/X11 &')
 			try:
 				import gtk
@@ -611,7 +612,7 @@ def on_exit():
 		try:
 			import osx
 			osx.shutdown()
-		except:
+		except ImportError:
 			pass
 
 import atexit
@@ -3475,7 +3476,7 @@ if __name__ == '__main__':
 		try:
 			import osx
 			osx.init()
-		except:
+		except ImportError:
 			pass
 
 	Interface()
