@@ -385,13 +385,10 @@ class RosterWindow:
 				added_iters.append(i_)
 
 				# Restore the group expand state
-				path = self.model.get_path(child_iterG)
 				if account + group in self.collapsed_rows:
 					is_expanded = False
-					self.tree.collapse_row(path)
 				else:
 					is_expanded = True
-					self.tree.expand_row(path, False)
 				if group not in gajim.groups[account]:
 					gajim.groups[account][group] = {'expand': is_expanded}
 
