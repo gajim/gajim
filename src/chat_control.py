@@ -619,7 +619,7 @@ class ChatControlBase(MessageControl):
 		'''Send the given message to the active tab. Doesn't return None if error
 		'''
 		if not message or message == '\n':
-			return 1
+			return None
 
 		ret = None
 
@@ -1453,7 +1453,7 @@ class ChatControl(ChatControlBase):
 	def send_message(self, message, keyID = '', chatstate = None):
 		'''Send a message to contact'''
 		if message in ('', None, '\n') or self._process_command(message):
-			return
+			return None
 
 		# Do we need to process command for the message ?
 		process_command = True
@@ -1504,12 +1504,12 @@ class ChatControl(ChatControlBase):
 				gobject.source_remove(self.possible_inactive_timeout_id)
 				self._schedule_activity_timers()
 
-		ChatControlBase.send_message(self, message, keyID,
-			type = 'chat', chatstate = chatstate_to_send,
-			composing_xep = composing_xep,
-			process_command = process_command)
-		self.print_conversation(message, self.contact.jid,
-			encrypted = encrypted)
+		if ChatControlBase.send_message(self, message, keyID,
+		type = 'chat', chatstate = chatstate_to_send,
+		composing_xep = composing_xep,
+		process_command = process_command):
+			self.print_conversation(message, self.contact.jid,
+				encrypted = encrypted)
 
 	def check_for_possible_paused_chatstate(self, arg):
 		''' did we move mouse of that window or write something in message
