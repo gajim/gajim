@@ -143,7 +143,9 @@ try:
 except Warning, msg:
 	if str(msg) == 'could not open display':
 		if sys.platform == 'darwin':
-			# TODO: This starts also xterm by default. Find a better way
+			# It seems there is no way to open X11 without also
+			# opening an xterm. Even Apple's open-x11 script
+			# opens the application AND an xterm.
 			os.system('/Applications/Utilities/X11.app/Contents/MacOS/X11 &')
 			try:
 				import gtk
