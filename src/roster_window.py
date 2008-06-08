@@ -953,7 +953,9 @@ class RosterWindow:
 		groups = contact.groups
 		if contact.is_observer():
 			groups = [_('Observers')]
-		elif not groups:
+		elif not groups and \
+		not contact.jid == gajim.get_jid_from_account(account):
+			# no group, and not self contact
 			groups = [_('General')]
 
 		# gets number of unread gc marked messages
@@ -1375,9 +1377,11 @@ class RosterWindow:
 				accounts = [account]
 			for _acc in accounts:
 				for contact in gajim.contacts.iter_contacts(_acc):
-					# Is this contact in this group ?
+					# Is this contact in this group ? (last part of if check if it's 
+					# self contact) 
 					if group in contact.groups or (group == _('General') and not \
-					contact.groups):
+					contact.groups and \
+					not contact.jid == gajim.get_jid_from_account(account)):
 						if self.contact_is_visible(contact, _acc):
 							return True
 			return False
