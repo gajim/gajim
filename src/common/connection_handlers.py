@@ -1218,9 +1218,6 @@ class ConnectionHandlersBase:
 		# keep track of sessions this connection has with other JIDs
 		self.sessions = {}
 
-		if gajim.otr_module:
-			self.otr_userstates = gajim.otr_module.otrl_userstate_create()
-
 	def _FeatureNegCB(self, con, stanza, session):
 		gajim.log.debug('FeatureNegCB')
 		feature = stanza.getTag(name='feature', namespace=common.xmpp.NS_FEATURE)
@@ -1704,79 +1701,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				namespace='urn:xmpp:receipts')
 			receipt.setThread(thread_id)
 			con.send(receipt)
-
-		# We don't trust libotr, that's why we only pass the message
-		# to it if necessary. otrl_proto_message_type does this check.
-		if gajim.otr_module and not xep_200_encrypted \
-		and isinstance(msgtxt, unicode) and \
-		gajim.otr_module.otrl_proto_message_type(msgtxt.encode()) != \
-		gajim.otr_module.OTRL_MSGTYPE_NOTOTR:
-			# set to encrypted if it's really encrypted.
-			if gajim.otr_module.otrl_proto_message_type(
-			msgtxt.encode()) != \
-			gajim.otr_module.OTRL_MSGTYPE_TAGGEDPLAINTEXT:
-				encrypted = True
-
-			# TODO: Do we really need .encode()?
-			# yes we do. OTR can't handle unicode.
-			otr_msg_tuple = \
-				gajim.otr_module.otrl_message_receiving(
-				self.otr_userstates,
-				(gajim.otr_ui_ops, {'account': self.name}),
-				gajim.get_jid_from_account(self.name).encode(),
-				gajim.OTR_PROTO,
-				frm.encode(),
-				msgtxt.encode(),
-				(gajim.otr_add_appdata, self.name))
-			msgtxt = unicode(otr_msg_tuple[1])
-
-			html_node = msg.getTag('html')
-			if html_node:
-				msg.delChild(html_node)
-			msg.setBody(msgtxt)
-
-			if gajim.otr_module.otrl_tlv_find(
-			otr_msg_tuple[2],
-			gajim.otr_module.OTRL_TLV_DISCONNECTED) != None:
-				gajim.otr_ui_ops.gajim_log(_('%s ' \
-					'has ended his/her private ' \
-					'conversation with you. You should ' \
-					'do the same.') % frm,
-					self.name,
-					frm.encode())
-
-				ctrls = gajim.interface.msg_win_mgr.get_chat_controls(jid, self.name)
-				for ctrl in ctrls:
-					ctrl.update_otr()
-
-			ctx = gajim.otr_module. \
-				otrl_context_find(
-				self.otr_userstates,
-				frm.encode(),
-				gajim.get_jid_from_account(
-				self.name).encode(),
-				gajim.OTR_PROTO, 1,
-				(gajim.otr_add_appdata,
-				self.name))[0]
-			tlvs = otr_msg_tuple[2]
-			ctx.app_data.handle_tlv(tlvs)
-
-			if msgtxt == '':
-				return
-		elif msgtxt != None and msgtxt != '':
-			gajim.otr_dont_append_tag[frm] = True
-
-			# We're also here if we just don't
-			# support OTR. Thus, we should strip
-			# the tags from plaintext messages
-			# since they look ugly.
-			msgtxt = msgtxt.replace('\x20\x09\x20' \
-				'\x20\x09\x09\x09\x09\x20\x09' \
-				'\x20\x09\x20\x09\x20\x20', '')
-			msgtxt = msgtxt.replace('\x20\x09\x20' \
-				'\x09\x20\x20\x09\x20', '')
-			msgtxt = msgtxt.replace('\x20\x20\x09' \
-				'\x09\x20\x20\x09\x20', '')
 
 		if mtype != 'groupchat':
 			session = self.get_or_create_session(frm, thread_id)

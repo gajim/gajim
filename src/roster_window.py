@@ -1837,19 +1837,6 @@ class RosterWindow:
 			elif gajim.sleeper_state[account] not in ('autoaway', 'autoxa'):
 				gajim.sleeper_state[account] = 'off'
 
-			if gajim.otr_module:
-				# disconnect from ENCRYPTED OTR contexts when going
-				# offline/invisible
-				if status == 'offline' or status == 'invisible':
-					ctx = gajim.connections[account].otr_userstates.context_root
-					while ctx is not None:
-						if ctx.msgstate == gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED:
-							disconnected = True
-							gajim.otr_module.otrl_message_disconnect(gajim.connections[
-								account].otr_userstates, (gajim.otr_ui_ops,
-								{'account': account,'urgent': True}), ctx.accountname,
-								ctx.protocol, ctx.username)
-						ctx = ctx.next
 		if to:
 			gajim.connections[account].send_custom_status(status, txt, to)
 		else:

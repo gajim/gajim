@@ -313,7 +313,6 @@ class Config:
 			'use_env_http_proxy' : [opt_bool, False],
 			'answer_receipt' : [opt_bool, True, _('Answer to receipt requests')],
 			'request_receipt' : [opt_bool, True, _('Sent receipt requests')],
-			'otr_flags': [opt_int, 58 ],
 			'publish_mood': [opt_bool, True],
 			'publish_activity': [opt_bool, True],
 			'publish_tune': [opt_bool, False],
@@ -372,7 +371,6 @@ class Config:
 		'contacts': ({
 			'gpg_enabled': [ opt_bool, False, _('Is OpenPGP enabled for this contact?')],
 			'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
-			'otr_flags': [opt_int, -1 ],
 		}, {}),
 		'rooms': ({
 			'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],

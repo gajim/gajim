@@ -163,46 +163,6 @@ class MessageControl:
 
 			self.set_session(sess)
 
-		xep_200 = bool(self.session) and self.session.enable_encryption
-
-		if gajim.otr_module and not xep_200 and (jid not in gajim.otr_dont_append_tag):
-			if type == 'chat' and isinstance(message, unicode):
-				d = {'kwargs': {'keyID': keyID, 'type': type,
-					'chatstate': chatstate,
-					'msg_id': msg_id,
-					'composing_xep': composing_xep,
-					'resource': self.resource,
-					'user_nick': user_nick,
-					'session': self.session,
-					'original_message': original_message},
-					'account': self.account}
-
-				new_msg = gajim.otr_module.otrl_message_sending(
-					self.session.conn.otr_userstates,
-					(gajim.otr_ui_ops, d),
-					gajim.get_jid_from_account(
-					self.account).encode(),
-					gajim.OTR_PROTO,
-					self.contact.get_full_jid().encode(),
-					message.encode(), None,
-					(gajim.otr_add_appdata, self.account))
-
-				ctx = gajim.otr_module.otrl_context_find(
-					self.session.conn.otr_userstates,
-					self.contact.get_full_jid().encode(),
-					gajim.get_jid_from_account(
-					self.account).encode(),
-					gajim.OTR_PROTO, 1,
-					(gajim.otr_add_appdata,
-					self.account))[0]
-
-				# we send all because inject_message can filter
-				# on HTML stuff then
-				gajim.otr_module.otrl_message_fragment_and_send(
-					(gajim.otr_ui_ops, d), ctx, new_msg,
-					gajim.otr_module.OTRL_FRAGMENT_SEND_ALL)
-				return
-
 		# Send and update history
 		return conn.send_message(jid, message, keyID, type = type,
 			chatstate = chatstate, msg_id = msg_id, composing_xep = composing_xep,

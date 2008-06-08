@@ -896,20 +896,6 @@ class Connection(ConnectionHandlers):
 		self.on_connect_auth = self._init_roster
 		self.connect_and_auth()
 
-		if gajim.otr_module:
-			try:
-				gajim.otr_module.otrl_privkey_read(self.otr_userstates,
-					os.path.join(gajim.gajimpaths.root,
-					'%s.key' % self.name).encode())
-				gajim.otr_module.otrl_privkey_read_fingerprints(
-					self.otr_userstates, os.path.join(
-					gajim.gajimpaths.root, '%s.fpr' %
-					self.name).encode(),
-					(gajim.otr_add_appdata, self.name))
-			except Exception, e:
-				if not hasattr(e, 'os_errno') or e.os_errno != 2:
-					raise
-
 	def _init_roster(self, con):
 		self.connection = con
 		if not self.connection:
