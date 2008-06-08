@@ -621,13 +621,14 @@ class ChatControlBase(MessageControl):
 		if not message or message == '\n':
 			return 1
 
+		ret = None
+
 		if not process_command or not self._process_command(message):
 			ret = MessageControl.send_message(self, message, keyID, type = type,
 				chatstate = chatstate, msg_id = msg_id,
 				composing_xep = composing_xep, resource = resource,
 				user_nick = self.user_nick)
-			if ret:
-				return ret
+
 			# Record message history
 			self.save_sent_message(message)
 
@@ -637,6 +638,8 @@ class ChatControlBase(MessageControl):
 		# Clear msg input
 		message_buffer = self.msg_textview.get_buffer()
 		message_buffer.set_text('') # clear message buffer (and tv of course)
+
+		return ret
 
 	def save_sent_message(self, message):
 		# save the message, so user can scroll though the list with key up/down
@@ -1501,11 +1504,12 @@ class ChatControl(ChatControlBase):
 				gobject.source_remove(self.possible_inactive_timeout_id)
 				self._schedule_activity_timers()
 
-		if not ChatControlBase.send_message(self, message, keyID, type = 'chat',
-		chatstate = chatstate_to_send, composing_xep = composing_xep,
-		process_command = process_command):
-			self.print_conversation(message, self.contact.jid,
-				encrypted = encrypted)
+		ChatControlBase.send_message(self, message, keyID,
+			type = 'chat', chatstate = chatstate_to_send,
+			composing_xep = composing_xep,
+			process_command = process_command)
+		self.print_conversation(message, self.contact.jid,
+			encrypted = encrypted)
 
 	def check_for_possible_paused_chatstate(self, arg):
 		''' did we move mouse of that window or write something in message

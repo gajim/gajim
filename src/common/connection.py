@@ -1126,7 +1126,7 @@ class Connection(ConnectionHandlers):
 			if session.enable_encryption:
 				msg_iq = session.encrypt_stanza(msg_iq)
 
-		self.connection.send(msg_iq)
+		msg_id = self.connection.send(msg_iq)
 		if not forward_from and session and session.is_loggable():
 			no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')\
 				.split()
@@ -1147,6 +1147,8 @@ class Connection(ConnectionHandlers):
 					except exceptions.PysqliteOperationalError, e:
 						self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 		self.dispatch('MSGSENT', (jid, msg, keyID))
+
+		return msg_id
 
 	def send_stanza(self, stanza):
 		''' send a stanza untouched '''
