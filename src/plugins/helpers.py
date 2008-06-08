@@ -35,11 +35,11 @@ Logger for code related to plug-in system.
 '''
 
 consoleloghandler = logging.StreamHandler()
-consoleloghandler.setLevel(1)
+#consoleloghandler.setLevel(1)
 consoleloghandler.setFormatter(
         logging.Formatter('%(levelname)s: %(message)s'))
         #logging.Formatter('%(asctime)s %(name)s: %(levelname)s: %(message)s'))
-log.setLevel(logging.DEBUG)
+#log.setLevel(logging.DEBUG)
 log.addHandler(consoleloghandler)
 log.propagate = False
 

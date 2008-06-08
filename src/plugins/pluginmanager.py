@@ -195,6 +195,7 @@ class PluginManager(object):
 		# removing plug-in from active plug-ins list
 		self.active_plugins.remove(plugin_object)
 		plugin_object.__class__._active = False
+		plugin_object.__class__._instance = None
 		del plugin_object
 		
 	def deactivate_all_plugins(self):
