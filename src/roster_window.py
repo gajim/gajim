@@ -571,7 +571,8 @@ class RosterWindow:
 		big_brother_jid = big_brother_data['jid']
 		big_brother_account = big_brother_data['account']
 
-		child_iters = self._get_contact_iter(jid, account, model = self.model)
+		child_iters = self._get_contact_iter(big_brother_jid, big_brother_account,
+			model = self.model)
 		parent_iter = self.model.iter_parent(child_iters[0])
 		parent_type = self.model[parent_iter][C_TYPE]
 
