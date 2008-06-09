@@ -364,9 +364,9 @@ class Connection(ConnectionHandlers):
 				# data is (dict)
 				self.dispatch('PRIVACY_LISTS_ACTIVE_DEFAULT', (data))
 		elif realm == '':
-			if event == common.xmpp.transports.DATA_RECEIVED:
+			if event == common.xmpp.transports_nb.DATA_RECEIVED:
 				self.dispatch('STANZA_ARRIVED', unicode(data, errors = 'ignore'))
-			elif event == common.xmpp.transports.DATA_SENT:
+			elif event == common.xmpp.transports_nb.DATA_SENT:
 				self.dispatch('STANZA_SENT', unicode(data))
 
 	def select_next_host(self, hosts):
@@ -896,20 +896,6 @@ class Connection(ConnectionHandlers):
 		self.on_connect_auth = self._init_roster
 		self.connect_and_auth()
 
-		if gajim.otr_module:
-			try:
-				gajim.otr_module.otrl_privkey_read(self.otr_userstates,
-					os.path.join(gajim.gajimpaths.root,
-					'%s.key' % self.name).encode())
-				gajim.otr_module.otrl_privkey_read_fingerprints(
-					self.otr_userstates, os.path.join(
-					gajim.gajimpaths.root, '%s.fpr' %
-					self.name).encode(),
-					(gajim.otr_add_appdata, self.name))
-			except Exception, e:
-				if not hasattr(e, 'os_errno') or e.os_errno != 2:
-					raise
-
 	def _init_roster(self, con):
 		self.connection = con
 		if not self.connection:
@@ -1123,6 +1109,14 @@ class Connection(ConnectionHandlers):
 				namespace=common.xmpp.NS_ADDRESS)
 			addresses.addChild('address', attrs = {'type': 'ofrom',
 				'jid': forward_from})
+
+		# TODO: We should also check if the other end supports it
+		#       as XEP 0184 says checking is a SHOULD. Maybe we should
+		#       implement section 6 of the XEP as well?
+		if msgtxt and gajim.config.get_per('accounts', self.name,
+		'request_receipt'):
+			msg_iq.setTag('request', namespace='urn:xmpp:receipts')
+
 		if session:
 			# XEP-0201
 			session.last_send = time.time()
@@ -1132,8 +1126,7 @@ class Connection(ConnectionHandlers):
 			if session.enable_encryption:
 				msg_iq = session.encrypt_stanza(msg_iq)
 
-
-		self.connection.send(msg_iq)
+		msg_id = self.connection.send(msg_iq)
 		if not forward_from and session and session.is_loggable():
 			no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')\
 				.split()
@@ -1154,6 +1147,8 @@ class Connection(ConnectionHandlers):
 					except exceptions.PysqliteOperationalError, e:
 						self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 		self.dispatch('MSGSENT', (jid, msg, keyID))
+
+		return msg_id
 
 	def send_stanza(self, stanza):
 		''' send a stanza untouched '''
@@ -1531,6 +1526,15 @@ class Connection(ConnectionHandlers):
 		# send instantly so when we go offline, status is sent to gc before we
 		# disconnect from jabber server
 		self.connection.send(p)
+
+	def gc_got_disconnected(self, room_jid):
+		''' A groupchat got disconnected. This can be or purpose or not.
+		Save the time we quit to avoid duplicate logs AND be faster than get that
+ 		date from DB. Save it in mem AND in a small table (with fast access)
+		'''
+		log_time = time_time()
+		self.last_history_time[room_jid] = log_time
+		gajim.logger.set_room_last_message_time(room_jid, log_time)
 
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
 		'''role is for all the life of the room so it's based on nick'''

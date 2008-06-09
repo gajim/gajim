@@ -1,8 +1,8 @@
 ##   client_nb.py
-##       based on client.py
+##	   based on client.py
 ##
 ##   Copyright (C) 2003-2005 Alexey "Snake" Nezhdanov
-##       modified by Dimitur Kirov <dkirov@gmail.com>
+##	   modified by Dimitur Kirov <dkirov@gmail.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ import debug
 import transports_nb, dispatcher_nb, auth_nb, roster_nb
 from client import *
 
-class NBCommonClient(CommonClient):
+class NBCommonClient:
 	''' Base for Client and Component classes.'''
 	def __init__(self, server, port=5222, debug=['always', 'nodebuilder'], caller=None, 
 		on_connect=None, on_proxy_failure=None, on_connect_failure=None):
@@ -184,6 +184,37 @@ class NBCommonClient(CommonClient):
 			self.on_stream_start()
 			self.on_stream_start = None
 		return True
+	
+	# moved from client.CommonClient:
+	def RegisterDisconnectHandler(self,handler):
+		""" Register handler that will be called on disconnect."""
+		self.disconnect_handlers.append(handler)
+
+	def UnregisterDisconnectHandler(self,handler):
+		""" Unregister handler that is called on disconnect."""
+		self.disconnect_handlers.remove(handler)
+
+	def DisconnectHandler(self):
+		""" Default disconnect handler. Just raises an IOError.
+			If you choosed to use this class in your production client,
+			override this method or at least unregister it. """
+		raise IOError('Disconnected from server.')
+
+	def event(self,eventName,args={}):
+		""" Default event handler. To be overriden. """
+		print "Event: ",(eventName,args)
+
+	def isConnected(self):
+		""" Returns connection state. F.e.: None / 'tls' / 'tcp+non_sasl' . """
+		return self.connected
+
+	def get_peerhost(self):
+		''' get the ip address of the account, from which is made connection 
+		to the server , (e.g. me).
+		We will create listening socket on the same ip '''
+		# moved from client.CommonClient
+		if hasattr(self, 'Connection'):
+			return self.Connection._sock.getsockname()
 	
 class NonBlockingClient(NBCommonClient):
 	''' Example client class, based on CommonClient. '''

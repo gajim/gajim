@@ -448,6 +448,7 @@ class MessageWindow(object):
 	def set_active_tab(self, ctrl):
 		ctrl_page = self.notebook.page_num(ctrl.widget)
 		self.notebook.set_current_page(ctrl_page)
+		self.window.present()
 
 	def remove_tab(self, ctrl, method, reason = None, force = False):
 		'''reason is only for gc (offline status message)
@@ -692,10 +693,13 @@ class MessageWindow(object):
 
 		del self.sessionless_ctrls[acct][jid][idx]
 
+		if len(self.sessionless_ctrls[acct][jid]) == 0:
+			del self.sessionless_ctrls[acct][jid]
+
 		if not self._controls.has_key(acct):
 			self._controls[acct] = {}
 
-		if not self.sessionless_ctrls[acct].has_key(jid):
+		if not self._controls[acct].has_key(jid):
 			self._controls[acct][jid] = {}
 
 		thread_id = ctrl.session.thread_id

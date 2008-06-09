@@ -142,8 +142,19 @@ try:
 	import gtk
 except Warning, msg:
 	if str(msg) == 'could not open display':
-		print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
-		sys.exit()
+		if sys.platform == 'darwin':
+			# It seems there is no way to open X11 without also
+			# opening an xterm. Even Apple's open-x11 script
+			# opens the application AND an xterm.
+			os.system('/Applications/Utilities/X11.app/Contents/MacOS/X11 &')
+			try:
+				import gtk
+			except Warning, msg:
+				print >> sys.stderr, _('No X11 running and failed to start it! Quitting...')
+				sys.exit()
+		else:
+			print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
+			sys.exit()
 warnings.resetwarnings()
 
 if os.name == 'nt':
@@ -254,214 +265,6 @@ from common import socks5
 from common import helpers
 from common import optparser
 from common import dataforms
-
-from common.xmpp import Message as XmppMessage
-
-try:
-	import otr, otr_windows
-	gajim.otr_module = otr
-	gajim.otr_windows = otr_windows
-except ImportError:
-	gajim.otr_module = None
-	gajim.otr_windows = None
-
-def add_appdata(data, context):
-	account = data
-	context.app_data = otr_windows.ContactOtrSMPWindow(
-		unicode(context.username), account)
-
-gajim.otr_add_appdata = add_appdata
-
-def otr_dialog_destroy(widget, *args, **kwargs):
-	widget.destroy()
-
-class OtrlMessageAppOps:
-	def gajim_log(self, msg, account, fjid, no_print=False):
-		if not isinstance(fjid, unicode):
-			fjid = unicode(fjid)
-		if not isinstance(account, unicode):
-			account = unicode(account)
-		resource=gajim.get_resource_from_jid(fjid)
-		tim = time.localtime()
-
-		if not no_print:
-			ctrl = self.get_control(fjid, account)
-			if ctrl:
-				ctrl.print_conversation_line(u'[OTR] %s' % \
-					msg, 'status', '', None)
-		id = gajim.logger.write('chat_msg_recv', fjid,
-			message='[OTR: %s]' % msg, tim=tim)
-		# gajim.logger.write() only marks a message as unread
-		# (and so only returns an id) when fjid is a real contact
-		# (NOT if it's a GC private chat)
-		if id:
-			gajim.logger.set_read_messages([id])
-
-	def get_control(self, fjid, account):
-		# first try to get the window with the full jid
-		ctrls = gajim.interface.msg_win_mgr.get_chat_controls(fjid, account)
-		if ctrls:
-			# got one, be happy
-			return ctrls[0]
-
-		# otherwise try without the resource
-		ctrls = gajim.interface.msg_win_mgr.get_chat_controls(
-			gajim.get_jid_without_resource(fjid), account)
-		# but only use it when it is not a GC window
-		if ctrls and ctrls[0].TYPE_ID == message_control.TYPE_CHAT:
-			return ctrls[0]
-
-	def policy(self, opdata=None, context=None):
-		policy = gajim.config.get_per('contacts', context.username,
-			"otr_flags")
-		if policy <= 0:
-			policy = gajim.config.get_per('contacts',
-				gajim.get_jid_without_resource(
-				context.username), 'otr_flags')
-		if policy <= 0:
-			policy = gajim.config.get_per('accounts',
-				opdata['account'], 'otr_flags')
-		return policy
-
-	def create_privkey(self, opdata='', accountname='', protocol=''):
-		dialog = gtk.Dialog(
-			title   = _('Generating...'),
-			parent  = gajim.interface.roster.window,
-			flags   = gtk.DIALOG_MODAL,
-			buttons = (gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE))
-		permlabel = gtk.Label(_('Generating a private key for %s...') \
-			% accountname)
-		permlabel.set_padding(20, 20)
-		dialog.set_response_sensitive(gtk.RESPONSE_CLOSE, False)
-		dialog.connect('destroy', otr_dialog_destroy)
-		dialog.connect('response', otr_dialog_destroy)
-		dialog.vbox.pack_start(permlabel)
-		dialog.get_root_window().raise_()
-		dialog.show_all()
-		dialog.map()
-		for c in dialog.get_children():
-			c.show_now()
-			c.map()
-
-		while gtk.events_pending():
-			gtk.main_iteration(block = False)
-
-		otr.otrl_privkey_generate(
-			gajim.connections[opdata['account']].otr_userstates,
-			os.path.join(gajimpaths.root,
-			'%s.key' % opdata['account']).encode(),
-			accountname, gajim.OTR_PROTO)
-		permlabel.set_text(_('Generating a private key for %s...\n' \
-			'done.') % accountname)
-		dialog.set_response_sensitive(gtk.RESPONSE_CLOSE, True)
-
-	def is_logged_in(self, opdata={}, accountname='', protocol='',
-	recipient=""):
-		contact = gajim.contacts.get_contact_from_full_jid(
-			opdata['account'], recipient)
-		if contact:
-			return contact.show \
-				in ['dnd', 'xa', 'chat', 'online', 'away',
-				'invisible']
-		return 0
-
-	def inject_message(self, opdata=None, accountname='', protocol='',
-	recipient='', message=''):
-		msg_type = otr.otrl_proto_message_type(message)
-
-		if 'kwargs' not in opdata or 'urgent' in opdata:
-			# don't use send_message here to have the message
-			# sent immediatly. This results in being able to
-			# disconnect from OTR sessions before quitting
-			stanza = XmppMessage(to = recipient,
-				body = message, typ='chat')
-			gajim.connections[opdata['account']].connection. \
-				send(stanza, now = True)
-			return
-
-		if msg_type == otr.OTRL_MSGTYPE_QUERY:
-			# split away XHTML-contaminated explanatory message
-			message = unicode(message.splitlines()[0])
-			message += _(u'\nThis user has requested an ' \
-				'Off-the-Record private conversation. ' \
-				'However, you do not have a plugin to ' \
-				'support that.\n' \
-				'See http://otr.cypherpunks.ca/ for more ' \
-				'information.')
-
-			gajim.connections[opdata['account']].connection.send(
-				common.xmpp.Message(to = recipient,
-				body = message, typ = 'chat'))
-			return
-
-		gajim.connections[opdata['account']].send_message(recipient,
-			message, **opdata['kwargs'])
-
-	def notify(sef, opdata=None, username='', **kwargs):
-		self.gajim_log('Notify: ' + str(kwargs), opdata['account'], 
-			username)
-
-	def display_otr_message(self, opdata=None, username="", msg="", **kwargs):
-		self.gajim_log('OTR Message: ' + msg, opdata['account'],
-			username)
-		return 0
-
-	def update_context_list(self, **kwargs):
-		# FIXME stub FIXME #
-		pass
-
-	def protocol_name(self, opdata=None, protocol=""):
-		return 'XMPP'
-
-	def new_fingerprint(self, opdata=None, username='', fingerprint='',
-	**kwargs):
-		self.gajim_log('New fingerprint for %s: %s' % (username,
-			otr.otrl_privkey_hash_to_human(fingerprint)),
-			opdata['account'], username)
-
-	def write_fingerprints(self, opdata=''):
-		otr.otrl_privkey_write_fingerprints(
-			gajim.connections[opdata['account']].otr_userstates,
-			os.path.join(gajimpaths.root, '%s.fpr' % \
-			opdata['account']).encode())
-
-	def gone_secure(self, opdata='', context=None):
-		trust = context.active_fingerprint.trust \
-			and 'verified' or 'unverified'
-		self.gajim_log('%s secured OTR connection started' % trust,
-			opdata['account'], context.username, no_print = True)
-
-		ctrl = self.get_control(context.username, opdata['account'])
-		if ctrl:
-			ctrl.update_otr(True)
-
-	def gone_insecure(self, opdata='', context=None):
-		self.gajim_log('Private conversation with %s lost.',
-			opdata['account'], context.username)
-
-		ctrl = self.get_control(context.username, opdata['account'])
-		if ctrl:
-			ctrl.update_otr(True)
-
-	def still_secure(self, opdata=None, context=None, is_reply=0):
-		ctrl = self.get_control(context.username, opdata['account'])
-		if ctrl:
-			ctrl.update_otr(True)
-
-		self.gajim_log('OTR connection was refreshed',
-			opdata['account'], context.username)
-
-	def log_message(self, opdata=None, message=''):
-		gajim.log.debug(message)
-
-	def max_message_size(self, **kwargs):
-		return 0
-
-	def account_name(self, opdata=None, account='', protocol=''):
-		return gajim.get_name_from_jid(opdata['account'],
-			unicode(account))
-
-gajim.otr_ui_ops = OtrlMessageAppOps()
 
 if verbose: gajim.verbose = True
 del verbose
@@ -600,8 +403,11 @@ def on_exit():
 	if os.path.exists(pid_filename):
 		os.remove(pid_filename)
 	if sys.platform == 'darwin':
-		import osx
-		osx.shutdown()
+		try:
+			import osx
+			osx.shutdown()
+		except ImportError:
+			pass
 
 import atexit
 atexit.register(on_exit)
@@ -858,7 +664,7 @@ class Interface:
 					if resource == gajim.connections[account].server_resource:
 						return
 					contact1 = gajim.contacts.create_contact(jid = ji,
-						name = gajim.nicks[account], groups = [],
+						name = gajim.nicks[account], groups = ['self_contact'],
 						show = array[1], status = status_message, sub = 'both',
 						ask = 'none', priority = priority, keyID = keyID,
 						resource = resource)
@@ -1648,18 +1454,26 @@ class Interface:
 				gmail_new_messages, gmail_new_messages)
 
 			if gajim.config.get('notify_on_new_gmail_email_extra'):
+				cnt = 0
 				for gmessage in gmail_messages_list:
-					#FIXME: emulate Gtalk client popups. find out what they parse and how
-					#they decide what to show
-					# each message has a 'From', 'Subject' and 'Snippet' field
-					text += _('\nFrom: %(from_address)s') % \
-						{'from_address': gmessage['From']}
+					#FIXME: emulate Gtalk client popups. find out what they parse and
+					# how they decide what to show each message has a 'From',
+					# 'Subject' and 'Snippet' field
+					if cnt >=5:
+						break
+					senders = reduce(lambda b, a: a + ',\n     ' + b,
+						gmessage['From'])
+					text += _('\n\nFrom: %(from_address)s\nSubject: %(subject)s\n%(snippet)s') % \
+						{'from_address': senders, 'subject': gmessage['Subject'],
+						'snippet': gmessage['Snippet']} 
+					cnt += 1 
 
 			if gajim.config.get_per('soundevents', 'gmail_received', 'enabled'):
 				helpers.play_sound('gmail_received')
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			notify.popup(_('New E-mail'), jid, account, 'gmail',
-				path_to_image = path, title = title, text = text)
+				path_to_image=path, title=title,
+				text=gobject.markup_escape_text(text))
 
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewGmail', (account, array))
@@ -2041,7 +1855,7 @@ class Interface:
 					connection = gajim.connections[account]
 					contact = gajim.contacts.create_contact(jid = jid.getStripped(), 
 							resource = resource, show = connection.get_status())
-				self.new_chat(session, contact, account, resource = resource)
+				self.new_chat(contact, account, resource = resource, session = session)
 
 			negotiation.FeatureNegotiationWindow(account, jid, session, form)
 
@@ -2446,7 +2260,7 @@ class Interface:
 				if not session:
 					session = gajim.connections[account].get_or_create_session(fjid, None)
 
-				self.new_chat(session, contact, account, resource = resource)
+				self.new_chat(contact, account, resource = resource, session = session)
 				ctrl = session.control
 
 				gajim.last_message_time[account][jid] = 0 # long time ago
@@ -2514,7 +2328,6 @@ class Interface:
 			self.roster.draw_contact(jid, account)
 		if w:
 			w.set_active_tab(ctrl)
-			w.window.present()
 			w.window.window.focus()
 			# Using isinstance here because we want to catch all derived types
 			if isinstance(ctrl, ChatControlBase):
@@ -2750,11 +2563,12 @@ class Interface:
 	def join_gc_room(self, account, room_jid, nick, password, minimize=False,
 		is_continued=False):
 		'''joins the room immediately'''
+		if not nick:
+			nick = gajim.nicks[account]
 		if self.msg_win_mgr.has_window(room_jid, account) and \
 				gajim.gc_connected[account][room_jid]:
 			gc_ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
 			win = gc_ctrl.parent_win
-			win.window.present()
 			win.set_active_tab(gc_ctrl)
 			dialogs.ErrorDialog(_('You are already in group chat %s') % room_jid)
 			return
@@ -2782,7 +2596,6 @@ class Interface:
 		if not minimized_control_exists:
 			gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
 			gc_control.parent_win.set_active_tab(gc_control)
-			gc_control.parent_win.window.present()
 		gajim.connections[account].join_gc(nick, room_jid, password)
 		if password:
 			gajim.gc_passwords[room_jid] = password
@@ -2841,7 +2654,7 @@ class Interface:
 			# We call this here to avoid race conditions with widget validation
 			session.control.read_queue()
 
-	def new_chat(self, session, contact, account, resource = None):
+	def new_chat(self, contact, account, resource = None, session = None):
 		# Get target window, create a control, and associate it with the window
 		type_ = message_control.TYPE_CHAT
 
@@ -2875,14 +2688,13 @@ class Interface:
 		session = gajim.connections[account].get_or_create_session(fjid, None)
 
 		if not self.msg_win_mgr.has_window(fjid, account):
-			session.control = self.new_chat(session, contact, account,
-				resource=resource)
+			session.control = self.new_chat(contact, account,
+				resource=resource, session=session)
 			if len(gajim.events.get_events(account, fjid)):
 				session.control.read_queue()
 
 		mw = session.control.parent_win
 		mw.set_active_tab(session.control)
-		mw.window.present()
 		# For JEP-0172
 		if added_to_roster:
 			session.control.user_nick = gajim.nicks[account]
@@ -2896,45 +2708,30 @@ class Interface:
 		if resource:
 			fjid += '/' + resource
 
-		conn = gajim.connections[account]
+		ctrl = None
 
-		if not session and fjid in conn.sessions:
-			sessions = filter(lambda s: isinstance(s, ChatControlSession),
-				conn.sessions[fjid].values())
+		if session:
+			ctrl = session.control
+		else:
+			win = self.msg_win_mgr.get_window(fjid, account)
 
-			# look for an existing session with a chat control
-			for s in sessions:
-				if s.control:
-					session = s
-					break
+			if win:
+				ctrl = win.get_controls(fjid, account)[0]
 
-			if not session and not len(sessions) == 0:
-				# there are no sessions with chat controls, just take the first one
-				session = sessions[0]
-
-		if not session:
-			# couldn't find an existing ChatControlSession, just make a new one
-			session = conn.make_new_session(fjid, None, 'chat')
-
-		if not session.control:
-			# open a new chat control
-			session.control = self.new_chat(session, contact, account,
-				resource=resource)
-
-			if len(gajim.events.get_events(account, fjid)):
-				session.control.read_queue()
-
+		if not ctrl:
+			ctrl = self.new_chat(contact, account,
+				resource = resource, session = session)
 			# last message is long time ago
-			gajim.last_message_time[account][session.control.get_full_jid()] = 0
+			gajim.last_message_time[account][ctrl.get_full_jid()] = 0
 
-		win = session.control.parent_win
-		win.set_active_tab(session.control)
+		win = ctrl.parent_win
 
-		if conn.is_zeroconf and conn.status in ('offline', 'invisible'):
+		win.set_active_tab(ctrl)
+
+		if gajim.connections[account].is_zeroconf and \
+				gajim.connections[account].status in ('offline', 'invisible'):
 			for ctrl in win.get_controls(fjid, account):
 				ctrl.got_disconnected()
-
-		win.window.present()
 
 ################################################################################		
 ### Other Methods
@@ -3222,6 +3019,10 @@ class Interface:
 		if os.name != 'nt' and gajim.config.get('check_if_gajim_is_default'):
 			gtkgui_helpers.possibly_set_gajim_as_xmpp_handler()
 
+		for account in gajim.config.get_per('accounts'):
+			if gajim.config.get_per('accounts', account, 'is_zeroconf'):
+				gajim.ZEROCONF_ACC_NAME = account
+				break
 		# Is gnome configured to activate row on single click ?
 		try:
 			import gconf
@@ -3466,8 +3267,11 @@ if __name__ == '__main__':
 	check_paths.check_and_possibly_create_paths()
 
 	if sys.platform == 'darwin':
-		import osx
-		osx.init()
+		try:
+			import osx
+			osx.init()
+		except ImportError:
+			pass
 
 	Interface()
 

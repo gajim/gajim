@@ -27,7 +27,10 @@ from common import gajim
 from common import helpers
 
 if sys.platform == 'darwin':
-	import osx
+	try:
+		import osx
+	except ImportError:
+		pass
 
 class StatusIcon(systray.Systray):
 	'''Class for the notification area icon'''
@@ -69,7 +72,10 @@ class StatusIcon(systray.Systray):
 		self.status_icon.set_tooltip(text)
 		if gajim.events.get_nb_systray_events():
 			if sys.platform == 'darwin':
-				osx.nsapp.requestUserAttention()
+				try:
+					osx.nsapp.requestUserAttention()
+				except NameError:
+					pass
 			state = 'event'
 			self.status_icon.set_blinking(True)
 		else:

@@ -65,8 +65,6 @@ class HistoryWindow:
 	'''Class for browsing logs of conversations with contacts'''
 
 	def __init__(self, jid = None, account = None):
-		self.mark_days_idle_call_id = None
-				
 		xml = gtkgui_helpers.get_glade('history_window.glade')
 		self.window = xml.get_widget('history_window')
 		self.jid_entry = xml.get_widget('jid_entry')
@@ -117,22 +115,25 @@ class HistoryWindow:
 		self.completion_dict = {}
 		self.accounts_seen_online = [] # Update dict when new accounts connect
 		self.jids_to_search = []
-		self._fill_completion_dict()
+
+		# This will load history too
+		gobject.idle_add(self._fill_completion_dict().next)
 
 		if jid:
 			self.jid_entry.set_text(jid)	
 
 		xml.signal_autoconnect(self)
-		self._load_history(jid, account)
 		self.window.show_all()
 
 	def _fill_completion_dict(self):
-		'''Fill completion_dict for key auto completion. 
+		'''Fill completion_dict for key auto completion. Then load history for 
+		current jid (by calling another function).
 
 		Key will be either jid or full_completion_name  
 		(contact name or long description like "pm-contact from groupchat....")
 		
 		{key : (jid, account, nick_name, full_completion_name}
+		this is a generator and does pseudo-threading via idle_add()
 		'''
 		liststore = gtkgui_helpers.get_completion_liststore(self.jid_entry)
 
@@ -150,8 +151,14 @@ class HistoryWindow:
 		muc_active_img = gtkgui_helpers.load_icon('muc_active')
 		contact_img = gajim.interface.jabber_state_images['16']['online']
 		muc_active_pix = muc_active_img.get_pixbuf()
-		contact_pix = contact_img.get_pixbuf()			
+		contact_pix = contact_img.get_pixbuf()
+		
 		keys = self.completion_dict.keys()
+		# Move the actual jid at first so we load history faster
+		actual_jid = self.jid_entry.get_text().decode('utf-8')
+		if actual_jid in keys:
+			keys.remove(actual_jid)
+			keys.insert(0, actual_jid)
 		# Map jid to info tuple
 		# Warning : This for is time critical with big DB 
 		for key in keys:
@@ -180,13 +187,17 @@ class HistoryWindow:
 					info_name = nick
 			else:
 				pix = contact_pix
-			
+
 			liststore.append((pix, completed))
 			self.completion_dict[key] = (info_jid, info_acc, info_name,
 				info_completion)
 			self.completion_dict[completed] = (info_jid, info_acc,
 				info_name, info_completion)
+			if key == actual_jid:
+				self._load_history(info_jid, info_acc)
+			yield True
 		keys.sort()
+		yield False
 	
 	def _get_account_for_jid(self, jid):
 		'''Return the corresponding account of the jid.
@@ -202,10 +213,6 @@ class HistoryWindow:
 		return account
 
 	def on_history_window_destroy(self, widget):
-		if self.mark_days_idle_call_id:
-			# if user destroys the window, and we have a generator filling mark days
-			# stop him!
-			gobject.source_remove(self.mark_days_idle_call_id)
 		self.history_textview.del_handlers()
 		del gajim.interface.instances['logs']
 
@@ -265,11 +272,10 @@ class HistoryWindow:
 
 			# select logs for last date we have logs with contact
 			self.calendar.set_sensitive(True)
-			self.calendar.emit('month-changed')
-			lastlog = gajim.logger.get_last_date_that_has_logs(self.jid, self.account)
+			last_log = \
+				gajim.logger.get_last_date_that_has_logs(self.jid, self.account)
 
-			tim = lastlog
-			date = time.localtime(tim)
+			date = time.localtime(last_log)
 
 			y, m, d = date[0], date[1], date[2]
 			gtk_month = gtkgui_helpers.make_python_month_gtk_month(m)
@@ -305,31 +311,21 @@ class HistoryWindow:
 		month = gtkgui_helpers.make_gtk_month_python_month(month)
 		self._add_lines_for_date(year, month, day)
 		
-	def do_possible_mark_for_days_in_this_month(self, widget, year, month):
-		'''this is a generator and does pseudo-threading via idle_add()
-		so it runs progressively! yea :)
-		asks for days in this month if they have logs it bolds them (marks them)'''
+	def on_calendar_month_changed(self, widget):
+		'''asks for days in this month if they have logs it bolds them (marks 
+		them)
+		'''
+		year, month, day = widget.get_date() # integers
+		# in gtk January is 1, in python January is 0,
+		# I want the second
+		# first day of month is 1 not 0
+		widget.clear_marks()
+		month = gtkgui_helpers.make_gtk_month_python_month(month)
 		weekday, days_in_this_month = calendar.monthrange(year, month)
 		log_days = gajim.logger.get_days_with_logs(self.jid, year,
 			month, days_in_this_month, self.account)
 		for day in log_days:
 			widget.mark_day(day)
-			yield True
-		yield False
-	
-	def on_calendar_month_changed(self, widget):
-		year, month, day = widget.get_date() # integers
-		# in gtk January is 1, in python January is 0,
-		# I want the second
-		# first day of month is 1 not 0
-		if self.mark_days_idle_call_id:
-			# if user changed month, and we have a generator filling mark days
-			# stop him from marking dates for the previously selected month
-			gobject.source_remove(self.mark_days_idle_call_id)
-		widget.clear_marks()
-		month = gtkgui_helpers.make_gtk_month_python_month(month)
-		self.mark_days_idle_call_id = gobject.idle_add(
-			self.do_possible_mark_for_days_in_this_month(widget, year, month).next)
 
 	def _get_string_show_from_constant_int(self, show):
 		if show == constants.SHOW_ONLINE:
@@ -480,7 +476,8 @@ class HistoryWindow:
 				message = row[4]
 				local_time = time.localtime(tim)
 				date = time.strftime('%x', local_time)
-				#  jid (to which log is assigned to), name, date, message, time (full unix time)
+				#  jid (to which log is assigned to), name, date, message, 
+				# time (full unix time)
 				model.append((jid, contact_name, date, message, tim))
 
 	def on_query_combobox_changed(self, widget):
@@ -573,9 +570,12 @@ class HistoryWindow:
 
 	def open_history(self, jid, account):
 		'''Load chat history of the specified jid'''
+		self.jid_entry.set_text(jid)
 		if account and account not in self.accounts_seen_online:
 			# Update dict to not only show bare jid
-			self._fill_completion_dict
-		self.jid_entry.set_text(jid)
-		self._load_history(jid, account)
+			gobject.idle_add(self._fill_completion_dict().next)
+		else:
+			# Only in that case because it's called by self._fill_completion_dict()
+			# otherwise 
+			self._load_history(jid, account)
 		self.results_window.set_property('visible', False)

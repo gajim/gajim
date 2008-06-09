@@ -250,6 +250,7 @@ class Config:
 		'max_conversation_lines': [opt_int, 500, _('Maximum number of lines that are printed in conversations. Oldest lines are cleared.')],
 		'attach_notifications_to_systray': [opt_bool, False, _('If True, notification windows from notification-daemon will be attached to systray icon.')],
 		'check_idle_every_foo_seconds': [opt_int, 2, _('Choose interval between 2 checks of idleness.')],
+		'latex_png_dpi': [opt_str, '108',_('Change the value to change the size of latex formulas displayed. The higher is larger.') ],
 	}
 
 	__options_per_key = {
@@ -310,7 +311,8 @@ class Config:
 			'zeroconf_jabber_id': [ opt_str, '', '', True ],
 			'zeroconf_email': [ opt_str, '', '', True ],
 			'use_env_http_proxy' : [opt_bool, False],
-			'otr_flags': [opt_int, 58 ],
+			'answer_receipt' : [opt_bool, True, _('Answer to receipt requests')],
+			'request_receipt' : [opt_bool, True, _('Sent receipt requests')],
 			'publish_mood': [opt_bool, True],
 			'publish_activity': [opt_bool, True],
 			'publish_tune': [opt_bool, False],
@@ -369,7 +371,6 @@ class Config:
 		'contacts': ({
 			'gpg_enabled': [ opt_bool, False, _('Is OpenPGP enabled for this contact?')],
 			'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
-			'otr_flags': [opt_int, -1 ],
 		}, {}),
 		'rooms': ({
 			'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],

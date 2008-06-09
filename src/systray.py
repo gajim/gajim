@@ -109,7 +109,6 @@ class Systray:
 		if gajim.interface.msg_win_mgr.has_window(jid, account):
 			gajim.interface.msg_win_mgr.get_window(jid, account).set_active_tab(
 				jid, account)
-			gajim.interface.msg_win_mgr.get_window(jid, account).window.present()
 		elif contact:
 			gajim.interface.new_chat(contact, account)
 			gajim.interface.msg_win_mgr.get_window(jid, account).set_active_tab(

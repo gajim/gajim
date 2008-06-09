@@ -186,7 +186,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			if ctrl:
 				self.control = ctrl
 				self.control.set_session(self)
-				self.control.parent_win.move_from_sessionless(self.control)
 				first = False
 
 		if pm:
@@ -317,8 +316,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		if popup:
 			if not self.control:
-				self.control = gajim.interface.new_chat(self, contact,
-					self.conn.name, resource=resource_for_chat)
+				self.control = gajim.interface.new_chat(contact,
+					self.conn.name, resource=resource_for_chat, session=self)
 
 				if len(gajim.events.get_events(self.conn.name, fjid)):
 					self.control.read_queue()

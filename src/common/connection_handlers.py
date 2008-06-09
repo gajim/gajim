@@ -50,7 +50,8 @@ if dbus_support.supported:
 	from music_track_listener import MusicTrackListener
 
 from session import ChatControlSession
-import tictactoe
+
+gajim.default_session_type = ChatControlSession
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible', 'error']
@@ -1217,9 +1218,6 @@ class ConnectionHandlersBase:
 		# keep track of sessions this connection has with other JIDs
 		self.sessions = {}
 
-		if gajim.otr_module:
-			self.otr_userstates = gajim.otr_module.otrl_userstate_create()
-
 	def _FeatureNegCB(self, con, stanza, session):
 		gajim.log.debug('FeatureNegCB')
 		feature = stanza.getTag(name='feature', namespace=common.xmpp.NS_FEATURE)
@@ -1301,8 +1299,9 @@ sent a message to.'''
 		# sessions that we haven't received a thread ID in
 		idless = filter(lambda s: not s.received_thread_id, sessions)
 
-		# filter out everything exceptthe default session type
-		chat_sessions = filter(lambda s: isinstance(s, ChatControlSession), idless)
+		# filter out everything except the default session type
+		p = lambda s: isinstance(s, gajim.default_session_type)
+		chat_sessions = filter(p, idless)
 
 		if chat_sessions:
 			# return the session that we last sent a message in
@@ -1311,10 +1310,25 @@ sent a message to.'''
 		else:
 			return None
 
-	# if deferred is true, the thread ID we're generating is tem
+	def find_controlless_session(self, jid):
+		'''find an active session that doesn't have a control attached'''
+
+		try:
+			sessions = self.sessions[jid].values()
+
+			# filter out everything except the default session type
+			p = lambda s: isinstance(s, gajim.default_session_type)
+			chat_sessions = filter(p, sessions)
+
+			orphaned = filter(lambda s: not s.control, chat_sessions)
+
+			return orphaned[0]
+		except KeyError:
+			return None
+
 	def make_new_session(self, jid, thread_id=None, type='chat', cls=None):
 		if not cls:
-			cls = ChatControlSession
+			cls = gajim.default_session_type
 
 		# determine if this session is a pm session
 		# if not, discard the resource
@@ -1353,6 +1367,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			idle.init()
 		except:
 			HAS_IDLE = False
+
+		self.gmail_last_tid = None
+		self.gmail_last_time = None
 
 	def build_http_auth_answer(self, iq_obj, answer):
 		if answer == 'yes':
@@ -1565,9 +1582,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			jid = gajim.get_jid_from_account(self.name)
 			gajim.log.debug('Got notification of new gmail e-mail on %s. Asking the server for more info.' % jid)
 			iq = common.xmpp.Iq(typ = 'get')
-			iq.setAttr('id', '13')
+			iq.setID(self.connection.getAnID())
 			query = iq.setTag('query')
 			query.setNamespace(common.xmpp.NS_GMAILNOTIFY)
+			# we want only be notified about newer mails
+			if self.gmail_last_tid:
+				query.setAttr('newer-than-tid', self.gmail_last_tid)
+			if self.gmail_last_time:
+				query.setAttr('newer-than-time', self.gmail_last_time)
 			self.connection.send(iq)
 			raise common.xmpp.NodeProcessed
 
@@ -1584,16 +1606,34 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				if gm.getTag('mailbox').getTag('mail-thread-info'):
 					gmail_messages = gm.getTag('mailbox').getTags('mail-thread-info')
 					for gmessage in gmail_messages:
-						sender = gmessage.getTag('senders').getTag('sender')
-						if not sender:
+						unread_senders = []
+						for sender in gmessage.getTag('senders').getTags('sender'):
+							if sender.getAttr('unread') != '1':
+								continue
+							if sender.getAttr('name'):
+								unread_senders.append(sender.getAttr('name') + '< ' + \
+									sender.getAttr('address') + '>')
+							else:
+								unread_senders.append(sender.getAttr('address'))
+
+						if not unread_senders:
 							continue
-						gmail_from = sender.getAttr('address')
 						gmail_subject = gmessage.getTag('subject').getData()
 						gmail_snippet = gmessage.getTag('snippet').getData()
+						tid = int(gmessage.getAttr('tid'))
+						if not self.gmail_last_tid or tid > self.gmail_last_tid:
+							self.gmail_last_tid = tid
 						gmail_messages_list.append({ \
-							'From': gmail_from, \
+							'From': unread_senders, \
 							'Subject': gmail_subject, \
-							'Snippet': gmail_snippet})
+							'Snippet': gmail_snippet, \
+							'url': gmessage.getAttr('url'), \
+							'participation': gmessage.getAttr('participation'), \
+							'messages': gmessage.getAttr('messages'), \
+							'date': gmessage.getAttr('date')})
+					self.gmail_last_time = int(gm.getTag('mailbox').getAttr(
+						'result-time'))
+
 				jid = gajim.get_jid_from_account(self.name)
 				gajim.log.debug(('You have %s new gmail e-mails on %s.') % (newmsgs, jid))
 				self.dispatch('GMAIL_NOTIFY', (jid, newmsgs, gmail_messages_list))
@@ -1650,96 +1690,21 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		encrypted = False
 		xep_200_encrypted = msg.getTag('c', namespace=common.xmpp.NS_STANZA_CRYPTO)
+		
+		# Receipt requested
+		# TODO: We shouldn't answer if we're invisible!
+		if msg.getTag('request', namespace='urn:xmpp:receipts') and \
+		gajim.config.get_per('accounts', self.name, 'answer_receipt') \
+		and gajim.contacts.get_contact_from_full_jid(self.name, frm). \
+		sub not in (u'to', u'none'):
+			receipt = common.xmpp.Message(to = jid, typ = 'chat')
+			receipt.setID(msg.getID())
+			receipt.setTag('received',
+				namespace='urn:xmpp:receipts')
+			receipt.setThread(thread_id)
+			con.send(receipt)
 
-		# We don't trust libotr, that's why we only pass the message
-		# to it if necessary. otrl_proto_message_type does this check.
-		if gajim.otr_module and not xep_200_encrypted \
-		and isinstance(msgtxt, unicode) and \
-		gajim.otr_module.otrl_proto_message_type(msgtxt.encode()) != \
-		gajim.otr_module.OTRL_MSGTYPE_NOTOTR:
-			# set to encrypted if it's really encrypted.
-			if gajim.otr_module.otrl_proto_message_type(
-			msgtxt.encode()) != \
-			gajim.otr_module.OTRL_MSGTYPE_TAGGEDPLAINTEXT:
-				encrypted = True
-
-			# TODO: Do we really need .encode()?
-			# yes we do. OTR can't handle unicode.
-			otr_msg_tuple = \
-				gajim.otr_module.otrl_message_receiving(
-				self.otr_userstates,
-				(gajim.otr_ui_ops, {'account': self.name}),
-				gajim.get_jid_from_account(self.name).encode(),
-				gajim.OTR_PROTO,
-				frm.encode(),
-				msgtxt.encode(),
-				(gajim.otr_add_appdata, self.name))
-			msgtxt = unicode(otr_msg_tuple[1])
-
-			html_node = msg.getTag('html')
-			if html_node:
-				msg.delChild(html_node)
-			msg.setBody(msgtxt)
-
-			if gajim.otr_module.otrl_tlv_find(
-			otr_msg_tuple[2],
-			gajim.otr_module.OTRL_TLV_DISCONNECTED) != None:
-				gajim.otr_ui_ops.gajim_log(_('%s ' \
-					'has ended his/her private ' \
-					'conversation with you. You should ' \
-					'do the same.') % frm,
-					self.name,
-					frm.encode())
-
-				ctrls = gajim.interface.msg_win_mgr.get_chat_controls(jid, self.name)
-				for ctrl in ctrls:
-					ctrl.update_otr()
-
-			ctx = gajim.otr_module. \
-				otrl_context_find(
-				self.otr_userstates,
-				frm.encode(),
-				gajim.get_jid_from_account(
-				self.name).encode(),
-				gajim.OTR_PROTO, 1,
-				(gajim.otr_add_appdata,
-				self.name))[0]
-			tlvs = otr_msg_tuple[2]
-			ctx.app_data.handle_tlv(tlvs)
-
-			if msgtxt == '':
-				return
-		elif msgtxt != None and msgtxt != '':
-			gajim.otr_dont_append_tag[frm] = True
-
-			# We're also here if we just don't
-			# support OTR. Thus, we should strip
-			# the tags from plaintext messages
-			# since they look ugly.
-			msgtxt = msgtxt.replace('\x20\x09\x20' \
-				'\x20\x09\x09\x09\x09\x20\x09' \
-				'\x20\x09\x20\x09\x20\x20', '')
-			msgtxt = msgtxt.replace('\x20\x09\x20' \
-				'\x09\x20\x20\x09\x20', '')
-			msgtxt = msgtxt.replace('\x20\x20\x09' \
-				'\x09\x20\x20\x09\x20', '')
-
-		game_invite = msg.getTag('invite', namespace='http://jabber.org/protocol/games')
-		if game_invite:
-			game = game_invite.getTag('game')
-
-			if game.getAttr('var') == \
-			'http://jabber.org/protocol/games/tictactoe':
-				cls = tictactoe.TicTacToeSession
-
-			# this assumes that the invitation came with a thread_id we haven't
-			# seen
-			session = self.make_new_session(frm, thread_id, cls=cls)
-
-			session.invited(msg)
-
-			return
-		elif mtype != 'groupchat':
+		if mtype != 'groupchat':
 			session = self.get_or_create_session(frm, thread_id)
 
 			if thread_id and not session.received_thread_id:
@@ -1851,7 +1816,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			no_log_for = '' 
 
 		no_log_for = no_log_for.split()
-
 		tim_int = int(float(mktime(tim)))
 
 		if self.name not in no_log_for and jid not in no_log_for and not \
@@ -1861,8 +1825,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			# so don't store it in logs
 			try:
 				gajim.logger.write('gc_msg', frm, msgtxt, tim=tim)
-				# save the time we log to avoid duplicate logs
-				self.last_history_time[jid] = tim_int
 			except exceptions.PysqliteOperationalError, e:
 				self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 
