@@ -1693,10 +1693,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		
 		# Receipt requested
 		# TODO: We shouldn't answer if we're invisible!
+		cont = gajim.contacts.get_contact(self.name,
+			common.gajim.get_room_and_nick_from_fjid(frm)[0])
 		if msg.getTag('request', namespace='urn:xmpp:receipts') and \
 		gajim.config.get_per('accounts', self.name, 'answer_receipt') \
-		and gajim.contacts.get_contact_from_full_jid(self.name, frm). \
-		sub not in (u'to', u'none'):
+		and cont and cont.sub not in (u'to', u'none'):
 			receipt = common.xmpp.Message(to = jid, typ = 'chat')
 			receipt.setID(msg.getID())
 			receipt.setTag('received',
