@@ -445,18 +445,8 @@ class RosterWindow:
 		family -- the family, see Contacts.get_metacontacts_family()
 		'''
 
-		if self.regroup:
-			# group all together
-			nearby_family = family
-		else:
-			# we want one nearby_family per account
-			nearby_family = [data for data in family
-				if account == data['account']]
-
-		big_brother_data = gajim.contacts.get_metacontacts_big_brother(
-			nearby_family)
-		big_brother_jid = big_brother_data['jid']
-		big_brother_account = big_brother_data['account']
+		nearby_family, big_brother_jid, big_brother_account = \
+			self._get_nearby_family_and_big_brother(family, account)
 		big_brother_contact = gajim.contacts.get_first_contact_from_jid(
 			big_brother_account, big_brother_jid)
 
@@ -469,15 +459,13 @@ class RosterWindow:
 		brothers = []
 		# Filter family members
 		for data in nearby_family:
-			if data == big_brother_data:
-				continue # already added
-
 			_account = data['account']
 			_jid = data['jid']
 			_contact = gajim.contacts.get_first_contact_from_jid(_account, _jid)
 
-			if not _contact:
+			if not _contact or _contact == big_brother_contact:
 				# Corresponding account is not connected
+				# or brother already added
 				continue
 
 			assert len(self._get_contact_iter(_jid, _account, _contact, self.model)
@@ -494,13 +482,8 @@ class RosterWindow:
 
 		See Contacts.get_metacontacts_family() and RosterWindow._remove_entity()
 		'''
-		if self.regroup:
-			# remove all
-			nearby_family = family
-		else:
-			# remove nearby_family per account
-			nearby_family = [data for data in family
-				if account == data['account']]
+		nearby_family = self._get_nearby_family_and_big_brother(
+			family, account)[0]
 
 		# Family might has changed (actual big brother not on top).
 		# Remove childs first then big brother
@@ -558,19 +541,8 @@ class RosterWindow:
 		'''Regroup metacontact family if necessary.'''
 
 		brothers = []
-		if self.regroup:
-			# group all together
-			nearby_family = family
-		else:
-			# we want one nearby_family per account
-			nearby_family = [data for data in family
-				if account == data['account']]
-
-		big_brother_data = gajim.contacts.get_metacontacts_big_brother(
-			nearby_family)
-		big_brother_jid = big_brother_data['jid']
-		big_brother_account = big_brother_data['account']
-
+		nearby_family, big_brother_jid, big_brother_account = \
+			self._get_nearby_family_and_big_brother(family, account)
 		child_iters = self._get_contact_iter(big_brother_jid, big_brother_account,
 			model = self.model)
 		parent_iter = self.model.iter_parent(child_iters[0])
@@ -585,6 +557,31 @@ class RosterWindow:
 			for c, acc in brothers:
 				self.draw_contact(c.jid, acc)
 				self.draw_avatar(c.jid, acc)
+
+
+	def _get_nearby_family_and_big_brother(self, family, account):
+		'''Return the nearby family and its Big Brother
+
+		Nearby family is the part of the family that is grouped with the metacontact.
+		A metacontact may be over different accounts. If regroup is s False the 
+		given family is split account wise.
+
+		(nearby_family, big_brother_jid, big_brother_account)
+		'''
+		if self.regroup:
+			# group all together
+			nearby_family = family
+		else:
+			# we want one nearby_family per account
+			nearby_family = [data for data in family
+				if account == data['account']]
+
+		big_brother_data = gajim.contacts.get_metacontacts_big_brother(
+			nearby_family)
+		big_brother_jid = big_brother_data['jid']
+		big_brother_account = big_brother_data['account']
+
+		return (nearby_family, big_brother_jid, big_brother_account)
 
 
 	def _add_self_contact(self, account):
@@ -1037,19 +1034,9 @@ class RosterWindow:
 		brothers = []
 		family = gajim.contacts.get_metacontacts_family(account, jid)
 		if family: # Are we a metacontact (have a family)
-
-			if self.regroup:
-				# group all together
-				nearby_family = family
-			else:
-				# we want one nearby_family per account
-				nearby_family = [data for data in family
-					if account == data['account']]
-
-			big_brother_data = gajim.contacts.get_metacontacts_big_brother(
-				nearby_family)
-			big_brother_jid = big_brother_data['jid']
-			big_brother_account = big_brother_data['account']
+			
+			nearby_family, big_brother_jid, big_brother_account = \
+				self._get_nearby_family_and_big_brother(family, account)
 
 			if big_brother_jid != jid or big_brother_account != account:
 				# We are a simple brother
