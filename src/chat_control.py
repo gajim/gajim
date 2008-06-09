@@ -291,6 +291,8 @@ class ChatControlBase(MessageControl):
 		self.user_nick = None
 
 		self.smooth = True
+		
+		gajim.plugin_manager.gui_extension_point('chat_control_base', self)
 
 	def on_msg_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend an option to switch languages'''
