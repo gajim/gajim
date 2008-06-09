@@ -553,6 +553,39 @@ class RosterWindow:
 
 		return True
 
+
+	def _recalibrate_metacontact_family(self, family, account):
+		'''Regroup metacontact family if necessary.'''
+
+		brothers = []
+		if self.regroup:
+			# group all together
+			nearby_family = family
+		else:
+			# we want one nearby_family per account
+			nearby_family = [data for data in family
+				if account == data['account']]
+
+		big_brother_data = gajim.contacts.get_metacontacts_big_brother(
+			nearby_family)
+		big_brother_jid = big_brother_data['jid']
+		big_brother_account = big_brother_data['account']
+
+		child_iters = self._get_contact_iter(jid, account, model = self.model)
+		parent_iter = self.model.iter_parent(child_iters[0])
+		parent_type = self.model[parent_iter][C_TYPE]
+
+		# Check if the current BigBrother has even been before.
+		if parent_type == 'contact':
+			# There is a new big brother
+			self._remove_metacontact_family(family, account)
+			brothers = self._add_metacontact_family(family, account)
+
+			for c, acc in brothers:
+				self.draw_contact(c.jid, acc)
+				self.draw_avatar(c.jid, acc)
+
+
 	def _add_self_contact(self, account):
 		'''Add account's SelfContact to roster and draw it and the account.
 
@@ -1017,24 +1050,7 @@ class RosterWindow:
 			big_brother_jid = big_brother_data['jid']
 			big_brother_account = big_brother_data['account']
 
-			if big_brother_jid == jid and big_brother_account == account:
-				parent_iter = self.model.iter_parent(child_iters[0])
-				parent_type = self.model[parent_iter][C_TYPE]
-
-				# We are the big brother. But have also been before?
-				if parent_type == 'group':
-					# We don't have a big brother. We must have been
-					# big brother then.
-					pass
-				else:
-					# We are the new big brother but haven't been before
-					# Remove us and all our brothers and then re-add us so that
-					self._remove_metacontact_family(family, account)
-					brothers = self._add_metacontact_family(family, account)
-					big_brother_c, big_brother_acc = brothers[0]
-					brothers = brothers[1:]
-					self.draw_avatar(big_brother_c.jid, big_brother_acc)
-			else:
+			if big_brother_jid != jid or big_brother_account != account:
 				# We are a simple brother
 				# Let our big brother know of our existence (and possible events)
 				if not self.starting:
@@ -1096,10 +1112,6 @@ class RosterWindow:
 		for child_iter in child_iters:
 			self.model[child_iter][C_IMG] = img
 			self.model[child_iter][C_NAME] = name
-
-		for c, acc in brothers:
-			self.draw_contact(c.jid, acc)
-			self.draw_avatar(c.jid, acc)
 
 		for group in contact.groups:
 			# We need to make sure that _visible_func is called for
@@ -1176,7 +1188,12 @@ class RosterWindow:
 		'''
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 
-		self.draw_contact(jid, account)
+		family = gajim.contacts.get_metacontacts_family(account, jid)
+		if family:
+			# There might be a new big brother
+			self._recalibrate_metacontact_family(family, account)
+		else:
+			self.draw_contact(jid, account)
 		self.draw_account(account)
 
 		for group in contact.groups:
