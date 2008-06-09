@@ -811,9 +811,8 @@ class RosterWindow:
 
 		self.add_contact(jid, account)
 
-		# FIXME: Jim, what was the exact need of this?
-#		for group in groups:
-#			self._adjust_group_expand_collapse_state(group, account)
+		for group in groups:
+			self._adjust_group_expand_collapse_state(group, account)
 
 	def remove_contact_from_groups(self, jid, account, groups):
 		'''Remove contact from given groups and redraw them.
@@ -939,7 +938,7 @@ class RosterWindow:
 		return False
 
 	def draw_parent_contact(self, jid, account):
-		child_iters = self._get_contact_iter(jid, account, self.model)
+		child_iters = self._get_contact_iter(jid, account, model = self.model)
 		if not child_iters:
 			return False
 		parent_iter = self.model.iter_parent(child_iters[0])
@@ -954,6 +953,8 @@ class RosterWindow:
 	def draw_contact(self, jid, account, selected = False, focus = False):
 		'''draw the correct state image, name BUT not avatar'''
 		# focus is about if the roster window has toplevel-focus or not
+		# FIXME: We really need a custom cell_renderer
+
 		contact_instances = gajim.contacts.get_contacts(account, jid)
 		contact = gajim.contacts.get_highest_prio_contact_from_contacts(
 			contact_instances)
@@ -1004,7 +1005,6 @@ class RosterWindow:
 				if account_ == account: # useless to add accout name
 					continue
 				for jid_ in gajim.contacts.get_jid_list(account_):
-					# [0] cause it'fster than highest_prio
 					contact_ = gajim.contacts.get_first_contact_from_jid(account_,
 						jid_)
 					if contact_.get_shown_name() == contact.get_shown_name() and \
@@ -1030,21 +1030,6 @@ class RosterWindow:
 					'\n<span size="small" style="italic" foreground="%s">%s</span>' \
 					% (colorstring, gobject.markup_escape_text(status))
 
-		# Check if our metacontacts family has changed
-		brothers = []
-		family = gajim.contacts.get_metacontacts_family(account, jid)
-		if family: # Are we a metacontact (have a family)
-			
-			nearby_family, big_brother_jid, big_brother_account = \
-				self._get_nearby_family_and_big_brother(family, account)
-
-			if big_brother_jid != jid or big_brother_account != account:
-				# We are a simple brother
-				# Let our big brother know of our existence (and possible events)
-				if not self.starting:
-					# Our account is currently added. Parent will be drawn anyway.
-					self.draw_contact(big_brother_jid, big_brother_account)
-
 		icon_name = helpers.get_icon_name_to_show(contact, account)
 		# look if another resource has awaiting events
 		for c in contact_instances:
@@ -1053,53 +1038,58 @@ class RosterWindow:
 				icon_name = c_icon_name
 				break
 
-		iters = self._get_contact_iter(jid, account, contact)
-		if iters and self.modelfilter.iter_has_child(iters[0]):
-			# We are big brother contact and visible in the roster
-			titer = iters[0]
-			path = self.modelfilter.get_path(titer)
+		# Check for events of collapsed (hidden) brothers
+		family = gajim.contacts.get_metacontacts_family(account, jid)
+		is_big_brother = False
+		have_visible_children = False
+		if family:
+			nearby_family, bb_jid, bb_account = \
+				self._get_nearby_family_and_big_brother(family, account)
+			is_big_brother = (jid, account) == (bb_jid, bb_account)
+			iters = self._get_contact_iter(jid, account)	
+			have_visible_children = iters and self.modelfilter.iter_has_child(iters[0])
 
-			if not self.tree.row_expanded(path) and \
-			icon_name not in ('event', 'muc_active', 'muc_inactive'):
+		if have_visible_children:
+			# We are the big brother and have a visible family
+			# that is not just us
+			for child_iter in child_iters:
+				path = self.model.get_path(child_iter)
 
-				iterC = self.modelfilter.iter_children(titer)
-				if icon_name in ('error', 'offline'):
-					# get the icon from the first child as they are sorted by show
-					jidC = self.modelfilter[iterC][C_JID].decode('utf-8')
-					accountC = self.modelfilter[iterC][C_ACCOUNT].decode(
-						'utf-8')
-					contactC = gajim.contacts.get_contact_with_highest_priority(
-						accountC, jidC)
-					icon_nameC = helpers.get_icon_name_to_show(contactC, accountC)
-					if icon_nameC not in ('error', 'not in roster'):
-						icon_name = icon_nameC
-				while iterC:
-					# a child has awaiting messages ?
-					jidC = self.modelfilter[iterC][C_JID].decode('utf-8')
-					accountC = self.modelfilter[iterC][C_ACCOUNT].decode('utf-8')
-					if len(gajim.events.get_events(accountC, jidC)):
-						icon_name = 'event'
-						break
-					iterC = self.modelfilter.iter_next(iterC)
+				if not self.tree.row_expanded(path) and icon_name != 'event':
+					iterC = self.model.iter_children(child_iter)
+					while iterC:
+						# a child has awaiting messages?
+						jidC = self.model[iterC][C_JID].decode('utf-8')
+						accountC = self.model[iterC][C_ACCOUNT].decode('utf-8')
+						if len(gajim.events.get_events(accountC, jidC)):
+							icon_name = 'event'
+							break
+						iterC = self.model.iter_next(iterC)
 
-			if self.tree.row_expanded(path):
-				state_images = self.get_appropriate_state_images(jid,
-					size = 'opened', icon_name = icon_name)
-			else:
-				state_images = self.get_appropriate_state_images(jid,
-					size = 'closed', icon_name = icon_name)
+				if self.tree.row_expanded(path):
+					state_images = self.get_appropriate_state_images(jid,
+						size = 'opened', icon_name = icon_name)
+				else:
+					state_images = self.get_appropriate_state_images(jid,
+						size = 'closed', icon_name = icon_name)
+				
+				# Expand/collapse icon might differ per iter (group)
+				img = state_images[icon_name]
+				self.model[child_iter][C_IMG] = img
+				self.model[child_iter][C_NAME] = name
 		else:
-			# We might be a normal contact or a little brother
-			#self.draw_parent_contact(jid, account) # simply call, it's save
+			# All iters have the same icon (no expand/collapse)
 			state_images = self.get_appropriate_state_images(jid,
 				icon_name = icon_name)
 
-		img = state_images[icon_name]
-		# Old iters might be invalid!
-		child_iters = self._get_contact_iter(jid, account, model = self.model)
-		for child_iter in child_iters:
-			self.model[child_iter][C_IMG] = img
-			self.model[child_iter][C_NAME] = name
+			img = state_images[icon_name]
+			for child_iter in child_iters:
+				self.model[child_iter][C_IMG] = img
+				self.model[child_iter][C_NAME] = name
+
+			# We are a little brother
+			if family and not is_big_brother and not self.starting:
+				self.draw_parent_contact(jid, account)
 
 		for group in contact.groups:
 			# We need to make sure that _visible_func is called for
@@ -1186,8 +1176,7 @@ class RosterWindow:
 
 		for group in contact.groups:
 			self.draw_group(group, account)
-			# FIXME: Is this needed, Jim?
-			#self._adjust_group_expand_collapse_state(group, account)
+			self._adjust_group_expand_collapse_state(group, account)
 
 	def _idle_draw_jids_of_account(self, jids, account):
 		'''Draw given contacts and their avatars in a lazy fashion.
