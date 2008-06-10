@@ -1323,7 +1323,7 @@ sent a message to.'''
 			orphaned = filter(lambda s: not s.control, chat_sessions)
 
 			return orphaned[0]
-		except KeyError:
+		except (KeyError, IndexError):
 			return None
 
 	def make_new_session(self, jid, thread_id=None, type='chat', cls=None):
@@ -2103,6 +2103,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			else:	# print in the window the error
 				self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 					errmsg, errcode))
+
+		if ptype == 'unavailable' and jid_stripped in self.sessions:
+			# automatically terminate sessions that they haven't sent a thread ID in
+			for sess in self.sessions[jid_stripped].values():
+				if not sess.received_thread_id:
+					sess.terminate()
+					del self.sessions[jid_stripped][sess.thread_id]
 
 		if avatar_sha and ptype != 'error':
 			if not self.vcard_shas.has_key(jid_stripped):

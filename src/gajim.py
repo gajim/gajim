@@ -621,7 +621,7 @@ class Interface:
 		jid = array[0].split('/')[0]
 		keyID = array[5]
 		contact_nickname = array[7]
-		
+
 		# Get the proper keyID
 		keyID = helpers.prepare_and_validate_gpg_keyID(account, 
 				jid, keyID)
@@ -647,6 +647,20 @@ class Interface:
 				if c.resource == resource:
 					contact1 = c
 					break
+
+			highest = gajim.contacts.get_highest_prio_contact_from_contacts(lcontact)
+			if not highest or \
+			(highest.priority < priority and highest.resource != resource) or \
+			(highest.resource == resource and highest.priority > priority):
+				# either this contact is the new highest priority contact or it was the
+				# highest and dropped in priority (so may no longer be the highest)
+
+				# disconnect sessions from this contact's chat controls so we
+				# don't have to open a new tab if a new session comes in
+
+				for ctrl in self.msg_win_mgr.get_chat_controls(jid, account):
+					ctrl.set_session(None)
+
 			if contact1:
 				if contact1.show in statuss:
 					old_show = statuss.index(contact1.show)

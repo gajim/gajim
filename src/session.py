@@ -125,15 +125,12 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			pm = True
 			msg_type = 'pm'
 
-		jid_of_control = full_jid_with_resource
-
 		highest_contact = gajim.contacts.get_contact_with_highest_priority(
 			self.conn.name, jid)
 
-		if not pm:
-			if not highest_contact or not highest_contact.resource or \
-			resource == highest_contact.resource or highest_contact.show == 'offline':
-				jid_of_control = jid
+		# does this resource have the highest priority of any available?
+		is_highest = not highest_contact or not highest_contact.resource or \
+			resource == highest_contact.resource or highest_contact.show == 'offline'
 
 		# Handle chat states
 		contact = gajim.contacts.get_contact(self.conn.name, jid, resource)
@@ -174,11 +171,10 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		advanced_notif_num = notify.get_advanced_notification('message_received',
 			self.conn.name, contact)
 
-		# Is it a first or next message received ?
-		first = False
-		if not self.control and not gajim.events.get_events(self.conn.name,
-																							jid_of_control, [msg_type]):
-			first = True
+		if not pm and is_highest:
+			jid_of_control = jid
+		else:
+			jid_of_control = full_jid_with_resource
 
 		if not self.control:
 			# look for an existing chat control without a session
@@ -186,7 +182,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			if ctrl:
 				self.control = ctrl
 				self.control.set_session(self)
-				first = False
 
 		if pm:
 			nickname = resource
@@ -198,17 +193,24 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 				xhtml=xhtml, form_node=form_node)
 
 			nickname = gajim.get_name_from_jid(self.conn.name, jid)
+
 		# Check and do wanted notifications
 		msg = msgtxt
 		if subject:
 			msg = _('Subject: %s') % subject + '\n' + msg
 		focused = False
 
+		# Is it a first or next message received ?
+		first = False
+
 		if self.control:
 			parent_win = self.control.parent_win
 			if self.control == parent_win.get_active_control() and \
 			parent_win.window.has_focus:
 				focused = True
+		elif not gajim.events.get_events(self.conn.name, \
+		jid_of_control, [msg_type]):
+			first = True
 
 		notify.notify('new_message', jid_of_control, self.conn.name, [msg_type,
 			first, nickname, msg, focused], advanced_notif_num)
