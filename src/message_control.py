@@ -134,6 +134,8 @@ class MessageControl:
 			new_key = session.thread_id
 
 		if oldsession:
+			oldsession.control = None
+
 			jid = self.contact.jid
 			if self.resource:
 				jid += '/' + self.resource
@@ -143,7 +145,7 @@ class MessageControl:
 
 			if oldsession.enable_encryption:
 				self.print_esession_details()
-		else:
+		elif session:
 			self.parent_win.move_from_sessionless(self)
 
 	def send_message(self, message, keyID = '', type = 'chat',
