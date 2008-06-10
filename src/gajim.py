@@ -609,7 +609,11 @@ class Interface:
 	def handle_event_notify(self, account, array):
 		# 'NOTIFY' (account, (jid, status, status message, resource, priority,
 		# keyID, timestamp, contact_nickname))
-		# if we're here it means contact changed show
+		#
+		# Contact changed show
+
+		# FIXME: Drop and rewrite...
+
 		statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd',
 			'invisible']
 		# Ignore invalid show
@@ -664,17 +668,20 @@ class Interface:
 			if contact1:
 				if contact1.show in statuss:
 					old_show = statuss.index(contact1.show)
+				# nick changed
 				if contact_nickname is not None and \
 				contact1.contact_name != contact_nickname:
 					contact1.contact_name = contact_nickname
 					self.roster.draw_contact(jid, account)
+
 				if old_show == new_show and contact1.status == status_message and \
 				contact1.priority == priority: # no change
 					return
 			else:
 				contact1 = gajim.contacts.get_first_contact_from_jid(account, ji)
 				if not contact1:
-					# presence of another resource of our jid
+					# Presence of another resource of our jid
+					# Create SelfContact and add to roster
 					if resource == gajim.connections[account].server_resource:
 						return
 					contact1 = gajim.contacts.create_contact(jid = ji,
@@ -687,14 +694,15 @@ class Interface:
 					lcontact.append(contact1)
 				elif contact1.show in statuss:
 					old_show = statuss.index(contact1.show)
+				# FIXME: What Am I?
 				if (resources != [''] and (len(lcontact) != 1 or
 				lcontact[0].show != 'offline')) and jid.find('@') > 0:
 					old_show = 0
 					contact1 = gajim.contacts.copy_contact(contact1)
 					lcontact.append(contact1)
 				contact1.resource = resource
-			# FIXME ugly workaround for self contact
-			self.roster.add_contact(contact1.jid, account)
+			
+				self.roster.add_contact(contact1.jid, account)
 
 			if contact1.jid.find('@') > 0 and len(lcontact) == 1:
 				# It's not an agent
@@ -725,6 +733,7 @@ class Interface:
 				# We're connected since more that 30 seconds
 				contact1.last_status_time = time.localtime()
 			contact1.contact_nickname = contact_nickname
+
 		if gajim.jid_is_transport(jid):
 			# It must be an agent
 			if ji in jid_list:
@@ -852,10 +861,7 @@ class Interface:
 		if jid in gajim.contacts.get_jid_list(account):
 			c = gajim.contacts.get_first_contact_from_jid(account, jid)
 			c.resource = array[1]
-			self.roster.remove_contact(c.jid, account)
-			if _('Not in Roster') in c.groups:
-				c.groups.remove(_('Not in Roster'))
-			self.roster.add_contact(c.jid, account)
+			self.roster.remove_contact_from_groups(c.jid, account, [('Not in Roster'),])
 		else:
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,
@@ -922,8 +928,7 @@ class Interface:
 				if c.jid in gajim.to_be_removed[account]:
 					# This way we'll really remove it
 					gajim.to_be_removed[account].remove(c.jid)
-				gajim.contacts.remove_jid(account, c.jid)
-				self.roster.remove_contact(c.jid, account)
+				self.roster.remove_contact(c.jid, account, backend = True)
 
 	def handle_event_register_agent_info(self, account, array):
 		# ('REGISTER_AGENT_INFO', account, (agent, infos, is_form))

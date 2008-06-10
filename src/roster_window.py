@@ -760,33 +760,6 @@ class RosterWindow:
 		self.remove_contact(jid, account, force = True, backend = True)
 		return True
 
-	#FIXME:
-	# We need to define a generic way to keep contacts in roster
-	# as long as they have pending events or as we
-	# still chat with them
-	def _readd_contact_to_roster_if_needed(self, contact, account):
-		need_readd = False
-		if len(gajim.events.get_events(account, contact.jid)):
-			need_readd = True
-		elif gajim.interface.msg_win_mgr.has_window(contact.jid, account):
-			if _('Not in Roster') in contact.groups:
-				# Close chat window
-				msg_win = gajim.interface.msg_win_mgr.get_window(contact.jid,
-					account)
-				for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(
-				contact.jid, account):
-					msg_win.remove_tab(ctrl, msg_win.CLOSE_CLOSE_BUTTON)
-			else:
-				need_readd = True
-		if need_readd:
-			c = gajim.contacts.create_contact(jid = contact.jid,
-				name = '', groups = [_('Not in Roster')],
-				show = 'not in roster', status = '', ask = 'none',
-				keyID = contact.keyID)
-			gajim.contacts.add_contact(account, c)
-			self.add_contact(contact.jid, account)
-
-
 	def add_contact_to_groups(self, jid, account, groups):
 		'''Add contact to given groups and redraw them.
 
@@ -1165,13 +1138,15 @@ class RosterWindow:
 		Show contact if it has pending events
 		'''
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+		if not contact:
+			# idle draw or just removed SelfContact
+			return
 
 		family = gajim.contacts.get_metacontacts_family(account, jid)
 		if family:
 			# There might be a new big brother
 			self._recalibrate_metacontact_family(family, account)
-		else:
-			self.draw_contact(jid, account)
+		self.draw_contact(jid, account)
 		self.draw_account(account)
 
 		for group in contact.groups:
@@ -1496,7 +1471,7 @@ class RosterWindow:
 			gajim.groups[account] = {}
 		for jid in array.keys():
 			# Remove the contact in roster. It might has changed
-			self.remove_contact(jid, account)
+			self.remove_contact(jid, account, force = True)
 			# Remove old Contact instances
 			gajim.contacts.remove_jid(account, jid, remove_meta=False)
 			jids = jid.split('/')
@@ -1827,6 +1802,7 @@ class RosterWindow:
 				# We come back from invisible, join bookmarks
 				gajim.interface.auto_join_bookmarks(account)
 
+
 	def chg_contact_status(self, contact, show, status, account):
 		'''When a contact changes his or her status'''
 		contact_instances = gajim.contacts.get_contacts(account, contact.jid)
@@ -1834,10 +1810,13 @@ class RosterWindow:
 		contact.status = status
 		# name is to show in conversation window
 		name = contact.get_shown_name()
-
+		
+		# The contact has several resources
 		if len(contact_instances) > 1:
 			if contact.resource != '':
 				name += '/' + contact.resource
+			
+			# Remove resource when going offline
 			if show in ('offline', 'error') and \
 			len(gajim.events.get_events(account, contact.get_full_jid())) == 0:
 				jid_with_resource = contact.jid + '/' + contact.resource
@@ -1848,13 +1827,13 @@ class RosterWindow:
 					for ctrl in win.get_controls(jid_with_resource, account):
 						ctrl.update_ui()
 						win.redraw_tab(ctrl)
-
 				gajim.contacts.remove_contact(account, contact)
+
 		elif contact.jid == gajim.get_jid_from_account(account) and \
-		show == 'offline':
-			# Our SelfContact went offline. Remove him from roster and contacts
-			self.remove_contact(contact.jid, account)
-			gajim.contacts.remove_contact(account, contact) 
+		show in ('offline', 'error'):
+			# SelfContact went offline. Remove him when last pending message was read
+			self.remove_contact(contact.jid, account, backend = True)
+
 		# print status in chat window and update status/GPG image
 		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
 			win = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
@@ -1909,8 +1888,7 @@ class RosterWindow:
 				# Remove SelfContact from roster and remove it.
 				# It might be gone when we return
 				self_jid = gajim.get_jid_from_account(account)
-				self.remove_contact(self_jid, account)
-				gajim.contacts.remove_jid(account, self_jid)
+				self.remove_contact(self_jid, account, backend = True)
 			self.actions_menu_needs_rebuild = True
 		self.update_status_combobox()
 		# Force the rebuild now since the on_activates on the menu itself does
@@ -2310,7 +2288,6 @@ class RosterWindow:
 	def on_remove_agent(self, widget, list_):
 		'''When an agent is requested to be removed. list_ is a list of
 		(contact, account) tuple'''
-		# FIXME remove transport contacts
 		for (contact, account) in list_:
 			if gajim.config.get_per('accounts', account, 'hostname') == \
 			contact.jid:
@@ -2579,16 +2556,9 @@ class RosterWindow:
 			for contact in gajim.contacts.get_contacts_from_group(account, group):
 				if not dlg.is_checked():
 					self.remove_contact_from_groups(contact.jid,account, [group])
-					gajim.connections[account].update_contact(contact.jid,
-						contact.name, contact.groups)
-					self.add_contact(contact.jid, account)
 				else:
 					gajim.connections[account].unsubscribe(contact.jid)
-					for c in gajim.contacts.get_contacts(account, contact.jid):
-						self.remove_contact(c.jid, account)
-					gajim.contacts.remove_jid(account, c.jid)
-					self._readd_contact_to_roster_if_needed(contact, account)
-			self.draw_account(account)
+					self.remove_contact(contact.jid, account, backend = True)
 
 	def on_assign_pgp_key(self, widget, contact, account):
 		attached_keys = gajim.config.get_per('accounts', account,
@@ -2964,21 +2934,13 @@ class RosterWindow:
 					remove_auth = False
 			for (contact, account) in list_:
 				gajim.connections[account].unsubscribe(contact.jid, remove_auth)
-				for c in gajim.contacts.get_contacts(account, contact.jid):
-					self.remove_contact(c.jid, account)
-				gajim.contacts.remove_jid(account, contact.jid)
-				self.draw_account(account)
+				self.remove_contact(contact.jid, account, backend = True)
 				if not remove_auth and contact.sub == 'both':
 					contact.name = ''
 					contact.groups = []
 					contact.sub = 'from'
 					gajim.contacts.add_contact(account, contact)
 					self.add_contact(contact.jid, account)
-				else:
-					if _('Not in Roster') in contact.groups:
-						gajim.events.remove_events(account, contact.jid)
-					self._readd_contact_to_roster_if_needed(contact, account)
-
 		def on_ok2(list_):
 			on_ok(False, list_)
 
