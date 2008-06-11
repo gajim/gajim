@@ -3403,34 +3403,34 @@ class RosterWindow:
 		elif type_ == 'account':
 			self._adjust_account_expand_collapse_state(account)
 
-	def on_treeview_selection_changed(self, selection):
-		'''Called when selection in TreeView has changed.
-
-		Redraw unselected rows to make status message readable
-		on all possible backgrounds.
-		'''
-		# Selection can change when the model is filtered
-		# Only write to the model when filtering is finished!
-
-		# FIXME: When we are filtering our custom colors are somehow lost
-
-		model, list_of_paths = selection.get_selected_rows()
-		if len(self._last_selected_contact):
-			# update unselected rows
-			for (jid, account) in self._last_selected_contact:
-				gobject.idle_add(self.draw_contact, jid, account)
-		self._last_selected_contact = []
-		if len(list_of_paths) == 0:
-			return
-		for path in list_of_paths:
-			row = model[path]
-			if row[C_TYPE] != 'contact':
-				self._last_selected_contact = []
-				return
-			jid = row[C_JID].decode('utf-8')
-			account = row[C_ACCOUNT].decode('utf-8')
-			self._last_selected_contact.append((jid, account))
-			gobject.idle_add(self.draw_contact, jid, account, True)
+# Selection can change when the model is filtered
+# Only write to the model when filtering is finished!
+#
+# FIXME: When we are filtering our custom colors are somehow lost
+#
+#	def on_treeview_selection_changed(self, selection):
+#		'''Called when selection in TreeView has changed.
+#
+#		Redraw unselected rows to make status message readable
+#		on all possible backgrounds.
+#		'''
+#		model, list_of_paths = selection.get_selected_rows()
+#		if len(self._last_selected_contact):
+#			# update unselected rows
+#			for (jid, account) in self._last_selected_contact:
+#				gobject.idle_add(self.draw_contact, jid, account)
+#		self._last_selected_contact = []
+#		if len(list_of_paths) == 0:
+#			return
+#		for path in list_of_paths:
+#			row = model[path]
+#			if row[C_TYPE] != 'contact':
+#				self._last_selected_contact = []
+#				return
+#			jid = row[C_JID].decode('utf-8')
+#			account = row[C_ACCOUNT].decode('utf-8')
+#			self._last_selected_contact.append((jid, account))
+#			gobject.idle_add(self.draw_contact, jid, account, True)
 
 	def on_service_disco_menuitem_activate(self, widget, account):
 		server_jid = gajim.config.get_per('accounts', account, 'hostname')
