@@ -3108,6 +3108,7 @@ class RosterWindow:
 			if gajim.connections[account].pep_supported:
 				# As many implementations don't support retracting items, we send a
 				# "Stopped" event first
+				from common import pep
 				pep.user_send_tune(account, '')
 				pep.user_retract_tune(account)
 		helpers.update_optional_features(account)
