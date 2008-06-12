@@ -64,11 +64,6 @@ class CapsCache(object):
 	>>> muc in x.features
 	True
 
-	# retrieving data (multiple exts case)
-	>>> caps=('http://gajim.org/caps', '0.9', ('csn', 'ft'))
-	>>> muc in cc[caps].features
-	True
-
 	'''
 	def __init__(self, logger=None):
 		''' Create a cache for entity capabilities. '''
