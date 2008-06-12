@@ -1,41 +1,15 @@
 import unittest
 
-import sys
-import os.path
-
-gajim_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
-
-sys.path.append(gajim_root + '/src')
-
-# a temporary version of ~/.gajim for testing
-configdir = gajim_root + '/test/tmp'
-
-# define _ for i18n
-import __builtin__
-__builtin__._ = lambda x: x
-
-# wipe config directory
-import os
-if os.path.isdir(configdir):
-	import shutil
-	shutil.rmtree(configdir)
-
-os.mkdir(configdir)
-
-import common.configpaths
-common.configpaths.gajimpaths.init(configdir)
-common.configpaths.gajimpaths.init_profile()
-
 import time
 
-# for some reason common.gajim needs to be imported before xmpppy?
+import testlib
+testlib.setup_env()
+
 from common import gajim
 from common import xmpp
 
 from mock import Mock, expectParams
 from mocks import *
-
-gajim.DATA_DIR = gajim_root + '/data'
 
 from common.stanza_session import StanzaSession
 
