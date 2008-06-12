@@ -43,7 +43,7 @@ class AcronymsExpanderPlugin(GajimPlugin):
 	def __init__(self):
 		super(AcronymsExpanderPlugin, self).__init__()
 
-		self.__class__.gui_extension_points = {
+		self.gui_extension_points = {
 			'chat_control_base' : (self.connect_with_chat_control_base,
 								   self.disconnect_from_chat_control_base)
 		}		

@@ -43,7 +43,7 @@ class LengthNotifierPlugin(GajimPlugin):
 	def __init__(self):
 		super(LengthNotifierPlugin, self).__init__()
 		
-		self.__class__.gui_extension_points = {
+		self.gui_extension_points = {
 			'chat_control' : (self.connect_with_chat_control,
 							  self.disconnect_from_chat_control)
 		}		

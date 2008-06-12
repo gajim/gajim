@@ -94,4 +94,29 @@ class GajimPlugin(object):
 	
 	@log_calls('GajimPlugin')
 	def __init__(self):
+		self.config = Config()
+		'''
+		Plug-in configuration dictionary.
+		
+		Automatically saved and loaded and plug-in (un)load.
+		
+		:type: `plugins.plugin.Config`
+		'''
+		
+		self._load_config()
+	
+	@log_calls('GajimPlugin')
+	def _save_config(self):
 		pass
+	
+	@log_calls('GajimPlugin')	
+	def _load_config(self):
+		pass
+	
+	@log_calls('GajimPlugin')
+	def __del__(self):
+		self._save_config()
+		
+
+class Config(dict):
+	pass
