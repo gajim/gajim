@@ -26,7 +26,7 @@
 ##
 
 import os
-import pycallgraph
+# import pycallgraph
 
 
 if os.name == 'nt':
