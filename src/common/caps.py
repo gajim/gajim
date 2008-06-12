@@ -24,7 +24,7 @@ import helpers
 
 class CapsCache(object):
 	''' This object keeps the mapping between caps data and real disco
-	features they represent, and provides simple way to query that info. 
+	features they represent, and provides simple way to query that info.
 	It is application-wide, that is there's one object for all
 	connections.
 	Goals:
@@ -44,46 +44,39 @@ class CapsCache(object):
 	# object creation
 	>>> cc=CapsCache(logger_object)
 
-	>>> caps=('http://exodus.jabberstudio.org/caps', '0.9', None) # node, ver, ext
-	>>> muc='http://jabber.org/protocol/muc'
-	>>> chatstates='http://jabber.org/protocol/chatstates'
+	>>> caps = ('sha-1', '66/0NaeaBKkwk85efJTGmU47vXI=')
+	>>> muc = 'http://jabber.org/protocol/muc'
+	>>> chatstates = 'http://jabber.org/protocol/chatstates'
+
+	# setting data
+	>>> cc[caps].identities = [{'category':'client', 'type':'pc'}]
+	>>> cc[caps].features = [muc]
 
 	# retrieving data
 	>>> muc in cc[caps].features
 	True
-	>>> muc in cc[caps]
-	True
-	>>> chatstates in cc[caps]
+	>>> chatstates in cc[caps].features
 	False
 	>>> cc[caps].identities
-	set({'category':'client', 'type':'pc'})
-	>>> x=cc[caps] # more efficient if making several queries for one set of caps
+	[{'category': 'client', 'type': 'pc'}]
+	>>> x = cc[caps] # more efficient if making several queries for one set of caps
 	ATypicalBlackBoxObject
-	>>> muc in x
+	>>> muc in x.features
 	True
-	>>> x.node
-	'http://exodus.jabberstudio.org/caps'
 
 	# retrieving data (multiple exts case)
 	>>> caps=('http://gajim.org/caps', '0.9', ('csn', 'ft'))
-	>>> muc in cc[caps]
+	>>> muc in cc[caps].features
 	True
 
-	# setting data
-	>>> newcaps=('http://exodus.jabberstudio.org/caps', '0.9a', None)
-	>>> cc[newcaps].identities.add({'category':'client', 'type':'pc', 'name':'Gajim'})
-	>>> cc[newcaps].features+=muc # same as:
-	>>> cc[newcaps]+=muc
-	>>> cc[newcaps]['csn']+=chatstates # adding data as if ext was 'csn'
-	# warning: no feature removal!
 	'''
 	def __init__(self, logger=None):
 		''' Create a cache for entity capabilities. '''
 		# our containers:
-		# __cache is a dictionary mapping: pair of node and version maps
+		# __cache is a dictionary mapping: pair of hash method and hash maps
 		#   to CapsCacheItem object
 		# __CacheItem is a class that stores data about particular
-		#   client (node/version pair)
+		#   client (hash method/hash pair)
 		self.__cache = {}
 
 		class CacheItem(object):
@@ -129,7 +122,7 @@ class CapsCache(object):
 						d['xml:lang'] = i[2]
 					if i[3]:
 						d['name'] = i[3]
-					list.append(d)
+					list_.append(d)
 				return list_
 			def _set_identities(ciself, value):
 				ciself._identities = []
@@ -172,7 +165,9 @@ class CapsCache(object):
 	def __getitem__(self, caps):
 		if caps in self.__cache:
 			return self.__cache[caps]
-		hash_method, hash = caps[0], caps[1]
+
+		hash_method, hash = caps
+
 		x = self.__CacheItem(hash_method, hash)
 		self.__cache[(hash_method, hash)] = x
 		return x
