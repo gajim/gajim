@@ -183,6 +183,12 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 				self.control = ctrl
 				self.control.set_session(self)
 
+		# Is it a first or next message received ?
+		first = False
+		if not self.control and not gajim.events.get_events(self.conn.name, \
+		jid_of_control, [msg_type]):
+			first = True
+
 		if pm:
 			nickname = resource
 			groupchat_control.on_private_message(nickname, msgtxt, tim,
@@ -200,17 +206,11 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			msg = _('Subject: %s') % subject + '\n' + msg
 		focused = False
 
-		# Is it a first or next message received ?
-		first = False
-
 		if self.control:
 			parent_win = self.control.parent_win
 			if self.control == parent_win.get_active_control() and \
 			parent_win.window.has_focus:
 				focused = True
-		elif not gajim.events.get_events(self.conn.name, \
-		jid_of_control, [msg_type]):
-			first = True
 
 		notify.notify('new_message', jid_of_control, self.conn.name, [msg_type,
 			first, nickname, msg, focused], advanced_notif_num)
