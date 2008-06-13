@@ -87,7 +87,7 @@ def _info(type, value, tb):
 	while not close_clicked:
 		resp = dialog.run()
 		if resp == RESPONSE_REPORT_BUG:
-			url = 'http://trac.gajim.org/wiki/WikiStart#howto_report_ticket'
+			url = 'http://trac.gajim.org/wiki/HowToCreateATicket'
 			helpers.launch_browser_mailer('url', url)
 		else:
 			close_clicked = True
