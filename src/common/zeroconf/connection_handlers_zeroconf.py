@@ -460,7 +460,7 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream, connecti
 		else:
 			# XXX this shouldn't be hardcoded
 			if isinstance(session, ChatControlSession):
-				session.received(frm, msgtxt, tim, encrypted, subject, msg)
+				session.received(frm, msgtxt, tim, encrypted, msg)
 			else:
 				session.received(msg)
 	# END messageCB
