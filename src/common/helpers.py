@@ -1162,10 +1162,13 @@ def datetime_tuple(timestamp):
 	Because of various datetime formats are used the following exceptions
 	are handled:
 		- Optional milliseconds appened to the string are removed
+		- Optional Z (that means UTC) appened to the string are removed
 		- XEP-082 datetime strings have all '-' cahrs removed to meet
 		  the above format.'''
 	timestamp = timestamp.split('.')[0]
 	timestamp = timestamp.replace('-', '')
+	timestamp = timestamp.replace('z', '')
+	timestamp = timestamp.replace('Z', '')
 	from time import strptime
 	return strptime(timestamp, '%Y%m%dT%H:%M:%S')
 
