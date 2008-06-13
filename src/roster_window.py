@@ -550,7 +550,11 @@ class RosterWindow:
 
 		# Check if the current BigBrother has even been before.
 		if parent_type == 'contact':
-			# There is a new big brother
+			for data in nearby_family:
+				# recalibrate after remove to keep highlight
+				if data['jid'] in gajim.to_be_removed[data['account']]:
+					return
+
 			self._remove_metacontact_family(family, account)
 			brothers = self._add_metacontact_family(family, account)
 
@@ -829,6 +833,10 @@ class RosterWindow:
 			return
 		if jid in gajim.to_be_removed[account]:
 			gajim.to_be_removed[account].remove(jid)
+			family = gajim.contacts.get_metacontacts_family(account, jid)
+			if family:
+				# Peform delayed recalibration
+				self._recalibrate_metacontact_family(family, account)
 			self.draw_contact(jid, account)
 
 	#FIXME: integrate into add_contact()
