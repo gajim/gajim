@@ -4196,14 +4196,13 @@ class RosterWindow:
 
 		connected_accounts_with_private_storage = 0
 
-		if connected_accounts > 1: # 2 or more accounts? make submenus
-			add_sub_menu = gtk.Menu()
-			disco_sub_menu = gtk.Menu()
-			new_chat_sub_menu = gtk.Menu()
-			single_message_sub_menu = gtk.Menu()
+		accounts_list = gajim.contacts.get_accounts()
+		accounts_list.sort()
 
-			accounts_list = gajim.contacts.get_accounts()
-			accounts_list.sort()
+		# items that get shown whether an account is zeroconf or not
+		if connected_accounts > 1: # 2 or more accounts? make submenus
+			new_chat_sub_menu = gtk.Menu()
+
 			for account in accounts_list:
 				if gajim.connections[account].connected <= 1:
 					# if offline or connecting
@@ -4216,7 +4215,68 @@ class RosterWindow:
 				new_chat_item.connect('activate',
 					self.on_new_chat_menuitem_activate, account)
 
-				if gajim.config.get_per('accounts', account, 'is_zeroconf'):
+			new_chat_menuitem.set_submenu(new_chat_sub_menu)
+			new_chat_sub_menu.show_all()
+
+		elif connected_accounts == 1: # user has only one account
+			for account in gajim.connections:
+				if gajim.account_is_connected(account): # THE connected account
+					# new chat
+					if not self.new_chat_menuitem_handler_id:
+						self.new_chat_menuitem_handler_id = new_chat_menuitem.\
+							connect('activate', self.on_new_chat_menuitem_activate,
+							account)
+
+					break
+
+		# menu items that don't apply to zeroconf connections
+		if connected_accounts == 1 or (connected_accounts == 2 and \
+		gajim.zeroconf_is_connected()):
+			# only one 'real' (non-zeroconf) account is connected, don't need submenus
+
+			for account in accounts_list:
+				if gajim.account_is_connected(account) and \
+				not gajim.config.get_per('accounts', account, 'is_zeroconf'):
+					# gc
+					if gajim.connections[account].private_storage_supported:
+						connected_accounts_with_private_storage += 1
+					self.add_bookmarks_list(gc_sub_menu, account)
+					gc_sub_menu.show_all()
+					# add
+					if not self.add_new_contact_handler_id:
+						self.add_new_contact_handler_id =\
+							add_new_contact_menuitem.connect(
+							'activate', self.on_add_new_contact, account)
+					# disco
+					if not self.service_disco_handler_id:
+						self.service_disco_handler_id = service_disco_menuitem.\
+							connect('activate',
+							self.on_service_disco_menuitem_activate, account)
+
+					# single message
+					if not self.single_message_menuitem_handler_id:
+						self.single_message_menuitem_handler_id = \
+						single_message_menuitem.connect('activate', \
+						self.on_send_single_message_menuitem_activate, account)
+
+					# new chat accel
+					if not self.have_new_chat_accel:
+						ag = gtk.accel_groups_from_object(self.window)[0]
+						new_chat_menuitem.add_accelerator('activate', ag,
+							gtk.keysyms.n,	gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+						self.have_new_chat_accel = True
+
+					break # No other account connected
+		else:
+			# 2 or more 'real' accounts are connected, make submenus
+			single_message_sub_menu = gtk.Menu()
+			add_sub_menu = gtk.Menu()
+			disco_sub_menu = gtk.Menu()
+
+			for account in accounts_list:
+				if gajim.connections[account].connected <= 1 or \
+				gajim.config.get_per('accounts', account, 'is_zeroconf'):
+					# skip account if it's offline or connecting or is zeroconf
 					continue
 
 				# single message
@@ -4246,54 +4306,13 @@ class RosterWindow:
 				disco_item.connect('activate',
 					self.on_service_disco_menuitem_activate, account)
 
+			single_message_menuitem.set_submenu(single_message_sub_menu)
+			single_message_sub_menu.show_all()
+			gc_sub_menu.show_all()
 			add_new_contact_menuitem.set_submenu(add_sub_menu)
 			add_sub_menu.show_all()
 			service_disco_menuitem.set_submenu(disco_sub_menu)
 			disco_sub_menu.show_all()
-			new_chat_menuitem.set_submenu(new_chat_sub_menu)
-			new_chat_sub_menu.show_all()
-			single_message_menuitem.set_submenu(single_message_sub_menu)
-			single_message_sub_menu.show_all()
-			gc_sub_menu.show_all()
-
-		elif connected_accounts == 1: # user has only one account
-			for account in gajim.connections:
-				if gajim.account_is_connected(account): # THE connected account
-					# gc
-					if gajim.connections[account].private_storage_supported:
-						connected_accounts_with_private_storage += 1
-					self.add_bookmarks_list(gc_sub_menu, account)
-					gc_sub_menu.show_all()
-					# add
-					if not self.add_new_contact_handler_id:
-						self.add_new_contact_handler_id =\
-							add_new_contact_menuitem.connect(
-							'activate', self.on_add_new_contact, account)
-					# disco
-					if not self.service_disco_handler_id:
-						self.service_disco_handler_id = service_disco_menuitem.\
-							connect('activate',
-							self.on_service_disco_menuitem_activate, account)
-					# new chat
-					if not self.new_chat_menuitem_handler_id:
-						self.new_chat_menuitem_handler_id = new_chat_menuitem.\
-							connect('activate', self.on_new_chat_menuitem_activate,
-							account)
-
-					# single message
-					if not self.single_message_menuitem_handler_id:
-						self.single_message_menuitem_handler_id = \
-						single_message_menuitem.connect('activate', \
-						self.on_send_single_message_menuitem_activate, account)
-
-					# new chat accel
-					if not self.have_new_chat_accel:
-						ag = gtk.accel_groups_from_object(self.window)[0]
-						new_chat_menuitem.add_accelerator('activate', ag,
-							gtk.keysyms.n,	gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
-						self.have_new_chat_accel = True
-
-					break # No other account connected
 
 		if connected_accounts == 0:
 			# no connected accounts, make the menuitems insensitive

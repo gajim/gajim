@@ -285,6 +285,10 @@ def account_is_connected(account):
 def account_is_disconnected(account):
 	return not account_is_connected(account)
 
+def zeroconf_is_connected():
+	return account_is_connected(ZEROCONF_ACC_NAME) and \
+		config.get_per('accounts', ZEROCONF_ACC_NAME, 'is_zeroconf')
+
 def get_number_of_securely_connected_accounts():
 	'''returns the number of the accounts that are SSL/TLS connected'''
 	num_of_secured = 0
