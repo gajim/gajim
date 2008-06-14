@@ -41,6 +41,7 @@ class Event:
 				where kind in error, incoming
 			file-*: file_props
 			gc_msg: None
+			printed_chat: control
 			printed_*: None
 				messages that are already printed in chat, but not read'''
 		self.type_ = type_

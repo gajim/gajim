@@ -710,7 +710,7 @@ class ChatControlBase(MessageControl):
 				show_in_systray = notify.get_show_in_systray(event,
 					self.account, self.contact, type_)
 
-				event = gajim.events.create_event(type_, (self.session,),
+				event = gajim.events.create_event(type_, (self,),
 					show_in_roster = show_in_roster,
 					show_in_systray = show_in_systray)
 				gajim.events.add_event(self.account, full_jid, event)

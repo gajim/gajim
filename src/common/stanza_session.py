@@ -58,7 +58,7 @@ class StanzaSession(object):
 		for event in gajim.events.get_events(self.conn.name, self.jid, types=types):
 			# the event wasn't in this session
 			if (event.type_ == 'chat' and event.parameters[8] != self) or \
-					(event.type_ == 'printed_chat' and event.parameters[0] != self):
+			(event.type_ == 'printed_chat' and event.parameters[0].session != self):
 				continue
 
 			# events.remove_events returns True when there were no events

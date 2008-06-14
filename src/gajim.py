@@ -2260,20 +2260,17 @@ class Interface:
 			if not event:
 				event = gajim.events.get_first_event(account, jid, type_)
 
-			session = None
-
 			if type_ == 'printed_chat':
-				session = event.parameters[0]
+				ctrl = event.parameters[0]
 			elif type_ == 'chat':
 				session = event.parameters[8]
-
-			if session and session.control:
 				ctrl = session.control
-			elif type_ == '' and self.msg_win_mgr.has_window(fjid, account):
+
+			if type_ == '' and self.msg_win_mgr.has_window(fjid, account):
 				# assume that the most recently updated control we have for this party
 				# is the one that this event was in
 				ctrl = self.msg_win_mgr.get_chat_controls(fjid, account)[0]
-			else:
+			elif not ctrl:
 				highest_contact = gajim.contacts.get_contact_with_highest_priority(
 					account, jid)
 				# jid can have a window if this resource was lower when he sent
