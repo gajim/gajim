@@ -24,6 +24,8 @@ Base class for implementing plugin.
 :license: GPL
 '''
 
+import os
+
 from plugins.helpers import log_calls
 
 class GajimPlugin(object):
@@ -117,6 +119,17 @@ class GajimPlugin(object):
 	def __del__(self):
 		self._save_config()
 		
+	@log_calls('GajimPlugin')
+	def local_file_path(self, file_name):
+		return os.path.join(self.__path__, file_name)
+	
+	@log_calls('GajimPlugin')
+	def activate(self):
+		pass
+		
+	@log_calls('GajimPlugin')
+	def deactivate(self):
+		pass
 
 class Config(dict):
 	pass

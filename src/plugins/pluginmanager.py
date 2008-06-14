@@ -171,6 +171,7 @@ class PluginManager(object):
 
 		if success:
 			self.active_plugins.append(plugin_object)
+			plugin_object.activate()
 			plugin_class._instance = plugin_object
 			plugin_class._active = True
 
@@ -193,6 +194,7 @@ class PluginManager(object):
 			self.gui_extension_points_handlers[gui_extpoint_name].remove(gui_extpoint_handlers)
 			
 		# removing plug-in from active plug-ins list
+		plugin_object.deactivate()
 		self.active_plugins.remove(plugin_object)
 		plugin_object.__class__._active = False
 		plugin_object.__class__._instance = None
@@ -249,28 +251,57 @@ class PluginManager(object):
 		plugins_found = []
 		if os.path.isdir(path):
 			dir_list = os.listdir(path)
-			log.debug(dir_list)
+			#log.debug(dir_list)
 
 			sys.path.insert(0, path)
-			log.debug(sys.path)
+			#log.debug(sys.path)
 
-			for file_name in fnmatch.filter(dir_list, '*.py'):
-				log.debug('- "%s"'%(file_name))
-				file_path = os.path.join(path, file_name)
+			for elem_name in dir_list:
+				log.debug('- "%s"'%(elem_name))
+				file_path = os.path.join(path, elem_name)
 				log.debug('  "%s"'%(file_path))
-				if os.path.isfile(file_path):
-					module_name = os.path.splitext(file_name)[0]
-					module = __import__(module_name)
-					for module_attr_name in [f_name for f_name in dir(module) 
-								if not (f_name.startswith('__') or 
-										f_name.endswith('__'))]:
+				
+				module = None
+				
+				if os.path.isfile(file_path) and fnmatch.fnmatch(file_path,'*.py'):
+					module_name = os.path.splitext(elem_name)[0]
+					log.debug('Possible module detected.')
+					try:
+						module = __import__(module_name)
+						log.debug('Module imported.')
+					except ValueError, value_error:
+						log.debug('Module not imported successfully. ValueError: %s'%(value_error))
+					except ImportError, import_error:
+						log.debug('Module not imported successfully. ImportError: %s'%(import_error))
+					
+				elif os.path.isdir(file_path):
+					module_name = elem_name
+					file_path += os.path.sep
+					log.debug('Possible package detected.')
+					try:
+						module = __import__(module_name)
+						log.debug('Package imported.')
+					except ValueError, value_error:
+						log.debug('Package not imported successfully. ValueError: %s'%(value_error))
+					except ImportError, import_error:
+						log.debug('Package not imported successfully. ImportError: %s'%(import_error))
+					
+					
+				if module:
+					log.debug('Attributes processing started')
+					for module_attr_name in [attr_name for attr_name in dir(module) 
+											 if not (attr_name.startswith('__') or 
+													 attr_name.endswith('__'))]:
 						module_attr = getattr(module, module_attr_name)
 						log.debug('%s : %s'%(module_attr_name, module_attr))
-
+						
 						try:
 							if issubclass(module_attr, GajimPlugin) and \
 							   not module_attr is GajimPlugin:
 								log.debug('is subclass of GajimPlugin')
+								#log.debug('file_path: %s\nabspath: %s\ndirname: %s'%(file_path, os.path.abspath(file_path), os.path.dirname(os.path.abspath(file_path))))
+								#log.debug('file_path: %s\ndirname: %s\nabspath: %s'%(file_path, os.path.dirname(file_path), os.path.abspath(os.path.dirname(file_path))))
+								module_attr.__path__ = os.path.abspath(os.path.dirname(file_path))
 								plugins_found.append(module_attr)
 						except TypeError, type_error:
 							log.debug('module_attr: %s, error : %s'%(
