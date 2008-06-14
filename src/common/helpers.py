@@ -960,17 +960,22 @@ def get_chat_control(account, contact):
 		account, contact.jid)
 	# Look for a chat control that has the given resource, or default to
 	# one without resource
-	ctrl = gajim.interface.msg_win_mgr.get_control(full_jid_with_resource,
+	ctrls = gajim.interface.msg_win_mgr.get_chat_controls(full_jid_with_resource,
 		account)
-	if ctrl:
-		return ctrl
+	if ctrls:
+		return ctrls[0]
 	elif not highest_contact or not highest_contact.resource:
 		# unknow contact or offline message
-		return gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+		pass # fall through, handle this at the end
 	elif highest_contact and contact.resource != \
 	highest_contact.resource:
 		return None
-	return gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+
+	ctrls = gajim.interface.msg_win_mgr.get_chat_controls(contact.jid, account)
+	if ctrls:
+		return ctrls[0]
+	else:
+		return None
 
 def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
 	'''Cut the chars after 'max_chars' on each line

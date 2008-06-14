@@ -798,6 +798,11 @@ class Interface:
 		full_jid_with_resource = array[0]
 		jids = full_jid_with_resource.split('/', 1)
 		jid = jids[0]
+
+		session = None
+		if len(array) > 5:
+			session = array[5]
+
 		gc_control = self.msg_win_mgr.get_gc_control(jid, account)
 		if not gc_control and \
 		jid in self.minimized_controls[account]:
@@ -807,8 +812,17 @@ class Interface:
 		if gc_control:
 			if len(jids) > 1: # it's a pm
 				nick = jids[1]
-				if not self.msg_win_mgr.get_control(full_jid_with_resource,
-				account):
+
+				ctrl = None
+				if session:
+					ctrl = session.control
+
+				if not ctrl:
+					ctrls = self.msg_win_mgr.get_chat_controls(full_jid_with_resource, account)
+					if ctrls:
+						ctrl = ctrls[0]
+
+				if not ctrl:
 					tv = gc_control.list_treeview
 					model = tv.get_model()
 					iter = gc_control.get_contact_iter(nick)
@@ -818,8 +832,8 @@ class Interface:
 						show = 'offline'
 					gc_c = gajim.contacts.create_gc_contact(room_jid = jid,
 						name = nick, show = show)
-					self.new_private_chat(gc_c, account)
-				ctrl = self.msg_win_mgr.get_control(full_jid_with_resource, account)
+					ctrl = self.new_private_chat(gc_c, account, session)
+
 				ctrl.print_conversation('Error %s: %s' % (array[1], array[2]),
 							'status')
 				return
@@ -2672,6 +2686,8 @@ class Interface:
 		if len(gajim.events.get_events(account, fjid)):
 			# We call this here to avoid race conditions with widget validation
 			session.control.read_queue()
+
+		return session.control
 
 	def new_chat(self, contact, account, resource = None, session = None):
 		# Get target window, create a control, and associate it with the window
