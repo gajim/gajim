@@ -1031,7 +1031,6 @@ class RosterWindow:
 
 		if have_visible_children:
 			# We are the big brother and have a visible family
-			# that is not just us
 			for child_iter in child_iters:
 				path = self.model.get_path(child_iter)
 
@@ -1058,10 +1057,11 @@ class RosterWindow:
 				self.model[child_iter][C_IMG] = img
 				self.model[child_iter][C_NAME] = name
 		else:
-			# All iters have the same icon (no expand/collapse)
+			# A normal contact or little brother
 			state_images = self.get_appropriate_state_images(jid,
 				icon_name = icon_name)
 
+			# All iters have the same icon (no expand/collapse)
 			img = state_images[icon_name]
 			for child_iter in child_iters:
 				self.model[child_iter][C_IMG] = img
@@ -1413,9 +1413,9 @@ class RosterWindow:
 			if show2 == 6 and jid2 in gajim.to_be_removed[account2]:
 				removing2 = True
 			if removing1 and not removing2:
-				return -1
-			if removing2 and not removing1:
 				return 1
+			if removing2 and not removing1:
+				return -1
 			if show1 < show2:
 				return -1
 			elif show1 > show2:
@@ -3343,6 +3343,7 @@ class RosterWindow:
 			jid = model[titer][C_JID].decode('utf-8')
 			account = model[titer][C_ACCOUNT].decode('utf-8')
 			self.draw_contact(jid, account)
+			# FIXME redraw child contacts
 
 		self._toggeling_row = False
 
@@ -3378,6 +3379,7 @@ class RosterWindow:
 			jid = model[titer][C_JID].decode('utf-8')
 			account = model[titer][C_ACCOUNT].decode('utf-8')
 			self.draw_contact(jid, account)
+			# FIXME redraw child contacts
 
 		self._toggeling_row = False
 

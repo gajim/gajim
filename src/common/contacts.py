@@ -473,13 +473,13 @@ class Contacts:
 			return 1
 		if transport1 and not transport2:
 			return -1
-		if priority1 > priority2:
-			return 1
-		if priority2 > priority1:
-			return -1
 		if show1 > show2:
 			return 1
 		if show2 > show1:
+			return -1
+		if priority1 > priority2:
+			return 1
+		if priority2 > priority1:
 			return -1
 		server1 = common.gajim.get_server_from_jid(jid1)
 		server2 = common.gajim.get_server_from_jid(jid2)
