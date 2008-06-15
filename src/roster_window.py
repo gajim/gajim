@@ -1331,8 +1331,24 @@ class RosterWindow:
 		if type_ == 'contact':
 			if gajim.config.get('showoffline'):
 				return True
-			contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-			return self.contact_is_visible(contact, account)
+			bb_jid = None
+			bb_account = None
+			family = gajim.contacts.get_metacontacts_family(account, jid)
+			if family:
+				nearby_family, bb_jid, bb_account = \
+					self._get_nearby_family_and_big_brother(family, account)
+			if (bb_jid, bb_account) == (jid, account):
+				# Show the big brother if a child has pending events
+				for data in nearby_family:
+					jid = data['jid']
+					account = data['account']
+					contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+					if self.contact_is_visible(contact, account):
+						return True
+				return False 
+			else:
+				contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+				return self.contact_is_visible(contact, account)
 		if type_ == 'agent':
 			return gajim.config.get('show_transports_group')
 		return True
