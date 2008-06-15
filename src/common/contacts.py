@@ -32,7 +32,7 @@ class Contact:
 		self.jid = jid
 		self.name = name
 		self.contact_name = '' # nick choosen by contact
-		self.groups = groups # See below for what we do if it's empty
+		self.groups = groups
 		self.show = show
 		self.status = status
 		self.sub = sub
@@ -63,11 +63,6 @@ class Contact:
 		# this is contact's chatstate
 		self.chatstate = chatstate
 		self.last_status_time = last_status_time
-		if not self.groups:
-			if self.is_observer():
-				self.groups = [_('Observers')]
-			else:
-				self.groups = [_('General')]
 		self.mood = mood.copy()
 		self.tune = tune.copy()
 		self.activity = activity.copy()
@@ -83,6 +78,20 @@ class Contact:
 		if self.contact_name:
 			return self.contact_name
 		return self.jid.split('@')[0]
+
+	def get_shown_groups(self):
+		'''
+		'''
+		if self.is_observer():
+			return [_('Observers')]
+		elif self.is_groupchat():
+			return [_('Groupchats')]
+		elif self.is_transport():
+			return [_('Transports')]
+		elif not self.groups:
+			return [_('General')]
+		else:
+			return self.groups
 
 	def is_hidden_from_roster(self):
 		'''if contact should not be visible in roster'''
@@ -316,7 +325,7 @@ class Contacts:
 					in_groups = True
 				else:
 					for group in groups:
-						if group in contact.groups:
+						if group in contact.get_shown_groups():
 							in_groups = True
 							break
 

@@ -183,7 +183,7 @@ class RosterWindow:
 
 		acct = self._get_account_iter(account, model)
 		found = [] # the contact iters. One per group
-		for group in contact.groups:
+		for group in contact.get_shown_groups():
 			group_iter = self._get_group_iter(group, account, acct,  model)
 			contact_iter = model.iter_children(group_iter)
 
@@ -329,9 +329,11 @@ class RosterWindow:
 		Keyword arguments:
 		contact -- the contact to add
 		account -- the contacts account
-		groups -- list of groups to add the contact to. (default groups in contact.groups).
+		groups -- list of groups to add the contact to. (default groups in 
+						contact.get_shown_groups()).
 			Parameter ignored when big_brother_contact is specified.
-		big_brother_contact -- if specified contact is added as child big_brother_contact. (default None)
+		big_brother_contact -- if specified contact is added as child 
+										big_brother_contact. (default None)
 		'''
 		added_iters = []
 		if big_brother_contact:
@@ -344,7 +346,7 @@ class RosterWindow:
 
 			# Do not confuse get_contact_iter
 			# Sync groups of family members
-			contact.groups = big_brother_contact.groups[:]
+			contact.groups = big_brother_contact.get_shown_groups()[:]
 
 			for child_iter in parent_iters:
 				it = self.model.append(child_iter, (None, contact.get_shown_name(),
@@ -353,7 +355,7 @@ class RosterWindow:
 		else:
 			# We are a normal contact. Add us to our groups.
 			if not groups:
-				groups = contact.groups
+				groups = contact.get_shown_groups()
 			for group in groups:
 				child_iterG = self._get_group_iter(group, account, model=self.model)
 				if not child_iterG:
@@ -398,8 +400,7 @@ class RosterWindow:
 		Keyword arguments:
 		contact -- the contact to add
 		account -- the contacts account
-		groups -- list of groups to remove the contact from. (default groups in contact.groups).
-
+		groups -- list of groups to remove the contact from.
 		'''
 		iters = self._get_contact_iter(contact.jid, account, contact, self.model)
 		assert iters, '%s shall be removed but is not in roster' % contact.jid
@@ -662,7 +663,7 @@ class RosterWindow:
 			for c, acc in contacts:
 				self.draw_contact(c.jid, acc)
 				self.draw_avatar(c.jid, acc)
-			for group in contact.groups:
+			for group in contact.get_shown_groups():
 				self.draw_group(group, account)
 			self.draw_account(account)
 
@@ -714,7 +715,7 @@ class RosterWindow:
 				# numbers will still be show
 				gajim.contacts.remove_jid(account, jid)
 
-			for group in contact.groups:
+			for group in contact.get_shown_groups():
 				self.draw_group(group, account)
 			self.draw_account(account)
 
@@ -777,7 +778,6 @@ class RosterWindow:
 
 		'''
 		self.remove_contact(jid, account, force = True)
-
 		for contact in gajim.contacts.get_contacts(account, jid):
 			for group in groups:
 				if group not in contact.groups:
@@ -804,7 +804,6 @@ class RosterWindow:
 
 		'''
 		self.remove_contact(jid, account, force = True)
-
 		for contact in gajim.contacts.get_contacts(account, jid):
 			for group in groups:
 				if group in contact.groups:
@@ -963,7 +962,7 @@ class RosterWindow:
 		if jid in gajim.connections[account].blocked_contacts:
 			strike = True
 		else:
-			for group in contact.groups:
+			for group in contact.get_shown_groups():
 				if group in gajim.connections[account].blocked_groups:
 					strike = True
 					break
@@ -1072,7 +1071,7 @@ class RosterWindow:
 			if family and not is_big_brother and not self.starting:
 				self.draw_parent_contact(jid, account)
 
-		for group in contact.groups:
+		for group in contact.get_shown_groups():
 			# We need to make sure that _visible_func is called for
 			# our groups otherwise we might not be shown
 			iterG = self._get_group_iter(group, account, model = self.model)
@@ -1157,7 +1156,7 @@ class RosterWindow:
 		self.draw_contact(jid, account)
 		self.draw_account(account)
 
-		for group in contact.groups:
+		for group in contact.get_shown_groups():
 			self.draw_group(group, account)
 			self._adjust_group_expand_collapse_state(group, account)
 
@@ -1279,13 +1278,11 @@ class RosterWindow:
 	def contact_is_visible(self, contact, account):
 		if self.contact_has_pending_roster_events(contact, account):
 			return True
-		# XEP-0162
-		hide = contact.is_hidden_from_roster()
-		if hide and contact.sub != 'from':
-			return False
 
-		showOffline = gajim.config.get('showoffline')
-		if (contact.show in ('offline', 'error') or hide) and not showOffline:
+		if contact.ask:
+			return True
+
+		if contact.show in ('offline', 'error'):
 			if contact.jid in gajim.to_be_removed[account]:
 				return True
 			return False
@@ -1327,7 +1324,7 @@ class RosterWindow:
 				for contact in gajim.contacts.iter_contacts(_acc):
 					# Is this contact in this group ? (last part of if check if it's 
 					# self contact) 
-					if group in contact.groups:
+					if group in contact.get_shown_groups():
 						if self.contact_is_visible(contact, _acc):
 							return True
 			return False
@@ -1716,15 +1713,15 @@ class RosterWindow:
 				sub = 'subscribe', keyID = keyID)
 			gajim.contacts.add_contact(account, contact)
 		else:
-			if not _('Not in Roster') in contact.groups:
+			if not _('Not in Roster') in contact.get_shown_groups():
 				dialogs.InformationDialog(_('Subscription request has been sent'),
 					_('If "%s" accepts this request you will know his or her status.'
 					) % jid)
 				return
+			self.remove_contact(contact.jid, account)
 			contact.groups = groups
 			if nickname:
 				contact.name = nickname
-			self.remove_contact(contact.jid, account)
 		self.add_contact(jid, account)
 
 	def revoke_auth(self, widget, jid, account):
@@ -2516,9 +2513,10 @@ class RosterWindow:
 			if row_type in ('contact', 'agent'):
 				if old_text == new_text:
 					return
-				for u in gajim.contacts.get_contacts(account, jid):
-					u.name = new_text
-				gajim.connections[account].update_contact(jid, new_text, u.groups)
+				for contact in gajim.contacts.get_contacts(account, jid):
+					contact.name = new_text
+				gajim.connections[account].update_contact(jid, new_text, \
+					contact.groups)
 				self.draw_contact(jid, account)
 				# Update opened chats
 				for ctrl in gajim.interface.msg_win_mgr.get_controls(jid, account):
@@ -2666,7 +2664,7 @@ class RosterWindow:
 		ctrl.shutdown()
 
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
-		if contact.groups == [_('Groupchats')]:
+		if contact.get_shown_groups() == [_('Groupchats')]:
 			self.remove_groupchat(contact.jid, account)
 
 	def on_send_single_message_menuitem_activate(self, widget, account,
@@ -2947,6 +2945,8 @@ class RosterWindow:
 					contact.name = ''
 					contact.groups = []
 					contact.sub = 'from'
+					# we can't see him, but have to set it manually in contact
+					contact.show = 'offline' 
 					gajim.contacts.add_contact(account, contact)
 					self.add_contact(contact.jid, account)
 		def on_ok2(list_):
@@ -4659,7 +4659,7 @@ class RosterWindow:
 		for jid in gajim.contacts.get_jid_list(account):
 			contact = gajim.contacts.get_contact_with_highest_priority(account,
 					jid)
-			if group in contact.groups:
+			if group in contact.get_shown_groups():
 				if contact.show not in ('offline', 'error'):
 					list_online.append((contact, account))
 				list_.append((contact, account))
@@ -4880,7 +4880,7 @@ class RosterWindow:
 			history_menuitem.connect('activate', self.on_history, contact,
 				account)
 
-			if _('Not in Roster') not in contact.groups:
+			if _('Not in Roster') not in contact.get_shown_groups():
 				# contact is in normal group
 				edit_groups_menuitem.set_no_show_all(False)
 				assign_openpgp_key_menuitem.set_no_show_all(False)
@@ -4950,7 +4950,7 @@ class RosterWindow:
 		if jid in gajim.connections[account].blocked_contacts:
 			blocked = True
 		else:
-			for group in contact.groups:
+			for group in contact.get_shown_groups():
 				if group in gajim.connections[account].blocked_groups:
 					blocked = True
 					break
@@ -5048,7 +5048,7 @@ class RosterWindow:
 		history_menuitem.connect('activate', self.on_history, contact,
 			account)
 
-		if _('Not in Roster') not in contact.groups:
+		if _('Not in Roster') not in contact.get_shown_groups():
 			# contact is in normal group
 			add_to_roster_menuitem.hide()
 			add_to_roster_menuitem.set_no_show_all(True)

@@ -1425,7 +1425,9 @@ class Interface:
 		else:
 			re_add = False
 			# if sub changed: remove and re-add, maybe observer status changed
-			if contacts[0].sub != sub:
+			# according to xep 0162, contact is not an observer anymore when 
+			# we asked him is auth, so also remove him if ask changed
+			if contacts[0].sub != sub or contacts[0].ask != ask:
 				self.roster.remove_contact(contacts[0].jid, account, force = True)
 				re_add = True
 			for contact in contacts:
