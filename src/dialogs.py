@@ -335,24 +335,24 @@ class ChangeActivityDialog:
 		{'None': [],
 		'doing_chores': ['buying_groceries', 'cleaning', 'cooking',
 			'doing_maintenance', 'doing_the_dishes', 'doing_the_laundry',
-			'gardening', 'running_an_errand', 'walking_the_dog'],
-		'drinking': ['having_a_beer', 'having_coffee', 'having_tea'],
+			'gardening', 'running_an_errand', 'walking_the_dog', 'other'],
+		'drinking': ['having_a_beer', 'having_coffee', 'having_tea', 'other'],
 		'eating': ['having_a_snack', 'having_breakfast', 'having_dinner',
-			'having_lunch'],
+			'having_lunch', 'other'],
 		'excercising': ['cycling', 'hiking', 'jogging', 'playing_sports',
-			'running', 'skiing', 'swimming', 'working_out'],
+			'running', 'skiing', 'swimming', 'working_out', 'other'],
 		'grooming': ['at_the_spa', 'brushing_teeth', 'getting_a_haircut',
-			'shaving','taking_a_bath', 'taking_a_shower'],
+			'shaving','taking_a_bath', 'taking_a_shower', 'other'],
 		'having_appointment': [],
 		'inactive': ['day_off', 'hanging_out', 'on_vacation', 'scheduled_holiday',
-			'sleeping'],
+			'sleeping', 'other'],
 		'relaxing': ['gaming', 'going_out', 'partying', 'reading', 'rehearsing',
 			'shopping', 'socializing', 'sunbathing', 'watching_tv',
-			'watching_a_movie'],
-		'talking': ['in_real_life', 'on_the_phone', 'on_video_phone'],
+			'watching_a_movie', 'other'],
+		'talking': ['in_real_life', 'on_the_phone', 'on_video_phone', 'other'],
 		'traveling': ['commuting', 'cycling', 'driving', 'in_a_car', 'on_a_bus',
-			'on_a_plane', 'on_a_train', 'on_a_trip', 'walking'],
-		'working': ['coding', 'in_a_meeting', 'studying', 'writing']}
+			'on_a_plane', 'on_a_train', 'on_a_trip', 'walking', 'other'],
+		'working': ['coding', 'in_a_meeting', 'studying', 'writing', 'other']}
 	def __init__(self, account):
 		self.account = account
 		self.xml = gtkgui_helpers.get_glade('change_activity_dialog.glade')
@@ -428,6 +428,8 @@ class ChangeActivityDialog:
 			if active2 > -1:
 				subactivity = self.liststore2[active2][1].decode('utf-8')
 			message = self.entry.get_text().decode('utf-8')
+			if subactivity is None:
+				subactivity = ''
 			from common import pep
 			if activity == 'None':
 				pep.user_retract_activity(self.account)

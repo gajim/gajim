@@ -412,7 +412,7 @@ def get_uf_activity(activity):
 		'taking_a_shower':_('taking a shower'), 'jogging':_('jogging'),
 		'in_a_meeting': _('in a meeting'), 'in_a_car':_('in a car'),
 		'studying': _('studying'), 'swimming': _('swimming'),
-		'having_coffee': _('having coffee')}
+		'having_coffee': _('having coffee'), 'other': _('other')}
 	if activities.has_key(activity):
 		return activities[activity]
 	else:
