@@ -1343,7 +1343,7 @@ class RosterWindow:
 					jid = data['jid']
 					account = data['account']
 					contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-					if self.contact_is_visible(contact, account):
+					if contact and self.contact_is_visible(contact, account):
 						return True
 				return False 
 			else:
