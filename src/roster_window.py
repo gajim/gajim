@@ -3358,8 +3358,12 @@ class RosterWindow:
 			# Metacontact got toggled, update icon
 			jid = model[titer][C_JID].decode('utf-8')
 			account = model[titer][C_ACCOUNT].decode('utf-8')
-			self.draw_contact(jid, account)
-			# FIXME redraw child contacts
+			family = gajim.contacts.get_metacontacts_family(account, jid)
+			nearby_family, bb_jid, bb_account = \
+				self._get_nearby_family_and_big_brother(family, account)
+			# Redraw all brothers to show pending events
+			for data in nearby_family:
+				self.draw_contact(data['jid'], data['account'])
 
 		self._toggeling_row = False
 
@@ -3394,8 +3398,12 @@ class RosterWindow:
 			# Metacontact got toggled, update icon
 			jid = model[titer][C_JID].decode('utf-8')
 			account = model[titer][C_ACCOUNT].decode('utf-8')
-			self.draw_contact(jid, account)
-			# FIXME redraw child contacts
+			family = gajim.contacts.get_metacontacts_family(account, jid)
+			nearby_family, bb_jid, bb_account = \
+				self._get_nearby_family_and_big_brother(family, account)
+			# Redraw all brothers to show pending events
+			for data in nearby_family:
+				self.draw_contact(data['jid'], data['account'])
 
 		self._toggeling_row = False
 
