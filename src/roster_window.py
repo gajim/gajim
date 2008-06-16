@@ -5135,12 +5135,15 @@ class RosterWindow:
 		privacy_rules_supported:
 			if jid in gajim.connections[account].blocked_contacts:
 				block_menuitem.set_no_show_all(True)
-				unblock_menuitem.connect('activate', self.on_unblock, titer, None)
 				block_menuitem.hide()
+				unblock_menuitem.connect('activate', self.on_unblock, titer, None)
 			else:
 				unblock_menuitem.set_no_show_all(True)
-				block_menuitem.connect('activate', self.on_block, titer, None)
 				unblock_menuitem.hide()
+				if gajim.get_transport_name_from_jid(jid, use_config_setting=False):
+					block_menuitem.set_sensitive(False)
+				else:
+					block_menuitem.connect('activate', self.on_block, titer, None)
 		else:
 			unblock_menuitem.set_no_show_all(True)
 			block_menuitem.set_sensitive(False)
