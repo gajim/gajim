@@ -1420,7 +1420,11 @@ class ChatControl(ChatControlBase):
 			return True
 		elif command == 'ping':
 			if not len(message_array):
-				gajim.connections[self.account].sendPing(self.contact)
+				if self.account == gajim.ZEROCONF_ACC_NAME:
+					self.print_conversation(
+						_('Command not supported for zeroconf account.'), 'info')
+				else:
+					gajim.connections[self.account].sendPing(self.contact)
 			else:
 				self.get_command_help(command)
 			self.clear(self.msg_textview)
