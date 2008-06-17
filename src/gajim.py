@@ -2749,7 +2749,9 @@ class Interface:
 			win = self.msg_win_mgr.get_window(fjid, account)
 
 			if win:
-				ctrl = win.get_controls(fjid, account)[0]
+				ctrls = win.get_controls(fjid, account)
+				if ctrls:
+					ctrl = ctrls[0]
 
 		if not ctrl:
 			ctrl = self.new_chat(contact, account,
