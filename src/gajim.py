@@ -2240,11 +2240,14 @@ class Interface:
 
 	def handle_event(self, account, fjid, type_):
 		w = None
+		ctrl = None
+		session = None
+
 		resource = gajim.get_resource_from_jid(fjid)
 		jid = gajim.get_jid_without_resource(fjid)
+
 		if type_ in ('printed_gc_msg', 'printed_marked_gc_msg', 'gc_msg'):
 			w = self.msg_win_mgr.get_window(jid, account)
-			ctrl = None
 			if self.minimized_controls[account].has_key(jid):
 				if not w:
 					ctrl = self.minimized_controls[account][jid]
@@ -2269,8 +2272,6 @@ class Interface:
 				ctrl = session.control
 
 			if type_ == '' and self.msg_win_mgr.has_window(fjid, account):
-				# assume that the most recently updated control we have for this party
-				# is the one that this event was in
 				ctrl = self.msg_win_mgr.get_chat_controls(fjid, account)[0]
 			elif not ctrl:
 				highest_contact = gajim.contacts.get_contact_with_highest_priority(
@@ -2304,8 +2305,6 @@ class Interface:
 			event = gajim.events.get_first_event(account, fjid, type_)
 			if not event:
 				event = gajim.events.get_first_event(account, jid, type_)
-
-			session = None
 
 			if type_ == 'printed_pm':
 				session = event.parameters[0]
