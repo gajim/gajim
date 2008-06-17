@@ -311,7 +311,7 @@ class Config:
 			'zeroconf_jabber_id': [ opt_str, '', '', True ],
 			'zeroconf_email': [ opt_str, '', '', True ],
 			'use_env_http_proxy' : [opt_bool, False],
-			'answer_receipt' : [opt_bool, True, _('Answer to receipt requests')],
+			'answer_receipts' : [opt_bool, True, _('Answer to receipt requests')],
 			'request_receipt' : [opt_bool, True, _('Sent receipt requests')],
 			'publish_mood': [opt_bool, True],
 			'publish_activity': [opt_bool, True],

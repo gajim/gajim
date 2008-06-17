@@ -1096,11 +1096,6 @@ class Connection(ConnectionHandlers):
 				# XEP-0022
 				chatstate_node = msg_iq.setTag('x',
 					namespace = common.xmpp.NS_EVENT)
-				if not msgtxt: # when no <body>, add <id>
-					if not msg_id: # avoid putting 'None' in <id> tag
-						msg_id = ''
-					chatstate_node.setTagData('id', msg_id)
-				# when msgtxt, requests XEP-0022 composing notification
 				if chatstate is 'composing' or msgtxt:
 					chatstate_node.addChild(name = 'composing')
 
@@ -1110,12 +1105,20 @@ class Connection(ConnectionHandlers):
 			addresses.addChild('address', attrs = {'type': 'ofrom',
 				'jid': forward_from})
 
-		# TODO: We should also check if the other end supports it
-		#       as XEP 0184 says checking is a SHOULD. Maybe we should
-		#       implement section 6 of the XEP as well?
+		# XEP-0184
+		if resource:
+			contact = gajim.contacts.get_contact(self.name, jid,
+				resource)
+		else:
+			contact = gajim.contacts. \
+				get_contact_with_highest_priority(self.name,
+				jid)
 		if msgtxt and gajim.config.get_per('accounts', self.name,
-		'request_receipt'):
-			msg_iq.setTag('request', namespace='urn:xmpp:receipts')
+		'request_receipt') and common.xmpp.NS_RECEIPTS in \
+		gajim.capscache[(contact.caps_hash_method,
+		contact.caps_hash)].features:
+			msg_iq.setTag('request',
+				namespace=common.xmpp.NS_RECEIPTS)
 
 		if session:
 			# XEP-0201

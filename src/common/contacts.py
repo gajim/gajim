@@ -248,6 +248,11 @@ class Contacts:
 			return []
 	
 	def get_contact(self, account, jid, resource = None):
+		### WARNING ###
+		# This function returns a *RANDOM* resource if resource = None!
+		# Do *NOT* use if you need to get the contact to which you
+		# send a message for example, as a bare JID in Jabber means
+		# highest available resource, which this function ignores!
 		'''Returns the contact instance for the given resource if it's given else
 		the first contact is no resource is given or None if there is not'''
 		if jid in self._contacts[account]:
