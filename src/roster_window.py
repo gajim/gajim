@@ -765,7 +765,7 @@ class RosterWindow:
 		self.remove_contact(jid, account, force = True, backend = True)
 		return True
 
-	def add_contact_to_groups(self, jid, account, groups):
+	def add_contact_to_groups(self, jid, account, groups, update = True):
 		'''Add contact to given groups and redraw them.
 
 		Contact on server is updated too. When the contact has a family,
@@ -775,6 +775,7 @@ class RosterWindow:
 		jid -- the jid
 		account -- the corresponding account
 		groups -- list of Groups to add the contact to.
+		update -- update contact on the server
 
 		'''
 		self.remove_contact(jid, account, force = True)
@@ -783,15 +784,16 @@ class RosterWindow:
 				if group not in contact.groups:
 					# we might be dropped from meta to group
 					contact.groups.append(group)
-			gajim.connections[account].update_contact(jid, contact.name,
-				contact.groups)
+			if update:
+				gajim.connections[account].update_contact(jid, contact.name,
+					contact.groups)
 
 		self.add_contact(jid, account)
 
 		for group in groups:
 			self._adjust_group_expand_collapse_state(group, account)
 
-	def remove_contact_from_groups(self, jid, account, groups):
+	def remove_contact_from_groups(self, jid, account, groups, update = True):
 		'''Remove contact from given groups and redraw them.
 
 		Contact on server is updated too. When the contact has a family,
@@ -801,6 +803,7 @@ class RosterWindow:
 		jid -- the jid
 		account -- the corresponding account
 		groups -- list of Groups to remove the contact from
+		update -- update contact on the server
 
 		'''
 		self.remove_contact(jid, account, force = True)
@@ -809,11 +812,13 @@ class RosterWindow:
 				if group in contact.groups:
 					# Needed when we remove from "General"
 					contact.groups.remove(group)
-			gajim.connections[account].update_contact(jid, contact.name,
-				contact.groups)
+			if update:
+				gajim.connections[account].update_contact(jid, contact.name,
+					contact.groups)
 
 		self.add_contact(jid, account)
-
+		
+		# Also redraw old groups
 		for group in groups:
 			self.draw_group(group, account)
 
