@@ -1441,7 +1441,7 @@ class Interface:
 				contact.groups = groups or []
 			if re_add:
 				self.roster.add_contact(jid, account)
-				# Refilter and update oĺd groups
+				# Refilter and update old groups
 				for group in old_groups:
 					self.roster.draw_group(group, account)
 
