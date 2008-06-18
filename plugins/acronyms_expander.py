@@ -19,7 +19,7 @@
 Acronyms expander plugin.
 
 :author: Mateusz Biliński <mateusz@bilinski.it>
-:since: 06/10/2008
+:since: 9th June 2008
 :copyright: Copyright (2008) Mateusz Biliński <mateusz@bilinski.it>
 :license: GPL
 '''
@@ -39,10 +39,11 @@ class AcronymsExpanderPlugin(GajimPlugin):
 	authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
 	homepage = u'http://blog.bilinski.it'
 
-	@log_calls('AcronymsExpanderPlugin')
-	def __init__(self):
-		super(AcronymsExpanderPlugin, self).__init__()
-
+	#@log_calls('AcronymsExpanderPlugin')
+	#def __init__(self):
+		#super(AcronymsExpanderPlugin, self).__init__()
+		
+	def init(self):
 		self.gui_extension_points = {
 			'chat_control_base' : (self.connect_with_chat_control_base,
 								   self.disconnect_from_chat_control_base)
@@ -56,7 +57,7 @@ class AcronymsExpanderPlugin(GajimPlugin):
 						 'GNT-' : 'http://trac.gajim.org/newticket',
 						 'GW-' : 'http://trac.gajim.org/',
 						 'GTS-' : 'http://trac.gajim.org/report'
-						}
+						}		
 
 	@log_calls('AcronymsExpanderPlugin')
 	def textbuffer_live_acronym_expander(self, tb):
@@ -98,4 +99,5 @@ class AcronymsExpanderPlugin(GajimPlugin):
 		d = chat_control.acronyms_expander_plugin_data
 		tv = chat_control.msg_textview
 		tv.get_buffer().disconnect(d['h_id'])
+		
 		

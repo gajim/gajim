@@ -19,7 +19,7 @@
 Base class for implementing plugin.
 
 :author: Mateusz Biliński <mateusz@bilinski.it>
-:since: 06/01/2008
+:since: 1st June 2008
 :copyright: Copyright (2008) Mateusz Biliński <mateusz@bilinski.it>
 :license: GPL
 '''
@@ -104,15 +104,15 @@ class GajimPlugin(object):
 		
 		:type: `plugins.plugin.Config`
 		'''
-		
-		self._load_config()
+		self.load_config()
+		self.init()
 	
 	@log_calls('GajimPlugin')
-	def _save_config(self):
+	def save_config(self):
 		pass
 	
 	@log_calls('GajimPlugin')	
-	def _load_config(self):
+	def load_config(self):
 		pass
 	
 	@log_calls('GajimPlugin')
@@ -122,6 +122,10 @@ class GajimPlugin(object):
 	@log_calls('GajimPlugin')
 	def local_file_path(self, file_name):
 		return os.path.join(self.__path__, file_name)
+
+	@log_calls('GajimPlugin')
+	def init(self):
+		pass
 	
 	@log_calls('GajimPlugin')
 	def activate(self):

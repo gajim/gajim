@@ -19,7 +19,7 @@
 Roster buttons plug-in.
 
 :author: Mateusz Biliński <mateusz@bilinski.it>
-:since: 06/10/2008
+:since: 14th June 2008
 :copyright: Copyright (2008) Mateusz Biliński <mateusz@bilinski.it>
 :license: GPL
 '''
@@ -44,22 +44,23 @@ class RosterButtonsPlugin(GajimPlugin):
 	#@log_calls('RosterButtonsPlugin')
 	#def __init__(self):
 		#super(RosterButtonsPlugin, self).__init__()
-		
-	@log_calls('RosterButtonsPlugin')
-	def activate(self):
+
+	@log_calls('RosterButtonsPlugin')	
+	def init(self):
 		#log.debug('self.__path__==%s'%(self.__path__))
 		self.GLADE_FILE_PATH = self.local_file_path('roster_buttons.glade')
+		
+		self.roster_vbox = gajim.interface.roster.xml.get_widget('roster_vbox2')
+		self.show_offline_contacts_menuitem = gajim.interface.roster.xml.get_widget('show_offline_contacts_menuitem')
+	
+	@log_calls('RosterButtonsPlugin')
+	def activate(self):
 		self.xml = gtk.glade.XML(self.GLADE_FILE_PATH, root='roster_buttons_buttonbox', domain=i18n.APP)
 		self.buttonbox = self.xml.get_widget('roster_buttons_buttonbox')
 		
-		self.roster_vbox = gajim.interface.roster.xml.get_widget('roster_vbox2')
 		self.roster_vbox.pack_start(self.buttonbox, expand=False)
 		self.roster_vbox.reorder_child(self.buttonbox, 0)
-		
-		self.show_offline_contacts_menuitem = gajim.interface.roster.xml.get_widget('show_offline_contacts_menuitem')
-		
 		self.xml.signal_autoconnect(self)
-		
 		
 	@log_calls('RosterButtonsPlugin')
 	def deactivate(self):
@@ -72,7 +73,6 @@ class RosterButtonsPlugin(GajimPlugin):
 	def on_roster_button_1_clicked(self, button):
 		#gajim.interface.roster.on_show_offline_contacts_menuitem_activate(None)
 		self.show_offline_contacts_menuitem.set_active(not self.show_offline_contacts_menuitem.get_active())
-		
 	
 	@log_calls('RosterButtonsPlugin')
 	def on_roster_button_2_clicked(self, button):

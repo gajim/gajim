@@ -139,20 +139,20 @@ class PluginsWindow(object):
 		self.installed_plugins_model.clear()
 		self.installed_plugins_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 		
-		for plugin_class in pm.plugins:
-			self.installed_plugins_model.append([plugin_class, 
-												 plugin_class.name, 
-												 plugin_class._active])
+		for plugin in pm.plugins:
+			self.installed_plugins_model.append([plugin, 
+												 plugin.name, 
+												 plugin.active])
 		
 	@log_calls('PluginsWindow')
 	def installed_plugins_toggled_cb(self, cell, path):
 		is_active = self.installed_plugins_model[path][2]
-		plugin_class = self.installed_plugins_model[path][0]
+		plugin = self.installed_plugins_model[path][0]
 
 		if is_active:
-			gajim.plugin_manager.deactivate_plugin(plugin_class._instance)
+			gajim.plugin_manager.deactivate_plugin(plugin)
 		else:
-			gajim.plugin_manager.activate_plugin(plugin_class)
+			gajim.plugin_manager.activate_plugin(plugin)
 		
 		self.installed_plugins_model[path][2] = not is_active
 		

@@ -19,7 +19,7 @@
 Message length notifier plugin.
 
 :author: Mateusz Biliński <mateusz@bilinski.it>
-:since: 06/01/2008
+:since: 1st June 2008
 :copyright: Copyright (2008) Mateusz Biliński <mateusz@bilinski.it>
 :license: GPL
 '''
@@ -39,10 +39,12 @@ class LengthNotifierPlugin(GajimPlugin):
 	authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
 	homepage = u'http://blog.bilinski.it'
 
+	#@log_calls('LengthNotifierPlugin')
+	#def __init__(self):
+		#super(LengthNotifierPlugin, self).__init__()
+	
 	@log_calls('LengthNotifierPlugin')
-	def __init__(self):
-		super(LengthNotifierPlugin, self).__init__()
-		
+	def init(self):
 		self.gui_extension_points = {
 			'chat_control' : (self.connect_with_chat_control,
 							  self.disconnect_from_chat_control)

@@ -19,7 +19,7 @@
 Plug-in management related classes.
 
 :author: Mateusz Biliński <mateusz@bilinski.it>
-:since: 05/30/2008
+:since: 30th May 2008
 :copyright: Copyright (2008) Mateusz Biliński <mateusz@bilinski.it>
 :license: GPL
 '''
@@ -94,29 +94,42 @@ class PluginManager(object):
 		'''
 
 		for path in gajim.PLUGINS_DIRS:
-			self._add_plugins(PluginManager.scan_dir_for_plugins(path))
+			self.add_plugins(PluginManager.scan_dir_for_plugins(path))
 
 		log.debug('plugins: %s'%(self.plugins))
 
-		self.activate_all_plugins()
+		self._activate_all_plugins_from_global_config()
 
 		log.debug('active: %s'%(self.active_plugins))
 
+	@log_calls('PluginManager')
+	def _plugin_has_entry_in_global_config(self, plugin):
+		if gajim.config.get_per('plugins', plugin.short_name) is None:
+			return False
+		else:
+			return True
+	
+	@log_calls('PluginManager')
+	def _create_plugin_entry_in_global_config(self, plugin):
+		gajim.config.add_per('plugins', plugin.short_name)
 		
 	@log_calls('PluginManager')
-	def _add_plugin(self, plugin_class):
+	def add_plugin(self, plugin_class):
 		'''
 		:todo: what about adding plug-ins that are already added? Module reload
 		and adding class from reloaded module or ignoring adding plug-in?
 		'''
-		plugin_class._active = False
-		plugin_class._instance = None
-		self.plugins.append(plugin_class)
+		plugin = plugin_class()
+		if not self._plugin_has_entry_in_global_config(plugin):
+			self._create_plugin_entry_in_global_config(plugin)
+			
+		self.plugins.append(plugin)
+		plugin.active = False
 	
 	@log_calls('PluginManager')
-	def _add_plugins(self, plugin_classes):
+	def add_plugins(self, plugin_classes):
 		for plugin_class in plugin_classes:
-			self._add_plugin(plugin_class)
+			self.add_plugin(plugin_class)
 		
 	@log_calls('PluginManager')
 	def gui_extension_point(self, gui_extpoint_name, *args):
@@ -156,33 +169,36 @@ class PluginManager(object):
 				handlers[0](*args)
 
 	@log_calls('PluginManager')
-	def activate_plugin(self, plugin_class):
+	def activate_plugin(self, plugin):
 		'''
 		:param plugin: plugin to be activated
 		:type plugin: class object of `GajimPlugin` subclass
-		'''
 		
-		plugin_object = plugin_class()
-
-		success = True
-
-		self._add_gui_extension_points_handlers_from_plugin(plugin_object)
-		self._handle_all_gui_extension_points_with_plugin(plugin_object)
-
-		if success:
-			self.active_plugins.append(plugin_object)
-			plugin_object.activate()
-			plugin_class._instance = plugin_object
-			plugin_class._active = True
+		:todo: success checks should be implemented using exceptions. Such
+			control should also be implemented in deactivation.
+		'''
+		success = False
+		if not plugin.active:
+	
+			self._add_gui_extension_points_handlers_from_plugin(plugin)
+			self._handle_all_gui_extension_points_with_plugin(plugin)
+			
+			success = True
+			
+			if success:
+				self.active_plugins.append(plugin)
+				plugin.activate()
+				self._set_plugin_active_in_global_config(plugin)
+				plugin.active = True
 
 		return success
 	
-	def deactivate_plugin(self, plugin_object):
+	def deactivate_plugin(self, plugin):
 		# detaching plug-in from handler GUI extension points (calling
 		# cleaning up method that must be provided by plug-in developer
 		# for each handled GUI extension point)
 		for gui_extpoint_name, gui_extpoint_handlers in \
-				plugin_object.gui_extension_points.iteritems():
+				plugin.gui_extension_points.iteritems():
 			if gui_extpoint_name in self.gui_extension_points:
 				for gui_extension_point_args in self.gui_extension_points[gui_extpoint_name]:
 					gui_extpoint_handlers[1](*gui_extension_point_args)
@@ -190,45 +206,55 @@ class PluginManager(object):
 		# remove GUI extension points handlers (provided by plug-in) from
 		# handlers list
 		for gui_extpoint_name, gui_extpoint_handlers in \
-				plugin_object.gui_extension_points.iteritems():
+				plugin.gui_extension_points.iteritems():
 			self.gui_extension_points_handlers[gui_extpoint_name].remove(gui_extpoint_handlers)
 			
 		# removing plug-in from active plug-ins list
-		plugin_object.deactivate()
-		self.active_plugins.remove(plugin_object)
-		plugin_object.__class__._active = False
-		plugin_object.__class__._instance = None
-		del plugin_object
+		plugin.deactivate()
+		self.active_plugins.remove(plugin)
+		self._set_plugin_active_in_global_config(plugin, False)
+		plugin.active = False
 		
-	def deactivate_all_plugins(self):
+	def _deactivate_all_plugins(self):
 		for plugin_object in self.active_plugins:
 			self.deactivate_plugin(plugin_object)
 	
 	@log_calls('PluginManager')
-	def _add_gui_extension_points_handlers_from_plugin(self, plugin_object):
+	def _add_gui_extension_points_handlers_from_plugin(self, plugin):
 		for gui_extpoint_name, gui_extpoint_handlers in \
-				plugin_object.gui_extension_points.iteritems():
+				plugin.gui_extension_points.iteritems():
 			self.gui_extension_points_handlers.setdefault(gui_extpoint_name, []).append(
 					gui_extpoint_handlers)
 	
 	@log_calls('PluginManager')
-	def _handle_all_gui_extension_points_with_plugin(self, plugin_object):
+	def _handle_all_gui_extension_points_with_plugin(self, plugin):
 		for gui_extpoint_name, gui_extpoint_handlers in \
-				plugin_object.gui_extension_points.iteritems():
+				plugin.gui_extension_points.iteritems():
 			if gui_extpoint_name in self.gui_extension_points:
 				for gui_extension_point_args in self.gui_extension_points[gui_extpoint_name]:
 					gui_extpoint_handlers[0](*gui_extension_point_args)
 
 	@log_calls('PluginManager')
-	def activate_all_plugins(self):
+	def _activate_all_plugins(self):
 		'''
 		Activates all plugins in `plugins`.
 		
 		Activated plugins are appended to `active_plugins` list.
 		'''
-		self.active_plugins = []
+		#self.active_plugins = []
 		for plugin in self.plugins:
 			self.activate_plugin(plugin)
+			
+	def _activate_all_plugins_from_global_config(self):
+		for plugin in self.plugins:
+			if self._plugin_is_active_in_global_config(plugin):
+				self.activate_plugin(plugin)
+		
+	def _plugin_is_active_in_global_config(self, plugin):
+		return gajim.config.get_per('plugins', plugin.short_name, 'active')
+	
+	def _set_plugin_active_in_global_config(self, plugin, active=True):
+		gajim.config.set_per('plugins', plugin.short_name, 'active', active)
 
 	@staticmethod
 	@log_calls('PluginManager')
