@@ -154,7 +154,7 @@ class Debug:
                   # If you dont want to validate flags on each call to
                   # show(), set this to 0
                   #
-                  validate_flags = 1,
+                  validate_flags = 0,
                   #
                   # If you dont want the welcome message, set to 0
                   # default is to show welcome if any flags are active

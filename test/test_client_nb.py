@@ -1,13 +1,13 @@
-import unittest, threading
-from mock import Mock
+import unittest
+from xmpp_mocks import *
 
-import sys, time, os.path
+import sys, os.path
 
 gajim_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
 
 sys.path.append(gajim_root + '/src/common/xmpp')
 
-import client_nb, idlequeue
+import client_nb
 
 '''
 Testing script for NonBlockingClient class (src/common/xmpp/client_nb.py)
@@ -15,10 +15,6 @@ It actually connects to a xmpp server so the connection values have to be
 changed before running.
 '''
 
-idlequeue_interval = 0.2
-'''
-IdleQueue polling interval. 200ms is used in Gajim as default
-'''
 
 xmpp_server_port = ('xmpp.example.org',5222)
 '''
@@ -26,110 +22,11 @@ xmpp_server_port = ('xmpp.example.org',5222)
 Script will connect to the machine.
 '''
 
-credentials = ['primus', 'l0v3', 'testclient']
+credentials = ['login', 'pass', 'testclient']
 '''
 [username, password, passphrase]
 Script will autheticate itself with this credentials on above mentioned server.
 '''
-
-
-class MockConnectionClass(Mock):
-	'''
-	Class simulating Connection class from src/common/connection.py
-
-	It is derived from Mock in order to avoid defining all methods
-	from real Connection that are called from NBClient or Dispatcher
-	( _event_dispatcher for example)
-	'''
-
-	def __init__(self, *args):
-		self.event = threading.Event()
-		'''
-		is used for waiting on connect, auth and disconnect callbacks
-		'''
-
-		self.event.clear()
-		Mock.__init__(self, *args)
-
-	def on_connect(self, *args):
-		'''
-		Method called on succesful connecting - after receiving <stream:features>
-		from server (NOT after TLS stream restart).
-		'''
-
-		#print 'on_connect - args:'
-		#for i in args:
-		#	print '    %s' % i
-		self.connect_failed = False
-		self.event.set()
-
-	def on_connect_failure(self, *args):
-		'''
-		Method called on failure while connecting - on everything from TCP error
-		to error during TLS handshake
-		'''
-
-		#print 'on_connect failure - args:'
-		#for i in args:
-		#	print '    %s' % i
-		self.connect_failed = True
-		self.event.set()
-	
-	def on_auth(self, con, auth):
-		'''
-		Method called after authentication is done regardless on the result.
-
-		:Parameters:
-			con : NonBlockingClient
-				reference to authenticated object
-			auth : string
-				type of authetication in case of success ('old_auth', 'sasl') or
-				None in case of auth failure
-		'''
-
-		#print 'on_auth - args:'
-		#print '    con: %s' % con
-		#print '    auth: %s' % auth
-		self.auth_connection = con
-		self.auth = auth
-		self.event.set()
-
-	def wait(self):
-		'''
-		Waiting until some callback sets the event and clearing the event subsequently. 
-		'''
-
-		self.event.wait()
-		self.event.clear()
-
-	
-
-
-class IdleQueueThread(threading.Thread):
-	'''
-	Thread for regular processing of idlequeue.
-	'''
-	def __init__(self):
-		self.iq = idlequeue.IdleQueue()
-		self.stop = threading.Event()
-		'''
-		Event used to stopping the thread main loop.
-		'''
-
-		self.stop.clear()
-		threading.Thread.__init__(self)
-	
-	def run(self):
-		while not self.stop.isSet():
-			self.iq.process()
-			time.sleep(idlequeue_interval)
-		self.iq.process()
-
-	def stop_thread(self):
-		self.stop.set()
-
-
-	
 
 class TestNonBlockingClient(unittest.TestCase):
 	'''
@@ -147,8 +44,8 @@ class TestNonBlockingClient(unittest.TestCase):
 		self.client = client_nb.NonBlockingClient(
 				server=xmpp_server_port[0],
 				port=xmpp_server_port[1],
-				on_connect=self.connection.on_connect,
-				on_connect_failure=self.connection.on_connect_failure,
+				on_connect=lambda *args: self.connection.on_connect(True, *args),
+				on_connect_failure=lambda *args: self.connection.on_connect(False, *args),
 				caller=self.connection 
 				)
 		'''
@@ -180,10 +77,10 @@ class TestNonBlockingClient(unittest.TestCase):
 		self.connection.wait()
 		
 		# if on_connect was called, client has to be connected and vice versa
-		if self.connection.connect_failed:
-			self.assert_(not self.client.isConnected())
-		else:
+		if self.connection.connect_succeeded:
 			self.assert_(self.client.isConnected())
+		else:
+			self.assert_(not self.client.isConnected())
 
 	def client_auth(self, username, password, resource, sasl):
 		'''
@@ -203,7 +100,7 @@ class TestNonBlockingClient(unittest.TestCase):
 		'''
 		Does disconnecting of connected client. Returns when TCP connection is closed.
 		'''
-		self.client.start_disconnect(None, on_disconnect=self.connection.event.set)
+		self.client.start_disconnect(None, on_disconnect=self.connection.set_event)
 
 		print 'waiting for disconnecting...'
 		self.connection.wait()
@@ -260,7 +157,7 @@ class TestNonBlockingClient(unittest.TestCase):
 		'''
 		self.open_stream(xmpp_server_port)
 		self.assert_(self.client.isConnected())
-		self.client_auth(credentials[0], "wrong pass", credentials[2], sasl=0)
+		self.client_auth(credentials[0], "wrong pass", credentials[2], sasl=1)
 		self.assert_(self.connection.auth is None)
 		self.do_disconnect()
 
@@ -271,7 +168,10 @@ class TestNonBlockingClient(unittest.TestCase):
 
 if __name__ == '__main__':
 
-	suite = unittest.TestLoader().loadTestsFromTestCase(TestNonBlockingClient)
+	#suite = unittest.TestLoader().loadTestsFromTestCase(TestNonBlockingClient)
+	suite = unittest.TestSuite()
+	suite.addTest(TestNonBlockingClient('test_proper_connect_sasl'))
+
 	unittest.TextTestRunner(verbosity=2).run(suite)
 
 

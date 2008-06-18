@@ -337,7 +337,9 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self.on_connect_failure()
 
 	def _plug_idle(self):
+		# readable if socket is connected or disconnecting
 		readable = self.state != 0
+		# writeable if sth to send
 		if self.sendqueue or self.sendbuff:
 			writable = True
 		else:
@@ -346,6 +348,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self.idlequeue.plug_idle(self, writable, readable)
 	
 	def pollout(self):
+		print 'pollout called - send possible'
 		if self.state == 0:
 			self.connect_to_next_ip()
 			return
@@ -359,6 +362,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		self._owner = None
 	
 	def pollin(self):
+		print 'pollin called - receive possible'
 		self._do_receive() 
 	
 	def pollend(self, retry=False):
@@ -583,11 +587,13 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		errnum = 0
 
 		try:
+			print "==============sock.connect called"
 			self._sock.connect(self._server)
 			self._sock.setblocking(False)
 		except Exception, ee:
 			(errnum, errstr) = ee
 		# in progress, or would block
+		print "errnum: %s" % errnum
 		if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):
 			self.state = 1
 			return
