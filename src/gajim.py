@@ -2312,13 +2312,13 @@ class Interface:
 				event = gajim.events.get_first_event(account, jid, type_)
 
 			if type_ == 'printed_pm':
-				session = event.parameters[0]
+				ctrl = event.parameters[0]
 			elif type_ == 'pm':
 				session = event.parameters[8]
 
 			if session and session.control:
 				ctrl = session.control
-			else:
+			elif not ctrl:
 				room_jid = jid
 				nick = resource
 				gc_contact = gajim.contacts.get_gc_contact(account, room_jid,
@@ -2723,19 +2723,19 @@ class Interface:
 			contact = self.roster.add_to_not_in_the_roster(account, jid,
 				resource=resource)
 
-		session = gajim.connections[account].get_or_create_session(fjid, None)
-
-		if not self.msg_win_mgr.has_window(fjid, account):
-			session.control = self.new_chat(contact, account,
-				resource=resource, session=session)
+		if self.msg_win_mgr.has_window(fjid, account):
+			ctrl = self.msg_win_mgr.get_chat_controls(fjid, account)[0]
+		else:
+			ctrl = self.new_chat(contact, account,
+				resource=resource)
 			if len(gajim.events.get_events(account, fjid)):
-				session.control.read_queue()
+				ctrl.read_queue()
 
-		mw = session.control.parent_win
-		mw.set_active_tab(session.control)
+		mw = ctrl.parent_win
+		mw.set_active_tab(ctrl)
 		# For JEP-0172
 		if added_to_roster:
-			session.control.user_nick = gajim.nicks[account]
+			ctrl.user_nick = gajim.nicks[account]
 
 	def on_open_chat_window(self, widget, contact, account, resource=None,
 	session=None):
