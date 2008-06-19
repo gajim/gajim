@@ -103,6 +103,9 @@ class Connection(ConnectionHandlers):
 		self.connection = None # xmpppy ClientCommon instance
 		# this property is used to prevent double connections
 		self.last_connection = None # last ClientCommon instance
+		# If we succeed to connect, remember it so next time we try (after a
+		# disconnection) we try only this type.
+		self.last_connection_type = None
 		self.lang = None
 		if locale.getdefaultlocale()[0]:
 			self.lang = locale.getdefaultlocale()[0].split('_')[0]
@@ -556,7 +559,9 @@ class Connection(ConnectionHandlers):
 	def connect_to_next_host(self, retry = False):
 		if len(self._hosts):
 			# No config option exist when creating a new account
-			if self.name in gajim.config.get_per('accounts'):
+			if self.last_connection_type:
+				self._connection_types = [self.last_connection_type]
+			elif self.name in gajim.config.get_per('accounts'):
 				self._connection_types = gajim.config.get_per('accounts', self.name,
 					'connection_types').split()
 			else:
@@ -615,6 +620,7 @@ class Connection(ConnectionHandlers):
 		log.debug('Connected to server %s:%s with %s' % (
 			self._current_host['host'], self._current_host['port'], con_type))
 
+		self.last_connection_type = con_type
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		self.connection = con
