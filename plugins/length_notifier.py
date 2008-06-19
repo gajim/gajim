@@ -45,6 +45,8 @@ class LengthNotifierPlugin(GajimPlugin):
 	
 	@log_calls('LengthNotifierPlugin')
 	def init(self):
+		#self.config_dialog = None
+		
 		self.gui_extension_points = {
 			'chat_control' : (self.connect_with_chat_control,
 							  self.disconnect_from_chat_control)

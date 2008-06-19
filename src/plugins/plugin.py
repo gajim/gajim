@@ -27,6 +27,7 @@ Base class for implementing plugin.
 import os
 
 from plugins.helpers import log_calls
+from plugins.gui import GajimPluginConfigDialog
 
 class GajimPlugin(object):
 	'''
@@ -96,28 +97,29 @@ class GajimPlugin(object):
 	
 	@log_calls('GajimPlugin')
 	def __init__(self):
-		self.config = Config()
+		self.config = GajimPluginConfig()
 		'''
 		Plug-in configuration dictionary.
 		
 		Automatically saved and loaded and plug-in (un)load.
 		
-		:type: `plugins.plugin.Config`
+		:type: `plugins.plugin.GajimPluginConfig`
 		'''
 		self.load_config()
+		self.config_dialog = GajimPluginConfigDialog(self)
 		self.init()
 	
 	@log_calls('GajimPlugin')
 	def save_config(self):
-		pass
+		self.config.save()
 	
 	@log_calls('GajimPlugin')	
 	def load_config(self):
-		pass
+		self.config.load()
 	
 	@log_calls('GajimPlugin')
 	def __del__(self):
-		self._save_config()
+		self.save_config()
 		
 	@log_calls('GajimPlugin')
 	def local_file_path(self, file_name):
@@ -135,5 +137,11 @@ class GajimPlugin(object):
 	def deactivate(self):
 		pass
 
-class Config(dict):
-	pass
+class GajimPluginConfig(dict):
+	@log_calls('GajimPluginConfig')
+	def save(self):
+		pass
+	
+	@log_calls('GajimPluginConfig')
+	def load(self):
+		pass

@@ -117,7 +117,10 @@ class PluginsWindow(object):
 		desc_textbuffer.set_text(plugin.description)
 		self.plugin_description_textview.set_property('sensitive', True)
 		self.uninstall_plugin_button.set_property('sensitive', True)
-		self.configure_plugin_button.set_property('sensitive', True)
+		if plugin.config_dialog is None:
+			self.configure_plugin_button.set_property('sensitive', False)
+		else:
+			self.configure_plugin_button.set_property('sensitive', True)
 		
 	def _clear_installed_plugin_info(self):
 		self.plugin_name_label.set_text('')
@@ -164,3 +167,53 @@ class PluginsWindow(object):
 	@log_calls('PluginsWindow')
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
+	
+	@log_calls('PluginsWindow')
+	def on_configure_plugin_button_clicked(self, widget):
+		log.debug('widget: %s'%(widget))
+		selection = self.installed_plugins_treeview.get_selection()
+		model, iter = selection.get_selected()
+		if iter:
+			plugin = model.get_value(iter, 0)
+			plugin_name = model.get_value(iter, 1)
+			is_active = model.get_value(iter, 2)
+			
+
+			result = plugin.config_dialog.run(self.window)
+
+		else:
+			# No plugin selected. this should never be reached. As configure
+			# plugin button should only my clickable when plugin is selected.
+			# XXX: maybe throw exception here?
+			pass
+	
+	@log_calls('PluginsWindow')
+	def on_uninstall_plugin_button_clicked(self, widget):
+		pass
+
+	
+class GajimPluginConfigDialog(gtk.Dialog):
+	
+	@log_calls('GajimPluginConfigDialog')
+	def __init__(self, plugin, **kwargs):
+		# TRANSLATORS: The window title for the generic configuration dialog of plugins
+		gtk.Dialog.__init__(self, '%s : %s'%(_('Configuration'), plugin.name), **kwargs)
+		self.plugin = plugin
+		self.add_button('gtk-close', gtk.RESPONSE_CLOSE)
+	
+		self.main = self.child
+		self.main.set_spacing(3)
+	
+		# TRANSLATORS: Short text stating which plugin a configuration dialog is for
+		label = gtk.Label(_('<b>%s Configuration</b>') % (plugin.name))
+		label.set_markup(label.get_label())
+		self.main.pack_start(label, False, False)
+		
+	@log_calls('GajimPluginConfigDialog')
+	def run(self, parent=None):
+		self.reparent(parent)
+		self.show_all()
+		result =  super(GajimPluginConfigDialog, self).run()
+		self.hide()
+		return result
+	

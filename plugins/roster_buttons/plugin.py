@@ -52,6 +52,8 @@ class RosterButtonsPlugin(GajimPlugin):
 		
 		self.roster_vbox = gajim.interface.roster.xml.get_widget('roster_vbox2')
 		self.show_offline_contacts_menuitem = gajim.interface.roster.xml.get_widget('show_offline_contacts_menuitem')
+		
+		self.config_dialog = None
 	
 	@log_calls('RosterButtonsPlugin')
 	def activate(self):

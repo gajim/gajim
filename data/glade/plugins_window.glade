@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Jun  9 15:22:01 2008 -->
+<!--Generated with glade3 3.4.5 on Thu Jun 19 13:11:54 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="plugins_window">
     <property name="width_request">650</property>
@@ -242,6 +242,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="response_id">0</property>
+                            <signal name="clicked" handler="on_uninstall_plugin_button_clicked"/>
                             <child>
                               <widget class="GtkHBox" id="hbox11">
                                 <property name="visible">True</property>
@@ -270,6 +271,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="response_id">0</property>
+                            <signal name="clicked" handler="on_configure_plugin_button_clicked"/>
                             <child>
                               <widget class="GtkHBox" id="hbox12">
                                 <property name="visible">True</property>
