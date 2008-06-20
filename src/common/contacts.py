@@ -140,6 +140,9 @@ class GC_Contact:
 		self.affiliation = affiliation
 		self.jid = jid
 		self.resource = resource
+		self.caps_node = None
+		self.caps_hash_method = None
+		self.caps_hash = None
 
 	def get_full_jid(self):
 		return self.room_jid + '/' + self.name
