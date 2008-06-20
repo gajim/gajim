@@ -657,6 +657,16 @@ class ConversationTextview:
 			start_sel, finish_sel = return_val[0], return_val[1]
 			self.selected_phrase = buffer.get_text(start_sel, finish_sel).decode(
 				'utf-8')
+		elif ord(iter.get_char()) > 31:
+			# we clicked on a word, do as if it's selected for context menu
+			start_sel = iter.copy()
+			if not start_sel.starts_word():
+				start_sel.backward_word_start()
+			finish_sel = iter.copy()
+			if not finish_sel.ends_word():
+				finish_sel.forward_word_end()
+			self.selected_phrase = buffer.get_text(start_sel, finish_sel).decode(
+				'utf-8')
 
 	def on_open_link_activate(self, widget, kind, text):
 		helpers.launch_browser_mailer(kind, text)
