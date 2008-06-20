@@ -65,7 +65,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		msg_type = msg.getType()
 		subject = msg.getSubject()
 
-		if not msg_type:
+		if not msg_type or msg_type not in ('chat', 'groupchat', 'error'):
 			msg_type = 'normal'
 
 		msg_id = None
