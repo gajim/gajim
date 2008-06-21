@@ -7,11 +7,12 @@ from common import contacts
 
 import common.xmpp
 
-import dialogs
-
 import message_control
 
 import notify
+
+import dialogs
+import negotiation
 
 class ChatControlSession(stanza_session.EncryptedStanzaSession):
 	def __init__(self, conn, jid, thread_id, type = 'chat'):
@@ -330,3 +331,137 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			gajim.interface.roster.show_title() # we show the * or [n]
 		# Select contact row in roster.
 		gajim.interface.roster.select_contact(jid, self.conn.name)
+
+	# ---- ESessions stuff ---
+
+	def check_identity(self, on_success):
+		negotiation.show_sas_dialog(self, self.jid, self.sas, on_success)
+
+	def handle_negotiation(self, form):
+		if form.getField('accept') and not form['accept'] in ('1', 'true'):
+			self.cancelled_negotiation()
+			return
+
+		# encrypted session states. these are described in stanza_session.py
+
+		try:
+			# bob responds
+			if form.getType() == 'form' and 'security' in form.asDict():
+				def continue_with_negotiation(*args):
+					if len(args):
+						self.dialog.destroy()
+
+					# we don't support 3-message negotiation as the responder
+					if 'dhkeys' in form.asDict():
+						self.fail_bad_negotiation('3 message negotiation not supported when responding', ('dhkeys',))
+						return
+
+					negotiated, not_acceptable, ask_user = self.verify_options_bob(form)
+
+					if ask_user:
+						def accept_nondefault_options(is_checked):
+							self.dialog.destroy()
+							negotiated.update(ask_user)
+							self.respond_e2e_bob(form, negotiated, not_acceptable)
+
+						def reject_nondefault_options():
+							self.dialog.destroy()
+							for key in ask_user.keys():
+								not_acceptable.append(key)
+							self.respond_e2e_bob(form, negotiated, not_acceptable)
+
+						self.dialog = dialogs.YesNoDialog(_('Confirm these session options'),
+							_('''The remote client wants to negotiate an session with these features:
+
+		%s
+
+		Are these options acceptable?''') % (negotiation.describe_features(ask_user)),
+								on_response_yes=accept_nondefault_options,
+								on_response_no=reject_nondefault_options)
+					else:
+						self.respond_e2e_bob(form, negotiated, not_acceptable)
+
+				def ignore_negotiation(widget):
+					self.dialog.destroy()
+					return
+
+				continue_with_negotiation()
+
+				return
+
+			# alice accepts
+			elif self.status == 'requested-e2e' and form.getType() == 'submit':
+				negotiated, not_acceptable, ask_user = self.verify_options_alice(form)
+
+				if ask_user:
+					def accept_nondefault_options(is_checked):
+						dialog.destroy()
+
+						negotiated.update(ask_user)
+
+						try:
+							self.accept_e2e_alice(form, negotiated)
+						except exceptions.NegotiationError, details:
+							self.fail_bad_negotiation(details)
+
+					def reject_nondefault_options():
+						self.reject_negotiation()
+						dialog.destroy()
+
+					dialog = dialogs.YesNoDialog(_('Confirm these session options'),
+							_('The remote client selected these options:\n\n%s\n\nContinue with the session?') % (negotiation.describe_features(ask_user)),
+							on_response_yes = accept_nondefault_options,
+							on_response_no = reject_nondefault_options)
+				else:
+					try:
+						self.accept_e2e_alice(form, negotiated)
+					except exceptions.NegotiationError, details:
+						self.fail_bad_negotiation(details)
+
+				return
+			elif self.status == 'responded-e2e' and form.getType() == 'result':
+				try:
+					self.accept_e2e_bob(form)
+				except exceptions.NegotiationError, details:
+					self.fail_bad_negotiation(details)
+
+				return
+			elif self.status == 'identified-alice' and form.getType() == 'result':
+				try:
+					self.final_steps_alice(form)
+				except exceptions.NegotiationError, details:
+					self.fail_bad_negotiation(details)
+
+				return
+		except exceptions.Cancelled:
+			# user cancelled the negotiation
+
+			self.reject_negotiation()
+
+			return
+
+		if form.getField('terminate') and\
+		form.getField('terminate').getValue() in ('1', 'true'):
+			self.acknowledge_termination()
+
+			self.conn.delete_session(self.jid, self.thread_id)
+
+			return
+
+		# non-esession negotiation. this isn't very useful, but i'm keeping it around
+		# to test my test suite.
+		if form.getType() == 'form':
+			if not self.control:
+				jid, resource = gajim.get_room_and_nick_from_fjid(self.jid)
+
+				account = self.conn.name
+				contact = gajim.contacts.get_contact(account, self.jid, resource)
+
+				if not contact:
+					contact = gajim.contacts.create_contact(jid = jidk,
+							resource = resource, show = self.conn.get_status())
+
+				gajim.interface.new_chat(contact, account,
+					resource = resource, session = self)
+
+			negotiation.FeatureNegotiationWindow(account, self.jid, self, form)

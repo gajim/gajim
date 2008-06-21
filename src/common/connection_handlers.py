@@ -1218,33 +1218,6 @@ class ConnectionHandlersBase:
 		# keep track of sessions this connection has with other JIDs
 		self.sessions = {}
 
-	def _FeatureNegCB(self, con, stanza, session):
-		gajim.log.debug('FeatureNegCB')
-		feature = stanza.getTag(name='feature', namespace=common.xmpp.NS_FEATURE)
-		form = common.xmpp.DataForm(node=feature.getTag('x'))
-
-		if form['FORM_TYPE'] == 'urn:xmpp:ssn':
-			self.dispatch('SESSION_NEG', (stanza.getFrom(), session, form))
-		else:
-			reply = stanza.buildReply()
-			reply.setType('error')
-
-			reply.addChild(feature)
-			reply.addChild(node=common.xmpp.ErrorNode('service-unavailable', typ='cancel'))
-
-			con.send(reply)
-
-		raise common.xmpp.NodeProcessed
-
-	def _InitE2ECB(self, con, stanza, session):
-		gajim.log.debug('InitE2ECB')
-		init = stanza.getTag(name='init', namespace=common.xmpp.NS_ESESSION_INIT)
-		form = common.xmpp.DataForm(node=init.getTag('x'))
-
-		self.dispatch('SESSION_NEG', (stanza.getFrom(), session, form))
-
-		raise common.xmpp.NodeProcessed
-
 	def get_or_create_session(self, jid, thread_id):
 		'''returns an existing session between this connection and 'jid', returns a new one if none exist.'''
 
@@ -1717,10 +1690,32 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		# check if the message is a XEP-0020 feature negotiation request
 		if msg.getTag('feature', namespace=common.xmpp.NS_FEATURE):
 			if gajim.HAVE_PYCRYPTO:
-				self._FeatureNegCB(con, msg, session)
+				feature = msg.getTag(name='feature', namespace=common.xmpp.NS_FEATURE)
+				form = common.xmpp.DataForm(node=feature.getTag('x'))
+
+				if form['FORM_TYPE'] == 'urn:xmpp:ssn':
+					session.handle_negotiation(form)
+				else:
+					reply = msg.buildReply()
+					reply.setType('error')
+
+					reply.addChild(feature)
+					err = common.xmpp.ErrorNode('service-unavailable', typ='cancel')
+					reply.addChild(node=err)
+
+					con.send(reply)
+
+				raise common.xmpp.NodeProcessed
+
 			return
+
 		if msg.getTag('init', namespace=common.xmpp.NS_ESESSION_INIT):
-			self._InitE2ECB(con, msg, session)
+			init = msg.getTag(name='init', namespace=common.xmpp.NS_ESESSION_INIT)
+			form = common.xmpp.DataForm(node=init.getTag('x'))
+
+			session.handle_negotiation(form)
+
+			raise common.xmpp.NodeProcessed
 
 		tim = msg.getTimestamp()
 		tim = helpers.datetime_tuple(tim)

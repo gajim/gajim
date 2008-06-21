@@ -246,7 +246,6 @@ import math
 import gtkgui_helpers
 import notify
 import message_control
-import negotiation
 
 from chat_control import ChatControlBase
 from chat_control import ChatControl
@@ -1752,153 +1751,6 @@ class Interface:
 		else:
 			print 'failed decrypt, unable to find a control to notify you in.'
 
-	def handle_session_negotiation(self, account, data):
-		jid, session, form = data
-
-		if form.getField('accept') and not form['accept'] in ('1', 'true'):
-			session.cancelled_negotiation()
-			return
-
-		# encrypted session states. these are described in stanza_session.py
-
-		try:
-			# bob responds
-			if form.getType() == 'form' and 'security' in form.asDict():
-				def continue_with_negotiation(*args):
-					if len(args):
-						self.dialog.destroy()
-
-					# we don't support 3-message negotiation as the responder
-					if 'dhkeys' in form.asDict():
-						session.fail_bad_negotiation('3 message negotiation not supported when responding', ('dhkeys',))
-						return
-
-					negotiated, not_acceptable, ask_user = session.verify_options_bob(form)
-
-					if ask_user:
-						def accept_nondefault_options(is_checked):
-							self.dialog.destroy()
-							negotiated.update(ask_user)
-							session.respond_e2e_bob(form, negotiated, not_acceptable)
-
-						def reject_nondefault_options():
-							self.dialog.destroy()
-							for key in ask_user.keys():
-								not_acceptable.append(key)
-							session.respond_e2e_bob(form, negotiated, not_acceptable)
-
-						self.dialog = dialogs.YesNoDialog(_('Confirm these session options'),
-							_('''The remote client wants to negotiate an session with these features:
-
-		%s
-
-		Are these options acceptable?''') % (negotiation.describe_features(ask_user)),
-								on_response_yes=accept_nondefault_options,
-								on_response_no=reject_nondefault_options)
-					else:
-						session.respond_e2e_bob(form, negotiated, not_acceptable)
-
-				def ignore_negotiation(widget):
-					self.dialog.destroy()
-					return
-
-				continue_with_negotiation()
-
-				return
-
-			# alice accepts
-			elif session.status == 'requested-e2e' and form.getType() == 'submit':
-				negotiated, not_acceptable, ask_user = session.verify_options_alice(form)
-
-				if session.sigmai:
-					def _cb(on_success):
-						negotiation.show_sas_dialog(session, jid, session.sas, on_success)
-
-					session.check_identity = _cb
-
-				if ask_user:
-					def accept_nondefault_options(is_checked):
-						dialog.destroy()
-
-						negotiated.update(ask_user)
-
-						try:
-							session.accept_e2e_alice(form, negotiated)
-						except exceptions.NegotiationError, details:
-							session.fail_bad_negotiation(details)
-
-					def reject_nondefault_options():
-						session.reject_negotiation()
-						dialog.destroy()
-
-					dialog = dialogs.YesNoDialog(_('Confirm these session options'),
-							_('The remote client selected these options:\n\n%s\n\nContinue with the session?') % (negotiation.describe_features(ask_user)),
-							on_response_yes = accept_nondefault_options,
-							on_response_no = reject_nondefault_options)
-				else:
-					try:
-						session.accept_e2e_alice(form, negotiated)
-					except exceptions.NegotiationError, details:
-						session.fail_bad_negotiation(details)
-
-				return
-			elif session.status == 'responded-e2e' and form.getType() == 'result':
-
-				def _cb(on_success):
-					negotiation.show_sas_dialog(session, jid, session.sas, on_success)
-
-				session.check_identity = _cb
-
-				try:
-					session.accept_e2e_bob(form)
-				except exceptions.NegotiationError, details:
-					session.fail_bad_negotiation(details)
-
-				return
-			elif session.status == 'identified-alice' and form.getType() == 'result':
-				def _cb(on_success):
-					negotiation.show_sas_dialog(session, jid, session.sas, on_success)
-
-				session.check_identity = _cb
-
-				try:
-					session.final_steps_alice(form)
-				except exceptions.NegotiationError, details:
-					session.fail_bad_negotiation(details)
-
-				return
-		except exceptions.Cancelled:
-			# user cancelled the negotiation
-
-			session.reject_negotiation()
-
-			return
-
-		if form.getField('terminate') and\
-		form.getField('terminate').getValue() in ('1', 'true'):
-			jid = str(jid)
-
-			session.acknowledge_termination()
-
-			conn = gajim.connections[account]
-			conn.delete_session(jid, session.thread_id)
-
-			return
-
-		# non-esession negotiation. this isn't very useful, but i'm keeping it around
-		# to test my test suite.
-		if form.getType() == 'form':
-			if not session.control:
-				resource = jid.getResource()
-				contact = gajim.contacts.get_contact(account, str(jid), resource)
-				if not contact:
-					connection = gajim.connections[account]
-					contact = gajim.contacts.create_contact(jid = jid.getStripped(), 
-							resource = resource, show = connection.get_status())
-				self.new_chat(contact, account, resource = resource, session = session)
-
-			negotiation.FeatureNegotiationWindow(account, jid, session, form)
-
 	def handle_event_privacy_lists_received(self, account, data):
 		# ('PRIVACY_LISTS_RECEIVED', account, list)
 		if not self.instances.has_key(account):
@@ -2195,7 +2047,6 @@ class Interface:
 			'UNIQUE_ROOM_ID_UNSUPPORTED': \
 				self.handle_event_unique_room_id_unsupported,
 			'UNIQUE_ROOM_ID_SUPPORTED': self.handle_event_unique_room_id_supported,
-			'SESSION_NEG': self.handle_session_negotiation,
 			'GPG_PASSWORD_REQUIRED': self.handle_event_gpg_password_required,
 			'SSL_ERROR': self.handle_event_ssl_error,
 			'FINGERPRINT_ERROR': self.handle_event_fingerprint_error,
