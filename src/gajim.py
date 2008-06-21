@@ -1025,23 +1025,22 @@ class Interface:
 		if vcard.has_key('resource'):
 			resource = vcard['resource']
 
+		fjid = jid + '/' + str(resource)
+
 		# vcard window
 		win = None
 		if self.instances[account]['infos'].has_key(jid):
 			win = self.instances[account]['infos'][jid]
-		elif resource and self.instances[account]['infos'].has_key(
-			jid + '/' + resource):
-			win = self.instances[account]['infos'][jid + '/' + resource]
+		elif resource and self.instances[account]['infos'].has_key(fjid):
+			win = self.instances[account]['infos'][fjid]
 		if win:
 			win.set_values(vcard)
 
 		# show avatar in chat
 		ctrls = []
-		if resource and self.msg_win_mgr.has_window(
-		jid + '/' + resource, account):
-			win = self.msg_win_mgr.get_window(jid + '/' + resource,
-				account)
-			ctrls = win.get_controls(jid + '/' + resource, account)
+		if resource and self.msg_win_mgr.has_window(fjid, account):
+			win = self.msg_win_mgr.get_window(fjid, account)
+			ctrls = win.get_controls(fjid, account)
 		elif self.msg_win_mgr.has_window(jid, account):
 			win = self.msg_win_mgr.get_window(jid, account)
 			ctrls = win.get_controls(jid, account)
@@ -2126,10 +2125,13 @@ class Interface:
 			elif type_ == 'chat':
 				session = event.parameters[8]
 				ctrl = session.control
+			elif type_ == '':
+				ctrls = self.msg_win_mgr.get_chat_controls(fjid, account)
 
-			if type_ == '' and self.msg_win_mgr.has_window(fjid, account):
-				ctrl = self.msg_win_mgr.get_chat_controls(fjid, account)[0]
-			elif not ctrl:
+				if ctrls:
+					ctrl = ctrls[0]
+
+			if not ctrl:
 				highest_contact = gajim.contacts.get_contact_with_highest_priority(
 					account, jid)
 				# jid can have a window if this resource was lower when he sent
@@ -2443,7 +2445,7 @@ class Interface:
 			self.emoticons_menu.destroy()
 		self.emoticons_menu = self.prepare_emoticons_menu()
 
-################################################################################		
+################################################################################
 ### Methods for opening new messages controls
 ################################################################################
 
@@ -2574,8 +2576,9 @@ class Interface:
 			contact = self.roster.add_to_not_in_the_roster(account, jid,
 				resource=resource)
 
-		if self.msg_win_mgr.has_window(fjid, account):
-			ctrl = self.msg_win_mgr.get_chat_controls(fjid, account)[0]
+		ctrls = self.msg_win_mgr.get_chat_controls(fjid, account)
+		if ctrls:
+			ctrl = ctrls[0]
 		else:
 			ctrl = self.new_chat(contact, account,
 				resource=resource)

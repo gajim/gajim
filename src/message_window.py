@@ -621,6 +621,12 @@ class MessageWindow(object):
 			nth_child = notebook.get_nth_page(page_num)
 			return self._widget_to_control(nth_child)
 
+	def has_control(self, jid, acct):
+		sessioned = (acct in self._controls and jid in self._controls[acct] \
+			and self._controls[acct][jid])
+
+		return sessioned or self.sessionless_controls(acct, jid)
+
 	def get_gc_control(self, jid, acct):
 		return self.get_control(jid, acct, 'gc')
 
@@ -924,9 +930,8 @@ class MessageWindowMgr(gobject.GObject):
 
 	def get_window(self, jid, acct):
 		for win in self.windows():
-			if (acct in win._controls and jid in win._controls[acct]) or \
-			(acct in win.sessionless_ctrls and jid in win.sessionless_ctrls[acct]):
-					return win
+			if win.has_control(jid, acct):
+				return win
 
 		return None
 
