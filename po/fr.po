@@ -84,7 +84,7 @@ msgid ""
 "\n"
 "Please wait..."
 msgstr ""
-"<b>Connexion au server</b>\n"
+"<b>Connexion au serveur</b>\n"
 "\n"
 "Veuillez patienter..."
 
@@ -338,7 +338,7 @@ msgid ""
 "IP, so file transfer has higher chances of working."
 msgstr ""
 "Si cette case est cochée, Gajim va diffuser des adresses IP en plus de la "
-"votre, les transferts de fichiers ont ainsi plus de chance de fonctionner."
+"vôtre, les transferts de fichiers ont ainsi plus de chance de fonctionner."
 
 #: ../data/glade/account_modification_window.glade.h:21
 #: ../data/glade/accounts_window.glade.h:26
@@ -347,7 +347,7 @@ msgid ""
 "which results in disconnection"
 msgstr ""
 "Si coché, Gajim enverra des paquets de maintien de connection pour prévenir "
-"des temps de latence pouvant entraîner des déconnections"
+"des temps de latence pouvant entraîner des déconnexions"
 
 #: ../data/glade/account_modification_window.glade.h:22
 #: ../data/glade/zeroconf_properties_window.glade.h:8
@@ -429,7 +429,7 @@ msgid ""
 "server when two or more clients are connected using the same account; The "
 "client with the highest priority gets the events"
 msgstr ""
-"La priorité est utilisé par Jabber pour déterminer qui reçoit les évenements "
+"La priorité est utilisée par Jabber pour déterminer qui reçoit les événements "
 "du serveur quand plusieurs clients sont connectés avec le même compte. Le "
 "client ayant la plus haute priorité recevra les messages"
 
@@ -597,7 +597,7 @@ msgstr "Utiliser un port personnalisé :"
 
 #: ../data/glade/accounts_window.glade.h:59
 msgid "_Warn before using an insecure connection"
-msgstr "_Prévenir avant d'utiliser une connexion non-sécurisée"
+msgstr "_Prévenir avant d'utiliser une connexion non sécurisée"
 
 #: ../data/glade/accounts_window.glade.h:60
 msgid "gtk-add"
@@ -963,7 +963,7 @@ msgstr "Changer le mot de passe"
 
 #: ../data/glade/change_password_dialog.glade.h:2
 msgid "Enter it again for confirmation:"
-msgstr "Entrez le de nouveau pour confirmer :"
+msgstr "Entrez le à nouveau pour confirmer :"
 
 #: ../data/glade/change_password_dialog.glade.h:3
 msgid "Enter new password:"
@@ -1289,7 +1289,7 @@ msgstr "_Marque-pages"
 
 #: ../data/glade/gc_control_popup_menu.glade.h:6
 msgid "_Destroy Room"
-msgstr "_Destruction le Salon"
+msgstr "_Détruire le Salon"
 
 #: ../data/glade/gc_control_popup_menu.glade.h:8
 msgid "_Manage Room"
@@ -1820,7 +1820,7 @@ msgid ""
 "not been used even longer"
 msgstr ""
 "Si cette case est cochée, Gajim changera votre statut en Non disponible "
-"quand l'ordinateur n'a pas été utilisé pendant un plus longue période"
+"quand l'ordinateur n'a pas été utilisé pendant une plus longue période"
 
 #: ../data/glade/preferences_window.glade.h:57
 msgid ""
@@ -1855,8 +1855,8 @@ msgid ""
 "Use with caution, because it blocks all messages from any contact that is "
 "not in the roster"
 msgstr ""
-"Si cette case est cochée, Gajim ignorera les évènements en provenance des "
-"contacts non-autorisés. Utilisez avec précaution car cela bloque tous les "
+"Si cette case est cochée, Gajim ignorera les événements en provenance des "
+"contacts non autorisés. Utilisez avec précaution car cela bloque tous les "
 "messages provenant des contacts qui ne sont pas dans votre liste"
 
 #: ../data/glade/preferences_window.glade.h:61
@@ -1883,7 +1883,7 @@ msgid ""
 msgstr ""
 "Si cette case est cochée, Gajim utilisera des icônes d'état spécifiques aux "
 "protocoles. (Par ex. un contact MSN aura les icônes de MSN pour les états "
-"disponible, absent(e), occupé(e), etc)"
+"disponible, absent(e), occupé(e), etc.)"
 
 #: ../data/glade/preferences_window.glade.h:64
 msgid ""
@@ -1898,7 +1898,7 @@ msgid ""
 "If not disabled, Gajim will replace ascii smilies like ':)' with equivalent "
 "animated or static graphical emoticons"
 msgstr ""
-"Si cette case n'est pas décochée, Gajim va remplacer les émoticône ASCII "
+"Si cette case n'est pas décochée, Gajim va remplacer les émoticônes ASCII "
 "comme « :) » par un équivalent graphique statique ou dynamique"
 
 #: ../data/glade/preferences_window.glade.h:66
@@ -1941,7 +1941,7 @@ msgstr "M'avertir lors de l'arrivée d'un courrier électronique _Gmail"
 
 #: ../data/glade/preferences_window.glade.h:75
 msgid "Personal Events"
-msgstr "Évènements Personnels"
+msgstr "Événements Personnels"
 
 #: ../data/glade/preferences_window.glade.h:76
 msgid "Play _sounds"
@@ -1979,7 +1979,7 @@ msgid ""
 "Gajim will just display the raw message text."
 msgstr ""
 "Certains messages peuvent contenir du texte complexe (formatage, couleurs, "
-"etc). Si activé, Gajim l'affichera seulement en tant que texte non formaté. "
+"etc.). Si activé, Gajim l'affichera seulement en tant que texte non formaté. "
 
 #: ../data/glade/preferences_window.glade.h:85
 msgid "Status"
@@ -2578,7 +2578,7 @@ msgstr "De :"
 
 #: ../data/glade/single_message_window.glade.h:3
 msgid "Reply to this message"
-msgstr "Repondre à ce message"
+msgstr "Répondre à ce message"
 
 #: ../data/glade/single_message_window.glade.h:4
 msgid "Sen_d"
@@ -3213,7 +3213,7 @@ msgstr "Événements non lus"
 
 #: ../src/config.py:1718
 msgid "Read all pending events before removing this account."
-msgstr "Lisez tous les évènements avant de supprimer ce compte."
+msgstr "Lisez tous les événements avant de supprimer ce compte."
 
 #: ../src/config.py:1744
 #, python-format
@@ -3236,7 +3236,7 @@ msgstr "Pour changer le nom du compte, vous devez être déconnecté."
 
 #: ../src/config.py:1759
 msgid "To change the account name, you must read all pending events."
-msgstr "Pour changer le nom du compte, vous devez lire tous ses évènements."
+msgstr "Pour changer le nom du compte, vous devez lire tous ses événements."
 
 #: ../src/config.py:1765
 msgid "Account Name Already Used"
@@ -3874,7 +3874,7 @@ msgstr "Nom d'utilisateur invalide"
 #: ../src/dialogs.py:1705 ../src/groupchat_control.py:1297
 #: ../src/groupchat_control.py:1569
 msgid "The nickname has not allowed characters."
-msgstr "Le pseudonyme contient des caractères non-autorisés."
+msgstr "Le pseudonyme contient des caractères non autorisés."
 
 #: ../src/dialogs.py:1709 ../src/dialogs.py:1715
 #: ../src/groupchat_control.py:1736
@@ -4346,7 +4346,7 @@ msgstr "Nécessite python-dbus."
 #: ../src/features_window.py:73 ../src/features_window.py:81
 #: ../src/features_window.py:85 ../src/features_window.py:97
 msgid "Feature not available under Windows."
-msgstr "Fonctionnalité non-disponible sous Windows."
+msgstr "Fonctionnalité indisponible sous Windows."
 
 #: ../src/features_window.py:58
 msgid "OpenGPG"
@@ -4439,7 +4439,7 @@ msgstr "Notification-daemon"
 
 #: ../src/features_window.py:83
 msgid "Passive popups notifying for new events."
-msgstr "Notification de nouveaux évènements via des popups."
+msgstr "Notification de nouveaux événements via des popups."
 
 #: ../src/features_window.py:84
 msgid ""
@@ -4461,7 +4461,7 @@ msgstr ""
 msgid ""
 "Requires python-gnome2-extras or compiled trayicon module from Gajim sources."
 msgstr ""
-"Nécessite python-gnome2-extras ou un compilation du module trayicon depuis "
+"Nécessite python-gnome2-extras ou une compilation du module trayicon depuis "
 "les sources Gajim."
 
 #: ../src/features_window.py:89
@@ -4475,7 +4475,7 @@ msgstr "Inactif"
 #: ../src/features_window.py:91
 msgid "Ability to measure idle time, in order to set auto status."
 msgstr ""
-"Possibilité de mesurer le temps d'invativité, afin de définir un statut "
+"Possibilité de mesurer le temps d'inactivité, afin de définir un statut "
 "automatique."
 
 #: ../src/features_window.py:92 ../src/features_window.py:93
@@ -4505,7 +4505,7 @@ msgstr "Chiffrement de bout en bout"
 
 #: ../src/features_window.py:99
 msgid "Encrypting chatmessages."
-msgstr "Encryption de la conversation."
+msgstr "Chiffrement de la conversation."
 
 #: ../src/features_window.py:100 ../src/features_window.py:101
 msgid "Requires python-crypto."
@@ -4561,7 +4561,7 @@ msgstr "Disponible"
 
 #: ../src/features_window.py:127
 msgid "Feature"
-msgstr "Fonctionalité"
+msgstr "Fonctionnalité"
 
 #: ../src/filetransfers_window.py:77
 msgid "File"
@@ -4752,7 +4752,7 @@ msgstr ""
 
 #: ../src/gajim.py:144
 msgid "Gajim needs X server to run. Quiting..."
-msgstr "Gajim a besoin d'un serveur X pour démarrer. Quitte..."
+msgstr "Gajim a besoin d'un serveur X pour démarrer. Fermeture..."
 
 #: ../src/gajim.py:174
 msgid "Gajim needs PyGTK 2.8 or above"
@@ -4983,7 +4983,7 @@ msgstr "mot de passe erroné"
 
 #: ../src/gajim.py:1533
 msgid "Please retype your GPG passphrase or press Cancel."
-msgstr "Ressaisissez votre mot de passe GPG ou pressez Annuler."
+msgstr "Ressaisissez votre mot de passe GPG ou appuyez sur Annuler."
 
 #: ../src/gajim.py:1638
 #, python-format
@@ -5142,7 +5142,7 @@ msgstr ""
 "Ancienne empreinte digitale : %s\n"
 "Nouvelle empreinte digitale : %s\n"
 "\n"
-"Voulez vous toujours vous connecter et mettre à jour l'emprunte digitale du "
+"Voulez vous toujours vous connecter et mettre à jour l'empreinte digitale du "
 "certificat ?"
 
 #: ../src/gajim.py:2254
@@ -5154,7 +5154,7 @@ msgid ""
 "You are about to send your password on an insecure connection. Are you sure "
 "you want to do that?"
 msgstr ""
-"Vous êtes sur le point d'envoyer votre mot de passe sur une connexion non-"
+"Vous êtes sur le point d'envoyer votre mot de passe sur une connexion non "
 "sécurisée. Êtes vous sûr de vouloir le faire ?"
 
 #: ../src/gajim.py:2257 ../src/groupchat_control.py:1663
@@ -5386,7 +5386,7 @@ msgstr "sujet du message"
 
 #: ../src/gajim-remote.py:150
 msgid "Sends new message to a groupchat you've joined."
-msgstr "Send un nouveau message à un salon que vous avec rejoin."
+msgstr "Envoie un nouveau message à un salon que vous avez rejoint."
 
 #: ../src/gajim-remote.py:152
 msgid "JID of the room that will receive the message"
@@ -5481,12 +5481,12 @@ msgstr "Renvoit l'état actuel (global à moins qu'un compte ne soit spécifié)
 msgid ""
 "Returns current status message(the global one unless account is specified)"
 msgstr ""
-"Renvois le message d'état actuel (global à moins qu'un compte ne soit "
+"Renvoie le message d'état actuel (global à moins qu'un compte ne soit "
 "spécifié)"
 
 #: ../src/gajim-remote.py:233
 msgid "Returns number of unread messages"
-msgstr "Renvois le nombre de messages non-lus"
+msgstr "Renvoie le nombre de messages non-lus"
 
 #: ../src/gajim-remote.py:237
 msgid "Opens 'Start Chat' dialog"
@@ -5509,7 +5509,7 @@ msgid ""
 "Account in which the xml will be sent; if not specified, xml will be sent to "
 "all accounts"
 msgstr ""
-"Compte dans lequel le XML sera envoyé; si non spécifié, le XML sera envoyé à "
+"Compte dans lequel le XML sera envoyé ; si non spécifié, le XML sera envoyé à "
 "tous les comptes"
 
 #: ../src/gajim-remote.py:252
@@ -5610,7 +5610,7 @@ msgid ""
 "Type \"%s help %s\" for more info"
 msgstr ""
 "L'argument \"%s\" n'est pas précisé. \n"
-"Tappez \"%s help %s\" pour plus d'informations"
+"Tapez \"%s help %s\" pour plus d'informations"
 
 #: ../src/gajim-remote.py:516
 msgid "Wrong uri"
@@ -5785,7 +5785,7 @@ msgid ""
 "Usage: /%s [reason], closes the current window or tab, displaying reason if "
 "specified."
 msgstr ""
-"Utilisation : /%s [raison], ferme la fenêtre ou l'onglet courrant en "
+"Utilisation : /%s [raison], ferme la fenêtre ou l'onglet courant en "
 "affichant la raison si spécifiée."
 
 #: ../src/groupchat_control.py:1514
@@ -5949,7 +5949,7 @@ msgstr "Erreur lors de l'analyse du fichier :"
 #: ../src/gtkgui_helpers.py:392
 #, python-format
 msgid "Could not write to %s. Session Management support will not work"
-msgstr "N'a pas pu écrire dans %s. La gestion des sessions ne foncionnera pas"
+msgstr "N'a pas pu écrire dans %s. La gestion des sessions ne fonctionnera pas"
 
 #. xmpp: is currently handled by another program, so ask the user
 #: ../src/gtkgui_helpers.py:724
@@ -5958,7 +5958,7 @@ msgstr "Gajim n'est pas le client Jabber par défaut"
 
 #: ../src/gtkgui_helpers.py:725
 msgid "Would you like to make Gajim the default Jabber client?"
-msgstr "Voulez vous faire de Gajim le client Jabber par défaut"
+msgstr "Voulez vous faire de Gajim le client Jabber par défaut ?"
 
 #: ../src/gtkgui_helpers.py:726
 msgid "Always check to see if Gajim is the default Jabber client on startup"
@@ -5974,7 +5974,7 @@ msgstr "Extension non supportée"
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr ""
 "L'image ne peut être enregistrée en format %(type)s. Enregistrer en tant que "
-"%(new_filename)s?"
+"%(new_filename)s ?"
 
 #: ../src/gtkgui_helpers.py:833
 msgid "Save Image as..."
@@ -6130,14 +6130,14 @@ msgstr ""
 "croyez.\n"
 "\n"
 "Vous devriez parler avec elle directement (en personne ou au téléphone) et "
-"confirmer que leur Chaine d'Authentification Courte est identique à celle-"
+"confirmer que leur Chaîne d'Authentification Courte est identique à celle-"
 "ci :%s\n"
 "\n"
-"Voulez continuer la session encryptée ?"
+"Voulez-vous continuer la session chiffrée ?"
 
 #: ../src/negotiation.py:31
 msgid "Yes, I verified the Short Authentication String"
-msgstr "Oui, j'ai vérifié la Chaine Courte d'Authentification"
+msgstr "Oui, j'ai vérifié la Chaîne Courte d'Authentification"
 
 #: ../src/notify.py:227
 #, python-format
@@ -6320,7 +6320,7 @@ msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled and contact is in your roster."
 msgstr ""
-"Les messages seront disponibles à une lecture ultérieure si l'archivage de "
+"Les messages seront disponibles pour une lecture ultérieure si l'archivage de "
 "l'historique est actif et si le contact est dans votre liste."
 
 #: ../src/roster_window.py:2372
@@ -6777,7 +6777,7 @@ msgid ""
 "This contact is interested in your presence information, but you are not "
 "interested in his/her presence"
 msgstr ""
-"Ce contact s'intéresse à votre état mais vous ne vous intéressez au sien"
+"Ce contact s'intéresse à votre état mais vous ne vous intéressez pas au sien"
 
 #: ../src/vcard.py:319
 msgid ""
@@ -6785,7 +6785,7 @@ msgid ""
 "interested in yours"
 msgstr ""
 "Vous vous intéressez à l'état de ce contact mais il ne s'intéresse pas au "
-"votre"
+"vôtre"
 
 #: ../src/vcard.py:321
 msgid "You and the contact are interested in each other's presence information"
@@ -6797,8 +6797,8 @@ msgid ""
 "You are not interested in the contact's presence, and neither he/she is "
 "interested in yours"
 msgstr ""
-"Vous n'êtes pas intéressé par l'état de ce contact et il ne s'intéressepas "
-"au votre"
+"Vous n'êtes pas intéressé par l'état de ce contact et il ne s'intéresse pas "
+"au vôtre"
 
 #: ../src/vcard.py:330
 msgid "You are waiting contact's answer about your subscription request"
@@ -7299,7 +7299,7 @@ msgid ""
 msgstr ""
 "Si Vrai et que les versions de GTK+ et PyGTK sont au moins 2.8, fait "
 "clignoter (comportement par défaut dans la plupart des gestionnaires de "
-"fenêtres) la fenêtre quand elle contient des évènements non lus."
+"fenêtres) la fenêtre quand elle contient des événements non lus."
 
 #: ../src/common/config.py:228
 msgid ""
@@ -7513,8 +7513,8 @@ msgstr ""
 msgid ""
 "Show a warning dialog before sending password on an insecure connection."
 msgstr ""
-"Afficher message d'avertissement avant d'envoyer un mot de passer via une "
-"connexion non-sécurisée."
+"Afficher un message d'avertissement avant d'envoyer un mot de passer via une "
+"connexion non sécurisée."
 
 #: ../src/common/config.py:290
 msgid "Space separated list of ssl errors to ignore."
@@ -7947,7 +7947,7 @@ msgstr "La passerelle %s a mal répondu à la requête d'enregistrement : %s"
 
 #: ../src/common/connection.py:516
 msgid "Connection to proxy failed"
-msgstr "La connexion au prox a échoué"
+msgstr "La connexion au proxy a échoué"
 
 #: ../src/common/connection.py:593 ../src/common/connection.py:673
 #: ../src/common/connection.py:1280
@@ -8039,7 +8039,7 @@ msgstr "Non récupéré à cause du statut invisible"
 
 #: ../src/common/contacts.py:307
 msgid "Not in roster"
-msgstr "Non dans la liste"
+msgstr "Pas dans la liste"
 
 # Traduction moins mauvaise mais pas terrible: binding=lier, attacher
 #. only say that to non Windows users
@@ -8053,7 +8053,7 @@ msgstr "Les possibilités D-Bus de Gajim ne peuvent pas être utilisées"
 
 #: ../src/common/exceptions.py:27
 msgid "pysqlite2 (aka python-pysqlite2) dependency is missing. Exiting..."
-msgstr "pysqlite2 (ou python-pysqlite2) n'est pas installé.Quitte..."
+msgstr "pysqlite2 (ou python-pysqlite2) n'est pas installé. Quitte..."
 
 #: ../src/common/exceptions.py:44
 msgid "Database cannot be read."
@@ -8978,7 +8978,7 @@ msgstr "de %s"
 msgid "%d event pending"
 msgid_plural "%d events pending"
 msgstr[0] "%d évènement en attente"
-msgstr[1] "%d évènements en attente"
+msgstr[1] "%d événements en attente"
 
 #: ../src/common/helpers.py:1097
 #, python-format
