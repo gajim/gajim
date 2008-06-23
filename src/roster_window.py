@@ -4532,12 +4532,14 @@ class RosterWindow:
 				item.set_active(have_tune)
 				item.connect('toggled', self.on_publish_tune_toggled, account)
 				if have_mood:
-					item = gtk.MenuItem(_('Mood'))
+					item = gtk.CheckMenuItem(_('Mood'))
 					pep_submenu.append(item)
+					item.set_active(len(gajim.connections[account].mood) > 0)
 					item.connect('activate', self.on_change_mood_activate, account)
 				if have_activity:
-					item = gtk.MenuItem(_('Activity'))
+					item = gtk.CheckMenuItem(_('Activity'))
 					pep_submenu.append(item)
+					item.set_active(len(gajim.connections[account].activity) > 0)
 					item.connect('activate', self.on_change_activity_activate,
 						account)
 
