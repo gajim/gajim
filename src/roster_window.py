@@ -4965,6 +4965,8 @@ class RosterWindow:
 		invite_menuitem = xml.get_widget('invite_menuitem')
 		block_menuitem = xml.get_widget('block_menuitem')
 		unblock_menuitem = xml.get_widget('unblock_menuitem')
+		ignore_menuitem = xml.get_widget('ignore_menuitem')
+		unignore_menuitem = xml.get_widget('unignore_menuitem')
 		rename_menuitem = xml.get_widget('rename_menuitem')
 		edit_groups_menuitem = xml.get_widget('edit_groups_menuitem')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
@@ -5141,12 +5143,23 @@ class RosterWindow:
 			if jid in gajim.connections[account].blocked_contacts:
 				block_menuitem.set_no_show_all(True)
 				block_menuitem.hide()
-				unblock_menuitem.connect('activate', self.on_unblock, titer, None)
+				if gajim.get_transport_name_from_jid(jid, use_config_setting=False):
+					unblock_menuitem.set_no_show_all(True)
+					unblock_menuitem.hide()
+					unignore_menuitem.set_no_show_all(False)
+					unignore_menuitem.connect('activate', self.on_unblock, titer,
+						None)
+				else:
+					unblock_menuitem.connect('activate', self.on_unblock, titer,
+						None)
 			else:
 				unblock_menuitem.set_no_show_all(True)
 				unblock_menuitem.hide()
 				if gajim.get_transport_name_from_jid(jid, use_config_setting=False):
-					block_menuitem.set_sensitive(False)
+					block_menuitem.set_no_show_all(True)
+					block_menuitem.hide()
+					ignore_menuitem.set_no_show_all(False)
+					ignore_menuitem.connect('activate', self.on_block, titer, None)
 				else:
 					block_menuitem.connect('activate', self.on_block, titer, None)
 		else:
