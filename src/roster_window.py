@@ -742,8 +742,11 @@ class RosterWindow:
 	def remove_groupchat(self, jid, account):
 		'''Remove groupchat from roster and redraw account and group.'''
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
-		self.remove_contact(jid, account, force = True, backend = True)
-		return True
+		if contact.is_groupchat():
+			self.remove_contact(jid, account, force = True, backend = True)
+			return True
+		else:
+			return False
 
 
 	# TODO: This function is yet unused! Port to new API
@@ -1102,48 +1105,6 @@ class RosterWindow:
 			self.model[child_iter][C_AVATAR_PIXBUF] = scaled_pixbuf
 		return False
 
-	def join_gc_room(self, account, room_jid, nick, password, minimize=False,
-		is_continued=False):
-		'''joins the room immediately'''
-		if gajim.interface.msg_win_mgr.has_window(room_jid, account) and \
-		gajim.gc_connected[account][room_jid]:
-			win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
-			ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid, account)
-			win.set_active_tab(ctrl)
-			dialogs.ErrorDialog(_('You are already in group chat %s') % room_jid)
-			return
-		minimized_control_exists = False
-		if room_jid in gajim.interface.minimized_controls[account]:
-			minimized_control_exists = True
-		invisible_show = gajim.SHOW_LIST.index('invisible')
-		if gajim.connections[account].connected == invisible_show:
-			dialogs.ErrorDialog(
-				_('You cannot join a group chat while you are invisible'))
-			return
-		if minimize and not minimized_control_exists and \
-		not gajim.interface.msg_win_mgr.has_window(room_jid, account):
-			contact = gajim.contacts.create_contact(jid = room_jid, name = nick)
-			gc_control = GroupchatControl(None, contact, account)
-			gajim.interface.minimized_controls[account][room_jid] = gc_control
-			gajim.connections[account].join_gc(nick, room_jid, password)
-			if password:
-				gajim.gc_passwords[room_jid] = password
-			self.add_groupchat_to_roster(account, room_jid)
-			return
-		if not minimized_control_exists and \
-			not gajim.interface.msg_win_mgr.has_window(room_jid, account):
-			self.new_room(room_jid, nick, account, is_continued=is_continued)
-		if not minimized_control_exists:
-			gc_win = gajim.interface.msg_win_mgr.get_window(room_jid, account)
-			gc_control = gc_win.get_gc_control(room_jid, account)
-			gc_win.set_active_tab(gc_control)
-		gajim.connections[account].join_gc(nick, room_jid, password)
-		if password:
-			gajim.gc_passwords[room_jid] = password
-		contact = gajim.contacts.get_contact_with_highest_priority(account, \
-			room_jid)
-		if contact or minimized_control_exists:
-			self.add_groupchat_to_roster(account, room_jid)
 
 	def draw_completely_and_show_if_needed(self, jid, account):
 		'''Draw contact, account and groups of given jid
@@ -2684,9 +2645,7 @@ class RosterWindow:
 		del gajim.interface.minimized_controls[account][jid]
 		ctrl.shutdown()
 
-		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
-		if contact.get_shown_groups() == [_('Groupchats')]:
-			self.remove_groupchat(contact.jid, account)
+		self.remove_groupchat(jid, account)
 
 	def on_send_single_message_menuitem_activate(self, widget, account,
 	contact = None):
