@@ -1663,7 +1663,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		encrypted = False
 		xep_200_encrypted = msg.getTag('c', namespace=common.xmpp.NS_STANZA_CRYPTO)
-		
+
 		# Receipt requested
 		# TODO: We shouldn't answer if we're invisible!
 		contact = gajim.contacts.get_contact(self.name,
@@ -1676,7 +1676,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			receipt.setID(msg.getID())
 			receipt.setTag('received',
 				namespace='urn:xmpp:receipts')
-			receipt.setThread(thread_id)
+
+			if thread_id:
+				receipt.setThread(thread_id)
 			con.send(receipt)
 
 		if mtype != 'groupchat':
