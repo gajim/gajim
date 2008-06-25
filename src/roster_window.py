@@ -489,6 +489,7 @@ class RosterWindow:
 		# Family might has changed (actual big brother not on top).
 		# Remove childs first then big brother
 		family_in_roster = False
+		big_brother_jid = None
 		for data in nearby_family:
 			_account = data['account']
 			_jid = data['jid']
@@ -521,7 +522,9 @@ class RosterWindow:
 
 		if not family_in_roster:
 			return False
-
+	
+		assert old_big_jid, 'No Big Brother in nearby family % (Family: %)' % \
+			(nearby_family, family)
 		iters = self._get_contact_iter(old_big_jid, old_big_account,
 			old_big_contact, self.model)
 		assert len(iters) > 0, 'Old Big Brother %s is not in roster anymore' % \
@@ -665,6 +668,7 @@ class RosterWindow:
 				self.draw_avatar(c.jid, acc)
 			for group in contact.get_shown_groups():
 				self.draw_group(group, account)
+				self._adjust_group_expand_collapse_state(group, account)
 			self.draw_account(account)
 
 		return contacts[0][0] # it's contact/big brother with highest priority
@@ -728,14 +732,20 @@ class RosterWindow:
 		'''
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if contact is None:
+			# Do not show gc if we are disconnected and minimize it
+			if gajim.account_is_connected(account):
+				show = 'online'
+			else: 
+				show = 'offline'
+				status = ''
 			contact = gajim.contacts.create_contact(jid = jid, name = jid,
-				groups = [_('Groupchats')], show = 'online',
+				groups = [_('Groupchats')], show = show,
 				status = status, sub = 'none')
 			gajim.contacts.add_contact(account, contact)
 			self.add_contact(jid, account)
 		else:
 			contact.show = 'online'
-			self.draw_contact(jid, account)
+			self.draw_completely_and_show_if_needed(jid, account)
 		return contact
 
 
@@ -922,7 +932,7 @@ class RosterWindow:
 				accounts = accounts, groups = [group])
 			text += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
 
-		self.model[child_iter][C_NAME] = gobject.markup_escape_text(text)
+		self.model[child_iter][C_NAME] = text
 		return False
 
 	def draw_parent_contact(self, jid, account):
@@ -1872,10 +1882,6 @@ class RosterWindow:
 					for contact in [c for c in lcontact if (c.show != 'offline' or \
 					c.is_transport())]:
 						self.chg_contact_status(contact, 'offline', '', account)
-				# Remove SelfContact from roster and remove it.
-				# It might be gone when we return
-				self_jid = gajim.get_jid_from_account(account)
-				self.remove_contact(self_jid, account, backend = True)
 			self.actions_menu_needs_rebuild = True
 		self.update_status_combobox()
 		# Force the rebuild now since the on_activates on the menu itself does
@@ -2644,7 +2650,6 @@ class RosterWindow:
 		ctrl = gajim.interface.minimized_controls[account][jid]
 		del gajim.interface.minimized_controls[account][jid]
 		ctrl.shutdown()
-
 		self.remove_groupchat(jid, account)
 
 	def on_send_single_message_menuitem_activate(self, widget, account,
