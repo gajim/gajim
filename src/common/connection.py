@@ -251,6 +251,7 @@ class Connection(ConnectionHandlers):
 	# END disconenctedReconnCB
 
 	def _connection_lost(self):
+		log.debug('_connection_lost')
 		self.disconnect(on_purpose = False)
 		self.dispatch('STATUS', 'offline')
 		self.dispatch('CONNECTION_LOST',
@@ -516,6 +517,7 @@ class Connection(ConnectionHandlers):
 			(_('Connection to proxy failed'), reason))
 
 	def connect_to_next_type(self, retry=False):
+		log.debug('Connection to next type')
 		if len(self._connection_types):
 			self._current_type = self._connection_types.pop(0)
 			if self.last_connection:
@@ -557,6 +559,7 @@ class Connection(ConnectionHandlers):
 			self.connect_to_next_host(retry)
 
 	def connect_to_next_host(self, retry = False):
+		log.debug('Connection to next host')
 		if len(self._hosts):
 			# No config option exist when creating a new account
 			if self.last_connection_type:
@@ -1279,6 +1282,9 @@ class Connection(ConnectionHandlers):
 
 	def _on_new_account(self, con = None, con_type = None):
 		if not con_type:
+			if len(self._connection_types) or len(self._hosts):
+				# There are still other way to try to connect
+				return
 			self.dispatch('NEW_ACC_NOT_CONNECTED',
 				(_('Could not connect to "%s"') % self._hostname))
 			return
