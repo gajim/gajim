@@ -2171,6 +2171,20 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
 
+	def _PrivacySetCB(self, con, iq_obj):
+		'''
+		Privacy lists (XEP 016)
+
+		A list has been set
+		'''
+		gajim.log.debug('PrivacySetCB')
+		result = iq_obj.buildReply('result')
+		q = result.getTag('query')
+		if q:
+			result.delChild(q)
+		self.connection.send(result)
+		raise common.xmpp.NodeProcessed
+
 	def _getRosterCB(self, con, iq_obj):
 		if not self.connection:
 			return
@@ -2387,6 +2401,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			common.xmpp.NS_PING)
 		con.RegisterHandler('iq', self._search_fields_received, 'result',
 			common.xmpp.NS_SEARCH)
+		con.RegisterHandler('iq', self._PrivacySetCB, 'set',
+			common.xmpp.NS_PRIVACY)
 		con.RegisterHandler('iq', self._PubSubCB, 'result')
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._IqCB)
