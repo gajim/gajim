@@ -811,6 +811,11 @@ class Connection(ConnectionHandlers):
 	def send_invisible_presence(self, msg, signed, initial = False):
 		if not self.connection:
 			return
+		if not self.privacy_rules_supported:
+			self.dispatch('STATUS', gajim.SHOW_LIST[self.connected])
+			self.dispatch('ERROR', (_('Invisibility not supported'),
+				_('Account %s doesn\'t support invisibility.') % self.name))
+			return
 		# If we are already connected, and privacy rules are supported, send
 		# offline presence first as it's required by XEP-0126
 		if self.connected > 1 and self.privacy_rules_supported:
@@ -828,19 +833,16 @@ class Connection(ConnectionHandlers):
 			{'msg': msg, 'signed': signed, 'initial': initial})
 
 	def _continue_invisible(self, con, iq_obj, msg, signed, initial):
-		ptype = ''
-		show = ''
 		if iq_obj.getType() == 'error': # server doesn't support privacy lists
-			# We use the old way which is not xmpp complient
-			ptype = 'invisible'
-			show = 'invisible'
-		else:
-			# active the privacy rule
-			self.privacy_rules_supported = True
-			self.activate_privacy_rule('invisible')
-		priority = unicode(gajim.get_priority(self.name, show))
-		p = common.xmpp.Presence(typ = ptype, priority = priority, show = show)
-		p = self.add_sha(p, ptype != 'unavailable')
+			return
+		# active the privacy rule
+		self.privacy_rules_supported = True
+		self.activate_privacy_rule('invisible')
+		self.connected = STATUS_LIST.index('invisible')
+		self.status = msg
+		priority = unicode(gajim.get_priority(self.name, 'invisible'))
+		p = common.xmpp.Presence(priority = priority)
+		p = self.add_sha(p, True)
 		if msg:
 			p.setStatus(msg)
 		if signed:
@@ -953,7 +955,9 @@ class Connection(ConnectionHandlers):
 		sign_msg = False
 		if not auto and not show == 'offline':
 			sign_msg = True
-		self.status = msg
+		if show != 'invisible':
+			# We save it only when privacy list is accepted
+			self.status = msg
 		if show != 'offline' and self.connected < 1:
 			# set old_show to requested 'show' in case we need to
 			# recconect before we auth to server
@@ -993,12 +997,12 @@ class Connection(ConnectionHandlers):
 			# dont'try to connect, when we are in state 'connecting'
 			if self.connected == 1:
 				return
-			was_invisible = self.connected == STATUS_LIST.index('invisible')
-			self.connected = STATUS_LIST.index(show)
 			if show == 'invisible':
 				signed = self.get_signed_presence(msg)
 				self.send_invisible_presence(msg, signed)
 				return
+			was_invisible = self.connected == STATUS_LIST.index('invisible')
+			self.connected = STATUS_LIST.index(show)
 			if was_invisible and self.privacy_rules_supported:
 				iq = self.build_privacy_rule('visible', 'allow')
 				self.connection.send(iq)

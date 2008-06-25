@@ -4450,7 +4450,12 @@ class RosterWindow:
 				icon = state_images[show]
 				item.set_image(icon)
 				sub_menu.append(item)
-				item.connect('activate', self.change_status, account, show)
+				con = gajim.connections[account]
+				if show == 'invisible' and con.connected > 1 and \
+				not con.privacy_rules_supported:
+					item.set_sensitive(False)
+				else:
+					item.connect('activate', self.change_status, account, show)
 
 			item = gtk.SeparatorMenuItem()
 			sub_menu.append(item)

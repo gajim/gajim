@@ -1101,6 +1101,14 @@ class ConnectionVcard:
 			if iq_obj.getType() != 'error':
 				self.privacy_rules_supported = True
 				self.get_privacy_list('block')
+			elif self.continue_connect_info:
+				if self.continue_connect_info[0] == 'invisible':
+					# Trying to login as invisible but privacy list not supported
+					self.disconnect(on_purpose=True)
+					self.dispatch('STATUS', 'offline')
+					self.dispatch('ERROR', (_('Invisibility not supported'),
+						_('Account %s doesn\'t support invisibility.') % self.name))
+					return
 			# Ask metacontacts before roster
 			self.get_metacontacts()
 		elif self.awaiting_answers[id][0] == PEP_CONFIG:
