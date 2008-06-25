@@ -1432,18 +1432,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					annotation = note.getData()
 					self.annotations[jid] = annotation
 
-	def _PrivateErrorCB(self, con, iq_obj):
-		gajim.log.debug('PrivateErrorCB')
-		query = iq_obj.getTag('query')
-		storage_tag = query.getTag('storage')
-		if storage_tag:
-			ns = storage_tag.getNamespace()
-			if ns == 'storage:metacontacts':
-				self.private_storage_supported = False
-				# Private XML Storage (XEP49) is not supported by server
-				# Continue connecting
-				self.connection.initRoster()
-
 	def _rosterSetCB(self, con, iq_obj):
 		gajim.log.debug('rosterSetCB')
 		for item in iq_obj.getTag('query').getChildren():
