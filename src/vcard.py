@@ -123,9 +123,9 @@ class VcardWindow:
 		# Update roster
 		gajim.interface.roster.draw_avatar(jid, self.account)
 		# Update chat windows
-		for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(jid, self.account):
-			if ctrl.type_id != message_control.TYPE_GC:
-				ctrl.show_avatar()
+		ctrl = gajim.interface.msg_win_mgr.get_control(jid, self.account)
+		if ctrl and ctrl.type_id != message_control.TYPE_GC:
+			ctrl.show_avatar()
 
 	def on_vcard_information_window_destroy(self, widget):
 		if self.update_progressbar_timeout_id is not None:

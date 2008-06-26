@@ -54,14 +54,9 @@ class MessageWindow(object):
 	) = range(5)
 
 	def __init__(self, acct, type, parent_window=None, parent_paned=None):
-		# A dictionary of dictionaries of dictionaries
-		# where _contacts[account][jid][thread_id] == A MessageControl
+		# A dictionary of dictionaries
+		# where _contacts[account][jid] == A MessageControl
 		self._controls = {}
-
-		# a dictionary of dictionaries where
-		# sessionless_ctrls[account][jid] = a list of MessageControls that don't have
-		# sessions attached
-		self.sessionless_ctrls = {}
 
 		# If None, the window is not tied to any specific account
 		self.account = acct
@@ -154,10 +149,6 @@ class MessageWindow(object):
 			self._controls[new_name] = self._controls[old_name]
 			del self._controls[old_name]
 
-		if self.sessionless_ctrls.has_key(old_name):
-			self.sessionless_ctrls[new_name] = self.sessionless_ctrls[old_name]
-			del self.sessionless_ctrls[old_name]
-
 		for ctrl in self.controls():
 			if ctrl.account == old_name:
 				ctrl.account = new_name
@@ -166,14 +157,8 @@ class MessageWindow(object):
 
 	def get_num_controls(self):
 		n = 0
-		for jid_dict in self._controls.values():
-			for dict in jid_dict.values():
-				n += len(dict)
-
-		for jid_dict in self.sessionless_ctrls.values():
-			for ctrls in jid_dict.values():
-				n += len(ctrls)
-
+		for dict in self._controls.values():
+			n += len(dict)
 		return n
 
 	def resize(self, width, height):
@@ -214,7 +199,6 @@ class MessageWindow(object):
 		for ctrl in self.controls():
 			ctrl.shutdown()
 		self._controls.clear()
-		self.sessionless_ctrls.clear()
 		# Clean up handlers connected to the parent window, this is important since
 		# self.window may be the RosterWindow
 		for i in self.handlers.keys():
@@ -226,22 +210,10 @@ class MessageWindow(object):
 	def new_tab(self, control):
 		fjid = control.get_full_jid()
 
-		if control.session:
-			if not self._controls.has_key(control.account):
-				self._controls[control.account] = {}
+		if not self._controls.has_key(control.account):
+			self._controls[control.account] = {}
 
-			if not self._controls[control.account].has_key(fjid):
-				self._controls[control.account][fjid] = {}
-
-			self._controls[control.account][fjid][control.session.thread_id] = control
-		else:
-			if not self.sessionless_ctrls.has_key(control.account):
-				self.sessionless_ctrls[control.account] = {}
-
-			if not self.sessionless_ctrls[control.account].has_key(fjid):
-				self.sessionless_ctrls[control.account][fjid] = []
-
-			self.sessionless_ctrls[control.account][fjid].append(control)
+		self._controls[control.account][fjid] = control
 
 		if self.get_num_controls() == 2:
 			# is first conversation_textview scrolled down ?
@@ -486,20 +458,10 @@ class MessageWindow(object):
 
 		self.notebook.remove_page(self.notebook.page_num(ctrl.widget))
 
-		if ctrl.session:
-			dict = self._controls
-			idx = ctrl.session.thread_id
-		else:
-			dict = self.sessionless_ctrls
-			idx = dict[ctrl.account][fjid].index(ctrl)
+		del self._controls[ctrl.account][fjid]
 
-		del dict[ctrl.account][fjid][idx]
-
-		if len(dict[ctrl.account][fjid]) == 0:
-			del dict[ctrl.account][fjid]
-
-		if len(dict[ctrl.account]) == 0:
-			del dict[ctrl.account]
+		if len(self._controls[ctrl.account]) == 0:
+			del self._controls[ctrl.account]
 
 		self.check_tabs()
 		self.show_title()
@@ -601,16 +563,16 @@ class MessageWindow(object):
 		for ctrl in self.controls():
 			ctrl.update_tags()
 
-	def get_control(self, key, acct, thread_id):
+	def get_control(self, key, acct):
 		'''Return the MessageControl for jid or n, where n is a notebook page index.
-		When key is an int index acct and thread_id may be None'''
+		When key is an int index acct may be None'''
 		if isinstance(key, str):
 			key = unicode(key, 'utf-8')
 
 		if isinstance(key, unicode):
 			jid = key
 			try:
-				return self._controls[acct][jid][thread_id]
+				return self._controls[acct][jid]
 			except:
 				return None
 		else:
@@ -622,26 +584,11 @@ class MessageWindow(object):
 			return self._widget_to_control(nth_child)
 
 	def has_control(self, jid, acct):
-		sessioned = (acct in self._controls and jid in self._controls[acct] \
-			and self._controls[acct][jid])
-
-		return sessioned or self.sessionless_controls(acct, jid)
-
-	def get_gc_control(self, jid, acct):
-		return self.get_control(jid, acct, 'gc')
+		return (acct in self._controls and jid in self._controls[acct])
 
 	def get_controls(self, jid, acct):
 		try:
-			sessioned = self._controls[acct][jid].values()
-		except KeyError:
-			sessioned = []
-
-		sessionless = self.sessionless_controls(acct, jid)
-		return sessioned + sessionless
-
-	def sessionless_controls(self, acct, jid):
-		try:
-			return self.sessionless_ctrls[acct][jid]
+			return self._controls[acct][jid]
 		except KeyError:
 			return []
 
@@ -649,78 +596,22 @@ class MessageWindow(object):
 		'''Change the JID key of a control'''
 		try:
 			# Check if controls exists
-			ctrls = self._controls[acct][old_jid]
+			ctrl = self._controls[acct][old_jid]
 		except KeyError:
 			return
-		self._controls[acct][new_jid] = ctrls
+
+		self._controls[acct][new_jid] = ctrl
 		del self._controls[acct][old_jid]
-
-		try:
-			ctrls = self.sessionless_ctrls[acct][old_jid]
-		except KeyError:
-			return
-
-		self.sessionless_ctrls[acct][new_jid] = ctrls
-		del self.sessionless_ctrls[acct][new_jid]
 
 		if old_jid in gajim.last_message_time[acct]:
 			gajim.last_message_time[acct][new_jid] = \
 				gajim.last_message_time[acct][old_jid]
 			del gajim.last_message_time[acct][old_jid]
 
-	def change_thread_key(self, jid, acct, old_thread_id, new_thread_id):
-		'''Change the thread_id key of a control'''
-
-		if jid in self._controls[acct]:
-			ctrl = self._controls[acct][jid][old_thread_id]
-		else:
-			jid = gajim.get_jid_without_resource(jid)
-			ctrl = self._controls[acct][jid][old_thread_id]
-
-		del self._controls[acct][jid][old_thread_id]
-
-		if new_thread_id:
-			self._controls[acct][jid][new_thread_id] = ctrl
-		else:
-			if acct not in self.sessionless_ctrls:
-				self.sessionless_ctrls[acct] = {}
-
-			if jid not in self.sessionless_ctrls[acct]:
-				self.sessionless_ctrls[acct][jid] = []
-
-			self.sessionless_ctrls[acct][jid].append(ctrl)
-
-	def move_from_sessionless(self, ctrl):
-		'''a control just got a session, move it to the proper holding cell'''
-		acct = ctrl.account
-		jid = ctrl.get_full_jid()
-
-		idx = self.sessionless_ctrls[acct][jid].index(ctrl)
-
-		del self.sessionless_ctrls[acct][jid][idx]
-
-		if len(self.sessionless_ctrls[acct][jid]) == 0:
-			del self.sessionless_ctrls[acct][jid]
-
-		if not self._controls.has_key(acct):
-			self._controls[acct] = {}
-
-		if not self._controls[acct].has_key(jid):
-			self._controls[acct][jid] = {}
-
-		thread_id = ctrl.session.thread_id
-
-		self._controls[acct][jid][thread_id] = ctrl
-
 	def controls(self):
 		for jid_dict in self._controls.values():
-			for ctrl_dict in jid_dict.values():
-				for ctrl in ctrl_dict.values():
-					yield ctrl
-		for jid_dict in self.sessionless_ctrls.values():
-			for ctrl_dict in jid_dict.values():
-				for ctrl in ctrl_dict:
-					yield ctrl
+			for ctrl in jid_dict.values():
+				yield ctrl
 
 	def move_to_next_unread_tab(self, forward):
 		ind = self.notebook.get_current_page()
@@ -935,25 +826,6 @@ class MessageWindowMgr(gobject.GObject):
 
 		return None
 
-	def get_gc_control(self, jid, acct):
-		win = self.get_window(jid, acct)
-
-		if win:
-			return win.get_gc_control(jid, acct)
-
-		return None
-
-	def get_sessionless_ctrl(self, acct, jid):
-		'''returns a ChatControl associated with jid, that doesn't have a
-		session attached'''
-		mw = self.get_window(jid, acct)
-
-		if mw:
-			ctrls = mw.sessionless_controls(acct, jid)
-
-			if len(ctrls):
-				return ctrls[0]
-
 	def has_window(self, jid, acct):
 		return self.get_window(jid, acct) is not None
 
@@ -1084,12 +956,17 @@ class MessageWindowMgr(gobject.GObject):
 				del self._windows[k]
 				return
 
-	def get_control(self, jid, acct, session):
+	def get_control(self, jid, acct):
 		'''Amongst all windows, return the MessageControl for jid'''
 		win = self.get_window(jid, acct)
 		if win:
-			return win.get_control(jid, acct, session)
+			return win.get_control(jid, acct)
 		return None
+
+	def get_gc_control(self, jid, acct):
+		'''Same as get_control. Was briefly required, is not any more.
+May be useful some day in the future?'''
+		return self.get_control(jid, acct)
 
 	def get_controls(self, type = None, acct = None):
 		ctrls = []
@@ -1099,14 +976,6 @@ class MessageWindowMgr(gobject.GObject):
 			if not type or c.type_id == type:
 				ctrls.append(c)
 		return ctrls
-
-	def get_chat_controls(self, jid, acct):
-		win = self.get_window(jid, acct)
-
-		if win:
-			return win.get_controls(jid, acct)
-		else:
-			return []
 
 	def windows(self):
 		for w in self._windows.values():

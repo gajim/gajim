@@ -907,12 +907,15 @@ class GroupchatControl(ChatControlBase):
 			fjid = self.room_jid + '/' + nick
 			gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid,
 				nick)
-			for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(fjid, self.account):
+
+			ctrl = gajim.interface.msg_win_mgr.get_control(fjid, self.account)
+			if ctrl:
 				gc_contact.show = 'offline'
 				gc_contact.status = ''
 				ctrl.update_ui()
 				if ctrl.parent_win:
 					ctrl.parent_win.redraw_tab(ctrl)
+
 			gajim.contacts.remove_gc_contact(self.account, gc_contact)
 		gajim.gc_connected[self.account][self.room_jid] = False
 		ChatControlBase.got_disconnected(self)
@@ -1620,7 +1623,7 @@ class GroupchatControl(ChatControlBase):
 		# Minimize it
 		win = gajim.interface.msg_win_mgr.get_window(self.contact.jid,
 			self.account)
-		ctrl = win.get_gc_control(self.contact.jid, self.account)
+		ctrl = win.get_control(self.contact.jid, self.account)
 
 		ctrl_page = win.notebook.page_num(ctrl.widget)
 		control = win.notebook.get_nth_page(ctrl_page)

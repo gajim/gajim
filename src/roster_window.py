@@ -1517,8 +1517,8 @@ class RosterWindow:
 
 			# If we already have chat windows opened, update them with new contact
 			# instance
-			for chat_control in gajim.interface.msg_win_mgr.get_chat_controls(ji,
-			account):
+			chat_control = gajim.interface.msg_win_mgr.get_control(ji, account)
+			if chat_control:
 				chat_control.contact = contact1
 
 	def _change_awn_icon_status(self, status):
@@ -2581,9 +2581,10 @@ class RosterWindow:
 			keyID = keyID[0]
 			keys[contact.jid] = keyID
 
-		for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(contact.jid,
-		account):
+		ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+		if ctrl:
 			ctrl.update_ui()
+
 		keys_str = ''
 		for jid in keys:
 			keys_str += jid + ' ' + keys[jid] + ' '
@@ -3939,11 +3940,10 @@ class RosterWindow:
 		# Update roster
 		self.draw_avatar(jid, account)
 		# Update chat window
-		if gajim.interface.msg_win_mgr.has_window(jid, account):
-			win = gajim.interface.msg_win_mgr.get_window(jid, account)
-			for ctrl in win.get_chat_controls(jid, account):
-				if win and ctrl.type_id != message_control.TYPE_GC:
-					ctrl.show_avatar()
+
+		ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
+		if ctrl and ctrl.type_id != message_control.TYPE_GC:
+			ctrl.show_avatar()
 
 	def on_roster_treeview_style_set(self, treeview, style):
 		'''When style (theme) changes, redraw all contacts'''

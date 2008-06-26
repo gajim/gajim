@@ -140,13 +140,8 @@ class MessageControl:
 			if self.resource:
 				jid += '/' + self.resource
 
-			self.parent_win.change_thread_key(jid, self.account,
-				oldsession.thread_id, new_key)
-
 			if oldsession.enable_encryption:
 				self.print_esession_details()
-		elif session:
-			self.parent_win.move_from_sessionless(self)
 
 	def send_message(self, message, keyID = '', type = 'chat',
 	chatstate = None, msg_id = None, composing_xep = None, resource = None,

@@ -177,9 +177,9 @@ class TestChatControlSession(unittest.TestCase):
 		msgtxt = 'testing one two three'
 
 		ctrl = MockChatControl()
-		gajim.interface.msg_win_mgr = Mock({'get_sessionless_ctrl': ctrl})
-		gajim.interface.msg_win_mgr.mockSetExpectation('get_sessionless_ctrl',
-			expectParams(account_name, jid))
+		gajim.interface.msg_win_mgr = Mock({'get_control': ctrl})
+		gajim.interface.msg_win_mgr.mockSetExpectation('get_control',
+			expectParams(jid, account_name))
 
 		self.receive_chat_msg(fjid, msgtxt)
 

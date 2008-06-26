@@ -245,7 +245,9 @@ def user_nickname(items, name, jid):
 			for contact in gajim.contacts.get_contacts(name, user):
 				contact.contact_name = nick
 			gajim.interface.roster.draw_contact(user, name)
-			for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(user, name):
+
+			ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
+			if ctrl:
 				ctrl.update_ui()
 				win = ctrl.parent_win
 				win.redraw_tab(ctrl)

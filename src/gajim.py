@@ -538,9 +538,9 @@ class Interface:
 				conn.disconnect_transfer(file_props)
 				return
 
-		for ctrl in self.msg_win_mgr.get_chat_controls(jid_from, account):
-			if ctrl.type_id == message_control.TYPE_GC:
-				ctrl.print_conversation('Error %s: %s' % (array[2], array[1]))
+		ctrl = self.msg_win_mgr.get_control(jid_from, account)
+		if ctrl and ctrl.type_id == message_control.TYPE_GC:
+			ctrl.print_conversation('Error %s: %s' % (array[2], array[1]))
 
 	def handle_event_con_type(self, account, con_type):
 		# ('CON_TYPE', account, con_type) which can be 'ssl', 'tls', 'tcp'
@@ -661,7 +661,8 @@ class Interface:
 				# disconnect sessions from this contact's chat controls so we
 				# don't have to open a new tab if a new session comes in
 
-				for ctrl in self.msg_win_mgr.get_chat_controls(jid, account):
+				ctrl = self.msg_win_mgr.get_control(jid, account)
+				if ctrl:
 					ctrl.set_session(None)
 
 			if contact1:
@@ -812,14 +813,10 @@ class Interface:
 			if len(jids) > 1: # it's a pm
 				nick = jids[1]
 
-				ctrl = None
 				if session:
 					ctrl = session.control
-
-				if not ctrl:
-					ctrls = self.msg_win_mgr.get_chat_controls(full_jid_with_resource, account)
-					if ctrls:
-						ctrl = ctrls[0]
+				else:
+					ctrl = self.msg_win_mgr.get_control(full_jid_with_resource, account)
 
 				if not ctrl:
 					tv = gc_control.list_treeview
@@ -1124,8 +1121,9 @@ class Interface:
 		if contact:
 			self.roster.draw_contact(room_jid, account)
 
-		# print status in chat windows and update status/GPG image
-		for ctrl in self.msg_win_mgr.get_chat_controls(fjid, account):
+		# print status in chat window and update status/GPG image
+		ctrl = self.msg_win_mgr.get_control(fjid, account)
+		if ctrl:
 			statusCode = array[9]
 			if '303' in statusCode:
 				new_nick = array[10]
@@ -1817,24 +1815,25 @@ class Interface:
 			gajim.connections[account].change_status('offline','')
 
 	def handle_event_ping_sent(self, account, contact):
-		for ctrl in self.msg_win_mgr.get_chat_controls(contact.jid, account):
-			ctrl.print_conversation(_('Ping?'), 'status')
-		for ctrl in self.msg_win_mgr.get_chat_controls(contact.get_full_jid(), account):
-			ctrl.print_conversation(_('Ping?'), 'status')
+		for jid in [contact.jid, contact.get_full_jid()]:
+			ctrl = self.msg_win_mgr.get_control(jid, account)
+			if ctrl:
+				ctrl.print_conversation(_('Ping?'), 'status')
 
 	def handle_event_ping_reply(self, account, data):
 		contact = data[0]
 		seconds = data[1]
-		for ctrl in self.msg_win_mgr.get_chat_controls(contact.jid, account):
-			ctrl.print_conversation(_('Pong! (%s s.)') % seconds, 'status')
-		for ctrl in self.msg_win_mgr.get_chat_controls(contact.get_full_jid(), account):
-			ctrl.print_conversation(_('Pong! (%s s.)') % seconds, 'status')
+
+		for jid in [contact.jid, contact.get_full_jid()]:
+			ctrl = self.msg_win_mgr.get_control(jid, account)
+			if ctrl:
+				ctrl.print_conversation(_('Pong! (%s s.)') % seconds, 'status')
 
 	def handle_event_ping_error(self, account, contact):
-		for ctrl in self.msg_win_mgr.get_chat_controls(contact.jid, account):
-			ctrl.print_conversation(_('Error.'), 'status')
-		for ctrl in self.msg_win_mgr.get_chat_controls(contact.get_full_jid(), account):
-			ctrl.print_conversation(_('Error.'), 'status')
+		for jid in [contact.jid, contact.get_full_jid()]:
+			ctrl = self.msg_win_mgr.get_control(jid, account)
+			if ctrl:
+				ctrl.print_conversation(_('Error.'), 'status')
 
 	def handle_event_search_form(self, account, data):
 		# ('SEARCH_FORM', account, (jid, dataform, is_dataform))
@@ -2126,10 +2125,7 @@ class Interface:
 				session = event.parameters[8]
 				ctrl = session.control
 			elif type_ == '':
-				ctrls = self.msg_win_mgr.get_chat_controls(fjid, account)
-
-				if ctrls:
-					ctrl = ctrls[0]
+				ctrl = self.msg_win_mgr.get_control(fjid, account)
 
 			if not ctrl:
 				highest_contact = gajim.contacts.get_contact_with_highest_priority(
@@ -2578,10 +2574,9 @@ class Interface:
 			contact = self.roster.add_to_not_in_the_roster(account, jid,
 				resource=resource)
 
-		ctrls = self.msg_win_mgr.get_chat_controls(fjid, account)
-		if ctrls:
-			ctrl = ctrls[0]
-		else:
+		ctrl = self.msg_win_mgr.get_control(fjid, account)
+
+		if not ctrl:
 			ctrl = self.new_chat(contact, account,
 				resource=resource)
 			if len(gajim.events.get_events(account, fjid)):
