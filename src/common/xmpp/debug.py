@@ -283,25 +283,7 @@ class Debug:
                 s=s+c
             self._fh.write( '%s%s%s' % ( pre, s, suf ))
         self._fh.flush()
-            
                 
-    def is_active( self, flag ):
-        'If given flag(s) should generate output.'
-
-        # try to abort early to quicken code
-        if not self.active:
-            return 0
-        if not flag or flag in self.active:
-            return 1
-        else:
-            # check for multi flag type:
-            if type( flag ) in ( type(()), type([]) ):
-                for s in flag:
-                    if s in self.active:
-                        return 1
-        return 0
-
-    
     def active_set( self, active_flags = None ):
         "returns 1 if any flags where actually set, otherwise 0."
         r = 0
@@ -411,7 +393,7 @@ class Debug:
 
     def is_active( self, flag ):
         if not self.active: return 0
-        if not flag or flag in self.active and DBG_ALWAYS not in self.active or flag not in self.active and DBG_ALWAYS in self.active : return 1
+        if not flag or ((flag in self.active) ^ (DBG_ALWAYS in self.active)) : return 1
         return 0
 
 DBG_ALWAYS='always'
