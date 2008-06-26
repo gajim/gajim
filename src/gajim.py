@@ -1034,6 +1034,7 @@ class Interface:
 			win.set_values(vcard)
 
 		# show avatar in chat
+		ctrl = None
 		if resource and self.msg_win_mgr.has_window(fjid, account):
 			win = self.msg_win_mgr.get_window(fjid, account)
 			ctrl = win.get_control(fjid, account)
