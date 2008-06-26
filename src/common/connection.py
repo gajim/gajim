@@ -525,8 +525,12 @@ class Connection(ConnectionHandlers):
 				self.last_connection = None
 				self.connection = None
 			if gajim.verbose:
-				con = common.xmpp.NonBlockingClient(self._hostname, caller = self,
-					on_connect = self.on_connect_success,
+				if log.getEffectiveLevel() == logging.DEBUG:
+					d = ['always']
+				else:
+					d = ['always', 'nodebuilder']
+				con = common.xmpp.NonBlockingClient(self._hostname, debug = d,
+					caller = self, on_connect = self.on_connect_success,
 					on_proxy_failure = self.on_proxy_failure,
 					on_connect_failure = self.connect_to_next_type)
 			else:
