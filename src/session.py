@@ -458,7 +458,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 				contact = gajim.contacts.get_contact(account, self.jid, resource)
 
 				if not contact:
-					contact = gajim.contacts.create_contact(jid = jidk,
+					contact = gajim.contacts.create_contact(jid = jid,
 							resource = resource, show = self.conn.get_status())
 
 				gajim.interface.new_chat(contact, account,
