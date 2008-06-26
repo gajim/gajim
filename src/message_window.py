@@ -586,12 +586,6 @@ class MessageWindow(object):
 	def has_control(self, jid, acct):
 		return (acct in self._controls and jid in self._controls[acct])
 
-	def get_controls(self, jid, acct):
-		try:
-			return self._controls[acct][jid]
-		except KeyError:
-			return []
-
 	def change_key(self, old_jid, new_jid, acct):
 		'''Change the JID key of a control'''
 		try:

@@ -2076,7 +2076,7 @@ class GroupchatControl(ChatControlBase):
 			gajim.interface.new_private_chat(gc_c, self.account)
 			win = gajim.interface.msg_win_mgr.get_window(nick_jid, self.account)
 
-		ctrl = win.get_controls(nick_jid, self.account)[0]
+		ctrl = win.get_control(nick_jid, self.account)
 
 		win.set_active_tab(ctrl)
 

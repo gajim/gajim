@@ -1812,7 +1812,7 @@ class RosterWindow:
 		if len(contact_instances) > 1:
 			if contact.resource != '':
 				name += '/' + contact.resource
-			
+
 			# Remove resource when going offline
 			if show in ('offline', 'error') and \
 			len(gajim.events.get_events(account, contact.get_full_jid())) == 0:
@@ -1821,7 +1821,8 @@ class RosterWindow:
 				account):
 					win = gajim.interface.msg_win_mgr.get_window(jid_with_resource,
 						account)
-					for ctrl in win.get_controls(jid_with_resource, account):
+					ctrl = win.get_control(jid_with_resource, account)
+					if ctrl:
 						ctrl.update_ui()
 						win.redraw_tab(ctrl)
 				gajim.contacts.remove_contact(account, contact)
@@ -1836,7 +1837,8 @@ class RosterWindow:
 			win = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
 			uf_show = helpers.get_uf_show(show)
 
-			for ctrl in win.get_controls(contact.jid, account):
+			ctrl = win.get_control(contact.jid, account)
+			if ctrl:
 				ctrl.contact = gajim.contacts.get_contact_with_highest_priority(
 					account, contact.jid)
 				ctrl.update_ui()

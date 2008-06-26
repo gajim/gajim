@@ -1034,17 +1034,15 @@ class Interface:
 			win.set_values(vcard)
 
 		# show avatar in chat
-		ctrls = []
 		if resource and self.msg_win_mgr.has_window(fjid, account):
 			win = self.msg_win_mgr.get_window(fjid, account)
-			ctrls = win.get_controls(fjid, account)
+			ctrl = win.get_control(fjid, account)
 		elif self.msg_win_mgr.has_window(jid, account):
 			win = self.msg_win_mgr.get_window(jid, account)
-			ctrls = win.get_controls(jid, account)
+			ctrl = win.get_control(jid, account)
 
-		for ctrl in ctrls:
-			if ctrl.type_id != message_control.TYPE_GC:
-				ctrl.show_avatar()
+		if ctrl and ctrl.type_id != message_control.TYPE_GC:
+			ctrl.show_avatar()
 
 		# Show avatar in roster or gc_roster
 		gc_ctrl = self.msg_win_mgr.get_gc_control(jid, account)
@@ -2605,9 +2603,7 @@ class Interface:
 			win = self.msg_win_mgr.get_window(fjid, account)
 
 			if win:
-				ctrls = win.get_controls(fjid, account)
-				if ctrls:
-					ctrl = ctrls[0]
+				ctrl = win.get_control(fjid, account)
 
 		if not ctrl:
 			ctrl = self.new_chat(contact, account,
@@ -2620,8 +2616,9 @@ class Interface:
 		win.set_active_tab(ctrl)
 
 		if gajim.connections[account].is_zeroconf and \
-				gajim.connections[account].status in ('offline', 'invisible'):
-			for ctrl in win.get_controls(fjid, account):
+		gajim.connections[account].status in ('offline', 'invisible'):
+			ctrl = win.get_control(fjid, account)
+			if ctrl:
 				ctrl.got_disconnected()
 
 ################################################################################		
