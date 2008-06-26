@@ -5404,7 +5404,7 @@ class RosterWindow:
 		disconnect_icon = gtk.image_new_from_stock(gtk.STOCK_DISCONNECT, \
 			gtk.ICON_SIZE_MENU)
 		disconnect_menuitem.set_image(disconnect_icon)
-		disconnect_menuitem .connect('activate', self.on_disconnect, jid, account)
+		disconnect_menuitem.connect('activate', self.on_disconnect, jid, account)
 		menu.append(disconnect_menuitem)
 
 		item = gtk.SeparatorMenuItem() # separator

@@ -393,9 +393,9 @@ class Contacts:
 					break
 			if found:
 				self._metacontacts_tags[account][tag].remove(found)
+				common.gajim.connections[account].store_metacontacts(
+					self._metacontacts_tags[account])
 				break
-		common.gajim.connections[account].store_metacontacts(
-			self._metacontacts_tags[account])
 
 	def has_brother(self, account, jid):
 		for account in self._metacontacts_tags:
