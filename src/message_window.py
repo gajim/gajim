@@ -623,7 +623,7 @@ class MessageWindow(object):
 				ind = ind - 1
 				if ind < 0:
 					ind = self.notebook.get_n_pages() - 1
-			ctrl = self.get_control(ind, None, None)
+			ctrl = self.get_control(ind, None)
 			if ctrl.get_nb_unread() > 0:
 				found = True
 				break # found
