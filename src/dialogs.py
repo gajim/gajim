@@ -555,6 +555,8 @@ class ChangeStatusMessageDialog:
 	def countdown(self):
 		if self.countdown_enabled:
 			if self.countdown_left <= 0:
+				# Prevent GUI freeze when the combobox menu is opened on close
+				self.message_combobox.popdown()
 				self.window.response(gtk.RESPONSE_OK)
 				return False
 			self.window.set_title('%s [%s]' % (self.title_text,
