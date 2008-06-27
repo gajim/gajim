@@ -206,11 +206,12 @@ class ConnectionCaps(object):
 		# start disco query...
 		gajim.capscache.preload(self, jid, node, hash_method, hash)
 
-		contact=gajim.contacts.get_contact_from_full_jid(self.name, jid)
-		if contact in [None, []]:
-			return	# TODO: a way to put contact not-in-roster into Contacts
-		elif isinstance(contact, list):
-			contact = contact[0]
+		contact = gajim.contacts.get_contact_from_full_jid(self.name, jid)
+		if contact is None:
+			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+			contact = gajim.contacts.get_gc_contact(self.name, room_jid, nick)
+			if contact is None:
+				return	# TODO: a way to put contact not-in-roster into Contacts
 
 		# overwriting old data
 		contact.caps_node = node
@@ -220,7 +221,10 @@ class ConnectionCaps(object):
 	def _capsDiscoCB(self, jid, node, identities, features, dataforms):
 		contact = gajim.contacts.get_contact_from_full_jid(self.name, jid)
 		if not contact:
-			return
+			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+			contact = gajim.contacts.get_gc_contact(self.name, room_jid, nick)
+			if contact is None:
+				return
 		if not contact.caps_node:
 			return # we didn't asked for that?
 		if not node.startswith(contact.caps_node + '#'):
