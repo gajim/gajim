@@ -2450,6 +2450,9 @@ class RosterWindow:
 						privacy_list_received([])
 		if group_list is None:
 			status = gajim.connections[jid_account].connected
+			if gajim.SHOW_LIST[status] == 'invisible':
+				# Don't send our presence if we're invisible
+				return
 			msg = gajim.connections[jid_account].status
 			if not self.regroup:
 				show = gajim.SHOW_LIST[status]
@@ -2462,6 +2465,9 @@ class RosterWindow:
 					show = gajim.SHOW_LIST[gajim.connections[account].connected]
 				else:	# accounts merged
 					show = helpers.get_global_show()
+				if gajim.SHOW_LIST[show] == 'invisible':
+					# Don't send our presence if we're invisible
+					continue
 				if account not in accounts:
 					if gajim.connections[account].privacy_rules_supported:
 						accounts.append(account)
