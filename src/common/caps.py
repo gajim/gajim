@@ -201,7 +201,7 @@ class ConnectionCaps(object):
 		# for disco... so that disco will learn how to interpret
 		# these caps
 
-		jid=str(presence.getFrom())
+		jid = helpers.get_full_jid_from_iq(presence)
 
 		# start disco query...
 		gajim.capscache.preload(self, jid, node, hash_method, hash)
