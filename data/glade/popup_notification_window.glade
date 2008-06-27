@@ -4,7 +4,7 @@
 <glade-interface>
 
 <widget class="GtkWindow" id="popup_notification_window">
-  <property name="border_width">6</property>
+  <property name="border_width">1</property>
   <property name="width_request">312</property>
   <property name="height_request">95</property>
   <property name="title" translatable="yes"></property>
