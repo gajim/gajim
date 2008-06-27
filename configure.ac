@@ -46,7 +46,7 @@ dnl *****
 dnl dbus
 dnl *****
 AC_ARG_ENABLE([remote], 
-  [  --disable-remote        enable remote control via DBus [default auto]],
+  [  --disable-remote        disable remote control via DBus [default auto]],
   enable_remote=$enableval, enable_remote=auto)
 
 if test "x$enable_remote" = "xauto"; then
@@ -67,7 +67,7 @@ dnl ****
 dnl gtkspell
 dnl ****
 AC_ARG_ENABLE(gtkspell, 
-  [  --disable-gtkspell      build spell checking support [default auto]],
+  [  --disable-gtkspell      do not build spell checking support [default auto]],
   enable_gtkspell=$enableval, enable_gtkspell=auto)
 
 if test "x$enable_gtkspell" = "xauto";then
@@ -88,7 +88,7 @@ dnl ****
 dnl xscreensaver
 dnl ****
 AC_ARG_ENABLE([idle],
-  [  --disable-idle          build idle module [default auto]],
+  [  --disable-idle          do not build idle module [default auto]],
   enable_idle=$enableval, enable_idle=yes)
 
 if test "x$enable_idle" = "xyes";then 
@@ -126,7 +126,7 @@ dnl ****
 dnl tray icon
 dnl ****
 AC_ARG_ENABLE(trayicon,
-  [  --disable-trayicon      build trayicon module [default yes]],
+  [  --disable-trayicon      do not build trayicon module [default yes]],
   enable_trayicon=$enableval, enable_trayicon=yes)
 test "x$enable_trayicon" = "xyes" && have_trayicon=true || have_trayicon=false
 AM_CONDITIONAL(BUILD_TRAYICON, $have_trayicon)
@@ -135,7 +135,7 @@ dnl ****
 dnl Cocoa
 dnl ****
 AC_ARG_ENABLE([cocoa],
-  [  --disable-cocoa         build cocoa integration [default auto]],
+  [  --disable-cocoa         do not build cocoa integration [default auto]],
   enable_cocoa=$enableval, enable_cocoa=yes)
 
 if test "x$enable_cocoa" = "xyes";then 
@@ -163,7 +163,7 @@ dnl ****
 dnl Carbon
 dnl ****
 AC_ARG_ENABLE([carbon],
-  [  --disable-carbon        build with carbon [default auto]],
+  [  --disable-carbon        do not build with carbon [default auto]],
   enable_carbon=$enableval, enable_carbon=yes)
 
 if test "x$enable_carbon" = "xyes";then 
@@ -243,9 +243,9 @@ echo "
 ***************************** 
   Build features:
     spell check ...... ${have_gtkspell}
-    idle module ...... ${have_idle}
     remote control ... ${have_remote}
     trayicon ......... ${have_trayicon}
+    idle module ...... ${have_idle}
     idle module OSX .. ${have_idle_osx}
-    cocoa ............ ${have_cocoa}
+    cocoa (OSX)....... ${have_cocoa}
 *****************************"
