@@ -142,19 +142,8 @@ try:
 	import gtk
 except Warning, msg:
 	if str(msg) == 'could not open display':
-		if sys.platform == 'darwin':
-			# It seems there is no way to open X11 without also
-			# opening an xterm. Even Apple's open-x11 script
-			# opens the application AND an xterm.
-			os.system('/Applications/Utilities/X11.app/Contents/MacOS/X11 &')
-			try:
-				import gtk
-			except Warning, msg:
-				print >> sys.stderr, _('No X11 running and failed to start it! Quitting...')
-				sys.exit()
-		else:
-			print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
-			sys.exit()
+		print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
+		sys.exit()
 warnings.resetwarnings()
 
 if os.name == 'nt':
