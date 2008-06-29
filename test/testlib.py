@@ -30,3 +30,6 @@ def setup_env():
 		from common import gajim
 
 		gajim.DATA_DIR = gajim_root + '/data'
+
+		import gtkgui_helpers
+		gtkgui_helpers.GLADE_DIR = gajim_root + '/data/glade'
