@@ -132,7 +132,13 @@ class Dispatcher(PlugIn):
 			_pendingException = self._pendingExceptions.pop()
 			raise _pendingException[0], _pendingException[1], _pendingException[2]
 		try:
-			self.Stream.Parse(data)
+			try:
+				self.Stream.Parse(data)
+			except ExpatError, (e):
+				if e[0][:14] == 'unbound prefix':
+					pass
+				else:
+					raise
 			# end stream:stream tag received
 			if self.Stream and self.Stream.has_received_endtag():
 				self._owner.Connection.disconnect()
