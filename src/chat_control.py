@@ -2325,23 +2325,18 @@ class ChatControl(ChatControlBase):
 
 	def _on_toggle_e2e_menuitem_activate(self, widget):
 		if self.session and self.session.enable_encryption:
+			jid = str(self.session.jid)
+			thread_id = self.session.thread_id
+
 			self.session.terminate_e2e()
 
-			self.print_esession_details()
-
-			jid = str(self.session.jid)
-
-			gajim.connections[self.account].delete_session(jid,
-				self.session.thread_id)
-
-			self.set_session(gajim.connections[self.account].make_new_session(jid))
+			gajim.connections[self.account].delete_session(jid, thread_id)
 		else:
 			if not self.session:
 				fjid = self.contact.get_full_jid()
 				new_sess = gajim.connections[self.account].make_new_session(fjid)
 				self.set_session(new_sess)
 
-			# XXX decide whether to use 4 or 3 message negotiation
 			self.session.negotiate_e2e(False)
 
 	def got_connected(self):

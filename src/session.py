@@ -21,13 +21,10 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		self.control = None
 
 	def acknowledge_termination(self):
-		stanza_session.EncryptedStanzaSession.acknowledge_termination(self)
-
 		if self.control:
-			if self.enable_encryption:
-				self.control.print_esession_details()
-
 			self.control.set_session(None)
+
+		stanza_session.EncryptedStanzaSession.acknowledge_termination(self)
 
 	def terminate(self):
 		stanza_session.EncryptedStanzaSession.terminate(self)

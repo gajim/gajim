@@ -3818,7 +3818,7 @@ class ESessionInfoWindow:
 
 	def on_verify_now_button_clicked(self, widget):
 		pritext = _('''Have you verified the remote contact's identity?''')
-		sectext = _('''To prevent a man-in-the-middle attack, you should speak to this person directly (in person or on the phone) and verify that they see the same SAS as you.\n\nThis session's SAS: %s''') % self.session.sas
+		sectext = _('''To prevent a man-in-the-middle attack, you should speak to %s directly (in person or on the phone) and verify that they see the same SAS as you.\n\nThis session's SAS: <b>%s<b>''') % (self.session.jid, self.session.sas)
 		sectext += '\n\n' + _('Did you talk to the remote contact and verify the SAS?')
 
 		dialog = YesNoDialog(pritext, sectext)
