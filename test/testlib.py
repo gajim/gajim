@@ -20,16 +20,16 @@ def setup_env():
 		import shutil
 		shutil.rmtree(configdir)
 
-		os.mkdir(configdir)
+	os.mkdir(configdir)
 
-		import common.configpaths
-		common.configpaths.gajimpaths.init(configdir)
-		common.configpaths.gajimpaths.init_profile()
+	import common.configpaths
+	common.configpaths.gajimpaths.init(configdir)
+	common.configpaths.gajimpaths.init_profile()
 
-		# for some reason common.gajim needs to be imported before xmpppy?
-		from common import gajim
+	# for some reason common.gajim needs to be imported before xmpppy?
+	from common import gajim
 
-		gajim.DATA_DIR = gajim_root + '/data'
+	gajim.DATA_DIR = gajim_root + '/data'
 
-		import gtkgui_helpers
-		gtkgui_helpers.GLADE_DIR = gajim_root + '/data/glade'
+	import gtkgui_helpers
+	gtkgui_helpers.GLADE_DIR = gajim_root + '/data/glade'
