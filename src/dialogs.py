@@ -3780,7 +3780,7 @@ class DataFormWindow(Dialog):
 		self.dataform_widget.data_form = self.dataform
 		self.dataform_widget.show_all()
 		self.vbox.pack_start(self.dataform_widget)
-	
+
 	def on_ok(self):
 		form = self.dataform_widget.data_form
 		if isinstance(self.df_response_ok, tuple):
@@ -3788,3 +3788,42 @@ class DataFormWindow(Dialog):
 		else:
 			self.df_response_ok(form)
 		self.destroy()
+
+class ESessionInfoWindow:
+	'''Class for displaying information about a XEP-0116 encrypted session'''
+	def __init__(self, session):
+		self.session = session
+
+		self.xml = gtkgui_helpers.get_glade('esession_info_window.glade')
+		self.xml.signal_autoconnect(self)
+
+		self.update_info()
+
+		self.window = self.xml.get_widget('esession_info_window')
+		self.window.show_all()
+
+	def update_info(self):
+		labeltext = _('''Your chat session with %s is encrypted.\n\nSAS is: %s''') % (self.session.jid, self.session.sas)
+
+		if self.session.verified_identity:
+			labeltext += '\n\n' + _('''You have already verified this contact's identity.''')
+			w = self.xml.get_widget('verification_info')
+			w.set_no_show_all(True)
+			w.hide()
+
+		self.xml.get_widget('info_display').set_text(labeltext)
+
+	def on_close_button_clicked(self, widget):
+		self.window.destroy()
+
+	def on_verify_now_button_clicked(self, widget):
+		pritext = _('''Have you verified the remote contact's identity?''')
+		sectext = _('''To prevent a man-in-the-middle attack, you should speak to this person directly (in person or on the phone) and verify that they see the same SAS as you.\n\nThis session's SAS: %s''') % self.session.sas
+		sectext += '\n\n' + _('Did you talk to the remote contact and verify the SAS?')
+
+		dialog = YesNoDialog(pritext, sectext)
+
+		if dialog.get_response() == gtk.RESPONSE_YES:
+			self.session._verified_srs_cb()
+			self.session.verified_identity = True
+			self.update_info()

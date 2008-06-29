@@ -334,9 +334,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 	# ---- ESessions stuff ---
 
-	def check_identity(self, on_success):
-		negotiation.show_sas_dialog(self, self.jid, self.sas, on_success)
-
 	def handle_negotiation(self, form):
 		if form.getField('accept') and not form['accept'] in ('1', 'true'):
 			self.cancelled_negotiation()

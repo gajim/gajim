@@ -136,7 +136,7 @@ class Secrets:
 	# has the user verified this retained secret?
 	def srs_verified(self, account, jid, srs):
 		return self.find_srs(account, jid, srs)[1]
-		
+
 	def replace_srs(self, account, jid, old_secret, new_secret, verified):
 		our_secrets = self.srs[account][jid]
 

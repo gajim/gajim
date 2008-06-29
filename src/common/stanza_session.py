@@ -183,6 +183,9 @@ class EncryptedStanzaSession(StanzaSession):
 		# _o denotes 'other' (ie. the client at the other end of the session)
 		self._kc_o = None
 
+		# has the remote contact's identity ever been verified?
+		self.verified_identity = False
+
 	# keep the encrypter updated with my latest cipher key
 	def set_kc_s(self, value):
 		self._kc_s = value
@@ -338,7 +341,8 @@ class EncryptedStanzaSession(StanzaSession):
 			raise exceptions.NegotiationError, 'calculated m_%s differs from received m_%s' % (i_o, i_o)
 
 		if i_o == 'a' and self.sas_algs == 'sas28x5':
-			# XXX not necessary if there's a verified retained secret
+			# we don't need to calculate this if there's a verified retained secret
+			# (but we do anyways)
 			self.sas = crypto.sas_28x5(m_o, self.form_s)
 
 		if self.negotiated['recv_pubkey']:
@@ -844,26 +848,32 @@ class EncryptedStanzaSession(StanzaSession):
 		if self.control:
 			self.control.print_esession_details()
 
-	# calculate and store the new retained secret
-	# prompt the user to check the remote party's identity (if necessary)
-	def do_retained_secret(self, k, srs):
+	def do_retained_secret(self, k, old_srs):
+		'''calculate the new retained secret. determine if the user needs to check the remote party's identity. set up callbacks for when the identity has been verified.'''
+
 		new_srs = self.hmac(k, 'New Retained Secret')
+		self.srs = new_srs
+
 		account = self.conn.name
 		bjid = self.jid.getStripped()
 
-		if srs:
-			if secrets.secrets().srs_verified(account, bjid, srs):
-				secrets.secrets().replace_srs(account, bjid, srs, new_srs, True)
+		self.verified_identity = False
+
+		if old_srs:
+			if secrets.secrets().srs_verified(account, bjid, old_srs):
+				# already had a stored secret verified by the user.
+				secrets.secrets().replace_srs(account, bjid, old_srs, new_srs, True)
+				# continue without warning.
+				self.verified_identity = True
 			else:
-				def _cb(verified):
-					secrets.secrets().replace_srs(account, bjid, srs, new_srs, verified)
-
-				self.check_identity(_cb)
+				# had a secret, but it wasn't verified.
+				secrets.secrets().replace_srs(account, bjid, old_srs, new_srs, False)
 		else:
-			def _cb(verified):
-				secrets.secrets().save_new_srs(account, bjid, new_srs, verified)
+			# we don't even have an SRS
+			secrets.secrets().save_new_srs(account, bjid, new_srs, False)
 
-			self.check_identity(_cb)
+	def _verified_srs_cb(self):
+		secrets.secrets().replace_srs(self.conn.name, self.jid.getStripped(), self.srs, self.srs, True)
 
 	def make_dhfield(self, modp_options, sigmai):
 		dhs = []

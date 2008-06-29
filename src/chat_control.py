@@ -1056,6 +1056,10 @@ class ChatControl(ChatControlBase):
 		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
 			gajim.config.get('hide_chat_banner'))
 
+		self.authentication_button = self.xml.get_widget('authentication_button')
+		id = self.authentication_button.connect('clicked', self._on_authentication_button_clicked)
+		self.handlers[id] = self.authentication_button
+
 		# Add lock image to show chat encryption
 		self.lock_image = self.xml.get_widget('lock_image')
 		self.lock_tooltip = gtk.Tooltips()
@@ -1115,11 +1119,18 @@ class ChatControl(ChatControlBase):
 			self.on_avatar_eventbox_button_press_event)
 		self.handlers[id] = widget
 
-		self.session = session
+		if not session:
+			session = gajim.connections[self.account].find_controlless_session(self.contact.jid)
+			self.session = session
+
 		if session:
 			session.control = self
+			self.session = session
 
-		# Enable ecryption if needed
+			if session.enable_encryption:
+				self.print_esession_details()
+
+		# Enable encryption if needed
 		e2e_is_active = hasattr(self, 'session') and self.session and self.session.enable_encryption
 		self.gpg_is_active = False
 		gpg_pref = gajim.config.get_per('contacts', contact.jid, 'gpg_enabled')
@@ -1134,7 +1145,7 @@ class ChatControl(ChatControlBase):
 			if self.session:
 				self.session.loggable = gajim.config.get('log_encrypted_sessions')
 			self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active, self.session and \
-					self.session.is_loggable())
+					self.session.is_loggable(), self.session and self.session.verified_identity)
 
 		self.status_tooltip = gtk.Tooltips()
 
@@ -1365,7 +1376,7 @@ class ChatControl(ChatControlBase):
 			self.gpg_is_active)
 
 		self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active, self.session and \
-				self.session.is_loggable())
+				self.session.is_loggable(), self.session and self.session.verified_identity)
 
 	def _show_lock_image(self, visible, enc_type = '', enc_enabled = False, chat_logged = False, authenticated = False):
 		'''Set lock icon visibility and create tooltip'''
@@ -1373,21 +1384,25 @@ class ChatControl(ChatControlBase):
 		status_string = enc_enabled and 'is' or 'is NOT'
 		logged_string = chat_logged and 'will' or 'will NOT'
 
-		if enc_type == 'OTR':
-			authenticated_string = authenticated \
-				and ' and authenticated' \
-				or ' and NOT authenticated'
+		if authenticated:
+			authenticated_string = ' and authenticated'
+			self.lock_image.set_from_stock('gtk-dialog-authentication', 1)
 		else:
-			authenticated_string = ''
+			authenticated_string = ' and NOT authenticated'
+			self.lock_image.set_from_stock('gtk-dialog-warning', 1)
 
-		tooltip = '%s Encryption %s active%s.\n' \
+		tooltip = '%s encryption %s active%s.\n' \
 			'Your chat session %s be logged.' % \
-			(enc_type, status_string, authenticated_string, 
+			(enc_type, status_string, authenticated_string,
 			logged_string)
 
-		self.lock_tooltip.set_tip(self.lock_image, tooltip)
-		self.widget_set_visible(self.lock_image, not visible)
+		self.lock_tooltip.set_tip(self.authentication_button, tooltip)
+		self.widget_set_visible(self.authentication_button, not visible)
 		self.lock_image.set_sensitive(enc_enabled)
+
+	def _on_authentication_button_clicked(self, widget):
+		if self.session and self.session.enable_encryption:
+			dialogs.ESessionInfoWindow(self.session)
 
 	def _process_command(self, message):
 		if message[0] != '/':
@@ -1588,11 +1603,15 @@ class ChatControl(ChatControlBase):
 				msg = _('Session WILL NOT be logged')
 
 			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+
+			if not self.session.verified_identity:
+				ChatControlBase.print_conversation_line(self, 'SAS not verified', 'status', '', None)
 		else:
 			msg = _('E2E encryption disabled')
 			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+
 		self._show_lock_image(e2e_is_active, 'E2E', e2e_is_active, self.session and \
-				self.session.is_loggable())
+				self.session.is_loggable(), self.session and self.session.verified_identity)
 
 	def print_conversation(self, text, frm='', tim=None, encrypted=False,
 	subject=None, xhtml=None, simple=False):
