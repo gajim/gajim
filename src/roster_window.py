@@ -388,6 +388,10 @@ class RosterWindow:
 					gajim.groups[account][group] = {'expand': is_expanded}
 
 		assert len(added_iters), '%s has not been added to roster!' % contact.jid
+		for titer in added_iters:
+			assert self.model[titer][C_JID] == contact.jid and \
+				self.model[titer][C_ACCOUNT] == account, \
+				"Iters invalidated for %s" % contact.jid
 		return added_iters
 
 	def _remove_entity(self, contact, account, groups = None):
@@ -424,6 +428,9 @@ class RosterWindow:
 		else:
 			# Remove us and empty groups from the model
 			for i in iters:
+				assert self.model[i][C_JID] == contact.jid and \
+					self.model[i][C_ACCOUNT] == account, \
+					"Invalidated iters of %s" % contact.jid
 				parent_i = self.model.iter_parent(i)
 				if parent_type == 'group' and \
 				self.model.iter_n_children(parent_i) == 1:
@@ -1159,6 +1166,7 @@ class RosterWindow:
 
 	def setup_and_draw_roster(self):
 		'''create new empty model and draw roster'''
+		self.modelfilter = None
 		#(icon, name, type, jid, account, editable, avatar_pixbuf, padlock_pixbuf)
 		self.model = gtk.TreeStore(gtk.Image, str, str, str, str, gtk.gdk.Pixbuf,
 			gtk.gdk.Pixbuf)
