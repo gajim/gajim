@@ -25,7 +25,7 @@ import socket
 import debug
 import random
 
-import transports_nb, dispatcher_nb, auth_nb, roster_nb, protocol
+import transports_nb, tls_nb, dispatcher_nb, auth_nb, roster_nb, protocol
 from client import *
 
 import logging
@@ -184,10 +184,11 @@ class NBCommonClient:
 						bosh_uri = proxy['host'],
 						bosh_port = tcp_port)
 			else:
-					self.socket = transports_nb.NBHTTPProxySocket(
-						on_disconnect=self.on_disconnect,
-						proxy_creds=(None, None),
-						xmpp_server=(self.Server, self.Port))
+				# HTTP CONNECT to proxy from environment variables
+				self.socket = transports_nb.NBHTTPProxySocket(
+					on_disconnect=self.on_disconnect,
+					proxy_creds=(None, None),
+					xmpp_server=(self.Server, self.Port))
 		else: 
 			self._on_tcp_failure = self._on_connect_failure
 			tcp_server=self.Server
@@ -432,7 +433,7 @@ class NonBlockingClient(NBCommonClient):
 				self._on_connect()
 				return
 			# otherwise start TLS 	
-			transports_nb.NonBlockingTLS().PlugIn(
+			tls_nb.NonBlockingTLS().PlugIn(
 				self,
 				on_tls_success=lambda: self._xmpp_connect(socket_type='tls'),
 				on_tls_failure=self._on_connect_failure)

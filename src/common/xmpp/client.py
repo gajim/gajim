@@ -70,7 +70,9 @@ class PlugIn:
 				self._old_owners_methods.append(owner.__dict__[method.__name__])
 			owner.__dict__[method.__name__]=method
 		owner.__dict__[self.__class__.__name__]=self
-		if self.__class__.__dict__.has_key('plugin'): return self.plugin(owner)
+		# following will not work for classes inheriting plugin()
+		#if self.__class__.__dict__.has_key('plugin'): return self.plugin(owner)
+		if hasattr(self,'plugin'): return self.plugin(owner)
  
 	def PlugOut(self):
 		""" Unregister all our staff from main instance and detach from it. """
