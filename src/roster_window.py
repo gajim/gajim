@@ -906,7 +906,6 @@ class RosterWindow:
 			account_name = account
 			accounts = [account]
 
-		path = self.model.get_path(child_iter)
 		if account in self.collapsed_rows and \
 		self.model.iter_has_child(child_iter):
 			account_name = '[%s]' % account_name
@@ -1057,7 +1056,8 @@ class RosterWindow:
 		if have_visible_children:
 			# We are the big brother and have a visible family
 			for child_iter in child_iters:
-				path = self.model.get_path(child_iter)
+				child_path = self.model.get_path(child_iter)
+				path = self.modelfilter.convert_child_path_to_path(child_path)
 
 				if not self.tree.row_expanded(path) and icon_name != 'event':
 					iterC = self.model.iter_children(child_iter)
