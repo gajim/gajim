@@ -33,7 +33,7 @@ class IdleObject:
 		''' called on new write event (connect in sockets is a pollout) '''
 		pass
 	
-	def read_timeout(self, fd):
+	def read_timeout(self):
 		''' called when timeout has happend '''
 		pass
 		

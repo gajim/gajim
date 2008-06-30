@@ -169,6 +169,9 @@ class SASL(PlugIn):
 			self.startsasl='success'
 			self.DEBUG('Successfully authenticated with remote server.', 'ok')
 			handlers=self._owner.Dispatcher.dumpHandlers()
+			print '6' * 79
+			print handlers
+			print '6' * 79
 			self._owner.Dispatcher.PlugOut()
 			dispatcher_nb.Dispatcher().PlugIn(self._owner)
 			self._owner.Dispatcher.restoreHandlers(handlers)

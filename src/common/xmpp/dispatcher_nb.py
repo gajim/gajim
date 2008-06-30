@@ -47,7 +47,7 @@ class Dispatcher(PlugIn):
 		self._exported_methods=[self.RegisterHandler, self.RegisterDefaultHandler, \
 		self.RegisterEventHandler, self.UnregisterCycleHandler, self.RegisterCycleHandler, \
 		self.RegisterHandlerOnce, self.UnregisterHandler, self.RegisterProtocol, \
-		self.SendAndWaitForResponse, self.send,self.disconnect, \
+		self.SendAndWaitForResponse, self.assign_id, self.StreamTerminate, \
 		self.SendAndCallForResponse, self.getAnID, self.Event]
 
 	def getAnID(self):
@@ -79,6 +79,8 @@ class Dispatcher(PlugIn):
 		
 	def plugin(self, owner):
 		''' Plug the Dispatcher instance into Client class instance and send initial stream header. Used internally.'''
+		self.DEBUG('Dispatcher plugin', 'PlugIn')
+		
 		self._init()
 		self._owner.lastErrNode = None
 		self._owner.lastErr = None
@@ -116,6 +118,10 @@ class Dispatcher(PlugIn):
 				locale.getdefaultlocale()[0].split('_')[0])
 		self._owner.send("<?xml version='1.0'?>%s>" % str(self._metastream)[:-2])
 
+	def StreamTerminate(self):
+		''' Send a stream terminator. '''
+		self._owner.send('</stream:stream>')
+
 	def _check_stream_start(self, ns, tag, attrs):
 		if ns<>NS_STREAMS or tag<>'stream':
 			raise ValueError('Incorrect stream start: (%s,%s). Terminating.' % (tag, ns))
@@ -139,7 +145,7 @@ class Dispatcher(PlugIn):
 				return 0
 		except ExpatError:
 			self.DEBUG('Invalid XML received from server. Forcing disconnect.', 'error')
-			self._owner.Connection.pollend()
+			self._owner.Connection.disconnect()
 			return 0
 		if len(self._pendingExceptions) > 0:
 			 _pendingException = self._pendingExceptions.pop()
@@ -244,7 +250,7 @@ class Dispatcher(PlugIn):
 	def returnStanzaHandler(self,conn,stanza):
 		''' Return stanza back to the sender with <feature-not-implemennted/> error set. '''
 		if stanza.getType() in ['get','set']:
-			conn.send(Error(stanza,ERR_FEATURE_NOT_IMPLEMENTED))
+			conn._owner.send(Error(stanza,ERR_FEATURE_NOT_IMPLEMENTED))
 
 	def streamErrorHandler(self,conn,error):
 		name,text='error',error.getData()
@@ -387,7 +393,7 @@ class Dispatcher(PlugIn):
 		''' Put stanza on the wire and wait for recipient's response to it. '''
 		if timeout is None: 
 			timeout = DEFAULT_TIMEOUT_SECONDS
-		self._witid = self.send(stanza)
+		self._witid = self._owner.send(stanza)
 		if func:
 			self.on_responses[self._witid] = (func, args)
 		if timeout:
@@ -401,11 +407,10 @@ class Dispatcher(PlugIn):
 			Additional callback arguments can be specified in args. '''
 		self.SendAndWaitForResponse(stanza, 0, func, args)
 	
-	def send(self, stanza, is_message = False, now = False):
-		''' Serialise stanza and put it on the wire. Assign an unique ID to it before send.
-			Returns assigned ID.'''
+	def assign_id(self, stanza):
+		''' Assign an unique ID to stanza and return assigned ID.'''
 		if type(stanza) in [type(''), type(u'')]: 
-			return self._owner.Connection.send(stanza, now = now)
+			return (None, stanza)
 		if not isinstance(stanza, Protocol): 
 			_ID=None
 		elif not stanza.getID():
@@ -417,23 +422,7 @@ class Dispatcher(PlugIn):
 			_ID=stanza.getID()
 		if self._owner._registered_name and not stanza.getAttr('from'): 
 			stanza.setAttr('from', self._owner._registered_name)
-		if self._owner._component and stanza.getName() != 'bind':
-			to=self._owner.Server
-			if stanza.getTo() and stanza.getTo().getDomain():
-				to=stanza.getTo().getDomain()
-			frm=stanza.getFrom()
-			if frm.getDomain():
-				frm=frm.getDomain()
-			route=Protocol('route', to=to, frm=frm, payload=[stanza])
-			stanza=route
 		stanza.setNamespace(self._owner.Namespace)
 		stanza.setParent(self._metastream)
-		if is_message:
-			self._owner.Connection.send(stanza, True, now = now)
-		else:
-			self._owner.Connection.send(stanza, now = now)
-		return _ID
+		return (_ID, stanza)
 	
-	def disconnect(self):
-		''' Send a stream terminator. '''
-		self._owner.Connection.send('</stream:stream>')

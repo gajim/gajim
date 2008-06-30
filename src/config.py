@@ -1199,7 +1199,7 @@ class ManageProxiesWindow:
 			proxypass_entry.set_text(gajim.config.get_per('proxies', proxy,
 				'pass'))
 			proxytype = gajim.config.get_per('proxies', proxy, 'type')
-			types = ['http', 'socks5']
+			types = ['http', 'socks5', 'bosh']
 			self.proxytype_combobox.set_active(types.index(proxytype))
 			if gajim.config.get_per('proxies', proxy, 'user'):
 				useauth_checkbutton.set_active(True)
@@ -1227,7 +1227,7 @@ class ManageProxiesWindow:
 		model.set_value(iter, 0, new_name)
 
 	def on_proxytype_combobox_changed(self, widget):
-		types = ['http', 'socks5']
+		types = ['http', 'socks5', 'bosh']
 		type_ = self.proxytype_combobox.get_active()
 		proxy = self.proxyname_entry.get_text().decode('utf-8')
 		gajim.config.set_per('proxies', proxy, 'type', types[type_])

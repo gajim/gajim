@@ -22,7 +22,7 @@ xmpp_server_port = ('xmpp.example.org',5222)
 Script will connect to the machine.
 '''
 
-credentials = ['login', 'pass', 'testclient']
+credentials = ['loginn', 'passwo', 'testresour']
 '''
 [username, password, passphrase]
 Script will autheticate itself with this credentials on above mentioned server.
@@ -41,19 +41,6 @@ class TestNonBlockingClient(unittest.TestCase):
 		self.idlequeue_thread = IdleQueueThread()
 		self.connection = MockConnectionClass()
 
-		self.client = client_nb.NonBlockingClient(
-				server=xmpp_server_port[0],
-				port=xmpp_server_port[1],
-				on_connect=lambda *args: self.connection.on_connect(True, *args),
-				on_connect_failure=lambda *args: self.connection.on_connect(False, *args),
-				caller=self.connection 
-				)
-		'''
-		NonBlockingClient instance with parameters from global variables and with
-		callbacks from dummy connection.
-		'''
-
-		self.client.set_idlequeue(self.idlequeue_thread.iq)	
 		self.idlequeue_thread.start()
 
 	def tearDown(self):
@@ -70,17 +57,33 @@ class TestNonBlockingClient(unittest.TestCase):
 
 		:param server_port: tuple of (hostname, port) for where the client should
 		connect.
+
 		'''
-		self.client.connect(server_port)
+		self.client = client_nb.NonBlockingClient(
+				hostname=server_port[0],
+				port=server_port[1],
+				caller=self.connection,
+				idlequeue=self.idlequeue_thread.iq,
+				)
+		'''
+		NonBlockingClient instance with parameters from global variables and with
+		callbacks from dummy connection.
+		'''
+
+		self.client.connect(
+			on_connect=lambda *args: self.connection.on_connect(True, *args),
+			on_connect_failure=lambda *args: self.connection.on_connect(False, *args),
+			secure=False
+			)
 
 		print 'waiting for callback from client constructor'
 		self.connection.wait()
 		
 		# if on_connect was called, client has to be connected and vice versa
 		if self.connection.connect_succeeded:
-			self.assert_(self.client.isConnected())
+			self.assert_(self.client.get_connect_type())
 		else:
-			self.assert_(not self.client.isConnected())
+			self.assert_(not self.client.get_connect_type())
 
 	def client_auth(self, username, password, resource, sasl):
 		'''
@@ -100,7 +103,9 @@ class TestNonBlockingClient(unittest.TestCase):
 		'''
 		Does disconnecting of connected client. Returns when TCP connection is closed.
 		'''
-		self.client.start_disconnect(None, on_disconnect=self.connection.set_event)
+		#self.client.start_disconnect(None, on_disconnect=self.connection.set_event)
+		self.client.RegisterDisconnectHandler(self.connection.set_event)
+		self.client.disconnect()
 
 		print 'waiting for disconnecting...'
 		self.connection.wait()
@@ -113,7 +118,7 @@ class TestNonBlockingClient(unittest.TestCase):
 		self.open_stream(xmpp_server_port)
 
 		# if client is not connected, lets raise the AssertionError
-		self.assert_(self.client.isConnected())
+		self.assert_(self.client.get_connect_type())
 		# (client.disconnect() is already called from NBClient._on_connected_failure
 		# so there's need to call it in this case
 
@@ -130,7 +135,7 @@ class TestNonBlockingClient(unittest.TestCase):
 		then disconnected.
 		'''
 		self.open_stream(xmpp_server_port)
-		self.assert_(self.client.isConnected())
+		self.assert_(self.client.get_connect_type())
 		self.client_auth(credentials[0], credentials[1], credentials[2], sasl=0)
 		self.assert_(self.connection.con)
 		self.assert_(self.connection.auth=='old_auth')
@@ -141,7 +146,8 @@ class TestNonBlockingClient(unittest.TestCase):
 		Connect to nonexisting host. DNS request for A records should return nothing.
 		'''
 		self.open_stream(('fdsfsdf.fdsf.fss', 5222))
-		self.assert_(not self.client.isConnected())
+		print 'nonexthost: %s' % self.client.get_connect_type()
+		self.assert_(not self.client.get_connect_type())
 
 	def test_connect_to_wrong_port(self):
 		'''
@@ -149,14 +155,14 @@ class TestNonBlockingClient(unittest.TestCase):
 		but there shouldn't be XMPP server running on specified port.
 		'''
 		self.open_stream((xmpp_server_port[0], 31337))
-		self.assert_(not self.client.isConnected())
+		self.assert_(not self.client.get_connect_type())
 
 	def test_connect_with_wrong_creds(self):
 		'''
 		Connecting with invalid password.
 		'''
 		self.open_stream(xmpp_server_port)
-		self.assert_(self.client.isConnected())
+		self.assert_(self.client.get_connect_type())
 		self.client_auth(credentials[0], "wrong pass", credentials[2], sasl=1)
 		self.assert_(self.connection.auth is None)
 		self.do_disconnect()
@@ -168,9 +174,10 @@ class TestNonBlockingClient(unittest.TestCase):
 
 if __name__ == '__main__':
 
-	#suite = unittest.TestLoader().loadTestsFromTestCase(TestNonBlockingClient)
-	suite = unittest.TestSuite()
-	suite.addTest(TestNonBlockingClient('test_proper_connect_sasl'))
+	suite = unittest.TestLoader().loadTestsFromTestCase(TestNonBlockingClient)
+	#suite = unittest.TestSuite()
+	#suite.addTest(TestNonBlockingClient('test_proper_connect_oldauth'))
+	#suite.addTest(TestNonBlockingClient('test_connect_to_nonexisting_host'))
 
 	unittest.TextTestRunner(verbosity=2).run(suite)
 

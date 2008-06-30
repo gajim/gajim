@@ -27,10 +27,34 @@ import errno
 import time
 
 import traceback
-import thread
+import threading
 
 import logging
 log = logging.getLogger('gajim.c.x.transports_nb')
+consoleloghandler = logging.StreamHandler()
+consoleloghandler.setLevel(logging.DEBUG)
+consoleloghandler.setFormatter(
+	logging.Formatter('%(levelname)s: %(message)s')
+)
+log.setLevel(logging.DEBUG)
+log.addHandler(consoleloghandler)
+log.propagate = False
+
+
+def urisplit(self, uri):
+	'''
+	Function for splitting URI string to tuple (protocol, host, path).
+	e.g. urisplit('http://httpcm.jabber.org/webclient') returns
+	('http', 'httpcm.jabber.org', '/webclient')
+	'''
+	import re
+	regex = '(([^:/]+)(://))?([^/]*)(/?.*)'
+	grouped = re.match(regex, uri).groups()
+	proto, host, path = grouped[1], grouped[3], grouped[4]
+	return proto, host, path
+		
+
+
 
 # I don't need to load gajim.py just because of few TLS variables, so I changed
 # %s/common\.gajim\.DATA_DIR/\'\.\.\/data\'/c
@@ -39,12 +63,437 @@ log = logging.getLogger('gajim.c.x.transports_nb')
 # To change it back do:
 # %s/\'\.\.\/data\'/common\.gajim\.DATA_DIR/c
 # %s/\'%s\/\.gajim\/cacerts\.pem\'\ %\ os\.environ\[\'HOME\'\]/common\.gajim\.MY_CACERTS/c
+# TODO: make the paths configurable - as constructor parameters or sth
+
 
 # import common.gajim
 
+# timeout to connect to the server socket, it doesn't include auth 
+CONNECT_TIMEOUT_SECONDS = 30
+
+# how long to wait for a disconnect to complete
+DISCONNECT_TIMEOUT_SECONDS = 10
+
+# size of the buffer which reads data from server
+# if lower, more stanzas will be fragmented and processed twice
+RECV_BUFSIZE = 32768 # 2x maximum size of ssl packet, should be plenty
+#RECV_BUFSIZE = 16 # FIXME: (#2634) gajim breaks with this setting: it's inefficient but should work.
 
 DATA_RECEIVED='DATA RECEIVED'
 DATA_SENT='DATA SENT'
+
+
+DISCONNECTED ='DISCONNECTED' 	
+CONNECTING ='CONNECTING'  
+CONNECTED ='CONNECTED' 
+DISCONNECTING ='DISCONNECTING' 
+
+class NonBlockingTcp(PlugIn, IdleObject):
+	'''
+	Non-blocking TCP socket wrapper
+	'''
+	def __init__(self, on_disconnect):
+		'''
+		Class constructor.
+		'''
+
+		PlugIn.__init__(self)
+		IdleObject.__init__(self)
+
+		self.on_disconnect = on_disconnect
+
+		self.on_connect = None
+		self.on_connect_failure = None
+		self.sock = None
+		self.idlequeue = None
+		self.on_receive = None
+		self.DBG_LINE='socket'
+		self.state = DISCONNECTED
+
+		# writable, readable  -  keep state of the last pluged flags
+		# This prevents replug of same object with the same flags
+		self.writable = True
+		self.readable = False
+
+		# queue with messages to be send 
+		self.sendqueue = []
+
+		# time to wait for SOME stanza to come and then send keepalive
+		self.sendtimeout = 0
+
+		# in case we want to something different than sending keepalives
+		self.on_timeout = None
+		
+		# bytes remained from the last send message
+		self.sendbuff = ''
+		self._exported_methods=[self.disconnect, self.onreceive, self.set_send_timeout, 
+			self.set_timeout, self.remove_timeout]
+
+	def plugin(self, owner):
+		owner.Connection=self
+		print 'plugin called'
+		self.idlequeue = owner.idlequeue
+
+	def plugout(self):
+		self._owner.Connection = None
+		self._owner = None
+
+
+	def get_fd(self):
+		try:
+			tmp = self._sock.fileno()
+			return tmp
+		except:
+			return 0
+
+	def connect(self, conn_5tuple, on_connect, on_connect_failure):
+		'''
+		Creates and connects socket to server and port defined in conn_5tupe which
+		should be list item returned from getaddrinfo.
+		:param conn_5tuple: 5-tuple returned from getaddrinfo
+		:param on_connect: callback called on successful tcp connection
+		:param on_connect_failure: callback called on failure when estabilishing tcp 
+			connection
+		'''
+		self.on_connect = on_connect
+		self.on_connect_failure = on_connect_failure
+		(self.server, self.port) = conn_5tuple[4]
+		log.debug('NonBlocking Connect :: About tot connect to %s:%s' % conn_5tuple[4])
+		try:
+			self._sock = socket.socket(*conn_5tuple[:3])
+		except socket.error, (errnum, errstr):
+			on_connect_failure('NonBlockingTcp: Error while creating socket: %s %s' % (errnum, errstr))
+			return
+
+		self._send = self._sock.send
+		self._recv = self._sock.recv
+		self.fd = self._sock.fileno()
+		self.idlequeue.plug_idle(self, True, False)
+
+		errnum = 0
+		''' variable for errno symbol that will be found from exception raised from connect() '''
+	
+		# set timeout for TCP connecting - if nonblocking connect() fails, pollend
+		# is called. If if succeeds pollout is called.
+		self.idlequeue.set_read_timeout(self.get_fd(), CONNECT_TIMEOUT_SECONDS)
+
+		try: 
+			self._sock.setblocking(False)
+			self._sock.connect((self.server,self.port))
+		except Exception, (errnum, errstr):
+			pass
+
+		if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):
+			# connecting in progress
+			self.set_state(CONNECTING)
+			log.debug('After connect. "%s" raised => CONNECTING' % errstr)
+			# on_connect/failure will be called from self.pollin/self.pollout
+			return
+		elif errnum in (0, 10056, errno.EISCONN):
+			# already connected - this branch is very unlikely, nonblocking connect() will
+			# return EINPROGRESS exception in most cases. When here, we don't need timeout
+			# on connected descriptor and success callback can be called.
+			log.debug('After connect. "%s" raised => CONNECTED' % errstr)
+			self._on_connect(self)
+			return
+
+		# if there was some other error, call failure callback and unplug transport
+		# which will also remove read_timeouts for descriptor
+		self._on_connect_failure('Exception while connecting to %s:%s - %s %s' % 
+			(self.server, self.port, errnum, errstr))
+			
+	def _on_connect(self, data):
+		''' preceeds call of on_connect callback '''
+		self.set_state(CONNECTED)
+		self.idlequeue.remove_timeout(self.get_fd())
+		self.on_connect()
+
+
+	def set_state(self, newstate):
+		assert(newstate in [DISCONNECTED, CONNECTING, CONNECTED, DISCONNECTING])
+		if (self.state, newstate) in [(CONNECTING, DISCONNECTING), (DISCONNECTED, DISCONNECTING)]:
+			log.info('strange move: %s -> %s' % (self.state, newstate))
+		self.state = newstate
+
+
+	def _on_connect_failure(self,err_message):
+		''' preceeds call of on_connect_failure callback '''
+		# In case of error while connecting we need to close socket
+		# but we don't want to call DisconnectHandlers from client,
+		# thus the do_callback=False
+		self.disconnect(do_callback=False)
+		self.on_connect_failure(err_message=err_message)
+
+		
+
+	def pollin(self):
+		'''called when receive on plugged socket is possible '''
+		log.debug('pollin called, state == %s' % self.state)
+		self._do_receive() 
+
+	def pollout(self):
+		'''called when send to plugged socket is possible'''
+		log.debug('pollout called, state == %s' % self.state)
+
+		if self.state==CONNECTING:
+			self._on_connect(self)
+			return
+		self._do_send()
+
+	def pollend(self):
+		log.debug('pollend called, state == %s' % self.state)
+
+		if self.state==CONNECTING:
+			self._on_connect_failure('Error during connect to %s:%s' % 
+				(self.server, self.port))
+		else :
+			self.disconnect()
+
+	def disconnect(self, do_callback=True):
+		if self.state == DISCONNECTED:
+			return
+		self.idlequeue.unplug_idle(self.get_fd())
+		try:
+			self._sock.shutdown(socket.SHUT_RDWR)
+			self._sock.close()
+		except socket.error, (errnum, errstr):
+			log.error('Error disconnecting a socket: %s %s' % (errnum,errstr))
+		self.set_state(DISCONNECTED)
+		if do_callback:
+			# invoke callback given in __init__
+			self.on_disconnect()
+
+	def read_timeout(self):
+		'''
+		Implemntation of IdleObject function called on timeouts from IdleQueue.
+		'''
+		log.debug('read_timeout called, state == %s' % self.state)
+		if self.state==CONNECTING:
+			# if read_timeout is called during connecting, connect() didn't end yet
+			# thus we have to call the tcp failure callback
+			self._on_connect_failure('Error during connect to %s:%s' % 
+				(self.server, self.port))
+		else:
+			if self.on_timeout:
+				self.on_timeout()
+			self.renew_send_timeout()
+
+	def renew_send_timeout(self):
+		if self.on_timeout and self.sendtimeout > 0:
+			self.set_timeout(self.sendtimeout)
+		else:
+			self.remove_timeout()
+	
+	def set_send_timeout(self, timeout, on_timeout):
+		self.sendtimeout = timeout
+		if self.sendtimeout > 0:
+			self.on_timeout = on_timeout
+		else:
+			self.on_timeout = None
+	
+	def set_timeout(self, timeout):
+		if self.state in [CONNECTING, CONNECTED] and self.get_fd() > 0:
+			self.idlequeue.set_read_timeout(self.get_fd(), timeout)
+
+	def remove_timeout(self):
+		if self.get_fd():
+			self.idlequeue.remove_timeout(self.get_fd())
+
+	def send(self, raw_data, now=False):
+		'''Append raw_data to the queue of messages to be send. 
+		If supplied data is unicode string, encode it to utf-8.
+		'''
+
+		if self.state not in [CONNECTED, DISCONNECTING]:
+			log.error('Trying to send %s when transport is %s.' % 
+				(raw_data, self.state))
+			return
+		r = raw_data
+		if isinstance(r, unicode): 
+			r = r.encode('utf-8')
+		elif not isinstance(r, str): 
+			r = ustr(r).encode('utf-8')
+		if now:
+			self.sendqueue.insert(0, r)
+			self._do_send()
+		else:
+			self.sendqueue.append(r)
+		self._plug_idle()
+
+
+
+	def _plug_idle(self):
+		# readable if socket is connected or disconnecting
+		readable = self.state != DISCONNECTED
+		# writeable if sth to send
+		if self.sendqueue or self.sendbuff:
+			writable = True
+		else:
+			writable = False
+		print 'About to plug fd %d, W:%s, R:%s' % (self.get_fd(), writable, readable)
+		if self.writable != writable or self.readable != readable:
+			print 'Really plugging fd %d, W:%s, R:%s' % (self.get_fd(), writable, readable)
+			self.idlequeue.plug_idle(self, writable, readable)
+		else: 
+			print 'Not plugging - is already plugged'
+
+
+
+	def _do_send(self):
+		if not self.sendbuff:
+			if not self.sendqueue:
+				return None # nothing to send
+			self.sendbuff = self.sendqueue.pop(0)
+		try:
+			send_count = self._send(self.sendbuff)
+			if send_count:
+				sent_data = self.sendbuff[:send_count]
+				self.sendbuff = self.sendbuff[send_count:]
+				self._plug_idle()
+				self._raise_event(DATA_SENT, sent_data)
+
+		except socket.error, e:
+			log.error('_do_send:', exc_info=True)
+			traceback.print_exc()
+			self.disconnect()
+
+	def _raise_event(self, event_type, data):
+		if data and data.strip():
+			log.debug('raising event from transport: %s %s' % (event_type,data))
+			if hasattr(self._owner, 'Dispatcher'):
+				self._owner.Dispatcher.Event('', event_type, data)
+
+	def onreceive(self, recv_handler):
+		''' Sets the on_receive callback. Do not confuse it with
+		on_receive() method, which is the callback itself.'''
+		if not recv_handler:
+			if hasattr(self._owner, 'Dispatcher'):
+				self.on_receive = self._owner.Dispatcher.ProcessNonBlocking
+			else:
+				self.on_receive = None
+			return
+		self.on_receive = recv_handler
+
+
+	def _do_receive(self):
+		''' Reads all pending incoming data. Calls owner's disconnected() method if appropriate.'''
+		ERR_DISCONN = -2 # Misc error signifying that we got disconnected
+		received = None
+		errnum = 0
+		errstr = 'No Error Set'
+
+		try: 
+			# get as many bites, as possible, but not more than RECV_BUFSIZE
+			received = self._recv(RECV_BUFSIZE)
+		except (socket.error, socket.herror, socket.gaierror), (errnum, errstr):
+			# save exception number and message to errnum, errstr
+			log.debug("_do_receive: got %s:" % received , exc_info=True)
+		
+		if received == '':
+			errnum = ERR_DISCONN
+			errstr = "Connection closed unexpectedly"
+
+		if errnum in (ERR_DISCONN, errno.ECONNRESET, errno.ENOTCONN, errno.ESHUTDOWN):
+			# ECONNRESET - connection you are trying to access has been reset by the peer
+			# ENOTCONN - Transport endpoint is not connected
+			# ESHUTDOWN  - shutdown(2) has been called on a socket to close down the
+			# sending end of the transmision, and then data was attempted to be sent
+			log.error("Connection to %s lost: %s %s" % ( self.server, errnum, errstr))
+			self.disconnect()
+			return
+
+		if received is None:
+			# in case of some other exception
+			# FIXME: is this needed?? 
+			if errnum != 0:
+				self.DEBUG(self.DBG, errstr, 'error')
+				log.error("CConnection to %s lost: %s %s" % (self.server, errnum, errstr))
+				if not errors_only and self.state in [CONNECTING, CONNECTED]:
+					self.pollend(retry=True)
+				return
+			received = ''
+
+		# we have received some bytes, stop the timeout!
+		self.renew_send_timeout()
+		if self.on_receive:
+			self._raise_event(DATA_RECEIVED, received)
+			self._on_receive(received)
+		else:
+			# This should never happen, so we need the debug
+			log.error('SOCKET Unhandled data received: %s' % received)
+			self.disconnect()
+
+	def _on_receive(self, data):
+		# Overriding this method allows modifying received data before it is passed
+		# to callback. 
+		self.on_receive(data)
+
+
+class NonBlockingHttpBOSH(NonBlockingTcp):
+	'''
+	Socket wrapper that makes HTTP message out of send data and peels-off 
+	HTTP headers from incoming messages
+	'''
+
+	def __init__(self, bosh_uri, bosh_port, on_disconnect):
+		self.bosh_protocol, self.bosh_host, self.bosh_path = self.urisplit(bosh_uri)
+		if self.bosh_protocol is None:
+			self.bosh_protocol = 'http'
+		if self.bosh_path == '':
+			bosh_path = '/'
+		self.bosh_port = bosh_port
+		
+	def send(self, raw_data, now=False):
+
+		NonBlockingTcp.send(
+			self,
+			self.build_http_message(raw_data),
+			now)
+
+	def _on_receive(self,data):
+		'''Preceeds pass of received data to Client class. Gets rid of HTTP headers
+		and checks them.'''
+		statusline, headers, httpbody = self.parse_http_message(data)
+		if statusline[1] != '200':
+			log.error('HTTP Error: %s %s' % (statusline[1], statusline[2]))
+			self.disconnect()
+		self.on_receive(httpbody)
+	
+		
+	def build_http_message(self, httpbody):
+		'''
+		Builds bosh http message with given body.
+		Values for headers and status line fields are taken from class variables.
+		)  
+		'''
+		headers = ['POST %s HTTP/1.1' % self.bosh_path,
+			'Host: %s:%s' % (self.bosh_host, self.bosh_port),
+			'Content-Type: text/xml; charset=utf-8',
+			'Content-Length: %s' % len(str(httpbody)),
+			'\r\n']
+		headers = '\r\n'.join(headers)
+		return('%s%s\r\n' % (headers, httpbody))
+
+	def parse_http_message(self, message):
+		'''
+		splits http message to tuple (
+		  statusline - list of e.g. ['HTTP/1.1', '200', 'OK'],
+		  headers - dictionary of headers e.g. {'Content-Length': '604',
+		            'Content-Type': 'text/xml; charset=utf-8'},
+		  httpbody - string with http body
+		)  
+		'''
+		message = message.replace('\r','')
+		(header, httpbody) = message.split('\n\n')
+		header = header.split('\n')
+		statusline = header[0].split(' ')
+		header = header[1:]
+		headers = {}
+		for dummy in header:
+			row = dummy.split(' ',1)
+			headers[row[0][:-1]] = row[1]
+		return (statusline, headers, httpbody)
+
 
 USE_PYOPENSSL = False
 
@@ -62,16 +511,6 @@ except ImportError:
 	print >> sys.stderr, "PyOpenSSL not found, falling back to Python builtin SSL objects (insecure)."
 	print >> sys.stderr, "=" * 79
 
-# timeout to connect to the server socket, it doesn't include auth 
-CONNECT_TIMEOUT_SECONDS = 30
-
-# how long to wait for a disconnect to complete
-DISCONNECT_TIMEOUT_SECONDS = 10
-
-# size of the buffer which reads data from server
-# if lower, more stanzas will be fragmented and processed twice
-RECV_BUFSIZE = 32768 # 2x maximum size of ssl packet, should be plenty
-#RECV_BUFSIZE = 16 # FIXME: (#2634) gajim breaks with this setting: it's inefficient but should work.
 
 def torf(cond, tv, fv):
 	if cond: return tv
@@ -243,439 +682,6 @@ class StdlibSSLWrapper(SSLWrapper):
 				raise SSLWrapper.Error(self.sock or self.sslobj, e)
 		return 0
 
-class NonBlockingTcp(PlugIn, IdleObject):
-	''' This class can be used instead of transports.Tcp in threadless implementations '''
-	def __init__(self, on_connect = None, on_connect_failure = None, server=None, use_srv = True):
-		''' Cache connection point 'server'. 'server' is the tuple of (host, port)
-			absolutely the same as standard tcp socket uses. 
-			on_connect - called when we connect to the socket
-			on_connect_failure  - called if there was error connecting to socket
-			'''
-		IdleObject.__init__(self)
-		PlugIn.__init__(self)
-		self.DBG_LINE='socket'
-		self._exported_methods=[self.send, self.disconnect, self.onreceive, self.set_send_timeout, 
-			self.start_disconnect, self.set_timeout, self.remove_timeout]
-		self._server = server
-		self.on_connect  = on_connect
-		self.on_connect_failure = on_connect_failure
-		self.on_receive = None
-		self.on_disconnect = None
-		self.printed_error = False
-		
-		#  0 - not connected
-		#  1 - connected
-		# -1 - about to disconnect (when we wait for final events to complete)
-		# -2 - disconnected
-		self.state = 0
-		
-		# queue with messages to be send 
-		self.sendqueue = []
-		
-		# bytes remained from the last send message
-		self.sendbuff = ''
-		
-		# time to wait for SOME stanza to come and then send keepalive
-		self.sendtimeout = 0
-		
-		# in case we want to something different than sending keepalives
-		self.on_timeout = None
-		
-		# writable, readable  -  keep state of the last pluged flags
-		# This prevents replug of same object with the same flags
-		self.writable = True
-		self.readable = False
-		self.ais = None
-	
-	def plugin(self, owner):
-		''' Fire up connection. Return non-empty string on success.
-			Also registers self.disconnected method in the owner's dispatcher.
-			Called internally. '''
-		self.idlequeue = owner.idlequeue
-		self.printed_error = False
-		if not self._server: 
-			self._server=(self._owner.Server,5222)
-		if self.connect(self._server) is False:
-			return False
-		return True
-		
-	def read_timeout(self):
-		if self.state == 0:
-			self.idlequeue.unplug_idle(self.fd)
-			if self.on_connect_failure:
-				self.on_connect_failure()
-		else:
-			if self.on_timeout:
-				self.on_timeout()
-			self.renew_send_timeout()
-
-	def connect(self,server=None, proxy = None, secure = None):
-		''' Try to establish connection. '''
-		if not server:
-			server=self._server
-		else: 
-			self._server = server
-		self.printed_error = False
-		self.state = 0
-		try:
-			self.set_timeout(CONNECT_TIMEOUT_SECONDS)
-			if len(server) == 2 and type(server[0]) in (str, unicode) and not \
-			self.ais:
-				# FIXME: blocks here
-				self.ais = socket.getaddrinfo(server[0],server[1],socket.AF_UNSPEC,socket.SOCK_STREAM)
-				log.info('Found IPs: %s', self.ais)
-			else:
-				self.ais = (server,)
-			self.connect_to_next_ip()
-			return
-		except socket.gaierror, e:
-			log.info('Lookup failure for %s: %s[%s]', self.getName(), e[1], repr(e[0]), exc_info=True)
-		except:
-			log.error('Exception trying to connect to %s:', self.getName(), exc_info=True)
-
-		if self.on_connect_failure:
-			self.on_connect_failure()
-
-	def _plug_idle(self):
-		# readable if socket is connected or disconnecting
-		readable = self.state != 0
-		# writeable if sth to send
-		if self.sendqueue or self.sendbuff:
-			writable = True
-		else:
-			writable = False
-		if self.writable != writable or self.readable != readable:
-			self.idlequeue.plug_idle(self, writable, readable)
-	
-	def pollout(self):
-		print 'pollout called - send possible'
-		if self.state == 0:
-			self.connect_to_next_ip()
-			return
-		self._do_send()
-	
-	def plugout(self):
-		''' Disconnect from the remote server and unregister self.disconnected method from
-			the owner's dispatcher. '''
-		self.disconnect()
-		self._owner.Connection = None
-		self._owner = None
-	
-	def pollin(self):
-		print 'pollin called - receive possible'
-		self._do_receive() 
-	
-	def pollend(self, retry=False):
-		if not self.printed_error:
-			self.printed_error = True
-			try: self._do_receive(errors_only=True)
-			except: log.error("pollend: Got exception from _do_receive:", exc_info=True)
-		conn_failure_cb = self.on_connect_failure
-		self.disconnect()
-		if conn_failure_cb:
-			conn_failure_cb(retry)
-		
-	def disconnect(self):
-		if self.state == -2: # already disconnected
-			return
-		self.state = -2
-		self.sendqueue = None
-		self.remove_timeout() 
-		try:
-			self._owner.disconnected()
-		except:
-			pass
-		self.idlequeue.unplug_idle(self.fd)
-		sock = getattr(self, '_sock', None)
-		if sock:
-			try:
-				sock.shutdown(socket.SHUT_RDWR)
-			except socket.error, e:
-				if e[0] != errno.ENOTCONN:
-					log.error("Error shutting down socket for %s:", self.getName(), exc_info=True)
-			try: sock.close()
-			except: log.error("Error closing socket for %s:", self.getName(), exc_info=True)
-		# socket descriptor cannot be (un)plugged anymore
-		self.fd = -1
-		if self.on_disconnect:
-			self.on_disconnect()
-		self.on_connect_failure = None
-	
-	def end_disconnect(self):
-		''' force disconnect only if we are still trying to disconnect '''
-		if self.state == -1:
-			self.disconnect()
-	
-	def start_disconnect(self, to_send, on_disconnect):
-		self.on_disconnect = on_disconnect
-
-		# flush the sendqueue
-		while self.sendqueue:
-			self._do_send()
-
-		self.sendqueue = []
-		self.send(to_send)
-		self.send('</stream:stream>')
-		self.state = -1 # about to disconnect
-		self.idlequeue.set_alarm(self.end_disconnect, DISCONNECT_TIMEOUT_SECONDS)
-	
-	def set_timeout(self, timeout):
-		if self.state >= 0 and self.fd > 0:
-			self.idlequeue.set_read_timeout(self.fd, timeout)
-	
-	def remove_timeout(self):
-		if self.fd:
-			self.idlequeue.remove_timeout(self.fd)
-	
-	def onreceive(self, recv_handler):
-		''' Sets the on_receive callback. Do not confuse it with
-		on_receive() method, which is the callback itself.
-		
-		If recv_handler==None, it tries to set that callback assuming that
-		our owner also has a Dispatcher object plugged in, to its
-		ProcessNonBlocking method.'''
-		if not recv_handler:
-			if hasattr(self._owner, 'Dispatcher'):
-				self.on_receive = self._owner.Dispatcher.ProcessNonBlocking
-			else:
-				self.on_receive = None
-			return
-		_tmp = self.on_receive
-		# make sure this cb is not overriden by recursive calls
-		if not recv_handler(None) and _tmp == self.on_receive:
-			self.on_receive = recv_handler
-		
-	def _do_receive(self, errors_only=False):
-		''' Reads all pending incoming data. Calls owner's disconnected() method if appropriate.'''
-		ERR_DISCONN = -2 # Misc error signifying that we got disconnected
-		ERR_OTHER = -1 # Other error
-		received = None
-		errnum = 0
-		errtxt = 'No Error Set'
-		try: 
-			# get as many bites, as possible, but not more than RECV_BUFSIZE
-			received = self._recv(RECV_BUFSIZE)
-		except (socket.error, socket.herror, socket.gaierror), e:
-			log.debug("_do_receive: got %s:", e.__class__, exc_info=True)
-			#traceback.print_exc()
-			#print "Current Stack:"
-			#traceback.print_stack()
-			errnum = e[0]
-			errtxt = str(errnum) + ':' + e[1]
-		except socket.sslerror, e:
-			log.error("_do_receive: got unknown %s:", e.__class__, exc_info=True)
-			#traceback.print_exc()
-			#print "Current Stack:"
-			#traceback.print_stack()
-			errnum = ERR_OTHER
-			errtxt = repr("socket.sslerror: " + e.args)
-		except SSLWrapper.Error, e:
-			log.debug("Caught: %s", str(e))
-			errnum = gattr(e, 'errno', ERR_OTHER)
-			if not errnum: errnum = ERR_OTHER # unset, but we must put a status
-			errtxt = gattr(e, 'strerror') or repr(e.args)
-
-		if received == '':
-			errnum = ERR_DISCONN
-			errtxt = "Connection closed unexpectedly"
-
-		if errnum in (ERR_DISCONN, errno.ECONNRESET, errno.ENOTCONN, errno.ESHUTDOWN):
-			log.error("Connection to %s lost: %s [%d]", self.getName(), errtxt, errnum)
-			self.printed_error = True
-			if not errors_only:
-				self.pollend(retry=(errnum in (ERR_DISCONN, errno.ECONNRESET)))
-			# don't process result, because it will raise an error
-			return
-
-		if received is None:
-			if errnum != 0:
-				self.DEBUG(errtxt, 'error')
-				log.error("Connection to %s lost: %s [%d]", self.getName(), errtxt, errnum)
-				self.printed_error = True
-				if not errors_only and self.state >= 0:
-					self.pollend(retry=True)
-				return
-			received = ''
-
-		if errors_only or self.state < 0:
-			return
-
-		# we have received some bites, stop the timeout!
-		self.renew_send_timeout()
-		if self.on_receive:
-			if received.strip():
-				self.DEBUG(received, 'got')
-			if hasattr(self._owner, 'Dispatcher'):
-				self._owner.Dispatcher.Event('', DATA_RECEIVED, received)
-			self.on_receive(received)
-		else:
-			# This should never happed, so we need the debug
-			self.DEBUG('Unhandled data received: %s' % received,'got')
-			self.disconnect()
-			if self.on_connect_failure:
-				self.on_connect_failure()
-		return True
-	
-	def _do_send(self):
-		if not self.sendbuff:
-			if not self.sendqueue:
-				return None # nothing to send
-			self.sendbuff = self.sendqueue.pop(0)
-			self.sent_data = self.sendbuff
-		try:
-			send_count = self._send(self.sendbuff)
-			if send_count:
-				self.sendbuff = self.sendbuff[send_count:]
-				if not self.sendbuff and not self.sendqueue:
-					if self.state < 0:
-						self.idlequeue.unplug_idle(self.fd)
-						self._on_send()
-						self.disconnect()
-						return
-					# we are not waiting for write 
-					self._plug_idle()
-				self._on_send()
-		except socket.error, e:
-			if e[0] == socket.SSL_ERROR_WANT_WRITE:
-				return True		
-			log.error("_do_send:", exc_info=True)
-			#traceback.print_exc()
-			if self.state < 0:
-				self.disconnect()
-				return
-			if self._on_send_failure:
-				self._on_send_failure()
-				return
-		return True
-
-	def connect_to_next_ip(self):
-		if self.state != 0:
-			return
-		if len(self.ais) == 0:
-			if self.on_connect_failure:
-				self.on_connect_failure()
-			return
-		ai = self.ais.pop(0)
-		log.info('Trying to connect to %s:%s', ai[4][0], ai[4][1])
-		try:
-			self._sock = socket.socket(*ai[:3])
-			self._server=ai[4]
-		except socket.error, e:
-			errnum, errstr = e
-			
-			# Ignore "Socket already connected".
-			# FIXME: This happens when we switch an already
-			# connected socket to SSL (STARTTLS). Instead of
-			# ignoring the error, the socket should only be
-			# connected to once. See #2846 and #3396.
-			workaround = (errno.EALREADY, 10056, 56)
-
-			# 10035 - winsock equivalent of EINPROGRESS
-			if errnum not in (errno.EINPROGRESS, 10035) + workaround:
-				log.error('Could not connect to %s: %s [%s]', ai[4][0], errnum,
-					errstr, exc_info=True)
-				#traceback.print_exc()
-				self.connect_to_next_ip()
-				return
-		self.fd = self._sock.fileno()
-		self.idlequeue.plug_idle(self, True, False)
-		self._send = self._sock.send
-		self._recv = self._sock.recv
-		self._do_connect()
-
-	def _do_connect(self):
-		errnum = 0
-
-		try:
-			print "==============sock.connect called"
-			self._sock.connect(self._server)
-			self._sock.setblocking(False)
-		except Exception, ee:
-			(errnum, errstr) = ee
-		# in progress, or would block
-		print "errnum: %s" % errnum
-		if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):
-			self.state = 1
-			return
-		# 10056  - already connected, only on win32
-		# code 'WS*' is not available on GNU, so we use its numeric value
-		elif errnum not in (0, 10056, errno.EISCONN):
-			log.error('Could not connect to %s: %s [%s]', self._server[0], errnum,
-				errstr)
-			self.connect_to_next_ip()
-			return
-		self.remove_timeout()
-		self._owner.Connection=self
-		self.state = 1
-
-		self._sock.setblocking(False)
-		self._plug_idle()
-		if self.on_connect:
-			self.on_connect()
-		self.on_connect = None
-
-	def send(self, raw_data, now = False):
-		'''Append raw_data to the queue of messages to be send. 
-		If supplied data is unicode string, encode it to utf-8.
-		'''
-
-		if self.state <= 0:
-			return
-		r = raw_data
-		if isinstance(r, unicode): 
-			r = r.encode('utf-8')
-		elif not isinstance(r, str): 
-			r = ustr(r).encode('utf-8')
-		if now:
-			self.sendqueue.insert(0, r)
-			self._do_send()
-		else:
-			self.sendqueue.append(r)
-
-		self._plug_idle()
-
-	def _on_send(self):
-		if self.sent_data and self.sent_data.strip():
-			self.DEBUG(self.sent_data,'sent')
-			if hasattr(self._owner, 'Dispatcher'):
-				self._owner.Dispatcher.Event('', DATA_SENT, self.sent_data)
-		self.sent_data  = None
-	
-	def _on_send_failure(self):
-		self.DEBUG("Socket error while sending data",'error')
-		self._owner.disconnected()
-		self.sent_data = None
-	
-	def set_send_timeout(self, timeout, on_timeout):
-		self.sendtimeout = timeout
-		if self.sendtimeout > 0:
-			self.on_timeout = on_timeout
-		else:
-			self.on_timeout = None
-	
-	def renew_send_timeout(self):
-		if self.on_timeout and self.sendtimeout > 0:
-			self.set_timeout(self.sendtimeout)
-		else:
-			self.remove_timeout()
-	
-	def getHost(self):
-		''' Return the 'host' value that is connection is [will be] made to.'''
-		return self._server[0]
-
-	def getName(self):
-		''' Return the server's name, or 'getHost()' if not available.'''
-		retval = None
-		try:
-			retval = gattr(self._owner, 'name')
-		except:
-			pass
-		if retval: return retval
-		return self.getHost()
-
-	def getPort(self):
-		''' Return the 'port' value that is connection is [will be] made to.'''
-		return self._server[1]
 
 class NonBlockingTLS(PlugIn):
 	''' TLS connection used to encrypts already estabilished tcp connection.'''
@@ -687,7 +693,7 @@ class NonBlockingTLS(PlugIn):
 			"SSL_CB_ALERT": 0x4000, 
 			"SSL_CB_HANDSHAKE_START": 0x10, "SSL_CB_HANDSHAKE_DONE": 0x20}
 
-	def PlugIn(self, owner, now=0, on_tls_start = None):
+	def PlugIn(self, owner, on_tls_success, on_tls_failure, now=0):
 		''' If the 'now' argument is true then starts using encryption immidiatedly.
 			If 'now' in false then starts encryption as soon as TLS feature is
 			declared by the server (if it were already declared - it is ok).
@@ -696,7 +702,8 @@ class NonBlockingTLS(PlugIn):
 			return  # Already enabled.
 		PlugIn.PlugIn(self, owner)
 		DBG_LINE='NonBlockingTLS'
-		self.on_tls_start = on_tls_start
+		self.on_tls_success = on_tls_success
+		self.on_tls_faliure = on_tls_failure
 		if now:
 			try:
 				res = self._startSSL()
@@ -705,7 +712,7 @@ class NonBlockingTLS(PlugIn):
 				#traceback.print_exc()
 				self._owner.socket.pollend()
 				return
-			self.tls_start()
+			on_tls_success()
 			return res
 		if self._owner.Dispatcher.Stream.features:
 			try: 
@@ -725,23 +732,17 @@ class NonBlockingTLS(PlugIn):
 			self._owner.Dispatcher.PlugOut()
 		self._owner = None
 
-	def tls_start(self):
-		if self.on_tls_start:
-			self.on_tls_start()
-			self.on_tls_start = None
-		
 	def FeaturesHandler(self, conn, feats):
 		''' Used to analyse server <features/> tag for TLS support.
 			If TLS is supported starts the encryption negotiation. Used internally '''
 		if not feats.getTag('starttls', namespace=NS_TLS):
 			self.DEBUG("TLS unsupported by remote server.", 'warn')
-			self.tls_start()
+			self.on_tls_failure("TLS unsupported by remote server.")
 			return
 		self.DEBUG("TLS supported by remote server. Requesting TLS start.", 'ok')
 		self._owner.RegisterHandlerOnce('proceed', self.StartTLSHandler, xmlns=NS_TLS)
 		self._owner.RegisterHandlerOnce('failure', self.StartTLSHandler, xmlns=NS_TLS)
 		self._owner.send('<starttls xmlns="%s"/>' % NS_TLS)
-		self.tls_start()
 		raise NodeProcessed
 
 	def _dumpX509(self, cert, stream=sys.stderr):
@@ -824,9 +825,10 @@ class NonBlockingTLS(PlugIn):
 		try:
 			self.starttls='in progress'
 			tcpsock._sslObj.do_handshake()
-		# Errors are handeled in _do_receive function
 		except:
-			pass
+			log.error('Error while TLS handshake: ', exc_info=True)
+			self.on_tls_failure('Error while TLS Handshake')
+			return
 		tcpsock._sslObj.setblocking(False)
 		log.debug("Synchronous handshake completed")
 		#log.debug("Async handshake started...")
@@ -865,63 +867,73 @@ class NonBlockingTLS(PlugIn):
 		''' Handle server reply if TLS is allowed to process. Behaves accordingly.
 			Used internally.'''
 		if starttls.getNamespace() <> NS_TLS: 
+			self.on_tls_failure('Unknown namespace: %s' % starttls.getNamespace())
 			return
 		self.starttls = starttls.getName()
 		if self.starttls == 'failure':
-			self.DEBUG('Got starttls response: ' + self.starttls,'error')
+			self.on_tls_failure('TLS <failure>  received: %s' % self.starttls)
 			return
 		self.DEBUG('Got starttls proceed response. Switching to TLS/SSL...','ok')
 		try:
 			self._startSSL()
 		except Exception, e:
 			log.error("StartTLSHandler:", exc_info=True)
+			self.on_tls_failure('in StartTLSHandler')
 			#traceback.print_exc()
-			self._owner.socket.pollend()
 			return
 		self._owner.Dispatcher.PlugOut()
-		dispatcher_nb.Dispatcher().PlugIn(self._owner)
+		self.on_tls_success()
+		#dispatcher_nb.Dispatcher().PlugIn(self._owner)
 
-
-class NBHTTPPROXYsocket(NonBlockingTcp):
-	''' This class can be used instead of transports.HTTPPROXYsocket
-	HTTP (CONNECT) proxy connection class. Uses TCPsocket as the base class
-		redefines only connect method. Allows to use HTTP proxies like squid with
-		(optionally) simple authentication (using login and password). 
-		
+class NBProxySocket(NonBlockingTcp):
 	'''
-	def __init__(self, on_connect =None, on_proxy_failure=None, on_connect_failure = None,proxy = None,server = None,use_srv=True):
-		''' Caches proxy and target addresses.
-			'proxy' argument is a dictionary with mandatory keys 'host' and 'port' (proxy address)
-			and optional keys 'user' and 'password' to use for authentication.
-			'server' argument is a tuple of host and port - just like TCPsocket uses. '''
-		self.on_connect_proxy = on_connect  
-		self.on_proxy_failure = on_proxy_failure
-		self.on_connect_failure = on_connect_failure
-		NonBlockingTcp.__init__(self, self._on_tcp_connect, on_connect_failure, server, use_srv)
-		self.DBG_LINE=DBG_CONNECT_PROXY
-		self.server = server
-		self.proxy=proxy
+	Interface for proxy socket wrappers - when tunnneling XMPP over proxies,
+	some connecting process usually has to be done before opening stream.
+	'''
+	def __init__(self, on_disconnect, xmpp_server, proxy_creds=(None,None)):
+		self.proxy_user, self.proxy_pass = proxy_creds
+		self.xmpp_server = xmpp_server
+		NonBlockingTcp.__init__(self, on_disconnect)
+		
 
-	def plugin(self, owner):
-		''' Starts connection. Used interally. Returns non-empty string on success.'''
-		owner.debug_flags.append(DBG_CONNECT_PROXY)
-		NonBlockingTcp.plugin(self,owner)
+	def connect(self, conn_5tuple, on_connect, on_connect_failure):
+		'''
+		connect method is extended by proxy credentials and xmpp server hostname
+		and port because those are needed for 
+		The idea is to insert Proxy-specific mechanism after TCP connect and 
+		before XMPP stream opening (which is done from client).
+		'''
 
-	def connect(self,dupe=None):
+		self.after_proxy_connect = on_connect
+		
+		NonBlockingTcp.connect(self,
+				conn_5tuple=conn_5tuple,
+				on_connect =self._on_tcp_connect,
+				on_connect_failure =on_connect_failure)
+
+	def _on_tcp_connect(self):
+		pass
+
+
+
+class NBHTTPProxySocket(NBProxySocket):
+	''' This class can be used instead of NonBlockingTcp
+	HTTP (CONNECT) proxy connection class. Allows to use HTTP proxies like squid with
+	(optionally) simple authentication (using login and password). 
+	'''
+		
+	def _on_tcp_connect(self):
 		''' Starts connection. Connects to proxy, supplies login and password to it
 			(if were specified while creating instance). Instructs proxy to make
 			connection to the target server. Returns non-empty sting on success. '''
-		NonBlockingTcp.connect(self, (self.proxy['host'], self.proxy['port']))
-		
-	def _on_tcp_connect(self):
-		self.DEBUG('Proxy server contacted, performing authentification','start')
-		connector = ['CONNECT %s:%s HTTP/1.0'%self.server,
+		log.debug('Proxy server contacted, performing authentification')
+		connector = ['CONNECT %s:%s HTTP/1.0' % self.xmpp_server,
 			'Proxy-Connection: Keep-Alive',
 			'Pragma: no-cache',
-			'Host: %s:%s'%self.server,
+			'Host: %s:%s' % self.xmpp_server,
 			'User-Agent: HTTPPROXYsocket/v0.1']
-		if self.proxy.has_key('user') and self.proxy.has_key('password'):
-			credentials = '%s:%s' % ( self.proxy['user'], self.proxy['password'])
+		if self.proxy_user and self.proxy_pass:
+			credentials = '%s:%s' % (self.proxy_user, self.proxy_pass)
 			credentials = base64.encodestring(credentials).strip()
 			connector.append('Proxy-Authorization: Basic '+credentials)
 		connector.append('\r\n')
@@ -937,12 +949,11 @@ class NBHTTPPROXYsocket(NonBlockingTcp):
 		except: 
 			log.error("_on_headers_sent:", exc_info=True)
 			#traceback.print_exc()
-			self.on_proxy_failure('Invalid proxy reply')
+			self._on_connect_failure('Invalid proxy reply')
 			return
 		if code <> '200':
-			self.DEBUG('Invalid proxy reply: %s %s %s' % (proto, code, desc),'error')
-			self._owner.disconnected()
-			self.on_proxy_failure('Invalid proxy reply')
+			log.error('Invalid proxy reply: %s %s %s' % (proto, code, desc))
+			self._on_connect_failure('Invalid proxy reply')
 			return
 		if len(reply) != 2:
 			pass
@@ -951,55 +962,24 @@ class NBHTTPPROXYsocket(NonBlockingTcp):
 	def _on_proxy_auth(self, reply):
 		if self.reply.find('\n\n') == -1:
 			if reply is None:
-				self.on_proxy_failure('Proxy authentification failed')
+				self._on_connect_failure('Proxy authentification failed')
 				return
 			if reply.find('\n\n') == -1:
 				self.reply += reply.replace('\r', '')
-				self.on_proxy_failure('Proxy authentification failed')
+				self._on_connect_failure('Proxy authentification failed')
 				return
-		self.DEBUG('Authentification successfull. Jabber server contacted.','ok')
-		if self.on_connect_proxy:
-			self.on_connect_proxy()
+		log.debug('Authentification successfull. Jabber server contacted.')
+		self._on_connect(self)
 
-	def DEBUG(self, text, severity):
-		''' Overwrites DEBUG tag to allow debug output be presented as "CONNECTproxy".'''
-		return self._owner.DEBUG(DBG_CONNECT_PROXY, text, severity)
 
-class NBSOCKS5PROXYsocket(NonBlockingTcp):
+class NBSOCKS5ProxySocket(NBProxySocket):
 	'''SOCKS5 proxy connection class. Uses TCPsocket as the base class
 		redefines only connect method. Allows to use SOCKS5 proxies with
 		(optionally) simple authentication (only USERNAME/PASSWORD auth). 
 	'''
-	def __init__(self, on_connect = None, on_proxy_failure = None,
-	on_connect_failure = None, proxy = None, server = None, use_srv = True):
-		''' Caches proxy and target addresses.
-			'proxy' argument is a dictionary with mandatory keys 'host' and 'port'
-			(proxy address) and optional keys 'user' and 'password' to use for
-			authentication. 'server' argument is a tuple of host and port -
-			just like TCPsocket uses. '''
-		self.on_connect_proxy = on_connect  
-		self.on_proxy_failure = on_proxy_failure
-		self.on_connect_failure = on_connect_failure
-		NonBlockingTcp.__init__(self, self._on_tcp_connect, on_connect_failure,
-			server, use_srv)
-		self.DBG_LINE=DBG_CONNECT_PROXY
-		self.server = server
-		self.proxy = proxy
-		self.ipaddr = None
+	# TODO: replace DEBUG with ordinrar logging, replace on_proxy_failure() with
+	#	_on_connect_failure, at the end call _on_connect()
 
-	def plugin(self, owner):
-		''' Starts connection. Used interally. Returns non-empty string on
-		success.'''
-		owner.debug_flags.append(DBG_CONNECT_PROXY)
-		NonBlockingTcp.plugin(self, owner)
-
-	def connect(self, dupe = None):
-		''' Starts connection. Connects to proxy, supplies login and password to
-			it (if were specified while creating instance). Instructs proxy to make
-			connection to the target server. Returns non-empty sting on success.
-		'''
-		NonBlockingTcp.connect(self, (self.proxy['host'], self.proxy['port']))
-		
 	def _on_tcp_connect(self):
 		self.DEBUG('Proxy server contacted, performing authentification', 'start')
 		if self.proxy.has_key('user') and self.proxy.has_key('password'):

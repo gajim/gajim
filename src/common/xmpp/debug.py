@@ -393,6 +393,7 @@ class Debug:
 
     colors={}
     def Show(self, flag, msg, prefix=''):
+	msg=str(msg)
         msg=msg.replace('\r','\\r').replace('\n','\\n').replace('><','>\n  <')
         if not colors_enabled: pass
         elif self.colors.has_key(prefix): msg=self.colors[prefix]+msg+color_none

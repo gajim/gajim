@@ -12,7 +12,7 @@ gajim_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
 sys.path.append(gajim_root + '/src/common/xmpp')
 sys.path.append(gajim_root + '/src/common')
 
-import transports_new, debug
+import transports_nb
 from client import *
 
 xmpp_server = ('xmpp.example.org',5222)
@@ -21,60 +21,48 @@ xmpp_server = ('xmpp.example.org',5222)
 Script will connect to the machine.
 '''
 
-dns_timeout = 10
-'''
-timeout for DNS A-request (for getaddrinfo() call)
-'''
+
+import socket
+ips = socket.getaddrinfo(xmpp_server[0], xmpp_server[1], socket.AF_UNSPEC,socket.SOCK_STREAM) 
+
+# change xmpp_server on real values
+ip = ips[0]
+
 
 class MockClient(IdleMock):
-	def __init__(self, server, port):
+	def __init__(self, idlequeue):
+		self.idlequeue=idlequeue
 		self.debug_flags=['all', 'nodebuilder']
 		self._DEBUG = debug.Debug(['socket'])
 		self.DEBUG = self._DEBUG.Show
-		self.server = server
-		self.port = port
 		IdleMock.__init__(self)
-		self.tcp_connected = False
-		self.ip_addresses = []
-		self.socket = None
 
-	def do_dns_request(self):
-		transports_new.NBgetaddrinfo(
-			server=(self.server, self.port),
-			on_success=lambda *args:self.on_success('DNSrequest', *args),
-			on_failure=self.on_failure,
-			timeout_sec=dns_timeout
+	def do_connect(self):
+		self.socket=transports_nb.NonBlockingTcp(
+			on_disconnect=lambda: self.on_success(mode='SocketDisconnect')
+			)
+
+		self.socket.PlugIn(self)
+
+		self.socket.connect(
+			conn_5tuple=ip,
+			on_connect=lambda: self.on_success(mode='TCPconnect'),
+			on_connect_failure=self.on_failure
 			)
 		self.wait()
 
-
-	def try_next_ip(self, err_message=None):
-		if err_message:
-			print err_message
-		if self.ip_addresses == []:
-			self.on_failure('Run out of hosts')
-			return
-		current_ip = self.ip_addresses.pop(0)
-		self.NonBlockingTcp.connect(
-				conn_5tuple=current_ip,
-				on_tcp_connect=lambda *args: self.on_success('TCPconnect',*args),
-				on_tcp_failure=self.try_next_ip,
-				idlequeue=self.idlequeue
-				)
+	def do_disconnect(self):
+		self.socket.disconnect()
 		self.wait()
-
-		
-	def set_idlequeue(self, idlequeue):
-		self.idlequeue=idlequeue
 
 	def on_failure(self, data):
 		print 'Error: %s' % data
 		self.set_event()
 
-	def on_success(self, mode, data):
-		if   mode == "DNSrequest":
-			self.ip_addresses = data
-		elif mode == "TCPconnect":
+	def on_success(self, mode, data=None):
+		if mode == "TCPconnect":
+			pass
+		if mode == "SocketDisconnect":
 			pass
 		self.set_event()
 
@@ -87,12 +75,10 @@ class MockClient(IdleMock):
 
 class TestNonBlockingTcp(unittest.TestCase):
 	def setUp(self):
-		self.nbtcp = transports_new.NonBlockingTcp()
-		self.client = MockClient(*xmpp_server)
 		self.idlequeue_thread = IdleQueueThread()
 		self.idlequeue_thread.start()
-		self.client.set_idlequeue(self.idlequeue_thread.iq)
-		self.nbtcp.PlugIn(self.client)
+		self.client = MockClient(
+			idlequeue=self.idlequeue_thread.iq)
 
 	def tearDown(self):
 		self.idlequeue_thread.stop_thread()
@@ -100,12 +86,12 @@ class TestNonBlockingTcp(unittest.TestCase):
 		
 
 	def testSth(self):
-		self.client.do_dns_request()
-		if self.client.ip_addresses == []:
-			print 'No IP found for given hostname: %s' % self.client.server
-			return
-		else:
-			self.client.try_next_ip()
+
+		self.client.do_connect()
+		self.assert_(self.client.socket.state == 'CONNECTED')
+		self.client.do_disconnect()
+		self.assert_(self.client.socket.state == 'DISCONNECTED')
+
 
 
 		

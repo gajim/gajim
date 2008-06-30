@@ -55,6 +55,7 @@ from common.rst_xhtml_generator import create_xhtml
 from string import Template
 import logging
 log = logging.getLogger('gajim.c.connection')
+log.setLevel(logging.DEBUG)
 
 ssl_error = {
 2: _("Unable to get issuer certificate"),
@@ -207,7 +208,7 @@ class Connection(ConnectionHandlers):
 
 	def _disconnectedReconnCB(self):
 		'''Called when we are disconnected'''
-		log.debug('disconnectedReconnCB')
+		log.error('disconnectedReconnCB')
 		if gajim.account_is_connected(self.name):
 			# we cannot change our status to offline or connecting
 			# after we auth to server
@@ -467,7 +468,6 @@ class Connection(ConnectionHandlers):
 				proxy = None
 		else:
 			proxy = None
-
 		h = hostname
 		p = 5222
 		ssl_p = 5223
@@ -504,7 +504,7 @@ class Connection(ConnectionHandlers):
 		self.connect_to_next_host()
 
 	def on_proxy_failure(self, reason):
-		log.debug('Connection to proxy failed')
+		log.error('Connection to proxy failed: %s' % reason)
 		self.time_to_reconnect = None
 		self.on_connect_failure = None
 		self.disconnect(on_purpose = True)
@@ -519,23 +519,6 @@ class Connection(ConnectionHandlers):
 				self.last_connection.socket.disconnect()
 				self.last_connection = None
 				self.connection = None
-			if gajim.verbose:
-				con = common.xmpp.NonBlockingClient(self._hostname, caller = self,
-					on_connect = self.on_connect_success,
-					on_proxy_failure = self.on_proxy_failure,
-					on_connect_failure = self.connect_to_next_type)
-			else:
-				con = common.xmpp.NonBlockingClient(self._hostname, debug = [],
-					caller = self, on_connect = self.on_connect_success,
-					on_proxy_failure = self.on_proxy_failure,
-					on_connect_failure = self.connect_to_next_type)
-			self.last_connection = con
-			# increase default timeout for server responses
-			common.xmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = self.try_connecting_for_foo_secs
-			con.set_idlequeue(gajim.idlequeue)
-			# FIXME: this is a hack; need a better way
-			if self.on_connect_success == self._on_new_account:
-				con.RegisterDisconnectHandler(self._on_new_account)
 
 			if self._current_type == 'ssl':
 				port = self._current_host['ssl_port']
@@ -546,9 +529,40 @@ class Connection(ConnectionHandlers):
 					secur = 0
 				else:
 					secur = None
+
+                        if self._proxy and self._proxy['type'] == 'bosh': 
+                                clientClass = common.xmpp.BOSHClient
+                        else:
+                                clientClass = common.xmpp.NonBlockingClient
+
+			if gajim.verbose:
+				con = common.xmpp.NonBlockingClient(
+					hostname=self._current_host['host'],
+					port=port,
+                                        caller=self,
+					idlequeue=gajim.idlequeue)
+			else:
+				con = common.xmpp.NonBlockingClient(
+					hostname=self._current_host['host'],
+					debug=[],
+					port=port,
+                                        caller=self,
+					idlequeue=gajim.idlequeue)
+
+			self.last_connection = con
+			# increase default timeout for server responses
+			common.xmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = self.try_connecting_for_foo_secs
+			# FIXME: this is a hack; need a better way
+			if self.on_connect_success == self._on_new_account:
+				con.RegisterDisconnectHandler(self._on_new_account)
+			
 			log.info('Connecting to %s: [%s:%d]', self.name,
 				self._current_host['host'], port)
-			con.connect((self._current_host['host'], port), proxy=self._proxy,
+			con.connect(
+				on_connect=self.on_connect_success,
+				on_proxy_failure=self.on_proxy_failure,
+				on_connect_failure=self.connect_to_next_type,
+				proxy=self._proxy,
 				secure = secur)
 		else:
 			self.connect_to_next_host(retry)
@@ -561,6 +575,9 @@ class Connection(ConnectionHandlers):
 					'connection_types').split()
 			else:
 				self._connection_types = ['tls', 'ssl', 'plain']
+			
+			# FIXME: remove after tls and ssl will be degubbed
+			#self._connection_types = ['plain']
 			host = self.select_next_host(self._hosts)
 			self._current_host = host
 			self._hosts.remove(host)
@@ -975,7 +992,11 @@ class Connection(ConnectionHandlers):
 					p.setStatus(msg)
 				self.remove_all_transfers()
 				self.time_to_reconnect = None
-				self.connection.start_disconnect(p, self._on_disconnected)
+
+				self.connection.RegisterDisconnectHandler(self._on_disconnected)
+				self.connection.send(p)
+				self.connection.StreamTerminate()
+				#self.connection.start_disconnect(p, self._on_disconnected)
 			else:
 				self.time_to_reconnect = None
 				self._on_disconnected()
@@ -1010,7 +1031,7 @@ class Connection(ConnectionHandlers):
 	def _on_disconnected(self):
 		''' called when a disconnect request has completed successfully'''
 		self.dispatch('STATUS', 'offline')
-		self.disconnect()
+		self.disconnect(on_purpose=True)
 
 	def get_status(self):
 		return STATUS_LIST[self.connected]

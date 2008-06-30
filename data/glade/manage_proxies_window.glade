@@ -211,7 +211,8 @@
 			    <widget class="GtkComboBox" id="proxytype_combobox">
 			      <property name="visible">True</property>
 			      <property name="items" translatable="yes">HTTP Connect
-SOCKS5</property>
+SOCKS5
+BOSH</property>
 			      <property name="add_tearoffs">False</property>
 			      <property name="focus_on_click">True</property>
 			      <signal name="changed" handler="on_proxytype_combobox_changed" last_modification_time="Wed, 08 Jun 2005 17:45:26 GMT"/>
