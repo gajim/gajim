@@ -61,6 +61,8 @@ if dbus_support.supported:
 	import dbus
 from lastfm_track_listener import LastFMTrackListener
 
+from common.xmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC
+
 try:
 	from osx import syncmenu
 except ImportError:
@@ -4882,10 +4884,12 @@ class RosterWindow:
 				start_chat_menuitem.connect('activate',
 					self.on_roster_treeview_row_activated, tree_path)
 
-			if contact.resource:
+			if contact.resource and NS_FILE in gajim.capscache[
+			(contact.caps_hash_method, contact.caps_hash)].features:
+				send_file_menuitem.set_sensitive(True)
 				send_file_menuitem.connect('activate',
 					self.on_send_file_menuitem_activate, contact, account)
-			else: # if we do no have resource we cannot do much
+			else:
 				send_file_menuitem.set_sensitive(False)
 
 			rename_menuitem.connect('activate', self.on_rename, titer, tree_path)
@@ -5035,15 +5039,22 @@ class RosterWindow:
 			start_chat_menuitem.set_submenu(self.build_resources_submenu(contacts,
 				account, gajim.interface.on_open_chat_window))
 			send_file_menuitem.set_submenu(self.build_resources_submenu(contacts,
-				account, self.on_send_file_menuitem_activate))
+				account, self.on_send_file_menuitem_activate,
+				cap=NS_FILE))
 			execute_command_menuitem.set_submenu(self.build_resources_submenu(
-				contacts, account, self.on_execute_command))
+				contacts, account, self.on_execute_command,
+				cap=NS_COMMANDS))
 
 		else: # one resource
 			start_chat_menuitem.connect('activate',
 				gajim.interface.on_open_chat_window, contact, account)
-			execute_command_menuitem.connect('activate', self.on_execute_command,
-				contact, account, contact.resource)
+			if contact.resource and NS_FILE in gajim.capscache[
+			(contact.caps_hash_method, contact.caps_hash)].features:
+				execute_command_menuitem.set_sensitive(True)
+				execute_command_menuitem.connect('activate', self.on_execute_command,
+					contact, account, contact.resource)
+			else:
+				execute_command_menuitem.set_sensitive(False)
 
 			our_jid_other_resource = None
 			if our_jid:
@@ -5051,10 +5062,12 @@ class RosterWindow:
 				our_jid_other_resource = contact.resource
 			# Else this var is useless but harmless in next connect calls
 
-			if contact.resource:
+			if contact.resource and NS_FILE in gajim.capscache[
+			(contact.caps_hash_method, contact.caps_hash)].features:
+				send_file_menuitem.set_sensitive(True)
 				send_file_menuitem.connect('activate',
 					self.on_send_file_menuitem_activate, contact, account)
-			else: # if we do not have resource we cannot send file
+			else:
 				send_file_menuitem.set_sensitive(False)
 
 		send_single_message_menuitem.connect('activate',
@@ -5442,7 +5455,7 @@ class RosterWindow:
 		menu.popup(None, None, None, event_button, event.time)
 
 	def build_resources_submenu(self, contacts, account, action, room_jid=None,
-	room_account=None):
+	room_account=None, cap=None):
 		''' Build a submenu with contact's resources.
 		room_jid and room_account are for action self.on_invite_to_room '''
 		sub_menu = gtk.Menu()
@@ -5466,6 +5479,9 @@ class RosterWindow:
 				item.connect('activate', action, [(c, account)], c.resource)
 			else: # start_chat, execute_command, send_file
 				item.connect('activate', action, c, account, c.resource)
+			if cap and cap not in gajim.capscache[
+			(c.caps_hash_method, c.caps_hash)].features:
+				item.set_sensitive(False)
 		return sub_menu
 
 	def build_invite_submenu(self, invite_menuitem, list_):
@@ -5498,10 +5514,15 @@ class RosterWindow:
 		invite_to_new_room_menuitem.set_image(icon)
 		if len(contact_list) > 1: # several resources
 			invite_to_new_room_menuitem.set_submenu(self.build_resources_submenu(
-				contact_list, account, self.on_invite_to_new_room))
+				contact_list, account, self.on_invite_to_new_room, cap=NS_MUC))
 		else:
-			invite_to_new_room_menuitem.connect('activate',
-				self.on_invite_to_new_room, list_)
+			if NS_MUC in gajim.capscache[(contact.caps_hash_method,
+			contact.caps_hash)].features:
+				invite_menuitem.set_sensitive(True)
+				invite_to_new_room_menuitem.connect('activate',
+					self.on_invite_to_new_room, list_)
+			else:
+				invite_menuitem.set_sensitive(False)
 		# transform None in 'jabber'
 		c_t = contacts_transport or 'jabber'
 		muc_jid = {}

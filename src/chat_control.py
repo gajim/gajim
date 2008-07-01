@@ -45,7 +45,7 @@ from common.contacts import GC_Contact
 from common.logger import Constants
 constants = Constants()
 from common.rst_xhtml_generator import create_xhtml
-from common.xmpp.protocol import NS_XHTML
+from common.xmpp.protocol import NS_XHTML, NS_FILE, NS_MUC
 
 try:
 	import gtkspell
@@ -1074,17 +1074,17 @@ class ChatControl(ChatControlBase):
 
 		# If we don't have resource, we can't do file transfer
 		# in transports, contact holds our info we need to disable it too
-		if self.TYPE_ID == message_control.TYPE_PM and self.gc_contact.jid and \
-		self.gc_contact.resource:
-			send_file_button.set_sensitive(True)
-		elif contact.resource and contact.jid.find('@') != -1:
+		if NS_FILE in gajim.capscache[(contact.caps_hash_method,
+		contact.caps_hash)].features:
 			send_file_button.set_sensitive(True)
 		else:
 			send_file_button.set_sensitive(False)
 
 		# check if it's possible to convert to groupchat
-		if gajim.get_transport_name_from_jid(self.contact.jid) or \
-		gajim.connections[self.account].is_zeroconf:
+		if NS_MUC in gajim.capscache[(contact.caps_hash_method,
+		contact.caps_hash)].features:
+			convert_to_gc_button.set_sensitive(True)
+		else:
 			convert_to_gc_button.set_sensitive(False)
 
 		# keep timeout id and window obj for possible big avatar
@@ -1821,17 +1821,17 @@ class ChatControl(ChatControlBase):
 
 		# If we don't have resource, we can't do file transfer
 		# in transports, contact holds our info we need to disable it too
-		if self.TYPE_ID == message_control.TYPE_PM and self.gc_contact.jid and \
-		self.gc_contact.resource:
-			send_file_menuitem.set_sensitive(True)
-		elif contact.resource and contact.jid.find('@') != -1:
+		if NS_FILE in gajim.capscache[(contact.caps_hash_method,
+		contact.caps_hash)].features:
 			send_file_menuitem.set_sensitive(True)
 		else:
 			send_file_menuitem.set_sensitive(False)
 
 		# check if it's possible to convert to groupchat
-		if gajim.get_transport_name_from_jid(jid) or \
-		gajim.connections[self.account].is_zeroconf:
+		if NS_MUC in gajim.capscache[(contact.caps_hash_method,
+		contact.caps_hash)].features:
+			convert_to_gc_menuitem.set_sensitive(True)
+		else:
 			convert_to_gc_menuitem.set_sensitive(False)
 
 		# connect signals
