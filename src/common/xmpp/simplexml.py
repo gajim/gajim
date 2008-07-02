@@ -18,6 +18,9 @@
 I'm personally using it in many other separate projects. It is designed to be as standalone as possible."""
 
 import xml.parsers.expat
+import logging
+log = logging.getLogger('gajim.c.x.simplexml')
+
 
 def XMLescape(txt):
 	"""Returns provided string with symbols & < > " replaced by their respective XML entities."""
@@ -279,7 +282,6 @@ class NT(T):
 		if isinstance(val,Node): self.node.addChild(attr,node=val)
 		else: return self.node.addChild(attr,payload=[val])
 
-DBG_NODEBUILDER = 'nodebuilder'
 class NodeBuilder:
 	""" Builds a Node class minidom from data parsed to it. This class used for two purposes:
 		1. Creation an XML Node from a textual representation. F.e. reading a config file. See an XML2Node method.
@@ -293,7 +295,7 @@ class NodeBuilder:
 			You can think about it as of "node upgrade".
 			"data" (if provided) feeded to parser immidiatedly after instance init.
 			"""
-		self.DEBUG(DBG_NODEBUILDER, "Preparing to handle incoming XML stream.", 'start')
+		log.debug("Preparing to handle incoming XML stream.")
 		self._parser = xml.parsers.expat.ParserCreate(namespace_separator=' ')
 		self._parser.StartElementHandler       = self.starttag
 		self._parser.EndElementHandler         = self.endtag
@@ -341,7 +343,7 @@ class NodeBuilder:
 			attrs[self.namespaces[ns]+attr[sp+1:]]=attrs[attr]
 			del attrs[attr]        #
 		self._inc_depth()
-		self.DEBUG(DBG_NODEBUILDER, "DEPTH -> %i , tag -> %s, attrs -> %s" % (self.__depth, tag, `attrs`), 'down')
+		log.info("DEPTH -> %i , tag -> %s, attrs -> %s" % (self.__depth, tag, `attrs`))
 		if self.__depth == self._dispatch_depth:
 			if not self._mini_dom : 
 				self._mini_dom = Node(tag=tag, attrs=attrs)
@@ -360,14 +362,14 @@ class NodeBuilder:
 		self.last_is_data = 0
 	def endtag(self, tag ):
 		"""XML Parser callback. Used internally"""
-		self.DEBUG(DBG_NODEBUILDER, "DEPTH -> %i , tag -> %s" % (self.__depth, tag), 'up')
+		log.info("DEPTH -> %i , tag -> %s" % (self.__depth, tag))
 		self.check_data_buffer()
 		if self.__depth == self._dispatch_depth:
 			self.dispatch(self._mini_dom)
 		elif self.__depth > self._dispatch_depth:
 			self._ptr = self._ptr.parent
 		else:
-			self.DEBUG(DBG_NODEBUILDER, "Got higher than dispatch level. Stream terminated?", 'stop')
+			log.info("Got higher than dispatch level. Stream terminated?")
 		self._dec_depth()
 		self.last_is_data = 0
 		if self.__depth == 0: self.stream_footer_received()
@@ -385,8 +387,7 @@ class NodeBuilder:
 		self.check_data_buffer()
 		if prefix: self.namespaces[uri]=prefix+':'
 		else: self.xmlns=uri
-	def DEBUG(self, level, text, comment=None):
-		""" Gets all NodeBuilder walking events. Can be used for debugging if redefined."""
+
 	def getDom(self):
 		""" Returns just built Node. """
 		self.check_data_buffer()

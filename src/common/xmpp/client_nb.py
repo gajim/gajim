@@ -22,8 +22,6 @@ These classes can be used for simple applications "AS IS" though.
 '''
 
 import socket
-import debug
-import random
 
 import transports_nb, tls_nb, dispatcher_nb, auth_nb, roster_nb, protocol
 from client import *
@@ -31,54 +29,29 @@ from client import *
 import logging
 log = logging.getLogger('gajim.c.x.client_nb')
 
-consoleloghandler = logging.StreamHandler()
-consoleloghandler.setLevel(logging.DEBUG)
-consoleloghandler.setFormatter(
-	logging.Formatter('%(levelname)s: %(message)s')
-)
-log.setLevel(logging.DEBUG)
-log.addHandler(consoleloghandler)
-log.propagate = False
-
 
 class NBCommonClient:
 	''' Base for Client and Component classes.'''
-	def __init__(self, hostname, idlequeue, port=5222, debug=['always', 'nodebuilder'], caller=None):
+	def __init__(self, domain, idlequeue, caller=None):
 		
 		''' Caches connection data:
-		:param hostname: hostname of machine where the XMPP server is running (from Account
-			of from SRV request) and port to connect to.
+		:param domain: domain - for to: attribute (from account info)
 		:param idlequeue: processing idlequeue
 		:param port: port of listening XMPP server
-		:param debug: specifies	the debug IDs that will go into debug output. You can either
-			specifiy an "include" or "exclude" list. The latter is done via adding "always" 
-			pseudo-ID to the list. Full list: ['nodebuilder', 'dispatcher', 'gen_auth', 
-			'SASL_auth', 'bind', 'socket', 'CONNECTproxy', 'TLS', 'roster', 'browser', 'ibb'].
-			TODO: get rid of debug.py using
 		:param caller: calling object - it has to implement certain methods (necessary?)
 			
 		'''
 		
-		self.DBG = DBG_CLIENT
-
 		self.Namespace = protocol.NS_CLIENT
 
 		self.idlequeue = idlequeue
 		self.defaultNamespace = self.Namespace
 		self.disconnect_handlers = []
 
-		# XMPP server and port from account or SRV
-		self.Server = hostname
-		self.Port = port
+		self.Server = domain
 		
 		# caller is who initiated this client, it is sed to register the EventDispatcher
 		self._caller = caller
-		if debug and type(debug) != list: 
-			debug = ['always', 'nodebuilder']
-		self._DEBUG = Debug.Debug(debug)
-		self.DEBUG = self._DEBUG.Show
-		self.debug_flags = self._DEBUG.debug_flags
-		self.debug_flags.append(self.DBG)
 		self._owner = self
 		self._registered_name = None
 		self.connected = ''
@@ -98,9 +71,9 @@ class NBCommonClient:
 		'''
 		
 		self.connected=''
-		self.DEBUG(self.DBG,'Disconnect detected','stop')
+		log.debug('Client disconnected..')
 		for i in reversed(self.disconnect_handlers):
-			self.DEBUG(self.DBG, 'Calling disc handler %s' % i, 'stop')
+			log.debug('Calling disconnect handler %s' % i)
 			i()
 		if self.__dict__.has_key('NonBlockingRoster'):
 			self.NonBlockingRoster.PlugOut()
@@ -120,23 +93,22 @@ class NBCommonClient:
 			self.NonBlockingTcp.PlugOut()
 		
 
-	def send(self, stanza, is_message = False, now = False):
+	def send(self, stanza, now = False):
 		''' interface for putting stanzas on wire. Puts ID to stanza if needed and
 		sends it via socket wrapper'''
 		(id, stanza_to_send) = self.Dispatcher.assign_id(stanza)
 
-		if is_message:
-			# somehow zeroconf-specific
-			self.Connection.send(stanza_to_send, True, now = now)
-		else:
-			self.Connection.send(stanza_to_send, now = now)
+		self.Connection.send(stanza_to_send, now = now)
 		return id
 
 
 
-	def connect(self, on_connect, on_connect_failure, on_proxy_failure=None, proxy=None, secure=None):
+	def connect(self, on_connect, on_connect_failure, hostname=None, port=5222, 
+		on_proxy_failure=None, proxy=None, secure=None):
 		''' 
 		Open XMPP connection (open streams in both directions).
+		:param hostname: hostname of XMPP server from SRV request 
+		:param port: port number of XMPP server
 		:param on_connect: called after stream is successfully opened
 		:param on_connect_failure: called when error occures during connection
 		:param on_proxy_failure: called if error occurres during TCP connection to
@@ -146,7 +118,12 @@ class NBCommonClient:
 			optionally keys 'user' and 'pass' as proxy credentials
 		:param secure:
 		'''
-		
+		self.Port = port
+		if hostname:
+			xmpp_hostname = hostname
+		else:
+			xmpp_hostname = self.Server
+
 		self.on_connect = on_connect
 		self.on_connect_failure=on_connect_failure
 		self.on_proxy_failure = on_proxy_failure
@@ -155,8 +132,8 @@ class NBCommonClient:
 
 		if proxy:
 			# with proxies, client connects to proxy instead of directly to
-			# XMPP server from __init__. 
-			# tcp_server is hostname used for socket connecting
+			# XMPP server ((hostname, port))
+			# tcp_server is machine used for socket connection
 			tcp_server=proxy['host']			
 			tcp_port=proxy['port']
 			self._on_tcp_failure = self.on_proxy_failure
@@ -168,30 +145,33 @@ class NBCommonClient:
 											
 				type_ = proxy['type']
 				if type_ == 'socks5':
+					# SOCKS5 proxy
 					self.socket = transports_nb.NBSOCKS5ProxySocket(
 						on_disconnect=self.on_disconnect,
 						proxy_creds=proxy_creds,
-						xmpp_server=(self.Server, self.Port))
+						xmpp_server=(xmpp_hostname, self.Port))
 				elif type_ == 'http':
+					# HTTP CONNECT to proxy
 					self.socket = transports_nb.NBHTTPProxySocket(
 						on_disconnect=self.on_disconnect,
 						proxy_creds=proxy_creds,
-						xmpp_server=(self.Server, self.Port))
+						xmpp_server=(xmpp_hostname, self.Port))
 				elif type_ == 'bosh':
+					# BOSH - XMPP over HTTP
 					tcp_server = transports_nb.urisplit(tcp_server)[1]
-					self.socket = transports_nb.NonBlockingHttpBOSH(
+					self.socket = transports_nb.NonBlockingHTTP(
 						on_disconnect=self.on_disconnect,
-						bosh_uri = proxy['host'],
-						bosh_port = tcp_port)
+						http_uri = proxy['host'],
+						http_port = tcp_port)
 			else:
 				# HTTP CONNECT to proxy from environment variables
 				self.socket = transports_nb.NBHTTPProxySocket(
 					on_disconnect=self.on_disconnect,
 					proxy_creds=(None, None),
-					xmpp_server=(self.Server, self.Port))
+					xmpp_server=(xmpp_hostname, self.Port))
 		else: 
 			self._on_tcp_failure = self._on_connect_failure
-			tcp_server=self.Server
+			tcp_server=xmpp_hostname
 			tcp_port=self.Port
 			self.socket = transports_nb.NonBlockingTcp(on_disconnect = self.on_disconnect)
 
@@ -221,7 +201,7 @@ class NBCommonClient:
 	def _try_next_ip(self, err_message=None):
 		'''iterates over IP addresses from getaddinfo'''
 		if err_message:
-			self.DEBUG(self.DBG,err_message,'connect')
+			log.debug('While looping over DNS A records: %s' % connect)
 		if self.ip_addresses == []:
 			self._on_tcp_failure(err_message='Run out of hosts for name %s:%s' % 
 				(self.Server, self.Port))
@@ -305,7 +285,7 @@ class NBCommonClient:
 	def _on_connect_failure(self, retry=None, err_message=None): 
 		self.connected = None
 		if err_message:
-			self.DEBUG(self.DBG, err_message, 'connecting')
+			log.debug('While connecting: %s' % err_message)
 		if self.socket:
 			self.socket.disconnect()
 		self.on_connect_failure(retry)
@@ -460,83 +440,3 @@ class NonBlockingClient(NBCommonClient):
 		self.send(dispatcher_nb.Presence(to=jid, typ=typ))
 
 
-class BOSHClient(NBCommonClient):
-	'''
-	Client class implementing BOSH. 
-	'''
-	def __init__(self, *args, **kw):
-		'''Preceeds constructor of NBCommonClient and sets some of values that will
-		be used as attributes in <body> tag'''
-		self.Namespace = NS_HTTP_BIND
-		# BOSH parameters should be given via Advanced Configuration Editor
-		self.bosh_hold = 1
-		self.bosh_wait=60
-		self.bosh_rid=-1
-		self.bosh_httpversion = 'HTTP/1.1'
-		NBCommonClient.__init__(self, *args, **kw)
-
-
-	def connect(self, *args, **kw):
-		proxy = kw['proxy']
-		self.bosh_protocol, self.bosh_host, self.bosh_uri = self.urisplit(proxy['host'])
-		self.bosh_port = proxy['port']
-		NBCommonClient.connect(*args, **kw)
-		
-
-	def _on_stream_start(self):
-		'''
-		Called after XMPP stream is opened. In BOSH TLS is negotiated on tranport layer
-		so success callback can be invoked.
-		(authentication is started from auth() method)
-		'''
-		self.onreceive(None)
-		if self.connected == 'tcp':
-			self._on_connect()
-
-
-
-
-
-	def bosh_raise_event(self, realm, event, data):
-		# should to extract stanza from body
-		self.DEBUG(self.DBG,'realm: %s, event: %s, data: %s' % (realm, event, data),
-			'BOSH EventHandler')
-		self._caller._event_dispatcher(realm, event, data)
-
-
-	def StreamInit(self):
-		'''
-		Init of BOSH session. Called instead of Dispatcher.StreamInit()
-		Initial body tag is created and sent.
-		'''
-		#self.Dispatcher.RegisterEventHandler(self.bosh_event_handler)
-		self.Dispatcher.Stream = simplexml.NodeBuilder()
-		self.Dispatcher.Stream._dispatch_depth = 2
-		self.Dispatcher.Stream.dispatch = self.Dispatcher.dispatch
-		self.Dispatcher.Stream.stream_header_received = self._check_stream_start
-		self.Dispatcher.Stream.features = None
-
-		r = random.Random()
-		r.seed()
-		# with 50-bit random initial rid, session would have to go up
-		# to 7881299347898368 messages to raise rid over 2**53 
-		# (see http://www.xmpp.org/extensions/xep-0124.html#rids)
-		self.bosh_rid = r.getrandbits(50)
-
-		initial_body_tag = BOSHBody(
-			attrs={'content': 'text/xml; charset=utf-8',
-				'hold': str(self.bosh_hold),
-				# "to" should be domain, not hostname of machine
-				'to': self.Server,
-				'wait': str(self.bosh_wait),
-				'rid': str(self.bosh_rid),
-				'xmpp:version': '1.0',
-				'xmlns:xmpp': 'urn:xmpp:xbosh'}
-			)
-
-		if locale.getdefaultlocale()[0]:
-			initial_body_tag.setAttr('xml:lang',
-				locale.getdefaultlocale()[0].split('_')[0])
-		initial_body_tag.setAttr('xmpp:version', '1.0')
-		initial_body_tag.setAttr('xmlns:xmpp', 'urn:xmpp:xbosh')
-		self.send(initial_body_tag)

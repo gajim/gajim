@@ -208,7 +208,7 @@ class Connection(ConnectionHandlers):
 
 	def _disconnectedReconnCB(self):
 		'''Called when we are disconnected'''
-		log.error('disconnectedReconnCB')
+		log.info('disconnectedReconnCB called')
 		if gajim.account_is_connected(self.name):
 			# we cannot change our status to offline or connecting
 			# after we auth to server
@@ -531,23 +531,17 @@ class Connection(ConnectionHandlers):
 					secur = None
 
                         if self._proxy and self._proxy['type'] == 'bosh': 
-                                clientClass = common.xmpp.BOSHClient
+                                clientClass = common.xmpp.bosh.BOSHClient
                         else:
                                 clientClass = common.xmpp.NonBlockingClient
 
-			if gajim.verbose:
-				con = common.xmpp.NonBlockingClient(
-					hostname=self._current_host['host'],
-					port=port,
-                                        caller=self,
-					idlequeue=gajim.idlequeue)
-			else:
-				con = common.xmpp.NonBlockingClient(
-					hostname=self._current_host['host'],
-					debug=[],
-					port=port,
-                                        caller=self,
-					idlequeue=gajim.idlequeue)
+			# there was:
+			# "if gajim.verbose:"
+			# here
+			con = clientClass(
+				domain=self._hostname,
+				caller=self,
+				idlequeue=gajim.idlequeue)
 
 			self.last_connection = con
 			# increase default timeout for server responses
@@ -555,10 +549,19 @@ class Connection(ConnectionHandlers):
 			# FIXME: this is a hack; need a better way
 			if self.on_connect_success == self._on_new_account:
 				con.RegisterDisconnectHandler(self._on_new_account)
+
+			# FIXME: BOSH properties should be in proxy dictionary - loaded from
+			# config
+                        if self._proxy and self._proxy['type'] == 'bosh': 
+				self._proxy['bosh_hold'] = '1'
+				self._proxy['bosh_wait'] = '60'
+
 			
 			log.info('Connecting to %s: [%s:%d]', self.name,
 				self._current_host['host'], port)
 			con.connect(
+				hostname=self._current_host['host'],
+				port=port,
 				on_connect=self.on_connect_success,
 				on_proxy_failure=self.on_proxy_failure,
 				on_connect_failure=self.connect_to_next_type,

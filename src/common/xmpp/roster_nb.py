@@ -24,6 +24,10 @@ mass-renaming of contacts.
 from protocol import *
 from client import PlugIn
 
+import logging
+log = logging.getLogger('gajim.c.x.roster_nb')
+
+
 class NonBlockingRoster(PlugIn):
 	""" Defines a plenty of methods that will allow you to manage roster.
 		Also automatically track presences from remote JIDs taking into 
@@ -35,7 +39,6 @@ class NonBlockingRoster(PlugIn):
 	def __init__(self):
 		""" Init internal variables. """
 		PlugIn.__init__(self)
-		self.DBG_LINE='roster'
 		self._data = {}
 		self.set=None
 		self._exported_methods=[self.getRoster]
@@ -46,7 +49,7 @@ class NonBlockingRoster(PlugIn):
 		if self.set is None: self.set=0
 		elif not force: return
 		self._owner.send(Iq('get',NS_ROSTER))
-		self.DEBUG('Roster requested from server','start')
+		log.info('Roster requested from server')
 
 	def RosterIqHandler(self,dis,stanza):
 		""" Subscription tracker. Used internally for setting items state in
@@ -60,7 +63,7 @@ class NonBlockingRoster(PlugIn):
 			if item.getAttr('subscription')=='remove':
 				if self._data.has_key(jid): del self._data[jid]
 				return
-			self.DEBUG('Setting roster item %s...'%jid,'ok')
+			log.info('Setting roster item %s...' % jid)
 			if not self._data.has_key(jid): self._data[jid]={}
 			self._data[jid]['name']=item.getAttr('name')
 			self._data[jid]['ask']=item.getAttr('ask')
@@ -86,7 +89,7 @@ class NonBlockingRoster(PlugIn):
 		typ=pres.getType()
 
 		if not typ:
-			self.DEBUG('Setting roster item %s for resource %s...'%(jid.getStripped(),jid.getResource()),'ok')
+			log.info('Setting roster item %s for resource %s...'%(jid.getStripped(),jid.getResource()))
 			item['resources'][jid.getResource()]=res={'show':None,'status':None,'priority':'0','timestamp':None}
 			if pres.getTag('show'): res['show']=pres.getShow()
 			if pres.getTag('status'): res['status']=pres.getStatus()

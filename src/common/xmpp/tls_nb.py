@@ -26,16 +26,8 @@ import time
 import traceback
 
 import logging
-
 log = logging.getLogger('gajim.c.x.tls_nb')
-consoleloghandler = logging.StreamHandler()
-consoleloghandler.setLevel(logging.DEBUG)
-consoleloghandler.setFormatter(
-	logging.Formatter('%(levelname)s: %(message)s')
-)
-log.setLevel(logging.DEBUG)
-log.addHandler(consoleloghandler)
-log.propagate = False
+
 # I don't need to load gajim.py just because of few TLS variables, so I changed
 # %s/common\.gajim\.DATA_DIR/\'\.\.\/data\'/c
 # %s/common\.gajim\.MY_CACERTS/\'\%s\/\.gajim\/cacerts\.pem\' \% os\.environ\[\'HOME\'\]/c
@@ -48,6 +40,11 @@ log.propagate = False
 # import common.gajim
 
 USE_PYOPENSSL = False
+
+
+#TODO: add callback set from PlugIn for errors during runtime
+#      - sth like on_disconnect in socket wrappers
+
 
 try:
 	#raise ImportError("Manually disabled PyOpenSSL")
@@ -164,8 +161,8 @@ class PyOpenSSLWrapper(SSLWrapper):
 			if flags is None: retval = self.sslobj.recv(bufsize)
 			else:		  retval = self.sslobj.recv(bufsize, flags)
 		except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError), e:
+			log.debug("Recv: Want-error: " + repr(e))
 			pass
-			# log.debug("Recv: " + repr(e))
 		except OpenSSL.SSL.SysCallError, e:
 			log.debug("Recv: Got OpenSSL.SSL.SysCallError: " + repr(e), exc_info=True)
 			#traceback.print_exc()
@@ -253,7 +250,6 @@ class NonBlockingTLS(PlugIn):
 		if owner.__dict__.has_key('NonBlockingTLS'): 
 			return  # Already enabled.
 		PlugIn.PlugIn(self, owner)
-		DBG_LINE='NonBlockingTLS'
 		self.on_tls_success = on_tls_success
 		self.on_tls_faliure = on_tls_failure
 		if now:
@@ -288,10 +284,10 @@ class NonBlockingTLS(PlugIn):
 		''' Used to analyse server <features/> tag for TLS support.
 			If TLS is supported starts the encryption negotiation. Used internally '''
 		if not feats.getTag('starttls', namespace=NS_TLS):
-			self.DEBUG("TLS unsupported by remote server.", 'warn')
+			log.warn("TLS unsupported by remote server.")
 			self.on_tls_failure("TLS unsupported by remote server.")
 			return
-		self.DEBUG("TLS supported by remote server. Requesting TLS start.", 'ok')
+		log.debug("TLS supported by remote server. Requesting TLS start.")
 		self._owner.RegisterHandlerOnce('proceed', self.StartTLSHandler, xmlns=NS_TLS)
 		self._owner.RegisterHandlerOnce('failure', self.StartTLSHandler, xmlns=NS_TLS)
 		self._owner.send('<starttls xmlns="%s"/>' % NS_TLS)
@@ -425,7 +421,7 @@ class NonBlockingTLS(PlugIn):
 		if self.starttls == 'failure':
 			self.on_tls_failure('TLS <failure>  received: %s' % self.starttls)
 			return
-		self.DEBUG('Got starttls proceed response. Switching to TLS/SSL...','ok')
+		log.debug('Got starttls proceed response. Switching to TLS/SSL...')
 		try:
 			self._startSSL()
 		except Exception, e:
