@@ -5048,7 +5048,7 @@ class RosterWindow:
 		else: # one resource
 			start_chat_menuitem.connect('activate',
 				gajim.interface.on_open_chat_window, contact, account)
-			if contact.resource and NS_FILE in gajim.capscache[
+			if contact.resource and NS_COMMANDS in gajim.capscache[
 			(contact.caps_hash_method, contact.caps_hash)].features:
 				execute_command_menuitem.set_sensitive(True)
 				execute_command_menuitem.connect('activate', self.on_execute_command,
