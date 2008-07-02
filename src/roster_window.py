@@ -2475,7 +2475,7 @@ class RosterWindow:
 					show = gajim.SHOW_LIST[gajim.connections[account].connected]
 				else:	# accounts merged
 					show = helpers.get_global_show()
-				if gajim.SHOW_LIST[show] == 'invisible':
+				if show == 'invisible':
 					# Don't send our presence if we're invisible
 					continue
 				if account not in accounts:
