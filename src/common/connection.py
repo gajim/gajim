@@ -1135,7 +1135,7 @@ class Connection(ConnectionHandlers):
 		# XEP-0184
 		if msgtxt and gajim.config.get_per('accounts', self.name,
 		'request_receipt') and gajim.capscache.is_supported(contact,
-		common.xmpp.NS_RECEIPTS:
+		common.xmpp.NS_RECEIPTS):
 			msg_iq.setTag('request',
 				namespace=common.xmpp.NS_RECEIPTS)
 
