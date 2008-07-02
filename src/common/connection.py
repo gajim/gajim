@@ -1101,6 +1101,16 @@ class Connection(ConnectionHandlers):
 			msg_iq.setTag('nick', namespace = common.xmpp.NS_NICK).setData(
 				user_nick)
 
+		# TODO: We might want to write a function so we don't need to
+		#	reproduce that ugly if somewhere else.
+		if resource:
+			contact = gajim.contacts.get_contact(self.name, jid,
+				resource)
+		else:
+			contact = gajim.contacts. \
+				get_contact_with_highest_priority(self.name,
+				jid)
+
 		# chatstates - if peer supports xep85 or xep22, send chatstates
 		# please note that the only valid tag inside a message containing a <body>
 		# tag is the active event
@@ -1123,17 +1133,9 @@ class Connection(ConnectionHandlers):
 				'jid': forward_from})
 
 		# XEP-0184
-		if resource:
-			contact = gajim.contacts.get_contact(self.name, jid,
-				resource)
-		else:
-			contact = gajim.contacts. \
-				get_contact_with_highest_priority(self.name,
-				jid)
 		if msgtxt and gajim.config.get_per('accounts', self.name,
-		'request_receipt') and common.xmpp.NS_RECEIPTS in \
-		gajim.capscache[(contact.caps_hash_method,
-		contact.caps_hash)].features:
+		'request_receipt') and gajim.capscache.is_supported(contact,
+		common.xmpp.NS_RECEIPTS:
 			msg_iq.setTag('request',
 				namespace=common.xmpp.NS_RECEIPTS)
 
