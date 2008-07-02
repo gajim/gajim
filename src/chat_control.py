@@ -1074,15 +1074,13 @@ class ChatControl(ChatControlBase):
 
 		# If we don't have resource, we can't do file transfer
 		# in transports, contact holds our info we need to disable it too
-		if NS_FILE in gajim.capscache[(contact.caps_hash_method,
-		contact.caps_hash)].features:
+		if gajim.capscache.is_supported(contact, NS_FILE):
 			send_file_button.set_sensitive(True)
 		else:
 			send_file_button.set_sensitive(False)
 
 		# check if it's possible to convert to groupchat
-		if NS_MUC in gajim.capscache[(contact.caps_hash_method,
-		contact.caps_hash)].features:
+		if gajim.capscache.is_supported(contact, NS_MUC):
 			convert_to_gc_button.set_sensitive(True)
 		else:
 			convert_to_gc_button.set_sensitive(False)
@@ -1821,15 +1819,13 @@ class ChatControl(ChatControlBase):
 
 		# If we don't have resource, we can't do file transfer
 		# in transports, contact holds our info we need to disable it too
-		if NS_FILE in gajim.capscache[(contact.caps_hash_method,
-		contact.caps_hash)].features:
+		if gajim.capscache.is_supported(contact, NS_FILE):
 			send_file_menuitem.set_sensitive(True)
 		else:
 			send_file_menuitem.set_sensitive(False)
 
 		# check if it's possible to convert to groupchat
-		if NS_MUC in gajim.capscache[(contact.caps_hash_method,
-		contact.caps_hash)].features:
+		if gajim.capscache.is_supported(contact, NS_MUC):
 			convert_to_gc_menuitem.set_sensitive(True)
 		else:
 			convert_to_gc_menuitem.set_sensitive(False)

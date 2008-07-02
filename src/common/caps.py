@@ -178,6 +178,21 @@ class CapsCache(object):
 			# this will create proper object
 			q.queried=1
 			con.discoverInfo(jid, '%s#%s' % (node, hash))
+	
+	def is_supported(self, contact, feature):
+		if not contact.resource:
+			return False
+
+		# FIXME: We assume everything is supported if we got no caps.
+		#	 This is the "Asterix way", after 0.12 release, I will
+		#	 likely implement a fallback to disco (could be disabled
+		#	 for mobile users who pay for traffic)
+		features = self[(contact.caps_hash_method,
+			contact.caps_hash)].features
+		if feature in features or features == []:
+			return True
+
+		return False
 
 gajim.capscache = CapsCache(gajim.logger)
 

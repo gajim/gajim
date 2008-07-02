@@ -4884,8 +4884,7 @@ class RosterWindow:
 				start_chat_menuitem.connect('activate',
 					self.on_roster_treeview_row_activated, tree_path)
 
-			if contact.resource and NS_FILE in gajim.capscache[
-			(contact.caps_hash_method, contact.caps_hash)].features:
+			if gajim.capscache.is_supported(contact, NS_FILE):
 				send_file_menuitem.set_sensitive(True)
 				send_file_menuitem.connect('activate',
 					self.on_send_file_menuitem_activate, contact, account)
@@ -5048,8 +5047,7 @@ class RosterWindow:
 		else: # one resource
 			start_chat_menuitem.connect('activate',
 				gajim.interface.on_open_chat_window, contact, account)
-			if contact.resource and NS_COMMANDS in gajim.capscache[
-			(contact.caps_hash_method, contact.caps_hash)].features:
+			if gajim.capscache.is_supported(contact, NS_COMMANDS):
 				execute_command_menuitem.set_sensitive(True)
 				execute_command_menuitem.connect('activate', self.on_execute_command,
 					contact, account, contact.resource)
@@ -5062,8 +5060,7 @@ class RosterWindow:
 				our_jid_other_resource = contact.resource
 			# Else this var is useless but harmless in next connect calls
 
-			if contact.resource and NS_FILE in gajim.capscache[
-			(contact.caps_hash_method, contact.caps_hash)].features:
+			if gajim.capscache.is_supported(contact, NS_FILE):
 				send_file_menuitem.set_sensitive(True)
 				send_file_menuitem.connect('activate',
 					self.on_send_file_menuitem_activate, contact, account)
@@ -5479,8 +5476,8 @@ class RosterWindow:
 				item.connect('activate', action, [(c, account)], c.resource)
 			else: # start_chat, execute_command, send_file
 				item.connect('activate', action, c, account, c.resource)
-			if cap and cap not in gajim.capscache[
-			(c.caps_hash_method, c.caps_hash)].features:
+			if cap and \
+			not gajim.capscache.is_supported(c, cap):
 				item.set_sensitive(False)
 		return sub_menu
 
@@ -5516,8 +5513,7 @@ class RosterWindow:
 			invite_to_new_room_menuitem.set_submenu(self.build_resources_submenu(
 				contact_list, account, self.on_invite_to_new_room, cap=NS_MUC))
 		else:
-			if NS_MUC in gajim.capscache[(contact.caps_hash_method,
-			contact.caps_hash)].features:
+			if gajim.capscache.is_supported(contact, NS_MUC):
 				invite_menuitem.set_sensitive(True)
 				invite_to_new_room_menuitem.connect('activate',
 					self.on_invite_to_new_room, list_)
