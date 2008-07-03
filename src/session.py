@@ -96,7 +96,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 				msg_id = gajim.logger.write(log_type, full_jid_with_resource, msgtxt,
 						tim=tim, subject=subject)
 			except exceptions.PysqliteOperationalError, e:
-				gajim.dispatch('ERROR', (_('Disk WriteError'), str(e)))
+				self.conn.dispatch('ERROR', (_('Disk WriteError'), str(e)))
 
 		treat_as = gajim.config.get('treat_incoming_messages')
 		if treat_as:
@@ -341,10 +341,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		try:
 			# bob responds
 			if form.getType() == 'form' and 'security' in form.asDict():
-				def continue_with_negotiation(*args):
-					if len(args):
-						self.dialog.destroy()
-
+				def continue_with_negotiation():
 					# we don't support 3-message negotiation as the responder
 					if 'dhkeys' in form.asDict():
 						self.fail_bad_negotiation('3 message negotiation not supported when responding', ('dhkeys',))

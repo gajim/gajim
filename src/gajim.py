@@ -2134,11 +2134,7 @@ class Interface:
 				if not contact:
 					contact = highest_contact
 
-				if not session:
-					session = gajim.connections[account].get_or_create_session(fjid, None)
-
-				self.new_chat(contact, account, resource = resource, session = session)
-				ctrl = session.control
+				ctrl = self.new_chat(contact, account, resource = resource, session = session)
 
 				gajim.last_message_time[account][jid] = 0 # long time ago
 

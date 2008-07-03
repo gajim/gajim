@@ -43,7 +43,6 @@ import cell_renderer_image
 
 from common import gajim
 from common import helpers
-from common.stanza_session import StanzaSession
 
 from chat_control import ChatControl
 from chat_control import ChatControlBase
@@ -222,9 +221,6 @@ class GroupchatControl(ChatControlBase):
 		self.nick = contact.name.decode('utf-8')
 		self.new_nick = ''
 		self.name = self.room_jid.split('@')[0]
-
-		self.session = StanzaSession(gajim.connections[self.account],
-			self.room_jid, 'gc', 'gc')
 
 		compact_view = gajim.config.get('compact_view')
 		self.chat_buttons_set_visible(compact_view)
