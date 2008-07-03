@@ -149,8 +149,8 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		'''
 		self.on_connect = on_connect
 		self.on_connect_failure = on_connect_failure
-		(self.server, self.port) = conn_5tuple[4]
-		log.info('NonBlocking Connect :: About tot connect to %s:%s' % conn_5tuple[4])
+		(self.server, self.port) = conn_5tuple[4][:2]
+		log.info('NonBlocking Connect :: About tot connect to %s:%s' % conn_5tuple[4][:2])
 		try:
 			self._sock = socket.socket(*conn_5tuple[:3])
 		except socket.error, (errnum, errstr):
