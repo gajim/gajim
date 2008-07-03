@@ -26,9 +26,10 @@ import common.gajim
 class Contact:
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
-	ask='', resource='', priority=0, keyID='', our_chatstate=None,
-	chatstate=None, last_status_time=None, msg_id = None, composing_xep = None,
-	mood={}, tune={}, activity={}):
+	ask='', resource='', priority=0, keyID='', caps_node=None,
+	caps_hash_method=None, caps_hash=None, our_chatstate=None, chatstate=None,
+	last_status_time=None, msg_id = None, composing_xep = None,	mood={}, tune={},
+	activity={}):
 		self.jid = jid
 		self.name = name
 		self.contact_name = '' # nick choosen by contact
@@ -43,9 +44,9 @@ class Contact:
 
 		# Capabilities; filled by caps.py/ConnectionCaps object
 		# every time it gets these from presence stanzas
-		self.caps_node = None
-		self.caps_hash_method = None
-		self.caps_hash = None
+		self.caps_node = caps_node
+		self.caps_hash_method = caps_hash_method
+		self.caps_hash = caps_hash
 
 		# please read xep-85 http://www.xmpp.org/extensions/xep-0085.html
 		# we keep track of xep85 support with the peer by three extra states:
@@ -533,9 +534,11 @@ class Contacts:
 	def contact_from_gc_contact(self, gc_contact):
 		'''Create a Contact instance from a GC_Contact instance'''
 		jid = gc_contact.get_full_jid()
-		return Contact(jid = jid, resource = '', name = gc_contact.name,
-			groups = [], show = gc_contact.show, status = gc_contact.status,
-			sub = 'none')
+		return Contact(jid=jid, resource='', name=gc_contact.name, groups=[],
+			show=gc_contact.show, status=gc_contact.status, sub='none',
+			caps_node=gc_contact.caps_node,
+			caps_hash_method=gc_contact.caps_hash_method,
+			caps_hash=gc_contact.caps_hash)
 
 	def create_gc_contact(self, room_jid='', name='', show='', status='',
 		role='', affiliation='', jid='', resource=''):
