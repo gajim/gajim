@@ -323,8 +323,12 @@ class Contacts:
 				if jid == our_jid:
 					continue
 				if common.gajim.jid_is_transport(jid) and not \
-					_('Transports') in groups:
+				_('Transports') in groups:
 					# do not count transports
+					continue
+				if self.has_brother(account, jid) and not \
+				self.is_big_brother(account, jid):
+					# count metacontacts only once
 					continue
 				contact = self.get_contact_with_highest_priority(account, jid)
 				if _('Not in roster') in contact.groups:
@@ -355,7 +359,7 @@ class Contacts:
 
 	def get_metacontacts_tag(self, account, jid):
 		'''Returns the tag of a jid'''
-		if not self._metacontacts_tags.has_key(account):
+		if not account in self._metacontacts_tags:
 			return None
 		for tag in self._metacontacts_tags[account]:
 			for data in self._metacontacts_tags[account][tag]:
@@ -399,20 +403,17 @@ class Contacts:
 				break
 
 	def has_brother(self, account, jid):
-		for account in self._metacontacts_tags:
-			tag = self.get_metacontacts_tag(account, jid)
-			if tag and len(self._metacontacts_tags[account][tag]) > 1:
-				return True
-		return False
+		tag = self.get_metacontacts_tag(account, jid)
+		if not tag:
+			return False
+		meta_jids = self.get_metacontacts_jids(tag)
+		return len(meta_jids) > 1 or len(meta_jids[account]) > 1
 
 	def is_big_brother(self, account, jid):
-		tag = self.get_metacontacts_tag(account, jid)
-		if tag:
-			family = self.get_metacontacts_family(account, jid)
+		family = self.get_metacontacts_family(account, jid)
+		if family:
 			bb_data = self.get_metacontacts_big_brother(family)
-			bb_jid = bb_data['jid']
-			bb_account = bb_data['account']
-			if bb_jid == jid and bb_account == account: 
+			if bb_data['jid'] == jid and bb_data['account'] == account: 
 				return True
 		return False
 
@@ -420,7 +421,7 @@ class Contacts:
 		'''Returns all jid for the given tag in the form {acct: [jid1, jid2],.}'''
 		answers = {}
 		for account in self._metacontacts_tags:
-			if self._metacontacts_tags[account].has_key(tag):
+			if tag in self._metacontacts_tags[account]:
 				answers[account] = []
 				for data in self._metacontacts_tags[account][tag]:
 					answers[account].append(data['jid'])
@@ -435,7 +436,7 @@ class Contacts:
 			return []
 		answers = []
 		for account in self._metacontacts_tags:
-			if self._metacontacts_tags[account].has_key(tag):
+			if tag in self._metacontacts_tags[account]:
 				for data in self._metacontacts_tags[account][tag]:
 					data['account'] = account
 					answers.append(data)

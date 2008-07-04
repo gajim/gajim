@@ -285,15 +285,12 @@ class RosterWindow:
 		'''Add all contacts and groups of the given account to roster,
 		draw them and account.
 		'''
-		c1 = time.clock()
 		self.starting = True
 		jids = gajim.contacts.get_jid_list(account)
 
 		self.tree.freeze_child_notify()
-		c5 = time.clock()
 		for jid in jids:
 			self.add_contact(jid, account)
-		c6 = time.clock()
 		self.tree.thaw_child_notify()
 
 		# Do not freeze the GUI when drawing the contacts
@@ -301,24 +298,11 @@ class RosterWindow:
 			# Overhead is big, only invoke when needed
 			self._idle_draw_jids_of_account(jids, account)
 
-		c9 = time.clock()
 		# Draw all known groups
 		for group in gajim.groups[account].keys():
 			self.draw_group(group, account)
 		self.draw_account(account)
 		self.starting = False
-		c10 = time.clock()
-
-		if jids:
-			c4 = time.clock()
-
-			print ""
-			print "--- Add account contacts of %s ---------" % account
-			print "Total Time", c4-c1
-			print "Add contact without draw", c6-c5
-			print "Draw groups and account", c10-c9
-			print "--- contacts added -----------------------------"
-			print ""
 
 
 	def _add_entity(self, contact, account, groups = None,
@@ -479,7 +463,7 @@ class RosterWindow:
 				continue
 
 			assert len(self._get_contact_iter(_jid, _account, _contact, self.model)
-				) == 0, "%s already in roster. \n Family: " % (_jid, nearby_family)
+				) == 0, "%s already in roster. \n Family: %s" % (_jid, nearby_family)
 			self._add_entity(_contact, _account, big_brother_contact = \
 				big_brother_contact, big_brother_account=big_brother_account)
 			brothers.append((_contact, _account))
@@ -1152,18 +1136,14 @@ class RosterWindow:
 		jids -- a list of jids to draw
 		account -- the corresponding account
 		'''
-		def _draw_all_contacts(jids, account, t):
+		def _draw_all_contacts(jids, account):
 			for jid in jids:
 				self.draw_contact(jid, account)
 				self.draw_avatar(jid, account)
 				yield True
-			print "--- Idle draw of %s -----------" % account
-			print "Draw contact and avatar", time.clock() - t
-			print "-------------------------------"
 			yield False
 
-		t = time.clock()
-		task = _draw_all_contacts(jids, account, t)
+		task = _draw_all_contacts(jids, account)
 		gobject.idle_add(task.next)
 
 	def setup_and_draw_roster(self):
