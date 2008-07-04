@@ -127,7 +127,7 @@
 													</widget>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="padding">2</property>
+                            <property name="padding">0</property>
                           </packing>
                         </child>
                         <child>
