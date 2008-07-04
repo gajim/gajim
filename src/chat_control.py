@@ -1119,7 +1119,6 @@ class ChatControl(ChatControlBase):
 
 		if not session:
 			session = gajim.connections[self.account].find_controlless_session(self.contact.jid)
-			self.session = session
 
 		if session:
 			session.control = self

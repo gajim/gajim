@@ -43,6 +43,8 @@ class MessageControl:
 		self.hide_chat_buttons = False
 		self.resource = resource
 
+		self.session = None
+
 		gajim.last_message_time[self.account][self.get_full_jid()] = 0
 
 		self.xml = gtkgui_helpers.get_glade('message_window.glade', widget_name)
