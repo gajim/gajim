@@ -673,11 +673,10 @@ class Interface:
 					# Create SelfContact and add to roster
 					if resource == gajim.connections[account].server_resource:
 						return
-					contact1 = gajim.contacts.create_contact(jid = ji,
-						name = gajim.nicks[account], groups = ['self_contact'],
-						show = array[1], status = status_message, sub = 'both',
-						ask = 'none', priority = priority, keyID = keyID,
-						resource = resource)
+					contact1 = gajim.contacts.create_contact(jid=ji,
+						name=gajim.nicks[account], groups=['self_contact'],
+						show=array[1], status=status_message, sub='both', ask='none',
+						priority=priority, keyID=keyID, resource=resource)
 					old_show = 0
 					gajim.contacts.add_contact(account, contact1)
 					lcontact.append(contact1)
@@ -869,9 +868,9 @@ class Interface:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			name = jid.split('@', 1)[0]
 			name = name.split('%', 1)[0]
-			contact1 = gajim.contacts.create_contact(jid = jid, name = name,
-				groups = [], show = 'online', status = 'online',
-				ask = 'to', resource = array[1], keyID = keyID)
+			contact1 = gajim.contacts.create_contact(jid=jid, name=name,
+				groups=[], show='online', status='online',
+				ask='to', resource=array[1], keyID=keyID)
 			gajim.contacts.add_contact(account, contact1)
 			self.roster.add_contact(jid, account)
 		dialogs.InformationDialog(_('Authorization accepted'),
@@ -1401,8 +1400,8 @@ class Interface:
 			if sub == 'remove':
 				return
 			# Add new contact to roster
-			contact = gajim.contacts.create_contact(jid = jid, name = name,
-				groups = groups, show = 'offline', sub = sub, ask = ask)
+			contact = gajim.contacts.create_contact(jid=jid, name=name,
+				groups=groups, show='offline', sub=sub, ask=ask)
 			gajim.contacts.add_contact(account, contact)
 			self.roster.add_contact(jid, account)
 		else:
@@ -1540,9 +1539,9 @@ class Interface:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			contact = gajim.contacts.create_contact(jid = jid, name = '',
-				groups = [_('Not in Roster')], show = 'not in roster', status = '',
-				sub = 'none', keyID = keyID)
+			contact = gajim.contacts.create_contact(jid=jid, name='',
+				groups=[_('Not in Roster')], show='not in roster', status='',
+				sub='none', keyID=keyID)
 			gajim.contacts.add_contact(account, contact)
 			self.roster.add_contact(contact.jid, account)
 		file_props = array[1]
@@ -2484,7 +2483,7 @@ class Interface:
 			return
 		if minimize and not minimized_control_exists and \
 		not self.msg_win_mgr.has_window(room_jid, account):
-			contact = gajim.contacts.create_contact(jid = room_jid, name = nick)
+			contact = gajim.contacts.create_contact(jid=room_jid, name=nick)
 			gc_control = GroupchatControl(None, contact, account)
 			self.minimized_controls[account][room_jid] = gc_control
 			gajim.connections[account].join_gc(nick, room_jid, password)
@@ -2508,7 +2507,7 @@ class Interface:
 
 	def new_room(self, room_jid, nick, account, is_continued=False):
 		# Get target window, create a control, and associate it with the window
-		contact = gajim.contacts.create_contact(jid = room_jid, name = nick)
+		contact = gajim.contacts.create_contact(jid=room_jid, name=nick)
 		mw = self.msg_win_mgr.get_window(contact.jid, account)
 		if not mw:
 			mw = self.msg_win_mgr.create_window(contact, account,

@@ -1602,7 +1602,7 @@ class SubscriptionRequestWindow:
 		if gajim.interface.instances[self.account]['infos'].has_key(self.jid):
 			gajim.interface.instances[self.account]['infos'][self.jid].window.present()
 		else:
-			contact = gajim.contacts.create_contact(jid = self.jid, name='',
+			contact = gajim.contacts.create_contact(jid=self.jid, name='',
 			groups=[], show='', status='', sub='', ask='', resource='',
 			priority=5, keyID='', our_chatstate=None, chatstate=None)
 			gajim.interface.instances[self.account]['infos'][self.jid] = \

@@ -186,17 +186,20 @@ class Contacts:
 		sub='', ask='', resource='', priority=0, keyID='', our_chatstate=None,
 		chatstate=None, last_status_time=None, composing_xep=None,
 		mood={}, tune={}, activity={}):
-		return Contact(jid, name, groups, show, status, sub, ask, resource,
-			priority, keyID, our_chatstate, chatstate, last_status_time,
-			None, composing_xep, mood, tune, activity)
+		return Contact(jid=jid, name=name, groups=groups, show=show,
+			status=status, sub=sub, ask=ask, resource=resource, priority=priority,
+			keyID=keyID, chatstate=our_chatstate, chatstate=chatstate,
+			last_status_time=last_status_time, composing_xep=composing_xep,
+			mood=mood, tune=tune, activity=activity)
 	
 	def copy_contact(self, contact):
-		return self.create_contact(jid = contact.jid, name = contact.name,
-			groups = contact.groups, show = contact.show, status =
-			contact.status, sub = contact.sub, ask = contact.ask, resource = contact.resource,
-			priority = contact.priority, keyID = contact.keyID,
-			our_chatstate = contact.our_chatstate, chatstate = contact.chatstate,
-			last_status_time = contact.last_status_time)
+		return self.create_contact(jid=contact.jid, name=contact.name,
+			groups=contact.groups, show=contact.show, status=contact.status,
+			sub=contact.sub, ask=contact.ask, resource=contact.resource,
+			priority=contact.priority, keyID=contact.keyID,
+			caps_node=contact.caps_node, caps_hash_method=contact.caps_hash_method,
+			caps_hash=contact.caps_hash, our_chatstate=contact.our_chatstate,
+			chatstate=contact.chatstate, last_status_time=contact.last_status_time)
 
 	def add_contact(self, account, contact):
 		# No such account before ?
