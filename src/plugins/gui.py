@@ -196,18 +196,15 @@ class GajimPluginConfigDialog(gtk.Dialog):
 	
 	@log_calls('GajimPluginConfigDialog')
 	def __init__(self, plugin, **kwargs):
-		# TRANSLATORS: The window title for the generic configuration dialog of plugins
-		gtk.Dialog.__init__(self, '%s : %s'%(_('Configuration'), plugin.name), **kwargs)
+		gtk.Dialog.__init__(self, '%s %s'%(plugin.name, _('Configuration')), **kwargs)
 		self.plugin = plugin
 		self.add_button('gtk-close', gtk.RESPONSE_CLOSE)
 	
-		self.main = self.child
-		self.main.set_spacing(3)
+		self.child.set_spacing(3)
 	
-		# TRANSLATORS: Short text stating which plugin a configuration dialog is for
-		label = gtk.Label(_('<b>%s Configuration</b>') % (plugin.name))
-		label.set_markup(label.get_label())
-		self.main.pack_start(label, False, False)
+		#label = gtk.Label(_('<b>%s Configuration</b>') % (plugin.name))
+		#label.set_markup(label.get_label())
+		#self.child.pack_start(label, False, False)
 		
 	@log_calls('GajimPluginConfigDialog')
 	def run(self, parent=None):

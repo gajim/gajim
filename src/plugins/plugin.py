@@ -26,8 +26,11 @@ Base class for implementing plugin.
 
 import os
 
-from plugins.helpers import log_calls
+from common import gajim
+
+from plugins.helpers import log_calls, log
 from plugins.gui import GajimPluginConfigDialog
+
 
 class GajimPlugin(object):
 	'''
@@ -97,7 +100,7 @@ class GajimPlugin(object):
 	
 	@log_calls('GajimPlugin')
 	def __init__(self):
-		self.config = GajimPluginConfig()
+		self.config = GajimPluginConfig(self)
 		'''
 		Plug-in configuration dictionary.
 		
@@ -136,8 +139,17 @@ class GajimPlugin(object):
 	@log_calls('GajimPlugin')
 	def deactivate(self):
 		pass
+	
+import shelve
 
 class GajimPluginConfig(dict):
+	@log_calls('GajimPluginConfig')
+	def __init__(self, plugin):
+		self.plugin = plugin
+		self.FILE_PATH = gajim.HOME_DIR
+		log.debug('FILE_PATH = %s'%(self.FILE_PATH))
+		#self.data = shelve.open(self.FILE_PATH)
+	
 	@log_calls('GajimPluginConfig')
 	def save(self):
 		pass
@@ -145,3 +157,4 @@ class GajimPluginConfig(dict):
 	@log_calls('GajimPluginConfig')
 	def load(self):
 		pass
+	
