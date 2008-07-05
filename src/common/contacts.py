@@ -188,7 +188,7 @@ class Contacts:
 		mood={}, tune={}, activity={}):
 		return Contact(jid=jid, name=name, groups=groups, show=show,
 			status=status, sub=sub, ask=ask, resource=resource, priority=priority,
-			keyID=keyID, chatstate=our_chatstate, chatstate=chatstate,
+			keyID=keyID, our_chatstate=our_chatstate, chatstate=chatstate,
 			last_status_time=last_status_time, composing_xep=composing_xep,
 			mood=mood, tune=tune, activity=activity)
 	
