@@ -1566,10 +1566,10 @@ class AccountsWindow:
 			use_env_http_proxy)
 		self.xml.get_widget('proxy_hbox1').set_sensitive(not use_env_http_proxy)
 
-		warn_when_insecure = gajim.config.get_per('accounts', account,
-			'warn_when_insecure_connection')
+		warn_when_insecure_ssl = gajim.config.get_per('accounts', account,
+			'warn_when_insecure_ssl_connection')
 		self.xml.get_widget('warn_when_insecure_connection_checkbutton1').\
-			set_active(warn_when_insecure)
+			set_active(warn_when_insecure_ssl)
 
 		self.xml.get_widget('send_keepalive_checkbutton1').set_active(
 			gajim.config.get_per('accounts', account, 'keep_alives_enabled'))
@@ -1939,7 +1939,7 @@ class AccountsWindow:
 		if self.ignore_events:
 			return
 
-		self.on_checkbutton_toggled(widget, 'warn_when_insecure_connection',
+		self.on_checkbutton_toggled(widget, 'warn_when_insecure_ssl_connection',
 			account=self.current_account)
 
 	def on_send_keepalive_checkbutton1_toggled(self, widget):

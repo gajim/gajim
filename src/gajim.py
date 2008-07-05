@@ -1933,20 +1933,48 @@ class Interface:
 	def handle_event_plain_connection(self, account, data):
 		# ('PLAIN_CONNECTION', account, (connection))
 		server = gajim.config.get_per('accounts', account, 'hostname')
-		def on_yes(is_checked):
-			if is_checked:
+		def on_ok(is_checked):
+			if not is_checked[0]:
+				on_cancel()
+				return
+			if is_checked[1]:
 				gajim.config.set_per('accounts', account,
-					'warn_when_insecure_connection', False)
+					'warn_when_plaintext_connection', False)
 			gajim.connections[account].connection_accepted(data[0], 'tcp')
-		def on_no():
+		def on_cancel():
+			gajim.connections[account].disconnect(on_purpose=True)
+			self.handle_event_status(account, 'offline')
+		pritext = _('Insecure connection')
+		sectext = _('You are about to send your password on an unencrypted '
+			'connection. Are you sure you want to do that?')
+		checktext1 = _('Yes, I really want to connect insecurely')
+		checktext2 = _('Do _not ask me again')
+		dialog = dialogs.ConfirmationDialogDubbleCheck(pritext, sectext,
+			checktext1, checktext2, on_response_ok=on_ok,
+			on_response_cancel=on_cancel, is_modal=False)
+
+	def handle_event_insecure_ssl_connection(self, account, data):
+		# ('INSECURE_SSL_CONNECTION', account, (connection, connection_type))
+		server = gajim.config.get_per('accounts', account, 'hostname')
+		def on_ok(is_checked):
+			if not is_checked[0]:
+				on_cancel()
+				return
+			if is_checked[1]:
+				gajim.config.set_per('accounts', account,
+					'warn_when_insecure_ssl_connection', False)
+			gajim.connections[account].connection_accepted(data[0], data[1])
+		def on_cancel():
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
 		pritext = _('Insecure connection')
 		sectext = _('You are about to send your password on an insecure '
-			'connection. Are you sure you want to do that?')
-		checktext = _('Do _not ask me again')
-		dialog = dialogs.YesNoDialog(pritext, sectext, checktext,
-			on_response_yes=on_yes, on_response_no=on_no)
+			'connection. You should install PyOpenSSL to prevent that. Are you sure you want to do that?')
+		checktext1 = _('Yes, I really want to connect insecurely')
+		checktext2 = _('Do _not ask me again')
+		dialog = dialogs.ConfirmationDialogDubbleCheck(pritext, sectext,
+			checktext1, checktext2, on_response_ok=on_ok,
+			on_response_cancel=on_cancel, is_modal=False)
 
 	def handle_event_pubsub_node_removed(self, account, data):
 		# ('PUBSUB_NODE_REMOVED', account, (jid, node))
@@ -2037,6 +2065,7 @@ class Interface:
 			'SSL_ERROR': self.handle_event_ssl_error,
 			'FINGERPRINT_ERROR': self.handle_event_fingerprint_error,
 			'PLAIN_CONNECTION': self.handle_event_plain_connection,
+			'INSECURE_SSL_CONNECTION': self.handle_event_insecure_ssl_connection,
 			'PUBSUB_NODE_REMOVED': self.handle_event_pubsub_node_removed,
 			'PUBSUB_NODE_NOT_REMOVED': self.handle_event_pubsub_node_not_removed,
 		}
