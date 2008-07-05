@@ -183,12 +183,14 @@ class Contacts:
 		del self._metacontacts_tags[account]
 
 	def create_contact(self, jid='', name='', groups=[], show='', status='',
-		sub='', ask='', resource='', priority=0, keyID='', our_chatstate=None,
+		sub='', ask='', resource='', priority=0, keyID='', caps_node=None,
+		caps_hash_method=None, caps_hash=None, our_chatstate=None,
 		chatstate=None, last_status_time=None, composing_xep=None,
 		mood={}, tune={}, activity={}):
 		return Contact(jid=jid, name=name, groups=groups, show=show,
 			status=status, sub=sub, ask=ask, resource=resource, priority=priority,
-			keyID=keyID, our_chatstate=our_chatstate, chatstate=chatstate,
+			keyID=keyID, caps_node=caps_node, caps_hash_method=caps_hash_method,
+			caps_hash=caps_hash, our_chatstate=our_chatstate, chatstate=chatstate,
 			last_status_time=last_status_time, composing_xep=composing_xep,
 			mood=mood, tune=tune, activity=activity)
 	
