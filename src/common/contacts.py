@@ -326,8 +326,8 @@ class Contacts:
 				_('Transports') in groups:
 					# do not count transports
 					continue
-				if self.has_brother(account, jid) and not \
-				self.is_big_brother(account, jid):
+				if self.has_brother(account, jid, accounts) and not \
+				self.is_big_brother(account, jid, accounts):
 					# count metacontacts only once
 					continue
 				contact = self.get_contact_with_highest_priority(account, jid)
@@ -402,26 +402,30 @@ class Contacts:
 					self._metacontacts_tags[account])
 				break
 
-	def has_brother(self, account, jid):
+	def has_brother(self, account, jid, accounts):
 		tag = self.get_metacontacts_tag(account, jid)
 		if not tag:
 			return False
-		meta_jids = self.get_metacontacts_jids(tag)
+		meta_jids = self.get_metacontacts_jids(tag, accounts)
 		return len(meta_jids) > 1 or len(meta_jids[account]) > 1
 
-	def is_big_brother(self, account, jid):
+	def is_big_brother(self, account, jid, accounts):
 		family = self.get_metacontacts_family(account, jid)
 		if family:
-			bb_data = self.get_metacontacts_big_brother(family)
+			nearby_family = [data for data in family
+				if account in accounts]
+			bb_data = self.get_metacontacts_big_brother(nearby_family)
 			if bb_data['jid'] == jid and bb_data['account'] == account: 
 				return True
 		return False
 
-	def get_metacontacts_jids(self, tag):
+	def get_metacontacts_jids(self, tag, accounts):
 		'''Returns all jid for the given tag in the form {acct: [jid1, jid2],.}'''
 		answers = {}
 		for account in self._metacontacts_tags:
 			if tag in self._metacontacts_tags[account]:
+				if account not in accounts:
+					continue
 				answers[account] = []
 				for data in self._metacontacts_tags[account][tag]:
 					answers[account].append(data['jid'])

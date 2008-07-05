@@ -3785,7 +3785,8 @@ class RosterWindow:
 			return
 
 		# Is the contact we drag a meta contact?
-		is_big_brother = gajim.contacts.is_big_brother(account_source, jid_source)
+		accounts = (self.regroup and gajim.contacts.get_accounts()) or account_source
+		is_big_brother = gajim.contacts.is_big_brother(account_source, jid_source, accounts)
 
 		# Contact drop on group row or between two contacts
 		if type_dest == 'group' or position == gtk.TREE_VIEW_DROP_BEFORE or \
