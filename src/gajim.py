@@ -926,7 +926,7 @@ class Interface:
 				if c.jid in gajim.to_be_removed[account]:
 					# This way we'll really remove it
 					gajim.to_be_removed[account].remove(c.jid)
-				self.roster.remove_contact(c.jid, account, backend = True)
+				self.roster.remove_contact(c.jid, account, backend=True)
 
 	def handle_event_register_agent_info(self, account, array):
 		# ('REGISTER_AGENT_INFO', account, (agent, infos, is_form))
@@ -1394,7 +1394,7 @@ class Interface:
 		not name and not groups:
 			# contact removes us.
 			if contacts:
-				self.roster.remove_contact(jid, account, backend = True)
+				self.roster.remove_contact(jid, account, backend=True)
 				return
 		elif not contacts:
 			if sub == 'remove':

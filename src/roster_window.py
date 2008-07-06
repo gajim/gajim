@@ -667,7 +667,7 @@ class RosterWindow:
 		return contacts[0][0] # it's contact/big brother with highest priority
 
 
-	def remove_contact(self, jid, account, force = False, backend = False):
+	def remove_contact(self, jid, account, force=False, backend=False):
 		'''Remove contact from roster.
 
 		Remove contact from all its group. Remove empty groups or redraw
@@ -692,7 +692,7 @@ class RosterWindow:
 		if not force and self.contact_has_pending_roster_events(contact, account):
 			# Contact has pending events
 			key = (jid, account)
-			if not key in self.contacts_to_be_removed.keys():
+			if not key in self.contacts_to_be_removed:
 				self.contacts_to_be_removed[key] = {'backend': backend}
 			return False
 		else:
@@ -705,13 +705,17 @@ class RosterWindow:
 			else:
 				self._remove_entity(contact, account)
 
-			# Draw all groups of the contact
 
 			if backend:
 				# Remove contact before redrawing, otherwise the old
 				# numbers will still be show
-				gajim.contacts.remove_jid(account, jid)
+				gajim.contacts.remove_jid(account, jid, remove_meta=True)
+				family = gajim.contacts.get_metacontacts_family(account, jid)
+				if family:
+					# reshow the rest of the family
+					self._add_metacontact_family(family, account)
 
+			# Draw all groups of the contact
 			for group in contact.get_shown_groups():
 				self.draw_group(group, account)
 			self.draw_account(account)
@@ -745,7 +749,7 @@ class RosterWindow:
 		'''Remove groupchat from roster and redraw account and group.'''
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if contact.is_groupchat():
-			self.remove_contact(jid, account, force = True, backend = True)
+			self.remove_contact(jid, account, force=True, backend=True)
 			return True
 		else:
 			return False
@@ -767,7 +771,7 @@ class RosterWindow:
 	def remove_transport(self, jid, account):
 		'''Remove transport from roster and redraw account and group.'''
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
-		self.remove_contact(jid, account, force = True, backend = True)
+		self.remove_contact(jid, account, force=True, backend=True)
 		return True
 
 	def add_contact_to_groups(self, jid, account, groups, update = True):
@@ -1603,7 +1607,7 @@ class RosterWindow:
 			if key in self.contacts_to_be_removed.keys():
 				del self.contacts_to_be_removed[key]
 				# Remove contact will delay removal if there are more events pending
-				self.remove_contact(jid, account, backend = True)
+				self.remove_contact(jid, account, backend=True)
 		self.show_title()
 
 	def open_event(self, account, jid, event):
@@ -1817,7 +1821,7 @@ class RosterWindow:
 		elif contact.jid == gajim.get_jid_from_account(account) and \
 		show in ('offline', 'error'):
 			# SelfContact went offline. Remove him when last pending message was read
-			self.remove_contact(contact.jid, account, backend = True)
+			self.remove_contact(contact.jid, account, backend=True)
 
 		# print status in chat window and update status/GPG image
 		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
@@ -2273,7 +2277,7 @@ class RosterWindow:
 				# We remove the server contact
 				# remove it from treeview
 				gajim.connections[account].unsubscribe(contact.jid)
-				self.remove_contact(contact.jid, account, backend = True)
+				self.remove_contact(contact.jid, account, backend=True)
 				return
 
 		def remove(list_):
@@ -2281,7 +2285,7 @@ class RosterWindow:
 				full_jid = contact.get_full_jid()
 				gajim.connections[account].unsubscribe_agent(full_jid)
 				# remove transport from treeview
-				self.remove_contact(contact.jid, account, backend = True)
+				self.remove_contact(contact.jid, account, backend=True)
 
 		# Check if there are unread events from some contacts
 		has_unread_events = False
@@ -2544,7 +2548,7 @@ class RosterWindow:
 					self.remove_contact_from_groups(contact.jid,account, [group])
 				else:
 					gajim.connections[account].unsubscribe(contact.jid)
-					self.remove_contact(contact.jid, account, backend = True)
+					self.remove_contact(contact.jid, account, backend=True)
 
 	def on_assign_pgp_key(self, widget, contact, account):
 		attached_keys = gajim.config.get_per('accounts', account,
@@ -2918,7 +2922,7 @@ class RosterWindow:
 					remove_auth = False
 			for (contact, account) in list_:
 				gajim.connections[account].unsubscribe(contact.jid, remove_auth)
-				self.remove_contact(contact.jid, account, backend = True)
+				self.remove_contact(contact.jid, account, backend=True)
 				if not remove_auth and contact.sub == 'both':
 					contact.name = ''
 					contact.groups = []
