@@ -171,7 +171,7 @@ class Contacts:
 	def add_account(self, account):
 		self._contacts[account] = {}
 		self._gc_contacts[account] = {}
-		if not self._metacontacts_tags.has_key(account):
+		if account not in self._metacontacts_tags:
 			self._metacontacts_tags[account] = {}
 
 	def get_accounts(self):
@@ -187,7 +187,14 @@ class Contacts:
 		caps_hash_method=None, caps_hash=None, our_chatstate=None,
 		chatstate=None, last_status_time=None, composing_xep=None,
 		mood={}, tune={}, activity={}):
-		return Contact(jid=jid, name=name, groups=groups, show=show,
+	
+		# We don't want duplicated group values
+		groups_unique = []
+		for group in groups:
+			if group not in groups_unique:
+				groups_unique.append(group)
+
+		return Contact(jid=jid, name=name, groups=groups_unique, show=show,
 			status=status, sub=sub, ask=ask, resource=resource, priority=priority,
 			keyID=keyID, caps_node=caps_node, caps_hash_method=caps_hash_method,
 			caps_hash=caps_hash, our_chatstate=our_chatstate, chatstate=chatstate,
@@ -205,11 +212,11 @@ class Contacts:
 
 	def add_contact(self, account, contact):
 		# No such account before ?
-		if not self._contacts.has_key(account):
+		if account not in self._contacts:
 			self._contacts[account] = {contact.jid : [contact]}
 			return
 		# No such jid before ?
-		if not self._contacts[account].has_key(contact.jid):
+		if contact.jid not in self._contacts[account]:
 			self._contacts[account][contact.jid] = [contact]
 			return
 		contacts = self._contacts[account][contact.jid]
@@ -226,9 +233,9 @@ class Contacts:
 		contacts.append(contact)
 
 	def remove_contact(self, account, contact):
-		if not self._contacts.has_key(account):
+		if account not in self._contacts:
 			return
-		if not self._contacts[account].has_key(contact.jid):
+		if contact.jid not in self._contacts[account]:
 			return
 		if contact in self._contacts[account][contact.jid]:
 			self._contacts[account][contact.jid].remove(contact)
@@ -240,9 +247,9 @@ class Contacts:
 
 	def remove_jid(self, account, jid, remove_meta=True):
 		'''Removes all contacts for a given jid'''
-		if not self._contacts.has_key(account):
+		if account not in self._contacts:
 			return
-		if not self._contacts[account].has_key(jid):
+		if jid not in self._contacts[account]:
 			return
 		del self._contacts[account][jid]
 		if remove_meta:
@@ -386,7 +393,7 @@ class Contacts:
 		while old_tag:
 			self.remove_metacontact(account, jid)
 			old_tag = self.get_metacontacts_tag(account, jid)
-		if not self._metacontacts_tags[account].has_key(tag):
+		if tag not in self._metacontacts_tags[account]:
 			self._metacontacts_tags[account][tag] = [{'jid': jid, 'tag': tag}]
 		else:
 			self._metacontacts_tags[account][tag].append({'jid': jid,
@@ -557,12 +564,12 @@ class Contacts:
 	
 	def add_gc_contact(self, account, gc_contact):
 		# No such account before ?
-		if not self._gc_contacts.has_key(account):
+		if account not in self._gc_contacts:
 			self._contacts[account] = {gc_contact.room_jid : {gc_contact.name: \
 				gc_contact}}
 			return
 		# No such room_jid before ?
-		if not self._gc_contacts[account].has_key(gc_contact.room_jid):
+		if gc_contact.room_jid not in self._gc_contacts[account]:
 			self._gc_contacts[account][gc_contact.room_jid] = {gc_contact.name: \
 				gc_contact}
 			return
@@ -570,12 +577,12 @@ class Contacts:
 				gc_contact
 
 	def remove_gc_contact(self, account, gc_contact):
-		if not self._gc_contacts.has_key(account):
+		if account not in self._gc_contacts:
 			return
-		if not self._gc_contacts[account].has_key(gc_contact.room_jid):
+		if gc_contact.room_jid not in self._gc_contacts[account]:
 			return
-		if not self._gc_contacts[account][gc_contact.room_jid].has_key(
-			gc_contact.name):
+		if gc_contact.name not in self._gc_contacts[account][
+		gc_contact.room_jid]:
 			return
 		del self._gc_contacts[account][gc_contact.room_jid][gc_contact.name]
 		# It was the last nick in room ?
@@ -583,14 +590,14 @@ class Contacts:
 			del self._gc_contacts[account][gc_contact.room_jid]
 
 	def remove_room(self, account, room_jid):
-		if not self._gc_contacts.has_key(account):
+		if account not in self._gc_contacts:
 			return
-		if not self._gc_contacts[account].has_key(room_jid):
+		if room_jid not in self._gc_contacts[account]:
 			return
 		del self._gc_contacts[account][room_jid]
 
 	def get_gc_list(self, account):
-		if not self._gc_contacts.has_key(account):
+		if account not in self._gc_contacts:
 			return []
 		return self._gc_contacts[account].keys()
 

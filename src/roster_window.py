@@ -1468,9 +1468,7 @@ class RosterWindow:
 			if len(jids) > 1:
 				resource = '/'.join(jids[1:])
 			# get name
-			name = array[jid]['name']
-			if not name:
-				name = ''
+			name = array[jid]['name'] or ''
 			show = 'offline' # show is offline by default
 			status = '' # no status message by default
 
