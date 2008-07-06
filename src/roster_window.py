@@ -710,10 +710,12 @@ class RosterWindow:
 				# Remove contact before redrawing, otherwise the old
 				# numbers will still be show
 				gajim.contacts.remove_jid(account, jid, remove_meta=True)
-				family = gajim.contacts.get_metacontacts_family(account, jid)
 				if family:
 					# reshow the rest of the family
-					self._add_metacontact_family(family, account)
+					brothers = self._add_metacontact_family(family, account)
+					for c, acc in brothers:
+						self.draw_contact(c.jid, acc)
+						self.draw_avatar(c.jid, acc)
 
 			# Draw all groups of the contact
 			for group in contact.get_shown_groups():
