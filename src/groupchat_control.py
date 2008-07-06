@@ -1867,7 +1867,9 @@ class GroupchatControl(ChatControlBase):
 
 			gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
 			with_refer_to_nick_char = False
-			if begin.endswith(gc_refer_to_nick_char):
+
+			# first part of this if : works fine even if refer_to_nick_char
+			if gc_refer_to_nick_char and begin.endswith(gc_refer_to_nick_char):
 				with_refer_to_nick_char = True
 			if len(self.nick_hits) and self.last_key_tabs and \
 			(text[:-1].endswith(self.nick_hits[0]) or \
@@ -1880,6 +1882,7 @@ class GroupchatControl(ChatControlBase):
 				self.nick_hits = [] # clear the hit list
 				list_nick = gajim.contacts.get_nick_list(self.account,
 									self.room_jid)
+				list_nick.sort(key=unicode.lower) # case-insensitive sort
 				if begin == '': 
 					# empty message, show lasts nicks that highlighted us first
 					for nick in self.attention_list:
@@ -1888,7 +1891,6 @@ class GroupchatControl(ChatControlBase):
 						list_nick.insert(0, nick)
 
 				list_nick.remove(self.nick) # Skip self
-				list_nick.sort()
 				for nick in list_nick:
 					if nick.lower().startswith(begin.lower()):
 						# the word is the begining of a nick
