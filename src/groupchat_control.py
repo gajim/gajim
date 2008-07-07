@@ -2069,14 +2069,11 @@ class GroupchatControl(ChatControlBase):
 		gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 		nick_jid = gc_c.get_full_jid()
 
-		win = gajim.interface.msg_win_mgr.get_window(nick_jid, self.account)
-		if not win:
-			gajim.interface.new_private_chat(gc_c, self.account)
-			win = gajim.interface.msg_win_mgr.get_window(nick_jid, self.account)
+		ctrl = gajim.interface.msg_win_mgr.get_control(nick_jid, self.account)
+		if not ctrl:
+			ctrl = gajim.interface.new_private_chat(gc_c, self.account)
 
-		ctrl = win.get_control(nick_jid, self.account)
-
-		win.set_active_tab(ctrl)
+		ctrl.parent_win.set_active_tab(ctrl)
 
 		return ctrl
 

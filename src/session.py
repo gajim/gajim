@@ -175,8 +175,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			jid_of_control = full_jid_with_resource
 
 		if not self.control:
-			# look for an existing chat control without a session
-			ctrl = gajim.interface.msg_win_mgr.get_control(jid, self.conn.name)
+			ctrl = gajim.interface.msg_win_mgr.get_control(jid_of_control, self.conn.name)
 			if ctrl:
 				self.control = ctrl
 				self.control.set_session(self)
