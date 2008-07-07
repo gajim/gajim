@@ -32,7 +32,7 @@ class PlugIn:
 	def PlugIn(self,owner):
 		""" Attach to main instance and register ourself and all our staff in it. """
 		self._owner=owner
-		log.debug('Plugging %s into %s'%(self,self._owner))
+		log.info('Plugging %s __INTO__ %s' % (self,self._owner))
 		if owner.__dict__.has_key(self.__class__.__name__):
 			log.debug('Plugging ignored: another instance already plugged.')
 			return
@@ -41,17 +41,27 @@ class PlugIn:
 			if owner.__dict__.has_key(method.__name__):
 				self._old_owners_methods.append(owner.__dict__[method.__name__])
 			owner.__dict__[method.__name__]=method
-		owner.__dict__[self.__class__.__name__]=self
+		if self.__class__.__name__.endswith('Dispatcher'):
+			# FIXME: I need BOSHDispatcher or XMPPDispatcher on .Dispatcher 
+			# there must be a better way..
+			owner.__dict__['Dispatcher']=self
+		else:
+			owner.__dict__[self.__class__.__name__]=self
+
 		# following will not work for classes inheriting plugin()
 		#if self.__class__.__dict__.has_key('plugin'): return self.plugin(owner)
 		if hasattr(self,'plugin'): return self.plugin(owner)
  
 	def PlugOut(self):
 		""" Unregister all our staff from main instance and detach from it. """
-		log.debug('Plugging %s out of %s.'%(self,self._owner))
+		log.info('Plugging %s __OUT__ of %s.' % (self,self._owner))
 		for method in self._exported_methods: del self._owner.__dict__[method.__name__]
 		for method in self._old_owners_methods: self._owner.__dict__[method.__name__]=method
-		del self._owner.__dict__[self.__class__.__name__]
-		if self.__class__.__dict__.has_key('plugout'): return self.plugout()
+		if self.__class__.__name__.endswith('Dispatcher'):
+			del self._owner.__dict__['Dispatcher']
+		else:
+			del self._owner.__dict__[self.__class__.__name__]
+		#if self.__class__.__dict__.has_key('plugout'): return self.plugout()
+		if hasattr(self,'plugout'): return self.plugout()
 		del self._owner
 

@@ -41,11 +41,10 @@ class NBCommonClient:
 		:param caller: calling object - it has to implement certain methods (necessary?)
 			
 		'''
-		
 		self.Namespace = protocol.NS_CLIENT
-
-		self.idlequeue = idlequeue
 		self.defaultNamespace = self.Namespace
+		
+		self.idlequeue = idlequeue
 		self.disconnect_handlers = []
 
 		self.Server = domain
@@ -85,12 +84,14 @@ class NBCommonClient:
 			self.SASL.PlugOut()
 		if self.__dict__.has_key('NonBlockingTLS'):
 			self.NonBlockingTLS.PlugOut()
-		if self.__dict__.has_key('NBHTTPPROXYsocket'):
+		if self.__dict__.has_key('NBHTTPProxySocket'):
 			self.NBHTTPPROXYsocket.PlugOut()
-		if self.__dict__.has_key('NBSOCKS5PROXYsocket'):
+		if self.__dict__.has_key('NBSOCKS5ProxySocket'):
 			self.NBSOCKS5PROXYsocket.PlugOut()
-		if self.__dict__.has_key('NonBlockingTcp'):
-			self.NonBlockingTcp.PlugOut()
+		if self.__dict__.has_key('NonBlockingTCP'):
+			self.NonBlockingTCP.PlugOut()
+		if self.__dict__.has_key('NonBlockingHTTP'):
+			self.NonBlockingHTTP.PlugOut()
 		
 
 	def send(self, stanza, now = False):
@@ -106,7 +107,7 @@ class NBCommonClient:
 	def connect(self, on_connect, on_connect_failure, hostname=None, port=5222, 
 		on_proxy_failure=None, proxy=None, secure=None):
 		''' 
-		Open XMPP connection (open streams in both directions).
+		Open XMPP connection (open XML streams in both directions).
 		:param hostname: hostname of XMPP server from SRV request 
 		:param port: port number of XMPP server
 		:param on_connect: called after stream is successfully opened
@@ -118,70 +119,14 @@ class NBCommonClient:
 			optionally keys 'user' and 'pass' as proxy credentials
 		:param secure:
 		'''
-		self.Port = port
-		if hostname:
-			xmpp_hostname = hostname
-		else:
-			xmpp_hostname = self.Server
-
 		self.on_connect = on_connect
 		self.on_connect_failure=on_connect_failure
 		self.on_proxy_failure = on_proxy_failure
 		self._secure = secure
 		self.Connection = None
+		self.Port = port
 
-		if proxy:
-			# with proxies, client connects to proxy instead of directly to
-			# XMPP server ((hostname, port))
-			# tcp_server is machine used for socket connection
-			tcp_server=proxy['host']			
-			tcp_port=proxy['port']
-			self._on_tcp_failure = self.on_proxy_failure
-			if proxy.has_key('type'):
-				if proxy.has_key('user') and proxy.has_key('pass'):
-					proxy_creds=(proxy['user'],proxy['pass'])
-				else:
-					proxy_creds=(None, None)
-											
-				type_ = proxy['type']
-				if type_ == 'socks5':
-					# SOCKS5 proxy
-					self.socket = transports_nb.NBSOCKS5ProxySocket(
-						on_disconnect=self.on_disconnect,
-						proxy_creds=proxy_creds,
-						xmpp_server=(xmpp_hostname, self.Port))
-				elif type_ == 'http':
-					# HTTP CONNECT to proxy
-					self.socket = transports_nb.NBHTTPProxySocket(
-						on_disconnect=self.on_disconnect,
-						proxy_creds=proxy_creds,
-						xmpp_server=(xmpp_hostname, self.Port))
-				elif type_ == 'bosh':
-					# BOSH - XMPP over HTTP
-					tcp_server = transports_nb.urisplit(tcp_server)[1]
-					self.socket = transports_nb.NonBlockingHTTP(
-						on_disconnect=self.on_disconnect,
-						http_uri = proxy['host'],
-						http_port = tcp_port)
-			else:
-				# HTTP CONNECT to proxy from environment variables
-				self.socket = transports_nb.NBHTTPProxySocket(
-					on_disconnect=self.on_disconnect,
-					proxy_creds=(None, None),
-					xmpp_server=(xmpp_hostname, self.Port))
-		else: 
-			self._on_tcp_failure = self._on_connect_failure
-			tcp_server=xmpp_hostname
-			tcp_port=self.Port
-			self.socket = transports_nb.NonBlockingTcp(on_disconnect = self.on_disconnect)
 
-		self.socket.PlugIn(self)
-
-		self._resolve_hostname(
-			hostname=tcp_server,
-			port=tcp_port,
-			on_success=self._try_next_ip,
-			on_failure=self._on_tcp_failure)
 			
 			
 
@@ -232,13 +177,14 @@ class NBCommonClient:
 		started, and _on_connect_failure on failure.
 		'''
 		#FIXME: use RegisterHandlerOnce instead of onreceive
-		log.info('=============xmpp_connect_machine() >> mode: %s, data: %s' % (mode,data))
+		log.info('========xmpp_connect_machine() >> mode: %s, data: %s' % (mode,str(data)[:20] ))
 
 		def on_next_receive(mode):
+			log.info('setting %s on next receive' % mode)
 			if mode is None:
 				self.onreceive(None)
 			else:
-				self.onreceive(lambda data:self._xmpp_connect_machine(mode, data))
+				self.onreceive(lambda _data:self._xmpp_connect_machine(mode, _data))
 
 		if not mode:
 			dispatcher_nb.Dispatcher().PlugIn(self)
@@ -259,9 +205,11 @@ class NBCommonClient:
 				if not self.Dispatcher.Stream.features: 
 					on_next_receive('RECEIVE_STREAM_FEATURES')
 				else:
+					log.info('got STREAM FEATURES in first read')
 					self._xmpp_connect_machine(mode='STREAM_STARTED')
 
 			else:
+				log.info('incoming stream version less than 1.0')
 				self._xmpp_connect_machine(mode='STREAM_STARTED')
 
 		elif mode == 'RECEIVE_STREAM_FEATURES':
@@ -274,6 +222,7 @@ class NBCommonClient:
 					mode='FAILURE',
 					data='Missing <features> in 1.0 stream')
 			else:
+				log.info('got STREAM FEATURES in second read')
 				self._xmpp_connect_machine(mode='STREAM_STARTED')
 
 		elif mode == 'STREAM_STARTED':
@@ -294,6 +243,10 @@ class NBCommonClient:
 		self.onreceive(None)
 		self.on_connect(self, self.connected)
 
+	def raise_event(self, event_type, data):
+		log.info('raising event from transport: %s %s' % (event_type,data))
+		if hasattr(self, 'Dispatcher'):
+			self.Dispatcher.Event('', event_type, data)
 		
 	
 	# moved from client.CommonClient:
@@ -324,8 +277,6 @@ class NBCommonClient:
 
 
 	def auth(self, user, password, resource = '', sasl = 1, on_auth = None):
-			
-		print 'auth called'
 		''' Authenticate connnection and bind resource. If resource is not provided
 			random one or library name used. '''
 		self._User, self._Password, self._Resource, self._sasl = user, password, resource, sasl
@@ -388,10 +339,93 @@ class NBCommonClient:
 			self.on_auth(self, None)
 
 
+	def initRoster(self):
+		''' Plug in the roster. '''
+		if not self.__dict__.has_key('NonBlockingRoster'): 
+			roster_nb.NonBlockingRoster().PlugIn(self)
+
+	def getRoster(self, on_ready = None):
+		''' Return the Roster instance, previously plugging it in and
+			requesting roster from server if needed. '''
+		if self.__dict__.has_key('NonBlockingRoster'):
+			return self.NonBlockingRoster.getRoster(on_ready)
+		return None
+
+	def sendPresence(self, jid=None, typ=None, requestRoster=0):
+		''' Send some specific presence state.
+			Can also request roster from server if according agrument is set.'''
+		if requestRoster: roster_nb.NonBlockingRoster().PlugIn(self)
+		self.send(dispatcher_nb.Presence(to=jid, typ=typ))
+
 
 	
 class NonBlockingClient(NBCommonClient):
 	''' Example client class, based on CommonClient. '''
+
+	def __init__(self, domain, idlequeue, caller=None):
+		NBCommonClient.__init__(self, domain, idlequeue, caller)
+
+	def connect(self, on_connect, on_connect_failure, hostname=None, port=5222, 
+		on_proxy_failure=None, proxy=None, secure=None):
+
+		NBCommonClient.connect(self, on_connect, on_connect_failure, hostname, port,
+			on_proxy_failure, proxy, secure)
+
+		if hostname:
+			xmpp_hostname = hostname
+		else:
+			xmpp_hostname = self.Server
+
+		if proxy:
+			# with proxies, client connects to proxy instead of directly to
+			# XMPP server ((hostname, port))
+			# tcp_host is machine used for socket connection
+			tcp_host=proxy['host']			
+			tcp_port=proxy['port']
+			self._on_tcp_failure = self.on_proxy_failure
+			if proxy.has_key('type'):
+				assert(proxy['type']!='bosh')
+				if proxy.has_key('user') and proxy.has_key('pass'):
+					proxy_creds=(proxy['user'],proxy['pass'])
+				else:
+					proxy_creds=(None, None)
+											
+				type_ = proxy['type']
+				if type_ == 'socks5':
+					# SOCKS5 proxy
+					self.socket = transports_nb.NBSOCKS5ProxySocket(
+						on_disconnect=self.on_disconnect,
+						proxy_creds=proxy_creds,
+						xmpp_server=(xmpp_hostname, self.Port))
+				elif type_ == 'http':
+					# HTTP CONNECT to proxy
+					self.socket = transports_nb.NBHTTPProxySocket(
+						on_disconnect=self.on_disconnect,
+						proxy_creds=proxy_creds,
+						xmpp_server=(xmpp_hostname, self.Port))
+			else:
+				# HTTP CONNECT to proxy from environment variables
+				self.socket = transports_nb.NBHTTPProxySocket(
+					on_disconnect=self.on_disconnect,
+					proxy_creds=(None, None),
+					xmpp_server=(xmpp_hostname, self.Port))
+		else: 
+			self._on_tcp_failure = self._on_connect_failure
+			tcp_host=xmpp_hostname
+			tcp_port=self.Port
+			self.socket = transports_nb.NonBlockingTCP(
+					raise_event = self.raise_event,
+					on_disconnect = self.on_disconnect)
+
+		self.socket.PlugIn(self)
+
+		self._resolve_hostname(
+			hostname=tcp_host,
+			port=tcp_port,
+			on_success=self._try_next_ip,
+			on_failure=self._on_tcp_failure)
+
+
 
 
 	def _on_stream_start(self):
@@ -401,7 +435,7 @@ class NonBlockingClient(NBCommonClient):
 		'''
 		self.onreceive(None)
 		if self.connected == 'tcp':
-			if not self.connected or self._secure is not None and not self._secure:
+			if not self.connected or not self._secure:
 				# if we are disconnected or TLS/SSL is not desired, return
 				self._on_connect()
 				return 
@@ -421,22 +455,4 @@ class NonBlockingClient(NBCommonClient):
 			self._on_connect()
 
 		
-	def initRoster(self):
-		''' Plug in the roster. '''
-		if not self.__dict__.has_key('NonBlockingRoster'): 
-			roster_nb.NonBlockingRoster().PlugIn(self)
-
-	def getRoster(self, on_ready = None):
-		''' Return the Roster instance, previously plugging it in and
-			requesting roster from server if needed. '''
-		if self.__dict__.has_key('NonBlockingRoster'):
-			return self.NonBlockingRoster.getRoster(on_ready)
-		return None
-
-	def sendPresence(self, jid=None, typ=None, requestRoster=0):
-		''' Send some specific presence state.
-			Can also request roster from server if according agrument is set.'''
-		if requestRoster: roster_nb.NonBlockingRoster().PlugIn(self)
-		self.send(dispatcher_nb.Presence(to=jid, typ=typ))
-
 

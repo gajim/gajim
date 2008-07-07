@@ -173,11 +173,8 @@ class SASL(PlugIn):
 			self.startsasl='success'
 			log.info('Successfully authenticated with remote server.')
 			handlers=self._owner.Dispatcher.dumpHandlers()
-			print '6' * 79
-			print handlers
-			print '6' * 79
 			self._owner.Dispatcher.PlugOut()
-			dispatcher_nb.Dispatcher().PlugIn(self._owner)
+			dispatcher_nb.Dispatcher().PlugIn(self._owner, after_SASL=True)
 			self._owner.Dispatcher.restoreHandlers(handlers)
 			self._owner.User = self.username
 			if self.on_sasl :

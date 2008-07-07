@@ -1,34 +1,20 @@
 
-import protocol, simplexml, locale, random, dispatcher_nb 
+import protocol, locale, random, dispatcher_nb 
 from client_nb import NBCommonClient
+import transports_nb
 import logging
+from simplexml import Node
 log = logging.getLogger('gajim.c.x.bosh')
 
 
 class BOSHClient(NBCommonClient):
 	'''
-	Client class implementing BOSH. 
+	Client class implementing BOSH. Extends common XMPP  
 	'''
-	def __init__(self, *args, **kw):
+	def __init__(self, domain, idlequeue, caller=None):
 		'''Preceeds constructor of NBCommonClient and sets some of values that will
 		be used as attributes in <body> tag'''
-		self.Namespace = protocol.NS_HTTP_BIND
-		# BOSH parameters should be given via Advanced Configuration Editor
-		self.bosh_xml_lang = None
-		self.bosh_hold = 1
-		self.bosh_wait=60
-		self.bosh_rid=None
 		self.bosh_sid=None
-
-		self.bosh_httpversion = 'HTTP/1.1'
-		NBCommonClient.__init__(self, *args, **kw)
-
-
-	def connect(self, *args, **kw):
-
-
-		if locale.getdefaultlocale()[0]:
-			self.bosh_xml_lang = locale.getdefaultlocale()[0].split('_')[0]
 
 		# with 50-bit random initial rid, session would have to go up
 		# to 7881299347898368 messages to raise rid over 2**53 
@@ -36,45 +22,187 @@ class BOSHClient(NBCommonClient):
 		r = random.Random()
 		r.seed()
 		self.bosh_rid = r.getrandbits(50)
+		self.bosh_sid = None
 
-		proxy = kw['proxy']
-		#self.bosh_protocol, self.bosh_host, self.bosh_uri = transports_nb.urisplit(proxy['host'])
-		self.bosh_port = proxy['port']
+		if locale.getdefaultlocale()[0]:
+			self.bosh_xml_lang = locale.getdefaultlocale()[0].split('_')[0]
+		else:
+			self.bosh_xml_lang = 'en'
+
+		self.http_version = 'HTTP/1.1'
+		self.bosh_to = domain
+
+		#self.Namespace = protocol.NS_HTTP_BIND
+		#self.defaultNamespace = self.Namespace
+		self.bosh_session_on = False
+
+		NBCommonClient.__init__(self, domain, idlequeue, caller)
+
+
+
+	def connect(self, on_connect, on_connect_failure, proxy, hostname=None, port=5222, 
+		on_proxy_failure=None, secure=None):
+		''' 
+		Open XMPP connection (open XML streams in both directions).
+		:param hostname: hostname of XMPP server from SRV request 
+		:param port: port number of XMPP server
+		:param on_connect: called after stream is successfully opened
+		:param on_connect_failure: called when error occures during connection
+		:param on_proxy_failure: called if error occurres during TCP connection to
+			proxy server or during connection to the proxy
+		:param proxy: dictionary with bosh-related paramters. It should contain at 
+			least values for keys 'host' and 'port' - connection details for proxy
+			server and optionally keys 'user' and 'pass' as proxy credentials
+		:param secure: if 
+		'''
+		NBCommonClient.connect(self, on_connect, on_connect_failure, hostname, port,
+			on_proxy_failure, proxy, secure)
+
+		if hostname:
+			self.route_host = hostname
+		else:
+			self.route_host = self.Server
+
+		assert(proxy.has_key('type'))
+		assert(proxy['type']=='bosh')
+
 		self.bosh_wait = proxy['bosh_wait']
 		self.bosh_hold = proxy['bosh_hold']
-		self.bosh_to = proxy['to']
-		#self.bosh_ack = proxy['bosh_ack']
-		#self.bosh_secure = proxy['bosh_secure']
-		NBCommonClient.connect(self, *args, **kw)
+		self.bosh_host = proxy['host']
+		self.bosh_port = proxy['port']
+		self.bosh_content = proxy['bosh_content']
+
+		# _on_tcp_failure is callback for errors which occur during name resolving or
+		# TCP connecting.
+		self._on_tcp_failure = self.on_proxy_failure
+
+
+								
+		# in BOSH, client connects to Connection Manager instead of directly to
+		# XMPP server ((hostname, port)). If HTTP Proxy is specified, client connects
+		# to HTTP proxy and Connection Manager is specified at URI and Host header
+		# in HTTP message
+				
+		# tcp_host, tcp_port is hostname and port for socket connection - Connection
+		# Manager or HTTP proxy
+		if proxy.has_key('proxy_host') and proxy['proxy_host'] and \
+			proxy.has_key('proxy_port') and proxy['proxy_port']:
+			
+			tcp_host=proxy['proxy_host']
+			tcp_port=proxy['proxy_port']
+
+			# user and password for HTTP proxy
+			if proxy.has_key('user') and proxy['user'] and \
+				proxy.has_key('pass') and proxy['pass']:
+
+				proxy_creds=(proxy['user'],proxy['pass'])
+			else:
+				proxy_creds=(None, None)
+
+		else:
+			tcp_host = transports_nb.urisplit(proxy['host'])[1]
+			tcp_port=proxy['port']
+
+			if tcp_host is None:
+				self._on_connect_failure("Invalid BOSH URI")
+				return
+
+		self.socket = self.get_socket()
+
+		self._resolve_hostname(
+			hostname=tcp_host,
+			port=tcp_port,
+			on_success=self._try_next_ip,
+			on_failure=self._on_tcp_failure)
+
+	def _on_stream_start(self):
+		'''
+		Called after XMPP stream is opened. In BOSH, TLS is negotiated on socket
+		connect so success callback can be invoked after TCP connect.
+		(authentication is started from auth() method)
+		'''
+		self.onreceive(None)
+		if self.connected == 'tcp':
+			self._on_connect()
+
+	def get_socket(self):
+		tmp = transports_nb.NonBlockingHTTP(
+			raise_event=self.raise_event,
+			on_disconnect=self.on_http_disconnect,
+			http_uri = self.bosh_host,			
+			http_port = self.bosh_port,
+			http_version = self.http_version
+			)
+		tmp.PlugIn(self)
+		return tmp
+
+	def on_http_disconnect(self):
+		log.info('HTTP socket disconnected')
+		#import traceback
+		#traceback.print_stack()
+		if self.bosh_session_on:
+                        self.socket.connect(
+				conn_5tuple=self.current_ip,
+				on_connect=self.on_http_reconnect,
+				on_connect_failure=self.on_disconnect)
+		else:
+			self.on_disconnect()
+
+	def on_http_reconnect(self):
+		self.socket._plug_idle()
+		log.info('Connected to BOSH CM again')
+		pass
+
+
+	def on_http_reconnect_fail(self):
+		log.error('Error when reconnecting to BOSH CM')
+		self.on_disconnect()
 		
 	def send(self, stanza, now = False):
 		(id, stanza_to_send) = self.Dispatcher.assign_id(stanza)
 
-		self.Connection.send(
+		self.socket.send(
 			self.boshify_stanza(stanza_to_send),
 			now = now)
 		return id
 
+	def get_rid(self):
+		# does this need a lock??"
+		self.bosh_rid = self.bosh_rid + 1
+		return str(self.bosh_rid)
+
 	def get_bodytag(self):
 		# this should be called not until after session creation response so sid has
 		# to be initialized. 
-		assert(self.sid is not None)
-		self.rid = self.rid+1
+		assert(hasattr(self, 'bosh_sid'))
 		return protocol.BOSHBody(
-			attrs={	'rid': str(self.bosh_rid),
+			attrs={	'rid': self.get_rid(),
 				'sid': self.bosh_sid})
 
-
-	def get_initial_bodytag(self):
-		return protocol.BOSHBody(
-			attrs={'content': 'text/xml; charset=utf-8',
+	def get_initial_bodytag(self, after_SASL=False):
+		tag = protocol.BOSHBody(
+			attrs={'content': self.bosh_content,
 				'hold': str(self.bosh_hold),
+				'route': '%s:%s' % (self.route_host, self.Port),
 				'to': self.bosh_to,
 				'wait': str(self.bosh_wait),
-				'rid': str(self.bosh_rid),
+				'rid': self.get_rid(),
+				'xml:lang': self.bosh_xml_lang,
 				'xmpp:version': '1.0',
-				'xmlns:xmpp': 'urn:xmpp:xbosh'}
-			)
+				'ver': '1.6',
+				'xmlns:xmpp': 'urn:xmpp:xbosh'})
+		if after_SASL:
+			tag.delAttr('content')
+			tag.delAttr('hold')
+			tag.delAttr('route')
+			tag.delAttr('wait')
+			tag.delAttr('ver')
+			# xmpp:restart attribute is essential for stream restart request
+			tag.setAttr('xmpp:restart','true')
+			tag.setAttr('sid',self.bosh_sid)
+
+		return tag
+
 
 	def get_closing_bodytag(self):
 		closing_bodytag = self.get_bodytag()
@@ -82,31 +210,26 @@ class BOSHClient(NBCommonClient):
 		return closing_bodytag
 
 
-	def boshify_stanza(self, stanza):
-		''' wraps stanza by body tag or modifies message entirely (in case of stream
-		opening and closing'''
-		log.info('boshify_staza - type is: %s' % type(stanza))
-		if isinstance(stanza, simplexml.Node):
-			tag = self.get_bodytag()
-			return tag.setPayload(stanza)
-		else:
-			# only stream initialization and stream terminatoion are not Nodes
-			if stanza.startswith(dispatcher_nb.XML_DECLARATION):
-				# stream init
-				return self.get_initial_bodytag()
-			else:
-				# should be stream closing
-				assert(stanza == dispatcher_nb.STREAM_TERMINATOR)
-				return self.get_closing_bodytag()
+	def boshify_stanza(self, stanza=None, body_attrs=None):
+		''' wraps stanza by body tag with rid and sid '''
+		#log.info('boshify_staza - type is: %s, stanza is %s' % (type(stanza), stanza))
+		tag = self.get_bodytag()
+		tag.setPayload([stanza])
+		return tag
 
 
+	def on_bodytag_attrs(self, body_attrs):
+		#log.info('on_bodytag_attrs: %s' % body_attrs)
+		if body_attrs.has_key('type'):
+			if body_attrs['type']=='terminated':
+				# BOSH session terminated 
+				self.bosh_session_on = False
+			elif body_attrs['type']=='error':
+				# recoverable error
+				pass
+		if not self.bosh_sid:
+			# initial response - when bosh_sid is set
+			self.bosh_session_on = True
+			self.bosh_sid = body_attrs['sid']
+			self.Dispatcher.Stream._document_attrs['id']=body_attrs['authid']
 
-	def _on_stream_start(self):
-		'''
-		Called after XMPP stream is opened. In BOSH, TLS is negotiated elsewhere 
-		so success callback can be invoked.
-		(authentication is started from auth() method)
-		'''
-		self.onreceive(None)
-		if self.connected == 'tcp':
-			self._on_connect()

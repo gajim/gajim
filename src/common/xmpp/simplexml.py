@@ -20,7 +20,7 @@ I'm personally using it in many other separate projects. It is designed to be as
 import xml.parsers.expat
 import logging
 log = logging.getLogger('gajim.c.x.simplexml')
-
+#log.setLevel(logging.DEBUG)
 
 def XMLescape(txt):
 	"""Returns provided string with symbols & < > " replaced by their respective XML entities."""
@@ -99,7 +99,10 @@ class Node(object):
 			for a in self.kids:
 				if not fancy and (len(self.data)-1)>=cnt: s=s+XMLescape(self.data[cnt])
 				elif (len(self.data)-1)>=cnt: s=s+XMLescape(self.data[cnt].strip())
-				s = s + a.__str__(fancy and fancy+1)
+				if isinstance(a, str) or isinstance(a, unicode):
+					s = s + a.__str__()
+				else:
+					s = s + a.__str__(fancy and fancy+1)
 				cnt=cnt+1
 		if not fancy and (len(self.data)-1) >= cnt: s = s + XMLescape(self.data[cnt])
 		elif (len(self.data)-1) >= cnt: s = s + XMLescape(self.data[cnt].strip())
@@ -343,7 +346,7 @@ class NodeBuilder:
 			attrs[self.namespaces[ns]+attr[sp+1:]]=attrs[attr]
 			del attrs[attr]        #
 		self._inc_depth()
-		log.info("DEPTH -> %i , tag -> %s, attrs -> %s" % (self.__depth, tag, `attrs`))
+		log.info("STARTTAG.. DEPTH -> %i , tag -> %s, attrs -> %s" % (self.__depth, tag, `attrs`))
 		if self.__depth == self._dispatch_depth:
 			if not self._mini_dom : 
 				self._mini_dom = Node(tag=tag, attrs=attrs)
