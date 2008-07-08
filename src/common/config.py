@@ -251,6 +251,7 @@ class Config:
 		'attach_notifications_to_systray': [opt_bool, False, _('If True, notification windows from notification-daemon will be attached to systray icon.')],
 		'check_idle_every_foo_seconds': [opt_int, 2, _('Choose interval between 2 checks of idleness.')],
 		'latex_png_dpi': [opt_str, '108',_('Change the value to change the size of latex formulas displayed. The higher is larger.') ],
+		'uri_schemes': [opt_str, 'http https ftp ftps gopher news ed2k irc magnet sip', _('Valid uri schemes. Only schemes in this list will be made accepted as "real" uri.')],
 	}
 
 	__options_per_key = {

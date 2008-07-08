@@ -907,19 +907,8 @@ class ConversationTextview:
 			self.images.append(img)
 			# add with possible animation
 			self.tv.add_child_at_anchor(img, anchor)
-		#FIXME: one day, somehow sync with regexp in gajim.py
-		elif special_text.startswith('http://') or \
-			special_text.startswith('www.') or \
-			special_text.startswith('ftp://') or \
-			special_text.startswith('ftp.') or \
-			special_text.startswith('https://') or \
-			special_text.startswith('gopher://') or \
-			special_text.startswith('news://') or \
-			special_text.startswith('ed2k://') or \
-			special_text.startswith('irc://') or \
-			special_text.startswith('sip:') or \
-			special_text.startswith('magnet:'):
-			# it's a url
+		elif special_text.startswith('www.') or \
+		special_text.startswith('ftp.'):
 			tags.append('url')
 			use_other_tags = False
 		elif special_text.startswith('mailto:') or \
@@ -991,9 +980,16 @@ class ConversationTextview:
 				buffer.insert(end_iter, special_text)
 			use_other_tags = False
 		else:
-			#it's a url
-			tags.append('url')
-			use_other_tags = False
+			# Check if we accept this as an uri
+			schemes = gajim.config.get('uri_schemes').split()
+			for scheme in schemes:
+				if special_text.startswith(scheme + ':'):
+					tags.append('url')
+					use_other_tags = False
+			# It's not a accepted uri
+			if use_other_tags:
+				end_iter = buffer.get_end_iter()
+				buffer.insert_with_tags_by_name(end_iter, special_text, *other_tags)
 
 		if len(tags) > 0:
 			end_iter = buffer.get_end_iter()
@@ -1171,6 +1167,7 @@ class ConversationTextview:
 		# /me is replaced by name if name is given
 		if name and (text.startswith('/me ') or text.startswith('/me\n')):
 			text = '* ' + name + text[3:]
+			text_tags.append('italic')
 		# detect urls formatting and if the user has it on emoticons
 		index = self.detect_and_print_special_text(text, text_tags)
 

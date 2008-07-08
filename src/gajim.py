@@ -2274,9 +2274,9 @@ class Interface:
 		# \S*[^\s\W] --> in the matching string don't match ? or ) etc.. if at the end
 		# so http://be) will match http://be and http://be)be) will match http://be)be
 
-		prefixes = '|'.join((r'http://', r'https://', r'gopher://', r'news://',
-			r'ftp://', r'ed2k://', r'irc://', r'magnet:', r'sip:', r'www\.',
-			r'ftp\.'))
+		legacy_prefixes = r"((?<=\()(www|ftp)\.([A-Za-z0-9\.\-_~:/\?#\[\]@!\$&'\(\)\*\+,;=]|%[A-Fa-f0-9]{2})+(?=\)))"\
+				r"|((www|ftp)\.([A-Za-z0-9\.\-_~:/\?#\[\]@!\$&'\(\)\*\+,;=]|%[A-Fa-f0-9]{2})+"\
+				r"\.([A-Za-z0-9\.\-_~:/\?#\[\]@!\$&'\(\)\*\+,;=]|%[A-Fa-f0-9]{2})+)"
 		# NOTE: it's ok to catch www.gr such stuff exist!
 
 		#FIXME: recognize xmpp: and treat it specially
@@ -2295,7 +2295,7 @@ class Interface:
 
 		latex = r'|\$\$[^$\\]*?([\]\[0-9A-Za-z()|+*/-]|[\\][\]\[0-9A-Za-z()|{}$])(.*?[^\\])?\$\$'
 
-		basic_pattern = links + '|' + mail
+		basic_pattern = links + '|' + mail + '|' + legacy_prefixes
 
 		if gajim.config.get('use_latex'):
 			basic_pattern += latex
