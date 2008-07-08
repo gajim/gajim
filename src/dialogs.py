@@ -2315,9 +2315,9 @@ class SingleMessageWindow:
 		if gajim.connections[self.account].connected <= 1:
 			# if offline or connecting
 			ErrorDialog(_('Connection not available'),
-		_('Please make sure you are connected with "%s".') % self.account)
+				_('Please make sure you are connected with "%s".') % self.account)
 			return
-		if type(self.to) == type([]):
+		if isinstance(self.to, list):
 			sender_list = [i[0].jid + '/' + i[0].resource for i in self.to]
 		else:
 			sender_list = [self.to_entry.get_text().decode('utf-8')]
@@ -2325,14 +2325,15 @@ class SingleMessageWindow:
 		for to_whom_jid in sender_list:
 			if self.completion_dict.has_key(to_whom_jid):
 				to_whom_jid = self.completion_dict[to_whom_jid].jid
+
 			subject = self.subject_entry.get_text().decode('utf-8')
 			begin, end = self.message_tv_buffer.get_bounds()
 			message = self.message_tv_buffer.get_text(begin, end).decode('utf-8')
 
-			if to_whom_jid.find('/announce/') != -1:
+			if '/announce/' in to_whom_jid:
 				gajim.connections[self.account].send_motd(to_whom_jid, subject,
 					message)
-				return
+				continue
 
 			if self.session:
 				session = self.session

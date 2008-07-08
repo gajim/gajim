@@ -180,7 +180,7 @@ class CapsCache(object):
 			con.discoverInfo(jid, '%s#%s' % (node, hash))
 	
 	def is_supported(self, contact, feature):
-		if not contact.resource:
+		if not contact or not contact.resource:
 			return False
 
 		# FIXME: We assume everything is supported if we got no caps.

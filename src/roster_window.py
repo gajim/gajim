@@ -5493,13 +5493,12 @@ class RosterWindow:
 		if len(contact_list) > 1: # several resources
 			invite_to_new_room_menuitem.set_submenu(self.build_resources_submenu(
 				contact_list, account, self.on_invite_to_new_room, cap=NS_MUC))
+		elif len(list_) == 1 and gajim.capscache.is_supported(contact, NS_MUC):
+			invite_menuitem.set_sensitive(True)
+			invite_to_new_room_menuitem.connect('activate',
+				self.on_invite_to_new_room, list_)
 		else:
-			if gajim.capscache.is_supported(contact, NS_MUC):
-				invite_menuitem.set_sensitive(True)
-				invite_to_new_room_menuitem.connect('activate',
-					self.on_invite_to_new_room, list_)
-			else:
-				invite_menuitem.set_sensitive(False)
+			invite_menuitem.set_sensitive(False)
 		# transform None in 'jabber'
 		c_t = contacts_transport or 'jabber'
 		muc_jid = {}
