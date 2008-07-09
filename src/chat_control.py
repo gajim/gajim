@@ -1602,7 +1602,7 @@ class ChatControl(ChatControlBase):
 			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
 
 			if not self.session.verified_identity:
-				ChatControlBase.print_conversation_line(self, 'SAS not verified', 'status', '', None)
+				ChatControlBase.print_conversation_line(self, _("Remote contact's identity not verified. Click the shield button for more details."), 'status', '', None)
 		else:
 			msg = _('E2E encryption disabled')
 			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
