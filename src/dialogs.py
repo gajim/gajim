@@ -3812,6 +3812,10 @@ class ESessionInfoWindow:
 			w.set_no_show_all(True)
 			w.hide()
 
+			if self.session.control:
+				self.session.control._show_lock_image(True, 'E2E', True,
+					self.session.is_loggable(), True)
+
 		self.xml.get_widget('info_display').set_text(labeltext)
 
 	def on_close_button_clicked(self, widget):
