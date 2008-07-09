@@ -1383,10 +1383,10 @@ class ChatControl(ChatControlBase):
 
 		if authenticated:
 			authenticated_string = ' and authenticated'
-			self.lock_image.set_from_stock('gtk-dialog-authentication', 1)
+			self.lock_image.set_from_file(os.path.join(gajim.DATA_DIR, 'pixmaps', 'security-high.png'))
 		else:
 			authenticated_string = ' and NOT authenticated'
-			self.lock_image.set_from_stock('gtk-dialog-warning', 1)
+			self.lock_image.set_from_file(os.path.join(gajim.DATA_DIR, 'pixmaps', 'security-low.png'))
 
 		tooltip = '%s encryption %s active%s.\n' \
 			'Your chat session %s be logged.' % \
