@@ -103,6 +103,8 @@ def _gen_agent_type_info():
 		('gateway', 'smtp'):			(False, 'mail.png'),
 		('gateway', 'yahoo'):		(False, 'yahoo.png'),
 		('_jid', 'yahoo'):			(False, 'yahoo.png'),
+		('gateway', 'mrim'):			(False, 'mrim.png'),
+		('_jid', 'mrim'):				(False, 'mrim.png'),
 	}
 
 # Category type to "human-readable" description string, and sort priority

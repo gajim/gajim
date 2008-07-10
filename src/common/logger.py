@@ -83,7 +83,8 @@ class Constants:
 			self.TYPE_NEWMAIL,
 			self.TYPE_RSS,
 			self.TYPE_WEATHER,
-		) = range(13)
+			self.TYPE_MRIM,
+		) = range(14)
 
 constants = Constants()
 
@@ -290,6 +291,8 @@ class Logger:
 			return constants.TYPE_RSS
 		if type_ == 'weather':
 			return constants.TYPE_WEATHER
+		if type_ == 'mrim':
+			return constants.TYPE_MRIM
 		return None
 
 	def convert_api_values_to_human_transport_type(self, type_id):
@@ -320,6 +323,8 @@ class Logger:
 			return 'rss'
 		if type_id == constants.TYPE_WEATHER:
 			return 'weather'
+		if type_id == constants.TYPE_MRIM:
+			return 'mrim'
 
 	def commit_to_db(self, values, write_unread = False):
 		sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message, subject) VALUES (?, ?, ?, ?, ?, ?, ?)'
