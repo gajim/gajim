@@ -278,30 +278,37 @@ class ServicesCache:
 		_icon_cache[filename] = pix
 		return pix
 
-	def get_browser(self, identities = [], features = []):
+	def get_browser(self, identities=[], features=[]):
 		'''Return the browser class for an agent.'''
-		# Grab the first identity with a browser
-		browser = None
+		# First pass, we try to find a ToplevelAgentBrowser
 		for identity in identities:
 			try:
-				cat, type = identity['category'], identity['type']
-				info = _agent_type_info[(cat, type)]
+				cat, type_ = identity['category'], identity['type']
+				info = _agent_type_info[(cat, type_)]
+			except KeyError:
+				continue
+			browser = info[0]
+			if browser and browser == ToplevelAgentBrowser:
+				return browser
+
+		# second pass, we haven't found a ToplevelAgentBrowser
+		for identity in identities:
+			try:
+				cat, type_ = identity['category'], identity['type']
+				info = _agent_type_info[(cat, type_)]
 			except KeyError:
 				continue
 			browser = info[0]
 			if browser:
-				break
-		# Note: possible outcome here is browser=False
-		if browser is None:
-			# NS_BROWSE is deprecated, but we check for it anyways.
-			# Some services list it in features and respond to
-			# NS_DISCO_ITEMS anyways.
-			# Allow browsing for unknown types aswell.
-			if (not features and not identities) or\
-					xmpp.NS_DISCO_ITEMS in features or\
-					xmpp.NS_BROWSE in features:
-				browser = AgentBrowser
-		return browser
+				return browser
+		# NS_BROWSE is deprecated, but we check for it anyways.
+		# Some services list it in features and respond to
+		# NS_DISCO_ITEMS anyways.
+		# Allow browsing for unknown types aswell.
+		if (not features and not identities) or \
+		xmpp.NS_DISCO_ITEMS in features or xmpp.NS_BROWSE in features:
+			return AgentBrowser
+		return None
 
 	def get_info(self, jid, node, cb, force = False, nofetch = False, args = ()):
 		'''Get info for an agent.'''
