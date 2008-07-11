@@ -77,7 +77,10 @@ class VcardWindow:
 
 		# Get real jid
 		if gc_contact:
-			if gc_contact.jid:
+			# Don't use real jid if room is (semi-)anonymous
+			gc_control = gajim.interface.msg_win_mgr.get_gc_control(
+			gc_contact.room_jid, account)
+			if gc_contact.jid and not gc_control.is_anonymous:
 				self.real_jid = gc_contact.jid
 				if gc_contact.resource:
 					self.real_jid += '/' + gc_contact.resource
