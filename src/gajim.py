@@ -3122,6 +3122,18 @@ class Interface:
 				spell = gtkspell.Spell(tv, lang)
 			except:
 				dialogs.AspellDictError(lang)
+
+		if gajim.config.get('soundplayer') == '':
+			print 'first'
+			# only on first time Gajim starts
+			commands = ('aplay', 'play', 'esdplay', 'artsplay')
+			for command in commands:
+				if helpers.is_in_path(command):
+					if command == 'aplay':
+						command += ' -q'
+					gajim.config.set('soundplayer', command)
+					break
+
 		self.last_ftwindow_update = 0
 
 		gobject.timeout_add(100, self.autoconnect)
