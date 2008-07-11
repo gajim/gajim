@@ -1,9 +1,9 @@
 # coding=utf-8
 emoticons = {
-	'smile.png': [':)', ':-)'],
+	'smile.png': [':)', ':-)', '^_^', '^^'],
 	'coolglasses.png': ['8-)', 'B-)', '(H)'],
 	'wink.png': [';)', ';-)'],
-	'biggrin.png': [':D', ':-D'],
+	'biggrin.png': [':D', ':-D', ':>', ':->', 'xD'],
 	'unhappy.png': [':(', ':-('],
 	'cry.png': [":'(", ';-(', ';(', ";'-(", ';_;'],
 	'frowning.png': [':/', ':-/', ':S', ':-S'],
