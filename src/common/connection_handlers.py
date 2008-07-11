@@ -1616,7 +1616,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		# check if the message is pubsub#event
 		if msg.getTag('event') is not None:
-			self._pubsubEventCB(con, msg)
+			if msg.getTag('error') is None:
+				self._pubsubEventCB(con, msg)
 			return
 
 		# check if the message is a XEP-0070 confirmation request

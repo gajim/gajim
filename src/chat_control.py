@@ -1816,8 +1816,7 @@ class ChatControl(ChatControlBase):
 		if not hide_buttonbar_entries and _('Not in Roster') in contact.groups:
 			add_to_roster_menuitem.show()
 
-		# If we don't have resource, we can't do file transfer
-		# in transports, contact holds our info we need to disable it too
+		# check if it's possible to send a file
 		if gajim.capscache.is_supported(contact, NS_FILE):
 			send_file_menuitem.set_sensitive(True)
 		else:
