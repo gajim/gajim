@@ -475,7 +475,8 @@ class HistoryWindow:
 				tim = row[1]
 				message = row[4]
 				local_time = time.localtime(tim)
-				date = time.strftime('%x', local_time)
+				date = time.strftime('%Y-%m-%d', local_time)
+
 				#  jid (to which log is assigned to), name, date, message, 
 				# time (full unix time)
 				model.append((jid, contact_name, date, message, tim))
@@ -512,7 +513,7 @@ class HistoryWindow:
 		cur_month = gtkgui_helpers.make_gtk_month_python_month(cur_month)
 		model = widget.get_model()
 		# make it a tupple (Y, M, D, 0, 0, 0...)
-		tim = time.strptime(model[path][C_UNIXTIME], '%x')
+		tim = time.strptime(model[path][C_UNIXTIME], '%Y-%m-%d')
 		year = tim[0]
 		gtk_month = tim[1]
 		month = gtkgui_helpers.make_python_month_gtk_month(gtk_month)
