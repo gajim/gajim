@@ -30,7 +30,7 @@ emoticons = {
 	'photo.png': ['(P)'],
 	'thumbup.png': ['(Y)', '*THUMBS UP*'],
 	'hugleft.png': ['(})'],
-	'brheart.png': ['(U)', '</3'],
+	'brheart.png': ['</3', '(U)'],
 	'flower.png': ['@}->--', '(F)'],
 	'drink.png': ['(D)'],
 	'phone.png': ['(T)'],
