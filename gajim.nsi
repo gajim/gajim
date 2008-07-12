@@ -404,6 +404,7 @@ SectionEnd
 SectionGroupEnd
 
 Section $(NAME_SecAutostart) SecAutostart
+	SetOutPath "$INSTDIR\bin"
 	CreateShortCut "$SMSTARTUP\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
 SectionEnd
 
