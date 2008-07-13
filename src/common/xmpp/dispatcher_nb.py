@@ -42,8 +42,6 @@ XML_DECLARATION = '<?xml version=\'1.0\'?>'
 
 
 # FIXME: ugly
-from client_nb import NonBlockingClient
-from bosh import BOSHClient
 class Dispatcher():
 # Why is this here - I needed to redefine Dispatcher for BOSH and easiest way
 # was to inherit original Dispatcher (now renamed to XMPPDispatcher). Trouble
@@ -53,9 +51,9 @@ class Dispatcher():
 
 # If having two kinds of dispatcher will go well, I will rewrite the 
 	def PlugIn(self, client_obj, after_SASL=False):
-		if isinstance(client_obj, NonBlockingClient):
+		if client_obj.protocol_type == 'XMPP':
 			XMPPDispatcher().PlugIn(client_obj)
-		elif isinstance(client_obj, BOSHClient):
+		elif client_obj.protocol_type == 'BOSH':
 			BOSHDispatcher().PlugIn(client_obj, after_SASL)
 
 
@@ -76,8 +74,8 @@ class XMPPDispatcher(PlugIn):
 		self._exported_methods=[self.RegisterHandler, self.RegisterDefaultHandler, \
 		self.RegisterEventHandler, self.UnregisterCycleHandler, self.RegisterCycleHandler, \
 		self.RegisterHandlerOnce, self.UnregisterHandler, self.RegisterProtocol, \
-		self.SendAndWaitForResponse, self.assign_id, self.StreamTerminate, \
-		self.SendAndCallForResponse, self.getAnID, self.Event]
+		self.SendAndWaitForResponse, self.StreamTerminate, \
+		self.SendAndCallForResponse, self.getAnID, self.Event, self.send]
 
 	def getAnID(self):
 		global ID
@@ -112,10 +110,7 @@ class XMPPDispatcher(PlugIn):
 		self._owner.lastErrNode = None
 		self._owner.lastErr = None
 		self._owner.lastErrCode = None
-		if hasattr(self._owner, 'StreamInit'):
-			self._owner.StreamInit()
-		else:
-			self.StreamInit()
+		self.StreamInit()
 	
 	def plugout(self):
 		''' Prepares instance to be destructed. '''
@@ -165,6 +160,7 @@ class XMPPDispatcher(PlugIn):
 			self.Stream.Parse(data)
 			# end stream:stream tag received
 			if self.Stream and self.Stream.has_received_endtag():
+				# FIXME call client method
 				self._owner.Connection.disconnect()
 				return 0
 		except ExpatError:
@@ -414,25 +410,19 @@ class XMPPDispatcher(PlugIn):
 		''' Put stanza on the wire and call back when recipient replies.
 			Additional callback arguments can be specified in args. '''
 		self.SendAndWaitForResponse(stanza, 0, func, args)
-	
-	def assign_id(self, stanza):
-		''' Assign an unique ID to stanza and return assigned ID.'''
-		if type(stanza) in [type(''), type(u'')]: 
-			return (None, stanza)
-		if not isinstance(stanza, Protocol): 
-			_ID=None
-		elif not stanza.getID():
-			global ID
-			ID+=1
-			_ID=`ID`
-			stanza.setID(_ID)
-		else: 
-			_ID=stanza.getID()
-		if self._owner._registered_name and not stanza.getAttr('from'): 
-			stanza.setAttr('from', self._owner._registered_name)
-		stanza.setNamespace(self._owner.Namespace)
-		stanza.setParent(self._metastream)
-		return (_ID, stanza)
+
+	def send(self, stanza, now=False):
+		id = None
+		if type(stanza) not in [type(''), type(u'')]: 
+			if isinstance(stanza, Protocol):
+				id = stanza.getID()
+				if id is None:
+					stanza.setID(self.getAnID())
+					id = stanza.getID()
+				if self._owner._registered_name and not stanza.getAttr('from'): 
+					stanza.setAttr('from', self._owner._registered_name)
+		self._owner.Connection.send(stanza, now)	
+		return id
 	
 class BOSHDispatcher(XMPPDispatcher):
 
@@ -458,12 +448,16 @@ class BOSHDispatcher(XMPPDispatcher):
 				locale.getdefaultlocale()[0].split('_')[0])
 		
 		self.restart = True
-		self._owner.Connection.send(self._owner.get_initial_bodytag(self.after_SASL))
+		if self.after_SASL:
+			self._owner.Connection.send_http(self._owner.Connection.get_after_SASL_bodytag())
+		else:
+			self._owner.Connection.send_http(self._owner.Connection.get_initial_bodytag())
+
 
 
 	def StreamTerminate(self):
 		''' Send a stream terminator. '''
-		self._owner.Connection.send(self._owner.get_closing_bodytag())
+		self._owner.Connection.send_http(self._owner.Connection.get_closing_bodytag())
 
 	def ProcessNonBlocking(self, data=None):
 
@@ -478,10 +472,31 @@ class BOSHDispatcher(XMPPDispatcher):
 
 	def dispatch(self, stanza, session=None, direct=0):
 		if stanza.getName()=='body' and stanza.getNamespace()==NS_HTTP_BIND:
-			self._owner.on_bodytag_attrs(stanza.getAttrs())
-			#self._owner.send_empty_bodytag()
-			for child in stanza.getChildren():
-				XMPPDispatcher.dispatch(self, child, session, direct)
+
+			stanza_attrs = stanza.getAttrs()
+
+			if stanza_attrs.has_key('authid'):
+				# should be only in init response
+				# auth module expects id of stream in document attributes
+				self.Stream._document_attrs['id'] = stanza_attrs['authid']
+
+			if stanza_attrs.has_key('sid'):
+				# session ID should be only in init response
+				self._owner.Connection.bosh_sid = stanza_attrs['sid']
+
+			if stanza_attrs.has_key('terminate'):
+				# staznas under body still should be passed to XMPP dispatcher
+				self._owner.on_disconnect()
+
+			if stanza_attrs.has_key('error'):
+				# recoverable error
+				pass
+			
+			children = stanza.getChildren()
+		
+			if children:
+				for child in children:
+					XMPPDispatcher.dispatch(self, child, session, direct)
 		else:
 			XMPPDispatcher.dispatch(self, stanza, session, direct)
 

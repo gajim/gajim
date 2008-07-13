@@ -521,24 +521,19 @@ class Connection(ConnectionHandlers):
 				self.connection = None
 
 			if self._current_type == 'ssl':
+				# SSL (force TLS on different port than plain)
 				port = self._current_host['ssl_port']
-				secur = 1
+				secure = 'force'
 			else:
 				port = self._current_host['port']
 				if self._current_type == 'plain':
-					secur = 0
+					# plain connection
+					secure = None
 				else:
-					secur = None
+					# TLS (on the same port as plain)
+					secure = 'negotiate'
 
-                        if self._proxy and self._proxy['type'] == 'bosh': 
-                                clientClass = common.xmpp.bosh.BOSHClient
-                        else:
-                                clientClass = common.xmpp.NonBlockingClient
-
-			# there was:
-			# "if gajim.verbose:"
-			# here
-			con = clientClass(
+			con = common.xmpp.NonBlockingClient(
 				domain=self._hostname,
 				caller=self,
 				idlequeue=gajim.idlequeue)
@@ -550,11 +545,11 @@ class Connection(ConnectionHandlers):
 			if self.on_connect_success == self._on_new_account:
 				con.RegisterDisconnectHandler(self._on_new_account)
 
-			# FIXME: BOSH properties should be in proxy dictionary - loaded from
-			# config
-                        if self._proxy and self._proxy['type'] == 'bosh': 
+			# FIXME: BOSH properties should be loaded from config
+	                if self._proxy and self._proxy['type'] == 'bosh': 
 				self._proxy['bosh_hold'] = '1'
 				self._proxy['bosh_wait'] = '60'
+				self._proxy['bosh_content'] = 'text/xml; charset=utf-8'
 
 			
 			log.info('Connecting to %s: [%s:%d]', self.name,
@@ -566,7 +561,7 @@ class Connection(ConnectionHandlers):
 				on_proxy_failure=self.on_proxy_failure,
 				on_connect_failure=self.connect_to_next_type,
 				proxy=self._proxy,
-				secure = secur)
+				secure = secure)
 		else:
 			self.connect_to_next_host(retry)
 
@@ -578,9 +573,11 @@ class Connection(ConnectionHandlers):
 					'connection_types').split()
 			else:
 				self._connection_types = ['tls', 'ssl', 'plain']
-			
+
 			# FIXME: remove after tls and ssl will be degubbed
-			#self._connection_types = ['plain']
+			self._connection_types = ['plain']
+			
+
 			host = self.select_next_host(self._hosts)
 			self._current_host = host
 			self._hosts.remove(host)
@@ -619,6 +616,8 @@ class Connection(ConnectionHandlers):
 		if _con_type == 'tcp':
 			_con_type = 'plain'
 		if _con_type != self._current_type:
+			log.info('Connecting to next type beacuse desired is %s and returned is %s'
+				% (self._current_type, _con_type))
 			self.connect_to_next_type()
 			return
 		if _con_type == 'plain' and gajim.config.get_per('accounts', self.name,
@@ -662,7 +661,12 @@ class Connection(ConnectionHandlers):
 						(con.Connection.ssl_fingerprint_sha1,))
 					return True
 		self._register_handlers(con, con_type)
-		con.auth(name, self.password, self.server_resource, 1, self.__on_auth)
+		con.auth(
+			user=name,
+			password=self.password,
+			resource=self.server_resource,
+			sasl=1,
+			on_auth=self.__on_auth)
 
 	def ssl_certificate_accepted(self):
 		name = gajim.config.get_per('accounts', self.name, 'name')
@@ -997,7 +1001,7 @@ class Connection(ConnectionHandlers):
 				self.time_to_reconnect = None
 
 				self.connection.RegisterDisconnectHandler(self._on_disconnected)
-				self.connection.send(p)
+				self.connection.send(p, now=True)
 				self.connection.StreamTerminate()
 				#self.connection.start_disconnect(p, self._on_disconnected)
 			else:
@@ -1554,7 +1558,7 @@ class Connection(ConnectionHandlers):
 	def gc_got_disconnected(self, room_jid):
 		''' A groupchat got disconnected. This can be or purpose or not.
 		Save the time we quit to avoid duplicate logs AND be faster than get that
- 		date from DB. Save it in mem AND in a small table (with fast access)
+		date from DB. Save it in mem AND in a small table (with fast access)
 		'''
 		log_time = time_time()
 		self.last_history_time[room_jid] = log_time

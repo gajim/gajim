@@ -15,6 +15,7 @@
 import select
 import logging
 log = logging.getLogger('gajim.c.x.idlequeue')
+log.setLevel(logging.DEBUG)
 
 class IdleObject:
 	''' base class for all idle listeners, these are the methods, which are called from IdleQueue
@@ -36,7 +37,7 @@ class IdleObject:
 		pass
 	
 	def read_timeout(self):
-		''' called when timeout has happend '''
+		''' called when timeout happened '''
 		pass
 		
 class IdleQueue:
@@ -55,7 +56,8 @@ class IdleQueue:
 		self.selector = select.poll()
 	
 	def remove_timeout(self, fd):
-		log.debug('read timeout removed for fd %s' % fd)
+		#log.debug('read timeout removed for fd %s' % fd)
+		print 'read timeout removed for fd %s' % fd
 		if self.read_timeouts.has_key(fd):
 			del(self.read_timeouts[fd])
 	
@@ -71,11 +73,13 @@ class IdleQueue:
 	def set_read_timeout(self, fd, seconds):
 		''' set a new timeout, if it is not removed after 'seconds', 
 		then obj.read_timeout() will be called '''
-		log.debug('read timeout set for fd %s on %s seconds' % (fd, seconds))
+		#log.debug('read timeout set for fd %s on %s seconds' % (fd, seconds))
+		print 'read timeout set for fd %s on %s seconds' % (fd, seconds)
 		timeout = self.current_time() + seconds
 		self.read_timeouts[fd] = timeout
 	
 	def check_time_events(self):
+		print 'check time evs'
 		current_time = self.current_time()
 		for fd, timeout in self.read_timeouts.items():
 			if timeout > current_time:
@@ -134,6 +138,7 @@ class IdleQueue:
 			return False
 		
 		if flags & 3: # waiting read event
+			#print 'waiting read on %d, flags are %d' % (fd, flags)
 			obj.pollin()
 			return True
 		

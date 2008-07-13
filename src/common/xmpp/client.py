@@ -48,7 +48,7 @@ class PlugIn:
 		else:
 			owner.__dict__[self.__class__.__name__]=self
 
-		# following will not work for classes inheriting plugin()
+		# following commented line will not work for classes inheriting plugin()
 		#if self.__class__.__dict__.has_key('plugin'): return self.plugin(owner)
 		if hasattr(self,'plugin'): return self.plugin(owner)
  

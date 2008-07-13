@@ -23,7 +23,7 @@ These classes can be used for simple applications "AS IS" though.
 
 import socket
 
-import transports_nb, tls_nb, dispatcher_nb, auth_nb, roster_nb, protocol
+import transports_nb, tls_nb, dispatcher_nb, auth_nb, roster_nb, protocol, bosh
 from client import *
 
 import logging
@@ -49,7 +49,7 @@ class NBCommonClient:
 
 		self.Server = domain
 		
-		# caller is who initiated this client, it is sed to register the EventDispatcher
+		# caller is who initiated this client, it is needed to register the EventDispatcher
 		self._caller = caller
 		self._owner = self
 		self._registered_name = None
@@ -92,16 +92,8 @@ class NBCommonClient:
 			self.NonBlockingTCP.PlugOut()
 		if self.__dict__.has_key('NonBlockingHTTP'):
 			self.NonBlockingHTTP.PlugOut()
-		
-
-	def send(self, stanza, now = False):
-		''' interface for putting stanzas on wire. Puts ID to stanza if needed and
-		sends it via socket wrapper'''
-		(id, stanza_to_send) = self.Dispatcher.assign_id(stanza)
-
-		self.Connection.send(stanza_to_send, now = now)
-		return id
-
+		if self.__dict__.has_key('NonBlockingBOSH'):
+			self.NonBlockingBOSH.PlugOut()
 
 
 	def connect(self, on_connect, on_connect_failure, hostname=None, port=5222, 
@@ -177,7 +169,7 @@ class NBCommonClient:
 		started, and _on_connect_failure on failure.
 		'''
 		#FIXME: use RegisterHandlerOnce instead of onreceive
-		log.info('========xmpp_connect_machine() >> mode: %s, data: %s' % (mode,str(data)[:20] ))
+		log.info('-------------xmpp_connect_machine() >> mode: %s, data: %s' % (mode,str(data)[:20] ))
 
 		def on_next_receive(mode):
 			log.info('setting %s on next receive' % mode)
@@ -187,7 +179,8 @@ class NBCommonClient:
 				self.onreceive(lambda _data:self._xmpp_connect_machine(mode, _data))
 
 		if not mode:
-			dispatcher_nb.Dispatcher().PlugIn(self)
+			# starting state
+			d=dispatcher_nb.Dispatcher().PlugIn(self)
 			on_next_receive('RECEIVE_DOCUMENT_ATTRIBUTES')
 
 		elif mode == 'FAILURE':
@@ -205,7 +198,7 @@ class NBCommonClient:
 				if not self.Dispatcher.Stream.features: 
 					on_next_receive('RECEIVE_STREAM_FEATURES')
 				else:
-					log.info('got STREAM FEATURES in first read')
+					log.info('got STREAM FEATURES in first recv')
 					self._xmpp_connect_machine(mode='STREAM_STARTED')
 
 			else:
@@ -222,7 +215,7 @@ class NBCommonClient:
 					mode='FAILURE',
 					data='Missing <features> in 1.0 stream')
 			else:
-				log.info('got STREAM FEATURES in second read')
+				log.info('got STREAM FEATURES in second recv')
 				self._xmpp_connect_machine(mode='STREAM_STARTED')
 
 		elif mode == 'STREAM_STARTED':
@@ -244,7 +237,7 @@ class NBCommonClient:
 		self.on_connect(self, self.connected)
 
 	def raise_event(self, event_type, data):
-		log.info('raising event from transport: %s %s' % (event_type,data))
+		log.info('raising event from transport: :::::%s::::\n_____________\n%s\n_____________\n' % (event_type,data))
 		if hasattr(self, 'Dispatcher'):
 			self.Dispatcher.Event('', event_type, data)
 		
@@ -272,8 +265,9 @@ class NBCommonClient:
 		''' get the ip address of the account, from which is made connection 
 		to the server , (e.g. me).
 		We will create listening socket on the same ip '''
-		if hasattr(self, 'Connection'):
-			return self.Connection._sock.getsockname()
+		# FIXME: tuple (ip, port) is expected (and checked for) but port num is useless
+		if hasattr(self, 'socket'):
+			return self.socket.peerhost
 
 
 	def auth(self, user, password, resource = '', sasl = 1, on_auth = None):
@@ -364,6 +358,7 @@ class NonBlockingClient(NBCommonClient):
 
 	def __init__(self, domain, idlequeue, caller=None):
 		NBCommonClient.__init__(self, domain, idlequeue, caller)
+		self.protocol_type = 'XMPP'
 
 	def connect(self, on_connect, on_connect_failure, hostname=None, port=5222, 
 		on_proxy_failure=None, proxy=None, secure=None):
@@ -379,35 +374,33 @@ class NonBlockingClient(NBCommonClient):
 		if proxy:
 			# with proxies, client connects to proxy instead of directly to
 			# XMPP server ((hostname, port))
-			# tcp_host is machine used for socket connection
-			tcp_host=proxy['host']			
-			tcp_port=proxy['port']
+			# tcp_host is hostname of machine used for socket connection
+			# (DNS request will be done for this hostname)
+			tcp_host, tcp_port, proxy_user, proxy_pass = \
+				transports_nb.get_proxy_data_from_dict(proxy)
+
 			self._on_tcp_failure = self.on_proxy_failure
-			if proxy.has_key('type'):
-				assert(proxy['type']!='bosh')
-				if proxy.has_key('user') and proxy.has_key('pass'):
-					proxy_creds=(proxy['user'],proxy['pass'])
-				else:
-					proxy_creds=(None, None)
-											
-				type_ = proxy['type']
-				if type_ == 'socks5':
-					# SOCKS5 proxy
-					self.socket = transports_nb.NBSOCKS5ProxySocket(
+		
+			if proxy['type'] == 'bosh':
+				self.socket = bosh.NonBlockingBOSH(
 						on_disconnect=self.on_disconnect,
-						proxy_creds=proxy_creds,
-						xmpp_server=(xmpp_hostname, self.Port))
-				elif type_ == 'http':
-					# HTTP CONNECT to proxy
-					self.socket = transports_nb.NBHTTPProxySocket(
-						on_disconnect=self.on_disconnect,
-						proxy_creds=proxy_creds,
-						xmpp_server=(xmpp_hostname, self.Port))
+						raise_event = self.raise_event,
+						idlequeue = self.idlequeue,
+						xmpp_server=(xmpp_hostname, self.Port),
+						domain = self.Server,
+						bosh_dict = proxy)
+				self.protocol_type = 'BOSH'
+
 			else:
-				# HTTP CONNECT to proxy from environment variables
-				self.socket = transports_nb.NBHTTPProxySocket(
+				if proxy['type'] == 'socks5':
+					proxy_class = transports_nb.NBSOCKS5ProxySocket
+				elif proxy['type'] == 'http':
+					proxy_class = transports_nb.NBHTTPProxySocket
+				self.socket = proxy_class(
 					on_disconnect=self.on_disconnect,
-					proxy_creds=(None, None),
+					raise_event = self.raise_event,
+					idlequeue = self.idlequeue,
+					proxy_creds=(proxy_user, proxy_pass),
 					xmpp_server=(xmpp_hostname, self.Port))
 		else: 
 			self._on_tcp_failure = self._on_connect_failure
@@ -415,6 +408,7 @@ class NonBlockingClient(NBCommonClient):
 			tcp_port=self.Port
 			self.socket = transports_nb.NonBlockingTCP(
 					raise_event = self.raise_event,
+					idlequeue = self.idlequeue,
 					on_disconnect = self.on_disconnect)
 
 		self.socket.PlugIn(self)

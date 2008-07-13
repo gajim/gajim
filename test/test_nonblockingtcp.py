@@ -1,5 +1,5 @@
 '''
-Unit test for NonBlockingTcp tranport.
+Unit test for NonBlockingTCP tranport.
 '''
 
 import unittest
@@ -38,7 +38,7 @@ class MockClient(IdleMock):
 		IdleMock.__init__(self)
 
 	def do_connect(self):
-		self.socket=transports_nb.NonBlockingTcp(
+		self.socket=transports_nb.NonBlockingTCP(
 			on_disconnect=lambda: self.on_success(mode='SocketDisconnect')
 			)
 
@@ -73,7 +73,7 @@ class MockClient(IdleMock):
 
 
 
-class TestNonBlockingTcp(unittest.TestCase):
+class TestNonBlockingTCP(unittest.TestCase):
 	def setUp(self):
 		self.idlequeue_thread = IdleQueueThread()
 		self.idlequeue_thread.start()
@@ -100,6 +100,6 @@ class TestNonBlockingTcp(unittest.TestCase):
 
 if __name__ == '__main__':
 
-	suite = unittest.TestLoader().loadTestsFromTestCase(TestNonBlockingTcp)
+	suite = unittest.TestLoader().loadTestsFromTestCase(TestNonBlockingTCP)
 	unittest.TextTestRunner(verbosity=2).run(suite)
 

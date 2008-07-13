@@ -300,6 +300,13 @@ class JID:
 		""" Produce hash of the JID, Allows to use JID objects as keys of the dictionary. """
 		return hash(self.__str__())
 
+class BOSHBody(Node):
+	'''
+	<body> tag that wraps usual XMPP stanzas in XMPP over BOSH
+	'''
+	def __init__(self, attrs={}, payload=[], node=None):
+		Node.__init__(self, tag='body', attrs=attrs, payload=payload, node=node)
+		self.setNamespace(NS_HTTP_BIND)
 
 
 class Protocol(Node):
@@ -400,13 +407,6 @@ class Protocol(Node):
 		if item in ['to','from']: val=JID(val)
 		return self.setAttr(item,val)
 
-class BOSHBody(Protocol):
-	'''
-	<body> tag that wraps usual XMPP stanzas in BOSH
-	'''
-	def __init__(self, to=None, frm=None, attrs={}, payload=[], node=None):
-		Protocol.__init__(self, name='body', to=to, frm=frm, attrs=attrs,
-			payload=payload, xmlns=NS_HTTP_BIND, node=node)
 
 class Message(Protocol):
 	""" XMPP Message stanza - "push" mechanism."""

@@ -1,235 +1,260 @@
 
-import protocol, locale, random, dispatcher_nb 
-from client_nb import NBCommonClient
-import transports_nb
-import logging
+import locale, random
+from transports_nb import NonBlockingTransport, NonBlockingHTTP, CONNECTED, CONNECTING, DISCONNECTED
+from protocol import BOSHBody
 from simplexml import Node
+
+import logging
 log = logging.getLogger('gajim.c.x.bosh')
 
 
-class BOSHClient(NBCommonClient):
-	'''
-	Client class implementing BOSH. Extends common XMPP  
-	'''
-	def __init__(self, domain, idlequeue, caller=None):
-		'''Preceeds constructor of NBCommonClient and sets some of values that will
-		be used as attributes in <body> tag'''
-		self.bosh_sid=None
+FAKE_DESCRIPTOR = -1337
+'''Fake file descriptor - it's used for setting read_timeout in idlequeue for
+BOSH Transport. Timeouts in queue are saved by socket descriptor.
+In TCP-derived transports it is file descriptor of socket'''
+
+
+class NonBlockingBOSH(NonBlockingTransport):
+	def __init__(self, raise_event, on_disconnect, idlequeue, xmpp_server, domain,
+		bosh_dict):
+		NonBlockingTransport.__init__(self, raise_event, on_disconnect, idlequeue)
 
 		# with 50-bit random initial rid, session would have to go up
 		# to 7881299347898368 messages to raise rid over 2**53 
 		# (see http://www.xmpp.org/extensions/xep-0124.html#rids)
 		r = random.Random()
 		r.seed()
+		global FAKE_DESCRIPTOR
+		FAKE_DESCRIPTOR = FAKE_DESCRIPTOR - 1
+		self.fake_fd = FAKE_DESCRIPTOR
 		self.bosh_rid = r.getrandbits(50)
 		self.bosh_sid = None
-
 		if locale.getdefaultlocale()[0]:
 			self.bosh_xml_lang = locale.getdefaultlocale()[0].split('_')[0]
 		else:
 			self.bosh_xml_lang = 'en'
 
 		self.http_version = 'HTTP/1.1'
+		self.http_persistent = False
+		self.http_pipelining = False
 		self.bosh_to = domain
 
-		#self.Namespace = protocol.NS_HTTP_BIND
-		#self.defaultNamespace = self.Namespace
-		self.bosh_session_on = False
+		self.route_host, self.route_port = xmpp_server
 
-		NBCommonClient.__init__(self, domain, idlequeue, caller)
+		self.bosh_wait = bosh_dict['bosh_wait']
+		self.bosh_hold = bosh_dict['bosh_hold']
+		self.bosh_host = bosh_dict['host']
+		self.bosh_port = bosh_dict['port']
+		self.bosh_content = bosh_dict['bosh_content']
+
+		self.http_socks = []
+		self.stanzas_to_send = []
+		self.prio_bosh_stanza = None
+		self.current_recv_handler = None
+
+		# if proxy_host .. do sth about HTTP proxy etc.
+		
+
+	def connect(self, conn_5tuple, on_connect, on_connect_failure):
+		NonBlockingTransport.connect(self, conn_5tuple, on_connect, on_connect_failure)
+		self.http_socks.append(self.get_http_socket())
+		self.tcp_connection_started()
+
+		# this connect() is not needed because sockets can be connected on send but 
+		# we need to know if host is reachable in order to invoke callback for
+		# failure when connecting (it's different than callback for errors 
+		# occurring after connection is etabilished)
+
+		self.http_socks[0].connect(
+			conn_5tuple = conn_5tuple,
+			on_connect = lambda: self._on_connect(self.http_socks[0]),
+			on_connect_failure = self._on_connect_failure)
 
 
 
-	def connect(self, on_connect, on_connect_failure, proxy, hostname=None, port=5222, 
-		on_proxy_failure=None, secure=None):
-		''' 
-		Open XMPP connection (open XML streams in both directions).
-		:param hostname: hostname of XMPP server from SRV request 
-		:param port: port number of XMPP server
-		:param on_connect: called after stream is successfully opened
-		:param on_connect_failure: called when error occures during connection
-		:param on_proxy_failure: called if error occurres during TCP connection to
-			proxy server or during connection to the proxy
-		:param proxy: dictionary with bosh-related paramters. It should contain at 
-			least values for keys 'host' and 'port' - connection details for proxy
-			server and optionally keys 'user' and 'pass' as proxy credentials
-		:param secure: if 
+	def get_fd(self):
+		return self.fake_fd
+
+	def on_http_request_possible(self):
 		'''
-		NBCommonClient.connect(self, on_connect, on_connect_failure, hostname, port,
-			on_proxy_failure, proxy, secure)
+		Called after HTTP response is received - another request is possible. 
+		There should be always one pending request on BOSH CM.
+		'''
+		log.info('on_http_req possible, stanzas in list: %s, state:\n%s' % 
+				(self.stanzas_to_send, self.get_current_state()))
+		# if one of sockets is connecting, sth is about to be sent - we don't have to
+		# send request from here
+		for s in self.http_socks:
+			if s.state==CONNECTING or s.pending_requests>0: return
+		self.flush_stanzas()
 
-		if hostname:
-			self.route_host = hostname
+
+	def flush_stanzas(self):
+		# another to-be-locked candidate
+		log.info('flushing stanzas')
+		if self.prio_bosh_stanza:
+			tmp = self.prio_bosh_stanza
+			self.prio_bosh_stanza = None
 		else:
-			self.route_host = self.Server
-
-		assert(proxy.has_key('type'))
-		assert(proxy['type']=='bosh')
-
-		self.bosh_wait = proxy['bosh_wait']
-		self.bosh_hold = proxy['bosh_hold']
-		self.bosh_host = proxy['host']
-		self.bosh_port = proxy['port']
-		self.bosh_content = proxy['bosh_content']
-
-		# _on_tcp_failure is callback for errors which occur during name resolving or
-		# TCP connecting.
-		self._on_tcp_failure = self.on_proxy_failure
+			tmp = self.stanzas_to_send
+			self.stanzas_to_send = []
+		self.send_http(tmp)
 
 
-								
-		# in BOSH, client connects to Connection Manager instead of directly to
-		# XMPP server ((hostname, port)). If HTTP Proxy is specified, client connects
-		# to HTTP proxy and Connection Manager is specified at URI and Host header
-		# in HTTP message
-				
-		# tcp_host, tcp_port is hostname and port for socket connection - Connection
-		# Manager or HTTP proxy
-		if proxy.has_key('proxy_host') and proxy['proxy_host'] and \
-			proxy.has_key('proxy_port') and proxy['proxy_port']:
-			
-			tcp_host=proxy['proxy_host']
-			tcp_port=proxy['proxy_port']
+	def send(self, stanza, now=False):
+		# body tags should be send only via send_http()
+		assert(not isinstance(stanza, BOSHBody))
+		now = True
+		if now:
+			self.send_http([stanza])
+		else:
+			self.stanzas_to_send.append(stanza)
 
-			# user and password for HTTP proxy
-			if proxy.has_key('user') and proxy['user'] and \
-				proxy.has_key('pass') and proxy['pass']:
 
-				proxy_creds=(proxy['user'],proxy['pass'])
+	def send_http(self, payload):
+		# "Protocol" and string/unicode stanzas should be sent via send()
+		# (only initiating and terminating BOSH stanzas should be send via send_http)
+		assert(isinstance(payload, list) or isinstance(payload, BOSHBody))
+		log.warn('send_http: stanzas: %s\n%s' % (payload, self.get_current_state()))
+
+		if isinstance(payload, list):
+			bosh_stanza = self.boshify_stanzas(payload)
+		else:
+			# bodytag_payload is <body ...>, we don't boshify, only add the rid
+			bosh_stanza = payload
+		picked_sock = self.pick_socket()
+		if picked_sock:
+			log.info('sending to socket %s' % id(picked_sock))
+			bosh_stanza.setAttr('rid', self.get_rid())
+			picked_sock.send(bosh_stanza)
+		else:
+			# no socket was picked but one is about to connect - save the stanza and
+			# return
+			if self.prio_bosh_stanza:
+				payload = self.merge_stanzas(payload, self.prio_bosh_stanza)
+				if payload is None:
+					log.error('Error in BOSH socket handling - unable to send %s because %s\
+					is already about to be sent' % (payload, self.prio_bosh_stanza))
+					self.disconnect()
+			self.prio_bosh_stanza = payload
+
+	def merge_stanzas(self, s1, s2):
+		if isinstance(s1, BOSHBody):
+			if isinstance(s2, BOSHBody):
+				# both are boshbodies
+				return
 			else:
-				proxy_creds=(None, None)
-
+				s1.setPayload(s2, add=True)
+				return s1
+		elif isinstance(s2, BOSHBody):
+			s2.setPayload(s1, add=True)
+			return s2
 		else:
-			tcp_host = transports_nb.urisplit(proxy['host'])[1]
-			tcp_port=proxy['port']
+			#both are lists
+			s1.extend(s2)
+			return s1
 
-			if tcp_host is None:
-				self._on_connect_failure("Invalid BOSH URI")
+		
+	def get_current_state(self):
+		t = '\t\tSOCKET_ID\tSOCKET_STATE\tPENDING_REQS\n'
+		for s in self.http_socks:
+			t = '%s\t\t%s\t%s\t%s\n' % (t,id(s), s.state, s.pending_requests)
+		return t
+		
+
+	def pick_socket(self):
+		# try to pick connected socket with no pending reqs
+		for s in self.http_socks:
+			if s.state == CONNECTED and s.pending_requests == 0:
+				return s
+
+		# try to connect some disconnected socket 
+		for s in self.http_socks:
+			if s.state==DISCONNECTED:
+				self.connect_and_flush(s)
 				return
 
-		self.socket = self.get_socket()
-
-		self._resolve_hostname(
-			hostname=tcp_host,
-			port=tcp_port,
-			on_success=self._try_next_ip,
-			on_failure=self._on_tcp_failure)
-
-	def _on_stream_start(self):
-		'''
-		Called after XMPP stream is opened. In BOSH, TLS is negotiated on socket
-		connect so success callback can be invoked after TCP connect.
-		(authentication is started from auth() method)
-		'''
-		self.onreceive(None)
-		if self.connected == 'tcp':
-			self._on_connect()
-
-	def get_socket(self):
-		tmp = transports_nb.NonBlockingHTTP(
-			raise_event=self.raise_event,
-			on_disconnect=self.on_http_disconnect,
-			http_uri = self.bosh_host,			
-			http_port = self.bosh_port,
-			http_version = self.http_version
-			)
-		tmp.PlugIn(self)
-		return tmp
-
-	def on_http_disconnect(self):
-		log.info('HTTP socket disconnected')
-		#import traceback
-		#traceback.print_stack()
-		if self.bosh_session_on:
-                        self.socket.connect(
-				conn_5tuple=self.current_ip,
-				on_connect=self.on_http_reconnect,
-				on_connect_failure=self.on_disconnect)
-		else:
-			self.on_disconnect()
-
-	def on_http_reconnect(self):
-		self.socket._plug_idle()
-		log.info('Connected to BOSH CM again')
-		pass
+		# if there is any just-connecting socket, it will send the data in its 
+		# connect callback
+		for s in self.http_socks:
+			if s.state==CONNECTING:
+				return
+		# being here means there are only CONNECTED scokets with pending requests.
+		# Lets create and connect another one
+		s = self.get_http_socket()
+		self.http_socks.append(s)
+		self.connect_and_flush(s)
+		return
 
 
-	def on_http_reconnect_fail(self):
-		log.error('Error when reconnecting to BOSH CM')
-		self.on_disconnect()
-		
-	def send(self, stanza, now = False):
-		(id, stanza_to_send) = self.Dispatcher.assign_id(stanza)
+	def connect_and_flush(self, socket):
+		socket.connect(
+			conn_5tuple = self.conn_5tuple, 
+			on_connect = self.flush_stanzas,
+			on_connect_failure = self.disconnect)
 
-		self.socket.send(
-			self.boshify_stanza(stanza_to_send),
-			now = now)
-		return id
 
-	def get_rid(self):
-		# does this need a lock??"
-		self.bosh_rid = self.bosh_rid + 1
-		return str(self.bosh_rid)
+	def boshify_stanzas(self, stanzas=[], body_attrs=None):
+		''' wraps zero to many stanzas by body tag with xmlns and sid '''
+		log.debug('boshify_staza - type is: %s, stanza is %s' % (type(stanzas), stanzas))
+		tag = BOSHBody(attrs={'sid': self.bosh_sid})
+		tag.setPayload(stanzas)
+		return tag
 
-	def get_bodytag(self):
-		# this should be called not until after session creation response so sid has
-		# to be initialized. 
-		assert(hasattr(self, 'bosh_sid'))
-		return protocol.BOSHBody(
-			attrs={	'rid': self.get_rid(),
-				'sid': self.bosh_sid})
 
 	def get_initial_bodytag(self, after_SASL=False):
-		tag = protocol.BOSHBody(
+		return BOSHBody(
 			attrs={'content': self.bosh_content,
 				'hold': str(self.bosh_hold),
-				'route': '%s:%s' % (self.route_host, self.Port),
+				'route': '%s:%s' % (self.route_host, self.route_port),
 				'to': self.bosh_to,
 				'wait': str(self.bosh_wait),
-				'rid': self.get_rid(),
 				'xml:lang': self.bosh_xml_lang,
 				'xmpp:version': '1.0',
 				'ver': '1.6',
 				'xmlns:xmpp': 'urn:xmpp:xbosh'})
-		if after_SASL:
-			tag.delAttr('content')
-			tag.delAttr('hold')
-			tag.delAttr('route')
-			tag.delAttr('wait')
-			tag.delAttr('ver')
-			# xmpp:restart attribute is essential for stream restart request
-			tag.setAttr('xmpp:restart','true')
-			tag.setAttr('sid',self.bosh_sid)
 
-		return tag
-
+	def get_after_SASL_bodytag(self):
+		return BOSHBody(
+			attrs={	'to': self.bosh_to,
+				'sid': self.bosh_sid,
+				'xml:lang': self.bosh_xml_lang,
+				'xmpp:version': '1.0',
+				'xmpp:restart': 'true',
+				'xmlns:xmpp': 'urn:xmpp:xbosh'})
 
 	def get_closing_bodytag(self):
-		closing_bodytag = self.get_bodytag()
-		closing_bodytag.setAttr('type', 'terminate')
-		return closing_bodytag
+		return BOSHBody(attrs={'sid': self.bosh_sid, 'type': 'terminate'})
+
+	def get_rid(self):
+		self.bosh_rid = self.bosh_rid + 1
+		return str(self.bosh_rid)
 
 
-	def boshify_stanza(self, stanza=None, body_attrs=None):
-		''' wraps stanza by body tag with rid and sid '''
-		#log.info('boshify_staza - type is: %s, stanza is %s' % (type(stanza), stanza))
-		tag = self.get_bodytag()
-		tag.setPayload([stanza])
-		return tag
+	def get_http_socket(self):
+		s = NonBlockingHTTP(
+			raise_event=self.raise_event,
+			on_disconnect=self.disconnect,
+			idlequeue = self.idlequeue,
+			on_http_request_possible = self.on_http_request_possible,
+			http_uri = self.bosh_host,			
+			http_port = self.bosh_port,
+			http_version = self.http_version)
+		if self.current_recv_handler:
+			s.onreceive(self.current_recv_handler)
+		return s
 
+	def onreceive(self, recv_handler):
+		if recv_handler is None:
+			recv_handler = self._owner.Dispatcher.ProcessNonBlocking
+		self.current_recv_handler = recv_handler
+		for s in self.http_socks:
+			s.onreceive(recv_handler)
 
-	def on_bodytag_attrs(self, body_attrs):
-		#log.info('on_bodytag_attrs: %s' % body_attrs)
-		if body_attrs.has_key('type'):
-			if body_attrs['type']=='terminated':
-				# BOSH session terminated 
-				self.bosh_session_on = False
-			elif body_attrs['type']=='error':
-				# recoverable error
-				pass
-		if not self.bosh_sid:
-			# initial response - when bosh_sid is set
-			self.bosh_session_on = True
-			self.bosh_sid = body_attrs['sid']
-			self.Dispatcher.Stream._document_attrs['id']=body_attrs['authid']
+	def disconnect(self, do_callback=True):
+		if self.state == DISCONNECTED: return
+
+		for s in self.http_socks:
+			s.disconnect(do_callback=False)
+		NonBlockingTransport.disconnect(self, do_callback)
 
