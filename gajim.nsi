@@ -56,15 +56,15 @@ LangString DESC_SecGtk ${LANG_ENGLISH} "Installs Gtk+ 2 (necessary to run Gajim)
 LangString DESC_SecAutostart ${LANG_ENGLISH} "If set, Gajim will be automatically started when Windows starts."
 
 ; French		TODO: TRANSLATE!
-LangString NAME_Emoticons ${LANG_FRENCH} "EmoticÃ´nes"
-LangString NAME_Iconsets ${LANG_FRENCH} "BibliothÃ¨que d'icÃ´nes"
+LangString NAME_Emoticons ${LANG_FRENCH} "Emoticônes"
+LangString NAME_Iconsets ${LANG_FRENCH} "Bibliothèque d'icônes"
 LangString NAME_Languages ${LANG_FRENCH} "Langues"
 LangString NAME_SecLanguagesOther ${LANG_FRENCH} "Autre"
-LangString NAME_Themes ${LANG_FRENCH} "ThÃ¨mes"
-LangString NAME_SecAutostart ${LANG_FRENCH} "Lancer Gajim au dÃ©marrage de Windows"
+LangString NAME_Themes ${LANG_FRENCH} "Thèmes"
+LangString NAME_SecAutostart ${LANG_FRENCH} "Lancer Gajim au démarrage de Windows"
 LangString DESC_SecGajim ${LANG_FRENCH} "Installer les fichiers principaux de Gajim."
-LangString DESC_SecGtk ${LANG_FRENCH} "Installer Gtk+ 2 (nÃ©cessaire Ã  Gajim)."
-LangString DESC_SecAutostart ${LANG_FRENCH} "Si activÃ©, Gajim sera automatiquement lancÃ© au dÃ©marrage de Windows."
+LangString DESC_SecGtk ${LANG_FRENCH} "Installer Gtk+ 2 (nécessaire à Gajim)."
+LangString DESC_SecAutostart ${LANG_FRENCH} "Si activé, Gajim sera automatiquement lancé au démarrage de Windows."
 
 ; German
 LangString NAME_Emoticons ${LANG_GERMAN} "Emoticons"
