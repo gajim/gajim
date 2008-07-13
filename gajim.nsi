@@ -164,6 +164,12 @@ Section "Gajim" SecGajim
 	WriteUninstaller "$INSTDIR\Uninstall.exe"
 
 	!insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+		SetShellVarContext current
+		CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
+		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
+		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Change Theme.lnk" "$INSTDIR\bin\gtk\bin\gtkthemeselector.exe"
+		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+		SetShellVarContext all
 		CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Change Theme.lnk" "$INSTDIR\bin\gtk\bin\gtkthemeselector.exe"
@@ -404,6 +410,7 @@ SectionEnd
 SectionGroupEnd
 
 Section $(NAME_SecAutostart) SecAutostart
+	SetShellVarContext current
 	SetOutPath "$INSTDIR\bin"
 	CreateShortCut "$SMSTARTUP\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
 SectionEnd
