@@ -380,6 +380,7 @@ class XMPPDispatcher(PlugIn):
 		if not res:
 			return
 		self._owner.remove_timeout()
+		print self._expected
 		if self._expected[self._witid] is None:
 			return
 		if self.on_responses.has_key(self._witid):
@@ -471,6 +472,7 @@ class BOSHDispatcher(XMPPDispatcher):
 		return XMPPDispatcher.ProcessNonBlocking(self, data)
 
 	def dispatch(self, stanza, session=None, direct=0):
+
 		if stanza.getName()=='body' and stanza.getNamespace()==NS_HTTP_BIND:
 
 			stanza_attrs = stanza.getAttrs()
@@ -496,6 +498,8 @@ class BOSHDispatcher(XMPPDispatcher):
 		
 			if children:
 				for child in children:
+					if child.getNamespace() == NS_HTTP_BIND:
+						child.setNamespace(self._owner.defaultNamespace)
 					XMPPDispatcher.dispatch(self, child, session, direct)
 		else:
 			XMPPDispatcher.dispatch(self, stanza, session, direct)
