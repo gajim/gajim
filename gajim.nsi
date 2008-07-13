@@ -6,7 +6,7 @@ SetCompressor /final /solid lzma
 
 InstallDir "$PROGRAMFILES\Gajim"
 InstallDirRegKey HKCU "Software\Gajim" ""
-RequestExecutionLevel user
+RequestExecutionLevel admin
 
 Var StartMenuFolder
 
@@ -56,15 +56,15 @@ LangString DESC_SecGtk ${LANG_ENGLISH} "Installs Gtk+ 2 (necessary to run Gajim)
 LangString DESC_SecAutostart ${LANG_ENGLISH} "If set, Gajim will be automatically started when Windows starts."
 
 ; French		TODO: TRANSLATE!
-LangString NAME_Emoticons ${LANG_FRENCH} "Emoticons"
-LangString NAME_Iconsets ${LANG_FRENCH} "Iconsets"
-LangString NAME_Languages ${LANG_FRENCH} "Languages"
-LangString NAME_SecLanguagesOther ${LANG_FRENCH} "Other"
-LangString NAME_Themes ${LANG_FRENCH} "Themes"
-LangString NAME_SecAutostart ${LANG_FRENCH} "Start Gajim when Windows starts"
-LangString DESC_SecGajim ${LANG_FRENCH} "Installs the main Gajim files."
-LangString DESC_SecGtk ${LANG_FRENCH} "Installs Gtk+ 2 (necessary to run Gajim)."
-LangString DESC_SecAutostart ${LANG_FRENCH} "If set, Gajim will be automatically started when Windows starts."
+LangString NAME_Emoticons ${LANG_FRENCH} "Emoticônes"
+LangString NAME_Iconsets ${LANG_FRENCH} "Bibliothèque d'icônes"
+LangString NAME_Languages ${LANG_FRENCH} "Langues"
+LangString NAME_SecLanguagesOther ${LANG_FRENCH} "Autre"
+LangString NAME_Themes ${LANG_FRENCH} "Thèmes"
+LangString NAME_SecAutostart ${LANG_FRENCH} "Lancer Gajim au démarrage de Windows"
+LangString DESC_SecGajim ${LANG_FRENCH} "Installer les fichiers principaux de Gajim."
+LangString DESC_SecGtk ${LANG_FRENCH} "Installer Gtk+ 2 (nécessaire à Gajim)."
+LangString DESC_SecAutostart ${LANG_FRENCH} "Si activé, Gajim sera automatiquement lancé au démarrage de Windows."
 
 ; German
 LangString NAME_Emoticons ${LANG_GERMAN} "Emoticons"
