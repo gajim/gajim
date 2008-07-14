@@ -1661,23 +1661,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		encrypted = False
 		xep_200_encrypted = msg.getTag('c', namespace=common.xmpp.NS_STANZA_CRYPTO)
 
-		# Receipt requested
-		# TODO: We shouldn't answer if we're invisible!
-		contact = gajim.contacts.get_contact(self.name,
-			common.gajim.get_room_and_nick_from_fjid(frm)[0])
-		if msg.getTag('request', namespace=common.xmpp.NS_RECEIPTS) \
-		and gajim.config.get_per('accounts', self.name,
-		'answer_receipts') and contact and contact.sub \
-		not in (u'to', u'none'):
-			receipt = common.xmpp.Message(to = jid, typ = 'chat')
-			receipt.setID(msg.getID())
-			receipt.setTag('received',
-				namespace='urn:xmpp:receipts')
-
-			if thread_id:
-				receipt.setThread(thread_id)
-			con.send(receipt)
-
 		if mtype != 'groupchat':
 			session = self.get_or_create_session(frm, thread_id)
 
@@ -1728,6 +1711,23 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				msgtxt = msg.getBody()
 			except:
 				self.dispatch('FAILED_DECRYPT', (frm, tim, session))
+
+		# Receipt requested
+		# TODO: We shouldn't answer if we're invisible!
+		contact = gajim.contacts.get_contact(self.name,
+			common.gajim.get_room_and_nick_from_fjid(frm)[0])
+		if msg.getTag('request', namespace=common.xmpp.NS_RECEIPTS) \
+		and gajim.config.get_per('accounts', self.name,
+		'answer_receipts') and contact and contact.sub \
+		not in (u'to', u'none'):
+			receipt = common.xmpp.Message(to = jid, typ = 'chat')
+			receipt.setID(msg.getID())
+			receipt.setTag('received',
+				namespace='urn:xmpp:receipts')
+
+			if thread_id:
+				receipt.setThread(thread_id)
+			con.send(receipt)
 
 		addressTag = msg.getTag('addresses', namespace = common.xmpp.NS_ADDRESS)
 
