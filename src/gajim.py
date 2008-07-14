@@ -1353,34 +1353,38 @@ class Interface:
 			gajim.connections[account].gpg_passphrase(self.gpg_passphrase[keyid])
 			callback()
 			return
-		if self.gpg_dialog:
-			# A GPG dialog is already open, retry in 0.5 second
-			gobject.timeout_add(500, self.handle_event_gpg_password_required,
-				account, array)
-			return
-		password_ok = False
-		count = 0
+
 		title = _('Passphrase Required')
 		second = _('Enter GPG key passphrase for account %s.') % account
-		while not password_ok and count < 3:
-			count += 1
-			self.gpg_dialog = dialogs.PassphraseDialog(title, second, '')
-			passphrase, save = self.gpg_dialog.run()
-			if passphrase == -1:
-				# User pressed cancel
-				passphrase = None
-				password_ok = True
+
+		def _cancel():
+			# user cancelled, continue without GPG
+			gajim.connections[account].gpg_passphrase(None)
+			callback()
+
+		def _ok(passphrase, checked, count):
+			if count < 3:
+				count += 1
+				done = gajim.connections[account].test_gpg_passphrase(passphrase)
 			else:
-				password_ok = gajim.connections[account].\
-					test_gpg_passphrase(passphrase)
-				title = _('Wrong Passphrase')
-				second = _('Please retype your GPG passphrase or press Cancel.')
-		self.gpg_dialog = None
-		if passphrase is not None:
-			self.gpg_passphrase[keyid] = passphrase
-			gobject.timeout_add(30000, self.forget_gpg_passphrase, keyid)
-		gajim.connections[account].gpg_passphrase(passphrase)
-		callback()
+				done = True
+				passphrase = None
+
+			if done:
+				if passphrase is not None:
+					self.gpg_passphrase[keyid] = passphrase
+					gobject.timeout_add(30000, self.forget_gpg_passphrase, keyid)
+				gajim.connections[account].gpg_passphrase(passphrase)
+				callback()
+			else:
+				# ask again
+				dialogs.PassphraseDialog(_('Wrong Passphrase'),
+					_('Please retype your GPG passphrase or press Cancel.'),
+					is_modal=False, ok_handler=(_ok, count), cancel_handler=_cancel)
+
+		dialogs.PassphraseDialog(title, second,
+			is_modal=False, ok_handler=(_ok, 0), cancel_handler=_cancel)
+
 
 	def handle_event_roster_info(self, account, array):
 		#('ROSTER_INFO', account, (jid, name, sub, ask, groups))
