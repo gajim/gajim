@@ -2135,11 +2135,12 @@ class Interface:
 		elif type_ in ('printed_chat', 'chat', ''):
 			# '' is for log in/out notifications
 
-			event = gajim.events.get_first_event(account, fjid, type_)
-			if not event:
-				event = gajim.events.get_first_event(account, jid, type_)
-			if not event:
-				return
+			if type_ != '':
+				event = gajim.events.get_first_event(account, fjid, type_)
+				if not event:
+					event = gajim.events.get_first_event(account, jid, type_)
+				if not event:
+					return
 
 			if type_ == 'printed_chat':
 				ctrl = event.parameters[0]
