@@ -45,7 +45,7 @@ from common.contacts import GC_Contact
 from common.logger import Constants
 constants = Constants()
 from common.rst_xhtml_generator import create_xhtml
-from common.xmpp.protocol import NS_XHTML, NS_FILE, NS_MUC
+from common.xmpp.protocol import NS_XHTML, NS_FILE, NS_MUC, NS_ESESSION
 
 try:
 	import gtkspell
@@ -1128,10 +1128,11 @@ class ChatControl(ChatControlBase):
 				self.print_esession_details()
 
 		# Enable encryption if needed
-		e2e_is_active = hasattr(self, 'session') and self.session and self.session.enable_encryption
+		e2e_is_active = self.session and self.session.enable_encryption
 		self.gpg_is_active = False
 		gpg_pref = gajim.config.get_per('contacts', contact.jid, 'gpg_enabled')
 
+		# try GPG first
 		if not e2e_is_active and gpg_pref and gajim.config.get_per('accounts', self.account, 'keyid') and\
 		gajim.connections[self.account].USE_GPG:
 			self.gpg_is_active = True
@@ -1143,6 +1144,9 @@ class ChatControl(ChatControlBase):
 				self.session.loggable = gajim.config.get('log_encrypted_sessions')
 			self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active, self.session and \
 					self.session.is_loggable(), self.session and self.session.verified_identity)
+		# then try E2E
+		elif not e2e_is_active and gajim.capscache.is_supported(contact, NS_ESESSION):
+			self.begin_e2e_negotiation()
 
 		self.status_tooltip = gtk.Tooltips()
 
@@ -1793,23 +1797,23 @@ class ChatControl(ChatControlBase):
 		contact = self.parent_win.get_active_contact()
 		jid = contact.jid
 
+		e2e_is_active = self.session is not None and self.session.enable_encryption
+
 		# check if we support and use gpg
 		if not gajim.config.get_per('accounts', self.account, 'keyid') or\
 		not gajim.connections[self.account].USE_GPG or\
 		gajim.jid_is_transport(jid):
 			toggle_gpg_menuitem.set_sensitive(False)
 		else:
-			e2e_is_active = int(self.session is not None and self.session.enable_encryption)
 			toggle_gpg_menuitem.set_sensitive(not e2e_is_active)
 			toggle_gpg_menuitem.set_active(self.gpg_is_active)
 
-		# TODO: check that the remote client supports e2e
-		if not gajim.HAVE_PYCRYPTO:
+		# disable esessions if we or the other client don't support them
+		if not gajim.HAVE_PYCRYPTO or \
+		not gajim.capscache.is_supported(contact, NS_ESESSION):
 			toggle_e2e_menuitem.set_sensitive(False)
 		else:
-			isactive = int(self.session is not None and \
-				self.session.enable_encryption)
-			toggle_e2e_menuitem.set_active(isactive)
+			toggle_e2e_menuitem.set_active(e2e_is_active)
 			toggle_e2e_menuitem.set_sensitive(not self.gpg_is_active)
 
 		# add_to_roster_menuitem
@@ -2326,12 +2330,15 @@ class ChatControl(ChatControlBase):
 
 			gajim.connections[self.account].delete_session(jid, thread_id)
 		else:
-			if not self.session:
-				fjid = self.contact.get_full_jid()
-				new_sess = gajim.connections[self.account].make_new_session(fjid)
-				self.set_session(new_sess)
+			self.begin_e2e_negotiation()
 
-			self.session.negotiate_e2e(False)
+	def begin_e2e_negotiation(self):
+		if not self.session:
+			fjid = self.contact.get_full_jid()
+			new_sess = gajim.connections[self.account].make_new_session(fjid)
+			self.set_session(new_sess)
+
+		self.session.negotiate_e2e(False)
 
 	def got_connected(self):
 		ChatControlBase.got_connected(self)
