@@ -36,7 +36,7 @@ class Event:
 		file-request-error, file-send-error, file-stopped, gc_msg, pm,
 		printed_chat, printed_gc_msg, printed_marked_gc_msg, printed_pm
 		parameters is (per type_):
-			chat, normal: [message, subject, kind, time, encrypted, resource,
+			chat, normal, pm: [message, subject, kind, time, encrypted, resource,
 			msg_id]
 				where kind in error, incoming
 			file-*: file_props

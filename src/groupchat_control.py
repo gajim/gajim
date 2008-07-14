@@ -645,18 +645,14 @@ class GroupchatControl(ChatControlBase):
 			else:
 				self.print_conversation(msg, nick, tim, xhtml)
 
-	def on_private_message(self, nick, msg, tim, xhtml, session, msg_id = None):
+	def on_private_message(self, nick, msg, tim, xhtml, session,
+	msg_id = None, encrypted = False):
 		# Do we have a queue?
 		fjid = self.room_jid + '/' + nick
 		no_queue = len(gajim.events.get_events(self.account, fjid)) == 0
 
-		# We print if window is opened
-		if session.control:
-			session.control.print_conversation(msg, tim = tim, xhtml = xhtml)
-			return
-
 		event = gajim.events.create_event('pm', (msg, '', 'incoming', tim,
-			False, '', msg_id, xhtml, session))
+			encrypted, '', msg_id, xhtml, session))
 		gajim.events.add_event(self.account, fjid, event)
 
 		autopopup = gajim.config.get('autopopup')

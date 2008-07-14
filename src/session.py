@@ -188,8 +188,14 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		if pm:
 			nickname = resource
-			groupchat_control.on_private_message(nickname, msgtxt, tim,
-				xhtml, self, msg_id)
+			if self.control:
+				# print if a control is open
+				self.control.print_conversation(msgtxt,
+					tim = tim, xhtml = xhtml, encrypted = encrypted)
+			else:
+				# otherwise pass it off to the control to be queued
+				groupchat_control.on_private_message(nickname, msgtxt, tim,
+					xhtml, self, msg_id=msg_id, encrypted=encrypted)
 		else:
 			self.roster_message(jid, msgtxt, tim, encrypted, msg_type,
 				subject, resource, msg_id, user_nick, advanced_notif_num,
