@@ -45,7 +45,7 @@ from common.contacts import GC_Contact
 from common.logger import Constants
 constants = Constants()
 from common.rst_xhtml_generator import create_xhtml
-from common.xmpp.protocol import NS_XHTML, NS_FILE, NS_MUC, NS_ESESSION
+from common.xmpp.protocol import NS_XHTML, NS_FILE, NS_MUC
 
 try:
 	import gtkspell
@@ -1144,9 +1144,6 @@ class ChatControl(ChatControlBase):
 				self.session.loggable = gajim.config.get('log_encrypted_sessions')
 			self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active, self.session and \
 					self.session.is_loggable(), self.session and self.session.verified_identity)
-		# then try E2E
-		elif not e2e_is_active and gajim.capscache.is_supported(contact, NS_ESESSION):
-			self.begin_e2e_negotiation()
 
 		self.status_tooltip = gtk.Tooltips()
 
@@ -1809,8 +1806,7 @@ class ChatControl(ChatControlBase):
 			toggle_gpg_menuitem.set_active(self.gpg_is_active)
 
 		# disable esessions if we or the other client don't support them
-		if not gajim.HAVE_PYCRYPTO or \
-		not gajim.capscache.is_supported(contact, NS_ESESSION):
+		if not gajim.HAVE_PYCRYPTO:
 			toggle_e2e_menuitem.set_sensitive(False)
 		else:
 			toggle_e2e_menuitem.set_active(e2e_is_active)
