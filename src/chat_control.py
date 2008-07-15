@@ -1359,7 +1359,8 @@ class ChatControl(ChatControlBase):
 			ec.remove(self.contact.jid)
 			self.gpg_is_active = False
 			msg = _('GPG encryption disabled')
-			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+			ChatControlBase.print_conversation_line(self, msg,
+				'status', '', None)
 			if self.session:
 				self.session.loggable = True
 
@@ -1368,25 +1369,29 @@ class ChatControl(ChatControlBase):
 			ec.append(self.contact.jid)
 			self.gpg_is_active = True
 			msg = _('GPG encryption enabled')
-			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+			ChatControlBase.print_conversation_line(self, msg,
+				'status', '', None)
 
 			if self.session:
-				self.session.loggable = gajim.config.get('log_encrypted_sessions');
+				self.session.loggable = gajim.config.get(
+					'log_encrypted_sessions');
 			if self.session and not self.session.is_loggable():
 				msg = _('Session WILL NOT be logged')
 			else:
 				msg = _('Session WILL be logged')
-			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+			ChatControlBase.print_conversation_line(self, msg,
+				'status', '', None)
 
 		gpg_pref = gajim.config.get_per('contacts', self.contact.jid,
 			'gpg_enabled')
 		if gpg_pref is None:
 			gajim.config.add_per('contacts', self.contact.jid)
-		gajim.config.set_per('contacts', self.contact.jid, 'gpg_enabled',
-			self.gpg_is_active)
+		gajim.config.set_per('contacts', self.contact.jid,
+			'gpg_enabled', self.gpg_is_active)
 
-		self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active, self.session and \
-				self.session.is_loggable(), self.session and self.session.verified_identity)
+		self._show_lock_image(self.gpg_is_active, 'GPG',
+			self.gpg_is_active,
+			self.session and self.session.is_loggable(), True)
 
 	def _show_lock_image(self, visible, enc_type = '', enc_enabled = False, chat_logged = False, authenticated = False):
 		'''Set lock icon visibility and create tooltip'''
