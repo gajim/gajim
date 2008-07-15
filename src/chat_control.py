@@ -1130,20 +1130,26 @@ class ChatControl(ChatControlBase):
 		# Enable encryption if needed
 		e2e_is_active = self.session and self.session.enable_encryption
 		self.gpg_is_active = False
-		gpg_pref = gajim.config.get_per('contacts', contact.jid, 'gpg_enabled')
+		gpg_pref = gajim.config.get_per('contacts', contact.jid,
+			'gpg_enabled')
 
 		# try GPG first
-		if not e2e_is_active and gpg_pref and gajim.config.get_per('accounts', self.account, 'keyid') and\
+		if not e2e_is_active and gpg_pref and \
+		gajim.config.get_per('accounts', self.account, 'keyid') and \
 		gajim.connections[self.account].USE_GPG:
 			self.gpg_is_active = True
 			gajim.encrypted_chats[self.account].append(contact.jid)
 			msg = _('GPG encryption enabled')
-			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+			ChatControlBase.print_conversation_line(self, msg,
+				'status', '', None)
 
 			if self.session:
-				self.session.loggable = gajim.config.get('log_encrypted_sessions')
-			self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active, self.session and \
-					self.session.is_loggable(), self.session and self.session.verified_identity)
+				self.session.loggable = gajim.config.get(
+					'log_encrypted_sessions')
+			# GPG is always authenticated as we use GPG's WoT
+			self._show_lock_image(self.gpg_is_active, 'GPG',
+			self.gpg_is_active,
+			self.session and self.session.is_loggable(), True)
 		# then try E2E
 		# XXX: Once we have fallback to disco, remove notexistant check
 		elif not e2e_is_active and \
