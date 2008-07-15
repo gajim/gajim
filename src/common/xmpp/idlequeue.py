@@ -214,6 +214,8 @@ class SelectIdleQueue(IdleQueue):
 			if q:
 				q.pollout()
 		for fd in waiting_descriptors[2]:
-			self.queue.get(fd).pollend()
+			q = self.queue.get(fd)
+			if q:
+				q.pollend()
 		self.check_time_events()
 		return True
