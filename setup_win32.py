@@ -44,6 +44,18 @@ opts = {
     }
 }
 
+try:
+	import docutils.readers
+except ImportError:
+	opts['py2exe']['includes'] = \
+		opts['py2exe']['includes'].replace(',docutils.readers.*', '')
+
+try:
+	import docutils.writers.html4css1
+except ImportError:
+	opts['py2exe']['includes'] = \
+		opts['py2exe']['includes'].replace(',docutils.writers.html4css1', '')
+
 setup(
     name = 'Gajim',
     version = '0.11.4.4-svn',
