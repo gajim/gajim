@@ -1733,11 +1733,13 @@ class Interface:
 	def handle_event_failed_decrypt(self, account, data):
 		jid, tim, session = data
 
+		details = _('Unable to decrypt message from '
+			'%s\nIt may have been tampered with.') % (jid)
+
 		if session.control:
-			session.control.print_conversation_line('Unable to decrypt message from '+
-				'%s\nIt may have been tampered with.' % (jid), 'status', '', tim)
+			session.control.print_conversation_line(details, 'status', '', tim)
 		else:
-			print 'failed decrypt, unable to find a control to notify you in.'
+			dialogs.WarningDialog(_('Unable to decrypt message'), details)
 
 	def handle_event_privacy_lists_received(self, account, data):
 		# ('PRIVACY_LISTS_RECEIVED', account, list)
