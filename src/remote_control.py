@@ -653,10 +653,10 @@ class SignalObject(dbus.service.Object):
 	@dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
 	def send_xml(self, xml, account):
 		if account:
-			gajim.connections[account].send_stanza(xml)
+			gajim.connections[account].send_stanza(str(xml))
 		else:
 			for acc in gajim.contacts.get_accounts():
-				gajim.connections[acc].send_stanza(xml)
+				gajim.connections[acc].send_stanza(str(xml))
 
 	@dbus.service.method(INTERFACE, in_signature='ssss', out_signature='')
 	def join_room(self, room_jid, nick, password, account):
