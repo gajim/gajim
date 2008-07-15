@@ -1126,7 +1126,7 @@ class Connection(ConnectionHandlers):
 			if ((composing_xep == 'XEP-0085' or not composing_xep) \
 			and composing_xep != 'asked_once') or \
 			(gajim.capscache.is_supported(contact,
-			xmpp.NS_CHATSTATES) and \
+			common.xmpp.NS_CHATSTATES) and \
 			not gajim.capscache.is_supported(contact,
 			'notexistant')):
 				# XEP-0085
