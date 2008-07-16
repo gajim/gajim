@@ -2738,7 +2738,17 @@ class Interface:
 	def process_connections(self):
 		''' called each foo (200) miliseconds. Check for idlequeue timeouts.
 		'''
-		gajim.idlequeue.process()
+		try:
+			gajim.idlequeue.process()
+		except:
+			# Otherwise, an exception will stop our loop
+			if os.name == 'nt':
+				gobject.timeout_add(200,
+					self.process_connections)
+			else:
+				gobject.timeout_add_seconds(2,
+					self.process_connections)
+			raise
 		return True # renew timeout (loop for ever)
 
 	def save_config(self):
