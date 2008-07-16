@@ -321,5 +321,15 @@ if __name__ == '__main__':
 	but.connect('clicked', clicked)
 	win.add(hbox)
 	win.show_all()
-	gobject.timeout_add(200, idlequeue.process)
+
+	def process():
+		try:
+			idlequeue.process()
+		except:
+			# Otherwise, an exception will stop our loop
+			gobject.timeout_add(200, process)
+			raise
+		return True
+
+	gobject.timeout_add(200, process)
 	gtk.main()
