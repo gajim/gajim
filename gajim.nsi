@@ -566,12 +566,18 @@ Section "Uninstall"
 
 	!insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
 
+	SetShellVarContext current
 	Delete "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk"
 	Delete "$SMPROGRAMS\$StartMenuFolder\Change Theme.lnk"
 	RMDir "$SMPROGRAMS\$StartMenuFolder"
 	Delete "$SMSTARTUP\Gajim.lnk"
+	SetShellVarContext all
+	Delete "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk"
+	Delete "$SMPROGRAMS\$StartMenuFolder\Change Theme.lnk"
+	RMDir "$SMPROGRAMS\$StartMenuFolder"
 
 	DeleteRegKey /ifempty HKCU "Software\Gajim"
+	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim"
 SectionEnd
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
