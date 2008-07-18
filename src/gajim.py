@@ -1738,6 +1738,13 @@ class Interface:
 		else:
 			dialogs.WarningDialog(_('Unable to decrypt message'), details)
 
+		# terminate the session
+		session.terminate_e2e()
+		session.conn.delete_session(jid, session.thread_id)
+
+		# restart the session
+		session.begin_e2e_negotiation()
+
 	def handle_event_privacy_lists_received(self, account, data):
 		# ('PRIVACY_LISTS_RECEIVED', account, list)
 		if not self.instances.has_key(account):
