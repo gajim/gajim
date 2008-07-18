@@ -142,8 +142,11 @@ class MessageControl:
 			if self.resource:
 				jid += '/' + self.resource
 
-			if oldsession.enable_encryption:
-				self.print_esession_details()
+		crypto_changed = bool(session and session.enable_encryption) != \
+			bool(oldsession and oldsession.enable_encryption)
+
+		if crypto_changed:
+			self.print_esession_details()
 
 	def send_message(self, message, keyID = '', type = 'chat',
 	chatstate = None, msg_id = None, composing_xep = None, resource = None,
