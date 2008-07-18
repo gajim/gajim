@@ -148,8 +148,10 @@ class ConversationTextview:
 	'''Class for the conversation textview (where user reads already said messages)
 	for chat/groupchat windows'''
 
-	path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
-	FOCUS_OUT_LINE_PIXBUF = gtk.gdk.pixbuf_new_from_file(path_to_file)
+	FOCUS_OUT_LINE_PIXBUF = gtk.gdk.pixbuf_new_from_file(os.path.join(
+		gajim.DATA_DIR, 'pixmaps', 'muc_separator.png'))
+	XEP0184_WARNING_PIXBUF = gtk.gdk.pixbuf_new_from_file(os.path.join(
+		gajim.DATA_DIR, 'pixmaps', 'xep0184.png'))
 
 	# smooth scroll constants
 	MAX_SCROLL_TIME = 0.4 # seconds
@@ -175,6 +177,7 @@ class ConversationTextview:
 		self.handlers = {}
 		self.images = []
 		self.image_cache = {}
+		self.xep0184_marks = {}
 
 		# It's True when we scroll in the code, so we can detect scroll from user
 		self.auto_scrolling = False
@@ -388,6 +391,58 @@ class ConversationTextview:
 			gobject.source_remove(self.smooth_id)
 			self.smooth_id = None
 			self.smooth_scroll_timer.cancel()
+
+	def show_xep0184_warning(self, id):
+		try:
+			if self.xep0184_marks[id] is not None:
+				return
+		except KeyError:
+			pass
+
+		buffer = self.tv.get_buffer()
+
+		buffer.begin_user_action()
+
+		end_iter = buffer.get_end_iter()
+		buffer.insert(end_iter, ' ')
+		buffer.insert_pixbuf(end_iter,
+			ConversationTextview.XEP0184_WARNING_PIXBUF)
+
+		end_iter = buffer.get_end_iter();
+		before_img_iter = end_iter.copy()
+		# XXX: Is there a nicer way?
+		before_img_iter.backward_char();
+		before_img_iter.backward_char();
+
+		self.xep0184_marks[id] = buffer.create_mark(None,
+			buffer.get_end_iter(), left_gravity=True)
+
+		buffer.end_user_action()
+
+	def hide_xep0184_warning(self, id):
+		try:
+			if self.xep0184_marks[id] is None:
+				return
+		except KeyError:
+			return
+
+		buffer = self.tv.get_buffer()
+
+		buffer.begin_user_action()
+
+		end_iter = buffer.get_iter_at_mark(self.xep0184_marks[id])
+
+		begin_iter = end_iter.copy()
+		# XXX: Is there a nicer way?
+		begin_iter.backward_char();
+		begin_iter.backward_char();
+
+		buffer.delete(begin_iter, end_iter)
+		buffer.delete_mark(self.xep0184_marks[id])
+
+		buffer.end_user_action()
+
+		self.xep0184_marks[id] = None
 
 	def show_focus_out_line(self):
 		if not self.allow_focus_out_line:

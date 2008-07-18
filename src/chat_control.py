@@ -45,7 +45,7 @@ from common.contacts import GC_Contact
 from common.logger import Constants
 constants = Constants()
 from common.rst_xhtml_generator import create_xhtml
-from common.xmpp.protocol import NS_XHTML, NS_FILE, NS_MUC, NS_ESESSION
+from common.xmpp.protocol import NS_XHTML, NS_FILE, NS_MUC, NS_RECEIPTS, NS_ESESSION
 
 try:
 	import gtkspell
@@ -660,7 +660,7 @@ class ChatControlBase(MessageControl):
 
 	def print_conversation_line(self, text, kind, name, tim,
 	other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
-	count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False):
+	count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False, xep0184_id = None):
 		'''prints 'chat' type messages'''
 		jid = self.contact.jid
 		full_jid = self.get_full_jid()
@@ -671,6 +671,9 @@ class ChatControlBase(MessageControl):
 		textview.print_conversation_line(text, jid, kind, name, tim,
 			other_tags_for_name, other_tags_for_time, other_tags_for_text,
 			subject, old_kind, xhtml, simple=simple)
+
+		if xep0184_id is not None:
+			textview.show_xep0184_warning(xep0184_id)
 
 		if not count_as_new:
 			return
@@ -1538,12 +1541,23 @@ class ChatControl(ChatControlBase):
 				gobject.source_remove(self.possible_inactive_timeout_id)
 				self._schedule_activity_timers()
 
-		if ChatControlBase.send_message(self, message, keyID,
-		type = 'chat', chatstate = chatstate_to_send,
-		composing_xep = composing_xep,
-		process_command = process_command):
+		id = ChatControlBase.send_message(self, message, keyID,
+			type = 'chat', chatstate = chatstate_to_send,
+			composing_xep = composing_xep,
+			process_command = process_command)
+		if id:
+			# XXX: Once we have fallback to disco, remove
+			#      notexistant check
+			if gajim.capscache.is_supported(contact, NS_RECEIPTS) \
+			and not gajim.capscache.is_supported(contact,
+			'notexistant') and gajim.config.get_per('accounts',
+			self.account, 'request_receipt'):
+				xep0184_id = id
+			else:
+				xep0184_id = None
+
 			self.print_conversation(message, self.contact.jid,
-				encrypted = encrypted)
+				encrypted = encrypted, xep0184_id = xep0184_id)
 
 	def check_for_possible_paused_chatstate(self, arg):
 		''' did we move mouse of that window or write something in message
@@ -1629,7 +1643,7 @@ class ChatControl(ChatControlBase):
 				self.session.is_loggable(), self.session and self.session.verified_identity)
 
 	def print_conversation(self, text, frm='', tim=None, encrypted=False,
-	subject=None, xhtml=None, simple=False):
+	subject=None, xhtml=None, simple=False, xep0184_id=None):
 		# TODO: contact? ITYM frm.
 		'''Print a line in the conversation:
 		if contact is set to status: it's a status message
@@ -1683,7 +1697,7 @@ class ChatControl(ChatControlBase):
 						xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)
 		ChatControlBase.print_conversation_line(self, text, kind, name, tim,
 			subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
-			simple=simple)
+			simple=simple, xep0184_id=xep0184_id)
 		if text.startswith('/me ') or text.startswith('/me\n'):
 			self.old_msg_kind = None
 		else:

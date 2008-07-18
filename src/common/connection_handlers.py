@@ -1729,6 +1729,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				receipt.setThread(thread_id)
 			con.send(receipt)
 
+		# We got our message's receipt
+		if msg.getTag('received', namespace=common.xmpp.NS_RECEIPTS) \
+		and session.control and gajim.config.get_per('accounts',
+		self.name, 'request_receipt'):
+			session.control.conv_textview.hide_xep0184_warning(
+				msg.getID())
+
 		addressTag = msg.getTag('addresses', namespace = common.xmpp.NS_ADDRESS)
 
 		# Be sure it comes from one of our resource, else ignore address element

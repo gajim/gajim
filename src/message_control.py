@@ -167,6 +167,8 @@ class MessageControl:
 
 		# Send and update history
 		return conn.send_message(jid, message, keyID, type = type,
-			chatstate = chatstate, msg_id = msg_id, composing_xep = composing_xep,
+			chatstate = chatstate, msg_id = msg_id,
+			composing_xep = composing_xep,
 			resource = self.resource, user_nick = user_nick,
-			session = self.session, original_message = original_message)
+			session = self.session,
+			original_message = original_message)
