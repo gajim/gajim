@@ -19,7 +19,7 @@
 GUI classes related to plug-in management.
 
 :author: Mateusz Biliński <mateusz@bilinski.it>
-:since: 06/06/2008
+:since: 6th June 2008
 :copyright: Copyright (2008) Mateusz Biliński <mateusz@bilinski.it>
 :license: GPL
 '''
@@ -183,7 +183,7 @@ class PluginsWindow(object):
 
 		else:
 			# No plugin selected. this should never be reached. As configure
-			# plugin button should only my clickable when plugin is selected.
+			# plugin button should only be clickable when plugin is selected.
 			# XXX: maybe throw exception here?
 			pass
 	

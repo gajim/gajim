@@ -19,7 +19,7 @@
 Helper code related to plug-ins management system.
 
 :author: Mateusz Biliński <mateusz@bilinski.it>
-:since: 05/30/2008
+:since: 30th May 2008
 :copyright: Copyright (2008) Mateusz Biliński <mateusz@bilinski.it>
 :license: GPL
 '''

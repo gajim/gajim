@@ -97,6 +97,20 @@ class GajimPlugin(object):
 	'''
 	Extension points that plugin wants to connect with.
 	'''
+	config_default_values = {}
+	'''
+	Default values for keys that should be stored in plug-in config.
+	
+	This dict is used when when someone calls for config option but it has not
+	been set yet.
+	
+	Values are tuples: (default_value, option_description). The first one can
+	be anything (this is the advantage of using shelve/pickle instead of
+	custom-made	config I/O handling); the second one should be unicode (gettext
+	can be used if need and/or translation is planned).
+	
+	:type: {} of 2-element tuples
+	'''
 	
 	@log_calls('GajimPlugin')
 	def __init__(self):
