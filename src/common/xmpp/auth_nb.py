@@ -143,10 +143,10 @@ class SASL(PlugIn):
 		if "DIGEST-MD5" in mecs:
 			node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'DIGEST-MD5'})
 		elif "PLAIN" in mecs:
-			sasl_data='%s\x00%s\x00%s' % (self.username+'@' + self._owner.Server, 
-																	self.username, self.password)
+			sasl_data='%s\x00%s\x00%s' % (self.username+'@' + self._owner.Server,
+				self.username, self.password)
 			node=Node('auth', attrs={'xmlns':NS_SASL,'mechanism':'PLAIN'}, 
-								payload=[base64.encodestring(sasl_data).replace('\n','')])
+				payload=[base64.encodestring(sasl_data).replace('\n','')])
 		else:
 			self.startsasl='failure'
 			log.error('I can only use DIGEST-MD5 and PLAIN mecanisms.')
@@ -173,12 +173,19 @@ class SASL(PlugIn):
 			self.startsasl='success'
 			log.info('Successfully authenticated with remote server.')
 			handlers=self._owner.Dispatcher.dumpHandlers()
+
+			# save old features. They will be used in case we won't get response on
+			# stream restart after SASL auth (happens with XMPP over BOSH with Openfire)
+			old_features = self._owner.Dispatcher.Stream.features
+
 			self._owner.Dispatcher.PlugOut()
-			dispatcher_nb.Dispatcher().PlugIn(self._owner, after_SASL=True)
+			dispatcher_nb.Dispatcher().PlugIn(self._owner, after_SASL=True,
+					old_features=old_features)
+
 			self._owner.Dispatcher.restoreHandlers(handlers)
 			self._owner.User = self.username
 			if self.on_sasl :
-				self.on_sasl ()
+				self.on_sasl()
 			raise NodeProcessed
 ########################################3333
 		incoming_data = challenge.getData()
@@ -232,7 +239,7 @@ class SASL(PlugIn):
 	
 class NonBlockingNonSASL(PlugIn):
 	''' Implements old Non-SASL (JEP-0078) authentication used 
-	in jabberd1.4 and transport authentication.
+	in jabberd1.4 and transport authentication. 
 	'''
 	def __init__(self, user, password, resource, on_auth):
 		''' Caches username, password and resource for auth. '''
@@ -331,16 +338,6 @@ class NonBlockingBind(PlugIn):
 		PlugIn.__init__(self)
 		self.bound=None
 
-	def FeaturesHandler(self,conn,feats):
-		""" Determine if server supports resource binding and set some internal attributes accordingly. """
-		if not feats.getTag('bind',namespace=NS_BIND):
-			self.bound='failure'
-			log.error('Server does not requested binding.')
-			return
-		if feats.getTag('session',namespace=NS_SESSION): self.session=1
-		else: self.session=-1
-		self.bound=[]
-
 	def plugin(self, owner):
 		''' Start resource binding, if allowed at this time. Used internally. '''
 		if self._owner.Dispatcher.Stream.features:
@@ -348,7 +345,23 @@ class NonBlockingBind(PlugIn):
 				self.FeaturesHandler(self._owner.Dispatcher, self._owner.Dispatcher.Stream.features)
 			except NodeProcessed: 
 				pass
-		else: self._owner.RegisterHandler('features', self.FeaturesHandler, xmlns=NS_STREAMS)
+		else:
+			self._owner.RegisterHandler('features', self.FeaturesHandler, xmlns=NS_STREAMS)
+
+	def FeaturesHandler(self,conn,feats):
+		''' Determine if server supports resource binding and set some internal attributes accordingly. '''
+		if not feats.getTag('bind',namespace=NS_BIND):
+			log.error('Server does not requested binding.')
+			# we try to bind resource anyway
+			#self.bound='failure'
+			self.bound=[]
+			return
+		if feats.getTag('session',namespace=NS_SESSION):
+			self.session=1
+		else: 
+			self.session=-1
+		self.bound=[]
+
 
 	def plugout(self):
 		''' Remove Bind handler from owner's dispatcher. Used internally. '''
@@ -404,77 +417,3 @@ class NonBlockingBind(PlugIn):
 			self.session = 0
 			self.on_bound(None)
 
-class NBComponentBind(PlugIn):
-	''' ComponentBind some JID to the current connection to allow 
-	router know of our location.
-	'''
-	def __init__(self):
-		PlugIn.__init__(self)
-		self.bound=None
-		self.needsUnregister=None
-
-	def plugin(self,owner):
-		''' Start resource binding, if allowed at this time. Used internally. '''
-		if self._owner.Dispatcher.Stream.features:
-			try: 
-				self.FeaturesHandler(self._owner.Dispatcher, self._owner.Dispatcher.Stream.features)
-			except NodeProcessed: 
-				pass
-		else:
-			self._owner.RegisterHandler('features', self.FeaturesHandler, xmlns=NS_STREAMS)
-			self.needsUnregister = 1
-
-	def plugout(self):
-		''' Remove ComponentBind handler from owner's dispatcher. Used internally. '''
-		if self.needsUnregister:
-			self._owner.UnregisterHandler('features', self.FeaturesHandler, xmlns=NS_STREAMS)
-	
-	def Bind(self, domain = None, on_bind = None):
-		''' Perform binding. Use provided domain name (if not provided). '''
-		self._owner.onreceive(self._on_bound)
-		self.on_bind = on_bind
-	
-	def _on_bound(self, resp):
-		if data:
-			self.Dispatcher.ProcessNonBlocking(data)
-		if self.bound is None:
-			return
-		self._owner.onreceive(None)
-		self._owner.SendAndWaitForResponse(
-			Protocol('bind', attrs={'name':domain}, xmlns=NS_COMPONENT_1), 
-			func=self._on_bind_reponse)
-	
-	def _on_bind_reponse(self, res):
-		if resp and resp.getAttr('error'):
-			log.error('Binding failed: %s.' % resp.getAttr('error'))
-		elif resp:
-			log.info('Successfully bound.')
-			if self.on_bind:
-				self.on_bind('ok')
-		else:
-			log.error('Binding failed: timeout expired.')
-		if self.on_bind:
-			self.on_bind(None)
-
-	def FeaturesHandler(self,conn,feats):
-		""" Determine if server supports resource binding and set some internal attributes accordingly. """
-		if not feats.getTag('bind',namespace=NS_BIND):
-			self.bound='failure'
-			log.error('Server does not requested binding.')
-			return
-		if feats.getTag('session',namespace=NS_SESSION): self.session=1
-		else: self.session=-1
-		self.bound=[]
-
-	def Bind(self,domain=None):
-		""" Perform binding. Use provided domain name (if not provided). """
-		while self.bound is None and self._owner.Process(1): pass
-		resp=self._owner.SendAndWaitForResponse(Protocol('bind',attrs={'name':domain},xmlns=NS_COMPONENT_1))
-		if resp and resp.getAttr('error'):
-			log.error('Binding failed: %s.'%resp.getAttr('error'))
-		elif resp:
-			log.info('Successfully bound.')
-			return 'ok'
-		else:
-			log.error('Binding failed: timeout expired.')
-			return ''

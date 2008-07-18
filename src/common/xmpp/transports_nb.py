@@ -61,14 +61,10 @@ def get_proxy_data_from_dict(proxy):
 
 	# user and pass for socks5/http_connect proxy. In case of BOSH, it's user and
 	# pass for http proxy - If there's no proxy_host they won't be used
-	if proxy.has_key('user'):
-		proxy_user = proxy['user']
-	else:
-		proxy_user = None
-	if proxy.has_key('pass'):
-		proxy_pass = proxy['pass']
-	else:
-		proxy_pass = None
+	if proxy.has_key('user'): proxy_user = proxy['user']
+	else: proxy_user = None
+	if proxy.has_key('pass'): proxy_pass = proxy['pass']
+	else: proxy_pass = None
 	return tcp_host, tcp_port, proxy_user, proxy_pass
 
 
@@ -89,6 +85,7 @@ DATA_SENT='DATA SENT'
 
 
 DISCONNECTED ='DISCONNECTED' 	
+DISCONNECTING ='DISCONNECTING' 	
 CONNECTING ='CONNECTING'  
 CONNECTED ='CONNECTED' 
 
@@ -132,11 +129,10 @@ class NonBlockingTransport(PlugIn):
 		self.on_connect_failure = on_connect_failure
 		(self.server, self.port) = conn_5tuple[4][:2]
 		self.conn_5tuple = conn_5tuple
-		log.info('NonBlocking Connect :: About to connect to %s:%s' % (self.server, self.port))
 
 
 	def set_state(self, newstate):
-		assert(newstate in [DISCONNECTED, CONNECTING, CONNECTED])
+		assert(newstate in [DISCONNECTED, CONNECTING, CONNECTED, DISCONNECTING])
 		self.state = newstate
 
 	def _on_connect(self, data):
@@ -156,9 +152,8 @@ class NonBlockingTransport(PlugIn):
 		self.on_connect_failure(err_message=err_message)
 
 	def send(self, raw_data, now=False):
-		if self.state not in [CONNECTED]:
-			# FIXME better handling needed
-			log.error('Trying to send %s when transport is %s.' % 
+		if self.state != CONNECTED:
+			log.error('Trying to send %s when state is %s.' % 
 				(raw_data, self.state))
 			return
 
@@ -195,13 +190,13 @@ class NonBlockingTransport(PlugIn):
 			self.remove_timeout()
 
 	def set_timeout(self, timeout):
-		self.idlequeue.set_read_timeout(self.get_fd(), timeout)
+		self.idlequeue.set_read_timeout(self.fd, timeout)
 
 	def get_fd(self):
 		pass
 
 	def remove_timeout(self):
-		self.idlequeue.remove_timeout(self.get_fd())
+		self.idlequeue.remove_timeout(self.fd)
 
 	def set_send_timeout(self, timeout, on_timeout):
 		self.sendtimeout = timeout
@@ -220,25 +215,14 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 		Class constructor.
 		'''
 		NonBlockingTransport.__init__(self, raise_event, on_disconnect, idlequeue)
-		# writable, readable  -  keep state of the last pluged flags
-		# This prevents replug of same object with the same flags
-		self.writable = True
-		self.readable = False
 
 		# queue with messages to be send 
 		self.sendqueue = []
 
 		# bytes remained from the last send message
 		self.sendbuff = ''
+		
 
-
-	def get_fd(self):
-		try:
-			tmp = self._sock.fileno()
-			return tmp
-		except socket.error, (errnum, errstr):
-			log.error('Trying to get file descriptor of not-connected socket: %s' % errstr )
-			return 0
 
 	def connect(self, conn_5tuple, on_connect, on_connect_failure):
 		'''
@@ -250,17 +234,21 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 			connection
 		'''
 		NonBlockingTransport.connect(self, conn_5tuple, on_connect, on_connect_failure)
+		log.info('NonBlockingTCP Connect :: About to connect to %s:%s' % (self.server, self.port))
 
 		try:
 			self._sock = socket.socket(*conn_5tuple[:3])
 		except socket.error, (errnum, errstr):
-			self._on_connect_failure('NonBlockingTCP: Error while creating socket: %s %s' % (errnum, errstr))
+			self._on_connect_failure('NonBlockingTCP Connect: Error while creating socket:\
+				%s %s' % (errnum, errstr))
 			return
 
 		self._send = self._sock.send
 		self._recv = self._sock.recv
 		self.fd = self._sock.fileno()
-		self.idlequeue.plug_idle(self, True, False)
+
+		# we want to be notified when send is possible to connected socket
+		self._plug_idle(writable=True, readable=False)
 		self.peerhost = None
 
 		errnum = 0
@@ -268,7 +256,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 	
 		# set timeout for TCP connecting - if nonblocking connect() fails, pollend
 		# is called. If if succeeds pollout is called.
-		self.idlequeue.set_read_timeout(self.get_fd(), CONNECT_TIMEOUT_SECONDS)
+		self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT_SECONDS)
 
 		try: 
 			self._sock.setblocking(False)
@@ -296,7 +284,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 			
 	def _on_connect(self, data):
 		''' with TCP socket, we have to remove send-timeout '''
-		self.idlequeue.remove_timeout(self.get_fd())
+		self.idlequeue.remove_timeout(self.fd)
 
 		NonBlockingTransport._on_connect(self, data)
 		
@@ -328,12 +316,14 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 	def disconnect(self, do_callback=True):
 		if self.state == DISCONNECTED:
 			return
-		self.idlequeue.unplug_idle(self.get_fd())
+		self.set_state(DISCONNECTING)
+		self.idlequeue.unplug_idle(self.fd)
 		try:
 			self._sock.shutdown(socket.SHUT_RDWR)
 			self._sock.close()
 		except socket.error, (errnum, errstr):
-			log.error('Error disconnecting a socket: %s %s' % (errnum,errstr))
+			log.error('Error while disconnecting  a socket: %s %s' % (errnum,errstr))
+		self.fd = -1
 		NonBlockingTransport.disconnect(self, do_callback)
 
 	def read_timeout(self):
@@ -352,12 +342,16 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 	
 	
 	def set_timeout(self, timeout):
-		if self.state in [CONNECTING, CONNECTED] and self.get_fd() > 0:
+		if self.state in [CONNECTING, CONNECTED] and self.fd != -1:
 			NonBlockingTransport.set_timeout(self, timeout)
+		else:
+			log.warn('set_timeout: TIMEOUT NOT SET: state is %s, fd is %s' % (self.state, self.fd))
 
 	def remove_timeout(self):
-		if self.get_fd():
+		if self.fd:
 			NonBlockingTransport.remove_timeout(self)
+		else:
+			log.warn('remove_timeout: no self.fd state is %s' % self.state)
 
 	def send(self, raw_data, now=False):
 		'''Append raw_data to the queue of messages to be send. 
@@ -374,39 +368,42 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 			self._do_send()
 		else:
 			self.sendqueue.append(r)
-		self._plug_idle()
+		self._plug_idle(writable=True, readable=True)
 
 
 
-	def _plug_idle(self):
-		# readable if socket is connected or disconnecting
-		readable = self.state != DISCONNECTED
-		fd = self.get_fd()
-		# writeable if sth to send
-		if self.sendqueue or self.sendbuff:
-			writable = True
-		else:
-			writable = False
-		log.debug('About to plug fd %d, W:%s, R:%s' % (fd, writable, readable))
-		if self.writable != writable or self.readable != readable:
-			log.debug('Really plugging fd %d, W:%s, R:%s' % (fd, writable, readable))
-			self.idlequeue.plug_idle(self, writable, readable)
-		else: 
-			log.debug('Not plugging fd %s because it\'s already plugged' % fd)
+	def _plug_idle(self, writable, readable):
+		'''
+		Plugs file descriptor of socket to Idlequeue. Plugged socket
+		will be watched for "send possible" or/and "recv possible" events. pollin()
+		callback is invoked on "recv possible", pollout() on "send_possible".
+		Plugged socket will always be watched for "error" event - in that case,
+		pollend() is called.
+		'''
+		# if we are connecting, we shouln't touch the socket until it's connected
+		assert(self.state!=CONNECTING)
+		self.idlequeue.plug_idle(self, writable, readable)
+
+		log.info('Plugging fd %d, W:%s, R:%s' % (self.fd, writable, readable))
+		self.idlequeue.plug_idle(self, writable, readable)
+
 
 
 
 	def _do_send(self):
 		if not self.sendbuff:
 			if not self.sendqueue:
-				return None # nothing to send
+				log.warn('calling send on empty buffer and queue')
+				return None
 			self.sendbuff = self.sendqueue.pop(0)
 		try:
 			send_count = self._send(self.sendbuff)
 			if send_count:
 				sent_data = self.sendbuff[:send_count]
 				self.sendbuff = self.sendbuff[send_count:]
-				self._plug_idle()
+				self._plug_idle(
+					writable=self.sendqueue or self.sendbuff,
+					readable=True)
 				self.raise_event(DATA_SENT, sent_data)
 
 		except socket.error, e:
@@ -439,7 +436,10 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 			# ESHUTDOWN  - shutdown(2) has been called on a socket to close down the
 			# sending end of the transmision, and then data was attempted to be sent
 			log.error("Connection to %s lost: %s %s" % ( self.server, errnum, errstr))
-			self.disconnect()
+			if self.on_remote_disconnect:
+				self.on_remote_disconnect()
+			else:
+				self.disconnect()
 			return
 
 		if received is None:
@@ -454,15 +454,13 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 		# we have received some bytes, stop the timeout!
 		self.renew_send_timeout()
 		# pass received data to owner
-		#self.
 		if self.on_receive:
 			self.raise_event(DATA_RECEIVED, received)
 			self._on_receive(received)
 		else:
 			# This should never happen, so we need the debug. (If there is no handler
-			# on receive spacified, data are passed to Dispatcher.ProcessNonBlocking)
+			# on receive specified, data are passed to Dispatcher.ProcessNonBlocking)
 			log.error('SOCKET %s Unhandled data received: %s' % (id(self), received))
-			import traceback
 			traceback.print_stack()
 			self.disconnect()
 
@@ -474,12 +472,14 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 
 class NonBlockingHTTP(NonBlockingTCP):
 	'''
-	Socket wrapper that cretes HTTP message out of sent data and peels-off 
+	Socket wrapper that creates HTTP message out of sent data and peels-off 
 	HTTP headers from incoming messages
 	'''
 
 	def __init__(self, raise_event, on_disconnect, idlequeue, on_http_request_possible,
-			http_uri, http_port, http_version='HTTP/1.1'):
+			http_uri, http_port, http_version='HTTP/1.1', http_persistent=False):
+
+		NonBlockingTCP.__init__(self, raise_event, on_disconnect, idlequeue)
 
 		self.http_protocol, self.http_host, self.http_path = urisplit(http_uri)
 		if self.http_protocol is None:
@@ -488,12 +488,12 @@ class NonBlockingHTTP(NonBlockingTCP):
 			http_path = '/'
 		self.http_port = http_port
 		self.http_version = http_version
+		self.http_persistent = http_persistent
 		# buffer for partial responses
 		self.recvbuff = ''
 		self.expected_length = 0 
 		self.pending_requests = 0
 		self.on_http_request_possible = on_http_request_possible
-		NonBlockingTCP.__init__(self, raise_event, on_disconnect, idlequeue)
 		
 	def send(self, raw_data, now=False):
 		NonBlockingTCP.send(
@@ -502,6 +502,19 @@ class NonBlockingHTTP(NonBlockingTCP):
 			now)
 		self.pending_requests += 1
 
+
+	def on_remote_disconnect(self):
+		if self.http_persistent:
+			self.http_persistent = False
+			self.disconnect(do_callback=False)
+			self.connect(
+				conn_5tuple = self.conn_5tuple,
+				on_connect = lambda: self._plug_idle(writable=True, readable=True),
+				on_connect_failure = self.disconnect)
+
+		else:
+			self.disconnect()
+		return
 
 	def _on_receive(self,data):
 		'''Preceeds passing received data to owner class. Gets rid of HTTP headers
@@ -524,9 +537,6 @@ class NonBlockingHTTP(NonBlockingTCP):
 			log.info('not enough bytes - %d expected, %d got' % (self.expected_length, len(self.recvbuff)))
 			return
 
-		# FIXME the reassembling doesn't work - Connection Manager on jabbim.cz
-		# closes TCP connection before sending <Content-Length> announced bytes.. WTF
-
 		# all was received, now call the on_receive callback
 		httpbody = self.recvbuff
 
@@ -534,17 +544,18 @@ class NonBlockingHTTP(NonBlockingTCP):
 		self.expected_length=0
 		self.pending_requests -= 1
 		assert(self.pending_requests >= 0)
-		# not-persistent connections
-		self.disconnect(do_callback = False)
+		if not self.http_persistent:
+			# not-persistent connections disconnect after response
+			self.disconnect(do_callback = False)
 		self.on_receive(httpbody)
 		self.on_http_request_possible()
+	
 
 		
 	def build_http_message(self, httpbody, method='POST'):
 		'''
 		Builds http message with given body.
 		Values for headers and status line fields are taken from class variables.
-		)  
 		'''
 		absolute_uri = '%s://%s:%s%s' % (self.http_protocol, self.http_host,
 			self.http_port, self.http_path)

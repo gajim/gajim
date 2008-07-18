@@ -14,23 +14,23 @@
 
 # $Id: client.py,v 1.52 2006/01/02 19:40:55 normanr Exp $
 
-"""
+'''
 Provides PlugIn class functionality to develop extentions for xmpppy.
 Also provides Client and Component classes implementations as the
 examples of xmpppy structures usage.
 These classes can be used for simple applications "AS IS" though.
-"""
+'''
 
 import logging
 log = logging.getLogger('gajim.c.x.plugin')
 
 class PlugIn:
-	""" Common xmpppy plugins infrastructure: plugging in/out, debugging. """
+	''' Common xmpppy plugins infrastructure: plugging in/out, debugging. '''
 	def __init__(self):
 		self._exported_methods=[]
 
 	def PlugIn(self,owner):
-		""" Attach to main instance and register ourself and all our staff in it. """
+		''' Attach to main instance and register ourself and all our staff in it. '''
 		self._owner=owner
 		log.info('Plugging %s __INTO__ %s' % (self,self._owner))
 		if owner.__dict__.has_key(self.__class__.__name__):
@@ -53,7 +53,7 @@ class PlugIn:
 		if hasattr(self,'plugin'): return self.plugin(owner)
  
 	def PlugOut(self):
-		""" Unregister all our staff from main instance and detach from it. """
+		''' Unregister all our staff from main instance and detach from it. '''
 		log.info('Plugging %s __OUT__ of %s.' % (self,self._owner))
 		for method in self._exported_methods: del self._owner.__dict__[method.__name__]
 		for method in self._old_owners_methods: self._owner.__dict__[method.__name__]=method

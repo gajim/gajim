@@ -129,13 +129,13 @@ class SSLWrapper:
 		log.debug("%s.__init__ called with %s", self.__class__, sslobj)
 
 	def recv(self, data, flags=None):
-		""" Receive wrapper for SSL object
+		''' Receive wrapper for SSL object
 
 		We can return None out of this function to signal that no data is
 		available right now. Better than an exception, which differs
 		depending on which SSL lib we're using. Unfortunately returning ''
 		can indicate that the socket has been closed, so to be sure, we avoid
-		this by returning None. """
+		this by returning None. '''
 
 		raise NotImplementedException()
 

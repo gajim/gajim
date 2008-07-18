@@ -38,9 +38,6 @@ ID = 0
 STREAM_TERMINATOR = '</stream:stream>'
 XML_DECLARATION = '<?xml version=\'1.0\'?>'
 
-
-
-
 # FIXME: ugly
 class Dispatcher():
 # Why is this here - I needed to redefine Dispatcher for BOSH and easiest way
@@ -50,11 +47,11 @@ class Dispatcher():
 # I wrote following to avoid changing each client.Dispatcher.whatever() in xmpp/
 
 # If having two kinds of dispatcher will go well, I will rewrite the 
-	def PlugIn(self, client_obj, after_SASL=False):
+	def PlugIn(self, client_obj, after_SASL=False, old_features=None):
 		if client_obj.protocol_type == 'XMPP':
 			XMPPDispatcher().PlugIn(client_obj)
 		elif client_obj.protocol_type == 'BOSH':
-			BOSHDispatcher().PlugIn(client_obj, after_SASL)
+			BOSHDispatcher().PlugIn(client_obj, after_SASL, old_features)
 
 
 
@@ -160,12 +157,11 @@ class XMPPDispatcher(PlugIn):
 			self.Stream.Parse(data)
 			# end stream:stream tag received
 			if self.Stream and self.Stream.has_received_endtag():
-				# FIXME call client method
-				self._owner.Connection.disconnect()
+				self._owner.disconnect()
 				return 0
 		except ExpatError:
 			log.error('Invalid XML received from server. Forcing disconnect.')
-			self._owner.Connection.disconnect()
+			self._owner.disconnect()
 			return 0
 		if len(self._pendingExceptions) > 0:
 			 _pendingException = self._pendingExceptions.pop()
@@ -380,7 +376,6 @@ class XMPPDispatcher(PlugIn):
 		if not res:
 			return
 		self._owner.remove_timeout()
-		print self._expected
 		if self._expected[self._witid] is None:
 			return
 		if self.on_responses.has_key(self._witid):
@@ -427,7 +422,8 @@ class XMPPDispatcher(PlugIn):
 	
 class BOSHDispatcher(XMPPDispatcher):
 
-	def PlugIn(self, owner, after_SASL=False):
+	def PlugIn(self, owner, after_SASL=False, old_features=None):
+		self.old_features = old_features
 		self.after_SASL = after_SASL
 		XMPPDispatcher.PlugIn(self, owner)
 
@@ -437,7 +433,7 @@ class BOSHDispatcher(XMPPDispatcher):
 		self.Stream.dispatch = self.dispatch
 		self.Stream._dispatch_depth = 2
 		self.Stream.stream_header_received = self._check_stream_start
-		self.Stream.features = None
+		self.Stream.features = self.old_features
 
 		self._metastream = Node('stream:stream')
 		self._metastream.setNamespace(self._owner.Namespace)
@@ -487,8 +483,7 @@ class BOSHDispatcher(XMPPDispatcher):
 				self._owner.Connection.bosh_sid = stanza_attrs['sid']
 
 			if stanza_attrs.has_key('terminate'):
-				# staznas under body still should be passed to XMPP dispatcher
-				self._owner.on_disconnect()
+				self._owner.disconnect()
 
 			if stanza_attrs.has_key('error'):
 				# recoverable error
@@ -498,6 +493,9 @@ class BOSHDispatcher(XMPPDispatcher):
 		
 			if children:
 				for child in children:
+					# if child doesn't have any ns specified, simplexml (or expat) thinks it's
+					# of parent's (BOSH body) namespace, so we have to rewrite it to 
+					# jabber:client
 					if child.getNamespace() == NS_HTTP_BIND:
 						child.setNamespace(self._owner.defaultNamespace)
 					XMPPDispatcher.dispatch(self, child, session, direct)

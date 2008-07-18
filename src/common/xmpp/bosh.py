@@ -24,9 +24,6 @@ class NonBlockingBOSH(NonBlockingTransport):
 		# (see http://www.xmpp.org/extensions/xep-0124.html#rids)
 		r = random.Random()
 		r.seed()
-		global FAKE_DESCRIPTOR
-		FAKE_DESCRIPTOR = FAKE_DESCRIPTOR - 1
-		self.fake_fd = FAKE_DESCRIPTOR
 		self.bosh_rid = r.getrandbits(50)
 		self.bosh_sid = None
 		if locale.getdefaultlocale()[0]:
@@ -35,7 +32,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 			self.bosh_xml_lang = 'en'
 
 		self.http_version = 'HTTP/1.1'
-		self.http_persistent = False
+		self.http_persistent = True
 		self.http_pipelining = False
 		self.bosh_to = domain
 
@@ -57,33 +54,38 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 	def connect(self, conn_5tuple, on_connect, on_connect_failure):
 		NonBlockingTransport.connect(self, conn_5tuple, on_connect, on_connect_failure)
+
+		global FAKE_DESCRIPTOR
+		FAKE_DESCRIPTOR = FAKE_DESCRIPTOR - 1
+		self.fd = FAKE_DESCRIPTOR
+
+		self.http_persistent = True
 		self.http_socks.append(self.get_http_socket())
 		self.tcp_connection_started()
 
 		# this connect() is not needed because sockets can be connected on send but 
 		# we need to know if host is reachable in order to invoke callback for
-		# failure when connecting (it's different than callback for errors 
+		# connecting failurei eventually (it's different than callback for errors 
 		# occurring after connection is etabilished)
-
 		self.http_socks[0].connect(
 			conn_5tuple = conn_5tuple,
 			on_connect = lambda: self._on_connect(self.http_socks[0]),
 			on_connect_failure = self._on_connect_failure)
 
-
-
-	def get_fd(self):
-		return self.fake_fd
+	def set_timeout(self, timeout):
+		if self.state in [CONNECTING, CONNECTED] and self.fd != -1:
+			NonBlockingTransport.set_timeout(self, timeout)
+		else:
+			log.warn('set_timeout: TIMEOUT NOT SET: state is %s, fd is %s' % (self.state, self.fd))
 
 	def on_http_request_possible(self):
 		'''
 		Called after HTTP response is received - another request is possible. 
 		There should be always one pending request on BOSH CM.
 		'''
-		log.info('on_http_req possible, stanzas in list: %s, state:\n%s' % 
-				(self.stanzas_to_send, self.get_current_state()))
-		# if one of sockets is connecting, sth is about to be sent - we don't have to
-		# send request from here
+		log.info('on_http_req possible state:\n%s' % self.get_current_state())
+		# if one of sockets is connecting, sth is about to be sent
+		# if there is a pending request, we shouldn't send another one
 		for s in self.http_socks:
 			if s.state==CONNECTING or s.pending_requests>0: return
 		self.flush_stanzas()
@@ -96,19 +98,17 @@ class NonBlockingBOSH(NonBlockingTransport):
 			tmp = self.prio_bosh_stanza
 			self.prio_bosh_stanza = None
 		else:
-			tmp = self.stanzas_to_send
-			self.stanzas_to_send = []
+			if self.stanzas_to_send:
+				tmp = self.stanzas_to_send.pop(0)
+			else: 
+				tmp = []
 		self.send_http(tmp)
 
 
 	def send(self, stanza, now=False):
 		# body tags should be send only via send_http()
 		assert(not isinstance(stanza, BOSHBody))
-		now = True
-		if now:
-			self.send_http([stanza])
-		else:
-			self.stanzas_to_send.append(stanza)
+		self.send_http([stanza])
 
 
 	def send_http(self, payload):
@@ -130,12 +130,16 @@ class NonBlockingBOSH(NonBlockingTransport):
 		else:
 			# no socket was picked but one is about to connect - save the stanza and
 			# return
+			log.info('send_http: no free socket:\n%s' % self.get_current_state())
 			if self.prio_bosh_stanza:
 				payload = self.merge_stanzas(payload, self.prio_bosh_stanza)
 				if payload is None:
-					log.error('Error in BOSH socket handling - unable to send %s because %s\
-					is already about to be sent' % (payload, self.prio_bosh_stanza))
-					self.disconnect()
+					# if we cant merge the stanzas (both are BOSH <body>), add the current to 
+					# queue to be sent later
+					self.stanzas_to_send.append(bosh_stanza)
+					log.warn('in BOSH send_http - unable to send %s because %s\
+						is already about to be sent' % (str(payload), str(self.prio_bosh_stanza)))
+					return
 			self.prio_bosh_stanza = payload
 
 	def merge_stanzas(self, s1, s2):
@@ -156,9 +160,11 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 		
 	def get_current_state(self):
-		t = '\t\tSOCKET_ID\tSOCKET_STATE\tPENDING_REQS\n'
+		t = '------ SOCKET_ID\tSOCKET_STATE\tPENDING_REQS\n'
 		for s in self.http_socks:
-			t = '%s\t\t%s\t%s\t%s\n' % (t,id(s), s.state, s.pending_requests)
+			t = '%s------ %s\t%s\t%s\n' % (t,id(s), s.state, s.pending_requests)
+		t = '%s------ prio stanza to send: %s, queued stanzas: %s' \
+			% (t, self.prio_bosh_stanza, self.stanzas_to_send)
 		return t
 		
 
@@ -181,9 +187,10 @@ class NonBlockingBOSH(NonBlockingTransport):
 				return
 		# being here means there are only CONNECTED scokets with pending requests.
 		# Lets create and connect another one
-		s = self.get_http_socket()
-		self.http_socks.append(s)
-		self.connect_and_flush(s)
+		if len(self.http_socks) < 2:
+			s = self.get_http_socket()
+			self.http_socks.append(s)
+			self.connect_and_flush(s)
 		return
 
 
@@ -219,7 +226,6 @@ class NonBlockingBOSH(NonBlockingTransport):
 			attrs={	'to': self.bosh_to,
 				'sid': self.bosh_sid,
 				'xml:lang': self.bosh_xml_lang,
-				'xmpp:version': '1.0',
 				'xmpp:restart': 'true',
 				'xmlns:xmpp': 'urn:xmpp:xbosh'})
 
@@ -239,7 +245,8 @@ class NonBlockingBOSH(NonBlockingTransport):
 			on_http_request_possible = self.on_http_request_possible,
 			http_uri = self.bosh_host,			
 			http_port = self.bosh_port,
-			http_version = self.http_version)
+			http_version = self.http_version,
+			http_persistent = self.http_persistent)
 		if self.current_recv_handler:
 			s.onreceive(self.current_recv_handler)
 		return s
@@ -251,9 +258,15 @@ class NonBlockingBOSH(NonBlockingTransport):
 		for s in self.http_socks:
 			s.onreceive(recv_handler)
 
+	def http_socket_disconnect(self, socket):
+		if self.http_persistent:
+			self.disconnect()
+
+
+
 	def disconnect(self, do_callback=True):
 		if self.state == DISCONNECTED: return
-
+		self.fd = -1
 		for s in self.http_socks:
 			s.disconnect(do_callback=False)
 		NonBlockingTransport.disconnect(self, do_callback)

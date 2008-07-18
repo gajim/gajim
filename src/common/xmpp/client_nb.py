@@ -138,9 +138,9 @@ class NBCommonClient:
 	def _try_next_ip(self, err_message=None):
 		'''iterates over IP addresses from getaddinfo'''
 		if err_message:
-			log.debug('While looping over DNS A records: %s' % connect)
+			log.debug('While looping over DNS A records: %s' % err_message)
 		if self.ip_addresses == []:
-			self._on_tcp_failure(err_message='Run out of hosts for name %s:%s' % 
+			self._on_tcp_failure('Run out of hosts for name %s:%s' % 
 				(self.Server, self.Port))
 		else:
                         self.current_ip = self.ip_addresses.pop(0)
@@ -237,7 +237,7 @@ class NBCommonClient:
 		self.on_connect(self, self.connected)
 
 	def raise_event(self, event_type, data):
-		log.info('raising event from transport: :::::%s::::\n_____________\n%s\n_____________\n' % (event_type,data))
+		log.info('raising event from transport: >>>>>%s<<<<<\n_____________\n%s\n_____________\n' % (event_type,data))
 		if hasattr(self, 'Dispatcher'):
 			self.Dispatcher.Event('', event_type, data)
 		
@@ -293,7 +293,7 @@ class NBCommonClient:
 				self._Resource = 'xmpppy'
 			auth_nb.NonBlockingNonSASL(self._User, self._Password, self._Resource, self._on_old_auth).PlugIn(self)
 			return
-		self.onreceive(self._on_start_sasl)
+		#self.onreceive(self._on_start_sasl)
 		self.SASL.auth()
 		return True
 		
@@ -313,8 +313,18 @@ class NBCommonClient:
 			self.SASL.PlugOut()
 		elif self.SASL.startsasl == 'success':
 			auth_nb.NonBlockingBind().PlugIn(self)
-			self.onreceive(self._on_auth_bind)
-		return True
+			if self.protocol_type == 'BOSH':
+				if self.wait_for_restart_response:
+					self.onreceive(self._on_auth_bind)
+				else:
+					self._on_auth_bind(None)
+				return
+
+			elif self.protocol_type == 'XMPP':
+				auth_nb.NonBlockingBind().PlugIn(self)
+				self.onreceive(self._on_auth_bind)
+				return
+		return 
 		
 	def _on_auth_bind(self, data):
 		if data:
@@ -390,6 +400,7 @@ class NonBlockingClient(NBCommonClient):
 						domain = self.Server,
 						bosh_dict = proxy)
 				self.protocol_type = 'BOSH'
+				self.wait_for_restart_response = proxy['wait_for_restart_response']
 
 			else:
 				if proxy['type'] == 'socks5':

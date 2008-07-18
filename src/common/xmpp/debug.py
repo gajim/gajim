@@ -14,7 +14,7 @@
 
 _version_ = '1.4.0'
 
-"""\
+'''\
 
 Generic debug class
 
@@ -35,7 +35,7 @@ by the individual classes.
 For samples of usage, see samples subdir in distro source, and selftest
 in this code
     
-"""
+'''
 
 
 
@@ -70,7 +70,7 @@ color_bright_cyan  = chr(27) + "[36;1m"
 color_white        = chr(27) + "[37;1m"
 
 
-"""
+'''
 Define your flags in yor modules like this:
 
 from debug import *
@@ -99,7 +99,7 @@ DBG_MULTI = [ DBG_INIT, DBG_CONNECTION ]
   -------
   To speed code up, typically for product releases or such
   use this class instead if you globaly want to disable debugging
-"""
+'''
 
 
 class NoDebug:
@@ -214,7 +214,7 @@ class Debug:
 
     def show( self, msg, flag = None, prefix = None, sufix = None,
               lf = 0 ):
-        """
+        '''
         flag can be of folowing types:
             None - this msg will always be shown if any debugging is on
             flag - will be shown if flag is active
@@ -225,7 +225,7 @@ class Debug:
         
         lf = -1 means strip linefeed if pressent
         lf = 1 means add linefeed if not pressent
-        """
+        '''
         
         if self.validate_flags:
             self._validate_flag( flag )
@@ -343,10 +343,10 @@ class Debug:
     
     
     def _as_one_list( self, items ):
-        """ init param might contain nested lists, typically from group flags.
+        ''' init param might contain nested lists, typically from group flags.
         
         This code organises lst and remves dupes
-        """
+        '''
         if type( items ) <> type( [] ) and type( items ) <> type( () ):
             return [ items ]
         r = []
@@ -363,7 +363,7 @@ class Debug:
     
     
     def _append_unique_str( self, lst, item ):
-        """filter out any dupes."""
+        '''filter out any dupes.'''
         if type(item) <> type(''):
             msg2 = '%s' % item
             raise 'Invalid item type (should be string)',msg2
@@ -381,10 +381,10 @@ class Debug:
                     raise 'Invalid debugflag given', msg2
 
     def _remove_dupe_flags( self ):
-        """
+        '''
         if multiple instances of Debug is used in same app, 
         some flags might be created multiple time, filter out dupes
-        """
+        '''
         unique_flags = []
         for f in self.debug_flags:
             if f not in unique_flags:

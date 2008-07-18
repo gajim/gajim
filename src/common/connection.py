@@ -550,6 +550,7 @@ class Connection(ConnectionHandlers):
 				self._proxy['bosh_hold'] = '1'
 				self._proxy['bosh_wait'] = '60'
 				self._proxy['bosh_content'] = 'text/xml; charset=utf-8'
+				self._proxy['wait_for_restart_response'] = False
 
 			
 			log.info('Connecting to %s: [%s:%d]', self.name,
