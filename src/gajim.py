@@ -628,6 +628,9 @@ class Interface:
 		else:
 			ji = jid
 
+		highest = gajim.contacts.get_contact_with_highest_priority(account, jid)
+		was_highest = (highest and highest.resource == resource)
+
 		# Update contact
 		jid_list = gajim.contacts.get_jid_list(account)
 		if ji in jid_list or jid == gajim.get_jid_from_account(account):
@@ -639,20 +642,6 @@ class Interface:
 				if c.resource == resource:
 					contact1 = c
 					break
-
-			highest = gajim.contacts.get_highest_prio_contact_from_contacts(lcontact)
-			if not highest or \
-			(highest.priority < priority and highest.resource != resource) or \
-			(highest.resource == resource and highest.priority > priority):
-				# either this contact is the new highest priority contact or it was the
-				# highest and dropped in priority (so may no longer be the highest)
-
-				# disconnect sessions from this contact's chat controls so we
-				# don't have to open a new tab if a new session comes in
-
-				ctrl = self.msg_win_mgr.get_control(jid, account)
-				if ctrl:
-					ctrl.set_session(None)
 
 			if contact1:
 				if contact1.show in statuss:
@@ -689,7 +678,7 @@ class Interface:
 					contact1 = gajim.contacts.copy_contact(contact1)
 					lcontact.append(contact1)
 				contact1.resource = resource
-			
+
 				self.roster.add_contact(contact1.jid, account)
 
 			if contact1.jid.find('@') > 0 and len(lcontact) == 1:
@@ -780,6 +769,14 @@ class Interface:
 			# It's maybe a GC_NOTIFY (specialy for MSN gc)
 			self.handle_event_gc_notify(account, (jid, array[1], status_message,
 				array[3], None, None, None, None, None, [], None, None))
+
+		highest = gajim.contacts.get_contact_with_highest_priority(account, jid)
+		is_highest = (highest and highest.resource == resource)
+
+		if was_highest and not is_highest:
+			ctrl = self.msg_win_mgr.get_control(jid, account)
+			if ctrl:
+				ctrl.set_session(None)
 
 	def handle_event_msgerror(self, account, array):
 		#'MSGERROR' (account, (jid, error_code, error_msg, msg, time[, session]))
