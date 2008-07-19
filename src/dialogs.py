@@ -2214,8 +2214,8 @@ class SingleMessageWindow:
 		self.instances.remove(self)
 
 	def set_cursor_to_end(self):
-			end_iter = self.message_tv_buffer.get_end_iter()
-			self.message_tv_buffer.place_cursor(end_iter)
+		end_iter = self.message_tv_buffer.get_end_iter()
+		self.message_tv_buffer.place_cursor(end_iter)
 
 	def save_pos(self):
 		# save the window size and position
@@ -2920,50 +2920,34 @@ class InvitationReceivedDialog:
 		self.account = account
 		self.password = password
 		self.is_continued = is_continued
-		xml = gtkgui_helpers.get_glade('invitation_received_dialog.glade')
-		self.dialog = xml.get_widget('invitation_received_dialog')
 
+		pritext = _('''You are invited to a groupchat''')
 		#Don't translate $Contact
 		if is_continued:
-			pritext = _('$Contact has invited you to join a discussion')
+			sectext = _('$Contact has invited you to join a discussion')
 		else:
-			pritext = _('$Contact has invited you to group chat %(room_jid)s')\
+			sectext = _('$Contact has invited you to group chat %(room_jid)s')\
 				% {'room_jid': room_jid}
 		contact = gajim.contacts.get_first_contact_from_jid(account, contact_jid)
-		if contact and contact.name:
-			contact_text = '%s (%s)' % (contact.name, contact_jid)
-		else:
-			contact_text = contact_jid
-		pritext = pritext.replace('$Contact', contact_text)
-
-		label_text = '<big><b>%s</b></big>' % pritext
+		contact_text = contact and contact.name or contact_jid
+		sectext = sectext.replace('$Contact', contact_text)
 
 		if comment: # only if not None and not ''
 			comment = gobject.markup_escape_text(comment)
-			sectext = _('Comment: %s') % comment
-			label_text += '\n\n%s' % sectext
-
-		xml.get_widget('label').set_markup(label_text)
-
-		xml.get_widget('deny_button').connect('clicked',
-			self.on_deny_button_clicked)
-		xml.get_widget('accept_button').connect('clicked',
-			self.on_accept_button_clicked)
-		self.dialog.show_all()
-
-	def on_deny_button_clicked(self, widget):
-		self.dialog.destroy()
-
-	def on_accept_button_clicked(self, widget):
-		self.dialog.destroy()
-		try:
-			if self.is_continued:
-				gajim.interface.join_gc_room(self.account, self.room_jid,
-					gajim.nicks[self.account], None, is_continued=True)
-			else:
-				JoinGroupchatWindow(self.account, self.room_jid)
-		except GajimGeneralException:
-			pass
+			comment = _('Comment: %s') % comment
+			sectext += '\n\n%s' % comment
+		sectext += '\n\n' + _('Do you want to accept the invitation?')
+		
+		dialog = YesNoDialog(pritext, sectext)
+		if dialog.get_response() == gtk.RESPONSE_YES:
+			try:
+				if self.is_continued:
+					gajim.interface.join_gc_room(self.account, self.room_jid,
+						gajim.nicks[self.account], None, is_continued=True)
+				else:
+					JoinGroupchatWindow(self.account, self.room_jid)
+			except GajimGeneralException:
+				pass
 
 class ProgressDialog:
 	def __init__(self, title_text, during_text, messages_queue):

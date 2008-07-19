@@ -705,7 +705,6 @@ class RosterWindow:
 			else:
 				self._remove_entity(contact, account)
 
-
 			if backend:
 				# Remove contact before redrawing, otherwise the old
 				# numbers will still be show
@@ -730,20 +729,28 @@ class RosterWindow:
 		Return the added contact instance.
 		'''
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
+		# Do not show gc if we are disconnected and minimize it
+		if gajim.account_is_connected(account):
+			show = 'online'
+		else: 
+			show = 'offline'
+			status = ''
+
 		if contact is None:
-			# Do not show gc if we are disconnected and minimize it
-			if gajim.account_is_connected(account):
-				show = 'online'
-			else: 
-				show = 'offline'
-				status = ''
+			# New groupchat
 			contact = gajim.contacts.create_contact(jid=jid, name=jid,
 				groups=[_('Groupchats')], show=show, status=status, sub='none')
 			gajim.contacts.add_contact(account, contact)
+			gc_control = gajim.interface.msg_win_mgr.get_gc_control(jid, account)
+			if gc_control:
+				# there is a window that we can minimize
+				gajim.interface.minimized_controls[account][jid] = gc_control
 			self.add_contact(jid, account)
 		else:
-			contact.show = 'online'
+			contact.show = show
+			contact.status = status
 			self.draw_completely_and_show_if_needed(jid, account)
+
 		return contact
 
 
@@ -751,6 +758,8 @@ class RosterWindow:
 		'''Remove groupchat from roster and redraw account and group.'''
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if contact.is_groupchat():
+			if jid in gajim.interface.minimized_controls[account]:
+				gajim.interface.minimized_controls[account][jid]
 			self.remove_contact(jid, account, force=True, backend=True)
 			return True
 		else:
@@ -961,7 +970,8 @@ class RosterWindow:
 		name = gobject.markup_escape_text(contact.get_shown_name())
 
 		# gets number of unread gc marked messages
-		if jid in gajim.interface.minimized_controls[account]:
+		if jid in gajim.interface.minimized_controls[account] and \
+		gajim.interface.minimized_controls[account][jid]:
 			nb_unread = len(gajim.events.get_events(account, jid,
 				['printed_marked_gc_msg']))
 			nb_unread += \
@@ -1580,18 +1590,6 @@ class RosterWindow:
 		if account in gajim.gc_connected[account].values():
 			return True
 		return False
-
-	def auto_join_bookmarks(self, account):
-		'''autojoin bookmarks that have 'auto join' on for this account'''
-		for bm in gajim.connections[account].bookmarks:
-			if bm['autojoin'] in ('1', 'true'):
-				jid = bm['jid']
-				if not gajim.gc_connected[account].has_key(jid) or\
-					not gajim.gc_connected[account][jid]:
-					# we are not already connected
-					minimize = bm['minimize'] in ('1', 'true')
-					gajim.interface.join_gc_room(account, jid, bm['nick'],
-					bm['password'], minimize = minimize)
 
 	def on_event_removed(self, event_list):
 		'''Remove contacts on last events removed.
@@ -2651,9 +2649,9 @@ class RosterWindow:
 
 	def on_disconnect(self, widget, jid, account):
 		'''When disconnect menuitem is activated: disconect from room'''
-		ctrl = gajim.interface.minimized_controls[account][jid]
-		del gajim.interface.minimized_controls[account][jid]
-		ctrl.shutdown()
+		if jid in gajim.interface.minimized_controls[account]:
+			ctrl = gajim.interface.minimized_controls[account][jid]
+			ctrl.shutdown()
 		self.remove_groupchat(jid, account)
 
 	def on_send_single_message_menuitem_activate(self, widget, account,
@@ -2722,6 +2720,8 @@ class RosterWindow:
 
 	def on_groupchat_maximized(self, widget, jid, account):
 		'''When a groupchat is maximised'''
+		if not jid in gajim.interface.minimized_controls[account]:
+			return
 		ctrl = gajim.interface.minimized_controls[account][jid]
 		mw = gajim.interface.msg_win_mgr.get_window(ctrl.contact.jid,
 			ctrl.account)
@@ -2731,8 +2731,7 @@ class RosterWindow:
 		ctrl.parent_win = mw
 		mw.new_tab(ctrl)
 		mw.set_active_tab(ctrl)
-		del gajim.interface.minimized_controls[account][jid]
-
+		
 		self.remove_groupchat(jid, account)
 
 	def on_edit_account(self, widget, account):
@@ -3240,15 +3239,21 @@ class RosterWindow:
 		type_ = model[path][C_TYPE]
 		jid = model[path][C_JID].decode('utf-8')
 		resource = None
-		contact = None
+		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		titer = model.get_iter(path)
 		if type_ in ('group', 'account'):
 			if self.tree.row_expanded(path):
 				self.tree.collapse_row(path)
 			else:
 				self.tree.expand_row(path, False)
-		elif jid in gajim.interface.minimized_controls[account]:
-			self.on_groupchat_maximized(None, jid, account)
+		elif contact.is_groupchat():
+			first_ev = gajim.events.get_first_event(account, jid)
+			if first_ev and self.open_event(account, jid, first_ev):
+				# We are invited to a GC
+				# open event cares about connecting to it
+				self.remove_groupchat(jid, account)
+			else:
+				self.on_groupchat_maximized(None, jid, account)
 		else:
 			first_ev = gajim.events.get_first_event(account, jid)
 			if not first_ev:

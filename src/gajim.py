@@ -2128,11 +2128,7 @@ class Interface:
 
 		if type_ in ('printed_gc_msg', 'printed_marked_gc_msg', 'gc_msg'):
 			w = self.msg_win_mgr.get_window(jid, account)
-			if self.minimized_controls[account].has_key(jid):
-				if not w:
-					ctrl = self.minimized_controls[account][jid]
-					w = self.msg_win_mgr.create_window(ctrl.contact, \
-						ctrl.account, ctrl.type_id)
+			if jid in self.minimized_controls[account]:
 				self.roster.on_groupchat_maximized(None, jid, account)
 
 			if not ctrl:
@@ -2473,48 +2469,51 @@ class Interface:
 ################################################################################
 
 	def join_gc_room(self, account, room_jid, nick, password, minimize=False,
-		is_continued=False):
+	is_continued=False):
 		'''joins the room immediately'''
 		if not nick:
 			nick = gajim.nicks[account]
+
 		if self.msg_win_mgr.has_window(room_jid, account) and \
-				gajim.gc_connected[account][room_jid]:
+		gajim.gc_connected[account][room_jid]:
 			gc_ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
 			win = gc_ctrl.parent_win
 			win.set_active_tab(gc_ctrl)
 			dialogs.ErrorDialog(_('You are already in group chat %s') % room_jid)
 			return
-		minimized_control_exists = False
-		if room_jid in gajim.interface.minimized_controls[account]:
-			minimized_control_exists = True
+
 		invisible_show = gajim.SHOW_LIST.index('invisible')
 		if gajim.connections[account].connected == invisible_show:
 			dialogs.ErrorDialog(
 				_('You cannot join a group chat while you are invisible'))
 			return
-		if minimize and not minimized_control_exists and \
-		not self.msg_win_mgr.has_window(room_jid, account):
-			contact = gajim.contacts.create_contact(jid=room_jid, name=nick)
-			gc_control = GroupchatControl(None, contact, account)
-			self.minimized_controls[account][room_jid] = gc_control
-			gajim.connections[account].join_gc(nick, room_jid, password)
-			if password:
-				gajim.gc_passwords[room_jid] = password
-			self.roster.add_groupchat(room_jid, account)
-			return
+
+		minimized_control_exists = False
+		if room_jid in gajim.interface.minimized_controls[account]:
+			minimized_control_exists = True
+
 		if not minimized_control_exists and \
-			not self.msg_win_mgr.has_window(room_jid, account):
-			self.new_room(room_jid, nick, account, is_continued=is_continued)
-		if not minimized_control_exists:
+		not self.msg_win_mgr.has_window(room_jid, account):
+			# Join new groupchat
+			if minimize:
+				contact = gajim.contacts.create_contact(jid=room_jid, name=nick)
+				gc_control = GroupchatControl(None, contact, account)
+				gajim.interface.minimized_controls[account][room_jid] = gc_control
+				self.roster.add_groupchat(room_jid, account)
+			else:
+				self.new_room(room_jid, nick, account, is_continued=is_continued)
+		elif not minimized_control_exists:
+			# We are already in that groupchat
 			gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
-			gc_control.parent_win.set_active_tab(gc_control)
+			gc_control.parent_win.set_active_tab(gc_control)	
+		else:
+			# We are already in this groupchat and it is minimized
+			self.roster.add_groupchat(room_jid, account)
+
+		# Connect
 		gajim.connections[account].join_gc(nick, room_jid, password)
 		if password:
 			gajim.gc_passwords[room_jid] = password
-		contact = gajim.contacts.get_contact_with_highest_priority(account, \
-			room_jid)
-		if contact or minimized_control_exists:
-			self.roster.add_groupchat(room_jid, account)
 
 	def new_room(self, room_jid, nick, account, is_continued=False):
 		# Get target window, create a control, and associate it with the window
@@ -2821,11 +2820,16 @@ class Interface:
 				jid = bm['jid']
 				# Only join non-opened groupchats. Opened one are already
 				# auto-joined on re-connection
-				if not gajim.gc_connected[account].has_key(jid):
+				if not jid in gajim.gc_connected[account]:
 					# we are not already connected
 					minimize = bm['minimize'] in ('1', 'true')
 					gajim.interface.join_gc_room(account, jid, bm['nick'],
 					bm['password'], minimize = minimize)
+				elif jid in self.minimized_controls[account]:
+					# more or less a hack:
+					# On disconnect the minimized gc contact instances 
+					# were set to offline. Reconnect them to show up in the roster.
+					self.roster.add_groupchat(jid, account)
 
 	def add_gc_bookmark(self, account, name, jid, autojoin, minimize, password,
 		nick):

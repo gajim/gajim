@@ -1624,13 +1624,10 @@ class GroupchatControl(ChatControlBase):
 		control.unparent()
 		ctrl.parent_win = None
 
-		gajim.interface.minimized_controls[self.account][self.contact.jid] = \
-			ctrl
-
-		del win._controls[self.account][self.contact.jid]
-
 		gajim.interface.roster.add_groupchat(self.contact.jid, self.account,
 			status = self.subject)
+
+		del win._controls[self.account][self.contact.jid]
 
 	def shutdown(self, status='offline'):
 		# destroy banner tooltip - bug #pygtk for that!
