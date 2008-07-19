@@ -1803,7 +1803,7 @@ class RosterWindow:
 		contact.status = status
 		# name is to show in conversation window
 		name = contact.get_shown_name()
-		
+
 		# The contact has several resources
 		if len(contact_instances) > 1:
 			if contact.resource != '':
@@ -1828,24 +1828,21 @@ class RosterWindow:
 			# SelfContact went offline. Remove him when last pending message was read
 			self.remove_contact(contact.jid, account, backend=True)
 
+		uf_show = helpers.get_uf_show(show)
+
 		# print status in chat window and update status/GPG image
-		if gajim.interface.msg_win_mgr.has_window(contact.jid, account):
-			win = gajim.interface.msg_win_mgr.get_window(contact.jid, account)
-			uf_show = helpers.get_uf_show(show)
+		ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+		if ctrl:
+			ctrl.contact = gajim.contacts.get_contact_with_highest_priority(
+				account, contact.jid)
+			ctrl.update_status_display(name, uf_show, status)
 
-			ctrl = win.get_control(contact.jid, account)
+		if contact.resource != '':
+			fjid = contact.jid + '/' + contact.resource
+
+			ctrl = gajim.interface.msg_win_mgr.get_control(fjid, account)
 			if ctrl:
-				ctrl.contact = gajim.contacts.get_contact_with_highest_priority(
-					account, contact.jid)
-				ctrl.update_ui()
-				win.redraw_tab(ctrl)
-
-				ctrl.print_conversation(_('%s is now %s') % (name, uf_show),
-					'status')
-				if status:
-					ctrl.print_conversation(' (', 'status', simple=True)
-					ctrl.print_conversation('%s' % (status), 'status', simple=True)
-					ctrl.print_conversation(')', 'status', simple=True)
+				ctrl.update_status_display(name, uf_show, status)
 
 		# unset custom status
 		if gajim.interface.status_sent_to_users.has_key(account) and \

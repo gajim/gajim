@@ -2380,3 +2380,16 @@ class ChatControl(ChatControlBase):
 		if contact:
 			self.contact = contact
 		self.draw_banner()
+
+	def update_status_display(self, name, uf_show, status):
+		'''print the contact's status and update the status/GPG image'''
+		self.update_ui()
+		self.parent_win.redraw_tab(self)
+
+		self.print_conversation(_('%s is now %s') % (name, uf_show),
+			'status')
+
+		if status:
+			ctrl.print_conversation(' (', 'status', simple=True)
+			ctrl.print_conversation('%s' % (status), 'status', simple=True)
+			ctrl.print_conversation(')', 'status', simple=True)
