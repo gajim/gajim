@@ -483,7 +483,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 		x.addChild(node=xmpp.DataField(name='my_nonce', value=base64.b64encode(self.n_s), typ='hidden'))
 
-		modp_options = [ 5, 14, 2, 1 ]
+		modp_options = [ int(g) for g in gajim.config.get('esession_modp').split(',') ]
 
 		x.addChild(node=xmpp.DataField(name='modp', typ='list-single', options=map(lambda x: [ None, x ], modp_options)))
 

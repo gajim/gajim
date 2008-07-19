@@ -1155,9 +1155,10 @@ class ChatControl(ChatControlBase):
 			self.session and self.session.is_loggable(), True)
 		# then try E2E
 		# XXX: Once we have fallback to disco, remove notexistant check
-		elif not e2e_is_active and \
-		gajim.capscache.is_supported(contact, NS_ESESSION) and \
-		not gajim.capscache.is_supported(contact, 'notexistant'):
+		elif not e2e_is_active and gajim.HAVE_PYCRYPTO \
+		and gajim.config.get('autonegotiate_esessions') \
+		and gajim.capscache.is_supported(contact, NS_ESESSION) \
+		and not gajim.capscache.is_supported(contact, 'notexistant'):
 			self.begin_e2e_negotiation()
 
 		self.status_tooltip = gtk.Tooltips()
