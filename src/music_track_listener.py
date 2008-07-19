@@ -33,7 +33,6 @@ class MusicTrackInfo(object):
 	__slots__ = ['title', 'album', 'artist', 'duration', 'track_number',
 		'paused']
 
-
 class MusicTrackListener(gobject.GObject):
 	__gsignals__ = {
 		'music-track-changed': (gobject.SIGNAL_RUN_LAST, None, (object,)),
@@ -57,7 +56,8 @@ class MusicTrackListener(gobject.GObject):
 			'org.freedesktop.MediaPlayer')
 		bus.add_signal_receiver(self._mpris_playing_changed_cb, 'StatusChange',
 			'org.freedesktop.MediaPlayer')
-			
+		bus.add_signal_receiver(self._player_name_owner_changed,
+			'NameOwnerChanged', 'org.freedesktop.DBus', arg0='org.freedesktop.MediaPlayer')
 
 		## Muine
 		bus.add_signal_receiver(self._muine_music_track_change_cb, 'SongChanged',
@@ -76,41 +76,10 @@ class MusicTrackListener(gobject.GObject):
 			'playingSongPropertyChanged', 'org.gnome.Rhythmbox.Player')
 
 		## Banshee
-		# Banshee sucks because it only supports polling.
-		# Thus, we only register this is we are very sure that it's
-		# installed.
-		if os.name == 'posix' and os.system('which banshee >/dev/null 2>&1') == 0:
-			banshee_bus = dbus.SessionBus()
-			dubus = banshee_bus.get_object('org.freedesktop.DBus',
-				'/org/freedesktop/dbus')
-			self.dubus_methods = dbus.Interface(dubus, 'org.freedesktop.DBus')
-			self.current_banshee_title = ''
-			self.banshee_paused_before = False
-			self.banshee_is_here = False
-			gobject.timeout_add_seconds(10, self._check_if_banshee_bus)
-			if self.dubus_methods.NameHasOwner('org.gnome.Banshee'):
-				self._get_banshee_bus()
-				self.banshee_is_here = True
-			# Otherwise, it opens Banshee!
-			self.banshee_props ={}
-			gobject.timeout_add_seconds(1, self._banshee_check_track_status)
-
-	def _check_if_banshee_bus(self):
-		if self.dubus_methods.NameHasOwner('org.gnome.Banshee'):
-			self._get_banshee_bus()
-			self.banshee_is_here = True
-		else:
-			self.banshee_is_here = False
-		return True
-
-	def _get_banshee_bus(self):
-		bus = dbus.SessionBus()
-		banshee = bus.get_object('org.gnome.Banshee', '/org/gnome/Banshee/Player')
-		self.banshee_methods = dbus.Interface(banshee, 'org.gnome.Banshee.Core')
-
-	def do_music_track_changed(self, info):
-		if info is not None:
-			self._last_playing_music = info
+		bus.add_signal_receiver(self._banshee_state_changed_cb,
+			'StateChanged', 'org.bansheeproject.Banshee.PlayerEngine')
+		bus.add_signal_receiver(self._player_name_owner_changed,
+			'NameOwnerChanged', 'org.freedesktop.DBus', arg0='org.bansheeproject.Banshee')
 
 	def _player_name_owner_changed(self, name, old, new):
 		if not new:
@@ -192,54 +161,22 @@ class MusicTrackListener(gobject.GObject):
 		info.track_number = int(props['track-number'])
 		return info
 
-	def _banshee_check_track_status(self):
-		if self.dubus_methods.NameHasOwner('org.gnome.Banshee') and \
-		not hasattr(self, 'banshee_methods'):
-			self._get_banshee_bus()
-
-		if self.dubus_methods.NameHasOwner('org.gnome.Banshee') and self.banshee_is_here:
-			try:
-				self.banshee_props['title'] = self.banshee_methods.GetPlayingTitle()
-				self.banshee_props['album'] = self.banshee_methods.GetPlayingAlbum()
-				self.banshee_props['artist'] = self.banshee_methods.\
-					GetPlayingArtist()
-				self.banshee_props['duration'] = \
-				self.banshee_methods.GetPlayingDuration()
-				self.banshee_props['paused'] = self.banshee_methods.\
-					GetPlayingStatus()
-				info = self._banshee_properties_extract(self.banshee_props)
-			except dbus.DBusException, err:
-				info = None
-
-				for key in self.banshee_props.keys():
-					self.banshee_props[key] = ''
-				self.banshee_is_here = False
-
-			if self.current_banshee_title != self.banshee_props['title']:
-				self.emit('music-track-changed', info)
-				self.banshee_paused_before = False
-			if self.banshee_props['paused'] == 0 and self.banshee_paused_before ==\
-			False:
-				self.emit('music-track-changed', info)
-				self.banshee_paused_before = True
-			else: 
-				if self.banshee_paused_before and self.banshee_props['paused'] == 1:
-					self.emit('music-track-changed', info)
-					self.banshee_paused_before = False
-			self.current_banshee_title = self.banshee_props['title']
-		return 1
-
-	def _banshee_music_track_change_cb(self, arg):
-		info = self._banshee_properties_extract(arg)
-		self.emit('music-track-changed', info)
+	def _banshee_state_changed_cb(self, state):
+		if state == 'playing':
+			bus = dbus.SessionBus()
+			banshee = bus.get_object("org.bansheeproject.Banshee", "/org/bansheeproject/Banshee/PlayerEngine")
+			currentTrack = banshee.GetCurrentTrack()
+			self._last_playing_music = self._banshee_properties_extract(currentTrack) 
+			self.emit('music-track-changed', self._last_playing_music)
+		elif state == 'paused':
+			self.emit('music-track-changed', None)
 
 	def _banshee_properties_extract(self, props):
 		info = MusicTrackInfo()
-		info.title = props['title']
+		info.title = props['name']
 		info.album = props['album']
 		info.artist = props['artist']
-		info.duration = int(props['duration'])
-		info.paused = props['paused']
+		info.duration = int(props['length'])
 		return info
 
 	def get_playing_track(self):
