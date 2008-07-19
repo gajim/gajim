@@ -2390,6 +2390,6 @@ class ChatControl(ChatControlBase):
 			'status')
 
 		if status:
-			ctrl.print_conversation(' (', 'status', simple=True)
-			ctrl.print_conversation('%s' % (status), 'status', simple=True)
-			ctrl.print_conversation(')', 'status', simple=True)
+			self.print_conversation(' (', 'status', simple=True)
+			self.print_conversation('%s' % (status), 'status', simple=True)
+			self.print_conversation(')', 'status', simple=True)
