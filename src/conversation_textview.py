@@ -43,6 +43,9 @@ from common.fuzzyclock import FuzzyClock
 from htmltextview import HtmlTextView
 from common.exceptions import GajimGeneralException
 
+NOT_SHOWN = 0
+ALREADY_RECEIVED = 1
+SHOWN = 2
 
 def is_selection_modified(mark):
 	name = mark.get_name()
@@ -178,6 +181,7 @@ class ConversationTextview:
 		self.images = []
 		self.image_cache = {}
 		self.xep0184_marks = {}
+		self.xep0184_shown = {}
 
 		# It's True when we scroll in the code, so we can detect scroll from user
 		self.auto_scrolling = False
@@ -400,22 +404,25 @@ class ConversationTextview:
 			pass
 
 		buffer = self.tv.get_buffer()
-
 		buffer.begin_user_action()
-
-		end_iter = buffer.get_end_iter()
-		buffer.insert(end_iter, ' ')
-		buffer.insert_pixbuf(end_iter,
-			ConversationTextview.XEP0184_WARNING_PIXBUF)
-
-		end_iter = buffer.get_end_iter();
-		before_img_iter = end_iter.copy()
-		# XXX: Is there a nicer way?
-		before_img_iter.backward_char();
-		before_img_iter.backward_char();
 
 		self.xep0184_marks[id] = buffer.create_mark(None,
 			buffer.get_end_iter(), left_gravity=True)
+		self.xep0184_shown[id] = NOT_SHOWN
+
+		def show_it():
+			if self.xep0184_shown[id] == ALREADY_RECEIVED:
+				return False
+
+			end_iter = buffer.get_iter_at_mark(
+				self.xep0184_marks[id])
+			buffer.insert(end_iter, ' ')
+			buffer.insert_pixbuf(end_iter,
+				ConversationTextview.XEP0184_WARNING_PIXBUF)
+
+			self.xep0184_shown[id] = SHOWN
+			return False
+		gobject.timeout_add(2000, show_it)
 
 		buffer.end_user_action()
 
@@ -426,16 +433,19 @@ class ConversationTextview:
 		except KeyError:
 			return
 
-		buffer = self.tv.get_buffer()
+		if self.xep0184_shown[id] == NOT_SHOWN:
+			self.xep0184_shown[id] = ALREADY_RECEIVED
+			return
 
+		buffer = self.tv.get_buffer()
 		buffer.begin_user_action()
 
-		end_iter = buffer.get_iter_at_mark(self.xep0184_marks[id])
+		begin_iter = buffer.get_iter_at_mark(self.xep0184_marks[id])
 
-		begin_iter = end_iter.copy()
+		end_iter = begin_iter.copy()
 		# XXX: Is there a nicer way?
-		begin_iter.backward_char();
-		begin_iter.backward_char();
+		end_iter.forward_char();
+		end_iter.forward_char();
 
 		buffer.delete(begin_iter, end_iter)
 		buffer.delete_mark(self.xep0184_marks[id])
@@ -443,6 +453,7 @@ class ConversationTextview:
 		buffer.end_user_action()
 
 		self.xep0184_marks[id] = None
+		del self.xep0184_shown[id]
 
 	def show_focus_out_line(self):
 		if not self.allow_focus_out_line:
