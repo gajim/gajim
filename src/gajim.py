@@ -269,7 +269,7 @@ import dialogs
 def pid_alive():
 	try:
 		pf = open(pid_filename)
-	except:
+	except IOError:
 		# probably file not found
 		return False
 
