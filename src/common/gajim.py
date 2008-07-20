@@ -176,9 +176,6 @@ gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI,
 	'msglog', 'sslc2s', 'stringprep', xmpp.NS_PING,
 	xmpp.NS_TIME_REVISED, xmpp.NS_GAMING]
 
-if HAVE_PYCRYPTO:
-	gajim_common_features.append(xmpp.NS_ESESSION)
-
 # Optional features gajim supports per account
 gajim_optional_features = {}
 
