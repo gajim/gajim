@@ -1,9 +1,11 @@
-docdir = '../'
+import re
 
+docdir = '../'
 datadir = '../'
 
 version = '0.11.4.4-svn'
-rev = '$Rev$'.replace('$', '').replace('Rev', '').replace(': ', '')
+
+rev = re.sub('[^0-9]', '', '$Rev$')
 if rev is not '':
 	version += ' r' + rev
 
