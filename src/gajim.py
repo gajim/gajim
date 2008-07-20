@@ -213,13 +213,7 @@ if pritext:
 
 del pritext
 
-path = os.getcwd()
-if '.svn' in os.listdir(path) or '_svn' in os.listdir(path):
-	# import gtkexcepthook only for those that run svn
-	# those than run with --verbose run from terminal so no need to care
-	# about those
-	import gtkexcepthook
-del path
+import gtkexcepthook
 
 import gobject
 if not hasattr(gobject, 'timeout_add_seconds'):
