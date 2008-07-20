@@ -191,7 +191,6 @@ class Config:
 		'tabs_border': [opt_bool, False, _('Show tabbed notebook border in chat windows?')],
 		'tabs_close_button': [opt_bool, True, _('Show close button in tab?')],
 		'log_encrypted_sessions': [opt_bool, True, _('When negotiating an encrypted session, should Gajim assume you want your messages to be logged?')],
-		'autonegotiate_esessions': [opt_bool, True, _('Should Gajim automatically start an encrypted session when possible?')],
 		'esession_modp': [opt_str, '5,14', _('A list of modp groups to use in a Diffie-Hellman, highest preference first, separated by commas. Valid groups are 1, 2, 5, 14, 15, 16, 17 and 18. Higher numbers are more secure, but take longer to calculate when you start a session.')],
 		'chat_avatar_width': [opt_int, 52],
 		'chat_avatar_height': [opt_int, 52],
@@ -277,6 +276,7 @@ class Config:
 			'keyid': [ opt_str, '', '', True ],
 			'gpg_sign_presence': [ opt_bool, True, _('If disabled, don\'t sign presences with GPG key, even if GPG is configured.') ],
 			'keyname': [ opt_str, '', '', True ],
+			'autonegotiate_esessions': [opt_bool, True, _('Should Gajim automatically start an encrypted session when possible?')],
 			'connection_types': [ opt_str, 'tls ssl plain', _('Ordered list (space separated) of connection type to try. Can contain tls, ssl or plain')],
 			'warn_when_plaintext_connection': [ opt_bool, True, _('Show a warning dialog before sending password on an plaintext connection.') ],
 			'warn_when_insecure_ssl_connection': [ opt_bool, True, _('Show a warning dialog before using standard SSL library.') ],
@@ -299,7 +299,7 @@ class Config:
 			'http_auth': [opt_str, 'ask'], # yes, no, ask
 			'dont_ack_subscription': [opt_bool, False, _('Jabberd2 workaround')],
 			# proxy65 for FT
-			'file_transfer_proxies': [opt_str, 
+			'file_transfer_proxies': [opt_str,
 			'proxy.jabber.org, proxy.netlab.cz, transfer.jabber.freenet.de, proxy.jabber.cd.chalmers.se'],
 			'use_ft_proxies': [opt_bool, True, _('If checked, Gajim will use your IP and proxies defined in file_transfer_proxies option for file transfer.'), True],
 			'msgwin-x-position': [opt_int, -1], # Default is to let the wm decide
@@ -361,7 +361,7 @@ class Config:
 			'bannerbgcolor': [ opt_color, '', '', True ],
 			'bannerfont': [ opt_str, '', '', True ],
 			'bannerfontattrs': [ opt_str, 'B', '', True ],
-				
+
 			# http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html
 			'state_inactive_color': [ opt_color, 'grey62' ],
 			'state_composing_color': [ opt_color, 'green4' ],
@@ -374,6 +374,7 @@ class Config:
 		}, {}),
 		'contacts': ({
 			'gpg_enabled': [ opt_bool, False, _('Is OpenPGP enabled for this contact?')],
+			'autonegotiate_esessions': [opt_bool, True, _('Should Gajim automatically start an encrypted session with this contact when possible?')],
 			'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
 		}, {}),
 		'rooms': ({

@@ -1135,6 +1135,9 @@ class ChatControl(ChatControlBase):
 		self.gpg_is_active = False
 		gpg_pref = gajim.config.get_per('contacts', contact.jid,
 			'gpg_enabled')
+		e2e_pref = gajim.config.get_per('accounts', self.account,
+			'autonegotiate_esessions') and gajim.config.get_per('contacts',
+			contact.jid, 'autonegotiate_esessions')
 
 		# try GPG first
 		if not e2e_is_active and gpg_pref and \
@@ -1155,8 +1158,7 @@ class ChatControl(ChatControlBase):
 			self.session and self.session.is_loggable(), True)
 		# then try E2E
 		# XXX: Once we have fallback to disco, remove notexistant check
-		elif not e2e_is_active and gajim.HAVE_PYCRYPTO \
-		and gajim.config.get('autonegotiate_esessions') \
+		elif not e2e_is_active and gajim.HAVE_PYCRYPTO and e2e_pref \
 		and gajim.capscache.is_supported(contact, NS_ESESSION) \
 		and not gajim.capscache.is_supported(contact, 'notexistant'):
 			self.begin_e2e_negotiation()
