@@ -1737,7 +1737,7 @@ class Interface:
 		session.conn.delete_session(jid, session.thread_id)
 
 		# restart the session
-		session.begin_e2e_negotiation()
+		session.negotiate_e2e()
 
 	def handle_event_privacy_lists_received(self, account, data):
 		# ('PRIVACY_LISTS_RECEIVED', account, list)
