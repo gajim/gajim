@@ -879,7 +879,7 @@ def get_os_info():
 						text = distro_name
 					elif path_to_file.endswith('lfs-release'): # file just has version
 						text = distro_name + ' ' + text
-				return text
+				return text.replace('\n', '')
 
 		# our last chance, ask uname and strip it
 		uname_output = get_output_of_command('uname -sr')
