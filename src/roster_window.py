@@ -759,7 +759,7 @@ class RosterWindow:
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if contact.is_groupchat():
 			if jid in gajim.interface.minimized_controls[account]:
-				gajim.interface.minimized_controls[account][jid]
+				del gajim.interface.minimized_controls[account][jid]
 			self.remove_contact(jid, account, force=True, backend=True)
 			return True
 		else:
@@ -2720,15 +2720,14 @@ class RosterWindow:
 		if not jid in gajim.interface.minimized_controls[account]:
 			return
 		ctrl = gajim.interface.minimized_controls[account][jid]
-		mw = gajim.interface.msg_win_mgr.get_window(ctrl.contact.jid,
-			ctrl.account)
+		mw = gajim.interface.msg_win_mgr.get_window(jid, account)
 		if not mw:
 			mw = gajim.interface.msg_win_mgr.create_window(ctrl.contact,
 				ctrl.account, ctrl.type_id)
 		ctrl.parent_win = mw
 		mw.new_tab(ctrl)
 		mw.set_active_tab(ctrl)
-		
+		mw.window.window.focus()
 		self.remove_groupchat(jid, account)
 
 	def on_edit_account(self, widget, account):

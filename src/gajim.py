@@ -710,7 +710,6 @@ class Interface:
 			if ji in jid_list:
 				# Update existing iter
 				self.roster.draw_contact(ji, account)
-				self.roster.draw_group(_('Transports'), account)
 				if new_show > 1 and ji in gajim.transport_avatar[account]:
 					# transport just signed in. request avatars
 					for jid_ in gajim.transport_avatar[account][ji]:
@@ -2107,7 +2106,8 @@ class Interface:
 				else:
 					# add contact to roster ("Not In The Roster") if he is not
 					self.roster.add_to_not_in_the_roster(account, jid)
-			self.roster.draw_contact(jid, account)
+			else:
+				self.roster.draw_contact(jid, account)
 
 		# Select the contact in roster, it's visible because it has events.
 		self.roster.select_contact(jid, account)
@@ -2124,8 +2124,8 @@ class Interface:
 			w = self.msg_win_mgr.get_window(jid, account)
 			if jid in self.minimized_controls[account]:
 				self.roster.on_groupchat_maximized(None, jid, account)
-
-			if not ctrl:
+				return
+			else:
 				ctrl = self.msg_win_mgr.get_gc_control(jid, account)
 
 		elif type_ in ('printed_chat', 'chat', ''):
@@ -3134,7 +3134,6 @@ class Interface:
 				dialogs.AspellDictError(lang)
 
 		if gajim.config.get('soundplayer') == '':
-			print 'first'
 			# only on first time Gajim starts
 			commands = ('aplay', 'play', 'esdplay', 'artsplay')
 			for command in commands:
