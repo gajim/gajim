@@ -1038,20 +1038,27 @@ class ChatControl(ChatControlBase):
 		id = self.actions_button.connect('clicked', self.on_actions_button_clicked)
 		self.handlers[id] = self.actions_button
 
-		add_to_roster_button = self.xml.get_widget('add_to_roster_button')
-		id = add_to_roster_button.connect('clicked', self._on_add_to_roster_menuitem_activate)
-		self.handlers[id] = add_to_roster_button
+		self._add_to_roster_button = self.xml.get_widget(
+			'add_to_roster_button')
+		id = self._add_to_roster_button.connect('clicked',
+			self._on_add_to_roster_menuitem_activate)
+		self.handlers[id] = self._add_to_roster_button
 
-		send_file_button = self.xml.get_widget('send_file_button')
-		id = send_file_button.connect('clicked', self._on_send_file_menuitem_activate)
-		self.handlers[id] = send_file_button
+		self._send_file_button = self.xml.get_widget('send_file_button')
+		id = self._send_file_button.connect('clicked',
+			self._on_send_file_menuitem_activate)
+		self.handlers[id] = self._send_file_button
 
-		convert_to_gc_button = self.xml.get_widget('convert_to_gc_button')
-		id = convert_to_gc_button.connect('clicked', self._on_convert_to_gc_menuitem_activate)
-		self.handlers[id] = convert_to_gc_button
+		self._convert_to_gc_button = self.xml.get_widget(
+			'convert_to_gc_button')
+		id = self._convert_to_gc_button.connect('clicked',
+			self._on_convert_to_gc_menuitem_activate)
+		self.handlers[id] = self._convert_to_gc_button
 
-		contact_information_button = self.xml.get_widget('contact_information_button')
-		id = contact_information_button.connect('clicked', self._on_contact_information_menuitem_activate)
+		contact_information_button = self.xml.get_widget(
+			'contact_information_button')
+		id = contact_information_button.connect('clicked',
+			self._on_contact_information_menuitem_activate)
 		self.handlers[id] = contact_information_button
 
 		compact_view = gajim.config.get('compact_view')
@@ -1059,8 +1066,10 @@ class ChatControl(ChatControlBase):
 		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
 			gajim.config.get('hide_chat_banner'))
 
-		self.authentication_button = self.xml.get_widget('authentication_button')
-		id = self.authentication_button.connect('clicked', self._on_authentication_button_clicked)
+		self.authentication_button = self.xml.get_widget(
+			'authentication_button')
+		id = self.authentication_button.connect('clicked',
+			self._on_authentication_button_clicked)
 		self.handlers[id] = self.authentication_button
 
 		# Add lock image to show chat encryption
@@ -1069,27 +1078,14 @@ class ChatControl(ChatControlBase):
 
 		# Convert to GC icon
 		img = self.xml.get_widget('convert_to_gc_button_image')
-		img.set_from_pixbuf(gtkgui_helpers.load_icon('muc_active').get_pixbuf())
+		img.set_from_pixbuf(gtkgui_helpers.load_icon(
+			'muc_active').get_pixbuf())
 
-		# Add to roster button
-		if _('Not in Roster') in contact.groups:
-			add_to_roster_button.show()
-
-		# If we don't have resource, we can't do file transfer
-		# in transports, contact holds our info we need to disable it too
-		if gajim.capscache.is_supported(contact, NS_FILE):
-			send_file_button.set_sensitive(True)
-		else:
-			send_file_button.set_sensitive(False)
-
-		# check if it's possible to convert to groupchat
-		if gajim.capscache.is_supported(contact, NS_MUC):
-			convert_to_gc_button.set_sensitive(True)
-		else:
-			convert_to_gc_button.set_sensitive(False)
+		self.update_toolbar()
 
 		# keep timeout id and window obj for possible big avatar
-		# it is on enter-notify and leave-notify so no need to be per jid
+		# it is on enter-notify and leave-notify so no need to be
+		# per jid
 		self.show_bigger_avatar_timeout_id = None
 		self.bigger_avatar_window = None
 		self.show_avatar(self.contact.resource)
@@ -1121,7 +1117,8 @@ class ChatControl(ChatControlBase):
 		self.handlers[id] = widget
 
 		if not session:
-			session = gajim.connections[self.account].find_controlless_session(self.contact.jid)
+			session = gajim.connections[self.account]. \
+				find_controlless_session(self.contact.jid)
 
 		if session:
 			session.control = self
@@ -1136,8 +1133,9 @@ class ChatControl(ChatControlBase):
 		gpg_pref = gajim.config.get_per('contacts', contact.jid,
 			'gpg_enabled')
 		e2e_pref = gajim.config.get_per('accounts', self.account,
-			'autonegotiate_esessions') and gajim.config.get_per('contacts',
-			contact.jid, 'autonegotiate_esessions')
+			'autonegotiate_esessions') and \
+			gajim.config.get_per('contacts', contact.jid,
+			'autonegotiate_esessions')
 
 		# try GPG first
 		if not e2e_is_active and gpg_pref and \
@@ -1169,9 +1167,30 @@ class ChatControl(ChatControlBase):
 		# restore previous conversation
 		self.restore_conversation()
 
+	def update_toolbar(self):
+		# Add to roster
+		if _('Not in Roster') in self.contact.groups:
+			self._add_to_roster_button.show()
+		else:
+			self._add_to_roster_button.hide()
+
+		# Send file
+		if gajim.capscache.is_supported(self.contact, NS_FILE):
+			self._send_file_button.set_sensitive(True)
+		else:
+			self._send_file_button.set_sensitive(False)
+
+		# Convert to GC
+		if gajim.capscache.is_supported(self.contact, NS_MUC):
+			self._convert_to_gc_button.set_sensitive(True)
+		else:
+			self._convert_to_gc_button.set_sensitive(False)
+
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
-		'''we enter the eventbox area so we under conditions add a timeout
-		to show a bigger avatar after 0.5 sec'''
+		'''
+		we enter the eventbox area so we under conditions add a timeout
+		to show a bigger avatar after 0.5 sec
+		'''
 		jid = self.contact.jid
 		is_fake = False
 		if self.type_id == message_control.TYPE_PM:
@@ -1190,14 +1209,16 @@ class ChatControl(ChatControlBase):
 		# do we have something bigger to show?
 		if avatar_w > scaled_buf_w or avatar_h > scaled_buf_h:
 			# wait for 0.5 sec in case we leave earlier
-			self.show_bigger_avatar_timeout_id = gobject.timeout_add(500,
+			self.show_bigger_avatar_timeout_id = \
+				gobject.timeout_add(500,
 				self.show_bigger_avatar, widget)
 
 	def on_avatar_eventbox_leave_notify_event(self, widget, event):
 		'''we left the eventbox area that holds the avatar img'''
 		# did we add a timeout? if yes remove it
 		if self.show_bigger_avatar_timeout_id is not None:
-			gobject.source_remove(self.show_bigger_avatar_timeout_id)
+			gobject.source_remove(
+				self.show_bigger_avatar_timeout_id)
 
 	def on_avatar_eventbox_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
