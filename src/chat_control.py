@@ -1214,7 +1214,7 @@ class ChatControl(ChatControlBase):
 					gtkgui_helpers.load_mood_icon(
 						mood).get_pixbuf())
 				# Translate standard moods
-				mood = _(mood)
+				mood = _(mood.replace('_', ' '))
 			else:
 				self._mood_image.set_from_pixbuf(
 					gtkgui_helpers.load_mood_icon(
