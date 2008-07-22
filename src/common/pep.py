@@ -1,6 +1,6 @@
 from common import gajim, xmpp
 
-MOODS = ['None', 'afraid', 'amazed', 'angry', 'annoyed', 'anxious', 'aroused',
+MOODS = ['afraid', 'amazed', 'angry', 'annoyed', 'anxious', 'aroused',
 	'ashamed', 'bored', 'brave', 'calm', 'cold', 'confused', 'contented',
 	'cranky', 'curious', 'depressed', 'disappointed', 'disgusted',
 	'distracted', 'embarrassed', 'excited', 'flirtatious', 'frustrated', 
