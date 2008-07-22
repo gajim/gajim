@@ -62,6 +62,10 @@ def user_mood(items, name, jid):
 			if contact.mood.has_key('text'):
 				del contact.mood['text']
 
+	ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
+	if ctrl:
+		ctrl.update_mood()
+
 def user_tune(items, name, jid):
 	has_child = False
 	retract = False
