@@ -567,16 +567,19 @@ class RosterTooltip(NotificationAreaTooltip):
 		self.win.add(vcard_table)
 
 	def _append_pep_info(self, contact, properties):
-		'''Append Tune, Mood, Activity information of the specified contact
+		'''
+		Append Tune, Mood, Activity information of the specified contact
 		to the given property list.
 		'''
 		if contact.mood.has_key('mood'):
 			mood = contact.mood['mood'].strip()
 			mood = gobject.markup_escape_text(mood)
 			mood_string = _('Mood:') + ' <b>%s</b>' % mood
-			if contact.mood.has_key('text') and contact.mood['text'] != '':
+			if contact.mood.has_key('text') \
+			and contact.mood['text'] != '':
 				mood_text = contact.mood['text'].strip()
-				mood_text = gobject.markup_escape_text(mood_text)
+				mood_text = \
+					gobject.markup_escape_text(mood_text)
 				mood_string += ' (%s)' % mood_text
 			properties.append((mood_string, None))
 
@@ -585,18 +588,22 @@ class RosterTooltip(NotificationAreaTooltip):
 			activity = gobject.markup_escape_text(activity)
 			activity_string = _('Activity:') + ' <b>%s' % activity
 			if contact.activity.has_key('subactivity'):
-				activity_sub = contact.activity['subactivity'].strip()
-				activity_sub = gobject.markup_escape_text(activity_sub)
+				activity_sub = \
+					contact.activity['subactivity'].strip()
+				activity_sub = \
+					gobject.markup_escape_text(activity_sub)
 				activity_string += ' (%s)</b>' % activity_sub
 			else:
 				activity_string += '</b>'
 			if contact.activity.has_key('text'):
 				activity_text = contact.activity['text'].strip()
-				activity_text = gobject.markup_escape_text(activity_text)
+				activity_text = gobject.markup_escape_text(
+					activity_text)
 				activity_string += ' (%s)' % activity_text
 			properties.append((activity_string, None))
 
-		if contact.tune.has_key('artist') or contact.tune.has_key('title'):
+		if contact.tune.has_key('artist') \
+		or contact.tune.has_key('title'):
 			if contact.tune.has_key('artist'):
 				artist = contact.tune['artist'].strip()
 				artist = gobject.markup_escape_text(artist)
