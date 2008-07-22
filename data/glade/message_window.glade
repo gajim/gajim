@@ -66,7 +66,7 @@
                             <child>
                               <widget class="GtkHBox" id="hbox2">
                                 <property name="visible">True</property>
-                                <property name="spacing">2</property>
+                                <property name="spacing">4</property>
                                 <child>
                                   <widget class="GtkImage" id="mood_image">
                                     <property name="no_show_all">True</property>
