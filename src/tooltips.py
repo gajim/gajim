@@ -612,8 +612,10 @@ class RosterTooltip(NotificationAreaTooltip):
 				source = gobject.markup_escape_text(source)
 			else:
 				source = _('Unknown Source')
-			tune_string = _('Tune:') + ' ' + _('<b>"%(title)s"</b> by <i>%(artist)s</i>\nfrom <i>%(source)s</i>' %\
-					{'title': title, 'artist': artist, 'source': source})
+			tune_string = _('Tune:') + ' ' + _('<b>"%(title)s"' +
+				'</b> by <i>%(artist)s</i>\nfrom ' +
+				'<i>%(source)s</i>') % {'title': title,
+				'artist': artist, 'source': source}
 			properties.append((tune_string, None))
 			
 
