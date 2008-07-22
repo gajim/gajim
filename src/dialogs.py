@@ -37,7 +37,7 @@ import message_control
 import dataforms_widget
 
 from random import randrange
-from common.pep import MOODS
+from common import pep
 
 try:
 	import gtkspell
@@ -431,7 +431,6 @@ class ChangeActivityDialog:
 			message = self.entry.get_text().decode('utf-8')
 			if subactivity is None:
 				subactivity = ''
-			from common import pep
 			if activity == 'None':
 				pep.user_retract_activity(self.account)
 			else:
@@ -443,52 +442,82 @@ class ChangeActivityDialog:
 		self.window.destroy()
 
 class ChangeMoodDialog:
-	moods = MOODS
+	COLS = 11
+
 	def __init__(self, account):
 		self.account = account
 		self.xml = gtkgui_helpers.get_glade('change_mood_dialog.glade')
+		self.mood = None
+
 		self.window = self.xml.get_widget('change_mood_dialog')
 		self.window.set_transient_for(gajim.interface.roster.window)
 		self.window.set_title(_('Set Mood'))
 
+		table = self.xml.get_widget('mood_icons_table')
+		self.label = self.xml.get_widget('mood_label')
 		self.entry = self.xml.get_widget('description_entry')
 
-		self.combo = self.xml.get_widget('type_combobox')
-		self.liststore = gtk.ListStore(str, str) # translated, english
-		self.combo.set_model(self.liststore)
+		no_mood_button = self.xml.get_widget('no_mood_button')
+		no_mood_button.set_mode(False)
+		no_mood_button.connect('clicked',
+			self.on_mood_button_clicked, None)
 
-		for mood in self.moods:
-			self.liststore.append((helpers.get_uf_mood(mood), mood))
+		x = 1
+		y = 0
+		self.mood_buttons = {}
+		for mood in pep.MOODS:
+			self.mood_buttons[mood] = gtk.RadioButton(
+				no_mood_button)
+			self.mood_buttons[mood].set_mode(False)
+			self.mood_buttons[mood].add(
+				gtkgui_helpers.load_mood_icon(mood))
+			self.mood_buttons[mood].set_relief(gtk.RELIEF_NONE)
+			self.mood_buttons[mood].set_tooltip_text(_(mood))
+			self.mood_buttons[mood].connect('clicked',
+				self.on_mood_button_clicked, mood)
+			table.attach(self.mood_buttons[mood],
+				x, x + 1, y, y + 1)
+			
+			# Calculate the next position
+			x += 1
+			if x >= self.COLS:
+				x = 0
+				y += 1
 
 		con = gajim.connections[account]
-		if 'mood' in con.mood and con.mood['mood'] in self.moods:
-			self.combo.set_active(self.moods.index(con.mood['mood']))
-		else:
-			self.combo.set_active(0)
+		if 'mood' in con.mood:
+			self.mood = con.mood['mood']
+			self.label.set_text(con.mood['mood'])
+			if con.mood['mood'] in pep.MOODS:
+				self.mood_buttons[con.mood['mood']]. \
+					set_active(True)
+
+		self.entry.set_sensitive(True if self.mood else False)
 
 		if 'text' in con.mood:
 			self.entry.set_text(con.mood['text'])
 
-		cellrenderertext = gtk.CellRendererText()
-		self.combo.pack_start(cellrenderertext, True)
-		self.combo.add_attribute(cellrenderertext, 'text', 0)
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
+	def on_mood_button_clicked(self, widget, data):
+		self.label.set_text(_(data))
+
+		if data:
+			self.entry.set_sensitive(True)
+		else:
+			self.entry.set_text('')
+			self.entry.set_sensitive(False)
+		self.mood = data
+
 	def on_ok_button_clicked(self, widget):
 		'''Return mood and messsage (None if no mood selected)'''
-		mood = None
-		message = None
-		active = self.combo.get_active()
-		if active > -1:
-			mood = self.liststore[active][1].decode('utf-8')
-			message = self.entry.get_text().decode('utf-8')
-			from common import pep
-			if mood == 'None':
-				pep.user_retract_mood(self.account)
-			else:
-				pep.user_send_mood(self.account, mood, message)
-			self.window.destroy()
+		message = self.entry.get_text().decode('utf-8')
+		if self.mood is None:
+			pep.user_retract_mood(self.account)
+		else:
+			pep.user_send_mood(self.account, self.mood, message)
+		self.window.destroy()
 
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
