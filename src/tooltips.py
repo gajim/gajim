@@ -574,7 +574,8 @@ class RosterTooltip(NotificationAreaTooltip):
 		if contact.mood.has_key('mood'):
 			mood = contact.mood['mood'].strip()
 			mood = gobject.markup_escape_text(mood)
-			mood_string = _('Mood:') + ' <b>%s</b>' % mood
+			mood_string = _('Mood:') + ' <b>%s</b>' % \
+				_(mood.replace('_', ' '))
 			if contact.mood.has_key('text') \
 			and contact.mood['text'] != '':
 				mood_text = contact.mood['text'].strip()
