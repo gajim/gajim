@@ -37,6 +37,7 @@ import message_control
 import dataforms_widget
 
 from random import randrange
+from common.pep import MOODS
 
 try:
 	import gtkspell
@@ -442,19 +443,7 @@ class ChangeActivityDialog:
 		self.window.destroy()
 
 class ChangeMoodDialog:
-	moods = ['None', 'afraid', 'amazed', 'angry', 'annoyed', 'anxious',
-		'aroused', 'ashamed', 'bored', 'brave', 'calm',
-		'cold', 'confused', 'contented', 'cranky', 'curious',
-		'depressed', 'disappointed', 'disgusted', 'distracted', 
-		'embarrassed', 'excited', 'flirtatious', 'frustrated', 
-		'grumpy', 'guilty', 'happy', 'hot', 'humbled', 
-		'humiliated', 'hungry', 'hurt', 'impressed', 'in_awe', 
-		'in_love', 'indignant', 'interested', 'intoxicated', 
-		'invincible', 'jealous', 'lonely', 'mean', 'moody', 
-		'nervous', 'neutral', 'offended', 'playful', 'proud', 
-		'relieved', 'remorseful', 'restless', 'sad', 'sarcastic', 
-		'serious', 'shocked', 'shy', 'sick', 'sleepy', 
-		'stressed', 'surprised', 'thirsty', 'worried']
+	moods = MOODS
 	def __init__(self, account):
 		self.account = account
 		self.xml = gtkgui_helpers.get_glade('change_mood_dialog.glade')

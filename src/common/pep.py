@@ -1,5 +1,16 @@
 from common import gajim, xmpp
 
+MOODS = ['None', 'afraid', 'amazed', 'angry', 'annoyed', 'anxious', 'aroused',
+	'ashamed', 'bored', 'brave', 'calm', 'cold', 'confused', 'contented',
+	'cranky', 'curious', 'depressed', 'disappointed', 'disgusted',
+	'distracted', 'embarrassed', 'excited', 'flirtatious', 'frustrated', 
+	'grumpy', 'guilty', 'happy', 'hot', 'humbled', 'humiliated', 'hungry',
+	'hurt', 'impressed', 'in_awe', 'in_love', 'indignant', 'interested',
+	'intoxicated', 'invincible', 'jealous', 'lonely', 'mean', 'moody', 
+	'nervous', 'neutral', 'offended', 'playful', 'proud', 'relieved',
+	'remorseful', 'restless', 'sad', 'sarcastic', 'serious', 'shocked',
+	'shy', 'sick', 'sleepy', 'stressed', 'surprised', 'thirsty', 'worried']
+
 def user_mood(items, name, jid):
 	has_child = False
 	retract = False

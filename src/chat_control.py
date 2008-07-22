@@ -45,7 +45,9 @@ from common.contacts import GC_Contact
 from common.logger import Constants
 constants = Constants()
 from common.rst_xhtml_generator import create_xhtml
-from common.xmpp.protocol import NS_XHTML, NS_FILE, NS_MUC, NS_RECEIPTS, NS_ESESSION
+from common.pep import MOODS
+from common.xmpp.protocol import NS_XHTML, NS_FILE, NS_MUC, NS_RECEIPTS
+from common.xmpp.protocol import NS_ESESSION
 
 try:
 	import gtkspell
@@ -1083,6 +1085,12 @@ class ChatControl(ChatControlBase):
 
 		self.update_toolbar()
 
+		self._mood_image = self.xml.get_widget('mood_image')
+		self._activity_image = self.xml.get_widget('activity_image')
+		self._tune_image = self.xml.get_widget('tune_image')
+
+		self.update_mood()
+
 		# keep timeout id and window obj for possible big avatar
 		# it is on enter-notify and leave-notify so no need to be
 		# per jid
@@ -1185,6 +1193,37 @@ class ChatControl(ChatControlBase):
 			self._convert_to_gc_button.set_sensitive(True)
 		else:
 			self._convert_to_gc_button.set_sensitive(False)
+
+	def update_mood(self):
+		if self.contact.mood.has_key('mood'):
+			mood = gobject.markup_escape_text(
+				self.contact.mood['mood'])
+		else:
+			mood = None
+
+		if self.contact.mood.has_key('text'):
+			text = gobject.markup_escape_text(
+				self.contact.mood['text'])
+		else:
+			text = ''
+
+		if mood is not None:
+			if mood in MOODS:
+				self._mood_image.set_from_pixbuf(
+					gtkgui_helpers.load_mood_icon(
+						mood).get_pixbuf())
+				# Translate standard moods
+				mood = _(mood)
+			else:
+				self._mood_image.set_from_pixbuf(
+					gtkgui_helpers.load_mood_icon(
+					'unknown').get_pixbuf())
+
+			self._mood_image.set_tooltip_markup('<b>%s</b>%s%s' %
+				(mood, '\n' if text is not '' else '', text))
+			self._mood_image.show()
+		else:
+			self._mood_image.hide()
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		'''

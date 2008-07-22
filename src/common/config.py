@@ -51,6 +51,7 @@ opt_treat_incoming_messages = ['', 'chat', 'normal']
 class Config:
 
 	DEFAULT_ICONSET = 'dcraven'
+	DEFAULT_MOOD_ICONSET = 'default'
 	if sys.platform == 'darwin':
 		DEFAULT_OPENWITH = 'open'
 		DEFAULT_BROWSER = 'open -a Safari'
@@ -92,6 +93,7 @@ class Config:
 		'last_status_msg_offline': [ opt_str, '' ],
 		'trayicon': [ opt_bool, True, '', True ],
 		'iconset': [ opt_str, DEFAULT_ICONSET, '', True ],
+		'mood_iconset': [ opt_str, DEFAULT_MOOD_ICONSET, '', True ],
 		'use_transports_iconsets': [ opt_bool, True, '', True ],
 		'inmsgcolor': [ opt_color, '#a34526', '', True ],
 		'outmsgcolor': [ opt_color, '#164e6f', '', True ],

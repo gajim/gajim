@@ -882,7 +882,14 @@ def load_iconset(path, pixbuf2 = None, transport = False):
 def load_icon(icon_name):
 	'''load an icon from the iconset in 16x16'''
 	iconset = gajim.config.get('iconset')
-	path = os.path.join(helpers.get_iconset_path(iconset), '16x16' + '/')
+	path = os.path.join(helpers.get_iconset_path(iconset), '16x16', '')
+	icon_list = _load_icon_list([icon_name], path)
+	return icon_list[icon_name]
+
+def load_mood_icon(icon_name):
+	'''load an icon from the mood iconset in 16x16'''
+	iconset = gajim.config.get('mood_iconset')
+	path = os.path.join(helpers.get_mood_iconset_path(iconset), '')
 	icon_list = _load_icon_list([icon_name], path)
 	return icon_list[icon_name]
 
