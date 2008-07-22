@@ -70,14 +70,14 @@
                                 <child>
                                   <widget class="GtkImage" id="mood_image">
                                     <property name="no_show_all">True</property>
-                                    <property name="stock">gtk-missing-image</property>
+                                    <property name="stock">None</property>
                                     <property name="icon_size">1</property>
                                   </widget>
                                 </child>
                                 <child>
                                   <widget class="GtkImage" id="activity_image">
                                     <property name="no_show_all">True</property>
-                                    <property name="stock">gtk-missing-image</property>
+                                    <property name="stock">None</property>
                                     <property name="icon_size">1</property>
                                   </widget>
                                   <packing>
@@ -87,7 +87,7 @@
                                 <child>
                                   <widget class="GtkImage" id="tune_image">
                                     <property name="no_show_all">True</property>
-                                    <property name="pixbuf">music.png</property>
+				    <property name="pixbuf">../emoticons/static/music.png</property>
                                     <property name="icon_size">1</property>
                                   </widget>
                                   <packing>
