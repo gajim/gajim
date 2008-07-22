@@ -1090,6 +1090,7 @@ class ChatControl(ChatControlBase):
 		self._tune_image = self.xml.get_widget('tune_image')
 
 		self.update_mood()
+		self.update_tune()
 
 		# keep timeout id and window obj for possible big avatar
 		# it is on enter-notify and leave-notify so no need to be
@@ -1224,6 +1225,34 @@ class ChatControl(ChatControlBase):
 			self._mood_image.show()
 		else:
 			self._mood_image.hide()
+
+	def update_tune(self):
+		artist = None
+		title  = None
+		source = None
+
+		if self.contact.tune.has_key('artist'):
+			artist = gobject.markup_escape_text(
+				self.contact.tune['artist'].strip())
+		if self.contact.tune.has_key('title'):
+			title = gobject.markup_escape_text(
+				self.contact.tune['title'].strip())
+		if self.contact.tune.has_key('source'):
+			title = gobject.markup_escape_text(
+				self.contact.tune['source'].strip())
+
+		if artist or title:
+			artist = artist if artist else _('Unknown Artist')
+			title  = title  if title  else _('Unknown Title')
+			source = source if source else _('Unknown Source')
+
+			self._tune_image.set_tooltip_markup(_(
+				'<b>"%(title)s"</b> by <i>%(artist)s</i>\n' +
+				'from <i>%(source)s</i>') % {'title': title,
+				'artist': artist, 'source': source})
+			self._tune_image.show()
+		else:
+			self._tune_image.hide()
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		'''
