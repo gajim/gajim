@@ -248,7 +248,8 @@ def user_nickname(items, name, jid):
 		if has_child:
 			gajim.nicks[name] = nick
 		if retract:
-			gajim.nicks[name] = gajim.config.get_per('accounts', name, 'name')
+			gajim.nicks[name] = gajim.config.get_per('accounts',
+				name, 'name')
 
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
 	if has_child:
@@ -257,7 +258,8 @@ def user_nickname(items, name, jid):
 				contact.contact_name = nick
 			gajim.interface.roster.draw_contact(user, name)
 
-			ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
+			ctrl = gajim.interface.msg_win_mgr.get_control(user,
+				name)
 			if ctrl:
 				ctrl.update_ui()
 				win = ctrl.parent_win
@@ -290,9 +292,11 @@ def user_send_activity(account, activity, subactivity = '', message = ''):
 		i = item.addChild('text')
 		i.addData(message)
 
-	gajim.connections[account].send_pb_publish('', xmpp.NS_ACTIVITY, item, '0')
+	gajim.connections[account].send_pb_publish('', xmpp.NS_ACTIVITY,
+		item, '0')
 
-def user_send_tune(account, artist = '', title = '', source = '', track = 0,length = 0, items = None):
+def user_send_tune(account, artist = '', title = '', source = '', track = 0,
+length = 0, items = None):
 	if not (gajim.config.get_per('accounts', account, 'publish_tune') and \
 	gajim.connections[account].pep_supported):
 		return
