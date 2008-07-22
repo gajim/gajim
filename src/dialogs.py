@@ -488,7 +488,8 @@ class ChangeMoodDialog:
 		con = gajim.connections[account]
 		if 'mood' in con.mood:
 			self.mood = con.mood['mood']
-			self.label.set_text(con.mood['mood'])
+			self.label.set_text(_(
+				con.mood['mood'].replace('_', ' ')))
 			if con.mood['mood'] in pep.MOODS:
 				self.mood_buttons[con.mood['mood']]. \
 					set_active(True)
@@ -502,9 +503,8 @@ class ChangeMoodDialog:
 		self.window.show_all()
 
 	def on_mood_button_clicked(self, widget, data):
-		self.label.set_text(_(data))
-
 		if data:
+			self.label.set_text(_(data.replace('_', ' ')))
 			self.entry.set_sensitive(True)
 		else:
 			self.entry.set_text('')
