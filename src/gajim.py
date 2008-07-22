@@ -773,6 +773,22 @@ class Interface:
 				#	resource signs off!
 				gajim.connections[account]. \
 					remove_transfers_for_contact(contact1)
+
+				# disable encryption, since if any messages are
+				# lost they'll be not decryptable (note that
+				# this contradicts XEP-0201 - trying to get the
+				# in the XEP, though)
+				if gajim.connections[account].sessions. \
+				has_key(ji):
+					for sess in gajim.connections \
+					[account]. sessions[ji].values():
+						if sess.enable_encryption:
+							sess.terminate_e2e()
+							gajim.connections \
+							[account]. \
+							delete_session(jid,
+							sess.thread_id)
+
 			self.roster.chg_contact_status(contact1, array[1],
 				status_message, account)
 			# Notifications
@@ -786,7 +802,7 @@ class Interface:
 
 			elif old_show > 1 and new_show < 2:
 				notify.notify('contact_disconnected', jid, 
-					ccount, status_message)
+					account, status_message)
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal(
 						'ContactAbsence',

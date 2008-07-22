@@ -397,11 +397,8 @@ class ConversationTextview:
 			self.smooth_scroll_timer.cancel()
 
 	def show_xep0184_warning(self, id):
-		try:
-			if self.xep0184_marks[id] is not None:
-				return
-		except KeyError:
-			pass
+		if self.xep0184_marks.has_key(id):
+			return
 
 		buffer = self.tv.get_buffer()
 		buffer.begin_user_action()
@@ -427,10 +424,7 @@ class ConversationTextview:
 		buffer.end_user_action()
 
 	def hide_xep0184_warning(self, id):
-		try:
-			if self.xep0184_marks[id] is None:
-				return
-		except KeyError:
+		if not self.xep0184_marks.has_key(id):
 			return
 
 		if self.xep0184_shown[id] == NOT_SHOWN:
@@ -452,7 +446,7 @@ class ConversationTextview:
 
 		buffer.end_user_action()
 
-		self.xep0184_marks[id] = None
+		del self.xep0184_marks[id]
 		del self.xep0184_shown[id]
 
 	def show_focus_out_line(self):
