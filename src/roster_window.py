@@ -1260,9 +1260,6 @@ class RosterWindow:
 		if self.contact_has_pending_roster_events(contact, account):
 			return True
 
-		if contact.ask:
-			return True
-
 		if contact.show in ('offline', 'error'):
 			if contact.jid in gajim.to_be_removed[account]:
 				return True
@@ -1290,9 +1287,12 @@ class RosterWindow:
 		if type_ == 'group':
 			group = jid
 			if group == _('Transports'):
-				return gajim.config.get('show_transports_group')
+				return gajim.config.get('show_transports_group') and \
+					(gajim.account_is_connected(account) or \
+					gajim.config.get('showoffline'))
 			if gajim.config.get('showoffline'):
 				return True
+
 
 			if self.regroup:
 				# C_ACCOUNT for groups depends on the order
@@ -1331,7 +1331,9 @@ class RosterWindow:
 				contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 				return self.contact_is_visible(contact, account)
 		if type_ == 'agent':
-			return gajim.config.get('show_transports_group')
+			return gajim.config.get('show_transports_group') and \
+				(gajim.account_is_connected(account) or \
+				gajim.config.get('showoffline'))
 		return True
 
 	def _compareIters(self, model, iter1, iter2, data = None):
