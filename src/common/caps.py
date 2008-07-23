@@ -202,31 +202,41 @@ class ConnectionCaps(object):
 		''' Handle incoming presence stanzas... This is a callback
 		for xmpp registered in connection_handlers.py'''
 
-		# get the caps element
-		caps = presence.getTag('c')
-		if not caps:
-			return
-
-		hash_method, node, hash = caps['hash'], caps['node'], caps['ver']
-		if hash_method is None or node is None or hash is None:
-			# improper caps in stanza, ignoring
-			return
-
 		# we will put these into proper Contact object and ask
 		# for disco... so that disco will learn how to interpret
 		# these caps
-
 		jid = helpers.get_full_jid_from_iq(presence)
+		contact = gajim.contacts.get_contact_from_full_jid(
+			self.name, jid)
+		if contact is None:
+			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+			contact = gajim.contacts.get_gc_contact(
+				self.name, room_jid, nick)
+			if contact is None:
+				# TODO: a way to put contact not-in-roster
+				# into Contacts
+				return	
+
+		# get the caps element
+		caps = presence.getTag('c')
+		if not caps:
+			contact.caps_node = None
+			contact.caps_hash = None
+			contact.hash_method = None
+			return
+
+		hash_method, node, hash = \
+			caps['hash'], caps['node'], caps['ver']
+
+		if hash_method is None or node is None or hash is None:
+			# improper caps in stanza, ignoring
+			contact.caps_node = None
+			contact.caps_hash = None
+			contact.hash_method = None
+			return
 
 		# start disco query...
 		gajim.capscache.preload(self, jid, node, hash_method, hash)
-
-		contact = gajim.contacts.get_contact_from_full_jid(self.name, jid)
-		if contact is None:
-			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-			contact = gajim.contacts.get_gc_contact(self.name, room_jid, nick)
-			if contact is None:
-				return	# TODO: a way to put contact not-in-roster into Contacts
 
 		# overwriting old data
 		contact.caps_node = node
