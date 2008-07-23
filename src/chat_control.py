@@ -142,9 +142,10 @@ class ChatControlBase(MessageControl):
 		if resource is None:
 			# We very likely got a contact with a random resource.
 			# This is bad, we need the highest for caps etc.
-			contact = gajim.contacts. \
-				get_contact_with_highest_priority(
+			c = gajim.contacts.get_contact_with_highest_priority(
 				acct, contact.jid)
+			if c:
+				contact = c
 
 		MessageControl.__init__(self, type_id, parent_win, widget_name,
 			contact, acct, resource = resource);
