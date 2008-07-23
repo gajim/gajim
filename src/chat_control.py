@@ -55,6 +55,8 @@ try:
 except:
 	HAS_GTK_SPELL = False
 
+HAVE_MARKUP_TOOLTIPS = gtk.pygtk_version >= (2, 12, 0)
+
 # the next script, executed in the "po" directory,
 # generates the following list.
 ##!/bin/sh
@@ -1089,6 +1091,11 @@ class ChatControl(ChatControlBase):
 		self._activity_image = self.xml.get_widget('activity_image')
 		self._tune_image = self.xml.get_widget('tune_image')
 
+		if not HAVE_MARKUP_TOOLTIPS:
+			self._mood_tooltip = gtk.Tooltips()
+			self._activity_tooltip = gtk.Tooltips()
+			self._tune_tooltip = gtk.Tooltips()
+
 		self.update_mood()
 		self.update_tune()
 
@@ -1197,14 +1204,16 @@ class ChatControl(ChatControlBase):
 
 	def update_mood(self):
 		if self.contact.mood.has_key('mood'):
-			mood = gobject.markup_escape_text(
-				self.contact.mood['mood'])
+			mood = self.contact.mood['mood']
+			if HAVE_MARKUP_TOOLTIPS:
+				mood = gobject.markup_escape_text(mood)
 		else:
 			mood = None
 
 		if self.contact.mood.has_key('text'):
-			text = gobject.markup_escape_text(
-				self.contact.mood['text'])
+			text = self.contact.mood['text']
+			if HAVE_MARKUP_TOOLTIPS:
+				text = gobject.markup_escape_text(text)
 		else:
 			text = ''
 
@@ -1220,8 +1229,14 @@ class ChatControl(ChatControlBase):
 					gtkgui_helpers.load_mood_icon(
 					'unknown').get_pixbuf())
 
-			self._mood_image.set_tooltip_markup('<b>%s</b>%s%s' %
-				(mood, '\n' if text is not '' else '', text))
+			if HAVE_MARKUP_TOOLTIPS:
+				self._mood_image.set_tooltip_markup(
+					'<b>%s</b>%s%s' % (mood,
+					'\n' if text is not '' else '', text))
+			else:
+				self._mood_tooltip.set_tip(
+					self._mood_image, '%s%s%s' % (mood,
+					'\n' if text is not '' else '', text))
 			self._mood_image.show()
 		else:
 			self._mood_image.hide()
@@ -1232,24 +1247,35 @@ class ChatControl(ChatControlBase):
 		source = None
 
 		if self.contact.tune.has_key('artist'):
-			artist = gobject.markup_escape_text(
-				self.contact.tune['artist'].strip())
+			artist = self.contact.tune['artist'].strip()
+			if HAVE_MARKUP_TOOLTIPS:
+				artist = gobject.markup_escape_text(artist)
 		if self.contact.tune.has_key('title'):
-			title = gobject.markup_escape_text(
-				self.contact.tune['title'].strip())
+			title = self.contact.tune['title'].strip()
+			if HAVE_MARKUP_TOOLTIPS:
+				title = gobject.markup_escape_text(title)
 		if self.contact.tune.has_key('source'):
-			title = gobject.markup_escape_text(
-				self.contact.tune['source'].strip())
+			source = self.contact.tune['source'].strip()
+			if HAVE_MARKUP_TOOLTIPS:
+				source = gobject.markup_escape_text(source)
 
 		if artist or title:
 			artist = artist if artist else _('Unknown Artist')
 			title  = title  if title  else _('Unknown Title')
 			source = source if source else _('Unknown Source')
 
-			self._tune_image.set_tooltip_markup(_(
-				'<b>"%(title)s"</b> by <i>%(artist)s</i>\n' +
-				'from <i>%(source)s</i>') % {'title': title,
-				'artist': artist, 'source': source})
+			if HAVE_MARKUP_TOOLTIPS:
+				self._tune_image.set_tooltip_markup(
+					_('<b>"%(title)s"</b> by ' +
+					'<i>%(artist)s</i>\n' +
+					'from <i>%(source)s</i>') % 
+					{'title': title, 'artist': artist,
+					'source': source})
+			else:
+				self._tune_tooltip.set_tip(self._tune_image,
+					_('%(title)s by %(artist)s\n' +
+					'from %(source)s') % {'title': title,
+					'artist': artist, 'source': source})
 			self._tune_image.show()
 		else:
 			self._tune_image.hide()

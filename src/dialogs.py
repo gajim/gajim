@@ -472,7 +472,7 @@ class ChangeMoodDialog:
 			self.mood_buttons[mood].add(
 				gtkgui_helpers.load_mood_icon(mood))
 			self.mood_buttons[mood].set_relief(gtk.RELIEF_NONE)
-			self.mood_buttons[mood].set_tooltip_text(
+			gtk.Tooltips().set_tip(self.mood_buttons[mood],
 				_(mood.replace('_', ' ')))
 			self.mood_buttons[mood].connect('clicked',
 				self.on_mood_button_clicked, mood)
