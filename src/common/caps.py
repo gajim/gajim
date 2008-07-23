@@ -180,7 +180,15 @@ class CapsCache(object):
 			con.discoverInfo(jid, '%s#%s' % (node, hash))
 	
 	def is_supported(self, contact, feature):
+		# No resource -> can't have any caps
 		if not contact or not contact.resource:
+			return False
+
+		# Unfortunately, if all resources are offline, the contact
+		# includes the last resource that was online. Check for its
+		# show, so we can be sure it's existant. Otherwise, we still
+		# return caps for a contact that has no resources left.
+		if contact.show == 'offline':
 			return False
 
 		# FIXME: We assume everything is supported if we got no caps.
