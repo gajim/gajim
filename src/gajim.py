@@ -1790,9 +1790,11 @@ class Interface:
 			'%s\nIt may have been tampered with.') % (jid)
 
 		if session.control:
-			session.control.print_conversation_line(details, 'status', '', tim)
+			session.control.print_conversation_line(details,
+				'status', '', tim)
 		else:
-			dialogs.WarningDialog(_('Unable to decrypt message'), details)
+			dialogs.WarningDialog(_('Unable to decrypt message'),
+				details)
 
 		# terminate the session
 		session.terminate_e2e()

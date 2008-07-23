@@ -1348,6 +1348,7 @@ class ChatControl(ChatControlBase):
 	def update_ui(self):
 		# The name banner is drawn here
 		ChatControlBase.update_ui(self)
+		self.update_toolbar()
 
 	def _update_banner_state_image(self):
 		contact = gajim.contacts.get_contact_with_highest_priority(self.account,
