@@ -507,6 +507,7 @@ class ChangeMoodDialog:
 			self.label.set_text(_(data.replace('_', ' ')))
 			self.entry.set_sensitive(True)
 		else:
+			self.label.set_text(_('None'))
 			self.entry.set_text('')
 			self.entry.set_sensitive(False)
 		self.mood = data
