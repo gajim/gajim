@@ -227,13 +227,14 @@ AC_CONFIG_FILES([
 	data/emoticons/Makefile
 	data/pixmaps/Makefile
 	data/iconsets/Makefile
+	data/moods/Makefile
 	data/gajim.desktop.in
 	data/defs.py
 	src/Makefile
 	src/common/Makefile
-    src/osx/Makefile
-    src/osx/growl/Makefile
-    src/osx/syncmenu/Makefile
+	src/osx/Makefile
+	src/osx/growl/Makefile
+	src/osx/syncmenu/Makefile
 	scripts/gajim
 	scripts/gajim-remote
 	po/Makefile.in
