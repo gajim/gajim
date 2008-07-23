@@ -833,6 +833,7 @@ class Interface:
 			ctrl = self.msg_win_mgr.get_control(jid, account)
 			if ctrl:
 				ctrl.set_session(None)
+				ctrl.contact = highest
 
 	def handle_event_msgerror(self, account, array):
 		#'MSGERROR' (account, (jid, error_code, error_msg, msg, time[, session]))
