@@ -1460,12 +1460,12 @@ class ChatControl(ChatControlBase):
 				status_text = '<span %s>%s</span>' % (font_attrs_small, status_text)
 			else:
 				status_text = '<span %s>%s</span>' % (font_attrs_small, status_escaped)
-			self.status_tooltip.set_tip(banner_eventbox, status)
+			self.status_tooltip.set_tip(self.banner_status_label,
+					status)
 			self.banner_status_label.show()
 			self.banner_status_label.set_no_show_all(False)
 		else:
 			status_text = ''
-			self.status_tooltip.disable()
 			self.banner_status_label.hide()
 			self.banner_status_label.set_no_show_all(True)
 
