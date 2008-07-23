@@ -946,9 +946,16 @@ class ConversationTextview:
 		special text (emots, links, formatting)'''
 		tags = []
 		use_other_tags = True
+		text_is_valid_uri = False
 		show_ascii_formatting_chars = \
 			gajim.config.get('show_ascii_formatting_chars')
 		buffer = self.tv.get_buffer()
+
+		# Check if we accept this as an uri
+		schemes = gajim.config.get('uri_schemes').split()
+		for scheme in schemes:
+			if special_text.startswith(scheme + ':'):
+				text_is_valid_uri = True
 
 		possible_emot_ascii_caps = special_text.upper() # emoticons keys are CAPS
 		if gajim.config.get('emoticons_theme') and \
@@ -968,7 +975,8 @@ class ConversationTextview:
 			# add with possible animation
 			self.tv.add_child_at_anchor(img, anchor)
 		elif special_text.startswith('www.') or \
-		special_text.startswith('ftp.'):
+		special_text.startswith('ftp.') or \
+		text_is_valid_uri:
 			tags.append('url')
 			use_other_tags = False
 		elif special_text.startswith('mailto:') or \
@@ -1040,13 +1048,7 @@ class ConversationTextview:
 				buffer.insert(end_iter, special_text)
 			use_other_tags = False
 		else:
-			# Check if we accept this as an uri
-			schemes = gajim.config.get('uri_schemes').split()
-			for scheme in schemes:
-				if special_text.startswith(scheme + ':'):
-					tags.append('url')
-					use_other_tags = False
-			# It's not a accepted uri
+			# It's nothing special
 			if use_other_tags:
 				end_iter = buffer.get_end_iter()
 				buffer.insert_with_tags_by_name(end_iter, special_text, *other_tags)
