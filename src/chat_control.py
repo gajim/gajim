@@ -1152,14 +1152,11 @@ class ChatControl(ChatControlBase):
 				self.print_esession_details()
 
 		# Enable encryption if needed
+		self.no_autonegotiation = False
 		e2e_is_active = self.session and self.session.enable_encryption
 		self.gpg_is_active = False
 		gpg_pref = gajim.config.get_per('contacts', contact.jid,
 			'gpg_enabled')
-		e2e_pref = gajim.config.get_per('accounts', self.account,
-			'autonegotiate_esessions') and \
-			gajim.config.get_per('contacts', contact.jid,
-			'autonegotiate_esessions')
 
 		# try GPG first
 		if not e2e_is_active and gpg_pref and \
@@ -1178,12 +1175,6 @@ class ChatControl(ChatControlBase):
 			self._show_lock_image(self.gpg_is_active, 'GPG',
 			self.gpg_is_active,
 			self.session and self.session.is_loggable(), True)
-		# then try E2E
-		# XXX: Once we have fallback to disco, remove notexistant check
-		elif not e2e_is_active and gajim.HAVE_PYCRYPTO and e2e_pref \
-		and gajim.capscache.is_supported(contact, NS_ESESSION) \
-		and not gajim.capscache.is_supported(contact, 'notexistant'):
-			self.begin_e2e_negotiation()
 
 		self.status_tooltip = gtk.Tooltips()
 
@@ -2260,6 +2251,23 @@ class ChatControl(ChatControlBase):
 		self.kbd_activity_in_last_30_secs = True
 		if textbuffer.get_char_count():
 			self.send_chatstate('composing', self.contact)
+
+			e2e_is_active = self.session and \
+				self.session.enable_encryption
+			e2e_pref = gajim.config.get_per('accounts',
+				self.account, 'autonegotiate_esessions') and \
+				gajim.config.get_per('contacts',
+				self.contact.jid, 'autonegotiate_esessions')
+			# XXX: Once we have fallback to disco, remove
+			#      notexistant check
+			if not e2e_is_active and e2e_pref and \
+			not self.no_autonegotiation and gajim.HAVE_PYCRYPTO \
+			and e2e_pref and gajim.capscache.is_supported(
+			self.contact, NS_ESESSION) and not \
+			gajim.capscache.is_supported(self.contact,
+			'notexistant'):
+				self.no_autonegotiation = True
+				self.begin_e2e_negotiation()
 		else:
 			self.send_chatstate('active', self.contact)
 
