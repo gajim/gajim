@@ -278,6 +278,7 @@ class Config:
 			'keyid': [ opt_str, '', '', True ],
 			'gpg_sign_presence': [ opt_bool, True, _('If disabled, don\'t sign presences with GPG key, even if GPG is configured.') ],
 			'keyname': [ opt_str, '', '', True ],
+			'enable_esessions': [opt_bool, True, _('Enable ESessions encryption for this account.')],
 			'autonegotiate_esessions': [opt_bool, True, _('Should Gajim automatically start an encrypted session when possible?')],
 			'connection_types': [ opt_str, 'tls ssl plain', _('Ordered list (space separated) of connection type to try. Can contain tls, ssl or plain')],
 			'warn_when_plaintext_connection': [ opt_bool, True, _('Show a warning dialog before sending password on an plaintext connection.') ],

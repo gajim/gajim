@@ -1346,7 +1346,8 @@ def update_optional_features(account = None):
 			gajim.gajim_optional_features[a].append(xmpp.NS_CHATSTATES)
 		if not gajim.config.get('ignore_incoming_xhtml'):
 			gajim.gajim_optional_features[a].append(xmpp.NS_XHTML_IM)
-		if gajim.HAVE_PYCRYPTO:
+		if gajim.HAVE_PYCRYPTO \
+		and gajim.config.get_per('accounts', a, 'enable_esessions'):
 			gajim.gajim_optional_features[a].append(xmpp.NS_ESESSION)
 		if gajim.config.get_per('accounts', a, 'answer_receipts'):
 			gajim.gajim_optional_features[a].append(xmpp.NS_RECEIPTS)
