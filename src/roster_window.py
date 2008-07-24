@@ -62,6 +62,7 @@ if dbus_support.supported:
 from lastfm_track_listener import LastFMTrackListener
 
 from common.xmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC
+from common.pep import MOODS
 
 try:
 	from osx import syncmenu
@@ -75,20 +76,22 @@ C_NAME, # cellrenderer text that holds contact nickame
 C_TYPE, # account, group or contact?
 C_JID, # the jid of the row
 C_ACCOUNT, # cellrenderer text that holds account name
+C_MOOD,
 C_AVATAR_PIXBUF, # avatar_pixbuf
 C_PADLOCK_PIXBUF, # use for account row only
-) = range(7)
+) = range(8)
 
 class RosterWindow:
 	'''Class for main window of the GTK+ interface'''
 
 	def _get_account_iter(self, name, model = None):
-		''' Return the gtk.TreeIter of the given account or None if not found.
+		'''
+		Return the gtk.TreeIter of the given account or None
+		if not found.
 
 		Keyword arguments:
 		name -- the account name
 		model -- the data model (default TreeFilterModel)
-
 		'''
 		if not model:
 			model = self.modelfilter
@@ -105,8 +108,10 @@ class RosterWindow:
 		return account_iter
 
 
-	def _get_group_iter(self, name, account, account_iter = None, model = None):
-		''' Return the gtk.TreeIter of the given group or None if not found.
+	def _get_group_iter(self, name, account, account_iter = None,
+	model = None):
+		'''
+		Return the gtk.TreeIter of the given group or None if not found.
 
 		Keyword arguments:
 		name -- the group name
@@ -167,18 +172,21 @@ class RosterWindow:
 		'''
 		if not model:
 			model = self.modelfilter
-			if model is None: # when closing Gajim model can be none (async pbs?)
+			# when closing Gajim model can be none (async pbs?)
+			if model is None:
 				return []
 
 		if jid == gajim.get_jid_from_account(account):
-			contact_iter = self._get_self_contact_iter(jid, account, model)
+			contact_iter = self._get_self_contact_iter(jid,
+				account, model)
 			if contact_iter:
 				return [contact_iter]
 			else:
 				return []
 
 		if not contact:
-			contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+			contact = gajim.contacts.get_first_contact_from_jid(
+				account, jid)
 			if not contact:
 				# We don't know this contact
 				return
@@ -186,33 +194,45 @@ class RosterWindow:
 		acct = self._get_account_iter(account, model)
 		found = [] # the contact iters. One per group
 		for group in contact.get_shown_groups():
-			group_iter = self._get_group_iter(group, account, acct,  model)
+			group_iter = self._get_group_iter(group, account,
+				acct,  model)
 			contact_iter = model.iter_children(group_iter)
 
 			while contact_iter:
 				# Loop over all contacts in this group
 				iter_jid = model[contact_iter][C_JID]
-				if iter_jid and jid == iter_jid.decode('utf-8') and \
-				account == model[contact_iter][C_ACCOUNT].decode('utf-8'):
+				if iter_jid and \
+				jid == iter_jid.decode('utf-8') and account == \
+				model[contact_iter][C_ACCOUNT].decode('utf-8'):
 					# only one iter per group
 					found.append(contact_iter)
 					contact_iter = None
 				elif model.iter_has_child(contact_iter):
 					# it's a big brother and has children
-					contact_iter = model.iter_children(contact_iter)
+					contact_iter = model.iter_children(
+						contact_iter)
 				else:
 					# try to find next contact:
-					# other contact in this group or brother contact
-					next_contact_iter = model.iter_next(contact_iter)
+					# other contact in this group or
+					# brother contact
+					next_contact_iter = model.iter_next(
+						contact_iter)
 					if next_contact_iter:
 						contact_iter = next_contact_iter
 					else:
-						# It's the last one. Go up if we are big brother
-						parent_iter = model.iter_parent(contact_iter)
-						if parent_iter and model[parent_iter][C_TYPE] == 'contact':
-							contact_iter = model.iter_next(parent_iter)
+						# It's the last one.
+						# Go up if we are big brother
+						parent_iter = model.iter_parent(
+							contact_iter)
+						if parent_iter and \
+						model[parent_iter][C_TYPE] == \
+						'contact':
+							contact_iter = \
+								model.iter_next(
+								parent_iter)
 						else:
-							# we tested all contacts in this group
+							# we tested all 
+							# contacts in this group
 							contact_iter = None
 		return found
 
@@ -244,7 +264,8 @@ class RosterWindow:
 				contact_iter = model.iter_children(group_iter)
 				while contact_iter:
 					yield model[contact_iter]
-					contact_iter = model.iter_next(contact_iter)
+					contact_iter = model.iter_next(
+						contact_iter)
 				group_iter = model.iter_next(group_iter)
 			account_iter = model.iter_next(account_iter)
 
@@ -254,7 +275,10 @@ class RosterWindow:
 #############################################################################
 
 	def add_account(self, account):
-		'''Add account to roster and draw it. Do nothing if it is already in.'''
+		'''
+		Add account to roster and draw it. Do nothing if it is
+		already in.
+		'''
 		if self._get_account_iter(account):
 			# Will happen on reconnect or for merged accounts
 			return
@@ -262,21 +286,26 @@ class RosterWindow:
 		if self.regroup:
 			# Merged accounts view
 			show = helpers.get_global_show()
-			self.model.append(None, [gajim.interface.jabber_state_images['16'][
-				show], _('Merged accounts'), 'account', '', 'all', None, None])
+			self.model.append(None, [
+				gajim.interface.jabber_state_images['16'][show],
+				_('Merged accounts'), 'account', '', 'all',
+				None, None, None])
 		else:
-			show = gajim.SHOW_LIST[gajim.connections[account].connected]
+			show = gajim.SHOW_LIST[gajim.connections[account]. \
+				connected]
 			our_jid = gajim.get_jid_from_account(account)
 
 			tls_pixbuf = None
 			if gajim.account_is_securely_connected(account):
 				# the only way to create a pixbuf from stock
 				tls_pixbuf = self.window.render_icon(
-					gtk.STOCK_DIALOG_AUTHENTICATION, gtk.ICON_SIZE_MENU)
+					gtk.STOCK_DIALOG_AUTHENTICATION,
+					gtk.ICON_SIZE_MENU)
 
-			self.model.append(None, [gajim.interface.jabber_state_images['16'][
-				show], gobject.markup_escape_text(account), 'account', our_jid,
-				account, None, tls_pixbuf])
+			self.model.append(None, [
+				gajim.interface.jabber_state_images['16'][show],
+				gobject.markup_escape_text(account), 'account',
+				our_jid, account, None, None, tls_pixbuf])
 
 		self.draw_account(account)
 
@@ -315,42 +344,50 @@ class RosterWindow:
 		Keyword arguments:
 		contact -- the contact to add
 		account -- the contacts account
-		groups -- list of groups to add the contact to. (default groups in 
-						contact.get_shown_groups()).
+		groups -- list of groups to add the contact to.
+			  (default groups in contact.get_shown_groups()).
 			Parameter ignored when big_brother_contact is specified.
-		big_brother_contact -- if specified contact is added as child 
-										big_brother_contact. (default None)
+		big_brother_contact -- if specified contact is added as child
+			  big_brother_contact. (default None)
 		'''
 		added_iters = []
 		if big_brother_contact:
 			# Add contact under big brother
 
-			parent_iters = self._get_contact_iter(big_brother_contact.jid,
-				big_brother_account, big_brother_contact, self.model)
+			parent_iters = self._get_contact_iter(
+				big_brother_contact.jid, big_brother_account,
+				big_brother_contact, self.model)
 			assert len(parent_iters) > 0,\
 				'Big brother is not yet in roster!'
 
 			# Do not confuse get_contact_iter
 			# Sync groups of family members
-			contact.groups = big_brother_contact.get_shown_groups()[:]
+			contact.groups = \
+				big_brother_contact.get_shown_groups()[:]
 
 			for child_iter in parent_iters:
-				it = self.model.append(child_iter, (None, contact.get_shown_name(),
-					'contact', contact.jid,	account, None, None))
+				it = self.model.append(child_iter, (None,
+					contact.get_shown_name(), 'contact',
+					contact.jid, account, None, None, None))
 				added_iters.append(it)
 		else:
 			# We are a normal contact. Add us to our groups.
 			if not groups:
 				groups = contact.get_shown_groups()
 			for group in groups:
-				child_iterG = self._get_group_iter(group, account, model=self.model)
+				child_iterG = self._get_group_iter(group,
+					account, model = self.model)
 				if not child_iterG:
 					# Group is not yet in roster, add it!
-					child_iterA = self._get_account_iter(account, self.model)
-					child_iterG = self.model.append(child_iterA, [
-						gajim.interface.jabber_state_images['16']['closed'],
-						gobject.markup_escape_text(group), 'group',
-						group, account, None, None])
+					child_iterA = self._get_account_iter(
+						account, self.model)
+					child_iterG = self.model.append(
+						child_iterA, [gajim.interface. \
+						jabber_state_images['16'] \
+						['closed'], gobject. \
+						markup_escape_text(group),
+						'group', group, account, None,
+						None, None])
 					self.draw_group(group, account)
 
 				if contact.is_transport():
@@ -360,9 +397,11 @@ class RosterWindow:
 				else:
 					typestr = 'contact'
 
-				# we add some values here. see draw_contact for more
-				i_ = self.model.append(child_iterG, (None, contact.get_shown_name(),
-					typestr, contact.jid, account, None, None))
+				# we add some values here. see draw_contact
+				# for more
+				i_ = self.model.append(child_iterG, (None,
+					contact.get_shown_name(), typestr,
+					contact.jid, account, None, None, None))
 				added_iters.append(i_)
 
 				# Restore the group expand state
@@ -371,9 +410,11 @@ class RosterWindow:
 				else:
 					is_expanded = True
 				if group not in gajim.groups[account]:
-					gajim.groups[account][group] = {'expand': is_expanded}
+					gajim.groups[account][group] = \
+						{'expand': is_expanded}
 
-		assert len(added_iters), '%s has not been added to roster!' % contact.jid
+		assert len(added_iters), '%s has not been added to roster!' % \
+			contact.jid
 		for titer in added_iters:
 			assert self.model[titer][C_JID] == contact.jid and \
 				self.model[titer][C_ACCOUNT] == account, \
@@ -384,7 +425,8 @@ class RosterWindow:
 		'''Remove the given contact from roster data model.
 
 		Empty groups after contact removal are removed too.
-		Return False if contact still has children and deletion was not performed.
+		Return False if contact still has children and deletion was
+		not performed.
 		Return True on success.
 
 		Keyword arguments:
@@ -392,8 +434,10 @@ class RosterWindow:
 		account -- the contacts account
 		groups -- list of groups to remove the contact from.
 		'''
-		iters = self._get_contact_iter(contact.jid, account, contact, self.model)
-		assert iters, '%s shall be removed but is not in roster' % contact.jid
+		iters = self._get_contact_iter(contact.jid, account, contact,
+			self.model)
+		assert iters, '%s shall be removed but is not in roster' % \
+			contact.jid
 
 		parent_iter = self.model.iter_parent(iters[0])
 		parent_type = self.model[parent_iter][C_TYPE]
@@ -401,8 +445,8 @@ class RosterWindow:
 		if groups:
 			# Only remove from specified groups
 			all_iters = iters[:]
-			group_iters = [self._get_group_iter(group, account) for group in \
-				groups]
+			group_iters = [self._get_group_iter(group, account) \
+				for group in groups]
 			iters = [titer for titer in all_iters
 				if self.model.iter_parent(titer) in group_iters]
 
@@ -420,7 +464,8 @@ class RosterWindow:
 				parent_i = self.model.iter_parent(i)
 				if parent_type == 'group' and \
 				self.model.iter_n_children(parent_i) == 1:
-					group = self.model[parent_i][C_JID].decode('utf-8')
+					group = self.model[parent_i][C_JID]. \
+						decode('utf-8')
 					if gajim.groups[account].has_key(group):
 						del gajim.groups[account][group]
 					self.model.remove(parent_i)
@@ -429,11 +474,12 @@ class RosterWindow:
 			return True
 
 	def _add_metacontact_family(self, family, account):
-		'''Add the give Metacontact family to roster data model.
+		'''
+		Add the give Metacontact family to roster data model.
 
 		Add Big Brother to his groups and all others under him.
-		Return list of all added (contact, account) tuples with Big Brother
-		as first element.
+		Return list of all added (contact, account) tuples with
+		Big Brother as first element.
 
 		Keyword arguments:
 		family -- the family, see Contacts.get_metacontacts_family()
@@ -444,10 +490,10 @@ class RosterWindow:
 		big_brother_contact = gajim.contacts.get_first_contact_from_jid(
 			big_brother_account, big_brother_jid)
 
-		assert len(self._get_contact_iter(big_brother_jid, big_brother_account,
-			big_brother_contact, self.model)) == 0,\
-			'Big brother %s already in roster  \n Family: %s' % (big_brother_jid,
-			family)
+		assert len(self._get_contact_iter(big_brother_jid,
+			big_brother_account, big_brother_contact, self.model)) \
+			== 0, 'Big brother %s already in roster\n Family: %s' \
+			% (big_brother_jid, family)
 		self._add_entity(big_brother_contact, big_brother_account)
 
 		brothers = []
@@ -455,26 +501,31 @@ class RosterWindow:
 		for data in nearby_family:
 			_account = data['account']
 			_jid = data['jid']
-			_contact = gajim.contacts.get_first_contact_from_jid(_account, _jid)
+			_contact = gajim.contacts.get_first_contact_from_jid(
+				_account, _jid)
 
 			if not _contact or _contact == big_brother_contact:
 				# Corresponding account is not connected
 				# or brother already added
 				continue
 
-			assert len(self._get_contact_iter(_jid, _account, _contact, self.model)
-				) == 0, "%s already in roster. \n Family: %s" % (_jid, nearby_family)
-			self._add_entity(_contact, _account, big_brother_contact = \
-				big_brother_contact, big_brother_account=big_brother_account)
+			assert len(self._get_contact_iter(_jid, _account,
+				_contact, self.model)) == 0, "%s already in " \
+				"roster.\n Family: %s" % (_jid, nearby_family)
+			self._add_entity(_contact, _account,
+				big_brother_contact = big_brother_contact,
+				big_brother_account = big_brother_account)
 			brothers.append((_contact, _account))
 
 		brothers.insert(0, (big_brother_contact, big_brother_account))
 		return brothers
 
 	def _remove_metacontact_family(self, family, account):
-		'''Remove the given Metacontact family from roster data model.
+		'''
+		Remove the given Metacontact family from roster data model.
 
-		See Contacts.get_metacontacts_family() and RosterWindow._remove_entity()
+		See Contacts.get_metacontacts_family() and
+		RosterWindow._remove_entity()
 		'''
 		nearby_family = self._get_nearby_family_and_big_brother(
 			family, account)[0]
@@ -598,7 +649,7 @@ class RosterWindow:
 
 		child_iterA = self._get_account_iter(account, self.model)
 		self.model.append(child_iterA, (None, gajim.nicks[account],
-			'self_contact', jid, account, None, None))
+			'self_contact', jid, account, None, None, None))
 
 		self.draw_contact(jid, account)
 		self.draw_avatar(jid, account)
@@ -963,7 +1014,8 @@ class RosterWindow:
 		contact = gajim.contacts.get_highest_prio_contact_from_contacts(
 			contact_instances)
 
-		child_iters = self._get_contact_iter(jid, account, contact, self.model)
+		child_iters = self._get_contact_iter(jid, account,
+			contact, self.model)
 		if not child_iters:
 			return False
 
@@ -974,8 +1026,8 @@ class RosterWindow:
 		gajim.interface.minimized_controls[account][jid]:
 			nb_unread = len(gajim.events.get_events(account, jid,
 				['printed_marked_gc_msg']))
-			nb_unread += \
-				gajim.interface.minimized_controls[account][jid].get_nb_unread_pm()
+			nb_unread += gajim.interface.minimized_controls \
+				[account][jid].get_nb_unread_pm()
 
 			if nb_unread == 1:
 				name = '%s *' % name
@@ -988,7 +1040,8 @@ class RosterWindow:
 			strike = True
 		else:
 			for group in contact.get_shown_groups():
-				if group in gajim.connections[account].blocked_groups:
+				if group in \
+				gajim.connections[account].blocked_groups:
 					strike = True
 					break
 		if strike:
@@ -1002,44 +1055,58 @@ class RosterWindow:
 		if nb_connected_contact > 1:
 			name += ' (' + unicode(nb_connected_contact) + ')'
 
-		# show (account_name) if there are 2 contact with same jid in merged mode
+		# show (account_name) if there are 2 contact with same jid
+		# in merged mode
 		if self.regroup:
 			add_acct = False
 			# look through all contacts of all accounts
 			for account_ in gajim.connections:
-				if account_ == account: # useless to add accout name
+				# useless to add account name
+				if account_ == account:
 					continue
-				for jid_ in gajim.contacts.get_jid_list(account_):
-					contact_ = gajim.contacts.get_first_contact_from_jid(account_,
-						jid_)
-					if contact_.get_shown_name() == contact.get_shown_name() and \
+				for jid_ in \
+				gajim.contacts.get_jid_list(account_):
+					contact_ = gajim.contacts. \
+						get_first_contact_from_jid(
+						account_, jid_)
+					if contact_.get_shown_name() == \
+					contact.get_shown_name() and \
 					(jid_, account_) != (jid, account):
 						add_acct = True
 						break
 				if add_acct:
-					# No need to continue in other account if we already found one
+					# No need to continue in other account
+					# if we already found one
 					break
 			if add_acct:
 				name += ' (' + account + ')'
 
-		# add status msg, if not empty, under contact name in the treeview
-		if contact.status and gajim.config.get('show_status_msgs_in_roster'):
+		# add status msg, if not empty, under contact name in
+		# the treeview
+		if contact.status \
+		and gajim.config.get('show_status_msgs_in_roster'):
 			status = contact.status.strip()
 			if status != '':
-				status = helpers.reduce_chars_newlines(status, max_lines = 1)
-				# escape markup entities and make them small italic and fg color
-				# color is calcuted to be always readable
-				color = gtkgui_helpers._get_fade_color(self.tree, selected, focus)
-				colorstring = '#%04x%04x%04x' % (color.red, color.green, color.blue)
-				name += \
-					'\n<span size="small" style="italic" foreground="%s">%s</span>' \
-					% (colorstring, gobject.markup_escape_text(status))
+				status = helpers.reduce_chars_newlines(status,
+					max_lines = 1)
+				# escape markup entities and make them small
+				# italic and fg color color is calcuted to be
+				# always readable
+				color = gtkgui_helpers._get_fade_color(
+					self.tree, selected, focus)
+				colorstring = '#%04x%04x%04x' % (color.red,
+					color.green, color.blue)
+				name += '\n<span size="small" style="italic" ' \
+					'foreground="%s">%s</span>' % (
+					colorstring,
+					gobject.markup_escape_text(status))
 
 		icon_name = helpers.get_icon_name_to_show(contact, account)
 		# look if another resource has awaiting events
 		for c in contact_instances:
 			c_icon_name = helpers.get_icon_name_to_show(c, account)
-			if c_icon_name in ('event', 'muc_active', 'muc_inactive'):
+			if c_icon_name \
+			in ('event', 'muc_active', 'muc_inactive'):
 				icon_name = c_icon_name
 				break
 
@@ -1049,36 +1116,51 @@ class RosterWindow:
 		have_visible_children = False
 		if family:
 			nearby_family, bb_jid, bb_account = \
-				self._get_nearby_family_and_big_brother(family, account)
+				self._get_nearby_family_and_big_brother(
+				family, account)
 			is_big_brother = (jid, account) == (bb_jid, bb_account)
 			iters = self._get_contact_iter(jid, account)	
-			have_visible_children = iters and self.modelfilter.iter_has_child(iters[0])
+			have_visible_children = iters \
+				and self.modelfilter.iter_has_child(iters[0])
 
 		if have_visible_children:
 			# We are the big brother and have a visible family
 			for child_iter in child_iters:
 				child_path = self.model.get_path(child_iter)
-				path = self.modelfilter.convert_child_path_to_path(child_path)
+				path = self.modelfilter. \
+					convert_child_path_to_path(child_path)
 
-				if not self.tree.row_expanded(path) and icon_name != 'event':
-					iterC = self.model.iter_children(child_iter)
+				if not self.tree.row_expanded(path) \
+				and icon_name != 'event':
+					iterC = self.model.iter_children(
+						child_iter)
 					while iterC:
 						# a child has awaiting messages?
-						jidC = self.model[iterC][C_JID].decode('utf-8')
-						accountC = self.model[iterC][C_ACCOUNT].decode('utf-8')
-						if len(gajim.events.get_events(accountC, jidC)):
+						jidC = self.model[iterC] \
+							[C_JID].decode('utf-8')
+						accountC = self.model \
+							[iterC][C_ACCOUNT]. \
+							decode('utf-8')
+						if len(gajim.events.get_events(
+						accountC, jidC)):
 							icon_name = 'event'
 							break
-						iterC = self.model.iter_next(iterC)
+						iterC = self.model.iter_next(
+							iterC)
 
 				if self.tree.row_expanded(path):
-					state_images = self.get_appropriate_state_images(jid,
-						size = 'opened', icon_name = icon_name)
+					state_images = self. \
+						get_appropriate_state_images(
+						jid, size = 'opened',
+						icon_name = icon_name)
 				else:
-					state_images = self.get_appropriate_state_images(jid,
-						size = 'closed', icon_name = icon_name)
+					state_images = self. \
+						get_appropriate_state_images(
+						jid, size = 'closed',
+						icon_name = icon_name)
 				
-				# Expand/collapse icon might differ per iter (group)
+				# Expand/collapse icon might differ per iter
+				# (group)
 				img = state_images[icon_name]
 				self.model[child_iter][C_IMG] = img
 				self.model[child_iter][C_NAME] = name
@@ -1092,6 +1174,18 @@ class RosterWindow:
 			for child_iter in child_iters:
 				self.model[child_iter][C_IMG] = img
 				self.model[child_iter][C_NAME] = name
+				
+				if contact.mood.has_key('mood') \
+				and contact.mood['mood'] in MOODS:
+					self.model[child_iter][C_MOOD] = \
+						gtkgui_helpers.load_mood_icon(
+						contact.mood['mood'])
+				elif contact.mood.has_key('mood'):
+					self.model[child_iter][C_MOOD] = \
+						gtkgui_helpers.load_mood_icon(
+						'unknown')
+				else:
+					self.model[child_iter][C_MOOD] = None
 
 			# We are a little brother
 			if family and not is_big_brother and not self.starting:
@@ -1100,10 +1194,12 @@ class RosterWindow:
 		for group in contact.get_shown_groups():
 			# We need to make sure that _visible_func is called for
 			# our groups otherwise we might not be shown
-			iterG = self._get_group_iter(group, account, model = self.model)
+			iterG = self._get_group_iter(group, account,
+				model = self.model)
 			if iterG:
 				# it's not self contact
-				self.model[iterG][C_JID] = self.model[iterG][C_JID]
+				self.model[iterG][C_JID] = \
+					self.model[iterG][C_JID]
 
 		return False
 
@@ -1164,9 +1260,10 @@ class RosterWindow:
 	def setup_and_draw_roster(self):
 		'''create new empty model and draw roster'''
 		self.modelfilter = None
-		#(icon, name, type, jid, account, editable, avatar_pixbuf, padlock_pixbuf)
-		self.model = gtk.TreeStore(gtk.Image, str, str, str, str, gtk.gdk.Pixbuf,
-			gtk.gdk.Pixbuf)
+		# (icon, name, type, jid, account, editable, mood_pixbuf, 
+		# avatar_pixbuf, padlock_pixbuf)
+		self.model = gtk.TreeStore(gtk.Image, str, str, str, str,
+			gtk.Image, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf)
 
 		self.model.set_sort_func(1, self._compareIters)
 		self.model.set_sort_column_id(1, gtk.SORT_ASCENDING)
@@ -5858,7 +5955,8 @@ class RosterWindow:
 		def add_avatar_renderer():
 			render_pixbuf = gtk.CellRendererPixbuf() # avatar img
 			col.pack_start(render_pixbuf, expand = False)
-			col.add_attribute(render_pixbuf, 'pixbuf', C_AVATAR_PIXBUF)
+			col.add_attribute(render_pixbuf, 'pixbuf',
+				C_AVATAR_PIXBUF)
 			col.set_cell_data_func(render_pixbuf,
 				self._fill_avatar_pixbuf_rederer, None)
 
@@ -5876,6 +5974,14 @@ class RosterWindow:
 		col.pack_start(render_text, expand = True)
 		col.add_attribute(render_text, 'markup', C_NAME) # where we hold the name
 		col.set_cell_data_func(render_text, self._nameCellDataFunc, None)
+
+		if gajim.config.get('show_mood_in_roster'):
+			render_image = cell_renderer_image.CellRendererImage(
+				0, 0)
+			col.pack_start(render_image, expand = False)
+			col.add_attribute(render_image, 'image', C_MOOD)
+			col.set_cell_data_func(render_image,
+				self._iconCellDataFunc, None)
 
 		if gajim.config.get('avatar_position_in_roster') == 'right':
 			add_avatar_renderer()
