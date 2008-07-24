@@ -1401,6 +1401,7 @@ class ChatControl(ChatControlBase):
 		jid = contact.jid
 
 		banner_name_label = self.xml.get_widget('banner_name_label')
+		banner_name_tooltip = gtk.Tooltips()
 		banner_eventbox = self.xml.get_widget('banner_eventbox')
 
 		name = contact.get_shown_name()
@@ -1456,12 +1457,17 @@ class ChatControl(ChatControlBase):
 				# When does that happen ? See [7797] and [7804]
 				chatstate = helpers.get_uf_chatstate(cs)
 
-			label_text = '<span %s>%s</span><span %s>%s %s</span>' % \
-				(font_attrs, name, font_attrs_small, acct_info, chatstate)
+			label_text = '<span %s>%s</span><span %s>%s %s</span>' \
+				% (font_attrs, name, font_attrs_small,
+				acct_info, chatstate)
+			label_tooltip = '%s%s %s' % (name, ' ' + acct_info \
+				if acct_info else '', chatstate)
 		else:
 			# weight="heavy" size="x-large"
 			label_text = '<span %s>%s</span><span %s>%s</span>' % \
 				(font_attrs, name, font_attrs_small, acct_info)
+			label_tooltip = '%s%s' % (name, ' ' + acct_info \
+				if acct_info else '')
 
 		if status_escaped:
 			if gajim.HAVE_PYSEXY:
@@ -1481,6 +1487,7 @@ class ChatControl(ChatControlBase):
 		self.banner_status_label.set_markup(status_text)
 		# setup the label that holds name and jid
 		banner_name_label.set_markup(label_text)
+		banner_name_tooltip.set_tip(banner_name_label, label_tooltip)
 
 	def _toggle_gpg(self):
 		ec = gajim.encrypted_chats[self.account]
