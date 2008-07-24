@@ -585,6 +585,10 @@ class Config:
 		if not key:
 			return dict.keys()
 		if not dict.has_key(key):
+			if self.__options_per_key.has_key(optname) \
+			and self.__options_per_key[optname][0].has_key(subname):
+				return self.__options_per_key \
+					[optname][0][subname][1]
 			return None
 		obj = dict[key]
 		if not subname:
