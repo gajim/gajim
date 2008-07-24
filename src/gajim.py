@@ -776,12 +776,20 @@ class Interface:
 
 				# disable encryption, since if any messages are
 				# lost they'll be not decryptable (note that
-				# this contradicts XEP-0201 - trying to get the
+				# this contradicts XEP-0201 - trying to get that
 				# in the XEP, though)
+				#
+				# FIXME: This *REALLY* are TOO many leves of
+				#	 indentation! We even need to introduce
+				#	 a temp var here to make it somehow fit!
 				if gajim.connections[account].sessions. \
 				has_key(ji):
 					for sess in gajim.connections \
 					[account]. sessions[ji].values():
+						ctrl = sess.control
+						if ctrl:
+							ctrl.no_autonegotiation\
+								= False
 						if sess.enable_encryption:
 							sess.terminate_e2e()
 							gajim.connections \

@@ -2262,12 +2262,11 @@ class ChatControl(ChatControlBase):
 			#      notexistant check
 			if not e2e_is_active and e2e_pref and \
 			not self.no_autonegotiation and gajim.HAVE_PYCRYPTO \
-			and e2e_pref and gajim.capscache.is_supported(
-			self.contact, NS_ESESSION) and not \
-			gajim.capscache.is_supported(self.contact,
-			'notexistant'):
-				self.no_autonegotiation = True
+			and gajim.capscache.is_supported(self.contact,
+			NS_ESESSION) and not gajim.capscache.is_supported(
+			self.contact, 'notexistant'):
 				self.begin_e2e_negotiation()
+				self.no_autonegotiation = True
 		else:
 			self.send_chatstate('active', self.contact)
 
