@@ -92,12 +92,18 @@ class PreferencesWindow:
 		### General tab ###
 		# Display avatars in roster
 		st = gajim.config.get('show_avatars_in_roster')
-		self.xml.get_widget('show_avatars_in_roster_checkbutton').set_active(st)
+		self.xml.get_widget('show_avatars_in_roster_checkbutton'). \
+			set_active(st) 
 
 		# Display status msg under contact name in roster
 		st = gajim.config.get('show_status_msgs_in_roster')
-		self.xml.get_widget('show_status_msgs_in_roster_checkbutton').set_active(
-			st)
+		self.xml.get_widget('show_status_msgs_in_roster_checkbutton'). \
+			set_active( st)
+
+		# Display mood in roster
+		st = gajim.config.get('show_mood_in_roster')
+		self.xml.get_widget('show_mood_in_roster_checkbutton'). \
+			set_active(st)
 
 		# Sort contacts by show
 		st = gajim.config.get('sort_by_show')
@@ -526,6 +532,10 @@ class PreferencesWindow:
 		for ctl in gajim.interface.msg_win_mgr.controls():
 			if ctl.type_id == message_control.TYPE_GC:
 				ctl.update_ui()
+
+	def on_show_mood_in_roster_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'show_mood_in_roster')
+		gajim.interface.roster.setup_and_draw_roster()
 
 	def on_sort_by_show_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sort_by_show')

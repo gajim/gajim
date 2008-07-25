@@ -76,7 +76,7 @@ C_NAME, # cellrenderer text that holds contact nickame
 C_TYPE, # account, group or contact?
 C_JID, # the jid of the row
 C_ACCOUNT, # cellrenderer text that holds account name
-C_MOOD,
+C_MOOD_PIXBUF,
 C_AVATAR_PIXBUF, # avatar_pixbuf
 C_PADLOCK_PIXBUF, # use for account row only
 ) = range(8)
@@ -608,6 +608,7 @@ class RosterWindow:
 
 			for c, acc in brothers:
 				self.draw_contact(c.jid, acc)
+				self.draw_mood(c.jid, acc)
 				self.draw_avatar(c.jid, acc)
 
 
@@ -652,6 +653,7 @@ class RosterWindow:
 			'self_contact', jid, account, None, None, None))
 
 		self.draw_contact(jid, account)
+		self.draw_mood(jid, account)
 		self.draw_avatar(jid, account)
 		self.draw_account(account)
 
@@ -709,6 +711,7 @@ class RosterWindow:
 		if not self.starting:
 			for c, acc in contacts:
 				self.draw_contact(c.jid, acc)
+				self.draw_mood(c.jid, acc)
 				self.draw_avatar(c.jid, acc)
 			for group in contact.get_shown_groups():
 				self.draw_group(group, account)
@@ -765,6 +768,7 @@ class RosterWindow:
 					brothers = self._add_metacontact_family(family, account)
 					for c, acc in brothers:
 						self.draw_contact(c.jid, acc)
+						self.draw_mood(c.jid, acc)
 						self.draw_avatar(c.jid, acc)
 
 			# Draw all groups of the contact
@@ -1174,18 +1178,6 @@ class RosterWindow:
 			for child_iter in child_iters:
 				self.model[child_iter][C_IMG] = img
 				self.model[child_iter][C_NAME] = name
-				
-				if contact.mood.has_key('mood') \
-				and contact.mood['mood'] in MOODS:
-					self.model[child_iter][C_MOOD] = \
-						gtkgui_helpers.load_mood_icon(
-						contact.mood['mood'])
-				elif contact.mood.has_key('mood'):
-					self.model[child_iter][C_MOOD] = \
-						gtkgui_helpers.load_mood_icon(
-						'unknown')
-				else:
-					self.model[child_iter][C_MOOD] = None
 
 			# We are a little brother
 			if family and not is_big_brother and not self.starting:
@@ -1201,6 +1193,27 @@ class RosterWindow:
 				self.model[iterG][C_JID] = \
 					self.model[iterG][C_JID]
 
+		return False
+
+
+	def draw_mood(self, jid, account):
+		iters = self._get_contact_iter(jid, account, model = self.model)
+		if not iters or not gajim.config.get('show_mood_in_roster'):
+			return
+		jid = self.model[iters[0]][C_JID]
+		jid = jid.decode('utf-8')
+		contact = gajim.contacts.get_contact(account, jid)
+		if contact.mood.has_key('mood') \
+		and contact.mood['mood'] in MOODS:
+			pixbuf = gtkgui_helpers.load_mood_icon(
+				contact.mood['mood']).get_pixbuf()
+		elif contact.mood.has_key('mood'):
+			pixbuf = gtkgui_helpers.load_mood_image(
+				'unknown').get_pixbuf()
+		else:
+			pixbuf = None
+		for child_iter in iters:
+			self.model[child_iter][C_MOOD_PIXBUF] = pixbuf
 		return False
 
 
@@ -1250,6 +1263,7 @@ class RosterWindow:
 		def _draw_all_contacts(jids, account):
 			for jid in jids:
 				self.draw_contact(jid, account)
+				self.draw_mood(jid, account)
 				self.draw_avatar(jid, account)
 				yield True
 			yield False
@@ -1263,7 +1277,7 @@ class RosterWindow:
 		# (icon, name, type, jid, account, editable, mood_pixbuf, 
 		# avatar_pixbuf, padlock_pixbuf)
 		self.model = gtk.TreeStore(gtk.Image, str, str, str, str,
-			gtk.Image, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf)
+			gtk.gdk.Pixbuf, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf)
 
 		self.model.set_sort_func(1, self._compareIters)
 		self.model.set_sort_column_id(1, gtk.SORT_ASCENDING)
@@ -3665,6 +3679,7 @@ class RosterWindow:
 
 			for c, acc in brothers:
 				self.draw_contact(c.jid, acc)
+				self.draw_mood(c.jid, acc)
 				self.draw_avatar(c.jid, acc)
 
 			old_groups.extend(c_dest.groups)
@@ -4170,6 +4185,42 @@ class RosterWindow:
 				renderer.set_property('xpad', 16)
 			else:
 				renderer.set_property('xpad', 8)
+
+
+	def _fill_mood_pixbuf_rederer(self, column, renderer, model, titer,
+	data = None):
+		'''When a row is added, set properties for avatar renderer'''
+		theme = gajim.config.get('roster_theme')
+		type_ = model[titer][C_TYPE]
+		if type_ in ('group', 'account'):
+			renderer.set_property('visible', False)
+			return
+
+		# allocate space for the icon only if needed
+		if model[titer][C_MOOD_PIXBUF]:
+			renderer.set_property('visible', True)
+		else:
+			renderer.set_property('visible', False)
+		if type_: # prevent type_ = None, see http://trac.gajim.org/ticket/2534
+			if not model[titer][C_JID] or not model[titer][C_ACCOUNT]:
+				# This can append at the moment we add the row
+				return
+			jid = model[titer][C_JID].decode('utf-8')
+			account = model[titer][C_ACCOUNT].decode('utf-8')
+			if jid in gajim.newly_added[account]:
+				renderer.set_property('cell-background', gajim.config.get(
+					'just_connected_bg_color'))
+			elif jid in gajim.to_be_removed[account]:
+				renderer.set_property('cell-background', gajim.config.get(
+					'just_disconnected_bg_color'))
+			else:
+				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
+				if color:
+					renderer.set_property('cell-background', color)
+				else:
+					renderer.set_property('cell-background', None)
+		renderer.set_property('xalign', 1) # align pixbuf to the right
+
 
 	def _fill_avatar_pixbuf_rederer(self, column, renderer, model, titer,
 	data = None):
@@ -5975,13 +6026,11 @@ class RosterWindow:
 		col.add_attribute(render_text, 'markup', C_NAME) # where we hold the name
 		col.set_cell_data_func(render_text, self._nameCellDataFunc, None)
 
-		if gajim.config.get('show_mood_in_roster'):
-			render_image = cell_renderer_image.CellRendererImage(
-				0, 0)
-			col.pack_start(render_image, expand = False)
-			col.add_attribute(render_image, 'image', C_MOOD)
-			col.set_cell_data_func(render_image,
-				self._iconCellDataFunc, None)
+		render_pixbuf = gtk.CellRendererPixbuf()
+		col.pack_start(render_pixbuf, expand = False)
+		col.add_attribute(render_pixbuf, 'pixbuf', C_MOOD_PIXBUF)
+		col.set_cell_data_func(render_pixbuf,
+			self._fill_mood_pixbuf_rederer, None)
 
 		if gajim.config.get('avatar_position_in_roster') == 'right':
 			add_avatar_renderer()

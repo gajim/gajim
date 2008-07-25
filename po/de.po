@@ -4713,11 +4713,11 @@ msgstr "Mitglied"
 
 #: ../src/common/helpers.py:350
 msgid "afraid"
-msgstr "Fürchtend"
+msgstr "Verängstigt"
 
 #: ../src/common/helpers.py:350
 msgid "amazed"
-msgstr "Überrascht"
+msgstr "Verblüfft"
 
 #: ../src/common/helpers.py:350
 msgid "angry"

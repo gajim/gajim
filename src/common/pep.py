@@ -62,7 +62,7 @@ def user_mood(items, name, jid):
 			if contact.mood.has_key('text'):
 				del contact.mood['text']
 
-	gajim.interface.roster.draw_contact(user, name)
+	gajim.interface.roster.draw_mood(user, name)
 	ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
 	if ctrl:
 		ctrl.update_mood()
