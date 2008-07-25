@@ -167,9 +167,13 @@ def user_tune(items, name, jid):
 			if contact.tune.has_key('length'):
 				del contact.tune['length']
 
-	ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
-	if ctrl:
-		ctrl.update_tune()
+	if jid == gajim.get_jid_from_account(name):
+		gajim.interface.roster.draw_account(name)
+	else:
+		gajim.interface.roster.draw_tune(user, name)
+		ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
+		if ctrl:
+			ctrl.update_tune()
 
 def user_geoloc(items, name, jid):
 	pass
