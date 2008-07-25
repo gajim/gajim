@@ -4222,7 +4222,7 @@ class RosterWindow:
 				renderer.set_property('cell-background', color)
 			else:
 				self.set_renderer_color(renderer,
-					gtk.STATE_ACTIVE
+					gtk.STATE_ACTIVE)
 			# align pixbuf to the right)
 			renderer.set_property('xalign', 1)
 		# prevent type_ = None, see http://trac.gajim.org/ticket/2534
