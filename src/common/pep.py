@@ -62,10 +62,13 @@ def user_mood(items, name, jid):
 			if contact.mood.has_key('text'):
 				del contact.mood['text']
 
-	gajim.interface.roster.draw_mood(user, name)
-	ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
-	if ctrl:
-		ctrl.update_mood()
+	if jid == gajim.get_jid_from_account(name):
+		gajim.interface.roster.draw_account(name)
+	else:
+		gajim.interface.roster.draw_mood(user, name)
+		ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
+		if ctrl:
+			ctrl.update_mood()
 
 def user_tune(items, name, jid):
 	has_child = False

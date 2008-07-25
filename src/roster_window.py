@@ -231,7 +231,7 @@ class RosterWindow:
 								model.iter_next(
 								parent_iter)
 						else:
-							# we tested all 
+							# we tested all
 							# contacts in this group
 							contact_iter = None
 		return found
@@ -616,7 +616,7 @@ class RosterWindow:
 		'''Return the nearby family and its Big Brother
 
 		Nearby family is the part of the family that is grouped with the metacontact.
-		A metacontact may be over different accounts. If regroup is s False the 
+		A metacontact may be over different accounts. If regroup is s False the
 		given family is split account wise.
 
 		(nearby_family, big_brother_jid, big_brother_account)
@@ -787,7 +787,7 @@ class RosterWindow:
 		# Do not show gc if we are disconnected and minimize it
 		if gajim.account_is_connected(account):
 			show = 'online'
-		else: 
+		else:
 			show = 'offline'
 			status = ''
 
@@ -973,6 +973,20 @@ class RosterWindow:
 			account_name += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
 
 		self.model[child_iter][C_NAME] = account_name
+
+		if gajim.connections[account].mood.has_key('mood') \
+		and gajim.connections[account].mood['mood'] in MOODS:
+			self.model[child_iter][C_MOOD_PIXBUF] = \
+				gtkgui_helpers.load_mood_icon(
+				gajim.connections[account].mood['mood']). \
+				get_pixbuf()
+		elif gajim.connections[account].mood.has_key('mood'):
+			self.model[child_iter][C_MOOD_PIXBUF] = \
+				gtkgui_helpers.load_mood_icon('unknown'). \
+				get_pixbuf()
+		else:
+			self.model[child_iter][C_MOOD_PIXBUF] = None
+
 		return False
 
 	def draw_group(self, group, account):
@@ -1274,7 +1288,7 @@ class RosterWindow:
 	def setup_and_draw_roster(self):
 		'''create new empty model and draw roster'''
 		self.modelfilter = None
-		# (icon, name, type, jid, account, editable, mood_pixbuf, 
+		# (icon, name, type, jid, account, editable, mood_pixbuf,
 		# avatar_pixbuf, padlock_pixbuf)
 		self.model = gtk.TreeStore(gtk.Image, str, str, str, str,
 			gtk.gdk.Pixbuf, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf)
@@ -1414,8 +1428,8 @@ class RosterWindow:
 				accounts = [account]
 			for _acc in accounts:
 				for contact in gajim.contacts.iter_contacts(_acc):
-					# Is this contact in this group ? (last part of if check if it's 
-					# self contact) 
+					# Is this contact in this group ? (last part of if check if it's
+					# self contact)
 					if group in contact.get_shown_groups():
 						if self.contact_is_visible(contact, _acc):
 							return True
@@ -1437,7 +1451,7 @@ class RosterWindow:
 					contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 					if contact and self.contact_is_visible(contact, account):
 						return True
-				return False 
+				return False
 			else:
 				contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 				return self.contact_is_visible(contact, account)
@@ -3043,7 +3057,7 @@ class RosterWindow:
 					contact.groups = []
 					contact.sub = 'from'
 					# we can't see him, but have to set it manually in contact
-					contact.show = 'offline' 
+					contact.show = 'offline'
 					gajim.contacts.add_contact(account, contact)
 					self.add_contact(contact.jid, account)
 		def on_ok2(list_):
@@ -4192,7 +4206,7 @@ class RosterWindow:
 		'''When a row is added, set properties for avatar renderer'''
 		theme = gajim.config.get('roster_theme')
 		type_ = model[titer][C_TYPE]
-		if type_ in ('group', 'account'):
+		if type_ == 'group':
 			renderer.set_property('visible', False)
 			return
 
@@ -4201,25 +4215,43 @@ class RosterWindow:
 			renderer.set_property('visible', True)
 		else:
 			renderer.set_property('visible', False)
-		if type_: # prevent type_ = None, see http://trac.gajim.org/ticket/2534
-			if not model[titer][C_JID] or not model[titer][C_ACCOUNT]:
+		if type_ == 'account':
+			color = gajim.config.get_per('themes', theme,
+				'accountbgcolor')
+			if color:
+				renderer.set_property('cell-background', color)
+			else:
+				self.set_renderer_color(renderer,
+					gtk.STATE_ACTIVE
+			# align pixbuf to the right)
+			renderer.set_property('xalign', 1)
+		# prevent type_ = None, see http://trac.gajim.org/ticket/2534
+		elif type_:
+			if not model[titer][C_JID] \
+			or not model[titer][C_ACCOUNT]:
 				# This can append at the moment we add the row
 				return
 			jid = model[titer][C_JID].decode('utf-8')
 			account = model[titer][C_ACCOUNT].decode('utf-8')
 			if jid in gajim.newly_added[account]:
-				renderer.set_property('cell-background', gajim.config.get(
+				renderer.set_property('cell-background',
+					gajim.config.get(
 					'just_connected_bg_color'))
 			elif jid in gajim.to_be_removed[account]:
-				renderer.set_property('cell-background', gajim.config.get(
+				renderer.set_property('cell-background',
+					gajim.config.get(
 					'just_disconnected_bg_color'))
 			else:
-				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
+				color = gajim.config.get_per('themes',
+					theme, 'contactbgcolor')
 				if color:
-					renderer.set_property('cell-background', color)
+					renderer.set_property(
+						'cell-background', color)
 				else:
-					renderer.set_property('cell-background', None)
-		renderer.set_property('xalign', 1) # align pixbuf to the right
+					renderer.set_property(
+						'cell-background', None)
+			# align pixbuf to the right
+			renderer.set_property('xalign', 1)
 
 
 	def _fill_avatar_pixbuf_rederer(self, column, renderer, model, titer,
