@@ -621,7 +621,7 @@ class RosterTooltip(NotificationAreaTooltip):
 			else:
 				source = _('Unknown Source')
 			tune_string = _('Tune:') + ' ' + \
-				_('<b>"%(title)s</b>" by <i>%(artist)s</i>\n' +
+				_('<b>"%(title)s"</b> by <i>%(artist)s</i>\n' +
 				'from <i>%(source)s</i>') % {'title': title,
 				'artist': artist, 'source': source}
 			properties.append((tune_string, None))
