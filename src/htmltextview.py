@@ -564,7 +564,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			try: 
 				f = urllib2.urlopen(attrs['src']) 
 			except Exception, ex: 
-				gajim.log.debug('Error loading image %s ' % attrs['src']  + str(ex)))
+				gajim.log.debug('Error loading image %s ' % attrs['src']  + str(ex))
 				pixbuf = None 
 				alt = attrs.get('alt', 'Broken image') 
 			else: 
