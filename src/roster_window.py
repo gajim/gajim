@@ -974,13 +974,15 @@ class RosterWindow:
 
 		self.model[child_iter][C_NAME] = account_name
 
-		if gajim.connections[account].mood.has_key('mood') \
+		if gajim.config.get('show_mood_in_roster') \
+		and gajim.connections[account].mood.has_key('mood') \
 		and gajim.connections[account].mood['mood'] in MOODS:
 			self.model[child_iter][C_MOOD_PIXBUF] = \
 				gtkgui_helpers.load_mood_icon(
 				gajim.connections[account].mood['mood']). \
 				get_pixbuf()
-		elif gajim.connections[account].mood.has_key('mood'):
+		elif gajim.config.get('show_mood_in_roster') \
+		and gajim.connections[account].mood.has_key('mood'):
 			self.model[child_iter][C_MOOD_PIXBUF] = \
 				gtkgui_helpers.load_mood_icon('unknown'). \
 				get_pixbuf()
