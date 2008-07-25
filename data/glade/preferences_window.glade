@@ -76,7 +76,7 @@
                               <widget class="GtkCheckButton" id="show_mood_in_roster_checkbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">If checked, Gajim will display status messages of contacts under the contact name in roster window and in group chats</property>
+                                <property name="tooltip" translatable="yes">If checked, Gajim will display the mood of contacts in the roster window</property>
                                 <property name="label" translatable="yes">Display m_ood of contacts in roster</property>
                                 <property name="use_underline">True</property>
                                 <property name="response_id">0</property>
