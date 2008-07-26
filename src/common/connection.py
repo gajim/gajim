@@ -1062,6 +1062,9 @@ class Connection(ConnectionHandlers):
 		msgtxt = msg
 		msgenc = ''
 
+		if session:
+			fjid = str(session.jid)
+
 		if keyID and self.USE_GPG:
 			if keyID ==  'UNKNOWN':
 				error = _('Neither the remote presence is signed, nor a key was assigned.')

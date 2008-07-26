@@ -440,7 +440,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		form.getField('terminate').getValue() in ('1', 'true'):
 			self.acknowledge_termination()
 
-			self.conn.delete_session(self.jid, self.thread_id)
+			self.conn.delete_session(str(self.jid), self.thread_id)
 
 			return
 

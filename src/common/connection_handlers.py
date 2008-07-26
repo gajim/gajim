@@ -1226,13 +1226,27 @@ class ConnectionHandlersBase:
 		# keep track of sessions this connection has with other JIDs
 		self.sessions = {}
 
-	def get_or_create_session(self, jid, thread_id):
-		'''returns an existing session between this connection and 'jid', returns a new one if none exist.'''
+	def get_sessions(self, jid):
+		'''get all sessions for the given full jid'''
+
+		if not gajim.interface.is_pm_contact(jid, self.name):
+			jid = gajim.get_jid_without_resource(jid)
+
+		try:
+			return self.sessions[jid].values()
+		except KeyError:
+			return []
+
+	def get_or_create_session(self, fjid, thread_id):
+		'''returns an existing session between this connection and 'jid', returns a
+		new one if none exist.'''
 
 		pm = True
-		if not gajim.interface.is_pm_contact(jid, self.name):
+		jid = fjid
+
+		if not gajim.interface.is_pm_contact(fjid, self.name):
 			pm = False
-			jid = gajim.get_jid_without_resource(jid)
+			jid = gajim.get_jid_without_resource(fjid)
 
 		session = self.find_session(jid, thread_id)
 
@@ -1240,9 +1254,9 @@ class ConnectionHandlersBase:
 			return session
 
 		if pm:
-			return self.make_new_session(jid, thread_id, type = 'pm')
+			return self.make_new_session(fjid, thread_id, type='pm')
 		else:
-			return self.make_new_session(jid, thread_id)
+			return self.make_new_session(fjid, thread_id)
 
 	def find_session(self, jid, thread_id):
 		try:
@@ -1311,12 +1325,12 @@ sent a message to.'''
 		if not cls:
 			cls = gajim.default_session_type
 
+		sess = cls(self, common.xmpp.JID(jid), thread_id, type)
+
 		# determine if this session is a pm session
-		# if not, discard the resource
+		# if not, discard the resource so that all sessions are stored bare
 		if not type == 'pm':
 			jid = gajim.get_jid_without_resource(jid)
-
-		sess = cls(self, common.xmpp.JID(jid), thread_id, type)
 
 		if not jid in self.sessions:
 			self.sessions[jid] = {}

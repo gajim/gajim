@@ -769,10 +769,12 @@ class Interface:
 			if array[1] in ('offline', 'error'):
 				contact1.our_chatstate = contact1.chatstate = \
 					contact1.composing_xep = None
+
+				conn = gajim.connections[account]
+
 				# TODO: This causes problems when another
 				#	resource signs off!
-				gajim.connections[account]. \
-					remove_transfers_for_contact(contact1)
+				conn.remove_transfers_for_contact(contact1)
 
 				# disable encryption, since if any messages are
 				# lost they'll be not decryptable (note that
@@ -782,20 +784,16 @@ class Interface:
 				# FIXME: This *REALLY* are TOO many leves of
 				#	 indentation! We even need to introduce
 				#	 a temp var here to make it somehow fit!
-				if gajim.connections[account].sessions. \
-				has_key(ji):
-					for sess in gajim.connections \
-					[account]. sessions[ji].values():
-						ctrl = sess.control
-						if ctrl:
-							ctrl.no_autonegotiation\
-								= False
-						if sess.enable_encryption:
-							sess.terminate_e2e()
-							gajim.connections \
-							[account]. \
-							delete_session(jid,
-							sess.thread_id)
+				for sess in  conn.get_sessions(ji):
+					if (ji+'/'+resource) != str(sess.jid):
+						continue
+					ctrl = sess.control
+					if ctrl:
+						ctrl.no_autonegotiation = False
+					if sess.enable_encryption:
+						sess.terminate_e2e()
+						conn.delete_session(jid,
+						sess.thread_id)
 
 			self.roster.chg_contact_status(contact1, array[1],
 				status_message, account)

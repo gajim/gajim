@@ -160,6 +160,9 @@ class MessageControl:
 		if not self.session:
 			sess = conn.find_controlless_session(jid)
 
+			if self.resource:
+				jid += '/' + self.resource
+
 			if not sess:
 				sess = conn.make_new_session(jid)
 
