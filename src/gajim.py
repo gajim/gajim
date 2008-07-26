@@ -2782,8 +2782,9 @@ class Interface:
 				self.roster.send_status(a,
 					gajim.config.get_per('accounts', a, 
 					'last_status'),
+					helpers.from_one_line(
 					gajim.config.get_per('accounts', a,
-					'last_status_msg'))
+					'last_status_msg')))
 		return False
 
 	def show_systray(self):
