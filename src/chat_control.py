@@ -144,7 +144,7 @@ class ChatControlBase(MessageControl):
 			# This is bad, we need the highest for caps etc.
 			c = gajim.contacts.get_contact_with_highest_priority(
 				acct, contact.jid)
-			if c:
+			if c and not isinstance(c, GC_Contact):
 				contact = c
 
 		MessageControl.__init__(self, type_id, parent_win, widget_name,
@@ -1184,7 +1184,8 @@ class ChatControl(ChatControlBase):
 
 	def update_toolbar(self):
 		# Add to roster
-		if _('Not in Roster') in self.contact.groups:
+		if not isinstance(self.contact, GC_Contact) \
+		and _('Not in Roster') in self.contact.groups:
 			self._add_to_roster_button.show()
 		else:
 			self._add_to_roster_button.hide()
@@ -1202,14 +1203,16 @@ class ChatControl(ChatControlBase):
 			self._convert_to_gc_button.set_sensitive(False)
 
 	def update_mood(self):
-		if self.contact.mood.has_key('mood'):
+		if not isinstance(self.contact, GC_Contact) \
+		and self.contact.mood.has_key('mood'):
 			mood = self.contact.mood['mood']
 			if HAVE_MARKUP_TOOLTIPS:
 				mood = gobject.markup_escape_text(mood)
 		else:
 			mood = None
 
-		if self.contact.mood.has_key('text'):
+		if not isinstance(self.contact, GC_Contact) \
+		and self.contact.mood.has_key('text'):
 			text = self.contact.mood['text']
 			if HAVE_MARKUP_TOOLTIPS:
 				text = gobject.markup_escape_text(text)
@@ -1245,15 +1248,18 @@ class ChatControl(ChatControlBase):
 		title  = None
 		source = None
 
-		if self.contact.tune.has_key('artist'):
+		if not isinstance(self.contact, GC_Contact) \
+		and self.contact.tune.has_key('artist'):
 			artist = self.contact.tune['artist'].strip()
 			if HAVE_MARKUP_TOOLTIPS:
 				artist = gobject.markup_escape_text(artist)
-		if self.contact.tune.has_key('title'):
+		if not isinstance(self.contact, GC_Contact) \
+		and self.contact.tune.has_key('title'):
 			title = self.contact.tune['title'].strip()
 			if HAVE_MARKUP_TOOLTIPS:
 				title = gobject.markup_escape_text(title)
-		if self.contact.tune.has_key('source'):
+		if not isinstance(self.contact, GC_Contact) \
+		and self.contact.tune.has_key('source'):
 			source = self.contact.tune['source'].strip()
 			if HAVE_MARKUP_TOOLTIPS:
 				source = gobject.markup_escape_text(source)

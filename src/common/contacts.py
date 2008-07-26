@@ -81,8 +81,6 @@ class Contact:
 		return self.jid.split('@')[0]
 
 	def get_shown_groups(self):
-		'''
-		'''
 		if self.is_observer():
 			return [_('Observers')]
 		elif self.is_groupchat():
@@ -132,7 +130,8 @@ class Contact:
 class GC_Contact:
 	'''Information concerning each groupchat contact'''
 	def __init__(self, room_jid='', name='', show='', status='', role='',
-	affiliation='', jid = '', resource = ''):
+	affiliation='', jid = '', resource = '', our_chatstate = None,
+	composing_xep = None, chatstate = None):
 		self.room_jid = room_jid
 		self.name = name
 		self.show = show
@@ -144,6 +143,9 @@ class GC_Contact:
 		self.caps_node = None
 		self.caps_hash_method = None
 		self.caps_hash = None
+		self.our_chatstate = our_chatstate
+		self.composing_xep = composing_xep
+		self.chatstate = chatstate
 
 	def get_full_jid(self):
 		return self.room_jid + '/' + self.name
