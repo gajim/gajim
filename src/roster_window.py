@@ -1978,20 +1978,21 @@ class RosterWindow:
 			# Remove resource when going offline
 			if show in ('offline', 'error') and \
 			len(gajim.events.get_events(account, contact.get_full_jid())) == 0:
-				jid_with_resource = contact.jid + '/' + contact.resource
-				if gajim.interface.msg_win_mgr.has_window(jid_with_resource,
-				account):
-					win = gajim.interface.msg_win_mgr.get_window(jid_with_resource,
-						account)
-					ctrl = win.get_control(jid_with_resource, account)
-					if ctrl:
-						ctrl.update_ui()
-						win.redraw_tab(ctrl)
-				gajim.contacts.remove_contact(account, contact)
+				fjid = contact.jid + '/' + contact.resource
+				ctrl = gajim.interface.msg_win_mgr.get_control(
+					fjid, account)
+				if ctrl:
+					ctrl.update_ui()
+					ctrl.parent_win.redraw_tab(ctrl)
+					# keep the contact around, since it's
+					# already attached to the control
+				else:
+					gajim.contacts.remove_contact(account, contact)
 
 		elif contact.jid == gajim.get_jid_from_account(account) and \
 		show in ('offline', 'error'):
-			# SelfContact went offline. Remove him when last pending message was read
+			# SelfContact went offline. Remove him when last pending
+			# message was read
 			self.remove_contact(contact.jid, account, backend=True)
 
 		uf_show = helpers.get_uf_show(show)
