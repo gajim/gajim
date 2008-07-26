@@ -15,7 +15,6 @@
 import select
 import logging
 log = logging.getLogger('gajim.c.x.idlequeue')
-log.setLevel(logging.DEBUG)
 
 class IdleObject:
 	''' base class for all idle listeners, these are the methods, which are called from IdleQueue
@@ -68,6 +67,25 @@ class IdleQueue:
 			self.alarms[alarm_time].append(alarm_cb)
 		else:
 			self.alarms[alarm_time] = [alarm_cb]
+		return alarm_time
+
+		
+
+	def remove_alarm(self, alarm_cb, alarm_time):
+		''' removes alarm callback alarm_cb scheduled on alarm_time'''
+		if not self.alarms.has_key(alarm_time): return False
+		i = -1
+		for i in range(len(self.alarms[alarm_time])):
+			# let's not modify the list inside the loop
+			if self.alarms[alarm_time][i] is alarm_cb: break
+		if i != -1:
+			del self.alarms[alarm_time][i]
+			if self.alarms[alarm_time] == []:
+				del self.alarms[alarm_time]
+			return True
+		else:
+			return False
+
 	
 	def set_read_timeout(self, fd, seconds):
 		''' set a new timeout, if it is not removed after 'seconds', 
@@ -91,9 +109,10 @@ class IdleQueue:
 		for alarm_time in times:
 			if alarm_time > current_time:
 				break
-			for cb in self.alarms[alarm_time]:
-				cb()
-			del(self.alarms[alarm_time])
+			if self.alarms.has_key(alarm_time):
+				for cb in self.alarms[alarm_time]:
+					cb()
+				del(self.alarms[alarm_time])
 		
 	def plug_idle(self, obj, writable = True, readable = True):
 		if obj.fd == -1:

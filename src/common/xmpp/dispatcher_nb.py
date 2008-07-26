@@ -35,7 +35,6 @@ log.setLevel(logging.INFO)
 DEFAULT_TIMEOUT_SECONDS = 25
 ID = 0
 
-STREAM_TERMINATOR = '</stream:stream>'
 XML_DECLARATION = '<?xml version=\'1.0\'?>'
 
 # FIXME: ugly
@@ -46,7 +45,8 @@ class Dispatcher():
 # named by __class__.__name__ of the dispatcher instance .. long story short:
 # I wrote following to avoid changing each client.Dispatcher.whatever() in xmpp/
 
-# If having two kinds of dispatcher will go well, I will rewrite the 
+# If having two kinds of dispatcher will go well, I will rewrite the dispatcher
+# references in other scripts
 	def PlugIn(self, client_obj, after_SASL=False, old_features=None):
 		if client_obj.protocol_type == 'XMPP':
 			XMPPDispatcher().PlugIn(client_obj)
@@ -71,7 +71,7 @@ class XMPPDispatcher(PlugIn):
 		self._exported_methods=[self.RegisterHandler, self.RegisterDefaultHandler, \
 		self.RegisterEventHandler, self.UnregisterCycleHandler, self.RegisterCycleHandler, \
 		self.RegisterHandlerOnce, self.UnregisterHandler, self.RegisterProtocol, \
-		self.SendAndWaitForResponse, self.StreamTerminate, \
+		self.SendAndWaitForResponse, \
 		self.SendAndCallForResponse, self.getAnID, self.Event, self.send]
 
 	def getAnID(self):
@@ -134,9 +134,6 @@ class XMPPDispatcher(PlugIn):
 				locale.getdefaultlocale()[0].split('_')[0])
 		self._owner.send("%s%s>" % (XML_DECLARATION,str(self._metastream)[:-2]))
 
-	def StreamTerminate(self):
-		''' Send a stream terminator. '''
-		self._owner.send(STREAM_TERMINATOR)
 
 	def _check_stream_start(self, ns, tag, attrs):
 		if ns<>NS_STREAMS or tag<>'stream':
@@ -445,16 +442,12 @@ class BOSHDispatcher(XMPPDispatcher):
 				locale.getdefaultlocale()[0].split('_')[0])
 		
 		self.restart = True
-		if self.after_SASL:
-			self._owner.Connection.send_http(self._owner.Connection.get_after_SASL_bodytag())
-		else:
-			self._owner.Connection.send_http(self._owner.Connection.get_initial_bodytag())
-
+		self._owner.Connection.send_init(after_SASL = self.after_SASL)
 
 
 	def StreamTerminate(self):
 		''' Send a stream terminator. '''
-		self._owner.Connection.send_http(self._owner.Connection.get_closing_bodytag())
+		self._owner.Connection.send_terminator()
 
 	def ProcessNonBlocking(self, data=None):
 
@@ -472,22 +465,13 @@ class BOSHDispatcher(XMPPDispatcher):
 		if stanza.getName()=='body' and stanza.getNamespace()==NS_HTTP_BIND:
 
 			stanza_attrs = stanza.getAttrs()
-
 			if stanza_attrs.has_key('authid'):
 				# should be only in init response
 				# auth module expects id of stream in document attributes
 				self.Stream._document_attrs['id'] = stanza_attrs['authid']
 
-			if stanza_attrs.has_key('sid'):
-				# session ID should be only in init response
-				self._owner.Connection.bosh_sid = stanza_attrs['sid']
+			self._owner.Connection.handle_body_attrs(stanza_attrs)
 
-			if stanza_attrs.has_key('terminate'):
-				self._owner.disconnect()
-
-			if stanza_attrs.has_key('error'):
-				# recoverable error
-				pass
 			
 			children = stanza.getChildren()
 		

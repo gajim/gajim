@@ -46,25 +46,17 @@ def urisplit(uri):
 	return proto, host, path
 
 def get_proxy_data_from_dict(proxy):
+	tcp_host, tcp_port, proxy_user, proxy_pass = None, None, None, None
 	type = proxy['type']
-	# with http-connect/socks5 proxy, we do tcp connecting to the proxy machine
-	tcp_host, tcp_port = proxy['host'], proxy['port']
-	if type == 'bosh':
-		# in ['host'] is whole URI
-		tcp_host = urisplit(proxy['host'])[1]
-		# in BOSH, client connects to Connection Manager instead of directly to
-		# XMPP server ((hostname, port)). If HTTP Proxy is specified, client connects
-		# to HTTP proxy and Connection Manager is specified at URI and Host header
-		# in HTTP message
-		if proxy.has_key('proxy_host') and proxy.has_key('proxy_port'):
-			tcp_host, tcp_port = proxy['proxy_host'], proxy['proxy_port']
-
-	# user and pass for socks5/http_connect proxy. In case of BOSH, it's user and
-	# pass for http proxy - If there's no proxy_host they won't be used
-	if proxy.has_key('user'): proxy_user = proxy['user']
-	else: proxy_user = None
-	if proxy.has_key('pass'): proxy_pass = proxy['pass']
-	else: proxy_pass = None
+	if type == 'bosh' and not proxy['bosh_useproxy']:
+		# with BOSH not over proxy we have to parse the hostname from BOSH URI
+		tcp_host, tcp_port = urisplit(proxy['bosh_uri'])[1], proxy['bosh_port']
+	else:
+		# with proxy!=bosh or with bosh over HTTP proxy we're connecting to proxy
+		# machine
+		tcp_host, tcp_port = proxy['host'], proxy['port']
+		if proxy['useauth']:
+			proxy_user, proxy_pass = proxy['user'], proxy['pass']
 	return tcp_host, tcp_port, proxy_user, proxy_pass
 
 
@@ -104,7 +96,7 @@ class NonBlockingTransport(PlugIn):
 		self.port = None
 		self.state = DISCONNECTED
 		self._exported_methods=[self.disconnect, self.onreceive, self.set_send_timeout, 
-			self.set_timeout, self.remove_timeout]
+			self.set_timeout, self.remove_timeout, self.start_disconnect]
 
 		# time to wait for SOME stanza to come and then send keepalive
 		self.sendtimeout = 0
@@ -152,10 +144,10 @@ class NonBlockingTransport(PlugIn):
 		self.on_connect_failure(err_message=err_message)
 
 	def send(self, raw_data, now=False):
-		if self.state != CONNECTED:
-			log.error('Trying to send %s when state is %s.' % 
+		if self.state not in [CONNECTED]:
+			log.error('Unable to send %s \n because state is %s.' % 
 				(raw_data, self.state))
-			return
+			
 
 	def disconnect(self, do_callback=True):
 		self.set_state(DISCONNECTED)
@@ -205,6 +197,10 @@ class NonBlockingTransport(PlugIn):
 		else:
 			self.on_timeout = None
 
+	def start_disconnect(self):
+		self.set_state(DISCONNECTING)
+
+
 
 class NonBlockingTCP(NonBlockingTransport, IdleObject):
 	'''
@@ -221,8 +217,12 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 
 		# bytes remained from the last send message
 		self.sendbuff = ''
-		
 
+		self.terminator = '</stream:stream>'
+		
+	def start_disconnect(self):
+		self.send('</stream:stream>')
+		NonBlockingTransport.start_disconnect(self)
 
 	def connect(self, conn_5tuple, on_connect, on_connect_failure):
 		'''
@@ -316,7 +316,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 	def disconnect(self, do_callback=True):
 		if self.state == DISCONNECTED:
 			return
-		self.set_state(DISCONNECTING)
+		self.set_state(DISCONNECTED)
 		self.idlequeue.unplug_idle(self.fd)
 		try:
 			self._sock.shutdown(socket.SHUT_RDWR)
@@ -342,7 +342,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 	
 	
 	def set_timeout(self, timeout):
-		if self.state in [CONNECTING, CONNECTED] and self.fd != -1:
+		if self.state != DISCONNECTED and self.fd != -1:
 			NonBlockingTransport.set_timeout(self, timeout)
 		else:
 			log.warn('set_timeout: TIMEOUT NOT SET: state is %s, fd is %s' % (self.state, self.fd))
@@ -394,6 +394,9 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 		if not self.sendbuff:
 			if not self.sendqueue:
 				log.warn('calling send on empty buffer and queue')
+				self._plug_idle(
+					writable= ((self.sendqueue!=[]) or (self.sendbuff!='')),
+					readable=True)
 				return None
 			self.sendbuff = self.sendqueue.pop(0)
 		try:
@@ -402,7 +405,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 				sent_data = self.sendbuff[:send_count]
 				self.sendbuff = self.sendbuff[send_count:]
 				self._plug_idle(
-					writable=self.sendqueue or self.sendbuff,
+					writable= ((self.sendqueue!=[]) or (self.sendbuff!='')),
 					readable=True)
 				self.raise_event(DATA_SENT, sent_data)
 
@@ -477,7 +480,8 @@ class NonBlockingHTTP(NonBlockingTCP):
 	'''
 
 	def __init__(self, raise_event, on_disconnect, idlequeue, on_http_request_possible,
-			http_uri, http_port, http_version='HTTP/1.1', http_persistent=False):
+			http_uri, http_port, on_persistent_fallback, http_version='HTTP/1.1',
+			http_persistent=False):
 
 		NonBlockingTCP.__init__(self, raise_event, on_disconnect, idlequeue)
 
@@ -493,22 +497,29 @@ class NonBlockingHTTP(NonBlockingTCP):
 		self.recvbuff = ''
 		self.expected_length = 0 
 		self.pending_requests = 0
+		self.on_persistent_fallback = on_persistent_fallback
 		self.on_http_request_possible = on_http_request_possible
+		self.just_responed = False
+		self.last_recv_time = 0
 		
 	def send(self, raw_data, now=False):
 		NonBlockingTCP.send(
 			self,
 			self.build_http_message(raw_data),
 			now)
-		self.pending_requests += 1
 
 
 	def on_remote_disconnect(self):
+		log.warn('on_remote_disconnect called, http_persistent = %s' % self.http_persistent)
 		if self.http_persistent:
 			self.http_persistent = False
+			self.on_persistent_fallback()
 			self.disconnect(do_callback=False)
 			self.connect(
 				conn_5tuple = self.conn_5tuple,
+				# after connect, the socket will be plugged as writable - pollout will be
+				# called, and since there are still data in sendbuff, _do_send will be 
+				# called and sendbuff will be flushed
 				on_connect = lambda: self._plug_idle(writable=True, readable=True),
 				on_connect_failure = self.disconnect)
 
@@ -534,20 +545,21 @@ class NonBlockingHTTP(NonBlockingTCP):
 		if self.expected_length > len(self.recvbuff):
 			# If we haven't received the whole HTTP mess yet, let's end the thread.
 			# It will be finnished from one of following polls (io_watch) on plugged socket.
-			log.info('not enough bytes - %d expected, %d got' % (self.expected_length, len(self.recvbuff)))
+			log.info('not enough bytes in HTTP response - %d expected, %d got' %
+				(self.expected_length, len(self.recvbuff)))
 			return
 
-		# all was received, now call the on_receive callback
+		# everything was received
 		httpbody = self.recvbuff
 
 		self.recvbuff=''
 		self.expected_length=0
-		self.pending_requests -= 1
-		assert(self.pending_requests >= 0)
+
 		if not self.http_persistent:
 			# not-persistent connections disconnect after response
 			self.disconnect(do_callback = False)
-		self.on_receive(httpbody)
+		self.last_recv_time = time.time()
+		self.on_receive(data=httpbody, socket=self)
 		self.on_http_request_possible()
 	
 
@@ -563,6 +575,9 @@ class NonBlockingHTTP(NonBlockingTCP):
 			'Host: %s:%s' % (self.http_host, self.http_port),
 			'Content-Type: text/xml; charset=utf-8',
 			'Content-Length: %s' % len(str(httpbody)),
+			'Proxy-Connection: keep-alive',
+			'Pragma: no-cache',
+			'Accept-Encoding: gzip, deflate',
 			'\r\n']
 		headers = '\r\n'.join(headers)
 		return('%s%s\r\n' % (headers, httpbody))
@@ -586,6 +601,35 @@ class NonBlockingHTTP(NonBlockingTCP):
 			row = dummy.split(' ',1)
 			headers[row[0][:-1]] = row[1]
 		return (statusline, headers, httpbody)
+
+class NonBlockingHTTPBOSH(NonBlockingHTTP):
+
+
+	def set_stanza_build_cb(self, build_cb):
+		self.build_cb = build_cb
+
+	def _do_send(self):
+		if not self.sendbuff:
+			stanza = self.build_cb(socket=self)
+			stanza = self.build_http_message(httpbody=stanza)
+			if isinstance(stanza, unicode): 
+				stanza = stanza.encode('utf-8')
+			elif not isinstance(stanza, str): 
+				stanza = ustr(stanza).encode('utf-8')
+			self.sendbuff = stanza
+		try:
+			send_count = self._send(self.sendbuff)
+			if send_count:
+				sent_data = self.sendbuff[:send_count]
+				self.sendbuff = self.sendbuff[send_count:]
+				self._plug_idle(writable = self.sendbuff != '', readable = True)
+				self.raise_event(DATA_SENT, sent_data)
+
+		except socket.error, e:
+			log.error('_do_send:', exc_info=True)
+			traceback.print_exc()
+			self.disconnect()
+
 
 
 class NBProxySocket(NonBlockingTCP):
@@ -663,7 +707,6 @@ class NBHTTPProxySocket(NBProxySocket):
 		self.after_proxy_connect()
 		#self.onreceive(self._on_proxy_auth)
 
-	# FIXME: find out what it this method for
 	def _on_proxy_auth(self, reply):
 		if self.reply.find('\n\n') == -1:
 			if reply is None:

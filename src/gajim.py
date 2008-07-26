@@ -50,7 +50,7 @@ import logging
 consoleloghandler = logging.StreamHandler()
 consoleloghandler.setLevel(1)
 consoleloghandler.setFormatter(
-	logging.Formatter('%(name)s: %(levelname)s: %(message)s')
+	logging.Formatter('%(asctime)s %(name)s: %(levelname)s: %(message)s')
 	)
 log = logging.getLogger('gajim')
 log.setLevel(logging.WARNING)

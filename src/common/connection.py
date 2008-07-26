@@ -428,11 +428,11 @@ class Connection(ConnectionHandlers):
 		# create connection if it doesn't already exist
 		self.connected = 1
 		if p and p in gajim.config.get_per('proxies'):
-			proxy = {'host': gajim.config.get_per('proxies', p, 'host')}
-			proxy['port'] = gajim.config.get_per('proxies', p, 'port')
-			proxy['user'] = gajim.config.get_per('proxies', p, 'user')
-			proxy['password'] = gajim.config.get_per('proxies', p, 'pass')
-			proxy['type'] = gajim.config.get_per('proxies', p, 'type')
+			proxy = {}
+			proxyptr = gajim.config.get_per('proxies',p)
+			for key in proxyptr.keys(): proxy[key]=proxyptr[key][1]
+			print proxy
+
 		elif gajim.config.get_per('accounts', self.name, 'use_env_http_proxy'):
 			try:
 				try:
@@ -546,11 +546,11 @@ class Connection(ConnectionHandlers):
 				con.RegisterDisconnectHandler(self._on_new_account)
 
 			# FIXME: BOSH properties should be loaded from config
-	                if self._proxy and self._proxy['type'] == 'bosh': 
-				self._proxy['bosh_hold'] = '1'
-				self._proxy['bosh_wait'] = '60'
-				self._proxy['bosh_content'] = 'text/xml; charset=utf-8'
-				self._proxy['wait_for_restart_response'] = False
+			#if self._proxy and self._proxy['type'] == 'bosh': 
+			#	self._proxy['bosh_hold'] = '2'
+			#	self._proxy['bosh_wait'] = '10'
+			#	self._proxy['bosh_content'] = 'text/xml; charset=utf-8'
+			#	self._proxy['wait_for_restart_response'] = False
 
 			
 			log.info('Connecting to %s: [%s:%d]', self.name,
@@ -1003,7 +1003,7 @@ class Connection(ConnectionHandlers):
 
 				self.connection.RegisterDisconnectHandler(self._on_disconnected)
 				self.connection.send(p, now=True)
-				self.connection.StreamTerminate()
+				self.connection.start_disconnect()
 				#self.connection.start_disconnect(p, self._on_disconnected)
 			else:
 				self.time_to_reconnect = None

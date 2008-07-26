@@ -128,8 +128,8 @@ class NBCommonClient:
 			self.ip_addresses = socket.getaddrinfo(hostname,port,
 				socket.AF_UNSPEC,socket.SOCK_STREAM)
 		except socket.gaierror, (errnum, errstr):
-			on_failure(err_message='Lookup failure for %s:%s - %s %s' % 
-				 (self.Server, self.Port, errnum, errstr))
+			on_failure('Lookup failure for %s:%s, hostname: %s - %s' % 
+				 (self.Server, self.Port, hostname, errstr))
 		else:
 			on_success()
 		
@@ -385,7 +385,7 @@ class NonBlockingClient(NBCommonClient):
 			# with proxies, client connects to proxy instead of directly to
 			# XMPP server ((hostname, port))
 			# tcp_host is hostname of machine used for socket connection
-			# (DNS request will be done for this hostname)
+			# (DNS request will be done for proxy or BOSH CM hostname)
 			tcp_host, tcp_port, proxy_user, proxy_pass = \
 				transports_nb.get_proxy_data_from_dict(proxy)
 
@@ -400,7 +400,7 @@ class NonBlockingClient(NBCommonClient):
 						domain = self.Server,
 						bosh_dict = proxy)
 				self.protocol_type = 'BOSH'
-				self.wait_for_restart_response = proxy['wait_for_restart_response']
+				self.wait_for_restart_response = proxy['bosh_wait_for_restart_response']
 
 			else:
 				if proxy['type'] == 'socks5':
