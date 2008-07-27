@@ -2264,10 +2264,13 @@ class ChatControl(ChatControlBase):
 				self.account, 'autonegotiate_esessions') and \
 				gajim.config.get_per('contacts',
 				self.contact.jid, 'autonegotiate_esessions')
+			want_e2e = not e2e_is_active and not self.gpg_is_active \
+				and e2e_pref
+
 			# XXX: Once we have fallback to disco, remove
 			#      notexistant check
-			if not e2e_is_active and e2e_pref and \
-			not self.no_autonegotiation and gajim.HAVE_PYCRYPTO \
+			if want_e2e and not self.no_autonegotiation \
+			and gajim.HAVE_PYCRYPTO \
 			and gajim.capscache.is_supported(self.contact,
 			NS_ESESSION) and not gajim.capscache.is_supported(
 			self.contact, 'notexistant'):
