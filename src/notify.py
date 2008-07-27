@@ -205,13 +205,13 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 		'status_change'): # Common code for popup for these three events
 			if event == 'contact_disconnected':
 				show_image = 'offline.png'
-				suffix = '_notif_size_bw.png'
+				suffix = '_notif_size_bw'
 			else: #Status Change or Connected
 				# FIXME: for status change,
 				# we don't always 'online.png', but we
 				# first need 48x48 for all status
 				show_image = 'online.png'
-				suffix = '_notif_size_colored.png'
+				suffix = '_notif_size_colored'
 			transport_name = gajim.get_transport_name_from_jid(jid)
 			img = None
 			if transport_name:

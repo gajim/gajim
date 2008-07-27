@@ -121,15 +121,6 @@ class VcardWindow:
 		self.progressbar.pulse()
 		return True # loop forever
 
-	def update_avatar_in_gui(self):
-		jid = self.contact.jid
-		# Update roster
-		gajim.interface.roster.draw_avatar(jid, self.account)
-		# Update chat windows
-		ctrl = gajim.interface.msg_win_mgr.get_control(jid, self.account)
-		if ctrl and ctrl.type_id != message_control.TYPE_GC:
-			ctrl.show_avatar()
-
 	def on_vcard_information_window_destroy(self, widget):
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)

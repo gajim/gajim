@@ -4116,7 +4116,7 @@ class RosterWindow:
 		# Update chat window
 
 		ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
-		if ctrl and ctrl.type_id != message_control.TYPE_GC:
+		if ctrl:
 			ctrl.show_avatar()
 
 	def on_roster_treeview_style_set(self, treeview, style):
