@@ -1964,7 +1964,7 @@ class ChatControl(ChatControlBase):
 		gajim.jid_is_transport(jid):
 			toggle_gpg_menuitem.set_sensitive(False)
 		else:
-			toggle_gpg_menuitem.set_sensitive(not e2e_is_active)
+			toggle_gpg_menuitem.set_sensitive(self.gpg_is_active or not e2e_is_active)
 			toggle_gpg_menuitem.set_active(self.gpg_is_active)
 
 		# disable esessions if we or the other client don't support them
@@ -1975,7 +1975,7 @@ class ChatControl(ChatControlBase):
 			toggle_e2e_menuitem.set_sensitive(False)
 		else:
 			toggle_e2e_menuitem.set_active(e2e_is_active)
-			toggle_e2e_menuitem.set_sensitive(not self.gpg_is_active)
+			toggle_e2e_menuitem.set_sensitive(e2e_is_active or not self.gpg_is_active)
 
 		# add_to_roster_menuitem
 		if not hide_buttonbar_entries and _('Not in Roster') in contact.groups:
