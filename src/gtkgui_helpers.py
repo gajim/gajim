@@ -898,6 +898,14 @@ def load_mood_icon(icon_name):
 	icon_list = _load_icon_list([icon_name], path)
 	return icon_list[icon_name]
 
+def load_activity_icon(activity, sub_activity = None):
+	'''load an icon from the activity iconset in 16x16'''
+	iconset = gajim.config.get('activity_iconset')
+	path = os.path.join(helpers.get_activity_iconset_path(iconset),
+		activity, '')
+	icon_list = _load_icon_list(['category'], path)
+	return icon_list['category']
+
 def load_icons_meta():
 	'''load and return  - AND + small icons to put on top left of an icon
 	for meta contacts.'''

@@ -11,6 +11,80 @@ MOODS = ['afraid', 'amazed', 'angry', 'annoyed', 'anxious', 'aroused',
 	'remorseful', 'restless', 'sad', 'sarcastic', 'serious', 'shocked',
 	'shy', 'sick', 'sleepy', 'stressed', 'surprised', 'thirsty', 'worried']
 
+ACTIVITIES = {
+	'doing_chores': {
+		'buying_groceries':	_('Buying Groceries'),
+		'cleaning':		_('Cleaning'),
+		'cooking':		_('Cooking'),
+		'doing_maintenance':	_('Doing Maintenance'),
+		'doing_the_dishes':	_('Doing the Dishes'),
+		'doing_the_laundry':	_('Doing the Laundry'),
+		'gardening':		_('Gardening'),
+		'running_an_errand':	_('Running an Errand'),
+		'walking_the_dog':	_('Walking the Dog')},
+	'drinking': {
+		'having_a_beer':	_('Having a Beer'),
+		'having_coffee':	_('Having Coffee'),
+		'having_tea':		_('Having Tea')},
+	'eating': {
+		'having_a_snack':	_('Having a Snack'),
+		'having_breakfast':	_('Having Breakfast'),
+		'having_dinner':	_('Having Dinner'),
+		'having_lunch':		_('Having Lunch')},
+	'exercising': {
+		'cycling':		_('Cycling'),
+		'hiking':		_('Hiking'),
+		'jogging':		_('Jogging'),
+		'playing_sports':	_('Playing Sports'),
+		'running':		_('Running'),
+		'skiing':		_('Skiing'),
+		'swimming':		_('Swimming'),
+		'working_out':		_('Working out')},
+	'grooming': {
+		'at_the_spa':		_('At the Spa'),
+		'brushing_teeth':	_('Brushing Teeth'),
+		'getting_a_haircut':	_('Getting a Haircut'),
+		'shaving':		_('Shaving'),
+		'taking_a_bath':	_('Taking a Bath'),
+		'taking_a_shower':	_('Taking a Shower')},
+	'having_appointment': {},
+	'inactive': {
+		'day_off':		_('Day Off'),
+		'hanging_out':		_('Haning out'),
+		'on_vacation':		_('On Vacation'),
+		'scheduled_holiday':	_('Scheduled Holiday'),
+		'sleeping':		_('Sleeping')},
+	'relaxing': {
+		'gaming':		_('Gaming'),
+		'going_out':		_('Going out'),
+		'partying':		_('Partying'),
+		'reading':		_('Reading'),
+		'rehearsing':		_('Rehearsing'),
+		'shopping':		_('Shopping'),
+		'socializing':		_('Socializing'),
+		'sunbathing':		_('Sunbathing'),
+		'watching_tv':		_('Watching TV'),
+		'watching_a_movie':	_('Watching a Movie')},
+	'talking': {
+		'in_real_life':		_('In Real Life'),
+		'on_the_phone':		_('On the Phone'),
+		'on_video_phone':	_('On Video Phone')},
+	'traveling': {
+		'commuting':		_('Commuting'),
+		'cycling':		_('Cycling'),
+		'driving':		_('Driving'),
+		'in_a_car':		_('In a Car'),
+		'on_a_bus':		_('On a Bus'),
+		'on_a_plane':		_('On a Plane'),
+		'on_a_train':		_('On a Train'),
+		'on_a_trip':		_('On a Trip'),
+		'walking':		_('Walking')},
+	'working': {
+		'coding':		_('Coding'),
+		'in_a_meeting':		_('In a Meeting'),
+		'studying':		_('Studying'),
+		'writing':		_('Writing')}}
+
 def user_mood(items, name, jid):
 	has_child = False
 	retract = False

@@ -332,63 +332,81 @@ class ChooseGPGKeyDialog:
 
 
 class ChangeActivityDialog:
-	activities = \
-		{'None': [],
-		'doing_chores': ['buying_groceries', 'cleaning', 'cooking',
-			'doing_maintenance', 'doing_the_dishes', 'doing_the_laundry',
-			'gardening', 'running_an_errand', 'walking_the_dog', 'other'],
-		'drinking': ['having_a_beer', 'having_coffee', 'having_tea', 'other'],
-		'eating': ['having_a_snack', 'having_breakfast', 'having_dinner',
-			'having_lunch', 'other'],
-		'excercising': ['cycling', 'hiking', 'jogging', 'playing_sports',
-			'running', 'skiing', 'swimming', 'working_out', 'other'],
-		'grooming': ['at_the_spa', 'brushing_teeth', 'getting_a_haircut',
-			'shaving','taking_a_bath', 'taking_a_shower', 'other'],
-		'having_appointment': [],
-		'inactive': ['day_off', 'hanging_out', 'on_vacation', 'scheduled_holiday',
-			'sleeping', 'other'],
-		'relaxing': ['gaming', 'going_out', 'partying', 'reading', 'rehearsing',
-			'shopping', 'socializing', 'sunbathing', 'watching_tv',
-			'watching_a_movie', 'other'],
-		'talking': ['in_real_life', 'on_the_phone', 'on_video_phone', 'other'],
-		'traveling': ['commuting', 'cycling', 'driving', 'in_a_car', 'on_a_bus',
-			'on_a_plane', 'on_a_train', 'on_a_trip', 'walking', 'other'],
-		'working': ['coding', 'in_a_meeting', 'studying', 'writing', 'other']}
+	PAGELIST = ['working', 'eating', 'exercising', 'relaxing', 'talking',
+		'doing_chores', 'inactive', 'traveling', 'having_appointment',
+		'drinking', 'grooming']
+
 	def __init__(self, account):
 		self.account = account
-		self.xml = gtkgui_helpers.get_glade('change_activity_dialog.glade')
+		self.xml = gtkgui_helpers.get_glade(
+			'change_activity_dialog.glade')
 		self.window = self.xml.get_widget('change_activity_dialog')
 		self.window.set_transient_for(gajim.interface.roster.window)
 
+		self.checkbutton = self.xml.get_widget('enable_checkbutton')
+		self.notebook = self.xml.get_widget('notebook')
 		self.entry = self.xml.get_widget('description_entry')
 
-		self.activity_combo = self.xml.get_widget('activity_combobox')
-		self.liststore1 = gtk.ListStore(str, str) # translated, english
-		self.activity_combo.set_model(self.liststore1)
+		self.activity = None
+		self.subactivity = None
 
-		for activity in self.activities:
-			self.liststore1.append((helpers.get_uf_activity(activity), activity))
+		rbtns = {}
+		group = None
+		for category in pep.ACTIVITIES:
+			item = self.xml.get_widget(category + '_image')
+			item.set_from_pixbuf(
+				gtkgui_helpers.load_activity_icon(
+				category).get_pixbuf())
 
-		cellrenderertext = gtk.CellRendererText()
-		self.activity_combo.pack_start(cellrenderertext, True)
-		self.activity_combo.add_attribute(cellrenderertext, 'text', 0)
+			vbox = self.xml.get_widget(category + '_vbox')
+			for activity in pep.ACTIVITIES[category]:
+				act = category + '_' + activity
 
-		self.subactivity_combo = self.xml.get_widget('subactivity_combobox')
-		self.liststore2 = gtk.ListStore(str, str) # translated, english
-		self.subactivity_combo.set_model(self.liststore2)
+				if group:
+					rbtns[act] = gtk.RadioButton(group)
+				else:
+					rbtns[act] = group = gtk.RadioButton()
 
-		cellrenderertext = gtk.CellRendererText()
-		self.subactivity_combo.pack_start(cellrenderertext, True)
-		self.subactivity_combo.add_attribute(cellrenderertext, 'text', 0)
+				rbtns[act].set_label(
+					pep.ACTIVITIES[category][activity])
+				rbtns[act].connect('toggled',
+					self.on_rbtn_toggled,
+					[category, activity])
+				vbox.pack_start(rbtns[act], False, False, 0)
+
+			# Other
+			act = category + '_other'
+
+			if group:
+				rbtns[act] = gtk.RadioButton(group)
+			else:
+				rbtns[act] = group = gtk.RadioButton()
+
+			rbtns[act].set_label(_('Other'))
+			rbtns[act].connect('toggled', self.on_rbtn_toggled,
+				[category, 'other'])
+			vbox.pack_start(rbtns[act], False, False, 0)
 
 		con = gajim.connections[account]
-		if 'activity' in con.activity and con.activity['activity'] in \
-		self.activities:
-			self.activity_combo.set_active(self.activities.keys().index(
-				con.activity['activity']))
-			self.on_activity_combobox_changed(self.activity_combo)
-		else:
-			self.activity_combo.set_active(0)
+
+		if 'activity' in con.activity \
+		and con.activity['activity'] in pep.ACTIVITIES:
+			if 'subactivity' in con.activity \
+			and pep.ACTIVITIES[con.activity['activity']].has_key(
+			con.activity['subactivity']):
+				subactivity = con.activity['subactivity']
+			else:
+				subactivity = 'other'
+
+			rbtns[con.activity['activity'] + '_' + subactivity]. \
+				set_active(True)
+
+			self.checkbutton.set_active(True)
+			self.notebook.set_sensitive(True)
+			self.entry.set_sensitive(True)
+
+			self.notebook.set_current_page(
+				self.PAGELIST.index(con.activity['activity']))
 
 		if 'text' in con.activity:
 			self.entry.set_text(con.activity['text'])
@@ -396,47 +414,30 @@ class ChangeActivityDialog:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
-	def on_activity_combobox_changed(self, widget):
-		self.liststore2.clear()
-		selected_activity = self.activity_combo.get_active()
-		if selected_activity > -1:
-			selected_activity = self.liststore1[selected_activity][1]
-			if self.activities[selected_activity]:
-				for subactivity in self.activities[selected_activity]:
-					self.liststore2.append((helpers.get_uf_activity(subactivity),
-						subactivity))
-				self.subactivity_combo.set_sensitive(True)
-				con = gajim.connections[self.account]
-				if 'subactivity' in con.activity and con.activity['subactivity'] in\
-				self.activities[selected_activity]:
-					self.subactivity_combo.set_active(self.activities[
-						selected_activity].index(con.activity['subactivity']))
-				else:
-					self.subactivity_combo.set_active(0)
+	def on_enable_checkbutton_toggled(self, widget):
+		self.notebook.set_sensitive(widget.get_active())
+		self.entry.set_sensitive(widget.get_active())
 
-			else:
-				self.subactivity_combo.set_sensitive(False)
+	def on_rbtn_toggled(self, widget, data):
+		if widget.get_active():
+			self.activity = data[0]
+			self.subactivity = data[1]
 
 	def on_ok_button_clicked(self, widget):
-		'''Return activity and messsage (None if no activity selected)'''
-		activity = None
-		subactivity = None
+		'''
+		Return activity and messsage (None if no activity selected)
+		'''
 		message = None
-		active1 = self.activity_combo.get_active()
-		active2 = self.subactivity_combo.get_active()
-		if active1 > -1:
-			activity = self.liststore1[active1][1].decode('utf-8')
-			if active2 > -1:
-				subactivity = self.liststore2[active2][1].decode('utf-8')
-			message = self.entry.get_text().decode('utf-8')
-			if subactivity is None:
-				subactivity = ''
-			if activity == 'None':
-				pep.user_retract_activity(self.account)
-			else:
-				pep.user_send_activity(self.account, activity,
-					subactivity, message)
-			self.window.destroy()
+		if self.checkbutton.get_active():
+			if self.subactivity is 'other':
+				self.subactivity = ''
+
+			pep.user_send_activity(self.account, self.activity,
+				self.subactivity,
+				self.entry.get_text().decode('utf-8'))
+		else:
+			pep.user_retract_activity(self.account)
+		self.window.destroy()
 
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
