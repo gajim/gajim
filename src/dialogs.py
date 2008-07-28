@@ -360,6 +360,9 @@ class ChangeActivityDialog:
 
 			vbox = self.xml.get_widget(category + '_vbox')
 			for activity in pep.ACTIVITIES[category]:
+				if activity == 'category':
+					continue
+
 				act = category + '_' + activity
 
 				if group:

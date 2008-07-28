@@ -12,7 +12,7 @@ MOODS = ['afraid', 'amazed', 'angry', 'annoyed', 'anxious', 'aroused',
 	'shy', 'sick', 'sleepy', 'stressed', 'surprised', 'thirsty', 'worried']
 
 ACTIVITIES = {
-	'doing_chores': {
+	'doing_chores': {'category':	_('Doing Chores'),
 		'buying_groceries':	_('Buying Groceries'),
 		'cleaning':		_('Cleaning'),
 		'cooking':		_('Cooking'),
@@ -22,16 +22,16 @@ ACTIVITIES = {
 		'gardening':		_('Gardening'),
 		'running_an_errand':	_('Running an Errand'),
 		'walking_the_dog':	_('Walking the Dog')},
-	'drinking': {
+	'drinking': {'category':	_('Drinking'),
 		'having_a_beer':	_('Having a Beer'),
 		'having_coffee':	_('Having Coffee'),
 		'having_tea':		_('Having Tea')},
-	'eating': {
+	'eating': {'category':		_('Eating'),
 		'having_a_snack':	_('Having a Snack'),
 		'having_breakfast':	_('Having Breakfast'),
 		'having_dinner':	_('Having Dinner'),
 		'having_lunch':		_('Having Lunch')},
-	'exercising': {
+	'exercising': {'category':	_('Exercising'),
 		'cycling':		_('Cycling'),
 		'hiking':		_('Hiking'),
 		'jogging':		_('Jogging'),
@@ -40,21 +40,21 @@ ACTIVITIES = {
 		'skiing':		_('Skiing'),
 		'swimming':		_('Swimming'),
 		'working_out':		_('Working out')},
-	'grooming': {
+	'grooming': {'category':	_('Grooming'),
 		'at_the_spa':		_('At the Spa'),
 		'brushing_teeth':	_('Brushing Teeth'),
 		'getting_a_haircut':	_('Getting a Haircut'),
 		'shaving':		_('Shaving'),
 		'taking_a_bath':	_('Taking a Bath'),
 		'taking_a_shower':	_('Taking a Shower')},
-	'having_appointment': {},
-	'inactive': {
+	'having_appointment': {'category:': _('Having an Appointment')},
+	'inactive': {'category':	_('Inactive'),
 		'day_off':		_('Day Off'),
 		'hanging_out':		_('Haning out'),
 		'on_vacation':		_('On Vacation'),
 		'scheduled_holiday':	_('Scheduled Holiday'),
 		'sleeping':		_('Sleeping')},
-	'relaxing': {
+	'relaxing': {'category':	_('Relaxing'),
 		'gaming':		_('Gaming'),
 		'going_out':		_('Going out'),
 		'partying':		_('Partying'),
@@ -65,11 +65,11 @@ ACTIVITIES = {
 		'sunbathing':		_('Sunbathing'),
 		'watching_tv':		_('Watching TV'),
 		'watching_a_movie':	_('Watching a Movie')},
-	'talking': {
+	'talking': {'category':		_('Talking'),
 		'in_real_life':		_('In Real Life'),
 		'on_the_phone':		_('On the Phone'),
 		'on_video_phone':	_('On Video Phone')},
-	'traveling': {
+	'traveling': {'category':	_('Traveling'),
 		'commuting':		_('Commuting'),
 		'cycling':		_('Cycling'),
 		'driving':		_('Driving'),
@@ -79,7 +79,7 @@ ACTIVITIES = {
 		'on_a_train':		_('On a Train'),
 		'on_a_trip':		_('On a Trip'),
 		'walking':		_('Walking')},
-	'working': {
+	'working': {'category':		_('Working'),
 		'coding':		_('Coding'),
 		'in_a_meeting':		_('In a Meeting'),
 		'studying':		_('Studying'),
@@ -318,6 +318,14 @@ def user_activity(items, name, jid):
 				del contact.activity['subactivity']
 			if contact.activity.has_key('text'):
 				del contact.activity['text']
+
+	#if jid == gajim.get_jid_from_account(name):
+	#	gajim.interface.roster.draw_account(name)
+	#else:
+	#	gajim.interface.roster.draw_activity(user, name)
+	ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
+	if ctrl:
+		ctrl.update_activity()
 
 def user_nickname(items, name, jid):
 	has_child = False

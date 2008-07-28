@@ -45,7 +45,7 @@ from common.contacts import GC_Contact
 from common.logger import Constants
 constants = Constants()
 from common.rst_xhtml_generator import create_xhtml
-from common.pep import MOODS
+from common.pep import MOODS, ACTIVITIES
 from common.xmpp.protocol import NS_XHTML, NS_FILE, NS_MUC, NS_RECEIPTS
 from common.xmpp.protocol import NS_ESESSION
 
@@ -1105,6 +1105,7 @@ class ChatControl(ChatControlBase):
 			self._tune_tooltip = gtk.Tooltips()
 
 		self.update_mood()
+		self.update_activity()
 		self.update_tune()
 
 		# keep timeout id and window obj for possible big avatar
@@ -1203,21 +1204,16 @@ class ChatControl(ChatControlBase):
 			self._convert_to_gc_button.set_sensitive(False)
 
 	def update_mood(self):
-		if not isinstance(self.contact, GC_Contact) \
-		and self.contact.mood.has_key('mood'):
-			mood = self.contact.mood['mood']
-			if HAVE_MARKUP_TOOLTIPS:
-				mood = gobject.markup_escape_text(mood)
-		else:
-			mood = None
+		mood = None
+		text = ''
 
-		if not isinstance(self.contact, GC_Contact) \
-		and self.contact.mood.has_key('text'):
+		if isinstance(self.contact, GC_Contact):
+			return
+
+		if self.contact.mood.has_key('mood'):
+			mood = self.contact.mood['mood']
+		if self.contact.mood.has_key('text'):
 			text = self.contact.mood['text']
-			if HAVE_MARKUP_TOOLTIPS:
-				text = gobject.markup_escape_text(text)
-		else:
-			text = ''
 
 		if mood is not None:
 			if mood in MOODS:
@@ -1232,6 +1228,9 @@ class ChatControl(ChatControlBase):
 					'unknown').get_pixbuf())
 
 			if HAVE_MARKUP_TOOLTIPS:
+				mood = gobject.markup_escape_text(mood)
+				text = gobject.markup_escape_text(text)
+
 				self._mood_image.set_tooltip_markup(
 					'<b>%s</b>%s%s' % (mood,
 					'\n' if text is not '' else '', text))
@@ -1243,23 +1242,79 @@ class ChatControl(ChatControlBase):
 		else:
 			self._mood_image.hide()
 
+	def update_activity(self):
+		activity    = None
+		subactivity = ''
+		text        = ''
+
+		if isinstance(self.contact, GC_Contact):
+			return
+
+		if self.contact.activity.has_key('activity'):
+			activity = self.contact.activity['activity']
+		if self.contact.activity.has_key('subactivity'):
+			subactivity = self.contact.activity['subactivity']
+		if self.contact.activity.has_key('text'):
+			text = self.contact.activity['text']
+
+		if activity is not None:
+			if activity in ACTIVITIES:
+				self._activity_image.set_from_pixbuf(
+					gtkgui_helpers.load_activity_icon(
+						activity).get_pixbuf())
+				# Translate standard activities
+				if subactivity in ACTIVITIES[activity]:
+					subactivity = ACTIVITIES[activity] \
+						[subactivity]
+				activity = ACTIVITIES[activity]['category']
+			else:
+				self._activity_image.set_from_pixbuf(
+					gtkgui_helpers.load_activity_icon(
+						'unknown').get_pixbuf())
+
+			# Translate standard subactivities
+
+			if HAVE_MARKUP_TOOLTIPS:
+				activity = gobject.markup_escape_text(activity)
+				subactivity = gobject.markup_escape_text(
+					subactivity)
+				text = gobject.markup_escape_text(text)
+
+				self._activity_image.set_tooltip_markup(
+					'<b>%s%s%s</b>%s%s' % (activity,
+					': ' if subactivity is not '' else '',
+					subactivity,
+					'\n' if text is not '' else '', text))
+			else:
+				self._activity_tooltip.set_tip(
+					self._activity_image, '%s%s%s%s%s' % (
+					activity,
+					': ' if subactivity is not '' else '',
+					subactivity,
+					'\n' if text is not '' else '', text))
+
+			self._activity_image.show()
+		else:
+			self._activity_image.hide()
+
+
 	def update_tune(self):
 		artist = None
 		title  = None
 		source = None
 
-		if not isinstance(self.contact, GC_Contact) \
-		and self.contact.tune.has_key('artist'):
+		if isinstance(self.contact, GC_Contact):
+			return
+
+		if self.contact.tune.has_key('artist'):
 			artist = self.contact.tune['artist'].strip()
 			if HAVE_MARKUP_TOOLTIPS:
 				artist = gobject.markup_escape_text(artist)
-		if not isinstance(self.contact, GC_Contact) \
-		and self.contact.tune.has_key('title'):
+		if self.contact.tune.has_key('title'):
 			title = self.contact.tune['title'].strip()
 			if HAVE_MARKUP_TOOLTIPS:
 				title = gobject.markup_escape_text(title)
-		if not isinstance(self.contact, GC_Contact) \
-		and self.contact.tune.has_key('source'):
+		if self.contact.tune.has_key('source'):
 			source = self.contact.tune['source'].strip()
 			if HAVE_MARKUP_TOOLTIPS:
 				source = gobject.markup_escape_text(source)
