@@ -4835,11 +4835,11 @@ msgstr "Mitglied"
 
 #: ../src/common/helpers.py:350
 msgid "afraid"
-msgstr "Besorgt"
+msgstr "Verängstigt"
 
 #: ../src/common/helpers.py:350
 msgid "amazed"
-msgstr "Erstaunt"
+msgstr "Verblüfft"
 
 #: ../src/common/helpers.py:350
 msgid "angry"
@@ -4851,11 +4851,11 @@ msgstr "Verärgert"
 
 #: ../src/common/helpers.py:351
 msgid "anxious"
-msgstr "Bemüht"
+msgstr "Ängstlich"
 
 #: ../src/common/helpers.py:351
 msgid "aroused"
-msgstr "Erregt"
+msgstr "Aufgerüttelt"
 
 #: ../src/common/helpers.py:352
 msgid "ashamed"
@@ -4871,7 +4871,7 @@ msgstr "Tapfer"
 
 #: ../src/common/helpers.py:353
 msgid "calm"
-msgstr "Gelassen"
+msgstr "Ruhig"
 
 #: ../src/common/helpers.py:353
 msgid "cold"
@@ -4887,7 +4887,7 @@ msgstr "Zufrieden"
 
 #: ../src/common/helpers.py:354
 msgid "cranky"
-msgstr "Launisch"
+msgstr "Reizbar"
 
 #: ../src/common/helpers.py:354
 msgid "curious"
@@ -4931,7 +4931,7 @@ msgstr "Mürrisch"
 
 #: ../src/common/helpers.py:359
 msgid "guilty"
-msgstr "Schuldig"
+msgstr "Schuldbewusst"
 
 #: ../src/common/helpers.py:359
 msgid "happy"
@@ -4947,7 +4947,7 @@ msgstr "Demütig"
 
 #: ../src/common/helpers.py:360
 msgid "humiliated"
-msgstr "Beschämt"
+msgstr "Gedemütigt"
 
 #: ../src/common/helpers.py:361
 msgid "hungry"
@@ -4983,7 +4983,7 @@ msgstr "Betrunken"
 
 #: ../src/common/helpers.py:364
 msgid "invincible"
-msgstr "unsichtbar"
+msgstr "Unbesiegbar"
 
 #: ../src/common/helpers.py:364
 msgid "jealous"
@@ -5015,7 +5015,7 @@ msgstr "Beleidigt"
 
 #: ../src/common/helpers.py:366
 msgid "playful"
-msgstr "Verspielt"
+msgstr "Scherzhaft"
 
 #: ../src/common/helpers.py:367
 msgid "proud"
@@ -9179,7 +9179,7 @@ msgid ""
 "It is most likely legacy or broken"
 msgstr ""
 "Dieser Dienst konnte nicht mit detaillierten Informationen antworten\n"
-"Er ist wahrscheinlich verwaltet oder defekt"
+"Er ist wahrscheinlich veraltet oder defekt"
 
 #: ../src/vcard.py:237
 msgid "?Client:Unknown"
