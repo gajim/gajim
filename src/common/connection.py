@@ -431,7 +431,6 @@ class Connection(ConnectionHandlers):
 			proxy = {}
 			proxyptr = gajim.config.get_per('proxies',p)
 			for key in proxyptr.keys(): proxy[key]=proxyptr[key][1]
-			print proxy
 
 		elif gajim.config.get_per('accounts', self.name, 'use_env_http_proxy'):
 			try:

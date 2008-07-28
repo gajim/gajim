@@ -71,6 +71,7 @@ class NBCommonClient:
 		
 		self.connected=''
 		log.debug('Client disconnected..')
+		print 'ffffffffffffffffff'
 		for i in reversed(self.disconnect_handlers):
 			log.debug('Calling disconnect handler %s' % i)
 			i()
@@ -393,10 +394,11 @@ class NonBlockingClient(NBCommonClient):
 		
 			if proxy['type'] == 'bosh':
 				self.socket = bosh.NonBlockingBOSH(
-						on_disconnect=self.on_disconnect,
+						on_disconnect = self.on_disconnect,
 						raise_event = self.raise_event,
 						idlequeue = self.idlequeue,
-						xmpp_server=(xmpp_hostname, self.Port),
+						proxy_creds = (proxy_user, proxy_pass),
+						xmpp_server = (xmpp_hostname, self.Port),
 						domain = self.Server,
 						bosh_dict = proxy)
 				self.protocol_type = 'BOSH'
@@ -408,19 +410,19 @@ class NonBlockingClient(NBCommonClient):
 				elif proxy['type'] == 'http':
 					proxy_class = transports_nb.NBHTTPProxySocket
 				self.socket = proxy_class(
-					on_disconnect=self.on_disconnect,
+					on_disconnect = self.on_disconnect,
 					raise_event = self.raise_event,
 					idlequeue = self.idlequeue,
-					proxy_creds=(proxy_user, proxy_pass),
-					xmpp_server=(xmpp_hostname, self.Port))
+					proxy_creds = (proxy_user, proxy_pass),
+					xmpp_server = (xmpp_hostname, self.Port))
 		else: 
 			self._on_tcp_failure = self._on_connect_failure
 			tcp_host=xmpp_hostname
 			tcp_port=self.Port
 			self.socket = transports_nb.NonBlockingTCP(
+					on_disconnect = self.on_disconnect,
 					raise_event = self.raise_event,
-					idlequeue = self.idlequeue,
-					on_disconnect = self.on_disconnect)
+					idlequeue = self.idlequeue)
 
 		self.socket.PlugIn(self)
 

@@ -480,19 +480,24 @@ class NonBlockingHTTP(NonBlockingTCP):
 	'''
 
 	def __init__(self, raise_event, on_disconnect, idlequeue, on_http_request_possible,
-			http_uri, http_port, on_persistent_fallback, http_version='HTTP/1.1',
-			http_persistent=False):
+			on_persistent_fallback, http_dict):
 
 		NonBlockingTCP.__init__(self, raise_event, on_disconnect, idlequeue)
 
-		self.http_protocol, self.http_host, self.http_path = urisplit(http_uri)
+		self.http_protocol, self.http_host, self.http_path = urisplit(http_dict['http_uri'])
 		if self.http_protocol is None:
 			self.http_protocol = 'http'
 		if self.http_path == '':
-			http_path = '/'
-		self.http_port = http_port
-		self.http_version = http_version
-		self.http_persistent = http_persistent
+			self.http_path = '/'
+		self.http_port = http_dict['http_port']
+		self.http_version = http_dict['http_version']
+		self.http_persistent = http_dict['http_persistent']
+		self.over_proxy =  http_dict['over_proxy']
+		if http_dict.has_key('proxy_user') and http_dict.has_key('proxy_pass'):
+			self.proxy_user, self.proxy_pass = http_dict['proxy_user'], http_dict['proxy_pass']
+		else:
+			self.proxy_user, self.proxy_pass = None, None
+
 		# buffer for partial responses
 		self.recvbuff = ''
 		self.expected_length = 0 
@@ -574,11 +579,15 @@ class NonBlockingHTTP(NonBlockingTCP):
 		headers = ['%s %s %s' % (method, absolute_uri, self.http_version),
 			'Host: %s:%s' % (self.http_host, self.http_port),
 			'Content-Type: text/xml; charset=utf-8',
-			'Content-Length: %s' % len(str(httpbody)),
-			'Proxy-Connection: keep-alive',
-			'Pragma: no-cache',
-			'Accept-Encoding: gzip, deflate',
-			'\r\n']
+			'Content-Length: %s' % len(str(httpbody))]
+		if self.over_proxy:
+			headers.append('Proxy-Connection: keep-alive')
+			headers.append('Pragma: no-cache')
+			if self.proxy_user and self.proxy_pass:
+				credentials = '%s:%s' % (self.proxy_user, self.proxy_pass)
+				credentials = base64.encodestring(credentials).strip()
+				headers.append('Proxy-Authorization: Basic %s' % credentials)
+		headers.append('\r\n')
 		headers = '\r\n'.join(headers)
 		return('%s%s\r\n' % (headers, httpbody))
 
@@ -678,7 +687,7 @@ class NBHTTPProxySocket(NBProxySocket):
 			'Proxy-Connection: Keep-Alive',
 			'Pragma: no-cache',
 			'Host: %s:%s' % self.xmpp_server,
-			'User-Agent: HTTPPROXYsocket/v0.1']
+			'User-Agent: Gajim']
 		if self.proxy_user and self.proxy_pass:
 			credentials = '%s:%s' % (self.proxy_user, self.proxy_pass)
 			credentials = base64.encodestring(credentials).strip()

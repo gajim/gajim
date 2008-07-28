@@ -20,7 +20,7 @@ In TCP-derived transports it is file descriptor of socket'''
 
 class NonBlockingBOSH(NonBlockingTransport):
 	def __init__(self, raise_event, on_disconnect, idlequeue, xmpp_server, domain,
-		bosh_dict):
+		bosh_dict, proxy_creds):
 		NonBlockingTransport.__init__(self, raise_event, on_disconnect, idlequeue)
 
 		self.bosh_sid = None
@@ -42,7 +42,9 @@ class NonBlockingBOSH(NonBlockingTransport):
 		self.bosh_uri = bosh_dict['bosh_uri']
 		self.bosh_port = bosh_dict['bosh_port']
 		self.bosh_content = bosh_dict['bosh_content']
-
+		self.over_proxy = bosh_dict['bosh_useproxy']
+		self.use_proxy_auth = bosh_dict['useauth']
+		self.proxy_creds = proxy_creds
 		self.wait_cb_time = None
 		self.http_socks = []
 		self.stanza_buffer = []
@@ -289,8 +291,6 @@ class NonBlockingBOSH(NonBlockingTransport):
 		return t
 		
 
-
-
 	def connect_and_flush(self, socket):
 		socket.connect(
 			conn_5tuple = self.conn_5tuple, 
@@ -334,15 +334,21 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 
 	def get_new_http_socket(self):
+		http_dict = {'http_uri': self.bosh_uri,			
+			'http_port': self.bosh_port,
+			'http_version': self.http_version,
+			'http_persistent': self.http_persistent,
+			'over_proxy': self.over_proxy}
+		if self.use_proxy_auth:
+			http_dict['proxy_user'], http_dict['proxy_pass'] = self.proxy_creds
+
+
 		s = NonBlockingHTTPBOSH(
 			raise_event=self.raise_event,
 			on_disconnect=self.disconnect,
 			idlequeue = self.idlequeue,
 			on_http_request_possible = self.on_http_request_possible,
-			http_uri = self.bosh_uri,			
-			http_port = self.bosh_port,
-			http_version = self.http_version,
-			http_persistent = self.http_persistent,
+			http_dict = http_dict,
 			on_persistent_fallback = self.on_persistent_fallback)
 		s.onreceive(self.on_received_http)
 		s.set_stanza_build_cb(self.build_stanza)
