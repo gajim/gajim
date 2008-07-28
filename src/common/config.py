@@ -274,6 +274,7 @@ class Config:
 			'autopriority_dnd': [ opt_int, 20],
 			'autopriority_invisible': [ opt_int, 10],
 			'autoconnect': [ opt_bool, False, '', True ],
+			'dont_restore_last_status': [ opt_bool, False, _('If enabled, don\'t restore the last status that was used.') ],
 			'autoreconnect': [ opt_bool, True ],
 			'active': [ opt_bool, True],
 			'proxy': [ opt_str, '', '', True ],

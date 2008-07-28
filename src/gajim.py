@@ -2777,12 +2777,16 @@ class Interface:
 		# dict of account that want to connect sorted by status
 		for a in gajim.connections:
 			if gajim.config.get_per('accounts', a, 'autoconnect'):
-				self.roster.send_status(a,
-					gajim.config.get_per('accounts', a, 
-					'last_status'),
-					helpers.from_one_line(
-					gajim.config.get_per('accounts', a,
-					'last_status_msg')))
+				if not gajim.config.get_per('accounts', a,
+				'dont_restore_last_status'):
+					self.roster.send_status(a,
+						gajim.config.get_per('accounts',
+						a, 'last_status'),
+						helpers.from_one_line(
+						gajim.config.get_per('accounts',
+						a, 'last_status_msg')))
+				else:
+					self.roster.send_status(a, 'online', '')
 		return False
 
 	def show_systray(self):
