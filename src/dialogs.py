@@ -346,6 +346,7 @@ class ChangeActivityDialog:
 		self.checkbutton = self.xml.get_widget('enable_checkbutton')
 		self.notebook = self.xml.get_widget('notebook')
 		self.entry = self.xml.get_widget('description_entry')
+		self.ok_button = self.xml.get_widget('ok_button')
 
 		self.activity = None
 		self.subactivity = None
@@ -418,10 +419,18 @@ class ChangeActivityDialog:
 		self.notebook.set_sensitive(widget.get_active())
 		self.entry.set_sensitive(widget.get_active())
 
+		if widget.get_active() and (self.activity is None \
+		or self.subactivity is None):
+			self.ok_button.set_sensitive(False)
+		else:
+			self.ok_button.set_sensitive(True)
+
 	def on_rbtn_toggled(self, widget, data):
 		if widget.get_active():
 			self.activity = data[0]
 			self.subactivity = data[1]
+
+		self.ok_button.set_sensitive(True)
 
 	def on_ok_button_clicked(self, widget):
 		'''
