@@ -90,3 +90,5 @@ class StatusIcon(systray.Systray):
 		#or they were lazy to get it to work under Windows! WTF!
 		#elif image.get_storage_type() == gtk.IMAGE_ANIMATION:
 		#	self.img_tray.set_from_animation(image.get_animation())
+
+# vim: se ts=3:

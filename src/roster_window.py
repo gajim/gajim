@@ -6333,3 +6333,5 @@ class RosterWindow:
 		if sys.platform == 'darwin':
 			self.setup_for_osx()
 
+
+# vim: se ts=3:

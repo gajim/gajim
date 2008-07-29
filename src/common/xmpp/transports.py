@@ -287,3 +287,5 @@ class TLS(PlugIn):
         self._startSSL()
         self._owner.Dispatcher.PlugOut()
         dispatcher.Dispatcher().PlugIn(self._owner)
+
+# vim: se ts=3:

@@ -3736,3 +3736,5 @@ class ManagePEPServicesWindow:
 		title = "Configure %s" % node
 		window.set_title(title) 
 		window.show_all()
+
+# vim: se ts=3:

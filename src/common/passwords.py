@@ -137,3 +137,5 @@ def get_password(account_name):
 
 def save_password(account_name, password):
 	return get_storage().save_password(account_name, password)
+
+# vim: se ts=3:

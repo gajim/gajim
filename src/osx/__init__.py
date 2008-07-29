@@ -41,3 +41,5 @@ def netDeviceChanged():
 		net_device_active = True
 		device_now_active(None)
 	return
+
+# vim: se ts=3:

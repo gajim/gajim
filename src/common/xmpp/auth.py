@@ -304,3 +304,5 @@ class ComponentBind(PlugIn):
         else:
             self.DEBUG('Binding failed: timeout expired.','error')
             return ''
+
+# vim: se ts=3:

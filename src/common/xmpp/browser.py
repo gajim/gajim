@@ -214,3 +214,5 @@ class Browser(PlugIn):
             if dt.has_key('xdata'): q.addChild(node=dt['xdata'])
         conn.send(rep)
         raise NodeProcessed
+
+# vim: se ts=3:

@@ -146,3 +146,5 @@ def check_and_possibly_create_paths():
 def create_path(directory):
 	print _('creating %s directory') % directory
 	os.mkdir(directory, 0700)
+
+# vim: se ts=3:

@@ -715,3 +715,5 @@ class ClientZeroconf:
 		# otherwise open new connection
 		P2PClient(None, item['address'], item['port'], self,
 			[(stanza, is_message)], to, on_ok=on_ok, on_not_ok=on_not_ok)
+
+# vim: se ts=3:

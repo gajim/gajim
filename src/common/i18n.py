@@ -86,3 +86,5 @@ def ngettext(s_sing, s_plural, n, replace_sing = None, replace_plural = None):
 	elif n > 1 and replace_plural is not None:
 		text = text % replace_plural
 	return text
+
+# vim: se ts=3:

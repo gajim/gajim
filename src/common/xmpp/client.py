@@ -320,3 +320,5 @@ class Component(CommonClient):
                 raise auth.NotAuthorized(self.SASL.startsasl)
         except:
             self.DEBUG(self.DBG,"Failed to authenticate %s"%name,'error')
+
+# vim: se ts=3:

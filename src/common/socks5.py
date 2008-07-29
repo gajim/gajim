@@ -1083,3 +1083,5 @@ class Socks5Receiver(Socks5, IdleObject):
 			self.file_props['disconnect_cb'] = None
 		if self.queue is not None:
 			self.queue.remove_receiver(self.queue_idx, False)
+
+# vim: se ts=3:

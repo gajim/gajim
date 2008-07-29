@@ -49,3 +49,5 @@ emoticons = {
 	'puke.gif': [':-!'],
 }
 
+
+# vim: se ts=3:

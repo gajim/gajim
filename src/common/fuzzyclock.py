@@ -139,3 +139,5 @@ class FuzzyClock:
 				newTimeStr = self.__fuzzyWeek[3]
 
 		return newTimeStr
+
+# vim: se ts=3:

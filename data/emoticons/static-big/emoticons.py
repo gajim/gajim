@@ -41,3 +41,5 @@ emoticons = {
 	'rainbow.png': ['(R)'],
 	'puke.png': [':-!'],
 }
+
+# vim: se ts=3:

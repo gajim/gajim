@@ -595,3 +595,5 @@ class OptionsParser:
 			pass
 		con.close()
 		gajim.config.set('version', '0.11.4.4')
+
+# vim: se ts=3:

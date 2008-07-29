@@ -585,3 +585,5 @@ class DesktopNotification:
 	def version_error_handler_3_x_try(self, e):
 		self.version = self.default_version
 		self.attempt_notify()
+
+# vim: se ts=3:

@@ -481,3 +481,5 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream, connecti
 
 	def remove_transfer(self, file_props, remove_from_list = True):
 		pass
+
+# vim: se ts=3:

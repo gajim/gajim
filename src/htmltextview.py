@@ -1147,3 +1147,5 @@ if __name__ == '__main__':
 	w.show_all()
 	w.connect('destroy', lambda w: gtk.main_quit())
 	gtk.main()
+
+# vim: se ts=3:

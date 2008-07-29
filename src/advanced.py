@@ -271,3 +271,5 @@ class AdvancedConfigurationWindow(object):
 
 	def on_advanced_entry_changed(self, widget):
 		self.modelfilter.refilter()
+
+# vim: se ts=3:

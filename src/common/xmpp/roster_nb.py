@@ -57,3 +57,5 @@ class NonBlockingRoster(Roster):
 			on_ready = None
 		else:
 			return self
+
+# vim: se ts=3:

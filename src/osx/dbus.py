@@ -129,3 +129,5 @@ def shutdown():
 		return
 	os.kill(int(env[1]), signal.SIGINT)
 	return
+
+# vim: se ts=3:

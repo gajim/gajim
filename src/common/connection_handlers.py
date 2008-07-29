@@ -2447,3 +2447,5 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		con.RegisterHandler('presence', self._StanzaArrivedCB)
 		con.RegisterHandler('message', self._StanzaArrivedCB)
 		con.RegisterHandler('unknown', self._StreamCB, 'urn:ietf:params:xml:ns:xmpp-streams', xmlns='http://etherx.jabber.org/streams')
+
+# vim: se ts=3:

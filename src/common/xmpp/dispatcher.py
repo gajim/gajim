@@ -381,3 +381,5 @@ class Dispatcher(PlugIn):
         """ Send a stream terminator and and handle all incoming stanzas before stream closure. """
         self._owner_send('</stream:stream>')
         while self.Process(1): pass
+
+# vim: se ts=3:

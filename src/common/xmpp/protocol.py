@@ -776,3 +776,5 @@ class DataForm(Node):
     def __setitem__(self,name,val):
         """ Simple dictionary interface for setting datafields values by their names."""
         return self.setField(name).setValue(val)
+
+# vim: se ts=3:

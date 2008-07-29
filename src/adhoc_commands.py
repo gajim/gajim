@@ -516,3 +516,5 @@ class CommandWindow:
 			# we did not received any reply from service; FIXME: we should wait and
 			# then send cancel; for now we do nothing
 			pass
+
+# vim: se ts=3:

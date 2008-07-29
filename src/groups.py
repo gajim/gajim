@@ -45,3 +45,5 @@ class GroupsPostWindow:
 
 		# close the window
 		self.window.destroy()
+
+# vim: se ts=3:

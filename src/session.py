@@ -461,3 +461,5 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 					resource = resource, session = self)
 
 			negotiation.FeatureNegotiationWindow(account, self.jid, self, form)
+
+# vim: se ts=3:

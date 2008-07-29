@@ -348,3 +348,5 @@ class Session:
             Note that some features (like TLS and SASL)
             requires stream re-start so this state can have non-linear changes. """
         if self._stream_state<newstate: self._stream_state=newstate
+
+# vim: se ts=3:

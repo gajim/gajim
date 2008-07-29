@@ -553,3 +553,5 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				self.dispatch('STANZA_SENT', unicode(data))
 
 # END ConnectionZeroconf
+
+# vim: se ts=3:

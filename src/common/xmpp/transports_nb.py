@@ -1114,3 +1114,5 @@ class NBSOCKS5PROXYsocket(NonBlockingTcp):
 	def DEBUG(self, text, severity):
 		''' Overwrites DEBUG tag to allow debug output be presented as "CONNECTproxy".'''
 		return self._owner.DEBUG(DBG_CONNECT_PROXY, text, severity)
+
+# vim: se ts=3:

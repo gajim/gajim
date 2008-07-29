@@ -3846,3 +3846,5 @@ class ESessionInfoWindow:
 			self.session._verified_srs_cb()
 			self.session.verified_identity = True
 			self.update_info()
+
+# vim: se ts=3:

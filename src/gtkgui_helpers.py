@@ -979,3 +979,5 @@ def make_jabber_state_images():
 def reload_jabber_state_images():
 	make_jabber_state_images()
 	gajim.interface.roster.update_jabber_state_images()
+
+# vim: se ts=3:

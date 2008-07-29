@@ -84,3 +84,5 @@ def powmod(base, exp, mod):
 		exp /= 2
 
 	return result
+
+# vim: se ts=3:

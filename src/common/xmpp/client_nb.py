@@ -407,3 +407,5 @@ class Component(NBCommonClient):
 	def _on_component_bound(self, resp):
 		self.NBComponentBind.PlugOut()
 		
+
+# vim: se ts=3:

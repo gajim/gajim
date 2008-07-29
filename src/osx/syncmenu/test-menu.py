@@ -76,3 +76,5 @@ menubar.hide()
 syncmenu.takeover_menu(menubar)
 
 gtk.main()
+
+# vim: se ts=3:

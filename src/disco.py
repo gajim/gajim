@@ -1995,3 +1995,5 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
 # Fill the global agent type info dictionary
 _agent_type_info = _gen_agent_type_info()
+
+# vim: se ts=3:

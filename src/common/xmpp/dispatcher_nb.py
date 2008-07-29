@@ -437,3 +437,5 @@ class Dispatcher(PlugIn):
 	def disconnect(self):
 		''' Send a stream terminator. '''
 		self._owner.Connection.send('</stream:stream>')
+
+# vim: se ts=3:

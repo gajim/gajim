@@ -388,3 +388,5 @@ def get_priority(account, show):
 	config.get_per('accounts', account, 'adjust_priority_with_status'):
 		return config.get_per('accounts', account, 'autopriority_' + show)
 	return config.get_per('accounts', account, 'priority')
+
+# vim: se ts=3:

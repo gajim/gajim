@@ -579,3 +579,5 @@ class SingleForm(gtk.Table, object):
 	def on_jid_multi_clean_button_clicked(self, widget, model, field):
 		model.clear()
 		del field.values
+
+# vim: se ts=3:

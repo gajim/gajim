@@ -333,3 +333,5 @@ if __name__ == '__main__':
 
 	gobject.timeout_add(200, process)
 	gtk.main()
+
+# vim: se ts=3:

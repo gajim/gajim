@@ -182,3 +182,5 @@ def delPrivacyList(disp,listname):
     """ Deletes privacy list 'listname'. Returns true on success."""
     resp=disp.SendAndWaitForResponse(Iq('set',NS_PRIVACY,payload=[Node('list',{'name':listname})]))
     if isResultNode(resp): return 1
+
+# vim: se ts=3:

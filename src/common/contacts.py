@@ -614,3 +614,5 @@ class Contacts:
 		if not nick in nick_list:
 			return None
 		return self._gc_contacts[account][room_jid][nick]
+
+# vim: se ts=3:

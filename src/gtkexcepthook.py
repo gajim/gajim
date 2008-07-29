@@ -107,3 +107,5 @@ if __name__ == '__main__':
 	_excepthook_save = sys.excepthook
 	sys.excepthook = _info
 	print x # this always tracebacks
+
+# vim: se ts=3:

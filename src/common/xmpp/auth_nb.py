@@ -427,3 +427,5 @@ class NBComponentBind(ComponentBind):
 			self.DEBUG('Binding failed: timeout expired.', 'error')
 		if self.on_bind:
 			self.on_bind(None)
+
+# vim: se ts=3:

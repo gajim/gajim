@@ -275,3 +275,5 @@ class HostTester(Socks5, IdleObject):
 		self.idlequeue.plug_idle(self, True, False)
 		return 
 		
+
+# vim: se ts=3:

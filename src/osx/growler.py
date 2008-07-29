@@ -61,3 +61,5 @@ def filterString(string):
 	string = string.replace("&quot;", "'")
 	return string
 
+
+# vim: se ts=3:

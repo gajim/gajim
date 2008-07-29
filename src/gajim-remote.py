@@ -544,3 +544,5 @@ class GajimRemote:
 
 if __name__ == '__main__':
 	GajimRemote()
+
+# vim: se ts=3:

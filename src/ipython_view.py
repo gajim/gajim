@@ -521,3 +521,5 @@ class IPythonView(ConsoleView, IterableIPShell):
     self.showReturned(rv)
     self.cout.truncate(0)
     
+
+# vim: se ts=3:

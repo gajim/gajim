@@ -30,3 +30,5 @@ import simplexml,protocol,debug,auth_nb,auth,transports,transports_nb,roster_nb,
 from client_nb import *
 from client import *
 from protocol import *
+
+# vim: se ts=3:

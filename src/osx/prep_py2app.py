@@ -21,3 +21,5 @@ if ((lib_dyn > -1) and (site_zip > -1)):
 	sys.path[site_zip] = tmp
 if py > -1:
 	del sys.path[py]
+
+# vim: se ts=3:

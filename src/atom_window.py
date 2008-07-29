@@ -133,3 +133,5 @@ class AtomWindow:
 			if uri is not None:
 				helpers.launch_browser_mailer('url', uri)
 		return True
+
+# vim: se ts=3:

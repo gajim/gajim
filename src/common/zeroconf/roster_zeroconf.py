@@ -161,3 +161,5 @@ class Roster:
 
 	def Unauthorize(self,jid):
 		pass
+
+# vim: se ts=3:

@@ -467,3 +467,5 @@ def user_retract_tune(account):
 
 def user_retract_nickname(account):
 	gajim.connections[account].send_pb_retract('', xmpp.NS_NICK, '0')
+
+# vim: se ts=3:

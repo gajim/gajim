@@ -1286,3 +1286,5 @@ def update_optional_features(account = None):
 		if connected > 1 and gajim.SHOW_LIST[connected] != 'invisible':
 			gajim.connections[a].change_status(gajim.SHOW_LIST[connected],
 				gajim.connections[a].status)
+
+# vim: se ts=3:

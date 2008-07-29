@@ -1236,3 +1236,5 @@ class ConversationTextview:
 		# add the rest of text located in the index and after
 		end_iter = buffer.get_end_iter()
 		buffer.insert_with_tags_by_name(end_iter, text[index:], *text_tags)
+
+# vim: se ts=3:

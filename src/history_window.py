@@ -580,3 +580,5 @@ class HistoryWindow:
 			# otherwise 
 			self._load_history(jid, account)
 		self.results_window.set_property('visible', False)
+
+# vim: se ts=3:

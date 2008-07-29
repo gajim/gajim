@@ -205,3 +205,5 @@ def hex_to_decimal(stripee):
 	return int(stripee.translate(all_ascii, string.whitespace), 16)
 
 primes = map(hex_to_decimal, hex_primes)
+
+# vim: se ts=3:

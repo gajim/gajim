@@ -101,3 +101,5 @@ if __name__ == '__main__':
 	else:
 		print 'Now playing: "%s" by %s' % (track.title, track.artist)
 	gobject.MainLoop().run()
+
+# vim: se ts=3:

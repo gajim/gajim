@@ -404,3 +404,5 @@ class Systray:
 			self.t.destroy()
 			self.t = None
 			self.unsubscribe_events()
+
+# vim: se ts=3:

@@ -2603,3 +2603,5 @@ class ChatControl(ChatControlBase):
 			self.print_conversation(' (', 'status', simple=True)
 			self.print_conversation('%s' % (status), 'status', simple=True)
 			self.print_conversation(')', 'status', simple=True)
+
+# vim: se ts=3:

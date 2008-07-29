@@ -1087,3 +1087,5 @@ May be useful some day in the future?'''
 							ctrl.type_id)
 			ctrl.parent_win = mw
 			mw.new_tab(ctrl)
+
+# vim: se ts=3:

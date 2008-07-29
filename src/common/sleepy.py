@@ -128,3 +128,5 @@ if os.name == 'nt':
 	Sleepy = SleepyWindows
 else:
 	Sleepy = SleepyUnix
+
+# vim: se ts=3:

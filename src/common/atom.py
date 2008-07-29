@@ -134,3 +134,5 @@ class OldEntry(xmpp.Node, object):
 		''' Last significant modification time. ''')
 
 	feed_tagline = u''
+
+# vim: se ts=3:

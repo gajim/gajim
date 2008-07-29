@@ -58,3 +58,5 @@ else:
 									'/org/freedesktop/NetworkManager')
 	except:
 		pass
+
+# vim: se ts=3:

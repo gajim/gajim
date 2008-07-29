@@ -198,3 +198,5 @@ elif sys.argv[1] == "build":
 	finishApp()
 elif sys.argv[1] == "dist":
 	distApp()
+
+# vim: se ts=3:

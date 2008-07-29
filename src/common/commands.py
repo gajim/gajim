@@ -412,3 +412,5 @@ class ConnectionCommands:
 				del self.__sessions[magictuple]
 
 			raise xmpp.NodeProcessed
+
+# vim: se ts=3:

@@ -649,3 +649,5 @@ class Config:
 			self.add_per('defaultstatusmsg', status)
 			self.set_per('defaultstatusmsg', status, 'enabled', default[0])
 			self.set_per('defaultstatusmsg', status, 'message', default[1])
+
+# vim: se ts=3:

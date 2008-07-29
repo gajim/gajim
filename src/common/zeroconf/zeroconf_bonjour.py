@@ -334,3 +334,5 @@ class Zeroconf:
 			return False
 		return True
 
+
+# vim: se ts=3:

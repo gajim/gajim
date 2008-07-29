@@ -655,3 +655,5 @@ GnuPGInterface = GnuPG
 
 if __name__ == '__main__':
     _run_doctests()
+
+# vim: se ts=3:

@@ -149,3 +149,5 @@ if supported:
 	class InvalidArgument(dbus.DBusException):
 		'''Raised when one of the provided arguments is invalid.'''
 		_dbus_error_name = _GAJIM_ERROR_IFACE + '.InvalidArgument'
+
+# vim: se ts=3:

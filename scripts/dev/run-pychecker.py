@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 # (C) 2006 Nikos Kouremenos <kourem@gmail.com>
 
 import os
@@ -10,3 +10,5 @@ if os.getcwd().endswith('dev'):
 os.system('pychecker --limit 10000 --no-shadowbuiltin *.py &> /tmp/pychecker-gajim.log')
 os.system('$EDITOR /tmp/pychecker-gajim.log')
 
+
+# vim: se ts=3:

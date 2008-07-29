@@ -197,3 +197,5 @@ class IBB(PlugIn):
                         stream['direction']=stream['direction'][1:]
                         conn.Event(self.DBG_LINE,'STREAM COMMITTED',stream)
                     else: conn.send(Error(stanza,ERR_UNEXPECTED_REQUEST))
+
+# vim: se ts=3:

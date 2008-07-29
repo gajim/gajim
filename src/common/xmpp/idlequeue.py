@@ -219,3 +219,5 @@ class SelectIdleQueue(IdleQueue):
 				q.pollend()
 		self.check_time_events()
 		return True
+
+# vim: se ts=3:

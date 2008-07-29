@@ -525,3 +525,5 @@ class ZeroconfVcardWindow:
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
+
+# vim: se ts=3:

@@ -119,3 +119,5 @@ gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.KP_Enter,
 gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.KP_Enter, 
 	gtk.gdk.CONTROL_MASK, 'mykeypress', int, gtk.keysyms.KP_Enter,
 	gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK)
+
+# vim: se ts=3:

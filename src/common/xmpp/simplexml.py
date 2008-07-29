@@ -424,3 +424,5 @@ def BadXML2Node(xml):
 		I.e. "<html>some text <br>some more text". Will raise xml.parser.expat.parsererror on misplaced
 		tags though. F.e. "<b>some text <br>some more text</b>" will not work."""
 	return NodeBuilder(xml).getDom()
+
+# vim: se ts=3:

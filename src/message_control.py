@@ -175,3 +175,5 @@ class MessageControl:
 			resource = self.resource, user_nick = user_nick,
 			session = self.session,
 			original_message = original_message)
+
+# vim: se ts=3:

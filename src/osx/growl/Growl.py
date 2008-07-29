@@ -245,3 +245,5 @@ class GrowlNotifier(object):
 
     def notifyCB(self, userdata):
         print "Got notify in pyland", userdata
+
+# vim: se ts=3:

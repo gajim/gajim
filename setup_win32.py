@@ -75,3 +75,5 @@ setup(
                 ('.', glob.glob('src/history_manager.glade')),
     ],
 )
+
+# vim: se ts=3:

@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 """
 LastFM Python class
 Copyright (C) 2007 Olivier Mehani <shtrom@ssji.net>
@@ -215,3 +215,5 @@ if __name__ == '__main__':
 		if lfm.updateData():
 			print lfm.formatSongTitle()
 		sleep(60) 
+
+# vim: se ts=3:

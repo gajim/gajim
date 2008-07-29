@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 from distutils.core import setup, Extension
 import sys
 
@@ -23,3 +23,5 @@ setup(name="py-Growl",
       py_modules=["Growl"],
       ext_modules = modules )
 
+
+# vim: se ts=3:

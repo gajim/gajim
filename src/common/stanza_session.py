@@ -944,3 +944,5 @@ otherwise, list the fields we haven't implemented'''
 		self.enable_encryption = False
 
 		self.km_o = ''
+
+# vim: se ts=3:

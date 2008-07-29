@@ -66,3 +66,5 @@ class MockSession(Mock):
 
 	def __nonzero__(self):
 		return True
+
+# vim: se ts=3:

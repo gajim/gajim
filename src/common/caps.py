@@ -278,3 +278,5 @@ class ConnectionCaps(object):
 			return
 
 		caps.update(identities, features)
+
+# vim: se ts=3:

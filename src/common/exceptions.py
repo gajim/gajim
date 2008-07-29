@@ -87,3 +87,5 @@ class GajimGeneralException(Exception):
 
 	def __str__(self):
 		return self.text
+
+# vim: se ts=3:

@@ -64,3 +64,5 @@ class FeatureNegotiationWindow:
 		gajim.connections[self.account].send_stanza(rejection)
 
 		self.window.destroy()
+
+# vim: se ts=3:

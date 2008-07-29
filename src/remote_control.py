@@ -675,3 +675,5 @@ class SignalObject(dbus.service.Object):
 					JoinGroupchatWindow(account, room_jid, nick)
 		else:
 			gajim.interface.join_gc_room(account, room_jid, nick, password)
+
+# vim: se ts=3:

@@ -18,3 +18,5 @@ setup(
 			  extra_link_args=['-framework', 'AppKit', '-framework', 'Cocoa']),
 	]
 )
+
+# vim: se ts=3:

@@ -3290,3 +3290,5 @@ if __name__ == '__main__':
 		gtk.main()
 	except KeyboardInterrupt:
 		print >> sys.stderr, 'KeyboardInterrupt'
+
+# vim: se ts=3:

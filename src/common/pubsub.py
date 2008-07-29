@@ -104,3 +104,5 @@ class ConnectionPubSub:
 		query.setID(id)
 		self.awaiting_answers[id] = (connection_handlers.PEP_CONFIG,)
 		self.connection.send(query)
+
+# vim: se ts=3:

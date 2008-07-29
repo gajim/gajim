@@ -402,3 +402,5 @@ class GajimThemesWindow:
 		self.no_update = True
 		self._set_color(True, widget, 'state_muc_directed_msg_color')
 		self.no_update = False
+
+# vim: se ts=3:

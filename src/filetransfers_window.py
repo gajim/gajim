@@ -964,3 +964,5 @@ _('Connection with peer cannot be established.'))
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
 			self.window.hide()
 
+
+# vim: se ts=3:

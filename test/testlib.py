@@ -33,3 +33,5 @@ def setup_env():
 
 	import gtkgui_helpers
 	gtkgui_helpers.GLADE_DIR = gajim_root + '/data/glade'
+
+# vim: se ts=3:

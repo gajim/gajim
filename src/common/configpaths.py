@@ -121,3 +121,5 @@ class ConfigPaths:
 		# 	print "%s: %s" % (repr(k), repr(v))
 
 gajimpaths = ConfigPaths()
+
+# vim: se ts=3:

@@ -737,3 +737,5 @@ class ServiceDiscoveryTooltip(BaseTooltip):
 				_('This service could not respond with detailed information.\n'
 				'It is most likely legacy or broken'))
 		self.win.add(label)
+
+# vim: se ts=3:

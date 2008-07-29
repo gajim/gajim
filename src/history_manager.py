@@ -622,3 +622,5 @@ if __name__ == '__main__':
 	signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 	HistoryManager()
 	gtk.main()
+
+# vim: se ts=3:

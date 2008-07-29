@@ -101,3 +101,5 @@ def secrets():
 		secrets_cache = Secrets(secrets_filename)
 
 	return secrets_cache
+
+# vim: se ts=3:

@@ -161,3 +161,5 @@ this `` should    trigger`` should trigger the &nbsp; problem.
 test2_
 """)
 	print "test 3\n", Generator.create_xhtml(""":ticket:`316` implements :xep:`71`""")
+
+# vim: se ts=3:

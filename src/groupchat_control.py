@@ -2320,3 +2320,5 @@ class GroupchatControl(ChatControlBase):
 			self.grant_owner(widget, jid)
 		else:
 			self.revoke_owner(widget, jid)
+
+# vim: se ts=3:

@@ -231,3 +231,5 @@ class SearchWindow:
 			self.window.set_title('%s - Search - Gajim' % \
 				self.data_form_widget.title)
 
+
+# vim: se ts=3:

@@ -228,3 +228,5 @@ if gajim.HAVE_GPG:
 			out = out + data + "\n"
 			out = out + "-----END PGP %s-----\n" % type
 			return out
+
+# vim: se ts=3:

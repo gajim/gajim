@@ -760,3 +760,5 @@ class Logger:
 			self.con.commit()
 		except sqlite.OperationalError, e:
 			print >> sys.stderr, str(e)
+
+# vim: se ts=3:

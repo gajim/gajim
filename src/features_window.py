@@ -318,3 +318,5 @@ class FeaturesWindow:
 	def pysexy_available(self):
 		from common import gajim
 		return gajim.HAVE_PYSEXY
+
+# vim: se ts=3:

@@ -358,3 +358,5 @@ class ProfileWindow:
 
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
+
+# vim: se ts=3:

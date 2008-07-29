@@ -193,3 +193,5 @@ class Roster(PlugIn):
     def getRaw(self):
         """Returns the internal data representation of the roster."""
         return self._data
+
+# vim: se ts=3:

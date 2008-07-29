@@ -328,3 +328,5 @@ class TestCommand(Command_Handler_Prototype):
         del sessions[request.getTagAttr('command','sessionid')]
             
     
+
+# vim: se ts=3:

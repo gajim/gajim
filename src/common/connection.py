@@ -1744,3 +1744,5 @@ class Connection(ConnectionHandlers):
 		self.connection.SendAndCallForResponse(iq, _on_response)
 
 # END Connection
+
+# vim: se ts=3:

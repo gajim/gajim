@@ -291,3 +291,5 @@ class Events:
 		'''return all events that must be displayed in roster:
 		{account1: {jid1: [ev1, ev2], },. }'''
 		return self._get_some_events('roster')
+
+# vim: se ts=3:
