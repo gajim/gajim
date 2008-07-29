@@ -471,19 +471,22 @@ class ChangeMoodDialog:
 		x = 1
 		y = 0
 		self.mood_buttons = {}
+
+		# Order them first
+		self.MOODS = []
 		for mood in pep.MOODS:
-			self.mood_buttons[mood] = gtk.RadioButton(
-				no_mood_button)
+			self.MOODS.append(mood)
+		self.MOODS.sort()
+
+		for mood in self.MOODS:
+			self.mood_buttons[mood] = gtk.RadioButton(no_mood_button)
 			self.mood_buttons[mood].set_mode(False)
-			self.mood_buttons[mood].add(
-				gtkgui_helpers.load_mood_icon(mood))
+			self.mood_buttons[mood].add(gtkgui_helpers.load_mood_icon(mood))
 			self.mood_buttons[mood].set_relief(gtk.RELIEF_NONE)
-			gtk.Tooltips().set_tip(self.mood_buttons[mood],
-				_(mood.replace('_', ' ')))
+			gtk.Tooltips().set_tip(self.mood_buttons[mood], pep.MOODS[mood])
 			self.mood_buttons[mood].connect('clicked',
 				self.on_mood_button_clicked, mood)
-			table.attach(self.mood_buttons[mood],
-				x, x + 1, y, y + 1)
+			table.attach(self.mood_buttons[mood], x, x + 1, y, y + 1)
 			
 			# Calculate the next position
 			x += 1
@@ -494,11 +497,11 @@ class ChangeMoodDialog:
 		con = gajim.connections[account]
 		if 'mood' in con.mood:
 			self.mood = con.mood['mood']
-			self.label.set_text(_(
-				con.mood['mood'].replace('_', ' ')))
-			if con.mood['mood'] in pep.MOODS:
-				self.mood_buttons[con.mood['mood']]. \
-					set_active(True)
+			if self.mood in pep.MOODS:
+				self.mood_buttons[self.mood].set_active(True)
+				self.label.set_text(pep.MOODS[self.mood])
+			else:
+				self.label.set_text(self.mood)
 
 		if self.mood:
 			self.entry.set_sensitive(True)
@@ -513,7 +516,7 @@ class ChangeMoodDialog:
 
 	def on_mood_button_clicked(self, widget, data):
 		if data:
-			self.label.set_text(_(data.replace('_', ' ')))
+			self.label.set_text(pep.MOODS[data])
 			self.entry.set_sensitive(True)
 		else:
 			self.label.set_text(_('None'))

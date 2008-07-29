@@ -1220,7 +1220,7 @@ class ChatControl(ChatControlBase):
 				self._mood_image.set_from_pixbuf(gtkgui_helpers.load_mood_icon(
 						mood).get_pixbuf())
 				# Translate standard moods
-				mood = _(mood.replace('_', ' '))
+				mood = MOODS[mood]
 			else:
 				self._mood_image.set_from_pixbuf(gtkgui_helpers.load_mood_icon(
 					'unknown').get_pixbuf())

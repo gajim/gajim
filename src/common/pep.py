@@ -1,16 +1,37 @@
 from common import gajim, xmpp
 
-MOODS = ['afraid', 'amazed', 'angry', 'annoyed', 'anxious', 'aroused',
-	'ashamed', 'bored', 'brave', 'calm', 'cold', 'confused', 'contented',
-	'cranky', 'curious', 'depressed', 'disappointed', 'disgusted',
-	'distracted', 'embarrassed', 'excited', 'flirtatious', 'frustrated', 
-	'grumpy', 'guilty', 'happy', 'hot', 'humbled', 'humiliated', 'hungry',
-	'hurt', 'impressed', 'in_awe', 'in_love', 'indignant', 'interested',
-	'intoxicated', 'invincible', 'jealous', 'lonely', 'mean', 'moody', 
-	'nervous', 'neutral', 'offended', 'playful', 'proud', 'relieved',
-	'remorseful', 'restless', 'sad', 'sarcastic', 'serious', 'shocked',
-	'shy', 'sick', 'sleepy', 'stressed', 'surprised', 'thirsty',
-	'thoughtful', 'worried']
+MOODS = {
+	'afraid':			_('Afraid'),			'amazed':		_('Amazed'),
+	'angry':				_('Angry'),				'annoyed':		_('Annoyed'),
+	'anxious':			_('Anxious'),			'aroused':		_('Aroused'),
+	'ashamed':			_('Ashamed'),			'bored':			_('Bored'),
+	'brave':				_('Brave'),				'calm':			_('Calm'),
+	'cold':				_('Cold'),				'confused':		_('Confused'),
+	'contented':		_('Contented'),		'cranky':		_('Cranky'),
+	'curious':			_('Curious'),			'depressed':	_('Depressed'),
+	'disappointed':	_('Disappointed'),	'disgusted':	_('Disgusted'),
+	'distracted':		_('Distracted'),		'embarrassed':	_('Embarassed'),
+	'excited':			_('Excited'),			'flirtatious':	_('Flirtatious'),
+	'frustrated':		_('Frustrated'),		'grumpy':		_('Grumpy'),
+	'guilty':			_('Guilty'),			'happy':			_('Happy'),
+	'hot':				_('Hot'),				'humbled':		_('Humbled'),
+	'humiliated':		_('Humiliated'),		'hungry':		_('Hungry'),
+	'hurt':				_('Hurt'),				'impressed':	_('Impressed'),
+	'in_awe':			_('In Awe'),			'in_love':		_('In Love'),
+	'indignant':		_('Indignant'),		'interested':	_('Interested'),
+	'intoxicated':		_('Intoxicated'),		'invincible':	_('Invincible'),
+	'jealous':			_('Jealous'),			'lonely':		_('Lonely'),
+	'mean':				_('Mean'),				'moody':			_('Moody'),
+	'nervous':			_('Nervous'),			'neutral':		_('Neutral'),
+	'offended':			_('Offended'),			'playful':		_('Playful'),
+	'proud':				_('Proud'),				'relieved':		_('Relieved'),
+	'remorseful':		_('Remorseful'),		'restless':		_('Restless'),
+	'sad':				_('Sad'),				'sarcastic':	_('Sarcastic'),
+	'serious':			_('Serious'),			'shocked':		_('Shocked'),
+	'shy':				_('Shy'),				'sick':			_('Sick'),
+	'sleepy':			_('Sleepy'),			'stressed':		_('Stressed'),
+	'surprised':		_('Surprised'),		'thirsty':		_('Thirsty'),
+	'thoughtful':		_('Thoughtful'),		'worried':		_('Worried')}
 
 # These moods are only available in the Gajim namespace
 GAJIM_MOODS = ['thoughtful']
