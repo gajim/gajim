@@ -31,6 +31,7 @@ import gtkgui_helpers
 
 from common import gajim
 from common import helpers
+from common.pep import ACTIVITIES
 
 class BaseTooltip:
 	''' Base Tooltip class;
@@ -585,12 +586,20 @@ class RosterTooltip(NotificationAreaTooltip):
 			properties.append((mood_string, None))
 
 		if contact.activity.has_key('activity'):
-			activity = contact.activity['activity'].strip()
+			activity = act_plain = \
+				contact.activity['activity'].strip()
 			activity = gobject.markup_escape_text(activity)
+			activity = ACTIVITIES[activity]['category'] \
+				if act_plain in ACTIVITIES else activity
 			activity_string = _('Activity:') + ' <b>%s' % activity
 			if contact.activity.has_key('subactivity'):
 				activity_sub = \
 					contact.activity['subactivity'].strip()
+				activity_sub = \
+					ACTIVITIES[act_plain][activity_sub] \
+					if act_plain in ACTIVITIES and \
+					activity_sub in ACTIVITIES[act_plain] \
+					else activity_sub
 				activity_sub = \
 					gobject.markup_escape_text(activity_sub)
 				activity_string += ' (%s)</b>' % activity_sub

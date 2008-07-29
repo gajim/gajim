@@ -1211,9 +1211,9 @@ class ChatControl(ChatControlBase):
 			return
 
 		if self.contact.mood.has_key('mood'):
-			mood = self.contact.mood['mood']
+			mood = self.contact.mood['mood'].strip()
 		if self.contact.mood.has_key('text'):
-			text = self.contact.mood['text']
+			text = self.contact.mood['text'].strip()
 
 		if mood is not None:
 			if mood in MOODS:
@@ -1251,11 +1251,12 @@ class ChatControl(ChatControlBase):
 			return
 
 		if self.contact.activity.has_key('activity'):
-			activity = self.contact.activity['activity']
+			activity = self.contact.activity['activity'].strip()
 		if self.contact.activity.has_key('subactivity'):
-			subactivity = self.contact.activity['subactivity']
+			subactivity = \
+				self.contact.activity['subactivity'].strip()
 		if self.contact.activity.has_key('text'):
-			text = self.contact.activity['text']
+			text = self.contact.activity['text'].strip()
 
 		if activity is not None:
 			if activity in ACTIVITIES:
