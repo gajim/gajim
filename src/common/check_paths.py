@@ -101,6 +101,8 @@ def check_and_possibly_create_paths():
 	VCARD_PATH = gajim.VCARD_PATH
 	AVATAR_PATH = gajim.AVATAR_PATH
 	dot_gajim = os.path.dirname(VCARD_PATH)
+	PLUGINS_CONFIG_PATH = gajim.PLUGINS_CONFIG_DIR
+	
 	if os.path.isfile(dot_gajim):
 		print _('%s is a file but it should be a directory') % dot_gajim
 		print _('Gajim will now exit')
@@ -123,7 +125,7 @@ def check_and_possibly_create_paths():
 			print _('%s is a file but it should be a directory') % AVATAR_PATH
 			print _('Gajim will now exit')
 			sys.exit()
-
+			
 		if not os.path.exists(LOG_DB_PATH):
 			create_log_db()
 			gajim.logger.init_vars()
@@ -131,6 +133,14 @@ def check_and_possibly_create_paths():
 			print _('%s is a directory but should be a file') % LOG_DB_PATH
 			print _('Gajim will now exit')
 			sys.exit()
+		
+		if not os.path.exists(PLUGINS_CONFIG_PATH):
+			create_path(PLUGINS_CONFIG_PATH)
+		elif os.path.isfile(PLUGINS_CONFIG_PATH):
+			print _('%s is a file but it should be a directory') % PLUGINS_CONFIG_PATH
+			print _('Gajim will now exit')
+			sys.exit()
+
 		
 	else: # dot_gajim doesn't exist
 		if dot_gajim: # is '' on win9x so avoid that

@@ -51,32 +51,35 @@ class AcronymsExpanderPlugin(GajimPlugin):
 								   self.disconnect_from_chat_control_base)
 		}		
 
-		self.INVOKER = ' '
-		self.ACRONYMS = {'RTFM' : 'Read The Friendly Manual',
-						 '/slap' : '/me slaps',
-						 'PS-' : 'plug-in system',
-						 'G-' : 'Gajim',
-						 'GNT-' : 'http://trac.gajim.org/newticket',
-						 'GW-' : 'http://trac.gajim.org/',
-						 'GTS-' : 'http://trac.gajim.org/report'
-						}		
+		self.config_default_values = {'INVOKER' : (' ', _('')),
+						  			  'ACRONYMS' :  ({'RTFM' : 'Read The Friendly Manual',
+													 '/slap' : '/me slaps',
+													 'PS-' : 'plug-in system',
+													 'G-' : 'Gajim',
+													 'GNT-' : 'http://trac.gajim.org/newticket',
+													 'GW-' : 'http://trac.gajim.org/',
+													 'GTS-' : 'http://trac.gajim.org/report'
+													}, _('')),
+									 }
 
 	@log_calls('AcronymsExpanderPlugin')
 	def textbuffer_live_acronym_expander(self, tb):
 		"""
 		@param tb gtk.TextBuffer
 		"""
-		assert isinstance(tb,gtk.TextBuffer)
+		#assert isinstance(tb,gtk.TextBuffer)
+		ACRONYMS = self.config['ACRONYMS']
+		INVOKER = self.config['INVOKER']
 		t = tb.get_text(tb.get_start_iter(), tb.get_end_iter())
 		log.debug('%s %d'%(t, len(t)))
-		if t and t[-1] == self.INVOKER:
+		if t and t[-1] == INVOKER:
 			log.debug("changing msg text")
-			base,sep,head=t[:-1].rpartition(self.INVOKER)
+			base,sep,head=t[:-1].rpartition(INVOKER)
 			log.debug('%s | %s | %s'%(base, sep, head))
-			if head in self.ACRONYMS:
-				head = self.ACRONYMS[head]
+			if head in ACRONYMS:
+				head = ACRONYMS[head]
 				log.debug("head: %s"%(head))
-				t = "".join((base, sep, head, self.INVOKER))
+				t = "".join((base, sep, head, INVOKER))
 				log.debug("turning off notify")
 				tb.freeze_notify()
 				log.debug("setting text: '%s'"%(t))
@@ -101,5 +104,4 @@ class AcronymsExpanderPlugin(GajimPlugin):
 		d = chat_control.acronyms_expander_plugin_data
 		tv = chat_control.msg_textview
 		tv.get_buffer().disconnect(d['h_id'])
-		
-		
+	

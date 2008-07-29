@@ -133,10 +133,6 @@ class GajimPlugin(object):
 	@log_calls('GajimPlugin')	
 	def load_config(self):
 		self.config.load()
-	
-	@log_calls('GajimPlugin')
-	def __del__(self):
-		self.save_config()
 		
 	@log_calls('GajimPlugin')
 	def local_file_path(self, file_name):
@@ -155,20 +151,38 @@ class GajimPlugin(object):
 		pass
 	
 import shelve
+import UserDict
 
-class GajimPluginConfig(dict):
+class GajimPluginConfig(UserDict.DictMixin):
 	@log_calls('GajimPluginConfig')
 	def __init__(self, plugin):
 		self.plugin = plugin
-		self.FILE_PATH = gajim.HOME_DIR
-		log.debug('FILE_PATH = %s'%(self.FILE_PATH))
-		#self.data = shelve.open(self.FILE_PATH)
+		self.FILE_PATH = os.path.join(gajim.PLUGINS_CONFIG_DIR, self.plugin.short_name)
+		#log.debug('FILE_PATH = %s'%(self.FILE_PATH))
+		self.data = None
+		self.load()
+		
+	@log_calls('GajimPluginConfig')
+	def __getitem__(self, key):
+		if not key in self.data:
+			self.data[key] = self.plugin.config_default_values[key][0]
+			self.save()
+		
+		return self.data[key]
 	
+	@log_calls('GajimPluginConfig')
+	def __setitem__(self, key, value):
+		self.data[key] = value
+		self.save()
+		
+	def keys(self): 
+		return self.data.keys()
+		
 	@log_calls('GajimPluginConfig')
 	def save(self):
-		pass
-	
+		self.data.sync()
+		log.debug(str(self.data))
+
 	@log_calls('GajimPluginConfig')
 	def load(self):
-		pass
-	
+		self.data = shelve.open(self.FILE_PATH)

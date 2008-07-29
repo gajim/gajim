@@ -88,6 +88,7 @@ DATA_DIR = gajimpaths['DATA']
 HOME_DIR = gajimpaths['HOME']
 PLUGINS_DIRS = [gajimpaths['PLUGINS_BASE'],
 				gajimpaths['PLUGINS_USER']]
+PLUGINS_CONFIG_DIR = gajimpaths['PLUGINS_CONFIG_DIR']
 
 try:
 	LANG = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..

@@ -50,6 +50,12 @@ class log_calls(object):
     Decorator class for functions to easily log when they are entered and left.
     '''
     
+    filter_out_classes = ['PluginManager']
+    '''
+    List of classes from which no logs should be emited when methods are called,
+    eventhough `log_calls` decorator is used.
+    '''
+    
     def __init__(self, classname='', log=log):
         '''
         :Keywords:
@@ -71,9 +77,19 @@ class log_calls(object):
         
         :type: str
         '''
+        self.log_this_class = True
+        '''
+        Determines whether wrapper of given function should log calls of this
+        function or not.
+        
+        :type: bool
+        '''
         
         if classname:
             self.full_func_name = classname+'.'
+            
+        if classname in self.filter_out_classes:
+            self.log_this_class = False
         
     def __call__(self, f):
         '''
@@ -82,15 +98,24 @@ class log_calls(object):
         :return: given function wrapped by *log.debug* statements
         :rtype: function
         '''
+        
         self.full_func_name += f.func_name
-        @functools.wraps(f)
-        def wrapper(*args, **kwargs):
-            log.debug('%(funcname)s() <entered>'%{
-                'funcname': self.full_func_name})
-            result = f(*args, **kwargs)
-            log.debug('%(funcname)s() <left>'%{
-                'funcname': self.full_func_name})
-            return result
+        if self.log_this_class:
+            @functools.wraps(f)
+            def wrapper(*args, **kwargs):
+                
+                log.debug('%(funcname)s() <entered>'%{
+                    'funcname': self.full_func_name})
+                result = f(*args, **kwargs)
+                log.debug('%(funcname)s() <left>'%{
+                    'funcname': self.full_func_name})
+                return result
+        else:
+            @functools.wraps(f)
+            def wrapper(*args, **kwargs):
+                result = f(*args, **kwargs)
+                return result
+            
         return wrapper
 
 class Singleton(type):
