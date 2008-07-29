@@ -355,8 +355,8 @@ class ChangeActivityDialog:
 		for category in pep.ACTIVITIES:
 			item = self.xml.get_widget(category + '_image')
 			item.set_from_pixbuf(
-				gtkgui_helpers.load_activity_icon(
-				category).get_pixbuf())
+				gtkgui_helpers.load_activity_icon(category).get_pixbuf())
+			gtk.Tooltips().set_tip(item, pep.ACTIVITIES[category]['category'])
 
 			vbox = self.xml.get_widget(category + '_vbox')
 			for activity in pep.ACTIVITIES[category]:
@@ -370,10 +370,8 @@ class ChangeActivityDialog:
 				else:
 					rbtns[act] = group = gtk.RadioButton()
 
-				rbtns[act].set_label(
-					pep.ACTIVITIES[category][activity])
-				rbtns[act].connect('toggled',
-					self.on_rbtn_toggled,
+				rbtns[act].set_label(pep.ACTIVITIES[category][activity])
+				rbtns[act].connect('toggled', self.on_rbtn_toggled,
 					[category, activity])
 				vbox.pack_start(rbtns[act], False, False, 0)
 

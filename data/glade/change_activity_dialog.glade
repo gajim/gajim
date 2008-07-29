@@ -63,7 +63,6 @@
             <child>
               <widget class="GtkImage" id="working_image">
                 <property name="visible">True</property>
-                <property name="tooltip" translatable="yes">Working</property>
                 <property name="stock">gtk-missing-image</property>
                 <property name="icon_size">1</property>
               </widget>
@@ -106,7 +105,6 @@
             <child>
               <widget class="GtkImage" id="eating_image">
                 <property name="visible">True</property>
-                <property name="tooltip" translatable="yes">Eating</property>
                 <property name="stock">gtk-missing-image</property>
                 <property name="icon_size">1</property>
               </widget>
@@ -150,7 +148,6 @@
             <child>
               <widget class="GtkImage" id="exercising_image">
                 <property name="visible">True</property>
-                <property name="tooltip" translatable="yes">Exercising</property>
                 <property name="stock">gtk-missing-image</property>
                 <property name="icon_size">1</property>
               </widget>
@@ -194,7 +191,6 @@
             <child>
               <widget class="GtkImage" id="relaxing_image">
                 <property name="visible">True</property>
-                <property name="tooltip" translatable="yes">Relaxing</property>
                 <property name="stock">gtk-missing-image</property>
                 <property name="icon_size">1</property>
               </widget>
@@ -238,7 +234,6 @@
             <child>
               <widget class="GtkImage" id="talking_image">
                 <property name="visible">True</property>
-                <property name="tooltip" translatable="yes">Talking</property>
                 <property name="stock">gtk-missing-image</property>
                 <property name="icon_size">1</property>
               </widget>
@@ -282,7 +277,6 @@
             <child>
               <widget class="GtkImage" id="doing_chores_image">
                 <property name="visible">True</property>
-                <property name="tooltip" translatable="yes">Doing Chores</property>
                 <property name="stock">gtk-missing-image</property>
                 <property name="icon_size">1</property>
               </widget>
@@ -326,7 +320,6 @@
             <child>
               <widget class="GtkImage" id="inactive_image">
                 <property name="visible">True</property>
-                <property name="tooltip" translatable="yes">Inactive</property>
                 <property name="stock">gtk-missing-image</property>
                 <property name="icon_size">1</property>
               </widget>
@@ -370,7 +363,6 @@
             <child>
               <widget class="GtkImage" id="traveling_image">
                 <property name="visible">True</property>
-                <property name="tooltip" translatable="yes">Traveling</property>
                 <property name="stock">gtk-missing-image</property>
                 <property name="icon_size">1</property>
               </widget>
@@ -414,7 +406,6 @@
             <child>
               <widget class="GtkImage" id="having_appointment_image">
                 <property name="visible">True</property>
-                <property name="tooltip" translatable="yes">Having an Appointment</property>
                 <property name="stock">gtk-missing-image</property>
                 <property name="icon_size">1</property>
               </widget>
@@ -458,7 +449,6 @@
             <child>
               <widget class="GtkImage" id="drinking_image">
                 <property name="visible">True</property>
-                <property name="tooltip" translatable="yes">Drinking</property>
                 <property name="stock">gtk-missing-image</property>
                 <property name="icon_size">1</property>
               </widget>
@@ -502,7 +492,6 @@
             <child>
               <widget class="GtkImage" id="grooming_image">
                 <property name="visible">True</property>
-                <property name="tooltip" translatable="yes">Grooming</property>
                 <property name="stock">gtk-missing-image</property>
                 <property name="icon_size">1</property>
               </widget>
