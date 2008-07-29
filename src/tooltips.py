@@ -601,7 +601,7 @@ class RosterTooltip(NotificationAreaTooltip):
 					activity_sub = ACTIVITIES[act_plain][activity_sub]
 				activity_sub = \
 					gobject.markup_escape_text(activity_sub)
-				activity_string += ' (%s)</b>' % activity_sub
+				activity_string += ': %s</b>' % activity_sub
 			else:
 				activity_string += '</b>'
 			if contact.activity.has_key('text'):
