@@ -4869,10 +4869,6 @@ class RosterWindow:
 
 			pep_menuitem = xml.get_widget('pep_menuitem')
 			if gajim.connections[account].pep_supported:
-				have_mood = gajim.config.get_per('accounts', account,
-					'publish_mood')
-				have_activity = gajim.config.get_per('accounts', account,
-					'publish_activity')
 				have_tune = gajim.config.get_per('accounts', account,
 					'publish_tune')
 				pep_submenu = gtk.Menu()
@@ -4881,25 +4877,19 @@ class RosterWindow:
 				pep_submenu.append(item)
 				item.set_active(have_tune)
 				item.connect('toggled', self.on_publish_tune_toggled, account)
-				if have_mood:
-					item = gtk.CheckMenuItem(_('Mood'))
-					pep_submenu.append(item)
-					item.set_active(len(gajim.connections[account].mood) > 0)
-					item.connect('activate', self.on_change_mood_activate, account)
-				if have_activity:
-					item = gtk.CheckMenuItem(_('Activity'))
-					pep_submenu.append(item)
-					item.set_active(len(gajim.connections[account].activity) > 0)
-					item.connect('activate', self.on_change_activity_activate,
-						account)
+				item = gtk.CheckMenuItem(_('Mood'))
+				pep_submenu.append(item)
+				item.set_active(len(gajim.connections[account].mood) > 0)
+				item.connect('activate', self.on_change_mood_activate, account)
+				item = gtk.CheckMenuItem(_('Activity'))
+				pep_submenu.append(item)
+				item.set_active(len(gajim.connections[account].activity) > 0)
+				item.connect('activate', self.on_change_activity_activate, account)
 
 				pep_config = gtk.ImageMenuItem(_('Configure Services...'))
-				if have_mood or have_activity or have_tune:
-					item = gtk.SeparatorMenuItem()
-					pep_submenu.append(item)
-					pep_config.set_sensitive(True)
-				else:
-					pep_config.set_sensitive(False)
+				item = gtk.SeparatorMenuItem()
+				pep_submenu.append(item)
+				pep_config.set_sensitive(True)
 				pep_submenu.append(pep_config)
 				pep_config.connect('activate',
 					self.on_pep_services_menuitem_activate, account)

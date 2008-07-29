@@ -1333,20 +1333,14 @@ def update_optional_features(account = None):
 		accounts = [a for a in gajim.connections]
 	for a in accounts:
 		gajim.gajim_optional_features[a] = []
-		if gajim.config.get_per('accounts', a, 'publish_mood'):
-			gajim.gajim_optional_features[a].append(xmpp.NS_MOOD)
 		if gajim.config.get_per('accounts', a, 'subscribe_mood'):
 			gajim.gajim_optional_features[a].append(xmpp.NS_MOOD + '+notify')
-		if gajim.config.get_per('accounts', a, 'publish_activity'):
-			gajim.gajim_optional_features[a].append(xmpp.NS_ACTIVITY)
 		if gajim.config.get_per('accounts', a, 'subscribe_activity'):
 			gajim.gajim_optional_features[a].append(xmpp.NS_ACTIVITY + '+notify')
 		if gajim.config.get_per('accounts', a, 'publish_tune'):
 			gajim.gajim_optional_features[a].append(xmpp.NS_TUNE)
 		if gajim.config.get_per('accounts', a, 'subscribe_tune'):
 			gajim.gajim_optional_features[a].append(xmpp.NS_TUNE + '+notify')
-		if gajim.config.get_per('accounts', a, 'publish_nick'):
-			gajim.gajim_optional_features[a].append(xmpp.NS_NICK)
 		if gajim.config.get_per('accounts', a, 'subscribe_nick'):
 			gajim.gajim_optional_features[a].append(xmpp.NS_NICK + '+notify')
 		if gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':

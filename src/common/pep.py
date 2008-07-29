@@ -371,7 +371,7 @@ def user_nickname(items, name, jid):
 		contact.contact_name = ''
 
 def user_send_mood(account, mood, message = ''):
-	if not gajim.config.get_per('accounts', account, 'publish_mood'):
+	if not gajim.connections[account].pep_supported:
 		return
 	item = xmpp.Node('mood', {'xmlns': xmpp.NS_MOOD})
 	if mood != '':
@@ -384,7 +384,7 @@ def user_send_mood(account, mood, message = ''):
 	gajim.connections[account].send_pb_publish('', xmpp.NS_MOOD, item, '0')
 
 def user_send_activity(account, activity, subactivity = '', message = ''):
-	if not gajim.config.get_per('accounts', account, 'publish_activity'):
+	if not gajim.connections[account].pep_supported:
 		return
 	item = xmpp.Node('activity', {'xmlns': xmpp.NS_ACTIVITY})
 	if activity != '':
@@ -425,8 +425,7 @@ length = 0, items = None):
 	gajim.connections[account].send_pb_publish('', xmpp.NS_TUNE, item, '0')
 
 def user_send_nickname(account, nick):
-	if not (gajim.config.get_per('accounts', account, 'publish_nick') and \
-	gajim.connections[account].pep_supported):
+	if not gajim.connections[account].pep_supported:
 		return
 	item = xmpp.Node('nick', {'xmlns': xmpp.NS_NICK})
 	item.addData(nick)
