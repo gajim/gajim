@@ -1205,7 +1205,7 @@ class ChatControl(ChatControlBase):
 
 	def update_mood(self):
 		mood = None
-		text = ''
+		text = None
 
 		if isinstance(self.contact, GC_Contact):
 			return
@@ -1217,37 +1217,35 @@ class ChatControl(ChatControlBase):
 
 		if mood is not None:
 			if mood in MOODS:
-				self._mood_image.set_from_pixbuf(
-					gtkgui_helpers.load_mood_icon(
+				self._mood_image.set_from_pixbuf(gtkgui_helpers.load_mood_icon(
 						mood).get_pixbuf())
 				# Translate standard moods
 				mood = _(mood.replace('_', ' '))
 			else:
-				self._mood_image.set_from_pixbuf(
-					gtkgui_helpers.load_mood_icon(
+				self._mood_image.set_from_pixbuf(gtkgui_helpers.load_mood_icon(
 					'unknown').get_pixbuf())
 
 			if HAVE_MARKUP_TOOLTIPS:
 				mood = gobject.markup_escape_text(mood)
 				text = gobject.markup_escape_text(text)
 
-				markup = '<b>%s</b>' % mood
-				if text != '':
-					text += '\n' + text
-				self._mood_image.set_tooltip_markup(markup)
+				tooltip = '<b>%s</b>' % mood
+				if text:
+					tooltip += '\n' + text
+				self._mood_image.set_tooltip_markup(tooltip)
 			else:
-				markup = mood
-				if text != '':
-					text += '\n' + text
-				self._mood_tooltip.set_tip(self._mood_image, markup)
+				tooltip = mood
+				if text:
+					tooltip += '\n' + text
+				self._mood_tooltip.set_tip(self._mood_image, tooltip)
 			self._mood_image.show()
 		else:
 			self._mood_image.hide()
 
 	def update_activity(self):
 		activity    = None
-		subactivity = ''
-		text        = ''
+		subactivity = None
+		text        = None
 
 		if isinstance(self.contact, GC_Contact):
 			return
@@ -1255,16 +1253,14 @@ class ChatControl(ChatControlBase):
 		if self.contact.activity.has_key('activity'):
 			activity = self.contact.activity['activity'].strip()
 		if self.contact.activity.has_key('subactivity'):
-			subactivity = \
-				self.contact.activity['subactivity'].strip()
+			subactivity = self.contact.activity['subactivity'].strip()
 		if self.contact.activity.has_key('text'):
 			text = self.contact.activity['text'].strip()
 
 		if activity is not None:
 			if activity in ACTIVITIES:
 				self._activity_image.set_from_pixbuf(
-					gtkgui_helpers.load_activity_icon(
-						activity).get_pixbuf())
+					gtkgui_helpers.load_activity_icon(activity).get_pixbuf())
 				# Translate standard activities
 				if subactivity in ACTIVITIES[activity]:
 					subactivity = ACTIVITIES[activity] \
@@ -1272,8 +1268,7 @@ class ChatControl(ChatControlBase):
 				activity = ACTIVITIES[activity]['category']
 			else:
 				self._activity_image.set_from_pixbuf(
-					gtkgui_helpers.load_activity_icon(
-						'unknown').get_pixbuf())
+					gtkgui_helpers.load_activity_icon('unknown').get_pixbuf())
 
 			# Translate standard subactivities
 
@@ -1283,21 +1278,20 @@ class ChatControl(ChatControlBase):
 					subactivity)
 				text = gobject.markup_escape_text(text)
 
-				markup = '<b>' + activity
-				if subactivity != '':
-					markup += ': ' + subactivity
-				markup += '</b>'
-				if text != '':
-					markup += '\n' + text
-				self._activity_image.set_tooltip_markup(markup)
+				tooltip = '<b>' + activity
+				if subactivity:
+					tooltip += ': ' + subactivity
+				tooltip += '</b>'
+				if text:
+					tooltip += '\n' + text
+				self._activity_image.set_tooltip_markup(tooltip)
 			else:
-				markup = activity
-				if subactivity != '':
-					markup += ': ' + subactivity
-				if text != '':
-					markup += '\n' + text
-				self._activity_tooltip.set_tip(
-					self._activity_image, markup)
+				tooltip = activity
+				if subactivity:
+					tooltip += ': ' + subactivity
+				if text:
+					tooltip += '\n' + text
+				self._activity_tooltip.set_tip(self._activity_image, tooltip)
 
 			self._activity_image.show()
 		else:
