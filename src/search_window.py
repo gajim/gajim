@@ -77,7 +77,7 @@ class SearchWindow:
 		if self.is_form:
 			self.data_form_widget.data_form.type = 'submit'
 			gajim.connections[self.account].send_search_form(self.jid,
-				self.data_form_widget.data_form, True)
+				self.data_form_widget.data_form.get_purged(), True)
 		else:
 			infos = self.data_form_widget.get_infos()
 			if infos.has_key('instructions'):

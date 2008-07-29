@@ -386,6 +386,22 @@ class SimpleDataForm(DataForm, DataRecord):
 	def __init__(self, type=None, title=None, instructions=None, fields=None, extend=None):
 		DataForm.__init__(self, type=type, title=title, instructions=instructions, extend=extend)
 		DataRecord.__init__(self, fields=fields, extend=self, associated=self)
+	
+	def get_purged(self):
+		c = SimpleDataForm(extend=self)
+		del c.title
+		c.instructions = ''
+		for f in c.iter_fields():
+			if f.required:
+				# Keep all required fields
+				continue
+			if (hasattr(f, 'value') and not f.value) or (hasattr(f, 'values') and \
+			len(f.values) == 0):
+				c.delChild(f)
+			else:
+				del f.label
+				del f.description
+		return c
 
 class MultipleDataForm(DataForm):
 	def __init__(self, type=None, title=None, instructions=None, items=None, extend=None):
