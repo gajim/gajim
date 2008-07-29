@@ -1231,13 +1231,15 @@ class ChatControl(ChatControlBase):
 				mood = gobject.markup_escape_text(mood)
 				text = gobject.markup_escape_text(text)
 
-				self._mood_image.set_tooltip_markup(
-					'<b>%s</b>%s%s' % (mood,
-					'\n' if text is not '' else '', text))
+				markup = '<b>%s</b>' % mood
+				if text != '':
+					text += '\n' + text
+				self._mood_image.set_tooltip_markup(markup)
 			else:
-				self._mood_tooltip.set_tip(
-					self._mood_image, '%s%s%s' % (mood,
-					'\n' if text is not '' else '', text))
+				markup = mood
+				if text != '':
+					text += '\n' + text
+				self._mood_tooltip.set_tip(self._mood_image, markup)
 			self._mood_image.show()
 		else:
 			self._mood_image.hide()
@@ -1281,18 +1283,21 @@ class ChatControl(ChatControlBase):
 					subactivity)
 				text = gobject.markup_escape_text(text)
 
-				self._activity_image.set_tooltip_markup(
-					'<b>%s%s%s</b>%s%s' % (activity,
-					': ' if subactivity is not '' else '',
-					subactivity,
-					'\n' if text is not '' else '', text))
+				markup = '<b>' + activity
+				if subactivity != '':
+					markup += ': ' + subactivity
+				markup += '</b>'
+				if text != '':
+					markup += '\n' + text
+				self._activity_image.set_tooltip_markup(markup)
 			else:
+				markup = activity
+				if subactivity != '':
+					markup += ': ' + subactivity
+				if text != '':
+					markup += '\n' + text
 				self._activity_tooltip.set_tip(
-					self._activity_image, '%s%s%s%s%s' % (
-					activity,
-					': ' if subactivity is not '' else '',
-					subactivity,
-					'\n' if text is not '' else '', text))
+					self._activity_image, markup)
 
 			self._activity_image.show()
 		else:
