@@ -9,7 +9,11 @@ MOODS = ['afraid', 'amazed', 'angry', 'annoyed', 'anxious', 'aroused',
 	'intoxicated', 'invincible', 'jealous', 'lonely', 'mean', 'moody', 
 	'nervous', 'neutral', 'offended', 'playful', 'proud', 'relieved',
 	'remorseful', 'restless', 'sad', 'sarcastic', 'serious', 'shocked',
-	'shy', 'sick', 'sleepy', 'stressed', 'surprised', 'thirsty', 'worried']
+	'shy', 'sick', 'sleepy', 'stressed', 'surprised', 'thirsty',
+	'thoughtful', 'worried']
+
+# These moods are only available in the Gajim namespace
+GAJIM_MOODS = ['thoughtful']
 
 ACTIVITIES = {
 	'doing_chores': {'category':	_('Doing Chores'),
@@ -371,7 +375,8 @@ def user_send_mood(account, mood, message = ''):
 		return
 	item = xmpp.Node('mood', {'xmlns': xmpp.NS_MOOD})
 	if mood != '':
-		item.addChild(mood)
+		item.addChild(mood, namespace = 'http://gajim.org/moods' \
+			if mood in GAJIM_MOODS else None)
 	if message != '':
 		i = item.addChild('text')
 		i.addData(message)

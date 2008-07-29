@@ -1240,7 +1240,7 @@ class RosterWindow:
 			pixbuf = gtkgui_helpers.load_mood_icon(
 				contact.mood['mood']).get_pixbuf()
 		elif contact.mood.has_key('mood'):
-			pixbuf = gtkgui_helpers.load_mood_image(
+			pixbuf = gtkgui_helpers.load_mood_icon(
 				'unknown').get_pixbuf()
 		else:
 			pixbuf = None
