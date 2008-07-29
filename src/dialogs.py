@@ -500,7 +500,10 @@ class ChangeMoodDialog:
 				self.mood_buttons[con.mood['mood']]. \
 					set_active(True)
 
-		self.entry.set_sensitive(True if self.mood else False)
+		if self.mood:
+			self.entry.set_sensitive(True)
+		else:
+			self.entry.set_sensitive(False)
 
 		if 'text' in con.mood:
 			self.entry.set_text(con.mood['text'])
