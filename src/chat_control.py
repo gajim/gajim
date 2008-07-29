@@ -1326,9 +1326,12 @@ class ChatControl(ChatControlBase):
 				source = gobject.markup_escape_text(source)
 
 		if artist or title:
-			artist = artist if artist else _('Unknown Artist')
-			title  = title  if title  else _('Unknown Title')
-			source = source if source else _('Unknown Source')
+			if not artist:
+				artist = _('Unknown Artist')
+			if not title:
+				title = _('Unknown Title')
+			if not source:
+				source = _('Unknown Source')
 
 			if HAVE_MARKUP_TOOLTIPS:
 				self._tune_image.set_tooltip_markup(
