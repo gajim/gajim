@@ -1936,10 +1936,8 @@ class RosterWindow:
 		child_iterA = self._get_account_iter(account, self.model)
 		if status != 'offline':
 			if to is None:
-				gajim.config.set_per('accounts', account,
-					'last_status', status)
-				gajim.config.set_per('accounts', account,
-					'last_status_msg',
+				gajim.config.set_per('accounts', account, 'last_status', status)
+				gajim.config.set_per('accounts', account, 'last_status_msg',
 					helpers.to_one_line(txt))
 			if gajim.connections[account].connected < 2:
 				self.set_connecting_state(account)
