@@ -217,7 +217,10 @@ class MusicTrackListener(gobject.GObject):
 				bus.get_object('org.gnome.Rhythmbox',
 				'/org/gnome/Rhythmbox/Player'), 'org.gnome.Rhythmbox.Player')
 			rbshell = dbus.Interface(rbshellobj, 'org.gnome.Rhythmbox.Shell')
-			uri = player.getPlayingUri()
+			try:
+				uri = player.getPlayingUri()
+			except dbus.DBusException:
+				uri = None
 			if not uri:
 				return None
 			props = rbshell.getSongProperties(uri)
