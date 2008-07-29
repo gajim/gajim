@@ -1227,10 +1227,10 @@ class ChatControl(ChatControlBase):
 
 			if HAVE_MARKUP_TOOLTIPS:
 				mood = gobject.markup_escape_text(mood)
-				text = gobject.markup_escape_text(text)
 
 				tooltip = '<b>%s</b>' % mood
 				if text:
+					text = gobject.markup_escape_text(text)
 					tooltip += '\n' + text
 				self._mood_image.set_tooltip_markup(tooltip)
 			else:
@@ -1276,13 +1276,13 @@ class ChatControl(ChatControlBase):
 				activity = gobject.markup_escape_text(activity)
 				subactivity = gobject.markup_escape_text(
 					subactivity)
-				text = gobject.markup_escape_text(text)
 
 				tooltip = '<b>' + activity
 				if subactivity:
 					tooltip += ': ' + subactivity
 				tooltip += '</b>'
 				if text:
+					text = gobject.markup_escape_text(text)
 					tooltip += '\n' + text
 				self._activity_image.set_tooltip_markup(tooltip)
 			else:
