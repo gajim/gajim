@@ -105,6 +105,11 @@ class PreferencesWindow:
 		self.xml.get_widget('show_mood_in_roster_checkbutton'). \
 			set_active(st)
 
+		# Display activity in roster
+		st = gajim.config.get('show_activity_in_roster')
+		self.xml.get_widget('show_activity_in_roster_checkbutton'). \
+			set_active(st)
+
 		# Display tunes in roster
 		st = gajim.config.get('show_tunes_in_roster')
 		self.xml.get_widget('show_tunes_in_roster_checkbutton'). \
@@ -540,6 +545,10 @@ class PreferencesWindow:
 
 	def on_show_mood_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_mood_in_roster')
+		gajim.interface.roster.setup_and_draw_roster()
+
+	def on_show_activity_in_roster_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'show_activity_in_roster')
 		gajim.interface.roster.setup_and_draw_roster()
 
 	def on_show_tunes_in_roster_checkbutton_toggled(self, widget):

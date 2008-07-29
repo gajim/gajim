@@ -323,10 +323,10 @@ def user_activity(items, name, jid):
 			if contact.activity.has_key('text'):
 				del contact.activity['text']
 
-	#if jid == gajim.get_jid_from_account(name):
-	#	gajim.interface.roster.draw_account(name)
-	#else:
-	#	gajim.interface.roster.draw_activity(user, name)
+	if jid == gajim.get_jid_from_account(name):
+		gajim.interface.roster.draw_account(name)
+	else:
+		gajim.interface.roster.draw_activity(user, name)
 	ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
 	if ctrl:
 		ctrl.update_activity()

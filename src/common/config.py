@@ -216,6 +216,7 @@ class Config:
 		'show_status_msgs_in_roster': [opt_bool, True, _('If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window.'), True],
 		'show_avatars_in_roster': [opt_bool, True, '', True],
 		'show_mood_in_roster': [opt_bool, True, '', True],
+		'show_activity_in_roster': [opt_bool, True, '', True],
 		'show_tunes_in_roster': [opt_bool, True, '', True],
 		'avatar_position_in_roster': [opt_str, 'right', _('Define the position of the avatar in roster. Can be left or right'), True],
 		'ask_avatars_on_startup': [opt_bool, True, _('If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cached that is too old.')],

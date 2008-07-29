@@ -90,6 +90,23 @@
                               </packing>
                             </child>
                             <child>
+                              <widget class="GtkCheckButton" id="show_activity_in_roster_checkbutton">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip" translatable="yes">If checked, Gajim will display the activity of contacts in the roster window</property>
+                                <property name="label" translatable="yes">Display _activity of contacts in roster</property>
+                                <property name="use_underline">True</property>
+                                <property name="response_id">0</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="on_show_activity_in_roster_checkbutton_toggled"/>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                            <child>
                               <widget class="GtkCheckButton" id="show_tunes_in_roster_checkbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -103,7 +120,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
-                                <property name="position">3</property>
+                                <property name="position">4</property>
                               </packing>
                             </child>
                             <child>
@@ -120,7 +137,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
-                                <property name="position">4</property>
+                                <property name="position">5</property>
                               </packing>
                             </child>
                           </widget>

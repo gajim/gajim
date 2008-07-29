@@ -62,7 +62,7 @@ if dbus_support.supported:
 from lastfm_track_listener import LastFMTrackListener
 
 from common.xmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC
-from common.pep import MOODS
+from common.pep import MOODS, ACTIVITIES
 
 try:
 	from osx import syncmenu
@@ -77,10 +77,11 @@ C_TYPE, # account, group or contact?
 C_JID, # the jid of the row
 C_ACCOUNT, # cellrenderer text that holds account name
 C_MOOD_PIXBUF,
+C_ACTIVITY_PIXBUF,
 C_TUNE_PIXBUF,
 C_AVATAR_PIXBUF, # avatar_pixbuf
 C_PADLOCK_PIXBUF, # use for account row only
-) = range(9)
+) = range(10)
 
 class RosterWindow:
 	'''Class for main window of the GTK+ interface'''
@@ -290,7 +291,7 @@ class RosterWindow:
 			self.model.append(None, [
 				gajim.interface.jabber_state_images['16'][show],
 				_('Merged accounts'), 'account', '', 'all',
-				None, None, None, None])
+				None, None, None, None, None])
 		else:
 			show = gajim.SHOW_LIST[gajim.connections[account]. \
 				connected]
@@ -306,7 +307,8 @@ class RosterWindow:
 			self.model.append(None, [
 				gajim.interface.jabber_state_images['16'][show],
 				gobject.markup_escape_text(account), 'account',
-				our_jid, account, None, None, None, tls_pixbuf])
+				our_jid, account, None, None, None, None,
+				tls_pixbuf])
 
 		self.draw_account(account)
 
@@ -370,7 +372,7 @@ class RosterWindow:
 				it = self.model.append(child_iter, (None,
 					contact.get_shown_name(), 'contact',
 					contact.jid, account, None, None, None,
-					None))
+					None, None))
 				added_iters.append(it)
 		else:
 			# We are a normal contact. Add us to our groups.
@@ -389,7 +391,7 @@ class RosterWindow:
 						['closed'], gobject. \
 						markup_escape_text(group),
 						'group', group, account, None,
-						None, None, None])
+						None, None, None, None])
 					self.draw_group(group, account)
 
 				if contact.is_transport():
@@ -404,7 +406,7 @@ class RosterWindow:
 				i_ = self.model.append(child_iterG, (None,
 					contact.get_shown_name(), typestr,
 					contact.jid, account, None, None, None,
-					None))
+					None, None))
 				added_iters.append(i_)
 
 				# Restore the group expand state
@@ -612,6 +614,7 @@ class RosterWindow:
 			for c, acc in brothers:
 				self.draw_contact(c.jid, acc)
 				self.draw_mood(c.jid, acc)
+				self.draw_activity(c.jid, acc)
 				self.draw_tune(c.jid, acc)
 				self.draw_avatar(c.jid, acc)
 
@@ -654,10 +657,12 @@ class RosterWindow:
 
 		child_iterA = self._get_account_iter(account, self.model)
 		self.model.append(child_iterA, (None, gajim.nicks[account],
-			'self_contact', jid, account, None, None, None, None))
+			'self_contact', jid, account, None, None, None, None,
+			None))
 
 		self.draw_contact(jid, account)
 		self.draw_mood(jid, account)
+		self.draw_activity(jid, account)
 		self.draw_tune(jid, account)
 		self.draw_avatar(jid, account)
 		self.draw_account(account)
@@ -717,6 +722,7 @@ class RosterWindow:
 			for c, acc in contacts:
 				self.draw_contact(c.jid, acc)
 				self.draw_mood(c.jid, acc)
+				self.draw_activity(c.jid, acc)
 				self.draw_tune(c.jid, acc)
 				self.draw_avatar(c.jid, acc)
 			for group in contact.get_shown_groups():
@@ -775,6 +781,7 @@ class RosterWindow:
 					for c, acc in brothers:
 						self.draw_contact(c.jid, acc)
 						self.draw_mood(c.jid, acc)
+						self.draw_activity(c.jid, acc)
 						self.draw_tune(c.jid, acc)
 						self.draw_avatar(c.jid, acc)
 
@@ -983,11 +990,11 @@ class RosterWindow:
 
 		if gajim.config.get('show_mood_in_roster') \
 		and gajim.connections[account].mood.has_key('mood') \
-		and gajim.connections[account].mood['mood'] in MOODS:
+		and gajim.connections[account].mood['mood'].strip() in MOODS:
 			self.model[child_iter][C_MOOD_PIXBUF] = \
 				gtkgui_helpers.load_mood_icon(
-				gajim.connections[account].mood['mood']). \
-				get_pixbuf()
+				gajim.connections[account].mood['mood']. \
+				strip()).get_pixbuf()
 		elif gajim.config.get('show_mood_in_roster') \
 		and gajim.connections[account].mood.has_key('mood'):
 			self.model[child_iter][C_MOOD_PIXBUF] = \
@@ -995,6 +1002,22 @@ class RosterWindow:
 				get_pixbuf()
 		else:
 			self.model[child_iter][C_MOOD_PIXBUF] = None
+
+		if gajim.config.get('show_activity_in_roster') \
+		and gajim.connections[account].activity.has_key('activity') \
+		and gajim.connections[account].activity['activity'].strip() \
+		in ACTIVITIES:
+			self.model[child_iter][C_ACTIVITY_PIXBUF] = \
+				gtkgui_helpers.load_activity_icon(
+				gajim.connections[account]. \
+				activity['activity'].strip()).get_pixbuf()
+		elif gajim.config.get('show_activity_in_roster') \
+		and gajim.connections[account].activity.has_key('activity'):
+			self.model[child_iter][C_ACTIVITY_PIXBUF] = \
+				gtkgui_helpers.load_activity_icon('unknown'). \
+				get_pixbuf()
+		else:
+			self.model[child_iter][C_ACTIVITY_PIXBUF] = None
 
 		if gajim.config.get('show_tunes_in_roster') \
 		and (gajim.connections[account].tune.has_key('artist') \
@@ -1236,9 +1259,9 @@ class RosterWindow:
 		jid = jid.decode('utf-8')
 		contact = gajim.contacts.get_contact(account, jid)
 		if contact.mood.has_key('mood') \
-		and contact.mood['mood'] in MOODS:
+		and contact.mood['mood'].strip() in MOODS:
 			pixbuf = gtkgui_helpers.load_mood_icon(
-				contact.mood['mood']).get_pixbuf()
+				contact.mood['mood'].strip()).get_pixbuf()
 		elif contact.mood.has_key('mood'):
 			pixbuf = gtkgui_helpers.load_mood_icon(
 				'unknown').get_pixbuf()
@@ -1246,6 +1269,28 @@ class RosterWindow:
 			pixbuf = None
 		for child_iter in iters:
 			self.model[child_iter][C_MOOD_PIXBUF] = pixbuf
+		return False
+
+
+	def draw_activity(self, jid, account):
+		iters = self._get_contact_iter(jid, account, model = self.model)
+		if not iters or not gajim.config.get('show_activity_in_roster'):
+			return
+		jid = self.model[iters[0]][C_JID]
+		jid = jid.decode('utf-8')
+		contact = gajim.contacts.get_contact(account, jid)
+		if contact.activity.has_key('activity') \
+		and contact.activity['activity'].strip() in ACTIVITIES:
+			pixbuf = gtkgui_helpers.load_activity_icon(
+				contact.activity['activity'].strip()). \
+				get_pixbuf()
+		elif contact.activity.has_key('activity'):
+			pixbuf = gtkgui_helpers.load_activity_icon(
+				'unknown').get_pixbuf()
+		else:
+			pixbuf = None
+		for child_iter in iters:
+			self.model[child_iter][C_ACTIVITY_PIXBUF] = pixbuf
 		return False
 
 
@@ -1314,6 +1359,7 @@ class RosterWindow:
 			for jid in jids:
 				self.draw_contact(jid, account)
 				self.draw_mood(jid, account)
+				self.draw_activity(jid, account)
 				self.draw_tune(jid, account)
 				self.draw_avatar(jid, account)
 				yield True
@@ -1326,10 +1372,10 @@ class RosterWindow:
 		'''create new empty model and draw roster'''
 		self.modelfilter = None
 		# (icon, name, type, jid, account, editable, mood_pixbuf,
-		# avatar_pixbuf, padlock_pixbuf)
+		# activity_pixbuf, tune_pixbuf avatar_pixbuf, padlock_pixbuf)
 		self.model = gtk.TreeStore(gtk.Image, str, str, str, str,
 			gtk.gdk.Pixbuf, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf,
-			gtk.gdk.Pixbuf)
+			gtk.gdk.Pixbuf, gtk.gdk.Pixbuf)
 
 		self.model.set_sort_func(1, self._compareIters)
 		self.model.set_sort_column_id(1, gtk.SORT_ASCENDING)
@@ -3734,6 +3780,7 @@ class RosterWindow:
 			for c, acc in brothers:
 				self.draw_contact(c.jid, acc)
 				self.draw_mood(c.jid, acc)
+				self.draw_activity(c.jid, acc)
 				self.draw_tune(c.jid, acc)
 				self.draw_avatar(c.jid, acc)
 
@@ -4253,6 +4300,59 @@ class RosterWindow:
 
 		# allocate space for the icon only if needed
 		if model[titer][C_MOOD_PIXBUF]:
+			renderer.set_property('visible', True)
+		else:
+			renderer.set_property('visible', False)
+		if type_ == 'account':
+			color = gajim.config.get_per('themes', theme,
+				'accountbgcolor')
+			if color:
+				renderer.set_property('cell-background', color)
+			else:
+				self.set_renderer_color(renderer,
+					gtk.STATE_ACTIVE)
+			# align pixbuf to the right)
+			renderer.set_property('xalign', 1)
+		# prevent type_ = None, see http://trac.gajim.org/ticket/2534
+		elif type_:
+			if not model[titer][C_JID] \
+			or not model[titer][C_ACCOUNT]:
+				# This can append at the moment we add the row
+				return
+			jid = model[titer][C_JID].decode('utf-8')
+			account = model[titer][C_ACCOUNT].decode('utf-8')
+			if jid in gajim.newly_added[account]:
+				renderer.set_property('cell-background',
+					gajim.config.get(
+					'just_connected_bg_color'))
+			elif jid in gajim.to_be_removed[account]:
+				renderer.set_property('cell-background',
+					gajim.config.get(
+					'just_disconnected_bg_color'))
+			else:
+				color = gajim.config.get_per('themes',
+					theme, 'contactbgcolor')
+				if color:
+					renderer.set_property(
+						'cell-background', color)
+				else:
+					renderer.set_property(
+						'cell-background', None)
+			# align pixbuf to the right
+			renderer.set_property('xalign', 1)
+
+
+	def _fill_activity_pixbuf_rederer(self, column, renderer, model, titer,
+	data = None):
+		'''When a row is added, set properties for avatar renderer'''
+		theme = gajim.config.get('roster_theme')
+		type_ = model[titer][C_TYPE]
+		if type_ == 'group':
+			renderer.set_property('visible', False)
+			return
+
+		# allocate space for the icon only if needed
+		if model[titer][C_ACTIVITY_PIXBUF]:
 			renderer.set_property('visible', True)
 		else:
 			renderer.set_property('visible', False)
@@ -6157,6 +6257,12 @@ class RosterWindow:
 		col.add_attribute(render_pixbuf, 'pixbuf', C_MOOD_PIXBUF)
 		col.set_cell_data_func(render_pixbuf,
 			self._fill_mood_pixbuf_rederer, None)
+
+		render_pixbuf = gtk.CellRendererPixbuf()
+		col.pack_start(render_pixbuf, expand = False)
+		col.add_attribute(render_pixbuf, 'pixbuf', C_ACTIVITY_PIXBUF)
+		col.set_cell_data_func(render_pixbuf,
+			self._fill_activity_pixbuf_rederer, None)
 
 		render_pixbuf = gtk.CellRendererPixbuf()
 		col.pack_start(render_pixbuf, expand = False)
