@@ -738,6 +738,8 @@ class ConnectionDisco:
 			raise common.xmpp.NodeProcessed
 
 	def _DiscoverInfoGetCB(self, con, iq_obj):
+		if not self.connection:
+			return
 		gajim.log.debug('DiscoverInfoGetCB')
 		q = iq_obj.getTag('query')
 		node = q.getAttr('node')
