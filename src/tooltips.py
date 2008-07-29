@@ -589,17 +589,15 @@ class RosterTooltip(NotificationAreaTooltip):
 			activity = act_plain = \
 				contact.activity['activity'].strip()
 			activity = gobject.markup_escape_text(activity)
-			activity = ACTIVITIES[activity]['category'] \
-				if act_plain in ACTIVITIES else activity
+			if act_plain in ACTIVITIES:
+				activity = ACTIVITIES[activity]['category']
 			activity_string = _('Activity:') + ' <b>%s' % activity
 			if contact.activity.has_key('subactivity'):
 				activity_sub = \
 					contact.activity['subactivity'].strip()
-				activity_sub = \
-					ACTIVITIES[act_plain][activity_sub] \
-					if act_plain in ACTIVITIES and \
-					activity_sub in ACTIVITIES[act_plain] \
-					else activity_sub
+				if act_plain in ACTIVITIES and activity_sub in \
+				ACTIVITIES[act_plain]:
+					activity_sub = ACTIVITIES[act_plain][activity_sub]
 				activity_sub = \
 					gobject.markup_escape_text(activity_sub)
 				activity_string += ' (%s)</b>' % activity_sub
