@@ -375,8 +375,11 @@ def user_send_mood(account, mood, message = ''):
 		return
 	item = xmpp.Node('mood', {'xmlns': xmpp.NS_MOOD})
 	if mood != '':
-		item.addChild(mood, namespace = 'http://gajim.org/moods' \
-			if mood in GAJIM_MOODS else None)
+		if mood in GAJIM_MOODS:
+			ns = 'http://gajim.org/moods'
+		else:
+			ns = None
+		item.addChild(mood, namespace = ns)
 	if message != '':
 		i = item.addChild('text')
 		i.addData(message)
