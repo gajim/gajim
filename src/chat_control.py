@@ -1521,14 +1521,16 @@ class ChatControl(ChatControlBase):
 			label_text = '<span %s>%s</span><span %s>%s %s</span>' \
 				% (font_attrs, name, font_attrs_small,
 				acct_info, chatstate)
-			label_tooltip = '%s%s %s' % (name, ' ' + acct_info \
-				if acct_info else '', chatstate)
+			if acct_info:
+				acct_info = ' ' + acct_info
+			label_tooltip = '%s%s %s' % (name, acct_info, chatstate)
 		else:
 			# weight="heavy" size="x-large"
 			label_text = '<span %s>%s</span><span %s>%s</span>' % \
 				(font_attrs, name, font_attrs_small, acct_info)
-			label_tooltip = '%s%s' % (name, ' ' + acct_info \
-				if acct_info else '')
+			if acct_info:
+				acct_info = ' ' + acct_info
+			label_tooltip = '%s%s' % (name, acct_info)
 
 		if status_escaped:
 			if gajim.HAVE_PYSEXY:
