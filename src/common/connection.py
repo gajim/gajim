@@ -154,6 +154,8 @@ class Connection(ConnectionHandlers):
 		self.activity = {}
 		# Do we continue connection when we get roster (send presence,get vcard..)
 		self.continue_connect_info = None
+		# Do we auto accept insecure connection
+		self.connection_auto_accepted = False
 		# To know the groupchat jid associated with a sranza ID. Useful to
 		# request vcard or os info... to a real JID but act as if it comes from
 		# the fake jid
@@ -617,9 +619,11 @@ class Connection(ConnectionHandlers):
 		'warn_when_plaintext_connection'):
 			self.dispatch('PLAIN_CONNECTION', (con,))
 			return True
+		con.RegisterDisconnectHandler(self._on_disconnected)
 		if _con_type in ('tls', 'ssl') and not hasattr(con.Connection,
 		'_sslContext') and gajim.config.get_per('accounts', self.name,
-		'warn_when_insecure_ssl_connection'):
+		'warn_when_insecure_ssl_connection') and \
+		not self.connection_auto_accepted:
 			# Pyopenssl is not used
 			self.dispatch('INSECURE_SSL_CONNECTION', (con, _con_type))
 			return True
@@ -627,8 +631,10 @@ class Connection(ConnectionHandlers):
 
 	def connection_accepted(self, con, con_type):
 		self.hosts = []
+		self.connection_auto_accepted = False
 		self.connected_hostname = self._current_host['host']
 		self.on_connect_failure = None
+		con.UnregisterDisconnectHandler(self._on_disconnected)
 		con.RegisterDisconnectHandler(self._disconnectedReconnCB)
 		log.debug('Connected to server %s:%s with %s' % (
 			self._current_host['host'], self._current_host['port'], con_type))

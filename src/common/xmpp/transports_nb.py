@@ -476,6 +476,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			if errnum != 0:
 				self.DEBUG(errtxt, 'error')
 				log.error("Connection to %s lost: %s [%d]", self.getName(), errtxt, errnum)
+				self._owner.disconnected()
 				self.printed_error = True
 				if not errors_only and self.state >= 0:
 					self.pollend(retry=True)

@@ -2037,6 +2037,13 @@ class Interface:
 			if is_checked[1]:
 				gajim.config.set_per('accounts', account,
 					'warn_when_insecure_ssl_connection', False)
+			if gajim.connections[account].connected == 0:
+				# We have been disconnecting (too long time since window is opened)
+				# re-connect with auto-accept
+				gajim.connections[account].connection_auto_accepted = True
+				show, msg = gajim.connections[account].continue_connect_info[:2]
+				self.roster.send_status(account, show, msg)
+				return
 			gajim.connections[account].connection_accepted(data[0], data[1])
 		def on_cancel():
 			gajim.connections[account].disconnect(on_purpose=True)
