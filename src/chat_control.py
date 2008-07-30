@@ -1273,17 +1273,12 @@ class ChatControl(ChatControlBase):
 			# Translate standard subactivities
 
 			if HAVE_MARKUP_TOOLTIPS:
-				activity = gobject.markup_escape_text(activity)
-				subactivity = gobject.markup_escape_text(
-					subactivity)
-
-				tooltip = '<b>' + activity
+				tooltip = '<b>' + gobject.markup_escape_text(activity)
 				if subactivity:
-					tooltip += ': ' + subactivity
+					tooltip += ': ' + gobject.markup_escape_text(subactivity)
 				tooltip += '</b>'
 				if text:
-					text = gobject.markup_escape_text(text)
-					tooltip += '\n' + text
+					tooltip += '\n' + gobject.markup_escape_text(text)
 				self._activity_image.set_tooltip_markup(tooltip)
 			else:
 				tooltip = activity
@@ -1296,7 +1291,6 @@ class ChatControl(ChatControlBase):
 			self._activity_image.show()
 		else:
 			self._activity_image.hide()
-
 
 	def update_tune(self):
 		artist = None
