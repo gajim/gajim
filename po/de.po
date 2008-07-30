@@ -7443,7 +7443,7 @@ msgstr "Dateitransfer %(filename)s von %(name)s wurde gestoppt."
 #: ../src/gajim.py:1706
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
-msgstr "Sie haben%(filename)s erfolgreich an %(name)s gesendet."
+msgstr "Sie haben %(filename)s erfolgreich an %(name)s gesendet."
 
 #. ft stopped
 #: ../src/gajim.py:1710
