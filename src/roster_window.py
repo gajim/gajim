@@ -4873,8 +4873,11 @@ class RosterWindow:
 				pep_menuitem.set_submenu(pep_submenu)
 				item = gtk.CheckMenuItem(_('Publish Tune'))
 				pep_submenu.append(item)
-				item.set_active(have_tune)
-				item.connect('toggled', self.on_publish_tune_toggled, account)
+				if not dbus_support.supported:
+					item.set_sensitive(False)
+				else:
+					item.set_active(have_tune)
+					item.connect('toggled', self.on_publish_tune_toggled, account)
 				item = gtk.CheckMenuItem(_('Mood'))
 				pep_submenu.append(item)
 				item.set_active(len(gajim.connections[account].mood) > 0)
@@ -6304,7 +6307,8 @@ class RosterWindow:
 		self.setup_and_draw_roster()
 
 		for account in gajim.connections:
-			if gajim.config.get_per('accounts', account, 'publish_tune'):
+			if gajim.config.get_per('accounts', account, 'publish_tune') and \
+			dbus_support.supported:
 				listener = MusicTrackListener.get()
 				self.music_track_changed_signal = listener.connect(
 					'music-track-changed', self.music_track_changed)
