@@ -505,7 +505,7 @@ msgstr "_Nazwa: "
 
 #: ../data/glade/accounts_window.glade.h:4
 msgid "<b>Proxy</b>"
-msgstr "<p>Proxy</b>"
+msgstr "<b>Proxy</b>"
 
 #: ../data/glade/accounts_window.glade.h:6
 msgid "Accounts"
@@ -1102,7 +1102,7 @@ msgstr ""
 #: ../data/glade/esession_info_window.glade.h:2
 #, fuzzy
 msgid "Close"
-msgstr "Kolor"
+msgstr "Zamknij"
 
 #: ../data/glade/esession_info_window.glade.h:3
 msgid ""
@@ -1728,18 +1728,16 @@ msgid "Display _extra email details"
 msgstr "Wyświetlaj _dodatkowe informacje o poczcie e-mail"
 
 #: ../data/glade/preferences_window.glade.h:41
-#, fuzzy
 msgid "Display _tunes of contacts in roster"
-msgstr "Wyświetlaj awatary kontaktów z listy"
+msgstr "Wyświetlaj muzyczne ikonki kontaktów z listy"
 
 #: ../data/glade/preferences_window.glade.h:42
 msgid "Display a_vatars of contacts in roster"
 msgstr "Wyświetlaj awatary kontaktów z listy"
 
 #: ../data/glade/preferences_window.glade.h:43
-#, fuzzy
 msgid "Display m_ood of contacts in roster"
-msgstr "Wyświetlaj awatary kontaktów z listy"
+msgstr "Wyświetlaj nastroje kontaktów z listy"
 
 #: ../data/glade/preferences_window.glade.h:44
 msgid "Display status _messages of contacts in roster"
@@ -1828,19 +1826,17 @@ msgstr ""
 "jego nazwą na liście kontaktów"
 
 #: ../data/glade/preferences_window.glade.h:57
-#, fuzzy
 msgid ""
 "If checked, Gajim will display the mood of contacts in the roster window"
 msgstr ""
-"Zaznaczenie tej opcji spowoduje wyświetlanie awatarów w oknie listy "
+"Zaznaczenie tej opcji spowoduje wyświetlanie nastrojów w oknie listy "
 "kontaktów (roster oraz okno czatu)"
 
 #: ../data/glade/preferences_window.glade.h:58
-#, fuzzy
 msgid ""
 "If checked, Gajim will display the tunes of contacts in the roster window"
 msgstr ""
-"Zaznaczenie tej opcji spowoduje wyświetlanie awatarów w oknie listy "
+"Zaznaczenie tej opcji spowoduje wyświetlanie muzycznych ikonek w oknie listy "
 "kontaktów (roster oraz okno czatu)"
 
 #: ../data/glade/preferences_window.glade.h:59
@@ -2067,6 +2063,11 @@ msgstr "_Zapisuj w logach zmiany statusów kontaktów"
 #: ../data/glade/preferences_window.glade.h:101
 msgid "_Mail client:"
 msgstr "Klient _poczty:"
+
+#: ../data/glade/preferences_window.glade.h:99
+#, fuzzy
+msgid "_Make message windows compact"
+msgstr "_Spraw, by okna wiadomości były zwarte"
 
 #: ../data/glade/preferences_window.glade.h:102
 msgid "_Not available after:"
