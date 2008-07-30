@@ -391,16 +391,19 @@ class SimpleDataForm(DataForm, DataRecord):
 		c = SimpleDataForm(extend=self)
 		del c.title
 		c.instructions = ''
+		to_be_removed = []
 		for f in c.iter_fields():
 			if f.required:
 				# Keep all required fields
 				continue
 			if (hasattr(f, 'value') and not f.value) or (hasattr(f, 'values') and \
 			len(f.values) == 0):
-				c.delChild(f)
+				to_be_removed.append(f)
 			else:
 				del f.label
 				del f.description
+		for f in to_be_removed:
+			c.delChild(f)
 		return c
 
 class MultipleDataForm(DataForm):
