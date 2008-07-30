@@ -608,6 +608,7 @@ class ChangeStatusMessageDialog:
 			beg, end = self.message_buffer.get_bounds()
 			message = self.message_buffer.get_text(beg, end).decode('utf-8')\
 				.strip()
+			message = helpers.remove_invalid_xml_chars(message)
 			msg = helpers.to_one_line(message)
 			if self.show:
 				gajim.config.set('last_status_msg_' + self.show, msg)

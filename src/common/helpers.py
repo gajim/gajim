@@ -645,6 +645,11 @@ def ensure_utf8_string(string):
 		pass
 	return string
 
+def remove_invalid_xml_chars(string):
+	if string:
+		string = re.sub(gajim.interface.invalid_XML_chars_re, '', string)
+	return string
+
 def get_windows_reg_env(varname, default=''):
 	'''asks for paths commonly used but not exposed as ENVs
 	in english Windows 2003 those are:

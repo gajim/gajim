@@ -20,6 +20,7 @@
 import gtkgui_helpers
 
 from common import gajim
+from common import helpers
 
 # Derived types MUST register their type IDs here if custom behavor is required
 TYPE_CHAT = 'chat'
@@ -154,6 +155,9 @@ class MessageControl:
 		# Send the given message to the active tab.
 		# Doesn't return None if error
 		jid = self.contact.jid
+
+		message = helpers.remove_invalid_xml_chars(message)
+
 		original_message = message
 		conn = gajim.connections[self.account]
 

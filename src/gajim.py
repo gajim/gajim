@@ -2416,6 +2416,10 @@ class Interface:
 		# at least one character in 3 parts (before @, after @, after .)
 		self.sth_at_sth_dot_sth_re = re.compile(r'\S+@\S+\.\S*[^\s)?]')
 
+		# Invalid XML chars
+		invalid_XML_chars = u'[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x19]|[\ud800-\udfff]|[\ufffe-\uffff]'
+		self.invalid_XML_chars_re = re.compile(invalid_XML_chars)
+
 		re.purge() # clear the regular expression cache
 
 	def on_emoticon_sort(self, emot1, emot2):
