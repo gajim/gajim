@@ -2927,8 +2927,8 @@ class PrivacyListsWindow:
 				PrivacyListWindow(self.account, name, 'EDIT')
 
 class InvitationReceivedDialog:
-	def __init__(self, account, room_jid, contact_jid, password = None,
-	comment = None, is_continued = False):
+	def __init__(self, account, room_jid, contact_jid, password=None,
+	comment=None, is_continued=False):
 
 		self.room_jid = room_jid
 		self.account = account
@@ -2951,9 +2951,8 @@ class InvitationReceivedDialog:
 			comment = _('Comment: %s') % comment
 			sectext += '\n\n%s' % comment
 		sectext += '\n\n' + _('Do you want to accept the invitation?')
-		
-		dialog = YesNoDialog(pritext, sectext)
-		if dialog.get_response() == gtk.RESPONSE_YES:
+
+		def on_yes(checked):
 			try:
 				if self.is_continued:
 					gajim.interface.join_gc_room(self.account, self.room_jid,
@@ -2962,6 +2961,8 @@ class InvitationReceivedDialog:
 					JoinGroupchatWindow(self.account, self.room_jid)
 			except GajimGeneralException:
 				pass
+
+		dialog = YesNoDialog(pritext, sectext, on_response_yes=on_yes)
 
 class ProgressDialog:
 	def __init__(self, title_text, during_text, messages_queue):
