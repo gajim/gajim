@@ -60,6 +60,10 @@ class Systray:
 		self.added_hide_menuitem = False 
 		self.img_tray = gtk.Image()
 		self.status = 'offline'
+		self.double_click = False
+		self.double_click_id = None
+		self.double_click_time = gtk.settings_get_default().get_property(
+			'gtk-double-click-time')
 		self.xml = gtkgui_helpers.get_glade('systray_context_menu.glade')
 		self.systray_context_menu = self.xml.get_widget('systray_context_menu')
 		self.xml.signal_autoconnect(self)
@@ -283,6 +287,10 @@ class Systray:
 		gajim.interface.roster.on_quit_request()
 
 	def on_left_click(self):
+		self.double_click_id = None
+		if self.double_click:
+			self.double_click = False
+			return
 		win = gajim.interface.roster.window
 		# toggle visible/hidden for roster window
 		if win.get_property('visible') and win.get_property('has-toplevel-focus'):
@@ -312,10 +320,16 @@ class Systray:
 
 	def on_clicked(self, widget, event):
 		self.on_tray_leave_notify_event(widget, None)
+		if event.type == gtk.gdk._2BUTTON_PRESS:
+			self.double_click = True
+			self.on_middle_click()
 		if event.type != gtk.gdk.BUTTON_PRESS:
 			return
 		if event.button == 1: # Left click
-			self.on_left_click()
+			if self.double_click_id:
+				gobject.source_remove(self.double_click_id)
+			self.double_click_id = gobject.timeout_add(self.double_click_time,
+				self.on_left_click)
 		elif event.button == 2: # middle click
 			self.on_middle_click()
 		elif event.button == 3: # right click
