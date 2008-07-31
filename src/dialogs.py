@@ -869,6 +869,11 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 			ErrorDialog(pritext, _('The user ID must not contain a resource.'))
 			return
 
+		if jid == gajim.get_jid_from_account(self.account):
+			pritext = _('Invalid User ID')
+			ErrorDialog(pritext, _('You cannot add yourself to your roster.'))
+			return
+
 		nickname = self.nickname_entry.get_text().decode('utf-8') or ''
 		# get value of account combobox, if account was not specified
 		if not self.account:
