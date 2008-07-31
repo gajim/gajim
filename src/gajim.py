@@ -432,6 +432,64 @@ class GlibIdleQueue(idlequeue.IdleQueue):
 	def process(self):
 		self.check_time_events()
 
+class PassphraseRequest:
+	def __init__(self, keyid):
+		self.keyid = keyid
+		self.callbacks = []
+		self.dialog_created = False
+		self.completed = False
+
+	def run_callback(self, account, callback):
+		gajim.connections[account].gpg_passphrase(self.passphrase)
+		callback()
+
+	def add_callback(self, account, cb):
+		if self.completed:
+			self.run_callback(account, cb)
+		else:
+			self.callbacks.append((account, cb))
+			if not self.dialog_created:
+				self.create_dialog(account)
+
+	def complete(self, passphrase):
+		self.passphrase = passphrase
+		self.completed = True
+		if passphrase is not None:
+			gobject.timeout_add(30000, gajim.interface.forget_gpg_passphrase,
+				self.keyid)
+		for (account, cb) in self.callbacks:
+			self.run_callback(account, cb)
+		del self.callbacks
+
+	def create_dialog(self, account):
+		title = _('Passphrase Required')
+		second = _('Enter GPG key passphrase for key %s (account %s).'
+			) % (self.keyid, account)
+
+		def _cancel():
+			# user cancelled, continue without GPG
+			gajim.connections[account].gpg_passphrase(None)
+			callback()
+
+		def _ok(passphrase, checked, count):
+			if count < 3:
+				done = gajim.connections[account].test_gpg_passphrase(passphrase)
+			else:
+				done = True
+				passphrase = None
+
+			if done:
+				self.complete(passphrase)
+			else:
+				# ask again
+				dialogs.PassphraseDialog(_('Wrong Passphrase'),
+					_('Please retype your GPG passphrase or press Cancel.'),
+					ok_handler=(_ok, count + 1), cancel_handler=_cancel)
+
+		dialogs.PassphraseDialog(title, second, ok_handler=(_ok, 0),
+			cancel_handler=_cancel)
+		self.dialog_created = True
+
 class Interface:
 
 ################################################################################		
@@ -1409,41 +1467,12 @@ class Interface:
 		#('GPG_PASSWORD_REQUIRED', account, (callback,))
 		callback = array[0]
 		keyid = gajim.config.get_per('accounts', account, 'keyid')
-		if self.gpg_passphrase.has_key(keyid):
-			gajim.connections[account].gpg_passphrase(self.gpg_passphrase[keyid])
-			callback()
-			return
-
-		title = _('Passphrase Required')
-		second = _('Enter GPG key passphrase for account %s.') % account
-
-		def _cancel():
-			# user cancelled, continue without GPG
-			gajim.connections[account].gpg_passphrase(None)
-			callback()
-
-		def _ok(passphrase, checked, count):
-			if count < 3:
-				count += 1
-				done = gajim.connections[account].test_gpg_passphrase(passphrase)
-			else:
-				done = True
-				passphrase = None
-
-			if done:
-				if passphrase is not None:
-					self.gpg_passphrase[keyid] = passphrase
-					gobject.timeout_add(30000, self.forget_gpg_passphrase, keyid)
-				gajim.connections[account].gpg_passphrase(passphrase)
-				callback()
-			else:
-				# ask again
-				dialogs.PassphraseDialog(_('Wrong Passphrase'),
-					_('Please retype your GPG passphrase or press Cancel.'),
-					ok_handler=(_ok, count), cancel_handler=_cancel)
-
-		dialogs.PassphraseDialog(title, second, ok_handler=(_ok, 0),
-		cancel_handler=_cancel)
+		if keyid in self.gpg_passphrase:
+			request = self.gpg_passphrase[keyid]
+		else:
+			request = PassphraseRequest(keyid)
+			self.gpg_passphrase[keyid] = request
+		request.add_callback(account, callback)
 
 	def handle_event_roster_info(self, account, array):
 		#('ROSTER_INFO', account, (jid, name, sub, ask, groups))
