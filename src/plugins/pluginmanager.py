@@ -194,6 +194,12 @@ class PluginManager(object):
 		return success
 	
 	def deactivate_plugin(self, plugin):
+		# remove GUI extension points handlers (provided by plug-in) from
+		# handlers list
+		for gui_extpoint_name, gui_extpoint_handlers in \
+				plugin.gui_extension_points.iteritems():
+			self.gui_extension_points_handlers[gui_extpoint_name].remove(gui_extpoint_handlers)
+		
 		# detaching plug-in from handler GUI extension points (calling
 		# cleaning up method that must be provided by plug-in developer
 		# for each handled GUI extension point)
@@ -201,14 +207,10 @@ class PluginManager(object):
 				plugin.gui_extension_points.iteritems():
 			if gui_extpoint_name in self.gui_extension_points:
 				for gui_extension_point_args in self.gui_extension_points[gui_extpoint_name]:
-					gui_extpoint_handlers[1](*gui_extension_point_args)
-				
-		# remove GUI extension points handlers (provided by plug-in) from
-		# handlers list
-		for gui_extpoint_name, gui_extpoint_handlers in \
-				plugin.gui_extension_points.iteritems():
-			self.gui_extension_points_handlers[gui_extpoint_name].remove(gui_extpoint_handlers)
-			
+					handler = gui_extpoint_handlers[1]
+					if handler:
+						handler(*gui_extension_point_args)
+		
 		# removing plug-in from active plug-ins list
 		plugin.deactivate()
 		self.active_plugins.remove(plugin)
@@ -232,7 +234,9 @@ class PluginManager(object):
 				plugin.gui_extension_points.iteritems():
 			if gui_extpoint_name in self.gui_extension_points:
 				for gui_extension_point_args in self.gui_extension_points[gui_extpoint_name]:
-					gui_extpoint_handlers[0](*gui_extension_point_args)
+					handler = gui_extpoint_handlers[0]
+					if handler:
+						handler(*gui_extension_point_args)
 
 	@log_calls('PluginManager')
 	def _activate_all_plugins(self):

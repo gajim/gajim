@@ -109,6 +109,8 @@ class ChatControlBase(MessageControl):
 		'''
 		self.draw_banner_text()
 		self._update_banner_state_image()
+		gajim.plugin_manager.gui_extension_point('chat_control_base_draw_banner',
+												 self)
 		# Derived types MAY implement this
 
 	def draw_banner_text(self):
