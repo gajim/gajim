@@ -2553,16 +2553,19 @@ class RemoveAccountWindow:
 				gajim.connections[self.account].change_status('offline', 'offline')
 			if self.remove_and_unregister_radiobutton.get_active():
 				if not gajim.connections[self.account].password:
-					passphrase = ''
+					def on_ok(passphrase, checked):
+						if passphrase == -1:
+							# We don't remove account cause we canceled pw window
+							return
+						gajim.connections[self.account].password = passphrase
+						gajim.connections[self.account].unregister_account(
+							self._on_remove_success)
+
 					w = dialogs.PassphraseDialog(
 						_('Password Required'),
 						_('Enter your password for account %s') % self.account,
-						_('Save password'))
-					passphrase, save = w.run()
-					if passphrase == -1:
-						# We don't remove account cause we canceled pw window
-						return
-					gajim.connections[self.account].password = passphrase
+						_('Save password'), ok_handler=on_ok)
+					return
 				gajim.connections[self.account].unregister_account(
 					self._on_remove_success)
 			else:
@@ -2572,7 +2575,7 @@ class RemoveAccountWindow:
 			dialog = dialogs.ConfirmationDialog(
 				_('Account "%s" is connected to the server') % self.account,
 				_('If you remove it, the connection will be lost.'),
-				on_response_ok = remove)
+				on_response_ok=remove)
 		else:
 			remove()
 

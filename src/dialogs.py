@@ -199,26 +199,8 @@ class EditGroupsDialog:
 
 class PassphraseDialog:
 	'''Class for Passphrase dialog'''
-	def run(self):
-		'''Wait for OK button to be pressed and return passphrase/password'''
-		rep = self.window.run()
-		if rep == gtk.RESPONSE_OK:
-			passphrase = self.passphrase_entry.get_text().decode('utf-8')
-		else:
-			passphrase = -1
-
-		if self.check:
-			save_passphrase_checkbutton = self.xml.\
-				get_widget('save_passphrase_checkbutton')
-			checked = save_passphrase_checkbutton.get_active()
-		else:
-			checked = False
-
-		self.window.destroy()
-		return passphrase, checked
-
-	def __init__(self, titletext, labeltext, checkbuttontext=None, is_modal=True,
-	ok_handler = None, cancel_handler = None):
+	def __init__(self, titletext, labeltext, checkbuttontext=None,
+	ok_handler=None, cancel_handler=None):
 		self.xml = gtkgui_helpers.get_glade('passphrase_dialog.glade')
 		self.window = self.xml.get_widget('passphrase_dialog')
 		self.passphrase_entry = self.xml.get_widget('passphrase_entry')
@@ -229,13 +211,11 @@ class PassphraseDialog:
 		self.ok = False
 
 		self.cancel_handler = cancel_handler
-		self.is_modal = is_modal
-		if not is_modal and ok_handler is not None:
-			self.ok_handler = ok_handler
-			okbutton = self.xml.get_widget('ok_button')
-			okbutton.connect('clicked', self.on_okbutton_clicked)
-			cancelbutton = self.xml.get_widget('cancel_button')
-			cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
+		self.ok_handler = ok_handler
+		okbutton = self.xml.get_widget('ok_button')
+		okbutton.connect('clicked', self.on_okbutton_clicked)
+		cancelbutton = self.xml.get_widget('cancel_button')
+		cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
 
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -248,6 +228,9 @@ class PassphraseDialog:
 			checkbutton.hide()
 
 	def on_okbutton_clicked(self, widget):
+		if not self.ok_handler:
+			return
+
 		passph = self.passphrase_entry.get_text().decode('utf-8')
 
 		if self.check:

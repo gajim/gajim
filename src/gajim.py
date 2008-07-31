@@ -1440,11 +1440,10 @@ class Interface:
 				# ask again
 				dialogs.PassphraseDialog(_('Wrong Passphrase'),
 					_('Please retype your GPG passphrase or press Cancel.'),
-					is_modal=False, ok_handler=(_ok, count), cancel_handler=_cancel)
+					ok_handler=(_ok, count), cancel_handler=_cancel)
 
-		dialogs.PassphraseDialog(title, second,
-			is_modal=False, ok_handler=(_ok, 0), cancel_handler=_cancel)
-
+		dialogs.PassphraseDialog(title, second, ok_handler=(_ok, 0),
+		cancel_handler=_cancel)
 
 	def handle_event_roster_info(self, account, array):
 		#('ROSTER_INFO', account, (jid, name, sub, ask, groups))

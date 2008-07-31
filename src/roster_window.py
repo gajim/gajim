@@ -1932,7 +1932,7 @@ class RosterWindow:
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.change_status('connecting')
 
-	def send_status(self, account, status, txt, auto = False, to = None):
+	def send_status(self, account, status, txt, auto=False, to=None):
 		child_iterA = self._get_account_iter(account, self.model)
 		if status != 'offline':
 			if to is None:
@@ -1950,27 +1950,39 @@ class RosterWindow:
 						text += '\n' + _('Gnome Keyring is installed but not \
 							correctly started (environment variable probably not \
 							correctly set)')
-					w = dialogs.PassphraseDialog(_('Password Required'), text,
-						_('Save password'))
-					passphrase, save = w.run()
-					if passphrase == -1:
+					def on_ok(passphrase, save):
+						gajim.connections[account].password = passphrase
+						if save:
+							gajim.config.set_per('accounts', account, 'savepass', True)
+							passwords.save_password(account, passphrase)
+						keyid = gajim.config.get_per('accounts', account, 'keyid')
+						if keyid and not gajim.connections[account].gpg:
+							dialog = dialogs.WarningDialog(_('GPG is not usable'),
+								_('You will be connected to %s without OpenPGP.') % \
+								account)
+						self.send_status_continue(account, status, txt, auto, to)
+
+					def on_cancel():
 						if child_iterA:
 							self.model[child_iterA][0] = \
 								gajim.interface.jabber_state_images['16']['offline']
 						if gajim.interface.systray_enabled:
 							gajim.interface.systray.change_status('offline')
 						self.update_status_combobox()
-						return
-					gajim.connections[account].password = passphrase
-					if save:
-						gajim.config.set_per('accounts', account, 'savepass', True)
-						passwords.save_password(account, passphrase)
+
+					w = dialogs.PassphraseDialog(_('Password Required'), text,
+						_('Save password'), ok_handler=on_ok,
+						cancel_handler=on_cancel)
+					return
 
 				keyid = gajim.config.get_per('accounts', account, 'keyid')
 				if keyid and not gajim.connections[account].gpg:
 					dialog = dialogs.WarningDialog(_('GPG is not usable'),
 						_('You will be connected to %s without OpenPGP.') % account)
 
+		self.send_status_continue(account, status, txt, auto, to)
+
+	def send_status_continue(self, account, status, txt, auto, to):
 		if gajim.account_is_connected(account):
 			if status == 'online' and gajim.interface.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
