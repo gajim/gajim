@@ -919,7 +919,7 @@ class RosterWindow:
 
 	# FIXME: maybe move to gajim.py
 	def remove_to_be_removed(self, jid, account):
-		if not gajim.interface.instances.has_key(account):
+		if account not in gajim.interface.instances:
 			# Account has been deleted during the timeout that called us
 			return
 		if jid in gajim.newly_added[account]:
@@ -1073,8 +1073,7 @@ class RosterWindow:
 		contact = gajim.contacts.get_highest_prio_contact_from_contacts(
 			contact_instances)
 
-		child_iters = self._get_contact_iter(jid, account,
-			contact, self.model)
+		child_iters = self._get_contact_iter(jid, account, contact, self.model)
 		if not child_iters:
 			return False
 
@@ -1099,8 +1098,7 @@ class RosterWindow:
 			strike = True
 		else:
 			for group in contact.get_shown_groups():
-				if group in \
-				gajim.connections[account].blocked_groups:
+				if group in gajim.connections[account].blocked_groups:
 					strike = True
 					break
 		if strike:
@@ -1123,13 +1121,10 @@ class RosterWindow:
 				# useless to add account name
 				if account_ == account:
 					continue
-				for jid_ in \
-				gajim.contacts.get_jid_list(account_):
-					contact_ = gajim.contacts. \
-						get_first_contact_from_jid(
+				for jid_ in gajim.contacts.get_jid_list(account_):
+					contact_ = gajim.contacts.get_first_contact_from_jid(
 						account_, jid_)
-					if contact_.get_shown_name() == \
-					contact.get_shown_name() and \
+					if contact_.get_shown_name() == contact.get_shown_name() and \
 					(jid_, account_) != (jid, account):
 						add_acct = True
 						break
@@ -1142,8 +1137,7 @@ class RosterWindow:
 
 		# add status msg, if not empty, under contact name in
 		# the treeview
-		if contact.status \
-		and gajim.config.get('show_status_msgs_in_roster'):
+		if contact.status and gajim.config.get('show_status_msgs_in_roster'):
 			status = contact.status.strip()
 			if status != '':
 				status = helpers.reduce_chars_newlines(status,
@@ -1151,10 +1145,8 @@ class RosterWindow:
 				# escape markup entities and make them small
 				# italic and fg color color is calcuted to be
 				# always readable
-				color = gtkgui_helpers._get_fade_color(
-					self.tree, selected, focus)
-				colorstring = '#%04x%04x%04x' % (color.red,
-					color.green, color.blue)
+				color = gtkgui_helpers._get_fade_color(self.tree, selected, focus)
+				colorstring = '#%04x%04x%04x' % (color.red, color.green, color.blue)
 				name += '\n<span size="small" style="italic" ' \
 					'foreground="%s">%s</span>' % (
 					colorstring,
@@ -1164,8 +1156,7 @@ class RosterWindow:
 		# look if another resource has awaiting events
 		for c in contact_instances:
 			c_icon_name = helpers.get_icon_name_to_show(c, account)
-			if c_icon_name \
-			in ('event', 'muc_active', 'muc_inactive'):
+			if c_icon_name in ('event', 'muc_active', 'muc_inactive'):
 				icon_name = c_icon_name
 				break
 
@@ -1175,8 +1166,7 @@ class RosterWindow:
 		have_visible_children = False
 		if family:
 			nearby_family, bb_jid, bb_account = \
-				self._get_nearby_family_and_big_brother(
-				family, account)
+				self._get_nearby_family_and_big_brother(family, account)
 			is_big_brother = (jid, account) == (bb_jid, bb_account)
 			iters = self._get_contact_iter(jid, account)	
 			have_visible_children = iters \
@@ -1186,35 +1176,25 @@ class RosterWindow:
 			# We are the big brother and have a visible family
 			for child_iter in child_iters:
 				child_path = self.model.get_path(child_iter)
-				path = self.modelfilter. \
-					convert_child_path_to_path(child_path)
+				path = self.modelfilter.convert_child_path_to_path(child_path)
 
-				if not self.tree.row_expanded(path) \
-				and icon_name != 'event':
-					iterC = self.model.iter_children(
-						child_iter)
+				if not self.tree.row_expanded(path) and icon_name != 'event':
+					iterC = self.model.iter_children(child_iter)
 					while iterC:
 						# a child has awaiting messages?
-						jidC = self.model[iterC] \
-							[C_JID].decode('utf-8')
-						accountC = self.model \
-							[iterC][C_ACCOUNT]. \
-							decode('utf-8')
-						if len(gajim.events.get_events(
-						accountC, jidC)):
+						jidC = self.model[iterC][C_JID].decode('utf-8')
+						accountC = self.model[iterC][C_ACCOUNT].decode('utf-8')
+						if len(gajim.events.get_events(accountC, jidC)):
 							icon_name = 'event'
 							break
-						iterC = self.model.iter_next(
-							iterC)
+						iterC = self.model.iter_next(iterC)
 
 				if self.tree.row_expanded(path):
-					state_images = self. \
-						get_appropriate_state_images(
+					state_images = self.get_appropriate_state_images(
 						jid, size = 'opened',
 						icon_name = icon_name)
 				else:
-					state_images = self. \
-						get_appropriate_state_images(
+					state_images = self.get_appropriate_state_images(
 						jid, size = 'closed',
 						icon_name = icon_name)
 				
@@ -1241,12 +1221,10 @@ class RosterWindow:
 		for group in contact.get_shown_groups():
 			# We need to make sure that _visible_func is called for
 			# our groups otherwise we might not be shown
-			iterG = self._get_group_iter(group, account,
-				model = self.model)
+			iterG = self._get_group_iter(group, account, model = self.model)
 			if iterG:
 				# it's not self contact
-				self.model[iterG][C_JID] = \
-					self.model[iterG][C_JID]
+				self.model[iterG][C_JID] = self.model[iterG][C_JID]
 
 		return False
 
@@ -1258,11 +1236,10 @@ class RosterWindow:
 		jid = self.model[iters[0]][C_JID]
 		jid = jid.decode('utf-8')
 		contact = gajim.contacts.get_contact(account, jid)
-		if contact.mood.has_key('mood') \
-		and contact.mood['mood'].strip() in MOODS:
+		if 'mood' in contact.mood and contact.mood['mood'].strip() in MOODS:
 			pixbuf = gtkgui_helpers.load_mood_icon(
 				contact.mood['mood'].strip()).get_pixbuf()
-		elif contact.mood.has_key('mood'):
+		elif 'mood' in contact.mood:
 			pixbuf = gtkgui_helpers.load_mood_icon(
 				'unknown').get_pixbuf()
 		else:
@@ -1279,12 +1256,11 @@ class RosterWindow:
 		jid = self.model[iters[0]][C_JID]
 		jid = jid.decode('utf-8')
 		contact = gajim.contacts.get_contact(account, jid)
-		if contact.activity.has_key('activity') \
+		if 'activity' in contact.activity \
 		and contact.activity['activity'].strip() in ACTIVITIES:
 			pixbuf = gtkgui_helpers.load_activity_icon(
-				contact.activity['activity'].strip()). \
-				get_pixbuf()
-		elif contact.activity.has_key('activity'):
+				contact.activity['activity'].strip()).get_pixbuf()
+		elif 'activity' in contact.activity:
 			pixbuf = gtkgui_helpers.load_activity_icon(
 				'unknown').get_pixbuf()
 		else:
@@ -1301,8 +1277,7 @@ class RosterWindow:
 		jid = self.model[iters[0]][C_JID]
 		jid = jid.decode('utf-8')
 		contact = gajim.contacts.get_contact(account, jid)
-		if contact.tune.has_key('artist') \
-		or contact.tune.has_key('title'):
+		if contact.tune.has_key('artist') or contact.tune.has_key('title'):
 			pixbuf = gtk.gdk.pixbuf_new_from_file(
 				'../data/emoticons/static/music.png')
 		else:
@@ -1680,7 +1655,7 @@ class RosterWindow:
 		# Most of the logic SHOULD NOT be done at GUI level
 		if account not in gajim.contacts.get_accounts():
 			gajim.contacts.add_account(account)
-		if not gajim.groups.has_key(account):
+		if account not in gajim.groups:
 			gajim.groups[account] = {}
 		for jid in array.keys():
 			# Remove the contact in roster. It might has changed
@@ -1724,7 +1699,7 @@ class RosterWindow:
 						gajim.connections[account].request_vcard(jid_with_resource)
 					else:
 						host = gajim.get_server_from_jid(contact1.jid)
-						if not gajim.transport_avatar[account].has_key(host):
+						if host not in gajim.transport_avatar[account]:
 							gajim.transport_avatar[account][host] = [contact1.jid]
 						else:
 							gajim.transport_avatar[account][host].append(contact1.jid)
