@@ -468,8 +468,7 @@ class PassphraseRequest:
 
 		def _cancel():
 			# user cancelled, continue without GPG
-			gajim.connections[account].gpg_passphrase(None)
-			callback()
+			self.complete(None)
 
 		def _ok(passphrase, checked, count):
 			if count < 3:
