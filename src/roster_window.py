@@ -3456,16 +3456,17 @@ class RosterWindow:
 		model = self.modelfilter
 		account = model[path][C_ACCOUNT].decode('utf-8')
 		type_ = model[path][C_TYPE]
-		jid = model[path][C_JID].decode('utf-8')
-		resource = None
-		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-		titer = model.get_iter(path)
 		if type_ in ('group', 'account'):
 			if self.tree.row_expanded(path):
 				self.tree.collapse_row(path)
 			else:
 				self.tree.expand_row(path, False)
-		elif contact.is_groupchat():
+			return
+		jid = model[path][C_JID].decode('utf-8')
+		resource = None
+		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+		titer = model.get_iter(path)
+		if contact.is_groupchat():
 			first_ev = gajim.events.get_first_event(account, jid)
 			if first_ev and self.open_event(account, jid, first_ev):
 				# We are invited to a GC
@@ -3473,44 +3474,46 @@ class RosterWindow:
 				self.remove_groupchat(jid, account)
 			else:
 				self.on_groupchat_maximized(None, jid, account)
-		else:
-			first_ev = gajim.events.get_first_event(account, jid)
-			if not first_ev:
-				# look in other resources
-				for c in gajim.contacts.get_contacts(account, jid):
-					fjid = c.get_full_jid()
-					first_ev = gajim.events.get_first_event(account, fjid)
-					if first_ev:
-						resource = c.resource
-						break
-			if not first_ev and model.iter_has_child(titer):
-				child_iter = model.iter_children(titer)
-				while not first_ev and child_iter:
-					child_jid = model[child_iter][C_JID].decode('utf-8')
-					first_ev = gajim.events.get_first_event(account, child_jid)
-					if first_ev:
-						jid = child_jid
-					else:
-						child_iter = model.iter_next(child_iter)
-			session = None
-			if first_ev:
-				if first_ev.type_ in ('chat', 'normal'):
-					session = first_ev.parameters[8]
-				fjid = jid
-				if resource:
-					fjid += '/' + resource
-				if self.open_event(account, fjid, first_ev):
-					return
-				# else
-				contact = gajim.contacts.get_contact(account, jid, resource)
-			if not contact or isinstance(contact, list):
-				contact = \
-					gajim.contacts.get_contact_with_highest_priority(account, jid)
-			if jid == gajim.get_jid_from_account(account):
-				resource = contact.resource
+			return
 
-			gajim.interface.on_open_chat_window(None, contact, account, \
-				resource = resource, session = session)
+		# else
+		first_ev = gajim.events.get_first_event(account, jid)
+		if not first_ev:
+			# look in other resources
+			for c in gajim.contacts.get_contacts(account, jid):
+				fjid = c.get_full_jid()
+				first_ev = gajim.events.get_first_event(account, fjid)
+				if first_ev:
+					resource = c.resource
+					break
+		if not first_ev and model.iter_has_child(titer):
+			child_iter = model.iter_children(titer)
+			while not first_ev and child_iter:
+				child_jid = model[child_iter][C_JID].decode('utf-8')
+				first_ev = gajim.events.get_first_event(account, child_jid)
+				if first_ev:
+					jid = child_jid
+				else:
+					child_iter = model.iter_next(child_iter)
+		session = None
+		if first_ev:
+			if first_ev.type_ in ('chat', 'normal'):
+				session = first_ev.parameters[8]
+			fjid = jid
+			if resource:
+				fjid += '/' + resource
+			if self.open_event(account, fjid, first_ev):
+				return
+			# else
+			contact = gajim.contacts.get_contact(account, jid, resource)
+		if not contact or isinstance(contact, list):
+			contact = gajim.contacts.get_contact_with_highest_priority(account,
+				jid)
+		if jid == gajim.get_jid_from_account(account):
+			resource = contact.resource
+
+		gajim.interface.on_open_chat_window(None, contact, account, \
+			resource=resource, session=session)
 
 	def on_roster_treeview_row_activated(self, widget, path, col = 0):
 		'''When an iter is double clicked: open the first event window'''
