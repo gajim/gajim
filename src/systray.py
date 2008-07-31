@@ -321,15 +321,20 @@ class Systray:
 	def on_clicked(self, widget, event):
 		self.on_tray_leave_notify_event(widget, None)
 		if event.type == gtk.gdk._2BUTTON_PRESS:
+			if len(gajim.events.get_systray_events()) == 0:
+				return
 			self.double_click = True
 			self.on_middle_click()
 		if event.type != gtk.gdk.BUTTON_PRESS:
 			return
 		if event.button == 1: # Left click
-			if self.double_click_id:
-				gobject.source_remove(self.double_click_id)
-			self.double_click_id = gobject.timeout_add(self.double_click_time,
-				self.on_left_click)
+			if len(gajim.events.get_systray_events()) == 0:
+				self.on_left_click()
+			else:
+				if self.double_click_id:
+					gobject.source_remove(self.double_click_id)
+				self.double_click_id = gobject.timeout_add(
+					self.double_click_time, self.on_left_click)
 		elif event.button == 2: # middle click
 			self.on_middle_click()
 		elif event.button == 3: # right click
