@@ -1418,10 +1418,9 @@ class RosterWindow:
 ##############################################################################
 
 	def _search_roster_func(self, model, column, key, titer):
-		if model[titer][C_NAME].decode('utf-8').lower().startswith(
-		gobject.markup_escape_text(key.lower())):
-			return False
-		return True
+		key = gobject.markup_escape_text(key.lower())
+		name = model[titer][C_NAME].decode('utf-8').lower()
+		return not (key in name)
 
 	def refilter_shown_roster_items(self):
 		self.filtering = True
