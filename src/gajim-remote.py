@@ -409,8 +409,9 @@ class GajimRemote:
 		if command in self.commands:
 			command_props = self.commands[command]
 			arguments_str = self.make_arguments_row(command_props[1])
-			str = _('Usage: %s %s %s \n\t %s') % (BASENAME, command,
-					arguments_str, command_props[0])
+			str = _('Usage: %(basename)s %(command)s %(arguments)s \n\t %(help)s')\
+				% {'basename': BASENAME, 'command': command,
+				'arguments': arguments_str, 'help': command_props[0]}
 			if len(command_props[1]) > 0:
 				str += '\n\n' + _('Arguments:') + '\n'
 				for argument in command_props[1]:
@@ -494,12 +495,14 @@ class GajimRemote:
 		args = self.commands[self.command][1]
 		if len(args) < argv_len:
 			send_error(_('Too many arguments. \n'
-				'Type "%s help %s" for more info') % (BASENAME, self.command))
+				'Type "%(basename)s help %(command)s" for more info') % {
+				'basename': BASENAME, 'command': self.command})
 		if len(args) > argv_len:
 			if args[argv_len][2]:
-				send_error(_('Argument "%s" is not specified. \n'
-					'Type "%s help %s" for more info') %
-					(args[argv_len][0], BASENAME, self.command))
+				send_error(_('Argument "%(arg)s" is not specified. \n'
+					'Type "%(basename)s help %(command)s" for more info') %
+					{'arg': args[argv_len][0], 'basename': BASENAME,
+					'command': self.command})
 		self.arguments = []
 		i = 0
 		for arg in sys.argv[2:]:

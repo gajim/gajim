@@ -405,7 +405,7 @@ class MessageWindow(object):
 
 		title = 'Gajim'
 		if label:
-			title = _('%s - %s') % (label, title)
+			title = '%s - %s' % (label, title)
 
 		if window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERACCT:
 			title = title + ": " + control.account

@@ -145,8 +145,8 @@ class PrivateChatControl(ChatControl):
 				dialogs.ErrorDialog(
 					_('Sending private message failed'),
 					#in second %s code replaces with nickname
-					_('You are no longer in group chat "%s" or "%s" has left.') % \
-					(room, nick))
+					_('You are no longer in group chat "%(room)s" or "%(nick)s" has '
+					'left.') % {'room': room, 'nick': nick})
 				return
 
 		ChatControl.send_message(self, message)
@@ -1062,7 +1062,8 @@ class GroupchatControl(ChatControlBase):
 						self.new_nick = ''
 						s = _('You are now known as %s') % new_nick
 					else:
-						s = _('%s is now known as %s') % (nick, new_nick)
+						s = _('%(nick)s is now known as %(new_nick)s') % {
+							'nick': nick, 'new_nick': new_nick}
 					# We add new nick to muc roster here, so we don't see 
 					# that "new_nick has joined the room" when he just changed nick.
 					# add_contact_to_roster will be called a second time 
@@ -1211,7 +1212,8 @@ class GroupchatControl(ChatControlBase):
 				if newly_created and print_status in ('all', 'in_and_out'):
 					st = _('%s has joined the group chat') % nick_jid
 				elif print_status == 'all':
-					st = _('%s is now %s') % (nick_jid, helpers.get_uf_show(show))
+					st = _('%(nick)s is now %(status)s') % {'nick': nick_jid,
+						'status': helpers.get_uf_show(show)}
 			if st:
 				if status:
 					st += ' (' + status + ')'
@@ -1553,9 +1555,9 @@ class GroupchatControl(ChatControlBase):
 				'optionally displays a reason. Does NOT support spaces in '
 				'nickname.') % command, 'info')
 		elif command == 'me':
-			self.print_conversation(_('Usage: /%s <action>, sends action to the '
-				'current group chat. Use third person. (e.g. /%s explodes.)') % \
-				(command, command), 'info')
+			self.print_conversation(_('Usage: /%(command)s <action>, sends action '
+				'to the current group chat. Use third person. (e.g. /%(command)s '
+				'explodes.)') % {'command': command}, 'info')
 		elif command == 'msg':
 			s = _('Usage: /%s <nickname> [message], opens a private message window'
 				' and sends message to the occupant specified by nickname.') % \
