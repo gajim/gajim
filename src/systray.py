@@ -293,7 +293,8 @@ class Systray:
 			return
 		win = gajim.interface.roster.window
 		# toggle visible/hidden for roster window
-		if win.get_property('visible') and win.get_property('has-toplevel-focus'):
+		if win.get_property('visible') and (win.get_property('has-toplevel-focus') or \
+			os.name == 'nt'):
 			# visible in ANY virtual desktop?
 
 			# we could be in another VD right now. eg vd2
