@@ -735,8 +735,9 @@ class AgentBrowser:
 
 	def _set_initial_title(self):
 		'''Set the initial window title based on agent address.'''
-		self.window.window.set_title(_('Browsing %s using account %s') % \
-			(self._get_agent_address(), self.account))
+		self.window.window.set_title(_('Browsing %(address)s using account '
+			'%(account)s') % {'address': self._get_agent_address(),
+			'account': self.account})
 		self.window._set_window_banner_text(self._get_agent_address())
 
 	def _create_treemodel(self):
@@ -1368,8 +1369,8 @@ class ToplevelAgentBrowser(AgentBrowser):
 
 		fraction = 0
 		if self._total_items:
-			self.window.progressbar.set_text(_("Scanning %d / %d..") %\
-				(self._progress, self._total_items))
+			self.window.progressbar.set_text(_("Scanning %(current)d / %(total)d.."
+				) % {'current': self._progress, 'total': self._total_items})
 			fraction = float(self._progress) / float(self._total_items)
 			if self._progress >= self._total_items:
 				# We show the progressbar for just a bit before hiding it.

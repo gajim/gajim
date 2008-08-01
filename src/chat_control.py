@@ -1660,9 +1660,9 @@ class ChatControl(ChatControlBase):
 			self.print_conversation(_('Usage: /%s, hide the chat buttons.') % \
 				command, 'info')
 		elif command == 'me':
-			self.print_conversation(_('Usage: /%s <action>, sends action to the '
-				'current group chat. Use third person. (e.g. /%s explodes.)') % \
-				(command, command), 'info')
+			self.print_conversation(_('Usage: /%(command)s <action>, sends action '
+				'to the current group chat. Use third person. (e.g. /%s explodes.)'
+				) % {'command': command}, 'info')
 		elif command == 'ping':
 			self.print_conversation(_('Usage: /%s, sends a ping to the contact') %\
 				command, 'info')
@@ -2590,8 +2590,8 @@ class ChatControl(ChatControlBase):
 		self.update_ui()
 		self.parent_win.redraw_tab(self)
 
-		self.print_conversation(_('%s is now %s') % (name, uf_show),
-			'status')
+		self.print_conversation(_('%(name)s is now %(status)s') % {'name': name,
+			'status': uf_show}, 'status')
 
 		if status:
 			self.print_conversation(' (', 'status', simple=True)

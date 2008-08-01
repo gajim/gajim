@@ -442,7 +442,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			ji not in no_log_for:
 				log_msg = msg
 				if subject:
-					log_msg = _('Subject: %s\n%s') % (subject, msg)
+					log_msg = _('Subject: %(subject)s\n%(message)s') % \
+					{'subject': subject, 'message': msg}
 				if log_msg:
 					if type == 'chat':
 						kind = 'chat_msg_sent'

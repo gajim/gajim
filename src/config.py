@@ -3243,10 +3243,10 @@ class AccountCreationWizardWindow:
 			# An SSL warning occured, show it
 			hostname = gajim.connections[self.account].new_account_info['hostname']
 			self.xml.get_widget('ssl_label').set_markup(_('<b>Security Warning</b>'
-				'\n\nThe authenticity of the %s SSL certificate could be invalid.\n'
-				'SSL Error: %s\n'
-				'Do you still want to connect to this server?') % (hostname,
-				ssl_msg))
+				'\n\nThe authenticity of the %(hostname)s SSL certificate could be '
+				'invalid.\nSSL Error: %(error)s\n'
+				'Do you still want to connect to this server?') % {
+				'hostname': hostname, 'error': ssl_msg})
 			if ssl_err in (18, 27):
 				text = _('Add this certificate to the list of trusted certificates.\nSHA1 fingerprint of the certificate:\n%s') % ssl_fingerprint
 				self.xml.get_widget('ssl_checkbutton').set_label(text)

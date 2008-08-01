@@ -1591,8 +1591,9 @@ class SubscriptionRequestWindow:
 		self.account = account
 		self.user_nick = user_nick
 		if len(gajim.connections) >= 2:
-			prompt_text = _('Subscription request for account %s from %s')\
-				% (account, self.jid)
+			prompt_text = \
+				_('Subscription request for account %(account)s from %(jid)s')\
+				% {'account': account, 'jid': self.jid}
 		else:
 			prompt_text = _('Subscription request from %s') % self.jid
 		xml.get_widget('from_label').set_text(prompt_text)
@@ -2606,11 +2607,13 @@ class PrivacyListWindow:
 		self.global_rules = {}
 		for rule in rules:
 			if rule.has_key('type'):
-				text_item = _('Order: %s, action: %s, type: %s, value: %s') % \
-					(rule['order'], rule['action'], rule['type'], rule['value'])
+				text_item = _('Order: %(order)s, action: %(action)s, type: %(type)s'
+				', value: %(value)s') % {'order': rule['order'],
+				'action': rule['action'], 'type': rule['type'],
+				'value': rule['value']}
 			else:
-				text_item = _('Order: %s, action: %s') % (rule['order'],
-					rule['action'])
+				text_item = _('Order: %(order)s, action: %(action)s') % \
+				{'order': rule['order'], 'action': rule['action']}
 			self.global_rules[text_item] = rule
 			self.list_of_rules_combobox.append_text(text_item)
 		if len(rules) == 0:
@@ -3808,7 +3811,7 @@ class ESessionInfoWindow:
 		self.window.show_all()
 
 	def update_info(self):
-		labeltext = _('''Your chat session with %s is encrypted.\n\nThis session's Short Authentication String is: %s''') % (self.session.jid, self.session.sas)
+		labeltext = _('''Your chat session with %(jid)s is encrypted.\n\nThis session's Short Authentication String is: %(sas)s''') % {'jid': self.session.jid, 'sas': self.session.sas}
 
 		if self.session.verified_identity:
 			labeltext += '\n\n' + _('''You have already verified this contact's identity.''')
@@ -3827,7 +3830,7 @@ class ESessionInfoWindow:
 
 	def on_verify_now_button_clicked(self, widget):
 		pritext = _('''Have you verified the remote contact's identity?''')
-		sectext = _('''To prevent a man-in-the-middle attack, you should speak to %s directly (in person or on the phone) and verify that they see the same Short Authentication String (SAS) as you.\n\nThis session's Short Authentication String: <b>%s</b>''') % (self.session.jid, self.session.sas)
+		sectext = _('''To prevent a man-in-the-middle attack, you should speak to %(jid)s directly (in person or on the phone) and verify that they see the same Short Authentication String (SAS) as you.\n\nThis session's Short Authentication String: <b>%(sas)s</b>''') % {'jid': self.session.jid, 'sas': self.session.sas}
 		sectext += '\n\n' + _('Did you talk to the remote contact and verify the SAS?')
 
 		dialog = YesNoDialog(pritext, sectext)

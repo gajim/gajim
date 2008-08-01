@@ -269,8 +269,8 @@ class Connection(ConnectionHandlers):
 					# it's a new account
 					if not data[1]: # wrong answer
 						self.dispatch('ACC_NOT_OK', (
-							_('Server %s answered wrongly to register request: %s')\
-							% (data[0], data[3])))
+							_('Server %(name)s answered wrongly to register request: '
+							'%(error)s') % {'name': data[0], 'error': data[3]}))
 						return
 					is_form = data[2]
 					conf = data[1]
@@ -335,8 +335,8 @@ class Connection(ConnectionHandlers):
 					return
 				if not data[1]: # wrong answer
 					self.dispatch('ERROR', (_('Invalid answer'),
-						_('Transport %s answered wrongly to register request: %s') % \
-						(data[0], data[3])))
+						_('Transport %(name)s answered wrongly to register request: '
+						'%(error)s') % {'name': data[0], 'error': data[3]}))
 					return
 				is_form = data[2]
 				conf = data[1]
@@ -1182,7 +1182,8 @@ class Connection(ConnectionHandlers):
 				if original_message != None:
 					log_msg = original_message
 				if subject:
-					log_msg = _('Subject: %s\n%s') % (subject, msg)
+					log_msg = _('Subject: %(subject)s\n%(message)s') % \
+					{'subject': subject, 'message': msg}
 				if log_msg:
 					if type == 'chat':
 						kind = 'chat_msg_sent'

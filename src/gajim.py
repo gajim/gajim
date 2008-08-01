@@ -463,8 +463,8 @@ class PassphraseRequest:
 
 	def create_dialog(self, account):
 		title = _('Passphrase Required')
-		second = _('Enter GPG key passphrase for key %s (account %s).'
-			) % (self.keyid, account)
+		second = _('Enter GPG key passphrase for key %(keyid)s (account '
+			'%(account)s).') % {'kayid': self.keyid, 'account': account}
 
 		def _cancel():
 			# user cancelled, continue without GPG
@@ -544,9 +544,9 @@ class Interface:
 			sec_msg = _('Do you accept this request on account %s?') % account
 		if data[4]:
 			sec_msg = data[4] + '\n' + sec_msg
-		self.dialog = dialogs.YesNoDialog(_('HTTP (%s) Authorization for %s (id: %s)') \
-			% (data[0], data[1], data[2]), sec_msg,
-			on_response_yes=(on_yes, account, data[3]),
+		self.dialog = dialogs.YesNoDialog(_('HTTP (%(method)s) Authorization for '
+			'%(url)s (id: %(id)s)') % {'method': data[0], 'url': data[1],
+			'id': data[2]}, sec_msg, on_response_yes=(on_yes, account, data[3]),
 			on_response_no=(response, account, data[3], 'no'))
 
 	def handle_event_error_answer(self, account, array):
@@ -935,11 +935,12 @@ class Interface:
 						name = nick, show = show)
 					ctrl = self.new_private_chat(gc_c, account, session)
 
-				ctrl.print_conversation('Error %s: %s' % (array[1], array[2]),
-							'status')
+				ctrl.print_conversation(_('Error %(code)s: %(msg)s') % {
+					'error': array[1], 'msg': array[2]}, 'status')
 				return
 
-			gc_control.print_conversation('Error %s: %s' % (array[1], array[2]))
+			gc_control.print_conversation(_('Error %(code)s: %(msg)s') % {
+				'error': array[1], 'msg': array[2]}, 'status')
 			if gc_control.parent_win and gc_control.parent_win.get_active_jid() == jid:
 				gc_control.set_subject(gc_control.subject)
 			return
@@ -948,7 +949,8 @@ class Interface:
 			jid = jid.replace('@', '')
 		msg = array[2]
 		if array[3]:
-			msg = _('error while sending %s ( %s )') % (array[3], msg)
+			msg = _('error while sending %(message)s ( %(error)s )') % {
+				'message': array[3], 'error': msg}
 		array[5].roster_message(jid, msg, array[4], msg_type='error')
 
 	def handle_event_msgsent(self, account, array):
@@ -960,7 +962,8 @@ class Interface:
 
 	def handle_event_msgnotsent(self, account, array):
 		#('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
-		msg = _('error while sending %s ( %s )') % (array[2], array[1])
+		msg = _('error while sending %(message)s ( %(error)s )') % {
+			'message': array[2], 'error': array[1]}
 		array[4].roster_message(array[0], msg, array[3], account,
 			msg_type='error')
 
@@ -1231,8 +1234,8 @@ class Interface:
 			statusCode = array[9]
 			if '303' in statusCode:
 				new_nick = array[10]
-				ctrl.print_conversation(_('%s is now known as %s') % (nick,
-					new_nick), 'status')
+				ctrl.print_conversation(_('%(nick)s is now known as %(new_nick)s') \
+					% {'nick': nick, 'new_nick': new_nick}, 'status')
 				gc_c = gajim.contacts.get_gc_contact(account, room_jid, new_nick)
 				c = gajim.contacts.contact_from_gc_contact(gc_c)
 				ctrl.gc_contact = gc_c
@@ -1246,8 +1249,8 @@ class Interface:
 				contact.show = show
 				contact.status = status
 				uf_show = helpers.get_uf_show(show)
-				ctrl.print_conversation(_('%s is now %s') % (nick, uf_show),
-					'status')
+				ctrl.print_conversation(_('%(nick)s is now %(status)s') % {
+					'nick': nick, 'status': uf_show}, 'status')
 				if status:
 					ctrl.print_conversation(' (', 'status', simple=True)
 					ctrl.print_conversation('%s' % (status), 'status', simple=True)
@@ -2024,10 +2027,10 @@ class Interface:
 			self.handle_event_status(account, 'offline')
 		pritext = _('SSL certificate error')
 		sectext = _('It seems the SSL certificate has changed or your connection '
-			'is being hacked.\nOld fingerprint: %s\nNew fingerprint: %s\n\nDo you '
-			'still want to connect and update the fingerprint of the certificate?'\
-			) % (gajim.config.get_per('accounts', account, 'ssl_fingerprint_sha1'),
-			data[0])
+			'is being hacked.\nOld fingerprint: %(old)s\nNew fingerprint: %(new)s'
+			'\n\nDo you still want to connect and update the fingerprint of the '
+			'certificate?') % {'old': gajim.config.get_per('accounts', account,
+			'ssl_fingerprint_sha1'), 'new': data[0]}
 		dialog = dialogs.YesNoDialog(pritext, sectext, on_response_yes=on_yes,
 			on_response_no=on_no)
 
@@ -2094,7 +2097,8 @@ class Interface:
 		# ('PUBSUB_NODE_NOT_REMOVED', account, (jid, node, msg))
 		if data[0] == gajim.get_jid_from_account(account):
 			dialogs.WarningDialog(_('PEP node was not removed'),
-				_('PEP node %s was not removed: %s') % (data[1], data[2]))
+				_('PEP node %(node)s was not removed: %(message)s') % {
+				'node': data[1], 'message': data[2]})
 
 	def register_handlers(self):
 		self.handlers = {
