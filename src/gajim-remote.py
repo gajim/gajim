@@ -218,14 +218,14 @@ class GajimRemote:
 			'get_status': [
 				_('Returns current status (the global one unless account is specified)'),
 					[
-						(_('account'), _(''), False)
+						(_('account'), '', False)
 					]
 				],
 
 			'get_status_message': [
 				_('Returns current status message(the global one unless account is specified)'),
 					[
-						(_('account'), _(''), False)
+						(_('account'), '', False)
 					]
 				],
 
@@ -251,17 +251,19 @@ class GajimRemote:
 			'handle_uri': [
 					_('Handle a xmpp:/ uri'),
 					[
-						(_('uri'), _(''), True),
-						(_('account'), _(''), False)
+						(_('uri'), _('URI to handle'), True),
+						(_('account'), _('Account in which you want to handle it'),
+							False)
 					]
 				],
 			'join_room': [
 					_('Join a MUC room'),
 					[
-						(_('room'), _(''), True),
-						(_('nick'), _(''), False),
-						(_('password'), _(''), False),
-						(_('account'), _(''), False)
+						(_('room'), _('Room JID'), True),
+						(_('nick'), _('Nickname to use'), False),
+						(_('password'), _('Password to enter the room'), False),
+						(_('account'), _('Account from which you want to enter the '
+							'room'), False)
 					]
 				],
 			'check_gajim_running':[
