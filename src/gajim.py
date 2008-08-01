@@ -464,7 +464,7 @@ class PassphraseRequest:
 	def create_dialog(self, account):
 		title = _('Passphrase Required')
 		second = _('Enter GPG key passphrase for key %(keyid)s (account '
-			'%(account)s).') % {'kayid': self.keyid, 'account': account}
+			'%(account)s).') % {'keyid': self.keyid, 'account': account}
 
 		def _cancel():
 			# user cancelled, continue without GPG
@@ -936,11 +936,11 @@ class Interface:
 					ctrl = self.new_private_chat(gc_c, account, session)
 
 				ctrl.print_conversation(_('Error %(code)s: %(msg)s') % {
-					'error': array[1], 'msg': array[2]}, 'status')
+					'code': array[1], 'msg': array[2]}, 'status')
 				return
 
 			gc_control.print_conversation(_('Error %(code)s: %(msg)s') % {
-				'error': array[1], 'msg': array[2]}, 'status')
+				'code': array[1], 'msg': array[2]}, 'status')
 			if gc_control.parent_win and gc_control.parent_win.get_active_jid() == jid:
 				gc_control.set_subject(gc_control.subject)
 			return
@@ -1824,7 +1824,7 @@ class Interface:
 		jid, tim, session = data
 
 		details = _('Unable to decrypt message from '
-			'%s\nIt may have been tampered with.') % (jid)
+			'%s\nIt may have been tampered with.') % jid
 
 		if session.control:
 			session.control.print_conversation_line(details,
