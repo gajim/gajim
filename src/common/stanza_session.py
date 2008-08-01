@@ -281,6 +281,11 @@ class EncryptedStanzaSession(StanzaSession):
 		return self.encrypter.encrypt(padded)
 
 	def decrypt_stanza(self, stanza):
+		# delete the unencrypted explanation body, if it exists
+		orig_body = stanza.getTag('body')
+		if orig_body:
+			stanza.delChild(orig_body)
+
 		c = stanza.getTag(name='c',
 			namespace='http://www.xmpp.org/extensions/xep-0200.html#ns')
 
