@@ -69,7 +69,7 @@ def parseLogLevel(arg):
 		return int(arg)
 	if arg.isupper():
 		return getattr(logging, arg)
-	raise ValueError(_("%s is not a valid loglevel"), repr(arg))
+	raise ValueError(_('%s is not a valid loglevel'), repr(arg))
 
 def parseLogTarget(arg):
 	arg = arg.lower()
@@ -471,21 +471,21 @@ class PassphraseRequest:
 			self.complete(None)
 
 		def _ok(passphrase, checked, count):
-			if count < 3:
-				done = gajim.connections[account].test_gpg_passphrase(passphrase)
-			else:
-				done = True
-				passphrase = None
-
-			if done:
+			if gajim.connections[account].test_gpg_passphrase(passphrase):
+				# passphrase is good
 				self.complete(passphrase)
-			else:
+				return
+
+			if count < 3:
 				# ask again
 				dialogs.PassphraseDialog(_('Wrong Passphrase'),
 					_('Please retype your GPG passphrase or press Cancel.'),
 					ok_handler=(_ok, count + 1), cancel_handler=_cancel)
+			else:
+				# user failed 3 times, continue without GPG
+				self.complete(None)
 
-		dialogs.PassphraseDialog(title, second, ok_handler=(_ok, 0),
+		dialogs.PassphraseDialog(title, second, ok_handler=(_ok, 1),
 			cancel_handler=_cancel)
 		self.dialog_created = True
 
@@ -1378,7 +1378,7 @@ class Interface:
 		if '103' in statusCode:
 			changes.append(_('room now does not show unavailable members'))
 		if '104' in statusCode:
-			changes.append(\
+			changes.append(
 				_('A non-privacy-related room configuration change has occurred'))
 		if '170' in statusCode:
 			# Can be a presence (see chg_contact_status in groupchat_control.py)
