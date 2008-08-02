@@ -1661,7 +1661,8 @@ class ChatControl(ChatControlBase):
 				command, 'info')
 		elif command == 'me':
 			self.print_conversation(_('Usage: /%(command)s <action>, sends action '
-				'to the current group chat. Use third person. (e.g. /%s explodes.)'
+				'to the current group chat. Use third person. (e.g. /%(command)s '
+				'explodes.)'
 				) % {'command': command}, 'info')
 		elif command == 'ping':
 			self.print_conversation(_('Usage: /%s, sends a ping to the contact') %\
