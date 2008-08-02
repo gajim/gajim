@@ -32,8 +32,11 @@ http://trac.gajim.org/attachment/ticket/4133/gajim-chatbanneroptions-svn10008.pa
 import sys
 
 import gtk
+import gobject
+import message_control
 from common import i18n
 from common import gajim
+from common import helpers
 
 from plugins import GajimPlugin
 from plugins.helpers import log, log_calls
@@ -83,23 +86,83 @@ http://trac.gajim.org/attachment/ticket/4133'''
 		if not self.config['show_banner_image']:
 			banner_status_img = chat_control.xml.get_widget('banner_status_image')
 			banner_status_img.clear()
+		
+		# TODO: part below repeats a lot of code from ChatControl.draw_banner_text()
+		# This could be rewritten using re module: getting markup text from
+		# banner_name_label and replacing some elements based on plugin config.
+		# Would it be faster?
+		if self.config['show_banner_resource'] or self.config['banner_small_fonts']:
+			banner_name_label = chat_control.xml.get_widget('banner_name_label')
+			label_text = banner_name_label.get_label()
+			log.debug('label_text = "%s"'%(label_text))
+						
+			contact = chat_control.contact
+			jid = contact.jid
+			
+			name = contact.get_shown_name()
+			if chat_control.resource:
+				name += '/' + chat_control.resource
+			elif contact.resource and self.config['show_banner_resource']:
+				name += '/' + contact.resource
+				
+			if chat_control.TYPE_ID == message_control.TYPE_PM:
+				name = _('%(nickname)s from group chat %(room_name)s') %\
+					{'nickname': name, 'room_name': chat_control.room_name}
+			name = gobject.markup_escape_text(name)
+	
+			# We know our contacts nick, but if another contact has the same nick
+			# in another account we need to also display the account.
+			# except if we are talking to two different resources of the same contact
+			acct_info = ''
+			for account in gajim.contacts.get_accounts():
+				if account == chat_control.account:
+					continue
+				if acct_info: # We already found a contact with same nick
+					break
+				for jid in gajim.contacts.get_jid_list(account):
+					other_contact_ = \
+						gajim.contacts.get_first_contact_from_jid(account, jid)
+					if other_contact_.get_shown_name() == chat_control.contact.get_shown_name():
+						acct_info = ' (%s)' % \
+							gobject.markup_escape_text(chat_control.account)
+						break
+				
+			font_attrs, font_attrs_small = chat_control.get_font_attrs()
+			if self.config['banner_small_fonts']:
+				font_attrs = font_attrs_small
+			
+			st = gajim.config.get('displayed_chat_state_notifications')
+			cs = contact.chatstate
+			if cs and st in ('composing_only', 'all'):
+				if contact.show == 'offline':
+					chatstate = ''
+				elif contact.composing_xep == 'XEP-0085':
+					if st == 'all' or cs == 'composing':
+						chatstate = helpers.get_uf_chatstate(cs)
+					else:
+						chatstate = ''
+				elif contact.composing_xep == 'XEP-0022':
+					if cs in ('composing', 'paused'):
+						# only print composing, paused
+						chatstate = helpers.get_uf_chatstate(cs)
+					else:
+						chatstate = ''
+				else:
+					# When does that happen ? See [7797] and [7804]
+					chatstate = helpers.get_uf_chatstate(cs)
+	
+				label_text = '<span %s>%s</span><span %s>%s %s</span>' % \
+					(font_attrs, name, font_attrs_small, acct_info, chatstate)
+			else:
+				# weight="heavy" size="x-large"
+				label_text = '<span %s>%s</span><span %s>%s</span>' % \
+					(font_attrs, name, font_attrs_small, acct_info)
+			
+			banner_name_label.set_markup(label_text)
 			
 	def chat_control_base_draw_banner_deactivation(self, chat_control):
 		pass
 		#chat_control.draw_banner()
-		
-	#@log_calls('BannerTweaksPlugin')
-	#def connect_with_chat_control(self, chat_control):
-		#d = {}
-		#banner_status_img = chat_control.xml.get_widget('banner_status_image')
-		#h_id = banner_status_img.connect('state-changed', self.on_banner_status_img_state_changed, chat_control)
-		#d['banner_img_h_id'] = h_id
-		
-		#chat_control.banner_tweaks_plugin_data = d
-	
-	#@log_calls('BannerTweaksPlugin')
-	#def disconnect_from_chat_control(self, chat_control):
-		#pass
 	
 class BannerTweaksPluginConfigDialog(GajimPluginConfigDialog):
 	def init(self):
