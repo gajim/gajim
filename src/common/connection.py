@@ -1080,12 +1080,11 @@ class Connection(ConnectionHandlers):
 				#encrypt
 				msgenc, error = self.gpg.encrypt(msg, [keyID])
 			if msgenc and not error:
-				msgtxt = '[This message is encrypted]'
+				msgtxt = '[This message is *encrypted* (See :XEP:`27`]'
 				lang = os.getenv('LANG')
 				if lang is not None and lang != 'en': # we're not english
-					# one  in locale and one en
-					msgtxt = _('[This message is *encrypted* (See :XEP:`27`]') +\
-						' ([This message is *encrypted* (See :XEP:`27`])'
+					# one in locale and one en
+					msgtxt = _(msgtxt) + ' (' + msgtxt + ')'
 			else:
 				# Encryption failed, do not send message
 				tim = localtime()
