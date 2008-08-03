@@ -2121,12 +2121,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		elif ptype == 'error':
 			errmsg = prs.getError()
 			errcode = prs.getErrorCode()
-			if errcode == '502': # Internal Timeout:
-				self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
-					prio, keyID, timestamp, None))
-			else:	# print in the window the error
+			if errcode != '502': # Internal Timeout:
+				# print in the window the error
 				self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 					errmsg, errcode))
+			self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource, prio,
+				keyID, timestamp, None))
 
 		if ptype == 'unavailable' and jid_stripped in self.sessions:
 			# automatically terminate sessions that they haven't sent a thread ID in
