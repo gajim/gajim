@@ -193,7 +193,7 @@ class GajimPluginConfig(UserDict.DictMixin):
 	@log_calls('GajimPluginConfig')
 	def save(self):
 		self.data.sync()
-		log.debug(str(self.data))
+		#log.debug(str(self.data))
 
 	@log_calls('GajimPluginConfig')
 	def load(self):

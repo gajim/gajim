@@ -203,11 +203,6 @@ class GajimPluginConfigDialog(gtk.Dialog):
 		self.child.set_spacing(3)
 	
 		self.init()
-		
-		#label = gtk.Label(_('<b>%s Configuration</b>') % (plugin.name))
-		#label.set_markup(label.get_label())
-		#self.child.pack_start(label, False, False)
-		
 	
 	@log_calls('GajimPluginConfigDialog')
 	def run(self, parent=None):

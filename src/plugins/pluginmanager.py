@@ -200,7 +200,10 @@ class PluginManager(object):
 			extension point name) to identify element to be removed.
 		:type args: tuple
 		'''
-		log.debug('name: %s\n args: %s'%(gui_extpoint_name, args))
+
+		if gui_extpoint_name in self.gui_extension_points:
+			log.debug('Removing GUI extpoint\n name: %s\n args: %s'%(gui_extpoint_name, args))
+			self.gui_extension_points[gui_extpoint_name].remove(args)
 		
 				
 	@log_calls('PluginManager')
