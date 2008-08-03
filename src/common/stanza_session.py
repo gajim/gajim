@@ -249,6 +249,9 @@ class EncryptedStanzaSession(StanzaSession):
 		c.NT.mac = base64.b64encode(self.hmac(self.km_s, m_content + \
 			crypto.encode_mpi(old_en_counter)))
 
+		stanza.setBody(_('[This message is part of an encrypted session. '
+		'If you see this message, something went wrong.]'))
+
 		return stanza
 
 	def is_xep_200_encrypted(self, msg):
