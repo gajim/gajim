@@ -791,8 +791,9 @@ class Interface:
 		if gajim.jid_is_transport(jid):
 			# It must be an agent
 			if ji in jid_list:
-				# Update existing iter
+				# Update existing iter and group counting
 				self.roster.draw_contact(ji, account)
+				self.roster.draw_group(_('Transports'), account)				
 				if new_show > 1 and ji in \
 				gajim.transport_avatar[account]:
 					# transport just signed in.
