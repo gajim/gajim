@@ -94,6 +94,7 @@
                 </child>
                 <child>
                   <widget class="GtkEntry" id="pass_entry">
+                    <property name="sensitive">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="visibility">False</property>
@@ -108,6 +109,7 @@
                 </child>
                 <child>
                   <widget class="GtkEntry" id="server_entry">
+                    <property name="sensitive">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </widget>
@@ -147,6 +149,7 @@
                 </child>
                 <child>
                   <widget class="GtkEntry" id="room_entry">
+                    <property name="sensitive">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </widget>
@@ -160,6 +163,7 @@
                 </child>
                 <child>
                   <widget class="GtkEntry" id="nick_entry">
+                    <property name="sensitive">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </widget>
@@ -197,6 +201,7 @@
                 </child>
                 <child>
                   <widget class="GtkEntry" id="title_entry">
+                    <property name="sensitive">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </widget>
@@ -221,6 +226,7 @@
                 </child>
                 <child>
                   <widget class="GtkComboBox" id="print_status_combobox">
+                    <property name="sensitive">False</property>
                     <property name="visible">True</property>
                     <property name="items" translatable="yes"></property>
                     <signal name="changed" handler="on_print_status_combobox_changed"/>
@@ -240,6 +246,7 @@
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
                       <widget class="GtkCheckButton" id="autojoin_checkbutton">
+                        <property name="sensitive">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip" translatable="yes">If checked, Gajim will join this group chat on startup</property>
@@ -251,6 +258,7 @@
                     </child>
                     <child>
                       <widget class="GtkCheckButton" id="minimize_checkbutton">
+                        <property name="sensitive">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
