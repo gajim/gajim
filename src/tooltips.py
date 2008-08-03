@@ -194,7 +194,8 @@ class StatusTable:
 				str_status += ' - <i>' + status + '</i>'
 		return str_status
 	
-	def add_status_row(self, file_path, show, str_status, status_time = None, show_lock = False):
+	def add_status_row(self, file_path, show, str_status, status_time=None,
+	show_lock=False, indent=True):
 		''' appends a new row with status icon to the table '''
 		self.current_row += 1
 		state_file = show.replace(' ', '_')
@@ -209,8 +210,9 @@ class StatusTable:
 				break
 		spacer = gtk.Label(self.spacer_label)
 		image.set_alignment(1, 0.5)
-		self.table.attach(spacer, 1, 2, self.current_row, 
-			self.current_row + 1, 0, 0, 0, 0)
+		if indent:
+			self.table.attach(spacer, 1, 2, self.current_row, 
+				self.current_row + 1, 0, 0, 0, 0)
 		self.table.attach(image, 2, 3, self.current_row, 
 			self.current_row + 1, gtk.FILL, gtk.FILL, 2, 0)
 		status_label = gtk.Label()
@@ -253,13 +255,13 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 			if message:
 				self.add_status_row(file_path, acct['show'], 
 					gobject.markup_escape_text(acct['name']) + \
-					' - ' + message, show_lock=show_lock)
+					' - ' + message, show_lock=show_lock, indent=False)
 			else:
 				self.add_status_row(file_path, acct['show'], 
 					gobject.markup_escape_text(acct['name']) 
-					, show_lock=show_lock)
+					, show_lock=show_lock, indent=False)
 			for line in acct['event_lines']:
-				self.add_text_row('  ' + line, 2)
+				self.add_text_row('  ' + line, 1)
 
 	def populate(self, data):
 		self.create_window()
