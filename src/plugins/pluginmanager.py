@@ -96,11 +96,11 @@ class PluginManager(object):
 		for path in gajim.PLUGINS_DIRS:
 			self.add_plugins(PluginManager.scan_dir_for_plugins(path))
 
-		log.debug('plugins: %s'%(self.plugins))
+		#log.debug('plugins: %s'%(self.plugins))
 
 		self._activate_all_plugins_from_global_config()
 
-		log.debug('active: %s'%(self.active_plugins))
+		#log.debug('active: %s'%(self.active_plugins))
 
 	@log_calls('PluginManager')
 	def _plugin_has_entry_in_global_config(self, plugin):
@@ -120,11 +120,16 @@ class PluginManager(object):
 		and adding class from reloaded module or ignoring adding plug-in?
 		'''
 		plugin = plugin_class()
-		if not self._plugin_has_entry_in_global_config(plugin):
-			self._create_plugin_entry_in_global_config(plugin)
-			
-		self.plugins.append(plugin)
-		plugin.active = False
+		
+		if plugin not in self.plugins:
+			if not self._plugin_has_entry_in_global_config(plugin):
+				self._create_plugin_entry_in_global_config(plugin)
+				
+			self.plugins.append(plugin)
+			plugin.active = False
+		else:
+			log.info('Not loading plugin %s v%s from module %s (identified by short name: %s). Plugin already loaded.'%(
+				plugin.name, plugin.version, plugin.__module__, plugin.short_name))
 	
 	@log_calls('PluginManager')
 	def add_plugins(self, plugin_classes):
@@ -134,7 +139,9 @@ class PluginManager(object):
 	@log_calls('PluginManager')
 	def gui_extension_point(self, gui_extpoint_name, *args):
 		'''
-		Invokes all handlers (from plugins) for particular GUI extension point.
+		Invokes all handlers (from plugins) for particular GUI extension point
+		and adds it to collection for further processing (eg. by plugins not active
+		yet).
 		
 		:param gui_extpoint_name: name of GUI extension point.
 		:type gui_extpoint_name: unicode
@@ -157,10 +164,69 @@ class PluginManager(object):
 
 		self._add_gui_extension_point_call_to_list(gui_extpoint_name, *args)
 		self._execute_all_handlers_of_gui_extension_point(gui_extpoint_name, *args)
+	
+	@log_calls('PluginManager')
+	def remove_gui_extension_point(self, gui_extpoint_name, *args):
+		'''
+		Removes GUI extension point from collection held by `PluginManager`.
+		
+		From this point this particular extension point won't be visible
+		to plugins (eg. it won't invoke any handlers when plugin is activated).
+		
+		GUI extension point is removed completely (there is no way to recover it
+		from inside `PluginManager`).
+		
+		Removal is needed when instance object that given extension point was
+		connect with is destroyed (eg. ChatControl is closed or context menu
+		is hidden).
+		
+		Each `PluginManager.gui_extension_point` call should have a call of 
+		`PluginManager.remove_gui_extension_point` related to it.
+
+		:note: in current implementation different arguments mean different
+			extension points. The same arguments and the same name mean
+			the same extension point.
+		:todo: instead of using argument to identify which extpoint should be
+			removed, maybe add additional 'id' argument - this would work similar
+			hash in Python objects. 'id' would be calculated based on arguments
+			passed or on anything else (even could be constant). This would give
+			core developers (that add new extpoints) more freedom, but is this 
+			necessary?
+		
+		:param gui_extpoint_name: name of GUI extension point.
+		:type gui_extpoint_name: unicode
+		:param args: arguments that `PluginManager.gui_extension_point` was
+			called with for this extension point. This is used (along with
+			extension point name) to identify element to be removed.
+		:type args: tuple
+		'''
+		log.debug('name: %s\n args: %s'%(gui_extpoint_name, args))
+		
 				
 	@log_calls('PluginManager')
 	def _add_gui_extension_point_call_to_list(self, gui_extpoint_name, *args):
-		self.gui_extension_points.setdefault(gui_extpoint_name, []).append(args)
+		'''
+		Adds GUI extension point call to list of calls.
+		
+		This is done only if such call hasn't been added already
+		(same extension point name and same arguments).
+		
+		:note: This is assumption that GUI extension points are different only
+		if they have different name or different arguments. 
+		
+		:param gui_extpoint_name: GUI extension point name used to identify it
+			by plugins.
+		:type gui_extpoint_name: str
+		
+		:param args: parameters to be passed to extension point handlers 
+			(typically and object that invokes `gui_extension_point`; however, 
+			this can be practically anything)
+		:type args: tuple
+		
+		'''
+		if ((gui_extpoint_name not in self.gui_extension_points)
+			or (args not in self.gui_extension_points[gui_extpoint_name])):
+			self.gui_extension_points.setdefault(gui_extpoint_name, []).append(args)
 	
 	@log_calls('PluginManager')
 	def _execute_all_handlers_of_gui_extension_point(self, gui_extpoint_name, *args):
@@ -287,57 +353,62 @@ class PluginManager(object):
 			#log.debug(sys.path)
 
 			for elem_name in dir_list:
-				log.debug('- "%s"'%(elem_name))
+				#log.debug('- "%s"'%(elem_name))
 				file_path = os.path.join(path, elem_name)
-				log.debug('  "%s"'%(file_path))
+				#log.debug('  "%s"'%(file_path))
 				
 				module = None
 				
 				if os.path.isfile(file_path) and fnmatch.fnmatch(file_path,'*.py'):
 					module_name = os.path.splitext(elem_name)[0]
-					log.debug('Possible module detected.')
+					#log.debug('Possible module detected.')
 					try:
 						module = __import__(module_name)
-						log.debug('Module imported.')
+						#log.debug('Module imported.')
 					except ValueError, value_error:
-						log.debug('Module not imported successfully. ValueError: %s'%(value_error))
+						pass
+						#log.debug('Module not imported successfully. ValueError: %s'%(value_error))
 					except ImportError, import_error:
-						log.debug('Module not imported successfully. ImportError: %s'%(import_error))
+						pass
+						#log.debug('Module not imported successfully. ImportError: %s'%(import_error))
 					
 				elif os.path.isdir(file_path):
 					module_name = elem_name
 					file_path += os.path.sep
-					log.debug('Possible package detected.')
+					#log.debug('Possible package detected.')
 					try:
 						module = __import__(module_name)
-						log.debug('Package imported.')
+						#log.debug('Package imported.')
 					except ValueError, value_error:
-						log.debug('Package not imported successfully. ValueError: %s'%(value_error))
+						pass
+						#log.debug('Package not imported successfully. ValueError: %s'%(value_error))
 					except ImportError, import_error:
-						log.debug('Package not imported successfully. ImportError: %s'%(import_error))
+						pass
+						#log.debug('Package not imported successfully. ImportError: %s'%(import_error))
 					
 					
 				if module:
-					log.debug('Attributes processing started')
+					#log.debug('Attributes processing started')
 					for module_attr_name in [attr_name for attr_name in dir(module) 
 											 if not (attr_name.startswith('__') or 
 													 attr_name.endswith('__'))]:
 						module_attr = getattr(module, module_attr_name)
-						log.debug('%s : %s'%(module_attr_name, module_attr))
+						#log.debug('%s : %s'%(module_attr_name, module_attr))
 						
 						try:
 							if issubclass(module_attr, GajimPlugin) and \
 							   not module_attr is GajimPlugin:
-								log.debug('is subclass of GajimPlugin')
+								#log.debug('is subclass of GajimPlugin')
 								#log.debug('file_path: %s\nabspath: %s\ndirname: %s'%(file_path, os.path.abspath(file_path), os.path.dirname(os.path.abspath(file_path))))
 								#log.debug('file_path: %s\ndirname: %s\nabspath: %s'%(file_path, os.path.dirname(file_path), os.path.abspath(os.path.dirname(file_path))))
 								module_attr.__path__ = os.path.abspath(os.path.dirname(file_path))
 								plugins_found.append(module_attr)
 						except TypeError, type_error:
-							log.debug('module_attr: %s, error : %s'%(
-								module_name+'.'+module_attr_name,
-								type_error))
+							pass
+							#log.debug('module_attr: %s, error : %s'%(
+								#module_name+'.'+module_attr_name,
+								#type_error))
 
-					log.debug(module)
+					#log.debug(module)
 
 		return plugins_found

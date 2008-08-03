@@ -170,7 +170,7 @@ class PluginsWindow(object):
 	
 	@log_calls('PluginsWindow')
 	def on_configure_plugin_button_clicked(self, widget):
-		log.debug('widget: %s'%(widget))
+		#log.debug('widget: %s'%(widget))
 		selection = self.installed_plugins_treeview.get_selection()
 		model, iter = selection.get_selected()
 		if iter:

@@ -50,7 +50,8 @@ class log_calls(object):
     Decorator class for functions to easily log when they are entered and left.
     '''
     
-    filter_out_classes = ['PluginManager']
+    filter_out_classes = ['GajimPlugin', 'GajimPluginConfig',
+                          'GajimPluginConfigDialog', 'PluginsWindow']
     '''
     List of classes from which no logs should be emited when methods are called,
     eventhough `log_calls` decorator is used.
@@ -129,10 +130,11 @@ class Singleton(type):
     def __call__(cls,*args,**kw):
         if cls.instance is None:
             cls.instance=super(Singleton,cls).__call__(*args,**kw)
-            log.debug('%(classname)s - new instance created'%{
-                'classname' : cls.__name__})
+            #log.debug('%(classname)s - new instance created'%{
+                #'classname' : cls.__name__})
         else:
-            log.debug('%(classname)s - returning already existing instance'%{
-                'classname' : cls.__name__})
+            pass
+            #log.debug('%(classname)s - returning already existing instance'%{
+                #'classname' : cls.__name__})
             
         return cls.instance

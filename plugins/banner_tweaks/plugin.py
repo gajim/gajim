@@ -94,7 +94,6 @@ http://trac.gajim.org/attachment/ticket/4133'''
 		if self.config['show_banner_resource'] or self.config['banner_small_fonts']:
 			banner_name_label = chat_control.xml.get_widget('banner_name_label')
 			label_text = banner_name_label.get_label()
-			log.debug('label_text = "%s"'%(label_text))
 						
 			contact = chat_control.contact
 			jid = contact.jid

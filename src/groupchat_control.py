@@ -1636,6 +1636,11 @@ class GroupchatControl(ChatControlBase):
 			status = self.subject)
 
 	def shutdown(self, status='offline'):
+		# PluginSystem: calling shutdown of super class (ChatControlBase) 
+		# to let it remove it's GUI extension points
+		super(GroupchatControl, self).shutdown()
+		
+		
 		# destroy banner tooltip - bug #pygtk for that!
 		self.subject_tooltip.destroy()
 		gajim.connections[self.account].send_gc_status(self.nick, self.room_jid,

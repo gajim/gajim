@@ -294,7 +294,15 @@ class ChatControlBase(MessageControl):
 
 		self.smooth = True
 		
+		# PluginSystem: adding GUI extension point for ChatControlBase
+		# instance object (also subclasses, eg. ChatControl or GroupchatControl)
 		gajim.plugin_manager.gui_extension_point('chat_control_base', self)
+		
+	def shutdown(self):
+		# PluginSystem: removing GUI extension points connected with ChatControlBase
+		# instance object
+		gajim.plugin_manager.remove_gui_extension_point('chat_control_base', self)
+		gajim.plugin_manager.remove_gui_extension_point('chat_control_base_draw_banner', self)
 
 	def on_msg_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend an option to switch languages'''
@@ -1144,6 +1152,8 @@ class ChatControl(ChatControlBase):
 		# restore previous conversation
 		self.restore_conversation()
 		
+		# PluginSystem: adding GUI extension point for this ChatControl 
+		# instance object
 		gajim.plugin_manager.gui_extension_point('chat_control', self)
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
@@ -2022,6 +2032,13 @@ class ChatControl(ChatControlBase):
 			self.reset_kbd_mouse_timeout_vars()
 
 	def shutdown(self):
+		# PluginSystem: calling shutdown of super class (ChatControlBase) to let it remove
+		# it's GUI extension points
+		super(ChatControl, self).shutdown()
+		# PluginSystem: removing GUI extension points connected with ChatControl
+		# instance object
+		gajim.plugin_manager.remove_gui_extension_point('chat_control', self)
+		
 		# destroy banner tooltip - bug #pygtk for that!
 		self.status_tooltip.destroy()
 

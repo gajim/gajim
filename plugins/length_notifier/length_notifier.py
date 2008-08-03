@@ -40,10 +40,6 @@ class LengthNotifierPlugin(GajimPlugin):
 	description = u'''Highlights message entry field in chat window when given length of message is exceeded.'''
 	authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
 	homepage = u'http://blog.bilinski.it'
-
-	#@log_calls('LengthNotifierPlugin')
-	#def __init__(self):
-		#super(LengthNotifierPlugin, self).__init__()
 	
 	@log_calls('LengthNotifierPlugin')
 	def init(self):
@@ -107,7 +103,8 @@ class LengthNotifierPlugin(GajimPlugin):
 			if d['prev_color']:
 				tv.modify_base(gtk.STATE_NORMAL, d['prev_color'])
 		except AttributeError, error:
-			log.debug('Length Notifier Plugin was (probably) never connected with this chat window.\n Error: %s' % (error))
+			pass
+			#log.debug('Length Notifier Plugin was (probably) never connected with this chat window.\n Error: %s' % (error))
 	
 	@log_calls('LengthNotifierPlugin')
 	def jid_is_ok(self, jid):

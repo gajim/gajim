@@ -28,7 +28,7 @@ TYPE_PM = 'pm'
 
 ####################
 
-class MessageControl:
+class MessageControl(object):
 	'''An abstract base widget that can embed in the gtk.Notebook of a MessageWindow'''
 
 	def __init__(self, type_id, parent_win, widget_name, contact, account, resource = None):

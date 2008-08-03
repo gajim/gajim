@@ -40,14 +40,9 @@ class RosterButtonsPlugin(GajimPlugin):
 	description = u'''Adds quick action buttons to roster window.'''
 	authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
 	homepage = u'http://blog.bilinski.it'
-	
-	#@log_calls('RosterButtonsPlugin')
-	#def __init__(self):
-		#super(RosterButtonsPlugin, self).__init__()
 
 	@log_calls('RosterButtonsPlugin')	
 	def init(self):
-		#log.debug('self.__path__==%s'%(self.__path__))
 		self.GLADE_FILE_PATH = self.local_file_path('roster_buttons.glade')
 		
 		self.roster_vbox = gajim.interface.roster.xml.get_widget('roster_vbox2')

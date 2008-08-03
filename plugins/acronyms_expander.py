@@ -38,11 +38,8 @@ class AcronymsExpanderPlugin(GajimPlugin):
 	description = u'''Replaces acronyms (or other strings) with given expansions/substitutes.'''
 	authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
 	homepage = u'http://blog.bilinski.it'
-
-	#@log_calls('AcronymsExpanderPlugin')
-	#def __init__(self):
-		#super(AcronymsExpanderPlugin, self).__init__()
 		
+	@log_calls('AcronymsExpanderPlugin')
 	def init(self):
 		self.config_dialog = None
 		
@@ -71,20 +68,20 @@ class AcronymsExpanderPlugin(GajimPlugin):
 		ACRONYMS = self.config['ACRONYMS']
 		INVOKER = self.config['INVOKER']
 		t = tb.get_text(tb.get_start_iter(), tb.get_end_iter())
-		log.debug('%s %d'%(t, len(t)))
+		#log.debug('%s %d'%(t, len(t)))
 		if t and t[-1] == INVOKER:
-			log.debug("changing msg text")
+			#log.debug("changing msg text")
 			base,sep,head=t[:-1].rpartition(INVOKER)
-			log.debug('%s | %s | %s'%(base, sep, head))
+			#log.debug('%s | %s | %s'%(base, sep, head))
 			if head in ACRONYMS:
 				head = ACRONYMS[head]
 				log.debug("head: %s"%(head))
 				t = "".join((base, sep, head, INVOKER))
-				log.debug("turning off notify")
+				#log.debug("turning off notify")
 				tb.freeze_notify()
-				log.debug("setting text: '%s'"%(t))
+				#log.debug("setting text: '%s'"%(t))
 				tb.set_text(t)
-				log.debug("turning on notify")
+				#log.debug("turning on notify")
 				tb.thaw_notify()
 		
 	@log_calls('AcronymsExpanderPlugin')

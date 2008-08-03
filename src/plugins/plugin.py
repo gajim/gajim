@@ -130,9 +130,21 @@ class GajimPlugin(object):
 	def save_config(self):
 		self.config.save()
 	
-	@log_calls('GajimPlugin')	
+	@log_calls('GajimPlugin')
 	def load_config(self):
 		self.config.load()
+		
+	def __eq__(self, plugin):
+		if self.short_name == plugin.short_name:
+			return True
+		
+		return False
+	
+	def __ne__(self, plugin):
+		if self.short_name != plugin.short_name:
+			return True
+		
+		return False
 		
 	@log_calls('GajimPlugin')
 	def local_file_path(self, file_name):
