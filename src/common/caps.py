@@ -171,14 +171,20 @@ class CapsCache(object):
 		''' Preload data about (node, ver, exts) caps using disco
 		query to jid using proper connection. Don't query if
 		the data is already in cache. '''
-		q = self[(hash_method, hash)]
+		if hash_method == 'old':
+			q = self[(hash_method, node + '#' + hash)]
+		else:
+			q = self[(hash_method, hash)]
 
 		if q.queried==0:
 			# do query for bare node+hash pair
 			# this will create proper object
 			q.queried=1
-			con.discoverInfo(jid, '%s#%s' % (node, hash))
-	
+			if hash_method == 'old':
+				con.discoverInfo(jid)
+			else:
+				con.discoverInfo(jid, '%s#%s' % (node, hash))
+
 	def is_supported(self, contact, feature):
 		# No resource -> can't have any caps
 		if not contact or not contact.resource:
@@ -195,8 +201,11 @@ class CapsCache(object):
 		#	 This is the "Asterix way", after 0.12 release, I will
 		#	 likely implement a fallback to disco (could be disabled
 		#	 for mobile users who pay for traffic)
-		features = self[(contact.caps_hash_method,
-			contact.caps_hash)].features
+		if contact.caps_hash_method == 'old':
+			features = self[(contact.caps_hash_method, contact.caps_node + '#' + \
+				contact.caps_hash)].features
+		else:
+			features = self[(contact.caps_hash_method, contact.caps_hash)].features
 		if feature in features or features == []:
 			return True
 
@@ -214,8 +223,7 @@ class ConnectionCaps(object):
 		# for disco... so that disco will learn how to interpret
 		# these caps
 		jid = helpers.get_full_jid_from_iq(presence)
-		contact = gajim.contacts.get_contact_from_full_jid(
-			self.name, jid)
+		contact = gajim.contacts.get_contact_from_full_jid(self.name, jid)
 		if contact is None:
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
 			contact = gajim.contacts.get_gc_contact(
@@ -233,8 +241,11 @@ class ConnectionCaps(object):
 			contact.hash_method = None
 			return
 
-		hash_method, node, hash = \
-			caps['hash'], caps['node'], caps['ver']
+		hash_method, node, hash = caps['hash'], caps['node'], caps['ver']
+
+		if hash_method is None and node and hash:
+			# Old XEP-115 implentation
+			hash_method = 'old'
 
 		if hash_method is None or node is None or hash is None:
 			# improper caps in stanza, ignoring
@@ -260,20 +271,25 @@ class ConnectionCaps(object):
 				return
 		if not contact.caps_node:
 			return # we didn't asked for that?
-		if not node.startswith(contact.caps_node + '#'):
+		if contact.caps_hash_method != 'old' and not node.startswith(
+		contact.caps_node + '#'):
 			return
-		node, hash = node.split('#', 1)
-		computed_hash = helpers.compute_caps_hash(identities, features,
-			dataforms=dataforms, hash_method=contact.caps_hash_method)
-		if computed_hash != hash:
-			# wrong hash, forget it
-			contact.caps_node = ''
-			contact.caps_hash_method = ''
-			contact.caps_hash = ''
-			return
-
-		# if we don't have this info already...
-		caps = gajim.capscache[(contact.caps_hash_method, hash)]
+		if contact.caps_hash_method != 'old':
+			node, hash = node.split('#', 1)
+			computed_hash = helpers.compute_caps_hash(identities, features,
+				dataforms=dataforms, hash_method=contact.caps_hash_method)
+			if computed_hash != hash:
+				# wrong hash, forget it
+				contact.caps_node = ''
+				contact.caps_hash_method = ''
+				contact.caps_hash = ''
+				return
+			# if we don't have this info already...
+			caps = gajim.capscache[(contact.caps_hash_method, contact.caps_hash)]
+		else:
+			# if we don't have this info already...
+			caps = gajim.capscache[(contact.caps_hash_method, contact.caps_node + \
+				'#' + contact.caps_hash)]
 		if caps.queried == 2:
 			return
 
