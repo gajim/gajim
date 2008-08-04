@@ -254,7 +254,9 @@ class EncryptedStanzaSession(StanzaSession):
 			'If you see this message, something went wrong.]'
 		lang = os.getenv('LANG')
 		if lang is not None and lang != 'en': # we're not english
-			msgtxt = _(msgtxt) + ' (' + msgtxt + ')'
+			msgtxt = _('[This message is part of an encrypted session. '
+				'If you see this message, something went wrong.]') + ' (' + \
+				msgtxt + ')'
 		stanza.setBody(msgtxt)
 
 		return stanza

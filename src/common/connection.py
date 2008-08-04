@@ -1084,7 +1084,8 @@ class Connection(ConnectionHandlers):
 				lang = os.getenv('LANG')
 				if lang is not None and lang != 'en': # we're not english
 					# one in locale and one en
-					msgtxt = _(msgtxt) + ' (' + msgtxt + ')'
+					msgtxt = _('[This message is *encrypted* (See :XEP:`27`]') + \
+						' (' + msgtxt + ')'
 			else:
 				# Encryption failed, do not send message
 				tim = localtime()
