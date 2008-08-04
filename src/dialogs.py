@@ -518,8 +518,9 @@ class ChangeMoodDialog:
 		self.window.destroy()
 
 class ChangeStatusMessageDialog:
-	def __init__(self, show = None):
+	def __init__(self, on_response, show = None):
 		self.show = show
+		self.on_response = on_response
 		self.xml = gtkgui_helpers.get_glade('change_status_message_dialog.glade')
 		self.window = self.xml.get_widget('change_status_message_dialog')
 		self.window.set_transient_for(gajim.interface.roster.window)
@@ -563,6 +564,10 @@ class ChangeStatusMessageDialog:
 		for msg_name in sorted_keys_list:
 			self.message_liststore.append((msg_name,))
 		self.xml.signal_autoconnect(self)
+		if self.countdown_time > 0:
+			self.countdown()
+			gobject.timeout_add(1000, self.countdown)
+		self.window.connect('response', self.on_dialog_response)
 		self.window.show_all()
 
 	def countdown(self):
@@ -580,14 +585,8 @@ class ChangeStatusMessageDialog:
 			self.window.set_title(self.title_text)
 			return False
 
-	def run(self):
-		'''Wait for OK or Cancel button to be pressed and return status messsage
-		(None if users pressed Cancel or x button of WM'''
-		if self.countdown_time > 0:
-			self.countdown()
-			gobject.timeout_add(1000, self.countdown)
-		rep = self.window.run()
-		if rep == gtk.RESPONSE_OK:
+	def on_dialog_response(self, dialog, response):
+		if response == gtk.RESPONSE_OK:
 			beg, end = self.message_buffer.get_bounds()
 			message = self.message_buffer.get_text(beg, end).decode('utf-8')\
 				.strip()
@@ -598,7 +597,7 @@ class ChangeStatusMessageDialog:
 		else:
 			message = None # user pressed Cancel button or X wm button
 		self.window.destroy()
-		return message
+		self.on_response(message)
 
 	def on_message_combobox_changed(self, widget):
 		self.countdown_enabled = False

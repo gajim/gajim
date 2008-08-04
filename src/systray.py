@@ -358,10 +358,9 @@ class Systray:
 		model = gajim.interface.roster.status_combobox.get_model()
 		active = gajim.interface.roster.status_combobox.get_active()
 		status = model[active][2].decode('utf-8')
-		dlg = dialogs.ChangeStatusMessageDialog(status)
-		dlg.window.present()
-		message = dlg.run()
-		if message is not None: # None if user press Cancel
+		def on_response(message):
+			if message is None: # None if user press Cancel
+				return
 			accounts = gajim.connections.keys()
 			for acct in accounts:
 				if not gajim.config.get_per('accounts', acct,
@@ -369,6 +368,8 @@ class Systray:
 					continue
 				show = gajim.SHOW_LIST[gajim.connections[acct].connected]
 				gajim.interface.roster.send_status(acct, show, message)
+		dlg = dialogs.ChangeStatusMessageDialog(on_response, status)
+		dlg.window.present()
 
 	def show_tooltip(self, widget):
 		position = widget.window.get_origin()

@@ -2081,26 +2081,29 @@ class RosterWindow:
 		if sys.platform == 'darwin':
 			self.make_menu(force = True)
 
-	def get_status_message(self, show):
+	def get_status_message(self, show, on_response):
 		if show in gajim.config.get_per('defaultstatusmsg'):
 			if gajim.config.get_per('defaultstatusmsg', show, 'enabled'):
-				return gajim.config.get_per('defaultstatusmsg', show, 'message')
+				on_response(gajim.config.get_per('defaultstatusmsg', show,
+					'message'))
+				return
 		if (show == 'online' and not gajim.config.get('ask_online_status')) or \
 		(show in ('offline', 'invisible')
 		and not gajim.config.get('ask_offline_status')):
-			return ''
-		dlg = dialogs.ChangeStatusMessageDialog(show)
+			on_response('')
+			return
+
+		dlg = dialogs.ChangeStatusMessageDialog(on_response, show)
 		dlg.window.present() # show it on current workspace
-		message = dlg.run()
-		return message
 
 	def change_status(self, widget, account, status):
 		def change(account, status):
-			message = self.get_status_message(status)
-			if message is None:
-				# user pressed Cancel to change status message dialog
-				return
-			self.send_status(account, status, message)
+			def on_response(message):
+				if message is None:
+					# user pressed Cancel to change status message dialog
+					return
+				self.send_status(account, status, message)
+			self.get_status_message(status, on_response)
 
 		if status == 'invisible' and self.connected_rooms(account):
 			dialogs.ConfirmationDialog(
@@ -2219,7 +2222,7 @@ class RosterWindow:
 			gajim.interface.hide_systray()
 		gtk.main_quit()
 
-	def on_quit_request(self, widget = None):
+	def on_quit_request(self, widget=None):
 		''' user want to quit. Check if he should be warned about messages
 		pending. Terminate all sessions and send offline to all connected
 		account. We do NOT really quit gajim here '''
@@ -2229,45 +2232,50 @@ class RosterWindow:
 			if gajim.connections[acct].connected:
 				get_msg = True
 				break
-		if get_msg:
-			message = self.get_status_message('offline')
+
+		def on_continue(message):
 			if message is None:
 				# user pressed Cancel to change status message dialog
 				return
+			# check if we have unread messages
+			unread = gajim.events.get_nb_events()
+			if not gajim.config.get('notify_on_all_muc_messages'):
+				unread_not_to_notify = gajim.events.get_nb_events(
+					['printed_gc_msg'])
+				unread -= unread_not_to_notify
 
-		# check if we have unread messages
-		unread = gajim.events.get_nb_events()
-		if not gajim.config.get('notify_on_all_muc_messages'):
-			unread_not_to_notify = gajim.events.get_nb_events(['printed_gc_msg'])
-			unread -= unread_not_to_notify
+			# check if we have recent messages
+			recent = False
+			for win in gajim.interface.msg_win_mgr.windows():
+				for ctrl in win.controls():
+					fjid = ctrl.get_full_jid()
+					if gajim.last_message_time[ctrl.account].has_key(fjid):
+						if time.time() - gajim.last_message_time[ctrl.account][fjid] < 2:
+							recent = True
+							break
+				if recent:
+					break
 
-		# check if we have recent messages
-		recent = False
-		for win in gajim.interface.msg_win_mgr.windows():
-			for ctrl in win.controls():
-				fjid = ctrl.get_full_jid()
-				if gajim.last_message_time[ctrl.account].has_key(fjid):
-					if time.time() - gajim.last_message_time[ctrl.account][fjid] < 2:
-						recent = True
-						break
-			if recent:
-				break
+			if unread or recent:
+				dialog = dialogs.ConfirmationDialog(_('You have unread messages'),
+					_('Messages will only be available for reading them later if you'
+					' have history enabled and contact is in your roster.'))
+				if dialog.get_response() != gtk.RESPONSE_OK:
+					return
 
-		if unread or recent:
-			dialog = dialogs.ConfirmationDialog(_('You have unread messages'),
-				_('Messages will only be available for reading them later if you'
-				' have history enabled and contact is in your roster.'))
-			if dialog.get_response() != gtk.RESPONSE_OK:
-				return
+			self.quit_on_next_offline = 0
+			for acct in accounts:
+				if gajim.connections[acct].connected:
+					self.quit_on_next_offline += 1
+					self.send_status(acct, 'offline', message)
 
-		self.quit_on_next_offline = 0
-		for acct in accounts:
-			if gajim.connections[acct].connected:
-				self.quit_on_next_offline += 1
-				self.send_status(acct, 'offline', message)
+			if not self.quit_on_next_offline:
+				self.quit_gtkgui_interface()
 
-		if not self.quit_on_next_offline:
-			self.quit_gtkgui_interface()
+		if get_msg:
+			self.get_status_message('offline', on_continue)
+		else:
+			self.on_continue('')
 
 ################################################################################
 ### Menu and GUI callbacks
@@ -2514,57 +2522,64 @@ class RosterWindow:
 
 	def on_block(self, widget, titer, group_list):
 		''' When clicked on the 'block' button in context menu. '''
-		model = self.modelfilter
-		accounts = []
-		msg = self.get_status_message('offline')
-		if group_list is None:
-			jid = model[titer][C_JID].decode('utf-8')
-			account = model[titer][C_ACCOUNT].decode('utf-8')
-			accounts.append(account)
-			self.send_status(account, 'offline', msg, to = jid)
-			new_rule = {'order': u'1', 'type': u'jid', 'action': u'deny',
-				'value' : jid, 'child': [u'message', u'iq', u'presence-out']}
-			gajim.connections[account].blocked_list.append(new_rule)
-			# needed for draw_contact:
-			gajim.connections[account].blocked_contacts.append(jid)
-			self.draw_contact(jid, account)
-		else:
-			if titer is None:
-				for (contact, account) in group_list:
-					if account not in accounts:
-						if not gajim.connections[account].privacy_rules_supported:
-							continue
-						accounts.append(account)
-					self.send_status(account, 'offline', msg, to=contact.jid)
-					new_rule = {'order': u'1', 'type': u'jid',
-							'action': u'deny', 'value' : contact.jid,
-							'child': [u'message', u'iq', u'presence-out']}
-					gajim.connections[account].blocked_list.append(new_rule)
-					# needed for draw_contact:
-					gajim.connections[account].blocked_contacts.append(contact.jid)
-					self.draw_contact(contact.jid, account)
-			else:
-				group = model[titer][C_JID].decode('utf-8')
-				for (contact, account) in group_list:
-					if account not in accounts:
-						if not gajim.connections[account].privacy_rules_supported:
-							continue
-						accounts.append(account)
-						# needed for draw_group:
-						gajim.connections[account].blocked_groups.append(group)
-						self.draw_group(group, account)
-					self.send_status(account, 'offline', msg, to=contact.jid)
-					self.draw_contact(contact.jid, account)
-				new_rule = {'order': u'1', 'type': u'group', 'action': u'deny',
-					'value' : group, 'child': [u'message', u'iq', u'presence-out']}
+		def on_continue(msg):
+			if msg is None:
+				# user pressed Cancel to change status message dialog
+				return
+			model = self.modelfilter
+			accounts = []
+			if group_list is None:
+				jid = model[titer][C_JID].decode('utf-8')
+				account = model[titer][C_ACCOUNT].decode('utf-8')
+				accounts.append(account)
+				self.send_status(account, 'offline', msg, to = jid)
+				new_rule = {'order': u'1', 'type': u'jid', 'action': u'deny',
+					'value' : jid, 'child': [u'message', u'iq', u'presence-out']}
 				gajim.connections[account].blocked_list.append(new_rule)
-		for account in accounts:
-			gajim.connections[account].set_privacy_list(
-			'block', gajim.connections[account].blocked_list)
-		if len(gajim.connections[account].blocked_list) == 1:
-			gajim.connections[account].set_active_list('block')
-			gajim.connections[account].set_default_list('block')
-		gajim.connections[account].get_privacy_list('block')
+				# needed for draw_contact:
+				gajim.connections[account].blocked_contacts.append(jid)
+				self.draw_contact(jid, account)
+			else:
+				if titer is None:
+					for (contact, account) in group_list:
+						if account not in accounts:
+							if not gajim.connections[account].privacy_rules_supported:
+								continue
+							accounts.append(account)
+						self.send_status(account, 'offline', msg, to=contact.jid)
+						new_rule = {'order': u'1', 'type': u'jid',
+								'action': u'deny', 'value' : contact.jid,
+								'child': [u'message', u'iq', u'presence-out']}
+						gajim.connections[account].blocked_list.append(new_rule)
+						# needed for draw_contact:
+						gajim.connections[account].blocked_contacts.append(
+							contact.jid)
+						self.draw_contact(contact.jid, account)
+				else:
+					group = model[titer][C_JID].decode('utf-8')
+					for (contact, account) in group_list:
+						if account not in accounts:
+							if not gajim.connections[account].privacy_rules_supported:
+								continue
+							accounts.append(account)
+							# needed for draw_group:
+							gajim.connections[account].blocked_groups.append(group)
+							self.draw_group(group, account)
+						self.send_status(account, 'offline', msg, to=contact.jid)
+						self.draw_contact(contact.jid, account)
+					new_rule = {'order': u'1', 'type': u'group', 'action': u'deny',
+						'value' : group, 'child': [u'message', u'iq',
+						u'presence-out']}
+					gajim.connections[account].blocked_list.append(new_rule)
+			for account in accounts:
+				gajim.connections[account].set_privacy_list(
+				'block', gajim.connections[account].blocked_list)
+			if len(gajim.connections[account].blocked_list) == 1:
+				gajim.connections[account].set_active_list('block')
+				gajim.connections[account].set_default_list('block')
+			gajim.connections[account].get_privacy_list('block')
+
+		self.get_status_message('offline', on_continue)
 
 	def on_unblock(self, widget, titer, group_list):
 		''' When clicked on the 'unblock' button in context menu. '''
@@ -2954,10 +2969,10 @@ class RosterWindow:
 
 	def on_change_status_message_activate(self, widget, account):
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
-		dlg = dialogs.ChangeStatusMessageDialog(show)
-		message = dlg.run()
-		if message is not None: # None is if user pressed Cancel
-			self.send_status(account, show, message)
+		def on_response(message):
+			if message is not None: # None is if user pressed Cancel
+				self.send_status(account, show, message)
+		dialogs.ChangeStatusMessageDialog(on_response, show)
 
 	def on_add_to_roster(self, widget, contact, account):
 		dialogs.AddNewContactWindow(account, contact.jid, contact.name)
@@ -3062,16 +3077,17 @@ class RosterWindow:
 				show = helpers.get_global_show()
 				if show == 'offline':
 					return True
-				dlg = dialogs.ChangeStatusMessageDialog(show)
-				message = dlg.run()
-				if not message:
-					return True
-				for acct in gajim.connections:
-					if not gajim.config.get_per('accounts', acct,
-					'sync_with_global_status'):
-						continue
-					current_show = gajim.SHOW_LIST[gajim.connections[acct].connected]
-					self.send_status(acct, current_show, message)
+				def on_response(message):
+					if message is None:
+						return True
+					for acct in gajim.connections:
+						if not gajim.config.get_per('accounts', acct,
+						'sync_with_global_status'):
+							continue
+						current_show = gajim.SHOW_LIST[gajim.connections[acct].\
+							connected]
+						self.send_status(acct, current_show, message)
+				dialogs.ChangeStatusMessageDialog(on_response, show)
 			return True
 
 		elif event.button == 1: # Left click
@@ -3164,9 +3180,9 @@ class RosterWindow:
 
 	def on_send_custom_status(self, widget, contact_list, show, group=None):
 		'''send custom status'''
-		dlg = dialogs.ChangeStatusMessageDialog(show)
-		message = dlg.run()
-		if message is not None: # None if user pressed Cancel
+		def on_response(message):
+			if message is None: # None if user pressed Cancel
+				return
 			for (contact, account) in contact_list:
 				our_jid = gajim.get_jid_from_account(account)
 				accounts = []
@@ -3182,6 +3198,7 @@ class RosterWindow:
 				if not gajim.interface.status_sent_to_users.has_key(account):
 					gajim.interface.status_sent_to_users[account] = {}
 				gajim.interface.status_sent_to_users[account][contact.jid] = show
+		dialogs.ChangeStatusMessageDialog(on_response, show)
 
 	def on_status_combobox_changed(self, widget):
 		'''When we change our status via the combobox'''
@@ -3205,20 +3222,20 @@ class RosterWindow:
 			# 'Change status message' selected:
 			# do not change show, just show change status dialog
 			status = model[self.previous_status_combobox_active][2].decode('utf-8')
-			dlg = dialogs.ChangeStatusMessageDialog(status)
-			message = dlg.run()
-			if message is not None: # None if user pressed Cancel
-				for account in accounts:
-					if not gajim.config.get_per('accounts', account,
-						'sync_with_global_status'):
-						continue
-					current_show = gajim.SHOW_LIST[
-						gajim.connections[account].connected]
-					self.send_status(account, current_show, message)
-			self.combobox_callback_active = False
-			self.status_combobox.set_active(
-				self.previous_status_combobox_active)
-			self.combobox_callback_active = True
+			def on_response(message):
+				if message is not None: # None if user pressed Cancel
+					for account in accounts:
+						if not gajim.config.get_per('accounts', account,
+							'sync_with_global_status'):
+							continue
+						current_show = gajim.SHOW_LIST[
+							gajim.connections[account].connected]
+						self.send_status(account, current_show, message)
+				self.combobox_callback_active = False
+				self.status_combobox.set_active(
+					self.previous_status_combobox_active)
+				self.combobox_callback_active = True
+			dialogs.ChangeStatusMessageDialog(on_response, status)
 			return
 		# we are about to change show, so save this new show so in case
 		# after user chooses "Change status message" menuitem
@@ -3245,28 +3262,33 @@ class RosterWindow:
 				if dialog.get_response() != gtk.RESPONSE_OK:
 					self.update_status_combobox()
 					return
-		message = self.get_status_message(status)
-		if message is None: # user pressed Cancel to change status message dialog
-			self.update_status_combobox()
-			return
-		global_sync_accounts = []
-		for acct in accounts:
-			if gajim.config.get_per('accounts', acct, 'sync_with_global_status'):
-				global_sync_accounts.append(acct)
-		global_sync_connected_accounts = gajim.get_number_of_connected_accounts(
-			global_sync_accounts)
-		for account in accounts:
-			if not gajim.config.get_per('accounts', account,
-			'sync_with_global_status'):
-				continue
-			# we are connected (so we wanna change show and status)
-			# or no account is connected and we want to connect with new show and
-			# status
 
-			if not global_sync_connected_accounts > 0 or \
-			gajim.connections[account].connected > 0:
-				self.send_status(account, status, message)
-		self.update_status_combobox()
+		def on_continue(message):
+			if message is None:
+				# user pressed Cancel to change status message dialog
+				self.update_status_combobox()
+				return
+			global_sync_accounts = []
+			for acct in accounts:
+				if gajim.config.get_per('accounts', acct,
+				'sync_with_global_status'):
+					global_sync_accounts.append(acct)
+			global_sync_connected_accounts = \
+				gajim.get_number_of_connected_accounts(global_sync_accounts)
+			for account in accounts:
+				if not gajim.config.get_per('accounts', account,
+				'sync_with_global_status'):
+					continue
+				# we are connected (so we wanna change show and status)
+				# or no account is connected and we want to connect with new show
+				# and status
+
+				if not global_sync_connected_accounts > 0 or \
+				gajim.connections[account].connected > 0:
+					self.send_status(account, status, message)
+			self.update_status_combobox()
+
+		self.get_status_message(status, on_continue)
 
 	def on_preferences_menuitem_activate(self, widget):
 		if gajim.interface.instances.has_key('preferences'):
