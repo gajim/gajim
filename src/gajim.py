@@ -2837,12 +2837,13 @@ class Interface:
 					shows[show] = [a]
 				else:
 					shows[show].append(a)
-		for show in shows:
-			message = self.roster.get_status_message(show)
+		def on_message(message):
 			if message is None:
-				continue
+				return
 			for a in shows[show]:
 				self.roster.send_status(a, show, message)
+		for show in shows:
+			message = self.roster.get_status_message(show, on_message)
 		return False
 
 	def show_systray(self):
