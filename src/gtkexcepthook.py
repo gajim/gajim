@@ -47,6 +47,7 @@ def _info(type, value, tb):
 				_('It probably is not fatal, but should be reported '
 				'to the developers nonetheless.'))
 	
+	dialog.set_modal(False)
 	#FIXME: add icon to this button
 	RESPONSE_REPORT_BUG = 42
 	dialog.add_buttons(gtk.STOCK_CLOSE, gtk.BUTTONS_CLOSE,
@@ -81,18 +82,15 @@ def _info(type, value, tb):
 	# on expand the details the dialog remains centered on screen
 	dialog.set_position(gtk.WIN_POS_CENTER_ALWAYS)
 
-	dialog.show_all()
-
 	close_clicked = False
-	while not close_clicked:
-		resp = dialog.run()
-		if resp == RESPONSE_REPORT_BUG:
+	def on_dialog_response(dialog, response):
+		if response == RESPONSE_REPORT_BUG:
 			url = 'http://trac.gajim.org/wiki/HowToCreateATicket'
 			helpers.launch_browser_mailer('url', url)
 		else:
-			close_clicked = True
-	
-	dialog.destroy()
+			dialog.destroy()
+	dialog.connect('response', on_dialog_response)
+	dialog.show_all()
 
 	_exception_in_progress.release()
 	
