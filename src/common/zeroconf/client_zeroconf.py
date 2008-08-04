@@ -698,6 +698,8 @@ class ClientZeroconf:
 		# look for hashed connections
 		if to in self.recipient_to_hash:
 			conn = self.connections[self.recipient_to_hash[to]]
+			id = conn.Dispatcher.getAnID()
+			stanza.setID(id)
 			if conn.add_stanza(stanza, is_message):
 				if on_ok:
 					on_ok()
@@ -707,13 +709,18 @@ class ClientZeroconf:
 			hash = self.ip_to_hash[item['address']]
 			if self.hash_to_port[hash] == item['port']:
 				conn = self.connections[hash]
+				id = conn.Dispatcher.getAnID()
+				stanza.setID(id)
 				if conn.add_stanza(stanza, is_message):
 					if on_ok:
 						on_ok()
 					return 0
 
 		# otherwise open new connection
+		stanza.setID('zero')
 		P2PClient(None, item['address'], item['port'], self,
 			[(stanza, is_message)], to, on_ok=on_ok, on_not_ok=on_not_ok)
+
+		return 'zero'
 
 # vim: se ts=3:
