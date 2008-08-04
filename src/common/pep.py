@@ -163,11 +163,10 @@ def user_mood(items, name, jid):
 
 	if jid == gajim.get_jid_from_account(name):
 		gajim.interface.roster.draw_account(name)
-	else:
-		gajim.interface.roster.draw_mood(user, name)
-		ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
-		if ctrl:
-			ctrl.update_mood()
+	gajim.interface.roster.draw_mood(user, name)
+	ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
+	if ctrl:
+		ctrl.update_mood()
 
 def user_tune(items, name, jid):
 	has_child = False
@@ -268,11 +267,10 @@ def user_tune(items, name, jid):
 
 	if jid == gajim.get_jid_from_account(name):
 		gajim.interface.roster.draw_account(name)
-	else:
-		gajim.interface.roster.draw_tune(user, name)
-		ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
-		if ctrl:
-			ctrl.update_tune()
+	gajim.interface.roster.draw_tune(user, name)
+	ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
+	if ctrl:
+		ctrl.update_tune()
 
 def user_geoloc(items, name, jid):
 	pass
@@ -346,8 +344,7 @@ def user_activity(items, name, jid):
 
 	if jid == gajim.get_jid_from_account(name):
 		gajim.interface.roster.draw_account(name)
-	else:
-		gajim.interface.roster.draw_activity(user, name)
+	gajim.interface.roster.draw_activity(user, name)
 	ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
 	if ctrl:
 		ctrl.update_activity()
