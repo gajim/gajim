@@ -250,11 +250,11 @@ class EncryptedStanzaSession(StanzaSession):
 		c.NT.mac = base64.b64encode(self.hmac(self.km_s, m_content + \
 			crypto.encode_mpi(old_en_counter)))
 
-		msgtxt = '[This message is part of an encrypted session. ' \
+		msgtxt = '[This is part of an encrypted session. ' \
 			'If you see this message, something went wrong.]'
 		lang = os.getenv('LANG')
 		if lang is not None and lang != 'en': # we're not english
-			msgtxt = _('[This message is part of an encrypted session. '
+			msgtxt = _('[This is part of an encrypted session. '
 				'If you see this message, something went wrong.]') + ' (' + \
 				msgtxt + ')'
 		stanza.setBody(msgtxt)
