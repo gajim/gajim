@@ -19,9 +19,10 @@ In TCP-derived transports it is file descriptor of socket'''
 
 
 class NonBlockingBOSH(NonBlockingTransport):
-	def __init__(self, raise_event, on_disconnect, idlequeue, xmpp_server, domain,
-		bosh_dict, proxy_creds):
-		NonBlockingTransport.__init__(self, raise_event, on_disconnect, idlequeue)
+	def __init__(self, raise_event, on_disconnect, idlequeue, estabilish_tls, certs,
+			xmpp_server, domain, bosh_dict, proxy_creds):
+		NonBlockingTransport.__init__(self, raise_event, on_disconnect, idlequeue,
+			estabilish_tls, certs)
 
 		self.bosh_sid = None
 		if locale.getdefaultlocale()[0]:
@@ -37,12 +38,19 @@ class NonBlockingBOSH(NonBlockingTransport):
 		self.route_host, self.route_port = xmpp_server
 
 		self.bosh_wait = bosh_dict['bosh_wait']
-		self.bosh_hold = bosh_dict['bosh_hold']
+		if not self.http_pipelining:
+			self.bosh_hold = 1
+		else:
+			self.bosh_hold = bosh_dict['bosh_hold']
 		self.bosh_requests = self.bosh_hold
 		self.bosh_uri = bosh_dict['bosh_uri']
 		self.bosh_port = bosh_dict['bosh_port']
 		self.bosh_content = bosh_dict['bosh_content']
 		self.over_proxy = bosh_dict['bosh_useproxy']
+		if estabilish_tls:
+			self.bosh_secure = 'true'
+		else:
+			self.bosh_secure = 'false'
 		self.use_proxy_auth = bosh_dict['useauth']
 		self.proxy_creds = proxy_creds
 		self.wait_cb_time = None
@@ -55,7 +63,6 @@ class NonBlockingBOSH(NonBlockingTransport):
 		self.ack_checker = None
 		self.after_init = False
 
-		# if proxy_host .. do sth about HTTP proxy etc.
 		
 	def connect(self, conn_5tuple, on_connect, on_connect_failure):
 		NonBlockingTransport.connect(self, conn_5tuple, on_connect, on_connect_failure)
@@ -72,7 +79,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 		self.after_init = True
 
 		self.http_socks.append(self.get_new_http_socket())
-		self.tcp_connection_started()
+		self.tcp_connecting_started()
 
 		# following connect() is not necessary because sockets can be connected on 
 		# send but we need to know if host is reachable in order to invoke callback
@@ -80,14 +87,21 @@ class NonBlockingBOSH(NonBlockingTransport):
 		# for errors occurring after connection is etabilished)
 		self.http_socks[0].connect(
 			conn_5tuple = conn_5tuple,
-			on_connect = lambda: self._on_connect(self.http_socks[0]),
+			on_connect = lambda: self._on_connect(),
 			on_connect_failure = self._on_connect_failure)
 
+	def _on_connect(self):
+		self.peerhost = self.http_socks[0].peerhost
+		self.ssl_lib = self.http_socks[0].ssl_lib
+		NonBlockingTransport._on_connect(self)
+
+
+
 	def set_timeout(self, timeout):
-		if self.state in [CONNECTING, CONNECTED] and self.fd != -1:
+		if self.get_state() in [CONNECTING, CONNECTED] and self.fd != -1:
 			NonBlockingTransport.set_timeout(self, timeout)
 		else:
-			log.warn('set_timeout: TIMEOUT NOT SET: state is %s, fd is %s' % (self.state, self.fd))
+			log.warn('set_timeout: TIMEOUT NOT SET: state is %s, fd is %s' % (self.get_state(), self.fd))
 
 	def on_http_request_possible(self):
 		'''
@@ -95,16 +109,24 @@ class NonBlockingBOSH(NonBlockingTransport):
 		There should be always one pending request on BOSH CM.
 		'''
 		log.info('on_http_req possible, state:\n%s' % self.get_current_state())
-		if self.state == DISCONNECTING:
+		if self.get_state() == DISCONNECTING:
 			self.disconnect()
 			return
-		self.send_BOSH(None)
+
+		print 'SSSSSSSSSSEEEEEEEEEND'
+		if hasattr(self._owner, 'NonBlockingNonSASL') or hasattr(self._owner, 'SASL'):
+			#FIXME: Hack for making the non-secure warning dialog work
+			self.send_BOSH(None)
+		else:
+			self.http_socks[0]._plug_idle(writable=False, readable=True)
+			return
 
 
 	def get_socket_in(self, state):
 		for s in self.http_socks:
-			if s.state==state: return s
+			if s.get_state()==state: return s
 		return None
+
 
 	def get_free_socket(self):
 		if self.http_pipelining:
@@ -114,8 +136,8 @@ class NonBlockingBOSH(NonBlockingTransport):
 			last_recv_time, tmpsock = 0, None
 			for s in self.http_socks:
 				# we're interested only into CONNECTED socket with no req pending
-				if s.state==CONNECTED and s.pending_requests==0:
-					# if there's more of them, we want the one with less recent data receive
+				if s.get_state()==CONNECTED and s.pending_requests==0:
+					# if there's more of them, we want the one with the least recent data receive
 					# (lowest last_recv_time)
 					if (last_recv_time==0) or (s.last_recv_time < last_recv_time):
 						last_recv_time = s.last_recv_time
@@ -129,13 +151,14 @@ class NonBlockingBOSH(NonBlockingTransport):
 	def send_BOSH(self, payload):
 		total_pending_reqs = sum([s.pending_requests for s in self.http_socks])
 
-		# when called after HTTP response when there are some pending requests and
-		# no data to send, we do nothing and disccard the payload
+		# when called after HTTP response (Payload=None) and when there are already 
+		# some pending requests and no data to send, or when the socket is
+		# disconnected, we do nothing
 		if      payload is None and \
 			total_pending_reqs > 0 and \
 			self.stanza_buffer == [] and \
 			self.prio_bosh_stanzas == [] or \
-			self.state==DISCONNECTED:
+			self.get_state()==DISCONNECTED:
 			return
 
 		# now the payload is put to buffer and will be sent at some point
@@ -144,7 +167,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 		# if we're about to make more requests than allowed, we don't send - stanzas will be
 		# sent after HTTP response from CM, exception is when we're disconnecting - then we
 		# send anyway
-		if total_pending_reqs >= self.bosh_requests and self.state!=DISCONNECTING:
+		if total_pending_reqs >= self.bosh_requests and self.get_state()!=DISCONNECTING:
 			log.warn('attemp to make more requests than allowed by Connection Manager:\n%s' % 
 				self.get_current_state())
 			return
@@ -232,17 +255,16 @@ class NonBlockingBOSH(NonBlockingTransport):
 		self.remove_bosh_wait_timeout()
 
 		if self.after_init:
-			self.after_init = False
 			if stanza_attrs.has_key('sid'):
 				# session ID should be only in init response
 				self.bosh_sid = stanza_attrs['sid']
 
 			if stanza_attrs.has_key('requests'):
-				#self.bosh_requests = int(stanza_attrs['requests'])
-				self.bosh_requests = int(stanza_attrs['wait'])
+				self.bosh_requests = int(stanza_attrs['requests'])
 
 			if stanza_attrs.has_key('wait'):
 				self.bosh_wait = int(stanza_attrs['wait'])
+			self.after_init = False
 
 		ack = None
 		if stanza_attrs.has_key('ack'):
@@ -267,11 +289,10 @@ class NonBlockingBOSH(NonBlockingTransport):
 	def append_stanza(self, stanza):
 		if stanza:
 			if isinstance(stanza, tuple):
-				# tuple of BOSH stanza and True/False for whether to add payload
+				# stanza is tuple of BOSH stanza and bool value for whether to add payload
 				self.prio_bosh_stanzas.append(stanza)
 			else:
 				self.stanza_buffer.append(stanza)
-
 
 
 	def send(self, stanza, now=False):
@@ -284,7 +305,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 	def get_current_state(self):
 		t = '------ SOCKET_ID\tSOCKET_STATE\tPENDING_REQS\n'
 		for s in self.http_socks:
-			t = '%s------ %s\t%s\t%s\n' % (t,id(s), s.state, s.pending_requests)
+			t = '%s------ %s\t%s\t%s\n' % (t,id(s), s.get_state(), s.pending_requests)
 		t = '%s------ prio stanzas: %s, queued XMPP stanzas: %s, not_acked stanzas: %s' \
 			% (t, self.prio_bosh_stanzas, self.stanza_buffer,
 			self.ack_checker.get_not_acked_rids())
@@ -294,7 +315,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 	def connect_and_flush(self, socket):
 		socket.connect(
 			conn_5tuple = self.conn_5tuple, 
-			on_connect = lambda :self.send_BOSH(None),
+			on_connect = self.on_http_request_possible,
 			on_connect_failure = self.disconnect)
 
 
@@ -313,6 +334,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 					'sid': self.bosh_sid,
 					'xml:lang': self.bosh_xml_lang,
 					'xmpp:restart': 'true',
+					'secure': self.bosh_secure,
 					'xmlns:xmpp': 'urn:xmpp:xbosh'})
 		else:
 			t = BOSHBody(
@@ -347,6 +369,8 @@ class NonBlockingBOSH(NonBlockingTransport):
 			raise_event=self.raise_event,
 			on_disconnect=self.disconnect,
 			idlequeue = self.idlequeue,
+			estabilish_tls = self.estabilish_tls,
+			certs = self.certs,
 			on_http_request_possible = self.on_http_request_possible,
 			http_dict = http_dict,
 			on_persistent_fallback = self.on_persistent_fallback)
@@ -368,7 +392,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 	def disconnect(self, do_callback=True):
 		self.remove_bosh_wait_timeout()
-		if self.state == DISCONNECTED: return
+		if self.get_state() == DISCONNECTED: return
 		self.fd = -1
 		for s in self.http_socks:
 			s.disconnect(do_callback=False)

@@ -207,7 +207,7 @@ class ConnectionBytestream:
 		iq.setID(file_props['request-id'])
 		query = iq.setTag('query')
 		query.setNamespace(common.xmpp.NS_BYTESTREAM)
-		query.setAttr('mode', 'tcp')
+		query.setAttr('mode', 'plain')
 		query.setAttr('sid', file_props['sid'])
 		for ft_host in ft_add_hosts:
 			# The streamhost, if set

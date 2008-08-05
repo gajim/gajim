@@ -545,7 +545,7 @@ class Interface:
 				ctrl.print_conversation('Error %s: %s' % (array[2], array[1]))
 
 	def handle_event_con_type(self, account, con_type):
-		# ('CON_TYPE', account, con_type) which can be 'ssl', 'tls', 'tcp'
+		# ('CON_TYPE', account, con_type) which can be 'ssl', 'tls', 'plain'
 		gajim.con_types[account] = con_type
 		self.roster.draw_account(account)
 

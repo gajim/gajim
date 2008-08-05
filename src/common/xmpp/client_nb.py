@@ -26,6 +26,8 @@ import socket
 import transports_nb, tls_nb, dispatcher_nb, auth_nb, roster_nb, protocol, bosh
 from client import *
 
+from protocol import NS_TLS
+
 import logging
 log = logging.getLogger('gajim.c.x.client_nb')
 
@@ -71,7 +73,6 @@ class NBCommonClient:
 		
 		self.connected=''
 		log.debug('Client disconnected..')
-		print 'ffffffffffffffffff'
 		for i in reversed(self.disconnect_handlers):
 			log.debug('Calling disconnect handler %s' % i)
 			i()
@@ -86,9 +87,9 @@ class NBCommonClient:
 		if self.__dict__.has_key('NonBlockingTLS'):
 			self.NonBlockingTLS.PlugOut()
 		if self.__dict__.has_key('NBHTTPProxySocket'):
-			self.NBHTTPPROXYsocket.PlugOut()
+			self.NBHTTPProxySocket.PlugOut()
 		if self.__dict__.has_key('NBSOCKS5ProxySocket'):
-			self.NBSOCKS5PROXYsocket.PlugOut()
+			self.NBSOCKS5ProxySocket.PlugOut()
 		if self.__dict__.has_key('NonBlockingTCP'):
 			self.NonBlockingTCP.PlugOut()
 		if self.__dict__.has_key('NonBlockingHTTP'):
@@ -98,7 +99,7 @@ class NBCommonClient:
 
 
 	def connect(self, on_connect, on_connect_failure, hostname=None, port=5222, 
-		on_proxy_failure=None, proxy=None, secure=None):
+		on_proxy_failure=None, proxy=None, secure_tuple=None):
 		''' 
 		Open XMPP connection (open XML streams in both directions).
 		:param hostname: hostname of XMPP server from SRV request 
@@ -110,17 +111,15 @@ class NBCommonClient:
 		:param proxy: dictionary with proxy data. It should contain at least values
 			for keys 'host' and 'port' - connection details for proxy server and
 			optionally keys 'user' and 'pass' as proxy credentials
-		:param secure:
+		:param secure_tuple:
 		'''
 		self.on_connect = on_connect
 		self.on_connect_failure=on_connect_failure
 		self.on_proxy_failure = on_proxy_failure
-		self._secure = secure
+		self.secure, self.cacerts, self.mycerts = secure_tuple
 		self.Connection = None
 		self.Port = port
 
-
-			
 			
 
 	def _resolve_hostname(self, hostname, port, on_success, on_failure):
@@ -147,7 +146,7 @@ class NBCommonClient:
                         self.current_ip = self.ip_addresses.pop(0)
                         self.socket.connect(
 				conn_5tuple=self.current_ip,
-				on_connect=lambda: self._xmpp_connect(socket_type='tcp'),
+				on_connect=lambda: self._xmpp_connect(socket_type='plain'),
 				on_connect_failure=self._try_next_ip)
 
 
@@ -159,6 +158,8 @@ class NBCommonClient:
 			return None
 
 	def _xmpp_connect(self, socket_type):
+		if socket_type == 'plain' and self.Connection.ssl_lib:
+			socket_type = 'ssl'
 		self.connected = socket_type
 		self._xmpp_connect_machine()
 
@@ -169,7 +170,6 @@ class NBCommonClient:
 		and features tag handling. Calls _on_stream_start when stream is 
 		started, and _on_connect_failure on failure.
 		'''
-		#FIXME: use RegisterHandlerOnce instead of onreceive
 		log.info('-------------xmpp_connect_machine() >> mode: %s, data: %s' % (mode,str(data)[:20] ))
 
 		def on_next_receive(mode):
@@ -181,6 +181,7 @@ class NBCommonClient:
 
 		if not mode:
 			# starting state
+			if self.__dict__.has_key('Dispatcher'): self.Dispatcher.PlugOut()
 			d=dispatcher_nb.Dispatcher().PlugIn(self)
 			on_next_receive('RECEIVE_DOCUMENT_ATTRIBUTES')
 
@@ -222,11 +223,38 @@ class NBCommonClient:
 		elif mode == 'STREAM_STARTED':
 			self._on_stream_start()
 
+
+	def _tls_negotiation_handler(self, con=None, tag=None):
+		log.info('-------------tls_negotiaton_handler() >> tag: %s' % tag)
+		if not con and not tag:
+			# starting state when we send the <starttls>
+			self.RegisterHandlerOnce('proceed', self._tls_negotiation_handler,
+					xmlns=NS_TLS)
+			self.RegisterHandlerOnce('failure', self._tls_negotiation_handler,
+					xmlns=NS_TLS)
+			self.send('<starttls xmlns="%s"/>' % NS_TLS)
+		else:
+			if tag.getNamespace() <> NS_TLS: 
+				self._on_connect_failure('Unknown namespace: %s' % tag.getNamespace())
+				return
+			tagname = tag.getName()
+			if tagname == 'failure':
+				self._on_connect_failure('TLS <failure>  received: %s' % tag)
+				return
+			log.info('Got starttls proceed response. Switching to TLS/SSL...')
+			# following call wouldn't work for BOSH transport but it doesn't matter
+			# because TLS negotiation with BOSH is forbidden
+			self.Connection.tls_init(
+				on_succ = lambda: self._xmpp_connect(socket_type='tls'),
+				on_fail = lambda: self._on_connect_failure('error while etabilishing TLS'))
+
+
+
 	def _on_stream_start(self):
 		'''Called when stream is opened. To be overriden in derived classes.'''
 
 	def _on_connect_failure(self, retry=None, err_message=None): 
-		self.connected = None
+		self.connected = ''
 		if err_message:
 			log.debug('While connecting: %s' % err_message)
 		if self.socket:
@@ -234,6 +262,10 @@ class NBCommonClient:
 		self.on_connect_failure(retry)
 
 	def _on_connect(self):
+		if self.secure == 'tls':
+			self._on_connect_failure('uaaaaaa')
+			return
+		print 'self.secure = %s' % self.secure
 		self.onreceive(None)
 		self.on_connect(self, self.connected)
 
@@ -243,7 +275,7 @@ class NBCommonClient:
 			self.Dispatcher.Event('', event_type, data)
 		
 	
-	# moved from client.CommonClient:
+	# moved from client.CommonClient (blocking client from xmpppy):
 	def RegisterDisconnectHandler(self,handler):
 		""" Register handler that will be called on disconnect."""
 		self.disconnect_handlers.append(handler)
@@ -259,7 +291,7 @@ class NBCommonClient:
 		raise IOError('Disconnected from server.')
 
 	def get_connect_type(self):
-		""" Returns connection state. F.e.: None / 'tls' / 'tcp+non_sasl' . """
+		""" Returns connection state. F.e.: None / 'tls' / 'plain+non_sasl' . """
 		return self.connected
 
 	def get_peerhost(self):
@@ -267,8 +299,7 @@ class NBCommonClient:
 		to the server , (e.g. me).
 		We will create listening socket on the same ip '''
 		# FIXME: tuple (ip, port) is expected (and checked for) but port num is useless
-		if hasattr(self, 'socket'):
-			return self.socket.peerhost
+		return self.socket.peerhost
 
 
 	def auth(self, user, password, resource = '', sasl = 1, on_auth = None):
@@ -372,15 +403,20 @@ class NonBlockingClient(NBCommonClient):
 		self.protocol_type = 'XMPP'
 
 	def connect(self, on_connect, on_connect_failure, hostname=None, port=5222, 
-		on_proxy_failure=None, proxy=None, secure=None):
+		on_proxy_failure=None, proxy=None, secure_tuple=None):
 
 		NBCommonClient.connect(self, on_connect, on_connect_failure, hostname, port,
-			on_proxy_failure, proxy, secure)
+			on_proxy_failure, proxy, secure_tuple)
 
 		if hostname:
 			xmpp_hostname = hostname
 		else:
 			xmpp_hostname = self.Server
+
+		estabilish_tls = self.secure == 'ssl'
+		certs = (self.cacerts, self.mycerts)
+
+		self._on_tcp_failure = self._on_connect_failure
 
 		if proxy:
 			# with proxies, client connects to proxy instead of directly to
@@ -390,13 +426,14 @@ class NonBlockingClient(NBCommonClient):
 			tcp_host, tcp_port, proxy_user, proxy_pass = \
 				transports_nb.get_proxy_data_from_dict(proxy)
 
-			self._on_tcp_failure = self.on_proxy_failure
 		
 			if proxy['type'] == 'bosh':
 				self.socket = bosh.NonBlockingBOSH(
 						on_disconnect = self.on_disconnect,
 						raise_event = self.raise_event,
 						idlequeue = self.idlequeue,
+						estabilish_tls = estabilish_tls,
+						certs = certs,
 						proxy_creds = (proxy_user, proxy_pass),
 						xmpp_server = (xmpp_hostname, self.Port),
 						domain = self.Server,
@@ -405,6 +442,7 @@ class NonBlockingClient(NBCommonClient):
 				self.wait_for_restart_response = proxy['bosh_wait_for_restart_response']
 
 			else:
+				self._on_tcp_failure = self.on_proxy_failure
 				if proxy['type'] == 'socks5':
 					proxy_class = transports_nb.NBSOCKS5ProxySocket
 				elif proxy['type'] == 'http':
@@ -413,16 +451,19 @@ class NonBlockingClient(NBCommonClient):
 					on_disconnect = self.on_disconnect,
 					raise_event = self.raise_event,
 					idlequeue = self.idlequeue,
+					estabilish_tls = estabilish_tls,
+					certs = certs,
 					proxy_creds = (proxy_user, proxy_pass),
 					xmpp_server = (xmpp_hostname, self.Port))
 		else: 
-			self._on_tcp_failure = self._on_connect_failure
 			tcp_host=xmpp_hostname
 			tcp_port=self.Port
 			self.socket = transports_nb.NonBlockingTCP(
 					on_disconnect = self.on_disconnect,
 					raise_event = self.raise_event,
-					idlequeue = self.idlequeue)
+					idlequeue = self.idlequeue,
+					estabilish_tls = estabilish_tls,
+					certs = certs)
 
 		self.socket.PlugIn(self)
 
@@ -434,31 +475,31 @@ class NonBlockingClient(NBCommonClient):
 
 
 
-
 	def _on_stream_start(self):
 		'''
 		Called after XMPP stream is opened.
 		In pure XMPP client, TLS negotiation may follow after esabilishing a stream.
 		'''
 		self.onreceive(None)
-		if self.connected == 'tcp':
-			if not self.connected or not self._secure:
-				# if we are disconnected or TLS/SSL is not desired, return
+		if self.connected == 'plain':
+			if self.secure == 'plain':
+				# if we want plain connection, we're done now
 				self._on_connect()
 				return 
 			if not self.Dispatcher.Stream.features.getTag('starttls'): 
-				# if server doesn't advertise TLS in init response
+				# if server doesn't advertise TLS in init response, we can't do more
+				log.warn('While connecting with type = "tls": TLS unsupported by remote server')
 				self._on_connect()
 				return 
 			if self.incoming_stream_version() != '1.0':
+				# if stream version is less than 1.0, we can't do more 
+				log.warn('While connecting with type = "tls": stream version is less than 1.0')
 				self._on_connect()
 				return
-			# otherwise start TLS 	
-			tls_nb.NonBlockingTLS().PlugIn(
-				self,
-				on_tls_success=lambda: self._xmpp_connect(socket_type='tls'),
-				on_tls_failure=self._on_connect_failure)
-		elif self.connected == 'tls':
+			# otherwise start TLS 
+			log.info("TLS supported by remote server. Requesting TLS start.")
+			self._tls_negotiation_handler()
+		elif self.connected in ['ssl', 'tls']:
 			self._on_connect()
 
 		

@@ -27,24 +27,12 @@ import traceback
 
 import logging
 log = logging.getLogger('gajim.c.x.tls_nb')
-
-# I don't need to load gajim.py just because of few TLS variables, so I changed
-# %s/common\.gajim\.DATA_DIR/\'\.\.\/data\'/c
-# %s/common\.gajim\.MY_CACERTS/\'\%s\/\.gajim\/cacerts\.pem\' \% os\.environ\[\'HOME\'\]/c
-
-# To change it back do:
-# %s/\'\.\.\/data\'/common\.gajim\.DATA_DIR/c
-# %s/\'%s\/\.gajim\/cacerts\.pem\'\ %\ os\.environ\[\'HOME\'\]/common\.gajim\.MY_CACERTS/c
-# TODO: make the paths configurable - as constructor parameters or sth
-
-# import common.gajim
+log.setLevel(logging.DEBUG)
 
 USE_PYOPENSSL = False
 
-
-#TODO: add callback set from PlugIn for errors during runtime
-#      - sth like on_disconnect in socket wrappers
-
+PYOPENSSL = 'PYOPENSSL'
+PYSTDLIB  = 'PYSTDLIB'
 
 try:
 	#raise ImportError("Manually disabled PyOpenSSL")
@@ -235,6 +223,11 @@ class StdlibSSLWrapper(SSLWrapper):
 class NonBlockingTLS(PlugIn):
 	''' TLS connection used to encrypts already estabilished tcp connection.'''
 
+	def __init__(self, cacerts, mycerts):
+		PlugIn.__init__(self)
+		self.cacerts = cacerts
+		self.mycerts = mycerts
+
 	# from ssl.h (partial extract)
 	ssl_h_bits = {	"SSL_ST_CONNECT": 0x1000, "SSL_ST_ACCEPT": 0x2000, 
 			"SSL_CB_LOOP": 0x01, "SSL_CB_EXIT": 0x02, 
@@ -242,56 +235,23 @@ class NonBlockingTLS(PlugIn):
 			"SSL_CB_ALERT": 0x4000, 
 			"SSL_CB_HANDSHAKE_START": 0x10, "SSL_CB_HANDSHAKE_DONE": 0x20}
 
-	def PlugIn(self, owner, on_tls_success, on_tls_failure, now=0):
-		''' If the 'now' argument is true then starts using encryption immidiatedly.
-			If 'now' in false then starts encryption as soon as TLS feature is
-			declared by the server (if it were already declared - it is ok).
+	def PlugIn(self, owner):
 		'''
-		if owner.__dict__.has_key('NonBlockingTLS'): 
-			return  # Already enabled.
+		start using encryption immediately
+		'''
+		log.info('Starting TLS estabilishing')
 		PlugIn.PlugIn(self, owner)
-		self.on_tls_success = on_tls_success
-		self.on_tls_faliure = on_tls_failure
-		if now:
-			try:
-				res = self._startSSL()
-			except Exception, e:
-				log.error("PlugIn: while trying _startSSL():", exc_info=True)
-				#traceback.print_exc()
-				self._owner.socket.pollend()
-				return
-			on_tls_success()
-			return res
-		if self._owner.Dispatcher.Stream.features:
-			try: 
-				self.FeaturesHandler(self._owner.Dispatcher, self._owner.Dispatcher.Stream.features)
-			except NodeProcessed: 
-				pass
-		else: 
-			self._owner.RegisterHandlerOnce('features',self.FeaturesHandler, xmlns=NS_STREAMS)
-		self.starttls = None
-		
-	def plugout(self,now=0):
-		''' Unregisters TLS handler's from owner's dispatcher. Take note that encription
-			can not be stopped once started. You can only break the connection and start over.'''
-		# if dispatcher is not plugged we cannot (un)register handlers
-		if self._owner.__dict__.has_key('Dispatcher'):
-			self._owner.UnregisterHandler('features', self.FeaturesHandler,xmlns=NS_STREAMS)
-			self._owner.Dispatcher.PlugOut()
-		self._owner = None
+		print 'inplugin'
+		try:
+			self._owner._plug_idle(writable=False, readable=False)
+			res = self._startSSL()
+		except Exception, e:
+			log.error("PlugIn: while trying _startSSL():", exc_info=True)
+			#traceback.print_exc()
+			return False
+		return res
 
-	def FeaturesHandler(self, conn, feats):
-		''' Used to analyse server <features/> tag for TLS support.
-			If TLS is supported starts the encryption negotiation. Used internally '''
-		if not feats.getTag('starttls', namespace=NS_TLS):
-			log.warn("TLS unsupported by remote server.")
-			self.on_tls_failure("TLS unsupported by remote server.")
-			return
-		log.debug("TLS supported by remote server. Requesting TLS start.")
-		self._owner.RegisterHandlerOnce('proceed', self.StartTLSHandler, xmlns=NS_TLS)
-		self._owner.RegisterHandlerOnce('failure', self.StartTLSHandler, xmlns=NS_TLS)
-		self._owner.send('<starttls xmlns="%s"/>' % NS_TLS)
-		raise NodeProcessed
+		
 
 	def _dumpX509(self, cert, stream=sys.stderr):
 		print >> stream, "Digest (SHA-1):", cert.digest("sha1")
@@ -317,27 +277,26 @@ class NonBlockingTLS(PlugIn):
 		''' Immidiatedly switch socket to TLS mode. Used internally.'''
 		log.debug("_startSSL called")
 		if USE_PYOPENSSL: return self._startSSL_pyOpenSSL()
-		return self._startSSL_stdlib()
+		else:             return self._startSSL_stdlib()
 
 	def _startSSL_pyOpenSSL(self):
 		#log.debug("_startSSL_pyOpenSSL called, thread id: %s", str(thread.get_ident()))
 		log.debug("_startSSL_pyOpenSSL called")
-		tcpsock = self._owner.Connection
+		tcpsock = self._owner
 		# FIXME: should method be configurable?
-		tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_METHOD)
-		#tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv23_METHOD)
+		#tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_METHOD)
+		tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv23_METHOD)
 		tcpsock.ssl_errnum = 0
 		tcpsock._sslContext.set_verify(OpenSSL.SSL.VERIFY_PEER, self._ssl_verify_callback)
-		cacerts = os.path.join('../data', 'other', 'cacerts.pem')
 		try:
-			tcpsock._sslContext.load_verify_locations(cacerts)
+			tcpsock._sslContext.load_verify_locations(self.cacerts)
 		except:
-			log.warning('Unable to load SSL certificats from file %s' % \
-				os.path.abspath(cacerts))
+			log.warning('Unable to load SSL certificates from file %s' % \
+				os.path.abspath(self.cacerts))
 		# load users certs
-		if os.path.isfile('%s/.gajim/cacerts.pem' % os.environ['HOME']):
+		if os.path.isfile(self.mycerts):
 			store = tcpsock._sslContext.get_cert_store()
-			f = open('%s/.gajim/cacerts.pem' % os.environ['HOME'])
+			f = open(self.mycerts)
 			lines = f.readlines()
 			i = 0
 			begin = -1
@@ -352,11 +311,10 @@ class NonBlockingTLS(PlugIn):
 						store.add_cert(X509cert)
 					except OpenSSL.crypto.Error, exception_obj:
 						log.warning('Unable to load a certificate from file %s: %s' %\
-							('%s/.gajim/cacerts.pem' % os.environ['HOME'], exception_obj.args[0][0][2]))
+							(self.mycerts, exception_obj.args[0][0][2]))
 					except:
-						log.warning(
-							'Unknown error while loading certificate from file %s' % \
-							'%s/.gajim/cacerts.pem' % os.environ['HOME'])
+						log.warning('Unknown error while loading certificate from file %s' %\
+							self.mycerts)
 					begin = -1
 				i += 1
 		tcpsock._sslObj = OpenSSL.SSL.Connection(tcpsock._sslContext, tcpsock._sock)
@@ -367,67 +325,52 @@ class NonBlockingTLS(PlugIn):
 		tcpsock._send = wrapper.send
 
 		log.debug("Initiating handshake...")
-		# FIXME: Figure out why _connect_success is called before the
-		# SSL handshake is completed in STARTTLS mode. See #2838.
 		tcpsock._sslObj.setblocking(True)
 		try:
-			self.starttls='in progress'
 			tcpsock._sslObj.do_handshake()
 		except:
 			log.error('Error while TLS handshake: ', exc_info=True)
-			self.on_tls_failure('Error while TLS Handshake')
-			return
+			return False
 		tcpsock._sslObj.setblocking(False)
 		log.debug("Synchronous handshake completed")
-		#log.debug("Async handshake started...")
+		self._owner.ssl_lib = PYOPENSSL
+		return self._endSSL()
 
-		# fake it, for now
-		self.starttls='success'
 
 	def _startSSL_stdlib(self):
 		log.debug("_startSSL_stdlib called")
-		tcpsock=self._owner.Connection
-		tcpsock._sock.setblocking(True)
-		tcpsock._sslObj = socket.ssl(tcpsock._sock, None, None)
-		tcpsock._sock.setblocking(False)
-		tcpsock._sslIssuer = tcpsock._sslObj.issuer()
-		tcpsock._sslServer = tcpsock._sslObj.server()
-		wrapper = StdlibSSLWrapper(tcpsock._sslObj, tcpsock._sock)
-		tcpsock._recv = wrapper.recv
-		tcpsock._send = wrapper.send
-		self.starttls='success'
+		tcpsock=self._owner
+		try:
+			tcpsock._sock.setblocking(True)
+			tcpsock._sslObj = socket.ssl(tcpsock._sock, None, None)
+			tcpsock._sock.setblocking(False)
+			tcpsock._sslIssuer = tcpsock._sslObj.issuer()
+			tcpsock._sslServer = tcpsock._sslObj.server()
+			wrapper = StdlibSSLWrapper(tcpsock._sslObj, tcpsock._sock)
+			tcpsock._recv = wrapper.recv
+			tcpsock._send = wrapper.send
+		except:
+			log.error("Exception caught in _startSSL_stdlib:", exc_info=True)
+			return False
+		self._owner.ssl_lib = PYSTDLIB
+		return self._endSSL()
+
+	def _endSSL(self):
+		self._owner._plug_idle(writable=True, readable=False)
+		return True
 
 	def _ssl_verify_callback(self, sslconn, cert, errnum, depth, ok):
 		# Exceptions can't propagate up through this callback, so print them here.
 		try:
-			self._owner.Connection.ssl_fingerprint_sha1 = cert.digest('sha1')
+			print 'in ssl verify callback'
+			self._owner.ssl_fingerprint_sha1 = cert.digest('sha1')
 			if errnum == 0:
 				return True
-			self._owner.Connection.ssl_errnum = errnum
-			self._owner.Connection.ssl_cert_pem = OpenSSL.crypto.dump_certificate(
+			self._owner.ssl_errnum = errnum
+			self._owner.ssl_cert_pem = OpenSSL.crypto.dump_certificate(
 				OpenSSL.crypto.FILETYPE_PEM, cert)
 			return True
 		except:
 			log.error("Exception caught in _ssl_info_callback:", exc_info=True)
 			traceback.print_exc() # Make sure something is printed, even if log is disabled.
 
-	def StartTLSHandler(self, conn, starttls):
-		''' Handle server reply if TLS is allowed to process. Behaves accordingly.
-			Used internally.'''
-		if starttls.getNamespace() <> NS_TLS: 
-			self.on_tls_failure('Unknown namespace: %s' % starttls.getNamespace())
-			return
-		self.starttls = starttls.getName()
-		if self.starttls == 'failure':
-			self.on_tls_failure('TLS <failure>  received: %s' % self.starttls)
-			return
-		log.debug('Got starttls proceed response. Switching to TLS/SSL...')
-		try:
-			self._startSSL()
-		except Exception, e:
-			log.error("StartTLSHandler:", exc_info=True)
-			self.on_tls_failure('in StartTLSHandler')
-			#traceback.print_exc()
-			return
-		self._owner.Dispatcher.PlugOut()
-		self.on_tls_success()
