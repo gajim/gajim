@@ -342,6 +342,23 @@ class ChangeActivityDialog:
 			gtk.Tooltips().set_tip(item, pep.ACTIVITIES[category]['category'])
 
 			vbox = self.xml.get_widget(category + '_vbox')
+			vbox.set_border_width(5)
+
+			# Other
+			act = category + '_other'
+
+			if group:
+				rbtns[act] = gtk.RadioButton(group)
+			else:
+				rbtns[act] = group = gtk.RadioButton()
+
+			lbl = gtk.Label('<b>' + pep.ACTIVITIES[category]['category'] + '</b>')
+			lbl.set_use_markup(True)
+			rbtns[act].add(lbl)
+			rbtns[act].connect('toggled', self.on_rbtn_toggled,
+				[category, 'other'])
+			vbox.pack_start(rbtns[act], False, False, 0)
+
 			for activity in pep.ACTIVITIES[category]:
 				if activity == 'category':
 					continue
@@ -357,19 +374,6 @@ class ChangeActivityDialog:
 				rbtns[act].connect('toggled', self.on_rbtn_toggled,
 					[category, activity])
 				vbox.pack_start(rbtns[act], False, False, 0)
-
-			# Other
-			act = category + '_other'
-
-			if group:
-				rbtns[act] = gtk.RadioButton(group)
-			else:
-				rbtns[act] = group = gtk.RadioButton()
-
-			rbtns[act].set_label(_('Other'))
-			rbtns[act].connect('toggled', self.on_rbtn_toggled,
-				[category, 'other'])
-			vbox.pack_start(rbtns[act], False, False, 0)
 
 		rbtns['working_other'].set_active(True)
 
