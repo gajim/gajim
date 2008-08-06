@@ -644,18 +644,19 @@ class ChangeStatusMessageDialog:
 			msg_name = msg_name.decode('utf-8')
 
 			if msg_name in self.preset_messages_dict:
+				def on_ok():
+					self.preset_messages_dict[msg_name] = msg_text
+					gajim.config.set_per('statusmsg', msg_name, 'message',
+						msg_text_1l)
 				dlg2 = ConfirmationDialog(_('Overwrite Status Message?'),
-					_('This name is already used. Do you want to overwrite this status message?'))
-				resp = dlg2.run()
-				if resp != gtk.RESPONSE_OK:
-					return
-				self.preset_messages_dict[msg_name] = msg_text
-			else:
-				self.preset_messages_dict[msg_name] = msg_text
-				iter_ = self.message_liststore.append((msg_name,))
-				gajim.config.add_per('statusmsg', msg_name)
-				# select in combobox the one we just saved
-				self.message_combobox.set_active_iter(iter_)
+					_('This name is already used. Do you want to overwrite this '
+					'status message?'), on_response_ok=on_ok)
+				return
+			self.preset_messages_dict[msg_name] = msg_text
+			iter_ = self.message_liststore.append((msg_name,))
+			gajim.config.add_per('statusmsg', msg_name)
+			# select in combobox the one we just saved
+			self.message_combobox.set_active_iter(iter_)
 			gajim.config.set_per('statusmsg', msg_name, 'message', msg_text_1l)
 
 class AddNewContactWindow:
@@ -1207,8 +1208,8 @@ class AspellDictError:
 
 class ConfirmationDialog(HigDialog):
 	'''HIG compliant confirmation dialog.'''
-	def __init__(self, pritext, sectext='', on_response_ok = None,
-	on_response_cancel = None):
+	def __init__(self, pritext, sectext='', on_response_ok=None,
+	on_response_cancel=None):
 		self.user_response_ok = on_response_ok
 		self.user_response_cancel = on_response_cancel
 		HigDialog.__init__(self, None,
