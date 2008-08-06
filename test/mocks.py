@@ -4,10 +4,34 @@ from mock import Mock
 from common import gajim
 
 class MockConnection(Mock):
-	def __init__(self, name, *args):
+	def __init__(self, account, *args):
 		Mock.__init__(self, *args)
-		self.name = name
-		gajim.connections[name] = self
+		self.name = account
+		self.connected = 2
+		self.mood = {}
+		self.activity = {}
+		self.tune = {}
+		self.blocked_contacts = {}
+		self.blocked_groups = {}
+		gajim.interface.instances[account] = {'infos': {}, 'disco': {}, 'gc_config': {}, 'search': {}}
+		gajim.interface.minimized_controls[account] = {}
+		gajim.contacts.add_account(account)
+		gajim.groups[account] = {}
+		gajim.gc_connected[account] = {}
+		gajim.automatic_rooms[account] = {}
+		gajim.newly_added[account] = []
+		gajim.to_be_removed[account] = []
+		gajim.nicks[account] = gajim.config.get_per('accounts', account, 'name')
+		gajim.block_signed_in_notifications[account] = True
+		gajim.sleeper_state[account] = 0
+		gajim.encrypted_chats[account] = []
+		gajim.last_message_time[account] = {}
+		gajim.status_before_autoaway[account] = ''
+		gajim.transport_avatar[account] = {}
+		gajim.gajim_optional_features[account] = []
+		gajim.caps_hash[account] = ''
+
+		gajim.connections[account] = self
 
 class MockWindow(Mock):
 	def __init__(self, *args):
@@ -31,13 +55,17 @@ class MockChatControl(Mock):
 		return self is other
 
 class MockInterface(Mock):
-	def __init__(self, acct, *args):
+	def __init__(self, *args):
 		Mock.__init__(self, *args)
 		self.msg_win_mgr = Mock()
 		self.roster = Mock()
 
 		self.remote_ctrl = None
-		self.minimized_controls = { acct: {} }
+		self.instances = {}
+		self.minimized_controls = {}
+		self.status_sent_to_users = Mock()
+
+		self.jabber_state_images = {'16': Mock(), '32': Mock(), 'opened': Mock(), 'closed': Mock()}
 
 class MockLogger(Mock):
 	def __init__(self):

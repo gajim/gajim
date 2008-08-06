@@ -69,8 +69,7 @@ class TestStanzaSession(unittest.TestCase):
 
 from session import ChatControlSession
 
-gajim.interface = MockInterface(account_name)
-gajim.contacts.add_account(account_name)
+gajim.interface = MockInterface()
 
 import notify
 
