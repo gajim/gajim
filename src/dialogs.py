@@ -81,7 +81,6 @@ class EditGroupsDialog:
 		self.xml.signal_autoconnect(self)
 		self.init_list()
 
-	def run(self):
 		self.dialog.show_all()
 		if self.changes_made:
 			for (contact, account) in self.list_:
@@ -1979,43 +1978,38 @@ class NewChatDialog(InputDialog):
 		gajim.interface.new_chat_from_jid(self.account, jid)
 
 class ChangePasswordDialog:
-	def __init__(self, account):
+	def __init__(self, account, on_response):
 		# 'account' can be None if we are about to create our first one
 		if not account or gajim.connections[account].connected < 2:
 			ErrorDialog(_('You are not connected to the server'),
 				_('Without a connection, you can not change your password.'))
 			raise GajimGeneralException, 'You are not connected to the server'
 		self.account = account
+		self.on_response = on_response
 		self.xml = gtkgui_helpers.get_glade('change_password_dialog.glade')
 		self.dialog = self.xml.get_widget('change_password_dialog')
 		self.password1_entry = self.xml.get_widget('password1_entry')
 		self.password2_entry = self.xml.get_widget('password2_entry')
+		self.dialog.connect('response', self.on_dialog_response)
 
 		self.dialog.show_all()
 
-	def run(self):
-		'''Wait for OK button to be pressed and return new password'''
-		end = False
-		while not end:
-			rep = self.dialog.run()
-			if rep == gtk.RESPONSE_OK:
-				password1 = self.password1_entry.get_text().decode('utf-8')
-				if not password1:
-					ErrorDialog(_('Invalid password'),
-							_('You must enter a password.'))
-					continue
-				password2 = self.password2_entry.get_text().decode('utf-8')
-				if password1 != password2:
-					ErrorDialog(_('Passwords do not match'),
-							_('The passwords typed in both fields must be identical.'))
-					continue
-				message = password1
-			else:
-				message = -1
-			end = True
-		self.dialog.destroy()
-		return message
-
+	def on_dialog_response(self, dialog, response):
+		if response != gtk.RESPONSE_OK:
+			dialog.destroy()
+			self.on_response(None)
+			return
+		password1 = self.password1_entry.get_text().decode('utf-8')
+		if not password1:
+			ErrorDialog(_('Invalid password'), _('You must enter a password.'))
+			return
+		password2 = self.password2_entry.get_text().decode('utf-8')
+		if password1 != password2:
+			ErrorDialog(_('Passwords do not match'),
+				_('The passwords typed in both fields must be identical.'))
+			return
+		dialog.destroy()
+		self.on_response(password1)
 
 class PopupNotificationWindow:
 	def __init__(self, event_type, jid, account, msg_type = '',

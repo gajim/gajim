@@ -2727,14 +2727,13 @@ class RosterWindow:
 			on_canceled)
 
 	def on_remove_group_item_activated(self, widget, group, account):
-		dlg = dialogs.ConfirmationDialogCheck(_('Remove Group'),
+		dialogs.ConfirmationDialogCheck(_('Remove Group'),
 			_('Do you want to remove group %s from the roster?' % group),
-			_('Remove also all contacts in this group from your roster'))
-		dlg.set_default_response(gtk.BUTTONS_OK_CANCEL)
-		response = dlg.run()
-		if response == gtk.RESPONSE_OK:
+			_('Remove also all contacts in this group from your roster'),
+			on_response_ok=on_ok)
+		def on_ok(checked):
 			for contact in gajim.contacts.get_contacts_from_group(account, group):
-				if not dlg.is_checked():
+				if not checked:
 					self.remove_contact_from_groups(contact.jid,account, [group])
 				else:
 					gajim.connections[account].unsubscribe(contact.jid)
@@ -2820,8 +2819,7 @@ class RosterWindow:
 			on_response_clear = on_clear)
 
 	def on_edit_groups(self, widget, list_):
-		dlg = dialogs.EditGroupsDialog(list_)
-		dlg.run()
+		dialogs.EditGroupsDialog(list_)
 
 	def on_history(self, widget, contact, account):
 		'''When history menuitem is activated: call log window'''

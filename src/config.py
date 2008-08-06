@@ -1880,17 +1880,18 @@ class AccountsWindow:
 			return
 
 	def on_change_password_button1_clicked(self, widget):
+		def on_changed(new_password):
+			if new_password is not None:
+				gajim.connections[self.current_account].change_password(
+					new_password)
+				if self.xml.get_widget('save_password_checkbutton1').get_active():
+					self.xml.get_widget('password_entry1').set_text(new_password)
+
 		try:
-			dialog = dialogs.ChangePasswordDialog(self.current_account)
+			dialog = dialogs.ChangePasswordDialog(self.current_account, on_changed)
 		except GajimGeneralException:
 			# if we showed ErrorDialog, there will not be dialog instance
 			return
-
-		new_password = dialog.run()
-		if new_password != -1:
-			gajim.connections[self.current_account].change_password(new_password)
-			if self.xml.get_widget('save_password_checkbutton1').get_active():
-				self.xml.get_widget('password_entry1').set_text(new_password)
 
 	def on_autoconnect_checkbutton_toggled(self, widget):
 		if self.ignore_events:
