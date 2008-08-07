@@ -268,6 +268,8 @@ class ConversationTextview:
 		tag.set_property('underline', pango.UNDERLINE_SINGLE)
 
 		buffer.create_tag('focus-out-line', justification = gtk.JUSTIFY_CENTER)
+		
+		tag = buffer.create_tag('xep0184-warning')
 
 		# One mark at the begining then 2 marks between each lines
 		size = gajim.config.get('max_conversation_lines')
@@ -278,6 +280,8 @@ class ConversationTextview:
 		# holds a mark at the end of --- line
 		self.focus_out_end_mark = None
 
+		self.xep0184_warning_tooltip = tooltips.BaseTooltip()
+		
 		self.line_tooltip = tooltips.BaseTooltip()
 		# use it for hr too
 		self.tv.focus_out_line_pixbuf = ConversationTextview.FOCUS_OUT_LINE_PIXBUF
@@ -416,6 +420,13 @@ class ConversationTextview:
 			buffer.insert(end_iter, ' ')
 			buffer.insert_pixbuf(end_iter,
 				ConversationTextview.XEP0184_WARNING_PIXBUF)
+			before_img_iter = buffer.get_iter_at_mark(
+				self.xep0184_marks[id])
+			before_img_iter.forward_char()
+			post_img_iter = before_img_iter.copy()
+			post_img_iter.forward_char()
+			buffer.apply_tag_by_name('xep0184-warning', before_img_iter,
+				post_img_iter)
 
 			self.xep0184_shown[id] = SHOWN
 			return False
@@ -511,6 +522,24 @@ class ConversationTextview:
 			# scroll to the end (via idle in case the scrollbar has appeared)
 			gobject.idle_add(self.scroll_to_end)
 
+	def show_xep0184_warning_tooltip(self):
+		pointer = self.tv.get_pointer()
+		x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer[0],
+			pointer[1])
+		tags = self.tv.get_iter_at_location(x, y).get_tags()
+		tag_table = self.tv.get_buffer().get_tag_table()
+		xep0184_warning = False
+		for tag in tags:
+			if tag == tag_table.lookup('xep0184-warning'):
+				xep0184_warning = True
+				break
+		if xep0184_warning and not self.xep0184_warning_tooltip.win:
+			# check if the current pointer is still over the line
+			position = self.tv.window.get_origin()
+			self.xep0184_warning_tooltip.show_tooltip(_('This message '
+			'was not delivered'),
+				8, position[1] + pointer[1])
+	
 	def show_line_tooltip(self):
 		pointer = self.tv.get_pointer()
 		x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer[0],
@@ -567,6 +596,7 @@ class ConversationTextview:
 			self.change_cursor = None
 		tag_table = self.tv.get_buffer().get_tag_table()
 		over_line = False
+		xep0184_warning = False
 		for tag in tags:
 			if tag in (tag_table.lookup('url'), tag_table.lookup('mail')):
 				self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
@@ -574,6 +604,8 @@ class ConversationTextview:
 				self.change_cursor = tag
 			elif tag == tag_table.lookup('focus-out-line'):
 				over_line = True
+			elif tag == tag_table.lookup('xep0184-warning'):
+				xep0184_warning = True
 
 		if self.line_tooltip.timeout != 0:
 			# Check if we should hide the line tooltip
@@ -582,6 +614,13 @@ class ConversationTextview:
 		if over_line and not self.line_tooltip.win:
 			self.line_tooltip.timeout = gobject.timeout_add(500,
 				self.show_line_tooltip)
+			self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
+				gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
+			self.change_cursor = tag
+		if xep0184_warning and not self.xep0184_warning_tooltip.win:
+			self.xep0184_warning_tooltip.timeout = \
+				gobject.timeout_add(500,
+				self.show_xep0184_warning_tooltip)
 			self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
 				gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
 			self.change_cursor = tag
