@@ -1433,15 +1433,12 @@ class ConfirmationDialogDubbleCheck(ConfirmationDialog):
 
 class FTOverwriteConfirmationDialog(ConfirmationDialog):
 	'''HIG compliant confirmation dialog to overwrite or resume a file transfert'''
-	def __init__(self, pritext, sectext='', propose_resume=True):
-		self.user_response_ok = on_response_ok
-		self.user_response_cancel = on_response_cancel
-		HigDialog.__init__(self, None,
-			gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL, pritext, sectext,
-			self.on_response_ok, self.on_response_cancel)
-		self.popup()
+	def __init__(self, pritext, sectext='', propose_resume=True,
+	on_response=None):
 		HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION, gtk.BUTTONS_CANCEL,
 			pritext, sectext)
+
+		self.on_response = on_response
 
 		if propose_resume:
 			b = gtk.Button('', gtk.STOCK_REFRESH)
@@ -1460,20 +1457,15 @@ class FTOverwriteConfirmationDialog(ConfirmationDialog):
 		label.set_use_underline(True)
 		self.add_action_widget(b, 200)
 
-	def on_response_ok(self, widget):
-		if self.user_response_ok:
-			if isinstance(self.user_response_ok, tuple):
-				self.user_response_ok[0](*self.user_response_ok[1:])
-			else:
-				self.user_response_ok()
-		self.destroy()
+		self.connect('response', self.on_dialog_response)
+		self.show_all()
 
-	def on_response_cancel(self, widget):
-		if self.user_response_cancel:
-			if isinstance(self.user_response_cancel, tuple):
-				self.user_response_cancel[0](*self.user_response_ok[1:])
+	def on_dialog_response(self, dialog, response):
+		if self.on_response:
+			if isinstance(self.on_response, tuple):
+				self.on_response[0](response, *self.on_response[1:])
 			else:
-				self.user_response_cancel()
+				self.on_response(response)
 		self.destroy()
 
 class CommonInputDialog:
