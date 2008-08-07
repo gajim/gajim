@@ -2210,6 +2210,16 @@ class RosterWindow:
 				get_msg = True
 				break
 
+		def on_continue2(message):
+			self.quit_on_next_offline = 0
+			for acct in accounts:
+				if gajim.connections[acct].connected:
+					self.quit_on_next_offline += 1
+					self.send_status(acct, 'offline', message)
+
+			if not self.quit_on_next_offline:
+				self.quit_gtkgui_interface()
+
 		def on_continue(message):
 			if message is None:
 				# user pressed Cancel to change status message dialog
@@ -2227,7 +2237,8 @@ class RosterWindow:
 				for ctrl in win.controls():
 					fjid = ctrl.get_full_jid()
 					if gajim.last_message_time[ctrl.account].has_key(fjid):
-						if time.time() - gajim.last_message_time[ctrl.account][fjid] < 2:
+						if time.time() - gajim.last_message_time[ctrl.account][fjid] \
+						< 2:
 							recent = True
 							break
 				if recent:
@@ -2236,18 +2247,10 @@ class RosterWindow:
 			if unread or recent:
 				dialog = dialogs.ConfirmationDialog(_('You have unread messages'),
 					_('Messages will only be available for reading them later if you'
-					' have history enabled and contact is in your roster.'))
-				if dialog.get_response() != gtk.RESPONSE_OK:
-					return
-
-			self.quit_on_next_offline = 0
-			for acct in accounts:
-				if gajim.connections[acct].connected:
-					self.quit_on_next_offline += 1
-					self.send_status(acct, 'offline', message)
-
-			if not self.quit_on_next_offline:
-				self.quit_gtkgui_interface()
+					' have history enabled and contact is in your roster.'),
+					on_response_ok=(on_continue2, message))
+				return
+			on_continue2(message)
 
 		if get_msg:
 			self.get_status_message('offline', on_continue)
@@ -3217,26 +3220,6 @@ class RosterWindow:
 		# we can return to this show
 		self.previous_status_combobox_active = active
 		connected_accounts = gajim.get_number_of_connected_accounts()
-		if status == 'invisible':
-			bug_user = False
-			for account in accounts:
-				if connected_accounts < 1 or gajim.account_is_connected(account):
-					if not gajim.config.get_per('accounts', account,
-							'sync_with_global_status'):
-						continue
-					# We're going to change our status to invisible
-					if self.connected_rooms(account):
-						bug_user = True
-						break
-			if bug_user:
-				dialog = dialogs.ConfirmationDialog(
-					_('You are participating in one or more group chats'),
-					_('Changing your status to invisible will result in '
-					'disconnection from those group chats. Are you sure you want to '
-					'go invisible?'))
-				if dialog.get_response() != gtk.RESPONSE_OK:
-					self.update_status_combobox()
-					return
 
 		def on_continue(message):
 			if message is None:
@@ -3262,6 +3245,32 @@ class RosterWindow:
 				gajim.connections[account].connected > 0:
 					self.send_status(account, status, message)
 			self.update_status_combobox()
+
+		if status == 'invisible':
+			bug_user = False
+			for account in accounts:
+				if connected_accounts < 1 or gajim.account_is_connected(account):
+					if not gajim.config.get_per('accounts', account,
+							'sync_with_global_status'):
+						continue
+					# We're going to change our status to invisible
+					if self.connected_rooms(account):
+						bug_user = True
+						break
+			if bug_user:
+				def on_ok():
+					self.get_status_message(status, on_continue)
+
+				def on_cancel():
+					self.update_status_combobox()
+
+				dialog = dialogs.ConfirmationDialog(
+					_('You are participating in one or more group chats'),
+					_('Changing your status to invisible will result in '
+					'disconnection from those group chats. Are you sure you want to '
+					'go invisible?'), on_reponse_ok=on_ok,
+					on_response_cancel=on_cancel)
+				return
 
 		self.get_status_message(status, on_continue)
 

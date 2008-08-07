@@ -769,38 +769,9 @@ def destroy_widget(widget):
 
 def on_avatar_save_as_menuitem_activate(widget, jid, account,
 default_name = ''):
-	def on_ok(widget):
-		def on_ok2(file_path, pixbuf):
-			pixbuf.save(file_path, 'jpeg')
-			dialog.destroy()
-
-		file_path = dialog.get_filename()
-		file_path = decode_filechooser_file_paths((file_path,))[0]
-		if os.path.exists(file_path):
-			# check if we have write permissions
-			if not os.access(file_path, os.W_OK):
-				file_name = os.path.basename(file_path)
-				dialogs.ErrorDialog(_('Cannot overwrite existing file "%s"' % 
-					file_name),
-				_('A file with this name already exists and you do not have '
-				'permission to overwrite it.'))
-				return
-			dialog2 = dialogs.FTOverwriteConfirmationDialog(
-				_('This file already exists'), _('What do you want to do?'),
-				False)
-			dialog2.set_transient_for(dialog)
-			dialog2.set_destroy_with_parent(True)
-			response = dialog2.get_response()
-			if response < 0:
-				return
-		else:
-			dirname = os.path.dirname(file_path)
-			if not os.access(dirname, os.W_OK):
-				dialogs.ErrorDialog(_('Directory "%s" is not writable') % \
-				dirname, _('You do not have permission to create files in this'
-				' directory.'))
-				return
-
+	def on_continue(response):
+		if response < 0:
+			return
 		# Get pixbuf
 		pixbuf = None
 		is_fake = False
@@ -831,18 +802,46 @@ default_name = ''):
 		else:
 			dialog.destroy()
 
+	def on_ok(widget):
+		def on_ok2(file_path, pixbuf):
+			pixbuf.save(file_path, 'jpeg')
+			dialog.destroy()
+
+		file_path = dialog.get_filename()
+		file_path = decode_filechooser_file_paths((file_path,))[0]
+		if os.path.exists(file_path):
+			# check if we have write permissions
+			if not os.access(file_path, os.W_OK):
+				file_name = os.path.basename(file_path)
+				dialogs.ErrorDialog(_('Cannot overwrite existing file "%s"' % 
+					file_name),
+				_('A file with this name already exists and you do not have '
+				'permission to overwrite it.'))
+				return
+			dialog2 = dialogs.FTOverwriteConfirmationDialog(
+				_('This file already exists'), _('What do you want to do?'),
+				propose_resume=False, on_response=on_continue)
+			dialog2.set_transient_for(dialog)
+			dialog2.set_destroy_with_parent(True)
+		else:
+			dirname = os.path.dirname(file_path)
+			if not os.access(dirname, os.W_OK):
+				dialogs.ErrorDialog(_('Directory "%s" is not writable') % \
+				dirname, _('You do not have permission to create files in this'
+				' directory.'))
+				return
+
+		on_continue(0)
+
 	def on_cancel(widget):
 		dialog.destroy()
 
-	dialog = dialogs.FileChooserDialog(
-		title_text = _('Save Image as...'), 
-		action = gtk.FILE_CHOOSER_ACTION_SAVE, 
-		buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, 
-		gtk.STOCK_SAVE, gtk.RESPONSE_OK),
-		default_response = gtk.RESPONSE_OK,
-		current_folder = gajim.config.get('last_save_dir'),
-		on_response_ok = on_ok,
-		on_response_cancel = on_cancel)
+	dialog = dialogs.FileChooserDialog(title_text=_('Save Image as...'), 
+		action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,
+		gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK),
+		default_response=gtk.RESPONSE_OK,
+		current_folder=gajim.config.get('last_save_dir'), on_response_ok=on_ok,
+		on_response_cancel=on_cancel)
 
 	dialog.set_current_name(default_name)
 	dialog.connect('delete-event', lambda widget, event:

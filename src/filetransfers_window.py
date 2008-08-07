@@ -327,16 +327,21 @@ _('Connection with peer cannot be established.'))
 					dl_size = stat.st_size
 					file_size = file_props['size']
 					dl_finished = dl_size >= file_size
+
+					def on_response(response):
+						if response < 0:
+							return
+						elif response == 100:
+							file_props['offset'] = dl_size
+						dialog2.destroy()
+						self._start_receive(file_path, account, contact, file_props)
+
 					dialog = dialogs.FTOverwriteConfirmationDialog(
 						_('This file already exists'), _('What do you want to do?'),
-						not dl_finished)
+						propose_resume=not dl_finished, on_response=on_response)
 					dialog.set_transient_for(dialog2)
 					dialog.set_destroy_with_parent(True)
-					response = dialog.get_response()
-					if response < 0:
-						return
-					elif response == 100:
-						file_props['offset'] = dl_size
+					return
 				else:
 					dirname = os.path.dirname(file_path)
 					if not os.access(dirname, os.W_OK) and os.name != 'nt':

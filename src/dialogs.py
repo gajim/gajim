@@ -632,11 +632,7 @@ class ChangeStatusMessageDialog:
 		start_iter, finish_iter = self.message_buffer.get_bounds()
 		status_message_to_save_as_preset = self.message_buffer.get_text(
 			start_iter, finish_iter)
-		dlg = InputDialog(_('Save as Preset Status Message'),
-			_('Please type a name for this status message'), is_modal = True)
-		response = dlg.get_response()
-		if response == gtk.RESPONSE_OK:
-			msg_name = dlg.input_entry.get_text()
+		def on_ok(msg_name):
 			msg_text = status_message_to_save_as_preset.decode('utf-8')
 			msg_text_1l = helpers.to_one_line(msg_text)
 			if not msg_name: # msg_name was ''
@@ -644,13 +640,13 @@ class ChangeStatusMessageDialog:
 			msg_name = msg_name.decode('utf-8')
 
 			if msg_name in self.preset_messages_dict:
-				def on_ok():
+				def on_ok2():
 					self.preset_messages_dict[msg_name] = msg_text
 					gajim.config.set_per('statusmsg', msg_name, 'message',
 						msg_text_1l)
 				dlg2 = ConfirmationDialog(_('Overwrite Status Message?'),
 					_('This name is already used. Do you want to overwrite this '
-					'status message?'), on_response_ok=on_ok)
+					'status message?'), on_response_ok=on_ok2)
 				return
 			self.preset_messages_dict[msg_name] = msg_text
 			iter_ = self.message_liststore.append((msg_name,))
@@ -658,6 +654,9 @@ class ChangeStatusMessageDialog:
 			# select in combobox the one we just saved
 			self.message_combobox.set_active_iter(iter_)
 			gajim.config.set_per('statusmsg', msg_name, 'message', msg_text_1l)
+		InputDialog(_('Save as Preset Status Message'),
+			_('Please type a name for this status message'), is_modal=False,
+			ok_handler=on_ok)
 
 class AddNewContactWindow:
 	'''Class for AddNewContactWindow'''
@@ -1435,6 +1434,12 @@ class ConfirmationDialogDubbleCheck(ConfirmationDialog):
 class FTOverwriteConfirmationDialog(ConfirmationDialog):
 	'''HIG compliant confirmation dialog to overwrite or resume a file transfert'''
 	def __init__(self, pritext, sectext='', propose_resume=True):
+		self.user_response_ok = on_response_ok
+		self.user_response_cancel = on_response_cancel
+		HigDialog.__init__(self, None,
+			gtk.MESSAGE_QUESTION, gtk.BUTTONS_OK_CANCEL, pritext, sectext,
+			self.on_response_ok, self.on_response_cancel)
+		self.popup()
 		HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION, gtk.BUTTONS_CANCEL,
 			pritext, sectext)
 
@@ -1454,6 +1459,22 @@ class FTOverwriteConfirmationDialog(ConfirmationDialog):
 		label.set_text('Re_place')
 		label.set_use_underline(True)
 		self.add_action_widget(b, 200)
+
+	def on_response_ok(self, widget):
+		if self.user_response_ok:
+			if isinstance(self.user_response_ok, tuple):
+				self.user_response_ok[0](*self.user_response_ok[1:])
+			else:
+				self.user_response_ok()
+		self.destroy()
+
+	def on_response_cancel(self, widget):
+		if self.user_response_cancel:
+			if isinstance(self.user_response_cancel, tuple):
+				self.user_response_cancel[0](*self.user_response_ok[1:])
+			else:
+				self.user_response_cancel()
+		self.destroy()
 
 class CommonInputDialog:
 	'''Common Class for Input dialogs'''
@@ -3831,11 +3852,11 @@ class ESessionInfoWindow:
 		sectext = _('''To prevent a man-in-the-middle attack, you should speak to %(jid)s directly (in person or on the phone) and verify that they see the same Short Authentication String (SAS) as you.\n\nThis session's Short Authentication String: <b>%(sas)s</b>''') % {'jid': self.session.jid, 'sas': self.session.sas}
 		sectext += '\n\n' + _('Did you talk to the remote contact and verify the SAS?')
 
-		dialog = YesNoDialog(pritext, sectext)
-
-		if dialog.get_response() == gtk.RESPONSE_YES:
+		def on_yes(checked):
 			self.session._verified_srs_cb()
 			self.session.verified_identity = True
 			self.update_info()
+
+		YesNoDialog(pritext, sectext, on_response_yes=on_yes)
 
 # vim: se ts=3:
