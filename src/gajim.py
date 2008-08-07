@@ -1870,7 +1870,12 @@ class Interface:
 			gajim.connections[account].change_status('offline','')
 
 	def handle_event_ping_sent(self, account, contact):
-		for jid in [contact.jid, contact.get_full_jid()]:
+		if contact.jid == contact.get_full_jid():
+			# If contact is a groupchat user
+			jids = [contact.jid]
+		else:
+			jids = [contact.jid, contact.get_full_jid()]		
+		for jid in jids:
 			ctrl = self.msg_win_mgr.get_control(jid, account)
 			if ctrl:
 				ctrl.print_conversation(_('Ping?'), 'status')
@@ -1878,14 +1883,23 @@ class Interface:
 	def handle_event_ping_reply(self, account, data):
 		contact = data[0]
 		seconds = data[1]
-
-		for jid in [contact.jid, contact.get_full_jid()]:
+		if contact.jid == contact.get_full_jid():
+			# If contact is a groupchat user
+			jids = [contact.jid]
+		else:
+			jids = [contact.jid, contact.get_full_jid()]
+		for jid in jids:
 			ctrl = self.msg_win_mgr.get_control(jid, account)
 			if ctrl:
 				ctrl.print_conversation(_('Pong! (%s s.)') % seconds, 'status')
 
 	def handle_event_ping_error(self, account, contact):
-		for jid in [contact.jid, contact.get_full_jid()]:
+		if contact.jid == contact.get_full_jid():
+			# If contact is a groupchat user
+			jids = [contact.jid]
+		else:
+			jids = [contact.jid, contact.get_full_jid()]
+		for jid in jids:
 			ctrl = self.msg_win_mgr.get_control(jid, account)
 			if ctrl:
 				ctrl.print_conversation(_('Error.'), 'status')
