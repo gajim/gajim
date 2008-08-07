@@ -1632,7 +1632,8 @@ class RosterWindow:
 			gajim.contacts.add_account(account)
 		if account not in gajim.groups:
 			gajim.groups[account] = {}
-		for jid in array:
+		# .keys() is needed
+		for jid in array.keys():
 			# Remove the contact in roster. It might has changed
 			self.remove_contact(jid, account, force = True)
 			# Remove old Contact instances
