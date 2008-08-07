@@ -2442,15 +2442,12 @@ class GroupchatConfigWindow:
 				'4. domain (the domain itself matches, as does any user@domain,\n'
 				'domain/resource, or address containing a subdomain.')
 
-		instance = dialogs.InputDialog(title, prompt)
-		response = instance.get_response()
-		if response != gtk.RESPONSE_OK:
-			return
-		jid = instance.input_entry.get_text().decode('utf-8')
-		if not jid:
-			return
-		model = self.affiliation_treeview[affiliation].get_model()
-		model.append((jid,'', '', ''))
+		def on_ok(jid):
+			if not jid:
+				return
+			model = self.affiliation_treeview[affiliation].get_model()
+			model.append((jid,'', '', ''))
+		instance = dialogs.InputDialog(title, prompt, ok_handler=on_ok)
 
 	def on_remove_button_clicked(self, widget, affiliation):
 		selection = self.affiliation_treeview[affiliation].get_selection()

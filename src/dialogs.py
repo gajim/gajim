@@ -1495,6 +1495,8 @@ class CommonInputDialog:
 
 	def on_okbutton_clicked(self, widget):
 		user_input = self.get_text()
+		if user_input:
+			user_input = user_input.decode('utf-8')
 		self.cancel_handler = None
 		self.dialog.destroy()
 		if isinstance(self.ok_handler, tuple):

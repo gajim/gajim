@@ -1721,16 +1721,14 @@ class GroupchatControl(ChatControlBase):
 		return nb
 
 	def _on_change_subject_menuitem_activate(self, widget):
-		instance = dialogs.InputTextDialog(_('Changing Subject'),
-			_('Please specify the new subject:'), self.subject)
-		response = instance.get_response()
-		if response == gtk.RESPONSE_OK:
+		def on_ok(subject):
 			# Note, we don't update self.subject since we don't know whether it
 			# will work yet
-			start_iter, end_iter = instance.input_buffer.get_bounds()
-			subject = instance.input_buffer.get_text(start_iter, end_iter).decode(
-				'utf-8')
 			gajim.connections[self.account].send_gc_subject(self.room_jid, subject)
+
+		instance = dialogs.InputTextDialog(_('Changing Subject'),
+			_('Please specify the new subject:'), input_str=self.subject,
+			ok_handler=on_ok)
 
 	def _on_change_nick_menuitem_activate(self, widget):
 		title = _('Changing Nickname')
@@ -1748,15 +1746,7 @@ class GroupchatControl(ChatControlBase):
 					= config.GroupchatConfigWindow(self.account, self.room_jid)
 
 	def _on_destroy_room_menuitem_activate(self, widget):
-		# Ask for a reason
-		instance = dialogs.DubbleInputDialog(_('Destroying %s') % self.room_jid,
-			_('You are going to definitively destroy this room.\n'
-			'You may specify a reason below:'),
-			_('You may also enter an alternate venue:'))
-		response = instance.get_response()
-		if response == gtk.RESPONSE_OK:
-			reason = instance.input_entry1.get_text().decode('utf-8')
-			jid = instance.input_entry2.get_text().decode('utf-8')
+		def on_ok(reason, jid):
 			if jid:
 				# Test jid
 				try:
@@ -1765,11 +1755,14 @@ class GroupchatControl(ChatControlBase):
 					dialogs.ErrorDialog(_('Invalid group chat Jabber ID'),
 					_('The group chat Jabber ID has not allowed characters.'))
 					return
-		else:
-			# Abord destroy operation
-			return
-		gajim.connections[self.account].destroy_gc_room(self.room_jid, reason,
-			jid)
+			gajim.connections[self.account].destroy_gc_room(self.room_jid, reason,
+				jid)
+
+		# Ask for a reason
+		instance = dialogs.DubbleInputDialog(_('Destroying %s') % self.room_jid,
+			_('You are going to definitively destroy this room.\n'
+			'You may specify a reason below:'),
+			_('You may also enter an alternate venue:'), ok_handler=on_ok)
 
 	def _on_bookmark_room_menuitem_activate(self, widget):
 		'''bookmark the room, without autojoin and not minimized'''
@@ -1937,16 +1930,13 @@ class GroupchatControl(ChatControlBase):
 
 	def kick(self, widget, nick):
 		'''kick a user'''
+		def on_ok(reason):
+			gajim.connections[self.account].gc_set_role(self.room_jid, nick,
+				'none', reason)
+
 		# ask for reason
 		instance = dialogs.InputDialog(_('Kicking %s') % nick,
-					_('You may specify a reason below:'))
-		response = instance.get_response()
-		if response == gtk.RESPONSE_OK:
-			reason = instance.input_entry.get_text().decode('utf-8')
-		else:
-			return # stop kicking procedure
-		gajim.connections[self.account].gc_set_role(self.room_jid, nick, 'none',
-								reason)
+					_('You may specify a reason below:'), ok_handler=on_ok)
 
 	def mk_menu(self, event, iter):
 		'''Make contact's popup menu'''
@@ -2235,18 +2225,15 @@ class GroupchatControl(ChatControlBase):
 
 	def ban(self, widget, jid):
 		'''ban a user'''
+		def on_ok(reason):
+			gajim.connections[self.account].gc_set_affiliation(self.room_jid, jid,
+				'outcast', reason)
+
 		# to ban we know the real jid. so jid is not fakejid
 		nick = gajim.get_nick_from_jid(jid)
 		# ask for reason
 		instance = dialogs.InputDialog(_('Banning %s') % nick,
-			_('You may specify a reason below:'))
-		response = instance.get_response()
-		if response == gtk.RESPONSE_OK:
-			reason = instance.input_entry.get_text().decode('utf-8')
-		else:
-			return # stop banning procedure
-		gajim.connections[self.account].gc_set_affiliation(self.room_jid, jid,
-			'outcast', reason)
+			_('You may specify a reason below:'), ok_handler=on_ok)
 
 	def grant_membership(self, widget, jid):
 		'''grant membership privilege to a user'''
