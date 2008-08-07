@@ -1384,14 +1384,14 @@ class AccountsWindow:
 				gobject.timeout_add(500, login, self.current_account, show_before,
 					status_before)
 
+			def on_yes(checked):
+				relog()
+			def on_no():
+				if self.resend_presence:
+					self.resend()
 			self.dialog = dialogs.YesNoDialog(_('Relogin now?'),
 				_('If you want all the changes to apply instantly, '
-				'you must relogin.'))
-			resp = self.dialog.get_response()
-			if resp == gtk.RESPONSE_YES:
-				relog()
-			elif self.resend_presence:
-				self.resend()
+				'you must relogin.'), on_response_yes=on_yes, on_response_no=on_no)
 		elif self.resend_presence:
 			self.resend()
 

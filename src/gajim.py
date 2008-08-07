@@ -1855,19 +1855,17 @@ class Interface:
 			self.instances[account]['privacy_lists'].privacy_list_removed(name)
 
 	def handle_event_zc_name_conflict(self, account, data):
-		dlg = dialogs.InputDialog(_('Username Conflict'),
-			_('Please type a new username for your local account'),
-			is_modal = True)
-		dlg.input_entry.set_text(data)
-		response = dlg.get_response()
-		if response == gtk.RESPONSE_OK:
-			new_name = dlg.input_entry.get_text()
+		def on_ok(new_name):
 			gajim.config.set_per('accounts', account, 'name', new_name)
 			status = gajim.connections[account].status
 			gajim.connections[account].username = new_name
 			gajim.connections[account].change_status(status, '')
-		else:
+		def on_cancel():
 			gajim.connections[account].change_status('offline','')
+
+		dlg = dialogs.InputDialog(_('Username Conflict'),
+			_('Please type a new username for your local account'), input_str=data,
+			is_modal=True, ok_handler=on_ok, cancel_handler=on_cancel)
 
 	def handle_event_ping_sent(self, account, contact):
 		if contact.jid == contact.get_full_jid():
