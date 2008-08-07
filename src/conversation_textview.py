@@ -268,7 +268,7 @@ class ConversationTextview:
 		tag.set_property('underline', pango.UNDERLINE_SINGLE)
 
 		buffer.create_tag('focus-out-line', justification = gtk.JUSTIFY_CENTER)
-		
+
 		tag = buffer.create_tag('xep0184-warning')
 
 		# One mark at the begining then 2 marks between each lines
@@ -281,7 +281,7 @@ class ConversationTextview:
 		self.focus_out_end_mark = None
 
 		self.xep0184_warning_tooltip = tooltips.BaseTooltip()
-		
+
 		self.line_tooltip = tooltips.BaseTooltip()
 		# use it for hr too
 		self.tv.focus_out_line_pixbuf = ConversationTextview.FOCUS_OUT_LINE_PIXBUF
@@ -524,8 +524,8 @@ class ConversationTextview:
 
 	def show_xep0184_warning_tooltip(self):
 		pointer = self.tv.get_pointer()
-		x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer[0],
-			pointer[1])
+		x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
+			pointer[0], pointer[1])
 		tags = self.tv.get_iter_at_location(x, y).get_tags()
 		tag_table = self.tv.get_buffer().get_tag_table()
 		xep0184_warning = False
@@ -539,11 +539,11 @@ class ConversationTextview:
 			self.xep0184_warning_tooltip.show_tooltip(_('This message '
 			'was not delivered'),
 				8, position[1] + pointer[1])
-	
+
 	def show_line_tooltip(self):
 		pointer = self.tv.get_pointer()
-		x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer[0],
-			pointer[1])
+		x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
+			pointer[0], pointer[1])
 		tags = self.tv.get_iter_at_location(x, y).get_tags()
 		tag_table = self.tv.get_buffer().get_tag_table()
 		over_line = False
@@ -585,10 +585,11 @@ class ConversationTextview:
 		return False
 
 	def on_textview_motion_notify_event(self, widget, event):
-		'''change the cursor to a hand when we are over a mail or an url'''
+		'''change the cursor to a hand when we are over a mail or an
+		url'''
 		pointer_x, pointer_y, spam = self.tv.window.get_pointer()
-		x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer_x,
-			pointer_y)
+		x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
+			pointer_x, pointer_y)
 		tags = self.tv.get_iter_at_location(x, y).get_tags()
 		if self.change_cursor:
 			self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
@@ -642,8 +643,8 @@ class ConversationTextview:
 	def on_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend Clear
 		(only if used_in_history_window is False)
-		and if we have sth selected we show a submenu with actions on the phrase
-		(see on_conversation_textview_button_press_event)'''
+		and if we have sth selected we show a submenu with actions on 
+		the phrase (see on_conversation_textview_button_press_event)'''
 
 		separator_menuitem_was_added = False
 		if not self.used_in_history_window:
