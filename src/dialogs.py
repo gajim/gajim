@@ -636,8 +636,7 @@ class ChangeStatusMessageDialog:
 			msg_text = status_message_to_save_as_preset.decode('utf-8')
 			msg_text_1l = helpers.to_one_line(msg_text)
 			if not msg_name: # msg_name was ''
-				msg_name = msg_text_1l
-			msg_name = msg_name.decode('utf-8')
+				msg_name = msg_text_1l.decode('utf-8')
 
 			if msg_name in self.preset_messages_dict:
 				def on_ok2():
@@ -1471,8 +1470,6 @@ class FTOverwriteConfirmationDialog(ConfirmationDialog):
 class CommonInputDialog:
 	'''Common Class for Input dialogs'''
 	def __init__(self, title, label_str, is_modal, ok_handler, cancel_handler):
-		# if modal is True you also need to call get_response()
-		# and ok_handler won't be used
 		self.dialog = self.xml.get_widget('input_dialog')
 		label = self.xml.get_widget('label')
 		self.dialog.set_title(title)
@@ -1480,14 +1477,14 @@ class CommonInputDialog:
 		self.cancel_handler = cancel_handler
 
 		self.is_modal = is_modal
-		if not is_modal and ok_handler is not None:
-			self.ok_handler = ok_handler
-			okbutton = self.xml.get_widget('okbutton')
-			okbutton.connect('clicked', self.on_okbutton_clicked)
-			cancelbutton = self.xml.get_widget('cancelbutton')
-			cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
-			self.xml.signal_autoconnect(self)
-			self.dialog.show_all()
+
+		self.ok_handler = ok_handler
+		okbutton = self.xml.get_widget('okbutton')
+		okbutton.connect('clicked', self.on_okbutton_clicked)
+		cancelbutton = self.xml.get_widget('cancelbutton')
+		cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
+		self.xml.signal_autoconnect(self)
+		self.dialog.show_all()
 
 	def on_input_dialog_destroy(self, widget):
 		if self.cancel_handler:
@@ -1506,12 +1503,6 @@ class CommonInputDialog:
 
 	def on_cancelbutton_clicked(self, widget):
 		self.dialog.destroy()
-
-	def get_response(self):
-		if self.is_modal:
-			response = self.dialog.run()
-			self.dialog.destroy()
-		return response
 
 class InputDialog(CommonInputDialog):
 	'''Class for Input dialog'''
