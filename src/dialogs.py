@@ -1476,8 +1476,6 @@ class CommonInputDialog:
 		label.set_markup(label_str)
 		self.cancel_handler = cancel_handler
 
-		self.is_modal = is_modal
-
 		self.ok_handler = ok_handler
 		okbutton = self.xml.get_widget('okbutton')
 		okbutton.connect('clicked', self.on_okbutton_clicked)
@@ -1506,8 +1504,8 @@ class CommonInputDialog:
 
 class InputDialog(CommonInputDialog):
 	'''Class for Input dialog'''
-	def __init__(self, title, label_str, input_str = None, is_modal = True,
-	ok_handler = None, cancel_handler = None):
+	def __init__(self, title, label_str, input_str=None, is_modal=True,
+	ok_handler=None, cancel_handler=None):
 		self.xml = gtkgui_helpers.get_glade('input_dialog.glade')
 		CommonInputDialog.__init__(self, title, label_str, is_modal, ok_handler,
 			cancel_handler)
@@ -1521,8 +1519,8 @@ class InputDialog(CommonInputDialog):
 
 class InputTextDialog(CommonInputDialog):
 	'''Class for multilines Input dialog (more place than InputDialog)'''
-	def __init__(self, title, label_str, input_str = None, is_modal = True,
-	ok_handler = None, cancel_handler = None):
+	def __init__(self, title, label_str, input_str=None, is_modal=True,
+	ok_handler=None, cancel_handler=None):
 		self.xml = gtkgui_helpers.get_glade('input_text_dialog.glade')
 		CommonInputDialog.__init__(self, title, label_str, is_modal, ok_handler,
 			cancel_handler)
@@ -1538,9 +1536,8 @@ class InputTextDialog(CommonInputDialog):
 
 class DubbleInputDialog:
 	'''Class for Dubble Input dialog'''
-	def __init__(self, title, label_str1, label_str2, input_str1 = None,
-	input_str2 = None, is_modal = True, ok_handler = None,
-	cancel_handler = None):
+	def __init__(self, title, label_str1, label_str2, input_str1=None,
+	input_str2=None, is_modal=True, ok_handler=None, cancel_handler=None):
 		# if modal is True you also need to call get_response()
 		# and ok_handler won't be used
 		self.xml = gtkgui_helpers.get_glade('dubbleinput_dialog.glade')
@@ -1593,7 +1590,7 @@ class DubbleInputDialog:
 		return response
 
 class SubscriptionRequestWindow:
-	def __init__(self, jid, text, account, user_nick = None):
+	def __init__(self, jid, text, account, user_nick=None):
 		xml = gtkgui_helpers.get_glade('subscription_request_window.glade')
 		self.window = xml.get_widget('subscription_request_window')
 		self.jid = jid
@@ -1657,8 +1654,8 @@ class SubscriptionRequestWindow:
 
 
 class JoinGroupchatWindow:
-	def __init__(self, account, room_jid = '', nick = '', password = '',
-	automatic = False):
+	def __init__(self, account, room_jid='', nick='', password='',
+	automatic=False):
 		'''automatic is a dict like {'invities': []}
 		If automatic is not empty, this means room must be automaticaly configured
 		and when done, invities must be automatically invited'''
@@ -2019,8 +2016,8 @@ class ChangePasswordDialog:
 		self.on_response(password1)
 
 class PopupNotificationWindow:
-	def __init__(self, event_type, jid, account, msg_type = '',
-	path_to_image = None, title = None, text = None):
+	def __init__(self, event_type, jid, account, msg_type='',
+	path_to_image=None, title=None, text=None):
 		self.account = account
 		self.jid = jid
 		self.msg_type = msg_type
@@ -2089,7 +2086,8 @@ class PopupNotificationWindow:
 			pos_x = gtk.gdk.screen_width() - window_width + pos_x + 1
 		pos_y = gajim.config.get('notification_position_y')
 		if pos_y < 0:
-			pos_y = gtk.gdk.screen_height() - gajim.interface.roster.popups_notification_height + pos_y + 1
+			pos_y = gtk.gdk.screen_height() - \
+				gajim.interface.roster.popups_notification_height + pos_y + 1
 		self.window.move(pos_x, pos_y)
 
 		xml.signal_autoconnect(self)
@@ -2110,7 +2108,7 @@ class PopupNotificationWindow:
 
 		if len(gajim.interface.roster.popup_notification_windows) > 0:
 			# we want to remove the first window added in the list
-			gajim.interface.roster.popup_notification_windows.pop(0) # remove 1st item
+			gajim.interface.roster.popup_notification_windows.pop(0)
 
 		# move the rest of popup windows
 		gajim.interface.roster.popups_notification_height = 0
@@ -2118,7 +2116,8 @@ class PopupNotificationWindow:
 			window_width, window_height = window_instance.window.get_size()
 			gajim.interface.roster.popups_notification_height += window_height
 			window_instance.window.move(gtk.gdk.screen_width() - window_width,
-		gtk.gdk.screen_height() - gajim.interface.roster.popups_notification_height)
+				gtk.gdk.screen_height() - \
+				gajim.interface.roster.popups_notification_height)
 
 	def on_popup_notification_window_button_press_event(self, widget, event):
 		if event.button != 1:
@@ -2169,14 +2168,16 @@ class SingleMessageWindow:
 			self.conversation_textview.tv)
 
 		self.form_widget = None
-		parent_box = self.xml.get_widget('conversation_scrolledwindow').get_parent()
+		parent_box = self.xml.get_widget('conversation_scrolledwindow').\
+			get_parent()
 		if form_node:
 			dataform = dataforms.ExtendForm(node = form_node)
 			self.form_widget = dataforms_widget.DataFormWidget(dataform)
 			self.form_widget.show_all()
 			parent_box.add(self.form_widget)
 			parent_box.child_set_property(self.form_widget, 'position',
-				parent_box.child_get_property(self.xml.get_widget('conversation_scrolledwindow'), 'position'))
+				parent_box.child_get_property(self.xml.get_widget(
+					'conversation_scrolledwindow'), 'position'))
 			self.action = 'form'
 
 		self.send_button = self.xml.get_widget('send_button')
@@ -2362,7 +2363,8 @@ class SingleMessageWindow:
 			if self.session:
 				session = self.session
 			else:
-				session = gajim.connections[self.account].make_new_session(to_whom_jid)
+				session = gajim.connections[self.account].make_new_session(
+					to_whom_jid)
 
 			if self.form_widget:
 				form_node = self.form_widget.data_form
@@ -2484,7 +2486,8 @@ class XMLConsoleWindow:
 		_('Please make sure you are connected with "%s".') % self.account)
 			return
 		begin_iter, end_iter = self.input_tv_buffer.get_bounds()
-		stanza = self.input_tv_buffer.get_text(begin_iter, end_iter).decode('utf-8')
+		stanza = self.input_tv_buffer.get_text(begin_iter, end_iter).decode(
+			'utf-8')
 		if stanza:
 			gajim.connections[self.account].send_stanza(stanza)
 			self.input_tv_buffer.set_text('') # we sent ok, clear the textview
@@ -3005,8 +3008,8 @@ class ProgressDialog:
 
 
 class SoundChooserDialog(FileChooserDialog):
-	def __init__(self, path_to_snd_file = '', on_response_ok = None,
-	on_response_cancel = None):
+	def __init__(self, path_to_snd_file='', on_response_ok=None,
+	on_response_cancel=None):
 		'''optionally accepts path_to_snd_file so it has that as selected'''
 		def on_ok(widget, callback):
 			'''check if file exists and call callback'''
@@ -3041,8 +3044,8 @@ class SoundChooserDialog(FileChooserDialog):
 			self.set_filename(path_to_snd_file)
 
 class ImageChooserDialog(FileChooserDialog):
-	def __init__(self, path_to_file = '', on_response_ok = None,
-	on_response_cancel = None):
+	def __init__(self, path_to_file='', on_response_ok=None,
+	on_response_cancel=None):
 		'''optionally accepts path_to_snd_file so it has that as selected'''
 		def on_ok(widget, callback):
 			'''check if file exists and call callback'''
@@ -3114,8 +3117,8 @@ class ImageChooserDialog(FileChooserDialog):
 		widget.get_preview_widget().set_from_pixbuf(pixbuf)
 
 class AvatarChooserDialog(ImageChooserDialog):
-	def __init__(self, path_to_file = '', on_response_ok = None,
-	on_response_cancel = None, on_response_clear = None):
+	def __init__(self, path_to_file='', on_response_ok=None,
+	on_response_cancel=None, on_response_clear=None):
 		ImageChooserDialog.__init__(self, path_to_file, on_response_ok,
 			on_response_cancel)
 		button = gtk.Button(None, gtk.STOCK_CLEAR)
@@ -3575,7 +3578,7 @@ class AdvancedNotificationsWindow:
 		else:
 			self.sound_file_hbox.set_sensitive(False)
 
-	def on_browse_for_sounds_button_clicked(self, widget, data = None):
+	def on_browse_for_sounds_button_clicked(self, widget, data=None):
 		if self.active_num < 0:
 			return
 
@@ -3647,7 +3650,7 @@ class AdvancedNotificationsWindow:
 class TransformChatToMUC:
 	# Keep a reference on windows so garbage collector don't restroy them
 	instances = []
-	def __init__(self, account, jids, preselected = None):
+	def __init__(self, account, jids, preselected=None):
 		'''This window is used to trasform a one-to-one chat to a MUC.
 		We do 2 things: first select the server and then make a guests list.'''
 
@@ -3776,7 +3779,8 @@ class TransformChatToMUC:
 
 	def unique_room_id_error(self, server):
 		self.unique_room_id_supported(server,
-			gajim.nicks[self.account].lower().replace(' ','') + str(randrange(9999999)))
+			gajim.nicks[self.account].lower().replace(' ','') + str(randrange(
+				9999999)))
 
 class DataFormWindow(Dialog):
 	def __init__(self, form, on_response_ok):
