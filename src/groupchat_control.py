@@ -1778,6 +1778,7 @@ class GroupchatControl(ChatControlBase):
 		treeview = gajim.interface.roster.tree
 		model = treeview.get_model()
 		if not selection.data or target_type == 80:
+			#  target_type = 80 means a file is dropped
 			return
 		data = selection.data
 		path = treeview.get_selection().get_selected_rows()[1][0]
