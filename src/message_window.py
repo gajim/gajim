@@ -439,46 +439,56 @@ class MessageWindow(object):
 	def remove_tab(self, ctrl, method, reason = None, force = False):
 		'''reason is only for gc (offline status message)
 		if force is True, do not ask any confirmation'''
-		# Shutdown the MessageControl
-		allow_shutdown = ctrl.allow_shutdown(method)
-		if not force and allow_shutdown == 'no':
-			return
-		if allow_shutdown == 'minimize' and method != self.CLOSE_COMMAND:
-			ctrl.minimize()
+		def close(ctrl):
+			if reason is not None: # We are leaving gc with a status message
+				ctrl.shutdown(reason)
+			else: # We are leaving gc without status message or it's a chat
+				ctrl.shutdown()
+			# Update external state
+			gajim.events.remove_events(ctrl.account, ctrl.get_full_jid,
+				types = ['printed_msg', 'chat', 'gc_msg'])
+
+			fjid = ctrl.get_full_jid()
+			jid = gajim.get_jid_without_resource(fjid)
+
+			fctrl = self.get_control(fjid, ctrl.account)
+			bctrl = self.get_control(jid, ctrl.account)
+			# keep last_message_time around unless this was our last control with
+			# that jid
+			if not fctrl and not bctrl:
+				del gajim.last_message_time[ctrl.account][fjid]
+
+			# Disconnect tab DnD only if GTK version < 2.10
+			if gtk.pygtk_version < (2, 10, 0) or gtk.gtk_version < (2, 10, 0):
+				self.disconnect_tab_dnd(ctrl.widget)
+
+			self.notebook.remove_page(self.notebook.page_num(ctrl.widget))
+
+			del self._controls[ctrl.account][fjid]
+
+			if len(self._controls[ctrl.account]) == 0:
+				del self._controls[ctrl.account]
+
 			self.check_tabs()
-			return
-		if reason is not None: # We are leaving gc with a status message
-			ctrl.shutdown(reason)
-		else: # We are leaving gc without status message or it's a chat
-			ctrl.shutdown()
+			self.show_title()
 
-		# Update external state
-		gajim.events.remove_events(ctrl.account, ctrl.get_full_jid,
-			types = ['printed_msg', 'chat', 'gc_msg'])
+		def on_yes(ctrl):
+			close(ctrl)
 
-		fjid = ctrl.get_full_jid()
-		jid = gajim.get_jid_without_resource(fjid)
+		def on_no(ctrl):
+			if not force:
+				return
+			close(ctrl)
 
-		fctrl = self.get_control(fjid, ctrl.account)
-		bctrl = self.get_control(jid, ctrl.account)
-		# keep last_message_time around unless this was our last control with
-		# that jid
-		if not fctrl and not bctrl:
-			del gajim.last_message_time[ctrl.account][fjid]
+		def on_minimize(ctrl):
+			if method != self.CLOSE_COMMAND:
+				ctrl.minimize()
+				self.check_tabs()
+				return
+			close(ctrl)
 
-		# Disconnect tab DnD only if GTK version < 2.10
-		if gtk.pygtk_version < (2, 10, 0) or gtk.gtk_version < (2, 10, 0):
-			self.disconnect_tab_dnd(ctrl.widget)
-
-		self.notebook.remove_page(self.notebook.page_num(ctrl.widget))
-
-		del self._controls[ctrl.account][fjid]
-
-		if len(self._controls[ctrl.account]) == 0:
-			del self._controls[ctrl.account]
-
-		self.check_tabs()
-		self.show_title()
+		# Shutdown the MessageControl
+		ctrl.allow_shutdown(method, on_yes, on_no, on_minimize)
 
 	def check_tabs(self):
 		if self.get_num_controls() == 0:
