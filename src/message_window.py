@@ -65,6 +65,8 @@ class MessageWindow(object):
 		# dict { handler id: widget}. Keeps callbacks, which
 		# lead to cylcular references
 		self.handlers = {}
+		# Don't show warning dialogs when we want to delete the window
+		self.dont_warn_on_delete = False
 
 		self.widget_name = 'message_window'
 		self.xml = gtkgui_helpers.get_glade('%s.glade' % self.widget_name)
@@ -182,18 +184,30 @@ class MessageWindow(object):
 				self.redraw_tab(ctrl)
 
 	def _on_window_delete(self, win, event):
+		if self.dont_warn_on_delete:
+			# Destroy the window
+			return False
+
+		def on_yes(ctrl):
+			if self.on_delete_ok == 1:
+				self.dont_warn_on_delete = True
+				win.destroy()
+			self.on_delete_ok -= 1
+
+		def on_no(ctrl):
+			return
+
+		def on_minimize(ctrl):
+			self.on_delete_ok -= 1
+			ctrl.minimize()
+
 		# Make sure all controls are okay with being deleted
 		ctrl_to_minimize = []
+		self.on_delete_ok = self.get_nb_controls()
 		for ctrl in self.controls():
-			allow_shutdown = ctrl.allow_shutdown(self.CLOSE_CLOSE_BUTTON)
-			if allow_shutdown == 'no':
-				return True # halt the delete
-			elif allow_shutdown == 'minimize':
-				ctrl_to_minimize.append(ctrl)
-		# If all are ok, minimize the one that need to be minimized
-		for ctrl in ctrl_to_minimize:
-			ctrl.minimize()
-		return False
+			ctrl.allow_shutdown(self.CLOSE_CLOSE_BUTTON, on_yes, on_no,
+				on_minimize)
+		return True # halt the delete for the moment
 
 	def _on_window_destroy(self, win):
 		for ctrl in self.controls():
@@ -606,6 +620,13 @@ class MessageWindow(object):
 		for jid_dict in self._controls.values():
 			for ctrl in jid_dict.values():
 				yield ctrl
+
+	def get_nb_controls(self):
+		nb_ctrl = 0
+		for jid_dict in self._controls.values():
+			for ctrl in jid_dict.values():
+				nb_ctrl += 1
+		return nb_ctrl
 
 	def move_to_next_unread_tab(self, forward):
 		ind = self.notebook.get_current_page()

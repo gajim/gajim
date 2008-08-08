@@ -3795,7 +3795,7 @@ class RosterWindow:
 			'line. Generally it is used when the same person has several Jabber '
 			'accounts or transport accounts.')
 		dlg = dialogs.ConfirmationDialogCheck(pritext, sectext,
-			_('Do _not ask me again'), on_response_ok = merge_contacts)
+			_('Do _not ask me again'), on_response_ok=merge_contacts)
 		if not confirm_metacontacts: # First time we see this window
 			dlg.checkbutton.set_active(True)
 

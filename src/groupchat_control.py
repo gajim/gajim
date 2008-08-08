@@ -1667,37 +1667,47 @@ class GroupchatControl(ChatControlBase):
 		# Remove unread events from systray
 		gajim.events.remove_events(self.account, self.room_jid)
 
-	def allow_shutdown(self, method):
+	def allow_shutdown(self, method, on_yes, on_no, on_minimize):
 		if self.contact.jid in gajim.config.get_per('accounts', self.account,
 		'minimized_gc').split(' '):
-			return 'minimize'
+			on_minimize(self)
+			return
 		if method == self.parent_win.CLOSE_ESC:
 			model, iter = self.list_treeview.get_selection().get_selected()
 			if iter:
 				self.list_treeview.get_selection().unselect_all()
-				return 'no'
-		retval = 'yes'
+				on_no(self)
+				return
 		includes = gajim.config.get('confirm_close_muc_rooms').split(' ')
 		excludes = gajim.config.get('noconfirm_close_muc_rooms').split(' ')
 		# whether to ask for comfirmation before closing muc
 		if (gajim.config.get('confirm_close_muc') or self.room_jid in includes) \
 		and gajim.gc_connected[self.account][self.room_jid] and self.room_jid not\
 		in excludes:
+
+			def on_ok(clicked):
+				if clicked:
+					# user does not want to be asked again
+					gajim.config.set('confirm_close_muc', False)
+				on_yes(self)
+
+			def on_cancel(clicked):
+				if clicked:
+					# user does not want to be asked again
+					gajim.config.set('confirm_close_muc', False)
+				on_no(self)
+
 			pritext = _('Are you sure you want to leave group chat "%s"?')\
 				% self.name
 			sectext = _('If you close this window, you will be disconnected '
 					'from this group chat.')
 
 			dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
-						_('Do _not ask me again'))
+				_('Do _not ask me again'), on_response_ok=on_ok,
+				on_response_cancel=on_cancel)
+			return
 
-			if dialog.get_response() != gtk.RESPONSE_OK:
-				retval = 'no'
-
-			if dialog.is_checked(): # user does not want to be asked again
-				gajim.config.set('confirm_close_muc', False)
-
-		return retval
+		on_yes(self)
 
 	def set_control_active(self, state):
 		self.conv_textview.allow_focus_out_line = True

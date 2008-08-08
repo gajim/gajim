@@ -730,9 +730,8 @@ Description=xmpp
 		sectext = _('Would you like to make Gajim the default Jabber client?')
 		checktext = _('Always check to see if Gajim is the default Jabber client '
 			'on startup')
-		def on_cancel():
-			gajim.config.set('check_if_gajim_is_default',
-				dlg.is_checked())
+		def on_cancel(checked):
+			gajim.config.set('check_if_gajim_is_default', checked)
 		dlg = dialogs.ConfirmationDialogCheck(pritext, sectext, checktext,
 			set_gajim_as_xmpp_handler, on_cancel)
 		if gajim.config.get('check_if_gajim_is_default'):

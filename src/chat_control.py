@@ -2200,18 +2200,24 @@ class ChatControl(ChatControlBase):
 		self.conv_textview.del_handlers()
 		self.msg_textview.destroy()
 
-	def allow_shutdown(self, method):
+	def allow_shutdown(self, method, on_yes, on_no, on_minimize):
 		if time.time() - gajim.last_message_time[self.account]\
 		[self.get_full_jid()] < 2:
 			# 2 seconds
+			def on_ok():
+				on_yes(self)
+
+			def on_cancel():
+				on_no(self)
+
 			dialog = dialogs.ConfirmationDialog(
 				# %s is being replaced in the code with JID
 				_('You just received a new message from "%s"') % self.contact.jid,
 				_('If you close this tab and you have history disabled, '\
-				'this message will be lost.'))
-			if dialog.get_response() != gtk.RESPONSE_OK:
-				return 'no' # stop the propagation of the event
-		return 'yes'
+				'this message will be lost.'), on_response_ok=on_ok,
+				on_response_cancel=on_cancel)
+			return
+		on_yes(self)
 
 	def handle_incoming_chatstate(self):
 		''' handle incoming chatstate that jid SENT TO us '''

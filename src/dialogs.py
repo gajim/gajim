@@ -1362,9 +1362,10 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 	def on_response_cancel(self, widget):
 		if self.user_response_cancel:
 			if isinstance(self.user_response_cancel, tuple):
-				self.user_response_cancel[0](*self.user_response_cancel[1:])
+				self.user_response_cancel[0](self.is_checked(),
+					*self.user_response_cancel[1:])
 			else:
-				self.user_response_cancel()
+				self.user_response_cancel(self.is_checked())
 		self.destroy()
 
 	def is_checked(self):
