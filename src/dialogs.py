@@ -256,8 +256,10 @@ class PassphraseDialog:
 
 class ChooseGPGKeyDialog:
 	'''Class for GPG key dialog'''
-	def __init__(self, title_text, prompt_text, secret_keys, selected = None):
-		#list : {keyID: userName, ...}
+	def __init__(self, title_text, prompt_text, secret_keys, on_response,
+	selected=None):
+		'''secret_keys : {keyID: userName, ...}'''
+		self.on_response = on_response
 		xml = gtkgui_helpers.get_glade('choose_gpg_key_dialog.glade')
 		self.window = xml.get_widget('choose_gpg_key_dialog')
 		self.window.set_title(title_text)
@@ -279,6 +281,7 @@ class ChooseGPGKeyDialog:
 		col.set_sort_column_id(1)
 		self.keys_treeview.set_search_column(1)
 		self.fill_tree(secret_keys, selected)
+		self.window.connect('response', self.on_dialog_response)
 		self.window.show_all()
 
 	def sort_keys(self, model, iter1, iter2):
@@ -292,17 +295,16 @@ class ChooseGPGKeyDialog:
 			return -1
 		return 1
 
-	def run(self):
-		rep = self.window.run()
+	def on_dialog_response(self, dialog, response):
 		selection = self.keys_treeview.get_selection()
 		(model, iter) = selection.get_selected()
-		if iter and rep == gtk.RESPONSE_OK:
+		if iter and response == gtk.RESPONSE_OK:
 			keyID = [ model[iter][0].decode('utf-8'),
 				model[iter][1].decode('utf-8') ]
 		else:
 			keyID = None
+		self.on_response(keyID)
 		self.window.destroy()
-		return keyID
 
 	def fill_tree(self, list, selected):
 		model = self.keys_treeview.get_model()
@@ -1582,12 +1584,6 @@ class DubbleInputDialog:
 
 	def on_cancelbutton_clicked(self, widget):
 		self.dialog.destroy()
-
-	def get_response(self):
-		if self.is_modal:
-			response = self.dialog.run()
-			self.dialog.destroy()
-		return response
 
 class SubscriptionRequestWindow:
 	def __init__(self, jid, text, account, user_nick=None):

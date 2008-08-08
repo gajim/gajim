@@ -2021,37 +2021,40 @@ class AccountsWindow:
 				_('There was a problem retrieving your OpenPGP secret keys.'))
 			return
 		secret_keys[_('None')] = _('None')
+
+		def on_key_selected(keyID):
+			if keyID is None:
+				return
+			if self.current_account == gajim.ZEROCONF_ACC_NAME:
+				wiget_name_ext = '2'
+			else:
+				wiget_name_ext = '1'
+			gpg_key_label = self.xml.get_widget('gpg_key_label' + wiget_name_ext)
+			gpg_name_label = self.xml.get_widget('gpg_name_label' + wiget_name_ext)
+			use_gpg_agent_checkbutton = self.xml.get_widget(
+				'use_gpg_agent_checkbutton' + wiget_name_ext)
+			if keyID[0] == _('None'):
+				gpg_key_label.set_text(_('No key selected'))
+				gpg_name_label.set_text('')
+				use_gpg_agent_checkbutton.set_sensitive(False)
+				if self.option_changed('keyid', ''):
+					self.need_relogin = True
+				gajim.config.set_per('accounts', self.current_account, 'keyname',
+					'')
+				gajim.config.set_per('accounts', self.current_account, 'keyid', '')
+			else:
+				gpg_key_label.set_text(keyID[0])
+				gpg_name_label.set_text(keyID[1])
+				use_gpg_agent_checkbutton.set_sensitive(True)
+				if self.option_changed('keyid', keyID[0]):
+					self.need_relogin = True
+				gajim.config.set_per('accounts', self.current_account, 'keyname',
+					keyID[1])
+				gajim.config.set_per('accounts', self.current_account, 'keyid',
+					keyID[0])
+
 		instance = dialogs.ChooseGPGKeyDialog(_('OpenPGP Key Selection'),
-			_('Choose your OpenPGP key'), secret_keys)
-		keyID = instance.run()
-		if keyID is None:
-			return
-		if self.current_account == gajim.ZEROCONF_ACC_NAME:
-			wiget_name_ext = '2'
-		else:
-			wiget_name_ext = '1'
-		gpg_key_label = self.xml.get_widget('gpg_key_label' + wiget_name_ext)
-		gpg_name_label = self.xml.get_widget('gpg_name_label' + wiget_name_ext)
-		use_gpg_agent_checkbutton = self.xml.get_widget(
-			'use_gpg_agent_checkbutton' + wiget_name_ext)
-		if keyID[0] == _('None'):
-			gpg_key_label.set_text(_('No key selected'))
-			gpg_name_label.set_text('')
-			use_gpg_agent_checkbutton.set_sensitive(False)
-			if self.option_changed('keyid', ''):
-				self.need_relogin = True
-			gajim.config.set_per('accounts', self.current_account, 'keyname', '')
-			gajim.config.set_per('accounts', self.current_account, 'keyid', '')
-		else:
-			gpg_key_label.set_text(keyID[0])
-			gpg_name_label.set_text(keyID[1])
-			use_gpg_agent_checkbutton.set_sensitive(True)
-			if self.option_changed('keyid', keyID[0]):
-				self.need_relogin = True
-			gajim.config.set_per('accounts', self.current_account, 'keyname',
-				keyID[1])
-			gajim.config.set_per('accounts', self.current_account, 'keyid',
-				keyID[0])
+			_('Choose your OpenPGP key'), secret_keys, on_key_selected)
 
 	def on_use_gpg_agent_checkbutton_toggled(self, widget):
 		if self.current_account == gajim.ZEROCONF_ACC_NAME:

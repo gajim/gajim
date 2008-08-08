@@ -2747,40 +2747,41 @@ class RosterWindow:
 		attached_keys = gajim.config.get_per('accounts', account,
 			'attached_gpg_keys').split()
 		keys = {}
-		#GPG Key
 		keyID = _('None')
 		for i in xrange(len(attached_keys)/2):
 			keys[attached_keys[2*i]] = attached_keys[2*i+1]
 			if attached_keys[2*i] == contact.jid:
 				keyID = attached_keys[2*i+1]
 		public_keys = gajim.connections[account].ask_gpg_keys()
-		#GPG Key
 		public_keys[_('None')] = _('None')
-		instance = dialogs.ChooseGPGKeyDialog(_('Assign OpenPGP Key'),
-			_('Select a key to apply to the contact'), public_keys, keyID)
-		keyID = instance.run()
-		if keyID is None:
-			return
-		#GPG Key
-		if keyID[0] == _('None'):
-			if contact.jid in keys:
-				del keys[contact.jid]
-			keyID = ''
-		else:
-			keyID = keyID[0]
-			keys[contact.jid] = keyID
 
-		ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
-		if ctrl:
-			ctrl.update_ui()
+		def on_key_selected(keyID):
+			if keyID is None:
+				return
+			if keyID[0] == _('None'):
+				if contact.jid in keys:
+					del keys[contact.jid]
+				keyID = ''
+			else:
+				keyID = keyID[0]
+				keys[contact.jid] = keyID
 
-		keys_str = ''
-		for jid in keys:
-			keys_str += jid + ' ' + keys[jid] + ' '
-		gajim.config.set_per('accounts', account, 'attached_gpg_keys', keys_str)
-		for u in gajim.contacts.get_contacts(account, contact.jid):
-			u.keyID = helpers.prepare_and_validate_gpg_keyID(account,
+			ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+			if ctrl:
+				ctrl.update_ui()
+
+			keys_str = ''
+			for jid in keys:
+				keys_str += jid + ' ' + keys[jid] + ' '
+			gajim.config.set_per('accounts', account, 'attached_gpg_keys',
+				keys_str)
+			for u in gajim.contacts.get_contacts(account, contact.jid):
+				u.keyID = helpers.prepare_and_validate_gpg_keyID(account,
 					contact.jid, keyID)
+
+		instance = dialogs.ChooseGPGKeyDialog(_('Assign OpenPGP Key'),
+			_('Select a key to apply to the contact'), public_keys,
+			on_key_selected, selected=keyID)
 
 	def on_set_custom_avatar_activate(self, widget, contact, account):
 		def on_ok(widget, path_to_file):
