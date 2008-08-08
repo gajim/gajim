@@ -1777,7 +1777,7 @@ class GroupchatControl(ChatControlBase):
 		# Invite contact to groupchat
 		treeview = gajim.interface.roster.tree
 		model = treeview.get_model()
-		if not selection.data:
+		if not selection.data or target_type == 80:
 			return
 		data = selection.data
 		path = treeview.get_selection().get_selected_rows()[1][0]
