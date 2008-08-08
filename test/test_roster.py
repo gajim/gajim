@@ -21,7 +21,7 @@ class TestRosterWindow(unittest.TestCase):
 	def setUp(self):
 		gajim.interface = MockInterface()
 		self.roster = roster_window.RosterWindow()
-		
+
 		# Please unuglify :-)
 		self.C_NAME = roster_window.C_NAME
 		self.C_TYPE = roster_window.C_TYPE
@@ -52,7 +52,7 @@ class TestRosterWindow(unittest.TestCase):
 			self.assertTrue(len(iters) == len(contact.get_shown_groups()),
 				msg='Contact is not in all his groups')
 
-			# check for each group tag	
+			# check for each group tag
 			for titerC in iters:
 				self.assertTrue(self.roster.model.iter_is_valid(titerC),
 					msg='Contact iter invalid')
@@ -67,7 +67,7 @@ class TestRosterWindow(unittest.TestCase):
 					self.assertEquals(account, c_model[self.C_ACCOUNT],
 						msg='Account missmatch')
 				# TODO: Is our parent correct? (group or big b)
-				
+
 	def assert_group_is_in_roster(self, group, account):
 		#TODO
 		pass
@@ -80,7 +80,7 @@ class TestRosterWindow(unittest.TestCase):
 		acc_model = self.roster.model[titerA]
 		self.assertEquals(acc_model[self.C_TYPE], 'account',
 			msg='No account found')
-		
+
 		if not self.roster.regroup:
 			self.assertEquals(acc_model[self.C_ACCOUNT], acc,
 				msg='Account not found')
@@ -88,7 +88,7 @@ class TestRosterWindow(unittest.TestCase):
 			self_jid = gajim.get_jid_from_account(acc)
 			self.assertEquals(acc_model[self.C_JID], self_jid,
 				msg='Account JID not found in account row')
-	
+
 	def assert_model_is_in_sync(self):
 		#TODO: check that iter_n_children returns the correct numbers
 		pass
@@ -97,18 +97,18 @@ class TestRosterWindow(unittest.TestCase):
 	def test_fill_contacts_and_groups_dicts(self):
 		for acc in contacts:
 			self.roster.fill_contacts_and_groups_dicts(contacts[acc], acc)
-			
+
 			for jid in contacts[acc]:
 				instances = gajim.contacts.get_contacts(acc, jid)
 
 				# Created a contact for each single jid?
 				self.assertTrue(len(instances) == 1)
-				
+
 				# Contacts kept their info
 				contact = instances[0]
 				self.assertEquals(contact.groups, contacts[acc][jid]['groups'],
 					msg='Group Missmatch')
-				
+
 				groups = contacts[acc][jid]['groups'] or ['General',]
 
 		# cleanup
@@ -123,9 +123,9 @@ class TestRosterWindow(unittest.TestCase):
 			self.roster.add_account(acc)
 			self.assert_account_is_in_roster(acc)
 
-			self.roster.add_account_contacts(acc)	
+			self.roster.add_account_contacts(acc)
 			self.assert_all_contacts_are_in_roster(acc)
-			
+
 		self.assert_model_is_in_sync()
 
 
@@ -166,6 +166,6 @@ class TestRosterWindowMetaContacts(TestRosterWindowRegrouped):
 
 
 if __name__ == '__main__':
-    unittest.main()
+	unittest.main()
 
 # vim: se ts=3:

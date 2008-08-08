@@ -5,15 +5,10 @@ import testlib
 testlib.setup_env()
 
 from common import gajim
-from common import xmpp
-
-from common.caps import CapsCache
-
-from mock import Mock
-
 from gajim import Interface
 
-gajim.logger = Mock()
+from mocks import MockLogger
+gajim.logger = MockLogger()
 
 Interface()
 

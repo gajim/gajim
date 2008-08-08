@@ -3,7 +3,8 @@ import os.path
 
 gajim_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
 
-sys.path.append(gajim_root + '/src')
+# look for modules in the CWD, then gajim/src, then everywhere else
+sys.path.insert(1, gajim_root + '/src')
 
 # a temporary version of ~/.gajim for testing
 configdir = gajim_root + '/test/tmp'

@@ -69,7 +69,7 @@ class MockInterface(Mock):
 
 class MockLogger(Mock):
 	def __init__(self):
-		Mock.__init__(self, {'write': None})
+		Mock.__init__(self, {'write': None, 'get_transports_type': {}})
 
 class MockContact(Mock):
 	def __nonzero__(self):
