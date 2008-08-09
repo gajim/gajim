@@ -113,9 +113,8 @@ class NonBlockingBOSH(NonBlockingTransport):
 			self.disconnect()
 			return
 
-		print 'SSSSSSSSSSEEEEEEEEEND'
+		#Hack for making the non-secure warning dialog work
 		if hasattr(self._owner, 'NonBlockingNonSASL') or hasattr(self._owner, 'SASL'):
-			#FIXME: Hack for making the non-secure warning dialog work
 			self.send_BOSH(None)
 		else:
 			self.http_socks[0]._plug_idle(writable=False, readable=True)
@@ -453,31 +452,31 @@ class AckChecker():
 
 
 class KeyStack():
-        def __init__(self, count):
-                self.count = count
-                self.keys = []
-                self.reset()
+	def __init__(self, count):
+		self.count = count
+		self.keys = []
+		self.reset()
 		self.first_call = True
 
-        def reset(self):
-                seed = str(get_rand_number())
-                self.keys = [sha.new(seed).hexdigest()]
-                for i in range(self.count-1):
-                        curr_seed = self.keys[i]
-                        self.keys.append(sha.new(curr_seed).hexdigest())
+	def reset(self):
+		seed = str(get_rand_number())
+		self.keys = [sha.new(seed).hexdigest()]
+		for i in range(self.count-1):
+			curr_seed = self.keys[i]
+			self.keys.append(sha.new(curr_seed).hexdigest())
 
-        def get(self):
+	def get(self):
 		if self.first_call:
 			self.first_call = False
 			return (None, self.keys.pop())
 			
-                if len(self.keys)>1:
-                        return (self.keys.pop(), None)
-                else:
-                        last_key = self.keys.pop()
-                        self.reset()
-                        new_key = self.keys.pop()
-                        return (last_key, new_key)
+		if len(self.keys)>1:
+			return (self.keys.pop(), None)
+		else:
+			last_key = self.keys.pop()
+			self.reset()
+			new_key = self.keys.pop()
+			return (last_key, new_key)
 
 # http://www.xmpp.org/extensions/xep-0124.html#errorstatus-terminal
 bosh_errors = {

@@ -150,7 +150,6 @@ class PyOpenSSLWrapper(SSLWrapper):
 			else:		  retval = self.sslobj.recv(bufsize, flags)
 		except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError), e:
 			log.debug("Recv: Want-error: " + repr(e))
-			pass
 		except OpenSSL.SSL.SysCallError, e:
 			log.debug("Recv: Got OpenSSL.SSL.SysCallError: " + repr(e), exc_info=True)
 			#traceback.print_exc()
@@ -202,8 +201,7 @@ class StdlibSSLWrapper(SSLWrapper):
 		try:
 			return self.sslobj.read(bufsize)
 		except socket.sslerror, e:
-			#log.debug("Recv: Caught socket.sslerror:", exc_info=True)
-			#traceback.print_exc()
+			log.debug("Recv: Caught socket.sslerror:", exc_info=True)
 			if e.args[0] not in (socket.SSL_ERROR_WANT_READ, socket.SSL_ERROR_WANT_WRITE):
 				raise SSLWrapper.Error(self.sock or self.sslobj, e)
 		return None
@@ -213,8 +211,7 @@ class StdlibSSLWrapper(SSLWrapper):
 		try:
 			return self.sslobj.write(data)
 		except socket.sslerror, e:
-			#log.debug("Send: Caught socket.sslerror:", exc_info=True)
-			#traceback.print_exc()
+			log.debug("Send: Caught socket.sslerror:", exc_info=True)
 			if e.args[0] not in (socket.SSL_ERROR_WANT_READ, socket.SSL_ERROR_WANT_WRITE):
 				raise SSLWrapper.Error(self.sock or self.sslobj, e)
 		return 0
@@ -274,13 +271,12 @@ class NonBlockingTLS(PlugIn):
 		print >> stream, "PKey type: %s (%d)" % (typedict.get(pkey.type(), "Unknown"), pkey.type())
 
 	def _startSSL(self):
-		''' Immidiatedly switch socket to TLS mode. Used internally.'''
+		''' Immediatedly switch socket to TLS mode. Used internally.'''
 		log.debug("_startSSL called")
 		if USE_PYOPENSSL: return self._startSSL_pyOpenSSL()
 		else:             return self._startSSL_stdlib()
 
 	def _startSSL_pyOpenSSL(self):
-		#log.debug("_startSSL_pyOpenSSL called, thread id: %s", str(thread.get_ident()))
 		log.debug("_startSSL_pyOpenSSL called")
 		tcpsock = self._owner
 		# FIXME: should method be configurable?

@@ -110,9 +110,8 @@ class IdleQueue:
 			if alarm_time > current_time:
 				break
 			if self.alarms.has_key(alarm_time):
-				for cb in self.alarms[alarm_time]:
-					cb()
-				del(self.alarms[alarm_time])
+				for cb in self.alarms[alarm_time]: cb()
+				if self.alarms.has_key(alarm_time): del(self.alarms[alarm_time])
 		
 	def plug_idle(self, obj, writable = True, readable = True):
 		if obj.fd == -1:

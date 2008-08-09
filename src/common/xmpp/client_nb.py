@@ -23,7 +23,7 @@ These classes can be used for simple applications "AS IS" though.
 
 import socket
 
-import transports_nb, tls_nb, dispatcher_nb, auth_nb, roster_nb, protocol, bosh
+import transports_nb, dispatcher_nb, auth_nb, roster_nb, protocol, bosh
 from client import *
 
 from protocol import NS_TLS
@@ -234,6 +234,7 @@ class NBCommonClient:
 					xmlns=NS_TLS)
 			self.send('<starttls xmlns="%s"/>' % NS_TLS)
 		else:
+			# we got <proceed> or <failure>
 			if tag.getNamespace() <> NS_TLS: 
 				self._on_connect_failure('Unknown namespace: %s' % tag.getNamespace())
 				return

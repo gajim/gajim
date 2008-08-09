@@ -21,7 +21,7 @@ from simplexml import ustr
 from client import PlugIn
 from idlequeue import IdleObject
 from protocol import *
-from tls_nb import NonBlockingTLS
+import tls_nb
 
 import sys
 import os
@@ -304,7 +304,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 	
 	def tls_init(self, on_succ, on_fail):
 		cacerts, mycerts = self.certs
-		result = NonBlockingTLS(cacerts, mycerts).PlugIn(self)
+		result = tls_nb.NonBlockingTLS(cacerts, mycerts).PlugIn(self)
 		if result: on_succ()
 		else:      on_fail()
 
@@ -436,7 +436,10 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 
 	def _do_receive(self):
 		''' Reads all pending incoming data. Calls owner's disconnected() method if appropriate.'''
-		ERR_DISCONN = -2 # Misc error signifying that we got disconnected
+		# Misc error signifying that we got disconnected
+		ERR_DISCONN = -2 
+		# code for unknown/other errors
+		ERR_OTHER = -3
 		received = None
 		errnum = 0
 		errstr = 'No Error Set'
@@ -444,9 +447,13 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 		try: 
 			# get as many bites, as possible, but not more than RECV_BUFSIZE
 			received = self._recv(RECV_BUFSIZE)
-		except (socket.error, socket.herror, socket.gaierror), (errnum, errstr):
+		except socket.error, (errnum, errstr):
 			# save exception number and message to errnum, errstr
 			log.info("_do_receive: got %s:" % received , exc_info=True)
+		except tls_nb.SSLWrapper.Error, e:
+			log.info("_do_receive, caugth SSL error: got %s:" % received , exc_info=True)
+			errnum = tls_nb.gattr(e, 'errno') or ERR_OTHER
+			errstr = tls_nb.gattr(e, 'exc_str')
 		
 		if received == '':
 			errnum = ERR_DISCONN
@@ -456,25 +463,24 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 			# ECONNRESET - connection you are trying to access has been reset by the peer
 			# ENOTCONN - Transport endpoint is not connected
 			# ESHUTDOWN  - shutdown(2) has been called on a socket to close down the
-			# sending end of the transmision, and then data was attempted to be sent
+			#     sending end of the transmision, and then data was attempted to be sent
 			log.error("Connection to %s lost: %s %s" % ( self.server, errnum, errstr), exc_info=True)
 			if hasattr(self, 'on_remote_disconnect'): self.on_remote_disconnect()
 			else: self.disconnect()
 			return
 
 		if received is None:
-			# in case of SSL error - because there are two types of TLS wrappers, the TLS
-			# pluging recv method returns None in case of error
-			print 'SSL ERROR'
+			# because there are two types of TLS wrappers, the TLS plugin recv method
+			# returns None in case of error
 			if errnum != 0:
 				log.error("CConnection to %s lost: %s %s" % (self.server, errnum, errstr))
 				self.disconnect()
 				return
 			received = ''
+			return
 
 		# we have received some bytes, stop the timeout!
 		self.renew_send_timeout()
-		print '-->%s<--' % received
 		# pass received data to owner
 		if self.on_receive:
 			self.raise_event(DATA_RECEIVED, received)
@@ -732,7 +738,7 @@ class NBHTTPProxySocket(NBProxySocket):
 			return
 		if len(reply) != 2:
 			pass
-		NonBlockingT._on_connect(self)
+		NonBlockingTCP._on_connect(self)
 		#self.onreceive(self._on_proxy_auth)
 
 	def _on_proxy_auth(self, reply):

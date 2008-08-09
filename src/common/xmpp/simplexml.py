@@ -20,7 +20,6 @@ I'm personally using it in many other separate projects. It is designed to be as
 import xml.parsers.expat
 import logging
 log = logging.getLogger('gajim.c.x.simplexml')
-#log.setLevel(logging.DEBUG)
 
 def XMLescape(txt):
 	'''Returns provided string with symbols & < > " replaced by their respective XML entities.'''

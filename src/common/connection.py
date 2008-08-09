@@ -515,13 +515,12 @@ class Connection(ConnectionHandlers):
 					'connection_types').split()
 			else:
 				self._connection_types = ['tls', 'ssl', 'plain']
-			#THEHACK
-			#self._connection_types = ['ssl', 'plain']
 
 			if self._proxy and self._proxy['type']=='bosh':
 				# with BOSH, we can't do TLS negotiation with <starttls>, we do only "plain"
 				# connection and TLS with handshake right after TCP connecting ("ssl")
-				try: self._connection_types.remove('tls')
+				try:
+					self._connection_types.remove('tls')
 				except ValueError: pass
 
 			host = self.select_next_host(self._hosts)
@@ -553,7 +552,12 @@ class Connection(ConnectionHandlers):
 
 			if self._current_type == 'ssl':
 				# SSL (force TLS on different port than plain)
-				port = self._current_host['ssl_port']
+				# If we do TLS over BOSH, port of XMPP server should be the standard one
+				# and TLS should be negotiated because immediate TLS on 5223 is deprecated
+				if self._proxy and self._proxy['type']=='bosh':
+					port = self._current_host['port']
+				else:
+					port = self._current_host['ssl_port']
 			elif self._current_type == 'tls':
 				# TLS - negotiate tls after XMPP stream is estabilished
 				port = self._current_host['port']
