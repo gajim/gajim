@@ -449,8 +449,8 @@ class ConversationTextview:
 
 		end_iter = begin_iter.copy()
 		# XXX: Is there a nicer way?
-		end_iter.forward_char();
-		end_iter.forward_char();
+		end_iter.forward_char()
+		end_iter.forward_char()
 
 		buffer.delete(begin_iter, end_iter)
 		buffer.delete_mark(self.xep0184_marks[id])
