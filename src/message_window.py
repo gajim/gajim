@@ -198,8 +198,11 @@ class MessageWindow(object):
 			return
 
 		def on_minimize(ctrl):
-			self.on_delete_ok -= 1
 			ctrl.minimize()
+			if self.on_delete_ok == 1:
+				self.dont_warn_on_delete = True
+				win.destroy()
+			self.on_delete_ok -= 1
 
 		# Make sure all controls are okay with being deleted
 		ctrl_to_minimize = []
