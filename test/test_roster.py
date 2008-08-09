@@ -2,8 +2,8 @@ import unittest
 
 import time
 
-import testlib
-testlib.setup_env()
+import lib
+lib.setup_env()
 
 from data import *
 

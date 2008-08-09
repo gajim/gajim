@@ -1,10 +1,11 @@
 import sys
 import os.path
 
-gajim_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
+gajim_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../..')
 
-# look for modules in the CWD, then gajim/src, then everywhere else
+# look for modules in the CWD, then gajim/test/lib, then gajim/src, then everywhere else
 sys.path.insert(1, gajim_root + '/src')
+sys.path.insert(1, gajim_root + '/test/lib')
 
 # a temporary version of ~/.gajim for testing
 configdir = gajim_root + '/test/tmp'

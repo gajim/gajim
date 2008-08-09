@@ -1,8 +1,8 @@
 # tests for the miscellaneous functions scattered throughout src/gajim.py
 import unittest
 
-import testlib
-testlib.setup_env()
+import lib
+lib.setup_env()
 
 from common import gajim
 from gajim import Interface
