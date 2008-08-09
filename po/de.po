@@ -5317,7 +5317,7 @@ msgid "Day Off"
 msgstr "Freier Tag"
 
 #: ../src/common/pep.py:78
-msgid "Haning out"
+msgid "Hanging out"
 msgstr "Rumhängen"
 
 #: ../src/common/pep.py:79

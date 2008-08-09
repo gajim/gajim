@@ -5261,7 +5261,7 @@ msgstr "Выходной день"
 
 #: ../src/common/pep.py:78
 #, fuzzy
-msgid "Haning out"
+msgid "Hanging out"
 msgstr "тусовка"
 
 #: ../src/common/pep.py:79

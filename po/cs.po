@@ -5265,7 +5265,7 @@ msgid "Day Off"
 msgstr "Den volna"
 
 #: ../src/common/pep.py:78
-msgid "Haning out"
+msgid "Hanging out"
 msgstr "Venku za zábavou"
 
 #: ../src/common/pep.py:79
