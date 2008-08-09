@@ -4933,15 +4933,15 @@ msgstr "Verblüfft"
 
 #: ../src/common/pep.py:5
 msgid "Angry"
-msgstr "Aufgebracht"
+msgstr "Wütend"
 
 #: ../src/common/pep.py:5
 msgid "Annoyed"
-msgstr "Verärgert"
+msgstr "Ärgerlich"
 
 #: ../src/common/pep.py:6
 msgid "Anxious"
-msgstr "Besorgt"
+msgstr "Ängstlich"
 
 #: ../src/common/pep.py:6
 msgid "Aroused"
@@ -5069,7 +5069,7 @@ msgstr "Interessiert"
 
 #: ../src/common/pep.py:22
 msgid "Intoxicated"
-msgstr "Betrunken"
+msgstr "Berauscht"
 
 #: ../src/common/pep.py:22
 msgid "Invincible"
@@ -5089,7 +5089,7 @@ msgstr "Fies"
 
 #: ../src/common/pep.py:24
 msgid "Moody"
-msgstr "Mürrisch"
+msgstr "Launisch"
 
 #: ../src/common/pep.py:25
 msgid "Nervous"
@@ -5117,7 +5117,7 @@ msgstr "Erleichtert"
 
 #: ../src/common/pep.py:28
 msgid "Remorseful"
-msgstr "Reumütig"
+msgstr "Reuevoll"
 
 #: ../src/common/pep.py:28
 msgid "Restless"
@@ -5173,7 +5173,7 @@ msgstr "Besorgt"
 
 #: ../src/common/pep.py:40
 msgid "Doing Chores"
-msgstr "Mache den Haushalt"
+msgstr "Haushalt machen"
 
 #: ../src/common/pep.py:41
 msgid "Buying Groceries"
@@ -5190,11 +5190,11 @@ msgstr "Kochen"
 #: ../src/common/pep.py:44
 #, fuzzy
 msgid "Doing Maintenance"
-msgstr "Wartungsarbeiten"
+msgstr "Instanthaltung"
 
 #: ../src/common/pep.py:45
 msgid "Doing the Dishes"
-msgstr "Geschirr abspülen"
+msgstr "Geschirr spülen"
 
 #: ../src/common/pep.py:46
 msgid "Doing the Laundry"
@@ -5214,7 +5214,7 @@ msgstr "Hund ausführen"
 
 #: ../src/common/pep.py:50
 msgid "Drinking"
-msgstr "In der Kneipe"
+msgstr "Etwas trinken"
 
 #: ../src/common/pep.py:51
 msgid "Having a Beer"
@@ -5230,7 +5230,7 @@ msgstr "Tee trinken"
 
 #: ../src/common/pep.py:55
 msgid "Having a Snack"
-msgstr "Beim Imbiss"
+msgstr "Zwischenmahlzeit"
 
 #: ../src/common/pep.py:56
 msgid "Having Breakfast"
@@ -5246,7 +5246,7 @@ msgstr "Mittagessen"
 
 #: ../src/common/pep.py:59
 msgid "Exercising"
-msgstr "Üben"
+msgstr "Sport machen"
 
 #: ../src/common/pep.py:60 ../src/common/pep.py:99
 msgid "Cycling"
@@ -5302,7 +5302,7 @@ msgstr "Rasieren"
 
 #: ../src/common/pep.py:73
 msgid "Taking a Bath"
-msgstr "Ein Bad nehmen"
+msgstr "Baden"
 
 #: ../src/common/pep.py:74
 msgid "Taking a Shower"
@@ -5310,7 +5310,7 @@ msgstr "Unter der Dusche"
 
 #: ../src/common/pep.py:75
 msgid "Having an Appointment"
-msgstr "Habe einen Termin"
+msgstr "Termin"
 
 #: ../src/common/pep.py:77
 msgid "Day Off"
@@ -5328,7 +5328,7 @@ msgstr "Im Urlaub"
 #: ../src/common/pep.py:80
 #, fuzzy
 msgid "Scheduled Holiday"
-msgstr "Urlaub"
+msgstr "Geplanter Urlaub"
 
 #: ../src/common/pep.py:82
 msgid "Relaxing"
@@ -5356,11 +5356,11 @@ msgstr "Studieren"
 
 #: ../src/common/pep.py:88
 msgid "Shopping"
-msgstr "Beim Einkaufen"
+msgstr "Shoppen"
 
 #: ../src/common/pep.py:89
 msgid "Socializing"
-msgstr "Kontakte knüpfen"
+msgstr "Unter Leuten"
 
 #: ../src/common/pep.py:90
 msgid "Sunbathing"
@@ -5380,7 +5380,7 @@ msgstr "Im Gespräch"
 
 #: ../src/common/pep.py:94
 msgid "In Real Life"
-msgstr "Im wahren Leben"
+msgstr "Im echten Leben"
 
 #: ../src/common/pep.py:95
 msgid "On the Phone"
@@ -5392,7 +5392,7 @@ msgstr "Am Videotelefon"
 
 #: ../src/common/pep.py:97
 msgid "Traveling"
-msgstr "Auf Reisen"
+msgstr "Reisen"
 
 #: ../src/common/pep.py:98
 msgid "Commuting"
@@ -5420,7 +5420,7 @@ msgstr "Im Zug"
 
 #: ../src/common/pep.py:105
 msgid "On a Trip"
-msgstr "Auf Reisen"
+msgstr "Auf einer Reise"
 
 #: ../src/common/pep.py:106
 msgid "Walking"
@@ -5432,11 +5432,11 @@ msgstr "Programmieren"
 
 #: ../src/common/pep.py:109
 msgid "In a Meeting"
-msgstr "Bei einer Besprechung"
+msgstr "In einer Besprechung"
 
 #: ../src/common/pep.py:110
 msgid "Studying"
-msgstr "Lerne"
+msgstr "Lernen"
 
 #: ../src/common/pep.py:111
 msgid "Writing"
@@ -5449,7 +5449,7 @@ msgid ""
 "went wrong.]"
 msgstr ""
 "[Dies ist ein Teil einer verschlüsselten Unterhaltung. Wenn Sie diese "
-"Nachricht sehen, ist etwas nicht Ordnung.]"
+"Nachricht sehen, ist etwas schief gegangen.]"
 
 #: ../src/common/zeroconf/client_zeroconf.py:408
 msgid ""
