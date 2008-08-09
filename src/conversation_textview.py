@@ -556,8 +556,8 @@ class ConversationTextview:
 			# check if the current pointer is still over the line
 			position = self.tv.window.get_origin()
 			self.line_tooltip.show_tooltip(_('Text below this line is what has '
-			'been said since the last time you paid attention to this group chat'),
-				8, position[1] + pointer[1])
+				'been said since the\nlast time you paid attention to this group '
+				'chat'), 8, position[1] + pointer[1])
 
 	def on_textview_expose_event(self, widget, event):
 		expalloc = event.area
