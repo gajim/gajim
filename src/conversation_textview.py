@@ -537,9 +537,9 @@ class ConversationTextview:
 			# check if the current pointer is still over the line
 			position = self.tv.window.get_origin()
 			self.xep0184_warning_tooltip.show_tooltip(_('This icon indicates that '
-				'this message has not been delivered yet.\nIf this icon stays for '
-				"a long time, it's likely the message got lost."), 8,
-				position[1] + pointer[1])
+				'this message has not yet\nbeen received by the remote end. '
+				"If this icon stays\nfor a long time, it's likely the message got "
+				'lost.'), 8, position[1] + pointer[1])
 
 	def show_line_tooltip(self):
 		pointer = self.tv.get_pointer()
