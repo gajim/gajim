@@ -816,6 +816,9 @@ class Interface:
 				for sess in conn.get_sessions(ji):
 					if (ji+'/'+resource) != str(sess.jid):
 						continue
+					ctrl = sess.control
+					if ctrl:
+						ctrl.no_autonegotiation = False
 					if sess.enable_encryption:
 						sess.terminate_e2e()
 						conn.delete_session(jid,

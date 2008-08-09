@@ -1153,6 +1153,7 @@ class ChatControl(ChatControlBase):
 				self.print_esession_details()
 
 		# Enable encryption if needed
+		self.no_autonegotiation = False
 		e2e_is_active = self.session and self.session.enable_encryption
 		self.gpg_is_active = False
 		gpg_pref = gajim.config.get_per('contacts', contact.jid,
@@ -2324,22 +2325,18 @@ class ChatControl(ChatControlBase):
 				self.account, 'autonegotiate_esessions') and \
 				gajim.config.get_per('contacts',
 				self.contact.jid, 'autonegotiate_esessions')
-
 			want_e2e = not e2e_is_active and not self.gpg_is_active \
 				and e2e_pref
 
-			already_negotiating = bool(self.session and \
-				self.session.status)
-
 			# XXX: Once we have fallback to disco, remove
 			#      notexistant check
-			can_e2e = gajim.HAVE_PYCRYPTO and gajim.capscache. \
-				is_supported(self.contact, NS_ESESSION) and \
-				not gajim.capscache.is_supported(self.contact,
-				'notexistant')
-
-			if want_e2e and not already_negotiating and can_e2e:
+			if want_e2e and not self.no_autonegotiation \
+			and gajim.HAVE_PYCRYPTO \
+			and gajim.capscache.is_supported(self.contact,
+			NS_ESESSION) and not gajim.capscache.is_supported(
+			self.contact, 'notexistant'):
 				self.begin_e2e_negotiation()
+				self.no_autonegotiation = True
 		else:
 			self.send_chatstate('active', self.contact)
 
