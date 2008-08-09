@@ -151,7 +151,7 @@ class TestChatControlSession(unittest.TestCase):
 		jid = 'bct@necronomicorp.com/Gajim'
 		msgtxt = 'testing one two three'
 
-		self.sess.control = MockChatControl()
+		self.sess.control = MockChatControl(jid, account_name)
 
 		self.receive_chat_msg(jid, msgtxt)
 
@@ -175,7 +175,7 @@ class TestChatControlSession(unittest.TestCase):
 		fjid = jid + '/Gajim'
 		msgtxt = 'testing one two three'
 
-		ctrl = MockChatControl()
+		ctrl = MockChatControl(jid, account_name)
 		gajim.interface.msg_win_mgr = Mock({'get_control': ctrl})
 		gajim.interface.msg_win_mgr.mockSetExpectation('get_control',
 			expectParams(jid, account_name))

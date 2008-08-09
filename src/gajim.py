@@ -813,7 +813,7 @@ class Interface:
 				# FIXME: This *REALLY* are TOO many leves of
 				#	 indentation! We even need to introduce
 				#	 a temp var here to make it somehow fit!
-				for sess in  conn.get_sessions(ji):
+				for sess in conn.get_sessions(ji):
 					if (ji+'/'+resource) != str(sess.jid):
 						continue
 					if sess.enable_encryption:
@@ -852,8 +852,10 @@ class Interface:
 		highest = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		is_highest = (highest and highest.resource == resource)
 
-		if was_highest and not is_highest:
+		# disconnect the session from the ctrl if the highest resource has changed
+		if (was_highest and not is_highest) or (not was_highest and is_highest):
 			ctrl = self.msg_win_mgr.get_control(jid, account)
+
 			if ctrl:
 				ctrl.set_session(None)
 				ctrl.contact = highest
