@@ -3954,7 +3954,7 @@ msgstr "'yes', 'no' ou ''"
 
 #: ../src/common/config.py:407
 msgid "Sleeping"
-msgstr "Dors"
+msgstr "Dort"
 
 #: ../src/common/config.py:408
 msgid "Back soon"
@@ -5105,7 +5105,7 @@ msgstr "Discute"
 
 #: ../src/common/helpers.py:384
 msgid "Doing Chores"
-msgstr "fait des corvées"
+msgstr "Fait des corvées"
 
 #: ../src/common/helpers.py:385
 msgid "Traveling"
