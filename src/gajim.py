@@ -663,6 +663,8 @@ class Interface:
 		self.roster.fire_up_unread_messages_events(account)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('Roster', (account, data))
+		
+		gajim.ged.raise_event('Roster', (account, data))
 
 	def handle_event_warning(self, unused, data):
 		#('WARNING', account, (title_text, section_text))
@@ -796,6 +798,7 @@ class Interface:
 			self.edit_own_details(account)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('AccountPresence', (status, account))
+		gajim.ged.raise_event('AccountPresence', (status, account))
 
 	def edit_own_details(self, account):
 		jid = gajim.get_jid_from_account(account)
@@ -950,17 +953,20 @@ class Interface:
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactPresence',
 						(account, array))
+				gajim.ged.raise_event('ContactPresence', (account, array))
 
 			elif old_show > 1 and new_show < 2:
 				notify.notify('contact_disconnected', jid, account, status_message)
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactAbsence', (account, array))
+					gajim.ged.raise_event('ContactAbsence', (account, array))
 				# FIXME: stop non active file transfers
 			elif new_show > 1: # Status change (not connected/disconnected or error (<1))
 				notify.notify('status_change', jid, account, [new_show,
 					status_message])
 				if self.remote_ctrl:
 					self.remote_ctrl.raise_signal('ContactStatus', (account, array))
+				gajim.ged.raise_event('ContactStatus', (account, array))
 		else:
 			# FIXME: Msn transport (CMSN1.2.1 and PyMSN) doesn't follow the XEP
 			# still the case in 2008
@@ -1029,6 +1035,7 @@ class Interface:
 		dialogs.SubscriptionRequestWindow(array[0], array[1], account, array[2])
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('Subscribe', (account, array))
+		gajim.ged.raise_event('Subscribe', (account, array))
 
 	def handle_event_subscribed(self, account, array):
 		#('SUBSCRIBED', account, (jid, resource))
@@ -1060,11 +1067,13 @@ class Interface:
 			gajim.connections[account].ack_subscribed(jid)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('Subscribed', (account, array))
+		gajim.ged.raise_event('Subscribed', (account, array))
 
 	def handle_event_unsubscribed(self, account, jid):
 		gajim.connections[account].ack_unsubscribed(jid)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('Unsubscribed', (account, jid))
+		gajim.ged.raise_event('Unsubscribed', (account, jid))
 
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if not contact:
@@ -1159,6 +1168,7 @@ class Interface:
 
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewAccount', (account, array))
+		gajim.ged.raise_event('NewAccount', (account, array))
 
 	def handle_event_acc_not_ok(self, account, array):
 		#('ACC_NOT_OK', account, (reason))
@@ -1227,6 +1237,7 @@ class Interface:
 			self.roster.draw_avatar(jid, account)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('VcardInfo', (account, vcard))
+		gajim.ged.raise_event('VcardInfo', (account, vcard))
 
 	def handle_event_last_status_time(self, account, array):
 		# ('LAST_STATUS_TIME', account, (jid, resource, seconds, status))
@@ -1248,6 +1259,7 @@ class Interface:
 				win.set_last_status_time()
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('LastStatusTime', (account, array))
+		gajim.ged.raise_event('LastStatusTime', (account, array))
 
 	def handle_event_os_info(self, account, array):
 		#'OS_INFO' (account, (jid, resource, client_info, os_info))
@@ -1260,6 +1272,7 @@ class Interface:
 			win.set_os_info(array[1], array[2], array[3])
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('OsInfo', (account, array))
+		gajim.ged.raise_event('OsInfo', (account, array))
 
 	def handle_event_gc_notify(self, account, array):
 		#'GC_NOTIFY' (account, (room_jid, show, status, nick,
@@ -1321,6 +1334,7 @@ class Interface:
 				ctrl.update_ui()
 			if self.remote_ctrl:
 				self.remote_ctrl.raise_signal('GCPresence', (account, array))
+			gajim.ged.raise_event('GCPresence', (account, array))
 
 	def handle_event_gc_msg(self, account, array):
 		# ('GC_MSG', account, (jid, msg, time, has_timestamp, htmlmsg,
@@ -1350,6 +1364,7 @@ class Interface:
 
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('GCMessage', (account, array))
+		gajim.ged.raise_event('GCMessage', (account, array))
 
 	def handle_event_gc_subject(self, account, array):
 		#('GC_SUBJECT', account, (jid, subject, body, has_timestamp))
@@ -1621,6 +1636,7 @@ class Interface:
 		self.roster.draw_contact(jid, account)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('RosterInfo', (account, array))
+		gajim.ged.raise_event('RosterInfo', (account, array))
 
 	def handle_event_bookmarks(self, account, bms):
 		# ('BOOKMARKS', account, [{name,jid,autojoin,password,nick}, {}])
@@ -1683,6 +1699,7 @@ class Interface:
 
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewGmail', (account, array))
+		gajim.ged.raise_event('NewGmail', (account, array))
 
 	def handle_event_file_request_error(self, account, array):
 		# ('FILE_REQUEST_ERROR', account, (jid, file_props, error_msg))
@@ -3472,9 +3489,23 @@ class Interface:
 		gobject.timeout_add_seconds(gajim.config.get(
 			'check_idle_every_foo_seconds'), self.read_sleepy)
 		
+		# Creating Global Events Dispatcher
+		from common import ged
+		gajim.ged = ged.GlobalEventsDispatcher()
+		self.register_core_handlers()
+		
 		# Creating plugin manager
 		import plugins
 		gajim.plugin_manager = plugins.PluginManager()
+		
+	def register_core_handlers(self):
+		'''
+		Register core handlers in Global Events Dispatcher (GED).
+		
+		This part of rewriting whole evetns handling system to use GED.
+		Of course this can be done anywhere else.
+		'''
+		pass
 
 if __name__ == '__main__':
 	def sigint_cb(num, stack):

@@ -62,6 +62,7 @@ connections = {} # 'account name': 'account (connection.Connection) instance'
 verbose = False
 ipython_window = None
 plugin_manager = None
+ged = None # Global Events Dispatcher
 
 h = logging.StreamHandler()
 f = logging.Formatter('%(asctime)s %(name)s: %(message)s', '%d %b %Y %H:%M:%S')

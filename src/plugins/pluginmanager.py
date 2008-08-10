@@ -236,6 +236,22 @@ class PluginManager(object):
 		if gui_extpoint_name in self.gui_extension_points_handlers:
 			for handlers in self.gui_extension_points_handlers[gui_extpoint_name]:
 				handlers[0](*args)
+				
+	def _register_events_handlers_in_ged(self, plugin):
+		for event_name, handler in plugin.events_handlers.iteritems():
+			priority = handler[0]
+			handler_function = handler[1]
+			gajim.ged.register_event_handler(event_name,
+											 priority,
+											 handler_function)
+			
+	def _remove_events_handler_from_ged(self, plugin):
+		for event_name, handler in plugin.events_handlers.iteritems():
+			priority = handler[0]
+			handler_function = handler[1]
+			gajim.ged.remove_event_handler(event_name,
+											 priority,
+											 handler_function)
 
 	@log_calls('PluginManager')
 	def activate_plugin(self, plugin):
@@ -244,13 +260,16 @@ class PluginManager(object):
 		:type plugin: class object of `GajimPlugin` subclass
 		
 		:todo: success checks should be implemented using exceptions. Such
-			control should also be implemented in deactivation.
+			control should also be implemented in deactivation. Exceptions
+			should be shown to user inside popup dialog, so the reason
+			for not activating plugin is known.
 		'''
 		success = False
 		if not plugin.active:
 	
 			self._add_gui_extension_points_handlers_from_plugin(plugin)
 			self._handle_all_gui_extension_points_with_plugin(plugin)
+			self._register_events_handlers_in_ged(plugin)
 			
 			success = True
 			
@@ -279,6 +298,8 @@ class PluginManager(object):
 					handler = gui_extpoint_handlers[1]
 					if handler:
 						handler(*gui_extension_point_args)
+						
+		self._remove_events_handler_from_ged(plugin)
 		
 		# removing plug-in from active plug-ins list
 		plugin.deactivate()
@@ -391,17 +412,17 @@ class PluginManager(object):
 					
 					
 				if module:
-					#log.debug('Attributes processing started')
+					log.debug('Attributes processing started')
 					for module_attr_name in [attr_name for attr_name in dir(module) 
 											 if not (attr_name.startswith('__') or 
 													 attr_name.endswith('__'))]:
 						module_attr = getattr(module, module_attr_name)
-						#log.debug('%s : %s'%(module_attr_name, module_attr))
+						log.debug('%s : %s'%(module_attr_name, module_attr))
 						
 						try:
 							if issubclass(module_attr, GajimPlugin) and \
 							   not module_attr is GajimPlugin:
-								#log.debug('is subclass of GajimPlugin')
+								log.debug('is subclass of GajimPlugin')
 								#log.debug('file_path: %s\nabspath: %s\ndirname: %s'%(file_path, os.path.abspath(file_path), os.path.dirname(os.path.abspath(file_path))))
 								#log.debug('file_path: %s\ndirname: %s\nabspath: %s'%(file_path, os.path.dirname(file_path), os.path.abspath(os.path.dirname(file_path))))
 								module_attr.__path__ = os.path.abspath(os.path.dirname(file_path))

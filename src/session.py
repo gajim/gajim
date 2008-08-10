@@ -224,6 +224,12 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 					(self.conn.name, [full_jid_with_resource, msgtxt, tim,
 						encrypted, msg_type, subject, chatstate, msg_id,
 						composing_xep, user_nick, xhtml, form_node]))
+			
+		gajim.ged.raise_event('NewMessage', 
+			(self.conn.name, [full_jid_with_resource, msgtxt, tim,
+							  encrypted, msg_type, subject, chatstate, msg_id,
+							  composing_xep, user_nick, xhtml, form_node]))
+		
 
 	# display the message or show notification in the roster
 	def roster_message(self, jid, msg, tim, encrypted=False, msg_type='',

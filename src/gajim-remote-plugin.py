@@ -51,9 +51,9 @@ except:
 	print str(exceptions.DbusNotSupported())
 	sys.exit(1)
 
-OBJ_PATH = '/org/gajim/dbus/RemoteObject'
-INTERFACE = 'org.gajim.dbus.RemoteInterface'
-SERVICE = 'org.gajim.dbus'
+OBJ_PATH = '/org/gajim/dbusplugin/RemoteObject'
+INTERFACE = 'org.gajim.dbusplugin.RemoteInterface'
+SERVICE = 'org.gajim.dbusplugin'
 BASENAME = 'gajim-remote-plugin'
 
 

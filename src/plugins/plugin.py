@@ -95,7 +95,17 @@ class GajimPlugin(object):
 	'''
 	gui_extension_points = {}
 	'''
-	Extension points that plugin wants to connect with.
+	Extension points that plugin wants to connect with and handlers to be used.
+	
+	Keys of this string should be strings with name of GUI extension point
+	to handles. Values should be 2-element tuples with references to handling
+	functions. First function will be used to connect plugin with extpoint,
+	the second one to successfuly disconnect from it. Connecting takes places
+	when plugin is activated and extpoint already exists, or when plugin is
+	already activated but extpoint is being created (eg. chat window opens).
+	Disconnecting takes place when plugin is deactivated and extpoint exists
+	or when extpoint is destroyed and plugin is activate (eg. chat window
+	closed).
 	'''
 	config_default_values = {}
 	'''
@@ -110,6 +120,17 @@ class GajimPlugin(object):
 	can be used if need and/or translation is planned).
 	
 	:type: {} of 2-element tuples
+	'''
+	events_handlers = {}
+	'''
+	Dictionary with events handlers.
+	
+	Keys are event names. Values should be 2-element tuples with handler
+	priority as first element and reference to handler function as second
+	element. Priority is integer. See `ged` module for predefined priorities
+	like `ged.PRECORE`, `ged.CORE` or `ged.POSTCORE`.
+	
+	:type: {} with 2-element tuples
 	'''
 	
 	@log_calls('GajimPlugin')
