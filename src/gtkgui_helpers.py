@@ -768,7 +768,7 @@ def destroy_widget(widget):
 
 def on_avatar_save_as_menuitem_activate(widget, jid, account,
 default_name = ''):
-	def on_continue(response):
+	def on_continue(response, file_path):
 		if response < 0:
 			return
 		# Get pixbuf
@@ -795,9 +795,11 @@ default_name = ''):
 			if os.path.exists(file_path):
 				os.remove(file_path)
 			new_file_path = '.'.join(file_path.split('.')[:-1]) + '.jpeg'
+			def on_ok(file_path, pixbuf):
+				pixbuf.save(file_path, 'jpeg')
 			dialogs.ConfirmationDialog(_('Extension not supported'),
 				_('Image cannot be saved in %(type)s format. Save as %(new_filename)s?') % {'type': type_, 'new_filename': new_file_path},
-				on_response_ok = (on_ok2, new_file_path, pixbuf))
+				on_response_ok = (on_ok, new_file_path, pixbuf))
 		else:
 			dialog.destroy()
 
@@ -819,7 +821,7 @@ default_name = ''):
 				return
 			dialog2 = dialogs.FTOverwriteConfirmationDialog(
 				_('This file already exists'), _('What do you want to do?'),
-				propose_resume=False, on_response=on_continue)
+				propose_resume=False, on_response=(on_continue, file_path))
 			dialog2.set_transient_for(dialog)
 			dialog2.set_destroy_with_parent(True)
 		else:
@@ -830,7 +832,7 @@ default_name = ''):
 				' directory.'))
 				return
 
-		on_continue(0)
+		on_continue(0, file_path)
 
 	def on_cancel(widget):
 		dialog.destroy()
