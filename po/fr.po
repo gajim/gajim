@@ -4840,538 +4840,533 @@ msgid "Member"
 msgstr "Membre"
 
 #: ../src/common/helpers.py:350
-msgid "afraid"
-msgstr "effrayé"
+msgid "Afraid"
+msgstr "Effrayé"
 
 #: ../src/common/helpers.py:350
-msgid "amazed"
-msgstr "épaté"
+msgid "Amazed"
+msgstr "Épaté"
 
 #: ../src/common/helpers.py:350
-msgid "angry"
-msgstr "en colère"
+msgid "Angry"
+msgstr "En colère"
 
 #: ../src/common/helpers.py:351
-msgid "annoyed"
-msgstr "ennuyé"
+msgid "Annoyed"
+msgstr "Ennuyé"
 
 #: ../src/common/helpers.py:351
-msgid "anxious"
-msgstr "anxious"
+msgid "Anxious"
+msgstr "Anxieux"
 
 #: ../src/common/helpers.py:351
-msgid "aroused"
-msgstr "excité"
+msgid "Aroused"
+msgstr "Excité"
 
 #: ../src/common/helpers.py:352
-msgid "ashamed"
-msgstr "honteux"
+msgid "Ashamed"
+msgstr "Honteux"
 
 #: ../src/common/helpers.py:352
-msgid "bored"
-msgstr "ennuyé"
+msgid "Bored"
+msgstr "Ennuyé"
 
 #: ../src/common/helpers.py:352
-msgid "brave"
-msgstr "courageux"
+msgid "Brave"
+msgstr "Courageux"
 
 #: ../src/common/helpers.py:353
-msgid "calm"
-msgstr "calme"
+msgid "Calm"
+msgstr "Calme"
 
 #: ../src/common/helpers.py:353
-msgid "cold"
-msgstr "froid"
+msgid "Cold"
+msgstr "Froid"
 
 #: ../src/common/helpers.py:353
-msgid "confused"
-msgstr "confus"
+msgid "Confused"
+msgstr "Confus"
 
 #: ../src/common/helpers.py:354
-msgid "contented"
-msgstr "satisfait"
+msgid "Contented"
+msgstr "Satisfait"
 
 #: ../src/common/helpers.py:354
-msgid "cranky"
-msgstr "grincheux"
+msgid "Cranky"
+msgstr "Grincheux"
 
 #: ../src/common/helpers.py:354
-msgid "curious"
-msgstr "curieux"
+msgid "Curious"
+msgstr "Curieux"
 
 #: ../src/common/helpers.py:355
-msgid "depressed"
-msgstr "déprimé"
+msgid "Depressed"
+msgstr "Déprimé"
 
 #: ../src/common/helpers.py:355
-msgid "disappointed"
-msgstr "déçu"
+msgid "Disappointed"
+msgstr "Déçu"
 
 #: ../src/common/helpers.py:356
-msgid "disgusted"
-msgstr "écœuré"
+msgid "Disgusted"
+msgstr "Écœuré"
 
 #: ../src/common/helpers.py:356
-msgid "distracted"
-msgstr "distrait"
+msgid "Distracted"
+msgstr "Distrait"
 
 #: ../src/common/helpers.py:357
-msgid "embarrassed"
-msgstr "embarrassé"
+msgid "Embarrassed"
+msgstr "Embarrassé"
 
 #: ../src/common/helpers.py:357
-msgid "excited"
-msgstr "excité"
+msgid "Excited"
+msgstr "Excité"
 
 #: ../src/common/helpers.py:358
-msgid "flirtatious"
-msgstr "galant"
+msgid "Flirtatious"
+msgstr "Galant"
 
 #: ../src/common/helpers.py:358
-msgid "frustrated"
-msgstr "frustré"
+msgid "Frustrated"
+msgstr "Frustré"
 
 #: ../src/common/helpers.py:359
-msgid "grumpy"
-msgstr "grognon"
+msgid "Grumpy"
+msgstr "Grognon"
 
 #: ../src/common/helpers.py:359
-msgid "guilty"
-msgstr "coupable"
+msgid "Guilty"
+msgstr "Coupable"
 
 #: ../src/common/helpers.py:359
-msgid "happy"
-msgstr "joyeux"
+msgid "Happy"
+msgstr "Joyeux"
 
 #: ../src/common/helpers.py:360
-msgid "hot"
-msgstr "chaud"
+msgid "Hot"
+msgstr "Chaud"
 
 #: ../src/common/helpers.py:360
-msgid "humbled"
-msgstr "humilié"
+msgid "Humbled"
+msgstr "Humble"
 
 #: ../src/common/helpers.py:360
-msgid "humiliated"
-msgstr "humilié"
+msgid "Humiliated"
+msgstr "Humilié"
 
 #: ../src/common/helpers.py:361
-msgid "hungry"
-msgstr "affamé"
+msgid "Hungry"
+msgstr "Affamé"
 
 #: ../src/common/helpers.py:361
-msgid "hurt"
-msgstr "blessé"
+msgid "Hurt"
+msgstr "Blessé"
 
 #: ../src/common/helpers.py:361
-msgid "impressed"
-msgstr "impressionné"
+msgid "Impressed"
+msgstr "Impressionné"
 
 #: ../src/common/helpers.py:362
-msgid "in awe"
-msgstr "craintif"
+msgid "In Awe"
+msgstr "Craintif"
 
 #: ../src/common/helpers.py:362
-msgid "in love"
-msgstr "amoureux"
+msgid "In Love"
+msgstr "Amoureux"
 
 #: ../src/common/helpers.py:362
-msgid "indignant"
-msgstr "indigné"
+msgid "Indignant"
+msgstr "Indigné"
 
 #: ../src/common/helpers.py:363
-msgid "interested"
-msgstr "intéressé"
+msgid "Interested"
+msgstr "Intéressé"
 
 #: ../src/common/helpers.py:363
-msgid "intoxicated"
-msgstr "intoxiqué"
+msgid "Thoughtful"
+msgstr "Pensif"
+
+#: ../src/common/helpers.py:363
+msgid "Intoxicated"
+msgstr "Intoxiqué"
 
 #: ../src/common/helpers.py:364
-msgid "invincible"
+msgid "Invincible"
 msgstr "Invincible"
 
 #: ../src/common/helpers.py:364
-msgid "jealous"
-msgstr "jaloux"
+msgid "Jealous"
+msgstr "Jaloux"
 
 #: ../src/common/helpers.py:364
-msgid "lonely"
-msgstr "solitaire"
+msgid "Lonely"
+msgstr "Solitaire"
 
 #: ../src/common/helpers.py:365
-msgid "mean"
-msgstr "méchant"
+msgid "Mean"
+msgstr "Méchant"
 
 #: ../src/common/helpers.py:365
-msgid "moody"
-msgstr "morose"
+msgid "Moody"
+msgstr "Morose"
 
 #: ../src/common/helpers.py:365
-msgid "nervous"
-msgstr "nerveux"
+msgid "Nervous"
+msgstr "Nerveux"
 
 #: ../src/common/helpers.py:366
-msgid "neutral"
-msgstr "neutre"
+msgid "Neutral"
+msgstr "Neutre"
 
 #: ../src/common/helpers.py:366
-msgid "offended"
-msgstr "outré"
+msgid "Offended"
+msgstr "Outré"
 
 #: ../src/common/helpers.py:366
-msgid "playful"
-msgstr "enjoué"
+msgid "Playful"
+msgstr "Enjoué"
 
 #: ../src/common/helpers.py:367
-msgid "proud"
-msgstr "fier"
+msgid "Proud"
+msgstr "Fier"
 
 #: ../src/common/helpers.py:367
-msgid "relieved"
-msgstr "soulagé"
+msgid "Relieved"
+msgstr "Soulagé"
 
 #: ../src/common/helpers.py:367
-msgid "remorseful"
-msgstr "plein de remords"
+msgid "Remorseful"
+msgstr "Plein de remords"
 
 #: ../src/common/helpers.py:368
-msgid "restless"
-msgstr "impatient"
+msgid "Restless"
+msgstr "Impatient"
 
 #: ../src/common/helpers.py:368
-msgid "sad"
-msgstr "triste"
+msgid "Sad"
+msgstr "Triste"
 
 #: ../src/common/helpers.py:368
-msgid "sarcastic"
-msgstr "sarcastique"
+msgid "Sarcastic"
+msgstr "Sarcastique"
 
 #: ../src/common/helpers.py:369
-msgid "serious"
-msgstr "concentré"
+msgid "Serious"
+msgstr "Concentré"
 
 #: ../src/common/helpers.py:369
-msgid "shocked"
-msgstr "choqué"
+msgid "Shocked"
+msgstr "Choqué"
 
 #: ../src/common/helpers.py:369
-msgid "shy"
-msgstr "timide"
+msgid "Shy"
+msgstr "Timide"
 
 #: ../src/common/helpers.py:370
-msgid "sick"
-msgstr "malade"
+msgid "Sick"
+msgstr "Malade"
 
 #: ../src/common/helpers.py:370
-msgid "sleepy"
-msgstr "endormi"
+msgid "Sleepy"
+msgstr "Endormi"
 
 #: ../src/common/helpers.py:370
-msgid "stressed"
-msgstr "stressé"
+msgid "Stressed"
+msgstr "Stressé"
 
 #: ../src/common/helpers.py:371
-msgid "surprised"
-msgstr "surpris"
+msgid "Surprised"
+msgstr "Surpris"
 
 #: ../src/common/helpers.py:371
-msgid "thirsty"
-msgstr "assoiffé"
+msgid "Thirsty"
+msgstr "Assoiffé"
 
 #: ../src/common/helpers.py:371
-msgid "worried"
-msgstr "inquiet"
-
-#. Activities
-#: ../src/common/helpers.py:382
-msgid "working"
-msgstr "travaille"
-
-#: ../src/common/helpers.py:382
-msgid "eating"
-msgstr "mange"
+msgid "Worried"
+msgstr "Inquiet"
 
 #: ../src/common/helpers.py:383
-msgid "excercising"
-msgstr "fait de l'exercice"
+msgid "Set an activity"
+msgstr "Pulier une activité"
 
 #: ../src/common/helpers.py:383
-msgid "relaxing"
-msgstr "se relaxe"
+msgid "Excercising"
+msgstr "Fait de l'exercice"
 
 #: ../src/common/helpers.py:383
-msgid "talking"
-msgstr "discute"
+msgid "Relaxing"
+msgstr "Se relaxe"
+
+#: ../src/common/helpers.py:383
+msgid "Talking"
+msgstr "Discute"
 
 #: ../src/common/helpers.py:384
-msgid "doing chores"
+msgid "Doing Chores"
 msgstr "fait des corvées"
 
-#: ../src/common/helpers.py:384
-msgid "inactive"
-msgstr "inactif"
+#: ../src/common/helpers.py:385
+msgid "Traveling"
+msgstr "Voyage"
 
 #: ../src/common/helpers.py:385
-msgid "traveling"
-msgstr "voyage"
-
-#: ../src/common/helpers.py:385
-msgid "having an appointment"
-msgstr "à un rendez-vous"
+msgid "Having an Appointment"
+msgstr "À un rendez-vous"
 
 #: ../src/common/helpers.py:386
-msgid "grooming"
-msgstr "se toilette"
+msgid "Grooming"
+msgstr "Se toilette"
 
 #: ../src/common/helpers.py:386
-msgid "drinking"
-msgstr "boit"
+msgid "Drinking"
+msgstr "Boit"
 
 #. Subactivites
 #: ../src/common/helpers.py:388
-msgid "on the phone"
-msgstr "au téléphone"
+msgid "On the Phone"
+msgstr "Au téléphone"
 
 #: ../src/common/helpers.py:388
-msgid "gardening"
-msgstr "jardine"
+msgid "Gardening"
+msgstr "Jardine"
 
 #: ../src/common/helpers.py:389
-msgid "hiking"
-msgstr "fait de la randonnée"
+msgid "Hiking"
+msgstr "Fait de la randonnée"
 
 #: ../src/common/helpers.py:389
-msgid "on vacation"
-msgstr "en vacances"
+msgid "On Vacation"
+msgstr "En vacances"
 
 #: ../src/common/helpers.py:389
-msgid "coding"
-msgstr "programme"
+msgid "Coding"
+msgstr "Programme"
 
 #: ../src/common/helpers.py:390
-msgid "walking"
-msgstr "marche"
+msgid "Walking"
+msgstr "Marche"
 
 #: ../src/common/helpers.py:390
-msgid "rehearsing"
-msgstr "se prépare"
-
-#: ../src/common/helpers.py:390
-msgid "sleeping"
-msgstr "dort"
+msgid "Rehearsing"
+msgstr "Se prépare"
 
 #: ../src/common/helpers.py:391
-msgid "brushing teeth"
-msgstr "se brosse les dents"
+msgid "Brushing Teeth"
+msgstr "Se brosse les dents"
 
 #: ../src/common/helpers.py:391
-msgid "playing sports"
-msgstr "fait du sport"
+msgid "Playing Sports"
+msgstr "Fait du sport"
 
 #: ../src/common/helpers.py:392
-msgid "skiing"
-msgstr "skie"
+msgid "Skiing"
+msgstr "Skie"
 
 #: ../src/common/helpers.py:392
-msgid "having breakfast"
-msgstr "prend le petit-déjeuner"
+msgid "Having Breakfast"
+msgstr "Prend le petit-déjeuner"
 
 #: ../src/common/helpers.py:393
-msgid "watching TV"
-msgstr "regarde la télé"
+msgid "Watching TV"
+msgstr "Regarde la télé"
 
 #: ../src/common/helpers.py:393
-msgid "doing the dishes"
-msgstr "fait la vaisselle"
+msgid "Doing the Dishes"
+msgstr "Fait la vaisselle"
 
 #: ../src/common/helpers.py:394
-msgid "at the spa"
-msgstr "à la station thermale"
+msgid "At the Spa"
+msgstr "À la station thermale"
 
 #: ../src/common/helpers.py:394
-msgid "cycling"
-msgstr "fait du vélo"
+msgid "Cycling"
+msgstr "Fait du vélo"
 
 #: ../src/common/helpers.py:395
-msgid "hanging out"
-msgstr "traîne"
+msgid "Hanging out"
+msgstr "Traîne"
 
 #: ../src/common/helpers.py:395
-msgid "driving"
-msgstr "conduit"
+msgid "Driving"
+msgstr "Conduit"
 
 #: ../src/common/helpers.py:395
-msgid "commuting"
-msgstr "permute"
+msgid "Commuting"
+msgstr "Permute"
 
 #: ../src/common/helpers.py:396
-msgid "cooking"
-msgstr "cuisine"
+msgid "Cooking"
+msgstr "Cuisine"
 
 #: ../src/common/helpers.py:396
-msgid "walking the dog"
-msgstr "promène le chien"
+msgid "Walking the Dog"
+msgstr "Promène le chien"
 
 #: ../src/common/helpers.py:397
-msgid "writing"
-msgstr "écrit"
+msgid "Writing"
+msgstr "Écrit"
 
 #: ../src/common/helpers.py:397
-msgid "on a trip"
-msgstr "en séjour"
+msgid "On a Trip"
+msgstr "En séjour"
 
 #: ../src/common/helpers.py:397
-msgid "day off"
-msgstr "en congé"
+msgid "Day Off"
+msgstr "En congé"
 
 #: ../src/common/helpers.py:398
-msgid "having tea"
-msgstr "prend un thé"
+msgid "Having Tea"
+msgstr "Prend un thé"
 
 #: ../src/common/helpers.py:398
-msgid "on a bus"
-msgstr "en bus"
+msgid "On a Bus"
+msgstr "En bus"
 
 #: ../src/common/helpers.py:399
-msgid "having a beer"
-msgstr "prend une bière"
+msgid "Having a Beer"
+msgstr "Prend une bière"
 
 #: ../src/common/helpers.py:399
-msgid "reading"
-msgstr "lit"
+msgid "Reading"
+msgstr "Lit"
 
 #: ../src/common/helpers.py:400
-msgid "buying groceries"
-msgstr "achète des provisions"
+msgid "Buying Groceries"
+msgstr "Achète des provisions"
 
 #: ../src/common/helpers.py:400
-msgid "shaving"
-msgstr "se rase"
+msgid "Shaving"
+msgstr "Se rase"
 
 #: ../src/common/helpers.py:401
-msgid "getting a haircut"
-msgstr "se fait couper les cheveux"
+msgid "Getting a Haircut"
+msgstr "Se fait couper les cheveux"
 
 #: ../src/common/helpers.py:401
-msgid "gaming"
-msgstr "joue"
+msgid "Gaming"
+msgstr "Joue"
 
 #: ../src/common/helpers.py:402
-msgid "having dinner"
-msgstr "soupe"
+msgid "Having dinner"
+msgstr "Soupe"
 
 #: ../src/common/helpers.py:402
-msgid "doing maintenance"
-msgstr "fait de la maintenance"
+msgid "Doing Maintenance"
+msgstr "Fait de la maintenance"
 
 #: ../src/common/helpers.py:403
-msgid "doing the laundry"
-msgstr "lave le linge"
+msgid "Doing the Laundry"
+msgstr "Lave le linge"
 
 #: ../src/common/helpers.py:403
-msgid "on video phone"
-msgstr "en visioconférence"
+msgid "On Video Phone"
+msgstr "En visioconférence"
 
 #: ../src/common/helpers.py:404
-msgid "scheduled holiday"
-msgstr "en vacances organisées"
+msgid "Scheduled Holiday"
+msgstr "En vacances organisées"
 
 #: ../src/common/helpers.py:404
-msgid "going out"
-msgstr "sort"
+msgid "Going out"
+msgstr "Sort"
+
+#: ../src/common/helpers.py:404
+msgid "Permute"
+msgstr "Fait la navette"
 
 #: ../src/common/helpers.py:405
-msgid "partying"
-msgstr "fait la fête"
+msgid "Partying"
+msgstr "Fait la fête"
 
 #: ../src/common/helpers.py:405
-msgid "having a snack"
-msgstr "prend un snack"
+msgid "Having a Snack"
+msgstr "Prend un Snack"
 
 #: ../src/common/helpers.py:406
-msgid "having lunch"
-msgstr "dîne"
+msgid "Having Lunch"
+msgstr "Dîne"
 
 #: ../src/common/helpers.py:406
-msgid "working out"
-msgstr "élabore"
+msgid "Working out"
+msgstr "Élabore"
 
 #: ../src/common/helpers.py:407
-msgid "cleaning"
-msgstr "nettoie"
+msgid "Cleaning"
+msgstr "Nettoie"
 
 #: ../src/common/helpers.py:407
-msgid "watching a movie"
-msgstr "regarde un film"
+msgid "Watching a Movie"
+msgstr "Regarde un film"
 
 #: ../src/common/helpers.py:408
-msgid "sunbathing"
-msgstr "prend un bain de soleil"
+msgid "Sunbathing"
+msgstr "Prend un bain de soleil"
 
 #: ../src/common/helpers.py:408
-msgid "socializing"
-msgstr "se socialise"
+msgid "Socializing"
+msgstr "Se socialise"
 
 #: ../src/common/helpers.py:409
-msgid "running an errand"
-msgstr "fait une course"
+msgid "Running an Errand"
+msgstr "Fait une course"
 
 #: ../src/common/helpers.py:409
-msgid "taking a bath"
-msgstr "prend un bain"
+msgid "Taking a Bath"
+msgstr "Prend un bain"
 
 #: ../src/common/helpers.py:410
-msgid "in real life"
-msgstr "dans la vraie vie"
+msgid "In Real Life"
+msgstr "Dans la vraie vie"
 
 #: ../src/common/helpers.py:410
-msgid "on a plane"
-msgstr "en avion"
+msgid "On a Plane"
+msgstr "En avion"
 
 #: ../src/common/helpers.py:411
-msgid "shopping"
-msgstr "fait les magasins"
+msgid "Shopping"
+msgstr "Fait les magasins"
 
 #: ../src/common/helpers.py:411
-msgid "on a train"
-msgstr "en train"
+msgid "On a Train"
+msgstr "En train"
 
 #: ../src/common/helpers.py:411
-msgid "running"
-msgstr "court"
+msgid "Running"
+msgstr "Court"
 
 #: ../src/common/helpers.py:412
-msgid "taking a shower"
-msgstr "prend une douche"
+msgid "Taking a Shower"
+msgstr "Prend une douche"
 
 #: ../src/common/helpers.py:412
-msgid "jogging"
-msgstr "fait un jogging"
+msgid "Jogging"
+msgstr "Fait un jogging"
 
 #: ../src/common/helpers.py:413
-msgid "in a meeting"
-msgstr "en réunion"
+msgid "In a Meeting"
+msgstr "En réunion"
 
 #: ../src/common/helpers.py:413
-msgid "in a car"
-msgstr "en voiture"
+msgid "In a Car"
+msgstr "En voiture"
 
 #: ../src/common/helpers.py:414
-msgid "studying"
-msgstr "étudie"
+msgid "Studying"
+msgstr "Étudie"
 
 #: ../src/common/helpers.py:414
-msgid "swimming"
-msgstr "nage"
+msgid "Swimming"
+msgstr "Nage"
 
 #: ../src/common/helpers.py:415
-msgid "having coffee"
-msgstr "prend un café"
+msgid "Having Coffee"
+msgstr "Prend un café"
 
 #: ../src/common/helpers.py:415
-msgid "other"
-msgstr "autre"
+msgid "Other"
+msgstr "Autre"
 
 #: ../src/common/helpers.py:454
 msgid "is paying attention to the conversation"
