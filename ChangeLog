@@ -1,7 +1,45 @@
-Gajim 0.XX.X (svn)
+Gajim 0.12-alpha1 (XX augustus 2008)
 
-  * Modified the format of emoticons list file, so we can choose the default code (#3696)
+  * SECURITY
+  * Support for End-To-End encryption (XEP-0116)
+  * Improve GPG support (#2390, #2783)
+  * Ability to disable message previews in notify popups
+
+  * GROUPCHATS
+  * Support for sending files over groupchats
   * List of bookmarked rooms is now sorted alphabetically
+  * Support for transforming a one-to-one chat into a groupchat
+  * Send invitation by drag-and-dropping a contact from roster
+  * Send messages to conference using gajim-remote
+  * Ability to destroy a room when we are owner, give a reason and alternative room jid
+  * Ability to minimize groupchats in roster
+  
+  * USABILITY
+  * Files transferts by drang and dropping
+  * Ability to select statuses and to click url's in chat windows (using libsexy)
+  * Ability to set a custom avatar for a contact
+  * Better handling of resource collisions
+  * Option to Sign On as a Certain Status (#3314)
+  * Block/Unblock contact directly from roster using privacy lists
+  
+  * GUI
+  * Single window mode
+  * Close change status windows after 15 seconds of inactivity
+  * Simplified "Accounts" dialog
+  * Preferences window redesign
+  * New GUI for chat dialog
+
+  * OTHER
+  * Support of PEP (Personal Eventing Protocol) (XEP-0163)
+  * Support for Google Talk accounts with non gmail.com domain (+ GMail notifications)
+  * Modified the format of emoticons list file, so we can choose the default code (#3696)
+  * Support for Remote Controlling Clients (XEP-0146): Leave groupchats, change status, forward unread messages
+  * Support for User Search (XEP-0055)
+  * Support for jabber:x:data in message elements (Part of XEP-OO04)
+  * Added a «supported features» window
+  * Latex support (#2796)
+  * Link-local messaging with Windows (#2883)
+  * Ability to send a custom status to a group, a contact or a transport
 
 Gajim 0.11.4 (06 December 2007)
 
