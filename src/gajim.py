@@ -1305,6 +1305,8 @@ class Interface:
 						f.value = False
 					elif f.var == 'muc#roomconfig_membersonly':
 						f.value = True
+					elif f.var == 'public_list':
+						f.value = False
 				gajim.connections[account].send_gc_config(room_jid, form)
 			else:
 				# use default configuration
