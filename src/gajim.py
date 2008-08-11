@@ -3344,7 +3344,14 @@ class Interface:
 			self.handle_event_file_rcv_completed,
 			self.handle_event_file_progress)
 		gajim.proxy65_manager = proxy65_manager.Proxy65Manager(gajim.idlequeue)
+		
+		# Creating Global Events Dispatcher
+		from common import ged
+		gajim.ged = ged.GlobalEventsDispatcher()
+		self.register_core_handlers()
+		
 		self.register_handlers()
+		
 		if gajim.config.get('enable_zeroconf'):
 			gajim.connections[gajim.ZEROCONF_ACC_NAME] = common.zeroconf.connection_zeroconf.ConnectionZeroconf(gajim.ZEROCONF_ACC_NAME)
 		for account in gajim.config.get_per('accounts'):
@@ -3489,10 +3496,7 @@ class Interface:
 		gobject.timeout_add_seconds(gajim.config.get(
 			'check_idle_every_foo_seconds'), self.read_sleepy)
 		
-		# Creating Global Events Dispatcher
-		from common import ged
-		gajim.ged = ged.GlobalEventsDispatcher()
-		self.register_core_handlers()
+
 		
 		# Creating plugin manager
 		import plugins

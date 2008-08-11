@@ -202,7 +202,7 @@ class PluginManager(object):
 		'''
 
 		if gui_extpoint_name in self.gui_extension_points:
-			log.debug('Removing GUI extpoint\n name: %s\n args: %s'%(gui_extpoint_name, args))
+			#log.debug('Removing GUI extpoint\n name: %s\n args: %s'%(gui_extpoint_name, args))
 			self.gui_extension_points[gui_extpoint_name].remove(args)
 		
 				

@@ -109,7 +109,7 @@ Gajim core but uses new events handling system.'''
 	
 	def _generate_handling_method(self, event_name):
 		def handler(self, arg):
-			print "Handler of event %s called"%(event_name)
+			#print "Handler of event %s called"%(event_name)
 			if self.signal_object:
 				getattr(self.signal_object, event_name)(get_dbus_struct(arg))
 		
