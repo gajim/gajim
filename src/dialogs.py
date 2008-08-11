@@ -1547,24 +1547,30 @@ class DubbleInputDialog:
 			self.input_entry2.set_text(input_str2)
 			self.input_entry2.select_region(0, -1) # select all
 
-		self.is_modal = is_modal
-		if not is_modal and ok_handler is not None:
-			self.ok_handler = ok_handler
-			okbutton = self.xml.get_widget('okbutton')
-			okbutton.connect('clicked', self.on_okbutton_clicked)
-			cancelbutton = self.xml.get_widget('cancelbutton')
-			cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
-			self.xml.signal_autoconnect(self)
-			self.dialog.show_all()
+		self.dialog.set_modal(is_modal)
+
+		self.ok_handler = ok_handler
+		okbutton = self.xml.get_widget('okbutton')
+		okbutton.connect('clicked', self.on_okbutton_clicked)
+		cancelbutton = self.xml.get_widget('cancelbutton')
+		cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
+		self.xml.signal_autoconnect(self)
+		self.dialog.show_all()
 
 	def on_dubbleinput_dialog_destroy(self, widget):
-		if self.cancel_handler:
+		if not cancel_handler:
+			return False
+		if isinstance(self.cancel_handler, tuple):
+			self.cancel_handler[0](*self.cancel_handler[1:])
+		else:
 			self.cancel_handler()
 
 	def on_okbutton_clicked(self, widget):
 		user_input1 = self.input_entry1.get_text().decode('utf-8')
 		user_input2 = self.input_entry2.get_text().decode('utf-8')
 		self.dialog.destroy()
+		if not ok_handler:
+			return
 		if isinstance(self.ok_handler, tuple):
 			self.ok_handler[0](user_input1, user_input2, *self.ok_handler[1:])
 		else:
@@ -1572,6 +1578,12 @@ class DubbleInputDialog:
 
 	def on_cancelbutton_clicked(self, widget):
 		self.dialog.destroy()
+		if not cancel_handler:
+			return
+		if isinstance(self.cancel_handler, tuple):
+			self.cancel_handler[0](*self.cancel_handler[1:])
+		else:
+			self.cancel_handler()
 
 class SubscriptionRequestWindow:
 	def __init__(self, jid, text, account, user_nick=None):
