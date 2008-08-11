@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Sat Jun 28 20:51:00 2008 -->
+<!--Generated with glade3 3.4.5 on Mon Aug 11 22:23:04 2008 -->
 <glade-interface>
   <widget class="GtkDialog" id="esession_info_window">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -39,7 +39,7 @@
               <widget class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-								<property name="label" translatable="yes">To be certain that only the expected person can read your messages or send you messages, you need to verify their identity.</property>
+                <property name="label" translatable="yes" comments="We talk about the identity of the other contact">To be certain that only the expected person can read your messages or send you messages, you need to verify their identity.</property>
                 <property name="wrap">True</property>
                 <property name="width_chars">0</property>
               </widget>
@@ -54,7 +54,6 @@
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label" translatable="yes">Verify remote identity</property>
-								<property name="wrap">True</property>
                 <property name="response_id">0</property>
                 <signal name="clicked" handler="on_verify_now_button_clicked"/>
               </widget>
