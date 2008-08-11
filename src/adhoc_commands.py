@@ -54,6 +54,7 @@ class CommandWindow:
 		self.commandnode = None
 		self.sessionid = None
 		self.dataform = None
+		self.allow_stage3_close = False
 
 		# retrieving widgets from xml
 		self.xml = gtkgui_helpers.get_glade('adhoc_commands_window.glade')
@@ -247,18 +248,20 @@ class CommandWindow:
 				self.window.destroy()
 			return False
 
-		dialog = dialogs.HigDialog(self.window, gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
-			gtk.BUTTONS_YES_NO, _('Cancel confirmation'),
-			_('You are in process of executing command. Do you really want to cancel it?'))
-		dialog.popup()
-		if dialog.get_response()==gtk.RESPONSE_YES:
-			self.send_cancel()
-			if widget==self.window:
-				return False
-			else:
-				self.window.destroy()
+		if self.allow_stage3_close:
 			return False
-		return True
+
+		def on_yes(button):
+			self.send_cancel()
+			self.allow_stage3_close = True
+			self.window.destroy()
+
+		dialog = dialogs.HigDialog(self.window, gtk.DIALOG_DESTROY_WITH_PARENT | \
+			gtk.DIALOG_MODAL, gtk.BUTTONS_YES_NO, _('Cancel confirmation'),
+			_('You are in process of executing command. Do you really want to '
+			'cancel it?'), on_response_yes=on_yes)
+		dialog.popup()
+		return True # Block event, don't close window
 
 	def stage3_back_button_clicked(self, widget):
 		self.stage3_submit_form('prev')
