@@ -352,8 +352,10 @@ if pid_alive():
 	pritext = _('Gajim is already running')
 	sectext = _('Another instance of Gajim seems to be running\nRun anyway?')
 	dialog = dialogs.YesNoDialog(pritext, sectext)
-	if dialog.get_response() != gtk.RESPONSE_YES:
+	dialog.popup()
+	if dialog.tun() != gtk.RESPONSE_YES:
 		sys.exit(3)
+	dialog.destroy()
 	# run anyway, delete pid and useless global vars
 	if os.path.exists(pid_filename):
 		os.remove(pid_filename)

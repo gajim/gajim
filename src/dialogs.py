@@ -1137,17 +1137,6 @@ class HigDialog(gtk.MessageDialog):
 		vb.grab_focus()
 		self.show_all()
 
-	def get_response(self):
-		'''Be carefull: this function uses dialog.run() function so GUI is not updated'''
-		# Give focus to top vbox
-		vb = self.get_children()[0].get_children()[0]
-		vb.set_flags(gtk.CAN_FOCUS)
-		vb.grab_focus()
-		self.show_all()
-		response = self.run()
-		self.destroy()
-		return response
-
 class FileChooserDialog(gtk.FileChooserDialog):
 	'''Non-blocking FileChooser Dialog around gtk.FileChooserDialog'''
 	def __init__(self, title_text, action, buttons, default_response,
@@ -1541,8 +1530,6 @@ class DubbleInputDialog:
 	'''Class for Dubble Input dialog'''
 	def __init__(self, title, label_str1, label_str2, input_str1=None,
 	input_str2=None, is_modal=True, ok_handler=None, cancel_handler=None):
-		# if modal is True you also need to call get_response()
-		# and ok_handler won't be used
 		self.xml = gtkgui_helpers.get_glade('dubbleinput_dialog.glade')
 		self.dialog = self.xml.get_widget('dubbleinput_dialog')
 		label1 = self.xml.get_widget('label1')
