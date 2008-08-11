@@ -943,12 +943,10 @@ msgid "Blocked Contacts"
 msgstr "Kontakty zablokowane"
 
 #: ../data/glade/change_activity_dialog.glade.h:1
-#, fuzzy
 msgid "General:"
 msgstr "Ogólne"
 
 #: ../data/glade/change_activity_dialog.glade.h:2
-#, fuzzy
 msgid "Message:"
 msgstr "Wiadomość"
 
@@ -962,9 +960,8 @@ msgid "Specific:"
 msgstr ""
 
 #: ../data/glade/change_mood_dialog.glade.h:1
-#, fuzzy
 msgid "<b>Message:</b>"
-msgstr "<b>Strona domowa:</b>"
+msgstr "<b>Wiadomość:</b>"
 
 #: ../data/glade/change_mood_dialog.glade.h:2
 #, fuzzy
@@ -1100,7 +1097,6 @@ msgid "(ESession info)"
 msgstr ""
 
 #: ../data/glade/esession_info_window.glade.h:2
-#, fuzzy
 msgid "Close"
 msgstr "Zamknij"
 
@@ -1409,7 +1405,6 @@ msgstr ""
 "Wszystkie historie rozmów"
 
 #: ../data/glade/history_window.glade.h:5
-#, fuzzy
 msgid "Search:"
 msgstr "Szukaj"
 
@@ -1483,9 +1478,8 @@ msgid "Title:"
 msgstr "Tytuł:"
 
 #: ../data/glade/manage_pep_services_window.glade.h:1
-#, fuzzy
 msgid "PEP Service Configuration"
-msgstr "Konfiguracja pokoju"
+msgstr "Konfiguracja usługi PEP"
 
 #: ../data/glade/manage_pep_services_window.glade.h:2
 msgid "_Configure"
@@ -1536,9 +1530,8 @@ msgid "_Host:"
 msgstr "_Host:"
 
 #: ../data/glade/message_window.glade.h:1
-#, fuzzy
 msgid "Add this contact to roster (Ctrl+D)"
-msgstr "Dodaje kontakt do listy kontaktów"
+msgstr "Dodaje kontakt do listy kontaktów (Ctrl+D)"
 
 #: ../data/glade/message_window.glade.h:2
 msgid "Bookmark this room (Ctrl+B)"
@@ -1557,26 +1550,24 @@ msgid "Change your nickname (Ctrl+N)"
 msgstr ""
 
 #: ../data/glade/message_window.glade.h:6
-#, fuzzy
 msgid "Invite contacts to the conversation (Ctrl+G)"
-msgstr "jest skupiony na rozmowie"
+msgstr "Zaproś kontakt do rozmowy (Ctrl+G)"
 
 #: ../data/glade/message_window.glade.h:7
 msgid "Send a file (Ctrl+F)"
-msgstr ""
+msgstr "Wyślij plik (Ctrl+F)"
 
 #: ../data/glade/message_window.glade.h:8
-#, fuzzy
 msgid "Show a list of emoticons (Alt+M)"
-msgstr "Kliknij by wstawić emotikon (Alt+E)"
+msgstr "Kliknij by wyświetlić listę emotikon (Alt+M)"
 
 #: ../data/glade/message_window.glade.h:9
 msgid "Show a menu of advanced functions (Alt+A)"
-msgstr ""
+msgstr "Pokaż menu zaawansowanych funkcji (Alt+A)"
 
 #: ../data/glade/message_window.glade.h:10
 msgid "Show the contact's profile (Ctrl+I)"
-msgstr ""
+msgstr "Pokaż profil kontaktu (Ctrl+I)"
 
 #. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
 #: ../data/glade/message_window.glade.h:12
@@ -1860,7 +1851,6 @@ msgstr ""
 "wszystkich wiadomości od osób, których nie masz na liście kontaktów"
 
 #: ../data/glade/preferences_window.glade.h:61
-#, fuzzy
 msgid ""
 "If checked, Gajim will keep logs for encrypted messages. Please note that "
 "when using E2E encryption the remote party has to agree on logging, else the "
@@ -1921,9 +1911,8 @@ msgid "Log _encrypted chat session"
 msgstr "Loguj _zaszyfrowane wiadomości"
 
 #: ../data/glade/preferences_window.glade.h:69
-#, fuzzy
 msgid "Ma_ke message windows compact"
-msgstr "_Ukrywaj przyciski w oknach rozmowy"
+msgstr "_Spraw by okna rozmowy były zwarte"
 
 #: ../data/glade/preferences_window.glade.h:70
 msgid "Ma_nage..."
@@ -2065,7 +2054,6 @@ msgid "_Mail client:"
 msgstr "Klient _poczty:"
 
 #: ../data/glade/preferences_window.glade.h:99
-#, fuzzy
 msgid "_Make message windows compact"
 msgstr "_Spraw, by okna wiadomości były zwarte"
 
@@ -2454,9 +2442,8 @@ msgid "_Unblock"
 msgstr "_Cofnij blokadę"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:23
-#, fuzzy
 msgid "_Unignore"
-msgstr "_Konfiguruj"
+msgstr "_Cofnij ignorowanie"
 
 #: ../data/glade/roster_window.glade.h:1
 msgid "A_ccounts"
@@ -3131,9 +3118,8 @@ msgstr ""
 "utracisz tę wiadomość."
 
 #: ../src/chat_control.py:2306 ../src/gajim.py:159
-#, fuzzy
 msgid "Database Error"
-msgstr "Błąd zapisu na dysk"
+msgstr "Błąd bazy danych"
 
 #: ../src/chat_control.py:2307 ../src/gajim.py:160
 #, python-format
@@ -3264,7 +3250,6 @@ msgid "$S (Away as a result of being idle more than $T min)"
 msgstr "$S (Zaraz wracam z powodu braku aktywności przez $T min.)"
 
 #: ../src/common/config.py:81
-#, fuzzy
 msgid "$S will be replaced by current status message, $T by autoaway time."
 msgstr ""
 "$S zostanie zastąpiony bieżącym opisem stanu, $T przez czas bezczynności"
@@ -3853,7 +3838,7 @@ msgstr ""
 
 #: ../src/common/config.py:284
 msgid "Should Gajim automatically start an encrypted session when possible?"
-msgstr ""
+msgstr "Czy Gajim powinien automatycznie zaczynać zaszyfrowaną sesje jeśli to możliwe?"
 
 #: ../src/common/config.py:285
 msgid ""
@@ -3864,15 +3849,13 @@ msgstr ""
 "Może zawierać tls, ssl lub plain"
 
 #: ../src/common/config.py:286
-#, fuzzy
 msgid ""
 "Show a warning dialog before sending password on an plaintext connection."
 msgstr "Pokaż ostrzeżenie przed wysłaniem hasła nieszyfrowanym połączeniem."
 
 #: ../src/common/config.py:287
-#, fuzzy
 msgid "Show a warning dialog before using standard SSL library."
-msgstr "Pokaż ostrzeżenie przed wysłaniem hasła nieszyfrowanym połączeniem."
+msgstr "Pokaż ostrzeżenie przed użyciem standardowej biblioteki SSL."
 
 #: ../src/common/config.py:289
 msgid "Space separated list of ssl errors to ignore."
@@ -4071,14 +4054,13 @@ msgid "Disk Write Error"
 msgstr "Błąd zapisu na dysk"
 
 #: ../src/common/connection_handlers.py:1113 ../src/common/connection.py:826
-#, fuzzy
 msgid "Invisibility not supported"
-msgstr "Rozszerzenie nie jest obsługiwane"
+msgstr "Niewidoczność nie jest obsługiwana"
 
 #: ../src/common/connection_handlers.py:1114 ../src/common/connection.py:827
 #, python-format
 msgid "Account %s doesn't support invisibility."
-msgstr ""
+msgstr "Konto %s nie obsługuje niewidoczności."
 
 #: ../src/common/connection_handlers.py:1919
 #, python-format
@@ -4480,9 +4462,8 @@ msgstr ""
 "programu..."
 
 #: ../src/common/exceptions.py:44
-#, fuzzy
 msgid "Database cannot be read."
-msgstr "Nazwa konta nie może być pusta."
+msgstr "Baza danych nie może zostać odczytana."
 
 #: ../src/common/exceptions.py:52
 msgid "Service not available: Gajim is not running, or remote_control is False"
@@ -5125,9 +5106,8 @@ msgstr "piję"
 
 #. Subactivites
 #: ../src/common/helpers.py:388
-#, fuzzy
 msgid "on the phone"
-msgstr "Rozmawiam przez telefon."
+msgstr "rozmawiam przez telefon"
 
 #: ../src/common/helpers.py:388
 msgid "gardening"
@@ -5138,9 +5118,8 @@ msgid "hiking"
 msgstr "jeżdzę_na_rowerze"
 
 #: ../src/common/helpers.py:389
-#, fuzzy
 msgid "on vacation"
-msgstr "Na wakacjach"
+msgstr "na wakacjach"
 
 #: ../src/common/helpers.py:389
 msgid "coding"
@@ -5159,28 +5138,24 @@ msgid "sleeping"
 msgstr "Śpię"
 
 #: ../src/common/helpers.py:391
-#, fuzzy
 msgid "brushing teeth"
 msgstr "myję_zęby"
 
 #: ../src/common/helpers.py:391
-#, fuzzy
 msgid "playing sports"
-msgstr "Uprawiam sport"
+msgstr "uprawiam sport"
 
 #: ../src/common/helpers.py:392
 msgid "skiing"
 msgstr "Na nartach"
 
 #: ../src/common/helpers.py:392
-#, fuzzy
 msgid "having breakfast"
 msgstr "jem_śniadanie"
 
 #: ../src/common/helpers.py:393
-#, fuzzy
 msgid "watching TV"
-msgstr "Oglądam TV"
+msgstr "oglądam TV"
 
 #: ../src/common/helpers.py:393
 #, fuzzy
@@ -5188,7 +5163,6 @@ msgid "doing the dishes"
 msgstr "zmywam_naczynia"
 
 #: ../src/common/helpers.py:394
-#, fuzzy
 msgid "at the spa"
 msgstr "w_salonie_spa"
 
@@ -5214,36 +5188,30 @@ msgid "cooking"
 msgstr "gotuję"
 
 #: ../src/common/helpers.py:396
-#, fuzzy
 msgid "walking the dog"
-msgstr "Wyprowadzam psa"
+msgstr "wyprowadzam psa"
 
 #: ../src/common/helpers.py:397
 msgid "writing"
-msgstr "Piszę"
+msgstr "piszę"
 
 #: ../src/common/helpers.py:397
-#, fuzzy
 msgid "on a trip"
 msgstr "w_podróży"
 
 #: ../src/common/helpers.py:397
-#, fuzzy
 msgid "day off"
 msgstr "dzień_wolny"
 
 #: ../src/common/helpers.py:398
-#, fuzzy
 msgid "having tea"
 msgstr "piję_herbatę"
 
 #: ../src/common/helpers.py:398
-#, fuzzy
 msgid "on a bus"
 msgstr "w_autobusie"
 
 #: ../src/common/helpers.py:399
-#, fuzzy
 msgid "having a beer"
 msgstr "piję_piwo"
 
@@ -5261,7 +5229,6 @@ msgid "shaving"
 msgstr "Golę się"
 
 #: ../src/common/helpers.py:401
-#, fuzzy
 msgid "getting a haircut"
 msgstr "u_fryzjera"
 
@@ -5270,7 +5237,6 @@ msgid "gaming"
 msgstr "gram"
 
 #: ../src/common/helpers.py:402
-#, fuzzy
 msgid "having dinner"
 msgstr "jem_obiad"
 
@@ -5290,9 +5256,8 @@ msgid "on video phone"
 msgstr "Rozmawiam przez telefon."
 
 #: ../src/common/helpers.py:404
-#, fuzzy
 msgid "scheduled holiday"
-msgstr "Zaplanowane wakacje"
+msgstr "wakacje zaplanowane"
 
 #: ../src/common/helpers.py:404
 #, fuzzy
@@ -5309,7 +5274,6 @@ msgid "having a snack"
 msgstr "coś_przegryzam"
 
 #: ../src/common/helpers.py:406
-#, fuzzy
 msgid "having lunch"
 msgstr "jem_lunch"
 
@@ -5323,9 +5287,8 @@ msgid "cleaning"
 msgstr "czyszczę"
 
 #: ../src/common/helpers.py:407
-#, fuzzy
 msgid "watching a movie"
-msgstr "Oglądam film."
+msgstr "oglądam film."
 
 #: ../src/common/helpers.py:408
 msgid "sunbathing"
@@ -5341,9 +5304,8 @@ msgid "running an errand"
 msgstr "Biegam na posyłki"
 
 #: ../src/common/helpers.py:409
-#, fuzzy
 msgid "taking a bath"
-msgstr "Biorę kąpiel"
+msgstr "biorę kąpiel"
 
 #: ../src/common/helpers.py:410
 #, fuzzy
@@ -5351,7 +5313,6 @@ msgid "in real life"
 msgstr "zajmuję_się_życiem"
 
 #: ../src/common/helpers.py:410
-#, fuzzy
 msgid "on a plane"
 msgstr "w_samolocie"
 
@@ -5360,7 +5321,6 @@ msgid "shopping"
 msgstr "Na zakupach"
 
 #: ../src/common/helpers.py:411
-#, fuzzy
 msgid "on a train"
 msgstr "w_pociągu"
 
@@ -5369,21 +5329,18 @@ msgid "running"
 msgstr "Biegam"
 
 #: ../src/common/helpers.py:412
-#, fuzzy
 msgid "taking a shower"
-msgstr "Jestem pod prysznicem"
+msgstr "biorę prysznic"
 
 #: ../src/common/helpers.py:412
 msgid "jogging"
 msgstr "biegam"
 
 #: ../src/common/helpers.py:413
-#, fuzzy
 msgid "in a meeting"
 msgstr "na_spotkaniu"
 
 #: ../src/common/helpers.py:413
-#, fuzzy
 msgid "in a car"
 msgstr "w_samochodzie"
 
@@ -5396,7 +5353,6 @@ msgid "swimming"
 msgstr "Pływam"
 
 #: ../src/common/helpers.py:415
-#, fuzzy
 msgid "having coffee"
 msgstr "piję_kawę"
 
@@ -5513,9 +5469,8 @@ msgstr ""
 "Przesyłanie wiadomości między adresami link-local może nie działać poprawnie."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:249
-#, fuzzy
 msgid "Please check if Avahi or Bonjour is installed."
-msgstr "Proszę sprawdzić czy zainstalowano Avahi."
+msgstr "Proszę sprawdzić czy zainstalowano Avahi lub Bonjour"
 
 #: ../src/common/zeroconf/connection_zeroconf.py:258
 #: ../src/common/zeroconf/connection_zeroconf.py:262
@@ -5551,9 +5506,8 @@ msgid "[This message is encrypted]"
 msgstr "[Ta wiadomość jest zaszyfrowana]"
 
 #: ../src/common/zeroconf/connection_zeroconf.py:456
-#, fuzzy
 msgid "Your message could not be sent."
-msgstr "Kontakt jest rozłączony. Twoja wiadomość nie mogła zostać wysłana."
+msgstr "Twoja wiadomość nie mogła zostać wysłana."
 
 #. Contact Offline
 #: ../src/common/zeroconf/connection_zeroconf.py:463
@@ -5579,14 +5533,12 @@ msgid "Event"
 msgstr "Zdarzenie"
 
 #: ../src/config.py:390
-#, fuzzy
 msgid "Default Message"
-msgstr "Domyślne stany opisowe"
+msgstr "Domyśla wiadomość"
 
 #: ../src/config.py:397
-#, fuzzy
 msgid "Enabled"
-msgstr "Włącz"
+msgstr "Włączone"
 
 #: ../src/config.py:439
 msgid "Always use OS/X default applications"
@@ -6164,9 +6116,8 @@ msgid "Contact name"
 msgstr "Nazwa kontaktu"
 
 #: ../src/dialogs.py:454
-#, fuzzy
 msgid "Set Mood"
-msgstr "Nastrój"
+msgstr "Ustaw Nastrój"
 
 #: ../src/dialogs.py:492
 #, fuzzy
@@ -6335,7 +6286,6 @@ msgid "Join Group Chat with account %s"
 msgstr "Dołącz do pokoju z konta %s"
 
 #: ../src/dialogs.py:1757
-#, fuzzy
 msgid "Invalid Nickname"
 msgstr "Niepoprawny pseudonim"
 
@@ -6603,9 +6553,8 @@ msgid "You must enter a name to create a privacy list."
 msgstr "Musisz podać nazwę nowej listy prywatności."
 
 #: ../src/dialogs.py:2944
-#, fuzzy
 msgid "You are invited to a groupchat"
-msgstr "Nie dołączyłeś do pokoju."
+msgstr "Jestes zaproszony do rozmowy grupowej"
 
 #: ../src/dialogs.py:2947
 msgid "$Contact has invited you to join a discussion"
@@ -6622,9 +6571,8 @@ msgid "Comment: %s"
 msgstr "Komentarz: %s"
 
 #: ../src/dialogs.py:2959
-#, fuzzy
 msgid "Do you want to accept the invitation?"
-msgstr "Czy chcesz wysłać ten plik do %s:"
+msgstr "Czy chcesz zaakceptować zaproszenie?"
 
 #: ../src/dialogs.py:3013
 msgid "Choose Sound"
@@ -6998,9 +6946,8 @@ msgstr ""
 "'use_latex' na 'True'."
 
 #: ../src/features_window.py:98
-#, fuzzy
 msgid "End to End Encryption"
-msgstr "Szyfrowanie transmisji"
+msgstr "Szyfrowanie typu "end to end""
 
 #: ../src/features_window.py:99
 msgid "Encrypting chatmessages."
@@ -7493,9 +7440,8 @@ msgid ""
 msgstr ""
 
 #: ../src/gajim.py:1803
-#, fuzzy
 msgid "Unable to decrypt message"
-msgstr "Nie można odszyfrować podpisu CRL"
+msgstr "Nie można odszyfrować wiadomości"
 
 #: ../src/gajim.py:1865
 msgid "Username Conflict"
@@ -7571,7 +7517,6 @@ msgid "Insecure connection"
 msgstr "Niezabezpieczone połączenie"
 
 #: ../src/gajim.py:2022
-#, fuzzy
 msgid ""
 "You are about to send your password on an unencrypted connection. Are you "
 "sure you want to do that?"
@@ -7581,7 +7526,7 @@ msgstr ""
 
 #: ../src/gajim.py:2024 ../src/gajim.py:2047
 msgid "Yes, I really want to connect insecurely"
-msgstr ""
+msgstr "Tak, na prawdę chce się połączyć w trybie niezaszyfrowanym"
 
 #: ../src/gajim.py:2025 ../src/gajim.py:2048 ../src/groupchat_control.py:1690
 #: ../src/roster_window.py:3757
@@ -7589,13 +7534,12 @@ msgid "Do _not ask me again"
 msgstr "_Nie pytaj mnie o to ponownie"
 
 #: ../src/gajim.py:2045
-#, fuzzy
 msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
 msgstr ""
-"Zamierzasz wysłać hasło wykorzystując niezabezpieczone połączenie.Czy jesteś "
-"pewien?"
+"Zamierzasz wysłać hasło wykorzystując niezabezpieczone połączenie. Powinieneś "
+"zainstalować PyOpenSSL by temu zapobiec. Czy jesteś pewien?"
 
 #: ../src/gajim.py:2062
 msgid "PEP node was not removed"
@@ -7608,9 +7552,8 @@ msgstr "Węzeł PEP %s nie został usunięty: %s"
 
 #. theme doesn't exist, disable emoticons
 #: ../src/gajim.py:2506 ../src/gajim.py:2527
-#, fuzzy
 msgid "Emoticons disabled"
-msgstr "Szyfrowanie E2E wyłączone"
+msgstr "Emotoikony wyłączone"
 
 #: ../src/gajim.py:2507
 msgid ""
@@ -8073,14 +8016,12 @@ msgid "Insert Nickname"
 msgstr "Wstaw pseudonim"
 
 #: ../src/groupchat_control.py:536
-#, fuzzy
 msgid "Conversation with "
-msgstr "Historia rozmowy"
+msgstr "Rozmowa z"
 
 #: ../src/groupchat_control.py:538
-#, fuzzy
 msgid "Continued conversation"
-msgstr "Cofnij potwierdzenie"
+msgstr "Kontynuacja rozmowy"
 
 #: ../src/groupchat_control.py:953
 msgid "Really send file?"
@@ -8916,9 +8857,8 @@ msgid "Activity"
 msgstr "Aktywność"
 
 #: ../src/roster_window.py:4796
-#, fuzzy
 msgid "Configure Services..."
-msgstr "Konfiguruj..."
+msgstr "Konfiguruj Usłúgi..."
 
 #: ../src/roster_window.py:4953
 msgid "_Maximize All"
@@ -9000,7 +8940,6 @@ msgid "No result"
 msgstr "Brak wyników"
 
 #: ../src/session.py:99
-#, fuzzy
 msgid "Disk WriteError"
 msgstr "Błąd zapisu na dysk"
 
