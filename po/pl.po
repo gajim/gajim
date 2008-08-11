@@ -6947,7 +6947,7 @@ msgstr ""
 
 #: ../src/features_window.py:98
 msgid "End to End Encryption"
-msgstr "Szyfrowanie typu "end to end""
+msgstr "Szyfrowanie typu «end to end»"
 
 #: ../src/features_window.py:99
 msgid "Encrypting chatmessages."
