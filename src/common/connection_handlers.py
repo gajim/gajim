@@ -1974,7 +1974,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		except:
 			prio = 0
 		keyID = ''
-		if sigTag and self.USE_GPG:
+		if sigTag and self.USE_GPG and ptype != 'error':
+			# error presences contain our own signature
 			# verify
 			sigmsg = sigTag.getData()
 			keyID = self.gpg.verify(status, sigmsg)
