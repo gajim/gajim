@@ -40,7 +40,7 @@ class EventsDumpPlugin(GajimPlugin):
 	authors = [u'Mateusz Biliński <mateusz@bilinski.it>']
 	homepage = u'http://blog.bilinski.it'
 	
-	@log_calls('DBusPlugin')
+	@log_calls('EventsDumpPlugin')
 	def init(self):
 		self.config_dialog = None
 		#self.gui_extension_points = {}
