@@ -620,6 +620,8 @@ def get_icon_name_to_show(contact, account = None):
 	transport = gajim.get_transport_name_from_jid(contact.jid)
 	if transport:
 		return contact.show
+	if contact.show in gajim.SHOW_LIST:
+		return contact.show
 	return 'not in roster'
 
 def decode_string(string):
