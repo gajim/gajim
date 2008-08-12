@@ -5089,10 +5089,10 @@ msgstr "Inquiet"
 
 #: ../src/common/helpers.py:383
 msgid "Set an activity"
-msgstr "Pulier une activité"
+msgstr "Publier une activité"
 
 #: ../src/common/helpers.py:383
-msgid "Excercising"
+msgid "Exercising"
 msgstr "Fait de l'exercice"
 
 #: ../src/common/helpers.py:383
@@ -5249,7 +5249,7 @@ msgid "Gaming"
 msgstr "Joue"
 
 #: ../src/common/helpers.py:402
-msgid "Having dinner"
+msgid "Having Dinner"
 msgstr "Soupe"
 
 #: ../src/common/helpers.py:402
