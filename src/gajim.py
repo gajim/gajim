@@ -2670,7 +2670,7 @@ class Interface:
 
 		mw = self.msg_win_mgr.get_window(fjid, account)
 		if not mw:
-			mw = self.msg_win_mgr.create_window(contact, account, type_)
+			mw = self.msg_win_mgr.create_window(contact, account, type_, resource)
 
 		chat_control = ChatControl(mw, contact, account, session, resource)
 

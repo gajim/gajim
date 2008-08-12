@@ -1144,6 +1144,12 @@ class ChatControl(ChatControlBase):
 		if not session:
 			session = gajim.connections[self.account]. \
 				find_controlless_session(self.contact.jid)
+			if session:
+				# Don't use previous session if we want to a specific resource
+				# and it's not the same
+				j, r = gajim.get_room_and_nick_from_fjid(str(session.jid))
+				if resource and resource != r:
+					session = None
 
 		if session:
 			session.control = self
