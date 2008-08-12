@@ -5864,8 +5864,13 @@ class RosterWindow:
 				contact_list, account, self.on_invite_to_new_room, cap=NS_MUC))
 		elif len(list_) == 1 and gajim.capscache.is_supported(contact, NS_MUC):
 			invite_menuitem.set_sensitive(True)
+			# use resource if it's self contact
+			if contact.jid == gajim.get_jid_from_account(account):
+				resource = contact.resource
+			else:
+				resource = None
 			invite_to_new_room_menuitem.connect('activate',
-				self.on_invite_to_new_room, list_)
+				self.on_invite_to_new_room, list_, resource)
 		else:
 			invite_menuitem.set_sensitive(False)
 		# transform None in 'jabber'
@@ -5901,8 +5906,13 @@ class RosterWindow:
 						contact_list, account, self.on_invite_to_room, room_jid,
 						account))
 				else:
+					# use resource if it's self contact
+					if contact.jid == gajim.get_jid_from_account(account):
+						resource = contact.resource
+					else:
+						resource = None
 					menuitem.connect('activate', self.on_invite_to_room, list_,
-						room_jid, account)
+						room_jid, account, resource)
 				invite_to_submenu.append(menuitem)
 
 	def get_and_connect_advanced_menuitem_menu(self, account):
