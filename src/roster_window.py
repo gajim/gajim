@@ -3445,7 +3445,7 @@ class RosterWindow:
 			return
 		jid = model[path][C_JID].decode('utf-8')
 		resource = None
-		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		titer = model.get_iter(path)
 		if contact.is_groupchat():
 			first_ev = gajim.events.get_first_event(account, jid)
