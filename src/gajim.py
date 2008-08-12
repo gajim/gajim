@@ -2619,7 +2619,7 @@ class Interface:
 			is_continued=is_continued)
 		mw.new_tab(gc_control)
 
-	def new_private_chat(self, gc_contact, account, session = None):
+	def new_private_chat(self, gc_contact, account, session=None):
 		contact = gajim.contacts.contact_from_gc_contact(gc_contact)
 		type_ = message_control.TYPE_PM
 		fjid = gc_contact.room_jid + '/' + gc_contact.name
@@ -2660,7 +2660,7 @@ class Interface:
 
 		return session.control
 
-	def new_chat(self, contact, account, resource = None, session = None):
+	def new_chat(self, contact, account, resource=None, session=None):
 		# Get target window, create a control, and associate it with the window
 		type_ = message_control.TYPE_CHAT
 
@@ -2725,8 +2725,8 @@ class Interface:
 				ctrl = win.get_control(fjid, account)
 
 		if not ctrl:
-			ctrl = self.new_chat(contact, account,
-				resource = resource, session = session)
+			ctrl = self.new_chat(contact, account, resource=resource,
+				session=session)
 			# last message is long time ago
 			gajim.last_message_time[account][ctrl.get_full_jid()] = 0
 
