@@ -5194,7 +5194,7 @@ msgstr "Conduit"
 
 #: ../src/common/helpers.py:395
 msgid "Commuting"
-msgstr "Permute"
+msgstr "Fait la navette"
 
 #: ../src/common/helpers.py:396
 msgid "Cooking"
@@ -5290,7 +5290,7 @@ msgstr "Dîne"
 
 #: ../src/common/helpers.py:406
 msgid "Working out"
-msgstr "Élabore"
+msgstr "S'entraine"
 
 #: ../src/common/helpers.py:407
 msgid "Cleaning"
