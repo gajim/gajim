@@ -58,7 +58,7 @@ except ImportError:
 
 setup(
     name = 'Gajim',
-    version = '0.11.4.4-svn',
+    version = '0.12-alpha1',
     description = 'A full featured Jabber client',
     author = 'Gajim Development Team',
     url = 'http://www.gajim.org/',

@@ -9,7 +9,7 @@ Packager: Filippos Papadopoulos <psybases@gmail.com>
 Summary: Gajim is a Jabber client written in Python.
 URL: http://www.gajim.org/
 License: GNU General Public License, Version 2
-SoftwareVersion: 0.11.1
+SoftwareVersion: 0.12-alpha1
 AutopackageTarget: 1.0
 PackageVersion: 1
 
