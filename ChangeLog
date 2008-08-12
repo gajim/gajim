@@ -2,6 +2,7 @@ Gajim 0.12-alpha1 (XX augustus 2008)
 
   * SECURITY
   * Support for End-To-End encryption (XEP-0116)
+  * SSL certificat verification
   * Improve GPG support (#2390, #2783)
   * Ability to disable message previews in notify popups
 
@@ -33,7 +34,7 @@ Gajim 0.12-alpha1 (XX augustus 2008)
   * Support of PEP (Personal Eventing Protocol) (XEP-0163)
   * Support for Google Talk accounts with non gmail.com domain (+ GMail notifications)
   * Modified the format of emoticons list file, so we can choose the default code (#3696)
-  * Support for Remote Controlling Clients (XEP-0146): Leave groupchats, change status, forward unread messages
+  * New Remote Controlling Option (XEP-0146): forward unread messages
   * Support for User Search (XEP-0055)
   * Support for jabber:x:data in message elements (Part of XEP-OO04)
   * Added a «supported features» window
