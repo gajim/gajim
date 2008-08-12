@@ -3,7 +3,7 @@ import re
 docdir = '../'
 datadir = '../'
 
-version = '0.11.4.4-svn'
+version = '0.12-alpha'
 
 import sys, os.path
 for base in ('.', 'common'):
