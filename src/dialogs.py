@@ -3810,9 +3810,9 @@ class ESessionInfoWindow:
 		self.xml.signal_autoconnect(self)
 
 		self.security_image = self.xml.get_widget('security_image')
+		self.window = self.xml.get_widget('esession_info_window')
 		self.update_info()
 
-		self.window = self.xml.get_widget('esession_info_window')
 
 		self.window.show_all()
 
@@ -3826,9 +3826,11 @@ class ESessionInfoWindow:
 			if self.session.control:
 				self.session.control._show_lock_image(True, 'E2E', True,
 					self.session.is_loggable(), True)
+			self.window.set_title(_('''Contact's identity verified'''))
 		else:
 			labeltext += '\n\n' + _('''To be certain that only the expected person can read your messages or send you messages, you need to verify their identity.''')
 			security_image = 'security-low-big.png'
+			self.window.set_title(_('''Contact's identity NOT verified'''))
 
 		path = os.path.join(dir, security_image)
 		filename = os.path.abspath(path)
