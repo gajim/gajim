@@ -307,6 +307,8 @@ class HistoryWindow:
 			self.window.set_title(title)
 
 	def on_calendar_day_selected(self, widget):
+		if not self.jid:
+			return
 		year, month, day = widget.get_date() # integers
 		month = gtkgui_helpers.make_gtk_month_python_month(month)
 		self._add_lines_for_date(year, month, day)
