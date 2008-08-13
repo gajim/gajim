@@ -477,23 +477,22 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			tag.set_property('justification', align)
 	
 	def _parse_style_text_decoration(self, tag, value):
-		if value == 'none':
+		values = value.split(' ')
+		if 'none' in values:
 			tag.set_property('underline', pango.UNDERLINE_NONE)
 			tag.set_property('strikethrough', False)
-		elif value == 'underline':
+		if 'underline' in values:
 			tag.set_property('underline', pango.UNDERLINE_SINGLE)
-			tag.set_property('strikethrough', False)
-		elif value == 'overline':
-			warnings.warn('text-decoration:overline not implemented')
-			tag.set_property('underline', pango.UNDERLINE_NONE)
-			tag.set_property('strikethrough', False)
-		elif value == 'line-through':
-			tag.set_property('underline', pango.UNDERLINE_NONE)
-			tag.set_property('strikethrough', True)
-		elif value == 'blink':
-			warnings.warn('text-decoration:blink not implemented')
 		else:
-			warnings.warn('text-decoration:%s not implemented' % value)
+			tag.set_property('underline', pango.UNDERLINE_NONE)
+		if 'line-through' in values:
+			tag.set_property('strikethrough', True)
+		else:
+			tag.set_property('strikethrough', False)
+		if 'blink' in values:
+			warnings.warn('text-decoration:blink not implemented')
+		if 'overline' in values:
+			warnings.warn('text-decoration:overline not implemented')
 	
 	def _parse_style_white_space(self, tag, value):
 		if value == 'pre':
