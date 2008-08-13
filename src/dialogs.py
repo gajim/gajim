@@ -3810,6 +3810,7 @@ class ESessionInfoWindow:
 		self.xml.signal_autoconnect(self)
 
 		self.security_image = self.xml.get_widget('security_image')
+		self.verify_now_button = self.xml.get_widget('verify_now_button')
 		self.window = self.xml.get_widget('esession_info_window')
 		self.update_info()
 
@@ -3827,6 +3828,8 @@ class ESessionInfoWindow:
 				self.session.control._show_lock_image(True, 'E2E', True,
 					self.session.is_loggable(), True)
 			self.window.set_title(_('''Contact's identity verified'''))
+			self.xml.get_widget('dialog-action_area1').set_no_show_all(True) 
+			self.verify_now_button.hide()
 		else:
 			labeltext += '\n\n' + _('''To be certain that only the expected person can read your messages or send you messages, you need to verify their identity.''')
 			security_image = 'security-low-big.png'
