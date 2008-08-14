@@ -1569,7 +1569,7 @@ class ChatControl(ChatControlBase):
 		tooltip = _('%(type)s encryption %(status)s active %(authenticated)s.\n'
 			'Your chat session %(logged)s be logged.'\
 			% {'type': enc_type, 'status': status_string,
-			'authenticated': authenticated_string, 'logged': logged_string)
+			'authenticated': authenticated_string, 'logged': logged_string})
 
 		self.lock_tooltip.set_tip(self.authentication_button, tooltip)
 		self.widget_set_visible(self.authentication_button, not visible)
