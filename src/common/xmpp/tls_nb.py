@@ -201,7 +201,7 @@ class StdlibSSLWrapper(SSLWrapper):
 		try:
 			return self.sslobj.read(bufsize)
 		except socket.sslerror, e:
-			log.debug("Recv: Caught socket.sslerror:", exc_info=True)
+			log.debug("Recv: Caught socket.sslerror: " + repr(e), exc_info=True)
 			if e.args[0] not in (socket.SSL_ERROR_WANT_READ, socket.SSL_ERROR_WANT_WRITE):
 				raise SSLWrapper.Error(self.sock or self.sslobj, e)
 		return None
@@ -238,7 +238,6 @@ class NonBlockingTLS(PlugIn):
 		'''
 		log.info('Starting TLS estabilishing')
 		PlugIn.PlugIn(self, owner)
-		print 'inplugin'
 		try:
 			self._owner._plug_idle(writable=False, readable=False)
 			res = self._startSSL()
@@ -273,8 +272,17 @@ class NonBlockingTLS(PlugIn):
 	def _startSSL(self):
 		''' Immediatedly switch socket to TLS mode. Used internally.'''
 		log.debug("_startSSL called")
-		if USE_PYOPENSSL: return self._startSSL_pyOpenSSL()
-		else:             return self._startSSL_stdlib()
+
+		if USE_PYOPENSSL: result = self._startSSL_pyOpenSSL()
+		else:             result = self._startSSL_stdlib()
+
+		if result:
+			log.debug("Synchronous handshake completed")
+			self._owner._plug_idle(writable=True, readable=False)
+			return True
+		else:
+			return False
+
 
 	def _startSSL_pyOpenSSL(self):
 		log.debug("_startSSL_pyOpenSSL called")
@@ -328,9 +336,8 @@ class NonBlockingTLS(PlugIn):
 			log.error('Error while TLS handshake: ', exc_info=True)
 			return False
 		tcpsock._sslObj.setblocking(False)
-		log.debug("Synchronous handshake completed")
 		self._owner.ssl_lib = PYOPENSSL
-		return self._endSSL()
+		return True
 
 
 	def _startSSL_stdlib(self):
@@ -349,10 +356,6 @@ class NonBlockingTLS(PlugIn):
 			log.error("Exception caught in _startSSL_stdlib:", exc_info=True)
 			return False
 		self._owner.ssl_lib = PYSTDLIB
-		return self._endSSL()
-
-	def _endSSL(self):
-		self._owner._plug_idle(writable=True, readable=False)
 		return True
 
 	def _ssl_verify_callback(self, sslconn, cert, errnum, depth, ok):

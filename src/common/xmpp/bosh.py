@@ -1,11 +1,29 @@
+## bosh.py	
+##
+##
+## Copyright (C) 2008 Tomas Karasek <tom.to.the.k@gmail.com>
+##
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
-import locale, random
+
+import locale, random, sha
 from transports_nb import NonBlockingTransport, NonBlockingHTTPBOSH,\
 	CONNECTED, CONNECTING, DISCONNECTED, DISCONNECTING,\
-	urisplit
+	urisplit, DISCONNECT_TIMEOUT_SECONDS
 from protocol import BOSHBody
 from simplexml import Node
-import sha
 
 import logging
 log = logging.getLogger('gajim.c.x.bosh')
@@ -62,6 +80,13 @@ class NonBlockingBOSH(NonBlockingTransport):
 		self.key_stack = None
 		self.ack_checker = None
 		self.after_init = False
+		self.proxy_dict = {}
+		if self.over_proxy and self.estabilish_tls:
+			self.proxy_dict['type'] = 'http'
+			# with SSL over proxy, we do HTTP CONNECT to proxy to open a channel to 
+			# BOSH Connection Manager
+			self.proxy_dict['xmpp_server'] = (urisplit(self.bosh_uri)[1], self.bosh_port)
+			self.proxy_dict['credentials'] = self.proxy_creds
 
 		
 	def connect(self, conn_5tuple, on_connect, on_connect_failure):
@@ -81,13 +106,9 @@ class NonBlockingBOSH(NonBlockingTransport):
 		self.http_socks.append(self.get_new_http_socket())
 		self.tcp_connecting_started()
 
-		# following connect() is not necessary because sockets can be connected on 
-		# send but we need to know if host is reachable in order to invoke callback
-		# for connecting failure eventually (the callback is different than callback
-		# for errors occurring after connection is etabilished)
 		self.http_socks[0].connect(
 			conn_5tuple = conn_5tuple,
-			on_connect = lambda: self._on_connect(),
+			on_connect = self._on_connect,
 			on_connect_failure = self._on_connect_failure)
 
 	def _on_connect(self):
@@ -98,28 +119,29 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 
 	def set_timeout(self, timeout):
-		if self.get_state() in [CONNECTING, CONNECTED] and self.fd != -1:
+		if self.get_state() != DISCONNECTED and self.fd != -1:
 			NonBlockingTransport.set_timeout(self, timeout)
 		else:
 			log.warn('set_timeout: TIMEOUT NOT SET: state is %s, fd is %s' % (self.get_state(), self.fd))
 
 	def on_http_request_possible(self):
 		'''
-		Called after HTTP response is received - another request is possible. 
-		There should be always one pending request on BOSH CM.
+		Called after HTTP response is received - when another request is possible. 
+		There should be always one pending request to BOSH CM.
 		'''
 		log.info('on_http_req possible, state:\n%s' % self.get_current_state())
-		if self.get_state() == DISCONNECTING:
-			self.disconnect()
-			return
+		if self.get_state()==DISCONNECTED: return
 
 		#Hack for making the non-secure warning dialog work
-		if hasattr(self._owner, 'NonBlockingNonSASL') or hasattr(self._owner, 'SASL'):
-			self.send_BOSH(None)
+		if self._owner.got_features:
+			if (hasattr(self._owner, 'NonBlockingNonSASL') or hasattr(self._owner, 'SASL')):
+				self.send_BOSH(None)
+			else:
+				return
 		else:
-			self.http_socks[0]._plug_idle(writable=False, readable=True)
-			return
+			self.send_BOSH(None)
 
+		
 
 	def get_socket_in(self, state):
 		for s in self.http_socks:
@@ -129,7 +151,6 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 	def get_free_socket(self):
 		if self.http_pipelining:
-			assert( len(self.http_socks) == 1 )
 			return self.get_socket_in(CONNECTED)
 		else:
 			last_recv_time, tmpsock = 0, None
@@ -184,11 +205,12 @@ class NonBlockingBOSH(NonBlockingTransport):
 		# CONNECTED with too many pending requests
 		s = self.get_socket_in(DISCONNECTED)
 
-		# if we have DISCONNECTED socket, lets connect it and ...
+		# if we have DISCONNECTED socket, lets connect it and plug for send
 		if s:
 			self.connect_and_flush(s)
 		else:
-			if len(self.http_socks) > 1: return
+			#if len(self.http_socks) > 1: return
+			print 'connecting sock'
 			ss = self.get_new_http_socket()
 			self.http_socks.append(ss)
 			self.connect_and_flush(ss)
@@ -200,7 +222,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 		if s:
 			s._plug_idle(writable=True, readable=True)
 		else:
-			log.error('=====!!!!!!!!====> Couldnt get free socket in plug_socket())')
+			log.error('=====!!!!!!!!====> Couldn\'t get free socket in plug_socket())')
 
 	def build_stanza(self, socket):
 		if self.prio_bosh_stanzas:
@@ -222,21 +244,20 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 
 		log.info('sending msg with rid=%s to sock %s' % (stanza.getAttr('rid'), id(socket)))
-		socket.send(stanza)
-		self.renew_bosh_wait_timeout()
+		#socket.send(stanza)
+		self.renew_bosh_wait_timeout(self.bosh_wait + 3)
 		return stanza
 
 
 	def on_bosh_wait_timeout(self):
-		log.error('Connection Manager didn\'t respond within % seconds --> forcing \
-			disconnect' % self.bosh_wait)
+		log.error('Connection Manager didn\'t respond within %s + 3 seconds --> forcing disconnect' % self.bosh_wait)
 		self.disconnect()
 
 
-	def renew_bosh_wait_timeout(self):
+	def renew_bosh_wait_timeout(self, timeout):
 		if self.wait_cb_time is not None:
 			self.remove_bosh_wait_timeout()
-		sched_time = self.idlequeue.set_alarm(self.on_bosh_wait_timeout, self.bosh_wait+10)
+		sched_time = self.idlequeue.set_alarm(self.on_bosh_wait_timeout, timeout)
 		self.wait_cb_time = sched_time
 
 	def remove_bosh_wait_timeout(self):
@@ -244,10 +265,17 @@ class NonBlockingBOSH(NonBlockingTransport):
 				self.on_bosh_wait_timeout,
 				self.wait_cb_time)
 
-	def on_persistent_fallback(self):
+	def on_persistent_fallback(self, socket):
 		log.warn('Fallback to nonpersistent HTTP (no pipelining as well)')
-		self.http_persistent = False
-		self.http_pipelining = False
+		if socket.http_persistent:
+			socket.http_persistent = False
+			self.http_persistent = False
+			self.http_pipelining = False
+			socket.disconnect(do_callback=False)
+			self.connect_and_flush(socket)
+		else:
+			socket.disconnect()
+
 		
 
 	def handle_body_attrs(self, stanza_attrs):
@@ -277,7 +305,8 @@ class NonBlockingBOSH(NonBlockingTransport):
 				if stanza_attrs.has_key('condition'):
 					condition = stanza_attrs['condition']
 				log.error('Received terminating stanza: %s - %s' % (condition, bosh_errors[condition]))
-				self.set_state(DISCONNECTING)
+				self.disconnect()
+				return
 
 			if stanza_attrs['type'] == 'error':
 				# recoverable error
@@ -295,8 +324,6 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 
 	def send(self, stanza, now=False):
-		# body tags should be send only via send_BOSH()
-		assert(not isinstance(stanza, BOSHBody))
 		self.send_BOSH(stanza)
 
 
@@ -350,6 +377,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 	def start_disconnect(self):
 		NonBlockingTransport.start_disconnect(self)
+		self.renew_bosh_wait_timeout(DISCONNECT_TIMEOUT_SECONDS)
 		self.send_BOSH(
 			(BOSHBody(attrs={'sid': self.bosh_sid, 'type': 'terminate'}), True))
 
@@ -359,7 +387,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 			'http_port': self.bosh_port,
 			'http_version': self.http_version,
 			'http_persistent': self.http_persistent,
-			'over_proxy': self.over_proxy}
+			'add_proxy_headers': self.over_proxy and not self.estabilish_tls}
 		if self.use_proxy_auth:
 			http_dict['proxy_user'], http_dict['proxy_pass'] = self.proxy_creds
 
@@ -372,6 +400,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 			certs = self.certs,
 			on_http_request_possible = self.on_http_request_possible,
 			http_dict = http_dict,
+			proxy_dict = self.proxy_dict,
 			on_persistent_fallback = self.on_persistent_fallback)
 		s.onreceive(self.on_received_http)
 		s.set_stanza_build_cb(self.build_stanza)

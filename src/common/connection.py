@@ -424,10 +424,8 @@ class Connection(ConnectionHandlers):
 			use_srv = gajim.config.get_per('accounts', self.name, 'use_srv')
 			use_custom = gajim.config.get_per('accounts', self.name,
 				'use_custom_host')
-			print 'use_custom = %s' % use_custom
 			custom_h = gajim.config.get_per('accounts', self.name, 'custom_host')
 			custom_p = gajim.config.get_per('accounts', self.name, 'custom_port')
-			print 'custom_port = %s' % custom_p
 
 		# create connection if it doesn't already exist
 		self.connected = 1
@@ -519,9 +517,11 @@ class Connection(ConnectionHandlers):
 			if self._proxy and self._proxy['type']=='bosh':
 				# with BOSH, we can't do TLS negotiation with <starttls>, we do only "plain"
 				# connection and TLS with handshake right after TCP connecting ("ssl")
-				try:
-					self._connection_types.remove('tls')
-				except ValueError: pass
+				scheme = common.xmpp.transports_nb.urisplit(self._proxy['bosh_uri'])[0]
+				if scheme=='https':
+					self._connection_types = ['ssl']
+				else:
+					self._connection_types = ['plain']
 
 			host = self.select_next_host(self._hosts)
 			self._current_host = host
@@ -553,7 +553,7 @@ class Connection(ConnectionHandlers):
 			if self._current_type == 'ssl':
 				# SSL (force TLS on different port than plain)
 				# If we do TLS over BOSH, port of XMPP server should be the standard one
-				# and TLS should be negotiated because immediate TLS on 5223 is deprecated
+				# and TLS should be negotiated because TLS on 5223 is deprecated
 				if self._proxy and self._proxy['type']=='bosh':
 					port = self._current_host['port']
 				else:
@@ -583,7 +583,6 @@ class Connection(ConnectionHandlers):
 
 			log.info('Connecting to %s: [%s:%d]', self.name,
 				self._current_host['host'], port)
-			print secure_tuple
 			con.connect(
 				hostname=self._current_host['host'],
 				port=port,
@@ -1303,6 +1302,7 @@ class Connection(ConnectionHandlers):
 		self.connect(config)
 
 	def _on_new_account(self, con = None, con_type = None):
+		print 'on_new_acc- con: %s, con_type: %s' % (con, con_type)
 		if not con_type:
 			self.dispatch('NEW_ACC_NOT_CONNECTED',
 				(_('Could not connect to "%s"') % self._hostname))

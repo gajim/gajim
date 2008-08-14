@@ -56,12 +56,12 @@ class NBCommonClient:
 		self._owner = self
 		self._registered_name = None
 		self.connected = ''
-		self._component=0
 		self.socket = None
 		self.on_connect = None
 		self.on_proxy_failure = None
 		self.on_connect_failure = None
 		self.proxy = None
+		self.got_features = False
 		
 	
 	def on_disconnect(self):
@@ -72,7 +72,6 @@ class NBCommonClient:
 		'''
 		
 		self.connected=''
-		log.debug('Client disconnected..')
 		for i in reversed(self.disconnect_handlers):
 			log.debug('Calling disconnect handler %s' % i)
 			i()
@@ -84,18 +83,13 @@ class NBCommonClient:
 			self.NonBlockingNonSASL.PlugOut()
 		if self.__dict__.has_key('SASL'):
 			self.SASL.PlugOut()
-		if self.__dict__.has_key('NonBlockingTLS'):
-			self.NonBlockingTLS.PlugOut()
-		if self.__dict__.has_key('NBHTTPProxySocket'):
-			self.NBHTTPProxySocket.PlugOut()
-		if self.__dict__.has_key('NBSOCKS5ProxySocket'):
-			self.NBSOCKS5ProxySocket.PlugOut()
 		if self.__dict__.has_key('NonBlockingTCP'):
 			self.NonBlockingTCP.PlugOut()
 		if self.__dict__.has_key('NonBlockingHTTP'):
 			self.NonBlockingHTTP.PlugOut()
 		if self.__dict__.has_key('NonBlockingBOSH'):
 			self.NonBlockingBOSH.PlugOut()
+		log.debug('Client disconnected..')
 
 
 	def connect(self, on_connect, on_connect_failure, hostname=None, port=5222, 
@@ -181,7 +175,9 @@ class NBCommonClient:
 
 		if not mode:
 			# starting state
-			if self.__dict__.has_key('Dispatcher'): self.Dispatcher.PlugOut()
+			if self.__dict__.has_key('Dispatcher'): 
+				self.Dispatcher.PlugOut()
+				self.got_features = False
 			d=dispatcher_nb.Dispatcher().PlugIn(self)
 			on_next_receive('RECEIVE_DOCUMENT_ATTRIBUTES')
 
@@ -197,7 +193,7 @@ class NBCommonClient:
 					mode='FAILURE',
 					data='Error on stream open')
 			if self.incoming_stream_version() == '1.0':
-				if not self.Dispatcher.Stream.features: 
+				if not self.got_features: 
 					on_next_receive('RECEIVE_STREAM_FEATURES')
 				else:
 					log.info('got STREAM FEATURES in first recv')
@@ -212,7 +208,7 @@ class NBCommonClient:
 				# sometimes <features> are received together with document
 				# attributes and sometimes on next receive...
 				self.Dispatcher.ProcessNonBlocking(data)
-			if not self.Dispatcher.Stream.features: 
+			if not self.got_features: 
 				self._xmpp_connect_machine(
 					mode='FAILURE',
 					data='Missing <features> in 1.0 stream')
@@ -263,10 +259,6 @@ class NBCommonClient:
 		self.on_connect_failure(retry)
 
 	def _on_connect(self):
-		if self.secure == 'tls':
-			self._on_connect_failure('uaaaaaa')
-			return
-		print 'self.secure = %s' % self.secure
 		self.onreceive(None)
 		self.on_connect(self, self.connected)
 
@@ -343,7 +335,6 @@ class NBCommonClient:
 			# wrong user/pass, stop auth
 			self.connected = None
 			self._on_sasl_auth(None)
-			self.SASL.PlugOut()
 		elif self.SASL.startsasl == 'success':
 			auth_nb.NonBlockingBind().PlugIn(self)
 			if self.protocol_type == 'BOSH':
@@ -418,6 +409,9 @@ class NonBlockingClient(NBCommonClient):
 		certs = (self.cacerts, self.mycerts)
 
 		self._on_tcp_failure = self._on_connect_failure
+		proxy_dict = {}
+		tcp_host=xmpp_hostname
+		tcp_port=self.Port
 
 		if proxy:
 			# with proxies, client connects to proxy instead of directly to
@@ -444,27 +438,18 @@ class NonBlockingClient(NBCommonClient):
 
 			else:
 				self._on_tcp_failure = self.on_proxy_failure
-				if proxy['type'] == 'socks5':
-					proxy_class = transports_nb.NBSOCKS5ProxySocket
-				elif proxy['type'] == 'http':
-					proxy_class = transports_nb.NBHTTPProxySocket
-				self.socket = proxy_class(
-					on_disconnect = self.on_disconnect,
-					raise_event = self.raise_event,
-					idlequeue = self.idlequeue,
-					estabilish_tls = estabilish_tls,
-					certs = certs,
-					proxy_creds = (proxy_user, proxy_pass),
-					xmpp_server = (xmpp_hostname, self.Port))
-		else: 
-			tcp_host=xmpp_hostname
-			tcp_port=self.Port
+				proxy_dict['type'] = proxy['type']
+				proxy_dict['xmpp_server'] = (xmpp_hostname, self.Port)
+				proxy_dict['credentials'] = (proxy_user, proxy_pass)
+
+		if not proxy or proxy['type'] != 'bosh': 
 			self.socket = transports_nb.NonBlockingTCP(
 					on_disconnect = self.on_disconnect,
 					raise_event = self.raise_event,
 					idlequeue = self.idlequeue,
 					estabilish_tls = estabilish_tls,
-					certs = certs)
+					certs = certs,
+					proxy_dict = proxy_dict)
 
 		self.socket.PlugIn(self)
 

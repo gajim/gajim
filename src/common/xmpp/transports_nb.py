@@ -15,20 +15,21 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-import socket,base64
 
 from simplexml import ustr
 from client import PlugIn
 from idlequeue import IdleObject
 from protocol import *
+import proxy_connectors
 import tls_nb
 
+import socket
 import sys
 import os
 import errno
 import time
-
 import traceback
+import base64
 
 import logging
 log = logging.getLogger('gajim.c.x.transports_nb')
@@ -66,7 +67,7 @@ def get_proxy_data_from_dict(proxy):
 CONNECT_TIMEOUT_SECONDS = 30
 
 # how long to wait for a disconnect to complete
-DISCONNECT_TIMEOUT_SECONDS = 10
+DISCONNECT_TIMEOUT_SECONDS =5 
 
 # size of the buffer which reads data from server
 # if lower, more stanzas will be fragmented and processed twice
@@ -82,7 +83,7 @@ DISCONNECTING = 'DISCONNECTING'
 CONNECTING = 'CONNECTING'  
 PROXY_CONNECTING = 'PROXY_CONNECTING'
 CONNECTED = 'CONNECTED' 
-STATES = [DISCONNECTED, DISCONNECTING, CONNECTING, PROXY_CONNECTING, CONNECTED]
+STATES = [DISCONNECTED, CONNECTING, PROXY_CONNECTING, CONNECTED, DISCONNECTING]
 # transports have different arguments in constructor and same in connect()
 # method
 
@@ -124,7 +125,7 @@ class NonBlockingTransport(PlugIn):
 		'''
 		self.on_connect = on_connect
 		self.on_connect_failure = on_connect_failure
-		(self.server, self.port) = conn_5tuple[4][:2]
+		self.server, self.port = conn_5tuple[4][:2]
 		self.conn_5tuple = conn_5tuple
 
 
@@ -213,7 +214,8 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 	'''
 	Non-blocking TCP socket wrapper
 	'''
-	def __init__(self, raise_event, on_disconnect, idlequeue, estabilish_tls, certs):
+	def __init__(self, raise_event, on_disconnect, idlequeue, estabilish_tls, certs,
+		proxy_dict=None):
 		'''
 		Class constructor.
 		'''
@@ -224,6 +226,8 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 
 		# bytes remained from the last send message
 		self.sendbuff = ''
+		self.proxy_dict = proxy_dict
+		self.on_remote_disconnect = self.disconnect()
 
 		
 	def start_disconnect(self):
@@ -288,12 +292,29 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 		# which will also remove read_timeouts for descriptor
 		self._on_connect_failure('Exception while connecting to %s:%s - %s %s' % 
 			(self.server, self.port, errnum, errstr))
+
+	def _connect_to_proxy(self):
+		self.set_state(PROXY_CONNECTING)
+		if self.proxy_dict['type']   == 'socks5': 
+			proxyclass = proxy_connectors.SOCKS5Connector
+		elif self.proxy_dict['type'] == 'http'  :
+			proxyclass = proxy_connectors.HTTPCONNECTConnector
+		proxyclass(
+			send_method = self.send,
+			onreceive = self.onreceive,
+			old_on_receive = self.on_receive,
+			on_success = self._on_connect,
+			on_failure = self._on_connect_failure,
+			xmpp_server = self.proxy_dict['xmpp_server'],
+			proxy_creds = self.proxy_dict['credentials']
+			)
+
 			
 	def _on_connect(self):
-		''' with TCP socket, we have to remove send-timeout '''
-		self.idlequeue.remove_timeout(self.fd)
-		self.peerhost  = self._sock.getsockname()
-		print self.estabilish_tls
+		'''
+		Preceeds invoking of on_connect callback. TCP connection is estabilished at
+		this time.
+		'''
 		if self.estabilish_tls: 
 			self.tls_init(
 				on_succ = lambda: NonBlockingTransport._on_connect(self),
@@ -320,7 +341,10 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 
 		if self.get_state()==CONNECTING:
 			log.info('%s socket wrapper connected' % id(self))
-			self._on_connect()
+			self.idlequeue.remove_timeout(self.fd)
+			self.peerhost  = self._sock.getsockname()
+			if self.proxy_dict: self._connect_to_proxy()
+			else: self._on_connect()
 			return
 		self._do_send()
 
@@ -330,7 +354,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 		if self.get_state()==CONNECTING:
 			self._on_connect_failure('Error during connect to %s:%s' % 
 				(self.server, self.port))
-		else :
+		else:
 			self.disconnect()
 
 	def disconnect(self, do_callback=True):
@@ -338,6 +362,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 			return
 		self.set_state(DISCONNECTED)
 		self.idlequeue.unplug_idle(self.fd)
+		if self.__dict__.has_key('NonBlockingTLS'): self.NonBlockingTLS.PlugOut()
 		try:
 			self._sock.shutdown(socket.SHUT_RDWR)
 			self._sock.close()
@@ -401,8 +426,6 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 		Plugged socket will always be watched for "error" event - in that case,
 		pollend() is called.
 		'''
-		self.idlequeue.plug_idle(self, writable, readable)
-
 		log.info('Plugging fd %d, W:%s, R:%s' % (self.fd, writable, readable))
 		self.idlequeue.plug_idle(self, writable, readable)
 
@@ -436,10 +459,6 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 
 	def _do_receive(self):
 		''' Reads all pending incoming data. Calls owner's disconnected() method if appropriate.'''
-		# Misc error signifying that we got disconnected
-		ERR_DISCONN = -2 
-		# code for unknown/other errors
-		ERR_OTHER = -3
 		received = None
 		errnum = 0
 		errstr = 'No Error Set'
@@ -448,35 +467,29 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 			# get as many bites, as possible, but not more than RECV_BUFSIZE
 			received = self._recv(RECV_BUFSIZE)
 		except socket.error, (errnum, errstr):
-			# save exception number and message to errnum, errstr
 			log.info("_do_receive: got %s:" % received , exc_info=True)
 		except tls_nb.SSLWrapper.Error, e:
-			log.info("_do_receive, caugth SSL error: got %s:" % received , exc_info=True)
-			errnum = tls_nb.gattr(e, 'errno') or ERR_OTHER
-			errstr = tls_nb.gattr(e, 'exc_str')
+			log.info("_do_receive, caught SSL error, got %s:" % received , exc_info=True)
+			errnum, errstr = e.exc
 		
-		if received == '':
-			errnum = ERR_DISCONN
-			errstr = "Connection closed unexpectedly"
+		if (self.ssl_lib is None and received == '') or \
+			(self.ssl_lib == tls_nb.PYSTDLIB  and errnum ==  8 ) or \
+			(self.ssl_lib == tls_nb.PYOPENSSL and errnum == -1 ):
+			#  8 in stdlib: errstr == EOF occured in violation of protocol 
+			# -1 in pyopenssl: errstr == Unexpected EOF 
+			log.info("Disconnected by remote server: %s %s" % (errnum, errstr), exc_info=True)
+			self.on_remote_disconnect()
+			return
+		
 
-		if errnum in (ERR_DISCONN, errno.ECONNRESET, errno.ENOTCONN, errno.ESHUTDOWN):
-			# ECONNRESET - connection you are trying to access has been reset by the peer
-			# ENOTCONN - Transport endpoint is not connected
-			# ESHUTDOWN  - shutdown(2) has been called on a socket to close down the
-			#     sending end of the transmision, and then data was attempted to be sent
-			log.error("Connection to %s lost: %s %s" % ( self.server, errnum, errstr), exc_info=True)
-			if hasattr(self, 'on_remote_disconnect'): self.on_remote_disconnect()
-			else: self.disconnect()
+		if errnum:
+			log.error("Connection to %s:%s lost: %s %s" % ( self.server, self.port, errnum, errstr), exc_info=True)
+			self.disconnect()
 			return
 
+		# this branch is for case of non-fatal SSL errors - None is returned from 
+		# recv() but no errnum is set
 		if received is None:
-			# because there are two types of TLS wrappers, the TLS plugin recv method
-			# returns None in case of error
-			if errnum != 0:
-				log.error("CConnection to %s lost: %s %s" % (self.server, errnum, errstr))
-				self.disconnect()
-				return
-			received = ''
 			return
 
 		# we have received some bytes, stop the timeout!
@@ -505,10 +518,10 @@ class NonBlockingHTTP(NonBlockingTCP):
 	'''
 
 	def __init__(self, raise_event, on_disconnect, idlequeue, estabilish_tls, certs,
-			on_http_request_possible, on_persistent_fallback, http_dict):
+		on_http_request_possible, on_persistent_fallback, http_dict, proxy_dict = None):
 
 		NonBlockingTCP.__init__(self, raise_event, on_disconnect, idlequeue,
-			estabilish_tls, certs)
+			estabilish_tls, certs, proxy_dict)
 
 		self.http_protocol, self.http_host, self.http_path = urisplit(http_dict['http_uri'])
 		if self.http_protocol is None:
@@ -518,7 +531,7 @@ class NonBlockingHTTP(NonBlockingTCP):
 		self.http_port = http_dict['http_port']
 		self.http_version = http_dict['http_version']
 		self.http_persistent = http_dict['http_persistent']
-		self.over_proxy =  http_dict['over_proxy']
+		self.add_proxy_headers =  http_dict['add_proxy_headers']
 		if http_dict.has_key('proxy_user') and http_dict.has_key('proxy_pass'):
 			self.proxy_user, self.proxy_pass = http_dict['proxy_user'], http_dict['proxy_pass']
 		else:
@@ -528,46 +541,39 @@ class NonBlockingHTTP(NonBlockingTCP):
 		self.recvbuff = ''
 		self.expected_length = 0 
 		self.pending_requests = 0
-		self.on_persistent_fallback = on_persistent_fallback
 		self.on_http_request_possible = on_http_request_possible
-		self.just_responed = False
 		self.last_recv_time = 0
+		self.close_current_connection = False
+		self.on_remote_disconnect = lambda: on_persistent_fallback(self)
 		
-	def send(self, raw_data, now=False):
-		NonBlockingTCP.send(
-			self,
-			self.build_http_message(raw_data),
-			now)
+	def http_send(self, raw_data, now=False):
+		self.send(self.build_http_message(raw_data), now)
 
-
-	def on_remote_disconnect(self):
-		log.warn('on_remote_disconnect called, http_persistent = %s' % self.http_persistent)
-		if self.http_persistent:
-			self.http_persistent = False
-			self.on_persistent_fallback()
-			self.disconnect(do_callback=False)
-			self.connect(
-				conn_5tuple = self.conn_5tuple,
-				on_connect = self.on_http_request_possible,
-				on_connect_failure = self.disconnect)
-
-		else:
-			self.disconnect()
-		return
 
 	def _on_receive(self,data):
 		'''Preceeds passing received data to owner class. Gets rid of HTTP headers
 		and checks them.'''
+		if self.get_state() == PROXY_CONNECTING:
+			NonBlockingTCP._on_receive(self, data)
+			return
 		if not self.recvbuff:
 			# recvbuff empty - fresh HTTP message was received
-			statusline, headers, self.recvbuff = self.parse_http_message(data)
+			try:
+				statusline, headers, self.recvbuff = self.parse_http_message(data)
+			except ValueError:
+				self.disconnect()
+				return
+
 			if statusline[1] != '200':
 				log.error('HTTP Error: %s %s' % (statusline[1], statusline[2]))
 				self.disconnect()
 				return
 			self.expected_length = int(headers['Content-Length'])
+			if headers.has_key('Connection') and headers['Connection'].strip()=='close':
+				self.close_current_connection = True
+
 		else:
-			#sth in recvbuff - append currently received data to HTTP mess in buffer 
+			#sth in recvbuff - append currently received data to HTTP msg in buffer 
 			self.recvbuff = '%s%s' % (self.recvbuff, data)
 
 		if self.expected_length > len(self.recvbuff):
@@ -583,9 +589,10 @@ class NonBlockingHTTP(NonBlockingTCP):
 		self.recvbuff=''
 		self.expected_length=0
 
-		if not self.http_persistent:
+		if not self.http_persistent or self.close_current_connection:
 			# not-persistent connections disconnect after response
 			self.disconnect(do_callback = False)
+		self.close_current_connection = False
 		self.last_recv_time = time.time()
 		self.on_receive(data=httpbody, socket=self)
 		self.on_http_request_possible()
@@ -601,9 +608,10 @@ class NonBlockingHTTP(NonBlockingTCP):
 			self.http_port, self.http_path)
 		headers = ['%s %s %s' % (method, absolute_uri, self.http_version),
 			'Host: %s:%s' % (self.http_host, self.http_port),
+			'User-Agent: Gajim',
 			'Content-Type: text/xml; charset=utf-8',
 			'Content-Length: %s' % len(str(httpbody))]
-		if self.over_proxy:
+		if self.add_proxy_headers:
 			headers.append('Proxy-Connection: keep-alive')
 			headers.append('Pragma: no-cache')
 			if self.proxy_user and self.proxy_pass:
@@ -646,6 +654,9 @@ class NonBlockingHTTPBOSH(NonBlockingHTTP):
 		self.build_cb = build_cb
 
 	def _do_send(self):
+		if self.state == PROXY_CONNECTING:
+			NonBlockingTCP._do_send(self)
+			return
 		if not self.sendbuff:
 			stanza = self.build_cb(socket=self)
 			stanza = self.build_http_message(httpbody=stanza)
@@ -666,227 +677,6 @@ class NonBlockingHTTPBOSH(NonBlockingHTTP):
 			log.error('_do_send:', exc_info=True)
 			traceback.print_exc()
 			self.disconnect()
-
-
-
-class NBProxySocket(NonBlockingTCP):
-	'''
-	Interface for proxy socket wrappers - when tunnneling XMPP over proxies,
-	some connecting process usually has to be done before opening stream.
-	'''
-	def __init__(self, raise_event, on_disconnect, idlequeue, estabilish_tls, certs,
-		xmpp_server, proxy_creds=(None,None)):
-
-		self.proxy_user, self.proxy_pass = proxy_creds
-		self.xmpp_server = xmpp_server
-		NonBlockingTCP.__init__(self, raise_event, on_disconnect, idlequeue,
-			estabilish_tls, certs)
-		
-	def _on_connect(self):
-		'''
-		We're redefining _on_connect method to insert proxy-specific mechanism before
-		invoking the ssl connection and then client callback. All the proxy connecting
-		is done before XML stream is opened.
-		'''
-		self.set_state(PROXY_CONNECTING)
-		self._on_tcp_connect()
-
-
-	def _on_tcp_connect(self):
-		'''to be implemented in each proxy socket wrapper'''
-		pass
-
-
-class NBHTTPProxySocket(NBProxySocket):
-	''' This class can be used instead of NonBlockingTCP
-	HTTP (CONNECT) proxy connection class. Allows to use HTTP proxies like squid with
-	(optionally) simple authentication (using login and password). 
-	'''
-		
-	def _on_tcp_connect(self):
-		''' Starts connection. Connects to proxy, supplies login and password to it
-			(if were specified while creating instance). Instructs proxy to make
-			connection to the target server. Returns non-empty sting on success. '''
-		log.info('Proxy server contacted, performing authentification')
-		connector = ['CONNECT %s:%s HTTP/1.0' % self.xmpp_server,
-			'Proxy-Connection: Keep-Alive',
-			'Pragma: no-cache',
-			'Host: %s:%s' % self.xmpp_server,
-			'User-Agent: Gajim']
-		if self.proxy_user and self.proxy_pass:
-			credentials = '%s:%s' % (self.proxy_user, self.proxy_pass)
-			credentials = base64.encodestring(credentials).strip()
-			connector.append('Proxy-Authorization: Basic '+credentials)
-		connector.append('\r\n')
-		self.onreceive(self._on_headers_sent)
-		self.send('\r\n'.join(connector))
-		
-	def _on_headers_sent(self, reply):
-		if reply is None:
-			return
-		self.reply = reply.replace('\r', '')
-		try: 
-			proto, code, desc = reply.split('\n')[0].split(' ', 2)
-		except: 
-			log.error("_on_headers_sent:", exc_info=True)
-			#traceback.print_exc()
-			self._on_connect_failure('Invalid proxy reply')
-			return
-		if code <> '200':
-			log.error('Invalid proxy reply: %s %s %s' % (proto, code, desc))
-			self._on_connect_failure('Invalid proxy reply')
-			return
-		if len(reply) != 2:
-			pass
-		NonBlockingTCP._on_connect(self)
-		#self.onreceive(self._on_proxy_auth)
-
-	def _on_proxy_auth(self, reply):
-		if self.reply.find('\n\n') == -1:
-			if reply is None:
-				self._on_connect_failure('Proxy authentification failed')
-				return
-			if reply.find('\n\n') == -1:
-				self.reply += reply.replace('\r', '')
-				self._on_connect_failure('Proxy authentification failed')
-				return
-		log.info('Authentification successfull. Jabber server contacted.')
-		self._on_connect(self)
-
-
-class NBSOCKS5ProxySocket(NBProxySocket):
-	'''SOCKS5 proxy connection class. Uses TCPsocket as the base class
-		redefines only connect method. Allows to use SOCKS5 proxies with
-		(optionally) simple authentication (only USERNAME/PASSWORD auth). 
-	'''
-	# TODO:  replace on_proxy_failure() with
-	#	_on_connect_failure, at the end call _on_connect()
-
-	def _on_tcp_connect(self):
-		log.info('Proxy server contacted, performing authentification')
-		if self.proxy.has_key('user') and self.proxy.has_key('password'):
-			to_send = '\x05\x02\x00\x02'
-		else:
-			to_send = '\x05\x01\x00'
-		self.onreceive(self._on_greeting_sent)
-		self.send(to_send)
-
-	def _on_greeting_sent(self, reply):
-		if reply is None:
-			return
-		if len(reply) != 2:
-			self.on_proxy_failure('Invalid proxy reply')
-			return
-		if reply[0] != '\x05':
-			log.info('Invalid proxy reply')
-			self._owner.disconnected()
-			self.on_proxy_failure('Invalid proxy reply')
-			return
-		if reply[1] == '\x00':
-			return self._on_proxy_auth('\x01\x00')
-		elif reply[1] == '\x02':
-			to_send = '\x01' + chr(len(self.proxy['user'])) + self.proxy['user'] +\
-				chr(len(self.proxy['password'])) + self.proxy['password']
-			self.onreceive(self._on_proxy_auth)
-			self.send(to_send)
-		else:
-			if reply[1] == '\xff':
-				log.error('Authentification to proxy impossible: no acceptable '
-					'auth method')
-				self._owner.disconnected()
-				self.on_proxy_failure('Authentification to proxy impossible: no '
-					'acceptable authentification method')
-				return
-			log.error('Invalid proxy reply')
-			self._owner.disconnected()
-			self.on_proxy_failure('Invalid proxy reply')
-			return
-
-	def _on_proxy_auth(self, reply):
-		if reply is None:
-			return
-		if len(reply) != 2:
-			log.error('Invalid proxy reply')
-			self._owner.disconnected()
-			self.on_proxy_failure('Invalid proxy reply')
-			return
-		if reply[0] != '\x01':
-			log.error('Invalid proxy reply')
-			self._owner.disconnected()
-			self.on_proxy_failure('Invalid proxy reply')
-			return
-		if reply[1] != '\x00':
-			log.error('Authentification to proxy failed')
-			self._owner.disconnected()
-			self.on_proxy_failure('Authentification to proxy failed')
-			return
-		log.info('Authentification successfull. Jabber server contacted.')
-		# Request connection
-		req = "\x05\x01\x00"
-		# If the given destination address is an IP address, we'll
-		# use the IPv4 address request even if remote resolving was specified.
-		try:
-			self.ipaddr = socket.inet_aton(self.server[0])
-			req = req + "\x01" + self.ipaddr
-		except socket.error:
-			# Well it's not an IP number,  so it's probably a DNS name.
-#			if self.__proxy[3]==True:
-			# Resolve remotely
-			self.ipaddr = None
-			req = req + "\x03" + chr(len(self.server[0])) + self.server[0]
-#			else:
-#				# Resolve locally
-#				self.ipaddr = socket.inet_aton(socket.gethostbyname(self.server[0]))
-#				req = req + "\x01" + ipaddr
-		req = req + struct.pack(">H",self.server[1])
-		self.onreceive(self._on_req_sent)
-		self.send(req)
-
-	def _on_req_sent(self, reply):
-		if reply is None:
-			return
-		if len(reply) < 10:
-			log.error('Invalid proxy reply')
-			self._owner.disconnected()
-			self.on_proxy_failure('Invalid proxy reply')
-			return
-		if reply[0] != '\x05':
-			log.error('Invalid proxy reply')
-			self._owner.disconnected()
-			self.on_proxy_failure('Invalid proxy reply')
-			return
-		if reply[1] != "\x00":
-			# Connection failed
-			self._owner.disconnected()
-			if ord(reply[1])<9:
-				errors = ['general SOCKS server failure',
-					'connection not allowed by ruleset',
-					'Network unreachable',
-					'Host unreachable',
-					'Connection refused',
-					'TTL expired',
-					'Command not supported',
-					'Address type not supported'
-				]
-				txt = errors[ord(reply[1])-1]
-			else:
-				txt = 'Invalid proxy reply'
-			log.error(txt)
-			self.on_proxy_failure(txt)
-			return
-		# Get the bound address/port
-		elif reply[3] == "\x01":
-			begin, end = 3, 7
-		elif reply[3] == "\x03":
-			begin, end = 4, 4 + reply[4]
-		else:
-			log.error('Invalid proxy reply')
-			self._owner.disconnected()
-			self.on_proxy_failure('Invalid proxy reply')
-			return
-
-		if self.on_connect_proxy:
-			self.on_connect_proxy()
 
 
 

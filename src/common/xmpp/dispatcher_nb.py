@@ -305,6 +305,7 @@ class XMPPDispatcher(PlugIn):
 		name = stanza.getName()
 
 		if name=='features': 
+			self._owner.got_features = True
 			session.Stream.features=stanza
 		
 		xmlns=stanza.getNamespace()
@@ -390,7 +391,7 @@ class XMPPDispatcher(PlugIn):
 		''' Put stanza on the wire and wait for recipient's response to it. '''
 		if timeout is None: 
 			timeout = DEFAULT_TIMEOUT_SECONDS
-		self._witid = self._owner.send(stanza)
+		self._witid = self.send(stanza)
 		if func:
 			self.on_responses[self._witid] = (func, args)
 		if timeout:

@@ -253,8 +253,6 @@ class NonBlockingNonSASL(PlugIn):
 	def plugin(self, owner):
 		''' Determine the best auth method (digest/0k/plain) and use it for auth.
 			Returns used method name on success. Used internally. '''
-		if not self.resource: 
-			return self.authComponent(owner)
 		log.info('Querying server about possible auth methods')
 		self.owner = owner 
 		
@@ -303,33 +301,6 @@ class NonBlockingNonSASL(PlugIn):
 		log.error('Authentication failed!')
 		return self.on_auth(None)
 
-	def authComponent(self,owner):
-		''' Authenticate component. Send handshake stanza and wait for result. Returns "ok" on success. '''
-		self.handshake=0
-		owner.send(Node(NS_COMPONENT_ACCEPT+' handshake',
-			payload=[sha.new(owner.Dispatcher.Stream._document_attrs['id']+self.password).hexdigest()]))
-		owner.RegisterHandler('handshake', self.handshakeHandler, xmlns=NS_COMPONENT_ACCEPT)
-		self._owner.onreceive(self._on_auth_component)
-		
-	def _on_auth_component(self, data):
-		''' called when we receive some response, after we send the handshake '''
-		if data:
-			self.Dispatcher.ProcessNonBlocking(data)
-		if not self.handshake:
-			log.info('waiting on handshake')
-			return
-		self._owner.onreceive(None)
-		owner._registered_name=self.user
-		if self.handshake+1: 
-			return self.on_auth('ok')
-		self.on_auth(None)
-
-	def handshakeHandler(self,disp,stanza):
-		''' Handler for registering in dispatcher for accepting transport authentication. '''
-		if stanza.getName() == 'handshake': 
-			self.handshake=1
-		else: 
-			self.handshake=-1
 	
 class NonBlockingBind(PlugIn):
 	''' Bind some JID to the current connection to allow router know of our location.'''
