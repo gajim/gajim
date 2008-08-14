@@ -35,7 +35,7 @@ Gajim 0.12-alpha1 (XX augustus 2008)
   * 
 
   * OTHER
-  * Support of PEP (Personal Eventing Protocol) (XEP-0163, XEP-0107, XEP-1018, XEP-0118)
+  * Support of PEP (Personal Eventing Protocol) (XEP-0163, XEP-0107, XEP-0108, XEP-0118)
   * Support for Google Talk accounts with non gmail.com domain (+ GMail notifications)
   * Modified the format of emoticons list file, so we can choose the default code (#3696)
   * New Remote Controlling Option (XEP-0146): forward unread messages
