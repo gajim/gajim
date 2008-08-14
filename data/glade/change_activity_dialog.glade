@@ -33,12 +33,12 @@
             <property name="sensitive">False</property>
             <property name="can_focus">True</property>
             <child>
-              <widget class="GtkVBox" id="working_vbox">
+              <widget class="GtkVBox" id="doing_chores_vbox">
                 <property name="visible">True</property>
               </widget>
             </child>
             <child>
-              <widget class="GtkImage" id="working_image">
+              <widget class="GtkImage" id="doing_chores_image">
                 <property name="visible">True</property>
                 <property name="stock">gtk-missing-image</property>
                 <property name="icon_size">1</property>
@@ -49,11 +49,31 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkVBox" id="eating_vbox">
+              <widget class="GtkVBox" id="drinking_vbox">
                 <property name="visible">True</property>
               </widget>
               <packing>
                 <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkImage" id="drinking_image">
+                <property name="visible">True</property>
+                <property name="stock">gtk-missing-image</property>
+                <property name="icon_size">1</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+                <property name="position">1</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkVBox" id="eating_vbox">
+                <property name="visible">True</property>
+              </widget>
+              <packing>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -64,7 +84,7 @@
               </widget>
               <packing>
                 <property name="type">tab</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -73,7 +93,7 @@
                 <property name="visible">True</property>
               </widget>
               <packing>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -84,32 +104,12 @@
               </widget>
               <packing>
                 <property name="type">tab</property>
-                <property name="position">2</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkVBox" id="relaxing_vbox">
-                <property name="visible">True</property>
-              </widget>
-              <packing>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkImage" id="relaxing_image">
-                <property name="visible">True</property>
-                <property name="stock">gtk-missing-image</property>
-                <property name="icon_size">1</property>
-              </widget>
-              <packing>
-                <property name="type">tab</property>
                 <property name="position">3</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkVBox" id="talking_vbox">
+              <widget class="GtkVBox" id="grooming_vbox">
                 <property name="visible">True</property>
               </widget>
               <packing>
@@ -117,7 +117,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkImage" id="talking_image">
+              <widget class="GtkImage" id="grooming_image">
                 <property name="visible">True</property>
                 <property name="stock">gtk-missing-image</property>
                 <property name="icon_size">1</property>
@@ -129,7 +129,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkVBox" id="doing_chores_vbox">
+              <widget class="GtkVBox" id="having_appointment_vbox">
                 <property name="visible">True</property>
               </widget>
               <packing>
@@ -137,7 +137,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkImage" id="doing_chores_image">
+              <widget class="GtkImage" id="having_appointment_image">
                 <property name="visible">True</property>
                 <property name="stock">gtk-missing-image</property>
                 <property name="icon_size">1</property>
@@ -169,11 +169,51 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkVBox" id="traveling_vbox">
+              <widget class="GtkVBox" id="relaxing_vbox">
                 <property name="visible">True</property>
               </widget>
               <packing>
                 <property name="position">7</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkImage" id="relaxing_image">
+                <property name="visible">True</property>
+                <property name="stock">gtk-missing-image</property>
+                <property name="icon_size">1</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+                <property name="position">7</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkVBox" id="talking_vbox">
+                <property name="visible">True</property>
+              </widget>
+              <packing>
+                <property name="position">8</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkImage" id="talking_image">
+                <property name="visible">True</property>
+                <property name="stock">gtk-missing-image</property>
+                <property name="icon_size">1</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+                <property name="position">8</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkVBox" id="traveling_vbox">
+                <property name="visible">True</property>
+              </widget>
+              <packing>
+                <property name="position">9</property>
               </packing>
             </child>
             <child>
@@ -184,52 +224,12 @@
               </widget>
               <packing>
                 <property name="type">tab</property>
-                <property name="position">7</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkVBox" id="having_appointment_vbox">
-                <property name="visible">True</property>
-              </widget>
-              <packing>
-                <property name="position">8</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkImage" id="having_appointment_image">
-                <property name="visible">True</property>
-                <property name="stock">gtk-missing-image</property>
-                <property name="icon_size">1</property>
-              </widget>
-              <packing>
-                <property name="type">tab</property>
-                <property name="position">8</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkVBox" id="drinking_vbox">
-                <property name="visible">True</property>
-              </widget>
-              <packing>
-                <property name="position">9</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkImage" id="drinking_image">
-                <property name="visible">True</property>
-                <property name="stock">gtk-missing-image</property>
-                <property name="icon_size">1</property>
-              </widget>
-              <packing>
-                <property name="type">tab</property>
                 <property name="position">9</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkVBox" id="grooming_vbox">
+              <widget class="GtkVBox" id="working_vbox">
                 <property name="visible">True</property>
               </widget>
               <packing>
@@ -237,7 +237,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkImage" id="grooming_image">
+              <widget class="GtkImage" id="working_image">
                 <property name="visible">True</property>
                 <property name="stock">gtk-missing-image</property>
                 <property name="icon_size">1</property>

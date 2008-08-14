@@ -336,6 +336,7 @@ class ChangeActivityDialog:
 
 		rbtns = {}
 		group = None
+
 		for category in pep.ACTIVITIES:
 			item = self.xml.get_widget(category + '_image')
 			item.set_from_pixbuf(
@@ -360,7 +361,12 @@ class ChangeActivityDialog:
 				[category, 'other'])
 			vbox.pack_start(rbtns[act], False, False, 0)
 
+			activities = []
 			for activity in pep.ACTIVITIES[category]:
+				activities.append(activity)
+			activities.sort()
+
+			for activity in activities:
 				if activity == 'category':
 					continue
 
