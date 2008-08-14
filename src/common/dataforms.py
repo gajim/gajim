@@ -129,7 +129,8 @@ class DataField(ExtendedNode):
 			assert isinstance(value, basestring)
 			self.setAttr('label', value)
 		def fdel(self):
-			self.delAttr('label')
+			if self.getAttr('label'):
+				self.delAttr('label')
 		return locals()
 
 	@nested_property
