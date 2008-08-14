@@ -1552,21 +1552,24 @@ class ChatControl(ChatControlBase):
 
 	def _show_lock_image(self, visible, enc_type = '', enc_enabled = False, chat_logged = False, authenticated = False):
 		'''Set lock icon visibility and create tooltip'''
-		# TODO: Make translatable
-		status_string = enc_enabled and 'is' or 'is NOT'
-		logged_string = chat_logged and 'will' or 'will NOT'
+		#encryption %s active
+		status_string = enc_enabled and _('is') or _('is NOT')
+		#chat session %s be logged
+		logged_string = chat_logged and _('will') or _('will NOT')
 
 		if authenticated:
-			authenticated_string = ' and authenticated'
+			#About encrypted chat session
+			authenticated_string = _('and authenticated')
 			self.lock_image.set_from_file(os.path.join(gajim.DATA_DIR, 'pixmaps', 'security-high.png'))
 		else:
-			authenticated_string = ' and NOT authenticated'
+			#About encrypted chat session
+			authenticated_string = _('and NOT authenticated')
 			self.lock_image.set_from_file(os.path.join(gajim.DATA_DIR, 'pixmaps', 'security-low.png'))
 
-		tooltip = '%s encryption %s active%s.\n' \
-			'Your chat session %s be logged.' % \
-			(enc_type, status_string, authenticated_string,
-			logged_string)
+		tooltip = _('%(type)s encryption %(status)s active %(authenticated)s.\n'
+			'Your chat session %(logged)s be logged.'\
+			% {'type': enc_type, 'status': status_string,
+			'authenticated': authenticated_string, 'logged': logged_string)
 
 		self.lock_tooltip.set_tip(self.authentication_button, tooltip)
 		self.widget_set_visible(self.authentication_button, not visible)
