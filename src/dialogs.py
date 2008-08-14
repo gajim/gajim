@@ -420,9 +420,6 @@ class ChangeActivityDialog:
 		'''
 		message = None
 		if self.checkbutton.get_active():
-			if self.subactivity is 'other':
-				self.subactivity = ''
-
 			pep.user_send_activity(self.account, self.activity,
 				self.subactivity,
 				self.entry.get_text().decode('utf-8'))
