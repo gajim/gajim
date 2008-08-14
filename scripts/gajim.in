@@ -23,8 +23,9 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 
-if [ `id -u` -eq 0 ]; then
+if test $(id -u) -eq 0; then
 	echo "You must not launch Gajim as root, it is INSECURE"
+	exit 1
 fi
 
 datadir=@DATADIR@
