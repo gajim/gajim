@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 if [[ $0 == /* ]]; then
 	BASE=`dirname $0`
 else
@@ -15,4 +15,4 @@ if [ "x${OS}" == "xDarwin" ]; then
 fi
 
 cd ${BASE}/src
-exec -a gajim python -t gajim.py $@
+exec python2.5 -t gajim.py $@
