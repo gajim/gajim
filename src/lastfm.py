@@ -1,10 +1,10 @@
 #!/usr/bin/env python
+# -*- coding:utf-8 -*-
 ## src/lastfm.py
 ##
-## Copyright (C) 2007 Yann Leboulanger <asterix AT lagaule.org>
-##                    Olivier Mehani <shtrom@ssji.net>
+## Copyright (C) 2007 Olivier Mehani <shtrom AT ssji.net>
+##                    Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007-2008 Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##

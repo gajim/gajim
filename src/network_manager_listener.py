@@ -5,7 +5,6 @@
 ##                    Nikos Kouremenos <kourem AT gmail.com>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
 ## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##

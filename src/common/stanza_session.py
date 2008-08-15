@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/common/stanza_session.py
 ##
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>

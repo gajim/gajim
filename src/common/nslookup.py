@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/common/nslookup.py
 ##
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>

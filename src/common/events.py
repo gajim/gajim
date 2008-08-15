@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/common/events.py
 ##
 ## Copyright (C) 2006 Jean-Marie Traissard <jim AT lapin.org>

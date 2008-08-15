@@ -1,10 +1,11 @@
+# -*- coding:utf-8 -*-
 ## src/gtkgui_helpers.py
 ##
 ## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Travis Shirk <travis AT pobox.com>
-## Copyright (C) 2006-2007 Junglecow <junglecow AT gmail.com>
+## Copyright (C) 2006-2007 Junglecow J <junglecow AT gmail.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2007 James Newton <redshodan AT gmail.com>
 ##                    Julien Pivotto <roidelapluie AT gmail.com>

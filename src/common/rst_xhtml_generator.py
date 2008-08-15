@@ -1,10 +1,10 @@
+# -*- coding:utf-8 -*-
 ## src/common/rst_xhtml_generator.py
 ##
 ## Copyright (C) 2006 Santiago Gala
 ##                    Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##

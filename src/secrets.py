@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/secrets.py
 ##
 ## Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>

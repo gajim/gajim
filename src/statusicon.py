@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/statusicon.py
 ##
 ## Copyright (C) 2006 Nikos Kouremenos <kourem AT gmail.com>

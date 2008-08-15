@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/common/contacts.py
 ##
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>

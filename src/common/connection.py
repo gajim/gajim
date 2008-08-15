@@ -1,13 +1,14 @@
+# -*- coding:utf-8 -*-
 ## src/common/connection.py
 ##
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Alex Mauer <hawke AT hawkesnest.net>
-##                    Stephan Kochen <stephan AT kochen.nl>
+##                    Stéphan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                         Travis Shirk <travis AT pobox.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006 Junglecow <junglecow AT gmail.com>
+## Copyright (C) 2006 Junglecow J <junglecow AT gmail.com>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2007 Tomasz Melcer <liori AT exroot.org>

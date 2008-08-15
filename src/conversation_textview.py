@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/conversation_textview.py
 ##
 ## Copyright (C) 2005 Norman Rasmussen <norman AT rasmussen.co.za>

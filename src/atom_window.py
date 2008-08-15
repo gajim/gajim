@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/atom_window.py
 ##
 ## Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>

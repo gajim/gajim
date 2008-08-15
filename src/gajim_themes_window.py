@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/gajim_themes_window.py
 ##
 ## Copyright (C) 2003-2007 Yann Leboulanger <asterix AT lagaule.org>
@@ -5,7 +6,6 @@
 ##                         Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##

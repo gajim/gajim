@@ -1,7 +1,8 @@
+# -*- coding:utf-8 -*-
 ## src/common/connection_handlers.py
 ##
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
-##                    Junglecow <junglecow AT gmail.com>
+##                    Junglecow J <junglecow AT gmail.com>
 ## Copyright (C) 2006-2007 Tomasz Melcer <liori AT exroot.org>
 ##                         Travis Shirk <travis AT pobox.com>
 ##                         Nikos Kouremenos <kourem AT gmail.com>

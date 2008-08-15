@@ -3,7 +3,6 @@
 ##
 ## Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
 ## Copyright (C) 2007-2008 Yann Leboulanger <asterix AT lagaule.org>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##

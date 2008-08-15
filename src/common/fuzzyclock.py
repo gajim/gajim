@@ -1,9 +1,9 @@
+# -*- coding:utf-8 -*-
 ## src/common/fuzzyclock.py
 ##
 ## Copyright (C) 2006 Christoph Neuroth <delmonico AT gmx.net>
 ## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##

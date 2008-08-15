@@ -4,7 +4,6 @@
 ## Copyright (C) 2006 Jean-Marie Traissard <jim AT lapin.org>
 ##                    Tomasz Melcer <liori AT exroot.org>
 ## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##

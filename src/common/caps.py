@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/common/caps.py
 ##
 ## Copyright (C) 2007 Tomasz Melcer <liori AT exroot.org>

@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/common/socks5.py
 ##
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>

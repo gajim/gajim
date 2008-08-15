@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/session.py
 ##
 ## Copyright (C) 2008 Yann Leboulanger <asterix AT lagaule.org>

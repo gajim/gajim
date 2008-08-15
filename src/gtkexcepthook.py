@@ -1,9 +1,9 @@
+# -*- coding:utf-8 -*-
 ## src/gtkexcepthook.py
 ##
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
-##                    Stephan Erb <steve-e AT h3c.de>
+## Copyright (C) 2008 Stephan Erb <steve-e AT h3c.de>
 ##
 ## This file is part of Gajim.
 ##

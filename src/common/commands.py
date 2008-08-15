@@ -1,10 +1,10 @@
+# -*- coding:utf-8 -*-
 ## src/common/commands.py
 ##
 ## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
 ##                         Tomasz Melcer <liori AT exroot.org>
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
-##                    Jonathan Schleifer <js-gajim AT webkeks.org>
 ##                    Stephan Erb <steve-e AT h3c.de>
 ##
 ## This file is part of Gajim.

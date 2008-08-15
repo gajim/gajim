@@ -1,8 +1,8 @@
 # common crypto functions (mostly specific to XEP-0116, but useful elsewhere)
+# -*- coding:utf-8 -*-
 ## src/common/crypto.py
 ##
 ## Copyright (C) 2007 Brendan Taylor <whateley AT gmail.com>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##

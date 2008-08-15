@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/common/dbus_support.py
 ##
 ## Copyright (C) 2005 Andrew Sayman <lorien420 AT myrealbox.com>

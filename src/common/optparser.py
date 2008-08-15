@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/common/optparser.py
 ##
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab AT snarc.org>
@@ -9,7 +10,6 @@
 ##                    Brendan Taylor <whateley AT gmail.com>
 ##                    Tomasz Melcer <liori AT exroot.org>
 ##                    Stephan Erb <steve-e AT h3c.de>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##

@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 ## src/disco.py
 ##
-## Copyright (C) 2005-2006 Stephan Kochen <stephan AT kochen.nl>
+## Copyright (C) 2005-2006 Stéphan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##

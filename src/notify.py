@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/notify.py
 ##
 ## Copyright (C) 2005 Sebastian Estienne

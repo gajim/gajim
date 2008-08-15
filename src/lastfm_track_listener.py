@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 ## src/lastfm_track_listener.py
 ##
-## Copyright (C) 2007 Yann Leboulanger <asterix AT lagaule.org>
-##                    Olivier Mehani <shtrom-gajim AT ssji.net>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
+## Copyright (C) 2007 Olivier Mehani <shtrom-gajim AT ssji.net>
+##                    Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##

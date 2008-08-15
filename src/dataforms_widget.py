@@ -1,9 +1,9 @@
+# -*- coding:utf-8 -*-
 ## src/dataforms_widget.py
 ##
 ## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##

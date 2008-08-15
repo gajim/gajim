@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/common/check_paths.py
 ##
 ## Copyright (C) 2005-2006 Travis Shirk <travis AT pobox.com>
@@ -6,7 +7,6 @@
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2007 Tomasz Melcer <liori AT exroot.org>
 ## Copyright (C) 2008 Jean-Marie Traissard <jim AT lapin.org>
-##                    Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##

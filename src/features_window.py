@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/features_window.py
 ##
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>

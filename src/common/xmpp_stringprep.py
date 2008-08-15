@@ -1,10 +1,10 @@
+# -*- coding:utf-8 -*-
 ## src/common/xmpp_stringprep.py
 ##
 ## Copyright (C) 2001-2005 Twisted Matrix Laboratories
 ## Copyright (C) 2005-2007 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Stefan Bethge <stefan AT lanpartei.de>
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##

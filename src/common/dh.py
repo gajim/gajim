@@ -1,8 +1,8 @@
+# -*- coding:utf-8 -*-
 ## src/common/dh.py
 ##
 ## Copyright (C) 2007 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
-##                    Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##

@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/systray.py
 ##
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab AT snarc.org>
@@ -10,7 +11,6 @@
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas AT petrovicky.net>
 ##                    Julien Pivotto <roidelapluie AT gmail.com>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##

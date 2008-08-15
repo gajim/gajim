@@ -1,10 +1,10 @@
+# -*- coding:utf-8 -*-
 ## src/common/pubsub.py
 ##
 ## Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>
 ## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
-##                    Stephan Erb <steve-e AT h3c.de>
+## Copyright (C) 2008 Stephan Erb <steve-e AT h3c.de>
 ##
 ## This file is part of Gajim.
 ##

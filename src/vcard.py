@@ -1,10 +1,11 @@
+# -*- coding:utf-8 -*-
 ## src/vcard.py
 ##
 ## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
-##                    Junglecow <junglecow AT gmail.com>
+## Copyright (C) 2006 Junglecow J <junglecow AT gmail.com>
+##                    Dimitur Kirov <dkirov AT gmail.com>
 ##                    Travis Shirk <travis AT pobox.com>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>

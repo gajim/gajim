@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding:utf-8 -*-
 ## src/history_manager.py
 ##
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>

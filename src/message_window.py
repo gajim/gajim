@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/message_window.py
 ##
 ## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>

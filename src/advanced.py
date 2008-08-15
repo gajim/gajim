@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/advanced.py
 ##
 ## Copyright (C) 2005 Travis Shirk <travis AT pobox.com>
@@ -6,7 +7,6 @@
 ##                         Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##

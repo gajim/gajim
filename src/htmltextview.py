@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/htmltextview.py
 ##
 ## Copyright (C) 2005 Gustavo J. A. M. Carneiro

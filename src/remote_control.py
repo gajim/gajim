@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/remote_control.py
 ##
 ## Copyright (C) 2005-2006 Andrew Sayman <lorien420 AT myrealbox.com>

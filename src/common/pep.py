@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 ## src/common/pep.py
 ##
 ## Copyright (C) 2007 Piotr Gaczkowski <doomhammerng AT gmail.com>
