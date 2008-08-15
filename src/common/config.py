@@ -2,7 +2,7 @@
 ##
 ## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
-## Copyright (C) 2005 Stéphan Kochen <stephan AT kochen.nl>
+## Copyright (C) 2005 Stephan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                         Alex Mauer <hawke AT hawkesnest.net>
 ##                         Nikos Kouremenos <kourem AT gmail.com>

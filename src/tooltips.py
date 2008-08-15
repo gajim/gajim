@@ -2,7 +2,7 @@
 ## src/tooltips.py
 ##
 ## Copyright (C) 2005 Alex Mauer <hawke AT hawkesnest.net>
-##                    Stéphan Kochen <stephan AT kochen.nl>
+##                    Stephan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>

@@ -1,11 +1,10 @@
 ## src/common/sleepy.py
 ##
 ## Copyright (C) 2003-2007 Yann Leboulanger <asterix AT lagaule.org>
-## Copyright (C) 2005-2006 Yann Leboulanger <asterix AT lagaule.org>
-##                         Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
-##                    Mateusz Biliński <mateusz AT bilinski.it>
+##                    Mateusz Bilinski <mateusz AT bilinski.it>
 ##
 ## This file is part of Gajim.
 ##
