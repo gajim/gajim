@@ -1,17 +1,9 @@
-##	message_textview.py
+## src/message_textview.py
 ##
-## Contributors for this file:
-## - Yann Leboulanger <asterix@lagaule.org>
-## - Nikos Kouremenos <kourem@gmail.com>
-##
-## Copyright (C) 2003-2004 Yann Leboulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Leboulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2003-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -21,11 +13,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import gtk

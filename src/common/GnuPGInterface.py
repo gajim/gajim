@@ -1,3 +1,26 @@
+## src/common/GnuPGInterface.py
+##
+## Copyright (C) 2001 Frank J. Tobin <ftobin@neverending.org>
+## Copyright (C) 2005 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2008 Jean-Marie Traissard <jim AT lapin.org>
+##                    Jonathan Schleifer <js-gajim AT webkeks.org>
+##
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
+
 """Interface to GNU Privacy Guard (GnuPG)
 
 GnuPGInterface is a Python module to interface with GnuPG.
@@ -196,31 +219,6 @@ Here is an example of generating a key:
 >>> proc.handles['logger'].close()
 >>> 
 >>> proc.wait()
-
-
-COPYRIGHT:
-
-Copyright (C) 2001  Frank J. Tobin, ftobin@neverending.org
-
-LICENSE:
-
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
-
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
-
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-or see http://www.gnu.org/copyleft/lesser.html
 """
 
 import os

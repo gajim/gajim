@@ -1,4 +1,26 @@
 # this will go to src/common/xmpp later, for now it is in src/common
+## src/common/dataforms.py
+##
+## Copyright (C) 2006-2007 Tomasz Melcer <liori AT exroot.org>
+## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
+##
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
+
 """ This module contains wrappers for different parts of data forms (JEP 0004). For information
 how to use them, read documentation. """
 

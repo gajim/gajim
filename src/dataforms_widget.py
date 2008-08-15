@@ -1,9 +1,9 @@
-##	dataforms.py
+## src/dataforms_widget.py
 ##
-## Copyright (C) 2003-2007 Yann Leboulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <nkour@jabber.org>
-## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
-## Copyright (C) 2003-2005 Vincent Hanquez <tab@snarc.org>
+## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>
+## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -13,12 +13,13 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
+
 ''' This module contains widget that can display data form (JEP-0004).
 Words single and multiple refers here to types of data forms:
 single means these with one record of data (without <reported/> element),

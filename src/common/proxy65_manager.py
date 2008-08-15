@@ -1,8 +1,9 @@
+## src/common/proxy65_manager.py
 ##
-## Copyright (C) 2006 Gajim Team
-##
-## Contributors for this file:
-##	- Dimitur Kirov <dkirov@gmail.com>
+## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
+##                    Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -12,12 +13,13 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
+
 import socket 
 import struct
 import errno

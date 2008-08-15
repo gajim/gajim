@@ -1,11 +1,9 @@
-##	atom_window.py - a window to display atom entries from pubsub.
+## src/atom_window.py
 ##
-## For now greatly simplified, supports only simple feeds like the
-## one from pubsub.com.
-##
-## Copyright (C) 2006-2007 Yann Leboulanger <asterix@lagaule.org>
-## Copyright (C) 2007 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2006-2007 Liori (I think) put ur self here please
+## Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>
+## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -15,11 +13,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 

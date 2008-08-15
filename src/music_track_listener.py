@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
-##	musictracklistener.py
+## src/music_track_listener.py
 ##
-## Copyright (C) 2006 Gustavo Carneiro <gjcarneiro@gmail.com>
-## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2006 Gustavo Carneiro <gjcarneiro AT gmail.com>
+##                    Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2008 Jean-Marie Traissard <jim AT lapin.org>
+##                    Jonathan Schleifer <js-gajim AT webkeks.org>
+##                    Stephan Erb <steve-e AT h3c.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -12,12 +16,13 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
+
 import os
 import gobject
 if __name__ == '__main__':

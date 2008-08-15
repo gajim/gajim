@@ -1,20 +1,25 @@
 # -*- coding: utf-8 -*-
-##	lastfmtracklistener.py
+## src/lastfm_track_listener.py
 ##
-## Copyright (C) 2007 Olivier Mehani <shtrom-gajim@ssji.net>
-## Heavily based on music_track_listener.py:
-##  Copyright (C) 2006 Gustavo Carneiro <gjcarneiro@gmail.com>
-##  Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2007 Yann Leboulanger <asterix AT lagaule.org>
+##                    Olivier Mehani <shtrom-gajim AT ssji.net>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
+
 import gobject
 from lastfm import LastFM
 

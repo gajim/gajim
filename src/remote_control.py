@@ -1,12 +1,14 @@
-##	remote_control.py
+## src/remote_control.py
 ##
-## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
-## Copyright (C) 2005-2006 Andrew Sayman <lorien420@myrealbox.com>
-## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
-## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
-## Copyright (C) 2007 Travis Shirk <travis@pobox.com> 
+## Copyright (C) 2005-2006 Andrew Sayman <lorien420 AT myrealbox.com>
+##                         Dimitur Kirov <dkirov AT gmail.com>
+##                         Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2007 Travis Shirk <travis AT pobox.com>
+## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2007 Lukas Petrovicky <lukas AT petrovicky.net>
+##                    Julien Pivotto <roidelapluie AT gmail.com>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -16,11 +18,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import gobject

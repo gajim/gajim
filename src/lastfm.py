@@ -1,25 +1,25 @@
 #!/usr/bin/env python
-"""
-LastFM Python class
-Copyright (C) 2007 Olivier Mehani <shtrom@ssji.net>
-
-$Id: lastfm.py 52 2007-11-03 23:19:00Z shtrom $
-Python class to handily retrieve song information from a Last.fm account.
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-"""
+## src/lastfm.py
+##
+## Copyright (C) 2007 Yann Leboulanger <asterix AT lagaule.org>
+##                    Olivier Mehani <shtrom@ssji.net>
+## Copyright (C) 2007-2008 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
+##
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
 
 __version__ = '$Revision: 64 $'
 

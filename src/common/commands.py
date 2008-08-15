@@ -1,5 +1,11 @@
+## src/common/commands.py
 ##
-## Copyright (C) 2006 Gajim Team
+## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
+##                         Tomasz Melcer <liori AT exroot.org>
+## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
+##                    Jonathan Schleifer <js-gajim AT webkeks.org>
+##                    Stephan Erb <steve-e AT h3c.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -9,11 +15,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import xmpp

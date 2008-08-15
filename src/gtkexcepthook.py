@@ -1,9 +1,9 @@
-##	gtkexcepthook.py
+## src/gtkexcepthook.py
 ##
-## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
-##
-## Initially written and submitted by Gustavo J. A. M. Carneiro
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
+##                    Stephan Erb <steve-e AT h3c.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -13,11 +13,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import sys
