@@ -320,8 +320,8 @@ class MessageWindow(object):
 			elif control.type_id == message_control.TYPE_CHAT and \
 			keyval == gtk.keysyms.g: # CTRL + g
 				control._on_convert_to_gc_menuitem_activate(None)
-			elif control.type_id == message_control.TYPE_CHAT and \
-			keyval == gtk.keysyms.i: # CTRL + i
+			elif control.type_id in (message_control.TYPE_CHAT,
+			message_control.TYPE_PM) and keyval == gtk.keysyms.i: # CTRL + i
 				control._on_contact_information_menuitem_activate(None)
 			elif keyval == gtk.keysyms.l or keyval == gtk.keysyms.L: # CTRL + l|L
 				control.conv_textview.clear()
