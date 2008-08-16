@@ -1290,7 +1290,7 @@ class Interface:
 		# Standard way, the message comes from the occupant who set the subject
 		text = None
 		if len(jids) > 1:
-			text = '%s has set the subject to %s' % (jids[1], array[1])
+			text = _('%s has set the subject to %s') % (jids[1], array[1])
 		# Workaround for psi bug http://flyspray.psi-im.org/task/595 , to be
 		# deleted one day. We can receive a subject with a body that contains
 		# "X has set the subject to Y" ...
