@@ -168,12 +168,14 @@ class Connection(ConnectionHandlers):
 	# END __init__
 
 	def put_event(self, ev):
+		
 		if gajim.handlers.has_key(ev[0]):
 			gajim.handlers[ev[0]](self.name, ev[1])
 
 	def dispatch(self, event, data):
 		'''always passes account name as first param'''
 		self.put_event((event, data))
+		gajim.ged.raise_event(event, data)
 
 
 	def _reconnect(self):

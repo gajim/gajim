@@ -51,7 +51,37 @@ class EventsDumpPlugin(GajimPlugin):
 							 'Subscribe', 'Subscribed', 'Unsubscribed',
 							 'NewAccount', 'VcardInfo', 'LastStatusTime',
 							 'OsInfo', 'GCPresence', 'GCMessage', 'RosterInfo',
-							 'NewGmail']
+							 'NewGmail','ROSTER', 'WARNING', 'ERROR', 
+							 'INFORMATION',	'ERROR_ANSWER',	'STATUS',
+							 'NOTIFY', 'MSGERROR', 'MSGSENT', 'MSGNOTSENT',
+							 'SUBSCRIBED', 'UNSUBSCRIBED', 'SUBSCRIBE',
+							 'AGENT_ERROR_INFO', 'AGENT_ERROR_ITEMS',
+							 'AGENT_REMOVED', 'REGISTER_AGENT_INFO',
+							 'AGENT_INFO_ITEMS', 'AGENT_INFO_INFO',
+							 'QUIT', 'NEW_ACC_CONNECTED', 
+							 'NEW_ACC_NOT_CONNECTED', 'ACC_OK',	'ACC_NOT_OK',
+							 'MYVCARD', 'VCARD', 'LAST_STATUS_TIME', 'OS_INFO',
+							 'GC_NOTIFY', 'GC_MSG',	'GC_SUBJECT', 'GC_CONFIG',
+							 'GC_CONFIG_CHANGE', 'GC_INVITATION', 
+							 'GC_AFFILIATION', 'GC_PASSWORD_REQUIRED',
+							 'BAD_PASSPHRASE', 'ROSTER_INFO', 'BOOKMARKS',
+							 'CON_TYPE', 'CONNECTION_LOST',	'FILE_REQUEST',
+							 'GMAIL_NOTIFY', 'FILE_REQUEST_ERROR',
+							 'FILE_SEND_ERROR', 'STANZA_ARRIVED', 'STANZA_SENT',
+							 'HTTP_AUTH', 'VCARD_PUBLISHED', 
+							 'VCARD_NOT_PUBLISHED',	'ASK_NEW_NICK',	'SIGNED_IN',
+							 'METACONTACTS', 'ATOM_ENTRY', 'FAILED_DECRYPT',
+							 'PRIVACY_LISTS_RECEIVED', 'PRIVACY_LIST_RECEIVED',
+							 'PRIVACY_LISTS_ACTIVE_DEFAULT', 
+							 'PRIVACY_LIST_REMOVED', 'ZC_NAME_CONFLICT',
+							 'PING_SENT', 'PING_REPLY',	'PING_ERROR',
+							 'SEARCH_FORM',	'SEARCH_RESULT', 
+							 'RESOURCE_CONFLICT', 'PEP_CONFIG',
+							 'UNIQUE_ROOM_ID_UNSUPPORTED', 
+							 'UNIQUE_ROOM_ID_SUPPORTED', 'SESSION_NEG',
+							 'GPG_PASSWORD_REQUIRED', 'SSL_ERROR',
+							 'FINGERPRINT_ERROR', 'PLAIN_CONNECTION',
+							 'PUBSUB_NODE_REMOVED',	'PUBSUB_NODE_NOT_REMOVED']
 		
 		self.events_handlers = {}
 		self._set_handling_methods()
@@ -75,6 +105,6 @@ class EventsDumpPlugin(GajimPlugin):
 	
 	def _generate_handling_method(self, event_name):
 		def handler(self, *args):
-			print "Event '%s' occured. Arguments: %s"%(event_name, pformat(*args))
+			print "Event '%s' occured. Arguments: %s\n\n===\n"%(event_name, pformat(*args))
 		
 		return handler
