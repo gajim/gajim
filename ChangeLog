@@ -4,7 +4,7 @@ Gajim 0.12-alpha1 (XX augustus 2008)
 
   * SECURITY
   * Support for End-To-End encryption (XEP-0116)
-  * SSL certificat verification
+  * SSL certificate verification
   * Improve GPG support (#2390, #2783)
   * Ability to disable message previews in notify popups
 
