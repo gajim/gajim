@@ -224,7 +224,7 @@ be converted to ASCII."""
                     sys.stderr.write("You need to have either"+
                                      " ctypes or pywin32 installed.\n")
                     sys.stderr.flush()
-                    sys.exit(2)
+                    #sys.exit(2)
 
 
 myWin32Funcs = Win32Funcs()    
