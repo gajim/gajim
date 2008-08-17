@@ -3,6 +3,7 @@
 ##  
 ##   Copyright (C) 2003-2004 Alexey "Snake" Nezhdanov
 ##       modified by Dimitur Kirov <dkirov@gmail.com>
+##       modified by Tomas Karasek <tom.to.the.k@gmail.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License as published by
@@ -190,7 +191,7 @@ class PyOpenSSLWrapper(SSLWrapper):
 		return 0
 
 class StdlibSSLWrapper(SSLWrapper):
-	'''Wrapper class for Python's socket.ssl read() and write() methods'''
+	'''Wrapper class for Python socket.ssl read() and write() methods'''
 
 	def __init__(self, *args):
 		self.parent = SSLWrapper
@@ -221,6 +222,10 @@ class NonBlockingTLS(PlugIn):
 	''' TLS connection used to encrypts already estabilished tcp connection.'''
 
 	def __init__(self, cacerts, mycerts):
+		'''
+		:param cacerts: path to pem file with certificates of known XMPP servers
+		:param mycerts: path to pem file with certificates of user trusted servers
+		'''
 		PlugIn.__init__(self)
 		self.cacerts = cacerts
 		self.mycerts = mycerts
@@ -239,11 +244,9 @@ class NonBlockingTLS(PlugIn):
 		log.info('Starting TLS estabilishing')
 		PlugIn.PlugIn(self, owner)
 		try:
-			self._owner._plug_idle(writable=False, readable=False)
 			res = self._startSSL()
 		except Exception, e:
 			log.error("PlugIn: while trying _startSSL():", exc_info=True)
-			#traceback.print_exc()
 			return False
 		return res
 
@@ -278,7 +281,6 @@ class NonBlockingTLS(PlugIn):
 
 		if result:
 			log.debug("Synchronous handshake completed")
-			self._owner._plug_idle(writable=True, readable=False)
 			return True
 		else:
 			return False
@@ -361,7 +363,6 @@ class NonBlockingTLS(PlugIn):
 	def _ssl_verify_callback(self, sslconn, cert, errnum, depth, ok):
 		# Exceptions can't propagate up through this callback, so print them here.
 		try:
-			print 'in ssl verify callback'
 			self._owner.ssl_fingerprint_sha1 = cert.digest('sha1')
 			if errnum == 0:
 				return True

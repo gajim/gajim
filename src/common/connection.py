@@ -581,8 +581,8 @@ class Connection(ConnectionHandlers):
 			if self.on_connect_success == self._on_new_account:
 				con.RegisterDisconnectHandler(self._on_new_account)
 
-			log.info('Connecting to %s: [%s:%d]', self.name,
-				self._current_host['host'], port)
+			self.log_hosttype_info(port)
+
 			con.connect(
 				hostname=self._current_host['host'],
 				port=port,
@@ -593,6 +593,19 @@ class Connection(ConnectionHandlers):
 				secure_tuple = secure_tuple)
 		else:
 			self.connect_to_next_host(retry)
+
+	def log_hosttype_info(self, port):
+		msg = '>>>>>> Connecting to %s [%s:%d], type = %s' % (self.name,
+			self._current_host['host'], port, self._current_type)
+		log.info(msg)
+		if self._proxy:
+			msg = '>>>>>> '
+			if self._proxy['type']=='bosh':
+				msg = '%s over BOSH %s:%s' % (msg, self._proxy['bosh_uri'], self._proxy['bosh_port'])
+			if self._proxy['type'] in ['http','socks5'] or self._proxy['bosh_useproxy']:
+				msg = '%s over proxy %s:%s' % (msg, self._proxy['host'], self._proxy['port'])
+			log.info(msg)
+
 
 
 	def _connect_failure(self, con_type = None):

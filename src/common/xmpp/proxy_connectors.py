@@ -19,6 +19,7 @@ import struct, socket, base64
 '''
 Module containing classes for proxy connecting. So far its HTTP CONNECT
 and SOCKS5 proxy. 
+Authentication to NTLM (Microsoft implementation) proxies can be next.
 '''
 
 import logging

@@ -30,10 +30,9 @@ log = logging.getLogger('gajim.c.x.bosh')
 
 KEY_COUNT = 10
 
+# Fake file descriptor - it's used for setting read_timeout in idlequeue for
+# BOSH Transport. In TCP-derived transports this is file descriptor of socket.
 FAKE_DESCRIPTOR = -1337
-'''Fake file descriptor - it's used for setting read_timeout in idlequeue for
-BOSH Transport.
-In TCP-derived transports it is file descriptor of socket'''
 
 
 class NonBlockingBOSH(NonBlockingTransport):
@@ -126,10 +125,11 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 	def on_http_request_possible(self):
 		'''
-		Called after HTTP response is received - when another request is possible. 
+		Called when HTTP request it's possible to send a HTTP request. It can be when
+		socket is connected or when HTTP response arrived.
 		There should be always one pending request to BOSH CM.
 		'''
-		log.info('on_http_req possible, state:\n%s' % self.get_current_state())
+		log.debug('on_http_req possible, state:\n%s' % self.get_current_state())
 		if self.get_state()==DISCONNECTED: return
 
 		#Hack for making the non-secure warning dialog work
@@ -137,6 +137,10 @@ class NonBlockingBOSH(NonBlockingTransport):
 			if (hasattr(self._owner, 'NonBlockingNonSASL') or hasattr(self._owner, 'SASL')):
 				self.send_BOSH(None)
 			else:
+				# If we already got features and no auth module was plugged yet, we are
+				# probably waiting for confirmation of the "not-secure-connection" dialog.
+				# We don't send HTTP request in that case.
+				# see http://lists.jabber.ru/pipermail/ejabberd/2008-August/004027.html
 				return
 		else:
 			self.send_BOSH(None)
@@ -144,18 +148,20 @@ class NonBlockingBOSH(NonBlockingTransport):
 		
 
 	def get_socket_in(self, state):
+		''' gets sockets in desired state '''
 		for s in self.http_socks:
 			if s.get_state()==state: return s
 		return None
 
 
 	def get_free_socket(self):
+		''' Selects and returns socket eligible for sending a data to.'''
 		if self.http_pipelining:
 			return self.get_socket_in(CONNECTED)
 		else:
 			last_recv_time, tmpsock = 0, None
 			for s in self.http_socks:
-				# we're interested only into CONNECTED socket with no req pending
+				# we're interested only in CONNECTED socket with no requests pending
 				if s.get_state()==CONNECTED and s.pending_requests==0:
 					# if there's more of them, we want the one with the least recent data receive
 					# (lowest last_recv_time)
@@ -169,6 +175,10 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 
 	def send_BOSH(self, payload):
+		'''
+		Tries to send a stanza in payload by appeding it to a buffer and plugging a 
+		free socket for writing.
+		'''
 		total_pending_reqs = sum([s.pending_requests for s in self.http_socks])
 
 		# when called after HTTP response (Payload=None) and when there are already 
@@ -192,7 +202,8 @@ class NonBlockingBOSH(NonBlockingTransport):
 				self.get_current_state())
 			return
 
-		# when there's free CONNECTED socket, we flush the data
+		# when there's free CONNECTED socket, we plug it for write and the data will
+		# be sent when write is possible
 		if self.get_free_socket():
 			self.plug_socket()
 			return
@@ -209,8 +220,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 		if s:
 			self.connect_and_flush(s)
 		else:
-			#if len(self.http_socks) > 1: return
-			print 'connecting sock'
+			# otherwise create and connect a new one
 			ss = self.get_new_http_socket()
 			self.http_socks.append(ss)
 			self.connect_and_flush(ss)
@@ -225,6 +235,15 @@ class NonBlockingBOSH(NonBlockingTransport):
 			log.error('=====!!!!!!!!====> Couldn\'t get free socket in plug_socket())')
 
 	def build_stanza(self, socket):
+		'''
+		Builds a BOSH body tag from data in buffers and adds key, rid and ack
+		attributes to it.
+		This method is called from _do_send() of underlying transport. This is to
+		ensure rid and keys will be processed in correct order. If I generate them 
+		before	plugging a socket for write (and did it for two sockets/HTTP 
+		connections) in parallel, they might be sent in wrong order, which results
+		in violating the BOSH session and server-side disconnect.
+		'''
 		if self.prio_bosh_stanzas:
 			stanza, add_payload = self.prio_bosh_stanzas.pop(0)
 			if add_payload:
@@ -244,7 +263,6 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 
 		log.info('sending msg with rid=%s to sock %s' % (stanza.getAttr('rid'), id(socket)))
-		#socket.send(stanza)
 		self.renew_bosh_wait_timeout(self.bosh_wait + 3)
 		return stanza
 
@@ -266,8 +284,12 @@ class NonBlockingBOSH(NonBlockingTransport):
 				self.wait_cb_time)
 
 	def on_persistent_fallback(self, socket):
-		log.warn('Fallback to nonpersistent HTTP (no pipelining as well)')
+		'''
+		Called from underlying transport when server closes TCP connection.
+		:param socket: disconnected transport object
+		'''
 		if socket.http_persistent:
+			log.warn('Fallback to nonpersistent HTTP (no pipelining as well)')
 			socket.http_persistent = False
 			self.http_persistent = False
 			self.http_pipelining = False
@@ -279,6 +301,9 @@ class NonBlockingBOSH(NonBlockingTransport):
 		
 
 	def handle_body_attrs(self, stanza_attrs):
+		'''
+		Called for each incoming body stanza from dispatcher. Checks body attributes.
+		'''
 		self.remove_bosh_wait_timeout()
 
 		if self.after_init:
@@ -315,11 +340,13 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 
 	def append_stanza(self, stanza):
+		''' appends stanza to a buffer to send '''
 		if stanza:
 			if isinstance(stanza, tuple):
 				# stanza is tuple of BOSH stanza and bool value for whether to add payload
 				self.prio_bosh_stanzas.append(stanza)
 			else:
+				# stanza is XMPP stanza. Will be boshified before send.
 				self.stanza_buffer.append(stanza)
 
 
@@ -391,7 +418,6 @@ class NonBlockingBOSH(NonBlockingTransport):
 		if self.use_proxy_auth:
 			http_dict['proxy_user'], http_dict['proxy_pass'] = self.proxy_creds
 
-
 		s = NonBlockingHTTPBOSH(
 			raise_event=self.raise_event,
 			on_disconnect=self.disconnect,
@@ -402,6 +428,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 			http_dict = http_dict,
 			proxy_dict = self.proxy_dict,
 			on_persistent_fallback = self.on_persistent_fallback)
+
 		s.onreceive(self.on_received_http)
 		s.set_stanza_build_cb(self.build_stanza)
 		return s
@@ -439,6 +466,10 @@ def get_rand_number():
 
 
 class AckChecker():
+	'''
+	Class for generating rids and generating and checking acknowledgements in
+	BOSH messages.
+	'''
 	def __init__(self):
 		self.rid = get_rand_number()
 		self.ack = 1
@@ -481,6 +512,9 @@ class AckChecker():
 
 
 class KeyStack():
+	'''
+	Class implementing key sequences for BOSH messages
+	'''
 	def __init__(self, count):
 		self.count = count
 		self.keys = []
