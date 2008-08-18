@@ -174,8 +174,8 @@ class Connection(ConnectionHandlers):
 
 	def dispatch(self, event, data):
 		'''always passes account name as first param'''
-		self.put_event((event, data))
-		gajim.ged.raise_event(event, data)
+		#self.put_event((event, data))
+		gajim.ged.raise_event(event, self.name, data)
 
 
 	def _reconnect(self):

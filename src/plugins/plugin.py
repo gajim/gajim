@@ -132,6 +132,13 @@ class GajimPlugin(object):
 	
 	:type: {} with 2-element tuples
 	'''
+	events = []
+	'''
+	New network event classes to be registered in Network Events Controller.
+	
+	:type: [] of `nec.NetworkIncomingEvent` or `nec.NetworkOutgoingEvent`
+	subclasses.
+	'''
 	
 	@log_calls('GajimPlugin')
 	def __init__(self):

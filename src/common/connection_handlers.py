@@ -43,6 +43,7 @@ from common import exceptions
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.caps import ConnectionCaps
+from common.nec import NetworkEvent
 
 from common import dbus_support
 if dbus_support.supported:
@@ -1004,6 +1005,10 @@ class ConnectionVcard:
 
 	def _IqCB(self, con, iq_obj):
 		id = iq_obj.getID()
+		
+		gajim.nec.push_incoming_event(NetworkEvent('raw-iq-received',
+												   conn = con,
+												   xmpp_iq = iq_obj))
 
 		# Check if we were waiting a timeout for this id
 		found_tim = None
@@ -1601,7 +1606,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 	def _messageCB(self, con, msg):
 		'''Called when we receive a message'''
 		gajim.log.debug('MessageCB')
-
+		
+		gajim.nec.push_incoming_event(NetworkEvent('raw-message-received',
+												   conn = con,
+												   xmpp_msg = msg))
+		
 		frm = helpers.get_full_jid_from_iq(msg)
 
 		# check if the message is pubsub#event
@@ -1916,6 +1925,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _presenceCB(self, con, prs):
 		'''Called when we receive a presence'''
+		gajim.nec.push_incoming_event(NetworkEvent('raw-pres-received',
+												   conn = con,
+												   xmpp_pres = prs))
 		ptype = prs.getType()
 		if ptype == 'available':
 			ptype = None

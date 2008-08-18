@@ -30,7 +30,8 @@ import os
 import sys
 import fnmatch
 
-import common.gajim as gajim
+from common import gajim
+from common import nec
 
 from plugins.helpers import log, log_calls, Singleton
 from plugins.plugin import GajimPlugin
@@ -252,6 +253,20 @@ class PluginManager(object):
 			gajim.ged.remove_event_handler(event_name,
 											 priority,
 											 handler_function)
+			
+	def _register_network_events_in_nec(self, plugin):
+		for event_class in plugin.events:
+			if issubclass(event_class, nec.NetworkIncomingEvent):
+				gajim.nec.register_incoming_event(event_class)
+			elif issubclass(event_class, nec.NetworkOutgoingEvent):
+				gajim.nec.register_outgoing_event(event_class)
+	
+	def _remove_network_events_from_nec(self, plugin):
+		for event_class in plugin.events:
+			if issubclass(event_class, nec.NetworkIncomingEvent):
+				gajim.nec.unregister_incoming_event(event_class)
+			elif issubclass(event_class, nec.NetworkOutgoingEvent):
+				gajim.nec.unregister_outgoing_event(event_class)
 
 	@log_calls('PluginManager')
 	def activate_plugin(self, plugin):
@@ -270,6 +285,7 @@ class PluginManager(object):
 			self._add_gui_extension_points_handlers_from_plugin(plugin)
 			self._handle_all_gui_extension_points_with_plugin(plugin)
 			self._register_events_handlers_in_ged(plugin)
+			self._register_network_events_in_nec(plugin)
 			
 			success = True
 			
@@ -300,6 +316,7 @@ class PluginManager(object):
 						handler(*gui_extension_point_args)
 						
 		self._remove_events_handler_from_ged(plugin)
+		self._remove_network_events_from_nec(plugin)
 		
 		# removing plug-in from active plug-ins list
 		plugin.deactivate()

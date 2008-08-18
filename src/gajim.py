@@ -615,6 +615,7 @@ parser = optparser.OptionsParser(config_filename)
 import roster_window
 import profile_window
 import config
+from common import ged
 
 class GlibIdleQueue(idlequeue.IdleQueue):
 	'''
@@ -3348,6 +3349,9 @@ class Interface:
 		# Creating Global Events Dispatcher
 		from common import ged
 		gajim.ged = ged.GlobalEventsDispatcher()
+		# Creating Network Events Controller
+		from common import nec
+		gajim.nec = nec.NetworkEventsController()
 		self.register_core_handlers()
 		
 		self.register_handlers()
@@ -3496,8 +3500,6 @@ class Interface:
 		gobject.timeout_add_seconds(gajim.config.get(
 			'check_idle_every_foo_seconds'), self.read_sleepy)
 		
-
-		
 		# Creating plugin manager
 		import plugins
 		gajim.plugin_manager = plugins.PluginManager()
@@ -3509,7 +3511,88 @@ class Interface:
 		This part of rewriting whole evetns handling system to use GED.
 		Of course this can be done anywhere else.
 		'''
-		pass
+		handlers = {
+			'ROSTER': self.handle_event_roster,
+			'WARNING': self.handle_event_warning,
+			'ERROR': self.handle_event_error,
+			'INFORMATION': self.handle_event_information,
+			'ERROR_ANSWER': self.handle_event_error_answer,
+			'STATUS': self.handle_event_status,
+			'NOTIFY': self.handle_event_notify,
+			'MSGERROR': self.handle_event_msgerror,
+			'MSGSENT': self.handle_event_msgsent,
+			'MSGNOTSENT': self.handle_event_msgnotsent,
+			'SUBSCRIBED': self.handle_event_subscribed,
+			'UNSUBSCRIBED': self.handle_event_unsubscribed,
+			'SUBSCRIBE': self.handle_event_subscribe,
+			'AGENT_ERROR_INFO': self.handle_event_agent_info_error,
+			'AGENT_ERROR_ITEMS': self.handle_event_agent_items_error,
+			'AGENT_REMOVED': self.handle_event_agent_removed,
+			'REGISTER_AGENT_INFO': self.handle_event_register_agent_info,
+			'AGENT_INFO_ITEMS': self.handle_event_agent_info_items,
+			'AGENT_INFO_INFO': self.handle_event_agent_info_info,
+			'QUIT': self.handle_event_quit,
+			'NEW_ACC_CONNECTED': self.handle_event_new_acc_connected,
+			'NEW_ACC_NOT_CONNECTED': self.handle_event_new_acc_not_connected,
+			'ACC_OK': self.handle_event_acc_ok,
+			'ACC_NOT_OK': self.handle_event_acc_not_ok,
+			'MYVCARD': self.handle_event_myvcard,
+			'VCARD': self.handle_event_vcard,
+			'LAST_STATUS_TIME': self.handle_event_last_status_time,
+			'OS_INFO': self.handle_event_os_info,
+			'GC_NOTIFY': self.handle_event_gc_notify,
+			'GC_MSG': self.handle_event_gc_msg,
+			'GC_SUBJECT': self.handle_event_gc_subject,
+			'GC_CONFIG': self.handle_event_gc_config,
+			'GC_CONFIG_CHANGE': self.handle_event_gc_config_change,
+			'GC_INVITATION': self.handle_event_gc_invitation,
+			'GC_AFFILIATION': self.handle_event_gc_affiliation,
+			'GC_PASSWORD_REQUIRED': self.handle_event_gc_password_required,
+			'BAD_PASSPHRASE': self.handle_event_bad_passphrase,
+			'ROSTER_INFO': self.handle_event_roster_info,
+			'BOOKMARKS': self.handle_event_bookmarks,
+			'CON_TYPE': self.handle_event_con_type,
+			'CONNECTION_LOST': self.handle_event_connection_lost,
+			'FILE_REQUEST': self.handle_event_file_request,
+			'GMAIL_NOTIFY': self.handle_event_gmail_notify,
+			'FILE_REQUEST_ERROR': self.handle_event_file_request_error,
+			'FILE_SEND_ERROR': self.handle_event_file_send_error,
+			'STANZA_ARRIVED': self.handle_event_stanza_arrived,
+			'STANZA_SENT': self.handle_event_stanza_sent,
+			'HTTP_AUTH': self.handle_event_http_auth,
+			'VCARD_PUBLISHED': self.handle_event_vcard_published,
+			'VCARD_NOT_PUBLISHED': self.handle_event_vcard_not_published,
+			'ASK_NEW_NICK': self.handle_event_ask_new_nick,
+			'SIGNED_IN': self.handle_event_signed_in,
+			'METACONTACTS': self.handle_event_metacontacts,
+			'ATOM_ENTRY': self.handle_atom_entry,
+			'FAILED_DECRYPT': self.handle_event_failed_decrypt,
+			'PRIVACY_LISTS_RECEIVED': self.handle_event_privacy_lists_received,
+			'PRIVACY_LIST_RECEIVED': self.handle_event_privacy_list_received,
+			'PRIVACY_LISTS_ACTIVE_DEFAULT': \
+				self.handle_event_privacy_lists_active_default,
+			'PRIVACY_LIST_REMOVED': self.handle_event_privacy_list_removed,
+			'ZC_NAME_CONFLICT': self.handle_event_zc_name_conflict,
+			'PING_SENT': self.handle_event_ping_sent,
+			'PING_REPLY': self.handle_event_ping_reply,
+			'PING_ERROR': self.handle_event_ping_error,
+			'SEARCH_FORM': self.handle_event_search_form,
+			'SEARCH_RESULT': self.handle_event_search_result,
+			'RESOURCE_CONFLICT': self.handle_event_resource_conflict,
+			'PEP_CONFIG': self.handle_event_pep_config,
+			'UNIQUE_ROOM_ID_UNSUPPORTED': \
+				self.handle_event_unique_room_id_unsupported,
+			'UNIQUE_ROOM_ID_SUPPORTED': self.handle_event_unique_room_id_supported,
+			'SESSION_NEG': self.handle_session_negotiation,
+			'GPG_PASSWORD_REQUIRED': self.handle_event_gpg_password_required,
+			'SSL_ERROR': self.handle_event_ssl_error,
+			'FINGERPRINT_ERROR': self.handle_event_fingerprint_error,
+			'PLAIN_CONNECTION': self.handle_event_plain_connection,
+			'PUBSUB_NODE_REMOVED': self.handle_event_pubsub_node_removed,
+			'PUBSUB_NODE_NOT_REMOVED': self.handle_event_pubsub_node_not_removed,
+		}
+		for event_name, handler in handlers.iteritems():
+			gajim.ged.register_event_handler(event_name, ged.CORE, handler)
 
 if __name__ == '__main__':
 	def sigint_cb(num, stack):

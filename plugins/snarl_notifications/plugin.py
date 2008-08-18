@@ -30,7 +30,7 @@ Fancy events notifications under Windows using Snarl infrastructure.
 import new
 from pprint import pformat
 
-import PySnarl
+#import PySnarl
 
 from common import gajim
 from plugins import GajimPlugin
@@ -62,7 +62,7 @@ PySnarl bindings are used (http://code.google.com/p/pysnarl/).'''
 	
 	def newMessage(self, args):
 		event_name = "NewMessage"
-		data = args[0]
+		data = args
 		account = data[0]
 		jid = data[1][0]
 		jid_without_resource = gajim.get_jid_without_resource(jid)
@@ -74,15 +74,15 @@ PySnarl bindings are used (http://code.google.com/p/pysnarl/).'''
 		elif msg_type == 'pm':
 			nickname = gajim.get_resource_from_jid(jid)
 		
-		print "Event '%s' occured. Arguments: %s\n\n===\n"%(event_name, pformat(*args))
+		print "Event '%s' occured. Arguments: %s\n\n===\n"%(event_name, pformat(args))
 		print "Event '%s' occured. Arguments: \naccount = %s\njid = %s\nmsg = %s\nnickname = %s"%(
 			event_name, account, jid, msg, nickname)
 		
 		
-		if PySnarl.snGetVersion() != False:
-			(major, minor) = PySnarl.snGetVersion()
-			print "Found Snarl version",str(major)+"."+str(minor),"running."
-			PySnarl.snShowMessage(nickname, msg[:20]+'...')
-		else:
-			print "Sorry Snarl does not appear to be running"
+		#if PySnarl.snGetVersion() != False:
+			#(major, minor) = PySnarl.snGetVersion()
+			#print "Found Snarl version",str(major)+"."+str(minor),"running."
+			#PySnarl.snShowMessage(nickname, msg[:20]+'...')
+		#else:
+			#print "Sorry Snarl does not appear to be running"
 		

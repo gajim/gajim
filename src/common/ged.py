@@ -24,7 +24,7 @@ Global Events Dispatcher module.
 :license: GPL
 '''
 
-from plugins.helpers import log
+#from plugins.helpers import log
 
 PRECORE = 30
 CORE = 40
@@ -39,9 +39,9 @@ class GlobalEventsDispatcher(object):
 		if event_name in self.handlers:
 			handlers_list = self.handlers[event_name]
 			i = 0
-			if len(handlers_list) > 0:
-				while priority > handlers_list[i][0]: # sorting handlers by priority
-					i += 1
+			for i,h in enumerate(handlers_list):
+				if priority < h[0]:
+					break
 			
 			handlers_list.insert(i, (priority, handler))
 		else:
@@ -52,13 +52,13 @@ class GlobalEventsDispatcher(object):
 			try:
 				self.handlers[event_name].remove((priority, handler))
 			except ValueError, error:
-				log.debug('''Function (%s) with priority "%s" never registered 
+				print('''Function (%s) with priority "%s" never registered 
 				as handler of event "%s". Couldn\'t remove. Error: %s'''
 						  %(handler, priority, event_name, error))
 	
-	def raise_event(self, event_name, *args):
+	def raise_event(self, event_name, *args, **kwargs):
 		#log.debug('[GED] Event: %s\nArgs: %s'%(event_name, str(args)))
 		if event_name in self.handlers:
 			for priority, handler in self.handlers[event_name]:
-				handler(args)
+				handler(*args, **kwargs)
 	

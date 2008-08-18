@@ -61,8 +61,10 @@ version = config.get('version')
 connections = {} # 'account name': 'account (connection.Connection) instance'
 verbose = False
 ipython_window = None
-plugin_manager = None
+
 ged = None # Global Events Dispatcher
+nec = None # Network Events Controller
+plugin_manager = None # Plugins Manager
 
 h = logging.StreamHandler()
 f = logging.Formatter('%(asctime)s %(name)s: %(message)s', '%d %b %Y %H:%M:%S')
