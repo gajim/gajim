@@ -144,10 +144,16 @@ class TestRosterWindowRegrouped(TestRosterWindow):
 
 class TestRosterWindowMetaContacts(TestRosterWindowRegrouped):
 
-	def setUp(self):
-		gajim.contacts.add_metacontact(account1, u'samejid@gajim.org',
-			account2, u'samejid@gajim.org')
-		TestRosterWindowRegrouped.setUp(self)
+	def test_receive_metacontact_data(self):
+		for complete_data in metacontact_data:
+			t_acc = complete_data[0]['account']
+			t_jid = complete_data[0]['jid']
+			data = complete_data[1:]
+			for brother in data:
+				acc = brother['account']
+				jid = brother['jid']
+				gajim.contacts.add_metacontact(t_acc, t_jid, acc, jid)
+		self.roster.setup_and_draw_roster()
 
 	def test_connect_new_metacontact(self):
 		self.test_fill_roster_model()
@@ -163,6 +169,7 @@ class TestRosterWindowMetaContacts(TestRosterWindowRegrouped):
 		self.roster.chg_contact_status(contact, 'online', '', account1)
 
 		self.assert_model_is_in_sync()
+
 
 
 if __name__ == '__main__':

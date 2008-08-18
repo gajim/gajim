@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 account1 = u'acc1'
 account2 = u'Cool"chârßéµö'
+account3 = u'dingdong.org'
 
 contacts = {}
 contacts[account1] = {
@@ -31,5 +32,40 @@ contacts[account2] = {
 			  'ask': None, 'groups': [u'GroupA', u'GroupB'], 'name': None, 
 			  'resources': {}, 'subscription': u'both'}
 }
+contacts[account3] = {
+	#u'guypsych0\\40h.com@msn.dingdong.org': {
+	#		  'ask': None, 'groups': [], 'name': None, 'resources': {}, 
+	#		  'subscription': u'both'},
+	u'guypsych0%h.com@msn.delx.cjb.net': {
+			  'ask': u'subscribe', 'groups': [], 'name': None,
+			  'resources': {}, 'subscription': u'from'},
+	#u'guypsych0%h.com@msn.jabber.wiretrip.org': {
+	#		  'ask': None, 'groups': [], 'name': None, 'resources': {}, 
+	#		  'subscription': u'to'},
+	#u'guypsycho\\40g.com@gtalk.dingdong.org': {
+	#		  'ask': None, 'groups': [], 'name': None, 
+	#		  'resources': {}, 'subscription': u'both'}
+}
 
-# vim: se ts=3:
+metacontact_data = [
+	[{'account': account3,
+	  'jid': u'guypsych0\\40h.com@msn.dingdong.org',
+	  'order': 0},
+	 {'account': account3,
+	  'jid': u'guypsych0%h.com@msn.delx.cjb.net',
+	  'order': 0},
+	 {'account': account3,
+	  'jid': u'guypsych0%h.com@msn.jabber.wiretrip.org',
+	  'order': 0},
+	 {'account': account3,
+	  'jid': u'guypsycho\\40g.com@gtalk.dingdong.org',
+	  'order': 0}],
+
+	[{'account': account1,
+	  'jid': u'samejid@gajim.org',
+	  'order': 0},
+	 {'account': account2,
+	  'jid': u'samejid@gajim.org',
+	  'order': 0}]
+	]
+
