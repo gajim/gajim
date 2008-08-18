@@ -462,6 +462,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		if ret == -1:
 			# Contact Offline
 			self.dispatch('MSGERROR', [jid, '-1', _('Contact is offline. Your message could not be sent.'), None, None, session])
+		return ret
 
 	def send_stanza(self, stanza):
 		# send a stanza untouched
