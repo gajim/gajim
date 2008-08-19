@@ -479,16 +479,23 @@ class Contacts:
 		contact2 = self.get_contact_with_highest_priority(account2, jid2)
 		show_list = ['not in roster', 'error', 'offline', 'invisible', 'dnd',
 			'xa', 'away', 'chat', 'online', 'requested', 'message']
-		# contact can be null when we fill the roster on connection
+		# contact can be null when a jid listed in the metacontact data
+		# is not in our roster
 		if not contact1:
-			show1 = 0
-			priority1 = 0
+			if contact2:
+				return -1 # prefer the known contact 	
+			else:
+				show1 = 0
+				priority1 = 0
 		else:
 			show1 = show_list.index(contact1.show)
 			priority1 = contact1.priority
 		if not contact2:
-			show2 = 0
-			priority2 = 0
+			if contact1:
+				return 1 # prefer the known contact
+			else:
+				show2 = 0
+				priority2 = 0
 		else:
 			show2 = show_list.index(contact2.show)
 			priority2 = contact2.priority
