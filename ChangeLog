@@ -32,10 +32,14 @@ Gajim 0.12-alpha1 (XX augustus 2008)
   * Preferences window redesign
   * New GUI for chat dialog
   * Roster treeview now uses modelfilter (faster)
-  * 
+  *
 
   * OTHER
-  * Support of PEP (Personal Eventing Protocol) (XEP-0163, XEP-0107, XEP-0108, XEP-0118)
+  * Support of PEP (Personal Eventing Protocol) (XEP-0163)
+    * User Mood (XEP-0107)
+    * User Activity (XEP-0108)
+    * User Tune (XEP-0118)
+    * User Nickname (XEP-0172)
   * Support for Google Talk accounts with non gmail.com domain (+ GMail notifications)
   * Modified the format of emoticons list file, so we can choose the default code (#3696)
   * New Remote Controlling Option (XEP-0146): forward unread messages
