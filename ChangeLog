@@ -1,4 +1,4 @@
-Gajim 0.12-alpha1 (XX augustus 2008)
+Gajim 0.12-alpha1 (12 August 2008)
 
   * Change licence from GPLv2 to GPLv3
 
@@ -9,17 +9,17 @@ Gajim 0.12-alpha1 (XX augustus 2008)
   * Ability to disable message previews in notify popups
 
   * GROUPCHATS
-  * Support for sending files over groupchats
+  * Support for sending files over group chats
   * List of bookmarked rooms is now sorted alphabetically
   * Support for transforming a one-to-one chat into a groupchat
   * Send invitation by drag-and-dropping a contact from roster
   * Send messages to conference using gajim-remote
   * Ability to destroy a room when we are owner, give a reason and alternative room jid
-  * Ability to minimize groupchats in roster
+  * Ability to minimize group chats in roster
   
   * USABILITY
-  * Files transferts by drang and dropping
-  * Ability to select statuses and to click url's in chat windows (using libsexy)
+  * Files transfers using drag and drop
+  * Ability to select and interact with status messages in chat windows (using libsexy)
   * Ability to set a custom avatar for a contact
   * Better handling of resource collisions
   * Option to Sign On as a Certain Status (#3314)
@@ -30,8 +30,8 @@ Gajim 0.12-alpha1 (XX augustus 2008)
   * Close change status windows after 15 seconds of inactivity
   * Simplified "Accounts" dialog
   * Preferences window redesign
-  * New GUI for chat dialog
-  * Roster treeview now uses modelfilter (faster)
+  * New GUI for chat window
+  * Roster treeview now uses modelfilter (way way much faster)
   *
 
   * OTHER
