@@ -986,6 +986,9 @@ class MessageWindowMgr(gobject.GObject):
 		if not self.one_window_opened(contact, acct, type):
 			self._resize_window(win, acct, type)
 			self._position_window(win, acct, type)
+			#FIXME: make sure when first chat tab is shown textview grabs focus
+			#this wont work but something close to that should be fine:
+			#  win.window.grab_focus()
 
 		self._windows[win_key] = win
 		return win
