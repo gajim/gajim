@@ -818,7 +818,7 @@ class RosterWindow:
 			return False
 
 
-	# TODO: This function is yet unused! Port to new API
+	# FIXME: This function is yet unused! Port to new API
 	def add_transport(self, jid, account):
 		'''Add transport to roster and draw it.
 		Return the added contact instance.'''
@@ -3441,7 +3441,7 @@ class RosterWindow:
 
 	def on_row_activated(self, widget, path):
 		'''When an iter is activated (double-click or single click if gnome is
-		set this way'''
+		set this way)'''
 		model = self.modelfilter
 		account = model[path][C_ACCOUNT].decode('utf-8')
 		type_ = model[path][C_TYPE]
