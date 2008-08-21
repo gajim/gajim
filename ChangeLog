@@ -8,7 +8,7 @@ Gajim 0.12-alpha1 (12 August 2008)
   * Improve GPG support (#2390, #2783)
   * Ability to disable message previews in notify popups
 
-  * GROUPCHATS
+  * GROUP CHATS
   * Support for sending files over group chats
   * List of bookmarked rooms is now sorted alphabetically
   * Support for transforming a one-to-one chat into a groupchat
@@ -32,7 +32,6 @@ Gajim 0.12-alpha1 (12 August 2008)
   * Preferences window redesign
   * New GUI for chat window
   * Roster treeview now uses modelfilter (way way much faster)
-  *
 
   * OTHER
   * Support of PEP (Personal Eventing Protocol) (XEP-0163)
@@ -44,7 +43,7 @@ Gajim 0.12-alpha1 (12 August 2008)
   * Modified the format of emoticons list file, so we can choose the default code (#3696)
   * New Remote Controlling Option (XEP-0146): forward unread messages
   * Support for User Search (XEP-0055)
-  * Support for jabber:x:data in message elements (Part of XEP-OO04)
+  * Support for jabber:x:data in message elements (Part of XEP-0004)
   * Added a «supported features» window
   * Latex support (#2796)
   * Link-local messaging with Windows (#2883)
