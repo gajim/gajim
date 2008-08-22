@@ -367,7 +367,7 @@ class GroupchatControl(ChatControlBase):
 
 		gajim.gc_connected[self.account][self.room_jid] = False
 		# disable win, we are not connected yet
-		ChatControlBase.got_disconnected(self) 
+		ChatControlBase.got_disconnected(self)
 
 		self.update_ui()
 		self.conv_textview.tv.grab_focus()
@@ -889,6 +889,8 @@ class GroupchatControl(ChatControlBase):
 		self._update_banner_state_image()
 		if self.parent_win:
 			self.parent_win.redraw_tab(self)
+
+		self.msg_textview.grab_focus()
 
 	def got_disconnected(self):
 		self.list_treeview.get_model().clear()

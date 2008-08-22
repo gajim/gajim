@@ -730,6 +730,10 @@ class MessageWindow(object):
 		new_ctrl.set_control_active(True)
 		self.show_title(control = new_ctrl)
 
+		control = self.get_active_control()
+		if isinstance(control, ChatControlBase):
+			control.msg_textview.grab_focus()
+
 	def _on_notebook_key_press(self, widget, event):
 		# Ctrl+PageUP / DOWN has to be handled by notebook
 		if (event.state & gtk.gdk.CONTROL_MASK and
@@ -986,9 +990,6 @@ class MessageWindowMgr(gobject.GObject):
 		if not self.one_window_opened(contact, acct, type):
 			self._resize_window(win, acct, type)
 			self._position_window(win, acct, type)
-			#FIXME: make sure when first chat tab is shown textview grabs focus
-			#this wont work but something close to that should be fine:
-			#  win.window.grab_focus()
 
 		self._windows[win_key] = win
 		return win

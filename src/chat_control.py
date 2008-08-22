@@ -304,6 +304,7 @@ class ChatControlBase(MessageControl):
 		self.user_nick = None
 
 		self.smooth = True
+		self.msg_textview.grab_focus()
 
 	def on_msg_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend an option to switch languages'''
@@ -1155,6 +1156,7 @@ class ChatControl(ChatControlBase):
 		self.update_ui()
 		# restore previous conversation
 		self.restore_conversation()
+		self.msg_textview.grab_focus()
 
 	def update_toolbar(self):
 		# Add to roster
