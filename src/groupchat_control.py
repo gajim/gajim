@@ -5,8 +5,8 @@
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                    Alex Mauer <hawke AT hawkesnest.net>
-##                    Travis Shirk <travis AT pobox.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
+##                         Travis Shirk <travis AT pobox.com>
 ## Copyright (C) 2007-2008 Julien Pivotto <roidelapluie AT gmail.com>
 ##                         Stephan Erb <steve-e AT h3c.de>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
