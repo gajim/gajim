@@ -331,8 +331,11 @@ def pid_alive():
 			return True
 		return False
 	elif sys.platform == 'darwin':
-		from osx import checkPID
-		return checkPID(pid, 'Gajim.bin')
+		try:
+			from osx import checkPID
+			return checkPID(pid, 'Gajim.bin')
+ 		except ImportError:
+			return
 	try:
 		if not os.path.exists('/proc'):
 			return True # no /proc, assume Gajim is running
