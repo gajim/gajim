@@ -4707,34 +4707,32 @@ class RosterWindow:
 					single_message_menuitem]:
 				item.set_sensitive(False)
 		else: # we have one or more connected accounts
-			for item in [new_chat_menuitem, join_gc_menuitem,\
-					add_new_contact_menuitem, service_disco_menuitem,\
-					single_message_menuitem]:
+			for item in (new_chat_menuitem, join_gc_menuitem,
+					add_new_contact_menuitem, service_disco_menuitem,
+					single_message_menuitem):
 				item.set_sensitive(True)
 			# disable some fields if only local account is there
 			if connected_accounts == 1:
 				for account in gajim.connections:
 					if gajim.account_is_connected(account) and \
 							gajim.connections[account].is_zeroconf:
-						for item in [join_gc_menuitem,\
-								add_new_contact_menuitem, service_disco_menuitem,
-								single_message_menuitem]:
+						for item in (join_gc_menuitem, add_new_contact_menuitem, 
+							service_disco_menuitem, single_message_menuitem):
 							item.set_sensitive(False)
 
-		if connected_accounts_with_private_storage > 0:
-			# At least one account with private storage support
-			# show the 'manage gc bookmarks' item
-			newitem = gtk.SeparatorMenuItem() # separator
-			gc_sub_menu.append(newitem)
+		# Manage GC bookmarks
+		newitem = gtk.SeparatorMenuItem() # separator
+		gc_sub_menu.append(newitem)
 
-			newitem = gtk.ImageMenuItem(_('_Manage Bookmarks...'))
-			img = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES,
-				gtk.ICON_SIZE_MENU)
-			newitem.set_image(img)
-			newitem.connect('activate',
-				self.on_manage_bookmarks_menuitem_activate)
-			gc_sub_menu.append(newitem)
-			gc_sub_menu.show_all()
+		newitem = gtk.ImageMenuItem(_('_Manage Bookmarks...'))
+		img = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES,
+			gtk.ICON_SIZE_MENU)
+		newitem.set_image(img)
+		newitem.connect('activate', self.on_manage_bookmarks_menuitem_activate)
+		gc_sub_menu.append(newitem)
+		gc_sub_menu.show_all()
+		if connected_accounts_with_private_storage == 0:
+			newitem.set_sensitive(False)
 
 		connected_accounts_with_vcard = []
 		for account in gajim.connections:

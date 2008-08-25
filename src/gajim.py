@@ -334,7 +334,7 @@ def pid_alive():
 		try:
 			from osx import checkPID
 			return checkPID(pid, 'Gajim.bin')
- 		except ImportError:
+		except ImportError:
 			return
 	try:
 		if not os.path.exists('/proc'):
