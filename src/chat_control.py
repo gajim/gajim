@@ -1298,15 +1298,12 @@ class ChatControl(ChatControlBase):
 
 			if HAVE_MARKUP_TOOLTIPS:
 				self._tune_image.set_tooltip_markup(
-					_('<b>"%(title)s"</b> by ' +
-					'<i>%(artist)s</i>\n' +
-					'from <i>%(source)s</i>') % 
-					{'title': title, 'artist': artist,
+					_('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
+					'from <i>%(source)s</i>') % {'title': title, 'artist': artist,
 					'source': source})
 			else:
 				self._tune_tooltip.set_tip(self._tune_image,
-					_('%(title)s by %(artist)s\n' +
-					'from %(source)s') % {'title': title,
+					_('%(title)s by %(artist)s\nfrom %(source)s') % {'title': title,
 					'artist': artist, 'source': source})
 			self._tune_image.show()
 		else:
@@ -1335,16 +1332,14 @@ class ChatControl(ChatControlBase):
 		# do we have something bigger to show?
 		if avatar_w > scaled_buf_w or avatar_h > scaled_buf_h:
 			# wait for 0.5 sec in case we leave earlier
-			self.show_bigger_avatar_timeout_id = \
-				gobject.timeout_add(500,
+			self.show_bigger_avatar_timeout_id = gobject.timeout_add(500,
 				self.show_bigger_avatar, widget)
 
 	def on_avatar_eventbox_leave_notify_event(self, widget, event):
 		'''we left the eventbox area that holds the avatar img'''
 		# did we add a timeout? if yes remove it
 		if self.show_bigger_avatar_timeout_id is not None:
-			gobject.source_remove(
-				self.show_bigger_avatar_timeout_id)
+			gobject.source_remove(self.show_bigger_avatar_timeout_id)
 
 	def on_avatar_eventbox_button_press_event(self, widget, event):
 		'''If right-clicked, show popup'''
