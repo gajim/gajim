@@ -168,7 +168,7 @@ try:
 	from common import gajim
 except exceptions.DatabaseMalformed:
 	pritext = _('Database Error')
-	sectext = _('The database file (%s) cannot be read. Try to repare it or remove it (all history will be lost).') % common.logger.LOG_DB_PATH
+	sectext = _('The database file (%s) cannot be read. Try to repair it or remove it (all history will be lost).') % common.logger.LOG_DB_PATH
 else:
 	from common import dbus_support
 	if dbus_support.supported:
@@ -1293,7 +1293,8 @@ class Interface:
 		# Standard way, the message comes from the occupant who set the subject
 		text = None
 		if len(jids) > 1:
-			text = _('%s has set the subject to %s') % (jids[1], array[1])
+			text = _('%(jid)s has set the subject to %(subject)s') % {
+				'jid': jids[1], 'subject': array[1]}
 		# Workaround for psi bug http://flyspray.psi-im.org/task/595 , to be
 		# deleted one day. We can receive a subject with a body that contains
 		# "X has set the subject to Y" ...

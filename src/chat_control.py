@@ -2343,7 +2343,7 @@ class ChatControl(ChatControlBase):
 				pending_how_many, timeout, self.account)
 		except exceptions.DatabaseMalformed:
 			dialogs.ErrorDialog(_('Database Error'),
-				_('The database file (%s) cannot be read. Try to repare it or remove it (all history will be lost).') % common.logger.LOG_DB_PATH)
+				_('The database file (%s) cannot be read. Try to repair it or remove it (all history will be lost).') % common.logger.LOG_DB_PATH)
 			rows = []
 		local_old_kind = None
 		for row in rows: # row[0] time, row[1] has kind, row[2] the message

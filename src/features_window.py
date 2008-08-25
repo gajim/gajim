@@ -57,7 +57,7 @@ class FeaturesWindow:
 				_('Requires python-avahi.'),
 				_('Requires pybonjour (http://o2s.csail.mit.edu/o2s-wiki/pybonjour).')),
 			_('gajim-remote'): (self.dbus_available,
-				_('A script to controle Gajim via commandline.'),
+				_('A script to control Gajim via commandline.'),
 				_('Requires python-dbus.'),
 				_('Feature not available under Windows.')),
 			_('OpenGPG'): (self.gpg_available,

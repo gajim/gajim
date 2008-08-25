@@ -3924,7 +3924,7 @@ class RosterWindow:
 			# Popup dialog to confirm sending
 			prim_text = 'Send file?'
 			sec_text = i18n.ngettext('Do you want to send this file to %s:',
-				'Do you want to send those files to %s:', nb_uri) %\
+				'Do you want to send these files to %s:', nb_uri) %\
 				c_dest.get_shown_name()
 			for uri in uri_splitted:
 				path = helpers.get_file_path_from_dnd_dropped_uri(uri)

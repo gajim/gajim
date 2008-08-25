@@ -35,7 +35,7 @@ MOODS = {
 	'contented':		_('Contented'),		'cranky':		_('Cranky'),
 	'curious':			_('Curious'),			'depressed':	_('Depressed'),
 	'disappointed':	_('Disappointed'),	'disgusted':	_('Disgusted'),
-	'distracted':		_('Distracted'),		'embarrassed':	_('Embarassed'),
+	'distracted':		_('Distracted'),		'embarrassed':	_('Embarrassed'),
 	'excited':			_('Excited'),			'flirtatious':	_('Flirtatious'),
 	'frustrated':		_('Frustrated'),		'grumpy':		_('Grumpy'),
 	'guilty':			_('Guilty'),			'happy':			_('Happy'),
