@@ -256,6 +256,7 @@ class PluginManager(object):
 			
 	def _register_network_events_in_nec(self, plugin):
 		for event_class in plugin.events:
+			setattr(event_class, 'plugin', plugin)
 			if issubclass(event_class, nec.NetworkIncomingEvent):
 				gajim.nec.register_incoming_event(event_class)
 			elif issubclass(event_class, nec.NetworkOutgoingEvent):
