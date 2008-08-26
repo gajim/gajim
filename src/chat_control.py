@@ -1827,23 +1827,20 @@ class ChatControl(ChatControlBase):
 			if self.session and self.session.enable_encryption:
 				# ESessions
 				if not encrypted:
-					msg = _('The following message was ' + \
-						'NOT encrypted')
-					ChatControlBase.print_conversation_line(
-						self, msg, 'status', '', tim)
+					msg = _('The following message was NOT encrypted')
+					ChatControlBase.print_conversation_line(self, msg, 'status', '',
+						tim)
 			else:
 				# GPG encryption
 				if encrypted and not self.gpg_is_active:
-					msg = _('The following message was ' + \
-						'encrypted')
-					ChatControlBase.print_conversation_line(
-						self, msg, 'status', '', tim)
+					msg = _('The following message was encrypted')
+					ChatControlBase.print_conversation_line(self, msg, 'status', '',
+						tim)
 					self._toggle_gpg()
 				elif not encrypted and self.gpg_is_active:
-					msg = _('The following message was ' + \
-						'NOT encrypted')
-					ChatControlBase.print_conversation_line(
-						self, msg, 'status', '', tim)
+					msg = _('The following message was NOT encrypted')
+					ChatControlBase.print_conversation_line(self, msg, 'status', '',
+						tim)
 			if not frm:
 				kind = 'incoming'
 				name = contact.get_shown_name()
@@ -1853,7 +1850,8 @@ class ChatControl(ChatControlBase):
 			else:
 				kind = 'outgoing'
 				name = gajim.nicks[self.account]
-				if not xhtml and not encrypted and gajim.config.get('rst_formatting_outgoing_messages'):
+				if not xhtml and not encrypted and gajim.config.get(
+				'rst_formatting_outgoing_messages'):
 					xhtml = create_xhtml(text)
 					if xhtml:
 						xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)
