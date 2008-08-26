@@ -1,11 +1,11 @@
 # coding=utf-8
 emoticons = {
-	'smile.png': [':-)', ':)', '^_^', '^^'],
+	'smile.png': [':-)', ':)'],
 	'coolglasses.png': ['B-)', '(H)'],
 	'wink.gif': [';-)', ';)'],
-	'biggrin.png': [':-D', ':D', ':->', ':>', 'xD'],
+	'biggrin.png': [':-D', ':D'],
 	'unhappy.png': [':-(', ':('],
-	'cry.gif': [":'-(", ":'(", ';-(', ';(', ";'-(", ';_;'],
+	'cry.gif': [":'-(", ":'(", ';-(', ';(', ";'-("],
 	'frowning.png': [':-/', ':/', ':-\\', ':\\', ':-S', ':S'],
 	'blush.png': [':-$', ':$'],
 	'angry.png': [':-@', ':@'],
@@ -14,7 +14,7 @@ emoticons = {
 	'stare.png': [':-|', ':|'],
 	'devil.png': [']:->', '>:-)', '>:)', '(6)'],
 	'tongue.png': [':-P', ':P', ':-þ', ':þ'],
-	'oh.png': ['=-O', ':-O', ':O', 'O.O', 'O_O'],
+	'oh.png': ['=-O', ':-O', ':O'],
 	'heart.png': ['<3', '(L)', '*IN LOVE*'],
 	'pussy.png': ['(@)'],
 	'cuffs.png': ['(%)'],
@@ -48,6 +48,5 @@ emoticons = {
 	'think.gif': ['*-)'],
 	'puke.gif': [':-!'],
 }
-
 
 # vim: se ts=3:
