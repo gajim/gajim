@@ -523,10 +523,10 @@ class GajimRemote:
 		self.arguments += ['']*(len(args)-i)
 
 	def handle_uri(self):
-		if not sys.argv[2:][0].startswith('xmpp:'):
+		if not sys.argv[2].startswith('xmpp:'):
 			send_error(_('Wrong uri'))
 		sys.argv[2] = sys.argv[2][5:]
-		uri = sys.argv[2:][0]
+		uri = sys.argv[2]
 		if not '?' in uri:
 			self.command = sys.argv[1] = 'open_chat'
 			return
