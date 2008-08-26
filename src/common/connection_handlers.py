@@ -1494,6 +1494,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		raise common.xmpp.NodeProcessed
 
 	def _LastCB(self, con, iq_obj):
+		if not self.connection:
+			return
 		gajim.log.debug('LastCB')
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.getTag('query')
