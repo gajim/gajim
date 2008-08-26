@@ -1419,7 +1419,7 @@ class AccountsWindow:
 			return
 		# Save config for previous account if needed cause focus_out event is
 		# called after the changed event
-		if self.current_account:
+		if self.current_account and self.window.get_focus():
 			focused_widget = self.window.get_focus()
 			focused_widget_name = focused_widget.get_name()
 			if focused_widget_name in ('jid_entry1', 'resource_entry1',
@@ -1692,7 +1692,9 @@ class AccountsWindow:
 			remove(account)
 
 	def on_rename_button_clicked(self, widget):
-		if gajim.connections[self.current_account].connected != 0:
+		enable = gajim.config.get('enable_zeroconf')
+		if (self.current_account != gajim.ZEROCONF_ACC_NAME or enable) and \
+		gajim.connections[self.current_account].connected != 0:
 			dialogs.ErrorDialog(
 				_('You are currently connected to the server'),
 				_('To change the account name, you must be disconnected.'))
@@ -1717,61 +1719,64 @@ class AccountsWindow:
 				dialogs.ErrorDialog(_('Invalid account name'),
 					_('Account name cannot contain spaces.'))
 				return
-			# update variables
-			gajim.interface.instances[new_name] = gajim.interface.instances[
-				old_name]
-			gajim.interface.minimized_controls[new_name] = \
-				gajim.interface.minimized_controls[old_name]
-			gajim.nicks[new_name] = gajim.nicks[old_name]
-			gajim.block_signed_in_notifications[new_name] = \
-				gajim.block_signed_in_notifications[old_name]
-			gajim.groups[new_name] = gajim.groups[old_name]
-			gajim.gc_connected[new_name] = gajim.gc_connected[old_name]
-			gajim.automatic_rooms[new_name] = gajim.automatic_rooms[old_name]
-			gajim.newly_added[new_name] = gajim.newly_added[old_name]
-			gajim.to_be_removed[new_name] = gajim.to_be_removed[old_name]
-			gajim.sleeper_state[new_name] = gajim.sleeper_state[old_name]
-			gajim.encrypted_chats[new_name] = gajim.encrypted_chats[old_name]
-			gajim.last_message_time[new_name] = gajim.last_message_time[old_name]
-			gajim.status_before_autoaway[new_name] = \
-				gajim.status_before_autoaway[old_name]
-			gajim.transport_avatar[new_name] = gajim.transport_avatar[old_name]
-			gajim.gajim_optional_features[new_name] = \
-				gajim.gajim_optional_features[old_name]
-			gajim.caps_hash[new_name] = gajim.caps_hash[old_name]
+			if self.current_account != gajim.ZEROCONF_ACC_NAME or enable:
+				# update variables
+				gajim.interface.instances[new_name] = gajim.interface.instances[
+					old_name]
+				gajim.interface.minimized_controls[new_name] = \
+					gajim.interface.minimized_controls[old_name]
+				gajim.nicks[new_name] = gajim.nicks[old_name]
+				gajim.block_signed_in_notifications[new_name] = \
+					gajim.block_signed_in_notifications[old_name]
+				gajim.groups[new_name] = gajim.groups[old_name]
+				gajim.gc_connected[new_name] = gajim.gc_connected[old_name]
+				gajim.automatic_rooms[new_name] = gajim.automatic_rooms[old_name]
+				gajim.newly_added[new_name] = gajim.newly_added[old_name]
+				gajim.to_be_removed[new_name] = gajim.to_be_removed[old_name]
+				gajim.sleeper_state[new_name] = gajim.sleeper_state[old_name]
+				gajim.encrypted_chats[new_name] = gajim.encrypted_chats[old_name]
+				gajim.last_message_time[new_name] = \
+					gajim.last_message_time[old_name]
+				gajim.status_before_autoaway[new_name] = \
+					gajim.status_before_autoaway[old_name]
+				gajim.transport_avatar[new_name] = gajim.transport_avatar[old_name]
+				gajim.gajim_optional_features[new_name] = \
+					gajim.gajim_optional_features[old_name]
+				gajim.caps_hash[new_name] = gajim.caps_hash[old_name]
 
-			gajim.contacts.change_account_name(old_name, new_name)
-			gajim.events.change_account_name(old_name, new_name)
+				gajim.contacts.change_account_name(old_name, new_name)
+				gajim.events.change_account_name(old_name, new_name)
 
-			# change account variable for chat / gc controls
-			gajim.interface.msg_win_mgr.change_account_name(old_name, new_name)
-			# upgrade account variable in opened windows
-			for kind in ('infos', 'disco', 'gc_config', 'search'):
-				for j in gajim.interface.instances[new_name][kind]:
-					gajim.interface.instances[new_name][kind][j].account = new_name
+				# change account variable for chat / gc controls
+				gajim.interface.msg_win_mgr.change_account_name(old_name, new_name)
+				# upgrade account variable in opened windows
+				for kind in ('infos', 'disco', 'gc_config', 'search'):
+					for j in gajim.interface.instances[new_name][kind]:
+						gajim.interface.instances[new_name][kind][j].account = \
+							new_name
 
-			# ServiceCache object keep old property account
-			if hasattr(gajim.connections[old_name], 'services_cache'):
-				gajim.connections[old_name].services_cache.account = new_name
-			del gajim.interface.instances[old_name]
-			del gajim.interface.minimized_controls[old_name]
-			del gajim.nicks[old_name]
-			del gajim.block_signed_in_notifications[old_name]
-			del gajim.groups[old_name]
-			del gajim.gc_connected[old_name]
-			del gajim.automatic_rooms[old_name]
-			del gajim.newly_added[old_name]
-			del gajim.to_be_removed[old_name]
-			del gajim.sleeper_state[old_name]
-			del gajim.encrypted_chats[old_name]
-			del gajim.last_message_time[old_name]
-			del gajim.status_before_autoaway[old_name]
-			del gajim.transport_avatar[old_name]
-			del gajim.gajim_optional_features[old_name]
-			del gajim.caps_hash[old_name]
-			gajim.connections[old_name].name = new_name
-			gajim.connections[new_name] = gajim.connections[old_name]
-			del gajim.connections[old_name]
+				# ServiceCache object keep old property account
+				if hasattr(gajim.connections[old_name], 'services_cache'):
+					gajim.connections[old_name].services_cache.account = new_name
+				del gajim.interface.instances[old_name]
+				del gajim.interface.minimized_controls[old_name]
+				del gajim.nicks[old_name]
+				del gajim.block_signed_in_notifications[old_name]
+				del gajim.groups[old_name]
+				del gajim.gc_connected[old_name]
+				del gajim.automatic_rooms[old_name]
+				del gajim.newly_added[old_name]
+				del gajim.to_be_removed[old_name]
+				del gajim.sleeper_state[old_name]
+				del gajim.encrypted_chats[old_name]
+				del gajim.last_message_time[old_name]
+				del gajim.status_before_autoaway[old_name]
+				del gajim.transport_avatar[old_name]
+				del gajim.gajim_optional_features[old_name]
+				del gajim.caps_hash[old_name]
+				gajim.connections[old_name].name = new_name
+				gajim.connections[new_name] = gajim.connections[old_name]
+				del gajim.connections[old_name]
 			gajim.config.add_per('accounts', new_name)
 			old_config = gajim.config.get_per('accounts', old_name)
 			for opt in old_config:
