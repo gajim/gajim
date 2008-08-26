@@ -313,6 +313,8 @@ class HistoryWindow:
 		'''asks for days in this month if they have logs it bolds them (marks 
 		them)
 		'''
+		if not self.jid:
+			return
 		year, month, day = widget.get_date() # integers
 		# in gtk January is 1, in python January is 0,
 		# I want the second
