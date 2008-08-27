@@ -3,7 +3,9 @@ import os.path
 import getopt
 
 use_x = True
-opts, args = getopt.getopt(sys.argv[1:], 'n', ['no-x'])
+shortargs = 'hnv:'
+longargs = 'help no-x verbose='
+opts, args = getopt.getopt(sys.argv[1:], shortargs, longargs.split())
 for o, a in opts:
 	if o in ('-n', '--no-x'):
 		use_x = False

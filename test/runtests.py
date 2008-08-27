@@ -25,6 +25,7 @@ for o, a in opts:
 			verbose = int(a)
 		except:
 			print 'verbose must be a number >= 0'
+			sys.exit(2)
 
 # new test modules need to be added manually
 modules = ( 'test_caps',
