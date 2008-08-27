@@ -78,7 +78,7 @@ class SocksQueue:
 			self.listener = Socks5Listener(self.idlequeue, port)
 			self.listener.queue = self
 			self.listener.bind()
-			if self.listener.started is False or True:
+			if self.listener.started is False:
 				self.listener = None
 				# We cannot bind port, call error callback and fail
 				self.error_cb(_('Unable to bind to port %s.') % port,
