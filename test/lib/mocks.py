@@ -19,7 +19,8 @@ class MockConnection(Mock, ConnectionHandlersBase):
 		self.blocked_groups = {}
 		self.sessions = {}
 
-		gajim.interface.instances[account] = {'infos': {}, 'disco': {}, 'gc_config': {}, 'search': {}}
+		gajim.interface.instances[account] = {'infos': {}, 'disco': {},
+			'gc_config': {}, 'search': {}}
 		gajim.interface.minimized_controls[account] = {}
 		gajim.contacts.add_account(account)
 		gajim.groups[account] = {}
@@ -91,6 +92,7 @@ class MockChatControl(Mock):
 class MockInterface(Mock):
 	def __init__(self, *args):
 		Mock.__init__(self, *args)
+		gajim.interface = self
 		self.msg_win_mgr = Mock()
 		self.roster = Mock()
 
@@ -99,7 +101,15 @@ class MockInterface(Mock):
 		self.minimized_controls = {}
 		self.status_sent_to_users = Mock()
 
-		self.jabber_state_images = {'16': Mock(), '32': Mock(), 'opened': Mock(), 'closed': Mock()}
+		if gajim.use_x:
+			self.jabber_state_images = {'16': {}, '32': {}, 'opened': {},
+				'closed': {}}
+
+			import gtkgui_helpers
+			gtkgui_helpers.make_jabber_state_images()
+		else:
+			self.jabber_state_images = {'16': Mock(), '32': Mock(),
+				'opened': Mock(), 'closed': Mock()}
 
 class MockLogger(Mock):
 	def __init__(self):
