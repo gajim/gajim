@@ -6,6 +6,7 @@ lib.setup_env()
 
 from common import gajim
 from common import xmpp
+from common import helpers
 
 from common.caps import CapsCache
 
@@ -20,28 +21,39 @@ class TestCapsCache(unittest.TestCase):
 		self.logger = MockLogger()
 		self.cc = CapsCache(self.logger)
 
+		self.caps_method = 'sha-1'
+		self.caps_hash = 'zaQfb22o0UCwYDIk8KZOnoZTnrs='
+		self.caps = (self.caps_method, self.caps_hash)
+		self.identity = {'category': 'client', 'type': 'pc'}
+
+		self.muc = 'http://jabber.org/protocol/muc'
+		self.chatstates = 'http://jabber.org/protocol/chatstates'
+
+		self.identities = [self.identity]
+		self.features = [self.muc]
+
 	def test_examples(self):
 		'''tests the examples given in common/caps.py'''
 
-		caps = ('sha-1', '66/0NaeaBKkwk85efJTGmU47vXI=')
-		identity = {'category': 'client', 'type': 'pc'}
+		self.cc[self.caps].identities = self.identities
+		self.cc[self.caps].features = self.features
 
-		muc = 'http://jabber.org/protocol/muc'
-		chatstates = 'http://jabber.org/protocol/chatstates'
+		self.assert_(self.muc in self.cc[self.caps].features)
+		self.assert_(self.chatstates not in self.cc[self.caps].features)
 
-		self.cc[caps].identities = [identity]
-		self.cc[caps].features = [muc]
-
-		self.assert_(muc in self.cc[caps].features)
-		self.assert_(chatstates not in self.cc[caps].features)
-
-		id = self.cc[caps].identities
+		id = self.cc[self.caps].identities
 
 		self.assertEqual(1, len(id))
 
 		id = id[0]
 		self.assertEqual('client', id['category'])
 		self.assertEqual('pc', id['type'])
+
+	def test_hash(self):
+		'''tests the hash computation'''
+		computed_hash = helpers.compute_caps_hash(self.identities, self.features)
+
+		self.assertEqual(self.caps_hash, computed_hash)
 
 if __name__ == '__main__':
 	unittest.main()
