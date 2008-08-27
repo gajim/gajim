@@ -30,7 +30,8 @@ class TestMiscInterface(unittest.TestCase):
 		assert_matches_all('http://tools.ietf.org/html/draft-saintandre-rfc3920bis-05#section-12.3')
 
 		assert_matches_all('http://en.wikipedia.org/wiki/Protocol_(computing)')
-		assert_matches_all('http://en.wikipedia.org/wiki/Protocol_%28computing%29')
+		assert_matches_all(
+			'http://en.wikipedia.org/wiki/Protocol_%28computing%29')
 
 		assert_matches_all('mailto:test@example.org')
 
@@ -55,7 +56,8 @@ class TestStatusChange(unittest.TestCase):
 		for acc in contacts:
 			gajim.connections[acc] = MockConnection(acc)
 
-			gajim.interface.roster.fill_contacts_and_groups_dicts(contacts[acc], acc)
+			gajim.interface.roster.fill_contacts_and_groups_dicts(contacts[acc],
+				acc)
 			gajim.interface.roster.add_account(acc)
 			gajim.interface.roster.add_account_contacts(acc)
 
@@ -180,7 +182,8 @@ class TestStatusChange(unittest.TestCase):
 
 		ctrl = self.user_starts_chatting(jid, account1)
 
-		self.contact_goes_offline(account1, jid, 'highprio', 50, still_exists = False)
+		self.contact_goes_offline(account1, jid, 'highprio', 50,
+			still_exists=False)
 
 		# old session was dropped
 		self.assertEqual(None, ctrl.session)
