@@ -122,7 +122,8 @@ class TestChatControlSession(unittest.TestCase):
 		notif = notify.notifications[0]
 		params = notif[3]
 		first = params[1]
-		self.assert_(not first, 'message was unexpectedly treated as a first message')
+		self.assert_(not first,
+			'message was unexpectedly treated as a first message')
 
 	# ----- tests -----
 	def test_receive_nocontrol(self):
@@ -146,7 +147,8 @@ class TestChatControlSession(unittest.TestCase):
 		self.assertEqual(None, self.sess.control)
 
 	def test_receive_already_has_control(self):
-		'''test receiving a message with a session already attached to a control'''
+		'''test receiving a message with a session already attached to a
+		control'''
 
 		jid = 'bct@necronomicorp.com/Gajim'
 		msgtxt = 'testing one two three'
@@ -169,7 +171,8 @@ class TestChatControlSession(unittest.TestCase):
 		self.assertEqual(1, len(calls))
 
 	def test_received_orphaned_control(self):
-		'''test receiving a message when a control that doesn't have a session attached exists'''
+		'''test receiving a message when a control that doesn't have a session
+		attached exists'''
 
 		jid = 'bct@necronomicorp.com'
 		fjid = jid + '/Gajim'
