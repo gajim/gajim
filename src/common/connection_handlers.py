@@ -834,7 +834,10 @@ class ConnectionDisco:
 										track, self.name)
 						break
 			if features.__contains__(common.xmpp.NS_BYTESTREAM):
-				gajim.proxy65_manager.resolve(jid, self.connection, self.name)
+				our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name) +\
+					'/' + self.server_resource)
+				gajim.proxy65_manager.resolve(jid, self.connection, our_jid,
+					self.name)
 			if features.__contains__(common.xmpp.NS_MUC) and is_muc:
 				type_ = transport_type or 'jabber'
 				self.muc_jid[type_] = jid
@@ -2242,10 +2245,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 	def discover_ft_proxies(self):
 		cfg_proxies = gajim.config.get_per('accounts', self.name,
 			'file_transfer_proxies')
+		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name) + '/' +\
+			self.server_resource)
 		if cfg_proxies:
 			proxies = map(lambda e:e.strip(), cfg_proxies.split(','))
 			for proxy in proxies:
-				gajim.proxy65_manager.resolve(proxy, self.connection)
+				gajim.proxy65_manager.resolve(proxy, self.connection, our_jid)
 	
 	def _on_roster_set(self, roster):
 		raw_roster = roster.getRaw()
