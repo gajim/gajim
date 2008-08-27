@@ -24,12 +24,8 @@ from common.configpaths import gajimpaths
 from common import crypto
 from common import exceptions
 
-import dialogs
-
 import os
 import pickle
-
-import gtk
 
 secrets_filename = gajimpaths['SECRETS_FILE']
 secrets_cache = None

@@ -26,7 +26,6 @@
 import socket
 import struct
 import sha
-from dialogs import BindPortError
 
 from errno import EWOULDBLOCK
 from errno import ENOBUFS
@@ -52,7 +51,8 @@ SEND_TIMEOUT = 180
 
 class SocksQueue:
 	''' queue for all file requests objects '''
-	def __init__(self, idlequeue, complete_transfer_cb = None, progress_transfer_cb = None):
+	def __init__(self, idlequeue, complete_transfer_cb=None,
+	progress_transfer_cb=None, error_cb=None):
 		self.connected = 0
 		self.readers = {}
 		self.files_props = {}
@@ -65,6 +65,7 @@ class SocksQueue:
 		self.idlequeue = idlequeue
 		self.complete_transfer_cb = complete_transfer_cb
 		self.progress_transfer_cb = progress_transfer_cb
+		self.error_cb = error_cb
 		self.on_success = None
 		self.on_failure = None
 	
@@ -77,11 +78,12 @@ class SocksQueue:
 			self.listener = Socks5Listener(self.idlequeue, port)
 			self.listener.queue = self
 			self.listener.bind()
-			if self.listener.started is False:
+			if self.listener.started is False or True:
 				self.listener = None
-				# We cannot bind port, call error 
-				# dialog from dialogs.py and fail
-				BindPortError(port)
+				# We cannot bind port, call error callback and fail
+				self.error_cb(_('Unable to bind to port %s.') % port,
+					 _('Maybe you have another running instance of Gajim. File '
+					 'Transfer will be cancelled.'))
 				return None
 			self.connected += 1
 		return self.listener

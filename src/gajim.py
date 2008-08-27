@@ -1644,6 +1644,9 @@ class Interface:
 			notify.popup(event_type, jid, account, 'file-request',
 				path_to_image = path, title = event_type, text = txt)
 
+	def handle_event_file_error(self, title, message):
+		dialogs.ErrorDialog(title, message)
+
 	def handle_event_file_progress(self, account, file_props):
 		if time.time() - self.last_ftwindow_update > 0.5:
 			# update ft window every 500ms
@@ -3122,8 +3125,10 @@ class Interface:
 		gajim.resolver = nslookup.Resolver(gajim.idlequeue)
 		gajim.socks5queue = socks5.SocksQueue(gajim.idlequeue,
 			self.handle_event_file_rcv_completed,
-			self.handle_event_file_progress)
+			self.handle_event_file_progress,
+			self.handle_event_file_error)
 		gajim.proxy65_manager = proxy65_manager.Proxy65Manager(gajim.idlequeue)
+		gajim.default_session_type = ChatControlSession
 		self.register_handlers()
 		if gajim.config.get('enable_zeroconf'):
 			gajim.connections[gajim.ZEROCONF_ACC_NAME] = common.zeroconf.connection_zeroconf.ConnectionZeroconf(gajim.ZEROCONF_ACC_NAME)

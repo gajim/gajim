@@ -55,10 +55,6 @@ if dbus_support.supported:
 	import dbus
 	from music_track_listener import MusicTrackListener
 
-from session import ChatControlSession
-
-gajim.default_session_type = ChatControlSession
-
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible', 'error']
 # kind of events we can wait for an answer
@@ -1791,7 +1787,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		elif invite is not None:
 			self.dispatch_invite_message(invite, frm)
 		else:
-			if isinstance(session, ChatControlSession):
+			if isinstance(session, gajim.default_session_type):
 				session.received(frm, msgtxt, tim, encrypted, msg)
 			else:
 				session.received(msg)
