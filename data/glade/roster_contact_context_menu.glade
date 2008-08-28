@@ -308,7 +308,7 @@
             </child>
             <child>
               <widget class="GtkImageMenuItem" id="remove_from_roster_menuitem">
-                <property name="label" translatable="yes">_Remove</property>
+                <property name="label" translatable="yes">Remo_ve</property>
                 <property name="use_underline">True</property>
                 <child internal-child="image">
                   <widget class="GtkImage" id="image1717">
