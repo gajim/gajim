@@ -85,7 +85,13 @@ class MessageWindow(object):
 			orig_window.destroy()
 			del orig_window
 
-		id = self.window.connect('delete-event', self._on_window_delete)
+		# NOTE: we use 'connect_after' here because in 
+		# MessageWindowMgr._new_window we register handler that saves window
+		# state when closing it, and it should be called before
+		# MessageWindow._on_window_delete, which manually destroys window
+		# through win.destroy() - this means no additional handlers for
+		# 'delete-event' are called.
+		id = self.window.connect_after('delete-event', self._on_window_delete)
 		self.handlers[id] = self.window
 		id = self.window.connect('destroy', self._on_window_destroy)
 		self.handlers[id] = self.window
