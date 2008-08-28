@@ -498,26 +498,20 @@ def delete_pep(jid, name):
 
 	if jid == gajim.get_jid_from_account(name):
 		acc = gajim.connections[name]
-		for key in activities_keys:
-			if acc.activity.has_key(key):
-				del acc.activity[key]
-		for key in tune_keys:
-			if acc.tune.has_key(key):
-				del acc.tune[key]
-		for key in mood_keys:
-			if acc.mood.has_key(key):
-				del acc.mood[key]
+		del acc.activity
+		acc.activity = {}
+		del acc.tune
+		acc.tune = {}
+		del acc.mood
+		acc.mood = {}
 
 	for contact in gajim.contacts.get_contacts(name, user):
-		for key in activities_keys:
-			if contact.activity.has_key(key):
-				del contact.activity[key]
-		for key in tune_keys:
-			if contact.tune.has_key(key):
-				del contact.tune[key]
-		for key in mood_keys:
-			if contact.mood.has_key(key):
-				del contact.mood[key]
+		del contact.activity
+		contact.activity = {}
+		del contact.tune
+		contact.tune = {}
+		del contact.mood
+		contact.mood = {}
 
 	if jid == gajim.get_jid_from_account(name):
 		gajim.interface.roster.draw_account(name)
