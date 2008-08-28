@@ -5,6 +5,9 @@ account3 = u'dingdong.org'
 
 contacts = {}
 contacts[account1] = {
+	u'myjid@'+account1: {
+			  'ask': None, 'groups': [], 'name': None, 'resources': {}, 
+			  'subscription': u'both'},
 	u'default1@gajim.org': {
 			  'ask': None, 'groups': [], 'name': None, 'resources': {}, 
 			  'subscription': u'both'},
@@ -19,6 +22,9 @@ contacts[account1] = {
 			  'subscription': u'both'}
 }
 contacts[account2] = {
+	u'myjid@'+account2: {
+			  'ask': None, 'groups': [], 'name': None, 'resources': {}, 
+			  'subscription': u'both'},
 	u'default3@gajim.org': {
 			  'ask': None, 'groups': [u'GroupC',], 'name': None, 'resources': {}, 
 			  'subscription': u'both'},
@@ -46,7 +52,7 @@ contacts[account3] = {
 	#		  'ask': None, 'groups': [], 'name': None, 
 	#		  'resources': {}, 'subscription': u'both'}
 }
-
+# We have contacts that are not in roster but only specified in the metadata
 metacontact_data = [
 	[{'account': account3,
 	  'jid': u'guypsych0\\40h.com@msn.dingdong.org',
