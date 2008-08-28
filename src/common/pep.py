@@ -490,4 +490,45 @@ def user_retract_tune(account):
 def user_retract_nickname(account):
 	gajim.connections[account].send_pb_retract('', xmpp.NS_NICK, '0')
 
+def delete_pep(jid, name):
+	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
+	activities_keys = ('activity', 'subactivity', 'text')
+	tune_keys = ('artist', 'title', 'source', 'track', 'length')
+	mood_keys = ('mood', 'text')
+
+	if jid == gajim.get_jid_from_account(name):
+		acc = gajim.connections[name]
+		for key in activities_keys:
+			if acc.activity.has_key(key):
+				del acc.activity[key]
+		for key in tune_keys:
+			if acc.tune.has_key(key):
+				del acc.tune[key]
+		for key in mood_keys:
+			if acc.mood.has_key(key):
+				del acc.mood[key]
+
+	for contact in gajim.contacts.get_contacts(name, user):
+		for key in activities_keys:
+			if contact.activity.has_key(key):
+				del contact.activity[key]
+		for key in tune_keys:
+			if contact.tune.has_key(key):
+				del contact.tune[key]
+		for key in mood_keys:
+			if contact.mood.has_key(key):
+				del contact.mood[key]
+
+	if jid == gajim.get_jid_from_account(name):
+		gajim.interface.roster.draw_account(name)
+
+	gajim.interface.roster.draw_activity(user, name)
+	gajim.interface.roster.draw_tune(user, name)
+	gajim.interface.roster.draw_mood(user, name)
+	ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
+	if ctrl:
+		ctrl.update_activity()
+		ctrl.update_tune()
+		ctrl.update_mood()
+
 # vim: se ts=3:

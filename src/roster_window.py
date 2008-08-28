@@ -58,6 +58,7 @@ from common import helpers
 from common import passwords
 from common.exceptions import GajimGeneralException
 from common import i18n
+from common import pep
 
 from message_window import MessageWindowMgr
 
@@ -1088,6 +1089,14 @@ class RosterWindow:
 		if strike:
 			name = '<span strikethrough="true">%s</span>' % name
 
+		# Delete pep if needed
+		delete_pep = True
+		for c in contact_instances:
+			if c.show not in ('error', 'offline'):
+				delete_pep = False
+		if delete_pep:
+			pep.delete_pep(jid, account)
+
 		# Show resource counter
 		nb_connected_contact = 0
 		for c in contact_instances:
@@ -1952,6 +1961,9 @@ class RosterWindow:
 		if to:
 			gajim.connections[account].send_custom_status(status, txt, to)
 		else:
+			if status in ('invisible', 'offline'):
+				pep.delete_pep(gajim.get_jid_from_account(account), \
+					account)
 			was_invisible = gajim.connections[account].connected == \
 				gajim.SHOW_LIST.index('invisible')
 			gajim.connections[account].change_status(status, txt, auto)
