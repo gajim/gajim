@@ -2508,57 +2508,44 @@ class RosterWindow:
 		dialogs.ConfirmationDialog(pritext, sectext,
 			on_response_ok = (remove, list_))
 
-	def on_block(self, widget, titer, group_list):
-		''' When clicked on the 'block' button in context menu. '''
+	def on_block(self, widget, list_, group=None):
+		''' When clicked on the 'block' button in context menu.
+		list_ is a list of (contact, account)'''
 		def on_continue(msg):
 			if msg is None:
 				# user pressed Cancel to change status message dialog
 				return
 			model = self.modelfilter
 			accounts = []
-			if group_list is None:
-				jid = model[titer][C_JID].decode('utf-8')
-				account = model[titer][C_ACCOUNT].decode('utf-8')
-				accounts.append(account)
-				self.send_status(account, 'offline', msg, to = jid)
-				new_rule = {'order': u'1', 'type': u'jid', 'action': u'deny',
-					'value' : jid, 'child': [u'message', u'iq', u'presence-out']}
-				gajim.connections[account].blocked_list.append(new_rule)
-				# needed for draw_contact:
-				gajim.connections[account].blocked_contacts.append(jid)
-				self.draw_contact(jid, account)
-			else:
-				if titer is None:
-					for (contact, account) in group_list:
-						if account not in accounts:
-							if not gajim.connections[account].privacy_rules_supported:
-								continue
-							accounts.append(account)
-						self.send_status(account, 'offline', msg, to=contact.jid)
-						new_rule = {'order': u'1', 'type': u'jid',
-								'action': u'deny', 'value' : contact.jid,
-								'child': [u'message', u'iq', u'presence-out']}
-						gajim.connections[account].blocked_list.append(new_rule)
-						# needed for draw_contact:
-						gajim.connections[account].blocked_contacts.append(
-							contact.jid)
-						self.draw_contact(contact.jid, account)
-				else:
-					group = model[titer][C_JID].decode('utf-8')
-					for (contact, account) in group_list:
-						if account not in accounts:
-							if not gajim.connections[account].privacy_rules_supported:
-								continue
-							accounts.append(account)
-							# needed for draw_group:
-							gajim.connections[account].blocked_groups.append(group)
-							self.draw_group(group, account)
-						self.send_status(account, 'offline', msg, to=contact.jid)
-						self.draw_contact(contact.jid, account)
-					new_rule = {'order': u'1', 'type': u'group', 'action': u'deny',
-						'value' : group, 'child': [u'message', u'iq',
+			if group is None:
+				for (contact, account) in list_:
+					if account not in accounts:
+						if not gajim.connections[account].privacy_rules_supported:
+							continue
+						accounts.append(account)
+					self.send_status(account, 'offline', msg, to=contact.jid)
+					new_rule = {'order': u'1', 'type': u'jid', 'action': u'deny',
+						'value' : contact.jid, 'child': [u'message', u'iq',
 						u'presence-out']}
 					gajim.connections[account].blocked_list.append(new_rule)
+					# needed for draw_contact:
+					gajim.connections[account].blocked_contacts.append(
+						contact.jid)
+					self.draw_contact(contact.jid, account)
+			else:
+				for (contact, account) in list_:
+					if account not in accounts:
+						if not gajim.connections[account].privacy_rules_supported:
+							continue
+						accounts.append(account)
+						# needed for draw_group:
+						gajim.connections[account].blocked_groups.append(group)
+						self.draw_group(group, account)
+					self.send_status(account, 'offline', msg, to=contact.jid)
+					self.draw_contact(contact.jid, account)
+				new_rule = {'order': u'1', 'type': u'group', 'action': u'deny',
+					'value' : group, 'child': [u'message', u'iq', u'presence-out']}
+				gajim.connections[account].blocked_list.append(new_rule)
 			for account in accounts:
 				gajim.connections[account].set_privacy_list(
 				'block', gajim.connections[account].blocked_list)
@@ -2569,64 +2556,47 @@ class RosterWindow:
 
 		self.get_status_message('offline', on_continue)
 
-	def on_unblock(self, widget, titer, group_list):
+	def on_unblock(self, widget, list_, group=None):
 		''' When clicked on the 'unblock' button in context menu. '''
 		model = self.modelfilter
 		accounts = []
-		if group_list is None:
-			jid = model[titer][C_JID].decode('utf-8')
-			jid_account = model[titer][C_ACCOUNT].decode('utf-8')
-			accounts.append(jid_account)
-			gajim.connections[jid_account].new_blocked_list = []
-			for rule in gajim.connections[jid_account].blocked_list:
-				if rule['action'] != 'deny' or rule['type'] != 'jid' \
-				or rule['value'] != jid:
-					gajim.connections[jid_account].new_blocked_list.append(rule)
-			# needed for draw_contact:
-			if jid in gajim.connections[jid_account].blocked_contacts:
-				gajim.connections[jid_account].blocked_contacts.remove(jid)
-			self.draw_contact(jid, jid_account)
-		else:
-			if titer is None:
-				for (contact, account) in group_list:
-					if account not in accounts:
-						if gajim.connections[account].privacy_rules_supported:
-							accounts.append(account)
-							gajim.connections[account].new_blocked_list = []
-							gajim.connections[account].to_unblock = []
-							gajim.connections[account].to_unblock.append(contact.jid)
-					else:
+		if group is None:
+			for (contact, account) in list_:
+				if account not in accounts:
+					if gajim.connections[account].privacy_rules_supported:
+						accounts.append(account)
+						gajim.connections[account].new_blocked_list = []
+						gajim.connections[account].to_unblock = []
 						gajim.connections[account].to_unblock.append(contact.jid)
-					# needed for draw_contact:
-					if contact.jid in gajim.connections[account].blocked_contacts:
-						gajim.connections[account].blocked_contacts.remove(
-							contact.jid)
-					self.draw_contact(contact.jid, account)
-				for account in accounts:
-					for rule in gajim.connections[account].blocked_list:
-						if rule['action'] != 'deny' or rule['type'] != 'jid' \
-						or rule['value'] not in gajim.connections[account].to_unblock:
-							gajim.connections[account].new_blocked_list.append(rule)
-			else:
-				group = model[titer][C_JID].decode('utf-8')
-				for (contact, account) in group_list:
-					if account not in accounts:
-						if gajim.connections[account].privacy_rules_supported:
-							accounts.append(account)
-							# needed for draw_group:
-							if group in gajim.connections[account].blocked_groups:
-								gajim.connections[account].blocked_groups.remove(group)
-							self.draw_group(group, account)
-							gajim.connections[account].new_blocked_list = []
-							for rule in gajim.connections[account].blocked_list:
-								if rule['action'] != 'deny' or rule['type'] != 'group' \
-								or rule['value'] != group:
-									gajim.connections[account].new_blocked_list.append(
-										rule)
-					self.draw_contact(contact.jid, account)
+				else:
+					gajim.connections[account].to_unblock.append(contact.jid)
+				# needed for draw_contact:
+				if contact.jid in gajim.connections[account].blocked_contacts:
+					gajim.connections[account].blocked_contacts.remove(contact.jid)
+				self.draw_contact(contact.jid, account)
+			for account in accounts:
+				for rule in gajim.connections[account].blocked_list:
+					if rule['action'] != 'deny' or rule['type'] != 'jid' \
+					or rule['value'] not in gajim.connections[account].to_unblock:
+						gajim.connections[account].new_blocked_list.append(rule)
+		else:
+			for (contact, account) in list_:
+				if account not in accounts:
+					if gajim.connections[account].privacy_rules_supported:
+						accounts.append(account)
+						# needed for draw_group:
+						if group in gajim.connections[account].blocked_groups:
+							gajim.connections[account].blocked_groups.remove(group)
+						self.draw_group(group, account)
+						gajim.connections[account].new_blocked_list = []
+						for rule in gajim.connections[account].blocked_list:
+							if rule['action'] != 'deny' or rule['type'] != 'group' \
+							or rule['value'] != group:
+								gajim.connections[account].new_blocked_list.append(rule)
+				self.draw_contact(contact.jid, account)
 		for account in accounts:
-			gajim.connections[account].set_privacy_list(
-				'block', gajim.connections[account].new_blocked_list)
+			gajim.connections[account].set_privacy_list('block',
+				gajim.connections[account].new_blocked_list)
 			gajim.connections[account].get_privacy_list('block')
 			if len(gajim.connections[account].new_blocked_list) == 0:
 				gajim.connections[account].blocked_list = []
@@ -2638,45 +2608,30 @@ class RosterWindow:
 				if gajim.interface.instances[account].has_key('blocked_contacts'):
 					gajim.interface.instances[account]['blocked_contacts'].\
 						privacy_list_received([])
-		if group_list is None:
-			status = gajim.connections[jid_account].connected
-			if gajim.SHOW_LIST[status] == 'invisible':
-				# Don't send our presence if we're invisible
-				return
-			msg = gajim.connections[jid_account].status
+		for (contact, account) in list_:
 			if not self.regroup:
-				show = gajim.SHOW_LIST[status]
+				show = gajim.SHOW_LIST[gajim.connections[account].connected]
 			else:	# accounts merged
 				show = helpers.get_global_show()
-			self.send_status(jid_account, show, msg, to=jid)
-		else:
-			for (contact, account) in group_list:
-				if not self.regroup:
-					show = gajim.SHOW_LIST[gajim.connections[account].connected]
-				else:	# accounts merged
-					show = helpers.get_global_show()
-				if show == 'invisible':
-					# Don't send our presence if we're invisible
-					continue
-				if account not in accounts:
-					if gajim.connections[account].privacy_rules_supported:
-						accounts.append(account)
-						self.send_status(account, show,
-							gajim.connections[account].status, to=contact.jid)
-				else:
+			if show == 'invisible':
+				# Don't send our presence if we're invisible
+				continue
+			if account not in accounts:
+				accounts.append(account)
+				if gajim.connections[account].privacy_rules_supported:
 					self.send_status(account, show,
 						gajim.connections[account].status, to=contact.jid)
+			else:
+				self.send_status(account, show,
+					gajim.connections[account].status, to=contact.jid)
 
-	def on_rename(self, widget, titer, path):
+	def on_rename(self, widget, row_type, jid, account):
 		# this function is called either by F2 or by Rename menuitem
 		if gajim.interface.instances.has_key('rename'):
 			gajim.interface.instances['rename'].dialog.present()
 			return
 		model = self.modelfilter
 
-		row_type = model[titer][C_TYPE]
-		jid = model[titer][C_JID].decode('utf-8')
-		account = model[titer][C_ACCOUNT].decode('utf-8')
 		# account is offline, don't allow to rename
 		if gajim.connections[account].connected < 2:
 			return
@@ -2689,9 +2644,9 @@ class RosterWindow:
 		elif row_type == 'group':
 			if jid in helpers.special_groups + (_('General'),):
 				return
-			old_text = model[titer][C_JID].decode('utf-8')
+			old_text = jid
 			title = _('Rename Group')
-			message = _('Enter a new name for group %s') % old_text
+			message = _('Enter a new name for group %s') % jid
 
 		def on_renamed(new_text, account, row_type, jid, old_text):
 			if gajim.interface.instances.has_key('rename'):
@@ -2981,8 +2936,9 @@ class RosterWindow:
 			path = list_of_paths[0]
 			type_ = model[path][C_TYPE]
 			if type_ in ('contact', 'group', 'agent'):
-				titer = model.get_iter(path)
-				self.on_rename(widget, titer, path)
+				jid = model[path][C_JID].decode('utf-8')
+				account = model[path][C_ACCOUNT].decode('utf-8')
+				self.on_rename(widget, type_, jid, account)
 
 		elif event.keyval == gtk.keysyms.Delete:
 			treeselection = self.tree.get_selection()
@@ -2990,7 +2946,7 @@ class RosterWindow:
 			if not len(list_of_paths):
 				return
 			type_ = model[list_of_paths[0]][C_TYPE]
-			account = model[list_of_paths[0]][C_ACCOUNT]
+			account = model[list_of_paths[0]][C_ACCOUNT].decode('utf-8')
 			list_ = []
 			for path in list_of_paths:
 				if model[path][C_TYPE] != type_:
@@ -5125,7 +5081,8 @@ class RosterWindow:
 			img.set_from_file(path_to_kbd_input_img)
 			rename_item.set_image(img)
 			menu.append(rename_item)
-			rename_item.connect('activate', self.on_rename, titer, path)
+			rename_item.connect('activate', self.on_rename, 'group', group,
+				account)
 
 			# Block group
 			is_blocked = False
@@ -5141,13 +5098,13 @@ class RosterWindow:
 				unblock_menuitem = gtk.ImageMenuItem(_('_Unblock'))
 				icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
 				unblock_menuitem.set_image(icon)
-				unblock_menuitem.connect('activate', self.on_unblock, titer, list_)
+				unblock_menuitem.connect('activate', self.on_unblock, list_, group)
 				menu.append(unblock_menuitem)
 			else:
 				block_menuitem = gtk.ImageMenuItem(_('_Block'))
 				icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
 				block_menuitem.set_image(icon)
-				block_menuitem.connect('activate', self.on_block, titer, list_)
+				block_menuitem.connect('activate', self.on_block, list_, group)
 				menu.append(block_menuitem)
 				if not gajim.connections[account].privacy_rules_supported:
 					block_menuitem.set_sensitive(False)
@@ -5247,7 +5204,8 @@ class RosterWindow:
 			else:
 				send_file_menuitem.set_sensitive(False)
 
-			rename_menuitem.connect('activate', self.on_rename, titer, tree_path)
+			rename_menuitem.connect('activate', self.on_rename, 'contact', jid,
+				account)
 			if contact.show in ('offline', 'error'):
 				information_menuitem.set_sensitive(False)
 				send_file_menuitem.set_sensitive(False)
@@ -5426,7 +5384,8 @@ class RosterWindow:
 		send_single_message_menuitem.connect('activate',
 			self.on_send_single_message_menuitem_activate, account, contact)
 
-		rename_menuitem.connect('activate', self.on_rename, titer, tree_path)
+		rename_menuitem.connect('activate', self.on_rename, 'contact', jid,
+			account)
 		remove_from_roster_menuitem.connect('activate', self.on_req_usub,
 			[(contact, account)])
 		information_menuitem.connect('activate', self.on_info, contact,
@@ -5500,11 +5459,11 @@ class RosterWindow:
 					unblock_menuitem.set_no_show_all(True)
 					unblock_menuitem.hide()
 					unignore_menuitem.set_no_show_all(False)
-					unignore_menuitem.connect('activate', self.on_unblock, titer,
-						None)
+					unignore_menuitem.connect('activate', self.on_unblock, [(contact,
+						account)])
 				else:
-					unblock_menuitem.connect('activate', self.on_unblock, titer,
-						None)
+					unblock_menuitem.connect('activate', self.on_unblock, [(contact,
+						account)])
 			else:
 				unblock_menuitem.set_no_show_all(True)
 				unblock_menuitem.hide()
@@ -5512,9 +5471,11 @@ class RosterWindow:
 					block_menuitem.set_no_show_all(True)
 					block_menuitem.hide()
 					ignore_menuitem.set_no_show_all(False)
-					ignore_menuitem.connect('activate', self.on_block, titer, None)
+					ignore_menuitem.connect('activate', self.on_block, [(contact,
+						account)])
 				else:
-					block_menuitem.connect('activate', self.on_block, titer, None)
+					block_menuitem.connect('activate', self.on_block, [(contact,
+						account)])
 		else:
 			unblock_menuitem.set_no_show_all(True)
 			block_menuitem.set_sensitive(False)
@@ -5597,13 +5558,13 @@ class RosterWindow:
 			unblock_menuitem = gtk.ImageMenuItem(_('_Unblock'))
 			icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
 			unblock_menuitem.set_image(icon)
-			unblock_menuitem.connect('activate', self.on_unblock, None, list_)
+			unblock_menuitem.connect('activate', self.on_unblock, list_)
 			manage_contacts_submenu.append(unblock_menuitem)
 		else:
 			block_menuitem = gtk.ImageMenuItem(_('_Block'))
 			icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
 			block_menuitem.set_image(icon)
-			block_menuitem.connect('activate', self.on_block, None, list_)
+			block_menuitem.connect('activate', self.on_block, list_)
 			manage_contacts_submenu.append(block_menuitem)
 
 			if not gajim.connections[account].privacy_rules_supported:
@@ -5717,7 +5678,7 @@ class RosterWindow:
 		img.set_from_file(path_to_kbd_input_img)
 		item.set_image(img)
 		manage_transport_submenu.append(item)
-		item.connect('activate', self.on_rename, titer, path)
+		item.connect('activate', self.on_rename, 'agent', jid, account)
 		if gajim.account_is_disconnected(account):
 			item.set_sensitive(False)
 
@@ -5727,10 +5688,10 @@ class RosterWindow:
 		# Block
 		if blocked:
 			item = gtk.ImageMenuItem(_('_Unblock'))
-			item.connect('activate', self.on_unblock, titer, None)
+			item.connect('activate', self.on_unblock, [(contact, account)])
 		else:
 			item = gtk.ImageMenuItem(_('_Block'))
-			item.connect('activate', self.on_block, titer, None)
+			item.connect('activate', self.on_block, [(contact, account)])
 
 		icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
