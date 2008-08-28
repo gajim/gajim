@@ -915,6 +915,9 @@ class EncryptedStanzaSession(StanzaSession):
 	def _verified_srs_cb(self):
 		secrets.secrets().replace_srs(self.conn.name, self.jid.getStripped(), self.srs, self.srs, True)
 
+	def _unverified_srs_cb(self):
+		secrets.secrets().replace_srs(self.conn.name, self.jid.getStripped(), self.srs, self.srs, False)
+
 	def make_dhfield(self, modp_options, sigmai):
 		dhs = []
 

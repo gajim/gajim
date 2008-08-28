@@ -3811,6 +3811,7 @@ class ESessionInfoWindow:
 
 		self.security_image = self.xml.get_widget('security_image')
 		self.verify_now_button = self.xml.get_widget('verify_now_button')
+		self.button_label = self.xml.get_widget('button_label')
 		self.window = self.xml.get_widget('esession_info_window')
 		self.update_info()
 
@@ -3818,7 +3819,7 @@ class ESessionInfoWindow:
 		self.window.show_all()
 
 	def update_info(self):
-		labeltext = _('''Your chat session with %(jid)s is encrypted.\n\nThis session's Short Authentication String is %(sas)s.''') % {'jid': self.session.jid, 'sas': self.session.sas}
+		labeltext = _('''Your chat session with %(jid)s is encrypted.\n\nThis session's Short Authentication String is <b>%(sas)s</b>.''') % {'jid': self.session.jid, 'sas': self.session.sas}
 		dir = os.path.join(gajim.DATA_DIR, 'pixmaps')
 
 		if self.session.verified_identity:
@@ -3829,23 +3830,27 @@ class ESessionInfoWindow:
 					self.session.is_loggable(), True)
 			self.window.set_title(_('''Contact's identity verified'''))
 			self.xml.get_widget('dialog-action_area1').set_no_show_all(True) 
-			self.verify_now_button.hide()
+			self.button_label.set_text(_('Verify again'))
 		else:
-			labeltext += '\n\n' + _('''To be certain that only the expected person can read your messages or send you messages, you need to verify their identity.''')
+			if self.session.control:
+				self.session.control._show_lock_image(True, 'E2E', True,
+					self.session.is_loggable(), False)
+			labeltext += '\n\n' + _('''To be certain that <b>only</b> the expected person can read your messages or send you messages, you need to verify their identity by clicking the button above.''')
 			security_image = 'security-low-big.png'
 			self.window.set_title(_('''Contact's identity NOT verified'''))
+			self.button_label.set_text(_('Verify'))
 
 		path = os.path.join(dir, security_image)
 		filename = os.path.abspath(path)
 		self.security_image.set_from_file(filename)
 
-		self.xml.get_widget('info_display').set_text(labeltext)
+		self.xml.get_widget('info_display').set_markup(labeltext)
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 
 	def on_verify_now_button_clicked(self, widget):
-		pritext = _('''Have you verified the remote contact's identity?''')
+		pritext = _('''Have you verified the contact's identity?''')
 		sectext = _('''To prevent a man-in-the-middle attack, you should speak to %(jid)s directly (in person or on the phone) and verify that they see the same Short Authentication String (SAS) as you.\n\nThis session's Short Authentication String is <b>%(sas)s</b>.''') % {'jid': self.session.jid, 'sas': self.session.sas}
 		sectext += '\n\n' + _('Did you talk to the remote contact and verify the SAS?')
 
@@ -3854,6 +3859,11 @@ class ESessionInfoWindow:
 			self.session.verified_identity = True
 			self.update_info()
 
-		YesNoDialog(pritext, sectext, on_response_yes=on_yes)
+		def on_no():
+			self.session._unverified_srs_cb()
+			self.session.verified_identity = False
+			self.update_info()
+
+		YesNoDialog(pritext, sectext, on_response_yes=on_yes, on_response_no=on_no)
 
 # vim: se ts=3:
