@@ -420,7 +420,8 @@ class ConversationTextview:
 		self.xep0184_shown[id] = NOT_SHOWN
 
 		def show_it():
-			if self.xep0184_shown[id] == ALREADY_RECEIVED:
+			if (not id in self.xep0184_shown) or \
+			self.xep0184_shown[id] == ALREADY_RECEIVED:
 				return False
 
 			end_iter = buffer.get_iter_at_mark(
