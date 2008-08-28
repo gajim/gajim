@@ -1641,8 +1641,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		'''Called when we receive a message'''
 		gajim.log.debug('MessageCB')
 
-		frm = helpers.get_full_jid_from_iq(msg)
-
 		# check if the message is pubsub#event
 		if msg.getTag('event') is not None:
 			if msg.getTag('error') is None:
@@ -1653,6 +1651,18 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if msg.getTag('confirm', namespace=common.xmpp.NS_HTTP_AUTH):
 			self._HttpAuthCB(con, msg)
 			return
+
+		frm = helpers.get_full_jid_from_iq(msg)
+		jid = helpers.get_jid_from_iq(msg)
+
+		addressTag = msg.getTag('addresses', namespace = common.xmpp.NS_ADDRESS)
+
+		# Be sure it comes from one of our resource, else ignore address element
+		if addressTag and jid == gajim.get_jid_from_account(self.name):
+			address = addressTag.getTag('address', attrs={'type': 'ofrom'})
+			if address:
+				frm = address.getAttr('jid')
+				jid = gajim.get_jid_without_resource(frm)
 
 		# invitations
 		invite = None
@@ -1684,8 +1694,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			mtype = 'normal'
 
 		msgtxt = msg.getBody()
-
-		jid = helpers.get_jid_from_iq(msg)
 
 		encrypted = False
 		xep_200_encrypted = msg.getTag('c', namespace=common.xmpp.NS_STANZA_CRYPTO)
@@ -1764,15 +1772,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.name, 'request_receipt'):
 			session.control.conv_textview.hide_xep0184_warning(
 				msg.getID())
-
-		addressTag = msg.getTag('addresses', namespace = common.xmpp.NS_ADDRESS)
-
-		# Be sure it comes from one of our resource, else ignore address element
-		if addressTag and jid == gajim.get_jid_from_account(self.name):
-			address = addressTag.getTag('address', attrs={'type': 'ofrom'})
-			if address:
-				frm = address.getAttr('jid')
-				jid = gajim.get_jid_without_resource(frm)
 
 		if encTag and self.USE_GPG:
 			encmsg = encTag.getData()
