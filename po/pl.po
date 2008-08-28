@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-27 15:21+0200\n"
+"POT-Creation-Date: 2008-08-28 12:02+0200\n"
 "PO-Revision-Date: 2006-11-08 09:01+0100\n"
 "Last-Translator: Maciej Chojnacki <maciej.chojnacki@gmail.com>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -306,8 +306,8 @@ msgstr "Gajim"
 #: ../data/glade/preferences_window.glade.h:50
 #: ../data/glade/zeroconf_properties_window.glade.h:7
 #: ../src/common/contacts.py:98 ../src/dialogs.py:103 ../src/dialogs.py:111
-#: ../src/dialogs.py:165 ../src/roster_window.py:2690
-#: ../src/roster_window.py:5168
+#: ../src/dialogs.py:165 ../src/roster_window.py:2645
+#: ../src/roster_window.py:5125
 msgid "General"
 msgstr "Ogólne"
 
@@ -383,8 +383,8 @@ msgstr "Nie wybrano żadnego klucza"
 #: ../src/config.py:1211 ../src/config.py:1459 ../src/config.py:1464
 #: ../src/config.py:1959 ../src/config.py:2037 ../src/config.py:2050
 #: ../src/config.py:3153 ../src/config.py:3221 ../src/dialogs.py:293
-#: ../src/dialogs.py:295 ../src/dialogs.py:514 ../src/roster_window.py:2758
-#: ../src/roster_window.py:2764 ../src/roster_window.py:2769
+#: ../src/dialogs.py:295 ../src/dialogs.py:514 ../src/roster_window.py:2713
+#: ../src/roster_window.py:2719 ../src/roster_window.py:2724
 msgid "None"
 msgstr "Żaden"
 
@@ -564,7 +564,7 @@ msgid "Mer_ge accounts"
 msgstr "_Połącz konta"
 
 #. Rename
-#: ../data/glade/accounts_window.glade.h:44 ../src/roster_window.py:5120
+#: ../data/glade/accounts_window.glade.h:44 ../src/roster_window.py:5076
 msgid "Re_name"
 msgstr "_Zmień nazwę"
 
@@ -1043,7 +1043,7 @@ msgstr "Dod_aj do listy kontaktów"
 #: ../data/glade/roster_contact_context_menu.glade.h:16
 #: ../data/glade/roster_window.glade.h:20
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:6
-#: ../src/roster_window.py:5795
+#: ../src/roster_window.py:5756
 msgid "_History"
 msgstr "_Historia"
 
@@ -2338,8 +2338,8 @@ msgstr "Usuń konto z Gajima i z _serwera"
 #. Remove
 #: ../data/glade/remove_account_window.glade.h:4
 #: ../data/glade/roster_contact_context_menu.glade.h:19
-#: ../src/roster_window.py:5156 ../src/roster_window.py:5613
-#: ../src/roster_window.py:5742
+#: ../src/roster_window.py:5113 ../src/roster_window.py:5574
+#: ../src/roster_window.py:5703
 msgid "_Remove"
 msgstr "_Usuń"
 
@@ -2361,20 +2361,20 @@ msgstr "Modyfikuj _grupy..."
 
 #. Execute Command
 #: ../data/glade/roster_contact_context_menu.glade.h:5
-#: ../src/roster_window.py:5685
+#: ../src/roster_window.py:5646
 msgid "Execute Command..."
 msgstr "Wykonaj komendę..."
 
 #. Invite to
 #. Invite to Groupchat
 #: ../data/glade/roster_contact_context_menu.glade.h:6
-#: ../src/roster_window.py:5075 ../src/roster_window.py:5566
+#: ../src/roster_window.py:5031 ../src/roster_window.py:5527
 msgid "In_vite to"
 msgstr "_Zaproś do"
 
 #. Send Custom Status
 #: ../data/glade/roster_contact_context_menu.glade.h:7
-#: ../src/roster_window.py:5085 ../src/roster_window.py:5651
+#: ../src/roster_window.py:5041 ../src/roster_window.py:5612
 msgid "Send Cus_tom Status"
 msgstr "Wyślij odrębny status"
 
@@ -2400,8 +2400,8 @@ msgid "_Allow him/her to see my status"
 msgstr "_Pozwól mu/jej widzieć swój status"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:14
-#: ../src/roster_window.py:5147 ../src/roster_window.py:5603
-#: ../src/roster_window.py:5732
+#: ../src/roster_window.py:5104 ../src/roster_window.py:5564
+#: ../src/roster_window.py:5693
 msgid "_Block"
 msgstr "_Zablokuj"
 
@@ -2427,8 +2427,8 @@ msgid "_Subscription"
 msgstr "_Autoryzacja"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:22
-#: ../src/roster_window.py:5141 ../src/roster_window.py:5597
-#: ../src/roster_window.py:5729
+#: ../src/roster_window.py:5098 ../src/roster_window.py:5558
+#: ../src/roster_window.py:5690
 msgid "_Unblock"
 msgstr "_Cofnij blokadę"
 
@@ -2473,9 +2473,8 @@ msgid "Show _roster"
 msgstr "Pokaż _listę kontaktów"
 
 #: ../data/glade/roster_window.glade.h:12
-#, fuzzy
 msgid "_Accounts"
-msgstr "Konta"
+msgstr "_Konta"
 
 #. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
 #: ../data/glade/roster_window.glade.h:13
@@ -2528,7 +2527,7 @@ msgid "_Add contact"
 msgstr "Dodaj _kontakt"
 
 #. Information
-#: ../data/glade/search_window.glade.h:4 ../src/roster_window.py:5754
+#: ../data/glade/search_window.glade.h:4 ../src/roster_window.py:5715
 msgid "_Information"
 msgstr "Informacje o kontakcie"
 
@@ -2751,13 +2750,13 @@ msgstr "Przypisz klucz Open_PGP"
 
 #. Edit Groups
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:3
-#: ../src/roster_window.py:5586
+#: ../src/roster_window.py:5547
 msgid "Edit _Groups"
 msgstr "Modyfikuj _grupy"
 
 #. Rename
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:8
-#: ../src/roster_window.py:5712
+#: ../src/roster_window.py:5673
 msgid "_Rename"
 msgstr "_Zmień nazwę"
 
@@ -2983,8 +2982,8 @@ msgstr "Szyfrowanie GPG włączone"
 #: ../src/common/helpers.py:289 ../src/conversation_textview.py:843
 #: ../src/dialogs.py:896 ../src/gajim.py:1623 ../src/roster_window.py:926
 #: ../src/roster_window.py:1527 ../src/roster_window.py:1529
-#: ../src/roster_window.py:1869 ../src/roster_window.py:5260
-#: ../src/roster_window.py:5437
+#: ../src/roster_window.py:1869 ../src/roster_window.py:5218
+#: ../src/roster_window.py:5396
 msgid "Not in Roster"
 msgstr "spoza listy kontaktów"
 
@@ -3036,11 +3035,11 @@ msgstr "Sesja BĘDZIE logowana"
 #. encryption %s active
 #: ../src/chat_control.py:1557
 msgid "is"
-msgstr ""
+msgstr "jest"
 
 #: ../src/chat_control.py:1557
 msgid "is NOT"
-msgstr ""
+msgstr "NIE jest"
 
 #. chat session %s be logged
 #: ../src/chat_control.py:1559
@@ -3129,6 +3128,8 @@ msgid ""
 "Remote contact's identity not verified. Click the shield button for more "
 "details."
 msgstr ""
+"Tożsamość zdalnego rozmówny nie jest zweryfikowana. Kliknij na przycisk "
+"tarczy po więcej szczegółów."
 
 #: ../src/chat_control.py:1801
 msgid "E2E encryption disabled"
@@ -3139,9 +3140,8 @@ msgid "The following message was NOT encrypted"
 msgstr "Ta wiadomość NIE została jest zaszyfrowana"
 
 #: ../src/chat_control.py:1836
-#, fuzzy
 msgid "The following message was encrypted"
-msgstr "Ta wiadomość NIE została jest zaszyfrowana"
+msgstr "Ta wiadomość została zaszyfrowana"
 
 #. %s is being replaced in the code with JID
 #: ../src/chat_control.py:2189
@@ -3259,7 +3259,7 @@ msgstr "Wybierz pokoje, które chcesz opuścić"
 #: ../src/common/commands.py:205 ../src/common/contacts.py:94
 #: ../src/common/contacts.py:126 ../src/common/helpers.py:75
 #: ../src/roster_window.py:794 ../src/roster_window.py:1531
-#: ../src/roster_window.py:1533 ../src/roster_window.py:5045
+#: ../src/roster_window.py:1533 ../src/roster_window.py:5001
 msgid "Groupchats"
 msgstr "Pokoje"
 
@@ -3871,7 +3871,7 @@ msgstr ""
 
 #: ../src/common/config.py:287
 msgid "If enabled, restore the last status that was used."
-msgstr ""
+msgstr "Jeśli włączone, przywróc ostatni status, który był użyty."
 
 #: ../src/common/config.py:292
 msgid ""
@@ -3951,6 +3951,8 @@ msgid ""
 "Should Gajim automatically start an encrypted session with this contact when "
 "possible?"
 msgstr ""
+"Czy Gajim powinien automatycznie rozpoczynać zaszyfrowana sesję z tym "
+"kontaktem, jeśli to możliwe?"
 
 #: ../src/common/config.py:391 ../src/common/config.py:394
 msgid "Language for which we want to check misspelled words"
@@ -4942,17 +4944,14 @@ msgid "Afraid"
 msgstr "Obawiam się"
 
 #: ../src/common/pep.py:29
-#, fuzzy
 msgid "Amazed"
 msgstr "Zadziwiony"
 
 #: ../src/common/pep.py:30
-#, fuzzy
 msgid "Angry"
 msgstr "Zły"
 
 #: ../src/common/pep.py:30
-#, fuzzy
 msgid "Annoyed"
 msgstr "Zdenerwowany"
 
@@ -4967,24 +4966,20 @@ msgid "Aroused"
 msgstr "Podejrzliwy"
 
 #: ../src/common/pep.py:32
-#, fuzzy
 msgid "Ashamed"
 msgstr "Zawstydzony"
 
 #: ../src/common/pep.py:32
-#, fuzzy
 msgid "Bored"
 msgstr "Znudzony"
 
 #: ../src/common/pep.py:33
-#, fuzzy
 msgid "Brave"
 msgstr "Odważny"
 
 #: ../src/common/pep.py:33
-#, fuzzy
 msgid "Calm"
-msgstr "spokojny"
+msgstr "Spokojny"
 
 #: ../src/common/pep.py:34
 #, fuzzy
@@ -4992,7 +4987,6 @@ msgid "Cold"
 msgstr "Wytłuszczone"
 
 #: ../src/common/pep.py:34
-#, fuzzy
 msgid "Confused"
 msgstr "Zmieszany"
 
@@ -5007,9 +5001,8 @@ msgid "Cranky"
 msgstr "zakręcony"
 
 #: ../src/common/pep.py:36
-#, fuzzy
 msgid "Curious"
-msgstr "ciekawy"
+msgstr "Ciekawy"
 
 #: ../src/common/pep.py:36
 #, fuzzy
@@ -5037,9 +5030,8 @@ msgid "Embarrassed"
 msgstr "zawstydzony"
 
 #: ../src/common/pep.py:39
-#, fuzzy
 msgid "Excited"
-msgstr "poruszony"
+msgstr "Podniecony"
 
 #: ../src/common/pep.py:39
 #, fuzzy
@@ -5047,9 +5039,8 @@ msgid "Flirtatious"
 msgstr "gotowy do flirtu"
 
 #: ../src/common/pep.py:40
-#, fuzzy
 msgid "Frustrated"
-msgstr "sfrustrowany"
+msgstr "Sfrustrowany"
 
 #: ../src/common/pep.py:40
 #, fuzzy
@@ -5057,19 +5048,16 @@ msgid "Grumpy"
 msgstr "zrzędliwy"
 
 #: ../src/common/pep.py:41
-#, fuzzy
 msgid "Guilty"
-msgstr "winny"
+msgstr "Winny"
 
 #: ../src/common/pep.py:41
-#, fuzzy
 msgid "Happy"
-msgstr "szczęśliwy"
+msgstr "Szczęśliwy"
 
 #: ../src/common/pep.py:42
-#, fuzzy
 msgid "Hot"
-msgstr "_Host:"
+msgstr "Gorący"
 
 #: ../src/common/pep.py:42
 #, fuzzy
@@ -5082,9 +5070,8 @@ msgid "Humiliated"
 msgstr "poniżony"
 
 #: ../src/common/pep.py:43
-#, fuzzy
 msgid "Hungry"
-msgstr "głodny"
+msgstr "Głodny"
 
 #: ../src/common/pep.py:44
 #, fuzzy
@@ -5102,9 +5089,8 @@ msgid "In Awe"
 msgstr "wstrząśnięty"
 
 #: ../src/common/pep.py:45
-#, fuzzy
 msgid "In Love"
-msgstr "zakochany"
+msgstr "Zakochany"
 
 #: ../src/common/pep.py:46
 #, fuzzy
@@ -5127,34 +5113,28 @@ msgid "Invincible"
 msgstr "niepokonany"
 
 #: ../src/common/pep.py:48
-#, fuzzy
 msgid "Jealous"
-msgstr "zazdrosny"
+msgstr "Zazdrosny"
 
 #: ../src/common/pep.py:48
-#, fuzzy
 msgid "Lonely"
-msgstr "samotny"
+msgstr "Samotny"
 
 #: ../src/common/pep.py:49
-#, fuzzy
 msgid "Mean"
-msgstr "skromny"
+msgstr "Skromny"
 
 #: ../src/common/pep.py:49
-#, fuzzy
 msgid "Moody"
 msgstr "Nastrój"
 
 #: ../src/common/pep.py:50
-#, fuzzy
 msgid "Nervous"
-msgstr "nerwowy"
+msgstr "Nerwowy"
 
 #: ../src/common/pep.py:50
-#, fuzzy
 msgid "Neutral"
-msgstr "neutralny"
+msgstr "Neutralny"
 
 #: ../src/common/pep.py:51
 #, fuzzy
@@ -5167,9 +5147,8 @@ msgid "Playful"
 msgstr "swawolny"
 
 #: ../src/common/pep.py:52
-#, fuzzy
 msgid "Proud"
-msgstr "dumny"
+msgstr "Dumny"
 
 #: ../src/common/pep.py:52
 #, fuzzy
@@ -5187,63 +5166,52 @@ msgid "Restless"
 msgstr "niespokojny"
 
 #: ../src/common/pep.py:54
-#, fuzzy
 msgid "Sad"
-msgstr "smutny"
+msgstr "Smutny"
 
 #: ../src/common/pep.py:54
-#, fuzzy
 msgid "Sarcastic"
-msgstr "sarkastyczny"
+msgstr "Sarkastyczny"
 
 #: ../src/common/pep.py:55
-#, fuzzy
 msgid "Serious"
-msgstr "poważny"
+msgstr "Poważny"
 
 #: ../src/common/pep.py:55
-#, fuzzy
 msgid "Shocked"
-msgstr "zaszokowany"
+msgstr "Zszokowany"
 
 #: ../src/common/pep.py:56
-#, fuzzy
 msgid "Shy"
-msgstr "nieśmiały"
+msgstr "Nieśmiały"
 
 #: ../src/common/pep.py:56
-#, fuzzy
 msgid "Sick"
-msgstr "chory"
+msgstr "Chory"
 
 #: ../src/common/pep.py:57
-#, fuzzy
 msgid "Sleepy"
-msgstr "śpiący"
+msgstr "Śpiący"
 
 #: ../src/common/pep.py:57
-#, fuzzy
 msgid "Stressed"
-msgstr "zestresowany"
+msgstr "Zestresowany"
 
 #: ../src/common/pep.py:58
-#, fuzzy
 msgid "Surprised"
-msgstr "zaskoczony"
+msgstr "Zaskoczony"
 
 #: ../src/common/pep.py:58
-#, fuzzy
 msgid "Thirsty"
-msgstr "spragniony"
+msgstr "Spragniony"
 
 #: ../src/common/pep.py:59
 msgid "Thoughtful"
 msgstr ""
 
 #: ../src/common/pep.py:59
-#, fuzzy
 msgid "Worried"
-msgstr "zmartwiony"
+msgstr "Zmartwiony"
 
 #: ../src/common/pep.py:65
 #, fuzzy
@@ -5256,29 +5224,24 @@ msgid "Buying Groceries"
 msgstr "na_zakupach"
 
 #: ../src/common/pep.py:67
-#, fuzzy
 msgid "Cleaning"
-msgstr "czyszczę"
+msgstr "Czyszczę"
 
 #: ../src/common/pep.py:68
-#, fuzzy
 msgid "Cooking"
-msgstr "gotuję"
+msgstr "Gotuję"
 
 #: ../src/common/pep.py:69
-#, fuzzy
 msgid "Doing Maintenance"
-msgstr "naprawiam"
+msgstr "Naprawiam"
 
 #: ../src/common/pep.py:70
-#, fuzzy
 msgid "Doing the Dishes"
-msgstr "zmywam_naczynia"
+msgstr "Zmywam_Naczynia"
 
 #: ../src/common/pep.py:71
-#, fuzzy
 msgid "Doing the Laundry"
-msgstr "piorę"
+msgstr "Piorę"
 
 #: ../src/common/pep.py:72
 #, fuzzy
@@ -5291,87 +5254,70 @@ msgid "Running an Errand"
 msgstr "Biegam na posyłki"
 
 #: ../src/common/pep.py:74
-#, fuzzy
 msgid "Walking the Dog"
-msgstr "wyprowadzam psa"
+msgstr "Wyprowadzam Psa"
 
 #: ../src/common/pep.py:75
-#, fuzzy
 msgid "Drinking"
-msgstr "piję"
+msgstr "Piję"
 
 #: ../src/common/pep.py:76
-#, fuzzy
 msgid "Having a Beer"
-msgstr "piję_piwo"
+msgstr "Hiję_Piwo"
 
 #: ../src/common/pep.py:77
-#, fuzzy
 msgid "Having Coffee"
-msgstr "piję_kawę"
+msgstr "Piję_Kawę"
 
 #: ../src/common/pep.py:78
-#, fuzzy
 msgid "Having Tea"
-msgstr "piję_herbatę"
+msgstr "Piję_Herbatę"
 
 #: ../src/common/pep.py:80
-#, fuzzy
 msgid "Having a Snack"
-msgstr "coś_przegryzam"
+msgstr "Coś_Przegryzam"
 
 #: ../src/common/pep.py:81
-#, fuzzy
 msgid "Having Breakfast"
-msgstr "jem_śniadanie"
+msgstr "Jem_Śniadanie"
 
 #: ../src/common/pep.py:82
-#, fuzzy
 msgid "Having Dinner"
-msgstr "jem_obiad"
+msgstr "Jem_Obiad"
 
 #: ../src/common/pep.py:83
-#, fuzzy
 msgid "Having Lunch"
-msgstr "jem_lunch"
+msgstr "Jem_Lunch"
 
 #: ../src/common/pep.py:84
-#, fuzzy
 msgid "Exercising"
-msgstr "ćwiczę"
+msgstr "Ćwiczę"
 
 #: ../src/common/pep.py:85 ../src/common/pep.py:124
-#, fuzzy
 msgid "Cycling"
-msgstr "jeżdżę_na_rowerze"
+msgstr "Jeżdżę_Na_Rowerze"
 
 #: ../src/common/pep.py:86
-#, fuzzy
 msgid "Hiking"
-msgstr "jeżdzę_na_rowerze"
+msgstr "Wspinam Się"
 
 #: ../src/common/pep.py:87
-#, fuzzy
 msgid "Jogging"
-msgstr "biegam"
+msgstr "Jogging"
 
 #: ../src/common/pep.py:88
-#, fuzzy
 msgid "Playing Sports"
-msgstr "uprawiam sport"
+msgstr "Uprawiam Sport"
 
 #: ../src/common/pep.py:89
-#, fuzzy
 msgid "Running"
 msgstr "Biegam"
 
 #: ../src/common/pep.py:90
-#, fuzzy
 msgid "Skiing"
 msgstr "Na nartach"
 
 #: ../src/common/pep.py:91
-#, fuzzy
 msgid "Swimming"
 msgstr "Pływam"
 
@@ -5386,44 +5332,36 @@ msgid "Grooming"
 msgstr "pokój"
 
 #: ../src/common/pep.py:94
-#, fuzzy
 msgid "At the Spa"
-msgstr "w_salonie_spa"
+msgstr "W_Salonie_Spa"
 
 #: ../src/common/pep.py:95
-#, fuzzy
 msgid "Brushing Teeth"
-msgstr "myję_zęby"
+msgstr "Myję_Zęby"
 
 #: ../src/common/pep.py:96
-#, fuzzy
 msgid "Getting a Haircut"
-msgstr "u_fryzjera"
+msgstr "U_Fryzjera"
 
 #: ../src/common/pep.py:97
-#, fuzzy
 msgid "Shaving"
 msgstr "Golę się"
 
 #: ../src/common/pep.py:98
-#, fuzzy
 msgid "Taking a Bath"
-msgstr "biorę kąpiel"
+msgstr "Biorę Kąpiel"
 
 #: ../src/common/pep.py:99
-#, fuzzy
 msgid "Taking a Shower"
-msgstr "biorę prysznic"
+msgstr "Biorę Prysznic"
 
 #: ../src/common/pep.py:100
-#, fuzzy
 msgid "Having an Appointment"
-msgstr "na_spotkaniu"
+msgstr "Na_Spotkaniu"
 
 #: ../src/common/pep.py:102
-#, fuzzy
 msgid "Day Off"
-msgstr "dzień_wolny"
+msgstr "Dzień_Wolny"
 
 #: ../src/common/pep.py:103
 #, fuzzy
@@ -5431,24 +5369,20 @@ msgid "Hanging out"
 msgstr "wałęsam_się"
 
 #: ../src/common/pep.py:104
-#, fuzzy
 msgid "On Vacation"
-msgstr "na wakacjach"
+msgstr "Na Wakacjach"
 
 #: ../src/common/pep.py:105
-#, fuzzy
 msgid "Scheduled Holiday"
-msgstr "wakacje zaplanowane"
+msgstr "Wakacje Zaplanowane"
 
 #: ../src/common/pep.py:107
-#, fuzzy
 msgid "Relaxing"
-msgstr "odpoczywam"
+msgstr "Odpoczywam"
 
 #: ../src/common/pep.py:108
-#, fuzzy
 msgid "Gaming"
-msgstr "gram"
+msgstr "Gram"
 
 #: ../src/common/pep.py:109
 #, fuzzy
@@ -5461,7 +5395,6 @@ msgid "Partying"
 msgstr "Bawię się"
 
 #: ../src/common/pep.py:111
-#, fuzzy
 msgid "Reading"
 msgstr "Czytam"
 
@@ -5471,7 +5404,6 @@ msgid "Rehearsing"
 msgstr "Na próbie"
 
 #: ../src/common/pep.py:113
-#, fuzzy
 msgid "Shopping"
 msgstr "Na zakupach"
 
@@ -5481,24 +5413,20 @@ msgid "Socializing"
 msgstr "Udzielam się towarzysko"
 
 #: ../src/common/pep.py:115
-#, fuzzy
 msgid "Sunbathing"
 msgstr "Opalam się"
 
 #: ../src/common/pep.py:116
-#, fuzzy
 msgid "Watching TV"
-msgstr "oglądam TV"
+msgstr "Oglądam TV"
 
 #: ../src/common/pep.py:117
-#, fuzzy
 msgid "Watching a Movie"
-msgstr "oglądam film."
+msgstr "Oglądam film."
 
 #: ../src/common/pep.py:118
-#, fuzzy
 msgid "Talking"
-msgstr "rozmawiam"
+msgstr "Rozmawiam"
 
 #: ../src/common/pep.py:119
 #, fuzzy
@@ -7720,7 +7648,7 @@ msgid "Yes, I really want to connect insecurely"
 msgstr "Tak, na prawdę chce się połączyć w trybie niezaszyfrowanym"
 
 #: ../src/gajim.py:2056 ../src/gajim.py:2086 ../src/groupchat_control.py:1707
-#: ../src/roster_window.py:3806
+#: ../src/roster_window.py:3762
 msgid "Do _not ask me again"
 msgstr "_Nie pytaj mnie o to ponownie"
 
@@ -7759,7 +7687,7 @@ msgid ""
 "for more details."
 msgstr ""
 
-#: ../src/gajim.py:2599 ../src/roster_window.py:3334
+#: ../src/gajim.py:2599 ../src/roster_window.py:3290
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Nie możesz dołączyć do pokoju gdy jesteś niewidoczny"
 
@@ -8733,18 +8661,18 @@ msgstr "Ogólne"
 msgid "Retrieving profile..."
 msgstr "Pobieranie profilu..."
 
-#: ../src/profile_window.py:109 ../src/roster_window.py:2803
+#: ../src/profile_window.py:109 ../src/roster_window.py:2758
 msgid "File is empty"
 msgstr "Plik jest pusty"
 
-#: ../src/profile_window.py:112 ../src/roster_window.py:2806
+#: ../src/profile_window.py:112 ../src/roster_window.py:2761
 msgid "File does not exist"
 msgstr "Plik nie istnieje."
 
 #. keep identation
 #. unknown format
 #: ../src/profile_window.py:126 ../src/profile_window.py:142
-#: ../src/roster_window.py:2808 ../src/roster_window.py:2819
+#: ../src/roster_window.py:2763 ../src/roster_window.py:2774
 msgid "Could not load image"
 msgstr "Nie można załadować obrazka."
 
@@ -8821,11 +8749,11 @@ msgstr ""
 msgid "GPG is not usable"
 msgstr "GPG nie nadaje się do użycia"
 
-#: ../src/roster_window.py:2095 ../src/roster_window.py:3277
+#: ../src/roster_window.py:2095 ../src/roster_window.py:3233
 msgid "You are participating in one or more group chats"
 msgstr "Znajdujesz się w jednym lub kilku pokojach"
 
-#: ../src/roster_window.py:2096 ../src/roster_window.py:3278
+#: ../src/roster_window.py:2096 ../src/roster_window.py:3234
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
@@ -8880,51 +8808,51 @@ msgstr ""
 "następujących transportów: %s"
 
 #. it's jid
-#: ../src/roster_window.py:2685
+#: ../src/roster_window.py:2640
 msgid "Rename Contact"
 msgstr "Zmień nazwę dla kontaktu"
 
-#: ../src/roster_window.py:2686
+#: ../src/roster_window.py:2641
 #, python-format
 msgid "Enter a new nickname for contact %s"
 msgstr "Wpisz nazwę dla kontaktu %s."
 
-#: ../src/roster_window.py:2693
+#: ../src/roster_window.py:2648
 msgid "Rename Group"
 msgstr "Zmień nazwę grupy"
 
-#: ../src/roster_window.py:2694
+#: ../src/roster_window.py:2649
 #, python-format
 msgid "Enter a new name for group %s"
 msgstr "Wpisz nową nazwę dla grupy %s."
 
-#: ../src/roster_window.py:2742
+#: ../src/roster_window.py:2697
 msgid "Remove Group"
 msgstr "Usuń grupę"
 
-#: ../src/roster_window.py:2743
+#: ../src/roster_window.py:2698
 #, python-format
 msgid "Do you want to remove group %s from the roster?"
 msgstr "Czy chcesz usunąć z rostera grupę %s?"
 
-#: ../src/roster_window.py:2744
+#: ../src/roster_window.py:2699
 msgid "Remove also all contacts in this group from your roster"
 msgstr "Usuń z rostera wszystkie kontakty należące do tej grupy"
 
-#: ../src/roster_window.py:2790
+#: ../src/roster_window.py:2745
 msgid "Assign OpenPGP Key"
 msgstr "Przypisz klucz OpenPGP"
 
-#: ../src/roster_window.py:2791
+#: ../src/roster_window.py:2746
 msgid "Select a key to apply to the contact"
 msgstr "Wybierz klucz, który chcesz przypisać kontaktowi"
 
-#: ../src/roster_window.py:3142
+#: ../src/roster_window.py:3098
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr "Kontakt \"%s\" zostanie usunięty z Twojej listy kontaktów"
 
-#: ../src/roster_window.py:3146
+#: ../src/roster_window.py:3102
 msgid ""
 "By removing this contact you also remove authorization resulting in him or "
 "her always seeing you as offline."
@@ -8932,7 +8860,7 @@ msgstr ""
 "Usuwając kontakt cofniesz mu również autoryzację, co spowoduje, że kontakt "
 "będzie zawsze widział Cię jako rozłączonego."
 
-#: ../src/roster_window.py:3151
+#: ../src/roster_window.py:3107
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
@@ -8940,16 +8868,16 @@ msgstr ""
 "Usuwając kontakt usuniesz również autoryzację, co spowoduje, że kontakt "
 "będzie zawsze widział Cię jako rozłączonego."
 
-#: ../src/roster_window.py:3154
+#: ../src/roster_window.py:3110
 msgid "I want this contact to know my status after removal"
 msgstr "Chcę żeby po usunięciu ten kontakt znał mój status"
 
 #. several contact to remove at the same time
-#: ../src/roster_window.py:3158
+#: ../src/roster_window.py:3114
 msgid "Contacts will be removed from your roster"
 msgstr "Kontakty zostaną usunięte z twojej listy kontaktów"
 
-#: ../src/roster_window.py:3162
+#: ../src/roster_window.py:3118
 #, python-format
 msgid ""
 "By removing these contacts:%s\n"
@@ -8959,19 +8887,19 @@ msgstr ""
 "cofniesz im również autoryzację, co spowoduje, że będziesz dla nich widoczny "
 "jako rozłączony."
 
-#: ../src/roster_window.py:3201
+#: ../src/roster_window.py:3157
 msgid "No account available"
 msgstr "Żadne konto nie jest dostępne"
 
-#: ../src/roster_window.py:3202
+#: ../src/roster_window.py:3158
 msgid "You must create an account before you can chat with other contacts."
 msgstr "Aby rozmawiać z innymi osobami musisz założyć konto Jabbera."
 
-#: ../src/roster_window.py:3720
+#: ../src/roster_window.py:3676
 msgid "Metacontacts storage not supported by your server"
 msgstr "Twój serwer uniemożliwia przechowywanie metakontaktów"
 
-#: ../src/roster_window.py:3722
+#: ../src/roster_window.py:3678
 msgid ""
 "Your server does not support storing metacontacts information. So those "
 "information will not be saved on next reconnection."
@@ -8979,12 +8907,12 @@ msgstr ""
 "Twój serwer uniemożliwia przechowywanie metakontaktów. Informacja ta nie "
 "zostanie przywrócona podczas następnego połączenia."
 
-#: ../src/roster_window.py:3800
+#: ../src/roster_window.py:3756
 msgid ""
 "You are about to create a metacontact. Are you sure you want to continue?"
 msgstr "Chcesz utworzyć metakontakt. Kontynuować?"
 
-#: ../src/roster_window.py:3802
+#: ../src/roster_window.py:3758
 msgid ""
 "Metacontacts are a way to regroup several contacts in one line. Generally it "
 "is used when the same person has several Jabber accounts or transport "
@@ -8994,11 +8922,11 @@ msgstr ""
 "rostera. Używa się ich przede wszystkim wtedy, gdy jedna osoba ma kilka kont "
 "Jabbera lub zarejestrowana jest w kilku transportach."
 
-#: ../src/roster_window.py:3915
+#: ../src/roster_window.py:3871
 msgid "Invalid file URI:"
 msgstr "Niepoprawny adres pliku:"
 
-#: ../src/roster_window.py:3926
+#: ../src/roster_window.py:3882
 #, fuzzy, python-format
 msgid "Do you want to send this file to %s:"
 msgid_plural "Do you want to send these files to %s:"
@@ -9011,123 +8939,123 @@ msgstr[2] "Czy chcesz wysłać te pliki do %s:"
 #. for chat_with
 #. for single message
 #. join gc
-#: ../src/roster_window.py:4598 ../src/roster_window.py:4669
-#: ../src/roster_window.py:4678 ../src/systray.py:219 ../src/systray.py:224
+#: ../src/roster_window.py:4554 ../src/roster_window.py:4625
+#: ../src/roster_window.py:4634 ../src/systray.py:219 ../src/systray.py:224
 #: ../src/systray.py:230
 #, python-format
 msgid "using account %s"
 msgstr "używając konta %s"
 
 #. add
-#: ../src/roster_window.py:4685
+#: ../src/roster_window.py:4641
 #, python-format
 msgid "to %s account"
 msgstr "do konta %s"
 
 #. disco
-#: ../src/roster_window.py:4690
+#: ../src/roster_window.py:4646
 #, python-format
 msgid "using %s account"
 msgstr "używając konta %s"
 
-#: ../src/roster_window.py:4727
+#: ../src/roster_window.py:4683
 msgid "_Manage Bookmarks..."
 msgstr "_Zarządzaj zakładkami..."
 
 #. profile, avatar
-#: ../src/roster_window.py:4747
+#: ../src/roster_window.py:4703
 #, python-format
 msgid "of account %s"
 msgstr "dla konta %s"
 
-#: ../src/roster_window.py:4787
+#: ../src/roster_window.py:4743
 #, python-format
 msgid "for account %s"
 msgstr "dla konta %s"
 
-#: ../src/roster_window.py:4849 ../src/roster_window.py:4958
+#: ../src/roster_window.py:4805 ../src/roster_window.py:4914
 msgid "_Change Status Message"
 msgstr "_Zmień opis statusu"
 
-#: ../src/roster_window.py:4876
+#: ../src/roster_window.py:4832
 msgid "Publish Tune"
 msgstr "_Publikuj Utwór"
 
-#: ../src/roster_window.py:4883
+#: ../src/roster_window.py:4839
 msgid "Mood"
 msgstr "Nastrój"
 
-#: ../src/roster_window.py:4887
+#: ../src/roster_window.py:4843
 msgid "Activity"
 msgstr "Aktywność"
 
-#: ../src/roster_window.py:4892
+#: ../src/roster_window.py:4848
 msgid "Configure Services..."
 msgstr "Konfiguruj Usługi..."
 
-#: ../src/roster_window.py:5046
+#: ../src/roster_window.py:5002
 msgid "_Maximize All"
 msgstr "_Maksymalizuj wszystkie"
 
 #. Send Group Message
-#: ../src/roster_window.py:5054 ../src/roster_window.py:5558
+#: ../src/roster_window.py:5010 ../src/roster_window.py:5519
 msgid "Send Group M_essage"
 msgstr "_Wyślij wiadomość grupową"
 
-#: ../src/roster_window.py:5062
+#: ../src/roster_window.py:5018
 msgid "To all users"
 msgstr "Do wszystkich użytkowników"
 
-#: ../src/roster_window.py:5066
+#: ../src/roster_window.py:5022
 msgid "To all online users"
 msgstr "Do wszystkich połączonych użytkowników"
 
-#: ../src/roster_window.py:5460
+#: ../src/roster_window.py:5419
 msgid "I would like to add you to my roster"
 msgstr "Chciałbym dodać Cię do listy kontaktów"
 
 #. Manage Transport submenu
-#: ../src/roster_window.py:5578
+#: ../src/roster_window.py:5539
 msgid "_Manage Contacts"
 msgstr "_Zarządzaj kontaktami"
 
 #. Send single message
-#: ../src/roster_window.py:5639
+#: ../src/roster_window.py:5600
 msgid "Send Single Message"
 msgstr "Wyślij wiadomość"
 
 #. Manage Transport submenu
-#: ../src/roster_window.py:5695
+#: ../src/roster_window.py:5656
 msgid "_Manage Transport"
 msgstr "_Zarządzaj transportami"
 
 #. Modify Transport
-#: ../src/roster_window.py:5703
+#: ../src/roster_window.py:5664
 msgid "_Modify Transport"
 msgstr "_Modyfikuj transport"
 
-#: ../src/roster_window.py:5778
+#: ../src/roster_window.py:5739
 msgid "_Maximize"
 msgstr "_Maksymalizuj"
 
-#: ../src/roster_window.py:5785
+#: ../src/roster_window.py:5746
 msgid "_Disconnect"
 msgstr "_Rozłącz"
 
-#: ../src/roster_window.py:5865
+#: ../src/roster_window.py:5826
 msgid "_New Group Chat"
 msgstr "_Nowa rozmowa grupowa"
 
 #. History manager
-#: ../src/roster_window.py:5978
+#: ../src/roster_window.py:5939
 msgid "History Manager"
 msgstr "Historia rozmów"
 
-#: ../src/roster_window.py:5987
+#: ../src/roster_window.py:5948
 msgid "_Join New Group Chat"
 msgstr "_Dołącz do pokoju"
 
-#: ../src/roster_window.py:6197
+#: ../src/roster_window.py:6158
 msgid "Change Status Message..."
 msgstr "Zmień opis statusu..."
 
