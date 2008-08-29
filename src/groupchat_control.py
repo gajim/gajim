@@ -1017,6 +1017,15 @@ class GroupchatControl(ChatControlBase):
 			affiliation = 'none'
 		fake_jid = self.room_jid + '/' + nick
 		newly_created = False
+		nick_jid = nick
+
+		# Set to true if role or affiliation have changed
+		right_changed = False
+
+		if jid:
+			# delete ressource
+			simple_jid = gajim.get_jid_without_resource(jid)
+			nick_jid += ' (%s)' % simple_jid
 
 		# statusCode
 		# http://www.xmpp.org/extensions/xep-0045.html#registrar-statuscodes-init
@@ -1173,11 +1182,36 @@ class GroupchatControl(ChatControlBase):
 						# save sha in mem NOW
 						con.vcard_shas[fake_jid] = avatar_sha
 
+				actual_affiliation = gc_c.affiliation
+				if affiliation != actual_affiliation:
+					if actor:
+						st = _('** Affiliation of %(nick)s has been set to '
+							'%(affiliation)s by %(actor)s' % {'nick': nick_jid,
+							'affiliation': affiliation, 'actor': actor}
+					else:
+						st = _('** Affiliation of %(nick)s has been set to '
+							'%(affiliation)s' % {'nick': nick_jid,
+							'affiliation': affiliation}
+					if reason:
+						st += ' (%s)' % reason
+					self.print_conversation(st, tim=tim)
+					right_changed = True
 				actual_role = self.get_role(nick)
 				if role != actual_role:
 					self.remove_contact(nick)
 					self.add_contact_to_roster(nick, show, role,
 						affiliation, status, jid)
+					if actor:
+						st = _('** Role of %(nick)s has been set to %(role)s by '
+							'%(actor)s' % {'nick': nick_jid, 'role': role,
+							'actor': actor}
+					else:
+						st = _('** Role of %(nick)s has been set to %(role)s' % {
+							'nick': nick_jid, 'role': role}
+					if reason:
+						st += ' (%s)' % reason
+					self.print_conversation(st, tim=tim)
+					right_changed = True
 				else:
 					if gc_c.show == show and gc_c.status == status and \
 						gc_c.affiliation == affiliation: # no change
@@ -1186,9 +1220,8 @@ class GroupchatControl(ChatControlBase):
 					gc_c.affiliation = affiliation
 					gc_c.status = status
 					self.draw_contact(nick)
-		if (time.time() - self.room_creation) > 30 and \
-				nick != self.nick and (not statusCode or \
-				'303' not in statusCode):
+		if (time.time() - self.room_creation) > 30 and nick != self.nick and \
+		(not statusCode or '303' not in statusCode) and not right_changed:
 			st = ''
 			print_status = None
 			for bookmark in gajim.connections[self.account].bookmarks:
@@ -1197,11 +1230,6 @@ class GroupchatControl(ChatControlBase):
 					break
 			if not print_status:
 				print_status = gajim.config.get('print_status_in_muc')
-			nick_jid = nick
-			if jid:
-				# delete ressource
-				simple_jid = gajim.get_jid_without_resource(jid)
-				nick_jid += ' (%s)' % simple_jid
 			if show == 'offline':
 				if nick in self.attention_list:
 					self.attention_list.remove(nick)
