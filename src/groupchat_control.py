@@ -1186,11 +1186,11 @@ class GroupchatControl(ChatControlBase):
 				if affiliation != actual_affiliation:
 					if actor:
 						st = _('** Affiliation of %(nick)s has been set to '
-							'%(affiliation)s by %(actor)s' % {'nick': nick_jid,
+							'%(affiliation)s by %(actor)s') % {'nick': nick_jid,
 							'affiliation': affiliation, 'actor': actor}
 					else:
 						st = _('** Affiliation of %(nick)s has been set to '
-							'%(affiliation)s' % {'nick': nick_jid,
+							'%(affiliation)s') % {'nick': nick_jid,
 							'affiliation': affiliation}
 					if reason:
 						st += ' (%s)' % reason
@@ -1203,10 +1203,10 @@ class GroupchatControl(ChatControlBase):
 						affiliation, status, jid)
 					if actor:
 						st = _('** Role of %(nick)s has been set to %(role)s by '
-							'%(actor)s' % {'nick': nick_jid, 'role': role,
+							'%(actor)s') % {'nick': nick_jid, 'role': role,
 							'actor': actor}
 					else:
-						st = _('** Role of %(nick)s has been set to %(role)s' % {
+						st = _('** Role of %(nick)s has been set to %(role)s') % {
 							'nick': nick_jid, 'role': role}
 					if reason:
 						st += ' (%s)' % reason
