@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Jun 19 13:11:54 2008 -->
+<!--Generated with glade3 3.4.5 on Fri Aug 29 13:45:31 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="plugins_window">
     <property name="width_request">650</property>
@@ -57,7 +57,7 @@
                           <widget class="GtkLabel" id="plugin_name_label">
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">&lt;empty&gt;</property>
+                            <property name="label" translatable="yes">&amp;lt;empty&amp;gt;</property>
                             <property name="use_markup">True</property>
                             <property name="wrap">True</property>
                             <property name="selectable">True</property>
