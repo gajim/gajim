@@ -206,7 +206,7 @@ class GajimPluginConfigDialog(gtk.Dialog):
 	
 	@log_calls('GajimPluginConfigDialog')
 	def run(self, parent=None):
-		self.reparent(parent)
+		self.set_transient_for(parent)
 		self.on_run()
 		self.show_all()
 		result =  super(GajimPluginConfigDialog, self).run()
