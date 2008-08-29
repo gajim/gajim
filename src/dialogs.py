@@ -1558,7 +1558,7 @@ class DubbleInputDialog:
 		self.dialog.show_all()
 
 	def on_dubbleinput_dialog_destroy(self, widget):
-		if not cancel_handler:
+		if not self.cancel_handler:
 			return False
 		if isinstance(self.cancel_handler, tuple):
 			self.cancel_handler[0](*self.cancel_handler[1:])
@@ -1569,7 +1569,7 @@ class DubbleInputDialog:
 		user_input1 = self.input_entry1.get_text().decode('utf-8')
 		user_input2 = self.input_entry2.get_text().decode('utf-8')
 		self.dialog.destroy()
-		if not ok_handler:
+		if not self.ok_handler:
 			return
 		if isinstance(self.ok_handler, tuple):
 			self.ok_handler[0](user_input1, user_input2, *self.ok_handler[1:])
