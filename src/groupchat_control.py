@@ -171,6 +171,7 @@ class GroupchatControl(ChatControlBase):
 
 		self.is_continued=is_continued
 		self.is_anonymous = True
+		self.change_nick_dialog = None
 
 		self.actions_button = self.xml.get_widget('muc_window_actions_button')
 		id = self.actions_button.connect('clicked', self.on_actions_button_clicked)
@@ -1589,10 +1590,14 @@ class GroupchatControl(ChatControlBase):
 		else:
 			return 'visitor'
 
-	def show_change_nick_input_dialog(self, title, prompt, proposed_nick = None):
+	def show_change_nick_input_dialog(self, title, prompt):
 		'''asks user for new nick and on ok it sets it on room'''
+		if self.change_nick_dialog:
+			# A dialog is already opened
+			return
 		def on_ok(widget):
-			nick = instance.input_entry.get_text().decode('utf-8')
+			nick = self.change_nick_dialog.input_entry.get_text().decode('utf-8')
+			self.change_nick_dialog = None
 			try:
 				nick = helpers.parse_resource(nick)
 			except:
@@ -1602,7 +1607,7 @@ class GroupchatControl(ChatControlBase):
 				return
 			gajim.connections[self.account].join_gc(nick, self.room_jid, None)
 			if gajim.gc_connected[self.account][self.room_jid]:
-				# We are changing nick, we will change self.nick when we receive 
+				# We are changing nick, we will change self.nick when we receive
 				# presence that inform that it works
 				self.new_nick = nick
 			else:
@@ -1610,9 +1615,12 @@ class GroupchatControl(ChatControlBase):
 				# change it NOW. We don't already have a nick so it's harmless
 				self.nick = nick
 		def on_cancel():
-			self.new_nick = '' 
-		instance = dialogs.InputDialog(title, prompt, proposed_nick,
-			is_modal = False, ok_handler = on_ok, cancel_handler = on_cancel)
+			self.change_nick_dialog = None
+			self.new_nick = ''
+		proposed_nick = self.nick + gajim.config.get('gc_proposed_nick_char')
+		self.change_nick_dialog = dialogs.InputDialog(title, prompt,
+			proposed_nick, is_modal=False, ok_handler=on_ok,
+			cancel_handler=on_cancel)
 
 	def minimize(self, status='offline'):
 		# Minimize it
@@ -1744,7 +1752,7 @@ class GroupchatControl(ChatControlBase):
 	def _on_change_nick_menuitem_activate(self, widget):
 		title = _('Changing Nickname')
 		prompt = _('Please specify the new nickname you want to use:')
-		self.show_change_nick_input_dialog(title, prompt, self.nick)
+		self.show_change_nick_input_dialog(title, prompt)
 
 	def _on_configure_room_menuitem_activate(self, widget):
 		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, self.nick)

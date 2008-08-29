@@ -2014,13 +2014,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						_('You are not in the members list in groupchat %s.') % \
 						room_jid))
 				elif errcode == '409': # nick conflict
-					# the jid_from in this case is FAKE JID: room_jid/nick
-					# resource holds the bad nick so propose a new one
-					proposed_nickname = resource + \
-						gajim.config.get('gc_proposed_nick_char')
 					room_jid = gajim.get_room_from_fjid(who)
-					self.dispatch('ASK_NEW_NICK', (room_jid, _('Unable to join group chat'),
-		_('Your desired nickname in group chat %s is in use or registered by another occupant.\nPlease specify another nickname below:') % room_jid, proposed_nickname))
+					self.dispatch('ASK_NEW_NICK', (room_jid,))
 				else:	# print in the window the error
 					self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 						errmsg, errcode))
