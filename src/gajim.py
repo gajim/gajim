@@ -2456,9 +2456,7 @@ class Interface:
 		self.sth_at_sth_dot_sth_re = re.compile(r'\S+@\S+\.\S*[^\s)?]')
 
 		# Invalid XML chars
-#		invalid_XML_chars = u'[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x19]|[\ud800-\udfff]|[\ufffe-\uffff]'
-		#FIXME: xgettext fails with \udfff char ... see #http://trac.gajim.org/ticket/4166
-		invalid_XML_chars = u'[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x19]|[\ufffe-\uffff]'
+		invalid_XML_chars = u'[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x19]|[\ud800-\udfff]|[\ufffe-\uffff]'
 		self.invalid_XML_chars_re = re.compile(invalid_XML_chars)
 
 		re.purge() # clear the regular expression cache
