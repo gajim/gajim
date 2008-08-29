@@ -947,6 +947,9 @@ _('This service does not contain any items to browse.'))
 		for item in items:
 			jid = item['jid']
 			node = item.get('node', '')
+			# If such an item is already here: don't add it
+			if self._find_item(jid, node):
+				continue
 			self._total_items += 1
 			self._add_item(jid, node, item, force)
 		self.window.services_treeview.set_model(self.model)
@@ -963,8 +966,7 @@ _('This service does not contain any items to browse.'))
 			self._update_error(iter, jid, node)
 		else:
 			# We got our info
-			self._update_info(iter, jid, node,
-				identities, features, data)
+			self._update_info(iter, jid, node, identities, features, data)
 		self.update_actions()
 
 	def _add_item(self, jid, node, item, force):
@@ -1672,7 +1674,8 @@ class MucBrowser(AgentBrowser):
 		# Bottom row
 		# Iter compare is broke, use the path instead
 		try:
-			ex, ey = view.tree_to_widget_coords(rect.x + rect.height, rect.y + rect.height)
+			ex, ey = view.tree_to_widget_coords(rect.x + rect.height,
+				rect.y + rect.height)
 			end = view.get_path_at_pos(ex, ey)[0]
 			# end is the last visible, we want to query that aswell
 			end = (end[0] + 1,)
@@ -1726,8 +1729,8 @@ class MucBrowser(AgentBrowser):
 		name = identities[0].get('name', '')
 		for form in data:
 			typefield = form.getField('FORM_TYPE')
-			if typefield and typefield.getValue() ==\
-					'http://jabber.org/protocol/muc#roominfo':
+			if typefield and typefield.getValue() == \
+			'http://jabber.org/protocol/muc#roominfo':
 				# Fill model row from the form's fields
 				users = form.getField('muc#roominfo_occupants')
 				descr = form.getField('muc#roominfo_description')
