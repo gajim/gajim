@@ -140,7 +140,7 @@ class PluginsWindow(object):
 	def fill_installed_plugins_model(self):
 		pm = gajim.plugin_manager
 		self.installed_plugins_model.clear()
-		self.installed_plugins_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+		self.installed_plugins_model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 		
 		for plugin in pm.plugins:
 			self.installed_plugins_model.append([plugin, 
