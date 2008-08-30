@@ -369,42 +369,35 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		try:
 			# bob responds
 			if form.getType() == 'form' and 'security' in form.asDict():
-				def continue_with_negotiation():
-					# we don't support 3-message negotiation as the responder
-					if 'dhkeys' in form.asDict():
-						self.fail_bad_negotiation('3 message negotiation not supported when responding', ('dhkeys',))
-						return
-
-					negotiated, not_acceptable, ask_user = self.verify_options_bob(form)
-
-					if ask_user:
-						def accept_nondefault_options(is_checked):
-							self.dialog.destroy()
-							negotiated.update(ask_user)
-							self.respond_e2e_bob(form, negotiated, not_acceptable)
-
-						def reject_nondefault_options():
-							self.dialog.destroy()
-							for key in ask_user.keys():
-								not_acceptable.append(key)
-							self.respond_e2e_bob(form, negotiated, not_acceptable)
-
-						self.dialog = dialogs.YesNoDialog(_('Confirm these session options'),
-							_('''The remote client wants to negotiate an session with these features:
-
-		%s
-
-		Are these options acceptable?''') % (negotiation.describe_features(ask_user)),
-								on_response_yes=accept_nondefault_options,
-								on_response_no=reject_nondefault_options)
-					else:
-						self.respond_e2e_bob(form, negotiated, not_acceptable)
-
-				def ignore_negotiation(widget):
-					self.dialog.destroy()
+				# we don't support 3-message negotiation as the responder
+				if 'dhkeys' in form.asDict():
+					self.fail_bad_negotiation('3 message negotiation not supported when responding', ('dhkeys',))
 					return
 
-				continue_with_negotiation()
+				negotiated, not_acceptable, ask_user = self.verify_options_bob(form)
+
+				if ask_user:
+					def accept_nondefault_options(is_checked):
+						self.dialog.destroy()
+						negotiated.update(ask_user)
+						self.respond_e2e_bob(form, negotiated, not_acceptable)
+
+					def reject_nondefault_options():
+						self.dialog.destroy()
+						for key in ask_user.keys():
+							not_acceptable.append(key)
+						self.respond_e2e_bob(form, negotiated, not_acceptable)
+
+					self.dialog = dialogs.YesNoDialog(_('Confirm these session options'),
+						_('''The remote client wants to negotiate an session with these features:
+
+	%s
+
+	Are these options acceptable?''') % (negotiation.describe_features(ask_user)),
+							on_response_yes=accept_nondefault_options,
+							on_response_no=reject_nondefault_options)
+				else:
+					self.respond_e2e_bob(form, negotiated, not_acceptable)
 
 				return
 
