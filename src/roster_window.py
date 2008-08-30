@@ -1090,11 +1090,9 @@ class RosterWindow:
 			name = '<span strikethrough="true">%s</span>' % name
 
 		# Delete pep if needed
-		delete_pep = True
-		for c in contact_instances:
-			if c.show not in ('error', 'offline'):
-				delete_pep = False
-		if delete_pep:
+		keep_pep = any(c.show not in ('error', 'offline') for c in
+			contact_instances)
+		if not keep_pep and not contact.is_groupchat():
 			pep.delete_pep(jid, account)
 
 		# Show resource counter
