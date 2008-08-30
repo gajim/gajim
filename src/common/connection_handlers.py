@@ -90,6 +90,8 @@ class ConnectionBytestream:
 		''' send reply to the initiator of FT that we
 		made a connection
 		'''
+		if not self.connection or self.connected < 2:
+			return
 		if streamhost is None:
 			return None
 		iq = common.xmpp.Iq(to = streamhost['initiator'], typ = 'result',
@@ -149,6 +151,8 @@ class ConnectionBytestream:
 	def send_socks5_info(self, file_props, fast = True, receiver = None,
 		sender = None):
 		''' send iq for the present streamhosts and proxies '''
+		if not self.connection or self.connected < 2:
+			return
 		if type(self.peerhost) != tuple:
 			return
 		port = gajim.config.get('file_transfers_port')
@@ -328,6 +332,8 @@ class ConnectionBytestream:
 	def _connect_error(self, to, _id, sid, code = 404):
 		''' cb, when there is an error establishing BS connection, or 
 		when connection is rejected'''
+		if not self.connection or self.connected < 2:
+			return
 		msg_dict = {
 			404: 'Could not connect to given hosts',
 			405: 'Cancel',
@@ -351,6 +357,8 @@ class ConnectionBytestream:
 
 	def _proxy_auth_ok(self, proxy):
 		'''cb, called after authentication to proxy server '''
+		if not self.connection or self.connected < 2:
+			return
 		file_props = self.files_props[proxy['sid']]
 		iq = common.xmpp.Protocol(name = 'iq', to = proxy['initiator'],
 		typ = 'set')
@@ -621,7 +629,7 @@ class ConnectionDisco:
 		self._discover(common.xmpp.NS_DISCO_INFO, jid, node, id_prefix)
 
 	def request_register_agent_info(self, agent):
-		if not self.connection:
+		if not self.connection or self.connected < 2:
 			return None
 		iq=common.xmpp.Iq('get', common.xmpp.NS_REGISTER, to=agent)
 		id = self.connection.getAnID()
@@ -634,7 +642,7 @@ class ConnectionDisco:
 			{'agent': agent})
 
 	def register_agent(self, agent, info, is_form = False):
-		if not self.connection:
+		if not self.connection or self.connected < 2:
 			return
 		if is_form:
 			iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to = agent)
@@ -646,9 +654,8 @@ class ConnectionDisco:
 			# fixed: blocking
 			common.xmpp.features_nb.register(self.connection, agent, info, None)
 
-
 	def _discover(self, ns, jid, node = None, id_prefix = None):
-		if not self.connection:
+		if not self.connection or self.connected < 2:
 			return
 		iq = common.xmpp.Iq(typ = 'get', to = jid, queryNS = ns)
 		if id_prefix:
@@ -664,6 +671,8 @@ class ConnectionDisco:
 
 	def _discoGetCB(self, con, iq_obj):
 		''' get disco info '''
+		if not self.connection or self.connected < 2:
+			return
 		frm = helpers.get_full_jid_from_iq(iq_obj)
 		to = unicode(iq_obj.getAttr('to'))
 		id = unicode(iq_obj.getAttr('id'))
@@ -725,7 +734,7 @@ class ConnectionDisco:
 	def _DiscoverItemsGetCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverItemsGetCB')
 
-		if not self.connection:
+		if not self.connection or self.connected < 2:
 			return
 
 		if self.commandItemsQuery(con, iq_obj):
@@ -740,9 +749,9 @@ class ConnectionDisco:
 			raise common.xmpp.NodeProcessed
 
 	def _DiscoverInfoGetCB(self, con, iq_obj):
-		if not self.connection:
-			return
 		gajim.log.debug('DiscoverInfoGetCB')
+		if not self.connection or self.connected < 2:
+			return
 		q = iq_obj.getTag('query')
 		node = q.getAttr('node')
 
@@ -957,7 +966,7 @@ class ConnectionVcard:
 		'''request the VCARD. If groupchat_jid is not nul, it means we request a vcard
 		to a fake jid, like in private messages in groupchat. jid can be the
 		real jid of the contact, but we want to consider it comes from a fake jid'''
-		if not self.connection:
+		if not self.connection or self.connected < 2:
 			return
 		iq = common.xmpp.Iq(typ = 'get')
 		if jid:
@@ -978,7 +987,7 @@ class ConnectionVcard:
 		self.connection.send(iq)
 
 	def send_vcard(self, vcard):
-		if not self.connection:
+		if not self.connection or self.connected < 2:
 			return
 		iq = common.xmpp.Iq(typ = 'set')
 		iq2 = iq.setTag(common.xmpp.NS_VCARD + ' vCard')
@@ -1044,7 +1053,9 @@ class ConnectionVcard:
 
 				# Send new presence if sha changed and we are not invisible
 				if self.vcard_sha != new_sha and STATUS_LIST[self.connected] != \
-					'invisible':
+				'invisible':
+					if not self.connection or self.connected < 2:
+						return
 					self.vcard_sha = new_sha
 					sshow = helpers.get_xmpp_show(STATUS_LIST[self.connected])
 					p = common.xmpp.Presence(typ = None, priority = self.priority,
@@ -1080,6 +1091,8 @@ class ConnectionVcard:
 			jid = self.awaiting_answers[id][1]
 			self.dispatch('AGENT_REMOVED', jid)
 		elif self.awaiting_answers[id][0] == METACONTACTS_ARRIVED:
+			if not self.connection:
+				return
 			if iq_obj.getType() == 'result':
 				# Metacontact tags
 				# http://www.xmpp.org/extensions/xep-0209.html
@@ -1212,6 +1225,8 @@ class ConnectionVcard:
 				return
 			self.vcard_sha = avatar_sha
 			if STATUS_LIST[self.connected] == 'invisible':
+				return
+			if not self.connection:
 				return
 			sshow = helpers.get_xmpp_show(STATUS_LIST[self.connected])
 			p = common.xmpp.Presence(typ = None, priority = self.priority,
@@ -1378,6 +1393,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.gmail_last_time = None
 
 	def build_http_auth_answer(self, iq_obj, answer):
+		if not self.connection or self.connected < 2:
+			return
 		if answer == 'yes':
 			self.connection.send(iq_obj.buildReply('result'))
 		elif answer == 'no':
@@ -1479,9 +1496,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		raise common.xmpp.NodeProcessed
 	
 	def _VersionCB(self, con, iq_obj):
-		if not self.connection:
-			return
 		gajim.log.debug('VersionCB')
+		if not self.connection or self.connected < 2:
+			return
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.getTag('query')
 		qp.setTagData('name', 'Gajim')
@@ -1493,9 +1510,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		raise common.xmpp.NodeProcessed
 
 	def _LastCB(self, con, iq_obj):
-		if not self.connection:
-			return
 		gajim.log.debug('LastCB')
+		if not self.connection or self.connected < 2:
+			return
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.getTag('query')
 		if not HAS_IDLE:
@@ -1550,6 +1567,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _TimeCB(self, con, iq_obj):
 		gajim.log.debug('TimeCB')
+		if not self.connection or self.connected < 2:
+			return
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.getTag('query')
 		qp.setTagData('utc', strftime('%Y%m%dT%T', gmtime()))
@@ -1561,6 +1580,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _TimeRevisedCB(self, con, iq_obj):
 		gajim.log.debug('TimeRevisedCB')
+		if not self.connection or self.connected < 2:
+			return
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.setTag('time',
 			namespace=common.xmpp.NS_TIME_REVISED)
@@ -1573,6 +1594,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _gMailNewMailCB(self, con, gm):
 		'''Called when we get notified of new mail messages in gmail account'''
+		if not self.connection or self.connected < 2:
+			return
 		if not gm.getTag('new-mail'):
 			return
 		if gm.getTag('new-mail').getNamespace() == common.xmpp.NS_GMAILNOTIFY:
@@ -2198,6 +2221,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _IqPingCB(self, con, iq_obj):
 		gajim.log.debug('IqPingCB')
+		if not self.connection or self.connected < 2:
+			return
 		iq_obj = iq_obj.buildReply('result')
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
@@ -2209,6 +2234,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		A list has been set
 		'''
 		gajim.log.debug('PrivacySetCB')
+		if not self.connection or self.connected < 2:
+			return
 		result = iq_obj.buildReply('result')
 		q = result.getTag('query')
 		if q:
@@ -2326,6 +2353,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.continue_connect_info = None
 	
 	def request_gmail_notifications(self):
+		if not self.connection or self.connected < 2:
+			return
 		# It's a gmail account,
 		# inform the server that we want e-mail notifications
 		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
