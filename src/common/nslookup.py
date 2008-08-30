@@ -24,6 +24,7 @@
 import sys
 import os
 import re
+from common import helpers
 
 from xmpp.idlequeue import *
 
@@ -121,7 +122,7 @@ class Resolver:
 			elif line.startswith(ufqdn):
 				domain = ufqdn
 			if domain:
-				rest = line[len(host):].split('=')
+				rest = line[len(domain):].split('=')
 				if len(rest) != 2:
 					continue
 				answer_type, props_str = rest
