@@ -642,6 +642,18 @@ class Config:
 			return obj[subname][OPT_RESTART]
 		return False
 
+	def should_log(self, account, jid):
+		'''should conversations between a local account and a remote jid be
+		logged?'''
+		no_log_for = self.get_per('accounts', account, 'no_log_for')
+
+		if not no_log_for:
+			no_log_for = ''
+
+		no_log_for = no_log_for.split()
+
+		return (account not in no_log_for) and (jid not in no_log_for)
+
 	def __init__(self):
 		#init default values
 		for event in self.soundevents_default:

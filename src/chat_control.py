@@ -1530,13 +1530,21 @@ class ChatControl(ChatControlBase):
 			ChatControlBase.print_conversation_line(self, msg,
 				'status', '', None)
 
+			loggable = gajim.config.get('log_encrypted_sessions')
+
 			if self.session:
-				self.session.loggable = gajim.config.get(
-					'log_encrypted_sessions');
-			if self.session and not self.session.is_loggable():
-				msg = _('Session WILL NOT be logged')
+				self.session.loggable = loggable
+
+				loggable = self.session.is_loggable()
 			else:
+				loggable = loggable and gajim.config.should_log(self.account,
+					self.contact.jid)
+
+			if loggable:
 				msg = _('Session WILL be logged')
+			else:
+				msg = _('Session WILL NOT be logged')
+
 			ChatControlBase.print_conversation_line(self, msg,
 				'status', '', None)
 
@@ -1548,8 +1556,7 @@ class ChatControl(ChatControlBase):
 			'gpg_enabled', self.gpg_is_active)
 
 		self._show_lock_image(self.gpg_is_active, 'GPG',
-			self.gpg_is_active,
-			self.session and self.session.is_loggable(), True)
+			self.gpg_is_active, loggable, True)
 
 	def _show_lock_image(self, visible, enc_type = '', enc_enabled = False, chat_logged = False, authenticated = False):
 		'''Set lock icon visibility and create tooltip'''

@@ -66,15 +66,7 @@ class StanzaSession(object):
 		self.negotiated = {}
 
 	def is_loggable(self):
-		account = self.conn.name
-		no_log_for = gajim.config.get_per('accounts', account, 'no_log_for')
-
-		if not no_log_for:
-			no_log_for = ''
-
-		no_log_for = no_log_for.split()
-
-		return self.loggable and account not in no_log_for and self.jid not in no_log_for
+		return self.loggable and gajim.config.should_log(self.conn.name, self.jid)
 
 	# remove events associated with this session from the queue
 	# returns True if any events were removed (unlike gajim.events.remove_events)

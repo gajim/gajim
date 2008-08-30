@@ -1841,15 +1841,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msg.getXHTML(),
 			statusCode))
 
-		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for') 
-
-		if not no_log_for: 
-			no_log_for = '' 
-
-		no_log_for = no_log_for.split()
 		tim_int = int(float(mktime(tim)))
-
-		if self.name not in no_log_for and jid not in no_log_for and not \
+		if gajim.config.should_log(self.name, jid) and not \
 		tim_int <= self.last_history_time[jid] and msgtxt and frm.find('/') >= 0:
 			# if frm.find('/') < 0, it means message comes from room itself
 			# usually it hold description and can be send at each connection
@@ -1963,8 +1956,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				if self.connection.getRoster().getItem(agent): # to be sure it's a transport contact
 					transport_auto_auth = True
 
-		no_log_for = gajim.config.get_per('accounts', self.name,
-			'no_log_for').split()
 		status = prs.getStatus() or ''
 		show = prs.getShow()
 		if not show in STATUS_LIST:
@@ -2020,8 +2011,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 						errmsg, errcode))
 			if not ptype or ptype == 'unavailable':
-				if gajim.config.get('log_contact_status_changes') and self.name\
-				not in no_log_for and jid_stripped not in no_log_for:
+				if gajim.config.get('log_contact_status_changes') and \
+				gajim.config.should_log(self.name, jid_stripped):
 					gc_c = gajim.contacts.get_gc_contact(self.name, jid_stripped,
 						resource)
 					st = status or ''
@@ -2149,8 +2140,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				# avatar has been updated
 				self.request_vcard(jid_stripped)
 		if not ptype or ptype == 'unavailable':
-			if gajim.config.get('log_contact_status_changes') and self.name \
-			not in no_log_for and jid_stripped not in no_log_for:
+			if gajim.config.get('log_contact_status_changes') and \
+			gajim.config.should_log(self.name, jid_stripped):
 				try:
 					gajim.logger.write('status', jid_stripped, status, show)
 				except exceptions.PysqliteOperationalError, e:
