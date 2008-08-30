@@ -109,13 +109,19 @@ class Resolver:
 		# _xmpp-client._tcp.jabber.org    service = 30 30 5222 jabber.org.
 		if not result: 
 			return []
+		ufqdn = helpers.ascii_to_idn(fqdn) # Unicode domain name
 		hosts = []
 		lines = result.split('\n')
 		for line in lines:
 			if line == '':
 				continue
+			domain = None
 			if line.startswith(fqdn):
-				rest = line[len(fqdn):].split('=')
+				domain = fqdn
+			elif line.startswith(ufqdn):
+				domain = ufqdn
+			if domain:
+				rest = line[len(host):].split('=')
 				if len(rest) != 2:
 					continue
 				answer_type, props_str = rest

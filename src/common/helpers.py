@@ -119,11 +119,21 @@ def parse_jid(jidstring):
 	return prep(*decompose_jid(jidstring))
 
 def idn_to_ascii(host):
-	'''convert IDN (Internationalized Domain Names) to ACE (ASCII-compatible encoding)'''
+	'''convert IDN (Internationalized Domain Names) to ACE
+	(ASCII-compatible encoding)'''
 	labels = idna.dots.split(host)
 	converted_labels = []
 	for label in labels:
 		converted_labels.append(idna.ToASCII(label))
+	return ".".join(converted_labels)
+
+def ascii_to_idn(host):
+	'''convert ACE (ASCII-compatible encoding) to IDN
+	(Internationalized Domain Names)'''
+	labels = idna.dots.split(host)
+	converted_labels = []
+	for label in labels:
+		converted_labels.append(idna.ToUnicode(label))
 	return ".".join(converted_labels)
 
 def parse_resource(resource):
