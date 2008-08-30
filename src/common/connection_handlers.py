@@ -1741,7 +1741,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		tim = localtime(timegm(tim))
 
 		if xep_200_encrypted:
-			encrypted = True
+			encrypted = 'xep200'
 
 			try:
 				msg = session.decrypt_stanza(msg)
@@ -1781,7 +1781,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				decmsg = self.gpg.decrypt(encmsg, keyID)
 				# \x00 chars are not allowed in C (so in GTK)
 				msgtxt = decmsg.replace('\x00', '')
-				encrypted = True
+				encrypted = 'xep27'
 		if mtype == 'error':
 			self.dispatch_error_message(msg, msgtxt, session, frm, tim)
 		elif mtype == 'groupchat':

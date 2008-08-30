@@ -1843,7 +1843,9 @@ class ChatControl(ChatControlBase):
 					msg = _('The following message was encrypted')
 					ChatControlBase.print_conversation_line(self, msg, 'status', '',
 						tim)
-					self._toggle_gpg()
+					# turn on OpenPGP if this was in fact a XEP-0027 encrypted message
+					if encrypted == 'xep27':
+						self._toggle_gpg()
 				elif not encrypted and self.gpg_is_active:
 					msg = _('The following message was NOT encrypted')
 					ChatControlBase.print_conversation_line(self, msg, 'status', '',
