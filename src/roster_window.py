@@ -2700,10 +2700,6 @@ class RosterWindow:
 			on_canceled)
 
 	def on_remove_group_item_activated(self, widget, group, account):
-		dialogs.ConfirmationDialogCheck(_('Remove Group'),
-			_('Do you want to remove group %s from the roster?' % group),
-			_('Remove also all contacts in this group from your roster'),
-			on_response_ok=on_ok)
 		def on_ok(checked):
 			for contact in gajim.contacts.get_contacts_from_group(account, group):
 				if not checked:
@@ -2711,6 +2707,10 @@ class RosterWindow:
 				else:
 					gajim.connections[account].unsubscribe(contact.jid)
 					self.remove_contact(contact.jid, account, backend=True)
+		dialogs.ConfirmationDialogCheck(_('Remove Group'),
+			_('Do you want to remove group %s from the roster?' % group),
+			_('Remove also all contacts in this group from your roster'),
+			on_response_ok=on_ok)
 
 	def on_assign_pgp_key(self, widget, contact, account):
 		attached_keys = gajim.config.get_per('accounts', account,
