@@ -2712,6 +2712,11 @@ class RosterWindow:
 			_('Remove also all contacts in this group from your roster'),
 			on_response_ok=on_ok)
 
+		dialogs.ConfirmationDialogCheck(_('Remove Group'),
+			_('Do you want to remove group %s from the roster?' % group),
+			_('Also remove all contacts in this group from your roster'),
+			on_response_ok=on_ok)
+
 	def on_assign_pgp_key(self, widget, contact, account):
 		attached_keys = gajim.config.get_per('accounts', account,
 			'attached_gpg_keys').split()
