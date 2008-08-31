@@ -119,7 +119,8 @@ class Resolver:
 			domain = None
 			if line.startswith(fqdn):
 				domain = fqdn
-			elif line.startswith(ufqdn):
+			elif helpers.decode_string(line).startswith(ufqdn):
+				line = helpers.decode_string(line)
 				domain = ufqdn
 			if domain:
 				rest = line[len(domain):].split('=')
