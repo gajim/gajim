@@ -976,10 +976,9 @@ class RosterWindow:
 		and 'mood' in gajim.connections[account].mood \
 		and gajim.connections[account].mood['mood'].strip() in MOODS:
 
-			self.model[child_iter][C_MOOD_PIXBUF] = \
-				gtkgui_helpers.load_mood_icon(
-				gajim.connections[account].mood['mood']. \
-				strip()).get_pixbuf()
+			self.model[child_iter][C_MOOD_PIXBUF] = gtkgui_helpers.load_mood_icon(
+				gajim.connections[account].mood['mood'].strip()).get_pixbuf()
+
 		elif gajim.config.get('show_mood_in_roster') \
 		and gajim.connections[account].mood.has_key('mood'):
 			self.model[child_iter][C_MOOD_PIXBUF] = \
@@ -1088,12 +1087,6 @@ class RosterWindow:
 					break
 		if strike:
 			name = '<span strikethrough="true">%s</span>' % name
-
-		# Delete pep if needed
-		keep_pep = any(c.show not in ('error', 'offline') for c in
-			contact_instances)
-		if not keep_pep and not contact.is_groupchat():
-			pep.delete_pep(jid, account)
 
 		# Show resource counter
 		nb_connected_contact = 0
@@ -1994,6 +1987,7 @@ class RosterWindow:
 		contact.status = status
 		# name is to show in conversation window
 		name = contact.get_shown_name()
+		fjid = contact.get_full_jid()
 
 		# The contact has several resources
 		if len(contact_instances) > 1:
@@ -2002,10 +1996,8 @@ class RosterWindow:
 
 			# Remove resource when going offline
 			if show in ('offline', 'error') and \
-			len(gajim.events.get_events(account, contact.get_full_jid())) == 0:
-				fjid = contact.jid + '/' + contact.resource
-				ctrl = gajim.interface.msg_win_mgr.get_control(
-					fjid, account)
+			len(gajim.events.get_events(account, fjid)) == 0:
+				ctrl = gajim.interface.msg_win_mgr.get_control(fjid, account)
 				if ctrl:
 					ctrl.update_ui()
 					ctrl.parent_win.redraw_tab(ctrl)
@@ -2029,9 +2021,7 @@ class RosterWindow:
 				account, contact.jid)
 			ctrl.update_status_display(name, uf_show, status)
 
-		if contact.resource != '':
-			fjid = contact.jid + '/' + contact.resource
-
+		if contact.resource:
 			ctrl = gajim.interface.msg_win_mgr.get_control(fjid, account)
 			if ctrl:
 				ctrl.update_status_display(name, uf_show, status)
@@ -2040,6 +2030,12 @@ class RosterWindow:
 		if gajim.interface.status_sent_to_users.has_key(account) and \
 			contact.jid in gajim.interface.status_sent_to_users[account]:
 			del gajim.interface.status_sent_to_users[account][contact.jid]
+
+		# Delete pep if needed
+		keep_pep = any(c.show not in ('error', 'offline') for c in
+			contact_instances)
+		if not keep_pep and not contact.is_groupchat():
+			pep.delete_pep(contact.jid, account)
 
 		# Redraw everything and select the sender
 		self.draw_completely_and_show_if_needed(contact.jid, account)
@@ -2062,11 +2058,11 @@ class RosterWindow:
 				# No need to redraw contacts if we're quitting
 				if child_iterA:
 					self.model[child_iterA][C_AVATAR_PIXBUF] = None
-				if gajim.con_types.has_key(account):
+				if account in gajim.con_types:
 					gajim.con_types[account] = None
 				for jid in gajim.contacts.get_jid_list(account):
 					lcontact = gajim.contacts.get_contacts(account, jid)
-					for contact in [c for c in lcontact if (c.show != 'offline' or \
+					for contact in [c for c in lcontact if (c.show != 'offline' or
 					c.is_transport())]:
 						self.chg_contact_status(contact, 'offline', '', account)
 			self.actions_menu_needs_rebuild = True
