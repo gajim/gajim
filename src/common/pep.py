@@ -492,9 +492,6 @@ def user_retract_nickname(account):
 
 def delete_pep(jid, name):
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
-	activities_keys = ('activity', 'subactivity', 'text')
-	tune_keys = ('artist', 'title', 'source', 'track', 'length')
-	mood_keys = ('mood', 'text')
 
 	if jid == gajim.get_jid_from_account(name):
 		acc = gajim.connections[name]
