@@ -260,7 +260,7 @@ import common.sleepy
 
 from common.xmpp import idlequeue
 from common.zeroconf import connection_zeroconf
-from common import nslookup
+from common import resolver
 from common import proxy65_manager
 from common import socks5
 from common import helpers
@@ -3077,7 +3077,7 @@ class Interface:
 			# gajim.idlequeue.process() each foo miliseconds
 			gajim.idlequeue = GlibIdleQueue()
 		# resolve and keep current record of resolved hosts
-		gajim.resolver = nslookup.Resolver(gajim.idlequeue)
+		gajim.resolver = resolver.get_resolver(gajim.idlequeue)
 		gajim.socks5queue = socks5.SocksQueue(gajim.idlequeue,
 			self.handle_event_file_rcv_completed,
 			self.handle_event_file_progress)
@@ -3222,6 +3222,11 @@ class Interface:
 		self.last_ftwindow_update = 0
 
 		gobject.timeout_add(100, self.autoconnect)
+
+		# when using libasyncns we need to process resolver in regular intervals
+		if resolver.USE_LIBASYNCNS:
+			gobject.timeout_add(200, gajim.resolver.process)
+
 		if os.name == 'nt':
 			gobject.timeout_add(200, self.process_connections)
 		else:

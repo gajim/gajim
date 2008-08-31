@@ -1,4 +1,4 @@
-##	common/nslookup.py
+##	common/resolver.py
 ##
 ## Copyright (C) 2006 Dimitur Kirov <dkirov@gmail.com>
 ##
@@ -23,6 +23,7 @@ import re
 
 from xmpp.idlequeue import *
 
+# needed for nslookup
 if os.name == 'nt':
 	from subprocess import * # python24 only. we ask this for Windows
 elif os.name == 'posix':
@@ -34,13 +35,138 @@ ns_type_pattern = re.compile('^[a-z]+$')
 # match srv host_name
 host_pattern = re.compile('^[a-z0-9\-._]*[a-z0-9]\.[a-z]{2,}$')
 
-class Resolver:
+USE_LIBASYNCNS = False
+
+try:
+	#raise ImportError("Manually disabled libasync")
+	import libasyncns 
+	USE_LIBASYNCNS = True
+	log.info("libasyncns-python loaded")
+except ImportError:
+	log.debug("Import of libasyncns-python failed, getaddrinfo will block", exc_info=True)
+
+	# FIXME: Remove these prints before release, replace with a warning dialog.
+	print >> sys.stderr, "=" * 79
+	print >> sys.stderr, "libasyncns-python not installed which means:"
+	print >> sys.stderr, " - nslookup will be used for SRV and TXT requests"
+	print >> sys.stderr, " - getaddrinfo will block"
+	print >> sys.stderr, "libasyncns-python can be found at https://launchpad.net/libasyncns-python"
+	print >> sys.stderr, "=" * 79
+
+
+def get_resolver(idlequeue):
+	if USE_LIBASYNCNS:
+		return LibAsyncNSResolver()
+	else:
+		return NSLookupResolver(idlequeue)
+
+class CommonResolver():
+	def __init__(self):
+		# dict {"host+type" : list of records}
+		self.resolved_hosts = {}
+		# dict {"host+type" : list of callbacks}
+		self.handlers = {}
+
+	def resolve(self, host, on_ready, type='srv'):
+		assert(type in ['srv', 'txt'])
+		if not host:
+			# empty host, return empty list of srv records
+			on_ready([])
+			return
+		if self.resolved_hosts.has_key(host+type):
+			# host is already resolved, return cached values
+			on_ready(host, self.resolved_hosts[host+type])
+			return
+		if self.handlers.has_key(host+type):
+			# host is about to be resolved by another connection,
+			# attach our callback 
+			self.handlers[host+type].append(on_ready)
+		else:
+			# host has never been resolved, start now
+			self.handlers[host+type] = [on_ready]
+			self.start_resolve(host, type)
+
+	def _on_ready(self, host, type, result_list):
+		# practically it is impossible to be the opposite, but who knows :)
+		if not self.resolved_hosts.has_key(host+type):
+			self.resolved_hosts[host+type] = result_list
+		if self.handlers.has_key(host+type):
+			for callback in self.handlers[host+type]:
+				callback(host, result_list)
+			del(self.handlers[host+type])
+
+	def start_resolve(self, host, type):
+		pass
+
+
+class LibAsyncNSResolver(CommonResolver):
+	'''
+	Asynchronous resolver using libasyncns-python. process() method has to be called
+	in order to proceed the pending requests.
+	Based on patch submitted by Damien Thebault. 
+	'''	
+	def __init__(self):
+		self.asyncns = libasyncns.Asyncns()
+		CommonResolver.__init__(self)
+
+	def start_resolve(self, host, type):
+		type = libasyncns.ns_t_srv
+		if type == 'txt': type = libasyncns.ns_t_txt
+		resq = self.asyncns.res_query(host, libasyncns.ns_c_in, type)
+		resq.userdata = {'host':host, 'type':type}
+
+	# getaddrinfo to be done
+	#def resolve_name(self, dname, callback):
+		#resq = self.asyncns.getaddrinfo(dname)
+		#resq.userdata = {'callback':callback, 'dname':dname}
+
+	def _on_ready(self, host, type, result_list):
+		if type == libasyncns.ns_t_srv: type = 'srv'
+		elif type == libasyncns.ns_t_txt: type = 'txt'
+
+		CommonResolver._on_ready(self, host, type, result_list)
+
+	
+	def process(self):
+		try:
+			self.asyncns.wait(False)
+			resq = self.asyncns.get_next()
+		except:
+			return True
+		if type(resq) == libasyncns.ResQuery:
+			# TXT or SRV result
+			while resq is not None:
+				try:
+					rl = resq.get_done()
+				except:
+					rl = []
+				if rl:
+					for r in rl:
+						r['prio'] = r['pref']
+				self._on_ready(
+					host = resq.userdata['host'],
+					type = resq.userdata['type'],
+					result_list = rl)
+				try:
+					resq = self.asyncns.get_next()
+				except:
+					resq = None
+		elif type(resq) == libasyncns.AddrInfoQuery:
+			# getaddrinfo result (A or AAAA)
+			rl = resq.get_done()
+			resq.userdata['callback'](resq.userdata['dname'], rl)
+		return True
+
+class NSLookupResolver(CommonResolver):
+	'''
+	Asynchronous DNS resolver calling nslookup. Processing of pending requests
+	is invoked from idlequeue which is watching file descriptor of pipe of stdout
+	of nslookup process.
+	'''
 	def __init__(self, idlequeue):
 		self.idlequeue = idlequeue
-		# dict {host : list of srv records}
-		self.resolved_hosts = {} 
-		# dict {host : list of callbacks}
-		self.handlers = {} 
+		self.process = False
+		CommonResolver.__init__(self)
 	
 	def parse_srv_result(self, fqdn, result):
 		''' parse the output of nslookup command and return list of 
@@ -133,42 +259,19 @@ class Resolver:
 						'prio': prio})
 		return hosts
 	
-	def _on_ready(self, host, result):
+	def _on_ready(self, host, type, result):
 		# nslookup finished, parse the result and call the handlers
 		result_list = self.parse_srv_result(host, result)
+		CommonResolver._on_ready(self, host, type, result_list)
 		
-		# practically it is impossible to be the opposite, but who knows :)
-		if not self.resolved_hosts.has_key(host):
-			self.resolved_hosts[host] = result_list
-		if self.handlers.has_key(host):
-			for callback in self.handlers[host]:
-				callback(host, result_list)
-			del(self.handlers[host])
 	
-	def start_resolve(self, host):
+	def start_resolve(self, host, type):
 		''' spawn new nslookup process and start waiting for results '''
-		ns = NsLookup(self._on_ready, host)
+		ns = NsLookup(self._on_ready, host, type)
 		ns.set_idlequeue(self.idlequeue)
 		ns.commandtimeout = 10
 		ns.start()
 	
-	def resolve(self, host, on_ready):
-		if not host:
-			# empty host, return empty list of srv records
-			on_ready([])
-			return
-		if self.resolved_hosts.has_key(host):
-			# host is already resolved, return cached values
-			on_ready(host, self.resolved_hosts[host])
-			return
-		if self.handlers.has_key(host):
-			# host is about to be resolved by another connection,
-			# attach our callback 
-			self.handlers[host].append(on_ready)
-		else:
-			# host has never been resolved, start now
-			self.handlers[host] = [on_ready]
-			self.start_resolve(host)
 
 # TODO: move IdleCommand class in other file, maybe helpers ?
 class IdleCommand(IdleObject):
@@ -268,7 +371,7 @@ class IdleCommand(IdleObject):
 		self._return_result()
 	
 class NsLookup(IdleCommand):
-	def __init__(self, on_result, host='_xmpp-client', type = 'srv'):
+	def __init__(self, on_result, host='_xmpp-client', type='srv'):
 		IdleCommand.__init__(self, on_result)
 		self.commandtimeout = 10 
 		self.host = host.lower()
@@ -288,7 +391,7 @@ class NsLookup(IdleCommand):
 	
 	def _return_result(self):
 		if self.result_handler:
-			self.result_handler(self.host, self.result)
+			self.result_handler(self.host, self.type, self.result)
 		self.result_handler = None
 	
 # below lines is on how to use API and assist in testing

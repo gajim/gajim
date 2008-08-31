@@ -13,3 +13,5 @@ def get_show_in_roster(event, account, contact, session = None):
 
 def get_show_in_systray(event, account, contact, type_ = None):
 	return True
+
+# vim: se ts=3:

@@ -40,6 +40,7 @@ class NonBlockingClient:
 		:param domain: domain - for to: attribute (from account info)
 		:param idlequeue: processing idlequeue
 		:param caller: calling object - it has to implement method _event_dispatcher
+			which is called from dispatcher instance
 		'''
 		self.Namespace = protocol.NS_CLIENT
 		self.defaultNamespace = self.Namespace
