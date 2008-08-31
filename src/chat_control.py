@@ -1516,6 +1516,7 @@ class ChatControl(ChatControlBase):
 			# Disable encryption
 			ec.remove(self.contact.jid)
 			self.gpg_is_active = False
+			loggable = False
 			msg = _('GPG encryption disabled')
 			ChatControlBase.print_conversation_line(self, msg,
 				'status', '', None)
