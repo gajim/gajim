@@ -192,7 +192,7 @@ class IdleCommand(IdleObject):
 		# if it is True, we can safetely execute the command
 		self.canexecute = True
 		self.idlequeue = None
-		self.result =''
+		self.result = u''
 	
 	def set_idlequeue(self, idlequeue):
 		self.idlequeue = idlequeue
