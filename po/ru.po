@@ -7907,7 +7907,7 @@ msgstr ""
 
 #: ../src/gajim-remote.py:232
 msgid ""
-"Returns current status message(the global one unless account is specified)"
+"Returns current status message (the global one unless account is specified)"
 msgstr ""
 "Возвращает текущий статус (по умолчанию глобальный, если не указана учетная "
 "запись)"

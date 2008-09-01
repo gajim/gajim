@@ -4644,7 +4644,7 @@ msgstr ""
 
 #: ../src/gajim-remote.py:217
 msgid ""
-"Returns current status message(the global one unless account is specified)"
+"Returns current status message (the global one unless account is specified)"
 msgstr ""
 "Restituisce il messaggio di stato corrente (quello globale se non è "
 "specificato un account)"

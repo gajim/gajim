@@ -7851,9 +7851,9 @@ msgstr "Returns current status (the global one unless account is specified)"
 
 #: ../src/gajim-remote.py:232
 msgid ""
-"Returns current status message(the global one unless account is specified)"
+"Returns current status message (the global one unless account is specified)"
 msgstr ""
-"Returns current status message(the global one unless account is specified)"
+"Returns current status message (the global one unless account is specified)"
 
 #: ../src/gajim-remote.py:239
 msgid "Returns number of unread messages"

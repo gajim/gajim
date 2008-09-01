@@ -7991,7 +7991,7 @@ msgstr "Renvoit l'état actuel (global à moins qu'un compte ne soit spécifié)
 
 #: ../src/gajim-remote.py:232
 msgid ""
-"Returns current status message(the global one unless account is specified)"
+"Returns current status message (the global one unless account is specified)"
 msgstr ""
 "Renvoie le message d'état actuel (global à moins qu'un compte ne soit "
 "spécifié)"

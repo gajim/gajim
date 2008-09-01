@@ -7961,7 +7961,7 @@ msgstr "Zwraca obecny status (globalny, chyba, że zostało wskazane konto)."
 
 #: ../src/gajim-remote.py:232
 msgid ""
-"Returns current status message(the global one unless account is specified)"
+"Returns current status message (the global one unless account is specified)"
 msgstr "Zwraca obecny status (globalny, chyba że zostało wskazane konto)."
 
 #: ../src/gajim-remote.py:239

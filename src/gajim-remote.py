@@ -229,7 +229,7 @@ class GajimRemote:
 				],
 
 			'get_status_message': [
-				_('Returns current status message(the global one unless account is specified)'),
+				_('Returns current status message (the global one unless account is specified)'),
 					[
 						(_('account'), '', False)
 					]

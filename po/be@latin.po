@@ -4287,7 +4287,7 @@ msgstr "Viartaje dziejny status (hlabalny, kali nie akreśleny kont)"
 
 #: ../src/gajim-remote.py:208
 msgid ""
-"Returns current status message(the global one unless account is specified)"
+"Returns current status message (the global one unless account is specified)"
 msgstr ""
 "Viartaje dziejnaje paviedamleńnie statusu (hlabalnaha, kali nie akreśleny "
 "kont)"

@@ -324,7 +324,7 @@ msgid ""
 "If checked, Gajim will also broadcast some more IPs except from just your "
 "IP, so file transfer has higher chances of working."
 msgstr ""
-"Ako je ovo označeno, Gajim će odašiljati još neke IP adrese pored Vaše,tako "
+"Ako je ovo označeno, Gajim će odašiljati još neke IP adrese pored Vaše, tako "
 "da prenos datoteka ima veće šanse da će raditi."
 
 #: ../data/glade/account_modification_window.glade.h:21
@@ -7889,7 +7889,7 @@ msgstr "Vraća trenutni status (globalni ako nije naznačen nalog)"
 
 #: ../src/gajim-remote.py:232
 msgid ""
-"Returns current status message(the global one unless account is specified)"
+"Returns current status message (the global one unless account is specified)"
 msgstr "Vraća trenutnu statusnu poruku (globalnu ako nije naznačen nalog)"
 
 #: ../src/gajim-remote.py:239
@@ -8455,7 +8455,7 @@ msgid ""
 "\n"
 "In case you click YES, please wait..."
 msgstr ""
-"Normalno, veličina alociranog prostora neće biti oslobođena,samo će postati "
+"Normalno, veličina alociranog prostora neće biti oslobođena, samo će postati "
 "ponovo koristiva. Ukoliko zaista želite smanjiti veličinu baze podataka "
 "pritisnite Da, inače pritisnite Ne.\n"
 "\n"

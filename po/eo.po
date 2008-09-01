@@ -4193,7 +4193,7 @@ msgstr "Donas nuntempan staton (la komuna se konto estas nespecifita)"
 
 #: ../src/gajim-remote.py:208
 msgid ""
-"Returns current status message(the global one unless account is specified)"
+"Returns current status message (the global one unless account is specified)"
 msgstr "Donas nuntempan statmesaĝon (la komuna se konto estas nespecifita)"
 
 #: ../src/gajim-remote.py:215
