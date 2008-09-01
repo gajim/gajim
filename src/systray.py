@@ -319,7 +319,7 @@ class Systray:
 	def on_middle_click(self):
 		'''middle click raises window to have complete focus (fe. get kbd events)
 		but if already raised, it hides it'''
-		if len(gajim.events.get_systray_events()) == 0:
+		if gajim.events.get_nb_systray_events() == 0:
 			return
 		self.handle_first_event()
 
