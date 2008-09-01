@@ -961,7 +961,8 @@ class Interface:
 		if jid in gajim.contacts.get_jid_list(account):
 			c = gajim.contacts.get_first_contact_from_jid(account, jid)
 			c.resource = array[1]
-			self.roster.remove_contact_from_groups(c.jid, account, [('Not in Roster'),])
+			self.roster.remove_contact_from_groups(c.jid, account,
+				[('Not in Roster'),])
 		else:
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,
@@ -1493,7 +1494,8 @@ class Interface:
 			# according to xep 0162, contact is not an observer anymore when 
 			# we asked him is auth, so also remove him if ask changed
 			old_groups = contacts[0].get_shown_groups()
-			if contacts[0].sub != sub or contacts[0].ask != ask or old_groups != groups:
+			if contacts[0].sub != sub or contacts[0].ask != ask\
+			or old_groups != groups:
 				self.roster.remove_contact(jid, account)
 				re_add = True
 			for contact in contacts:

@@ -851,7 +851,7 @@ class RosterWindow:
 		update -- update contact on the server
 
 		'''
-		self.remove_contact(jid, account, force = True)
+		self.remove_contact(jid, account, force=True)
 		for contact in gajim.contacts.get_contacts(account, jid):
 			for group in groups:
 				if group not in contact.groups:
@@ -866,7 +866,7 @@ class RosterWindow:
 		for group in groups:
 			self._adjust_group_expand_collapse_state(group, account)
 
-	def remove_contact_from_groups(self, jid, account, groups, update = True):
+	def remove_contact_from_groups(self, jid, account, groups, update=True):
 		'''Remove contact from given groups and redraw them.
 
 		Contact on server is updated too. When the contact has a family,
@@ -879,7 +879,7 @@ class RosterWindow:
 		update -- update contact on the server
 
 		'''
-		self.remove_contact(jid, account, force = True)
+		self.remove_contact(jid, account, force=True)
 		for contact in gajim.contacts.get_contacts(account, jid):
 			for group in groups:
 				if group in contact.groups:
@@ -1643,7 +1643,7 @@ class RosterWindow:
 		# .keys() is needed
 		for jid in array.keys():
 			# Remove the contact in roster. It might has changed
-			self.remove_contact(jid, account, force = True)
+			self.remove_contact(jid, account, force=True)
 			# Remove old Contact instances
 			gajim.contacts.remove_jid(account, jid, remove_meta=False)
 			jids = jid.split('/')
@@ -1775,9 +1775,10 @@ class RosterWindow:
 			# Remove contacts in roster if removal was requested
 			key = (jid, account)
 			if key in self.contacts_to_be_removed.keys():
+				backend = self.contacts_to_be_removed[key]['backend']
 				del self.contacts_to_be_removed[key]
 				# Remove contact will delay removal if there are more events pending
-				self.remove_contact(jid, account, backend=True)
+				self.remove_contact(jid, account, backend=backend)
 		self.show_title()
 
 	def open_event(self, account, jid, event):
@@ -2787,7 +2788,7 @@ class RosterWindow:
 		def on_clear(widget):
 			dlg.destroy()
 			# Delete file:
-			gajim.interface.remove_avatar_files(contact.jid, local = True)
+			gajim.interface.remove_avatar_files(contact.jid, local=True)
 			self.update_avatar_in_gui(contact.jid, account)
 
 		dlg = dialogs.AvatarChooserDialog(on_response_ok = on_ok,
