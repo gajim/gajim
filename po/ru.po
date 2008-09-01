@@ -1078,8 +1078,8 @@ msgid ""
 "You are going to begin a Multi-User Chat.\n"
 "Select the contacts you want to invite"
 msgstr ""
-"Вы хотите начать чат(Multi-User Chat).\n"
-"Выберите контакты которых вы хотите пригласить"
+"Вы хотите начать чат (Multi-User Chat).\n"
+"Выберите контакты, которых вы хотите пригласить"
 
 #: ../data/glade/data_form_window.glade.h:1
 msgid "Fill in the form."
@@ -1860,7 +1860,7 @@ msgid ""
 "If checked, Gajim will show a notification when a new e-mail is received via "
 "GMail"
 msgstr ""
-"Если отмечено, то Gajim будет сообщать о новых письмах полученных в GMail"
+"Если отмечено, то Gajim будет сообщать о новых письмах, полученных в GMail"
 
 #: ../data/glade/preferences_window.glade.h:65
 msgid ""
@@ -1988,7 +1988,7 @@ msgid ""
 "The auto away status message. If empty, Gajim will not change the current "
 "status message"
 msgstr ""
-"Автоматическое статусное сообщение(Ушел). Если не указано, Gajim не будет "
+"Автоматическое статусное сообщение (Ушел). Если не указано, Gajim не будет "
 "изменять статусное сообщение"
 
 #: ../data/glade/preferences_window.glade.h:91
@@ -1996,7 +1996,7 @@ msgid ""
 "The auto not available status message. If empty, Gajim will not change the "
 "current status message"
 msgstr ""
-"Автоматическое статусное сообщение(Недоступен). Если не указано, Gajim не "
+"Автоматическое статусное сообщение (Недоступен). Если не указано, Gajim не "
 "будет изменять статусное сообщение"
 
 #: ../data/glade/preferences_window.glade.h:92
@@ -4414,7 +4414,7 @@ msgstr "Пожалуйста, проверьте правильность лог
 
 #: ../src/common/connection.py:792
 msgid "Error while removing privacy list"
-msgstr "Ошибка при удалении списка приватности"
+msgstr "Ошибка при удалении списка доступа"
 
 #: ../src/common/connection.py:793
 #, python-format
@@ -4422,7 +4422,7 @@ msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
 "connected resources. Deactivate it and try again."
 msgstr ""
-"Список приватности %s не может быть удален. Возможно, он используется одним "
+"Список доступа %s не может быть удален. Возможно, он используется одним "
 "из ваших активных ресурсов. Отключите ресурс и попробуйте снова."
 
 #: ../src/common/connection.py:1084
@@ -5447,7 +5447,7 @@ msgid ""
 "The host %s you configured as the ft_add_hosts_to_send advanced option is "
 "not valid, so ignored."
 msgstr ""
-"Хост %s, который настроен как ft_add_hosts_to_send не действителен, поэтому "
+"Хост %s, который настроен как ft_add_hosts_to_send, не действителен, поэтому "
 "игнорируется."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:215
@@ -6562,7 +6562,7 @@ msgstr "Недопустимое имя списка"
 
 #: ../src/dialogs.py:2922
 msgid "You must enter a name to create a privacy list."
-msgstr "Необходимо ввести имя для новой учетной записи."
+msgstr "Необходимо ввести имя для нового списка доступа."
 
 #: ../src/dialogs.py:2955
 msgid "You are invited to a groupchat"
@@ -6570,7 +6570,7 @@ msgstr "Вы приглашены в конференцию"
 
 #: ../src/dialogs.py:2958
 msgid "$Contact has invited you to join a discussion"
-msgstr "$Contact приглашает вас присоединится к обсуждению."
+msgstr "$Contact приглашает вас присоединиться к обсуждению."
 
 #: ../src/dialogs.py:2960
 #, python-format
@@ -7422,7 +7422,7 @@ msgid ""
 "You configured Gajim to use GPG agent, but there is no GPG agent running or "
 "it returned a wrong passphrase.\n"
 msgstr ""
-"Gajim настроен на использование GPG агента,но GPG агент не запущен или он "
+"Gajim настроен на использование GPG агента, но GPG агент не запущен или он "
 "возвратил неверный пароль.\n"
 
 #: ../src/gajim.py:1449
@@ -7444,7 +7444,7 @@ msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
 msgstr[0] "У вас есть %d непрочитанное письмо"
 msgstr[1] "У вас есть %d непрочитанных письма"
-msgstr[2] "У вас есть %d непрочитанных письма"
+msgstr[2] "У вас есть %d непрочитанных писем"
 
 #: ../src/gajim.py:1569
 #, python-format
@@ -7618,7 +7618,7 @@ msgstr "Смайлики выключены"
 msgid ""
 "Your configured emoticons theme has not been found, so emoticons have been "
 "disabled."
-msgstr "Тема смайликов не найдена,они будут отключены."
+msgstr "Тема смайликов не найдена, они будут отключены."
 
 #: ../src/gajim.py:2570
 msgid ""
@@ -7952,7 +7952,7 @@ msgstr "URI для обработки"
 
 #: ../src/gajim-remote.py:261
 msgid "Account in which you want to handle it"
-msgstr "Учетная запись в которой вы хотите его использовать"
+msgstr "Учетная запись, в которой вы хотите его использовать"
 
 #: ../src/gajim-remote.py:266
 msgid "Join a MUC room"
@@ -7984,7 +7984,7 @@ msgstr "Пароль для входа в комнату"
 
 #: ../src/gajim-remote.py:271
 msgid "Account from which you want to enter the room"
-msgstr "Выберите учетную запись с которой вы хотите войти в комнату"
+msgstr "Выберите учетную запись, с которой вы хотите войти в комнату"
 
 #: ../src/gajim-remote.py:276
 msgid "Check if Gajim is running"
