@@ -272,7 +272,7 @@ class Contacts:
 		else:
 			return []
 	
-	def get_contact(self, account, jid, resource = None):
+	def get_contact(self, account, jid, resource=None):
 		### WARNING ###
 		# This function returns a *RANDOM* resource if resource = None!
 		# Do *NOT* use if you need to get the contact to which you
@@ -331,7 +331,7 @@ class Contacts:
 				group_contacts += contacts
 		return group_contacts
 
-	def get_nb_online_total_contacts(self, accounts = [], groups = []):
+	def get_nb_online_total_contacts(self, accounts=[], groups=[]):
 		'''Returns the number of online contacts and the total number of
 		contacts'''
 		if accounts == []:
@@ -590,7 +590,7 @@ class Contacts:
 				gc_contact}
 			return
 		self._gc_contacts[account][gc_contact.room_jid][gc_contact.name] = \
-				gc_contact
+			gc_contact
 
 	def remove_gc_contact(self, account, gc_contact):
 		if account not in self._gc_contacts:
@@ -629,4 +629,17 @@ class Contacts:
 			return None
 		return self._gc_contacts[account][room_jid][nick]
 
+	def get_nb_role_total_gc_contacts(self, account, room_jid, role):
+		'''Returns the number of group chat contacts for the given role and the
+		total number of group chat contacts'''
+		if account not in self._gc_contacts:
+			return 0, 0
+		if room_jid not in self._gc_contacts[account]:
+			return 0, 0
+		nb_role = nb_total = 0
+		for nick in self._gc_contacts[account][room_jid]:
+			if self._gc_contacts[account][room_jid][nick].role == role:
+				nb_role += 1
+			nb_total += 1
+		return nb_role, nb_total
 # vim: se ts=3:

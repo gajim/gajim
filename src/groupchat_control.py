@@ -628,14 +628,14 @@ class GroupchatControl(ChatControlBase):
 
 		return self.gc_popup_menu
 
-	def on_message(self, nick, msg, tim, has_timestamp = False, xhtml = None,
-	status_code = []):
+	def on_message(self, nick, msg, tim, has_timestamp=False, xhtml=None,
+	status_code=[]):
 		if '100' in status_code:
 			# Room is not anonymous
 			self.is_anonymous = False
 		if not nick:
 			# message from server
-			self.print_conversation(msg, tim = tim, xhtml = xhtml)
+			self.print_conversation(msg, tim=tim, xhtml=xhtml)
 		else:
 			# message from someone
 			if has_timestamp:
@@ -926,8 +926,8 @@ class GroupchatControl(ChatControlBase):
 			gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid,
 				nick)
 			self.add_contact_to_roster(nick, gc_contact.show, gc_contact.role,
-						gc_contact.affiliation, gc_contact.status,
-						gc_contact.jid)
+				gc_contact.affiliation, gc_contact.status, gc_contact.jid)
+		self.draw_all_roles()
 		# Recalculate column width for ellipsizin
 		self.list_treeview.columns_autosize()
 
@@ -1004,6 +1004,22 @@ class GroupchatControl(ChatControlBase):
 		else:
 			scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
 		model[iter][C_AVATAR] = scaled_pixbuf
+
+	def draw_role(self, role):
+		role_iter = self.get_role_iter(role)
+		if not role_iter:
+			return
+		model = self.list_treeview.get_model()
+		role_name = helpers.get_uf_role(role, plural=True)
+		if gajim.config.get('show_contacts_number'):
+			nbr_role, nbr_total = gajim.contacts.get_nb_role_total_gc_contacts(
+				self.account, self.room_jid, role)
+			role_name += ' (%s/%s)' % (repr(nbr_role), repr(nbr_total))
+		model[role_iter][C_TEXT] = role_name
+
+	def draw_all_roles(self):
+		for role in ('visitor', 'participant', 'moderator'):
+			self.draw_role(role)
 
 	def chg_contact_status(self, nick, show, status, role, affiliation, jid,
 	reason, actor, statusCode, new_nick, avatar_sha, tim = None):
@@ -1092,7 +1108,8 @@ class GroupchatControl(ChatControlBase):
 					puny_nick = helpers.sanitize_filename(nick)
 					puny_new_nick = helpers.sanitize_filename(new_nick)
 					old_path = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
-					new_path = os.path.join(gajim.VCARD_PATH, puny_jid, puny_new_nick)
+					new_path = os.path.join(gajim.VCARD_PATH, puny_jid,
+						puny_new_nick)
 					files = {old_path: new_path}
 					path = os.path.join(gajim.AVATAR_PATH, puny_jid)
 					# possible extensions
@@ -1126,6 +1143,7 @@ class GroupchatControl(ChatControlBase):
 
 			if len(gajim.events.get_events(self.account, fake_jid)) == 0:
 				self.remove_contact(nick)
+				self.draw_all_roles()
 			else:
 				c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 				c.show = show
@@ -1145,6 +1163,7 @@ class GroupchatControl(ChatControlBase):
 				iter = self.add_contact_to_roster(nick, show, role, affiliation,
 					status, jid)
 				newly_created = True
+				self.draw_all_roles()
 				if statusCode and '201' in statusCode: # We just created the room
 					gajim.connections[self.account].request_gc_config(self.room_jid)
 			else:
@@ -1201,6 +1220,8 @@ class GroupchatControl(ChatControlBase):
 					self.remove_contact(nick)
 					self.add_contact_to_roster(nick, show, role,
 						affiliation, status, jid)
+					self.draw_role(actual_role)
+					self.draw_role(role)
 					if actor:
 						st = _('** Role of %(nick)s has been set to %(role)s by '
 							'%(actor)s') % {'nick': nick_jid, 'role': role,
@@ -1247,12 +1268,12 @@ class GroupchatControl(ChatControlBase):
 			if st:
 				if status:
 					st += ' (' + status + ')'
-				self.print_conversation(st, tim = tim)
+				self.print_conversation(st, tim=tim)
 
 	def add_contact_to_roster(self, nick, show, role, affiliation, status,
-	jid = ''):
+	jid=''):
 		model = self.list_treeview.get_model()
-		role_name = helpers.get_uf_role(role, plural = True)
+		role_name = helpers.get_uf_role(role, plural=True)
 
 		resource = ''
 		if jid:
@@ -1269,7 +1290,8 @@ class GroupchatControl(ChatControlBase):
 		if not role_iter:
 			role_iter = model.append(None,
 				(gajim.interface.jabber_state_images['16']['closed'], role, 
-				'role', '%s' % role_name,  None))
+				'role', role_name,  None))
+			self.draw_all_roles()
 		iter = model.append(role_iter, (None, nick, 'contact', name, None))
 		if not nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
 			gc_contact = gajim.contacts.create_gc_contact(room_jid = self.room_jid,
