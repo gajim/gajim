@@ -1013,7 +1013,7 @@ class RosterWindow:
 		return False
 
 	def draw_group(self, group, account):
-		child_iter = self._get_group_iter(group, account, model = self.model)
+		child_iter = self._get_group_iter(group, account, model=self.model)
 		if not child_iter:
 			# Eg. We redraw groups after we removed a entitiy
 			# and its empty groups
@@ -1034,7 +1034,7 @@ class RosterWindow:
 		return False
 
 	def draw_parent_contact(self, jid, account):
-		child_iters = self._get_contact_iter(jid, account, model = self.model)
+		child_iters = self._get_contact_iter(jid, account, model=self.model)
 		if not child_iters:
 			return False
 		parent_iter = self.model.iter_parent(child_iters[0])
@@ -1203,7 +1203,7 @@ class RosterWindow:
 		for group in contact.get_shown_groups():
 			# We need to make sure that _visible_func is called for
 			# our groups otherwise we might not be shown
-			iterG = self._get_group_iter(group, account, model = self.model)
+			iterG = self._get_group_iter(group, account, model=self.model)
 			if iterG:
 				# it's not self contact
 				self.model[iterG][C_JID] = self.model[iterG][C_JID]
@@ -1212,7 +1212,7 @@ class RosterWindow:
 
 
 	def draw_mood(self, jid, account):
-		iters = self._get_contact_iter(jid, account, model = self.model)
+		iters = self._get_contact_iter(jid, account, model=self.model)
 		if not iters or not gajim.config.get('show_mood_in_roster'):
 			return
 		jid = self.model[iters[0]][C_JID]
@@ -1232,7 +1232,7 @@ class RosterWindow:
 
 
 	def draw_activity(self, jid, account):
-		iters = self._get_contact_iter(jid, account, model = self.model)
+		iters = self._get_contact_iter(jid, account, model=self.model)
 		if not iters or not gajim.config.get('show_activity_in_roster'):
 			return
 		jid = self.model[iters[0]][C_JID]
@@ -1253,7 +1253,7 @@ class RosterWindow:
 
 
 	def draw_tune(self, jid, account):
-		iters = self._get_contact_iter(jid, account, model = self.model)
+		iters = self._get_contact_iter(jid, account, model=self.model)
 		if not iters or not gajim.config.get('show_tunes_in_roster'):
 			return
 		jid = self.model[iters[0]][C_JID]
@@ -1270,7 +1270,7 @@ class RosterWindow:
 
 
 	def draw_avatar(self, jid, account):
-		iters = self._get_contact_iter(jid, account, model = self.model)
+		iters = self._get_contact_iter(jid, account, model=self.model)
 		if not iters or not gajim.config.get('show_avatars_in_roster'):
 			return
 		jid = self.model[iters[0]][C_JID]
@@ -2069,7 +2069,7 @@ class RosterWindow:
 		# Force the rebuild now since the on_activates on the menu itself does
 		# not work with the os/x top level menubar
 		if sys.platform == 'darwin':
-			self.make_menu(force = True)
+			self.make_menu(force=True)
 
 	def get_status_message(self, show, on_response):
 		if show in gajim.config.get_per('defaultstatusmsg'):
@@ -2163,7 +2163,7 @@ class RosterWindow:
 		'''
 		if account in gajim.interface.instances:
 			self.close_all_from_dict(gajim.interface.instances[account])
-		for ctrl in gajim.interface.msg_win_mgr.get_controls(acct = account):
+		for ctrl in gajim.interface.msg_win_mgr.get_controls(acct=account):
 			ctrl.parent_win.remove_tab(ctrl, ctrl.parent_win.CLOSE_CLOSE_BUTTON,
 				force = force)
 
@@ -2779,7 +2779,7 @@ class RosterWindow:
 				msg = str(msg)
 				dialogs.ErrorDialog(_('Could not load image'), msg)
 				return
-			gajim.interface.save_avatar_files(contact.jid, pixbuf, local = True)
+			gajim.interface.save_avatar_files(contact.jid, pixbuf, local=True)
 			dlg.destroy()
 			self.update_avatar_in_gui(contact.jid, account)
 
@@ -2789,8 +2789,8 @@ class RosterWindow:
 			gajim.interface.remove_avatar_files(contact.jid, local=True)
 			self.update_avatar_in_gui(contact.jid, account)
 
-		dlg = dialogs.AvatarChooserDialog(on_response_ok = on_ok,
-			on_response_clear = on_clear)
+		dlg = dialogs.AvatarChooserDialog(on_response_ok=on_ok,
+			on_response_clear=on_clear)
 
 	def on_edit_groups(self, widget, list_):
 		dialogs.EditGroupsDialog(list_)
@@ -2814,7 +2814,7 @@ class RosterWindow:
 	def on_send_single_message_menuitem_activate(self, widget, account,
 	contact = None):
 		if contact is None:
-			dialogs.SingleMessageWindow(account, action = 'send')
+			dialogs.SingleMessageWindow(account, action='send')
 		elif type(contact) == type([]):
 			dialogs.SingleMessageWindow(account, contact, 'send')
 		else:
@@ -3372,8 +3372,7 @@ class RosterWindow:
 		# or not
 		if len(self._last_selected_contact):
 			for (jid, account) in self._last_selected_contact:
-				self.draw_contact(jid, account, selected = True,
-					focus = True)
+				self.draw_contact(jid, account, selected=True, focus=True)
 
 	def on_roster_window_focus_out_event(self, widget, event):
 		# if a contact row is selected, update colors (eg. for status msg)
@@ -3381,8 +3380,7 @@ class RosterWindow:
 		# or not
 		if len(self._last_selected_contact):
 			for (jid, account) in self._last_selected_contact:
-				self.draw_contact(jid, account, selected = True,
-					focus = False)
+				self.draw_contact(jid, account, selected=True, focus=False)
 
 	def on_roster_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
@@ -3626,7 +3624,7 @@ class RosterWindow:
 		else:
 			try:
 				# Object will add itself to the window dict
-				disco.ServiceDiscoveryWindow(account, address_entry = True)
+				disco.ServiceDiscoveryWindow(account, address_entry=True)
 			except GajimGeneralException:
 				pass
 
@@ -3962,8 +3960,8 @@ class RosterWindow:
 		if (type_dest == 'account' or not self.regroup) and \
 				account_source != account_dest:
 			# add to account in specified group
-			dialogs.AddNewContactWindow(account = account_dest, jid = jid_source,
-				user_nick = c_source.name, group = grp_dest)
+			dialogs.AddNewContactWindow(account=account_dest, jid=jid_source,
+				user_nick=c_source.name, group=grp_dest)
 			return
 
 		# we may not add contacts from special_groups
@@ -4792,7 +4790,7 @@ class RosterWindow:
 			status_menuitem.set_submenu(sub_menu)
 
 			for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
-				uf_show = helpers.get_uf_show(show, use_mnemonic = True)
+				uf_show = helpers.get_uf_show(show, use_mnemonic=True)
 				item = gtk.ImageMenuItem(uf_show)
 				icon = state_images[show]
 				item.set_image(icon)
@@ -4821,7 +4819,7 @@ class RosterWindow:
 			item = gtk.SeparatorMenuItem()
 			sub_menu.append(item)
 
-			uf_show = helpers.get_uf_show('offline', use_mnemonic = True)
+			uf_show = helpers.get_uf_show('offline', use_mnemonic=True)
 			item = gtk.ImageMenuItem(uf_show)
 			icon = state_images['offline']
 			item.set_image(icon)
@@ -4906,7 +4904,7 @@ class RosterWindow:
 			status_menuitem.set_submenu(sub_menu)
 
 			for show in ('online', 'away', 'dnd', 'invisible'):
-				uf_show = helpers.get_uf_show(show, use_mnemonic = True)
+				uf_show = helpers.get_uf_show(show, use_mnemonic=True)
 				item = gtk.ImageMenuItem(uf_show)
 				icon = state_images[show]
 				item.set_image(icon)
@@ -4927,7 +4925,7 @@ class RosterWindow:
 			if gajim.connections[account].connected < 2:
 				item.set_sensitive(False)
 
-			uf_show = helpers.get_uf_show('offline', use_mnemonic = True)
+			uf_show = helpers.get_uf_show('offline', use_mnemonic=True)
 			item = gtk.ImageMenuItem(uf_show)
 			icon = state_images['offline']
 			item.set_image(icon)
@@ -5972,7 +5970,7 @@ class RosterWindow:
 		# Force the rebuild now since the on_activates on the menu itself does
 		# not work with the os/x top level menubar
 		if sys.platform == 'darwin':
-			self.make_menu(force = True)
+			self.make_menu(force=True)
 		return
 
 	def show_appropriate_context_menu(self, event, iters):
@@ -6058,7 +6056,7 @@ class RosterWindow:
 		app_menu.show_all()
 		# Do the merge baby!
 		syncmenu.takeover_menu(main_menu)
-		self.make_menu(force = True)
+		self.make_menu(force=True)
 		# Hide the GTK menubar itself and let the OS/X menubar do its thing
 		#self.xml.get_widget('menubar').hide()
 		return
@@ -6200,7 +6198,7 @@ class RosterWindow:
 
 		def add_avatar_renderer():
 			render_pixbuf = gtk.CellRendererPixbuf() # avatar img
-			col.pack_start(render_pixbuf, expand = False)
+			col.pack_start(render_pixbuf, expand=False)
 			col.add_attribute(render_pixbuf, 'pixbuf',
 				C_AVATAR_PIXBUF)
 			col.set_cell_data_func(render_pixbuf,
@@ -6211,30 +6209,30 @@ class RosterWindow:
 
 		render_image = cell_renderer_image.CellRendererImage(0, 0)
 		# show img or +-
-		col.pack_start(render_image, expand = False)
+		col.pack_start(render_image, expand=False)
 		col.add_attribute(render_image, 'image', C_IMG)
 		col.set_cell_data_func(render_image, self._iconCellDataFunc, None)
 
 		render_text = gtk.CellRendererText() # contact or group or account name
 		render_text.set_property('ellipsize', pango.ELLIPSIZE_END)
-		col.pack_start(render_text, expand = True)
+		col.pack_start(render_text, expand=True)
 		col.add_attribute(render_text, 'markup', C_NAME) # where we hold the name
 		col.set_cell_data_func(render_text, self._nameCellDataFunc, None)
 
 		render_pixbuf = gtk.CellRendererPixbuf()
-		col.pack_start(render_pixbuf, expand = False)
+		col.pack_start(render_pixbuf, expand=False)
 		col.add_attribute(render_pixbuf, 'pixbuf', C_MOOD_PIXBUF)
 		col.set_cell_data_func(render_pixbuf,
 			self._fill_mood_pixbuf_rederer, None)
 
 		render_pixbuf = gtk.CellRendererPixbuf()
-		col.pack_start(render_pixbuf, expand = False)
+		col.pack_start(render_pixbuf, expand=False)
 		col.add_attribute(render_pixbuf, 'pixbuf', C_ACTIVITY_PIXBUF)
 		col.set_cell_data_func(render_pixbuf,
 			self._fill_activity_pixbuf_rederer, None)
 
 		render_pixbuf = gtk.CellRendererPixbuf()
-		col.pack_start(render_pixbuf, expand = False)
+		col.pack_start(render_pixbuf, expand=False)
 		col.add_attribute(render_pixbuf, 'pixbuf', C_TUNE_PIXBUF)
 		col.set_cell_data_func(render_pixbuf,
 			self._fill_tune_pixbuf_rederer, None)
@@ -6243,7 +6241,7 @@ class RosterWindow:
 			add_avatar_renderer()
 
 		render_pixbuf = gtk.CellRendererPixbuf() # tls/ssl img
-		col.pack_start(render_pixbuf, expand = False)
+		col.pack_start(render_pixbuf, expand=False)
 		col.add_attribute(render_pixbuf, 'pixbuf', C_PADLOCK_PIXBUF)
 		col.set_cell_data_func(render_pixbuf,
 			self._fill_padlock_pixbuf_rederer, None)
@@ -6252,7 +6250,7 @@ class RosterWindow:
 		# do not show gtk arrows workaround
 		col = gtk.TreeViewColumn()
 		render_pixbuf = gtk.CellRendererPixbuf()
-		col.pack_start(render_pixbuf, expand = False)
+		col.pack_start(render_pixbuf, expand=False)
 		self.tree.append_column(col)
 		col.set_visible(False)
 		self.tree.set_expander_column(col)
