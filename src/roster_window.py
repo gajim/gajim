@@ -334,8 +334,8 @@ class RosterWindow:
 		self.starting = False
 
 
-	def _add_entity(self, contact, account, groups = None,
-	big_brother_contact = None, big_brother_account = None):
+	def _add_entity(self, contact, account, groups=None,
+	big_brother_contact=None, big_brother_account=None):
 		'''Add the given contact to roster data model.
 
 		Contact is added regardless if he is already in roster or not.
@@ -357,8 +357,7 @@ class RosterWindow:
 			parent_iters = self._get_contact_iter(
 				big_brother_contact.jid, big_brother_account,
 				big_brother_contact, self.model)
-			assert len(parent_iters) > 0,\
-				'Big brother is not yet in roster!'
+			assert len(parent_iters) > 0, 'Big brother is not yet in roster!'
 
 			# Do not confuse get_contact_iter: Sync groups of family members
 			contact.groups = big_brother_contact.get_shown_groups()[:]
