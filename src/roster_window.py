@@ -95,7 +95,7 @@ C_PADLOCK_PIXBUF, # use for account row only
 class RosterWindow:
 	'''Class for main window of the GTK+ interface'''
 
-	def _get_account_iter(self, name, model = None):
+	def _get_account_iter(self, name, model=None):
 		'''
 		Return the gtk.TreeIter of the given account or None
 		if not found.
@@ -119,8 +119,7 @@ class RosterWindow:
 		return account_iter
 
 
-	def _get_group_iter(self, name, account, account_iter = None,
-	model = None):
+	def _get_group_iter(self, name, account, account_iter=None, model=None):
 		'''
 		Return the gtk.TreeIter of the given group or None if not found.
 
@@ -145,7 +144,7 @@ class RosterWindow:
 		return group_iter
 
 
-	def _get_self_contact_iter(self, jid, account, model = None):
+	def _get_self_contact_iter(self, jid, account, model=None):
 		''' Return the gtk.TreeIter of SelfContact or None if not found.
 
 		Keyword arguments:
@@ -249,7 +248,7 @@ class RosterWindow:
 		return False
 
 
-	def _iter_contact_rows(self, model = None):
+	def _iter_contact_rows(self, model=None):
 		'''Iterate over all contact rows in given model.
 
 		Keyword argument
@@ -411,7 +410,7 @@ class RosterWindow:
 			"Iters invalidated for %s" % contact.jid
 		return added_iters
 
-	def _remove_entity(self, contact, account, groups = None):
+	def _remove_entity(self, contact, account, groups=None):
 		'''Remove the given contact from roster data model.
 
 		Empty groups after contact removal are removed too.
@@ -776,7 +775,7 @@ class RosterWindow:
 			return True
 
 
-	def add_groupchat(self, jid, account, status = ''):
+	def add_groupchat(self, jid, account, status=''):
 		'''Add groupchat to roster and draw it.
 		Return the added contact instance.
 		'''
@@ -837,7 +836,7 @@ class RosterWindow:
 		self.remove_contact(jid, account, force=True, backend=True)
 		return True
 
-	def add_contact_to_groups(self, jid, account, groups, update = True):
+	def add_contact_to_groups(self, jid, account, groups, update=True):
 		'''Add contact to given groups and redraw them.
 
 		Contact on server is updated too. When the contact has a family,
@@ -916,7 +915,7 @@ class RosterWindow:
 			self.draw_contact(jid, account)
 
 	#FIXME: integrate into add_contact()
-	def add_to_not_in_the_roster(self, account, jid, nick = '', resource = ''):
+	def add_to_not_in_the_roster(self, account, jid, nick='', resource=''):
 		keyID = ''
 		attached_keys = gajim.config.get_per('accounts', account,
 			'attached_gpg_keys').split()
@@ -1047,7 +1046,7 @@ class RosterWindow:
 		self.draw_contact(parent_jid, parent_account)
 		return False
 
-	def draw_contact(self, jid, account, selected = False, focus = False):
+	def draw_contact(self, jid, account, selected=False, focus=False):
 		'''draw the correct state image, name BUT not avatar'''
 		# focus is about if the roster window has toplevel-focus or not
 		# FIXME: We really need a custom cell_renderer
@@ -1502,7 +1501,7 @@ class RosterWindow:
 				gajim.config.get('showoffline'))
 		return True
 
-	def _compareIters(self, model, iter1, iter2, data = None):
+	def _compareIters(self, model, iter1, iter2, data=None):
 		'''Compare two iters to sort them'''
 		name1 = model[iter1][C_NAME]
 		name2 = model[iter2][C_NAME]
@@ -1849,8 +1848,8 @@ class RosterWindow:
 		dialogs.InformationDialog(_('Authorization has been sent'),
 			_('Now "%s" will know your status.') %jid)
 
-	def req_sub(self, widget, jid, txt, account, groups = [], nickname = None,
-	auto_auth = False):
+	def req_sub(self, widget, jid, txt, account, groups=[], nickname=None,
+	auto_auth=False):
 		'''Request subscription to a contact'''
 		gajim.connections[account].request_subscription(jid, txt, nickname,
 			groups, auto_auth, gajim.nicks[account])
@@ -2158,7 +2157,7 @@ class RosterWindow:
 			else:
 				w.window.destroy()
 
-	def close_all(self, account, force = False):
+	def close_all(self, account, force=False):
 		'''close all the windows from an account
 		if force is True, do not ask confirmation before closing chat/gc windows
 		'''
@@ -2832,7 +2831,7 @@ class RosterWindow:
 	def on_add_special_notification_menuitem_activate(self, widget, jid):
 		dialogs.AddSpecialNotificationDialog(jid)
 
-	def on_invite_to_new_room(self, widget, list_, resource = None):
+	def on_invite_to_new_room(self, widget, list_, resource=None):
 		''' resource parameter MUST NOT be used if more than one contact in
 		list '''
 		account_list = []
@@ -3467,7 +3466,7 @@ class RosterWindow:
 		gajim.interface.on_open_chat_window(None, contact, account, \
 			resource=resource, session=session)
 
-	def on_roster_treeview_row_activated(self, widget, path, col = 0):
+	def on_roster_treeview_row_activated(self, widget, path, col=0):
 		'''When an iter is double clicked: open the first event window'''
 		if not gajim.single_click:
 			self.on_row_activated(widget, path)
@@ -3999,8 +3998,7 @@ class RosterWindow:
 ### Cleanup assigned to Jim++ :-)
 ################################################################################
 
-	def get_appropriate_state_images(self, jid, size = '16',
-	icon_name = 'online'):
+	def get_appropriate_state_images(self, jid, size='16', icon_name='online'):
 		'''check jid and return the appropriate state images dict for
 		the demanded size. icon_name is taken into account when jid is from
 		transport: transport iconset doesn't contain all icons, so we fall back
@@ -4137,7 +4135,7 @@ class RosterWindow:
 			self.draw_contact(contact[C_JID].decode('utf-8'),
 				contact[C_ACCOUNT].decode('utf-8'))
 
-	def set_renderer_color(self, renderer, style, set_background = True):
+	def set_renderer_color(self, renderer, style, set_background=True):
 		'''set style for treeview cell, using PRELIGHT system color'''
 		if set_background:
 			bgcolor = self.tree.style.bg[style]
@@ -4146,7 +4144,7 @@ class RosterWindow:
 			fgcolor = self.tree.style.fg[style]
 			renderer.set_property('foreground-gdk', fgcolor)
 
-	def _iconCellDataFunc(self, column, renderer, model, titer, data = None):
+	def _iconCellDataFunc(self, column, renderer, model, titer, data=None):
 		'''When a row is added, set properties for icon renderer'''
 		theme = gajim.config.get('roster_theme')
 		type_ = model[titer][C_TYPE]
@@ -4189,7 +4187,7 @@ class RosterWindow:
 				renderer.set_property('xalign', 0.4)
 		renderer.set_property('width', 26)
 
-	def _nameCellDataFunc(self, column, renderer, model, titer, data = None):
+	def _nameCellDataFunc(self, column, renderer, model, titer, data=None):
 		'''When a row is added, set properties for name renderer'''
 		theme = gajim.config.get('roster_theme')
 		type_ = model[titer][C_TYPE]
@@ -4474,7 +4472,7 @@ class RosterWindow:
 ### FIXME: We really need to make it simpler! 1465 lines are a few to much....
 ################################################################################
 
-	def make_menu(self, force = False):
+	def make_menu(self, force=False):
 		'''create the main window\'s menus'''
 		if not force and not self.actions_menu_needs_rebuild:
 			return
