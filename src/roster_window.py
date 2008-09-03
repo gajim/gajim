@@ -1870,7 +1870,7 @@ class RosterWindow:
 					_('If "%s" accepts this request you will know his or her status.'
 					) % jid)
 				return
-			self.remove_contact(contact.jid, account)
+			self.remove_contact(contact.jid, account, force=True)
 			contact.groups = groups
 			if nickname:
 				contact.name = nickname

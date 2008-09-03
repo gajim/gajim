@@ -1476,7 +1476,7 @@ class Interface:
 		not name and not groups:
 			# contact removes us.
 			if contacts:
-				self.roster.remove_contact(jid, account, backend=True)
+				self.roster.remove_contact(jid, account, force=True, backend=True)
 				return
 		elif not contacts:
 			if sub == 'remove':
@@ -1496,7 +1496,7 @@ class Interface:
 			old_groups = contacts[0].get_shown_groups()
 			if contacts[0].sub != sub or contacts[0].ask != ask\
 			or old_groups != groups:
-				self.roster.remove_contact(jid, account)
+				self.roster.remove_contact(jid, account, force=True)
 				re_add = True
 			for contact in contacts:
 				if not name:
@@ -2737,7 +2737,7 @@ class Interface:
 
 		if session:
 			ctrl = session.control
-		else:
+		if not ctrl:
 			win = self.msg_win_mgr.get_window(fjid, account)
 
 			if win:
