@@ -2708,7 +2708,7 @@ class RosterWindow:
 					self.remove_contact(contact.jid, account, backend=True)
 
 		dialogs.ConfirmationDialogCheck(_('Remove Group'),
-			_('Do you want to remove group %s from the roster?' % group),
+			_('Do you want to remove group %s from the roster?') % group,
 			_('Also remove all contacts in this group from your roster'),
 			on_response_ok=on_ok)
 
