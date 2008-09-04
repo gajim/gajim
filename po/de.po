@@ -1093,7 +1093,7 @@ msgstr "Gruppen bearbeiten"
 #: ../data/glade/esession_info_window.glade.h:1
 #, fuzzy
 msgid "(<b>ESession</b> info)"
-msgstr "(Esession-Verschlüsselung Information)"
+msgstr "(<b>ESession</b>-Information)"
 
 #: ../data/glade/esession_info_window.glade.h:2
 msgid "_Verify"
@@ -3060,13 +3060,13 @@ msgstr ""
 #: ../src/chat_control.py:1563
 #, fuzzy
 msgid "and authenticated"
-msgstr "Verwende Authentifizierung"
+msgstr "und authentifiziert"
 
 #. About encrypted chat session
 #: ../src/chat_control.py:1567
 #, fuzzy
 msgid "and NOT authenticated"
-msgstr "Verwende Authentifizierung"
+msgstr "und NICHT authentifiziert"
 
 #. status will become 'is' or 'is not', authentificaed will become
 #. 'and authentificated' or 'and not authentificated', logged will become
