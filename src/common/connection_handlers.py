@@ -1780,7 +1780,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		and gajim.config.get_per('accounts', self.name,
 		'answer_receipts') and contact and contact.sub \
 		not in (u'to', u'none'):
-			receipt = common.xmpp.Message(to = jid, typ = 'chat')
+			receipt = common.xmpp.Message(to = frm, typ = 'chat')
 			receipt.setID(msg.getID())
 			receipt.setTag('received',
 				namespace='urn:xmpp:receipts')
