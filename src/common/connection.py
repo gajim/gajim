@@ -638,6 +638,14 @@ class Connection(ConnectionHandlers):
 		return self.connection_accepted(con, con_type)
 
 	def connection_accepted(self, con, con_type):
+		if not con or not con.Connection:
+			self.disconnect(on_purpose=True)
+			self.dispatch('STATUS', 'offline')
+			self.dispatch('CONNECTION_LOST',
+				(_('Could not connect to account %s') % self.name,
+				_('Connection with account %s has been lost. Retry connecting.') % \
+				self.name))
+			return
 		self.hosts = []
 		self.connection_auto_accepted = False
 		self.connected_hostname = self._current_host['host']
@@ -678,14 +686,16 @@ class Connection(ConnectionHandlers):
 		con.auth(name, self.password, self.server_resource, 1, self.__on_auth)
 
 	def ssl_certificate_accepted(self):
+		if not self.connection:
+			self.disconnect(on_purpose=True)
+			self.dispatch('STATUS', 'offline')
+			self.dispatch('CONNECTION_LOST',
+				(_('Could not connect to account %s') % self.name,
+				_('Connection with account %s has been lost. Retry connecting.') % \
+				self.name))
+			return
 		name = gajim.config.get_per('accounts', self.name, 'name')
 		self._register_handlers(self.connection, 'ssl')
-		self.connection.auth(name, self.password, self.server_resource, 1,
-			self.__on_auth)
-
-	def plain_connection_accepted(self):
-		name = gajim.config.get_per('accounts', self.name, 'name')
-		self._register_handlers(self.connection, 'tcp')
 		self.connection.auth(name, self.password, self.server_resource, 1,
 			self.__on_auth)
 
@@ -697,7 +707,7 @@ class Connection(ConnectionHandlers):
 
 	def __on_auth(self, con, auth):
 		if not con:
-			self.disconnect(on_purpose = True)
+			self.disconnect(on_purpose=True)
 			self.dispatch('STATUS', 'offline')
 			self.dispatch('CONNECTION_LOST',
 				(_('Could not connect to "%s"') % self._hostname,
