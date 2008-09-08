@@ -1798,13 +1798,12 @@ class ChatControl(ChatControlBase):
 		'''print esession settings to textview'''
 		e2e_is_active = bool(self.session) and self.session.enable_encryption
 		if e2e_is_active:
-			msg = _('E2E encryption enabled')
-			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+			msg = _('This session is encrypted')
 
 			if self.session.is_loggable():
-				msg = _('Session WILL be logged')
+				msg += _(' and WILL be logged')
 			else:
-				msg = _('Session WILL NOT be logged')
+				msg += _(' and WILL NOT be logged')
 
 			ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
 
