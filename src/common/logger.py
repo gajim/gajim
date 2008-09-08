@@ -707,21 +707,26 @@ class Logger:
 		# get data from table
 		# the data field contains binary object (gzipped data), this is a hack
 		# to get that data without trying to convert it to unicode
-		#tmp, self.con.text_factory = self.con.text_factory, str
 		try:
 			self.cur.execute('SELECT hash_method, hash, data FROM caps_cache;');
 		except sqlite.OperationalError:
 			# might happen when there's no caps_cache table yet
 			# -- there's no data to read anyway then
-			#self.con.text_factory = tmp
 			return
-		#self.con.text_factory = tmp
+
+		# list of corrupted entries that will be removed
+		to_be_removed = []
 		for hash_method, hash, data in self.cur:
 			# for each row: unpack the data field
 			# (format: (category, type, name, category, type, name, ...
 			#   ..., 'FEAT', feature1, feature2, ...).join(' '))
 			# NOTE: if there's a need to do more gzip, put that to a function
-			data = GzipFile(fileobj=StringIO(str(data))).read().split('\0')
+			try:
+				data = GzipFile(fileobj=StringIO(str(data))).read().split('\0')
+			except IOError:
+				# This data is corrupted. It probably contains non-ascii chars
+				to_be_removed.append((hash_method, hash))
+				continue
 			i=0
 			identities = list()
 			features = list()
@@ -740,6 +745,9 @@ class Logger:
 
 			# yield the row
 			yield hash_method, hash, identities, features
+		for hash_method, hash in to_be_removed:
+			sql = 'DELETE FROM caps_cache WHERE hash_method = "%s" AND hash = "%s"' % (hash_method, hash)
+			self.simple_commit(sql)
 
 	def add_caps_entry(self, hash_method, hash, identities, features):
 		data=[]
@@ -755,6 +763,7 @@ class Logger:
 		# if there's a need to do more gzip, put that to a function
 		string = StringIO()
 		gzip = GzipFile(fileobj=string, mode='w')
+		data = str(data) # the gzip module can't handle unicode objects
 		gzip.write(data)
 		gzip.close()
 		data = string.getvalue()
