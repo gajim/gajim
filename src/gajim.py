@@ -473,7 +473,7 @@ class PassphraseRequest:
 		self.passphrase = passphrase
 		self.completed = True
 		if passphrase is not None:
-			gobject.timeout_add(30000, gajim.interface.forget_gpg_passphrase,
+			gobject.timeout_add_seconds(30, gajim.interface.forget_gpg_passphrase,
 				self.keyid)
 		for (account, cb) in self.callbacks:
 			self.run_callback(account, cb)
