@@ -2033,7 +2033,8 @@ class RosterWindow:
 		# Delete pep if needed
 		keep_pep = any(c.show not in ('error', 'offline') for c in
 			contact_instances)
-		if not keep_pep and not contact.is_groupchat():
+		if not keep_pep and contact.jid != gajim.get_jid_from_account(account) \
+		and not contact.is_groupchat():
 			pep.delete_pep(contact.jid, account)
 
 		# Redraw everything and select the sender
