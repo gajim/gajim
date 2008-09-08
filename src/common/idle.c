@@ -23,36 +23,27 @@
  * along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _WIN32
-	#include <X11/Xlib.h>
-	#include <X11/Xutil.h>
-	#include <X11/extensions/scrnsaver.h>
-#endif
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/scrnsaver.h>
 
 #include <Python.h>
 
-#ifndef _WIN32
-	Display *display;
-#endif
-
+Display *display;
 
 static PyObject * idle_init(PyObject *self, PyObject *args)
 {
-#ifndef _WIN32
 	display = XOpenDisplay(NULL);
-#endif
+
 	Py_INCREF(Py_None);
 	return Py_None;
 }
 
 static PyObject * idle_getIdleSec(PyObject *self, PyObject *args)
 {
-#ifndef _WIN32
 	static XScreenSaverInfo *mit_info = NULL;
 	int idle_time, event_base, error_base;
-#endif
 
-#ifndef _WIN32
 	if (XScreenSaverQueryExtension(display, &event_base, &error_base))
 	{
 		if (mit_info == NULL)
@@ -62,24 +53,23 @@ static PyObject * idle_getIdleSec(PyObject *self, PyObject *args)
 	}
 	else
 		idle_time = 0;
-#endif
+
 	return Py_BuildValue("i", idle_time);
 }
 
 static PyObject * idle_close(PyObject *self, PyObject *args)
 {
-#ifndef _WIN32
 	XCloseDisplay(display);
-#endif
+
 	Py_INCREF(Py_None);
 	return Py_None;
 }
 
 static PyMethodDef idleMethods[] =
 {
-	{"init",  idle_init, METH_VARARGS, "init idle"},
-	{"getIdleSec",  idle_getIdleSec, METH_VARARGS, "Give the idle time in secondes"},
-	{"close",  idle_close, METH_VARARGS, "close idle"},
+	{"init",  idle_init, METH_NOARGS, "init idle"},
+	{"getIdleSec",  idle_getIdleSec, METH_NOARGS, "Give the idle time in secondes"},
+	{"close",  idle_close, METH_NOARGS, "close idle"},
 	{NULL, NULL, 0, NULL}
 };
 
