@@ -722,8 +722,7 @@ class Logger:
 			#   ..., 'FEAT', feature1, feature2, ...).join(' '))
 			# NOTE: if there's a need to do more gzip, put that to a function
 			try:
-				data = GzipFile(fileobj=StringIO(str(data))).read().split('\0')
-				data = data.decode('utf-8')
+				data = GzipFile(fileobj=StringIO(str(data))).read().decode('utf-8').split('\0')
 			except IOError:
 				# This data is corrupted. It probably contains non-ascii chars
 				to_be_removed.append((hash_method, hash))
