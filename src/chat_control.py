@@ -1025,6 +1025,11 @@ class ChatControl(ChatControlBase):
 		self.handlers[id] = self._add_to_roster_button
 
 		self._send_file_button = self.xml.get_widget('send_file_button')
+		# add a special img for send file button
+		path_to_upload_img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'upload.png')
+		img = gtk.Image()
+		img.set_from_file(path_to_upload_img)
+		self._send_file_button.set_image(img)
 		id = self._send_file_button.connect('clicked',
 			self._on_send_file_menuitem_activate)
 		self.handlers[id] = self._send_file_button
@@ -1969,6 +1974,12 @@ class ChatControl(ChatControlBase):
 		convert_to_gc_menuitem = xml.get_widget('convert_to_groupchat')
 		separatormenuitem1 = xml.get_widget('separatormenuitem1')
 		separatormenuitem2 = xml.get_widget('separatormenuitem2')
+
+		# add a special img for send file menuitem
+		path_to_upload_img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'upload.png')
+		img = gtk.Image()
+		img.set_from_file(path_to_upload_img)
+		send_file_menuitem.set_image(img)
 
 		muc_icon = gtkgui_helpers.load_icon('muc_active')
 		if muc_icon:

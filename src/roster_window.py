@@ -5163,6 +5163,13 @@ class RosterWindow:
 			add_special_notification_menuitem = xml.get_widget(
 				'add_special_notification_menuitem')
 
+			# add a special img for send file menuitem
+			path_to_upload_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+				'upload.png')
+			img = gtk.Image()
+			img.set_from_file(path_to_upload_img)
+			send_file_menuitem.set_image(img)
+
 			if not our_jid:
 				# add a special img for rename menuitem
 				path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
@@ -5284,6 +5291,12 @@ class RosterWindow:
 			'add_special_notification_menuitem')
 		execute_command_menuitem = xml.get_widget(
 			'execute_command_menuitem')
+
+		# add a special img for send file menuitem
+		path_to_upload_img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'upload.png')
+		img = gtk.Image()
+		img.set_from_file(path_to_upload_img)
+		send_file_menuitem.set_image(img)
 
 		# send custom status icon
 		blocked = False

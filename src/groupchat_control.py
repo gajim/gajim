@@ -2109,6 +2109,12 @@ class GroupchatControl(ChatControlBase):
 		self.handlers[id] = item
 
 		item = xml.get_widget('send_file_menuitem')
+		# add a special img for send file menuitem
+		path_to_upload_img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'upload.png')
+		img = gtk.Image()
+		img.set_from_file(path_to_upload_img)
+		item.set_image(img)
+
 		if not c.resource:
 			item.set_sensitive(False)
 		else:
