@@ -283,13 +283,6 @@ class GajimRemote:
 
 			}
 
-		path = os.getcwd()
-		if '.svn' in os.listdir(path) or '_svn' in os.listdir(path):
-			# command only for svn
-			self.commands['toggle_ipython'] = [
-					_('Shows or hides the ipython window'),
-					[]
-				]
 		self.sbus = None
 		if self.argv_len  < 2 or sys.argv[1] not in self.commands.keys():
 			# no args or bad args
