@@ -723,6 +723,7 @@ class Logger:
 			# NOTE: if there's a need to do more gzip, put that to a function
 			try:
 				data = GzipFile(fileobj=StringIO(str(data))).read().split('\0')
+				data = data.decode('utf-8')
 			except IOError:
 				# This data is corrupted. It probably contains non-ascii chars
 				to_be_removed.append((hash_method, hash))
@@ -763,7 +764,7 @@ class Logger:
 		# if there's a need to do more gzip, put that to a function
 		string = StringIO()
 		gzip = GzipFile(fileobj=string, mode='w')
-		data = str(data) # the gzip module can't handle unicode objects
+		data = data.encode('utf-8') # the gzip module can't handle unicode objects
 		gzip.write(data)
 		gzip.close()
 		data = string.getvalue()
