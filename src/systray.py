@@ -252,6 +252,15 @@ class Systray:
 						account)
 					break # No other connected account
 
+		newitem = gtk.SeparatorMenuItem() # separator
+		gc_sub_menu.append(newitem)
+		newitem = gtk.ImageMenuItem(_('_Manage Bookmarks...'))
+		img = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES, gtk.ICON_SIZE_MENU)
+		newitem.set_image(img)
+		newitem.connect('activate',
+			gajim.interface.roster.on_manage_bookmarks_menuitem_activate)
+		gc_sub_menu.append(newitem)
+
 		sounds_mute_menuitem.set_active(not gajim.config.get('sounds_on'))
 
 		if os.name == 'nt':
