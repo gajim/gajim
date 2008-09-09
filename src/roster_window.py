@@ -3091,7 +3091,8 @@ class RosterWindow:
 				if contact.sub != 'to' and is_checked:
 					remove_auth = False
 			for (contact, account) in list_:
-				gajim.connections[account].unsubscribe(contact.jid, remove_auth)
+				if _('Not in Roster') not in contact.get_shown_groups():
+					gajim.connections[account].unsubscribe(contact.jid, remove_auth)
 				self.remove_contact(contact.jid, account, backend=True)
 				if not remove_auth and contact.sub == 'both':
 					contact.name = ''
@@ -3113,6 +3114,10 @@ class RosterWindow:
 				dialogs.ConfirmationDialog(pritext,
 					_('By removing this contact you also remove authorization '
 					'resulting in him or her always seeing you as offline.'),
+					on_response_ok = (on_ok2, list_))
+			elif _('Not in Roster') in contact.get_shown_groups():
+				# Contact is not in roster
+				dialogs.ConfirmationDialog(pritext, _('Do you want to continue?'),
 					on_response_ok = (on_ok2, list_))
 			else:
 				dialogs.ConfirmationDialogCheck(pritext,
