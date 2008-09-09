@@ -2031,8 +2031,13 @@ class RosterWindow:
 			del gajim.interface.status_sent_to_users[account][contact.jid]
 
 		# Delete pep if needed
-		keep_pep = any(c.show not in ('error', 'offline') for c in
-			contact_instances)
+		#FIXME: py2.5only
+#		keep_pep = any(c.show not in ('error', 'offline') for c in
+#			contact_instances)
+		keep_pep = False
+		for c in contact_instances:
+			if c.show not in ('error', 'offline'):
+				keep_pep = True
 		if not keep_pep and contact.jid != gajim.get_jid_from_account(account) \
 		and not contact.is_groupchat():
 			pep.delete_pep(contact.jid, account)
