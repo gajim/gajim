@@ -1051,8 +1051,8 @@ msgid "In_vite"
 msgstr "Pozo_vi"
 
 #: ../data/glade/chat_to_muc_window.glade.h:2
-msgid "Invite Friends !"
-msgstr "Pozovi prijatelje !"
+msgid "Invite Friends!"
+msgstr "Pozovi prijatelje!"
 
 #: ../data/glade/chat_to_muc_window.glade.h:3
 msgid "MUC server"

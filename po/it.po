@@ -7437,7 +7437,7 @@ msgstr "[Questo messaggio è cifrato]"
 #~ msgid "In_vite"
 #~ msgstr "In_vita"
 
-#~ msgid "Invite Friends !"
+#~ msgid "Invite Friends!"
 #~ msgstr "Invita amici!"
 
 #~ msgid "MUC server"

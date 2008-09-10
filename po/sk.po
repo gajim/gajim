@@ -1040,7 +1040,7 @@ msgid "In_vite"
 msgstr "Poz_vať"
 
 #: ../data/glade/chat_to_muc_window.glade.h:2
-msgid "Invite Friends !"
+msgid "Invite Friends!"
 msgstr "Pozvať priateľov!"
 
 #: ../data/glade/chat_to_muc_window.glade.h:3

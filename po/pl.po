@@ -1052,7 +1052,7 @@ msgid "In_vite"
 msgstr "_Zaproś"
 
 #: ../data/glade/chat_to_muc_window.glade.h:2
-msgid "Invite Friends !"
+msgid "Invite Friends!"
 msgstr "Zaproś przyjaciół!"
 
 #: ../data/glade/chat_to_muc_window.glade.h:3

@@ -1059,8 +1059,8 @@ msgid "In_vite"
 msgstr "_Einladen zu"
 
 #: ../data/glade/chat_to_muc_window.glade.h:2
-msgid "Invite Friends !"
-msgstr "Freunde einladen !"
+msgid "Invite Friends!"
+msgstr "Freunde einladen!"
 
 #: ../data/glade/chat_to_muc_window.glade.h:3
 msgid "MUC server"

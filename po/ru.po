@@ -85,19 +85,19 @@ msgid ""
 msgstr ""
 "<b>Соединение с сервером </b>\n"
 "\n"
-"Пожалуйста подождите..."
+"Подождите..."
 
 #: ../data/glade/account_creation_wizard_window.glade.h:4
 msgid "<b>Please choose one of the options below:</b>"
-msgstr "<b>Пожалуйста, выберите одну из опций из списка ниже:</b>"
+msgstr "<b>Выберите одну из опций из списка ниже:</b>"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:5
 msgid "<b>Please fill in the data for your existing account</b>"
-msgstr "<b>Пожалуйста, заполните данные для вашей новой учетной записи</b>"
+msgstr "<b>Заполните данные для вашей новой учетной записи</b>"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:6
 msgid "<b>Please select a server</b>"
-msgstr "<b>Пожалуйста, выберите сервер</b>"
+msgstr "<b>Выберите сервер</b>"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:7
 msgid ""
@@ -1061,16 +1061,16 @@ msgid "In_vite"
 msgstr "_Пригласить"
 
 #: ../data/glade/chat_to_muc_window.glade.h:2
-msgid "Invite Friends !"
-msgstr "Пригласить Друзей !"
+msgid "Invite Friends!"
+msgstr "Пригласить друзей!"
 
 #: ../data/glade/chat_to_muc_window.glade.h:3
 msgid "MUC server"
-msgstr "MUC сервер"
+msgstr "MUC-сервер"
 
 #: ../data/glade/chat_to_muc_window.glade.h:4
 msgid "Please select a MUC server."
-msgstr "Пожалуйста выберите сервер"
+msgstr "Выберите сервер конференций."
 
 #: ../data/glade/chat_to_muc_window.glade.h:5
 msgid ""
@@ -1339,7 +1339,7 @@ msgid ""
 "Generally avoid deletions with contacts you currently chat with."
 msgstr ""
 "<b>ВНИМАНИЕ:</b>\n"
-"Если вы собираетесь устроить массовую чистку, пожалуйста, удостоверьтесь, "
+"Если вы собираетесь устроить массовую чистку, удостоверьтесь, "
 "что Gajim не запущен. Избегайте удалений из логов контактов, с которыми вы "
 "разговариваете в этот момент."
 
@@ -1519,7 +1519,7 @@ msgstr "_Хост:"
 
 #: ../data/glade/message_window.glade.h:1
 msgid "Add this contact to roster (Ctrl+D)"
-msgstr "Добавляет контакт в ростер (Ctrl+D)"
+msgstr "Добавить контакт в ростер (Ctrl+D)"
 
 #: ../data/glade/message_window.glade.h:2
 msgid "Bookmark this room (Ctrl+B)"
@@ -1758,7 +1758,7 @@ msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:51
 msgid "Hide all buttons in chat windows"
-msgstr "Скрывает кнопки в окнах чата"
+msgstr "Не показывать кнопки в окнах чата"
 
 #: ../data/glade/preferences_window.glade.h:52
 msgid ""
@@ -1830,8 +1830,8 @@ msgid ""
 "windows. If no language is explicitly set via right click on the input "
 "field, the default language will be used for this contact or group chat."
 msgstr ""
-"Если отмечено,  Gajim будет выделять орфографические ошибки в полях ввода "
-"окон чата.  Если язык проверки явно не задан, будет использован язык по "
+"Если отмечено, Gajim будет выделять орфографические ошибки в полях ввода "
+"окон чата. Если язык проверки явно не задан, будет использован язык по "
 "умолчанию для данного контакта или комнаты."
 
 #: ../data/glade/preferences_window.glade.h:62
@@ -1877,7 +1877,7 @@ msgid ""
 msgstr ""
 "Если отмечено, то Gajim будет использовать для каждого протокола свои иконки "
 "(например, контакты из MSN будут иметь соответствующие иконки msn для "
-"статусов \"в сети\", \"ушёл\", \"занят\" и т.д.)"
+"статусов «в сети», «ушёл», «занят» и т.д.)"
 
 #: ../data/glade/preferences_window.glade.h:67
 msgid ""
@@ -1893,7 +1893,7 @@ msgid ""
 "animated or static graphical emoticons"
 msgstr ""
 "Gajim заменяет текстовые смайлики, например ':)', их графическим или "
-"анимированным эквивалентом. Выберите \"Отключены\", чтобы этого не "
+"анимированным эквивалентом. Выберите «Отключены», чтобы этого не "
 "происходило."
 
 #: ../data/glade/preferences_window.glade.h:69
@@ -3000,7 +3000,7 @@ msgid ""
 "<b>\"%(title)s\"</b> by <i>%(artist)s</i>\n"
 "from <i>%(source)s</i>"
 msgstr ""
-"<b>\"%(title)s\"</b> <i>%(artist)s</i>\n"
+"<b>«%(title)s»</b> <i>%(artist)s</i>\n"
 "из <i>%(source)s</i>"
 
 #: ../src/chat_control.py:1306
@@ -3363,7 +3363,7 @@ msgid ""
 "restructuredtext.html (If you want to use this, install docutils)"
 msgstr ""
 "Использует разметку ReStructuredText для отправки HTML, плюс ascii "
-"форматирование,  если оно выбрано. Синтаксис описан на http://docutils."
+"форматирование, если оно выбрано. Синтаксис описан на http://docutils."
 "sourceforge.net/docs/ref/rst/restructuredtext.htm (Если вы хотите "
 "воспользоваться этим, установите docutils)"
 
@@ -3439,8 +3439,8 @@ msgid ""
 "Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' "
 "which means use wiktionary."
 msgstr ""
-"Введите свою ссылку с %s, в которой %s подменяет слово/фразу или "
-"'WIKTIONARY', что значит: \"использовать wiktionary\"."
+"Введите свою ссылку с %s, в которой %s подменяет слово/фразу, или "
+"«WIKTIONARY», чтобы использовать Викисловарь."
 
 #: ../src/common/config.py:179
 msgid "If checked, Gajim can be controlled remotely using gajim-remote."
@@ -3465,16 +3465,16 @@ msgstr ""
 msgid ""
 "Sent chat state notifications. Can be one of all, composing_only, disabled."
 msgstr ""
-"Отсылать уведомления о состоянии беседы. Может быть одним из \"все\", "
-"\"только печать\", \"отключено\"."
+"Отсылать уведомления о состоянии беседы. Варианты: all (все), "
+"composing_only (только печать), disabled (никаких уведомлений)."
 
 #: ../src/common/config.py:182
 msgid ""
 "Displayed chat state notifications in chat windows. Can be one of all, "
 "composing_only, disabled."
 msgstr ""
-"Отображать состояния беседы в окне беседы. Может быть одним из \"все\", "
-"\"только написание\", \"отключено\"."
+"Отображать состояния беседы в окне беседы. Варианты: all (все), "
+"composing_only (только печать), disabled (никаких уведомлений)."
 
 #: ../src/common/config.py:184
 msgid ""
@@ -3538,7 +3538,7 @@ msgid ""
 "When negotiating an encrypted session, should Gajim assume you want your "
 "messages to be logged?"
 msgstr ""
-"Когда устанавливается зашифрованный сеанс, должен ли Gajim предположить,  "
+"Когда устанавливается зашифрованный сеанс, должен ли Gajim предположить, "
 "что вы хотите сохранить историю сообщений?"
 
 #: ../src/common/config.py:204
@@ -3802,7 +3802,7 @@ msgid ""
 "and convert before insterting it in chat window."
 msgstr ""
 "Если активно, Gajim будет конвертировать строку между $$ и $$ в изображение, "
-"используя dvips и конвертировать до вставки его в  окно чата."
+"используя dvips и конвертировать до вставки его в окно чата."
 
 #: ../src/common/config.py:262
 msgid "Time of inactivity needed before the change status window closes down."
@@ -3869,7 +3869,7 @@ msgstr ""
 
 #: ../src/common/config.py:294
 msgid "Enable ESessions encryption for this account."
-msgstr "Включить ESessions шифрование для данной учетной  записи."
+msgstr "Включить ESessions шифрование для данной учетной записи."
 
 #: ../src/common/config.py:295
 msgid "Should Gajim automatically start an encrypted session when possible?"
@@ -3904,7 +3904,7 @@ msgid ""
 "How many seconds to wait for the answer of keepalive packet before we try to "
 "reconnect."
 msgstr ""
-"Время ожидания в секундах ответа на \"keepalive packet\" перед повторной "
+"Время ожидания (в секундах) ответа на \"keepalive packet\" перед повторной "
 "попыткой соединения."
 
 #. yes, no, ask
@@ -3950,13 +3950,13 @@ msgstr "все или статусы, разделенные пробелом"
 
 #: ../src/common/config.py:401
 msgid "'yes', 'no', or 'both'"
-msgstr "\"да\", \"нет\" или \"оба\""
+msgstr "\"yes\" (да), \"no\" (нет) или \"both\" (оба)"
 
 #: ../src/common/config.py:402 ../src/common/config.py:404
 #: ../src/common/config.py:405 ../src/common/config.py:408
 #: ../src/common/config.py:409
 msgid "'yes', 'no' or ''"
-msgstr "\"да\", \"нет\" или \"\""
+msgstr "\"yes\" (да), \"no\" (нет) или \"\""
 
 #: ../src/common/config.py:415 ../src/common/pep.py:106
 msgid "Sleeping"
@@ -4407,7 +4407,7 @@ msgstr "Ошибка аутентификации с \"%s\""
 
 #: ../src/common/connection.py:731
 msgid "Please check your login and password for correctness."
-msgstr "Пожалуйста, проверьте правильность логина и пароля."
+msgstr "Проверьте правильность логина и пароля."
 
 #: ../src/common/connection.py:792
 msgid "Error while removing privacy list"
@@ -5480,7 +5480,7 @@ msgstr ""
 
 #: ../src/common/zeroconf/connection_zeroconf.py:249
 msgid "Please check if Avahi or Bonjour is installed."
-msgstr "Пожалуйста, удостоверьтесь что Avahi или Bonjour установлен."
+msgstr "Удостоверьтесь, что Avahi или Bonjour установлен."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:258
 #: ../src/common/zeroconf/connection_zeroconf.py:262
@@ -5495,7 +5495,7 @@ msgstr "Не могу использовать порт %d."
 #: ../src/common/zeroconf/connection_zeroconf.py:263
 #: ../src/common/zeroconf/connection_zeroconf.py:358
 msgid "Please check if avahi-daemon is running."
-msgstr "Пожалуйста, удостоверьтесь что демон avahi запущен."
+msgstr "Удостоверьтесь, что демон avahi запущен."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:357
 #, python-format
@@ -5675,8 +5675,7 @@ msgid ""
 "This name is already used by another of your accounts. Please choose another "
 "name."
 msgstr ""
-"Это имя уже используется в другой вашей учетной записи. Пожалуйста, выберите "
-"другое."
+"Это имя уже используется в другой вашей учетной записи. Выберите другое."
 
 #: ../src/config.py:1715 ../src/config.py:1719
 msgid "Invalid account name"
@@ -5932,7 +5931,7 @@ msgstr "Эта закладка содержит неверные данные"
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
-"Пожалуйста, удостоверьтесь, что заполнены поля с именем сервера и комнаты, "
+"Удостоверьтесь, что заполнены поля с именем сервера и комнаты, "
 "либо удалите эту закладку."
 
 #: ../src/config.py:3074
@@ -5971,7 +5970,7 @@ msgstr "Неверный сервер"
 
 #: ../src/config.py:3140
 msgid "Please provide a server on which you want to register."
-msgstr "Пожалуйста, укажите сервер, на котором вы хотите зарегистрироваться."
+msgstr "Укажите сервер, на котором вы хотите зарегистрироваться."
 
 #: ../src/config.py:3191 ../src/gajim.py:1990
 msgid "Certificate Already in File"
@@ -6098,7 +6097,7 @@ msgstr "Jabber ID уже в списке"
 #: ../src/dataforms_widget.py:541
 msgid "The Jabber ID you entered is already in the list. Choose another one."
 msgstr ""
-"Jabber ID, который вы ввели, уже существует. Пожалуйста, выберите другой."
+"Jabber ID, который вы ввели, уже существует. Выберите другой."
 
 #. Default jid
 #: ../src/dataforms_widget.py:552
@@ -6190,12 +6189,12 @@ msgstr "Адрес Yahoo:"
 #, python-format
 msgid "Please fill in the data of the contact you want to add in account %s"
 msgstr ""
-"Пожалуйста, заполните данные о контакте,\n"
+"Заполните данные о контакте,\n"
 "который хотите добавить в ростер учетной записи %s"
 
 #: ../src/dialogs.py:713
 msgid "Please fill in the data of the contact you want to add"
-msgstr "Пожалуйста, заполните данные о контакте, который вы хотите добавить"
+msgstr "Заполните данные о контакте, который вы хотите добавить"
 
 #: ../src/dialogs.py:870 ../src/dialogs.py:876 ../src/dialogs.py:881
 msgid "Invalid User ID"
@@ -6368,7 +6367,7 @@ msgstr "Соединение невозможно"
 #: ../src/dialogs.py:1963 ../src/dialogs.py:2338 ../src/dialogs.py:2481
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
-msgstr "Пожалуйста, удостоверьтесь, что вы подключены к \"%s\"."
+msgstr "Удостоверьтесь, что вы подключены к \"%s\"."
 
 #: ../src/dialogs.py:1972 ../src/dialogs.py:1975
 msgid "Invalid JID"
@@ -6681,7 +6680,7 @@ msgid ""
 "\n"
 "This session's Short Authentication String is <b>%(sas)s</b>."
 msgstr ""
-"Для предотвращения атаки типа «человек посередине», вы должны переговорить с "
+"Для предотвращения атаки типа «человек посередине» вы должны переговорить с "
 "<b>%(jid)s</b> напрямую (лично или по телефону) и убедиться, что он видит ту "
 "же Short Authentication String (SAS), что и вы.\n"
 "\n"
@@ -6954,7 +6953,7 @@ msgstr "Иконка в системном лотке отображающая �
 msgid ""
 "Requires python-gnome2-extras or compiled trayicon module from Gajim sources."
 msgstr ""
-"Требует python-gnome2-extras или скомпилированного модуля  trayicon из "
+"Требует python-gnome2-extras или скомпилированного модуля trayicon из "
 "исходных кодов Gajim."
 
 #: ../src/features_window.py:94
@@ -6989,7 +6988,7 @@ msgid ""
 "'use_latex' to True in the Advanced Configuration Editor."
 msgstr ""
 "Требует texlive-latex-base, dvips и imagemagick. Необходимо присвоить пункту "
-"'use_latex'  значение True в Расширенном редакторе настроек."
+"'use_latex' значение True в Расширенном редакторе настроек."
 
 #: ../src/features_window.py:103
 msgid "End to End Encryption"
@@ -7205,7 +7204,7 @@ msgstr "Нельзя отсылать пустые файлы"
 
 #: ../src/filetransfers_window.py:594 ../src/tooltips.py:663
 msgid "Name: "
-msgstr "Имя:  "
+msgstr "Имя: "
 
 #: ../src/filetransfers_window.py:596 ../src/tooltips.py:667
 msgid "Sender: "
@@ -7250,13 +7249,13 @@ msgid ""
 "Please remove your current GTK+ runtime and install the latest stable "
 "version from %s"
 msgstr ""
-"Пожалуйста, удалите вашу текущую версию GTK и установите последнюю "
+"Удалите вашу текущую версию GTK и установите последнюю "
 "стабильную версию с %s"
 
 #: ../src/gajim.py:199
 msgid ""
 "Please make sure that GTK+ and PyGTK have libglade support in your system."
-msgstr "Пожалуйста, удостоверьтесь что GTK+ и PyGTK поддерживают libglade."
+msgstr "Удостоверьтесь, что GTK+ и PyGTK поддерживают libglade."
 
 #: ../src/gajim.py:204
 msgid "Gajim needs PySQLite2 to run"
@@ -7272,7 +7271,7 @@ msgid ""
 "Please make sure that Pywin32 is installed on your system. You can get it at "
 "%s"
 msgstr ""
-"Пожалуйста, удостоверьтесь что в вашей системе установлен Pywin32. Вы можете "
+"Удостоверьтесь, что в вашей системе установлен Pywin32. Вы можете "
 "получить его на сайте: %s"
 
 #. set the icon to all newly opened wind
@@ -7305,7 +7304,7 @@ msgstr "Неверная парольная фраза"
 #: ../src/gajim.py:500
 msgid "Please retype your GPG passphrase or press Cancel."
 msgstr ""
-"Пожалуйста, введите парольную фразу для GPG еще раз или нажмите Отмена."
+"Введите парольную фразу для GPG еще раз или нажмите «Отмена»."
 
 #: ../src/gajim.py:547
 #, python-format
@@ -7316,7 +7315,7 @@ msgid ""
 msgstr ""
 "Тот ник, что вы ввели в комнате %s уже используется или зарегистрирован "
 "другим пользователем.\n"
-"Пожалуйста, укажите другой ник ниже:"
+"Укажите другой ник:"
 
 #: ../src/gajim.py:561
 msgid "Do you accept this request?"
@@ -7526,7 +7525,7 @@ msgstr "Такое имя уже есть"
 #: ../src/gajim.py:1896
 msgid "Please type a new username for your local account"
 msgstr ""
-"Пожалуйста, введите новое имя пользователя для локальной учетной записи"
+"Введите новое имя пользователя для локальной учетной записи"
 
 #: ../src/gajim.py:1908
 msgid "Ping?"
@@ -7616,7 +7615,7 @@ msgid ""
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
 msgstr ""
 "Вы хотите отправить пароль через небезопасное соединение. Вы уверены? "
-"Установите PyOpenSSL чтоб предотвратить это."
+"(Установите PyOpenSSL, чтобы этого не происходило.)"
 
 #: ../src/gajim.py:2103
 msgid "PEP node was not removed"
@@ -7645,7 +7644,7 @@ msgid ""
 "for more details."
 msgstr ""
 "Смайлики не могут быть загружены. Возможно, вам нужно обновить формат файла "
-"emoticons.py. Подробности на  http://trac.gajim.org/wiki/Emoticons."
+"emoticons.py. Подробности на http://trac.gajim.org/wiki/Emoticons."
 
 #: ../src/gajim.py:2600 ../src/roster_window.py:3296
 msgid "You cannot join a group chat while you are invisible"
@@ -8006,7 +8005,7 @@ msgstr "Выберите учетную запись, с которой вы х�
 
 #: ../src/gajim-remote.py:276
 msgid "Check if Gajim is running"
-msgstr "Проверьте что Gajim запущен"
+msgstr "Проверить, запущен ли Gajim"
 
 #: ../src/gajim-remote.py:280 ../src/gajim-remote.py:290
 msgid "Shows or hides the ipython window"
@@ -8022,12 +8021,12 @@ msgid ""
 "'%s' is not in your roster.\n"
 "Please specify account for sending the message."
 msgstr ""
-"'%s' не в вашем ростере\n"
-"Пожалуйста, укажите учетную запись для отправки сообщения."
+"'%s' не в вашем ростере.\n"
+"Укажите учетную запись для отправки сообщения."
 
 #: ../src/gajim-remote.py:336
 msgid "You have no active account"
-msgstr "У вас нет активной учетной записи"
+msgstr "У вас нет ни одной активной учетной записи"
 
 #: ../src/gajim-remote.py:389
 msgid "It seems Gajim is not running. So you can't use gajim-remote."
@@ -8092,7 +8091,7 @@ msgstr "Вы не можете удалить вашу текущую тему"
 
 #: ../src/gajim_themes_window.py:98
 msgid "Please create a clean new theme with your desired name."
-msgstr "Пожалуйста, cоздайте новую тему с желаемым названием."
+msgstr "Создайте новую тему с желаемым названием."
 
 #. don't confuse translators
 #: ../src/gajim_themes_window.py:172
@@ -8105,7 +8104,7 @@ msgstr "Вы не можете удалить вашу текущую тему"
 
 #: ../src/gajim_themes_window.py:190
 msgid "Please first choose another for your current theme."
-msgstr "Пожалуйста, выберите сначала другую тему."
+msgstr "Выберите сначала другую тему."
 
 #: ../src/groupchat_control.py:145
 msgid "Sending private message failed"
@@ -8350,19 +8349,19 @@ msgstr "Если вы закроете это окно, то вы выйдете
 
 #: ../src/groupchat_control.py:1798
 msgid "Changing Subject"
-msgstr "Изменяет тему"
+msgstr "Смена темы"
 
 #: ../src/groupchat_control.py:1799
 msgid "Please specify the new subject:"
-msgstr "Пожалуйста, введите новую тему:"
+msgstr "Введите новую тему:"
 
 #: ../src/groupchat_control.py:1803
 msgid "Changing Nickname"
-msgstr "Изменяет ник"
+msgstr "Смена ника"
 
 #: ../src/groupchat_control.py:1804
 msgid "Please specify the new nickname you want to use:"
-msgstr "Пожалуйста, введите новый ник, который вы хотите использовать:"
+msgstr "Введите новый ник, который вы хотите использовать:"
 
 # смотря где вылазит меседж - нужно присмотреться
 #. Ask for a reason
@@ -8376,12 +8375,12 @@ msgid ""
 "You are going to definitively destroy this room.\n"
 "You may specify a reason below:"
 msgstr ""
-"Вы хотите уничтожить комнату.\n"
-"Вы можете указать причину:"
+"Вы собираетесь полностью уничтожить эту комнату.\n"
+"Можете указать причину:"
 
 #: ../src/groupchat_control.py:1834
 msgid "You may also enter an alternate venue:"
-msgstr "Альтернативная причина:"
+msgstr "Можете указать альтернативную комнату:"
 
 #. ask for reason
 #: ../src/groupchat_control.py:2008
@@ -8556,7 +8555,7 @@ msgstr "%(nick)s теперь %(status)s: %(status_msg)s"
 #: ../src/history_window.py:416
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
-msgstr "Статус установлен в:  %(status)s: %(status_msg)s"
+msgstr "Статус установлен в: %(status)s: %(status_msg)s"
 
 #: ../src/history_window.py:419
 #, python-format
@@ -8898,7 +8897,7 @@ msgid ""
 "is used when the same person has several Jabber accounts or transport "
 "accounts."
 msgstr ""
-"Метаконтакты - это метод группировки нескольких контактов в одну запись. "
+"Метаконтакты — это метод группировки нескольких контактов в одну запись. "
 "Обычно используется, когда один и тот же человек имеет несколько учетных "
 "записей в Jabber или на транспортах."
 
@@ -9217,8 +9216,8 @@ msgid ""
 "This service could not respond with detailed information.\n"
 "It is most likely legacy or broken"
 msgstr ""
-"Этот сервис не может предоставить информацию о себе . \n"
-"Похоже что он или неверно настроен или сломан"
+"Этот сервис не может предоставить подробную информацию о себе. \n"
+"Скорее всего, он устарел или сломан"
 
 #: ../src/vcard.py:246
 msgid "?Client:Unknown"
