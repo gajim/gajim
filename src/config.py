@@ -3174,8 +3174,8 @@ class AccountCreationWizardWindow:
 				self.update_progressbar)
 			# Get form from serveur
 			con = connection.Connection(self.account)
-			con.new_account(self.account, config)
 			gajim.connections[self.account] = con
+			con.new_account(self.account, config)
 		elif cur_page == 3:
 			checked = self.xml.get_widget('ssl_checkbutton').get_active()
 			if checked:
@@ -3274,6 +3274,8 @@ class AccountCreationWizardWindow:
 
 	def new_acc_not_connected(self, reason):
 		'''Account creation failed: connection to server failed'''
+		if self.account not in gajim.connections:
+			return
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 		del gajim.connections[self.account]
