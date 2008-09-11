@@ -127,7 +127,6 @@ Section "Gajim" SecGajim
 	File "bin\_hashlib.pyd"
 	File "bin\_socket.pyd"
 	File "bin\_sqlite3.pyd"
-	File "bin\_sqlite.pyd"
 	File "bin\_ssl.pyd"
 	File "bin\_win32sysloader.pyd"
 	File "bin\AES.pyd"
