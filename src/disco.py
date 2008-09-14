@@ -61,6 +61,7 @@ import search_window
 from common import gajim
 from common import xmpp
 from common.exceptions import GajimGeneralException
+from common import helpers
 
 # Dictionary mapping category, type pairs to browser class, image pairs.
 # This is a function, so we can call it after the classes are declared.
@@ -692,10 +693,22 @@ _('This type of service does not contain any items to browse.'))
 		if self.address_comboboxentry.get_active() != -1:
 			# user selected one of the entries so do auto-visit
 			jid = self.address_comboboxentry.child.get_text().decode('utf-8')
+			try:
+				jid = helpers.parse_jid(jid)
+			except helpers.InvalidFormat, s:
+				pritext = _('Invalid Server Name')
+				dialogs.ErrorDialog(pritext, str(s))
+				return
 			self.travel(jid, '')
 
 	def on_go_button_clicked(self, widget):
 		jid = self.address_comboboxentry.child.get_text().decode('utf-8')
+		try:
+			jid = helpers.parse_jid(jid)
+		except helpers.InvalidFormat, s:
+			pritext = _('Invalid Server Name')
+			dialogs.ErrorDialog(pritext, str(s))
+			return
 		if jid == self.jid: # jid has not changed
 			return
 		if jid in self.latest_addresses:
