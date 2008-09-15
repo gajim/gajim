@@ -5523,11 +5523,14 @@ class RosterWindow:
 		list_ = [] # list of (jid, account) tuples
 		one_account_offline = False
 		is_blocked = True
+		privacy_rules_supported = True
 		for titer in iters:
 			jid = model[titer][C_JID].decode('utf-8')
 			account = model[titer][C_ACCOUNT].decode('utf-8')
 			if gajim.connections[account].connected < 2:
 				one_account_offline = True
+			if not gajim.connections[account].privacy_rules_supported:
+				privacy_rules_supported = False
 			contact = gajim.contacts.get_contact_with_highest_priority(account,
 				jid)
 			if jid not in gajim.connections[account].blocked_contacts:
@@ -5581,7 +5584,7 @@ class RosterWindow:
 		manage_contacts_submenu.append(item)
 
 		# Block
-		if is_blocked and gajim.connections[account].privacy_rules_supported:
+		if is_blocked and privacy_rules_supported:
 			unblock_menuitem = gtk.ImageMenuItem(_('_Unblock'))
 			icon = gtk.image_new_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
 			unblock_menuitem.set_image(icon)
@@ -5594,7 +5597,7 @@ class RosterWindow:
 			block_menuitem.connect('activate', self.on_block, list_)
 			manage_contacts_submenu.append(block_menuitem)
 
-			if not gajim.connections[account].privacy_rules_supported:
+			if not privacy_rules_supported:
 				block_menuitem.set_sensitive(False)
 
 		# Remove
