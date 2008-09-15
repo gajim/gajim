@@ -3989,7 +3989,7 @@ msgid ""
 "Should Gajim automatically start an encrypted session with this contact when "
 "possible?"
 msgstr ""
-"Gajim doit-il commencer automatiquement une discussion chiffrées avec ce "
+"Gajim doit-il commencer automatiquement une discussion chiffrée avec ce "
 "contact quand cela est possible ?"
 
 #: ../src/common/config.py:391 ../src/common/config.py:394
