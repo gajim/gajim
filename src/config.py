@@ -1361,10 +1361,10 @@ class AccountsWindow:
 			iter = model.append()
 			model.set(iter, 0, account)
 
-	def resend(self):
-		show = gajim.SHOW_LIST[gajim.connections[self.current_account].connected]
-		status = gajim.connections[self.current_account].status
-		gajim.connections[self.current_account].change_status(show, status)
+	def resend(self, account):
+		show = gajim.SHOW_LIST[gajim.connections[account].connected]
+		status = gajim.connections[account].status
+		gajim.connections[account].change_status(show, status)
 
 	def check_resend_relog(self):
 		if self.need_relogin and self.current_account == gajim.ZEROCONF_ACC_NAME:
@@ -1382,26 +1382,25 @@ class AccountsWindow:
 				gajim.interface.roster.send_status(account, show_before,
 					status_before)
 
-			def relog():
+			def relog(account):
 				self.dialog.destroy()
-				show_before = gajim.SHOW_LIST[gajim.connections[
-					self.current_account].connected]
-				status_before = gajim.connections[self.current_account].status
-				gajim.interface.roster.send_status(self.current_account, 'offline',
+				show_before = gajim.SHOW_LIST[gajim.connections[account].connected]
+				status_before = gajim.connections[account].status
+				gajim.interface.roster.send_status(account, 'offline',
 					_('Be right back.'))
-				gobject.timeout_add(500, login, self.current_account, show_before,
-					status_before)
+				gobject.timeout_add(500, login, account, show_before, status_before)
 
-			def on_yes(checked):
-				relog()
-			def on_no():
+			def on_yes(checked, account):
+				relog(account)
+			def on_no(account):
 				if self.resend_presence:
-					self.resend()
+					self.resend(account)
 			self.dialog = dialogs.YesNoDialog(_('Relogin now?'),
 				_('If you want all the changes to apply instantly, '
-				'you must relogin.'), on_response_yes=on_yes, on_response_no=on_no)
+				'you must relogin.'), on_response_yes=(on_yes,
+				self.current_account), on_response_no=(on_no, self.current_account))
 		elif self.resend_presence:
-			self.resend()
+			self.resend(self.current_account)
 
 		self.need_relogin = False
 		self.resend_presence = False
