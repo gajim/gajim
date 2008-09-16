@@ -502,10 +502,14 @@ class Presence(Protocol):
 
     def _muc_getItemAttr(self,tag,attr):
         for xtag in self.getTags('x'):
+            if xtag.getNamespace() not in (NS_MUC_USER, NS_MUC_ADMIN):
+                continue
             for child in xtag.getTags(tag):
                 return child.getAttr(attr)
     def _muc_getSubTagDataAttr(self,tag,attr):
         for xtag in self.getTags('x'):
+            if xtag.getNamespace() not in (NS_MUC_USER, NS_MUC_ADMIN):
+                continue
             for child in xtag.getTags('item'):
                 for cchild in child.getTags(tag):
                     return cchild.getData(),cchild.getAttr(attr)
