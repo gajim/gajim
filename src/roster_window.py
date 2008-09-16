@@ -732,18 +732,23 @@ class RosterWindow:
 
 		'''
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
-
-		iters = self._get_contact_iter(jid, account, contact, self.model)
-		if not iters:
+		if not contact:
 			return
 
-		if not force and self.contact_has_pending_roster_events(contact, account):
-			# Contact has pending events
+		if not force and (self.contact_has_pending_roster_events(contact,
+		account) or gajim.interface.msg_win_mgr.get_control(jid, account)):
+			# Contact has pending events or window
+			#TODO: or single message windows? Bur they are not listed for the
+			# moment
 			key = (jid, account)
 			if not key in self.contacts_to_be_removed:
 				self.contacts_to_be_removed[key] = {'backend': backend}
-			return False
-		else:
+			# if more pending event, don't remove from roster
+			if self.contact_has_pending_roster_events(contact, account):
+				return False
+
+		iters = self._get_contact_iter(jid, account, contact, self.model)
+		if iters:
 			# no more pending events
 			# Remove contact from roster directly
 			family = gajim.contacts.get_metacontacts_family(account, jid)
@@ -753,27 +758,29 @@ class RosterWindow:
 			else:
 				self._remove_entity(contact, account)
 
-			if backend:
-				# Remove contact before redrawing, otherwise the old
-				# numbers will still be show
-				gajim.contacts.remove_jid(account, jid, remove_meta=True)
-				if family:
-					# reshow the rest of the family
-					brothers = self._add_metacontact_family(family, account)
-					for c, acc in brothers:
-						self.draw_contact(c.jid, acc)
-						self.draw_mood(c.jid, acc)
-						self.draw_activity(c.jid, acc)
-						self.draw_tune(c.jid, acc)
-						self.draw_avatar(c.jid, acc)
+		if backend and (not gajim.interface.msg_win_mgr.get_control(jid, account)\
+		or force):
+			# If a window is still opened: don't remove contact instance
+			# Remove contact before redrawing, otherwise the old
+			# numbers will still be show
+			gajim.contacts.remove_jid(account, jid, remove_meta=True)
+			if iters and family:
+				# reshow the rest of the family
+				brothers = self._add_metacontact_family(family, account)
+				for c, acc in brothers:
+					self.draw_contact(c.jid, acc)
+					self.draw_mood(c.jid, acc)
+					self.draw_activity(c.jid, acc)
+					self.draw_tune(c.jid, acc)
+					self.draw_avatar(c.jid, acc)
 
+		if iters:
 			# Draw all groups of the contact
 			for group in contact.get_shown_groups():
 				self.draw_group(group, account)
 			self.draw_account(account)
 
-			return True
-
+		return True
 
 	def add_groupchat(self, jid, account, status=''):
 		'''Add groupchat to roster and draw it.

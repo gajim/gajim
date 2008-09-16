@@ -2185,6 +2185,14 @@ class ChatControl(ChatControlBase):
 		# Clean events
 		gajim.events.remove_events(self.account, self.get_full_jid(),
 			types = ['printed_' + self.type_id, self.type_id])
+		# Remove contact instance if contact has been removed
+		key = (self.contact.jid, self.account)
+		roster = gajim.interface.roster
+		if key in roster.contacts_to_be_removed.keys():
+			backend = roster.contacts_to_be_removed[key]['backend']
+			del roster.contacts_to_be_removed[key]
+			roster.remove_contact(self.contact.jid, self.account, force=True,
+				backend=backend)
 		# remove all register handlers on widgets, created by self.xml
 		# to prevent circular references among objects
 		for i in self.handlers.keys():
