@@ -1749,7 +1749,8 @@ class RosterWindow:
 					continue
 				pep.user_send_tune(account, artist, title, source)
 				gajim.connections[account].music_track_info = music_track_info
-		elif gajim.connections[account].pep_supported:
+		elif account in gajim.connections and \
+		gajim.connections[account].pep_supported:
 			if gajim.connections[account].music_track_info != music_track_info:
 				pep.user_send_tune(account, artist, title, source)
 				gajim.connections[account].music_track_info = music_track_info
