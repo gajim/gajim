@@ -73,20 +73,20 @@ class StanzaSession(object):
 	def remove_events(self, types):
 		any_removed = False
 
-		for event in gajim.events.get_events(self.conn.name, self.jid,
-		types=types):
-			# the event wasn't in this session
-			if (event.type_ == 'chat' and event.parameters[8] != self) or \
-			(event.type_ == 'printed_chat' and event.parameters[0].session != \
-			self):
-				continue
+		for j in (self.jid, self.jid.getStripped()):
+			for event in gajim.events.get_events(self.conn.name, j, types=types):
+				# the event wasn't in this session
+				if (event.type_ == 'chat' and event.parameters[8] != self) or \
+				(event.type_ == 'printed_chat' and event.parameters[0].session != \
+				self):
+					continue
 
-			# events.remove_events returns True when there were no events
-			# for some reason
-			r = gajim.events.remove_events(self.conn.name, self.jid, event)
+				# events.remove_events returns True when there were no events
+				# for some reason
+				r = gajim.events.remove_events(self.conn.name, j, event)
 
-			if not r:
-				any_removed = True
+				if not r:
+					any_removed = True
 
 		return any_removed
 
@@ -340,8 +340,7 @@ class EncryptedStanzaSession(StanzaSession):
 		try:
 			parsed = xmpp.Node(node='<node>' + plaintext + '</node>')
 		except:
-			raise exceptions.DecryptionError,
-				'decrypted <data/> not parseable as XML'
+			raise exceptions.DecryptionError, 'decrypted <data/> not parseable as XML'
 
 		for child in parsed.getChildren():
 			stanza.addChild(node=child)
@@ -375,8 +374,7 @@ class EncryptedStanzaSession(StanzaSession):
 		m_o_calculated = self.hmac(self.km_o, crypto.encode_mpi(self.c_o) + id_o)
 
 		if m_o_calculated != m_o:
-			raise exceptions.NegotiationError,
-				'calculated m_%s differs from received m_%s' % (i_o, i_o)
+			raise exceptions.NegotiationError, 'calculated m_%s differs from received m_%s' % (i_o, i_o)
 
 		if i_o == 'a' and self.sas_algs == 'sas28x5':
 			# we don't need to calculate this if there's a verified retained secret
@@ -429,12 +427,10 @@ class EncryptedStanzaSession(StanzaSession):
 			hash = crypto.sha256(mac_o_calculated)
 
 			if not eir_pubkey.verify(hash, signature):
-				raise exceptions.NegotiationError,
-					'public key signature verification failed!'
+				raise exceptions.NegotiationError, 'public key signature verification failed!'
 
 		elif mac_o_calculated != mac_o:
-			raise exceptions.NegotiationError,
-				'calculated mac_%s differs from received mac_%s' % (i_o, i_o)
+			raise exceptions.NegotiationError, 'calculated mac_%s differs from received mac_%s' % (i_o, i_o)
 
 	def make_identity(self, form, dh_i):
 		if self.negotiated['send_pubkey']:
@@ -446,7 +442,7 @@ class EncryptedStanzaSession(StanzaSession):
 					fields)
 
 				pubkey_s = '<RSAKeyValue xmlns="http://www.w3.org/2000/09/xmldsig#"'
-					'><Modulus>%s</Modulus><Exponent>%s</Exponent></RSAKeyValue>' % \
+				'><Modulus>%s</Modulus><Exponent>%s</Exponent></RSAKeyValue>' % \
 					tuple(cb_fields)
 		else:
 			pubkey_s = ''
@@ -463,7 +459,7 @@ class EncryptedStanzaSession(StanzaSession):
 			signature = self.sign(mac_s)
 
 			sign_s = '<SignatureValue xmlns="http://www.w3.org/2000/09/xmldsig#">'
-				'%s</SignatureValue>' % base64.b64encode(signature)
+			'%s</SignatureValue>' % base64.b64encode(signature)
 
 			if self.negotiated['send_pubkey'] == 'hash':
 				b64ed = base64.b64encode(self.hash(pubkey_s))
