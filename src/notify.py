@@ -57,7 +57,7 @@ try:
 except:
 	USER_HAS_GROWL = False
 
-def get_show_in_roster(event, account, contact, session = None):
+def get_show_in_roster(event, account, contact, session=None):
 	'''Return True if this event must be shown in roster, else False'''
 	if event == 'gc_message_received':
 		return True
@@ -134,7 +134,7 @@ def get_advanced_notification(event, account, contact):
 		num += 1
 		notif = gajim.config.get_per('notifications', str(num))
 
-def notify(event, jid, account, parameters, advanced_notif_num = None):
+def notify(event, jid, account, parameters, advanced_notif_num=None):
 	'''Check what type of notifications we want, depending on basic
 	and the advanced configuration of notifications and do these notifications;
 	advanced_notif_num holds the number of the first (top most) advanced
@@ -236,7 +236,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 				if status_message:
 					text = text + " : " + status_message
 				popup(_('Contact Changed Status'), jid, account,
-					path_to_image = path, title = title, text = text)
+					path_to_image=path, title=title, text=text)
 			elif event == 'contact_connected':
 				title = _('%(nickname)s Signed In') % \
 					{'nickname': gajim.get_name_from_jid(account, jid)}
@@ -244,7 +244,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 				if status_message:
 					text = status_message
 				popup(_('Contact Signed In'), jid, account,
-					path_to_image = path, title = title, text = text)
+					path_to_image=path, title=title, text=text)
 			elif event == 'contact_disconnected':
 				title = _('%(nickname)s Signed Out') % \
 					{'nickname': gajim.get_name_from_jid(account, jid)}
@@ -252,7 +252,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 				if status_message:
 					text = status_message
 				popup(_('Contact Signed Out'), jid, account,
-					path_to_image = path, title = title, text = text)
+					path_to_image=path, title=title, text=text)
 		elif event == 'new_message':
 			if message_type == 'normal': # single message
 				event_type = _('New Single Message')
@@ -282,7 +282,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 				text = message
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			popup(event_type, jid, account, message_type,
-				path_to_image = path, title = title, text = text)
+				path_to_image=path, title=title, text=text)
 
 	if do_sound:
 		snd_file = None
@@ -316,8 +316,8 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 		except:
 			pass
 
-def popup(event_type, jid, account, msg_type = '', path_to_image = None,
-	title = None, text = None):
+def popup(event_type, jid, account, msg_type='', path_to_image=None,
+	title=None, text=None):
 	'''Notifies a user of an event. It first tries to a valid implementation of
 	the Desktop Notification Specification. If that fails, then we fall back to
 	the older style PopupNotificationWindow method.'''
@@ -413,7 +413,7 @@ class NotificationResponseManager:
 				if diff > 10:
 					self.received.remove(rec)
 
-	def on_closed(self, id, reason = None):
+	def on_closed(self, id, reason=None):
 		if self.pending.has_key(id):
 			del self.pending[id]
 
@@ -437,8 +437,8 @@ notification_response_manager = NotificationResponseManager()
 class DesktopNotification:
 	'''A DesktopNotification that interfaces with D-Bus via the Desktop
 	Notification specification'''
-	def __init__(self, event_type, jid, account, msg_type = '',
-		path_to_image = None, title = None, text = None):
+	def __init__(self, event_type, jid, account, msg_type='',
+		path_to_image=None, title=None, text=None):
 		self.path_to_image = path_to_image
 		self.event_type = event_type
 		self.title = title
