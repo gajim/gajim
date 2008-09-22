@@ -570,7 +570,9 @@ class DesktopNotification:
 
 		gajim.interface.handle_event(self.account, self.jid, self.msg_type)
 
-	def version_reply_handler(self, name, vendor, version, spec_version = None):
+	def version_reply_handler(self, name, vendor, version, spec_version=None):
+		if spec_version:
+			version = spec_version
 		version_list = version.split('.')
 		self.version = []
 		while len(version_list):
