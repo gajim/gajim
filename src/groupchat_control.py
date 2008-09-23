@@ -320,7 +320,8 @@ class GroupchatControl(ChatControlBase):
 		self.handlers[id] = self.list_treeview
 		#status_image, shown_nick, type, nickname, avatar
 		store = gtk.TreeStore(gtk.Image, str, str, str, gtk.gdk.Pixbuf)
-		store.set_sort_column_id(C_TEXT, gtk.SORT_ASCENDING)
+		store.set_sort_func(C_NICK, self.tree_compare_iters)
+		store.set_sort_column_id(C_NICK, gtk.SORT_ASCENDING)
 		self.list_treeview.set_model(store)
 
 		# columns
@@ -373,6 +374,51 @@ class GroupchatControl(ChatControlBase):
 		self.update_ui()
 		self.conv_textview.tv.grab_focus()
 		self.widget.show_all()
+
+	def tree_compare_iters(self, model, iter1, iter2):
+		'''Compare two iters to sort them'''
+		type1 = model[iter1][C_TYPE]
+		type2 = model[iter2][C_TYPE]
+		if not type1 or not type2:
+			return 0
+		nick1 = model[iter1][C_NICK]
+		nick2 = model[iter2][C_NICK]
+		if not nick1 or not nick2:
+			return 0
+		nick1 = nick1.decode('utf-8')
+		nick2 = nick2.decode('utf-8')
+		if type1 == 'role':
+			if nick1 < nick2:
+				return -1
+			return 1
+		if type1 == 'contact':
+			gc_contact1 = gajim.contacts.get_gc_contact(self.account, self.room_jid,
+				nick1)
+			if not gc_contact1:
+				return 0
+		if type2 == 'contact':
+			gc_contact2 = gajim.contacts.get_gc_contact(self.account, self.room_jid,
+				nick2)
+			if not gc_contact2:
+				return 0
+		if type1 == 'contact' and type2 == 'contact' and \
+		gajim.config.get('sort_by_show'):
+			cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
+				'invisible': 5, 'offline': 6, 'error': 7}
+			show1 = cshow[gc_contact1.show]
+			show2 = cshow[gc_contact2.show]
+			if show1 < show2:
+				return -1
+			elif show1 > show2:
+				return 1
+		# We compare names
+		name1 = gc_contact1.get_shown_name()
+		name2 = gc_contact2.get_shown_name()
+		if name1.lower() < name2.lower():
+			return -1
+		if name2.lower() < name1.lower():
+			return 1
+		return 0
 
 	def on_msg_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend Clear

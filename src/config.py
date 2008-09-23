@@ -532,6 +532,13 @@ class PreferencesWindow:
 	def on_sort_by_show_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sort_by_show')
 		gajim.interface.roster.setup_and_draw_roster()
+		# Redraw connected groupchats
+		for account in gajim.connections:
+			if gajim.connections[account].connected:
+				for gc_control in gajim.interface.msg_win_mgr.get_controls(
+				message_control.TYPE_GC) + \
+				gajim.interface.minimized_controls[account].values():
+					gc_control.draw_roster()
 
 	def on_show_avatars_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_avatars_in_roster')
@@ -540,9 +547,9 @@ class PreferencesWindow:
 		for account in gajim.connections:
 			if gajim.connections[account].connected:
 				for gc_control in gajim.interface.msg_win_mgr.get_controls(
-					message_control.TYPE_GC) + \
-					gajim.interface.minimized_controls[account].values():
-						gc_control.draw_roster()
+				message_control.TYPE_GC) + \
+				gajim.interface.minimized_controls[account].values():
+					gc_control.draw_roster()
 
 	def on_show_status_msgs_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_status_msgs_in_roster')
@@ -561,10 +568,6 @@ class PreferencesWindow:
 
 	def on_show_tunes_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_tunes_in_roster')
-		gajim.interface.roster.setup_and_draw_roster()
-
-	def on_sort_by_show_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'sort_by_show')
 		gajim.interface.roster.setup_and_draw_roster()
 
 	def on_emoticons_combobox_changed(self, widget):
