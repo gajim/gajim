@@ -105,6 +105,9 @@ class ProxyResolver:
 		self.port = int(port)
 		self.jid = unicode(jid)
 		self.state = S_RESOLVED
+		#FIXME: re-enable proxy testing
+		self.state = S_FINISHED
+		return
 		self.receiver_tester = ReceiverTester(self.host, self.port, self.jid,
 			self.sid, self.sender_jid, self._on_receiver_success,
 			self._on_connect_failure)
