@@ -158,7 +158,8 @@ def find_current_groupchats(account):
 	import message_control
 	rooms = []
 	for gc_control in gajim.interface.msg_win_mgr.get_controls(
-	message_control.TYPE_GC):
+	message_control.TYPE_GC) + gajim.interface.minimized_controls[account].\
+	values():
 		acct = gc_control.account
 		# check if account is the good one
 		if acct != account:
@@ -224,8 +225,7 @@ class LeaveGroupchatsCommand(AdHocCommand):
 
 		try:
 			gc = form['groupchats'].values
-		except:	# KeyError if there's no presence-type field in form or
-			# AttributeError if that field is of wrong type
+		except:	# KeyError if there's no groupchats in form
 			self.badRequest(request)
 			return False
 		account = self.connection.name
@@ -233,8 +233,14 @@ class LeaveGroupchatsCommand(AdHocCommand):
 			for room_jid in gc:
 				gc_control = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
 					account)
+				if not gc_control:
+					gc_control = gajim.interface.minimized_controls[account]\
+						[room_jid]
+					gc_control.shutdown()
+					gajim.interface.roster.remove_groupchat(room_jid, account)
+					continue
 				gc_control.parent_win.remove_tab(gc_control, None, force = True)
-		except:	# KeyError if there's no presence-type field in form or
+		except:	# KeyError if there's no such room opened
 			self.badRequest(request)
 			return False
 		response, cmd = self.buildResponse(request, status = 'completed')

@@ -514,8 +514,6 @@ class MessageWindow(object):
 			close(ctrl)
 
 		def on_no(ctrl):
-			if not force:
-				return
 			close(ctrl)
 
 		def on_minimize(ctrl):
@@ -526,7 +524,10 @@ class MessageWindow(object):
 			close(ctrl)
 
 		# Shutdown the MessageControl
-		ctrl.allow_shutdown(method, on_yes, on_no, on_minimize)
+		if force:
+			close(ctrl)
+		else:
+			ctrl.allow_shutdown(method, on_yes, on_no, on_minimize)
 
 	def check_tabs(self):
 		if self.get_num_controls() == 0:
