@@ -124,19 +124,49 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkCheckButton" id="sort_by_show_checkbutton">
+                              <widget class="GtkHBox" id="hbox3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">If checked, Gajim will sort contacts in roster window and groupchats by their status and not by the shown name</property>
-                                <property name="label" translatable="yes">_Sort contacts by status</property>
-                                <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
-                                <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_sort_by_show_checkbutton_toggled"/>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <widget class="GtkLabel" id="label10">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Sort contacts by status</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkCheckButton" id="sort_by_show_in_roster_checkbutton">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="label" translatable="yes">in _roster</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="response_id">0</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="on_sort_by_show_in_roster_checkbutton_toggled"/>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkCheckButton" id="sort_by_show_in_muc_checkbutton">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="label" translatable="yes">in _group chats</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="response_id">0</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="on_sort_by_show_in_muc_checkbutton_toggled"/>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
                               </widget>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
                                 <property name="position">5</property>
                               </packing>
                             </child>
@@ -220,7 +250,7 @@ Detached roster with chat grouped by type</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="tooltip" translatable="yes">Some messages may include rich content (formatting, colors etc). If checked, Gajim will just display the raw message text.</property>
-                                <property name="label" translatable="yes">Ignore rich content in incoming messages</property>
+                                <property name="label" translatable="yes">_Ignore rich content in incoming messages</property>
                                 <property name="use_underline">True</property>
                                 <property name="response_id">0</property>
                                 <property name="draw_indicator">True</property>
@@ -259,7 +289,8 @@ Detached roster with chat grouped by type</property>
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
                                     <property name="xpad">1</property>
-                                    <property name="label" translatable="yes">Emoticons:</property>
+                                    <property name="label" translatable="yes">_Emoticons:</property>
+                                    <property name="use_underline">True</property>
                                   </widget>
                                 </child>
                               </widget>

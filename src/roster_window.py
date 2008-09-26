@@ -1561,10 +1561,10 @@ class RosterWindow:
 			if not contact2:
 				return 0
 			name2 = contact2.get_shown_name()
-		# We first compare by show if sort_by_show is True or if it's a child
-		# contact
+		# We first compare by show if sort_by_show_in_roster is True or if it's a
+		# child contact
 		if type1 == 'contact' and type2 == 'contact' and \
-		gajim.config.get('sort_by_show'):
+		gajim.config.get('sort_by_show_in_roster'):
 			cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
 				'invisible': 5, 'offline': 6, 'not in roster': 7, 'error': 8}
 			s = self.get_show(lcontact1)

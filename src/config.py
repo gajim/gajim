@@ -124,8 +124,10 @@ class PreferencesWindow:
 			set_active(st)
 
 		# Sort contacts by show
-		st = gajim.config.get('sort_by_show')
-		self.xml.get_widget('sort_by_show_checkbutton').set_active(st)
+		st = gajim.config.get('sort_by_show_in_roster')
+		self.xml.get_widget('sort_by_show_in_roster_checkbutton').set_active(st)
+		st = gajim.config.get('sort_by_show_in_muc')
+		self.xml.get_widget('sort_by_show_in_muc_checkbutton').set_active(st)
 
 		# emoticons
 		emoticons_combobox = self.xml.get_widget('emoticons_combobox')
@@ -529,9 +531,12 @@ class PreferencesWindow:
 				w.set_sensitive(widget.get_active())
 		gajim.interface.save_config()
 
-	def on_sort_by_show_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'sort_by_show')
+	def on_sort_by_show_in_roster_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'sort_by_show_in_roster')
 		gajim.interface.roster.setup_and_draw_roster()
+
+	def on_sort_by_show_in_muc_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'sort_by_show_in_muc')
 		# Redraw connected groupchats
 		for account in gajim.connections:
 			if gajim.connections[account].connected:

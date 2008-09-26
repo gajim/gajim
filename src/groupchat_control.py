@@ -402,7 +402,7 @@ class GroupchatControl(ChatControlBase):
 			if not gc_contact2:
 				return 0
 		if type1 == 'contact' and type2 == 'contact' and \
-		gajim.config.get('sort_by_show'):
+		gajim.config.get('sort_by_show_in_muc'):
 			cshow = {'online':0, 'chat': 1, 'away': 2, 'xa': 3, 'dnd': 4,
 				'invisible': 5, 'offline': 6, 'error': 7}
 			show1 = cshow[gc_contact1.show]
