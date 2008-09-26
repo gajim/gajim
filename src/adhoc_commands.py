@@ -444,7 +444,7 @@ class CommandWindow:
 # handling xml stanzas
 	def request_command_list(self):
 		'''Request the command list. Change stage on delivery.'''
-		query = xmpp.Iq(typ='get', to=xmpp.JID(self.jid), xmlns=xmpp.NS_DISCO_ITEMS)
+		query = xmpp.Iq(typ='get', to=xmpp.JID(self.jid), queryNS=xmpp.NS_DISCO_ITEMS)
 		query.setQuerynode(xmpp.NS_COMMANDS)
 
 		def callback(response):
