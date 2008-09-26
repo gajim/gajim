@@ -1073,7 +1073,8 @@ class Connection(ConnectionHandlers):
 
 	def send_message(self, jid, msg, keyID, type='chat', subject='',
 	chatstate=None, msg_id=None, composing_xep=None, resource=None,
-	user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None, original_message=None):
+	user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None,
+	original_message=None, delayed=None):
 		if not self.connection:
 			return 1
 		if msg and not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
@@ -1173,6 +1174,14 @@ class Connection(ConnectionHandlers):
 				namespace=common.xmpp.NS_ADDRESS)
 			addresses.addChild('address', attrs = {'type': 'ofrom',
 				'jid': forward_from})
+
+		# XEP-0203
+		if delayed:
+			our_jid = gajim.get_jid_from_account(self.name) + '/' + \
+				self.server_resource
+			timestamp = time.strftime('%Y-%m-%dT%TZ', time.gmtime(delayed))
+			msg_iq.addChild('delay', namespace=common.xmpp.NS_DELAY2,
+				attrs={'from': our_jid, 'stamp': timestamp})
 
 		# XEP-0184
 		if msgtxt and gajim.config.get_per('accounts', self.name,

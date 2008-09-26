@@ -266,7 +266,7 @@ class ForwardMessagesCommand(AdHocCommand):
 			for event in events[jid]:
 				self.connection.send_message(j, event.parameters[0], '',
 					type=event.type_, subject=event.parameters[1],
-					resource=resource, forward_from=jid)
+					resource=resource, forward_from=jid, delayed=event.time_)
 
 		# Inform other client of completion
 		response, cmd = self.buildResponse(request, status = 'completed')

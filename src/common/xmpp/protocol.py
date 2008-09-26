@@ -43,6 +43,7 @@ NS_COMPRESS     ='http://jabber.org/protocol/compress'                  # XEP-01
 NS_CONFERENCE   ='jabber:x:conference'
 NS_DATA         ='jabber:x:data'                                        # XEP-0004
 NS_DELAY        ='jabber:x:delay'
+NS_DELAY2       ='urn:xmpp:delay'
 NS_DIALBACK     ='jabber:server:dialback'
 NS_DISCO        ='http://jabber.org/protocol/disco'
 NS_DISCO_INFO   =NS_DISCO+'#info'
@@ -322,10 +323,15 @@ class Protocol(Node):
         if self['from']: self.setFrom(self['from'])
         if node and type(self)==type(node) and self.__class__==node.__class__ and self.attrs.has_key('id'): del self.attrs['id']
         self.timestamp=None
-        for x in self.getTags('x',namespace=NS_DELAY):
+        for d in self.getTags('delay',namespace=NS_DELAY2):
             try:
-                if x.getAttr('stamp')<self.getTimestamp(): self.setTimestamp(x.getAttr('stamp'))
+                if d.getAttr('stamp')<self.getTimestamp2(): self.setTimestamp(d.getAttr('stamp'))
             except: pass
+        if not self.timestamp:
+            for x in self.getTags('x',namespace=NS_DELAY):
+                try:
+                    if x.getAttr('stamp')<self.getTimestamp(): self.setTimestamp(x.getAttr('stamp'))
+                except: pass
         if timestamp is not None: self.setTimestamp(timestamp)  # To auto-timestamp stanza just pass timestamp=''
     def getTo(self):
         """ Return value of the 'to' attribute. """
@@ -339,6 +345,10 @@ class Protocol(Node):
         """ Return the timestamp in the 'yyyymmddThhmmss' format. """
         if self.timestamp: return self.timestamp
         return time.strftime('%Y%m%dT%H:%M:%S', time.gmtime())
+    def getTimestamp2(self):
+        """ Return the timestamp in the 'yyyymmddThhmmss' format. """
+        if self.timestamp: return self.timestamp
+        return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
     def getID(self):
         """ Return the value of the 'id' attribute. """
         return self.getAttr('id')

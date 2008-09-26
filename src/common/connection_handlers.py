@@ -1956,6 +1956,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			user_nick = ''
 		contact_nickname = None
 		transport_auto_auth = False
+		# XEP-0203
+		delay_tag = prs.getTag('delay', namespace=common.xmpp.NS_DELAY2)
+		if delay_tag:
+			tim = prs.getTimestamp2()
+			tim = helpers.datetime_tuple(tim)
+			timestamp = localtime(timegm(tim))
 		xtags = prs.getTags('x')
 		for x in xtags:
 			namespace = x.getNamespace()
@@ -1968,7 +1974,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			elif namespace == common.xmpp.NS_VCARD_UPDATE:
 				avatar_sha = x.getTagData('photo')
 				contact_nickname = x.getTagData('nickname')
-			elif namespace == common.xmpp.NS_DELAY:
+			elif namespace == common.xmpp.NS_DELAY and not timestamp:
 				# XEP-0091
 				tim = prs.getTimestamp()
 				tim = helpers.datetime_tuple(tim)
