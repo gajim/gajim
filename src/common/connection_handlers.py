@@ -1774,13 +1774,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		# Receipt requested
 		# TODO: We shouldn't answer if we're invisible!
-		contact = gajim.contacts.get_contact(self.name,
-			common.gajim.get_room_and_nick_from_fjid(frm)[0])
+		contact = gajim.contacts.get_contact(self.name, jid)
+		nick = gajim.get_room_and_nick_from_fjid(frm)[1]
+		gc_contact = gajim.contacts.get_gc_contact(self.name, jid, nick)
 		if msg.getTag('request', namespace=common.xmpp.NS_RECEIPTS) \
 		and gajim.config.get_per('accounts', self.name,
-		'answer_receipts') and contact and contact.sub \
-		not in (u'to', u'none'):
-			receipt = common.xmpp.Message(to = frm, typ = 'chat')
+		'answer_receipts') and ((contact and contact.sub \
+		not in (u'to', u'none')) or gc_contact):
+			receipt = common.xmpp.Message(to=frm, typ='chat')
 			receipt.setID(msg.getID())
 			receipt.setTag('received',
 				namespace='urn:xmpp:receipts')
