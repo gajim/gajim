@@ -42,12 +42,12 @@ class TestDispatcherNB(unittest.TestCase):
 		self.assertEqual(1, len(msgs))
 
 		d.ProcessNonBlocking('<message><x:y/></message>')
-		# we should have been disconnected after that message
-		self.assertEqual(1, len(conn.mockGetNamedCalls('pollend')))
+		# we should not have been disconnected after that message
+		self.assertEqual(0, len(conn.mockGetNamedCalls('pollend')))
 
-		# we should not be able to keep parsing
+		# we should be able to keep parsing
 		d.ProcessNonBlocking('<message><body>still here?</body></message>')
-		self.assertEqual(1, len(msgs))
+		self.assertEqual(3, len(msgs))
 
 if __name__ == '__main__':
 	unittest.main()

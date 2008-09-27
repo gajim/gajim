@@ -49,7 +49,7 @@ class Node(object):
 		replication (and using replication only to move upwards on the classes tree).
 	"""
 	FORCE_NODE_RECREATION=0
-	def __init__(self, tag=None, attrs={}, payload=[], parent=None, node=None):
+	def __init__(self, tag=None, attrs={}, payload=[], parent=None, nsp=None, node_built=False, node=None):
 		""" Takes "tag" argument as the name of node (prepended by namespace, if needed and separated from it
 			by a space), attrs dictionary as the set of arguments, payload list as the set of textual strings
 			and child nodes that this node carries within itself and "parent" argument that is another node
@@ -62,22 +62,50 @@ class Node(object):
 				node=str(node)
 			if not isinstance(node, Node): 
 				node=NodeBuilder(node,self)
+				node_built = True
 			else:
-				self.name,self.namespace,self.attrs,self.data,self.kids,self.parent = node.name,node.namespace,{},[],[],node.parent
+				self.name,self.namespace,self.attrs,self.data,self.kids,self.parent,self.nsd = node.name,node.namespace,{},[],[],node.parent,{}
 				for key  in node.attrs.keys(): self.attrs[key]=node.attrs[key]
 				for data in node.data: self.data.append(data)
 				for kid  in node.kids: self.kids.append(kid)
-		else: self.name,self.namespace,self.attrs,self.data,self.kids,self.parent = 'tag','',{},[],[],None
-
-		if tag: self.namespace, self.name = ([self.namespace]+tag.split())[-2:]
-		if parent: self.parent = parent
-		if self.parent and not self.namespace: self.namespace=self.parent.namespace
-		for attr in attrs.keys():
+				for k,v in node.nsd.items(): self.nsd[k] = v
+		else: self.name,self.namespace,self.attrs,self.data,self.kids,self.parent,self.nsd = 'tag','',{},[],[],None,{}
+		if parent:
+			self.parent = parent
+		self.nsp_cache = {}
+		if nsp:
+			for k,v in nsp.items(): self.nsp_cache[k] = v
+		for attr,val in attrs.items():
+			if attr == 'xmlns':
+				self.nsd[u''] = val
+			elif attr.startswith('xmlns:'):
+				self.nsd[attr[6:]] = val
 			self.attrs[attr]=attrs[attr]
+		if tag:
+			if node_built:
+				pfx,self.name = (['']+tag.split(':'))[-2:]
+				self.namespace = self.lookup_nsp(pfx)
+			else:
+				if ' ' in tag:
+					self.namespace,self.name = tag.split()
+				else:
+					self.name = tag
 		if isinstance(payload, basestring): payload=[payload]
 		for i in payload:
 			if isinstance(i, Node): self.addChild(node=i)
 			else: self.data.append(ustr(i))
+	
+	def lookup_nsp(self,pfx=''):
+		ns = self.nsd.get(pfx,None)
+		if ns is None:
+			ns = self.nsp_cache.get(pfx,None)
+		if ns is None:
+			if self.parent:
+				ns = self.parent.lookup_nsp(pfx)
+				self.nsp_cache[pfx] = ns
+			else:
+				return 'http://www.gajim.org/xmlns/undeclared'
+		return ns
 
 	def __str__(self,fancy=0):
 		""" Method used to dump node into textual representation.
@@ -85,7 +113,8 @@ class Node(object):
 		s = (fancy-1) * 2 * ' ' + "<" + self.name
 		if self.namespace:
 			if not self.parent or self.parent.namespace!=self.namespace:
-				s = s + ' xmlns="%s"'%self.namespace
+				if 'xmlns' not in self.attrs:
+					s = s + ' xmlns="%s"'%self.namespace
 		for key in self.attrs.keys():
 			val = ustr(self.attrs[key])
 			s = s + ' %s="%s"' % ( key, XMLescape(val) )
@@ -111,11 +140,12 @@ class Node(object):
 	def addChild(self, name=None, attrs={}, payload=[], namespace=None, node=None):
 		""" If "node" argument is provided, adds it as child node. Else creates new node from
 			the other arguments' values and adds it as well."""
-		if namespace: name=namespace+' '+name
 		if node:
 			newnode=node
 			node.parent = self
 		else: newnode=Node(tag=name, parent=self, attrs=attrs, payload=payload)
+		if namespace:
+			newnode.setNamespace(namespace)
 		self.kids.append(newnode)
 		return newnode
 	def addData(self, data):
@@ -294,26 +324,25 @@ class NodeBuilder:
 			"data" (if provided) feeded to parser immidiatedly after instance init.
 			"""
 		self.DEBUG(DBG_NODEBUILDER, "Preparing to handle incoming XML stream.", 'start')
-		self._parser = xml.parsers.expat.ParserCreate(namespace_separator=' ')
+	
+		self._parser = xml.parsers.expat.ParserCreate()
 		self._parser.StartElementHandler       = self.starttag
 		self._parser.EndElementHandler         = self.endtag
 		self._parser.StartNamespaceDeclHandler = self.handle_namespace_start
 		self._parser.CharacterDataHandler    = self.handle_cdata
 		self.Parse = self._parser.Parse
-
+		
 		self.__depth = 0
 		self.__last_depth = 0
 		self.__max_depth = 0
 		self._dispatch_depth = 1
 		self._document_attrs = None
+		self._document_nsp = None
 		self._mini_dom=initial_node
 		self.last_is_data = 1
 		self._ptr=None
 		self.data_buffer = None
-		self.namespaces={"http://www.w3.org/XML/1998/namespace":'xml:'}
-		self.xmlns="http://www.w3.org/XML/1998/namespace"
-
-		if data: 
+		if data:
 			self._parser.Parse(data,1)
 	
 	def check_data_buffer(self):
@@ -333,27 +362,29 @@ class NodeBuilder:
 	def starttag(self, tag, attrs):
 		"""XML Parser callback. Used internally"""
 		self.check_data_buffer()
-		attlist=attrs.keys()       #
-		for attr in attlist:       # FIXME: Crude hack. And it also slows down the whole library considerably.
-			sp=attr.rfind(" ")     #
-			if sp==-1: continue    #
-			ns=attr[:sp]           #
-			attrs[self.namespaces[ns]+attr[sp+1:]]=attrs[attr]
-			del attrs[attr]        #
 		self._inc_depth()
 		self.DEBUG(DBG_NODEBUILDER, "DEPTH -> %i , tag -> %s, attrs -> %s" % (self.__depth, tag, `attrs`), 'down')
 		if self.__depth == self._dispatch_depth:
 			if not self._mini_dom : 
-				self._mini_dom = Node(tag=tag, attrs=attrs)
+				self._mini_dom = Node(tag=tag, attrs=attrs, nsp = self._document_nsp, node_built=True)
 			else: 
-				Node.__init__(self._mini_dom,tag=tag, attrs=attrs)
+				Node.__init__(self._mini_dom,tag=tag, attrs=attrs, nsp = self._document_nsp, node_built=True)
 			self._ptr = self._mini_dom
 		elif self.__depth > self._dispatch_depth:
-			self._ptr.kids.append(Node(tag=tag,parent=self._ptr,attrs=attrs))
+			self._ptr.kids.append(Node(tag=tag,parent=self._ptr,attrs=attrs, node_built=True))
 			self._ptr = self._ptr.kids[-1]
 		if self.__depth == 1:
-			self._document_attrs = attrs
-			ns, name = (['']+tag.split())[-2:]
+			self._document_attrs = {}
+			self._document_nsp = {}
+			nsp, name = (['']+tag.split(':'))[-2:]
+			for attr,val in attrs.items():
+				if attr == 'xmlns':
+					self._document_nsp[u''] = val
+				elif attr.startswith('xmlns:'):
+					self._document_nsp[attr[6:]] = val
+				else:
+					self._document_attrs[attr] = val
+			ns = self._document_nsp.get(nsp, 'http://www.gajim.org/xmlns/undeclared-root')
 			self.stream_header_received(ns, name, attrs)
 		if not self.last_is_data and self._ptr.parent: 
 			self._ptr.parent.data.append('')
@@ -383,8 +414,6 @@ class NodeBuilder:
 	def handle_namespace_start(self, prefix, uri):
 		"""XML Parser callback. Used internally"""
 		self.check_data_buffer()
-		if prefix: self.namespaces[uri]=prefix+':'
-		else: self.xmlns=uri
 	def DEBUG(self, level, text, comment=None):
 		""" Gets all NodeBuilder walking events. Can be used for debugging if redefined."""
 	def getDom(self):
