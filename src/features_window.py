@@ -98,7 +98,7 @@ class FeaturesWindow:
 				_('Requires compilation of the idle module from Gajim sources.')),
 			_('LaTeX'): (self.latex_available,
 				_('Transform LaTeX expressions between $$ $$.'),
-				_('Requires texlive-latex-base, dvips and imagemagick. You have to set \'use_latex\' to True in the Advanced Configuration Editor.'),
+				_('Requires texlive-latex-base and dvipng. You have to set \'use_latex\' to True in the Advanced Configuration Editor.'),
 				_('Feature not available under Windows.')),
 			_('End to End Encryption'): (self.pycrypto_available,
 				_('Encrypting chatmessages.'),
@@ -287,19 +287,12 @@ class FeaturesWindow:
 			exitcode = 1
 		if exitcode == 0:
 			try:
-				p = Popen(['dvips', '-E', '-o', tmpfile + '.ps', tmpfile + '.dvi'],
-					cwd=gettempdir())
+				p = Popen(['dvipng', '-bg', 'white', '-T', 'tight',
+					tmpfile + '.dvi', '-o', tmpfile + '.png'], cwd=gettempdir())
 				exitcode = p.wait()
 			except:
 				exitcode = 1
-		if exitcode == 0:
-			try:
-				p = Popen(['convert', tmpfile + '.ps', tmpfile + '.png'],
-					cwd=gettempdir())
-				exitcode = p.wait()
-			except:
-				exitcode = 1
-		extensions = [".tex", ".log", ".aux", ".dvi", ".ps", ".png"]
+		extensions = ['.tex', '.log', '.aux', '.dvi', '.png']
 		for ext in extensions:
 			try:
 				os.remove(tmpfile + ext)

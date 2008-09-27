@@ -969,17 +969,13 @@ class ConversationTextview:
 			exitcode = p.wait()
 
 		if exitcode == 0:
-			p = Popen(['dvips', '-E', '-o', tmpfile + '.ps', tmpfile + '.dvi'],
-				cwd=gettempdir())
-			exitcode = p.wait()
-
-		if exitcode == 0:
 			latex_png_dpi = gajim.config.get('latex_png_dpi')
-			p = Popen(['convert', '-background', 'white', '-flatten', '-density', latex_png_dpi, tmpfile + '.ps', tmpfile + '.png'],
+			p = Popen(['dvipng', '-bg', 'white', '-T', 'tight', '-D',
+				latex_png_dpi, tmpfile + '.dvi', '-o', tmpfile + '.png'],
 				cwd=gettempdir())
 			exitcode = p.wait()
 
-		extensions = ['.tex', '.log', '.aux', '.dvi', '.ps']
+		extensions = ['.tex', '.log', '.aux', '.dvi']
 		for ext in extensions:
 			try:
 				os.remove(tmpfile + ext)
