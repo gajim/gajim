@@ -1187,7 +1187,8 @@ class GroupchatControl(ChatControlBase):
 				elif 'destroyed' in statusCode: # Room has been destroyed
 					self.print_conversation(reason, 'info', tim)
 
-			if len(gajim.events.get_events(self.account, fake_jid)) == 0:
+			if len(gajim.events.get_events(self.account, jid=fake_jid,
+			types=['pm'])) == 0:
 				self.remove_contact(nick)
 				self.draw_all_roles()
 			else:
