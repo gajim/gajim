@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-27 16:52+0200\n"
+"POT-Creation-Date: 2008-09-27 18:50+0200\n"
 "PO-Revision-Date: 2008-08-28 22:49+0200\n"
 "Last-Translator: Nico Gulden <cilugnedon@gmx.de>\n"
 "Language-Team: German <translators@gajim.org>\n"
@@ -1959,9 +1959,8 @@ msgstr ""
 "anzeigen."
 
 #: ../data/glade/preferences_window.glade.h:83
-#, fuzzy
 msgid "Sort contacts by status"
-msgstr "Kontakte nach Status _sortieren"
+msgstr "Kontakte nach Status sortieren"
 
 #: ../data/glade/preferences_window.glade.h:84 ../src/config.py:400
 msgid "Status"
@@ -2020,9 +2019,8 @@ msgid "_Display chat state notifications:"
 msgstr "Zeige Benachrichtigung über Chatstatus:"
 
 #: ../data/glade/preferences_window.glade.h:96
-#, fuzzy
 msgid "_Emoticons:"
-msgstr "Emoticons:"
+msgstr "_Emoticons:"
 
 #: ../data/glade/preferences_window.glade.h:97
 msgid "_File manager:"
@@ -2037,9 +2035,8 @@ msgid "_Ignore events from contacts not in the roster"
 msgstr "Ereignisse von Kontakten, die nicht in der Liste sind, _ignorieren"
 
 #: ../data/glade/preferences_window.glade.h:100
-#, fuzzy
 msgid "_Ignore rich content in incoming messages"
-msgstr "Formatierten Inhalt in ankommenden Nachrichten ignorieren"
+msgstr "Formatierten Inhalt in ankommenden Nachrichten _ignorieren"
 
 #: ../data/glade/preferences_window.glade.h:101
 msgid "_Incoming message:"
@@ -2086,14 +2083,12 @@ msgid "_Window behavior:"
 msgstr "Fensterverhalten"
 
 #: ../data/glade/preferences_window.glade.h:112
-#, fuzzy
 msgid "in _group chats"
-msgstr "_Gruppenchat beitreten"
+msgstr "in _Gruppenchats"
 
 #: ../data/glade/preferences_window.glade.h:113
-#, fuzzy
 msgid "in _roster"
-msgstr "Nicht in der Kontaktliste"
+msgstr "in der _Kontaktliste"
 
 #: ../data/glade/preferences_window.glade.h:114
 msgid "minutes"
@@ -2382,7 +2377,6 @@ msgid "In_vite to"
 msgstr "_Einladen zu"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:7
-#, fuzzy
 msgid "Remo_ve"
 msgstr "_Entfernen"
 
@@ -2488,7 +2482,7 @@ msgstr "_Kontaktliste anzeigen"
 
 #: ../data/glade/roster_window.glade.h:12
 msgid "_Accounts"
-msgstr "Konten"
+msgstr "_Konten"
 
 #. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
 #: ../data/glade/roster_window.glade.h:13
@@ -3091,22 +3085,22 @@ msgstr ""
 msgid "Command not supported for zeroconf account."
 msgstr "Befehl wird für zeroconf Benutzer nicht unterstützt."
 
-#: ../src/chat_control.py:1643 ../src/groupchat_control.py:1621
+#: ../src/chat_control.py:1643 ../src/groupchat_control.py:1622
 #, python-format
 msgid "Commands: %s"
 msgstr "Befehle: %s"
 
-#: ../src/chat_control.py:1646 ../src/groupchat_control.py:1635
+#: ../src/chat_control.py:1646 ../src/groupchat_control.py:1636
 #, python-format
 msgid "Usage: /%s, clears the text window."
 msgstr "Bedienung: /%s, leert das Textfenster."
 
-#: ../src/chat_control.py:1649 ../src/groupchat_control.py:1640
+#: ../src/chat_control.py:1649 ../src/groupchat_control.py:1641
 #, python-format
 msgid "Usage: /%s, hide the chat buttons."
 msgstr "Verwendung: /%s, versteckt die Chatbuttons."
 
-#: ../src/chat_control.py:1652 ../src/groupchat_control.py:1656
+#: ../src/chat_control.py:1652 ../src/groupchat_control.py:1657
 #, python-format
 msgid ""
 "Usage: /%(command)s <action>, sends action to the current group chat. Use "
@@ -3125,7 +3119,7 @@ msgstr "Bedienung: /%s, sendet einen Ping zum Kontakt"
 msgid "Usage: /%s, send the message to the contact"
 msgstr "Verwendung: /%s, sendet eine Nachricht zum Kontakt"
 
-#: ../src/chat_control.py:1663 ../src/groupchat_control.py:1679
+#: ../src/chat_control.py:1663 ../src/groupchat_control.py:1680
 #, python-format
 msgid "No help info for /%s"
 msgstr "Keine Hilfe vorhanden für /%s"
@@ -3135,19 +3129,16 @@ msgid "Session negotiation cancelled"
 msgstr "Sitzungs-Aushandlung abgebrochen"
 
 #: ../src/chat_control.py:1801
-#, fuzzy
 msgid "This session is encrypted"
-msgstr "[Diese Nachricht ist verschlüsselt]"
+msgstr "[Diese Sitzung ist verschlüsselt]"
 
 #: ../src/chat_control.py:1804
-#, fuzzy
 msgid " and WILL be logged"
-msgstr "Sitzung wird aufgezeichnet"
+msgstr "und WIRD aufgezeichnet"
 
 #: ../src/chat_control.py:1806
-#, fuzzy
 msgid " and WILL NOT be logged"
-msgstr "Sitzung wird nicht aufgezeichnet"
+msgstr "und WIRD NICHT aufgezeichnet"
 
 #: ../src/chat_control.py:1811
 msgid ""
@@ -4426,14 +4417,16 @@ msgstr ""
 "Überprüfen Sie die Verbindung oder versuchen Sie es später noch einmal."
 
 #: ../src/common/connection.py:645 ../src/common/connection.py:693
-#, fuzzy, python-format
+#, python-format
 msgid "Could not connect to account %s"
 msgstr "Konnte nicht mit %s verbinden"
 
 #: ../src/common/connection.py:646 ../src/common/connection.py:694
-#, fuzzy, python-format
+#, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
-msgstr "Verbindung mit Konto \"%s\" abgebrochen"
+msgstr ""
+"Verbindung mit Konto \"%s\" wurde unterbrochen. Verbindung wird "
+"wiederhergestellt."
 
 #: ../src/common/connection.py:668
 #, python-format
@@ -5051,7 +5044,6 @@ msgid "Distracted"
 msgstr "Abgelenkt"
 
 #: ../src/common/pep.py:38
-#, fuzzy
 msgid "Embarrassed"
 msgstr "Verlegen"
 
@@ -6143,19 +6135,19 @@ msgstr "Im _Internet suchen"
 msgid "Open as _Link"
 msgstr "Als _Link öffnen"
 
-#: ../src/conversation_textview.py:1222
+#: ../src/conversation_textview.py:1218
 msgid "Yesterday"
 msgstr "Gestern"
 
 #. the number is >= 2
 #. %i is day in year (1-365), %d (1-31) we want %i
-#: ../src/conversation_textview.py:1226
+#: ../src/conversation_textview.py:1222
 #, python-format
 msgid "%i days ago"
 msgstr "Vor %i Tagen"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:1260
+#: ../src/conversation_textview.py:1256
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Thema: %s\n"
@@ -6372,18 +6364,18 @@ msgstr "Betrete Gruppenchat mit Account %s"
 msgid "Invalid Nickname"
 msgstr "Ungültiger Benutzername"
 
-#: ../src/dialogs.py:1759 ../src/groupchat_control.py:1426
-#: ../src/groupchat_control.py:1702
+#: ../src/dialogs.py:1759 ../src/groupchat_control.py:1427
+#: ../src/groupchat_control.py:1703
 msgid "The nickname has not allowed characters."
 msgstr "Die Jabber-ID für den Gruppenchat enthält nicht erlaubte Zeichen."
 
 #: ../src/dialogs.py:1763 ../src/dialogs.py:1769
-#: ../src/groupchat_control.py:1870
+#: ../src/groupchat_control.py:1871
 msgid "Invalid group chat Jabber ID"
 msgstr "Ungültige Jabber-ID für den Gruppenchat"
 
 #: ../src/dialogs.py:1764 ../src/dialogs.py:1770
-#: ../src/groupchat_control.py:1871
+#: ../src/groupchat_control.py:1872
 msgid "The group chat Jabber ID has not allowed characters."
 msgstr "Die Jabber-ID für den Gruppenchat enthält nicht erlaubte Zeichen."
 
@@ -6704,15 +6696,16 @@ msgid "when I am "
 msgstr "wenn Ich bin "
 
 #: ../src/dialogs.py:3821
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Your chat session with <b>%(jid)s</b> is encrypted.\n"
 "\n"
 "This session's Short Authentication String is <b>%(sas)s</b>."
 msgstr ""
-"Ihre Unterhaltung mit %(jid)s ist verschlüsselt.\n"
+"Ihre Unterhaltung mit <b>%(jid)s</b> ist verschlüsselt.\n"
 "\n"
-"Der Kurz-Authentifizierungs-Schluessel für diese Unterhaltung ist: %(sas)s"
+"Der Kurz-Authentifizierungs-Schlüssel für diese Unterhaltung ist: <b>%(sas)"
+"s</b>"
 
 #: ../src/dialogs.py:3825
 msgid "You have already verified this contact's identity."
@@ -6727,15 +6720,14 @@ msgid "Verify again..."
 msgstr ""
 
 #: ../src/dialogs.py:3844
-#, fuzzy
 msgid ""
 "To be certain that <b>only</b> the expected person can read your messages or "
 "send you messages, you need to verify their identity by clicking the button "
 "below."
 msgstr ""
-"Um sicher zu gehen, dass nur die erwarteten Person Nachrichten von Ihnen "
-"oderSie Nachrichten von dieser lesen können, ist es ratsam die Identität zu "
-"überprüfen."
+"Um sicher zu gehen, dass <b>nur</b> die erwarteten Person Nachrichten von "
+"Ihnen oder Sie Nachrichten von dieser lesen können, ist es ratsam die "
+"Identität zu überprüfen."
 
 #: ../src/dialogs.py:3847
 msgid "Contact's identity NOT verified"
@@ -6746,12 +6738,11 @@ msgid "Verify..."
 msgstr ""
 
 #: ../src/dialogs.py:3866
-#, fuzzy
 msgid "Have you verified the contact's identity?"
 msgstr "Haben Sie die Identität des Kontaktes überprüft?"
 
 #: ../src/dialogs.py:3867
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "To prevent talking to an unknown person, you should speak to <b>%(jid)s</b> "
 "directly (in person or on the phone) and verify that they see the same Short "
@@ -6759,12 +6750,11 @@ msgid ""
 "\n"
 "This session's Short Authentication String is <b>%(sas)s</b>."
 msgstr ""
-"Um man-in-the-middle Attacken zu verhindern, sollten Sie %(jid)s "
+"Um man-in-the-middle Attacken zu verhindern, sollten Sie <b>%(jid)s</b> "
 "kontaktieren (persönlich oder telefonisch) um den Kurz-Authentifizierungs-"
-"Schluessel beidseitig zu überprüfen.\n"
+"Schlüssel beidseitig zu überprüfen.\n"
 "\n"
-"Der Kurz-Authentifizierungs-Schluessel dieser Unterhaltung ist: <b>%(sas)s</"
-"b>"
+"Der Kurz-Authentifizierungs-Schlüssel dieser Unterhaltung ist: <b>%(sas)s</b>"
 
 #: ../src/dialogs.py:3868
 msgid "Did you talk to the remote contact and verify the SAS?"
@@ -6816,9 +6806,8 @@ msgstr ""
 "Dieser Art von Dienst enthält keine Objekte, di edurchsucht werden können."
 
 #: ../src/disco.py:699 ../src/disco.py:709
-#, fuzzy
 msgid "Invalid Server Name"
-msgstr "Ungültiger Server"
+msgstr "Ungültiger Servername"
 
 #: ../src/disco.py:754
 #, python-format
@@ -7069,9 +7058,10 @@ msgid "Transform LaTeX expressions between $$ $$."
 msgstr "LaTeX-Ausdrücke zwischen $$ $$ umwandeln."
 
 #: ../src/features_window.py:101
+#, fuzzy
 msgid ""
-"Requires texlive-latex-base, dvips and imagemagick. You have to set "
-"'use_latex' to True in the Advanced Configuration Editor."
+"Requires texlive-latex-base and dvipng. You have to set 'use_latex' to True "
+"in the Advanced Configuration Editor."
 msgstr ""
 "Erfordert texlive-latex-base, dvips und imagemagick. Sie müssen 'use_latex' "
 "im Advanced Configuration Editor auf 'true' setzen."
@@ -7473,7 +7463,7 @@ msgstr "Kontakt mit \"%s\" konnte nicht hergestellt werden"
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s heißt jetzt %(new_nick)s"
 
-#: ../src/gajim.py:1235 ../src/groupchat_control.py:1312
+#: ../src/gajim.py:1235 ../src/groupchat_control.py:1313
 #: ../src/history_window.py:410 ../src/notify.py:233
 #, python-format
 msgid "%(nick)s is now %(status)s"
@@ -7703,7 +7693,7 @@ msgstr ""
 msgid "Yes, I really want to connect insecurely"
 msgstr "Ja, ich möchte dies trotz Sicherheitsbedenken tun"
 
-#: ../src/gajim.py:2059 ../src/gajim.py:2089 ../src/groupchat_control.py:1811
+#: ../src/gajim.py:2059 ../src/gajim.py:2089 ../src/groupchat_control.py:1812
 #: ../src/roster_window.py:3785
 msgid "Do _not ask me again"
 msgstr "_Nicht noch einmal fragen"
@@ -8304,58 +8294,58 @@ msgstr "Gruppenchatkonfiguration wurde auf ausschließlich Mitgleider geändert"
 msgid "system shutdown"
 msgstr "System wird heruntergefahren"
 
-#: ../src/groupchat_control.py:1253
+#: ../src/groupchat_control.py:1254
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s by %(actor)s"
 msgstr ""
 
-#: ../src/groupchat_control.py:1257
+#: ../src/groupchat_control.py:1258
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s"
 msgstr ""
 
-#: ../src/groupchat_control.py:1272
-#, fuzzy, python-format
+#: ../src/groupchat_control.py:1273
+#, python-format
 msgid "** Role of %(nick)s has been set to %(role)s by %(actor)s"
-msgstr "%(nick)s wurde von %(who)s rausgeworfen: %(reason)s"
+msgstr "** Die Rolle von %(nick)s wurde durch %(actor)s in %(role)s geändert"
 
-#: ../src/groupchat_control.py:1276
-#, fuzzy, python-format
+#: ../src/groupchat_control.py:1277
+#, python-format
 msgid "** Role of %(nick)s has been set to %(role)s"
-msgstr "%(nick)s wurde rausgeworfen: %(reason)s"
+msgstr "** Die Rolle von %(nick)s wurde in %(role)s geändert"
 
-#: ../src/groupchat_control.py:1305
+#: ../src/groupchat_control.py:1306
 #, python-format
 msgid "%s has left"
 msgstr "%s ist gegangen"
 
-#: ../src/groupchat_control.py:1310
+#: ../src/groupchat_control.py:1311
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s hat den Gruppenchat betreten"
 
 #. Invalid Nickname
 #. invalid char
-#: ../src/groupchat_control.py:1425 ../src/groupchat_control.py:1701
+#: ../src/groupchat_control.py:1426 ../src/groupchat_control.py:1702
 msgid "Invalid nickname"
 msgstr "Ungültiger Benutzername"
 
-#: ../src/groupchat_control.py:1449 ../src/groupchat_control.py:1467
-#: ../src/groupchat_control.py:1551 ../src/groupchat_control.py:1568
+#: ../src/groupchat_control.py:1450 ../src/groupchat_control.py:1468
+#: ../src/groupchat_control.py:1552 ../src/groupchat_control.py:1569
 #, python-format
 msgid "Nickname not found: %s"
 msgstr "Spitzname nicht gefunden: %s"
 
-#: ../src/groupchat_control.py:1483
+#: ../src/groupchat_control.py:1484
 msgid "This group chat has no subject"
 msgstr "Dieser Gruppenchat hat kein Thema"
 
-#: ../src/groupchat_control.py:1494
+#: ../src/groupchat_control.py:1495
 #, python-format
 msgid "Invited %(contact_jid)s to %(room_jid)s."
 msgstr "%(contact_jid)s in %(room_jid)s eingeladen"
 
-#: ../src/groupchat_control.py:1624
+#: ../src/groupchat_control.py:1625
 #, python-format
 msgid ""
 "Usage: /%s <nickname|JID> [reason], bans the JID from the group chat. The "
@@ -8368,7 +8358,7 @@ msgstr ""
 "ein \"@\" enthält. Wenn die JID derzeit im Gruppenchat ist, wird er/sie/es "
 "ebenfalls gebannt. Unterstützt KEINE Leerzeichen im Spitznamen."
 
-#: ../src/groupchat_control.py:1631
+#: ../src/groupchat_control.py:1632
 #, python-format
 msgid ""
 "Usage: /%s <nickname>, opens a private chat window with the specified "
@@ -8377,7 +8367,7 @@ msgstr ""
 "Verwendung: /%s <Spitzname>, öffnet ein privates Nachrichtenfenster mit dem "
 "Inhaber des angegebenen Spitznamens."
 
-#: ../src/groupchat_control.py:1637
+#: ../src/groupchat_control.py:1638
 #, python-format
 msgid ""
 "Usage: /%s [reason], closes the current window or tab, displaying reason if "
@@ -8386,7 +8376,7 @@ msgstr ""
 "Bedienung: /%s [Grund], schließt das aktuelle Fenster oder Tab, mit Anzeige "
 "eines Grundes, falls angegeben."
 
-#: ../src/groupchat_control.py:1643
+#: ../src/groupchat_control.py:1644
 #, python-format
 msgid ""
 "Usage: /%s <JID> [reason], invites JID to the current group chat, optionally "
@@ -8395,7 +8385,7 @@ msgstr ""
 "Bedienung: /%s <JID> [Grund], lädt die JID in den aktuellen Gruppenchat ein, "
 "optional mit der Angabe eines Grundes."
 
-#: ../src/groupchat_control.py:1647
+#: ../src/groupchat_control.py:1648
 #, python-format
 msgid ""
 "Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally "
@@ -8404,7 +8394,7 @@ msgstr ""
 "Bedienung: /%s <Raum>@<Server> [/Spitzname], bietet den Beitritt zu "
 "Raum@Server an, optional mit Spitznamen."
 
-#: ../src/groupchat_control.py:1651
+#: ../src/groupchat_control.py:1652
 #, python-format
 msgid ""
 "Usage: /%s <nickname> [reason], removes the occupant specified by nickname "
@@ -8415,7 +8405,7 @@ msgstr ""
 "Gruppenchats und zeigt optional einen Grund. Unterstützt KEINE Leerzeichen "
 "im Spitznamen."
 
-#: ../src/groupchat_control.py:1660
+#: ../src/groupchat_control.py:1661
 #, python-format
 msgid ""
 "Usage: /%s <nickname> [message], opens a private message window and sends "
@@ -8425,25 +8415,25 @@ msgstr ""
 "Nachrichtenfenster und sendet die Nachricht zum Inhaber des angegebenen "
 "Spitznamens."
 
-#: ../src/groupchat_control.py:1665
+#: ../src/groupchat_control.py:1666
 #, python-format
 msgid "Usage: /%s <nickname>, changes your nickname in current group chat."
 msgstr ""
 "Bedienung: /%s <Spitzname>, ändert den Spitznamen im aktuellen Gruppenchat."
 
-#: ../src/groupchat_control.py:1669
+#: ../src/groupchat_control.py:1670
 #, python-format
 msgid "Usage: /%s , display the names of group chat occupants."
 msgstr "Benutzung: /%s , zeigt die Namen der Gruppenchatbesucher."
 
-#: ../src/groupchat_control.py:1673
+#: ../src/groupchat_control.py:1674
 #, python-format
 msgid "Usage: /%s [topic], displays or updates the current group chat topic."
 msgstr ""
 "Benutzung: /%s [topic], zeigt oder aktualisiert das derzeitige Gruppenchat-"
 "Thema."
 
-#: ../src/groupchat_control.py:1676
+#: ../src/groupchat_control.py:1677
 #, python-format
 msgid ""
 "Usage: /%s <message>, sends a message without looking for other commands."
@@ -8451,41 +8441,41 @@ msgstr ""
 "Benutzung: /%s <Nachricht>, sendet eine Nachricht ohne andere Befehle zu "
 "beachten."
 
-#: ../src/groupchat_control.py:1805
+#: ../src/groupchat_control.py:1806
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "Möchten Sie den Gruppenchat \"%s\" wirklich verlassen?"
 
-#: ../src/groupchat_control.py:1807
+#: ../src/groupchat_control.py:1808
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr ""
 "Wenn Sie dieses Fenster schließen, wird die Verbindung zu diesem Gruppenchat "
 "geschlossen."
 
-#: ../src/groupchat_control.py:1844
+#: ../src/groupchat_control.py:1845
 msgid "Changing Subject"
 msgstr "Thema ändern"
 
-#: ../src/groupchat_control.py:1845
+#: ../src/groupchat_control.py:1846
 msgid "Please specify the new subject:"
 msgstr "Bitte bestimmen Sie ein neues Thema"
 
-#: ../src/groupchat_control.py:1849
+#: ../src/groupchat_control.py:1850
 msgid "Changing Nickname"
 msgstr "Spitzname ändern"
 
-#: ../src/groupchat_control.py:1850
+#: ../src/groupchat_control.py:1851
 msgid "Please specify the new nickname you want to use:"
 msgstr "Bitte geben Sie an, welchen Spitznamen Sie verwenden möchten:"
 
 #. Ask for a reason
-#: ../src/groupchat_control.py:1877
+#: ../src/groupchat_control.py:1878
 #, python-format
 msgid "Destroying %s"
 msgstr "Zerstöre %s"
 
-#: ../src/groupchat_control.py:1878
+#: ../src/groupchat_control.py:1879
 msgid ""
 "You are going to definitively destroy this room.\n"
 "You may specify a reason below:"
@@ -8493,22 +8483,22 @@ msgstr ""
 "Sie werden den Raum endgültig zerstören.\n"
 "Sie können hier einen Grund angeben:"
 
-#: ../src/groupchat_control.py:1880
+#: ../src/groupchat_control.py:1881
 msgid "You may also enter an alternate venue:"
 msgstr "Sie können auch einen alternativen Raum eintragen:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:2054
+#: ../src/groupchat_control.py:2055
 #, python-format
 msgid "Kicking %s"
 msgstr "%s rausschmeißen"
 
-#: ../src/groupchat_control.py:2055 ../src/groupchat_control.py:2358
+#: ../src/groupchat_control.py:2056 ../src/groupchat_control.py:2359
 msgid "You may specify a reason below:"
 msgstr "Sie können eine Begründung angeben:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:2357
+#: ../src/groupchat_control.py:2358
 #, python-format
 msgid "Banning %s"
 msgstr "%s verbannen"
@@ -8933,7 +8923,6 @@ msgid "Do you want to remove group %s from the roster?"
 msgstr "Möchten Sie wirklich die Gruppe %s von Ihrer Kontaktliste entfernen?"
 
 #: ../src/roster_window.py:2726
-#, fuzzy
 msgid "Also remove all contacts in this group from your roster"
 msgstr "Auch alle Kontakte dieser Gruppe von Ihrer Kontaktliste entfernen"
 
@@ -8961,9 +8950,8 @@ msgstr ""
 
 #. Contact is not in roster
 #: ../src/roster_window.py:3128
-#, fuzzy
 msgid "Do you want to continue?"
-msgstr "Möchten Sie die Einladung annehmen?"
+msgstr "Möchten Sie fortsetzen?"
 
 #: ../src/roster_window.py:3132
 msgid ""
@@ -9198,7 +9186,7 @@ msgid "Confirm these session options"
 msgstr "Bestätigen Sie diese Sitzungs-Optionen"
 
 #: ../src/session.py:392
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The remote client wants to negotiate an session with these features:\n"
 "\n"
