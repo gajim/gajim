@@ -23,6 +23,15 @@ from auth import *
 from client import PlugIn
 import sha,base64,random,dispatcher_nb
 
+try:
+	import kerberos
+	have_kerberos = True
+except ImportError:
+	have_kerberos = False
+
+GSS_STATE_STEP = 0
+GSS_STATE_WRAP = 1
+
 def challenge_splitter(data):
 	''' Helper function that creates a dict from challenge string.
 	Sample chalenge string:
@@ -132,16 +141,26 @@ class SASL(PlugIn):
 		self._owner.RegisterHandler('challenge', self.SASLHandler, xmlns=NS_SASL)
 		self._owner.RegisterHandler('failure', self.SASLHandler, xmlns=NS_SASL)
 		self._owner.RegisterHandler('success', self.SASLHandler, xmlns=NS_SASL)
-		if "DIGEST-MD5" in mecs:
+		if "GSSAPI" in mecs and have_kerberos:
+			rc, self.gss_vc = kerberos.authGSSClientInit('xmpp@' + 
+														self._owner.Server)
+			response = kerberos.authGSSClientResponse(self.gss_vc)
+			node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'GSSAPI'},
+                   payload=(response or ""))
+			self.mechanism = "GSSAPI"
+			self.gss_step = GSS_STATE_STEP
+		elif "DIGEST-MD5" in mecs:
 			node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'DIGEST-MD5'})
+			self.mechanism = "DIGEST-MD5"
 		elif "PLAIN" in mecs:
 			sasl_data='%s\x00%s\x00%s' % (self.username+'@' + self._owner.Server, 
 																	self.username, self.password)
 			node=Node('auth', attrs={'xmlns':NS_SASL,'mechanism':'PLAIN'}, 
 								payload=[base64.encodestring(sasl_data).replace('\n','')])
+			self.mechanism = "PLAIN"
 		else:
 			self.startsasl='failure'
-			self.DEBUG('I can only use DIGEST-MD5 and PLAIN mecanisms.', 'error')
+			self.DEBUG('I can only use DIGEST-MD5, GSSAPI and PLAIN mecanisms.', 'error')
 			return
 		self.startsasl='in-process'
 		self._owner.send(node.__str__())
@@ -176,6 +195,22 @@ class SASL(PlugIn):
 		incoming_data = challenge.getData()
 		data=base64.decodestring(incoming_data)
 		self.DEBUG('Got challenge:'+data,'ok')
+		if self.mechanism == "GSSAPI":
+			if self.gss_step == GSS_STATE_STEP:
+				rc = kerberos.authGSSClientStep(self.gss_vc, incoming_data)
+				if rc != kerberos.AUTH_GSS_CONTINUE:
+					self.gss_step = GSS_STATE_WRAP
+			elif self.gss_step == GSS_STATE_WRAP:
+				rc = kerberos.authGSSClientUnwrap(self.gss_vc, incoming_data)
+				response = kerberos.authGSSClientResponse(self.gss_vc)
+				rc = kerberos.authGSSClientWrap(self.gss_vc, response,
+												self.username)
+			response = kerberos.authGSSClientResponse(self.gss_vc)
+			if not response:
+				response = ''
+			self._owner.send(Node('response', attrs={'xmlns':NS_SASL},
+						payload=response).__str__())
+			raise NodeProcessed
 		chal = challenge_splitter(data)
 		if not self.realm and chal.has_key('realm'):
 			self.realm = chal['realm']
