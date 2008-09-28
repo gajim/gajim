@@ -2412,9 +2412,6 @@ class ChatControl(ChatControlBase):
 			jid_with_resource += '/' + self.resource
 		events = gajim.events.get_events(self.account, jid_with_resource)
 
-		if hasattr(self, 'session') and self.session and self.session.enable_encryption:
-			self.print_esession_details()
-
 		# list of message ids which should be marked as read
 		message_ids = []
 		for event in events:
