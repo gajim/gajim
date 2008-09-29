@@ -1476,7 +1476,7 @@ class Interface:
 		not name and not groups:
 			# contact removes us.
 			if contacts:
-				self.roster.remove_contact(jid, account, force=True, backend=True)
+				self.roster.remove_contact(jid, account, backend=True)
 				return
 		elif not contacts:
 			if sub == 'remove':
@@ -1488,7 +1488,7 @@ class Interface:
 			self.roster.add_contact(jid, account)
 		else:
 			# it is an existing contact that might has changed
-			re_add = False
+			re_draw = False
 			# if sub or groups changed: remove and re-add
 			# Maybe observer status changed:
 			# according to xep 0162, contact is not an observer anymore when 
@@ -1496,8 +1496,7 @@ class Interface:
 			old_groups = contacts[0].get_shown_groups()
 			if contacts[0].sub != sub or contacts[0].ask != ask\
 			or old_groups != groups:
-				self.roster.remove_contact(jid, account, force=True)
-				re_add = True
+				re_draw = True
 			for contact in contacts:
 				if not name:
 					name = ''
@@ -1505,8 +1504,7 @@ class Interface:
 				contact.sub = sub
 				contact.ask = ask
 				contact.groups = groups or []
-			if re_add:
-				self.roster.add_contact(jid, account)
+			if re_draw:
 				# Refilter and update old groups
 				for group in old_groups:
 					self.roster.draw_group(group, account)

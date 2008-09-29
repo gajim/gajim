@@ -2003,7 +2003,7 @@ class RosterWindow:
 
 			# Remove resource when going offline
 			if show in ('offline', 'error') and \
-			len(gajim.events.get_events(account, fjid)) == 0:
+			not self.contact_has_pending_roster_events(contact, account):
 				ctrl = gajim.interface.msg_win_mgr.get_control(fjid, account)
 				if ctrl:
 					ctrl.update_ui()
