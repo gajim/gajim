@@ -110,9 +110,9 @@ class LastFM:
 				else:
 					album = None
 
-					timeNode = track.getElementsByTagName('date')[0]
-					self.lastSongs.append((artist, name, album,
-						int(timeNode.getAttribute('uts'))))
+				timeNode = track.getElementsByTagName('date')[0]
+				self.lastSongs.append((artist, name, album,
+					int(timeNode.getAttribute('uts'))))
 			self.scrobbling = True
 			return True
 
