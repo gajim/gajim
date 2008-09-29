@@ -132,6 +132,11 @@ class PrivateChatControl(ChatControl):
 		if not message:
 			return
 
+		message = helpers.remove_invalid_xml_chars(message)
+
+		if not message:
+			return
+
 		# We need to make sure that we can still send through the room and that
 		# the recipient did not go away
 		contact = gajim.contacts.get_first_contact_from_jid(self.account,
@@ -1604,6 +1609,11 @@ class GroupchatControl(ChatControlBase):
 
 	def send_message(self, message):
 		'''call this function to send our message'''
+		if not message:
+			return
+
+		message = helpers.remove_invalid_xml_chars(message)
+
 		if not message:
 			return
 
