@@ -38,8 +38,9 @@ import dialogs
 import negotiation
 
 class ChatControlSession(stanza_session.EncryptedStanzaSession):
-	def __init__(self, conn, jid, thread_id, type = 'chat'):
-		stanza_session.EncryptedStanzaSession.__init__(self, conn, jid, thread_id, type = 'chat')
+	def __init__(self, conn, jid, thread_id, type='chat'):
+		stanza_session.EncryptedStanzaSession.__init__(self, conn, jid, thread_id,
+			type='chat')
 
 		self.control = None
 
@@ -72,7 +73,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 					break
 			# No XEP-0085 support, fallback to XEP-0022
 			if not chatstate:
-				chatstate_child = msg.getTag('x', namespace = common.xmpp.NS_EVENT)
+				chatstate_child = msg.getTag('x', namespace=common.xmpp.NS_EVENT)
 				if chatstate_child:
 					chatstate = 'active'
 					composing_xep = 'XEP-0022'
@@ -94,7 +95,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		# XEP-0172 User Nickname
 		user_nick = msg.getTagData('nick')
 		if not user_nick:
-			user_nick =''
+			user_nick = ''
 
 		form_node = None
 		for xtag in msg.getTags('x'):
@@ -116,8 +117,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		if self.is_loggable() and msgtxt:
 			try:
-				msg_id = gajim.logger.write(log_type, full_jid_with_resource, msgtxt,
-						tim=tim, subject=subject)
+				msg_id = gajim.logger.write(log_type, full_jid_with_resource,
+					msgtxt, tim=tim, subject=subject)
 			except exceptions.PysqliteOperationalError, e:
 				self.conn.dispatch('ERROR', (_('Disk WriteError'), str(e)))
 
@@ -133,11 +134,13 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		if gajim.jid_is_transport(jid):
 			jid = jid.replace('@', '')
 
-		groupchat_control = gajim.interface.msg_win_mgr.get_gc_control(jid, self.conn.name)
+		groupchat_control = gajim.interface.msg_win_mgr.get_gc_control(jid,
+			self.conn.name)
 
 		if not groupchat_control and \
 		jid in gajim.interface.minimized_controls[self.conn.name]:
-			groupchat_control = gajim.interface.minimized_controls[self.conn.name][jid]
+			groupchat_control = gajim.interface.minimized_controls[self.conn.name]\
+				[jid]
 
 		pm = False
 		if groupchat_control and groupchat_control.type_id == \
@@ -151,7 +154,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		# does this resource have the highest priority of any available?
 		is_highest = not highest_contact or not highest_contact.resource or \
-			resource == highest_contact.resource or highest_contact.show == 'offline'
+			resource == highest_contact.resource or highest_contact.show == \
+				'offline'
 
 		# Handle chat states
 		contact = gajim.contacts.get_contact(self.conn.name, jid, resource)
@@ -181,13 +185,13 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			return
 
 		if gajim.config.get('ignore_unknown_contacts') and \
-			not gajim.contacts.get_contacts(self.conn.name, jid) and not pm:
+		not gajim.contacts.get_contacts(self.conn.name, jid) and not pm:
 			return
 
 		if not contact:
 			# contact is not in the roster, create a fake one to display
 			# notification
-			contact = contacts.Contact(jid = jid, resource = resource)
+			contact = contacts.Contact(jid=jid, resource=resource)
 
 		advanced_notif_num = notify.get_advanced_notification('message_received',
 			self.conn.name, contact)
@@ -198,7 +202,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			jid_of_control = full_jid_with_resource
 
 		if not self.control:
-			ctrl = gajim.interface.msg_win_mgr.get_control(jid_of_control, self.conn.name)
+			ctrl = gajim.interface.msg_win_mgr.get_control(jid_of_control,
+				self.conn.name)
 			if ctrl:
 				self.control = ctrl
 				self.control.set_session(self)
@@ -213,8 +218,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			nickname = resource
 			if self.control:
 				# print if a control is open
-				self.control.print_conversation(msgtxt,
-					tim = tim, xhtml = xhtml, encrypted = encrypted)
+				self.control.print_conversation(msgtxt, tim=tim, xhtml=xhtml,
+					encrypted=encrypted)
 			else:
 				# otherwise pass it off to the control to be queued
 				groupchat_control.on_private_message(nickname, msgtxt, tim,
@@ -242,10 +247,9 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			first, nickname, msg, focused], advanced_notif_num)
 
 		if gajim.interface.remote_ctrl:
-			gajim.interface.remote_ctrl.raise_signal('NewMessage',
-					(self.conn.name, [full_jid_with_resource, msgtxt, tim,
-						encrypted, msg_type, subject, chatstate, msg_id,
-						composing_xep, user_nick, xhtml, form_node]))
+			gajim.interface.remote_ctrl.raise_signal('NewMessage', (self.conn.name,
+				[full_jid_with_resource, msgtxt, tim, encrypted, msg_type, subject,
+				chatstate, msg_id, composing_xep, user_nick, xhtml, form_node]))
 
 	# display the message or show notification in the roster
 	def roster_message(self, jid, msg, tim, encrypted=False, msg_type='',
@@ -333,8 +337,10 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			type_ = 'normal'
 			event_type = 'single_message_received'
 
-		show_in_roster = notify.get_show_in_roster(event_type, self.conn.name, contact, self)
-		show_in_systray = notify.get_show_in_systray(event_type, self.conn.name, contact)
+		show_in_roster = notify.get_show_in_roster(event_type, self.conn.name,
+			contact, self)
+		show_in_systray = notify.get_show_in_systray(event_type, self.conn.name,
+			contact)
 
 		event = gajim.events.create_event(type_, (msg, subject, msg_type, tim,
 			encrypted, resource, msg_id, xhtml, self, form_node),
@@ -371,7 +377,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			if form.getType() == 'form' and 'security' in form.asDict():
 				# we don't support 3-message negotiation as the responder
 				if 'dhkeys' in form.asDict():
-					self.fail_bad_negotiation('3 message negotiation not supported when responding', ('dhkeys',))
+					self.fail_bad_negotiation('3 message negotiation not supported '
+						'when responding', ('dhkeys',))
 					return
 
 				negotiated, not_acceptable, ask_user = self.verify_options_bob(form)
@@ -388,14 +395,16 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 							not_acceptable.append(key)
 						self.respond_e2e_bob(form, negotiated, not_acceptable)
 
-					self.dialog = dialogs.YesNoDialog(_('Confirm these session options'),
+					self.dialog = dialogs.YesNoDialog(_('Confirm these session '
+						'options'),
 						_('''The remote client wants to negotiate an session with these features:
 
 	%s
 
-	Are these options acceptable?''') % (negotiation.describe_features(ask_user)),
-							on_response_yes=accept_nondefault_options,
-							on_response_no=reject_nondefault_options)
+	Are these options acceptable?''') % (negotiation.describe_features(
+						ask_user)),
+						on_response_yes=accept_nondefault_options,
+						on_response_no=reject_nondefault_options)
 				else:
 					self.respond_e2e_bob(form, negotiated, not_acceptable)
 
@@ -403,7 +412,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 			# alice accepts
 			elif self.status == 'requested-e2e' and form.getType() == 'submit':
-				negotiated, not_acceptable, ask_user = self.verify_options_alice(form)
+				negotiated, not_acceptable, ask_user = self.verify_options_alice(
+					form)
 
 				if ask_user:
 					def accept_nondefault_options(is_checked):
@@ -421,9 +431,11 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 						dialog.destroy()
 
 					dialog = dialogs.YesNoDialog(_('Confirm these session options'),
-							_('The remote client selected these options:\n\n%s\n\nContinue with the session?') % (negotiation.describe_features(ask_user)),
-							on_response_yes = accept_nondefault_options,
-							on_response_no = reject_nondefault_options)
+						_('The remote client selected these options:\n\n%s\n\n'
+						'Continue with the session?') % (
+						negotiation.describe_features(ask_user)),
+						on_response_yes = accept_nondefault_options,
+						on_response_no = reject_nondefault_options)
 				else:
 					try:
 						self.accept_e2e_alice(form, negotiated)
@@ -460,8 +472,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 			return
 
-		# non-esession negotiation. this isn't very useful, but i'm keeping it around
-		# to test my test suite.
+		# non-esession negotiation. this isn't very useful, but i'm keeping it
+		# around to test my test suite.
 		if form.getType() == 'form':
 			if not self.control:
 				jid, resource = gajim.get_room_and_nick_from_fjid(self.jid)
@@ -471,10 +483,10 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 				if not contact:
 					contact = gajim.contacts.create_contact(jid=jid,
-							resource=resource, show=self.conn.get_status())
+						resource=resource, show=self.conn.get_status())
 
-				gajim.interface.new_chat(contact, account,
-					resource = resource, session = self)
+				gajim.interface.new_chat(contact, account, resource=resource,
+					session=self)
 
 			negotiation.FeatureNegotiationWindow(account, self.jid, self, form)
 
