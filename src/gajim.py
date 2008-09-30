@@ -1408,7 +1408,7 @@ class Interface:
 				self.roster.on_disconnect(None, room_jid, account)
 			else:
 				win = self.msg_win_mgr.get_window(room_jid, account)
-				ctrl = win.get_gc_control(room_jid, account)
+				ctrl = self.msg_win_mgr.get_gc_control(room_jid, account)
 				win.remove_tab(ctrl, 3)
 
 		dlg = dialogs.InputDialog(_('Password Required'),
