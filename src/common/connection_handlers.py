@@ -1304,6 +1304,8 @@ class ConnectionHandlersBase:
 	def delete_session(self, jid, thread_id):
 		if not jid in self.sessions:
 			jid = gajim.get_jid_without_resource(jid)
+		if not jid in self.sessions:
+			return
 
 		del self.sessions[jid][thread_id]
 
