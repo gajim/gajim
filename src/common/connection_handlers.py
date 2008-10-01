@@ -2160,7 +2160,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					sess.terminate()
 					del self.sessions[jid_stripped][sess.thread_id]
 
-		if avatar_sha and ptype != 'error':
+		if avatar_sha is not None and ptype != 'error':
 			if not self.vcard_shas.has_key(jid_stripped):
 				cached_vcard = self.get_cached_vcard(jid_stripped)
 				if cached_vcard and cached_vcard.has_key('PHOTO') and \
