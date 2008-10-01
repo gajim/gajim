@@ -6725,9 +6725,9 @@ msgid ""
 "send you messages, you need to verify their identity by clicking the button "
 "below."
 msgstr ""
-"Um sicher zu gehen, dass <b>nur</b> die erwarteten Person Nachrichten von "
-"Ihnen oder Sie Nachrichten von dieser lesen können, ist es ratsam die "
-"Identität zu überprüfen."
+"Um sicher zu stellen, dass <b>nur</b> die erwartete Person Nachrichten von "
+"Ihnen lesen kann oder Ihnen Nachrichten senden kann, müssen Sie die Identität "
+"überprüfen, indem Sie den Knopf unten drücken."
 
 #: ../src/dialogs.py:3847
 msgid "Contact's identity NOT verified"
