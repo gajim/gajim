@@ -449,6 +449,8 @@ _('Connection with peer cannot be established.'))
 			last = file_props['transfered_size'][-1]
 			transfered = last[1] - first[1]
 			tim = last[0] - first[0]
+			if time == 0:
+				return 0., 0.
 			speed = round(float(transfered) / tim)
 		if speed == 0.:
 			return 0., 0.
