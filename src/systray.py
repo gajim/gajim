@@ -128,6 +128,12 @@ class Systray:
 	def on_new_chat(self, widget, account):
 		dialogs.NewChatDialog(account)
 
+	def on_single_message_menuitem_activate2(self, widget, event, account):
+		self.on_single_message_menuitem_activate(widget, account)
+
+	def on_new_chat2(self, widget, event, account):
+		self.on_new_chat(widget, account)
+
 	def make_menu(self, event_button, event_time):
 		'''create chat with and new message (sub) menus/menuitems'''
 		for m in self.popup_menus:
@@ -168,7 +174,13 @@ class Systray:
 			item = gtk.ImageMenuItem(uf_show)
 			item.set_image(state_images[show])
 			sub_menu.append(item)
-			item.connect('activate', self.on_show_menuitem_activate, show)
+			if os.name == 'nt':
+				#FIXME: bug in pygtk, activate is not called.
+				# see http://trac.gajim.org/ticket/4310
+				item.connect('button_press_event',
+					self.on_show_menuitem_activate2, show)
+			else:
+				item.connect('activate', self.on_show_menuitem_activate, show)
 
 		item = gtk.SeparatorMenuItem()
 		sub_menu.append(item)
@@ -179,7 +191,14 @@ class Systray:
 		img.set_from_file(path)
 		item.set_image(img)
 		sub_menu.append(item)
-		item.connect('activate', self.on_change_status_message_activate)
+		if os.name == 'nt':
+			#FIXME: bug in pygtk, activate is not called.
+			# see http://trac.gajim.org/ticket/4310
+			item.connect('button_press_event',
+				self.on_change_status_message_activate2)
+		else:
+			item.connect('activate', self.on_change_status_message_activate)
+
 		connected_accounts = gajim.get_number_of_connected_accounts()
 		if connected_accounts < 1:
 			item.set_sensitive(False)
@@ -191,7 +210,13 @@ class Systray:
 		item = gtk.ImageMenuItem(uf_show)
 		item.set_image(state_images['offline'])
 		sub_menu.append(item)
-		item.connect('activate', self.on_show_menuitem_activate, 'offline')
+		if os.name == 'nt':
+			#FIXME: bug in pygtk, activate is not called.
+			# see http://trac.gajim.org/ticket/4310
+			item.connect('button_press_event',
+				self.on_show_menuitem_activate2, 'offline')
+		else:
+			item.connect('activate', self.on_show_menuitem_activate, 'offline')
 
 		iskey = connected_accounts > 0 and not (connected_accounts == 1 and
 				gajim.connections[gajim.connections.keys()[0]].is_zeroconf)
@@ -215,23 +240,40 @@ class Systray:
 				if gajim.connections[account].is_zeroconf:
 					continue
 				if gajim.connections[account].connected > 1:
-					#for chat_with
+					# for chat_with
 					item = gtk.MenuItem(_('using account %s') % account)
 					account_menu_for_chat_with.append(item)
-					item.connect('activate', self.on_new_chat, account)
+					if os.name == 'nt':
+						#FIXME: bug in pygtk, activate is not called.
+						# see http://trac.gajim.org/ticket/4310
+						item.connect('button_press_event',
+							self.on_new_chat2, account)
+					else:
+						item.connect('activate', self.on_new_chat, account)
 
-					#for single message
+					# for single message
 					item = gtk.MenuItem(_('using account %s') % account)
-					item.connect('activate',
-						self.on_single_message_menuitem_activate, account)
+					if os.name == 'nt':
+						#FIXME: bug in pygtk, activate is not called.
+						# see http://trac.gajim.org/ticket/4310
+						item.connect('button_press_event',
+							self.on_single_message_menuitem_activate2, account)
+					else:
+						item.connect('activate',
+							self.on_single_message_menuitem_activate, account)
 					account_menu_for_single_message.append(item)
 
 					# join gc 
 					gc_item = gtk.MenuItem(_('using account %s') % account, False)
 					gc_sub_menu.append(gc_item)
 					gc_menuitem_menu = gtk.Menu()
-					gajim.interface.roster.add_bookmarks_list(gc_menuitem_menu,
-						account)
+					if os.name == 'nt':
+						#FIXME: bug in pygtk, activate is not called.
+						# see http://trac.gajim.org/ticket/4310
+						self.add_bookmarks_list2(gc_menuitem_menu, account)
+					else:
+						gajim.interface.roster.add_bookmarks_list(gc_menuitem_menu,
+							account)
 					gc_item.set_submenu(gc_menuitem_menu)
 					gc_sub_menu.show_all()
 
@@ -248,8 +290,13 @@ class Systray:
 						self.on_single_message_menuitem_activate, account)
 
 					# join gc
-					gajim.interface.roster.add_bookmarks_list(gc_sub_menu,
-						account)
+					if os.name == 'nt':
+						#FIXME: bug in pygtk, activate is not called.
+						# see http://trac.gajim.org/ticket/4310
+						self.add_bookmarks_list2(gc_sub_menu, account)
+					else:
+						gajim.interface.roster.add_bookmarks_list(gc_sub_menu,
+							account)
 					break # No other connected account
 
 		newitem = gtk.SeparatorMenuItem() # separator
@@ -257,8 +304,14 @@ class Systray:
 		newitem = gtk.ImageMenuItem(_('_Manage Bookmarks...'))
 		img = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES, gtk.ICON_SIZE_MENU)
 		newitem.set_image(img)
-		newitem.connect('activate',
-			gajim.interface.roster.on_manage_bookmarks_menuitem_activate)
+		if os.name == 'nt':
+			#FIXME: bug in pygtk, activate is not called.
+			# see http://trac.gajim.org/ticket/4310
+			newitem.connect('button_press_event',
+				self.on_manage_bookmarks_menuitem_activate2)
+		else:
+			newitem.connect('activate',
+				gajim.interface.roster.on_manage_bookmarks_menuitem_activate)
 		gc_sub_menu.append(newitem)
 
 		sounds_mute_menuitem.set_active(not gajim.config.get('sounds_on'))
@@ -274,6 +327,34 @@ class Systray:
 		self.systray_context_menu.show_all()
 		self.systray_context_menu.popup(None, None, None, event_button,
 			event_time)
+
+	def on_join_gc_activate2(self, widget, event, account):
+		gajim.interface.roster.on_join_gc_activate(widget, account)
+
+	def on_bookmark_menuitem_activate2(self, widget, event, account, bookmark):
+		gajim.interface.roster.on_bookmark_menuitem_activate(widget, account, bookmark)
+
+	def on_manage_bookmarks_menuitem_activate2(self, widget, event):
+		gajim.interface.roster.on_manage_bookmarks_menuitem_activate(widget)
+
+	def add_bookmarks_list2(self, gc_sub_menu, account):
+		'''Show join new group chat item and bookmarks list for an account'''
+		item = gtk.ImageMenuItem(_('_Join New Group Chat'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
+		item.set_image(icon)
+		item.connect('button_press_event', self.on_join_gc_activate2, account)
+		gc_sub_menu.append(item)
+
+		# user has at least one bookmark
+		if len(gajim.connections[account].bookmarks) > 0:
+			item = gtk.SeparatorMenuItem() # separator
+			gc_sub_menu.append(item)
+
+		for bookmark in gajim.connections[account].bookmarks:
+			item = gtk.MenuItem(bookmark['name'], False) # Do not use underline
+			item.connect('button_press_event', self.on_bookmark_menuitem_activate2,
+				account, bookmark)
+			gc_sub_menu.append(item)
 
 	def on_show_all_events_menuitem_activate(self, widget):
 		events = gajim.events.get_systray_events()
@@ -367,6 +448,9 @@ class Systray:
 		if index != current:
 			gajim.interface.roster.status_combobox.set_active(index)
 
+	def on_show_menuitem_activate2(self, widget, event, show):
+		self.on_show_menuitem_activate(widget, show)
+
 	def on_change_status_message_activate(self, widget):
 		model = gajim.interface.roster.status_combobox.get_model()
 		active = gajim.interface.roster.status_combobox.get_active()
@@ -383,6 +467,9 @@ class Systray:
 				gajim.interface.roster.send_status(acct, show, message)
 		dlg = dialogs.ChangeStatusMessageDialog(on_response, status)
 		dlg.window.present()
+
+	def on_change_status_message_activate2(self, widget, event):
+		self.on_change_status_message_activate(widget)
 
 	def show_tooltip(self, widget):
 		position = widget.window.get_origin()
