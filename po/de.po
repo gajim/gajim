@@ -3130,15 +3130,15 @@ msgstr "Sitzungs-Aushandlung abgebrochen"
 
 #: ../src/chat_control.py:1801
 msgid "This session is encrypted"
-msgstr "[Diese Sitzung ist verschlüsselt]"
+msgstr "Diese Sitzung ist verschlüsselt"
 
 #: ../src/chat_control.py:1804
 msgid " and WILL be logged"
-msgstr "und WIRD aufgezeichnet"
+msgstr " und WIRD aufgezeichnet"
 
 #: ../src/chat_control.py:1806
 msgid " and WILL NOT be logged"
-msgstr "und WIRD NICHT aufgezeichnet"
+msgstr " und WIRD NICHT aufgezeichnet"
 
 #: ../src/chat_control.py:1811
 msgid ""
