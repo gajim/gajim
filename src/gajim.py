@@ -2861,12 +2861,10 @@ class Interface:
 			gajim.idlequeue.process()
 		except:
 			# Otherwise, an exception will stop our loop
-			if os.name == 'nt':
-				gobject.timeout_add(200,
-					self.process_connections)
+			if gajim.idlequeue.__class__ == GlibIdleQueue:
+				gobject.timeout_add_seconds(2, self.process_connections)
 			else:
-				gobject.timeout_add_seconds(2,
-					self.process_connections)
+				gobject.timeout_add(200, self.process_connections)
 			raise
 		return True # renew timeout (loop for ever)
 
@@ -3279,10 +3277,10 @@ class Interface:
 		self.last_ftwindow_update = 0
 
 		gobject.timeout_add(100, self.autoconnect)
-		if os.name == 'nt':
-			gobject.timeout_add(200, self.process_connections)
-		else:
+		if gajim.idlequeue.__class__ == GlibIdleQueue:
 			gobject.timeout_add_seconds(2, self.process_connections)
+		else:
+			gobject.timeout_add(200, self.process_connections)
 		gobject.timeout_add_seconds(gajim.config.get(
 			'check_idle_every_foo_seconds'), self.read_sleepy)
 
