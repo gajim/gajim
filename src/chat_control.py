@@ -1593,7 +1593,9 @@ class ChatControl(ChatControlBase):
 		self.lock_image.set_sensitive(enc_enabled)
 
 	def _on_authentication_button_clicked(self, widget):
-		if self.session and self.session.enable_encryption:
+		if self.gpg_is_active:
+			dialogs.GPGInfoWindow(self)
+		elif self.session and self.session.enable_encryption:
 			dialogs.ESessionInfoWindow(self.session)
 
 	def _process_command(self, message):

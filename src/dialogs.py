@@ -1260,7 +1260,7 @@ class WarningDialog(HigDialog):
 class InformationDialog(HigDialog):
 	def __init__(self, pritext, sectext=''):
 		'''HIG compliant info dialog.'''
-		HigDialog.__init__( self, None,
+		HigDialog.__init__(self, None,
 			gtk.MESSAGE_INFO, gtk.BUTTONS_OK, pritext, sectext)
 		self.set_modal(False)
 		self.set_transient_for(gajim.interface.roster.window)
@@ -3878,5 +3878,55 @@ class ESessionInfoWindow:
 			self.update_info()
 
 		YesNoDialog(pritext, sectext, on_response_yes=on_yes, on_response_no=on_no)
+
+class GPGInfoWindow:
+	'''Class for displaying information about a XEP-0116 encrypted session'''
+	def __init__(self, control):
+		xml = gtkgui_helpers.get_glade('esession_info_window.glade')
+		security_image = xml.get_widget('security_image')
+		status_label = xml.get_widget('verification_status_label')
+		info_label = xml.get_widget('info_display')
+		verify_now_button = xml.get_widget('verify_now_button')
+		self.window = xml.get_widget('esession_info_window')
+		account = control.account
+		keyID = control.contact.keyID
+		error = None
+
+		verify_now_button.set_no_show_all(True)
+		verify_now_button.hide()
+
+		if keyID[8:] == 'MISMATCH':
+			verification_status = _('''Contact's identity NOT verified''')
+			info = _('The contact\'s key (%s) <b>does not match</b> the key '
+				'assigned in Gajim.') % keyID[:8]
+			image = 'security-low-big.png'
+		else:
+			msgenc, error = gajim.connections[account].gpg.encrypt('test', [keyID])
+			if error:
+				verification_status = _('''Contact's identity NOT verified''')
+				info = _('GPG Key is assigned to this contact, but <b>you do not '
+					'trust his key</b>, so message <b>cannot</b> be encrypted. Use '
+					'your GPG client to trust this key.')
+				image = 'security-low-big.png'
+			else:
+				verification_status = _('''Contact's identity verified''')
+				info = _('GPG Key is assigned to this contact, and you trust his '
+					'key, so messages will be encrypted.')
+				image = 'security-high-big.png'
+
+		status_label.set_markup('<b><span size="x-large">%s</span></b>' % \
+			verification_status)
+		info_label.set_markup(info)
+
+		dir = os.path.join(gajim.DATA_DIR, 'pixmaps')
+		path = os.path.join(dir, image)
+		filename = os.path.abspath(path)
+		security_image.set_from_file(filename)
+
+		xml.signal_autoconnect(self)
+		self.window.show_all()
+
+	def on_close_button_clicked(self, widget):
+		self.window.destroy()
 
 # vim: se ts=3:
