@@ -29,6 +29,7 @@ Var StartMenuFolder
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
 !insertmacro MUI_PAGE_INSTFILES
+!define MUI_FINISHPAGE_RUN "$INSTDIR\bin\Gajim.exe"
 !insertmacro MUI_PAGE_FINISH
 
 !insertmacro MUI_UNPAGE_WELCOME
@@ -197,10 +198,7 @@ Section "Gtk+ 2" SecGtk
 	File "bin\gtk\lib\gtk-2.0\2.10.0\engines\libpixmap.dll"
 	File "bin\gtk\lib\gtk-2.0\2.10.0\engines\libsvg.dll"
 	SetOutPath "$INSTDIR\bin\gtk\lib\gtk-2.0\2.10.0"
-	File /r "bin\gtk\lib\gtk-2.0\2.10.0\immodules"
-	File /r "bin\gtk\lib\gtk-2.0\2.10.0\loaders"
 	SetOutPath "$INSTDIR\bin\gtk\lib"
-	File /r "bin\gtk\lib\pango"
 	File "bin\gtk\lib\charset.alias"
 	SetOutPath "$INSTDIR\bin\gtk\share"
 	File /r "bin\gtk\share\gtkthemeselector"
@@ -509,11 +507,8 @@ Section "Uninstall"
 	Delete "$INSTDIR\bin\gtk\lib\gtk-2.0\2.10.0\engines\libsvg.dll"
 	Delete "$INSTDIR\bin\gtk\lib\gtk-2.0\2.10.0\engines\libwimp.dll"
 	RMDir "$INSTDIR\bin\gtk\lib\gtk-2.0\2.10.0\engines"
-	RMDir /r "$INSTDIR\bin\gtk\lib\gtk-2.0\2.10.0\immodules"
-	RMDir /r "$INSTDIR\bin\gtk\lib\gtk-2.0\2.10.0\loaders"
 	RMDir "$INSTDIR\bin\gtk\lib\gtk-2.0\2.10.0"
 	RMDir "$INSTDIR\bin\gtk\lib\gtk-2.0"
-	RMDir /r "$INSTDIR\bin\gtk\lib\pango"
 	Delete "$INSTDIR\bin\gtk\lib\charset.alias"
 	RMDir "$INSTDIR\bin\gtk\lib"
 	RMDir /r "$INSTDIR\bin\gtk\share\locale\de"
