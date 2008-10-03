@@ -435,10 +435,18 @@ class GlibIdleQueue(idlequeue.IdleQueue):
 		''' this method is called when we plug a new idle object.
 		Start listening for events from fd
 		'''
-		res = gobject.io_add_watch(fd, flags, self.process_events,
+		res = gobject.io_add_watch(fd, flags, self._process_events,
 			priority=gobject.PRIORITY_LOW)
 		# store the id of the watch, so that we can remove it on unplug
 		self.events[fd] = res
+
+	def _process_events(self, fd, flags):
+		try:
+			return self.process_events(fd, flags)
+		except:
+			self.remove_idle(fd)
+			self.add_idle(fd, flags)
+			raise
 
 	def remove_idle(self, fd):
 		''' this method is called when we unplug a new idle object.
