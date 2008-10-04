@@ -578,7 +578,7 @@ class Config:
 		dict = self.__options_per_key[optname][1]
 		if not dict.has_key(key):
 #			raise RuntimeError, '%s is not a key of %s' % (key, dict)
-			return
+			self.add_per(optname, key)
 		obj = dict[key]
 		if not obj.has_key(subname):
 #			raise RuntimeError, '%s is not a key of %s' % (subname, obj)

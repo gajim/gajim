@@ -1554,10 +1554,6 @@ class ChatControl(ChatControlBase):
 			ChatControlBase.print_conversation_line(self, msg,
 				'status', '', None)
 
-		gpg_pref = gajim.config.get_per('contacts', self.contact.jid,
-			'gpg_enabled')
-		if gpg_pref is None:
-			gajim.config.add_per('contacts', self.contact.jid)
 		gajim.config.set_per('contacts', self.contact.jid,
 			'gpg_enabled', self.gpg_is_active)
 
