@@ -575,6 +575,8 @@ class Config:
 		if not self.__options_per_key.has_key(optname):
 #			raise RuntimeError, 'option %s does not exist' % optname
 			return
+		if not key:
+			return
 		dict = self.__options_per_key[optname][1]
 		if not dict.has_key(key):
 #			raise RuntimeError, '%s is not a key of %s' % (key, dict)
