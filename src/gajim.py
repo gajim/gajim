@@ -2453,7 +2453,7 @@ class Interface:
 			emoticons_pattern = '|' + \
 				'(?:(?<![\w.]' + emoticons_pattern_prematch[:-1]	+ '))' + \
 				'(?:'		 + emoticons_pattern[:-1]				+ ')'  + \
-				'(?:(?![\w.]'  + emoticons_pattern_postmatch[:-1]  + '))'
+				'(?:(?![\w]'  + emoticons_pattern_postmatch[:-1]  + '))'
 
 		# because emoticons match later (in the string) they need to be after
 		# basic matches that may occur earlier
