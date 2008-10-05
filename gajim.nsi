@@ -749,6 +749,7 @@ Section "Uninstall"
 	Delete "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk"
 	Delete "$SMPROGRAMS\$StartMenuFolder\Change Theme.lnk"
 	RMDir "$SMPROGRAMS\$StartMenuFolder"
+	Delete "$DESKTOP\Gajim.lnk"
 	Delete "$SMSTARTUP\Gajim.lnk"
 	SetShellVarContext all
 	Delete "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk"
