@@ -59,17 +59,17 @@ LangString DESC_SecDesktopIcon ${LANG_ENGLISH} "If set, a shortcut for Gajim wil
 LangString DESC_SecAutostart ${LANG_ENGLISH} "If set, Gajim will be automatically started when Windows starts."
 
 ; French
-LangString NAME_Emoticons ${LANG_FRENCH} "Emotic�nes"
-LangString NAME_Iconsets ${LANG_FRENCH} "Biblioth�que d'ic�nes"
+LangString NAME_Emoticons ${LANG_FRENCH} "Emoticônes"
+LangString NAME_Iconsets ${LANG_FRENCH} "Bibliothèque d'icônes"
 LangString NAME_Languages ${LANG_FRENCH} "Langues"
 LangString NAME_SecLanguagesOther ${LANG_FRENCH} "Autre"
-LangString NAME_Themes ${LANG_FRENCH} "Th�mes"
-LangString NAME_SecDesktopIcon ${LANG_FRENCH} "Cr�er une ic�ne sur le bureau"
-LangString NAME_SecAutostart ${LANG_FRENCH} "Lancer Gajim au d�marrage de Windows"
+LangString NAME_Themes ${LANG_FRENCH} "Thèmes"
+LangString NAME_SecDesktopIcon ${LANG_FRENCH} "Créer une icône sur le bureau"
+LangString NAME_SecAutostart ${LANG_FRENCH} "Lancer Gajim au démarrage de Windows"
 LangString DESC_SecGajim ${LANG_FRENCH} "Installer les fichiers principaux de Gajim."
-LangString DESC_SecGtk ${LANG_FRENCH} "Installer Gtk+ 2 (n�cessaire � Gajim)."
-LangString DESC_SecDesktopIcon ${LANG_FRENCH} "Si selectionn�, un raccourci pour Gajim sera cr�� sur le bureau."
-LangString DESC_SecAutostart ${LANG_FRENCH} "Si activ�, Gajim sera automatiquement lanc� au d�marrage de Windows."
+LangString DESC_SecGtk ${LANG_FRENCH} "Installer Gtk+ 2 (nécessaire à Gajim)."
+LangString DESC_SecDesktopIcon ${LANG_FRENCH} "Si selectionné, un raccourci pour Gajim sera créé sur le bureau."
+LangString DESC_SecAutostart ${LANG_FRENCH} "Si activé, Gajim sera automatiquement lancé au démarrage de Windows."
 
 ; German
 LangString NAME_Emoticons ${LANG_GERMAN} "Emoticons"
@@ -81,7 +81,7 @@ LangString NAME_SecDesktopIcon ${LANG_GERMAN} "Desktop-Icon erstellen"
 LangString NAME_SecAutostart ${LANG_GERMAN} "Gajim mit Windows starten"
 LangString DESC_SecGajim ${LANG_GERMAN} "Installiert die Hauptdateien von Gajim."
 LangString DESC_SecGtk ${LANG_GERMAN} "Installert Gtk+ 2 (notwendig um Gajim zu benutzen)."
-LangString DESC_SecDesktopIcon ${LANG_GERMAN} "Wenn dies aktiviert wird, wird ein Icon f�r Gajim auf dem Desktop erstellt."
+LangString DESC_SecDesktopIcon ${LANG_GERMAN} "Wenn dies aktiviert wird, wird ein Icon für Gajim auf dem Desktop erstellt."
 LangString DESC_SecAutostart ${LANG_GERMAN} "Gajim wird automatisch gestartet, sowie Windows startet, wenn dies aktivier wird."
 
 ; Italian		TODO: TRANSLATE!
@@ -110,18 +110,18 @@ LangString DESC_SecGtk ${LANG_SPANISH} "Installs Gtk+ 2 (necessary to run Gajim)
 LangString DESC_SecDesktopIcon ${LANG_SPANISH} "If set, a shortcut for Gajim will be created on the desktop."
 LangString DESC_SecAutostart ${LANG_SPANISH} "If set, Gajim will be automatically started when Windows starts."
 
-; Russian		TODO: TRANSLATE!
-LangString NAME_Emoticons ${LANG_RUSSIAN} "Emoticons"
-LangString NAME_Iconsets ${LANG_RUSSIAN} "Iconsets"
-LangString NAME_Languages ${LANG_RUSSIAN} "Languages"
-LangString NAME_SecLanguagesOther ${LANG_RUSSIAN} "Other"
-LangString NAME_Themes ${LANG_RUSSIAN} "Themes"
-LangString NAME_SecDesktopIcon ${LANG_RUSSIAN} "Create icon on desktop"
-LangString NAME_SecAutostart ${LANG_RUSSIAN} "Start Gajim when Windows starts"
-LangString DESC_SecGajim ${LANG_RUSSIAN} "Installs the main Gajim files."
-LangString DESC_SecGtk ${LANG_RUSSIAN} "Installs Gtk+ 2 (necessary to run Gajim)."
-LangString DESC_SecDesktopIcon ${LANG_RUSSIAN} "If set, a shortcut for Gajim will be created on the desktop."
-LangString DESC_SecAutostart ${LANG_RUSSIAN} "If set, Gajim will be automatically started when Windows starts."
+; Russian
+LangString NAME_Emoticons ${LANG_RUSSIAN} "Смайлики"
+LangString NAME_Iconsets ${LANG_RUSSIAN} "Темы иконок"
+LangString NAME_Languages ${LANG_RUSSIAN} "Языки"
+LangString NAME_SecLanguagesOther ${LANG_RUSSIAN} "Другое"
+LangString NAME_Themes ${LANG_RUSSIAN} "Темы"
+LangString NAME_SecDesktopIcon ${LANG_RUSSIAN} "Создать ярлык на рабочем столе"
+LangString NAME_SecAutostart ${LANG_RUSSIAN} "Запускать Gajim при загрузке Windows"
+LangString DESC_SecGajim ${LANG_RUSSIAN} "Установка основных файлов Gajim."
+LangString DESC_SecGtk ${LANG_RUSSIAN} "Устанавливка Gtk+ 2 (необходимо для работы Gajim)."
+LangString DESC_SecDesktopIcon ${LANG_RUSSIAN} "Если отмечено, на рабочем столе будет создан ярлык Gajim."
+LangString DESC_SecAutostart ${LANG_RUSSIAN} "Если отмечено, Gajim будет автоматически запускаться при загрузке Windows."
 
 Section "Gajim" SecGajim
 	SectionIn RO
