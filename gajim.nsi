@@ -111,17 +111,17 @@ LangString DESC_SecDesktopIcon ${LANG_SPANISH} "If set, a shortcut for Gajim wil
 LangString DESC_SecAutostart ${LANG_SPANISH} "If set, Gajim will be automatically started when Windows starts."
 
 ; Russian
-LangString NAME_Emoticons ${LANG_RUSSIAN} "уНБКМЙЛЙ"
-LangString NAME_Iconsets ${LANG_RUSSIAN} "фЕНЩ ЙЛПОПЛ"
-LangString NAME_Languages ${LANG_RUSSIAN} "сЪЩЛЙ"
-LangString NAME_SecLanguagesOther ${LANG_RUSSIAN} "дТХЗПЕ"
-LangString NAME_Themes ${LANG_RUSSIAN} "фЕНЩ"
-LangString NAME_SecDesktopIcon ${LANG_RUSSIAN} "уПЪДБФШ СТМЩЛ ОБ ТБВПЮЕН УФПМЕ"
-LangString NAME_SecAutostart ${LANG_RUSSIAN} "ъБРХУЛБФШ Gajim РТЙ ЪБЗТХЪЛЕ Windows"
-LangString DESC_SecGajim ${LANG_RUSSIAN} "хУФБОПЧЛБ ПУОПЧОЩИ ЖБКМПЧ Gajim."
-LangString DESC_SecGtk ${LANG_RUSSIAN} "хУФБОПЧЛБ Gtk+ 2 (ОЕПВИПДЙНП ДМС ТБВПФЩ Gajim)."
-LangString DESC_SecDesktopIcon ${LANG_RUSSIAN} "еУМЙ ПФНЕЮЕОП, ОБ ТБВПЮЕН УФПМЕ ВХДЕФ УПЪДБО СТМЩЛ Gajim."
-LangString DESC_SecAutostart ${LANG_RUSSIAN} "еУМЙ ПФНЕЮЕОП, Gajim ВХДЕФ БЧФПНБФЙЮЕУЛЙ ЪБРХУЛБФШУС РТЙ ЪБЗТХЪЛЕ Windows."
+LangString NAME_Emoticons ${LANG_RUSSIAN} "Смайлики"
+LangString NAME_Iconsets ${LANG_RUSSIAN} "Темы иконок"
+LangString NAME_Languages ${LANG_RUSSIAN} "Языки"
+LangString NAME_SecLanguagesOther ${LANG_RUSSIAN} "Другое"
+LangString NAME_Themes ${LANG_RUSSIAN} "Темы"
+LangString NAME_SecDesktopIcon ${LANG_RUSSIAN} "Создать ярлык на рабочем столе"
+LangString NAME_SecAutostart ${LANG_RUSSIAN} "Запускать Gajim при загрузке Windows"
+LangString DESC_SecGajim ${LANG_RUSSIAN} "Установка основных файлов Gajim."
+LangString DESC_SecGtk ${LANG_RUSSIAN} "Установка Gtk+ 2 (необходимо для работы Gajim)."
+LangString DESC_SecDesktopIcon ${LANG_RUSSIAN} "Если отмечено, на рабочем столе будет создан ярлык Gajim."
+LangString DESC_SecAutostart ${LANG_RUSSIAN} "Если отмечено, Gajim будет автоматически запускаться при загрузке Windows."
 
 Section "Gajim" SecGajim
 	SectionIn RO
