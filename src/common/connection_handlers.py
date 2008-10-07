@@ -2313,6 +2313,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						self.discoverInfo(jid)
 
 		self.dispatch('ROSTER', roster)
+		self.connection.set_send_timeout(self.keepalives, self.sendPing)
 
 	def _send_first_presence(self, signed = ''):
 		show = self.continue_connect_info[0]
