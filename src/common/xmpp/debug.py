@@ -46,7 +46,7 @@ import os
 
 import types
 
-if os.environ.has_key('TERM'):
+if 'TERM' in os.environ:
     colors_enabled=True
 else:
     colors_enabled=False
@@ -377,10 +377,10 @@ class Debug:
     def Show(self, flag, msg, prefix=''):
         msg=msg.replace('\r','\\r').replace('\n','\\n').replace('><','>\n  <')
         if not colors_enabled: pass
-        elif self.colors.has_key(prefix): msg=self.colors[prefix]+msg+color_none
+        elif prefix in self.colors: msg=self.colors[prefix]+msg+color_none
         else: msg=color_none+msg
         if not colors_enabled: prefixcolor=''
-        elif self.colors.has_key(flag): prefixcolor=self.colors[flag]
+        elif flag in self.colors: prefixcolor=self.colors[flag]
         else: prefixcolor=color_none
         
         if prefix=='error':

@@ -234,7 +234,7 @@ class HistoryWindow:
 
 	def _load_history(self, jid_or_name, account = None):
 		'''Load history for the given jid/name and show it''' 
-		if jid_or_name and self.completion_dict.has_key(jid_or_name): 
+		if jid_or_name and jid_or_name in self.completion_dict: 
 			# a full qualified jid or a contact name was entered
 			info_jid, info_account, info_name, info_completion = self.completion_dict[jid_or_name]
 			self.jids_to_search = [info_jid]

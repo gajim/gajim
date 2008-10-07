@@ -433,7 +433,7 @@ class SignalObject(dbus.service.Object):
 	def account_info(self, account):
 		'''show info on account: resource, jid, nick, prio, message'''
 		result = DBUS_DICT_SS()
-		if gajim.connections.has_key(account):
+		if account in gajim.connections:
 			# account is valid
 			con = gajim.connections[account]
 			index = con.connected

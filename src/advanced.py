@@ -144,7 +144,7 @@ class AdvancedConfigurationWindow(object):
 				self.desc_label.set_text(_('(None)'))
 
 	def remember_option(self, option, oldval, newval):
-		if self.changed_opts.has_key(option):
+		if option in self.changed_opts:
 			self.changed_opts[option] = (self.changed_opts[option][0], newval)
 		else:
 			self.changed_opts[option] = (oldval, newval)

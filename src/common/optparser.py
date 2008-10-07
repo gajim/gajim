@@ -199,14 +199,14 @@ class OptionsParser:
 	def update_config_x_to_09(self):
 		# Var name that changed:
 		# avatar_width /height -> chat_avatar_width / height
-		if self.old_values.has_key('avatar_width'):
+		if 'avatar_width' in self.old_values:
 			gajim.config.set('chat_avatar_width', self.old_values['avatar_width'])
-		if self.old_values.has_key('avatar_height'):
+		if 'avatar_height' in self.old_values:
 			gajim.config.set('chat_avatar_height', self.old_values['avatar_height'])
-		if self.old_values.has_key('use_dbus'):
+		if 'use_dbus' in self.old_values:
 			gajim.config.set('remote_control', self.old_values['use_dbus'])
 		# always_compact_view -> always_compact_view_chat / _gc
-		if self.old_values.has_key('always_compact_view'):
+		if 'always_compact_view' in self.old_values:
 			gajim.config.set('always_compact_view_chat',
 				self.old_values['always_compact_view'])
 			gajim.config.set('always_compact_view_gc',
@@ -269,19 +269,19 @@ class OptionsParser:
 		con.close()
 
 	def update_config_09_to_010(self):
-		if self.old_values.has_key('usetabbedchat') and not \
+		if 'usetabbedchat' in self.old_values and not \
 		self.old_values['usetabbedchat']:
 			gajim.config.set('one_message_window', 'never')
-		if self.old_values.has_key('autodetect_browser_mailer') and \
+		if 'autodetect_browser_mailer' in self.old_values and \
 		self.old_values['autodetect_browser_mailer'] is True:
 			gajim.config.set('autodetect_browser_mailer', False)
-		if self.old_values.has_key('useemoticons') and \
+		if 'useemoticons' in self.old_values and \
 		not self.old_values['useemoticons']:
 			gajim.config.set('emoticons_theme', '')
-		if self.old_values.has_key('always_compact_view_chat') and \
+		if 'always_compact_view_chat' in self.old_values and \
 		self.old_values['always_compact_view_chat'] != 'False':
 			gajim.config.set('always_hide_chat_buttons', True)
-		if self.old_values.has_key('always_compact_view_gc') and \
+		if 'always_compact_view_gc' in self.old_values and \
 		self.old_values['always_compact_view_gc'] != 'False':
 			gajim.config.set('always_hide_groupchat_buttons', True)
 		
@@ -306,14 +306,14 @@ class OptionsParser:
 		gajim.config.set('version', '0.10')
 
 	def update_config_to_01011(self):
-		if self.old_values.has_key('print_status_in_muc') and \
+		if 'print_status_in_muc' in self.old_values and \
 			self.old_values['print_status_in_muc'] in (True, False):
 			gajim.config.set('print_status_in_muc', 'in_and_out')
 		gajim.config.set('version', '0.10.1.1')
 
 	def update_config_to_01012(self):
 		# See [6456]
-		if self.old_values.has_key('emoticons_theme') and \
+		if 'emoticons_theme' in self.old_values and \
 			self.old_values['emoticons_theme'] == 'Disabled':
 			gajim.config.set('emoticons_theme', '')
 		gajim.config.set('version', '0.10.1.2')
@@ -387,7 +387,7 @@ class OptionsParser:
 	def update_config_to_01016(self):
 		'''#2494 : Now we play gc_received_message sound even if 
 		notify_on_all_muc_messages is false. Keep precedent behaviour.'''
-		if self.old_values.has_key('notify_on_all_muc_messages') and \
+		if 'notify_on_all_muc_messages' in self.old_values and \
 		self.old_values['notify_on_all_muc_messages'] == 'False' and \
 		gajim.config.get_per('soundevents', 'muc_message_received', 'enabled'):
 			gajim.config.set_per('soundevents',\
@@ -397,43 +397,43 @@ class OptionsParser:
 	def update_config_to_01017(self):
 		'''trayicon_notification_on_new_messages ->
 		trayicon_notification_on_events '''
-		if self.old_values.has_key('trayicon_notification_on_new_messages'):
+		if 'trayicon_notification_on_new_messages' in self.old_values:
 			gajim.config.set('trayicon_notification_on_events',
 				self.old_values['trayicon_notification_on_new_messages'])
 		gajim.config.set('version', '0.10.1.7')
 
 	def update_config_to_01018(self):
 		'''chat_state_notifications -> outgoing_chat_state_notifications'''
-		if self.old_values.has_key('chat_state_notifications'):
+		if 'chat_state_notifications' in self.old_values:
 			gajim.config.set('outgoing_chat_state_notifications',
 				self.old_values['chat_state_notifications'])
 		gajim.config.set('version', '0.10.1.8')
 
 	def update_config_to_01101(self):
 		'''fill time_stamp from before_time and after_time'''
-		if self.old_values.has_key('before_time'):
+		if 'before_time' in self.old_values:
 			gajim.config.set('time_stamp', '%s%%X%s ' % (
 				self.old_values['before_time'], self.old_values['after_time']))
 		gajim.config.set('version', '0.11.0.1')
 
 	def update_config_to_01102(self):
 		'''fill time_stamp from before_time and after_time'''
-		if self.old_values.has_key('ft_override_host_to_send'):
+		if 'ft_override_host_to_send' in self.old_values:
 			gajim.config.set('ft_add_hosts_to_send',
 				self.old_values['ft_override_host_to_send'])
 		gajim.config.set('version', '0.11.0.2')
 	
 	def update_config_to_01111(self):
 		'''always_hide_chatbuttons -> compact_view'''
-		if self.old_values.has_key('always_hide_groupchat_buttons') and \
-		self.old_values.has_key('always_hide_chat_buttons'):
+		if 'always_hide_groupchat_buttons' in self.old_values and \
+		'always_hide_chat_buttons' in self.old_values:
 			gajim.config.set('compact_view', self.old_values['always_hide_groupchat_buttons'] and \
 			self.old_values['always_hide_chat_buttons'])
 		gajim.config.set('version', '0.11.1.1')
 
 	def update_config_to_01112(self):
 		'''gtk+ theme is renamed to default'''
-		if self.old_values.has_key('roster_theme') and \
+		if 'roster_theme' in self.old_values and \
 		self.old_values['roster_theme'] == 'gtk+':
 			gajim.config.set('roster_theme', _('default'))
 		gajim.config.set('version', '0.11.1.2')

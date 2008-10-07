@@ -148,7 +148,7 @@ class FileTransfersWindow:
 		''' show a dialog saying that file (file_props) has been transferred'''
 		def on_open(widget, file_props):
 			dialog.destroy()
-			if not file_props.has_key('file-name'):
+			if 'file-name' not in file_props:
 				return
 			(path, file) = os.path.split(file_props['file-name'])
 			if os.path.exists(path) and os.path.isdir(path):
@@ -296,15 +296,15 @@ _('Connection with peer cannot be established.'))
 	def show_file_request(self, account, contact, file_props):
 		''' show dialog asking for comfirmation and store location of new
 		file requested by a contact'''
-		if file_props is None or not file_props.has_key('name'):
+		if file_props is None or 'name' not in file_props:
 			return
 		sec_text = '\t' + _('File: %s') % file_props['name']
-		if file_props.has_key('size'):
+		if 'size' in file_props:
 			sec_text += '\n\t' + _('Size: %s') % \
 				helpers.convert_bytes(file_props['size'])
-		if file_props.has_key('mime-type'):
+		if 'mime-type' in file_props:
 			sec_text += '\n\t' + _('Type: %s') % file_props['mime-type']
-		if file_props.has_key('desc'):
+		if 'desc' in file_props:
 			sec_text += '\n\t' + _('Description: %s') % file_props['desc']
 		prim_text = _('%s wants to send you a file:') % contact.jid
 		dialog, dialog2 = None, None
@@ -460,10 +460,10 @@ _('Connection with peer cannot be established.'))
 
 	def _remove_transfer(self, iter, sid, file_props):
 		self.model.remove(iter)
-		if  file_props.has_key('tt_account'):
+		if  'tt_account' in file_props:
 			# file transfer is set
 			account = file_props['tt_account']
-			if gajim.connections.has_key(account):
+			if account in gajim.connections:
 				# there is a connection to the account
 				gajim.connections[account].remove_transfer(file_props)
 			if file_props['type'] == 'r': # we receive a file
@@ -486,7 +486,7 @@ _('Connection with peer cannot be established.'))
 
 	def set_progress(self, typ, sid, transfered_size, iter = None):
 		''' change the progress of a transfer with new transfered size'''
-		if not self.files_props[typ].has_key(sid):
+		if sid not in self.files_props[typ]:
 			return
 		file_props = self.files_props[typ][sid]
 		full_size = int(file_props['size'])
@@ -509,7 +509,7 @@ _('Connection with peer cannot be established.'))
 			# Kb/s
 
 			# remaining time
-			if file_props.has_key('offset') and file_props['offset']:
+			if 'offset' in file_props and file_props['offset']:
 				transfered_size -= file_props['offset'] 
 				full_size -= file_props['offset']
 
@@ -536,11 +536,11 @@ _('Connection with peer cannot be established.'))
 				status = 'download'
 			else:
 				status = 'upload'
-			if file_props.has_key('paused') and file_props['paused'] == True:
+			if 'paused' in file_props and file_props['paused'] == True:
 				status = 'pause'
-			elif file_props.has_key('stalled') and file_props['stalled'] == True:
+			elif 'stalled' in file_props and file_props['stalled'] == True:
 				status = 'waiting'
-			if file_props.has_key('connected') and file_props['connected'] == False:
+			if 'connected' in file_props and file_props['connected'] == False:
 				status = 'stop'
 			self.model.set(iter, 0, self.images[status])
 			if transfered_size == full_size:
@@ -608,7 +608,7 @@ _('Connection with peer cannot be established.'))
 		self.model.set(iter, 1, text_labels, 2, text_props, C_SID,
 			file_props['type'] + file_props['sid'])
 		self.set_progress(file_props['type'], file_props['sid'], 0, iter)
-		if file_props.has_key('started') and file_props['started'] is False:
+		if 'started' in file_props and file_props['started'] is False:
 			status = 'waiting'
 		elif file_props['type'] == 'r':
 			status = 'download'
@@ -660,33 +660,33 @@ _('Connection with peer cannot be established.'))
 		self.on_open_folder_menuitem_activate(widget)
 
 	def is_transfer_paused(self, file_props):
-		if file_props.has_key('stopped') and file_props['stopped']:
+		if 'stopped' in file_props and file_props['stopped']:
 			return False
-		if file_props.has_key('completed') and file_props['completed']:
+		if 'completed' in file_props and file_props['completed']:
 			return False
-		if not file_props.has_key('disconnect_cb'):
+		if 'disconnect_cb' not in file_props:
 			return False
 		return file_props['paused']
 
 	def is_transfer_active(self, file_props):
-		if file_props.has_key('stopped') and file_props['stopped']:
+		if 'stopped' in file_props and file_props['stopped']:
 			return False
-		if file_props.has_key('completed') and file_props['completed']:
+		if 'completed' in file_props and file_props['completed']:
 			return False
-		if not file_props.has_key('started') or not file_props['started']:
+		if 'started' not in file_props or not file_props['started']:
 			return False
-		if not file_props.has_key('paused'):
+		if 'paused' not in file_props:
 			return True
 		return not file_props['paused']
 
 	def is_transfer_stopped(self, file_props):
-		if file_props.has_key('error') and file_props['error'] != 0:
+		if 'error' in file_props and file_props['error'] != 0:
 			return True
-		if file_props.has_key('completed') and file_props['completed']:
+		if 'completed' in file_props and file_props['completed']:
 			return True
-		if file_props.has_key('connected') and file_props['connected'] == False:
+		if 'connected' in file_props and file_props['connected'] == False:
 			return True
-		if not file_props.has_key('stopped') or not file_props['stopped']:
+		if 'stopped' not in file_props or not file_props['stopped']:
 			return False
 		return True
 
@@ -831,10 +831,10 @@ _('Connection with peer cannot be established.'))
 		s_iter = selected[1]
 		sid = self.model[s_iter][C_SID].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
-		if not file_props.has_key('tt_account'):
+		if 'tt_account' not in file_props:
 			return 
 		account = file_props['tt_account']
-		if not gajim.connections.has_key(account):
+		if account not in gajim.connections:
 			return
 		gajim.connections[account].disconnect_transfer(file_props)
 		self.set_status(file_props['type'], file_props['sid'], 'stop')
@@ -941,7 +941,7 @@ _('Connection with peer cannot be established.'))
 		s_iter = selected[1]
 		sid = self.model[s_iter][C_SID].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
-		if not file_props.has_key('file-name'):
+		if 'file-name' not in file_props:
 			return
 		(path, file) = os.path.split(file_props['file-name'])
 		if os.path.exists(path) and os.path.isdir(path):

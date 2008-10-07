@@ -193,11 +193,11 @@ class Dispatcher(PlugIn):
 								(handler, name, typ, ns, xmlns), 'info')
 		if not typ and not ns: 
 			typ='default'
-		if not self.handlers.has_key(xmlns): 
+		if xmlns not in self.handlers: 
 			self.RegisterNamespace(xmlns,'warn')
-		if not self.handlers[xmlns].has_key(name): 
+		if name not in self.handlers[xmlns]: 
 			self.RegisterProtocol(name,Protocol,xmlns,'warn')
-		if not self.handlers[xmlns][name].has_key(typ+ns): 
+		if typ+ns not in self.handlers[xmlns][name]: 
 			self.handlers[xmlns][name][typ+ns]=[]
 		if makefirst: 
 			self.handlers[xmlns][name][typ+ns].insert(0,{'func':handler,'system':system})
@@ -216,11 +216,11 @@ class Dispatcher(PlugIn):
 			xmlns=self._owner.defaultNamespace
 		if not typ and not ns: 
 			typ='default'
-		if not self.handlers.has_key(xmlns):
+		if xmlns not in self.handlers:
 			return
-		if not self.handlers[xmlns].has_key(name): 
+		if name not in self.handlers[xmlns]: 
 			return
-		if not self.handlers[xmlns][name].has_key(typ+ns): 
+		if typ+ns not in self.handlers[xmlns][name]: 
 			return
 		for pack in self.handlers[xmlns][name][typ+ns]:
 			if handler==pack['func']: 
@@ -306,10 +306,10 @@ class Dispatcher(PlugIn):
 			session.Stream.features=stanza
 		
 		xmlns=stanza.getNamespace()
-		if not self.handlers.has_key(xmlns):
+		if xmlns not in self.handlers:
 			self.DEBUG("Unknown namespace: " + xmlns, 'warn')
 			xmlns='unknown'
-		if not self.handlers[xmlns].has_key(name):
+		if name not in self.handlers[xmlns]:
 			self.DEBUG("Unknown stanza: " + name, 'warn')
 			name='unknown'
 		else:
@@ -325,17 +325,17 @@ class Dispatcher(PlugIn):
 		
 		session.DEBUG("Dispatching %s stanza with type->%s props->%s id->%s"%(name,typ,stanza.props,ID),'ok')
 		list=['default']                                                     # we will use all handlers:
-		if self.handlers[xmlns][name].has_key(typ): list.append(typ)                # from very common...
+		if typ in self.handlers[xmlns][name]: list.append(typ)                # from very common...
 		for prop in stanza.props:
-			if self.handlers[xmlns][name].has_key(prop): list.append(prop)
-			if typ and self.handlers[xmlns][name].has_key(typ+prop): list.append(typ+prop)  # ...to very particular
+			if prop in self.handlers[xmlns][name]: list.append(prop)
+			if typ and typ+prop in self.handlers[xmlns][name]: list.append(typ+prop)  # ...to very particular
 		
 		chain=self.handlers[xmlns]['default']['default']
 		for key in list:
 			if key: chain = chain + self.handlers[xmlns][name][key]
 		
 		output=''
-		if session._expected.has_key(ID):
+		if ID in session._expected:
 			user=0
 			if type(session._expected[ID]) == type(()):
 				cb,args = session._expected[ID]
@@ -372,7 +372,7 @@ class Dispatcher(PlugIn):
 		self._owner.remove_timeout()
 		if self._expected[self._witid] is None:
 			return
-		if self.on_responses.has_key(self._witid):
+		if self._witid in self.on_responses:
 			i = self._witid # copy id cause it can change in resp() call
 			self._owner.onreceive(None)
 			resp, args = self.on_responses[self._witid]

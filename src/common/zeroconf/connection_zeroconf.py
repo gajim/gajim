@@ -135,7 +135,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	# END __init__
 
 	def dispatch(self, event, data):
-		if gajim.handlers.has_key(event):
+		if event in gajim.handlers:
 			gajim.handlers[event](self.name, data)
 
 	def _reconnect(self):

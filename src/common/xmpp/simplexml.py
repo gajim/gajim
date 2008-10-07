@@ -217,7 +217,7 @@ class Node(object):
 			if namespace and namespace<>node.getNamespace(): continue
 			if node.getName() == name:
 				for key in attrs.keys():
-				   if not node.attrs.has_key(key) or node.attrs[key]<>attrs[key]: break
+				   if key not in node.attrs or node.attrs[key]<>attrs[key]: break
 				else: nodes.append(node)
 			if one and nodes: return nodes[0]
 		if not one: return nodes
@@ -228,7 +228,7 @@ class Node(object):
 			if namespace is not None and namespace!=node.getNamespace(): continue
 			if node.getName() == name:
 				for key in attrs.keys():
-					if not node.attrs.has_key(key) or \
+					if key not in node.attrs or \
 						node.attrs[key]!=attrs[key]: break
 				else:
 					yield node
@@ -273,7 +273,7 @@ class Node(object):
 		except: self.addChild(tag,attrs,payload=[ustr(val)])
 	def has_attr(self,key):
 		""" Checks if node have attribute "key"."""
-		return self.attrs.has_key(key)
+		return key in self.attrs
 	def __getitem__(self,item):
 		""" Returns node's attribute "item" value. """
 		return self.getAttr(item)

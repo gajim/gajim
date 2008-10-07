@@ -242,7 +242,7 @@ def get_contact_dict_for_account(account):
 				jid)
 		contacts_dict[jid] = contact
 		name = contact.name
-		if contacts_dict.has_key(name):
+		if name in contacts_dict:
 			contact1 = contacts_dict[name]
 			del contacts_dict[name]
 			contacts_dict['%s (%s)' % (name, contact1.jid)] = contact1
@@ -619,11 +619,11 @@ def get_icon_name_to_show(contact, account = None):
 	if account and gajim.events.get_nb_roster_events(account,
 	contact.get_full_jid()):
 		return 'event'
-	if account and gajim.interface.minimized_controls.has_key(account) and \
+	if account and account in gajim.interface.minimized_controls and \
 	contact.jid in gajim.interface.minimized_controls[account] and gajim.interface.\
 		minimized_controls[account][contact.jid].get_nb_unread_pm() > 0:
 		return 'event'
-	if account and gajim.gc_connected[account].has_key(contact.jid):
+	if account and contact.jid in gajim.gc_connected[account]:
 		if gajim.gc_connected[account][contact.jid]:
 			return 'muc_active'
 		else:
@@ -787,7 +787,7 @@ def get_os_info():
 			(2, 5, 2): '2003',
 			(2, 6, 0): 'Vista',
 		}
-		if win_version.has_key(ver_format):
+		if ver_format in win_version:
 			return 'Windows' + ' ' + win_version[ver_format]
 		else:
 			return 'Windows'
@@ -1175,7 +1175,7 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
 		elif keyID: 
 			public_keys = gajim.connections[account].ask_gpg_keys()
 			# Assign the corresponding key, if we have it in our keyring
-			if public_keys.has_key(keyID):
+			if keyID in public_keys:
 				for u in gajim.contacts.get_contacts(account, jid):
 					u.keyID = keyID
 				keys_str = gajim.config.get_per('accounts', account, 'attached_gpg_keys')
@@ -1192,11 +1192,11 @@ def sort_identities_func(i1, i2):
 		return -1
 	if cat1 > cat2:
 		return 1
-	if i1.has_key('type'):
+	if 'type' in i1:
 		type1 = i1['type']
 	else:
 		type1 = ''
-	if i2.has_key('type'):
+	if 'type' in i2:
 		type2 = i2['type']
 	else:
 		type2 = ''
@@ -1204,11 +1204,11 @@ def sort_identities_func(i1, i2):
 		return -1
 	if type1 > type2:
 		return 1
-	if i1.has_key('xml:lang'):
+	if 'xml:lang' in i1:
 		lang1 = i1['xml:lang']
 	else:
 		lang1 = ''
-	if i2.has_key('xml:lang'):
+	if 'xml:lang' in i2:
 		lang2 = i2['xml:lang']
 	else:
 		lang2 = ''
@@ -1234,15 +1234,15 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 	identities.sort(cmp=sort_identities_func)
 	for i in identities:
 		c = i['category']
-		if i.has_key('type'):
+		if 'type' in i:
 			type_ = i['type']
 		else:
 			type_ = ''
-		if i.has_key('xml:lang'):
+		if 'xml:lang' in i:
 			lang = i['xml:lang']
 		else:
 			lang = ''
-		if i.has_key('name'):
+		if 'name' in i:
 			name = i['name']
 		else:
 			name = ''

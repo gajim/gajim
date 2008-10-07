@@ -140,7 +140,7 @@ if gajim.HAVE_GPG:
 
 			try: proc.wait()
 			except IOError: pass
-			if resp.has_key('GOOD_PASSPHRASE') or resp.has_key('SIG_CREATED'):
+			if 'GOOD_PASSPHRASE' in resp or 'SIG_CREATED' in resp:
 				return self._stripHeaderFooter(output)
 			return 'BAD_PASSPHRASE'
 
@@ -168,7 +168,7 @@ if gajim.HAVE_GPG:
 			except IOError: pass
 			
 			keyid = ''
-			if resp.has_key('GOODSIG'):
+			if 'GOODSIG' in resp:
 				keyid = resp['GOODSIG'].split()[0]
 			return keyid
 

@@ -53,7 +53,7 @@ def get_avatar_pixbuf_encoded_mime(photo):
 	img_decoded = None
 	avatar_encoded = None
 	avatar_mime_type = None
-	if photo.has_key('BINVAL'):
+	if 'BINVAL' in photo:
 		img_encoded = photo['BINVAL']
 		avatar_encoded = img_encoded
 		try:
@@ -61,7 +61,7 @@ def get_avatar_pixbuf_encoded_mime(photo):
 		except:
 			pass
 	if img_decoded:
-		if photo.has_key('TYPE'):
+		if 'TYPE' in photo:
 			avatar_mime_type = photo['TYPE']
 			pixbuf = gtkgui_helpers.get_pixbuf_from_data(img_decoded)
 		else:
@@ -230,7 +230,7 @@ class VcardWindow:
 		i = 0
 		client = ''
 		os = ''
-		while self.os_info.has_key(i):
+		while i in self.os_info:
 			if not self.os_info[i]['resource'] or \
 					self.os_info[i]['resource'] == resource:
 				self.os_info[i]['client'] = client_info
@@ -525,7 +525,7 @@ class ZeroconfVcardWindow:
 	def fill_personal_page(self):
 		contact = gajim.connections[gajim.ZEROCONF_ACC_NAME].roster.getItem(self.contact.jid)
 		for key in ('1st', 'last', 'jid', 'email'):
-			if not contact['txt_dict'].has_key(key):
+			if key not in contact['txt_dict']:
 				contact['txt_dict'][key] = ''
 		self.xml.get_widget('first_name_label').set_text(contact['txt_dict']['1st'])
 		self.xml.get_widget('last_name_label').set_text(contact['txt_dict']['last'])

@@ -1122,7 +1122,7 @@ class PreferencesWindow:
 		helpers.play_sound(snd_event_config_name)
 
 	def on_open_advanced_editor_button_clicked(self, widget, data = None):
-		if gajim.interface.instances.has_key('advanced_config'):
+		if 'advanced_config' in gajim.interface.instances:
 			gajim.interface.instances['advanced_config'].window.present()
 		else:
 			gajim.interface.instances['advanced_config'] = \
@@ -1165,7 +1165,7 @@ class ManageProxiesWindow:
 		self.xml.get_widget('proxytype_combobox').set_active(0)
 
 	def on_manage_proxies_window_destroy(self, widget):
-		if gajim.interface.instances.has_key('accounts'):
+		if 'accounts' in gajim.interface.instances:
 			gajim.interface.instances['accounts'].\
 				update_proxy_list()
 		del gajim.interface.instances['manage_proxies']
@@ -1376,7 +1376,7 @@ class AccountsWindow:
 
 	def check_resend_relog(self):
 		if self.need_relogin and self.current_account == gajim.ZEROCONF_ACC_NAME:
-			if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME):
+			if gajim.ZEROCONF_ACC_NAME in gajim.connections:
 				gajim.connections[gajim.ZEROCONF_ACC_NAME].update_details()
 				return
 
@@ -1524,7 +1524,7 @@ class AccountsWindow:
 
 		# Personal tab
 		gpg_key_label = self.xml.get_widget('gpg_key_label2')
-		if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME) and \
+		if gajim.ZEROCONF_ACC_NAME in gajim.connections and \
 		gajim.connections[gajim.ZEROCONF_ACC_NAME].gpg:
 			self.xml.get_widget('gpg_choose_button2').set_sensitive(True)
 			self.init_account_gpg()
@@ -1651,7 +1651,7 @@ class AccountsWindow:
 
 	def on_add_button_clicked(self, widget):
 		'''When add button is clicked: open an account information window'''
-		if gajim.interface.instances.has_key('account_creation_wizard'):
+		if 'account_creation_wizard' in gajim.interface.instances:
 			gajim.interface.instances['account_creation_wizard'].window.present()
 		else:
 			gajim.interface.instances['account_creation_wizard'] = \
@@ -1683,7 +1683,7 @@ class AccountsWindow:
 					break
 		# Detect if we have opened windows for this account
 		def remove(account):
-			if gajim.interface.instances[account].has_key('remove_account'):
+			if 'remove_account' in gajim.interface.instances[account]:
 				gajim.interface.instances[account]['remove_account'].window.\
 					present()
 			else:
@@ -1972,7 +1972,7 @@ class AccountsWindow:
 		gajim.config.set_per('accounts', self.current_account, 'proxy', proxy)
 
 	def on_manage_proxies_button1_clicked(self, widget):
-		if gajim.interface.instances.has_key('manage_proxies'):
+		if 'manage_proxies' in gajim.interface.instances:
 			gajim.interface.instances['manage_proxies'].window.present()
 		else:
 			gajim.interface.instances['manage_proxies'] = ManageProxiesWindow()
@@ -2026,7 +2026,7 @@ class AccountsWindow:
 			custom_port)
 
 	def on_gpg_choose_button_clicked(self, widget, data = None):
-		if gajim.connections.has_key(self.current_account) and \
+		if self.current_account in gajim.connections and \
 		gajim.connections[self.current_account].gpg:
 			secret_keys = gajim.connections[self.current_account].\
 				ask_gpg_secrete_keys()
@@ -2085,14 +2085,14 @@ class AccountsWindow:
 		self.on_checkbutton_toggled(widget, 'use_gpg_agent')
 
 	def on_edit_details_button1_clicked(self, widget):
-		if not gajim.interface.instances.has_key(self.current_account):
+		if self.current_account not in gajim.interface.instances:
 			dialogs.ErrorDialog(_('No such account available'),
 				_('You must create your account before editing your personal '
 				'information.'))
 			return
 
 		# show error dialog if account is newly created (not in gajim.connections)
-		if not gajim.connections.has_key(self.current_account) or \
+		if self.current_account not in gajim.connections or \
 		gajim.connections[self.current_account].connected < 2:
 			dialogs.ErrorDialog(_('You are not connected to the server'),
 			_('Without a connection, you can not edit your personal information.'))
@@ -2128,7 +2128,7 @@ class AccountsWindow:
 	def on_enable_zeroconf_checkbutton2_toggled(self, widget):
 		# don't do anything if there is an account with the local name but is a 
 		# normal account
-		if gajim.connections.has_key(gajim.ZEROCONF_ACC_NAME) and not \
+		if gajim.ZEROCONF_ACC_NAME in gajim.connections and not \
 		gajim.connections[gajim.ZEROCONF_ACC_NAME].is_zeroconf:
 			gajim.connections[gajim.ZEROCONF_ACC_NAME].dispatch('ERROR',
 				(_('Account Local already exists.'),
@@ -2264,7 +2264,7 @@ class FakeDataForm(gtk.Table, object):
 	def _draw_table(self):
 		'''Draw the table'''
 		nbrow = 0
-		if self.infos.has_key('instructions'):
+		if 'instructions' in self.infos:
 			nbrow = 1
 			self.resize(rows = nbrow, columns = 2)
 			label = gtk.Label(self.infos['instructions'])
@@ -2314,7 +2314,7 @@ class ServiceRegistrationWindow:
 			table = self.xml.get_widget('table')
 			table.attach(self.data_form_widget, 0, 2, 0, 1)
 		else:
-			if infos.has_key('registered'):
+			if 'registered' in infos:
 				self.window.set_title(_('Edit %s') % service)
 			else:
 				self.window.set_title(_('Register to %s') % service)
@@ -2336,9 +2336,9 @@ class ServiceRegistrationWindow:
 				form, True) # True is for is_form
 		else:
 			infos = self.data_form_widget.get_infos()
-			if infos.has_key('instructions'):
+			if 'instructions' in infos:
 				del infos['instructions']
-			if infos.has_key('registered'):
+			if 'registered' in infos:
 				del infos['registered']
 			gajim.connections[self.account].register_agent(self.service, infos)
 
@@ -2500,13 +2500,13 @@ class GroupchatConfigWindow:
 			tv = self.affiliation_treeview[affiliation]
 			model = tv.get_model()
 			reason = ''
-			if users_dict[jid].has_key('reason'):
+			if 'reason' in users_dict[jid]:
 				reason = users_dict[jid]['reason']
 			nick = ''
-			if users_dict[jid].has_key('nick'):
+			if 'nick' in users_dict[jid]:
 				nick = users_dict[jid]['nick']
 			role = ''
-			if users_dict[jid].has_key('role'):
+			if 'role' in users_dict[jid]:
 				role = users_dict[jid]['role']
 			model.append((jid, reason, nick, role))
 
@@ -2527,8 +2527,8 @@ class GroupchatConfigWindow:
 				jid = model[iter][0].decode('utf-8')
 				actual_jid_list.append(jid)
 				if jid not in self.start_users_dict[affiliation] or \
-				(affiliation == 'outcast' and self.start_users_dict[affiliation]\
-				[jid].has_key('reason') and self.start_users_dict[affiliation][jid]\
+				(affiliation == 'outcast' and 'reason' in self.start_users_dict[affiliation]\
+				[jid] and self.start_users_dict[affiliation][jid]\
 				['reason'] != model[iter][1].decode('utf-8')):
 					users_dict[jid] = {'affiliation': affiliation}
 					if affiliation == 'outcast':
@@ -2549,7 +2549,7 @@ class RemoveAccountWindow:
 	and do removing of the account given'''
 
 	def on_remove_account_window_destroy(self, widget):
-		if gajim.interface.instances.has_key(self.account):
+		if self.account in gajim.interface.instances:
 			del gajim.interface.instances[self.account]['remove_account']
 
 	def on_cancel_button_clicked(self, widget):
@@ -2635,7 +2635,7 @@ class RemoveAccountWindow:
 			gajim.interface.roster.regroup = False
 		gajim.interface.roster.setup_and_draw_roster()
 		gajim.interface.roster.set_actions_menu_needs_rebuild()
-		if gajim.interface.instances.has_key('accounts'):
+		if 'accounts' in gajim.interface.instances:
 			gajim.interface.instances['accounts'].init_accounts()
 		self.window.destroy()
 
@@ -3231,7 +3231,7 @@ class AccountCreationWizardWindow:
 		proxies_combobox.set_active(0)
 
 	def on_manage_proxies_button_clicked(self, widget):
-		if gajim.interface.instances.has_key('manage_proxies'):
+		if 'manage_proxies' in gajim.interface.instances:
 			gajim.interface.instances['manage_proxies'].window.present()
 		else:
 			gajim.interface.instances['manage_proxies'] = \
@@ -3341,7 +3341,7 @@ class AccountCreationWizardWindow:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 
 	def on_advanced_button_clicked(self, widget):
-		if gajim.interface.instances.has_key('accounts'):
+		if 'accounts' in gajim.interface.instances:
 			gajim.interface.instances['accounts'].window.present()
 		else:
 			gajim.interface.instances['accounts'] = AccountsWindow()
@@ -3462,7 +3462,7 @@ class AccountCreationWizardWindow:
 		gajim.gajim_optional_features[self.account] = []
 		gajim.caps_hash[self.account] = ''
 		# refresh accounts window
-		if gajim.interface.instances.has_key('accounts'):
+		if 'accounts' in gajim.interface.instances:
 			gajim.interface.instances['accounts'].init_accounts()
 		# refresh roster
 		if len(gajim.connections) >= 2: # Do not merge accounts if only one exists

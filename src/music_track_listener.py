@@ -103,22 +103,22 @@ class MusicTrackListener(gobject.GObject):
 	def _mpris_properties_extract(self, song):
 		info = MusicTrackInfo()
 
-		if song.has_key('title'):
+		if 'title' in song:
 			info.title = song['title']
 		else:
 			info.title = ''
 
-		if song.has_key('album'):
+		if 'album' in song:
 			info.album = song['album']
 		else:
 			info.album = ''
 
-		if song.has_key('artist'):
+		if 'artist' in song:
 			info.artist = song['artist']
 		else:
 			info.artist = ''
 
-		if song.has_key('length'):
+		if 'length' in song:
 			info.duration = int(song['length'])
 		else:
 			info.duration = 0

@@ -89,15 +89,15 @@ class SocksQueue:
 		return self.listener
 	
 	def send_success_reply(self, file_props, streamhost):
-		if file_props.has_key('streamhost-used') and \
+		if 'streamhost-used' in file_props and \
 			file_props['streamhost-used'] is True:
-				if file_props.has_key('proxyhosts'):
+				if 'proxyhosts' in file_props:
 					for proxy in file_props['proxyhosts']:
 						if proxy == streamhost:
 							self.on_success(streamhost)
 							return 2
 				return 0
-		if file_props.has_key('streamhosts'):
+		if 'streamhosts' in file_props:
 			for host in file_props['streamhosts']:
 				if streamhost['state'] == 1:
 					return 0
@@ -123,7 +123,7 @@ class SocksQueue:
 		''' called when there is a host connected to one of the 
 		senders's streamhosts. Stop othere attempts for connections '''
 		for host in file_props['streamhosts']:
-			if host != streamhost and host.has_key('idx'):
+			if host != streamhost and 'idx' in host:
 				if host['state'] == 1:
 					# remove current
 					self.remove_receiver(streamhost['idx'])
@@ -147,7 +147,7 @@ class SocksQueue:
 		# boolean, indicates that there are hosts, which are not tested yet
 		unused_hosts = False
 		for host in file_props['streamhosts']:
-			if host.has_key('idx'):
+			if 'idx' in host:
 				if host['state'] >= 0:
 					return
 				elif host['state'] == -2:
@@ -161,7 +161,7 @@ class SocksQueue:
 					host['idx'] = receiver.queue_idx
 			# we still have chances to connect
 			return
-		if not file_props.has_key('received-len') or file_props['received-len'] == 0:
+		if 'received-len' not in file_props or file_props['received-len'] == 0:
 			# there are no other streamhosts and transfer hasn't started
 			self._connection_refused(streamhost, file_props, receiver.queue_idx)
 		else:
@@ -176,12 +176,12 @@ class SocksQueue:
 			return
 		streamhost['state'] = -1
 		self.remove_receiver(idx, False)
-		if file_props.has_key('streamhosts'):
+		if 'streamhosts' in file_props:
 			for host in file_props['streamhosts']:
 				if host['state'] != -1:
 					return
 		# failure_cb exists - this means that it has never been called
-		if file_props.has_key('failure_cb') and file_props['failure_cb']:
+		if 'failure_cb' in file_props and file_props['failure_cb']:
 			file_props['failure_cb'](streamhost['initiator'], streamhost['id'], 
 				file_props['sid'], code = 404)
 			del(file_props['failure_cb'])
@@ -204,8 +204,8 @@ class SocksQueue:
 	def get_file_from_sender(self, file_props, account):
 		if file_props is None:
 			return
-		if file_props.has_key('hash') and \
-			self.senders.has_key(file_props['hash']):
+		if 'hash' in file_props and \
+			file_props['hash'] in self.senders:
 			
 			sender = self.senders[file_props['hash']]
 			sender.account = account
@@ -213,12 +213,12 @@ class SocksQueue:
 			self.process_result(result, sender)
 	
 	def result_sha(self, sha_str, idx):
-		if self.sha_handlers.has_key(sha_str):
+		if sha_str in self.sha_handlers:
 			props = self.sha_handlers[sha_str]
 			props[0](props[1], idx)
 	
 	def activate_proxy(self, idx):
-		if not self.readers.has_key(idx):
+		if idx not in self.readers:
 			return
 		reader = self.readers[idx]
 		if reader.file_props['type'] != 's':
@@ -244,8 +244,8 @@ class SocksQueue:
 			self.process_result(result, reader)
 	
 	def send_file(self, file_props, account):
-		if file_props.has_key('hash') and \
-			self.senders.has_key(file_props['hash']):
+		if 'hash' in file_props and \
+			file_props['hash'] in self.senders:
 			sender = self.senders[file_props['hash']]
 			file_props['streamhost-used'] = True
 			sender.account = account
@@ -264,17 +264,17 @@ class SocksQueue:
 		It is identified by account name and sid
 		'''
 		if file_props is None or \
-			file_props.has_key('sid') is False:
+			('sid' in file_props) is False:
 			return
 		_id = file_props['sid']
-		if not self.files_props.has_key(account):
+		if account not in self.files_props:
 			self.files_props[account] = {}
 		self.files_props[account][_id] = file_props
 	
 	def remove_file_props(self, account, sid):
-		if self.files_props.has_key(account):
+		if account in self.files_props:
 			fl_props = self.files_props[account]
-			if fl_props.has_key(sid):
+			if sid in fl_props:
 				del(fl_props[sid])
 		
 		if len(self.files_props) == 0:
@@ -282,15 +282,15 @@ class SocksQueue:
 		
 	def get_file_props(self, account, sid):
 		''' get fil_prop by account name and session id '''
-		if self.files_props.has_key(account):
+		if account in self.files_props:
 			fl_props = self.files_props[account]
-			if fl_props.has_key(sid):
+			if sid in fl_props:
 				return fl_props[sid]
 		return None
 	
 	def on_connection_accepted(self, sock):
 		sock_hash =  sock.__hash__()
-		if not self.senders.has_key(sock_hash):
+		if sock_hash not in self.senders:
 			self.senders[sock_hash] = Socks5Sender(self.idlequeue, 
 				sock_hash, self, sock[0], sock[1][0], sock[1][1])
 			self.connected += 1
@@ -305,7 +305,7 @@ class SocksQueue:
 			return
 		if result in (0, -1) and self.complete_transfer_cb is not None:
 			account = actor.account
-			if account is None and actor.file_props.has_key('tt_account'):
+			if account is None and 'tt_account' in actor.file_props:
 				account = actor.file_props['tt_account']
 			self.complete_transfer_cb(account, actor.file_props)
 		elif self.progress_transfer_cb is not None:
@@ -315,7 +315,7 @@ class SocksQueue:
 		''' Remove reciver from the list and decrease 
 		the number of active connections with 1'''
 		if idx != -1:
-			if self.readers.has_key(idx):
+			if idx in self.readers:
 				reader = self.readers[idx]
 				self.idlequeue.unplug_idle(reader.fd)
 				self.idlequeue.remove_timeout(reader.fd)
@@ -330,7 +330,7 @@ class SocksQueue:
 		''' Remove sender from the list of senders and decrease the 
 		number of active connections with 1'''
 		if idx != -1:
-			if self.senders.has_key(idx):
+			if idx in self.senders:
 				if do_disconnect:
 					self.senders[idx].disconnect()
 					return
@@ -369,7 +369,7 @@ class Socks5:
 		if self.file is None:
 			try:
 				self.file = open(self.file_props['file-name'],'rb')
-				if self.file_props.has_key('offset') and self.file_props['offset']:
+				if 'offset' in self.file_props and self.file_props['offset']:
 					self.size = self.file_props['offset']
 					self.file.seek(self.size)
 					self.file_props['received-len'] = self.size
@@ -390,12 +390,12 @@ class Socks5:
 		''' Test if file is already open and return its fd,
 		or just open the file and return the fd.
 		'''
-		if self.file_props.has_key('fd'):
+		if 'fd' in self.file_props:
 			fd = self.file_props['fd']
 		else:
 			offset = 0
 			opt = 'wb'
-			if self.file_props.has_key('offset') and self.file_props['offset']:
+			if 'offset' in self.file_props and self.file_props['offset']:
 				offset = self.file_props['offset']
 				opt = 'ab'
 			fd = open(self.file_props['file-name'], opt)
@@ -406,7 +406,7 @@ class Socks5:
 		return fd
 	
 	def rem_fd(self, fd):
-		if self.file_props.has_key('fd'):
+		if 'fd' in self.file_props:
 			del(self.file_props['fd'])
 		try:
 			fd.close()
@@ -488,7 +488,7 @@ class Socks5:
 		''' read file contents from socket and write them to file ''', \
 			self.file_props['type'], self.file_props['sid']
 		if self.file_props is None or \
-			self.file_props.has_key('file-name') is False:
+			('file-name' in self.file_props) is False:
 			self.file_props['error'] = -2
 			return None
 		fd = None
@@ -545,7 +545,7 @@ class Socks5:
 			self.file_props['stalled'] = False
 		if fd is None and self.file_props['stalled'] is False:
 			return None
-		if self.file_props.has_key('received-len'):
+		if 'received-len' in self.file_props:
 			if self.file_props['received-len'] != 0:
 				return self.file_props['received-len']
 		return None
@@ -647,7 +647,7 @@ class Socks5:
 	
 	def _get_sha1_auth(self):
 		''' get sha of sid + Initiator jid + Target jid '''
-		if self.file_props.has_key('is_a_proxy'):
+		if 'is_a_proxy' in self.file_props:
 			del(self.file_props['is_a_proxy'])
 			return sha.new('%s%s%s' % (self.sid, self.file_props['proxy_sender'], 
 				self.file_props['proxy_receiver'])).hexdigest()
@@ -880,7 +880,7 @@ class Socks5Receiver(Socks5, IdleObject):
 			# no activity for foo seconds
 			if self.file_props['stalled'] == False:
 				self.file_props['stalled'] = True
-				if not self.file_props.has_key('received-len'):
+				if 'received-len' not in self.file_props:
 					self.file_props['received-len'] = 0
 				self.queue.process_result(-1, self)
 				if READ_TIMEOUT > 0:

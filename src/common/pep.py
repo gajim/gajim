@@ -155,35 +155,35 @@ def user_mood(items, name, jid):
 	if jid == gajim.get_jid_from_account(name):
 		acc = gajim.connections[name]
 		if has_child:
-			if acc.mood.has_key('mood'):
+			if 'mood' in acc.mood:
 				del acc.mood['mood']
-			if acc.mood.has_key('text'):
+			if 'text' in acc.mood:
 				del acc.mood['text']
 			if mood is not None:
 				acc.mood['mood'] = mood
 			if text is not None:
 				acc.mood['text'] = text
 		elif retract:
-			if acc.mood.has_key('mood'):
+			if 'mood' in acc.mood:
 				del acc.mood['mood']
-			if acc.mood.has_key('text'):
+			if 'text' in acc.mood:
 				del acc.mood['text']
 
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
 	for contact in gajim.contacts.get_contacts(name, user):
 		if has_child:
-			if contact.mood.has_key('mood'):
+			if 'mood' in contact.mood:
 				del contact.mood['mood']
-			if contact.mood.has_key('text'):
+			if 'text' in contact.mood:
 				del contact.mood['text']
 			if mood is not None:
 				contact.mood['mood'] = mood
 			if text is not None:
 				contact.mood['text'] = text
 		elif retract:
-			if contact.mood.has_key('mood'):
+			if 'mood' in contact.mood:
 				del contact.mood['mood']
-			if contact.mood.has_key('text'):
+			if 'text' in contact.mood:
 				del contact.mood['text']
 
 	if jid == gajim.get_jid_from_account(name):
@@ -223,15 +223,15 @@ def user_tune(items, name, jid):
 	if jid == gajim.get_jid_from_account(name):
 		acc = gajim.connections[name]
 		if has_child:
-			if acc.tune.has_key('artist'):
+			if 'artist' in acc.tune:
 				del acc.tune['artist']
-			if acc.tune.has_key('title'):
+			if 'title' in acc.tune:
 				del acc.tune['title']
-			if acc.tune.has_key('source'):
+			if 'source' in acc.tune:
 				del acc.tune['source']
-			if acc.tune.has_key('track'):
+			if 'track' in acc.tune:
 				del acc.tune['track']
-			if acc.tune.has_key('length'):
+			if 'length' in acc.tune:
 				del acc.tune['length']
 			if artist is not None:
 				acc.tune['artist'] = artist
@@ -244,29 +244,29 @@ def user_tune(items, name, jid):
 			if length is not None:
 				acc.tune['length'] = length
 		elif retract:
-			if acc.tune.has_key('artist'):
+			if 'artist' in acc.tune:
 				del acc.tune['artist']
-			if acc.tune.has_key('title'):
+			if 'title' in acc.tune:
 				del acc.tune['title']
-			if acc.tune.has_key('source'):
+			if 'source' in acc.tune:
 				del acc.tune['source']
-			if acc.tune.has_key('track'):
+			if 'track' in acc.tune:
 				del acc.tune['track']
-			if acc.tune.has_key('length'):
+			if 'length' in acc.tune:
 				del acc.tune['length']
 
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
 	for contact in gajim.contacts.get_contacts(name, user):
 		if has_child:
-			if contact.tune.has_key('artist'):
+			if 'artist' in contact.tune:
 				del contact.tune['artist']
-			if contact.tune.has_key('title'):
+			if 'title' in contact.tune:
 				del contact.tune['title']
-			if contact.tune.has_key('source'):
+			if 'source' in contact.tune:
 				del contact.tune['source']
-			if contact.tune.has_key('track'):
+			if 'track' in contact.tune:
 				del contact.tune['track']
-			if contact.tune.has_key('length'):
+			if 'length' in contact.tune:
 				del contact.tune['length']
 			if artist is not None:
 				contact.tune['artist'] = artist
@@ -279,15 +279,15 @@ def user_tune(items, name, jid):
 			if length is not None:
 				contact.tune['length'] = length
 		elif retract:
-			if contact.tune.has_key('artist'):
+			if 'artist' in contact.tune:
 				del contact.tune['artist']
-			if contact.tune.has_key('title'):
+			if 'title' in contact.tune:
 				del contact.tune['title']
-			if contact.tune.has_key('source'):
+			if 'source' in contact.tune:
 				del contact.tune['source']
-			if contact.tune.has_key('track'):
+			if 'track' in contact.tune:
 				del contact.tune['track']
-			if contact.tune.has_key('length'):
+			if 'length' in contact.tune:
 				del contact.tune['length']
 
 	if jid == gajim.get_jid_from_account(name):
@@ -324,11 +324,11 @@ def user_activity(items, name, jid):
 	if jid == gajim.get_jid_from_account(name):
 		acc = gajim.connections[name]
 		if has_child:
-			if acc.activity.has_key('activity'):
+			if 'activity' in acc.activity:
 				del acc.activity['activity']
-			if acc.activity.has_key('subactivity'):
+			if 'subactivity' in acc.activity:
 				del acc.activity['subactivity']
-			if acc.activity.has_key('text'):
+			if 'text' in acc.activity:
 				del acc.activity['text']
 			if activity is not None:
 				acc.activity['activity'] = activity
@@ -337,21 +337,21 @@ def user_activity(items, name, jid):
 			if text is not None:
 				acc.activity['text'] = text
 		elif retract:
-			if acc.activity.has_key('activity'):
+			if 'activity' in acc.activity:
 				del acc.activity['activity']
-			if acc.activity.has_key('subactivity'):
+			if 'subactivity' in acc.activity:
 				del acc.activity['subactivity']
-			if acc.activity.has_key('text'):
+			if 'text' in acc.activity:
 				del acc.activity['text']
 
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
 	for contact in gajim.contacts.get_contacts(name, user):
 		if has_child:
-			if contact.activity.has_key('activity'):
+			if 'activity' in contact.activity:
 				del contact.activity['activity']
-			if contact.activity.has_key('subactivity'):
+			if 'subactivity' in contact.activity:
 				del contact.activity['subactivity']
-			if contact.activity.has_key('text'):
+			if 'text' in contact.activity:
 				del contact.activity['text']
 			if activity is not None:
 				contact.activity['activity'] = activity
@@ -360,11 +360,11 @@ def user_activity(items, name, jid):
 			if text is not None:
 				contact.activity['text'] = text
 		elif retract:
-			if contact.activity.has_key('activity'):
+			if 'activity' in contact.activity:
 				del contact.activity['activity']
-			if contact.activity.has_key('subactivity'):
+			if 'subactivity' in contact.activity:
 				del contact.activity['subactivity']
-			if contact.activity.has_key('text'):
+			if 'text' in contact.activity:
 				del contact.activity['text']
 
 	if jid == gajim.get_jid_from_account(name):

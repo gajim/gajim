@@ -52,7 +52,7 @@ class Proxy65Manager:
 
 	def resolve(self, proxy, connection, sender_jid, default=None):
 		''' start '''
-		if self.proxies.has_key(proxy):
+		if proxy in self.proxies:
 			resolver = self.proxies[proxy]
 		else:
 			# proxy is being ressolved for the first time
@@ -68,7 +68,7 @@ class Proxy65Manager:
 			resolver.disconnect(connection)
 
 	def resolve_result(self, proxy, query):
-		if not self.proxies.has_key(proxy):
+		if proxy not in self.proxies:
 			return
 		jid = None
 		for item in query.getChildren():
@@ -88,11 +88,11 @@ class Proxy65Manager:
 				break
 
 	def get_default_for_name(self, account):
-		if self.default_proxies.has_key(account):
+		if account in self.default_proxies:
 			return self.default_proxies[account]
 
 	def get_proxy(self, proxy, account):
-		if self.proxies.has_key(proxy):
+		if proxy in self.proxies:
 			resolver = self.proxies[proxy]
 			if resolver.state == S_FINISHED:
 				return (resolver.host, resolver.port, resolver.jid)

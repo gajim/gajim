@@ -102,7 +102,7 @@ class SASL(PlugIn):
         self.password=password
 
     def plugin(self,owner):
-        if not self._owner.Dispatcher.Stream._document_attrs.has_key('version'): self.startsasl='not-supported'
+        if 'version' not in self._owner.Dispatcher.Stream._document_attrs: self.startsasl='not-supported'
         elif self._owner.Dispatcher.Stream.features:
             try: self.FeaturesHandler(self._owner.Dispatcher,self._owner.Dispatcher.Stream.features)
             except NodeProcessed: pass
@@ -177,7 +177,7 @@ class SASL(PlugIn):
             key,value=pair.split('=', 1)
             if value[:1]=='"' and value[-1:]=='"': value=value[1:-1]
             chal[key]=value
-        if chal.has_key('qop') and chal['qop']=='auth':
+        if 'qop' in chal and chal['qop']=='auth':
             resp={}
             resp['username']=self.username
             resp['realm']=self._owner.Server
@@ -201,7 +201,7 @@ class SASL(PlugIn):
 ########################################3333
             node=Node('response',attrs={'xmlns':NS_SASL},payload=[base64.encodestring(sasl_data[:-1]).replace('\r','').replace('\n','')])
             self._owner.send(node.__str__())
-        elif chal.has_key('rspauth'): self._owner.send(Node('response',attrs={'xmlns':NS_SASL}).__str__())
+        elif 'rspauth' in chal: self._owner.send(Node('response',attrs={'xmlns':NS_SASL}).__str__())
         else: 
             self.startsasl='failure'
             self.DEBUG('Failed SASL authentification: unknown challenge','error')

@@ -254,7 +254,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 				message = unicode(message, encoding = 'utf-8')
 			message = helpers.reduce_chars_newlines(message, 100, 1)
 			message = gobject.markup_escape_text(message)
-			if gajim.con_types.has_key(acct['name']) and \
+			if acct['name'] in gajim.con_types and \
 				gajim.con_types[acct['name']] in ('tls', 'ssl'):
 				show_lock = True
 			else:
@@ -431,7 +431,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		self.account].blocked_contacts:
 			name_markup += _(' [blocked]')
 		if self.account and \
-		gajim.interface.minimized_controls.has_key(self.account) and \
+		self.account in gajim.interface.minimized_controls and \
 		prim_contact.jid in gajim.interface.minimized_controls[self.account]:
 			name_markup += _(' [minimized]')
 		properties.append((name_markup, None))
@@ -497,7 +497,7 @@ class RosterTooltip(NotificationAreaTooltip):
 					text = text % local_time 
 					show += text
 				if self.account and \
-				gajim.gc_connected[self.account].has_key(prim_contact.jid):
+				prim_contact.jid in gajim.gc_connected[self.account]:
 					if gajim.gc_connected[self.account][prim_contact.jid]:
 						show = _('Connected')
 					else:
@@ -528,7 +528,7 @@ class RosterTooltip(NotificationAreaTooltip):
 				' (' + unicode(contact.priority) + ')'))
 		
 		if self.account and prim_contact.sub and prim_contact.sub != 'both' and\
-		not gajim.gc_connected[self.account].has_key(prim_contact.jid):
+		prim_contact.jid not in gajim.gc_connected[self.account]:
 			# ('both' is the normal sub so we don't show it)
 			properties.append(( _('Subscription: '), 
 				gobject.markup_escape_text(helpers.get_uf_sub(prim_contact.sub))))
@@ -581,13 +581,13 @@ class RosterTooltip(NotificationAreaTooltip):
 		Append Tune, Mood, Activity information of the specified contact
 		to the given property list.
 		'''
-		if contact.mood.has_key('mood'):
+		if 'mood' in contact.mood:
 			mood = contact.mood['mood'].strip()
 			if mood in MOODS:
 				mood = MOODS[mood]
 			mood = gobject.markup_escape_text(mood)
 			mood_string = _('Mood:') + ' <b>%s</b>' % mood
-			if contact.mood.has_key('text') \
+			if 'text' in contact.mood \
 			and contact.mood['text'] != '':
 				mood_text = contact.mood['text'].strip()
 				mood_text = \
@@ -595,14 +595,14 @@ class RosterTooltip(NotificationAreaTooltip):
 				mood_string += ' (%s)' % mood_text
 			properties.append((mood_string, None))
 
-		if contact.activity.has_key('activity'):
+		if 'activity' in contact.activity:
 			activity = act_plain = \
 				contact.activity['activity'].strip()
 			activity = gobject.markup_escape_text(activity)
 			if act_plain in ACTIVITIES:
 				activity = ACTIVITIES[activity]['category']
 			activity_string = _('Activity:') + ' <b>%s' % activity
-			if contact.activity.has_key('subactivity'):
+			if 'subactivity' in contact.activity:
 				activity_sub = \
 					contact.activity['subactivity'].strip()
 				if act_plain in ACTIVITIES and activity_sub in \
@@ -613,26 +613,26 @@ class RosterTooltip(NotificationAreaTooltip):
 				activity_string += ': %s</b>' % activity_sub
 			else:
 				activity_string += '</b>'
-			if contact.activity.has_key('text'):
+			if 'text' in contact.activity:
 				activity_text = contact.activity['text'].strip()
 				activity_text = gobject.markup_escape_text(
 					activity_text)
 				activity_string += ' (%s)' % activity_text
 			properties.append((activity_string, None))
 
-		if contact.tune.has_key('artist') \
-		or contact.tune.has_key('title'):
-			if contact.tune.has_key('artist'):
+		if 'artist' in contact.tune \
+		or 'title' in contact.tune:
+			if 'artist' in contact.tune:
 				artist = contact.tune['artist'].strip()
 				artist = gobject.markup_escape_text(artist)
 			else:
 				artist = _('Unknown Artist')
-			if contact.tune.has_key('title'):
+			if 'title' in contact.tune:
 				title = contact.tune['title'].strip()
 				title = gobject.markup_escape_text(title)
 			else:
 				title = _('Unknown Title')
-			if contact.tune.has_key('source'):
+			if 'source' in contact.tune:
 				source = contact.tune['source'].strip()
 				source = gobject.markup_escape_text(source)
 			else:
@@ -680,14 +680,14 @@ class FileTransfersTooltip(BaseTooltip):
 		properties.append((actor, gobject.markup_escape_text(name)))
 		
 		transfered_len = 0
-		if file_props.has_key('received-len'):
+		if 'received-len' in file_props:
 			transfered_len = file_props['received-len']
 		properties.append((_('Transferred: '), helpers.convert_bytes(transfered_len)))
 		status = '' 
-		if not file_props.has_key('started') or not file_props['started']:
+		if 'started' not in file_props or not file_props['started']:
 			status = _('Not started')
-		elif file_props.has_key('connected'):
-			if file_props.has_key('stopped') and \
+		elif 'connected' in file_props:
+			if 'stopped' in file_props and \
 			file_props['stopped'] == True:
 				status = _('Stopped')
 			elif file_props['completed']:
@@ -696,10 +696,10 @@ class FileTransfersTooltip(BaseTooltip):
 				if file_props['completed']:
 					status = _('Completed')
 			else:
-				if file_props.has_key('paused') and \
+				if 'paused' in file_props and \
 				file_props['paused'] == True:
 					status = _('?transfer status:Paused')
-				elif file_props.has_key('stalled') and \
+				elif 'stalled' in file_props and \
 				file_props['stalled'] == True:
 					#stalled is not paused. it is like 'frozen' it stopped alone
 					status = _('Stalled')

@@ -262,7 +262,7 @@ class ProfileWindow:
 		entries = entry.split('_')
 		loc = vcard_
 		if len(entries) == 3: # We need to use lists
-			if not loc.has_key(entries[0]):
+			if entries[0] not in loc:
 				loc[entries[0]] = []
 			found = False
 			for e in loc[entries[0]]:
@@ -275,7 +275,7 @@ class ProfileWindow:
 				loc[entries[0]].append({entries[1]: '', entries[2]: txt})
 			return vcard_
 		while len(entries) > 1:
-			if not loc.has_key(entries[0]):
+			if entries[0] not in loc:
 				loc[entries[0]] = {}
 			loc = loc[entries[0]]
 			del entries[0]
@@ -323,7 +323,7 @@ class ProfileWindow:
 			return
 		vcard_ = self.make_vcard()
 		nick = ''
-		if vcard_.has_key('NICKNAME'):
+		if 'NICKNAME' in vcard_:
 			nick = vcard_['NICKNAME']
 			from common import pep
 			pep.user_send_nickname(self.account, nick)

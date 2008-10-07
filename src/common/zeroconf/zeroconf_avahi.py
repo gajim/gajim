@@ -243,7 +243,7 @@ class Zeroconf:
 			txt['txtvers'] = 1
 
 			# replace gajim's show messages with compatible ones
-			if self.txt.has_key('status'):
+			if 'status' in self.txt:
 				txt['status'] = self.replace_show(self.txt['status'])
 			else:
 				txt['status'] = 'avail'

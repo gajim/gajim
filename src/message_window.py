@@ -155,7 +155,7 @@ class MessageWindow(object):
 				gtk.gdk.ACTION_MOVE)
 
 	def change_account_name(self, old_name, new_name):
-		if self._controls.has_key(old_name):
+		if old_name in self._controls:
 			self._controls[new_name] = self._controls[old_name]
 			del self._controls[old_name]
 
@@ -235,7 +235,7 @@ class MessageWindow(object):
 	def new_tab(self, control):
 		fjid = control.get_full_jid()
 
-		if not self._controls.has_key(control.account):
+		if control.account not in self._controls:
 			self._controls[control.account] = {}
 
 		self._controls[control.account][fjid] = control

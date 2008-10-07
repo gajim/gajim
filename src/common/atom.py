@@ -124,7 +124,7 @@ class OldEntry(xmpp.Node, object):
 		''' Get the uri the entry points to (entry's first link element with rel='alternate'
 		or without rel attribute). '''
 		for element in self.getTags('link'):
-			if element.attrs.has_key('rel') and element.attrs['rel']<>'alternate': continue
+			if 'rel' in element.attrs and element.attrs['rel']<>'alternate': continue
 			try:
 				return element.attrs['href']
 			except AttributeError:

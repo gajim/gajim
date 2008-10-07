@@ -44,7 +44,7 @@ class Roster:
 		old_data = self._data.copy()
 		self.update_roster()
 		for key in old_data.keys():
-			if self._data.has_key(key):
+			if key in self._data:
 				if old_data[key] != self._data[key]:
 					diffs[key] = self._data[key]['status']
 		#print 'roster_zeroconf.py: diffs:' + str(diffs)
@@ -68,16 +68,16 @@ class Roster:
 		self._data[jid]['host'] = host
 		self._data[jid]['port'] = port
 		txt_dict = self.zeroconf.txt_array_to_dict(txt)
-		if txt_dict.has_key('status'):
+		if 'status' in txt_dict:
 			status = txt_dict['status']
 		else:
 			status = ''
 		if not status:
 			status = 'avail'
 		nm = ''
-		if txt_dict.has_key('1st'):
+		if '1st' in txt_dict:
 			nm = txt_dict['1st']
-		if txt_dict.has_key('last'):
+		if 'last' in txt_dict:
 			if nm != '':
 				nm += ' '
 			nm += txt_dict['last']
@@ -88,19 +88,19 @@ class Roster:
 		if status == 'avail': 
 			status = 'online'
 		self._data[jid]['txt_dict'] = txt_dict
-		if not self._data[jid]['txt_dict'].has_key('msg'):
+		if 'msg' not in self._data[jid]['txt_dict']:
 			self._data[jid]['txt_dict']['msg'] = ''
 		self._data[jid]['status'] = status
 		self._data[jid]['show'] = status
 
 	def delItem(self, jid):
 		#print 'roster_zeroconf.py: delItem %s' % jid
-		if self._data.has_key(jid):
+		if jid in self._data:
 			del self._data[jid]
 		
 	def getItem(self, jid):
 		#print 'roster_zeroconf.py: getItem: %s' % jid
-		if self._data.has_key(jid):
+		if jid in self._data:
 			return self._data[jid]
 
 	def __getitem__(self,jid):
@@ -128,15 +128,15 @@ class Roster:
 		return self._data[jid]['groups']
 
 	def getName(self, jid):
-		if self._data.has_key(jid):
+		if jid in self._data:
 			return self._data[jid]['name']
 
 	def getStatus(self, jid):
-		if self._data.has_key(jid):
+		if jid in self._data:
 			return self._data[jid]['status']
 
 	def getMessage(self, jid):
-		if self._data.has_key(jid):
+		if jid in self._data:
 			return self._data[jid]['txt_dict']['msg']
 
 	def getShow(self, jid):

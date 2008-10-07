@@ -87,7 +87,7 @@ class Events:
 			listener(event_list)
 
 	def change_account_name(self, old_name, new_name):
-		if self._events.has_key(old_name):
+		if old_name in self._events:
 			self._events[new_name] = self._events[old_name]
 			del self._events[old_name]
 
@@ -107,10 +107,10 @@ class Events:
 
 	def add_event(self, account, jid, event):
 		# No such account before ?
-		if not self._events.has_key(account):
+		if account not in self._events:
 			self._events[account] = {jid: [event]}
 		# no such jid before ?
-		elif not self._events[account].has_key(jid):
+		elif jid not in self._events[account]:
 			self._events[account][jid] = [event]
 		else:
 			self._events[account][jid].append(event)
@@ -122,9 +122,9 @@ class Events:
 		'''if event is not specified, remove all events from this jid,
 		optionally only from given type
 		return True if no such event found'''
-		if not self._events.has_key(account):
+		if account not in self._events:
 			return True
-		if not self._events[account].has_key(jid):
+		if jid not in self._events[account]:
 			return True
 		if event: # remove only one event
 			if event in self._events[account][jid]:
@@ -157,9 +157,9 @@ class Events:
 		del self._events[account][jid]
 
 	def change_jid(self, account, old_jid, new_jid):
-		if not self._events[account].has_key(old_jid):
+		if old_jid not in self._events[account]:
 			return
-		if self._events[account].has_key(new_jid):
+		if new_jid in self._events[account]:
 			self._events[account][new_jid] += self._events[account][old_jid]
 		else:
 			self._events[account][new_jid] = self._events[account][old_jid]
@@ -173,7 +173,7 @@ class Events:
 		{jid1: [], jid2: []}
 		if jid is given, returns all events from the given jid in a list: []
 		optionally only from given type'''
-		if not self._events.has_key(account):
+		if account not in self._events:
 			return []
 		if not jid:
 			events_list = {} # list of events
@@ -185,7 +185,7 @@ class Events:
 				if events:
 					events_list[jid_] = events
 			return events_list
-		if not self._events[account].has_key(jid):
+		if jid not in self._events[account]:
 			return []
 		events_list = [] # list of events
 		for ev in self._events[account][jid]:
@@ -214,14 +214,14 @@ class Events:
 		else:
 			accounts = self._events.keys()
 		for acct in accounts:
-			if not self._events.has_key(acct):
+			if acct not in self._events:
 				continue
 			if jid:
 				jids = [jid]
 			else:
 				jids = self._events[acct].keys()
 			for j in jids:
-				if not self._events[acct].has_key(j):
+				if j not in self._events[acct]:
 					continue
 				for event in self._events[acct][j]:
 					if types and event.type_ not in types:

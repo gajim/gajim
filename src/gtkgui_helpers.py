@@ -587,7 +587,7 @@ def get_avatar_pixbuf_from_cache(fjid, is_fake_jid = False, use_local = True):
 		is_fake_jid)
 	if not vcard_dict: # This can happen if cached vcard is too old
 		return 'ask'
-	if not vcard_dict.has_key('PHOTO'):
+	if 'PHOTO' not in vcard_dict:
 		return None
 	pixbuf = vcard.get_avatar_pixbuf_encoded_mime(vcard_dict['PHOTO'])[0]
 	return pixbuf

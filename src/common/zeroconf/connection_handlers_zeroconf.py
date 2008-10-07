@@ -146,7 +146,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		file_tag.setAttr('name', file_props['name'])
 		file_tag.setAttr('size', file_props['size'])
 		desc = file_tag.setTag('desc')
-		if file_props.has_key('desc'):
+		if 'desc' in file_props:
 			desc.setData(file_props['desc'])
 		file_tag.setTag('range')
 		feature = si.setTag('feature')
@@ -180,11 +180,11 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 					host_dict[attr] = item.getAttr(attr)
 				streamhosts.append(host_dict)
 		if file_props is None:
-			if self.files_props.has_key(sid):
+			if sid in self.files_props:
 				file_props = self.files_props[sid]
 				file_props['fast'] = streamhosts
 				if file_props['type'] == 's':
-					if file_props.has_key('streamhosts'):
+					if 'streamhosts' in file_props:
 						file_props['streamhosts'].extend(streamhosts)
 					else:
 						file_props['streamhosts'] = streamhosts
@@ -209,11 +209,11 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 			return
 		frm = unicode(iq_obj.getFrom())
 		id = real_id[3:]
-		if self.files_props.has_key(id):
+		if id in self.files_props:
 			file_props = self.files_props[id]
 			if file_props['streamhost-used']:
 				for host in file_props['proxyhosts']:
-					if host['initiator'] == frm and host.has_key('idx'):
+					if host['initiator'] == frm and 'idx' in host:
 						gajim.socks5queue.activate_proxy(host['idx'])
 						raise common.xmpp.NodeProcessed
 
@@ -229,7 +229,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		except: # this bytestream result is not what we need
 			pass
 		id = real_id[3:]
-		if self.files_props.has_key(id):
+		if id in self.files_props:
 			file_props = self.files_props[id]
 		else:
 			raise common.xmpp.NodeProcessed
@@ -237,10 +237,10 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 			# proxy approves the activate query
 			if real_id[:3] == 'au_':
 				id = real_id[3:]
-				if not file_props.has_key('streamhost-used') or \
+				if 'streamhost-used' not in file_props or \
 					file_props['streamhost-used'] is False:
 					raise common.xmpp.NodeProcessed
-				if not file_props.has_key('proxyhosts'):
+				if 'proxyhosts' not in file_props:
 					raise common.xmpp.NodeProcessed
 				for host in file_props['proxyhosts']:
 					if host['initiator'] == frm and \
@@ -249,7 +249,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 						break
 			raise common.xmpp.NodeProcessed
 		jid = streamhost.getAttr('jid')
-		if file_props.has_key('streamhost-used') and \
+		if 'streamhost-used' in file_props and \
 			file_props['streamhost-used'] is True:
 			raise common.xmpp.NodeProcessed
 
@@ -258,14 +258,14 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 			raise common.xmpp.NodeProcessed
 
 		proxy = None
-		if file_props.has_key('proxyhosts'):
+		if 'proxyhosts' in file_props:
 			for proxyhost in file_props['proxyhosts']:
 				if proxyhost['jid'] == jid:
 					proxy = proxyhost
 
 		if proxy != None:
 			file_props['streamhost-used'] = True
-			if not file_props.has_key('streamhosts'):
+			if 'streamhosts' not in file_props:
 				file_props['streamhosts'] = []
 			file_props['streamhosts'].append(proxy)
 			file_props['is_a_proxy'] = True
@@ -277,7 +277,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 
 		else:
 			gajim.socks5queue.send_file(file_props, self.name)
-			if file_props.has_key('fast'):
+			if 'fast' in file_props:
 				fasts = file_props['fast']
 				if len(fasts) > 0:
 					self._connect_error(frm, fasts[0]['id'], file_props['sid'],
@@ -289,14 +289,14 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		gajim.log.debug('_siResultCB')
 		self.peerhost = con._owner.Connection._sock.getsockname()
 		id = iq_obj.getAttr('id')
-		if not self.files_props.has_key(id):
+		if id not in self.files_props:
 			# no such jid
 			return
 		file_props = self.files_props[id]
 		if file_props is None:
 			# file properties for jid is none
 			return
-		if file_props.has_key('request-id'):
+		if 'request-id' in file_props:
 			# we have already sent streamhosts info
 			return
 		file_props['receiver'] = unicode(iq_obj.getFrom())
@@ -362,7 +362,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		if profile != common.xmpp.NS_FILE:
 			return
 		id = iq_obj.getAttr('id')
-		if not self.files_props.has_key(id):
+		if id not in self.files_props:
 			# no such jid
 			return
 		file_props = self.files_props[id]

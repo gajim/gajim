@@ -321,7 +321,7 @@ class Protocol(Node):
         if not node and xmlns: self.setNamespace(xmlns)
         if self['to']: self.setTo(self['to'])
         if self['from']: self.setFrom(self['from'])
-        if node and type(self)==type(node) and self.__class__==node.__class__ and self.attrs.has_key('id'): del self.attrs['id']
+        if node and type(self)==type(node) and self.__class__==node.__class__ and 'id' in self.attrs: del self.attrs['id']
         self.timestamp=None
         for d in self.getTags('delay',namespace=NS_DELAY2):
             try:
@@ -598,7 +598,7 @@ class ErrorNode(Node):
         """ Create new error node object.
             Mandatory parameter: name - name of error condition.
             Optional parameters: code, typ, text. Used for backwards compartibility with older jabber protocol."""
-        if ERRORS.has_key(name):
+        if name in ERRORS:
             cod,type,txt=ERRORS[name]
             ns=name.split()[0]
         else: cod,ns,type,txt='500',NS_STANZAS,'cancel',''

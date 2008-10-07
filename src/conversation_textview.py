@@ -409,7 +409,7 @@ class ConversationTextview:
 			self.smooth_scroll_timer.cancel()
 
 	def show_xep0184_warning(self, id):
-		if self.xep0184_marks.has_key(id):
+		if id in self.xep0184_marks:
 			return
 
 		buffer = self.tv.get_buffer()
@@ -444,7 +444,7 @@ class ConversationTextview:
 		buffer.end_user_action()
 
 	def hide_xep0184_warning(self, id):
-		if not self.xep0184_marks.has_key(id):
+		if id not in self.xep0184_marks:
 			return
 
 		if self.xep0184_shown[id] == NOT_SHOWN:

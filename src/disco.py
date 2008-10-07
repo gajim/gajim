@@ -318,7 +318,7 @@ class ServicesCache:
 		'''Get info for an agent.'''
 		addr = get_agent_address(jid, node)
 		# Check the cache
-		if self._info.has_key(addr):
+		if addr in self._info:
 			args = self._info[addr] + args
 			cb(jid, node, *args)
 			return
@@ -330,7 +330,7 @@ class ServicesCache:
 		cb = Closure(cb, userargs = args, remove = self._clean_closure,
 				removeargs = cbkey)
 		# Are we already fetching this?
-		if self._cbs.has_key(cbkey):
+		if cbkey in self._cbs:
 			self._cbs[cbkey].append(cb)
 		else:
 			self._cbs[cbkey] = [cb]
@@ -340,7 +340,7 @@ class ServicesCache:
 		'''Get a list of items in an agent.'''
 		addr = get_agent_address(jid, node)
 		# Check the cache
-		if self._items.has_key(addr):
+		if addr in self._items:
 			args = (self._items[addr],) + args
 			cb(jid, node, *args)
 			return
@@ -352,7 +352,7 @@ class ServicesCache:
 		cb = Closure(cb, userargs = args, remove = self._clean_closure,
 				removeargs = cbkey)
 		# Are we already fetching this?
-		if self._cbs.has_key(cbkey):
+		if cbkey in self._cbs:
 			self._cbs[cbkey].append(cb)
 		else:
 			self._cbs[cbkey] = [cb]
@@ -367,11 +367,11 @@ class ServicesCache:
 
 		# Call callbacks
 		cbkey = ('info', addr)
-		if self._cbs.has_key(cbkey):
+		if cbkey in self._cbs:
 			for cb in self._cbs[cbkey]:
 				cb(jid, node, identities, features, data)
 			# clean_closure may have beaten us to it
-			if self._cbs.has_key(cbkey):
+			if cbkey in self._cbs:
 				del self._cbs[cbkey]
 
 	def agent_items(self, jid, node, items):
@@ -383,11 +383,11 @@ class ServicesCache:
 
 		# Call callbacks
 		cbkey = ('items', addr)
-		if self._cbs.has_key(cbkey):
+		if cbkey in self._cbs:
 			for cb in self._cbs[cbkey]:
 				cb(jid, node, items)
 			# clean_closure may have beaten us to it
-			if self._cbs.has_key(cbkey):
+			if cbkey in self._cbs:
 				del self._cbs[cbkey]
 
 	def agent_info_error(self, jid):
@@ -397,11 +397,11 @@ class ServicesCache:
 
 		# Call callbacks
 		cbkey = ('info', addr)
-		if self._cbs.has_key(cbkey):
+		if cbkey in self._cbs:
 			for cb in self._cbs[cbkey]:
 				cb(jid, '', 0, 0, 0)
 			# clean_closure may have beaten us to it
-			if self._cbs.has_key(cbkey):
+			if cbkey in self._cbs:
 				del self._cbs[cbkey]
 
 	def agent_items_error(self, jid):
@@ -411,11 +411,11 @@ class ServicesCache:
 
 		# Call callbacks
 		cbkey = ('items', addr)
-		if self._cbs.has_key(cbkey):
+		if cbkey in self._cbs:
 			for cb in self._cbs[cbkey]:
 				cb(jid, '', 0)
 			# clean_closure may have beaten us to it
-			if self._cbs.has_key(cbkey):
+			if cbkey in self._cbs:
 				del self._cbs[cbkey]
 
 # object is needed so that @property works
@@ -636,7 +636,7 @@ _('Without a connection, you can not browse available services'))
 		# Update the window list
 		if self.jid:
 			old_addr = get_agent_address(self.jid, self.node)
-			if gajim.interface.instances[self.account]['disco'].has_key(old_addr):
+			if old_addr in gajim.interface.instances[self.account]['disco']:
 				del gajim.interface.instances[self.account]['disco'][old_addr]
 		addr = get_agent_address(jid, node)
 		gajim.interface.instances[self.account]['disco'][addr] = self
@@ -810,7 +810,7 @@ class AgentBrowser:
 	def _set_title(self, jid, node, identities, features, data):
 		'''Set the window title based on agent info.'''
 		# Set the banner and window title
-		if identities[0].has_key('name'):
+		if 'name' in identities[0]:
 			name = identities[0]['name']
 			self.window._set_window_banner_text(self._get_agent_address(), name)
 
@@ -992,7 +992,7 @@ _('This service does not contain any items to browse.'))
 	def _update_item(self, iter, jid, node, item):
 		'''Called when an item should be updated in the model. The result of a
 		disco#items query. (seldom)'''
-		if item.has_key('name'):
+		if 'name' in item:
 			self.model[iter][2] = item['name']
 
 	def _update_info(self, iter, jid, node, identities, features, data):
@@ -1238,7 +1238,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 		if not iter:
 			return
 		service = model[iter][0].decode('utf-8')
-		if gajim.interface.instances[self.account]['search'].has_key(service):
+		if service in gajim.interface.instances[self.account]['search']:
 			gajim.interface.instances[self.account]['search'][service].present()
 		else:
 			gajim.interface.instances[self.account]['search'][service] = \
@@ -1283,7 +1283,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 		if not iter:
 			return
 		service = model[iter][0].decode('utf-8')
-		if not gajim.interface.instances[self.account].has_key('join_gc'):
+		if 'join_gc' not in gajim.interface.instances[self.account]:
 			try:
 				dialogs.JoinGroupchatWindow(self.account, service)
 			except GajimGeneralException:
@@ -1459,7 +1459,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 	def _add_item(self, jid, node, item, force):
 		# Row text
 		addr = get_agent_address(jid, node)
-		if item.has_key('name'):
+		if 'name' in item:
 			descr = "<b>%s</b>\n%s" % (item['name'], addr)
 		else:
 			descr = "<b>%s</b>" % addr
@@ -1488,7 +1488,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 
 	def _update_item(self, iter, jid, node, item):
 		addr = get_agent_address(jid, node)
-		if item.has_key('name'):
+		if 'name' in item:
 			descr = "<b>%s</b>\n%s" % (item['name'], addr)
 		else:
 			descr = "<b>%s</b>" % addr

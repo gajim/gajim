@@ -166,7 +166,7 @@ def find_current_groupchats(account):
 			continue
 		room_jid = gc_control.room_jid
 		nick = gc_control.nick
-		if gajim.gc_connected[acct].has_key(room_jid) and \
+		if room_jid in gajim.gc_connected[acct] and \
 		gajim.gc_connected[acct][room_jid]:
 			rooms.append((room_jid, nick,))
 	return rooms

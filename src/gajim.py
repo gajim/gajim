@@ -585,7 +585,7 @@ class Interface:
 			sid = id
 			if len(id) > 3 and id[2] == '_':
 				sid = id[3:]
-			if ft.files_props['s'].has_key(sid):
+			if sid in ft.files_props['s']:
 				file_props = ft.files_props['s'][sid]
 				file_props['error'] = -4
 				self.handle_event_file_request_error(account,
@@ -598,7 +598,7 @@ class Interface:
 			sid = id
 			if len(id) > 3 and id[2] == '_':
 				sid = id[3:]
-			if conn.files_props.has_key(sid):
+			if sid in conn.files_props:
 				file_props = conn.files_props[sid]
 				self.handle_event_file_send_error(account,
 					(jid_from, file_props))
@@ -644,7 +644,7 @@ class Interface:
 
 		# Inform all controls for this account of the connection state change
 		ctrls = self.msg_win_mgr.get_controls()
-		if self.minimized_controls.has_key(account):
+		if account in self.minimized_controls:
 			# Can not be the case when we remove account
 			ctrls += self.minimized_controls[account].values()
 		for ctrl in ctrls:
@@ -667,7 +667,7 @@ class Interface:
 
 	def edit_own_details(self, account):
 		jid = gajim.get_jid_from_account(account)
-		if not self.instances[account].has_key('profile'):
+		if 'profile' not in self.instances[account]:
 			self.instances[account]['profile'] = \
 				profile_window.ProfileWindow(account)
 			gajim.connections[account].request_vcard(jid)
@@ -811,7 +811,7 @@ class Interface:
 					self.unblock_signed_in_notifications, account_ji)
 			locations = (self.instances, self.instances[account])
 			for location in locations:
-				if location.has_key('add_contact'):
+				if 'add_contact' in location:
 					if old_show == 0 and new_show > 1:
 						location['add_contact'].transport_signed_in(jid)
 						break
@@ -1042,7 +1042,7 @@ class Interface:
 	def handle_event_register_agent_info(self, account, array):
 		# ('REGISTER_AGENT_INFO', account, (agent, infos, is_form))
 		# info in a dataform if is_form is True
-		if array[2] or array[1].has_key('instructions'):
+		if array[2] or 'instructions' in array[1]:
 			config.ServiceRegistrationWindow(array[0], array[1], account,
 				array[2])
 		else:
@@ -1052,7 +1052,7 @@ class Interface:
 	def handle_event_agent_info_items(self, account, array):
 		#('AGENT_INFO_ITEMS', account, (agent, node, items))
 		our_jid = gajim.get_jid_from_account(account)
-		if gajim.interface.instances[account].has_key('pep_services') and \
+		if 'pep_services' in gajim.interface.instances[account] and \
 		array[0] == our_jid:
 			gajim.interface.instances[account]['pep_services'].items_received(
 				array[2])
@@ -1073,18 +1073,18 @@ class Interface:
 	def handle_event_new_acc_connected(self, account, array):
 		#('NEW_ACC_CONNECTED', account, (infos, is_form, ssl_msg, ssl_err,
 		# ssl_cert, ssl_fingerprint))
-		if self.instances.has_key('account_creation_wizard'):
+		if 'account_creation_wizard' in self.instances:
 			self.instances['account_creation_wizard'].new_acc_connected(array[0],
 				array[1], array[2], array[3], array[4], array[5])
 
 	def handle_event_new_acc_not_connected(self, account, array):
 		#('NEW_ACC_NOT_CONNECTED', account, (reason))
-		if self.instances.has_key('account_creation_wizard'):
+		if 'account_creation_wizard' in self.instances:
 			self.instances['account_creation_wizard'].new_acc_not_connected(array)
 
 	def handle_event_acc_ok(self, account, array):
 		#('ACC_OK', account, (config))
-		if self.instances.has_key('account_creation_wizard'):
+		if 'account_creation_wizard' in self.instances:
 			self.instances['account_creation_wizard'].acc_is_ok(array)
 
 		if self.remote_ctrl:
@@ -1092,7 +1092,7 @@ class Interface:
 
 	def handle_event_acc_not_ok(self, account, array):
 		#('ACC_NOT_OK', account, (reason))
-		if self.instances.has_key('account_creation_wizard'):
+		if 'account_creation_wizard' in self.instances:
 			self.instances['account_creation_wizard'].acc_is_not_ok(array)
 
 	def handle_event_quit(self, p1, p2):
@@ -1100,17 +1100,17 @@ class Interface:
 
 	def handle_event_myvcard(self, account, array):
 		nick = ''
-		if array.has_key('NICKNAME') and array['NICKNAME']:
+		if 'NICKNAME' in array and array['NICKNAME']:
 			gajim.nicks[account] = array['NICKNAME']
-		elif array.has_key('FN') and array['FN']:
+		elif 'FN' in array and array['FN']:
 			gajim.nicks[account] = array['FN']
-		if self.instances[account].has_key('profile'):
+		if 'profile' in self.instances[account]:
 			win = self.instances[account]['profile']
 			win.set_values(array)
 			if account in self.show_vcard_when_connect:
 				self.show_vcard_when_connect.remove(account)
 		jid = array['jid']
-		if self.instances[account]['infos'].has_key(jid):
+		if jid in self.instances[account]['infos']:
 			self.instances[account]['infos'][jid].set_values(array)
 
 	def handle_event_vcard(self, account, vcard):
@@ -1118,16 +1118,16 @@ class Interface:
 		'''vcard holds the vcard data'''
 		jid = vcard['jid']
 		resource = ''
-		if vcard.has_key('resource'):
+		if 'resource' in vcard:
 			resource = vcard['resource']
 
 		fjid = jid + '/' + str(resource)
 
 		# vcard window
 		win = None
-		if self.instances[account]['infos'].has_key(jid):
+		if jid in self.instances[account]['infos']:
 			win = self.instances[account]['infos'][jid]
-		elif resource and self.instances[account]['infos'].has_key(fjid):
+		elif resource and fjid in self.instances[account]['infos']:
 			win = self.instances[account]['infos'][fjid]
 		if win:
 			win.set_values(vcard)
@@ -1163,9 +1163,9 @@ class Interface:
 			# Ann error occured
 			return
 		win = None
-		if self.instances[account]['infos'].has_key(array[0]):
+		if array[0] in self.instances[account]['infos']:
 			win = self.instances[account]['infos'][array[0]]
-		elif self.instances[account]['infos'].has_key(array[0] + '/' + array[1]):
+		elif array[0] + '/' + array[1] in self.instances[account]['infos']:
 			win = self.instances[account]['infos'][array[0] + '/' + array[1]]
 		if win:
 			c = gajim.contacts.get_contact(account, array[0], array[1])
@@ -1180,9 +1180,9 @@ class Interface:
 	def handle_event_os_info(self, account, array):
 		#'OS_INFO' (account, (jid, resource, client_info, os_info))
 		win = None
-		if self.instances[account]['infos'].has_key(array[0]):
+		if array[0] in self.instances[account]['infos']:
 			win = self.instances[account]['infos'][array[0]]
-		elif self.instances[account]['infos'].has_key(array[0] + '/' + array[1]):
+		elif array[0] + '/' + array[1] in self.instances[account]['infos']:
 			win = self.instances[account]['infos'][array[0] + '/' + array[1]]
 		if win:
 			win.set_os_info(array[1], array[2], array[3])
@@ -1320,7 +1320,7 @@ class Interface:
 		#('GC_CONFIG', account, (jid, form))  config is a dict
 		room_jid = array[0].split('/')[0]
 		if room_jid in gajim.automatic_rooms[account]:
-			if gajim.automatic_rooms[account][room_jid].has_key('continue_tag'):
+			if 'continue_tag' in gajim.automatic_rooms[account][room_jid]:
 				# We're converting chat to muc. allow participants to invite
 				form = dataforms.ExtendForm(node = array[1])
 				for f in form.iter_fields():
@@ -1339,14 +1339,14 @@ class Interface:
 			# invite contacts
 			# check if it is necessary to add <continue />
 			continue_tag = False
-			if gajim.automatic_rooms[account][room_jid].has_key('continue_tag'):
+			if 'continue_tag' in gajim.automatic_rooms[account][room_jid]:
 				continue_tag = True
-			if gajim.automatic_rooms[account][room_jid].has_key('invities'):
+			if 'invities' in gajim.automatic_rooms[account][room_jid]:
 				for jid in gajim.automatic_rooms[account][room_jid]['invities']:
 					gajim.connections[account].send_invite(room_jid, jid,
 						continue_tag=continue_tag)
 			del gajim.automatic_rooms[account][room_jid]
-		elif not self.instances[account]['gc_config'].has_key(room_jid):
+		elif room_jid not in self.instances[account]['gc_config']:
 			self.instances[account]['gc_config'][room_jid] = \
 			config.GroupchatConfigWindow(account, room_jid, array[1])
 
@@ -1397,7 +1397,7 @@ class Interface:
 	def handle_event_gc_affiliation(self, account, array):
 		#('GC_AFFILIATION', account, (room_jid, users_dict))
 		room_jid = array[0]
-		if self.instances[account]['gc_config'].has_key(room_jid):
+		if room_jid in self.instances[account]['gc_config']:
 			self.instances[account]['gc_config'][room_jid].\
 				affiliation_list_received(array[1])
 
@@ -1445,7 +1445,7 @@ class Interface:
 				event_type, room_jid)
 
 	def forget_gpg_passphrase(self, keyid):
-		if self.gpg_passphrase.has_key(keyid):
+		if keyid in self.gpg_passphrase:
 			del self.gpg_passphrase[keyid]
 		return False
 
@@ -1670,8 +1670,8 @@ class Interface:
 				file_props['received-len'])
 		else:
 			ft.set_status(file_props['type'], file_props['sid'], 'stop')
-		if file_props.has_key('stalled') and file_props['stalled'] or \
-			file_props.has_key('paused') and file_props['paused']:
+		if 'stalled' in file_props and file_props['stalled'] or \
+			'paused' in file_props and file_props['paused']:
 			return
 		if file_props['type'] == 'r': # we receive a file
 			jid = unicode(file_props['sender'])
@@ -1752,19 +1752,19 @@ class Interface:
 				title = event_type, text = txt)
 
 	def handle_event_stanza_arrived(self, account, stanza):
-		if not self.instances.has_key(account):
+		if account not in self.instances:
 			return
-		if self.instances[account].has_key('xml_console'):
+		if 'xml_console' in self.instances[account]:
 			self.instances[account]['xml_console'].print_stanza(stanza, 'incoming')
 
 	def handle_event_stanza_sent(self, account, stanza):
-		if not self.instances.has_key(account):
+		if account not in self.instances:
 			return
-		if self.instances[account].has_key('xml_console'):
+		if 'xml_console' in self.instances[account]:
 			self.instances[account]['xml_console'].print_stanza(stanza, 'outgoing')
 
 	def handle_event_vcard_published(self, account, array):
-		if self.instances[account].has_key('profile'):
+		if 'profile' in self.instances[account]:
 			win = self.instances[account]['profile']
 			win.vcard_published()
 		for gc_control in self.msg_win_mgr.get_controls(message_control.TYPE_GC) + \
@@ -1776,7 +1776,7 @@ class Interface:
 					gc_control.room_jid, show, status)
 
 	def handle_event_vcard_not_published(self, account, array):
-		if self.instances[account].has_key('profile'):
+		if 'profile' in self.instances[account]:
 			win = self.instances[account]['profile']
 			win.vcard_not_published()
 
@@ -1802,12 +1802,12 @@ class Interface:
 			if account != gc_control.account:
 				continue
 			room_jid = gc_control.room_jid
-			if gajim.gc_connected[account].has_key(room_jid) and\
+			if room_jid in gajim.gc_connected[account] and\
 					gajim.gc_connected[account][room_jid]:
 				continue
 			nick = gc_control.nick
 			password = ''
-			if gajim.gc_passwords.has_key(room_jid):
+			if room_jid in gajim.gc_passwords:
 				password = gajim.gc_passwords[room_jid]
 			gajim.connections[account].join_gc(nick, room_jid, password)
 
@@ -1840,18 +1840,18 @@ class Interface:
 
 	def handle_event_privacy_lists_received(self, account, data):
 		# ('PRIVACY_LISTS_RECEIVED', account, list)
-		if not self.instances.has_key(account):
+		if account not in self.instances:
 			return
-		if self.instances[account].has_key('privacy_lists'):
+		if 'privacy_lists' in self.instances[account]:
 			self.instances[account]['privacy_lists'].privacy_lists_received(data)
 
 	def handle_event_privacy_list_received(self, account, data):
 		# ('PRIVACY_LISTS_RECEIVED', account, (name, rules))
-		if not self.instances.has_key(account):
+		if account not in self.instances:
 			return
 		name = data[0]
 		rules = data[1]
-		if self.instances[account].has_key('privacy_list_%s' % name):
+		if 'privacy_list_%s' % name in self.instances[account]:
 			self.instances[account]['privacy_list_%s' % name].\
 				privacy_list_received(rules)
 		if name == 'block':
@@ -1870,7 +1870,7 @@ class Interface:
 				#	self.global_rules.append(rule)
 				#else:
 				#	self.global_rules_to_append.append(rule)
-			if self.instances[account].has_key('blocked_contacts'):
+			if 'blocked_contacts' in self.instances[account]:
 				self.instances[account]['blocked_contacts'].\
 					privacy_list_received(rules)
 
@@ -1884,9 +1884,9 @@ class Interface:
 
 	def handle_event_privacy_list_removed(self, account, name):
 		# ('PRIVACY_LISTS_REMOVED', account, name)
-		if not self.instances.has_key(account):
+		if account not in self.instances:
 			return
-		if self.instances[account].has_key('privacy_lists'):
+		if 'privacy_lists' in self.instances[account]:
 			self.instances[account]['privacy_lists'].privacy_list_removed(name)
 
 	def handle_event_zc_name_conflict(self, account, data):
@@ -1939,14 +1939,14 @@ class Interface:
 
 	def handle_event_search_form(self, account, data):
 		# ('SEARCH_FORM', account, (jid, dataform, is_dataform))
-		if not self.instances[account]['search'].has_key(data[0]):
+		if data[0] not in self.instances[account]['search']:
 			return
 		self.instances[account]['search'][data[0]].on_form_arrived(data[1],
 			data[2])
 
 	def handle_event_search_result(self, account, data):
 		# ('SEARCH_RESULT', account, (jid, dataform, is_dataform))
-		if not self.instances[account]['search'].has_key(data[0]):
+		if data[0] not in self.instances[account]['search']:
 			return
 		self.instances[account]['search'][data[0]].on_result_arrived(data[1],
 			data[2])
@@ -1966,7 +1966,7 @@ class Interface:
 
 	def handle_event_pep_config(self, account, data):
 		# ('PEP_CONFIG', account, (node, form))
-		if self.instances[account].has_key('pep_services'):
+		if 'pep_services' in self.instances[account]:
 			self.instances[account]['pep_services'].config(data[0], data[1])
 
 	def handle_event_unique_room_id_supported(self, account, data):
@@ -2099,7 +2099,7 @@ class Interface:
 
 	def handle_event_pubsub_node_removed(self, account, data):
 		# ('PUBSUB_NODE_REMOVED', account, (jid, node))
-		if self.instances[account].has_key('pep_services'):
+		if 'pep_services' in self.instances[account]:
 			if data[0] == gajim.get_jid_from_account(account):
 				self.instances[account]['pep_services'].node_removed(data[1])
 
@@ -2776,7 +2776,7 @@ class Interface:
 			return False # stop looping in vain
 		state = self.sleeper.getState()
 		for account in gajim.connections:
-			if not gajim.sleeper_state.has_key(account) or \
+			if account not in gajim.sleeper_state or \
 					not gajim.sleeper_state[account]:
 				continue
 			if state == common.sleepy.STATE_AWAKE and \
@@ -3194,7 +3194,7 @@ class Interface:
 					# Don't go auto away if user disabled the option
 					return
 				for account in gajim.connections:
-					if not gajim.sleeper_state.has_key(account) or \
+					if account not in gajim.sleeper_state or \
 							not gajim.sleeper_state[account]:
 						continue
 					if gajim.sleeper_state[account] == 'online':

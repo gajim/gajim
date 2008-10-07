@@ -676,7 +676,7 @@ class NonBlockingTLS(PlugIn):
 			If 'now' in false then starts encryption as soon as TLS feature is
 			declared by the server (if it were already declared - it is ok).
 		'''
-		if owner.__dict__.has_key('NonBlockingTLS'): 
+		if 'NonBlockingTLS' in owner.__dict__: 
 			return  # Already enabled.
 		PlugIn.PlugIn(self, owner)
 		DBG_LINE='NonBlockingTLS'
@@ -704,7 +704,7 @@ class NonBlockingTLS(PlugIn):
 		''' Unregisters TLS handler's from owner's dispatcher. Take note that encription
 			can not be stopped once started. You can only break the connection and start over.'''
 		# if dispatcher is not plugged we cannot (un)register handlers
-		if self._owner.__dict__.has_key('Dispatcher'):
+		if 'Dispatcher' in self._owner.__dict__:
 			self._owner.UnregisterHandler('features', self.FeaturesHandler,xmlns=NS_STREAMS)
 			self._owner.Dispatcher.PlugOut()
 		self._owner = None
@@ -906,7 +906,7 @@ class NBHTTPPROXYsocket(NonBlockingTcp):
 			'Pragma: no-cache',
 			'Host: %s:%s'%self.server,
 			'User-Agent: HTTPPROXYsocket/v0.1']
-		if self.proxy.has_key('user') and self.proxy.has_key('password'):
+		if 'user' in self.proxy and 'password' in self.proxy:
 			credentials = '%s:%s' % ( self.proxy['user'], self.proxy['password'])
 			credentials = base64.encodestring(credentials).strip()
 			connector.append('Proxy-Authorization: Basic '+credentials)
@@ -988,7 +988,7 @@ class NBSOCKS5PROXYsocket(NonBlockingTcp):
 		
 	def _on_tcp_connect(self):
 		self.DEBUG('Proxy server contacted, performing authentification', 'start')
-		if self.proxy.has_key('user') and self.proxy.has_key('password'):
+		if 'user' in self.proxy and 'password' in self.proxy:
 			to_send = '\x05\x02\x00\x02'
 		else:
 			to_send = '\x05\x01\x00'

@@ -77,21 +77,21 @@ class NBCommonClient(CommonClient):
 		self.DEBUG(self.DBG,'Disconnect detected','stop')
 		for i in reversed(self.disconnect_handlers):
 			i()
-		if self.__dict__.has_key('NonBlockingRoster'):
+		if 'NonBlockingRoster' in self.__dict__:
 			self.NonBlockingRoster.PlugOut()
-		if self.__dict__.has_key('NonBlockingBind'):
+		if 'NonBlockingBind' in self.__dict__:
 			self.NonBlockingBind.PlugOut()
-		if self.__dict__.has_key('NonBlockingNonSASL'):
+		if 'NonBlockingNonSASL' in self.__dict__:
 			self.NonBlockingNonSASL.PlugOut()
-		if self.__dict__.has_key('SASL'):
+		if 'SASL' in self.__dict__:
 			self.SASL.PlugOut()
-		if self.__dict__.has_key('NonBlockingTLS'):
+		if 'NonBlockingTLS' in self.__dict__:
 			self.NonBlockingTLS.PlugOut()
-		if self.__dict__.has_key('NBHTTPPROXYsocket'):
+		if 'NBHTTPPROXYsocket' in self.__dict__:
 			self.NBHTTPPROXYsocket.PlugOut()
-		if self.__dict__.has_key('NBSOCKS5PROXYsocket'):
+		if 'NBSOCKS5PROXYsocket' in self.__dict__:
 			self.NBSOCKS5PROXYsocket.PlugOut()
-		if self.__dict__.has_key('NonBlockingTcp'):
+		if 'NonBlockingTcp' in self.__dict__:
 			self.NonBlockingTcp.PlugOut()
 		
 	def reconnectAndReauth(self):
@@ -106,7 +106,7 @@ class NBCommonClient(CommonClient):
 		self._Server,  self._Proxy, self._Ssl = server ,  proxy, ssl
 		self.on_stream_start = on_stream_start
 		if proxy:
-			if proxy.has_key('type'):
+			if 'type' in proxy:
 				type_ = proxy['type']
 				if type_ == 'socks5':
 					self.socket = transports_nb.NBSOCKS5PROXYsocket(
@@ -164,7 +164,7 @@ class NBCommonClient(CommonClient):
 			self.Dispatcher.Stream._document_attrs is None:
 			return
 		self.onreceive(None)
-		if self.Dispatcher.Stream._document_attrs.has_key('version') and \
+		if 'version' in self.Dispatcher.Stream._document_attrs and \
 			self.Dispatcher.Stream._document_attrs['version'] == '1.0':
 				self.onreceive(self._on_receive_stream_features)
 				return
@@ -219,7 +219,7 @@ class NonBlockingClient(NBCommonClient):
 		transports_nb.NonBlockingTLS().PlugIn(self)
 		if not self.Connection: # ssl error, stream is closed
 			return True
-		if not self.Dispatcher.Stream._document_attrs.has_key('version') or \
+		if 'version' not in self.Dispatcher.Stream._document_attrs or \
 			not self.Dispatcher.Stream._document_attrs['version']=='1.0': 
 			self._is_connected()
 			return
@@ -273,7 +273,7 @@ class NonBlockingClient(NBCommonClient):
 	def _on_start_sasl(self, data=None):
 		if data:
 			self.Dispatcher.ProcessNonBlocking(data)
-		if not self.__dict__.has_key('SASL'): 
+		if 'SASL' not in self.__dict__: 
 			# SASL is pluged out, possible disconnect 
 			return
 		if self.SASL.startsasl == 'in-process': 
@@ -307,13 +307,13 @@ class NonBlockingClient(NBCommonClient):
 		
 	def initRoster(self):
 		''' Plug in the roster. '''
-		if not self.__dict__.has_key('NonBlockingRoster'): 
+		if 'NonBlockingRoster' not in self.__dict__: 
 			roster_nb.NonBlockingRoster().PlugIn(self)
 
 	def getRoster(self, on_ready = None):
 		''' Return the Roster instance, previously plugging it in and
 			requesting roster from server if needed. '''
-		if self.__dict__.has_key('NonBlockingRoster'):
+		if 'NonBlockingRoster' in self.__dict__:
 			return self.NonBlockingRoster.getRoster(on_ready)
 		return None
 

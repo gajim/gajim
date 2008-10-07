@@ -100,7 +100,7 @@ class SASL(PlugIn):
 		self.on_sasl = on_sasl
 		self.realm = None
 	def plugin(self,owner):
-		if not self._owner.Dispatcher.Stream._document_attrs.has_key('version'): 
+		if 'version' not in self._owner.Dispatcher.Stream._document_attrs: 
 			self.startsasl='not-supported'
 		elif self._owner.Dispatcher.Stream.features:
 			try: 
@@ -212,9 +212,9 @@ class SASL(PlugIn):
 						payload=response).__str__())
 			raise NodeProcessed
 		chal = challenge_splitter(data)
-		if not self.realm and chal.has_key('realm'):
+		if not self.realm and 'realm' in chal:
 			self.realm = chal['realm']
-		if chal.has_key('qop') and ((type(chal['qop']) == str and \
+		if 'qop' in chal and ((type(chal['qop']) == str and \
 		chal['qop'] =='auth') or (type(chal['qop']) == list and 'auth' in \
 		chal['qop'])):
 			resp={}
@@ -248,7 +248,7 @@ class SASL(PlugIn):
 			node=Node('response', attrs={'xmlns':NS_SASL}, 
 				payload=[base64.encodestring(sasl_data[:-1]).replace('\r','').replace('\n','')])
 			self._owner.send(node.__str__())
-		elif chal.has_key('rspauth'): 
+		elif 'rspauth' in chal: 
 			self._owner.send(Node('response', attrs={'xmlns':NS_SASL}).__str__())
 		else: 
 			self.startsasl='failure'

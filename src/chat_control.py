@@ -764,7 +764,7 @@ class ChatControlBase(MessageControl):
 		if not jid:
 			jid = self.contact.jid
 
-		if gajim.interface.instances.has_key('logs'):
+		if 'logs' in gajim.interface.instances:
 			gajim.interface.instances['logs'].window.present()
 			gajim.interface.instances['logs'].open_history(jid, self.account)
 		else:
@@ -1190,9 +1190,9 @@ class ChatControl(ChatControlBase):
 		if isinstance(self.contact, GC_Contact):
 			return
 
-		if self.contact.mood.has_key('mood'):
+		if 'mood' in self.contact.mood:
 			mood = self.contact.mood['mood'].strip()
-		if self.contact.mood.has_key('text'):
+		if 'text' in self.contact.mood:
 			text = self.contact.mood['text'].strip()
 
 		if mood is not None:
@@ -1230,11 +1230,11 @@ class ChatControl(ChatControlBase):
 		if isinstance(self.contact, GC_Contact):
 			return
 
-		if self.contact.activity.has_key('activity'):
+		if 'activity' in self.contact.activity:
 			activity = self.contact.activity['activity'].strip()
-		if self.contact.activity.has_key('subactivity'):
+		if 'subactivity' in self.contact.activity:
 			subactivity = self.contact.activity['subactivity'].strip()
-		if self.contact.activity.has_key('text'):
+		if 'text' in self.contact.activity:
 			text = self.contact.activity['text'].strip()
 
 		if activity is not None:
@@ -1280,15 +1280,15 @@ class ChatControl(ChatControlBase):
 		if isinstance(self.contact, GC_Contact):
 			return
 
-		if self.contact.tune.has_key('artist'):
+		if 'artist' in self.contact.tune:
 			artist = self.contact.tune['artist'].strip()
 			if HAVE_MARKUP_TOOLTIPS:
 				artist = gobject.markup_escape_text(artist)
-		if self.contact.tune.has_key('title'):
+		if 'title' in self.contact.tune:
 			title = self.contact.tune['title'].strip()
 			if HAVE_MARKUP_TOOLTIPS:
 				title = gobject.markup_escape_text(title)
-		if self.contact.tune.has_key('source'):
+		if 'source' in self.contact.tune:
 			source = self.contact.tune['source'].strip()
 			if HAVE_MARKUP_TOOLTIPS:
 				source = gobject.markup_escape_text(source)
@@ -1396,7 +1396,7 @@ class ChatControl(ChatControlBase):
 			size = '32', icon_name = show)
 		img_16 = gajim.interface.roster.get_appropriate_state_images(jid,
 			icon_name = show)
-		if img_32.has_key(show) and img_32[show].get_pixbuf():
+		if show in img_32 and img_32[show].get_pixbuf():
 			# we have 32x32! use it!
 			banner_image = img_32[show]
 			use_size_32 = True

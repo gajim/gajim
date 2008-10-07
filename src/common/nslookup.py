@@ -150,9 +150,9 @@ class Resolver:
 		result_list = self.parse_srv_result(host, result)
 		
 		# practically it is impossible to be the opposite, but who knows :)
-		if not self.resolved_hosts.has_key(host):
+		if host not in self.resolved_hosts:
 			self.resolved_hosts[host] = result_list
-		if self.handlers.has_key(host):
+		if host in self.handlers:
 			for callback in self.handlers[host]:
 				callback(host, result_list)
 			del(self.handlers[host])
@@ -169,11 +169,11 @@ class Resolver:
 			# empty host, return empty list of srv records
 			on_ready([])
 			return
-		if self.resolved_hosts.has_key(host):
+		if host in self.resolved_hosts:
 			# host is already resolved, return cached values
 			on_ready(host, self.resolved_hosts[host])
 			return
-		if self.handlers.has_key(host):
+		if host in self.handlers:
 			# host is about to be resolved by another connection,
 			# attach our callback 
 			self.handlers[host].append(on_ready)

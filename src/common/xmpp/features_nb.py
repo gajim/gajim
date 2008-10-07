@@ -236,13 +236,13 @@ def setPrivacyList(disp, listname, tags):
 	iq = Iq('set', NS_PRIVACY, xmlns = '')
 	list_query = iq.getTag('query').setTag('list', {'name': listname})
 	for item in tags:
-		if item.has_key('type') and item.has_key('value'):
+		if 'type' in item and 'value' in item:
 			item_tag = list_query.setTag('item', {'action': item['action'],
 				'order': item['order'], 'type': item['type'], 'value': item['value']})
 		else:
 			item_tag = list_query.setTag('item', {'action': item['action'],
 				'order': item['order']})
-		if item.has_key('child'):
+		if 'child' in item:
 			for child_tag in item['child']:
 				item_tag.setTag(child_tag)
 	_on_default_response(disp, iq, None)

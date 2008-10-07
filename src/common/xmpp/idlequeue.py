@@ -53,14 +53,14 @@ class IdleQueue:
 		self.selector = select.poll()
 	
 	def remove_timeout(self, fd):
-		if self.read_timeouts.has_key(fd):
+		if fd in self.read_timeouts:
 			del(self.read_timeouts[fd])
 	
 	def set_alarm(self, alarm_cb, seconds):
 		''' set up a new alarm, to be called after alarm_cb sec. '''
 		alarm_time = self.current_time() + seconds
 		# almost impossible, but in case we have another alarm_cb at this time
-		if self.alarms.has_key(alarm_time):
+		if alarm_time in self.alarms:
 			self.alarms[alarm_time].append(alarm_cb)
 		else:
 			self.alarms[alarm_time] = [alarm_cb]
@@ -76,7 +76,7 @@ class IdleQueue:
 		for fd, timeout in self.read_timeouts.items():
 			if timeout > current_time:
 				continue
-			if self.queue.has_key(fd):
+			if fd in self.queue:
 				self.queue[fd].read_timeout()
 			else:
 				self.remove_timeout(fd)
@@ -91,7 +91,7 @@ class IdleQueue:
 	def plug_idle(self, obj, writable = True, readable = True):
 		if obj.fd == -1:
 			return
-		if self.queue.has_key(obj.fd):
+		if obj.fd in self.queue:
 			self.unplug_idle(obj.fd)
 		self.queue[obj.fd] = obj
 		if writable:
@@ -111,7 +111,7 @@ class IdleQueue:
 		self.selector.register(fd, flags)
 	
 	def unplug_idle(self, fd):
-		if self.queue.has_key(fd):
+		if fd in self.queue:
 			del(self.queue[fd])
 			self.remove_idle(fd)
 	
@@ -187,11 +187,11 @@ class SelectIdleQueue(IdleQueue):
 		''' this method is called when we unplug a new idle object.
 		Remove descriptor from read/write/error lists
 		'''
-		if self.read_fds.has_key(fd):
+		if fd in self.read_fds:
 			del(self.read_fds[fd])
-		if self.write_fds.has_key(fd):
+		if fd in self.write_fds:
 			del(self.write_fds[fd])
-		if self.error_fds.has_key(fd):
+		if fd in self.error_fds:
 			del(self.error_fds[fd])
 	
 	def process(self):

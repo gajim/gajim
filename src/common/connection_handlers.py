@@ -76,13 +76,13 @@ class ConnectionBytestream:
 		self.files_props = {}
 
 	def is_transfer_stopped(self, file_props):
-		if file_props.has_key('error') and file_props['error'] != 0:
+		if 'error' in file_props and file_props['error'] != 0:
 			return True
-		if file_props.has_key('completed') and file_props['completed']:
+		if 'completed' in file_props and file_props['completed']:
 			return True
-		if file_props.has_key('connected') and file_props['connected'] == False:
+		if 'connected' in file_props and file_props['connected'] == False:
 			return True
-		if not file_props.has_key('stopped') or not file_props['stopped']:
+		if 'stopped' not in file_props or not file_props['stopped']:
 			return False
 		return True
 
@@ -133,18 +133,18 @@ class ConnectionBytestream:
 		gajim.socks5queue.remove_file_props(self.name, sid)
 
 		if remove_from_list:
-			if self.files_props.has_key('sid'):
+			if 'sid' in self.files_props:
 				del(self.files_props['sid'])
 
 	def disconnect_transfer(self, file_props):
 		if file_props is None:
 			return
-		if file_props.has_key('hash'):
+		if 'hash' in file_props:
 			gajim.socks5queue.remove_sender(file_props['hash'])
 
-		if file_props.has_key('streamhosts'):
+		if 'streamhosts' in file_props:
 			for host in file_props['streamhosts']:
-				if host.has_key('idx') and host['idx'] > 0:
+				if 'idx' in host and host['idx'] > 0:
 					gajim.socks5queue.remove_receiver(host['idx'])
 					gajim.socks5queue.remove_sender(host['idx'])
 
@@ -273,7 +273,7 @@ class ConnectionBytestream:
 		iq.setAttr('id', file_props['request-id'])
 		si = iq.setTag('si')
 		si.setNamespace(common.xmpp.NS_SI)
-		if file_props.has_key('offset') and file_props['offset']:
+		if 'offset' in file_props and file_props['offset']:
 			file_tag = si.setTag('file')
 			file_tag.setNamespace(common.xmpp.NS_FILE)
 			range_tag = file_tag.setTag('range')
@@ -309,7 +309,7 @@ class ConnectionBytestream:
 		file_tag.setAttr('name', file_props['name'])
 		file_tag.setAttr('size', file_props['size'])
 		desc = file_tag.setTag('desc')
-		if file_props.has_key('desc'):
+		if 'desc' in file_props:
 			desc.setData(file_props['desc'])
 		file_tag.setTag('range')
 		feature = si.setTag('feature')
@@ -323,7 +323,7 @@ class ConnectionBytestream:
 
 	def _result_socks5_sid(self, sid, hash_id):
 		''' store the result of sha message from auth. '''
-		if not self.files_props.has_key(sid):
+		if sid not in self.files_props:
 			return
 		file_props = self.files_props[sid]
 		file_props['hash'] = hash_id
@@ -381,7 +381,7 @@ class ConnectionBytestream:
 		gajim.proxy65_manager.error_cb(frm, query)
 		jid = helpers.get_jid_from_iq(iq_obj)
 		id = id[3:]
-		if not self.files_props.has_key(id):
+		if id not in self.files_props:
 			return
 		file_props = self.files_props[id]
 		file_props['error'] = -4
@@ -410,13 +410,13 @@ class ConnectionBytestream:
 					host_dict[attr] = item.getAttr(attr)
 				streamhosts.append(host_dict)
 		if file_props is None:
-			if self.files_props.has_key(sid):
+			if sid in self.files_props:
 				file_props = self.files_props[sid]
 				file_props['fast'] = streamhosts
 				if file_props['type'] == 's': # FIXME: remove fast xmlns
 					# only psi do this
 
-					if file_props.has_key('streamhosts'):
+					if 'streamhosts' in file_props:
 						file_props['streamhosts'].extend(streamhosts)
 					else:
 						file_props['streamhosts'] = streamhosts
@@ -444,11 +444,11 @@ class ConnectionBytestream:
 			return
 		frm = helpers.get_full_jid_from_iq(iq_obj)
 		id = real_id[3:]
-		if self.files_props.has_key(id):
+		if id in self.files_props:
 			file_props = self.files_props[id]
 			if file_props['streamhost-used']:
 				for host in file_props['proxyhosts']:
-					if host['initiator'] == frm and host.has_key('idx'):
+					if host['initiator'] == frm and 'idx' in host:
 						gajim.socks5queue.activate_proxy(host['idx'])
 						raise common.xmpp.NodeProcessed
 
@@ -464,7 +464,7 @@ class ConnectionBytestream:
 		except: # this bytestream result is not what we need
 			pass
 		id = real_id[3:]
-		if self.files_props.has_key(id):
+		if id in self.files_props:
 			file_props = self.files_props[id]
 		else:
 			raise common.xmpp.NodeProcessed
@@ -472,10 +472,10 @@ class ConnectionBytestream:
 			# proxy approves the activate query
 			if real_id[:3] == 'au_':
 				id = real_id[3:]
-				if not file_props.has_key('streamhost-used') or \
+				if 'streamhost-used' not in file_props or \
 					file_props['streamhost-used'] is False:
 					raise common.xmpp.NodeProcessed
-				if not file_props.has_key('proxyhosts'):
+				if 'proxyhosts' not in file_props:
 					raise common.xmpp.NodeProcessed
 				for host in file_props['proxyhosts']:
 					if host['initiator'] == frm and \
@@ -484,26 +484,26 @@ class ConnectionBytestream:
 						break
 			raise common.xmpp.NodeProcessed
 		jid = streamhost.getAttr('jid')
-		if file_props.has_key('streamhost-used') and \
+		if 'streamhost-used' in file_props and \
 			file_props['streamhost-used'] is True:
 			raise common.xmpp.NodeProcessed
 
 		if real_id[:3] == 'au_':
-			if file.has_key('stopped') and file_props['stopped']:
+			if 'stopped' in file and file_props['stopped']:
 				self.remove_transfer(file_props)
 			else:
 				gajim.socks5queue.send_file(file_props, self.name)
 			raise common.xmpp.NodeProcessed
 
 		proxy = None
-		if file_props.has_key('proxyhosts'):
+		if 'proxyhosts' in file_props:
 			for proxyhost in file_props['proxyhosts']:
 				if proxyhost['jid'] == jid:
 					proxy = proxyhost
 
 		if proxy is not None:
 			file_props['streamhost-used'] = True
-			if not file_props.has_key('streamhosts'):
+			if 'streamhosts' not in file_props:
 				file_props['streamhosts'] = []
 			file_props['streamhosts'].append(proxy)
 			file_props['is_a_proxy'] = True
@@ -514,11 +514,11 @@ class ConnectionBytestream:
 			raise common.xmpp.NodeProcessed
 
 		else:
-			if file_props.has_key('stopped') and file_props['stopped']:
+			if 'stopped' in file_props and file_props['stopped']:
 				self.remove_transfer(file_props)
 			else:
 				gajim.socks5queue.send_file(file_props, self.name)
-			if file_props.has_key('fast'):
+			if 'fast' in file_props:
 				fasts = file_props['fast']
 				if len(fasts) > 0:
 					self._connect_error(frm, fasts[0]['id'], file_props['sid'],
@@ -529,14 +529,14 @@ class ConnectionBytestream:
 	def _siResultCB(self, con, iq_obj):
 		gajim.log.debug('_siResultCB')
 		id = iq_obj.getAttr('id')
-		if not self.files_props.has_key(id):
+		if id not in self.files_props:
 			# no such jid
 			return
 		file_props = self.files_props[id]
 		if file_props is None:
 			# file properties for jid is none
 			return
-		if file_props.has_key('request-id'):
+		if 'request-id' in file_props:
 			# we have already sent streamhosts info
 			return
 		file_props['receiver'] = helpers.get_full_jid_from_iq(iq_obj)
@@ -603,7 +603,7 @@ class ConnectionBytestream:
 		if profile != common.xmpp.NS_FILE:
 			return
 		id = iq_obj.getAttr('id')
-		if not self.files_props.has_key(id):
+		if id not in self.files_props:
 			# no such jid
 			return
 		file_props = self.files_props[id]
@@ -804,13 +804,13 @@ class ConnectionDisco:
 				attr = {}
 				for key in i.getAttrs().keys():
 					attr[key] = i.getAttr(key)
-				if attr.has_key('category') and \
+				if 'category' in attr and \
 					attr['category'] in ('gateway', 'headline') and \
-					attr.has_key('type'):
+					'type' in attr:
 					transport_type = attr['type']
-				if attr.has_key('category') and \
+				if 'category' in attr and \
 					attr['category'] == 'conference' and \
-					attr.has_key('type') and attr['type'] == 'text':
+					'type' in attr and attr['type'] == 'text':
 					is_muc = True
 				identities.append(attr)
 			elif i.getName() == 'feature':
@@ -851,7 +851,7 @@ class ConnectionDisco:
 				type_ = transport_type or 'jabber'
 				self.muc_jid[type_] = jid
 			if transport_type:
-				if self.available_transports.has_key(transport_type):
+				if transport_type in self.available_transports:
 					self.available_transports[transport_type].append(jid)
 				else:
 					self.available_transports[transport_type] = [jid]
@@ -887,7 +887,7 @@ class ConnectionVcard:
 		for info in node.getChildren():
 			name = info.getName()
 			if name in ('ADR', 'TEL', 'EMAIL'): # we can have several
-				if not dict.has_key(name):
+				if name not in dict:
 					dict[name] = []
 				entry = {}
 				for c in info.getChildren():
@@ -949,12 +949,12 @@ class ConnectionVcard:
 			os.remove(path_to_file)
 			return None
 		vcard = self.node_to_dict(card)
-		if vcard.has_key('PHOTO'):
+		if 'PHOTO' in vcard:
 			if not isinstance(vcard['PHOTO'], dict):
 				del vcard['PHOTO']
-			elif vcard['PHOTO'].has_key('SHA'):
+			elif 'SHA' in vcard['PHOTO']:
 				cached_sha = vcard['PHOTO']['SHA']
-				if self.vcard_shas.has_key(jid) and self.vcard_shas[jid] != \
+				if jid in self.vcard_shas and self.vcard_shas[jid] != \
 					cached_sha:
 					# user change his vcard so don't use the cached one
 					return {}
@@ -1012,8 +1012,8 @@ class ConnectionVcard:
 
 		our_jid = gajim.get_jid_from_account(self.name)
 		# Add the sha of the avatar
-		if vcard.has_key('PHOTO') and isinstance(vcard['PHOTO'], dict) and \
-		vcard['PHOTO'].has_key('BINVAL'):
+		if 'PHOTO' in vcard and isinstance(vcard['PHOTO'], dict) and \
+		'BINVAL' in vcard['PHOTO']:
 			photo = vcard['PHOTO']['BINVAL']
 			photo_decoded = base64.decodestring(photo)
 			gajim.interface.save_avatar_files(our_jid, photo_decoded)
@@ -1111,7 +1111,7 @@ class ConnectionVcard:
 						order = 0
 					if order is not None:
 						data['order'] = order
-					if meta_list.has_key(tag):
+					if tag in meta_list:
 						meta_list[tag].append(data)
 					else:
 						meta_list[tag] = [data]
@@ -1168,8 +1168,8 @@ class ConnectionVcard:
 		card = vc.getChildren()[0]
 		vcard = self.node_to_dict(card)
 		photo_decoded = None
-		if vcard.has_key('PHOTO') and isinstance(vcard['PHOTO'], dict) and \
-		vcard['PHOTO'].has_key('BINVAL'):
+		if 'PHOTO' in vcard and isinstance(vcard['PHOTO'], dict) and \
+		'BINVAL' in vcard['PHOTO']:
 			photo = vcard['PHOTO']['BINVAL']
 			try:
 				photo_decoded = base64.decodestring(photo)
@@ -1201,12 +1201,12 @@ class ConnectionVcard:
 			if frm_jid == our_jid and avatar_sha != self.vcard_sha:
 				gajim.interface.save_avatar_files(frm, photo_decoded, puny_nick)
 			elif frm_jid != our_jid and (not os.path.exists(avatar_file) or \
-			not self.vcard_shas.has_key(frm_jid) or \
+			frm_jid not in self.vcard_shas or \
 			avatar_sha != self.vcard_shas[frm_jid]):
 				gajim.interface.save_avatar_files(frm, photo_decoded, puny_nick)
 				if avatar_sha:
 					self.vcard_shas[frm_jid] = avatar_sha
-			elif self.vcard_shas.has_key(frm):
+			elif frm in self.vcard_shas:
 				del self.vcard_shas[frm]
 		else:
 			for ext in ('.jpeg', '.png', '_notif_size_bw.png',
@@ -1861,7 +1861,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			return
 
 		# Ignore message from room in which we are not
-		if not self.last_history_time.has_key(jid):
+		if jid not in self.last_history_time:
 			return
 
 		self.dispatch('GC_MSG', (frm, msgtxt, tim, has_timestamp, msg.getXHTML(),
@@ -2110,7 +2110,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				self.automatically_added.remove(jid_stripped)
 			else:
 				# detect a subscription loop
-				if not self.subscribed_events.has_key(jid_stripped):
+				if jid_stripped not in self.subscribed_events:
 					self.subscribed_events[jid_stripped] = []
 				self.subscribed_events[jid_stripped].append(time_time())
 				block = False
@@ -2130,7 +2130,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		elif ptype == 'unsubscribed':
 			gajim.log.debug(_('we are now unsubscribed from %s') % who)
 			# detect a unsubscription loop
-			if not self.subscribed_events.has_key(jid_stripped):
+			if jid_stripped not in self.subscribed_events:
 				self.subscribed_events[jid_stripped] = []
 			self.subscribed_events[jid_stripped].append(time_time())
 			block = False
@@ -2161,10 +2161,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					del self.sessions[jid_stripped][sess.thread_id]
 
 		if avatar_sha is not None and ptype != 'error':
-			if not self.vcard_shas.has_key(jid_stripped):
+			if jid_stripped not in self.vcard_shas:
 				cached_vcard = self.get_cached_vcard(jid_stripped)
-				if cached_vcard and cached_vcard.has_key('PHOTO') and \
-				cached_vcard['PHOTO'].has_key('SHA'):
+				if cached_vcard and 'PHOTO' in cached_vcard and \
+				'SHA' in cached_vcard['PHOTO']:
 					self.vcard_shas[jid_stripped] = cached_vcard['PHOTO']['SHA']
 				else:
 					self.vcard_shas[jid_stripped] = ''
@@ -2335,7 +2335,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		priority = gajim.get_priority(self.name, sshow)
 		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
 		vcard = self.get_cached_vcard(our_jid)
-		if vcard and vcard.has_key('PHOTO') and vcard['PHOTO'].has_key('SHA'):
+		if vcard and 'PHOTO' in vcard and 'SHA' in vcard['PHOTO']:
 			self.vcard_sha = vcard['PHOTO']['SHA']
 		p = common.xmpp.Presence(typ = None, priority = priority, show = sshow)
 		p = self.add_sha(p)

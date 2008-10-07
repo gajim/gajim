@@ -454,7 +454,7 @@ class RosterWindow:
 				if parent_type == 'group' and \
 				self.model.iter_n_children(parent_i) == 1:
 					group = self.model[parent_i][C_JID].decode('utf-8')
-					if gajim.groups[account].has_key(group):
+					if group in gajim.groups[account]:
 						del gajim.groups[account][group]
 					self.model.remove(parent_i)
 				else:
@@ -985,7 +985,7 @@ class RosterWindow:
 				gajim.connections[account].mood['mood'].strip()).get_pixbuf()
 
 		elif gajim.config.get('show_mood_in_roster') \
-		and gajim.connections[account].mood.has_key('mood'):
+		and 'mood' in gajim.connections[account].mood:
 			self.model[child_iter][C_MOOD_PIXBUF] = \
 				gtkgui_helpers.load_mood_icon('unknown'). \
 				get_pixbuf()
@@ -993,7 +993,7 @@ class RosterWindow:
 			self.model[child_iter][C_MOOD_PIXBUF] = None
 
 		if gajim.config.get('show_activity_in_roster') \
-		and gajim.connections[account].activity.has_key('activity') \
+		and 'activity' in gajim.connections[account].activity \
 		and gajim.connections[account].activity['activity'].strip() \
 		in ACTIVITIES:
 			self.model[child_iter][C_ACTIVITY_PIXBUF] = \
@@ -1001,7 +1001,7 @@ class RosterWindow:
 				gajim.connections[account]. \
 				activity['activity'].strip()).get_pixbuf()
 		elif gajim.config.get('show_activity_in_roster') \
-		and gajim.connections[account].activity.has_key('activity'):
+		and 'activity' in gajim.connections[account].activity:
 			self.model[child_iter][C_ACTIVITY_PIXBUF] = \
 				gtkgui_helpers.load_activity_icon('unknown'). \
 				get_pixbuf()
@@ -1009,8 +1009,8 @@ class RosterWindow:
 			self.model[child_iter][C_ACTIVITY_PIXBUF] = None
 
 		if gajim.config.get('show_tunes_in_roster') \
-		and (gajim.connections[account].tune.has_key('artist') \
-		or gajim.connections[account].tune.has_key('title')):
+		and ('artist' in gajim.connections[account].tune \
+		or 'title' in gajim.connections[account].tune):
 			self.model[child_iter][C_TUNE_PIXBUF] = \
 				gtk.gdk.pixbuf_new_from_file(
 				'../data/emoticons/static/music.png')
@@ -1266,7 +1266,7 @@ class RosterWindow:
 		jid = self.model[iters[0]][C_JID]
 		jid = jid.decode('utf-8')
 		contact = gajim.contacts.get_contact(account, jid)
-		if contact.tune.has_key('artist') or contact.tune.has_key('title'):
+		if 'artist' in contact.tune or 'title' in contact.tune:
 			pixbuf = gtk.gdk.pixbuf_new_from_file(
 				'../data/emoticons/static/music.png')
 		else:
@@ -1966,9 +1966,9 @@ class RosterWindow:
 				gajim.SHOW_LIST.index('invisible')
 			gajim.connections[account].change_status(status, txt, auto)
 
-			if gajim.interface.status_sent_to_users.has_key(account):
+			if account in gajim.interface.status_sent_to_users:
 				gajim.interface.status_sent_to_users[account] = {}
-			if gajim.interface.status_sent_to_groups.has_key(account):
+			if account in gajim.interface.status_sent_to_groups:
 				gajim.interface.status_sent_to_groups[account] = {}
 			for gc_control in gajim.interface.msg_win_mgr.get_controls(
 			message_control.TYPE_GC) + \
@@ -2034,7 +2034,7 @@ class RosterWindow:
 				ctrl.update_status_display(name, uf_show, status)
 
 		# unset custom status
-		if gajim.interface.status_sent_to_users.has_key(account) and \
+		if account in gajim.interface.status_sent_to_users and \
 			contact.jid in gajim.interface.status_sent_to_users[account]:
 			del gajim.interface.status_sent_to_users[account][contact.jid]
 
@@ -2264,7 +2264,7 @@ class RosterWindow:
 			for win in gajim.interface.msg_win_mgr.windows():
 				for ctrl in win.controls():
 					fjid = ctrl.get_full_jid()
-					if gajim.last_message_time[ctrl.account].has_key(fjid):
+					if fjid in gajim.last_message_time[ctrl.account]:
 						if time.time() - gajim.last_message_time[ctrl.account][fjid] \
 						< 2:
 							recent = True
@@ -2307,14 +2307,14 @@ class RosterWindow:
 		dialogs.SingleMessageWindow(account, server, 'send')
 
 	def on_xml_console_menuitem_activate(self, widget, account):
-		if gajim.interface.instances[account].has_key('xml_console'):
+		if 'xml_console' in gajim.interface.instances[account]:
 			gajim.interface.instances[account]['xml_console'].window.present()
 		else:
 			gajim.interface.instances[account]['xml_console'] = \
 				dialogs.XMLConsoleWindow(account)
 
 	def on_privacy_lists_menuitem_activate(self, widget, account):
-		if gajim.interface.instances[account].has_key('privacy_lists'):
+		if 'privacy_lists' in gajim.interface.instances[account]:
 			gajim.interface.instances[account]['privacy_lists'].window.present()
 		else:
 			gajim.interface.instances[account]['privacy_lists'] = \
@@ -2351,14 +2351,14 @@ class RosterWindow:
 			return
 
 		info = gajim.interface.instances[account]['infos']
-		if info.has_key(contact.jid):
+		if contact.jid in info:
 			info[contact.jid].window.present()
 		else:
 			info[contact.jid] = vcard.VcardWindow(contact, account)
 
 	def on_info_zeroconf(self, widget, contact, account):
 		info = gajim.interface.instances[account]['infos']
-		if info.has_key(contact.jid):
+		if contact.jid in info:
 			info[contact.jid].window.present()
 		else:
 			contact = gajim.contacts.get_first_contact_from_jid(account,
@@ -2625,7 +2625,7 @@ class RosterWindow:
 				gajim.connections[account].set_default_list('')
 				gajim.connections[account].set_active_list('')
 				gajim.connections[account].del_privacy_list('block')
-				if gajim.interface.instances[account].has_key('blocked_contacts'):
+				if 'blocked_contacts' in gajim.interface.instances[account]:
 					gajim.interface.instances[account]['blocked_contacts'].\
 						privacy_list_received([])
 		for (contact, account) in list_:
@@ -2647,7 +2647,7 @@ class RosterWindow:
 
 	def on_rename(self, widget, row_type, jid, account):
 		# this function is called either by F2 or by Rename menuitem
-		if gajim.interface.instances.has_key('rename'):
+		if 'rename' in gajim.interface.instances:
 			gajim.interface.instances['rename'].dialog.present()
 			return
 		model = self.modelfilter
@@ -2669,7 +2669,7 @@ class RosterWindow:
 			message = _('Enter a new name for group %s') % jid
 
 		def on_renamed(new_text, account, row_type, jid, old_text):
-			if gajim.interface.instances.has_key('rename'):
+			if 'rename' in gajim.interface.instances:
 				del gajim.interface.instances['rename']
 			if row_type in ('contact', 'agent'):
 				if old_text == new_text:
@@ -2706,7 +2706,7 @@ class RosterWindow:
 							self.add_contact_to_groups(jid, acc, [new_text,])
 
 		def on_canceled():
-			if gajim.interface.instances.has_key('rename'):
+			if 'rename' in gajim.interface.instances:
 				del gajim.interface.instances['rename']
 
 		gajim.interface.instances['rename'] = dialogs.InputDialog(title, message,
@@ -2812,7 +2812,7 @@ class RosterWindow:
 
 	def on_history(self, widget, contact, account):
 		'''When history menuitem is activated: call log window'''
-		if gajim.interface.instances.has_key('logs'):
+		if 'logs' in gajim.interface.instances:
 			gajim.interface.instances['logs'].window.present()
 			gajim.interface.instances['logs'].open_history(contact.jid, account)
 		else:
@@ -2865,7 +2865,7 @@ class RosterWindow:
 		for account in account_list:
 			if gajim.connections[account].muc_jid[type_]:
 				# create the room on this muc server
-				if gajim.interface.instances[account].has_key('join_gc'):
+				if 'join_gc' in gajim.interface.instances[account]:
 					gajim.interface.instances[account]['join_gc'].window.destroy()
 				try:
 					gajim.interface.instances[account]['join_gc'] = \
@@ -2906,14 +2906,14 @@ class RosterWindow:
 		self.remove_groupchat(jid, account)
 
 	def on_edit_account(self, widget, account):
-		if gajim.interface.instances.has_key('accounts'):
+		if 'accounts' in gajim.interface.instances:
 			gajim.interface.instances['accounts'].window.present()
 		else:
 			gajim.interface.instances['accounts'] = config.AccountsWindow()
 		gajim.interface.instances['accounts'].select_account(account)
 
 	def on_zeroconf_properties(self, widget, account):
-		if gajim.interface.instances.has_key('accounts'):
+		if 'accounts' in gajim.interface.instances:
 			gajim.interface.instances['accounts'].window.present()
 		else:
 			gajim.interface.instances['accounts'] = config.AccountsWindow()
@@ -3156,7 +3156,7 @@ class RosterWindow:
 				our_jid = gajim.get_jid_from_account(account)
 				accounts = []
 				if group and account not in accounts:
-					if not gajim.interface.status_sent_to_groups.has_key(account):
+					if account not in gajim.interface.status_sent_to_groups:
 						gajim.interface.status_sent_to_groups[account] = {}
 					gajim.interface.status_sent_to_groups[account][group] = show
 					accounts.append(group)
@@ -3164,7 +3164,7 @@ class RosterWindow:
 				if jid == our_jid:
 					jid += '/' + contact.resource
 				self.send_status(account, show, message, to=jid)
-				if not gajim.interface.status_sent_to_users.has_key(account):
+				if account not in gajim.interface.status_sent_to_users:
 					gajim.interface.status_sent_to_users[account] = {}
 				gajim.interface.status_sent_to_users[account][contact.jid] = show
 		dialogs.ChangeStatusMessageDialog(on_response, show)
@@ -3266,7 +3266,7 @@ class RosterWindow:
 		self.get_status_message(status, on_continue)
 
 	def on_preferences_menuitem_activate(self, widget):
-		if gajim.interface.instances.has_key('preferences'):
+		if 'preferences' in gajim.interface.instances:
 			gajim.interface.instances['preferences'].window.present()
 		else:
 			gajim.interface.instances['preferences'] = config.PreferencesWindow()
@@ -3300,7 +3300,7 @@ class RosterWindow:
 		helpers.update_optional_features(account)
 
 	def on_pep_services_menuitem_activate(self, widget, account):
-		if gajim.interface.instances[account].has_key('pep_services'):
+		if 'pep_services' in gajim.interface.instances[account]:
 			gajim.interface.instances[account]['pep_services'].window.present()
 		else:
 			gajim.interface.instances[account]['pep_services'] = \
@@ -3316,7 +3316,7 @@ class RosterWindow:
 			dialogs.ErrorDialog(_('You cannot join a group chat while you are '
 				'invisible'))
 			return
-		if gajim.interface.instances[account].has_key('join_gc'):
+		if 'join_gc' in gajim.interface.instances[account]:
 			gajim.interface.instances[account]['join_gc'].window.present()
 		else:
 			# c http://nkour.blogspot.com/2005/05/pythons-init-return-none-doesnt-return.html
@@ -3343,7 +3343,7 @@ class RosterWindow:
 		dialogs.AboutDialog()
 
 	def on_accounts_menuitem_activate(self, widget):
-		if gajim.interface.instances.has_key('accounts'):
+		if 'accounts' in gajim.interface.instances:
 			gajim.interface.instances['accounts'].window.present()
 		else:
 			gajim.interface.instances['accounts'] = config.AccountsWindow()
@@ -3356,7 +3356,7 @@ class RosterWindow:
 			gajim.interface.instances['file_transfers'].window.show_all()
 
 	def on_history_menuitem_activate(self, widget):
-		if gajim.interface.instances.has_key('logs'):
+		if 'logs' in gajim.interface.instances:
 			gajim.interface.instances['logs'].window.present()
 		else:
 			gajim.interface.instances['logs'] = history_window.\
@@ -3638,7 +3638,7 @@ class RosterWindow:
 
 	def on_service_disco_menuitem_activate(self, widget, account):
 		server_jid = gajim.config.get_per('accounts', account, 'hostname')
-		if gajim.interface.instances[account]['disco'].has_key(server_jid):
+		if server_jid in gajim.interface.instances[account]['disco']:
 			gajim.interface.instances[account]['disco'][server_jid].\
 				window.present()
 		else:
@@ -4022,11 +4022,11 @@ class RosterWindow:
 		transport: transport iconset doesn't contain all icons, so we fall back
 		to jabber one'''
 		transport = gajim.get_transport_name_from_jid(jid)
-		if transport and self.transports_state_images.has_key(size):
-			if not self.transports_state_images[size].has_key(transport):
+		if transport and size in self.transports_state_images:
+			if transport not in self.transports_state_images[size]:
 				# we don't have iconset for this transport loaded yet. Let's do it
 				self.make_transport_state_images(transport)
-			if self.transports_state_images[size].has_key(transport) and \
+			if transport in self.transports_state_images[size] and \
 			icon_name in self.transports_state_images[size][transport]:
 				return self.transports_state_images[size][transport]
 		return gajim.interface.jabber_state_images[size]
@@ -5334,7 +5334,7 @@ class RosterWindow:
 			send_custom_status_menuitem.set_image( \
 				gtkgui_helpers.load_icon('offline'))
 			send_custom_status_menuitem.set_sensitive(False)
-		elif gajim.interface.status_sent_to_users.has_key(account) and \
+		elif account in gajim.interface.status_sent_to_users and \
 		jid in gajim.interface.status_sent_to_users[account]:
 			send_custom_status_menuitem.set_image(
 				gtkgui_helpers.load_icon( \
@@ -5655,7 +5655,7 @@ class RosterWindow:
 				'offline'))
 			send_custom_status_menuitem.set_sensitive(False)
 		else:
-			if gajim.interface.status_sent_to_users.has_key(account) and \
+			if account in gajim.interface.status_sent_to_users and \
 			jid in gajim.interface.status_sent_to_users[account]:
 				send_custom_status_menuitem.set_image(gtkgui_helpers.load_icon(
 					gajim.interface.status_sent_to_users[account][jid]))
@@ -5885,7 +5885,7 @@ class RosterWindow:
 		for account in connected_accounts:
 			for t in gajim.connections[account].muc_jid:
 				muc_jid[t] = gajim.connections[account].muc_jid[t]
-		if not muc_jid.has_key(c_t):
+		if c_t not in muc_jid:
 			invite_to_new_room_menuitem.set_sensitive(False)
 		rooms = [] # a list of (room_jid, account) tuple
 		invite_to_submenu.append(invite_to_new_room_menuitem)
@@ -5898,7 +5898,7 @@ class RosterWindow:
 		message_control.TYPE_GC) + minimized_controls:
 			acct = gc_control.account
 			room_jid = gc_control.room_jid
-			if gajim.gc_connected[acct].has_key(room_jid) and \
+			if room_jid in gajim.gc_connected[acct] and \
 			gajim.gc_connected[acct][room_jid] and \
 			contacts_transport == gajim.get_transport_name_from_jid(room_jid):
 				rooms.append((room_jid, acct))

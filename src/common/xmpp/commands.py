@@ -78,13 +78,13 @@ class Commands(PlugIn):
         except:
             conn.send(Error(request,ERR_BAD_REQUEST))
             raise NodeProcessed
-        if self._handlers.has_key(jid):
-            if self._handlers[jid].has_key(node):
+        if jid in self._handlers:
+            if node in self._handlers[jid]:
                 self._handlers[jid][node]['execute'](conn,request)
             else:
                 conn.send(Error(request,ERR_ITEM_NOT_FOUND))
                 raise NodeProcessed
-        elif self._handlers[''].has_key(node):
+        elif node in self._handlers['']:
                 self._handlers[''][node]['execute'](conn,request)
         else:
             conn.send(Error(request,ERR_ITEM_NOT_FOUND))
@@ -105,7 +105,7 @@ class Commands(PlugIn):
             items = []
             jid = str(request.getTo())
             # Get specific jid based results
-            if self._handlers.has_key(jid):
+            if jid in self._handlers:
                 for each in self._handlers[jid].keys():
                     items.append((jid,each))
             else:
@@ -133,10 +133,10 @@ class Commands(PlugIn):
         # We must:
         #   Add item into disco
         #   Add item into command list
-        if not self._handlers.has_key(jid):
+        if jid not in self._handlers:
             self._handlers[jid]={}
             self._browser.setDiscoHandler(self._DiscoHandler,node=NS_COMMANDS,jid=jid)
-        if self._handlers[jid].has_key(name):
+        if name in self._handlers[jid]:
             raise NameError,'Command Exists'
         else:
             self._handlers[jid][name]={'disco':cmddisco,'execute':cmdexecute}
@@ -149,9 +149,9 @@ class Commands(PlugIn):
         # We must:
         #   Remove item from disco
         #   Remove item from command list
-        if not self._handlers.has_key(jid):
+        if jid not in self._handlers:
             raise NameError,'Jid not found'
-        if not self._handlers[jid].has_key(name):
+        if name not in self._handlers[jid]:
             raise NameError, 'Command not found'
         else:
             #Do disco removal here
@@ -164,9 +164,9 @@ class Commands(PlugIn):
         # This gets the command object with name
         # We must:
         #   Return item that matches this name
-        if not self._handlers.has_key(jid):
+        if jid not in self._handlers:
             raise NameError,'Jid not found'
-        elif not self._handlers[jid].has_key(name):
+        elif name not in self._handlers[jid]:
             raise NameError,'Command not found'
         else:
             return self._handlers[jid][name]
@@ -229,10 +229,10 @@ class Command_Handler_Prototype(PlugIn):
             action = None
         if action is None: action = 'execute'
         # Check session is in session list
-        if self.sessions.has_key(session):
+        if session in self.sessions:
             if self.sessions[session]['jid']==request.getFrom():
                 # Check action is vaild
-                if self.sessions[session]['actions'].has_key(action):
+                if action in self.sessions[session]['actions']:
                     # Execute next action
                     self.sessions[session]['actions'][action](conn,request)
                 else:

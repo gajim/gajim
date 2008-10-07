@@ -87,7 +87,7 @@ class Mock:
         if realClass:
             self.realClassMethods = dict(inspect.getmembers(realClass, inspect.isroutine))
             for retMethod in self.mockReturnValues.keys():
-                if not self.realClassMethods.has_key(retMethod):
+                if retMethod not in self.realClassMethods:
                     raise MockInterfaceError("Return value supplied for method '%s' that was not in the original class" % retMethod)
         self._setupSubclassMethodInterceptors()
      
@@ -118,7 +118,7 @@ class Mock:
         """
         if self.realClassMethods == None:
             return
-        if not self.realClassMethods.has_key(name):
+        if name not in self.realClassMethods:
             raise MockInterfaceError("Calling mock method '%s' that was not found in the original class" % name)
 
         func = self.realClassMethods[name]
@@ -181,7 +181,7 @@ def _getNumPosSeenAndCheck(numPosCallParams, callKwParams, args, varkw):
     for arg in args[:numPosCallParams]:
         posSeen[arg] = True
     for kwp in callKwParams:
-        if posSeen.has_key(kwp):
+        if kwp in posSeen:
             raise MockInterfaceError("%s appears as both a positional and named parameter." % kwp)
         if kwp in args:
             posSeen[kwp] = True
@@ -289,7 +289,7 @@ class MockCallable:
 
 def _findFunc(cl, name):
     """ Depth first search for a method with a given name. """
-    if cl.__dict__.has_key(name):
+    if name in cl.__dict__:
         return cl.__dict__[name]
     for base in cl.__bases__:
         func = _findFunc(base, name)

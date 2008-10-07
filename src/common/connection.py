@@ -181,7 +181,7 @@ class Connection(ConnectionHandlers):
 	# END __init__
 
 	def put_event(self, ev):
-		if gajim.handlers.has_key(ev[0]):
+		if ev[0] in gajim.handlers:
 			gajim.handlers[ev[0]](self.name, ev[1])
 
 	def dispatch(self, event, data):
@@ -362,7 +362,7 @@ class Connection(ConnectionHandlers):
 				for child in data.getTag('query').getTag('list').getChildren():
 					dict_item = child.getAttrs()
 					childs = []
-					if dict_item.has_key('type'):
+					if 'type' in dict_item:
 						for scnd_child in child.getChildren():
 							childs += [scnd_child.getName()]
 						rules.append({'action':dict_item['action'],
@@ -1322,9 +1322,9 @@ class Connection(ConnectionHandlers):
 					self.new_account_info['password'] = field.value
 		else:
 			# Get username and password and put them in new_account_info
-			if form.has_key('username'):
+			if 'username' in form:
 				self.new_account_info['name'] = form['username']
-			if form.has_key('password'):
+			if 'password' in form:
 				self.new_account_info['password'] = form['password']
 		self.new_account_form = form
 		self.new_account(self.name, self.new_account_info)
@@ -1484,7 +1484,7 @@ class Connection(ConnectionHandlers):
 			for data in tags_list[tag]:
 				jid = data['jid']
 				dict_ = {'jid': jid, 'tag': tag}
-				if data.has_key('order'):
+				if 'order' in data:
 					dict_['order'] = data['order']
 				iq3.addChild(name = 'meta', attrs = dict_)
 		self.connection.send(iq)
@@ -1530,7 +1530,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(p)
 
 		# last date/time in history to avoid duplicate
-		if not self.last_history_time.has_key(room_jid):
+		if room_jid not in self.last_history_time:
 			# Not in memory, get it from DB
 			last_log = None
 			# Do not check if we are not logging for this room
@@ -1644,7 +1644,7 @@ class Connection(ConnectionHandlers):
 		for jid in users_dict:
 			item_tag = item.addChild('item', {'jid': jid,
 				'affiliation': users_dict[jid]['affiliation']})
-			if users_dict[jid].has_key('reason') and users_dict[jid]['reason']:
+			if 'reason' in users_dict[jid] and users_dict[jid]['reason']:
 				item_tag.setTagData('reason', users_dict[jid]['reason'])
 		self.connection.send(iq)
 

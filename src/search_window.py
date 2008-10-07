@@ -82,7 +82,7 @@ class SearchWindow:
 				self.data_form_widget.data_form.get_purged(), True)
 		else:
 			infos = self.data_form_widget.get_infos()
-			if infos.has_key('instructions'):
+			if 'instructions' in infos:
 				del infos['instructions']
 			gajim.connections[self.account].send_search_form(self.jid, infos,
 				False)
@@ -107,7 +107,7 @@ class SearchWindow:
 		if not iter:
 			return
 		jid = model[iter][self.jid_column]
-		if gajim.interface.instances[self.account]['infos'].has_key(jid):
+		if jid in gajim.interface.instances[self.account]['infos']:
 			gajim.interface.instances[self.account]['infos'][jid].window.present()
 		else:
 			contact = gajim.contacts.create_contact(jid = jid, name='', groups=[],

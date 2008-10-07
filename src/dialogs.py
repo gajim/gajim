@@ -392,8 +392,7 @@ class ChangeActivityDialog:
 		if 'activity' in con.activity \
 		and con.activity['activity'] in pep.ACTIVITIES:
 			if 'subactivity' in con.activity \
-			and pep.ACTIVITIES[con.activity['activity']].has_key(
-			con.activity['subactivity']):
+			and con.activity['subactivity'] in pep.ACTIVITIES[con.activity['activity']]:
 				subactivity = con.activity['subactivity']
 			else:
 				subactivity = 'other'
@@ -691,7 +690,7 @@ class AddNewContactWindow:
 			location = gajim.interface.instances[self.account]
 		else:
 			location = gajim.interface.instances
-		if location.has_key('add_contact'):
+		if 'add_contact' in location:
 			location['add_contact'].window.present()
 			# An instance is already opened
 			return
@@ -721,7 +720,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 					type_ = gajim.get_transport_name_from_jid(j, False)
 					if not type_:
 						continue
-					if self.agents.has_key(type_):
+					if type_ in self.agents:
 						self.agents[type_].append(j)
 					else:
 						self.agents[type_] = [j]
@@ -757,7 +756,7 @@ _('Please fill in the data of the contact you want to add in account %s') %accou
 				continue
 			imgs = gajim.interface.roster.transports_state_images
 			img = None
-			if imgs['16'].has_key(type_) and imgs['16'][type_].has_key('online'):
+			if type_ in imgs['16'] and 'online' in imgs['16'][type_]:
 				img = imgs['16'][type_]['online']
 				if type_ in uf_type:
 					liststore.append([uf_type[type_], img.get_pixbuf(), type_])
@@ -1620,7 +1619,7 @@ class SubscriptionRequestWindow:
 
 	def on_contact_info_activate(self, widget):
 		'''ask vcard'''
-		if gajim.interface.instances[self.account]['infos'].has_key(self.jid):
+		if self.jid in gajim.interface.instances[self.account]['infos']:
 			gajim.interface.instances[self.account]['infos'][self.jid].window.present()
 		else:
 			contact = gajim.contacts.create_contact(jid=self.jid, name='',
@@ -1963,7 +1962,7 @@ class NewChatDialog(InputDialog):
 		_('Please make sure you are connected with "%s".') % self.account)
 			return
 
-		if self.completion_dict.has_key(jid):
+		if jid in self.completion_dict:
 			jid = self.completion_dict[jid].jid
 		else:
 			try:
@@ -2343,7 +2342,7 @@ class SingleMessageWindow:
 			sender_list = [self.to_entry.get_text().decode('utf-8')]
 
 		for to_whom_jid in sender_list:
-			if self.completion_dict.has_key(to_whom_jid):
+			if to_whom_jid in self.completion_dict:
 				to_whom_jid = self.completion_dict[to_whom_jid].jid
 
 			subject = self.subject_entry.get_text().decode('utf-8')
@@ -2608,7 +2607,7 @@ class PrivacyListWindow:
 		self.list_of_rules_combobox.get_model().clear()
 		self.global_rules = {}
 		for rule in rules:
-			if rule.has_key('type'):
+			if 'type' in rule:
 				text_item = _('Order: %(order)s, action: %(action)s, type: %(type)s'
 				', value: %(value)s') % {'order': rule['order'],
 				'action': rule['action'], 'type': rule['type'],
@@ -2666,13 +2665,13 @@ class PrivacyListWindow:
 		if self.active_rule != '':
 			rule_info = self.global_rules[self.active_rule]
 			self.edit_order_spinbutton.set_value(int(rule_info['order']))
-			if rule_info.has_key('type'):
+			if 'type' in rule_info:
 				if rule_info['type'] == 'jid':
 					self.edit_type_jabberid_radiobutton.set_active(True)
 					self.edit_type_jabberid_entry.set_text(rule_info['value'])
 				elif rule_info['type'] == 'group':
 					self.edit_type_group_radiobutton.set_active(True)
-					if self.list_of_groups.has_key(rule_info['value']):
+					if rule_info['value'] in self.list_of_groups:
 						self.edit_type_group_combobox.set_active(
 							self.list_of_groups[rule_info['value']])
 					else:
@@ -2915,7 +2914,7 @@ class PrivacyListsWindow:
 				_('You must enter a name to create a privacy list.'))
 			return
 		key_name = 'privacy_list_%s' % name
-		if gajim.interface.instances[self.account].has_key(key_name):
+		if key_name in gajim.interface.instances[self.account]:
 			gajim.interface.instances[self.account][key_name].window.present()
 		else:
 			gajim.interface.instances[self.account][key_name] = \
@@ -2929,8 +2928,7 @@ class PrivacyListsWindow:
 		name = self.privacy_lists_save[
 			self.list_of_privacy_lists_combobox.get_active()]
 		key_name = 'privacy_list_%s' % name
-		if gajim.interface.instances[self.account].has_key(
-		key_name):
+		if key_name in gajim.interface.instances[self.account]:
 			gajim.interface.instances[self.account][key_name].window.present()
 		else:
 			gajim.interface.instances[self.account][key_name] = \

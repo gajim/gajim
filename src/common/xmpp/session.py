@@ -213,10 +213,10 @@ class Session:
 
     def _catch_stream_id(self,ns=None,tag='stream',attrs={}):
         """ This callback is used to detect the stream namespace of incoming stream. Used internally. """
-        if not attrs.has_key('id') or not attrs['id']:
+        if 'id' not in attrs or not attrs['id']:
             return self.terminate_stream(STREAM_INVALID_XML)
         self.ID=attrs['id']
-        if not attrs.has_key('version'): self._owner.Dialback(self)
+        if 'version' not in attrs: self._owner.Dialback(self)
 
     def _stream_open(self,ns=None,tag='stream',attrs={}):
         """ This callback is used to handle opening stream tag of the incoming stream.
@@ -228,23 +228,23 @@ class Session:
             text+=' to="%s"'%self.peer
         else:
             text+=' id="%s"'%self.ID
-            if not attrs.has_key('to'): text+=' from="%s"'%self._owner.servernames[0]
+            if 'to' not in attrs: text+=' from="%s"'%self._owner.servernames[0]
             else: text+=' from="%s"'%attrs['to']
-        if attrs.has_key('xml:lang'): text+=' xml:lang="%s"'%attrs['xml:lang']
+        if 'xml:lang' in attrs: text+=' xml:lang="%s"'%attrs['xml:lang']
         if self.xmlns: xmlns=self.xmlns
         else: xmlns=NS_SERVER
         text+=' xmlns:db="%s" xmlns:stream="%s" xmlns="%s"'%(NS_DIALBACK,NS_STREAMS,xmlns)
-        if attrs.has_key('version') or self.TYP=='client': text+=' version="1.0"'
+        if 'version' in attrs or self.TYP=='client': text+=' version="1.0"'
         self.sendnow(text+'>')
         self.set_stream_state(STREAM__OPENED)
         if self.TYP=='client': return
         if tag<>'stream': return self.terminate_stream(STREAM_INVALID_XML)
         if ns<>NS_STREAMS: return self.terminate_stream(STREAM_INVALID_NAMESPACE)
         if self.Stream.xmlns<>self.xmlns: return self.terminate_stream(STREAM_BAD_NAMESPACE_PREFIX)
-        if not attrs.has_key('to'): return self.terminate_stream(STREAM_IMPROPER_ADDRESSING)
+        if 'to' not in attrs: return self.terminate_stream(STREAM_IMPROPER_ADDRESSING)
         if attrs['to'] not in self._owner.servernames: return self.terminate_stream(STREAM_HOST_UNKNOWN)
         self.ourname=attrs['to'].lower()
-        if self.TYP=='server' and attrs.has_key('version'):
+        if self.TYP=='server' and 'version' in attrs:
             # send features
             features=Node('stream:features')
             if NS_TLS in self.waiting_features:

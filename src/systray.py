@@ -166,7 +166,7 @@ class Systray:
 		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 		state_images = gtkgui_helpers.load_iconset(path)
 
-		if state_images.has_key('muc_active'):
+		if 'muc_active' in state_images:
 			join_gc_menuitem.set_image(state_images['muc_active'])
 
 		for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
@@ -372,7 +372,7 @@ class Systray:
 		win.present()
 
 	def on_preferences_menuitem_activate(self, widget):
-		if gajim.interface.instances.has_key('preferences'):
+		if 'preferences' in gajim.interface.instances:
 			gajim.interface.instances['preferences'].window.present()
 		else:
 			gajim.interface.instances['preferences'] = config.PreferencesWindow()

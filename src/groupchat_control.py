@@ -120,7 +120,7 @@ class PrivateChatControl(ChatControl):
 	def __init__(self, parent_win, gc_contact, contact, account, session):
 		room_jid = contact.jid.split('/')[0]
 		room_ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid, account)
-		if gajim.interface.minimized_controls[account].has_key(room_jid):
+		if room_jid in gajim.interface.minimized_controls[account]:
 			room_ctrl = gajim.interface.minimized_controls[account][room_jid]
 		self.room_name = room_ctrl.name
 		self.gc_contact = gc_contact
@@ -555,12 +555,12 @@ class GroupchatControl(ChatControlBase):
 	def _update_banner_state_image(self):
 		banner_status_img = self.xml.get_widget('gc_banner_status_image')
 		images = gajim.interface.jabber_state_images
-		if gajim.gc_connected[self.account].has_key(self.room_jid) and \
+		if self.room_jid in gajim.gc_connected[self.account] and \
 		gajim.gc_connected[self.account][self.room_jid]:
 			image = 'muc_active'
 		else:
 			image = 'muc_inactive'
-		if images.has_key('32') and images['32'].has_key(image):
+		if '32' in images and image in images['32']:
 			muc_icon = images['32'][image]
 			if muc_icon.get_storage_type() != gtk.IMAGE_EMPTY:
 				pix = muc_icon.get_pixbuf()
@@ -800,7 +800,7 @@ class GroupchatControl(ChatControlBase):
 		if kind == 'incoming': # it's a message NOT from us
 			# highlighting and sounds
 			(highlight, sound) = self.highlighting_for_message(text, tim)
-			if self.gc_custom_colors.has_key(contact):
+			if contact in self.gc_custom_colors:
 				other_tags_for_name.append('gc_nickname_color_' + \
 					str(self.gc_custom_colors[contact]))
 			else:
@@ -1231,15 +1231,15 @@ class GroupchatControl(ChatControlBase):
 						real_jid += '/' + gc_c.resource
 				else:
 					real_jid = fake_jid
-				if con.vcard_shas.has_key(fake_jid):
+				if fake_jid in con.vcard_shas:
 					if avatar_sha != con.vcard_shas[fake_jid]:
 						server = gajim.get_server_from_jid(self.room_jid)
 						if not server.startswith('irc'):
 							con.request_vcard(real_jid, fake_jid)
 				else:
 					cached_vcard = con.get_cached_vcard(fake_jid, True)
-					if cached_vcard and cached_vcard.has_key('PHOTO') and \
-					cached_vcard['PHOTO'].has_key('SHA'):
+					if cached_vcard and 'PHOTO' in cached_vcard and \
+					'SHA' in cached_vcard['PHOTO']:
 						cached_sha = cached_vcard['PHOTO']['SHA']
 					else:
 						cached_sha = ''
@@ -1518,7 +1518,7 @@ class GroupchatControl(ChatControlBase):
 			else:
 				nick = ''
 			# join_gc window is needed in order to provide for password entry.
-			if gajim.interface.instances[self.account].has_key('join_gc'):
+			if 'join_gc' in gajim.interface.instances[self.account]:
 				gajim.interface.instances[self.account]['join_gc'].\
 					window.present()
 			else:
@@ -1866,8 +1866,7 @@ class GroupchatControl(ChatControlBase):
 		if c.affiliation == 'owner':
 			gajim.connections[self.account].request_gc_config(self.room_jid)
 		elif c.affiliation == 'admin':
-			if not gajim.interface.instances[self.account]['gc_config'].has_key(
-				self.room_jid):
+			if self.room_jid not in gajim.interface.instances[self.account]['gc_config']:
 				gajim.interface.instances[self.account]['gc_config'][self.room_jid]\
 					= config.GroupchatConfigWindow(self.account, self.room_jid)
 
@@ -1893,7 +1892,7 @@ class GroupchatControl(ChatControlBase):
 	def _on_bookmark_room_menuitem_activate(self, widget):
 		'''bookmark the room, without autojoin and not minimized'''
 		password = ''
-		if gajim.gc_passwords.has_key(self.room_jid):
+		if self.room_jid in gajim.gc_passwords:
 			password = gajim.gc_passwords[self.room_jid]
 		gajim.interface.add_gc_bookmark(self.account, self.name, self.room_jid, \
 			'0', '0', password, self.nick)
@@ -2399,7 +2398,7 @@ class GroupchatControl(ChatControlBase):
 		'''Call vcard_information_window class to display user's information'''
 		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 		c2 = gajim.contacts.contact_from_gc_contact(c)
-		if gajim.interface.instances[self.account]['infos'].has_key(c2.jid):
+		if c2.jid in gajim.interface.instances[self.account]['infos']:
 			gajim.interface.instances[self.account]['infos'][c2.jid].window.\
 				present()
 		else:

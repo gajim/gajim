@@ -518,7 +518,7 @@ class Config:
 				return None
 
 	def set(self, optname, value):
-		if not self.__options.has_key(optname):
+		if optname not in self.__options:
 #			raise RuntimeError, 'option %s does not exist' % optname
 			return
 		opt = self.__options[optname]
@@ -532,35 +532,35 @@ class Config:
 	def get(self, optname = None):
 		if not optname:
 			return self.__options.keys()
-		if not self.__options.has_key(optname):
+		if optname not in self.__options:
 			return None
 		return self.__options[optname][OPT_VAL]
 		
 	def get_desc(self, optname):
-		if not self.__options.has_key(optname):
+		if optname not in self.__options:
 			return None
 		if len(self.__options[optname]) > OPT_DESC:
 			return self.__options[optname][OPT_DESC]
 
 	def get_restart(self, optname):
-		if not self.__options.has_key(optname):
+		if optname not in self.__options:
 			return None
 		if len(self.__options[optname]) > OPT_RESTART:
 			return self.__options[optname][OPT_RESTART]
 
 	def add_per(self, typename, name): # per_group_of_option
-		if not self.__options_per_key.has_key(typename):
+		if typename not in self.__options_per_key:
 #			raise RuntimeError, 'option %s does not exist' % typename
 			return
 		
 		opt = self.__options_per_key[typename]
-		if opt[1].has_key(name):
+		if name in opt[1]:
 			# we already have added group name before
 			return 'you already have added %s before' % name
 		opt[1][name] = copy.deepcopy(opt[0])
 
 	def del_per(self, typename, name, subname = None): # per_group_of_option
-		if not self.__options_per_key.has_key(typename):
+		if typename not in self.__options_per_key:
 #			raise RuntimeError, 'option %s does not exist' % typename
 			return
 
@@ -568,21 +568,21 @@ class Config:
 		if subname is None:
 			del opt[1][name]
 		# if subname is specified, delete the item in the group.	
-		elif opt[1][name].has_key(subname):
+		elif subname in opt[1][name]:
 			del opt[1][name][subname]
 
 	def set_per(self, optname, key, subname, value): # per_group_of_option
-		if not self.__options_per_key.has_key(optname):
+		if optname not in self.__options_per_key:
 #			raise RuntimeError, 'option %s does not exist' % optname
 			return
 		if not key:
 			return
 		dict = self.__options_per_key[optname][1]
-		if not dict.has_key(key):
+		if key not in dict:
 #			raise RuntimeError, '%s is not a key of %s' % (key, dict)
 			self.add_per(optname, key)
 		obj = dict[key]
-		if not obj.has_key(subname):
+		if subname not in obj:
 #			raise RuntimeError, '%s is not a key of %s' % (subname, obj)
 			return
 		subobj = obj[subname]
@@ -593,53 +593,53 @@ class Config:
 		subobj[OPT_VAL] = value
 
 	def get_per(self, optname, key = None, subname = None): # per_group_of_option
-		if not self.__options_per_key.has_key(optname):
+		if optname not in self.__options_per_key:
 			return None
 		dict = self.__options_per_key[optname][1]
 		if not key:
 			return dict.keys()
-		if not dict.has_key(key):
-			if self.__options_per_key.has_key(optname) \
-			and self.__options_per_key[optname][0].has_key(subname):
+		if key not in dict:
+			if optname in self.__options_per_key \
+			and subname in self.__options_per_key[optname][0]:
 				return self.__options_per_key \
 					[optname][0][subname][1]
 			return None
 		obj = dict[key]
 		if not subname:
 			return obj
-		if not obj.has_key(subname):
+		if subname not in obj:
 			return None
 		return obj[subname][OPT_VAL]
 
 	def get_desc_per(self, optname, key = None, subname = None):
-		if not self.__options_per_key.has_key(optname):
+		if optname not in self.__options_per_key:
 			return None
 		dict = self.__options_per_key[optname][1]
 		if not key:
 			return None
-		if not dict.has_key(key):
+		if key not in dict:
 			return None
 		obj = dict[key]
 		if not subname:
 			return None
-		if not obj.has_key(subname):
+		if subname not in obj:
 			return None
 		if len(obj[subname]) > OPT_DESC:
 			return obj[subname][OPT_DESC]
 		return None
 
 	def get_restart_per(self, optname, key = None, subname = None):
-		if not self.__options_per_key.has_key(optname):
+		if optname not in self.__options_per_key:
 			return False
 		dict = self.__options_per_key[optname][1]
 		if not key:
 			return False
-		if not dict.has_key(key):
+		if key not in dict:
 			return False
 		obj = dict[key]
 		if not subname:
 			return False
-		if not obj.has_key(subname):
+		if subname not in obj:
 			return False
 		if len(obj[subname]) > OPT_RESTART:
 			return obj[subname][OPT_RESTART]

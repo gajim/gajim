@@ -402,7 +402,7 @@ class NotificationResponseManager:
 
 	def on_action_invoked(self, id, reason):
 		self.received.append((id, time.time(), reason))
-		if self.pending.has_key(id):
+		if id in self.pending:
 			notification = self.pending[id]
 			notification.on_action_invoked(id, reason)
 			del self.pending[id]
@@ -414,7 +414,7 @@ class NotificationResponseManager:
 					self.received.remove(rec)
 
 	def on_closed(self, id, reason=None):
-		if self.pending.has_key(id):
+		if id in self.pending:
 			del self.pending[id]
 
 	def add_pending(self, id, object):

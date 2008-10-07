@@ -70,11 +70,11 @@ class netgrowl:
         self.socket.sendto(data, (self.hostname, GROWL_UDP_PORT))
         
     def PostNotification(self, userInfo):
-        if userInfo.has_key(GROWL_NOTIFICATION_PRIORITY):
+        if GROWL_NOTIFICATION_PRIORITY in userInfo:
             priority = userInfo[GROWL_NOTIFICATION_PRIORITY]
         else:
             priority = 0
-        if userInfo.has_key(GROWL_NOTIFICATION_STICKY):
+        if GROWL_NOTIFICATION_STICKY in userInfo:
             sticky = userInfo[GROWL_NOTIFICATION_STICKY]
         else:
             priority = False

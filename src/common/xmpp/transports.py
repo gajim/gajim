@@ -194,7 +194,7 @@ class HTTPPROXYsocket(TCPsocket):
             'Pragma: no-cache',
             'Host: %s:%s'%self._server,
             'User-Agent: HTTPPROXYsocket/v0.1']
-        if self._proxy.has_key('user') and self._proxy.has_key('password'):
+        if 'user' in self._proxy and 'password' in self._proxy:
             credentials = '%s:%s'%(self._proxy['user'],self._proxy['password'])
             credentials = base64.encodestring(credentials).strip()
             connector.append('Proxy-Authorization: Basic '+credentials)
@@ -231,7 +231,7 @@ class TLS(PlugIn):
             If 'now' in false then starts encryption as soon as TLS feature is
             declared by the server (if it were already declared - it is ok).
         """
-        if owner.__dict__.has_key('TLS'): return  # Already enabled.
+        if 'TLS' in owner.__dict__: return  # Already enabled.
         PlugIn.PlugIn(self,owner)
         DBG_LINE='TLS'
         if now: return self._startSSL()
