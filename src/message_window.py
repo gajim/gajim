@@ -1035,7 +1035,7 @@ class MessageWindowMgr(gobject.GObject):
 		'''Same as get_control. Was briefly required, is not any more.
 May be useful some day in the future?'''
 		ctrl = self.get_control(jid, acct)
-		if ctrl.type_id == message_control.TYPE_GC:
+		if ctrl and ctrl.type_id == message_control.TYPE_GC:
 			return ctrl
 		return None
 
