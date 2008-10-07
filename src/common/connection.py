@@ -945,6 +945,7 @@ class Connection(ConnectionHandlers):
 		self.connection = con
 		if not self.connection:
 			return
+		self.connection.set_send_timeout(self.keepalives, self.sendPing)
 		self.connection.onreceive(None)
 		iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')
 		id = self.connection.getAnID()
