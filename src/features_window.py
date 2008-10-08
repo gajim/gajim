@@ -99,7 +99,7 @@ class FeaturesWindow:
 			_('LaTeX'): (self.latex_available,
 				_('Transform LaTeX expressions between $$ $$.'),
 				_('Requires texlive-latex-base and dvipng. You have to set \'use_latex\' to True in the Advanced Configuration Editor.'),
-				_('Feature not available under Windows.')),
+				_('Requires texlive-latex-base and dvipng (All is in MikTeX). You have to set \'use_latex\' to True in the Advanced Configuration Editor.')),
 			_('End to End Encryption'): (self.pycrypto_available,
 				_('Encrypting chatmessages.'),
 				_('Requires python-crypto.'),
@@ -260,9 +260,6 @@ class FeaturesWindow:
 
 	def latex_available(self):
 		'''check is latex is available and if it can create a picture.'''
-
-		if os.name == 'nt':
-			return False
 
 		exitcode = 0
 		random.seed()
