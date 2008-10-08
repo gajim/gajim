@@ -3898,11 +3898,17 @@ class GPGInfoWindow:
 			info = _('The contact\'s key (%s) <b>does not match</b> the key '
 				'assigned in Gajim.') % keyID[:8]
 			image = 'security-low-big.png'
+		elif not keyID:
+			# No key assigned nor a key is used by remote contact
+			verification_status = _('No GPG key assigned')
+			info = _('No GPG key is assigned to this contact. So you cannot '
+				'encrypt messages.')
+			image = 'security-low-big.png'
 		else:
 			msgenc, error = gajim.connections[account].gpg.encrypt('test', [keyID])
 			if error:
 				verification_status = _('''Contact's identity NOT verified''')
-				info = _('GPG Key is assigned to this contact, but <b>you do not '
+				info = _('GPG key is assigned to this contact, but <b>you do not '
 					'trust his key</b>, so message <b>cannot</b> be encrypted. Use '
 					'your GPG client to trust this key.')
 				image = 'security-low-big.png'

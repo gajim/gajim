@@ -1516,6 +1516,11 @@ class ChatControl(ChatControlBase):
 		banner_name_tooltip.set_tip(banner_name_label, label_tooltip)
 
 	def _toggle_gpg(self):
+		if not self.gpg_is_active and not self.contact.keyID:
+			dialogs.ErrorDialog(_('No GPG key assigned'),
+				_('No GPG key is assigned to this contact. So you cannot '
+					'encrypt messages with GPG.'))
+			return
 		ec = gajim.encrypted_chats[self.account]
 		if self.gpg_is_active:
 			# Disable encryption
