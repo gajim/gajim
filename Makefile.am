@@ -26,6 +26,8 @@ EXTRA_DIST = \
 	intltool-extract.in \
 	intltool-merge.in 	\
 	intltool-update.in	\
+	gajim.nsi \
+	setup_win32.py \
 	scripts/gajim.in	\
 	scripts/gajim-remote.in
 	
