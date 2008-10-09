@@ -991,7 +991,7 @@ class GroupchatControl(ChatControlBase):
 		fjid = gajim.construct_fjid(self.room_jid, nick) # 'fake' jid
 
 		ctrl = self._start_private_message(nick)
-		if msg:
+		if ctrl and msg:
 			ctrl.send_message(msg)
 
 	def on_send_file(self, widget, gc_contact):
@@ -2190,7 +2190,8 @@ class GroupchatControl(ChatControlBase):
 		if not ctrl:
 			ctrl = gajim.interface.new_private_chat(gc_c, self.account)
 
-		ctrl.parent_win.set_active_tab(ctrl)
+		if ctrl:
+			ctrl.parent_win.set_active_tab(ctrl)
 
 		return ctrl
 
