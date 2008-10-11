@@ -273,10 +273,10 @@ class HashDigest:
 		self.algo = self.cleanID(algo)
 		self.digest = self.cleanID(digest)
 
-	def cleanID(self, id):
-		id = id.strip().lower()
-		for strip in (' :.-_'): id = id.replace(strip, '')
-		return id
+	def cleanID(self, id_):
+		id_ = id_.strip().lower()
+		for strip in (' :.-_'): id_ = id_.replace(strip, '')
+		return id_
 
 	def __eq__(self, other):
 		sa, sd = self.algo, self.digest

@@ -122,12 +122,12 @@ class MockContact(Mock):
 import random
 
 class MockSession(Mock):
-	def __init__(self, conn, jid, thread_id, type):
+	def __init__(self, conn, jid, thread_id, type_):
 		Mock.__init__(self)
 
 		self.conn = conn
 		self.jid = jid
-		self.type = type
+		self.type = type_
 		self.thread_id = thread_id
 
 		if not self.thread_id:

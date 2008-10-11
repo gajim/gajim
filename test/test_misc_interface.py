@@ -15,11 +15,11 @@ Interface()
 class TestMiscInterface(unittest.TestCase):
 
 	def test_links_regexp_entire(self):
-		def assert_matches_all(str):
-			m = gajim.interface.basic_pattern_re.match(str)
+		def assert_matches_all(str_):
+			m = gajim.interface.basic_pattern_re.match(str_)
 
 			# the match should equal the string
-			str_span = (0, len(str))
+			str_span = (0, len(str_))
 			self.assertEqual(m.span(), str_span)
 
 		# these entire strings should be parsed as links

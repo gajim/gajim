@@ -1071,7 +1071,7 @@ class Connection(ConnectionHandlers):
 
 		self.connection.send(msg_iq)
 
-	def send_message(self, jid, msg, keyID, type='chat', subject='',
+	def send_message(self, jid, msg, keyID, type_='chat', subject='',
 	chatstate=None, msg_id=None, composing_xep=None, resource=None,
 	user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None,
 	original_message=None, delayed=None):
@@ -1114,8 +1114,8 @@ class Connection(ConnectionHandlers):
 			'rst_formatting_outgoing_messages'):
 			# Generate a XHTML part using reStructured text markup
 			xhtml = create_xhtml(msgtxt)
-		if type == 'chat':
-			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type,
+		if type_ == 'chat':
+			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type_,
 				xhtml = xhtml)
 		else:
 			if subject:
@@ -1210,7 +1210,7 @@ class Connection(ConnectionHandlers):
 					log_msg = _('Subject: %(subject)s\n%(message)s') % \
 					{'subject': subject, 'message': msg}
 				if log_msg:
-					if type == 'chat':
+					if type_ == 'chat':
 						kind = 'chat_msg_sent'
 					else:
 						kind = 'single_msg_sent'

@@ -45,9 +45,9 @@ class CellRendererImage(gtk.GenericCellRenderer):
 	def do_get_property(self, pspec):
 		return getattr(self, pspec.name)
 
-	def func(self, model, path, iter, image_tree):
+	def func(self, model, path, iter_, image_tree):
 		image, tree = image_tree	
-		if model.get_value(iter, self.tv_index) != image:
+		if model.get_value(iter_, self.tv_index) != image:
 			return
 		self.redraw = 1
 		col = tree.get_column(self.col_index)

@@ -749,7 +749,7 @@ class Logger:
 			sql = 'DELETE FROM caps_cache WHERE hash_method = "%s" AND hash = "%s"' % (hash_method, hash)
 			self.simple_commit(sql)
 
-	def add_caps_entry(self, hash_method, hash, identities, features):
+	def add_caps_entry(self, hash_method, hash_, identities, features):
 		data=[]
 		for identity in identities:
 			# there is no FEAT category
@@ -770,7 +770,7 @@ class Logger:
 		self.cur.execute('''
 			INSERT INTO caps_cache ( hash_method, hash, data )
 			VALUES (?, ?, ?);
-			''', (hash_method, hash, buffer(data))) # (1) -- note above
+			''', (hash_method, hash_, buffer(data))) # (1) -- note above
 		try:
 			self.con.commit()
 		except sqlite.OperationalError, e:

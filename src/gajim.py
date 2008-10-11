@@ -2307,7 +2307,8 @@ class Interface:
 						room_jid = room_jid, name = nick, show = show)
 
 				if not session:
-					session = gajim.connections[account].make_new_session(fjid, None, type='pm')
+					session = gajim.connections[account].make_new_session(
+						fjid, None, type_='pm')
 
 				self.new_private_chat(gc_contact, account, session=session)
 				ctrl = session.control

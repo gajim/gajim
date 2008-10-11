@@ -75,8 +75,8 @@ def base28(n):
 	else:
 		return base28_chr[n]
 
-def random_bytes(bytes):
-	return os.urandom(bytes)
+def random_bytes(bytes_):
+	return os.urandom(bytes_)
 
 def generate_nonce():
 	return random_bytes(8)

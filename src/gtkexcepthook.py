@@ -35,11 +35,11 @@ from common import helpers
 
 _exception_in_progress = threading.Lock()
 
-def _info(type, value, tb):
+def _info(type_, value, tb):
 	if not _exception_in_progress.acquire(False):
 		# Exceptions have piled up, so we use the default exception
 		# handler for such exceptions
-		_excepthook_save(type, value, tb)
+		_excepthook_save(type_, value, tb)
 		return
 
 	dialog = dialogs.HigDialog(None, gtk.MESSAGE_WARNING, gtk.BUTTONS_NONE, 
@@ -69,7 +69,7 @@ def _info(type, value, tb):
 	frame.set_border_width(6)
 	textbuffer = textview.get_buffer()
 	trace = StringIO()
-	traceback.print_exception(type, value, tb, None, trace)
+	traceback.print_exception(type_, value, tb, None, trace)
 	textbuffer.set_text(trace.getvalue())
 	textview.set_size_request(
 		gtk.gdk.screen_width() / 3,

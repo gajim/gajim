@@ -102,24 +102,24 @@ class AdvancedConfigurationWindow(object):
 		self.restart_label.hide()
 		gajim.interface.instances['advanced_config'] = self
 
-	def cb_value_column_data(self, col, cell, model, iter):
+	def cb_value_column_data(self, col, cell, model, iter_):
 		'''check if it's boolen or holds password stuff and if yes
 		make the cellrenderertext not editable else it's editable'''
-		optname = model[iter][C_PREFNAME]
-		opttype = model[iter][C_TYPE]
+		optname = model[iter_][C_PREFNAME]
+		opttype = model[iter_][C_TYPE]
 		if opttype == self.types['boolean'] or optname == 'password':
 			cell.set_property('editable', False)
 		else:
 			cell.set_property('editable', True)
 
-	def get_option_path(self, model, iter):
+	def get_option_path(self, model, iter_):
 		# It looks like path made from reversed array
 		# path[0] is the true one optname
 		# path[1] is the key name
 		# path[2] is the root of tree
 		# last two is optional
-		path = [model[iter][0].decode('utf-8')]
-		parent = model.iter_parent(iter)
+		path = [model[iter_][0].decode('utf-8')]
+		parent = model.iter_parent(iter_)
 		while parent:
 			path.append(model[parent][0].decode('utf-8'))
 			parent = model.iter_parent(parent)
@@ -249,14 +249,14 @@ class AdvancedConfigurationWindow(object):
 			value = self.right_true_dict[value]
 		model.append(iter, [name, value, type])
 
-	def visible_func(self, model, iter):
+	def visible_func(self, model, iter_):
 		str = self.entry.get_text().decode('utf-8')
 		if str in (None, ''):
 			return True # show all
-		name = model[iter][C_PREFNAME].decode('utf-8')
+		name = model[iter_][C_PREFNAME].decode('utf-8')
 		# If a child of the iter matches, we return True
-		if model.iter_has_child(iter):
-			iterC = model.iter_children(iter)
+		if model.iter_has_child(iter_):
+			iterC = model.iter_children(iter_)
 			while iterC:
 				nameC = model[iterC][C_PREFNAME].decode('utf-8')
 				if model.iter_has_child(iterC):

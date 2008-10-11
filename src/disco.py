@@ -240,9 +240,9 @@ class ServicesCache:
 		self._items.cleanup()
 		self._info.cleanup()
 
-	def _clean_closure(self, cb, type, addr):
+	def _clean_closure(self, cb, type_, addr):
 		# A closure died, clean up
-		cbkey = (type, addr)
+		cbkey = (type_, addr)
 		try:
 			self._cbs[cbkey].remove(cb)
 		except KeyError:
@@ -989,20 +989,20 @@ _('This service does not contain any items to browse.'))
 			get_agent_address(jid, node)))
 		self.cache.get_info(jid, node, self._agent_info, force = force)
 
-	def _update_item(self, iter, jid, node, item):
+	def _update_item(self, iter_, jid, node, item):
 		'''Called when an item should be updated in the model. The result of a
 		disco#items query. (seldom)'''
 		if 'name' in item:
-			self.model[iter][2] = item['name']
+			self.model[iter_][2] = item['name']
 
-	def _update_info(self, iter, jid, node, identities, features, data):
+	def _update_info(self, iter_, jid, node, identities, features, data):
 		'''Called when an item should be updated in the model with further info.
 		The result of a disco#info query.'''
 		name = identities[0].get('name', '')
 		if name:
-			self.model[iter][2] = name
+			self.model[iter_][2] = name
 
-	def _update_error(self, iter, jid, node):
+	def _update_error(self, iter_, jid, node):
 		'''Called when a disco#info query failed for an item.'''
 		pass
 
@@ -1024,21 +1024,21 @@ class ToplevelAgentBrowser(AgentBrowser):
 		self._view_signals = []
 		self._scroll_signal = None
 
-	def _pixbuf_renderer_data_func(self, col, cell, model, iter):
+	def _pixbuf_renderer_data_func(self, col, cell, model, iter_):
 		'''Callback for setting the pixbuf renderer's properties.'''
-		jid = model.get_value(iter, 0)
+		jid = model.get_value(iter_, 0)
 		if jid:
-			pix = model.get_value(iter, 2)
+			pix = model.get_value(iter_, 2)
 			cell.set_property('visible', True)
 			cell.set_property('pixbuf', pix)
 		else:
 			cell.set_property('visible', False)
 
-	def _text_renderer_data_func(self, col, cell, model, iter):
+	def _text_renderer_data_func(self, col, cell, model, iter_):
 		'''Callback for setting the text renderer's properties.'''
-		jid = model.get_value(iter, 0)
-		markup = model.get_value(iter, 3)
-		state = model.get_value(iter, 4)
+		jid = model.get_value(iter_, 0)
+		markup = model.get_value(iter_, 3)
+		state = model.get_value(iter_, 4)
 		cell.set_property('markup', markup)
 		if jid:
 			cell.set_property('cell_background_set', False)
@@ -1407,13 +1407,13 @@ class ToplevelAgentBrowser(AgentBrowser):
 			self.window.progressbar.hide()
 		return False
 
-	def _friendly_category(self, category, type=None):
+	def _friendly_category(self, category, type_=None):
 		'''Get the friendly category name and priority.'''
 		cat = None
-		if type:
+		if type_:
 			# Try type-specific override
 			try:
-				cat, prio = _cat_to_descr[(category, type)]
+				cat, prio = _cat_to_descr[(category, type_)]
 			except KeyError:
 				pass
 		if not cat:
@@ -1423,14 +1423,14 @@ class ToplevelAgentBrowser(AgentBrowser):
 				cat, prio = _cat_to_descr['other']
 		return cat, prio
 
-	def _create_category(self, cat, type=None):
+	def _create_category(self, cat, type_=None):
 		'''Creates a category row.'''
-		cat, prio = self._friendly_category(cat, type)
+		cat, prio = self._friendly_category(cat, type_)
 		return self.model.append(None, ('', '', None, cat, prio))
 
-	def _find_category(self, cat, type=None):
+	def _find_category(self, cat, type_=None):
 		'''Looks up a category row and returns the iterator to it, or None.'''
-		cat, prio = self._friendly_category(cat, type)
+		cat, prio = self._friendly_category(cat, type_)
 		iter = self.model.get_iter_root()
 		while iter:
 			if self.model.get_value(iter, 3).decode('utf-8') == cat:
@@ -1486,15 +1486,15 @@ class ToplevelAgentBrowser(AgentBrowser):
 		self.cache.get_info(jid, node, self._agent_info, force = force)
 		self._update_progressbar()
 
-	def _update_item(self, iter, jid, node, item):
+	def _update_item(self, iter_, jid, node, item):
 		addr = get_agent_address(jid, node)
 		if 'name' in item:
 			descr = "<b>%s</b>\n%s" % (item['name'], addr)
 		else:
 			descr = "<b>%s</b>" % addr
-		self.model[iter][3] = descr
+		self.model[iter_][3] = descr
 
-	def _update_info(self, iter, jid, node, identities, features, data):
+	def _update_info(self, iter_, jid, node, identities, features, data):
 		addr = get_agent_address(jid, node)
 		name = identities[0].get('name', '')
 		if name:
@@ -1516,16 +1516,16 @@ class ToplevelAgentBrowser(AgentBrowser):
 			break
 
 		# Check if we have to move categories
-		old_cat_iter = self.model.iter_parent(iter)
+		old_cat_iter = self.model.iter_parent(iter_)
 		old_cat = self.model.get_value(old_cat_iter, 3).decode('utf-8')
 		if self.model.get_value(old_cat_iter, 3) == cat:
 			# Already in the right category, just update
-			self.model[iter][2] = pix
-			self.model[iter][3] = descr
-			self.model[iter][4] = 0
+			self.model[iter_][2] = pix
+			self.model[iter_][3] = descr
+			self.model[iter_][4] = 0
 			return
 		# Not in the right category, move it.
-		self.model.remove(iter)
+		self.model.remove(iter_)
 
 		# Check if the old category is empty
 		if not self.model.iter_is_valid(old_cat_iter):
@@ -1539,9 +1539,9 @@ class ToplevelAgentBrowser(AgentBrowser):
 		self.model.append(cat_iter, (jid, node, pix, descr, 0))
 		self._expand_all()
 
-	def _update_error(self, iter, jid, node):
+	def _update_error(self, iter_, jid, node):
 		addr = get_agent_address(jid, node)
-		self.model[iter][4] = 2
+		self.model[iter_][4] = 2
 		self._progress += 1
 		self._update_progressbar()
 
@@ -1738,7 +1738,7 @@ class MucBrowser(AgentBrowser):
 		if not self._fetch_source:
 			self._fetch_source = gobject.idle_add(self._start_info_query)
 
-	def _update_info(self, iter, jid, node, identities, features, data):
+	def _update_info(self, iter_, jid, node, identities, features, data):
 		name = identities[0].get('name', '')
 		for form in data:
 			typefield = form.getField('FORM_TYPE')
@@ -1748,15 +1748,15 @@ class MucBrowser(AgentBrowser):
 				users = form.getField('muc#roominfo_occupants')
 				descr = form.getField('muc#roominfo_description')
 				if users:
-					self.model[iter][3] = int(users.getValue())
-					self.model[iter][4] = users.getValue()
+					self.model[iter_][3] = int(users.getValue())
+					self.model[iter_][4] = users.getValue()
 				if descr:
-					self.model[iter][5] = descr.getValue()
+					self.model[iter_][5] = descr.getValue()
 				# Only set these when we find a form with additional info
 				# Some servers don't support forms and put extra info in
 				# the name attribute, so we preserve it in that case.
-				self.model[iter][2] = name
-				self.model[iter][6] = True
+				self.model[iter_][2] = name
+				self.model[iter_][6] = True
 				break
 		else:
 			# We didn't find a form, switch to alternate query mode
@@ -1766,7 +1766,7 @@ class MucBrowser(AgentBrowser):
 		self._fetch_source = None
 		self._query_visible()
 
-	def _update_error(self, iter, jid, node):
+	def _update_error(self, iter_, jid, node):
 		# switch to alternate query mode
 		self.cache.get_items(jid, node, self._channel_altinfo)
 
@@ -1836,7 +1836,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 			self._total_items += 1
 			self._add_item(jid, node, item, force)
 
-	def _in_list_foreach(self, model, path, iter, node):
+	def _in_list_foreach(self, model, path, iter_, node):
 		if model[path][1] == node:
 			self.in_list = True
 

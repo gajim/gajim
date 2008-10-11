@@ -852,7 +852,7 @@ def sanitize_filename(filename):
 	
 	return filename
 
-def allow_showing_notification(account, type = 'notify_on_new_message',
+def allow_showing_notification(account, type_ = 'notify_on_new_message',
 advanced_notif_num = None, is_first_message = True):
 	'''is it allowed to show nofication?
 	check OUR status and if we allow notifications for that status
@@ -865,7 +865,7 @@ advanced_notif_num = None, is_first_message = True):
 			return True
 		if popup == 'no':
 			return False
-	if type and (not gajim.config.get(type) or not is_first_message):
+	if type_ and (not gajim.config.get(type_) or not is_first_message):
 		return False
 	if gajim.config.get('autopopupaway'): # always show notification
 		return True

@@ -309,12 +309,12 @@ class ChooseGPGKeyDialog:
 		self.on_response(keyID)
 		self.window.destroy()
 
-	def fill_tree(self, list, selected):
+	def fill_tree(self, list_, selected):
 		model = self.keys_treeview.get_model()
-		for keyID in list.keys():
-			iter = model.append((keyID, list[keyID]))
+		for keyID in list_.keys():
+			iter_ = model.append((keyID, list_[keyID]))
 			if keyID == selected:
-				path = model.get_path(iter)
+				path = model.get_path(iter_)
 				self.keys_treeview.set_cursor(path)
 
 
@@ -1104,12 +1104,12 @@ class Dialog(gtk.Dialog):
 
 
 class HigDialog(gtk.MessageDialog):
-	def __init__(self, parent, type, buttons, pritext, sectext,
+	def __init__(self, parent, type_, buttons, pritext, sectext,
 	on_response_ok = None, on_response_cancel = None, on_response_yes = None,
 	on_response_no = None):
 		gtk.MessageDialog.__init__(self, parent,
 				gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
-				type, buttons, message_format = pritext)
+				type_, buttons, message_format = pritext)
 
 		self.format_secondary_markup(sectext)
 
@@ -2364,7 +2364,7 @@ class SingleMessageWindow:
 				form_node = None
 			# FIXME: allow GPG message some day
 			gajim.connections[self.account].send_message(to_whom_jid, message,
-				keyID=None, type='normal', subject=subject, session=session,
+				keyID=None, type_='normal', subject=subject, session=session,
 				form_node=form_node)
 
 		self.subject_entry.set_text('') # we sent ok, clear the subject

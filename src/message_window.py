@@ -55,7 +55,7 @@ class MessageWindow(object):
 		CLOSE_CTRL_KEY
 	) = range(5)
 
-	def __init__(self, acct, type, parent_window=None, parent_paned=None):
+	def __init__(self, acct, type_, parent_window=None, parent_paned=None):
 		# A dictionary of dictionaries
 		# where _contacts[account][jid] == A MessageControl
 		self._controls = {}
@@ -63,7 +63,7 @@ class MessageWindow(object):
 		# If None, the window is not tied to any specific account
 		self.account = acct
 		# If None, the window is not tied to any specific type
-		self.type = type
+		self.type_ = type_
 		# dict { handler id: widget}. Keeps callbacks, which
 		# lead to cylcular references
 		self.handlers = {}
@@ -773,7 +773,7 @@ class MessageWindow(object):
 		selection.set(selection.target, 8, str(source_page_num))
 
 	def on_tab_label_drag_data_received_cb(self, widget, drag_context, x, y,
-		selection, type, time):
+		selection, type_, time):
 		'''Reorder the tabs according to the drop position'''
 		source_page_num = int(selection.data)
 		dest_page_num, to_right = self.get_tab_at_xy(x, y)
@@ -869,13 +869,13 @@ class MessageWindowMgr(gobject.GObject):
 		for win in self.windows():
 			win.change_account_name(old_name, new_name)
 
-	def _new_window(self, acct, type):
+	def _new_window(self, acct, type_):
 		parent_win = None
 		parent_paned = None
 		if self.mode == self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
 			parent_win = self.parent_win
 			parent_paned = self.parent_paned
-		win = MessageWindow(acct, type, parent_win, parent_paned)
+		win = MessageWindow(acct, type_, parent_win, parent_paned)
 		# we track the lifetime of this window
 		win.window.connect('delete-event', self._on_window_delete)
 		win.window.connect('destroy', self._on_window_destroy)
@@ -897,14 +897,14 @@ class MessageWindowMgr(gobject.GObject):
 	def has_window(self, jid, acct):
 		return self.get_window(jid, acct) is not None
 
-	def one_window_opened(self, contact=None, acct=None, type=None):
+	def one_window_opened(self, contact=None, acct=None, type_=None):
 		try:
 			return \
-				self._windows[self._mode_to_key(contact, acct, type)] is not None
+				self._windows[self._mode_to_key(contact, acct, type_)] is not None
 		except KeyError:
 			return False
 
-	def _resize_window(self, win, acct, type):
+	def _resize_window(self, win, acct, type_):
 		'''Resizes window according to config settings'''
 		if self.mode in (self.ONE_MSG_WINDOW_ALWAYS,
 				self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER):
@@ -920,10 +920,10 @@ class MessageWindowMgr(gobject.GObject):
 			size = (gajim.config.get_per('accounts', acct, 'msgwin-width'),
 				gajim.config.get_per('accounts', acct, 'msgwin-height'))
 		elif self.mode in (self.ONE_MSG_WINDOW_NEVER, self.ONE_MSG_WINDOW_PERTYPE):
-			if type == message_control.TYPE_PM:
-				type = message_control.TYPE_CHAT
-			opt_width = type + '-msgwin-width'
-			opt_height = type + '-msgwin-height'
+			if type_ == message_control.TYPE_PM:
+				type_ = message_control.TYPE_CHAT
+			opt_width = type_ + '-msgwin-width'
+			opt_height = type_ + '-msgwin-height'
 			size = (gajim.config.get(opt_width), gajim.config.get(opt_height))
 		else:
 			return
@@ -931,7 +931,7 @@ class MessageWindowMgr(gobject.GObject):
 		if win.parent_paned:
 			win.parent_paned.set_position(parent_size[0])
 
-	def _position_window(self, win, acct, type):
+	def _position_window(self, win, acct, type_):
 		'''Moves window according to config settings'''
 		if (self.mode in [self.ONE_MSG_WINDOW_NEVER,
 		self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER]):
@@ -944,14 +944,14 @@ class MessageWindowMgr(gobject.GObject):
 			pos = (gajim.config.get_per('accounts', acct, 'msgwin-x-position'),
 				gajim.config.get_per('accounts', acct, 'msgwin-y-position'))
 		elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
-			pos = (gajim.config.get(type + '-msgwin-x-position'),
-				gajim.config.get(type + '-msgwin-y-position'))
+			pos = (gajim.config.get(type_ + '-msgwin-x-position'),
+				gajim.config.get(type_ + '-msgwin-y-position'))
 		else:
 			return
 
 		gtkgui_helpers.move_window(win.window, pos[0], pos[1])
 
-	def _mode_to_key(self, contact, acct, type, resource = None):
+	def _mode_to_key(self, contact, acct, type_, resource = None):
 		if self.mode == self.ONE_MSG_WINDOW_NEVER:
 			key = acct + contact.jid
 			if resource:
@@ -964,22 +964,22 @@ class MessageWindowMgr(gobject.GObject):
 		elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			return acct
 		elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
-			return type
+			return type_
 
-	def create_window(self, contact, acct, type, resource = None):
+	def create_window(self, contact, acct, type_, resource = None):
 		win_acct = None
 		win_type = None
 		win_role = None # X11 window role
 
-		win_key = self._mode_to_key(contact, acct, type, resource)
+		win_key = self._mode_to_key(contact, acct, type_, resource)
 		if self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			win_acct = acct
 			win_role = acct
 		elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
-			win_type = type
-			win_role = type
+			win_type = type_
+			win_role = type_
 		elif self.mode == self.ONE_MSG_WINDOW_NEVER:
-			win_type = type
+			win_type = type_
 			win_role = contact.jid
 		elif self.mode == self.ONE_MSG_WINDOW_ALWAYS:
 			win_role = 'messages'
@@ -994,9 +994,9 @@ class MessageWindowMgr(gobject.GObject):
 			win.window.set_role(win_role)
 
 		# Position and size window based on saved state and window mode
-		if not self.one_window_opened(contact, acct, type):
-			self._resize_window(win, acct, type)
-			self._position_window(win, acct, type)
+		if not self.one_window_opened(contact, acct, type_):
+			self._resize_window(win, acct, type_)
+			self._position_window(win, acct, type_)
 
 		self._windows[win_key] = win
 		return win
@@ -1039,12 +1039,12 @@ May be useful some day in the future?'''
 			return ctrl
 		return None
 
-	def get_controls(self, type = None, acct = None):
+	def get_controls(self, type_ = None, acct = None):
 		ctrls = []
 		for c in self.controls():
 			if acct and c.account != acct:
 				continue
-			if not type or c.type_id == type:
+			if not type_ or c.type_id == type_:
 				ctrls.append(c)
 		return ctrls
 

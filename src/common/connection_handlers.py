@@ -1280,7 +1280,7 @@ class ConnectionHandlersBase:
 			return session
 
 		if pm:
-			return self.make_new_session(fjid, thread_id, type='pm')
+			return self.make_new_session(fjid, thread_id, type_='pm')
 		else:
 			return self.make_new_session(fjid, thread_id)
 
@@ -1349,15 +1349,15 @@ sent a message to.'''
 		except (KeyError, IndexError):
 			return None
 
-	def make_new_session(self, jid, thread_id=None, type='chat', cls=None):
+	def make_new_session(self, jid, thread_id=None, type_='chat', cls=None):
 		if not cls:
 			cls = gajim.default_session_type
 
-		sess = cls(self, common.xmpp.JID(jid), thread_id, type)
+		sess = cls(self, common.xmpp.JID(jid), thread_id, type_)
 
 		# determine if this session is a pm session
 		# if not, discard the resource so that all sessions are stored bare
-		if not type == 'pm':
+		if not type_ == 'pm':
 			jid = gajim.get_jid_without_resource(jid)
 
 		if not jid in self.sessions:

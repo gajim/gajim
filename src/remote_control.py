@@ -279,7 +279,7 @@ class SignalObject(dbus.service.Object):
 				return DBUS_BOOLEAN(True)
 		return DBUS_BOOLEAN(False)
 
-	def _send_message(self, jid, message, keyID, account, type = 'chat',
+	def _send_message(self, jid, message, keyID, account, type_ = 'chat',
 	subject = None):
 		'''can be called from send_chat_message (default when send_message)
 		or send_single_message'''
@@ -291,7 +291,7 @@ class SignalObject(dbus.service.Object):
 		connected_account, contact = self._get_account_and_contact(account, jid)
 		if connected_account:
 			connection = gajim.connections[connected_account]
-			connection.send_message(jid, message, keyID, type, subject)
+			connection.send_message(jid, message, keyID, type_, subject)
 			return DBUS_BOOLEAN(True)
 		return DBUS_BOOLEAN(False)
 

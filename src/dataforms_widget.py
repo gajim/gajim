@@ -570,9 +570,9 @@ class SingleForm(gtk.Table, object):
 		model = treeview.get_model()
 		deleted = []
 
-		def remove(model, path, iter, deleted):
-			deleted+=model[iter]
-			model.remove(iter)
+		def remove(model, path, iter_, deleted):
+			deleted+=model[iter_]
+			model.remove(iter_)
 
 		selection.selected_foreach(remove, deleted)
 		field.values = (v for v in field.values if v not in deleted)

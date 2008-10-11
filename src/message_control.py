@@ -160,7 +160,7 @@ class MessageControl:
 		if crypto_changed:
 			self.print_esession_details()
 
-	def send_message(self, message, keyID = '', type = 'chat',
+	def send_message(self, message, keyID = '', type_ = 'chat',
 	chatstate = None, msg_id = None, composing_xep = None, resource = None,
 	user_nick = None):
 		# Send the given message to the active tab.
@@ -184,7 +184,7 @@ class MessageControl:
 			self.set_session(sess)
 
 		# Send and update history
-		return conn.send_message(jid, message, keyID, type = type,
+		return conn.send_message(jid, message, keyID, type_ = type_,
 			chatstate = chatstate, msg_id = msg_id,
 			composing_xep = composing_xep,
 			resource = self.resource, user_nick = user_nick,

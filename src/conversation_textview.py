@@ -408,53 +408,53 @@ class ConversationTextview:
 			self.smooth_id = None
 			self.smooth_scroll_timer.cancel()
 
-	def show_xep0184_warning(self, id):
-		if id in self.xep0184_marks:
+	def show_xep0184_warning(self, id_):
+		if id_ in self.xep0184_marks:
 			return
 
 		buffer = self.tv.get_buffer()
 		buffer.begin_user_action()
 
-		self.xep0184_marks[id] = buffer.create_mark(None,
+		self.xep0184_marks[id_] = buffer.create_mark(None,
 			buffer.get_end_iter(), left_gravity=True)
-		self.xep0184_shown[id] = NOT_SHOWN
+		self.xep0184_shown[id_] = NOT_SHOWN
 
 		def show_it():
-			if (not id in self.xep0184_shown) or \
-			self.xep0184_shown[id] == ALREADY_RECEIVED:
+			if (not id_ in self.xep0184_shown) or \
+			self.xep0184_shown[id_] == ALREADY_RECEIVED:
 				return False
 
 			end_iter = buffer.get_iter_at_mark(
-				self.xep0184_marks[id])
+				self.xep0184_marks[id_])
 			buffer.insert(end_iter, ' ')
 			buffer.insert_pixbuf(end_iter,
 				ConversationTextview.XEP0184_WARNING_PIXBUF)
 			before_img_iter = buffer.get_iter_at_mark(
-				self.xep0184_marks[id])
+				self.xep0184_marks[id_])
 			before_img_iter.forward_char()
 			post_img_iter = before_img_iter.copy()
 			post_img_iter.forward_char()
 			buffer.apply_tag_by_name('xep0184-warning', before_img_iter,
 				post_img_iter)
 
-			self.xep0184_shown[id] = SHOWN
+			self.xep0184_shown[id_] = SHOWN
 			return False
 		gobject.timeout_add_seconds(2, show_it)
 
 		buffer.end_user_action()
 
-	def hide_xep0184_warning(self, id):
-		if id not in self.xep0184_marks:
+	def hide_xep0184_warning(self, id_):
+		if id_ not in self.xep0184_marks:
 			return
 
-		if self.xep0184_shown[id] == NOT_SHOWN:
-			self.xep0184_shown[id] = ALREADY_RECEIVED
+		if self.xep0184_shown[id_] == NOT_SHOWN:
+			self.xep0184_shown[id_] = ALREADY_RECEIVED
 			return
 
 		buffer = self.tv.get_buffer()
 		buffer.begin_user_action()
 
-		begin_iter = buffer.get_iter_at_mark(self.xep0184_marks[id])
+		begin_iter = buffer.get_iter_at_mark(self.xep0184_marks[id_])
 
 		end_iter = begin_iter.copy()
 		# XXX: Is there a nicer way?
@@ -462,12 +462,12 @@ class ConversationTextview:
 		end_iter.forward_char()
 
 		buffer.delete(begin_iter, end_iter)
-		buffer.delete_mark(self.xep0184_marks[id])
+		buffer.delete_mark(self.xep0184_marks[id_])
 
 		buffer.end_user_action()
 
-		del self.xep0184_marks[id]
-		del self.xep0184_shown[id]
+		del self.xep0184_marks[id_]
+		del self.xep0184_shown[id_]
 
 	def show_focus_out_line(self):
 		if not self.allow_focus_out_line:
@@ -859,13 +859,13 @@ class ConversationTextview:
 
 		menu.popup(None, None, None, event.button, event.time)
 
-	def hyperlink_handler(self, texttag, widget, event, iter, kind):
+	def hyperlink_handler(self, texttag, widget, event, iter_, kind):
 		if event.type == gtk.gdk.BUTTON_PRESS:
-			begin_iter = iter.copy()
+			begin_iter = iter_.copy()
 			# we get the begining of the tag
 			while not begin_iter.begins_tag(texttag):
 				begin_iter.backward_char()
-			end_iter = iter.copy()
+			end_iter = iter_.copy()
 			# we get the end of the tag
 			while not end_iter.ends_tag(texttag):
 				end_iter.forward_char()
@@ -877,7 +877,7 @@ class ConversationTextview:
 				# we launch the correct application
 				helpers.launch_browser_mailer(kind, word)
 
-	def html_hyperlink_handler(self, texttag, widget, event, iter, kind, href):
+	def html_hyperlink_handler(self, texttag, widget, event, iter_, kind, href):
 		if event.type == gtk.gdk.BUTTON_PRESS:
 			if event.button == 3: # right click
 				self.make_link_menu(event, kind, href)
@@ -922,7 +922,7 @@ class ConversationTextview:
 
 		return index # the position after *last* special text
 
-	def latex_to_image(self, str):
+	def latex_to_image(self, str_):
 		result = None
 		exitcode = 0
 
@@ -938,11 +938,11 @@ class ConversationTextview:
 			'\\item', '\\section', '\\mbox', '\\DeclareRobustCommand', '\\[',
 			'\\]']
 
-		str = str[2:len(str)-2]
+		str_ = str_[2:len(str_)-2]
 
 		# filter latex code with bad commands
 		for word in blacklist:
-			if word in str:
+			if word in str_:
 				exitcode = 1
 				break
 
@@ -956,7 +956,7 @@ class ConversationTextview:
 			texstr += '\\usepackage{amsmath}\\usepackage{amssymb}'
 			texstr += '\\pagestyle{empty}'
 			texstr += '\\begin{document}\\begin{large}\\begin{gather*}'
-			texstr += str
+			texstr += str_
 			texstr += '\\end{gather*}\\end{large}\\end{document}'
 
 			file = open(os.path.join(tmpfile + '.tex'), 'w+')

@@ -593,7 +593,7 @@ class ChatControlBase(MessageControl):
 			return True
 		return False
 
-	def send_message(self, message, keyID = '', type = 'chat', chatstate = None,
+	def send_message(self, message, keyID = '', type_ = 'chat', chatstate = None,
 	msg_id = None, composing_xep = None, resource = None,
 	process_command = True):
 		'''Send the given message to the active tab. Doesn't return None if error
@@ -604,7 +604,7 @@ class ChatControlBase(MessageControl):
 		ret = None
 
 		if not process_command or not self._process_command(message):
-			ret = MessageControl.send_message(self, message, keyID, type = type,
+			ret = MessageControl.send_message(self, message, keyID, type_ = type_,
 				chatstate = chatstate, msg_id = msg_id,
 				composing_xep = composing_xep, resource = resource,
 				user_nick = self.user_nick)
@@ -1720,7 +1720,7 @@ class ChatControl(ChatControlBase):
 				self._schedule_activity_timers()
 
 		id = ChatControlBase.send_message(self, message, keyID,
-			type = 'chat', chatstate = chatstate_to_send,
+			type_ = 'chat', chatstate = chatstate_to_send,
 			composing_xep = composing_xep,
 			process_command = process_command)
 		if id:

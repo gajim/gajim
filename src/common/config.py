@@ -502,17 +502,17 @@ class Config:
 	def is_valid_string(self, val):
 		return val
 
-	def is_valid(self, type, val):
-		if not type:
+	def is_valid(self, type_, val):
+		if not type_:
 			return None
-		if type[0] == 'boolean':
+		if type_[0] == 'boolean':
 			return self.is_valid_bool(val)
-		elif type[0] == 'integer':
+		elif type_[0] == 'integer':
 			return self.is_valid_int(val)
-		elif type[0] == 'string':
+		elif type_[0] == 'string':
 			return self.is_valid_string(val)
 		else:
-			if re.match(type[1], val):
+			if re.match(type_[1], val):
 				return val
 			else:
 				return None

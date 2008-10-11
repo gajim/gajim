@@ -280,11 +280,11 @@ class IdleCommand(IdleObject):
 		self._return_result()
 	
 class NsLookup(IdleCommand):
-	def __init__(self, on_result, host='_xmpp-client', type = 'srv'):
+	def __init__(self, on_result, host='_xmpp-client', type_ = 'srv'):
 		IdleCommand.__init__(self, on_result)
 		self.commandtimeout = 10 
 		self.host = host.lower()
-		self.type = type.lower()
+		self.type = type_.lower()
 		if not host_pattern.match(self.host):
 			# invalid host name
 			print >> sys.stderr, 'Invalid host: %s' % self.host

@@ -68,12 +68,12 @@ if gajim.HAVE_GPG:
 						resp[ keyword ] = ""
 			return resp
 
-		def encrypt(self, str, recipients):
+		def encrypt(self, str_, recipients):
 			self.options.recipients = recipients   # a list!
 
 			proc = self.run(['--encrypt'], create_fhs=['stdin', 'stdout', 'status',
 				'stderr'])
-			proc.handles['stdin'].write(str)
+			proc.handles['stdin'].write(str_)
 			try:
 				proc.handles['stdin'].close()
 			except IOError:
@@ -103,9 +103,9 @@ if gajim.HAVE_GPG:
 				error = ''
 			return self._stripHeaderFooter(output), error
 
-		def decrypt(self, str, keyID):
+		def decrypt(self, str_, keyID):
 			proc = self.run(['--decrypt', '-q', '-u %s'%keyID], create_fhs=['stdin', 'stdout'])
-			enc = self._addHeaderFooter(str, 'MESSAGE')
+			enc = self._addHeaderFooter(str_, 'MESSAGE')
 			proc.handles['stdin'].write(enc)
 			proc.handles['stdin'].close()
 	
@@ -116,9 +116,9 @@ if gajim.HAVE_GPG:
 			except IOError: pass
 			return output
 
-		def sign(self, str, keyID):
+		def sign(self, str_, keyID):
 			proc = self.run(['-b', '-u %s'%keyID], create_fhs=['stdin', 'stdout', 'status', 'stderr'])
-			proc.handles['stdin'].write(str)
+			proc.handles['stdin'].write(str_)
 			try:
 				proc.handles['stdin'].close()
 			except IOError:
@@ -144,12 +144,12 @@ if gajim.HAVE_GPG:
 				return self._stripHeaderFooter(output)
 			return 'BAD_PASSPHRASE'
 
-		def verify(self, str, sign):
-			if str is None:
+		def verify(self, str_, sign):
+			if str_ is None:
 				return ''
 			f = tmpfile()
 			fd = f.fileno()
-			f.write(str)
+			f.write(str_)
 			f.seek(0)
 
 			proc = self.run(['--verify', '--enable-special-filenames', '-', '-&%s'%fd], create_fhs=['stdin', 'status', 'stderr'])
@@ -215,13 +215,13 @@ if gajim.HAVE_GPG:
 			line = '\n'.join(lines[0:i])
 			return line
 
-		def _addHeaderFooter(self, data, type):
+		def _addHeaderFooter(self, data, type_):
 			"""Add header and footer from data"""
-			out = "-----BEGIN PGP %s-----\n" % type
+			out = "-----BEGIN PGP %s-----\n" % type_
 			out = out + "Version: PGP\n"
 			out = out + "\n"
 			out = out + data + "\n"
-			out = out + "-----END PGP %s-----\n" % type
+			out = out + "-----END PGP %s-----\n" % type_
 			return out
 
 # vim: se ts=3:

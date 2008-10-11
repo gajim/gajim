@@ -66,19 +66,19 @@ def set_renderer_color(treeview, renderer, set_background = True):
 		fgcolor = treeview.style.fg[gtk.STATE_PRELIGHT]
 		renderer.set_property('foreground-gdk', fgcolor)
 
-def tree_cell_data_func(column, renderer, model, iter, tv=None):
+def tree_cell_data_func(column, renderer, model, iter_, tv=None):
 	# cell data func is global, because we don't want it to keep
 	# reference to GroupchatControl instance (self)
 	theme = gajim.config.get('roster_theme')
 	# allocate space for avatar only if needed
-	parent_iter = model.iter_parent(iter)
+	parent_iter = model.iter_parent(iter_)
 	if isinstance(renderer, gtk.CellRendererPixbuf):
 		avatar_position = gajim.config.get('avatar_position_in_roster')
 		if avatar_position == 'right':
 			renderer.set_property('xalign', 1) # align pixbuf to the right
 		else:
 			renderer.set_property('xalign', 0.5)
-		if parent_iter and (model[iter][C_AVATAR] or avatar_position == 'left'):
+		if parent_iter and (model[iter_][C_AVATAR] or avatar_position == 'left'):
 			renderer.set_property('visible', True)
 			renderer.set_property('width', gajim.config.get('roster_avatar_width'))
 		else:
@@ -541,8 +541,8 @@ class GroupchatControl(ChatControlBase):
 		for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
 			self.draw_contact(nick)
 
-	def _change_style(self, model, path, iter):
-		model[iter][C_NICK] = model[iter][C_NICK]
+	def _change_style(self, model, path, iter_):
+		model[iter_][C_NICK] = model[iter_][C_NICK]
 
 	def change_roster_style(self):
 		model = self.list_treeview.get_model()
@@ -982,12 +982,12 @@ class GroupchatControl(ChatControlBase):
 		# Recalculate column width for ellipsizin
 		self.list_treeview.columns_autosize()
 
-	def on_send_pm(self, widget=None, model=None, iter=None, nick=None,
+	def on_send_pm(self, widget=None, model=None, iter_=None, nick=None,
 	msg=None):
 		'''opens a chat window and if msg is not None sends private message to a
 		contact in a room'''
 		if nick is None:
-			nick = model[iter][C_NICK].decode('utf-8')
+			nick = model[iter_][C_NICK].decode('utf-8')
 		fjid = gajim.construct_fjid(self.room_jid, nick) # 'fake' jid
 
 		ctrl = self._start_private_message(nick)
@@ -2040,17 +2040,17 @@ class GroupchatControl(ChatControlBase):
 				widget.get_selection().unselect_all()
 				return True
 
-	def on_list_treeview_row_expanded(self, widget, iter, path):
+	def on_list_treeview_row_expanded(self, widget, iter_, path):
 		'''When a row is expanded: change the icon of the arrow'''
 		model = widget.get_model()
 		image = gajim.interface.jabber_state_images['16']['opened']
-		model[iter][C_IMG] = image
+		model[iter_][C_IMG] = image
 
-	def on_list_treeview_row_collapsed(self, widget, iter, path):
+	def on_list_treeview_row_collapsed(self, widget, iter_, path):
 		'''When a row is collapsed: change the icon of the arrow'''
 		model = widget.get_model()
 		image = gajim.interface.jabber_state_images['16']['closed']
-		model[iter][C_IMG] = image
+		model[iter_][C_IMG] = image
 
 	def kick(self, widget, nick):
 		'''kick a user'''
@@ -2062,10 +2062,10 @@ class GroupchatControl(ChatControlBase):
 		instance = dialogs.InputDialog(_('Kicking %s') % nick,
 					_('You may specify a reason below:'), ok_handler=on_ok)
 
-	def mk_menu(self, event, iter):
+	def mk_menu(self, event, iter_):
 		'''Make contact's popup menu'''
 		model = self.list_treeview.get_model()
-		nick = model[iter][C_NICK].decode('utf-8')
+		nick = model[iter_][C_NICK].decode('utf-8')
 		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 		jid = c.jid
 		target_affiliation = c.affiliation
@@ -2159,7 +2159,7 @@ class GroupchatControl(ChatControlBase):
 			self.handlers[id] = item
 
 		item = xml.get_widget('send_private_message_menuitem')
-		id = item.connect('activate', self.on_send_pm, model, iter)
+		id = item.connect('activate', self.on_send_pm, model, iter_)
 		self.handlers[id] = item
 
 		item = xml.get_widget('send_file_menuitem')

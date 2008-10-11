@@ -458,8 +458,8 @@ _('Connection with peer cannot be established.'))
 		eta = remaining_size / speed
 		return eta, speed
 
-	def _remove_transfer(self, iter, sid, file_props):
-		self.model.remove(iter)
+	def _remove_transfer(self, iter_, sid, file_props):
+		self.model.remove(iter_)
 		if  'tt_account' in file_props:
 			# file transfer is set
 			account = file_props['tt_account']
@@ -484,7 +484,7 @@ _('Connection with peer cannot be established.'))
 		del(self.files_props[sid[0]][sid[1:]])
 		del(file_props)
 
-	def set_progress(self, typ, sid, transfered_size, iter = None):
+	def set_progress(self, typ, sid, transfered_size, iter_ = None):
 		''' change the progress of a transfer with new transfered size'''
 		if sid not in self.files_props[typ]:
 			return
@@ -494,11 +494,11 @@ _('Connection with peer cannot be established.'))
 			percent = 0
 		else:
 			percent = round(float(transfered_size) / full_size * 100, 1)
-		if iter is None:
-			iter = self.get_iter_by_sid(typ, sid)
-		if iter is not None:
+		if iter_ is None:
+			iter_ = self.get_iter_by_sid(typ, sid)
+		if iter_ is not None:
 			just_began = False
-			if self.model[iter][C_PERCENT] == 0 and int(percent > 0):
+			if self.model[iter_][C_PERCENT] == 0 and int(percent > 0):
 				just_began = True
 			text = self._format_percent(percent)
 			if transfered_size == 0:
@@ -520,8 +520,8 @@ _('Connection with peer cannot be established.'))
 			eta, speed = self._get_eta_and_speed(full_size, transfered_size, 
 				file_props)
 
-			self.model.set(iter, C_PROGRESS, text)
-			self.model.set(iter, C_PERCENT, int(percent))
+			self.model.set(iter_, C_PROGRESS, text)
+			self.model.set(iter_, C_PERCENT, int(percent))
 			text = self._format_time(eta)
 			text += '\n'
 			#This should make the string Kb/s, 
@@ -529,7 +529,7 @@ _('Connection with peer cannot be established.'))
 			#Only the 's' after / (which means second) should be translated.
 			text += _('(%(filesize_unit)s/s)') % {'filesize_unit':
 				helpers.convert_bytes(speed)}
-			self.model.set(iter, C_TIME, text)
+			self.model.set(iter_, C_TIME, text)
 
 			# try to guess what should be the status image
 			if file_props['type'] == 'r':
@@ -542,11 +542,11 @@ _('Connection with peer cannot be established.'))
 				status = 'waiting'
 			if 'connected' in file_props and file_props['connected'] == False:
 				status = 'stop'
-			self.model.set(iter, 0, self.images[status])
+			self.model.set(iter_, 0, self.images[status])
 			if transfered_size == full_size:
 				self.set_status(typ, sid, 'ok')
 			elif just_began:
-				path = self.model.get_path(iter)
+				path = self.model.get_path(iter_)
 				self.select_func(path)
 
 	def get_iter_by_sid(self, typ, sid):
@@ -873,11 +873,11 @@ _('Connection with peer cannot be established.'))
 	def on_close_button_clicked(self, widget):
 		self.window.hide()
 
-	def show_context_menu(self, event, iter):
+	def show_context_menu(self, event, iter_):
 		# change the sensitive propery of the buttons and menuitems
 		path = None
-		if iter is not None:
-			path = self.model.get_path(iter)
+		if iter_ is not None:
+			path = self.model.get_path(iter_)
 		self.set_buttons_sensitive(path, True)
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)

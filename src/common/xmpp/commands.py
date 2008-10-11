@@ -251,13 +251,13 @@ class Command_Handler_Prototype(PlugIn):
             # New session
             self.initial[action](conn,request)
     
-    def _DiscoHandler(self,conn,request,type):
+    def _DiscoHandler(self,conn,request,type_):
         """The handler for discovery events"""
-        if type == 'list':
+        if type_ == 'list':
             return (request.getTo(),self.name,self.description)
-        elif type == 'items':
+        elif type_ == 'items':
             return []
-        elif type == 'info':
+        elif type_ == 'info':
             return self.discoinfo
         
 class TestCommand(Command_Handler_Prototype):

@@ -171,11 +171,11 @@ def setDefaultPrivacyList(disp,listname=None):
     """ Sets the default privacy list as 'listname'. Returns true on success."""
     return setActivePrivacyList(disp,listname,'default')
 
-def setPrivacyList(disp,list):
+def setPrivacyList(disp,list_):
     """ Set the ruleset. 'list' should be the simpleXML node formatted
         according to RFC 3921 (XMPP-IM) (I.e. Node('list',{'name':listname},payload=[...]) )
         Returns true on success."""
-    resp=disp.SendAndWaitForResponse(Iq('set',NS_PRIVACY,payload=[list]))
+    resp=disp.SendAndWaitForResponse(Iq('set',NS_PRIVACY,payload=[list_]))
     if isResultNode(resp): return 1
 
 def delPrivacyList(disp,listname):

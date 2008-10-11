@@ -38,9 +38,9 @@ import dialogs
 import negotiation
 
 class ChatControlSession(stanza_session.EncryptedStanzaSession):
-	def __init__(self, conn, jid, thread_id, type='chat'):
+	def __init__(self, conn, jid, thread_id, type_='chat'):
 		stanza_session.EncryptedStanzaSession.__init__(self, conn, jid, thread_id,
-			type='chat')
+			type_='chat')
 
 		self.control = None
 

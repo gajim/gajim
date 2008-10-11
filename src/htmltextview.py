@@ -728,7 +728,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		else:
 			self._insert_text(text.strip('\n'))
 
-	def _anchor_event(self, tag, textview, event, iter, href, type_):
+	def _anchor_event(self, tag, textview, event, iter_, href, type_):
 		if event.type == gtk.gdk.BUTTON_PRESS:
 			self.textview.emit('url-clicked', href, type_)
 			return True
@@ -1068,7 +1068,7 @@ if __name__ == '__main__':
 
 	htmlview.connect('motion_notify_event', on_textview_motion_notify_event)
 
-	def handler(texttag, widget, event, iter, kind, href):
+	def handler(texttag, widget, event, iter_, kind, href):
 		if event.type == gtk.gdk.BUTTON_PRESS:
 			print href
 

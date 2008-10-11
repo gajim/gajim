@@ -41,19 +41,19 @@ import os
 XmlDsig = 'http://www.w3.org/2000/09/xmldsig#'
 
 class StanzaSession(object):
-	def __init__(self, conn, jid, thread_id, type):
+	def __init__(self, conn, jid, thread_id, type_):
 		self.conn = conn
 
 		self.jid = jid
 
-		self.type = type
+		self.type = type_
 
 		if thread_id:
 			self.received_thread_id = True
 			self.thread_id = thread_id
 		else:
 			self.received_thread_id = False
-			if type == 'normal':
+			if type_ == 'normal':
 				self.thread_id = None
 			else:
 				self.thread_id = self.generate_thread_id()
@@ -189,8 +189,8 @@ if gajim.HAVE_PYCRYPTO:
 #	handle_session_negotiation method.
 
 class EncryptedStanzaSession(StanzaSession):
-	def __init__(self, conn, jid, thread_id, type='chat'):
-		StanzaSession.__init__(self, conn, jid, thread_id, type='chat')
+	def __init__(self, conn, jid, thread_id, type_='chat'):
+		StanzaSession.__init__(self, conn, jid, thread_id, type_='chat')
 
 		self.xes = {}
 		self.es = {}

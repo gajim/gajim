@@ -89,10 +89,10 @@ class CapsCache(object):
 			#   TODO: maybe put all known xmpp namespace strings here
 			#   (strings given in xmpppy)?
 			__names = {}
-			def __init__(ciself, hash_method, hash):
+			def __init__(ciself, hash_method, hash_):
 				# cached into db
 				ciself.hash_method = hash_method
-				ciself.hash = hash
+				ciself.hash = hash_
 				ciself._features = []
 				ciself._identities = []
 
@@ -174,14 +174,14 @@ class CapsCache(object):
 		self.__cache[(hash_method, hash)] = x
 		return x
 
-	def preload(self, con, jid, node, hash_method, hash):
+	def preload(self, con, jid, node, hash_method, hash_):
 		''' Preload data about (node, ver, exts) caps using disco
 		query to jid using proper connection. Don't query if
 		the data is already in cache. '''
 		if hash_method == 'old':
-			q = self[(hash_method, node + '#' + hash)]
+			q = self[(hash_method, node + '#' + hash_)]
 		else:
-			q = self[(hash_method, hash)]
+			q = self[(hash_method, hash_)]
 
 		if q.queried==0:
 			# do query for bare node+hash pair
@@ -190,7 +190,7 @@ class CapsCache(object):
 			if hash_method == 'old':
 				con.discoverInfo(jid)
 			else:
-				con.discoverInfo(jid, '%s#%s' % (node, hash))
+				con.discoverInfo(jid, '%s#%s' % (node, hash_))
 
 	def is_supported(self, contact, feature):
 		if not contact:

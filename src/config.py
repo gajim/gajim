@@ -759,12 +759,12 @@ class PreferencesWindow:
 				[self.xml.get_widget('sounds_scrolledwindow'),
 				self.xml.get_widget('browse_sounds_hbox')])
 
-	def on_sounds_treemodel_row_changed(self, model, path, iter):
-		sound_event = model[iter][3].decode('utf-8')
+	def on_sounds_treemodel_row_changed(self, model, path, iter_):
+		sound_event = model[iter_][3].decode('utf-8')
 		gajim.config.set_per('soundevents', sound_event, 'enabled',
 					bool(model[path][0]))
 		gajim.config.set_per('soundevents', sound_event, 'path',
-					model[iter][2].decode('utf-8'))
+					model[iter_][2].decode('utf-8'))
 		gajim.interface.save_config()
 
 	def update_text_tags(self):
@@ -891,11 +891,11 @@ class PreferencesWindow:
 		model = self.default_msg_tree.get_model()
 		model[path][3] = not model[path][3]
 
-	def on_default_msg_treemodel_row_changed(self, model, path, iter):
-		status = model[iter][0]
-		message = model[iter][2].decode('utf-8')
+	def on_default_msg_treemodel_row_changed(self, model, path, iter_):
+		status = model[iter_][0]
+		message = model[iter_][2].decode('utf-8')
 		gajim.config.set_per('defaultstatusmsg', status, 'enabled',
-			model[iter][3])
+			model[iter_][3])
 		gajim.config.set_per('defaultstatusmsg', status, 'message', message)
 
 	def on_default_status_expander_activate(self, expander):
@@ -919,7 +919,7 @@ class PreferencesWindow:
 			iter = model.iter_next(iter)
 		gajim.interface.save_config()
 
-	def on_msg_treemodel_row_changed(self, model, path, iter):
+	def on_msg_treemodel_row_changed(self, model, path, iter_):
 		self.save_status_messages(model)
 
 	def on_msg_treemodel_row_deleted(self, model, path):

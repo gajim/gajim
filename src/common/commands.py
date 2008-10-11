@@ -271,7 +271,7 @@ class ForwardMessagesCommand(AdHocCommand):
 		for jid in events:
 			for event in events[jid]:
 				self.connection.send_message(j, event.parameters[0], '',
-					type=event.type_, subject=event.parameters[1],
+					type_=event.type_, subject=event.parameters[1],
 					resource=resource, forward_from=jid, delayed=event.time_)
 
 		# Inform other client of completion

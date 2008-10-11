@@ -351,12 +351,12 @@ class DataRecord(ExtendedNode):
 		return self.vars[item]
 
 class DataForm(ExtendedNode):
-	def __init__(self, type=None, title=None, instructions=None, extend=None):
+	def __init__(self, type_=None, title=None, instructions=None, extend=None):
 		if extend is None:
 			# we have to build form from scratch
 			xmpp.Node.__init__(self, 'x', attrs={'xmlns': xmpp.NS_DATA})
 
-		if type is not None:		self.type=type
+		if type_ is not None:		self.type_=type_
 		if title is not None:		self.title=title
 		if instructions is not None:	self.instructions=instructions
 
@@ -367,9 +367,9 @@ class DataForm(ExtendedNode):
 			filledform = DataForm(replyto=thisform)...'''
 		def fget(self):
 			return self.getAttr('type')
-		def fset(self, type):
-			assert type in ('form', 'submit', 'cancel', 'result')
-			self.setAttr('type', type)
+		def fset(self, type_):
+			assert type_ in ('form', 'submit', 'cancel', 'result')
+			self.setAttr('type', type_)
 		return locals()
 
 	@nested_property
@@ -406,8 +406,8 @@ class DataForm(ExtendedNode):
 		return locals()
 
 class SimpleDataForm(DataForm, DataRecord):
-	def __init__(self, type=None, title=None, instructions=None, fields=None, extend=None):
-		DataForm.__init__(self, type=type, title=title, instructions=instructions, extend=extend)
+	def __init__(self, type_=None, title=None, instructions=None, fields=None, extend=None):
+		DataForm.__init__(self, type_=type_, title=title, instructions=instructions, extend=extend)
 		DataRecord.__init__(self, fields=fields, extend=self, associated=self)
 	
 	def get_purged(self):
@@ -430,8 +430,8 @@ class SimpleDataForm(DataForm, DataRecord):
 		return c
 
 class MultipleDataForm(DataForm):
-	def __init__(self, type=None, title=None, instructions=None, items=None, extend=None):
-		DataForm.__init__(self, type=type, title=title, instructions=instructions, extend=extend)
+	def __init__(self, type_=None, title=None, instructions=None, items=None, extend=None):
+		DataForm.__init__(self, type_=type_, title=title, instructions=instructions, extend=extend)
 		# all records, recorded into DataRecords
 		if extend is None:
 
