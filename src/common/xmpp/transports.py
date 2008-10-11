@@ -103,7 +103,7 @@ class TCPsocket(PlugIn):
                     self._sock.connect(ai[4])
                     self._send=self._sock.sendall
                     self._recv=self._sock.recv
-                    self.DEBUG("Successfully connected to remote host %s"%`server`,'start')
+                    self.DEBUG("Successfully connected to remote host %s"%repr(server),'start')
                     return 'ok'
                 except: continue
         except: pass

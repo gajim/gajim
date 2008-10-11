@@ -363,7 +363,7 @@ class NodeBuilder:
 		"""XML Parser callback. Used internally"""
 		self.check_data_buffer()
 		self._inc_depth()
-		self.DEBUG(DBG_NODEBUILDER, "DEPTH -> %i , tag -> %s, attrs -> %s" % (self.__depth, tag, `attrs`), 'down')
+		self.DEBUG(DBG_NODEBUILDER, "DEPTH -> %i , tag -> %s, attrs -> %s" % (self.__depth, tag, repr(attrs)), 'down')
 		if self.__depth == self._dispatch_depth:
 			if not self._mini_dom : 
 				self._mini_dom = Node(tag=tag, attrs=attrs, nsp = self._document_nsp, node_built=True)

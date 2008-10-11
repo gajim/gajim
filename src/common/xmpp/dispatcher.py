@@ -49,7 +49,7 @@ class Dispatcher(PlugIn):
     def getAnID(self):
         global ID
         ID+=1
-        return `ID`
+        return repr(ID)
 
     def dumpHandlers(self):
         """ Return set of user-registered callbacks in it's internal format.
@@ -359,7 +359,7 @@ class Dispatcher(PlugIn):
         elif not stanza.getID():
             global ID
             ID+=1
-            _ID=`ID`
+            _ID=repr(ID)
             stanza.setID(_ID)
         else: _ID=stanza.getID()
         if self._owner._registered_name and not stanza.getAttr('from'): stanza.setAttr('from',self._owner._registered_name)

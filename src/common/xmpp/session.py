@@ -85,7 +85,7 @@ class Session:
         self.DEBUG=owner.Dispatcher.DEBUG
         self._expected={}
         self._owner=owner
-        if self.TYP=='server': self.ID=`random.random()`[2:]
+        if self.TYP=='server': self.ID=repr(random.random())[2:]
         else: self.ID=None
 
         self.sendbuffer=''
@@ -128,7 +128,7 @@ class Session:
         except: received = ''
 
         if len(received): # length of 0 means disconnect
-            self.DEBUG(`self.fileno()`+' '+received,'got')
+            self.DEBUG(repr(self.fileno())+' '+received,'got')
         else:
             self.DEBUG('Socket error while receiving data','error')
             self.set_socket_state(SOCKET_DEAD)
@@ -189,7 +189,7 @@ class Session:
                 self.set_socket_state(SOCKET_DEAD)
                 self.DEBUG("Socket error while sending data",'error')
                 return self.terminate_stream()
-            self.DEBUG(`self.fileno()`+' '+self.sendbuffer[:sent],'sent')
+            self.DEBUG(repr(self.fileno())+' '+self.sendbuffer[:sent],'sent')
             self._stream_pos_sent+=sent
             self.sendbuffer=self.sendbuffer[sent:]
             self._stream_pos_delivered=self._stream_pos_sent            # Should be acquired from socket somehow. Take SSL into account.
