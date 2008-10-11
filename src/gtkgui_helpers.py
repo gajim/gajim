@@ -157,7 +157,7 @@ def get_default_font():
 	
 	if os.path.exists(xfce_config_file):
 		try:
-			for line in file(xfce_config_file):
+			for line in open(xfce_config_file):
 				if line.find('name="Gtk/FontName"') != -1:
 					start = line.find('value="') + 7
 					return line[start:line.find('"', start)].decode('utf-8')
@@ -167,7 +167,7 @@ def get_default_font():
 	
 	elif os.path.exists(kde_config_file):
 		try:
-			for line in file(kde_config_file):
+			for line in open(kde_config_file):
 				if line.find('font=') == 0: # font=Verdana,9,other_numbers
 					start = 5 # 5 is len('font=')
 					line = line[start:]

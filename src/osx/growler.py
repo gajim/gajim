@@ -23,7 +23,7 @@ growler = None
 
 def init():
 	global growler, notifications
-	icon = file(os.path.join(gajim.DATA_DIR, "pixmaps", "gajim.icns"), "r")
+	icon = open(os.path.join(gajim.DATA_DIR, "pixmaps", "gajim.icns"), "r")
 	growler = GrowlNotifier(applicationName = "Gajim",
 							notifications = notifications,
 							applicationIcon = icon.read(),
@@ -46,7 +46,7 @@ def notify(event_type, jid, account, msg_type, path_to_image, title, text):
 		path_to_image = os.path.abspath(
 			os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 						 'chat_msg_recv.png')) # img to display
-	icon = file(path_to_image, "r")
+	icon = open(path_to_image, "r")
 	context = [account, jid, msg_type]
 	growler.notify(event_type, title, text, icon.read(), False, None,
 				   context)

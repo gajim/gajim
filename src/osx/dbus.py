@@ -20,7 +20,7 @@ _GTK_BASE = "/Library/Frameworks/GTK+.framework/Versions/Current"
 def readEnv():
 	gajimpaths.add_from_root(u'dbus.env', u'dbus.env')
 	try:
-		dbus_env = file(gajimpaths[u'dbus.env'], "r")
+		dbus_env = open(gajimpaths[u'dbus.env'], "r")
 	except Exception:
 		return False
 	try:
@@ -64,7 +64,7 @@ def setEnv(env):
 def writeEnv(env):
 	gajimpaths.add_from_root(u'dbus.env', u'dbus.env')
 	try:
-		dbus_env = file(gajimpaths[u'dbus.env'], "w+")
+		dbus_env = open(gajimpaths[u'dbus.env'], "w+")
 		dbus_env.write("DBUS_SESSION_BUS_ADDRESS=\"" + env[0] + "\"\n")
 		dbus_env.write("DBUS_SESSION_BUS_PID=\"" + env[1] + "\"\n")
 		dbus_env.close()

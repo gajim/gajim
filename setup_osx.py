@@ -88,7 +88,7 @@ def force(func):
 
 
 def writeScript(filename, contents):
-	script = file(filename, "w+")
+	script = open(filename, "w+")
 	script.write(contents)
 	script.close()
 	system("chmod +x %s" % filename)
@@ -148,8 +148,8 @@ def setupPrep():
 	copy("src/osx/prep_py2app.py", APP_RS)
 	move("dist/Gajim.app/Contents/Resources/__boot__.py",
 		 "dist/Gajim.app/Contents/Resources/__boot__.py.org")
-	new = file("dist/Gajim.app/Contents/Resources/__boot__.py", "w+")
-	org = file("dist/Gajim.app/Contents/Resources/__boot__.py.org")
+	new = open("dist/Gajim.app/Contents/Resources/__boot__.py", "w+")
+	org = open("dist/Gajim.app/Contents/Resources/__boot__.py.org")
 	for line in org:
 		new.write(line)
 		if (('site.addsitedir' in line) and ('Python' in line)):
