@@ -1039,7 +1039,7 @@ May be useful some day in the future?'''
 			return ctrl
 		return None
 
-	def get_controls(self, type_ = None, acct = None):
+	def get_controls(self, type_=None, acct=None):
 		ctrls = []
 		for c in self.controls():
 			if acct and c.account != acct:
@@ -1084,15 +1084,15 @@ May be useful some day in the future?'''
 		elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			acct = msg_win.account
 		elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
-			type = msg_win.type
-			pos_x_key = type + '-msgwin-x-position'
-			pos_y_key = type + '-msgwin-y-position'
-			size_width_key = type + '-msgwin-width'
-			size_height_key = type + '-msgwin-height'
+			type_ = msg_win.type
+			pos_x_key = type_ + '-msgwin-x-position'
+			pos_y_key = type_ + '-msgwin-y-position'
+			size_width_key = type_ + '-msgwin-width'
+			size_height_key = type_ + '-msgwin-height'
 		elif self.mode == self.ONE_MSG_WINDOW_NEVER:
-			type = msg_win.type
-			size_width_key = type + '-msgwin-width'
-			size_height_key = type + '-msgwin-height'
+			type_ = msg_win.type
+			size_width_key = type_ + '-msgwin-width'
+			size_height_key = type_ + '-msgwin-height'
 		elif self.mode == self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
 			# Ignore any hpaned width
 			width = msg_win.notebook.allocation.width
