@@ -2530,7 +2530,7 @@ class PrivacyListWindow:
 
 		# Add Widgets
 
-		for widget_to_add in ['title_hbox', 'privacy_lists_title_label',
+		for widget_to_add in ('title_hbox', 'privacy_lists_title_label',
 		'list_of_rules_label', 'add_edit_rule_label', 'delete_open_buttons_hbox',
 		'privacy_list_active_checkbutton', 'privacy_list_default_checkbutton',
 		'list_of_rules_combobox', 'delete_open_buttons_hbox',
@@ -2544,7 +2544,7 @@ class PrivacyListWindow:
 		'new_rule_button', 'save_rule_button', 'privacy_list_refresh_button',
 		'privacy_list_close_button', 'edit_send_status_checkbutton',
 		'add_edit_vbox', 'privacy_list_active_checkbutton',
-		'privacy_list_default_checkbutton']:
+		'privacy_list_default_checkbutton'):
 			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
 
 		self.privacy_lists_title_label.set_label(
@@ -2825,10 +2825,10 @@ class PrivacyListsWindow:
 		self.xml = gtkgui_helpers.get_glade('privacy_lists_window.glade')
 
 		self.window = self.xml.get_widget('privacy_lists_first_window')
-		for widget_to_add in ['list_of_privacy_lists_combobox',
+		for widget_to_add in ('list_of_privacy_lists_combobox',
 		'delete_privacy_list_button', 'open_privacy_list_button',
 		'new_privacy_list_button', 'new_privacy_list_entry',
-		'privacy_lists_refresh_button', 'close_privacy_lists_window_button']:
+		'privacy_lists_refresh_button', 'close_privacy_lists_window_button'):
 			self.__dict__[widget_to_add] = self.xml.get_widget(
 				widget_to_add)
 
@@ -3285,7 +3285,7 @@ class AdvancedNotificationsWindow:
 		else:
 			self.special_status_rb.set_active(True)
 			values = value.split()
-			for v in ['online', 'away', 'xa', 'dnd', 'invisible']:
+			for v in ('online', 'away', 'xa', 'dnd', 'invisible'):
 				if v in values:
 					self.__dict__[v + '_cb'].set_active(True)
 				else:
@@ -3305,7 +3305,7 @@ class AdvancedNotificationsWindow:
 			'sound_file')
 		self.sound_entry.set_text(value)
 		# sound, popup, auto_open, systray, roster
-		for option in ['sound', 'popup', 'auto_open', 'systray', 'roster']:
+		for option in ('sound', 'popup', 'auto_open', 'systray', 'roster'):
 			value = gajim.config.get_per('notifications', str(self.active_num),
 				option)
 			if value == 'yes':
@@ -3342,7 +3342,7 @@ class AdvancedNotificationsWindow:
 			status = ''
 		else:
 			status = _('when I am ')
-			for st in ['online', 'away', 'xa', 'dnd', 'invisible']:
+			for st in ('online', 'away', 'xa', 'dnd', 'invisible'):
 				if self.__dict__[st + '_cb'].get_active():
 					status += helpers.get_uf_show(st) + ' '
 		model[iter][1] = "When %s for %s %s %s" % (event, recipient_type,
@@ -3475,7 +3475,7 @@ class AdvancedNotificationsWindow:
 		if self.active_num < 0:
 			return
 		status = ''
-		for st in ['online', 'away', 'xa', 'dnd', 'invisible']:
+		for st in ('online', 'away', 'xa', 'dnd', 'invisible'):
 			if self.__dict__[st + '_cb'].get_active():
 				status += st + ' '
 		if status:
@@ -3491,14 +3491,14 @@ class AdvancedNotificationsWindow:
 			gajim.config.set_per('notifications', str(self.active_num), 'status',
 				'all')
 			# 'All status' clicked
-			for st in ['online', 'away', 'xa', 'dnd', 'invisible']:
+			for st in ('online', 'away', 'xa', 'dnd', 'invisible'):
 				self.__dict__[st + '_cb'].hide()
 
 			self.special_status_rb.show()
 		else:
 			self.set_status_config()
 			# 'special status' clicked
-			for st in ['online', 'away', 'xa', 'dnd', 'invisible']:
+			for st in ('online', 'away', 'xa', 'dnd', 'invisible'):
 				self.__dict__[st + '_cb'].show()
 
 			self.special_status_rb.hide()

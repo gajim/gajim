@@ -173,9 +173,9 @@ not-authorized --  --  -- The authentication failed because the initiating entit
 temporary-auth-failure --  --  -- The authentication failed because of a temporary error condition within the receiving entity; sent in reply to an <auth/> element or <response/> element."""
 
 ERRORS,_errorcodes={},{}
-for ns,errname,errpool in [(NS_XMPP_STREAMS,'STREAM',xmpp_stream_error_conditions),
+for ns,errname,errpool in ((NS_XMPP_STREAMS,'STREAM',xmpp_stream_error_conditions),
                            (NS_STANZAS     ,'ERR'   ,xmpp_stanza_error_conditions),
-                           (NS_SASL        ,'SASL'  ,sasl_error_conditions)]:
+                           (NS_SASL        ,'SASL'  ,sasl_error_conditions)):
     for err in errpool.split('\n')[1:]:
         cond,code,typ,text=err.split(' -- ')
         name=errname+'_'+cond.upper().replace('-','_')

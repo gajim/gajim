@@ -195,7 +195,7 @@ class SASL(PlugIn):
             resp['response']=response
             resp['charset']='utf-8'
             sasl_data=''
-            for key in ['charset','username','realm','nonce','nc','cnonce','digest-uri','response','qop']:
+            for key in ('charset','username','realm','nonce','nc','cnonce','digest-uri','response','qop'):
                 if key in ['nc','qop','response','charset']: sasl_data+="%s=%s,"%(key,resp[key])
                 else: sasl_data+='%s="%s",'%(key,resp[key])
 ########################################3333

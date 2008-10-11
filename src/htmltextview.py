@@ -528,10 +528,10 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 	
 	# build a dictionary mapping styles to methods, for greater speed
 	__style_methods = dict()
-	for style in ['background-color', 'color', 'font-family', 'font-size',
+	for style in ('background-color', 'color', 'font-family', 'font-size',
 				  'font-style', 'font-weight', 'margin-left', 'margin-right',
 				  'text-align', 'text-decoration', 'white-space', 'display',
-				  'width', 'height' ]:
+				  'width', 'height' ):
 		try:
 			method = locals()['_parse_style_%s' % style.replace('-', '_')]
 		except KeyError:

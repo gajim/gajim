@@ -291,8 +291,8 @@ class OptionsParser:
 			proxies = proxies_str.split(',')
 			for i in range(0, len(proxies)):
 				proxies[i] = proxies[i].strip()
-			for wrong_proxy in ['proxy65.jabber.autocom.pl', 
-				'proxy65.jabber.ccc.de']: 
+			for wrong_proxy in ('proxy65.jabber.autocom.pl', 
+				'proxy65.jabber.ccc.de'): 
 				if wrong_proxy in proxies:
 					proxies.remove(wrong_proxy)
 			if not 'transfer.jabber.freenet.de' in proxies:

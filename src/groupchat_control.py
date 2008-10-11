@@ -1447,7 +1447,7 @@ class GroupchatControl(ChatControlBase):
 				else:
 					nick1 = nick0
 				nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
-				for nick in [nick0, nick1]:
+				for nick in (nick0, nick1):
 					if nick in nicks:
 						self.on_send_pm(nick = nick)
 						self.clear(self.msg_textview)

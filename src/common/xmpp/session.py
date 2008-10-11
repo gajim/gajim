@@ -97,7 +97,7 @@ class Session:
 
         self._session_state=SESSION_NOT_AUTHED
         self.waiting_features=[]
-        for feature in [NS_TLS,NS_SASL,NS_BIND,NS_SESSION]:
+        for feature in (NS_TLS,NS_SASL,NS_BIND,NS_SESSION):
             if feature in owner.features: self.waiting_features.append(feature)
         self.features=[]
         self.feature_in_process=None

@@ -243,7 +243,7 @@ class Dispatcher(PlugIn):
 
 	def returnStanzaHandler(self,conn,stanza):
 		''' Return stanza back to the sender with <feature-not-implemennted/> error set. '''
-		if stanza.getType() in ['get','set']:
+		if stanza.getType() in ('get','set'):
 			conn.send(Error(stanza,ERR_FEATURE_NOT_IMPLEMENTED))
 
 	def streamErrorHandler(self,conn,error):
@@ -404,7 +404,7 @@ class Dispatcher(PlugIn):
 	def send(self, stanza, is_message = False, now = False):
 		''' Serialise stanza and put it on the wire. Assign an unique ID to it before send.
 			Returns assigned ID.'''
-		if type(stanza) in [type(''), type(u'')]: 
+		if type(stanza) in (type(''), type(u'')): 
 			return self._owner.Connection.send(stanza, now = now)
 		if not isinstance(stanza, Protocol): 
 			_ID=None

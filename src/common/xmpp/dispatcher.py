@@ -209,7 +209,7 @@ class Dispatcher(PlugIn):
 
     def returnStanzaHandler(self,conn,stanza):
         """ Return stanza back to the sender with <feature-not-implemennted/> error set. """
-        if stanza.getType() in ['get','set']:
+        if stanza.getType() in ('get','set'):
             conn.send(Error(stanza,ERR_FEATURE_NOT_IMPLEMENTED))
 
     def streamErrorHandler(self,conn,error):
