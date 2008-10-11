@@ -93,7 +93,7 @@ class Roster(PlugIn):
             jid=self._owner.Server
         jid=JID(jid)
         if jid.getStripped() not in self._data: self._data[jid.getStripped()]={'name':None,'ask':None,'subscription':'none','groups':['Not in roster'],'resources':{}}
-        if type(self._data[jid.getStripped()]['resources'])!=type(dict()):
+        if not isinstance(self._data[jid.getStripped()]['resources'], dict):
             self._data[jid.getStripped()]['resources']={}
         item=self._data[jid.getStripped()]
         typ=pres.getType()

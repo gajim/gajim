@@ -7,8 +7,7 @@ def c14n(node):
 		if not node.parent or node.parent.namespace != node.namespace:
 			s = s + ' xmlns="%s"' % node.namespace
 
-	sorted_attrs = node.attrs.keys()
-	sorted_attrs.sort()
+	sorted_attrs = sorted(node.attrs.keys())
 	for key in sorted_attrs:
 		val = ustr(node.attrs[key])
 		# like XMLescape() but with whitespace and without &gt;

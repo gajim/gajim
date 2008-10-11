@@ -363,8 +363,7 @@ def get_uf_affiliation(affiliation):
 	return affiliation_name
 
 def get_sorted_keys(adict):
-	keys = adict.keys()
-	keys.sort()
+	keys = sorted(adict.keys())
 	return keys
 
 def to_one_line(msg):
@@ -1072,8 +1071,7 @@ def get_notification_icon_tooltip_text():
 def get_accounts_info():
 	'''helper for notification icon tooltip'''
 	accounts = []
-	accounts_list = gajim.contacts.get_accounts()
-	accounts_list.sort()
+	accounts_list = sorted(gajim.contacts.get_accounts())
 	for account in accounts_list:
 		status_idx = gajim.connections[account].connected
 		# uncomment the following to hide offline accounts
@@ -1238,12 +1236,10 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 		if form_type:
 			S += form_type.getValue() + '<'
 			del fields['FORM_TYPE']
-		vars = fields.keys()
-		vars.sort()
+		vars = sorted(fields.keys())
 		for var in vars:
 			S += '%s<' % var
-			values = fields[var].getValues()
-			values.sort()
+			values = sorted(fields[var].getValues())
 			for value in values:
 				S += '%s<' % value
 

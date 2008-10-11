@@ -214,8 +214,8 @@ class SASL(PlugIn):
 		chal = challenge_splitter(data)
 		if not self.realm and 'realm' in chal:
 			self.realm = chal['realm']
-		if 'qop' in chal and ((type(chal['qop']) == str and \
-		chal['qop'] =='auth') or (type(chal['qop']) == list and 'auth' in \
+		if 'qop' in chal and ((isinstance(chal['qop'], str) and \
+		chal['qop'] =='auth') or (isinstance(chal['qop'], list) and 'auth' in \
 		chal['qop'])):
 			resp={}
 			resp['username'] = self.username

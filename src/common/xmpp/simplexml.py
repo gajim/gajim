@@ -27,7 +27,7 @@ def XMLescape(txt):
 ENCODING='utf-8'
 def ustr(what):
 	"""Converts object "what" to unicode string using it's own __str__ method if accessible or unicode method otherwise."""
-	if type(what) == type(u''): return what
+	if isinstance(what, unicode): return what
 	try: r=what.__str__()
 	except AttributeError: r=str(what)
 	if type(r)<>type(u''): return unicode(r,ENCODING)

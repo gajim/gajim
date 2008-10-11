@@ -153,7 +153,7 @@ class ConnectionBytestream:
 		''' send iq for the present streamhosts and proxies '''
 		if not self.connection or self.connected < 2:
 			return
-		if type(self.peerhost) != tuple:
+		if not isinstance(self.peerhost, tuple):
 			return
 		port = gajim.config.get('file_transfers_port')
 		ft_add_hosts_to_send = gajim.config.get('ft_add_hosts_to_send')
@@ -998,7 +998,7 @@ class ConnectionVcard:
 				iq3 = iq2.addChild(i)
 				for j in vcard[i]:
 					iq3.addChild(j).setData(vcard[i][j])
-			elif type(vcard[i]) == type([]):
+			elif isinstance(vcard[i], list):
 				for j in vcard[i]:
 					iq3 = iq2.addChild(i)
 					for k in j:

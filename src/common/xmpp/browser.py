@@ -195,14 +195,14 @@ class Browser(PlugIn):
         q=rep.getTag('query')
         if request.getQueryNS()==NS_DISCO_ITEMS:
             # handler must return list: [{jid,action,node,name}]
-            if type(handler)==dict: lst=handler['items']
+            if isinstance(handler, dict): lst=handler['items']
             else: lst=handler(conn,request,'items')
             if lst is None:
                 conn.send(Error(request,ERR_ITEM_NOT_FOUND))
                 raise NodeProcessed
             for item in lst: q.addChild('item',item)
         elif request.getQueryNS()==NS_DISCO_INFO:
-            if type(handler)==dict: dt=handler['info']
+            if isinstance(handler, dict): dt=handler['info']
             else: dt=handler(conn,request,'info')
             if dt is None:
                 conn.send(Error(request,ERR_ITEM_NOT_FOUND))

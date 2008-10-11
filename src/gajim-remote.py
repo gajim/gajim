@@ -341,8 +341,7 @@ class GajimRemote:
 				for account_dict in res:
 					print self.print_info(0, account_dict, True)
 			elif self.command == 'prefs_list':
-				pref_keys = res.keys()
-				pref_keys.sort()
+				pref_keys = sorted(res.keys())
 				for pref_key in pref_keys:
 					result = '%s = %s' % (pref_key, res[pref_key])
 					if isinstance(result, unicode):
@@ -421,8 +420,7 @@ class GajimRemote:
 	def compose_help(self):
 		''' print usage, and list available commands '''
 		str = _('Usage: %s command [arguments]\nCommand is one of:\n' ) % BASENAME
-		commands = self.commands.keys()
-		commands.sort()
+		commands = sorted(self.commands.keys())
 		for command in commands:
 			str += '  ' + command
 			for argument in self.commands[command][1]:

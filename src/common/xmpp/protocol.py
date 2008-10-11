@@ -254,7 +254,7 @@ class JID:
             JID(node='node',domain='domain.org')
         """
         if not jid and not domain: raise ValueError('JID must contain at least domain name')
-        elif type(jid)==type(self): self.node,self.domain,self.resource=jid.node,jid.domain,jid.resource
+        elif isinstance(jid, type(self)): self.node,self.domain,self.resource=jid.node,jid.domain,jid.resource
         elif domain: self.node,self.domain,self.resource=node,domain,resource
         else:
             if jid.find('@')+1: self.node,jid=jid.split('@',1)
@@ -321,7 +321,7 @@ class Protocol(Node):
         if not node and xmlns: self.setNamespace(xmlns)
         if self['to']: self.setTo(self['to'])
         if self['from']: self.setFrom(self['from'])
-        if node and type(self)==type(node) and self.__class__==node.__class__ and 'id' in self.attrs: del self.attrs['id']
+        if node and isinstance(self, type(node)) and self.__class__==node.__class__ and 'id' in self.attrs: del self.attrs['id']
         self.timestamp=None
         for d in self.getTags('delay',namespace=NS_DELAY2):
             try:
@@ -732,7 +732,7 @@ class DataForm(Node):
         if typ: self.setType(typ)
         self.setNamespace(NS_DATA)
         if title: self.setTitle(title)
-        if type(data)==type({}):
+        if isinstance(data, dict):
             newdata=[]
             for name in data.keys(): newdata.append(DataField(name,data[name]))
             data=newdata

@@ -2161,7 +2161,7 @@ class RosterWindow:
 	def close_all_from_dict(self, dic):
 		'''close all the windows in the given dictionary'''
 		for w in dic.values():
-			if type(w) == type({}):
+			if isinstance(w, dict):
 				self.close_all_from_dict(w)
 			else:
 				w.window.destroy()
@@ -2824,7 +2824,7 @@ class RosterWindow:
 	contact = None):
 		if contact is None:
 			dialogs.SingleMessageWindow(account, action='send')
-		elif type(contact) == type([]):
+		elif isinstance(contact, list):
 			dialogs.SingleMessageWindow(account, contact, 'send')
 		else:
 			jid = contact.jid
@@ -4555,10 +4555,8 @@ class RosterWindow:
 
 		connected_accounts_with_private_storage = 0
 
-		accounts_list = gajim.contacts.get_accounts()
-		accounts_list.sort()
-
 		# items that get shown whether an account is zeroconf or not
+		accounts_list = sorted(gajim.contacts.get_accounts())
 		if connected_accounts > 1: # 2 or more accounts? make submenus
 			new_chat_sub_menu = gtk.Menu()
 

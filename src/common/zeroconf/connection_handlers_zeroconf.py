@@ -69,7 +69,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 	def send_socks5_info(self, file_props, fast = True, receiver = None,
 		sender = None):
 		''' send iq for the present streamhosts and proxies '''
-		if type(self.peerhost) != tuple:
+		if not isinstance(self.peerhost, tuple):
 			return
 		port = gajim.config.get('file_transfers_port')
 		ft_add_hosts_to_send = gajim.config.get('ft_add_hosts_to_send')

@@ -2689,8 +2689,7 @@ class ManageBookmarksWindow:
 		self.option_list = {'': _('Default'), 'all': Q_('?print_status:All'),
 			'in_and_out': _('Enter and leave only'),
 			'none': Q_('?print_status:None')}
-		opts = self.option_list.keys()
-		opts.sort()
+		opts = sorted(self.option_list.keys())
 		for opt in opts:
 			model.append([self.option_list[opt], opt])
 
@@ -2892,8 +2891,7 @@ class ManageBookmarksWindow:
 			self.nick_entry.set_text('')
 
 		print_status = model[iter][7]
-		opts = self.option_list.keys()
-		opts.sort()
+		opts = sorted(self.option_list.keys())
 		self.print_status_combobox.set_active(opts.index(print_status))
 
 	def on_title_entry_changed(self, widget):

@@ -211,7 +211,7 @@ if __name__ == '__main__':
 
 	lfm = LastFM(argv[1])
 	print lfm
-	while 1:
+	while True:
 		if lfm.updateData():
 			print lfm.formatSongTitle()
 		sleep(60) 

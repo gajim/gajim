@@ -53,7 +53,7 @@ if gajim.HAVE_GPG:
 			# for that keyword.
 
 			resp = {}
-			while 1:
+			while True:
 				line = helpers.temp_failure_retry(child_stdout.readline)
 				if line == "": break
 				line = line.rstrip()

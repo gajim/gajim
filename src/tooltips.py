@@ -460,8 +460,7 @@ class RosterTooltip(NotificationAreaTooltip):
 					iconset = 'dcraven'
 				file_path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 
-			contact_keys = contacts_dict.keys()
-			contact_keys.sort()
+			contact_keys = sorted(contacts_dict.keys())
 			contact_keys.reverse()
 			for priority in contact_keys:
 				for contact in contacts_dict[priority]:

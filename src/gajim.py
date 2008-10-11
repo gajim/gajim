@@ -2494,7 +2494,7 @@ class Interface:
 		for image in self.emoticons_images:
 			item = gtk.MenuItem()
 			img = gtk.Image()
-			if type(image[1]) == gtk.gdk.PixbufAnimation:
+			if isinstance(image[1], gtk.gdk.PixbufAnimation):
 				img.set_from_animation(image[1])
 			else:
 				img.set_from_pixbuf(image[1])

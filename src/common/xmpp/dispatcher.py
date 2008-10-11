@@ -295,7 +295,7 @@ class Dispatcher(PlugIn):
         output=''
         if ID in session._expected:
             user=0
-            if type(session._expected[ID])==type(()):
+            if isinstance(session._expected[ID], tuple):
                 cb,args=session._expected[ID]
                 session.DEBUG("Expected stanza arrived. Callback %s(%s) found!"%(cb,args),'ok')
                 try: cb(session,stanza,**args)

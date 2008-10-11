@@ -70,10 +70,10 @@ exec ${TOPDIR}/MacOS/Python ${RESOURCEPATH}/gajim-remote.py $* \n\
 ###
 
 def check(ret):
-	if type(ret) == types.ListType:
+	if isinstance(ret, list):
 		if ret[0] != 0:
 			raise Exception("Command failed: " + ret[1])
-	elif type(ret) == types.IntType:
+	elif isinstance(ret, int):
 		if ret != 0:
 			raise Exception("Command failed")
 	return

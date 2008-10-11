@@ -170,7 +170,7 @@ class Debug:
             
         self._remove_dupe_flags()
         if log_file:
-            if type( log_file ) is type(''):
+            if isinstance(log_file, str):
                 try:
                     self._fh = open(log_file,'w')
                 except Exception:
@@ -291,7 +291,7 @@ class Debug:
         if not active_flags:
             #no debuging at all
             self.active = []
-        elif type( active_flags ) in ( types.TupleType, types.ListType ):
+        elif isinstance(active_flags, (tuple, list)):
             flags = self._as_one_list( active_flags )
             for t in flags:
                 if t not in self.debug_flags:
@@ -333,7 +333,7 @@ class Debug:
             return [ items ]
         r = []
         for l in items:
-            if type( l ) == type([]):
+            if isinstance(l, list):
                 lst2 = self._as_one_list( l )
                 for l2 in lst2: 
                     self._append_unique_str(r, l2 )

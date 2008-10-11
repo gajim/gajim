@@ -52,7 +52,7 @@ class NBCommonClient(CommonClient):
 		# Who initiated this client
 		# Used to register the EventDispatcher
 		self._caller = caller
-		if debug and type(debug) != list: 
+		if debug and not isinstance(debug, list): 
 			debug = ['always', 'nodebuilder']
 		self._DEBUG = Debug.Debug(debug)
 		self.DEBUG = self._DEBUG.Show

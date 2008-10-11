@@ -228,8 +228,7 @@ class MockCall:
         for p in self.params:
             s = s + sep + repr(p)
             sep = ', '
-        items = self.kwparams.items()
-        items.sort()
+        items = sorted(self.kwparams.items())
         for k,v in items:
             s = s + sep + k + '=' + repr(v)
             sep = ', '

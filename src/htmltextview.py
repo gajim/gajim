@@ -641,11 +641,11 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 					pifbufs for every resize, gtk.gdk.Pixbuf.scale_simple
 					or similar.
 					'''
-					if type(dims[0]) == float:
+					if isinstance(dims[0], float):
 						dims[0] = int(dims[0]*w)
 					elif not dims[0]:
 						dims[0] = w
-					if type(dims[1]) == float:
+					if isinstance(dims[1], float):
 						dims[1] = int(dims[1]*h)
 					if not dims[1]:
 						dims[1] = h

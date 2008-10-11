@@ -1940,8 +1940,7 @@ class NewChatDialog(InputDialog):
 		liststore = gtkgui_helpers.get_completion_liststore(self.input_entry)
 		self.completion_dict = helpers.get_contact_dict_for_account(account)
 		# add all contacts to the model
-		keys = self.completion_dict.keys()
-		keys.sort()
+		keys = sorted(self.completion_dict.keys())
 		for jid in keys:
 			contact = self.completion_dict[jid]
 			img = gajim.interface.jabber_state_images['16'][contact.show]
@@ -2180,7 +2179,7 @@ class SingleMessageWindow:
 		self.cancel_button = self.xml.get_widget('cancel_button')
 		self.close_button = self.xml.get_widget('close_button')
 		self.message_tv_buffer.connect('changed', self.update_char_counter)
-		if type(to) == type([]):
+		if isinstance(to, list):
 			jid = ', '.join( [i[0].jid + '/' + i[0].resource for i in to])
 			self.to_entry.set_text(jid)
 			self.to_entry.set_sensitive(False)
@@ -2209,8 +2208,7 @@ class SingleMessageWindow:
 		if to == '':
 			liststore = gtkgui_helpers.get_completion_liststore(self.to_entry)
 			self.completion_dict = helpers.get_contact_dict_for_account(account)
-			keys = self.completion_dict.keys()
-			keys.sort()
+			keys = sorted(self.completion_dict.keys())
 			for jid in keys:
 				contact = self.completion_dict[jid]
 				img = gajim.interface.jabber_state_images['16'][contact.show]

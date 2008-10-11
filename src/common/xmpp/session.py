@@ -141,7 +141,7 @@ class Session:
             If you just want to shedule regular stanza for delivery use enqueue method.
         """
         if isinstance(chunk,Node): chunk = chunk.__str__().encode('utf-8')
-        elif type(chunk)==type(u''): chunk = chunk.encode('utf-8')
+        elif isinstance(chunk, unicode): chunk = chunk.encode('utf-8')
         self.enqueue(chunk)
 
     def enqueue(self,stanza):
