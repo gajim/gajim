@@ -1084,13 +1084,13 @@ May be useful some day in the future?'''
 		elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
 			acct = msg_win.account
 		elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
-			type_ = msg_win.type
+			type_ = msg_win.type_
 			pos_x_key = type_ + '-msgwin-x-position'
 			pos_y_key = type_ + '-msgwin-y-position'
 			size_width_key = type_ + '-msgwin-width'
 			size_height_key = type_ + '-msgwin-height'
 		elif self.mode == self.ONE_MSG_WINDOW_NEVER:
-			type_ = msg_win.type
+			type_ = msg_win.type_
 			size_width_key = type_ + '-msgwin-width'
 			size_height_key = type_ + '-msgwin-height'
 		elif self.mode == self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
