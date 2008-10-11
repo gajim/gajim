@@ -3283,7 +3283,6 @@ class Interface:
 			gobject.timeout_add(200, self.process_connections)
 		gobject.timeout_add_seconds(gajim.config.get(
 			'check_idle_every_foo_seconds'), self.read_sleepy)
-		self.create_ipython_window()
 
 if __name__ == '__main__':
 	def sigint_cb(num, stack):
