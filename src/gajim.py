@@ -3031,6 +3031,7 @@ class Interface:
 			return True
 		window.connect('delete_event',on_delete)
 		view.updateNamespace({'gajim': gajim})
+		gajim.ipython_window = window
 
 	def __init__(self):
 		gajim.interface = self
