@@ -67,7 +67,7 @@ PEP_CONFIG = 'pep_config'
 HAS_IDLE = True
 try:
 	import idle
-except:
+except Exception:
 	gajim.log.debug(_('Unable to load idle module'))
 	HAS_IDLE = False
 
@@ -461,7 +461,7 @@ class ConnectionBytestream:
 
 		try:
 			streamhost = query.getTag('streamhost-used')
-		except: # this bytestream result is not what we need
+		except Exception: # this bytestream result is not what we need
 			pass
 		id = real_id[3:]
 		if id in self.files_props:
@@ -944,7 +944,7 @@ class ConnectionVcard:
 		f.close()
 		try:
 			card = common.xmpp.Node(node = c)
-		except:
+		except Exception:
 			# We are unable to parse it. Remove it
 			os.remove(path_to_file)
 			return None
@@ -1107,7 +1107,7 @@ class ConnectionVcard:
 					order = meta.getAttr('order')
 					try:
 						order = int(order)
-					except:
+					except Exception:
 						order = 0
 					if order is not None:
 						data['order'] = order
@@ -1174,7 +1174,7 @@ class ConnectionVcard:
 			try:
 				photo_decoded = base64.decodestring(photo)
 				avatar_sha = sha.sha(photo_decoded).hexdigest()
-			except:
+			except Exception:
 				avatar_sha = ''
 		else:
 			avatar_sha = ''
@@ -1388,7 +1388,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		try:
 			idle.init()
-		except:
+		except Exception:
 			HAS_IDLE = False
 
 		self.gmail_last_tid = None
@@ -1532,7 +1532,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		status = qp.getData()
 		try:
 			seconds = int(seconds)
-		except:
+		except Exception:
 			return
 		id = iq_obj.getID()
 		if id in self.groupchat_jids:
@@ -1771,7 +1771,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			try:
 				msg = session.decrypt_stanza(msg)
 				msgtxt = msg.getBody()
-			except:
+			except Exception:
 				self.dispatch('FAILED_DECRYPT', (frm, tim, session))
 
 		# Receipt requested
@@ -1938,7 +1938,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		gajim.log.debug('PresenceCB: %s' % ptype)
 		try:
 			who = helpers.get_full_jid_from_iq(prs)
-		except:
+		except Exception:
 			if prs.getTag('error').getTag('jid-malformed'):
 				# wrong jid, we probably tried to change our nick in a room to a non
 				# valid one
@@ -2000,7 +2000,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		prio = prs.getPriority()
 		try:
 			prio = int(prio)
-		except:
+		except Exception:
 			prio = 0
 		keyID = ''
 		if sigTag and self.USE_GPG and ptype != 'error':

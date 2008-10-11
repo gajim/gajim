@@ -382,7 +382,7 @@ class Socks5:
 			if not self.file.closed:
 				try:
 					self.file.close()
-				except:
+				except Exception:
 					pass
 			self.file = None
 	
@@ -410,7 +410,7 @@ class Socks5:
 			del(self.file_props['fd'])
 		try:
 			fd.close()
-		except:
+		except Exception:
 			pass
 			
 	
@@ -559,7 +559,7 @@ class Socks5:
 		try:
 			self._sock.shutdown(socket.SHUT_RDWR)
 			self._sock.close()
-		except:
+		except Exception:
 			# socket is already closed
 			pass
 		self.connected = False
@@ -580,7 +580,7 @@ class Socks5:
 			for i in xrange(num_auth):
 				mechanism, = struct.unpack('!B', buff[1 + i])
 				auth_mechanisms.append(mechanism)
-		except:
+		except Exception:
 			return None
 		return auth_mechanisms
 	def _get_auth_response(self):
@@ -623,7 +623,7 @@ class Socks5:
 			else: 
 				port, = struct.unpack('!H', buff[host_len + 5: host_len + 7])
 				self.remaining_buff = buff[host_len + 7:]
-		except:
+		except Exception:
 			return (None, None, None)
 		return (req_type, host, port)
 	
@@ -632,7 +632,7 @@ class Socks5:
 		buff = self._recv()
 		try:
 			version, method = struct.unpack('!BB', buff)
-		except:
+		except Exception:
 			version, method = None, None
 		if version != 0x05 or method == 0xff:
 			self.disconnect()
@@ -814,7 +814,7 @@ class Socks5Listener(IdleObject):
 				self._serv.bind(ai[4])
 				self.ai = ai
 				break
-			except:
+			except Exception:
 				self.ai = None
 				continue
 		if not self.ai:
@@ -844,7 +844,7 @@ class Socks5Listener(IdleObject):
 		self.started = False
 		try:
 			self._serv.close()
-		except:
+		except Exception:
 			pass
 	
 	def accept_conn(self):
@@ -903,7 +903,7 @@ class Socks5Receiver(Socks5, IdleObject):
 				self._sock.setblocking(False)
 				self._server=ai[4]
 				break
-			except:
+			except Exception:
 				if sys.exc_value[0] == errno.EINPROGRESS:
 					break
 				#for all errors, we try other addresses

@@ -41,7 +41,7 @@ import locale
 
 try:
 	randomsource = random.SystemRandom()
-except:
+except Exception:
 	randomsource = random.Random()
 	randomsource.seed()
 
@@ -447,7 +447,7 @@ class Connection(ConnectionHandlers):
 			try:
 				try:
 					env_http_proxy = os.environ['HTTP_PROXY']
-				except:
+				except Exception:
 					env_http_proxy = os.environ['http_proxy']
 				env_http_proxy = env_http_proxy.strip('"')
 				# Dispose of the http:// prefix
@@ -474,7 +474,7 @@ class Connection(ConnectionHandlers):
 				else:
 					proxy['password'] = u''
 
-			except:
+			except Exception:
 				proxy = None
 		else:
 			proxy = None

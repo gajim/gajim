@@ -48,7 +48,7 @@ try:
 		import osx.idle as idle
 	else: # unix
 		import idle
-except:
+except Exception:
 	gajim.log.debug('Unable to load idle module')
 	SUPPORTED = False
 
@@ -92,7 +92,7 @@ class SleepyUnix:
 		self.state = STATE_AWAKE # assume we are awake
 		try:
 			idle.init()
-		except:
+		except Exception:
 			SUPPORTED = False
 			self.state = STATE_UNKNOWN
 

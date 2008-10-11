@@ -186,7 +186,7 @@ class Zeroconf:
 			#check if last part is a number and if, increment it
 			try:
 				stripped = str(int(parts[-1]))
-			except:
+			except Exception:
 				stripped = 1
 			alternative_name = self.username + str(stripped+1)
 			self.name_conflictCB(alternative_name)

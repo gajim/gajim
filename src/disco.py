@@ -1103,7 +1103,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 			iter = None
 			try:
 				iter = self.model.get_iter(row)
-			except:
+			except Exception:
 				self.tooltip.hide_tooltip()
 				return
 			jid = self.model[iter][0]
@@ -1961,7 +1961,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		have items on the list, we should actualize them. '''
 		try:
 			subscriptions = request.getTag('pubsub').getTag('subscriptions')
-		except:
+		except Exception:
 			return 
 
 		groups = set()

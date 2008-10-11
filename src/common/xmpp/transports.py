@@ -146,7 +146,7 @@ class TCPsocket(PlugIn):
             if raw_data.strip():
                 self.DEBUG(raw_data,'sent')
                 self._owner.Dispatcher.Event('', DATA_SENT, raw_data)
-        except:
+        except Exception:
             self.DEBUG("Socket error while sending data",'error')
             self._owner.disconnected()
 

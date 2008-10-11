@@ -56,7 +56,7 @@ from common.xmpp.protocol import NS_ESESSION
 try:
 	import gtkspell
 	HAS_GTK_SPELL = True
-except:
+except Exception:
 	HAS_GTK_SPELL = False
 
 HAVE_MARKUP_TOOLTIPS = gtk.pygtk_version >= (2, 12, 0)
@@ -281,7 +281,7 @@ class ChatControlBase(MessageControl):
 				for lang in dict(langs):
 					try:
 						spell.set_language(langs[lang])
-					except:
+					except Exception:
 						del langs[lang]
 				# now set the one the user selected
 				per_type = 'contacts'

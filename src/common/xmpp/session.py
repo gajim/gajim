@@ -184,7 +184,7 @@ class Session:
             try:
                 # LOCK_QUEUE
                 sent=self._send(self.sendbuffer)    # blocking socket
-            except:
+            except Exception:
                 # UNLOCK_QUEUE
                 self.set_socket_state(SOCKET_DEAD)
                 self.DEBUG("Socket error while sending data",'error')

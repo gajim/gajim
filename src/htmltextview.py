@@ -222,7 +222,7 @@ def build_patterns(view, config, interface):
 			'(?:(?<![\w.]' + emoticons_pattern_prematch[:-1]   + '))' + \
 			'(?:'       + emoticons_pattern[:-1]            + ')'  + \
 			'(?:(?![\w.]'  + emoticons_pattern_postmatch[:-1]  + '))'
-	except:
+	except Exception:
 		pass
 
 	view.emot_pattern_re = re.compile(emoticons_pattern, re.IGNORECASE)
@@ -377,7 +377,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				# validate length
 				val = sign*max(minl,min(abs(val),maxl))
 				callback(val, *args)
-			except:
+			except Exception:
 				warnings.warn('Unable to parse length value "%s"' % value)
 		
 	def __parse_font_size_cb(length, tag):
@@ -510,7 +510,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 	def __length_tag_cb(self, value, tag, propname):
 		try:
 			tag.set_property(propname, value)
-		except:
+		except Exception:
 			gajim.log.warn( "Error with prop: " + propname + " for tag: " + str(tag))
 		
 
@@ -575,7 +575,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				# Wait 0.1s between each byte 
 				try: 
 					f.fp._sock.fp._sock.settimeout(0.5) 
-				except: 
+				except Exception: 
 					pass 
 			# Max image size = 2 MB (to try to prevent DoS)
 			mem = ''
@@ -675,7 +675,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			alt = attrs.get('alt', 'Broken image')
 			try:
 				loader.close()
-			except:
+			except Exception:
 				pass
 		return pixbuf
 

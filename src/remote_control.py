@@ -332,7 +332,7 @@ class SignalObject(dbus.service.Object):
 		jid = self._get_real_jid(jid, account)
 		try:
 			jid = helpers.parse_jid(jid)
-		except:
+		except Exception:
 			# Jid is not conform, ignore it
 			return DBUS_BOOLEAN(False)
 

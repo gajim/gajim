@@ -12,7 +12,7 @@ __contributors__ = ["Ingmar J Stein (Growl Team)",
 
 try:
     import _growl
-except:
+except Exception:
     _growl = False
 import types
 import struct

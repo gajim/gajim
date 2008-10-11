@@ -1426,7 +1426,7 @@ class GroupchatControl(ChatControlBase):
 				nick = message_array[0]
 				try:
 					nick = helpers.parse_resource(nick)
-				except:
+				except Exception:
 					# Invalid Nickname
 					dialogs.ErrorDialog(_('Invalid nickname'),
 					_('The nickname has not allowed characters.'))
@@ -1707,7 +1707,7 @@ class GroupchatControl(ChatControlBase):
 			self.change_nick_dialog = None
 			try:
 				nick = helpers.parse_resource(nick)
-			except:
+			except Exception:
 				# invalid char
 				dialogs.ErrorDialog(_('Invalid nickname'),
 				_('The nickname has not allowed characters.'))
@@ -1876,7 +1876,7 @@ class GroupchatControl(ChatControlBase):
 				# Test jid
 				try:
 					jid = helpers.parse_jid(jid)
-				except:
+				except Exception:
 					dialogs.ErrorDialog(_('Invalid group chat Jabber ID'),
 					_('The group chat Jabber ID has not allowed characters.'))
 					return
@@ -2297,7 +2297,7 @@ class GroupchatControl(ChatControlBase):
 			iter = None
 			try:
 				iter = model.get_iter(row)
-			except:
+			except Exception:
 				self.tooltip.hide_tooltip()
 				return
 			typ = model[iter][C_TYPE].decode('utf-8')

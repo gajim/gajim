@@ -1702,7 +1702,7 @@ class RosterWindow:
 			if not 'com.google.code.Awn' in bus.list_names():
 				# Awn is not installed
 				return
-		except:
+		except Exception:
 			return
 		iconset = gajim.config.get('iconset')
 		prefix = os.path.join(helpers.get_iconset_path(iconset), '32x32')
@@ -2379,7 +2379,7 @@ class RosterWindow:
 			titer = None
 			try:
 				titer = model.get_iter(row)
-			except:
+			except Exception:
 				self.tooltip.hide_tooltip()
 				return
 			if model[titer][C_TYPE] in ('contact', 'self_contact'):

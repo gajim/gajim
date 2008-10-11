@@ -45,7 +45,7 @@ from common import pep
 try:
 	import gtkspell
 	HAS_GTK_SPELL = True
-except:
+except Exception:
 	HAS_GTK_SPELL = False
 
 # those imports are not used in this file, but in files that 'import dialogs'
@@ -1753,7 +1753,7 @@ class JoinGroupchatWindow:
 		password = self._password_entry.get_text().decode('utf-8')
 		try:
 			nickname = helpers.parse_resource(nickname)
-		except:
+		except Exception:
 			ErrorDialog(_('Invalid Nickname'),
 				_('The nickname has not allowed characters.'))
 			return
@@ -1764,7 +1764,7 @@ class JoinGroupchatWindow:
 			return
 		try:
 			room_jid = helpers.parse_jid(room_jid)
-		except:
+		except Exception:
 			ErrorDialog(_('Invalid group chat Jabber ID'),
 				_('The group chat Jabber ID has not allowed characters.'))
 			return
@@ -3058,7 +3058,7 @@ class ImageChooserDialog(FileChooserDialog):
 				path = helpers.get_my_pictures_path()
 			else:
 				path = os.environ['HOME']
-		except:
+		except Exception:
 			path = ''
 		FileChooserDialog.__init__(self,
 			title_text = _('Choose Image'),

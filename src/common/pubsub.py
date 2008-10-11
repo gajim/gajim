@@ -116,7 +116,7 @@ class ConnectionPubSub:
 		try:
 			cb, args, kwargs = self.__callbacks.pop(stanza.getID())
 			cb(conn, stanza, *args, **kwargs)
-		except:
+		except Exception:
 			pass
 
 	def request_pb_configuration(self, jid, node):

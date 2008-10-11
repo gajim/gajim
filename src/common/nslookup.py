@@ -257,7 +257,7 @@ class IdleCommand(IdleObject):
 		self.idlequeue.unplug_idle(self.fd)
 		try:
 			self.pipe.close()
-		except:
+		except Exception:
 			pass
 	
 	def pollend(self):
@@ -337,7 +337,7 @@ if __name__ == '__main__':
 	def process():
 		try:
 			idlequeue.process()
-		except:
+		except Exception:
 			# Otherwise, an exception will stop our loop
 			gobject.timeout_add(200, process)
 			raise

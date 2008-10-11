@@ -107,7 +107,7 @@ class OldEntry(xmpp.Node, object):
 		''' Get source link '''
 		try:
 			return self.getTag('feed').getTags('link',{'rel':'alternate'})[1].getData()
-		except:
+		except Exception:
 			return None
 
 	feed_link = property(get_feed_link, None, None,

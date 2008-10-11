@@ -58,7 +58,7 @@ def get_avatar_pixbuf_encoded_mime(photo):
 		avatar_encoded = img_encoded
 		try:
 			img_decoded = base64.decodestring(img_encoded)
-		except:
+		except Exception:
 			pass
 	if img_decoded:
 		if 'TYPE' in photo:

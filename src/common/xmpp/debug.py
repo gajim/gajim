@@ -173,7 +173,7 @@ class Debug:
             if type( log_file ) is type(''):
                 try:
                     self._fh = open(log_file,'w')
-                except:
+                except Exception:
                     print 'ERROR: can open %s for writing'
                     sys.exit(0)
             else: ## assume its a stream type object
@@ -196,7 +196,7 @@ class Debug:
             caller = sys._getframe(1) # used to get name of caller
             try:
                 mod_name= ":%s" % caller.f_locals['__name__']
-            except:
+            except Exception:
                 mod_name = ""
             self.show('Debug created for %s%s' % (caller.f_code.co_filename,
                                                    mod_name ))
@@ -272,7 +272,7 @@ class Debug:
                 output = output[:-1]
         try:
             self._fh.write( output )
-        except:
+        except Exception:
             # unicode strikes again ;)
             s=u''
             for i in range(len(output)):
@@ -304,7 +304,7 @@ class Debug:
             # assume comma string
             try:
                 flags = active_flags.split(',')
-            except:
+            except Exception:
                 self.show( '***' )
                 self.show( '*** Invalid debug param given: %s' % active_flags )
                 self.show( '*** please correct your param!' )

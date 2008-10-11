@@ -378,7 +378,7 @@ class Component(NBCommonClient):
 				return
 			self.SASL.auth()
 			self.onreceive(self._on_auth_component)
-		except:
+		except Exception:
 			self.DEBUG(self.DBG,"Failed to authenticate %s" % name,'error')
 		
 	def _on_auth_component(self, data):

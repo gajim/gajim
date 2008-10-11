@@ -481,7 +481,7 @@ class Config:
 	def is_valid_int(self, val):
 		try:
 			ival = int(val)
-		except:
+		except Exception:
 			return None
 		return ival
 

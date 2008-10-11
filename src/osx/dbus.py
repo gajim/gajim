@@ -21,13 +21,13 @@ def readEnv():
 	gajimpaths.add_from_root(u'dbus.env', u'dbus.env')
 	try:
 		dbus_env = file(gajimpaths[u'dbus.env'], "r")
-	except:
+	except Exception:
 		return False
 	try:
 		line1 = dbus_env.readline()
 		line2 = dbus_env.readline()
 		dbus_env.close()
-	except:
+	except Exception:
 		print "Invalid dbus.env file"
 		return False
 	return parseEnv(line1, line2)

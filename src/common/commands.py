@@ -121,7 +121,7 @@ class ChangeStatusCommand(AdHocCommand):
 		try:
 			form = dataforms.SimpleDataForm(extend = request.getTag('command').\
 				getTag('x'))
-		except:
+		except Exception:
 			self.badRequest(request)
 			return False
 
@@ -131,14 +131,14 @@ class ChangeStatusCommand(AdHocCommand):
 			('free-for-chat', 'online', 'away', 'xa', 'dnd', 'offline'):
 				self.badRequest(request)
 				return False
-		except:	# KeyError if there's no presence-type field in form or
+		except Exception:	# KeyError if there's no presence-type field in form or
 			# AttributeError if that field is of wrong type
 			self.badRequest(request)
 			return False
 
 		try:
 			presencedesc = form['presence-desc'].value
-		except:	# same exceptions as in last comment
+		except Exception:	# same exceptions as in last comment
 			presencedesc = u''
 
 		response, cmd = self.buildResponse(request, status = 'completed')
@@ -219,13 +219,13 @@ class LeaveGroupchatsCommand(AdHocCommand):
 		try:
 			form = dataforms.SimpleDataForm(extend = request.getTag('command').\
 				getTag('x'))
-		except:
+		except Exception:
 			self.badRequest(request)
 			return False
 
 		try:
 			gc = form['groupchats'].values
-		except:	# KeyError if there's no groupchats in form
+		except Exception:	# KeyError if there's no groupchats in form
 			self.badRequest(request)
 			return False
 		account = self.connection.name
@@ -240,7 +240,7 @@ class LeaveGroupchatsCommand(AdHocCommand):
 					gajim.interface.roster.remove_groupchat(room_jid, account)
 					continue
 				gc_control.parent_win.remove_tab(gc_control, None, force = True)
-		except:	# KeyError if there's no such room opened
+		except Exception:	# KeyError if there's no such room opened
 			self.badRequest(request)
 			return False
 		response, cmd = self.buildResponse(request, status = 'completed')

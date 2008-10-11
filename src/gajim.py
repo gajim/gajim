@@ -179,7 +179,7 @@ else:
 			import dl
 			libc = dl.open('/lib/libc.so.6')
 			libc.call('prctl', 15, 'gajim\0', 0, 0, 0)
-		except:
+		except Exception:
 			pass
 
 	if gtk.pygtk_version < (2, 8, 0):
@@ -208,7 +208,7 @@ else:
 		try:
 			import winsound # windows-only built-in module for playing wav
 			import win32api # do NOT remove. we req this module
-		except:
+		except Exception:
 			pritext = _('Gajim needs pywin32 to run')
 			sectext = _('Please make sure that Pywin32 is installed on your system. You can get it at %s') % 'http://sourceforge.net/project/showfiles.php?group_id=78018'
 
@@ -281,7 +281,7 @@ def pid_alive():
 	try:
 		pid = int(pf.read().strip())
 		pf.close()
-	except:
+	except Exception:
 		traceback.print_exc()
 		# PID file exists, but something happened trying to read PID
 		# Could be 0.10 style empty PID file, so assume Gajim is running
@@ -290,7 +290,7 @@ def pid_alive():
 	if os.name == 'nt':
 		try:
 			from ctypes import (windll, c_ulong, c_int, Structure, c_char, POINTER, pointer, )
-		except:
+		except Exception:
 			return True
 
 		class PROCESSENTRY32(Structure):
@@ -352,7 +352,7 @@ def pid_alive():
 		if n.find('gajim') < 0:
 			return False
 		return True # Running Gajim found at pid
-	except:
+	except Exception:
 		traceback.print_exc()
 
 	# If we are here, pidfile exists, but some unexpected error occured.
@@ -443,7 +443,7 @@ class GlibIdleQueue(idlequeue.IdleQueue):
 	def _process_events(self, fd, flags):
 		try:
 			return self.process_events(fd, flags)
-		except:
+		except Exception:
 			self.remove_idle(fd)
 			self.add_idle(fd, flags)
 			raise
@@ -2357,7 +2357,7 @@ class Interface:
 		img = gtk.Image()
 		try:
 			img.set_from_file(image)
-		except:
+		except Exception:
 			return False
 		t = img.get_storage_type()
 		if t != gtk.IMAGE_PIXBUF and t != gtk.IMAGE_ANIMATION:
@@ -2566,7 +2566,7 @@ class Interface:
 				fd.close()
 				del emoticons
 				self._init_emoticons(path, need_reload=True)
-			except:
+			except Exception:
 				pass
 			if len(self.emoticons) == 0:
 				dialogs.WarningDialog(_('Emoticons disabled'),
@@ -2860,7 +2860,7 @@ class Interface:
 		'''
 		try:
 			gajim.idlequeue.process()
-		except:
+		except Exception:
 			# Otherwise, an exception will stop our loop
 			if gajim.idlequeue.__class__ == GlibIdleQueue:
 				gobject.timeout_add_seconds(2, self.process_connections)
@@ -3074,7 +3074,7 @@ class Interface:
 				'/apps/nautilus/preferences/click_policy')
 			if click_policy == 'single':
 				gajim.single_click = True
-		except:
+		except Exception:
 			pass
 		# add default status messages if there is not in the config file
 		if len(gajim.config.get_per('statusmsg')) == 0:
@@ -3167,7 +3167,7 @@ class Interface:
 			try:
 				import remote_control
 				self.remote_ctrl = remote_control.Remote()
-			except:
+			except Exception:
 				self.remote_ctrl = None
 		else:
 			self.remote_ctrl = None
@@ -3205,7 +3205,7 @@ class Interface:
 				bus = dbus.SessionBus()
 				bus.add_signal_receiver(gnome_screensaver_ActiveChanged_cb,
 					'ActiveChanged', 'org.gnome.ScreenSaver')
-			except:
+			except Exception:
 				pass
 
 		self.show_vcard_when_connect = []
@@ -3261,7 +3261,7 @@ class Interface:
 			try:
 				import gtkspell
 				spell = gtkspell.Spell(tv, lang)
-			except:
+			except Exception:
 				dialogs.AspellDictError(lang)
 
 		if gajim.config.get('soundplayer') == '':

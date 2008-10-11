@@ -54,7 +54,7 @@ USER_HAS_GROWL = True
 try:
 	import osx.growler
 	osx.growler.init()
-except:
+except Exception:
 	USER_HAS_GROWL = False
 
 def get_show_in_roster(event, account, contact, session=None):
@@ -313,7 +313,7 @@ def notify(event, jid, account, parameters, advanced_notif_num=None):
 			'command')
 		try:
 			helpers.exec_command(command)
-		except:
+		except Exception:
 			pass
 
 def popup(event_type, jid, account, msg_type='', path_to_image=None,

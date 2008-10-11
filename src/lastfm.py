@@ -75,7 +75,7 @@ class LastFM:
 			xmldocument = urlopen(self.LASTFM_FORMAT_URL % self._username,
 				self._proxies)
 			xmltree = minidom.parse(xmldocument)
-		except:
+		except Exception:
 			print 'Error parsing XML from Last.fm...'
 			return False
 

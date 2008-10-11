@@ -69,7 +69,7 @@ def torf(cond, tv, fv):
 def gattr(obj, attr, default=None):
 	try:
 		return getattr(obj, attr)
-	except:
+	except Exception:
 		return default
 
 class SSLWrapper:
@@ -368,7 +368,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		self.remove_timeout() 
 		try:
 			self._owner.disconnected()
-		except:
+		except Exception:
 			pass
 		self.idlequeue.unplug_idle(self.fd)
 		sock = getattr(self, '_sock', None)
@@ -652,7 +652,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		retval = None
 		try:
 			retval = gattr(self._owner, 'name')
-		except:
+		except Exception:
 			pass
 		if retval: return retval
 		return self.getHost()
@@ -768,7 +768,7 @@ class NonBlockingTLS(PlugIn):
 		cacerts = os.path.join(common.gajim.DATA_DIR, 'other', 'cacerts.pem')
 		try:
 			tcpsock._sslContext.load_verify_locations(cacerts)
-		except:
+		except Exception:
 			log.warning('Unable to load SSL certificats from file %s' % \
 				os.path.abspath(cacerts))
 		# load users certs
@@ -811,7 +811,7 @@ class NonBlockingTLS(PlugIn):
 			self.starttls='in progress'
 			tcpsock._sslObj.do_handshake()
 		# Errors are handeled in _do_receive function
-		except:
+		except Exception:
 			pass
 		tcpsock._sslObj.setblocking(False)
 		log.debug("Synchronous handshake completed")
@@ -843,7 +843,7 @@ class NonBlockingTLS(PlugIn):
 			self._owner.Connection.ssl_cert_pem = OpenSSL.crypto.dump_certificate(
 				OpenSSL.crypto.FILETYPE_PEM, cert)
 			return True
-		except:
+		except Exception:
 			log.error("Exception caught in _ssl_info_callback:", exc_info=True)
 			traceback.print_exc() # Make sure something is printed, even if log is disabled.
 
@@ -920,7 +920,7 @@ class NBHTTPPROXYsocket(NonBlockingTcp):
 		self.reply = reply.replace('\r', '')
 		try: 
 			proto, code, desc = reply.split('\n')[0].split(' ', 2)
-		except: 
+		except Exception: 
 			log.error("_on_headers_sent:", exc_info=True)
 			#traceback.print_exc()
 			self.on_proxy_failure('Invalid proxy reply')

@@ -59,7 +59,7 @@ else:
 									'org.freedesktop.NetworkManager',
 									'org.freedesktop.NetworkManager',
 									'/org/freedesktop/NetworkManager')
-	except:
+	except Exception:
 		pass
 
 # vim: se ts=3:

@@ -69,7 +69,7 @@ try:
 	import winsound # windows-only built-in module for playing wav
 	import win32api
 	import win32con
-except:
+except Exception:
 	pass
 
 special_groups = (_('Transports'), _('Not in Roster'), _('Observers'), _('Groupchats'))
@@ -447,7 +447,7 @@ def launch_browser_mailer(kind, uri):
 	if os.name == 'nt':
 		try:
 			os.startfile(uri) # if pywin32 is installed we open
-		except:
+		except Exception:
 			pass
 
 	else:
@@ -474,14 +474,14 @@ def launch_browser_mailer(kind, uri):
 		command = build_command(command, uri)
 		try:
 			exec_command(command)
-		except:
+		except Exception:
 			pass
 
 def launch_file_manager(path_to_open):
 	if os.name == 'nt':
 		try:
 			os.startfile(path_to_open) # if pywin32 is installed we open
-		except:
+		except Exception:
 			pass
 	else:
 		if gajim.config.get('openwith') == 'gnome-open':
@@ -500,7 +500,7 @@ def launch_file_manager(path_to_open):
 		command = build_command(command, path_to_open)
 		try:
 			exec_command(command)
-		except:
+		except Exception:
 			pass
 
 def play_sound(event):
@@ -524,7 +524,7 @@ def play_sound_file(path_to_soundfile):
 		try:
 			winsound.PlaySound(path_to_soundfile,
 				winsound.SND_FILENAME|winsound.SND_ASYNC)
-		except:
+		except Exception:
 			pass
 	elif os.name == 'posix':
 		if gajim.config.get('soundplayer') == '':
@@ -660,7 +660,7 @@ def ensure_utf8_string(string):
 	'''make sure string is in UTF-8'''
 	try:
 		string = decode_string(string).encode('utf-8')
-	except:
+	except Exception:
 		pass
 	return string
 
@@ -702,7 +702,7 @@ r'Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders')
 		try:
 			val = str(win32api.RegQueryValueEx(rkey, varname)[0])
 			val = win32api.ExpandEnvironmentStrings(val) # expand using environ
-		except:
+		except Exception:
 			pass
 	finally:
 		win32api.RegCloseKey(rkey)

@@ -632,7 +632,7 @@ _('Connection with peer cannot be established.'))
 			iter = None
 			try:
 				iter = self.model.get_iter(row)
-			except:
+			except Exception:
 				self.tooltip.hide_tooltip()
 				return
 			sid = self.model[iter][C_SID].decode('utf-8')

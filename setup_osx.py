@@ -82,7 +82,7 @@ def check(ret):
 def force(func):
 	try:
 		func()
-	except:
+	except Exception:
 		pass
 	return
 

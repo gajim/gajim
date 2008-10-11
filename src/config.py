@@ -48,7 +48,7 @@ import dataforms_widget
 try:
 	import gtkspell
 	HAS_GTK_SPELL = True
-except:
+except Exception:
 	HAS_GTK_SPELL = False
 
 from common import helpers
@@ -618,7 +618,7 @@ class PreferencesWindow:
 				if isinstance(ctrl, chat_control.ChatControlBase):
 					try:
 						spell_obj = gtkspell.get_from_text_view(ctrl.msg_textview)
-					except:
+					except Exception:
 						spell_obj = None
 
 					if not spell_obj:
@@ -630,7 +630,7 @@ class PreferencesWindow:
 				if isinstance(ctrl, chat_control.ChatControlBase):
 					try:
 						spell_obj = gtkspell.get_from_text_view(ctrl.msg_textview)
-					except:
+					except Exception:
 						spell_obj = None
 					if spell_obj:
 						spell_obj.detach()
@@ -2014,7 +2014,7 @@ class AccountsWindow:
 		custom_port = widget.get_text()
 		try:
 			custom_port = int(custom_port)
-		except:
+		except Exception:
 			if not widget.is_focus():
 				dialogs.ErrorDialog(_('Invalid entry'),
 					_('Custom port must be a port number.'))
@@ -3160,7 +3160,7 @@ class AccountCreationWizardWindow:
 			custom_port = self.xml.get_widget('custom_port_entry').get_text()
 			try:
 				custom_port = int(custom_port)
-			except:
+			except Exception:
 				dialogs.ErrorDialog(_('Invalid entry'),
 					_('Custom port must be a port number.'))
 				return

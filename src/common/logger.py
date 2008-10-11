@@ -369,7 +369,7 @@ class Logger:
 			self.cur.execute(
 				'SELECT message_id from unread_messages')
 			results = self.cur.fetchall()
-		except:
+		except Exception:
 			pass
 		for message in results:
 			msg_id = message[0]

@@ -45,7 +45,7 @@ AGENT_REMOVED = 'agent_removed'
 HAS_IDLE = True
 try:
 	import idle
-except:
+except Exception:
 	gajim.log.debug(_('Unable to load idle module'))
 	HAS_IDLE = False
 
@@ -226,7 +226,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 
 		try:
 			streamhost =  query.getTag('streamhost-used')
-		except: # this bytestream result is not what we need
+		except Exception: # this bytestream result is not what we need
 			pass
 		id = real_id[3:]
 		if id in self.files_props:
@@ -382,7 +382,7 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream, connecti
 
 		try:
 			idle.init()
-		except:
+		except Exception:
 			HAS_IDLE = False
 
 	def _messageCB(self, ip, con, msg):
@@ -429,7 +429,7 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream, connecti
 
 			try:
 				msg = session.decrypt_stanza(msg)
-			except:
+			except Exception:
 				self.dispatch('FAILED_DECRYPT', (frm, tim))
 
 		msgtxt = msg.getBody()

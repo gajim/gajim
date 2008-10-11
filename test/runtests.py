@@ -23,7 +23,7 @@ for o, a in opts:
 	elif o in ('-v', '--verbose'):
 		try:
 			verbose = int(a)
-		except:
+		except Exception:
 			print 'verbose must be a number >= 0'
 			sys.exit(2)
 

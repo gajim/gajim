@@ -636,7 +636,7 @@ class MessageWindow(object):
 			jid = key
 			try:
 				return self._controls[acct][jid]
-			except:
+			except Exception:
 				return None
 		else:
 			page_num = key

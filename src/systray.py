@@ -43,10 +43,10 @@ HAS_SYSTRAY_CAPABILITIES = True
 
 try:
 	import egg.trayicon as trayicon	# gnomepythonextras trayicon
-except:
+except Exception:
 	try:
 		import trayicon # our trayicon
-	except:
+	except Exception:
 		gajim.log.debug('No trayicon module available')
 		HAS_SYSTRAY_CAPABILITIES = False
 

@@ -164,17 +164,17 @@ class FeaturesWindow:
 		try:
 			import OpenSSL.SSL
 			import OpenSSL.crypto
-		except:
+		except Exception:
 			return False
 		return True
 
 	def zeroconf_available(self):
 		try:
 			import avahi
-		except:
+		except Exception:
 			try:
 				import pybonjour
-			except:
+			except Exception:
 				return False
 		return True
 
@@ -201,7 +201,7 @@ class FeaturesWindow:
 			return False
 		try:
 			import gnome.ui
-		except:
+		except Exception:
 			return False
 		return True
 
@@ -210,7 +210,7 @@ class FeaturesWindow:
 			return False
 		try:
 			import gnomekeyring
-		except:
+		except Exception:
 			return False
 		return True
 
@@ -222,7 +222,7 @@ class FeaturesWindow:
 			return False
 		try:
 			import gtkspell
-		except:
+		except Exception:
 			return False
 		return True
 
@@ -232,7 +232,7 @@ class FeaturesWindow:
 		elif sys.platform == 'darwin':
 			try:
 				import osx.growler
-			except:
+			except Exception:
 				return False
 			return True
 		from common import dbus_support
@@ -240,7 +240,7 @@ class FeaturesWindow:
 			return True
 		try:
 			import pynotify
-		except:
+		except Exception:
 			return False
 		return True
 
@@ -250,7 +250,7 @@ class FeaturesWindow:
 			return True
 		try:
 			import systray
-		except:
+		except Exception:
 			return False
 		return True
 
@@ -280,14 +280,14 @@ class FeaturesWindow:
 			p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'],
 				cwd=gettempdir())
 			exitcode = p.wait()
-		except:
+		except Exception:
 			exitcode = 1
 		if exitcode == 0:
 			try:
 				p = Popen(['dvipng', '-bg', 'white', '-T', 'tight',
 					tmpfile + '.dvi', '-o', tmpfile + '.png'], cwd=gettempdir())
 				exitcode = p.wait()
-			except:
+			except Exception:
 				exitcode = 1
 		extensions = ['.tex', '.log', '.aux', '.dvi', '.png']
 		for ext in extensions:
@@ -306,7 +306,7 @@ class FeaturesWindow:
 	def docutils_available(self):
 		try:
 			import docutils
-		except:
+		except Exception:
 			return False
 		return True
 

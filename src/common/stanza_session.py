@@ -339,7 +339,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 		try:
 			parsed = xmpp.Node(node='<node>' + plaintext + '</node>')
-		except:
+		except Exception:
 			raise exceptions.DecryptionError, 'decrypted <data/> not parseable as XML'
 
 		for child in parsed.getChildren():
