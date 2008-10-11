@@ -212,25 +212,22 @@ class IterableIPShell:
     '''
     split_line = self.complete_sep.split(line)
     possibilities = self.IP.complete(split_line[-1])
+
+    try:
+        __builtins__.all
+    except AttributeError:
+        def all(iterable):
+            for element in iterable:
+                if not element:
+                    return False
+            return True
+
+    def common_prefix(seq):
+        """Returns the common prefix of a sequence of strings"""
+        return "".join(c for i, c in enumerate(seq[0])
+                if all(s.startswith(c, i) for s in seq))
     if possibilities:
-      def _commonPrefix(str1, str2):
-        '''
-        Reduction function. returns common prefix of two given strings.
-        
-        @param str1: First string.
-        @type str1: string
-        @param str2: Second string
-        @type str2: string
-        
-        @return: Common prefix to both strings.
-        @rtype: string
-        '''
-        for i in range(len(str1)):
-          if not str2.startswith(str1[:i+1]):
-            return str1[:i]
-        return str1
-      common_prefix = reduce(_commonPrefix, possibilities)
-      completed = line[:-len(split_line[-1])]+common_prefix
+      completed = line[:-len(split_line[-1])]+common_prefix(possibilities)
     else:
       completed = line
     return completed, possibilities

@@ -208,7 +208,7 @@ class IdleCommand(IdleObject):
 	
 	def _compose_command_line(self):
 		''' return one line representation of command and its arguments '''
-		return  reduce(lambda left, right: left + ' ' + right,  self._compose_command_args())
+		return ' '.join(self._compose_command_args())
 	
 	def wait_child(self):
 		if self.pipe.poll() is None:

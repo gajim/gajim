@@ -609,7 +609,7 @@ class Socks5:
 				struct.unpack('!BBBB', buff[:4])
 			if host_type == 0x01:
 				host_arr = struct.unpack('!iiii', buff[4:8])
-				host, = reduce(lambda e1, e2: str(e1) + "." + str(e2), host_arr)
+				host, = '.'.join(str(s) for s in host_arr)
 				host_len = len(host)
 			elif host_type == 0x03:
 				host_len,  = struct.unpack('!B' , buff[4])

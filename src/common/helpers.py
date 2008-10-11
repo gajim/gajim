@@ -770,8 +770,7 @@ def get_random_string_16():
 	rng.extend(range(48, 57))
 	char_sequence = map(lambda e:chr(e), rng)
 	from random import sample
-	return reduce(lambda e1, e2: e1 + e2, 
-			sample(char_sequence, 16))
+	return ''.join(sample(char_sequence, 16))
 	
 def get_os_info():
 	if os.name == 'nt':
@@ -946,7 +945,7 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
 		if lines:
 			lines = map(lambda e: _cut_if_long(e), lines)
 	if lines:
-		reduced_text = reduce(lambda e, e1: e + '\n' + e1, lines)
+		reduced_text = '\n'.join(lines)
 		if reduced_text != text:
 			reduced_text += '...'
 	else:

@@ -1570,8 +1570,7 @@ class Interface:
 					# 'Subject' and 'Snippet' field
 					if cnt >=5:
 						break
-					senders = reduce(lambda b, a: a + ',\n     ' + b,
-						gmessage['From'])
+					senders = ',\n     '.join(reversed(gmessage['From']))
 					text += _('\n\nFrom: %(from_address)s\nSubject: %(subject)s\n%(snippet)s') % \
 						{'from_address': senders, 'subject': gmessage['Subject'],
 						'snippet': gmessage['Snippet']} 
