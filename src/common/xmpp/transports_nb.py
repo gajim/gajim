@@ -850,7 +850,7 @@ class NonBlockingTLS(PlugIn):
 	def StartTLSHandler(self, conn, starttls):
 		''' Handle server reply if TLS is allowed to process. Behaves accordingly.
 			Used internally.'''
-		if starttls.getNamespace() <> NS_TLS: 
+		if starttls.getNamespace() != NS_TLS: 
 			return
 		self.starttls = starttls.getName()
 		if self.starttls == 'failure':
@@ -925,7 +925,7 @@ class NBHTTPPROXYsocket(NonBlockingTcp):
 			#traceback.print_exc()
 			self.on_proxy_failure('Invalid proxy reply')
 			return
-		if code <> '200':
+		if code != '200':
 			self.DEBUG('Invalid proxy reply: %s %s %s' % (proto, code, desc),'error')
 			self._owner.disconnected()
 			self.on_proxy_failure('Invalid proxy reply')

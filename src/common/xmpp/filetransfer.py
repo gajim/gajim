@@ -147,7 +147,7 @@ class IBB(PlugIn):
         else:
             stream=self._streams[sid]
             if not data: err=ERR_BAD_REQUEST
-            elif seq<>stream['seq']: err=ERR_UNEXPECTED_REQUEST
+            elif seq!=stream['seq']: err=ERR_UNEXPECTED_REQUEST
             else:
                 self.DEBUG('Successfull receive sid->%s %s+%s bytes'%(sid,stream['fp'].tell(),len(data)),'ok')
                 stream['seq']+=1

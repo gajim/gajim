@@ -238,9 +238,9 @@ class Session:
         self.sendnow(text+'>')
         self.set_stream_state(STREAM__OPENED)
         if self.TYP=='client': return
-        if tag<>'stream': return self.terminate_stream(STREAM_INVALID_XML)
-        if ns<>NS_STREAMS: return self.terminate_stream(STREAM_INVALID_NAMESPACE)
-        if self.Stream.xmlns<>self.xmlns: return self.terminate_stream(STREAM_BAD_NAMESPACE_PREFIX)
+        if tag!='stream': return self.terminate_stream(STREAM_INVALID_XML)
+        if ns!=NS_STREAMS: return self.terminate_stream(STREAM_INVALID_NAMESPACE)
+        if self.Stream.xmlns!=self.xmlns: return self.terminate_stream(STREAM_BAD_NAMESPACE_PREFIX)
         if 'to' not in attrs: return self.terminate_stream(STREAM_IMPROPER_ADDRESSING)
         if attrs['to'] not in self._owner.servernames: return self.terminate_stream(STREAM_HOST_UNKNOWN)
         self.ourname=attrs['to'].lower()
@@ -320,7 +320,7 @@ class Session:
 
     def stop_feature(self,f):
         """ Declare some feature as "negotiated" to allow other features start negotiating. """
-        if self.feature_in_process<>f: raise "Stopping feature %s instead of %s !"%(f,self.feature_in_process)
+        if self.feature_in_process!=f: raise "Stopping feature %s instead of %s !"%(f,self.feature_in_process)
         self.feature_in_process=None
 
     def set_socket_state(self,newstate):

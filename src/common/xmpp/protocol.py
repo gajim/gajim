@@ -372,7 +372,7 @@ class Protocol(Node):
         errtag=self.getTag('error')
         if errtag:
             for tag in errtag.getChildren():
-                if tag.getName()<>'text': return tag.getName()
+                if tag.getName()!='text': return tag.getName()
             return errtag.getData()
     def getErrorMsg(self):
         """ Return the textual description of the error (if present) or the error condition """

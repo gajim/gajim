@@ -30,7 +30,7 @@ def ustr(what):
 	if isinstance(what, unicode): return what
 	try: r=what.__str__()
 	except AttributeError: r=str(what)
-	if type(r)<>type(u''): return unicode(r,ENCODING)
+	if type(r)!=type(u''): return unicode(r,ENCODING)
 	return r
 
 class Node(object):
@@ -214,10 +214,10 @@ class Node(object):
 			Returns the list of nodes found. """
 		nodes=[]
 		for node in self.kids:
-			if namespace and namespace<>node.getNamespace(): continue
+			if namespace and namespace!=node.getNamespace(): continue
 			if node.getName() == name:
 				for key in attrs.keys():
-				   if key not in node.attrs or node.attrs[key]<>attrs[key]: break
+				   if key not in node.attrs or node.attrs[key]!=attrs[key]: break
 				else: nodes.append(node)
 			if one and nodes: return nodes[0]
 		if not one: return nodes

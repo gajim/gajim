@@ -104,7 +104,7 @@ class CommonClient:
         # Who initiated this client
         # Used to register the EventDispatcher
         self._caller=caller
-        if debug and type(debug)<>list: debug=['always', 'nodebuilder']
+        if debug and type(debug)!=list: debug=['always', 'nodebuilder']
         self._DEBUG=Debug.Debug(debug)
         self.DEBUG=self._DEBUG.Show
         self.debug_flags=self._DEBUG.debug_flags
@@ -203,7 +203,7 @@ class Client(CommonClient):
             If you want to disable tls/ssl support completely, set it to 0.
             Example: connect(('192.168.5.5',5222),{'host':'proxy.my.net','port':8080,'user':'me','password':'secret'})
             Returns '' or 'tcp' or 'tls', depending on the result."""
-        if not CommonClient.connect(self,server,proxy,secure,use_srv) or secure<>None and not secure: return self.connected
+        if not CommonClient.connect(self,server,proxy,secure,use_srv) or secure!=None and not secure: return self.connected
         transports.TLS().PlugIn(self)
         if 'version' not in self.Dispatcher.Stream._document_attrs or not self.Dispatcher.Stream._document_attrs['version']=='1.0': return self.connected
         while not self.Dispatcher.Stream.features and self.Process(): pass      # If we get version 1.0 stream the features tag MUST BE presented

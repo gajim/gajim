@@ -152,7 +152,7 @@ class SASL(PlugIn):
 
     def SASLHandler(self,conn,challenge):
         """ Perform next SASL auth step. Used internally. """
-        if challenge.getNamespace()<>NS_SASL: return
+        if challenge.getNamespace()!=NS_SASL: return
         if challenge.getName()=='failure':
             self.startsasl='failure'
             try: reason=challenge.getChildren()[0]

@@ -139,7 +139,7 @@ class TCPsocket(PlugIn):
         """ Writes raw outgoing data. Blocks until done.
             If supplied data is unicode string, encodes it to utf-8 before send."""
         if isinstance(raw_data, unicode): raw_data = raw_data.encode('utf-8')
-        elif type(raw_data)<>type(str): raw_data = ustr(raw_data).encode('utf-8')
+        elif type(raw_data)!=type(str): raw_data = ustr(raw_data).encode('utf-8')
         try:
             self._send(raw_data)
             # Avoid printing messages that are empty keepalive packets.
@@ -207,7 +207,7 @@ class HTTPPROXYsocket(TCPsocket):
             return
         try: proto,code,desc=reply.split('\n')[0].split(' ',2)
         except: raise error('Invalid proxy reply')
-        if code<>'200':
+        if code!='200':
             self.DEBUG('Invalid proxy reply: %s %s %s'%(proto,code,desc),'error')
             self._owner.disconnected()
             return
@@ -278,7 +278,7 @@ class TLS(PlugIn):
     def StartTLSHandler(self, conn, starttls):
         """ Handle server reply if TLS is allowed to process. Behaves accordingly.
             Used internally."""
-        if starttls.getNamespace()<>NS_TLS: return
+        if starttls.getNamespace()!=NS_TLS: return
         self.starttls=starttls.getName()
         if self.starttls=='failure':
             self.DEBUG("Got starttls response: "+self.starttls,'error')

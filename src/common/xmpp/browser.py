@@ -112,8 +112,8 @@ class Browser(PlugIn):
         if node is None: node=[None]
         else: node=node.replace('/',' /').split('/')
         for i in node:
-            if i<>'' and i in cur: cur=cur[i]
-            elif set and i<>'': cur[i]={dict:cur,str:i}; cur=cur[i]
+            if i!='' and i in cur: cur=cur[i]
+            elif set and i!='': cur[i]={dict:cur,str:i}; cur=cur[i]
             elif set or '' in cur: return cur,''
             else: return None,None
         if 1 in cur or set: return cur,1

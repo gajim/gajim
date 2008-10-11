@@ -117,7 +117,7 @@ class Dispatcher(PlugIn):
 		self._owner.send("<?xml version='1.0'?>%s>" % str(self._metastream)[:-2])
 
 	def _check_stream_start(self, ns, tag, attrs):
-		if ns<>NS_STREAMS or tag<>'stream':
+		if ns!=NS_STREAMS or tag!='stream':
 			raise ValueError('Incorrect stream start: (%s,%s). Terminating.' % (tag, ns))
 
 	def ProcessNonBlocking(self, data=None):
@@ -343,7 +343,7 @@ class Dispatcher(PlugIn):
 				try: 
 					cb(session,stanza,**args)
 				except Exception, typ:
-					if typ.__class__.__name__ <>'NodeProcessed': raise
+					if typ.__class__.__name__ !='NodeProcessed': raise
 			else:
 				session.DEBUG("Expected stanza arrived!",'ok')
 				session._expected[ID]=stanza
@@ -354,7 +354,7 @@ class Dispatcher(PlugIn):
 				try:
 					handler['func'](session,stanza)
 				except Exception, typ:
-					if typ.__class__.__name__ <> 'NodeProcessed':
+					if typ.__class__.__name__ != 'NodeProcessed':
 						self._pendingExceptions.insert(0, sys.exc_info())
 						return
 					user=0
