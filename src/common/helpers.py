@@ -1192,26 +1192,14 @@ def sort_identities_func(i1, i2):
 		return -1
 	if cat1 > cat2:
 		return 1
-	if 'type' in i1:
-		type1 = i1['type']
-	else:
-		type1 = ''
-	if 'type' in i2:
-		type2 = i2['type']
-	else:
-		type2 = ''
+	type1 = i1.get('type', '')
+	type2 = i2.get('type', '')
 	if type1 < type2:
 		return -1
 	if type1 > type2:
 		return 1
-	if 'xml:lang' in i1:
-		lang1 = i1['xml:lang']
-	else:
-		lang1 = ''
-	if 'xml:lang' in i2:
-		lang2 = i2['xml:lang']
-	else:
-		lang2 = ''
+	lang1 = i1.get('xml:lang', '')
+	lang2 = i2.get('xml:lang', '')
 	if lang1 < lang2:
 		return -1
 	if lang1 > lang2:
@@ -1234,18 +1222,9 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 	identities.sort(cmp=sort_identities_func)
 	for i in identities:
 		c = i['category']
-		if 'type' in i:
-			type_ = i['type']
-		else:
-			type_ = ''
-		if 'xml:lang' in i:
-			lang = i['xml:lang']
-		else:
-			lang = ''
-		if 'name' in i:
-			name = i['name']
-		else:
-			name = ''
+		type_ = i.get('type', '')
+		lang = i.get('xml:lang', '')
+		name = i.get('name', '')
 		S += '%s/%s/%s/%s<' % (c, type_, lang, name)
 	features.sort()
 	for f in features:

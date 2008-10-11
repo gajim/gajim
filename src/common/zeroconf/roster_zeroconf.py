@@ -68,15 +68,10 @@ class Roster:
 		self._data[jid]['host'] = host
 		self._data[jid]['port'] = port
 		txt_dict = self.zeroconf.txt_array_to_dict(txt)
-		if 'status' in txt_dict:
-			status = txt_dict['status']
-		else:
-			status = ''
+		status = txt_dict.get('status', '')
 		if not status:
 			status = 'avail'
-		nm = ''
-		if '1st' in txt_dict:
-			nm = txt_dict['1st']
+		nm = txt_dict.get('1st', '')
 		if 'last' in txt_dict:
 			if nm != '':
 				nm += ' '

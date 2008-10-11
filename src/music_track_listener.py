@@ -62,7 +62,8 @@ class MusicTrackListener(gobject.GObject):
 		bus.add_signal_receiver(self._mpris_playing_changed_cb, 'StatusChange',
 			'org.freedesktop.MediaPlayer')
 		bus.add_signal_receiver(self._player_name_owner_changed,
-			'NameOwnerChanged', 'org.freedesktop.DBus', arg0='org.freedesktop.MediaPlayer')
+			'NameOwnerChanged', 'org.freedesktop.DBus',
+			arg0='org.freedesktop.MediaPlayer')
 
 		## Muine
 		bus.add_signal_receiver(self._muine_music_track_change_cb, 'SongChanged',
@@ -84,7 +85,8 @@ class MusicTrackListener(gobject.GObject):
 		bus.add_signal_receiver(self._banshee_state_changed_cb,
 			'StateChanged', 'org.bansheeproject.Banshee.PlayerEngine')
 		bus.add_signal_receiver(self._player_name_owner_changed,
-			'NameOwnerChanged', 'org.freedesktop.DBus', arg0='org.bansheeproject.Banshee')
+			'NameOwnerChanged', 'org.freedesktop.DBus',
+			arg0='org.bansheeproject.Banshee')
 
 	def _player_name_owner_changed(self, name, old, new):
 		if not new:
@@ -102,27 +104,10 @@ class MusicTrackListener(gobject.GObject):
 
 	def _mpris_properties_extract(self, song):
 		info = MusicTrackInfo()
-
-		if 'title' in song:
-			info.title = song['title']
-		else:
-			info.title = ''
-
-		if 'album' in song:
-			info.album = song['album']
-		else:
-			info.album = ''
-
-		if 'artist' in song:
-			info.artist = song['artist']
-		else:
-			info.artist = ''
-
-		if 'length' in song:
-			info.duration = int(song['length'])
-		else:
-			info.duration = 0
-
+		info.title = song.get('title', '')
+		info.album = song.get('album', '')
+		info.artist = song.get('artist', '')
+		info.duration = int(song.get('length', 0))
 		return info
 
 	def _mpris_playing_changed_cb(self, playing):
@@ -169,9 +154,11 @@ class MusicTrackListener(gobject.GObject):
 	def _banshee_state_changed_cb(self, state):
 		if state == 'playing':
 			bus = dbus.SessionBus()
-			banshee = bus.get_object("org.bansheeproject.Banshee", "/org/bansheeproject/Banshee/PlayerEngine")
+			banshee = bus.get_object('org.bansheeproject.Banshee',
+				'/org/bansheeproject/Banshee/PlayerEngine')
 			currentTrack = banshee.GetCurrentTrack()
-			self._last_playing_music = self._banshee_properties_extract(currentTrack) 
+			self._last_playing_music = self._banshee_properties_extract(
+				currentTrack) 
 			self.emit('music-track-changed', self._last_playing_music)
 		elif state == 'paused':
 			self.emit('music-track-changed', None)
@@ -239,7 +226,7 @@ class MusicTrackListener(gobject.GObject):
 if __name__ == '__main__':
 	def music_track_change_cb(listener, music_track_info):
 		if music_track_info is None:
-			print "Stop!"
+			print 'Stop!'
 		else:
 			print music_track_info.title
 	listener = MusicTrackListener.get()

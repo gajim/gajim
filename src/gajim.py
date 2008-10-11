@@ -1117,10 +1117,7 @@ class Interface:
 		# ('VCARD', account, data)
 		'''vcard holds the vcard data'''
 		jid = vcard['jid']
-		resource = ''
-		if 'resource' in vcard:
-			resource = vcard['resource']
-
+		resource = vcard.get('resource', '')
 		fjid = jid + '/' + str(resource)
 
 		# vcard window
@@ -1806,9 +1803,7 @@ class Interface:
 					gajim.gc_connected[account][room_jid]:
 				continue
 			nick = gc_control.nick
-			password = ''
-			if room_jid in gajim.gc_passwords:
-				password = gajim.gc_passwords[room_jid]
+			password = gajim.gc_passwords.get(room_jid, '')
 			gajim.connections[account].join_gc(nick, room_jid, password)
 
 	def handle_event_metacontacts(self, account, tags_list):
@@ -2203,14 +2198,12 @@ class Interface:
 		# Do we have a queue?
 		jid = gajim.get_jid_without_resource(jid)
 		no_queue = len(gajim.events.get_events(account, jid)) == 0
-		event_type = None
 		# type_ can be gc-invitation file-send-error file-error file-request-error
 		# file-request file-completed file-stopped
 		# event_type can be in advancedNotificationWindow.events_list
 		event_types = {'file-request': 'ft_request',
 			'file-completed': 'ft_finished'}
-		if type_ in event_types:
-			event_type = event_types[type_]
+		event_type = event_types.get(type_)
 		show_in_roster = notify.get_show_in_roster(event_type, account, jid)
 		show_in_systray = notify.get_show_in_systray(event_type, account, jid)
 		event = gajim.events.create_event(type_, event_args,
@@ -3038,7 +3031,6 @@ class Interface:
 			return True
 		window.connect('delete_event',on_delete)
 		view.updateNamespace({'gajim': gajim})
-		gajim.ipython_window = window
 
 	def __init__(self):
 		gajim.interface = self
@@ -3291,6 +3283,7 @@ class Interface:
 			gobject.timeout_add(200, self.process_connections)
 		gobject.timeout_add_seconds(gajim.config.get(
 			'check_idle_every_foo_seconds'), self.read_sleepy)
+		self.create_ipython_window()
 
 if __name__ == '__main__':
 	def sigint_cb(num, stack):

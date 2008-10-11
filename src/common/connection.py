@@ -324,10 +324,7 @@ class Connection(ConnectionHandlers):
 						errnum = -1 # we don't have an errnum
 					ssl_msg = ''
 					if errnum > 0:
-						if errnum in ssl_error:
-							ssl_msg = ssl_error[errnum]
-						else:
-							ssl_msg = _('Unknown SSL error: %d') % errnum
+						ssl_msg = ssl_error.get(errnum, _('Unknown SSL error: %d') % errnum)
 					ssl_cert = ''
 					if hasattr(self.connection.Connection, 'ssl_cert_pem'):
 						ssl_cert = self.connection.Connection.ssl_cert_pem

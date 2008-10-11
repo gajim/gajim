@@ -2499,15 +2499,9 @@ class GroupchatConfigWindow:
 			self.start_users_dict[affiliation][jid] = users_dict[jid]
 			tv = self.affiliation_treeview[affiliation]
 			model = tv.get_model()
-			reason = ''
-			if 'reason' in users_dict[jid]:
-				reason = users_dict[jid]['reason']
-			nick = ''
-			if 'nick' in users_dict[jid]:
-				nick = users_dict[jid]['nick']
-			role = ''
-			if 'role' in users_dict[jid]:
-				role = users_dict[jid]['role']
+			reason = users_dict[jid].get('reason', '')
+			nick = users_dict[jid].get('nick', '')
+			role = users_dict[jid].get('role', '')
 			model.append((jid, reason, nick, role))
 
 	def on_data_form_window_destroy(self, widget):

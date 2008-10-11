@@ -582,9 +582,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		to the given property list.
 		'''
 		if 'mood' in contact.mood:
-			mood = contact.mood['mood'].strip()
-			if mood in MOODS:
-				mood = MOODS[mood]
+			mood = MOODS.get(mood, contact.mood['mood'].strip())
 			mood = gobject.markup_escape_text(mood)
 			mood_string = _('Mood:') + ' <b>%s</b>' % mood
 			if 'text' in contact.mood \
@@ -679,9 +677,7 @@ class FileTransfersTooltip(BaseTooltip):
 		properties.append((_('Type: '), type))
 		properties.append((actor, gobject.markup_escape_text(name)))
 		
-		transfered_len = 0
-		if 'received-len' in file_props:
-			transfered_len = file_props['received-len']
+		transfered_len = file_props.get('received-len', 0)
 		properties.append((_('Transferred: '), helpers.convert_bytes(transfered_len)))
 		status = '' 
 		if 'started' not in file_props or not file_props['started']:

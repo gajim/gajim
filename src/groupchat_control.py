@@ -1891,9 +1891,7 @@ class GroupchatControl(ChatControlBase):
 
 	def _on_bookmark_room_menuitem_activate(self, widget):
 		'''bookmark the room, without autojoin and not minimized'''
-		password = ''
-		if self.room_jid in gajim.gc_passwords:
-			password = gajim.gc_passwords[self.room_jid]
+		password = gajim.gc_passwords.get(self.room_jid, '')
 		gajim.interface.add_gc_bookmark(self.account, self.name, self.room_jid, \
 			'0', '0', password, self.nick)
 

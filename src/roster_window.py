@@ -1568,15 +1568,9 @@ class RosterWindow:
 			cshow = {'chat':0, 'online': 1, 'away': 2, 'xa': 3, 'dnd': 4,
 				'invisible': 5, 'offline': 6, 'not in roster': 7, 'error': 8}
 			s = self.get_show(lcontact1)
-			if s in cshow:
-				show1 = cshow[s]
-			else:
-				show1 = 9
+			show1 = cshow.get(s, 9)
 			s = self.get_show(lcontact2)
-			if s in cshow:
-				show2 = cshow[s]
-			else:
-				show2 = 9
+			show2 = cshow.get(s, 9)
 			removing1 = False
 			removing2 = False
 			if show1 == 6 and jid1 in gajim.to_be_removed[account1]:
