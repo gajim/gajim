@@ -442,9 +442,9 @@ class MessageWindow(object):
 		window_mode = gajim.interface.msg_win_mgr.mode
 		if window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE:
 			# Show the plural form since number of tabs > 1
-			if self.type == 'chat':
+			if self.type_ == 'chat':
 				label = _('Chats')
-			elif self.type == 'gc':
+			elif self.type_ == 'gc':
 				label = _('Group Chats')
 			else:
 				label = _('Private Chats')
