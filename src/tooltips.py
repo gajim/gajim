@@ -581,7 +581,8 @@ class RosterTooltip(NotificationAreaTooltip):
 		to the given property list.
 		'''
 		if 'mood' in contact.mood:
-			mood = MOODS.get(mood, contact.mood['mood'].strip())
+			mood = contact.mood['mood'].strip()
+			mood = MOODS.get(mood, mood)
 			mood = gobject.markup_escape_text(mood)
 			mood_string = _('Mood:') + ' <b>%s</b>' % mood
 			if 'text' in contact.mood \
