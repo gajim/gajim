@@ -1204,7 +1204,7 @@ class Connection(ConnectionHandlers):
 			ji = gajim.get_jid_without_resource(jid)
 			if gajim.config.should_log(self.name, ji):
 				log_msg = msg
-				if original_message != None:
+				if original_message is not None:
 					log_msg = original_message
 				if subject:
 					log_msg = _('Subject: %(subject)s\n%(message)s') % \

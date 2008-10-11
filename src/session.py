@@ -62,7 +62,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		chatstate = None
 
 		# chatstates - look for chatstate tags in a message if not delayed
-		delayed = msg.getTag('x', namespace=common.xmpp.NS_DELAY) != None
+		delayed = msg.getTag('x', namespace=common.xmpp.NS_DELAY) is not None
 		if not delayed:
 			composing_xep = False
 			children = msg.getChildren()

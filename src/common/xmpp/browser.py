@@ -197,14 +197,14 @@ class Browser(PlugIn):
             # handler must return list: [{jid,action,node,name}]
             if type(handler)==dict: lst=handler['items']
             else: lst=handler(conn,request,'items')
-            if lst==None:
+            if lst is None:
                 conn.send(Error(request,ERR_ITEM_NOT_FOUND))
                 raise NodeProcessed
             for item in lst: q.addChild('item',item)
         elif request.getQueryNS()==NS_DISCO_INFO:
             if type(handler)==dict: dt=handler['info']
             else: dt=handler(conn,request,'info')
-            if dt==None:
+            if dt is None:
                 conn.send(Error(request,ERR_ITEM_NOT_FOUND))
                 raise NodeProcessed
             # handler must return dictionary:

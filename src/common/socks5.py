@@ -893,7 +893,7 @@ class Socks5Receiver(Socks5, IdleObject):
 	
 	def connect(self):
 		''' create the socket and plug it to the idlequeue '''
-		if self.ais == None:
+		if self.ais is None:
 			return None
 
 		for ai in self.ais:

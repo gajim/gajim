@@ -116,7 +116,7 @@ class Mock:
         raise a MockInterfaceError.
         Based on the Python 2.3.3 Reference Manual section 5.3.4: Calls.
         """
-        if self.realClassMethods == None:
+        if self.realClassMethods is None:
             return
         if name not in self.realClassMethods:
             raise MockInterfaceError("Calling mock method '%s' that was not found in the original class" % name)
@@ -411,7 +411,7 @@ def NOT(cond):
 def MATCHES(regex, *args, **kwargs):
     compiled_regex = re.compile(regex, *args, **kwargs)
     def testFn(param):
-        return compiled_regex.match(param) != None
+        return compiled_regex.match(param) is not None
     return testFn
 
 def SEQ(*sequence):

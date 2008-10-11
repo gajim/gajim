@@ -457,7 +457,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			reason += ' ' + _('Your message could not be sent.')
 			self.dispatch('MSGERROR', [jid, '-1', reason, None, None, session])
 
-		ret = self.connection.send(msg_iq, msg != None, on_ok=on_send_ok,
+		ret = self.connection.send(msg_iq, msg is not None, on_ok=on_send_ok,
 			on_not_ok=on_send_not_ok)
 		if ret == -1:
 			# Contact Offline

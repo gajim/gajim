@@ -93,7 +93,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 					self.dispatch('ERROR', (_('Wrong host'), _('The host %s you configured as the ft_add_hosts_to_send advanced option is not valid, so ignored.') % ft_host))
 		listener = gajim.socks5queue.start_listener(port,
 			sha_str, self._result_socks5_sid, file_props['sid'])
-		if listener == None:
+		if listener is None:
 			file_props['error'] = -5
 			self.dispatch('FILE_REQUEST_ERROR', (unicode(receiver), file_props,
 				''))
@@ -263,7 +263,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 				if proxyhost['jid'] == jid:
 					proxy = proxyhost
 
-		if proxy != None:
+		if proxy is not None:
 			file_props['streamhost-used'] = True
 			if 'streamhosts' not in file_props:
 				file_props['streamhosts'] = []
@@ -397,7 +397,7 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream, connecti
 		if not mtype:
 			mtype = 'normal'
 
-		if frm == None:
+		if frm is None:
 			for key in self.connection.zeroconf.contacts:
 				if ip == self.connection.zeroconf.contacts[key][zeroconf.C_ADDRESS]:
 					frm = key
