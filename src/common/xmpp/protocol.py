@@ -775,7 +775,7 @@ class DataForm(Node):
         for field in self.getTags('field'):
             name=field.getAttr('var')
             typ=field.getType()
-            if type(typ) in [type(''),type(u'')] and typ[-6:]=='-multi':
+            if type(typ) in [type(''),type(u'')] and typ.endswith('-multi'):
                 val=[]
                 for i in field.getTags('value'): val.append(i.getData())
             else: val=field.getTagData('value')

@@ -235,7 +235,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 			raise common.xmpp.NodeProcessed
 		if streamhost is None:
 			# proxy approves the activate query
-			if real_id[:3] == 'au_':
+			if real_id.startswith('au_'):
 				id = real_id[3:]
 				if 'streamhost-used' not in file_props or \
 					file_props['streamhost-used'] is False:
@@ -253,7 +253,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 			file_props['streamhost-used'] is True:
 			raise common.xmpp.NodeProcessed
 
-		if real_id[:3] == 'au_':
+		if real_id.startswith('au_'):
 			gajim.socks5queue.send_file(file_props, self.name)
 			raise common.xmpp.NodeProcessed
 

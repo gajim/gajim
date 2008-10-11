@@ -175,7 +175,7 @@ class SASL(PlugIn):
         self.DEBUG('Got challenge:'+data,'ok')
         for pair in data.split(','):
             key,value=pair.split('=', 1)
-            if value[:1]=='"' and value[-1:]=='"': value=value[1:-1]
+            if value.startswith('"') and value.endswith('"'): value=value[1:-1]
             chal[key]=value
         if 'qop' in chal and chal['qop']=='auth':
             resp={}

@@ -271,7 +271,7 @@ class SignalObject(dbus.service.Object):
 		connected_account, contact = self._get_account_and_contact(account, jid)
 
 		if connected_account:
-			if file_path[:7] == 'file://':
+			if file_path.startswith('file://'):
 				file_path=file_path[7:]
 			if os.path.isfile(file_path): # is it file?
 				gajim.interface.instances['file_transfers'].send_file(

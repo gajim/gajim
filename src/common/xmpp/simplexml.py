@@ -129,7 +129,7 @@ class Node(object):
 				cnt=cnt+1
 		if not fancy and (len(self.data)-1) >= cnt: s = s + XMLescape(self.data[cnt])
 		elif (len(self.data)-1) >= cnt: s = s + XMLescape(self.data[cnt].strip())
-		if not self.kids and s[-1:]=='>':
+		if not self.kids and s.endswith('>'):
 			s=s[:-1]+' />'
 			if fancy: s = s + "\n"
 		else:

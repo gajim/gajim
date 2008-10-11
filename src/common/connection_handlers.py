@@ -470,7 +470,7 @@ class ConnectionBytestream:
 			raise common.xmpp.NodeProcessed
 		if streamhost is None:
 			# proxy approves the activate query
-			if real_id[:3] == 'au_':
+			if real_id.startswith('au_'):
 				id = real_id[3:]
 				if 'streamhost-used' not in file_props or \
 					file_props['streamhost-used'] is False:
@@ -488,7 +488,7 @@ class ConnectionBytestream:
 			file_props['streamhost-used'] is True:
 			raise common.xmpp.NodeProcessed
 
-		if real_id[:3] == 'au_':
+		if real_id.startswith('au_'):
 			if 'stopped' in file and file_props['stopped']:
 				self.remove_transfer(file_props)
 			else:

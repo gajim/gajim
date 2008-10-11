@@ -3893,7 +3893,7 @@ class GPGInfoWindow:
 		verify_now_button.set_no_show_all(True)
 		verify_now_button.hide()
 
-		if keyID[8:] == 'MISMATCH':
+		if keyID.endswith('MISMATCH'):
 			verification_status = _('''Contact's identity NOT verified''')
 			info = _('The contact\'s key (%s) <b>does not match</b> the key '
 				'assigned in Gajim.') % keyID[:8]

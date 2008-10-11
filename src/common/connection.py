@@ -1093,7 +1093,7 @@ class Connection(ConnectionHandlers):
 		if keyID and self.USE_GPG:
 			if keyID ==  'UNKNOWN':
 				error = _('Neither the remote presence is signed, nor a key was assigned.')
-			elif keyID[8:] == 'MISMATCH':
+			elif keyID.endswith('MISMATCH'):
 				error = _('The contact\'s key (%s) does not match the key assigned in Gajim.' % keyID[:8])
 			else:
 				#encrypt

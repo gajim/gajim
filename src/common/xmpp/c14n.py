@@ -22,7 +22,7 @@ def c14n(node):
 			s = s + c14n(a)
 			cnt=cnt+1
 	if (len(node.data)-1) >= cnt: s = s + normalise_text(node.data[cnt])
-	if not node.kids and s[-1:]=='>':
+	if not node.kids and s.endswith('>'):
 		s=s[:-1]+' />'
 	else:
 		s = s + "</" + node.name + ">"
