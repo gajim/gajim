@@ -44,17 +44,18 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		self.control = None
 
-	def acknowledge_termination(self):
+	def detach_from_control(self):
 		if self.control:
+			self.control.no_autonegotiation = False
 			self.control.set_session(None)
 
+	def acknowledge_termination(self):
+		self.detach_from_control()
 		stanza_session.EncryptedStanzaSession.acknowledge_termination(self)
 
 	def terminate(self):
 		stanza_session.EncryptedStanzaSession.terminate(self)
-
-		if self.control:
-			self.control.set_session(None)
+		self.detach_from_control()
 
 	# extracts chatstate from a <message/> stanza
 	def get_chatstate(self, msg, msgtxt):
