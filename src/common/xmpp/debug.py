@@ -202,7 +202,7 @@ class Debug:
                                                    mod_name ))
             self.show(' flags defined: %s' % ','.join( self.active ))
             
-        if type(flag_show) in (type(''), type(None)):
+        if type(flag_show) in (str, type(None)):
             self.flag_show = flag_show
         else:
             msg2 = '%s' % type(flag_show )
@@ -329,7 +329,7 @@ class Debug:
         
         This code organises lst and remves dupes
         """
-        if type( items ) != type( [] ) and type( items ) != type( () ):
+        if not isinstance(items, (list, tuple)):
             return [ items ]
         r = []
         for l in items:
@@ -346,7 +346,7 @@ class Debug:
     
     def _append_unique_str( self, lst, item ):
         """filter out any dupes."""
-        if type(item) != type(''):
+        if not isinstance(item, str):
             msg2 = '%s' % item
             raise 'Invalid item type (should be string)',msg2
         if item not in lst:

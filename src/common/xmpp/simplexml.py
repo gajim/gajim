@@ -30,7 +30,7 @@ def ustr(what):
 	if isinstance(what, unicode): return what
 	try: r=what.__str__()
 	except AttributeError: r=str(what)
-	if type(r)!=type(u''): return unicode(r,ENCODING)
+	if not isinstance(r, unicode): return unicode(r,ENCODING)
 	return r
 
 class Node(object):
@@ -252,7 +252,7 @@ class Node(object):
 	def setPayload(self,payload,add=0):
 		""" Sets node payload according to the list specified. WARNING: completely replaces all node's
 			previous content. If you wish just to add child or CDATA - use addData or addChild methods. """
-		if type(payload) in (type(''),type(u'')): payload=[payload]
+		if isinstance(payload, basestring): payload=[payload]
 		if add: self.kids+=payload
 		else: self.kids=payload
 	def setTag(self, name, attrs={}, namespace=None):

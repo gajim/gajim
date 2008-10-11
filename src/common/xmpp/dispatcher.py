@@ -354,7 +354,7 @@ class Dispatcher(PlugIn):
     def send(self,stanza):
         """ Serialise stanza and put it on the wire. Assign an unique ID to it before send.
             Returns assigned ID."""
-        if type(stanza) in [type(''), type(u'')]: return self._owner_send(stanza)
+        if isinstance(stanza, basestring): return self._owner_send(stanza)
         if not isinstance(stanza,Protocol): _ID=None
         elif not stanza.getID():
             global ID

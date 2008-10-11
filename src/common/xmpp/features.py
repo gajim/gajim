@@ -114,7 +114,7 @@ def register(disp,host,info):
         attributes lastErrNode, lastErr and lastErrCode.
     """
     iq=Iq('set',NS_REGISTER,to=host)
-    if type(info)!=type({}): info=info.asDict()
+    if not isinstance(info, dict): info=info.asDict()
     for i in info.keys(): iq.setTag('query').setTagData(i,info[i])
     resp=disp.SendAndWaitForResponse(iq)
     if isResultNode(resp): return 1

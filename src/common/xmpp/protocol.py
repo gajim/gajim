@@ -389,7 +389,7 @@ class Protocol(Node):
         if code:
             if str(code) in _errorcodes.keys(): error=ErrorNode(_errorcodes[str(code)],text=error)
             else: error=ErrorNode(ERR_UNDEFINED_CONDITION,code=code,typ='cancel',text=error)
-        elif type(error) in [type(''),type(u'')]: error=ErrorNode(error)
+        elif isinstance(error, basestring): error=ErrorNode(error)
         self.setType('error')
         self.addChild(node=error)
     def setTimestamp(self,val=None):
@@ -638,7 +638,7 @@ class DataField(Node):
             """
         Node.__init__(self,'field',node=node)
         if name: self.setVar(name)
-        if type(value) in [list,tuple]: self.setValues(value)
+        if isinstance(value, (list, tuple)): self.setValues(value)
         elif value: self.setValue(value)
         if typ: self.setType(typ)
         elif not typ and not node: self.setType('text-single')
@@ -689,7 +689,7 @@ class DataField(Node):
         for opt in lst: self.addOption(opt)
     def addOption(self,opt):
         """ Add one more label-option pair to this field."""
-        if type(opt) in [str,unicode]: self.addChild('option').setTagData('value',opt)
+        if isinstance(opt, basestring): self.addChild('option').setTagData('value',opt)
         else: self.addChild('option',{'label':opt[0]}).setTagData('value',opt[1])
     def getType(self):
         """ Get type of this field. """
@@ -737,7 +737,7 @@ class DataForm(Node):
             for name in data.keys(): newdata.append(DataField(name,data[name]))
             data=newdata
         for child in data:
-            if type(child) in [type(''),type(u'')]: self.addInstructions(child)
+            if isinstance(child, basestring): self.addInstructions(child)
             elif child.__class__.__name__=='DataField': self.kids.append(child)
             else: self.kids.append(DataField(node=child))
     def getType(self):
@@ -775,7 +775,7 @@ class DataForm(Node):
         for field in self.getTags('field'):
             name=field.getAttr('var')
             typ=field.getType()
-            if type(typ) in [type(''),type(u'')] and typ.endswith('-multi'):
+            if isinstance(typ, basestring) and typ.endswith('-multi'):
                 val=[]
                 for i in field.getTags('value'): val.append(i.getData())
             else: val=field.getTagData('value')

@@ -139,7 +139,7 @@ class TCPsocket(PlugIn):
         """ Writes raw outgoing data. Blocks until done.
             If supplied data is unicode string, encodes it to utf-8 before send."""
         if isinstance(raw_data, unicode): raw_data = raw_data.encode('utf-8')
-        elif type(raw_data)!=type(str): raw_data = ustr(raw_data).encode('utf-8')
+        elif not isinstance(raw_data, str): raw_data = ustr(raw_data).encode('utf-8')
         try:
             self._send(raw_data)
             # Avoid printing messages that are empty keepalive packets.

@@ -404,7 +404,7 @@ class Dispatcher(PlugIn):
 	def send(self, stanza, is_message = False, now = False):
 		''' Serialise stanza and put it on the wire. Assign an unique ID to it before send.
 			Returns assigned ID.'''
-		if type(stanza) in (type(''), type(u'')): 
+		if isinstance(stanza, basestring):
 			return self._owner.Connection.send(stanza, now = now)
 		if not isinstance(stanza, Protocol): 
 			_ID=None
