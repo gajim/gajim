@@ -1818,9 +1818,9 @@ class Interface:
 		details = _('Unable to decrypt message from '
 			'%s\nIt may have been tampered with.') % jid
 
-		if session.control:
-			session.control.print_conversation_line(details,
-				'status', '', tim)
+		ctrl = session.control
+		if ctrl:
+			ctrl.print_conversation_line(details, 'status', '', tim)
 		else:
 			dialogs.WarningDialog(_('Unable to decrypt message'),
 				details)
@@ -1830,7 +1830,8 @@ class Interface:
 		session.conn.delete_session(jid, session.thread_id)
 
 		# restart the session
-		session.negotiate_e2e(False)
+		if ctrl:
+			ctrl.begin_e2e_negotiation()
 
 	def handle_event_privacy_lists_received(self, account, data):
 		# ('PRIVACY_LISTS_RECEIVED', account, list)
