@@ -162,6 +162,9 @@ class PrivateChatControl(ChatControl):
 			self.got_connected()
 		ChatControl.update_ui(self)
 
+	def update_contact(self):
+		self.contact = gajim.contacts.contact_from_gc_contact(self.gc_contact)
+
 
 class GroupchatControl(ChatControlBase):
 	TYPE_ID = message_control.TYPE_GC
