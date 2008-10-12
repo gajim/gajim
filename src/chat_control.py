@@ -2342,7 +2342,6 @@ class ChatControl(ChatControlBase):
 			NS_ESESSION) and not gajim.capscache.is_supported(
 			self.contact, 'notexistant'):
 				self.begin_e2e_negotiation()
-				self.no_autonegotiation = True
 		else:
 			self.send_chatstate('active', self.contact)
 
@@ -2577,6 +2576,8 @@ class ChatControl(ChatControlBase):
 			self.begin_e2e_negotiation()
 
 	def begin_e2e_negotiation(self):
+		self.no_autonegotiation = True
+
 		if not self.session:
 			fjid = self.contact.get_full_jid()
 			new_sess = gajim.connections[self.account].make_new_session(fjid)
