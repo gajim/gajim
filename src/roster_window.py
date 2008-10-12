@@ -4238,7 +4238,15 @@ class RosterWindow:
 				return
 			jid = model[titer][C_JID].decode('utf-8')
 			account = model[titer][C_ACCOUNT].decode('utf-8')
-			color = gajim.config.get_per('themes', theme, 'contacttextcolor')
+			color = None
+			if type_ == 'groupchat':
+				ctrl = gajim.interface.minimized_controls[account].get(jid, None)
+				if ctrl and ctrl.attention_flag:
+					color = gajim.config.get_per('themes', theme,
+						 'state_muc_directed_msg_color')
+				renderer.set_property('foreground', 'red')
+			if not color:
+				color = gajim.config.get_per('themes', theme, 'contacttextcolor')
 			if color:
 				renderer.set_property('foreground', color)
 			else:

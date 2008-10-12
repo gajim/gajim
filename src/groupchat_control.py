@@ -818,6 +818,8 @@ class GroupchatControl(ChatControlBase):
 				# muc-specific chatstate
 				if self.parent_win:
 					self.parent_win.redraw_tab(self, 'attention')
+				else:
+					self.attention_flag = True
 				other_tags_for_name.append('bold')
 				other_tags_for_text.append('marked')
 
