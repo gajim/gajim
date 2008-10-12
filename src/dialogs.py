@@ -68,7 +68,7 @@ class EditGroupsDialog:
 		self.dialog.set_transient_for(gajim.interface.roster.window)
 		self.list_ = list_
 		self.changes_made = False
-		self.list = self.xml.get_widget('groups_treeview')
+		self.treeview = self.xml.get_widget('groups_treeview')
 		if len(list_) == 1:
 			contact = list_[0][0]
 			self.xml.get_widget('nickname_label').set_markup(
@@ -118,7 +118,7 @@ class EditGroupsDialog:
 		if group in helpers.special_groups:
 			return
 		# check if it already exists
-		model = self.list.get_model()
+		model = self.treeview.get_model()
 		iter = model.get_iter_root()
 		while iter:
 			if model.get_value(iter, 0).decode('utf-8') == group:
@@ -131,7 +131,7 @@ class EditGroupsDialog:
 
 	def group_toggled_cb(self, cell, path):
 		self.changes_made = True
-		model = self.list.get_model()
+		model = self.treeview.get_model()
 		if model[path][2]:
 			model[path][2] = False
 			model[path][1] = True
@@ -145,9 +145,10 @@ class EditGroupsDialog:
 
 	def init_list(self):
 		store = gtk.ListStore(str, bool, bool)
-		self.list.set_model(store)
-		for column in self.list.get_columns(): # Clear treeview when re-drawing
-			self.list.remove_column(column)
+		self.treeview.set_model(store)
+		for column in self.treeview.get_columns():
+			# Clear treeview when re-drawing
+			self.treeview.remove_column(column)
 		accounts = []
 		# Store groups in a list so we can sort them and the number of contacts in
 		# it
@@ -185,14 +186,14 @@ class EditGroupsDialog:
 					store.set(iter, 2, True)
 		column = gtk.TreeViewColumn(_('Group'))
 		column.set_expand(True)
-		self.list.append_column(column)
+		self.treeview.append_column(column)
 		renderer = gtk.CellRendererText()
 		column.pack_start(renderer)
 		column.set_attributes(renderer, text=0)
 
 		column = gtk.TreeViewColumn(_('In the group'))
 		column.set_expand(False)
-		self.list.append_column(column)
+		self.treeview.append_column(column)
 		renderer = gtk.CellRendererToggle()
 		column.pack_start(renderer)
 		renderer.set_property('activatable', True)
