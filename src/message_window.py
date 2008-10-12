@@ -514,7 +514,7 @@ class MessageWindow(object):
 			close(ctrl)
 
 		def on_no(ctrl):
-			close(ctrl)
+			return
 
 		def on_minimize(ctrl):
 			if method != self.CLOSE_COMMAND:
