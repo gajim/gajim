@@ -947,8 +947,6 @@ class GroupchatControl(ChatControlBase):
 		if self.parent_win:
 			self.parent_win.redraw_tab(self)
 
-		self.msg_textview.grab_focus()
-
 	def got_disconnected(self):
 		self.list_treeview.get_model().clear()
 		nick_list = gajim.contacts.get_nick_list(self.account, self.room_jid)
