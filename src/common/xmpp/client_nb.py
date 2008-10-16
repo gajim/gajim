@@ -292,7 +292,7 @@ class NonBlockingClient(NBCommonClient):
 	def _on_auth_bind(self, data):
 		if data:
 			self.Dispatcher.ProcessNonBlocking(data)
-		if not hasattr(self, NonBlockingBind) or self.NonBlockingBind.bound is \
+		if not hasattr(self, 'NonBlockingBind') or self.NonBlockingBind.bound is \
 		None: 
 			return
 		self.NonBlockingBind.NonBlockingBind(self._Resource, self._on_sasl_auth)
