@@ -104,6 +104,6 @@ if os.name == 'nt' or not sys.stderr.isatty():
 if __name__ == '__main__':
 	_excepthook_save = sys.excepthook
 	sys.excepthook = _info
-	print x # this always tracebacks
+	raise Exception()
 
 # vim: se ts=3:

@@ -31,6 +31,7 @@ What it supplies:
     A means of handling requests, by redirection though the command manager.
 """
 
+import math
 from protocol import *
 from client import PlugIn
 
@@ -62,7 +63,7 @@ class Commands(PlugIn):
     def plugout(self):
         """Removes handlers from the session"""
         # unPlug from the session and the disco manager
-        self._owner.UnregisterHandler('iq',self_CommandHandler,ns=NS_COMMANDS)
+        self._owner.UnregisterHandler('iq',self._CommandHandler,ns=NS_COMMANDS)
         for jid in self._handlers:
             self._browser.delDiscoHandler(self._DiscoHandler,node=NS_COMMANDS)
         
@@ -281,10 +282,10 @@ class TestCommand(Command_Handler_Prototype):
             session = None
         if session is None:
             session = self.getSessionID()
-            sessions[session]={'jid':request.getFrom(),'actions':{'cancel':self.cmdCancel,'next':self.cmdSecondStage},'data':{'type':None}}
+            self.sessions[session]={'jid':request.getFrom(),'actions':{'cancel':self.cmdCancel,'next':self.cmdSecondStage},'data':{'type':None}}
         # As this is the first stage we only send a form
         reply = request.buildReply('result')
-        form = DataForm(title='Select type of operation',data=['Use the combobox to select the type of calculation you would like to do, then click Next',DataField(name='calctype',label='Calculation Type',value=sessions[session]['data']['type'],options=[['circlediameter','Calculate the Diameter of a circle'],['circlearea','Calculate the area of a circle']],typ='list-single',required=1)])
+        form = DataForm(title='Select type of operation',data=['Use the combobox to select the type of calculation you would like to do, then click Next',DataField(name='calctype',label='Calculation Type',value=self.sessions[session]['data']['type'],options=[['circlediameter','Calculate the Diameter of a circle'],['circlearea','Calculate the area of a circle']],typ='list-single',required=1)])
         replypayload = [Node('actions',attrs={'execute':'next'},payload=[Node('next')]),form]
         reply.addChild(name='command',attrs={'xmlns':NS_COMMAND,'node':request.getTagAttr('command','node'),'sessionid':session,'status':'executing'},payload=replypayload)
         self._owner.send(reply)
@@ -312,9 +313,9 @@ class TestCommand(Command_Handler_Prototype):
         except Exception:
             self.cmdSecondStageReply(conn,request)
         if sessions[request.getTagAttr('command','sessionid')]['data']['type'] == 'circlearea':
-            result = num*(pi**2)
+            result = num*(math.pi**2)
         else:
-            result = num*2*pi
+            result = num*2*math.pi
         reply = result.buildReply(request)
         form = DataForm(typ='result',data=[DataField(label='result',name='result',value=result)])
         reply.addChild(name='command',attrs={'xmlns':NS_COMMAND,'node':request.getTagAttr('command','node'),'sessionid':request.getTagAttr('command','sessionid'),'status':'completed'},payload=form)
@@ -325,7 +326,7 @@ class TestCommand(Command_Handler_Prototype):
         reply = request.buildReply('result')
         reply.addChild(name='command',attrs={'xmlns':NS_COMMAND,'node':request.getTagAttr('command','node'),'sessionid':request.getTagAttr('command','sessionid'),'status':'cancelled'})
         self._owner.send(reply)
-        del sessions[request.getTagAttr('command','sessionid')]
+        del self.sessions[request.getTagAttr('command','sessionid')]
             
     
 

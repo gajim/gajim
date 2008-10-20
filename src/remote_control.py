@@ -327,7 +327,7 @@ class SignalObject(dbus.service.Object):
 		'''Shows the tabbed window for new message to 'jid', using account
 		(optional) 'account' '''
 		if not jid:
-			raise MissingArgument
+			raise dbus_support.MissingArgument()
 		jid = self._get_real_jid(jid, account)
 		try:
 			jid = helpers.parse_jid(jid)
@@ -407,7 +407,7 @@ class SignalObject(dbus.service.Object):
 		if not isinstance(jid, unicode):
 			jid = unicode(jid)
 		if not jid:
-			raise MissingArgument
+			raise dbus_support.MissingArgument()
 		jid = self._get_real_jid(jid)
 
 		cached_vcard = gajim.connections.values()[0].get_cached_vcard(jid)

@@ -283,7 +283,7 @@ class EncryptedStanzaSession(StanzaSession):
 		return stanza
 
 	def is_xep_200_encrypted(self, msg):
-		msg.getTag('c', namespace=common.xmpp.NS_STANZA_CRYPTO)
+		msg.getTag('c', namespace=xmpp.NS_STANZA_CRYPTO)
 
 	def hmac(self, key, content):
 		return HMAC.new(key, content, self.hash_alg).digest()

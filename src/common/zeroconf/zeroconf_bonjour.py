@@ -251,7 +251,7 @@ class Zeroconf:
 			self.announced = False
 			return True
 		except pybonjour.BonjourError, e:
-			geajim.log.debug(e)
+			gajim.log.debug(e)
 			return False
 
 

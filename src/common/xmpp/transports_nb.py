@@ -139,10 +139,10 @@ class SSLWrapper:
 		can indicate that the socket has been closed, so to be sure, we avoid
 		this by returning None. """
 
-		raise NotImplementedException()
+		raise NotImplementedError()
 
 	def send(self, data, flags=None, now = False):
-		raise NotImplementedException()
+		raise NotImplementedError()
 
 class PyOpenSSLWrapper(SSLWrapper):
 	'''Wrapper class for PyOpenSSL's recv() and send() methods'''
