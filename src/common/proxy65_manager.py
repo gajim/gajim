@@ -107,11 +107,10 @@ class ProxyResolver:
 		self.state = S_RESOLVED
 		#FIXME: re-enable proxy testing
 		self.state = S_FINISHED
-		return
-		self.receiver_tester = ReceiverTester(self.host, self.port, self.jid,
-			self.sid, self.sender_jid, self._on_receiver_success,
-			self._on_connect_failure)
-		self.receiver_tester.connect()
+		#self.receiver_tester = ReceiverTester(self.host, self.port, self.jid,
+		#	self.sid, self.sender_jid, self._on_receiver_success,
+		#	self._on_connect_failure)
+		#self.receiver_tester.connect()
 	
 	def _on_receiver_success(self):
 		self.host_tester = HostTester(self.host, self.port, self.jid, 

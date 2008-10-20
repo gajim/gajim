@@ -328,7 +328,6 @@ class SignalObject(dbus.service.Object):
 		(optional) 'account' '''
 		if not jid:
 			raise MissingArgument
-			return DBUS_BOOLEAN(False)
 		jid = self._get_real_jid(jid, account)
 		try:
 			jid = helpers.parse_jid(jid)
@@ -409,7 +408,6 @@ class SignalObject(dbus.service.Object):
 			jid = unicode(jid)
 		if not jid:
 			raise MissingArgument
-			return DBUS_DICT_SV()
 		jid = self._get_real_jid(jid)
 
 		cached_vcard = gajim.connections.values()[0].get_cached_vcard(jid)
