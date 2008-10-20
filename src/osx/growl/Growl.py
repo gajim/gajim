@@ -14,7 +14,6 @@ try:
     import _growl
 except Exception:
     _growl = False
-import types
 import struct
 import md5
 import socket

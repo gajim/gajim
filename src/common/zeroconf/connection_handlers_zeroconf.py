@@ -23,7 +23,6 @@
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import os
 import time
 import socket
 

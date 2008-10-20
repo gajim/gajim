@@ -17,7 +17,6 @@
 Provides library with all Non-SASL and SASL authentication mechanisms.
 Can be used both for client and transport authentication.
 '''
-import sys
 from protocol import *
 from auth import *
 from client import PlugIn

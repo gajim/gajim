@@ -251,7 +251,6 @@ from session import ChatControlSession
 import common.sleepy
 
 from common.xmpp import idlequeue
-from common.zeroconf import connection_zeroconf
 from common import nslookup
 from common import proxy65_manager
 from common import socks5

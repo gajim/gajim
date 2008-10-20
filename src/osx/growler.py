@@ -1,6 +1,6 @@
 import sys, os
 from growl.Growl import GrowlNotifier
-from common import gajim, helpers
+from common import gajim
 
 
 if sys.platform != "darwin":

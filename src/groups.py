@@ -21,8 +21,6 @@
 
 '''Window to create new post for discussion groups service.'''
 
-import gtk
-
 from common import gajim, xmpp
 import gtkgui_helpers
 

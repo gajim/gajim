@@ -28,7 +28,6 @@
 # gajim-remote help will show you the D-BUS API of Gajim
 
 import sys
-import os
 import locale
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application

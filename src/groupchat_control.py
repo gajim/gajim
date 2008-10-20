@@ -45,7 +45,6 @@ from common import helpers
 
 from chat_control import ChatControl
 from chat_control import ChatControlBase
-from conversation_textview import ConversationTextview
 from common.exceptions import GajimGeneralException
 
 #(status_image, type, nick, shown_nick)

@@ -14,7 +14,9 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-import socket,select,base64,dispatcher_nb
+import socket
+import base64
+import dispatcher_nb
 import struct
 from simplexml import ustr
 from client import PlugIn
@@ -28,7 +30,6 @@ import errno
 import time
 
 import traceback
-import thread
 
 import logging
 log = logging.getLogger('gajim.c.x.transports_nb')

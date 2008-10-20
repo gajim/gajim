@@ -21,7 +21,6 @@ examples of xmpppy structures usage.
 These classes can be used for simple applications "AS IS" though.
 """
 
-import socket
 import debug
 Debug=debug
 Debug.DEBUGGING_IS_ON=1
