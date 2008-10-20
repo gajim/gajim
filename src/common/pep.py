@@ -169,7 +169,7 @@ def user_mood(items, name, jid):
 			if 'text' in acc.mood:
 				del acc.mood['text']
 
-	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
+	user = gajim.get_room_and_nick_from_fjid(jid)[0]
 	for contact in gajim.contacts.get_contacts(name, user):
 		if has_child:
 			if 'mood' in contact.mood:
@@ -255,7 +255,7 @@ def user_tune(items, name, jid):
 			if 'length' in acc.tune:
 				del acc.tune['length']
 
-	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
+	user = gajim.get_room_and_nick_from_fjid(jid)[0]
 	for contact in gajim.contacts.get_contacts(name, user):
 		if has_child:
 			if 'artist' in contact.tune:
@@ -344,7 +344,7 @@ def user_activity(items, name, jid):
 			if 'text' in acc.activity:
 				del acc.activity['text']
 
-	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
+	user = gajim.get_room_and_nick_from_fjid(jid)[0]
 	for contact in gajim.contacts.get_contacts(name, user):
 		if has_child:
 			if 'activity' in contact.activity:
@@ -491,7 +491,7 @@ def user_retract_nickname(account):
 	gajim.connections[account].send_pb_retract('', xmpp.NS_NICK, '0')
 
 def delete_pep(jid, name):
-	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
+	user = gajim.get_room_and_nick_from_fjid(jid)[0]
 
 	if jid == gajim.get_jid_from_account(name):
 		acc = gajim.connections[name]

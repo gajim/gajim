@@ -220,7 +220,7 @@ class HistoryManager:
 			def on_no():
 				gtk.main_quit()
 
-			dialog = dialogs.YesNoDialog(
+			dialogs.YesNoDialog(
 				_('Do you want to clean up the database? '
 				'(STRONGLY NOT RECOMMENDED IF GAJIM IS RUNNING)'),
 				_('Normally allocated database size will not be freed, '
@@ -296,7 +296,7 @@ class HistoryManager:
 		(user will see the first pm as if it was message in room's public chat)
 		and after that all okay'''
 		
-		possible_room_jid, possible_nick = jid.split('/', 1)
+		possible_room_jid = jid.split('/', 1)[0]
 		
 		self.cur.execute('SELECT jid_id FROM jids WHERE jid = ? AND type = ?',
 			(possible_room_jid, constants.JID_ROOM_TYPE))
@@ -420,9 +420,6 @@ class HistoryManager:
 				xml.get_widget('export_menuitem').hide()
 			xml.get_widget('delete_menuitem').connect('activate',
 				self.on_delete_menuitem_activate, widget)
-			
-			liststore, list_of_paths = self.jids_listview.get_selection()\
-				.get_selected_rows()
 			
 			xml.signal_autoconnect(self)
 			xml.get_widget('context_menu').popup(None, None, None,

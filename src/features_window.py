@@ -149,7 +149,6 @@ class FeaturesWindow:
 		if not rows:
 			return
 		path = rows[0]
-		available = self.model[path][1]
 		feature = self.model[path][0].decode('utf-8')
 		text = self.features[feature][1] + '\n'
 		if os.name == 'nt':

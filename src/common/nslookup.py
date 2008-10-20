@@ -268,7 +268,7 @@ class IdleCommand(IdleObject):
 	def pollin(self):
 		try:
 			res = self.pipe.read()
-		except Exception, e:
+		except Exception:
 			res = ''
 		if res == '':
 			return self.pollend()

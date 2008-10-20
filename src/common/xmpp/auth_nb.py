@@ -20,7 +20,11 @@ Can be used both for client and transport authentication.
 from protocol import *
 from auth import *
 from client import PlugIn
-import sha,base64,random,dispatcher_nb
+import sha
+import base64
+import random
+import itertools
+import dispatcher_nb
 
 try:
 	import kerberos
@@ -141,8 +145,8 @@ class SASL(PlugIn):
 		self._owner.RegisterHandler('failure', self.SASLHandler, xmlns=NS_SASL)
 		self._owner.RegisterHandler('success', self.SASLHandler, xmlns=NS_SASL)
 		if "GSSAPI" in mecs and have_kerberos:
-			rc, self.gss_vc = kerberos.authGSSClientInit('xmpp@' + 
-														self._owner.Server)
+			self.gss_vc = kerberos.authGSSClientInit(
+					'xmpp@' + self._owner.Server)[1]
 			response = kerberos.authGSSClientResponse(self.gss_vc)
 			node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'GSSAPI'},
                    payload=(response or ""))
@@ -223,10 +227,8 @@ class SASL(PlugIn):
 			else:
 				resp['realm'] = self._owner.Server
 			resp['nonce']=chal['nonce']
-			cnonce=''
-			for i in range(7):
-				cnonce += hex(int(random.random() * 65536 * 4096))[2:]
-			resp['cnonce'] = cnonce
+			resp['cnonce'] = ''.join("%x" % randint(0, 2**28) for randint in
+					itertools.repeat(random.randint, 7))
 			resp['nc'] = ('00000001')
 			resp['qop'] = 'auth'
 			resp['digest-uri'] = 'xmpp/'+self._owner.Server
@@ -277,7 +279,7 @@ class NonBlockingNonSASL(PlugIn):
 		self.DEBUG('Querying server about possible auth methods', 'start')
 		self.owner = owner 
 		
-		resp = owner.Dispatcher.SendAndWaitForResponse(
+		owner.Dispatcher.SendAndWaitForResponse(
 			Iq('get', NS_AUTH, payload=[Node('username', payload=[self.user])]), func=self._on_username
 		)
 		
@@ -301,9 +303,14 @@ class NonBlockingNonSASL(PlugIn):
 			token=query.getTagData('token')
 			seq=query.getTagData('sequence')
 			self.DEBUG("Performing zero-k authentication",'ok')
-			hash = sha.new(sha.new(self.password).hexdigest()+token).hexdigest()
-			for foo in xrange(int(seq)): 
-				hash = sha.new(hash).hexdigest()
+
+			def hasher(s):
+				return sha.new(s).hexdigest()
+
+			def hash_n_times(s, count):
+				return count and hasher(hash_n_times(s, count-1)) or s
+
+			hash = hash_n_times(hasher(hasher(self.password) + token), int(seq))
 			query.setTagData('hash',hash)
 			self._method='0k'
 		else:
@@ -375,7 +382,7 @@ class NonBlockingBind(Bind):
 			self._resource = []
 			
 		self._owner.onreceive(None)
-		resp=self._owner.Dispatcher.SendAndWaitForResponse(
+		self._owner.Dispatcher.SendAndWaitForResponse(
 			Protocol('iq',typ='set',
 				payload=[Node('bind', attrs={'xmlns':NS_BIND}, payload=self._resource)]), 
 				func=self._on_bound)

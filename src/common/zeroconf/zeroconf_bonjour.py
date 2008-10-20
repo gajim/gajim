@@ -115,7 +115,8 @@ class Zeroconf:
 		}
 
 		# Split on '.' but do not split on '\.'
-		name, stype, protocol, domain, dummy = re.split('(?<!\\\\)\.', fullname)
+		result = re.split('(?<!\\\\)\.', fullname)
+		name, protocol, domain = result[0] + result[2:4]
 		
 		# Replace the escaped values
 		for src, trg in escaping.items():
@@ -329,7 +330,7 @@ class Zeroconf:
 
 		try:
 			pybonjour.DNSServiceUpdateRecord(self.service_sdRef, None, 0, self.txt)
-		except pybonjour.BonjourError, e:
+		except pybonjour.BonjourError:
 			return False
 		return True
 

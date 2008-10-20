@@ -213,7 +213,6 @@ class MessageWindow(object):
 			self.on_delete_ok -= 1
 
 		# Make sure all controls are okay with being deleted
-		ctrl_to_minimize = []
 		self.on_delete_ok = self.get_nb_controls()
 		for ctrl in self.controls():
 			ctrl.allow_shutdown(self.CLOSE_CLOSE_BUTTON, on_yes, on_no,
@@ -671,11 +670,7 @@ class MessageWindow(object):
 				yield ctrl
 
 	def get_nb_controls(self):
-		nb_ctrl = 0
-		for jid_dict in self._controls.values():
-			for ctrl in jid_dict.values():
-				nb_ctrl += 1
-		return nb_ctrl
+		return sum(len(jid_dict) for jid_dict in self._controls.values())
 
 	def move_to_next_unread_tab(self, forward):
 		ind = self.notebook.get_current_page()
@@ -776,7 +771,7 @@ class MessageWindow(object):
 		selection, type_, time):
 		'''Reorder the tabs according to the drop position'''
 		source_page_num = int(selection.data)
-		dest_page_num, to_right = self.get_tab_at_xy(x, y)
+		dest_page_num = self.get_tab_at_xy(x, y)[0]
 		source_child = self.notebook.get_nth_page(source_page_num)
 		if dest_page_num != source_page_num:
 			self.notebook.reorder_child(source_child, dest_page_num)

@@ -61,8 +61,14 @@ class NonSASL(PlugIn):
             token=query.getTagData('token')
             seq=query.getTagData('sequence')
             self.DEBUG("Performing zero-k authentication",'ok')
-            hash = sha.new(sha.new(self.password).hexdigest()+token).hexdigest()
-            for foo in xrange(int(seq)): hash = sha.new(hash).hexdigest()
+
+            def hasher(s):
+               return sha.new(s).hexdigest()
+
+            def hash_n_times(s, count):
+               return count and hasher(hash_n_times(s, count-1)) or s
+
+            hash = hash_n_times(hasher(hasher(self.password)+token), int(seq))
             query.setTagData('hash',hash)
             method='0k'
         else:
@@ -182,10 +188,8 @@ class SASL(PlugIn):
             resp['username']=self.username
             resp['realm']=self._owner.Server
             resp['nonce']=chal['nonce']
-            cnonce=''
-            for i in range(7):
-                cnonce+=hex(int(random.random()*65536*4096))[2:]
-            resp['cnonce']=cnonce
+            resp['cnonce'] = ''.join("%x" % randint(0, 2**28) for randint in
+                itertools.repeat(random.randint, 7))
             resp['nc']=('00000001')
             resp['qop']='auth'
             resp['digest-uri']='xmpp/'+self._owner.Server

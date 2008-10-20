@@ -87,6 +87,7 @@ class SleepyWindows:
 
 class SleepyUnix:
 	def __init__(self, away_interval = 60, xa_interval = 120):
+		global SUPPORTED
 		self.away_interval = away_interval
 		self.xa_interval = xa_interval
 		self.state = STATE_AWAKE # assume we are awake

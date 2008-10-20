@@ -66,13 +66,15 @@ class error:
         """Serialise exception into pre-cached descriptive string."""
         return self._comment
 
+DBG_SOCKET = "socket"
+
 class TCPsocket(PlugIn):
     """ This class defines direct TCP connection method. """
     def __init__(self, server=None, use_srv=True):
         """ Cache connection point 'server'. 'server' is the tuple of (host, port)
             absolutely the same as standard tcp socket uses. """
         PlugIn.__init__(self)
-        self.DBG_LINE='socket'
+        self.DBG_LINE = DBG_SOCKET
         self._exported_methods=[self.send,self.disconnect]
 
         self._server = server
@@ -85,6 +87,7 @@ class TCPsocket(PlugIn):
         if not self.connect(self._server): return
         self._owner.Connection=self
         self._owner.RegisterDisconnectHandler(self.disconnected)
+        owner.debug_flags.append(DBG_SOCKET)
         return 'ok'
 
     def getHost(self):
@@ -235,7 +238,7 @@ class TLS(PlugIn):
         """
         if 'TLS' in owner.__dict__: return  # Already enabled.
         PlugIn.PlugIn(self,owner)
-        DBG_LINE='TLS'
+        self.DBG_LINE='TLS'
         if now: return self._startSSL()
         if self._owner.Dispatcher.Stream.features:
             try: self.FeaturesHandler(self._owner.Dispatcher,self._owner.Dispatcher.Stream.features)

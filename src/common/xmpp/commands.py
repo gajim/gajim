@@ -35,6 +35,8 @@ import math
 from protocol import *
 from client import PlugIn
 
+DBG_COMMANDS = 'commands'
+
 class Commands(PlugIn):
     """Commands is an ancestor of PlugIn and can be attached to any session.
     
@@ -47,7 +49,7 @@ class Commands(PlugIn):
     def __init__(self, browser):
         """Initialises class and sets up local variables"""
         PlugIn.__init__(self)
-        DBG_LINE='commands'
+        self.DBG_LINE = DBG_COMMANDS
         self._exported_methods=[]
         self._handlers={'':{}}
         self._browser = browser
@@ -59,13 +61,14 @@ class Commands(PlugIn):
         owner.RegisterHandler('iq',self._CommandHandler,typ='set',ns=NS_COMMANDS)
         owner.RegisterHandler('iq',self._CommandHandler,typ='get',ns=NS_COMMANDS)
         self._browser.setDiscoHandler(self._DiscoHandler,node=NS_COMMANDS,jid='')
+        owner.debug_flags.append(DBG_COMMANDS) 
         
     def plugout(self):
         """Removes handlers from the session"""
         # unPlug from the session and the disco manager
         self._owner.UnregisterHandler('iq',self._CommandHandler,ns=NS_COMMANDS)
         for jid in self._handlers:
-            self._browser.delDiscoHandler(self._DiscoHandler,node=NS_COMMANDS)
+            self._browser.delDiscoHandler(self._DiscoHandler,node=NS_COMMANDS,jid=jid)
         
     def _CommandHandler(self,conn,request):
         """The internal method to process the routing of command execution requests"""
@@ -194,7 +197,7 @@ class Command_Handler_Prototype(PlugIn):
     def __init__(self,jid=''):
         """Set up the class"""
         PlugIn.__init__(self)
-        DBG_LINE='command'
+        self.DBG_LINE='command'
         self.sessioncount = 0
         self.sessions = {}
         # Disco information for command list pre-formatted as a tuple
