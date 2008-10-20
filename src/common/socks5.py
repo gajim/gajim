@@ -485,8 +485,7 @@ class Socks5:
 			return -1
 	
 	def get_file_contents(self, timeout):
-		''' read file contents from socket and write them to file ''', \
-			self.file_props['type'], self.file_props['sid']
+		''' read file contents from socket and write them to file '''
 		if self.file_props is None or \
 			('file-name' in self.file_props) is False:
 			self.file_props['error'] = -2
