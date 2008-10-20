@@ -111,7 +111,7 @@ def parseOpts():
 	try:
 		shortargs = 'hqvl:p:c:'
 		longargs = 'help quiet verbose loglevel= profile= config_path='
-		opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
+		opts, args = getopt.getopt(sys.argv[1:], shortargs, longargs.split())
 	except getopt.error, msg:
 		print msg
 		print 'for help use --help'
@@ -251,6 +251,7 @@ from session import ChatControlSession
 import common.sleepy
 
 from common.xmpp import idlequeue
+from common.zeroconf import connection_zeroconf
 from common import nslookup
 from common import proxy65_manager
 from common import socks5

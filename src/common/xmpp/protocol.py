@@ -19,7 +19,7 @@ Protocol module contains tools that is needed for processing of
 xmpp-related data structures.
 """
 
-from simplexml import Node, NodeBuilder
+from simplexml import Node,NodeBuilder,ustr
 import time
 NS_ACTIVITY     ='http://jabber.org/protocol/activity'                  # XEP-0108
 NS_ADDRESS      ='http://jabber.org/protocol/address'                   # XEP-0033
@@ -458,7 +458,7 @@ class Message(Protocol):
                 self.setTag('html',namespace=NS_XHTML_IM).addChild(node=dom)
         except Exception, e:
             print "Error", e
-            #FIXME: log. we could not set xhtml (parse error, whatever)
+            pass #FIXME: log. we could not set xhtml (parse error, whatever)
     def setSubject(self,val):
         """ Sets the subject of the message. """
         self.setTagData('subject',val)

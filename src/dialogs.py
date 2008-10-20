@@ -427,6 +427,7 @@ class ChangeActivityDialog:
 		'''
 		Return activity and messsage (None if no activity selected)
 		'''
+		message = None
 		if self.checkbutton.get_active():
 			pep.user_send_activity(self.account, self.activity,
 				self.subactivity,
@@ -650,7 +651,7 @@ class ChangeStatusMessageDialog:
 					self.preset_messages_dict[msg_name] = msg_text
 					gajim.config.set_per('statusmsg', msg_name, 'message',
 						msg_text_1l)
-				ConfirmationDialog(_('Overwrite Status Message?'),
+				dlg2 = ConfirmationDialog(_('Overwrite Status Message?'),
 					_('This name is already used. Do you want to overwrite this '
 					'status message?'), on_response_ok=on_ok2)
 				return
@@ -1576,7 +1577,7 @@ class DubbleInputDialog:
 
 	def on_cancelbutton_clicked(self, widget):
 		self.dialog.destroy()
-		if not self.cancel_handler:
+		if not cancel_handler:
 			return
 		if isinstance(self.cancel_handler, tuple):
 			self.cancel_handler[0](*self.cancel_handler[1:])
@@ -1852,7 +1853,7 @@ class SynchroniseSelectAccountDialog:
 			return
 		else:
 			try:
-				SynchroniseSelectContactsDialog(self.account, remote_account)
+				dialog = SynchroniseSelectContactsDialog(self.account, remote_account)
 			except GajimGeneralException:
 				# if we showed ErrorDialog, there will not be dialog instance
 				return
@@ -2194,7 +2195,7 @@ class SingleMessageWindow:
 				if lang:
 					spell1.set_language(lang)
 					spell2.set_language(lang)
-			except gobject.GError:
+			except gobject.GError, msg:
 				AspellDictError(lang)
 
 		self.prepare_widgets_for(self.action)
@@ -2968,7 +2969,7 @@ class InvitationReceivedDialog:
 			except GajimGeneralException:
 				pass
 
-		YesNoDialog(pritext, sectext, on_response_yes=on_yes)
+		dialog = YesNoDialog(pritext, sectext, on_response_yes=on_yes)
 
 class ProgressDialog:
 	def __init__(self, title_text, during_text, messages_queue):
@@ -3155,6 +3156,7 @@ class AddSpecialNotificationDialog:
 		self.window.destroy()
 
 	def on_listen_sound_combobox_changed(self, widget):
+		model = widget.get_model()
 		active = widget.get_active()
 		if active == 1: # user selected 'choose sound'
 			def on_ok(widget, path_to_snd_file):
@@ -3657,6 +3659,9 @@ class TransformChatToMUC:
 		'server_and_guests_hseparator', 'server_select_label'):
 			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
 
+		# set comboboxentry
+		renderer_servers = gtk.CellRendererText()
+
 		server_list = []
 		self.servers = gtk.ListStore(str)
 		self.server_list_comboboxentry.set_model(self.servers)
@@ -3899,7 +3904,7 @@ class GPGInfoWindow:
 				'encrypt messages.')
 			image = 'security-low-big.png'
 		else:
-			error = gajim.connections[account].gpg.encrypt('test', [keyID])[1]
+			msgenc, error = gajim.connections[account].gpg.encrypt('test', [keyID])
 			if error:
 				verification_status = _('''Contact's identity NOT verified''')
 				info = _('GPG key is assigned to this contact, but <b>you do not '

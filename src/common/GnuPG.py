@@ -182,9 +182,6 @@ if gajim.HAVE_GPG:
 			output = proc.handles['stdout'].read()
 			proc.handles['stdout'].close()
 
-			try: proc.wait()
-			except IOError: pass
-
 			keys = {}
 			lines = output.split('\n')
 			for line in lines:
@@ -196,6 +193,8 @@ if gajim.HAVE_GPG:
 					# make it unicode instance
 					keys[sline[4][8:]] = helpers.decode_string(name)
 			return keys
+			try: proc.wait()
+			except IOError: pass
 
 		def get_secret_keys(self):
 			return self.get_keys(True)

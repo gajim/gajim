@@ -37,7 +37,7 @@ class Dispatcher(PlugIn):
 		Can be plugged out/in to restart these headers (used for SASL f.e.). '''
 	def __init__(self):
 		PlugIn.__init__(self)
-		self.DBG_LINE='dispatcher'
+		DBG_LINE='dispatcher'
 		self.handlers={}
 		self._expected={}
 		self._defaultHandler=None
@@ -334,6 +334,7 @@ class Dispatcher(PlugIn):
 		for key in list:
 			if key: chain = chain + self.handlers[xmlns][name][key]
 		
+		output=''
 		if ID in session._expected:
 			user=0
 			if isinstance(session._expected[ID], tuple):

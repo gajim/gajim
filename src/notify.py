@@ -443,9 +443,7 @@ class DesktopNotification:
 		self.event_type = event_type
 		self.title = title
 		self.text = text
-		# 0.3.1 is the only version of notification daemon that has no way
-		# to determine which version it is. If no method exists, it means
-		# they're using that one.
+		'''0.3.1 is the only version of notification daemon that has no way to determine which version it is. If no method exists, it means they're using that one.'''
 		self.default_version = [0, 3, 1]
 		self.account = account
 		self.jid = jid
@@ -521,8 +519,8 @@ class DesktopNotification:
 			if gajim.interface.systray_enabled and \
 			gajim.config.get('attach_notifications_to_systray'):
 				x, y = gajim.interface.systray.img_tray.window.get_position()
-				width, height = \
-					gajim.interface.systray.img_tray.window.get_geometry()[2:4]
+				x_, y_, width, height, depth = \
+					gajim.interface.systray.img_tray.window.get_geometry()
 				pos_x = x + (width / 2)
 				pos_y = y + (height / 2)
 				hints = {'x': pos_x, 'y': pos_y}

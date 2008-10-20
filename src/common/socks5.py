@@ -31,7 +31,6 @@ from errno import EWOULDBLOCK
 from errno import ENOBUFS
 from errno import EINTR
 from errno import EISCONN
-from errno import EINPROGRESS
 from xmpp.idlequeue import IdleObject
 MAX_BUFF_LEN = 65536
 
@@ -421,7 +420,7 @@ class Socks5:
 		received = ''
 		try: 
 			add = self._recv(64)
-		except Exception: 
+		except Exception, e: 
 			add=''
 		received +=add
 		if len(add) == 0:
@@ -431,8 +430,8 @@ class Socks5:
 	def send_raw(self,raw_data):
 		''' Writes raw outgoing data. '''
 		try:
-			self._send(raw_data)
-		except Exception:
+			lenn = self._send(raw_data)
+		except Exception, e:
 			self.disconnect()
 		return len(raw_data)
 	
@@ -486,7 +485,8 @@ class Socks5:
 			return -1
 	
 	def get_file_contents(self, timeout):
-		''' read file contents from socket and write them to file '''
+		''' read file contents from socket and write them to file ''', \
+			self.file_props['type'], self.file_props['sid']
 		if self.file_props is None or \
 			('file-name' in self.file_props) is False:
 			self.file_props['error'] = -2
@@ -512,7 +512,7 @@ class Socks5:
 			fd = self.get_fd()
 			try: 
 				buff = self._recv(MAX_BUFF_LEN)
-			except Exception:
+			except Exception, e:
 				buff = ''
 			current_time = self.idlequeue.current_time()
 			self.file_props['elapsed-time'] += current_time - \
@@ -576,7 +576,7 @@ class Socks5:
 		mechanisms '''
 		auth_mechanisms = []
 		try:
-			num_auth = struct.unpack('!BB', buff[:2])[1]
+			ver, num_auth = struct.unpack('!BB', buff[:2])
 			for i in xrange(num_auth):
 				mechanism, = struct.unpack('!B', buff[1 + i])
 				auth_mechanisms.append(mechanism)
@@ -605,7 +605,8 @@ class Socks5:
 	
 	def _parse_request_buff(self, buff):
 		try: # don't trust on what comes from the outside
-			req_type, host_type = struct.unpack('!xBxB', buff[:4])
+			version, req_type, reserved, host_type,  = \
+				struct.unpack('!BBBB', buff[:4])
 			if host_type == 0x01:
 				host_arr = struct.unpack('!iiii', buff[4:8])
 				host, = '.'.join(str(s) for s in host_arr)
@@ -767,7 +768,7 @@ class Socks5Sender(Socks5, IdleObject):
 				return -1 # invalid auth methods received
 		elif self.state == 3: # get next request
 			buff = self.receive()
-			req_type, self.sha_msg = self._parse_request_buff(buff)[:2]
+			(req_type, self.sha_msg, port) = self._parse_request_buff(buff)
 			if req_type != 0x01:
 				return -1 # request is not of type 'connect'
 		self.state += 1 # go to the next step
@@ -902,10 +903,10 @@ class Socks5Receiver(Socks5, IdleObject):
 				self._sock.setblocking(False)
 				self._server=ai[4]
 				break
-			except socket.error, e:
-				if not isinstance(e, basestring) and e[0] == EINPROGRESS:
+			except Exception:
+				if sys.exc_value[0] == errno.EINPROGRESS:
 					break
-				# for all other errors, we try other addresses
+				#for all errors, we try other addresses
 				continue
 		self.fd = self._sock.fileno()
 		self.state = 0 # about to be connected
@@ -975,7 +976,7 @@ class Socks5Receiver(Socks5, IdleObject):
 			self._send=self._sock.send
 			self._recv=self._sock.recv
 		except Exception, ee:
-			errnum = ee[0]
+			(errnum, errstr) = ee
 			self.connect_timeout += 1
 			if errnum == 111 or self.connect_timeout > 1000:
 				self.queue._connection_refused(self.streamhost, 
@@ -1020,8 +1021,8 @@ class Socks5Receiver(Socks5, IdleObject):
 			sub_buff = buff[:4]
 			if len(sub_buff) < 4:
 				return None
-			version, address_type = struct.unpack('!BxxB', buff[:4])
-			addrlen = 0
+			version, command, rsvd, address_type = struct.unpack('!BBBB', buff[:4])
+			addrlen, address, port = 0, 0, 0
 			if address_type == 0x03:
 				addrlen = ord(buff[4])
 				address = struct.unpack('!%ds' % addrlen, buff[5:addrlen + 5])

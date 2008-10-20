@@ -31,11 +31,8 @@ What it supplies:
     A means of handling requests, by redirection though the command manager.
 """
 
-import math
 from protocol import *
 from client import PlugIn
-
-DBG_COMMANDS = 'commands'
 
 class Commands(PlugIn):
     """Commands is an ancestor of PlugIn and can be attached to any session.
@@ -49,7 +46,7 @@ class Commands(PlugIn):
     def __init__(self, browser):
         """Initialises class and sets up local variables"""
         PlugIn.__init__(self)
-        self.DBG_LINE = DBG_COMMANDS
+        DBG_LINE='commands'
         self._exported_methods=[]
         self._handlers={'':{}}
         self._browser = browser
@@ -61,14 +58,13 @@ class Commands(PlugIn):
         owner.RegisterHandler('iq',self._CommandHandler,typ='set',ns=NS_COMMANDS)
         owner.RegisterHandler('iq',self._CommandHandler,typ='get',ns=NS_COMMANDS)
         self._browser.setDiscoHandler(self._DiscoHandler,node=NS_COMMANDS,jid='')
-        owner.debug_flags.append(DBG_COMMANDS) 
         
     def plugout(self):
         """Removes handlers from the session"""
         # unPlug from the session and the disco manager
-        self._owner.UnregisterHandler('iq',self._CommandHandler,ns=NS_COMMANDS)
+        self._owner.UnregisterHandler('iq',self_CommandHandler,ns=NS_COMMANDS)
         for jid in self._handlers:
-            self._browser.delDiscoHandler(self._DiscoHandler,node=NS_COMMANDS,jid=jid)
+            self._browser.delDiscoHandler(self._DiscoHandler,node=NS_COMMANDS)
         
     def _CommandHandler(self,conn,request):
         """The internal method to process the routing of command execution requests"""
@@ -197,7 +193,7 @@ class Command_Handler_Prototype(PlugIn):
     def __init__(self,jid=''):
         """Set up the class"""
         PlugIn.__init__(self)
-        self.DBG_LINE='command'
+        DBG_LINE='command'
         self.sessioncount = 0
         self.sessions = {}
         # Disco information for command list pre-formatted as a tuple
@@ -285,10 +281,10 @@ class TestCommand(Command_Handler_Prototype):
             session = None
         if session is None:
             session = self.getSessionID()
-            self.sessions[session]={'jid':request.getFrom(),'actions':{'cancel':self.cmdCancel,'next':self.cmdSecondStage},'data':{'type':None}}
+            sessions[session]={'jid':request.getFrom(),'actions':{'cancel':self.cmdCancel,'next':self.cmdSecondStage},'data':{'type':None}}
         # As this is the first stage we only send a form
         reply = request.buildReply('result')
-        form = DataForm(title='Select type of operation',data=['Use the combobox to select the type of calculation you would like to do, then click Next',DataField(name='calctype',label='Calculation Type',value=self.sessions[session]['data']['type'],options=[['circlediameter','Calculate the Diameter of a circle'],['circlearea','Calculate the area of a circle']],typ='list-single',required=1)])
+        form = DataForm(title='Select type of operation',data=['Use the combobox to select the type of calculation you would like to do, then click Next',DataField(name='calctype',label='Calculation Type',value=sessions[session]['data']['type'],options=[['circlediameter','Calculate the Diameter of a circle'],['circlearea','Calculate the area of a circle']],typ='list-single',required=1)])
         replypayload = [Node('actions',attrs={'execute':'next'},payload=[Node('next')]),form]
         reply.addChild(name='command',attrs={'xmlns':NS_COMMAND,'node':request.getTagAttr('command','node'),'sessionid':session,'status':'executing'},payload=replypayload)
         self._owner.send(reply)
@@ -316,9 +312,9 @@ class TestCommand(Command_Handler_Prototype):
         except Exception:
             self.cmdSecondStageReply(conn,request)
         if sessions[request.getTagAttr('command','sessionid')]['data']['type'] == 'circlearea':
-            result = num*(math.pi**2)
+            result = num*(pi**2)
         else:
-            result = num*2*math.pi
+            result = num*2*pi
         reply = result.buildReply(request)
         form = DataForm(typ='result',data=[DataField(label='result',name='result',value=result)])
         reply.addChild(name='command',attrs={'xmlns':NS_COMMAND,'node':request.getTagAttr('command','node'),'sessionid':request.getTagAttr('command','sessionid'),'status':'completed'},payload=form)
@@ -329,7 +325,7 @@ class TestCommand(Command_Handler_Prototype):
         reply = request.buildReply('result')
         reply.addChild(name='command',attrs={'xmlns':NS_COMMAND,'node':request.getTagAttr('command','node'),'sessionid':request.getTagAttr('command','sessionid'),'status':'cancelled'})
         self._owner.send(reply)
-        del self.sessions[request.getTagAttr('command','sessionid')]
+        del sessions[request.getTagAttr('command','sessionid')]
             
     
 

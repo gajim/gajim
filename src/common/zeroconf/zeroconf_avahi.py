@@ -292,7 +292,7 @@ class Zeroconf:
 				return True
 			else:
 				return False
-		except dbus.DBusException:
+		except dbus.DBusException, e:
 			gajim.log.debug("Can't remove service. That should not happen")
 
 	def browse_domain(self, interface, protocol, domain):

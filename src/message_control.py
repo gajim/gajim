@@ -142,6 +142,7 @@ class MessageControl:
 
 		self.session = session
 
+		new_key = None
 		if session:
 			session.control = self
 			new_key = session.thread_id

@@ -91,76 +91,77 @@ element_styles['tt']  = element_styles['kbd']
 element_styles['i']   = element_styles['em']
 element_styles['b']   = element_styles['strong']
 
-# ==========
-#   JEP-0071
-# ==========
+'''
+==========
+  JEP-0071
+==========
+
+This Integration Set includes a subset of the modules defined for 
+XHTML 1.0 but does not redefine any existing modules, nor 
+does it define any new modules. Specifically, it includes the 
+following modules only:
+
+- Structure
+- Text
+  
+  * Block
+    
+    phrasal
+       addr, blockquote, pre
+    Struc
+       div,p
+    Heading
+       h1, h2, h3, h4, h5, h6
+    
+  * Inline
+    
+    phrasal
+       abbr, acronym, cite, code, dfn, em, kbd, q, samp, strong, var
+    structural
+       br, span
+  
+- Hypertext (a)
+- List (ul, ol, dl)
+- Image (img)
+- Style Attribute
+     
+Therefore XHTML-IM uses the following content models:
+
+  Block.mix
+            Block-like elements, e.g., paragraphs
+  Flow.mix
+            Any block or inline elements
+  Inline.mix
+            Character-level elements
+  InlineNoAnchor.class
+			Anchor element 
+  InlinePre.mix
+            Pre element
+
+XHTML-IM also uses the following Attribute Groups:
+
+Core.extra.attrib
+	TBD
+I18n.extra.attrib
+	TBD
+Common.extra
+	style
+
+
+...
+#block level:
+#Heading    h
+#           ( pres           = h1 | h2 | h3 | h4 | h5 | h6 )
+#Block      ( phrasal        = address | blockquote | pre )
+#NOT           ( presentational = hr )
+#           ( structural     = div | p )
+#other:     section
+#Inline     ( phrasal        = abbr | acronym | cite | code | dfn | em | kbd | q | samp | strong | var )
+#NOT        ( presentational =  b  | big | i | small | sub | sup | tt )
+#           ( structural     =  br | span )
+#Param/Legacy    param, font, basefont, center, s, strike, u, dir, menu, isindex
 #
-# This Integration Set includes a subset of the modules defined for
-# XHTML 1.0 but does not redefine any existing modules, nor
-# does it define any new modules. Specifically, it includes the
-# following modules only:
-#
-# - Structure
-# - Text
-#
-#   * Block
-#
-#     phrasal
-#        addr, blockquote, pre
-#     Struc
-#        div,p
-#     Heading
-#        h1, h2, h3, h4, h5, h6
-#
-#   * Inline
-#
-#     phrasal
-#        abbr, acronym, cite, code, dfn, em, kbd, q, samp, strong, var
-#     structural
-#        br, span
-#
-# - Hypertext (a)
-# - List (ul, ol, dl)
-# - Image (img)
-# - Style Attribute
-#
-# Therefore XHTML-IM uses the following content models:
-#
-#   Block.mix
-#             Block-like elements, e.g., paragraphs
-#   Flow.mix
-#             Any block or inline elements
-#   Inline.mix
-#             Character-level elements
-#   InlineNoAnchor.class
-# 			Anchor element
-#   InlinePre.mix
-#             Pre element
-#
-# XHTML-IM also uses the following Attribute Groups:
-#
-# Core.extra.attrib
-# 	TBD
-# I18n.extra.attrib
-# 	TBD
-# Common.extra
-# 	style
-#
-#
-# ...
-# block level:
-# Heading    h
-#            ( pres           = h1 | h2 | h3 | h4 | h5 | h6 )
-# Block      ( phrasal        = address | blockquote | pre )
-# NOT           ( presentational = hr )
-#            ( structural     = div | p )
-# other:     section
-# Inline     ( phrasal        = abbr | acronym | cite | code | dfn | em |
-#                               kbd | q | samp | strong | var )
-# NOT        ( presentational =  b  | big | i | small | sub | sup | tt )
-#            ( structural     =  br | span )
-# Param/Legacy    param, font, basefont, center, s, strike, u, dir, menu,
-#                 isindex
+'''
 
 BLOCK_HEAD = set(( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', ))
 BLOCK_PHRASAL = set(( 'address', 'blockquote', 'pre', ))
@@ -1034,7 +1035,7 @@ if __name__ == '__main__':
 	def on_textview_motion_notify_event(widget, event):
 		'''change the cursor to a hand when we are over a mail or an url'''
 		global change_cursor
-		pointer_x, pointer_y = htmlview.window.get_pointer()[0:2]
+		pointer_x, pointer_y, spam = htmlview.window.get_pointer()
 		x, y = htmlview.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer_x,
 								   pointer_y)
 		tags = htmlview.get_iter_at_location(x, y).get_tags()
@@ -1043,6 +1044,7 @@ if __name__ == '__main__':
 					 gtk.gdk.Cursor(gtk.gdk.XTERM))
 			change_cursor = None
 		tag_table = htmlview.get_buffer().get_tag_table()
+		over_line = False
 		for tag in tags:
 			try:
 				if tag.is_anchor:

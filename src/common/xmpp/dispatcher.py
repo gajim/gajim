@@ -28,14 +28,12 @@ from client import PlugIn
 DefaultTimeout=25
 ID=0
 
-DBG_DISPATCHER = 'dispatcher'
-
 class Dispatcher(PlugIn):
     """ Ancestor of PlugIn class. Handles XMPP stream, i.e. aware of stream headers.
         Can be plugged out/in to restart these headers (used for SASL f.e.). """
     def __init__(self):
         PlugIn.__init__(self)
-        self.DBG_LINE = DBG_DISPATCHER
+        DBG_LINE='dispatcher'
         self.handlers={}
         self._expected={}
         self._defaultHandler=None
@@ -84,7 +82,6 @@ class Dispatcher(PlugIn):
         self._owner.lastErr=None
         self._owner.lastErrCode=None
         self.StreamInit()
-        owner.debug_flags.append(DBG_DISPATCHER)
 
     def plugout(self):
         """ Prepares instance to be destructed. """
@@ -295,6 +292,7 @@ class Dispatcher(PlugIn):
         for key in list:
             if key: chain = chain + self.handlers[xmlns][name][key]
 
+        output=''
         if ID in session._expected:
             user=0
             if isinstance(session._expected[ID], tuple):
@@ -325,6 +323,7 @@ class Dispatcher(PlugIn):
             lastErrNode, lastErr and lastErrCode are set accordingly. """
         if timeout is None: timeout=DefaultTimeout
         self._expected[ID]=None
+        has_timed_out=0
         abort_time=time.time() + timeout
         self.DEBUG("Waiting for ID:%s with timeout %s..." % (ID,timeout),'wait')
         while not self._expected[ID]:

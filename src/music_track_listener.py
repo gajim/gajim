@@ -23,6 +23,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import os
 import gobject
 if __name__ == '__main__':
 	# install _() func before importing dbus_support

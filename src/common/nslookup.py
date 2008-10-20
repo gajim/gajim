@@ -268,7 +268,7 @@ class IdleCommand(IdleObject):
 	def pollin(self):
 		try:
 			res = self.pipe.read()
-		except Exception:
+		except Exception, e:
 			res = ''
 		if res == '':
 			return self.pollend()
@@ -316,6 +316,7 @@ if __name__ == '__main__':
 	resolver = Resolver(idlequeue)
 	
 	def clicked(widget):
+		global resolver
 		host = text_view.get_text()
 		def on_result(host, result_array):
 			print 'Result:\n' + repr(result_array)

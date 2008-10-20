@@ -56,7 +56,8 @@ class Roster:
 		if not contact:
 			return
 
-		host, address, port, txt = contact[4:7] + contact[8]
+		(service_jid, domain, interface, protocol, host, address, port, bare_jid, txt)  \
+			= contact
 
 		self._data[jid]={}
 		self._data[jid]['ask'] = 'no'  #?

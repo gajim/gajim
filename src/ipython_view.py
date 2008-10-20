@@ -48,6 +48,7 @@ import sys
 import os
 import pango
 from StringIO import StringIO
+import thread
 
 try:
   import IPython
@@ -213,7 +214,7 @@ class IterableIPShell:
     possibilities = self.IP.complete(split_line[-1])
 
     try:
-        all(())
+        __builtins__.all
     except AttributeError:
         def all(iterable):
             for element in iterable:
@@ -245,6 +246,7 @@ class IterableIPShell:
     @param header: Header to be printed before output
     @type header: string
     '''
+    stat = 0
     if verbose or debug: print header+cmd
     # flush stdout so we don't mangle python's buffering
     if not debug:

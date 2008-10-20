@@ -71,7 +71,7 @@ class AdHocCommand:
 			' bad-request'))
 
 	def cancel(self, request):
-		response = self.buildResponse(request, status = 'canceled')[0]
+		response, cmd = self.buildResponse(request, status = 'canceled')
 		self.connection.connection.send(response)
 		return False	# finish the session
 

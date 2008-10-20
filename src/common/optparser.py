@@ -264,7 +264,7 @@ class OptionsParser:
 			)
 			con.commit()
 			gajim.logger.init_vars()
-		except sqlite.OperationalError:
+		except sqlite.OperationalError, e:
 			pass
 		con.close()
 
@@ -336,7 +336,7 @@ class OptionsParser:
 				'''
 			)
 			con.commit()
-		except sqlite.OperationalError:
+		except sqlite.OperationalError, e:
 			pass
 		con.close()
 		gajim.config.set('version', '0.10.1.3')
@@ -457,7 +457,7 @@ class OptionsParser:
 				'''
 			)
 			con.commit()
-		except sqlite.OperationalError:
+		except sqlite.OperationalError, e:
 			pass
 		con.close()
 		gajim.config.set('version', '0.11.1.3')
@@ -499,7 +499,7 @@ class OptionsParser:
 				'''
 			)
 			con.commit()
-		except sqlite.OperationalError:
+		except sqlite.OperationalError, e:
 			pass
 		con.close()
 		gajim.config.set('version', '0.11.1.5')
@@ -535,7 +535,7 @@ class OptionsParser:
 				'''
 			)
 			con.commit()
-		except sqlite.OperationalError:
+		except sqlite.OperationalError, e:
 			pass
 		con.close()
 		gajim.config.set('version', '0.11.4.1')
@@ -572,7 +572,7 @@ class OptionsParser:
 				'''
 			)
 			con.commit()
-		except sqlite.OperationalError:
+		except sqlite.OperationalError, e:
 			pass
 		con.close()
 		gajim.config.set('version', '0.11.4.3')
@@ -586,7 +586,7 @@ class OptionsParser:
 		try:
 			cur.executescript('DROP TABLE caps_cache;')
 			con.commit()
-		except sqlite.OperationalError:
+		except sqlite.OperationalError, e:
 			pass
 		try:
 			cur.executescript(

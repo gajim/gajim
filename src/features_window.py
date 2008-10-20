@@ -28,6 +28,8 @@ import sys
 import gtk
 import gtkgui_helpers
 
+import dialogs
+
 from common import gajim
 from common import helpers
 
@@ -149,6 +151,7 @@ class FeaturesWindow:
 		if not rows:
 			return
 		path = rows[0]
+		available = self.model[path][1]
 		feature = self.model[path][0].decode('utf-8')
 		text = self.features[feature][1] + '\n'
 		if os.name == 'nt':
@@ -184,6 +187,7 @@ class FeaturesWindow:
 	def gpg_available(self):
 		if os.name == 'nt':
 			return False
+		from common import gajim
 		return gajim.HAVE_GPG
 
 	def network_manager_available(self):
@@ -296,6 +300,7 @@ class FeaturesWindow:
 		return False
 
 	def pycrypto_available(self):
+		from common import gajim
 		return gajim.HAVE_PYCRYPTO
 
 	def docutils_available(self):
@@ -306,6 +311,7 @@ class FeaturesWindow:
 		return True
 
 	def pysexy_available(self):
+		from common import gajim
 		return gajim.HAVE_PYSEXY
 
 # vim: se ts=3:

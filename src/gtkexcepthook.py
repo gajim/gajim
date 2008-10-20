@@ -82,6 +82,7 @@ def _info(type_, value, tb):
 	# on expand the details the dialog remains centered on screen
 	dialog.set_position(gtk.WIN_POS_CENTER_ALWAYS)
 
+	close_clicked = False
 	def on_dialog_response(dialog, response):
 		if response == RESPONSE_REPORT_BUG:
 			url = 'http://trac.gajim.org/wiki/HowToCreateATicket'
@@ -103,6 +104,6 @@ if os.name == 'nt' or not sys.stderr.isatty():
 if __name__ == '__main__':
 	_excepthook_save = sys.excepthook
 	sys.excepthook = _info
-	raise Exception()
+	print x # this always tracebacks
 
 # vim: se ts=3:

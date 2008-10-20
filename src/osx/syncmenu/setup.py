@@ -1,4 +1,3 @@
-import sys
 from distutils.core import setup, Extension
 import commands
 

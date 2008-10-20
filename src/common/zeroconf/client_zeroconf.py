@@ -71,7 +71,7 @@ class ZeroconfListener(IdleObject):
 		# will fail when port is busy, or we don't have rights to bind
 		try:
 			self._serv.bind((ai[4][0], self.port))
-		except Exception:
+		except Exception, e:
 			# unable to bind, show error dialog
 			return None
 		self._serv.listen(socket.SOMAXCONN)
@@ -87,14 +87,14 @@ class ZeroconfListener(IdleObject):
 	def pollin(self):
 		''' accept a new incomming connection and notify queue'''
 		sock = self.accept_conn()
-		# loop through roster to find who has connected to us
+		''' loop through roster to find who has connected to us'''
 		from_jid = None
 		ipaddr = sock[1][0]
 		for jid in self.conn_holder.getRoster().keys():
 			entry = self.conn_holder.getRoster().getItem(jid)
 			if (entry['address'] == ipaddr):
 				from_jid = jid
-				break
+				break;
 		P2PClient(sock[0], ipaddr, sock[1][1], self.conn_holder, [], from_jid)
 
 	def disconnect(self):
@@ -158,7 +158,7 @@ class P2PClient(IdleObject):
 		self.conn_holder.add_connection(self, self.Server, port, self.to)
 		# count messages in queue
 		for val in self.stanzaqueue:
-			is_message = val[1]
+			stanza, is_message = val
 			if is_message:
 				if self.fd == -1:
 					if on_not_ok:
@@ -481,6 +481,18 @@ class P2PConnection(IdleObject, PlugIn):
 			self.DEBUG('Unhandled data received: %s' % received,'error')
 			self.disconnect()
 		return True
+
+	def onreceive(self, recv_handler):
+		if not recv_handler:
+			if hasattr(self._owner, 'Dispatcher'):
+				self.on_receive = self._owner.Dispatcher.ProcessNonBlocking
+			else:
+				self.on_receive = None
+			return
+		_tmp = self.on_receive
+		# make sure this cb is not overriden by recursive calls
+		if not recv_handler(None) and _tmp == self.on_receive:
+			self.on_receive = recv_handler
 
 	def disconnect(self):
 		''' Closes the socket. '''

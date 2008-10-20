@@ -39,6 +39,7 @@ import locale
 import os
 
 import gtkgui_helpers
+import message_control
 
 from common import helpers
 from common import gajim

@@ -1,6 +1,6 @@
 import sys, os
 from growl.Growl import GrowlNotifier
-from common import gajim
+from common import gajim, helpers
 
 
 if sys.platform != "darwin":
@@ -22,7 +22,7 @@ growler = None
 
 
 def init():
-	global growler
+	global growler, notifications
 	icon = open(os.path.join(gajim.DATA_DIR, "pixmaps", "gajim.icns"), "r")
 	growler = GrowlNotifier(applicationName = "Gajim",
 							notifications = notifications,
@@ -33,6 +33,7 @@ def init():
 
 
 def notify(event_type, jid, account, msg_type, path_to_image, title, text):
+	global notifications
 	if not event_type in notifications:
 		event_type = GENERIC_NOTIF
 	if not text:

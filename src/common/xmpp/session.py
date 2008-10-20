@@ -13,6 +13,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
+__version__="$Id"
 
 """
 When your handler is called it is getting the session instance as the first argument.
@@ -22,10 +23,6 @@ one client for each connection. Is is specifically important when you are
 writing the server.
 """
 
-__version__="$Id"
-
-import random
-import simplexml
 from protocol import *
 
 # Transport-level flags
@@ -252,6 +249,7 @@ class Session:
             features=Node('stream:features')
             if NS_TLS in self.waiting_features:
                 features.T.starttls.setNamespace(NS_TLS)
+                features.T.starttls.T.required
             if NS_SASL in self.waiting_features:
                 features.T.mechanisms.setNamespace(NS_SASL)
                 for mec in self._owner.SASL.mechanisms:

@@ -23,6 +23,8 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import re
+
 docdir = '../'
 datadir = '../'
 

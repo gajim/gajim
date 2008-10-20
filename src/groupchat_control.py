@@ -45,6 +45,7 @@ from common import helpers
 
 from chat_control import ChatControl
 from chat_control import ChatControlBase
+from conversation_textview import ConversationTextview
 from common.exceptions import GajimGeneralException
 
 #(status_image, type, nick, shown_nick)
@@ -174,7 +175,7 @@ class GroupchatControl(ChatControlBase):
 
 	def __init__(self, parent_win, contact, acct, is_continued=False):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
-					'muc_child_vbox', contact, acct)
+					'muc_child_vbox', contact, acct);
 
 		self.is_continued=is_continued
 		self.is_anonymous = True
@@ -990,6 +991,7 @@ class GroupchatControl(ChatControlBase):
 		contact in a room'''
 		if nick is None:
 			nick = model[iter_][C_NICK].decode('utf-8')
+		fjid = gajim.construct_fjid(self.room_jid, nick) # 'fake' jid
 
 		ctrl = self._start_private_message(nick)
 		if ctrl and msg:
@@ -1790,7 +1792,7 @@ class GroupchatControl(ChatControlBase):
 			on_minimize(self)
 			return
 		if method == self.parent_win.CLOSE_ESC:
-			iter = self.list_treeview.get_selection().get_selected()[1]
+			model, iter = self.list_treeview.get_selection().get_selected()
 			if iter:
 				self.list_treeview.get_selection().unselect_all()
 				on_no(self)
@@ -1819,7 +1821,7 @@ class GroupchatControl(ChatControlBase):
 			sectext = _('If you close this window, you will be disconnected '
 					'from this group chat.')
 
-			dialogs.ConfirmationDialogCheck(pritext, sectext,
+			dialog = dialogs.ConfirmationDialogCheck(pritext, sectext,
 				_('Do _not ask me again'), on_response_ok=on_ok,
 				on_response_cancel=on_cancel)
 			return
@@ -1853,7 +1855,7 @@ class GroupchatControl(ChatControlBase):
 			# will work yet
 			gajim.connections[self.account].send_gc_subject(self.room_jid, subject)
 
-		dialogs.InputTextDialog(_('Changing Subject'),
+		instance = dialogs.InputTextDialog(_('Changing Subject'),
 			_('Please specify the new subject:'), input_str=self.subject,
 			ok_handler=on_ok)
 
@@ -1885,7 +1887,7 @@ class GroupchatControl(ChatControlBase):
 				jid)
 
 		# Ask for a reason
-		dialogs.DubbleInputDialog(_('Destroying %s') % self.room_jid,
+		instance = dialogs.DubbleInputDialog(_('Destroying %s') % self.room_jid,
 			_('You are going to definitively destroy this room.\n'
 			'You may specify a reason below:'),
 			_('You may also enter an alternate venue:'), ok_handler=on_ok)
@@ -1908,6 +1910,7 @@ class GroupchatControl(ChatControlBase):
 		path = treeview.get_selection().get_selected_rows()[1][0]
 		iter = model.get_iter(path)
 		type = model[iter][2]
+		account = model[iter][4].decode('utf-8')
 		if type != 'contact': # source is not a contact
 			return
 		contact_jid = data.decode('utf-8')
@@ -2035,7 +2038,7 @@ class GroupchatControl(ChatControlBase):
 	def on_list_treeview_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
 			selection = widget.get_selection()
-			iter = selection.get_selected()[1]
+			model, iter = selection.get_selected()
 			if iter:
 				widget.get_selection().unselect_all()
 				return True
@@ -2059,7 +2062,7 @@ class GroupchatControl(ChatControlBase):
 				'none', reason)
 
 		# ask for reason
-		dialogs.InputDialog(_('Kicking %s') % nick,
+		instance = dialogs.InputDialog(_('Kicking %s') % nick,
 					_('You may specify a reason below:'), ok_handler=on_ok)
 
 	def mk_menu(self, event, iter_):
@@ -2213,13 +2216,13 @@ class GroupchatControl(ChatControlBase):
 
 	def on_list_treeview_button_press_event(self, widget, event):
 		'''popup user's group's or agent menu'''
-		try:
-			pos = widget.get_path_at_pos(int(event.x), int(event.y))
-			path, x = pos[0] + pos[2]
-		except TypeError:
-			widget.get_selection().unselect_all()
-			return
 		if event.button == 3: # right click
+			try:
+				path, column, x, y = widget.get_path_at_pos(int(event.x),
+					int(event.y))
+			except TypeError:
+				widget.get_selection().unselect_all()
+				return
 			widget.get_selection().select_path(path)
 			model = widget.get_model()
 			iter = model.get_iter(path)
@@ -2228,6 +2231,12 @@ class GroupchatControl(ChatControlBase):
 			return True
 
 		elif event.button == 2: # middle click
+			try:
+				path, column, x, y = widget.get_path_at_pos(int(event.x),
+					int(event.y))
+			except TypeError:
+				widget.get_selection().unselect_all()
+				return
 			widget.get_selection().select_path(path)
 			model = widget.get_model()
 			iter = model.get_iter(path)
@@ -2237,6 +2246,13 @@ class GroupchatControl(ChatControlBase):
 			return True
 
 		elif event.button == 1: # left click
+			try:
+				path, column, x, y = widget.get_path_at_pos(int(event.x),
+					int(event.y))
+			except TypeError:
+				widget.get_selection().unselect_all()
+				return
+
 			if gajim.single_click and not event.state & gtk.gdk.SHIFT_MASK:
 				self.on_row_activated(widget, path)
 				return True
@@ -2350,7 +2366,7 @@ class GroupchatControl(ChatControlBase):
 		# to ban we know the real jid. so jid is not fakejid
 		nick = gajim.get_nick_from_jid(jid)
 		# ask for reason
-		dialogs.InputDialog(_('Banning %s') % nick,
+		instance = dialogs.InputDialog(_('Banning %s') % nick,
 			_('You may specify a reason below:'), ok_handler=on_ok)
 
 	def grant_membership(self, widget, jid):

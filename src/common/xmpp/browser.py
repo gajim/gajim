@@ -26,8 +26,6 @@ automatically called when user requests some node of your disco tree.
 from dispatcher import *
 from client import PlugIn
 
-DBG_BROWSER = "Browser"
-
 class Browser(PlugIn):
     """ WARNING! This class is for components only. It will not work in client mode!
 
@@ -82,7 +80,7 @@ class Browser(PlugIn):
     def __init__(self):
         """Initialises internal variables. Used internally."""
         PlugIn.__init__(self)
-        self.DBG_LINE = DBG_BROWSER
+        DBG_LINE='browser'
         self._exported_methods=[]
         self._handlers={'':{}}
 
@@ -91,7 +89,6 @@ class Browser(PlugIn):
             Used internally."""
         owner.RegisterHandler('iq',self._DiscoveryHandler,typ='get',ns=NS_DISCO_INFO)
         owner.RegisterHandler('iq',self._DiscoveryHandler,typ='get',ns=NS_DISCO_ITEMS)
-        owner.debug_flags.append(DBG_BROWSER)
 
     def plugout(self):
         """ Unregisters browser's iq handlers from your application dispatcher instance.

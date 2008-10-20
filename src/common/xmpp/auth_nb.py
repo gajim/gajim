@@ -17,14 +17,11 @@
 Provides library with all Non-SASL and SASL authentication mechanisms.
 Can be used both for client and transport authentication.
 '''
+import sys
 from protocol import *
 from auth import *
 from client import PlugIn
-import sha
-import base64
-import random
-import itertools
-import dispatcher_nb
+import sha,base64,random,dispatcher_nb
 
 try:
 	import kerberos
@@ -145,8 +142,8 @@ class SASL(PlugIn):
 		self._owner.RegisterHandler('failure', self.SASLHandler, xmlns=NS_SASL)
 		self._owner.RegisterHandler('success', self.SASLHandler, xmlns=NS_SASL)
 		if "GSSAPI" in mecs and have_kerberos:
-			self.gss_vc = kerberos.authGSSClientInit(
-					'xmpp@' + self._owner.Server)[1]
+			rc, self.gss_vc = kerberos.authGSSClientInit('xmpp@' + 
+														self._owner.Server)
 			response = kerberos.authGSSClientResponse(self.gss_vc)
 			node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'GSSAPI'},
                    payload=(response or ""))
@@ -227,8 +224,10 @@ class SASL(PlugIn):
 			else:
 				resp['realm'] = self._owner.Server
 			resp['nonce']=chal['nonce']
-			resp['cnonce'] = ''.join("%x" % randint(0, 2**28) for randint in
-					itertools.repeat(random.randint, 7))
+			cnonce=''
+			for i in range(7):
+				cnonce += hex(int(random.random() * 65536 * 4096))[2:]
+			resp['cnonce'] = cnonce
 			resp['nc'] = ('00000001')
 			resp['qop'] = 'auth'
 			resp['digest-uri'] = 'xmpp/'+self._owner.Server
@@ -279,7 +278,7 @@ class NonBlockingNonSASL(PlugIn):
 		self.DEBUG('Querying server about possible auth methods', 'start')
 		self.owner = owner 
 		
-		owner.Dispatcher.SendAndWaitForResponse(
+		resp = owner.Dispatcher.SendAndWaitForResponse(
 			Iq('get', NS_AUTH, payload=[Node('username', payload=[self.user])]), func=self._on_username
 		)
 		
@@ -303,14 +302,9 @@ class NonBlockingNonSASL(PlugIn):
 			token=query.getTagData('token')
 			seq=query.getTagData('sequence')
 			self.DEBUG("Performing zero-k authentication",'ok')
-
-			def hasher(s):
-				return sha.new(s).hexdigest()
-
-			def hash_n_times(s, count):
-				return count and hasher(hash_n_times(s, count-1)) or s
-
-			hash = hash_n_times(hasher(hasher(self.password) + token), int(seq))
+			hash = sha.new(sha.new(self.password).hexdigest()+token).hexdigest()
+			for foo in xrange(int(seq)): 
+				hash = sha.new(hash).hexdigest()
 			query.setTagData('hash',hash)
 			self._method='0k'
 		else:
@@ -345,7 +339,7 @@ class NonBlockingNonSASL(PlugIn):
 			self.DEBUG('waiting on handshake', 'notify')
 			return
 		self._owner.onreceive(None)
-		self._owner._registered_name=self.user
+		owner._registered_name=self.user
 		if self.handshake+1: 
 			return self.on_auth('ok')
 		self.on_auth(None)
@@ -382,7 +376,7 @@ class NonBlockingBind(Bind):
 			self._resource = []
 			
 		self._owner.onreceive(None)
-		self._owner.Dispatcher.SendAndWaitForResponse(
+		resp=self._owner.Dispatcher.SendAndWaitForResponse(
 			Protocol('iq',typ='set',
 				payload=[Node('bind', attrs={'xmlns':NS_BIND}, payload=self._resource)]), 
 				func=self._on_bound)
@@ -444,14 +438,12 @@ class NBComponentBind(ComponentBind):
 	
 	def Bind(self, domain = None, on_bind = None):
 		''' Perform binding. Use provided domain name (if not provided). '''
-		def wrapper(resp):
-			self._on_bound(resp, domain)
-		self._owner.onreceive(wrapper)
+		self._owner.onreceive(self._on_bound)
 		self.on_bind = on_bind
 	
-	def _on_bound(self, resp, domain=None):
-		if resp:
-			self.Dispatcher.ProcessNonBlocking(resp)
+	def _on_bound(self, resp):
+		if data:
+			self.Dispatcher.ProcessNonBlocking(data)
 		if self.bound is None:
 			return
 		self._owner.onreceive(None)
@@ -459,7 +451,7 @@ class NBComponentBind(ComponentBind):
 			Protocol('bind', attrs={'name':domain}, xmlns=NS_COMPONENT_1), 
 			func=self._on_bind_reponse)
 	
-	def _on_bind_reponse(self, resp):
+	def _on_bind_reponse(self, res):
 		if resp and resp.getAttr('error'):
 			self.DEBUG('Binding failed: %s.' % resp.getAttr('error'), 'error')
 		elif resp:

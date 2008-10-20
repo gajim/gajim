@@ -27,13 +27,11 @@ Transports are stackable so you - f.e. TLS use HTPPROXYsocket or TCPsocket as mo
 Also exception 'error' is defined to allow capture of this module specific exceptions.
 """
 
-import socket
-import select
-import base64
-import dispatcher
+import socket,select,base64,dispatcher
 from simplexml import ustr
 from client import PlugIn
 from protocol import *
+import sys
 import os
 import errno
 
@@ -66,15 +64,13 @@ class error:
         """Serialise exception into pre-cached descriptive string."""
         return self._comment
 
-DBG_SOCKET = "socket"
-
 class TCPsocket(PlugIn):
     """ This class defines direct TCP connection method. """
     def __init__(self, server=None, use_srv=True):
         """ Cache connection point 'server'. 'server' is the tuple of (host, port)
             absolutely the same as standard tcp socket uses. """
         PlugIn.__init__(self)
-        self.DBG_LINE = DBG_SOCKET
+        self.DBG_LINE='socket'
         self._exported_methods=[self.send,self.disconnect]
 
         self._server = server
@@ -87,7 +83,6 @@ class TCPsocket(PlugIn):
         if not self.connect(self._server): return
         self._owner.Connection=self
         self._owner.RegisterDisconnectHandler(self.disconnected)
-        owner.debug_flags.append(DBG_SOCKET)
         return 'ok'
 
     def getHost(self):
@@ -238,7 +233,7 @@ class TLS(PlugIn):
         """
         if 'TLS' in owner.__dict__: return  # Already enabled.
         PlugIn.PlugIn(self,owner)
-        self.DBG_LINE='TLS'
+        DBG_LINE='TLS'
         if now: return self._startSSL()
         if self._owner.Dispatcher.Stream.features:
             try: self.FeaturesHandler(self._owner.Dispatcher,self._owner.Dispatcher.Stream.features)
@@ -271,7 +266,7 @@ class TLS(PlugIn):
 
     def _startSSL(self):
         """ Immidiatedly switch socket to TLS mode. Used internally."""
-        # Here we should switch pending_data to hint mode.
+        """ Here we should switch pending_data to hint mode."""
         tcpsock=self._owner.Connection
         tcpsock._sslObj    = socket.ssl(tcpsock._sock, None, None)
         tcpsock._sslIssuer = tcpsock._sslObj.issuer()

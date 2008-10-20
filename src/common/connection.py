@@ -415,6 +415,7 @@ class Connection(ConnectionHandlers):
 
 		if data:
 			hostname = data['hostname']
+			usessl = data['usessl']
 			self.try_connecting_for_foo_secs = 45
 			p = data['proxy']
 			use_srv = True
@@ -960,6 +961,7 @@ class Connection(ConnectionHandlers):
 		sshow = helpers.get_xmpp_show(show)
 		if not msg:
 			msg = ''
+		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 		if show == 'offline':
 			p = common.xmpp.Presence(typ = 'unavailable', to = jid)
 			p = self.add_sha(p, False)
@@ -983,6 +985,7 @@ class Connection(ConnectionHandlers):
 		sshow = helpers.get_xmpp_show(show)
 		if not msg:
 			msg = ''
+		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 		sign_msg = False
 		if not auto and not show == 'offline':
 			sign_msg = True
@@ -1396,7 +1399,7 @@ class Connection(ConnectionHandlers):
 			return
 		iq = common.xmpp.Iq(typ='get')
 		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
-		iq2.addChild(name='gajim', namespace='gajim:prefs')
+		iq3 = iq2.addChild(name='gajim', namespace='gajim:prefs')
 		self.connection.send(iq)
 
 	def get_bookmarks(self):
@@ -1426,11 +1429,11 @@ class Connection(ConnectionHandlers):
 			# Note: need to handle both None and '' as empty
 			#   thus shouldn't use "is not None"
 			if bm.get('nick', None):
-				iq4.setTagData('nick', bm['nick'])
+				iq5 = iq4.setTagData('nick', bm['nick'])
 			if bm.get('password', None):
-				iq4.setTagData('password', bm['password'])
+				iq5 = iq4.setTagData('password', bm['password'])
 			if bm.get('print_status', None):
-				iq4.setTagData('print_status', bm['print_status'])
+				iq5 = iq4.setTagData('print_status', bm['print_status'])
 		self.connection.send(iq)
 
 	def get_annotations(self):
@@ -1701,7 +1704,7 @@ class Connection(ConnectionHandlers):
 			if gajim.account_is_connected(self.name):
 				hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 				iq = common.xmpp.Iq(typ = 'set', to = hostname)
-				iq.setTag(common.xmpp.NS_REGISTER + ' query').setTag('remove')
+				q = iq.setTag(common.xmpp.NS_REGISTER + ' query').setTag('remove')
 				con.send(iq)
 				on_remove_success(True)
 				return

@@ -14,9 +14,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-import socket
-import base64
-import dispatcher_nb
+import socket,select,base64,dispatcher_nb
 import struct
 from simplexml import ustr
 from client import PlugIn
@@ -30,6 +28,7 @@ import errno
 import time
 
 import traceback
+import thread
 
 import logging
 log = logging.getLogger('gajim.c.x.transports_nb')
@@ -38,7 +37,6 @@ import common.gajim
 
 USE_PYOPENSSL = False
 
-DBG_NONBLOCKINGTLS= 'NonBlockingTLS'
 try:
 	#raise ImportError("Manually disabled PyOpenSSL")
 	import OpenSSL.SSL
@@ -140,10 +138,10 @@ class SSLWrapper:
 		can indicate that the socket has been closed, so to be sure, we avoid
 		this by returning None. """
 
-		raise NotImplementedError()
+		raise NotImplementedException()
 
 	def send(self, data, flags=None, now = False):
-		raise NotImplementedError()
+		raise NotImplementedException()
 
 class PyOpenSSLWrapper(SSLWrapper):
 	'''Wrapper class for PyOpenSSL's recv() and send() methods'''
@@ -663,8 +661,6 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		''' Return the 'port' value that is connection is [will be] made to.'''
 		return self._server[1]
 
-DBG_NONBLOCKINGTLS = "NonBlockingTLS"
-
 class NonBlockingTLS(PlugIn):
 	''' TLS connection used to encrypts already estabilished tcp connection.'''
 
@@ -683,13 +679,12 @@ class NonBlockingTLS(PlugIn):
 		if 'NonBlockingTLS' in owner.__dict__: 
 			return  # Already enabled.
 		PlugIn.PlugIn(self, owner)
-		self.DBG_LINE = DBG_NONBLOCKINGTLS
-		owner.debug_flags.append(DBG_NONBLOCKINGTLS)
+		DBG_LINE='NonBlockingTLS'
 		self.on_tls_start = on_tls_start
 		if now:
 			try:
 				res = self._startSSL()
-			except Exception:
+			except Exception, e:
 				log.error("PlugIn: while trying _startSSL():", exc_info=True)
 				#traceback.print_exc()
 				self._owner.socket.pollend()
@@ -864,7 +859,7 @@ class NonBlockingTLS(PlugIn):
 		self.DEBUG('Got starttls proceed response. Switching to TLS/SSL...','ok')
 		try:
 			self._startSSL()
-		except Exception:
+		except Exception, e:
 			log.error("StartTLSHandler:", exc_info=True)
 			#traceback.print_exc()
 			self._owner.socket.pollend()
@@ -1105,9 +1100,9 @@ class NBSOCKS5PROXYsocket(NonBlockingTcp):
 			return
 		# Get the bound address/port
 		elif reply[3] == "\x01":
-			pass # begin, end = 3, 7
+			begin, end = 3, 7
 		elif reply[3] == "\x03":
-			pass # begin, end = 4, 4 + reply[4]
+			begin, end = 4, 4 + reply[4]
 		else:
 			self.DEBUG('Invalid proxy reply', 'error')
 			self._owner.disconnected()

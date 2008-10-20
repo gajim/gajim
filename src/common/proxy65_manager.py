@@ -107,10 +107,11 @@ class ProxyResolver:
 		self.state = S_RESOLVED
 		#FIXME: re-enable proxy testing
 		self.state = S_FINISHED
-		#self.receiver_tester = ReceiverTester(self.host, self.port, self.jid,
-		#	self.sid, self.sender_jid, self._on_receiver_success,
-		#	self._on_connect_failure)
-		#self.receiver_tester.connect()
+		return
+		self.receiver_tester = ReceiverTester(self.host, self.port, self.jid,
+			self.sid, self.sender_jid, self._on_receiver_success,
+			self._on_connect_failure)
+		self.receiver_tester.connect()
 	
 	def _on_receiver_success(self):
 		self.host_tester = HostTester(self.host, self.port, self.jid, 
@@ -279,7 +280,7 @@ class HostTester(Socks5, IdleObject):
 			self._send = self._sock.send
 			self._recv = self._sock.recv
 		except Exception, ee:
-			errnum = ee[0]
+			(errnum, errstr) = ee
 			# 56 is for freebsd
 			if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):
 				# still trying to connect
@@ -391,7 +392,7 @@ class ReceiverTester(Socks5, IdleObject):
 			self._send = self._sock.send
 			self._recv = self._sock.recv
 		except Exception, ee:
-			errnum = ee[0]
+			(errnum, errstr) = ee
 			# 56 is for freebsd
 			if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):
 				# still trying to connect

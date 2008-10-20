@@ -23,6 +23,7 @@
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import os
 import time
 import socket
 
@@ -76,6 +77,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 			receiver = file_props['receiver']
 		if sender is None:
 			sender = file_props['sender']
+		proxyhosts = []
 		sha_str = helpers.get_auth_sha(file_props['sid'], sender,
 			receiver)
 		file_props['sha_str'] = sha_str
@@ -381,7 +383,6 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream, connecti
 		try:
 			idle.init()
 		except Exception:
-			global HAS_IDLE
 			HAS_IDLE = False
 
 	def _messageCB(self, ip, con, msg):

@@ -57,7 +57,7 @@ from common import connection
 from common import passwords
 from common import zeroconf
 from common import dataforms
-from common import GnuPG
+from common import pep
 
 from common.exceptions import GajimGeneralException
 
@@ -307,6 +307,9 @@ class PreferencesWindow:
 		else:
 			self.xml.get_widget('sounds_scrolledwindow').set_sensitive(False)
 			self.xml.get_widget('browse_sounds_hbox').set_sensitive(False)
+
+		# sound player
+		player = gajim.config.get('soundplayer')
 
 		# sounds treeview
 		self.sound_tree = self.xml.get_widget('sounds_treeview')
@@ -610,25 +613,27 @@ class PreferencesWindow:
 		helpers.update_optional_features()
 
 	def apply_speller(self):
-		for ctrl in gajim.interface.msg_win_mgr.controls():
-			if isinstance(ctrl, chat_control.ChatControlBase):
-				try:
-					spell_obj = gtkspell.get_from_text_view(ctrl.msg_textview)
-				except Exception:
-					spell_obj = None
+		for acct in gajim.connections:
+			for ctrl in gajim.interface.msg_win_mgr.controls():
+				if isinstance(ctrl, chat_control.ChatControlBase):
+					try:
+						spell_obj = gtkspell.get_from_text_view(ctrl.msg_textview)
+					except Exception:
+						spell_obj = None
 
-				if not spell_obj:
-					gtkspell.Spell(ctrl.msg_textview)
+					if not spell_obj:
+						gtkspell.Spell(ctrl.msg_textview)
 
 	def remove_speller(self):
-		for ctrl in gajim.interface.msg_win_mgr.controls():
-			if isinstance(ctrl, chat_control.ChatControlBase):
-				try:
-					spell_obj = gtkspell.get_from_text_view(ctrl.msg_textview)
-				except Exception:
-					spell_obj = None
-				if spell_obj:
-					spell_obj.detach()
+		for acct in gajim.connections:
+			for ctrl in gajim.interface.msg_win_mgr.controls():
+				if isinstance(ctrl, chat_control.ChatControlBase):
+					try:
+						spell_obj = gtkspell.get_from_text_view(ctrl.msg_textview)
+					except Exception:
+						spell_obj = None
+					if spell_obj:
+						spell_obj.detach()
 
 	def on_speller_checkbutton_toggled(self, widget):
 		active = widget.get_active()
@@ -640,7 +645,7 @@ class PreferencesWindow:
 				lang = gajim.LANG
 			tv = gtk.TextView()
 			try:
-				gtkspell.Spell(tv, lang)
+				spell = gtkspell.Spell(tv, lang)
 			except:
 				dialogs.ErrorDialog(
 					_('Dictionary for lang %s not available') % lang,
@@ -1027,6 +1032,7 @@ class PreferencesWindow:
 			return
 		buf = self.xml.get_widget('msg_textview').get_buffer()
 		first_iter, end_iter = buf.get_bounds()
+		name = model.get_value(iter, 0)
 		model.set_value(iter, 1, buf.get_text(first_iter, end_iter))
 
 	def on_msg_treeview_key_press_event(self, widget, event):
@@ -1684,7 +1690,7 @@ class AccountsWindow:
 				gajim.interface.instances[account]['remove_account'] = \
 					RemoveAccountWindow(account)
 		if win_opened:
-			dialogs.ConfirmationDialog(
+			dialog = dialogs.ConfirmationDialog(
 				_('You have opened chat in account %s') % account,
 				_('All chat and groupchat windows will be closed. Do you want to '
 				'continue?'),
@@ -1889,7 +1895,7 @@ class AccountsWindow:
 
 	def on_synchronise_contacts_button1_clicked(self, widget):
 		try:
-			dialogs.SynchroniseSelectAccountDialog(self.current_account)
+			dialog = dialogs.SynchroniseSelectAccountDialog(self.current_account)
 		except GajimGeneralException:
 			# If we showed ErrorDialog, there will not be dialog instance
 			return
@@ -1903,7 +1909,7 @@ class AccountsWindow:
 					self.xml.get_widget('password_entry1').set_text(new_password)
 
 		try:
-			dialogs.ChangePasswordDialog(self.current_account, on_changed)
+			dialog = dialogs.ChangePasswordDialog(self.current_account, on_changed)
 		except GajimGeneralException:
 			# if we showed ErrorDialog, there will not be dialog instance
 			return
@@ -2068,10 +2074,14 @@ class AccountsWindow:
 				gajim.config.set_per('accounts', self.current_account, 'keyid',
 					keyID[0])
 
-		dialogs.ChooseGPGKeyDialog(_('OpenPGP Key Selection'),
+		instance = dialogs.ChooseGPGKeyDialog(_('OpenPGP Key Selection'),
 			_('Choose your OpenPGP key'), secret_keys, on_key_selected)
 
 	def on_use_gpg_agent_checkbutton_toggled(self, widget):
+		if self.current_account == gajim.ZEROCONF_ACC_NAME:
+			wiget_name_ext = '2'
+		else:
+			wiget_name_ext = '1'
 		self.on_checkbutton_toggled(widget, 'use_gpg_agent')
 
 	def on_edit_details_button1_clicked(self, widget):
@@ -2461,7 +2471,7 @@ class GroupchatConfigWindow:
 				return
 			model = self.affiliation_treeview[affiliation].get_model()
 			model.append((jid,'', '', ''))
-		dialogs.InputDialog(title, prompt, ok_handler=on_ok)
+		instance = dialogs.InputDialog(title, prompt, ok_handler=on_ok)
 
 	def on_remove_button_clicked(self, widget, affiliation):
 		selection = self.affiliation_treeview[affiliation].get_selection()
@@ -2567,7 +2577,7 @@ class RemoveAccountWindow:
 						gajim.connections[self.account].unregister_account(
 							self._on_remove_success)
 
-					dialogs.PassphraseDialog(
+					w = dialogs.PassphraseDialog(
 						_('Password Required'),
 						_('Enter your password for account %s') % self.account,
 						_('Save password'), ok_handler=on_ok)
@@ -2578,7 +2588,7 @@ class RemoveAccountWindow:
 				self._on_remove_success(True)
 
 		if gajim.connections[self.account].connected:
-			dialogs.ConfirmationDialog(
+			dialog = dialogs.ConfirmationDialog(
 				_('Account "%s" is connected to the server') % self.account,
 				_('If you remove it, the connection will be lost.'),
 				on_response_ok=remove)

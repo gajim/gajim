@@ -19,6 +19,7 @@ class IdleObject:
 	'''
 	def __init__(self):
 		self.fd = -1
+		pass
 	
 	def pollend(self):
 		''' called on stream failure '''

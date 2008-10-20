@@ -178,7 +178,7 @@ class Logger:
 		and after that all okay'''
 		
 		if jid.find('/') > -1: 
-			possible_room_jid = jid.split('/', 1)[1]
+			possible_room_jid, possible_nick = jid.split('/', 1)
 			return self.jid_is_room_jid(possible_room_jid)
 		else:
 			# it's not a full jid, so it's not a pm one
@@ -466,6 +466,7 @@ class Logger:
 		and are already logged but pending to be viewed,
 		returns a list of tupples containg time, kind, message,
 		list with empty tupple if nothing found to meet our demands'''
+		jid_id = self.get_jid_id(jid)
 		where_sql = self._build_contact_where(account, jid)
 
 		now = int(float(time.time()))
@@ -503,6 +504,7 @@ class Logger:
 		'''returns contact_name, time, kind, show, message
 		for each row in a list of tupples,
 		returns list with empty tupple if we found nothing to meet our demands'''
+		jid_id = self.get_jid_id(jid)
 		where_sql = self._build_contact_where(account, jid)
 
 		start_of_day = self.get_unix_time_from_date(year, month, day)
@@ -523,6 +525,7 @@ class Logger:
 		'''returns contact_name, time, kind, show, message
 		for each row in a list of tupples,
 		returns list with empty tupple if we found nothing to meet our demands'''
+		jid_id = self.get_jid_id(jid)
 
 		if False: #query.startswith('SELECT '): # it's SQL query (FIXME)
 			try:
@@ -545,6 +548,7 @@ class Logger:
 
 	def get_days_with_logs(self, jid, year, month, max_day, account):
 		'''returns the list of days that have logs (not status messages)'''
+		jid_id = self.get_jid_id(jid)
 		days_with_logs = []
 		where_sql = self._build_contact_where(account, jid)
 
@@ -704,7 +708,7 @@ class Logger:
 		# the data field contains binary object (gzipped data), this is a hack
 		# to get that data without trying to convert it to unicode
 		try:
-			self.cur.execute('SELECT hash_method, hash, data FROM caps_cache;')
+			self.cur.execute('SELECT hash_method, hash, data FROM caps_cache;');
 		except sqlite.OperationalError:
 			# might happen when there's no caps_cache table yet
 			# -- there's no data to read anyway then

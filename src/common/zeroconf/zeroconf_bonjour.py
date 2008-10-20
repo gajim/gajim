@@ -18,6 +18,7 @@
 ##
 
 from common import gajim
+import sys
 import select
 import re
 from string import split
@@ -115,8 +116,7 @@ class Zeroconf:
 		}
 
 		# Split on '.' but do not split on '\.'
-		result = re.split('(?<!\\\\)\.', fullname)
-		name, protocol, domain = result[0] + result[2:4]
+		name, stype, protocol, domain, dummy = re.split('(?<!\\\\)\.', fullname)
 		
 		# Replace the escaped values
 		for src, trg in escaping.items():
@@ -252,7 +252,7 @@ class Zeroconf:
 			self.announced = False
 			return True
 		except pybonjour.BonjourError, e:
-			gajim.log.debug(e)
+			geajim.log.debug(e)
 			return False
 
 
@@ -330,7 +330,7 @@ class Zeroconf:
 
 		try:
 			pybonjour.DNSServiceUpdateRecord(self.service_sdRef, None, 0, self.txt)
-		except pybonjour.BonjourError:
+		except pybonjour.BonjourError, e:
 			return False
 		return True
 

@@ -46,7 +46,8 @@ from message_control import MessageControl
 from conversation_textview import ConversationTextview
 from message_textview import MessageTextView
 from common.contacts import GC_Contact
-from common.logger import constants
+from common.logger import Constants
+constants = Constants()
 from common.rst_xhtml_generator import create_xhtml
 from common.pep import MOODS, ACTIVITIES
 from common.xmpp.protocol import NS_XHTML, NS_FILE, NS_MUC, NS_RECEIPTS
@@ -151,7 +152,7 @@ class ChatControlBase(MessageControl):
 				contact = c
 
 		MessageControl.__init__(self, type_id, parent_win, widget_name,
-			contact, acct, resource = resource)
+			contact, acct, resource = resource);
 
 		widget = self.xml.get_widget('history_button')
 		id = widget.connect('clicked', self._on_history_menuitem_activate)
@@ -294,7 +295,7 @@ class ChatControlBase(MessageControl):
 				if lang:
 					self.msg_textview.lang = lang
 					spell.set_language(lang)
-			except (gobject.GError, RuntimeError):
+			except (gobject.GError, RuntimeError), msg:
 				dialogs.AspellDictError(lang)
 		self.conv_textview.tv.show()
 		self._paint_banner()
@@ -434,6 +435,7 @@ class ChatControlBase(MessageControl):
 	def show_emoticons_menu(self):
 		if not gajim.config.get('emoticons_theme'):
 			return
+		msg_tv = self.msg_textview
 		def set_emoticons_menu_position(w, msg_tv = self.msg_textview):
 			window = msg_tv.get_window(gtk.TEXT_WINDOW_WIDGET)
 			# get the window position
@@ -447,7 +449,7 @@ class ChatControlBase(MessageControl):
 				cursor.x, cursor.y)
 			x = origin[0] + cursor[0]
 			y = origin[1] + size[1]
-			menu_height = gajim.interface.emoticons_menu.size_request()[1]
+			menu_width, menu_height = gajim.interface.emoticons_menu.size_request()
 			#FIXME: get_line_count is not so good
 			#get the iter of cursor, then tv.get_line_yrange
 			# so we know in which y we are typing (not how many lines we have
@@ -954,7 +956,7 @@ class ChatControlBase(MessageControl):
 			conv_buf.set_text(self.sent_history[self.sent_history_pos])
 		elif direction == 'down':
 			if self.sent_history_pos >= size - 1:
-				conv_buf.set_text(self.orig_msg)
+				conv_buf.set_text(self.orig_msg);
 				self.orig_msg = None
 				self.sent_history_pos = size
 				return
@@ -1118,7 +1120,7 @@ class ChatControl(ChatControlBase):
 			if session:
 				# Don't use previous session if we want to a specific resource
 				# and it's not the same
-				r = gajim.get_room_and_nick_from_fjid(str(session.jid))[1]
+				j, r = gajim.get_room_and_nick_from_fjid(str(session.jid))
 				if resource and resource != r:
 					session = None
 
@@ -1424,6 +1426,7 @@ class ChatControl(ChatControlBase):
 
 		banner_name_label = self.xml.get_widget('banner_name_label')
 		banner_name_tooltip = gtk.Tooltips()
+		banner_eventbox = self.xml.get_widget('banner_eventbox')
 
 		name = contact.get_shown_name()
 		if self.resource:
@@ -1825,6 +1828,7 @@ class ChatControl(ChatControlBase):
 		if contact is set to print_queue: it is incomming from queue
 		if contact is not set: it's an incomming message'''
 		contact = self.contact
+		jid = contact.jid
 
 		if frm == 'status':
 			if not gajim.config.get('print_status_in_chats'):
@@ -2212,7 +2216,7 @@ class ChatControl(ChatControlBase):
 			def on_cancel():
 				on_no(self)
 
-			dialogs.ConfirmationDialog(
+			dialog = dialogs.ConfirmationDialog(
 				# %s is being replaced in the code with JID
 				_('You just received a new message from "%s"') % self.contact.jid,
 				_('If you close this tab and you have history disabled, '\
@@ -2303,6 +2307,7 @@ class ChatControl(ChatControlBase):
 		path = treeview.get_selection().get_selected_rows()[1][0]
 		iter = model.get_iter(path)
 		type = model[iter][2]
+		account = model[iter][4].decode('utf-8')
 		if type != 'contact': # source is not a contact
 			return
 		dropped_jid = data.decode('utf-8')
@@ -2365,7 +2370,7 @@ class ChatControl(ChatControlBase):
 				pending_how_many, timeout, self.account)
 		except exceptions.DatabaseMalformed:
 			dialogs.ErrorDialog(_('Database Error'),
-				_('The database file (%s) cannot be read. Try to repair it or remove it (all history will be lost).') % constants.LOG_DB_PATH)
+				_('The database file (%s) cannot be read. Try to repair it or remove it (all history will be lost).') % common.logger.LOG_DB_PATH)
 			rows = []
 		local_old_kind = None
 		for row in rows: # row[0] time, row[1] has kind, row[2] the message

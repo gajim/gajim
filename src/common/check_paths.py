@@ -27,7 +27,6 @@ import os
 import sys
 import stat
 
-import exceptions
 from common import gajim
 import logger
 

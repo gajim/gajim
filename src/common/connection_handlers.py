@@ -764,6 +764,7 @@ class ConnectionDisco:
 			if node:
 				q.setAttr('node', node)
 			q.addChild('identity', attrs = gajim.gajim_identity)
+			extension = None
 			if node and node.find('#') != -1:
 				extension = node[node.index('#') + 1:]
 			client_version = 'http://gajim.org#' + gajim.caps_hash[self.name]
@@ -979,7 +980,7 @@ class ConnectionVcard:
 			j = gajim.get_jid_from_account(self.name)
 		self.awaiting_answers[id] = (VCARD_ARRIVED, j, groupchat_jid)
 		if groupchat_jid:
-			room_jid = gajim.get_room_and_nick_from_fjid(groupchat_jid)[0]
+			room_jid, nick = gajim.get_room_and_nick_from_fjid(groupchat_jid)
 			if not room_jid in self.room_jids:
 				self.room_jids.append(room_jid)
 			self.groupchat_jids[id] = groupchat_jid
@@ -1388,7 +1389,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		try:
 			idle.init()
 		except Exception:
-			global HAS_IDLE
 			HAS_IDLE = False
 
 		self.gmail_last_tid = None
@@ -1414,7 +1414,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			method = iq_obj.getTagAttr('confirm', 'method')
 			url = iq_obj.getTagAttr('confirm', 'url')
 			msg = iq_obj.getTagData('body') # In case it's a message with a body
-			self.dispatch('HTTP_AUTH', (method, url, id, iq_obj, msg))
+			self.dispatch('HTTP_AUTH', (method, url, id, iq_obj, msg));
 		raise common.xmpp.NodeProcessed
 
 	def _ErrorCB(self, con, iq_obj):
@@ -1518,7 +1518,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.getTag('query')
 		if not HAS_IDLE:
-			qp.attrs['seconds'] = '0'
+			qp.attrs['seconds'] = '0';
 		else:
 			qp.attrs['seconds'] = idle.getIdleSec()
 		

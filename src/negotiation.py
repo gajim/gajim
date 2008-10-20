@@ -22,6 +22,8 @@
 import gtkgui_helpers
 import dataforms_widget
 
+import dialogs
+
 from common import dataforms
 from common import gajim
 from common import xmpp
