@@ -2584,9 +2584,9 @@ msgid "Chats"
 msgstr "Chattar"
 
 #: ../src/chat_control.py:1034
-#, fuzzy, python-format
+#, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
-msgstr "%(nickname) från gruppchatt %(room_name)"
+msgstr "%(nickname)s från gruppchatt %(room_name)s"
 
 #. we talk about a contact here
 #: ../src/chat_control.py:1123
@@ -3528,7 +3528,7 @@ msgstr "Du måste skriva in ett lösenord för det nya kontot."
 #: ../src/dialogs.py:2244
 #, fuzzy, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
-msgstr "%(contact_jid)s har bjudit in dig till %(room_jid)s"
+msgstr "$Contact har bjudit in dig till %(room_jid)s"
 
 #. only if not None and not ''
 #: ../src/dialogs.py:2256
@@ -4028,7 +4028,7 @@ msgid ""
 "From: %(from_address)s"
 msgstr ""
 "\n"
-"Från: %(from_address)"
+"Från: %(from_address)s"
 
 #: ../src/gajim.py:1375
 #, python-format
@@ -4815,7 +4815,7 @@ msgstr "Utökning stöds inte"
 #: ../src/gtkgui_helpers.py:752
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
-msgstr "Bilden kan inte sparas i %(type) format. Spara som %(new_filename)?"
+msgstr "Bilden kan inte sparas i %(type)s format. Spara som %(new_filename)s?"
 
 #: ../src/gtkgui_helpers.py:761
 #, fuzzy
@@ -5313,7 +5313,7 @@ msgstr "Du måste skapa ett konto innan du kan chatta med andra kontakter."
 #: ../src/roster_window.py:2966
 #, python-format
 msgid "\"%(title)s\" by %(artist)s"
-msgstr "\"%(title)\" av %(artist)"
+msgstr "\"%(title)s\" av %(artist)s"
 
 #: ../src/roster_window.py:3395 ../src/roster_window.py:3402
 msgid ""
@@ -5385,7 +5385,7 @@ msgstr "Resurs: "
 #: ../src/tooltips.py:317
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
-msgstr "%(owner_or_admin_or_member) av den här gruppchatten"
+msgstr "%(owner_or_admin_or_member)s av den här gruppchatten"
 
 #: ../src/tooltips.py:430 ../src/tooltips.py:610
 msgid "Status: "
