@@ -12,10 +12,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU Lesser General Public License for more details.
 
-_version_ = '1.4.0'
-
-"""\
-
+"""
 Generic debug class
 
 Other modules can always define extra debug flags for local usage, as long as
@@ -34,9 +31,9 @@ by the individual classes.
 
 For samples of usage, see samples subdir in distro source, and selftest
 in this code
-    
 """
 
+_version_ = '1.4.0'
 
 
 import sys
@@ -70,36 +67,34 @@ color_bright_cyan  = chr(27) + "[36;1m"
 color_white        = chr(27) + "[37;1m"
 
 
-"""
-Define your flags in yor modules like this:
-
-from debug import *
-
-DBG_INIT = 'init'                ; debug_flags.append( DBG_INIT )
-DBG_CONNECTION = 'connection'    ; debug_flags.append( DBG_CONNECTION )
-
- The reason for having a double statement wis so we can validate params
- and catch all undefined debug flags
- 
- This gives us control over all used flags, and makes it easier to allow
- global debugging in your code, just do something like
- 
- foo = Debug( debug_flags )
- 
- group flags, that is a flag in it self containing multiple flags should be
- defined without the debug_flags.append() sequence, since the parts are already
- in the list, also they must of course be defined after the flags they depend on ;)
- example:
-
-DBG_MULTI = [ DBG_INIT, DBG_CONNECTION ]
-
-
-
-  NoDebug
-  -------
-  To speed code up, typically for product releases or such
-  use this class instead if you globaly want to disable debugging
-"""
+# Define your flags in yor modules like this:
+#
+# from debug import *
+#
+# DBG_INIT = 'init'                ; debug_flags.append( DBG_INIT )
+# DBG_CONNECTION = 'connection'    ; debug_flags.append( DBG_CONNECTION )
+#
+#  The reason for having a double statement wis so we can validate params
+#  and catch all undefined debug flags
+#
+#  This gives us control over all used flags, and makes it easier to allow
+#  global debugging in your code, just do something like
+#
+#  foo = Debug( debug_flags )
+#
+#  group flags, that is a flag in it self containing multiple flags should be
+#  defined without the debug_flags.append() sequence, since the parts are already
+#  in the list, also they must of course be defined after the flags they depend on ;)
+#  example:
+#
+# DBG_MULTI = [ DBG_INIT, DBG_CONNECTION ]
+#
+#
+#
+#   NoDebug
+#   -------
+#   To speed code up, typically for product releases or such
+#   use this class instead if you globaly want to disable debugging
 
 
 class NoDebug:

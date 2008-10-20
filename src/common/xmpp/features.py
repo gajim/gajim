@@ -49,10 +49,10 @@ def _discover(disp,ns,jid,node=None,fb2b=0,fb2a=1):
 
 def discoverItems(disp,jid,node=None):
     """ Query remote object about any items that it contains. Return items list. """
-    """ According to JEP-0030:
-        query MAY have node attribute
-        item: MUST HAVE jid attribute and MAY HAVE name, node, action attributes.
-        action attribute of item can be either of remove or update value."""
+    # According to JEP-0030:
+    # query MAY have node attribute
+    # item: MUST HAVE jid attribute and MAY HAVE name, node, action attributes.
+    # action attribute of item can be either of remove or update value.
     ret=[]
     for i in _discover(disp,NS_DISCO_ITEMS,jid,node):
         if i.getName()=='agent' and i.getTag('name'): i.setAttr('name',i.getTagData('name'))
@@ -61,10 +61,10 @@ def discoverItems(disp,jid,node=None):
 
 def discoverInfo(disp,jid,node=None):
     """ Query remote object about info that it publishes. Returns identities and features lists."""
-    """ According to JEP-0030:
-        query MAY have node attribute
-        identity: MUST HAVE category and name attributes and MAY HAVE type attribute.
-        feature: MUST HAVE var attribute"""
+    # According to JEP-0030:
+    # query MAY have node attribute
+    # identity: MUST HAVE category and name attributes and MAY HAVE type attribute.
+    # feature: MUST HAVE var attribute"""
     identities , features = [] , []
     for i in _discover(disp,NS_DISCO_INFO,jid,node):
         if i.getName()=='identity': identities.append(i.attrs)

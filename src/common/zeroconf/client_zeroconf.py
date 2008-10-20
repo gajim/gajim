@@ -87,7 +87,7 @@ class ZeroconfListener(IdleObject):
 	def pollin(self):
 		''' accept a new incomming connection and notify queue'''
 		sock = self.accept_conn()
-		''' loop through roster to find who has connected to us'''
+		# loop through roster to find who has connected to us
 		from_jid = None
 		ipaddr = sock[1][0]
 		for jid in self.conn_holder.getRoster().keys():

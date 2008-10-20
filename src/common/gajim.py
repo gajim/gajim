@@ -256,12 +256,11 @@ def get_resource_from_jid(jid):
 		return jids[1] # abc@doremi.org/res/res-continued
 	else:
 		return ''
-	'''\
-[15:34:28] <asterix> we should add contact.fake_jid I think
-[15:34:46] <asterix> so if we know real jid, it wil be in contact.jid, or we look in contact.fake_jid
-[15:32:54] <asterix> they can have resource if we know the real jid
-[15:33:07] <asterix> and that resource is in contact.resource
-'''
+
+# [15:34:28] <asterix> we should add contact.fake_jid I think
+# [15:34:46] <asterix> so if we know real jid, it wil be in contact.jid, or we look in contact.fake_jid
+# [15:32:54] <asterix> they can have resource if we know the real jid
+# [15:33:07] <asterix> and that resource is in contact.resource
 
 def get_number_of_accounts():
 	'''returns the number of ALL accounts'''
