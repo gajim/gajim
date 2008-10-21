@@ -307,7 +307,6 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		self.printed_error = False
 		self.state = 0
 		try:
-			self.set_timeout(CONNECT_TIMEOUT_SECONDS)
 			if len(server) == 2 and type(server[0]) in (str, unicode) and not \
 			self.ais:
 				# FIXME: blocks here
@@ -336,7 +335,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 	
 	def pollout(self):
 		if self.state == 0:
-			self.connect_to_next_ip()
+			self._do_connect()
 			return
 		self._do_send()
 	
@@ -545,6 +544,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		log.info('Trying to connect to %s:%s', ai[4][0], ai[4][1])
 		try:
 			self._sock = socket.socket(*ai[:3])
+			self._sock.setblocking(False)
 			self._server=ai[4]
 		except socket.error, e:
 			errnum, errstr = e
@@ -565,21 +565,20 @@ class NonBlockingTcp(PlugIn, IdleObject):
 				return
 		self.fd = self._sock.fileno()
 		self.idlequeue.plug_idle(self, True, False)
-		self._send = self._sock.send
-		self._recv = self._sock.recv
+		self.set_timeout(CONNECT_TIMEOUT_SECONDS)
 		self._do_connect()
 
 	def _do_connect(self):
 		errnum = 0
+		if self.state != 0:
+			return
 
 		try:
 			self._sock.connect(self._server)
-			self._sock.setblocking(False)
 		except Exception, ee:
 			(errnum, errstr) = ee
 		# in progress, or would block
 		if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):
-			self.state = 1
 			return
 		# 10056  - already connected, only on win32
 		# code 'WS*' is not available on GNU, so we use its numeric value
@@ -592,7 +591,8 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		self._owner.Connection=self
 		self.state = 1
 
-		self._sock.setblocking(False)
+		self._send = self._sock.send
+		self._recv = self._sock.recv
 		self._plug_idle()
 		if self.on_connect:
 			self.on_connect()
