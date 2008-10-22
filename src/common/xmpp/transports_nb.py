@@ -472,7 +472,12 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			return
 
 		if received is None:
-			if errnum != 0:
+			if self.state == 0 and errnum == errno.ECONNREFUSED:
+				# We tried to connect to a port that did't listen.
+				log.error("Connection to %s refused: %s [%d]", self.getName(), errtxt, errnum)
+				self.pollend(retry=True)
+				return
+			elif errnum != 0:
 				self.DEBUG(errtxt, 'error')
 				log.error("Connection to %s lost: %s [%d]", self.getName(), errtxt, errnum)
 				self._owner.disconnected()
