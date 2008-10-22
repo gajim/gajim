@@ -565,6 +565,8 @@ class NonBlockingTcp(PlugIn, IdleObject):
 				return
 		self.fd = self._sock.fileno()
 		self.idlequeue.plug_idle(self, True, False)
+		self._send = self._sock.send
+		self._recv = self._sock.recv
 		self.set_timeout(CONNECT_TIMEOUT_SECONDS)
 		self._do_connect()
 
@@ -591,8 +593,6 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		self._owner.Connection=self
 		self.state = 1
 
-		self._send = self._sock.send
-		self._recv = self._sock.recv
 		self._plug_idle()
 		if self.on_connect:
 			self.on_connect()
