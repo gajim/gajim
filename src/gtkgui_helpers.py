@@ -902,13 +902,17 @@ def load_mood_icon(icon_name):
 	icon_list = _load_icon_list([icon_name], path)
 	return icon_list[icon_name]
 
-def load_activity_icon(activity, sub_activity = None):
+def load_activity_icon(category, activity = None):
 	'''load an icon from the activity iconset in 16x16'''
+	print category
+	print activity
 	iconset = gajim.config.get('activity_iconset')
 	path = os.path.join(helpers.get_activity_iconset_path(iconset),
-		activity, '')
-	icon_list = _load_icon_list(['category'], path)
-	return icon_list['category']
+		category, '')
+	if activity is None:
+		activity = 'category'
+	icon_list = _load_icon_list([activity], path)
+	return icon_list[activity]
 
 def load_icons_meta():
 	'''load and return  - AND + small icons to put on top left of an icon

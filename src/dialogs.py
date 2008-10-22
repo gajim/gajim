@@ -358,9 +358,13 @@ class ChangeActivityDialog:
 			else:
 				rbtns[act] = group = gtk.RadioButton()
 
+			hbox = gtk.HBox(False, 5)
+			hbox.pack_start(gtkgui_helpers.load_activity_icon(category),
+				False, False, 0)
 			lbl = gtk.Label('<b>' + pep.ACTIVITIES[category]['category'] + '</b>')
 			lbl.set_use_markup(True)
-			rbtns[act].add(lbl)
+			hbox.pack_start(lbl, False, False, 0)
+			rbtns[act].add(hbox)
 			rbtns[act].connect('toggled', self.on_rbtn_toggled,
 				[category, 'other'])
 			vbox.pack_start(rbtns[act], False, False, 0)
@@ -381,9 +385,14 @@ class ChangeActivityDialog:
 				else:
 					rbtns[act] = group = gtk.RadioButton()
 
-				rbtns[act].set_label(pep.ACTIVITIES[category][activity])
+				hbox = gtk.HBox(False, 5)
+				hbox.pack_start(gtkgui_helpers.load_activity_icon(category,
+					activity), False, False, 0)
+				hbox.pack_start(gtk.Label(pep.ACTIVITIES[category][activity]),
+					False, False, 0)
 				rbtns[act].connect('toggled', self.on_rbtn_toggled,
 					[category, activity])
+				rbtns[act].add(hbox)
 				vbox.pack_start(rbtns[act], False, False, 0)
 
 		rbtns['working_other'].set_active(True)
