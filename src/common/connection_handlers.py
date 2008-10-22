@@ -1840,8 +1840,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			except exceptions.DatabaseMalformed:
 				pritext = _('Database Error')
 				sectext = _('The database file (%s) cannot be read. Try to repair '
-					'it or remove it (all history will be lost).') % \
-					common.logger.LOG_DB_PATH
+					'it (see http://trac.gajim.org/wiki/DatabaseBackup) or remove '
+					'it (all history will be lost).') % common.logger.LOG_DB_PATH
 				self.dispatch('ERROR', (pritext, sectext))
 		self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt,
 			tim, session))
@@ -1886,8 +1886,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			except exceptions.DatabaseMalformed:
 				pritext = _('Database Error')
 				sectext = _('The database file (%s) cannot be read. Try to repair '
-					'it or remove it (all history will be lost).') % \
-					common.logger.LOG_DB_PATH
+					'it (see http://trac.gajim.org/wiki/DatabaseBackup) or remove '
+					'it (all history will be lost).') % common.logger.LOG_DB_PATH
 				self.dispatch('ERROR', (pritext, sectext))
 
 	def dispatch_invite_message(self, invite, frm):
@@ -2074,7 +2074,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					except exceptions.DatabaseMalformed:
 						pritext = _('Database Error')
 						sectext = _('The database file (%s) cannot be read. Try to '
-							'repair it or remove it (all history will be lost).') % \
+							'repair it (see http://trac.gajim.org/wiki/DatabaseBackup)'
+							' or remove it (all history will be lost).') % \
 							common.logger.LOG_DB_PATH
 						self.dispatch('ERROR', (pritext, sectext))
 				if avatar_sha or avatar_sha == '':
@@ -2199,7 +2200,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				except exceptions.DatabaseMalformed:
 					pritext = _('Database Error')
 					sectext = _('The database file (%s) cannot be read. Try to '
-						'repair it or remove it (all history will be lost).') % \
+						'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
+						'or remove it (all history will be lost).') % \
 						common.logger.LOG_DB_PATH
 					self.dispatch('ERROR', (pritext, sectext))
 			our_jid = gajim.get_jid_from_account(self.name)

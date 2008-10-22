@@ -168,7 +168,7 @@ try:
 	from common import gajim
 except exceptions.DatabaseMalformed:
 	pritext = _('Database Error')
-	sectext = _('The database file (%s) cannot be read. Try to repair it or remove it (all history will be lost).') % common.logger.LOG_DB_PATH
+	sectext = _('The database file (%s) cannot be read. Try to repair it (see http://trac.gajim.org/wiki/DatabaseBackup) or remove it (all history will be lost).') % common.logger.LOG_DB_PATH
 else:
 	from common import dbus_support
 	if dbus_support.supported:
