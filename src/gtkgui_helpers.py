@@ -904,8 +904,6 @@ def load_mood_icon(icon_name):
 
 def load_activity_icon(category, activity = None):
 	'''load an icon from the activity iconset in 16x16'''
-	print category
-	print activity
 	iconset = gajim.config.get('activity_iconset')
 	path = os.path.join(helpers.get_activity_iconset_path(iconset),
 		category, '')
