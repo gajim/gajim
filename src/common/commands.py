@@ -97,7 +97,7 @@ class ChangeStatusCommand(AdHocCommand):
 					var = 'presence-type',
 					label = 'Type of presence:',
 					options = [
-						(u'free-for-chat', _('Free for chat')),
+						(u'chat', _('Free for chat')),
 						(u'online', _('Online')),
 						(u'away', _('Away')),
 						(u'xa', _('Extended away')),
@@ -128,7 +128,7 @@ class ChangeStatusCommand(AdHocCommand):
 		try:
 			presencetype = form['presence-type'].value
 			if not presencetype in \
-			('free-for-chat', 'online', 'away', 'xa', 'dnd', 'offline'):
+			('chat', 'online', 'away', 'xa', 'dnd', 'offline'):
 				self.badRequest(request)
 				return False
 		except Exception:	# KeyError if there's no presence-type field in form or
