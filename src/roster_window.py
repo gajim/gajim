@@ -2070,9 +2070,9 @@ class RosterWindow:
 				for jid in gajim.contacts.get_jid_list(account):
 					lcontact = gajim.contacts.get_contacts(account, jid)
 					ctrl = gajim.interface.msg_win_mgr.get_gc_control(jid, account)
-					for contact in lcontact:
-						if (contact.show != 'offline' or contact.is_transport()) and not ctrl:
-							self.chg_contact_status(contact, 'offline', '', account)
+					for contact in [c for c in lcontact if ((c.show != 'offline' or \
+					c.is_transport()) and not ctrl)]:
+						self.chg_contact_status(contact, 'offline', '', account)
 			self.actions_menu_needs_rebuild = True
 		self.update_status_combobox()
 		# Force the rebuild now since the on_activates on the menu itself does
