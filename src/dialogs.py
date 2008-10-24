@@ -320,9 +320,9 @@ class ChooseGPGKeyDialog:
 
 
 class ChangeActivityDialog:
-	PAGELIST = ['working', 'eating', 'exercising', 'relaxing', 'talking',
-		'doing_chores', 'inactive', 'traveling', 'having_appointment',
-		'drinking', 'grooming']
+	PAGELIST = ['doing_chores', 'drinking', 'eating', 'exercising', 'grooming',
+		'having_appointment', 'inactive', 'relaxing', 'talking', 'traveling',
+		'working']
 
 	def __init__(self, account):
 		self.account = account
