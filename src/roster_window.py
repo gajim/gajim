@@ -996,10 +996,19 @@ class RosterWindow:
 		and 'activity' in gajim.connections[account].activity \
 		and gajim.connections[account].activity['activity'].strip() \
 		in ACTIVITIES:
-			self.model[child_iter][C_ACTIVITY_PIXBUF] = \
-				gtkgui_helpers.load_activity_icon(
-				gajim.connections[account]. \
-				activity['activity'].strip()).get_pixbuf()
+			if 'subactivity' in gajim.connections[account].activity \
+			and gajim.connections[account].activity['subactivity'].strip() \
+			in ACTIVITIES[gajim.connections[account].activity['activity'].strip()]:
+				self.model[child_iter][C_ACTIVITY_PIXBUF] = \
+					gtkgui_helpers.load_activity_icon(
+					gajim.connections[account].activity['activity'].strip(),
+					gajim.connections[account].activity['subactivity'].strip()). \
+					get_pixbuf()
+		 	else:
+				self.model[child_iter][C_ACTIVITY_PIXBUF] = \
+					gtkgui_helpers.load_activity_icon(
+					gajim.connections[account].activity['activity'].strip()). \
+					get_pixbuf()
 		elif gajim.config.get('show_activity_in_roster') \
 		and 'activity' in gajim.connections[account].activity:
 			self.model[child_iter][C_ACTIVITY_PIXBUF] = \
@@ -1247,8 +1256,15 @@ class RosterWindow:
 		contact = gajim.contacts.get_contact(account, jid)
 		if 'activity' in contact.activity \
 		and contact.activity['activity'].strip() in ACTIVITIES:
-			pixbuf = gtkgui_helpers.load_activity_icon(
-				contact.activity['activity'].strip()).get_pixbuf()
+			if 'subactivity' in contact.activity \
+			and contact.activity['subactivity'].strip() in \
+			ACTIVITIES[contact.activity['activity'].strip()]:
+				pixbuf = gtkgui_helpers.load_activity_icon(
+					contact.activity['activity'].strip(),
+					contact.activity['subactivity'].strip()).get_pixbuf()
+			else:
+				pixbuf = gtkgui_helpers.load_activity_icon(
+					contact.activity['activity'].strip()).get_pixbuf()
 		elif 'activity' in contact.activity:
 			pixbuf = gtkgui_helpers.load_activity_icon(
 				'unknown').get_pixbuf()

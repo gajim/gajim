@@ -1239,12 +1239,15 @@ class ChatControl(ChatControlBase):
 
 		if activity is not None:
 			if activity in ACTIVITIES:
-				self._activity_image.set_from_pixbuf(
-					gtkgui_helpers.load_activity_icon(activity).get_pixbuf())
 				# Translate standard activities
 				if subactivity in ACTIVITIES[activity]:
-					subactivity = ACTIVITIES[activity] \
-						[subactivity]
+					self._activity_image.set_from_pixbuf(
+						gtkgui_helpers.load_activity_icon(activity, subactivity). \
+						get_pixbuf())
+					subactivity = ACTIVITIES[activity][subactivity]
+				else:
+					self._activity_image.set_from_pixbuf(
+						gtkgui_helpers.load_activity_icon(activity).get_pixbuf())
 				activity = ACTIVITIES[activity]['category']
 			else:
 				self._activity_image.set_from_pixbuf(
