@@ -1586,7 +1586,7 @@ class DubbleInputDialog:
 
 	def on_cancelbutton_clicked(self, widget):
 		self.dialog.destroy()
-		if not cancel_handler:
+		if not self.cancel_handler:
 			return
 		if isinstance(self.cancel_handler, tuple):
 			self.cancel_handler[0](*self.cancel_handler[1:])
