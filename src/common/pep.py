@@ -332,7 +332,7 @@ def user_activity(items, name, jid):
 				del acc.activity['text']
 			if activity is not None:
 				acc.activity['activity'] = activity
-			if subactivity is not None:
+			if subactivity is not None and subactivity != 'other':
 				acc.activity['subactivity'] = subactivity
 			if text is not None:
 				acc.activity['text'] = text
@@ -355,7 +355,7 @@ def user_activity(items, name, jid):
 				del contact.activity['text']
 			if activity is not None:
 				contact.activity['activity'] = activity
-			if subactivity is not None:
+			if subactivity is not None and subactivity != 'other':
 				contact.activity['subactivity'] = subactivity
 			if text is not None:
 				contact.activity['text'] = text
