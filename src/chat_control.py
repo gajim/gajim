@@ -2583,7 +2583,7 @@ class ChatControl(ChatControlBase):
 
 		if not self.session:
 			fjid = self.contact.get_full_jid()
-			new_sess = gajim.connections[self.account].make_new_session(fjid)
+			new_sess = gajim.connections[self.account].make_new_session(fjid, type_=self.type_id)
 			self.set_session(new_sess)
 
 		self.session.negotiate_e2e(False)

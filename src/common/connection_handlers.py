@@ -1350,6 +1350,8 @@ sent a message to.'''
 			return None
 
 	def make_new_session(self, jid, thread_id=None, type_='chat', cls=None):
+		'''create and register a new session. thread_id=None to generate one.
+		type_ should be 'chat' or 'pm'.'''
 		if not cls:
 			cls = gajim.default_session_type
 
