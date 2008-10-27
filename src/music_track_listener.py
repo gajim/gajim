@@ -220,6 +220,23 @@ class MusicTrackListener(gobject.GObject):
 			self._last_playing_music = info
 			return info
 
+		## Check Banshee playing track
+		test = False
+		if hasattr(bus, 'name_has_owner'):
+			if bus.name_has_owner('org.bansheeproject.Banshee'):
+				test = True
+		elif dbus.dbus_bindings.bus_name_has_owner(bus.get_connection(),
+		'org.bansheeproject.Banshee'):
+			test = True
+		if test:
+			banshee = bus.get_object('org.bansheeproject.Banshee',
+				'/org/bansheeproject/Banshee/PlayerEngine')
+			currentTrack = banshee.GetCurrentTrack()
+			if currentTrack:
+				song = self._banshee_properties_extract(currentTrack)
+				self._last_playing_music = song
+				return song
+
 		return None
 
 # here we test :)

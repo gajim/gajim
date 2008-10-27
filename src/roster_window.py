@@ -1004,7 +1004,7 @@ class RosterWindow:
 					gajim.connections[account].activity['activity'].strip(),
 					gajim.connections[account].activity['subactivity'].strip()). \
 					get_pixbuf()
-		 	else:
+			else:
 				self.model[child_iter][C_ACTIVITY_PIXBUF] = \
 					gtkgui_helpers.load_activity_icon(
 					gajim.connections[account].activity['activity'].strip()). \
@@ -3285,12 +3285,12 @@ class RosterWindow:
 		act = widget.get_active()
 		gajim.config.set_per('accounts', account, 'publish_tune', act)
 		if act:
+			listener = MusicTrackListener.get()
 			if not self.music_track_changed_signal:
-				listener = MusicTrackListener.get()
 				self.music_track_changed_signal = listener.connect(
 					'music-track-changed', self.music_track_changed)
-				track = listener.get_playing_track()
-				self.music_track_changed(listener, track)
+			track = listener.get_playing_track()
+			self.music_track_changed(listener, track)
 		else:
 			# disable it only if no other account use it
 			for acct in gajim.connections:
