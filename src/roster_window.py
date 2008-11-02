@@ -795,14 +795,19 @@ class RosterWindow:
 			status = ''
 
 		if contact is None:
-			# New groupchat
-			contact = gajim.contacts.create_contact(jid=jid, name=jid,
-				groups=[_('Groupchats')], show=show, status=status, sub='none')
-			gajim.contacts.add_contact(account, contact)
 			gc_control = gajim.interface.msg_win_mgr.get_gc_control(jid, account)
 			if gc_control:
 				# there is a window that we can minimize
 				gajim.interface.minimized_controls[account][jid] = gc_control
+				name = gc_control.name
+			elif jid in gajim.interface.minimized_controls[account]:
+				name = gajim.interface.minimized_controls[account][jid].name
+			else:
+				name = jid.split('@')[0]
+			# New groupchat
+			contact = gajim.contacts.create_contact(jid=jid, name=name,
+				groups=[_('Groupchats')], show=show, status=status, sub='none')
+			gajim.contacts.add_contact(account, contact)
 			self.add_contact(jid, account)
 		else:
 			contact.show = show

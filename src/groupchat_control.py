@@ -228,7 +228,13 @@ class GroupchatControl(ChatControlBase):
 		self.room_jid = self.contact.jid
 		self.nick = contact.name.decode('utf-8')
 		self.new_nick = ''
-		self.name = self.room_jid.split('@')[0]
+		self.name = ''
+		for bm in gajim.connections[self.account].bookmarks:
+			if bm['jid'] == self.room_jid:
+				self.name = bm['name']
+				break
+		if not self.name:
+			self.name = self.room_jid.split('@')[0]
 
 		compact_view = gajim.config.get('compact_view')
 		self.chat_buttons_set_visible(compact_view)
