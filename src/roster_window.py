@@ -2255,10 +2255,14 @@ class RosterWindow:
 
 		def on_continue2(message):
 			self.quit_on_next_offline = 0
+			accounts_to_disconnect = []
 			for acct in accounts:
 				if gajim.connections[acct].connected:
 					self.quit_on_next_offline += 1
-					self.send_status(acct, 'offline', message)
+					accounts_to_disconnect.append(acct)
+
+			for acct in accounts_to_disconnect:
+				self.send_status(acct, 'offline', message)
 
 			if not self.quit_on_next_offline:
 				self.quit_gtkgui_interface()
