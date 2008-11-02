@@ -452,6 +452,8 @@ class GlibIdleQueue(idlequeue.IdleQueue):
 		''' this method is called when we unplug a new idle object.
 		Stop listening for events from fd
 		'''
+		if not fd in self.events:
+			return
 		gobject.source_remove(self.events[fd])
 		del(self.events[fd])
 
