@@ -271,7 +271,7 @@ class ServicesCache:
 			info = _agent_type_info[(0, 0)]
 			filename = info[1]
 		if not filename: # we don't have an image to show for this type
-			return
+			filename = 'jabber.png'
 		# Use the cache if possible
 		if filename in _icon_cache:
 			return _icon_cache[filename]
