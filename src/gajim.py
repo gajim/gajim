@@ -3177,8 +3177,6 @@ class Interface:
 
 		if gajim.config.get('networkmanager_support') and dbus_support.supported:
 			import network_manager_listener
-			if not network_manager_listener.supported:
-				print >> sys.stderr, _('Network Manager support not available')
 
 		# Handle gnome screensaver
 		if dbus_support.supported:
@@ -3302,7 +3300,7 @@ if __name__ == '__main__':
 		try:
 			import gnome.ui
 		except ImportError:
-			print >> sys.stderr, _('Session Management support not available (missing gnome.ui module)')
+			pass
 		else:
 			def die_cb(cli):
 				gajim.interface.roster.quit_gtkgui_interface()
