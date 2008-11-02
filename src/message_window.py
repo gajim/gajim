@@ -99,10 +99,10 @@ class MessageWindow(object):
 		self.handlers[id] = self.window
 
 		keys=['<Control>f', '<Control>g', '<Control>h', '<Control>i',
-			'<Control>l', '<Control>L', '<Control>n', '<Control>t', '<Control>u',
-			'<Control>v', '<Control>b', '<Control><Shift>Tab', '<Control>Tab',
-			'<Control>F4', '<Control>w', '<Control>Page_Up', '<Control>Page_Down',
-			'<Alt>Right', '<Alt>Left', '<Alt>a', '<Alt>c', '<Alt>m', 'Escape'] + \
+			'<Control>l', '<Control>L', '<Control>n', '<Control>u', '<Control>v',
+			'<Control>b', '<Control><Shift>Tab', '<Control>Tab', '<Control>F4',
+			'<Control>w', '<Control>Page_Up', '<Control>Page_Down', '<Alt>Right',
+			'<Alt>Left', '<Alt>a', '<Alt>c', '<Alt>m', '<Alt>t', 'Escape'] + \
 			['<Alt>'+str(i) for i in xrange(10)]
 		accel_group = gtk.AccelGroup()
 		for key in keys:
@@ -335,9 +335,6 @@ class MessageWindow(object):
 			elif control.type_id == message_control.TYPE_GC and \
 			keyval == gtk.keysyms.n: # CTRL + n
 				control._on_change_nick_menuitem_activate(None)
-			elif control.type_id == message_control.TYPE_GC and \
-			keyval == gtk.keysyms.t: # CTRL + t
-				control._on_change_subject_menuitem_activate(None)
 			elif keyval == gtk.keysyms.u: # CTRL + u: emacs style clear line
 				control.clear(control.msg_textview)
 			elif keyval == gtk.keysyms.v: # CTRL + v: Paste into msg_textview
@@ -397,6 +394,9 @@ class MessageWindow(object):
 				control.show_emoticons_menu()
 			elif keyval == gtk.keysyms.a: # ALT + A show actions menu
 				control.on_actions_button_clicked(control.actions_button)
+			elif control.type_id == message_control.TYPE_GC and \
+			keyval == gtk.keysyms.t: # ALT + t
+				control._on_change_subject_menuitem_activate(None)
 		# Close tab bindings
 		elif keyval == gtk.keysyms.Escape and \
 				gajim.config.get('escape_key_closes'): # Escape
