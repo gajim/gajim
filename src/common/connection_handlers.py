@@ -1805,6 +1805,18 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			session.control.conv_textview.hide_xep0184_warning(
 				msg.getID())
 
+		# Check mood in message
+		if msg.getTag('mood', namespace=common.xmpp.NS_MOOD):
+			mood_iq = msg.getTag('mood', namespace=common.xmpp.NS_MOOD)
+			mood = None
+			text = None
+			for ch in mood_iq.getChildren():
+				if ch.getName() != 'text':
+					mood = ch.getName()
+				else:
+					text = ch.getData()
+			pep.handle_mood(self.name, jid, mood=mood, text=text, retract=False)
+
 		if encTag and self.USE_GPG:
 			encmsg = encTag.getData()
 

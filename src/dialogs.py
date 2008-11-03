@@ -528,10 +528,19 @@ class ChangeMoodDialog:
 	def on_ok_button_clicked(self, widget):
 		'''Return mood and messsage (None if no mood selected)'''
 		message = self.entry.get_text().decode('utf-8')
-		if self.mood is None:
-			pep.user_retract_mood(self.account)
+		if gajim.connections[self.account].pep_supported:
+			if self.mood is None:
+				pep.user_retract_mood(self.account)
+			else:
+				pep.user_send_mood(self.account, self.mood, message)
 		else:
-			pep.user_send_mood(self.account, self.mood, message)
+			# Do as we we sent through pep and got the answer
+			our_jid = gajim.get_jid_from_account(self.account)
+			if self.mood is None:
+				pep.handle_mood(self.account, our_jid, retract=True)
+			else:
+				pep.handle_mood(self.account, our_jid, mood=self.mood,
+					text=message)
 		self.window.destroy()
 
 	def on_cancel_button_clicked(self, widget):

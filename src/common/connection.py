@@ -1132,8 +1132,15 @@ class Connection(ConnectionHandlers):
 
 		# XEP-0172: user_nickname
 		if user_nick:
-			msg_iq.setTag('nick', namespace = common.xmpp.NS_NICK).setData(
+			msg_iq.setTag('nick', namespace=common.xmpp.NS_NICK).setData(
 				user_nick)
+
+		# XEP-0107: User Mood
+		if 'mood' in self.mood and not self.pep_supported:
+			mood_iq = msg_iq.setTag('mood', namespace=common.xmpp.NS_MOOD)
+			mood_iq.setTag(self.mood['mood'])
+			if 'text' in self.mood and self.mood['text']:
+				mood_iq.setTagData('text', self.mood['text'])
 
 		# TODO: We might want to write a function so we don't need to
 		#	reproduce that ugly if somewhere else.

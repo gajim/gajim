@@ -201,10 +201,18 @@ def user_mood(items, name, jid):
 					text = ch.getData()
 	if items.getTag('retract') is not None:
 		retract = True
+	if has_child or retract:
+		handle_mood(name, jid, mood=mood, text=text, retract=retract)
 
-	if jid == gajim.get_jid_from_account(name):
-		acc = gajim.connections[name]
-		if has_child:
+def handle_mood(account, jid, mood=None, text=None, retract=False):
+	if jid == gajim.get_jid_from_account(account):
+		acc = gajim.connections[account]
+		if retract:
+			if 'mood' in acc.mood:
+				del acc.mood['mood']
+			if 'text' in acc.mood:
+				del acc.mood['text']
+		else:
 			if 'mood' in acc.mood:
 				del acc.mood['mood']
 			if 'text' in acc.mood:
@@ -213,15 +221,15 @@ def user_mood(items, name, jid):
 				acc.mood['mood'] = mood
 			if text is not None:
 				acc.mood['text'] = text
-		elif retract:
-			if 'mood' in acc.mood:
-				del acc.mood['mood']
-			if 'text' in acc.mood:
-				del acc.mood['text']
 
 	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
-	for contact in gajim.contacts.get_contacts(name, user):
-		if has_child:
+	for contact in gajim.contacts.get_contacts(account, user):
+		if retract:
+			if 'mood' in contact.mood:
+				del contact.mood['mood']
+			if 'text' in contact.mood:
+				del contact.mood['text']
+		else:
 			if 'mood' in contact.mood:
 				del contact.mood['mood']
 			if 'text' in contact.mood:
@@ -230,16 +238,11 @@ def user_mood(items, name, jid):
 				contact.mood['mood'] = mood
 			if text is not None:
 				contact.mood['text'] = text
-		elif retract:
-			if 'mood' in contact.mood:
-				del contact.mood['mood']
-			if 'text' in contact.mood:
-				del contact.mood['text']
 
-	if jid == gajim.get_jid_from_account(name):
-		gajim.interface.roster.draw_account(name)
-	gajim.interface.roster.draw_mood(user, name)
-	ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
+	if jid == gajim.get_jid_from_account(account):
+		gajim.interface.roster.draw_account(account)
+	gajim.interface.roster.draw_mood(user, account)
+	ctrl = gajim.interface.msg_win_mgr.get_control(user, account)
 	if ctrl:
 		ctrl.update_mood()
 
