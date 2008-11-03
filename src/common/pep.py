@@ -243,7 +243,7 @@ def handle_mood(account, jid, mood=None, text=None, retract=False):
 		gajim.interface.roster.draw_account(account)
 	gajim.interface.roster.draw_mood(user, account)
 	ctrl = gajim.interface.msg_win_mgr.get_control(user, account)
-	if ctrl:
+	if ctrl and ctrl.type_id == 'chat':
 		ctrl.update_mood()
 
 def user_tune(items, name, jid):
