@@ -50,6 +50,7 @@ from common.fuzzyclock import FuzzyClock
 
 from htmltextview import HtmlTextView
 from common.exceptions import GajimGeneralException
+from common.exceptions import LatexError
 
 NOT_SHOWN = 0
 ALREADY_RECEIVED = 1
@@ -964,16 +965,27 @@ class ConversationTextview:
 			file.flush()
 			file.close()
 
-			p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'],
-				cwd=gettempdir())
-			exitcode = p.wait()
+			try:
+				p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'],
+					cwd=gettempdir())
+				exitcode = p.wait()
+			except Exception, e:
+				exitcode = _('Error executing "%(command)s": %(error)s') % {
+					'command': 'latex --interaction=nonstopmode %s.tex' % tmpfile,
+					'error': str(e)}
 
 		if exitcode == 0:
 			latex_png_dpi = gajim.config.get('latex_png_dpi')
-			p = Popen(['dvipng', '-bg', 'white', '-T', 'tight', '-D',
-				latex_png_dpi, tmpfile + '.dvi', '-o', tmpfile + '.png'],
-				cwd=gettempdir())
-			exitcode = p.wait()
+			try:
+				p = Popen(['dvipng', '-bg', 'rgb 1.0 1.0 1.0', '-T', 'tight', '-D',
+					latex_png_dpi, tmpfile + '.dvi', '-o', tmpfile + '.png'],
+					cwd=gettempdir())
+				exitcode = p.wait()
+			except Exception, e:
+				exitcode = _('Error executing "%(command)s": %(error)s') % {
+					'command': 'dvipng -bg rgb 1.0 1.0 1.0 -T tight -D %s %s.dvi -o %s.png' %\
+						(latex_png_dpi, tmpfile, tmpfile),
+					'error': str(e)}
 
 		extensions = ['.tex', '.log', '.aux', '.dvi']
 		for ext in extensions:
@@ -981,6 +993,9 @@ class ConversationTextview:
 				os.remove(tmpfile + ext)
 			except Exception:
 				pass
+
+		if isinstance(exitcode, (unicode, str)):
+			raise LatexError(exitcode)
 
 		if exitcode == 0:
 			result = tmpfile + '.png'
@@ -1076,7 +1091,12 @@ class ConversationTextview:
 				if not show_ascii_formatting_chars:
 					special_text = special_text[1:-1] # remove _ _
 		elif special_text.startswith('$$') and special_text.endswith('$$'):
-			imagepath = self.latex_to_image(special_text)
+			try:
+				imagepath = self.latex_to_image(special_text)
+			except LatexError, e:
+				# print the error after the line has been written
+				gobject.idle_add(self.print_conversation_line, str(e), '', 'info', '', None)
+				imagepath = None
 			end_iter = buffer.get_end_iter()
 			anchor = buffer.create_child_anchor(end_iter)
 			if imagepath is not None:

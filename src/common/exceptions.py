@@ -82,6 +82,15 @@ class Cancelled(Exception):
 	'''The user cancelled an operation'''
 	pass
 
+class LatexError(Exception):
+	'''sqlite2 raised pysqlite2.dbapi2.OperationalError'''
+	def __init__(self, text=''):
+		Exception.__init__(self)
+		self.text = text
+
+	def __str__(self):
+		return self.text
+
 class GajimGeneralException(Exception):
 	'''This exception is our general exception'''
 	def __init__(self, text=''):
