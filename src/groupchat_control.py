@@ -194,8 +194,14 @@ class GroupchatControl(ChatControlBase):
 		self.handlers[id] = widget
 
 		widget = self.xml.get_widget('bookmark_button')
-		id = widget.connect('clicked', self._on_bookmark_room_menuitem_activate)
-		self.handlers[id] = widget
+		for bm in gajim.connections[self.account].bookmarks:
+			if bm['jid'] == self.contact.jid:
+				widget.set_sensitive(False)
+				break
+		else:
+			id = widget.connect('clicked',
+				self._on_bookmark_room_menuitem_activate)
+			self.handlers[id] = widget
 
 		widget = self.xml.get_widget('list_treeview')
 		id = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
@@ -271,9 +277,14 @@ class GroupchatControl(ChatControlBase):
 		xm = gtkgui_helpers.get_glade('gc_control_popup_menu.glade')
 
 		self.bookmark_room_menuitem = xm.get_widget('bookmark_room_menuitem')
-		id = self.bookmark_room_menuitem.connect('activate',
-			self._on_bookmark_room_menuitem_activate)
-		self.handlers[id] = self.bookmark_room_menuitem
+		for bm in gajim.connections[self.account].bookmarks:
+			if bm['jid'] == self.room_jid:
+				self.bookmark_room_menuitem.set_sensitive(False)
+				break
+		else:
+			id = self.bookmark_room_menuitem.connect('activate',
+				self._on_bookmark_room_menuitem_activate)
+			self.handlers[id] = self.bookmark_room_menuitem
 
 		self.change_nick_menuitem = xm.get_widget('change_nick_menuitem')
 		id = self.change_nick_menuitem.connect('activate',
