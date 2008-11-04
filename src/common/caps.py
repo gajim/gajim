@@ -281,14 +281,12 @@ class ConnectionCaps(object):
 				return
 		if not contact.caps_node:
 			return # we didn't asked for that?
-		if contact.caps_hash_method != 'old' and not node.startswith(
-		contact.caps_node + '#'):
+		if contact.caps_hash_method != 'old':
 			return
 		if contact.caps_hash_method != 'old':
-			node, hash = node.split('#', 1)
 			computed_hash = helpers.compute_caps_hash(identities, features,
 				dataforms=dataforms, hash_method=contact.caps_hash_method)
-			if computed_hash != hash:
+			if computed_hash != contact.caps_hash:
 				# wrong hash, forget it
 				contact.caps_node = ''
 				contact.caps_hash_method = ''
