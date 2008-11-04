@@ -342,14 +342,15 @@ class VcardWindow:
 		if not self.contact.status:
 			self.contact.status = ''
 
-		# Request list time status
-		if self.gc_contact:
-			j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
-			gajim.connections[self.account].request_last_status_time(j, r,
-				self.contact.jid)
-		else:
-			gajim.connections[self.account].request_last_status_time(
-				self.contact.jid, self.contact.resource)
+		# Request list time status only if contact is offline
+		if self.contact.show == 'offline':
+			if self.gc_contact:
+				j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
+				gajim.connections[self.account].request_last_status_time(j, r,
+					self.contact.jid)
+			else:
+				gajim.connections[self.account].request_last_status_time(
+					self.contact.jid, self.contact.resource)
 
 		# do not wait for os_info if contact is not connected or has error
 		# additional check for observer is needed, as show is offline for him
