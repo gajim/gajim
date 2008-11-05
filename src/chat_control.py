@@ -48,7 +48,6 @@ from message_textview import MessageTextView
 from common.contacts import GC_Contact
 from common.logger import Constants
 constants = Constants()
-from common.rst_xhtml_generator import create_xhtml
 from common.pep import MOODS, ACTIVITIES
 from common.xmpp.protocol import NS_XHTML, NS_FILE, NS_MUC, NS_RECEIPTS
 from common.xmpp.protocol import NS_ESESSION
@@ -1872,6 +1871,7 @@ class ChatControl(ChatControlBase):
 				name = gajim.nicks[self.account]
 				if not xhtml and not encrypted and gajim.config.get(
 				'rst_formatting_outgoing_messages'):
+					from common.rst_xhtml_generator import create_xhtml
 					xhtml = create_xhtml(text)
 					if xhtml:
 						xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)

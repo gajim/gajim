@@ -58,8 +58,6 @@ from common import exceptions
 
 from connection_handlers import *
 
-from common.rst_xhtml_generator import create_xhtml
-
 from string import Template
 import logging
 log = logging.getLogger('gajim.c.connection')
@@ -1078,6 +1076,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return 1
 		if msg and not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
+			from common.rst_xhtml_generator import create_xhtml
 			xhtml = create_xhtml(msg)
 		if not msg and chatstate is None and form_node is None:
 			return 2
@@ -1113,6 +1112,7 @@ class Connection(ConnectionHandlers):
 		if msgtxt and not xhtml and gajim.config.get(
 			'rst_formatting_outgoing_messages'):
 			# Generate a XHTML part using reStructured text markup
+			from common.rst_xhtml_generator import create_xhtml
 			xhtml = create_xhtml(msgtxt)
 		if type_ == 'chat':
 			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type_,
@@ -1558,6 +1558,7 @@ class Connection(ConnectionHandlers):
 		if not self.connection:
 			return
 		if not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
+			from common.rst_xhtml_generator import create_xhtml
 			xhtml = create_xhtml(msg)
 		msg_iq = common.xmpp.Message(jid, msg, typ = 'groupchat', xhtml = xhtml)
 		self.connection.send(msg_iq)
