@@ -111,7 +111,17 @@ class FileTransfersWindow:
 		col.set_expand(False)
 		self.tree.append_column(col)
 
-		self.set_images()
+		self.images = {}
+		self.icons = {
+			'upload': gtk.STOCK_GO_UP,
+			'download': gtk.STOCK_GO_DOWN,
+			'stop': gtk.STOCK_STOP,
+			'waiting': gtk.STOCK_REFRESH,
+			'pause': gtk.STOCK_MEDIA_PAUSE,
+			'continue': gtk.STOCK_MEDIA_PLAY,
+			'ok': gtk.STOCK_APPLY,
+		}
+
 		self.tree.get_selection().set_mode(gtk.SELECTION_SINGLE)
 		self.tree.get_selection().connect('changed', self.selection_changed)
 		self.tooltip = tooltips.FileTransfersTooltip()
@@ -379,23 +389,9 @@ _('Connection with peer cannot be established.'))
 			on_response_cancel(widget, account, file_props))
 		dialog.popup()
 
-	def set_images(self):
-		''' create pixbufs for status images in transfer rows'''
-		self.images = {}
-		self.images['upload'] = self.window.render_icon(gtk.STOCK_GO_UP, 
-			gtk.ICON_SIZE_MENU)
-		self.images['download'] = self.window.render_icon(gtk.STOCK_GO_DOWN, 
-			gtk.ICON_SIZE_MENU)
-		self.images['stop'] = self.window.render_icon(gtk.STOCK_STOP, 
-			gtk.ICON_SIZE_MENU)
-		self.images['waiting'] = self.window.render_icon(gtk.STOCK_REFRESH, 
-			gtk.ICON_SIZE_MENU)
-		self.images['pause'] = self.window.render_icon(gtk.STOCK_MEDIA_PAUSE, 
-			gtk.ICON_SIZE_MENU)
-		self.images['continue'] = self.window.render_icon(gtk.STOCK_MEDIA_PLAY, 
-			gtk.ICON_SIZE_MENU)
-		self.images['ok'] = self.window.render_icon(gtk.STOCK_APPLY, 
-			gtk.ICON_SIZE_MENU)
+	def get_icon(self, ident):
+		return self.images.setdefault(ident,
+			self.window.render_icon(icons[ident], gtk.ICON_SIZE_MENU))
 
 	def set_status(self, typ, sid, status):
 		''' change the status of a transfer to state 'status' '''
@@ -408,7 +404,7 @@ _('Connection with peer cannot be established.'))
 			file_props['stopped'] = True
 		elif status == 'ok':
 			file_props['completed'] = True
-		self.model.set(iter, C_IMAGE, self.images[status])
+		self.model.set(iter, C_IMAGE, self.get_icon(status))
 		path = self.model.get_path(iter)
 		self.select_func(path)
 
@@ -542,7 +538,7 @@ _('Connection with peer cannot be established.'))
 				status = 'waiting'
 			if 'connected' in file_props and file_props['connected'] == False:
 				status = 'stop'
-			self.model.set(iter_, 0, self.images[status])
+			self.model.set(iter_, 0, self.get_icon(status))
 			if transfered_size == full_size:
 				self.set_status(typ, sid, 'ok')
 			elif just_began:
