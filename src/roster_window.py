@@ -68,7 +68,6 @@ from common import dbus_support
 if dbus_support.supported:
 	from music_track_listener import MusicTrackListener
 	import dbus
-from lastfm_track_listener import LastFMTrackListener
 
 from common.xmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC
 from common.pep import MOODS, ACTIVITIES
