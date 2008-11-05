@@ -40,12 +40,10 @@ import sha
 import base64
 import sys
 from encodings.punycode import punycode_encode
-from encodings import idna
 
 import gajim
 from i18n import Q_
 from i18n import ngettext
-from xmpp_stringprep import nodeprep, resourceprep, nameprep
 import xmpp
 
 try:
@@ -121,6 +119,7 @@ def parse_jid(jidstring):
 def idn_to_ascii(host):
 	'''convert IDN (Internationalized Domain Names) to ACE
 	(ASCII-compatible encoding)'''
+	from encodings import idna
 	labels = idna.dots.split(host)
 	converted_labels = []
 	for label in labels:
@@ -130,6 +129,7 @@ def idn_to_ascii(host):
 def ascii_to_idn(host):
 	'''convert ACE (ASCII-compatible encoding) to IDN
 	(Internationalized Domain Names)'''
+	from encodings import idna
 	labels = idna.dots.split(host)
 	converted_labels = []
 	for label in labels:
@@ -140,6 +140,7 @@ def parse_resource(resource):
 	'''Perform stringprep on resource and return it'''
 	if resource:
 		try:
+			from xmpp_stringprep import resourceprep
 			return resourceprep.prepare(unicode(resource))
 		except UnicodeError:
 			raise InvalidFormat, 'Invalid character in resource.'
@@ -151,6 +152,7 @@ def prep(user, server, resource):
 
 	if user:
 		try:
+			from xmpp_stringprep import nodeprep
 			user = nodeprep.prepare(unicode(user))
 		except UnicodeError:
 			raise InvalidFormat, _('Invalid character in username.')
@@ -161,12 +163,14 @@ def prep(user, server, resource):
 		raise InvalidFormat, _('Server address required.')
 	else:
 		try:
+			from xmpp_stringprep import nameprep
 			server = nameprep.prepare(unicode(server))
 		except UnicodeError:
 			raise InvalidFormat, _('Invalid character in hostname.')
 
 	if resource:
 		try:
+			from xmpp_stringprep import resourceprep
 			resource = resourceprep.prepare(unicode(resource))
 		except UnicodeError:
 			raise InvalidFormat, _('Invalid character in resource.')
