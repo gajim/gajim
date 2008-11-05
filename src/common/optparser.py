@@ -28,6 +28,7 @@
 
 import os
 import locale
+import re
 from common import gajim
 
 import exceptions
@@ -46,24 +47,6 @@ class OptionsParser:
 		self.old_values = {}	# values that are saved in the file and maybe
 								# no longer valid
 
-	def read_line(self, line):
-		index = line.find(' = ')
-		var_str = line[0:index]
-		value_str = line[index + 3:-1]
-		
-		i_start = var_str.find('.')
-		i_end = var_str.rfind('.')
-		
-		if i_start == -1:
-			self.old_values[var_str] = value_str
-			gajim.config.set(var_str, value_str)
-		else:
-			optname = var_str[0:i_start]
-			key = var_str[i_start + 1:i_end]
-			subname = var_str[i_end + 1:]
-			gajim.config.add_per(optname, key)
-			gajim.config.set_per(optname, key, subname, value_str)
-		
 	def read(self):
 		try:
 			fd = open(self.__filename)
@@ -75,12 +58,24 @@ class OptionsParser:
 
 		new_version = gajim.config.get('version')
 		new_version = new_version.split('-', 1)[0]
-		for line in fd.readlines():
+		seen = set()
+		regex = re.compile(r"(?P<optname>[^.]+)(?:(?:\.(?P<key>.+))?\.(?P<subname>[^.]+))?\s=\s(?P<value>.*)")
+
+		for line in fd:
 			try:
 				line = line.decode('utf-8')
 			except UnicodeDecodeError:
 				line = line.decode(locale.getpreferredencoding())
-			self.read_line(line)
+			optname, key, subname, value = regex.match(line).groups()
+			if key is None:
+				self.old_values[optname] = value
+				gajim.config.set(optname, value)
+			else:
+				if (optname, key) not in seen:
+					gajim.config.add_per(optname, key)
+					seen.add((optname, key))
+				gajim.config.set_per(optname, key, subname, value)
+
 		old_version = gajim.config.get('version')
 		old_version = old_version.split('-', 1)[0]
 
