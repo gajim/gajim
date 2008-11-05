@@ -2460,8 +2460,7 @@ class Interface:
 			# expanded.  e.g., foo:) NO, foo :) YES, (brb) NO, (:)) YES, etc.
 			# We still allow multiple emoticons side-by-side like :P:P:P
 			# sort keys by length so :qwe emot is checked before :q
-			keys = self.emoticons.keys()
-			keys.sort(self.on_emoticon_sort)
+			keys = sorted(self.emoticons, key=len, reverse=True)
 			emoticons_pattern_prematch = ''
 			emoticons_pattern_postmatch = ''
 			emoticon_length = 0
@@ -2493,15 +2492,6 @@ class Interface:
 
 		# Invalid XML chars
 		self.invalid_XML_chars = u'[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x19]|[\ud800-\udfff]|[\ufffe-\uffff]'
-
-	def on_emoticon_sort(self, emot1, emot2):
-		len1 = len(emot1)
-		len2 = len(emot2)
-		if len1 < len2:
-			return 1
-		elif len1 > len2:
-			return -1
-		return 0
 
 	def popup_emoticons_under_button(self, button, parent_win):
 		''' pops emoticons menu under button, located in parent_win'''
