@@ -477,6 +477,25 @@ class Config:
 				for opt3 in dict[opt2]:
 					cb(data, opt3, [opt, opt2], dict[opt2][opt3])
 
+	def get_children(self, node=None):
+		''' Tree-like interface '''
+		if node is None:
+			for child, option in self.__options.iteritems():
+				yield (child, ), option
+			for grandparent in self.__options_per_key:
+				yield (grandparent, ), None
+		elif len(node) == 1:
+			grandparent, = node
+			for parent in self.__options_per_key[grandparent][1]:
+				yield (grandparent, parent), None
+		elif len(node) == 2:
+			grandparent, parent = node
+			children = self.__options_per_key[grandparent][1][parent]
+			for child, option in children.iteritems():
+				yield (grandparent, parent, child), option
+		else:
+			raise ValueError('Invalid node')
+
 	def is_valid_int(self, val):
 		try:
 			ival = int(val)

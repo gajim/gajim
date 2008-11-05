@@ -25,6 +25,7 @@
 
 import gtk
 import gtkgui_helpers
+import gobject
 
 from common import gajim
 
@@ -40,6 +41,42 @@ C_TYPE
 ) = range(3)
 
 GTKGUI_GLADE = 'manage_accounts_window.glade'
+
+def rate_limit(rate):
+	''' call func at most *rate* times per second '''
+	def decorator(func):
+		timeout = [None]
+		def f(*args, **kwargs):
+			if timeout[0] is not None:
+				gobject.source_remove(timeout[0])
+				timeout[0] = None
+			def timeout_func():
+				func(*args, **kwargs)
+				timeout[0] = None
+			timeout[0] = gobject.timeout_add(int(1000.0 / rate), timeout_func)
+		return f
+	return decorator
+
+def tree_model_iter_children(model, treeiter):
+	it = model.iter_children(treeiter)
+	while it:
+		yield it
+		it = model.iter_next(it)
+
+def tree_model_pre_order(model, treeiter):
+	yield treeiter
+	for childiter in tree_model_iter_children(model, treeiter):
+		for it in tree_model_pre_order(model, childiter):
+			yield it
+
+try:
+	any(()) # builtin since python 2.5
+except Exception:
+	def any(iterable):
+		for element in iterable:
+			if element:
+				return True
+		return False
 
 class AdvancedConfigurationWindow(object):
 	def __init__(self):
@@ -65,7 +102,9 @@ class AdvancedConfigurationWindow(object):
 			'color': _('Color')} 
 
 		treeview = self.xml.get_widget('advanced_treeview')
+		self.treeview = treeview
 		self.model = gtk.TreeStore(str, str, str)
+		self.fill_model()
 		self.model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 		self.modelfilter = self.model.filter_new()
 		self.modelfilter.set_visible_func(self.visible_func)
@@ -87,9 +126,6 @@ class AdvancedConfigurationWindow(object):
 		renderer_text = gtk.CellRendererText()
 		treeview.insert_column_with_attributes(-1, _('Type'),
 			renderer_text, text = 2)
-
-		# add data to model
-		gajim.config.foreach(self.fill, self.model)
 
 		treeview.set_model(self.modelfilter)
 
@@ -215,65 +251,34 @@ class AdvancedConfigurationWindow(object):
 	def on_advanced_close_button_clicked(self, widget):
 		self.window.destroy()
 
-	def find_iter(self, model, parent_iter, name):
-		if not parent_iter:
-			iter = model.get_iter_root()
-		else:
-			iter = model.iter_children(parent_iter)
-		while iter:
-			if model[iter][C_PREFNAME].decode('utf-8') == name:
-				break
-			iter = model.iter_next(iter)
-		return iter
+	def fill_model(self, node=None, parent=None):
+		for item, option in gajim.config.get_children(node):
+			name = item[-1]
+			if option is None: # Node
+				newparent = self.model.append(parent, [name, '', ''])
+				self.fill_model(item, newparent)
+			else: # Leaf
+				type_ = self.types[option[OPT_TYPE][0]]
+				if name == 'password':
+					value = _('Hidden')
+				else:
+					value = self.right_true_dict.get(option[OPT_VAL],
+						option[OPT_VAL])
+				self.model.append(parent, [name, value, type_])
 
-	def fill(self, model, name, parents, val):
-		iter = None
-		if parents:
-			for p in parents:
-				iter2 = self.find_iter(model, iter, p)
-				if iter2:
-					iter = iter2
+	def visible_func(self, model, treeiter):
+		search_string  = self.entry.get_text()
+		return any(search_string in model[it][C_PREFNAME] for it in
+			tree_model_pre_order(model, treeiter) if model[it][C_VALUE] != '')
 
-		if not val:
-			model.append(iter, [name, '', ''])
-			return
-		type = ''
-		if val[OPT_TYPE]:
-			type = val[OPT_TYPE][0]
-			type = self.types[type] # i18n
-		value = val[OPT_VAL]
-		if name == 'password':
-			#we talk about password
-			value = _('Hidden') # override passwords with this string
-		if value in self.right_true_dict:
-			value = self.right_true_dict[value]
-		model.append(iter, [name, value, type])
-
-	def visible_func(self, model, iter_):
-		str = self.entry.get_text().decode('utf-8')
-		if str in (None, ''):
-			return True # show all
-		name = model[iter_][C_PREFNAME].decode('utf-8')
-		# If a child of the iter matches, we return True
-		if model.iter_has_child(iter_):
-			iterC = model.iter_children(iter_)
-			while iterC:
-				nameC = model[iterC][C_PREFNAME].decode('utf-8')
-				if model.iter_has_child(iterC):
-					iterCC = model.iter_children(iterC)
-					while iterCC:
-						nameCC = model[iterCC][C_PREFNAME].decode('utf-8')
-						if nameCC.find(str) != -1:
-							return True
-						iterCC = model.iter_next(iterCC)
-				elif nameC.find(str) != -1:
-					return True
-				iterC = model.iter_next(iterC)
-		elif name.find(str) != -1:
-			return True
-		return False
-
+	@rate_limit(3)
 	def on_advanced_entry_changed(self, widget):
 		self.modelfilter.refilter()
+		if not widget.get_text():
+			# Maybe the expanded rows should be remembered here ...
+			self.treeview.collapse_all()
+		else:
+			# ... and be restored correctly here
+			self.treeview.expand_all()	
 
 # vim: se ts=3:
