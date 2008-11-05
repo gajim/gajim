@@ -3186,14 +3186,7 @@ class Interface:
 
 		helpers.update_optional_features()
 
-		if gajim.config.get('remote_control'):
-			try:
-				import remote_control
-				self.remote_ctrl = remote_control.Remote()
-			except Exception:
-				self.remote_ctrl = None
-		else:
-			self.remote_ctrl = None
+		self.remote_ctrl = None
 
 		if gajim.config.get('networkmanager_support') and dbus_support.supported:
 			import network_manager_listener
@@ -3304,6 +3297,15 @@ class Interface:
 			gobject.timeout_add(200, self.process_connections)
 		gobject.timeout_add_seconds(gajim.config.get(
 			'check_idle_every_foo_seconds'), self.read_sleepy)
+
+		def remote_init():
+			if gajim.config.get('remote_control'):
+				try:
+					import remote_control
+					self.remote_ctrl = remote_control.Remote()
+				except Exception:
+					pass
+		gobject.timeout_add_seconds(5, remote_init)
 
 if __name__ == '__main__':
 	def sigint_cb(num, stack):
