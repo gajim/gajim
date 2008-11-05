@@ -2367,6 +2367,39 @@ class Interface:
 			return False
 		return True
 
+	@property
+	def basic_pattern_re(self):
+		try:
+			return self._basic_pattern_re
+		except AttributeError:
+			self._basic_pattern_re = re.compile(self.basic_pattern, re.IGNORECASE)
+			return self._basic_pattern_re
+			
+	@property
+	def emot_and_basic_re(self):
+		try:
+			return self._emot_and_basic_re
+		except AttributeError:
+			self._emot_and_basic_re = re.compile(self.emot_and_basic,
+				re.IGNORECASE + re.UNICODE)
+			return self._emot_and_basic_re
+
+	@property
+	def sth_at_sth_dot_sth_re(self):
+		try:
+			return self._sth_at_sth_dot_sth_re
+		except AttributeError:
+			self._sth_at_sth_dot_sth_re = re.compile(self.sth_at_sth_dot_sth)
+			return self._sth_at_sth_dot_sth_re
+
+	@property
+	def invalid_XML_chars_re(self):
+		try:
+			return self._invalid_XML_chars_re
+		except AttributeError:
+			self._invalid_XML_chars_re = re.compile(self.invalid_XML_chars)
+			return self._invalid_XML_chars_re
+			
 	def make_regexps(self):
 		# regexp meta characters are:  . ^ $ * + ? { } [ ] \ | ( )
 		# one escapes the metachars with \
@@ -2419,7 +2452,7 @@ class Interface:
 
 		if gajim.config.get('ascii_formatting'):
 			basic_pattern += formatting
-		self.basic_pattern_re = re.compile(basic_pattern, re.IGNORECASE)
+		self.basic_pattern = basic_pattern
 
 		emoticons_pattern = ''
 		if gajim.config.get('emoticons_theme'):
@@ -2453,18 +2486,13 @@ class Interface:
 
 		# because emoticons match later (in the string) they need to be after
 		# basic matches that may occur earlier
-		emot_and_basic_pattern = basic_pattern + emoticons_pattern
-		self.emot_and_basic_re = re.compile(emot_and_basic_pattern,
-			re.IGNORECASE + re.UNICODE)
+		self.emot_and_basic = basic_pattern + emoticons_pattern
 
 		# at least one character in 3 parts (before @, after @, after .)
-		self.sth_at_sth_dot_sth_re = re.compile(r'\S+@\S+\.\S*[^\s)?]')
+		self.sth_at_sth_dot_sth_re = r'\S+@\S+\.\S*[^\s)?]'
 
 		# Invalid XML chars
-		invalid_XML_chars = u'[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x19]|[\ud800-\udfff]|[\ufffe-\uffff]'
-		self.invalid_XML_chars_re = re.compile(invalid_XML_chars)
-
-		re.purge() # clear the regular expression cache
+		self.invalid_XML_chars = u'[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x19]|[\ud800-\udfff]|[\ufffe-\uffff]'
 
 	def on_emoticon_sort(self, emot1, emot2):
 		len1 = len(emot1)
