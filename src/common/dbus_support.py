@@ -39,7 +39,6 @@ try:
 		except ImportError:
 			pass
 	import dbus
-	import dbus.service
 	import dbus.glib
 	supported = True # does user have D-Bus bindings?
 except ImportError:

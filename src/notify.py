@@ -40,7 +40,6 @@ from common import dbus_support
 if dbus_support.supported:
 	import dbus
 	import dbus.glib
-	import dbus.service
 
 
 USER_HAS_PYNOTIFY = True # user has pynotify module
