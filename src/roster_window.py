@@ -404,9 +404,6 @@ class RosterWindow:
 					gajim.groups[account][group] = {'expand': is_expanded}
 
 		assert len(added_iters), '%s has not been added to roster!' % contact.jid
-#		assert all(self.model[titer][C_JID] == contact.jid and \
-#			self.model[titer][C_ACCOUNT] == account for titer in added_iters), \
-#			"Iters invalidated for %s" % contact.jid
 		return added_iters
 
 	def _remove_entity(self, contact, account, groups=None):
