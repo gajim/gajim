@@ -322,8 +322,12 @@ class HistoryWindow:
 		widget.clear_marks()
 		month = gtkgui_helpers.make_gtk_month_python_month(month)
 		weekday, days_in_this_month = calendar.monthrange(year, month)
-		log_days = gajim.logger.get_days_with_logs(self.jid, year,
-			month, days_in_this_month, self.account)
+		try:
+			log_days = gajim.logger.get_days_with_logs(self.jid, year, month,
+				days_in_this_month, self.account)
+		except exceptions.PysqliteOperationalError, e:
+			dialogs.ErrorDialog(_('Disk Error'), str(e))
+			return
 		for day in log_days:
 			widget.mark_day(day)
 

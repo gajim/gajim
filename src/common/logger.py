@@ -218,14 +218,13 @@ class Logger:
 		try:
 			self.cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid,
 				typ))
+			self.con.commit()
 		except sqlite.IntegrityError, e:
 			# Jid already in DB, maybe added by another instance. re-read DB
 			self.get_jids_already_in_db()
 			return self.get_jid_id(jid, typestr)
-		try:
-			self.con.commit()
 		except sqlite.OperationalError, e:
-			print >> sys.stderr, str(e)
+			raise exceptions.PysqliteOperationalError(str(e))
 		jid_id = self.cur.lastrowid
 		self.jids_already_in.append(jid)
 		return jid_id
@@ -424,7 +423,10 @@ class Logger:
 		# now we may have need to do extra care for some values in columns
 		if kind == 'status': # we store (not None) time, jid, show, msg
 			# status for roster items
-			jid_id = self.get_jid_id(jid)
+			try:
+				jid_id = self.get_jid_id(jid)
+			except exceptions.PysqliteOperationalError, e:
+				raise exceptions.PysqliteOperationalError(str(e))
 			if show is None: # show is None (xmpp), but we say that 'online'
 				show_col = constants.SHOW_ONLINE
 
@@ -433,7 +435,11 @@ class Logger:
 			if show is None: # show is None (xmpp), but we say that 'online'
 				show_col = constants.SHOW_ONLINE
 			jid, nick = jid.split('/', 1)
-			jid_id = self.get_jid_id(jid, 'ROOM') # re-get jid_id for the new jid
+			try:
+				# re-get jid_id for the new jid
+				jid_id = self.get_jid_id(jid, 'ROOM')
+			except exceptions.PysqliteOperationalError, e:
+				raise exceptions.PysqliteOperationalError(str(e))
 			contact_name_col = nick
 
 		elif kind == 'gc_msg':
@@ -443,10 +449,17 @@ class Logger:
 				# it's server message f.e. error message
 				# when user tries to ban someone but he's not allowed to
 				nick = None
-			jid_id = self.get_jid_id(jid, 'ROOM') # re-get jid_id for the new jid
+			try:
+				# re-get jid_id for the new jid
+				jid_id = self.get_jid_id(jid, 'ROOM')
+			except exceptions.PysqliteOperationalError, e:
+				raise exceptions.PysqliteOperationalError(str(e))
 			contact_name_col = nick
 		else:
-			jid_id = self.get_jid_id(jid)
+			try:
+				jid_id = self.get_jid_id(jid)
+			except exceptions.PysqliteOperationalError, e:
+				raise exceptions.PysqliteOperationalError(str(e))
 			if kind == 'chat_msg_recv':
 				if not self.jid_is_from_pm(jid):
 					# Save in unread table only if it's not a pm
@@ -466,7 +479,11 @@ class Logger:
 		and are already logged but pending to be viewed,
 		returns a list of tupples containg time, kind, message,
 		list with empty tupple if nothing found to meet our demands'''
-		jid_id = self.get_jid_id(jid)
+		try:
+			jid_id = self.get_jid_id(jid)
+		except exceptions.PysqliteOperationalError, e:
+			# Error trying to create a new jid_id. This means there is no log
+			return []
 		where_sql = self._build_contact_where(account, jid)
 
 		now = int(float(time.time()))
@@ -504,7 +521,11 @@ class Logger:
 		'''returns contact_name, time, kind, show, message
 		for each row in a list of tupples,
 		returns list with empty tupple if we found nothing to meet our demands'''
-		jid_id = self.get_jid_id(jid)
+		try:
+			jid_id = self.get_jid_id(jid)
+		except exceptions.PysqliteOperationalError, e:
+			# Error trying to create a new jid_id. This means there is no log
+			return []
 		where_sql = self._build_contact_where(account, jid)
 
 		start_of_day = self.get_unix_time_from_date(year, month, day)
@@ -525,7 +546,11 @@ class Logger:
 		'''returns contact_name, time, kind, show, message
 		for each row in a list of tupples,
 		returns list with empty tupple if we found nothing to meet our demands'''
-		jid_id = self.get_jid_id(jid)
+		try:
+			jid_id = self.get_jid_id(jid)
+		except exceptions.PysqliteOperationalError, e:
+			# Error trying to create a new jid_id. This means there is no log
+			return []
 
 		if False: #query.startswith('SELECT '): # it's SQL query (FIXME)
 			try:
@@ -548,7 +573,11 @@ class Logger:
 
 	def get_days_with_logs(self, jid, year, month, max_day, account):
 		'''returns the list of days that have logs (not status messages)'''
-		jid_id = self.get_jid_id(jid)
+		try:
+			jid_id = self.get_jid_id(jid)
+		except exceptions.PysqliteOperationalError, e:
+			# Error trying to create a new jid_id. This means there is no log
+			return []
 		days_with_logs = []
 		where_sql = self._build_contact_where(account, jid)
 
@@ -568,7 +597,10 @@ class Logger:
 		result = self.cur.fetchall()
 
 		# Copy all interesting times in a temporary table
-		self.cur.execute('CREATE TEMPORARY TABLE temp_table(time,INTEGER)')
+		try:
+			self.cur.execute('CREATE TEMPORARY TABLE temp_table(time,INTEGER)')
+		except sqlite.OperationalError, e:
+			raise exceptions.PysqliteOperationalError(str(e))
 		for line in result:
 			self.cur.execute('''
 				INSERT INTO temp_table (time) VALUES (%d)
@@ -601,7 +633,11 @@ class Logger:
 		if not is_room:
 			where_sql = self._build_contact_where(account, jid)
 		else:
-			jid_id = self.get_jid_id(jid, 'ROOM')
+			try:
+				jid_id = self.get_jid_id(jid, 'ROOM')
+			except exceptions.PysqliteOperationalError, e:
+				# Error trying to create a new jid_id. This means there is no log
+				return None
 			where_sql = 'jid_id = %s' % jid_id
 		self.cur.execute('''
 			SELECT MAX(time) FROM logs
@@ -619,7 +655,11 @@ class Logger:
 	def get_room_last_message_time(self, jid):
 		'''returns FASTLY last time (in seconds since EPOCH) for which
 		we had logs for that room from rooms_last_message_time table'''
-		jid_id = self.get_jid_id(jid, 'ROOM')
+		try:
+			jid_id = self.get_jid_id(jid, 'ROOM')
+		except exceptions.PysqliteOperationalError, e:
+			# Error trying to create a new jid_id. This means there is no log
+			return None
 		where_sql = 'jid_id = %s' % jid_id
 		self.cur.execute('''
 			SELECT time FROM rooms_last_message_time
@@ -651,7 +691,10 @@ class Logger:
 		family = gajim.contacts.get_metacontacts_family(account, jid)
 		if family:
 			for user in family:
-				jid_id = self.get_jid_id(user['jid'])
+				try:
+					jid_id = self.get_jid_id(user['jid'])
+				except exceptions.PysqliteOperationalError, e:
+					continue
 				where_sql += 'jid_id = %s' % jid_id
 				if user != family[-1]:
 					where_sql += ' OR '
