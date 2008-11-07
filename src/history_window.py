@@ -35,6 +35,7 @@ import conversation_textview
 
 from common import gajim
 from common import helpers
+from common import exceptions
 
 from common.logger import Constants
 
