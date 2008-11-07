@@ -247,7 +247,10 @@ class ListField(DataField):
 		for element in self.iterTags('option'):
 			v = element.getTagData('value')
 			if v is None: raise WrongFieldValue
-			yield (v, element.getAttr('label'))
+			l = element.getAttr('label')
+			if not l:
+				l = v
+			yield (v, l)
 
 class ListSingleField(ListField, StringField):
 	'''Covers list-single and jid-single fields.'''
