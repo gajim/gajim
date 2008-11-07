@@ -391,7 +391,7 @@ _('Connection with peer cannot be established.'))
 
 	def get_icon(self, ident):
 		return self.images.setdefault(ident,
-			self.window.render_icon(icons[ident], gtk.ICON_SIZE_MENU))
+			self.window.render_icon(self.icons[ident], gtk.ICON_SIZE_MENU))
 
 	def set_status(self, typ, sid, status):
 		''' change the status of a transfer to state 'status' '''
