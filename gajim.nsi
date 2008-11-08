@@ -56,6 +56,11 @@ LangString DESC_SecGajim ${LANG_ENGLISH} "Installs the main Gajim files."
 LangString DESC_SecGtk ${LANG_ENGLISH} "Installs Gtk+ 2 (necessary to run Gajim)."
 LangString DESC_SecDesktopIcon ${LANG_ENGLISH} "If set, a shortcut for Gajim will be created on the desktop."
 LangString DESC_SecAutostart ${LANG_ENGLISH} "If set, Gajim will be automatically started when Windows starts."
+LangString STR_Installed ${LANG_ENGLISH} "Gajim is apparently already installed."
+LangString STR_Uninstall ${LANG_ENGLISH} "Launch Uninstall"
+LangString STR_Cancel ${LANG_ENGLISH} "Cancel"
+LangString STR_Running ${LANG_ENGLISH} "It appears that Gajim is currently running.$\n\
+		Close it and restart uninstaller."
 
 ; French
 LangString NAME_Emoticons ${LANG_FRENCH} "Emoticфnes"
@@ -69,6 +74,11 @@ LangString DESC_SecGajim ${LANG_FRENCH} "Installer les fichiers principaux de Ga
 LangString DESC_SecGtk ${LANG_FRENCH} "Installer Gtk+ 2 (nйcessaire а Gajim)."
 LangString DESC_SecDesktopIcon ${LANG_FRENCH} "Si selectionnй, un raccourci pour Gajim sera crйй sur le bureau."
 LangString DESC_SecAutostart ${LANG_FRENCH} "Si activй, Gajim sera automatiquement lancй au dйmarrage de Windows."
+LangString STR_Installed ${LANG_FRENCH} "Gajim est apparement dйja installй."
+LangString STR_Uninstall ${LANG_FRENCH} "Lancer la Dйsinstallation"
+LangString STR_Cancel ${LANG_FRENCH} "Annuler"
+LangString STR_Running ${LANG_FRENCH} "It appears that Gajim is currently running.$\n\
+		Close it and restart uninstaller."
 
 ; German
 LangString NAME_Emoticons ${LANG_GERMAN} "Emoticons"
@@ -82,6 +92,11 @@ LangString DESC_SecGajim ${LANG_GERMAN} "Installiert die Hauptdateien von Gajim.
 LangString DESC_SecGtk ${LANG_GERMAN} "Installert Gtk+ 2 (notwendig um Gajim zu benutzen)."
 LangString DESC_SecDesktopIcon ${LANG_GERMAN} "Wenn dies aktiviert wird, wird ein Icon fьr Gajim auf dem Desktop erstellt."
 LangString DESC_SecAutostart ${LANG_GERMAN} "Gajim wird automatisch gestartet, sowie Windows startet, wenn dies aktivier wird."
+LangString STR_Installed ${LANG_GERMAN} "Gajim is apparently already installed."
+LangString STR_Uninstall ${LANG_GERMAN} "Launch Uninstall"
+LangString STR_Cancel ${LANG_GERMAN} "Cancel"
+LangString STR_Running ${LANG_GERMAN} "It appears that Gajim is currently running.$\n\
+		Close it and restart uninstaller."
 
 ; Italian
 LangString NAME_Emoticons ${LANG_ITALIAN} "Emoticons"
@@ -95,6 +110,11 @@ LangString DESC_SecGajim ${LANG_ITALIAN} "Installa i file principali di Gajim."
 LangString DESC_SecGtk ${LANG_ITALIAN} "Installa Gtk+ 2 (necessario per eseguire Gajim)."
 LangString DESC_SecDesktopIcon ${LANG_ITALIAN} "Se selezionato, un'icona verrа creata sul desktop."
 LangString DESC_SecAutostart ${LANG_ITALIAN} "Se selezionato, Gajim sarа eseguito all'avvio di Windows."
+LangString STR_Installed ${LANG_ITALIAN} "Gajim is apparently already installed."
+LangString STR_Uninstall ${LANG_ITALIAN} "Launch Uninstall"
+LangString STR_Cancel ${LANG_ITALIAN} "Cancel"
+LangString STR_Running ${LANG_ITALIAN} "It appears that Gajim is currently running.$\n\
+		Close it and restart uninstaller."
 
 ; Russian
 LangString NAME_Emoticons ${LANG_RUSSIAN} "Смайлики"
@@ -108,6 +128,11 @@ LangString DESC_SecGajim ${LANG_RUSSIAN} "Установка основных файлов Gajim."
 LangString DESC_SecGtk ${LANG_RUSSIAN} "Установка Gtk+ 2 (необходимо для работы Gajim)."
 LangString DESC_SecDesktopIcon ${LANG_RUSSIAN} "Если отмечено, на рабочем столе будет создан ярлык Gajim."
 LangString DESC_SecAutostart ${LANG_RUSSIAN} "Если отмечено, Gajim будет автоматически запускаться при загрузке Windows."
+LangString STR_Installed ${LANG_RUSSIAN} "Gajim is apparently already installed."
+LangString STR_Uninstall ${LANG_RUSSIAN} "Launch Uninstall"
+LangString STR_Cancel ${LANG_RUSSIAN} "Cancel"
+LangString STR_Running ${LANG_RUSSIAN} "It appears that Gajim is currently running.$\n\
+		Close it and restart uninstaller."
 
 Section "Gajim" SecGajim
 	SectionIn RO
@@ -753,6 +778,69 @@ SectionEnd
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecAutostart} $(DESC_SecAutostart)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
+Function un.onInit
+;	Check that Gajim is not running before uninstalling
+	FindWindow $0 "gdkWindowToplevel" "Gajim"
+	StrCmp $0 0 Remove
+	MessageBox MB_ICONSTOP|MB_OK STR_Running
+	Quit
+Remove:
+FunctionEnd
+
 Function .onInit
+	BringToFront
+;	Check if already running
+;	If so don't open another but bring to front
+	System::Call "kernel32::CreateMutexA(i 0, i 0, t '$(^Name)') i .r0 ?e"
+	Pop $0
+	StrCmp $0 0 launch
+	StrLen $0 "$(^Name)"
+	IntOp $0 $0 + 1
+;;	loop:
+		FindWindow $1 '#32770' '' 0 $1
+;;		IntCmp $1 0 +5
+		IntCmp $1 0 +4
+		System::Call "user32::GetWindowText(i r1, t .r2, i r0) i."
+;;		Don't compare name, it's not "Gajim", it depends on window currently shown
+;;		Bad because we could open another nsin installer, but that's rare to have several installler running
+;;		StrCmp $2 "$(^Name)" 0 loop
+		System::Call "user32::ShowWindow(i r1,i 9) i."         ; If minimized then maximize
+		System::Call "user32::SetForegroundWindow(i r1) i."    ; Bring to front
+		Abort
+
+launch:
+;	Check to see if old install (inno setup) is already installed
+	ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Gajim_is1" "UninstallString"
+;	remove first and last " char
+	StrLen $0 $R0
+	IntOp $0 $0 - 2
+	strcpy $1 $R0 $0 1
+	IfFileExists $1 +1 NotInstalled
+	messagebox::show MB_DEFBUTTON4|MB_TOPMOST "Gajim" \
+		"0,103" \
+		$(STR_Installed) \
+		$(STR_Uninstall) $(STR_Cancel)
+		Pop $R1
+	StrCmp $R1 2 Quit +1
+	ExecWait '$R0 _?=$INSTDIR' $R2
+	StrCmp $R2 0 +1 Quit
+
+NotInstalled:	
+;	Check to see if new installer (NSIS)already installed
+	ReadRegStr $R3 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "UninstallString"
+	IfFileExists $R3 +1 ReallyNotInstalled
+	
+	messagebox::show MB_DEFBUTTON4|MB_TOPMOST "Gajim" \
+		"0,103" \
+		$(STR_Installed) \
+		$(STR_Uninstall) $(STR_Cancel)
+		Pop $R4
+	StrCmp $R4 2 Quit +1
+	ExecWait '$R3 _?=$INSTDIR' $R5
+	StrCmp $R5 0 ReallyNotInstalled Quit
+Quit:
+	Quit
+ 
+ReallyNotInstalled:
 	!insertmacro MUI_LANGDLL_DISPLAY
 FunctionEnd
