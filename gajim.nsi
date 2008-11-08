@@ -56,11 +56,11 @@ LangString DESC_SecGajim ${LANG_ENGLISH} "Installs the main Gajim files."
 LangString DESC_SecGtk ${LANG_ENGLISH} "Installs Gtk+ 2 (necessary to run Gajim)."
 LangString DESC_SecDesktopIcon ${LANG_ENGLISH} "If set, a shortcut for Gajim will be created on the desktop."
 LangString DESC_SecAutostart ${LANG_ENGLISH} "If set, Gajim will be automatically started when Windows starts."
-LangString STR_Installed ${LANG_ENGLISH} "Gajim is apparently already installed."
-LangString STR_Uninstall ${LANG_ENGLISH} "Launch Uninstall"
+LangString STR_Installed ${LANG_ENGLISH} "Apparently, Gajim is already installed."
+LangString STR_Uninstall ${LANG_ENGLISH} "Launch Uninstaller"
 LangString STR_Cancel ${LANG_ENGLISH} "Cancel"
 LangString STR_Running ${LANG_ENGLISH} "It appears that Gajim is currently running.$\n\
-		Close it and restart uninstaller."
+		Please quit Gajim and restart the uninstaller."
 
 ; French
 LangString NAME_Emoticons ${LANG_FRENCH} "Emoticônes"
@@ -92,11 +92,11 @@ LangString DESC_SecGajim ${LANG_GERMAN} "Installiert die Hauptdateien von Gajim.
 LangString DESC_SecGtk ${LANG_GERMAN} "Installert Gtk+ 2 (notwendig um Gajim zu benutzen)."
 LangString DESC_SecDesktopIcon ${LANG_GERMAN} "Wenn dies aktiviert wird, wird ein Icon für Gajim auf dem Desktop erstellt."
 LangString DESC_SecAutostart ${LANG_GERMAN} "Gajim wird automatisch gestartet, sowie Windows startet, wenn dies aktivier wird."
-LangString STR_Installed ${LANG_GERMAN} "Gajim is apparently already installed."
-LangString STR_Uninstall ${LANG_GERMAN} "Launch Uninstall"
-LangString STR_Cancel ${LANG_GERMAN} "Cancel"
-LangString STR_Running ${LANG_GERMAN} "It appears that Gajim is currently running.$\n\
-		Close it and restart uninstaller."
+LangString STR_Installed ${LANG_GERMAN} "Gajim scheint bereits installiert zu sein."
+LangString STR_Uninstall ${LANG_GERMAN} "Deinstallations-Programm starten"
+LangString STR_Cancel ${LANG_GERMAN} "Abbrechen"
+LangString STR_Running ${LANG_GERMAN} "Es scheint, dass Gajim bereits läuft.$\n\
+		Bitte beenden Sie es und starten Sie den Installer erneut.."
 
 ; Italian
 LangString NAME_Emoticons ${LANG_ITALIAN} "Emoticons"
