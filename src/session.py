@@ -57,8 +57,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		stanza_session.EncryptedStanzaSession.terminate(self)
 		self.detach_from_control()
 
-	# extracts chatstate from a <message/> stanza
 	def get_chatstate(self, msg, msgtxt):
+		'''extracts chatstate from a <message/> stanza'''
 		composing_xep = None
 		chatstate = None
 
@@ -83,8 +83,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		return (composing_xep, chatstate)
 
-	# dispatch a received <message> stanza
 	def received(self, full_jid_with_resource, msgtxt, tim, encrypted, msg):
+		'''dispatch a received <message> stanza'''
 		msg_type = msg.getType()
 		subject = msg.getSubject()
 
@@ -252,11 +252,10 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 				[full_jid_with_resource, msgtxt, tim, encrypted, msg_type, subject,
 				chatstate, msg_id, composing_xep, user_nick, xhtml, form_node]))
 
-	# display the message or show notification in the roster
 	def roster_message(self, jid, msg, tim, encrypted=False, msg_type='',
 	subject=None, resource='', msg_id=None, user_nick='',
 	advanced_notif_num=None, xhtml=None, form_node=None):
-
+		'''display the message or show notification in the roster'''
 		contact = None
 		# if chat window will be for specific resource
 		resource_for_chat = resource
