@@ -123,8 +123,9 @@ class Contact:
 		return is_observer
 
 	def is_groupchat(self):
-		if _('Groupchats') in self.groups:
-			return True
+		for account in common.gajim.gc_connected:
+			if self.jid in common.gajim.gc_connected[account]:
+				return True
 		return False
 
 	def is_transport(self):
