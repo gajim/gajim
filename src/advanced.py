@@ -269,7 +269,7 @@ class AdvancedConfigurationWindow(object):
 	def visible_func(self, model, treeiter):
 		search_string  = self.entry.get_text()
 		return any(search_string in model[it][C_PREFNAME] for it in
-			tree_model_pre_order(model, treeiter) if model[it][C_VALUE] != '')
+			tree_model_pre_order(model, treeiter))
 
 	@rate_limit(3)
 	def on_advanced_entry_changed(self, widget):
