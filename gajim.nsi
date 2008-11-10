@@ -4,6 +4,8 @@ Name "Gajim"
 OutFile "Gajim.exe"
 SetCompressor /final /solid lzma
 
+!define myAppName "Gajim"
+
 InstallDir "$PROGRAMFILES\Gajim"
 InstallDirRegKey HKCU "Software\Gajim" ""
 RequestExecutionLevel admin
@@ -77,8 +79,8 @@ LangString DESC_SecAutostart ${LANG_FRENCH} "Si activé, Gajim sera automatiqueme
 LangString STR_Installed ${LANG_FRENCH} "Gajim est apparement déja installé."
 LangString STR_Uninstall ${LANG_FRENCH} "Lancer la Désinstallation"
 LangString STR_Cancel ${LANG_FRENCH} "Annuler"
-LangString STR_Running ${LANG_FRENCH} "It appears that Gajim is currently running.$\n\
-		Close it and restart uninstaller."
+LangString STR_Running ${LANG_FRENCH} "Gajim est apparament lancé.$\n\
+		Fermez-le et redémarrez le désinstallateur."
 
 ; German
 LangString NAME_Emoticons ${LANG_GERMAN} "Emoticons"
@@ -782,7 +784,7 @@ Function un.onInit
 ;	Check that Gajim is not running before uninstalling
 	FindWindow $0 "gdkWindowToplevel" "Gajim"
 	StrCmp $0 0 Remove
-	MessageBox MB_ICONSTOP|MB_OK STR_Running
+	MessageBox MB_ICONSTOP|MB_OK $(STR_Running)
 	Quit
 Remove:
 FunctionEnd
@@ -796,17 +798,11 @@ Function .onInit
 	StrCmp $0 0 launch
 	StrLen $0 "$(^Name)"
 	IntOp $0 $0 + 1
-;;	loop:
-		FindWindow $1 '#32770' '' 0 $1
-;;		IntCmp $1 0 +5
-		IntCmp $1 0 +4
-		System::Call "user32::GetWindowText(i r1, t .r2, i r0) i."
-;;		Don't compare name, it's not "Gajim", it depends on window currently shown
-;;		Bad because we could open another nsin installer, but that's rare to have several installler running
-;;		StrCmp $2 "$(^Name)" 0 loop
-		System::Call "user32::ShowWindow(i r1,i 9) i."         ; If minimized then maximize
-		System::Call "user32::SetForegroundWindow(i r1) i."    ; Bring to front
-		Abort
+	FindWindow $1 '#32770' '' 0 $1
+	IntCmp $1 0 +3
+	System::Call "user32::ShowWindow(i r1,i 9) i."         ; If minimized then maximize
+	System::Call "user32::SetForegroundWindow(i r1) i."    ; Bring to front
+	Abort
 
 launch:
 ;	Check to see if old install (inno setup) is already installed
