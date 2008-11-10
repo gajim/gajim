@@ -196,12 +196,13 @@ class GroupchatControl(ChatControlBase):
 		widget = self.xml.get_widget('bookmark_button')
 		for bm in gajim.connections[self.account].bookmarks:
 			if bm['jid'] == self.contact.jid:
-				widget.set_sensitive(False)
+				widget.hide()
 				break
 		else:
 			id = widget.connect('clicked',
 				self._on_bookmark_room_menuitem_activate)
 			self.handlers[id] = widget
+			widget.show()
 
 		widget = self.xml.get_widget('list_treeview')
 		id = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
