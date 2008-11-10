@@ -544,7 +544,8 @@ class ChatControlBase(MessageControl):
 				else: # ENTER
 					send_message = True
 
-			if gajim.connections[self.account].connected < 2: # we are not connected
+			if gajim.connections[self.account].connected < 2 and send_message:
+				# we are not connected
 				dialogs.ErrorDialog(_('A connection is not available'),
 					_('Your message can not be sent until you are connected.'))
 				send_message = False
