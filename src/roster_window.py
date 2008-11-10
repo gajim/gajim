@@ -589,13 +589,9 @@ class RosterWindow:
 
 			self._remove_metacontact_family(family, account)
 			brothers = self._add_metacontact_family(family, account)
-
+			
 			for c, acc in brothers:
-				self.draw_contact(c.jid, acc)
-				self.draw_mood(c.jid, acc)
-				self.draw_activity(c.jid, acc)
-				self.draw_tune(c.jid, acc)
-				self.draw_avatar(c.jid, acc)
+				self.draw_completely(c.jid, acc)
 
 
 	def _get_nearby_family_and_big_brother(self, family, account):
@@ -639,11 +635,7 @@ class RosterWindow:
 			'self_contact', jid, account, None, None, None, None,
 			None))
 
-		self.draw_contact(jid, account)
-		self.draw_mood(jid, account)
-		self.draw_activity(jid, account)
-		self.draw_tune(jid, account)
-		self.draw_avatar(jid, account)
+		self.draw_completely(jid, account)
 		self.draw_account(account)
 
 		return contact
@@ -699,11 +691,7 @@ class RosterWindow:
 		# Draw the contact and its groups contact
 		if not self.starting:
 			for c, acc in contacts:
-				self.draw_contact(c.jid, acc)
-				self.draw_mood(c.jid, acc)
-				self.draw_activity(c.jid, acc)
-				self.draw_tune(c.jid, acc)
-				self.draw_avatar(c.jid, acc)
+				self.draw_completely(c.jid, acc)
 			for group in contact.get_shown_groups():
 				self.draw_group(group, account)
 				self._adjust_group_expand_collapse_state(group, account)
@@ -764,11 +752,7 @@ class RosterWindow:
 				# reshow the rest of the family
 				brothers = self._add_metacontact_family(family, account)
 				for c, acc in brothers:
-					self.draw_contact(c.jid, acc)
-					self.draw_mood(c.jid, acc)
-					self.draw_activity(c.jid, acc)
-					self.draw_tune(c.jid, acc)
-					self.draw_avatar(c.jid, acc)
+					self.draw_completely(c.jid, acc)
 
 		if iters:
 			# Draw all groups of the contact
@@ -808,7 +792,7 @@ class RosterWindow:
 		else:
 			contact.show = show
 			contact.status = status
-			self.draw_completely_and_show_if_needed(jid, account)
+			self.adjust_and_draw_contact_context(jid, account)
 
 		return contact
 
@@ -1307,9 +1291,15 @@ class RosterWindow:
 		for child_iter in iters:
 			self.model[child_iter][C_AVATAR_PIXBUF] = scaled_pixbuf
 		return False
+	
+	def draw_completely(self, jid, account):
+		self.draw_contact(jid, account)
+		self.draw_mood(jid, account)
+		self.draw_activity(jid, account)
+		self.draw_tune(jid, account)
+		self.draw_avatar(jid, account)
 
-
-	def draw_completely_and_show_if_needed(self, jid, account):
+	def adjust_and_draw_contact_context(self, jid, account):
 		'''Draw contact, account and groups of given jid
 		Show contact if it has pending events
 		'''
@@ -1338,11 +1328,15 @@ class RosterWindow:
 		'''
 		def _draw_all_contacts(jids, account):
 			for jid in jids:
-				self.draw_contact(jid, account)
-				self.draw_mood(jid, account)
-				self.draw_activity(jid, account)
-				self.draw_tune(jid, account)
-				self.draw_avatar(jid, account)
+				family = gajim.contacts.get_metacontacts_family(account, jid)
+				if family:
+					# For metacontacts over several accounts:
+					# When we connect a new account existing brothers
+					# must be redrawn (got removed and readded)
+					for data in family:
+						self.draw_completely(data['jid'], data['account'])
+				else:
+					self.draw_completely(jid, account)
 				yield True
 			yield False
 
@@ -2062,7 +2056,7 @@ class RosterWindow:
 			pep.delete_pep(contact.jid, account)
 
 		# Redraw everything and select the sender
-		self.draw_completely_and_show_if_needed(contact.jid, account)
+		self.adjust_and_draw_contact_context(contact.jid, account)
 
 
 	def on_status_changed(self, account, status):
@@ -3775,11 +3769,7 @@ class RosterWindow:
 			brothers = self._add_metacontact_family(new_family, account_source)
 
 			for c, acc in brothers:
-				self.draw_contact(c.jid, acc)
-				self.draw_mood(c.jid, acc)
-				self.draw_activity(c.jid, acc)
-				self.draw_tune(c.jid, acc)
-				self.draw_avatar(c.jid, acc)
+				self.draw_completely(c.jid, acc)
 
 			old_groups.extend(c_dest.groups)
 			for g in old_groups:
