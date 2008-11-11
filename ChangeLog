@@ -19,7 +19,8 @@ Gajim 0.12-beta1 (11 November 2008)
   * OTHERS
   * Do not crash on fluxbox restarts
   * Update several hotkeys and make them work on non-latin keyboards
-  * Prevent a user from sendin invalid XML chars
+  * Prevent a user from sending invalid XML chars
+  * Do not try to save a file with a too long filename when a nick is long
   * Implement XEP-0203 (Delayed Delivery)
   * Improved windows installer
   * Latex support for windows
