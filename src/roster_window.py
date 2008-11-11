@@ -50,7 +50,6 @@ import cell_renderer_image
 import tooltips
 import message_control
 import adhoc_commands
-import notify
 import features_window
 
 from common import gajim
