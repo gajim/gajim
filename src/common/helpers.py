@@ -841,18 +841,19 @@ def get_os_info():
 	return 'N/A'
 
 def sanitize_filename(filename):
-	'''makes sure the filename we will write does contain only
-	acceptable and latin characters'''
+	'''makes sure the filename we will write does contain only acceptable and 
+	latin characters, and is not too long (in that case hash it)'''
+	# 48 is the limit
+	if len(filename) > 48:
+		hash = hash_md5(filename)
+		filename = base64.b64encode(hash.digest())
+
 	filename = punycode_encode(filename) # make it latin chars only
 	filename = filename.replace('/', '_')
 	if os.name == 'nt':
 		filename = filename.replace('?', '_').replace(':', '_')\
 			.replace('\\', '_').replace('"', "'").replace('|', '_')\
 			.replace('*', '_').replace('<', '_').replace('>', '_')
-		# 48 is the limit
-		if len(filename) > 48:
-			extension = filename.split('.')[-1]
-			filename = filename[0:48]
 	
 	return filename
 
