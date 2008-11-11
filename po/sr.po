@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-11 20:49+0100\n"
+"POT-Creation-Date: 2008-11-11 23:40+0100\n"
 "PO-Revision-Date: 2008-08-15 22:36+0200\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -2977,7 +2977,7 @@ msgstr "GPG енкрипција омогућена"
 #: ../src/chat_control.py:1169 ../src/chat_control.py:2037
 #: ../src/common/contacts.py:113 ../src/common/helpers.py:73
 #: ../src/common/helpers.py:303 ../src/conversation_textview.py:845
-#: ../src/dialogs.py:913 ../src/gajim.py:1630 ../src/normal_control.py:483
+#: ../src/dialogs.py:913 ../src/gajim.py:1633 ../src/normal_control.py:483
 #: ../src/roster_window.py:916 ../src/roster_window.py:1542
 #: ../src/roster_window.py:1544 ../src/roster_window.py:1880
 #: ../src/roster_window.py:3111 ../src/roster_window.py:3135
@@ -3345,7 +3345,7 @@ msgstr ""
 #. sorted alphanum
 #: ../src/common/config.py:112 ../src/common/config.py:448
 #: ../src/common/optparser.py:215 ../src/common/optparser.py:433
-#: ../src/common/optparser.py:467 ../src/gajim.py:3111
+#: ../src/common/optparser.py:467 ../src/gajim.py:3114
 msgid "default"
 msgstr "подразумевано"
 
@@ -6063,7 +6063,7 @@ msgstr ""
 msgid "Removing %s account"
 msgstr "Уклањање рачуна %s"
 
-#: ../src/config.py:2580 ../src/gajim.py:1421 ../src/roster_window.py:1943
+#: ../src/config.py:2580 ../src/gajim.py:1424 ../src/roster_window.py:1943
 msgid "Password Required"
 msgstr "Лозинка захтевана"
 
@@ -6151,11 +6151,11 @@ msgstr "Неисправан сервер"
 msgid "Please provide a server on which you want to register."
 msgstr "Молимо одредите сервер на коме желите да се региструјете."
 
-#: ../src/config.py:3189 ../src/gajim.py:1993
+#: ../src/config.py:3189 ../src/gajim.py:1996
 msgid "Certificate Already in File"
 msgstr "Сертификат је већ у датотеци"
 
-#: ../src/config.py:3190 ../src/gajim.py:1994
+#: ../src/config.py:3190 ../src/gajim.py:1997
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr "Сертификат је већ у датотеци %s, па није поново додат."
@@ -6175,7 +6175,7 @@ msgstr ""
 "SSL грешка: %(error)s\n"
 "Да ли и даље желите да се повежете на овај сервер?"
 
-#: ../src/config.py:3264 ../src/gajim.py:2017
+#: ../src/config.py:3264 ../src/gajim.py:2020
 #, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -6461,7 +6461,7 @@ msgstr "Захтев претплате на рачун %(account)s од %(jid)s
 msgid "Subscription request from %s"
 msgstr "Захтев претплате од %s"
 
-#: ../src/dialogs.py:1678 ../src/gajim.py:2614
+#: ../src/dialogs.py:1678 ../src/gajim.py:2617
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "Већ сте у групном разговору %s"
@@ -6611,32 +6611,32 @@ msgstr "Нова Самостална Порука"
 msgid "New Private Message"
 msgstr "Нова Приватна Порука"
 
-#: ../src/dialogs.py:2069 ../src/gajim.py:1584 ../src/notify.py:472
+#: ../src/dialogs.py:2069 ../src/gajim.py:1587 ../src/notify.py:472
 #: ../src/osx/growler.py:13
 msgid "New E-mail"
 msgstr "Нови Е-мејл"
 
-#: ../src/dialogs.py:2071 ../src/gajim.py:1650 ../src/notify.py:466
+#: ../src/dialogs.py:2071 ../src/gajim.py:1653 ../src/notify.py:466
 #: ../src/osx/growler.py:14
 msgid "File Transfer Request"
 msgstr "Захтев за преносом датотеке"
 
-#: ../src/dialogs.py:2073 ../src/gajim.py:1550 ../src/gajim.py:1617
+#: ../src/dialogs.py:2073 ../src/gajim.py:1553 ../src/gajim.py:1620
 #: ../src/notify.py:468 ../src/osx/growler.py:14
 msgid "File Transfer Error"
 msgstr "Грешка при преносу датотеке"
 
-#: ../src/dialogs.py:2075 ../src/gajim.py:1692 ../src/gajim.py:1714
-#: ../src/gajim.py:1731 ../src/notify.py:470 ../src/osx/growler.py:15
+#: ../src/dialogs.py:2075 ../src/gajim.py:1695 ../src/gajim.py:1717
+#: ../src/gajim.py:1734 ../src/notify.py:470 ../src/osx/growler.py:15
 msgid "File Transfer Completed"
 msgstr "Пренос датотеке завршен"
 
-#: ../src/dialogs.py:2076 ../src/gajim.py:1695 ../src/notify.py:470
+#: ../src/dialogs.py:2076 ../src/gajim.py:1698 ../src/notify.py:470
 #: ../src/osx/growler.py:15
 msgid "File Transfer Stopped"
 msgstr "Пренос датотеке заустављен"
 
-#: ../src/dialogs.py:2078 ../src/gajim.py:1442 ../src/notify.py:474
+#: ../src/dialogs.py:2078 ../src/gajim.py:1445 ../src/notify.py:474
 #: ../src/osx/growler.py:16
 msgid "Groupchat Invitation"
 msgstr "Позив на групни разговор"
@@ -7597,64 +7597,64 @@ msgstr "Контакт са \"%s\" се не може успоставити"
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s је од сада познат као %(new_nick)s"
 
-#: ../src/gajim.py:1242 ../src/groupchat_control.py:1339
+#: ../src/gajim.py:1245 ../src/groupchat_control.py:1339
 #: ../src/history_window.py:417 ../src/notify.py:232
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s је тренутно %(status)s"
 
-#: ../src/gajim.py:1305
+#: ../src/gajim.py:1308
 #, python-format
 msgid "%(jid)s has set the subject to %(subject)s"
 msgstr ""
 
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
 #. Can be a message (see handle_event_gc_config_change in gajim.py)
-#: ../src/gajim.py:1369 ../src/groupchat_control.py:1124
+#: ../src/gajim.py:1372 ../src/groupchat_control.py:1124
 msgid "Any occupant is allowed to see your full JID"
 msgstr "Свима присутнима је дозвољено да виде ваш пун џабер ID"
 
-#: ../src/gajim.py:1372
+#: ../src/gajim.py:1375
 msgid "Room now shows unavailable member"
 msgstr "Соба сада приказује недоступне чланове"
 
-#: ../src/gajim.py:1374
+#: ../src/gajim.py:1377
 msgid "room now does not show unavailable members"
 msgstr "соба сада не приказује недоступне чланове"
 
-#: ../src/gajim.py:1377
+#: ../src/gajim.py:1380
 msgid "A non-privacy-related room configuration change has occurred"
 msgstr ""
 "Десила се промена у конфигурацији собе (напомена: не утиче на приватност "
 "корисника)"
 
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
-#: ../src/gajim.py:1380
+#: ../src/gajim.py:1383
 msgid "Room logging is now enabled"
 msgstr "Логовање у соби је сада омогућено"
 
-#: ../src/gajim.py:1382
+#: ../src/gajim.py:1385
 msgid "Room logging is now disabled"
 msgstr "Логовање у соби је сада онемогућено"
 
-#: ../src/gajim.py:1384
+#: ../src/gajim.py:1387
 msgid "Room is now non-anonymous"
 msgstr "Соба сада више није анонимна"
 
-#: ../src/gajim.py:1387
+#: ../src/gajim.py:1390
 msgid "Room is now semi-anonymous"
 msgstr "Соба је сада полу анонимна"
 
-#: ../src/gajim.py:1390
+#: ../src/gajim.py:1393
 msgid "Room is now fully-anonymous"
 msgstr "Соба је сада потпуно анонимна"
 
-#: ../src/gajim.py:1422
+#: ../src/gajim.py:1425
 #, python-format
 msgid "A Password is required to join the room %s. Please type it."
 msgstr "Лозинка потребна за придруживање групном разговору %s. Унесите је."
 
-#: ../src/gajim.py:1456
+#: ../src/gajim.py:1459
 msgid ""
 "You configured Gajim to use GPG agent, but there is no GPG agent running or "
 "it returned a wrong passphrase.\n"
@@ -7662,20 +7662,20 @@ msgstr ""
 "Конфигурисали сте Гајим да користи GPG агента, али не постоји GPG агент који "
 "ради или је вратио лошу фразу лозинке.\n"
 
-#: ../src/gajim.py:1458
+#: ../src/gajim.py:1461
 msgid "You are currently connected without your OpenPGP key."
 msgstr "Тренутно сте повезани без OpenPGP кључа."
 
-#: ../src/gajim.py:1461
+#: ../src/gajim.py:1464
 msgid "Your passphrase is incorrect"
 msgstr "Ваша лозинка није тачна"
 
-#: ../src/gajim.py:1561
+#: ../src/gajim.py:1564
 #, python-format
 msgid "New mail on %(gmail_mail_address)s"
 msgstr "Нови е-мејл за %(gmail_mail_address)s"
 
-#: ../src/gajim.py:1563
+#: ../src/gajim.py:1566
 #, python-format
 msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
@@ -7683,7 +7683,7 @@ msgstr[0] "Имате %d нови е-мејл разговор"
 msgstr[1] "Имате %d нова е-мејл разговора"
 msgstr[2] "Имате %d нових е-мејл разговора"
 
-#: ../src/gajim.py:1576
+#: ../src/gajim.py:1579
 #, python-format
 msgid ""
 "\n"
@@ -7698,34 +7698,34 @@ msgstr ""
 "Тема: %(subject)s\n"
 "%(snippet)s"
 
-#: ../src/gajim.py:1647
+#: ../src/gajim.py:1650
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "%s Вам жели послати датотеку."
 
-#: ../src/gajim.py:1715
+#: ../src/gajim.py:1718
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
 msgstr "Успешно сте примили датотеку %(filename)s од контакта %(name)s."
 
 #. ft stopped
-#: ../src/gajim.py:1719
+#: ../src/gajim.py:1722
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "Пренос датотеке %(filename)s од контакта %(name)s је заустављен."
 
-#: ../src/gajim.py:1732
+#: ../src/gajim.py:1735
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "Успешно сте послали датотеку %(filename)s за контакт %(name)s"
 
 #. ft stopped
-#: ../src/gajim.py:1736
+#: ../src/gajim.py:1739
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "Пренос %(filename)s за контакт %(name)s је заустављен. "
 
-#: ../src/gajim.py:1820
+#: ../src/gajim.py:1823
 #, python-format
 msgid ""
 "Unable to decrypt message from %s\n"
@@ -7734,36 +7734,36 @@ msgstr ""
 "Не могу да дешифрујем поруку од контакта %s\n"
 "Можда је промењена."
 
-#: ../src/gajim.py:1827
+#: ../src/gajim.py:1830
 msgid "Unable to decrypt message"
 msgstr "Не могу да дешифрујем поруку"
 
-#: ../src/gajim.py:1898
+#: ../src/gajim.py:1901
 msgid "Username Conflict"
 msgstr "Конфликт корисничког имена"
 
-#: ../src/gajim.py:1899
+#: ../src/gajim.py:1902
 msgid "Please type a new username for your local account"
 msgstr "Молимо Вас унесите ново корисничко име за Ваш локални налог"
 
-#: ../src/gajim.py:1911
+#: ../src/gajim.py:1914
 msgid "Ping?"
 msgstr "Пинг?"
 
-#: ../src/gajim.py:1924
+#: ../src/gajim.py:1927
 #, python-format
 msgid "Pong! (%s s.)"
 msgstr "Понг! (%s s.)"
 
-#: ../src/gajim.py:1935
+#: ../src/gajim.py:1938
 msgid "Error."
 msgstr "Грешка."
 
-#: ../src/gajim.py:1960
+#: ../src/gajim.py:1963
 msgid "Resource Conflict"
 msgstr "Конфликт ресурса"
 
-#: ../src/gajim.py:1961
+#: ../src/gajim.py:1964
 msgid ""
 "You are already connected to this account with the same resource. Please "
 "type a new one"
@@ -7771,11 +7771,11 @@ msgstr ""
 "Већ сте конектовани на овај налог са истим ресурсем. Молимо Вас, откуцајте "
 "ново име ресурса"
 
-#: ../src/gajim.py:2014
+#: ../src/gajim.py:2017
 msgid "Error verifying SSL certificate"
 msgstr "Грешка при верификацији SSL сертификата"
 
-#: ../src/gajim.py:2015
+#: ../src/gajim.py:2018
 #, python-format
 msgid ""
 "There was an error verifying the SSL certificate of your jabber server: %"
@@ -7786,15 +7786,15 @@ msgstr ""
 "%(error)s\n"
 "Да ли и даље желите да се конектујете на овај сервер?"
 
-#: ../src/gajim.py:2020
+#: ../src/gajim.py:2023
 msgid "Ignore this error for this certificate."
 msgstr "Игнориши ову грешку за овај сертификат."
 
-#: ../src/gajim.py:2035
+#: ../src/gajim.py:2038
 msgid "SSL certificate error"
 msgstr "Грешка SSL сертификата"
 
-#: ../src/gajim.py:2036
+#: ../src/gajim.py:2039
 #, python-format
 msgid ""
 "It seems the SSL certificate has changed or your connection is being "
@@ -7810,11 +7810,11 @@ msgstr ""
 "\n"
 "Да ли и даље желите да се конектујете и освежите отисак овог сертификата?"
 
-#: ../src/gajim.py:2058 ../src/gajim.py:2088
+#: ../src/gajim.py:2061 ../src/gajim.py:2091
 msgid "Insecure connection"
 msgstr "Несигурна веза"
 
-#: ../src/gajim.py:2059
+#: ../src/gajim.py:2062
 msgid ""
 "You are about to send your password on an unencrypted connection. Are you "
 "sure you want to do that?"
@@ -7822,16 +7822,16 @@ msgstr ""
 "Управо ћете послати лозинку преко нешифроване везе. Јесте ли сигурни да "
 "желите то да урадите?"
 
-#: ../src/gajim.py:2061 ../src/gajim.py:2091
+#: ../src/gajim.py:2064 ../src/gajim.py:2094
 msgid "Yes, I really want to connect insecurely"
 msgstr "Да, заиста желим да се конектујем несигурном везом"
 
-#: ../src/gajim.py:2062 ../src/gajim.py:2092 ../src/groupchat_control.py:1843
+#: ../src/gajim.py:2065 ../src/gajim.py:2095 ../src/groupchat_control.py:1843
 #: ../src/roster_window.py:3790
 msgid "Do _not ask me again"
 msgstr "_Не питај ме више"
 
-#: ../src/gajim.py:2089
+#: ../src/gajim.py:2092
 msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
@@ -7839,27 +7839,27 @@ msgstr ""
 "Управо ћете послати лозинку преко несигурне везе. Требало би да инсталирате "
 "PyOpenSSL да спречите ово. Да ли желите да наставите?"
 
-#: ../src/gajim.py:2106
+#: ../src/gajim.py:2109
 msgid "PEP node was not removed"
 msgstr "PEP чвор није уклоњен"
 
-#: ../src/gajim.py:2107
+#: ../src/gajim.py:2110
 #, python-format
 msgid "PEP node %(node)s was not removed: %(message)s"
 msgstr "PEP чвор %(node)s није уклоњен: %(message)s"
 
 #. theme doesn't exist, disable emoticons
-#: ../src/gajim.py:2572 ../src/gajim.py:2593
+#: ../src/gajim.py:2575 ../src/gajim.py:2596
 msgid "Emoticons disabled"
 msgstr "Смајлији искључени"
 
-#: ../src/gajim.py:2573
+#: ../src/gajim.py:2576
 msgid ""
 "Your configured emoticons theme has not been found, so emoticons have been "
 "disabled."
 msgstr "Ваша тема за смајлије није нађена, па су смајлији искључени."
 
-#: ../src/gajim.py:2594
+#: ../src/gajim.py:2597
 msgid ""
 "Your configured emoticons theme cannot been loaded. You maybe need to update "
 "the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons "
@@ -7869,30 +7869,30 @@ msgstr ""
 "emoticons.py датотеке. Погледајте http://trac.gajim.org/wiki/Emoticons за "
 "више детаља."
 
-#: ../src/gajim.py:2620 ../src/roster_window.py:3324
+#: ../src/gajim.py:2623 ../src/roster_window.py:3324
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Немогуће је приступити групном разговору ако сте невидљиви"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gajim.py:2900
+#: ../src/gajim.py:2903
 msgid "Could not save your settings and preferences"
 msgstr "Није могуће чување Ваших подешавања"
 
-#: ../src/gajim.py:2997
+#: ../src/gajim.py:3000
 msgid "Bookmark already set"
 msgstr "Маркер је већ постављен"
 
-#: ../src/gajim.py:2998
+#: ../src/gajim.py:3001
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "Групни разговор \"%s\" је већ маркиран."
 
-#: ../src/gajim.py:3011
+#: ../src/gajim.py:3014
 msgid "Bookmark has been added successfully"
 msgstr "Маркер успешно додат"
 
-#: ../src/gajim.py:3012
+#: ../src/gajim.py:3015
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
 "Можете управљати Вашим маркерима помоћу менија Акције из Ваше листе "

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-11 20:49+0100\n"
+"POT-Creation-Date: 2008-11-11 23:40+0100\n"
 "PO-Revision-Date: 2006-12-04 01:07+0800\n"
 "Last-Translator: kangkang <kanger@gmail.com>\n"
 "Language-Team: sIyU <jabber@lzusiyu.org>\n"
@@ -3062,7 +3062,7 @@ msgstr "启用加密"
 #: ../src/chat_control.py:1169 ../src/chat_control.py:2037
 #: ../src/common/contacts.py:113 ../src/common/helpers.py:73
 #: ../src/common/helpers.py:303 ../src/conversation_textview.py:845
-#: ../src/dialogs.py:913 ../src/gajim.py:1630 ../src/normal_control.py:483
+#: ../src/dialogs.py:913 ../src/gajim.py:1633 ../src/normal_control.py:483
 #: ../src/roster_window.py:916 ../src/roster_window.py:1542
 #: ../src/roster_window.py:1544 ../src/roster_window.py:1880
 #: ../src/roster_window.py:3111 ../src/roster_window.py:3135
@@ -3428,7 +3428,7 @@ msgstr "折叠的列(账户和组)的列表(空格分隔)。"
 #. sorted alphanum
 #: ../src/common/config.py:112 ../src/common/config.py:448
 #: ../src/common/optparser.py:215 ../src/common/optparser.py:433
-#: ../src/common/optparser.py:467 ../src/gajim.py:3111
+#: ../src/common/optparser.py:467 ../src/gajim.py:3114
 #, fuzzy
 msgid "default"
 msgstr "默认"
@@ -6114,7 +6114,7 @@ msgstr ""
 msgid "Removing %s account"
 msgstr "移除账户 %s"
 
-#: ../src/config.py:2580 ../src/gajim.py:1421 ../src/roster_window.py:1943
+#: ../src/config.py:2580 ../src/gajim.py:1424 ../src/roster_window.py:1943
 msgid "Password Required"
 msgstr "需要密码"
 
@@ -6206,12 +6206,12 @@ msgstr "无效用户名"
 msgid "Please provide a server on which you want to register."
 msgstr "请指定您想使用的新昵称："
 
-#: ../src/config.py:3189 ../src/gajim.py:1993
+#: ../src/config.py:3189 ../src/gajim.py:1996
 #, fuzzy
 msgid "Certificate Already in File"
 msgstr "联系人已经在名单中"
 
-#: ../src/config.py:3190 ../src/gajim.py:1994
+#: ../src/config.py:3190 ../src/gajim.py:1997
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr ""
@@ -6226,7 +6226,7 @@ msgid ""
 "Do you still want to connect to this server?"
 msgstr ""
 
-#: ../src/config.py:3264 ../src/gajim.py:2017
+#: ../src/config.py:3264 ../src/gajim.py:2020
 #, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -6509,7 +6509,7 @@ msgstr "该认证要求来自帐户 %s 由 %s 发送"
 msgid "Subscription request from %s"
 msgstr "来自 %s 的认证请求"
 
-#: ../src/dialogs.py:1678 ../src/gajim.py:2614
+#: ../src/dialogs.py:1678 ../src/gajim.py:2617
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "您已经在群聊房间 %s 。"
@@ -6662,32 +6662,32 @@ msgstr "新消息"
 msgid "New Private Message"
 msgstr "新的个人消息"
 
-#: ../src/dialogs.py:2069 ../src/gajim.py:1584 ../src/notify.py:472
+#: ../src/dialogs.py:2069 ../src/gajim.py:1587 ../src/notify.py:472
 #: ../src/osx/growler.py:13
 msgid "New E-mail"
 msgstr "新的电子邮件"
 
-#: ../src/dialogs.py:2071 ../src/gajim.py:1650 ../src/notify.py:466
+#: ../src/dialogs.py:2071 ../src/gajim.py:1653 ../src/notify.py:466
 #: ../src/osx/growler.py:14
 msgid "File Transfer Request"
 msgstr "文件传输请求"
 
-#: ../src/dialogs.py:2073 ../src/gajim.py:1550 ../src/gajim.py:1617
+#: ../src/dialogs.py:2073 ../src/gajim.py:1553 ../src/gajim.py:1620
 #: ../src/notify.py:468 ../src/osx/growler.py:14
 msgid "File Transfer Error"
 msgstr "文件传输错误"
 
-#: ../src/dialogs.py:2075 ../src/gajim.py:1692 ../src/gajim.py:1714
-#: ../src/gajim.py:1731 ../src/notify.py:470 ../src/osx/growler.py:15
+#: ../src/dialogs.py:2075 ../src/gajim.py:1695 ../src/gajim.py:1717
+#: ../src/gajim.py:1734 ../src/notify.py:470 ../src/osx/growler.py:15
 msgid "File Transfer Completed"
 msgstr "文件传输完成"
 
-#: ../src/dialogs.py:2076 ../src/gajim.py:1695 ../src/notify.py:470
+#: ../src/dialogs.py:2076 ../src/gajim.py:1698 ../src/notify.py:470
 #: ../src/osx/growler.py:15
 msgid "File Transfer Stopped"
 msgstr "文件传输已停止"
 
-#: ../src/dialogs.py:2078 ../src/gajim.py:1442 ../src/notify.py:474
+#: ../src/dialogs.py:2078 ../src/gajim.py:1445 ../src/notify.py:474
 #: ../src/osx/growler.py:16
 msgid "Groupchat Invitation"
 msgstr "群聊邀请"
@@ -7626,87 +7626,87 @@ msgstr "无法与对方“ %s ”建立连接。"
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%s 现在成了 %s"
 
-#: ../src/gajim.py:1242 ../src/groupchat_control.py:1339
+#: ../src/gajim.py:1245 ../src/groupchat_control.py:1339
 #: ../src/history_window.py:417 ../src/notify.py:232
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s 的状态是 %(status)s"
 
-#: ../src/gajim.py:1305
+#: ../src/gajim.py:1308
 #, python-format
 msgid "%(jid)s has set the subject to %(subject)s"
 msgstr ""
 
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
 #. Can be a message (see handle_event_gc_config_change in gajim.py)
-#: ../src/gajim.py:1369 ../src/groupchat_control.py:1124
+#: ../src/gajim.py:1372 ../src/groupchat_control.py:1124
 msgid "Any occupant is allowed to see your full JID"
 msgstr ""
 
-#: ../src/gajim.py:1372
+#: ../src/gajim.py:1375
 msgid "Room now shows unavailable member"
 msgstr ""
 
-#: ../src/gajim.py:1374
+#: ../src/gajim.py:1377
 msgid "room now does not show unavailable members"
 msgstr ""
 
-#: ../src/gajim.py:1377
+#: ../src/gajim.py:1380
 msgid "A non-privacy-related room configuration change has occurred"
 msgstr ""
 
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
-#: ../src/gajim.py:1380
+#: ../src/gajim.py:1383
 msgid "Room logging is now enabled"
 msgstr ""
 
-#: ../src/gajim.py:1382
+#: ../src/gajim.py:1385
 msgid "Room logging is now disabled"
 msgstr ""
 
-#: ../src/gajim.py:1384
+#: ../src/gajim.py:1387
 msgid "Room is now non-anonymous"
 msgstr ""
 
-#: ../src/gajim.py:1387
+#: ../src/gajim.py:1390
 msgid "Room is now semi-anonymous"
 msgstr ""
 
-#: ../src/gajim.py:1390
+#: ../src/gajim.py:1393
 msgid "Room is now fully-anonymous"
 msgstr ""
 
-#: ../src/gajim.py:1422
+#: ../src/gajim.py:1425
 #, fuzzy, python-format
 msgid "A Password is required to join the room %s. Please type it."
 msgstr "该群聊要求密码才能加入。"
 
-#: ../src/gajim.py:1456
+#: ../src/gajim.py:1459
 msgid ""
 "You configured Gajim to use GPG agent, but there is no GPG agent running or "
 "it returned a wrong passphrase.\n"
 msgstr ""
 
-#: ../src/gajim.py:1458
+#: ../src/gajim.py:1461
 msgid "You are currently connected without your OpenPGP key."
 msgstr "已建立没有 OpenPGP 密钥的连接"
 
-#: ../src/gajim.py:1461
+#: ../src/gajim.py:1464
 msgid "Your passphrase is incorrect"
 msgstr "您的密文不正确"
 
-#: ../src/gajim.py:1561
+#: ../src/gajim.py:1564
 #, python-format
 msgid "New mail on %(gmail_mail_address)s"
 msgstr " %(gmail_mail_address)s 上的新邮件"
 
-#: ../src/gajim.py:1563
+#: ../src/gajim.py:1566
 #, python-format
 msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
 msgstr[0] "您有 %d 条新邮件会话"
 
-#: ../src/gajim.py:1576
+#: ../src/gajim.py:1579
 #, python-format
 msgid ""
 "\n"
@@ -7716,82 +7716,82 @@ msgid ""
 "%(snippet)s"
 msgstr ""
 
-#: ../src/gajim.py:1647
+#: ../src/gajim.py:1650
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "%s 想发送给您一个文件。"
 
-#: ../src/gajim.py:1715
+#: ../src/gajim.py:1718
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
 msgstr "您成功的从 %(name)s 收到文件  %(filename)s。"
 
 #. ft stopped
-#: ../src/gajim.py:1719
+#: ../src/gajim.py:1722
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "从 %(name)s 传输的文件 %(filename)s 被停止。"
 
-#: ../src/gajim.py:1732
+#: ../src/gajim.py:1735
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "您成功的给 %(name)s 发送了文件 %(filename)s。"
 
 #. ft stopped
-#: ../src/gajim.py:1736
+#: ../src/gajim.py:1739
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "到 %(name)s 的文件传输 %(filename)s 被停止。"
 
-#: ../src/gajim.py:1820
+#: ../src/gajim.py:1823
 #, python-format
 msgid ""
 "Unable to decrypt message from %s\n"
 "It may have been tampered with."
 msgstr ""
 
-#: ../src/gajim.py:1827
+#: ../src/gajim.py:1830
 #, fuzzy
 msgid "Unable to decrypt message"
 msgstr "对于每条消息(_M)"
 
-#: ../src/gajim.py:1898
+#: ../src/gajim.py:1901
 msgid "Username Conflict"
 msgstr "用户名冲突"
 
-#: ../src/gajim.py:1899
+#: ../src/gajim.py:1902
 msgid "Please type a new username for your local account"
 msgstr "<b>请在您本地账户填写新的用户名</b>"
 
-#: ../src/gajim.py:1911
+#: ../src/gajim.py:1914
 msgid "Ping?"
 msgstr ""
 
-#: ../src/gajim.py:1924
+#: ../src/gajim.py:1927
 #, python-format
 msgid "Pong! (%s s.)"
 msgstr ""
 
-#: ../src/gajim.py:1935
+#: ../src/gajim.py:1938
 msgid "Error."
 msgstr ""
 
-#: ../src/gajim.py:1960
+#: ../src/gajim.py:1963
 #, fuzzy
 msgid "Resource Conflict"
 msgstr "用户名冲突"
 
-#: ../src/gajim.py:1961
+#: ../src/gajim.py:1964
 msgid ""
 "You are already connected to this account with the same resource. Please "
 "type a new one"
 msgstr ""
 
-#: ../src/gajim.py:2014
+#: ../src/gajim.py:2017
 msgid "Error verifying SSL certificate"
 msgstr ""
 
-#: ../src/gajim.py:2015
+#: ../src/gajim.py:2018
 #, python-format
 msgid ""
 "There was an error verifying the SSL certificate of your jabber server: %"
@@ -7799,15 +7799,15 @@ msgid ""
 "Do you still want to connect to this server?"
 msgstr ""
 
-#: ../src/gajim.py:2020
+#: ../src/gajim.py:2023
 msgid "Ignore this error for this certificate."
 msgstr ""
 
-#: ../src/gajim.py:2035
+#: ../src/gajim.py:2038
 msgid "SSL certificate error"
 msgstr ""
 
-#: ../src/gajim.py:2036
+#: ../src/gajim.py:2039
 #, python-format
 msgid ""
 "It seems the SSL certificate has changed or your connection is being "
@@ -7818,85 +7818,85 @@ msgid ""
 "Do you still want to connect and update the fingerprint of the certificate?"
 msgstr ""
 
-#: ../src/gajim.py:2058 ../src/gajim.py:2088
+#: ../src/gajim.py:2061 ../src/gajim.py:2091
 #, fuzzy
 msgid "Insecure connection"
 msgstr "连接"
 
-#: ../src/gajim.py:2059
+#: ../src/gajim.py:2062
 #, fuzzy
 msgid ""
 "You are about to send your password on an unencrypted connection. Are you "
 "sure you want to do that?"
 msgstr "您在创建一个元联系人。确定继续？"
 
-#: ../src/gajim.py:2061 ../src/gajim.py:2091
+#: ../src/gajim.py:2064 ../src/gajim.py:2094
 msgid "Yes, I really want to connect insecurely"
 msgstr ""
 
-#: ../src/gajim.py:2062 ../src/gajim.py:2092 ../src/groupchat_control.py:1843
+#: ../src/gajim.py:2065 ../src/gajim.py:2095 ../src/groupchat_control.py:1843
 #: ../src/roster_window.py:3790
 msgid "Do _not ask me again"
 msgstr "不再提问此问题(_N)"
 
-#: ../src/gajim.py:2089
+#: ../src/gajim.py:2092
 msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
 msgstr ""
 
-#: ../src/gajim.py:2106
+#: ../src/gajim.py:2109
 msgid "PEP node was not removed"
 msgstr ""
 
-#: ../src/gajim.py:2107
+#: ../src/gajim.py:2110
 #, python-format
 msgid "PEP node %(node)s was not removed: %(message)s"
 msgstr ""
 
 #. theme doesn't exist, disable emoticons
-#: ../src/gajim.py:2572 ../src/gajim.py:2593
+#: ../src/gajim.py:2575 ../src/gajim.py:2596
 #, fuzzy
 msgid "Emoticons disabled"
 msgstr "禁用加密"
 
-#: ../src/gajim.py:2573
+#: ../src/gajim.py:2576
 msgid ""
 "Your configured emoticons theme has not been found, so emoticons have been "
 "disabled."
 msgstr ""
 
-#: ../src/gajim.py:2594
+#: ../src/gajim.py:2597
 msgid ""
 "Your configured emoticons theme cannot been loaded. You maybe need to update "
 "the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons "
 "for more details."
 msgstr ""
 
-#: ../src/gajim.py:2620 ../src/roster_window.py:3324
+#: ../src/gajim.py:2623 ../src/roster_window.py:3324
 msgid "You cannot join a group chat while you are invisible"
 msgstr "隐身时无法加入群聊"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gajim.py:2900
+#: ../src/gajim.py:2903
 msgid "Could not save your settings and preferences"
 msgstr "无法保存您的设置。"
 
-#: ../src/gajim.py:2997
+#: ../src/gajim.py:3000
 msgid "Bookmark already set"
 msgstr "书签已设定"
 
-#: ../src/gajim.py:2998
+#: ../src/gajim.py:3001
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "群聊“%s”已在您的书签中。"
 
-#: ../src/gajim.py:3011
+#: ../src/gajim.py:3014
 msgid "Bookmark has been added successfully"
 msgstr "书签添加成功"
 
-#: ../src/gajim.py:3012
+#: ../src/gajim.py:3015
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr "您可以通过“动作”菜单管理您的名单。"
 
