@@ -1,3 +1,29 @@
+Gajim 0.12-beta1 (11 November 2008)
+
+  * SECURITY
+  * Implement Kerberos (GSSAPI) SASL Authentication mechanism
+  * Prevent affiliation spoofing in groupchats
+  * Improve GPG and E2E support
+
+  * GUI
+  * Highlight all valid IANA schemes
+  * Improved E2E, Mood and Activity dialogs
+  * Show number of participants in groupchats
+
+  * Connection
+  * Correctly parse IDNA names in SRV records
+  * Disable proxy resolution (#4299)
+  * Fix handling of namespace invalid XML
+  * Do not freeze on connection failures (#4366, #4107)
+
+  * OTHERS
+  * Do not crash on fluxbox restarts
+  * Update several hotkeys and make them work on non-latin keyboards
+  * Prevent a user from sendin invalid XML chars
+  * Implement XEP-0203 (Delayed Delivery)
+  * Improved windows installer
+  * Latex support for windows
+
 Gajim 0.12-alpha1 (12 August 2008)
 
   * Change licence from GPLv2 to GPLv3
