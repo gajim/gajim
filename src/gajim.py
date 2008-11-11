@@ -1238,6 +1238,9 @@ class Interface:
 				contact = ctrl.contact
 				contact.show = show
 				contact.status = status
+				gc_contact = ctrl.gc_contact
+				gc_contact.show = show
+				gc_contact.status = status
 				uf_show = helpers.get_uf_show(show)
 				ctrl.print_conversation(_('%(nick)s is now %(status)s') % {
 					'nick': nick, 'status': uf_show}, 'status')
