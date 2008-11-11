@@ -93,7 +93,7 @@
       </widget>
     </child>
     <child>
-      <widget class="GtkSeparatorMenuItem" id="separatormenuitem1">
+      <widget class="GtkSeparatorMenuItem" id="bookmark_separator">
         <property name="no_show_all">True</property>
       </widget>
     </child>
