@@ -606,7 +606,6 @@ class PreferencesWindow:
 			ctl.chat_buttons_set_visible(active)
 		gajim.config.set('compact_view', active)
 		gajim.interface.save_config()
-		gajim.interface.roster.setup_and_draw_roster()
 
 	def on_xhtml_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'ignore_incoming_xhtml')
