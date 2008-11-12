@@ -4857,11 +4857,11 @@ class RosterWindow:
 			item.connect('activate', self.change_status, account, 'offline')
 
 			pep_menuitem = xml.get_widget('pep_menuitem')
-			pep_submenu = gtk.Menu()
-			pep_menuitem.set_submenu(pep_submenu)
 			if gajim.connections[account].pep_supported:
 				have_tune = gajim.config.get_per('accounts', account,
 					'publish_tune')
+				pep_submenu = gtk.Menu()
+				pep_menuitem.set_submenu(pep_submenu)
 				item = gtk.CheckMenuItem(_('Publish Tune'))
 				pep_submenu.append(item)
 				if not dbus_support.supported:
@@ -4869,13 +4869,10 @@ class RosterWindow:
 				else:
 					item.set_active(have_tune)
 					item.connect('toggled', self.on_publish_tune_toggled, account)
-
-			item = gtk.CheckMenuItem(_('Mood'))
-			pep_submenu.append(item)
-			item.set_active(len(gajim.connections[account].mood) > 0)
-			item.connect('activate', self.on_change_mood_activate, account)
-
-			if gajim.connections[account].pep_supported:
+				item = gtk.CheckMenuItem(_('Mood'))
+				pep_submenu.append(item)
+				item.set_active(len(gajim.connections[account].mood) > 0)
+				item.connect('activate', self.on_change_mood_activate, account)
 				item = gtk.CheckMenuItem(_('Activity'))
 				pep_submenu.append(item)
 				item.set_active(len(gajim.connections[account].activity) > 0)
@@ -4891,6 +4888,9 @@ class RosterWindow:
 				img = gtk.image_new_from_stock(gtk.STOCK_PREFERENCES,
 					gtk.ICON_SIZE_MENU)
 				pep_config.set_image(img)
+
+			else:
+				pep_menuitem.set_sensitive(False)
 
 			if not gajim.connections[account].gmail_url:
 				open_gmail_inbox_menuitem.set_no_show_all(True)
