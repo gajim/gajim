@@ -2453,6 +2453,9 @@ class Interface:
 		latex = r'|\$\$[^$\\]*?([\]\[0-9A-Za-z()|+*/-]|[\\][\]\[0-9A-Za-z()|{}$])(.*?[^\\])?\$\$'
 
 		basic_pattern = links + '|' + mail + '|' + legacy_prefixes
+		
+		link_pattern = basic_pattern
+		self.link_pattern_re = re.compile(link_pattern, re.IGNORECASE)
 
 		if gajim.config.get('use_latex'):
 			basic_pattern += latex

@@ -127,7 +127,7 @@ class PrivateChatControl(ChatControl):
 		ChatControl.__init__(self, parent_win, contact, account, session)
 		self.TYPE_ID = 'pm'
 
-	def send_message(self, message):
+	def send_message(self, message, xhtml=None):
 		'''call this function to send our message'''
 		if not message:
 			return
@@ -153,7 +153,7 @@ class PrivateChatControl(ChatControl):
 					'left.') % {'room': room, 'nick': nick})
 				return
 
-		ChatControl.send_message(self, message)
+		ChatControl.send_message(self, message, xhtml=xhtml)
 
 	def update_ui(self):
 		if self.contact.show == 'offline':
@@ -1628,7 +1628,7 @@ class GroupchatControl(ChatControlBase):
 
 		return False
 
-	def send_message(self, message):
+	def send_message(self, message, xhtml=None):
 		'''call this function to send our message'''
 		if not message:
 			return
@@ -1644,7 +1644,7 @@ class GroupchatControl(ChatControlBase):
 			if not self._process_command(message):
 				# Send the message
 				gajim.connections[self.account].send_gc_message(self.room_jid,
-					message)
+					message, xhtml=xhtml)
 				self.msg_textview.get_buffer().set_text('')
 				self.msg_textview.grab_focus()
 

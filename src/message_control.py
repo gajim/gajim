@@ -162,7 +162,7 @@ class MessageControl:
 
 	def send_message(self, message, keyID = '', type_ = 'chat',
 	chatstate = None, msg_id = None, composing_xep = None, resource = None,
-	user_nick = None):
+	user_nick = None, xhtml = None):
 		# Send the given message to the active tab.
 		# Doesn't return None if error
 		jid = self.contact.jid
@@ -189,6 +189,6 @@ class MessageControl:
 			composing_xep = composing_xep,
 			resource = self.resource, user_nick = user_nick,
 			session = self.session,
-			original_message = original_message)
+			original_message = original_message, xhtml = xhtml)
 
 # vim: se ts=3:

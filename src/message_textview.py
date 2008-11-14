@@ -22,6 +22,9 @@
 
 import gtk
 import gobject
+import pango
+import gtkgui_helpers
+from common import gajim
 
 class MessageTextView(gtk.TextView):
 	'''Class for the message textview (where user writes new messages)
@@ -35,7 +38,7 @@ class MessageTextView(gtk.TextView):
 		
 	def __init__(self):
 		gtk.TextView.__init__(self)
-		
+
 		# set properties
 		self.set_border_width(1)
 		self.set_accepts_tab(True)
@@ -48,6 +51,222 @@ class MessageTextView(gtk.TextView):
 		self.set_pixels_below_lines(2)
 
 		self.lang = None # Lang used for spell checking
+		buffer = self.get_buffer()
+		self.begin_tags = {}
+		self.end_tags = {}
+		self.color_tags = []
+		self.fonts_tags = []
+		self.other_tags = {}		
+		self.other_tags['bold'] = buffer.create_tag('bold')
+		self.other_tags['bold'].set_property('weight', pango.WEIGHT_BOLD)
+		self.begin_tags['bold'] = '<strong>'
+		self.end_tags['bold'] = '</strong>'
+		self.other_tags['italic'] = buffer.create_tag('italic')
+		self.other_tags['italic'].set_property('style', pango.STYLE_ITALIC)
+		self.begin_tags['italic'] = '<em>'
+		self.end_tags['italic'] = '</em>'
+		self.other_tags['underline'] = buffer.create_tag('underline')
+		self.other_tags['underline'].set_property('underline', pango.UNDERLINE_SINGLE)
+		self.begin_tags['underline'] = '<span style="text-decoration: underline;">'
+		self.end_tags['underline'] = '</span>'
+		self.other_tags['strike'] = buffer.create_tag('strike')
+		self.other_tags['strike'].set_property('strikethrough', True)
+		self.begin_tags['strike'] = '<span style="text-decoration: line-through;">'
+		self.end_tags['strike'] = '</span>'
+
+	def make_clickable_urls(self, text):
+		buffer = self.get_buffer()
+
+		start = 0
+		end = 0
+		index = 0
+		
+		new_text = ''
+		iterator = gajim.interface.link_pattern_re.finditer(text)
+		for match in iterator:
+			start, end = match.span()
+			url = text[start:end]
+			if start != 0:
+				text_before_special_text = text[index:start]
+			else:
+				text_before_special_text = ''
+			end_iter = buffer.get_end_iter()
+			# we insert normal text
+			new_text += text_before_special_text + \
+			'<a href="'+ url +'">' + url + '</a>'
+				
+			index = end # update index
+
+		if end < len(text):
+			new_text += text[end:]
+
+		return new_text # the position after *last* special text
+
+	def get_active_tags(self):
+		buffer = self.get_buffer()
+		return_val = buffer.get_selection_bounds()
+		if return_val: # if sth was selected
+			start, finish = return_val[0], return_val[1]
+		else:
+			start, finish = buffer.get_bounds()
+		active_tags = []
+		for tag in start.get_tags():
+			active_tags.append(tag.get_property('name'))
+		return 	active_tags
+
+	def set_tag(self, widget, tag):
+		buffer = self.get_buffer()
+		return_val = buffer.get_selection_bounds()
+		if return_val: # if sth was selected
+			start, finish = return_val[0], return_val[1]
+		else:
+			start, finish = buffer.get_bounds()
+		if start.has_tag(self.other_tags[tag]):
+			buffer.remove_tag_by_name(tag, start, finish)
+		else:
+			if tag == 'underline':
+				buffer.remove_tag_by_name('strike', start, finish)
+			elif tag == 'strike':
+				buffer.remove_tag_by_name('underline', start, finish)
+			buffer.apply_tag_by_name(tag, start, finish)		
+
+	def clear_tags(self, widget):
+		buffer = self.get_buffer()
+		return_val = buffer.get_selection_bounds()
+		if return_val: # if sth was selected
+			start, finish = return_val[0], return_val[1]
+		else:
+			start, finish = buffer.get_bounds()
+		buffer.remove_all_tags(start, finish)
+
+	def color_set(self, widget, response, color):
+		if response == -6:
+			widget.destroy()
+			return
+		buffer = self.get_buffer()
+		color = color.get_current_color()
+		widget.destroy()
+		color_string = gtkgui_helpers.make_color_string(color)
+		tag_name = 'color' + color_string
+		if not tag_name in self.color_tags:
+			tagColor = buffer.create_tag(tag_name)
+			tagColor.set_property('foreground', color_string)
+			self.begin_tags[tag_name] = '<span style="color: ' + color_string + ';">'
+			self.end_tags[tag_name] = '</span>'
+			self.color_tags.append(tag_name)
+
+		return_val = buffer.get_selection_bounds()
+		if return_val: # if sth was selected
+			start, finish = return_val[0], return_val[1]
+		else:
+			start, finish = buffer.get_bounds()
+
+		for tag in self.color_tags:
+			buffer.remove_tag_by_name(tag, start, finish)
+
+		buffer.apply_tag_by_name(tag_name, start, finish)
+
+	def font_set(self, widget, response, font):
+		if response == -6:
+			widget.destroy()
+			return
+
+		buffer = self.get_buffer()
+
+		font = font.get_font_name()
+		font_desc = pango.FontDescription(font)
+		family = font_desc.get_family()
+		size = font_desc.get_size()
+		size = size / pango.SCALE
+		weight = font_desc.get_weight()
+		style = font_desc.get_style()
+
+		widget.destroy()
+
+		tag_name = 'font' + font
+		if not tag_name in self.fonts_tags:
+			tagFont = buffer.create_tag(tag_name)
+			tagFont.set_property('font', family + ' ' + str(size))
+			self.begin_tags[tag_name] = \
+				'<span style="font-family: ' + family + '; ' + \
+				'font-size: ' + str(size) + 'px">'
+			self.end_tags[tag_name] = '</span>'	
+			self.fonts_tags.append(tag_name)
+
+		return_val = buffer.get_selection_bounds()
+		if return_val: # if sth was selected
+			start, finish = return_val[0], return_val[1]
+		else:
+			start, finish = buffer.get_bounds()
+		
+		for tag in self.fonts_tags:
+			buffer.remove_tag_by_name(tag, start, finish)
+
+		buffer.apply_tag_by_name(tag_name, start, finish)
+
+		if weight == pango.WEIGHT_BOLD:
+			buffer.apply_tag_by_name('bold', start, finish)
+		else:
+			buffer.remove_tag_by_name('bold', start, finish)
+
+		if style == pango.STYLE_ITALIC:
+			buffer.apply_tag_by_name('italic', start, finish)
+		else:
+			buffer.remove_tag_by_name('italic', start, finish)
+
+	def get_xhtml(self):
+		buffer = self.get_buffer()
+		old = buffer.get_start_iter()
+		tags = {}
+		tags['bold'] = False
+		iter = buffer.get_start_iter()
+		old = buffer.get_start_iter()
+		texte = ''
+		modified = False
+		def xhtml_special(text):
+			text = text.replace('<', '&lt;')
+			text = text.replace('>', '&gt;')
+			text = text.replace('\n', '<br />')
+			return text
+
+		for tag in iter.get_toggled_tags(True):
+			texte += self.begin_tags[tag.get_property('name')]
+			modified = True
+		while (iter.forward_to_tag_toggle(None) and not iter.is_end()):
+			modified = True
+			texte += xhtml_special(buffer.get_text(old, iter))
+			old.forward_to_tag_toggle(None)
+			new_tags = []
+			old_tags = []
+			end_tags = []
+			for tag in iter.get_toggled_tags(True):
+				new_tags.append(tag.get_property('name'))
+			
+			for tag in iter.get_tags():
+				if tag.get_property('name') not in new_tags:
+					old_tags.append(tag.get_property('name'))
+			
+			for tag in iter.get_toggled_tags(False):
+				end_tags.append(tag.get_property('name'))
+
+			for tag in old_tags:
+				texte += self.end_tags[tag]
+			for tag in end_tags:
+				texte += self.end_tags[tag]
+			for tag in new_tags:
+				texte += self.begin_tags[tag]
+			for tag in old_tags:
+				texte += self.begin_tags[tag]		
+
+		texte += xhtml_special(buffer.get_text(old, buffer.get_end_iter()))
+		for tag in iter.get_toggled_tags(False):
+			texte += self.end_tags[tag.get_property('name')]
+
+		if modified:
+			return '<p>' + self.make_clickable_urls(texte) + '</p>'
+		else:
+			return None
+	
 
 	def destroy(self):
 		import gc

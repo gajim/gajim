@@ -258,6 +258,10 @@ class ChatControlBase(MessageControl):
 		id = widget.connect('clicked', self._on_send_button_clicked)
 		self.handlers[id] = widget
 
+		widget = self.xml.get_widget('formattings_button')
+		id = widget.connect('clicked', self.on_formattings_button_clicked)
+		self.handlers[id] = widget
+
 		# the following vars are used to keep history of user's messages
 		self.sent_history = []
 		self.sent_history_pos = 0
@@ -359,9 +363,10 @@ class ChatControlBase(MessageControl):
 		start_iter = message_buffer.get_start_iter()
 		end_iter = message_buffer.get_end_iter()
 		message = message_buffer.get_text(start_iter, end_iter, 0).decode('utf-8')
+		xhtml = self.msg_textview.get_xhtml()
 
 		# send the message
-		self.send_message(message)
+		self.send_message(message, xhtml=xhtml)
 
 	def _paint_banner(self):
 		'''Repaint banner with theme color'''
@@ -508,6 +513,7 @@ class ChatControlBase(MessageControl):
 		start_iter, end_iter = message_buffer.get_bounds()
 		message = message_buffer.get_text(start_iter, end_iter, False).decode(
 			'utf-8')
+		xhtml = self.msg_textview.get_xhtml() 
 
 		# construct event instance from binding
 		event = gtk.gdk.Event(gtk.gdk.KEY_PRESS) # it's always a key-press here
@@ -551,7 +557,7 @@ class ChatControlBase(MessageControl):
 				send_message = False
 
 			if send_message:
-				self.send_message(message) # send the message
+				self.send_message(message, xhtml=xhtml) # send the message
 		else:
 			# Give the control itself a chance to process
 			self.handle_message_textview_mykey_press(widget, event_keyval,
@@ -595,7 +601,7 @@ class ChatControlBase(MessageControl):
 
 	def send_message(self, message, keyID = '', type_ = 'chat', chatstate = None,
 	msg_id = None, composing_xep = None, resource = None,
-	process_command = True):
+	process_command = True, xhtml = None):
 		'''Send the given message to the active tab. Doesn't return None if error
 		'''
 		if not message or message == '\n':
@@ -607,7 +613,7 @@ class ChatControlBase(MessageControl):
 			ret = MessageControl.send_message(self, message, keyID, type_ = type_,
 				chatstate = chatstate, msg_id = msg_id,
 				composing_xep = composing_xep, resource = resource,
-				user_nick = self.user_nick)
+				user_nick = self.user_nick, xhtml = xhtml)
 
 			# Record message history
 			self.save_sent_message(message)
@@ -738,6 +744,68 @@ class ChatControlBase(MessageControl):
 		'''popup emoticons menu'''
 		gajim.interface.emoticon_menuitem_clicked = self.append_emoticon
 		gajim.interface.popup_emoticons_under_button(widget, self.parent_win)
+
+	def on_formattings_button_clicked(self, widget):
+		'''popup formattings menu'''
+ 		menu = gtk.Menu()
+ 
+ 		menuitems = ((_('Bold'), 'bold'),
+ 		(_('Italic'), 'italic'),
+ 		(_('Underline'), 'underline'),
+ 		(_('Strike'), 'strike'))
+
+		active_tags = self.msg_textview.get_active_tags()
+
+		for menuitem in menuitems:
+			item = gtk.CheckMenuItem(menuitem[0])
+			if menuitem[1] in active_tags:
+				item.set_active(True)
+			else:
+				item.set_active(False)
+			item.connect('activate', self.msg_textview.set_tag,
+				menuitem[1])
+			menu.append(item)
+
+		item = gtk.SeparatorMenuItem() # separator
+		menu.append(item)
+
+		item = gtk.ImageMenuItem(_('Color'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_SELECT_COLOR, gtk.ICON_SIZE_MENU)
+		item.set_image(icon)
+		item.connect('activate', self.on_color_menuitem_activale)
+		menu.append(item)
+
+		item = gtk.ImageMenuItem(_('Font'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_SELECT_FONT, gtk.ICON_SIZE_MENU)
+		item.set_image(icon)
+		item.connect('activate', self.on_font_menuitem_activale)
+		menu.append(item)
+
+		item = gtk.SeparatorMenuItem() # separator
+		menu.append(item)
+
+		item = gtk.ImageMenuItem(_('Clear formating'))
+		icon = gtk.image_new_from_stock(gtk.STOCK_CLEAR, gtk.ICON_SIZE_MENU)
+		item.set_image(icon)
+		item.connect('activate', self.msg_textview.clear_tags)
+		menu.append(item)
+
+		menu.show_all()
+		gtkgui_helpers.popup_emoticons_under_button(menu, widget,
+			self.parent_win)
+
+	def on_color_menuitem_activale(self, widget):
+		color_dialog = gtk.ColorSelectionDialog('Select a color')
+		color_dialog.connect('response', self.msg_textview.color_set, 
+			color_dialog.colorsel)
+		color_dialog.show_all()
+
+	def on_font_menuitem_activale(self, widget):
+		font_dialog = gtk.FontSelectionDialog('Select a font')
+		font_dialog.connect('response', self.msg_textview.font_set, 
+			font_dialog.fontsel)
+		font_dialog.show_all()
+		
 
 	def on_actions_button_clicked(self, widget):
 		'''popup action menu'''
@@ -1668,7 +1736,8 @@ class ChatControl(ChatControlBase):
 		else:
 			self.print_conversation(_('No help info for /%s') % command, 'info')
 
-	def send_message(self, message, keyID = '', chatstate = None):
+	def send_message(self, message, keyID = '', chatstate = None,
+	xhtml = None):
 		'''Send a message to contact'''
 		if message in ('', None, '\n') or self._process_command(message):
 			return None
@@ -1725,7 +1794,7 @@ class ChatControl(ChatControlBase):
 		id = ChatControlBase.send_message(self, message, keyID,
 			type_ = 'chat', chatstate = chatstate_to_send,
 			composing_xep = composing_xep,
-			process_command = process_command)
+			process_command = process_command, xhtml = xhtml)
 		if id:
 			# XXX: Once we have fallback to disco, remove
 			#      notexistant check
@@ -1738,7 +1807,8 @@ class ChatControl(ChatControlBase):
 				xep0184_id = None
 
 			self.print_conversation(message, self.contact.jid,
-				encrypted = encrypted, xep0184_id = xep0184_id)
+				encrypted = encrypted, xep0184_id = xep0184_id,
+				xhtml = xhtml)
 
 	def check_for_possible_paused_chatstate(self, arg):
 		''' did we move mouse of that window or write something in message
