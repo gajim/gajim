@@ -230,7 +230,10 @@ class MessageTextView(gtk.TextView):
 			return text
 
 		for tag in iter.get_toggled_tags(True):
-			texte += self.begin_tags[tag.get_property('name')]
+			tag_name = tag.get_property('name')
+			if tag_name not in self.begin_tags:
+				continue
+			texte += self.begin_tags[tag_name]
 			modified = True
 		while (iter.forward_to_tag_toggle(None) and not iter.is_end()):
 			modified = True
@@ -240,14 +243,23 @@ class MessageTextView(gtk.TextView):
 			old_tags = []
 			end_tags = []
 			for tag in iter.get_toggled_tags(True):
-				new_tags.append(tag.get_property('name'))
+				tag_name = tag.get_property('name')
+				if tag_name not in self.begin_tags:
+					continue
+				new_tags.append(tag_name)
 			
 			for tag in iter.get_tags():
-				if tag.get_property('name') not in new_tags:
-					old_tags.append(tag.get_property('name'))
+				tag_name = tag.get_property('name')
+				if tag_name not in self.begin_tags or tag_name not in self.end_tags:
+					continue
+				if tag_name not in new_tags:
+					old_tags.append(tag_name)
 			
 			for tag in iter.get_toggled_tags(False):
-				end_tags.append(tag.get_property('name'))
+				tag_name = tag.get_property('name')
+				if tag_name not in self.end_tags:
+					continue
+				end_tags.append(tag_name)
 
 			for tag in old_tags:
 				texte += self.end_tags[tag]
@@ -260,7 +272,10 @@ class MessageTextView(gtk.TextView):
 
 		texte += xhtml_special(buffer.get_text(old, buffer.get_end_iter()))
 		for tag in iter.get_toggled_tags(False):
-			texte += self.end_tags[tag.get_property('name')]
+			tag_name = tag.get_property('name')
+			if tag_name not in self.end_tags:
+				continue
+			texte += self.end_tags[tag_name]
 
 		if modified:
 			return '<p>' + self.make_clickable_urls(texte) + '</p>'
