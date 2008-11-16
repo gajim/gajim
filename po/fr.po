@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.12 svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-14 18:31+0100\n"
-"PO-Revision-Date: 2008-11-14 15:43+0100\n"
+"POT-Creation-Date: 2008-11-16 20:37+0100\n"
+"PO-Revision-Date: 2008-11-16 16:24+0100\n"
 "Last-Translator: Florent Le Coz <louizatakk@fedoraproject.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1200,7 +1200,7 @@ msgstr ""
 "Contact\n"
 "Bannière"
 
-#: ../data/glade/gajim_themes_window.glade.h:6
+#: ../data/glade/gajim_themes_window.glade.h:6 ../src/chat_control.py:752
 msgid "Bold"
 msgstr "Gras"
 
@@ -1224,7 +1224,7 @@ msgstr "Parti"
 msgid "Inactive"
 msgstr "Inactif"
 
-#: ../data/glade/gajim_themes_window.glade.h:12
+#: ../data/glade/gajim_themes_window.glade.h:12 ../src/chat_control.py:753
 msgid "Italic"
 msgstr "Italique"
 
@@ -1558,15 +1558,20 @@ msgid "Show a list of emoticons (Alt+M)"
 msgstr "Afficher une liste des émoticônes (Alt+M)"
 
 #: ../data/glade/message_window.glade.h:9
+#, fuzzy
+msgid "Show a list of formattings"
+msgstr "Afficher une liste des émoticônes (Alt+M)"
+
+#: ../data/glade/message_window.glade.h:10
 msgid "Show a menu of advanced functions (Alt+A)"
 msgstr "Affiche un menu de fonctions avancées (Alt+A)"
 
-#: ../data/glade/message_window.glade.h:10
+#: ../data/glade/message_window.glade.h:11
 msgid "Show the contact's profile (Ctrl+I)"
 msgstr "Afficher le profil du contact (Ctrl+I)"
 
 #. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
-#: ../data/glade/message_window.glade.h:12
+#: ../data/glade/message_window.glade.h:13
 #: ../data/glade/xml_console_window.glade.h:11
 #: ../src/filetransfers_window.py:261
 msgid "_Send"
@@ -2843,7 +2848,7 @@ msgstr "Entier"
 msgid "Text"
 msgstr "Texte"
 
-#: ../src/advanced.py:102
+#: ../src/advanced.py:102 ../src/chat_control.py:772
 msgid "Color"
 msgstr "Couleur"
 
@@ -2973,26 +2978,45 @@ msgstr "Suédois"
 msgid "Chinese (Ch)"
 msgstr "Chinois"
 
-#: ../src/chat_control.py:332
+#: ../src/chat_control.py:336
 msgid "Spelling language"
 msgstr "Langue du correcteur orthographique"
 
 #. we are not connected
-#: ../src/chat_control.py:355 ../src/chat_control.py:549
+#: ../src/chat_control.py:359 ../src/chat_control.py:555
 msgid "A connection is not available"
 msgstr "Aucune connexion disponible"
 
-#: ../src/chat_control.py:356 ../src/chat_control.py:550
+#: ../src/chat_control.py:360 ../src/chat_control.py:556
 msgid "Your message can not be sent until you are connected."
 msgstr "Votre message ne peut être envoyé tant que vous n'êtes pas connecté."
 
-#: ../src/chat_control.py:1147 ../src/chat_control.py:1543
+#: ../src/chat_control.py:754
+#, fuzzy
+msgid "Underline"
+msgstr "Indéfini"
+
+#: ../src/chat_control.py:755
+#, fuzzy
+msgid "Strike"
+msgstr "Malade"
+
+#: ../src/chat_control.py:778
+msgid "Font"
+msgstr ""
+
+#: ../src/chat_control.py:787
+#, fuzzy
+msgid "Clear formating"
+msgstr "Informations du Contact"
+
+#: ../src/chat_control.py:1215 ../src/chat_control.py:1611
 msgid "GPG encryption enabled"
 msgstr "Chiffrement GPG activé"
 
 #. Add to roster
 #. add_to_roster_menuitem
-#: ../src/chat_control.py:1169 ../src/chat_control.py:2037
+#: ../src/chat_control.py:1237 ../src/chat_control.py:2107
 #: ../src/common/contacts.py:113 ../src/common/helpers.py:73
 #: ../src/common/helpers.py:303 ../src/conversation_textview.py:845
 #: ../src/dialogs.py:904 ../src/gajim.py:1633 ../src/normal_control.py:483
@@ -3003,19 +3027,19 @@ msgstr "Chiffrement GPG activé"
 msgid "Not in Roster"
 msgstr "Absent de la liste"
 
-#: ../src/chat_control.py:1301 ../src/tooltips.py:627
+#: ../src/chat_control.py:1369 ../src/tooltips.py:627
 msgid "Unknown Artist"
 msgstr "Artiste Inconnu"
 
-#: ../src/chat_control.py:1303 ../src/tooltips.py:632
+#: ../src/chat_control.py:1371 ../src/tooltips.py:632
 msgid "Unknown Title"
 msgstr "Titre Iconnu"
 
-#: ../src/chat_control.py:1305 ../src/tooltips.py:637
+#: ../src/chat_control.py:1373 ../src/tooltips.py:637
 msgid "Unknown Source"
 msgstr "Source Inconnue"
 
-#: ../src/chat_control.py:1309 ../src/tooltips.py:639
+#: ../src/chat_control.py:1377 ../src/tooltips.py:639
 #, python-format
 msgid ""
 "<b>\"%(title)s\"</b> by <i>%(artist)s</i>\n"
@@ -3024,7 +3048,7 @@ msgstr ""
 "<b>« %(title)s »</b> par <i>%(artist)s</i>\n"
 "de <i>%(source)s</i>"
 
-#: ../src/chat_control.py:1314
+#: ../src/chat_control.py:1382
 #, python-format
 msgid ""
 "%(title)s by %(artist)s\n"
@@ -3033,17 +3057,17 @@ msgstr ""
 "%(title)s par %(artist)s\n"
 "de %(source)s"
 
-#: ../src/chat_control.py:1438
+#: ../src/chat_control.py:1506
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s du salon de discussion %(room_name)s"
 
 #. No key assigned nor a key is used by remote contact
-#: ../src/chat_control.py:1523 ../src/dialogs.py:3911
+#: ../src/chat_control.py:1591 ../src/dialogs.py:3911
 msgid "No GPG key assigned"
 msgstr "Aucune clef GPG assignée"
 
-#: ../src/chat_control.py:1524
+#: ../src/chat_control.py:1592
 msgid ""
 "No GPG key is assigned to this contact. So you cannot encrypt messages with "
 "GPG."
@@ -3051,78 +3075,78 @@ msgstr ""
 "Aucune clef GPG n'est assignée à ce contact. Vous ne pouvez donc pas "
 "chiffrer les messages avec GPG."
 
-#: ../src/chat_control.py:1533
+#: ../src/chat_control.py:1601
 msgid "GPG encryption disabled"
 msgstr "Chiffrement GPG désactivé"
 
-#: ../src/chat_control.py:1558
+#: ../src/chat_control.py:1626
 msgid "Session WILL be logged"
 msgstr "La session SERA archivée"
 
-#: ../src/chat_control.py:1560
+#: ../src/chat_control.py:1628
 msgid "Session WILL NOT be logged"
 msgstr "La session ne sera PAS archivée"
 
 #. encryption %s active
-#: ../src/chat_control.py:1574
+#: ../src/chat_control.py:1642
 msgid "is"
 msgstr "est"
 
-#: ../src/chat_control.py:1574
+#: ../src/chat_control.py:1642
 msgid "is NOT"
 msgstr "N'est PAS"
 
 #. chat session %s be logged
-#: ../src/chat_control.py:1576
+#: ../src/chat_control.py:1644
 msgid "will"
 msgstr "sera"
 
-#: ../src/chat_control.py:1576
+#: ../src/chat_control.py:1644
 msgid "will NOT"
 msgstr "NE sera PAS"
 
 #. About encrypted chat session
-#: ../src/chat_control.py:1580
+#: ../src/chat_control.py:1648
 msgid "and authenticated"
 msgstr "et authentifiée"
 
 #. About encrypted chat session
-#: ../src/chat_control.py:1584
+#: ../src/chat_control.py:1652
 msgid "and NOT authenticated"
 msgstr "et NON authentifiée"
 
 #. status will become 'is' or 'is not', authentificaed will become
 #. 'and authentificated' or 'and not authentificated', logged will become
 #. 'will' or 'will not'
-#: ../src/chat_control.py:1590
+#: ../src/chat_control.py:1658
 #, python-format
 msgid ""
 "%(type)s encryption %(status)s active %(authenticated)s.\n"
 "Your chat session %(logged)s be logged."
 msgstr ""
-"Chiffrement %(type)s %(status)s actif %(anthenticated)s.\n"
-"Votre discussion %(logged) archivée."
+"Chiffrement %(type)s %(status)s actif %(authenticated)s.\n"
+"Votre discussion %(logged)s archivée."
 
-#: ../src/chat_control.py:1638
+#: ../src/chat_control.py:1706
 msgid "Command not supported for zeroconf account."
 msgstr "Commande non prise en charge pour les comptes zeroconf."
 
-#: ../src/chat_control.py:1649 ../src/groupchat_control.py:1653
+#: ../src/chat_control.py:1717 ../src/groupchat_control.py:1653
 #, python-format
 msgid "Commands: %s"
 msgstr "Commandes : %s"
 
-#: ../src/chat_control.py:1652 ../src/groupchat_control.py:1667
+#: ../src/chat_control.py:1720 ../src/groupchat_control.py:1667
 #, python-format
 msgid "Usage: /%s, clears the text window."
 msgstr "Usage : /%s, nettoie la fenêtre."
 
-#: ../src/chat_control.py:1655 ../src/groupchat_control.py:1672
+#: ../src/chat_control.py:1723 ../src/groupchat_control.py:1672
 #, python-format
 msgid "Usage: /%s, hide the chat buttons."
 msgstr "Usage: /%s, cache les boutons de discussion."
 
-#: ../src/chat_control.py:1658 ../src/groupchat_control.py:1688
+#: ../src/chat_control.py:1726 ../src/groupchat_control.py:1688
 #, python-format
 msgid ""
 "Usage: /%(command)s <action>, sends action to the current group chat. Use "
@@ -3131,38 +3155,38 @@ msgstr ""
 "Utilisation : /%(command)s <action>, envoie l'action au salon actuel. "
 "Utilise la troisième personne. (ex : /%(command)s explose.)"
 
-#: ../src/chat_control.py:1663
+#: ../src/chat_control.py:1731
 #, python-format
 msgid "Usage: /%s, sends a ping to the contact"
 msgstr "Utilisation : /%s, envoie un ping au contact"
 
-#: ../src/chat_control.py:1666
+#: ../src/chat_control.py:1734
 #, python-format
 msgid "Usage: /%s, send the message to the contact"
 msgstr "Usage: /%s, envoie le message au contact"
 
-#: ../src/chat_control.py:1669 ../src/groupchat_control.py:1711
+#: ../src/chat_control.py:1737 ../src/groupchat_control.py:1711
 #, python-format
 msgid "No help info for /%s"
 msgstr "Pas d'aide disponible pour /%s"
 
-#: ../src/chat_control.py:1800
+#: ../src/chat_control.py:1870
 msgid "Session negotiation cancelled"
 msgstr "Négociation annulée"
 
-#: ../src/chat_control.py:1807
+#: ../src/chat_control.py:1877
 msgid "This session is encrypted"
 msgstr "Cette session est chiffrée"
 
-#: ../src/chat_control.py:1810
+#: ../src/chat_control.py:1880
 msgid " and WILL be logged"
 msgstr " et SERA archivée"
 
-#: ../src/chat_control.py:1812
+#: ../src/chat_control.py:1882
 msgid " and WILL NOT be logged"
 msgstr " et NE SERA PAS archivée"
 
-#: ../src/chat_control.py:1817
+#: ../src/chat_control.py:1887
 msgid ""
 "Remote contact's identity not verified. Click the shield button for more "
 "details."
@@ -3170,25 +3194,25 @@ msgstr ""
 "Identité du contact non vérifiée. Cliquez sur le bouton bouclier pour plus "
 "de détails."
 
-#: ../src/chat_control.py:1819
+#: ../src/chat_control.py:1889
 msgid "E2E encryption disabled"
 msgstr "Chiffrement E2E désactivé"
 
-#: ../src/chat_control.py:1848 ../src/chat_control.py:1861
+#: ../src/chat_control.py:1918 ../src/chat_control.py:1931
 msgid "The following message was NOT encrypted"
 msgstr "Le message suivant n'a PAS été chiffré"
 
-#: ../src/chat_control.py:1854
+#: ../src/chat_control.py:1924
 msgid "The following message was encrypted"
 msgstr "Le message suivant n'a été chiffré"
 
 #. %s is being replaced in the code with JID
-#: ../src/chat_control.py:2225
+#: ../src/chat_control.py:2295
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "Vous venez de recevoir un nouveau message de \"%s\""
 
-#: ../src/chat_control.py:2226
+#: ../src/chat_control.py:2296
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
@@ -3196,7 +3220,7 @@ msgstr ""
 "Si vous fermez cette fenêtre et que l'historique n'est pas activé, ce "
 "message sera perdu."
 
-#: ../src/chat_control.py:2376 ../src/common/connection_handlers.py:1847
+#: ../src/chat_control.py:2446 ../src/common/connection_handlers.py:1847
 #: ../src/common/connection_handlers.py:1893
 #: ../src/common/connection_handlers.py:2081
 #: ../src/common/connection_handlers.py:2207 ../src/common/connection.py:1222
@@ -3204,7 +3228,7 @@ msgstr ""
 msgid "Database Error"
 msgstr "Erreur de base de données"
 
-#: ../src/chat_control.py:2377
+#: ../src/chat_control.py:2447
 #, python-format
 msgid ""
 "The database file (%s) cannot be read. Try to repair it or remove it (all "
@@ -3213,7 +3237,7 @@ msgstr ""
 "Le fichier de base de données (%s) ne peut être lu. Essayez de le réparer ou "
 "supprimez le (toutes les archives seront perdues)."
 
-#: ../src/chat_control.py:2608
+#: ../src/chat_control.py:2678
 #, python-format
 msgid "%(name)s is now %(status)s"
 msgstr "%(name)s est maintenant %(status)s"
@@ -3360,7 +3384,7 @@ msgstr ""
 #. sorted alphanum
 #: ../src/common/config.py:112 ../src/common/config.py:448
 #: ../src/common/optparser.py:215 ../src/common/optparser.py:433
-#: ../src/common/optparser.py:467 ../src/gajim.py:3118
+#: ../src/common/optparser.py:467 ../src/gajim.py:3121
 msgid "default"
 msgstr "Par défaut"
 
@@ -4448,7 +4472,8 @@ msgstr "Réponse non valide"
 #, python-format
 msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
-"La passerelle %(name)s a mal répondu à la requête d'enregistrement : %(error)s"
+"La passerelle %(name)s a mal répondu à la requête d'enregistrement : %(error)"
+"s"
 
 #: ../src/common/connection.py:522
 msgid "Connection to proxy failed"
@@ -6507,7 +6532,7 @@ msgstr "Requête d'inscription pour le compte %(account)s de la part de %(jid)s"
 msgid "Subscription request from %s"
 msgstr "Requête d'inscription de la part de %s"
 
-#: ../src/dialogs.py:1669 ../src/gajim.py:2621
+#: ../src/dialogs.py:1669 ../src/gajim.py:2624
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "Vous êtes déjà dans le salon %s"
@@ -6914,7 +6939,7 @@ msgid ""
 "\n"
 "This session's Short Authentication String is <b>%(sas)s</b>."
 msgstr ""
-"Afin d'éviter de parler à un iconnu, vous devriez parler à <b>%(jid)s</b> "
+"Afin d'éviter de parler à un inconnu, vous devriez parler à <b>%(jid)s</b> "
 "directement (en personne ou au téléphone) et vérifier qu'ils voient la même "
 "Short Authentication String (SAS) que vous.\n"
 "\n"
@@ -7920,11 +7945,11 @@ msgid "PEP node %(node)s was not removed: %(message)s"
 msgstr "Le nœud PEP %(node)s n'a pas été supprimé : %(message)s"
 
 #. theme doesn't exist, disable emoticons
-#: ../src/gajim.py:2579 ../src/gajim.py:2600
+#: ../src/gajim.py:2582 ../src/gajim.py:2603
 msgid "Emoticons disabled"
 msgstr "Émoticônes désactivées"
 
-#: ../src/gajim.py:2580
+#: ../src/gajim.py:2583
 msgid ""
 "Your configured emoticons theme has not been found, so emoticons have been "
 "disabled."
@@ -7932,7 +7957,7 @@ msgstr ""
 "Votre thème d'émoticônes n'a pu être trouvé, les émoticônes sont donc "
 "désactivées."
 
-#: ../src/gajim.py:2601
+#: ../src/gajim.py:2604
 msgid ""
 "Your configured emoticons theme cannot been loaded. You maybe need to update "
 "the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons "
@@ -7942,7 +7967,7 @@ msgstr ""
 "mettre à jour le format du fichier emoticons.py. Voir http://trac.gajim.org/"
 "wiki/Emoticons pour plus de détails."
 
-#: ../src/gajim.py:2627 ../src/roster_window.py:3324
+#: ../src/gajim.py:2630 ../src/roster_window.py:3324
 msgid "You cannot join a group chat while you are invisible"
 msgstr ""
 "Vous ne pouvez pas joindre un salon de discussion tant que vous êtes "
@@ -7950,24 +7975,24 @@ msgstr ""
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gajim.py:2907
+#: ../src/gajim.py:2910
 msgid "Could not save your settings and preferences"
 msgstr "Impossible d'enregistrer vos informations de configuration"
 
-#: ../src/gajim.py:3004
+#: ../src/gajim.py:3007
 msgid "Bookmark already set"
 msgstr "Marque-page déjà spécifié"
 
-#: ../src/gajim.py:3005
+#: ../src/gajim.py:3008
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "Le salon \"%s\" est déjà dans vos marque-pages."
 
-#: ../src/gajim.py:3018
+#: ../src/gajim.py:3021
 msgid "Bookmark has been added successfully"
 msgstr "Marque-page ajouté avec succès"
 
-#: ../src/gajim.py:3019
+#: ../src/gajim.py:3022
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
 "Vous pouvez gérer vos marque-pages par le menu Actions de votre liste de "
@@ -8356,7 +8381,7 @@ msgid ""
 "Type \"%(basename)s help %(command)s\" for more info"
 msgstr ""
 "Trop d'arguments.\n"
-"Tappez \"%(basename)s help %(command)s\" pour plus d'informations"
+"Tapez \"%(basename)s help %(command)s\" pour plus d'informations"
 
 #: ../src/gajim-remote.py:498
 #, python-format
@@ -8405,8 +8430,7 @@ msgstr "L'envoi du message privé a échoué"
 #: ../src/groupchat_control.py:152
 #, python-format
 msgid "You are no longer in group chat \"%(room)s\" or \"%(nick)s\" has left."
-msgstr ""
-"Vous n'êtes plus dans le salon \"%(room)s\" ou \"%(nick)s\" l'a quitté."
+msgstr "Vous n'êtes plus dans le salon « %(room)s » ou « %(nick)s » l'a quitté."
 
 #: ../src/groupchat_control.py:451
 msgid "Insert Nickname"
