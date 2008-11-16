@@ -3100,7 +3100,7 @@ msgid ""
 "%(type)s encryption %(status)s active %(authenticated)s.\n"
 "Your chat session %(logged)s be logged."
 msgstr ""
-"Chiffrement %(type)s %(status) actif %(anthenticated)s.\n"
+"Chiffrement %(type)s %(status)s actif %(anthenticated)s.\n"
 "Votre discussion %(logged) archivée."
 
 #: ../src/chat_control.py:1638
@@ -4448,8 +4448,7 @@ msgstr "Réponse non valide"
 #, python-format
 msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
-"La passerelle %(name)s a mal répondu à la requête d'enregistrement : %(error)"
-"s"
+"La passerelle %(name)s a mal répondu à la requête d'enregistrement : %(error)s"
 
 #: ../src/common/connection.py:522
 msgid "Connection to proxy failed"
