@@ -311,7 +311,7 @@ class ServicesCache:
 		# Allow browsing for unknown types aswell.
 		if (not features and not identities) or \
 		xmpp.NS_DISCO_ITEMS in features or xmpp.NS_BROWSE in features:
-			return AgentBrowser
+			return ToplevelAgentBrowser
 		return None
 
 	def get_info(self, jid, node, cb, force = False, nofetch = False, args = ()):
