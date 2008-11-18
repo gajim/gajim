@@ -1417,7 +1417,7 @@ class RosterWindow:
 ##############################################################################
 
 	def _search_roster_func(self, model, column, key, titer):
-		key = gobject.markup_escape_text(key.lower())
+		key = key.decode('utf-8').lower()
 		name = model[titer][C_NAME].decode('utf-8').lower()
 		return not (key in name)
 
