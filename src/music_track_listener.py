@@ -164,10 +164,10 @@ class MusicTrackListener(gobject.GObject):
 
 	def _banshee_properties_extract(self, props):
 		info = MusicTrackInfo()
-		info.title = props['name']
-		info.album = props['album']
-		info.artist = props['artist']
-		info.duration = int(props['length'])
+		info.title = props.get('name', None)
+		info.album = props.get('album', None)
+		info.artist = props.get('artist', None)
+		info.duration = int(props.get('length', 0))
 		return info
 
 	def get_playing_track(self):
