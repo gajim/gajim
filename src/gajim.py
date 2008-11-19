@@ -57,6 +57,10 @@ if os.name == 'nt':
 
 import sys
 
+if os.name == 'nt':
+	# needed for docutils
+	sys.path.append('.')
+
 import logging
 consoleloghandler = logging.StreamHandler()
 consoleloghandler.setLevel(1)

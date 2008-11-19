@@ -25,15 +25,34 @@ import glob
 import sys
 import os
 
+docutils_files = []
+def fill_docutils_files(folder, base=u'docutils'):
+    docutils_files.append((base, glob.glob(os.path.join(folder, base, '*.pyc'))))
+    for path in os.listdir(os.path.join(folder, base)):
+        if os.path.isdir(os.path.join(folder, base, path)):
+            fill_docutils_files(folder, base=os.path.join(base, path))
+
+try:
+    import docutils.readers
+    import docutils.writers.html4css1
+    import docutils.languages
+except ImportError:
+    pass
+else:
+    fill_docutils_files(os.path.join(sys.prefix, 'Lib', 'site-packages'))
+    docutils_files.append((os.path.join('docutils', 'writers', 'html4css1'),
+        glob.glob(os.path.join(sys.prefix, 'Lib', 'site-packages', 'docutils',
+        'writers', 'html4css1', '*.css'))))
+
 sys.path.append('src')
 # Use local gtk folder instead of the one in PATH that is not latest gtk
 if 'gtk' in os.listdir('.'):
     sys.path.append('gtk/bin')
-includes = ['encodings', 'encodings.utf-8',]
 
 opts = {
     'py2exe': {
-        'includes': 'pango,atk,gobject,cairo,pangocairo,gtk.keysyms,encodings,encodings.*,docutils.readers.*,docutils.writers.html4css1',
+        # ConfigParser,UserString,roman are needed for docutils
+        'includes': 'pango,atk,gobject,cairo,pangocairo,gtk.keysyms,encodings,encodings.*,ConfigParser,UserString,roman',
         'dll_excludes': [
             'iconv.dll','intl.dll','libatk-1.0-0.dll',
             'libgdk_pixbuf-2.0-0.dll','libgdk-win32-2.0-0.dll',
@@ -43,20 +62,12 @@ opts = {
             'libpangowin32-1.0-0.dll','libcairo-2.dll',
             'libpangocairo-1.0-0.dll','libpangoft2-1.0-0.dll',
         ],
+        'excludes': [
+            'docutils'
+        ],
     }
 }
 
-try:
-	import docutils.readers
-except ImportError:
-	opts['py2exe']['includes'] = \
-		opts['py2exe']['includes'].replace(',docutils.readers.*', '')
-
-try:
-	import docutils.writers.html4css1
-except ImportError:
-	opts['py2exe']['includes'] = \
-		opts['py2exe']['includes'].replace(',docutils.writers.html4css1', '')
 
 setup(
     name = 'Gajim',
@@ -73,9 +84,8 @@ setup(
                 'icon_resources': [(1, 'data/pixmaps/gajim.ico')]}],
     options=opts,
 
-    data_files=[('.', glob.glob('src/gtkgui.glade')),
-                ('.', glob.glob('src/history_manager.glade')),
-    ],
+    data_files=docutils_files,
+
 )
 
 # vim: se ts=3:
