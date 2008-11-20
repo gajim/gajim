@@ -1061,18 +1061,13 @@ class ChatControlBase(MessageControl):
 	def got_connected(self):
 		self.msg_textview.set_sensitive(True)
 		self.msg_textview.set_editable(True)
-		# FIXME: This seems wrong. What if we have caps?
-		self.xml.get_widget('formattings_button').set_sensitive(True)
-		self.xml.get_widget('send_button').set_sensitive(True)
-		self.xml.get_widget('convert_to_gc_button').set_sensitive(True)
+		# FIXME: Set sensitivity for toolbar
 
 	def got_disconnected(self):
 		self.msg_textview.set_sensitive(False)
 		self.msg_textview.set_editable(False)
 		self.conv_textview.tv.grab_focus()
-		self.xml.get_widget('formattings_button').set_sensitive(False)
-		self.xml.get_widget('send_button').set_sensitive(False)
-		self.xml.get_widget('convert_to_gc_button').set_sensitive(False)
+		# FIXME: Set sensitivity for toolbar
 
 ################################################################################
 class ChatControl(ChatControlBase):
