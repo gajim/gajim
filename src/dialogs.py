@@ -442,7 +442,7 @@ class ChangeActivityDialog:
 				self.subactivity,
 				self.entry.get_text().decode('utf-8'))
 		else:
-			pep.user_retract_activity(self.account)
+			pep.user_send_activity(self.account, '')
 		self.window.destroy()
 
 	def on_cancel_button_clicked(self, widget):
@@ -529,7 +529,7 @@ class ChangeMoodDialog:
 		'''Return mood and messsage (None if no mood selected)'''
 		message = self.entry.get_text().decode('utf-8')
 		if self.mood is None:
-			pep.user_retract_mood(self.account)
+			pep.user_send_mood(self.account, '')
 		else:
 			pep.user_send_mood(self.account, self.mood, message)
 		self.window.destroy()
