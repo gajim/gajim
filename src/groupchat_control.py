@@ -2234,6 +2234,8 @@ class GroupchatControl(ChatControlBase):
 
 	def on_list_treeview_button_press_event(self, widget, event):
 		'''popup user's group's or agent menu'''
+		# hide tooltip, no matter the button is pressed
+		self.tooltip.hide_tooltip()
 		if event.button == 3: # right click
 			try:
 				path, column, x, y = widget.get_path_at_pos(int(event.x),

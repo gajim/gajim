@@ -311,7 +311,7 @@ class ServicesCache:
 		# Allow browsing for unknown types aswell.
 		if (not features and not identities) or \
 		xmpp.NS_DISCO_ITEMS in features or xmpp.NS_BROWSE in features:
-			return AgentBrowser
+			return ToplevelAgentBrowser
 		return None
 
 	def get_info(self, jid, node, cb, force = False, nofetch = False, args = ()):
@@ -725,10 +725,12 @@ _('This type of service does not contain any items to browse.'))
 		self.travel(jid, '')
 
 	def on_services_treeview_row_activated(self, widget, path, col = 0):
-		self.browser.default_action()
+		if self.browser:
+			self.browser.default_action()
 
 	def on_services_treeview_selection_changed(self, widget):
-		self.browser.update_actions()
+		if self.browser:
+			self.browser.update_actions()
 
 
 class AgentBrowser:
