@@ -747,12 +747,12 @@ class ChatControlBase(MessageControl):
 
 	def on_formattings_button_clicked(self, widget):
 		'''popup formattings menu'''
- 		menu = gtk.Menu()
- 
- 		menuitems = ((_('Bold'), 'bold'),
- 		(_('Italic'), 'italic'),
- 		(_('Underline'), 'underline'),
- 		(_('Strike'), 'strike'))
+		menu = gtk.Menu()
+
+		menuitems = ((_('Bold'), 'bold'),
+		(_('Italic'), 'italic'),
+		(_('Underline'), 'underline'),
+		(_('Strike'), 'strike'))
 
 		active_tags = self.msg_textview.get_active_tags()
 
@@ -1299,9 +1299,9 @@ class ChatControl(ChatControlBase):
 			self._mood_image.hide()
 
 	def update_activity(self):
-		activity    = None
+		activity = None
 		subactivity = None
-		text        = None
+		text = None
 
 		if isinstance(self.contact, GC_Contact):
 			return
@@ -1353,7 +1353,7 @@ class ChatControl(ChatControlBase):
 
 	def update_tune(self):
 		artist = None
-		title  = None
+		title = None
 		source = None
 
 		if isinstance(self.contact, GC_Contact):
@@ -1804,8 +1804,7 @@ class ChatControl(ChatControlBase):
 			composing_xep = composing_xep,
 			process_command = process_command, xhtml = xhtml)
 		if id:
-			# XXX: Once we have fallback to disco, remove
-			#      notexistant check
+			# XXX: Once we have fallback to disco, remove notexistant check
 			if gajim.capscache.is_supported(contact, NS_RECEIPTS) \
 			and not gajim.capscache.is_supported(contact,
 			'notexistant') and gajim.config.get_per('accounts',
@@ -2416,8 +2415,7 @@ class ChatControl(ChatControlBase):
 			want_e2e = not e2e_is_active and not self.gpg_is_active \
 				and e2e_pref
 
-			# XXX: Once we have fallback to disco, remove
-			#      notexistant check
+			# XXX: Once we have fallback to disco, remove notexistant check
 			if want_e2e and not self.no_autonegotiation \
 			and gajim.HAVE_PYCRYPTO \
 			and gajim.capscache.is_supported(self.contact,
