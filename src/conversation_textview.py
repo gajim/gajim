@@ -440,7 +440,7 @@ class ConversationTextview:
 
 			self.xep0184_shown[id_] = SHOWN
 			return False
-		gobject.timeout_add_seconds(4, show_it)
+		gobject.timeout_add_seconds(3, show_it)
 
 		buffer.end_user_action()
 
