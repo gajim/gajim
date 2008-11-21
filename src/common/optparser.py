@@ -185,6 +185,8 @@ class OptionsParser:
 			self.update_config_to_01143()
 		if old < [0, 11, 4, 4] and new >= [0, 11, 4, 4]:
 			self.update_config_to_01144()
+		if old < [0, 12, 0, 1] and new >= [0, 12, 0, 1]:
+			self.update_config_to_01201()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -598,5 +600,12 @@ class OptionsParser:
 			pass
 		con.close()
 		gajim.config.set('version', '0.11.4.4')
+
+	def update_config_to_01201(self):
+		if 'uri_schemes' in self.old_values:
+			new_value = self.old_values['uri_schemes'].replace(' mailto', '').\
+				replace(' xmpp', '')
+			gajim.config.set('uri_schemes', new_values)
+		gajim.config.set('version', '0.12.0.1')
 
 # vim: se ts=3:

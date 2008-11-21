@@ -267,6 +267,18 @@ class ConversationTextview:
 		id = self.tagMail.connect('event', self.hyperlink_handler, 'mail')
 		self.handlers[id] = self.tagMail
 
+		self.tagXMPP = buffer.create_tag('xmpp')
+		self.tagXMPP.set_property('foreground', color)
+		self.tagXMPP.set_property('underline', pango.UNDERLINE_SINGLE)
+		id = self.tagXMPP.connect('event', self.hyperlink_handler, 'xmpp')
+		self.handlers[id] = self.tagXMPP
+
+		self.tagSthAtSth = buffer.create_tag('sth_at_sth')
+		self.tagSthAtSth.set_property('foreground', color)
+		self.tagSthAtSth.set_property('underline', pango.UNDERLINE_SINGLE)
+		id = self.tagSthAtSth.connect('event', self.hyperlink_handler, 'sth_at_sth')
+		self.handlers[id] = self.tagSthAtSth
+
 		tag = buffer.create_tag('bold')
 		tag.set_property('weight', pango.WEIGHT_BOLD)
 
@@ -610,7 +622,8 @@ class ConversationTextview:
 		over_line = False
 		xep0184_warning = False
 		for tag in tags:
-			if tag in (tag_table.lookup('url'), tag_table.lookup('mail')):
+			if tag in (tag_table.lookup('url'), tag_table.lookup('mail'), \
+			tag_table.lookup('xmpp'), tag_table.lookup('sth_at_sth')):
 				self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
 					gtk.gdk.Cursor(gtk.gdk.HAND2))
 				self.change_cursor = tag
@@ -755,7 +768,7 @@ class ConversationTextview:
 		if tags: # we clicked on sth special (it can be status message too)
 			for tag in tags:
 				tag_name = tag.get_property('name')
-				if tag_name in ('url', 'mail'):
+				if tag_name in ('url', 'mail', 'xmpp', 'sth_at_sth'):
 					return True # we block normal context menu
 
 		# we check if sth was selected and if it was we assign
@@ -828,6 +841,8 @@ class ConversationTextview:
 				join_group_chat_menuitem.set_image(muc_icon)
 
 			text = text.lower()
+			if text.startswith('xmpp:'):
+				text = text[5:]
 			id = childs[2].connect('activate', self.on_copy_link_activate, text)
 			self.handlers[id] = childs[2]
 			id = childs[3].connect('activate', self.on_open_link_activate, kind,
@@ -855,6 +870,16 @@ class ConversationTextview:
 			else:
 				childs[7].hide() # hide add to roster menuitem
 
+			if kind == 'xmpp':
+				childs[2].hide() # copy mail address
+				childs[3].hide() # open mail composer
+				childs[4].hide() # jid section separator
+			elif kind == 'mail':
+				childs[4].hide() # jid section separator
+				childs[5].hide() # start chat
+				childs[6].hide() # join group chat
+				childs[7].hide() # add to roster
+
 			childs[0].hide() # copy link location
 			childs[1].hide() # open link in browser
 
@@ -876,7 +901,18 @@ class ConversationTextview:
 				self.make_link_menu(event, kind, word)
 			else:
 				# we launch the correct application
-				helpers.launch_browser_mailer(kind, word)
+				if kind == 'xmpp':
+					word = word[5:]
+					if '?' in word:
+						(jid, action) = word.split('?')
+						if action == 'join':
+							self.on_join_group_chat_menuitem_activate(None, jid)
+						else:
+							self.on_start_chat_activate(None, jid)
+					else:
+						self.on_start_chat_activate(None, word)
+				else:
+					helpers.launch_browser_mailer(kind, word)
 
 	def html_hyperlink_handler(self, texttag, widget, event, iter_, kind, href):
 		if event.type == gtk.gdk.BUTTON_PRESS:
@@ -1040,10 +1076,15 @@ class ConversationTextview:
 		text_is_valid_uri:
 			tags.append('url')
 			use_other_tags = False
-		elif special_text.startswith('mailto:') or \
-		gajim.interface.sth_at_sth_dot_sth_re.match(special_text):
-			# it's a mail
+		elif special_text.startswith('mailto:'):
 			tags.append('mail')
+			use_other_tags = False
+		elif special_text.startswith('xmpp:'):
+			tags.append('xmpp')
+			use_other_tags = False
+		elif gajim.interface.sth_at_sth_dot_sth_re.match(special_text):
+			# it's a JID or mail
+			tags.append('sth_at_sth')
 			use_other_tags = False
 		elif special_text.startswith('*'): # it's a bold text
 			tags.append('bold')
