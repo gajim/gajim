@@ -1528,7 +1528,7 @@ class AccountsWindow:
 			self.xml.get_widget('gpg_choose_button2').set_sensitive(True)
 			self.init_account_gpg()
 		else:
-			gpg_key_label.set_text(_('OpenPGP is not usable in this computer'))
+			gpg_key_label.set_text(_('OpenPGP is not usable on this computer'))
 			self.xml.get_widget('gpg_choose_button2').set_sensitive(False)
 
 		for opt in ('first_name', 'last_name', 'jabber_id', 'email'):
@@ -1627,7 +1627,7 @@ class AccountsWindow:
 			self.xml.get_widget('gpg_choose_button1').set_sensitive(True)
 			self.init_account_gpg()
 		else:
-			gpg_key_label.set_text(_('OpenPGP is not usable in this computer'))
+			gpg_key_label.set_text(_('OpenPGP is not usable on this computer'))
 			self.xml.get_widget('gpg_choose_button1').set_sensitive(False)
 
 		# General tab
