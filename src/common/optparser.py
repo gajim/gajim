@@ -603,7 +603,7 @@ class OptionsParser:
 
 	def update_config_to_01201(self):
 		if 'uri_schemes' in self.old_values:
-			new_value = self.old_values['uri_schemes'].replace(' mailto', '').\
+			new_values = self.old_values['uri_schemes'].replace(' mailto', '').\
 				replace(' xmpp', '')
 			gajim.config.set('uri_schemes', new_values)
 		gajim.config.set('version', '0.12.0.1')
