@@ -119,6 +119,13 @@ class HistoryWindow:
 		if jid:
 			self.jid_entry.set_text(jid)	
 
+		gtkgui_helpers.resize_window(self.window,
+			gajim.config.get('history_window_width'),
+			gajim.config.get('history_window_height'))
+		gtkgui_helpers.move_window(self.window,
+			gajim.config.get('history_window_x-position'),
+			gajim.config.get('history_window_y-position'))
+				
 		xml.signal_autoconnect(self)
 		self.window.show_all()
 
@@ -217,9 +224,11 @@ class HistoryWindow:
 
 	def on_history_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape:
+			self.save_state()
 			self.window.destroy()
 
 	def on_close_button_clicked(self, widget):
+		self.save_state()
 		self.window.destroy()
 
 	def on_jid_entry_activate(self, widget):
@@ -587,5 +596,16 @@ class HistoryWindow:
 			# otherwise 
 			self._load_history(jid, account)
 		self.results_window.set_property('visible', False)
+
+	def save_state(self):
+		x,y = self.window.window.get_root_origin()
+		width, height = self.window.get_size()
+
+		gajim.config.set('history_window_x-position', x)
+		gajim.config.set('history_window_y-position', y)
+		gajim.config.set('history_window_width', width);
+		gajim.config.set('history_window_height', height);
+
+		gajim.interface.save_config()
 
 # vim: se ts=3:
