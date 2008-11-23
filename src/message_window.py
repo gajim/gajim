@@ -454,7 +454,7 @@ class MessageWindow(object):
 			label = name
 			state = control.contact.chatstate
 			if state and bool(len(state)):
-				label = '%s (%s)' % (label, state.capitalize())
+				label = '%s (%s)' % (label, _(state.capitalize()))
 		else:
 			label = _('Messages')
 
