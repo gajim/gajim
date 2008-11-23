@@ -2646,12 +2646,17 @@ class ChatControl(ChatControlBase):
 
 	def _on_toggle_e2e_menuitem_activate(self, widget):
 		if self.session and self.session.enable_encryption:
+			# e2e was enabled, disable it
 			jid = str(self.session.jid)
 			thread_id = self.session.thread_id
 
 			self.session.terminate_e2e()
 
 			gajim.connections[self.account].delete_session(jid, thread_id)
+
+			# presumably the user had a good reason to shut it off, so
+			# disable autonegotiation too
+			self.no_autonegotiation = True
 		else:
 			self.begin_e2e_negotiation()
 
