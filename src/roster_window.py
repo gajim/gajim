@@ -2710,8 +2710,8 @@ class RosterWindow:
 					for jid in gajim.contacts.get_jid_list(acc):
 						contact = gajim.contacts.get_first_contact_from_jid(acc, jid)
 						if old_text in contact.groups:
-							self.remove_contact_from_groups(jid, acc, [old_text,])
 							self.add_contact_to_groups(jid, acc, [new_text,])
+							self.remove_contact_from_groups(jid, acc, [old_text,])
 
 		def on_canceled():
 			if 'rename' in gajim.interface.instances:
