@@ -292,8 +292,8 @@ class FeaturesWindow:
 				if os.name == 'nt':
 					# CREATE_NO_WINDOW
 					p = Popen(['dvipng', '-bg', 'white', '-T', 'tight',
-						creationflags=0x08000000, tmpfile + '.dvi', '-o',
-						tmpfile + '.png'], cwd=gettempdir())
+						tmpfile + '.dvi', '-o', tmpfile + '.png'],
+						creationflags=0x08000000, cwd=gettempdir())
 				else:
 					p = Popen(['dvipng', '-bg', 'white', '-T', 'tight',
 						tmpfile + '.dvi', '-o', tmpfile + '.png'], cwd=gettempdir())
