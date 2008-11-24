@@ -157,8 +157,8 @@ class TextViewImage(gtk.Image):
 
 
 class ConversationTextview:
-	'''Class for the conversation textview (where user reads already said messages)
-	for chat/groupchat windows'''
+	'''Class for the conversation textview (where user reads already said
+	messages) for chat/groupchat windows'''
 
 	FOCUS_OUT_LINE_PIXBUF = gtk.gdk.pixbuf_new_from_file(os.path.join(
 		gajim.DATA_DIR, 'pixmaps', 'muc_separator.png'))
@@ -276,7 +276,8 @@ class ConversationTextview:
 		self.tagSthAtSth = buffer.create_tag('sth_at_sth')
 		self.tagSthAtSth.set_property('foreground', color)
 		self.tagSthAtSth.set_property('underline', pango.UNDERLINE_SINGLE)
-		id = self.tagSthAtSth.connect('event', self.hyperlink_handler, 'sth_at_sth')
+		id = self.tagSthAtSth.connect('event', self.hyperlink_handler,
+			'sth_at_sth')
 		self.handlers[id] = self.tagSthAtSth
 
 		tag = buffer.create_tag('bold')
@@ -1002,8 +1003,13 @@ class ConversationTextview:
 			file.close()
 
 			try:
-				p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'],
-					cwd=gettempdir())
+				if os.name == 'nt':
+					# CREATE_NO_WINDOW
+					p = Popen(['latex', '--interaction=nonstopmode',
+						tmpfile + '.tex'], creationflags=0x08000000, cwd=gettempdir())
+				else:
+					p = Popen(['latex', '--interaction=nonstopmode',
+						tmpfile + '.tex'], cwd=gettempdir())
 				exitcode = p.wait()
 			except Exception, e:
 				exitcode = _('Error executing "%(command)s": %(error)s') % {
@@ -1013,15 +1019,20 @@ class ConversationTextview:
 		if exitcode == 0:
 			latex_png_dpi = gajim.config.get('latex_png_dpi')
 			try:
-				p = Popen(['dvipng', '-bg', 'rgb 1.0 1.0 1.0', '-T', 'tight', '-D',
-					latex_png_dpi, tmpfile + '.dvi', '-o', tmpfile + '.png'],
-					cwd=gettempdir())
+				if os.name == 'nt':
+					# CREATE_NO_WINDOW
+					p = Popen(['dvipng', '-bg', 'rgb 1.0 1.0 1.0', '-T', 'tight',
+						'-D', latex_png_dpi, tmpfile + '.dvi', '-o',
+						tmpfile + '.png'], creationflags=0x08000000, cwd=gettempdir())
+				else:
+					p = Popen(['dvipng', '-bg', 'rgb 1.0 1.0 1.0', '-T', 'tight',
+						'-D', latex_png_dpi, tmpfile + '.dvi', '-o',
+						tmpfile + '.png'], cwd=gettempdir())
 				exitcode = p.wait()
 			except Exception, e:
 				exitcode = _('Error executing "%(command)s": %(error)s') % {
-					'command': 'dvipng -bg rgb 1.0 1.0 1.0 -T tight -D %s %s.dvi -o %s.png' %\
-						(latex_png_dpi, tmpfile, tmpfile),
-					'error': str(e)}
+					'command': 'dvipng -bg rgb 1.0 1.0 1.0 -T tight -D %s %s.dvi -o '
+					'%s.png' % (latex_png_dpi, tmpfile, tmpfile), 'error': str(e)}
 
 		extensions = ['.tex', '.log', '.aux', '.dvi']
 		for ext in extensions:
@@ -1136,7 +1147,8 @@ class ConversationTextview:
 				imagepath = self.latex_to_image(special_text)
 			except LatexError, e:
 				# print the error after the line has been written
-				gobject.idle_add(self.print_conversation_line, str(e), '', 'info', '', None)
+				gobject.idle_add(self.print_conversation_line, str(e), '', 'info',
+					'', None)
 				imagepath = None
 			end_iter = buffer.get_end_iter()
 			anchor = buffer.create_child_anchor(end_iter)
