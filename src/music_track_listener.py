@@ -190,7 +190,7 @@ class MusicTrackListener(gobject.GObject):
 
 	def _quodlibet_properties_extract(self, props):
 		info = MusicTrackInfo()
-		info.title = props.get('name', None)
+		info.title = props.get('title', None)
 		info.album = props.get('album', None)
 		info.artist = props.get('artist', None)
 		info.duration = int(props.get('~#length', 0))
