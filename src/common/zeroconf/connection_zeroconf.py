@@ -366,8 +366,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	original_message=None, delayed=None):
 		fjid = jid
 
-		 if msg and not xhtml and gajim.config.get(
-		 'rst_formatting_outgoing_messages'):
+		if msg and not xhtml and gajim.config.get(
+		'rst_formatting_outgoing_messages'):
 			from common.rst_xhtml_generator import create_xhtml
 			xhtml = create_xhtml(msg)
 		if not self.connection:
