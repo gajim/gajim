@@ -976,7 +976,7 @@ class Interface:
 			c = gajim.contacts.get_first_contact_from_jid(account, jid)
 			c.resource = array[1]
 			self.roster.remove_contact_from_groups(c.jid, account,
-				[('Not in Roster'),])
+				[_('Not in Roster'), _('Observers')], update=False)
 		else:
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,
