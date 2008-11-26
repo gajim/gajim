@@ -135,13 +135,17 @@ class SASL(PlugIn):
 			self.startsasl='not-supported'
 			self.DEBUG('SASL not supported by server', 'error')
 			return
-		mecs=[]
+		self.mecs=[]
 		for mec in feats.getTag('mechanisms', namespace=NS_SASL).getTags('mechanism'):
-			mecs.append(mec.getData())
+			self.mecs.append(mec.getData())
 		self._owner.RegisterHandler('challenge', self.SASLHandler, xmlns=NS_SASL)
 		self._owner.RegisterHandler('failure', self.SASLHandler, xmlns=NS_SASL)
 		self._owner.RegisterHandler('success', self.SASLHandler, xmlns=NS_SASL)
-		if "GSSAPI" in mecs and have_kerberos:
+		self.MechanismHandler()
+
+	def MechanismHandler(self):
+		if "GSSAPI" in self.mecs and have_kerberos:
+			self.mecs.remove("GSSAPI")
 			rc, self.gss_vc = kerberos.authGSSClientInit('xmpp@' + 
 														self._owner.Server)
 			response = kerberos.authGSSClientResponse(self.gss_vc)
@@ -149,10 +153,12 @@ class SASL(PlugIn):
                    payload=(response or ""))
 			self.mechanism = "GSSAPI"
 			self.gss_step = GSS_STATE_STEP
-		elif "DIGEST-MD5" in mecs:
+		elif "DIGEST-MD5" in self.mecs:
+			self.mecs.remove("DIGEST-MD5")
 			node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'DIGEST-MD5'})
 			self.mechanism = "DIGEST-MD5"
-		elif "PLAIN" in mecs:
+		elif "PLAIN" in self.mecs:
+			self.mecs.remove("PLAIN")
 			sasl_data='%s\x00%s\x00%s' % (self.username+'@' + self._owner.Server, 
 																	self.username, self.password)
 			node=Node('auth', attrs={'xmlns':NS_SASL,'mechanism':'PLAIN'}, 
@@ -177,6 +183,10 @@ class SASL(PlugIn):
 			except Exception: 
 				reason = challenge
 			self.DEBUG('Failed SASL authentification: %s' % reason, 'error')
+			if len(self.mecs) > 0:
+				# There are other mechanisms to test
+				self.MechanismHandler()
+				raise NodeProcessed
 			if self.on_sasl :
 				self.on_sasl ()
 			raise NodeProcessed
