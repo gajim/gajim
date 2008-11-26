@@ -378,7 +378,7 @@ class Connection(ConnectionHandlers):
 			elif event == common.xmpp.transports.DATA_SENT:
 				self.dispatch('STANZA_SENT', unicode(data))
 
-	def select_next_host(self, hosts):
+	def _select_next_host(self, hosts):
 		'''Chooses best 'real' host basing on the SRV priority and weight data;
 		more info in RFC2782'''
 		hosts_best_prio = []
@@ -510,7 +510,7 @@ class Connection(ConnectionHandlers):
 				ssl_p = gajim.config.get_per('accounts', self.name, 'custom_port')
 			for i in self._hosts:
 				i['ssl_port'] = ssl_p
-		self.connect_to_next_host()
+		self._connect_to_next_host()
 
 	def on_proxy_failure(self, reason):
 		log.debug('Connection to proxy failed')
@@ -521,7 +521,7 @@ class Connection(ConnectionHandlers):
 		self.dispatch('CONNECTION_LOST',
 			(_('Connection to proxy failed'), reason))
 
-	def connect_to_next_type(self, retry=False):
+	def _connect_to_next_type(self, retry=False):
 		log.debug('Connection to next type')
 		if len(self._connection_types):
 			self._current_type = self._connection_types.pop(0)
@@ -537,12 +537,12 @@ class Connection(ConnectionHandlers):
 				con = common.xmpp.NonBlockingClient(self._hostname, debug = d,
 					caller = self, on_connect = self.on_connect_success,
 					on_proxy_failure = self.on_proxy_failure,
-					on_connect_failure = self.connect_to_next_type)
+					on_connect_failure = self._connect_to_next_type)
 			else:
 				con = common.xmpp.NonBlockingClient(self._hostname, debug = [],
 					caller = self, on_connect = self.on_connect_success,
 					on_proxy_failure = self.on_proxy_failure,
-					on_connect_failure = self.connect_to_next_type)
+					on_connect_failure = self._connect_to_next_type)
 			self.last_connection = con
 			# increase default timeout for server responses
 			common.xmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = self.try_connecting_for_foo_secs
@@ -565,9 +565,9 @@ class Connection(ConnectionHandlers):
 			con.connect((self._current_host['host'], port), proxy=self._proxy,
 				secure = secur)
 		else:
-			self.connect_to_next_host(retry)
+			self._connect_to_next_host(retry)
 
-	def connect_to_next_host(self, retry = False):
+	def _connect_to_next_host(self, retry = False):
 		log.debug('Connection to next host')
 		if len(self._hosts):
 			# No config option exist when creating a new account
@@ -581,10 +581,10 @@ class Connection(ConnectionHandlers):
 					'connection_types').split()
 			else:
 				self._connection_types = ['tls', 'ssl', 'plain']
-			host = self.select_next_host(self._hosts)
+			host = self._select_next_host(self._hosts)
 			self._current_host = host
 			self._hosts.remove(host)
-			self.connect_to_next_type()
+			self._connect_to_next_type()
 
 		else:
 			if not retry and self.retrycount == 0:
@@ -619,7 +619,7 @@ class Connection(ConnectionHandlers):
 		if _con_type == 'tcp':
 			_con_type = 'plain'
 		if _con_type != self._current_type:
-			self.connect_to_next_type()
+			self._connect_to_next_type()
 			return
 		con.RegisterDisconnectHandler(self._on_disconnected)
 		if _con_type == 'plain' and gajim.config.get_per('accounts', self.name,
