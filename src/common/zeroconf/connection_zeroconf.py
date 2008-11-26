@@ -402,7 +402,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				return 3
 
 		if type_ == 'chat':
-			msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ=type_i,
+			msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ=type_,
 				xhtml=xhtml)
 
 		else:
