@@ -549,6 +549,7 @@ def delete_pep(jid, name):
 		acc = gajim.connections[name]
 		del acc.activity
 		acc.activity = {}
+		user_send_tune(name)
 		del acc.tune
 		acc.tune = {}
 		del acc.mood
