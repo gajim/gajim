@@ -30,6 +30,8 @@ class ConnectionPubSub:
 		self.__callbacks={}
 
 	def send_pb_subscription_query(self, jid, cb, *args, **kwargs):
+		if not self.connection or self.connected < 2:
+			return
 		query = xmpp.Iq('get', to=jid)
 		pb = query.addChild('pubsub', {'xmlns': xmpp.NS_PUBSUB})
 		pb.addChild('subscriptions')
@@ -39,6 +41,8 @@ class ConnectionPubSub:
 		self.__callbacks[id]=(cb, args, kwargs)
 
 	def send_pb_subscribe(self, jid, node, cb, *args, **kwargs):
+		if not self.connection or self.connected < 2:
+			return
 		our_jid = gajim.get_jid_from_account(self.name)
 		query = xmpp.Iq('set', to=jid)
 		pb = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
@@ -49,6 +53,8 @@ class ConnectionPubSub:
 		self.__callbacks[id]=(cb, args, kwargs)
 
 	def send_pb_unsubscribe(self, jid, node, cb, *args, **kwargs):
+		if not self.connection or self.connected < 2:
+			return
 		our_jid = gajim.get_jid_from_account(self.name)
 		query = xmpp.Iq('set', to=jid)
 		pb = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
@@ -60,6 +66,8 @@ class ConnectionPubSub:
 
 	def send_pb_publish(self, jid, node, item, id_):
 		'''Publish item to a node.'''
+		if not self.connection or self.connected < 2:
+			return
 		query = xmpp.Iq('set', to=jid)
 		e = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
 		e = e.addChild('publish', {'node': node})
@@ -69,6 +77,8 @@ class ConnectionPubSub:
 
 	def send_pb_retract(self, jid, node, id_):
 		'''Delete item from a node'''
+		if not self.connection or self.connected < 2:
+			return
 		query = xmpp.Iq('set', to=jid)
 		r = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
 		r = r.addChild('retract', {'node': node, 'notify': '1'})
@@ -78,6 +88,8 @@ class ConnectionPubSub:
 
 	def send_pb_delete(self, jid, node):
 		'''Deletes node.'''
+		if not self.connection or self.connected < 2:
+			return
 		query = xmpp.Iq('set', to=jid)
 		d = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
 		d = d.addChild('delete', {'node': node})
@@ -94,6 +106,8 @@ class ConnectionPubSub:
 
 	def send_pb_create(self, jid, node, configure = False, configure_form = None):
 		'''Creates new node.'''
+		if not self.connection or self.connected < 2:
+			return
 		query = xmpp.Iq('set', to=jid)
 		c = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
 		c = c.addChild('create', {'node': node})
@@ -105,6 +119,8 @@ class ConnectionPubSub:
 		self.connection.send(query)
 
 	def send_pb_configure(self, jid, node, form):
+		if not self.connection or self.connected < 2:
+			return
 		query = xmpp.Iq('set', to=jid)
 		c = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB_OWNER)
 		c = c.addChild('configure', {'node': node})
@@ -120,6 +136,8 @@ class ConnectionPubSub:
 			pass
 
 	def request_pb_configuration(self, jid, node):
+		if not self.connection or self.connected < 2:
+			return
 		query = xmpp.Iq('get', to=jid)
 		e = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB_OWNER)
 		e = e.addChild('configure', {'node': node})
