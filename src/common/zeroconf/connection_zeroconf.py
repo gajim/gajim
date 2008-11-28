@@ -376,7 +376,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			return
 
 		if self.status in ('invisible', 'offline'):
-			self.dispatch('MSGERROR', [unicode(jid), '-1', _('You are not connected or not visible to others. Your message could not be sent.'), None, None])
+			self.dispatch('MSGERROR', [unicode(jid), -1,
+				 _('You are not connected or not visible to others. Your message '
+				'could not be sent.'), None, None, session])
 			return
 
 		msgtxt = msg
@@ -475,13 +477,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 		def on_send_not_ok(reason):
 			reason += ' ' + _('Your message could not be sent.')
-			self.dispatch('MSGERROR', [jid, '-1', reason, None, None, session])
+			self.dispatch('MSGERROR', [jid, -1, reason, None, None, session])
 
 		ret = self.connection.send(msg_iq, msg is not None, on_ok=on_send_ok,
 			on_not_ok=on_send_not_ok)
 		if ret == -1:
 			# Contact Offline
-			self.dispatch('MSGERROR', [jid, '-1', _('Contact is offline. Your message could not be sent.'), None, None, session])
+			self.dispatch('MSGERROR', [jid, -1, _('Contact is offline. Your message could not be sent.'), None, None, session])
 		return ret
 
 	def send_stanza(self, stanza):
@@ -573,6 +575,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				self.dispatch('STANZA_ARRIVED', unicode(data, errors = 'ignore'))
 			elif event == common.xmpp.transports.DATA_SENT:
 				self.dispatch('STANZA_SENT', unicode(data))
+			elif event == common.xmpp.transports.DATA_ERROR:
+				thread_id = data[1]
+				frm = unicode(data[0])
+				session = self.get_or_create_session(frm, thread_id)
+				self.dispatch('MSGERROR', [frm, -1,
+	            _('Connection to host could not be established: Timeout while '
+					'sending data.'), None, None, session])
 
 # END ConnectionZeroconf
 

@@ -164,10 +164,11 @@ class P2PClient(IdleObject):
 					if on_not_ok:
 						on_not_ok('Connection to host could not be established.')
 					return
-				if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
-					self.conn_holder.number_of_awaiting_messages[self.fd] += 1
+				id = stanza.getThread()
+				if self.conn_holder.ids_of_awaiting_messages.has_key(self.fd):
+					self.conn_holder.ids_of_awaiting_messages[self.fd].append(id)
 				else:
-					self.conn_holder.number_of_awaiting_messages[self.fd] = 1
+					self.conn_holder.ids_of_awaiting_messages[self.fd] = [id]
 
 	def add_stanza(self, stanza, is_message=False):
 		if self.Connection:
@@ -178,15 +179,16 @@ class P2PClient(IdleObject):
 			self.stanzaqueue.append((stanza, is_message))
 
 		if is_message:
-			if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
-				self.conn_holder.number_of_awaiting_messages[self.fd] += 1
+			id = stanza.getThread()
+			if self.conn_holder.ids_of_awaiting_messages.has_key(self.fd):
+				self.conn_holder.ids_of_awaiting_messages[self.fd].append(id)
 			else:
-				self.conn_holder.number_of_awaiting_messages[self.fd] = 1
+				self.conn_holder.ids_of_awaiting_messages[self.fd] = [id]
 
 		return True
 
 	def on_message_sent(self, connection_id):
-		self.conn_holder.number_of_awaiting_messages[connection_id] -= 1
+		self.conn_holder.ids_of_awaiting_messages[connection_id].pop(0)
 
 	def on_connect(self, conn):
 		self.Connection = conn
@@ -245,8 +247,8 @@ class P2PClient(IdleObject):
 
 	def on_disconnect(self):
 		if self.conn_holder:
-			if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
-				del self.conn_holder.number_of_awaiting_messages[self.fd]
+			if self.conn_holder.ids_of_awaiting_messages.has_key(self.fd):
+				del self.conn_holder.ids_of_awaiting_messages[self.fd]
 			self.conn_holder.remove_connection(self.sock_hash)
 		if self.__dict__.has_key('Dispatcher'):
 			self.Dispatcher.PlugOut()
@@ -402,11 +404,11 @@ class P2PConnection(IdleObject, PlugIn):
 		self._plug_idle()
 
 	def read_timeout(self):
-		if self.client.conn_holder.number_of_awaiting_messages.has_key(self.fd) \
-		and self.client.conn_holder.number_of_awaiting_messages[self.fd] > 0:
-			self.client._caller.dispatch('MSGERROR',[unicode(self.client.to), -1,
-				_('Connection to host could not be established: Timeout while sending data.'), None, None])
-			self.client.conn_holder.number_of_awaiting_messages[self.fd] = 0
+		ids = self.client.conn_holder.ids_of_awaiting_messages
+		if self.fd in ids and len(ids[self.fd]) > 0:
+			for id in ids[self.fd]:
+				self._owner.Dispatcher.Event('', DATA_ERROR, (self.client.to, id))
+			ids[self.fd] = []
 		self.pollend()
 
 	def do_connect(self):
@@ -577,7 +579,7 @@ class ClientZeroconf:
 		self.ip_to_hash = {}
 		self.hash_to_port = {}
 		self.listener = None
-		self.number_of_awaiting_messages = {}
+		self.ids_of_awaiting_messages = {}
 
 	def connect(self, show, msg):
 		self.port = self.start_listener(self.caller.port)
