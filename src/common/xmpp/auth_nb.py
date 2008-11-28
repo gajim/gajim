@@ -146,8 +146,9 @@ class SASL(PlugIn):
 	def MechanismHandler(self):
 		if "GSSAPI" in self.mecs and have_kerberos:
 			self.mecs.remove("GSSAPI")
-			rc, self.gss_vc = kerberos.authGSSClientInit('xmpp@' + 
-														self._owner.Server)
+			rc, self.gss_vc = kerberos.authGSSClientInit('xmpp@' +
+				self._owner.socket._hostfqdn)
+			rc = kerberos.authGSSClientStep(self.gss_vc, '')
 			response = kerberos.authGSSClientResponse(self.gss_vc)
 			node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'GSSAPI'},
                    payload=(response or ""))
@@ -205,7 +206,7 @@ class SASL(PlugIn):
 		incoming_data = challenge.getData()
 		data=base64.decodestring(incoming_data)
 		self.DEBUG('Got challenge:'+data,'ok')
-		if self.mechanism == "GSSAPI":
+		if self.mechanism == 'GSSAPI':
 			if self.gss_step == GSS_STATE_STEP:
 				rc = kerberos.authGSSClientStep(self.gss_vc, incoming_data)
 				if rc != kerberos.AUTH_GSS_CONTINUE:
@@ -214,7 +215,7 @@ class SASL(PlugIn):
 				rc = kerberos.authGSSClientUnwrap(self.gss_vc, incoming_data)
 				response = kerberos.authGSSClientResponse(self.gss_vc)
 				rc = kerberos.authGSSClientWrap(self.gss_vc, response,
-												self.username)
+					kerberos.authGSSClientUserName(self.gss_vc))
 			response = kerberos.authGSSClientResponse(self.gss_vc)
 			if not response:
 				response = ''
