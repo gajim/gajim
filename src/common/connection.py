@@ -1075,7 +1075,8 @@ class Connection(ConnectionHandlers):
 	original_message=None, delayed=None):
 		if not self.connection:
 			return 1
-		if msg and not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
+		if msg and not xhtml and gajim.config.get(
+		'rst_formatting_outgoing_messages'):
 			from common.rst_xhtml_generator import create_xhtml
 			xhtml = create_xhtml(msg)
 		if not msg and chatstate is None and form_node is None:
@@ -1109,11 +1110,6 @@ class Connection(ConnectionHandlers):
 				tim = localtime()
 				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim, session))
 				return 3
-		if msgtxt and not xhtml and gajim.config.get(
-			'rst_formatting_outgoing_messages'):
-			# Generate a XHTML part using reStructured text markup
-			from common.rst_xhtml_generator import create_xhtml
-			xhtml = create_xhtml(msgtxt)
 		if type_ == 'chat':
 			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type_,
 				xhtml = xhtml)
