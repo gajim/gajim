@@ -8438,7 +8438,7 @@ msgstr "Insérer un surnom"
 
 #: ../src/groupchat_control.py:603
 msgid "Conversation with "
-msgstr "Conversation avec"
+msgstr "Conversation avec "
 
 #: ../src/groupchat_control.py:605
 msgid "Continued conversation"
