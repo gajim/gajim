@@ -320,13 +320,26 @@ def popup(event_type, jid, account, msg_type='', path_to_image=None,
 	'''Notifies a user of an event. It first tries to a valid implementation of
 	the Desktop Notification Specification. If that fails, then we fall back to
 	the older style PopupNotificationWindow method.'''
-	# escape text like <3
-	text = gobject.markup_escape_text(text)
-	title = gobject.markup_escape_text(title)
+
+	# default image
+	if not path_to_image:
+		path_to_image = os.path.abspath(
+			os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+				'chat_msg_recv.png')) # img to display
+
+	# Try Growl first, as we might have D-Bus and notification daemon running
+	# on OS X for some reason.
+	if USER_HAS_GROWL:
+		osx.growler.notify(event_type, jid, account, msg_type, path_to_image,
+			title, text)
+		return
+
+	# Try to show our popup via D-Bus and notification daemon
 	if gajim.config.get('use_notif_daemon') and dbus_support.supported:
 		try:
 			DesktopNotification(event_type, jid, account, msg_type,
-				path_to_image, title, text)
+				path_to_image, gobject.markup_escape_text(title),
+				gobject.markup_escape_text(text))
 			return	# sucessfully did D-Bus Notification procedure!
 		except dbus.DBusException, e:
 			# Connection to D-Bus failed
@@ -334,21 +347,23 @@ def popup(event_type, jid, account, msg_type='', path_to_image=None,
 		except TypeError, e:
 			# This means that we sent the message incorrectly
 			gajim.log.debug(str(e))
-	# we failed to speak to notification daemon via D-Bus
-	if USER_HAS_PYNOTIFY: # try via libnotify
+
+	# Ok, that failed. Let's try pynotify, which also uses notification daemon
+	if gajim.config.get('use_notif_daemon') and USER_HAS_PYNOTIFY:
 		if not text and event_type == 'new_message':
 			# empty text for new_message means do_preview = False
-			text = gajim.get_name_from_jid(account, jid) # default value of text
+			# -> default value for text
+			_text = gobject.markup_escape_text(
+				gajim.get_name_from_jid(account, jid))
+		else:
+			_text = gobject.markup_escape_text(text)
+
 		if not title:
-			title = event_type
-		# default image
-		if not path_to_image:
-			path_to_image = os.path.abspath(
-				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-					'chat_msg_recv.png')) # img to display
+			_title = ''
+		else:
+			_title = gobject.markup_escape_text(title)
 
-
-		notification = pynotify.Notification(title, text)
+		notification = pynotify.Notification(_title, _text)
 		timeout = gajim.config.get('notification_timeout') * 1000 # make it ms
 		notification.set_timeout(timeout)
 
@@ -367,13 +382,8 @@ def popup(event_type, jid, account, msg_type='', path_to_image=None,
 		except gobject.GError, e:
 			# Connection to notification-daemon failed, see #2893
 			gajim.log.debug(str(e))
-	# try os/x growl
-	if USER_HAS_GROWL:
-		osx.growler.notify(event_type, jid, account, msg_type, path_to_image,
-			title, text)
-		return
 
-	# go old style
+	# Either nothing succeeded or the user wants old-style notifications
 	instance = dialogs.PopupNotificationWindow(event_type, jid, account,
 		msg_type, path_to_image, title, text)
 	gajim.interface.roster.popup_notification_windows.append(instance)
