@@ -2179,11 +2179,17 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				keyID, timestamp, None))
 
 		if ptype == 'unavailable' and jid_stripped in self.sessions:
-			# automatically terminate sessions that they haven't sent a thread ID in
+			# automatically terminate sessions that they haven't sent a thread ID
+			# in, only if other part support thread ID
 			for sess in self.sessions[jid_stripped].values():
 				if not sess.received_thread_id:
-					sess.terminate()
-					del self.sessions[jid_stripped][sess.thread_id]
+					contact = gajim.contacts.get_contact(self.name, jid_stripped)
+
+					session_supported = gajim.capscache.is_supported(contact,
+						common.xmpp.NS_ESESSION)
+					if session_supported:
+						sess.terminate()
+						del self.sessions[jid_stripped][sess.thread_id]
 
 		if avatar_sha is not None and ptype != 'error':
 			if jid_stripped not in self.vcard_shas:
