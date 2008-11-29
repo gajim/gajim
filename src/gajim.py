@@ -1489,7 +1489,7 @@ class Interface:
 		contacts = gajim.contacts.get_contacts(account, jid)
 		if (not sub or sub == 'none') and (not ask or ask == 'none') and \
 		not name and not groups:
-			# contact removes us.
+			# contact removed us.
 			if contacts:
 				self.roster.remove_contact(jid, account, backend=True)
 				return
@@ -1504,22 +1504,24 @@ class Interface:
 		else:
 			# it is an existing contact that might has changed
 			re_draw = False
-			# if sub or groups changed: remove and re-add
-			# Maybe observer status changed:
-			# according to xep 0162, contact is not an observer anymore when 
-			# we asked him is auth, so also remove him if ask changed
-			old_groups = contacts[0].get_shown_groups()
+			# If contact has changed (sub, ask or group) update roster
+			# Mind about observer status changes:
+			# 	According to xep 0162, a contact is not an observer anymore when 
+			# 	we asked for auth, so also remove him if ask changed
+			old_groups = contacts[0].groups
 			if contacts[0].sub != sub or contacts[0].ask != ask\
 			or old_groups != groups:
 				re_draw = True
+			if re_draw:
+				# c.get_shown_groups() has changed. Reflect that in roster_winodow
+				self.roster.remove_contact(jid, account, force=True)
 			for contact in contacts:
-				if not name:
-					name = ''
-				contact.name = name
+				contact.name = name or ''
 				contact.sub = sub
 				contact.ask = ask
 				contact.groups = groups or []
 			if re_draw:
+				self.roster.add_contact(jid, account)
 				# Refilter and update old groups
 				for group in old_groups:
 					self.roster.draw_group(group, account)

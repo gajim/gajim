@@ -872,12 +872,11 @@ class RosterWindow:
 		for contact in gajim.contacts.get_contacts(account, jid):
 			for group in groups:
 				if group in contact.groups:
-					# Needed when we remove from "General"
+					# Needed when we remove from "General" or "Observers"
 					contact.groups.remove(group)
 			if update:
 				gajim.connections[account].update_contact(jid, contact.name,
 					contact.groups)
-
 		self.add_contact(jid, account)
 		
 		# Also redraw old groups
