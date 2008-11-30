@@ -530,7 +530,7 @@ class DesktopNotification:
 		if version > [0, 3]:
 			if gajim.interface.systray_enabled and \
 			gajim.config.get('attach_notifications_to_systray'):
-				x, y = gajim.interface.systray.img_tray.window.get_position()
+				x, y = gajim.interface.systray.img_tray.window.get_origin()
 				x_, y_, width, height, depth = \
 					gajim.interface.systray.img_tray.window.get_geometry()
 				pos_x = x + (width / 2)
