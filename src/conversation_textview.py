@@ -1253,8 +1253,7 @@ class ConversationTextview:
 			# note that color of /me may be overwritten in gc_control
 			text_tags.append(other_text_tag)
 		else: # not status nor /me
-			if gajim.config.get(
-				'chat_merge_consecutive_nickname'):
+			if gajim.config.get('chat_merge_consecutive_nickname'):
 				if kind != old_kind:
 					self.print_name(name, kind, other_tags_for_name)
 				else:
@@ -1332,17 +1331,17 @@ class ConversationTextview:
 			buffer.insert(end_iter, subject)
 			self.print_empty_line()
 
-	def print_real_text(self, text, text_tags = [], name = None, xhtml = None):
+	def print_real_text(self, text, text_tags=[], name=None, xhtml=None):
 		'''this adds normal and special text. call this to add text'''
 		if xhtml:
 			try:
 				if name and (text.startswith('/me ') or text.startswith('/me\n')):
-					xhtml = xhtml.replace('/me', '<dfn>%s</dfn>'% (name,), 1)
+					xhtml = xhtml.replace('/me', '<dfn>%s</dfn>' % (name,), 1)
 				self.tv.display_html(xhtml.encode('utf-8'))
 				return
 			except Exception, e:
-				gajim.log.debug(str('Error processing xhtml')+str(e))
-				gajim.log.debug(str('with |'+xhtml+'|'))
+				gajim.log.debug(str('Error processing xhtml') + str(e))
+				gajim.log.debug(str('with |' + xhtml + '|'))
 
 		buffer = self.tv.get_buffer()
 		# /me is replaced by name if name is given
