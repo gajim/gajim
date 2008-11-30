@@ -157,8 +157,8 @@ class TextViewImage(gtk.Image):
 
 
 class ConversationTextview:
-	'''Class for the conversation textview (where user reads already said messages)
-	for chat/groupchat windows'''
+	'''Class for the conversation textview (where user reads already said
+	messages) for chat/groupchat windows'''
 
 	FOCUS_OUT_LINE_PIXBUF = gtk.gdk.pixbuf_new_from_file(os.path.join(
 		gajim.DATA_DIR, 'pixmaps', 'muc_separator.png'))
@@ -440,7 +440,7 @@ class ConversationTextview:
 
 			self.xep0184_shown[id_] = SHOWN
 			return False
-		gobject.timeout_add_seconds(4, show_it)
+		gobject.timeout_add_seconds(3, show_it)
 
 		buffer.end_user_action()
 
@@ -966,8 +966,13 @@ class ConversationTextview:
 			file.close()
 
 			try:
-				p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'],
-					cwd=gettempdir())
+				if os.name == 'nt':
+					# CREATE_NO_WINDOW
+					p = Popen(['latex', '--interaction=nonstopmode',
+						tmpfile + '.tex'], creationflags=0x08000000, cwd=gettempdir())
+				else:
+					p = Popen(['latex', '--interaction=nonstopmode',
+						tmpfile + '.tex'], cwd=gettempdir())
 				exitcode = p.wait()
 			except Exception, e:
 				exitcode = _('Error executing "%(command)s": %(error)s') % {
@@ -977,15 +982,20 @@ class ConversationTextview:
 		if exitcode == 0:
 			latex_png_dpi = gajim.config.get('latex_png_dpi')
 			try:
-				p = Popen(['dvipng', '-bg', 'rgb 1.0 1.0 1.0', '-T', 'tight', '-D',
-					latex_png_dpi, tmpfile + '.dvi', '-o', tmpfile + '.png'],
-					cwd=gettempdir())
+				if os.name == 'nt':
+					# CREATE_NO_WINDOW
+					p = Popen(['dvipng', '-bg', 'rgb 1.0 1.0 1.0', '-T', 'tight',
+						'-D', latex_png_dpi, tmpfile + '.dvi', '-o',
+						tmpfile + '.png'], creationflags=0x08000000, cwd=gettempdir())
+				else:
+					p = Popen(['dvipng', '-bg', 'rgb 1.0 1.0 1.0', '-T', 'tight',
+						'-D', latex_png_dpi, tmpfile + '.dvi', '-o',
+						tmpfile + '.png'], cwd=gettempdir())
 				exitcode = p.wait()
 			except Exception, e:
 				exitcode = _('Error executing "%(command)s": %(error)s') % {
-					'command': 'dvipng -bg rgb 1.0 1.0 1.0 -T tight -D %s %s.dvi -o %s.png' %\
-						(latex_png_dpi, tmpfile, tmpfile),
-					'error': str(e)}
+					'command': 'dvipng -bg rgb 1.0 1.0 1.0 -T tight -D %s %s.dvi -o '
+					'%s.png' % (latex_png_dpi, tmpfile, tmpfile), 'error': str(e)}
 
 		extensions = ['.tex', '.log', '.aux', '.dvi']
 		for ext in extensions:
@@ -1095,7 +1105,8 @@ class ConversationTextview:
 				imagepath = self.latex_to_image(special_text)
 			except LatexError, e:
 				# print the error after the line has been written
-				gobject.idle_add(self.print_conversation_line, str(e), '', 'info', '', None)
+				gobject.idle_add(self.print_conversation_line, str(e), '', 'info',
+					'', None)
 				imagepath = None
 			end_iter = buffer.get_end_iter()
 			anchor = buffer.create_child_anchor(end_iter)
@@ -1200,8 +1211,7 @@ class ConversationTextview:
 			# note that color of /me may be overwritten in gc_control
 			text_tags.append(other_text_tag)
 		else: # not status nor /me
-			if gajim.config.get(
-				'chat_merge_consecutive_nickname'):
+			if gajim.config.get('chat_merge_consecutive_nickname'):
 				if kind != old_kind:
 					self.print_name(name, kind, other_tags_for_name)
 				else:
@@ -1279,17 +1289,17 @@ class ConversationTextview:
 			buffer.insert(end_iter, subject)
 			self.print_empty_line()
 
-	def print_real_text(self, text, text_tags = [], name = None, xhtml = None):
+	def print_real_text(self, text, text_tags=[], name=None, xhtml=None):
 		'''this adds normal and special text. call this to add text'''
 		if xhtml:
 			try:
 				if name and (text.startswith('/me ') or text.startswith('/me\n')):
-					xhtml = xhtml.replace('/me', '<dfn>%s</dfn>'% (name,), 1)
+					xhtml = xhtml.replace('/me', '<dfn>%s</dfn>' % (name,), 1)
 				self.tv.display_html(xhtml.encode('utf-8'))
 				return
 			except Exception, e:
-				gajim.log.debug(str('Error processing xhtml')+str(e))
-				gajim.log.debug(str('with |'+xhtml+'|'))
+				gajim.log.debug(str('Error processing xhtml') + str(e))
+				gajim.log.debug(str('with |' + xhtml + '|'))
 
 		buffer = self.tv.get_buffer()
 		# /me is replaced by name if name is given

@@ -9418,7 +9418,7 @@ msgstr "Ändere _Statusnachricht ..."
 
 #: ../src/systray.py:322
 msgid "Hide this menu"
-msgstr "Versteckt dieses Menü"
+msgstr "Dieses Menü ausblenden"
 
 #: ../src/tooltips.py:327 ../src/tooltips.py:521
 msgid "Jabber ID: "

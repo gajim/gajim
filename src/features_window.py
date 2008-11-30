@@ -277,15 +277,26 @@ class FeaturesWindow:
 		file.flush()
 		file.close()
 		try:
-			p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'],
-				cwd=gettempdir())
+			if os.name == 'nt':
+				# CREATE_NO_WINDOW
+				p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'],
+					creationflags=0x08000000, cwd=gettempdir())
+			else:
+				p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'],
+					cwd=gettempdir())
 			exitcode = p.wait()
 		except Exception:
 			exitcode = 1
 		if exitcode == 0:
 			try:
-				p = Popen(['dvipng', '-bg', 'white', '-T', 'tight',
-					tmpfile + '.dvi', '-o', tmpfile + '.png'], cwd=gettempdir())
+				if os.name == 'nt':
+					# CREATE_NO_WINDOW
+					p = Popen(['dvipng', '-bg', 'white', '-T', 'tight',
+						tmpfile + '.dvi', '-o', tmpfile + '.png'],
+						creationflags=0x08000000, cwd=gettempdir())
+				else:
+					p = Popen(['dvipng', '-bg', 'white', '-T', 'tight',
+						tmpfile + '.dvi', '-o', tmpfile + '.png'], cwd=gettempdir())
 				exitcode = p.wait()
 			except Exception:
 				exitcode = 1

@@ -141,6 +141,10 @@ class Dispatcher(PlugIn):
 			self.DEBUG('Invalid XML received from server. Forcing disconnect.', 'error')
 			self._owner.Connection.pollend()
 			return 0
+		except ValueError, e:
+			self.DEBUG(str(e), 'error')
+			self._owner.Connection.pollend()
+			return 0
 		if len(self._pendingExceptions) > 0:
 			 _pendingException = self._pendingExceptions.pop()
 			 raise _pendingException[0], _pendingException[1], _pendingException[2]

@@ -49,8 +49,8 @@ from common.contacts import GC_Contact
 from common.logger import Constants
 constants = Constants()
 from common.pep import MOODS, ACTIVITIES
-from common.xmpp.protocol import NS_XHTML, NS_FILE, NS_MUC, NS_RECEIPTS
-from common.xmpp.protocol import NS_ESESSION
+from common.xmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
+from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
 
 try:
 	import gtkspell
@@ -993,13 +993,13 @@ class ChatControlBase(MessageControl):
 	def got_connected(self):
 		self.msg_textview.set_sensitive(True)
 		self.msg_textview.set_editable(True)
-		self.xml.get_widget('send_button').set_sensitive(True)
+		# FIXME: Set sensitivity for toolbar
 
 	def got_disconnected(self):
 		self.msg_textview.set_sensitive(False)
 		self.msg_textview.set_editable(False)
 		self.conv_textview.tv.grab_focus()
-		self.xml.get_widget('send_button').set_sensitive(False)
+		# FIXME: Set sensitivity for toolbar
 
 ################################################################################
 class ChatControl(ChatControlBase):
@@ -1017,6 +1017,8 @@ class ChatControl(ChatControlBase):
 		self.actions_button = self.xml.get_widget('message_window_actions_button')
 		id = self.actions_button.connect('clicked', self.on_actions_button_clicked)
 		self.handlers[id] = self.actions_button
+
+		self._formattings_button = self.xml.get_widget('formattings_button')
 
 		self._add_to_roster_button = self.xml.get_widget(
 			'add_to_roster_button')
@@ -1164,6 +1166,13 @@ class ChatControl(ChatControlBase):
 		self.msg_textview.grab_focus()
 
 	def update_toolbar(self):
+		# Formatting
+		if gajim.capscache.is_supported(self.contact, NS_XHTML_IM) \
+		and not gajim.capscache.is_supported(self.contact, 'notexistant'):
+			self._formattings_button.set_sensitive(True)
+		else:
+			self._formattings_button.set_sensitive(False)
+
 		# Add to roster
 		if not isinstance(self.contact, GC_Contact) \
 		and _('Not in Roster') in self.contact.groups:
@@ -2570,12 +2579,17 @@ class ChatControl(ChatControlBase):
 
 	def _on_toggle_e2e_menuitem_activate(self, widget):
 		if self.session and self.session.enable_encryption:
+			# e2e was enabled, disable it
 			jid = str(self.session.jid)
 			thread_id = self.session.thread_id
 
 			self.session.terminate_e2e()
 
 			gajim.connections[self.account].delete_session(jid, thread_id)
+
+			# presumably the user had a good reason to shut it off, so
+			# disable autonegotiation too
+			self.no_autonegotiation = True
 		else:
 			self.begin_e2e_negotiation()
 

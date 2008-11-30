@@ -386,7 +386,11 @@ class NodeBuilder:
 				else:
 					self._document_attrs[attr] = val
 			ns = self._document_nsp.get(nsp, 'http://www.gajim.org/xmlns/undeclared-root')
-			self.stream_header_received(ns, name, attrs)
+			try:
+				self.stream_header_received(ns, name, attrs)
+			except ValueError, e:
+				self._document_attrs = None
+				raise ValueError(str(e))
 		if not self.last_is_data and self._ptr.parent: 
 			self._ptr.parent.data.append('')
 		self.last_is_data = 0

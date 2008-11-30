@@ -87,6 +87,17 @@ class MusicTrackListener(gobject.GObject):
 			'NameOwnerChanged', 'org.freedesktop.DBus',
 			arg0='org.bansheeproject.Banshee')
 
+		## Quod Libet
+		bus.add_signal_receiver(self._quodlibet_state_change_cb,
+			'SongStarted', 'net.sacredchao.QuodLibet')
+		bus.add_signal_receiver(self._quodlibet_state_change_cb,
+			'Paused', 'net.sacredchao.QuodLibet')
+		bus.add_signal_receiver(self._quodlibet_state_change_cb,
+			'Unpaused', 'net.sacredchao.QuodLibet')
+		bus.add_signal_receiver(self._player_name_owner_changed,
+			'NameOwnerChanged', 'org.freedesktop.DBus',
+			arg0='net.sacredchao.QuodLibet')
+
 	def _player_name_owner_changed(self, name, old, new):
 		if not new:
 			self.emit('music-track-changed', None)
@@ -143,11 +154,11 @@ class MusicTrackListener(gobject.GObject):
 
 	def _rhythmbox_properties_extract(self, props):
 		info = MusicTrackInfo()
-		info.title = props['title']
-		info.album = props['album']
-		info.artist = props['artist']
-		info.duration = int(props['duration'])
-		info.track_number = int(props['track-number'])
+		info.title = props.get('title', None)
+		info.album = props.get('album', None)
+		info.artist = props.get('artist', None)
+		info.duration = int(props.get('duration', 0))
+		info.track_number = int(props.get('track-number', 0))
 		return info
 
 	def _banshee_state_changed_cb(self, state):
@@ -168,6 +179,21 @@ class MusicTrackListener(gobject.GObject):
 		info.album = props.get('album', None)
 		info.artist = props.get('artist', None)
 		info.duration = int(props.get('length', 0))
+		return info
+
+	def _quodlibet_state_change_cb(self, state=None):
+		info = self.get_playing_track()
+		if info:
+			self.emit('music-track-changed', info)
+		else:
+			self.emit('music-track-changed', None)
+
+	def _quodlibet_properties_extract(self, props):
+		info = MusicTrackInfo()
+		info.title = props.get('title', None)
+		info.album = props.get('album', None)
+		info.artist = props.get('artist', None)
+		info.duration = int(props.get('~#length', 0))
 		return info
 
 	def get_playing_track(self):
@@ -233,6 +259,23 @@ class MusicTrackListener(gobject.GObject):
 			currentTrack = banshee.GetCurrentTrack()
 			if currentTrack:
 				song = self._banshee_properties_extract(currentTrack)
+				self._last_playing_music = song
+				return song
+
+		## Check Quod Libet playing track
+		test = False
+		if hasattr(bus, 'name_has_owner'):
+			if bus.name_has_owner('net.sacredchao.QuodLibet'):
+				test = True
+		elif dbus.dbus_bindings.bus_name_has_owner(bus.get_connection(),
+		'net.sacredchao.QuodLibet'):
+			test = True
+		if test:
+			quodlibet = bus.get_object('net.sacredchao.QuodLibet',
+				'/net/sacredchao/QuodLibet')
+			if quodlibet.IsPlaying():
+				currentTrack = quodlibet.CurrentSong()
+				song = self._quodlibet_properties_extract(currentTrack)
 				self._last_playing_music = song
 				return song
 

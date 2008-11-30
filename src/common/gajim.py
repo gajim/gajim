@@ -180,7 +180,7 @@ gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI, xmpp.NS_FILE,
 	xmpp.NS_MUC_CONFIG, xmpp.NS_COMMANDS, xmpp.NS_DISCO_INFO, 'ipv6',
 	'jabber:iq:gateway', xmpp.NS_LAST, xmpp.NS_PRIVACY, xmpp.NS_PRIVATE,
 	xmpp.NS_REGISTER, xmpp.NS_VERSION, xmpp.NS_DATA, xmpp.NS_ENCRYPTED, 'msglog',
-	'sslc2s', 'stringprep', xmpp.NS_PING, xmpp.NS_TIME_REVISED, xmpp.NS_GAMING,
+	'sslc2s', 'stringprep', xmpp.NS_PING, xmpp.NS_TIME_REVISED, xmpp.NS_SSN,
 	xmpp.NS_MOOD, xmpp.NS_ACTIVITY, xmpp.NS_NICK]
 
 # Optional features gajim supports per account

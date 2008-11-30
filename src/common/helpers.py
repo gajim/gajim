@@ -795,7 +795,7 @@ def get_os_info():
 			return 'Windows'
 	elif os.name == 'posix':
 		executable = 'lsb_release'
-		params = ' --id --codename --release --short'
+		params = ' --description --codename --release --short'
 		full_path_to_executable = is_in_path(executable, return_abs_path = True)
 		if full_path_to_executable:
 			command = executable + params

@@ -2038,10 +2038,11 @@ class PopupNotificationWindow:
 		if not text:
 			text = gajim.get_name_from_jid(account, jid) # default value of text
 		if not title:
-			title = event_type
+			title = ''
 
 		event_type_label.set_markup(
-			'<span foreground="black" weight="bold">%s</span>' % title)
+			'<span foreground="black" weight="bold">%s</span>' %
+			gobject.markup_escape_text(title))
 
 		# set colors [ http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html ]
 		self.window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
@@ -2075,8 +2076,8 @@ class PopupNotificationWindow:
 		popup_bg_color = gtk.gdk.color_parse(bg_color)
 		close_button.modify_bg(gtk.STATE_NORMAL, popup_bg_color)
 		eventbox.modify_bg(gtk.STATE_NORMAL, popup_bg_color)
-		event_description_label.set_markup(
-			'<span foreground="black">%s</span>' % text)
+		event_description_label.set_markup('<span foreground="black">%s</span>' %
+			gobject.markup_escape_text(text))
 
 		# set the image
 		image.set_from_file(path_to_image)

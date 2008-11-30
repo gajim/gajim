@@ -145,7 +145,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		pm = False
 		if groupchat_control and groupchat_control.type_id == \
-		message_control.TYPE_GC:
+		message_control.TYPE_GC and resource:
 			# It's a Private message
 			pm = True
 			msg_type = 'pm'

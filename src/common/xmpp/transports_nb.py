@@ -246,6 +246,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		self._exported_methods=[self.send, self.disconnect, self.onreceive, self.set_send_timeout, 
 			self.start_disconnect, self.set_timeout, self.remove_timeout]
 		self._server = server
+		self._hostfqdn = server[0]
 		self.on_connect  = on_connect
 		self.on_connect_failure = on_connect_failure
 		self.on_receive = None
@@ -304,6 +305,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			server=self._server
 		else: 
 			self._server = server
+		self._hostfqdn = self._server[0]
 		self.printed_error = False
 		self.state = 0
 		try:

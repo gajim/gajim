@@ -459,8 +459,7 @@ def user_nickname(items, name, jid):
 				contact.contact_name = nick
 			gajim.interface.roster.draw_contact(user, name)
 
-			ctrl = gajim.interface.msg_win_mgr.get_control(user,
-				name)
+			ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
 			if ctrl:
 				ctrl.update_ui()
 				win = ctrl.parent_win
@@ -469,7 +468,7 @@ def user_nickname(items, name, jid):
 	elif retract:
 		contact.contact_name = ''
 
-def user_send_mood(account, mood, message = ''):
+def user_send_mood(account, mood, message=''):
 	if not gajim.connections[account].pep_supported:
 		return
 	item = xmpp.Node('mood', {'xmlns': xmpp.NS_MOOD})
@@ -481,7 +480,7 @@ def user_send_mood(account, mood, message = ''):
 
 	gajim.connections[account].send_pb_publish('', xmpp.NS_MOOD, item, '0')
 
-def user_send_activity(account, activity, subactivity = '', message = ''):
+def user_send_activity(account, activity, subactivity='', message=''):
 	if not gajim.connections[account].pep_supported:
 		return
 	item = xmpp.Node('activity', {'xmlns': xmpp.NS_ACTIVITY})
@@ -493,11 +492,10 @@ def user_send_activity(account, activity, subactivity = '', message = ''):
 		i = item.addChild('text')
 		i.addData(message)
 
-	gajim.connections[account].send_pb_publish('', xmpp.NS_ACTIVITY,
-		item, '0')
+	gajim.connections[account].send_pb_publish('', xmpp.NS_ACTIVITY, item, '0')
 
-def user_send_tune(account, artist = '', title = '', source = '', track = 0,
-length = 0, items = None):
+def user_send_tune(account, artist='', title='', source='', track=0, length=0,
+items=None):
 	if not (gajim.config.get_per('accounts', account, 'publish_tune') and \
 	gajim.connections[account].pep_supported):
 		return
@@ -549,6 +547,7 @@ def delete_pep(jid, name):
 		acc = gajim.connections[name]
 		del acc.activity
 		acc.activity = {}
+		user_send_tune(name)
 		del acc.tune
 		acc.tune = {}
 		del acc.mood
