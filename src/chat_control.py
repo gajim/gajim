@@ -1018,8 +1018,6 @@ class ChatControl(ChatControlBase):
 		id = self.actions_button.connect('clicked', self.on_actions_button_clicked)
 		self.handlers[id] = self.actions_button
 
-		self._formattings_button = self.xml.get_widget('formattings_button')
-
 		self._add_to_roster_button = self.xml.get_widget(
 			'add_to_roster_button')
 		id = self._add_to_roster_button.connect('clicked',
@@ -1166,13 +1164,6 @@ class ChatControl(ChatControlBase):
 		self.msg_textview.grab_focus()
 
 	def update_toolbar(self):
-		# Formatting
-		if gajim.capscache.is_supported(self.contact, NS_XHTML_IM) \
-		and not gajim.capscache.is_supported(self.contact, 'notexistant'):
-			self._formattings_button.set_sensitive(True)
-		else:
-			self._formattings_button.set_sensitive(False)
-
 		# Add to roster
 		if not isinstance(self.contact, GC_Contact) \
 		and _('Not in Roster') in self.contact.groups:
