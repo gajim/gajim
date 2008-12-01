@@ -452,9 +452,6 @@ class MessageWindow(object):
 			label = None
 		elif self.get_num_controls() == 1:
 			label = name
-			state = control.contact.chatstate
-			if state and bool(len(state)):
-				label = '%s (%s)' % (label, _(state.capitalize()))
 		else:
 			label = _('Messages')
 
@@ -581,8 +578,6 @@ class MessageWindow(object):
 				status_img.set_from_animation(tab_img.get_animation())
 			else:
 				status_img.set_from_pixbuf(tab_img.get_pixbuf())
-
-		self.show_title()
 
 	def repaint_themed_widgets(self):
 		'''Repaint controls in the window with theme color'''
