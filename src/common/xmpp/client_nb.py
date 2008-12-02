@@ -23,9 +23,6 @@ examples of xmpppy structures usage.
 These classes can be used for simple applications "AS IS" though.
 '''
 
-import socket
-import debug
-
 import transports_nb, dispatcher_nb, auth_nb, roster_nb
 from client import *
 

@@ -41,8 +41,6 @@ import traceback
 import time
 import os
 
-import types
-
 if 'TERM' in os.environ:
     colors_enabled=True
 else:

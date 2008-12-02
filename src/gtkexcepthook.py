@@ -27,7 +27,7 @@ import threading
 
 import gtk
 import pango
-from common import i18n
+from common import i18n # installs _() function
 import dialogs
 
 from cStringIO import StringIO

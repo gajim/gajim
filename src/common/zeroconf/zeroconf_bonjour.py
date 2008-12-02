@@ -18,7 +18,6 @@
 ##
 
 from common import gajim
-import sys
 import select
 import re
 from string import split

@@ -27,11 +27,13 @@ Transports are stackable so you - f.e. TLS use HTPPROXYsocket or TCPsocket as mo
 Also exception 'error' is defined to allow capture of this module specific exceptions.
 """
 
-import socket,select,base64,dispatcher
+import socket
+import select
+import base64
+import dispatcher
 from simplexml import ustr
 from client import PlugIn
 from protocol import *
-import sys
 import os
 import errno
 

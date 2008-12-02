@@ -3168,7 +3168,8 @@ class Interface:
 		gajim.default_session_type = ChatControlSession
 		self.register_handlers()
 		if gajim.config.get('enable_zeroconf'):
-			gajim.connections[gajim.ZEROCONF_ACC_NAME] = common.zeroconf.connection_zeroconf.ConnectionZeroconf(gajim.ZEROCONF_ACC_NAME)
+			gajim.connections[gajim.ZEROCONF_ACC_NAME] = \
+				connection_zeroconf.ConnectionZeroconf(gajim.ZEROCONF_ACC_NAME)
 		for account in gajim.config.get_per('accounts'):
 			if not gajim.config.get_per('accounts', account, 'is_zeroconf'):
 				gajim.connections[account] = common.connection.Connection(account)

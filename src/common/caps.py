@@ -24,8 +24,6 @@
 ##
 
 from itertools import *
-import xmpp
-import xmpp.features_nb
 import gajim
 import helpers
 

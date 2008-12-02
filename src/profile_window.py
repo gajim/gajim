@@ -33,7 +33,6 @@ import dialogs
 import vcard
 
 from common import gajim
-from common.i18n import Q_
 
 
 class ProfileWindow:

@@ -33,7 +33,7 @@ import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
 from common import exceptions
-from common import i18n
+from common import i18n # This installs _() function
 
 try:
 	PREFERRED_ENCODING = locale.getpreferredencoding()
