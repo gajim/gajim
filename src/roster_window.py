@@ -6059,52 +6059,52 @@ class RosterWindow:
 		return True
 
 	def setup_for_osx(self):
-		# This is broken
-		return
 		'''Massage the GTK menu so it will match up to the OS/X nib style menu
 		when passed to sync-menu and merged'''
-		main_menu = self.xml.get_widget('menubar')
-		app_item = gtk.MenuItem('Gajim')
-		main_menu.insert(app_item, 0)
-		win_item = gtk.MenuItem('Window')
-		main_menu.insert(win_item, 4)
-		actions_menu = self.xml.get_widget('actions_menu_menu')
-		quit_item = self.xml.get_widget('quit_menuitem')
-		actions_menu.remove(quit_item)
-		actions_menu.remove(self.xml.get_widget('separator1'))
-		edit_menu = self.xml.get_widget('edit_menu_menu')
-		#edit_menu.remove(self.xml.get_widget('preferences_menuitem'))
-		edit_menu.remove(self.xml.get_widget('separator2'))
-		help_menu = self.xml.get_widget('help_menu_menu')
-		about_item = self.xml.get_widget('about_menuitem')
-		help_menu.remove(about_item)
-		# Build up App menu
-		app_menu = gtk.Menu()
-		app_item.set_submenu(app_menu)
-		app_menu.append(about_item)
-		app_menu.append(gtk.MenuItem('__SKIP__'))
-		prefs_item = gtk.MenuItem('Preferences...')
-		prefs_item.connect('activate', self.on_preferences_menuitem_activate)
-		accels = gtk.AccelGroup()
-		self.xml.get_widget('roster_window').add_accel_group(accels)
-		prefs_item.add_accelerator('activate', accels, ord(','),
-						gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
-		app_menu.append(prefs_item)
-		app_menu.append(gtk.MenuItem('__SKIP__'))
-		app_menu.append(gtk.MenuItem('__SKIP__'))
-		app_menu.append(gtk.MenuItem('__SKIP__'))
-		app_menu.append(gtk.MenuItem('__SKIP__'))
-		app_menu.append(gtk.MenuItem('__SKIP__'))
-		app_menu.append(gtk.MenuItem('__SKIP__'))
-		app_menu.append(gtk.MenuItem('__SKIP__'))
-		app_menu.append(quit_item)
-		app_menu.show_all()
-		# Do the merge baby!
-		syncmenu.takeover_menu(main_menu)
-		self.make_menu(force=True)
-		# Hide the GTK menubar itself and let the OS/X menubar do its thing
-		#self.xml.get_widget('menubar').hide()
-		return
+		pass
+		# This is broken
+#		main_menu = self.xml.get_widget('menubar')
+#		app_item = gtk.MenuItem('Gajim')
+#		main_menu.insert(app_item, 0)
+#		win_item = gtk.MenuItem('Window')
+#		main_menu.insert(win_item, 4)
+#		actions_menu = self.xml.get_widget('actions_menu_menu')
+#		quit_item = self.xml.get_widget('quit_menuitem')
+#		actions_menu.remove(quit_item)
+#		actions_menu.remove(self.xml.get_widget('separator1'))
+#		edit_menu = self.xml.get_widget('edit_menu_menu')
+#		#edit_menu.remove(self.xml.get_widget('preferences_menuitem'))
+#		edit_menu.remove(self.xml.get_widget('separator2'))
+#		help_menu = self.xml.get_widget('help_menu_menu')
+#		about_item = self.xml.get_widget('about_menuitem')
+#		help_menu.remove(about_item)
+#		# Build up App menu
+#		app_menu = gtk.Menu()
+#		app_item.set_submenu(app_menu)
+#		app_menu.append(about_item)
+#		app_menu.append(gtk.MenuItem('__SKIP__'))
+#		prefs_item = gtk.MenuItem('Preferences...')
+#		prefs_item.connect('activate', self.on_preferences_menuitem_activate)
+#		accels = gtk.AccelGroup()
+#		self.xml.get_widget('roster_window').add_accel_group(accels)
+#		prefs_item.add_accelerator('activate', accels, ord(','),
+#						gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+#		app_menu.append(prefs_item)
+#		app_menu.append(gtk.MenuItem('__SKIP__'))
+#		app_menu.append(gtk.MenuItem('__SKIP__'))
+#		app_menu.append(gtk.MenuItem('__SKIP__'))
+#		app_menu.append(gtk.MenuItem('__SKIP__'))
+#		app_menu.append(gtk.MenuItem('__SKIP__'))
+#		app_menu.append(gtk.MenuItem('__SKIP__'))
+#		app_menu.append(gtk.MenuItem('__SKIP__'))
+#		app_menu.append(quit_item)
+#		app_menu.show_all()
+#		# Do the merge baby!
+#		syncmenu.takeover_menu(main_menu)
+#		self.make_menu(force=True)
+#		# Hide the GTK menubar itself and let the OS/X menubar do its thing
+#		#self.xml.get_widget('menubar').hide()
+#		return
 
 ################################################################################
 ###

@@ -193,8 +193,6 @@ if gajim.HAVE_GPG:
 					# make it unicode instance
 					keys[sline[4][8:]] = helpers.decode_string(name)
 			return keys
-			try: proc.wait()
-			except IOError: pass
 
 		def get_secret_keys(self):
 			return self.get_keys(True)
