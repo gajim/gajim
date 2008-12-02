@@ -2186,7 +2186,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					contact = gajim.contacts.get_contact(self.name, jid_stripped)
 
 					session_supported = gajim.capscache.is_supported(contact,
-						common.xmpp.NS_SSN)
+						common.xmpp.NS_SSN) or gajim.capscache.is_supported(contact,
+						common.xmpp.NS_ESESSION)
 					if session_supported:
 						sess.terminate()
 						del self.sessions[jid_stripped][sess.thread_id]
