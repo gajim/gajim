@@ -455,7 +455,9 @@ class DesktopNotification:
 		self.event_type = event_type
 		self.title = title
 		self.text = text
-		'''0.3.1 is the only version of notification daemon that has no way to determine which version it is. If no method exists, it means they're using that one.'''
+		# 0.3.1 is the only version of notification daemon that has no way
+		# to determine which version it is. If no method exists, it means
+		# they're using that one.
 		self.default_version = [0, 3, 1]
 		self.account = account
 		self.jid = jid

@@ -58,16 +58,14 @@ class IBB(PlugIn):
 
     def StreamOpenHandler(self,conn,stanza):
         """ Handles opening of new incoming stream. Used internally. """
-        """
-<iq type='set' 
-    from='romeo@montague.net/orchard'
-    to='juliet@capulet.com/balcony'
-    id='inband_1'>
-  <open sid='mySID' 
-        block-size='4096'
-        xmlns='http://jabber.org/protocol/ibb'/>
-</iq>
-"""
+        # <iq type='set'
+        #     from='romeo@montague.net/orchard'
+        #     to='juliet@capulet.com/balcony'
+        #     id='inband_1'>
+        #   <open sid='mySID'
+        #         block-size='4096'
+        #         xmlns='http://jabber.org/protocol/ibb'/>
+        # </iq>
         err=None
         sid,blocksize=stanza.getTagAttr('open','sid'),stanza.getTagAttr('open','block-size')
         self.DEBUG('StreamOpenHandler called sid->%s blocksize->%s'%(sid,blocksize),'info')
@@ -110,29 +108,27 @@ class IBB(PlugIn):
                     if stream['seq']==65536: stream['seq']=0
                     conn.send(Protocol('message',stream['direction'][1:],payload=[datanode,self._ampnode]))
                 else:
-                    """ notify the other side about stream closing
-                        notify the local user about sucessfull send
-                        delete the local stream"""
+                    # notify the other side about stream closing
+                    # notify the local user about sucessfull send
+                    # delete the local stream
                     conn.send(Protocol('iq',stream['direction'][1:],'set',payload=[Node(NS_IBB+' close',{'sid':sid})]))
                     conn.Event(self.DBG_LINE,'SUCCESSFULL SEND',stream)
                     del self._streams[sid]
                     self._owner.UnregisterCycleHandler(self.SendHandler)
 
-                    """
-<message from='romeo@montague.net/orchard' to='juliet@capulet.com/balcony' id='msg1'>
-  <data xmlns='http://jabber.org/protocol/ibb' sid='mySID' seq='0'>
-    qANQR1DBwU4DX7jmYZnncmUQB/9KuKBddzQH+tZ1ZywKK0yHKnq57kWq+RFtQdCJ
-    WpdWpR0uQsuJe7+vh3NWn59/gTc5MDlX8dS9p0ovStmNcyLhxVgmqS8ZKhsblVeu
-    IpQ0JgavABqibJolc3BKrVtVV1igKiX/N7Pi8RtY1K18toaMDhdEfhBRzO/XB0+P
-    AQhYlRjNacGcslkhXqNjK5Va4tuOAPy2n1Q8UUrHbUd0g+xJ9Bm0G0LZXyvCWyKH
-    kuNEHFQiLuCY6Iv0myq6iX6tjuHehZlFSh80b5BVV9tNLwNR5Eqz1klxMhoghJOA
-  </data>
-  <amp xmlns='http://jabber.org/protocol/amp'>
-    <rule condition='deliver-at' value='stored' action='error'/>
-    <rule condition='match-resource' value='exact' action='error'/>
-  </amp>
-</message>
-"""
+# <message from='romeo@montague.net/orchard' to='juliet@capulet.com/balcony' id='msg1'>
+#   <data xmlns='http://jabber.org/protocol/ibb' sid='mySID' seq='0'>
+#     qANQR1DBwU4DX7jmYZnncmUQB/9KuKBddzQH+tZ1ZywKK0yHKnq57kWq+RFtQdCJ
+#     WpdWpR0uQsuJe7+vh3NWn59/gTc5MDlX8dS9p0ovStmNcyLhxVgmqS8ZKhsblVeu
+#     IpQ0JgavABqibJolc3BKrVtVV1igKiX/N7Pi8RtY1K18toaMDhdEfhBRzO/XB0+P
+#     AQhYlRjNacGcslkhXqNjK5Va4tuOAPy2n1Q8UUrHbUd0g+xJ9Bm0G0LZXyvCWyKH
+#     kuNEHFQiLuCY6Iv0myq6iX6tjuHehZlFSh80b5BVV9tNLwNR5Eqz1klxMhoghJOA
+#   </data>
+#   <amp xmlns='http://jabber.org/protocol/amp'>
+#     <rule condition='deliver-at' value='stored' action='error'/>
+#     <rule condition='match-resource' value='exact' action='error'/>
+#   </amp>
+# </message>
 
     def ReceiveHandler(self,conn,stanza):
         """ Receive next portion of incoming datastream and store it write

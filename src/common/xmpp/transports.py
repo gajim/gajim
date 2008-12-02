@@ -266,7 +266,7 @@ class TLS(PlugIn):
 
     def _startSSL(self):
         """ Immidiatedly switch socket to TLS mode. Used internally."""
-        """ Here we should switch pending_data to hint mode."""
+        # Here we should switch pending_data to hint mode.
         tcpsock=self._owner.Connection
         tcpsock._sslObj    = socket.ssl(tcpsock._sock, None, None)
         tcpsock._sslIssuer = tcpsock._sslObj.issuer()

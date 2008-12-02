@@ -58,10 +58,10 @@ def _discover(disp, ns, jid, node = None, fb2b=0, fb2a=1, cb=None):
 # this function is not used in gajim ???
 def discoverItems(disp,jid,node=None, cb=None):
 	""" Query remote object about any items that it contains. Return items list. """
-	""" According to JEP-0030:
-		query MAY have node attribute
-		item: MUST HAVE jid attribute and MAY HAVE name, node, action attributes.
-		action attribute of item can be either of remove or update value."""
+	# According to JEP-0030:
+	# query MAY have node attribute
+	# item: MUST HAVE jid attribute and MAY HAVE name, node, action attributes.
+	# action attribute of item can be either of remove or update value.
 	def _on_response(result_array):
 		ret=[]
 		for result in result_array:
@@ -75,10 +75,10 @@ def discoverItems(disp,jid,node=None, cb=None):
 # this one is
 def discoverInfo(disp,jid,node=None, cb=None):
 	""" Query remote object about info that it publishes. Returns identities and features lists."""
-	""" According to JEP-0030:
-		query MAY have node attribute
-		identity: MUST HAVE category and name attributes and MAY HAVE type attribute.
-		feature: MUST HAVE var attribute"""
+	# According to JEP-0030:
+	# query MAY have node attribute
+	# identity: MUST HAVE category and name attributes and MAY HAVE type attribute.
+	# feature: MUST HAVE var attribute
 	def _on_response(result):
 		identities , features = [] , []
 		for i in result:

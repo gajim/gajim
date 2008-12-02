@@ -91,77 +91,76 @@ element_styles['tt']  = element_styles['kbd']
 element_styles['i']   = element_styles['em']
 element_styles['b']   = element_styles['strong']
 
-'''
-==========
-  JEP-0071
-==========
-
-This Integration Set includes a subset of the modules defined for 
-XHTML 1.0 but does not redefine any existing modules, nor 
-does it define any new modules. Specifically, it includes the 
-following modules only:
-
-- Structure
-- Text
-  
-  * Block
-    
-    phrasal
-       addr, blockquote, pre
-    Struc
-       div,p
-    Heading
-       h1, h2, h3, h4, h5, h6
-    
-  * Inline
-    
-    phrasal
-       abbr, acronym, cite, code, dfn, em, kbd, q, samp, strong, var
-    structural
-       br, span
-  
-- Hypertext (a)
-- List (ul, ol, dl)
-- Image (img)
-- Style Attribute
-     
-Therefore XHTML-IM uses the following content models:
-
-  Block.mix
-            Block-like elements, e.g., paragraphs
-  Flow.mix
-            Any block or inline elements
-  Inline.mix
-            Character-level elements
-  InlineNoAnchor.class
-			Anchor element 
-  InlinePre.mix
-            Pre element
-
-XHTML-IM also uses the following Attribute Groups:
-
-Core.extra.attrib
-	TBD
-I18n.extra.attrib
-	TBD
-Common.extra
-	style
-
-
-...
-#block level:
-#Heading    h
-#           ( pres           = h1 | h2 | h3 | h4 | h5 | h6 )
-#Block      ( phrasal        = address | blockquote | pre )
-#NOT           ( presentational = hr )
-#           ( structural     = div | p )
-#other:     section
-#Inline     ( phrasal        = abbr | acronym | cite | code | dfn | em | kbd | q | samp | strong | var )
-#NOT        ( presentational =  b  | big | i | small | sub | sup | tt )
-#           ( structural     =  br | span )
-#Param/Legacy    param, font, basefont, center, s, strike, u, dir, menu, isindex
+# ==========
+#   JEP-0071
+# ==========
 #
-'''
+# This Integration Set includes a subset of the modules defined for
+# XHTML 1.0 but does not redefine any existing modules, nor
+# does it define any new modules. Specifically, it includes the
+# following modules only:
+#
+# - Structure
+# - Text
+#
+#   * Block
+#
+#     phrasal
+#        addr, blockquote, pre
+#     Struc
+#        div,p
+#     Heading
+#        h1, h2, h3, h4, h5, h6
+#
+#   * Inline
+#
+#     phrasal
+#        abbr, acronym, cite, code, dfn, em, kbd, q, samp, strong, var
+#     structural
+#        br, span
+#
+# - Hypertext (a)
+# - List (ul, ol, dl)
+# - Image (img)
+# - Style Attribute
+#
+# Therefore XHTML-IM uses the following content models:
+#
+#   Block.mix
+#             Block-like elements, e.g., paragraphs
+#   Flow.mix
+#             Any block or inline elements
+#   Inline.mix
+#             Character-level elements
+#   InlineNoAnchor.class
+# 			Anchor element
+#   InlinePre.mix
+#             Pre element
+#
+# XHTML-IM also uses the following Attribute Groups:
+#
+# Core.extra.attrib
+# 	TBD
+# I18n.extra.attrib
+# 	TBD
+# Common.extra
+# 	style
+#
+#
+# ...
+# block level:
+# Heading    h
+#            ( pres           = h1 | h2 | h3 | h4 | h5 | h6 )
+# Block      ( phrasal        = address | blockquote | pre )
+# NOT           ( presentational = hr )
+#            ( structural     = div | p )
+# other:     section
+# Inline     ( phrasal        = abbr | acronym | cite | code | dfn | em |
+#                               kbd | q | samp | strong | var )
+# NOT        ( presentational =  b  | big | i | small | sub | sup | tt )
+#            ( structural     =  br | span )
+# Param/Legacy    param, font, basefont, center, s, strike, u, dir, menu,
+#                 isindex
 
 BLOCK_HEAD = set(( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', ))
 BLOCK_PHRASAL = set(( 'address', 'blockquote', 'pre', ))
