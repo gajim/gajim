@@ -249,7 +249,6 @@ class Session:
             features=Node('stream:features')
             if NS_TLS in self.waiting_features:
                 features.T.starttls.setNamespace(NS_TLS)
-                features.T.starttls.T.required
             if NS_SASL in self.waiting_features:
                 features.T.mechanisms.setNamespace(NS_SASL)
                 for mec in self._owner.SASL.mechanisms:

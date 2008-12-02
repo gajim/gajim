@@ -214,7 +214,7 @@ class IterableIPShell:
     possibilities = self.IP.complete(split_line[-1])
 
     try:
-        __builtins__.all
+        __builtins__.all()
     except AttributeError:
         def all(iterable):
             for element in iterable:
