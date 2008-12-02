@@ -20,7 +20,11 @@ Can be used both for client and transport authentication.
 from protocol import *
 from auth import *
 from client import PlugIn
-import sha,base64,random,dispatcher_nb
+import sha
+import base64
+import random
+import itertools
+import dispatcher_nb
 
 try:
 	import kerberos
@@ -143,27 +147,27 @@ class SASL(PlugIn):
 		self.MechanismHandler()
 
 	def MechanismHandler(self):
-		if "GSSAPI" in self.mecs and have_kerberos:
-			self.mecs.remove("GSSAPI")
-			rc, self.gss_vc = kerberos.authGSSClientInit('xmpp@' +
-				self._owner.socket._hostfqdn)
-			rc = kerberos.authGSSClientStep(self.gss_vc, '')
+		if 'GSSAPI' in self.mecs and have_kerberos:
+			self.mecs.remove('GSSAPI')
+			self.gss_vc = kerberos.authGSSClientInit('xmpp@' + \
+				self._owner.socket._hostfqdn)[1]
+			kerberos.authGSSClientStep(self.gss_vc, '')
 			response = kerberos.authGSSClientResponse(self.gss_vc)
 			node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'GSSAPI'},
-                   payload=(response or ""))
-			self.mechanism = "GSSAPI"
+				payload=(response or ''))
+			self.mechanism = 'GSSAPI'
 			self.gss_step = GSS_STATE_STEP
-		elif "DIGEST-MD5" in self.mecs:
-			self.mecs.remove("DIGEST-MD5")
+		elif 'DIGEST-MD5' in self.mecs:
+			self.mecs.remove('DIGEST-MD5')
 			node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'DIGEST-MD5'})
-			self.mechanism = "DIGEST-MD5"
-		elif "PLAIN" in self.mecs:
-			self.mecs.remove("PLAIN")
+			self.mechanism = 'DIGEST-MD5'
+		elif 'PLAIN' in self.mecs:
+			self.mecs.remove('PLAIN')
 			sasl_data='%s\x00%s\x00%s' % (self.username+'@' + self._owner.Server, 
 																	self.username, self.password)
 			node=Node('auth', attrs={'xmlns':NS_SASL,'mechanism':'PLAIN'}, 
 								payload=[base64.encodestring(sasl_data).replace('\n','')])
-			self.mechanism = "PLAIN"
+			self.mechanism = 'PLAIN'
 		else:
 			self.startsasl='failure'
 			self.DEBUG('I can only use DIGEST-MD5, GSSAPI and PLAIN mecanisms.', 'error')
@@ -234,10 +238,8 @@ class SASL(PlugIn):
 			else:
 				resp['realm'] = self._owner.Server
 			resp['nonce']=chal['nonce']
-			cnonce=''
-			for i in range(7):
-				cnonce += hex(int(random.random() * 65536 * 4096))[2:]
-			resp['cnonce'] = cnonce
+			resp['cnonce'] = ''.join("%x" % randint(0, 2**28) for randint in
+					itertools.repeat(random.randint, 7))
 			resp['nc'] = ('00000001')
 			resp['qop'] = 'auth'
 			resp['digest-uri'] = 'xmpp/'+self._owner.Server
@@ -288,7 +290,7 @@ class NonBlockingNonSASL(PlugIn):
 		self.DEBUG('Querying server about possible auth methods', 'start')
 		self.owner = owner 
 		
-		resp = owner.Dispatcher.SendAndWaitForResponse(
+		owner.Dispatcher.SendAndWaitForResponse(
 			Iq('get', NS_AUTH, payload=[Node('username', payload=[self.user])]), func=self._on_username
 		)
 		
@@ -312,9 +314,14 @@ class NonBlockingNonSASL(PlugIn):
 			token=query.getTagData('token')
 			seq=query.getTagData('sequence')
 			self.DEBUG("Performing zero-k authentication",'ok')
-			hash = sha.new(sha.new(self.password).hexdigest()+token).hexdigest()
-			for foo in xrange(int(seq)): 
-				hash = sha.new(hash).hexdigest()
+
+			def hasher(s):
+				return sha.new(s).hexdigest()
+
+			def hash_n_times(s, count):
+				return count and hasher(hash_n_times(s, count-1)) or s
+
+			hash = hash_n_times(hasher(hasher(self.password) + token), int(seq))
 			query.setTagData('hash',hash)
 			self._method='0k'
 		else:
@@ -386,7 +393,7 @@ class NonBlockingBind(Bind):
 			self._resource = []
 			
 		self._owner.onreceive(None)
-		resp=self._owner.Dispatcher.SendAndWaitForResponse(
+		self._owner.Dispatcher.SendAndWaitForResponse(
 			Protocol('iq',typ='set',
 				payload=[Node('bind', attrs={'xmlns':NS_BIND}, payload=self._resource)]), 
 				func=self._on_bound)

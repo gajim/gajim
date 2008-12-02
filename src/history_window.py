@@ -333,7 +333,7 @@ class HistoryWindow:
 		# first day of month is 1 not 0
 		widget.clear_marks()
 		month = gtkgui_helpers.make_gtk_month_python_month(month)
-		weekday, days_in_this_month = calendar.monthrange(year, month)
+		days_in_this_month = calendar.monthrange(year, month)[1]
 		try:
 			log_days = gajim.logger.get_days_with_logs(self.jid, year, month,
 				days_in_this_month, self.account)
@@ -525,7 +525,7 @@ class HistoryWindow:
 		'''a row was double clicked, get date from row, and select it in calendar
 		which results to showing conversation logs for that date'''
 		# get currently selected date
-		cur_year, cur_month, cur_day = self.calendar.get_date()
+		cur_year, cur_month = self.calendar.get_date()[0:2]
 		cur_month = gtkgui_helpers.make_gtk_month_python_month(cur_month)
 		model = widget.get_model()
 		# make it a tupple (Y, M, D, 0, 0, 0...)

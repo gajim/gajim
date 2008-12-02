@@ -67,7 +67,7 @@ class GnomePasswordStorage(PasswordStorage):
 		if conf is None:
 			return None
 		try:
-			unused, auth_token = conf.split('gnomekeyring:')
+			auth_token = conf.split('gnomekeyring:')[1]
 			auth_token = int(auth_token)
 		except ValueError:
 			password = conf

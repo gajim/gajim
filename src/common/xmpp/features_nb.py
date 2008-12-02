@@ -118,7 +118,7 @@ def getRegInfo(disp, host, info={}, sync=True):
 		disp.SendAndCallForResponse(iq, _ReceivedRegInfo, {'agent': host })
 
 def _ReceivedRegInfo(con, resp, agent):
-	iq=Iq('get',NS_REGISTER,to=agent)
+	Iq('get',NS_REGISTER,to=agent)
 	if not isResultNode(resp):
 		error_msg = resp.getErrorMsg()
 		con.Event(NS_REGISTER,REGISTER_DATA_RECEIVED,(agent,None,False,error_msg))

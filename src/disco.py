@@ -971,7 +971,6 @@ _('This service does not contain any items to browse.'))
 
 	def _agent_info(self, jid, node, identities, features, data):
 		'''Callback for when we receive info about an agent's item.'''
-		addr = get_agent_address(jid, node)
 		iter = self._find_item(jid, node)
 		if not iter:
 			# Not in the treeview, stop
@@ -1101,7 +1100,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 			if not props or self.tooltip.id != props[0]:
 				self.tooltip.hide_tooltip()
 		if props:
-			[row, col, x, y] = props
+			row = props[0]
 			iter = None
 			try:
 				iter = self.model.get_iter(row)
@@ -1432,7 +1431,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 
 	def _find_category(self, cat, type_=None):
 		'''Looks up a category row and returns the iterator to it, or None.'''
-		cat, prio = self._friendly_category(cat, type_)
+		cat = self._friendly_category(cat, type_)[0]
 		iter = self.model.get_iter_root()
 		while iter:
 			if self.model.get_value(iter, 3).decode('utf-8') == cat:
@@ -1542,7 +1541,6 @@ class ToplevelAgentBrowser(AgentBrowser):
 		self._expand_all()
 
 	def _update_error(self, iter_, jid, node):
-		addr = get_agent_address(jid, node)
 		self.model[iter_][4] = 2
 		self._progress += 1
 		self._update_progressbar()
@@ -1637,7 +1635,6 @@ class MucBrowser(AgentBrowser):
 		room = model[iter][1].decode('utf-8')
 		if 'join_gc' not in gajim.interface.instances[self.account]:
 			try:
-				room_jid = '%s@%s' % (service, room)
 				dialogs.JoinGroupchatWindow(self.account, service)
 			except GajimGeneralException:
 				pass

@@ -1032,7 +1032,7 @@ def get_notification_icon_tooltip_dict():
 def get_notification_icon_tooltip_text():
 	text = None
 	# How many events must there be before they're shown summarized, not per-user
-	max_ungrouped_events = 10
+	# max_ungrouped_events = 10
 	# Character which should be used to indent in the tooltip.
 	indent_with = ' '
 

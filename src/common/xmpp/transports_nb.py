@@ -38,6 +38,7 @@ import common.gajim
 
 USE_PYOPENSSL = False
 
+DBG_NONBLOCKINGTLS= 'NonBlockingTLS'
 try:
 	#raise ImportError("Manually disabled PyOpenSSL")
 	import OpenSSL.SSL
@@ -669,6 +670,8 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		''' Return the 'port' value that is connection is [will be] made to.'''
 		return self._server[1]
 
+DBG_NONBLOCKINGTLS = "NonBlockingTLS"
+
 class NonBlockingTLS(PlugIn):
 	''' TLS connection used to encrypts already estabilished tcp connection.'''
 
@@ -687,12 +690,13 @@ class NonBlockingTLS(PlugIn):
 		if 'NonBlockingTLS' in owner.__dict__: 
 			return  # Already enabled.
 		PlugIn.PlugIn(self, owner)
-		DBG_LINE='NonBlockingTLS'
+		self.DBG_LINE = DBG_NONBLOCKINGTLS
+		owner.debug_flags.append(DBG_NONBLOCKINGTLS)
 		self.on_tls_start = on_tls_start
 		if now:
 			try:
 				res = self._startSSL()
-			except Exception, e:
+			except Exception:
 				log.error("PlugIn: while trying _startSSL():", exc_info=True)
 				#traceback.print_exc()
 				self._owner.socket.pollend()
@@ -867,7 +871,7 @@ class NonBlockingTLS(PlugIn):
 		self.DEBUG('Got starttls proceed response. Switching to TLS/SSL...','ok')
 		try:
 			self._startSSL()
-		except Exception, e:
+		except Exception:
 			log.error("StartTLSHandler:", exc_info=True)
 			#traceback.print_exc()
 			self._owner.socket.pollend()
@@ -1108,9 +1112,9 @@ class NBSOCKS5PROXYsocket(NonBlockingTcp):
 			return
 		# Get the bound address/port
 		elif reply[3] == "\x01":
-			begin, end = 3, 7
+			pass # begin, end = 3, 7
 		elif reply[3] == "\x03":
-			begin, end = 4, 4 + reply[4]
+			pass # begin, end = 4, 4 + reply[4]
 		else:
 			self.DEBUG('Invalid proxy reply', 'error')
 			self._owner.disconnected()

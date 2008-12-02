@@ -178,7 +178,7 @@ class Logger:
 		and after that all okay'''
 		
 		if jid.find('/') > -1: 
-			possible_room_jid, possible_nick = jid.split('/', 1)
+			possible_room_jid = jid.split('/', 1)[1]
 			return self.jid_is_room_jid(possible_room_jid)
 		else:
 			# it's not a full jid, so it's not a pm one
@@ -480,7 +480,7 @@ class Logger:
 		returns a list of tupples containg time, kind, message,
 		list with empty tupple if nothing found to meet our demands'''
 		try:
-			jid_id = self.get_jid_id(jid)
+			self.get_jid_id(jid)
 		except exceptions.PysqliteOperationalError, e:
 			# Error trying to create a new jid_id. This means there is no log
 			return []
@@ -522,7 +522,7 @@ class Logger:
 		for each row in a list of tupples,
 		returns list with empty tupple if we found nothing to meet our demands'''
 		try:
-			jid_id = self.get_jid_id(jid)
+			self.get_jid_id(jid)
 		except exceptions.PysqliteOperationalError, e:
 			# Error trying to create a new jid_id. This means there is no log
 			return []
@@ -547,7 +547,7 @@ class Logger:
 		for each row in a list of tupples,
 		returns list with empty tupple if we found nothing to meet our demands'''
 		try:
-			jid_id = self.get_jid_id(jid)
+			self.get_jid_id(jid)
 		except exceptions.PysqliteOperationalError, e:
 			# Error trying to create a new jid_id. This means there is no log
 			return []
@@ -574,7 +574,7 @@ class Logger:
 	def get_days_with_logs(self, jid, year, month, max_day, account):
 		'''returns the list of days that have logs (not status messages)'''
 		try:
-			jid_id = self.get_jid_id(jid)
+			self.get_jid_id(jid)
 		except exceptions.PysqliteOperationalError, e:
 			# Error trying to create a new jid_id. This means there is no log
 			return []

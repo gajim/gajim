@@ -115,7 +115,7 @@ def parseOpts():
 	try:
 		shortargs = 'hqvl:p:c:'
 		longargs = 'help quiet verbose loglevel= profile= config_path='
-		opts, args = getopt.getopt(sys.argv[1:], shortargs, longargs.split())
+		opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
 	except getopt.error, msg:
 		print msg
 		print 'for help use --help'

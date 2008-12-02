@@ -82,7 +82,6 @@ def _info(type_, value, tb):
 	# on expand the details the dialog remains centered on screen
 	dialog.set_position(gtk.WIN_POS_CENTER_ALWAYS)
 
-	close_clicked = False
 	def on_dialog_response(dialog, response):
 		if response == RESPONSE_REPORT_BUG:
 			url = 'http://trac.gajim.org/wiki/HowToCreateATicket'

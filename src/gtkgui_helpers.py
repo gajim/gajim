@@ -97,7 +97,7 @@ def popup_emoticons_under_button(menu, button, parent_win):
 		x = window_x + button_x
 		y = window_y + button_y
 
-		menu_width, menu_height = menu.size_request()
+		menu_height = menu.size_request()[1]
 
 		## should we pop down or up?
 		if (y + button.allocation.height + menu_height
@@ -494,7 +494,7 @@ def file_is_locked(path_to_file):
 			win32con.FILE_ATTRIBUTE_NORMAL,	# normal file
 			0								# no attr. template
 		)
-	except pywintypes.error, e:
+	except pywintypes.error:
 		return True
 	else: # in case all went ok, close file handle (go to hell WinAPI)
 		hfile.Close()
@@ -808,10 +808,6 @@ default_name = ''):
 			dialog.destroy()
 
 	def on_ok(widget):
-		def on_ok2(file_path, pixbuf):
-			pixbuf.save(file_path, 'jpeg')
-			dialog.destroy()
-
 		file_path = dialog.get_filename()
 		file_path = decode_filechooser_file_paths((file_path,))[0]
 		if os.path.exists(file_path):

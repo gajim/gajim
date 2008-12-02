@@ -655,7 +655,7 @@ class FileTransfersTooltip(BaseTooltip):
 		properties = []
 		name = file_props['name']
 		if file_props['type'] == 'r':
-			(file_path, file_name) = os.path.split(file_props['file-name'])
+			file_name = os.path.split(file_props['file-name'])[1]
 		else:
 			file_name = file_props['name']
 		properties.append((_('Name: '), 

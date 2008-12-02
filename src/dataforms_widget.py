@@ -567,7 +567,6 @@ class SingleForm(gtk.Table, object):
 
 	def on_jid_multi_remove_button_clicked(self, widget, treeview, field):
 		selection = treeview.get_selection()
-		model = treeview.get_model()
 		deleted = []
 
 		def remove(model, path, iter_, deleted):

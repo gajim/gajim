@@ -28,6 +28,7 @@ from common import gajim
 from common import xmpp
 from common import exceptions
 
+import itertools
 import random
 import string
 
@@ -91,8 +92,8 @@ class StanzaSession(object):
 		return any_removed
 
 	def generate_thread_id(self):
-		return ''.join([random.choice(string.ascii_letters) for x in xrange(0,
-			32)])
+		return ''.join([f(string.ascii_letters) for f in itertools.repeat(
+			random.choice, 32)])
 
 	def send(self, msg):
 		if self.thread_id:
@@ -386,10 +387,9 @@ class EncryptedStanzaSession(StanzaSession):
 			parsed = xmpp.Node(node='<node>' + plaintext + '</node>')
 
 			if self.negotiated['recv_pubkey'] == 'hash':
-				fingerprint = parsed.getTagData('fingerprint')
-
+				# fingerprint = parsed.getTagData('fingerprint')
 				# XXX find stored pubkey or terminate session
-				raise 'unimplemented'
+				raise NotImplementedError()
 			else:
 				if self.negotiated['sign_algs'] == (XmlDsig + 'rsa-sha256'):
 					keyvalue = parsed.getTag(name='RSAKeyValue', namespace=XmlDsig)
@@ -771,7 +771,7 @@ class EncryptedStanzaSession(StanzaSession):
 		else:
 			srses = secrets.secrets().retained_secrets(self.conn.name,
 				self.jid.getStripped())
-			rshashes = [self.hmac(self.n_s, rs) for (rs,v) in srses]
+			rshashes = [self.hmac(self.n_s, rs[0]) for rs in srses]
 
 			if not rshashes:
 				# we've never spoken before, but we'll pretend we have
@@ -838,7 +838,8 @@ class EncryptedStanzaSession(StanzaSession):
 		rshashes = [base64.b64decode(rshash) for rshash in form.getField(
 			'rshashes').getValues()]
 
-		for (secret, verified) in srses:
+		for s in srses:
+			secret = s[0]
 			if self.hmac(self.n_o, secret) in rshashes:
 				srs = secret
 				break
@@ -889,7 +890,8 @@ class EncryptedStanzaSession(StanzaSession):
 
 		srshash = base64.b64decode(form['srshash'])
 
-		for (secret, verified) in srses:
+		for s in srses:
+			secret = s[0]
 			if self.hmac(secret, 'Shared Retained Secret') == srshash:
 				srs = secret
 				break

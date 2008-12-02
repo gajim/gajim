@@ -71,7 +71,7 @@ class ZeroconfListener(IdleObject):
 		# will fail when port is busy, or we don't have rights to bind
 		try:
 			self._serv.bind((ai[4][0], self.port))
-		except Exception, e:
+		except Exception:
 			# unable to bind, show error dialog
 			return None
 		self._serv.listen(socket.SOMAXCONN)
@@ -158,7 +158,7 @@ class P2PClient(IdleObject):
 		self.conn_holder.add_connection(self, self.Server, port, self.to)
 		# count messages in queue
 		for val in self.stanzaqueue:
-			stanza, is_message = val
+			is_message = val[1]
 			if is_message:
 				if self.fd == -1:
 					if on_not_ok:

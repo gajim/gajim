@@ -99,7 +99,8 @@ class IBB(PlugIn):
         self.DEBUG('SendHandler called','info')
         for sid in self._streams.keys():
             stream=self._streams[sid]
-            if stream['direction'][:2]=='|>': cont=1
+            if stream['direction'][:2]=='|>':
+                pass
             elif stream['direction'][0]=='>':
                 chunk=stream['fp'].read(stream['block-size'])
                 if chunk:

@@ -1034,7 +1034,7 @@ if __name__ == '__main__':
 	def on_textview_motion_notify_event(widget, event):
 		'''change the cursor to a hand when we are over a mail or an url'''
 		global change_cursor
-		pointer_x, pointer_y, spam = htmlview.window.get_pointer()
+		pointer_x, pointer_y = htmlview.window.get_pointer()[0:2]
 		x, y = htmlview.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer_x,
 								   pointer_y)
 		tags = htmlview.get_iter_at_location(x, y).get_tags()
@@ -1043,7 +1043,6 @@ if __name__ == '__main__':
 					 gtk.gdk.Cursor(gtk.gdk.XTERM))
 			change_cursor = None
 		tag_table = htmlview.get_buffer().get_tag_table()
-		over_line = False
 		for tag in tags:
 			try:
 				if tag.is_anchor:

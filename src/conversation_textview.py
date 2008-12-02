@@ -611,7 +611,7 @@ class ConversationTextview:
 	def on_textview_motion_notify_event(self, widget, event):
 		'''change the cursor to a hand when we are over a mail or an
 		url'''
-		pointer_x, pointer_y, spam = self.tv.window.get_pointer()
+		pointer_x, pointer_y = self.tv.window.get_pointer()[0:2]
 		x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
 			pointer_x, pointer_y)
 		tags = self.tv.get_iter_at_location(x, y).get_tags()

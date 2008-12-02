@@ -121,7 +121,7 @@ class GajimThemesWindow:
 		model.clear()
 		for config_theme in gajim.config.get_per('themes'):
 			theme = config_theme.replace('_', ' ')
-			iter = model.append([theme])
+			model.append([theme])
 
 	def select_active_theme(self):
 		model = self.themes_tree.get_model()

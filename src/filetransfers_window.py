@@ -160,7 +160,7 @@ class FileTransfersWindow:
 			dialog.destroy()
 			if 'file-name' not in file_props:
 				return
-			(path, file) = os.path.split(file_props['file-name'])
+			path = os.path.split(file_props['file-name'])[0]
 			if os.path.exists(path) and os.path.isdir(path):
 				helpers.launch_file_manager(path)
 			self.tree.get_selection().unselect_all()
@@ -286,7 +286,7 @@ _('Connection with peer cannot be established.'))
 				return
 			(jid, resource) = contact.split('/', 1)
 			contact = gajim.contacts.create_contact(jid=jid, resource=resource)
-		(file_dir, file_name) = os.path.split(file_path)
+		file_name = os.path.split(file_path)[1]
 		file_props = self.get_send_file_props(account, contact, 
 				file_path, file_name, file_desc)
 		if file_props is None:
@@ -317,7 +317,7 @@ _('Connection with peer cannot be established.'))
 		if 'desc' in file_props:
 			sec_text += '\n\t' + _('Description: %s') % file_props['desc']
 		prim_text = _('%s wants to send you a file:') % contact.jid
-		dialog, dialog2 = None, None
+		dialog = None
 
 		def on_response_ok(account, contact, file_props):
 
@@ -596,7 +596,7 @@ _('Connection with peer cannot be established.'))
 			text_labels += '<b>' + _('Recipient: ') + '</b>' 
 
 		if file_props['type'] == 'r':
-			(file_path, file_name) = os.path.split(file_props['file-name'])
+			file_name = os.path.split(file_props['file-name'])[1]
 		else:
 			file_name = file_props['name']
 		text_props = gobject.markup_escape_text(file_name) + '\n'
@@ -617,14 +617,13 @@ _('Connection with peer cannot be established.'))
 
 	def on_transfers_list_motion_notify_event(self, widget, event):
 		pointer = self.tree.get_pointer()
-		orig = widget.window.get_origin()
 		props = widget.get_path_at_pos(int(event.x), int(event.y))
 		self.height_diff = pointer[1] - int(event.y)
 		if self.tooltip.timeout > 0:
 			if not props or self.tooltip.id != props[0]:
 				self.tooltip.hide_tooltip()
 		if props:
-			[row, col, x, y] = props
+			row = props[0]
 			iter = None
 			try:
 				iter = self.model.get_iter(row)
@@ -886,7 +885,7 @@ _('Connection with peer cannot be established.'))
 		self.tooltip.hide_tooltip()
 		iter = None
 		try:
-			store, iter = self.tree.get_selection().get_selected()
+			iter = self.tree.get_selection().get_selected()[1]
 		except TypeError:
 			self.tree.get_selection().unselect_all()
 
@@ -904,8 +903,7 @@ _('Connection with peer cannot be established.'))
 		self.tooltip.hide_tooltip()
 		path = None
 		try:
-			path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
-				int(event.y))
+			path = self.tree.get_path_at_pos(int(event.x), int(event.y))[0]
 		except TypeError:
 			self.tree.get_selection().unselect_all()
 		if path is None:
@@ -918,8 +916,7 @@ _('Connection with peer cannot be established.'))
 		self.tooltip.hide_tooltip()
 		path, iter = None, None
 		try:
-			path, column, x, y = self.tree.get_path_at_pos(int(event.x), 
-				int(event.y))
+			path = self.tree.get_path_at_pos(int(event.x), int(event.y))[0]
 		except TypeError:
 			self.tree.get_selection().unselect_all()
 		if event.button == 3: # Right click
@@ -939,7 +936,7 @@ _('Connection with peer cannot be established.'))
 		file_props = self.files_props[sid[0]][sid[1:]]
 		if 'file-name' not in file_props:
 			return
-		(path, file) = os.path.split(file_props['file-name'])
+		path = os.path.split(file_props['file-name'])[0]
 		if os.path.exists(path) and os.path.isdir(path):
 			helpers.launch_file_manager(path)
 

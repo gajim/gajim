@@ -514,7 +514,6 @@ class RosterWindow:
 		# Family might has changed (actual big brother not on top).
 		# Remove childs first then big brother
 		family_in_roster = False
-		big_brother_jid = None
 		for data in nearby_family:
 			_account = data['account']
 			_jid = data['jid']
@@ -821,7 +820,6 @@ class RosterWindow:
 
 	def remove_transport(self, jid, account):
 		'''Remove transport from roster and redraw account and group.'''
-		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		self.remove_contact(jid, account, force=True, backend=True)
 		return True
 
@@ -1144,8 +1142,8 @@ class RosterWindow:
 		is_big_brother = False
 		have_visible_children = False
 		if family:
-			nearby_family, bb_jid, bb_account = \
-				self._get_nearby_family_and_big_brother(family, account)
+			bb_jid, bb_account = \
+				self._get_nearby_family_and_big_brother(family, account)[1:]
 			is_big_brother = (jid, account) == (bb_jid, bb_account)
 			iters = self._get_contact_iter(jid, account)	
 			have_visible_children = iters \
@@ -1723,7 +1721,7 @@ class RosterWindow:
 			obj = bus.get_object('com.google.code.Awn', '/com/google/code/Awn')
 			awn = dbus.Interface(obj, 'com.google.code.Awn')
 			awn.SetTaskIconByName('Gajim', os.path.abspath(path))
-		except Exception, e:
+		except Exception:
 			pass
 
 	def music_track_changed(self, unused_listener, music_track_info,
@@ -1735,14 +1733,10 @@ class RosterWindow:
 			artist = ''
 			title = ''
 			source = ''
-			track = ''
-			length = ''
 		elif hasattr(music_track_info, 'paused') and music_track_info.paused == 0:
 			artist = ''
 			title = ''
 			source = ''
-			track = ''
-			length = ''
 		else:
 			artist = music_track_info.artist
 			title = music_track_info.title
@@ -1910,7 +1904,6 @@ class RosterWindow:
 				self.set_connecting_state(account)
 
 				if not gajim.connections[account].password:
-					passphrase = ''
 					text = _('Enter your password for account %s') % account
 					if passwords.USER_HAS_GNOMEKEYRING and \
 					not passwords.USER_USES_GNOMEKEYRING:
@@ -1924,7 +1917,7 @@ class RosterWindow:
 							passwords.save_password(account, passphrase)
 						keyid = gajim.config.get_per('accounts', account, 'keyid')
 						if keyid and not gajim.connections[account].gpg:
-							dialog = dialogs.WarningDialog(_('GPG is not usable'),
+							dialogs.WarningDialog(_('GPG is not usable'),
 								_('You will be connected to %s without OpenPGP.') % \
 								account)
 						self.send_status_continue(account, status, txt, auto, to)
@@ -1937,14 +1930,14 @@ class RosterWindow:
 							gajim.interface.systray.change_status('offline')
 						self.update_status_combobox()
 
-					w = dialogs.PassphraseDialog(_('Password Required'), text,
+					dialogs.PassphraseDialog(_('Password Required'), text,
 						_('Save password'), ok_handler=on_ok,
 						cancel_handler=on_cancel)
 					return
 
 				keyid = gajim.config.get_per('accounts', account, 'keyid')
 				if keyid and not gajim.connections[account].gpg:
-					dialog = dialogs.WarningDialog(_('GPG is not usable'),
+					dialogs.WarningDialog(_('GPG is not usable'),
 						_('You will be connected to %s without OpenPGP.') % account)
 
 		self.send_status_continue(account, status, txt, auto, to)
@@ -2278,7 +2271,7 @@ class RosterWindow:
 					break
 
 			if unread or recent:
-				dialog = dialogs.ConfirmationDialog(_('You have unread messages'),
+				dialogs.ConfirmationDialog(_('You have unread messages'),
 					_('Messages will only be available for reading them later if you'
 					' have history enabled and contact is in your roster.'),
 					on_response_ok=(on_continue2, message))
@@ -2386,7 +2379,7 @@ class RosterWindow:
 			if not props or self.tooltip.id != props[0]:
 				self.tooltip.hide_tooltip()
 		if props:
-			[row, col, x, y] = props
+			row = props[0]
 			titer = None
 			try:
 				titer = model.get_iter(row)
@@ -2540,7 +2533,6 @@ class RosterWindow:
 			if msg is None:
 				# user pressed Cancel to change status message dialog
 				return
-			model = self.modelfilter
 			accounts = []
 			if group is None:
 				for (contact, account) in list_:
@@ -2583,7 +2575,6 @@ class RosterWindow:
 
 	def on_unblock(self, widget, list_, group=None):
 		''' When clicked on the 'unblock' button in context menu. '''
-		model = self.modelfilter
 		accounts = []
 		if group is None:
 			for (contact, account) in list_:
@@ -2655,7 +2646,6 @@ class RosterWindow:
 		if 'rename' in gajim.interface.instances:
 			gajim.interface.instances['rename'].dialog.present()
 			return
-		model = self.modelfilter
 
 		# account is offline, don't allow to rename
 		if gajim.connections[account].connected < 2:
@@ -2768,7 +2758,7 @@ class RosterWindow:
 				u.keyID = helpers.prepare_and_validate_gpg_keyID(account,
 					contact.jid, keyID)
 
-		instance = dialogs.ChooseGPGKeyDialog(_('Assign OpenPGP Key'),
+		dialogs.ChooseGPGKeyDialog(_('Assign OpenPGP Key'),
 			_('Select a key to apply to the contact'), public_keys,
 			on_key_selected, selected=keyID)
 
@@ -2885,7 +2875,8 @@ class RosterWindow:
 		resource = None):
 		''' resource parameter MUST NOT be used if more than one contact in
 		list '''
-		for (contact, acct) in list_:
+		for e in list_:
+			contact = e[0]
 			contact_jid = contact.jid
 			if resource: # we MUST have one contact only in list_
 				contact_jid += '/' + resource
@@ -2930,10 +2921,10 @@ class RosterWindow:
 			helpers.launch_browser_mailer('url', url)
 
 	def on_change_activity_activate(self, widget, account):
-		dlg = dialogs.ChangeActivityDialog(account)
+		dialogs.ChangeActivityDialog(account)
 
 	def on_change_mood_activate(self, widget, account):
-		dlg = dialogs.ChangeMoodDialog(account)
+		dialogs.ChangeMoodDialog(account)
 
 	def on_change_status_message_activate(self, widget, account):
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
@@ -2992,8 +2983,7 @@ class RosterWindow:
 
 	def on_roster_treeview_button_release_event(self, widget, event):
 		try:
-			path, column, x, y = self.tree.get_path_at_pos(int(event.x),
-				int(event.y))
+			path = self.tree.get_path_at_pos(int(event.x), int(event.y))[0]
 		except TypeError:
 			return False
 
@@ -3009,8 +2999,8 @@ class RosterWindow:
 		# hide tooltip, no matter the button is pressed
 		self.tooltip.hide_tooltip()
 		try:
-			path, column, x, y = self.tree.get_path_at_pos(int(event.x),
-				int(event.y))
+			pos = self.tree.get_path_at_pos(int(event.x), int(event.y))
+			path, x = pos[0], pos[2]
 		except TypeError:
 			self.tree.get_selection().unselect_all()
 			return False
@@ -3121,7 +3111,6 @@ class RosterWindow:
 
 		if len(list_) == 1:
 			contact = list_[0][0]
-			account = list_[0][1]
 			pritext = _('Contact "%s" will be removed from your roster') % \
 				contact.get_shown_name()
 			if contact.sub == 'to':
@@ -3260,7 +3249,7 @@ class RosterWindow:
 				def on_cancel():
 					self.update_status_combobox()
 
-				dialog = dialogs.ConfirmationDialog(
+				dialogs.ConfirmationDialog(
 					_('You are participating in one or more group chats'),
 					_('Changing your status to invisible will result in '
 					'disconnection from those group chats. Are you sure you want to '
@@ -3414,7 +3403,7 @@ class RosterWindow:
 			gajim.interface.msg_win_mgr.one_window_opened():
 				# let message window close the tab
 				return
-			model, list_of_paths = self.tree.get_selection().get_selected_rows()
+			list_of_paths = self.tree.get_selection().get_selected_rows()[1]
 			if not len(list_of_paths) and gajim.interface.systray_enabled and \
 			not gajim.config.get('quit_on_roster_x_button'):
 				self.tooltip.hide_tooltip()
@@ -3533,8 +3522,8 @@ class RosterWindow:
 			jid = model[titer][C_JID].decode('utf-8')
 			account = model[titer][C_ACCOUNT].decode('utf-8')
 			family = gajim.contacts.get_metacontacts_family(account, jid)
-			nearby_family, bb_jid, bb_account = \
-				self._get_nearby_family_and_big_brother(family, account)
+			nearby_family = \
+				self._get_nearby_family_and_big_brother(family, account)[0]
 			# Redraw all brothers to show pending events
 			for data in nearby_family:
 				self.draw_contact(data['jid'], data['account'])
@@ -3573,8 +3562,8 @@ class RosterWindow:
 			jid = model[titer][C_JID].decode('utf-8')
 			account = model[titer][C_ACCOUNT].decode('utf-8')
 			family = gajim.contacts.get_metacontacts_family(account, jid)
-			nearby_family, bb_jid, bb_account = \
-				self._get_nearby_family_and_big_brother(family, account)
+			nearby_family  = \
+				self._get_nearby_family_and_big_brother(family, account)[0]
 			# Redraw all brothers to show pending events
 			for data in nearby_family:
 				self.draw_contact(data['jid'], data['account'])
@@ -3835,7 +3824,7 @@ class RosterWindow:
 	def drag_drop(self, treeview, context, x, y, timestamp):
 		target_list = treeview.drag_dest_get_target_list()
 		target = treeview.drag_dest_find_target(context, target_list)
-		selection = treeview.drag_get_data(context, target)
+		treeview.drag_get_data(context, target)
 		context.finish(False, True)
 		return True
 
@@ -5411,10 +5400,11 @@ class RosterWindow:
 			else:
 				execute_command_menuitem.set_sensitive(False)
 
-			our_jid_other_resource = None
-			if our_jid:
-				# It's another resource of us, be sure to send invite to her
-				our_jid_other_resource = contact.resource
+			# This does nothing:
+			# our_jid_other_resource = None
+			# if our_jid:
+			# 	# It's another resource of us, be sure to send invite to her
+			# 	our_jid_other_resource = contact.resource
 			# Else this var is useless but harmless in next connect calls
 
 			if gajim.capscache.is_supported(contact, NS_FILE):
@@ -5775,7 +5765,6 @@ class RosterWindow:
 	def make_groupchat_menu(self, event, titer):
 		model = self.modelfilter
 
-		path = model.get_path(titer)
 		jid = model[titer][C_JID].decode('utf-8')
 		account = model[titer][C_ACCOUNT].decode('utf-8')
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
@@ -6351,8 +6340,7 @@ class RosterWindow:
 		if not gajim.ZEROCONF_ACC_NAME in gajim.config.get_per('accounts'):
 			# Create zeroconf in config file
 			from common.zeroconf import connection_zeroconf
-			zeroconf = connection_zeroconf.ConnectionZeroconf(
-				gajim.ZEROCONF_ACC_NAME)
+			connection_zeroconf.ConnectionZeroconf(gajim.ZEROCONF_ACC_NAME)
 
 		if sys.platform == 'darwin':
 			self.setup_for_osx()

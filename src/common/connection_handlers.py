@@ -768,9 +768,6 @@ class ConnectionDisco:
 		if node:
 			q.setAttr('node', node)
 		q.addChild('identity', attrs = gajim.gajim_identity)
-		extension = None
-		if node and node.find('#') != -1:
-			extension = node[node.index('#') + 1:]
 		client_version = 'http://gajim.org#' + gajim.caps_hash[self.name]
 
 		if node in (None, client_version):
@@ -984,7 +981,7 @@ class ConnectionVcard:
 			j = gajim.get_jid_from_account(self.name)
 		self.awaiting_answers[id] = (VCARD_ARRIVED, j, groupchat_jid)
 		if groupchat_jid:
-			room_jid, nick = gajim.get_room_and_nick_from_fjid(groupchat_jid)
+			room_jid = gajim.get_room_and_nick_from_fjid(groupchat_jid)[0]
 			if not room_jid in self.room_jids:
 				self.room_jids.append(room_jid)
 			self.groupchat_jids[id] = groupchat_jid
@@ -1395,6 +1392,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		try:
 			idle.init()
 		except Exception:
+			global HAS_IDLE
 			HAS_IDLE = False
 
 		self.gmail_last_tid = None

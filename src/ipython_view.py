@@ -245,7 +245,6 @@ class IterableIPShell:
     @param header: Header to be printed before output
     @type header: string
     '''
-    stat = 0
     if verbose or debug: print header+cmd
     # flush stdout so we don't mangle python's buffering
     if not debug:

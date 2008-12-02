@@ -297,7 +297,7 @@ class ChatControlBase(MessageControl):
 				if lang:
 					self.msg_textview.lang = lang
 					spell.set_language(lang)
-			except (gobject.GError, RuntimeError), msg:
+			except (gobject.GError, RuntimeError):
 				dialogs.AspellDictError(lang)
 		self.conv_textview.tv.show()
 		self._paint_banner()
@@ -438,7 +438,6 @@ class ChatControlBase(MessageControl):
 	def show_emoticons_menu(self):
 		if not gajim.config.get('emoticons_theme'):
 			return
-		msg_tv = self.msg_textview
 		def set_emoticons_menu_position(w, msg_tv = self.msg_textview):
 			window = msg_tv.get_window(gtk.TEXT_WINDOW_WIDGET)
 			# get the window position
@@ -452,7 +451,7 @@ class ChatControlBase(MessageControl):
 				cursor.x, cursor.y)
 			x = origin[0] + cursor[0]
 			y = origin[1] + size[1]
-			menu_width, menu_height = gajim.interface.emoticons_menu.size_request()
+			menu_height = gajim.interface.emoticons_menu.size_request()[1]
 			#FIXME: get_line_count is not so good
 			#get the iter of cursor, then tv.get_line_yrange
 			# so we know in which y we are typing (not how many lines we have
@@ -1189,7 +1188,7 @@ class ChatControl(ChatControlBase):
 			if session:
 				# Don't use previous session if we want to a specific resource
 				# and it's not the same
-				j, r = gajim.get_room_and_nick_from_fjid(str(session.jid))
+				r = gajim.get_room_and_nick_from_fjid(str(session.jid))[1]
 				if resource and resource != r:
 					session = None
 
@@ -1505,7 +1504,6 @@ class ChatControl(ChatControlBase):
 
 		banner_name_label = self.xml.get_widget('banner_name_label')
 		banner_name_tooltip = gtk.Tooltips()
-		banner_eventbox = self.xml.get_widget('banner_eventbox')
 
 		name = contact.get_shown_name()
 		if self.resource:
@@ -1908,7 +1906,6 @@ class ChatControl(ChatControlBase):
 		if contact is set to print_queue: it is incomming from queue
 		if contact is not set: it's an incomming message'''
 		contact = self.contact
-		jid = contact.jid
 
 		if frm == 'status':
 			if not gajim.config.get('print_status_in_chats'):
@@ -2297,7 +2294,7 @@ class ChatControl(ChatControlBase):
 			def on_cancel():
 				on_no(self)
 
-			dialog = dialogs.ConfirmationDialog(
+			dialogs.ConfirmationDialog(
 				# %s is being replaced in the code with JID
 				_('You just received a new message from "%s"') % self.contact.jid,
 				_('If you close this tab and you have history disabled, '\
@@ -2388,7 +2385,6 @@ class ChatControl(ChatControlBase):
 		path = treeview.get_selection().get_selected_rows()[1][0]
 		iter = model.get_iter(path)
 		type = model[iter][2]
-		account = model[iter][4].decode('utf-8')
 		if type != 'contact': # source is not a contact
 			return
 		dropped_jid = data.decode('utf-8')
