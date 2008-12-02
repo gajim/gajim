@@ -1420,7 +1420,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			method = iq_obj.getTagAttr('confirm', 'method')
 			url = iq_obj.getTagAttr('confirm', 'url')
 			msg = iq_obj.getTagData('body') # In case it's a message with a body
-			self.dispatch('HTTP_AUTH', (method, url, id, iq_obj, msg));
+			self.dispatch('HTTP_AUTH', (method, url, id, iq_obj, msg))
 		raise common.xmpp.NodeProcessed
 
 	def _ErrorCB(self, con, iq_obj):
@@ -1524,7 +1524,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.getTag('query')
 		if not HAS_IDLE:
-			qp.attrs['seconds'] = '0';
+			qp.attrs['seconds'] = '0'
 		else:
 			qp.attrs['seconds'] = idle.getIdleSec()
 		

@@ -751,7 +751,7 @@ class Logger:
 		# the data field contains binary object (gzipped data), this is a hack
 		# to get that data without trying to convert it to unicode
 		try:
-			self.cur.execute('SELECT hash_method, hash, data FROM caps_cache;');
+			self.cur.execute('SELECT hash_method, hash, data FROM caps_cache;')
 		except sqlite.OperationalError:
 			# might happen when there's no caps_cache table yet
 			# -- there's no data to read anyway then

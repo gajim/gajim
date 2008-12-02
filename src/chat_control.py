@@ -151,7 +151,7 @@ class ChatControlBase(MessageControl):
 				contact = c
 
 		MessageControl.__init__(self, type_id, parent_win, widget_name,
-			contact, acct, resource = resource);
+			contact, acct, resource = resource)
 
 		widget = self.xml.get_widget('history_button')
 		id = widget.connect('clicked', self._on_history_menuitem_activate)
@@ -1024,7 +1024,7 @@ class ChatControlBase(MessageControl):
 			conv_buf.set_text(self.sent_history[self.sent_history_pos])
 		elif direction == 'down':
 			if self.sent_history_pos >= size - 1:
-				conv_buf.set_text(self.orig_msg);
+				conv_buf.set_text(self.orig_msg)
 				self.orig_msg = None
 				self.sent_history_pos = size
 				return
