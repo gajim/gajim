@@ -316,7 +316,6 @@ if __name__ == '__main__':
 	resolver = Resolver(idlequeue)
 	
 	def clicked(widget):
-		global resolver
 		host = text_view.get_text()
 		def on_result(host, result_array):
 			print 'Result:\n' + repr(result_array)

@@ -22,7 +22,7 @@ growler = None
 
 
 def init():
-	global growler, notifications
+	global growler
 	icon = open(os.path.join(gajim.DATA_DIR, "pixmaps", "gajim.icns"), "r")
 	growler = GrowlNotifier(applicationName = "Gajim",
 							notifications = notifications,
@@ -33,7 +33,6 @@ def init():
 
 
 def notify(event_type, jid, account, msg_type, path_to_image, title, text):
-	global notifications
 	if not event_type in notifications:
 		event_type = GENERIC_NOTIF
 	if not text:
