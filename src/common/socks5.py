@@ -31,6 +31,7 @@ from errno import EWOULDBLOCK
 from errno import ENOBUFS
 from errno import EINTR
 from errno import EISCONN
+from errno import EINPROGRESS
 from xmpp.idlequeue import IdleObject
 MAX_BUFF_LEN = 65536
 
@@ -900,10 +901,10 @@ class Socks5Receiver(Socks5, IdleObject):
 				self._sock.setblocking(False)
 				self._server = ai[4]
 				break
-			except Exception:
-				if sys.exc_value[0] == errno.EINPROGRESS:
+			except socket.error, e:
+				if not isinstance(e, basestring) and e[0] == EINPROGRESS:
 					break
-				#for all errors, we try other addresses
+				# for all other errors, we try other addresses
 				continue
 		self.fd = self._sock.fileno()
 		self.state = 0 # about to be connected

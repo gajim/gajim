@@ -144,7 +144,7 @@ class CapsCache(object):
 		# prepopulate data which we are sure of; note: we do not log these info
 
 		for account in gajim.connections:
-			gajimcaps = self[('sha-1', gajim.caps_hash[accout])]
+			gajimcaps = self[('sha-1', gajim.caps_hash[account])]
 			gajimcaps.identities = [gajim.gajim_identity]
 			gajimcaps.features = gajim.gajim_common_features + \
 				gajim.gajim_optional_features[account]

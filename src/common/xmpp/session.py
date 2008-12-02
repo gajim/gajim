@@ -24,6 +24,8 @@ writing the server.
 
 __version__="$Id"
 
+import random
+import simplexml
 from protocol import *
 
 # Transport-level flags

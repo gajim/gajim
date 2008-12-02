@@ -57,6 +57,7 @@ from common import connection
 from common import passwords
 from common import zeroconf
 from common import dataforms
+from common import GnuPG
 
 from common.exceptions import GajimGeneralException
 

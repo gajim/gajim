@@ -21,6 +21,7 @@
 
 from common.configpaths import gajimpaths
 
+import Crypto
 from common import crypto
 from common import exceptions
 

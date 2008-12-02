@@ -349,7 +349,7 @@ class NonBlockingNonSASL(PlugIn):
 			self.DEBUG('waiting on handshake', 'notify')
 			return
 		self._owner.onreceive(None)
-		owner._registered_name=self.user
+		self._owner._registered_name=self.user
 		if self.handshake+1: 
 			return self.on_auth('ok')
 		self.on_auth(None)
@@ -448,12 +448,14 @@ class NBComponentBind(ComponentBind):
 	
 	def Bind(self, domain = None, on_bind = None):
 		''' Perform binding. Use provided domain name (if not provided). '''
-		self._owner.onreceive(self._on_bound)
+		def wrapper(resp):
+			self._on_bound(resp, domain)
+		self._owner.onreceive(wrapper)
 		self.on_bind = on_bind
 	
-	def _on_bound(self, resp):
-		if data:
-			self.Dispatcher.ProcessNonBlocking(data)
+	def _on_bound(self, resp, domain=None):
+		if resp:
+			self.Dispatcher.ProcessNonBlocking(resp)
 		if self.bound is None:
 			return
 		self._owner.onreceive(None)
@@ -461,7 +463,7 @@ class NBComponentBind(ComponentBind):
 			Protocol('bind', attrs={'name':domain}, xmlns=NS_COMPONENT_1), 
 			func=self._on_bind_reponse)
 	
-	def _on_bind_reponse(self, res):
+	def _on_bind_reponse(self, resp):
 		if resp and resp.getAttr('error'):
 			self.DEBUG('Binding failed: %s.' % resp.getAttr('error'), 'error')
 		elif resp:
