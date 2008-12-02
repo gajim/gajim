@@ -484,18 +484,6 @@ class P2PConnection(IdleObject, PlugIn):
 			self.disconnect()
 		return True
 
-	def onreceive(self, recv_handler):
-		if not recv_handler:
-			if hasattr(self._owner, 'Dispatcher'):
-				self.on_receive = self._owner.Dispatcher.ProcessNonBlocking
-			else:
-				self.on_receive = None
-			return
-		_tmp = self.on_receive
-		# make sure this cb is not overriden by recursive calls
-		if not recv_handler(None) and _tmp == self.on_receive:
-			self.on_receive = recv_handler
-
 	def disconnect(self):
 		''' Closes the socket. '''
 		gajim.idlequeue.remove_timeout(self.fd)
