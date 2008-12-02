@@ -459,7 +459,7 @@ class Message(Protocol):
                 self.setTag('html',namespace=NS_XHTML_IM).addChild(node=dom)
         except Exception, e:
             print "Error", e
-            pass #FIXME: log. we could not set xhtml (parse error, whatever)
+            #FIXME: log. we could not set xhtml (parse error, whatever)
     def setSubject(self,val):
         """ Sets the subject of the message. """
         self.setTagData('subject',val)
