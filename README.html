@@ -30,6 +30,7 @@ Gajim is a GTK+ app that loves GNOME. You can do 'make' so you don't require gno
 <ul>
 <li><a href="http://pyopenssl.sourceforge.net/">PyOpenSSL</a> (python-pyopenssl package in Debian) for <em>secure</em> SSL/TLS. Python's default SSL is insecure, so this package is highly recommended!</li>
 <li>python-crypto to enable End to end encryption</li>
+<li>For idle module, libxss library</li>
 <li>For zeroconf (bonjour), the "enable link-local messaging" checkbox, you need dbus-glib, python-avahi</li>
 <li>dnsutils (or whatever package provides the nslookup binary) for SRV support; if you don't know what that is, you don't need it</li>
 <li>gtkspell and aspell-LANG where lang is your locale eg. en, fr etc</li>
@@ -52,7 +53,6 @@ the xml lib that *comes* with python and not pyxml or whatever.
 <li>python-dev</li>
 <li>python-gtk2-dev</li>
 <li>libgtk2.0-dev aka. gtk2-devel</li>
-<li>libxss-dev (for idle detection module; some distributions such as Debian split xscreensaver)</li>
 <li>libgtkspell-dev	(for the gtkspell module)</li>
 <li>libdbus-1-dev	(for the remote control module)</li>
 <li>intltool</li>
