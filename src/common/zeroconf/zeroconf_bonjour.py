@@ -279,7 +279,7 @@ class Zeroconf:
 
 
 	def browse_domain(self, domain=None):
- 		gajim.log.debug('starting to browse')
+		gajim.log.debug('starting to browse')
 		try:
 			self.browse_sdRef = pybonjour.DNSServiceBrowse(regtype=self.stype, domain=domain, callBack=self.browse_callback)
 		except pybonjour.BonjourError, e:
