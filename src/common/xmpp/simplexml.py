@@ -168,8 +168,7 @@ class Node(object):
 		return self.attrs
 	def getAttr(self, key):
 		""" Returns value of specified attribute. """
-		try: return self.attrs[key]
-		except: return None
+		return self.attrs.get(key)
 	def getChildren(self):
 		""" Returns all node's child nodes as list. """
 		return self.kids
@@ -203,12 +202,16 @@ class Node(object):
 		return self.getTags(name, attrs, namespace, one=1)
 	def getTagAttr(self,tag,attr):
 		""" Returns attribute value of the child with specified name (or None if no such attribute)."""
-		try: return self.getTag(tag).attrs[attr]
-		except: return None
+		try:
+			return self.getTag(tag).attrs[attr]
+		except:
+			return None
 	def getTagData(self,tag):
 		""" Returns cocatenated CDATA of the child with specified name."""
-		try: return self.getTag(tag).getData()
-		except: return None
+		try:
+			return self.getTag(tag).getData()
+		except Exception:
+			return None
 	def getTags(self, name, attrs={}, namespace=None, one=0):
 		""" Filters all child nodes using specified arguments as filter.
 			Returns the list of nodes found. """
@@ -264,13 +267,17 @@ class Node(object):
 	def setTagAttr(self,tag,attr,val):
 		""" Creates new node (if not already present) with name "tag"
 			and sets it's attribute "attr" to value "val". """
-		try: self.getTag(tag).attrs[attr]=val
-		except: self.addChild(tag,attrs={attr:val})
+		try:
+			self.getTag(tag).attrs[attr]=val
+		except Exception:
+			self.addChild(tag,attrs={attr:val})
 	def setTagData(self,tag,val,attrs={}):
 		""" Creates new node (if not already present) with name "tag" and (optionally) attributes "attrs"
 			and sets it's CDATA to string "val". """
-		try: self.getTag(tag,attrs).setData(ustr(val))
-		except: self.addChild(tag,attrs,payload=[ustr(val)])
+		try:
+			self.getTag(tag,attrs).setData(ustr(val))
+		except Exception:
+			self.addChild(tag,attrs,payload=[ustr(val)])
 	def has_attr(self,key):
 		""" Checks if node have attribute "key"."""
 		return key in self.attrs

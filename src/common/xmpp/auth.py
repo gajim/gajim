@@ -161,8 +161,10 @@ class SASL(PlugIn):
         if challenge.getNamespace()!=NS_SASL: return
         if challenge.getName()=='failure':
             self.startsasl='failure'
-            try: reason=challenge.getChildren()[0]
-            except: reason=challenge
+            try:
+                reason=challenge.getChildren()[0]
+            except Exception:
+                reason=challenge
             self.DEBUG('Failed SASL authentification: %s'%reason,'error')
             raise NodeProcessed
         elif challenge.getName()=='success':

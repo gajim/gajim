@@ -2333,7 +2333,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		for jid in raw_roster:
 			try:
 				j = helpers.parse_jid(jid)
-			except:
+			except Exception:
 				print >> sys.stderr, _('JID %s is not RFC compliant. It will not be added to your roster. Use roster management tools such as http://jru.jabberstudio.org/ to remove it') % jid
 			else:
 				infos = raw_roster[jid]

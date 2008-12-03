@@ -127,8 +127,10 @@ class Session:
         """ Reads all pending incoming data.
             Raises IOError on disconnection.
             Blocks until at least one byte is read."""
-        try: received = self._recv(10240)
-        except: received = ''
+        try:
+            received = self._recv(10240)
+        except socket.error:
+            received = ''
 
         if len(received): # length of 0 means disconnect
             self.DEBUG(repr(self.fileno())+' '+received,'got')

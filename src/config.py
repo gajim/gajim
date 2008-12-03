@@ -640,7 +640,7 @@ class PreferencesWindow:
 			tv = gtk.TextView()
 			try:
 				gtkspell.Spell(tv, lang)
-			except:
+			except Exception:
 				dialogs.ErrorDialog(
 					_('Dictionary for lang %s not available') % lang,
 					_('You have to install %s dictionary to use spellchecking, or '

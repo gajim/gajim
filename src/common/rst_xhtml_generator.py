@@ -27,7 +27,7 @@ try:
 	from docutils.parsers.rst import roles
 	from docutils import nodes,utils
 	from docutils.parsers.rst.roles import set_classes
-except:
+except ImportError:
 	print "Requires docutils 0.4 for set_classes to be available"
 	def create_xhtml(text):
 		return None

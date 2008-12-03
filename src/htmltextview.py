@@ -1046,7 +1046,8 @@ if __name__ == '__main__':
 					change_cursor = tag
 				elif tag == tag_table.lookup('focus-out-line'):
 					over_line = True
-			except: pass
+			except Exception:
+				pass
 
 		#if line_tooltip.timeout != 0:
 			# Check if we should hide the line tooltip

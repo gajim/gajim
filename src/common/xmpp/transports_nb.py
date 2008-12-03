@@ -102,7 +102,8 @@ class SSLWrapper:
 							if self.exc_args[0] > 0:
 								errno = self.exc_args[0]
 							strerror = self.exc_args[1]
-					except: pass
+					except Exception:
+						pass
 
 			self.parent.__init__(self, errno, strerror)
 
@@ -112,7 +113,8 @@ class SSLWrapper:
 					if len(ppeer) == 2 and isinstance(ppeer[0], basestring) \
 					and isinstance(ppeer[1], int):
 						self.peer = ppeer
-				except: pass
+				except Exception:
+					pass
 
 		def __str__(self):
 			s = str(self.__class__)
@@ -356,8 +358,10 @@ class NonBlockingTcp(PlugIn, IdleObject):
 	def pollend(self, retry=False):
 		if not self.printed_error:
 			self.printed_error = True
-			try: self._do_receive(errors_only=True)
-			except: log.error("pollend: Got exception from _do_receive:", exc_info=True)
+			try:
+				self._do_receive(errors_only=True)
+			except Exception:
+				log.error("pollend: Got exception from _do_receive:", exc_info=True)
 		conn_failure_cb = self.on_connect_failure
 		self.disconnect()
 		if conn_failure_cb:
@@ -381,8 +385,10 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			except socket.error, e:
 				if e[0] != errno.ENOTCONN:
 					log.error("Error shutting down socket for %s:", self.getName(), exc_info=True)
-			try: sock.close()
-			except: log.error("Error closing socket for %s:", self.getName(), exc_info=True)
+			try:
+				sock.close()
+			except Exception:
+				log.error("Error closing socket for %s:", self.getName(), exc_info=True)
 		# socket descriptor cannot be (un)plugged anymore
 		self.fd = -1
 		if self.on_disconnect:

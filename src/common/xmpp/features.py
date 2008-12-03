@@ -149,7 +149,8 @@ def getPrivacyLists(disp):
             if list_.getName()=='list': dict_['lists'].append(list_.getAttr('name'))
             else: dict_[list_.getName()]=list_.getAttr('name')
         return dict_
-    except: pass
+    except Exception:
+        pass
 
 def getPrivacyList(disp,listname):
     """ Requests specific privacy list listname. Returns list of XML nodes (rules)
@@ -157,7 +158,8 @@ def getPrivacyList(disp,listname):
     try:
         resp=disp.SendAndWaitForResponse(Iq('get',NS_PRIVACY,payload=[Node('list',{'name':listname})]))
         if isResultNode(resp): return resp.getQueryPayload()[0]
-    except: pass
+    except Exception:
+        pass
 
 def setActivePrivacyList(disp,listname=None,typ='active'):
     """ Switches privacy list 'listname' to specified type.

@@ -326,22 +326,30 @@ class Protocol(Node):
         self.timestamp=None
         for d in self.getTags('delay',namespace=NS_DELAY2):
             try:
-                if d.getAttr('stamp')<self.getTimestamp2(): self.setTimestamp(d.getAttr('stamp'))
-            except: pass
+                if d.getAttr('stamp') < self.getTimestamp2():
+                    self.setTimestamp(d.getAttr('stamp'))
+            except Exception:
+                pass
         if not self.timestamp:
             for x in self.getTags('x',namespace=NS_DELAY):
                 try:
-                    if x.getAttr('stamp')<self.getTimestamp(): self.setTimestamp(x.getAttr('stamp'))
-                except: pass
+                    if x.getAttr('stamp') < self.getTimestamp():
+                        self.setTimestamp(x.getAttr('stamp'))
+                except Exception:
+                    pass
         if timestamp is not None: self.setTimestamp(timestamp)  # To auto-timestamp stanza just pass timestamp=''
     def getTo(self):
         """ Return value of the 'to' attribute. """
-        try: return self['to']
-        except: return None
+        try:
+            return self['to']
+        except KeyError:
+            return None
     def getFrom(self):
         """ Return value of the 'from' attribute. """
-        try: return self['from']
-        except: return None
+        try:
+            return self['from']
+        except KeyError:
+            return None
     def getTimestamp(self):
         """ Return the timestamp in the 'yyyymmddThhmmss' format. """
         if self.timestamp: return self.timestamp

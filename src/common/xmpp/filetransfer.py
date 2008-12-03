@@ -69,8 +69,10 @@ class IBB(PlugIn):
         err=None
         sid,blocksize=stanza.getTagAttr('open','sid'),stanza.getTagAttr('open','block-size')
         self.DEBUG('StreamOpenHandler called sid->%s blocksize->%s'%(sid,blocksize),'info')
-        try: blocksize=int(blocksize)
-        except: err=ERR_BAD_REQUEST
+        try:
+            blocksize=int(blocksize)
+        except Exception:
+            err=ERR_BAD_REQUEST
         if not sid or not blocksize: err=ERR_BAD_REQUEST
         elif sid in self._streams.keys(): err=ERR_UNEXPECTED_REQUEST
         if err: rep=Error(stanza,err)
@@ -137,8 +139,12 @@ class IBB(PlugIn):
         """
         sid,seq,data=stanza.getTagAttr('data','sid'),stanza.getTagAttr('data','seq'),stanza.getTagData('data')
         self.DEBUG('ReceiveHandler called sid->%s seq->%s'%(sid,seq),'info')
-        try: seq=int(seq); data=base64.decodestring(data)
-        except: seq=''; data=''
+        try:
+            seq=int(seq)
+            data=base64.decodestring(data)
+        except Exception:
+            seq=''
+            data=''
         err=None
         if not sid in self._streams.keys(): err=ERR_ITEM_NOT_FOUND
         else:

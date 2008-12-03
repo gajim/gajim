@@ -105,7 +105,7 @@ class ZeroconfListener(IdleObject):
 		self.started = False
 		try:
 			self._serv.close()
-		except:
+		except socket.error:
 			pass
 		self.conn_holder.kill_all_connections()
 
@@ -343,7 +343,7 @@ class P2PConnection(IdleObject, PlugIn):
 			self._sock = socket.socket(*ai[:3])
 			self._sock.setblocking(False)
 			self._server = ai[4]
-		except:
+		except socket.error:
 			if sys.exc_value[0] != errno.EINPROGRESS:
 				# for all errors, we try other addresses
 				self.connect_to_next_ip()
@@ -491,7 +491,7 @@ class P2PConnection(IdleObject, PlugIn):
 		try:
 			self._sock.shutdown(socket.SHUT_RDWR)
 			self._sock.close()
-		except:
+		except socket.error:
 			# socket is already closed
 			pass
 		self.fd = -1
