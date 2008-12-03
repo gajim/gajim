@@ -1,4 +1,4 @@
-SUBDIRS = common osx
+SUBDIRS = osx
 
 CLEANFILES = \
 	trayicon.c

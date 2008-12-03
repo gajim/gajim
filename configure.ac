@@ -84,39 +84,6 @@ fi
 AM_CONDITIONAL(BUILD_GTKSPELL, $have_gtkspell)
 
 
-dnl ****
-dnl xscreensaver
-dnl ****
-AC_ARG_ENABLE([idle],
-  [  --disable-idle          do not build idle module [default auto]],
-  enable_idle=$enableval, enable_idle=yes)
-
-if test "x$enable_idle" = "xyes";then 
-	PKG_CHECK_EXISTS([xscrnsaver], [have_xscrnsaver=yes], [have_xscrnsaver=no])
-
-	if test "x$have_xscrnsaver" = "xyes";then
-		PKG_CHECK_MODULES([XSCRNSAVER], xscrnsaver)
-		AC_SUBST(XSCRNSAVER_LIBS)
-		have_idle=true
-	else
-		# Checks for libraries.
-		LIBS=-L$x_libraries
-		AC_CHECK_LIB([X11], [XOpenDisplay])
-		AC_CHECK_LIB([Xext], [XMissingExtension])
-		AC_CHECK_LIB([Xss], [XScreenSaverAllocInfo])
-		XSCRNSAVER_LIBS="$LIBS"
-		AC_SUBST([XSCRNSAVER_LIBS])
-		if test "x$XSCRNSAVER_LIBS" = "x-L";then 
-			have_idle=false
-		else
-			have_idle=true
-		fi
-	fi
-else
-	have_idle=false
-fi
-AM_CONDITIONAL(BUILD_IDLE, $have_idle)
-
 AM_PATH_PYTHON([2.4])
 if test "x$PYTHON" = "x:"; then
 	AC_MSG_ERROR([Python not found])
@@ -180,9 +147,6 @@ if test "x$enable_carbon" = "xyes";then
   if test "x$CARBON_LIBS" != "x";then
 	 AC_SUBST(CARBON_LIBS)
      have_idle_osx=true
-     dnl Disable X11 idle
-     have_idle=false
-     AM_CONDITIONAL(BUILD_IDLE, false)
      dnl Disable custom trayicon
      have_trayicon=gtk+
      AM_CONDITIONAL(BUILD_TRAYICON, false)
@@ -232,7 +196,6 @@ AC_CONFIG_FILES([
 	data/gajim.desktop.in
 	data/defs.py
 	src/Makefile
-	src/common/Makefile
 	src/osx/Makefile
 	src/osx/growl/Makefile
 	src/osx/syncmenu/Makefile
@@ -247,7 +210,6 @@ echo "
     spell check ...... ${have_gtkspell}
     remote control ... ${have_remote}
     trayicon ......... ${have_trayicon}
-    idle module ...... ${have_idle}
     idle module OSX .. ${have_idle_osx}
     cocoa (OSX)....... ${have_cocoa}
 *****************************"
