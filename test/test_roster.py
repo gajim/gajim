@@ -46,9 +46,9 @@ class TestRosterWindow(unittest.TestCase):
 		contacts = gajim.contacts.get_contacts(account, jid)
 		# check for all resources
 		for contact in contacts:
-			iters = self.roster._get_contact_iter(jid, account, 
+			iters = self.roster._get_contact_iter(jid, account,
 				model=self.roster.model)
-			
+
 			if jid != gajim.get_jid_from_account(account):
 				# We don't care for groups of SelfContact
 				self.assertTrue(len(iters) == len(contact.get_shown_groups()),
@@ -61,7 +61,7 @@ class TestRosterWindow(unittest.TestCase):
 			if family:
 				nearby_family, bb_jid, bb_account = \
 					self.roster._get_nearby_family_and_big_brother(family, account)
-				
+
 				is_in_nearby_family = (jid, account) in (
 					(data['jid'], data['account']) for data in nearby_family)
 				self.assertTrue(is_in_nearby_family,

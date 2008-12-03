@@ -6,13 +6,13 @@ account3 = u'dingdong.org'
 contacts = {}
 contacts[account1] = {
 	u'myjid@'+account1: {
-			  'ask': None, 'groups': [], 'name': None, 'resources': {}, 
+			  'ask': None, 'groups': [], 'name': None, 'resources': {},
 			  'subscription': u'both'},
 	u'default1@gajim.org': {
-			  'ask': None, 'groups': [], 'name': None, 'resources': {}, 
+			  'ask': None, 'groups': [], 'name': None, 'resources': {},
 			  'subscription': u'both'},
 	u'default2@gajim.org': {
-			  'ask': None, 'groups': [u'GroupA',], 'name': None, 'resources': {}, 
+			  'ask': None, 'groups': [u'GroupA',], 'name': None, 'resources': {},
 			  'subscription': u'both'},
 	u'Cool"chârßéµö@gajim.org': {
 			  'ask': None, 'groups': [u'<Cool"chârßéµö', u'GroupB'],
@@ -23,33 +23,33 @@ contacts[account1] = {
 }
 contacts[account2] = {
 	u'myjid@'+account2: {
-			  'ask': None, 'groups': [], 'name': None, 'resources': {}, 
+			  'ask': None, 'groups': [], 'name': None, 'resources': {},
 			  'subscription': u'both'},
 	u'default3@gajim.org': {
-			  'ask': None, 'groups': [u'GroupC',], 'name': None, 'resources': {}, 
+			  'ask': None, 'groups': [u'GroupC',], 'name': None, 'resources': {},
 			  'subscription': u'both'},
 	u'asksubfrom@gajim.org': {
 			  'ask': u'subscribe', 'groups': [u'GroupA',], 'name': None,
 			  'resources': {}, 'subscription': u'from'},
 	u'subto@gajim.org': {
-			  'ask': None, 'groups': [u'GroupB'], 'name': None, 'resources': {}, 
+			  'ask': None, 'groups': [u'GroupB'], 'name': None, 'resources': {},
 			  'subscription': u'to'},
 	u'samejid@gajim.org': {
-			  'ask': None, 'groups': [u'GroupA', u'GroupB'], 'name': None, 
+			  'ask': None, 'groups': [u'GroupA', u'GroupB'], 'name': None,
 			  'resources': {}, 'subscription': u'both'}
 }
 contacts[account3] = {
 	#u'guypsych0\\40h.com@msn.dingdong.org': {
-	#		  'ask': None, 'groups': [], 'name': None, 'resources': {}, 
+	#		  'ask': None, 'groups': [], 'name': None, 'resources': {},
 	#		  'subscription': u'both'},
 	u'guypsych0%h.com@msn.delx.cjb.net': {
 			  'ask': u'subscribe', 'groups': [], 'name': None,
 			  'resources': {}, 'subscription': u'from'},
 	#u'guypsych0%h.com@msn.jabber.wiretrip.org': {
-	#		  'ask': None, 'groups': [], 'name': None, 'resources': {}, 
+	#		  'ask': None, 'groups': [], 'name': None, 'resources': {},
 	#		  'subscription': u'to'},
 	#u'guypsycho\\40g.com@gtalk.dingdong.org': {
-	#		  'ask': None, 'groups': [], 'name': None, 
+	#		  'ask': None, 'groups': [], 'name': None,
 	#		  'resources': {}, 'subscription': u'both'}
 }
 # We have contacts that are not in roster but only specified in the metadata

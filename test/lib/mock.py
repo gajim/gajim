@@ -8,26 +8,26 @@
 # This Python  module and associated files are released under the FreeBSD
 # license. Essentially, you can do what you like with it except pretend you wrote
 # it yourself.
-# 
-# 
+#
+#
 #     Copyright (c) 2005, Dave Kirby
-# 
+#
 #     All rights reserved.
-# 
+#
 #     Redistribution and use in source and binary forms, with or without
 #     modification, are permitted provided that the following conditions are met:
-# 
+#
 #         * Redistributions of source code must retain the above copyright
 #           notice, this list of conditions and the following disclaimer.
-# 
+#
 #         * Redistributions in binary form must reproduce the above copyright
 #           notice, this list of conditions and the following disclaimer in the
 #           documentation and/or other materials provided with the distribution.
-# 
+#
 #         * Neither the name of this library nor the names of its
 #           contributors may be used to endorse or promote products derived from
 #           this software without specific prior written permission.
-# 
+#
 #     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 #     ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 #     WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -38,7 +38,7 @@
 #     ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 #     (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 #     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-# 
+#
 #         mock@thedeveloperscoach.com
 
 
@@ -90,7 +90,7 @@ class Mock:
                 if retMethod not in self.realClassMethods:
                     raise MockInterfaceError("Return value supplied for method '%s' that was not in the original class" % retMethod)
         self._setupSubclassMethodInterceptors()
-     
+
     def _setupSubclassMethodInterceptors(self):
         methods = inspect.getmembers(self.__class__,inspect.isroutine)
         baseMethods = dict(inspect.getmembers(Mock, inspect.ismethod))
@@ -99,13 +99,13 @@ class Mock:
             # Don't record calls to methods of Mock base class.
             if not name in baseMethods:
                 self.__dict__[name] = MockCallable(name, self, handcrafted=True)
- 
+
     def __getattr__(self, name):
         return MockCallable(name, self)
-    
+
     def mockAddReturnValues(self, **methodReturnValues ):
         self.mockReturnValues.update(methodReturnValues)
-        
+
     def mockSetExpectation(self, name, testFn, after=0, until=0):
         self.mockExpectations.setdefault(name, []).append((testFn,after,until))
 
@@ -134,7 +134,7 @@ class Mock:
         numPosCallParams = 1 + len(callParams)
 
         if numPosCallParams > len(args) and not varargs:
-            raise MockInterfaceError("Original %s() takes at most %s arguments (%s given)" % 
+            raise MockInterfaceError("Original %s() takes at most %s arguments (%s given)" %
                 (name, len(args), numPosCallParams))
 
         # Get the number of positional arguments that appear in the call,
@@ -220,7 +220,7 @@ class MockCall:
 
     def getName(self):
         return self.name
-    
+
     #pretty-print the method call
     def __str__(self):
         s = self.name + "("
@@ -310,13 +310,13 @@ class ReturnValuesBase:
 class ReturnValues(ReturnValuesBase):
     def __init__(self, *values):
         self.iter = iter(values)
-        
+
 
 class ReturnIterator(ReturnValuesBase):
     def __init__(self, iterator):
         self.iter = iter(iterator)
 
-        
+
 def expectParams(*params, **keywords):
     '''check that the callObj is called with specified params and keywords
     '''
@@ -332,7 +332,7 @@ def expectAfter(*methods):
         calledMethods = [method.getName() for method in mockObj.mockGetAllCalls()]
         #skip last entry, since that is the current call
         calledMethods = calledMethods[:-1]
-        for method in methods:  
+        for method in methods:
             if method not in calledMethods:
                 return False
         return True
@@ -430,17 +430,17 @@ def IS(instance):
 
 def ISINSTANCE(class_):
     def testFn(param):
-        return isinstance(param, class_) 
+        return isinstance(param, class_)
     return testFn
 
 def ISSUBCLASS(class_):
     def testFn(param):
-        return issubclass(param, class_) 
+        return issubclass(param, class_)
     return testFn
 
 def CONTAINS(val):
     def testFn(param):
-        return val in param 
+        return val in param
     return testFn
 
 def IN(container):
