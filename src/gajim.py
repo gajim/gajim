@@ -37,9 +37,9 @@
 ##
 
 import os
+import warnings
 
 if os.name == 'nt':
-	import warnings
 	warnings.filterwarnings(action='ignore')
 
 	if os.path.isdir('gtk'):
@@ -56,6 +56,11 @@ if os.name == 'nt':
 		os.environ['GTK_BASEPATH'] = 'gtk'
 
 import sys
+if sys.platform == 'darwin':
+	try:
+		import osx
+	except ImportError:
+		pass
 
 if os.name == 'nt':
 	# needed for docutils
@@ -151,7 +156,6 @@ common.configpaths.gajimpaths.init_profile(profile)
 del profile
 
 # PyGTK2.10+ only throws a warning
-import warnings
 warnings.filterwarnings('error', module='gtk')
 try:
 	import gtk
@@ -162,7 +166,6 @@ except Warning, msg:
 warnings.resetwarnings()
 
 if os.name == 'nt':
-	import warnings
 	warnings.filterwarnings(action='ignore')
 
 pritext = ''
@@ -408,9 +411,8 @@ def on_exit():
 	gajim.interface.save_config()
 	if sys.platform == 'darwin':
 		try:
-			import osx
 			osx.shutdown()
-		except ImportError:
+		except Exception:
 			pass
 
 import atexit
@@ -3366,9 +3368,8 @@ if __name__ == '__main__':
 
 	if sys.platform == 'darwin':
 		try:
-			import osx
 			osx.init()
-		except ImportError:
+		except Exception:
 			pass
 
 	Interface()

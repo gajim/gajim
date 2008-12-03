@@ -36,7 +36,6 @@ import subprocess
 import urllib
 import errno
 import select
-import sha
 import base64
 import sys
 from encodings.punycode import punycode_encode
@@ -732,7 +731,7 @@ def get_jid_from_iq(iq_obj):
 
 def get_auth_sha(sid, initiator, target):
 	''' return sha of sid + initiator + target used for proxy auth'''
-	return sha.new("%s%s%s" % (sid, initiator, target)).hexdigest()
+	return hash_sha1("%s%s%s" % (sid, initiator, target)).hexdigest()
 
 
 distro_info = {

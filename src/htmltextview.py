@@ -1003,7 +1003,6 @@ change_cursor = None
 
 if __name__ == '__main__':
 	import os
-	from common import gajim
 
 	class log(object):
 

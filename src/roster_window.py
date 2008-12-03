@@ -1726,7 +1726,6 @@ class RosterWindow:
 
 	def music_track_changed(self, unused_listener, music_track_info,
 	account=''):
-		from common import pep
 		if account == '':
 			accounts = gajim.connections.keys()
 		if music_track_info is None:
@@ -2033,13 +2032,8 @@ class RosterWindow:
 			del gajim.interface.status_sent_to_users[account][contact.jid]
 
 		# Delete pep if needed
-		#FIXME: py2.5only
-#		keep_pep = any(c.show not in ('error', 'offline') for c in
-#			contact_instances)
-		keep_pep = False
-		for c in contact_instances:
-			if c.show not in ('error', 'offline'):
-				keep_pep = True
+		keep_pep = any(c.show not in ('error', 'offline') for c in
+			contact_instances)
 		if not keep_pep and contact.jid != gajim.get_jid_from_account(account) \
 		and not contact.is_groupchat():
 			pep.delete_pep(contact.jid, account)
@@ -3288,7 +3282,6 @@ class RosterWindow:
 			if gajim.connections[account].pep_supported:
 				# As many implementations don't support retracting items, we send a
 				# "Stopped" event first
-				from common import pep
 				pep.user_send_tune(account, '')
 				pep.user_retract_tune(account)
 		helpers.update_optional_features(account)
