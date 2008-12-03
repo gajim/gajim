@@ -4261,7 +4261,7 @@ class RosterWindow:
 				renderer.set_property('xpad', 8)
 
 
-	def _fill_mood_pixbuf_rederer(self, column, renderer, model, titer,
+	def _fill_mood_pixbuf_renderer(self, column, renderer, model, titer,
 	data = None):
 		'''When a row is added, set properties for avatar renderer'''
 		theme = gajim.config.get('roster_theme')
@@ -4314,7 +4314,7 @@ class RosterWindow:
 			renderer.set_property('xalign', 1)
 
 
-	def _fill_activity_pixbuf_rederer(self, column, renderer, model, titer,
+	def _fill_activity_pixbuf_renderer(self, column, renderer, model, titer,
 	data = None):
 		'''When a row is added, set properties for avatar renderer'''
 		theme = gajim.config.get('roster_theme')
@@ -4367,7 +4367,7 @@ class RosterWindow:
 			renderer.set_property('xalign', 1)
 
 
-	def _fill_tune_pixbuf_rederer(self, column, renderer, model, titer,
+	def _fill_tune_pixbuf_renderer(self, column, renderer, model, titer,
 	data = None):
 		'''When a row is added, set properties for avatar renderer'''
 		theme = gajim.config.get('roster_theme')
@@ -4420,7 +4420,7 @@ class RosterWindow:
 			renderer.set_property('xalign', 1)
 
 
-	def _fill_avatar_pixbuf_rederer(self, column, renderer, model, titer,
+	def _fill_avatar_pixbuf_renderer(self, column, renderer, model, titer,
 	data = None):
 		'''When a row is added, set properties for avatar renderer'''
 		theme = gajim.config.get('roster_theme')
@@ -4459,7 +4459,7 @@ class RosterWindow:
 		else:
 			renderer.set_property('xalign', 1) # align pixbuf to the right
 
-	def _fill_padlock_pixbuf_rederer(self, column, renderer, model, titer,
+	def _fill_padlock_pixbuf_renderer(self, column, renderer, model, titer,
 	data = None):
 		'''When a row is added, set properties for padlock renderer'''
 		theme = gajim.config.get('roster_theme')
@@ -6227,7 +6227,7 @@ class RosterWindow:
 			col.add_attribute(render_pixbuf, 'pixbuf',
 				C_AVATAR_PIXBUF)
 			col.set_cell_data_func(render_pixbuf,
-				self._fill_avatar_pixbuf_rederer, None)
+				self._fill_avatar_pixbuf_renderer, None)
 
 		if gajim.config.get('avatar_position_in_roster') == 'left':
 			add_avatar_renderer()
@@ -6248,19 +6248,19 @@ class RosterWindow:
 		col.pack_start(render_pixbuf, expand=False)
 		col.add_attribute(render_pixbuf, 'pixbuf', C_MOOD_PIXBUF)
 		col.set_cell_data_func(render_pixbuf,
-			self._fill_mood_pixbuf_rederer, None)
+			self._fill_mood_pixbuf_renderer, None)
 
 		render_pixbuf = gtk.CellRendererPixbuf()
 		col.pack_start(render_pixbuf, expand=False)
 		col.add_attribute(render_pixbuf, 'pixbuf', C_ACTIVITY_PIXBUF)
 		col.set_cell_data_func(render_pixbuf,
-			self._fill_activity_pixbuf_rederer, None)
+			self._fill_activity_pixbuf_renderer, None)
 
 		render_pixbuf = gtk.CellRendererPixbuf()
 		col.pack_start(render_pixbuf, expand=False)
 		col.add_attribute(render_pixbuf, 'pixbuf', C_TUNE_PIXBUF)
 		col.set_cell_data_func(render_pixbuf,
-			self._fill_tune_pixbuf_rederer, None)
+			self._fill_tune_pixbuf_renderer, None)
 
 		if gajim.config.get('avatar_position_in_roster') == 'right':
 			add_avatar_renderer()
@@ -6269,7 +6269,7 @@ class RosterWindow:
 		col.pack_start(render_pixbuf, expand=False)
 		col.add_attribute(render_pixbuf, 'pixbuf', C_PADLOCK_PIXBUF)
 		col.set_cell_data_func(render_pixbuf,
-			self._fill_padlock_pixbuf_rederer, None)
+			self._fill_padlock_pixbuf_renderer, None)
 		self.tree.append_column(col)
 
 		# do not show gtk arrows workaround
