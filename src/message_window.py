@@ -91,12 +91,12 @@ class MessageWindow(object):
 		# MessageWindow._on_window_delete, which manually destroys window
 		# through win.destroy() - this means no additional handlers for
 		# 'delete-event' are called.
-		id = self.window.connect_after('delete-event', self._on_window_delete)
-		self.handlers[id] = self.window
-		id = self.window.connect('destroy', self._on_window_destroy)
-		self.handlers[id] = self.window
-		id = self.window.connect('focus-in-event', self._on_window_focus)
-		self.handlers[id] = self.window
+		id_ = self.window.connect_after('delete-event', self._on_window_delete)
+		self.handlers[id_] = self.window
+		id_ = self.window.connect('destroy', self._on_window_destroy)
+		self.handlers[id_] = self.window
+		id_ = self.window.connect('focus-in-event', self._on_window_focus)
+		self.handlers[id_] = self.window
 
 		keys=['<Control>f', '<Control>g', '<Control>h', '<Control>i',
 			'<Control>l', '<Control>L', '<Control>n', '<Control>u', '<Control>v',
@@ -116,12 +116,12 @@ class MessageWindow(object):
 		self.window.add_events(gtk.gdk.POINTER_MOTION_MASK)
 		self.alignment = self.xml.get_widget('alignment')
 
-		id = self.notebook.connect('switch-page',
+		id_ = self.notebook.connect('switch-page',
 			self._on_notebook_switch_page)
-		self.handlers[id] = self.notebook
-		id = self.notebook.connect('key-press-event',
+		self.handlers[id_] = self.notebook
+		id_ = self.notebook.connect('key-press-event',
 			self._on_notebook_key_press)
-		self.handlers[id] = self.notebook
+		self.handlers[id_] = self.notebook
 
 		# Remove the glade pages
 		while self.notebook.get_n_pages():
@@ -166,10 +166,7 @@ class MessageWindow(object):
 			self.account = new_name
 
 	def get_num_controls(self):
-		n = 0
-		for dict in self._controls.values():
-			n += len(dict)
-		return n
+		return sum(len(d) for d in self._controls.values())
 
 	def resize(self, width, height):
 		gtkgui_helpers.resize_window(self.window, width, height)
@@ -256,12 +253,12 @@ class MessageWindow(object):
 		xml = gtkgui_helpers.get_glade('message_window.glade', 'chat_tab_ebox')
 		tab_label_box = xml.get_widget('chat_tab_ebox')
 		widget = xml.get_widget('tab_close_button')
-		id = widget.connect('clicked', self._on_close_button_clicked, control)
-		control.handlers[id] = widget
+		id_ = widget.connect('clicked', self._on_close_button_clicked, control)
+		control.handlers[id_] = widget
 
-		id = tab_label_box.connect('button-press-event', self.on_tab_eventbox_button_press_event,
+		id_ = tab_label_box.connect('button-press-event', self.on_tab_eventbox_button_press_event,
 					control.widget)
-		control.handlers[id] = tab_label_box
+		control.handlers[id_] = tab_label_box
 		self.notebook.append_page(control.widget, tab_label_box)
 
 		# If GTK+ version >= 2.10, use gtk native way to reorder tabs

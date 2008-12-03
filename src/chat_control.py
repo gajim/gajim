@@ -153,20 +153,20 @@ class ChatControlBase(MessageControl):
 			contact, acct, resource = resource)
 
 		widget = self.xml.get_widget('history_button')
-		id = widget.connect('clicked', self._on_history_menuitem_activate)
-		self.handlers[id] = widget
+		id_ = widget.connect('clicked', self._on_history_menuitem_activate)
+		self.handlers[id_] = widget
 
 		# when/if we do XHTML we will put formatting buttons back
 		widget = self.xml.get_widget('emoticons_button')
-		id = widget.connect('clicked', self.on_emoticons_button_clicked)
-		self.handlers[id] = widget
+		id_ = widget.connect('clicked', self.on_emoticons_button_clicked)
+		self.handlers[id_] = widget
 
 		# Create banner and connect signals
 		widget = self.xml.get_widget('banner_eventbox')
 		widget.set_property('height-request', gajim.config.get('chat_avatar_height'))
-		id = widget.connect('button-press-event',
+		id_ = widget.connect('button-press-event',
 			self._on_banner_eventbox_button_press_event)
-		self.handlers[id] = widget
+		self.handlers[id_] = widget
 
 		self.urlfinder = re.compile(r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
 
@@ -187,9 +187,9 @@ class ChatControlBase(MessageControl):
 		self.TARGET_TYPE_URI_LIST = 80
 		self.dnd_list = [ ( 'text/uri-list', 0, self.TARGET_TYPE_URI_LIST ),
 				('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_APP, 0)]
-		id = self.widget.connect('drag_data_received',
+		id_ = self.widget.connect('drag_data_received',
 			self._on_drag_data_received)
-		self.handlers[id] = self.widget
+		self.handlers[id_] = self.widget
 		self.widget.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
 			gtk.DEST_DEFAULT_HIGHLIGHT |
 			gtk.DEST_DEFAULT_DROP,
@@ -197,18 +197,18 @@ class ChatControlBase(MessageControl):
 
 		# Create textviews and connect signals
 		self.conv_textview = ConversationTextview(self.account)
-		id = self.conv_textview.tv.connect('key_press_event',
+		id_ = self.conv_textview.tv.connect('key_press_event',
 			self._conv_textview_key_press_event)
-		self.handlers[id] = self.conv_textview.tv
+		self.handlers[id_] = self.conv_textview.tv
 		# FIXME: DND on non editable TextView, find a better way
 		self.drag_entered = False
-		id = self.conv_textview.tv.connect('drag_data_received',
+		id_ = self.conv_textview.tv.connect('drag_data_received',
 			self._on_drag_data_received)
-		self.handlers[id] = self.conv_textview.tv
-		id = self.conv_textview.tv.connect('drag_motion', self._on_drag_motion)
-		self.handlers[id] = self.conv_textview.tv
-		id = self.conv_textview.tv.connect('drag_leave', self._on_drag_leave)
-		self.handlers[id] = self.conv_textview.tv
+		self.handlers[id_] = self.conv_textview.tv
+		id_ = self.conv_textview.tv.connect('drag_motion', self._on_drag_motion)
+		self.handlers[id_] = self.conv_textview.tv
+		id_ = self.conv_textview.tv.connect('drag_leave', self._on_drag_leave)
+		self.handlers[id_] = self.conv_textview.tv
 		self.conv_textview.tv.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
 			gtk.DEST_DEFAULT_HIGHLIGHT |
 			gtk.DEST_DEFAULT_DROP,
@@ -218,34 +218,34 @@ class ChatControlBase(MessageControl):
 			'conversation_scrolledwindow')
 		self.conv_scrolledwindow.add(self.conv_textview.tv)
 		widget = self.conv_scrolledwindow.get_vadjustment()
-		id = widget.connect('value-changed',
+		id_ = widget.connect('value-changed',
 			self.on_conversation_vadjustment_value_changed)
-		self.handlers[id] = widget
-		id = widget.connect('changed',
+		self.handlers[id_] = widget
+		id_ = widget.connect('changed',
 			self.on_conversation_vadjustment_changed)
-		self.handlers[id] = widget
+		self.handlers[id_] = widget
 		self.scroll_to_end_id = None
 		self.was_at_the_end = True
 
 		# add MessageTextView to UI and connect signals
 		self.msg_scrolledwindow = self.xml.get_widget('message_scrolledwindow')
 		self.msg_textview = MessageTextView()
-		id = self.msg_textview.connect('mykeypress',
+		id_ = self.msg_textview.connect('mykeypress',
 			self._on_message_textview_mykeypress_event)
-		self.handlers[id] = self.msg_textview
+		self.handlers[id_] = self.msg_textview
 		self.msg_scrolledwindow.add(self.msg_textview)
-		id = self.msg_textview.connect('key_press_event',
+		id_ = self.msg_textview.connect('key_press_event',
 			self._on_message_textview_key_press_event)
-		self.handlers[id] = self.msg_textview
-		id = self.msg_textview.connect('size-request', self.size_request)
-		self.handlers[id] = self.msg_textview
-		id = self.msg_textview.connect('populate_popup',
+		self.handlers[id_] = self.msg_textview
+		id_ = self.msg_textview.connect('size-request', self.size_request)
+		self.handlers[id_] = self.msg_textview
+		id_ = self.msg_textview.connect('populate_popup',
 			self.on_msg_textview_populate_popup)
-		self.handlers[id] = self.msg_textview
+		self.handlers[id_] = self.msg_textview
 		# Setup DND
-		id = self.msg_textview.connect('drag_data_received',
+		id_ = self.msg_textview.connect('drag_data_received',
 			self._on_drag_data_received)
-		self.handlers[id] = self.msg_textview
+		self.handlers[id_] = self.msg_textview
 		self.msg_textview.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
 			gtk.DEST_DEFAULT_HIGHLIGHT,
 			self.dnd_list, gtk.gdk.ACTION_COPY)
@@ -254,12 +254,12 @@ class ChatControlBase(MessageControl):
 
 		# Hook up send button
 		widget = self.xml.get_widget('send_button')
-		id = widget.connect('clicked', self._on_send_button_clicked)
-		self.handlers[id] = widget
+		id_ = widget.connect('clicked', self._on_send_button_clicked)
+		self.handlers[id_] = widget
 
 		widget = self.xml.get_widget('formattings_button')
-		id = widget.connect('clicked', self.on_formattings_button_clicked)
-		self.handlers[id] = widget
+		id_ = widget.connect('clicked', self.on_formattings_button_clicked)
+		self.handlers[id_] = widget
 
 		# the following vars are used to keep history of user's messages
 		self.sent_history = []
@@ -328,8 +328,8 @@ class ChatControlBase(MessageControl):
 
 		item = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
 		menu.prepend(item)
-		id = item.connect('activate', self.msg_textview.clear)
-		self.handlers[id] = item
+		id_ = item.connect('activate', self.msg_textview.clear)
+		self.handlers[id_] = item
 
 		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
 			item = gtk.MenuItem(_('Spelling language'))
@@ -341,8 +341,8 @@ class ChatControlBase(MessageControl):
 				if langs[lang] == self.msg_textview.lang:
 					item.set_active(True)
 				submenu.append(item)
-				id = item.connect('activate', _on_select_dictionary, langs[lang])
-				self.handlers[id] = item
+				id_ = item.connect('activate', _on_select_dictionary, langs[lang])
+				self.handlers[id_] = item
 
 		menu.show_all()
 
@@ -401,18 +401,18 @@ class ChatControlBase(MessageControl):
 	def disconnect_style_event(self, widget):
 		# Try to find the event_id
 		found = False
-		for id in self.handlers:
-			if self.handlers[id] == widget:
+		for id_ in self.handlers:
+			if self.handlers[id_] == widget:
 				found = True
 				break
 		if found:
-			widget.disconnect(id)
-			del self.handlers[id]
+			widget.disconnect(id_)
+			del self.handlers[id_]
 
 	def connect_style_event(self, widget, set_fg = False, set_bg = False):
 		self.disconnect_style_event(widget)
-		id = widget.connect('style-set', self._on_style_set_event, set_fg, set_bg)
-		self.handlers[id] = widget
+		id_ = widget.connect('style-set', self._on_style_set_event, set_fg, set_bg)
+		self.handlers[id_] = widget
 
 	def _on_style_set_event(self, widget, style, *opts):
 		'''set style of widget from style class *.Frame.Eventbox
@@ -731,11 +731,11 @@ class ChatControlBase(MessageControl):
 			emoticons_button.set_no_show_all(True)
 
 	def append_emoticon(self, str_):
-		buffer = self.msg_textview.get_buffer()
-		if buffer.get_char_count():
-			buffer.insert_at_cursor(' %s ' % str_)
+		buffer_ = self.msg_textview.get_buffer()
+		if buffer_.get_char_count():
+			buffer_.insert_at_cursor(' %s ' % str_)
 		else: # we are the beginning of buffer
-			buffer.insert_at_cursor('%s ' % str_)
+			buffer_.insert_at_cursor('%s ' % str_)
 		self.msg_textview.grab_focus()
 
 	def on_emoticons_button_clicked(self, widget):
@@ -821,9 +821,9 @@ class ChatControlBase(MessageControl):
 		self.conv_textview.update_tags()
 
 	def clear(self, tv):
-		buffer = tv.get_buffer()
-		start, end = buffer.get_bounds()
-		buffer.delete(start, end)
+		buffer_ = tv.get_buffer()
+		start, end = buffer_.get_bounds()
+		buffer_.delete(start, end)
 
 	def _on_history_menuitem_activate(self, widget = None, jid = None):
 		'''When history menuitem is pressed: call history window'''
@@ -872,8 +872,8 @@ class ChatControlBase(MessageControl):
 		if self.scroll_to_end_id:
 			# a scroll is already planned
 			return
-		buffer = textview.get_buffer()
-		end_iter = buffer.get_end_iter()
+		buffer_ = textview.get_buffer()
+		end_iter = buffer_.get_end_iter()
 		end_rect = textview.get_iter_location(end_iter)
 		visible_rect = textview.get_visible_rect()
 		# scroll only if expected end is not visible
@@ -882,8 +882,8 @@ class ChatControlBase(MessageControl):
 				textview)
 
 	def scroll_to_end_iter(self, textview):
-		buffer = textview.get_buffer()
-		end_iter = buffer.get_end_iter()
+		buffer_ = textview.get_buffer()
+		end_iter = buffer_.get_end_iter()
 		textview.scroll_to_iter(end_iter, 0, False, 1, 1)
 		self.scroll_to_end_id = None
 		return False
@@ -1081,16 +1081,17 @@ class ChatControl(ChatControlBase):
 		# for muc use:
 		# widget = self.xml.get_widget('muc_window_actions_button')
 		self.actions_button = self.xml.get_widget('message_window_actions_button')
-		id = self.actions_button.connect('clicked', self.on_actions_button_clicked)
-		self.handlers[id] = self.actions_button
+		id_ = self.actions_button.connect('clicked',
+			self.on_actions_button_clicked)
+		self.handlers[id_] = self.actions_button
 
 		self._formattings_button = self.xml.get_widget('formattings_button')
 
 		self._add_to_roster_button = self.xml.get_widget(
 			'add_to_roster_button')
-		id = self._add_to_roster_button.connect('clicked',
+		id_ = self._add_to_roster_button.connect('clicked',
 			self._on_add_to_roster_menuitem_activate)
-		self.handlers[id] = self._add_to_roster_button
+		self.handlers[id_] = self._add_to_roster_button
 
 		self._send_file_button = self.xml.get_widget('send_file_button')
 		# add a special img for send file button
@@ -1098,21 +1099,21 @@ class ChatControl(ChatControlBase):
 		img = gtk.Image()
 		img.set_from_file(path_to_upload_img)
 		self._send_file_button.set_image(img)
-		id = self._send_file_button.connect('clicked',
+		id_ = self._send_file_button.connect('clicked',
 			self._on_send_file_menuitem_activate)
-		self.handlers[id] = self._send_file_button
+		self.handlers[id_] = self._send_file_button
 
 		self._convert_to_gc_button = self.xml.get_widget(
 			'convert_to_gc_button')
-		id = self._convert_to_gc_button.connect('clicked',
+		id_ = self._convert_to_gc_button.connect('clicked',
 			self._on_convert_to_gc_menuitem_activate)
-		self.handlers[id] = self._convert_to_gc_button
+		self.handlers[id_] = self._convert_to_gc_button
 
 		contact_information_button = self.xml.get_widget(
 			'contact_information_button')
-		id = contact_information_button.connect('clicked',
+		id_ = contact_information_button.connect('clicked',
 			self._on_contact_information_menuitem_activate)
-		self.handlers[id] = contact_information_button
+		self.handlers[id_] = contact_information_button
 
 		compact_view = gajim.config.get('compact_view')
 		self.chat_buttons_set_visible(compact_view)
@@ -1121,9 +1122,9 @@ class ChatControl(ChatControlBase):
 
 		self.authentication_button = self.xml.get_widget(
 			'authentication_button')
-		id = self.authentication_button.connect('clicked',
+		id_ = self.authentication_button.connect('clicked',
 			self._on_authentication_button_clicked)
-		self.handlers[id] = self.authentication_button
+		self.handlers[id_] = self.authentication_button
 
 		# Add lock image to show chat encryption
 		self.lock_image = self.xml.get_widget('lock_image')
@@ -1161,26 +1162,26 @@ class ChatControl(ChatControlBase):
 		self._schedule_activity_timers()
 
 		# Hook up signals
-		id = self.parent_win.window.connect('motion-notify-event',
+		id_ = self.parent_win.window.connect('motion-notify-event',
 			self._on_window_motion_notify)
-		self.handlers[id] = self.parent_win.window
+		self.handlers[id_] = self.parent_win.window
 		message_tv_buffer = self.msg_textview.get_buffer()
-		id = message_tv_buffer.connect('changed',
+		id_ = message_tv_buffer.connect('changed',
 			self._on_message_tv_buffer_changed)
-		self.handlers[id] = message_tv_buffer
+		self.handlers[id_] = message_tv_buffer
 
 		widget = self.xml.get_widget('avatar_eventbox')
-		id = widget.connect('enter-notify-event',
+		id_ = widget.connect('enter-notify-event',
 			self.on_avatar_eventbox_enter_notify_event)
-		self.handlers[id] = widget
+		self.handlers[id_] = widget
 
-		id = widget.connect('leave-notify-event',
+		id_ = widget.connect('leave-notify-event',
 			self.on_avatar_eventbox_leave_notify_event)
-		self.handlers[id] = widget
+		self.handlers[id_] = widget
 
-		id = widget.connect('button-press-event',
+		id_ = widget.connect('button-press-event',
 			self.on_avatar_eventbox_button_press_event)
-		self.handlers[id] = widget
+		self.handlers[id_] = widget
 
 		if not session:
 			session = gajim.connections[self.account]. \
@@ -1429,11 +1430,11 @@ class ChatControl(ChatControlBase):
 		if event.button == 3: # right click
 			menu = gtk.Menu()
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
-			id = menuitem.connect('activate',
+			id_ = menuitem.connect('activate',
 				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
 				self.contact.jid, self.account, self.contact.get_shown_name() + \
 					'.jpeg')
-			self.handlers[id] = menuitem
+			self.handlers[id_] = menuitem
 			menu.append(menuitem)
 			menu.show_all()
 			menu.connect('selection-done', lambda w:w.destroy())
@@ -1797,17 +1798,17 @@ class ChatControl(ChatControlBase):
 				gobject.source_remove(self.possible_inactive_timeout_id)
 				self._schedule_activity_timers()
 
-		id = ChatControlBase.send_message(self, message, keyID,
+		id_ = ChatControlBase.send_message(self, message, keyID,
 			type_ = 'chat', chatstate = chatstate_to_send,
 			composing_xep = composing_xep,
 			process_command = process_command, xhtml = xhtml)
-		if id:
+		if id_:
 			# XXX: Once we have fallback to disco, remove notexistant check
 			if gajim.capscache.is_supported(contact, NS_RECEIPTS) \
 			and not gajim.capscache.is_supported(contact,
 			'notexistant') and gajim.config.get_per('accounts',
 			self.account, 'request_receipt'):
-				xep0184_id = id
+				xep0184_id = id_
 			else:
 				xep0184_id = None
 
@@ -2124,27 +2125,27 @@ class ChatControl(ChatControlBase):
 			convert_to_gc_menuitem.set_sensitive(False)
 
 		# connect signals
-		id = history_menuitem.connect('activate',
+		id_ = history_menuitem.connect('activate',
 			self._on_history_menuitem_activate)
-		self.handlers[id] = history_menuitem
-		id = send_file_menuitem.connect('activate',
+		self.handlers[id_] = history_menuitem
+		id_ = send_file_menuitem.connect('activate',
 			self._on_send_file_menuitem_activate)
-		self.handlers[id] = send_file_menuitem
-		id = add_to_roster_menuitem.connect('activate',
+		self.handlers[id_] = send_file_menuitem
+		id_ = add_to_roster_menuitem.connect('activate',
 			self._on_add_to_roster_menuitem_activate)
-		self.handlers[id] = add_to_roster_menuitem
-		id = toggle_gpg_menuitem.connect('activate',
+		self.handlers[id_] = add_to_roster_menuitem
+		id_ = toggle_gpg_menuitem.connect('activate',
 			self._on_toggle_gpg_menuitem_activate)
-		self.handlers[id] = toggle_gpg_menuitem
-		id = toggle_e2e_menuitem.connect('activate',
+		self.handlers[id_] = toggle_gpg_menuitem
+		id_ = toggle_e2e_menuitem.connect('activate',
 			self._on_toggle_e2e_menuitem_activate)
-		self.handlers[id] = toggle_e2e_menuitem
-		id = information_menuitem.connect('activate',
+		self.handlers[id_] = toggle_e2e_menuitem
+		id_ = information_menuitem.connect('activate',
 			self._on_contact_information_menuitem_activate)
-		self.handlers[id] = information_menuitem
-		id = convert_to_gc_menuitem.connect('activate',
+		self.handlers[id_] = information_menuitem
+		id_ = convert_to_gc_menuitem.connect('activate',
 			self._on_convert_to_gc_menuitem_activate)
-		self.handlers[id] = convert_to_gc_menuitem
+		self.handlers[id_] = convert_to_gc_menuitem
 
 		menu.connect('selection-done', self.destroy_menu,
 			send_file_menuitem, convert_to_gc_menuitem,
@@ -2383,9 +2384,9 @@ class ChatControl(ChatControlBase):
 		model = treeview.get_model()
 		data = selection.data
 		path = treeview.get_selection().get_selected_rows()[1][0]
-		iter = model.get_iter(path)
-		type = model[iter][2]
-		if type != 'contact': # source is not a contact
+		iter_ = model.get_iter(path)
+		type_ = model[iter_][2]
+		if type_ != 'contact': # source is not a contact
 			return
 		dropped_jid = data.decode('utf-8')
 

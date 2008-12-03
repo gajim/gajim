@@ -60,13 +60,13 @@ class CellRendererImage(gtk.GenericCellRenderer):
 		if image.get_storage_type() != gtk.IMAGE_ANIMATION:
 			return
 		self.redraw = 0
-		iter = self.iters[image]
-		iter.advance()
+		iter_ = self.iters[image]
+		iter_.advance()
 		model = tree.get_model()
 		if model:
 			model.foreach(self.func, (image, tree))
 		if self.redraw:
-			gobject.timeout_add(iter.get_delay_time(),
+			gobject.timeout_add(iter_.get_delay_time(),
 					self.animation_timeout, tree, image)
 		elif image in self.iters:
 			del self.iters[image]
@@ -92,9 +92,9 @@ class CellRendererImage(gtk.GenericCellRenderer):
 				if not isinstance(widget, gtk.TreeView):
 					return
 				animation = self.image.get_animation()
-				iter =  animation.get_iter()
-				self.iters[self.image] = iter
-				gobject.timeout_add(iter.get_delay_time(),
+				iter_ = animation.get_iter()
+				self.iters[self.image] = iter_
+				gobject.timeout_add(iter_.get_delay_time(),
 					self.animation_timeout, widget, self.image)
 
 			pix = self.iters[self.image].get_pixbuf()

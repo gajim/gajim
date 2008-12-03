@@ -99,10 +99,7 @@ class Zeroconf:
 	# takes a TXTRecord instance
 	def txt_array_to_dict(self, txt):
 		items = pybonjour.TXTRecord.parse(txt)._items
-		dict = {}
-		for val in items.values():
-			dict[val[0]] = val[1]
-		return dict
+		return dict((v[0], v[1]) for v in items.values())
 
 	def service_resolved_callback(self, sdRef, flags, interfaceIndex, errorCode, fullname, 
 			hosttarget, port, txtRecord):

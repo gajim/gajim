@@ -56,8 +56,8 @@ class GroupsPostWindow:
 		item.addChild('title', {}, [self.subject_entry.get_text()])
 		item.addChild('id', {}, ['0'])
 
-		buffer = self.contents_textview.get_buffer()
-		item.addChild('content', {}, [buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter())])
+		buf = self.contents_textview.get_buffer()
+		item.addChild('content', {}, [buf.get_text(buf.get_start_iter(), buf.get_end_iter())])
 
 		# publish it to node
 		gajim.connections[self.account].send_pb_publish(self.servicejid, self.groupid, item, '0')

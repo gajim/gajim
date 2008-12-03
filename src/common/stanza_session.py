@@ -240,8 +240,8 @@ class EncryptedStanzaSession(StanzaSession):
 
 	def sign(self, string):
 		if self.negotiated['sign_algs'] == (XmlDsig + 'rsa-sha256'):
-			hash = crypto.sha256(string)
-			return crypto.encode_mpi(gajim.pubkey.sign(hash, '')[0])
+			hash_ = crypto.sha256(string)
+			return crypto.encode_mpi(gajim.pubkey.sign(hash_, '')[0])
 
 	def encrypt_stanza(self, stanza):
 		encryptable = filter(lambda x: x.getName() not in ('error', 'amp',
@@ -424,9 +424,9 @@ class EncryptedStanzaSession(StanzaSession):
 		mac_o_calculated = self.hmac(self.ks_o, content)
 
 		if self.negotiated['recv_pubkey']:
-			hash = crypto.sha256(mac_o_calculated)
+			hash_ = crypto.sha256(mac_o_calculated)
 
-			if not eir_pubkey.verify(hash, signature):
+			if not eir_pubkey.verify(hash_, signature):
 				raise exceptions.NegotiationError, 'public key signature verification failed!'
 
 		elif mac_o_calculated != mac_o:

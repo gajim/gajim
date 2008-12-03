@@ -248,10 +248,10 @@ class IterableIPShell:
     if verbose or debug: print header+cmd
     # flush stdout so we don't mangle python's buffering
     if not debug:
-      input, output = os.popen4(cmd)
+      input_, output = os.popen4(cmd)
       print output.read()
       output.close()
-      input.close()
+      input_.close()
 
 class ConsoleView(gtk.TextView):
   '''
@@ -359,9 +359,9 @@ class ConsoleView(gtk.TextView):
     @param text: Text to use as replacement.
     @type text: string
     '''
-    iter = self.text_buffer.get_iter_at_mark(self.line_start)
-    iter.forward_to_line_end()
-    self.text_buffer.delete(self.text_buffer.get_iter_at_mark(self.line_start), iter)
+    iter_ = self.text_buffer.get_iter_at_mark(self.line_start)
+    iter_.forward_to_line_end()
+    self.text_buffer.delete(self.text_buffer.get_iter_at_mark(self.line_start), iter_)
     self._write(text, True)
 
   def getCurrentLine(self):
@@ -386,12 +386,12 @@ class ConsoleView(gtk.TextView):
     @param text: Text to show.
     @type text: string
     '''
-    iter = self.text_buffer.get_iter_at_mark(self.line_start)
-    iter.forward_to_line_end()
+    iter_ = self.text_buffer.get_iter_at_mark(self.line_start)
+    iter_.forward_to_line_end()
     self.text_buffer.apply_tag_by_name(
       'notouch', 
       self.text_buffer.get_iter_at_mark(self.line_start),
-      iter)
+      iter_)
     self._write('\n'+text)
     if text:
       self._write('\n')
@@ -515,12 +515,12 @@ class IPythonView(ConsoleView, IterableIPShell):
         return False
       completed, possibilities = self.complete(self.getCurrentLine())
       if len(possibilities) > 1:
-        slice = self.getCurrentLine()
+        slice_ = self.getCurrentLine()
         self.write('\n')
         for symbol in possibilities:
           self.write(symbol+'\n')
         self.showPrompt(self.prompt)
-      self.changeLine(completed or slice)
+      self.changeLine(completed or slice_)
       return True
 
   def _processLine(self):

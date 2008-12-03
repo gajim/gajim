@@ -688,23 +688,23 @@ class ClientZeroconf:
 		# look for hashed connections
 		if to in self.recipient_to_hash:
 			conn = self.connections[self.recipient_to_hash[to]]
-			id = conn.Dispatcher.getAnID()
-			stanza.setID(id)
+			id_ = conn.Dispatcher.getAnID()
+			stanza.setID(id_)
 			if conn.add_stanza(stanza, is_message):
 				if on_ok:
 					on_ok()
-				return id
+				return id_
 
 		if item['address'] in self.ip_to_hash:
-			hash = self.ip_to_hash[item['address']]
-			if self.hash_to_port[hash] == item['port']:
-				conn = self.connections[hash]
-				id = conn.Dispatcher.getAnID()
-				stanza.setID(id)
+			hash_ = self.ip_to_hash[item['address']]
+			if self.hash_to_port[hash_] == item['port']:
+				conn = self.connections[hash_]
+				id_ = conn.Dispatcher.getAnID()
+				stanza.setID(id_)
 				if conn.add_stanza(stanza, is_message):
 					if on_ok:
 						on_ok()
-					return id
+					return id_
 
 		# otherwise open new connection
 		stanza.setID('zero')

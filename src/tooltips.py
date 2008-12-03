@@ -211,9 +211,9 @@ class StatusTable:
 		files.append(os.path.join(file_path, state_file + '.gif'))
 		image = gtk.Image()
 		image.set_from_pixbuf(None)
-		for file in files:
-			if os.path.exists(file):
-				image.set_from_file(file)
+		for f in files:
+			if os.path.exists(f):
+				image.set_from_file(f)
 				break
 		spacer = gtk.Label(self.spacer_label)
 		image.set_alignment(1, 0.5)
@@ -339,36 +339,36 @@ class GCTooltip(BaseTooltip):
 		# Add avatar
 		puny_name = helpers.sanitize_filename(contact.name)
 		puny_room = helpers.sanitize_filename(contact.room_jid)
-		file = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH, puny_room,
+		file_ = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH, puny_room,
 			puny_name))
-		if file:
-			self.avatar_image.set_from_file(file)
+		if file_:
+			_self.avatar_image.set_from_file(file_)
 			pix = self.avatar_image.get_pixbuf()
 			pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
 			self.avatar_image.set_from_pixbuf(pix)
 		else:
 			self.avatar_image.set_from_pixbuf(None)
 		while properties:
-			property = properties.pop(0)
+			property_ = properties.pop(0)
 			vcard_current_row += 1
 			vertical_fill = gtk.FILL
 			if not properties:
 				vertical_fill |= gtk.EXPAND
 			label = gtk.Label()
 			label.set_alignment(0, 0)
-			if property[1]:
-				label.set_markup(property[0])
+			if property_[1]:
+				label.set_markup(property_[0])
 				vcard_table.attach(label, 1, 2, vcard_current_row,
 					vcard_current_row + 1, gtk.FILL, vertical_fill, 0, 0)
 				label = gtk.Label()
 				label.set_alignment(0, 0)
-				label.set_markup(property[1])
+				label.set_markup(property_[1])
 				label.set_line_wrap(True)
 				vcard_table.attach(label, 2, 3, vcard_current_row,
 					vcard_current_row + 1, gtk.EXPAND | gtk.FILL,
 					vertical_fill, 0, 0)
 			else:
-				label.set_markup(property[0])
+				label.set_markup(property_[0])
 				label.set_line_wrap(True)
 				vcard_table.attach(label, 1, 3, vcard_current_row,
 					vcard_current_row + 1, gtk.FILL, vertical_fill, 0)
@@ -409,9 +409,9 @@ class RosterTooltip(NotificationAreaTooltip):
 		puny_jid = helpers.sanitize_filename(prim_contact.jid)
 		table_size = 3
 
-		file = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH, puny_jid))
-		if file:
-			self.avatar_image.set_from_file(file)
+		file_ = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH, puny_jid))
+		if file_:
+			self.avatar_image.set_from_file(file_)
 			pix = self.avatar_image.get_pixbuf()
 			pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
 			self.avatar_image.set_from_pixbuf(pix)
@@ -543,30 +543,30 @@ class RosterTooltip(NotificationAreaTooltip):
 					gobject.markup_escape_text(keyID)))
 		
 		while properties:
-			property = properties.pop(0)
+			property_ = properties.pop(0)
 			vcard_current_row += 1
 			vertical_fill = gtk.FILL
 			if not properties and table_size == 4:
 				vertical_fill |= gtk.EXPAND
 			label = gtk.Label()
 			label.set_alignment(0, 0)
-			if property[1]:
-				label.set_markup(property[0])
+			if property_[1]:
+				label.set_markup(property_[0])
 				vcard_table.attach(label, 1, 2, vcard_current_row,
 					vcard_current_row + 1, gtk.FILL, vertical_fill, 0, 0)
 				label = gtk.Label()
 				label.set_alignment(0, 0)
-				label.set_markup(property[1])
+				label.set_markup(property_[1])
 				label.set_line_wrap(True)
 				vcard_table.attach(label, 2, 3, vcard_current_row,
 					vcard_current_row + 1, gtk.EXPAND | gtk.FILL,
 						vertical_fill, 0, 0)
 			else:
-				if isinstance(property[0], (unicode, str)): #FIXME: rm unicode?
-					label.set_markup(property[0]) 
+				if isinstance(property_[0], (unicode, str)): #FIXME: rm unicode?
+					label.set_markup(property_[0]) 
 					label.set_line_wrap(True)
 				else:
-					label = property[0]
+					label = property_[0]
 				vcard_table.attach(label, 1, 3, vcard_current_row,
 					vcard_current_row + 1, gtk.FILL, vertical_fill, 0)
 		self.avatar_image.set_alignment(0, 0)
@@ -661,20 +661,20 @@ class FileTransfersTooltip(BaseTooltip):
 		properties.append((_('Name: '), 
 			gobject.markup_escape_text(file_name)))
 		if file_props['type'] == 'r':
-			type = _('Download')
+			type_ = _('Download')
 			actor = _('Sender: ') 
 			sender = unicode(file_props['sender']).split('/')[0]
 			name = gajim.contacts.get_first_contact_from_jid( 
 				file_props['tt_account'], sender).get_shown_name()
 		else:
-			type = _('Upload')
+			type_ = _('Upload')
 			actor = _('Recipient: ')
 			receiver = file_props['receiver']
 			if hasattr(receiver, 'name'):
 				name = receiver.get_shown_name()
 			else:
 				name = receiver.split('/')[0]
-		properties.append((_('Type: '), type))
+		properties.append((_('Type: '), type_))
 		properties.append((actor, gobject.markup_escape_text(name)))
 		
 		transfered_len = file_props.get('received-len', 0)
@@ -709,17 +709,17 @@ class FileTransfersTooltip(BaseTooltip):
 			properties.append((_('Description: '), gobject.markup_escape_text(
 				file_desc)))
 		while properties:
-			property = properties.pop(0)
+			property_ = properties.pop(0)
 			current_row += 1
 			label = gtk.Label()
 			label.set_alignment(0, 0)
-			label.set_markup(property[0])
+			label.set_markup(property_[0])
 			ft_table.attach(label, 1, 2, current_row, current_row + 1, 
 				gtk.FILL, gtk.FILL, 0, 0)
 			label = gtk.Label()
 			label.set_alignment(0, 0)
 			label.set_line_wrap(True)
-			label.set_markup(property[1])
+			label.set_markup(property_[1])
 			ft_table.attach(label, 2, 3, current_row, current_row + 1, 
 				gtk.EXPAND | gtk.FILL, gtk.FILL, 0, 0)
 		

@@ -142,13 +142,13 @@ def getPrivacyLists(disp):
     """ Requests privacy lists from connected server.
         Returns dictionary of existing lists on success."""
     try:
-        dict={'lists':[]}
+        dict_={'lists':[]}
         resp=disp.SendAndWaitForResponse(Iq('get',NS_PRIVACY))
         if not isResultNode(resp): return
-        for list in resp.getQueryPayload():
-            if list.getName()=='list': dict['lists'].append(list.getAttr('name'))
-            else: dict[list.getName()]=list.getAttr('name')
-        return dict
+        for list_ in resp.getQueryPayload():
+            if list_.getName()=='list': dict_['lists'].append(list_.getAttr('name'))
+            else: dict_[list_.getName()]=list_.getAttr('name')
+        return dict_
     except: pass
 
 def getPrivacyList(disp,listname):

@@ -584,13 +584,13 @@ class Interface:
 
 	def handle_event_error_answer(self, account, array):
 		#('ERROR_ANSWER', account, (id, jid_from, errmsg, errcode))
-		id, jid_from, errmsg, errcode = array
-		if unicode(errcode) in ('403', '406') and id:
+		id_, jid_from, errmsg, errcode = array
+		if unicode(errcode) in ('403', '406') and id_:
 			# show the error dialog
 			ft = self.instances['file_transfers']
-			sid = id
-			if len(id) > 3 and id[2] == '_':
-				sid = id[3:]
+			sid = id_
+			if len(id_) > 3 and id_[2] == '_':
+				sid = id_[3:]
 			if sid in ft.files_props['s']:
 				file_props = ft.files_props['s'][sid]
 				file_props['error'] = -4
@@ -601,9 +601,9 @@ class Interface:
 				return
 		elif unicode(errcode) == '404':
 			conn = gajim.connections[account]
-			sid = id
-			if len(id) > 3 and id[2] == '_':
-				sid = id[3:]
+			sid = id_
+			if len(id_) > 3 and id_[2] == '_':
+				sid = id_[3:]
 			if sid in conn.files_props:
 				file_props = conn.files_props[sid]
 				self.handle_event_file_send_error(account,
@@ -922,9 +922,9 @@ class Interface:
 				if not ctrl:
 					tv = gc_control.list_treeview
 					model = tv.get_model()
-					iter = gc_control.get_contact_iter(nick)
-					if iter:
-						show = model[iter][3]
+					iter_ = gc_control.get_contact_iter(nick)
+					if iter_:
+						show = model[iter_][3]
 					else:
 						show = 'offline'
 					gc_c = gajim.contacts.create_gc_contact(room_jid = jid,
@@ -2599,8 +2599,9 @@ class Interface:
 				emots = emoticons.emoticons
 				fd = open(os.path.join(path, 'emoticons.py'), 'w')
 				fd.write('emoticons = ')
-				pprint.pprint( dict([(file, [i for i in emots.keys() if emots[i] ==\
-					file]) for file in set(emots.values())]), fd)
+				pprint.pprint( dict([
+					(file_, [i for i in emots.keys() if emots[i] == file_])
+						for file_ in set(emots.values())]), fd)
 				fd.close()
 				del emoticons
 				self._init_emoticons(path, need_reload=True)
@@ -2934,11 +2935,11 @@ class Interface:
 				os.remove(path_to_original_file)
 		if local and photo:
 			pixbuf = photo
-			type = 'png'
+			typ = 'png'
 			extension = '_local.png' # save local avatars as png file
 		else:
 			pixbuf, typ = gtkgui_helpers.get_pixbuf_from_data(photo, want_type = True)
-			if  pixbuf is None:
+			if pixbuf is None:
 				return
 			extension = '.' + typ
 			if typ not in ('jpeg', 'png'):

@@ -68,8 +68,8 @@ class NonSASL(PlugIn):
             def hash_n_times(s, count):
                return count and hasher(hash_n_times(s, count-1)) or s
 
-            hash = hash_n_times(hasher(hasher(self.password)+token), int(seq))
-            query.setTagData('hash',hash)
+            hash_ = hash_n_times(hasher(hasher(self.password)+token), int(seq))
+            query.setTagData('hash', hash_)
             method='0k'
         else:
             self.DEBUG("Sequre methods unsupported, performing plain text authentication",'warn')

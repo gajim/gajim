@@ -600,14 +600,14 @@ class ErrorNode(Node):
             Mandatory parameter: name - name of error condition.
             Optional parameters: code, typ, text. Used for backwards compartibility with older jabber protocol."""
         if name in ERRORS:
-            cod,type,txt=ERRORS[name]
+            cod,type_,txt=ERRORS[name]
             ns=name.split()[0]
-        else: cod,ns,type,txt='500',NS_STANZAS,'cancel',''
-        if typ: type=typ
+        else: cod,ns,type_,txt='500',NS_STANZAS,'cancel',''
+        if typ: type_=typ
         if code: cod=code
         if text: txt=text
         Node.__init__(self,'error',{},[Node(name)])
-        if type: self.setAttr('type',type)
+        if type_: self.setAttr('type',type_)
         if not cod: self.setName('stream:error')
         if txt: self.addChild(node=Node(ns+' text',{},[txt]))
         if cod: self.setAttr('code',cod)

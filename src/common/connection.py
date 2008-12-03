@@ -759,16 +759,16 @@ class Connection(ConnectionHandlers):
 		to server to detect connection failure at application level.'''
 		if not self.connection:
 			return
-		id = self.connection.getAnID()
+		id_ = self.connection.getAnID()
 		if pingTo:
 			to = pingTo.get_full_jid()
 			self.dispatch('PING_SENT', (pingTo))
 		else:
 			to = gajim.config.get_per('accounts', self.name, 'hostname')
-			self.awaiting_xmpp_ping_id = id
+			self.awaiting_xmpp_ping_id = id_
 		iq = common.xmpp.Iq('get', to=to)
 		iq.addChild(name = 'ping', namespace = common.xmpp.NS_PING)
-		iq.setID(id)
+		iq.setID(id_)
 		def _on_response(resp):
 			timePong = time_time()
 			if not common.xmpp.isResultNode(resp):
@@ -945,9 +945,9 @@ class Connection(ConnectionHandlers):
 		self.connection.set_send_timeout(self.keepalives, self.sendPing)
 		self.connection.onreceive(None)
 		iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')
-		id = self.connection.getAnID()
-		iq.setID(id)
-		self.awaiting_answers[id] = (PRIVACY_ARRIVED, )
+		id_ = self.connection.getAnID()
+		iq.setID(id_)
+		self.awaiting_answers[id_] = (PRIVACY_ARRIVED, )
 		self.connection.send(iq)
 
 	def send_custom_status(self, show, msg, jid):
@@ -1299,9 +1299,9 @@ class Connection(ConnectionHandlers):
 			return
 		iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to = agent)
 		iq.getTag('query').setTag('remove')
-		id = self.connection.getAnID()
-		iq.setID(id)
-		self.awaiting_answers[id] = (AGENT_REMOVED, agent)
+		id_ = self.connection.getAnID()
+		iq.setID(id_)
+		self.awaiting_answers[id_] = (AGENT_REMOVED, agent)
 		self.connection.send(iq)
 		self.connection.getRoster().delItem(agent)
 
@@ -1364,11 +1364,11 @@ class Connection(ConnectionHandlers):
 			to_whom_jid += '/' + resource
 		iq = common.xmpp.Iq(to = to_whom_jid, typ = 'get', queryNS =\
 			common.xmpp.NS_LAST)
-		id = self.connection.getAnID()
-		iq.setID(id)
+		id_ = self.connection.getAnID()
+		iq.setID(id_)
 		if groupchat_jid:
-			self.groupchat_jids[id] = groupchat_jid
-		self.last_ids.append(id)
+			self.groupchat_jids[id_] = groupchat_jid
+		self.last_ids.append(id_)
 		self.connection.send(iq)
 
 	def request_os_info(self, jid, resource, groupchat_jid=None):
@@ -1385,11 +1385,11 @@ class Connection(ConnectionHandlers):
 			to_whom_jid += '/' + resource
 		iq = common.xmpp.Iq(to = to_whom_jid, typ = 'get', queryNS =\
 			common.xmpp.NS_VERSION)
-		id = self.connection.getAnID()
-		iq.setID(id)
+		id_ = self.connection.getAnID()
+		iq.setID(id_)
 		if groupchat_jid:
-			self.groupchat_jids[id] = groupchat_jid
-		self.version_ids.append(id)
+			self.groupchat_jids[id_] = groupchat_jid
+		self.version_ids.append(id_)
 		self.connection.send(iq)
 
 	def get_settings(self):
@@ -1467,9 +1467,9 @@ class Connection(ConnectionHandlers):
 		iq = common.xmpp.Iq(typ='get')
 		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq2.addChild(name='storage', namespace='storage:metacontacts')
-		id = self.connection.getAnID()
-		iq.setID(id)
-		self.awaiting_answers[id] = (METACONTACTS_ARRIVED, )
+		id_ = self.connection.getAnID()
+		iq.setID(id_)
+		self.awaiting_answers[id_] = (METACONTACTS_ARRIVED, )
 		self.connection.send(iq)
 
 	def store_metacontacts(self, tags_list):

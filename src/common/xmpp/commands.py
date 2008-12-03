@@ -105,7 +105,7 @@ class Commands(PlugIn):
             #   Enumerate the 'item' disco of each command for the specified jid
             #   Build responce and send
             #   To make this code easy to write we add an 'list' disco type, it returns a tuple or 'none' if not advertised
-            list = []
+            list_ = []
             items = []
             jid = str(request.getTo())
             # Get specific jid based results
@@ -120,10 +120,10 @@ class Commands(PlugIn):
                 for each in items:
                     i = self._handlers[each[0]][each[1]]['disco'](conn,request,'list')
                     if i is not None:
-                        list.append(Node(tag='item',attrs={'jid':i[0],'node':i[1],'name':i[2]}))
+                        list_.append(Node(tag='item',attrs={'jid':i[0],'node':i[1],'name':i[2]}))
                 iq = request.buildReply('result')
                 if request.getQuerynode(): iq.setQuerynode(request.getQuerynode())
-                iq.setQueryPayload(list)
+                iq.setQueryPayload(list_)
                 conn.send(iq)
             else:
                 conn.send(Error(request,ERR_ITEM_NOT_FOUND))

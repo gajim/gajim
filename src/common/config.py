@@ -475,11 +475,11 @@ class Config:
 			cb(data, opt, None, self.__options[opt])
 		for opt in self.__options_per_key:
 			cb(data, opt, None, None)
-			dict = self.__options_per_key[opt][1]
-			for opt2 in dict.keys():
+			dict_ = self.__options_per_key[opt][1]
+			for opt2 in dict_.keys():
 				cb(data, opt2, [opt], None)
-				for opt3 in dict[opt2]:
-					cb(data, opt3, [opt, opt2], dict[opt2][opt3])
+				for opt3 in dict_[opt2]:
+					cb(data, opt3, [opt, opt2], dict_[opt2][opt3])
 
 	def get_children(self, node=None):
 		''' Tree-like interface '''
@@ -599,11 +599,11 @@ class Config:
 			return
 		if not key:
 			return
-		dict = self.__options_per_key[optname][1]
-		if key not in dict:
-#			raise RuntimeError, '%s is not a key of %s' % (key, dict)
+		dict_ = self.__options_per_key[optname][1]
+		if key not in dict_:
+#			raise RuntimeError, '%s is not a key of %s' % (key, dict_)
 			self.add_per(optname, key)
-		obj = dict[key]
+		obj = dict_[key]
 		if subname not in obj:
 #			raise RuntimeError, '%s is not a key of %s' % (subname, obj)
 			return
@@ -617,16 +617,16 @@ class Config:
 	def get_per(self, optname, key = None, subname = None): # per_group_of_option
 		if optname not in self.__options_per_key:
 			return None
-		dict = self.__options_per_key[optname][1]
+		dict_ = self.__options_per_key[optname][1]
 		if not key:
-			return dict.keys()
-		if key not in dict:
+			return dict_.keys()
+		if key not in dict_:
 			if optname in self.__options_per_key \
 			and subname in self.__options_per_key[optname][0]:
 				return self.__options_per_key \
 					[optname][0][subname][1]
 			return None
-		obj = dict[key]
+		obj = dict_[key]
 		if not subname:
 			return obj
 		if subname not in obj:
@@ -636,12 +636,12 @@ class Config:
 	def get_desc_per(self, optname, key = None, subname = None):
 		if optname not in self.__options_per_key:
 			return None
-		dict = self.__options_per_key[optname][1]
+		dict_ = self.__options_per_key[optname][1]
 		if not key:
 			return None
-		if key not in dict:
+		if key not in dict_:
 			return None
-		obj = dict[key]
+		obj = dict_[key]
 		if not subname:
 			return None
 		if subname not in obj:
@@ -653,12 +653,12 @@ class Config:
 	def get_restart_per(self, optname, key = None, subname = None):
 		if optname not in self.__options_per_key:
 			return False
-		dict = self.__options_per_key[optname][1]
+		dict_ = self.__options_per_key[optname][1]
 		if not key:
 			return False
-		if key not in dict:
+		if key not in dict_:
 			return False
-		obj = dict[key]
+		obj = dict_[key]
 		if not subname:
 			return False
 		if subname not in obj:

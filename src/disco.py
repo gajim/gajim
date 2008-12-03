@@ -35,9 +35,9 @@
 # - def default_action(self)
 # - def _find_item(self, jid, node)
 # - def _add_item(self, jid, node, item, force)
-# - def _update_item(self, iter, jid, node, item)
-# - def _update_info(self, iter, jid, node, identities, features, data)
-# - def _update_error(self, iter, jid, node)
+# - def _update_item(self, iter_, jid, node, item)
+# - def _update_info(self, iter_, jid, node, identities, features, data)
+# - def _update_error(self, iter_, jid, node)
 #
 # * Should call the super class for this method.
 # All others do not have to call back to the super class. (but can if they want
@@ -258,8 +258,8 @@ class ServicesCache:
 		# Grab the first identity with an icon
 		for identity in identities:
 			try:
-				cat, type = identity['category'], identity['type']
-				info = _agent_type_info[(cat, type)]
+				cat, type_ = identity['category'], identity['type']
+				info = _agent_type_info[(cat, type_)]
 			except KeyError:
 				continue
 			filename = info[1]
@@ -267,7 +267,6 @@ class ServicesCache:
 				break
 		else:
 			# Loop fell through, default to unknown
-			cat = type = 0
 			info = _agent_type_info[(0, 0)]
 			filename = info[1]
 		if not filename: # we don't have an image to show for this type
@@ -865,12 +864,12 @@ class AgentBrowser:
 	def on_browse_button_clicked(self, widget = None):
 		'''When we want to browse an agent:
 		Open a new services window with a browser for the agent type.'''
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if not iter:
+		model, iter_ = self.window.services_treeview.get_selection().get_selected()
+		if not iter_:
 			return
-		jid = model[iter][0].decode('utf-8')
+		jid = model[iter_][0].decode('utf-8')
 		if jid:
-			node = model[iter][1].decode('utf-8')
+			node = model[iter_][1].decode('utf-8')
 			self.window.open(jid, node)
 
 	def update_actions(self):
@@ -878,11 +877,11 @@ class AgentBrowser:
 		activate action buttons based on the agent's info.'''
 		if self.browse_button:
 			self.browse_button.set_sensitive(False)
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if not iter:
+		model, iter_ = self.window.services_treeview.get_selection().get_selected()
+		if not iter_:
 			return
-		jid = model[iter][0].decode('utf-8')
-		node = model[iter][1].decode('utf-8')
+		jid = model[iter_][0].decode('utf-8')
+		node = model[iter_][1].decode('utf-8')
 		if jid:
 			self.cache.get_info(jid, node, self._update_actions, nofetch = True)
 
@@ -897,11 +896,11 @@ class AgentBrowser:
 	def default_action(self):
 		'''When we double-click a row:
 		perform the default action on the selected item.'''
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if not iter:
+		model, iter_ = self.window.services_treeview.get_selection().get_selected()
+		if not iter_:
 			return
-		jid = model[iter][0].decode('utf-8')
-		node = model[iter][1].decode('utf-8')
+		jid = model[iter_][0].decode('utf-8')
+		node = model[iter_][1].decode('utf-8')
 		if jid:
 			self.cache.get_info(jid, node, self._default_action, nofetch = True)
 
@@ -932,15 +931,15 @@ class AgentBrowser:
 	def _find_item(self, jid, node):
 		'''Check if an item is already in the treeview. Return an iter to it
 		if so, None otherwise.'''
-		iter = self.model.get_iter_root()
-		while iter:
-			cjid = self.model.get_value(iter, 0).decode('utf-8')
-			cnode = self.model.get_value(iter, 1).decode('utf-8')
+		iter_ = self.model.get_iter_root()
+		while iter_:
+			cjid = self.model.get_value(iter_, 0).decode('utf-8')
+			cnode = self.model.get_value(iter_, 1).decode('utf-8')
 			if jid == cjid and node == cnode:
 				break
-			iter = self.model.iter_next(iter)
-		if iter:
-			return iter
+			iter_ = self.model.iter_next(iter_)
+		if iter_:
+			return iter_
 		return None
 
 	def _agent_items(self, jid, node, items, force):
@@ -971,16 +970,16 @@ _('This service does not contain any items to browse.'))
 
 	def _agent_info(self, jid, node, identities, features, data):
 		'''Callback for when we receive info about an agent's item.'''
-		iter = self._find_item(jid, node)
-		if not iter:
+		iter_ = self._find_item(jid, node)
+		if not iter_:
 			# Not in the treeview, stop
 			return
 		if identities == 0:
 			# The server returned an error
-			self._update_error(iter, jid, node)
+			self._update_error(iter_, jid, node)
 		else:
 			# We got our info
-			self._update_info(iter, jid, node, identities, features, data)
+			self._update_info(iter_, jid, node, identities, features, data)
 		self.update_actions()
 
 	def _add_item(self, jid, node, item, force):
@@ -1101,14 +1100,14 @@ class ToplevelAgentBrowser(AgentBrowser):
 				self.tooltip.hide_tooltip()
 		if props:
 			row = props[0]
-			iter = None
+			iter_ = None
 			try:
-				iter = self.model.get_iter(row)
+				iter_ = self.model.get_iter(row)
 			except Exception:
 				self.tooltip.hide_tooltip()
 				return
-			jid = self.model[iter][0]
-			state = self.model[iter][4]
+			jid = self.model[iter_][0]
+			state = self.model[iter_][4]
 			# Not a category, and we have something to say about state
 			if jid and state > 0 and \
 					(self.tooltip.timeout == 0 or self.tooltip.id != props[0]):
@@ -1235,10 +1234,10 @@ class ToplevelAgentBrowser(AgentBrowser):
 	def on_search_button_clicked(self, widget = None):
 		'''When we want to search something:
 		open search window'''
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if not iter:
+		model, iter_ = self.window.services_treeview.get_selection().get_selected()
+		if not iter_:
 			return
-		service = model[iter][0].decode('utf-8')
+		service = model[iter_][0].decode('utf-8')
 		if service in gajim.interface.instances[self.account]['search']:
 			gajim.interface.instances[self.account]['search'][service].present()
 		else:
@@ -1259,20 +1258,20 @@ class ToplevelAgentBrowser(AgentBrowser):
 	def on_execute_button_clicked(self, widget = None):
 		'''When we want to execute a command:
 		open adhoc command window'''
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if not iter:
+		model, iter_ = self.window.services_treeview.get_selection().get_selected()
+		if not iter_:
 			return
-		service = model[iter][0].decode('utf-8')
+		service = model[iter_][0].decode('utf-8')
 		adhoc_commands.CommandWindow(self.account, service)
 
 	def on_register_button_clicked(self, widget = None):
 		'''When we want to register an agent:
 		request information about registering with the agent and close the
 		window.'''
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if not iter:
+		model, iter_ = self.window.services_treeview.get_selection().get_selected()
+		if not iter_:
 			return
-		jid = model[iter][0].decode('utf-8')
+		jid = model[iter_][0].decode('utf-8')
 		if jid:
 			gajim.connections[self.account].request_register_agent_info(jid)
 			self.window.destroy(chain = True)
@@ -1280,10 +1279,10 @@ class ToplevelAgentBrowser(AgentBrowser):
 	def on_join_button_clicked(self, widget):
 		'''When we want to join an IRC room or create a new MUC room:
 		Opens the join_groupchat_window.'''
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if not iter:
+		model, iter_ = self.window.services_treeview.get_selection().get_selected()
+		if not iter_:
 			return
-		service = model[iter][0].decode('utf-8')
+		service = model[iter_][0].decode('utf-8')
 		if 'join_gc' not in gajim.interface.instances[self.account]:
 			try:
 				dialogs.JoinGroupchatWindow(self.account, service)
@@ -1304,25 +1303,25 @@ class ToplevelAgentBrowser(AgentBrowser):
 			self.join_button.set_sensitive(False)
 		if self.search_button:
 			self.search_button.set_sensitive(False)
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if not iter:
+		model, iter_ = self.window.services_treeview.get_selection().get_selected()
+		model, iter_ = self.window.services_treeview.get_selection().get_selected()
+		if not iter_:
 			return
-		if not model[iter][0]:
+		if not model[iter_][0]:
 			# We're on a category row
 			return
-		if model[iter][4] != 0:
+		if model[iter_][4] != 0:
 			# We don't have the info (yet)
 			# It's either unknown or a transport, register button should be active
 			if self.register_button:
 				self.register_button.set_sensitive(True)
 			# Guess what kind of service we're dealing with
 			if self.browse_button:
-				jid = model[iter][0].decode('utf-8')
-				type = gajim.get_transport_name_from_jid(jid,
+				jid = model[iter_][0].decode('utf-8')
+				type_ = gajim.get_transport_name_from_jid(jid,
 							use_config_setting = False)
-				if type:
-					identity = {'category': '_jid', 'type': type}
+				if type_:
+					identity = {'category': '_jid', 'type': type_}
 					klass = self.cache.get_browser([identity])
 					if klass:
 						self.browse_button.set_sensitive(True)
@@ -1393,13 +1392,13 @@ class ToplevelAgentBrowser(AgentBrowser):
 			fraction = float(self._progress) / float(self._total_items)
 			if self._progress >= self._total_items:
 				# We show the progressbar for just a bit before hiding it.
-				id = gobject.timeout_add_seconds(2, self._hide_progressbar_cb)
-				self._progressbar_sourceid = id
+				id_ = gobject.timeout_add_seconds(2, self._hide_progressbar_cb)
+				self._progressbar_sourceid = id_
 			else:
 				self.window.progressbar.show()
 				# Hide the progressbar if we're timing out anyways. (20 secs)
-				id = gobject.timeout_add_seconds(20, self._hide_progressbar_cb)
-				self._progressbar_sourceid = id
+				id_ = gobject.timeout_add_seconds(20, self._hide_progressbar_cb)
+				self._progressbar_sourceid = id_
 		self.window.progressbar.set_fraction(fraction)
 
 	def _hide_progressbar_cb(self, *args):
@@ -1432,29 +1431,29 @@ class ToplevelAgentBrowser(AgentBrowser):
 	def _find_category(self, cat, type_=None):
 		'''Looks up a category row and returns the iterator to it, or None.'''
 		cat = self._friendly_category(cat, type_)[0]
-		iter = self.model.get_iter_root()
-		while iter:
-			if self.model.get_value(iter, 3).decode('utf-8') == cat:
+		iter_ = self.model.get_iter_root()
+		while iter_:
+			if self.model.get_value(iter_, 3).decode('utf-8') == cat:
 				break
-			iter = self.model.iter_next(iter)
-		if iter:
-			return iter
+			iter_ = self.model.iter_next(iter_)
+		if iter_:
+			return iter_
 		return None
 
 	def _find_item(self, jid, node):
-		iter = None
+		iter_ = None
 		cat_iter = self.model.get_iter_root()
-		while cat_iter and not iter:
-			iter = self.model.iter_children(cat_iter)
-			while iter:
-				cjid = self.model.get_value(iter, 0).decode('utf-8')
-				cnode = self.model.get_value(iter, 1).decode('utf-8')
+		while cat_iter and not iter_:
+			iter_ = self.model.iter_children(cat_iter)
+			while iter_:
+				cjid = self.model.get_value(iter_, 0).decode('utf-8')
+				cnode = self.model.get_value(iter_, 1).decode('utf-8')
 				if jid == cjid and node == cnode:
 					break
-				iter = self.model.iter_next(iter)
+				iter_ = self.model.iter_next(iter_)
 			cat_iter = self.model.iter_next(cat_iter)
-		if iter:
-			return iter
+		if iter_:
+			return iter_
 		return None
 
 	def _add_item(self, jid, node, item, force):
@@ -1466,12 +1465,12 @@ class ToplevelAgentBrowser(AgentBrowser):
 			descr = "<b>%s</b>" % addr
 		# Guess which kind of service this is
 		identities = []
-		type = gajim.get_transport_name_from_jid(jid,
+		type_ = gajim.get_transport_name_from_jid(jid,
 					use_config_setting = False)
-		if type:
-			identity = {'category': '_jid', 'type': type}
+		if type_:
+			identity = {'category': '_jid', 'type': type_}
 			identities.append(identity)
-			cat_args = ('_jid', type)
+			cat_args = ('_jid', type_)
 		else:
 			# Put it in the 'other' category for now
 			cat_args = ('other',)
@@ -1511,7 +1510,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 		pix = self.cache.get_icon(identities)
 		for identity in identities:
 			try:
-				cat, type = identity['category'], identity['type']
+				cat, type_ = identity['category'], identity['type']
 			except KeyError:
 				continue
 			break
@@ -1534,9 +1533,9 @@ class ToplevelAgentBrowser(AgentBrowser):
 		if not self.model.iter_children(old_cat_iter):
 			self.model.remove(old_cat_iter)
 
-		cat_iter = self._find_category(cat, type)
+		cat_iter = self._find_category(cat, type_)
 		if not cat_iter:
-			cat_iter = self._create_category(cat, type)
+			cat_iter = self._create_category(cat, type_)
 		self.model.append(cat_iter, (jid, node, pix, descr, 0))
 		self._expand_all()
 
@@ -1628,11 +1627,11 @@ class MucBrowser(AgentBrowser):
 	def on_join_button_clicked(self, *args):
 		'''When we want to join a conference:
 		Ask specific informations about the selected agent and close the window'''
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if not iter:
+		model, iter_ = self.window.services_treeview.get_selection().get_selected()
+		if not iter_:
 			return
-		service = model[iter][0].decode('utf-8')
-		room = model[iter][1].decode('utf-8')
+		service = model[iter_][0].decode('utf-8')
+		room = model[iter_][1].decode('utf-8')
 		if 'join_gc' not in gajim.interface.instances[self.account]:
 			try:
 				dialogs.JoinGroupchatWindow(self.account, service)
@@ -1674,12 +1673,12 @@ class MucBrowser(AgentBrowser):
 		# We have to do this in a pygtk <2.8 compatible way :/
 		#start, end = self.window.services_treeview.get_visible_range()
 		rect = view.get_visible_rect()
-		iter = end = None
+		iter_ = end = None
 		# Top row
 		try:
 			sx, sy = view.tree_to_widget_coords(rect.x, rect.y)
 			spath = view.get_path_at_pos(sx, sy)[0]
-			iter = self.model.get_iter(spath)
+			iter_ = self.model.get_iter(spath)
 		except TypeError:
 			self._fetch_source = None
 			return
@@ -1694,14 +1693,14 @@ class MucBrowser(AgentBrowser):
 		except TypeError:
 			# We're at the end of the model, we can leave end=None though.
 			pass
-		while iter and self.model.get_path(iter) != end:
-			if not self.model.get_value(iter, 6):
-				jid = self.model.get_value(iter, 0).decode('utf-8')
-				node = self.model.get_value(iter, 1).decode('utf-8')
+		while iter_ and self.model.get_path(iter_) != end:
+			if not self.model.get_value(iter_, 6):
+				jid = self.model.get_value(iter_, 0).decode('utf-8')
+				node = self.model.get_value(iter_, 1).decode('utf-8')
 				self.cache.get_info(jid, node, self._agent_info)
 				self._fetch_source = True
 				return
-			iter = self.model.iter_next(iter)
+			iter_ = self.model.iter_next(iter_)
 		self._fetch_source = None
 
 	def _channel_altinfo(self, jid, node, items, name = None):
@@ -1722,13 +1721,13 @@ class MucBrowser(AgentBrowser):
 				self._fetch_source = None
 				return
 		else:
-			iter = self._find_item(jid, node)
-			if iter:
+			iter_ = self._find_item(jid, node)
+			if iter_:
 				if name:
-					self.model[iter][2] = name
-				self.model[iter][3] = len(items) # The number of users
-				self.model[iter][4] = str(len(items)) # The number of users
-				self.model[iter][6] = True
+					self.model[iter_][2] = name
+				self.model[iter_][3] = len(items) # The number of users
+				self.model[iter_][4] = str(len(items)) # The number of users
+				self.model[iter_][6] = True
 		self._fetch_source = None
 		self._query_visible()
 
@@ -1916,42 +1915,42 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		# we have nothing to do if we don't have buttons...
 		if self.subscribe_button is None: return
 
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if not iter or self.subscriptions is None:
+		model, iter_ = self.window.services_treeview.get_selection().get_selected()
+		if not iter_ or self.subscriptions is None:
 			# no item selected or no subscriptions info, all buttons are insensitive
 			self.post_button.set_sensitive(False)
 			self.subscribe_button.set_sensitive(False)
 			self.unsubscribe_button.set_sensitive(False)
 		else:
-			subscribed = model.get_value(iter, 4) # 4 = subscribed?
+			subscribed = model.get_value(iter_, 4) # 4 = subscribed?
 			self.post_button.set_sensitive(subscribed)
 			self.subscribe_button.set_sensitive(not subscribed)
 			self.unsubscribe_button.set_sensitive(subscribed)
 
 	def on_post_button_clicked(self, widget):
 		'''Called when 'post' button is pressed. Open window to create post'''
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if iter is None: return
+		model, iter_ = self.window.services_treeview.get_selection().get_selected()
+		if iter_ is None: return
 
-		groupnode = model.get_value(iter, 1)	# 1 = groupnode
+		groupnode = model.get_value(iter_, 1)	# 1 = groupnode
 
 		groups.GroupsPostWindow(self.account, self.jid, groupnode)
 
 	def on_subscribe_button_clicked(self, widget):
 		'''Called when 'subscribe' button is pressed. Send subscribtion request.'''
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if iter is None: return
+		model, iter_ = self.window.services_treeview.get_selection().get_selected()
+		if iter_ is None: return
 
-		groupnode = model.get_value(iter, 1)	# 1 = groupnode
+		groupnode = model.get_value(iter_, 1)	# 1 = groupnode
 
 		gajim.connections[self.account].send_pb_subscribe(self.jid, groupnode, self._subscribeCB, groupnode)
 		
 	def on_unsubscribe_button_clicked(self, widget):
 		'''Called when 'unsubscribe' button is pressed. Send unsubscription request.'''
-		model, iter = self.window.services_treeview.get_selection().get_selected()
-		if iter is None: return
+		model, iter_ = self.window.services_treeview.get_selection().get_selected()
+		if iter_ is None: return
 
-		groupnode = model.get_value(iter, 1) # 1 = groupnode
+		groupnode = model.get_value(iter_, 1) # 1 = groupnode
 		
 		gajim.connections[self.account].send_pb_unsubscribe(self.jid, groupnode, self._unsubscribeCB, groupnode)
 

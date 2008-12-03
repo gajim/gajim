@@ -96,17 +96,17 @@ class SearchWindow:
 		self.search_button.hide()
 
 	def on_add_contact_button_clicked(self, widget):
-		(model, iter) = self.result_treeview.get_selection().get_selected()
-		if not iter:
+		(model, iter_) = self.result_treeview.get_selection().get_selected()
+		if not iter_:
 			return
-		jid = model[iter][self.jid_column]
+		jid = model[iter_][self.jid_column]
 		dialogs.AddNewContactWindow(self.account, jid)
 	
 	def on_information_button_clicked(self, widget):
-		(model, iter) = self.result_treeview.get_selection().get_selected()
-		if not iter:
+		(model, iter_) = self.result_treeview.get_selection().get_selected()
+		if not iter_:
 			return
-		jid = model[iter][self.jid_column]
+		jid = model[iter_][self.jid_column]
 		if jid in gajim.interface.instances[self.account]['infos']:
 			gajim.interface.instances[self.account]['infos'][jid].window.present()
 		else:
@@ -146,10 +146,10 @@ class SearchWindow:
 	def on_result_treeview_cursor_changed(self, treeview):
 		if self.jid_column == -1:
 			return
-		(model, iter) = treeview.get_selection().get_selected()
-		if not iter:
+		(model, iter_) = treeview.get_selection().get_selected()
+		if not iter_:
 			return
-		if model[iter][self.jid_column]:
+		if model[iter_][self.jid_column]:
 			self.add_contact_button.set_sensitive(True)
 			self.information_button.set_sensitive(True)
 		else:

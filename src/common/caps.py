@@ -103,6 +103,7 @@ class CapsCache(object):
 
 			def _get_features(ciself):
 				return ciself._features
+
 			def _set_features(ciself, value):
 				ciself._features = []
 				for feature in value:
@@ -128,7 +129,8 @@ class CapsCache(object):
 				ciself._identities = []
 				for identity in value:
 					# dict are not hashable, so transform it into a tuple
-					t = (identity['category'], identity.get('type'), identity.get('xml:lang'), identity.get('name'))
+					t = (identity['category'], identity.get('type'),
+						identity.get('xml:lang'), identity.get('name'))
 					ciself._identities.append(ciself.__names.setdefault(t, t))
 			identities = property(_get_identities, _set_identities)
 
@@ -155,9 +157,9 @@ class CapsCache(object):
 	def load_from_db(self):
 		# get data from logger...
 		if self.logger is not None:
-			for hash_method, hash, identities, features in \
+			for hash_method, hash_, identities, features in \
 			self.logger.iter_caps_data():
-				x = self[(hash_method, hash)]
+				x = self[(hash_method, hash_)]
 				x.identities = identities
 				x.features = features
 				x.queried = 2
@@ -166,10 +168,10 @@ class CapsCache(object):
 		if caps in self.__cache:
 			return self.__cache[caps]
 
-		hash_method, hash = caps
+		hash_method, hash_ = caps
 
-		x = self.__CacheItem(hash_method, hash)
-		self.__cache[(hash_method, hash)] = x
+		x = self.__CacheItem(hash_method, hash_)
+		self.__cache[(hash_method, hash_)] = x
 		return x
 
 	def preload(self, con, jid, node, hash_method, hash_):
@@ -247,13 +249,13 @@ class ConnectionCaps(object):
 			contact.caps_hash_method = None
 			return
 
-		hash_method, node, hash = caps['hash'], caps['node'], caps['ver']
+		hash_method, node, hash_ = caps['hash'], caps['node'], caps['ver']
 
-		if hash_method is None and node and hash:
+		if hash_method is None and node and hash_:
 			# Old XEP-115 implentation
 			hash_method = 'old'
 
-		if hash_method is None or node is None or hash is None:
+		if hash_method is None or node is None or hash_ is None:
 			# improper caps in stanza, ignoring
 			contact.caps_node = None
 			contact.caps_hash = None
@@ -261,12 +263,12 @@ class ConnectionCaps(object):
 			return
 
 		# start disco query...
-		gajim.capscache.preload(self, jid, node, hash_method, hash)
+		gajim.capscache.preload(self, jid, node, hash_method, hash_)
 
 		# overwriting old data
 		contact.caps_node = node
 		contact.caps_hash_method = hash_method
-		contact.caps_hash = hash
+		contact.caps_hash = hash_
 		if pm_ctrl:
 			pm_ctrl.update_contact()
 

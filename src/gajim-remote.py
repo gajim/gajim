@@ -387,54 +387,41 @@ class GajimRemote:
 	def make_arguments_row(self, args):
 		''' return arguments list. Mandatory arguments are enclosed with:
 		'<', '>', optional arguments - with '[', ']' '''
-		str = ''
-		for argument in args:
-			str += ' '
-			if argument[2]:
-				str += '<'
+		s = ''
+		for arg in args:
+			if arg[2]:
+				s += ' <' + arg[0] + '>'
 			else:
-				str += '['
-			str += argument[0]
-			if argument[2]:
-				str += '>'
-			else:
-				str += ']'
-		return str
+				s += ' [' + arg[0] + ']'
+		return s
 
 	def help_on_command(self, command):
 		''' return help message for a given command '''
 		if command in self.commands:
 			command_props = self.commands[command]
 			arguments_str = self.make_arguments_row(command_props[1])
-			str = _('Usage: %(basename)s %(command)s %(arguments)s \n\t %(help)s')\
+			str_ = _('Usage: %(basename)s %(command)s %(arguments)s \n\t %(help)s')\
 				% {'basename': BASENAME, 'command': command,
 				'arguments': arguments_str, 'help': command_props[0]}
 			if len(command_props[1]) > 0:
-				str += '\n\n' + _('Arguments:') + '\n'
+				str_ += '\n\n' + _('Arguments:') + '\n'
 				for argument in command_props[1]:
-					str += ' ' +  argument[0] + ' - ' + argument[1] + '\n'
-			return str
+					str_ += ' ' +  argument[0] + ' - ' + argument[1] + '\n'
+			return str_
 		send_error(_('%s not found') % command)
 
 	def compose_help(self):
 		''' print usage, and list available commands '''
-		str = _('Usage: %s command [arguments]\nCommand is one of:\n' ) % BASENAME
-		commands = sorted(self.commands.keys())
-		for command in commands:
-			str += '  ' + command
-			for argument in self.commands[command][1]:
-				str += ' '
-				if argument[2]:
-					str += '<'
+		s = _('Usage: %s command [arguments]\nCommand is one of:\n' ) % BASENAME
+		for command in sorted(self.commands):
+			s += '  ' + command
+			for arg in self.commands[command][1]:
+				if arg[2]:
+					s += ' <' + arg[0] + '>'
 				else:
-					str += '['
-				str += argument[0]
-				if argument[2]:
-					str += '>'
-				else:
-					str += ']'
-			str += '\n'
-		return str
+					s += ' [' + arg[0] + ']'
+			s += '\n'
+		return s
 
 	def print_info(self, level, prop_dict, encode_return = False):
 		''' return formated string from data structure '''

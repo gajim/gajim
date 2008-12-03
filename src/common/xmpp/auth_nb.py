@@ -48,16 +48,17 @@ def challenge_splitter(data):
 	X_KEYWORD, X_VALUE, X_END = 0, 1, 2
 	quotes_open = False
 	keyword, value = '', ''
-	dict, arr = {}, None
+	dict_ = {}
+	arr = None
 	
 	expecting = X_KEYWORD
-	for iter in range(len(data) + 1):
+	for iter_ in range(len(data) + 1):
 		end = False
-		if iter == len(data):
+		if iter_ == len(data):
 			expecting = X_END
 			end = True
 		else:
-			char = data[iter]
+			char = data[iter_]
 		if expecting == X_KEYWORD:
 			if char == '=':
 				expecting  = X_VALUE
@@ -85,14 +86,14 @@ def challenge_splitter(data):
 		if end:
 			if arr:
 				arr.append(value)
-				dict[keyword] = arr
+				dict_[keyword] = arr
 				arr = None
 			else:
-				dict[keyword] = value
+				dict_[keyword] = value
 			value, keyword = '', ''
 			expecting = X_KEYWORD
 			quotes_open = False
-	return dict
+	return dict_
 
 class SASL(PlugIn):
 	''' Implements SASL authentication. '''
@@ -321,8 +322,8 @@ class NonBlockingNonSASL(PlugIn):
 			def hash_n_times(s, count):
 				return count and hasher(hash_n_times(s, count-1)) or s
 
-			hash = hash_n_times(hasher(hasher(self.password) + token), int(seq))
-			query.setTagData('hash',hash)
+			hash_ = hash_n_times(hasher(hasher(self.password) + token), int(seq))
+			query.setTagData('hash', hash_)
 			self._method='0k'
 		else:
 			self.DEBUG("Sequre methods unsupported, performing plain text authentication",'warn')

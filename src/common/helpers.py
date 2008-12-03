@@ -1241,20 +1241,19 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 		if form_type:
 			S += form_type.getValue() + '<'
 			del fields['FORM_TYPE']
-		vars = sorted(fields.keys())
-		for var in vars:
+		for var in sorted(fields.keys()):
 			S += '%s<' % var
 			values = sorted(fields[var].getValues())
 			for value in values:
 				S += '%s<' % value
 
 	if hash_method == 'sha-1':
-		hash = hash_sha1(S)
+		hash_ = hash_sha1(S)
 	elif hash_method == 'md5':
-		hash = hash_md5(S)
+		hash_ = hash_md5(S)
 	else:
 		return ''
-	return base64.b64encode(hash.digest())
+	return base64.b64encode(hash_.digest())
 
 def update_optional_features(account = None):
 	if account:

@@ -212,7 +212,7 @@ class Browser(PlugIn):
                 raise NodeProcessed
             # handler must return dictionary:
             # {'ids':[{},{},{},{}], 'features':[fe,at,ur,es], 'xdata':DataForm}
-            for id in dt['ids']: q.addChild('identity',id)
+            for id_ in dt['ids']: q.addChild('identity',id_)
             for feature in dt['features']: q.addChild('feature',{'var':feature})
             if 'xdata' in dt: q.addChild(node=dt['xdata'])
         conn.send(rep)

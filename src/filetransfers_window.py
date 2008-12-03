@@ -395,17 +395,17 @@ _('Connection with peer cannot be established.'))
 
 	def set_status(self, typ, sid, status):
 		''' change the status of a transfer to state 'status' '''
-		iter = self.get_iter_by_sid(typ, sid)
-		if iter is None:
+		iter_ = self.get_iter_by_sid(typ, sid)
+		if iter_ is None:
 			return
-		sid = self.model[iter][C_SID].decode('utf-8')
+		sid = self.model[iter_][C_SID].decode('utf-8')
 		file_props = self.files_props[sid[0]][sid[1:]]
 		if status == 'stop':
 			file_props['stopped'] = True
 		elif status == 'ok':
 			file_props['completed'] = True
-		self.model.set(iter, C_IMAGE, self.get_icon(status))
-		path = self.model.get_path(iter)
+		self.model.set(iter_, C_IMAGE, self.get_icon(status))
+		path = self.model.get_path(iter_)
 		self.select_func(path)
 
 	def _format_percent(self, percent):
@@ -548,11 +548,11 @@ _('Connection with peer cannot be established.'))
 	def get_iter_by_sid(self, typ, sid):
 		'''returns iter to the row, which holds file transfer, identified by the
 		session id'''
-		iter = self.model.get_iter_root()
-		while iter:
-			if typ + sid == self.model[iter][C_SID].decode('utf-8'):
-				return iter
-			iter = self.model.iter_next(iter)
+		iter_ = self.model.get_iter_root()
+		while iter_:
+			if typ + sid == self.model[iter_][C_SID].decode('utf-8'):
+				return iter_
+			iter_ = self.model.iter_next(iter_)
 
 	def get_send_file_props(self, account, contact, file_path, file_name,
 	file_desc=''):
@@ -588,7 +588,7 @@ _('Connection with peer cannot be established.'))
 			return
 		file_props['elapsed-time'] = 0
 		self.files_props[file_props['type']][file_props['sid']] = file_props
-		iter = self.model.append()
+		iter_ = self.model.append()
 		text_labels = '<b>' + _('Name: ') + '</b>\n' 
 		if file_props['type'] == 'r':
 			text_labels += '<b>' + _('Sender: ') + '</b>' 
@@ -601,9 +601,9 @@ _('Connection with peer cannot be established.'))
 			file_name = file_props['name']
 		text_props = gobject.markup_escape_text(file_name) + '\n'
 		text_props += contact.get_shown_name()
-		self.model.set(iter, 1, text_labels, 2, text_props, C_SID,
+		self.model.set(iter_, 1, text_labels, 2, text_props, C_SID,
 			file_props['type'] + file_props['sid'])
-		self.set_progress(file_props['type'], file_props['sid'], 0, iter)
+		self.set_progress(file_props['type'], file_props['sid'], 0, iter_)
 		if 'started' in file_props and file_props['started'] is False:
 			status = 'waiting'
 		elif file_props['type'] == 'r':
@@ -624,13 +624,13 @@ _('Connection with peer cannot be established.'))
 				self.tooltip.hide_tooltip()
 		if props:
 			row = props[0]
-			iter = None
+			iter_ = None
 			try:
-				iter = self.model.get_iter(row)
+				iter_ = self.model.get_iter(row)
 			except Exception:
 				self.tooltip.hide_tooltip()
 				return
-			sid = self.model[iter][C_SID].decode('utf-8')
+			sid = self.model[iter_][C_SID].decode('utf-8')
 			file_props = self.files_props[sid[0]][sid[1:]]
 			if file_props is not None:
 				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
@@ -767,11 +767,11 @@ _('Connection with peer cannot be established.'))
 	def on_cleanup_button_clicked(self, widget):
 		i = len(self.model) - 1
 		while i >= 0:
-			iter = self.model.get_iter((i))
-			sid = self.model[iter][C_SID].decode('utf-8')
+			iter_ = self.model.get_iter((i))
+			sid = self.model[iter_][C_SID].decode('utf-8')
 			file_props = self.files_props[sid[0]][sid[1:]]
 			if self.is_transfer_stopped(file_props):
-				self._remove_transfer(iter, sid, file_props)
+				self._remove_transfer(iter_, sid, file_props)
 			i -= 1
 		self.tree.get_selection().unselect_all()
 		self.set_all_insensitive()
@@ -844,8 +844,8 @@ _('Connection with peer cannot be established.'))
 		# check if the current pointer is at the same path
 		# as it was before setting the timeout
 		if props and self.tooltip.id == props[0]:
-			iter = self.model.get_iter(props[0])
-			sid = self.model[iter][C_SID].decode('utf-8')
+			iter_ = self.model.get_iter(props[0])
+			sid = self.model[iter_][C_SID].decode('utf-8')
 			file_props = self.files_props[sid[0]][sid[1:]]
 			# bounding rectangle of coordinates for the cell within the treeview
 			rect =  self.tree.get_cell_area(props[0],props[1])
@@ -883,18 +883,18 @@ _('Connection with peer cannot be established.'))
 	def on_transfers_list_key_press_event(self, widget, event):
 		'''when a key is pressed in the treeviews'''
 		self.tooltip.hide_tooltip()
-		iter = None
+		iter_ = None
 		try:
-			iter = self.tree.get_selection().get_selected()[1]
+			iter_ = self.tree.get_selection().get_selected()[1]
 		except TypeError:
 			self.tree.get_selection().unselect_all()
 
-		if iter is not None:
-			path = self.model.get_path(iter)
+		if iter_ is not None:
+			path = self.model.get_path(iter_)
 			self.tree.get_selection().select_path(path)
 
 		if event.keyval == gtk.keysyms.Menu:
-			self.show_context_menu(event, iter)
+			self.show_context_menu(event, iter_)
 			return True
 
 
@@ -914,7 +914,7 @@ _('Connection with peer cannot be established.'))
 	def on_transfers_list_button_press_event(self, widget, event):
 		# hide tooltip, no matter the button is pressed
 		self.tooltip.hide_tooltip()
-		path, iter = None, None
+		path, iter_ = None, None
 		try:
 			path = self.tree.get_path_at_pos(int(event.x), int(event.y))[0]
 		except TypeError:
@@ -922,8 +922,8 @@ _('Connection with peer cannot be established.'))
 		if event.button == 3: # Right click
 			if path is not None:
 				self.tree.get_selection().select_path(path)
-				iter = self.model.get_iter(path)
-			self.show_context_menu(event, iter)
+				iter_ = self.model.get_iter(path)
+			self.show_context_menu(event, iter_)
 			if path is not None:
 				return True
 

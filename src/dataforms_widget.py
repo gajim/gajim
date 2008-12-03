@@ -164,9 +164,9 @@ class DataFormWidget(gtk.Alignment, object):
 
 		# moving all data to model
 		for item in self._data_form.iter_records():
-			iter = self.multiplemodel.append()
+			iter_ = self.multiplemodel.append()
 			for field in item.iter_fields():
-				self.multiplemodel.set_value(iter, fieldvars.index(field.var),
+				self.multiplemodel.set_value(iter_, fieldvars.index(field.var),
 					field.value)
 
 		# constructing columns...
@@ -214,8 +214,8 @@ class DataFormWidget(gtk.Alignment, object):
 			self.remove_button.set_sensitive(True)
 			self.edit_button.set_sensitive(True)
 			_, (path,) = selection.get_selected_rows()
-			iter = model.get_iter(path)
-			if model.iter_next(iter) is None:
+			iter_ = model.get_iter(path)
+			if model.iter_next(iter_) is None:
 				self.up_button.set_sensitive(True)
 				self.down_button.set_sensitive(False)
 			elif path == (0, ):
@@ -252,19 +252,19 @@ class DataFormWidget(gtk.Alignment, object):
 	def on_up_button_clicked(self, widget):
 		selection = self.records_treeview.get_selection()
 		model, (path,) = selection.get_selected_rows()
-		iter = model.get_iter(path)
+		iter_ = model.get_iter(path)
 		# constructing path for previous iter
 		previter = model.get_iter((path[0]-1,))
-		model.swap(iter, previter)
+		model.swap(iter_, previter)
 
 		self.refresh_multiple_buttons()
 
 	def on_down_button_clicked(self, widget):
 		selection = self.records_treeview.get_selection()
 		model, (path,) = selection.get_selected_rows()
-		iter = model.get_iter(path)
-		nextiter = model.iter_next(iter)
-		model.swap(iter, nextiter)
+		iter_ = model.get_iter(path)
+		nextiter = model.iter_next(iter_)
+		model.swap(iter_, nextiter)
 
 		self.refresh_multiple_buttons()
 
@@ -356,10 +356,10 @@ class SingleForm(gtk.Table, object):
 				else:
 					# more than 5 options: show combobox
 					def on_list_single_combobox_changed(combobox, f):
-						iter = combobox.get_active_iter()
-						if iter:
+						iter_ = combobox.get_active_iter()
+						if iter_:
 							model = combobox.get_model()
-							f.value = model[iter][1]
+							f.value = model[iter_][1]
 						else:
 							f.value = ''
 					widget = gtkgui_helpers.create_combobox(field.options,
@@ -555,15 +555,15 @@ class SingleForm(gtk.Table, object):
 			while _('new%d@jabber.id') % i in field.values:
 				i += 1
 			jid = _('new%d@jabber.id') % i
-		iter = model.insert(999999, (jid,))
-		treeview.set_cursor(model.get_path(iter), treeview.get_column(0), True)
+		iter_ = model.insert(999999, (jid,))
+		treeview.set_cursor(model.get_path(iter_), treeview.get_column(0), True)
 		field.values = field.values + [jid]
 
 	def on_jid_multi_edit_button_clicked(self, widget, treeview):
-		model, iter = treeview.get_selection().get_selected()
-		assert iter is not None
+		model, iter_ = treeview.get_selection().get_selected()
+		assert iter_ is not None
 
-		treeview.set_cursor(model.get_path(iter), treeview.get_column(0), True)
+		treeview.set_cursor(model.get_path(iter_), treeview.get_column(0), True)
 
 	def on_jid_multi_remove_button_clicked(self, widget, treeview, field):
 		selection = treeview.get_selection()

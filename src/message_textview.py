@@ -289,9 +289,9 @@ class MessageTextView(gtk.TextView):
 
 	def clear(self, widget = None):
 		'''clear text in the textview'''
-		buffer = self.get_buffer()
-		start, end = buffer.get_bounds()
-		buffer.delete(start, end)
+		buffer_ = self.get_buffer()
+		start, end = buffer_.get_bounds()
+		buffer_.delete(start, end)
 
 
 # We register depending on keysym and modifier some bindings

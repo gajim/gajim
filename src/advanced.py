@@ -162,10 +162,10 @@ class AdvancedConfigurationWindow(object):
 		return path
 
 	def on_advanced_treeview_selection_changed(self, treeselection):
-		model, iter = treeselection.get_selected()
+		model, iter_ = treeselection.get_selected()
 		# Check for GtkTreeIter
-		if iter:
-			opt_path = self.get_option_path(model, iter)
+		if iter_:
+			opt_path = self.get_option_path(model, iter_)
 			# Get text from first column in this row
 			desc = None
 			if len(opt_path) == 3:

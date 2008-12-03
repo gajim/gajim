@@ -36,9 +36,9 @@ class ConnectionPubSub:
 		pb = query.addChild('pubsub', {'xmlns': xmpp.NS_PUBSUB})
 		pb.addChild('subscriptions')
 
-		id = self.connection.send(query)
+		id_ = self.connection.send(query)
 
-		self.__callbacks[id]=(cb, args, kwargs)
+		self.__callbacks[id_]=(cb, args, kwargs)
 
 	def send_pb_subscribe(self, jid, node, cb, *args, **kwargs):
 		if not self.connection or self.connected < 2:
@@ -48,9 +48,9 @@ class ConnectionPubSub:
 		pb = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
 		pb.addChild('subscribe', {'node': node, 'jid': our_jid})
 
-		id = self.connection.send(query)
+		id_ = self.connection.send(query)
 
-		self.__callbacks[id]=(cb, args, kwargs)
+		self.__callbacks[id_]=(cb, args, kwargs)
 
 	def send_pb_unsubscribe(self, jid, node, cb, *args, **kwargs):
 		if not self.connection or self.connected < 2:
@@ -60,9 +60,9 @@ class ConnectionPubSub:
 		pb = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
 		pb.addChild('unsubscribe', {'node': node, 'jid': our_jid})
 
-		id = self.connection.send(query)
+		id_ = self.connection.send(query)
 
-		self.__callbacks[id]=(cb, args, kwargs)
+		self.__callbacks[id_]=(cb, args, kwargs)
 
 	def send_pb_publish(self, jid, node, item, id_):
 		'''Publish item to a node.'''
@@ -141,9 +141,9 @@ class ConnectionPubSub:
 		query = xmpp.Iq('get', to=jid)
 		e = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB_OWNER)
 		e = e.addChild('configure', {'node': node})
-		id = self.connection.getAnID()
-		query.setID(id)
-		self.awaiting_answers[id] = (connection_handlers.PEP_CONFIG,)
+		id_ = self.connection.getAnID()
+		query.setID(id_)
+		self.awaiting_answers[id_] = (connection_handlers.PEP_CONFIG,)
 		self.connection.send(query)
 
 # vim: se ts=3:

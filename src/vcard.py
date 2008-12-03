@@ -118,8 +118,8 @@ class VcardWindow:
 		self.fill_jabber_page()
 		annotations = gajim.connections[self.account].annotations
 		if self.contact.jid in annotations:
-			buffer = self.xml.get_widget('textview_annotation').get_buffer()
-			buffer.set_text(annotations[self.contact.jid])
+			buffer_ = self.xml.get_widget('textview_annotation').get_buffer()
+			buffer_.set_text(annotations[self.contact.jid])
 
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -133,9 +133,9 @@ class VcardWindow:
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 		del gajim.interface.instances[self.account]['infos'][self.contact.jid]
-		buffer = self.xml.get_widget('textview_annotation').get_buffer()
-		annotation = buffer.get_text(buffer.get_start_iter(),
-			buffer.get_end_iter())
+		buffer_ = self.xml.get_widget('textview_annotation').get_buffer()
+		annotation = buffer_.get_text(buffer_.get_start_iter(),
+			buffer_.get_end_iter())
 		connection = gajim.connections[self.account]
 		if annotation != connection.annotations.get(self.contact.jid, ''):
 			connection.annotations[self.contact.jid] = annotation

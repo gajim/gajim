@@ -159,7 +159,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 	def _bytestreamSetCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamSetCB')
 		target = unicode(iq_obj.getAttr('to'))
-		id = unicode(iq_obj.getAttr('id'))
+		id_ = unicode(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
 		sid = unicode(query.getAttr('sid'))
 		file_props = gajim.socks5queue.get_file_props(
@@ -170,7 +170,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 				host_dict={
 					'state': 0,
 					'target': target,
-					'id': id,
+					'id': id_,
 					'sid': sid,
 					'initiator': unicode(iq_obj.getFrom())
 				}
@@ -206,9 +206,9 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		if not real_id.startswith('au_'):
 			return
 		frm = unicode(iq_obj.getFrom())
-		id = real_id[3:]
-		if id in self.files_props:
-			file_props = self.files_props[id]
+		id_ = real_id[3:]
+		if id_ in self.files_props:
+			file_props = self.files_props[id_]
 			if file_props['streamhost-used']:
 				for host in file_props['proxyhosts']:
 					if host['initiator'] == frm and 'idx' in host:
@@ -226,15 +226,15 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 			streamhost =  query.getTag('streamhost-used')
 		except Exception: # this bytestream result is not what we need
 			pass
-		id = real_id[3:]
-		if id in self.files_props:
-			file_props = self.files_props[id]
+		id_ = real_id[3:]
+		if id_ in self.files_props:
+			file_props = self.files_props[id_]
 		else:
 			raise common.xmpp.NodeProcessed
 		if streamhost is None:
 			# proxy approves the activate query
 			if real_id.startswith('au_'):
-				id = real_id[3:]
+				id_ = real_id[3:]
 				if 'streamhost-used' not in file_props or \
 					file_props['streamhost-used'] is False:
 					raise common.xmpp.NodeProcessed
@@ -286,11 +286,11 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 	def _siResultCB(self, con, iq_obj):
 		gajim.log.debug('_siResultCB')
 		self.peerhost = con._owner.Connection._sock.getsockname()
-		id = iq_obj.getAttr('id')
-		if id not in self.files_props:
+		id_ = iq_obj.getAttr('id')
+		if id_ not in self.files_props:
 			# no such jid
 			return
-		file_props = self.files_props[id]
+		file_props = self.files_props[id_]
 		if file_props is None:
 			# file properties for jid is none
 			return
@@ -359,11 +359,11 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		profile = si.getAttr('profile')
 		if profile != common.xmpp.NS_FILE:
 			return
-		id = iq_obj.getAttr('id')
-		if id not in self.files_props:
+		id_ = iq_obj.getAttr('id')
+		if id_ not in self.files_props:
 			# no such jid
 			return
-		file_props = self.files_props[id]
+		file_props = self.files_props[id_]
 		if file_props is None:
 			# file properties for jid is none
 			return

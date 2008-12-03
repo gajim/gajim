@@ -177,31 +177,31 @@ def getPrivacyLists(disp):
 		Returns dictionary of existing lists on success."""
 	iq = Iq('get', NS_PRIVACY)
 	def _on_response(resp):
-		dict = {'lists': []}
+		dict_ = {'lists': []}
 		if not isResultNode(resp):
 			disp.Event(NS_PRIVACY, PRIVACY_LISTS_RECEIVED, (False))
 			return
-		for list in resp.getQueryPayload():
-			if list.getName()=='list':
-				dict['lists'].append(list.getAttr('name'))
+		for list_ in resp.getQueryPayload():
+			if list_.getName()=='list':
+				dict_['lists'].append(list_.getAttr('name'))
 			else:
-				dict[list.getName()]=list.getAttr('name')
-		disp.Event(NS_PRIVACY, PRIVACY_LISTS_RECEIVED, (dict))
+				dict_[list_.getName()]=list_.getAttr('name')
+		disp.Event(NS_PRIVACY, PRIVACY_LISTS_RECEIVED, (dict_))
 	disp.SendAndCallForResponse(iq, _on_response)
 
 def getActiveAndDefaultPrivacyLists(disp):
 	iq = Iq('get', NS_PRIVACY)
 	def _on_response(resp):
-		dict = {'active': '', 'default': ''}
+		dict_ = {'active': '', 'default': ''}
 		if not isResultNode(resp):
 			disp.Event(NS_PRIVACY, PRIVACY_LISTS_ACTIVE_DEFAULT, (False))
 			return
-		for list in resp.getQueryPayload():
-			if list.getName() == 'active':
-				dict['active'] = list.getAttr('name')
-			elif list.getName() == 'default':
-				dict['default'] = list.getAttr('name')
-		disp.Event(NS_PRIVACY, PRIVACY_LISTS_ACTIVE_DEFAULT, (dict))
+		for list_ in resp.getQueryPayload():
+			if list_.getName() == 'active':
+				dict_['active'] = list_.getAttr('name')
+			elif list_.getName() == 'default':
+				dict_['default'] = list_.getAttr('name')
+		disp.Event(NS_PRIVACY, PRIVACY_LISTS_ACTIVE_DEFAULT, (dict_))
 	disp.SendAndCallForResponse(iq, _on_response)
 
 def getPrivacyList(disp, listname):

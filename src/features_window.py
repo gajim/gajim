@@ -268,10 +268,10 @@ class FeaturesWindow:
 		texstr += '\\begin{document}\\begin{large}\\begin{gather*}test'
 		texstr += '\\end{gather*}\\end{large}\\end{document}'
 
-		file = open(os.path.join(tmpfile + ".tex"), "w+")
-		file.write(texstr)
-		file.flush()
-		file.close()
+		file_ = open(os.path.join(tmpfile + ".tex"), "w+")
+		file_.write(texstr)
+		file_.flush()
+		file_.close()
 		try:
 			if os.name == 'nt':
 				# CREATE_NO_WINDOW

@@ -371,7 +371,7 @@ def get_abspath_for_script(scriptname, want_type = False):
 	'''checks if we are svn or normal user and returns abspath to asked script
 	if want_type is True we return 'svn' or 'install' '''
 	if os.path.isdir('.svn'): # we are svn user
-		type = 'svn'
+		type_ = 'svn'
 		cwd = os.getcwd() # it's always ending with src
 
 		if scriptname == 'gajim-remote':
@@ -397,13 +397,13 @@ def get_abspath_for_script(scriptname, want_type = False):
 				print >> sys.stderr, s
 
 	else: # normal user (not svn user)
-		type = 'install'
+		type_ = 'install'
 		# always make it like '/usr/local/bin/gajim'
 		path_to_script = helpers.is_in_path(scriptname, True)
 		
 	
 	if want_type:
-		return path_to_script, type
+		return path_to_script, type_
 	else:
 		return path_to_script
 
@@ -873,16 +873,16 @@ def load_iconset(path, pixbuf2 = None, transport = False):
 	pixbuf2 on top left of each static images'''
 	path += '/'
 	if transport:
-		list = ('online', 'chat', 'away', 'xa', 'dnd', 'offline',
+		list_ = ('online', 'chat', 'away', 'xa', 'dnd', 'offline',
 			'not in roster')
 	else:
-		list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
+		list_ = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 			'invisible', 'offline', 'error', 'requested', 'event', 'opened',
 			'closed', 'not in roster', 'muc_active', 'muc_inactive')
 		if pixbuf2:
-			list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
+			list_ = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 				'offline', 'error', 'requested', 'event', 'not in roster')
-	return _load_icon_list(list, path, pixbuf2)
+	return _load_icon_list(list_, path, pixbuf2)
 
 def load_icon(icon_name):
 	'''load an icon from the iconset in 16x16'''
@@ -944,9 +944,9 @@ def _load_icon_list(icons_list, path, pixbuf2 = None):
 		image = gtk.Image()
 		image.show()
 		imgs[icon] = image
-		for file in files: # loop seeking for either gif or png
-			if os.path.exists(file):
-				image.set_from_file(file)
+		for file_ in files: # loop seeking for either gif or png
+			if os.path.exists(file_):
+				image.set_from_file(file_)
 				if pixbuf2 and image.get_storage_type() == gtk.IMAGE_PIXBUF:
 					# add pixbuf2 on top-left corner of image
 					pixbuf1 = image.get_pixbuf()

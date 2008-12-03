@@ -988,8 +988,8 @@ class HtmlTextView(gtk.TextView):
 		return False
 
 	def display_html(self, html):
-		buffer = self.get_buffer()
-		eob = buffer.get_end_iter()
+		buffer_ = self.get_buffer()
+		eob = buffer_.get_end_iter()
 		## this works too if libxml2 is not available
 		# parser = xml.sax.make_parser(['drv_libxml2'])
 		# parser.setFeature(xml.sax.handler.feature_validation, True)
@@ -999,7 +999,7 @@ class HtmlTextView(gtk.TextView):
 		
 		# too much space after :)
 		#if not eob.starts_line():
-		#    buffer.insert(eob, '\n')
+		#    buffer_.insert(eob, '\n')
 
 
 

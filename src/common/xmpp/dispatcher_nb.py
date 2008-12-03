@@ -328,14 +328,14 @@ class Dispatcher(PlugIn):
 		ID=stanza.getID()
 		
 		session.DEBUG("Dispatching %s stanza with type->%s props->%s id->%s"%(name,typ,stanza.props,ID),'ok')
-		list=['default']                                                     # we will use all handlers:
-		if typ in self.handlers[xmlns][name]: list.append(typ)                # from very common...
+		list_=['default']                                                     # we will use all handlers:
+		if typ in self.handlers[xmlns][name]: list_.append(typ)                # from very common...
 		for prop in stanza.props:
-			if prop in self.handlers[xmlns][name]: list.append(prop)
-			if typ and typ+prop in self.handlers[xmlns][name]: list.append(typ+prop)  # ...to very particular
+			if prop in self.handlers[xmlns][name]: list_.append(prop)
+			if typ and typ+prop in self.handlers[xmlns][name]: list_.append(typ+prop)  # ...to very particular
 		
 		chain=self.handlers[xmlns]['default']['default']
-		for key in list:
+		for key in list_:
 			if key: chain = chain + self.handlers[xmlns][name][key]
 		
 		if ID in session._expected:

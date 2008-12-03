@@ -759,7 +759,7 @@ class Logger:
 
 		# list of corrupted entries that will be removed
 		to_be_removed = []
-		for hash_method, hash, data in self.cur:
+		for hash_method, hash_, data in self.cur:
 			# for each row: unpack the data field
 			# (format: (category, type, name, category, type, name, ...
 			#   ..., 'FEAT', feature1, feature2, ...).join(' '))
@@ -768,7 +768,7 @@ class Logger:
 				data = GzipFile(fileobj=StringIO(str(data))).read().decode('utf-8').split('\0')
 			except IOError:
 				# This data is corrupted. It probably contains non-ascii chars
-				to_be_removed.append((hash_method, hash))
+				to_be_removed.append((hash_method, hash_))
 				continue
 			i=0
 			identities = list()
@@ -787,9 +787,9 @@ class Logger:
 				i += 1
 
 			# yield the row
-			yield hash_method, hash, identities, features
-		for hash_method, hash in to_be_removed:
-			sql = 'DELETE FROM caps_cache WHERE hash_method = "%s" AND hash = "%s"' % (hash_method, hash)
+			yield hash_method, hash_, identities, features
+		for hash_method, hash_ in to_be_removed:
+			sql = 'DELETE FROM caps_cache WHERE hash_method = "%s" AND hash = "%s"' % (hash_method, hash_)
 			self.simple_commit(sql)
 
 	def add_caps_entry(self, hash_method, hash_, identities, features):

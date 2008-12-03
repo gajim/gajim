@@ -87,8 +87,8 @@ class GajimThemesWindow:
 
 	def on_theme_cell_edited(self, cell, row, new_name):
 		model = self.themes_tree.get_model()
-		iter = model.get_iter_from_string(row)
-		old_name = model.get_value(iter, 0).decode('utf-8')
+		iter_ = model.get_iter_from_string(row)
+		old_name = model.get_value(iter_, 0).decode('utf-8')
 		new_name = new_name.decode('utf-8')
 		if old_name == new_name:
 			return
@@ -106,14 +106,14 @@ class GajimThemesWindow:
 		properties = ['textcolor', 'bgcolor', 'font', 'fontattrs']
 		gajim.config.add_per('themes', new_config_name)
 		for option in self.options:
-			for property in properties:
-				option_name = option + property
+			for property_ in properties:
+				option_name = option + property_
 				gajim.config.set_per('themes', new_config_name, option_name,
 					gajim.config.get_per('themes', old_config_name, option_name))
 		gajim.config.del_per('themes', old_config_name)
 		if old_config_name == gajim.config.get('roster_theme'):
 			gajim.config.set('roster_theme', new_config_name)
-		model.set_value(iter, 0, new_name)
+		model.set_value(iter_, 0, new_name)
 		self.current_theme = new_name
 
 	def fill_themes_treeview(self):
@@ -125,12 +125,12 @@ class GajimThemesWindow:
 
 	def select_active_theme(self):
 		model = self.themes_tree.get_model()
-		iter = model.get_iter_root()
+		iter_ = model.get_iter_root()
 		active_theme = gajim.config.get('roster_theme').replace('_', ' ')
-		while iter:
-			theme = model[iter][0]
+		while iter_:
+			theme = model[iter_][0]
 			if theme == active_theme:
-				self.themes_tree.get_selection().select_iter(iter)
+				self.themes_tree.get_selection().select_iter(iter_)
 				self.xml.get_widget('remove_button').set_sensitive(True)
 				self.theme_options_vbox.set_sensitive(True)
 				self.theme_options_table.set_sensitive(True)
@@ -143,16 +143,16 @@ class GajimThemesWindow:
 					self.theme_options_vbox.set_sensitive(True)
 					self.theme_options_table.set_sensitive(True)
 				break
-			iter = model.iter_next(iter)
+			iter_ = model.iter_next(iter_)
 
 	def selection_changed(self, widget = None):
-		(model, iter) = self.themes_tree.get_selection().get_selected()
+		(model, iter_) = self.themes_tree.get_selection().get_selected()
 		selected = self.themes_tree.get_selection().get_selected_rows()
-		if not iter or selected[1] == []:
+		if not iter_ or selected[1] == []:
 			self.theme_options_vbox.set_sensitive(False)
 			self.theme_options_table.set_sensitive(False)
 			return
-		self.current_theme = model.get_value(iter, 0).decode('utf-8')
+		self.current_theme = model.get_value(iter_, 0).decode('utf-8')
 		self.current_theme = self.current_theme.replace(' ', '_')
 		self.set_theme_options(self.current_theme)
 		if self.current_theme == 'default':
@@ -166,23 +166,23 @@ class GajimThemesWindow:
 
 	def on_add_button_clicked(self, widget):
 		model = self.themes_tree.get_model()
-		iter = model.append()
+		iter_ = model.append()
 		i = 0
 		# don't confuse translators
 		theme_name = _('theme name')
 		theme_name_ns = theme_name.replace(' ', '_')
 		while theme_name_ns + unicode(i) in gajim.config.get_per('themes'):
 			i += 1
-		model.set_value(iter, 0, theme_name + unicode(i))
+		model.set_value(iter_, 0, theme_name + unicode(i))
 		gajim.config.add_per('themes', theme_name_ns + unicode(i))
-		self.themes_tree.get_selection().select_iter(iter)
+		self.themes_tree.get_selection().select_iter(iter_)
 		col = self.themes_tree.get_column(0)
-		path = model.get_path(iter)
+		path = model.get_path(iter_)
 		self.themes_tree.set_cursor(path, col, True)
 
 	def on_remove_button_clicked(self, widget):
-		(model, iter) = self.themes_tree.get_selection().get_selected()
-		if not iter:
+		(model, iter_) = self.themes_tree.get_selection().get_selected()
+		if not iter_:
 			return
 		if self.current_theme == gajim.config.get('roster_theme'):
 			dialogs.ErrorDialog(
@@ -193,7 +193,7 @@ class GajimThemesWindow:
 		self.theme_options_table.set_sensitive(False)
 		self.xml.get_widget('remove_button').set_sensitive(False)
 		gajim.config.del_per('themes', self.current_theme)
-		model.remove(iter)
+		model.remove(iter_)
 	
 	def set_theme_options(self, theme, option = 'account'):
 		self.no_update = True
