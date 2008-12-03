@@ -120,7 +120,7 @@ class Browser(PlugIn):
             elif set_ or '' in cur: return cur,''
             else: return None,None
         if 1 in cur or set_: return cur,1
-        raise "Corrupted data"
+        raise Exception("Corrupted data")
 
     def setDiscoHandler(self,handler,node='',jid=''):
         """ This is the main method that you will use in this class.

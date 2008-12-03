@@ -401,7 +401,7 @@ class EncryptedStanzaSession(StanzaSession):
 					pubkey_o = xmpp.c14n.c14n(keyvalue)
 				else:
 					# XXX DSA, etc.
-					raise 'unimplemented'
+					raise NotImplementedError()
 
 			enc_sig = parsed.getTag(name='SignatureValue',
 				namespace=XmlDsig).getData()
