@@ -56,16 +56,6 @@ def temp_failure_retry(func, *args, **kwargs):
             else:
                 raise
 
-class error:
-    """An exception to be raised in case of low-level errors in methods of 'transports' module."""
-    def __init__(self,comment):
-        """Cache the descriptive string"""
-        self._comment=comment
-
-    def __str__(self):
-        """Serialise exception into pre-cached descriptive string."""
-        return self._comment
-
 DBG_SOCKET = "socket"
 
 class TCPsocket(PlugIn):
@@ -211,7 +201,7 @@ class HTTPPROXYsocket(TCPsocket):
             self._owner.disconnected()
             return
         try: proto,code,desc=reply.split('\n')[0].split(' ',2)
-        except: raise error('Invalid proxy reply')
+        except: raise Exception('Invalid proxy reply')
         if code!='200':
             self.DEBUG('Invalid proxy reply: %s %s %s'%(proto,code,desc),'error')
             self._owner.disconnected()
