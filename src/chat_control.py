@@ -405,11 +405,11 @@ class ChatControlBase(MessageControl):
 				widget.disconnect(id_)
 				del self.handlers[id_]
 				break
-		if found:
 
 	def connect_style_event(self, widget, set_fg = False, set_bg = False):
 		self.disconnect_style_event(widget)
-		id_ = widget.connect('style-set', self._on_style_set_event, set_fg, set_bg)
+		id_ = widget.connect('style-set', self._on_style_set_event, set_fg,
+			set_bg)
 		self.handlers[id_] = widget
 
 	def _on_style_set_event(self, widget, style, *opts):
