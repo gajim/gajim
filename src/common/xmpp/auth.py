@@ -63,10 +63,10 @@ class NonSASL(PlugIn):
             self.DEBUG("Performing zero-k authentication",'ok')
 
             def hasher(s):
-               return sha.new(s).hexdigest()
+                return sha.new(s).hexdigest()
 
             def hash_n_times(s, count):
-               return count and hasher(hash_n_times(s, count-1)) or s
+                return count and hasher(hash_n_times(s, count-1)) or s
 
             hash_ = hash_n_times(hasher(hasher(self.password)+token), int(seq))
             query.setTagData('hash', hash_)

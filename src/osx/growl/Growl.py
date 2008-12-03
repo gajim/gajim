@@ -135,7 +135,7 @@ class netgrowl:
         checksum = md5.new()
         checksum.update(data)
         if self.password:
-           checksum.update(self.password)
+            checksum.update(self.password)
         data += checksum.digest()
         return data
 

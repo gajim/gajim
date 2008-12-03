@@ -89,7 +89,7 @@ class Commands(PlugIn):
                 conn.send(Error(request,ERR_ITEM_NOT_FOUND))
                 raise NodeProcessed
         elif node in self._handlers['']:
-                self._handlers[''][node]['execute'](conn,request)
+            self._handlers[''][node]['execute'](conn,request)
         else:
             conn.send(Error(request,ERR_ITEM_NOT_FOUND))
             raise NodeProcessed

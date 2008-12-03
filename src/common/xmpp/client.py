@@ -284,11 +284,11 @@ class Component(CommonClient):
             self.Server=server[0]
         CommonClient.connect(self,server=server,proxy=proxy)
         if self.connected and (self.typ=='jabberd2' or not self.typ and self.Dispatcher.Stream.features is not None):
-                self.defaultNamespace=auth.NS_CLIENT
-                self.Dispatcher.RegisterNamespace(self.defaultNamespace)
-                self.Dispatcher.RegisterProtocol('iq',dispatcher.Iq)
-                self.Dispatcher.RegisterProtocol('message',dispatcher.Message)
-                self.Dispatcher.RegisterProtocol('presence',dispatcher.Presence)
+            self.defaultNamespace=auth.NS_CLIENT
+            self.Dispatcher.RegisterNamespace(self.defaultNamespace)
+            self.Dispatcher.RegisterProtocol('iq',dispatcher.Iq)
+            self.Dispatcher.RegisterProtocol('message',dispatcher.Message)
+            self.Dispatcher.RegisterProtocol('presence',dispatcher.Presence)
         return self.connected
 
     def auth(self,name,password,dup=None,sasl=0):
