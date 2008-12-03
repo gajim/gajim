@@ -435,7 +435,7 @@ class GlibIdleQueue(idlequeue.IdleQueue):
 		self.events = {}
 		# time() is already called in glib, we just get the last value
 		# overrides IdleQueue.current_time()
-		self.current_time = lambda: gobject.get_current_time()
+		self.current_time = gobject.get_current_time
 
 	def add_idle(self, fd, flags):
 		''' this method is called when we plug a new idle object.

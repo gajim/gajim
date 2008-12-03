@@ -3708,12 +3708,12 @@ class TransformChatToMUC:
 
 		# All contacts beside the following can be invited:
 		# 	transports, zeroconf contacts, minimized groupchats
-		invitable = lambda contact, contact_transport = None:\
-				contact.jid not in self.auto_jids and\
-				contact.jid != gajim.get_jid_from_account(self.account) and\
-				contact.jid not in gajim.interface.minimized_controls[account] and\
-				not contact.is_transport() and\
-				not contact_transport
+		def invitable(contact, contact_transport=None):
+			return (contact.jid not in self.auto_jids and
+			contact.jid != gajim.get_jid_from_account(self.account) and
+			contact.jid not in gajim.interface.minimized_controls[account] and
+			not contact.is_transport() and
+			not contact_transport)
 
 		# set jabber id and pseudos
 		for account in gajim.contacts.get_accounts():

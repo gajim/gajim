@@ -33,6 +33,7 @@ import base64
 import sha
 import socket
 import sys
+import operator
 
 from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
 	time as time_time, timezone, tzname)
@@ -166,7 +167,7 @@ class ConnectionBytestream:
 			sender = file_props['sender']
 		proxyhosts = []
 		if fast and cfg_proxies:
-			proxies = map(lambda e:e.strip(), cfg_proxies.split(','))
+			proxies = [e.strip() for e in cfg_proxies.split(',')]
 			default = gajim.proxy65_manager.get_default_for_name(self.name)
 			if default:
 				# add/move default proxy at top of the others
@@ -194,8 +195,7 @@ class ConnectionBytestream:
 		file_props['sha_str'] = sha_str
 		ft_add_hosts = []
 		if ft_add_hosts_to_send:
-			ft_add_hosts_to_send = map(lambda e:e.strip(),
-				ft_add_hosts_to_send.split(','))
+			ft_add_hosts_to_send = [e.strip() for e in ft_add_hosts_to_send.split(',')]
 			for ft_host in ft_add_hosts_to_send:
 				ft_add_hosts.append(ft_host)
 		listener = gajim.socks5queue.start_listener(port,
@@ -1324,13 +1324,13 @@ sent a message to.'''
 		idless = [s for s in sessions if not s.received_thread_id]
 
 		# filter out everything except the default session type
-		p = lambda s: isinstance(s, gajim.default_session_type)
-		chat_sessions = filter(p, idless)
+		chat_sessions = [s for s in idless if isinstance(s,
+			gajim.default_session_type)]
 
 		if chat_sessions:
 			# return the session that we last sent a message in
-			chat_sessions.sort(key=lambda s: s.last_send)
-			return chat_sessions[-1]
+			return sorted(chat_sessions,
+				key=operator.attrgetter("last_send"))[-1]
 		else:
 			return None
 
@@ -1341,8 +1341,8 @@ sent a message to.'''
 			sessions = self.sessions[jid].values()
 
 			# filter out everything except the default session type
-			p = lambda s: isinstance(s, gajim.default_session_type)
-			chat_sessions = filter(p, sessions)
+			chat_sessions = [s for s in sessions if isinstance(s,
+				gajim.default_session_type)]
 
 			orphaned = [s for s in chat_sessions if not s.control]
 
@@ -2307,7 +2307,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name) + '/' +\
 			self.server_resource)
 		if cfg_proxies:
-			proxies = map(lambda e:e.strip(), cfg_proxies.split(','))
+			proxies = [e.strip() for e in cfg_proxies.split(',')]
 			for proxy in proxies:
 				gajim.proxy65_manager.resolve(proxy, self.connection, our_jid)
 

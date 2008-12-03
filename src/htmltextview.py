@@ -240,7 +240,8 @@ def _parse_css_color(color):
 		return gtk.gdk.color_parse(color)
 
 def style_iter(style):
-	return (map(lambda x:x.strip(),item.split(':', 1)) for item in style.split(';') if len(item.strip()))
+	return ([x.strip() for x in item.split(':', 1)] for item in style.split(';')\
+		if len(item.strip()))
 
 
 class HtmlHandler(xml.sax.handler.ContentHandler):

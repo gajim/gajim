@@ -762,7 +762,7 @@ def get_random_string_16():
 	''' create random string of length 16'''
 	rng = range(65, 90)
 	rng.extend(range(48, 57))
-	char_sequence = map(lambda e:chr(e), rng)
+	char_sequence = [chr(e) for e in rng]
 	from random import sample
 	return ''.join(sample(char_sequence, 16))
 
@@ -938,7 +938,7 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
 		lines = text.split('\n', max_lines)[:max_lines]
 	if max_chars > 0:
 		if lines:
-			lines = map(lambda e: _cut_if_long(e), lines)
+			lines = [_cut_if_long(e) for e in lines]
 	if lines:
 		reduced_text = '\n'.join(lines)
 		if reduced_text != text:

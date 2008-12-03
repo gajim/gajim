@@ -81,8 +81,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		file_props['sha_str'] = sha_str
 		ft_add_hosts = []
 		if ft_add_hosts_to_send:
-			ft_add_hosts_to_send = map(lambda e:e.strip(),
-				ft_add_hosts_to_send.split(','))
+			ft_add_hosts_to_send = [e.strip() for e in ft_add_hosts_to_send.split(',')]
 			for ft_host in ft_add_hosts_to_send:
 				try:
 					ft_host = socket.gethostbyname(ft_host)

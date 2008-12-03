@@ -69,7 +69,7 @@ class Secrets:
 
 	def find_srs(self, account, jid, srs):
 		our_secrets = self.srs[account][jid]
-		return filter(lambda (x,y): x == srs, our_secrets)[0]
+		return [(x, y) for x, y in our_secrets if x == srs][0]
 
 	# has the user verified this retained secret?
 	def srs_verified(self, account, jid, srs):

@@ -109,7 +109,7 @@ class ConfigPaths:
 			u'iconsets',  u'moods', u'activities', u'cacerts.pem')
 
 		if os.name == 'nt':
-			v = map(lambda x: x.capitalize(), v)
+			v = [x.capitalize() for x in v]
 
 		for n, p in zip(k, v):
 			self.add_from_root(n, p)
