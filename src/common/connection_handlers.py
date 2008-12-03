@@ -74,6 +74,7 @@ except Exception:
 class ConnectionBytestream:
 	def __init__(self):
 		self.files_props = {}
+		self.awaiting_xmpp_ping_id = None
 
 	def is_transfer_stopped(self, file_props):
 		if 'error' in file_props and file_props['error'] != 0:
@@ -1387,6 +1388,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.version_ids = []
 		# ID of urn:xmpp:ping requests
 		self.awaiting_xmpp_ping_id = None
+		self.continue_connect_info = None
 
 		try:
 			idle.init()

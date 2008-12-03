@@ -432,6 +432,7 @@ class ServiceDiscoveryWindow(object):
 		self.browser = None
 		self.children = []
 		self.dying = False
+		self.node = None
 
 		# Check connection
 		if gajim.connections[account].connected < 2:
