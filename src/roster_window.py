@@ -2512,7 +2512,7 @@ class RosterWindow:
 				_('You must read them before removing this transport.'))
 			return
 		if len(list_) == 1:
-			pritext = _('Transport "%s" will be removed') % contact.jid
+			pritext = _('Transport "%s" will be removed') % list_[0][0].jid
 			sectext = _('You will no longer be able to send and receive messages '
 				'from contacts using this transport.')
 		else:
@@ -2564,12 +2564,12 @@ class RosterWindow:
 					'value' : group, 'child': [u'message', u'iq', u'presence-out']}
 				gajim.connections[account].blocked_list.append(new_rule)
 			for account in accounts:
-				gajim.connections[account].set_privacy_list(
-				'block', gajim.connections[account].blocked_list)
-			if len(gajim.connections[account].blocked_list) == 1:
-				gajim.connections[account].set_active_list('block')
-				gajim.connections[account].set_default_list('block')
-			gajim.connections[account].get_privacy_list('block')
+				connection = gajim.connections[account]
+				connection.set_privacy_list('block', connection.blocked_list)
+				if len(connection.blocked_list) == 1:
+					connection.set_active_list('block')
+					connection.set_default_list('block')
+				connection.get_privacy_list('block')
 
 		self.get_status_message('offline', on_continue)
 

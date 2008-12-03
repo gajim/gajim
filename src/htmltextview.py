@@ -967,21 +967,17 @@ class HtmlTextView(gtk.TextView):
 		x, y, _ = widget.window.get_pointer()
 		x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, x, y)
 		tags = widget.get_iter_at_location(x, y).get_tags()
-		is_over_anchor = False
-		for tag in tags:
-			if getattr(tag, 'is_anchor', False):
-				is_over_anchor = True
-				break
+		anchor_tags = [tag for tag in tags if getattr(tag, 'is_anchor', False)]
 		if self.tooltip.timeout != 0:
 			# Check if we should hide the line tooltip
-			if not is_over_anchor:
+			if not anchor_tags:
 				self.tooltip.hide_tooltip()
-		if not self._changed_cursor and is_over_anchor:
+		if not self._changed_cursor and anchor_tags:
 			window = widget.get_window(gtk.TEXT_WINDOW_TEXT)
 			window.set_cursor(gtk.gdk.Cursor(gtk.gdk.HAND2))
 			self._changed_cursor = True
-			self.tooltip.timeout = gobject.timeout_add(500, self.show_tooltip, tag)
-		elif self._changed_cursor and not is_over_anchor:
+			self.tooltip.timeout = gobject.timeout_add(500, self.show_tooltip, anchor_tags[0])
+		elif self._changed_cursor and not anchor_tags:
 			window = widget.get_window(gtk.TEXT_WINDOW_TEXT)
 			window.set_cursor(gtk.gdk.Cursor(gtk.gdk.XTERM))
 			self._changed_cursor = False

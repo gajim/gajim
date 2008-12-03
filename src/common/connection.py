@@ -35,6 +35,7 @@
 import os
 import random
 import socket
+import operator
 
 import time
 import locale
@@ -379,29 +380,30 @@ class Connection(ConnectionHandlers):
 				self.dispatch('STANZA_SENT', unicode(data))
 
 	def _select_next_host(self, hosts):
-		'''Chooses best 'real' host basing on the SRV priority and weight data;
-		more info in RFC2782'''
-		hosts_best_prio = []
-		best_prio = 65535
-		sum_weight = 0
-		for h in hosts:
-			if h['prio'] < best_prio:
-				hosts_best_prio = [h]
-				best_prio = h['prio']
-				sum_weight = h['weight']
-			elif h['prio'] == best_prio:
-				hosts_best_prio.append(h)
-				sum_weight += h['weight']
-		if len(hosts_best_prio) == 1:
-			return hosts_best_prio[0]
-		r = random.randint(0, sum_weight)
-		min_w = sum_weight
-		# We return the one for which has the minimum weight and weight >= r
-		for h in hosts_best_prio:
-			if h['weight'] >= r:
-				if h['weight'] <= min_w:
-					min_w = h['weight']
-		return h
+		'''Selects the next host according to RFC2782 p.3 based on it's
+		priority. Chooses between hosts with the same priority randomly,
+		where the probability of being selected is proportional to the weight
+		of the host.'''
+
+		hosts_by_prio = sorted(hosts, key=operator.itemgetter('prio'))
+
+		try:
+			lowest_prio = hosts_by_prio[0]['prio']
+		except IndexError:
+			raise ValueError("No hosts to choose from!")
+
+		hosts_lowest_prio = [h for h in hosts_by_prio if h['prio'] == lowest_prio]
+
+		if len(hosts_lowest_prio) == 1:
+			return hosts_lowest_prio[0]
+		else:
+			rndint = random.randint(0, sum(h['weight'] for h in hosts_lowest_prio))
+			weightsum = 0
+			for host in sorted(hosts_lowest_prio, key=operator.itemgetter(
+			'weight')):
+				weightsum += host['weight']
+				if weightsum >= rndint:
+					return host
 
 	def connect(self, data = None):
 		''' Start a connection to the Jabber server.

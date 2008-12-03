@@ -211,7 +211,7 @@ class ConversationTextview:
 
 
 		self.account = account
-		self.change_cursor = None
+		self.change_cursor = False
 		self.last_time_printout = 0
 
 		font = pango.FontDescription(gajim.config.get('conversation_font'))
@@ -618,7 +618,7 @@ class ConversationTextview:
 		if self.change_cursor:
 			self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
 				gtk.gdk.Cursor(gtk.gdk.XTERM))
-			self.change_cursor = None
+			self.change_cursor = False
 		tag_table = self.tv.get_buffer().get_tag_table()
 		over_line = False
 		xep0184_warning = False
@@ -627,7 +627,7 @@ class ConversationTextview:
 			tag_table.lookup('xmpp'), tag_table.lookup('sth_at_sth')):
 				self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
 					gtk.gdk.Cursor(gtk.gdk.HAND2))
-				self.change_cursor = tag
+				self.change_cursor = True
 			elif tag == tag_table.lookup('focus-out-line'):
 				over_line = True
 			elif tag == tag_table.lookup('xep0184-warning'):
@@ -642,14 +642,13 @@ class ConversationTextview:
 				self.show_line_tooltip)
 			self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
 				gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
-			self.change_cursor = tag
+			self.change_cursor = True
 		if xep0184_warning and not self.xep0184_warning_tooltip.win:
-			self.xep0184_warning_tooltip.timeout = \
-				gobject.timeout_add(500,
+			self.xep0184_warning_tooltip.timeout = gobject.timeout_add(500,
 				self.show_xep0184_warning_tooltip)
 			self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
 				gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
-			self.change_cursor = tag
+			self.change_cursor = True
 
 	def clear(self, tv = None):
 		'''clear text in the textview'''

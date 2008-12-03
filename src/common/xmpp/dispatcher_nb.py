@@ -227,14 +227,11 @@ class Dispatcher(PlugIn):
 		if typ+ns not in self.handlers[xmlns][name]: 
 			return
 		for pack in self.handlers[xmlns][name][typ+ns]:
-			if handler==pack['func']: 
-				break
-		else: 
-			pack=None
-		try: 
-			self.handlers[xmlns][name][typ+ns].remove(pack)
-		except ValueError: 
-			pass
+			if pack['func'] == handler: 
+				try: 
+					self.handlers[xmlns][name][typ+ns].remove(pack)
+				except ValueError: 
+					pass
 
 	def RegisterDefaultHandler(self,handler):
 		''' Specify the handler that will be used if no NodeProcessed exception were raised.

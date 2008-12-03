@@ -400,14 +400,12 @@ class ChatControlBase(MessageControl):
 
 	def disconnect_style_event(self, widget):
 		# Try to find the event_id
-		found = False
-		for id_ in self.handlers:
+		for id_ in self.handlers.keys():
 			if self.handlers[id_] == widget:
-				found = True
+				widget.disconnect(id_)
+				del self.handlers[id_]
 				break
 		if found:
-			widget.disconnect(id_)
-			del self.handlers[id_]
 
 	def connect_style_event(self, widget, set_fg = False, set_bg = False):
 		self.disconnect_style_event(widget)

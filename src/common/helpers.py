@@ -410,30 +410,22 @@ def get_uf_chatstate(chatstate):
 		return _('has closed the chat window or tab')
 	return ''
 
-def is_in_path(name_of_command, return_abs_path = False):
-	# if return_abs_path is True absolute path will be returned
-	# for name_of_command
-	# on failures False is returned
-	is_in_dir = False
-	found_in_which_dir = None
-	path = os.getenv('PATH').split(os.pathsep)
-	for path_to_directory in path:
-		try:
-			contents = os.listdir(path_to_directory)
-		except OSError: # user can have something in PATH that is not a dir
-			pass
-		else:
-			is_in_dir = name_of_command in contents
-		if is_in_dir:
-			if return_abs_path:
-				found_in_which_dir = path_to_directory
-			break
+def is_in_path(command, return_abs_path=False):
+	'''Returns True if 'command' is found in one of the directories in the
+		user's path. If 'return_abs_path' is True, returns the absolute path of
+		the first found command instead. Returns False otherwise and on errors.'''
 
-	if found_in_which_dir:
-		abs_path = os.path.join(path_to_directory, name_of_command)
-		return abs_path
-	else:
-		return is_in_dir
+	for directory in os.getenv('PATH').split(os.pathsep):
+		try:
+			if command in os.listdir(directory):
+				if return_abs_path:
+					return os.path.join(directory, command)
+				else:
+					return True
+		except OSError:
+			# If the user has non directories in his path
+			pass
+	return False
 
 def exec_command(command):
 	subprocess.Popen(command, shell = True)

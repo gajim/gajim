@@ -463,13 +463,13 @@ class RosterTooltip(NotificationAreaTooltip):
 			contact_keys = sorted(contacts_dict.keys())
 			contact_keys.reverse()
 			for priority in contact_keys:
-				for contact in contacts_dict[priority]:
-					status_line = self.get_status_info(contact.resource,
-						contact.priority, contact.show, contact.status)
+				for acontact in contacts_dict[priority]:
+					status_line = self.get_status_info(acontact.resource,
+						acontact.priority, acontact.show, acontact.status)
 					
-					icon_name = self._get_icon_name_for_tooltip(contact)
+					icon_name = self._get_icon_name_for_tooltip(acontact)
 					self.add_status_row(file_path, icon_name, status_line,
-						contact.last_status_time)
+						acontact.last_status_time)
 			properties.append((self.table,	None))
 
 		else: # only one resource

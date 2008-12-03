@@ -266,10 +266,8 @@ class ProfileWindow:
 			found = False
 			for e in loc[entries[0]]:
 				if entries[1] in e:
-					found = True
+					e[entries[2]] = txt
 					break
-			if found:
-				e[entries[2]] = txt
 			else:
 				loc[entries[0]].append({entries[1]: '', entries[2]: txt})
 			return vcard_
