@@ -222,7 +222,7 @@ class P2PClient(IdleObject):
 			self.Dispatcher._metastream)[:-2])
 
 	def _check_stream_start(self, ns, tag, attrs):
-		if ns<>NS_STREAMS or tag<>'stream':
+		if ns != NS_STREAMS or tag != 'stream':
 			self.Connection.DEBUG('Incorrect stream start: (%s,%s).Terminating! ' \
 				% (tag, ns), 'error')
 			self.Connection.disconnect()
