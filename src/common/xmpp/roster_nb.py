@@ -32,23 +32,23 @@ class NonBlockingRoster(Roster):
 		self._owner.RegisterHandler('iq', self.RosterIqHandler, 'result', NS_ROSTER, makefirst = 1)
 		self._owner.RegisterHandler('iq', self.RosterIqHandler, 'set', NS_ROSTER)
 		self._owner.RegisterHandler('presence', self.PresenceHandler)
-		if request: 
+		if request:
 			self.Request()
-	
+
 	def _on_roster_set(self, data):
 		if data:
 			self._owner.Dispatcher.ProcessNonBlocking(data)
-		if not self.set: 
-			return 
+		if not self.set:
+			return
 		self._owner.onreceive(None)
 		if self.on_ready:
 			self.on_ready(self)
 			self.on_ready = None
 		return True
-		
+
 	def getRoster(self, on_ready=None):
 		''' Requests roster from server if neccessary and returns self. '''
-		if not self.set: 
+		if not self.set:
 			self.on_ready = on_ready
 			self._owner.onreceive(self._on_roster_set)
 			return

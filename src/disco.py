@@ -522,7 +522,7 @@ _('Without a connection, you can not browse available services'))
 		bannerfont = gajim.config.get_per('themes', theme, 'bannerfont')
 		bannerfontattrs = gajim.config.get_per('themes', theme,
 			'bannerfontattrs')
-		
+
 		if bannerfont:
 			font = pango.FontDescription(bannerfont)
 		else:
@@ -533,10 +533,10 @@ _('Without a connection, you can not browse available services'))
 				font.set_weight(pango.WEIGHT_HEAVY)
 			if 'I' in bannerfontattrs:
 				font.set_style(pango.STYLE_ITALIC)
-		
+
 		font_attrs = 'font_desc="%s"' % font.to_string()
 		font_size = font.get_size()
-		
+
 		# in case there is no font specified we use x-large font size
 		if font_size == 0:
 			font_attrs = '%s size="large"' % font_attrs
@@ -546,7 +546,7 @@ _('Without a connection, you can not browse available services'))
 			markup = '%s\n<span font_desc="%s" size="small">%s</span>' % \
 									(markup, font.to_string(), text_after)
 		self.banner.set_markup(markup)
-	
+
 	def paint_banner(self):
 		'''Repaint the banner with theme color'''
 		theme = gajim.config.get('roster_theme')
@@ -559,7 +559,7 @@ _('Without a connection, you can not browse available services'))
 			default_bg = False
 		else:
 			default_bg = True
-		
+
 		if textcolor:
 			color = gtk.gdk.color_parse(textcolor)
 			self.banner.modify_fg(gtk.STATE_NORMAL, color)
@@ -570,22 +570,22 @@ _('Without a connection, you can not browse available services'))
 			self._on_style_set_event(self.banner, None, default_fg, default_bg)
 		if self.browser:
 			self.browser.update_theme()
-	
+
 	def disconnect_style_event(self):
 		if self.style_event_id:
 			self.banner.disconnect(self.style_event_id)
 			self.style_event_id = 0
-	
+
 	def connect_style_event(self, set_fg = False, set_bg = False):
 		self.disconnect_style_event()
-		self.style_event_id = self.banner.connect('style-set', 
+		self.style_event_id = self.banner.connect('style-set',
 					self._on_style_set_event, set_fg, set_bg)
-	
+
 	def _on_style_set_event(self, widget, style, *opts):
-		''' set style of widget from style class *.Frame.Eventbox 
+		''' set style of widget from style class *.Frame.Eventbox
 			opts[0] == True -> set fg color
 			opts[1] == True -> set bg color	'''
-		
+
 		self.disconnect_style_event()
 		if opts[1]:
 			bg_color = widget.style.bg[gtk.STATE_SELECTED]
@@ -595,7 +595,7 @@ _('Without a connection, you can not browse available services'))
 			self.banner.modify_fg(gtk.STATE_NORMAL, fg_color)
 		self.banner.ensure_style()
 		self.connect_style_event(opts[0], opts[1])
-	
+
 	def destroy(self, chain = False):
 		'''Close the browser. This can optionally close its children and
 		propagate to the parent. This should happen on actions like register,
@@ -808,7 +808,7 @@ class AgentBrowser:
 		if self.browse_button:
 			self.browse_button.destroy()
 			self.browse_button = None
-	
+
 	def _set_title(self, jid, node, identities, features, data):
 		'''Set the window title based on agent info.'''
 		# Set the banner and window title
@@ -1945,14 +1945,14 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		groupnode = model.get_value(iter_, 1)	# 1 = groupnode
 
 		gajim.connections[self.account].send_pb_subscribe(self.jid, groupnode, self._subscribeCB, groupnode)
-		
+
 	def on_unsubscribe_button_clicked(self, widget):
 		'''Called when 'unsubscribe' button is pressed. Send unsubscription request.'''
 		model, iter_ = self.window.services_treeview.get_selection().get_selected()
 		if iter_ is None: return
 
 		groupnode = model.get_value(iter_, 1) # 1 = groupnode
-		
+
 		gajim.connections[self.account].send_pb_unsubscribe(self.jid, groupnode, self._unsubscribeCB, groupnode)
 
 	def _subscriptionsCB(self, conn, request):
@@ -1961,7 +1961,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		try:
 			subscriptions = request.getTag('pubsub').getTag('subscriptions')
 		except Exception:
-			return 
+			return
 
 		groups = set()
 		for child in subscriptions.getTags('subscription'):

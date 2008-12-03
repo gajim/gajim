@@ -8,7 +8,7 @@ setup(
 	url = 'http://www.gajim.org/',
 	download_url = 'http://www.gajim.org/downloads.php',
 	license = 'GPL',
-	
+
 	ext_modules=[
 	Extension('idle', ['idle.c'],
 			  extra_compile_args=['-Wall'],

@@ -57,7 +57,7 @@ else:
 		interpret_url:
 			this, modulo the validated text, will be added to it
 		validator:
-			should return the validated text, or raise ValueError 
+			should return the validated text, or raise ValueError
 		'''
 		def uri_reference_role(role, rawtext, text, lineno, inliner,
 			options={}, content=[]):
@@ -143,7 +143,7 @@ else:
 
 	def create_xhtml(text):
 		return Generator.create_xhtml(text)
-	
+
 
 if __name__ == '__main__':
 	print "test 1\n", Generator.create_xhtml("""

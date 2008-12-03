@@ -68,7 +68,7 @@ class AtomWindow:
 		assert len(self.__class__.entries)>0
 
 		newentry = self.__class__.entries.pop(0)
-		
+
 		# fill the fields
 		if newentry.feed_link is not None:
 			self.feed_title_label.set_markup(

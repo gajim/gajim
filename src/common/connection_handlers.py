@@ -331,7 +331,7 @@ class ConnectionBytestream:
 		return
 
 	def _connect_error(self, to, _id, sid, code = 404):
-		''' cb, when there is an error establishing BS connection, or 
+		''' cb, when there is an error establishing BS connection, or
 		when connection is rejected'''
 		if not self.connection or self.connected < 2:
 			return
@@ -1471,7 +1471,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 							'password': conf.getTagData('password'),
 							'nick': conf.getTagData('nick'),
 							'print_status': print_status}
-					
+
 					self.bookmarks.append(bm)
 				self.dispatch('BOOKMARKS', self.bookmarks)
 
@@ -1501,7 +1501,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				groups.append(group.getData())
 			self.dispatch('ROSTER_INFO', (jid, name, sub, ask, groups))
 		raise common.xmpp.NodeProcessed
-	
+
 	def _VersionCB(self, con, iq_obj):
 		gajim.log.debug('VersionCB')
 		if not self.connection or self.connected < 2:
@@ -1526,7 +1526,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			qp.attrs['seconds'] = '0'
 		else:
 			qp.attrs['seconds'] = idle.getIdleSec()
-		
+
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
 
@@ -2256,7 +2256,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				if reason:
 					users_dict[jid]['reason'] = reason
 
-		self.dispatch('GC_AFFILIATION', (helpers.get_full_jid_from_iq(iq_obj), 
+		self.dispatch('GC_AFFILIATION', (helpers.get_full_jid_from_iq(iq_obj),
 															users_dict))
 
 	def _MucErrorCB(self, con, iq_obj):
@@ -2294,13 +2294,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if not self.connection:
 			return
 		self.connection.getRoster(self._on_roster_set)
-		self.discoverItems(gajim.config.get_per('accounts', self.name, 
+		self.discoverItems(gajim.config.get_per('accounts', self.name,
 			'hostname'), id_prefix='p')
-		self.discoverInfo(gajim.config.get_per('accounts', self.name, 
+		self.discoverInfo(gajim.config.get_per('accounts', self.name,
 			'hostname'), id_prefix='p')
 		if gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):
 			self.discover_ft_proxies()
-	
+
 	def discover_ft_proxies(self):
 		cfg_proxies = gajim.config.get_per('accounts', self.name,
 			'file_transfer_proxies')
@@ -2310,7 +2310,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			proxies = map(lambda e:e.strip(), cfg_proxies.split(','))
 			for proxy in proxies:
 				gajim.proxy65_manager.resolve(proxy, self.connection, our_jid)
-	
+
 	def _on_roster_set(self, roster):
 		raw_roster = roster.getRaw()
 		roster = {}
@@ -2398,7 +2398,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		# Inform GUI we just signed in
 		self.dispatch('SIGNED_IN', ())
 		self.continue_connect_info = None
-	
+
 	def request_gmail_notifications(self):
 		if not self.connection or self.connected < 2:
 			return
@@ -2421,7 +2421,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		query.setNamespace(common.xmpp.NS_GMAILNOTIFY)
 		self.connection.send(iq)
 
-	
+
 	def _search_fields_received(self, con, iq_obj):
 		jid = jid = helpers.get_jid_from_iq(iq_obj)
 		tag = iq_obj.getTag('query', namespace = common.xmpp.NS_SEARCH)

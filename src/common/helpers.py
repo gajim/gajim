@@ -350,10 +350,10 @@ def get_uf_role(role, plural = False):
 		else:
 			role_name = _('Visitor')
 	return role_name
-	
+
 def get_uf_affiliation(affiliation):
 	'''Get a nice and translated affilition for muc'''
-	if affiliation == 'none': 
+	if affiliation == 'none':
 		affiliation_name = Q_('?Group Chat Contact Affiliation:None')
 	elif affiliation == 'owner':
 		affiliation_name = _('Owner')
@@ -593,7 +593,7 @@ def get_global_status():
 			status = gajim.connections[account].status
 	return status
 
-def statuses_unified(): 
+def statuses_unified():
 	'''testing if all statuses are the same.'''
 	reference = None
 	for account in gajim.connections:
@@ -765,7 +765,7 @@ def get_random_string_16():
 	char_sequence = map(lambda e:chr(e), rng)
 	from random import sample
 	return ''.join(sample(char_sequence, 16))
-	
+
 def get_os_info():
 	if os.name == 'nt':
 		ver = os.sys.getwindowsversion()
@@ -790,9 +790,9 @@ def get_os_info():
 		full_path_to_executable = is_in_path(executable, return_abs_path = True)
 		if full_path_to_executable:
 			command = executable + params
-			p = subprocess.Popen([command], shell=True, stdin=subprocess.PIPE, 
-				stdout=subprocess.PIPE, close_fds=True) 
-			p.wait() 
+			p = subprocess.Popen([command], shell=True, stdin=subprocess.PIPE,
+				stdout=subprocess.PIPE, close_fds=True)
+			p.wait()
 			output = temp_failure_retry(p.stdout.readline).strip()
 			# some distros put n/a in places, so remove those
 			output = output.replace('n/a', '').replace('N/A', '')
@@ -832,7 +832,7 @@ def get_os_info():
 	return 'N/A'
 
 def sanitize_filename(filename):
-	'''makes sure the filename we will write does contain only acceptable and 
+	'''makes sure the filename we will write does contain only acceptable and
 	latin characters, and is not too long (in that case hash it)'''
 	# 48 is the limit
 	if len(filename) > 48:
@@ -845,7 +845,7 @@ def sanitize_filename(filename):
 		filename = filename.replace('?', '_').replace(':', '_')\
 			.replace('\\', '_').replace('"', "'").replace('|', '_')\
 			.replace('*', '_').replace('<', '_').replace('>', '_')
-	
+
 	return filename
 
 def allow_showing_notification(account, type_ = 'notify_on_new_message',
@@ -952,7 +952,7 @@ def get_account_status(account):
 	return status
 
 def get_notification_icon_tooltip_dict():
-	'''returns a dict of the form {acct: {'show': show, 'message': message, 
+	'''returns a dict of the form {acct: {'show': show, 'message': message,
 	'event_lines': [list of text lines to show in tooltip]}'''
 	# How many events must there be before they're shown summarized, not per-user
 	max_ungrouped_events = 10
@@ -1000,7 +1000,7 @@ def get_notification_icon_tooltip_dict():
 					else:
 						text += _(' from %s') % (jid)
 					account['event_lines'].append(text)
-		
+
 		# Display unseen events numbers, if any
 		if total_non_messages > 0:
 			if total_non_messages > max_ungrouped_events:
@@ -1044,7 +1044,7 @@ def get_notification_icon_tooltip_text():
 	# If there is only one account, its status is shown on the first line.
 	if show_more_accounts:
 		text = _('Gajim')
-	else:		
+	else:
 		text = _('Gajim - %s') % (get_account_status(accounts[0]))
 
 	# Gather and display events. (With accounts, when there are more.)
@@ -1081,7 +1081,7 @@ def get_accounts_info():
 			message = message.strip()
 		if message != '':
 			single_line += ': ' + message
-		accounts.append({'name': account, 'status_line': single_line, 
+		accounts.append({'name': account, 'status_line': single_line,
 				'show': status, 'message': message})
 	return accounts
 
@@ -1150,13 +1150,13 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
 	'''Returns an eight char long keyID that can be used with for GPG encryption with this contact.
 	If the given keyID is None, return UNKNOWN; if the key does not match the assigned key
 	XXXXXXXXMISMATCH is returned. If the key is trusted and not yet assigned, assign it'''
-	if gajim.connections[account].USE_GPG:	
+	if gajim.connections[account].USE_GPG:
 		if keyID and len(keyID) == 16:
 			keyID = keyID[8:]
-		
+
 		attached_keys = gajim.config.get_per('accounts', account,
 			'attached_gpg_keys').split()
-		
+
 		if jid in attached_keys and keyID:
 			attachedkeyID = attached_keys[attached_keys.index(jid) + 1]
 			if attachedkeyID != keyID:
@@ -1165,7 +1165,7 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
 		elif jid in attached_keys:
 			# An unsigned presence, just use the assigned key
 			keyID = attached_keys[attached_keys.index(jid) + 1]
-		elif keyID: 
+		elif keyID:
 			public_keys = gajim.connections[account].ask_gpg_keys()
 			# Assign the corresponding key, if we have it in our keyring
 			if keyID in public_keys:
@@ -1208,7 +1208,7 @@ def sort_dataforms_func(d1, d2):
 
 def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 	'''Compute caps hash according to XEP-0115, V1.5
-	
+
 	dataforms are xmpp.DataForms objects as common.dataforms don't allow several
 	values without a field type list-multi'''
 	S = ''

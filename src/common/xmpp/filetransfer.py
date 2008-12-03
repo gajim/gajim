@@ -1,4 +1,4 @@
-##   filetransfer.py 
+##   filetransfer.py
 ##
 ##   Copyright (C) 2004 Alexey "Snake" Nezhdanov
 ##
@@ -28,7 +28,7 @@ class IBB(PlugIn):
     """ IBB used to transfer small-sized data chunk over estabilished xmpp connection.
         Data is split into small blocks (by default 3000 bytes each), encoded as base 64
         and sent to another entity that compiles these blocks back into the data chunk.
-        This is very inefficiend but should work under any circumstances. Note that 
+        This is very inefficiend but should work under any circumstances. Note that
         using IBB normally should be the last resort.
     """
     def __init__(self):

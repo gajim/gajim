@@ -28,28 +28,28 @@ from client import *
 
 class NBCommonClient(CommonClient):
 	''' Base for Client and Component classes.'''
-	def __init__(self, server, port=5222, debug=['always', 'nodebuilder'], caller=None, 
+	def __init__(self, server, port=5222, debug=['always', 'nodebuilder'], caller=None,
 		on_connect=None, on_proxy_failure=None, on_connect_failure=None):
 		''' Caches server name and (optionally) port to connect to. "debug" parameter specifies
 			the debug IDs that will go into debug output. You can either specifiy an "include"
 			or "exclude" list. The latter is done via adding "always" pseudo-ID to the list.
-			Full list: ['nodebuilder', 'dispatcher', 'gen_auth', 'SASL_auth', 'bind', 'socket', 
+			Full list: ['nodebuilder', 'dispatcher', 'gen_auth', 'SASL_auth', 'bind', 'socket',
 			 'CONNECTproxy', 'TLS', 'roster', 'browser', 'ibb'] . '''
-		
-		if isinstance(self, NonBlockingClient): 
+
+		if isinstance(self, NonBlockingClient):
 			self.Namespace, self.DBG = 'jabber:client', DBG_CLIENT
-		elif isinstance(self, NBCommonClient): 
+		elif isinstance(self, NBCommonClient):
 			self.Namespace, self.DBG = dispatcher_nb.NS_COMPONENT_ACCEPT, DBG_COMPONENT
-		
+
 		self.defaultNamespace = self.Namespace
 		self.disconnect_handlers = []
 		self.Server = server
 		self.Port = port
-		
+
 		# Who initiated this client
 		# Used to register the EventDispatcher
 		self._caller = caller
-		if debug and not isinstance(debug, list): 
+		if debug and not isinstance(debug, list):
 			debug = ['always', 'nodebuilder']
 		self._DEBUG = Debug.Debug(debug)
 		self.DEBUG = self._DEBUG.Show
@@ -64,10 +64,10 @@ class NBCommonClient(CommonClient):
 		self.on_connect = on_connect
 		self.on_proxy_failure = on_proxy_failure
 		self.on_connect_failure = on_connect_failure
-		
+
 	def set_idlequeue(self, idlequeue):
 		self.idlequeue = idlequeue
-	
+
 	def disconnected(self):
 		''' Called on disconnection. Calls disconnect handlers and cleans things up. '''
 		self.connected=''
@@ -90,15 +90,15 @@ class NBCommonClient(CommonClient):
 			self.NBSOCKS5PROXYsocket.PlugOut()
 		if 'NonBlockingTcp' in self.__dict__:
 			self.NonBlockingTcp.PlugOut()
-		
+
 	def reconnectAndReauth(self):
 		''' Just disconnect. We do reconnecting in connection.py '''
 		self.disconnect()
-		return '' 
+		return ''
 
 	def connect(self,server=None,proxy=None, ssl=None, on_stream_start = None):
 		''' Make a tcp/ip connection, protect it with tls/ssl if possible and start XMPP stream. '''
-		if not server: 
+		if not server:
 			server = (self.Server, self.Port)
 		self._Server,  self._Proxy, self._Ssl = server ,  proxy, ssl
 		self.on_stream_start = on_stream_start
@@ -117,22 +117,22 @@ class NBCommonClient(CommonClient):
 				self.socket = transports_nb.NBHTTPPROXYsocket(self._on_connected,
 					self._on_proxy_failure, self._on_connected_failure, proxy,
 					server)
-		else: 
+		else:
 			self.connected = 'tcp'
-			self.socket = transports_nb.NonBlockingTcp(self._on_connected, 
+			self.socket = transports_nb.NonBlockingTcp(self._on_connected,
 				self._on_connected_failure, server)
 		self.socket.PlugIn(self)
 		return True
-	
+
 	def get_attrs(self, on_stream_start):
 		self.on_stream_start = on_stream_start
 		self.onreceive(self._on_receive_document_attrs)
 
-	def _on_proxy_failure(self, reason): 
+	def _on_proxy_failure(self, reason):
 		if self.on_proxy_failure:
 			self.on_proxy_failure(reason)
 
-	def _on_connected_failure(self, retry = None): 
+	def _on_connected_failure(self, retry = None):
 		if self.socket:
 			self.socket.disconnect()
 		if self.on_connect_failure:
@@ -143,7 +143,7 @@ class NBCommonClient(CommonClient):
 		# in nonblocking mode, and this handler is actually called
 		# as soon as connection is initiated, NOT when connection
 		# succeeds, as the name suggests.
-		# # connect succeeded, so no need of this callback anymore 
+		# # connect succeeded, so no need of this callback anymore
 		# self.on_connect_failure = None
 		self.connected = 'tcp'
 		if self._Ssl:
@@ -153,7 +153,7 @@ class NBCommonClient(CommonClient):
 			self.connected = 'ssl'
 		self.onreceive(self._on_receive_document_attrs)
 		dispatcher_nb.Dispatcher().PlugIn(self)
-		
+
 	def _on_receive_document_attrs(self, data):
 		if data:
 			self.Dispatcher.ProcessNonBlocking(data)
@@ -169,11 +169,11 @@ class NBCommonClient(CommonClient):
 			self.on_stream_start()
 			self.on_stream_start = None
 		return True
-	
+
 	def _on_receive_stream_features(self, data):
 		if data:
 			self.Dispatcher.ProcessNonBlocking(data)
-		if not self.Dispatcher.Stream.features: 
+		if not self.Dispatcher.Stream.features:
 			return
 			# pass  # If we get version 1.0 stream the features tag MUST BE presented
 		self.onreceive(None)
@@ -181,12 +181,12 @@ class NBCommonClient(CommonClient):
 			self.on_stream_start()
 			self.on_stream_start = None
 		return True
-	
+
 class NonBlockingClient(NBCommonClient):
 	''' Example client class, based on CommonClient. '''
 	def connect(self,server=None,proxy=None,secure=None,use_srv=True):
 		''' Connect to jabber server. If you want to specify different ip/port to connect to you can
-			pass it as tuple as first parameter. If there is HTTP proxy between you and server 
+			pass it as tuple as first parameter. If there is HTTP proxy between you and server
 			specify it's address and credentials (if needed) in the second argument.
 			If you want ssl/tls support to be discovered and enable automatically - leave third argument as None. (ssl will be autodetected only if port is 5223 or 443)
 			If you want to force SSL start (i.e. if port 5223 or 443 is remapped to some non-standard port) then set it to 1.
@@ -195,18 +195,18 @@ class NonBlockingClient(NBCommonClient):
 			Returns '' or 'tcp' or 'tls', depending on the result.'''
 		self.__secure = secure
 		self.Connection = None
-		NBCommonClient.connect(self, server = server, proxy = proxy, ssl = secure, 
-			on_stream_start = self._on_tcp_stream_start) 
+		NBCommonClient.connect(self, server = server, proxy = proxy, ssl = secure,
+			on_stream_start = self._on_tcp_stream_start)
 		return self.connected
-	
-	
+
+
 	def _is_connected(self):
 		self.onreceive(None)
 		if self.on_connect:
 			self.on_connect(self, self.connected)
 			self.on_connect_failure = None
 			self.on_connect = None
-	
+
 	def _on_tcp_stream_start(self):
 		if not self.connected or self.__secure is not None and not self.__secure:
 			self._is_connected()
@@ -217,12 +217,12 @@ class NonBlockingClient(NBCommonClient):
 		if not self.Connection: # ssl error, stream is closed
 			return True
 		if 'version' not in self.Dispatcher.Stream._document_attrs or \
-			not self.Dispatcher.Stream._document_attrs['version']=='1.0': 
+			not self.Dispatcher.Stream._document_attrs['version']=='1.0':
 			self._is_connected()
 			return
-		if not self.Dispatcher.Stream.features.getTag('starttls'): 
+		if not self.Dispatcher.Stream.features.getTag('starttls'):
 			self._is_connected()
-			return 
+			return
 		self.onreceive(self._on_receive_starttls)
 
 	def _on_receive_starttls(self, data):
@@ -231,7 +231,7 @@ class NonBlockingClient(NBCommonClient):
 		if not self.NonBlockingTLS.starttls:
 			return
 		self.onreceive(None)
-		if not hasattr(self, 'NonBlockingTLS') or self.NonBlockingTLS.starttls != 'success': 
+		if not hasattr(self, 'NonBlockingTLS') or self.NonBlockingTLS.starttls != 'success':
 			self.event('tls_failed')
 			self._is_connected()
 			return
@@ -239,7 +239,7 @@ class NonBlockingClient(NBCommonClient):
 		self.onreceive(None)
 		self._is_connected()
 		return True
-	
+
 	def auth(self, user, password, resource = '', sasl = 1, on_auth = None):
 		''' Authenticate connnection and bind resource. If resource is not provided
 			random one or library name used. '''
@@ -247,7 +247,7 @@ class NonBlockingClient(NBCommonClient):
 		self.on_auth = on_auth
 		self.get_attrs(self._on_doc_attrs)
 		return
-	
+
 	def _on_old_auth(self, res):
 		if res:
 			self.connected += '+old_auth'
@@ -256,27 +256,27 @@ class NonBlockingClient(NBCommonClient):
 			self.on_auth(self, None)
 
 	def _on_doc_attrs(self):
-		if self._sasl: 
+		if self._sasl:
 			auth_nb.SASL(self._User, self._Password, self._on_start_sasl).PlugIn(self)
 		if not self._sasl or self.SASL.startsasl == 'not-supported':
-			if not self._Resource: 
+			if not self._Resource:
 				self._Resource = 'xmpppy'
 			auth_nb.NonBlockingNonSASL(self._User, self._Password, self._Resource, self._on_old_auth).PlugIn(self)
 			return
 		self.onreceive(self._on_start_sasl)
 		self.SASL.auth()
 		return True
-		
+
 	def _on_start_sasl(self, data=None):
 		if data:
 			self.Dispatcher.ProcessNonBlocking(data)
-		if 'SASL' not in self.__dict__: 
-			# SASL is pluged out, possible disconnect 
+		if 'SASL' not in self.__dict__:
+			# SASL is pluged out, possible disconnect
 			return
-		if self.SASL.startsasl == 'in-process': 
+		if self.SASL.startsasl == 'in-process':
 			return
 		self.onreceive(None)
-		if self.SASL.startsasl == 'failure': 
+		if self.SASL.startsasl == 'failure':
 			# wrong user/pass, stop auth
 			self.connected = None
 			self._on_sasl_auth(None)
@@ -285,16 +285,16 @@ class NonBlockingClient(NBCommonClient):
 			auth_nb.NonBlockingBind().PlugIn(self)
 			self.onreceive(self._on_auth_bind)
 		return True
-		
+
 	def _on_auth_bind(self, data):
 		if data:
 			self.Dispatcher.ProcessNonBlocking(data)
 		if not hasattr(self, 'NonBlockingBind') or self.NonBlockingBind.bound is \
-		None: 
+		None:
 			return
 		self.NonBlockingBind.NonBlockingBind(self._Resource, self._on_sasl_auth)
 		return True
-	
+
 	def _on_sasl_auth(self, res):
 		self.onreceive(None)
 		if res:
@@ -302,10 +302,10 @@ class NonBlockingClient(NBCommonClient):
 			self.on_auth(self, 'sasl')
 		else:
 			self.on_auth(self, None)
-		
+
 	def initRoster(self):
 		''' Plug in the roster. '''
-		if 'NonBlockingRoster' not in self.__dict__: 
+		if 'NonBlockingRoster' not in self.__dict__:
 			roster_nb.NonBlockingRoster().PlugIn(self)
 
 	def getRoster(self, on_ready = None):
@@ -330,7 +330,7 @@ class Component(NBCommonClient):
 			Jabberd1.4 and Ejabberd use the default namespace then for all client messages.
 			Jabberd2 uses jabber:client.
 			'server' argument is a server name that you are connecting to (f.e. "localhost").
-			'port' can be specified if 'server' resolves to correct IP. If it is not then you'll need to specify IP 
+			'port' can be specified if 'server' resolves to correct IP. If it is not then you'll need to specify IP
 			and port while calling "connect()".'''
 		NBCommonClient.__init__(self, server, port=port, debug=debug)
 		self.typ = typ
@@ -341,7 +341,7 @@ class Component(NBCommonClient):
 			self.domains=[server]
 		self.on_connect_component = on_connect
 		self.on_connect_failure = on_connect_failure
-	
+
 	def connect(self, server=None, proxy=None):
 		''' This will connect to the server, and if the features tag is found then set
 			the namespace to be jabber:client as that is required for jabberd2.
@@ -349,9 +349,9 @@ class Component(NBCommonClient):
 		if self.component:
 			self.Namespace=auth.NS_COMPONENT_1
 			self.Server=server[0]
-		NBCommonClient.connect(self, server=server, proxy=proxy, 
+		NBCommonClient.connect(self, server=server, proxy=proxy,
 			on_connect = self._on_connect, on_connect_failure = self.on_connect_failure)
-		
+
 	def _on_connect(self):
 		if self.typ=='jabberd2' or not self.typ and self.Dispatcher.Stream.features is not None:
 				self.defaultNamespace=auth.NS_CLIENT
@@ -365,9 +365,9 @@ class Component(NBCommonClient):
 		''' Authenticate component "name" with password "password".'''
 		self._User, self._Password, self._Resource=name, password,''
 		try:
-			if self.component: 
+			if self.component:
 				sasl=1
-			if sasl: 
+			if sasl:
 				auth.SASL(name,password).PlugIn(self)
 			if not sasl or self.SASL.startsasl=='not-supported':
 				if auth.NonSASL(name,password,'').PlugIn(self):
@@ -378,11 +378,11 @@ class Component(NBCommonClient):
 			self.onreceive(self._on_auth_component)
 		except Exception:
 			self.DEBUG(self.DBG,"Failed to authenticate %s" % name,'error')
-		
+
 	def _on_auth_component(self, data):
 		if data:
 			self.Dispatcher.ProcessNonBlocking(data)
-		if self.SASL.startsasl == 'in-process': 
+		if self.SASL.startsasl == 'in-process':
 			return
 		if self.SASL.startsasl =='success':
 			if self.component:
@@ -392,18 +392,18 @@ class Component(NBCommonClient):
 			self.connected += '+sasl'
 		else:
 			raise auth.NotAuthorized(self.SASL.startsasl)
-			
+
 	def _on_component_bind(self, data):
 		if data:
 			self.Dispatcher.ProcessNonBlocking(data)
-		if self.NBComponentBind.bound is None: 
+		if self.NBComponentBind.bound is None:
 			return
-		
+
 		for domain in self.domains:
 			self.NBComponentBind.Bind(domain, _on_component_bound)
-	
+
 	def _on_component_bound(self, resp):
 		self.NBComponentBind.PlugOut()
-		
+
 
 # vim: se ts=3:

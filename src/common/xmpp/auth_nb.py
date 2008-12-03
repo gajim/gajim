@@ -50,7 +50,7 @@ def challenge_splitter(data):
 	keyword, value = '', ''
 	dict_ = {}
 	arr = None
-	
+
 	expecting = X_KEYWORD
 	for iter_ in range(len(data) + 1):
 		end = False
@@ -104,12 +104,12 @@ class SASL(PlugIn):
 		self.on_sasl = on_sasl
 		self.realm = None
 	def plugin(self,owner):
-		if 'version' not in self._owner.Dispatcher.Stream._document_attrs: 
+		if 'version' not in self._owner.Dispatcher.Stream._document_attrs:
 			self.startsasl='not-supported'
 		elif self._owner.Dispatcher.Stream.features:
-			try: 
+			try:
 				self.FeaturesHandler(self._owner.Dispatcher, self._owner.Dispatcher.Stream.features)
-			except NodeProcessed: 
+			except NodeProcessed:
 				pass
 		else: self.startsasl=None
 
@@ -117,12 +117,12 @@ class SASL(PlugIn):
 		''' Start authentication. Result can be obtained via "SASL.startsasl" attribute and will be
 			either "success" or "failure". Note that successfull auth will take at least
 			two Dispatcher.Process() calls. '''
-		if self.startsasl: 
+		if self.startsasl:
 			pass
 		elif self._owner.Dispatcher.Stream.features:
-			try: 
+			try:
 				self.FeaturesHandler(self._owner.Dispatcher, self._owner.Dispatcher.Stream.features)
-			except NodeProcessed: 
+			except NodeProcessed:
 				pass
 		else: self._owner.RegisterHandler('features', self.FeaturesHandler, xmlns=NS_STREAMS)
 
@@ -164,9 +164,9 @@ class SASL(PlugIn):
 			self.mechanism = 'DIGEST-MD5'
 		elif 'PLAIN' in self.mecs:
 			self.mecs.remove('PLAIN')
-			sasl_data='%s\x00%s\x00%s' % (self.username+'@' + self._owner.Server, 
+			sasl_data='%s\x00%s\x00%s' % (self.username+'@' + self._owner.Server,
 																	self.username, self.password)
-			node=Node('auth', attrs={'xmlns':NS_SASL,'mechanism':'PLAIN'}, 
+			node=Node('auth', attrs={'xmlns':NS_SASL,'mechanism':'PLAIN'},
 								payload=[base64.encodestring(sasl_data).replace('\n','')])
 			self.mechanism = 'PLAIN'
 		else:
@@ -179,13 +179,13 @@ class SASL(PlugIn):
 
 	def SASLHandler(self, conn, challenge):
 		''' Perform next SASL auth step. Used internally. '''
-		if challenge.getNamespace() != NS_SASL: 
+		if challenge.getNamespace() != NS_SASL:
 			return
 		if challenge.getName() == 'failure':
 			self.startsasl = 'failure'
-			try: 
+			try:
 				reason = challenge.getChildren()[0]
-			except Exception: 
+			except Exception:
 				reason = challenge
 			self.DEBUG('Failed SASL authentification: %s' % reason, 'error')
 			if len(self.mecs) > 0:
@@ -244,7 +244,7 @@ class SASL(PlugIn):
 			resp['nc'] = ('00000001')
 			resp['qop'] = 'auth'
 			resp['digest-uri'] = 'xmpp/'+self._owner.Server
-			A1=C([H(C([resp['username'], resp['realm'], self.password])), 
+			A1=C([H(C([resp['username'], resp['realm'], self.password])),
 						resp['nonce'], resp['cnonce']])
 			A2=C(['AUTHENTICATE',resp['digest-uri']])
 			response= HH(C([HH(A1), resp['nonce'], resp['nc'], resp['cnonce'],
@@ -253,25 +253,25 @@ class SASL(PlugIn):
 			resp['charset'] = 'utf-8'
 			sasl_data=''
 			for key in ('charset', 'username', 'realm', 'nonce', 'nc', 'cnonce', 'digest-uri', 'response', 'qop'):
-				if key in ['nc','qop','response','charset']: 
+				if key in ['nc','qop','response','charset']:
 					sasl_data += "%s=%s," % (key,resp[key])
-				else: 
+				else:
 					sasl_data += '%s="%s",' % (key,resp[key])
 ########################################3333
-			node=Node('response', attrs={'xmlns':NS_SASL}, 
+			node=Node('response', attrs={'xmlns':NS_SASL},
 				payload=[base64.encodestring(sasl_data[:-1]).replace('\r','').replace('\n','')])
 			self._owner.send(node.__str__())
-		elif 'rspauth' in chal: 
+		elif 'rspauth' in chal:
 			self._owner.send(Node('response', attrs={'xmlns':NS_SASL}).__str__())
-		else: 
+		else:
 			self.startsasl='failure'
 			self.DEBUG('Failed SASL authentification: unknown challenge', 'error')
 		if self.on_sasl :
 				self.on_sasl ()
 		raise NodeProcessed
-	
+
 class NonBlockingNonSASL(PlugIn):
-	''' Implements old Non-SASL (JEP-0078) authentication used 
+	''' Implements old Non-SASL (JEP-0078) authentication used
 	in jabberd1.4 and transport authentication.
 	'''
 	def __init__(self, user, password, resource, on_auth):
@@ -286,15 +286,15 @@ class NonBlockingNonSASL(PlugIn):
 	def plugin(self, owner):
 		''' Determine the best auth method (digest/0k/plain) and use it for auth.
 			Returns used method name on success. Used internally. '''
-		if not self.resource: 
+		if not self.resource:
 			return self.authComponent(owner)
 		self.DEBUG('Querying server about possible auth methods', 'start')
-		self.owner = owner 
-		
+		self.owner = owner
+
 		owner.Dispatcher.SendAndWaitForResponse(
 			Iq('get', NS_AUTH, payload=[Node('username', payload=[self.user])]), func=self._on_username
 		)
-		
+
 	def _on_username(self, resp):
 		if not isResultNode(resp):
 			self.DEBUG('No result node arrived! Aborting...','error')
@@ -306,9 +306,9 @@ class NonBlockingNonSASL(PlugIn):
 
 		if query.getTag('digest'):
 			self.DEBUG("Performing digest authentication",'ok')
-			query.setTagData('digest', 
+			query.setTagData('digest',
 				sha.new(self.owner.Dispatcher.Stream._document_attrs['id']+self.password).hexdigest())
-			if query.getTag('password'): 
+			if query.getTag('password'):
 				query.delChild('password')
 			self._method='digest'
 		elif query.getTag('token'):
@@ -330,7 +330,7 @@ class NonBlockingNonSASL(PlugIn):
 			query.setTagData('password',self.password)
 			self._method='plain'
 		resp=self.owner.Dispatcher.SendAndWaitForResponse(iq, func=self._on_auth)
-		
+
 	def _on_auth(self, resp):
 		if isResultNode(resp):
 			self.DEBUG('Sucessfully authenticated with remove host.','ok')
@@ -348,7 +348,7 @@ class NonBlockingNonSASL(PlugIn):
 			payload=[sha.new(owner.Dispatcher.Stream._document_attrs['id']+self.password).hexdigest()]))
 		owner.RegisterHandler('handshake', self.handshakeHandler, xmlns=NS_COMPONENT_ACCEPT)
 		self._owner.onreceive(self._on_auth_component)
-		
+
 	def _on_auth_component(self, data):
 		''' called when we receive some response, after we send the handshake '''
 		if data:
@@ -358,25 +358,25 @@ class NonBlockingNonSASL(PlugIn):
 			return
 		self._owner.onreceive(None)
 		self._owner._registered_name=self.user
-		if self.handshake+1: 
+		if self.handshake+1:
 			return self.on_auth('ok')
 		self.on_auth(None)
 
 	def handshakeHandler(self,disp,stanza):
 		''' Handler for registering in dispatcher for accepting transport authentication. '''
-		if stanza.getName() == 'handshake': 
+		if stanza.getName() == 'handshake':
 			self.handshake=1
-		else: 
+		else:
 			self.handshake=-1
-	
+
 class NonBlockingBind(Bind):
 	''' Bind some JID to the current connection to allow router know of our location.'''
 	def plugin(self, owner):
 		''' Start resource binding, if allowed at this time. Used internally. '''
 		if self._owner.Dispatcher.Stream.features:
-			try: 
+			try:
 				self.FeaturesHandler(self._owner.Dispatcher, self._owner.Dispatcher.Stream.features)
-			except NodeProcessed: 
+			except NodeProcessed:
 				pass
 		else: self._owner.RegisterHandler('features', self.FeaturesHandler, xmlns=NS_STREAMS)
 
@@ -388,15 +388,15 @@ class NonBlockingBind(Bind):
 		''' Perform binding. Use provided resource name or random (if not provided). '''
 		self.on_bound = on_bound
 		self._resource = resource
-		if self._resource: 
+		if self._resource:
 			self._resource = [Node('resource', payload=[self._resource])]
-		else: 
+		else:
 			self._resource = []
-			
+
 		self._owner.onreceive(None)
 		self._owner.Dispatcher.SendAndWaitForResponse(
 			Protocol('iq',typ='set',
-				payload=[Node('bind', attrs={'xmlns':NS_BIND}, payload=self._resource)]), 
+				payload=[Node('bind', attrs={'xmlns':NS_BIND}, payload=self._resource)]),
 				func=self._on_bound)
 	def _on_bound(self, resp):
 		if isResultNode(resp):
@@ -405,7 +405,7 @@ class NonBlockingBind(Bind):
 			jid=JID(resp.getTag('bind').getTagData('jid'))
 			self._owner.User=jid.getNode()
 			self._owner.Resource=jid.getResource()
-			self._owner.SendAndWaitForResponse(Protocol('iq', typ='set', 
+			self._owner.SendAndWaitForResponse(Protocol('iq', typ='set',
 				payload=[Node('session', attrs={'xmlns':NS_SESSION})]), func=self._on_session)
 		elif resp:
 			self.DEBUG('Binding failed: %s.' % resp.getTag('error'),'error')
@@ -413,7 +413,7 @@ class NonBlockingBind(Bind):
 		else:
 			self.DEBUG('Binding failed: timeout expired.', 'error')
 			self.on_bound(None)
-			
+
 	def _on_session(self, resp):
 		self._owner.onreceive(None)
 		if isResultNode(resp):
@@ -435,15 +435,15 @@ class NonBlockingBind(Bind):
 			self.on_bound(None)
 
 class NBComponentBind(ComponentBind):
-	''' ComponentBind some JID to the current connection to allow 
+	''' ComponentBind some JID to the current connection to allow
 	router know of our location.
 	'''
 	def plugin(self,owner):
 		''' Start resource binding, if allowed at this time. Used internally. '''
 		if self._owner.Dispatcher.Stream.features:
-			try: 
+			try:
 				self.FeaturesHandler(self._owner.Dispatcher, self._owner.Dispatcher.Stream.features)
-			except NodeProcessed: 
+			except NodeProcessed:
 				pass
 		else:
 			self._owner.RegisterHandler('features', self.FeaturesHandler, xmlns=NS_STREAMS)
@@ -453,14 +453,14 @@ class NBComponentBind(ComponentBind):
 		''' Remove ComponentBind handler from owner's dispatcher. Used internally. '''
 		if self.needsUnregister:
 			self._owner.UnregisterHandler('features', self.FeaturesHandler, xmlns=NS_STREAMS)
-	
+
 	def Bind(self, domain = None, on_bind = None):
 		''' Perform binding. Use provided domain name (if not provided). '''
 		def wrapper(resp):
 			self._on_bound(resp, domain)
 		self._owner.onreceive(wrapper)
 		self.on_bind = on_bind
-	
+
 	def _on_bound(self, resp, domain=None):
 		if resp:
 			self.Dispatcher.ProcessNonBlocking(resp)
@@ -468,9 +468,9 @@ class NBComponentBind(ComponentBind):
 			return
 		self._owner.onreceive(None)
 		self._owner.SendAndWaitForResponse(
-			Protocol('bind', attrs={'name':domain}, xmlns=NS_COMPONENT_1), 
+			Protocol('bind', attrs={'name':domain}, xmlns=NS_COMPONENT_1),
 			func=self._on_bind_reponse)
-	
+
 	def _on_bind_reponse(self, resp):
 		if resp and resp.getAttr('error'):
 			self.DEBUG('Binding failed: %s.' % resp.getAttr('error'), 'error')

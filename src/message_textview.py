@@ -35,7 +35,7 @@ class MessageTextView(gtk.TextView):
 				(int, gtk.gdk.ModifierType ) # arguments
 			)
 		)
-		
+
 	def __init__(self):
 		gtk.TextView.__init__(self)
 
@@ -56,7 +56,7 @@ class MessageTextView(gtk.TextView):
 		self.end_tags = {}
 		self.color_tags = []
 		self.fonts_tags = []
-		self.other_tags = {}		
+		self.other_tags = {}
 		self.other_tags['bold'] = buffer.create_tag('bold')
 		self.other_tags['bold'].set_property('weight', pango.WEIGHT_BOLD)
 		self.begin_tags['bold'] = '<strong>'
@@ -80,7 +80,7 @@ class MessageTextView(gtk.TextView):
 		start = 0
 		end = 0
 		index = 0
-		
+
 		new_text = ''
 		iterator = gajim.interface.link_pattern_re.finditer(text)
 		for match in iterator:
@@ -94,7 +94,7 @@ class MessageTextView(gtk.TextView):
 			# we insert normal text
 			new_text += text_before_special_text + \
 			'<a href="'+ url +'">' + url + '</a>'
-				
+
 			index = end # update index
 
 		if end < len(text):
@@ -128,7 +128,7 @@ class MessageTextView(gtk.TextView):
 				buffer.remove_tag_by_name('strike', start, finish)
 			elif tag == 'strike':
 				buffer.remove_tag_by_name('underline', start, finish)
-			buffer.apply_tag_by_name(tag, start, finish)		
+			buffer.apply_tag_by_name(tag, start, finish)
 
 	def clear_tags(self, widget):
 		buffer = self.get_buffer()
@@ -190,7 +190,7 @@ class MessageTextView(gtk.TextView):
 			self.begin_tags[tag_name] = \
 				'<span style="font-family: ' + family + '; ' + \
 				'font-size: ' + str(size) + 'px">'
-			self.end_tags[tag_name] = '</span>'	
+			self.end_tags[tag_name] = '</span>'
 			self.fonts_tags.append(tag_name)
 
 		return_val = buffer.get_selection_bounds()
@@ -198,7 +198,7 @@ class MessageTextView(gtk.TextView):
 			start, finish = return_val[0], return_val[1]
 		else:
 			start, finish = buffer.get_bounds()
-		
+
 		for tag in self.fonts_tags:
 			buffer.remove_tag_by_name(tag, start, finish)
 
@@ -247,14 +247,14 @@ class MessageTextView(gtk.TextView):
 				if tag_name not in self.begin_tags:
 					continue
 				new_tags.append(tag_name)
-			
+
 			for tag in iter.get_tags():
 				tag_name = tag.get_property('name')
 				if tag_name not in self.begin_tags or tag_name not in self.end_tags:
 					continue
 				if tag_name not in new_tags:
 					old_tags.append(tag_name)
-			
+
 			for tag in iter.get_toggled_tags(False):
 				tag_name = tag.get_property('name')
 				if tag_name not in self.end_tags:
@@ -268,7 +268,7 @@ class MessageTextView(gtk.TextView):
 			for tag in new_tags:
 				texte += self.begin_tags[tag]
 			for tag in old_tags:
-				texte += self.begin_tags[tag]		
+				texte += self.begin_tags[tag]
 
 		texte += xhtml_special(buffer.get_text(old, buffer.get_end_iter()))
 		for tag in iter.get_toggled_tags(False):
@@ -281,7 +281,7 @@ class MessageTextView(gtk.TextView):
 			return '<p>' + self.make_clickable_urls(texte) + '</p>'
 		else:
 			return None
-	
+
 
 	def destroy(self):
 		import gc
@@ -308,41 +308,41 @@ gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.ISO_Left_Tab,
 	gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK)
 
 # CTRL + TAB
-gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Tab, 
+gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Tab,
 	gtk.gdk.CONTROL_MASK, 'mykeypress', int, gtk.keysyms.Tab,
 	gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK)
-	
+
 # TAB
-gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Tab, 
+gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Tab,
 	0, 'mykeypress', int, gtk.keysyms.Tab,	gtk.gdk.ModifierType, 0)
 
 # CTRL + UP
-gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Up, 
+gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Up,
 	gtk.gdk.CONTROL_MASK, 'mykeypress', int, gtk.keysyms.Up,
 	gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK)
 
 # CTRL + DOWN
-gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Down, 
+gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Down,
 	gtk.gdk.CONTROL_MASK, 'mykeypress', int, gtk.keysyms.Down,
 	gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK)
 
 # ENTER
-gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Return, 
+gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Return,
 	0, 'mykeypress', int, gtk.keysyms.Return,
 	gtk.gdk.ModifierType, 0)
 
 # Ctrl + Enter
-gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Return, 
+gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.Return,
 	gtk.gdk.CONTROL_MASK, 'mykeypress', int, gtk.keysyms.Return,
 	gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK)
 
 # Keypad Enter
-gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.KP_Enter, 
+gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.KP_Enter,
 	0, 'mykeypress', int, gtk.keysyms.KP_Enter,
 	gtk.gdk.ModifierType, 0)
 
 # Ctrl + Keypad Enter
-gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.KP_Enter, 
+gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.KP_Enter,
 	gtk.gdk.CONTROL_MASK, 'mykeypress', int, gtk.keysyms.KP_Enter,
 	gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK)
 

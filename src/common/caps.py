@@ -239,7 +239,7 @@ class ConnectionCaps(object):
 			if contact is None:
 				# TODO: a way to put contact not-in-roster
 				# into Contacts
-				return	
+				return
 
 		# get the caps element
 		caps = presence.getTag('c')

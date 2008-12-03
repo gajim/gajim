@@ -129,7 +129,7 @@ class DataField(ExtendedNode):
 			assert isinstance(value, basestring)
 			self.setAttr('type', value)
 		return locals()
-	
+
 	@nested_property
 	def var():
 		'''Field identifier.'''
@@ -274,7 +274,7 @@ class ListMultiField(ListField):
 			for element in self.getTags('value'):
 				self.delChild(element)
 		return locals()
-	
+
 	def iter_values(self):
 		for element in self.getTags('value'):
 			yield element.getData()
@@ -412,7 +412,7 @@ class SimpleDataForm(DataForm, DataRecord):
 	def __init__(self, type_=None, title=None, instructions=None, fields=None, extend=None):
 		DataForm.__init__(self, type_=type_, title=title, instructions=instructions, extend=extend)
 		DataRecord.__init__(self, fields=fields, extend=self, associated=self)
-	
+
 	def get_purged(self):
 		c = SimpleDataForm(extend=self)
 		del c.title

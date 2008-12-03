@@ -166,7 +166,7 @@ except ImportError:
 
 HAVE_GPG = True
 try:
-	import GnuPGInterface 
+	import GnuPGInterface
 except ImportError:
 	HAVE_GPG = False
 else:

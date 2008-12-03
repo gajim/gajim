@@ -2,10 +2,10 @@
 A Python module that enables posting notifications to the Growl daemon.
 See <http://growl.info/> for more information.
 """
-__version__ = "0.7" 
+__version__ = "0.7"
 __author__ = "Mark Rowe <bdash@users.sourceforge.net>"
 __copyright__ = "(C) 2003 Mark Rowe <bdash@users.sourceforge.net>. Released under the BSD license."
-__contributors__ = ["Ingmar J Stein (Growl Team)", 
+__contributors__ = ["Ingmar J Stein (Growl Team)",
                     "Rui Carmo (http://the.taoofmac.com)",
                     "Jeremy Rossi <jeremy@jeremyrossi.com>"
                    ]
@@ -35,7 +35,7 @@ GROWL_NOTIFICATION_DESCRIPTION="NotificationDescription"
 GROWL_NOTIFICATION_ICON="NotificationIcon"
 GROWL_NOTIFICATION_APP_ICON="NotificationAppIcon"
 GROWL_NOTIFICATION_PRIORITY="NotificationPriority"
-        
+
 GROWL_NOTIFICATION_STICKY="NotificationSticky"
 GROWL_NOTIFICATION_CLICK_CONTEXT="NotificationClickContext"
 
@@ -51,7 +51,7 @@ GROWL_NOTIFICATION_CLICKED="GrowlClicked!"
 GROWL_NOTIFICATION_TIMED_OUT="GrowlTimedOut!"
 GROWL_KEY_CLICKED_CONTEXT="ClickedContext"
 
-    
+
 growlPriority = {"Very Low":-2,"Moderate":-1,"Normal":0,"High":1,"Emergency":2}
 
 class netgrowl:
@@ -67,7 +67,7 @@ class netgrowl:
 
     def send(self, data):
         self.socket.sendto(data, (self.hostname, GROWL_UDP_PORT))
-        
+
     def PostNotification(self, userInfo):
         priority = userInfo.get(GROWL_NOTIFICATION_PRIORITY, 0)
         if GROWL_NOTIFICATION_STICKY in userInfo:
@@ -113,9 +113,9 @@ class netgrowl:
         title        = title.encode("utf-8")
         description  = description.encode("utf-8")
         flags = (priority & 0x07) * 2
-        if priority < 0: 
+        if priority < 0:
             flags |= 0x08
-        if sticky: 
+        if sticky:
             flags = flags | 0x0001
         data = struct.pack("!BBHHHHH",
                            GROWL_PROTOCOL_VERSION,

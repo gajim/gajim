@@ -667,7 +667,7 @@ class ConversationTextview:
 	def on_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend Clear
 		(only if used_in_history_window is False)
-		and if we have sth selected we show a submenu with actions on 
+		and if we have sth selected we show a submenu with actions on
 		the phrase (see on_conversation_textview_button_press_event)'''
 
 		separator_menuitem_was_added = False

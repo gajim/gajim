@@ -61,7 +61,7 @@ class Systray:
 		self.new_chat_handler_id = None
 		self.t = None
 		# click somewhere else does not popdown menu. workaround this.
-		self.added_hide_menuitem = False 
+		self.added_hide_menuitem = False
 		self.img_tray = gtk.Image()
 		self.status = 'offline'
 		self.double_click = False
@@ -107,7 +107,7 @@ class Systray:
 
 	def change_status(self, global_status):
 		''' set tray image to 'global_status' '''
-		# change image and status, only if it is different 
+		# change image and status, only if it is different
 		if global_status is not None and self.status != global_status:
 			self.status = global_status
 		self.set_img()
@@ -226,7 +226,7 @@ class Systray:
 						self.on_single_message_menuitem_activate, account)
 					account_menu_for_single_message.append(item)
 
-					# join gc 
+					# join gc
 					gc_item = gtk.MenuItem(_('using account %s') % account, False)
 					gc_sub_menu.append(gc_item)
 					gc_menuitem_menu = gtk.Menu()
@@ -283,7 +283,7 @@ class Systray:
 					gajim.interface.handle_event(account, jid, event.type_)
 
 	def on_sounds_mute_menuitem_activate(self, widget):
-		gajim.config.set('sounds_on', not widget.get_active()) 
+		gajim.config.set('sounds_on', not widget.get_active())
 		gajim.interface.save_config()
 
 	def on_show_roster_menuitem_activate(self, widget):
@@ -296,7 +296,7 @@ class Systray:
 		else:
 			gajim.interface.instances['preferences'] = config.PreferencesWindow()
 
-	def on_quit_menuitem_activate(self, widget):	
+	def on_quit_menuitem_activate(self, widget):
 		gajim.interface.roster.on_quit_request()
 
 	def on_left_click(self):

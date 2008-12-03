@@ -58,7 +58,7 @@ def Q_(s):
 	# so we must use as:
 	# s = Q_('?vcard:Unknown')
 	# widget.set_text(s)
-	# Q_() removes the ?vcard: 
+	# Q_() removes the ?vcard:
 	# but gettext while parsing the file detects ?vcard:Unknown as a whole string.
 	# translator can either put the ?vcard: part or no (easier for him or her to no)
 	# nothing fails
@@ -70,7 +70,7 @@ def Q_(s):
 def ngettext(s_sing, s_plural, n, replace_sing = None, replace_plural = None):
 	'''use as:
 	i18n.ngettext('leave room %s', 'leave rooms %s', len(rooms), 'a', 'a, b, c')
-	
+
 	in other words this is a hack to ngettext() to support %s %d etc..
 	'''
 	text = _translation.ungettext(s_sing, s_plural, n)

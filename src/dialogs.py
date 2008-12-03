@@ -106,7 +106,7 @@ class EditGroupsDialog:
 		'''add group group to all contacts and all their brothers'''
 		for (contact, account) in self.list_:
 			gajim.interface.roster.add_contact_to_groups(contact.jid, account, [group])
-		
+
 		# FIXME: Ugly workaround. Maybe we haven't been in any group (defaults to General)
 		gajim.interface.roster.draw_group(_('General'), account)
 
@@ -487,7 +487,7 @@ class ChangeMoodDialog:
 			self.mood_buttons[mood].connect('clicked',
 				self.on_mood_button_clicked, mood)
 			table.attach(self.mood_buttons[mood], x, x + 1, y, y + 1)
-			
+
 			# Calculate the next position
 			x += 1
 			if x >= self.COLS:
@@ -1036,7 +1036,7 @@ class AboutDialog:
 		dlg.set_logo(pixbuf)
 		#here you write your name in the form Name FamilyName <someone@somewhere>
 		dlg.set_translator_credits(_('translator-credits'))
-		
+
 		thanks_artists_file_path = self.get_path('THANKS.artists')
 		if thanks_artists_file_path:
 			artists_text = open(thanks_artists_file_path).read()
@@ -1690,7 +1690,7 @@ class JoinGroupchatWindow:
 			self._password_entry.set_text(password)
 		self.xml.signal_autoconnect(self)
 		# now add us to open windows
-		gajim.interface.instances[account]['join_gc'] = self 
+		gajim.interface.instances[account]['join_gc'] = self
 		if len(gajim.connections) > 1:
 			title = _('Join Group Chat with account %s') % account
 		else:

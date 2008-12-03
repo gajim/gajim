@@ -1,4 +1,4 @@
-##   features.py 
+##   features.py
 ##
 ##   Copyright (C) 2003-2004 Alexey "Snake" Nezhdanov
 ##   Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
@@ -20,7 +20,7 @@ from protocol import *
 
 def _on_default_response(disp, iq, cb):
 	def _on_response(resp):
-		if isResultNode(resp): 
+		if isResultNode(resp):
 			if cb:
 				cb(1)
 		elif cb:
@@ -33,22 +33,22 @@ def _discover(disp, ns, jid, node = None, fb2b=0, fb2a=1, cb=None):
 		and if it doesnt support browse (or fb2b is not true) fall back to agents protocol
 		(if gb2a is true). Returns obtained info. Used internally. """
 	iq=Iq(to=jid, typ='get', queryNS=ns)
-	if node: 
+	if node:
 		iq.setQuerynode(node)
 	def _on_resp1(resp):
-		if fb2b and not isResultNode(resp): 
+		if fb2b and not isResultNode(resp):
 			# Fallback to browse
-			disp.SendAndCallForResponse(Iq(to=jid,typ='get',queryNS=NS_BROWSE), _on_resp2)   
+			disp.SendAndCallForResponse(Iq(to=jid,typ='get',queryNS=NS_BROWSE), _on_resp2)
 		else:
 			_on_resp2('')
 	def _on_resp2(resp):
-		if fb2a and not isResultNode(resp): 
+		if fb2a and not isResultNode(resp):
 			# Fallback to agents
-			disp.SendAndCallForResponse(Iq(to=jid,typ='get',queryNS=NS_AGENTS), _on_result)   
+			disp.SendAndCallForResponse(Iq(to=jid,typ='get',queryNS=NS_AGENTS), _on_result)
 		else:
 			_on_result('')
 	def _on_result(resp):
-		if isResultNode(resp): 
+		if isResultNode(resp):
 			if cb:
 				cb(resp.getQueryPayload())
 		elif cb:
@@ -65,7 +65,7 @@ def discoverItems(disp,jid,node=None, cb=None):
 	def _on_response(result_array):
 		ret=[]
 		for result in result_array:
-			if result.getName()=='agent' and result.getTag('name'): 
+			if result.getName()=='agent' and result.getTag('name'):
 				result.setAttr('name', result.getTagData('name'))
 			ret.append(result.attrs)
 		if cb:
@@ -82,39 +82,39 @@ def discoverInfo(disp,jid,node=None, cb=None):
 	def _on_response(result):
 		identities , features = [] , []
 		for i in result:
-			if i.getName()=='identity': 
+			if i.getName()=='identity':
 				identities.append(i.attrs)
-			elif i.getName()=='feature': 
+			elif i.getName()=='feature':
 				features.append(i.getAttr('var'))
 			elif i.getName()=='agent':
-				if i.getTag('name'): 
+				if i.getTag('name'):
 					i.setAttr('name',i.getTagData('name'))
-				if i.getTag('description'): 
+				if i.getTag('description'):
 					i.setAttr('name',i.getTagData('description'))
 				identities.append(i.attrs)
-				if i.getTag('groupchat'): 
+				if i.getTag('groupchat'):
 					features.append(NS_GROUPCHAT)
-				if i.getTag('register'): 
+				if i.getTag('register'):
 					features.append(NS_REGISTER)
-				if i.getTag('search'): 
+				if i.getTag('search'):
 					features.append(NS_SEARCH)
 		if cb:
 			cb(identities , features)
 	_discover(disp, NS_DISCO_INFO, jid, node, _on_response)
-	
+
 ### Registration ### jabber:iq:register ### JEP-0077 ###########################
 def getRegInfo(disp, host, info={}, sync=True):
 	""" Gets registration form from remote host.
 		You can pre-fill the info dictionary.
-		F.e. if you are requesting info on registering user joey than specify 
+		F.e. if you are requesting info on registering user joey than specify
 		info as {'username':'joey'}. See JEP-0077 for details.
 		'disp' must be connected dispatcher instance."""
 	iq=Iq('get',NS_REGISTER,to=host)
-	for i in info.keys(): 
+	for i in info.keys():
 		iq.setTagData(i,info[i])
 	if sync:
 		disp.SendAndCallForResponse(iq, lambda resp: _ReceivedRegInfo(disp.Dispatcher,resp, host))
-	else: 
+	else:
 		disp.SendAndCallForResponse(iq, _ReceivedRegInfo, {'agent': host })
 
 def _ReceivedRegInfo(con, resp, agent):
@@ -208,7 +208,7 @@ def getPrivacyList(disp, listname):
 	""" Requests specific privacy list listname. Returns list of XML nodes (rules)
 		taken from the server responce."""
 	def _on_response(resp):
-		if not isResultNode(resp): 
+		if not isResultNode(resp):
 			disp.Event(NS_PRIVACY, PRIVACY_LIST_RECEIVED, (False))
 			return
 		disp.Event(NS_PRIVACY, PRIVACY_LIST_RECEIVED, (resp))
@@ -218,9 +218,9 @@ def getPrivacyList(disp, listname):
 def setActivePrivacyList(disp, listname=None, typ='active', cb=None):
 	""" Switches privacy list 'listname' to specified type.
 		By default the type is 'active'. Returns true on success."""
-	if listname: 
+	if listname:
 		attrs={'name':listname}
-	else: 
+	else:
 		attrs={}
 	iq = Iq('set',NS_PRIVACY,payload=[Node(typ,attrs)])
 	_on_default_response(disp, iq, cb)

@@ -90,7 +90,7 @@ def get_dbus_struct(obj):
 			return DBUS_NONE()
 		return result
 	# unknown type
-	return DBUS_NONE() 
+	return DBUS_NONE()
 
 class Remote:
 	def __init__(self):
@@ -265,7 +265,7 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.method(INTERFACE, in_signature='sss', out_signature='b')
 	def send_file(self, file_path, jid, account):
-		'''send file, located at 'file_path' to 'jid', using account 
+		'''send file, located at 'file_path' to 'jid', using account
 		(optional) 'account' '''
 		jid = self._get_real_jid(jid, account)
 		connected_account, contact = self._get_account_and_contact(account, jid)
@@ -355,7 +355,7 @@ class SignalObject(dbus.service.Object):
 					break
 				# we send the message to jid not in roster, because account is
 				# specified, or there is only one account
-				elif account: 
+				elif account:
 					connected_account = acct
 				elif first_connected_acct is None:
 					first_connected_acct = acct
@@ -378,7 +378,7 @@ class SignalObject(dbus.service.Object):
 	def change_status(self, status, message, account):
 		''' change_status(status, message, account). account is optional -
 		if not specified status is changed for all accounts. '''
-		if status not in ('offline', 'online', 'chat', 
+		if status not in ('offline', 'online', 'chat',
 			'away', 'xa', 'dnd', 'invisible'):
 			return DBUS_BOOLEAN(False)
 		if account:
@@ -546,7 +546,7 @@ class SignalObject(dbus.service.Object):
 		if account:
 			if account in gajim.connections and \
 				gajim.connections[account].connected > 1:
-				# if given account is active, use it 
+				# if given account is active, use it
 				AddNewContactWindow(account = account, jid = jid)
 			else:
 				# wrong account

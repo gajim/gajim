@@ -51,7 +51,7 @@ class SystemBus:
 	'''A Singleton for the DBus SystemBus'''
 	def __init__(self):
 		self.system_bus = None
-	
+
 	def SystemBus(self):
 		if not supported:
 			raise exceptions.DbusNotSupported
@@ -84,7 +84,7 @@ class SessionBus:
 	'''A Singleton for the D-Bus SessionBus'''
 	def __init__(self):
 		self.session_bus = None
-	
+
 	def SessionBus(self):
 		if not supported:
 			raise exceptions.DbusNotSupported
@@ -112,7 +112,7 @@ class SessionBus:
 session_bus = SessionBus()
 
 def get_interface(interface, path):
-	'''Returns an interface on the current SessionBus. If the interface isn\'t 
+	'''Returns an interface on the current SessionBus. If the interface isn\'t
 	running, it tries to start it first.'''
 	if not supported:
 		return None
@@ -148,7 +148,7 @@ def get_notifications_interface():
 if supported:
 	class MissingArgument(dbus.DBusException):
 		_dbus_error_name = _GAJIM_ERROR_IFACE + '.MissingArgument'
-	
+
 	class InvalidArgument(dbus.DBusException):
 		'''Raised when one of the provided arguments is invalid.'''
 		_dbus_error_name = _GAJIM_ERROR_IFACE + '.InvalidArgument'

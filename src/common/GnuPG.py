@@ -108,7 +108,7 @@ if gajim.HAVE_GPG:
 			enc = self._addHeaderFooter(str_, 'MESSAGE')
 			proc.handles['stdin'].write(enc)
 			proc.handles['stdin'].close()
-	
+
 			output = proc.handles['stdout'].read()
 			proc.handles['stdout'].close()
 
@@ -166,7 +166,7 @@ if gajim.HAVE_GPG:
 
 			try: proc.wait()
 			except IOError: pass
-			
+
 			keyid = ''
 			if 'GOODSIG' in resp:
 				keyid = resp['GOODSIG'].split()[0]

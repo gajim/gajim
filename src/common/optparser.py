@@ -106,7 +106,7 @@ class OptionsParser:
 				s += p + '.'
 		s += opt
 		fd.write(s + ' = ' + value + '\n')
-	
+
 	def write(self):
 		(base_dir, filename) = os.path.split(self.__filename)
 		self.__tempfile = os.path.join(base_dir, '.' + filename)
@@ -192,7 +192,7 @@ class OptionsParser:
 		gajim.config.set('version', new_version)
 
 		gajim.capscache.load_from_db()
-	
+
 	def update_config_x_to_09(self):
 		# Var name that changed:
 		# avatar_width /height -> chat_avatar_width / height
@@ -212,7 +212,7 @@ class OptionsParser:
 		d = ['accounttextcolor', 'accountbgcolor', 'accountfont',
 			'accountfontattrs', 'grouptextcolor', 'groupbgcolor', 'groupfont',
 			'groupfontattrs', 'contacttextcolor', 'contactbgcolor', 'contactfont',
-			'contactfontattrs', 'bannertextcolor', 'bannerbgcolor', 'bannerfont', 
+			'contactfontattrs', 'bannertextcolor', 'bannerbgcolor', 'bannerfont',
 			'bannerfontattrs']
 		for theme_name in (_('grocery'), _('default')):
 			if theme_name not in gajim.config.get_per('themes'):
@@ -281,15 +281,15 @@ class OptionsParser:
 		if 'always_compact_view_gc' in self.old_values and \
 		self.old_values['always_compact_view_gc'] != 'False':
 			gajim.config.set('always_hide_groupchat_buttons', True)
-		
+
 		for account in gajim.config.get_per('accounts'):
 			proxies_str = gajim.config.get_per('accounts', account,
 				'file_transfer_proxies')
 			proxies = proxies_str.split(',')
 			for i in range(0, len(proxies)):
 				proxies[i] = proxies[i].strip()
-			for wrong_proxy in ('proxy65.jabber.autocom.pl', 
-				'proxy65.jabber.ccc.de'): 
+			for wrong_proxy in ('proxy65.jabber.autocom.pl',
+				'proxy65.jabber.ccc.de'):
 				if wrong_proxy in proxies:
 					proxies.remove(wrong_proxy)
 			if not 'transfer.jabber.freenet.de' in proxies:
@@ -380,9 +380,9 @@ class OptionsParser:
 		cur.close() # remove this in 2007 [pysqlite old versions need this]
 		con.close()
 		gajim.config.set('version', '0.10.1.5')
-		
+
 	def update_config_to_01016(self):
-		'''#2494 : Now we play gc_received_message sound even if 
+		'''#2494 : Now we play gc_received_message sound even if
 		notify_on_all_muc_messages is false. Keep precedent behaviour.'''
 		if 'notify_on_all_muc_messages' in self.old_values and \
 		self.old_values['notify_on_all_muc_messages'] == 'False' and \
@@ -419,7 +419,7 @@ class OptionsParser:
 			gajim.config.set('ft_add_hosts_to_send',
 				self.old_values['ft_override_host_to_send'])
 		gajim.config.set('version', '0.11.0.2')
-	
+
 	def update_config_to_01111(self):
 		'''always_hide_chatbuttons -> compact_view'''
 		if 'always_hide_groupchat_buttons' in self.old_values and \
@@ -464,7 +464,7 @@ class OptionsParser:
 		d = ['accounttextcolor', 'accountbgcolor', 'accountfont',
 			'accountfontattrs', 'grouptextcolor', 'groupbgcolor', 'groupfont',
 			'groupfontattrs', 'contacttextcolor', 'contactbgcolor', 'contactfont',
-			'contactfontattrs', 'bannertextcolor', 'bannerbgcolor', 'bannerfont', 
+			'contactfontattrs', 'bannertextcolor', 'bannerbgcolor', 'bannerfont',
 			'bannerfontattrs']
 		theme_name = _('default')
 		if theme_name not in gajim.config.get_per('themes'):
@@ -481,7 +481,7 @@ class OptionsParser:
 				for o in d:
 					gajim.config.set_per('themes', theme_name, o, theme[d.index(o)])
 		gajim.config.set('version', '0.11.1.4')
-	
+
 	def update_config_to_01115(self):
 		# copy&pasted from update_config_to_01013, possibly 'FIXME see #2812' applies too
 		back = os.getcwd()

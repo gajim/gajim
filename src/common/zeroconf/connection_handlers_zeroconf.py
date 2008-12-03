@@ -6,7 +6,7 @@
 ##	- Nikos Kouremenos <nkour@jabber.org>
 ##	- Dimitur Kirov <dkirov@gmail.com>
 ##	- Travis Shirk <travis@pobox.com>
-## - Stefan Bethge <stefan@lanpartei.de> 
+## - Stefan Bethge <stefan@lanpartei.de>
 ##
 ## This file is part of Gajim.
 ##

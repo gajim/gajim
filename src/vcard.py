@@ -155,7 +155,7 @@ class VcardWindow:
 				self.contact.jid, self.account, self.contact.get_shown_name() +
 				'.jpeg')
 			menu.append(menuitem)
-			menu.connect('selection-done', lambda w:w.destroy())	
+			menu.connect('selection-done', lambda w:w.destroy())
 			# show the menu
 			menu.show_all()
 			menu.popup(None, None, None, event.button, event.time)
@@ -300,7 +300,7 @@ class VcardWindow:
 			self.contact.get_shown_name() +
 			'</span></b>')
 		self.xml.get_widget('jid_label').set_text(self.contact.jid)
-		
+
 		subscription_label = self.xml.get_widget('subscription_label')
 		ask_label = self.xml.get_widget('ask_label')
 		if self.gc_contact:
@@ -442,7 +442,7 @@ class ZeroconfVcardWindow:
 				self.contact.jid, self.account, self.contact.get_shown_name() +
 				'.jpeg')
 			menu.append(menuitem)
-			menu.connect('selection-done', lambda w:w.destroy())	
+			menu.connect('selection-done', lambda w:w.destroy())
 			# show the menu
 			menu.show_all()
 			menu.popup(None, None, None, event.button, event.time)
@@ -493,7 +493,7 @@ class ZeroconfVcardWindow:
 		tip = gtk.Tooltips()
 		status_label_eventbox = self.xml.get_widget('status_label_eventbox')
 		tip.set_tip(status_label_eventbox, stats)
-	
+
 	def fill_contact_page(self):
 		tooltips = gtk.Tooltips()
 		self.xml.get_widget('nickname_label').set_markup(
@@ -521,7 +521,7 @@ class ZeroconfVcardWindow:
 		self.fill_status_label()
 
 	#	gajim.connections[self.account].request_vcard(self.contact.jid, self.is_fake)
-	
+
 	def fill_personal_page(self):
 		contact = gajim.connections[gajim.ZEROCONF_ACC_NAME].roster.getItem(self.contact.jid)
 		for key in ('1st', 'last', 'jid', 'email'):

@@ -90,7 +90,7 @@ def srand(bottom, top):
 	return (decode_mpi(random_bytes(bytes)) % (top - bottom)) + bottom
 
 # a faster version of (base ** exp) % mod
-#		taken from <http://lists.danga.com/pipermail/yadis/2005-September/001445.html> 
+#		taken from <http://lists.danga.com/pipermail/yadis/2005-September/001445.html>
 def powmod(base, exp, mod):
 	square = base % mod
 	result = 1

@@ -92,14 +92,14 @@ class AdvancedConfigurationWindow(object):
 		# key = option name (root/subopt/opt separated by \n then)
 		# value = array(oldval, newval)
 		self.changed_opts = {}
-		
+
 		# For i18n
-		self.right_true_dict = {True: _('Activated'), False: _('Deactivated')} 
+		self.right_true_dict = {True: _('Activated'), False: _('Deactivated')}
 		self.types = {
 			'boolean': _('Boolean'),
 			'integer': _('Integer'),
 			'string': _('Text'),
-			'color': _('Color')} 
+			'color': _('Color')}
 
 		treeview = self.xml.get_widget('advanced_treeview')
 		self.treeview = treeview
@@ -279,6 +279,6 @@ class AdvancedConfigurationWindow(object):
 			self.treeview.collapse_all()
 		else:
 			# ... and be restored correctly here
-			self.treeview.expand_all()	
+			self.treeview.expand_all()
 
 # vim: se ts=3:

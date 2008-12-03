@@ -19,42 +19,42 @@ class IdleObject:
 	'''
 	def __init__(self):
 		self.fd = -1
-	
+
 	def pollend(self):
 		''' called on stream failure '''
 		pass
-	
+
 	def pollin(self):
 		''' called on new read event '''
 		pass
-	
+
 	def pollout(self):
 		''' called on new write event (connect in sockets is a pollout) '''
 		pass
-	
+
 	def read_timeout(self, fd):
 		''' called when timeout has happend '''
 		pass
-		
+
 class IdleQueue:
 	def __init__(self):
 		self.queue = {}
-		
+
 		# when there is a timeout it executes obj.read_timeout()
 		# timeout is not removed automatically!
 		self.read_timeouts = {}
-		
+
 		# cb, which are executed after XX sec., alarms are removed automatically
 		self.alarms = {}
 		self.init_idle()
-	
+
 	def init_idle(self):
 		self.selector = select.poll()
-	
+
 	def remove_timeout(self, fd):
 		if fd in self.read_timeouts:
 			del(self.read_timeouts[fd])
-	
+
 	def set_alarm(self, alarm_cb, seconds):
 		''' set up a new alarm, to be called after alarm_cb sec. '''
 		alarm_time = self.current_time() + seconds
@@ -63,13 +63,13 @@ class IdleQueue:
 			self.alarms[alarm_time].append(alarm_cb)
 		else:
 			self.alarms[alarm_time] = [alarm_cb]
-	
+
 	def set_read_timeout(self, fd, seconds):
-		''' set a new timeout, if it is not removed after 'seconds', 
+		''' set a new timeout, if it is not removed after 'seconds',
 		then obj.read_timeout() will be called '''
 		timeout = self.current_time() + seconds
 		self.read_timeouts[fd] = timeout
-	
+
 	def check_time_events(self):
 		current_time = self.current_time()
 		for fd, timeout in self.read_timeouts.items():
@@ -86,7 +86,7 @@ class IdleQueue:
 			for cb in self.alarms[alarm_time]:
 				cb()
 			del(self.alarms[alarm_time])
-		
+
 	def plug_idle(self, obj, writable = True, readable = True):
 		if obj.fd == -1:
 			return
@@ -105,43 +105,43 @@ class IdleQueue:
 				# when we paused a FT, we expect only a close event
 				flags = 16
 		self.add_idle(obj.fd, flags)
-	
+
 	def add_idle(self, fd, flags):
 		self.selector.register(fd, flags)
-	
+
 	def unplug_idle(self, fd):
 		if fd in self.queue:
 			del(self.queue[fd])
 			self.remove_idle(fd)
-	
+
 	def current_time(self):
 		from time import time
 		return time()
-	
+
 	def remove_idle(self, fd):
 		self.selector.unregister(fd)
-	
+
 	def process_events(self, fd, flags):
 		obj = self.queue.get(fd)
 		if obj is None:
 			self.unplug_idle(fd)
 			return False
-		
+
 		if flags & 3: # waiting read event
 			obj.pollin()
 			return True
-		
+
 		elif flags & 4: # waiting write event
 			obj.pollout()
 			return True
-		
+
 		elif flags & 16: # closed channel
 			# io error, don't expect more events
 			self.remove_timeout(obj.fd)
 			self.unplug_idle(obj.fd)
 			obj.pollend()
 		return False
-	
+
 	def process(self):
 		if not self.queue:
 			# check for timeouts/alert also when there are no active fds
@@ -159,7 +159,7 @@ class IdleQueue:
 		return True
 
 class SelectIdleQueue(IdleQueue):
-	''' 
+	'''
 	Extends IdleQueue to use select.select() for polling
 	This class exisists for the sake of gtk2.8 on windows, which
 	doesn't seem to support io_add_watch properly (yet)
@@ -171,7 +171,7 @@ class SelectIdleQueue(IdleQueue):
 		self.read_fds = {}
 		self.write_fds = {}
 		self.error_fds = {}
-	
+
 	def add_idle(self, fd, flags):
 		''' this method is called when we plug a new idle object.
 		Remove descriptor to read/write/error lists, according flags
@@ -181,7 +181,7 @@ class SelectIdleQueue(IdleQueue):
 		if flags & 4:
 			self.write_fds[fd] = fd
 		self.error_fds[fd] = fd
-	
+
 	def remove_idle(self, fd):
 		''' this method is called when we unplug a new idle object.
 		Remove descriptor from read/write/error lists
@@ -192,13 +192,13 @@ class SelectIdleQueue(IdleQueue):
 			del(self.write_fds[fd])
 		if fd in self.error_fds:
 			del(self.error_fds[fd])
-	
+
 	def process(self):
 		if not self.write_fds and not self.read_fds:
 			self.check_time_events()
 			return True
 		try:
-			waiting_descriptors = select.select(self.read_fds.keys(), 
+			waiting_descriptors = select.select(self.read_fds.keys(),
 				self.write_fds.keys(), self.error_fds.keys(), 0)
 		except select.error, e:
 			waiting_descriptors = ((),(),())

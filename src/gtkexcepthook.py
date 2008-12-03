@@ -42,11 +42,11 @@ def _info(type_, value, tb):
 		_excepthook_save(type_, value, tb)
 		return
 
-	dialog = dialogs.HigDialog(None, gtk.MESSAGE_WARNING, gtk.BUTTONS_NONE, 
+	dialog = dialogs.HigDialog(None, gtk.MESSAGE_WARNING, gtk.BUTTONS_NONE,
 				_('A programming error has been detected'),
 				_('It probably is not fatal, but should be reported '
 				'to the developers nonetheless.'))
-	
+
 	dialog.set_modal(False)
 	#FIXME: add icon to this button
 	RESPONSE_REPORT_BUG = 42
@@ -92,7 +92,7 @@ def _info(type_, value, tb):
 	dialog.show_all()
 
 	_exception_in_progress.release()
-	
+
 # gdb/kdm etc if we use startx this is not True
 if os.name == 'nt' or not sys.stderr.isatty():
 	#FIXME: maybe always show dialog?

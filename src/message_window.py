@@ -85,7 +85,7 @@ class MessageWindow(object):
 			orig_window.destroy()
 			del orig_window
 
-		# NOTE: we use 'connect_after' here because in 
+		# NOTE: we use 'connect_after' here because in
 		# MessageWindowMgr._new_window we register handler that saves window
 		# state when closing it, and it should be called before
 		# MessageWindow._on_window_delete, which manually destroys window
@@ -695,7 +695,7 @@ class MessageWindow(object):
 				# If no composing contact found yet, check if this one is composing
 					first_composing_ind = ind
 			if ind == current:
-				break # a complete cycle without finding an unread tab 
+				break # a complete cycle without finding an unread tab
 		if found:
 			self.notebook.set_current_page(ind)
 		elif first_composing_ind != -1:

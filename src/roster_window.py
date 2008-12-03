@@ -358,7 +358,7 @@ class RosterWindow:
 			contact.groups = big_brother_contact.get_shown_groups()[:]
 
 			for child_iter in parent_iters:
-				it = self.model.append(child_iter, (None,	contact.get_shown_name(), 
+				it = self.model.append(child_iter, (None,	contact.get_shown_name(),
 				'contact', contact.jid, account, None, None, None, None, None))
 				added_iters.append(it)
 		else:
@@ -366,13 +366,13 @@ class RosterWindow:
 			if not groups:
 				groups = contact.get_shown_groups()
 			for group in groups:
-				child_iterG = self._get_group_iter(group, account, 
+				child_iterG = self._get_group_iter(group, account,
 						model = self.model)
 				if not child_iterG:
 					# Group is not yet in roster, add it!
 					child_iterA = self._get_account_iter(account, self.model)
-					child_iterG = self.model.append(child_iterA, 
-						[gajim.interface.jabber_state_images['16']['closed'], 
+					child_iterG = self.model.append(child_iterA,
+						[gajim.interface.jabber_state_images['16']['closed'],
 						gobject.markup_escape_text(group),
 						'group', group, account, None, None, None, None, None])
 					self.draw_group(group, account)
@@ -425,7 +425,7 @@ class RosterWindow:
 		if groups:
 			# Only remove from specified groups
 			all_iters = iters[:]
-			group_iters = [self._get_group_iter(group, account) 
+			group_iters = [self._get_group_iter(group, account)
 				for group in groups]
 			iters = [titer for titer in all_iters
 				if self.model.iter_parent(titer) in group_iters]
@@ -546,7 +546,7 @@ class RosterWindow:
 
 		if not family_in_roster:
 			return False
-	
+
 		assert old_big_jid, 'No Big Brother in nearby family % (Family: %)' % \
 			(nearby_family, family)
 		iters = self._get_contact_iter(old_big_jid, old_big_account,
@@ -585,7 +585,7 @@ class RosterWindow:
 
 			self._remove_metacontact_family(family, account)
 			brothers = self._add_metacontact_family(family, account)
-			
+
 			for c, acc in brothers:
 				self.draw_completely(c.jid, acc)
 
@@ -874,7 +874,7 @@ class RosterWindow:
 				gajim.connections[account].update_contact(jid, contact.name,
 					contact.groups)
 		self.add_contact(jid, account)
-		
+
 		# Also redraw old groups
 		for group in groups:
 			self.draw_group(group, account)
@@ -1145,7 +1145,7 @@ class RosterWindow:
 			bb_jid, bb_account = \
 				self._get_nearby_family_and_big_brother(family, account)[1:]
 			is_big_brother = (jid, account) == (bb_jid, bb_account)
-			iters = self._get_contact_iter(jid, account)	
+			iters = self._get_contact_iter(jid, account)
 			have_visible_children = iters \
 				and self.modelfilter.iter_has_child(iters[0])
 
@@ -1174,7 +1174,7 @@ class RosterWindow:
 					state_images = self.get_appropriate_state_images(
 						jid, size = 'closed',
 						icon_name = icon_name)
-				
+
 				# Expand/collapse icon might differ per iter
 				# (group)
 				img = state_images[icon_name]
@@ -1285,7 +1285,7 @@ class RosterWindow:
 		for child_iter in iters:
 			self.model[child_iter][C_AVATAR_PIXBUF] = scaled_pixbuf
 		return False
-	
+
 	def draw_completely(self, jid, account):
 		self.draw_contact(jid, account)
 		self.draw_mood(jid, account)
@@ -4684,7 +4684,7 @@ class RosterWindow:
 				for account in gajim.connections:
 					if gajim.account_is_connected(account) and \
 							gajim.connections[account].is_zeroconf:
-						for item in (join_gc_menuitem, add_new_contact_menuitem, 
+						for item in (join_gc_menuitem, add_new_contact_menuitem,
 							service_disco_menuitem, single_message_menuitem):
 							item.set_sensitive(False)
 

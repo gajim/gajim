@@ -44,17 +44,17 @@ class BaseTooltip:
 	''' Base Tooltip class;
 		Usage:
 			tooltip = BaseTooltip()
-			.... 
+			....
 			tooltip.show_tooltip(data, widget_height, widget_y_position)
 			....
 			if tooltip.timeout != 0:
 				tooltip.hide_tooltip()
-		
-		* data - the text to be displayed  (extenders override this argument and 
+
+		* data - the text to be displayed  (extenders override this argument and
 			display more complex contents)
 		* widget_height  - the height of the widget on which we want to show tooltip
 		* widget_y_position - the vertical position of the widget on the screen
-		
+
 		Tooltip is displayed aligned centered to the mouse poiner and 4px below the widget.
 		In case tooltip goes below the visible area it is shown above the widget.
 	'''
@@ -63,14 +63,14 @@ class BaseTooltip:
 		self.preferred_position = [0, 0]
 		self.win = None
 		self.id = None
-		
+
 	def populate(self, data):
 		''' this method must be overriden by all extenders
 		This is the most simple implementation: show data as value of a label
 		'''
 		self.create_window()
 		self.win.add(gtk.Label(data))
-		
+
 	def create_window(self):
 		''' create a popup window each time tooltip is requested '''
 		self.win = gtk.Window(gtk.WINDOW_POPUP)
@@ -79,15 +79,15 @@ class BaseTooltip:
 		self.win.set_name('gtk-tooltips')
 		if gtk.gtk_version >= (2, 10, 0) and gtk.pygtk_version >= (2, 10, 0):
 			self.win.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLTIP)
-		
+
 		self.win.set_events(gtk.gdk.POINTER_MOTION_MASK)
 		self.win.connect_after('expose_event', self.expose)
 		self.win.connect('size-request', self.on_size_request)
 		self.win.connect('motion-notify-event', self.motion_notify_event)
 		self.screen = self.win.get_screen()
-	
+
 	def _get_icon_name_for_tooltip(self, contact):
-		''' helper function used for tooltip contacts/acounts 
+		''' helper function used for tooltip contacts/acounts
 		Tooltip on account has fake contact with sub == '', in this case we show
 		real status of the account
 		'''
@@ -102,14 +102,14 @@ class BaseTooltip:
 
 	def on_size_request(self, widget, requisition):
 		half_width = requisition.width / 2 + 1
-		if self.preferred_position[0] < half_width: 
+		if self.preferred_position[0] < half_width:
 			self.preferred_position[0] = 0
 		elif self.preferred_position[0] + requisition.width > \
 			self.screen.get_width() + half_width:
 			self.preferred_position[0] = self.screen.get_width() - \
 				requisition.width
 		else:
-			self.preferred_position[0] -= half_width 
+			self.preferred_position[0] -= half_width
 			self.screen.get_height()
 		if self.preferred_position[1] + requisition.height > \
 			self.screen.get_height():
@@ -132,23 +132,23 @@ class BaseTooltip:
 		style.paint_flat_box(self.win.window, gtk.STATE_NORMAL, gtk.SHADOW_OUT,
 			None, self.win, 'tooltip', size[0] - 1, 0, 1, -1)
 		return True
-	
+
 	def show_tooltip(self, data, widget_height, widget_y_position):
 		''' show tooltip on widget.
 		data contains needed data for tooltip contents
 		widget_height is the height of the widget on which we show the tooltip
 		widget_y_position is vertical position of the widget on the screen
 		'''
-		# set tooltip contents 
+		# set tooltip contents
 		self.populate(data)
-		
+
 		# get the X position of mouse pointer on the screen
 		pointer_x = self.screen.get_display().get_pointer()[1]
-		
-		# get the prefered X position of the tooltip on the screen in case this position is > 
+
+		# get the prefered X position of the tooltip on the screen in case this position is >
 		# than the height of the screen, tooltip will be shown above the widget
 		preferred_y = widget_y_position + widget_height + 4
-		
+
 		self.preferred_position = [pointer_x, preferred_y]
 		self.widget_height = widget_height
 		self.win.ensure_style()
@@ -164,18 +164,18 @@ class BaseTooltip:
 		self.id = None
 
 class StatusTable:
-	''' Contains methods for creating status table. This 
+	''' Contains methods for creating status table. This
 	is used in Roster and NotificationArea tooltips	'''
 	def __init__(self):
 		self.current_row = 1
 		self.table = None
 		self.text_label = None
 		self.spacer_label = '   '
-		
+
 	def create_table(self):
 		self.table = gtk.Table(4, 1)
 		self.table.set_property('column-spacing', 2)
-	
+
 	def add_text_row(self, text, col_inc = 0):
 		self.current_row += 1
 		self.text_label = gtk.Label()
@@ -185,7 +185,7 @@ class StatusTable:
 		self.text_label.set_markup(text)
 		self.table.attach(self.text_label, 1 + col_inc, 4, self.current_row,
 			self.current_row + 1)
-		
+
 	def get_status_info(self, resource, priority, show, status):
 		str_status = resource + ' (' + unicode(priority) + ')'
 		if status:
@@ -200,7 +200,7 @@ class StatusTable:
 				status = gobject.markup_escape_text(status)
 				str_status += ' - <i>' + status + '</i>'
 		return str_status
-	
+
 	def add_status_row(self, file_path, show, str_status, status_time=None,
 	show_lock=False, indent=True):
 		''' appends a new row with status icon to the table '''
@@ -218,9 +218,9 @@ class StatusTable:
 		spacer = gtk.Label(self.spacer_label)
 		image.set_alignment(1, 0.5)
 		if indent:
-			self.table.attach(spacer, 1, 2, self.current_row, 
+			self.table.attach(spacer, 1, 2, self.current_row,
 				self.current_row + 1, 0, 0, 0, 0)
-		self.table.attach(image, 2, 3, self.current_row, 
+		self.table.attach(image, 2, 3, self.current_row,
 			self.current_row + 1, gtk.FILL, gtk.FILL, 2, 0)
 		status_label = gtk.Label()
 		status_label.set_markup(str_status)
@@ -230,11 +230,11 @@ class StatusTable:
 			self.current_row + 1, gtk.FILL | gtk.EXPAND, 0, 0, 0)
 		if show_lock:
 			lock_image = gtk.Image()
-			lock_image.set_from_stock(gtk.STOCK_DIALOG_AUTHENTICATION, 
+			lock_image.set_from_stock(gtk.STOCK_DIALOG_AUTHENTICATION,
 				gtk.ICON_SIZE_MENU)
 			self.table.attach(lock_image, 4, 5, self.current_row,
 				self.current_row + 1, 0, 0, 0, 0)
-	
+
 class NotificationAreaTooltip(BaseTooltip, StatusTable):
 	''' Tooltip that is shown in the notification area '''
 	def __init__(self):
@@ -248,7 +248,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 		file_path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 		for acct in accounts:
 			message = acct['message']
-			# before reducing the chars we should assure we send unicode, else 
+			# before reducing the chars we should assure we send unicode, else
 			# there are possible pango TBs on 'set_markup'
 			if isinstance(message, str):
 				message = unicode(message, encoding = 'utf-8')
@@ -260,12 +260,12 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 			else:
 				show_lock = False
 			if message:
-				self.add_status_row(file_path, acct['show'], 
+				self.add_status_row(file_path, acct['show'],
 					gobject.markup_escape_text(acct['name']) + \
 					' - ' + message, show_lock=show_lock, indent=False)
 			else:
-				self.add_status_row(file_path, acct['show'], 
-					gobject.markup_escape_text(acct['name']) 
+				self.add_status_row(file_path, acct['show'],
+					gobject.markup_escape_text(acct['name'])
 					, show_lock=show_lock, indent=False)
 			for line in acct['event_lines']:
 				self.add_text_row('  ' + line, 1)
@@ -294,7 +294,7 @@ class GCTooltip(BaseTooltip):
 		self.avatar_image = gtk.Image()
 
 		BaseTooltip.__init__(self)
-		
+
 	def populate(self, contact):
 		if not contact:
 			return
@@ -307,10 +307,10 @@ class GCTooltip(BaseTooltip):
 
 		nick_markup = '<b>' + \
 			gobject.markup_escape_text(contact.get_shown_name()) \
-			+ '</b>' 
+			+ '</b>'
 		properties.append((nick_markup, None))
 
-		if contact.status: # status message 
+		if contact.status: # status message
 			status = contact.status.strip()
 			if status != '':
 				# escape markup entities
@@ -327,7 +327,7 @@ class GCTooltip(BaseTooltip):
 			properties.append((_('Jabber ID: '), contact.jid))
 
 		if hasattr(contact, 'resource') and contact.resource.strip() != '':
-			properties.append((_('Resource: '), 
+			properties.append((_('Resource: '),
 				gobject.markup_escape_text(contact.resource) ))
 		if contact.affiliation != 'none':
 			uf_affiliation = helpers.get_uf_affiliation(contact.affiliation)
@@ -335,7 +335,7 @@ class GCTooltip(BaseTooltip):
 				_('%(owner_or_admin_or_member)s of this group chat') %\
 				{'owner_or_admin_or_member': uf_affiliation}
 			properties.append((affiliation_str, None))
-		
+
 		# Add avatar
 		puny_name = helpers.sanitize_filename(contact.name)
 		puny_room = helpers.sanitize_filename(contact.room_jid)
@@ -372,9 +372,9 @@ class GCTooltip(BaseTooltip):
 				label.set_line_wrap(True)
 				vcard_table.attach(label, 1, 3, vcard_current_row,
 					vcard_current_row + 1, gtk.FILL, vertical_fill, 0)
-		
+
 		self.avatar_image.set_alignment(0, 0)
-		vcard_table.attach(self.avatar_image, 3, 4, 2, vcard_current_row + 1, 
+		vcard_table.attach(self.avatar_image, 3, 4, 2, vcard_current_row + 1,
 			gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 3)
 		self.win.add(vcard_table)
 
@@ -385,7 +385,7 @@ class RosterTooltip(NotificationAreaTooltip):
 		self.image = gtk.Image()
 		self.image.set_alignment(0, 0)
 		# padding is independent of the total length and better than alignment
-		self.image.set_padding(1, 2) 
+		self.image.set_padding(1, 2)
 		self.avatar_image = gtk.Image()
 		NotificationAreaTooltip.__init__(self)
 
@@ -401,11 +401,11 @@ class RosterTooltip(NotificationAreaTooltip):
 			self.fill_table_with_accounts(accounts)
 			self.win.add(self.table)
 			return
-		
+
 		# primary contact
 		prim_contact = gajim.contacts.get_highest_prio_contact_from_contacts(
 			contacts)
-		
+
 		puny_jid = helpers.sanitize_filename(prim_contact.jid)
 		table_size = 3
 
@@ -466,7 +466,7 @@ class RosterTooltip(NotificationAreaTooltip):
 				for acontact in contacts_dict[priority]:
 					status_line = self.get_status_info(acontact.resource,
 						acontact.priority, acontact.show, acontact.status)
-					
+
 					icon_name = self._get_icon_name_for_tooltip(acontact)
 					self.add_status_row(file_path, icon_name, status_line,
 						acontact.last_status_time)
@@ -474,14 +474,14 @@ class RosterTooltip(NotificationAreaTooltip):
 
 		else: # only one resource
 			if contact.show:
-				show = helpers.get_uf_show(contact.show) 
+				show = helpers.get_uf_show(contact.show)
 				if contact.last_status_time:
 					vcard_current_row += 1
 					if contact.show == 'offline':
 						text = ' - ' + _('Last status: %s')
 					else:
 						text = _(' since %s')
-					
+
 					if time.strftime('%j', time.localtime())== \
 							time.strftime('%j', contact.last_status_time):
 					# it's today, show only the locale hour representation
@@ -493,7 +493,7 @@ class RosterTooltip(NotificationAreaTooltip):
 							contact.last_status_time)
 					local_time = local_time.decode(
 						locale.getpreferredencoding())
-					text = text % local_time 
+					text = text % local_time
 					show += text
 				if self.account and \
 				prim_contact.jid in gajim.gc_connected[self.account]:
@@ -503,7 +503,7 @@ class RosterTooltip(NotificationAreaTooltip):
 						show = _('Disconnected')
 				show = '<i>' + show + '</i>'
 				# we append show below
-				
+
 				if contact.status:
 					status = contact.status.strip()
 					if status:
@@ -511,13 +511,13 @@ class RosterTooltip(NotificationAreaTooltip):
 						# (no more than 300 chars on line and no more than 5 lines)
 						# status is wrapped
 						status = helpers.reduce_chars_newlines(status, 300, 5)
-						# escape markup entities. 
+						# escape markup entities.
 						status = gobject.markup_escape_text(status)
 						properties.append(('<i>%s</i>' % status, None))
 				properties.append((show, None))
-				
+
 		self._append_pep_info(contact, properties)
-		
+
 		properties.append((_('Jabber ID: '), prim_contact.jid ))
 
 		# contact has only one ressource
@@ -525,13 +525,13 @@ class RosterTooltip(NotificationAreaTooltip):
 			properties.append((_('Resource: '),
 				gobject.markup_escape_text(contact.resource) +\
 				' (' + unicode(contact.priority) + ')'))
-		
+
 		if self.account and prim_contact.sub and prim_contact.sub != 'both' and\
 		prim_contact.jid not in gajim.gc_connected[self.account]:
 			# ('both' is the normal sub so we don't show it)
-			properties.append(( _('Subscription: '), 
+			properties.append(( _('Subscription: '),
 				gobject.markup_escape_text(helpers.get_uf_sub(prim_contact.sub))))
-	
+
 		if prim_contact.keyID:
 			keyID = None
 			if len(prim_contact.keyID) == 8:
@@ -541,7 +541,7 @@ class RosterTooltip(NotificationAreaTooltip):
 			if keyID:
 				properties.append((_('OpenPGP: '),
 					gobject.markup_escape_text(keyID)))
-		
+
 		while properties:
 			property_ = properties.pop(0)
 			vcard_current_row += 1
@@ -563,7 +563,7 @@ class RosterTooltip(NotificationAreaTooltip):
 						vertical_fill, 0, 0)
 			else:
 				if isinstance(property_[0], (unicode, str)): #FIXME: rm unicode?
-					label.set_markup(property_[0]) 
+					label.set_markup(property_[0])
 					label.set_line_wrap(True)
 				else:
 					label = property_[0]
@@ -640,7 +640,7 @@ class RosterTooltip(NotificationAreaTooltip):
 				'from <i>%(source)s</i>') % {'title': title,
 				'artist': artist, 'source': source}
 			properties.append((tune_string, None))
-			
+
 
 class FileTransfersTooltip(BaseTooltip):
 	''' Tooltip that is shown in the notification area '''
@@ -658,13 +658,13 @@ class FileTransfersTooltip(BaseTooltip):
 			file_name = os.path.split(file_props['file-name'])[1]
 		else:
 			file_name = file_props['name']
-		properties.append((_('Name: '), 
+		properties.append((_('Name: '),
 			gobject.markup_escape_text(file_name)))
 		if file_props['type'] == 'r':
 			type_ = _('Download')
-			actor = _('Sender: ') 
+			actor = _('Sender: ')
 			sender = unicode(file_props['sender']).split('/')[0]
-			name = gajim.contacts.get_first_contact_from_jid( 
+			name = gajim.contacts.get_first_contact_from_jid(
 				file_props['tt_account'], sender).get_shown_name()
 		else:
 			type_ = _('Upload')
@@ -676,10 +676,10 @@ class FileTransfersTooltip(BaseTooltip):
 				name = receiver.split('/')[0]
 		properties.append((_('Type: '), type_))
 		properties.append((actor, gobject.markup_escape_text(name)))
-		
+
 		transfered_len = file_props.get('received-len', 0)
 		properties.append((_('Transferred: '), helpers.convert_bytes(transfered_len)))
-		status = '' 
+		status = ''
 		if 'started' not in file_props or not file_props['started']:
 			status = _('Not started')
 		elif 'connected' in file_props:
@@ -714,15 +714,15 @@ class FileTransfersTooltip(BaseTooltip):
 			label = gtk.Label()
 			label.set_alignment(0, 0)
 			label.set_markup(property_[0])
-			ft_table.attach(label, 1, 2, current_row, current_row + 1, 
+			ft_table.attach(label, 1, 2, current_row, current_row + 1,
 				gtk.FILL, gtk.FILL, 0, 0)
 			label = gtk.Label()
 			label.set_alignment(0, 0)
 			label.set_line_wrap(True)
 			label.set_markup(property_[1])
-			ft_table.attach(label, 2, 3, current_row, current_row + 1, 
+			ft_table.attach(label, 2, 3, current_row, current_row + 1,
 				gtk.EXPAND | gtk.FILL, gtk.FILL, 0, 0)
-		
+
 		self.win.add(ft_table)
 
 

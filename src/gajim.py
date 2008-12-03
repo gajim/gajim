@@ -525,9 +525,9 @@ class PassphraseRequest:
 
 class Interface:
 
-################################################################################		
-### Methods handling events from connection 
-################################################################################	
+################################################################################
+### Methods handling events from connection
+################################################################################
 
 	def handle_event_roster(self, account, data):
 		#('ROSTER', account, array)
@@ -805,7 +805,7 @@ class Interface:
 			if ji in jid_list:
 				# Update existing iter and group counting
 				self.roster.draw_contact(ji, account)
-				self.roster.draw_group(_('Transports'), account)				
+				self.roster.draw_group(_('Transports'), account)
 				if new_show > 1 and ji in gajim.transport_avatar[account]:
 					# transport just signed in.
 					# request avatars
@@ -1508,7 +1508,7 @@ class Interface:
 			re_draw = False
 			# If contact has changed (sub, ask or group) update roster
 			# Mind about observer status changes:
-			# 	According to xep 0162, a contact is not an observer anymore when 
+			# 	According to xep 0162, a contact is not an observer anymore when
 			# 	we asked for auth, so also remove him if ask changed
 			old_groups = contacts[0].groups
 			if contacts[0].sub != sub or contacts[0].ask != ask\
@@ -1587,8 +1587,8 @@ class Interface:
 					senders = ',\n     '.join(reversed(gmessage['From']))
 					text += _('\n\nFrom: %(from_address)s\nSubject: %(subject)s\n%(snippet)s') % \
 						{'from_address': senders, 'subject': gmessage['Subject'],
-						'snippet': gmessage['Snippet']} 
-					cnt += 1 
+						'snippet': gmessage['Snippet']}
+					cnt += 1
 
 			if gajim.config.get_per('soundevents', 'gmail_received', 'enabled'):
 				helpers.play_sound('gmail_received')
@@ -1920,7 +1920,7 @@ class Interface:
 			# If contact is a groupchat user
 			jids = [contact.jid]
 		else:
-			jids = [contact.jid, contact.get_full_jid()]		
+			jids = [contact.jid, contact.get_full_jid()]
 		for jid in jids:
 			ctrl = self.msg_win_mgr.get_control(jid, account)
 			if ctrl:
@@ -2206,7 +2206,7 @@ class Interface:
 		}
 		gajim.handlers = self.handlers
 
-################################################################################		
+################################################################################
 ### Methods dealing with gajim.events
 ################################################################################
 
@@ -2366,7 +2366,7 @@ class Interface:
 				tv = ctrl.conv_textview
 				tv.scroll_to_end()
 
-################################################################################		
+################################################################################
 ### Methods dealing with emoticons
 ################################################################################
 
@@ -2390,7 +2390,7 @@ class Interface:
 		except AttributeError:
 			self._basic_pattern_re = re.compile(self.basic_pattern, re.IGNORECASE)
 			return self._basic_pattern_re
-			
+
 	@property
 	def emot_and_basic_re(self):
 		try:
@@ -2415,7 +2415,7 @@ class Interface:
 		except AttributeError:
 			self._invalid_XML_chars_re = re.compile(self.invalid_XML_chars)
 			return self._invalid_XML_chars_re
-			
+
 	def make_regexps(self):
 		# regexp meta characters are:  . ^ $ * + ? { } [ ] \ | ( )
 		# one escapes the metachars with \
@@ -2462,7 +2462,7 @@ class Interface:
 		latex = r'|\$\$[^$\\]*?([\]\[0-9A-Za-z()|+*/-]|[\\][\]\[0-9A-Za-z()|{}$])(.*?[^\\])?\$\$'
 
 		basic_pattern = links + '|' + mail + '|' + legacy_prefixes
-		
+
 		link_pattern = basic_pattern
 		self.link_pattern_re = re.compile(link_pattern, re.IGNORECASE)
 
@@ -2657,7 +2657,7 @@ class Interface:
 			# We are already in that groupchat
 			gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
 			gc_control.nick = nick
-			gc_control.parent_win.set_active_tab(gc_control)	
+			gc_control.parent_win.set_active_tab(gc_control)
 		else:
 			# We are already in this groupchat and it is minimized
 			minimized_control.nick = nick
@@ -2800,9 +2800,9 @@ class Interface:
 			if ctrl:
 				ctrl.got_disconnected()
 
-################################################################################		
+################################################################################
 ### Other Methods
-################################################################################	
+################################################################################
 
 	def read_sleepy(self):
 		'''Check idle status and change that status if needed'''
@@ -2852,7 +2852,7 @@ class Interface:
 					auto_message = auto_message.replace('$S','%(status)s')
 					auto_message = auto_message.replace('$T','%(time)s')
 					auto_message = auto_message % {
-						'status': gajim.status_before_autoaway[account], 
+						'status': gajim.status_before_autoaway[account],
 						'time': gajim.config.get('autoxatime')
 						}
 				self.roster.send_status(account, 'xa', auto_message, auto=True)
@@ -2993,7 +2993,7 @@ class Interface:
 					bm['password'], minimize = minimize)
 				elif jid in self.minimized_controls[account]:
 					# more or less a hack:
-					# On disconnect the minimized gc contact instances 
+					# On disconnect the minimized gc contact instances
 					# were set to offline. Reconnect them to show up in the roster.
 					self.roster.add_groupchat(jid, account)
 

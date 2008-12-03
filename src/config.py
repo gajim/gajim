@@ -101,7 +101,7 @@ class PreferencesWindow:
 		# Display avatars in roster
 		st = gajim.config.get('show_avatars_in_roster')
 		self.xml.get_widget('show_avatars_in_roster_checkbutton'). \
-			set_active(st) 
+			set_active(st)
 
 		# Display status msg under contact name in roster
 		st = gajim.config.get('show_status_msgs_in_roster')
@@ -222,7 +222,7 @@ class PreferencesWindow:
 			model.append([preview, l[i]])
 			if gajim.config.get('iconset') == l[i]:
 				self.iconset_combobox.set_active(i)
-	
+
 		# Use transports iconsets
 		st = gajim.config.get('use_transports_iconsets')
 		self.xml.get_widget('transports_iconsets_checkbutton').set_active(st)
@@ -512,7 +512,7 @@ class PreferencesWindow:
 		self.theme_preferences = None
 
 		self.notebook.set_current_page(0)
-		
+
 		self.window.show_all()
 		gtkgui_helpers.possibly_move_window_in_current_desktop(self.window)
 
@@ -961,7 +961,7 @@ class PreferencesWindow:
 
 	def on_log_show_changes_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'log_contact_status_changes')
-	
+
 	def on_log_encrypted_chats_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'log_encrypted_sessions')
 
@@ -1042,7 +1042,7 @@ class PreferencesWindow:
 		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
 
 		# NOTE: sounds_ui_names MUST have all items of
-		# sounds = gajim.config.get_per('soundevents') as keys 
+		# sounds = gajim.config.get_per('soundevents') as keys
 		sounds_dict = {
 			'first_message_received': _('First Message Received'),
 			'next_message_received_focused': _('Next Message Received Focused'),
@@ -1377,7 +1377,7 @@ class AccountsWindow:
 		gajim.connections[self.current_account].connected > 0:
 			def login(account, show_before, status_before):
 				''' login with previous status'''
-				# first make sure connection is really closed, 
+				# first make sure connection is really closed,
 				# 0.5 may not be enough
 				gajim.connections[account].disconnect(True)
 				gajim.interface.roster.send_status(account, show_before,
@@ -2115,7 +2115,7 @@ class AccountsWindow:
 		gajim.interface.roster.setup_and_draw_roster()
 
 	def on_enable_zeroconf_checkbutton2_toggled(self, widget):
-		# don't do anything if there is an account with the local name but is a 
+		# don't do anything if there is an account with the local name but is a
 		# normal account
 		if gajim.ZEROCONF_ACC_NAME in gajim.connections and not \
 		gajim.connections[gajim.ZEROCONF_ACC_NAME].is_zeroconf:
@@ -3536,7 +3536,7 @@ class ManagePEPServicesWindow:
 			gajim.connections[self.account].send_pb_configure(our_jid, node, form)
 		window = dialogs.DataFormWindow(form, (on_ok, node))
 		title = "Configure %s" % node
-		window.set_title(title) 
+		window.set_title(title)
 		window.show_all()
 
 # vim: se ts=3:

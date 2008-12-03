@@ -55,7 +55,7 @@ from common import i18n
 from common import gajim
 from common import helpers
 
-gtk.glade.bindtextdomain(i18n.APP, i18n.DIR) 
+gtk.glade.bindtextdomain(i18n.APP, i18n.DIR)
 gtk.glade.textdomain(i18n.APP)
 
 screen_w = gtk.gdk.screen_width()
@@ -71,11 +71,11 @@ def get_completion_liststore(entry):
 	completion list consists of (Pixbuf, Text) rows'''
 	completion = gtk.EntryCompletion()
 	liststore = gtk.ListStore(gtk.gdk.Pixbuf, str)
-	
+
 	render_pixbuf = gtk.CellRendererPixbuf()
 	completion.pack_start(render_pixbuf, expand = False)
 	completion.add_attribute(render_pixbuf, 'pixbuf', 0)
-	
+
 	render_text = gtk.CellRendererText()
 	completion.pack_start(render_text, expand = True)
 	completion.add_attribute(render_text, 'text', 1)
@@ -83,15 +83,15 @@ def get_completion_liststore(entry):
 	completion.set_model(liststore)
 	entry.set_completion(completion)
 	return liststore
-	
-	
+
+
 def popup_emoticons_under_button(menu, button, parent_win):
 	''' pops emoticons menu under button, which is in parent_win'''
 	window_x1, window_y1 = parent_win.get_origin()
 	def position_menu_under_button(menu):
 		# inline function, which will not keep refs, when used as CB
 		button_x, button_y = button.allocation.x, button.allocation.y
-		
+
 		# now convert them to X11-relative
 		window_x, window_y = window_x1, window_y1
 		x = window_x + button_x
@@ -113,7 +113,7 @@ def popup_emoticons_under_button(menu, button, parent_win):
 		return (x, y, push_in)
 
 	menu.popup(None, None, position_menu_under_button, 1, 0)
-	
+
 def get_theme_font_for_option(theme, option):
 	'''return string description of the font, stored in
 	theme preferences'''
@@ -128,12 +128,12 @@ def get_theme_font_for_option(theme, option):
 	fd = pango.FontDescription(font_name)
 	fd.merge(font_desc, True)
 	return fd.to_string()
-	
+
 def get_default_font():
 	'''Get the desktop setting for application font
 	first check for GNOME, then Xfce and last KDE
 	it returns None on failure or else a string 'Font Size' '''
-	
+
 	try:
 		import gconf
 		# in try because daemon may not be there
@@ -150,11 +150,11 @@ def get_default_font():
 	# and http://freedesktop.org/Standards/basedir-spec
 	xdg_config_home = os.environ.get('XDG_CONFIG_HOME', '')
 	if xdg_config_home == '':
-		xdg_config_home = os.path.expanduser('~/.config') # default	
+		xdg_config_home = os.path.expanduser('~/.config') # default
 	xfce_config_file = os.path.join(xdg_config_home, 'xfce4/mcs_settings/gtk.xml')
-	
+
 	kde_config_file = os.path.expanduser('~/.kde/share/config/kdeglobals')
-	
+
 	if os.path.exists(xfce_config_file):
 		try:
 			for line in open(xfce_config_file):
@@ -164,7 +164,7 @@ def get_default_font():
 		except Exception:
 			#we talk about file
 			print >> sys.stderr, _('Error: cannot open %s for reading') % xfce_config_file
-	
+
 	elif os.path.exists(kde_config_file):
 		try:
 			for line in open(kde_config_file):
@@ -179,9 +179,9 @@ def get_default_font():
 		except Exception:
 			#we talk about file
 			print >> sys.stderr, _('Error: cannot open %s for reading') % kde_config_file
-	
+
 	return None
-	
+
 def autodetect_browser_mailer():
 	# recognize the environment and set appropriate browser/mailer
 	if user_runs_gnome():
@@ -241,7 +241,7 @@ def get_running_processes():
 
 		# list of processes
 		processes = [os.path.basename(os.readlink('/proc/' + f +'/exe')) for f in files]
-		
+
 		return processes
 	return []
 
@@ -376,12 +376,12 @@ def get_abspath_for_script(scriptname, want_type = False):
 
 		if scriptname == 'gajim-remote':
 			path_to_script = cwd + '/gajim-remote.py'
-		
+
 		elif scriptname == 'gajim':
 			script = '#!/bin/sh\n' # the script we may create
 			script += 'cd %s' % cwd
 			path_to_script = cwd + '/../scripts/gajim_sm_script'
-				
+
 			try:
 				if os.path.exists(path_to_script):
 					os.remove(path_to_script)
@@ -400,8 +400,8 @@ def get_abspath_for_script(scriptname, want_type = False):
 		type_ = 'install'
 		# always make it like '/usr/local/bin/gajim'
 		path_to_script = helpers.is_in_path(scriptname, True)
-		
-	
+
+
 	if want_type:
 		return path_to_script, type_
 	else:
@@ -458,7 +458,7 @@ def possibly_move_window_in_current_desktop(window):
 	root_window = gtk.gdk.screen_get_default().get_root_window()
 	# current user's vd
 	current_virtual_desktop_no = get_current_desktop(root_window)
-	
+
 	# vd roster window is in
 	window_virtual_desktop = get_current_desktop(window.window)
 
@@ -476,13 +476,13 @@ def file_is_locked(path_to_file):
 	'''returns True if file is locked (WINDOWS ONLY)'''
 	if os.name != 'nt': # just in case
 		return
-	
+
 	if not HAS_PYWIN32:
 		return
-	
+
 	secur_att = pywintypes.SECURITY_ATTRIBUTES()
 	secur_att.Initialize()
-	
+
 	try:
 		# try make a handle for READING the file
 		hfile = win32file.CreateFile(
@@ -523,7 +523,7 @@ def _get_fade_color(treeview, selected, focused):
 def get_scaled_pixbuf(pixbuf, kind):
 	'''returns scaled pixbuf, keeping ratio etc or None
 	kind is either "chat", "roster", "notification", "tooltip", "vcard"'''
-	
+
 	# resize to a width / height for the avatar not to have distortion
 	# (keep aspect ratio)
 	width = gajim.config.get(kind + '_avatar_width')
@@ -629,7 +629,7 @@ def get_path_to_generic_or_avatar(generic, jid = None, suffix = None):
 		for extension in ('.png', '.jpeg'):
 			path_to_local_file_full = path_to_local_file + extension
 			if os.path.exists(path_to_local_file_full):
-				return path_to_local_file_full 
+				return path_to_local_file_full
 		for extension in ('.png', '.jpeg'):
 			path_to_file_full = path_to_file + extension
 			if os.path.exists(path_to_file_full):
@@ -641,7 +641,7 @@ def decode_filechooser_file_paths(file_paths):
 	ask sys.getfilesystemencoding() in POSIX
 	file_paths MUST be LIST'''
 	file_paths_list = list()
-	
+
 	if os.name == 'nt': # decode as UTF-8 under Windows
 		for file_path in file_paths:
 			file_path = file_path.decode('utf8')
@@ -656,14 +656,14 @@ def decode_filechooser_file_paths(file_paths):
 				except Exception:
 					pass
 			file_paths_list.append(file_path)
-	
+
 	return file_paths_list
 
 def possibly_set_gajim_as_xmpp_handler():
 	'''registers (by default only the first time) xmmp: to Gajim.'''
 	path_to_dot_kde = os.path.expanduser('~/.kde')
 	if os.path.exists(path_to_dot_kde):
-		path_to_kde_file = os.path.join(path_to_dot_kde, 
+		path_to_kde_file = os.path.join(path_to_dot_kde,
 			'share/services/xmpp.protocol')
 	else:
 		path_to_kde_file = None
@@ -814,7 +814,7 @@ default_name = ''):
 			# check if we have write permissions
 			if not os.access(file_path, os.W_OK):
 				file_name = os.path.basename(file_path)
-				dialogs.ErrorDialog(_('Cannot overwrite existing file "%s"' % 
+				dialogs.ErrorDialog(_('Cannot overwrite existing file "%s"' %
 					file_name),
 				_('A file with this name already exists and you do not have '
 				'permission to overwrite it.'))
@@ -837,7 +837,7 @@ default_name = ''):
 	def on_cancel(widget):
 		dialog.destroy()
 
-	dialog = dialogs.FileChooserDialog(title_text=_('Save Image as...'), 
+	dialog = dialogs.FileChooserDialog(title_text=_('Save Image as...'),
 		action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,
 		gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK),
 		default_response=gtk.RESPONSE_OK,

@@ -20,7 +20,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import socket 
+import socket
 import struct
 import errno
 
@@ -39,9 +39,9 @@ S_FINISHED = 4
 CONNECT_TIMEOUT = 20
 
 class Proxy65Manager:
-	''' keep records for file transfer proxies. Each time account 
-	establishes a connection to its server call proxy65manger.resolve(proxy) 
-	for every proxy that is convigured within the account. The class takes 
+	''' keep records for file transfer proxies. Each time account
+	establishes a connection to its server call proxy65manger.resolve(proxy)
+	for every proxy that is convigured within the account. The class takes
 	care to resolve and test each proxy only once.'''
 	def __init__(self, idlequeue):
 		# dict {proxy: proxy properties}
@@ -111,9 +111,9 @@ class ProxyResolver:
 		#	self.sid, self.sender_jid, self._on_receiver_success,
 		#	self._on_connect_failure)
 		#self.receiver_tester.connect()
-	
+
 	def _on_receiver_success(self):
-		self.host_tester = HostTester(self.host, self.port, self.jid, 
+		self.host_tester = HostTester(self.host, self.port, self.jid,
 			self.sid, self.sender_jid, self._on_connect_success,
 			self._on_connect_failure)
 		self.host_tester.connect()
@@ -252,7 +252,7 @@ class HostTester(Socks5, IdleObject):
 		self.idlequeue.remove_timeout(self.fd)
 		if self.state == 2:
 			self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
-			# begin negotiation. on success 'address' != 0 
+			# begin negotiation. on success 'address' != 0
 			buff = self.receive()
 			if buff == '':
 				# end connection
@@ -296,7 +296,7 @@ class HostTester(Socks5, IdleObject):
 		self.buff = ''
 		self.state = 1 # connected
 		self.idlequeue.plug_idle(self, True, False)
-		return 
+		return
 
 class ReceiverTester(Socks5, IdleObject):
 	''' fake proxy tester. '''
@@ -356,7 +356,7 @@ class ReceiverTester(Socks5, IdleObject):
 		self.idlequeue.remove_timeout(self.fd)
 		if self.state in (2, 3):
 			self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
-			# begin negotiation. on success 'address' != 0 
+			# begin negotiation. on success 'address' != 0
 			buff = self.receive()
 			if buff == '':
 				# end connection
@@ -408,6 +408,6 @@ class ReceiverTester(Socks5, IdleObject):
 		self.buff = ''
 		self.state = 1 # connected
 		self.idlequeue.plug_idle(self, True, False)
-		return 
+		return
 
 # vim: se ts=3:

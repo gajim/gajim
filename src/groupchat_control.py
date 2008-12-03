@@ -208,27 +208,26 @@ class GroupchatControl(ChatControlBase):
 		id_ = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
 		self.handlers[id_] = widget
 
-		id_ = widget.connect('row_collapsed', 
-			self.on_list_treeview_row_collapsed)
+		id_ = widget.connect('row_collapsed', self.on_list_treeview_row_collapsed)
 		self.handlers[id_] = widget
 
-		id_ = widget.connect('row_activated', 
+		id_ = widget.connect('row_activated',
 			self.on_list_treeview_row_activated)
 		self.handlers[id_] = widget
 
-		id_ = widget.connect('button_press_event', 
+		id_ = widget.connect('button_press_event',
 			self.on_list_treeview_button_press_event)
 		self.handlers[id_] = widget
 
-		id_ = widget.connect('key_press_event', 
+		id_ = widget.connect('key_press_event',
 			self.on_list_treeview_key_press_event)
 		self.handlers[id_] = widget
 
-		id_ = widget.connect('motion_notify_event', 
+		id_ = widget.connect('motion_notify_event',
 			self.on_list_treeview_motion_notify_event)
 		self.handlers[id_] = widget
 
-		id_ = widget.connect('leave_notify_event', 
+		id_ = widget.connect('leave_notify_event',
 			self.on_list_treeview_leave_notify_event)
 		self.handlers[id_] = widget
 
@@ -270,7 +269,7 @@ class GroupchatControl(ChatControlBase):
 
 		# nickname coloring
 		self.gc_count_nicknames_colors = 0
-		self.gc_custom_colors = {} 
+		self.gc_custom_colors = {}
 		self.number_of_colors = len(gajim.config.get('gc_nicknames_colors').\
 			split(':'))
 
@@ -327,7 +326,7 @@ class GroupchatControl(ChatControlBase):
 
 		self.list_treeview = self.xml.get_widget('list_treeview')
 		selection = self.list_treeview.get_selection()
-		id_ = selection.connect('changed', 
+		id_ = selection.connect('changed',
 				self.on_list_treeview_selection_changed)
 		self.handlers[id_] = selection
 		id_ = self.list_treeview.connect('style-set',
@@ -365,7 +364,7 @@ class GroupchatControl(ChatControlBase):
 		renderer_image.set_property('width', 26)
 		column.pack_start(renderer_image, expand = False)
 		column.add_attribute(renderer_image, 'image', C_IMG)
-		column.set_cell_data_func(renderer_image, tree_cell_data_func, 
+		column.set_cell_data_func(renderer_image, tree_cell_data_func,
 			self.list_treeview)
 
 		renderer_text = gtk.CellRendererText() # nickname
@@ -606,8 +605,8 @@ class GroupchatControl(ChatControlBase):
 		return title
 
 	def draw_banner_text(self):
-		'''Draw the text in the fat line at the top of the window that 
-		houses the room jid, subject. 
+		'''Draw the text in the fat line at the top of the window that
+		houses the room jid, subject.
 		'''
 		self.name_label.set_ellipsize(pango.ELLIPSIZE_END)
 		self.banner_status_label.set_ellipsize(pango.ELLIPSIZE_END)
@@ -827,7 +826,7 @@ class GroupchatControl(ChatControlBase):
 			else:
 				self.gc_count_nicknames_colors += 1
 				if self.gc_count_nicknames_colors == self.number_of_colors:
-					self.gc_count_nicknames_colors = 0				
+					self.gc_count_nicknames_colors = 0
 				self.gc_custom_colors[contact] = \
 					self.gc_count_nicknames_colors
 				other_tags_for_name.append('gc_nickname_color_' + \
@@ -846,7 +845,7 @@ class GroupchatControl(ChatControlBase):
 				elif len(self.attention_list) > 6:
 					self.attention_list.pop(0) # remove older
 				self.attention_list.append(contact)
-				
+
 			if sound == 'received':
 				helpers.play_sound('muc_message_received')
 			elif sound == 'highlight':
@@ -940,17 +939,17 @@ class GroupchatControl(ChatControlBase):
 							# This is A->Z, a->z or 0-9, we can be sure our nick is the
 							# beginning of a real word, do not highlight for this one.
 							break
-						else: 
+						else:
 							return True
 					else: # Special word == word, no char after in word
-						return True 
+						return True
 		for special_word in special_words:
-			if special_word.find(' ') > -1: 
+			if special_word.find(' ') > -1:
 				# There is a space in this special word, do a global search
 				# without splitting by words as previously
 				# We don't search this in all cases so we don't loose time
 				if text.find(special_word) > -1:
-					return True 
+					return True
 		return False
 
 	def set_subject(self, subject):
@@ -1162,9 +1161,9 @@ class GroupchatControl(ChatControlBase):
 					else:
 						s = _('%(nick)s is now known as %(new_nick)s') % {
 							'nick': nick, 'new_nick': new_nick}
-					# We add new nick to muc roster here, so we don't see 
+					# We add new nick to muc roster here, so we don't see
 					# that "new_nick has joined the room" when he just changed nick.
-					# add_contact_to_roster will be called a second time 
+					# add_contact_to_roster will be called a second time
 					# after that, but that doesn't hurt
 					self.add_contact_to_roster(new_nick, show, role, affiliation,
 						status, jid)
@@ -1361,7 +1360,7 @@ class GroupchatControl(ChatControlBase):
 		role_iter = self.get_role_iter(role)
 		if not role_iter:
 			role_iter = model.append(None,
-				(gajim.interface.jabber_state_images['16']['closed'], role, 
+				(gajim.interface.jabber_state_images['16']['closed'], role,
 				'role', role_name,  None))
 			self.draw_all_roles()
 		iter_ = model.append(role_iter, (None, nick, 'contact', name, None))
@@ -1771,7 +1770,7 @@ class GroupchatControl(ChatControlBase):
 		# destroy banner tooltip - bug #pygtk for that!
 		self.subject_tooltip.destroy()
 		if gajim.gc_connected[self.account][self.room_jid]:
-			# Tell connection to note the date we disconnect to avoid duplicate 
+			# Tell connection to note the date we disconnect to avoid duplicate
 			# logs. We do it only when connected because if connection was lost
 			# there may be new messages since disconnection.
 			gajim.connections[self.account].gc_got_disconnected(self.room_jid)
@@ -1915,8 +1914,8 @@ class GroupchatControl(ChatControlBase):
 		gajim.interface.add_gc_bookmark(self.account, self.name, self.room_jid, \
 			'0', '0', password, self.nick)
 
-	def _on_drag_data_received(self, widget, context, x, y, selection, 
-			target_type, timestamp):	
+	def _on_drag_data_received(self, widget, context, x, y, selection,
+			target_type, timestamp):
 		# Invite contact to groupchat
 		treeview = gajim.interface.roster.tree
 		model = treeview.get_model()
@@ -2014,7 +2013,7 @@ class GroupchatControl(ChatControlBase):
 				list_nick = gajim.contacts.get_nick_list(self.account,
 									self.room_jid)
 				list_nick.sort(key=unicode.lower) # case-insensitive sort
-				if begin == '': 
+				if begin == '':
 					# empty message, show lasts nicks that highlighted us first
 					for nick in self.attention_list:
 						if nick in list_nick:
@@ -2027,7 +2026,7 @@ class GroupchatControl(ChatControlBase):
 						# the word is the begining of a nick
 						self.nick_hits.append(nick)
 			if len(self.nick_hits):
-				if len(splitted_text) < 2 or with_refer_to_nick_char: 
+				if len(splitted_text) < 2 or with_refer_to_nick_char:
 				# This is the 1st word of the line or no word or we are cycling
 				# at the beginning, possibly with a space in one nick
 					add = gc_refer_to_nick_char + ' '
@@ -2117,7 +2116,7 @@ class GroupchatControl(ChatControlBase):
 		(user_affiliation=='member' and target_affiliation!='none') or \
 		target_affiliation in ('admin', 'owner'):
 			item.set_sensitive(False)
-		id_ = item.connect('activate', self.on_voice_checkmenuitem_activate, 
+		id_ = item.connect('activate', self.on_voice_checkmenuitem_activate,
 			nick)
 		self.handlers[id_] = item
 
@@ -2129,7 +2128,7 @@ class GroupchatControl(ChatControlBase):
 		id_ = item.connect('activate', self.on_moderator_checkmenuitem_activate,
 					nick)
 		self.handlers[id_] = item
-	
+
 		item = xml.get_widget('ban_menuitem')
 		if not user_affiliation in ('admin', 'owner') or \
 		(target_affiliation in ('admin', 'owner') and\
@@ -2143,10 +2142,9 @@ class GroupchatControl(ChatControlBase):
 		if not user_affiliation in ('admin', 'owner') or \
 		(user_affiliation != 'owner' and target_affiliation in ('admin','owner')):
 			item.set_sensitive(False)
-		id_ = item.connect('activate', self.on_member_checkmenuitem_activate, 
-					jid)
+		id_ = item.connect('activate', self.on_member_checkmenuitem_activate, jid)
 		self.handlers[id_] = item
-	
+
 		item = xml.get_widget('admin_checkmenuitem')
 		item.set_active(target_affiliation in ('admin', 'owner'))
 		if not user_affiliation == 'owner':
@@ -2336,7 +2334,7 @@ class GroupchatControl(ChatControlBase):
 		if props and self.tooltip.id == props[0]:
 			rect = self.list_treeview.get_cell_area(props[0],props[1])
 			position = self.list_treeview.window.get_origin()
-			self.tooltip.show_tooltip(contact, rect.height, 
+			self.tooltip.show_tooltip(contact, rect.height,
 											position[1] + rect.y)
 		else:
 			self.tooltip.hide_tooltip()

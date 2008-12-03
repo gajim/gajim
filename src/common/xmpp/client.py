@@ -71,7 +71,7 @@ class PlugIn:
             owner.__dict__[method.__name__]=method
         owner.__dict__[self.__class__.__name__]=self
         if 'plugin' in self.__class__.__dict__: return self.plugin(owner)
- 
+
     def PlugOut(self):
         """ Unregister all our staff from main instance and detach from it. """
         self.DEBUG('Plugging %s out of %s.'%(self,self._owner),'stop')
@@ -93,7 +93,7 @@ class CommonClient:
         """ Caches server name and (optionally) port to connect to. "debug" parameter specifies
             the debug IDs that will go into debug output. You can either specifiy an "include"
             or "exclude" list. The latter is done via adding "always" pseudo-ID to the list.
-            Full list: ['nodebuilder', 'dispatcher', 'gen_auth', 'SASL_auth', 'bind', 'socket', 
+            Full list: ['nodebuilder', 'dispatcher', 'gen_auth', 'SASL_auth', 'bind', 'socket',
              'CONNECTproxy', 'TLS', 'roster', 'browser', 'ibb'] . """
         if self.__class__.__name__=='Client': self.Namespace,self.DBG='jabber:client',DBG_CLIENT
         elif self.__class__.__name__=='Component': self.Namespace,self.DBG=dispatcher.NS_COMPONENT_ACCEPT,DBG_COMPONENT
@@ -161,7 +161,7 @@ class CommonClient:
         return self.connected
 
     def get_peerhost(self):
-        ''' get the ip address of the account, from which is made connection 
+        ''' get the ip address of the account, from which is made connection
         to the server , (e.g. me).
         We will create listening socket on the same ip '''
         if hasattr(self, 'Connection'):
@@ -174,7 +174,7 @@ class CommonClient:
         if proxy: socket=transports.HTTPPROXYsocket(proxy,server,use_srv)
         else: socket=transports.TCPsocket(server,use_srv)
         connected=socket.PlugIn(self)
-        if not connected: 
+        if not connected:
             socket.PlugOut()
             return
         self._Server,self._Proxy=server,proxy
@@ -196,7 +196,7 @@ class Client(CommonClient):
     """ Example client class, based on CommonClient. """
     def connect(self,server=None,proxy=None,secure=None,use_srv=True):
         """ Connect to jabber server. If you want to specify different ip/port to connect to you can
-            pass it as tuple as first parameter. If there is HTTP proxy between you and server 
+            pass it as tuple as first parameter. If there is HTTP proxy between you and server
             specify it's address and credentials (if needed) in the second argument.
             If you want ssl/tls support to be discovered and enable automatically - leave third argument as None. (ssl will be autodetected only if port is 5223 or 443)
             If you want to force SSL start (i.e. if port 5223 or 443 is remapped to some non-standard port) then set it to 1.
@@ -265,7 +265,7 @@ class Component(CommonClient):
             Jabberd1.4 and Ejabberd use the default namespace then for all client messages.
             Jabberd2 uses jabber:client.
             'server' argument is a server name that you are connecting to (f.e. "localhost").
-            'port' can be specified if 'server' resolves to correct IP. If it is not then you'll need to specify IP 
+            'port' can be specified if 'server' resolves to correct IP. If it is not then you'll need to specify IP
             and port while calling "connect()"."""
         CommonClient.__init__(self,server,port=port,debug=debug)
         self.typ=typ
@@ -274,7 +274,7 @@ class Component(CommonClient):
             self.domains=domains
         else:
             self.domains=[server]
-    
+
     def connect(self,server=None,proxy=None):
         """ This will connect to the server, and if the features tag is found then set
             the namespace to be jabber:client as that is required for jabberd2.

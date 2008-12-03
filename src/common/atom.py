@@ -88,7 +88,7 @@ class OldEntry(xmpp.Node, object):
 			source_feed = self.getTag('feed').getTagData('title')
 		else:
 			source_feed = None
-		
+
 
 		if main_feed is not None and source_feed is not None:
 			return u'%s: %s' % (main_feed, source_feed)
@@ -99,7 +99,7 @@ class OldEntry(xmpp.Node, object):
 		else:
 			return u''
 
-	feed_title = property(get_feed_title, None, None, 
+	feed_title = property(get_feed_title, None, None,
 		''' Title of feed. It is built from entry''s original feed title and title of feed
 		which delivered this entry. ''')
 
@@ -151,7 +151,7 @@ class OldEntry(xmpp.Node, object):
 
 		return date
 
-	updated = property(get_updated, None, None, 
+	updated = property(get_updated, None, None,
 		''' Last significant modification time. ''')
 
 	feed_tagline = u''

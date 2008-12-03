@@ -48,11 +48,11 @@ class MusicTrackListener(gobject.GObject):
 		if cls._instance is None:
 			cls._instance = cls()
 		return cls._instance
-	
+
 	def __init__(self):
 		super(MusicTrackListener, self).__init__()
 		self._last_playing_music = None
-		
+
 		bus = dbus.SessionBus()
 
 		## MPRIS
@@ -168,7 +168,7 @@ class MusicTrackListener(gobject.GObject):
 				'/org/bansheeproject/Banshee/PlayerEngine')
 			currentTrack = banshee.GetCurrentTrack()
 			self._last_playing_music = self._banshee_properties_extract(
-				currentTrack) 
+				currentTrack)
 			self.emit('music-track-changed', self._last_playing_music)
 		elif state == 'paused':
 			self.emit('music-track-changed', None)

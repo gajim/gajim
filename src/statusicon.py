@@ -44,7 +44,7 @@ class StatusIcon(systray.Systray):
 	def __init__(self):
 		systray.Systray.__init__(self)
 		self.status_icon = None
-		
+
 	def show_icon(self):
 		if not self.status_icon:
 			self.status_icon = gtk.StatusIcon()
@@ -86,7 +86,7 @@ class StatusIcon(systray.Systray):
 		else:
 			state = self.status
 			self.status_icon.set_blinking(False)
-		
+
 		#FIXME: do not always use 16x16 (ask actually used size and use that)
 		image = gajim.interface.jabber_state_images['16'][state]
 		if image.get_storage_type() == gtk.IMAGE_PIXBUF:

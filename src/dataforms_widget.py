@@ -110,7 +110,7 @@ class DataFormWidget(gtk.Alignment, object):
 # "private" methods
 
 # we have actually two different kinds of data forms: one is a simple form to fill,
-# second is a table with several records; 
+# second is a table with several records;
 
 	def empty_method(self):
 		pass
@@ -326,7 +326,7 @@ class SingleForm(gtk.Table, object):
 				if field.label is None:
 					commonlabel = False
 					leftattach = 0
-				
+
 				commonwidget = False
 				widget = gtk.Label(field.value)
 				widget.set_line_wrap(True)

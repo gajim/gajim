@@ -58,7 +58,7 @@ class SearchWindow:
 
 	def request_form(self):
 		gajim.connections[self.account].request_search_fields(self.jid)
-	
+
 	def pulse_callback(self):
 		self.progressbar.pulse()
 		return True
@@ -101,7 +101,7 @@ class SearchWindow:
 			return
 		jid = model[iter_][self.jid_column]
 		dialogs.AddNewContactWindow(self.account, jid)
-	
+
 	def on_information_button_clicked(self, widget):
 		(model, iter_) = self.result_treeview.get_selection().get_selected()
 		if not iter_:

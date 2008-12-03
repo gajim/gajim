@@ -509,7 +509,7 @@ class ChatControlBase(MessageControl):
 		start_iter, end_iter = message_buffer.get_bounds()
 		message = message_buffer.get_text(start_iter, end_iter, False).decode(
 			'utf-8')
-		xhtml = self.msg_textview.get_xhtml() 
+		xhtml = self.msg_textview.get_xhtml()
 
 		# construct event instance from binding
 		event = gtk.gdk.Event(gtk.gdk.KEY_PRESS) # it's always a key-press here
@@ -792,16 +792,16 @@ class ChatControlBase(MessageControl):
 
 	def on_color_menuitem_activale(self, widget):
 		color_dialog = gtk.ColorSelectionDialog('Select a color')
-		color_dialog.connect('response', self.msg_textview.color_set, 
+		color_dialog.connect('response', self.msg_textview.color_set,
 			color_dialog.colorsel)
 		color_dialog.show_all()
 
 	def on_font_menuitem_activale(self, widget):
 		font_dialog = gtk.FontSelectionDialog('Select a font')
-		font_dialog.connect('response', self.msg_textview.font_set, 
+		font_dialog.connect('response', self.msg_textview.font_set,
 			font_dialog.fontsel)
 		font_dialog.show_all()
-		
+
 
 	def on_actions_button_clicked(self, widget):
 		'''popup action menu'''

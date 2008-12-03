@@ -54,7 +54,7 @@ class Secrets:
 		except KeyError:
 			return []
 
-	# retained secrets are stored as a tuple of the secret and whether the user 
+	# retained secrets are stored as a tuple of the secret and whether the user
 	# has verified it
 	def save_new_srs(self, account, jid, secret, verified):
 		if not account in self.srs:

@@ -492,7 +492,7 @@ class CommandWindow:
 		if self.data_form_widget.data_form:
 #			cmdnode.addChild(node=dataforms.DataForm(tofill=self.data_form_widget.data_form))
 			# FIXME: simplified form to send
-			
+
 			cmdnode.addChild(node=self.data_form_widget.data_form)
 
 		def callback(response):

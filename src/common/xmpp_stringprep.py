@@ -87,7 +87,7 @@ class MappingTableFromFunction:
 		self.map = map_table_function
 
 class EmptyMappingTable:
-	
+
 	__implements__ = IMappingTable
 
 	def __init__(self, in_table_function):
@@ -145,7 +145,7 @@ class Profile:
 		for c in string:
 			if stringprep.in_table_a1(c):
 				raise UnicodeError, "Unassigned code point %s" % repr(c)
-	
+
 	def check_bidirectionals(self, string):
 		found_LCat = False
 		found_RandALCat = False
@@ -229,12 +229,12 @@ if crippled:
 						prohibiteds=[LookupTable([u' ', u'"', u'&', u"'", u'/',
 												u':', u'<', u'>', u'@'])],
 						check_unassigneds=False,
-						check_bidi=False) 
+						check_bidi=False)
 
 	resourceprep = Profile(normalize=False,
 							check_unassigneds=False,
 							check_bidi=False)
-	
+
 else:
 	C_11 = LookupTableFromFunction(stringprep.in_table_c11)
 	C_12 = LookupTableFromFunction(stringprep.in_table_c12)

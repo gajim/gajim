@@ -176,8 +176,8 @@ class Logger:
 		pm (so higly unlikely) and if we fail we do not go chaos
 		(user will see the first pm as if it was message in room's public chat)
 		and after that all okay'''
-		
-		if jid.find('/') > -1: 
+
+		if jid.find('/') > -1:
 			possible_room_jid = jid.split('/', 1)[1]
 			return self.jid_is_room_jid(possible_room_jid)
 		else:
@@ -336,7 +336,7 @@ class Logger:
 		try:
 			self.cur.execute(sql, values)
 		except sqlite.DatabaseError:
-			raise exceptions.DatabaseMalformed 
+			raise exceptions.DatabaseMalformed
 		except sqlite.OperationalError, e:
 			raise exceptions.PysqliteOperationalError(str(e))
 		message_id = None
@@ -373,7 +373,7 @@ class Logger:
 		for message in results:
 			msg_id = message[0]
 			# here we get infos for that message, and related jid from jids table
-			# do NOT change order of SELECTed things, unless you change function(s) 
+			# do NOT change order of SELECTed things, unless you change function(s)
 			# that called this function
 			self.cur.execute('''
 				SELECT logs.log_line_id, logs.message, logs.time, logs.subject,

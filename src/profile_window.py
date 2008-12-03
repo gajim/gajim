@@ -130,11 +130,11 @@ class ProfileWindow:
 							'avatar_scaled.png')
 						scaled_pixbuf.save(path_to_file, 'png')
 						must_delete = True
-			
+
 			fd = open(path_to_file, 'rb')
 			data = fd.read()
 			pixbuf = gtkgui_helpers.get_pixbuf_from_data(data)
-			try:			
+			try:
 				# rescale it
 				pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
 			except AttributeError: # unknown format
@@ -151,10 +151,10 @@ class ProfileWindow:
 			self.avatar_encoded = base64.encodestring(data)
 			# returns None if unknown type
 			self.avatar_mime_type = mimetypes.guess_type(path_to_file)[0]
-			if must_delete: 
-				try: 
-					os.remove(path_to_file) 
-				except OSError: 
+			if must_delete:
+				try:
+					os.remove(path_to_file)
+				except OSError:
 					gajim.log.debug('Cannot remove %s' % path_to_file)
 
 		def on_clear(widget):
@@ -176,7 +176,7 @@ class ProfileWindow:
 		'''If right-clicked, show popup'''
 		if event.button == 3 and self.avatar_encoded: # right click
 			menu = gtk.Menu()
-			
+
 			# Try to get pixbuf
 			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.jid,
 				use_local = False)
@@ -192,7 +192,7 @@ class ProfileWindow:
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
 			menuitem.connect('activate', self.on_clear_button_clicked)
 			menu.append(menuitem)
-			menu.connect('selection-done', lambda w:w.destroy())	
+			menu.connect('selection-done', lambda w:w.destroy())
 			# show the menu
 			menu.show_all()
 			menu.popup(None, None, None, event.button, event.time)
@@ -289,7 +289,7 @@ class ProfileWindow:
 			'ADR_WORK_STREET', 'ADR_WORK_EXTADR', 'ADR_WORK_LOCALITY',
 			'ADR_WORK_REGION', 'ADR_WORK_PCODE', 'ADR_WORK_CTRY']
 		vcard_ = {}
-		for e in entries: 
+		for e in entries:
 			txt = self.xml.get_widget(e + '_entry').get_text().decode('utf-8')
 			if txt != '':
 				vcard_ = self.add_to_vcard(vcard_, e, txt)

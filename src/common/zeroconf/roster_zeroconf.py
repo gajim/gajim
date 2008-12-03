@@ -49,7 +49,7 @@ class Roster:
 					diffs[key] = self._data[key]['status']
 		#print 'roster_zeroconf.py: diffs:' + str(diffs)
 		return diffs
-		
+
 	def setItem(self, jid, name='', groups=''):
 		#print 'roster_zeroconf.py: setItem %s' % jid
 		contact = self.zeroconf.get_contact(jid)
@@ -80,7 +80,7 @@ class Roster:
 			self._data[jid]['name'] = nm
 		else:
 			self._data[jid]['name'] = jid
-		if status == 'avail': 
+		if status == 'avail':
 			status = 'online'
 		self._data[jid]['txt_dict'] = txt_dict
 		if 'msg' not in self._data[jid]['txt_dict']:
@@ -92,7 +92,7 @@ class Roster:
 		#print 'roster_zeroconf.py: delItem %s' % jid
 		if jid in self._data:
 			del self._data[jid]
-		
+
 	def getItem(self, jid):
 		#print 'roster_zeroconf.py: getItem: %s' % jid
 		if jid in self._data:
@@ -101,16 +101,16 @@ class Roster:
 	def __getitem__(self, jid):
 		#print 'roster_zeroconf.py: __getitem__'
 		return self._data[jid]
-	
+
 	def getItems(self):
 		#print 'roster_zeroconf.py: getItems'
 		# Return list of all [bare] JIDs that the roster currently tracks.
 		return self._data.keys()
-	
+
 	def keys(self):
 		#print 'roster_zeroconf.py: keys'
 		return self._data.keys()
-	
+
 	def getRaw(self):
 		#print 'roster_zeroconf.py: getRaw'
 		return self._data
@@ -118,7 +118,7 @@ class Roster:
 	def getResources(self, jid):
 		#print 'roster_zeroconf.py: getResources(%s)' % jid
 		return {}
-		
+
 	def getGroups(self, jid):
 		return self._data[jid]['groups']
 
@@ -147,10 +147,10 @@ class Roster:
 
 	def Subscribe(self, jid):
 		pass
-		
+
 	def Unsubscribe(self, jid):
 		pass
-	
+
 	def Authorize(self, jid):
 		pass
 

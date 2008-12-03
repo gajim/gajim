@@ -197,7 +197,7 @@ class Contacts:
 		caps_hash_method=None, caps_hash=None, our_chatstate=None,
 		chatstate=None, last_status_time=None, composing_xep=None,
 		mood={}, tune={}, activity={}):
-	
+
 		# We don't want duplicated group values
 		groups_unique = []
 		for group in groups:
@@ -210,7 +210,7 @@ class Contacts:
 			caps_hash=caps_hash, our_chatstate=our_chatstate, chatstate=chatstate,
 			last_status_time=last_status_time, composing_xep=composing_xep,
 			mood=mood, tune=tune, activity=activity)
-	
+
 	def copy_contact(self, contact):
 		return self.create_contact(jid=contact.jid, name=contact.name,
 			groups=contact.groups, show=contact.show, status=contact.status,
@@ -272,7 +272,7 @@ class Contacts:
 			return self._contacts[account][jid]
 		else:
 			return []
-	
+
 	def get_contact(self, account, jid, resource=None):
 		### WARNING ###
 		# This function returns a *RANDOM* resource if resource = None!
@@ -437,7 +437,7 @@ class Contacts:
 			nearby_family = [data for data in family
 				if account in accounts]
 			bb_data = self.get_metacontacts_big_brother(nearby_family)
-			if bb_data['jid'] == jid and bb_data['account'] == account: 
+			if bb_data['jid'] == jid and bb_data['account'] == account:
 				return True
 		return False
 
@@ -484,7 +484,7 @@ class Contacts:
 		# is not in our roster
 		if not contact1:
 			if contact2:
-				return -1 # prefer the known contact 	
+				return -1 # prefer the known contact
 			else:
 				show1 = 0
 				priority1 = 0
@@ -578,7 +578,7 @@ class Contacts:
 		role='', affiliation='', jid='', resource=''):
 		return GC_Contact(room_jid, name, show, status, role, affiliation, jid,
 			resource)
-	
+
 	def add_gc_contact(self, account, gc_contact):
 		# No such account before ?
 		if account not in self._gc_contacts:

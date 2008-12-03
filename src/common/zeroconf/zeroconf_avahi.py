@@ -27,24 +27,24 @@ except ImportError, e:
 from common.zeroconf.zeroconf import C_BARE_NAME, C_INTERFACE, C_PROTOCOL, C_DOMAIN
 
 class Zeroconf:
-	def __init__(self, new_serviceCB, remove_serviceCB, name_conflictCB, 
+	def __init__(self, new_serviceCB, remove_serviceCB, name_conflictCB,
 		disconnected_CB, error_CB, name, host, port):
 		self.avahi = None
 		self.domain = None   # specific domain to browse
-		self.stype = '_presence._tcp'	
-		self.port = port  # listening port that gets announced	
+		self.stype = '_presence._tcp'
+		self.port = port  # listening port that gets announced
 		self.username = name
 		self.host = host
 		self.txt = {}		# service data
-		
-		#XXX these CBs should be set to None when we destroy the object 
-		# (go offline), because they create a circular reference 
+
+		#XXX these CBs should be set to None when we destroy the object
+		# (go offline), because they create a circular reference
 		self.new_serviceCB = new_serviceCB
 		self.remove_serviceCB = remove_serviceCB
 		self.name_conflictCB = name_conflictCB
 		self.disconnected_CB = disconnected_CB
 		self.error_CB = error_CB
-		
+
 		self.service_browser = None
 		self.domain_browser = None
 		self.bus = None
@@ -60,10 +60,10 @@ class Zeroconf:
 	def entrygroup_commit_error_CB(self, err):
 		# left blank for possible later usage
 		pass
-	
+
 	def error_callback1(self, err):
 		gajim.log.debug('Error while resolving: ' + str(err))
-	
+
 	def error_callback(self, err):
 		gajim.log.debug(str(err))
 		# timeouts are non-critical
@@ -75,7 +75,7 @@ class Zeroconf:
 		gajim.log.debug('Found service %s in domain %s on %i.%i.' % (name, domain, interface, protocol))
 		if not self.connected:
 		 	return
-		
+
 		# synchronous resolving
 		self.server.ResolveService( int(interface), int(protocol), name, stype, \
 					domain, self.avahi.PROTO_UNSPEC, dbus.UInt32(0), \
@@ -93,13 +93,13 @@ class Zeroconf:
 					return
 
 	def new_service_type(self, interface, protocol, stype, domain, flags):
-		# Are we already browsing this domain for this type? 
+		# Are we already browsing this domain for this type?
 		if self.service_browser:
 			return
 
 		object_path = self.server.ServiceBrowserNew(interface, protocol, \
 				stype, domain, dbus.UInt32(0))
-		
+
 		self.service_browser = dbus.Interface(self.bus.get_object(self.avahi.DBUS_NAME, \
 			object_path) , self.avahi.DBUS_INTERFACE_SERVICE_BROWSER)
 		self.service_browser.connect_to_signal('ItemNew', self.new_service_callback)
@@ -109,7 +109,7 @@ class Zeroconf:
 	def new_domain_callback(self,interface, protocol, domain, flags):
 		if domain != "local":
 			self.browse_domain(interface, protocol, domain)
-	
+
 	def txt_array_to_dict(self, txt_array):
 		txt_dict = {}
 		for els in txt_array:
@@ -131,8 +131,8 @@ class Zeroconf:
 				val = ''
 			txt_dict[key] = val.decode('utf-8')
 		return txt_dict
-	
-	def service_resolved_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):	
+
+	def service_resolved_callback(self, interface, protocol, name, stype, domain, host, aprotocol, address, port, txt, flags):
 		gajim.log.debug('Service data for service %s in domain %s on %i.%i:'
 				% (name, domain, interface, protocol))
 		gajim.log.debug('Host %s (%s), port %i, TXT data: %s' % (host, address, port,
@@ -142,10 +142,10 @@ class Zeroconf:
 		bare_name = name
 		if name.find('@') == -1:
 			name = name + '@' + name
-		
+
 		# we don't want to see ourselves in the list
 		if name != self.name:
-			self.contacts[name] = (name, domain, interface, protocol, host, address, port, 
+			self.contacts[name] = (name, domain, interface, protocol, host, address, port,
 					bare_name, txt)
 			self.new_serviceCB(name)
 		else:
@@ -230,14 +230,14 @@ class Zeroconf:
 				# create an EntryGroup for publishing
 				self.entrygroup = dbus.Interface(self.bus.get_object(self.avahi.DBUS_NAME, self.server.EntryGroupNew()), self.avahi.DBUS_INTERFACE_ENTRY_GROUP)
 				self.entrygroup.connect_to_signal('StateChanged', self.entrygroup_state_changed_callback)
-			
+
 			txt = {}
-			
+
 			#remove empty keys
 			for key,val in self.txt.iteritems():
 				if val:
 					txt[key] = val
-			
+
 			txt['port.p2pj'] = self.port
 			txt['version'] = 1
 			txt['txtvers'] = 1
@@ -256,16 +256,16 @@ class Zeroconf:
 				'', dbus.UInt16(self.port), self.avahi_txt(),
 				reply_handler=self.service_added_callback,
 				error_handler=self.service_add_fail_callback)
-			
-			self.entrygroup.Commit(reply_handler=self.service_committed_callback, 
+
+			self.entrygroup.Commit(reply_handler=self.service_committed_callback,
 				error_handler=self.entrygroup_commit_error_CB)
 
 			return True
-		
+
 		except dbus.DBusException, e:
 			gajim.log.debug(str(e))
 			return False
-			
+
 	def announce(self):
 		if not self.connected:
 			return False
@@ -288,7 +288,7 @@ class Zeroconf:
 				self.entrygroup._obj = None
 				self.entrygroup = None
 				self.announced = False
-				
+
 				return True
 			else:
 				return False
@@ -318,8 +318,8 @@ class Zeroconf:
 			return True
 		try:
 			self.bus = dbus.SystemBus()
-			self.bus.add_signal_receiver(self.avahi_dbus_connect_cb, 
-				"NameOwnerChanged", "org.freedesktop.DBus", 
+			self.bus.add_signal_receiver(self.avahi_dbus_connect_cb,
+				"NameOwnerChanged", "org.freedesktop.DBus",
 				arg0="org.freedesktop.Avahi")
 		except Exception, e:
 			# System bus is not present
@@ -345,7 +345,7 @@ class Zeroconf:
 		try:
 			self.server = dbus.Interface(self.bus.get_object(self.avahi.DBUS_NAME, \
 			self.avahi.DBUS_PATH_SERVER), self.avahi.DBUS_INTERFACE_SERVER)
-			self.server.connect_to_signal('StateChanged', 
+			self.server.connect_to_signal('StateChanged',
 				self.server_state_changed_callback)
 		except Exception, e:
 			# Avahi service is not present
@@ -359,7 +359,7 @@ class Zeroconf:
 		self.name = self.username + '@' + self.host # service name
 		if not self.connect_avahi():
 			return False
-		
+
 		self.connected = True
 		# start browsing
 		if self.domain is None:
@@ -375,7 +375,7 @@ class Zeroconf:
 			self.domain_browser.connect_to_signal('Failure', self.error_callback)
 		else:
 			self.browse_domain(self.avahi.IF_UNSPEC, self.avahi.PROTO_UNSPEC, self.domain)
-		
+
 		return True
 
 	def disconnect(self):
@@ -414,7 +414,7 @@ class Zeroconf:
 		if not jid in self.contacts:
 			return None
 		return self.contacts[jid]
-		
+
 	def update_txt(self, show = None):
 		if show:
 			self.txt['status'] = self.replace_show(show)
