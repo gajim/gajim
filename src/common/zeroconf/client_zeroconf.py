@@ -1,4 +1,4 @@
-﻿##      common/zeroconf/client_zeroconf.py
+##      common/zeroconf/client_zeroconf.py
 ##
 ## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
 ## 				2006 Dimitur Kirov <dkirov@gmail.com>
