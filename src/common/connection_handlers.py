@@ -1321,7 +1321,7 @@ sent a message to.'''
 		sessions = self.sessions[jid].values()
 
 		# sessions that we haven't received a thread ID in
-		idless = filter(lambda s: not s.received_thread_id, sessions)
+		idless = [s for s in sessions if not s.received_thread_id]
 
 		# filter out everything except the default session type
 		p = lambda s: isinstance(s, gajim.default_session_type)
@@ -1344,7 +1344,7 @@ sent a message to.'''
 			p = lambda s: isinstance(s, gajim.default_session_type)
 			chat_sessions = filter(p, sessions)
 
-			orphaned = filter(lambda s: not s.control, chat_sessions)
+			orphaned = [s for s in chat_sessions if not s.control]
 
 			return orphaned[0]
 		except (KeyError, IndexError):

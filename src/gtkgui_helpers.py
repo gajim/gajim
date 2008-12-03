@@ -229,15 +229,15 @@ def get_running_processes():
 		files = filter(str.isdigit, files)
 
 		# files that aren't directories...
-		files = filter(lambda f:os.path.isdir('/proc/' + f), files)
+		files = [f for f in files if os.path.isdir('/proc/' + f)]
 
 		# processes owned by somebody not running gajim...
 		# (we check if we have access to that file)
-		files = filter(lambda f:os.access('/proc/' + f +'/exe', os.F_OK), files)
+		files = [f for f in files if os.access('/proc/' + f +'/exe', os.F_OK)]
 
 		# be sure that /proc/[number]/exe is really a symlink
 		# to avoid TBs in incorrectly configured systems
-		files = filter(lambda f:os.path.islink('/proc/' + f + '/exe'), files)
+		files = [f for f in files if os.path.islink('/proc/' + f + '/exe')]
 
 		# list of processes
 		processes = [os.path.basename(os.readlink('/proc/' + f +'/exe')) for f in files]

@@ -244,8 +244,8 @@ class EncryptedStanzaSession(StanzaSession):
 			return crypto.encode_mpi(gajim.pubkey.sign(hash_, '')[0])
 
 	def encrypt_stanza(self, stanza):
-		encryptable = filter(lambda x: x.getName() not in ('error', 'amp',
-			'thread'), stanza.getChildren())
+		encryptable = [x for x in stanza.getChildren() if x.getName() not in ('error', 'amp',
+			'thread')]
 
 		# XXX can also encrypt contents of <error/> elements in stanzas @type =
 		# 'error'
@@ -324,8 +324,7 @@ class EncryptedStanzaSession(StanzaSession):
 		stanza.delChild(c)
 
 		# contents of <c>, minus <mac>, minus whitespace
-		macable = ''.join(map(str, filter(lambda x: x.getName() != 'mac',
-			c.getChildren())))
+		macable = ''.join(str(x) for x in c.getChildren() if x.getName() != 'mac')
 
 		received_mac = base64.b64decode(c.getTagData('mac'))
 		calculated_mac = self.hmac(self.km_o, macable + \
@@ -365,7 +364,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 	def c7lize_mac_id(self, form):
 		kids = form.getChildren()
-		macable = filter(lambda x: x.getVar() not in ('mac', 'identity'), kids)
+		macable = [x for x in kids if x.getVar() not in ('mac', 'identity')]
 		return ''.join(map(lambda el: xmpp.c14n.c14n(el), macable))
 
 	def verify_identity(self, form, dh_i, sigmai, i_o):
