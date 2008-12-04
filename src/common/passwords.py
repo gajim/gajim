@@ -69,7 +69,7 @@ class GnomePasswordStorage(PasswordStorage):
 		try:
 			auth_token = conf.split('gnomekeyring:')[1]
 			auth_token = int(auth_token)
-		except ValueError:
+		except (IndexError, ValueError):
 			password = conf
 			## migrate the password over to keyring
 			try:
