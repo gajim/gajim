@@ -160,6 +160,9 @@
   <item jid="jabber.i-pobox.net" name="Server in Germany">
     <active port="5222"/>
   </item>
+  <item jid="jabber.kiev.ua" name="Server in Ukrain (Kiev)">
+    <active port="5222"/>
+  </item>
   <item jid="jabber.killerbees.org.uk" name="">
     <active port="5222"/>
   </item>
