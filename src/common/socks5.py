@@ -805,6 +805,13 @@ class Socks5Listener(IdleObject):
 			self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 			self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
 			self._serv.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+			# Under windows Vista, we need that to listen on ipv6 AND ipv4
+			# Doesn't work under windows XP
+			if os.name == 'nt':
+				ver = os.sys.getwindowsversion()
+				if (ver[3], ver[0], ver[1]) == (2, 6, 0):
+					# 27 is socket.IPV6_V6ONLY under windows, but not defined ...
+					self._serv.setsockopt(socket.IPPROTO_IPV6, 27, 1)
 			# will fail when port as busy, or we don't have rights to bind
 			try:
 				self._serv.bind(ai[4])
