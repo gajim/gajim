@@ -118,6 +118,8 @@ class HistoryWindow:
 
 		if jid:
 			self.jid_entry.set_text(jid)	
+		else:
+			self._load_history(None)
 
 		xml.signal_autoconnect(self)
 		self.window.show_all()
