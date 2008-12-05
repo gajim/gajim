@@ -1175,7 +1175,7 @@ class Connection(ConnectionHandlers):
 		if delayed:
 			our_jid = gajim.get_jid_from_account(self.name) + '/' + \
 				self.server_resource
-			timestamp = time.strftime('%Y-%m-%dT%TZ', time.gmtime(delayed))
+			timestamp = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(delayed))
 			msg_iq.addChild('delay', namespace=common.xmpp.NS_DELAY2,
 				attrs={'from': our_jid, 'stamp': timestamp})
 

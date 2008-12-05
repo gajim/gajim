@@ -1579,7 +1579,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			return
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.getTag('query')
-		qp.setTagData('utc', strftime('%Y%m%dT%T', gmtime()))
+		qp.setTagData('utc', strftime('%Y%m%dT%H:%M:%S', gmtime()))
 		qp.setTagData('tz', helpers.decode_string(tzname[daylight]))
 		qp.setTagData('display', helpers.decode_string(strftime('%c',
 			localtime())))
@@ -1593,7 +1593,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		iq_obj = iq_obj.buildReply('result')
 		qp = iq_obj.setTag('time',
 			namespace=common.xmpp.NS_TIME_REVISED)
-		qp.setTagData('utc', strftime('%Y-%m-%dT%TZ', gmtime()))
+		qp.setTagData('utc', strftime('%Y-%m-%dT%H:%M:%SZ', gmtime()))
 		zone = -(timezone, altzone)[daylight] / 60
 		tzo = (zone / 60, abs(zone % 60))
 		qp.setTagData('tzo', '%+03d:%02d' % (tzo))
@@ -2186,7 +2186,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					contact = gajim.contacts.get_contact(self.name, jid_stripped)
 
 					session_supported = gajim.capscache.is_supported(contact,
-						common.xmpp.NS_SSN)
+						common.xmpp.NS_SSN) or gajim.capscache.is_supported(contact,
+						common.xmpp.NS_ESESSION)
 					if session_supported:
 						sess.terminate()
 						del self.sessions[jid_stripped][sess.thread_id]
