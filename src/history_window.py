@@ -118,6 +118,8 @@ class HistoryWindow:
 
 		if jid:
 			self.jid_entry.set_text(jid)
+		else:
+			self._load_history(None)
 
 		gtkgui_helpers.resize_window(self.window,
 			gajim.config.get('history_window_width'),
