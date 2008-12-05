@@ -429,9 +429,12 @@ class ChatControlBase(MessageControl):
 	def _conv_textview_key_press_event(self, widget, event):
 		if gtk.gtk_version < (2, 12, 0):
 			return
-		if event.state & (gtk.gdk.SHIFT_MASK | gtk.gdk.CONTROL_MASK):
+		if event.state & gtk.gdk.CONTROL_MASK and event.keyval == gtk.keysyms.c \
+		or event.state & gtk.gdk.SHIFT_MASK and event.keyval in (
+		gtk.keysyms.Page_Down, gtk.keysyms.Page_Up):
 			return False
 		self.parent_win.notebook.emit('key_press_event', event)
+		return True
 
 	def show_emoticons_menu(self):
 		if not gajim.config.get('emoticons_theme'):
@@ -467,6 +470,7 @@ class ChatControlBase(MessageControl):
 			set_emoticons_menu_position, 1, 0)
 
 	def _on_message_textview_key_press_event(self, widget, event):
+		# Ctrl [+ Shift] + Tab are not forwarded to notebook. We handle it here
 		if self.widget_name == 'muc_child_vbox':
 			if event.keyval not in (gtk.keysyms.ISO_Left_Tab, gtk.keysyms.Tab):
 				self.last_key_tabs = False
@@ -485,15 +489,6 @@ class ChatControlBase(MessageControl):
 			if event.keyval == gtk.keysyms.Tab: # CTRL + TAB
 				self.parent_win.move_to_next_unread_tab(True)
 				return True
-			# CTRL + PAGE_[UP|DOWN]: send to parent notebook
-			elif event.keyval == gtk.keysyms.Page_Down or \
-					event.keyval == gtk.keysyms.Page_Up:
-				self.parent_win.notebook.emit('key_press_event', event)
-				return True
-			# we pressed a control key or ctrl+sth: we don't block
-			# the event in order to let ctrl+c (copy text) and
-			# others do their default work
-			self.conv_textview.tv.emit('key_press_event', event)
 		return False
 
 	def _on_message_textview_mykeypress_event(self, widget, event_keyval,

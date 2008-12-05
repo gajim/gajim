@@ -99,7 +99,7 @@ class MessageWindow(object):
 		self.handlers[id_] = self.window
 
 		keys=['<Control>f', '<Control>g', '<Control>h', '<Control>i',
-			'<Control>l', '<Control>L', '<Control>n', '<Control>u', '<Control>v',
+			'<Control>l', '<Control>L', '<Control>n', '<Control>u',
 			'<Control>b', '<Control><Shift>Tab', '<Control>Tab', '<Control>F4',
 			'<Control>w', '<Control>Page_Up', '<Control>Page_Down', '<Alt>Right',
 			'<Alt>Left', '<Alt>a', '<Alt>c', '<Alt>m', '<Alt>t', 'Escape'] + \
@@ -333,16 +333,6 @@ class MessageWindow(object):
 				control._on_change_nick_menuitem_activate(None)
 			elif keyval == gtk.keysyms.u: # CTRL + u: emacs style clear line
 				control.clear(control.msg_textview)
-			elif keyval == gtk.keysyms.v: # CTRL + v: Paste into msg_textview
-				if not control.msg_textview.is_focus():
-					control.msg_textview.grab_focus()
-				# Paste into the msg textview
-				event = gtk.gdk.Event(gtk.gdk.KEY_PRESS)
-				event.window = self.window.window
-				event.time = int(time.time())
-				event.state = gtk.gdk.CONTROL_MASK
-				event.keyval = gtk.keysyms.v
-				control.msg_textview.emit('key_press_event', event)
 			elif control.type_id == message_control.TYPE_GC and \
 			keyval == gtk.keysyms.b: # CTRL + b
 				control._on_bookmark_room_menuitem_activate(None)
@@ -397,6 +387,7 @@ class MessageWindow(object):
 		elif keyval == gtk.keysyms.Escape and \
 				gajim.config.get('escape_key_closes'): # Escape
 			self.remove_tab(control, self.CLOSE_ESC)
+		return True
 
 	def _on_close_button_clicked(self, button, control):
 		'''When close button is pressed: close a tab'''
@@ -734,15 +725,36 @@ class MessageWindow(object):
 			control.msg_textview.grab_focus()
 
 	def _on_notebook_key_press(self, widget, event):
-		# Ctrl+PageUP / DOWN has to be handled by notebook
-		if (event.state & gtk.gdk.CONTROL_MASK and
-				event.keyval in (gtk.keysyms.Page_Down, gtk.keysyms.Page_Up)):
-			return False
 		# when tab itself is selected, make sure <- and -> are allowed for navigating between tabs
 		if event.keyval in (gtk.keysyms.Left, gtk.keysyms.Right):
 			return False
 
 		control = self.get_active_control()
+
+		if event.state & gtk.gdk.SHIFT_MASK:
+			# CTRL + SHIFT + TAB
+			if event.state & gtk.gdk.CONTROL_MASK and \
+			event.keyval == gtk.keysyms.ISO_Left_Tab:
+				self.move_to_next_unread_tab(False)
+				return True
+			# SHIFT + PAGE_[UP|DOWN]: send to conv_textview
+			elif event.keyval in (gtk.keysyms.Page_Down, gtk.keysyms.Page_Up):
+				control.conv_textview.tv.emit('key_press_event', event)
+				return True
+		elif event.state & gtk.gdk.CONTROL_MASK:
+			if event.keyval == gtk.keysyms.Tab: # CTRL + TAB
+				self.move_to_next_unread_tab(True)
+				return True
+			# Ctrl+PageUP / DOWN has to be handled by notebook
+			elif event.keyval == gtk.keysyms.Page_Down:
+				self.move_to_next_unread_tab(True)
+				return True
+			elif event.keyval == gtk.keysyms.Page_Up:
+				self.move_to_next_unread_tab(False)
+				return True
+		elif event.keyval == gtk.keysyms.Control_L:
+			return True
+
 		if isinstance(control, ChatControlBase):
 			# we forwarded it to message textview
 			control.msg_textview.emit('key_press_event', event)
