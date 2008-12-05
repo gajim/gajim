@@ -489,6 +489,8 @@ class ChatControlBase(MessageControl):
 					event.keyval == gtk.keysyms.Page_Up:
 				self.parent_win.notebook.emit('key_press_event', event)
 				return True
+			elif event.keyval == gtk.keysyms.v:
+				return False
 			# we pressed a control key or ctrl+sth: we don't block
 			# the event in order to let ctrl+c (copy text) and
 			# others do their default work
