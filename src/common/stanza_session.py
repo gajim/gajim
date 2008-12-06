@@ -542,7 +542,7 @@ class EncryptedStanzaSession(StanzaSession):
 			',') ]
 
 		x.addChild(node=xmpp.DataField(name='modp', typ='list-single',
-			options=[[None, x] for x in modp_options]))
+			options=[[None, y] for y in modp_options]))
 
 		x.addChild(node=self.make_dhfield(modp_options, sigmai))
 		self.sigmai = sigmai
