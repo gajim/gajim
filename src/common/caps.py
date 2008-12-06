@@ -274,13 +274,11 @@ class ConnectionCaps(object):
 
 	def _capsDiscoCB(self, jid, node, identities, features, dataforms):
 		contact = gajim.contacts.get_contact_from_full_jid(self.name, jid)
-		print contact
 		if not contact:
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
 			contact = gajim.contacts.get_gc_contact(self.name, room_jid, nick)
 			if contact is None:
 				return
-		print contact, contact.caps_node, contact.caps_hash_method
 		if not contact.caps_node:
 			return # we didn't asked for that?
 		if contact.caps_hash_method != 'old':
