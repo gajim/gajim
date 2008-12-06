@@ -317,7 +317,7 @@ msgstr "Hostname: "
 #: ../data/glade/account_modification_window.glade.h:19
 #: ../data/glade/accounts_window.glade.h:23
 msgid "If checked, Gajim will also broadcast some more IPs except from just your IP, so file transfer has higher chances of working."
-msgstr "Wenn aktiviert, wird Gajim von mehr als nur Ihrer eigenen IP senden, wodurch die Wahrscheinlichkeit eines erfolgreichen Dateitransfers erhöht wird."
+msgstr "Wenn aktiviert, wird Gajim von mehr als nur Ihrer eigenen IP senden, wodurch die Wahrscheinlichkeit einer erfolgreicher Dateiübertragung erhöht wird."
 
 #: ../data/glade/account_modification_window.glade.h:21
 #: ../data/glade/accounts_window.glade.h:26
@@ -700,7 +700,7 @@ msgstr "Setzt Nachricht des Tages (MOTD)"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:7
 msgid "Show _XML Console"
-msgstr "_XML Konsole anzeigen"
+msgstr "_XML-Konsole anzeigen"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:8
 msgid "Update MOTD..."
@@ -807,9 +807,9 @@ msgstr ""
 "Kontakt ändert Status\n"
 "Gruppenchat-Nachricht hervorgehoben\n"
 "Gruppenchat-Nachricht empfangen\n"
-"Anfrage zum Dateitransfer\n"
-"Dateitransfer begonnen\n"
-"Dateitransfer beendet"
+"Anfrage zur Dateiübertragung\n"
+"Dateiübertragung begonnen\n"
+"Dateiübertragung beendet"
 
 #: ../data/glade/advanced_notifications_window.glade.h:26
 msgid "When "
@@ -1035,7 +1035,7 @@ msgstr ""
 
 #: ../data/glade/data_form_window.glade.h:1
 msgid "Fill in the form."
-msgstr "Formular ausfüllen."
+msgstr "Bitte füllen Sie das Formular aus."
 
 #: ../data/glade/data_form_window.glade.h:2
 msgid "Room Configuration"
@@ -1063,19 +1063,19 @@ msgstr "Features"
 
 #: ../data/glade/filetransfers.glade.h:1
 msgid "A list of active, completed and stopped file transfers"
-msgstr "Eine Liste der aktiven, fertigen und angehaltenen Dateitransfers"
+msgstr "Eine Liste der aktiven, fertigen und angehaltenen Dateiübertragungen"
 
 #: ../data/glade/filetransfers.glade.h:2
 msgid "Cancel file transfer"
-msgstr "Dateitransfer abbrechen"
+msgstr "Dateiübertragung abbrechen"
 
 #: ../data/glade/filetransfers.glade.h:3
 msgid "Cancels the selected file transfer"
-msgstr "Bricht den ausgewählten Dateitransfer ab"
+msgstr "Bricht die ausgewählte Dateiübertragung ab"
 
 #: ../data/glade/filetransfers.glade.h:4
 msgid "Cancels the selected file transfer and removes incomplete file"
-msgstr "Bricht den ausgewählten Dateitransfer ab und löscht unvollständige Daten"
+msgstr "Bricht die ausgewählte Dateiübertragung ab und löscht unvollständige Daten"
 
 #: ../data/glade/filetransfers.glade.h:5
 msgid "Clean _up"
@@ -1083,7 +1083,7 @@ msgstr "Aufrä_umen"
 
 #: ../data/glade/filetransfers.glade.h:6
 msgid "File Transfers"
-msgstr "Dateitransfers"
+msgstr "Dateiübertragungen"
 
 #: ../data/glade/filetransfers.glade.h:7
 msgid "Hides the window"
@@ -1091,19 +1091,19 @@ msgstr "Versteckt das Fenster"
 
 #: ../data/glade/filetransfers.glade.h:8
 msgid "Remove file transfer from the list."
-msgstr "Entferne Dateitransfer von Liste."
+msgstr "Entferne Dateiübertragung von der Liste."
 
 #: ../data/glade/filetransfers.glade.h:9
 msgid "Removes completed, cancelled and failed file transfers from the list"
-msgstr "Entfernt beendete, abgebrochene und fehlgeschlagene Dateitransfers von der Liste"
+msgstr "Entfernt beendete, abgebrochene und fehlgeschlagene Dateiübertragungen von der Liste"
 
 #: ../data/glade/filetransfers.glade.h:10
 msgid "Shows a list of file transfers between you and others"
-msgstr "Zeigt eine Liste von Dateitransfers an"
+msgstr "Zeigt eine Liste von Dateiübertragungen an"
 
 #: ../data/glade/filetransfers.glade.h:11
 msgid "This action removes single file transfer from the list. If the transfer is active, it is first stopped and then removed"
-msgstr "Diese Aktion entfernt einen Dateitransfer von der Liste. Falls der Transfer aktiv ist, wird er erst gestoppt, dann entfernt"
+msgstr "Diese Aktion entfernt eine Dateiübertragung von der Liste. Falls die Übertragung aktiv ist, wird sie erst gestoppt, dann entfernt"
 
 #: ../data/glade/filetransfers.glade.h:12
 msgid "When a file transfer is complete show a popup notification"
@@ -1116,7 +1116,7 @@ msgstr "_Fortsetzen"
 
 #: ../data/glade/filetransfers.glade.h:14
 msgid "_Notify me when a file transfer is complete"
-msgstr "_Benachrichtige mich, wenn der Dateitransfer abgeschlossen ist"
+msgstr "_Benachrichtige mich, wenn die Dateiübertragung abgeschlossen ist"
 
 #: ../data/glade/filetransfers.glade.h:15
 #: ../src/filetransfers_window.py:200
@@ -1129,7 +1129,7 @@ msgstr "_Pause"
 
 #: ../data/glade/filetransfers.glade.h:17
 msgid "file transfers list"
-msgstr "Dateitransfer-Liste"
+msgstr "Dateiübertragungs-Liste"
 
 #: ../data/glade/gajim_themes_window.glade.h:1
 msgid "<b>Chatstate Tab Colors</b>"
@@ -1145,7 +1145,7 @@ msgstr ""
 "Konto-Reihe\n"
 "Gruppen-Reihe\n"
 "Kontakt-Reihe\n"
-"Chat Banner"
+"Chat-Banner"
 
 #: ../data/glade/gajim_themes_window.glade.h:6
 msgid "Bold"
@@ -1294,7 +1294,7 @@ msgid ""
 "If you plan to do massive deletions, please make sure Gajim is not running. Generally avoid deletions with contacts you currently chat with."
 msgstr ""
 "<b>WARNUNG:</b>\n"
-"Wenn Sie massiv Daten löschen möchten, stellen Sie sicher, dass Gajim nicht läuft. Vermeiden Sie generell Löschungen von Kontakten, mit denen Sie gerade chatten."
+"Wenn Sie planen, viel zu löschen, stellen Sie sicher, dass Gajim nicht läuft. Vermeiden Sie generell Löschungen von Unterhaltungen mit Kontakten, mit denen Sie gerade chatten."
 
 #: ../data/glade/history_manager.glade.h:3
 msgid "<big><b>Welcome to Gajim History Logs Manager</b></big>"
@@ -1318,7 +1318,7 @@ msgid ""
 "\n"
 "Use this program to delete or export logs. You can select logs from the left and/or search database from below."
 msgstr ""
-"Dieser Log-Manager ist nicht zum Ansehen der Logeinträge gedacht. Wenn Sie nach einer solchen Funktion suchen, benutzen Sie sattdessen das Verlaufsfenster unter Ansicht - Verlauf.\n"
+"Dieser Log-Manager ist nicht zum Ansehen der Logeinträge gedacht. Wenn Sie nach einer solchen Funktion suchen, benutzen Sie sattdessen das Verlaufsfenster.\n"
 "\n"
 "Benutzen Sie dieses Programm, um Logs zu löschen oder zu exportieren. Sie können Logeinträge links auswählen und/oder unten die Datenbank durchsuchen."
 
@@ -1474,7 +1474,7 @@ msgstr "Kontakt zur Kontaktliste hinzufügen (Strg+D)"
 
 #: ../data/glade/message_window.glade.h:2
 msgid "Bookmark this room (Ctrl+B)"
-msgstr "Diesen Raum den Lesenzeichen hinzufügren (Strg+B)"
+msgstr "Diesen Raum den Lesenzeichen hinzufügen (Strg+B)"
 
 #: ../data/glade/message_window.glade.h:3
 msgid "Browse the chat history (Ctrl+H)"
@@ -1490,7 +1490,7 @@ msgstr "Spitzname ändern (Strg+N)"
 
 #: ../data/glade/message_window.glade.h:6
 msgid "Invite contacts to the conversation (Ctrl+G)"
-msgstr "Kontakt zu Unterhaltung einladen (Strg+G)"
+msgstr "Kontakt zur Unterhaltung einladen (Strg+G)"
 
 #: ../data/glade/message_window.glade.h:7
 msgid "Send a file (Ctrl+F)"
@@ -1541,7 +1541,7 @@ msgstr "<b>Chatlinien Farbe</b>"
 
 #: ../data/glade/preferences_window.glade.h:6
 msgid "<b>Chat state notifications</b>"
-msgstr "<b>Chatstatus Benachrichtigungen</b>"
+msgstr "<b>Chatstatus-Benachrichtigungen</b>"
 
 #. a header for custom browser/client/file manager. so translate sth like: Custom Settings
 #: ../data/glade/preferences_window.glade.h:8
@@ -1558,7 +1558,7 @@ msgstr "<b>Gmail-Optionen</b>"
 
 #: ../data/glade/preferences_window.glade.h:12
 msgid "<b>Preset Status Messages</b>"
-msgstr "<b>Voreingestellte Status-Nachrichten</b>"
+msgstr "<b>Voreingestellte Statusnachrichten</b>"
 
 #: ../data/glade/preferences_window.glade.h:13
 msgid "<b>Privacy</b>"
@@ -1570,7 +1570,7 @@ msgstr "<b>Aussehen der Kontaktliste</b>"
 
 #: ../data/glade/preferences_window.glade.h:16
 msgid "<b>Status Messages</b>"
-msgstr "<b>Status-Nachrichten</b>"
+msgstr "<b>Statusnachrichten</b>"
 
 #: ../data/glade/preferences_window.glade.h:17
 msgid "<b>Themes</b>"
@@ -1604,11 +1604,11 @@ msgstr "Erlaube Senden von _Betriebssystem-Information"
 
 #: ../data/glade/preferences_window.glade.h:25
 msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
-msgstr "Popups/Benachrichtigungen _zulassen, wenn ich abwesend/NA/beschäftigt/unsichtbar bin"
+msgstr "Popups/Benachrichtigungen _zulassen, wenn ich abwesend/nicht verfügbar/beschäftigt/unsichtbar bin"
 
 #: ../data/glade/preferences_window.glade.h:26
 msgid "Ask status message when I:"
-msgstr "Erfrage Status-Nachricht beim: "
+msgstr "Erfrage Statusnachricht beim: "
 
 #: ../data/glade/preferences_window.glade.h:27
 msgid ""
@@ -1676,11 +1676,11 @@ msgstr "Zeige die Status_nachrichten von Kontakten in der Kontaktliste"
 
 #: ../data/glade/preferences_window.glade.h:46
 msgid "Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to display in chat windows."
-msgstr "Gajim kann Meta-Information, die eine Unterhaltung mit einem Kontakt betrifft, empfangen und versenden. Hier können Sie definieren, welche Chatstatus Sie in Ihrem Chatfenster anzeigen möchten."
+msgstr "Gajim kann Informationen, die eine Unterhaltung mit einem Kontakt betreffen, empfangen und versenden. Hier können Sie definieren, welche Chatstatus-Benachrichtigungen Sie in Ihrem Chatfenster anzeigen möchten."
 
 #: ../data/glade/preferences_window.glade.h:47
 msgid "Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to send to the other party."
-msgstr "Gajim kann Meta-Information, die eine Unterhaltung mit einem Kontakt betrifft, empfangen und versenden. Hier können Sie definieren, welche Chatstatus Sie Ihrem Gegenüber senden möchten."
+msgstr "Gajim kann Informationen, die eine Unterhaltung mit einem Kontakt betreffen, empfangen und versenden. Hier können Sie definieren, welche Chatstatus-Benachrichtigungen Sie Ihrem Gegenüber senden möchten."
 
 #: ../data/glade/preferences_window.glade.h:48
 msgid "Gajim will notify you via a popup window in the bottom right of the screen about contacts that just signed out"
@@ -1732,11 +1732,11 @@ msgstr "Wenn aktiviert, wird Gajim Rechtschreibfehler im Chat-Eingabefenster her
 
 #: ../data/glade/preferences_window.glade.h:61
 msgid "If checked, Gajim will ignore incoming events from unauthorized contacts. Use with caution, because it blocks all messages from any contact that is not in the roster"
-msgstr "Wenn aktiviert, wird Gajim eingehende Ereignisse von unauthorisierten Kontakten ignorieren. Mit Vorsicht benutzen, weil alle Nachrichten von Kontakten blockiert werden, die nicht in Ihrer Kontaktliste sind"
+msgstr "Wenn aktiviert, wird Gajim eingehende Ereignisse von unauthorisierten Kontakten ignorieren. Vorsicht bei der Benutzung, denn alle Nachrichten von Kontakten werden blockiert, die nicht in Ihrer Kontaktliste sind!"
 
 #: ../data/glade/preferences_window.glade.h:62
 msgid "If checked, Gajim will keep logs for encrypted messages. Please note that when using E2E encryption the remote party has to agree on logging, else the messages will not be logged."
-msgstr "Wenn aktiviert, wird Gajim Logs von verschlüsselten Nachrichten aufzeichnen. Bitte bedenken Sie, dass bei der Benutzung von Esession-Verschlüsselung der Chatpartner zustimmen muss; ansonsten wird nicht mitgeschnitten."
+msgstr "Wenn aktiviert, wird Gajim Logs von verschlüsselten Nachrichten aufzeichnen. Bitte bedenken Sie, dass bei der Benutzung von ESession-Verschlüsselung der Chatpartner zustimmen muss; ansonsten wird nicht mitgeschnitten."
 
 #: ../data/glade/preferences_window.glade.h:63
 msgid "If checked, Gajim will show a notification when a new e-mail is received via GMail"
@@ -1814,7 +1814,7 @@ msgstr "a_bmelden"
 
 #: ../data/glade/preferences_window.glade.h:82
 msgid "Some messages may include rich content (formatting, colors etc). If checked, Gajim will just display the raw message text."
-msgstr "Einige Nachrichten könnten formatierten Inhalt enthalten (Farben, Schriftarten etc.). Wenn aktiviert, wird Gajim nur den puren Nachrichtentext anzeigen."
+msgstr "Einige Nachrichten könnten formatierten Inhalt enthalten (Farben, Schriftarten etc.). Wenn aktiviert, wird Gajim nur den reinen Nachrichtentext anzeigen."
 
 #: ../data/glade/preferences_window.glade.h:83
 msgid "Sort contacts by status"
@@ -1839,11 +1839,11 @@ msgstr "T_hema:"
 
 #: ../data/glade/preferences_window.glade.h:88
 msgid "The auto away status message. If empty, Gajim will not change the current status message"
-msgstr "Die automatische Away-Status-Nachricht. Wenn leer, wird Gajim die aktuelle Statusnachricht belassen"
+msgstr "Die automatische Abwesenheits-Statusnachricht. Wenn leer, wird Gajim die aktuelle Statusnachricht belassen"
 
 #: ../data/glade/preferences_window.glade.h:89
 msgid "The auto not available status message. If empty, Gajim will not change the current status message"
-msgstr "Die automatische Nicht-Verfügbar-Status-Nachricht. Wenn leer, wird Gajim die aktuelle Statusnachricht belassen"
+msgstr "Die automatische Nicht-Verfügbar-Statusnachricht. Wenn leer, wird Gajim die aktuelle Statusnachricht belassen"
 
 #: ../data/glade/preferences_window.glade.h:90
 msgid "Use _transports icons"
@@ -2115,7 +2115,7 @@ msgstr "<b>Spitzname:</b>"
 #: ../data/glade/profile_window.glade.h:20
 #: ../data/glade/vcard_information_window.glade.h:23
 msgid "<b>Phone No.:</b>"
-msgstr "<b>Telefonnummer:</b>"
+msgstr "<b>Telefon-Nummer:</b>"
 
 #: ../data/glade/profile_window.glade.h:21
 #: ../data/glade/vcard_information_window.glade.h:24
@@ -2313,7 +2313,7 @@ msgstr "Fähigkei_ten des Servers"
 
 #: ../data/glade/roster_window.glade.h:3
 msgid "File _Transfers"
-msgstr "_Dateitransfers"
+msgstr "_Dateiübertragungen"
 
 #: ../data/glade/roster_window.glade.h:4
 msgid "Frequently Asked Questions (online)"
@@ -2570,7 +2570,7 @@ msgstr "Kontakt"
 
 #: ../data/glade/vcard_information_window.glade.h:43
 msgid "Contact Information"
-msgstr "Kontaktinformation"
+msgstr "Kontaktinformationen"
 
 #: ../data/glade/vcard_information_window.glade.h:46
 msgid "More"
@@ -2656,7 +2656,7 @@ msgstr "Bestätigung abbrechen"
 
 #: ../src/adhoc_commands.py:265
 msgid "You are in process of executing command. Do you really want to cancel it?"
-msgstr "Sie führen einen Befehl aus. Wollen Sie wirklich abbrechen?"
+msgstr "Sie sind mittendrin, einen Befehl auszuführen. Wollen Sie wirklich abbrechen?"
 
 #: ../src/adhoc_commands.py:304
 msgid "Service changed the session identifier."
@@ -2919,11 +2919,11 @@ msgstr "Verschlüsselung deaktiviert"
 
 #: ../src/chat_control.py:1558
 msgid "Session WILL be logged"
-msgstr "Sitzung wird aufgezeichnet"
+msgstr "Sitzung WIRD aufgezeichnet"
 
 #: ../src/chat_control.py:1560
 msgid "Session WILL NOT be logged"
-msgstr "Sitzung wird nicht aufgezeichnet"
+msgstr "Sitzung WIRD NICHT aufgezeichnet"
 
 #. encryption %s active
 #: ../src/chat_control.py:1574
@@ -2941,7 +2941,7 @@ msgstr "wird"
 
 #: ../src/chat_control.py:1576
 msgid "will NOT"
-msgstr "wird nicht"
+msgstr "wird NICHT"
 
 #. About encrypted chat session
 #: ../src/chat_control.py:1580
@@ -2963,7 +2963,7 @@ msgid ""
 "Your chat session %(logged)s be logged."
 msgstr ""
 "%(type)s Verschlüsselung %(status)s aktiv %(authenticated)s.\n"
-"Ihre Chatsitzung %(logged)s wird mitgeschrieben."
+"Ihre Chatsitzung %(logged)s mitgeschrieben."
 
 #: ../src/chat_control.py:1638
 msgid "Command not supported for zeroconf account."
@@ -3027,7 +3027,7 @@ msgstr " und WIRD NICHT aufgezeichnet"
 
 #: ../src/chat_control.py:1817
 msgid "Remote contact's identity not verified. Click the shield button for more details."
-msgstr "Identität des Gesprächspartners nicht überprüft. Mehr Informationen durch Klicken auf Schild-Schaltfläche"
+msgstr "Identität des Gesprächspartners nicht überprüft. Mehr Informationen durch Klicken auf das Schild-Symbol"
 
 #: ../src/chat_control.py:1819
 msgid "E2E encryption disabled"
@@ -3211,7 +3211,7 @@ msgstr "$S wird mit der aktuellen Statusnachricht ersetzt, $T durch die Nicht-Ve
 
 #: ../src/common/config.py:111
 msgid "List (space separated) of rows (accounts and groups) that are collapsed."
-msgstr "Liste (Leerzeichengeteilt) von Reihen (Kontos und Gruppen), die eingeklappt sind."
+msgstr "Liste (getrennt durch Leerzeichen) von Zeilen (Kontos und Gruppen), die eingeklappt sind."
 
 #. sorted alphanum
 #: ../src/common/config.py:112
@@ -3255,7 +3255,7 @@ msgstr "Wenn aktiviert, wird */_ nicht entfernt. So wird *abc* fett gedruckt, ab
 
 #: ../src/common/config.py:128
 msgid "Uses ReStructured text markup to send HTML, plus ascii formatting if selected. For syntax, see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html (If you want to use this, install docutils)"
-msgstr "Wenn aktiviert, wird reStructuredText für die HTML und ASCII-Formatierung verwendet (falls dies erwünscht ist, installieren Sie docutils). Informationen zur Syntax finden Sie unter http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html (Englisch)"
+msgstr "Wenn aktiviert, wird ReStructuredText für die HTML und ASCII-Formatierung verwendet (falls dies erwünscht ist, installieren Sie docutils). Informationen zur Syntax finden Sie unter http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html (Englisch)"
 
 #: ../src/common/config.py:137
 msgid "Character to add after nickname when using nick completion (tab) in group chat."
@@ -3263,7 +3263,7 @@ msgstr "Zeichen, das hinter Spitznamen angezeigt wird, wenn Spitznamenvervollst�
 
 #: ../src/common/config.py:138
 msgid "Character to propose to add after desired nickname when desired nickname is used by someone else in group chat."
-msgstr "Zeichen, das hinter den gewünschten Spitznamen gehängt wird, falls der gewünschteName im Gruppenchat bereits vergeben ist."
+msgstr "Zeichen, das hinter den gewünschten Spitznamen gehängt wird, falls der gewünschte Name im Gruppenchat bereits vergeben ist."
 
 #: ../src/common/config.py:161
 msgid "This option let you customize timestamp that is printed in conversation. For exemple \"[%H:%M] \" will show \"[hour:minute] \". See python doc on strftime for full documentation: http://docs.python.org/lib/module-time.html"
@@ -3312,11 +3312,11 @@ msgstr "Wenn aktiviert, reagiere auf D-Bus-Signale vom NetworkManager und änder
 
 #: ../src/common/config.py:181
 msgid "Sent chat state notifications. Can be one of all, composing_only, disabled."
-msgstr "Chat-Statusbenachrichtigungen gesendet. Kann eine von allen sein, composing_only deaktiviert."
+msgstr "Senden von Chatstatus-Benachrichtigungen. Kann all, composing_only oder disabled sein."
 
 #: ../src/common/config.py:182
 msgid "Displayed chat state notifications in chat windows. Can be one of all, composing_only, disabled."
-msgstr "Angezeigte Chat-Status Benachrichtigungen im Chatfenster. Kann all, composing_only oder disabled sein."
+msgstr "Angezeigte Chatstatus-Benachrichtigungen im Chatfenster. Kann all, composing_only oder disabled sein."
 
 #: ../src/common/config.py:184
 msgid "When not printing time for every message (print_time==sometimes), print it every x minutes."
@@ -3336,7 +3336,7 @@ msgstr "Niemals fragen, bevor ein Gruppenchat-Fenster/Tab aus der Leerzeichen-se
 
 #: ../src/common/config.py:190
 msgid "Comma separated list of hosts that we send, in addition of local interfaces, for File Transfer in case of address translation/port forwarding."
-msgstr "Überschreibt den Host für Datenübertragung für den Fall von NAT/Port-Forwarding"
+msgstr "Kommagetrennte Liste von Hosts die zusätzlich zum lokalen Host gesendet werden, für Datenübertragung im Fall von NAT/Port-Forwarding"
 
 #: ../src/common/config.py:192
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
@@ -3364,7 +3364,7 @@ msgstr "Soll Gajim beim Aushandeln einer verschlüsselten Sitzung annehmen, dass
 
 #: ../src/common/config.py:204
 msgid "A list of modp groups to use in a Diffie-Hellman, highest preference first, separated by commas. Valid groups are 1, 2, 5, 14, 15, 16, 17 and 18. Higher numbers are more secure, but take longer to calculate when you start a session."
-msgstr "Eine Liste von MODP-Gruppen, welche in Diffie-Hellman benutzt werden sollen. Vorzug in Reihenfolge , getrennt durch Kommas. Zulässige Gruppen sind 1, 2, 5, 14, 15, 16, 17 und 18. Größere Werte sind sicherer, benötigen jedoch beim Start einer neuen Unterhaltung mehr Rechenzeit."
+msgstr "Eine Liste von MODP-Gruppen, welche in Diffie-Hellman benutzt werden sollen. Vorzug in Reihenfolge, getrennt durch Kommata. Zulässige Gruppen sind 1, 2, 5, 14, 15, 16, 17 und 18. Größere Werte sind sicherer, benötigen jedoch beim Start einer neuen Unterhaltung mehr Rechenzeit."
 
 #: ../src/common/config.py:213
 msgid "Preview new messages in notification popup?"
@@ -3493,7 +3493,7 @@ msgstr "Farbliste, getrennt durch \":\", die zum Einfärben der Spitznamen in Gr
 
 #: ../src/common/config.py:254
 msgid "Ctrl-Tab go to next composing tab when none is unread."
-msgstr "Strg+Tab, um zum nächsten Reiter zu gehen, wenn kein Anderer neue Nachrichten enthält."
+msgstr "Strg+Tab, um zum nächsten Reiter zu gehen, wenn kein anderer neue Nachrichten enthält."
 
 #: ../src/common/config.py:255
 msgid "Should we show the confirm metacontacts creation dialog or not? Empty string means we never show the dialog."
@@ -4189,7 +4189,7 @@ msgstr "Gajims D-BUS-Möglichkeiten können nicht genutzt werden"
 
 #: ../src/common/exceptions.py:30
 msgid "pysqlite2 (aka python-pysqlite2) dependency is missing. Exiting..."
-msgstr "pysqlite2 (auch python-pysqlite2 genannt) Abhängigkeit fehlt. Beende ..."
+msgstr "pysqlite2 (auch python-pysqlite2 genannt) Abhängigkeit fehlt. Abbruch..."
 
 #: ../src/common/exceptions.py:47
 msgid "Database cannot be read."
@@ -5266,7 +5266,7 @@ msgstr "Konnte nicht an Port %s binden."
 
 #: ../src/common/socks5.py:85
 msgid "Maybe you have another running instance of Gajim. File Transfer will be cancelled."
-msgstr "Möglicherweise läuft Gajim bereits. Dateitransfer wird abgebrochen."
+msgstr "Möglicherweise läuft Gajim bereits. Dateiübertragung wird abgebrochen."
 
 #. we're not english
 #: ../src/common/stanza_session.py:278
@@ -5970,19 +5970,19 @@ msgstr "Stimmung setzen"
 #: ../src/dialogs.py:558
 #, python-format
 msgid "%s Status Message"
-msgstr "%s Status-Nachricht"
+msgstr "%s Statusnachricht"
 
 #: ../src/dialogs.py:560
 msgid "Status Message"
-msgstr "Status-Nachricht"
+msgstr "Statusnachricht"
 
 #: ../src/dialogs.py:672
 msgid "Overwrite Status Message?"
-msgstr "Status-Nachricht überschreiben"
+msgstr "Statusnachricht überschreiben"
 
 #: ../src/dialogs.py:673
 msgid "This name is already used. Do you want to overwrite this status message?"
-msgstr "Dieser Name wird bereits verwendet. Möchten Sie die Status-Nachricht überschreiben?"
+msgstr "Dieser Name wird bereits verwendet. Möchten Sie die Statusnachricht überschreiben?"
 
 #: ../src/dialogs.py:682
 msgid "Save as Preset Status Message"
@@ -6289,7 +6289,7 @@ msgstr "Neue E-Mail"
 #: ../src/notify.py:466
 #: ../src/osx/growler.py:14
 msgid "File Transfer Request"
-msgstr "Dateitransfer Anfrage"
+msgstr "Anfrage zur Dateiübertragung"
 
 #: ../src/dialogs.py:2073
 #: ../src/gajim.py:1553
@@ -6297,7 +6297,7 @@ msgstr "Dateitransfer Anfrage"
 #: ../src/notify.py:468
 #: ../src/osx/growler.py:14
 msgid "File Transfer Error"
-msgstr "Dateitransfer-Fehler"
+msgstr "Dateiübertragungsfehler"
 
 #: ../src/dialogs.py:2075
 #: ../src/gajim.py:1695
@@ -6306,14 +6306,14 @@ msgstr "Dateitransfer-Fehler"
 #: ../src/notify.py:470
 #: ../src/osx/growler.py:15
 msgid "File Transfer Completed"
-msgstr "Dateitransfer beendet"
+msgstr "Dateiübertragung beendet"
 
 #: ../src/dialogs.py:2076
 #: ../src/gajim.py:1698
 #: ../src/notify.py:470
 #: ../src/osx/growler.py:15
 msgid "File Transfer Stopped"
-msgstr "Dateitransfer gestoppt"
+msgstr "Dateiübertragung gestoppt"
 
 #: ../src/dialogs.py:2078
 #: ../src/gajim.py:1445
@@ -6549,7 +6549,7 @@ msgid ""
 "\n"
 "This session's Short Authentication String is <b>%(sas)s</b>."
 msgstr ""
-"Um man-in-the-middle Attacken zu verhindern, sollten Sie <b>%(jid)s</b> kontaktieren (persönlich oder telefonisch) um den Kurz-Authentifizierungs-Schlüssel beidseitig zu überprüfen.\n"
+"Um zu verhindern, dass Sie mit einer anderen Person reden, sollten Sie <b>%(jid)s</b> kontaktieren (persönlich oder telefonisch), um den Kurz-Authentifizierungs-Schlüssel beidseitig zu überprüfen.\n"
 "\n"
 "Der Kurz-Authentifizierungs-Schlüssel dieser Unterhaltung ist: <b>%(sas)s</b>"
 
@@ -6866,7 +6866,7 @@ msgstr "Erfordert texlive-latex-base und dvipng (Findet sich alles in MikTeX). S
 
 #: ../src/features_window.py:103
 msgid "End to End Encryption"
-msgstr "Esession-Verschlüsselung"
+msgstr "ESession-Verschlüsselung"
 
 #: ../src/features_window.py:104
 msgid "Encrypting chatmessages."
@@ -6957,12 +6957,12 @@ msgstr "Absender: %s"
 
 #: ../src/filetransfers_window.py:198
 msgid "File transfer completed"
-msgstr "Dateitransfer abgeschlossen"
+msgstr "Dateiübertragung abgeschlossen"
 
 #: ../src/filetransfers_window.py:212
 #: ../src/filetransfers_window.py:218
 msgid "File transfer cancelled"
-msgstr "Dateitransfer abgebrochen"
+msgstr "Dateiübertragung abgebrochen"
 
 #: ../src/filetransfers_window.py:212
 #: ../src/filetransfers_window.py:219
@@ -6981,7 +6981,7 @@ msgstr "Fehlermeldung: %s"
 
 #: ../src/filetransfers_window.py:231
 msgid "File transfer stopped by the contact at the other end"
-msgstr "Gegenseite hat Dateitransfer gestoppt"
+msgstr "Gegenseite hat Dateiübertragung gestoppt"
 
 #: ../src/filetransfers_window.py:252
 msgid "Choose File to Send..."
@@ -7369,7 +7369,7 @@ msgstr "Sie haben %(filename)s erfolgreich von %(name)s erhalten."
 #: ../src/gajim.py:1722
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
-msgstr "Dateitransfer %(filename)s von %(name)s wurde gestoppt."
+msgstr "Dateiübertragung %(filename)s von %(name)s wurde gestoppt."
 
 #: ../src/gajim.py:1735
 #, python-format
@@ -7380,7 +7380,7 @@ msgstr "Sie haben %(filename)s erfolgreich an %(name)s gesendet."
 #: ../src/gajim.py:1739
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
-msgstr "Dateitransfer von %(filename)s an %(name)s wurde gestoppt."
+msgstr "Dateiübertragung von %(filename)s an %(name)s wurde gestoppt."
 
 #: ../src/gajim.py:1823
 #, python-format
@@ -7819,7 +7819,7 @@ msgstr "Raum"
 
 #: ../src/gajim-remote.py:267
 msgid "Room JID"
-msgstr "Raum JID"
+msgstr "Raum-JID"
 
 #: ../src/gajim-remote.py:268
 msgid "nick"
@@ -7839,7 +7839,7 @@ msgstr "Passwörter um den Raum zu betreten"
 
 #: ../src/gajim-remote.py:270
 msgid "Account from which you want to enter the room"
-msgstr "Konto, mit welchem Sie den Raum betreten möchten"
+msgstr "Konto, mit dem Sie den Raum betreten möchten"
 
 #: ../src/gajim-remote.py:275
 msgid "Check if Gajim is running"
@@ -8037,12 +8037,12 @@ msgstr "System wird heruntergefahren"
 #: ../src/groupchat_control.py:1280
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s by %(actor)s"
-msgstr "** Aufnahme von %(nick)s wurde von %(actor)s auf %(affiliation)s gesetzt"
+msgstr "** Mitgliedschaft von %(nick)s wurde von %(actor)s auf %(affiliation)s gesetzt"
 
 #: ../src/groupchat_control.py:1284
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s"
-msgstr "** Aufnahme von %(nick)s wurde an %(affiliation)s gesendet"
+msgstr "** Mitgliedschaft von %(nick)s wurde an %(affiliation)s gesendet"
 
 #: ../src/groupchat_control.py:1299
 #, python-format
@@ -8466,7 +8466,7 @@ msgstr "Informationen empfangen"
 
 #: ../src/profile_window.py:321
 msgid "Without a connection you can not publish your contact information."
-msgstr "Sie müssen angemeldet sein, um Kontakt-Informationen zu veröffentlichen"
+msgstr "Sie müssen angemeldet sein, um Kontaktinformationen zu veröffentlichen"
 
 #: ../src/profile_window.py:335
 msgid "Sending profile..."
@@ -9019,7 +9019,7 @@ msgstr "seit %s"
 
 #: ../src/vcard.py:311
 msgid "<b>Affiliation:</b>"
-msgstr "<b>Aufnahme:</b>"
+msgstr "<b>Mitgliedschaft:</b>"
 
 #: ../src/vcard.py:319
 msgid "This contact is interested in your presence information, but you are not interested in his/her presence"
