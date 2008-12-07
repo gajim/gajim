@@ -338,8 +338,7 @@ def popup(event_type, jid, account, msg_type='', path_to_image=None,
 	if gajim.config.get('use_notif_daemon') and dbus_support.supported:
 		try:
 			DesktopNotification(event_type, jid, account, msg_type,
-				path_to_image, gobject.markup_escape_text(title),
-				gobject.markup_escape_text(text))
+				path_to_image, title, gobject.markup_escape_text(text))
 			return	# sucessfully did D-Bus Notification procedure!
 		except dbus.DBusException, e:
 			# Connection to D-Bus failed
@@ -361,7 +360,7 @@ def popup(event_type, jid, account, msg_type='', path_to_image=None,
 		if not title:
 			_title = ''
 		else:
-			_title = gobject.markup_escape_text(title)
+			_title = title
 
 		notification = pynotify.Notification(_title, _text)
 		timeout = gajim.config.get('notification_timeout') * 1000 # make it ms
