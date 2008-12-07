@@ -1592,7 +1592,7 @@ class Interface:
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			notify.popup(_('New E-mail'), jid, account, 'gmail',
 				path_to_image=path, title=title,
-				text=gobject.markup_escape_text(text))
+				text=text)
 
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewGmail', (account, array))
