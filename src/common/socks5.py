@@ -26,6 +26,7 @@
 import socket
 import struct
 import sha
+import os
 
 from errno import EWOULDBLOCK
 from errno import ENOBUFS
