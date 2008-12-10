@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.12 svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-05 18:29+0100\n"
+"POT-Creation-Date: 2008-12-10 09:18+0100\n"
 "PO-Revision-Date: 2008-12-04 21:50+0100\n"
 "Last-Translator: Florent Le Coz <louizatakk@fedoraproject.org>\n"
 "Language-Team: \n"
@@ -299,8 +299,8 @@ msgstr "_Éditer les informations personnelles..."
 #: ../data/glade/account_modification_window.glade.h:16
 #: ../data/glade/accounts_window.glade.h:20
 #: ../data/glade/roster_window.glade.h:5 ../src/common/helpers.py:1043
-#: ../src/common/helpers.py:1055 ../src/notify.py:514 ../src/notify.py:545
-#: ../src/notify.py:557
+#: ../src/common/helpers.py:1055 ../src/notify.py:513 ../src/notify.py:544
+#: ../src/notify.py:556
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -2493,7 +2493,7 @@ msgstr "_Comptes"
 #: ../data/glade/roster_window.glade.h:13
 #: ../data/glade/subscription_request_window.glade.h:6
 msgid "_Actions"
-msgstr "Ac_tions"
+msgstr "Act_ions"
 
 #: ../data/glade/roster_window.glade.h:15
 msgid "_Contents"
@@ -6629,65 +6629,65 @@ msgstr "Les mots de passe tapés dans chaque champs doivent être identiques."
 
 #. img to display
 #. default value
-#: ../src/dialogs.py:2056 ../src/notify.py:245 ../src/notify.py:472
+#: ../src/dialogs.py:2056 ../src/notify.py:245 ../src/notify.py:471
 #: ../src/osx/growler.py:12
 msgid "Contact Signed In"
 msgstr "Contact connecté"
 
-#: ../src/dialogs.py:2058 ../src/notify.py:253 ../src/notify.py:474
+#: ../src/dialogs.py:2058 ../src/notify.py:253 ../src/notify.py:473
 #: ../src/osx/growler.py:12
 msgid "Contact Signed Out"
 msgstr "Contact déconnecté"
 
 #. chat message
-#: ../src/dialogs.py:2060 ../src/notify.py:276 ../src/notify.py:476
+#: ../src/dialogs.py:2060 ../src/notify.py:276 ../src/notify.py:475
 #: ../src/osx/growler.py:12
 msgid "New Message"
 msgstr "Nouveau message"
 
 #. single message
-#: ../src/dialogs.py:2060 ../src/notify.py:257 ../src/notify.py:476
+#: ../src/dialogs.py:2060 ../src/notify.py:257 ../src/notify.py:475
 #: ../src/osx/growler.py:13
 msgid "New Single Message"
 msgstr "Nouveau message simple"
 
 #. private message
-#: ../src/dialogs.py:2061 ../src/notify.py:264 ../src/notify.py:477
+#: ../src/dialogs.py:2061 ../src/notify.py:264 ../src/notify.py:476
 #: ../src/osx/growler.py:13
 msgid "New Private Message"
 msgstr "Nouveau message privé"
 
-#: ../src/dialogs.py:2061 ../src/gajim.py:1593 ../src/notify.py:485
+#: ../src/dialogs.py:2061 ../src/gajim.py:1593 ../src/notify.py:484
 #: ../src/osx/growler.py:13
 msgid "New E-mail"
 msgstr "Nouveau courrier électronique"
 
-#: ../src/dialogs.py:2063 ../src/gajim.py:1659 ../src/notify.py:479
+#: ../src/dialogs.py:2063 ../src/gajim.py:1659 ../src/notify.py:478
 #: ../src/osx/growler.py:14
 msgid "File Transfer Request"
 msgstr "Requête de transfert de fichier"
 
 #: ../src/dialogs.py:2065 ../src/gajim.py:1559 ../src/gajim.py:1626
-#: ../src/notify.py:481 ../src/osx/growler.py:14
+#: ../src/notify.py:480 ../src/osx/growler.py:14
 msgid "File Transfer Error"
 msgstr "Erreur de Transfert de fichier"
 
 #: ../src/dialogs.py:2067 ../src/gajim.py:1701 ../src/gajim.py:1723
-#: ../src/gajim.py:1740 ../src/notify.py:483 ../src/osx/growler.py:15
+#: ../src/gajim.py:1740 ../src/notify.py:482 ../src/osx/growler.py:15
 msgid "File Transfer Completed"
 msgstr "Transfert de fichier terminé"
 
-#: ../src/dialogs.py:2068 ../src/gajim.py:1704 ../src/notify.py:483
+#: ../src/dialogs.py:2068 ../src/gajim.py:1704 ../src/notify.py:482
 #: ../src/osx/growler.py:15
 msgid "File Transfer Stopped"
 msgstr "Transfert de fichier interrompu"
 
-#: ../src/dialogs.py:2070 ../src/gajim.py:1449 ../src/notify.py:487
+#: ../src/dialogs.py:2070 ../src/gajim.py:1449 ../src/notify.py:486
 #: ../src/osx/growler.py:16
 msgid "Groupchat Invitation"
 msgstr "Invitation à un salon"
 
-#: ../src/dialogs.py:2072 ../src/notify.py:237 ../src/notify.py:489
+#: ../src/dialogs.py:2072 ../src/notify.py:237 ../src/notify.py:488
 #: ../src/osx/growler.py:16
 msgid "Contact Changed Status"
 msgstr "Le contact a changé d'état"
@@ -7612,7 +7612,7 @@ msgstr "Acceptez vous cette requête sur le compte %s ?"
 msgid "HTTP (%(method)s) Authorization for %(url)s (id: %(id)s)"
 msgstr "Autorisation HTTP (%(method)s) pour %(url)s (id : %(id)s)"
 
-#: ../src/gajim.py:628 ../src/notify.py:491 ../src/osx/growler.py:17
+#: ../src/gajim.py:628 ../src/notify.py:490 ../src/osx/growler.py:17
 msgid "Connection Failed"
 msgstr "La connexion a échoué"
 
