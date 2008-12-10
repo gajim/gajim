@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-10 09:18+0100\n"
+"POT-Creation-Date: 2008-12-10 09:44+0100\n"
 "PO-Revision-Date: 2008-12-09 23:36+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -103,64 +103,54 @@ msgstr ""
 "SHA1 potpis certifikata:\n"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:10
-msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
-msgstr ""
-"Kliknite da bi vidjeli mogućnosti (kao što su MSN, ICQ transporti) jabber "
-"poslužitelja"
-
-#: ../data/glade/account_creation_wizard_window.glade.h:11
 msgid "Connect when I press Finish"
 msgstr "Spoji se kada pritisnem Završi"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:12
+#: ../data/glade/account_creation_wizard_window.glade.h:11
 msgid "Gajim: Account Creation Wizard"
 msgstr "Gajim: Čarobnjak za Stvaranje Računa"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:13
+#: ../data/glade/account_creation_wizard_window.glade.h:12
 msgid "I already have an account I want to _use"
 msgstr "Već imam račun koji želim _koristiti"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:14
+#: ../data/glade/account_creation_wizard_window.glade.h:13
 msgid "I want to _register for a new account"
 msgstr "Želim se _registrirati novi račun"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:15
+#: ../data/glade/account_creation_wizard_window.glade.h:14
 #: ../data/glade/account_modification_window.glade.h:20
 #: ../data/glade/accounts_window.glade.h:25
 msgid "If checked, Gajim will remember the password for this account"
 msgstr "Ako je označeno, Gajim će pamtiti lozinku za ovaj račun"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:16
+#: ../data/glade/account_creation_wizard_window.glade.h:15
 #: ../data/glade/account_modification_window.glade.h:26
 #: ../data/glade/accounts_window.glade.h:34
 msgid "Manage..."
 msgstr "Uredi..."
 
-#: ../data/glade/account_creation_wizard_window.glade.h:17
+#: ../data/glade/account_creation_wizard_window.glade.h:16
 msgid "Prox_y:"
 msgstr "Prox_y:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:18
+#: ../data/glade/account_creation_wizard_window.glade.h:17
 #: ../data/glade/account_modification_window.glade.h:40
 #: ../data/glade/accounts_window.glade.h:48
 msgid "Save pass_word"
 msgstr "Snimi lo_zinku"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:19
-msgid "Servers Features"
-msgstr "Mogućnosti Poslužitelja"
-
-#: ../data/glade/account_creation_wizard_window.glade.h:20
+#: ../data/glade/account_creation_wizard_window.glade.h:18
 msgid "Set my profile when I connect"
 msgstr "Postavi moj profil pri spajanju"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:21
+#: ../data/glade/account_creation_wizard_window.glade.h:19
 #: ../data/glade/account_modification_window.glade.h:45
 #: ../data/glade/accounts_window.glade.h:53
 msgid "Use custom hostname/port"
 msgstr "Koristi vlastito ime poslužitelja/port"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:22
+#: ../data/glade/account_creation_wizard_window.glade.h:20
 msgid ""
 "You need to have an account in order to connect\n"
 "to the Jabber network."
@@ -168,39 +158,39 @@ msgstr ""
 "Morate imati račun kako bi se mogli spojiti\n"
 "na Jabber mrežu."
 
-#: ../data/glade/account_creation_wizard_window.glade.h:24
+#: ../data/glade/account_creation_wizard_window.glade.h:22
 msgid "Your JID:"
 msgstr "Vaš JID:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:25
+#: ../data/glade/account_creation_wizard_window.glade.h:23
 #: ../data/glade/roster_window.glade.h:14
 msgid "_Advanced"
 msgstr "_Napredno"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:26
+#: ../data/glade/account_creation_wizard_window.glade.h:24
 msgid "_Finish"
 msgstr "_Završi"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:27
+#: ../data/glade/account_creation_wizard_window.glade.h:25
 msgid "_Hostname:"
 msgstr "_Ime poslužitelja:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:28
+#: ../data/glade/account_creation_wizard_window.glade.h:26
 #: ../data/glade/account_modification_window.glade.h:50
 #: ../data/glade/accounts_window.glade.h:58
 msgid "_Password:"
 msgstr "_Lozinka:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:29
+#: ../data/glade/account_creation_wizard_window.glade.h:27
 #: ../data/glade/manage_proxies_window.glade.h:11
 msgid "_Port:"
 msgstr "_Port:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:30
+#: ../data/glade/account_creation_wizard_window.glade.h:28
 msgid "_Server:"
 msgstr "_Poslužitelj:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:31
+#: ../data/glade/account_creation_wizard_window.glade.h:29
 #: ../data/glade/manage_proxies_window.glade.h:12
 msgid "_Username:"
 msgstr "_Korisničko ime:"
@@ -9473,6 +9463,14 @@ msgstr "Niti jedan zahtjev za pretplatu nije u toku."
 #: ../src/vcard.py:339 ../src/vcard.py:377 ../src/vcard.py:507
 msgid " resource with priority "
 msgstr " resurs s prioritetom "
+
+#~ msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
+#~ msgstr ""
+#~ "Kliknite da bi vidjeli mogućnosti (kao što su MSN, ICQ transporti) jabber "
+#~ "poslužitelja"
+
+#~ msgid "Servers Features"
+#~ msgstr "Mogućnosti Poslužitelja"
 
 #~ msgid "Select the account with which to synchronise"
 #~ msgstr "Označite račun za sinkronizaciju"

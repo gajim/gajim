@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.12 svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-10 09:18+0100\n"
+"POT-Creation-Date: 2008-12-10 09:44+0100\n"
 "PO-Revision-Date: 2008-12-04 21:50+0100\n"
 "Last-Translator: Florent Le Coz <louizatakk@fedoraproject.org>\n"
 "Language-Team: \n"
@@ -105,65 +105,55 @@ msgstr ""
 "Empreinte digitale SHA1 du certificat :\n"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:10
-msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
-msgstr ""
-"Cliquez pour voir les fonctionnalités du serveur jabber (comme les "
-"passerelles MSN, ICQ)"
-
-#: ../data/glade/account_creation_wizard_window.glade.h:11
 msgid "Connect when I press Finish"
 msgstr "Se connecter quand je clique sur Finir"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:12
+#: ../data/glade/account_creation_wizard_window.glade.h:11
 msgid "Gajim: Account Creation Wizard"
 msgstr "Gajim : Assistant de création de compte"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:13
+#: ../data/glade/account_creation_wizard_window.glade.h:12
 msgid "I already have an account I want to _use"
 msgstr "J'ai déjà un compte que je veux _utiliser"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:14
+#: ../data/glade/account_creation_wizard_window.glade.h:13
 msgid "I want to _register for a new account"
 msgstr "Je veux _créer un nouveau compte"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:15
+#: ../data/glade/account_creation_wizard_window.glade.h:14
 #: ../data/glade/account_modification_window.glade.h:20
 #: ../data/glade/accounts_window.glade.h:25
 msgid "If checked, Gajim will remember the password for this account"
 msgstr ""
 "Si cette case est cochée, Gajim va retenir le mot de passe pour ce compte"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:16
+#: ../data/glade/account_creation_wizard_window.glade.h:15
 #: ../data/glade/account_modification_window.glade.h:26
 #: ../data/glade/accounts_window.glade.h:34
 msgid "Manage..."
 msgstr "Gérer..."
 
-#: ../data/glade/account_creation_wizard_window.glade.h:17
+#: ../data/glade/account_creation_wizard_window.glade.h:16
 msgid "Prox_y:"
 msgstr "Prox_y :"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:18
+#: ../data/glade/account_creation_wizard_window.glade.h:17
 #: ../data/glade/account_modification_window.glade.h:40
 #: ../data/glade/accounts_window.glade.h:48
 msgid "Save pass_word"
 msgstr "Sauver le mot de _passe"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:19
-msgid "Servers Features"
-msgstr "Fonctionnalités du Serveur"
-
-#: ../data/glade/account_creation_wizard_window.glade.h:20
+#: ../data/glade/account_creation_wizard_window.glade.h:18
 msgid "Set my profile when I connect"
 msgstr "Définir mon profil quand je me connecte"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:21
+#: ../data/glade/account_creation_wizard_window.glade.h:19
 #: ../data/glade/account_modification_window.glade.h:45
 #: ../data/glade/accounts_window.glade.h:53
 msgid "Use custom hostname/port"
 msgstr "Utiliser un nom d'hôte/port personnalisé"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:22
+#: ../data/glade/account_creation_wizard_window.glade.h:20
 msgid ""
 "You need to have an account in order to connect\n"
 "to the Jabber network."
@@ -171,39 +161,39 @@ msgstr ""
 "Vous devez avoir un compte pour vous connecter\n"
 "au réseau Jabber."
 
-#: ../data/glade/account_creation_wizard_window.glade.h:24
+#: ../data/glade/account_creation_wizard_window.glade.h:22
 msgid "Your JID:"
 msgstr "Votre identifiant Jabber :"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:25
+#: ../data/glade/account_creation_wizard_window.glade.h:23
 #: ../data/glade/roster_window.glade.h:14
 msgid "_Advanced"
 msgstr "_Avancées"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:26
+#: ../data/glade/account_creation_wizard_window.glade.h:24
 msgid "_Finish"
 msgstr "_Finir"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:27
+#: ../data/glade/account_creation_wizard_window.glade.h:25
 msgid "_Hostname:"
 msgstr "Nom d'_Hôte :"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:28
+#: ../data/glade/account_creation_wizard_window.glade.h:26
 #: ../data/glade/account_modification_window.glade.h:50
 #: ../data/glade/accounts_window.glade.h:58
 msgid "_Password:"
 msgstr "Mot de _passe : "
 
-#: ../data/glade/account_creation_wizard_window.glade.h:29
+#: ../data/glade/account_creation_wizard_window.glade.h:27
 #: ../data/glade/manage_proxies_window.glade.h:11
 msgid "_Port:"
 msgstr "_Port :"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:30
+#: ../data/glade/account_creation_wizard_window.glade.h:28
 msgid "_Server:"
 msgstr "_Serveur :"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:31
+#: ../data/glade/account_creation_wizard_window.glade.h:29
 #: ../data/glade/manage_proxies_window.glade.h:12
 msgid "_Username:"
 msgstr "_Nom :"
@@ -9579,6 +9569,14 @@ msgstr "Il n'y a aucune requête d'inscription en attente."
 #: ../src/vcard.py:339 ../src/vcard.py:377 ../src/vcard.py:507
 msgid " resource with priority "
 msgstr " ressource avec la priorité "
+
+#~ msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
+#~ msgstr ""
+#~ "Cliquez pour voir les fonctionnalités du serveur jabber (comme les "
+#~ "passerelles MSN, ICQ)"
+
+#~ msgid "Servers Features"
+#~ msgstr "Fonctionnalités du Serveur"
 
 #~ msgid "Show a list of formattings"
 #~ msgstr "Afficher une liste de styles"

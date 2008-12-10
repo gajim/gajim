@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-05 18:29+0100\n"
+"POT-Creation-Date: 2008-12-10 09:44+0100\n"
 "PO-Revision-Date: 2008-12-05 15:51+0100\n"
 "Last-Translator: Stian B. Barmen <stian@barmen.nu>\n"
 "Language-Team: \n"
@@ -99,63 +99,54 @@ msgstr ""
 "SHA1 fingeravtrykk til sertifikatet:\n"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:10
-msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
-msgstr ""
-"Klikk for å se tjenester (som MSN og ICQ transporter) på jabber serveren"
-
-#: ../data/glade/account_creation_wizard_window.glade.h:11
 msgid "Connect when I press Finish"
 msgstr "Koble til når jeg klikker Ferdig"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:12
+#: ../data/glade/account_creation_wizard_window.glade.h:11
 msgid "Gajim: Account Creation Wizard"
 msgstr "Gajim: Konto Opprettings Veiviser"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:13
+#: ../data/glade/account_creation_wizard_window.glade.h:12
 msgid "I already have an account I want to _use"
 msgstr "Jeg har allerede en konto jeg ønsker å _bruke"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:14
+#: ../data/glade/account_creation_wizard_window.glade.h:13
 msgid "I want to _register for a new account"
 msgstr "Jeg ønsker å _registrere en ny konto"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:15
+#: ../data/glade/account_creation_wizard_window.glade.h:14
 #: ../data/glade/account_modification_window.glade.h:20
 #: ../data/glade/accounts_window.glade.h:25
 msgid "If checked, Gajim will remember the password for this account"
 msgstr "Dersom valgt vil Gajim huske passordet for kontoen"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:16
+#: ../data/glade/account_creation_wizard_window.glade.h:15
 #: ../data/glade/account_modification_window.glade.h:26
 #: ../data/glade/accounts_window.glade.h:34
 msgid "Manage..."
 msgstr "Behandle..."
 
-#: ../data/glade/account_creation_wizard_window.glade.h:17
+#: ../data/glade/account_creation_wizard_window.glade.h:16
 msgid "Prox_y:"
 msgstr "Prox_y:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:18
+#: ../data/glade/account_creation_wizard_window.glade.h:17
 #: ../data/glade/account_modification_window.glade.h:40
 #: ../data/glade/accounts_window.glade.h:48
 msgid "Save pass_word"
 msgstr "Lagre pass_ord"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:19
-msgid "Servers Features"
-msgstr "Server Funksjonalitet"
-
-#: ../data/glade/account_creation_wizard_window.glade.h:20
+#: ../data/glade/account_creation_wizard_window.glade.h:18
 msgid "Set my profile when I connect"
 msgstr "Klargjør profilen min når jeg kobler til"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:21
+#: ../data/glade/account_creation_wizard_window.glade.h:19
 #: ../data/glade/account_modification_window.glade.h:45
 #: ../data/glade/accounts_window.glade.h:53
 msgid "Use custom hostname/port"
 msgstr "Bruk egendefinert maskinnavn/port"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:22
+#: ../data/glade/account_creation_wizard_window.glade.h:20
 msgid ""
 "You need to have an account in order to connect\n"
 "to the Jabber network."
@@ -163,39 +154,39 @@ msgstr ""
 "Du trenger en konto før du kan koble\n"
 "til Jabber nettverket."
 
-#: ../data/glade/account_creation_wizard_window.glade.h:24
+#: ../data/glade/account_creation_wizard_window.glade.h:22
 msgid "Your JID:"
 msgstr "Din JID:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:25
+#: ../data/glade/account_creation_wizard_window.glade.h:23
 #: ../data/glade/roster_window.glade.h:14
 msgid "_Advanced"
 msgstr "_Avansert"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:26
+#: ../data/glade/account_creation_wizard_window.glade.h:24
 msgid "_Finish"
 msgstr "_Avslutt"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:27
+#: ../data/glade/account_creation_wizard_window.glade.h:25
 msgid "_Hostname:"
 msgstr "_Maskinnavn:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:28
+#: ../data/glade/account_creation_wizard_window.glade.h:26
 #: ../data/glade/account_modification_window.glade.h:50
 #: ../data/glade/accounts_window.glade.h:58
 msgid "_Password:"
 msgstr "_Passord:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:29
+#: ../data/glade/account_creation_wizard_window.glade.h:27
 #: ../data/glade/manage_proxies_window.glade.h:11
 msgid "_Port:"
 msgstr "_Port:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:30
+#: ../data/glade/account_creation_wizard_window.glade.h:28
 msgid "_Server:"
 msgstr "_Server:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:31
+#: ../data/glade/account_creation_wizard_window.glade.h:29
 #: ../data/glade/manage_proxies_window.glade.h:12
 msgid "_Username:"
 msgstr "_Brukernavn:"
@@ -290,8 +281,8 @@ msgstr "Rediger Personlig Informasjon..."
 #: ../data/glade/account_modification_window.glade.h:16
 #: ../data/glade/accounts_window.glade.h:20
 #: ../data/glade/roster_window.glade.h:5 ../src/common/helpers.py:1043
-#: ../src/common/helpers.py:1055 ../src/notify.py:514 ../src/notify.py:545
-#: ../src/notify.py:557
+#: ../src/common/helpers.py:1055 ../src/notify.py:513 ../src/notify.py:544
+#: ../src/notify.py:556
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -6539,65 +6530,65 @@ msgstr "Passordene du skriver inn i begge felt må være identiske."
 
 #. img to display
 #. default value
-#: ../src/dialogs.py:2056 ../src/notify.py:245 ../src/notify.py:472
+#: ../src/dialogs.py:2056 ../src/notify.py:245 ../src/notify.py:471
 #: ../src/osx/growler.py:12
 msgid "Contact Signed In"
 msgstr "Kontakt Logget På"
 
-#: ../src/dialogs.py:2058 ../src/notify.py:253 ../src/notify.py:474
+#: ../src/dialogs.py:2058 ../src/notify.py:253 ../src/notify.py:473
 #: ../src/osx/growler.py:12
 msgid "Contact Signed Out"
 msgstr "Kontakt Logget Av"
 
 #. chat message
-#: ../src/dialogs.py:2060 ../src/notify.py:276 ../src/notify.py:476
+#: ../src/dialogs.py:2060 ../src/notify.py:276 ../src/notify.py:475
 #: ../src/osx/growler.py:12
 msgid "New Message"
 msgstr "Ny Melding"
 
 #. single message
-#: ../src/dialogs.py:2060 ../src/notify.py:257 ../src/notify.py:476
+#: ../src/dialogs.py:2060 ../src/notify.py:257 ../src/notify.py:475
 #: ../src/osx/growler.py:13
 msgid "New Single Message"
 msgstr "Ny Melding"
 
 #. private message
-#: ../src/dialogs.py:2061 ../src/notify.py:264 ../src/notify.py:477
+#: ../src/dialogs.py:2061 ../src/notify.py:264 ../src/notify.py:476
 #: ../src/osx/growler.py:13
 msgid "New Private Message"
 msgstr "Ny Privat Melding"
 
-#: ../src/dialogs.py:2061 ../src/gajim.py:1593 ../src/notify.py:485
+#: ../src/dialogs.py:2061 ../src/gajim.py:1593 ../src/notify.py:484
 #: ../src/osx/growler.py:13
 msgid "New E-mail"
 msgstr "Ny E-post"
 
-#: ../src/dialogs.py:2063 ../src/gajim.py:1659 ../src/notify.py:479
+#: ../src/dialogs.py:2063 ../src/gajim.py:1659 ../src/notify.py:478
 #: ../src/osx/growler.py:14
 msgid "File Transfer Request"
 msgstr "Fil Overførings Forespørsel"
 
 #: ../src/dialogs.py:2065 ../src/gajim.py:1559 ../src/gajim.py:1626
-#: ../src/notify.py:481 ../src/osx/growler.py:14
+#: ../src/notify.py:480 ../src/osx/growler.py:14
 msgid "File Transfer Error"
 msgstr "Fil Overføring Feilet"
 
 #: ../src/dialogs.py:2067 ../src/gajim.py:1701 ../src/gajim.py:1723
-#: ../src/gajim.py:1740 ../src/notify.py:483 ../src/osx/growler.py:15
+#: ../src/gajim.py:1740 ../src/notify.py:482 ../src/osx/growler.py:15
 msgid "File Transfer Completed"
 msgstr "Fil Overføring Komplett"
 
-#: ../src/dialogs.py:2068 ../src/gajim.py:1704 ../src/notify.py:483
+#: ../src/dialogs.py:2068 ../src/gajim.py:1704 ../src/notify.py:482
 #: ../src/osx/growler.py:15
 msgid "File Transfer Stopped"
 msgstr "Fil Overføring Stoppet"
 
-#: ../src/dialogs.py:2070 ../src/gajim.py:1449 ../src/notify.py:487
+#: ../src/dialogs.py:2070 ../src/gajim.py:1449 ../src/notify.py:486
 #: ../src/osx/growler.py:16
 msgid "Groupchat Invitation"
 msgstr "Gruppesamtale invitasjon"
 
-#: ../src/dialogs.py:2072 ../src/notify.py:237 ../src/notify.py:489
+#: ../src/dialogs.py:2072 ../src/notify.py:237 ../src/notify.py:488
 #: ../src/osx/growler.py:16
 msgid "Contact Changed Status"
 msgstr "Kontakt Endret Status"
@@ -7511,7 +7502,7 @@ msgstr "Godtar du denne forespørselen på konto %s?"
 msgid "HTTP (%(method)s) Authorization for %(url)s (id: %(id)s)"
 msgstr "HTTP (%(method)s) Autentisering for %(url)s (id: %(id)s)"
 
-#: ../src/gajim.py:628 ../src/notify.py:491 ../src/osx/growler.py:17
+#: ../src/gajim.py:628 ../src/notify.py:490 ../src/osx/growler.py:17
 msgid "Connection Failed"
 msgstr "Tilkobling Feilet"
 
@@ -9464,6 +9455,13 @@ msgstr "Det er ingen ventende abonnements forespørsler."
 #: ../src/vcard.py:339 ../src/vcard.py:377 ../src/vcard.py:507
 msgid " resource with priority "
 msgstr " ressurs med prioritet"
+
+#~ msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
+#~ msgstr ""
+#~ "Klikk for å se tjenester (som MSN og ICQ transporter) på jabber serveren"
+
+#~ msgid "Servers Features"
+#~ msgstr "Server Funksjonalitet"
 
 #~ msgid "Select the account with which to synchronise"
 #~ msgstr "Velg hvilken konto du skal synkronisere med"

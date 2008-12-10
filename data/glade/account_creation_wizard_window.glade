@@ -35,6 +35,7 @@ to the Jabber network.</property>
                 <child>
                   <widget class="GtkFrame" id="frame33">
                     <property name="visible">True</property>
+                    <property name="label_xalign">0</property>
                     <property name="shadow_type">GTK_SHADOW_NONE</property>
                     <child>
                       <widget class="GtkAlignment" id="alignment68">
@@ -139,63 +140,60 @@ to the Jabber network.</property>
                       <placeholder/>
                     </child>
                     <child>
-                      <widget class="GtkEntry" id="username_entry">
+                      <widget class="GtkLabel" id="jid_label">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="has_focus">True</property>
-                        <signal name="changed" handler="on_username_entry_changed"/>
-                        <signal name="key_press_event" handler="on_username_entry_key_press_event"/>
+                        <property name="xalign">0</property>
+                        <property name="use_markup">True</property>
+                        <property name="selectable">True</property>
                       </widget>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="label267">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Server:</property>
-                        <property name="use_underline">True</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
+                        <property name="right_attach">3</property>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkComboBoxEntry" id="server_comboboxentry">
+                      <widget class="GtkLabel" id="label258">
                         <property name="visible">True</property>
-                        <signal name="changed" handler="on_server_comboboxentry_changed"/>
-                        <child internal-child="entry">
-                          <widget class="GtkEntry" id="comboboxentry-entry1">
-                          </widget>
-                        </child>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Your JID:</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label262">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">_Username:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">username_entry</property>
+                      </widget>
+                      <packing>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkEntry" id="password_entry">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="visibility">False</property>
+                        <property name="activates_default">True</property>
                       </widget>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options">GTK_FILL</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="label263">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Password:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">password_entry</property>
-                      </widget>
-                      <packing>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
-                        <property name="x_options">GTK_FILL</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
@@ -222,60 +220,63 @@ to the Jabber network.</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkEntry" id="password_entry">
+                      <widget class="GtkLabel" id="label263">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="visibility">False</property>
-                        <property name="activates_default">True</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">_Password:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">password_entry</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkComboBoxEntry" id="server_comboboxentry">
+                        <property name="visible">True</property>
+                        <signal name="changed" handler="on_server_comboboxentry_changed"/>
+                        <child internal-child="entry">
+                          <widget class="GtkEntry" id="comboboxentry-entry1">
+                          </widget>
+                        </child>
                       </widget>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                        <property name="y_options"></property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options">GTK_FILL</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label262">
+                      <widget class="GtkLabel" id="label267">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Username:</property>
+                        <property name="label" translatable="yes">_Server:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">username_entry</property>
                       </widget>
                       <packing>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label258">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Your JID:</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="jid_label">
+                      <widget class="GtkEntry" id="username_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="xalign">0</property>
-                        <property name="use_markup">True</property>
-                        <property name="selectable">True</property>
+                        <property name="has_focus">True</property>
+                        <signal name="changed" handler="on_username_entry_changed"/>
+                        <signal name="key_press_event" handler="on_username_entry_key_press_event"/>
                       </widget>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="right_attach">3</property>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
-                        <property name="x_options">GTK_FILL</property>
+                        <property name="right_attach">2</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
@@ -344,22 +345,6 @@ to the Jabber network.</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
-                    <child>
-                      <widget class="GtkButton" id="server_features_button">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip" translatable="yes">Click to see features (like MSN, ICQ transports) of jabber servers</property>
-                        <property name="label" translatable="yes">Servers Features</property>
-                        <property name="use_underline">True</property>
-                        <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_register_server_features_button_clicked"/>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -379,62 +364,6 @@ to the Jabber network.</property>
                         <property name="n_columns">3</property>
                         <property name="column_spacing">5</property>
                         <property name="row_spacing">5</property>
-                        <child>
-                          <widget class="GtkLabel" id="label381">
-                            <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Prox_y:</property>
-                            <property name="use_underline">True</property>
-                          </widget>
-                          <packing>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkComboBox" id="proxies_combobox">
-                            <property name="visible">True</property>
-                            <property name="items">None</property>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="y_options">GTK_FILL</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="manage_proxies_button">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Manage...</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <signal name="clicked" handler="on_manage_proxies_button_clicked"/>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                            <property name="x_options"></property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkCheckButton" id="custom_host_port_checkbutton">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Use custom hostname/port</property>
-                            <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="on_custom_host_port_checkbutton_toggled"/>
-                          </widget>
-                          <packing>
-                            <property name="right_attach">3</property>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
                         <child>
                           <widget class="GtkHBox" id="custom_host_hbox">
                             <property name="visible">True</property>
@@ -495,6 +424,62 @@ to the Jabber network.</property>
                             <property name="bottom_attach">3</property>
                             <property name="x_options">GTK_FILL</property>
                             <property name="y_options">GTK_FILL</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkCheckButton" id="custom_host_port_checkbutton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="label" translatable="yes">Use custom hostname/port</property>
+                            <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="on_custom_host_port_checkbutton_toggled"/>
+                          </widget>
+                          <packing>
+                            <property name="right_attach">3</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkButton" id="manage_proxies_button">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="label" translatable="yes">Manage...</property>
+                            <property name="use_underline">True</property>
+                            <property name="response_id">0</property>
+                            <signal name="clicked" handler="on_manage_proxies_button_clicked"/>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="x_options"></property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkComboBox" id="proxies_combobox">
+                            <property name="visible">True</property>
+                            <property name="items">None</property>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="y_options">GTK_FILL</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="label381">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">Prox_y:</property>
+                            <property name="use_underline">True</property>
+                          </widget>
+                          <packing>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
                           </packing>
                         </child>
                       </widget>

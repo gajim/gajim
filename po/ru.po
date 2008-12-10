@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-01 22:29+0100\n"
+"POT-Creation-Date: 2008-12-10 09:44+0100\n"
 "PO-Revision-Date: 2008-12-02 18:30+0300\n"
 "Last-Translator: Fomin Denis <fominde@mail.ru>\n"
 "Language-Team: Русский <ru@li.org>\n"
@@ -108,64 +108,54 @@ msgstr ""
 "Отпечаток SHA1 сертификата:\n"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:10
-msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
-msgstr ""
-"Щелкните, чтобы просмотреть сервисы предоставляемые jabber сервером "
-"(например, MSN, ICQ транспорты)"
-
-#: ../data/glade/account_creation_wizard_window.glade.h:11
 msgid "Connect when I press Finish"
 msgstr "Подключиться, когда я нажму «Закончить»"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:12
+#: ../data/glade/account_creation_wizard_window.glade.h:11
 msgid "Gajim: Account Creation Wizard"
 msgstr "Gajim: мастер создания учетной записи"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:13
+#: ../data/glade/account_creation_wizard_window.glade.h:12
 msgid "I already have an account I want to _use"
 msgstr "У меня уже есть учетная запись, которую я хочу _использовать"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:14
+#: ../data/glade/account_creation_wizard_window.glade.h:13
 msgid "I want to _register for a new account"
 msgstr "Я хочу _зарегистрировать новую учетную запись"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:15
+#: ../data/glade/account_creation_wizard_window.glade.h:14
 #: ../data/glade/account_modification_window.glade.h:20
 #: ../data/glade/accounts_window.glade.h:25
 msgid "If checked, Gajim will remember the password for this account"
 msgstr "Если отмечено, то Gajim запомнит пароль учетной записи"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:16
+#: ../data/glade/account_creation_wizard_window.glade.h:15
 #: ../data/glade/account_modification_window.glade.h:26
 #: ../data/glade/accounts_window.glade.h:34
 msgid "Manage..."
 msgstr "Управление..."
 
-#: ../data/glade/account_creation_wizard_window.glade.h:17
+#: ../data/glade/account_creation_wizard_window.glade.h:16
 msgid "Prox_y:"
 msgstr "Про_кси:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:18
+#: ../data/glade/account_creation_wizard_window.glade.h:17
 #: ../data/glade/account_modification_window.glade.h:40
 #: ../data/glade/accounts_window.glade.h:48
 msgid "Save pass_word"
 msgstr "Сохранить _пароль"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:19
-msgid "Servers Features"
-msgstr "Параметры сервера"
-
-#: ../data/glade/account_creation_wizard_window.glade.h:20
+#: ../data/glade/account_creation_wizard_window.glade.h:18
 msgid "Set my profile when I connect"
 msgstr "Настроить мой профиль после соединения"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:21
+#: ../data/glade/account_creation_wizard_window.glade.h:19
 #: ../data/glade/account_modification_window.glade.h:45
 #: ../data/glade/accounts_window.glade.h:53
 msgid "Use custom hostname/port"
 msgstr "Использовать пользовательские хост/порт"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:22
+#: ../data/glade/account_creation_wizard_window.glade.h:20
 msgid ""
 "You need to have an account in order to connect\n"
 "to the Jabber network."
@@ -173,39 +163,39 @@ msgstr ""
 "Необходимо создать учетную запись для присоединения \n"
 "к сети Jabber."
 
-#: ../data/glade/account_creation_wizard_window.glade.h:24
+#: ../data/glade/account_creation_wizard_window.glade.h:22
 msgid "Your JID:"
 msgstr "Ваш JID:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:25
+#: ../data/glade/account_creation_wizard_window.glade.h:23
 #: ../data/glade/roster_window.glade.h:14
 msgid "_Advanced"
 msgstr "_Дополнительно"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:26
+#: ../data/glade/account_creation_wizard_window.glade.h:24
 msgid "_Finish"
 msgstr "_Закончить"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:27
+#: ../data/glade/account_creation_wizard_window.glade.h:25
 msgid "_Hostname:"
 msgstr "_Хост: "
 
-#: ../data/glade/account_creation_wizard_window.glade.h:28
+#: ../data/glade/account_creation_wizard_window.glade.h:26
 #: ../data/glade/account_modification_window.glade.h:50
 #: ../data/glade/accounts_window.glade.h:58
 msgid "_Password:"
 msgstr "_Пароль:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:29
+#: ../data/glade/account_creation_wizard_window.glade.h:27
 #: ../data/glade/manage_proxies_window.glade.h:11
 msgid "_Port:"
 msgstr "_Порт:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:30
+#: ../data/glade/account_creation_wizard_window.glade.h:28
 msgid "_Server:"
 msgstr "_Сервер:"
 
-#: ../data/glade/account_creation_wizard_window.glade.h:31
+#: ../data/glade/account_creation_wizard_window.glade.h:29
 #: ../data/glade/manage_proxies_window.glade.h:12
 msgid "_Username:"
 msgstr "_Имя пользователя:"
@@ -301,8 +291,8 @@ msgstr "Редактировать личную информацию..."
 #: ../data/glade/account_modification_window.glade.h:16
 #: ../data/glade/accounts_window.glade.h:20
 #: ../data/glade/roster_window.glade.h:5 ../src/common/helpers.py:1043
-#: ../src/common/helpers.py:1055 ../src/notify.py:514 ../src/notify.py:545
-#: ../src/notify.py:557
+#: ../src/common/helpers.py:1055 ../src/notify.py:513 ../src/notify.py:544
+#: ../src/notify.py:556
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -1378,7 +1368,7 @@ msgstr ""
 msgid "_Search Database"
 msgstr "_Поиск в базе данных"
 
-#: ../data/glade/history_window.glade.h:1 ../src/history_window.py:305
+#: ../data/glade/history_window.glade.h:1 ../src/history_window.py:307
 msgid "Conversation History"
 msgstr "История"
 
@@ -2956,21 +2946,21 @@ msgid "Spelling language"
 msgstr "Язык проверки орфографии"
 
 #. we are not connected
-#: ../src/chat_control.py:355 ../src/chat_control.py:549
+#: ../src/chat_control.py:355 ../src/chat_control.py:551
 msgid "A connection is not available"
 msgstr "Подключение недоступно"
 
-#: ../src/chat_control.py:356 ../src/chat_control.py:550
+#: ../src/chat_control.py:356 ../src/chat_control.py:552
 msgid "Your message can not be sent until you are connected."
 msgstr "Ваше сообщение не может быть отправлено, пока вы не подключитесь."
 
-#: ../src/chat_control.py:1147 ../src/chat_control.py:1543
+#: ../src/chat_control.py:1149 ../src/chat_control.py:1545
 msgid "GPG encryption enabled"
 msgstr "GPG шифрование включено"
 
 #. Add to roster
 #. add_to_roster_menuitem
-#: ../src/chat_control.py:1169 ../src/chat_control.py:2037
+#: ../src/chat_control.py:1171 ../src/chat_control.py:2039
 #: ../src/common/contacts.py:113 ../src/common/helpers.py:73
 #: ../src/common/helpers.py:303 ../src/conversation_textview.py:845
 #: ../src/dialogs.py:904 ../src/gajim.py:979 ../src/gajim.py:1639
@@ -2981,19 +2971,19 @@ msgstr "GPG шифрование включено"
 msgid "Not in Roster"
 msgstr "Не в ростере"
 
-#: ../src/chat_control.py:1301 ../src/tooltips.py:627
+#: ../src/chat_control.py:1303 ../src/tooltips.py:627
 msgid "Unknown Artist"
 msgstr "Неизвестный исполнитель"
 
-#: ../src/chat_control.py:1303 ../src/tooltips.py:632
+#: ../src/chat_control.py:1305 ../src/tooltips.py:632
 msgid "Unknown Title"
 msgstr "Неизвестная песня"
 
-#: ../src/chat_control.py:1305 ../src/tooltips.py:637
+#: ../src/chat_control.py:1307 ../src/tooltips.py:637
 msgid "Unknown Source"
 msgstr "Неизвестный альбом"
 
-#: ../src/chat_control.py:1309 ../src/tooltips.py:639
+#: ../src/chat_control.py:1311 ../src/tooltips.py:639
 #, python-format
 msgid ""
 "<b>\"%(title)s\"</b> by <i>%(artist)s</i>\n"
@@ -3002,7 +2992,7 @@ msgstr ""
 "<b>«%(title)s»</b> <i>%(artist)s</i>\n"
 "из <i>%(source)s</i>"
 
-#: ../src/chat_control.py:1314
+#: ../src/chat_control.py:1316
 #, python-format
 msgid ""
 "%(title)s by %(artist)s\n"
@@ -3011,17 +3001,17 @@ msgstr ""
 "%(title)s by %(artist)s\n"
 "из %(source)s"
 
-#: ../src/chat_control.py:1438
+#: ../src/chat_control.py:1440
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s из комнаты %(room_name)s"
 
 #. No key assigned nor a key is used by remote contact
-#: ../src/chat_control.py:1523 ../src/dialogs.py:3912
+#: ../src/chat_control.py:1525 ../src/dialogs.py:3912
 msgid "No GPG key assigned"
 msgstr "Ключ GPG не присвоен"
 
-#: ../src/chat_control.py:1524
+#: ../src/chat_control.py:1526
 msgid ""
 "No GPG key is assigned to this contact. So you cannot encrypt messages with "
 "GPG."
@@ -3029,50 +3019,50 @@ msgstr ""
 "Этому контакту не присвоен ключ GPG, поэтому вы не можете зашифровать "
 "сообщения с помощью GPG."
 
-#: ../src/chat_control.py:1533
+#: ../src/chat_control.py:1535
 msgid "GPG encryption disabled"
 msgstr "GPG шифрование выключено"
 
-#: ../src/chat_control.py:1558
+#: ../src/chat_control.py:1560
 msgid "Session WILL be logged"
 msgstr "Для сеанса БУДЕТ сохранена история сообщений"
 
-#: ../src/chat_control.py:1560
+#: ../src/chat_control.py:1562
 msgid "Session WILL NOT be logged"
 msgstr "Для сеанса НЕ БУДЕТ сохранена история сообщений"
 
 #. encryption %s active
-#: ../src/chat_control.py:1574
+#: ../src/chat_control.py:1576
 msgid "is"
 msgstr "было"
 
-#: ../src/chat_control.py:1574
+#: ../src/chat_control.py:1576
 msgid "is NOT"
 msgstr "НЕ"
 
 #. chat session %s be logged
-#: ../src/chat_control.py:1576
+#: ../src/chat_control.py:1578
 msgid "will"
 msgstr "будет"
 
-#: ../src/chat_control.py:1576
+#: ../src/chat_control.py:1578
 msgid "will NOT"
 msgstr "НЕ будет"
 
 #. About encrypted chat session
-#: ../src/chat_control.py:1580
+#: ../src/chat_control.py:1582
 msgid "and authenticated"
 msgstr "и заверено"
 
 #. About encrypted chat session
-#: ../src/chat_control.py:1584
+#: ../src/chat_control.py:1586
 msgid "and NOT authenticated"
 msgstr "и НЕ заверено"
 
 #. status will become 'is' or 'is not', authentificaed will become
 #. 'and authentificated' or 'and not authentificated', logged will become
 #. 'will' or 'will not'
-#: ../src/chat_control.py:1590
+#: ../src/chat_control.py:1592
 #, python-format
 msgid ""
 "%(type)s encryption %(status)s active %(authenticated)s.\n"
@@ -3081,26 +3071,26 @@ msgstr ""
 "%(type)s шифрование %(status)s включено %(authenticated)s.\n"
 "Для сеанса %(logged)s сохранена история сообщений."
 
-#: ../src/chat_control.py:1638
+#: ../src/chat_control.py:1640
 msgid "Command not supported for zeroconf account."
 msgstr "Команда не поддерживается учетной записью zeroconf."
 
-#: ../src/chat_control.py:1649 ../src/groupchat_control.py:1653
+#: ../src/chat_control.py:1651 ../src/groupchat_control.py:1653
 #, python-format
 msgid "Commands: %s"
 msgstr "Команды: %s"
 
-#: ../src/chat_control.py:1652 ../src/groupchat_control.py:1667
+#: ../src/chat_control.py:1654 ../src/groupchat_control.py:1667
 #, python-format
 msgid "Usage: /%s, clears the text window."
 msgstr "Использование: /%s, очищает текстовое окно."
 
-#: ../src/chat_control.py:1655 ../src/groupchat_control.py:1672
+#: ../src/chat_control.py:1657 ../src/groupchat_control.py:1672
 #, python-format
 msgid "Usage: /%s, hide the chat buttons."
 msgstr "Использование: /%s, скрывает кнопки беседы."
 
-#: ../src/chat_control.py:1658 ../src/groupchat_control.py:1688
+#: ../src/chat_control.py:1660 ../src/groupchat_control.py:1688
 #, python-format
 msgid ""
 "Usage: /%(command)s <action>, sends action to the current group chat. Use "
@@ -3109,38 +3099,38 @@ msgstr ""
 "Использование: /%(command)s <действие>, совершает действие в текущей "
 "комнате. Используйте третье лицо (например, «/%(command)s взрывается».)"
 
-#: ../src/chat_control.py:1663
+#: ../src/chat_control.py:1665
 #, python-format
 msgid "Usage: /%s, sends a ping to the contact"
 msgstr "Использование: /%s, посылает пинг контакту"
 
-#: ../src/chat_control.py:1666
+#: ../src/chat_control.py:1668
 #, python-format
 msgid "Usage: /%s, send the message to the contact"
 msgstr "Использование: /%s, посылает сообщение контакту"
 
-#: ../src/chat_control.py:1669 ../src/groupchat_control.py:1711
+#: ../src/chat_control.py:1671 ../src/groupchat_control.py:1711
 #, python-format
 msgid "No help info for /%s"
 msgstr "Нет подсказки для /%s"
 
-#: ../src/chat_control.py:1800
+#: ../src/chat_control.py:1802
 msgid "Session negotiation cancelled"
 msgstr "Установление сеанса отменено"
 
-#: ../src/chat_control.py:1807
+#: ../src/chat_control.py:1809
 msgid "This session is encrypted"
 msgstr "Сеанс зашифрован"
 
-#: ../src/chat_control.py:1810
+#: ../src/chat_control.py:1812
 msgid " and WILL be logged"
 msgstr " и БУДЕТ сохранена история сообщений"
 
-#: ../src/chat_control.py:1812
+#: ../src/chat_control.py:1814
 msgid " and WILL NOT be logged"
 msgstr " и НЕ БУДЕТ сохранена история сообщений"
 
-#: ../src/chat_control.py:1817
+#: ../src/chat_control.py:1819
 msgid ""
 "Remote contact's identity not verified. Click the shield button for more "
 "details."
@@ -3148,25 +3138,25 @@ msgstr ""
 "Личность удаленного контакта не подтверждена. Нажмите на кнопке со щитом для "
 "подробностей."
 
-#: ../src/chat_control.py:1819
+#: ../src/chat_control.py:1821
 msgid "E2E encryption disabled"
 msgstr "E2E шифрование выключено"
 
-#: ../src/chat_control.py:1848 ../src/chat_control.py:1861
+#: ../src/chat_control.py:1850 ../src/chat_control.py:1863
 msgid "The following message was NOT encrypted"
 msgstr "Последнее сообщение НЕ БЫЛО зашифровано"
 
-#: ../src/chat_control.py:1854
+#: ../src/chat_control.py:1856
 msgid "The following message was encrypted"
 msgstr "Последнее сообщение зашифровано"
 
 #. %s is being replaced in the code with JID
-#: ../src/chat_control.py:2225
+#: ../src/chat_control.py:2227
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "Получено новое сообщение от «%s»"
 
-#: ../src/chat_control.py:2226
+#: ../src/chat_control.py:2228
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
@@ -3174,15 +3164,15 @@ msgstr ""
 "Если вы закроете эту вкладку и у вас отключена функция ведения истории "
 "сообщений, то это сообщение будет утеряно."
 
-#: ../src/chat_control.py:2376 ../src/common/connection_handlers.py:1847
+#: ../src/chat_control.py:2378 ../src/common/connection_handlers.py:1847
 #: ../src/common/connection_handlers.py:1893
 #: ../src/common/connection_handlers.py:2081
-#: ../src/common/connection_handlers.py:2213 ../src/common/connection.py:1218
+#: ../src/common/connection_handlers.py:2214 ../src/common/connection.py:1218
 #: ../src/gajim.py:174
 msgid "Database Error"
 msgstr "Ошибка базы данных"
 
-#: ../src/chat_control.py:2377
+#: ../src/chat_control.py:2379
 #, python-format
 msgid ""
 "The database file (%s) cannot be read. Try to repair it or remove it (all "
@@ -3191,7 +3181,7 @@ msgstr ""
 "Файл базы данных (%s) не может быть прочитан. Попробуйте восстановить его "
 "или удалить (вся история будет утеряна)."
 
-#: ../src/chat_control.py:2613
+#: ../src/chat_control.py:2615
 #, python-format
 msgid "%(name)s is now %(status)s"
 msgstr "%(name)s теперь %(status)s"
@@ -4110,7 +4100,7 @@ msgstr "Данные о регистрации для транспорта %s н
 #: ../src/common/connection_handlers.py:1845
 #: ../src/common/connection_handlers.py:1891
 #: ../src/common/connection_handlers.py:2079
-#: ../src/common/connection_handlers.py:2211 ../src/common/connection.py:1216
+#: ../src/common/connection_handlers.py:2212 ../src/common/connection.py:1216
 #: ../src/gajim.py:396
 msgid "Disk Write Error"
 msgstr "Ошибка записи на диск"
@@ -4127,7 +4117,7 @@ msgstr "Учетная запись %s не поддерживает невид�
 #: ../src/common/connection_handlers.py:1848
 #: ../src/common/connection_handlers.py:1894
 #: ../src/common/connection_handlers.py:2082
-#: ../src/common/connection_handlers.py:2214 ../src/common/connection.py:1219
+#: ../src/common/connection_handlers.py:2215 ../src/common/connection.py:1219
 #: ../src/gajim.py:175
 #, python-format
 msgid ""
@@ -4209,7 +4199,7 @@ msgstr "%s хочет отменить подписку"
 msgid "we are now unsubscribed from %s"
 msgstr "теперь мы отписались от %s"
 
-#: ../src/common/connection_handlers.py:2337
+#: ../src/common/connection_handlers.py:2338
 #, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
@@ -4220,13 +4210,13 @@ msgstr ""
 "удалить его"
 
 #. We didn't set a passphrase
-#: ../src/common/connection_handlers.py:2362
+#: ../src/common/connection_handlers.py:2363
 #: ../src/common/zeroconf/connection_zeroconf.py:172
 msgid "OpenPGP passphrase was not given"
 msgstr "Не задана парольная фраза OpenPGP"
 
 #. %s is the account name here
-#: ../src/common/connection_handlers.py:2364
+#: ../src/common/connection_handlers.py:2365
 #: ../src/common/zeroconf/connection_zeroconf.py:174
 #: ../src/roster_window.py:1930 ../src/roster_window.py:1950
 #, python-format
@@ -6565,65 +6555,65 @@ msgstr "Пароли, введенные в оба поля, должны быт
 
 #. img to display
 #. default value
-#: ../src/dialogs.py:2056 ../src/notify.py:245 ../src/notify.py:472
+#: ../src/dialogs.py:2056 ../src/notify.py:245 ../src/notify.py:471
 #: ../src/osx/growler.py:12
 msgid "Contact Signed In"
 msgstr "Контакт подключился"
 
-#: ../src/dialogs.py:2058 ../src/notify.py:253 ../src/notify.py:474
+#: ../src/dialogs.py:2058 ../src/notify.py:253 ../src/notify.py:473
 #: ../src/osx/growler.py:12
 msgid "Contact Signed Out"
 msgstr "Контакт отключился"
 
 #. chat message
-#: ../src/dialogs.py:2060 ../src/notify.py:276 ../src/notify.py:476
+#: ../src/dialogs.py:2060 ../src/notify.py:276 ../src/notify.py:475
 #: ../src/osx/growler.py:12
 msgid "New Message"
 msgstr "Новое сообщение"
 
 #. single message
-#: ../src/dialogs.py:2060 ../src/notify.py:257 ../src/notify.py:476
+#: ../src/dialogs.py:2060 ../src/notify.py:257 ../src/notify.py:475
 #: ../src/osx/growler.py:13
 msgid "New Single Message"
 msgstr "Новое одиночное сообщение"
 
 #. private message
-#: ../src/dialogs.py:2061 ../src/notify.py:264 ../src/notify.py:477
+#: ../src/dialogs.py:2061 ../src/notify.py:264 ../src/notify.py:476
 #: ../src/osx/growler.py:13
 msgid "New Private Message"
 msgstr "Новое личное сообщение"
 
-#: ../src/dialogs.py:2061 ../src/gajim.py:1593 ../src/notify.py:485
+#: ../src/dialogs.py:2061 ../src/gajim.py:1593 ../src/notify.py:484
 #: ../src/osx/growler.py:13
 msgid "New E-mail"
 msgstr "Новое письмо"
 
-#: ../src/dialogs.py:2063 ../src/gajim.py:1659 ../src/notify.py:479
+#: ../src/dialogs.py:2063 ../src/gajim.py:1659 ../src/notify.py:478
 #: ../src/osx/growler.py:14
 msgid "File Transfer Request"
 msgstr "Запрос передачи"
 
 #: ../src/dialogs.py:2065 ../src/gajim.py:1559 ../src/gajim.py:1626
-#: ../src/notify.py:481 ../src/osx/growler.py:14
+#: ../src/notify.py:480 ../src/osx/growler.py:14
 msgid "File Transfer Error"
 msgstr "Ошибка передачи"
 
 #: ../src/dialogs.py:2067 ../src/gajim.py:1701 ../src/gajim.py:1723
-#: ../src/gajim.py:1740 ../src/notify.py:483 ../src/osx/growler.py:15
+#: ../src/gajim.py:1740 ../src/notify.py:482 ../src/osx/growler.py:15
 msgid "File Transfer Completed"
 msgstr "Передача файла завершена"
 
-#: ../src/dialogs.py:2068 ../src/gajim.py:1704 ../src/notify.py:483
+#: ../src/dialogs.py:2068 ../src/gajim.py:1704 ../src/notify.py:482
 #: ../src/osx/growler.py:15
 msgid "File Transfer Stopped"
 msgstr "Передача остановлена"
 
-#: ../src/dialogs.py:2070 ../src/gajim.py:1449 ../src/notify.py:487
+#: ../src/dialogs.py:2070 ../src/gajim.py:1449 ../src/notify.py:486
 #: ../src/osx/growler.py:16
 msgid "Groupchat Invitation"
 msgstr "Приглашение в комнату"
 
-#: ../src/dialogs.py:2072 ../src/notify.py:237 ../src/notify.py:489
+#: ../src/dialogs.py:2072 ../src/notify.py:237 ../src/notify.py:488
 #: ../src/osx/growler.py:16
 msgid "Contact Changed Status"
 msgstr "Контакт изменит статус"
@@ -7535,7 +7525,7 @@ msgstr "Вы принимаете запрос %s?"
 msgid "HTTP (%(method)s) Authorization for %(url)s (id: %(id)s)"
 msgstr "HTTP (%(method)s) Авторизация для %(url)s (id: %(id)s)"
 
-#: ../src/gajim.py:628 ../src/notify.py:491 ../src/osx/growler.py:17
+#: ../src/gajim.py:628 ../src/notify.py:490 ../src/osx/growler.py:17
 msgid "Connection Failed"
 msgstr "Соединение разорвалось"
 
@@ -7583,7 +7573,7 @@ msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s теперь известен как %(new_nick)s"
 
 #: ../src/gajim.py:1249 ../src/groupchat_control.py:1339
-#: ../src/history_window.py:417 ../src/notify.py:232
+#: ../src/history_window.py:419 ../src/notify.py:232
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s теперь %(status)s"
@@ -8736,26 +8726,26 @@ msgstr[0] "Вы точно хотите удалить выделенное со
 msgstr[1] "Вы точно хотите удалить выделенные сообщения?"
 msgstr[2] "Вы точно хотите удалить выделенные сообщения?"
 
-#: ../src/history_window.py:287
+#: ../src/history_window.py:289
 #, python-format
 msgid "Conversation History with %s"
 msgstr "История %s"
 
-#: ../src/history_window.py:332
+#: ../src/history_window.py:334
 msgid "Disk Error"
 msgstr "Ошибка записи на диск"
 
-#: ../src/history_window.py:413
+#: ../src/history_window.py:415
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s теперь %(status)s: %(status_msg)s"
 
-#: ../src/history_window.py:423
+#: ../src/history_window.py:425
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
 msgstr "Статус установлен в: %(status)s: %(status_msg)s"
 
-#: ../src/history_window.py:426
+#: ../src/history_window.py:428
 #, python-format
 msgid "Status is now: %(status)s"
 msgstr "Статус установлен в: %(status)s"
@@ -9477,6 +9467,14 @@ msgstr "Нет ожидающего запроса на подписку."
 #: ../src/vcard.py:339 ../src/vcard.py:377 ../src/vcard.py:507
 msgid " resource with priority "
 msgstr " ресурс с приоритетом "
+
+#~ msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
+#~ msgstr ""
+#~ "Щелкните, чтобы просмотреть сервисы предоставляемые jabber сервером "
+#~ "(например, MSN, ICQ транспорты)"
+
+#~ msgid "Servers Features"
+#~ msgstr "Параметры сервера"
 
 #~ msgid "Show a list of formattings"
 #~ msgstr "Показать список форматирования"
