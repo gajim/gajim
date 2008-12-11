@@ -121,7 +121,10 @@ class PrivateChatControl(ChatControl):
 		room_ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid, account)
 		if room_jid in gajim.interface.minimized_controls[account]:
 			room_ctrl = gajim.interface.minimized_controls[account][room_jid]
-		self.room_name = room_ctrl.name
+		if room_ctrl:
+			self.room_name = room_ctrl.name
+		else:
+			self.room_name = room_jid
 		self.gc_contact = gc_contact
 		ChatControl.__init__(self, parent_win, contact, account, session)
 		self.TYPE_ID = 'pm'

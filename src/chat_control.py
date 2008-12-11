@@ -991,9 +991,10 @@ class ChatControlBase(MessageControl):
 				room_jid)
 			if contact:
 				gajim.interface.roster.draw_contact(room_jid, self.account)
-			groupchat_control.draw_contact(nick)
-			if groupchat_control.parent_win:
-				groupchat_control.parent_win.redraw_tab(groupchat_control)
+			if groupchat_control:
+				groupchat_control.draw_contact(nick)
+				if groupchat_control.parent_win:
+					groupchat_control.parent_win.redraw_tab(groupchat_control)
 		else:
 			gajim.interface.roster.draw_contact(jid, self.account)
 			gajim.interface.roster.show_title()
