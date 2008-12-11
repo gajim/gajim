@@ -2007,7 +2007,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		status = prs.getStatus() or ''
 		show = prs.getShow()
-		if not show in STATUS_LIST:
+		if not show in ['away', 'chat', 'dnd', 'xa']:
 			show = '' # We ignore unknown show
 		if not ptype and not show:
 			show = 'online'
