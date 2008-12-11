@@ -5,13 +5,13 @@
 # Deni B. <baccic@gmail.com>, 2006.
 # Armando V. <synan@rilinux.hr> 2006.
 # Vedran M. <rivanvx@gmail.com> 2006.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-12-10 09:44+0100\n"
-"PO-Revision-Date: 2008-12-09 23:36+0100\n"
+"PO-Revision-Date: 2008-12-10 20:02+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
 "MIME-Version: 1.0\n"
@@ -52,7 +52,7 @@ msgstr "_Izvrši Naredbu..."
 
 #: ../data/glade/account_context_menu.glade.h:5
 msgid "_Modify Account"
-msgstr "_Izmjeni Račun"
+msgstr "_Uredi Račun"
 
 #: ../data/glade/account_context_menu.glade.h:6
 msgid "_Open Gmail Inbox"
@@ -116,7 +116,7 @@ msgstr "Već imam račun koji želim _koristiti"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:13
 msgid "I want to _register for a new account"
-msgstr "Želim se _registrirati novi račun"
+msgstr "Želim _registrirati novi račun"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:14
 #: ../data/glade/account_modification_window.glade.h:20
@@ -220,7 +220,7 @@ msgstr "Korisnički račun"
 
 #: ../data/glade/account_modification_window.glade.h:5
 msgid "Account Modification"
-msgstr "Modifikacija Korisničkog Računa"
+msgstr "Uređenje Korisničkog Računa"
 
 #: ../data/glade/account_modification_window.glade.h:6
 #: ../data/glade/accounts_window.glade.h:7
@@ -251,7 +251,7 @@ msgid ""
 "be disabled"
 msgstr ""
 "Označite ovo kako bi se Gajim spajao na port 5223 gdje se od starijih "
-"poslužitelja očekuju SSL mogućnosti. Primjetite da Gajim koristi TLS "
+"poslužitelja očekuju SSL mogućnosti. Primijetite da Gajim koristi TLS "
 "enkripciju ukoliko to server podržava, te će sa ovom opcijom uključenom TLS "
 "biti onemogućen"
 
@@ -259,7 +259,7 @@ msgstr ""
 #: ../data/glade/accounts_window.glade.h:12
 #: ../data/glade/zeroconf_properties_window.glade.h:4
 msgid "Choose _Key..."
-msgstr "Odaberi _Ključ"
+msgstr "Odaberi _Ključ..."
 
 #: ../data/glade/account_modification_window.glade.h:12
 #: ../data/glade/accounts_window.glade.h:13
@@ -279,7 +279,7 @@ msgstr "Veza"
 #: ../data/glade/account_modification_window.glade.h:15
 #: ../data/glade/accounts_window.glade.h:17
 msgid "Edit Personal Information..."
-msgstr "Izmjeni Osobne Informacije"
+msgstr "Uredi Osobne Informacije..."
 
 #. No configured account
 #: ../data/glade/account_modification_window.glade.h:16
@@ -315,7 +315,7 @@ msgid ""
 "IP, so file transfer has higher chances of working."
 msgstr ""
 "Ako je označeno, Gajim će odašiljati još neke IP adrese osim vaše, kako bi "
-"prijenosi datoteka imali veću šansu uspjeha."
+"prijenosi datoteka imali veću šansu za uspjeh."
 
 #: ../data/glade/account_modification_window.glade.h:21
 #: ../data/glade/accounts_window.glade.h:26
@@ -353,13 +353,14 @@ msgid ""
 "bottom of the roster window) will change the status of this account "
 "accordingly"
 msgstr ""
-"Ako je označeno, svaka promjena globalnog statusa (koji se mjenja padajućim "
-"izbornikom na dnu prozora kontaktne liste) promjenit će status i ovog računa"
+"Ako je označeno, svaka promjena globalnog statusa (koji se mijenja padajućim "
+"izbornikom na dnu prozora kontaktne liste) promijeniti će i status ovog "
+"računa"
 
 #: ../data/glade/account_modification_window.glade.h:25
 #: ../data/glade/accounts_window.glade.h:31
 msgid "Information about you, as stored in the server"
-msgstr "Informacije o vama, kako stoji na poslužitelju"
+msgstr "Informacije o vama, spremljene na poslužitelju"
 
 #: ../data/glade/account_modification_window.glade.h:27
 #: ../data/glade/accounts_window.glade.h:36
@@ -433,8 +434,8 @@ msgid ""
 msgstr ""
 "Resurs se šalje Jabber poslužitelju kako bi se razlikovao isti JID kod 2 ili "
 "više klijenata spojena u isto vrijeme na isti server sa istim računom. "
-"Dakle, možete biti spojeni sa resursom 'Posao' ili 'Kuća', klijent sa "
-"najvišim prioritetom dobivat će obavijesti o događajima"
+"Dakle, možete biti spojeni sa resursom 'Posao' ili 'Kuća' istovremeno, "
+"klijent sa najvišim prioritetom dobivati će obavijesti o događajima."
 
 #: ../data/glade/account_modification_window.glade.h:38
 #: ../data/glade/zeroconf_properties_window.glade.h:18
@@ -493,7 +494,7 @@ msgstr "<b>Proxy</b>"
 
 #: ../data/glade/accounts_window.glade.h:6
 msgid "Accounts"
-msgstr "Korisnički Račun"
+msgstr "Korisnički Računi"
 
 #: ../data/glade/accounts_window.glade.h:11
 msgid ""
@@ -523,7 +524,7 @@ msgstr "Ime:"
 
 #: ../data/glade/accounts_window.glade.h:24
 msgid "If checked, Gajim will get the password from a GPG agent like seahorse"
-msgstr "Ako je označeno, Gajim će preuzeti lozinku od GPG agenta kao seahorse"
+msgstr "Ako je označeno, Gajim će preuzeti lozinku od GPG agenta, kao seahorse"
 
 #: ../data/glade/accounts_window.glade.h:29
 #: ../data/glade/zeroconf_properties_window.glade.h:11
@@ -612,7 +613,7 @@ msgid ""
 msgstr ""
 "Morate se registrirati na ovom transportu\n"
 "kako bi ste mogli dodati kontakte sa ovog\n"
-"protokola. Kliknite na gumb registracije za\n"
+"protokola. Kliknite na dugme registracije za\n"
 "nastavak."
 
 #: ../data/glade/add_new_contact_window.glade.h:9
@@ -645,7 +646,7 @@ msgstr "_ID Korisnika:"
 
 #: ../data/glade/adhoc_commands_window.glade.h:1
 msgid "<b>An error has occurred:</b>"
-msgstr "<b>Pojavila se greška:</b>"
+msgstr "<b>Došlo je do greške:</b>"
 
 #: ../data/glade/adhoc_commands_window.glade.h:2
 msgid "<b>Choose command to execute:</b>"
@@ -665,11 +666,11 @@ msgstr "Opis greške..."
 
 #: ../data/glade/adhoc_commands_window.glade.h:6
 msgid "Please wait while retrieving command list..."
-msgstr "Pričekajte dok se odvija primanje liste naredbi..."
+msgstr "Pričekajte, primanje liste naredbi..."
 
 #: ../data/glade/adhoc_commands_window.glade.h:7
 msgid "Please wait while the command is sending..."
-msgstr "Pričekajte dok se odvija slanje naredbe..."
+msgstr "Pričekajte, slanje naredbe..."
 
 #: ../data/glade/adhoc_commands_window.glade.h:8
 msgid "Please wait..."
@@ -687,7 +688,7 @@ msgstr "<b>Opis</b>"
 #: ../data/glade/advanced_configuration_window.glade.h:2
 msgid "<b>NOTE:</b> You should restart Gajim for some settings to take effect"
 msgstr ""
-"<b>NAPOMENA:</b> Trebali bi ste ponovno pokrenuti gajim da bi neke postavke "
+"<b>NAPOMENA:</b> Trebali bi ponovno pokrenuti Gajim da bi neke postavke "
 "postale aktivne"
 
 #: ../data/glade/advanced_configuration_window.glade.h:3
@@ -708,7 +709,7 @@ msgstr "Briše Poruku Dana"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:3
 msgid "Edit _Privacy Lists..."
-msgstr "Izmjeni Liste _Privatnosti..."
+msgstr "Uredi Liste _Privatnosti..."
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:4
 msgid "Sends a message to users currently connected to this server"
@@ -808,7 +809,7 @@ msgstr "Jedan ili više posebnih statusa..."
 
 #: ../data/glade/advanced_notifications_window.glade.h:16
 msgid "Online / Free For Chat"
-msgstr "Spojen / Slobodan za Razgovor"
+msgstr "Spojen / Slobodan Za Razgovor"
 
 #: ../data/glade/advanced_notifications_window.glade.h:17
 msgid "Play a sound"
@@ -825,9 +826,9 @@ msgid ""
 "File Transfer Started \n"
 "File Transfer Finished"
 msgstr ""
-"Primanje Poruke \n"
+"Primanje Poruke\n"
 "Kontakt Odspojen \n"
-"Kontakt Promjeni Status \n"
+"Kontakt Promijeni Status \n"
 "Osvjetljavanje na Poruku Grupnog Razgovora \n"
 "Primanje Poruke Grupnog Razgovora \n"
 "Zahtjev za Prijenosom Datoteke \n"
@@ -843,7 +844,7 @@ msgid ""
 "_Activate window manager's UrgencyHint to make chat window in taskbar flash"
 msgstr ""
 "_Aktivacija opcije upravitelja prozora za bljeskanje prozora razgovora u "
-"taskbaru"
+"traci radne površine"
 
 #: ../data/glade/advanced_notifications_window.glade.h:28
 msgid "_Disable auto opening chat window"
@@ -909,7 +910,7 @@ msgstr "Unos:"
 
 #: ../data/glade/atom_entry_window.glade.h:2
 msgid "Feed name:"
-msgstr "Ime članaka:"
+msgstr "Ime kanala:"
 
 #: ../data/glade/atom_entry_window.glade.h:3
 msgid "Last modified:"
@@ -949,7 +950,7 @@ msgstr "<b>Raspoloženje:</b>"
 
 #: ../data/glade/change_password_dialog.glade.h:1
 msgid "Change Password"
-msgstr "Promijeni Password"
+msgstr "Promijeni Lozinku"
 
 #: ../data/glade/change_password_dialog.glade.h:2
 msgid "Enter it again for confirmation:"
@@ -990,7 +991,7 @@ msgstr "_Kopiraj Lokaciju Linka"
 
 #: ../data/glade/chat_context_menu.glade.h:5
 msgid "_Open Email Composer"
-msgstr "_Otvori Sastavljanje Emaila"
+msgstr "_Otvori Kompozitor E-poruka"
 
 #: ../data/glade/chat_context_menu.glade.h:6
 msgid "_Open Link in Browser"
@@ -1069,7 +1070,7 @@ msgstr "Konfiguracija Sobe"
 
 #: ../data/glade/edit_groups_dialog.glade.h:1
 msgid "Edit Groups"
-msgstr "Izmjeni Grupe"
+msgstr "Uredi Grupe"
 
 #: ../data/glade/esession_info_window.glade.h:1
 msgid "(<b>ESession</b> info)"
@@ -1089,7 +1090,7 @@ msgstr "Mogućnosti"
 
 #: ../data/glade/filetransfers.glade.h:1
 msgid "A list of active, completed and stopped file transfers"
-msgstr "Lista aktivnih, kompletiranih i zaustavljenih prijenosa datoteka"
+msgstr "Popis aktivnih, kompletiranih i zaustavljenih prijenosa datoteka"
 
 #: ../data/glade/filetransfers.glade.h:2
 msgid "Cancel file transfer"
@@ -1101,7 +1102,7 @@ msgstr "Prekini transfer odabrane datoteke"
 
 #: ../data/glade/filetransfers.glade.h:4
 msgid "Cancels the selected file transfer and removes incomplete file"
-msgstr "Prekini transfer odabrane datoteke i izbriši nekompletnu datoteku"
+msgstr "Prekini transfer odabrane datoteke i izbriši nepotpunu datoteku"
 
 #: ../data/glade/filetransfers.glade.h:5
 msgid "Clean _up"
@@ -1117,24 +1118,24 @@ msgstr "Skriva prozor"
 
 #: ../data/glade/filetransfers.glade.h:8
 msgid "Remove file transfer from the list."
-msgstr "Ukloni prijenos datoteka sa liste"
+msgstr "Ukloni prijenos datoteke sa popisa."
 
 #: ../data/glade/filetransfers.glade.h:9
 msgid "Removes completed, cancelled and failed file transfers from the list"
 msgstr ""
-"Ukloni završene, zaustavljene ili neuspjele prijenose datoteka sa liste"
+"Ukloni završene, zaustavljene ili neuspjele prijenose datoteka sa popisa"
 
 #: ../data/glade/filetransfers.glade.h:10
 msgid "Shows a list of file transfers between you and others"
-msgstr "Prikazuje listu prijenosa datoteka između vas i ostalih"
+msgstr "Prikazuje popis prijenosa datoteka između vas i ostalih"
 
 #: ../data/glade/filetransfers.glade.h:11
 msgid ""
 "This action removes single file transfer from the list. If the transfer is "
 "active, it is first stopped and then removed"
 msgstr ""
-"Ova akcija uklanja prijenos datoteke sa liste. Ako je prijenos aktivan, prvo "
-"se zaustavlja i onda uklanja"
+"Ova akcija uklanja prijenos datoteke sa popisa. Ako je prijenos aktivan, "
+"prvo se zaustavlja i onda uklanja"
 
 #: ../data/glade/filetransfers.glade.h:12
 msgid "When a file transfer is complete show a popup notification"
@@ -1158,7 +1159,7 @@ msgstr "_Stanka"
 
 #: ../data/glade/filetransfers.glade.h:17
 msgid "file transfers list"
-msgstr "lista prijenosa datoteka"
+msgstr "popis prijenosa datoteka"
 
 #: ../data/glade/gajim_themes_window.glade.h:1
 msgid "<b>Chatstate Tab Colors</b>"
@@ -1270,7 +1271,7 @@ msgstr "Mo_derator"
 
 #: ../data/glade/gc_occupants_menu.glade.h:2
 msgid "Occupant Actions"
-msgstr "Akcije Prisutnih"
+msgstr "Kontrola Prisutnih"
 
 #: ../data/glade/gc_occupants_menu.glade.h:5
 msgid "_Admin"
@@ -1349,7 +1350,7 @@ msgid ""
 "Use this program to delete or export logs. You can select logs from the left "
 "and/or search database from below."
 msgstr ""
-"Ovaj upravitelj spremljenih zapisa nije namjenjen za čitanje istih. Ukoliko "
+"Ovaj upravitelj spremljenih zapisa nije namijenjen za čitanje istih. Ukoliko "
 "tražite takvu mogućnost koristite prozor za povijest razgovora (po "
 "kontaktu).\n"
 "\n"
@@ -1417,11 +1418,11 @@ msgstr "_Pridruživanje"
 
 #: ../data/glade/manage_accounts_window.glade.h:1
 msgid "Manage Accounts"
-msgstr "Podešavanje Računa"
+msgstr "Uredi Račune"
 
 #: ../data/glade/manage_bookmarks_window.glade.h:1
 msgid "Auto join"
-msgstr "Automatsko spajanje"
+msgstr "Automatski ulaz"
 
 #: ../data/glade/manage_bookmarks_window.glade.h:2
 msgid "If checked, Gajim will join this group chat on startup"
@@ -1430,7 +1431,7 @@ msgstr ""
 
 #: ../data/glade/manage_bookmarks_window.glade.h:3
 msgid "Manage Bookmarks"
-msgstr "Podešavanje Knjižnih Oznaka"
+msgstr "Uredi Knjižne Oznake"
 
 #: ../data/glade/manage_bookmarks_window.glade.h:4
 msgid "Minimize on Auto Join"
@@ -1462,7 +1463,7 @@ msgstr "gtk-delete"
 
 #: ../data/glade/manage_proxies_window.glade.h:1
 msgid "<b>Properties</b>"
-msgstr "<b>Karakteristike</b>"
+msgstr "<b>Svojstva</b>"
 
 #: ../data/glade/manage_proxies_window.glade.h:2
 msgid "<b>Settings</b>"
@@ -1494,7 +1495,7 @@ msgstr "Vrsta:"
 
 #: ../data/glade/manage_proxies_window.glade.h:9
 msgid "Use authentication"
-msgstr "Koristi autentifikaciju"
+msgstr "Koristi autorizaciju"
 
 #: ../data/glade/manage_proxies_window.glade.h:10
 msgid "_Host:"
@@ -1514,7 +1515,7 @@ msgstr "Pregledaj povijest razgovora (Ctrl+H)"
 
 #: ../data/glade/message_window.glade.h:4
 msgid "Change the room's subject (Alt+T)"
-msgstr "Promjeni predmet razgovora u sobi (Alt+T)"
+msgstr "Promijeni predmet razgovora u sobi (Alt+T)"
 
 #: ../data/glade/message_window.glade.h:5
 msgid "Change your nickname (Ctrl+N)"
@@ -1530,7 +1531,7 @@ msgstr "Pošalji datoteku (Ctrl+F)"
 
 #: ../data/glade/message_window.glade.h:8
 msgid "Show a list of emoticons (Alt+M)"
-msgstr "Prikaži popis emoticona (Alt+M)"
+msgstr "Prikaži popis emotikona (Alt+M)"
 
 #: ../data/glade/message_window.glade.h:9
 msgid "Show a menu of advanced functions (Alt+A)"
@@ -1688,7 +1689,7 @@ msgstr "Prikaži _aktivnost kontakata na listi"
 
 #: ../data/glade/preferences_window.glade.h:41
 msgid "Display _extra email details"
-msgstr "Prikaži dodatne email _detalje"
+msgstr "Prikaži dodatne e-mail _detalje"
 
 #: ../data/glade/preferences_window.glade.h:42
 msgid "Display _tunes of contacts in roster"
@@ -1757,7 +1758,7 @@ msgstr ""
 msgid ""
 "If checked, Gajim will change status to Away when the computer is unused."
 msgstr ""
-"Ako je označeno, Gajim će promjeniti status u Odsutan kad se računalo ne "
+"Ako je označeno, Gajim će promijeniti status u Odsutan kad se računalo ne "
 "koristi."
 
 #: ../data/glade/preferences_window.glade.h:54
@@ -1765,7 +1766,7 @@ msgid ""
 "If checked, Gajim will change status to Not Available when the computer has "
 "not been used even longer"
 msgstr ""
-"Ako je označeno, Gajim će promjeniti status u Nedostupan kad se računalo ne "
+"Ako je označeno, Gajim će promijeniti status u Nedostupan kad se računalo ne "
 "koristi još duže."
 
 #: ../data/glade/preferences_window.glade.h:55
@@ -1853,7 +1854,7 @@ msgid ""
 "If enabled, Gajim will not ask for a status message. The specified default "
 "message will be used instead."
 msgstr ""
-"Ako je označeno, Gajim neće pitati za statusnu poruku. Koristit će se "
+"Ako je označeno, Gajim neće pitati za statusnu poruku. Koristiti će se "
 "odabrana predefinirana poruka."
 
 #: ../data/glade/preferences_window.glade.h:66
@@ -1861,8 +1862,8 @@ msgid ""
 "If not disabled, Gajim will replace ascii smilies like ':)' with equivalent "
 "animated or static graphical emoticons"
 msgstr ""
-"Ako nije onemogućeno, Gajim će zamjeniti ascii smajliće poput ':)' sa "
-"ekvivalentnim animiranim ili statičnim grafičkim emotikonama"
+"Ako nije onemogućeno, Gajim će zamijeniti ascii znakove poput ':)' sa "
+"ekvivalentnim animiranim ili statičnim grafičkim emotikonima"
 
 #: ../data/glade/preferences_window.glade.h:67
 msgid "Log _encrypted chat session"
@@ -1956,7 +1957,7 @@ msgid ""
 "status message"
 msgstr ""
 "Statusna poruka kod automatske odsutnosti. Ukoliko je prazno Gajim neće "
-"promjeniti trenutnu statusnu poruku"
+"promijeniti trenutnu statusnu poruku"
 
 #: ../data/glade/preferences_window.glade.h:89
 msgid ""
@@ -1964,7 +1965,7 @@ msgid ""
 "current status message"
 msgstr ""
 "Statusna poruka kod automatske nedostupnosti. Ukoliko je prazno Gajim neće "
-"promjeniti trenutnu statusnu poruku"
+"promijeniti trenutnu statusnu poruku"
 
 #: ../data/glade/preferences_window.glade.h:90
 msgid "Use _transports icons"
@@ -2072,7 +2073,7 @@ msgstr "Liste Privatnosti:"
 
 #: ../data/glade/privacy_list_window.glade.h:1
 msgid "<b>Add / Edit a rule</b>"
-msgstr "<b>Dodaj / Izmjeni pravilo</b>"
+msgstr "<b>Dodaj / Uredi pravilo</b>"
 
 #: ../data/glade/privacy_list_window.glade.h:2
 msgid "<b>List of rules</b>"
@@ -2587,7 +2588,7 @@ msgstr "Dozvoli kontaktu da može vidjeti kada sam spojen"
 msgid ""
 "Deny authorization from contact so he or she cannot know when you're "
 "connected"
-msgstr "Odbija autorizaciju kontaktu kako nebi mogao vidjeti kada ste spojeni"
+msgstr "Odbija autorizaciju kontaktu kako ne bi mogao vidjeti kada ste spojeni"
 
 #: ../data/glade/subscription_request_window.glade.h:4
 msgid "Subscription Request"
@@ -2669,7 +2670,7 @@ msgstr "Komentar"
 
 #: ../data/glade/vcard_information_window.glade.h:41
 msgid "Configured avatar:"
-msgstr "Podešeni avatar:"
+msgstr "Podešen avatar:"
 
 #: ../data/glade/vcard_information_window.glade.h:42
 #: ../data/glade/zeroconf_information_window.glade.h:1
@@ -2726,7 +2727,7 @@ msgstr "Pridruži Open_PGP Ključ"
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:3
 #: ../src/roster_window.py:5595
 msgid "Edit _Groups"
-msgstr "Izmjeni _Grupe"
+msgstr "Uredi _Grupe"
 
 #. Rename
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:8
@@ -2736,7 +2737,7 @@ msgstr "_Preimenuj"
 
 #: ../data/glade/zeroconf_context_menu.glade.h:1
 msgid "_Modify Account..."
-msgstr "_Izmjeni Račun..."
+msgstr "_Uredi Račun..."
 
 #: ../data/glade/zeroconf_information_window.glade.h:6
 msgid "Local jid:"
@@ -2756,7 +2757,7 @@ msgstr "Status:"
 
 #: ../data/glade/zeroconf_properties_window.glade.h:15
 msgid "Modify Account"
-msgstr "Izmjeni Račun"
+msgstr "Uredi Račun"
 
 #: ../src/adhoc_commands.py:264
 msgid "Cancel confirmation"
@@ -2769,7 +2770,7 @@ msgstr "Izvršavanje naredbe u tijeku. Zaista želite odustati?"
 
 #: ../src/adhoc_commands.py:304
 msgid "Service changed the session identifier."
-msgstr "Servis je promjenio identifikator sesije."
+msgstr "Servis je promijenio identifikator sesije."
 
 #: ../src/adhoc_commands.py:317
 msgid "Service sent malformed data"
@@ -2909,7 +2910,7 @@ msgstr "Portugalski"
 
 #: ../src/chat_control.py:68
 msgid "Brazilian Portuguese"
-msgstr "Brazilski Portugalski"
+msgstr "Brazilski portugalski"
 
 #: ../src/chat_control.py:68
 msgid "Russian"
@@ -3006,7 +3007,7 @@ msgid ""
 "No GPG key is assigned to this contact. So you cannot encrypt messages with "
 "GPG."
 msgstr ""
-"Niti jedan GPG ključ nije dodjeljen ovom kontaktu. Nije moguće kriptirati "
+"Niti jedan GPG ključ nije dodijeljen ovom kontaktu. Nije moguće kriptirati "
 "poruke sa GPG."
 
 #: ../src/chat_control.py:1535
@@ -3078,7 +3079,7 @@ msgstr "Uporaba: /%s, prazni tekstualni prozor"
 #: ../src/chat_control.py:1657 ../src/groupchat_control.py:1672
 #, python-format
 msgid "Usage: /%s, hide the chat buttons."
-msgstr "Uporaba: /%s, sakriva dugmadi."
+msgstr "Uporaba: /%s, sakriva dugmad."
 
 #: ../src/chat_control.py:1660 ../src/groupchat_control.py:1688
 #, python-format
@@ -3206,7 +3207,7 @@ msgstr "Izmjeni informacije o statusu"
 
 #: ../src/common/commands.py:93
 msgid "Change status"
-msgstr "Promjeni status"
+msgstr "Promijeni status"
 
 #: ../src/common/commands.py:94
 msgid "Set the presence type and description"
@@ -3238,7 +3239,7 @@ msgstr "Opis prisustva:"
 
 #: ../src/common/commands.py:145
 msgid "The status has been changed."
-msgstr "Status je promjenjen."
+msgstr "Status je promijenjen."
 
 #: ../src/common/commands.py:177 ../src/common/commands.py:201
 msgid "Leave Groupchats"
@@ -3284,7 +3285,7 @@ msgstr "Koristi DBus i Notification-Daemon za prikazivanje obavijesti"
 #: ../src/common/config.py:87
 msgid "Time in minutes, after which your status changes to away."
 msgstr ""
-"Vrijeme u minutama, nako kojega će se vaš status promijeniti u odsutan."
+"Vrijeme u minutama, nakon kojega će se vaš status promijeniti u odsutan."
 
 #: ../src/common/config.py:88
 msgid "$S (Away as a result of being idle more than $T min)"
@@ -3293,13 +3294,14 @@ msgstr "$S (Odsutan kao rezultat mirovanja dužeg od $T min)"
 #: ../src/common/config.py:88
 msgid "$S will be replaced by current status message, $T by autoaway time."
 msgstr ""
-"$S će biti zamjenjen sa trenutnom statusnom porukom, $T vremena automatske "
+"$S će biti zamijenjen sa trenutnom statusnom porukom, $T vremena automatske "
 "odsutnosti."
 
 #: ../src/common/config.py:90
 msgid "Time in minutes, after which your status changes to not available."
 msgstr ""
-"Vrijeme u minutama, nakon kojega će se vaš status promijenti u nije dostupan."
+"Vrijeme u minutama, nakon kojega će se vaš status promijeniti u nije "
+"dostupan."
 
 #: ../src/common/config.py:91
 msgid "$S (Not available as a result of being idle more than $T min)"
@@ -3347,9 +3349,9 @@ msgid ""
 "to disable fuzzyclock. 1 is the most precise clock, 4 the least precise one. "
 "This is used only if print_time is 'sometimes'."
 msgstr ""
-"Ispisuj vrijeme u razgovorima koristeći Nejasni Sat. Vrijednost nejasnoće od "
-"1 do 4 ili 0 za onemogućavanje nejasnog sata. 1 je najprecizniji sat, 4 "
-"najneprecizniji. Ovo se koristi samo ukoliko je prikazivanje _vremena na "
+"Ispisuje vrijeme u razgovorima koristeći Nejasni Sat. Vrijednost nejasnoće "
+"od 1 do 4 ili 0 za onemogućavanje nejasnog sata. 1 je najprecizniji sat, 4 "
+"naj ne precizniji. Ovo se koristi samo ukoliko je prikazivanje _vremena na "
 "'ponekad'."
 
 #: ../src/common/config.py:124
@@ -3456,7 +3458,7 @@ msgid ""
 "False and they sync with global status) based upon the status of the network "
 "connection."
 msgstr ""
-"Ako je Aktivno, osluškuj D-Bus signale NetworkManager-a i promjeni status "
+"Ako je Aktivno, osluškuj D-Bus signale NetworkManager-a i promijeni status "
 "računa (ako nemaju listen_to_network_manager postavljen na Neaktivno i "
 "sinkroniziraju se sa globalnim statusom) ovisno o statusu mrežnog spoja."
 
@@ -3493,7 +3495,7 @@ msgid ""
 "of group chat jids."
 msgstr ""
 "Uvijek pitaj prije zatvaranja kartice/prozora grupnog razgovora u ovoj "
-"razmakom odjeljenoj listi jid-ova grupnog razgovora."
+"razmakom odijeljenoj listi jid-ova grupnog razgovora."
 
 #: ../src/common/config.py:187
 msgid ""
@@ -3501,7 +3503,7 @@ msgid ""
 "of group chat jids."
 msgstr ""
 "Nikad ne pitaj prije zatvaranja kartice/prozora grupnog razgovora u ovoj "
-"razmacima podjeljenoj listi jid-ova grupnog razgovora."
+"razmacima podijeljenoj listi jid-ova grupnog razgovora."
 
 #: ../src/common/config.py:190
 msgid ""
@@ -3529,7 +3531,7 @@ msgstr "Prikaži granicu notesa sa karticama u prozorima razgovora?"
 
 #: ../src/common/config.py:202
 msgid "Show close button in tab?"
-msgstr "Prikaži gumb za zatvaranje u kartici?"
+msgstr "Prikaži dugme za zatvaranje u kartici?"
 
 #: ../src/common/config.py:203
 msgid ""
@@ -3567,8 +3569,8 @@ msgid ""
 "If True, quits Gajim when X button of Window Manager is clicked. This "
 "setting is taken into account only if trayicon is used."
 msgstr ""
-"Ako je Aktivno, Gajim se završava kad je pritisnut X gumb. Ova postavka je "
-"upotrebljena samo ako je \"trayicon\" u upotrebi."
+"Ako je Aktivno, Gajim se završava kad se pritisne dugme X. Ova postavka je "
+"upotrijebljena samo ako je \"trayicon\" u upotrebi."
 
 #: ../src/common/config.py:220
 msgid ""
@@ -3582,7 +3584,7 @@ msgid ""
 "If True, Gajim will display an icon on each tab containing unread messages. "
 "Depending on the theme, this icon may be animated."
 msgstr ""
-"Ako je Aktivno, Gajim će prikazvati ikonu na svakoj kartici koja sadrži "
+"Ako je Aktivno, Gajim će prikazivati ikonu na svakoj kartici koja sadrži "
 "nepročitane poruke. Ovisno o temi, ikona može biti i animirana."
 
 #: ../src/common/config.py:222
@@ -3603,7 +3605,7 @@ msgid ""
 "last time or has one cached that is too old."
 msgstr ""
 "Ako je Aktivno, će Gajim poslati upit za avatar svaki kontakt, koji nije "
-"imao avatar ili je onaj u memoriji prestar"
+"imao avatar ili je onaj u memoriji previše star."
 
 #: ../src/common/config.py:229
 msgid ""
@@ -3611,7 +3613,7 @@ msgid ""
 "changes his or her status and/or his or her status message."
 msgstr ""
 "Ako je Neaktivno, više nećete vidjeti statusnu poruku u razgovorima, kada "
-"kontakt promjeni svoj status i/ili statusnu poruku."
+"kontakt promijeni svoj status i/ili statusnu poruku."
 
 #: ../src/common/config.py:230
 msgid ""
@@ -3622,7 +3624,7 @@ msgid ""
 "group chat."
 msgstr ""
 "može biti \"none\", \"all\" ili \"in_and_out\". Ako je \"none\", Gajim više "
-"neće ispisivati statusnu liniju u grupnim razgovorima kada član promjeni "
+"neće ispisivati statusnu liniju u grupnim razgovorima kada član promijeni "
 "svoj status i/ili izmjeni statusnu poruku. Ako je \"all\", Gajim će "
 "prikazivati sve statusne poruke. Ako je \"in_and_out\" Gajim će prikazivati "
 "samo poruke tipa FOO je ušao/izašao u/iz sobe."
@@ -3757,9 +3759,8 @@ msgid ""
 "negative priority, you will NOT receive any message from your server."
 msgstr ""
 "Ako je Aktivno, biti ćete u mogućnosti postaviti negativni prioritet na vaš "
-"račun u prozoru za izmjenu postavki računa. BUDITE OPREZNI, kada ste "
-"prijavljeni sa negativnim prioritetom NEĆETE primati nikakve poruke sa vašeg "
-"poslužitelja."
+"račun u prozoru za uređenje računa. BUDITE OPREZNI, kada ste prijavljeni sa "
+"negativnim prioritetom NEĆETE primati nikakve poruke sa vašeg poslužitelja."
 
 #: ../src/common/config.py:257
 msgid ""
@@ -3831,7 +3832,7 @@ msgid ""
 "Change the value to change the size of latex formulas displayed. The higher "
 "is larger."
 msgstr ""
-"Promjeni vrijednost za promjenu veličine latex formule koja se prikazuje. "
+"Promijeni vrijednost za promjenu veličine latex formule koja se prikazuje. "
 "Veća je viša."
 
 #: ../src/common/config.py:267
@@ -3847,7 +3848,7 @@ msgid ""
 "Priority will change automatically according to your status. Priorities are "
 "defined in autopriority_* options."
 msgstr ""
-"Prioritet će se automatski promjeniti ovistno o vašem statusu. Prioriteti su "
+"Prioritet će se automatski promijeniti ovisno o vašem statusu. Prioriteti su "
 "definirani u autopriority_* opcijama."
 
 #: ../src/common/config.py:286
@@ -3856,7 +3857,7 @@ msgid ""
 "invisible. NOTE: this option is used only if restore_last_status is disabled"
 msgstr ""
 "Status koji se koristi za automatsko spajanje. Može biti povezan, razgovor, "
-"odsutan, produženo nedostupan, ne uznemiravaj, nevidljivd. PRIMJEDBA: ova "
+"odsutan, produženo nedostupan, ne uznemiravaj, nevidljiv. PRIMJEDBA: ova "
 "postavka se koristi samo ako je restore_last_status onemogućen."
 
 #: ../src/common/config.py:287
@@ -3884,7 +3885,7 @@ msgid ""
 "Ordered list (space separated) of connection type to try. Can contain tls, "
 "ssl or plain"
 msgstr ""
-"Poredani popis (odjeljen razmakom) vrsta povezivanja za probati. Može "
+"Poredani popis (odijeljen razmakom) vrsta povezivanja za probati. Može "
 "sadržavati tls, ssl ili plain"
 
 #: ../src/common/config.py:297
@@ -3900,7 +3901,7 @@ msgstr ""
 
 #: ../src/common/config.py:300
 msgid "Space separated list of ssl errors to ignore."
-msgstr "Popis ssl grešaka koje će se ignorirati, odjeljene razmakom."
+msgstr "Popis ssl grešaka koje će se ignorirati, odijeljene razmakom."
 
 #: ../src/common/config.py:312
 msgid ""
@@ -4042,8 +4043,8 @@ msgid ""
 "Sound to play when a group chat message contains one of the words in "
 "muc_highlight_words, or when a group chat message contains your nickname."
 msgstr ""
-"Zvuk koji će biti pušten kada poruka grupnog razgovora sadrži neku riječ iz "
-"muc_highlight_words, ili kada neka poruka grupnog razgovora sadrži vaš "
+"Zvuk koji će biti odsviran kada poruka grupnog razgovora sadrži neku riječ "
+"iz muc_highlight_words, ili kada neka poruka grupnog razgovora sadrži vaš "
 "nadimak."
 
 #: ../src/common/config.py:442
@@ -4294,7 +4295,7 @@ msgstr "Nemoguće potvrditi ispravnost prvog certifikata"
 
 #: ../src/common/connection.py:86
 msgid "Certificate chain too long"
-msgstr "Lanac certifikata je pre dugačak"
+msgstr "Lanac certifikata je previše dugačak"
 
 #: ../src/common/connection.py:87
 msgid "Certificate revoked"
@@ -4432,7 +4433,7 @@ msgstr "Provjerite vašu vezu ili pokušajte ponovno kasnije"
 #: ../src/common/connection.py:737
 #, python-format
 msgid "Authentication failed with \"%s\""
-msgstr "Autentifikacija sa \"%s\" nije uspjela"
+msgstr "Autorizacija nije uspjela \"%s\""
 
 #: ../src/common/connection.py:739
 msgid "Please check your login and password for correctness."
@@ -4460,7 +4461,7 @@ msgstr "Niti je udaljena prisutnost potpisana, niti je dodijeljen ključ."
 #: ../src/common/zeroconf/connection_zeroconf.py:388
 #, python-format
 msgid "The contact's key (%s) does not match the key assigned in Gajim."
-msgstr "Kontaktov ključ (%s) se ne podudara s ključem dodjeljenim u Gajim."
+msgstr "Kontaktov ključ (%s) se ne podudara s ključem dodijeljenim u Gajim."
 
 #. we're not english
 #. one in locale and one en
@@ -4922,7 +4923,7 @@ msgstr "Gajim - %s"
 #: ../src/common/optparser.py:56
 #, python-format
 msgid "error: cannot open %s for reading"
-msgstr "greška: nemogu otvoriti %s za čitanje"
+msgstr "greška: nemoguće otvoriti %s za čitanje"
 
 #: ../src/common/optparser.py:224 ../src/common/optparser.py:225
 msgid "cyan"
@@ -5644,7 +5645,7 @@ msgstr "Molim provjerite da li je avahi-daemon pokrenut."
 #: ../src/common/zeroconf/connection_zeroconf.py:357
 #, python-format
 msgid "Could not change status of account \"%s\""
-msgstr "Nije moguće promjeniti status računa \"%s\""
+msgstr "Nije moguće promijeniti status računa \"%s\""
 
 #: ../src/common/zeroconf/connection_zeroconf.py:379
 msgid ""
@@ -5704,7 +5705,7 @@ msgstr "Osobni"
 #: ../src/config.py:650 ../src/dialogs.py:1200
 #, python-format
 msgid "Dictionary for lang %s not available"
-msgstr "Riječnik za jezik %s nije dostupan"
+msgstr "Rječnik za jezik %s nije dostupan"
 
 #: ../src/config.py:651
 #, python-format
@@ -5810,7 +5811,7 @@ msgstr "Za promjenu imena računa morate se odspojiti."
 #: ../src/config.py:1710
 msgid "To change the account name, you must read all pending events."
 msgstr ""
-"Da bi ste mogli promjeniti ime računa, morate pročitati sve čekajuće događaje"
+"Da bi mogli promijeniti ime računa morate pročitati sve čekajuće događaje"
 
 #: ../src/config.py:1716
 msgid "Account Name Already Used"
@@ -5882,7 +5883,7 @@ msgstr "Takav račun nije dostupan"
 
 #: ../src/config.py:2089
 msgid "You must create your account before editing your personal information."
-msgstr "Morate napravit svoj račun prije izmjena osobnih informacija."
+msgstr "Morate napravit svoj račun prije uređenja osobnih informacija."
 
 #: ../src/config.py:2096 ../src/dialogs.py:1676 ../src/dialogs.py:1812
 #: ../src/dialogs.py:1991 ../src/disco.py:439 ../src/profile_window.py:320
@@ -5891,7 +5892,7 @@ msgstr "Niste spojeni na poslužitelj."
 
 #: ../src/config.py:2097
 msgid "Without a connection, you can not edit your personal information."
-msgstr "Bez veze sa poslužiteljom nije moguća izmjena osobnih informacija."
+msgstr "Bez veze sa poslužiteljem nije moguće urediti osobne informacije."
 
 #: ../src/config.py:2101
 msgid "Your server doesn't support Vcard"
@@ -5903,7 +5904,7 @@ msgstr "Vaš poslužitelj nije u mogućnosti spremiti vaše osobne informacije."
 
 #: ../src/config.py:2133
 msgid "Account Local already exists."
-msgstr "Račun Lokalno već postoji."
+msgstr "Račun Local već postoji."
 
 #: ../src/config.py:2134
 msgid "Please rename or remove it before enabling link-local messaging."
@@ -5912,7 +5913,7 @@ msgstr "Molim uklonite ili preimenujte prije omogućivanja poruka lokalne veze."
 #: ../src/config.py:2317
 #, python-format
 msgid "Edit %s"
-msgstr "Izmjena %s"
+msgstr "Uredi %s"
 
 #: ../src/config.py:2319
 #, python-format
@@ -5956,7 +5957,7 @@ msgstr "Uloga"
 
 #: ../src/config.py:2449
 msgid "Banning..."
-msgstr "Zabranjivanje..."
+msgstr "Zabranjujem..."
 
 #. You can move '\n' before user@domain if that line is TOO BIG
 #: ../src/config.py:2451
@@ -5969,7 +5970,7 @@ msgstr ""
 
 #: ../src/config.py:2453
 msgid "Adding Member..."
-msgstr "Dodaja Člana..."
+msgstr "Dodajem Člana..."
 
 #: ../src/config.py:2454
 msgid ""
@@ -6074,7 +6075,7 @@ msgstr "Ova knjižna oznaka ima neispravne podatke"
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
-"Molim obavezno ispunite polja poslužitelja i sobe ili uklonite ovu kljižnu "
+"Molim obavezno ispunite polja poslužitelja i sobe ili uklonite ovu knjižnu "
 "oznaku."
 
 #: ../src/config.py:3072
@@ -6103,7 +6104,7 @@ msgid ""
 "later by choosing the Accounts menuitem under the Edit menu from the main "
 "window."
 msgstr ""
-"Napredne opcije računa možete urediti pritiskom na gumb Napredno, ili "
+"Napredne opcije računa možete urediti pritiskom na dugme Napredno, ili "
 "kasnije klikom na Korisnički Računi u izborniku Uredi."
 
 #: ../src/config.py:3137
@@ -6112,7 +6113,7 @@ msgstr "Neispravan poslužitelj"
 
 #: ../src/config.py:3138
 msgid "Please provide a server on which you want to register."
-msgstr "Molimo specificirajte poslužitelj na koji se želite registrirati."
+msgstr "Molim navedite poslužitelj na koji se želite registrirati."
 
 #: ../src/config.py:3189 ../src/gajim.py:2006
 msgid "Certificate Already in File"
@@ -6181,7 +6182,7 @@ msgid ""
 "last time you paid attention to this group chat"
 msgstr ""
 "Tekst niže od ove linije je ono što je rečeno od kad ste\n"
-"zadnji puta obraćali pozornost na ovaj grupni razovor"
+"zadnji puta obraćali pozornost na ovaj grupni razgovor"
 
 #: ../src/conversation_textview.py:678
 #, python-format
@@ -6190,16 +6191,16 @@ msgstr "_Akcije za \"%s\""
 
 #: ../src/conversation_textview.py:690
 msgid "Read _Wikipedia Article"
-msgstr "Pročitajte članak na _Wikipedii"
+msgstr "Pročitaj _Wikipedia članak"
 
 #: ../src/conversation_textview.py:695
 msgid "Look it up in _Dictionary"
-msgstr "Potražiti u _Riječniku"
+msgstr "Potražiti u _Rječnik"
 
 #: ../src/conversation_textview.py:712
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
-msgstr "URL-u riječnika nedostaje \"%s\" i nije WIKTIONARY"
+msgstr "URL-u rječnika nedostaje \"%s\", a nije ni WIKTIONARY"
 
 #. we must have %s in the url
 #: ../src/conversation_textview.py:725
@@ -6243,7 +6244,7 @@ msgstr "Jabber ID je već na listi"
 
 #: ../src/dataforms_widget.py:541
 msgid "The Jabber ID you entered is already in the list. Choose another one."
-msgstr "Jabber ID koji ste unjeli je već na popisu. Izaberite drugi."
+msgstr "Jabber ID koji ste unijeli je već na popisu. Izaberite drugi."
 
 #. Default jid
 #: ../src/dataforms_widget.py:552
@@ -6535,7 +6536,7 @@ msgstr "Neispravna lozinka"
 
 #: ../src/dialogs.py:2011
 msgid "You must enter a password."
-msgstr "Morate unesti lozinku."
+msgstr "Morate unijeti lozinku."
 
 #: ../src/dialogs.py:2015
 msgid "Passwords do not match"
@@ -6608,7 +6609,7 @@ msgstr "Poziv na Grupni Razgovor"
 #: ../src/dialogs.py:2072 ../src/notify.py:237 ../src/notify.py:488
 #: ../src/osx/growler.py:16
 msgid "Contact Changed Status"
-msgstr "Kontakt Promjenio Status"
+msgstr "Kontakt Promijenio Status"
 
 #: ../src/dialogs.py:2264
 #, python-format
@@ -6682,11 +6683,11 @@ msgstr ""
 #: ../src/dialogs.py:2625
 #, python-format
 msgid "Order: %(order)s, action: %(action)s"
-msgstr "Redosljed: %(order)s, akcija: %(action)s"
+msgstr "Redoslijed: %(order)s, akcija: %(action)s"
 
 #: ../src/dialogs.py:2667
 msgid "<b>Edit a rule</b>"
-msgstr "<b>Izmjena pravila</b>"
+msgstr "<b>Uredi pravilo</b>"
 
 #: ../src/dialogs.py:2754
 msgid "<b>Add a rule</b>"
@@ -6707,7 +6708,7 @@ msgstr "Neispravno Ime Liste"
 
 #: ../src/dialogs.py:2923
 msgid "You must enter a name to create a privacy list."
-msgstr "Morate unesti ime za stvaranje liste privatnosti."
+msgstr "Morate unijeti ime za stvaranje liste privatnosti."
 
 #: ../src/dialogs.py:2955
 msgid "You are invited to a groupchat"
@@ -6855,8 +6856,8 @@ msgid ""
 "message <b>cannot</b> be encrypted. Use your GPG client to trust this key."
 msgstr ""
 "GPG ključ je dodijeljen ovom kontaktu, ali <b>vi ne vjerujete njegovom "
-"ključu</b>, tako da poruke <b>nemogu</b> biti kriptirane. Promjenite razinu "
-"povjerenja u njegov ključ sa GPG klijentom."
+"ključu</b>, tako da poruke <b>ne mogu</b> biti kriptirane. Promijenite "
+"razinu povjerenja u njegov ključ sa GPG klijentom."
 
 #: ../src/dialogs.py:3926
 msgid ""
@@ -7472,7 +7473,7 @@ msgid ""
 "Another instance of Gajim seems to be running\n"
 "Run anyway?"
 msgstr ""
-"Trenutno je već pokrenuta jedna instanca Gajima\n"
+"Trenutno je već pokrenuta jedna Gajim instanca\n"
 "Svejedno pokrenuti?"
 
 #: ../src/gajim.py:497
@@ -7552,7 +7553,7 @@ msgid ""
 "You will always see him or her as offline.\n"
 "Do you want to remove him or her from your contact list?"
 msgstr ""
-"Uvijek ćete vidjeti njega ili nju kao odspojenu.\n"
+"Uvijek ćete vidjeti njega ili nju kao odspojenog.\n"
 "Želite li ukloniti njega ili nju sa vaše liste kontakata?"
 
 #: ../src/gajim.py:1055
@@ -7699,7 +7700,7 @@ msgid ""
 "It may have been tampered with."
 msgstr ""
 "Nemoguće dekriptirati poruke od %s\n"
-"Možda ih je netko izmjenio."
+"Možda ih je netko izmijenio."
 
 #: ../src/gajim.py:1840
 msgid "Unable to decrypt message"
@@ -7912,7 +7913,7 @@ msgstr "Ispisuje listu registriranih računa"
 
 #: ../src/gajim-remote.py:108
 msgid "Changes the status of account or accounts"
-msgstr "Mjenja status jednog računa ili više njih"
+msgstr "Mijenja status jednog računa ili više njih"
 
 #. offline, online, chat, away, xa, dnd, invisible should not be translated
 #: ../src/gajim-remote.py:111
@@ -7940,7 +7941,7 @@ msgid ""
 "of all accounts that have \"sync with global status\" option set"
 msgstr ""
 "izmjena statusa računa \"račun\". Ako nije određeno, pokušaj promjene "
-"statusa svih računa koji imaju podešenu opciju \"sinkronizacija sa globalnim "
+"statusa svih računa koji imaju postavljeno \"sinkronizacija sa globalnim "
 "statusom\""
 
 #: ../src/gajim-remote.py:119
@@ -7953,7 +7954,7 @@ msgstr "JID kontakta sa kojim želite razgovarati"
 
 #: ../src/gajim-remote.py:123 ../src/gajim-remote.py:210
 msgid "if specified, contact is taken from the contact list of this account"
-msgstr "ako je označeno, kontak se uzima sa kontakt liste ovog računa"
+msgstr "ako je označeno, kontakt se uzima sa kontakt liste ovog računa"
 
 #: ../src/gajim-remote.py:128
 msgid ""
@@ -8032,7 +8033,7 @@ msgstr "Ime računa"
 
 #: ../src/gajim-remote.py:176
 msgid "Sends file to a contact"
-msgstr "Å alje datoteku kontaktu"
+msgstr "Šalje datoteku kontaktu"
 
 #: ../src/gajim-remote.py:178
 msgid "file"
@@ -8044,11 +8045,11 @@ msgstr "Putanja datoteke"
 
 #: ../src/gajim-remote.py:180
 msgid "if specified, file will be sent using this account"
-msgstr "ako je označeno, datoteka će biti poslana koriteći ovaj račun"
+msgstr "ako je označeno, datoteka će biti poslana koristeći ovaj račun"
 
 #: ../src/gajim-remote.py:185
 msgid "Lists all preferences and their values"
-msgstr "Prikatuje sve postavke i njihove vrijednosti"
+msgstr "Prikazuje sve postavke i njihove vrijednosti"
 
 #: ../src/gajim-remote.py:189
 msgid "Sets value of 'key' to 'value'."
@@ -8110,7 +8111,7 @@ msgstr "Vraća broj nepročitanih poruka"
 
 #: ../src/gajim-remote.py:242
 msgid "Opens 'Start Chat' dialog"
-msgstr "Otvaranje dialoga 'Započeti Razgovor'"
+msgstr "Otvaranje dijaloga 'Novi Razgovor'"
 
 #: ../src/gajim-remote.py:244
 msgid "Starts chat, using this account"
@@ -8326,7 +8327,7 @@ msgstr "Nova soba je stvorena"
 
 #: ../src/groupchat_control.py:1132
 msgid "The server has assigned or modified your roomnick"
-msgstr "Poslužitelj je dodijelio ili promjenio vaš nadimak"
+msgstr "Poslužitelj je dodijelio ili promijenio vaš nadimak"
 
 #. do not print 'kicked by None'
 #: ../src/groupchat_control.py:1138
@@ -8363,11 +8364,11 @@ msgstr "%(nick)s je izbačen iz sobe (%(reason)s)"
 
 #: ../src/groupchat_control.py:1201
 msgid "affiliation changed"
-msgstr "pripadnost promjenjena"
+msgstr "pripadnost promijenjena"
 
 #: ../src/groupchat_control.py:1206
 msgid "room configuration changed to members-only"
-msgstr "konfiguracija sobe promjenjena na members-only"
+msgstr "konfiguracija sobe promijenjena na members-only"
 
 #: ../src/groupchat_control.py:1211
 msgid "system shutdown"
@@ -8434,7 +8435,7 @@ msgid ""
 "NOT support spaces in nickname."
 msgstr ""
 "Uporaba: /%s <nickname|JID> [razlog], zabranjuje pristup JID-u u sobu. "
-"Nadimak učesnika može biti zamjenjen, ali ne ako sadrži \"@\". Ako je JID "
+"Nadimak učesnika može biti zamijenjen, ali ne ako sadrži \"@\". Ako je JID "
 "trenutno u sobi, on/ona/ono će biti izbačen(a/o). Razmaci u imenima NISU "
 "podržani."
 
@@ -8453,7 +8454,7 @@ msgid ""
 "specified."
 msgstr ""
 "Uporaba: /%s [razlog], zatvara trenutni prozor ili karticu, i prikazuje "
-"razlog ako je specificiran."
+"razlog ako je naveden."
 
 #: ../src/groupchat_control.py:1675
 #, python-format
@@ -8480,8 +8481,8 @@ msgid ""
 "from the group chat and optionally displays a reason. Does NOT support "
 "spaces in nickname."
 msgstr ""
-"Uporaba: /%s <nickname> [razlog], uklanja učesnika specificiranog nadimkom "
-"iz grupnog razgovora i opcionalno prikazuje razlog. NE podržava razmake u "
+"Uporaba: /%s <nickname> [razlog], uklanja učesnika definiranog nadimkom iz "
+"grupnog razgovora i opcionalno prikazuje razlog. NE podržava razmake u "
 "nadimku."
 
 #: ../src/groupchat_control.py:1692
@@ -8497,7 +8498,7 @@ msgstr ""
 #, python-format
 msgid "Usage: /%s <nickname>, changes your nickname in current group chat."
 msgstr ""
-"Uporaba: /%s <nickname>, mjenja vaš nadimak u trenutnom grupnom razgovoru."
+"Uporaba: /%s <nickname>, mijenja vaš nadimak u trenutnom grupnom razgovoru."
 
 #: ../src/groupchat_control.py:1701
 #, python-format
@@ -8532,7 +8533,7 @@ msgstr "Mijenjanje Teme"
 
 #: ../src/groupchat_control.py:1877
 msgid "Please specify the new subject:"
-msgstr "Molim specificirajte novu temu:"
+msgstr "Molim navedite novu temu:"
 
 #: ../src/groupchat_control.py:1881
 msgid "Changing Nickname"
@@ -8540,7 +8541,7 @@ msgstr "Mijenjam Nadimak"
 
 #: ../src/groupchat_control.py:1882
 msgid "Please specify the new nickname you want to use:"
-msgstr "Molim specificirajte novi nadimak ako ga želite koristiti:"
+msgstr "Molim navedite novi nadimak koji želite koristiti:"
 
 #. Ask for a reason
 #: ../src/groupchat_control.py:1908
@@ -8558,7 +8559,7 @@ msgstr ""
 
 #: ../src/groupchat_control.py:1911
 msgid "You may also enter an alternate venue:"
-msgstr "Također možete unjeti alternativno mjesto sastanka:"
+msgstr "Također možete unijeti alternativno mjesto sastanka:"
 
 #. ask for reason
 #: ../src/groupchat_control.py:2083
@@ -8578,7 +8579,7 @@ msgstr "Zabranjujem pristup %s"
 
 #: ../src/gtkexcepthook.py:46
 msgid "A programming error has been detected"
-msgstr "Otkrivena je bila greška u programiranju"
+msgstr "Otkrivena je greška u programiranju"
 
 #: ../src/gtkexcepthook.py:47
 msgid ""
@@ -8674,7 +8675,7 @@ msgid ""
 "Do you want to clean up the database? (STRONGLY NOT RECOMMENDED IF GAJIM IS "
 "RUNNING)"
 msgstr ""
-"Želite li očistiti bazu podataka? (NE PREPORUČUJEMO UKOLIKO JE GAJIM "
+"Želite li očistiti bazu podataka? (NIJE PREPORUČENO UKOLIKO JE GAJIM "
 "POKRENUT)"
 
 #: ../src/history_manager.py:226
@@ -8686,8 +8687,8 @@ msgid ""
 "In case you click YES, please wait..."
 msgstr ""
 "Uobičajeno, veličina prikupljenog prostora za bazu podataka neće biti "
-"oslobođena, samo će postati ponovo koristiva. Ukoliko zaista želite smanjiti "
-"veličinu baze podataka, pritisnite Da, inače pritisnite Ne.\n"
+"oslobođena, samo će postati ponovo iskoristiva. Ukoliko zaista želite "
+"smanjiti veličinu baze podataka, pritisnite Da, inače pritisnite Ne.\n"
 "\n"
 "Ukoliko pritisnite Da, pričekajte..."
 
@@ -8703,7 +8704,7 @@ msgstr "%(who)s %(time)s kaže: %(message)s\n"
 #: ../src/history_manager.py:549
 msgid "Do you really want to delete logs of the selected contact?"
 msgid_plural "Do you really want to delete logs of the selected contacts?"
-msgstr[0] "Da li zaista želite ukloniti zabilješke odabranog kontakta?"
+msgstr[0] "Da li zaista želite ukloniti zabilješke odabranoga kontakta?"
 msgstr[1] "Da li zaista želite ukloniti zabilješke odabranih kontakata?"
 msgstr[2] "Da li zaista želite ukloniti zabilješke odabranih kontakata?"
 
@@ -8735,7 +8736,7 @@ msgstr "%(nick)s je trenutno %(status)s: %(status_msg)s"
 #: ../src/history_window.py:425
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
-msgstr "Stauts je trenutno: %(status)s: %(status_msg)s"
+msgstr "Status je trenutno: %(status)s: %(status_msg)s"
 
 #: ../src/history_window.py:428
 #, python-format
@@ -8744,7 +8745,7 @@ msgstr "Status je trenutno: %(status)s"
 
 #: ../src/htmltextview.py:591 ../src/htmltextview.py:602
 msgid "Timeout loading image"
-msgstr "Vrijeme isteklo kod učitavanja slike"
+msgstr "Vrijeme za učitavanje slike isteklo"
 
 #: ../src/htmltextview.py:612
 msgid "Image is too big"
@@ -8760,7 +8761,7 @@ msgstr "Grupni Razgovori"
 
 #: ../src/message_window.py:450
 msgid "Private Chats"
-msgstr "Privanti Razgovori"
+msgstr "Privatni Razgovori"
 
 #: ../src/message_window.py:456
 msgid "Messages"
@@ -8777,7 +8778,7 @@ msgstr "- poruke neće biti zapisane"
 #: ../src/notify.py:230
 #, python-format
 msgid "%(nick)s Changed Status"
-msgstr "%(nick)s je Promjenio Status"
+msgstr "%(nick)s je Promijenio Status"
 
 #: ../src/notify.py:240
 #, python-format
@@ -8835,7 +8836,7 @@ msgstr "Datoteka ne postoji"
 #: ../src/profile_window.py:126 ../src/profile_window.py:142
 #: ../src/roster_window.py:2791 ../src/roster_window.py:2802
 msgid "Could not load image"
-msgstr "Nemogu učitati sliku"
+msgstr "Nemoguće učitati sliku"
 
 #: ../src/profile_window.py:252
 msgid "Information received"
@@ -8843,7 +8844,7 @@ msgstr "Primljene informacije"
 
 #: ../src/profile_window.py:321
 msgid "Without a connection you can not publish your contact information."
-msgstr "Bez veze ne možete objaviti informacije o sebi"
+msgstr "Ne možete objaviti informacije o sebi ako niste povezani."
 
 #: ../src/profile_window.py:335
 msgid "Sending profile..."
@@ -8855,19 +8856,19 @@ msgstr "Informacije NISU objavljene"
 
 #: ../src/profile_window.py:357
 msgid "vCard publication failed"
-msgstr "Objava vCard neuspješna"
+msgstr "vCard objava neuspješna"
 
 #: ../src/profile_window.py:358
 msgid ""
 "There was an error while publishing your personal information, try again "
 "later."
 msgstr ""
-"Nastala je greška prilikom objavljivanja vaših osobnih podataka, pokušajte "
+"Došlo je do greške prilikom objavljivanja vaših osobnih podataka, pokušajte "
 "ponovno kasnije."
 
 #: ../src/roster_window.py:288 ../src/roster_window.py:944
 msgid "Merged accounts"
-msgstr "Spojeni računi"
+msgstr "Pripojeni računi"
 
 #: ../src/roster_window.py:1859
 msgid "Authorization has been sent"
@@ -8902,7 +8903,7 @@ msgid ""
 "(environment variable probably not \t\t\t\t\t\t\tcorrectly set)"
 msgstr ""
 "Gnome Keyring je instaliran, ali nije \t\t\t\t\t\t\tispravno pokrenut "
-"(vjerovatno varijabla okruženja nije \t\t\t\t\t\t\tispravno postavljena)"
+"(vjerojatno varijabla okruženja nije \t\t\t\t\t\t\tispravno postavljena)"
 
 #: ../src/roster_window.py:1929 ../src/roster_window.py:1949
 msgid "GPG is not usable"
@@ -8910,15 +8911,15 @@ msgstr "GPG nije upotrebljiv"
 
 #: ../src/roster_window.py:2118 ../src/roster_window.py:3266
 msgid "You are participating in one or more group chats"
-msgstr "Sudjelujete u jednom ili više grupnih razovora"
+msgstr "Sudjelujete u jednom ili više grupnih razgovora"
 
 #: ../src/roster_window.py:2119 ../src/roster_window.py:3267
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
 msgstr ""
-"Promjena vašeg statusa u nevidljivo rezultirati će odspajanjem sa tih "
-"grupnih razgovora. Jeste li sigurni da želite ići na nevidljivo?"
+"Promjena vašeg statusa u nevidljivo rezultirati će izlazom iz tih grupnih "
+"razgovora. Želite li zaista postati nevidljivi?"
 
 #: ../src/roster_window.py:2145
 msgid "desync'ed"
@@ -8926,7 +8927,7 @@ msgstr "desinkroniziran"
 
 #: ../src/roster_window.py:2283 ../src/roster_window.py:2520
 msgid "You have unread messages"
-msgstr "Imte nepročitane poruke"
+msgstr "Imate nepročitanih poruka"
 
 #: ../src/roster_window.py:2284
 msgid ""
@@ -9084,7 +9085,7 @@ msgid ""
 "is used when the same person has several Jabber accounts or transport "
 "accounts."
 msgstr ""
-"Metakontakti su nacin grupiranja nekoliko kontakata u jednu liniju. Općenito "
+"Metakontakti su način grupiranja nekoliko kontakata u jednu liniju. Općenito "
 "oni se koriste kada ista osoba ima nekoliko Jabber računa ili računa "
 "prijenosa."
 
@@ -9126,7 +9127,7 @@ msgstr "koristeći %s račun"
 
 #: ../src/roster_window.py:4715 ../src/systray.py:257
 msgid "_Manage Bookmarks..."
-msgstr "Upravljanje Knjižni_m Oznakama..."
+msgstr "_Uredi Knjižne Oznake..."
 
 #. profile, avatar
 #: ../src/roster_window.py:4735
@@ -9141,7 +9142,7 @@ msgstr "za račun %s"
 
 #: ../src/roster_window.py:4837 ../src/roster_window.py:4946
 msgid "_Change Status Message"
-msgstr "_Izmjena Statusne Poruke"
+msgstr "_Uredi Statusnu Poruku"
 
 #: ../src/roster_window.py:4864
 msgid "Publish Tune"
@@ -9198,7 +9199,7 @@ msgstr "_Upravljanje Prijenosom"
 #. Modify Transport
 #: ../src/roster_window.py:5712
 msgid "_Modify Transport"
-msgstr "_Izmjeni Prijenos"
+msgstr "_Uredi Prijenos"
 
 #: ../src/roster_window.py:5787
 msgid "_Maximize"
@@ -9223,7 +9224,7 @@ msgstr "_Pridruži se Novom Grupnom Razgovoru"
 
 #: ../src/roster_window.py:6206
 msgid "Change Status Message..."
-msgstr "Promijeni Statusnu Poruku..."
+msgstr "Uredi Statusnu Poruku..."
 
 #: ../src/search_window.py:93
 msgid "Waiting for results"
@@ -9283,7 +9284,7 @@ msgstr ""
 
 #: ../src/systray.py:176
 msgid "_Change Status Message..."
-msgstr "_Promijeni Statusnu Poruku..."
+msgstr "_Uredi Statusnu Poruku..."
 
 #: ../src/systray.py:270
 msgid "Hide this menu"
@@ -9371,7 +9372,7 @@ msgstr "Prenešeno: "
 
 #: ../src/tooltips.py:684 ../src/tooltips.py:705
 msgid "Not started"
-msgstr "Nije početo"
+msgstr "Nije započeto"
 
 #: ../src/tooltips.py:688
 msgid "Stopped"
@@ -9388,7 +9389,7 @@ msgstr "?status prijenosa:Stanka"
 #. stalled is not paused. it is like 'frozen' it stopped alone
 #: ../src/tooltips.py:701
 msgid "Stalled"
-msgstr "Zaustavljeno"
+msgstr "Smrznuto"
 
 #: ../src/tooltips.py:703
 msgid "Transferring"
@@ -9437,7 +9438,7 @@ msgid ""
 "interested in yours"
 msgstr ""
 "Vi ste zainteresirani za informacije o prisustvu nekog kontakta, ali nju/"
-"njega ne interesira vaše prisutstvo"
+"njega ne interesira vaše prisustvo"
 
 #: ../src/vcard.py:323
 msgid "You and the contact are interested in each other's presence information"
