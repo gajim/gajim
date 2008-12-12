@@ -178,7 +178,7 @@ class Logger:
 		and after that all okay'''
 
 		if jid.find('/') > -1:
-			possible_room_jid = jid.split('/', 1)[1]
+			possible_room_jid = jid.split('/', 1)[0]
 			return self.jid_is_room_jid(possible_room_jid)
 		else:
 			# it's not a full jid, so it's not a pm one
