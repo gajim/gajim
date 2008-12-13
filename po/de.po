@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-11-11 23:40+0100\n"
-"PO-Revision-Date: 2008-12-05 23:01+0100\n"
+"PO-Revision-Date: 2008-12-13 23:14+0100\n"
 "Last-Translator: Nico Gulden <cilugnedon@gmx.de>\n"
 "Language-Team: German <translators@gajim.org>\n"
 "MIME-Version: 1.0\n"
@@ -126,7 +126,7 @@ msgstr "Ich möchte ein neues Konto _erstellen"
 #: ../data/glade/account_modification_window.glade.h:20
 #: ../data/glade/accounts_window.glade.h:25
 msgid "If checked, Gajim will remember the password for this account"
-msgstr "Wenn aktiviert, wird Gajim das Passwort für dieses Konto speichern"
+msgstr "Falls aktiviert, wird Gajim das Passwort für dieses Konto speichern"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:16
 #: ../data/glade/account_modification_window.glade.h:26
@@ -312,34 +312,34 @@ msgstr "Allgemein"
 #: ../data/glade/account_modification_window.glade.h:18
 #: ../data/glade/accounts_window.glade.h:22
 msgid "Hostname: "
-msgstr "Hostname: "
+msgstr "Rechnername: "
 
 #: ../data/glade/account_modification_window.glade.h:19
 #: ../data/glade/accounts_window.glade.h:23
 msgid "If checked, Gajim will also broadcast some more IPs except from just your IP, so file transfer has higher chances of working."
-msgstr "Wenn aktiviert, wird Gajim von mehr als nur Ihrer eigenen IP senden, wodurch die Wahrscheinlichkeit einer erfolgreicher Dateiübertragung erhöht wird."
+msgstr "Falls aktiviert, wird Gajim von mehr als nur Ihrer eigenen IP senden, wodurch die Wahrscheinlichkeit einer erfolgreicher Dateiübertragung erhöht wird."
 
 #: ../data/glade/account_modification_window.glade.h:21
 #: ../data/glade/accounts_window.glade.h:26
 msgid "If checked, Gajim will send keep-alive packets to prevent connection timeout which results in disconnection"
-msgstr "Wenn aktiviert, sendet Gajim regelmäßig Keepalive-Pakete, um einen Verbindungsabbruch durch eine Zeitüberschreitung zu verhindern"
+msgstr "Falls aktiviert, sendet Gajim regelmäßig Keepalive-Pakete, um einen Verbindungsabbruch durch eine Zeitüberschreitung zu verhindern"
 
 #: ../data/glade/account_modification_window.glade.h:22
 #: ../data/glade/zeroconf_properties_window.glade.h:8
 msgid "If checked, Gajim will store the password in ~/.gajim/config with 'read' permission only for you"
-msgstr "Wenn aktiviert, wird Gajim das Passwort mit ausschließlichen Lese-Rechten für Sie in ~/.gajim/config speichern"
+msgstr "Falls aktiviert, wird Gajim das Passwort mit ausschließlichen Lese-Rechten für Sie in ~/.gajim/config speichern"
 
 #: ../data/glade/account_modification_window.glade.h:23
 #: ../data/glade/accounts_window.glade.h:27
 #: ../data/glade/zeroconf_properties_window.glade.h:9
 msgid "If checked, Gajim, when launched, will automatically connect to jabber using this account"
-msgstr "Wenn aktiviert, wird Gajim während des Startvorgangs automatisch zu diesem Konto verbinden"
+msgstr "Falls aktiviert, wird Gajim während des Startvorgangs automatisch zu diesem Konto verbinden"
 
 #: ../data/glade/account_modification_window.glade.h:24
 #: ../data/glade/accounts_window.glade.h:28
 #: ../data/glade/zeroconf_properties_window.glade.h:10
 msgid "If checked, any change to the global status (handled by the combobox at the bottom of the roster window) will change the status of this account accordingly"
-msgstr "Wenn aktiviert, wird jede Änderung des globalen Status (verwaltet von der Combobox am Fuße der Kontaktliste) auch den Status dieses Kontakts entsprechend ändern"
+msgstr "Falls aktiviert, wird jede Änderung des globalen Status (verwaltet von der Combobox am Fuße der Kontaktliste) auch den Status dieses Kontakts entsprechend ändern"
 
 #: ../data/glade/account_modification_window.glade.h:25
 #: ../data/glade/accounts_window.glade.h:31
@@ -374,7 +374,7 @@ msgstr "Kein Schlüssel ausgewählt"
 #: ../src/roster_window.py:2748
 #: ../src/roster_window.py:2753
 msgid "None"
-msgstr "Kein"
+msgstr "Keine"
 
 #: ../data/glade/account_modification_window.glade.h:30
 #: ../data/glade/accounts_window.glade.h:39
@@ -396,7 +396,7 @@ msgstr "Priori_tät:"
 #: ../data/glade/account_modification_window.glade.h:33
 #: ../data/glade/accounts_window.glade.h:42
 msgid "Priority is used in Jabber to determine who gets the events from the jabber server when two or more clients are connected using the same account; The client with the highest priority gets the events"
-msgstr "Die Priorität wird von Jabber verwendet, um festzustellen, wer die Ereignisse des Jabber-Servers bekommt, wenn zwei oder mehr Clients mit dem selben Konto verbunden sind. Der Client mit der höchsten Priorität bekommt die Ereignisse"
+msgstr "Die Priorität wird von Jabber verwendet, um festzustellen, wer die Ereignisse des Jabber-Servers bekommt, wenn zwei oder mehr Clients mit dem selben Konto verbunden sind. Der Client mit der höchsten Priorität bekommt die Ereignisse."
 
 #: ../data/glade/account_modification_window.glade.h:34
 #: ../data/glade/accounts_window.glade.h:43
@@ -479,7 +479,7 @@ msgstr "Konten"
 
 #: ../data/glade/accounts_window.glade.h:11
 msgid "Check this so Gajim will ask you before sending your password over an insecure connection."
-msgstr "Wenn aktiviert, wird Gajim nachfragen, bevor das Passwort über eine unsichere Verbindung versendet wird."
+msgstr "Aktivieren und Gajim wird nachfragen, bevor das Passwort über eine unsichere Verbindung versendet wird."
 
 #: ../data/glade/accounts_window.glade.h:16
 #: ../data/glade/zeroconf_information_window.glade.h:2
@@ -501,7 +501,7 @@ msgstr "Vorname:"
 
 #: ../data/glade/accounts_window.glade.h:24
 msgid "If checked, Gajim will get the password from a GPG agent like seahorse"
-msgstr "Wenn aktiviert, wird Gajim das Passwort von einem GnuPG-Agent wie seahorse beziehen"
+msgstr "Falls aktiviert, wird Gajim das Passwort von einem GnuPG-Agent wie seahorse beziehen"
 
 #: ../data/glade/accounts_window.glade.h:29
 #: ../data/glade/zeroconf_properties_window.glade.h:11
@@ -509,7 +509,7 @@ msgid ""
 "If the default port that is used for incoming messages is unfitting for your setup you can select another one here.\n"
 "You might consider to change possible firewall settings."
 msgstr ""
-"Wenn der Standardport, der für eingehende Nachrichten benutzt wird, nicht für Ihre Konfiguration geeignet ist, können sie hier einen anderen Port festlegen.\n"
+"Falls der Standardport, der für eingehende Nachrichten benutzt wird, nicht für Ihre Konfiguration geeignet ist, können sie hier einen anderen Port festlegen.\n"
 "Möglicherweise ist es von Nöten, Ihre Firewall-Einstellungen zu ändern."
 
 #: ../data/glade/accounts_window.glade.h:32
@@ -1294,7 +1294,7 @@ msgid ""
 "If you plan to do massive deletions, please make sure Gajim is not running. Generally avoid deletions with contacts you currently chat with."
 msgstr ""
 "<b>WARNUNG:</b>\n"
-"Wenn Sie planen, viel zu löschen, stellen Sie sicher, dass Gajim nicht läuft. Vermeiden Sie generell Löschungen von Unterhaltungen mit Kontakten, mit denen Sie gerade chatten."
+"Falls Sie planen, viel zu löschen, stellen Sie sicher, dass Gajim nicht läuft. Vermeiden Sie generell Löschungen von Unterhaltungen mit Kontakten, mit denen Sie gerade chatten."
 
 #: ../data/glade/history_manager.glade.h:3
 msgid "<big><b>Welcome to Gajim History Logs Manager</b></big>"
@@ -1394,7 +1394,7 @@ msgstr "Automatisch verbinden"
 
 #: ../data/glade/manage_bookmarks_window.glade.h:2
 msgid "If checked, Gajim will join this group chat on startup"
-msgstr "Wenn aktiviert, tritt Gajim dem Gruppenchat beim Programmstart bei"
+msgstr "Falls aktiviert, tritt Gajim dem Gruppenchat beim Programmstart bei"
 
 #: ../data/glade/manage_bookmarks_window.glade.h:3
 msgid "Manage Bookmarks"
@@ -1466,7 +1466,7 @@ msgstr "Verwende Authentifizierung"
 
 #: ../data/glade/manage_proxies_window.glade.h:10
 msgid "_Host:"
-msgstr "_Server:"
+msgstr "_Rechner:"
 
 #: ../data/glade/message_window.glade.h:1
 msgid "Add this contact to roster (Ctrl+D)"
@@ -1554,7 +1554,7 @@ msgstr "<b>Schrift</b>"
 
 #: ../data/glade/preferences_window.glade.h:10
 msgid "<b>GMail Options</b>"
-msgstr "<b>Gmail-Optionen</b>"
+msgstr "<b>Google Mail Optionen</b>"
 
 #: ../data/glade/preferences_window.glade.h:12
 msgid "<b>Preset Status Messages</b>"
@@ -1692,67 +1692,67 @@ msgstr "Versteckt alle Knöpfe im Chat-Fenster"
 
 #: ../data/glade/preferences_window.glade.h:51
 msgid "If checked, Gajim will allow others to detect the operation system you are using"
-msgstr "Wenn aktiviert, erlaubt Gajim anderen Ihr Betriebssystem festzustellen"
+msgstr "Falls aktiviert, erlaubt Gajim anderen Ihr Betriebssystem festzustellen"
 
 #: ../data/glade/preferences_window.glade.h:52
 msgid "If checked, Gajim will also include information about the sender of the new emails"
-msgstr "Wenn aktiviert, wird Gajim auch Informationen über den Absender von neuen E-Mails hinzufügen."
+msgstr "Falls aktiviert, wird Gajim auch Informationen über den Absender von neuen E-Mails hinzufügen."
 
 #: ../data/glade/preferences_window.glade.h:53
 msgid "If checked, Gajim will change status to Away when the computer is unused."
-msgstr "Wenn aktiviert, wird Gajim den Status in Abwesend ändern, wenn der Computer nicht genutzt wird."
+msgstr "Falls aktiviert, wird Gajim den Status in Abwesend ändern, wenn der Computer nicht genutzt wird."
 
 #: ../data/glade/preferences_window.glade.h:54
 msgid "If checked, Gajim will change status to Not Available when the computer has not been used even longer"
-msgstr "Wenn aktiviert, wird Gajim den Status in Nicht Verfügbar ändern, wenn der Computer länger nicht genutzt wird."
+msgstr "Falls aktiviert, wird Gajim den Status in Nicht Verfügbar ändern, wenn der Computer länger nicht genutzt wird."
 
 #: ../data/glade/preferences_window.glade.h:55
 msgid "If checked, Gajim will display avatars of contacts in roster window and in group chats"
-msgstr "Wenn aktiviert, wird Gajim einen Avatar im Kontaktlistenfenster und in Gruppenchats einblenden"
+msgstr "Falls aktiviert, wird Gajim einen Avatar im Kontaktlistenfenster und in Gruppenchats einblenden"
 
 #: ../data/glade/preferences_window.glade.h:56
 msgid "If checked, Gajim will display status messages of contacts under the contact name in roster window and in group chats"
-msgstr "Wenn aktiviert, wird Gajim für jeden Kontakt unter dem Kontaktnamen in der Kontaktliste und im Gruppenchat-Fenster die Statusnachricht anzeigen"
+msgstr "Falls aktiviert, wird Gajim für jeden Kontakt unter dem Kontaktnamen in der Kontaktliste und im Gruppenchat-Fenster die Statusnachricht anzeigen"
 
 #: ../data/glade/preferences_window.glade.h:57
 msgid "If checked, Gajim will display the activity of contacts in the roster window"
-msgstr "Wenn aktiviert, wird Gajim die Aktivität der Kontakte im Kontaktlistenfenster anzeigen"
+msgstr "Falls aktiviert, wird Gajim die Aktivität der Kontakte im Kontaktlistenfenster anzeigen"
 
 #: ../data/glade/preferences_window.glade.h:58
 msgid "If checked, Gajim will display the mood of contacts in the roster window"
-msgstr "Wenn aktiviert, wird Gajim die Stimmung der Kontakte im Kontaktlistenfenster anzeigen"
+msgstr "Falls aktiviert, wird Gajim die Stimmung der Kontakte im Kontaktlistenfenster anzeigen"
 
 #: ../data/glade/preferences_window.glade.h:59
 msgid "If checked, Gajim will display the tunes of contacts in the roster window"
-msgstr "Wenn aktiviert, wird Gajim den Musiktitel der Kontakte im Kontaktlistenfenster anzeigen"
+msgstr "Falls aktiviert, wird Gajim den Musiktitel der Kontakte im Kontaktlistenfenster anzeigen"
 
 #: ../data/glade/preferences_window.glade.h:60
 msgid "If checked, Gajim will highlight spelling errors in input fields of chat windows. If no language is explicitly set via right click on the input field, the default language will be used for this contact or group chat."
-msgstr "Wenn aktiviert, wird Gajim Rechtschreibfehler im Chat-Eingabefenster hervorheben. Wenn keine Sprache durch setzen mittels Rechtsklick im Eingabefeld definiert wurde, wird die Standardsprache für diesen Kontakt oder Gruppenchat verwendet"
+msgstr "Falls aktiviert, wird Gajim Rechtschreibfehler im Chat-Eingabefenster hervorheben. Wenn keine Sprache im Eingabefeld definiert wurde (per Rechtsklick), wird die Standardsprache für diesen Kontakt oder Gruppenchat verwendet"
 
 #: ../data/glade/preferences_window.glade.h:61
 msgid "If checked, Gajim will ignore incoming events from unauthorized contacts. Use with caution, because it blocks all messages from any contact that is not in the roster"
-msgstr "Wenn aktiviert, wird Gajim eingehende Ereignisse von unauthorisierten Kontakten ignorieren. Vorsicht bei der Benutzung, denn alle Nachrichten von Kontakten werden blockiert, die nicht in Ihrer Kontaktliste sind!"
+msgstr "Falls aktiviert, wird Gajim eingehende Ereignisse von unauthorisierten Kontakten ignorieren. Vorsicht bei der Benutzung, denn alle Nachrichten von Kontakten werden blockiert, die nicht in Ihrer Kontaktliste sind"
 
 #: ../data/glade/preferences_window.glade.h:62
 msgid "If checked, Gajim will keep logs for encrypted messages. Please note that when using E2E encryption the remote party has to agree on logging, else the messages will not be logged."
-msgstr "Wenn aktiviert, wird Gajim Logs von verschlüsselten Nachrichten aufzeichnen. Bitte bedenken Sie, dass bei der Benutzung von ESession-Verschlüsselung der Chatpartner zustimmen muss; ansonsten wird nicht mitgeschnitten."
+msgstr "Falls aktiviert, wird Gajim Logs von verschlüsselten Nachrichten aufzeichnen. Bitte bedenken Sie, dass bei der Benutzung von ESession-Verschlüsselung der Chatpartner zustimmen muss; ansonsten wird nicht mitgeschnitten."
 
 #: ../data/glade/preferences_window.glade.h:63
 msgid "If checked, Gajim will show a notification when a new e-mail is received via GMail"
-msgstr "Wenn aktiviert, wird Gajim eine Benachrichtigung anzeigen, wenn eine neue E-Mail über Googlemail empfangen wurden"
+msgstr "Falls aktiviert, wird Gajim eine Benachrichtigung anzeigen, wenn eine neue E-Mail über Google Mail empfangen wurden"
 
 #: ../data/glade/preferences_window.glade.h:64
 msgid "If checked, Gajim will use protocol-specific status icons. (eg. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)"
-msgstr "Wenn Sie diese Option aktivieren wird Gajim Protokoll-spezifische Symbole verwenden (Ein Kontakt aus MSN wird z.B. das äquivalente MSN-Symbol für den Status \"Anwesend\", \"Abwesend\", \"Beschäftigt\", etc. haben)"
+msgstr "Falls aktiviert, wird Gajim Protokoll-spezifische Symbole verwenden. (Ein Kontakt aus MSN wird z.B. das äquivalente MSN-Symbol für den Status \"Anwesend\", \"Abwesend\", \"Beschäftigt\", etc. haben)"
 
 #: ../data/glade/preferences_window.glade.h:65
 msgid "If enabled, Gajim will not ask for a status message. The specified default message will be used instead."
-msgstr "Wenn aktiviert, wird Gajim nicht nach einer Statusnachricht fragen. Die Standardnachricht wird anstelle benutzt"
+msgstr "Falls aktiviert, wird Gajim nicht nach einer Statusnachricht fragen. Die Standardnachricht wird anstelle benutzt"
 
 #: ../data/glade/preferences_window.glade.h:66
 msgid "If not disabled, Gajim will replace ascii smilies like ':)' with equivalent animated or static graphical emoticons"
-msgstr "Wenn nicht deaktivert, wird Gajim ASCII-Smilies wie ':)' mit äquivalenten graphischen Emoticons ersetzen"
+msgstr "Falls nicht deaktivert, wird Gajim ASCII-Smilies wie \":)\" mit äquivalenten graphischen Emoticons ersetzen"
 
 #: ../data/glade/preferences_window.glade.h:67
 msgid "Log _encrypted chat session"
@@ -1814,7 +1814,7 @@ msgstr "a_bmelden"
 
 #: ../data/glade/preferences_window.glade.h:82
 msgid "Some messages may include rich content (formatting, colors etc). If checked, Gajim will just display the raw message text."
-msgstr "Einige Nachrichten könnten formatierten Inhalt enthalten (Farben, Schriftarten etc.). Wenn aktiviert, wird Gajim nur den reinen Nachrichtentext anzeigen."
+msgstr "Einige Nachrichten könnten formatierten Inhalt enthalten (Farben, Schriftarten etc.). Falls aktiviert, wird Gajim nur den reinen Nachrichtentext anzeigen."
 
 #: ../data/glade/preferences_window.glade.h:83
 msgid "Sort contacts by status"
@@ -2072,7 +2072,7 @@ msgstr "<b>E-Mail:</b>"
 #: ../data/glade/profile_window.glade.h:9
 #: ../data/glade/vcard_information_window.glade.h:11
 msgid "<b>Extra Address:</b>"
-msgstr "<b>Zusatz-Adresse:</b>"
+msgstr "<b>Zusatzadresse:</b>"
 
 #. Family Name
 #: ../data/glade/profile_window.glade.h:11
@@ -2115,7 +2115,7 @@ msgstr "<b>Spitzname:</b>"
 #: ../data/glade/profile_window.glade.h:20
 #: ../data/glade/vcard_information_window.glade.h:23
 msgid "<b>Phone No.:</b>"
-msgstr "<b>Telefon-Nummer:</b>"
+msgstr "<b>Telefonnummer:</b>"
 
 #: ../data/glade/profile_window.glade.h:21
 #: ../data/glade/vcard_information_window.glade.h:24
@@ -3243,7 +3243,7 @@ msgstr ""
 
 #: ../src/common/config.py:121
 msgid "Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 to disable fuzzyclock. 1 is the most precise clock, 4 the least precise one. This is used only if print_time is 'sometimes'."
-msgstr "Zeige die Zeit in Chats mittels ungenauer Uhr an. Werte für die Ungenauigkeit sind 1 bis 4 oder 0, um die ungenaue Uhr zu deaktivieren. 1 ist am Genauesten, 4 ist am Ungenaueste. Dies wird nur verwendet, wenn print_time auf 'sometimes' gesetzt ist."
+msgstr "Zeige die Zeit in Chats mittels ungenauer Uhr an. Werte für die Ungenauigkeit sind 1 bis 4 oder 0, um die ungenaue Uhr zu deaktivieren. 1 ist am Genauesten, 4 ist am Ungenaueste. Dies wird nur verwendet, wenn print_time auf \"sometimes\" gesetzt ist."
 
 #: ../src/common/config.py:124
 msgid "Treat * / _ pairs as possible formatting characters."
@@ -3251,11 +3251,11 @@ msgstr "Behandle * / _ Paare als mögliche Formatierungszeichen."
 
 #: ../src/common/config.py:125
 msgid "If True, do not remove */_ . So *abc* will be bold but with * * not removed."
-msgstr "Wenn aktiviert, wird */_ nicht entfernt. So wird *abc* fett gedruckt, aber * * wird nicht entfernt."
+msgstr "Falls aktiviert, wird */_ nicht entfernt. So wird *abc* fett gedruckt, aber * * wird nicht entfernt."
 
 #: ../src/common/config.py:128
 msgid "Uses ReStructured text markup to send HTML, plus ascii formatting if selected. For syntax, see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html (If you want to use this, install docutils)"
-msgstr "Wenn aktiviert, wird ReStructuredText für die HTML und ASCII-Formatierung verwendet (falls dies erwünscht ist, installieren Sie docutils). Informationen zur Syntax finden Sie unter http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html (Englisch)"
+msgstr "Verwendet ReStructuredText Text-Markup für HTML, und ASCII-Formatierung falls aktiviert. Informationen zur Syntax finden Sie unter http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html (Englisch). (Falls Sie das wünschen, installieren Sie docutils)"
 
 #: ../src/common/config.py:137
 msgid "Character to add after nickname when using nick completion (tab) in group chat."
@@ -3267,7 +3267,7 @@ msgstr "Zeichen, das hinter den gewünschten Spitznamen gehängt wird, falls der
 
 #: ../src/common/config.py:161
 msgid "This option let you customize timestamp that is printed in conversation. For exemple \"[%H:%M] \" will show \"[hour:minute] \". See python doc on strftime for full documentation: http://docs.python.org/lib/module-time.html"
-msgstr "Hiermit lässt sich der Zeitstempel anpassen, der in den Unterhaltungen verwendet wird. Zum Beispiel wird \"[%H:%M] \" zu \"[Stunde:Minute] \". Weitere Informationen finden Sie in der Python-Dokumentation zu 'strftime' unter http://docs.python.org/lib/module-time.html (Englisch)."
+msgstr "Hiermit lässt sich der Zeitstempel anpassen, der in den Unterhaltungen verwendet wird. Zum Beispiel wird \"[%H:%M] \" zu \"[Stunde:Minute] \". Weitere Informationen finden Sie in der Python-Dokumentation zu \"strftime\" unter http://docs.python.org/lib/module-time.html (Englisch)."
 
 #: ../src/common/config.py:162
 msgid "Characters that are printed before the nickname in conversations"
@@ -3300,19 +3300,19 @@ msgstr "Wie viele Zeilen für Strg+BildAuf gespeichert werden."
 #: ../src/common/config.py:176
 #, python-format
 msgid "Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary."
-msgstr "Entweder eine spezielle URL mit %s, wobei %s das Word/Phrase ist oder 'WIKTIONARY', was bedeutet, dass das Wörterbuch Wiktionary verwendet wird."
+msgstr "Entweder eine spezielle URL mit %s, wobei %s das Word/Phrase ist oder \"WIKTIONARY\", was bedeutet, dass das Wörterbuch Wiktionary verwendet wird."
 
 #: ../src/common/config.py:179
 msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr "Wenn aktiviert, kann Gajim von Außerhalb mittels gajim-remote kontrolliert werden."
+msgstr "Falls aktiviert, kann Gajim von außerhalb mittels gajim-remote kontrolliert werden."
 
 #: ../src/common/config.py:180
 msgid "If True, listen to D-Bus signals from NetworkManager and change the status of accounts (provided they do not have listen_to_network_manager set to False and they sync with global status) based upon the status of the network connection."
-msgstr "Wenn aktiviert, reagiere auf D-Bus-Signale vom NetworkManager und ändere den Status von Konten (vorausgesetzt, sie haben listen_to_network_manager nicht auf False gesetzt und sie synchronisieren sich mit dem globalen Status) basierend auf dem Status der Netzwerkverbindung."
+msgstr "Falls aktiviert, reagiere auf D-Bus-Signale vom NetworkManager und ändere den Status von Konten (vorausgesetzt, sie haben listen_to_network_manager nicht auf False gesetzt und sie synchronisieren sich mit dem globalen Status) basierend auf dem Status der Netzwerkverbindung."
 
 #: ../src/common/config.py:181
 msgid "Sent chat state notifications. Can be one of all, composing_only, disabled."
-msgstr "Senden von Chatstatus-Benachrichtigungen. Kann all, composing_only oder disabled sein."
+msgstr "Senden von Chatstatus-Benachrichtigungen. Kann \"all\", \"composing_only\" oder \"disabled\" sein."
 
 #: ../src/common/config.py:182
 msgid "Displayed chat state notifications in chat windows. Can be one of all, composing_only, disabled."
@@ -3336,7 +3336,7 @@ msgstr "Niemals fragen, bevor ein Gruppenchat-Fenster/Tab aus der Leerzeichen-se
 
 #: ../src/common/config.py:190
 msgid "Comma separated list of hosts that we send, in addition of local interfaces, for File Transfer in case of address translation/port forwarding."
-msgstr "Kommagetrennte Liste von Hosts die zusätzlich zum lokalen Host gesendet werden, für Datenübertragung im Fall von NAT/Port-Forwarding"
+msgstr "Kommagetrennte Liste von Rechnern die zusätzlich zum lokalen Rechner gesendet werden, für Datenübertragung im Fall von NAT/Port-Forwarding"
 
 #: ../src/common/config.py:192
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
@@ -3368,39 +3368,39 @@ msgstr "Eine Liste von MODP-Gruppen, welche in Diffie-Hellman benutzt werden sol
 
 #: ../src/common/config.py:213
 msgid "Preview new messages in notification popup?"
-msgstr "Vorschau neuer Nachrichten im Benachrichtigungs-Popup?"
+msgstr "Vorschau neuer Nachrichten im Benachrichtigungspopup?"
 
 #: ../src/common/config.py:218
 msgid "A semicolon-separated list of words that will be highlighted in group chats."
-msgstr "Eine mit Semilkolon separierte Liste von Worten, die in einem Gruppenchat hervorgehoben werden."
+msgstr "Eine mit Semikolon separierte Liste von Worten, die in einem Gruppenchat hervorgehoben werden."
 
 #: ../src/common/config.py:219
 msgid "If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if trayicon is used."
-msgstr "Wenn aktiviert, wird Gajim beendet, wenn der X-Button des Fenstermanagers geklickt wird. Diese Option wird nur beachtet, wenn die Trayicon-Unterstützung aktiv ist."
+msgstr "Falls aktiviert, wird Gajim beendet, wenn der X-Button des Fenstermanagers geklickt wird. Diese Option wird nur beachtet, wenn Trayicon verwendet wird."
 
 #: ../src/common/config.py:220
 msgid "If True, Gajim will check if it's the default jabber client on each startup."
-msgstr "Wenn aktiviert, wird Gajim beim Starten überprüfen, ob Gajim der Standard-Jabber-Client ist."
+msgstr "Falls aktiviert, wird Gajim beim Starten überprüfen, ob Gajim der Standard-Jabber-Client ist."
 
 #: ../src/common/config.py:221
 msgid "If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated."
-msgstr "Wenn aktiviert, wird Gajim ein Icon auf jedem Tab mit ungelesenen Nachrichten anzeigen. Abhängig vom Thema kann dieses Icon animiert sein."
+msgstr "Falls aktiviert, wird Gajim ein Icon auf jedem Tab mit ungelesenen Nachrichten anzeigen. Abhängig vom Theme kann dieses Icon animiert sein."
 
 #: ../src/common/config.py:222
 msgid "If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window."
-msgstr "Wenn aktiviert, wird Gajim für jeden Kontakt die Statusnachricht, falls nicht leer, unter dem jeweiligen Kontaktnamen in der Kontaktliste anzeigen."
+msgstr "Falls aktiviert, wird Gajim für jeden Kontakt die Statusnachricht, falls nicht leer, unter dem jeweiligen Kontaktnamen in der Kontaktliste anzeigen."
 
 #: ../src/common/config.py:227
 msgid "Define the position of the avatar in roster. Can be left or right"
-msgstr "Definiere die Position des Avatars in der Kontaktliste. Links oder rechts sind mögliche Optionen."
+msgstr "Definiere die Position des Avatars in der Kontaktliste. \"left\" (links) oder \"right\" (rechts) sind mögliche Optionen."
 
 #: ../src/common/config.py:228
 msgid "If True, Gajim will ask for avatar each contact that did not have an avatar last time or has one cached that is too old."
-msgstr "Wenn aktiviert fragt Gajim nach einem Avatar für jeden Kontakt, der beim letzten Mal keinen hatte oder einen veralteten hat."
+msgstr "Falls aktiviert, fragt Gajim nach einem Avatar für jeden Kontakt, der beim letzten Mal keinen hatte oder dessen gespeicherter Avatar zu alt ist."
 
 #: ../src/common/config.py:229
 msgid "If False, Gajim will no longer print status line in chats when a contact changes his or her status and/or his or her status message."
-msgstr "Wenn deaktiviert, werden Sie keine Statuszeile im Chat sehen, wenn ein Kontakt seinen Status und/oder seine Statusnachricht ändert."
+msgstr "Falls deaktiviert, werden Sie keine Statuszeile im Chat sehen, wenn ein Kontakt seinen Status und/oder seine Statusnachricht ändert."
 
 #: ../src/common/config.py:230
 msgid "can be \"none\", \"all\" or \"in_and_out\". If \"none\", Gajim will no longer print status line in groupchats when a member changes his or her status and/or his or her status message. If \"all\" Gajim will print all status messages. If \"in_and_out\", Gajim will only print FOO enters/leaves group chat."
@@ -3408,15 +3408,15 @@ msgstr "Kann \"none\", \"all\" oder \"in_and_out\" sein. Falls \"none\", wird Ga
 
 #: ../src/common/config.py:232
 msgid "Background color of contacts when they just signed in."
-msgstr "Hintergrundfarbe von Kontakten, wenn sie sich gerade anmeldeten."
+msgstr "Hintergrundfarbe von Kontakten, wenn sie sich gerade anmelden."
 
 #: ../src/common/config.py:233
 msgid "Background color of contacts when they just signed out."
-msgstr "Hintergrundfarbe von Kontakten, wenn sie sich gerade abmeldeten."
+msgstr "Hintergrundfarbe von Kontakten, wenn sie sich gerade abmelden."
 
 #: ../src/common/config.py:235
 msgid "If True, restored messages will use a smaller font than the default one."
-msgstr "Wenn aktiv, werden wiederhergestellte Nachrichten mit einer kleineren Schrift als der Standard dargestellt."
+msgstr "Falls aktiviert, werden wiederhergestellte Nachrichten mit einer kleineren Schrift als der Standard dargestellt."
 
 #: ../src/common/config.py:236
 msgid "Don't show avatar for the transport itself."
@@ -3428,7 +3428,7 @@ msgstr "Kontaktliste nicht in der System-Taskleiste anzeigen."
 
 #: ../src/common/config.py:238
 msgid "If True and installed GTK+ and PyGTK versions are at least 2.8, make the window flash (the default behaviour in most Window Managers) when holding pending events."
-msgstr "Wenn aktiviert und die installierten GTK+ und PyGTK Versionen wenigstens 2.8 sind, lasse das Fenster bei neuen Ereignissen aufblitzen (Standardverhalten in den meisten Window-Managers) "
+msgstr "Falls aktiviert und die installierten GTK+ und PyGTK Versionen wenigstens 2.8 sind, lasse das Fenster bei neuen Ereignissen aufblitzen (Standardverhalten in den meisten Window-Managern), wenn anstehende Ereignisse vorliegen."
 
 #: ../src/common/config.py:240
 msgid "Jabberd1.4 does not like sha info when one join a password protected group chat. Turn this option to False to stop sending sha info in group chat presences."
@@ -3453,11 +3453,11 @@ msgstr ""
 
 #: ../src/common/config.py:244
 msgid "If False, you will no longer see the avatar in the chat window."
-msgstr "Wenn deaktiviert, werden Sie den Avatar nicht mehr im Chatfenster sehen."
+msgstr "Falls deaktiviert, werden Sie den Avatar nicht mehr im Chatfenster sehen."
 
 #: ../src/common/config.py:245
 msgid "If True, pressing the escape key closes a tab/window."
-msgstr "Wenn aktiviert, schließt die Escape-Taste ein Tab/Fenster."
+msgstr "Falls aktiviert, schließt die Escape-Taste ein Tab/Fenster."
 
 #: ../src/common/config.py:246
 msgid "Hides the buttons in chat windows."
@@ -3477,7 +3477,7 @@ msgstr "Versteckt die Gruppenchat-Benutzerliste im Gruppenchat-Fenster."
 
 #: ../src/common/config.py:250
 msgid "In a chat, show the nickname at the beginning of a line only when it's not the same person talking than in previous message."
-msgstr "Zeige in einem Chat den Spitznamen nur dann am Beginn einer Linie, wenn es nicht die selbe Person ist die schon die letzte Nachricht geschrieben hat."
+msgstr "Zeige in einem Chat den Spitznamen nur dann am Beginn einer Linie, wenn es nicht die selbe Person ist, die schon die letzte Nachricht geschrieben hat."
 
 #: ../src/common/config.py:251
 msgid "Indentation when using merge consecutive nickname."
@@ -3501,31 +3501,31 @@ msgstr "Soll der Bestätigungsdialog beim Erstellen von Metakontakten angezeigt 
 
 #: ../src/common/config.py:256
 msgid "If True, you will be able to set a negative priority to your account in account modification window. BE CAREFUL, when you are logged in with a negative priority, you will NOT receive any message from your server."
-msgstr "Wenn aktiviert, werden Sie in der Lage sein eine negative Priorität für Ihr Konto im Konto-Bearbeiten Fenster zu setzen. SEIEN SIE VORSICHTIG, wenn Sie mit einer negativen Priorität angemeldet sind: Sie werden KEINE Nachrichten mehr von Ihrem Server erhalten."
+msgstr "Falls aktiviert, werden Sie in der Lage sein, eine negative Priorität für Ihr Konto im Konto-Bearbeiten Fenster zu setzen. SEIEN SIE VORSICHTIG, wenn Sie mit einer negativen Priorität angemeldet sind: Sie werden KEINE Nachrichten mehr von Ihrem Server erhalten."
 
 #: ../src/common/config.py:257
 msgid "If True, Gajim will use Gnome Keyring (if available) to store account passwords."
-msgstr "Wenn aktiviert, wird Gnome Keyring (insofern verfügbar) verwendet, um die Passwörter der Konten zu speichern."
+msgstr "Falls aktiviert, wird Gnome Keyring (falls verfügbar) verwendet, um die Passwörter der Konten zu speichern."
 
 #: ../src/common/config.py:258
 msgid "If True, Gajim will show number of online and total contacts in account and group rows."
-msgstr "Wenn aktiviert, wird Gajim die Anzahl der angemeldeten und gesamten Kontakte in den Konto- und Gruppenreihen anzeigen."
+msgstr "Falls aktiviert, wird Gajim die Anzahl der angemeldeten und gesamten Kontakte in den Konto- und Gruppenreihen anzeigen."
 
 #: ../src/common/config.py:259
 msgid "Can be empty, 'chat' or 'normal'. If not empty, treat all incoming messages as if they were of this type"
-msgstr "Kann leer, 'chat' oder 'normal' sein. Wenn nicht leer, dann werden alle eingehenden Nachrichten so behandelt, als wären sie von diesem Typ."
+msgstr "Kann leer, \"chat\" oder \"normal\" sein. Wenn nicht leer, dann werden alle eingehenden Nachrichten so behandelt, als wären sie von diesem Typ."
 
 #: ../src/common/config.py:260
 msgid "If True, Gajim will scroll and select the contact who sent you the last message, if chat window is not already opened."
-msgstr "Wenn aktiviert, wird Gajim automatisch zu der Person springen und auswählen, die die letzte Nachricht geschickt hat, falls das Chat Fenster nicht bereits offen ist."
+msgstr "Falls aktiviert, wird Gajim automatisch zu der Person springen und auswählen, die die letzte Nachricht geschickt hat, falls das Chat-Fenster nicht bereits offen ist."
 
 #: ../src/common/config.py:261
 msgid "If True, Gajim will convert string between $$ and $$ to an image using dvips and convert before insterting it in chat window."
-msgstr "Wenn 'true', wird Gajim eine Zeichenkette zwischen $$ und $$ mittels dvips vor dem Einfügen in ein Chat-Fenster in ein Bild umwandeln."
+msgstr "Falls aktiviert, wird Gajim eine Zeichenkette zwischen $$ und $$ mittels dvips vor dem Einfügen in ein Chat-Fenster in ein Bild umwandeln."
 
 #: ../src/common/config.py:262
 msgid "Time of inactivity needed before the change status window closes down."
-msgstr "Benötigte Inaktivitäts-Zeit bevor das 'Status ändern'-Fenster geschlossen wird."
+msgstr "Benötigte Inaktivitäts-Zeit bevor das \"Status ändern\"-Fenster geschlossen wird."
 
 #: ../src/common/config.py:263
 msgid "Maximum number of lines that are printed in conversations. Oldest lines are cleared."
@@ -3533,7 +3533,7 @@ msgstr "Maximale Anzahl Zeilen, die in einem Gespräch angezeigt werden. Die äl
 
 #: ../src/common/config.py:264
 msgid "If True, notification windows from notification-daemon will be attached to systray icon."
-msgstr "Wenn wahr, werden Benachrichtigungsfenster vom Benachrichtigungsdienst an das Systray-Icon angehängt."
+msgstr "Falls aktiviert, werden Benachrichtigungsfenster vom Benachrichtigungsdienst an das Systray-Icon angehängt."
 
 #: ../src/common/config.py:265
 msgid "Choose interval between 2 checks of idleness."
@@ -3557,11 +3557,11 @@ msgstr "Status bei automatischer Verbindung. Wahleise: Angemeldet, Frei zum Chat
 
 #: ../src/common/config.py:287
 msgid "If enabled, restore the last status that was used."
-msgstr "Wenn aktiviert, wird die letzte Statusmeldung wiederhergestellt."
+msgstr "Falls aktiviert, wird die letzte Statusmeldung wiederhergestellt."
 
 #: ../src/common/config.py:292
 msgid "If disabled, don't sign presences with GPG key, even if GPG is configured."
-msgstr "Wenn deaktiviert, wird die Anwesenheit nicht mit einem GPG-Schlüssel signiert, wenn GPG konfiguriert ist."
+msgstr "Falls deaktiviert, wird die Anwesenheit nicht mit einem GPG-Schlüssel signiert, wenn GPG konfiguriert ist."
 
 #: ../src/common/config.py:294
 msgid "Enable ESessions encryption for this account."
@@ -3598,7 +3598,7 @@ msgstr "Jabberd2 Workaround"
 
 #: ../src/common/config.py:320
 msgid "If checked, Gajim will use your IP and proxies defined in file_transfer_proxies option for file transfer."
-msgstr "Wenn aktiviert, wird Gajim Ihre IP und die in der file_transfer_proxies Option definierten Proxies für den Datentransfer verwenden."
+msgstr "Falls aktiviert, wird Gajim Ihre IP und die in der file_transfer_proxies Option definierten Proxies für den Datentransfer verwenden."
 
 #: ../src/common/config.py:334
 msgid "Answer to receipt requests"
@@ -3627,7 +3627,7 @@ msgstr "alle oder Leerzeichen-getrennter Status"
 
 #: ../src/common/config.py:401
 msgid "'yes', 'no', or 'both'"
-msgstr "'ja', 'nein' oder 'beide'"
+msgstr "\"ja\", \"nein\" oder \"beide\""
 
 #: ../src/common/config.py:402
 #: ../src/common/config.py:404
@@ -3752,7 +3752,7 @@ msgstr "Konnte Idle-Modus nicht laden"
 #: ../src/common/connection_handlers.py:233
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:93
 msgid "Wrong host"
-msgstr "Falscher Host"
+msgstr "Falscher Rechner"
 
 #: ../src/common/connection_handlers.py:234
 msgid "Invalid local address? :-O"
@@ -3996,15 +3996,15 @@ msgstr "Zertifikat abgelehnt"
 
 #: ../src/common/connection.py:93
 msgid "Subject issuer mismatch"
-msgstr ""
+msgstr "Subject issuer mismatch"
 
 #: ../src/common/connection.py:94
 msgid "Authority and subject key identifier mismatch"
-msgstr ""
+msgstr "Authority and subject key identifier mismatch"
 
 #: ../src/common/connection.py:95
 msgid "Authority and issuer serial number mismatch"
-msgstr ""
+msgstr "Authority and issuer serial number mismatch"
 
 #: ../src/common/connection.py:96
 msgid "Key usage does not include certificate signing"
@@ -4382,7 +4382,7 @@ msgstr "Server-Adresse notwendig."
 
 #: ../src/common/helpers.py:169
 msgid "Invalid character in hostname."
-msgstr "Ungültiges Zeichen in Hostname."
+msgstr "Ungültiges Zeichen im Rechnernamen."
 
 #: ../src/common/helpers.py:176
 msgid "Invalid character in resource."
@@ -5076,11 +5076,11 @@ msgstr "Schwimmen"
 
 #: ../src/common/pep.py:143
 msgid "Working out"
-msgstr "Ausarbeiten"
+msgstr "Trainieren"
 
 #: ../src/common/pep.py:144
 msgid "Grooming"
-msgstr "Waschen"
+msgstr "Körperpflege"
 
 #: ../src/common/pep.py:145
 msgid "At the Spa"
@@ -5100,7 +5100,7 @@ msgstr "Rasieren"
 
 #: ../src/common/pep.py:149
 msgid "Taking a Bath"
-msgstr "Baden"
+msgstr "Ein Bad nehmen"
 
 #: ../src/common/pep.py:150
 msgid "Taking a Shower"
@@ -5120,7 +5120,7 @@ msgstr "Rumhängen"
 
 #: ../src/common/pep.py:155
 msgid "Hiding"
-msgstr "Verstecken"
+msgstr "Untertauchen"
 
 #: ../src/common/pep.py:156
 msgid "On Vacation"
@@ -5275,12 +5275,12 @@ msgstr "[Dies ist ein Teil einer verschlüsselten Unterhaltung. Wenn Sie diese N
 
 #: ../src/common/zeroconf/client_zeroconf.py:408
 msgid "Connection to host could not be established: Timeout while sending data."
-msgstr "Verbindung zum Host konnte nicht hergestellt werden: Zeitüberschreitung beim Senden von Daten."
+msgstr "Verbindung zum Rechner konnte nicht hergestellt werden: Zeitüberschreitung beim Senden von Daten."
 
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:93
 #, python-format
 msgid "The host %s you configured as the ft_add_hosts_to_send advanced option is not valid, so ignored."
-msgstr "Der Host %s, den Sie für die erweiterte Option ft_override_host_to_send angeben haben ist ungültig und wird ignoriert."
+msgstr "Der Rechner %s, den Sie für die erweiterte Option ft_override_host_to_send angeben haben, ist ungültig und wird ignoriert."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:215
 msgid "To continue sending and receiving messages, you will need to reconnect."
@@ -5421,7 +5421,7 @@ msgstr "Nachricht gesendet"
 
 #: ../src/config.py:1060
 msgid "Group Chat Message Highlight"
-msgstr "Gruppenchat Nachrichten-Hervorhebung"
+msgstr "Gruppenchat-Nachrichten-Hervorhebung"
 
 #: ../src/config.py:1061
 msgid "Group Chat Message Received"
@@ -5429,7 +5429,7 @@ msgstr "Gruppenchat-Nachricht empfangen"
 
 #: ../src/config.py:1062
 msgid "GMail Email Received"
-msgstr "E-Mail über Googlemail empfangen"
+msgstr "E-Mail über Google Mail empfangen"
 
 #. Name column
 #: ../src/config.py:1319
@@ -5448,7 +5448,7 @@ msgstr "Jetzt neu einloggen?"
 
 #: ../src/config.py:1406
 msgid "If you want all the changes to apply instantly, you must relogin."
-msgstr "Wenn die Änderungen sofort übernommen werden sollen, müssen Sie sich neu einloggen."
+msgstr "Falls die Änderungen sofort übernommen werden sollen, müssen Sie sich neu einloggen."
 
 #: ../src/config.py:1531
 #: ../src/config.py:1630
@@ -5729,7 +5729,7 @@ msgstr "Konto \"%s\" ist mit Server verbunden"
 
 #: ../src/config.py:2592
 msgid "If you remove it, the connection will be lost."
-msgstr "Wenn Sie es entfernen, wird die Verbindung beendet."
+msgstr "Falls Sie es entfernen, wird die Verbindung beendet."
 
 #: ../src/config.py:2688
 msgid "Default"
@@ -7973,7 +7973,7 @@ msgstr "Datei wirklich senden?"
 #: ../src/groupchat_control.py:1028
 #, python-format
 msgid "If you send a file to %s, he/she will know your real Jabber ID."
-msgstr "Wenn Sie eine Datei an %s senden wird er/sie Ihre echte Jabber-ID kennen."
+msgstr "Falls Sie eine Datei an %s senden wird er/sie Ihre echte Jabber-ID kennen."
 
 #. Can be a message (see handle_event_gc_config_change in gajim.py)
 #: ../src/groupchat_control.py:1127
@@ -8150,7 +8150,7 @@ msgstr "Möchten Sie den Gruppenchat \"%s\" wirklich verlassen?"
 
 #: ../src/groupchat_control.py:1839
 msgid "If you close this window, you will be disconnected from this group chat."
-msgstr "Wenn Sie dieses Fenster schließen, wird die Verbindung zu diesem Gruppenchat geschlossen."
+msgstr "Falls Sie dieses Fenster schließen, wird die Verbindung zu diesem Gruppenchat geschlossen."
 
 #: ../src/groupchat_control.py:1876
 msgid "Changing Subject"
@@ -8505,7 +8505,7 @@ msgstr "Abonnement-Anforderung wurde gesendet"
 #: ../src/roster_window.py:1882
 #, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
-msgstr "Wenn \"%s\" diese Anfrage akzeptiert, erfahren Sie dessen Status."
+msgstr "Falls \"%s\" diese Anfrage akzeptiert, erfahren Sie dessen Status."
 
 #: ../src/roster_window.py:1894
 msgid "Authorization has been removed"
