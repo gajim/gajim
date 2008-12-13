@@ -429,9 +429,9 @@ class ChatControlBase(MessageControl):
 	def _conv_textview_key_press_event(self, widget, event):
 		if gtk.gtk_version < (2, 12, 0):
 			return
-		if event.state & gtk.gdk.CONTROL_MASK and event.keyval == gtk.keysyms.c \
-		or event.state & gtk.gdk.SHIFT_MASK and event.keyval in (
-		gtk.keysyms.Page_Down, gtk.keysyms.Page_Up):
+		if (event.state & gtk.gdk.CONTROL_MASK and event.keyval in (gtk.keysyms.c,
+		gtk.keysyms.Insert)) or (event.state & gtk.gdk.SHIFT_MASK and \
+		event.keyval in (gtk.keysyms.Page_Down, gtk.keysyms.Page_Up)):
 			return False
 		self.parent_win.notebook.emit('key_press_event', event)
 		return True
