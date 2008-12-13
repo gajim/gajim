@@ -752,7 +752,11 @@ class MessageWindow(object):
 			elif event.keyval == gtk.keysyms.Page_Up:
 				self.move_to_next_unread_tab(False)
 				return True
-		elif event.keyval == gtk.keysyms.Control_L:
+		if event.keyval in (gtk.keysyms.Shift_L, gtk.keysyms.Shift_R,
+		gtk.keysyms.Control_L, gtk.keysyms.Control_R, gtk.keysyms.Caps_Lock,
+		gtk.keysyms.Shift_Lock, gtk.keysyms.Meta_L, gtk.keysyms.Meta_R,
+		gtk.keysyms.Alt_L, gtk.keysyms.Alt_R, gtk.keysyms.Super_L,
+		gtk.keysyms.Super_R, gtk.keysyms.Hyper_L, gtk.keysyms.Hyper_R):
 			return True
 
 		if isinstance(control, ChatControlBase):
