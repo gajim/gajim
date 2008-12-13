@@ -1059,6 +1059,8 @@ class ChatControlBase(MessageControl):
 		self.msg_textview.set_sensitive(False)
 		self.msg_textview.set_editable(False)
 		self.conv_textview.tv.grab_focus()
+
+		self.no_autonegotiation = False
 		# FIXME: Set sensitivity for toolbar
 
 ################################################################################

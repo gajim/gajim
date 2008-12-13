@@ -133,10 +133,10 @@ class StanzaSession(object):
 		self.status = None
 		self.negotiated = {}
 
-	def terminate(self):
+	def terminate(self, send_termination = True):
 		# only send termination message if we've sent a message and think they
 		# have XEP-0201 support
-		if self.last_send > 0 and \
+		if send_termination and self.last_send > 0 and \
 		(self.received_thread_id or self.last_receive == 0):
 			msg = xmpp.Message()
 			feature = msg.NT.feature
