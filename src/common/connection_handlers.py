@@ -1682,8 +1682,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			self._HttpAuthCB(con, msg)
 			return
 
-		frm = helpers.get_full_jid_from_iq(msg)
-		jid = helpers.get_jid_from_iq(msg)
+		try:
+			frm = helpers.get_full_jid_from_iq(msg)
+			jid = helpers.get_jid_from_iq(msg)
+		except helpers.InvalidFormat:
+			self.dispatch('ERROR', (_('Invalid Jabber ID'),
+				_('A message from a non-valid JID arrived, it has been ignored.')))
 
 		addressTag = msg.getTag('addresses', namespace = common.xmpp.NS_ADDRESS)
 

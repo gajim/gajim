@@ -2352,6 +2352,13 @@ class SingleMessageWindow:
 		for to_whom_jid in sender_list:
 			if to_whom_jid in self.completion_dict:
 				to_whom_jid = self.completion_dict[to_whom_jid].jid
+			try:
+				to_whom_jid = helpers.parse_jid(to_whom_jid)
+			except helpers.InvalidFormat:
+				ErrorDialog(_('Invalid Jabber ID'),
+					_('It is not possible to send a message to %s, this JID is not '
+					'valid.') % to_whom_jid)
+				return
 
 			subject = self.subject_entry.get_text().decode('utf-8')
 			begin, end = self.message_tv_buffer.get_bounds()

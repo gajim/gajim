@@ -1074,6 +1074,14 @@ class Connection(ConnectionHandlers):
 	original_message=None, delayed=None):
 		if not self.connection:
 			return 1
+		try:
+			jid = helpers.parse_jid(jid)
+		except helpers.InvalidFormat:
+			self.dispatch('ERROR', (_('Invalid Jabber ID'),
+				_('It is not possible to send a message to %s, this JID is not '
+				'valid.') % jid))
+			return
+			
 		if msg and not xhtml and gajim.config.get(
 		'rst_formatting_outgoing_messages'):
 			from common.rst_xhtml_generator import create_xhtml
