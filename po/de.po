@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-11-11 23:40+0100\n"
-"PO-Revision-Date: 2008-12-14 01:33+0100\n"
+"PO-Revision-Date: 2008-12-14 14:40+0100\n"
 "Last-Translator: Nico Gulden <cilugnedon@gmx.de>\n"
 "Language-Team: German <translators@gajim.org>\n"
 "MIME-Version: 1.0\n"
@@ -312,7 +312,7 @@ msgstr "Allgemein"
 #: ../data/glade/account_modification_window.glade.h:18
 #: ../data/glade/accounts_window.glade.h:22
 msgid "Hostname: "
-msgstr "Rechnername: "
+msgstr "Servername: "
 
 #: ../data/glade/account_modification_window.glade.h:19
 #: ../data/glade/accounts_window.glade.h:23
@@ -1107,7 +1107,7 @@ msgstr "Diese Aktion entfernt eine Dateiübertragung von der Liste. Falls die Ü
 
 #: ../data/glade/filetransfers.glade.h:12
 msgid "When a file transfer is complete show a popup notification"
-msgstr "Zeige eine Benachrichtigung, wenn die Datei komplett übertragen wurde."
+msgstr "Zeige eine Popup-Benachrichtigung, wenn die Datei komplett übertragen wurde."
 
 #: ../data/glade/filetransfers.glade.h:13
 #: ../src/filetransfers_window.py:793
@@ -3336,7 +3336,7 @@ msgstr "Niemals fragen, bevor ein Gruppenchat-Fenster/Tab aus der Leerzeichen-se
 
 #: ../src/common/config.py:190
 msgid "Comma separated list of hosts that we send, in addition of local interfaces, for File Transfer in case of address translation/port forwarding."
-msgstr "Kommagetrennte Liste von Rechnern die zusätzlich zu den lokalen Schnittstellen gesendet werden, für Datenübertragung im Fall von NAT/Port-Forwarding."
+msgstr "Kommagetrennte Liste von FQHNs die zusätzlich zum lokalen Rechnernamen gesendet werden, für Datenübertragung im Fall von NAT/Port-Forwarding."
 
 #: ../src/common/config.py:192
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
@@ -3368,7 +3368,7 @@ msgstr "Eine Liste von MODP-Gruppen, welche in Diffie-Hellman benutzt werden sol
 
 #: ../src/common/config.py:213
 msgid "Preview new messages in notification popup?"
-msgstr "Vorschau neuer Nachrichten im Benachrichtigungspopup?"
+msgstr "Vorschau neuer Nachrichten in der Popup-Benachrichtigung?"
 
 #: ../src/common/config.py:218
 msgid "A semicolon-separated list of words that will be highlighted in group chats."
@@ -3408,11 +3408,11 @@ msgstr "Kann \"none\", \"all\" oder \"in_and_out\" sein. Falls \"none\", wird Ga
 
 #: ../src/common/config.py:232
 msgid "Background color of contacts when they just signed in."
-msgstr "Hintergrundfarbe von Kontakten, wenn sie sich gerade anmelden."
+msgstr "Hintergrundfarbe von Kontakten, wenn sie sich gerade angemeldet haben."
 
 #: ../src/common/config.py:233
 msgid "Background color of contacts when they just signed out."
-msgstr "Hintergrundfarbe von Kontakten, wenn sie sich gerade abmelden."
+msgstr "Hintergrundfarbe von Kontakten, wenn sie sich gerade abgemeldet haben."
 
 #: ../src/common/config.py:235
 msgid "If True, restored messages will use a smaller font than the default one."
@@ -3752,7 +3752,7 @@ msgstr "Konnte Idle-Modus nicht laden"
 #: ../src/common/connection_handlers.py:233
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:93
 msgid "Wrong host"
-msgstr "Falscher Rechner"
+msgstr "Falscher Server"
 
 #: ../src/common/connection_handlers.py:234
 msgid "Invalid local address? :-O"
@@ -5275,12 +5275,12 @@ msgstr "[Dies ist ein Teil einer verschlüsselten Unterhaltung. Wenn Sie diese N
 
 #: ../src/common/zeroconf/client_zeroconf.py:408
 msgid "Connection to host could not be established: Timeout while sending data."
-msgstr "Verbindung zum Rechner konnte nicht hergestellt werden: Zeitüberschreitung beim Senden von Daten."
+msgstr "Verbindung zum Server konnte nicht hergestellt werden: Zeitüberschreitung beim Senden von Daten."
 
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:93
 #, python-format
 msgid "The host %s you configured as the ft_add_hosts_to_send advanced option is not valid, so ignored."
-msgstr "Der Rechner %s, den Sie für die erweiterte Option ft_override_host_to_send angeben haben, ist ungültig und wird ignoriert."
+msgstr "Der Server %s, den Sie für die erweiterte Option ft_override_host_to_send angeben haben, ist ungültig und wird ignoriert."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:215
 msgid "To continue sending and receiving messages, you will need to reconnect."
@@ -6813,7 +6813,7 @@ msgstr "Notification-daemon"
 
 #: ../src/features_window.py:88
 msgid "Passive popups notifying for new events."
-msgstr "Popups informieren über neue Ereignisse."
+msgstr "Passive Popups informieren über neue Ereignisse."
 
 #: ../src/features_window.py:89
 msgid "Requires python-notify or instead python-dbus in conjunction with notification-daemon."
