@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-11-11 23:40+0100\n"
-"PO-Revision-Date: 2008-12-13 23:14+0100\n"
+"PO-Revision-Date: 2008-12-14 01:33+0100\n"
 "Last-Translator: Nico Gulden <cilugnedon@gmx.de>\n"
 "Language-Team: German <translators@gajim.org>\n"
 "MIME-Version: 1.0\n"
@@ -374,7 +374,7 @@ msgstr "Kein Schlüssel ausgewählt"
 #: ../src/roster_window.py:2748
 #: ../src/roster_window.py:2753
 msgid "None"
-msgstr "Keine"
+msgstr "Kein"
 
 #: ../data/glade/account_modification_window.glade.h:30
 #: ../data/glade/accounts_window.glade.h:39
@@ -479,7 +479,7 @@ msgstr "Konten"
 
 #: ../data/glade/accounts_window.glade.h:11
 msgid "Check this so Gajim will ask you before sending your password over an insecure connection."
-msgstr "Aktivieren und Gajim wird nachfragen, bevor das Passwort über eine unsichere Verbindung versendet wird."
+msgstr "Falls aktiviert, wird Gajim nachfragen, bevor das Passwort über eine unsichere Verbindung versendet wird."
 
 #: ../data/glade/accounts_window.glade.h:16
 #: ../data/glade/zeroconf_information_window.glade.h:2
@@ -1294,7 +1294,7 @@ msgid ""
 "If you plan to do massive deletions, please make sure Gajim is not running. Generally avoid deletions with contacts you currently chat with."
 msgstr ""
 "<b>WARNUNG:</b>\n"
-"Falls Sie planen, viel zu löschen, stellen Sie sicher, dass Gajim nicht läuft. Vermeiden Sie generell Löschungen von Unterhaltungen mit Kontakten, mit denen Sie gerade chatten."
+"Wenn Sie viel löschen, stellen Sie sicher, dass Gajim nicht läuft. Vermeiden Sie generell Löschungen von Unterhaltungen mit Kontakten, mit denen Sie gerade chatten."
 
 #: ../data/glade/history_manager.glade.h:3
 msgid "<big><b>Welcome to Gajim History Logs Manager</b></big>"
@@ -1466,7 +1466,7 @@ msgstr "Verwende Authentifizierung"
 
 #: ../data/glade/manage_proxies_window.glade.h:10
 msgid "_Host:"
-msgstr "_Rechner:"
+msgstr "P_roxy:"
 
 #: ../data/glade/message_window.glade.h:1
 msgid "Add this contact to roster (Ctrl+D)"
@@ -1554,7 +1554,7 @@ msgstr "<b>Schrift</b>"
 
 #: ../data/glade/preferences_window.glade.h:10
 msgid "<b>GMail Options</b>"
-msgstr "<b>Google Mail Optionen</b>"
+msgstr "<b>Google Mail-Optionen</b>"
 
 #: ../data/glade/preferences_window.glade.h:12
 msgid "<b>Preset Status Messages</b>"
@@ -2711,7 +2711,7 @@ msgstr "Typ"
 #. we talk about option description in advanced configuration editor
 #: ../src/advanced.py:180
 msgid "(None)"
-msgstr "(Kein)"
+msgstr "(Keine)"
 
 #: ../src/advanced.py:263
 msgid "Hidden"
@@ -3243,7 +3243,7 @@ msgstr ""
 
 #: ../src/common/config.py:121
 msgid "Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 to disable fuzzyclock. 1 is the most precise clock, 4 the least precise one. This is used only if print_time is 'sometimes'."
-msgstr "Zeige die Zeit in Chats mittels ungenauer Uhr an. Werte für die Ungenauigkeit sind 1 bis 4 oder 0, um die ungenaue Uhr zu deaktivieren. 1 ist am Genauesten, 4 ist am Ungenaueste. Dies wird nur verwendet, wenn print_time auf \"sometimes\" gesetzt ist."
+msgstr "Zeige die Zeit in Chats mittels ungenauer Uhr an. Werte für die Ungenauigkeit sind 1 bis 4 oder 0, um die ungenaue Uhr zu deaktivieren. 1 ist am Genauesten, 4 ist am Ungenaueste. Dies wird nur verwendet, wenn print_time auf 'sometimes' gesetzt ist."
 
 #: ../src/common/config.py:124
 msgid "Treat * / _ pairs as possible formatting characters."
@@ -3300,7 +3300,7 @@ msgstr "Wie viele Zeilen für Strg+BildAuf gespeichert werden."
 #: ../src/common/config.py:176
 #, python-format
 msgid "Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary."
-msgstr "Entweder eine spezielle URL mit %s, wobei %s das Word/Phrase ist oder \"WIKTIONARY\", was bedeutet, dass das Wörterbuch Wiktionary verwendet wird."
+msgstr "Entweder eine spezielle URL mit %s, wobei %s das Word/Phrase ist oder 'WIKTIONARY', was bedeutet, dass das Wörterbuch Wiktionary verwendet wird."
 
 #: ../src/common/config.py:179
 msgid "If checked, Gajim can be controlled remotely using gajim-remote."
@@ -3336,7 +3336,7 @@ msgstr "Niemals fragen, bevor ein Gruppenchat-Fenster/Tab aus der Leerzeichen-se
 
 #: ../src/common/config.py:190
 msgid "Comma separated list of hosts that we send, in addition of local interfaces, for File Transfer in case of address translation/port forwarding."
-msgstr "Kommagetrennte Liste von Rechnern die zusätzlich zum lokalen Rechner gesendet werden, für Datenübertragung im Fall von NAT/Port-Forwarding"
+msgstr "Kommagetrennte Liste von Rechnern die zusätzlich zu den lokalen Schnittstellen gesendet werden, für Datenübertragung im Fall von NAT/Port-Forwarding."
 
 #: ../src/common/config.py:192
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
@@ -3388,7 +3388,7 @@ msgstr "Falls aktiviert, wird Gajim ein Icon auf jedem Tab mit ungelesenen Nachr
 
 #: ../src/common/config.py:222
 msgid "If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window."
-msgstr "Falls aktiviert, wird Gajim für jeden Kontakt die Statusnachricht, falls nicht leer, unter dem jeweiligen Kontaktnamen in der Kontaktliste anzeigen."
+msgstr "Falls aktiviert, wird Gajim für jeden Kontakt die Statusnachricht, sofern nicht leer, unter dem jeweiligen Kontaktnamen in der Kontaktliste anzeigen."
 
 #: ../src/common/config.py:227
 msgid "Define the position of the avatar in roster. Can be left or right"
@@ -3513,7 +3513,7 @@ msgstr "Falls aktiviert, wird Gajim die Anzahl der angemeldeten und gesamten Kon
 
 #: ../src/common/config.py:259
 msgid "Can be empty, 'chat' or 'normal'. If not empty, treat all incoming messages as if they were of this type"
-msgstr "Kann leer, \"chat\" oder \"normal\" sein. Wenn nicht leer, dann werden alle eingehenden Nachrichten so behandelt, als wären sie von diesem Typ."
+msgstr "Kann leer, 'chat' oder 'normal' sein. Wenn nicht leer, dann werden alle eingehenden Nachrichten so behandelt, als wären sie von diesem Typ."
 
 #: ../src/common/config.py:260
 msgid "If True, Gajim will scroll and select the contact who sent you the last message, if chat window is not already opened."
@@ -3627,7 +3627,7 @@ msgstr "alle oder Leerzeichen-getrennter Status"
 
 #: ../src/common/config.py:401
 msgid "'yes', 'no', or 'both'"
-msgstr "\"ja\", \"nein\" oder \"beide\""
+msgstr "'ja', 'nein' oder 'beide'"
 
 #: ../src/common/config.py:402
 #: ../src/common/config.py:404
@@ -5448,7 +5448,7 @@ msgstr "Jetzt neu einloggen?"
 
 #: ../src/config.py:1406
 msgid "If you want all the changes to apply instantly, you must relogin."
-msgstr "Falls die Änderungen sofort übernommen werden sollen, müssen Sie sich neu einloggen."
+msgstr "Wenn die Änderungen sofort übernommen werden sollen, müssen Sie sich neu einloggen."
 
 #: ../src/config.py:1531
 #: ../src/config.py:1630
@@ -5729,7 +5729,7 @@ msgstr "Konto \"%s\" ist mit Server verbunden"
 
 #: ../src/config.py:2592
 msgid "If you remove it, the connection will be lost."
-msgstr "Falls Sie es entfernen, wird die Verbindung beendet."
+msgstr "Wenn Sie es entfernen, wird die Verbindung beendet."
 
 #: ../src/config.py:2688
 msgid "Default"
@@ -7973,7 +7973,7 @@ msgstr "Datei wirklich senden?"
 #: ../src/groupchat_control.py:1028
 #, python-format
 msgid "If you send a file to %s, he/she will know your real Jabber ID."
-msgstr "Falls Sie eine Datei an %s senden wird er/sie Ihre echte Jabber-ID kennen."
+msgstr "Wenn Sie eine Datei an %s senden wird er/sie Ihre echte Jabber-ID kennen."
 
 #. Can be a message (see handle_event_gc_config_change in gajim.py)
 #: ../src/groupchat_control.py:1127
@@ -8150,7 +8150,7 @@ msgstr "Möchten Sie den Gruppenchat \"%s\" wirklich verlassen?"
 
 #: ../src/groupchat_control.py:1839
 msgid "If you close this window, you will be disconnected from this group chat."
-msgstr "Falls Sie dieses Fenster schließen, wird die Verbindung zu diesem Gruppenchat geschlossen."
+msgstr "Wenn Sie dieses Fenster schließen, wird die Verbindung zu diesem Gruppenchat geschlossen."
 
 #: ../src/groupchat_control.py:1876
 msgid "Changing Subject"
@@ -8505,7 +8505,7 @@ msgstr "Abonnement-Anforderung wurde gesendet"
 #: ../src/roster_window.py:1882
 #, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
-msgstr "Falls \"%s\" diese Anfrage akzeptiert, erfahren Sie dessen Status."
+msgstr "Wenn \"%s\" diese Anfrage akzeptiert, erfahren Sie dessen Status."
 
 #: ../src/roster_window.py:1894
 msgid "Authorization has been removed"
