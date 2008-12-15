@@ -3047,7 +3047,7 @@ msgstr "será"
 
 #: ../src/chat_control.py:1581
 msgid "will NOT"
-msgstr "ne será"
+msgstr "no será"
 
 #. About encrypted chat session
 #: ../src/chat_control.py:1585
