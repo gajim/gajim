@@ -68,19 +68,21 @@ class Roster(PlugIn):
         if not sender is None and not sender.bareMatch(
         self._owner.User + '@' + self._owner.Server):
             return
-        for item in stanza.getTag('query').getTags('item'):
-            jid=item.getAttr('jid')
-            if item.getAttr('subscription')=='remove':
-                if jid in self._data: del self._data[jid]
-                return
-            self.DEBUG('Setting roster item %s...'%jid,'ok')
-            if jid not in self._data: self._data[jid]={}
-            self._data[jid]['name']=item.getAttr('name')
-            self._data[jid]['ask']=item.getAttr('ask')
-            self._data[jid]['subscription']=item.getAttr('subscription')
-            self._data[jid]['groups']=[]
-            if 'resources' not in self._data[jid]: self._data[jid]['resources']={}
-            for group in item.getTags('group'): self._data[jid]['groups'].append(group.getData())
+        query = stanza.getTag('query')
+        if query:
+            for item in query.getTags('item'):
+                jid=item.getAttr('jid')
+                if item.getAttr('subscription')=='remove':
+                    if jid in self._data: del self._data[jid]
+                    return
+                self.DEBUG('Setting roster item %s...'%jid,'ok')
+                if jid not in self._data: self._data[jid]={}
+                self._data[jid]['name']=item.getAttr('name')
+                self._data[jid]['ask']=item.getAttr('ask')
+                self._data[jid]['subscription']=item.getAttr('subscription')
+                self._data[jid]['groups']=[]
+                if 'resources' not in self._data[jid]: self._data[jid]['resources']={}
+                for group in item.getTags('group'): self._data[jid]['groups'].append(group.getData())
         self._data[self._owner.User+'@'+self._owner.Server]={'resources':{},'name':None,'ask':None,'subscription':None,'groups':None,}
         self.set=1
 
