@@ -1297,11 +1297,11 @@ class ConnectionHandlersBase:
 		except KeyError:
 			return None
 
-	def terminate_sessions(self):
+	def terminate_sessions(self, send_termination = False):
 		'''send termination messages and delete all active sessions'''
 		for jid in self.sessions:
 			for thread_id in self.sessions[jid]:
-				self.sessions[jid][thread_id].terminate()
+				self.sessions[jid][thread_id].terminate(send_termination)
 
 		self.sessions = {}
 

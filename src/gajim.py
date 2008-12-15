@@ -840,20 +840,17 @@ class Interface:
 				# lost they'll be not decryptable (note that
 				# this contradicts XEP-0201 - trying to get that
 				# in the XEP, though)
-				#
-				# FIXME: This *REALLY* are TOO many leves of
-				#	 indentation! We even need to introduce
-				#	 a temp var here to make it somehow fit!
+
+				# there won't be any sessions here if the contact terminated
+				# their sessions before going offline (which we do)
 				for sess in conn.get_sessions(ji):
 					if (ji+'/'+resource) != str(sess.jid):
 						continue
-					ctrl = sess.control
-					if ctrl:
-						ctrl.no_autonegotiation = False
+					if sess.control:
+						sess.control.no_autonegotiation = False
 					if sess.enable_encryption:
 						sess.terminate_e2e()
-						conn.delete_session(jid,
-						sess.thread_id)
+						conn.delete_session(jid, sess.thread_id)
 
 			self.roster.chg_contact_status(contact1, array[1], status_message,
 				account)
