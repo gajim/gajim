@@ -35,7 +35,7 @@ from shutil import move, copy, copytree, rmtree
 
 GTK_DIR="/Library/Frameworks/GTK+.framework/Versions/Current"
 NAME = 'Gajim'
-VERSION = '0.12-beta1'
+VERSION = '0.12'
 DESCRIPTION = 'A full featured Jabber client'
 AUTHOR = 'Gajim Development Team'
 URL = 'http://www.gajim.org/'

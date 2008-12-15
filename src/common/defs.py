@@ -28,7 +28,7 @@ import re
 docdir = '../'
 datadir = '../'
 
-version = '0.12-beta1'
+version = '0.12'
 
 import sys, os.path
 for base in ('.', 'common'):
