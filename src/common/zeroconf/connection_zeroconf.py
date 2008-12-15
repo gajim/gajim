@@ -138,6 +138,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		if event in gajim.handlers:
 			gajim.handlers[event](self.name, data)
 
+
 	def _reconnect(self):
 		# Do not try to reco while we are already trying
 		self.time_to_reconnect = None
@@ -472,19 +473,20 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 					else:
 						kind = 'single_msg_sent'
 					gajim.logger.write(kind, jid, log_msg)
-
+			
 			self.dispatch('MSGSENT', (jid, msg, keyID))
 
 		def on_send_not_ok(reason):
 			reason += ' ' + _('Your message could not be sent.')
 			self.dispatch('MSGERROR', [jid, -1, reason, None, None, session])
-
 		ret = self.connection.send(msg_iq, msg is not None, on_ok=on_send_ok,
 			on_not_ok=on_send_not_ok)
 		if ret == -1:
 			# Contact Offline
 			self.dispatch('MSGERROR', [jid, -1, _('Contact is offline. Your message could not be sent.'), None, None, session])
 		return ret
+		return ret
+
 
 	def send_stanza(self, stanza):
 		# send a stanza untouched
@@ -571,9 +573,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 	def _event_dispatcher(self, realm, event, data):
 		if realm == '':
-			if event == common.xmpp.transports.DATA_RECEIVED:
+			if event == common.xmpp.transports_nb.DATA_RECEIVED:
 				self.dispatch('STANZA_ARRIVED', unicode(data, errors = 'ignore'))
-			elif event == common.xmpp.transports.DATA_SENT:
+			elif event == common.xmpp.transports_nb.DATA_SENT:
 				self.dispatch('STANZA_SENT', unicode(data))
 			elif event == common.xmpp.transports.DATA_ERROR:
 				thread_id = data[1]

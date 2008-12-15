@@ -3175,7 +3175,8 @@ class AddSpecialNotificationDialog:
 		active = widget.get_active()
 		if active == 1: # user selected 'choose sound'
 			def on_ok(widget, path_to_snd_file):
-				print path_to_snd_file
+				pass
+				#print path_to_snd_file
 
 			def on_cancel(widget):
 				widget.set_active(0) # go back to No Sound
@@ -3187,11 +3188,9 @@ class AddSpecialNotificationDialog:
 		conditions = ('online', 'chat', 'online_and_chat',
 			'away', 'xa', 'away_and_xa', 'dnd', 'xa_and_dnd', 'offline')
 		active = self.condition_combobox.get_active()
-		print conditions[active]
 
 		active_iter = self.listen_sound_combobox.get_active_iter()
 		listen_sound_model = self.listen_sound_combobox.get_model()
-		print listen_sound_model[active_iter][0]
 
 class AdvancedNotificationsWindow:
 	events_list = ['message_received', 'contact_connected',

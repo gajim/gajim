@@ -7,18 +7,18 @@ lib.setup_env()
 from mock import Mock
 
 from common.xmpp import dispatcher_nb
-from common.xmpp import auth
+from common.xmpp import auth_nb
 
 class TestDispatcherNB(unittest.TestCase):
 	def test_unbound_namespace_prefix(self):
 		'''tests our handling of a message with an unbound namespace prefix'''
-		d = dispatcher_nb.Dispatcher()
+		d = dispatcher_nb.XMPPDispatcher()
 
 		conn = Mock()
 
 		owner = Mock()
 		owner._caller = Mock()
-		owner.defaultNamespace = auth.NS_CLIENT
+		owner.defaultNamespace = auth_nb.NS_CLIENT
 		owner.debug_flags = []
 		owner.Connection = conn
 		owner._component = False

@@ -18,13 +18,20 @@ Provides library with all Non-SASL and SASL authentication mechanisms.
 Can be used both for client and transport authentication.
 '''
 from protocol import *
-from auth import *
 from client import PlugIn
 import sha
 import base64
 import random
 import itertools
 import dispatcher_nb
+import md5
+
+import logging
+log = logging.getLogger('gajim.c.x.auth_nb')
+
+def HH(some): return md5.new(some).hexdigest()
+def H(some): return md5.new(some).digest()
+def C(some): return ':'.join(some)
 
 try:
 	import kerberos
@@ -137,7 +144,7 @@ class SASL(PlugIn):
 		''' Used to determine if server supports SASL auth. Used internally. '''
 		if not feats.getTag('mechanisms', namespace=NS_SASL):
 			self.startsasl='not-supported'
-			self.DEBUG('SASL not supported by server', 'error')
+			log.error('SASL not supported by server')
 			return
 		self.mecs=[]
 		for mec in feats.getTag('mechanisms', namespace=NS_SASL).getTags('mechanism'):
@@ -165,13 +172,13 @@ class SASL(PlugIn):
 		elif 'PLAIN' in self.mecs:
 			self.mecs.remove('PLAIN')
 			sasl_data='%s\x00%s\x00%s' % (self.username+'@' + self._owner.Server,
-																	self.username, self.password)
+				self.username, self.password)
 			node=Node('auth', attrs={'xmlns':NS_SASL,'mechanism':'PLAIN'},
-								payload=[base64.encodestring(sasl_data).replace('\n','')])
+				payload=[base64.encodestring(sasl_data).replace('\n','')])
 			self.mechanism = 'PLAIN'
 		else:
 			self.startsasl='failure'
-			self.DEBUG('I can only use DIGEST-MD5, GSSAPI and PLAIN mecanisms.', 'error')
+			log.error('I can only use DIGEST-MD5, GSSAPI and PLAIN mecanisms.')
 			return
 		self.startsasl='in-process'
 		self._owner.send(node.__str__())
@@ -187,7 +194,7 @@ class SASL(PlugIn):
 				reason = challenge.getChildren()[0]
 			except Exception:
 				reason = challenge
-			self.DEBUG('Failed SASL authentification: %s' % reason, 'error')
+			log.error('Failed SASL authentification: %s' % reason)
 			if len(self.mecs) > 0:
 				# There are other mechanisms to test
 				self.MechanismHandler()
@@ -197,19 +204,25 @@ class SASL(PlugIn):
 			raise NodeProcessed
 		elif challenge.getName() == 'success':
 			self.startsasl='success'
-			self.DEBUG('Successfully authenticated with remote server.', 'ok')
+			log.info('Successfully authenticated with remote server.')
 			handlers=self._owner.Dispatcher.dumpHandlers()
+
+			# save old features. They will be used in case we won't get response on
+			# stream restart after SASL auth (happens with XMPP over BOSH with Openfire) 
+			old_features = self._owner.Dispatcher.Stream.features
+
 			self._owner.Dispatcher.PlugOut()
-			dispatcher_nb.Dispatcher().PlugIn(self._owner)
+			dispatcher_nb.Dispatcher().PlugIn(self._owner, after_SASL=True,
+				old_features=old_features)
 			self._owner.Dispatcher.restoreHandlers(handlers)
 			self._owner.User = self.username
 			if self.on_sasl :
-				self.on_sasl ()
+				self.on_sasl()
 			raise NodeProcessed
 ########################################3333
 		incoming_data = challenge.getData()
 		data=base64.decodestring(incoming_data)
-		self.DEBUG('Got challenge:'+data,'ok')
+		log.info('Got challenge:' + data)
 		if self.mechanism == 'GSSAPI':
 			if self.gss_step == GSS_STATE_STEP:
 				rc = kerberos.authGSSClientStep(self.gss_vc, incoming_data)
@@ -265,7 +278,7 @@ class SASL(PlugIn):
 			self._owner.send(Node('response', attrs={'xmlns':NS_SASL}).__str__())
 		else:
 			self.startsasl='failure'
-			self.DEBUG('Failed SASL authentification: unknown challenge', 'error')
+			log.error('Failed SASL authentification: unknown challenge')
 		if self.on_sasl :
 				self.on_sasl ()
 		raise NodeProcessed
@@ -277,7 +290,6 @@ class NonBlockingNonSASL(PlugIn):
 	def __init__(self, user, password, resource, on_auth):
 		''' Caches username, password and resource for auth. '''
 		PlugIn.__init__(self)
-		self.DBG_LINE ='gen_auth'
 		self.user = user
 		self.password= password
 		self.resource = resource
@@ -286,9 +298,7 @@ class NonBlockingNonSASL(PlugIn):
 	def plugin(self, owner):
 		''' Determine the best auth method (digest/0k/plain) and use it for auth.
 			Returns used method name on success. Used internally. '''
-		if not self.resource:
-			return self.authComponent(owner)
-		self.DEBUG('Querying server about possible auth methods', 'start')
+		log.info('Querying server about possible auth methods')
 		self.owner = owner
 
 		owner.Dispatcher.SendAndWaitForResponse(
@@ -297,7 +307,7 @@ class NonBlockingNonSASL(PlugIn):
 
 	def _on_username(self, resp):
 		if not isResultNode(resp):
-			self.DEBUG('No result node arrived! Aborting...','error')
+			log.error('No result node arrived! Aborting...')
 			return self.on_auth(None)
 		iq=Iq(typ='set',node=resp)
 		query=iq.getTag('query')
@@ -305,7 +315,7 @@ class NonBlockingNonSASL(PlugIn):
 		query.setTagData('resource',self.resource)
 
 		if query.getTag('digest'):
-			self.DEBUG("Performing digest authentication",'ok')
+			log.info("Performing digest authentication")
 			query.setTagData('digest',
 				sha.new(self.owner.Dispatcher.Stream._document_attrs['id']+self.password).hexdigest())
 			if query.getTag('password'):
@@ -314,7 +324,7 @@ class NonBlockingNonSASL(PlugIn):
 		elif query.getTag('token'):
 			token=query.getTagData('token')
 			seq=query.getTagData('sequence')
-			self.DEBUG("Performing zero-k authentication",'ok')
+			log.info("Performing zero-k authentication")
 
 			def hasher(s):
 				return sha.new(s).hexdigest()
@@ -326,51 +336,28 @@ class NonBlockingNonSASL(PlugIn):
 			query.setTagData('hash', hash_)
 			self._method='0k'
 		else:
-			self.DEBUG("Sequre methods unsupported, performing plain text authentication",'warn')
+			log.warn("Sequre methods unsupported, performing plain text authentication")
 			query.setTagData('password',self.password)
 			self._method='plain'
 		resp=self.owner.Dispatcher.SendAndWaitForResponse(iq, func=self._on_auth)
 
 	def _on_auth(self, resp):
 		if isResultNode(resp):
-			self.DEBUG('Sucessfully authenticated with remove host.','ok')
+			log.info('Sucessfully authenticated with remove host.')
 			self.owner.User=self.user
 			self.owner.Resource=self.resource
 			self.owner._registered_name=self.owner.User+'@'+self.owner.Server+'/'+self.owner.Resource
 			return self.on_auth(self._method)
-		self.DEBUG('Authentication failed!','error')
+		log.error('Authentication failed!')
 		return self.on_auth(None)
 
-	def authComponent(self,owner):
-		''' Authenticate component. Send handshake stanza and wait for result. Returns "ok" on success. '''
-		self.handshake=0
-		owner.send(Node(NS_COMPONENT_ACCEPT+' handshake',
-			payload=[sha.new(owner.Dispatcher.Stream._document_attrs['id']+self.password).hexdigest()]))
-		owner.RegisterHandler('handshake', self.handshakeHandler, xmlns=NS_COMPONENT_ACCEPT)
-		self._owner.onreceive(self._on_auth_component)
 
-	def _on_auth_component(self, data):
-		''' called when we receive some response, after we send the handshake '''
-		if data:
-			self.Dispatcher.ProcessNonBlocking(data)
-		if not self.handshake:
-			self.DEBUG('waiting on handshake', 'notify')
-			return
-		self._owner.onreceive(None)
-		self._owner._registered_name=self.user
-		if self.handshake+1:
-			return self.on_auth('ok')
-		self.on_auth(None)
-
-	def handshakeHandler(self,disp,stanza):
-		''' Handler for registering in dispatcher for accepting transport authentication. '''
-		if stanza.getName() == 'handshake':
-			self.handshake=1
-		else:
-			self.handshake=-1
-
-class NonBlockingBind(Bind):
+class NonBlockingBind(PlugIn):
 	''' Bind some JID to the current connection to allow router know of our location.'''
+	def __init__(self):
+		PlugIn.__init__(self)
+		self.bound=None
+
 	def plugin(self, owner):
 		''' Start resource binding, if allowed at this time. Used internally. '''
 		if self._owner.Dispatcher.Stream.features:
@@ -378,7 +365,22 @@ class NonBlockingBind(Bind):
 				self.FeaturesHandler(self._owner.Dispatcher, self._owner.Dispatcher.Stream.features)
 			except NodeProcessed:
 				pass
-		else: self._owner.RegisterHandler('features', self.FeaturesHandler, xmlns=NS_STREAMS)
+		else:
+			self._owner.RegisterHandler('features', self.FeaturesHandler, xmlns=NS_STREAMS)
+
+	def FeaturesHandler(self,conn,feats):
+		''' Determine if server supports resource binding and set some internal attributes accordingly. '''
+		if not feats.getTag('bind',namespace=NS_BIND):
+			log.error('Server does not requested binding.')
+			# we try to bind resource anyway
+			#self.bound='failure'
+			self.bound=[]
+			return
+		if feats.getTag('session',namespace=NS_SESSION):
+			self.session=1
+		else:
+			self.session=-1
+		self.bound=[]
 
 	def plugout(self):
 		''' Remove Bind handler from owner's dispatcher. Used internally. '''
@@ -401,86 +403,37 @@ class NonBlockingBind(Bind):
 	def _on_bound(self, resp):
 		if isResultNode(resp):
 			self.bound.append(resp.getTag('bind').getTagData('jid'))
-			self.DEBUG('Successfully bound %s.'%self.bound[-1],'ok')
+			log.info('Successfully bound %s.'%self.bound[-1])
 			jid=JID(resp.getTag('bind').getTagData('jid'))
 			self._owner.User=jid.getNode()
 			self._owner.Resource=jid.getResource()
 			self._owner.SendAndWaitForResponse(Protocol('iq', typ='set',
 				payload=[Node('session', attrs={'xmlns':NS_SESSION})]), func=self._on_session)
 		elif resp:
-			self.DEBUG('Binding failed: %s.' % resp.getTag('error'),'error')
+			log.error('Binding failed: %s.' % resp.getTag('error'))
 			self.on_bound(None)
 		else:
-			self.DEBUG('Binding failed: timeout expired.', 'error')
+			log.error('Binding failed: timeout expired.')
 			self.on_bound(None)
 
 	def _on_session(self, resp):
 		self._owner.onreceive(None)
 		if isResultNode(resp):
-			self.DEBUG('Successfully opened session.', 'ok')
+			log.info('Successfully opened session.')
 			self.session = 1
 			self.on_bound('ok')
 		else:
-			self.DEBUG('Session open failed.', 'error')
+			log.error('Session open failed.')
 			self.session = 0
 			self.on_bound(None)
 		self._owner.onreceive(None)
 		if isResultNode(resp):
-			self.DEBUG('Successfully opened session.', 'ok')
+			log.info('Successfully opened session.')
 			self.session = 1
 			self.on_bound('ok')
 		else:
-			self.DEBUG('Session open failed.', 'error')
+			log.error('Session open failed.')
 			self.session = 0
 			self.on_bound(None)
-
-class NBComponentBind(ComponentBind):
-	''' ComponentBind some JID to the current connection to allow
-	router know of our location.
-	'''
-	def plugin(self,owner):
-		''' Start resource binding, if allowed at this time. Used internally. '''
-		if self._owner.Dispatcher.Stream.features:
-			try:
-				self.FeaturesHandler(self._owner.Dispatcher, self._owner.Dispatcher.Stream.features)
-			except NodeProcessed:
-				pass
-		else:
-			self._owner.RegisterHandler('features', self.FeaturesHandler, xmlns=NS_STREAMS)
-			self.needsUnregister = 1
-
-	def plugout(self):
-		''' Remove ComponentBind handler from owner's dispatcher. Used internally. '''
-		if self.needsUnregister:
-			self._owner.UnregisterHandler('features', self.FeaturesHandler, xmlns=NS_STREAMS)
-
-	def Bind(self, domain = None, on_bind = None):
-		''' Perform binding. Use provided domain name (if not provided). '''
-		def wrapper(resp):
-			self._on_bound(resp, domain)
-		self._owner.onreceive(wrapper)
-		self.on_bind = on_bind
-
-	def _on_bound(self, resp, domain=None):
-		if resp:
-			self.Dispatcher.ProcessNonBlocking(resp)
-		if self.bound is None:
-			return
-		self._owner.onreceive(None)
-		self._owner.SendAndWaitForResponse(
-			Protocol('bind', attrs={'name':domain}, xmlns=NS_COMPONENT_1),
-			func=self._on_bind_reponse)
-
-	def _on_bind_reponse(self, resp):
-		if resp and resp.getAttr('error'):
-			self.DEBUG('Binding failed: %s.' % resp.getAttr('error'), 'error')
-		elif resp:
-			self.DEBUG('Successfully bound.', 'ok')
-			if self.on_bind:
-				self.on_bind('ok')
-		else:
-			self.DEBUG('Binding failed: timeout expired.', 'error')
-		if self.on_bind:
-			self.on_bind(None)
 
 # vim: se ts=3:

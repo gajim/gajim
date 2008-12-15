@@ -23,6 +23,7 @@ from common.xmpp.idlequeue import IdleObject
 from common.xmpp import dispatcher_nb, simplexml
 from common.xmpp.client import *
 from common.xmpp.simplexml import ustr
+from common.xmpp.transports_nb import DATA_RECEIVED, DATA_SENT
 from common.zeroconf import zeroconf
 
 from common.xmpp.protocol import *
@@ -36,8 +37,6 @@ log = logging.getLogger('gajim.c.z.client_zeroconf')
 from common.zeroconf import roster_zeroconf
 
 MAX_BUFF_LEN = 65536
-DATA_RECEIVED = 'DATA RECEIVED'
-DATA_SENT = 'DATA SENT'
 TYPE_SERVER, TYPE_CLIENT = range(2)
 
 # wait XX sec to establish a connection
@@ -120,6 +119,7 @@ class P2PClient(IdleObject):
 	on_ok=None, on_not_ok=None):
 		self._owner = self
 		self.Namespace = 'jabber:client'
+		self.protocol_type = 'XMPP'
 		self.defaultNamespace = self.Namespace
 		self._component = 0
 		self._registered_name = None
@@ -130,16 +130,7 @@ class P2PClient(IdleObject):
 		self.Server = host
 		self.on_ok = on_ok
 		self.on_not_ok = on_not_ok
-		self.DBG = 'client'
 		self.Connection = None
-		if gajim.verbose:
-			debug = ['always', 'nodebuilder']
-		else:
-			debug = []
-		self._DEBUG = Debug.Debug(debug)
-		self.DEBUG = self._DEBUG.Show
-		self.debug_flags = self._DEBUG.debug_flags
-		self.debug_flags.append(self.DBG)
 		self.sock_hash = None
 		if _sock:
 			self.sock_type = TYPE_SERVER
@@ -204,8 +195,6 @@ class P2PClient(IdleObject):
 		self.Dispatcher.Stream._dispatch_depth = 2
 		self.Dispatcher.Stream.dispatch = self.Dispatcher.dispatch
 		self.Dispatcher.Stream.stream_header_received = self._check_stream_start
-		self.debug_flags.append(simplexml.DBG_NODEBUILDER)
-		self.Dispatcher.Stream.DEBUG = self.DEBUG
 		self.Dispatcher.Stream.features = None
 		if self.sock_type == TYPE_CLIENT:
 			self.send_stream_header()
@@ -223,8 +212,7 @@ class P2PClient(IdleObject):
 
 	def _check_stream_start(self, ns, tag, attrs):
 		if ns != NS_STREAMS or tag != 'stream':
-			self.Connection.DEBUG('Incorrect stream start: (%s,%s).Terminating! ' \
-				% (tag, ns), 'error')
+			log.error('Incorrect stream start: (%s,%s).Terminating!' % (tag, ns), 'error')
 			self.Connection.disconnect()
 			if self.on_not_ok:
 				self.on_not_ok('Connection to host could not be established: Incorrect answer from server.')
@@ -301,7 +289,6 @@ class P2PConnection(IdleObject, PlugIn):
 		IdleObject.__init__(self)
 		self._owner = client
 		PlugIn.__init__(self)
-		self.DBG_LINE = 'socket'
 		self.sendqueue = []
 		self.sendbuff = None
 		self.buff_is_message = False
@@ -474,13 +461,13 @@ class P2PConnection(IdleObject, PlugIn):
 			if self._owner.sock_type == TYPE_CLIENT:
 				self.set_timeout(ACTIVITY_TIMEOUT_SECONDS)
 			if received.strip():
-				self.DEBUG(received, 'got')
+				log.debug('received: %s', received)
 			if hasattr(self._owner, 'Dispatcher'):
 				self._owner.Dispatcher.Event('', DATA_RECEIVED, received)
 			self.on_receive(received)
 		else:
 			# This should never happed, so we need the debug
-			self.DEBUG('Unhandled data received: %s' % received,'error')
+			log.error('Unhandled data received: %s' % received)
 			self.disconnect()
 		return True
 
@@ -543,7 +530,7 @@ class P2PConnection(IdleObject, PlugIn):
 
 	def _on_send(self):
 		if self.sent_data and self.sent_data.strip():
-			self.DEBUG(self.sent_data,'sent')
+			log.debug('sent: %s' % self.sent_data)
 			if hasattr(self._owner, 'Dispatcher'):
 				self._owner.Dispatcher.Event('', DATA_SENT, self.sent_data)
 		self.sent_data = None
@@ -552,7 +539,7 @@ class P2PConnection(IdleObject, PlugIn):
 			self.buff_is_message = False
 
 	def _on_send_failure(self):
-		self.DEBUG("Socket error while sending data",'error')
+		log.error('Socket error while sending data')
 		self._owner.disconnected()
 		self.sent_data = None
 

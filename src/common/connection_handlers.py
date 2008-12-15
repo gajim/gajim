@@ -214,7 +214,7 @@ class ConnectionBytestream:
 		iq.setID(file_props['request-id'])
 		query = iq.setTag('query')
 		query.setNamespace(common.xmpp.NS_BYTESTREAM)
-		query.setAttr('mode', 'tcp')
+		query.setAttr('mode', 'plain')
 		query.setAttr('sid', file_props['sid'])
 		for ft_host in ft_add_hosts:
 			# The streamhost, if set
@@ -1294,7 +1294,7 @@ class ConnectionHandlersBase:
 		except KeyError:
 			return None
 
-	def terminate_sessions(self, send_termination = False):
+	def terminate_sessions(self, send_termination=False):
 		'''send termination messages and delete all active sessions'''
 		for jid in self.sessions:
 			for thread_id in self.sessions[jid]:
@@ -2011,7 +2011,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		status = prs.getStatus() or ''
 		show = prs.getShow()
-		if not show in ['away', 'chat', 'dnd', 'xa']:
+		if not show in STATUS_LIST:
 			show = '' # We ignore unknown show
 		if not ptype and not show:
 			show = 'online'

@@ -12,7 +12,7 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU Lesser General Public License for more details.
 
-"""
+'''
 Generic debug class
 
 Other modules can always define extra debug flags for local usage, as long as
@@ -31,7 +31,7 @@ by the individual classes.
 
 For samples of usage, see samples subdir in distro source, and selftest
 in this code
-"""
+'''
 
 _version_ = '1.4.0'
 
@@ -147,7 +147,7 @@ class Debug:
                   # If you dont want to validate flags on each call to
                   # show(), set this to 0
                   #
-                  validate_flags = 1,
+                  validate_flags = 0,
                   #
                   # If you dont want the welcome message, set to 0
                   # default is to show welcome if any flags are active
@@ -202,7 +202,7 @@ class Debug:
 
     def show( self, msg, flag = None, prefix = None, sufix = None,
               lf = 0 ):
-        """
+        '''
         flag can be of folowing types:
             None - this msg will always be shown if any debugging is on
             flag - will be shown if flag is active
@@ -213,7 +213,7 @@ class Debug:
 
         lf = -1 means strip linefeed if pressent
         lf = 1 means add linefeed if not pressent
-        """
+        '''
 
         if self.validate_flags:
             self._validate_flag( flag )
@@ -313,10 +313,10 @@ class Debug:
 
 
     def _as_one_list( self, items ):
-        """ init param might contain nested lists, typically from group flags.
+        ''' init param might contain nested lists, typically from group flags.
 
         This code organises lst and remves dupes
-        """
+        '''
         if not isinstance(items, (list, tuple)):
             return [ items ]
         r = []
@@ -333,7 +333,7 @@ class Debug:
 
 
     def _append_unique_str( self, lst, item ):
-        """filter out any dupes."""
+        '''filter out any dupes.'''
         if not isinstance(item, str):
             msg2 = '%s' % item
             raise Exception('Invalid item type "%s", should be string' % \
@@ -352,10 +352,10 @@ class Debug:
                     raise Exception('Invalid debugflag "%s" given' % f)
 
     def _remove_dupe_flags( self ):
-        """
+        '''
         if multiple instances of Debug is used in same app,
         some flags might be created multiple time, filter out dupes
-        """
+        '''
         unique_flags = []
         for f in self.debug_flags:
             if f not in unique_flags:
@@ -364,6 +364,7 @@ class Debug:
 
     colors={}
     def Show(self, flag, msg, prefix=''):
+	msg=str(msg)
         msg=msg.replace('\r','\\r').replace('\n','\\n').replace('><','>\n  <')
         if not colors_enabled: pass
         elif prefix in self.colors: msg=self.colors[prefix]+msg+color_none

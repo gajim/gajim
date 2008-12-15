@@ -13,6 +13,8 @@
 ##   GNU General Public License for more details.
 
 import select
+import logging
+log = logging.getLogger('gajim.c.x.idlequeue')
 
 class IdleObject:
 	''' base class for all idle listeners, these are the methods, which are called from IdleQueue
@@ -32,8 +34,8 @@ class IdleObject:
 		''' called on new write event (connect in sockets is a pollout) '''
 		pass
 
-	def read_timeout(self, fd):
-		''' called when timeout has happend '''
+	def read_timeout(self):
+		''' called when timeout happened '''
 		pass
 
 class IdleQueue:
@@ -52,6 +54,7 @@ class IdleQueue:
 		self.selector = select.poll()
 
 	def remove_timeout(self, fd):
+		log.info('read timeout removed for fd %s' % fd)
 		if fd in self.read_timeouts:
 			del(self.read_timeouts[fd])
 
@@ -63,19 +66,38 @@ class IdleQueue:
 			self.alarms[alarm_time].append(alarm_cb)
 		else:
 			self.alarms[alarm_time] = [alarm_cb]
+		return alarm_time
+
+	def remove_alarm(self, alarm_cb, alarm_time): 
+		''' removes alarm callback alarm_cb scheduled on alarm_time''' 
+		if not self.alarms.has_key(alarm_time): return False 
+		i = -1 
+		for i in range(len(self.alarms[alarm_time])): 
+			# let's not modify the list inside the loop 
+			if self.alarms[alarm_time][i] is alarm_cb: break 
+		if i != -1: 
+			del self.alarms[alarm_time][i] 
+			if self.alarms[alarm_time] == []: 
+				del self.alarms[alarm_time] 
+			return True 
+		else: 
+			return False
 
 	def set_read_timeout(self, fd, seconds):
 		''' set a new timeout, if it is not removed after 'seconds',
 		then obj.read_timeout() will be called '''
+		log.info('read timeout set for fd %s on %s seconds' % (fd, seconds))
 		timeout = self.current_time() + seconds
 		self.read_timeouts[fd] = timeout
 
 	def check_time_events(self):
+		log.info('check time evs')
 		current_time = self.current_time()
 		for fd, timeout in self.read_timeouts.items():
 			if timeout > current_time:
 				continue
 			if fd in self.queue:
+				log.debug('Calling read_timeout for fd %s' % fd) 
 				self.queue[fd].read_timeout()
 			else:
 				self.remove_timeout(fd)
@@ -83,9 +105,9 @@ class IdleQueue:
 		for alarm_time in times:
 			if alarm_time > current_time:
 				break
-			for cb in self.alarms[alarm_time]:
-				cb()
-			del(self.alarms[alarm_time])
+			if self.alarms.has_key(alarm_time):
+				for cb in self.alarms[alarm_time]: cb()
+				if self.alarms.has_key(alarm_time): del(self.alarms[alarm_time])
 
 	def plug_idle(self, obj, writable = True, readable = True):
 		if obj.fd == -1:
@@ -128,6 +150,7 @@ class IdleQueue:
 			return False
 
 		if flags & 3: # waiting read event
+			#print 'waiting read on %d, flags are %d' % (fd, flags)
 			obj.pollin()
 			return True
 

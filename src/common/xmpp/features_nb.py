@@ -15,8 +15,12 @@
 
 # $Id: features.py,v 1.22 2005/09/30 20:13:04 mikealbon Exp $
 
-from features import REGISTER_DATA_RECEIVED, PRIVACY_LISTS_RECEIVED, PRIVACY_LIST_RECEIVED, PRIVACY_LISTS_ACTIVE_DEFAULT
 from protocol import *
+
+REGISTER_DATA_RECEIVED='REGISTER DATA RECEIVED'
+PRIVACY_LISTS_RECEIVED='PRIVACY LISTS RECEIVED'
+PRIVACY_LIST_RECEIVED='PRIVACY LIST RECEIVED'
+PRIVACY_LISTS_ACTIVE_DEFAULT='PRIVACY LISTS ACTIVE DEFAULT'
 
 def _on_default_response(disp, iq, cb):
 	def _on_response(resp):
@@ -28,10 +32,10 @@ def _on_default_response(disp, iq, cb):
 	disp.SendAndCallForResponse(iq, _on_response)
 
 def _discover(disp, ns, jid, node = None, fb2b=0, fb2a=1, cb=None):
-	""" Try to obtain info from the remote object.
+	''' Try to obtain info from the remote object.
 		If remote object doesn't support disco fall back to browse (if fb2b is true)
 		and if it doesnt support browse (or fb2b is not true) fall back to agents protocol
-		(if gb2a is true). Returns obtained info. Used internally. """
+		(if gb2a is true). Returns obtained info. Used internally. '''
 	iq=Iq(to=jid, typ='get', queryNS=ns)
 	if node:
 		iq.setQuerynode(node)
@@ -57,7 +61,7 @@ def _discover(disp, ns, jid, node = None, fb2b=0, fb2a=1, cb=None):
 
 # this function is not used in gajim ???
 def discoverItems(disp,jid,node=None, cb=None):
-	""" Query remote object about any items that it contains. Return items list. """
+	''' Query remote object about any items that it contains. Return items list. '''
 	# According to JEP-0030:
 	# query MAY have node attribute
 	# item: MUST HAVE jid attribute and MAY HAVE name, node, action attributes.
@@ -74,7 +78,7 @@ def discoverItems(disp,jid,node=None, cb=None):
 
 # this one is
 def discoverInfo(disp,jid,node=None, cb=None):
-	""" Query remote object about info that it publishes. Returns identities and features lists."""
+	''' Query remote object about info that it publishes. Returns identities and features lists.'''
 	# According to JEP-0030:
 	# query MAY have node attribute
 	# identity: MUST HAVE category and name attributes and MAY HAVE type attribute.
@@ -104,11 +108,11 @@ def discoverInfo(disp,jid,node=None, cb=None):
 
 ### Registration ### jabber:iq:register ### JEP-0077 ###########################
 def getRegInfo(disp, host, info={}, sync=True):
-	""" Gets registration form from remote host.
+	''' Gets registration form from remote host.
 		You can pre-fill the info dictionary.
 		F.e. if you are requesting info on registering user joey than specify
 		info as {'username':'joey'}. See JEP-0077 for details.
-		'disp' must be connected dispatcher instance."""
+		'disp' must be connected dispatcher instance.'''
 	iq=Iq('get',NS_REGISTER,to=host)
 	for i in info.keys():
 		iq.setTagData(i,info[i])
@@ -140,11 +144,11 @@ def _ReceivedRegInfo(con, resp, agent):
 	con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent,df,False,''))
 
 def register(disp, host, info, cb):
-	""" Perform registration on remote server with provided info.
+	''' Perform registration on remote server with provided info.
 		disp must be connected dispatcher instance.
 		If registration fails you can get additional info from the dispatcher's owner
 		attributes lastErrNode, lastErr and lastErrCode.
-	"""
+	'''
 	iq=Iq('set', NS_REGISTER, to=host)
 	if not isinstance(info, dict):
 		info=info.asDict()
@@ -153,16 +157,16 @@ def register(disp, host, info, cb):
 	disp.SendAndCallForResponse(iq, cb)
 
 def unregister(disp, host, cb):
-	""" Unregisters with host (permanently removes account).
+	''' Unregisters with host (permanently removes account).
 		disp must be connected and authorized dispatcher instance.
-		Returns true on success."""
+		Returns true on success.'''
 	iq = Iq('set', NS_REGISTER, to=host, payload=[Node('remove')])
 	_on_default_response(disp, iq, cb)
 
 def changePasswordTo(disp, newpassword, host=None, cb = None):
-	""" Changes password on specified or current (if not specified) server.
+	''' Changes password on specified or current (if not specified) server.
 		disp must be connected and authorized dispatcher instance.
-		Returns true on success."""
+		Returns true on success.'''
 	if not host: host=disp._owner.Server
 	iq = Iq('set',NS_REGISTER,to=host, payload=[Node('username',
 			payload=[disp._owner.Server]),Node('password',payload=[newpassword])])
@@ -173,8 +177,8 @@ def changePasswordTo(disp, newpassword, host=None, cb = None):
 #action=[allow|deny]
 
 def getPrivacyLists(disp):
-	""" Requests privacy lists from connected server.
-		Returns dictionary of existing lists on success."""
+	''' Requests privacy lists from connected server.
+		Returns dictionary of existing lists on success.'''
 	iq = Iq('get', NS_PRIVACY)
 	def _on_response(resp):
 		dict_ = {'lists': []}
@@ -205,8 +209,8 @@ def getActiveAndDefaultPrivacyLists(disp):
 	disp.SendAndCallForResponse(iq, _on_response)
 
 def getPrivacyList(disp, listname):
-	""" Requests specific privacy list listname. Returns list of XML nodes (rules)
-		taken from the server responce."""
+	''' Requests specific privacy list listname. Returns list of XML nodes (rules)
+		taken from the server responce.'''
 	def _on_response(resp):
 		if not isResultNode(resp):
 			disp.Event(NS_PRIVACY, PRIVACY_LIST_RECEIVED, (False))
@@ -216,8 +220,8 @@ def getPrivacyList(disp, listname):
 	disp.SendAndCallForResponse(iq, _on_response)
 
 def setActivePrivacyList(disp, listname=None, typ='active', cb=None):
-	""" Switches privacy list 'listname' to specified type.
-		By default the type is 'active'. Returns true on success."""
+	''' Switches privacy list 'listname' to specified type.
+		By default the type is 'active'. Returns true on success.'''
 	if listname:
 		attrs={'name':listname}
 	else:
@@ -226,13 +230,13 @@ def setActivePrivacyList(disp, listname=None, typ='active', cb=None):
 	_on_default_response(disp, iq, cb)
 
 def setDefaultPrivacyList(disp, listname=None):
-	""" Sets the default privacy list as 'listname'. Returns true on success."""
+	''' Sets the default privacy list as 'listname'. Returns true on success.'''
 	return setActivePrivacyList(disp, listname,'default')
 
 def setPrivacyList(disp, listname, tags):
-	""" Set the ruleset. 'list' should be the simpleXML node formatted
+	''' Set the ruleset. 'list' should be the simpleXML node formatted
 		according to RFC 3921 (XMPP-IM) (I.e. Node('list',{'name':listname},payload=[...]) )
-		Returns true on success."""
+		Returns true on success.'''
 	iq = Iq('set', NS_PRIVACY, xmlns = '')
 	list_query = iq.getTag('query').setTag('list', {'name': listname})
 	for item in tags:
@@ -248,7 +252,7 @@ def setPrivacyList(disp, listname, tags):
 	_on_default_response(disp, iq, None)
 
 def delPrivacyList(disp,listname,cb=None):
-	""" Deletes privacy list 'listname'. Returns true on success."""
+	''' Deletes privacy list 'listname'. Returns true on success.'''
 	iq = Iq('set',NS_PRIVACY,payload=[Node('list',{'name':listname})])
 	_on_default_response(disp, iq, cb)
 

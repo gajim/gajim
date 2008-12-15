@@ -219,7 +219,7 @@ class Connection(ConnectionHandlers):
 
 	def _disconnectedReconnCB(self):
 		'''Called when we are disconnected'''
-		log.debug('disconnectedReconnCB')
+		log.info('disconnectedReconnCB called')
 		if gajim.account_is_connected(self.name):
 			# we cannot change our status to offline or connecting
 			# after we auth to server
@@ -374,9 +374,9 @@ class Connection(ConnectionHandlers):
 				# data is (dict)
 				self.dispatch('PRIVACY_LISTS_ACTIVE_DEFAULT', (data))
 		elif realm == '':
-			if event == common.xmpp.transports.DATA_RECEIVED:
+			if event == common.xmpp.transports_nb.DATA_RECEIVED:
 				self.dispatch('STANZA_ARRIVED', unicode(data, errors = 'ignore'))
-			elif event == common.xmpp.transports.DATA_SENT:
+			elif event == common.xmpp.transports_nb.DATA_SENT:
 				self.dispatch('STANZA_SENT', unicode(data))
 
 	def _select_next_host(self, hosts):
@@ -407,7 +407,7 @@ class Connection(ConnectionHandlers):
 
 	def connect(self, data = None):
 		''' Start a connection to the Jabber server.
-		Returns connection, and connection type ('tls', 'ssl', 'tcp', '')
+		Returns connection, and connection type ('tls', 'ssl', 'plain', '')
 		data MUST contain hostname, usessl, proxy, use_custom_host,
 		custom_host (if use_custom_host), custom_port (if use_custom_host)'''
 		if self.connection:
@@ -437,11 +437,11 @@ class Connection(ConnectionHandlers):
 		# create connection if it doesn't already exist
 		self.connected = 1
 		if p and p in gajim.config.get_per('proxies'):
-			proxy = {'host': gajim.config.get_per('proxies', p, 'host')}
-			proxy['port'] = gajim.config.get_per('proxies', p, 'port')
-			proxy['user'] = gajim.config.get_per('proxies', p, 'user')
-			proxy['password'] = gajim.config.get_per('proxies', p, 'pass')
-			proxy['type'] = gajim.config.get_per('proxies', p, 'type')
+			proxy = {}
+			proxyptr = gajim.config.get_per('proxies', p)
+			for key in proxyptr.keys():
+				proxy[key] = proxyptr[key][1]
+
 		elif gajim.config.get_per('accounts', self.name, 'use_env_http_proxy'):
 			try:
 				try:
@@ -477,7 +477,6 @@ class Connection(ConnectionHandlers):
 				proxy = None
 		else:
 			proxy = None
-
 		h = hostname
 		p = 5222
 		ssl_p = 5223
@@ -513,67 +512,13 @@ class Connection(ConnectionHandlers):
 				i['ssl_port'] = ssl_p
 		self._connect_to_next_host()
 
-	def on_proxy_failure(self, reason):
-		log.debug('Connection to proxy failed')
-		self.time_to_reconnect = None
-		self.on_connect_failure = None
-		self.disconnect(on_purpose = True)
-		self.dispatch('STATUS', 'offline')
-		self.dispatch('CONNECTION_LOST',
-			(_('Connection to proxy failed'), reason))
-
-	def _connect_to_next_type(self, retry=False):
-		log.debug('Connection to next type')
-		if len(self._connection_types):
-			self._current_type = self._connection_types.pop(0)
-			if self.last_connection:
-				self.last_connection.socket.disconnect()
-				self.last_connection = None
-				self.connection = None
-			if gajim.verbose:
-				if log.getEffectiveLevel() == logging.DEBUG:
-					d = ['always']
-				else:
-					d = ['always', 'nodebuilder']
-				con = common.xmpp.NonBlockingClient(self._hostname, debug = d,
-					caller = self, on_connect = self.on_connect_success,
-					on_proxy_failure = self.on_proxy_failure,
-					on_connect_failure = self._connect_to_next_type)
-			else:
-				con = common.xmpp.NonBlockingClient(self._hostname, debug = [],
-					caller = self, on_connect = self.on_connect_success,
-					on_proxy_failure = self.on_proxy_failure,
-					on_connect_failure = self._connect_to_next_type)
-			self.last_connection = con
-			# increase default timeout for server responses
-			common.xmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = self.try_connecting_for_foo_secs
-			con.set_idlequeue(gajim.idlequeue)
-			# FIXME: this is a hack; need a better way
-			if self.on_connect_success == self._on_new_account:
-				con.RegisterDisconnectHandler(self._on_new_account)
-
-			if self._current_type == 'ssl':
-				port = self._current_host['ssl_port']
-				secur = 1
-			else:
-				port = self._current_host['port']
-				if self._current_type == 'plain':
-					secur = 0
-				else:
-					secur = None
-			log.info('Connecting to %s: [%s:%d]', self.name,
-				self._current_host['host'], port)
-			con.connect((self._current_host['host'], port), proxy=self._proxy,
-				secure = secur)
-		else:
-			self._connect_to_next_host(retry)
 
 	def _connect_to_next_host(self, retry = False):
 		log.debug('Connection to next host')
 		if len(self._hosts):
 			# No config option exist when creating a new account
 			if self.last_connection_type:
-				if self.last_connection_type == 'tcp':
+				if self.last_connection_type == 'plain':
 					self._connection_types = ['plain']
 				else:
 					self._connection_types = [self.last_connection_type]
@@ -582,10 +527,20 @@ class Connection(ConnectionHandlers):
 					'connection_types').split()
 			else:
 				self._connection_types = ['tls', 'ssl', 'plain']
+
+			if self._proxy and self._proxy['type']=='bosh':
+				# with BOSH, we can't do TLS negotiation with <starttls>, we do only "plain"
+				# connection and TLS with handshake right after TCP connecting ("ssl")
+				scheme = common.xmpp.transports_nb.urisplit(self._proxy['bosh_uri'])[0]
+				if scheme=='https':
+					self._connection_types = ['ssl']
+				else:
+					self._connection_types = ['plain']
+
 			host = self._select_next_host(self._hosts)
 			self._current_host = host
 			self._hosts.remove(host)
-			self._connect_to_next_type()
+			self.connect_to_next_type()
 
 		else:
 			if not retry and self.retrycount == 0:
@@ -601,6 +556,69 @@ class Connection(ConnectionHandlers):
 				# try reconnect if connection has failed before auth to server
 				self._disconnectedReconnCB()
 
+	def connect_to_next_type(self, retry=False):
+		if len(self._connection_types):
+			self._current_type = self._connection_types.pop(0)
+			if self.last_connection:
+				self.last_connection.socket.disconnect()
+				self.last_connection = None
+				self.connection = None
+
+			if self._current_type == 'ssl':
+				# SSL (force TLS on different port than plain)
+				# If we do TLS over BOSH, port of XMPP server should be the standard one
+				# and TLS should be negotiated because TLS on 5223 is deprecated
+				if self._proxy and self._proxy['type']=='bosh':
+					port = self._current_host['port']
+				else:
+					port = self._current_host['ssl_port']
+			elif self._current_type == 'tls':
+				# TLS - negotiate tls after XMPP stream is estabilished
+				port = self._current_host['port']
+			elif self._current_type == 'plain':
+				# plain connection on defined port
+				port = self._current_host['port']
+
+			cacerts = os.path.join(common.gajim.DATA_DIR, 'other', 'cacerts.pem')
+			mycerts = common.gajim.MY_CACERTS
+			secure_tuple = (self._current_type, cacerts, mycerts)
+
+			con = common.xmpp.NonBlockingClient(
+				domain=self._hostname,
+				caller=self,
+				idlequeue=gajim.idlequeue)
+
+			self.last_connection = con
+			# increase default timeout for server responses
+			common.xmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = self.try_connecting_for_foo_secs
+			# FIXME: this is a hack; need a better way
+			if self.on_connect_success == self._on_new_account:
+				con.RegisterDisconnectHandler(self._on_new_account)
+
+			self.log_hosttype_info(port)
+			con.connect(
+				hostname=self._current_host['host'],
+				port=port,
+				on_connect=self.on_connect_success,
+				on_proxy_failure=self.on_proxy_failure,
+				on_connect_failure=self.connect_to_next_type,
+				proxy=self._proxy,
+				secure_tuple = secure_tuple)
+		else:
+			self._connect_to_next_host(retry)
+
+	def log_hosttype_info(self, port):
+		msg = '>>>>>> Connecting to %s [%s:%d], type = %s' % (self.name,
+			self._current_host['host'], port, self._current_type)
+		log.info(msg)
+		if self._proxy:
+			msg = '>>>>>> '
+			if self._proxy['type']=='bosh':
+				msg = '%s over BOSH %s:%s' % (msg, self._proxy['bosh_uri'], self._proxy['bosh_port'])
+			if self._proxy['type'] in ['http','socks5'] or self._proxy['bosh_useproxy']:
+				msg = '%s over proxy %s:%s' % (msg, self._proxy['host'], self._proxy['port'])
+			log.info(msg)
+
 	def _connect_failure(self, con_type = None):
 		if not con_type:
 			# we are not retrying, and not conecting
@@ -611,16 +629,24 @@ class Connection(ConnectionHandlers):
 					(_('Could not connect to "%s"') % self._hostname,
 					_('Check your connection or try again later.')))
 
+	def on_proxy_failure(self, reason):
+		log.error('Connection to proxy failed: %s' % reason)
+		self.time_to_reconnect = None
+		self.on_connect_failure = None
+		self.disconnect(on_purpose = True)
+		self.dispatch('STATUS', 'offline')
+		self.dispatch('CONNECTION_LOST',
+			(_('Connection to proxy failed'), reason))
+
 	def _connect_success(self, con, con_type):
 		if not self.connected: # We went offline during connecting process
 			# FIXME - not possible, maybe it was when we used threads
 			return
 		_con_type = con_type
-		# xmpp returns 'tcp', but we set 'plain' in connection_types in config
-		if _con_type == 'tcp':
-			_con_type = 'plain'
 		if _con_type != self._current_type:
-			self._connect_to_next_type()
+			log.info('Connecting to next type beacuse desired is %s and returned is %s'
+				% (self._current_type, _con_type))
+			self.connect_to_next_type()
 			return
 		con.RegisterDisconnectHandler(self._on_disconnected)
 		if _con_type == 'plain' and gajim.config.get_per('accounts', self.name,
@@ -682,7 +708,12 @@ class Connection(ConnectionHandlers):
 						(con.Connection.ssl_fingerprint_sha1,))
 					return True
 		self._register_handlers(con, con_type)
-		con.auth(name, self.password, self.server_resource, 1, self.__on_auth)
+		con.auth( 
+			user=name, 
+			password=self.password, 
+			resource=self.server_resource, 
+			sasl=1, 
+			on_auth=self.__on_auth)
 
 	def ssl_certificate_accepted(self):
 		if not self.connection:
@@ -1019,7 +1050,11 @@ class Connection(ConnectionHandlers):
 					p.setStatus(msg)
 				self.remove_all_transfers()
 				self.time_to_reconnect = None
-				self.connection.start_disconnect(p, self._on_disconnected)
+
+				self.connection.RegisterDisconnectHandler(self._on_disconnected)
+				self.connection.send(p, now=True)
+				self.connection.start_disconnect()
+				#self.connection.start_disconnect(p, self._on_disconnected)
 			else:
 				self.time_to_reconnect = None
 				self._on_disconnected()
@@ -1054,7 +1089,7 @@ class Connection(ConnectionHandlers):
 	def _on_disconnected(self):
 		''' called when a disconnect request has completed successfully'''
 		self.dispatch('STATUS', 'offline')
-		self.disconnect()
+		self.disconnect(on_purpose=True)
 
 	def get_status(self):
 		return STATUS_LIST[self.connected]
@@ -1072,7 +1107,7 @@ class Connection(ConnectionHandlers):
 	chatstate=None, msg_id=None, composing_xep=None, resource=None,
 	user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None,
 	original_message=None, delayed=None):
-		if not self.connection:
+		if not self.connection or self.connected < 2:
 			return 1
 		try:
 			jid = helpers.parse_jid(jid)
@@ -1202,6 +1237,7 @@ class Connection(ConnectionHandlers):
 			if session.enable_encryption:
 				msg_iq = session.encrypt_stanza(msg_iq)
 
+		print msg_iq
 		msg_id = self.connection.send(msg_iq)
 		if not forward_from and session and session.is_loggable():
 			ji = gajim.get_jid_without_resource(jid)
@@ -1613,7 +1649,7 @@ class Connection(ConnectionHandlers):
 	def gc_got_disconnected(self, room_jid):
 		''' A groupchat got disconnected. This can be or purpose or not.
 		Save the time we quit to avoid duplicate logs AND be faster than get that
- 		date from DB. Save it in mem AND in a small table (with fast access)
+		date from DB. Save it in mem AND in a small table (with fast access)
 		'''
 		log_time = time_time()
 		self.last_history_time[room_jid] = log_time
