@@ -1116,7 +1116,7 @@ class Connection(ConnectionHandlers):
 				_('It is not possible to send a message to %s, this JID is not '
 				'valid.') % jid))
 			return
-			
+
 		if msg and not xhtml and gajim.config.get(
 		'rst_formatting_outgoing_messages'):
 			from common.rst_xhtml_generator import create_xhtml
@@ -1237,7 +1237,6 @@ class Connection(ConnectionHandlers):
 			if session.enable_encryption:
 				msg_iq = session.encrypt_stanza(msg_iq)
 
-		print msg_iq
 		msg_id = self.connection.send(msg_iq)
 		if not forward_from and session and session.is_loggable():
 			ji = gajim.get_jid_without_resource(jid)
