@@ -149,7 +149,7 @@ class P2PClient(IdleObject):
 		self.conn_holder.add_connection(self, self.Server, port, self.to)
 		# count messages in queue
 		for val in self.stanzaqueue:
-			is_message = val[1]
+			stanza, is_message = val
 			if is_message:
 				if self.fd == -1:
 					if on_not_ok:
