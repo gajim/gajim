@@ -1,3 +1,16 @@
+Gajim 0.12 (17 December 2008)
+
+  * Fix text rendering in notifications
+  * Fix forward unread messages under Windows
+  * Better sessions support
+  * Better auto-away support
+  * Fix banshee support
+  * Quodlibet support
+  * Fix GSSAPI authentification 
+  * Fix IPV4 filetransfer on Windows Vista when IPV6 is used too
+  * Fix caps usage
+  * Fix end to end encryption autonegotiation
+
 Gajim 0.12-beta1 (11 November 2008)
 
   * SECURITY

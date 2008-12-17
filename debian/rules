@@ -7,7 +7,7 @@ include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/rules/simple-patchsys.mk
 include /usr/share/cdbs/1/class/autotools.mk
 
-PYTHONVER = 2.4
+PYTHONVER = 2.5
 DEB_CONFIGURE_EXTRA_FLAGS := --prefix=/usr
 DEB_MAKE_BUILD_TARGET    := all PYTHON=python$(PYTHONVER)
 DEB_MAKE_INSTALL_TARGET = install PYTHON=python$(PYTHONVER) DESTDIR=$(DEB_DESTDIR)

@@ -313,7 +313,7 @@ class Config:
 			'keep_alives_enabled': [ opt_bool, True],
 			# send keepalive every N seconds of inactivity
 			'keep_alive_every_foo_secs': [ opt_int, 55 ],
-			'time_for_keep_alive_answer': [ opt_int, 20, _('How many seconds to wait for the answer of keepalive packet before we try to reconnect.') ],
+			'time_for_keep_alive_answer': [ opt_int, 30, _('How many seconds to wait for the answer of keepalive packet before we try to reconnect.') ],
 			# try for 2 minutes before giving up (aka. timeout after those seconds)
 			'try_connecting_for_foo_secs': [ opt_int, 60 ],
 			'http_auth': [opt_str, 'ask'], # yes, no, ask
