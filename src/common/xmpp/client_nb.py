@@ -49,6 +49,7 @@ class NonBlockingClient:
 		self.disconnect_handlers = []
 
 		self.Server = domain
+		self.xmpp_hostname = None # FQDN hostname to connect to
 
 		# caller is who initiated this client, it is ineeded to register the EventDispatcher
 		self._caller = caller
@@ -154,16 +155,16 @@ class NonBlockingClient:
 		self.proxy = proxy
 
 		if hostname:
-			xmpp_hostname = hostname
+			self.xmpp_hostname = hostname
 		else:
-			xmpp_hostname = self.Server
+			self.xmpp_hostname = self.Server
 
 		estabilish_tls = self.secure == 'ssl'
 		certs = (self.cacerts, self.mycerts)
 
 		proxy_dict = {}
-		tcp_host=xmpp_hostname
-		tcp_port=self.Port
+		tcp_host = self.xmpp_hostname
+		tcp_port = self.Port
 
 		if proxy:
 			# with proxies, client connects to proxy instead of directly to
@@ -182,7 +183,7 @@ class NonBlockingClient:
 					estabilish_tls = estabilish_tls,
 					certs = certs,
 					proxy_creds = (proxy_user, proxy_pass),
-					xmpp_server = (xmpp_hostname, self.Port),
+					xmpp_server = (self.xmpp_hostname, self.Port),
 					domain = self.Server,
 					bosh_dict = proxy)
 				self.protocol_type = 'BOSH'
@@ -190,7 +191,7 @@ class NonBlockingClient:
 
 			else:
 				proxy_dict['type'] = proxy['type']
-				proxy_dict['xmpp_server'] = (xmpp_hostname, self.Port)
+				proxy_dict['xmpp_server'] = (self.xmpp_hostname, self.Port)
 				proxy_dict['credentials'] = (proxy_user, proxy_pass)
 
 		if not proxy or proxy['type'] != 'bosh':

@@ -158,7 +158,7 @@ class SASL(PlugIn):
 		if 'GSSAPI' in self.mecs and have_kerberos:
 			self.mecs.remove('GSSAPI')
 			self.gss_vc = kerberos.authGSSClientInit('xmpp@' + \
-				self._owner.socket._hostfqdn)[1]
+				self._owner.xmpp_hostname)[1]
 			kerberos.authGSSClientStep(self.gss_vc, '')
 			response = kerberos.authGSSClientResponse(self.gss_vc)
 			node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'GSSAPI'},
