@@ -540,12 +540,17 @@ class DesktopNotification:
 			if version >= [0, 3, 2]:
 				hints['urgency'] = dbus.Byte(0) # Low Urgency
 				hints['category'] = dbus.String(ntype)
+				# it seems notification-daemon doesn't like empty text 
+				if self.text:
+					text = self.text
+				else:
+					text = ' '
 				self.notif.Notify(
 					dbus.String(_('Gajim')),
 					dbus.UInt32(0), # this notification does not replace other
 					dbus.String(self.path_to_image),
 					dbus.String(self.title),
-					dbus.String(self.text),
+					dbus.String(text),
 					( dbus.String('default'), dbus.String(self.event_type) ),
 					hints,
 					dbus.UInt32(timeout*1000),
