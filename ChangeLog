@@ -1,3 +1,10 @@
+Gajim 0.12.1 (21 December 2008)
+
+  * Fix filetransfer
+  * Updated german translation
+  * Fix click on notifications when text string is empty
+  * Improve systray popup menu
+
 Gajim 0.12 (17 December 2008)
 
   * Fix text rendering in notifications
