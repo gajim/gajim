@@ -928,31 +928,18 @@ class GroupchatControl(ChatControlBase):
 		special_words = [word.lower() for word in special_words if word]
 		text = text.lower()
 
-		text_splitted = text.split()
-		for word in text_splitted: # get each word of the text
-			for special_word in special_words:
-				if word.startswith(special_word):
-					# get char after the word that highlight us
-					char_position = len(special_word)
-					refer_to_nick_char = \
-						word[char_position:char_position+1]
-					refer_to_nick_char = str(refer_to_nick_char)
-					if (refer_to_nick_char != ''):
-						if refer_to_nick_char.isalpha():
-							# This is A->Z, a->z or 0-9, we can be sure our nick is the
-							# beginning of a real word, do not highlight for this one.
-							break
-						else:
-							return True
-					else: # Special word == word, no char after in word
-						return True
 		for special_word in special_words:
-			if special_word.find(' ') > -1:
-				# There is a space in this special word, do a global search
-				# without splitting by words as previously
-				# We don't search this in all cases so we don't loose time
-				if text.find(special_word) > -1:
+			found_here = text.find(special_word)
+			while(found_here > -1):
+				end_here = found_here + len(special_word)
+				if (found_here == 0 or not text[found_here - 1].isalpha()) and \
+				(end_here == len(text) or not text[end_here].isalpha()):
+					# It is beginning of text or char before is not alpha AND
+					# it is end of text or char after is not alpha
 					return True
+				# continue searching
+				start = found_here + 1
+				found_here = text.find(special_word, start)
 		return False
 
 	def set_subject(self, subject):
