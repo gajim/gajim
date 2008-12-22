@@ -329,14 +329,14 @@ class NonBlockingClient:
 				# if we want plain connection, we're done now
 				self._on_connect()
 				return
-			if not self.Dispatcher.Stream.features.getTag('starttls'):
-				# if server doesn't advertise TLS in init response, we can't do more
-				log.warn('While connecting with type = "tls": TLS unsupported by remote server')
-				self._on_connect()
-				return
 			if self.incoming_stream_version() != '1.0':
 				# if stream version is less than 1.0, we can't do more
 				log.warn('While connecting with type = "tls": stream version is less than 1.0')
+				self._on_connect()
+				return
+			if not self.Dispatcher.Stream.features.getTag('starttls'):
+				# if server doesn't advertise TLS in init response, we can't do more
+				log.warn('While connecting with type = "tls": TLS unsupported by remote server')
 				self._on_connect()
 				return
 			# otherwise start TLS negotioation
