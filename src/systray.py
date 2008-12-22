@@ -185,6 +185,8 @@ class Systray:
 		if connected_accounts < 1:
 			item.set_sensitive(False)
 
+		connected_accounts_with_private_storage = 0
+
 		item = gtk.SeparatorMenuItem()
 		sub_menu.append(item)
 
@@ -200,57 +202,76 @@ class Systray:
 		single_message_menuitem.set_sensitive(iskey)
 		join_gc_menuitem.set_sensitive(iskey)
 
-		if connected_accounts >= 2: # 2 or more connections? make submenus
+		accounts_list = sorted(gajim.contacts.get_accounts()) 
+		# items that get shown whether an account is zeroconf or not 
+		if connected_accounts > 1: # 2 or more connections? make submenus
 			account_menu_for_chat_with = gtk.Menu()
 			chat_with_menuitem.set_submenu(account_menu_for_chat_with)
 			self.popup_menus.append(account_menu_for_chat_with)
 
-			account_menu_for_single_message = gtk.Menu()
-			single_message_menuitem.set_submenu(
-				account_menu_for_single_message)
-			self.popup_menus.append(account_menu_for_single_message)
-
-			accounts_list = sorted(gajim.contacts.get_accounts())
 			for account in accounts_list:
-				if gajim.connections[account].is_zeroconf:
-					continue
-				if gajim.connections[account].connected > 1:
+				if gajim.account_is_connected(account):
 					# for chat_with
 					item = gtk.MenuItem(_('using account %s') % account)
 					account_menu_for_chat_with.append(item)
 					item.connect('activate', self.on_new_chat, account)
 
-					# for single message
-					item = gtk.MenuItem(_('using account %s') % account)
-					item.connect('activate',
-						self.on_single_message_menuitem_activate, account)
-					account_menu_for_single_message.append(item)
-
-					# join gc
-					gc_item = gtk.MenuItem(_('using account %s') % account, False)
-					gc_sub_menu.append(gc_item)
-					gc_menuitem_menu = gtk.Menu()
-					gajim.interface.roster.add_bookmarks_list(gc_menuitem_menu,
-						account)
-					gc_item.set_submenu(gc_menuitem_menu)
-					gc_sub_menu.show_all()
-
 		elif connected_accounts == 1: # one account
 			# one account connected, no need to show 'as jid'
 			for account in gajim.connections:
 				if gajim.connections[account].connected > 1:
+					# for start chat
 					self.new_chat_handler_id = chat_with_menuitem.connect(
-							'activate', self.on_new_chat, account)
+						'activate', self.on_new_chat, account)
+					break # No other connected account
+
+		# menu items that don't apply to zeroconf connections
+		if connected_accounts == 1 or (connected_accounts == 2 and \
+		gajim.zeroconf_is_connected()):
+			# only one 'real' (non-zeroconf) account is connected, don't need
+			# submenus
+			for account in gajim.connections:
+				if gajim.account_is_connected(account) and \
+				not gajim.config.get_per('accounts', account, 'is_zeroconf'):
+					if gajim.connections[account].private_storage_supported:
+						connected_accounts_with_private_storage += 1
+
 					# for single message
 					single_message_menuitem.remove_submenu()
 					self.single_message_handler_id = single_message_menuitem.\
 						connect('activate',
 						self.on_single_message_menuitem_activate, account)
-
 					# join gc
 					gajim.interface.roster.add_bookmarks_list(gc_sub_menu,
 						account)
-					break # No other connected account
+					break # No other account connected
+		else:
+			# 2 or more 'real' accounts are connected, make submenus
+			account_menu_for_single_message = gtk.Menu()
+			single_message_menuitem.set_submenu(
+				account_menu_for_single_message)
+			self.popup_menus.append(account_menu_for_single_message)
+
+			for account in accounts_list:
+				if gajim.connections[account].is_zeroconf or \
+				not gajim.account_is_connected(account):
+					continue
+				if gajim.connections[account].private_storage_supported:
+					connected_accounts_with_private_storage += 1
+				# for single message
+				item = gtk.MenuItem(_('using account %s') % account)
+				item.connect('activate',
+					self.on_single_message_menuitem_activate, account)
+				account_menu_for_single_message.append(item)
+
+				# join gc
+				gc_item = gtk.MenuItem(_('using account %s') % account, False)
+				gc_sub_menu.append(gc_item)
+				gc_menuitem_menu = gtk.Menu()
+				gajim.interface.roster.add_bookmarks_list(gc_menuitem_menu,
+					account)
+				gc_item.set_submenu(gc_menuitem_menu)
+				gc_sub_menu.show_all()
 
 		newitem = gtk.SeparatorMenuItem() # separator
 		gc_sub_menu.append(newitem)
@@ -260,6 +281,8 @@ class Systray:
 		newitem.connect('activate',
 			gajim.interface.roster.on_manage_bookmarks_menuitem_activate)
 		gc_sub_menu.append(newitem)
+		if connected_accounts_with_private_storage == 0:
+			newitem.set_sensitive(False)
 
 		sounds_mute_menuitem.set_active(not gajim.config.get('sounds_on'))
 
