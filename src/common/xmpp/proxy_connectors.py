@@ -33,7 +33,19 @@ class ProxyConnector:
 	'''
 	def __init__(self, send_method, onreceive, old_on_receive, on_success,
 		on_failure, xmpp_server, proxy_creds=(None,None)):
+		'''
+		Creates proxy connector, starts connecting immediately and gives control
+		back to transport afterwards.
 
+		:param send_method: transport send method
+		:param onreceive: method to set on_receive callbacks
+		:param old_on_receive: on_receive callback that should be set when 
+			proxy connection was successful
+		:param on_success: called after proxy connection was successfully opened
+		:param on_failure: called when errors occured while connecting
+		:param xmpp_server: tuple of (hostname, port)
+		:param proxy_creds: tuple of (proxy_user, proxy_credentials)
+		'''
 		self.send = send_method
 		self.onreceive = onreceive
 		self.old_on_receive = old_on_receive
@@ -46,7 +58,7 @@ class ProxyConnector:
 		self.start_connecting()
 
 	def start_connecting(self):
-		raise NotImplementedException()
+		raise NotImplementedError
 
 	def connecting_over(self):
 		self.onreceive(self.old_on_receive)
@@ -91,7 +103,6 @@ class HTTPCONNECTConnector(ProxyConnector):
 		if len(reply) != 2:
 			pass
 		self.connecting_over()
-
 
 
 class SOCKS5Connector(ProxyConnector):
@@ -169,7 +180,7 @@ class SOCKS5Connector(ProxyConnector):
 #				# Resolve locally
 #				self.ipaddr = socket.inet_aton(socket.gethostbyname(self.xmpp_server[0]))
 #				req = req + "\x01" + ipaddr
-		req = req + struct.pack(">H",self.xmpp_server[1])
+		req = req + struct.pack(">H", self.xmpp_server[1])
 		self.onreceive(self._on_req_sent)
 		self.send(req)
 
@@ -213,10 +224,4 @@ class SOCKS5Connector(ProxyConnector):
 			return
 		self.connecting_over()
 
-
-
-
-
-
-
-
+# vim: se ts=3:
