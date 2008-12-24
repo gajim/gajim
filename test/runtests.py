@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 
+
+'''
+Runs Gajim's Test Suite
+
+Non GUI related tests will be run on each commit.
+'''
+
 import sys
 import unittest
 import getopt
@@ -28,14 +35,16 @@ for o, a in opts:
 			sys.exit(2)
 
 # new test modules need to be added manually
-modules = ( 'test_caps',
-				'test_dispatcher_nb',
-)
+modules = ()
 
 if use_x:
 	modules += ('test_misc_interface',
 					'test_roster',
 					'test_sessions',
+					'test_resolver',
+					'test_caps',
+					'test_dispatcher_nb',
+					'test_nonblockingtcp',
 	)
 
 nb_errors = 0
