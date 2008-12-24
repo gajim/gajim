@@ -425,47 +425,6 @@ import roster_window
 import profile_window
 import config
 
-class GlibIdleQueue(idlequeue.IdleQueue):
-	'''
-	Extends IdleQueue to use glib io_add_wath, instead of select/poll
-	In another, `non gui' implementation of Gajim IdleQueue can be used safetly.
-	'''
-	def init_idle(self):
-		''' this method is called at the end of class constructor.
-		Creates a dict, which maps file/pipe/sock descriptor to glib event id'''
-		self.events = {}
-		# time() is already called in glib, we just get the last value
-		# overrides IdleQueue.current_time()
-		self.current_time = gobject.get_current_time
-
-	def add_idle(self, fd, flags):
-		''' this method is called when we plug a new idle object.
-		Start listening for events from fd
-		'''
-		res = gobject.io_add_watch(fd, flags, self._process_events,
-			priority=gobject.PRIORITY_LOW)
-		# store the id of the watch, so that we can remove it on unplug
-		self.events[fd] = res
-
-	def _process_events(self, fd, flags):
-		try:
-			return self.process_events(fd, flags)
-		except Exception:
-			self.remove_idle(fd)
-			self.add_idle(fd, flags)
-			raise
-
-	def remove_idle(self, fd):
-		''' this method is called when we unplug a new idle object.
-		Stop listening for events from fd
-		'''
-		if not fd in self.events:
-			return
-		gobject.source_remove(self.events[fd])
-		del(self.events[fd])
-
-	def process(self):
-		self.check_time_events()
 
 class PassphraseRequest:
 	def __init__(self, keyid):
@@ -2904,7 +2863,7 @@ class Interface:
 			gajim.idlequeue.process()
 		except Exception:
 			# Otherwise, an exception will stop our loop
-			if gajim.idlequeue.__class__ == GlibIdleQueue:
+			if gajim.idlequeue.__class__ == idlequeue.GlibIdleQueue:
 				gobject.timeout_add_seconds(2, self.process_connections)
 			else:
 				gobject.timeout_add(200, self.process_connections)
@@ -3160,7 +3119,7 @@ class Interface:
 			# in a nongui implementation, just call:
 			# gajim.idlequeue = IdleQueue() , and
 			# gajim.idlequeue.process() each foo miliseconds
-			gajim.idlequeue = GlibIdleQueue()
+			gajim.idlequeue = idlequeue.GlibIdleQueue()
 		# resolve and keep current record of resolved hosts
 		gajim.resolver = resolver.get_resolver(gajim.idlequeue)
 		gajim.socks5queue = socks5.SocksQueue(gajim.idlequeue,
@@ -3312,7 +3271,7 @@ class Interface:
 		self.last_ftwindow_update = 0
 
 		gobject.timeout_add(100, self.autoconnect)
-		if gajim.idlequeue.__class__ == GlibIdleQueue:
+		if gajim.idlequeue.__class__ == idlequeue.GlibIdleQueue:
 			gobject.timeout_add_seconds(2, self.process_connections)
 		else:
 			gobject.timeout_add(200, self.process_connections)
