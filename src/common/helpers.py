@@ -767,6 +767,8 @@ def get_random_string_16():
 	return ''.join(sample(char_sequence, 16))
 
 def get_os_info():
+	if gajim.os_info:
+		return gajim.os_info
 	if os.name == 'nt':
 		ver = os.sys.getwindowsversion()
 		ver_format = ver[3], ver[0], ver[1]
@@ -781,9 +783,11 @@ def get_os_info():
 			(2, 6, 0): 'Vista',
 		}
 		if ver_format in win_version:
-			return 'Windows' + ' ' + win_version[ver_format]
+			os_info = 'Windows' + ' ' + win_version[ver_format]
 		else:
-			return 'Windows'
+			os_info = 'Windows'
+		gajim.os_info = os_info
+		return os_info
 	elif os.name == 'posix':
 		executable = 'lsb_release'
 		params = ' --description --codename --release --short'
@@ -796,6 +800,7 @@ def get_os_info():
 			output = temp_failure_retry(p.stdout.readline).strip()
 			# some distros put n/a in places, so remove those
 			output = output.replace('n/a', '').replace('N/A', '')
+			gajim.os_info = output
 			return output
 
 		# lsb_release executable not available, so parse files
@@ -823,13 +828,19 @@ def get_os_info():
 						text = distro_name
 					elif path_to_file.endswith('lfs-release'): # file just has version
 						text = distro_name + ' ' + text
-				return text.replace('\n', '')
+				os_info = text.replace('\n', '')
+				gajim.os_info = os_info
+				return os_info
 
 		# our last chance, ask uname and strip it
 		uname_output = get_output_of_command('uname -sr')
 		if uname_output is not None:
-			return uname_output[0] # only first line
-	return 'N/A'
+			os_info = uname_output[0] # only first line
+			gajim.os_info = os_info
+			return os_info
+	os_info = 'N/A'
+	gajim.os_info = os_info
+	return os_info
 
 def sanitize_filename(filename):
 	'''makes sure the filename we will write does contain only acceptable and

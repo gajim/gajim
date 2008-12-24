@@ -105,6 +105,8 @@ if LANG is None:
 else:
 	LANG = LANG[:2] # en, fr, el etc..
 
+os_info = None # used to cache os information
+
 gmail_domains = ['gmail.com', 'googlemail.com']
 
 transport_type = {} # list the type of transport
