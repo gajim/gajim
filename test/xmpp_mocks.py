@@ -1,30 +1,26 @@
 '''
-Module with dummy classes for unit testing of xmpp code (src/common/xmpp/*).
+Module with dummy classes for unit testing of XMPP and related code.
 '''
 
 import threading, time, os.path, sys
 
+gajim_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
+sys.path.append(gajim_root + '/src/common/xmpp')
+import idlequeue
+from client import PlugIn
+
 import lib
 lib.setup_env()
 
+
 from mock import Mock
 
-gajim_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
 
-sys.path.append(gajim_root + '/src/common/xmpp')
-
-'''
-Module with classes usable for XMPP related testing.
-'''
-
-import idlequeue
-from client import PlugIn
 
 idlequeue_interval = 0.2
 '''
 IdleQueue polling interval. 200ms is used in Gajim as default
 '''
-
 
 class IdleQueueThread(threading.Thread):
 	'''
@@ -48,8 +44,6 @@ class IdleQueueThread(threading.Thread):
 	def stop_thread(self):
 		self.stop.set()
 
-
-
 	
 class IdleMock:
 	'''
@@ -63,10 +57,10 @@ class IdleMock:
 		'''
 		self.event.clear()
 
-
 	def wait(self):
 		'''
-		Waiting until some callback sets the event and clearing the event subsequently. 
+		Waiting until some callback sets the event and clearing the event
+		subsequently. 
 		'''
 		self.event.wait()
 		self.event.clear()
@@ -75,7 +69,7 @@ class IdleMock:
 		self.event.set()
 
 
-class MockConnectionClass(IdleMock,Mock):
+class MockConnectionClass(IdleMock, Mock):
 	'''
 	Class simulating Connection class from src/common/connection.py
 
@@ -94,17 +88,16 @@ class MockConnectionClass(IdleMock,Mock):
 		Method called after connecting - after receiving <stream:features>
 		from server (NOT after TLS stream restart) or connect failure
 		'''
-
-		print 'on_connect - args:'
-		print '    success - %s' % success
-		for i in args:
-			print '    %s' % i
+		#print 'on_connect - args:'
+		#print '    success - %s' % success
+		#for i in args:
+		#	print '    %s' % i
 		self.connect_succeeded = success
 		self.set_event()
 
 	def on_auth(self, con, auth):
 		'''
-		Method called after authentication is done regardless on the result.
+		Method called after authentication, regardless of the result.
 
 		:Parameters:
 			con : NonBlockingClient
@@ -113,7 +106,6 @@ class MockConnectionClass(IdleMock,Mock):
 				type of authetication in case of success ('old_auth', 'sasl') or
 				None in case of auth failure
 		'''
-
 		#print 'on_auth - args:'
 		#print '    con: %s' % con
 		#print '    auth: %s' % auth
@@ -121,3 +113,4 @@ class MockConnectionClass(IdleMock,Mock):
 		self.auth = auth
 		self.set_event()
 
+# vim: se ts=3:
