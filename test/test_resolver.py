@@ -6,13 +6,12 @@ import lib
 lib.setup_env()
 
 from common import resolver
-from gajim import GlibIdleQueue
+from common.xmpp.idlequeue import GlibIdleQueue
 
 from mock import Mock, expectParams
 from mocks import *
 
 import gtk
-
 
 GMAIL_SRV_NAME = '_xmpp-client._tcp.gmail.com'
 NONSENSE_NAME = 'sfsdfsdfsdf.sdfs.fsd'
@@ -24,6 +23,8 @@ TEST_LIST = [(GMAIL_SRV_NAME, 'srv', True),
 	(JABBERCZ_SRV_NAME, 'srv', True)]
 
 class TestResolver(unittest.TestCase):
+	''' Test for LibAsyncNSResolver and NSLookupResolver '''
+
 	def setUp(self):
 		self.iq = GlibIdleQueue()
 		self.reset()
@@ -56,19 +57,18 @@ class TestResolver(unittest.TestCase):
 			time.sleep(1)
 			self.resolver.process()
 
-
 	def myonready(self, name, result_set):
-		print 'on_ready called ...'
-		print 'hostname: %s' % name
-		print 'result set: %s' % result_set
-		print 'res.resolved_hosts: %s' % self.resolver.resolved_hosts
+		if __name__ == '__main__':
+			print 'on_ready called ...'
+			print 'hostname: %s' % name
+			print 'result set: %s' % result_set
+			print 'res.resolved_hosts: %s' % self.resolver.resolved_hosts
 		if self.expect_results:
 			self.assert_(len(result_set) > 0)
 		else:
 			self.assert_(result_set == [])
 		self.flag = True
 		if self.nslookup: self._testNSLR()
-
 		
 	def testNSLookupResolver(self):
 		self.reset()
@@ -93,3 +93,5 @@ class TestResolver(unittest.TestCase):
 
 if __name__ == '__main__':
 	unittest.main()
+
+# vim: se ts=3:
