@@ -65,13 +65,13 @@ def get_proxy_data_from_dict(proxy):
 			proxy_user, proxy_pass = proxy['user'], proxy['pass']
 	return tcp_host, tcp_port, proxy_user, proxy_pass
 
-# timeout to connect to the server socket, it doesn't include auth
+#: timeout to connect to the server socket, it doesn't include auth
 CONNECT_TIMEOUT_SECONDS = 30
 
-# how long to wait for a disconnect to complete
+#: how long to wait for a disconnect to complete
 DISCONNECT_TIMEOUT_SECONDS = 5
 
-# size of the buffer which reads data from server
+#: size of the buffer which reads data from server
 # if lower, more stanzas will be fragmented and processed twice
 RECV_BUFSIZE = 32768 # 2x maximum size of ssl packet, should be plenty
 #RECV_BUFSIZE = 16 # FIXME: (#2634) gajim breaks with this setting: it's inefficient but should work.
