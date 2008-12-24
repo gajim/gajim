@@ -28,6 +28,9 @@ class PlugIn:
 
 	Inherit to develop pluggable objects. No code change on the owner class
 	required (the object where we plug into)
+	
+	For every instance of PlugIn class the 'owner' is the class in what the plug
+	was plugged.
 	'''
 	def __init__(self):
 		self._exported_methods=[]
