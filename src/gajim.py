@@ -588,7 +588,7 @@ class Interface:
 	def handle_event_error_answer(self, account, array):
 		#('ERROR_ANSWER', account, (id, jid_from, errmsg, errcode))
 		id_, jid_from, errmsg, errcode = array
-		if unicode(errcode) in ('403', '406') and id_:
+		if unicode(errcode) in ('400', '403', '406') and id_:
 			# show the error dialog
 			ft = self.instances['file_transfers']
 			sid = id_
@@ -596,7 +596,10 @@ class Interface:
 				sid = id_[3:]
 			if sid in ft.files_props['s']:
 				file_props = ft.files_props['s'][sid]
-				file_props['error'] = -4
+				if unicode(errcode) == '400':
+					file_props['error'] = -3
+				else:
+					file_props['error'] = -4
 				self.handle_event_file_request_error(account,
 					(jid_from, file_props, errmsg))
 				conn = gajim.connections[account]

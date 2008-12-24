@@ -56,6 +56,9 @@ if dbus_support.supported:
 	import dbus
 	from music_track_listener import MusicTrackListener
 
+import logging
+log = logging.getLogger('gajim.c.connection_handlers')
+
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible', 'error']
 # kind of events we can wait for an answer
@@ -69,7 +72,7 @@ HAS_IDLE = True
 try:
 	import idle
 except Exception:
-	gajim.log.debug(_('Unable to load idle module'))
+	log.debug(_('Unable to load idle module'))
 	HAS_IDLE = False
 
 class ConnectionBytestream:
@@ -251,16 +254,28 @@ class ConnectionBytestream:
 				# proxy.setNamespace(common.xmpp.NS_STREAM)
 		self.connection.send(iq)
 
-	def send_file_rejection(self, file_props):
-		''' informs sender that we refuse to download the file '''
+	def send_file_rejection(self, file_props, code='403', typ=None):
+		''' informs sender that we refuse to download the file
+		typ is used when code = '400', in this case typ can be 'strean' for
+		invalid stream or 'profile' for invalid profile'''
 		# user response to ConfirmationDialog may come after we've disconneted
 		if not self.connection or self.connected < 2:
 			return
 		iq = common.xmpp.Protocol(name = 'iq',
 			to = unicode(file_props['sender']), typ = 'error')
 		iq.setAttr('id', file_props['request-id'])
-		err = common.xmpp.ErrorNode(code = '403', typ = 'cancel', name =
-			'forbidden', text = 'Offer Declined')
+		if code == '400' and typ in ('stream', 'profile'):
+			name = 'bad-request'
+			text = ''
+		else:
+			name = 'forbidden'
+			text = 'Offer Declined'
+		err = common.xmpp.ErrorNode(code=code, typ='cancel', name=name, text=text)
+		if code == '400' and typ in ('stream', 'profile'):
+			if typ == 'stream':
+				err.setTag('no-valid-streams', namespace=common.xmpp.NS_SI)
+			else:
+				err.setTag('bad-profile', namespace=common.xmpp.NS_SI)
 		iq.addChild(node=err)
 		self.connection.send(iq)
 
@@ -375,7 +390,7 @@ class ConnectionBytestream:
 
 	# register xmpppy handlers for bytestream and FT stanzas
 	def _bytestreamErrorCB(self, con, iq_obj):
-		gajim.log.debug('_bytestreamErrorCB')
+		log.debug('_bytestreamErrorCB')
 		id_ = unicode(iq_obj.getAttr('id'))
 		frm = helpers.get_full_jid_from_iq(iq_obj)
 		query = iq_obj.getTag('query')
@@ -390,7 +405,7 @@ class ConnectionBytestream:
 		raise common.xmpp.NodeProcessed
 
 	def _bytestreamSetCB(self, con, iq_obj):
-		gajim.log.debug('_bytestreamSetCB')
+		log.debug('_bytestreamSetCB')
 		target = unicode(iq_obj.getAttr('to'))
 		id_ = unicode(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
@@ -434,7 +449,7 @@ class ConnectionBytestream:
 		raise common.xmpp.NodeProcessed
 
 	def _ResultCB(self, con, iq_obj):
-		gajim.log.debug('_ResultCB')
+		log.debug('_ResultCB')
 		# if we want to respect xep-0065 we have to check for proxy
 		# activation result in any result iq
 		real_id = unicode(iq_obj.getAttr('id'))
@@ -454,7 +469,7 @@ class ConnectionBytestream:
 						raise common.xmpp.NodeProcessed
 
 	def _bytestreamResultCB(self, con, iq_obj):
-		gajim.log.debug('_bytestreamResultCB')
+		log.debug('_bytestreamResultCB')
 		frm = helpers.get_full_jid_from_iq(iq_obj)
 		real_id = unicode(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
@@ -528,7 +543,7 @@ class ConnectionBytestream:
 		raise common.xmpp.NodeProcessed
 
 	def _siResultCB(self, con, iq_obj):
-		gajim.log.debug('_siResultCB')
+		log.debug('_siResultCB')
 		id_ = iq_obj.getAttr('id')
 		if id_ not in self.files_props:
 			# no such jid
@@ -565,15 +580,33 @@ class ConnectionBytestream:
 		raise common.xmpp.NodeProcessed
 
 	def _siSetCB(self, con, iq_obj):
-		gajim.log.debug('_siSetCB')
+		log.debug('_siSetCB')
 		jid = helpers.get_jid_from_iq(iq_obj)
+		file_props = {'type': 'r'}
+		file_props['sender'] = helpers.get_full_jid_from_iq(iq_obj)
+		file_props['request-id'] = unicode(iq_obj.getAttr('id'))
 		si = iq_obj.getTag('si')
 		profile = si.getAttr('profile')
 		mime_type = si.getAttr('mime-type')
 		if profile != common.xmpp.NS_FILE:
+			self.send_file_rejection(file_props, code='400', typ='profile')
+			raise common.xmpp.NodeProcessed
+		feature_tag = si.getTag('feature', namespace=common.xmpp.NS_FEATURE)
+		if not feature_tag:
 			return
+		form_tag = feature_tag.getTag('x', namespace=common.xmpp.NS_DATA)
+		if not form_tag:
+			return
+		form = common.dataforms.ExtendForm(node=form_tag)
+		for f in form.iter_fields():
+			if f.var == 'stream-method' and f.type == 'list-single':
+				values = [o[1] for o in f.options]
+				if common.xmpp.NS_BYTESTREAM in values:
+					break
+		else:
+			self.send_file_rejection(file_props, code='400', typ='stream')
+			raise common.xmpp.NodeProcessed
 		file_tag = si.getTag('file')
-		file_props = {'type': 'r'}
 		for attribute in file_tag.getAttrs():
 			if attribute in ('name', 'size', 'hash', 'date'):
 				val = file_tag.getAttr(attribute)
@@ -589,8 +622,6 @@ class ConnectionBytestream:
 		our_jid = gajim.get_jid_from_account(self.name)
 		resource = self.server_resource
 		file_props['receiver'] = our_jid + '/' + resource
-		file_props['sender'] = helpers.get_full_jid_from_iq(iq_obj)
-		file_props['request-id'] = unicode(iq_obj.getAttr('id'))
 		file_props['sid'] = unicode(si.getAttr('id'))
 		file_props['transfered_size'] = []
 		gajim.socks5queue.add_file_props(self.name, file_props)
@@ -598,7 +629,7 @@ class ConnectionBytestream:
 		raise common.xmpp.NodeProcessed
 
 	def _siErrorCB(self, con, iq_obj):
-		gajim.log.debug('_siErrorCB')
+		log.debug('_siErrorCB')
 		si = iq_obj.getTag('si')
 		profile = si.getAttr('profile')
 		if profile != common.xmpp.NS_FILE:
@@ -693,12 +724,12 @@ class ConnectionDisco:
 		raise common.xmpp.NodeProcessed
 
 	def _DiscoverItemsErrorCB(self, con, iq_obj):
-		gajim.log.debug('DiscoverItemsErrorCB')
+		log.debug('DiscoverItemsErrorCB')
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		self.dispatch('AGENT_ERROR_ITEMS', (jid))
 
 	def _DiscoverItemsCB(self, con, iq_obj):
-		gajim.log.debug('DiscoverItemsCB')
+		log.debug('DiscoverItemsCB')
 		q = iq_obj.getTag('query')
 		node = q.getAttr('node')
 		if not node:
@@ -733,7 +764,7 @@ class ConnectionDisco:
 			self.dispatch('AGENT_INFO_ITEMS', (jid, node, items))
 
 	def _DiscoverItemsGetCB(self, con, iq_obj):
-		gajim.log.debug('DiscoverItemsGetCB')
+		log.debug('DiscoverItemsGetCB')
 
 		if not self.connection or self.connected < 2:
 			return
@@ -750,7 +781,7 @@ class ConnectionDisco:
 			raise common.xmpp.NodeProcessed
 
 	def _DiscoverInfoGetCB(self, con, iq_obj):
-		gajim.log.debug('DiscoverInfoGetCB')
+		log.debug('DiscoverInfoGetCB')
 		if not self.connection or self.connected < 2:
 			return
 		q = iq_obj.getTag('query')
@@ -782,12 +813,12 @@ class ConnectionDisco:
 			raise common.xmpp.NodeProcessed
 
 	def _DiscoverInfoErrorCB(self, con, iq_obj):
-		gajim.log.debug('DiscoverInfoErrorCB')
+		log.debug('DiscoverInfoErrorCB')
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		self.dispatch('AGENT_ERROR_INFO', (jid))
 
 	def _DiscoverInfoCB(self, con, iq_obj):
-		gajim.log.debug('DiscoverInfoCB')
+		log.debug('DiscoverInfoCB')
 		# According to XEP-0030:
 		# For identity: category, type is mandatory, name is optional.
 		# For feature: var is mandatory
@@ -1078,7 +1109,7 @@ class ConnectionVcard:
 			our_jid = gajim.get_jid_from_account(self.name)
 			if iq_obj.getType() == 'error' and jid == our_jid:
 				# our server doesn't support vcard
-				gajim.log.debug('xxx error xxx')
+				log.debug('xxx error xxx')
 				self.vcard_supported = False
 			if not iq_obj.getTag('vCard') or iq_obj.getType() == 'error':
 				if frm and frm != our_jid:
@@ -1410,7 +1441,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			self.connection.send(err)
 
 	def _HttpAuthCB(self, con, iq_obj):
-		gajim.log.debug('HttpAuthCB')
+		log.debug('HttpAuthCB')
 		opt = gajim.config.get_per('accounts', self.name, 'http_auth')
 		if opt in ('yes', 'no'):
 			self.build_http_auth_answer(iq_obj, opt)
@@ -1423,7 +1454,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		raise common.xmpp.NodeProcessed
 
 	def _ErrorCB(self, con, iq_obj):
-		gajim.log.debug('ErrorCB')
+		log.debug('ErrorCB')
 		jid_from = helpers.get_full_jid_from_iq(iq_obj)
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(jid_from)
 		id_ = unicode(iq_obj.getID())
@@ -1445,7 +1476,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		'''
 		Private Data (XEP 048 and 049)
 		'''
-		gajim.log.debug('PrivateCB')
+		log.debug('PrivateCB')
 		query = iq_obj.getTag('query')
 		storage = query.getTag('storage')
 		if storage:
@@ -1490,7 +1521,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					self.annotations[jid] = annotation
 
 	def _rosterSetCB(self, con, iq_obj):
-		gajim.log.debug('rosterSetCB')
+		log.debug('rosterSetCB')
 		for item in iq_obj.getTag('query').getChildren():
 			jid = helpers.parse_jid(item.getAttr('jid'))
 			name = item.getAttr('name')
@@ -1503,7 +1534,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		raise common.xmpp.NodeProcessed
 
 	def _VersionCB(self, con, iq_obj):
-		gajim.log.debug('VersionCB')
+		log.debug('VersionCB')
 		if not self.connection or self.connected < 2:
 			return
 		iq_obj = iq_obj.buildReply('result')
@@ -1517,7 +1548,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		raise common.xmpp.NodeProcessed
 
 	def _LastCB(self, con, iq_obj):
-		gajim.log.debug('LastCB')
+		log.debug('LastCB')
 		if not self.connection or self.connected < 2:
 			return
 		iq_obj = iq_obj.buildReply('result')
@@ -1531,7 +1562,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		raise common.xmpp.NodeProcessed
 
 	def _LastResultCB(self, con, iq_obj):
-		gajim.log.debug('LastResultCB')
+		log.debug('LastResultCB')
 		qp = iq_obj.getTag('query')
 		seconds = qp.getAttr('seconds')
 		status = qp.getData()
@@ -1551,7 +1582,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, seconds, status))
 
 	def _VersionResultCB(self, con, iq_obj):
-		gajim.log.debug('VersionResultCB')
+		log.debug('VersionResultCB')
 		client_info = ''
 		os_info = ''
 		qp = iq_obj.getTag('query')
@@ -1573,7 +1604,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.dispatch('OS_INFO', (jid_stripped, resource, client_info, os_info))
 
 	def _TimeCB(self, con, iq_obj):
-		gajim.log.debug('TimeCB')
+		log.debug('TimeCB')
 		if not self.connection or self.connected < 2:
 			return
 		iq_obj = iq_obj.buildReply('result')
@@ -1586,7 +1617,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		raise common.xmpp.NodeProcessed
 
 	def _TimeRevisedCB(self, con, iq_obj):
-		gajim.log.debug('TimeRevisedCB')
+		log.debug('TimeRevisedCB')
 		if not self.connection or self.connected < 2:
 			return
 		iq_obj = iq_obj.buildReply('result')
@@ -1608,7 +1639,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if gm.getTag('new-mail').getNamespace() == common.xmpp.NS_GMAILNOTIFY:
 			# we'll now ask the server for the exact number of new messages
 			jid = gajim.get_jid_from_account(self.name)
-			gajim.log.debug('Got notification of new gmail e-mail on %s. Asking the server for more info.' % jid)
+			log.debug('Got notification of new gmail e-mail on %s. Asking the server for more info.' % jid)
 			iq = common.xmpp.Iq(typ = 'get')
 			iq.setID(self.connection.getAnID())
 			query = iq.setTag('query')
@@ -1663,13 +1694,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						'result-time'))
 
 				jid = gajim.get_jid_from_account(self.name)
-				gajim.log.debug(('You have %s new gmail e-mails on %s.') % (newmsgs, jid))
+				log.debug(('You have %s new gmail e-mails on %s.') % (newmsgs, jid))
 				self.dispatch('GMAIL_NOTIFY', (jid, newmsgs, gmail_messages_list))
 			raise common.xmpp.NodeProcessed
 
 	def _messageCB(self, con, msg):
 		'''Called when we receive a message'''
-		gajim.log.debug('MessageCB')
+		log.debug('MessageCB')
 
 		# check if the message is pubsub#event
 		if msg.getTag('event') is not None:
@@ -1956,7 +1987,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		rfc_types = ('unavailable', 'error', 'subscribe', 'subscribed', 'unsubscribe', 'unsubscribed')
 		if ptype and not ptype in rfc_types:
 			ptype = None
-		gajim.log.debug('PresenceCB: %s' % ptype)
+		log.debug('PresenceCB: %s' % ptype)
 		try:
 			who = helpers.get_full_jid_from_iq(prs)
 		except Exception:
@@ -2116,7 +2147,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			return
 
 		if ptype == 'subscribe':
-			gajim.log.debug('subscribe request from %s' % who)
+			log.debug('subscribe request from %s' % who)
 			if gajim.config.get('alwaysauth') or who.find("@") <= 0 or \
 			jid_stripped in self.jids_for_auto_auth or transport_auto_auth:
 				if self.connection:
@@ -2152,11 +2183,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				else:
 					self.dispatch('SUBSCRIBED', (jid_stripped, resource))
 			# BE CAREFUL: no con.updateRosterItem() in a callback
-			gajim.log.debug(_('we are now subscribed to %s') % who)
+			log.debug(_('we are now subscribed to %s') % who)
 		elif ptype == 'unsubscribe':
-			gajim.log.debug(_('unsubscribe request from %s') % who)
+			log.debug(_('unsubscribe request from %s') % who)
 		elif ptype == 'unsubscribed':
-			gajim.log.debug(_('we are now unsubscribed from %s') % who)
+			log.debug(_('we are now unsubscribed from %s') % who)
 			# detect a unsubscription loop
 			if jid_stripped not in self.subscribed_events:
 				self.subscribed_events[jid_stripped] = []
@@ -2233,7 +2264,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.last_io = gajim.idlequeue.current_time()
 
 	def _MucOwnerCB(self, con, iq_obj):
-		gajim.log.debug('MucOwnerCB')
+		log.debug('MucOwnerCB')
 		qp = iq_obj.getQueryPayload()
 		node = None
 		for q in qp:
@@ -2244,7 +2275,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.dispatch('GC_CONFIG', (helpers.get_full_jid_from_iq(iq_obj), node))
 
 	def _MucAdminCB(self, con, iq_obj):
-		gajim.log.debug('MucAdminCB')
+		log.debug('MucAdminCB')
 		items = iq_obj.getTag('query', namespace = common.xmpp.NS_MUC_ADMIN).getTags('item')
 		users_dict = {}
 		for item in items:
@@ -2264,14 +2295,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 															users_dict))
 
 	def _MucErrorCB(self, con, iq_obj):
-		gajim.log.debug('MucErrorCB')
+		log.debug('MucErrorCB')
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		errmsg = iq_obj.getError()
 		errcode = iq_obj.getErrorCode()
 		self.dispatch('MSGERROR', (jid, errcode, errmsg))
 
 	def _IqPingCB(self, con, iq_obj):
-		gajim.log.debug('IqPingCB')
+		log.debug('IqPingCB')
 		if not self.connection or self.connected < 2:
 			return
 		iq_obj = iq_obj.buildReply('result')
@@ -2284,7 +2315,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		A list has been set
 		'''
-		gajim.log.debug('PrivacySetCB')
+		log.debug('PrivacySetCB')
 		if not self.connection or self.connected < 2:
 			return
 		result = iq_obj.buildReply('result')
@@ -2409,7 +2440,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		# It's a gmail account,
 		# inform the server that we want e-mail notifications
 		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
-		gajim.log.debug(('%s is a gmail account. Setting option '
+		log.debug(('%s is a gmail account. Setting option '
 			'to get e-mail notifications on the server.') % (our_jid))
 		iq = common.xmpp.Iq(typ = 'set', to = our_jid)
 		iq.setAttr('id', 'MailNotify')
