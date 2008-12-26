@@ -22,7 +22,6 @@ Client class establishs connection to XMPP Server and handles authentication
 import socket
 
 import transports_nb, dispatcher_nb, auth_nb, roster_nb, protocol, bosh
-from client import PlugIn
 
 from protocol import NS_TLS
 
@@ -401,38 +400,60 @@ class NonBlockingClient:
 ### follows code for authentication, resource bind, session and roster download
 ###############################################################################
 
-	def auth(self, user, password, resource = '', sasl = 1, on_auth = None):
+	def auth(self, user, password, resource='', sasl=True, on_auth=None):
 		'''
 		Authenticate connnection and bind resource. If resource is not provided
 		random one or library name used.
+
+		:param user: XMPP username
+		:param password: XMPP password
+		:param resource: resource that shall be used for auth/connecting
+		:param sasl: Boolean indicating if SASL shall be used. (default: True)
+		:param on_auth: Callback, called after auth. On auth failure, argument
+			is None. 
 		'''
-		self._User, self._Password, self._Resource, self._sasl = user, password, resource, sasl
+		self._User, self._Password = user, password
+		self._Resource, self._sasl = resource, sasl
 		self.on_auth = on_auth
 		self._on_doc_attrs()
 		return
 	
 	def _on_old_auth(self, res):
+		''' Callback used by NON-SASL auth. On auth failure, res is None. '''
 		if res:
 			self.connected += '+old_auth'
 			self.on_auth(self, 'old_auth')
 		else:
 			self.on_auth(self, None)
 
+	def _on_sasl_auth(self, res):
+		''' Used internally. On auth failure, res is None. '''
+		self.onreceive(None)
+		if res:
+			self.connected += '+sasl'
+			self.on_auth(self, 'sasl')
+		else:
+			self.on_auth(self, None)
+
 	def _on_doc_attrs(self):
+		''' Plug authentication objects and start auth. '''
 		if self._sasl:
-			auth_nb.SASL(self._User, self._Password, self._on_start_sasl).PlugIn(self)
+			auth_nb.SASL(self._User, self._Password,
+				self._on_start_sasl).PlugIn(self)
 		if not self._sasl or self.SASL.startsasl == 'not-supported':
 			if not self._Resource:
 				self._Resource = 'xmpppy'
-			auth_nb.NonBlockingNonSASL(self._User, self._Password, self._Resource, self._on_old_auth).PlugIn(self)
+			auth_nb.NonBlockingNonSASL(self._User, self._Password, self._Resource,
+				self._on_old_auth).PlugIn(self)
 			return
 		self.SASL.auth()
 		return True
 		
 	def _on_start_sasl(self, data=None):
+		''' Callback used by SASL, called on each auth step.'''
 		if data:
 			self.Dispatcher.ProcessNonBlocking(data)
-		if not self.__dict__.has_key('SASL'):
+		if not 'SASL' in self.__dict__:
 			# SASL is pluged out, possible disconnect
 			return
 		if self.SASL.startsasl == 'in-process':
@@ -448,20 +469,13 @@ class NonBlockingClient:
 		return True
 		
 	def _on_auth_bind(self, data):
+		# FIXME: Why use this callback and not bind directly?
 		if data:
 			self.Dispatcher.ProcessNonBlocking(data)
 		if self.NonBlockingBind.bound is None:
 			return
 		self.NonBlockingBind.NonBlockingBind(self._Resource, self._on_sasl_auth)
 		return True
-	
-	def _on_sasl_auth(self, res):
-		self.onreceive(None)
-		if res:
-			self.connected += '+sasl'
-			self.on_auth(self, 'sasl')
-		else:
-			self.on_auth(self, None)
 
 	def initRoster(self):
 		''' Plug in the roster. '''
