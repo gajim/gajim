@@ -14,14 +14,13 @@
 ##   but WITHOUT ANY WARRANTY; without even the implied warranty of
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
-import struct, socket, base64
-
 '''
 Module containing classes for proxy connecting. So far its HTTP CONNECT
 and SOCKS5 proxy. 
 Authentication to NTLM (Microsoft implementation) proxies can be next.
 '''
 
+import struct, socket, base64
 import logging
 log = logging.getLogger('gajim.c.x.proxy_connectors')
 
