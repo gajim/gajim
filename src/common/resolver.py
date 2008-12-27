@@ -179,7 +179,7 @@ class NSLookupResolver(CommonResolver):
 	
 	def _parse_srv_result_nt(self, fqdn, result):
 		# output from win32 nslookup command
-		if not result: 
+		if not result:
 			return []
 		hosts = []
 		lines = result.replace('\r','').split('\n')
@@ -229,7 +229,7 @@ class NSLookupResolver(CommonResolver):
 	def _parse_srv_result_posix(self, fqdn, result):
 		# typical output of bind-tools nslookup command:
 		# _xmpp-client._tcp.jabber.org    service = 30 30 5222 jabber.org.
-		if not result: 
+		if not result:
 			return []
 		hosts = []
 		lines = result.split('\n')
@@ -426,3 +426,5 @@ if __name__ == '__main__':
 	win.show_all()
 	gobject.timeout_add(200, idlequeue.process)
 	gtk.main()
+
+# vim: se ts=3:
