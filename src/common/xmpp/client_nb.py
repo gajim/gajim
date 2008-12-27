@@ -58,7 +58,7 @@ class NonBlockingClient:
 		# the EventDispatcher
 		self._caller = caller
 		self._owner = self
-		self._registered_name = None
+		self._registered_name = None # our full jid, set after successful auth
 		self.connected = ''
 		self.socket = None
 		self.on_connect = None

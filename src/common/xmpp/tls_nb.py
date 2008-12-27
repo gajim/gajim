@@ -214,7 +214,7 @@ class StdlibSSLWrapper(SSLWrapper):
 				raise SSLWrapper.Error(self.sock or self.sslobj, e)
 		return None
 
-	def send(self, data, flags=None, now = False):
+	def send(self, data, flags=None, now=False):
 		# we simply ignore flags since ssl object doesn't support it
 		try:
 			return self.sslobj.write(data)

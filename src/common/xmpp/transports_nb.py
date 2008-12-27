@@ -20,7 +20,8 @@ Transports are objects responsible for connecting to XMPP server and putting
 data to wrapped sockets in in desired form (SSL, TLS, TCP, for HTTP proxy,
 for SOCKS5 proxy...)
 
-Transports are not aware of XMPP stanzas.
+Transports are not aware of XMPP stanzas and only responsible for low-level
+connection handling.
 '''
 
 from simplexml import ustr
@@ -404,7 +405,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 
 	def read_timeout(self):
 		log.info('read_timeout called, state == %s' % self.get_state())
-		if self.get_state()==CONNECTING:
+		if self.get_state() == CONNECTING:
 			# if read_timeout is called during connecting, connect() didn't end yet
 			# thus we have to call the tcp failure callback
 			self._on_connect_failure('Error during connect to %s:%s' %

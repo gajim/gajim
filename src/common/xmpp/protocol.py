@@ -15,8 +15,9 @@
 # $Id: protocol.py,v 1.52 2006/01/09 22:08:57 normanr Exp $
 
 '''
-Protocol module contains tools that is needed for processing of
-xmpp-related data structures.
+Protocol module contains tools that are needed for processing of xmpp-related
+data structures, including jabber-objects like JID or different stanzas and sub-
+stanzas) handling routines.
 '''
 
 from simplexml import Node, NodeBuilder
@@ -484,7 +485,7 @@ class Message(Protocol):
 	def buildReply(self,text=None):
 		''' Builds and returns another message object with specified text.
 			The to, from and thread properties of new message are pre-set as reply to this message. '''
-		m=Message(to=self.getFrom(),frm=self.getTo(),body=text,node=self)
+		m=Message(to=self.getFrom(),frm=self.getTo(),body=text)
 		th=self.getThread()
 		if th: m.setThread(th)
 		return m
