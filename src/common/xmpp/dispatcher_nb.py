@@ -16,36 +16,39 @@
 
 
 '''
-Main xmpppy mechanism. Provides library with methods to assign different handlers
-to different XMPP stanzas.
-Contains one tunable attribute: DefaultTimeout (25 seconds by default). It defines time that
-Dispatcher.SendAndWaitForResponce method will wait for reply stanza before giving up.
+Main xmpp decision making logic. Provides library with methods to assign 
+different handlers to different XMPP stanzas and namespaces.
 '''
 
 import simplexml, sys, locale
 from xml.parsers.expat import ExpatError
-from protocol import *
 from client import PlugIn
+from protocol import NS_STREAMS, NS_XMPP_STREAMS, NS_HTTP_BIND, Iq, Presence, \
+	Message, Protocol, Node, Error, ERR_FEATURE_NOT_IMPLEMENTED, StreamError, \
+	stream_exceptions
 
 import logging
 log = logging.getLogger('gajim.c.x.dispatcher_nb')
 
-# default timeout to wait for response for our id
+#: default timeout to wait for response for our id
 DEFAULT_TIMEOUT_SECONDS = 25
-ID = 0
+outgoingID = 0
 
 XML_DECLARATION = '<?xml version=\'1.0\'?>'
 
 # FIXME: ugly
 class Dispatcher():
-# Why is this here - I needed to redefine Dispatcher for BOSH and easiest way
-# was to inherit original Dispatcher (now renamed to XMPPDispatcher). Trouble
-# is that reference used to access dispatcher instance is in Client attribute
-# named by __class__.__name__ of the dispatcher instance .. long story short:
-# I wrote following to avoid changing each client.Dispatcher.whatever() in xmpp/
+	'''
+	Why is this here - I needed to redefine Dispatcher for BOSH and easiest way
+	was to inherit original Dispatcher (now renamed to XMPPDispatcher). Trouble
+	is that reference used to access dispatcher instance is in Client attribute
+	named by __class__.__name__ of the dispatcher instance .. long story short:
 
-# If having two kinds of dispatcher will go well, I will rewrite the dispatcher
-# references in other scripts
+	I wrote following to avoid changing each client.Dispatcher.whatever() in xmpp
+
+	If having two kinds of dispatcher will go well, I will rewrite the dispatcher
+	references in other scripts
+	'''
 	def PlugIn(self, client_obj, after_SASL=False, old_features=None):
 		if client_obj.protocol_type == 'XMPP':
 			XMPPDispatcher().PlugIn(client_obj)
@@ -53,42 +56,53 @@ class Dispatcher():
 			BOSHDispatcher().PlugIn(client_obj, after_SASL, old_features)
 
 
-
 class XMPPDispatcher(PlugIn):
-	''' Ancestor of PlugIn class. Handles XMPP stream, i.e. aware of stream headers.
-	Can be plugged out/in to restart these headers (used for SASL f.e.). '''
+	'''
+	Handles XMPP stream and is the first who takes control over a fresh stanza.
 
+	Is plugged into NonBlockingClient but can be replugged to restart handled 
+	stream headers (used by SASL f.e.).
+	'''
 	def __init__(self):
 		PlugIn.__init__(self)
-		self.handlers={}
-		self._expected={}
-		self._defaultHandler=None
-		self._pendingExceptions=[]
-		self._eventHandler=None
-		self._cycleHandlers=[]
-		self._exported_methods=[self.RegisterHandler, self.RegisterDefaultHandler, \
-		self.RegisterEventHandler, self.UnregisterCycleHandler, self.RegisterCycleHandler, \
-		self.RegisterHandlerOnce, self.UnregisterHandler, self.RegisterProtocol, \
-		self.SendAndWaitForResponse, \
-		self.SendAndCallForResponse, self.getAnID, self.Event, self.send]
+		self.handlers = {}
+		self._expected = {}
+		self._defaultHandler = None
+		self._pendingExceptions = []
+		self._eventHandler = None
+		self._cycleHandlers = []
+		self._exported_methods=[self.RegisterHandler, self.RegisterDefaultHandler,
+			self.RegisterEventHandler, self.UnregisterCycleHandler,
+			self.RegisterCycleHandler, self.RegisterHandlerOnce,
+			self.UnregisterHandler, self.RegisterProtocol, 
+			self.SendAndWaitForResponse, self.SendAndCallForResponse,
+			self.getAnID, self.Event, self.send]
 
 	def getAnID(self):
-		global ID
-		ID += 1
-		return repr(ID)
+		global outgoingID
+		outgoingID += 1
+		return repr(outgoingID)
 
 	def dumpHandlers(self):
-		''' Return set of user-registered callbacks in it's internal format.
-			Used within the library to carry user handlers set over Dispatcher replugins. '''
+		'''
+			Return set of user-registered callbacks in it's internal format.
+			Used within the library to carry user handlers set over Dispatcher
+			replugins.
+		'''
 		return self.handlers
 
 	def restoreHandlers(self, handlers):
-		''' Restores user-registered callbacks structure from dump previously obtained via dumpHandlers.
-			Used within the library to carry user handlers set over Dispatcher replugins. '''
+		'''
+			Restores user-registered callbacks structure from dump previously
+			obtained via dumpHandlers. Used within the library to carry user 
+			handlers set over Dispatcher replugins.
+		'''
 		self.handlers = handlers
 
 	def _init(self):
-		''' Registers default namespaces/protocols/handlers. Used internally.  '''
+		'''
+			Registers default namespaces/protocols/handlers. Used internally.
+		'''
 		self.RegisterNamespace('unknown')
 		self.RegisterNamespace(NS_STREAMS)
 		self.RegisterNamespace(self._owner.defaultNamespace)
@@ -100,7 +114,10 @@ class XMPPDispatcher(PlugIn):
 		self.on_responses = {}
 
 	def plugin(self, owner):
-		''' Plug the Dispatcher instance into Client class instance and send initial stream header. Used internally.'''
+		'''
+			Plug the Dispatcher instance into Client class instance and send
+			initial stream header. Used internally.
+		'''
 		self._init()
 		self._owner.lastErrNode = None
 		self._owner.lastErr = None
@@ -130,18 +147,23 @@ class XMPPDispatcher(PlugIn):
 		if locale.getdefaultlocale()[0]:
 			self._metastream.setAttr('xml:lang',
 				locale.getdefaultlocale()[0].split('_')[0])
-		self._owner.send("%s%s>" % (XML_DECLARATION,str(self._metastream)[:-2]))
+		self._owner.send("%s%s>" % (XML_DECLARATION, str(self._metastream)[:-2]))
 
 	def _check_stream_start(self, ns, tag, attrs):
-		if ns!=NS_STREAMS or tag!='stream':
-			raise ValueError('Incorrect stream start: (%s,%s). Terminating.' % (tag, ns))
+		if ns != NS_STREAMS or tag!='stream':
+			raise ValueError('Incorrect stream start: (%s,%s). Terminating.'
+				% (tag, ns))
 
 	def ProcessNonBlocking(self, data=None):
-		''' Check incoming stream for data waiting. If "timeout" is positive - block for as max. this time.
-			Returns:
+		'''
+		Check incoming stream for data waiting.
+
+		:param data: data received from transports/IO sockets
+		:return:
 			1) length of processed data if some data were processed;
 			2) '0' string if no data were processed but link is alive;
-			3) 0 (zero) if underlying connection is closed.'''
+			3) 0 (zero) if underlying connection is closed.
+		'''
 		for handler in self._cycleHandlers:
 			handler(self)
 		if len(self._pendingExceptions) > 0:
@@ -158,58 +180,76 @@ class XMPPDispatcher(PlugIn):
 			self._owner.Connection.disconnect()
 			return 0
 		except ValueError, e:
-			self.DEBUG(str(e), 'error')
+			log.debug('ValueError: %s' % str(e))
 			self._owner.Connection.pollend()
 			return 0
 		if len(self._pendingExceptions) > 0:
-			 _pendingException = self._pendingExceptions.pop()
-			 raise _pendingException[0], _pendingException[1], _pendingException[2]
-		if len(data) == 0: return '0'
+			_pendingException = self._pendingExceptions.pop()
+			raise _pendingException[0], _pendingException[1], _pendingException[2]
+		if len(data) == 0:
+			return '0'
 		return len(data)
 
 	def RegisterNamespace(self, xmlns, order='info'):
-		''' Creates internal structures for newly registered namespace.
-			You can register handlers for this namespace afterwards. By default one namespace
-			already registered (jabber:client or jabber:component:accept depending on context. '''
+		'''
+		Creates internal structures for newly registered namespace.
+		You can register handlers for this namespace afterwards. By default 
+		one namespace is already registered
+		(jabber:client or jabber:component:accept depending on context.
+		'''
 		log.debug('Registering namespace "%s"' % xmlns)
-		self.handlers[xmlns]={}
+		self.handlers[xmlns] = {}
 		self.RegisterProtocol('unknown', Protocol, xmlns=xmlns)
 		self.RegisterProtocol('default', Protocol, xmlns=xmlns)
 
 	def RegisterProtocol(self, tag_name, Proto, xmlns=None, order='info'):
-		''' Used to declare some top-level stanza name to dispatcher.
-		   Needed to start registering handlers for such stanzas.
-		   Iq, message and presence protocols are registered by default. '''
-		if not xmlns: xmlns=self._owner.defaultNamespace
+		'''
+		Used to declare some top-level stanza name to dispatcher.
+		Needed to start registering handlers for such stanzas.
+		
+		Iq, message and presence protocols are registered by default.
+		'''
+		if not xmlns:
+			xmlns=self._owner.defaultNamespace
 		log.debug('Registering protocol "%s" as %s(%s)' %(tag_name, Proto, xmlns))
-		self.handlers[xmlns][tag_name]={type:Proto, 'default':[]}
+		self.handlers[xmlns][tag_name] = {type:Proto, 'default':[]}
 
-	def RegisterNamespaceHandler(self, xmlns, handler, typ='', ns='', makefirst=0, system=0):
-		''' Register handler for processing all stanzas for specified namespace. '''
-		self.RegisterHandler('default', handler, typ, ns, xmlns, makefirst, system)
+	def RegisterNamespaceHandler(self, xmlns, handler, typ='', ns='',
+	makefirst=0, system=0):
+		'''
+		Register handler for processing all stanzas for specified namespace.
+		'''
+		self.RegisterHandler('default', handler, typ, ns, xmlns, makefirst,
+			system)
 
-	def RegisterHandler(self, name, handler, typ='', ns='', xmlns=None, makefirst=0, system=0):
-		'''Register user callback as stanzas handler of declared type. Callback must take
-			(if chained, see later) arguments: dispatcher instance (for replying), incomed
-			return of previous handlers.
-			The callback must raise xmpp.NodeProcessed just before return if it want preven
-			callbacks to be called with the same stanza as argument _and_, more importantly
-			library from returning stanza to sender with error set (to be enabled in 0.2 ve
-			Arguments:
-				"name" - name of stanza. F.e. "iq".
-				"handler" - user callback.
-				"typ" - value of stanza's "type" attribute. If not specified any value match
-				"ns" - namespace of child that stanza must contain.
-				"chained" - chain together output of several handlers.
-				"makefirst" - insert handler in the beginning of handlers list instead of
-				adding it to the end. Note that more common handlers (i.e. w/o "typ" and "
-				will be called first nevertheless.
-				"system" - call handler even if NodeProcessed Exception were raised already.
-			'''
+	def RegisterHandler(self, name, handler, typ='', ns='', xmlns=None,
+			makefirst=False, system=False):
+		'''
+		Register user callback as stanzas handler of declared type.
+		
+		Callback must take (if chained, see later) arguments:
+		dispatcher instance (for replying), incoming return of previous handlers.
+		The callback must raise xmpp.NodeProcessed just before return if it wants
+		other callbacks to be called with the same stanza as argument _and_, more
+		importantly	library from returning stanza to sender with error set. 		
+
+		:param name: name of stanza. F.e. "iq".
+		:param handler: user callback.
+		:param typ: value of stanza's "type" attribute. If not specified any
+			value will match
+		:param ns: namespace of child that stanza must contain.
+		:param chained: chain together output of several handlers.
+		:param makefirst: insert handler in the beginning of handlers list instea
+			of	adding it to the end. Note that more common handlers i.e. w/o "typ"
+			and " will be called first nevertheless.
+		:param system: call handler even if NodeProcessed Exception were raised
+			already.
+		'''
+		# FIXME: What does chain mean and where is it handled?
 		if not xmlns:
 			xmlns=self._owner.defaultNamespace
 		log.debug('Registering handler %s for "%s" type->%s ns->%s(%s)' %
-								(handler, name, typ, ns, xmlns))
+			(handler, name, typ, ns, xmlns))
 		if not typ and not ns:
 			typ='default'
 		if xmlns not in self.handlers:
@@ -219,20 +259,27 @@ class XMPPDispatcher(PlugIn):
 		if typ+ns not in self.handlers[xmlns][name]:
 			self.handlers[xmlns][name][typ+ns]=[]
 		if makefirst:
-			self.handlers[xmlns][name][typ+ns].insert(0,{'func':handler,'system':system})
+			self.handlers[xmlns][name][typ+ns].insert(0,{'func':handler, 
+				'system':system})
 		else:
-			self.handlers[xmlns][name][typ+ns].append({'func':handler,'system':system})
+			self.handlers[xmlns][name][typ+ns].append({'func':handler, 
+				'system':system})
 
-	def RegisterHandlerOnce(self,name,handler,typ='',ns='',xmlns=None,makefirst=0, system=0):
-		''' Unregister handler after first call (not implemented yet). '''
+	def RegisterHandlerOnce(self, name, handler, typ='', ns='', xmlns=None, 
+	makefirst=0, system=0):
+		''' Unregister handler after first call (not implemented yet).	'''
+		# FIXME Drop or implement
 		if not xmlns:
-			xmlns=self._owner.defaultNamespace
+			xmlns = self._owner.defaultNamespace
 		self.RegisterHandler(name, handler, typ, ns, xmlns, makefirst, system)
 
 	def UnregisterHandler(self, name, handler, typ='', ns='', xmlns=None):
-		''' Unregister handler. "typ" and "ns" must be specified exactly the same as with registering.'''
+		'''
+		Unregister handler. "typ" and "ns" must be specified exactly the same as
+		with registering.
+		'''
 		if not xmlns:
-			xmlns=self._owner.defaultNamespace
+			xmlns = self._owner.defaultNamespace
 		if not typ and not ns:
 			typ='default'
 		if xmlns not in self.handlers:
@@ -248,21 +295,29 @@ class XMPPDispatcher(PlugIn):
 				except ValueError:
 					pass
 
-	def RegisterDefaultHandler(self,handler):
-		''' Specify the handler that will be used if no NodeProcessed exception were raised.
-			This is returnStanzaHandler by default. '''
-		self._defaultHandler=handler
+	def RegisterDefaultHandler(self, handler):
+		'''
+		Specify the handler that will be used if no NodeProcessed exception were
+		raised. This is returnStanzaHandler by default.
+		'''
+		self._defaultHandler = handler
 
-	def RegisterEventHandler(self,handler):
-		''' Register handler that will process events. F.e. "FILERECEIVED" event. '''
-		self._eventHandler=handler
+	def RegisterEventHandler(self, handler):
+		'''
+		Register handler that will process events. F.e.
+		"FILERECEIVED" event. See common/connection: _event_dispatcher()
+		'''
+		self._eventHandler = handler
 
 	def returnStanzaHandler(self,conn,stanza):
-		''' Return stanza back to the sender with <feature-not-implemennted/> error set. '''
+		'''
+		Return stanza back to the sender with <feature-not-implemented/> error set
+		'''
 		if stanza.getType() in ('get','set'):
-			conn._owner.send(Error(stanza,ERR_FEATURE_NOT_IMPLEMENTED))
+			conn._owner.send(Error(stanza, ERR_FEATURE_NOT_IMPLEMENTED))
 
 	def streamErrorHandler(self,conn,error):
+		# FIXME: looks like it is unused
 		name,text='error',error.getData()
 		for tag in error.getChildren():
 			if tag.getNamespace()==NS_XMPP_STREAMS:
@@ -277,41 +332,56 @@ class XMPPDispatcher(PlugIn):
 		raise exc((name,text))
 
 	def RegisterCycleHandler(self, handler):
-		''' Register handler that will be called on every Dispatcher.Process() call. '''
+		'''
+		Register handler that will be called on every Dispatcher.Process() call.
+		'''
 		if handler not in self._cycleHandlers:
 			self._cycleHandlers.append(handler)
 
 	def UnregisterCycleHandler(self, handler):
-		''' Unregister handler that will is called on every Dispatcher.Process() call.'''
+		'''
+		Unregister handler that will is called on every Dispatcher.Process() call
+		'''
 		if handler in self._cycleHandlers:
 			self._cycleHandlers.remove(handler)
 
 	def Event(self, realm, event, data):
-		''' Raise some event. Takes three arguments:
-			1) "realm" - scope of event. Usually a namespace.
-			2) "event" - the event itself. F.e. "SUCESSFULL SEND".
-			3) data that comes along with event. Depends on event.'''
-		if self._eventHandler: self._eventHandler(realm,event,data)
+		'''
+		Raise some event. 
+			
+		:param realm: scope of event. Usually a namespace.
+		:param event: the event itself. F.e. "SUCCESSFUL SEND".
+		:param data: data that comes along with event. Depends on event.
+		'''
+		if self._eventHandler:
+			self._eventHandler(realm, event, data)
 
 	def dispatch(self, stanza, session=None, direct=0):
-		''' Main procedure that performs XMPP stanza recognition and calling apppropriate handlers for it.
-			Called internally. '''
-		#log.info('dispatch called: stanza = %s, session = %s, direct= %s' % (stanza, session, direct))
+		'''
+		Main procedure that performs XMPP stanza recognition and calling
+		apppropriate handlers for it. Called by simplexml.
+		'''
+		# FIXME: Where do we set session and direct. Why? What are those intended
+		# to do?
+
+		#log.info('dispatch called: stanza = %s, session = %s, direct= %s'
+		#	% (stanza, session, direct))
 		if not session:
 			session = self
 		session.Stream._mini_dom = None
 		name = stanza.getName()
 
-		if name=='features':
+		if name == 'features':
 			self._owner.got_features = True
-			session.Stream.features=stanza
+			session.Stream.features = stanza
 
-		xmlns=stanza.getNamespace()
+		xmlns = stanza.getNamespace()
 
-		#log.info('in dispatch, getting ns for %s, and the ns is %s' % (stanza, xmlns))
+		# log.info('in dispatch, getting ns for %s, and the ns is %s'
+		# % (stanza, xmlns))
 		if xmlns not in self.handlers:
 			log.warn("Unknown namespace: " + xmlns)
-			xmlns='unknown'
+			xmlns = 'unknown'
 		# features stanza has been handled before
 		if name not in self.handlers[xmlns]:
 			if name != 'features':
@@ -322,42 +392,50 @@ class XMPPDispatcher(PlugIn):
 		else:
 			log.debug("Got %s/%s stanza" % (xmlns, name))
 
-		if stanza.__class__.__name__=='Node':
+		if stanza.__class__.__name__ == 'Node':
+			# FIXME: this cannot work
 			stanza=self.handlers[xmlns][name][type](node=stanza)
 
-		typ=stanza.getType()
-		if not typ: typ=''
-		stanza.props=stanza.getProperties()
-		ID=stanza.getID()
+		typ = stanza.getType()
+		if not typ:
+			typ = ''
+		stanza.props = stanza.getProperties()
+		ID = stanza.getID()
 
-		list_=['default']                                                     # we will use all handlers:
-		if typ in self.handlers[xmlns][name]: list_.append(typ)                # from very common...
+		list_ = ['default'] # we will use all handlers:
+		if typ in self.handlers[xmlns][name]:
+			list_.append(typ) # from very common...
 		for prop in stanza.props:
-			if prop in self.handlers[xmlns][name]: list_.append(prop)
-			if typ and typ+prop in self.handlers[xmlns][name]: list_.append(typ+prop)  # ...to very particular
+			if prop in self.handlers[xmlns][name]:
+				list_.append(prop)
+			if typ and typ+prop in self.handlers[xmlns][name]:
+				list_.append(typ+prop)  # ...to very particular
 
-		chain=self.handlers[xmlns]['default']['default']
+		chain = self.handlers[xmlns]['default']['default']
 		for key in list_:
-			if key: chain = chain + self.handlers[xmlns][name][key]
+			if key:
+				chain = chain + self.handlers[xmlns][name][key]
 
 		if ID in session._expected:
-			user=0
+			user = 0
 			if isinstance(session._expected[ID], tuple):
-				cb,args = session._expected[ID]
-				log.debug("Expected stanza arrived. Callback %s(%s) found!" % (cb, args))
+				cb, args = session._expected[ID]
+				log.debug("Expected stanza arrived. Callback %s(%s) found!" %
+					(cb, args))
 				try:
 					cb(session,stanza,**args)
 				except Exception, typ:
-					if typ.__class__.__name__ !='NodeProcessed': raise
+					if typ.__class__.__name__ != 'NodeProcessed':
+						raise
 			else:
 				log.debug("Expected stanza arrived!")
-				session._expected[ID]=stanza
+				session._expected[ID] = stanza
 		else:
-			user=1
+			user = 1
 		for handler in chain:
 			if user or handler['system']:
 				try:
-					handler['func'](session,stanza)
+					handler['func'](session, stanza)
 				except Exception, typ:
 					if typ.__class__.__name__ != 'NodeProcessed':
 						self._pendingExceptions.insert(0, sys.exc_info())
@@ -366,7 +444,10 @@ class XMPPDispatcher(PlugIn):
 		if user and self._defaultHandler:
 			self._defaultHandler(session, stanza)
 
-	def WaitForData(self, data):
+	def _WaitForData(self, data):
+		'''
+		Internal wrapper around ProcessNonBlocking. Will check for 
+		'''
 		if data is None:
 			return
 		res = self.ProcessNonBlocking(data)
@@ -376,6 +457,8 @@ class XMPPDispatcher(PlugIn):
 			return
 		self._owner.remove_timeout()
 		if self._expected[self._witid] is None:
+			# If the expected Stanza would have arrived, ProcessNonBlocking would
+			# have placed the reply stanza in there
 			return
 		if self._witid in self.on_responses:
 			i = self._witid # copy id cause it can change in resp() call
@@ -389,7 +472,12 @@ class XMPPDispatcher(PlugIn):
 			del self._expected[i]
 
 	def SendAndWaitForResponse(self, stanza, timeout=None, func=None, args=None):
-		''' Put stanza on the wire and wait for recipient's response to it. '''
+		'''
+		Send stanza and wait for recipient's response to it. Will call transports
+		on_timeout callback if response is not retrieved in time.
+
+		Be aware: Only timeout of latest call of SendAndWait is active.
+		'''
 		if timeout is None:
 			timeout = DEFAULT_TIMEOUT_SECONDS
 		self._witid = self.send(stanza)
@@ -397,7 +485,7 @@ class XMPPDispatcher(PlugIn):
 			self.on_responses[self._witid] = (func, args)
 		if timeout:
 			self._owner.set_timeout(timeout)
-		self._owner.onreceive(self.WaitForData)
+		self._owner.onreceive(self._WaitForData)
 		self._expected[self._witid] = None
 		return self._witid
 
@@ -407,17 +495,22 @@ class XMPPDispatcher(PlugIn):
 		self.SendAndWaitForResponse(stanza, 0, func, args)
 
 	def send(self, stanza, now=False):
-		id = None
+		'''
+		Wraps transports send method when plugged into NonBlockingClient.
+		Makes sure stanzas get ID and from tag.
+		'''
+		ID = None
 		if type(stanza) not in [type(''), type(u'')]:
 			if isinstance(stanza, Protocol):
-				id = stanza.getID()
-				if id is None:
+				ID = stanza.getID()
+				if ID is None:
 					stanza.setID(self.getAnID())
-					id = stanza.getID()
+					ID = stanza.getID()
 				if self._owner._registered_name and not stanza.getAttr('from'):
 					stanza.setAttr('from', self._owner._registered_name)
 		self._owner.Connection.send(stanza, now)
-		return id
+		return ID
+
 
 class BOSHDispatcher(XMPPDispatcher): 
 
@@ -446,41 +539,35 @@ class BOSHDispatcher(XMPPDispatcher):
 		self.restart = True
 		self._owner.Connection.send_init(after_SASL=self.after_SASL)
 
-
 	def StreamTerminate(self):
 		''' Send a stream terminator. '''
 		self._owner.Connection.send_terminator()
 
 	def ProcessNonBlocking(self, data=None):
-
 		if self.restart:
 			fromstream = self._metastream
 			fromstream.setAttr('from', fromstream.getAttr('to'))
 			fromstream.delAttr('to')
 			data = '%s%s>%s' % (XML_DECLARATION,str(fromstream)[:-2] ,data)
 			self.restart = False
-
 		return XMPPDispatcher.ProcessNonBlocking(self, data)
 
 	def dispatch(self, stanza, session=None, direct=0):
-
-		if stanza.getName()=='body' and stanza.getNamespace()==NS_HTTP_BIND:
+		if stanza.getName()=='body' and stanza.getNamespace() == NS_HTTP_BIND:
 
 			stanza_attrs = stanza.getAttrs()
-			if stanza_attrs.has_key('authid'):
+			if 'authid' in stanza_attrs:
 				# should be only in init response
 				# auth module expects id of stream in document attributes
 				self.Stream._document_attrs['id'] = stanza_attrs['authid']
-
 			self._owner.Connection.handle_body_attrs(stanza_attrs)
 
 			children = stanza.getChildren()
-
 			if children:
 				for child in children:
-					# if child doesn't have any ns specified, simplexml (or expat) thinks it's
-					# of parent's (BOSH body) namespace, so we have to rewrite it to
-					# jabber:client
+					# if child doesn't have any ns specified, simplexml (or expat)
+					# thinks it's of parent's (BOSH body) namespace, so we have to
+					# rewrite it to jabber:client
 					if child.getNamespace() == NS_HTTP_BIND:
 						child.setNamespace(self._owner.defaultNamespace)
 					XMPPDispatcher.dispatch(self, child, session, direct)
