@@ -44,7 +44,6 @@ class PlugIn:
 		self._owner=owner
 		log.info('Plugging %s __INTO__ %s' % (self, self._owner))
 		if self.__class__.__name__ in owner.__dict__:
-			print "already plugged", self.__class__.__name__ 
 			log.debug('Plugging ignored: another instance already plugged.')
 			return
 		self._old_owners_methods=[]
