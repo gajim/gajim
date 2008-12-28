@@ -50,7 +50,7 @@ def getRegInfo(disp, host, info={}, sync=True):
 		iq.setTagData(i,info[i])
 	if sync:
 		disp.SendAndCallForResponse(iq, lambda resp:
-			_ReceivedRegInfo(disp.Dispatcher,resp, host))
+			_ReceivedRegInfo(disp.Dispatcher, resp, host))
 	else:
 		disp.SendAndCallForResponse(iq, _ReceivedRegInfo, {'agent': host })
 

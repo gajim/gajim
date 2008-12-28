@@ -1,5 +1,6 @@
 ##   client_nb.py
-##	   based on client.py
+##	   based on client.py, changes backported up to revision 1.60
+
 ##
 ##   Copyright (C) 2003-2005 Alexey "Snake" Nezhdanov
 ##	   modified by Dimitur Kirov <dkirov@gmail.com>
@@ -461,6 +462,8 @@ class NonBlockingClient:
 		self.onreceive(None)
 		if self.SASL.startsasl == 'failure':
 			# wrong user/pass, stop auth
+			if 'SASL' in self.__dict__:
+				self.SASL.PlugOut()
 			self.connected = None
 			self._on_sasl_auth(None)
 		elif self.SASL.startsasl == 'success':

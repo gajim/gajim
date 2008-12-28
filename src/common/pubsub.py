@@ -33,7 +33,7 @@ class ConnectionPubSub:
 		if not self.connection or self.connected < 2:
 			return
 		query = xmpp.Iq('get', to=jid)
-		pb = query.addChild('pubsub', {'xmlns': xmpp.NS_PUBSUB})
+		pb = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
 		pb.addChild('subscriptions')
 
 		id_ = self.connection.send(query)

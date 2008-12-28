@@ -145,6 +145,8 @@ class Node(object):
 	def addChild(self, name=None, attrs={}, payload=[], namespace=None, node=None):
 		''' If "node" argument is provided, adds it as child node. Else creates new node from
 			the other arguments' values and adds it as well.'''
+		if 'xmlns' in attrs:
+			raise AttributeError("Use namespace=x instead of attrs={'xmlns':x}")
 		if node:
 			newnode=node
 			node.parent = self

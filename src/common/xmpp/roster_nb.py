@@ -21,7 +21,7 @@ Simple roster implementation. Can be used though for different tasks like
 mass-renaming of contacts.
 '''
 
-from protocol import JID, Iq, Presence, Node, NS_ROSTER
+from protocol import JID, Iq, Presence, Node, NodeProcessed, NS_ROSTER
 from client import PlugIn
 
 import logging
@@ -64,7 +64,8 @@ class NonBlockingRoster(PlugIn):
 				jid=item.getAttr('jid')
 				if item.getAttr('subscription')=='remove':
 					if self._data.has_key(jid): del self._data[jid]
-					return
+					# Looks like we have a workaround
+					# raise NodeProcessed # a MUST
 				log.info('Setting roster item %s...' % jid)
 				if not self._data.has_key(jid): self._data[jid]={}
 				self._data[jid]['name']=item.getAttr('name')
@@ -75,6 +76,8 @@ class NonBlockingRoster(PlugIn):
 				for group in item.getTags('group'): self._data[jid]['groups'].append(group.getData())
 		self._data[self._owner.User+'@'+self._owner.Server]={'resources':{},'name':None,'ask':None,'subscription':None,'groups':None,}
 		self.set=1
+		# Looks like we have a workaround
+		# raise NodeProcessed # a MUST. Otherwise you'll get back an <iq type='error'/>
 
 	def PresenceHandler(self,dis,pres):
 		''' Presence tracker. Used internally for setting items' resources state in

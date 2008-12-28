@@ -1,5 +1,5 @@
 ##   auth_nb.py
-##       based on auth.py
+##       based on auth.py, changes backported up to revision 1.41
 ##
 ##   Copyright (C) 2003-2005 Alexey "Snake" Nezhdanov
 ##       modified by Dimitur Kirov <dkirov@gmail.com>
@@ -143,12 +143,18 @@ class SASL(PlugIn):
 
 	def plugout(self):
 		''' Remove SASL handlers from owner's dispatcher. Used internally. '''
-		self._owner.UnregisterHandler('features', self.FeaturesHandler,
-			xmlns=NS_STREAMS)
-		self._owner.UnregisterHandler('challenge', self.SASLHandler,
-			xmlns=NS_SASL)
-		self._owner.UnregisterHandler('failure', self.SASLHandler, xmlns=NS_SASL)
-		self._owner.UnregisterHandler('success', self.SASLHandler, xmlns=NS_SASL)
+		if 'features' in  self._owner.__dict__:
+			self._owner.UnregisterHandler('features', self.FeaturesHandler,
+				xmlns=NS_STREAMS)
+		if 'challenge' in  self._owner.__dict__:
+			self._owner.UnregisterHandler('challenge', self.SASLHandler,
+				xmlns=NS_SASL)
+		if 'failure' in  self._owner.__dict__:
+			self._owner.UnregisterHandler('failure', self.SASLHandler,
+				xmlns=NS_SASL)
+		if 'success' in  self._owner.__dict__:
+			self._owner.UnregisterHandler('success', self.SASLHandler,
+				xmlns=NS_SASL)
 
 	def auth(self):
 		'''
@@ -187,7 +193,11 @@ class SASL(PlugIn):
 		self.MechanismHandler()
 
 	def MechanismHandler(self):
-		if 'GSSAPI' in self.mecs and have_kerberos:
+		if 'ANONYMOUS' in self.mecs and self.username is None:
+			self.mecs.remove('ANONYMOUS')
+			node = Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'ANONYMOUS'})
+			self.mechanism = 'ANONYMOUS'
+		elif 'GSSAPI' in self.mecs and have_kerberos:
 			self.mecs.remove('GSSAPI')
 			self.gss_vc = kerberos.authGSSClientInit('xmpp@' + \
 				self._owner.xmpp_hostname)[1]

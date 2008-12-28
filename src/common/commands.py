@@ -50,8 +50,7 @@ class AdHocCommand:
 		assert status in ('executing', 'completed', 'canceled')
 
 		response = request.buildReply('result')
-		cmd = response.addChild('command', {
-			'xmlns': xmpp.NS_COMMANDS,
+		cmd = response.addChild('command', namespace=xmpp.NS_COMMANDS, attrs={
 			'sessionid': self.sessionid,
 			'node': self.commandnode,
 			'status': status})
