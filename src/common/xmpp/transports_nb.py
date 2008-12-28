@@ -27,7 +27,6 @@ connection handling.
 from simplexml import ustr
 from client import PlugIn
 from idlequeue import IdleObject
-from protocol import *
 import proxy_connectors
 import tls_nb
 

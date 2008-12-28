@@ -21,7 +21,7 @@ Simple roster implementation. Can be used though for different tasks like
 mass-renaming of contacts.
 '''
 
-from protocol import *
+from protocol import JID, Iq, Presence, Node, NS_ROSTER
 from client import PlugIn
 
 import logging
