@@ -24,9 +24,7 @@ import simplexml, sys, locale
 from xml.parsers.expat import ExpatError
 from client import PlugIn
 from protocol import NS_STREAMS, NS_XMPP_STREAMS, NS_HTTP_BIND, Iq, Presence, \
-	Message, Protocol, Node, Error, ERR_FEATURE_NOT_IMPLEMENTED, StreamError, \
-	stream_exceptions
-
+	Message, Protocol, Node, Error, ERR_FEATURE_NOT_IMPLEMENTED, StreamError 
 import logging
 log = logging.getLogger('gajim.c.x.dispatcher_nb')
 
@@ -316,21 +314,6 @@ class XMPPDispatcher(PlugIn):
 		if stanza.getType() in ('get','set'):
 			conn._owner.send(Error(stanza, ERR_FEATURE_NOT_IMPLEMENTED))
 
-	def streamErrorHandler(self,conn,error):
-		# FIXME: looks like it is unused
-		name,text='error',error.getData()
-		for tag in error.getChildren():
-			if tag.getNamespace()==NS_XMPP_STREAMS:
-				if tag.getName()=='text':
-					text=tag.getData()
-				else:
-					name=tag.getName()
-		if name in stream_exceptions.keys():
-			exc=stream_exceptions[name]
-		else:
-			exc=StreamError
-		raise exc((name,text))
-
 	def RegisterCycleHandler(self, handler):
 		'''
 		Register handler that will be called on every Dispatcher.Process() call.
@@ -553,7 +536,7 @@ class BOSHDispatcher(XMPPDispatcher):
 		return XMPPDispatcher.ProcessNonBlocking(self, data)
 
 	def dispatch(self, stanza, session=None, direct=0):
-		if stanza.getName()=='body' and stanza.getNamespace() == NS_HTTP_BIND:
+		if stanza.getName() == 'body' and stanza.getNamespace() == NS_HTTP_BIND:
 
 			stanza_attrs = stanza.getAttrs()
 			if 'authid' in stanza_attrs:
