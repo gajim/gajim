@@ -1088,8 +1088,8 @@ class Connection(ConnectionHandlers):
 
 	def _on_disconnected(self):
 		''' called when a disconnect request has completed successfully'''
-		self.dispatch('STATUS', 'offline')
 		self.disconnect(on_purpose=True)
+		self.dispatch('STATUS', 'offline')
 
 	def get_status(self):
 		return STATUS_LIST[self.connected]
@@ -1628,7 +1628,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 	def send_gc_status(self, nick, jid, show, status):
-		if not self.connection:
+		if not gajim.account_is_connected(self.name):
 			return
 		if show == 'invisible':
 			show = 'offline'
