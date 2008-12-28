@@ -1,6 +1,8 @@
+''' XML canonicalisation methods (for XEP-0116) '''
+# FIXME: Add licence, copyright
+
 from simplexml import ustr
 
-# XML canonicalisation methods (for XEP-0116)
 def c14n(node):
 	s = "<" + node.name
 	if node.namespace:
