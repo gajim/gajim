@@ -1088,7 +1088,6 @@ class NBSOCKS5PROXYsocket(NonBlockingTcp):
 			return
 		if reply[1] != "\x00":
 			# Connection failed
-			self._owner.disconnected()
 			if ord(reply[1])<9:
 				errors = ['general SOCKS server failure',
 					'connection not allowed by ruleset',
@@ -1103,6 +1102,7 @@ class NBSOCKS5PROXYsocket(NonBlockingTcp):
 			else:
 				txt = 'Invalid proxy reply'
 			self.DEBUG(txt, 'error')
+			self._owner.disconnected()
 			self.on_proxy_failure(txt)
 			return
 		# Get the bound address/port
