@@ -287,7 +287,8 @@ class NonBlockingClient:
 			if self.__dict__.has_key('Dispatcher'):
 				self.Dispatcher.PlugOut()
 				self.got_features = False
-			d = dispatcher_nb.Dispatcher().PlugIn(self)
+			# Plugging will send our stream header
+			dispatcher_nb.Dispatcher().PlugIn(self)
 			on_next_receive('RECEIVE_DOCUMENT_ATTRIBUTES')
 
 		elif mode == 'FAILURE':
@@ -298,16 +299,14 @@ class NonBlockingClient:
 				self.Dispatcher.ProcessNonBlocking(data)
 			if not hasattr(self, 'Dispatcher') or \
 			self.Dispatcher.Stream._document_attrs is None:
-				self._xmpp_connect_machine(
-					mode='FAILURE',
-					data='Error on stream open')
+				# only partial data received so far
+				return 
 			if self.incoming_stream_version() == '1.0':
 				if not self.got_features:
 					on_next_receive('RECEIVE_STREAM_FEATURES')
 				else:
 					log.info('got STREAM FEATURES in first recv')
 					self._xmpp_connect_machine(mode='STREAM_STARTED')
-
 			else:
 				log.info('incoming stream version less than 1.0')
 				self._xmpp_connect_machine(mode='STREAM_STARTED')
@@ -315,14 +314,11 @@ class NonBlockingClient:
 		elif mode == 'RECEIVE_STREAM_FEATURES':
 			if data:
 				# sometimes <features> are received together with document
-				# attributes and sometimes on next receive...
+				# attributes and sometimes on next receive... sometimes in
+				# several chunks...
 				self.Dispatcher.ProcessNonBlocking(data)
-			if not self.got_features:
-				self._xmpp_connect_machine(
-					mode='FAILURE',
-					data='Missing <features> in 1.0 stream')
-			else:
-				log.info('got STREAM FEATURES in second recv')
+			if self.got_features:
+				log.info('got STREAM FEATURES after several recv')
 				self._xmpp_connect_machine(mode='STREAM_STARTED')
 
 		elif mode == 'STREAM_STARTED':

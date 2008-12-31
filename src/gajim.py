@@ -2862,11 +2862,7 @@ class Interface:
 		try:
 			gajim.idlequeue.process()
 		except Exception:
-			# Otherwise, an exception will stop our loop
-			if gajim.idlequeue.__class__ == idlequeue.GlibIdleQueue:
-				gobject.timeout_add_seconds(2, self.process_connections)
-			else:
-				gobject.timeout_add(200, self.process_connections)
+			gobject.timeout_add(200, self.process_connections)
 			raise
 		return True # renew timeout (loop for ever)
 
@@ -3111,15 +3107,9 @@ class Interface:
 		else:
 			gajim.log.setLevel(None)
 
-		# pygtk2.8+ on win, breaks io_add_watch.
-		# We use good old select.select()
-		if os.name == 'nt':
+		# GObjectIdleQueue is currently broken with ssl. Use good old select
 			gajim.idlequeue = idlequeue.SelectIdleQueue()
-		else:
-			# in a nongui implementation, just call:
-			# gajim.idlequeue = IdleQueue() , and
-			# gajim.idlequeue.process() each foo miliseconds
-			gajim.idlequeue = idlequeue.GlibIdleQueue()
+
 		# resolve and keep current record of resolved hosts
 		gajim.resolver = resolver.get_resolver(gajim.idlequeue)
 		gajim.socks5queue = socks5.SocksQueue(gajim.idlequeue,
@@ -3271,10 +3261,7 @@ class Interface:
 		self.last_ftwindow_update = 0
 
 		gobject.timeout_add(100, self.autoconnect)
-		if gajim.idlequeue.__class__ == idlequeue.GlibIdleQueue:
-			gobject.timeout_add_seconds(2, self.process_connections)
-		else:
-			gobject.timeout_add(200, self.process_connections)
+		gobject.timeout_add(200, self.process_connections)
 		gobject.timeout_add_seconds(gajim.config.get(
 			'check_idle_every_foo_seconds'), self.read_sleepy)
 
