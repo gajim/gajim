@@ -161,9 +161,6 @@ class EditGroupsDialog:
 						continue
 					groups[g] = 0
 			c_groups = contact.groups
-			# FIXME: Move to backend
-			if not c_groups:
-				c_groups = [_('General')]
 			for g in c_groups:
 				groups[g] += 1
 		group_list = []
