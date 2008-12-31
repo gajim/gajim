@@ -3108,7 +3108,7 @@ class Interface:
 			gajim.log.setLevel(None)
 
 		# GObjectIdleQueue is currently broken with ssl. Use good old select
-			gajim.idlequeue = idlequeue.SelectIdleQueue()
+		gajim.idlequeue = idlequeue.SelectIdleQueue()
 
 		# resolve and keep current record of resolved hosts
 		gajim.resolver = resolver.get_resolver(gajim.idlequeue)

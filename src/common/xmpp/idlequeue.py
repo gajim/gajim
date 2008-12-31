@@ -295,7 +295,6 @@ class SelectIdleQueue(IdleQueue):
 			self._check_time_events()
 			return True
 		try:
-			# Maybe there is still data in ssl buffer
 			waiting_descriptors = select.select(self.read_fds.keys(),
 				self.write_fds.keys(), self.error_fds.keys(), 0)
 
