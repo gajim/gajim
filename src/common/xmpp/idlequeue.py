@@ -19,6 +19,7 @@ idle objects and be informed about possible IO.
 
 import select
 import logging
+import gobject
 log = logging.getLogger('gajim.c.x.idlequeue')
 
 FLAG_WRITE 			= 20 # write only
@@ -114,7 +115,7 @@ class IdleQueue:
 
 	def remove_timeout(self, fd):
 		''' Removes the read timeout '''
-		log.debug('read timeout removed for fd %s' % fd)
+		log.info('read timeout removed for fd %s' % fd)
 		if fd in self.read_timeouts:
 			del(self.read_timeouts[fd])
 
@@ -125,7 +126,7 @@ class IdleQueue:
 
 		A filedescriptor fd can have only one timeout.
 		'''
-		log.debug('read timeout set for fd %s on %s seconds' % (fd, seconds))
+		log.info('read timeout set for fd %s on %s seconds' % (fd, seconds))
 		timeout = self.current_time() + seconds
 		self.read_timeouts[fd] = timeout
 
@@ -134,14 +135,14 @@ class IdleQueue:
 		Execute and remove alarm callbacks and execute read_timeout() for plugged
 		objects if specified time has ellapsed.
 		'''
-		log.debug('check time evs')
+		log.info('check time evs')
 		current_time = self.current_time()
 
 		for fd, timeout in self.read_timeouts.items():
 			if timeout > current_time:
 				continue
 			if fd in self.queue:
-				log.info('Calling read_timeout for fd %s' % fd) 
+				log.debug('Calling read_timeout for fd %s' % fd) 
 				self.queue[fd].read_timeout()
 			else:
 				self.remove_timeout(fd)
@@ -166,7 +167,6 @@ class IdleQueue:
 		'''
 		if obj.fd == -1:
 			return
-		log.info('Plug object fd %s as w:%s r:%s' % (obj.fd, writable, readable))
 		if obj.fd in self.queue:
 			self.unplug_idle(obj.fd)
 		self.queue[obj.fd] = obj
@@ -208,6 +208,7 @@ class IdleQueue:
 			return False
 
 		if flags & PENDING_READ:
+			#print 'waiting read on %d, flags are %d' % (fd, flags)
 			obj.pollin()
 			return True
 
@@ -240,14 +241,6 @@ class IdleQueue:
 			waiting_descriptors = []
 			if e[0] != 4: # interrupt
 				raise
-		# Maybe there is still data in ssl buffer:
-		# Add all sslWrappers where we have pending data. poll doesn't work here
-		# as it can only check sockets but the data may already be read into
-		# a ssl internal buffer
-		descriptors = (fd for fd, flag in waiting_descriptors)
-		waiting_descriptors.extend((fd, FLAG_READ) for (fd, obj) in 
-			self.queue.iteritems() if not fd in descriptors and
-			hasattr(obj, '_sslObj') and obj._sslObj.pending())
 		for fd, flags in waiting_descriptors:
 			self._process_events(fd, flags)
 		self._check_time_events()
@@ -297,16 +290,6 @@ class SelectIdleQueue(IdleQueue):
 		try:
 			waiting_descriptors = select.select(self.read_fds.keys(),
 				self.write_fds.keys(), self.error_fds.keys(), 0)
-
-			# Maybe there is still data in ssl buffer:
-			# Add all sslWrappers where we have pending data. select doesn't work 
-			# here as it can only check sockets but the data may already be read
-			# into a ssl internal buffer
-			waiting_descriptors[0].extend(fd for (fd, obj) 
-				in self.queue.iteritems() if not fd in waiting_descriptors[0] and
-				hasattr(obj, '_sslObj') and obj._sslObj.pending())
-			waiting_descriptors = (waiting_descriptors[0], waiting_descriptors[1],
-				waiting_descriptors[2])
 		except select.error, e:
 			waiting_descriptors = ((),(),())
 			if e[0] != 4: # interrupt
@@ -327,13 +310,12 @@ class SelectIdleQueue(IdleQueue):
 		return True
 
 
-#import gobject
-# FIXME: Does not work well with SSL, data may be "forgotten" in SSL buffer
 class GlibIdleQueue(IdleQueue):
 	'''
 	Extends IdleQueue to use glib io_add_wath, instead of select/poll
 	In another 'non gui' implementation of Gajim IdleQueue can be used safetly.
 	'''
+
 	def _init_idle(self):
 		'''
 		Creates a dict, which maps file/pipe/sock descriptor to glib event id

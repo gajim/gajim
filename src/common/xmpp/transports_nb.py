@@ -73,8 +73,8 @@ DISCONNECT_TIMEOUT_SECONDS = 5
 
 #: size of the buffer which reads data from server
 # if lower, more stanzas will be fragmented and processed twice
-# but GUI will freeze less
-RECV_BUFSIZE = 8192 
+RECV_BUFSIZE = 32768 # 2x maximum size of ssl packet, should be plenty
+#RECV_BUFSIZE = 16 # FIXME: (#2634) gajim breaks with this setting: it's inefficient but should work.
 
 DATA_RECEIVED='DATA RECEIVED'
 DATA_SENT='DATA SENT'
@@ -201,8 +201,6 @@ class NonBlockingTransport(PlugIn):
 				self.on_receive = None
 			return
 		self.on_receive = recv_handler
-		log.info('on_receive callback set to %s' % 
-			self.on_receive.__name__ if self.on_receive else None)
 
 	def tcp_connecting_started(self):
 		self.set_state(CONNECTING)
@@ -371,8 +369,6 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 		if self.get_state() == CONNECTING:
 			log.info('%s socket wrapper connected' % id(self))
 			self.idlequeue.remove_timeout(self.fd)
-			# We are only interested in stream errors right now
-			# _xmpp_connect_machine will take care of further plugging
 			self._plug_idle(writable=False, readable=False)
 			self.peerhost  = self._sock.getsockname()
 			if self.proxy_dict:
@@ -443,6 +439,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 			self._do_send()
 		else:
 			self.sendqueue.append(r)
+
 		self._plug_idle(writable=True, readable=True)
 
 	def encode_stanza(self, stanza):
