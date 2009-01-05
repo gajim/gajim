@@ -24,9 +24,9 @@ if test $(id -u) -eq 0; then
 	exit 1
 fi
 
-export datadir=@DATADIR@
+export datadir=@DATADIR@/gajim
 PYTHON_EXEC=@PYTHON@
 
-cd ${datadir}/gajim/src
+cd ${datadir}/src
 export PYTHONPATH="$PYTHONPATH:@LIBDIR@/gajim"
 exec ${PYTHON_EXEC} -OO gajim-remote.py "$@"
