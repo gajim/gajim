@@ -114,7 +114,12 @@ class ConfigPaths:
 		for n, p in zip(k, v):
 			self.add_from_root(n, p)
 
-		self.add('DATA', os.path.join(u'..', windowsify(u'data')))
+		datadir = ''
+		if u'datadir' in os.environ:
+			datadir = fse(os.environ[u'datadir'])
+		if not datadir:
+			datadir = u'..'
+		self.add('DATA', os.path.join(datadir, windowsify(u'data')))
 		self.add('HOME', fse(os.path.expanduser('~')))
 		self.add('TMP', fse(tempfile.gettempdir()))
 

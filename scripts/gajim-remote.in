@@ -24,7 +24,7 @@ if test $(id -u) -eq 0; then
 	exit 1
 fi
 
-datadir=@DATADIR@
+export datadir=@DATADIR@
 PYTHON_EXEC=@PYTHON@
 
 cd ${datadir}/gajim/src
