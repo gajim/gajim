@@ -859,7 +859,9 @@ Disabled</property>
                               <widget class="GtkEntry" id="auto_xa_message_entry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">The auto not available status message. If empty, Gajim will not change the current status message</property>
+                                <property name="tooltip" translatable="yes">The auto not available status message. If empty, Gajim will not change the current status message
+$S will be replaced by previous status message
+$T will be replaced by auto-not-available timeout</property>
                                 <signal name="changed" handler="on_auto_xa_message_entry_changed"/>
                               </widget>
                               <packing>
@@ -874,7 +876,9 @@ Disabled</property>
                               <widget class="GtkEntry" id="auto_away_message_entry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">The auto away status message. If empty, Gajim will not change the current status message</property>
+                                <property name="tooltip" translatable="yes">The auto away status message. If empty, Gajim will not change the current status message
+$S will be replaced by previous status message
+$T will be replaced by auto-away timeout</property>
                                 <signal name="changed" handler="on_auto_away_message_entry_changed"/>
                               </widget>
                               <packing>
