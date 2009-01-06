@@ -201,6 +201,7 @@ AC_CONFIG_FILES([
 	src/osx/syncmenu/Makefile
 	scripts/gajim
 	scripts/gajim-remote
+	scripts/gajim-history-manager
 	po/Makefile.in
 ])
 AC_OUTPUT
