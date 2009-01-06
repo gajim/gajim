@@ -1407,6 +1407,19 @@ class RosterWindow:
 			self.tree.expand_row(path, False)
 		return False
 
+	def _adjust_contact_expand_collapse_state(self, jid, account):
+		'''Expand/collapse group row based on self.collapsed_rows'''
+		iterC = self._get_contact_iter(jid, account)
+		if not iterC:
+			# Contact not visible
+			return
+		path = self.modelfilter.get_path(iterC)
+		if account + group in self.collapsed_rows:
+			self.tree.collapse_row(path)
+		else:
+			self.tree.expand_row(path, False)
+		return False
+
 ##############################################################################
 ### Roster and Modelfilter handling
 ##############################################################################
@@ -3498,6 +3511,16 @@ class RosterWindow:
 					gajim.groups[account][group]['expand'] = True
 					if account + group in self.collapsed_rows:
 						self.collapsed_rows.remove(account + group)
+				for contact in gajim.contacts.iter_contacts(account):
+					jid = contact.jid
+					print contact.jid, group, gajim.contacts.is_big_brother(account, contact.jid, accounts), self.collapsed_rows
+					if group in contact.groups and gajim.contacts.is_big_brother(
+					account, jid, accounts) and account + group + jid \
+					not in self.collapsed_rows:
+						titers = self._get_contact_iter(jid, account)
+						for titer in titers:
+							path = model.get_path(titer)
+							self.tree.expand_row(path, False)
 		elif type_ == 'account':
 			account = accounts[0] # There is only one cause we don't use merge
 			if account in self.collapsed_rows:
@@ -3514,6 +3537,10 @@ class RosterWindow:
 			# Metacontact got toggled, update icon
 			jid = model[titer][C_JID].decode('utf-8')
 			account = model[titer][C_ACCOUNT].decode('utf-8')
+			contact = gajim.contacts.get_contact(account, jid)
+			for group in contact.groups:
+				if account + group + jid in self.collapsed_rows:
+					self.collapsed_rows.append(account + group + jid)
 			family = gajim.contacts.get_metacontacts_family(account, jid)
 			nearby_family = \
 				self._get_nearby_family_and_big_brother(family, account)[0]
@@ -3543,17 +3570,21 @@ class RosterWindow:
 			for account in accounts:
 				if group in gajim.groups[account]: # This account has this group
 					gajim.groups[account][group]['expand'] = False
-					if not account + group in self.collapsed_rows:
+					if account + group not in self.collapsed_rows:
 						self.collapsed_rows.append(account + group)
 		elif type_ == 'account':
 			account = accounts[0] # There is only one cause we don't use merge
-			if not account in self.collapsed_rows:
+			if account not in self.collapsed_rows:
 				self.collapsed_rows.append(account)
 			self.draw_account(account)
 		elif type_ == 'contact':
 			# Metacontact got toggled, update icon
 			jid = model[titer][C_JID].decode('utf-8')
 			account = model[titer][C_ACCOUNT].decode('utf-8')
+			contact = gajim.contacts.get_contact(account, jid)
+			for group in contact.groups:
+				if account + group + jid not in self.collapsed_rows:
+					self.collapsed_rows.append(account + group + jid)
 			family = gajim.contacts.get_metacontacts_family(account, jid)
 			nearby_family  = \
 				self._get_nearby_family_and_big_brother(family, account)[0]
