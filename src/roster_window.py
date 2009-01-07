@@ -3513,7 +3513,6 @@ class RosterWindow:
 						self.collapsed_rows.remove(account + group)
 				for contact in gajim.contacts.iter_contacts(account):
 					jid = contact.jid
-					print contact.jid, group, gajim.contacts.is_big_brother(account, contact.jid, accounts), self.collapsed_rows
 					if group in contact.groups and gajim.contacts.is_big_brother(
 					account, jid, accounts) and account + group + jid \
 					not in self.collapsed_rows:
