@@ -18,7 +18,8 @@
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import locale, random, sha
+import locale, random
+from hashlib import sha1
 from transports_nb import NonBlockingTransport, NonBlockingHTTPBOSH,\
 	CONNECTED, CONNECTING, DISCONNECTED, DISCONNECTING,\
 	urisplit, DISCONNECT_TIMEOUT_SECONDS
@@ -527,10 +528,10 @@ class KeyStack():
 
 	def reset(self):
 		seed = str(get_rand_number())
-		self.keys = [sha.new(seed).hexdigest()]
+		self.keys = [sha1(seed).hexdigest()]
 		for i in range(self.count-1):
 			curr_seed = self.keys[i]
-			self.keys.append(sha.new(curr_seed).hexdigest())
+			self.keys.append(sha1(curr_seed).hexdigest())
 
 	def get(self):
 		if self.first_call:

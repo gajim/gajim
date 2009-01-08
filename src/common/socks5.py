@@ -25,7 +25,7 @@
 
 import socket
 import struct
-import sha
+import hashlib
 import os
 
 from errno import EWOULDBLOCK
@@ -645,9 +645,10 @@ class Socks5:
 		''' get sha of sid + Initiator jid + Target jid '''
 		if 'is_a_proxy' in self.file_props:
 			del(self.file_props['is_a_proxy'])
-			return sha.new('%s%s%s' % (self.sid, self.file_props['proxy_sender'],
+			return hashlib.sha1('%s%s%s' % (self.sid,
+				self.file_props['proxy_sender'],
 				self.file_props['proxy_receiver'])).hexdigest()
-		return sha.new('%s%s%s' % (self.sid, self.initiator, self.target)).\
+		return hashlib.sha1('%s%s%s' % (self.sid, self.initiator, self.target)).\
 			hexdigest()
 
 class Socks5Sender(Socks5, IdleObject):

@@ -38,24 +38,14 @@ import errno
 import select
 import base64
 import sys
+import hashlib
+
 from encodings.punycode import punycode_encode
 
 import gajim
 from i18n import Q_
 from i18n import ngettext
 import xmpp
-
-try:
-	# Python 2.5
-	import hashlib
-	hash_md5  = hashlib.md5
-	hash_sha1 = hashlib.sha1
-except ImportError:
-	# Python 2.4
-	import md5
-	import sha
-	hash_md5 = md5.new
-	hash_sha1 = sha.new
 
 try:
 	from osx import nsapp
@@ -731,7 +721,7 @@ def get_jid_from_iq(iq_obj):
 
 def get_auth_sha(sid, initiator, target):
 	''' return sha of sid + initiator + target used for proxy auth'''
-	return hash_sha1("%s%s%s" % (sid, initiator, target)).hexdigest()
+	return hashlib.sha1("%s%s%s" % (sid, initiator, target)).hexdigest()
 
 
 distro_info = {
@@ -847,7 +837,7 @@ def sanitize_filename(filename):
 	latin characters, and is not too long (in that case hash it)'''
 	# 48 is the limit
 	if len(filename) > 48:
-		hash = hash_md5(filename)
+		hash = hashlib.md5(filename)
 		filename = base64.b64encode(hash.digest())
 
 	filename = punycode_encode(filename) # make it latin chars only
@@ -1250,9 +1240,9 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 				S += '%s<' % value
 
 	if hash_method == 'sha-1':
-		hash_ = hash_sha1(S)
+		hash_ = hashlib.sha1(S)
 	elif hash_method == 'md5':
-		hash_ = hash_md5(S)
+		hash_ = hashlib.md5(S)
 	else:
 		return ''
 	return base64.b64encode(hash_.digest())

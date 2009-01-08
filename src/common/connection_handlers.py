@@ -30,10 +30,10 @@
 
 import os
 import base64
-import sha
 import socket
 import sys
 import operator
+import hashlib
 
 from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
 	time as time_time, timezone, tzname)
@@ -1049,7 +1049,7 @@ class ConnectionVcard:
 			photo = vcard['PHOTO']['BINVAL']
 			photo_decoded = base64.decodestring(photo)
 			gajim.interface.save_avatar_files(our_jid, photo_decoded)
-			avatar_sha = sha.sha(photo_decoded).hexdigest()
+			avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
 			iq2.getTag('PHOTO').setTagData('SHA', avatar_sha)
 		else:
 			gajim.interface.remove_avatar_files(our_jid)
@@ -1205,7 +1205,7 @@ class ConnectionVcard:
 			photo = vcard['PHOTO']['BINVAL']
 			try:
 				photo_decoded = base64.decodestring(photo)
-				avatar_sha = sha.sha(photo_decoded).hexdigest()
+				avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
 			except Exception:
 				avatar_sha = ''
 		else:

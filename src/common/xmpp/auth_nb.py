@@ -22,18 +22,17 @@ See client_nb.py
 from protocol import NS_SASL, NS_SESSION, NS_STREAMS, NS_BIND, NS_AUTH
 from protocol import Node, NodeProcessed, isResultNode, Iq, Protocol, JID
 from client import PlugIn
-import sha
 import base64
 import random
 import itertools
 import dispatcher_nb
-import md5
+import hashlib
 
 import logging
 log = logging.getLogger('gajim.c.x.auth_nb')
 
-def HH(some): return md5.new(some).hexdigest()
-def H(some): return md5.new(some).digest()
+def HH(some): return hashlib.md5(some).hexdigest()
+def H(some): return hashlib.md5(some).digest()
 def C(some): return ':'.join(some)
 
 try:
@@ -372,8 +371,8 @@ class NonBlockingNonSASL(PlugIn):
 		if query.getTag('digest'):
 			log.info("Performing digest authentication")
 			query.setTagData('digest',
-				sha.new(self.owner.Dispatcher.Stream._document_attrs['id'] +
-				self.password).hexdigest())
+				hashlib.sha1(self.owner.Dispatcher.Stream._document_attrs['id']
+				+ self.password).hexdigest())
 			if query.getTag('password'):
 				query.delChild('password')
 			self._method = 'digest'
@@ -383,7 +382,7 @@ class NonBlockingNonSASL(PlugIn):
 			log.info("Performing zero-k authentication")
 
 			def hasher(s):
-				return sha.new(s).hexdigest()
+				return hashlib.sha1(s).hexdigest()
 
 			def hash_n_times(s, count):
 				return count and hasher(hash_n_times(s, count-1)) or s
