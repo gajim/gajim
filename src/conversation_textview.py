@@ -1150,8 +1150,8 @@ class ConversationTextview:
 					'', None)
 				imagepath = None
 			end_iter = buffer_.get_end_iter()
-			anchor = buffer_.create_child_anchor(end_iter)
 			if imagepath is not None:
+				anchor = buffer_.create_child_anchor(end_iter)
 				img = gtk.Image()
 				img.set_from_file(imagepath)
 				img.show()
