@@ -198,6 +198,7 @@ class NonBlockingTransport(PlugIn):
 			if hasattr(self._owner, 'Dispatcher'):
 				self.on_receive = self._owner.Dispatcher.ProcessNonBlocking
 			else:
+				log.warning('No Dispatcher plugged. Received data will not be processed')
 				self.on_receive = None
 			return
 		self.on_receive = recv_handler
@@ -343,7 +344,6 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 					'error while estabilishing TLS'))
 		else:
 			NonBlockingTransport._on_connect(self)
-
 
 	def tls_init(self, on_succ, on_fail):
 		'''

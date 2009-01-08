@@ -120,7 +120,7 @@ class NonBlockingClient:
 			if not stream_started:
 				# if error occur before XML stream was opened, e.g. no response on 
 				# init request, we call the on_connect_failure callback because
-				# proper connection is not estabilished yet and it's not a proxy
+				# proper connection is not established yet and it's not a proxy
 				# issue
 				log.debug('calling on_connect_failure cb')
 				self.on_connect_failure()
@@ -146,15 +146,15 @@ class NonBlockingClient:
 			values for keys 'host' and 'port' - connection details for proxy serve
 			and optionally keys 'user' and 'pass' as proxy credentials
 		:param secure_tuple: tuple of (desired connection type, cacerts, mycerts)
-			connection type can be 'ssl' - TLS estabilished after TCP connection,
-			'tls' - TLS estabilished after negotiation with starttls, or 'plain'.
+			connection type can be 'ssl' - TLS established after TCP connection,
+			'tls' - TLS established after negotiation with starttls, or 'plain'.
 			cacerts, mycerts - see tls_nb.NonBlockingTLS constructor for more
 			details
 		'''
 		self.on_connect = on_connect
 		self.on_connect_failure=on_connect_failure
 		self.on_proxy_failure = on_proxy_failure
-		self.secure, self.cacerts, self.mycerts = secure_tuple
+		self.desired_security, self.cacerts, self.mycerts = secure_tuple
 		self.Connection = None
 		self.Port = port
 		self.proxy = proxy
@@ -163,8 +163,12 @@ class NonBlockingClient:
 			self.xmpp_hostname = hostname
 		else:
 			self.xmpp_hostname = self.Server
-
-		estabilish_tls = self.secure == 'ssl'
+		
+		# We only check for SSL here as for TLS we will first have to start a 
+		# PLAIN connection and negotiate TLS afterwards.
+		# establish_tls will instruct transport to start secure connection 
+		# directly
+		establish_tls = self.desired_security == 'ssl'
 		certs = (self.cacerts, self.mycerts)
 
 		proxy_dict = {}
@@ -182,15 +186,15 @@ class NonBlockingClient:
 			if proxy['type'] == 'bosh':
 				# Setup BOSH transport
 				self.socket = bosh.NonBlockingBOSH(
-					on_disconnect = self.disconnect,
-					raise_event = self.raise_event,
-					idlequeue = self.idlequeue,
-					estabilish_tls = estabilish_tls,
-					certs = certs,
-					proxy_creds = (proxy_user, proxy_pass),
-					xmpp_server = (self.xmpp_hostname, self.Port),
-					domain = self.Server,
-					bosh_dict = proxy)
+					on_disconnect=self.disconnect,
+					raise_event=self.raise_event,
+					idlequeue=self.idlequeue,
+					estabilish_tls=establish_tls,
+					certs=certs,
+					proxy_creds=(proxy_user, proxy_pass),
+					xmpp_server=(self.xmpp_hostname, self.Port),
+					domain=self.Server,
+					bosh_dict=proxy)
 				self.protocol_type = 'BOSH'
 				self.wait_for_restart_response = \
 					proxy['bosh_wait_for_restart_response']
@@ -203,12 +207,12 @@ class NonBlockingClient:
 		if not proxy or proxy['type'] != 'bosh':
 			# Setup ordinary TCP transport
 			self.socket = transports_nb.NonBlockingTCP(
-				on_disconnect = self.disconnect,
-				raise_event = self.raise_event,
-				idlequeue = self.idlequeue,
-				estabilish_tls = estabilish_tls,
-				certs = certs,
-				proxy_dict = proxy_dict)
+				on_disconnect=self.disconnect,
+				raise_event=self.raise_event,
+				idlequeue=self.idlequeue,
+				estabilish_tls=establish_tls,
+				certs=certs,
+				proxy_dict=proxy_dict)
 
 		# plug transport into client as self.Connection
 		self.socket.PlugIn(self)
@@ -221,8 +225,8 @@ class NonBlockingClient:
 	def _resolve_hostname(self, hostname, port, on_success):
 		''' wrapper for getaddinfo call. FIXME: getaddinfo blocks'''
 		try:
-			self.ip_addresses = socket.getaddrinfo(hostname,port,
-				socket.AF_UNSPEC,socket.SOCK_STREAM)
+			self.ip_addresses = socket.getaddrinfo(hostname, port,
+				socket.AF_UNSPEC, socket.SOCK_STREAM)
 		except socket.gaierror, (errnum, errstr):
 			self.disconnect(message='Lookup failure for %s:%s, hostname: %s - %s' %
 				 (self.Server, self.Port, hostname, errstr))
@@ -241,7 +245,7 @@ class NonBlockingClient:
 			self.current_ip = self.ip_addresses.pop(0)
 			self.socket.connect(
 				conn_5tuple=self.current_ip,
-				on_connect=lambda: self._xmpp_connect(socket_type='plain'),
+				on_connect=lambda: self._xmpp_connect(),
 				on_connect_failure=self._try_next_ip)
 
 	def incoming_stream_version(self):
@@ -251,14 +255,20 @@ class NonBlockingClient:
 		else:
 			return None
 
-	def _xmpp_connect(self, socket_type):
+	def _xmpp_connect(self, socket_type=None):
 		'''
 		Starts XMPP connecting process - opens the XML stream. Is called after TCP
-		connection is estabilished or after switch to TLS when successfully
+		connection is established or after switch to TLS when successfully
 		negotiated with <starttls>.
 		'''
-		if socket_type == 'plain' and self.Connection.ssl_lib:
-			socket_type = 'ssl'
+		# socket_type contains info which transport connection was established
+		if not socket_type:
+			if self.Connection.ssl_lib:
+				# When ssl_lib is set we connected via SSL
+				socket_type = 'ssl'
+			else:
+				# PLAIN is default
+				socket_type = 'plain'
 		self.connected = socket_type
 		self._xmpp_connect_machine()
 
@@ -287,7 +297,7 @@ class NonBlockingClient:
 			if self.__dict__.has_key('Dispatcher'):
 				self.Dispatcher.PlugOut()
 				self.got_features = False
-			d = dispatcher_nb.Dispatcher().PlugIn(self)
+			dispatcher_nb.Dispatcher().PlugIn(self)
 			on_next_receive('RECEIVE_DOCUMENT_ATTRIBUTES')
 
 		elif mode == 'FAILURE':
@@ -307,7 +317,6 @@ class NonBlockingClient:
 				else:
 					log.info('got STREAM FEATURES in first recv')
 					self._xmpp_connect_machine(mode='STREAM_STARTED')
-
 			else:
 				log.info('incoming stream version less than 1.0')
 				self._xmpp_connect_machine(mode='STREAM_STARTED')
@@ -330,32 +339,35 @@ class NonBlockingClient:
 
 	def _on_stream_start(self):
 		'''
-		Called after XMPP stream is opened.
-		TLS negotiation may follow when stream is established.
+		Called after XMPP stream is opened.	TLS negotiation may follow if
+		supported and desired.
 		'''
 		self.stream_started = True
 		self.onreceive(None)
+
 		if self.connected == 'plain':
-			if self.secure == 'plain':
-				# if we want plain connection, we're done now
+			if self.desired_security == 'plain':
+				# if we want and have plain connection, we're done now
 				self._on_connect()
-				return
-			if self.incoming_stream_version() != '1.0':
-				# if stream version is less than 1.0, we can't do more
-				log.warn('While connecting with type = "tls": stream version is less than 1.0')
-				self._on_connect()
-				return
-			if not self.Dispatcher.Stream.features.getTag('starttls'):
-				# if server doesn't advertise TLS in init response, we can't do more
-				log.warn('While connecting with type = "tls": TLS unsupported by remote server')
-				self._on_connect()
-				return
-			# otherwise start TLS negotioation
-			self.stream_started = False
-			log.info("TLS supported by remote server. Requesting TLS start.")
-			self._tls_negotiation_handler()
+			else:
+				# try to negotiate TLS
+				if self.incoming_stream_version() != '1.0':
+					# if stream version is less than 1.0, we can't do more
+					log.warn('While connecting with type = "tls": stream version is less than 1.0')
+					self._on_connect()
+					return
+				if self.Dispatcher.Stream.features.getTag('starttls'):
+					# Server advertises TLS support, start negotiation
+					self.stream_started = False
+					log.info('TLS supported by remote server. Requesting TLS start.')
+					self._tls_negotiation_handler()
+				else:
+					log.warn('While connecting with type = "tls": TLS unsupported by remote server')
+					self._on_connect()
+
 		elif self.connected in ['ssl', 'tls']:
 			self._on_connect()
+		assert False # should never be reached
 
 	def _tls_negotiation_handler(self, con=None, tag=None):
 		''' takes care of TLS negotioation with <starttls> '''
@@ -374,7 +386,7 @@ class NonBlockingClient:
 				return
 			tagname = tag.getName()
 			if tagname == 'failure':
-				self.disconnect('TLS <failure>  received: %s' % tag)
+				self.disconnect('TLS <failure> received: %s' % tag)
 				return
 			log.info('Got starttls proceed response. Switching to TLS/SSL...')
 			# following call wouldn't work for BOSH transport but it doesn't matter
@@ -464,7 +476,7 @@ class NonBlockingClient:
 			# wrong user/pass, stop auth
 			if 'SASL' in self.__dict__:
 				self.SASL.PlugOut()
-			self.connected = None
+			self.connected = None # FIXME: is this intended?
 			self._on_sasl_auth(None)
 		elif self.SASL.startsasl == 'success':
 			auth_nb.NonBlockingBind().PlugIn(self)
