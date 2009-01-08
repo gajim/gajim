@@ -249,13 +249,12 @@ class NonBlockingTLS(PlugIn):
 			"SSL_CB_ALERT": 0x4000, 
 			"SSL_CB_HANDSHAKE_START": 0x10, "SSL_CB_HANDSHAKE_DONE": 0x20}
 
-	def PlugIn(self, owner):
+	def plugin(self, owner):
 		'''
 		Use to PlugIn TLS into transport and start establishing immediately
 		Returns True if TLS/SSL was established correctly, otherwise False.
 		'''
 		log.info('Starting TLS estabilishing')
-		PlugIn.PlugIn(self, owner)
 		try:
 			res = self._startSSL()
 		except Exception, e:
@@ -328,9 +327,8 @@ class NonBlockingTLS(PlugIn):
 	def _startSSL_pyOpenSSL(self):
 		log.debug("_startSSL_pyOpenSSL called")
 		tcpsock = self._owner
-		# FIXME: should method be configurable?
-		#tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_METHOD)
-		tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv23_METHOD)
+		# See http://docs.python.org/dev/library/ssl.html
+		tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv3_METHOD)
 		tcpsock.ssl_errnum = 0
 		tcpsock._sslContext.set_verify(OpenSSL.SSL.VERIFY_PEER,
 			self._ssl_verify_callback)
