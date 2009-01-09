@@ -30,7 +30,10 @@
 import os
 import random
 from tempfile import gettempdir
-from subprocess import Popen
+from subprocess import Popen, PIPE
+
+import logging
+log = logging.getLogger('gajim.c.latex')
 
 import gajim
 from exceptions import LatexError
@@ -72,12 +75,14 @@ def write_latex(filename, str_):
 	file_.close()
 
 # a wrapper for Popen so that no window gets opened on Windows
+# (i think this is the reason we're using Popen rather than just system())
+# stdout goes to a pipe so that it can be read
 def popen_nt_friendly(command):
 	if os.name == 'nt':
 		# CREATE_NO_WINDOW
-		return Popen(command, creationflags=0x08000000, cwd=gettempdir())
+		return Popen(command, creationflags=0x08000000, cwd=gettempdir(), stdout=PIPE)
 	else:
-		return Popen(command, cwd=gettempdir())
+		return Popen(command, cwd=gettempdir(), stdout=PIPE)
 
 def check_for_latex_support():
 	'''check is latex is available and if it can create a picture.'''
@@ -110,6 +115,8 @@ def latex_to_image(str_):
 	try:
 		p = popen_nt_friendly(['latex', '--interaction=nonstopmode',
 			tmpfile + '.tex'])
+		out = p.communicate()[0]
+		log.info(out)
 		exitcode = p.wait()
 	except Exception, e:
 		exitcode = _('Error executing "%(command)s": %(error)s') % {
@@ -123,6 +130,8 @@ def latex_to_image(str_):
 			p = popen_nt_friendly(['dvipng', '-bg', 'rgb 1.0 1.0 1.0', '-T',
 				'tight', '-D', latex_png_dpi, tmpfile + '.dvi', '-o',
 				tmpfile + '.png'])
+			out = p.communicate()[0]
+			log.info(out)
 			exitcode = p.wait()
 		except Exception, e:
 			exitcode = _('Error executing "%(command)s": %(error)s') % {
