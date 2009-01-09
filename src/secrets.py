@@ -42,10 +42,8 @@ class Secrets:
 		raise exceptions.Cancelled
 
 	def save(self):
-		pickle.dumps(self)
-
 		f = open(secrets_filename, 'w')
-		f.write(pickle.dumps(self))
+		pickle.dump(self, f)
 		f.close()
 
 	def retained_secrets(self, account, bare_jid):
@@ -100,7 +98,7 @@ def load_secrets(filename):
 	f = open(filename, 'r')
 
 	try:
-		secrets = pickle.loads(f.read())
+		secrets = pickle.load(f)
 	except KeyError:
 		f.close()
 		secrets = Secrets(filename)
