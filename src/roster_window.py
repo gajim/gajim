@@ -1955,7 +1955,7 @@ class RosterWindow:
 		self.send_status_continue(account, status, txt, auto, to)
 
 	def send_status_continue(self, account, status, txt, auto, to):
-		if gajim.account_is_connected(account):
+		if gajim.account_is_connected(account) and not to:
 			if status == 'online' and gajim.interface.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
 				gajim.sleeper_state[account] = 'online'
