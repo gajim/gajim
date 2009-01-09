@@ -27,9 +27,6 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import random
-from tempfile import gettempdir
-from subprocess import Popen
 from threading import Timer # for smooth scrolling
 
 import gtk
@@ -45,6 +42,7 @@ import Queue
 import gtkgui_helpers
 from common import gajim
 from common import helpers
+from common import latex
 from calendar import timegm
 from common.fuzzyclock import FuzzyClock
 
@@ -959,95 +957,6 @@ class ConversationTextview:
 
 		return index # the position after *last* special text
 
-	def latex_to_image(self, str_):
-		result = None
-		exitcode = 0
-
-		# some latex commands are really bad
-		blacklist = ['\\def', '\\let', '\\futurelet',
-			'\\newcommand', '\\renewcomment', '\\else', '\\fi', '\\write',
-			'\\input', '\\include', '\\chardef', '\\catcode', '\\makeatletter',
-			'\\noexpand', '\\toksdef', '\\every', '\\errhelp', '\\errorstopmode',
-			'\\scrollmode', '\\nonstopmode', '\\batchmode', '\\read', '\\csname',
-			'\\newhelp', '\\relax', '\\afterground', '\\afterassignment',
-			'\\expandafter', '\\noexpand', '\\special', '\\command', '\\loop',
-			'\\repeat', '\\toks', '\\output', '\\line', '\\mathcode', '\\name',
-			'\\item', '\\section', '\\mbox', '\\DeclareRobustCommand', '\\[',
-			'\\]']
-
-		str_ = str_[2:len(str_)-2]
-
-		# filter latex code with bad commands
-		for word in blacklist:
-			if word in str_:
-				exitcode = 1
-				break
-
-		if exitcode == 0:
-			random.seed()
-			tmpfile = os.path.join(gettempdir(), 'gajimtex_' + random.randint(0,
-				100).__str__())
-
-			# build latex string
-			texstr = '\\documentclass[12pt]{article}\\usepackage[dvips]{graphicx}'
-			texstr += '\\usepackage{amsmath}\\usepackage{amssymb}'
-			texstr += '\\pagestyle{empty}'
-			texstr += '\\begin{document}\\begin{large}\\begin{gather*}'
-			texstr += str_
-			texstr += '\\end{gather*}\\end{large}\\end{document}'
-
-			file_ = open(os.path.join(tmpfile + '.tex'), 'w+')
-			file_.write(texstr)
-			file_.flush()
-			file_.close()
-
-			try:
-				if os.name == 'nt':
-					# CREATE_NO_WINDOW
-					p = Popen(['latex', '--interaction=nonstopmode',
-						tmpfile + '.tex'], creationflags=0x08000000, cwd=gettempdir())
-				else:
-					p = Popen(['latex', '--interaction=nonstopmode',
-						tmpfile + '.tex'], cwd=gettempdir())
-				exitcode = p.wait()
-			except Exception, e:
-				exitcode = _('Error executing "%(command)s": %(error)s') % {
-					'command': 'latex --interaction=nonstopmode %s.tex' % tmpfile,
-					'error': str(e)}
-
-		if exitcode == 0:
-			latex_png_dpi = gajim.config.get('latex_png_dpi')
-			try:
-				if os.name == 'nt':
-					# CREATE_NO_WINDOW
-					p = Popen(['dvipng', '-bg', 'rgb 1.0 1.0 1.0', '-T', 'tight',
-						'-D', latex_png_dpi, tmpfile + '.dvi', '-o',
-						tmpfile + '.png'], creationflags=0x08000000, cwd=gettempdir())
-				else:
-					p = Popen(['dvipng', '-bg', 'rgb 1.0 1.0 1.0', '-T', 'tight',
-						'-D', latex_png_dpi, tmpfile + '.dvi', '-o',
-						tmpfile + '.png'], cwd=gettempdir())
-				exitcode = p.wait()
-			except Exception, e:
-				exitcode = _('Error executing "%(command)s": %(error)s') % {
-					'command': 'dvipng -bg rgb 1.0 1.0 1.0 -T tight -D %s %s.dvi -o '
-					'%s.png' % (latex_png_dpi, tmpfile, tmpfile), 'error': str(e)}
-
-		extensions = ['.tex', '.log', '.aux', '.dvi']
-		for ext in extensions:
-			try:
-				os.remove(tmpfile + ext)
-			except Exception:
-				pass
-
-		if isinstance(exitcode, (unicode, str)):
-			raise LatexError(exitcode)
-
-		if exitcode == 0:
-			result = tmpfile + '.png'
-
-		return result
-
 	def print_special_text(self, special_text, other_tags):
 		'''is called by detect_and_print_special_text and prints
 		special text (emots, links, formatting)'''
@@ -1144,7 +1053,7 @@ class ConversationTextview:
 		elif gajim.HAVE_LATEX and special_text.startswith('$$') and \
 		special_text.endswith('$$'):
 			try:
-				imagepath = self.latex_to_image(special_text)
+				imagepath = latex.latex_to_image(special_text[2:-2])
 			except LatexError, e:
 				# print the error after the line has been written
 				gobject.idle_add(self.print_conversation_line, str(e), '', 'info',
