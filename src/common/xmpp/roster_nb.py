@@ -22,7 +22,7 @@ mass-renaming of contacts.
 '''
 
 from protocol import JID, Iq, Presence, Node, NodeProcessed, NS_ROSTER
-from client import PlugIn
+from plugin import PlugIn
 
 import logging
 log = logging.getLogger('gajim.c.x.roster_nb')

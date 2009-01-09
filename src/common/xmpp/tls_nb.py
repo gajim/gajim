@@ -16,7 +16,7 @@
 ##   GNU General Public License for more details.
 
 import socket
-from client import PlugIn
+from plugin import PlugIn
 
 import sys
 import os

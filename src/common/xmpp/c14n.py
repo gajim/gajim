@@ -1,6 +1,5 @@
-''' XML canonicalisation methods (for XEP-0116) '''
 # -*- coding:utf-8 -*-
-## src/common/stanza_session.py
+## c14n.py
 ##
 ## Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>
 ##
@@ -18,6 +17,8 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
+
+''' XML canonicalisation methods (for XEP-0116) '''
 from simplexml import ustr
 
 def c14n(node):

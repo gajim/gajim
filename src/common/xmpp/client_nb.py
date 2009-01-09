@@ -1,6 +1,5 @@
 ##   client_nb.py
 ##	   based on client.py, changes backported up to revision 1.60
-
 ##
 ##   Copyright (C) 2003-2005 Alexey "Snake" Nezhdanov
 ##	   modified by Dimitur Kirov <dkirov@gmail.com>
@@ -21,9 +20,7 @@
 Client class establishs connection to XMPP Server and handles authentication
 '''
 import socket
-
 import transports_nb, dispatcher_nb, auth_nb, roster_nb, protocol, bosh
-
 from protocol import NS_TLS
 
 import logging
@@ -185,7 +182,7 @@ class NonBlockingClient:
 		
 			if proxy['type'] == 'bosh':
 				# Setup BOSH transport
-				self.socket = bosh.NonBlockingBOSH(
+				self.socket = bosh.NonBlockingBOSH.get_instance(
 					on_disconnect=self.disconnect,
 					raise_event=self.raise_event,
 					idlequeue=self.idlequeue,
@@ -206,7 +203,7 @@ class NonBlockingClient:
 
 		if not proxy or proxy['type'] != 'bosh':
 			# Setup ordinary TCP transport
-			self.socket = transports_nb.NonBlockingTCP(
+			self.socket = transports_nb.NonBlockingTCP.get_instance(
 				on_disconnect=self.disconnect,
 				raise_event=self.raise_event,
 				idlequeue=self.idlequeue,
@@ -297,7 +294,7 @@ class NonBlockingClient:
 			if self.__dict__.has_key('Dispatcher'):
 				self.Dispatcher.PlugOut()
 				self.got_features = False
-			dispatcher_nb.Dispatcher().PlugIn(self)
+			dispatcher_nb.Dispatcher.get_instance().PlugIn(self)
 			on_next_receive('RECEIVE_DOCUMENT_ATTRIBUTES')
 
 		elif mode == 'FAILURE':
@@ -451,13 +448,13 @@ class NonBlockingClient:
 	def _on_doc_attrs(self):
 		''' Plug authentication objects and start auth. '''
 		if self._sasl:
-			auth_nb.SASL(self._User, self._Password,
+			auth_nb.SASL.get_instance(self._User, self._Password,
 				self._on_start_sasl).PlugIn(self)
 		if not self._sasl or self.SASL.startsasl == 'not-supported':
 			if not self._Resource:
 				self._Resource = 'xmpppy'
-			auth_nb.NonBlockingNonSASL(self._User, self._Password, self._Resource,
-				self._on_old_auth).PlugIn(self)
+			auth_nb.NonBlockingNonSASL.get_instance(self._User, self._Password,
+				self._Resource, self._on_old_auth).PlugIn(self)
 			return
 		self.SASL.auth()
 		return True
@@ -479,7 +476,7 @@ class NonBlockingClient:
 			self.connected = None # FIXME: is this intended?
 			self._on_sasl_auth(None)
 		elif self.SASL.startsasl == 'success':
-			auth_nb.NonBlockingBind().PlugIn(self)
+			auth_nb.NonBlockingBind.get_instance().PlugIn(self)
 			self.onreceive(self._on_auth_bind)
 		return True
 		
@@ -495,7 +492,7 @@ class NonBlockingClient:
 	def initRoster(self):
 		''' Plug in the roster. '''
 		if not self.__dict__.has_key('NonBlockingRoster'):
-			roster_nb.NonBlockingRoster().PlugIn(self)
+			roster_nb.NonBlockingRoster.get_instance().PlugIn(self)
 
 	def getRoster(self, on_ready=None):
 		''' Return the Roster instance, previously plugging it in and
@@ -509,7 +506,7 @@ class NonBlockingClient:
 			Can also request roster from server if according agrument is set.'''
 		if requestRoster:
 			# FIXME: used somewhere?
-			roster_nb.NonBlockingRoster().PlugIn(self)
+			roster_nb.NonBlockingRoster.get_instance().PlugIn(self)
 		self.send(dispatcher_nb.Presence(to=jid, typ=typ))
 
 ###############################################################################

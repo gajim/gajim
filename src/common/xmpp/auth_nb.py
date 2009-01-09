@@ -21,7 +21,7 @@ See client_nb.py
 '''
 from protocol import NS_SASL, NS_SESSION, NS_STREAMS, NS_BIND, NS_AUTH
 from protocol import Node, NodeProcessed, isResultNode, Iq, Protocol, JID
-from client import PlugIn
+from plugin import PlugIn
 import base64
 import random
 import itertools
@@ -127,7 +127,7 @@ class SASL(PlugIn):
 		self.password = password
 		self.on_sasl = on_sasl
 		self.realm = None
-
+	
 	def plugin(self, owner):
 		if 'version' not in self._owner.Dispatcher.Stream._document_attrs:
 			self.startsasl = SASL_UNSUPPORTED
@@ -255,8 +255,8 @@ class SASL(PlugIn):
 			# Openfire) 
 			old_features = self._owner.Dispatcher.Stream.features
 			self._owner.Dispatcher.PlugOut()
-			dispatcher_nb.Dispatcher().PlugIn(self._owner, after_SASL=True,
-				old_features=old_features)
+			dispatcher_nb.Dispatcher.get_instance().PlugIn(self._owner,
+				after_SASL=True, old_features=old_features)
 			self._owner.Dispatcher.restoreHandlers(handlers)
 			self._owner.User = self.username
 

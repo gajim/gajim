@@ -21,7 +21,7 @@ from common import gajim
 import common.xmpp
 from common.xmpp.idlequeue import IdleObject
 from common.xmpp import dispatcher_nb, simplexml
-from common.xmpp.client import *
+from common.xmpp.plugin import *
 from common.xmpp.simplexml import ustr
 from common.xmpp.transports_nb import DATA_RECEIVED, DATA_SENT
 from common.zeroconf import zeroconf

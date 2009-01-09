@@ -25,7 +25,7 @@ connection handling.
 '''
 
 from simplexml import ustr
-from client import PlugIn
+from plugin import PlugIn
 from idlequeue import IdleObject
 import proxy_connectors
 import tls_nb
@@ -74,22 +74,27 @@ DISCONNECT_TIMEOUT_SECONDS = 5
 #: size of the buffer which reads data from server
 # if lower, more stanzas will be fragmented and processed twice
 RECV_BUFSIZE = 32768 # 2x maximum size of ssl packet, should be plenty
-#RECV_BUFSIZE = 16 # FIXME: (#2634) gajim breaks with this setting: it's inefficient but should work.
+# FIXME: (#2634) gajim breaks with #RECV_BUFSIZE = 16
+# it's inefficient but should work. Problem is that connect machine makes wrong
+# assumptions and that we only check for pending data in sockets but not in SSL
+# buffer...
 
-DATA_RECEIVED='DATA RECEIVED'
-DATA_SENT='DATA SENT'
+DATA_RECEIVED = 'DATA RECEIVED'
+DATA_SENT = 'DATA SENT'
 
 DISCONNECTED = 'DISCONNECTED'
 DISCONNECTING = 'DISCONNECTING'
 CONNECTING = 'CONNECTING'
 PROXY_CONNECTING = 'PROXY_CONNECTING'
 CONNECTED = 'CONNECTED'
-STATES = [DISCONNECTED, CONNECTING, PROXY_CONNECTING, CONNECTED, DISCONNECTING]
-# Transports have different arguments in constructor and same connect() method.
+STATES = (DISCONNECTED, CONNECTING, PROXY_CONNECTING, CONNECTED, DISCONNECTING)
 
 class NonBlockingTransport(PlugIn):
 	'''
 	Abstract class representing a transport.
+
+	Subclasses CAN have different constructor signature but connect method SHOULD
+	be the same.
 	'''
 	def __init__(self, raise_event, on_disconnect, idlequeue, estabilish_tls,
 	certs):
@@ -322,15 +327,14 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 			proxyclass = proxy_connectors.SOCKS5Connector
 		elif self.proxy_dict['type'] == 'http'  :
 			proxyclass = proxy_connectors.HTTPCONNECTConnector
-		proxyclass(
-			send_method = self.send,
-			onreceive = self.onreceive,
-			old_on_receive = self.on_receive,
-			on_success = self._on_connect,
-			on_failure = self._on_connect_failure,
-			xmpp_server = self.proxy_dict['xmpp_server'],
-			proxy_creds = self.proxy_dict['credentials']
-			)
+		proxyclass.get_instance(
+			send_method=self.send,
+			onreceive=self.onreceive,
+			old_on_receive=self.on_receive,
+			on_success=self._on_connect,
+			on_failure=self._on_connect_failure,
+			xmpp_server=self.proxy_dict['xmpp_server'],
+			proxy_creds=self.proxy_dict['credentials'])
 
 	def _on_connect(self):
 		'''
@@ -351,7 +355,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 		NonBlockingTLS module
 		'''
 		cacerts, mycerts = self.certs
-		result = tls_nb.NonBlockingTLS(cacerts, mycerts).PlugIn(self)
+		result = tls_nb.NonBlockingTLS.get_instance(cacerts, mycerts).PlugIn(self)
 		if result:
 			on_succ()
 		else:

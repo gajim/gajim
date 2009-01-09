@@ -55,6 +55,16 @@ class ProxyConnector:
 		self.old_on_receive = old_on_receive
 
 		self.start_connecting()
+	
+	@classmethod
+	def get_instance(cls, *args, **kwargs):
+		'''
+		Factory Method for object creation.
+		
+		Use this instead of directly initializing the class in order to make
+		unit testing much easier.
+		'''
+		return cls(*args, **kwargs)
 
 	def start_connecting(self):
 		raise NotImplementedError

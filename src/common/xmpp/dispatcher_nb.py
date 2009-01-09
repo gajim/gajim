@@ -22,9 +22,9 @@ different handlers to different XMPP stanzas and namespaces.
 
 import simplexml, sys, locale
 from xml.parsers.expat import ExpatError
-from client import PlugIn
-from protocol import NS_STREAMS, NS_XMPP_STREAMS, NS_HTTP_BIND, Iq, Presence, \
-	Message, Protocol, Node, Error, ERR_FEATURE_NOT_IMPLEMENTED, StreamError 
+from plugin import PlugIn
+from protocol import (NS_STREAMS, NS_XMPP_STREAMS, NS_HTTP_BIND, Iq, Presence,
+	Message, Protocol, Node, Error, ERR_FEATURE_NOT_IMPLEMENTED, StreamError)
 import logging
 log = logging.getLogger('gajim.c.x.dispatcher_nb')
 
@@ -52,6 +52,16 @@ class Dispatcher():
 			XMPPDispatcher().PlugIn(client_obj)
 		elif client_obj.protocol_type == 'BOSH':
 			BOSHDispatcher().PlugIn(client_obj, after_SASL, old_features)
+	
+	@classmethod
+	def get_instance(cls, *args, **kwargs):
+		'''
+		Factory Method for object creation.
+		
+		Use this instead of directly initializing the class in order to make
+		unit testing much easier.
+		'''
+		return cls(*args, **kwargs)
 
 
 class XMPPDispatcher(PlugIn):

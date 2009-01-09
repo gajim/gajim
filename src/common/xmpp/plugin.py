@@ -1,4 +1,4 @@
-##   client.py
+##   plugin.py
 ##
 ##   Copyright (C) 2003-2005 Alexey "Snake" Nezhdanov
 ##
@@ -82,5 +82,16 @@ class PlugIn:
 		if hasattr(self,'plugout'):
 			return self.plugout()
 		del self._owner
+	
+	@classmethod
+	def get_instance(cls, *args, **kwargs):
+		'''
+		Factory Method for object creation.
+		
+		Use this instead of directly initializing the class in order to make
+		unit testing easier. For testing, this method can be patched to inject
+		mock objects.
+		'''
+		return cls(*args, **kwargs)
 
 # vim: se ts=3:
