@@ -1141,7 +1141,8 @@ class ConversationTextview:
 			else:
 				if not show_ascii_formatting_chars:
 					special_text = special_text[1:-1] # remove _ _
-		elif special_text.startswith('$$') and special_text.endswith('$$'):
+		elif gajim.HAVE_LATEX and special_text.startswith('$$') and \
+		special_text.endswith('$$'):
 			try:
 				imagepath = self.latex_to_image(special_text)
 			except LatexError, e:

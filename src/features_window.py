@@ -31,10 +31,6 @@ import gtkgui_helpers
 from common import gajim
 from common import helpers
 
-import random
-from tempfile import gettempdir
-from subprocess import Popen
-
 class FeaturesWindow:
 	'''Class for features window'''
 
@@ -255,56 +251,7 @@ class FeaturesWindow:
 		return sleepy.SUPPORTED
 
 	def latex_available(self):
-		'''check is latex is available and if it can create a picture.'''
-
-		exitcode = 0
-		random.seed()
-		tmpfile = os.path.join(gettempdir(), "gajimtex_" + \
-			random.randint(0,100).__str__())
-
-		# build latex string
-		texstr = '\\documentclass[12pt]{article}\\usepackage[dvips]{graphicx}'
-		texstr += '\\usepackage{amsmath}\\usepackage{amssymb}\\pagestyle{empty}'
-		texstr += '\\begin{document}\\begin{large}\\begin{gather*}test'
-		texstr += '\\end{gather*}\\end{large}\\end{document}'
-
-		file_ = open(os.path.join(tmpfile + ".tex"), "w+")
-		file_.write(texstr)
-		file_.flush()
-		file_.close()
-		try:
-			if os.name == 'nt':
-				# CREATE_NO_WINDOW
-				p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'],
-					creationflags=0x08000000, cwd=gettempdir())
-			else:
-				p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'],
-					cwd=gettempdir())
-			exitcode = p.wait()
-		except Exception:
-			exitcode = 1
-		if exitcode == 0:
-			try:
-				if os.name == 'nt':
-					# CREATE_NO_WINDOW
-					p = Popen(['dvipng', '-bg', 'white', '-T', 'tight',
-						tmpfile + '.dvi', '-o', tmpfile + '.png'],
-						creationflags=0x08000000, cwd=gettempdir())
-				else:
-					p = Popen(['dvipng', '-bg', 'white', '-T', 'tight',
-						tmpfile + '.dvi', '-o', tmpfile + '.png'], cwd=gettempdir())
-				exitcode = p.wait()
-			except Exception:
-				exitcode = 1
-		extensions = ['.tex', '.log', '.aux', '.dvi', '.png']
-		for ext in extensions:
-			try:
-				os.remove(tmpfile + ext)
-			except Exception:
-				pass
-		if exitcode == 0:
-			return True
-		return False
+		return gajim.HAVE_LATEX
 
 	def pycrypto_available(self):
 		return gajim.HAVE_PYCRYPTO
