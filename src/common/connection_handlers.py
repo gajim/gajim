@@ -59,8 +59,6 @@ if dbus_support.supported:
 import logging
 log = logging.getLogger('gajim.c.connection_handlers')
 
-STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-	'invisible', 'error']
 # kind of events we can wait for an answer
 VCARD_PUBLISHED = 'vcard_published'
 VCARD_ARRIVED = 'vcard_arrived'
@@ -1084,12 +1082,12 @@ class ConnectionVcard:
 				self.save_vcard_to_hd(our_jid, vcard_iq)
 
 				# Send new presence if sha changed and we are not invisible
-				if self.vcard_sha != new_sha and STATUS_LIST[self.connected] != \
+				if self.vcard_sha != new_sha and gajim.SHOW_LIST[self.connected] !=\
 				'invisible':
 					if not self.connection or self.connected < 2:
 						return
 					self.vcard_sha = new_sha
-					sshow = helpers.get_xmpp_show(STATUS_LIST[self.connected])
+					sshow = helpers.get_xmpp_show(gajim.SHOW_LIST[self.connected])
 					p = common.xmpp.Presence(typ = None, priority = self.priority,
 						show = sshow, status = self.status)
 					p = self.add_sha(p)
@@ -1256,11 +1254,11 @@ class ConnectionVcard:
 			if self.vcard_sha == avatar_sha:
 				return
 			self.vcard_sha = avatar_sha
-			if STATUS_LIST[self.connected] == 'invisible':
+			if gajim.SHOW_LIST[self.connected] == 'invisible':
 				return
 			if not self.connection:
 				return
-			sshow = helpers.get_xmpp_show(STATUS_LIST[self.connected])
+			sshow = helpers.get_xmpp_show(gajim.SHOW_LIST[self.connected])
 			p = common.xmpp.Presence(typ = None, priority = self.priority,
 				show = sshow, status = self.status)
 			p = self.add_sha(p)
@@ -2042,7 +2040,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		status = prs.getStatus() or ''
 		show = prs.getShow()
-		if not show in STATUS_LIST:
+		if not show in gajim.SHOW_LIST:
 			show = '' # We ignore unknown show
 		if not ptype and not show:
 			show = 'online'
@@ -2399,7 +2397,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					_('You will be connected to %s without OpenPGP.') % self.name))
 				self.USE_GPG = False
 				signed = ''
-		self.connected = STATUS_LIST.index(show)
+		self.connected = gajim.SHOW_LIST.index(show)
 		sshow = helpers.get_xmpp_show(show)
 		# send our presence
 		if show == 'invisible':

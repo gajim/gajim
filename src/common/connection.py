@@ -223,7 +223,7 @@ class Connection(ConnectionHandlers):
 		if gajim.account_is_connected(self.name):
 			# we cannot change our status to offline or connecting
 			# after we auth to server
-			self.old_show = STATUS_LIST[self.connected]
+			self.old_show = gajim.SHOW_LIST[self.connected]
 		self.connected = 0
 		if not self.on_purpose:
 			self.dispatch('STATUS', 'offline')
@@ -927,7 +927,7 @@ class Connection(ConnectionHandlers):
 		# active the privacy rule
 		self.privacy_rules_supported = True
 		self.activate_privacy_rule('invisible')
-		self.connected = STATUS_LIST.index('invisible')
+		self.connected = gajim.SHOW_LIST.index('invisible')
 		self.status = msg
 		priority = unicode(gajim.get_priority(self.name, 'invisible'))
 		p = common.xmpp.Presence(priority = priority)
@@ -1009,7 +1009,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 	def send_custom_status(self, show, msg, jid):
-		if not show in STATUS_LIST:
+		if not show in gajim.SHOW_LIST:
 			return -1
 		if not self.connection:
 			return
@@ -1034,7 +1034,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(p)
 
 	def change_status(self, show, msg, auto = False):
-		if not show in STATUS_LIST:
+		if not show in gajim.SHOW_LIST:
 			return -1
 		sshow = helpers.get_xmpp_show(show)
 		if not msg:
@@ -1092,8 +1092,8 @@ class Connection(ConnectionHandlers):
 				signed = self.get_signed_presence(msg)
 				self.send_invisible_presence(msg, signed)
 				return
-			was_invisible = self.connected == STATUS_LIST.index('invisible')
-			self.connected = STATUS_LIST.index(show)
+			was_invisible = self.connected == gajim.SHOW_LIST.index('invisible')
+			self.connected = gajim.SHOW_LIST.index(show)
 			if was_invisible and self.privacy_rules_supported:
 				iq = self.build_privacy_rule('visible', 'allow')
 				self.connection.send(iq)
@@ -1117,7 +1117,7 @@ class Connection(ConnectionHandlers):
 		self.dispatch('STATUS', 'offline')
 
 	def get_status(self):
-		return STATUS_LIST[self.connected]
+		return gajim.SHOW_LIST[self.connected]
 
 
 	def send_motd(self, jid, subject = '', msg = '', xhtml = None):
@@ -1561,7 +1561,7 @@ class Connection(ConnectionHandlers):
 	def send_agent_status(self, agent, ptype):
 		if not self.connection:
 			return
-		show = helpers.get_xmpp_show(STATUS_LIST[self.connected])
+		show = helpers.get_xmpp_show(gajim.SHOW_LIST[self.connected])
 		p = common.xmpp.Presence(to = agent, typ = ptype, show = show)
 		p = self.add_sha(p, ptype != 'unavailable')
 		self.connection.send(p)
@@ -1584,7 +1584,7 @@ class Connection(ConnectionHandlers):
 		# FIXME: This room JID needs to be normalized; see #1364
 		if not self.connection:
 			return
-		show = helpers.get_xmpp_show(STATUS_LIST[self.connected])
+		show = helpers.get_xmpp_show(gajim.SHOW_LIST[self.connected])
 		if show == 'invisible':
 			# Never join a room when invisible
 			return
