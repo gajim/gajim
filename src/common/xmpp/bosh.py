@@ -104,7 +104,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 		self.after_init = True
 
 		self.http_socks.append(self.get_new_http_socket())
-		self.tcp_connecting_started()
+		self._tcp_connecting_started()
 
 		self.http_socks[0].connect(
 			conn_5tuple = conn_5tuple,

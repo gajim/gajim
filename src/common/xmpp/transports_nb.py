@@ -200,7 +200,7 @@ class NonBlockingTransport(PlugIn):
 		Do not confuse it with on_receive() method, which is the callback itself.
 		'''
 		if not recv_handler:
-			if hasattr(self._owner, 'Dispatcher'):
+			if hasattr(self, '_owner') and hasattr(self._owner, 'Dispatcher'):
 				self.on_receive = self._owner.Dispatcher.ProcessNonBlocking
 			else:
 				log.warning('No Dispatcher plugged. Received data will not be processed')
@@ -208,7 +208,7 @@ class NonBlockingTransport(PlugIn):
 			return
 		self.on_receive = recv_handler
 
-	def tcp_connecting_started(self):
+	def _tcp_connecting_started(self):
 		self.set_state(CONNECTING)
 
 	def read_timeout(self): 
@@ -313,7 +313,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 			# connecting in progress
 			log.info('After NB connect() of %s. "%s" raised => CONNECTING' % 
 				(id(self), errstr))
-			self.tcp_connecting_started()
+			self._tcp_connecting_started()
 			return
 
 		# if there was some other exception, call failure callback and unplug 
@@ -397,7 +397,8 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 			return
 		self.set_state(DISCONNECTED)
 		self.idlequeue.unplug_idle(self.fd)
-		if 'NonBlockingTLS' in self.__dict__: self.NonBlockingTLS.PlugOut()
+		if 'NonBlockingTLS' in self.__dict__:
+			self.NonBlockingTLS.PlugOut()
 		try:
 			self._sock.shutdown(socket.SHUT_RDWR)
 			self._sock.close()
@@ -513,7 +514,8 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 				exc_info=True)
 			errnum, errstr = e.exc
 
-		if received == '': errstr = 'zero bytes on recv'
+		if received == '':
+			errstr = 'zero bytes on recv'
 
 		if (self.ssl_lib is None and received == '') or \
 		(self.ssl_lib == tls_nb.PYSTDLIB  and errnum ==  8 ) or \
@@ -563,7 +565,7 @@ class NonBlockingHTTP(NonBlockingTCP):
 
 	def __init__(self, raise_event, on_disconnect, idlequeue, estabilish_tls,
 	certs, on_http_request_possible, on_persistent_fallback, http_dict,
-	proxy_dict = None):
+	proxy_dict=None):
 		'''
 		:param on_http_request_possible: method to call when HTTP request to
 			socket owned by transport is possible.
