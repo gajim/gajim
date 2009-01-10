@@ -2041,7 +2041,7 @@ class RosterWindow:
 
 		# unset custom status
 		if account in gajim.interface.status_sent_to_users and \
-			contact.jid in gajim.interface.status_sent_to_users[account]:
+		contact.jid in gajim.interface.status_sent_to_users[account]:
 			del gajim.interface.status_sent_to_users[account][contact.jid]
 
 		# Delete pep if needed
@@ -3150,24 +3150,40 @@ class RosterWindow:
 
 	def on_send_custom_status(self, widget, contact_list, show, group=None):
 		'''send custom status'''
+		# contact_list has only one element except if group != None
 		def on_response(message):
 			if message is None: # None if user pressed Cancel
 				return
+			account_list = []
 			for (contact, account) in contact_list:
-				our_jid = gajim.get_jid_from_account(account)
-				accounts = []
-				if group and account not in accounts:
+				if account not in account_list:
+					account_list.append(account)
+			# 1. update status_sent_to_[groups|users] list
+			if group:
+				for account in account_list:
 					if account not in gajim.interface.status_sent_to_groups:
 						gajim.interface.status_sent_to_groups[account] = {}
 					gajim.interface.status_sent_to_groups[account][group] = show
-					accounts.append(group)
+			else:
+				for (contact, account) in contact_list:
+					if account not in gajim.interface.status_sent_to_users:
+						gajim.interface.status_sent_to_users[account] = {}
+					gajim.interface.status_sent_to_users[account][contact.jid] = show
+
+			# 2. update privacy lists if main status is invisible
+			for account in account_list:
+				if gajim.SHOW_LIST[gajim.connections[account].connected] == \
+				'invisible':
+					gajim.connections[account].set_invisible_rule()
+
+			# 3. send directed presence
+			for (contact, account) in contact_list:
+				our_jid = gajim.get_jid_from_account(account)
 				jid = contact.jid
 				if jid == our_jid:
 					jid += '/' + contact.resource
 				self.send_status(account, show, message, to=jid)
-				if account not in gajim.interface.status_sent_to_users:
-					gajim.interface.status_sent_to_users[account] = {}
-				gajim.interface.status_sent_to_users[account][contact.jid] = show
+
 		dialogs.ChangeStatusMessageDialog(on_response, show)
 
 	def on_status_combobox_changed(self, widget):

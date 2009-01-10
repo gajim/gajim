@@ -856,13 +856,38 @@ class Connection(ConnectionHandlers):
 			return
 		common.xmpp.features_nb.setDefaultPrivacyList(self.connection, listname)
 
-	def build_privacy_rule(self, name, action):
+	def build_privacy_rule(self, name, action, order=1):
 		'''Build a Privacy rule stanza for invisibility'''
 		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
 		l = iq.getTag('query').setTag('list', {'name': name})
-		i = l.setTag('item', {'action': action, 'order': '1'})
+		i = l.setTag('item', {'action': action, 'order': str(order)})
 		i.setTag('presence-out')
 		return iq
+
+	def build_invisible_rule(self):
+		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
+		l = iq.getTag('query').setTag('list', {'name': 'invisible'})
+		if self.name in gajim.interface.status_sent_to_groups and \
+		len(gajim.interface.status_sent_to_groups[self.name]) > 0:
+			for group in gajim.interface.status_sent_to_groups[self.name]:
+				i = l.setTag('item', {'type': 'group', 'value': group,
+					'action': 'allow', 'order': '1'})
+				i.setTag('presence-out')
+		if self.name in gajim.interface.status_sent_to_users and \
+		len(gajim.interface.status_sent_to_users[self.name]) > 0:
+			for jid in gajim.interface.status_sent_to_users[self.name]:
+				i = l.setTag('item', {'type': 'jid', 'value': jid,
+					'action': 'allow', 'order': '2'})
+				i.setTag('presence-out')
+		i = l.setTag('item', {'action': 'deny', 'order': '3'})
+		i.setTag('presence-out')
+		return iq
+
+	def set_invisible_rule(self):
+		if not gajim.account_is_connected(self.name):
+			return
+		iq = self.build_invisible_rule()
+		self.connection.send(iq)
 
 	def activate_privacy_rule(self, name):
 		'''activate a privacy rule'''
@@ -892,7 +917,7 @@ class Connection(ConnectionHandlers):
 			self.connection.send(p)
 
 		# try to set the privacy rule
-		iq = self.build_privacy_rule('invisible', 'deny')
+		iq = self.build_invisible_rule()
 		self.connection.SendAndCallForResponse(iq, self._continue_invisible,
 			{'msg': msg, 'signed': signed, 'initial': initial})
 
