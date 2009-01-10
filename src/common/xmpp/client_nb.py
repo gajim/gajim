@@ -346,6 +346,7 @@ class NonBlockingClient:
 			if self.desired_security == 'plain':
 				# if we want and have plain connection, we're done now
 				self._on_connect()
+				return
 			else:
 				# try to negotiate TLS
 				if self.incoming_stream_version() != '1.0':
@@ -358,12 +359,15 @@ class NonBlockingClient:
 					self.stream_started = False
 					log.info('TLS supported by remote server. Requesting TLS start.')
 					self._tls_negotiation_handler()
+					return
 				else:
 					log.warn('While connecting with type = "tls": TLS unsupported by remote server')
 					self._on_connect()
+					return
 
 		elif self.connected in ['ssl', 'tls']:
 			self._on_connect()
+			return
 		assert False # should never be reached
 
 	def _tls_negotiation_handler(self, con=None, tag=None):
