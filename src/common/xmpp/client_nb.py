@@ -306,10 +306,18 @@ class NonBlockingClient:
 			if data:
 				self.Dispatcher.ProcessNonBlocking(data)
 			if not hasattr(self, 'Dispatcher') or \
-			self.Dispatcher.Stream._document_attrs is None:
+				self.Dispatcher.Stream._document_attrs is None:
 				self._xmpp_connect_machine(
 					mode='FAILURE',
 					data='Error on stream open')
+				return
+
+			# if terminating stanza was received after init request then client gets
+			# disconnected from bosh transport plugin and we have to end the stream
+			# negotiating process straight away.
+			# fixes #4657
+			if not self.connected: return
+
 			if self.incoming_stream_version() == '1.0':
 				if not self.got_features:
 					on_next_receive('RECEIVE_STREAM_FEATURES')
