@@ -71,7 +71,7 @@ class ConnectionPubSub:
 		query = xmpp.Iq('set', to=jid)
 		e = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
 		e = e.addChild('publish', {'node': node})
-		e = e.addChild('item', {'id': id_}, [item])	# TODO: we should generate id... or we shouldn't?
+		e = e.addChild('item', {'id': id_}, [item])
 
 		self.connection.send(query)
 
