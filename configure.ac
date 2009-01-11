@@ -1,9 +1,12 @@
 AC_INIT([Gajim - A Jabber Instant Messager],
 		[0.12.0.1-svn],[http://trac.gajim.org/],[gajim])
 AC_PREREQ([2.59])
-AM_INIT_AUTOMAKE([1.8])
+
 AC_CONFIG_HEADER(config.h)
+AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_MACRO_DIR([m4])
+
+AM_INIT_AUTOMAKE([1.8])
 AM_MAINTAINER_MODE
 
 dnl Make Objective-C work with automake
