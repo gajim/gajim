@@ -356,12 +356,12 @@ class NonBlockingClient:
 			if self.desired_security == 'plain':
 				# if we want and have plain connection, we're done now
 				self._on_connect()
-				return
 			else:
 				# try to negotiate TLS
 				if self.incoming_stream_version() != '1.0':
 					# if stream version is less than 1.0, we can't do more
-					log.warn('While connecting with type = "tls": stream version is less than 1.0')
+					log.warn('While connecting with type = "tls": stream version ' +
+						'is less than 1.0')
 					self._on_connect()
 				if self.Dispatcher.Stream.features.getTag('starttls'):
 					# Server advertises TLS support, start negotiation
@@ -369,16 +369,14 @@ class NonBlockingClient:
 					log.info('TLS supported by remote server. Requesting TLS start.')
 					self._tls_negotiation_handler()
 				else:
-					log.warn('While connecting with type = "tls": TLS unsupported by remote server')
+					log.warn('While connecting with type = "tls": TLS unsupported ' +
+						'by remote server')
 					self._on_connect()
-					return
 	
 		elif self.connected in ['ssl', 'tls']:
 			self._on_connect()
-			return
 		else:
-			log.error('Stream opened for unsupported connection: %s' % 
-				(self.connected or 'Disconnected'))
+			assert False, 'Stream opened for unsupported connection'
 
 	def _tls_negotiation_handler(self, con=None, tag=None):
 		''' takes care of TLS negotioation with <starttls> '''
