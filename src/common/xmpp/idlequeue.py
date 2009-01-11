@@ -20,12 +20,19 @@ import os
 import select
 import logging
 log = logging.getLogger('gajim.c.x.idlequeue')
+
+# needed for get_idleqeue
 try:
 	import gobject
 	HAVE_GOBJECT = True
 except ImportError:
 	HAVE_GOBJECT = False
 
+# needed for idlecommand
+if os.name == 'nt':
+	from subprocess import * # python24 only. we ask this for Windows
+elif os.name == 'posix':
+	import fcntl
 
 FLAG_WRITE			= 20 # write only
 FLAG_READ			= 19 # read only 
@@ -35,6 +42,7 @@ FLAG_CLOSE			= 16 # wait for close
 PENDING_READ		= 3 # waiting read event
 PENDING_WRITE		= 4 # waiting write event
 IS_CLOSED			= 16 # channel closed 
+
 
 def get_idlequeue():
 	''' Get an appropriate idlequeue '''
@@ -73,6 +81,110 @@ class IdleObject:
 		''' called when timeout happened '''
 		pass
 
+
+class IdleCommand(IdleObject):
+	'''
+	Can be subclassed to execute commands asynchronously by the idlequeue.
+	Result will be optained via file descriptor of created pipe
+	'''
+	def __init__(self, on_result):
+		IdleObject.__init__(self)
+		# how long (sec.) to wait for result ( 0 - forever )
+		# it is a class var, instead of a constant and we can override it.
+		self.commandtimeout = 0 
+		# when we have some kind of result (valid, ot not) we call this handler
+		self.result_handler = on_result
+		# if it is True, we can safetely execute the command
+		self.canexecute = True
+		self.idlequeue = None
+		self.result =''
+	
+	def set_idlequeue(self, idlequeue):
+		self.idlequeue = idlequeue
+	
+	def _return_result(self):
+		if self.result_handler:
+			self.result_handler(self.result)
+		self.result_handler = None
+	
+	def _compose_command_args(self):
+		return ['echo', 'da']
+	
+	def _compose_command_line(self):
+		''' return one line representation of command and its arguments '''
+		return  reduce(lambda left, right: left + ' ' + right, 
+			self._compose_command_args())
+	
+	def wait_child(self):
+		if self.pipe.poll() is None:
+			# result timeout
+			if self.endtime < self.idlequeue.current_time():
+				self._return_result()
+				self.pipe.stdout.close()
+				self.pipe.stdin.close()
+			else:
+				# child is still active, continue to wait
+				self.idlequeue.set_alarm(self.wait_child, 0.1)
+		else:
+			# child has quit
+			self.result = self.pipe.stdout.read()
+			self._return_result()
+			self.pipe.stdout.close()
+			self.pipe.stdin.close()
+
+	def start(self):
+		if not self.canexecute:
+			self.result = ''
+			self._return_result()
+			return
+		if os.name == 'nt':
+			self._start_nt()
+		elif os.name == 'posix':
+			self._start_posix()
+	
+	def _start_nt(self):
+		# if gajim is started from noninteraactive shells stdin is closed and 
+		# cannot be forwarded, so we have to keep it open
+		self.pipe = Popen(self._compose_command_args(), stdout=PIPE, 
+			bufsize = 1024, shell = True, stderr = STDOUT, stdin = PIPE)
+		if self.commandtimeout >= 0:
+			self.endtime = self.idlequeue.current_time() + self.commandtimeout
+			self.idlequeue.set_alarm(self.wait_child, 0.1)
+	
+	def _start_posix(self):
+		self.pipe = os.popen(self._compose_command_line())
+		self.fd = self.pipe.fileno()
+		fcntl.fcntl(self.pipe, fcntl.F_SETFL, os.O_NONBLOCK)
+		self.idlequeue.plug_idle(self, False, True)
+		if self.commandtimeout >= 0:
+			self.idlequeue.set_read_timeout(self.fd, self.commandtimeout)
+		
+	def end(self):
+		self.idlequeue.unplug_idle(self.fd)
+		try:
+			self.pipe.close()
+		except:
+			pass
+	
+	def pollend(self):
+		self.idlequeue.remove_timeout(self.fd)
+		self.end()
+		self._return_result()
+	
+	def pollin(self):
+		try:
+			res = self.pipe.read()
+		except Exception, e:
+			res = ''
+		if res == '':
+			return self.pollend()
+		else:
+			self.result += res
+	
+	def read_timeout(self):
+		self.end()
+		self._return_result()
+		
 
 class IdleQueue:
 	'''

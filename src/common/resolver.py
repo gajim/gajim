@@ -20,14 +20,10 @@
 import sys
 import os
 import re
+import logging
+log = logging.getLogger('gajim.c.resolver')
 
-from xmpp.idlequeue import *
-
-# needed for nslookup
-if os.name == 'nt':
-	from subprocess import * # python24 only. we ask this for Windows
-elif os.name == 'posix':
-	import fcntl
+from xmpp.idlequeue import IdleCommand
 
 # it is good to check validity of arguments, when calling system commands
 ns_type_pattern = re.compile('^[a-z]+$')
@@ -35,14 +31,13 @@ ns_type_pattern = re.compile('^[a-z]+$')
 # match srv host_name
 host_pattern = re.compile('^[a-z0-9\-._]*[a-z0-9]\.[a-z]{2,}$')
 
-USE_LIBASYNCNS = False
-
 try:
 	#raise ImportError("Manually disabled libasync")
 	import libasyncns 
 	USE_LIBASYNCNS = True
 	log.info("libasyncns-python loaded")
 except ImportError:
+	USE_LIBASYNCNS = False
 	log.debug("Import of libasyncns-python failed, getaddrinfo will block", exc_info=True)
 
 	# FIXME: Remove these prints before release, replace with a warning dialog.
@@ -98,11 +93,11 @@ class CommonResolver():
 	def start_resolve(self, host, type):
 		pass
 
-
+# FIXME: API usage is not consistent! This one requires that process is called
 class LibAsyncNSResolver(CommonResolver):
 	'''
-	Asynchronous resolver using libasyncns-python. process() method has to be called
-	in order to proceed the pending requests.
+	Asynchronous resolver using libasyncns-python. process() method has to be 
+	called in order to proceed the pending requests.
 	Based on patch submitted by Damien Thebault. 
 	'''	
 	def __init__(self):
@@ -126,7 +121,6 @@ class LibAsyncNSResolver(CommonResolver):
 
 		CommonResolver._on_ready(self, host, type, result_list)
 
-	
 	def process(self):
 		try:
 			self.asyncns.wait(False)
@@ -156,6 +150,7 @@ class LibAsyncNSResolver(CommonResolver):
 			rl = resq.get_done()
 			resq.userdata['callback'](resq.userdata['dname'], rl)
 		return True
+
 
 class NSLookupResolver(CommonResolver):
 	'''
@@ -264,112 +259,14 @@ class NSLookupResolver(CommonResolver):
 		result_list = self.parse_srv_result(host, result)
 		CommonResolver._on_ready(self, host, type, result_list)
 		
-	
 	def start_resolve(self, host, type):
 		''' spawn new nslookup process and start waiting for results '''
 		ns = NsLookup(self._on_ready, host, type)
 		ns.set_idlequeue(self.idlequeue)
 		ns.commandtimeout = 10
 		ns.start()
-	
 
-# TODO: move IdleCommand class in other file, maybe helpers ?
-class IdleCommand(IdleObject):
-	def __init__(self, on_result):
-		# how long (sec.) to wait for result ( 0 - forever )
-		# it is a class var, instead of a constant and we can override it.
-		self.commandtimeout = 0 
-		# when we have some kind of result (valid, ot not) we call this handler
-		self.result_handler = on_result
-		# if it is True, we can safetely execute the command
-		self.canexecute = True
-		self.idlequeue = None
-		self.result =''
-	
-	def set_idlequeue(self, idlequeue):
-		self.idlequeue = idlequeue
-	
-	def _return_result(self):
-		if self.result_handler:
-			self.result_handler(self.result)
-		self.result_handler = None
-	
-	def _compose_command_args(self):
-		return ['echo', 'da']
-	
-	def _compose_command_line(self):
-		''' return one line representation of command and its arguments '''
-		return  reduce(lambda left, right: left + ' ' + right,  self._compose_command_args())
-	
-	def wait_child(self):
-		if self.pipe.poll() is None:
-			# result timeout
-			if self.endtime < self.idlequeue.current_time():
-				self._return_result()
-				self.pipe.stdout.close()
-				self.pipe.stdin.close()
-			else:
-				# child is still active, continue to wait
-				self.idlequeue.set_alarm(self.wait_child, 0.1)
-		else:
-			# child has quit
-			self.result = self.pipe.stdout.read()
-			self._return_result()
-			self.pipe.stdout.close()
-			self.pipe.stdin.close()
-	def start(self):
-		if not self.canexecute:
-			self.result = ''
-			self._return_result()
-			return
-		if os.name == 'nt':
-			self._start_nt()
-		elif os.name == 'posix':
-			self._start_posix()
-	
-	def _start_nt(self):
-		# if gajim is started from noninteraactive shells stdin is closed and 
-		# cannot be forwarded, so we have to keep it open
-		self.pipe = Popen(self._compose_command_args(), stdout=PIPE, 
-			bufsize = 1024, shell = True, stderr = STDOUT, stdin = PIPE)
-		if self.commandtimeout >= 0:
-			self.endtime = self.idlequeue.current_time() + self.commandtimeout
-			self.idlequeue.set_alarm(self.wait_child, 0.1)
-	
-	def _start_posix(self):
-		self.pipe = os.popen(self._compose_command_line())
-		self.fd = self.pipe.fileno()
-		fcntl.fcntl(self.pipe, fcntl.F_SETFL, os.O_NONBLOCK)
-		self.idlequeue.plug_idle(self, False, True)
-		if self.commandtimeout >= 0:
-			self.idlequeue.set_read_timeout(self.fd, self.commandtimeout)
-		
-	def end(self):
-		self.idlequeue.unplug_idle(self.fd)
-		try:
-			self.pipe.close()
-		except:
-			pass
-	
-	def pollend(self):
-		self.idlequeue.remove_timeout(self.fd)
-		self.end()
-		self._return_result()
-	
-	def pollin(self):
-		try:
-			res = self.pipe.read()
-		except Exception, e:
-			res = ''
-		if res == '':
-			return self.pollend()
-		else:
-			self.result += res
-	
-	def read_timeout(self):
-		self.end()
-		self._return_result()
-	
+
 class NsLookup(IdleCommand):
 	def __init__(self, on_result, host='_xmpp-client', type='srv'):
 		IdleCommand.__init__(self, on_result)
@@ -378,11 +275,11 @@ class NsLookup(IdleCommand):
 		self.type = type.lower()
 		if not host_pattern.match(self.host):
 			# invalid host name
-			print >> sys.stderr, 'Invalid host: %s' % self.host
+			log.error('Invalid host: %s' % self.host)
 			self.canexecute = False
 			return
 		if not ns_type_pattern.match(self.type):
-			print >> sys.stderr, 'Invalid querytype: %s' % self.type
+			log.error('Invalid querytype: %s' % self.type)
 			self.canexecute = False
 			return
 	
@@ -396,15 +293,12 @@ class NsLookup(IdleCommand):
 	
 # below lines is on how to use API and assist in testing
 if __name__ == '__main__':
-	if os.name == 'posix':
-		idlequeue = IdleQueue()
-	elif os.name == 'nt':
-		idlequeue = SelectIdleQueue()
-	# testing Resolver class
 	import gobject
 	import gtk
+	from xmpp import idlequeue
 	
-	resolver = Resolver(idlequeue)
+	idlequeue = idlequeue.get_idlequeue()
+	resolver = get_resolver(idlequeue)
 	
 	def clicked(widget):
 		global resolver
