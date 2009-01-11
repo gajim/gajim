@@ -16,20 +16,38 @@
 Idlequeues are Gajim's network heartbeat. Transports can be plugged as 
 idle objects and be informed about possible IO.
 '''
-
+import os
 import select
 import logging
-import gobject
 log = logging.getLogger('gajim.c.x.idlequeue')
+try:
+	import gobject
+	HAVE_GOBJECT = True
+except ImportError:
+	HAVE_GOBJECT = False
 
-FLAG_WRITE 			= 20 # write only
-FLAG_READ 			= 19 # read only 
-FLAG_READ_WRITE 	= 23 # read and write
-FLAG_CLOSE 			= 16 # wait for close
+
+FLAG_WRITE			= 20 # write only
+FLAG_READ			= 19 # read only 
+FLAG_READ_WRITE	= 23 # read and write
+FLAG_CLOSE			= 16 # wait for close
 
 PENDING_READ		= 3 # waiting read event
-PENDING_WRITE 		= 4 # waiting write event
+PENDING_WRITE		= 4 # waiting write event
 IS_CLOSED			= 16 # channel closed 
+
+def get_idlequeue():
+	''' Get an appropriate idlequeue '''
+	if os.name == 'nt':
+		# gobject.io_add_watch does not work on windows
+		return SelectIdleQueue()
+	else:
+		if HAVE_GOBJECT:
+			# Gajim's default Idlequeue
+			return GlibIdleQueue()
+		else:
+			# GUI less implementation
+			return SelectIdleQueue()
 
 
 class IdleObject:
@@ -66,6 +84,10 @@ class IdleQueue:
 		3. Check file descriptor of plugged objects for read, write and error
 		events 
 	'''
+	# (timeout, boolean)
+	# Boolean is True if timeout is specified in seconds, False means miliseconds
+	PROCESS_TIMEOUT = (200, False) 
+
 	def __init__(self):
 		self.queue = {}
 
@@ -315,6 +337,9 @@ class GlibIdleQueue(IdleQueue):
 	Extends IdleQueue to use glib io_add_wath, instead of select/poll
 	In another 'non gui' implementation of Gajim IdleQueue can be used safetly.
 	'''
+	# (timeout, boolean)
+	# Boolean is True if timeout is specified in seconds, False means miliseconds
+	PROCESS_TIMEOUT = (2, True) 
 
 	def _init_idle(self):
 		'''
