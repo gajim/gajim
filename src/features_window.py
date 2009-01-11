@@ -42,7 +42,7 @@ class FeaturesWindow:
 
 		# {name: (available_function, unix_text, windows_text)}
 		self.features = {
-			_('PyOpenSSL'): (self.pyopenssl_available,
+			_('SSL certificat validation'): (self.pyopenssl_available,
 				_('A library used to validate server certificates to ensure a secure connection.'),
 				_('Requires python-pyopenssl.'),
 				_('Requires python-pyopenssl.')),
@@ -50,15 +50,15 @@ class FeaturesWindow:
 				_('Serverless chatting with autodetected clients in a local network.'),
 				_('Requires python-avahi.'),
 				_('Requires pybonjour (http://o2s.csail.mit.edu/o2s-wiki/pybonjour).')),
-			_('gajim-remote'): (self.dbus_available,
+			_('Command line'): (self.dbus_available,
 				_('A script to control Gajim via commandline.'),
 				_('Requires python-dbus.'),
 				_('Feature not available under Windows.')),
-			_('OpenGPG'): (self.gpg_available,
-				_('Encrypting chatmessages with gpg keys.'),
+			_('OpenGPG message encryption'): (self.gpg_available,
+				_('Encrypting chat messages with gpg keys.'),
 				_('Requires gpg and python-GnuPGInterface.'),
 				_('Feature not available under Windows.')),
-			_('network-manager'): (self.network_manager_available,
+			_('Network-manager'): (self.network_manager_available,
 				_('Autodetection of network status.'),
 				_('Requires gnome-network-manager and python-dbus.'),
 				_('Feature not available under Windows.')),
@@ -66,7 +66,7 @@ class FeaturesWindow:
 				_('Gajim session is stored on logout and restored on login.'),
 				_('Requires python-gnome2.'),
 				_('Feature not available under Windows.')),
-			_('gnome-keyring'): (self.gnome_keyring_available,
+			_('Password encryption'): (self.gnome_keyring_available,
 				_('Passwords can be stored securely and not just in plaintext.'),
 				_('Requires gnome-keyring and python-gnome2-desktop.'),
 				_('Feature not available under Windows.')),
@@ -78,7 +78,7 @@ class FeaturesWindow:
 				_('Spellchecking of composed messages.'),
 				_('Requires python-gnome2-extras or compilation of gtkspell module from Gajim sources.'),
 				_('Feature not available under Windows.')),
-			_('Notification-daemon'): (self.notification_available,
+			_('Notification'): (self.notification_available,
 				_('Passive popups notifying for new events.'),
 				_('Requires python-notify or instead python-dbus in conjunction with notification-daemon.'),
 				_('Feature not available under Windows.')),
@@ -86,7 +86,7 @@ class FeaturesWindow:
 				_('A icon in systemtray reflecting the current presence.'),
 				_('Requires python-gnome2-extras or compiled trayicon module from Gajim sources.'),
 				_('Requires PyGTK >= 2.10.')),
-			_('Idle'): (self.idle_available,
+			_('Automatic status'): (self.idle_available,
 				_('Ability to measure idle time, in order to set auto status.'),
 				_('Requires libxss library.'),
 				_('Requires python2.5.')),
@@ -94,15 +94,15 @@ class FeaturesWindow:
 				_('Transform LaTeX expressions between $$ $$.'),
 				_('Requires texlive-latex-base and dvipng. You have to set \'use_latex\' to True in the Advanced Configuration Editor.'),
 				_('Requires texlive-latex-base and dvipng (All is in MikTeX). You have to set \'use_latex\' to True in the Advanced Configuration Editor.')),
-			_('End to End Encryption'): (self.pycrypto_available,
-				_('Encrypting chatmessages.'),
+			_('End to End message encryption'): (self.pycrypto_available,
+				_('Encrypting chat messages.'),
 				_('Requires python-crypto.'),
 				_('Requires python-crypto.')),
 			_('RST Generator'): (self.docutils_available,
 				_('Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html).'),
 				_('Requires python-docutils.'),
 				_('Requires python-docutils.')),
-			_('libsexy'): (self.pysexy_available,
+			_('Banners and clickable links'): (self.pysexy_available,
 				_('Ability to have clickable URLs in chat and groupchat window banners.'),
 				_('Requires python-sexy.'),
 				_('Requires python-sexy.')),
@@ -130,6 +130,9 @@ class FeaturesWindow:
 			func = self.features[feature][0]
 			rep = func()
 			self.model.append([feature, rep])
+
+		self.model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 		self.xml.get_widget('close_button').grab_focus()
