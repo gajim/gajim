@@ -92,6 +92,8 @@ class NonBlockingClient:
 			self.NonBlockingHTTP.PlugOut()
 		if 'NonBlockingBOSH' in self.__dict__:
 			self.NonBlockingBOSH.PlugOut()
+		# FIXME: we never unplug dispatcher, only on next connect
+		# See _xmpp_connect_machine and SASLHandler
 
 		connected = self.connected
 		stream_started = self.stream_started
@@ -129,7 +131,7 @@ class NonBlockingClient:
 		self.disconnecting = False
 
 	def connect(self, on_connect, on_connect_failure, hostname=None, port=5222,
-	on_proxy_failure=None, proxy=None, secure_tuple=(None, None, None)):
+	on_proxy_failure=None, proxy=None, secure_tuple=('plain', None, None)):
 		''' 
 		Open XMPP connection (open XML streams in both directions).
 
@@ -353,22 +355,22 @@ class NonBlockingClient:
 					# if stream version is less than 1.0, we can't do more
 					log.warn('While connecting with type = "tls": stream version is less than 1.0')
 					self._on_connect()
-					return
 				if self.Dispatcher.Stream.features.getTag('starttls'):
 					# Server advertises TLS support, start negotiation
 					self.stream_started = False
 					log.info('TLS supported by remote server. Requesting TLS start.')
 					self._tls_negotiation_handler()
-					return
 				else:
 					log.warn('While connecting with type = "tls": TLS unsupported by remote server')
 					self._on_connect()
 					return
-
+	
 		elif self.connected in ['ssl', 'tls']:
 			self._on_connect()
 			return
-		assert False # should never be reached
+		else:
+			log.error('Stream opened for unsupported connection: %s' % 
+				(self.connected or 'Disconnected'))
 
 	def _tls_negotiation_handler(self, con=None, tag=None):
 		''' takes care of TLS negotioation with <starttls> '''
@@ -477,7 +479,7 @@ class NonBlockingClient:
 			# wrong user/pass, stop auth
 			if 'SASL' in self.__dict__:
 				self.SASL.PlugOut()
-			self.connected = None # FIXME: is this intended?
+			self.connected = None # FIXME: is this intended? We use ''elsewhere
 			self._on_sasl_auth(None)
 		elif self.SASL.startsasl == 'success':
 			auth_nb.NonBlockingBind.get_instance().PlugIn(self)

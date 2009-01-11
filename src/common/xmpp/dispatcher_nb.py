@@ -52,6 +52,8 @@ class Dispatcher():
 			XMPPDispatcher().PlugIn(client_obj)
 		elif client_obj.protocol_type == 'BOSH':
 			BOSHDispatcher().PlugIn(client_obj, after_SASL, old_features)
+		else:
+			assert False # should never be reached
 	
 	@classmethod
 	def get_instance(cls, *args, **kwargs):
@@ -111,6 +113,8 @@ class XMPPDispatcher(PlugIn):
 		'''
 			Registers default namespaces/protocols/handlers. Used internally.
 		'''
+		# FIXME: inject dependencies, do not rely that they are defined by our
+		# owner
 		self.RegisterNamespace('unknown')
 		self.RegisterNamespace(NS_STREAMS)
 		self.RegisterNamespace(self._owner.defaultNamespace)
@@ -162,7 +166,7 @@ class XMPPDispatcher(PlugIn):
 			raise ValueError('Incorrect stream start: (%s,%s). Terminating.'
 				% (tag, ns))
 
-	def ProcessNonBlocking(self, data=None):
+	def ProcessNonBlocking(self, data):
 		'''
 		Check incoming stream for data waiting.
 
@@ -172,6 +176,11 @@ class XMPPDispatcher(PlugIn):
 			2) '0' string if no data were processed but link is alive;
 			3) 0 (zero) if underlying connection is closed.
 		'''
+		# FIXME:
+		# When an error occurs we disconnect the transport directly. Client's
+		# disconnect method will never be called.
+		# Is this intended?
+		# also look at transports start_disconnect()
 		for handler in self._cycleHandlers:
 			handler(self)
 		if len(self._pendingExceptions) > 0:
@@ -317,7 +326,7 @@ class XMPPDispatcher(PlugIn):
 		'''
 		self._eventHandler = handler
 
-	def returnStanzaHandler(self,conn,stanza):
+	def returnStanzaHandler(self, conn, stanza):
 		'''
 		Return stanza back to the sender with <feature-not-implemented/> error set
 		'''
@@ -348,6 +357,8 @@ class XMPPDispatcher(PlugIn):
 		'''
 		if self._eventHandler:
 			self._eventHandler(realm, event, data)
+		else:
+			log.warning('Received unhandled event: %s' % event)
 
 	def dispatch(self, stanza, session=None, direct=0):
 		'''

@@ -239,6 +239,7 @@ class NonBlockingTransport(PlugIn):
 		else:
 			self.on_timeout = None
 
+	# FIXME: where and why does this need to be called
 	def start_disconnect(self):
 		self.set_state(DISCONNECTING)
 
@@ -267,7 +268,8 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 
 		self.proxy_dict = proxy_dict
 		self.on_remote_disconnect = self.disconnect
-
+	
+	# FIXME: transport should not be aware xmpp
 	def start_disconnect(self):
 		NonBlockingTransport.start_disconnect(self)
 		self.send('</stream:stream>', now=True)
