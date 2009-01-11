@@ -1,6 +1,8 @@
-# gajim-specific mock objects
-from mock import Mock
+'''
+Module with dummy classes for Gajim specific unit testing
+'''
 
+from mock import Mock
 from common import gajim
 
 from common.connection_handlers import ConnectionHandlersBase

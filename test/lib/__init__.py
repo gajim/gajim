@@ -1,5 +1,5 @@
 import sys
-import os.path
+import os
 import getopt
 
 use_x = True
@@ -12,7 +12,8 @@ for o, a in opts:
 
 gajim_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../..')
 
-# look for modules in the CWD, then gajim/test/lib, then gajim/src, then everywhere else
+# look for modules in the CWD, then gajim/test/lib, then gajim/src,
+# then everywhere else
 sys.path.insert(1, gajim_root + '/src')
 sys.path.insert(1, gajim_root + '/test/lib')
 
@@ -22,8 +23,6 @@ configdir = gajim_root + '/test/tmp'
 # define _ for i18n
 import __builtin__
 __builtin__._ = lambda x: x
-
-import os
 
 def setup_env():
 	# wipe config directory
@@ -39,6 +38,9 @@ def setup_env():
 
 	# for some reason common.gajim needs to be imported before xmpppy?
 	from common import gajim
+
+	import logging
+	logging.basicConfig()
 
 	gajim.DATA_DIR = gajim_root + '/data'
 	gajim.use_x = use_x

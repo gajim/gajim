@@ -1,4 +1,6 @@
-# tests for the miscellaneous functions scattered throughout src/gajim.py
+'''
+Tests for the miscellaneous functions scattered throughout src/gajim.py
+'''
 import unittest
 
 import lib
@@ -7,7 +9,7 @@ lib.setup_env()
 from common import gajim
 from gajim import Interface
 
-from mocks import *
+from gajim_mocks import *
 gajim.logger = MockLogger()
 
 Interface()

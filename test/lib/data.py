@@ -52,6 +52,7 @@ contacts[account3] = {
 	#		  'ask': None, 'groups': [], 'name': None,
 	#		  'resources': {}, 'subscription': u'both'}
 }
+
 # We have contacts that are not in roster but only specified in the metadata
 metacontact_data = [
 	[{'account': account3,
@@ -75,3 +76,4 @@ metacontact_data = [
 	  'order': 0}]
 	]
 
+# vim: se ts=3:

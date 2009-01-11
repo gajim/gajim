@@ -1,4 +1,6 @@
-# tests for capabilities and the capabilities cache
+'''
+Tests for capabilities and the capabilities cache
+'''
 import unittest
 
 import lib

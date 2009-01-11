@@ -9,7 +9,7 @@ from common import gajim
 from common import xmpp
 
 from mock import Mock, expectParams
-from mocks import *
+from gajim_mocks import *
 
 from common.stanza_session import StanzaSession
 
@@ -17,6 +17,7 @@ from common.stanza_session import StanzaSession
 account_name = 'test'
 
 class TestStanzaSession(unittest.TestCase):
+	''' Testclass for common/stanzasession.py '''
 	def setUp(self):
 		self.jid = 'test@example.org/Gajim'
 		self.conn = MockConnection(account_name, {'send_stanza': None})
@@ -74,6 +75,7 @@ gajim.interface = MockInterface()
 import notify
 
 class TestChatControlSession(unittest.TestCase):
+	''' Testclass for session.py '''
 	def setUp(self):
 		self.jid = 'test@example.org/Gajim'
 		self.conn = MockConnection(account_name, {'send_stanza': None})

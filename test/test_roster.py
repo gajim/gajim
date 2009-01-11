@@ -1,14 +1,12 @@
 import unittest
 
-import time
-
 import lib
 lib.setup_env()
 
 from data import *
 
 from mock import Mock, expectParams
-from mocks import *
+from gajim_mocks import *
 
 from common import gajim
 from common import zeroconf
