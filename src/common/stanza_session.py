@@ -2,7 +2,6 @@
 ## src/common/stanza_session.py
 ##
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>
-##                    Stephan Erb <steve-e AT h3c.de>
 ## Copyright (C) 2007-2008 Yann Leboulanger <asterix AT lagaule.org>
 ##                         Brendan Taylor <whateley AT gmail.com>
 ##                         Jean-Marie Traissard <jim AT lapin.org>
@@ -24,29 +23,36 @@
 ##
 
 from common import gajim
-
 from common import xmpp
-from common import exceptions
+from common.exceptions import DecryptionError, NegotiationError
+import xmpp.c14n
 
 import itertools
 import random
 import string
-
 import time
-
-import xmpp.c14n
-
 import base64
 import os
+
+if gajim.HAVE_PYCRYPTO:
+	from Crypto.Cipher import AES
+	from Crypto.Hash import HMAC, SHA256
+	from Crypto.PublicKey import RSA
+	from common import crypto
+
+	from common import dh
+	import secrets
 
 XmlDsig = 'http://www.w3.org/2000/09/xmldsig#'
 
 class StanzaSession(object):
+	'''
+	'''
 	def __init__(self, conn, jid, thread_id, type_):
+		'''
+		'''
 		self.conn = conn
-
 		self.jid = jid
-
 		self.type = type_
 
 		if thread_id:
@@ -69,9 +75,11 @@ class StanzaSession(object):
 	def is_loggable(self):
 		return self.loggable and gajim.config.should_log(self.conn.name, self.jid)
 
-	# remove events associated with this session from the queue
-	# returns True if any events were removed (unlike gajim.events.remove_events)
 	def remove_events(self, types):
+		'''
+		Remove events associated with this session from the queue.
+		returns True if any events were removed (unlike events.py remove_events)
+		'''
 		any_removed = False
 
 		for j in (self.jid, self.jid.getStripped()):
@@ -124,9 +132,10 @@ class StanzaSession(object):
 		self.cancelled_negotiation()
 
 	def cancelled_negotiation(self):
-		'''A negotiation has been cancelled, so reset this session to its default
-		state.'''
-
+		'''
+		A negotiation has been cancelled, so reset this session to its default
+		state.
+		'''
 		if self.control:
 			self.control.on_cancel_session_negotiation()
 
@@ -156,61 +165,52 @@ class StanzaSession(object):
 		# we could send an acknowledgement message to the remote client here
 		self.status = None
 
-if gajim.HAVE_PYCRYPTO:
-	from Crypto.Cipher import AES
-	from Crypto.Hash import HMAC, SHA256
-	from Crypto.PublicKey import RSA
-	from common import crypto
-
-	from common import dh
-	import secrets
-
-# an encrypted stanza negotiation has several states. i've represented them
-# as the following values in the 'status'
-# attribute of the session object:
-
-# 1. None:
-#				default state
-# 2. 'requested-e2e':
-#				this client has initiated an esession negotiation and is waiting
-#				for a response
-# 3. 'responded-e2e':
-#				this client has responded to an esession negotiation request and
-#				is waiting for the initiator to identify itself and complete the
-#				negotiation
-# 4. 'identified-alice':
-#				this client identified itself and is waiting for the responder to
-#				identify itself and complete the negotiation
-# 5. 'active':
-#				an encrypted session has been successfully negotiated. messages
-#				of any of the types listed in 'encryptable_stanzas' should be
-#				encrypted before they're sent.
-
-# the transition between these states is handled in gajim.py's
-#	handle_session_negotiation method.
 
 class EncryptedStanzaSession(StanzaSession):
+	'''
+	An encrypted stanza negotiation has several states. They arerepresented	as
+	the following values in the 'status' attribute of the session object:
+
+		1. None:
+				default state
+		2. 'requested-e2e':
+				this client has initiated an esession negotiation and is waiting
+				for a response
+		3. 'responded-e2e':
+				this client has responded to an esession negotiation request and
+				is waiting for the initiator to identify itself and complete the
+				negotiation
+ 		4. 'identified-alice':
+				this client identified itself and is waiting for the responder to
+				identify itself and complete the negotiation
+		5. 'active':
+				an encrypted session has been successfully negotiated. messages
+				of any of the types listed in 'encryptable_stanzas' should be
+				encrypted before they're sent.
+
+	The transition between these states is handled in gajim.py's
+	handle_session_negotiation method.
+	'''
 	def __init__(self, conn, jid, thread_id, type_='chat'):
 		StanzaSession.__init__(self, conn, jid, thread_id, type_='chat')
 
 		self.xes = {}
 		self.es = {}
-
 		self.n = 128
-
 		self.enable_encryption = False
 
 		# _s denotes 'self' (ie. this client)
 		self._kc_s = None
-
 		# _o denotes 'other' (ie. the client at the other end of the session)
 		self._kc_o = None
 
 		# has the remote contact's identity ever been verified?
 		self.verified_identity = False
 
-	# keep the encrypter updated with my latest cipher key
 	def set_kc_s(self, value):
+		'''
+		keep the encrypter updated with my latest cipher key
+		'''
 		self._kc_s = value
 		self.encrypter = self.cipher.new(self._kc_s, self.cipher.MODE_CTR,
 			counter=self.encryptcounter)
@@ -218,8 +218,10 @@ class EncryptedStanzaSession(StanzaSession):
 	def get_kc_s(self):
 		return self._kc_s
 
-	# keep the decrypter updated with the other party's latest cipher key
 	def set_kc_o(self, value):
+		'''
+		keep the decrypter updated with the other party's latest cipher key
+		'''
 		self._kc_o = value
 		self.decrypter = self.cipher.new(self._kc_o, self.cipher.MODE_CTR,
 			counter=self.decryptcounter)
@@ -244,10 +246,10 @@ class EncryptedStanzaSession(StanzaSession):
 			return crypto.encode_mpi(gajim.pubkey.sign(hash_, '')[0])
 
 	def encrypt_stanza(self, stanza):
-		encryptable = [x for x in stanza.getChildren() if x.getName() not in ('error', 'amp',
-			'thread')]
+		encryptable = [x for x in stanza.getChildren() if x.getName() not in 
+			('error', 'amp', 'thread')]
 
-		# XXX can also encrypt contents of <error/> elements in stanzas @type =
+		# FIXME can also encrypt contents of <error/> elements in stanzas @type =
 		# 'error'
 		# (except for <defined-condition
 		# xmlns='urn:ietf:params:xml:ns:xmpp-stanzas'/> child elements)
@@ -266,7 +268,7 @@ class EncryptedStanzaSession(StanzaSession):
 		c.setNamespace('http://www.xmpp.org/extensions/xep-0200.html#ns')
 		c.NT.data = base64.b64encode(m_final)
 
-		# XXX check for rekey request, handle <key/> elements
+		# FIXME check for rekey request, handle <key/> elements
 
 		m_content = ''.join(map(str, c.getChildren()))
 		c.NT.mac = base64.b64encode(self.hmac(self.km_s, m_content + \
@@ -313,7 +315,7 @@ class EncryptedStanzaSession(StanzaSession):
 		return self.encrypter.encrypt(padded)
 
 	def decrypt_stanza(self, stanza):
-		# delete the unencrypted explanation body, if it exists
+		''' delete the unencrypted explanation body, if it exists '''
 		orig_body = stanza.getTag('body')
 		if orig_body:
 			stanza.delChild(orig_body)
@@ -331,7 +333,7 @@ class EncryptedStanzaSession(StanzaSession):
 			crypto.encode_mpi_with_padding(self.c_o))
 
 		if not calculated_mac == received_mac:
-			raise exceptions.DecryptionError, 'bad signature'
+			raise DecryptionError('bad signature')
 
 		m_final = base64.b64decode(c.getTagData('data'))
 		m_compressed = self.decrypt(m_final)
@@ -340,7 +342,7 @@ class EncryptedStanzaSession(StanzaSession):
 		try:
 			parsed = xmpp.Node(node='<node>' + plaintext + '</node>')
 		except Exception:
-			raise exceptions.DecryptionError, 'decrypted <data/> not parseable as XML'
+			raise DecryptionError('decrypted <data/> not parseable as XML')
 
 		for child in parsed.getChildren():
 			stanza.addChild(node=child)
@@ -358,7 +360,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 	def get_shared_secret(self, e, y, p):
 		if (not 1 < e < (p - 1)):
-			raise exceptions.NegotiationError, 'invalid DH value'
+			raise NegotiationError('invalid DH value')
 
 		return crypto.sha256(crypto.encode_mpi(crypto.powmod(e, y, p)))
 
@@ -374,7 +376,8 @@ class EncryptedStanzaSession(StanzaSession):
 		m_o_calculated = self.hmac(self.km_o, crypto.encode_mpi(self.c_o) + id_o)
 
 		if m_o_calculated != m_o:
-			raise exceptions.NegotiationError, 'calculated m_%s differs from received m_%s' % (i_o, i_o)
+			raise NegotiationError('calculated m_%s differs from received m_%s' %
+				(i_o, i_o))
 
 		if i_o == 'a' and self.sas_algs == 'sas28x5':
 			# we don't need to calculate this if there's a verified retained secret
@@ -387,7 +390,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 			if self.negotiated['recv_pubkey'] == 'hash':
 				# fingerprint = parsed.getTagData('fingerprint')
-				# XXX find stored pubkey or terminate session
+				# FIXME find stored pubkey or terminate session
 				raise NotImplementedError()
 			else:
 				if self.negotiated['sign_algs'] == (XmlDsig + 'rsa-sha256'):
@@ -399,7 +402,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 					pubkey_o = xmpp.c14n.c14n(keyvalue)
 				else:
-					# XXX DSA, etc.
+					# FIXME DSA, etc.
 					raise NotImplementedError()
 
 			enc_sig = parsed.getTag(name='SignatureValue',
@@ -426,10 +429,11 @@ class EncryptedStanzaSession(StanzaSession):
 			hash_ = crypto.sha256(mac_o_calculated)
 
 			if not eir_pubkey.verify(hash_, signature):
-				raise exceptions.NegotiationError, 'public key signature verification failed!'
+				raise NegotiationError('public key signature verification failed!')
 
 		elif mac_o_calculated != mac_o:
-			raise exceptions.NegotiationError, 'calculated mac_%s differs from received mac_%s' % (i_o, i_o)
+			raise NegotiationError('calculated mac_%s differs from received mac_%s'
+				% (i_o, i_o))
 
 	def make_identity(self, form, dh_i):
 		if self.negotiated['send_pubkey']:
@@ -476,7 +480,7 @@ class EncryptedStanzaSession(StanzaSession):
 			self.sas = crypto.sas_28x5(m_s, self.form_o)
 
 			if self.sigmai:
-				# XXX save retained secret?
+				# FIXME save retained secret?
 				self.check_identity(tuple)
 
 		return (xmpp.DataField(name='identity', value=base64.b64encode(id_s)),
@@ -519,7 +523,7 @@ class EncryptedStanzaSession(StanzaSession):
 		x.addChild(node=xmpp.DataField(name='init_pubkey', options=['none', 'key',
 			'hash'], typ='list-single'))
 
-		# XXX store key, use hash
+		# FIXME store key, use hash
 		x.addChild(node=xmpp.DataField(name='resp_pubkey', options=['none',
 			'key'], typ='list-single'))
 
@@ -555,8 +559,8 @@ class EncryptedStanzaSession(StanzaSession):
 
 		self.send(request)
 
-	# 4.3 esession response (bob)
 	def verify_options_bob(self, form):
+		''' 4.3 esession response (bob) '''
 		negotiated = {'recv_pubkey': None, 'send_pubkey': None}
 		not_acceptable = []
 		ask_user = {}
@@ -618,14 +622,14 @@ class EncryptedStanzaSession(StanzaSession):
 				if (XmlDsig + 'rsa-sha256') in options:
 					negotiated['sign_algs'] = XmlDsig + 'rsa-sha256'
 			else:
-				# XXX some things are handled elsewhere, some things are
+				# FIXME some things are handled elsewhere, some things are
 				# not-implemented
 				pass
 
 		return (negotiated, not_acceptable, ask_user)
 
-	# 4.3 esession response (bob)
 	def respond_e2e_bob(self, form, negotiated, not_acceptable):
+		''' 4.3 esession response (bob) '''
 		response = xmpp.Message()
 		feature = response.NT.feature
 		feature.setNamespace(xmpp.NS_FEATURE)
@@ -697,8 +701,8 @@ class EncryptedStanzaSession(StanzaSession):
 
 		self.send(response)
 
-	# 'Alice Accepts'
 	def verify_options_alice(self, form):
+		''' 'Alice Accepts' '''
 		negotiated = {}
 		ask_user = {}
 		not_acceptable = []
@@ -725,8 +729,8 @@ class EncryptedStanzaSession(StanzaSession):
 
 		return (negotiated, not_acceptable, ask_user)
 
-	# 'Alice Accepts', continued
 	def accept_e2e_alice(self, form, negotiated):
+		''' 'Alice Accepts', continued '''
 		self.encryptable_stanzas = ['message']
 		self.sas_algs = 'sas28x5'
 		self.cipher = AES
@@ -743,7 +747,6 @@ class EncryptedStanzaSession(StanzaSession):
 
 		self.c_s = crypto.decode_mpi(base64.b64decode(form['counter']))
 		self.c_o = self.c_s ^ (2 ** (self.n - 1))
-
 		self.n_o = base64.b64decode(form['my_nonce'])
 
 		mod_p = int(form['modp'])
@@ -752,7 +755,6 @@ class EncryptedStanzaSession(StanzaSession):
 		e = self.es[mod_p]
 
 		self.d = crypto.decode_mpi(base64.b64decode(form['dhkeys']))
-
 		self.k = self.get_shared_secret(self.d, x, p)
 
 		result.addChild(node=xmpp.DataField(name='FORM_TYPE',
@@ -798,8 +800,8 @@ class EncryptedStanzaSession(StanzaSession):
 		else:
 			self.status = 'identified-alice'
 
-	# 4.5 esession accept (bob)
 	def accept_e2e_bob(self, form):
+		''' 4.5 esession accept (bob) '''
 		response = xmpp.Message()
 
 		init = response.NT.init
@@ -808,6 +810,7 @@ class EncryptedStanzaSession(StanzaSession):
 		x = xmpp.DataForm(typ='result')
 
 		for field in ('nonce', 'dhkeys', 'rshashes', 'identity', 'mac'):
+			# FIXME: will do nothing in real world...
 			assert field in form.asDict(), "alice's form didn't have a %s field" \
 				% field
 
@@ -816,18 +819,15 @@ class EncryptedStanzaSession(StanzaSession):
 		p = dh.primes[self.modp]
 
 		if crypto.sha256(crypto.encode_mpi(e)) != self.negotiated['He']:
-			raise exceptions.NegotiationError, 'SHA256(e) != He'
+			raise NegotiationError('SHA256(e) != He')
 
 		k = self.get_shared_secret(e, self.y, p)
-
 		self.kc_o, self.km_o, self.ks_o = self.generate_initiator_keys(k)
 
 		# 4.5.2 verifying alice's identity
-
 		self.verify_identity(form, e, False, 'a')
 
 		# 4.5.4 generating bob's final session keys
-
 		srs = ''
 
 		srses = secrets.secrets().retained_secrets(self.conn.name,
@@ -904,7 +904,6 @@ class EncryptedStanzaSession(StanzaSession):
 		self.kc_o, self.km_o, self.ks_o = self.generate_responder_keys(k)
 
 		# 4.6.2 Verifying Bob's Identity
-
 		self.verify_identity(form, self.d, False, 'b')
 		# Note: If Alice discovers an error then she SHOULD ignore any encrypted
 		# content she received in the stanza.
@@ -919,10 +918,11 @@ class EncryptedStanzaSession(StanzaSession):
 			self.control.print_esession_details()
 
 	def do_retained_secret(self, k, old_srs):
-		'''calculate the new retained secret. determine if the user needs to check
-		the remote party's identity. set up callbacks for when the identity has
-		been verified.'''
-
+		'''
+		Calculate the new retained secret. determine if the user needs to check
+		the remote party's identity. Set up callbacks for when the identity has
+		been verified.
+		'''
 		new_srs = self.hmac(k, 'New Retained Secret')
 		self.srs = new_srs
 
@@ -962,7 +962,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 			x = crypto.srand(2 ** (2 * self.n - 1), p - 1)
 
-			# XXX this may be a source of performance issues
+			# FIXME this may be a source of performance issues
 			e = crypto.powmod(g, x, p)
 
 			self.xes[modp] = x
@@ -980,21 +980,19 @@ class EncryptedStanzaSession(StanzaSession):
 
 	def terminate_e2e(self):
 		self.terminate()
-
 		self.enable_encryption = False
 
 	def acknowledge_termination(self):
 		StanzaSession.acknowledge_termination(self)
-
 		self.enable_encryption = False
 
-	def fail_bad_negotiation(self, reason, fields = None):
-		'''sends an error and cancels everything.
-
-if fields is None, the remote party has given us a bad cryptographic value of some kind
-
-otherwise, list the fields we haven't implemented'''
-
+	def fail_bad_negotiation(self, reason, fields=None):
+		'''
+		Sends an error and cancels everything.
+		
+		If fields is None, the remote party has given us a bad cryptographic
+		value of some kind. Otherwise, list the fields we haven't implemented
+		'''
 		err = xmpp.Error(xmpp.Message(), xmpp.ERR_FEATURE_NOT_IMPLEMENTED)
 		err.T.error.T.text.setData(reason)
 
@@ -1020,7 +1018,6 @@ otherwise, list the fields we haven't implemented'''
 	def cancelled_negotiation(self):
 		StanzaSession.cancelled_negotiation(self)
 		self.enable_encryption = False
-
 		self.km_o = ''
 
 # vim: se ts=3:
