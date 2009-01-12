@@ -163,7 +163,6 @@ class ChatControlBase(MessageControl):
 
 		# Create banner and connect signals
 		widget = self.xml.get_widget('banner_eventbox')
-		widget.set_property('height-request', gajim.config.get('chat_avatar_height'))
 		id_ = widget.connect('button-press-event',
 			self._on_banner_eventbox_button_press_event)
 		self.handlers[id_] = widget
@@ -1167,6 +1166,8 @@ class ChatControl(ChatControlBase):
 		self.handlers[id_] = message_tv_buffer
 
 		widget = self.xml.get_widget('avatar_eventbox')
+		widget.set_property('height-request', gajim.config.get(
+			'chat_avatar_height'))
 		id_ = widget.connect('enter-notify-event',
 			self.on_avatar_eventbox_enter_notify_event)
 		self.handlers[id_] = widget
