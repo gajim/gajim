@@ -2456,6 +2456,8 @@ class GroupchatConfigWindow:
 			renderer = gtk.CellRendererText()
 			col = gtk.TreeViewColumn(_('JID'), renderer)
 			col.add_attribute(renderer, 'text', 0)
+			col.set_resizable(True)
+			col.set_sort_column_id(0)
 			self.affiliation_treeview[affiliation].append_column(col)
 
 			if affiliation == 'outcast':
@@ -2464,15 +2466,21 @@ class GroupchatConfigWindow:
 				renderer.connect('edited', self.on_cell_edited)
 				col = gtk.TreeViewColumn(_('Reason'), renderer)
 				col.add_attribute(renderer, 'text', 1)
+				col.set_resizable(True)
+				col.set_sort_column_id(1)
 				self.affiliation_treeview[affiliation].append_column(col)
 			elif affiliation == 'member':
 				renderer = gtk.CellRendererText()
 				col = gtk.TreeViewColumn(_('Nick'), renderer)
 				col.add_attribute(renderer, 'text', 2)
+				col.set_resizable(True)
+				col.set_sort_column_id(2)
 				self.affiliation_treeview[affiliation].append_column(col)
 				renderer = gtk.CellRendererText()
 				col = gtk.TreeViewColumn(_('Role'), renderer)
 				col.add_attribute(renderer, 'text', 3)
+				col.set_resizable(True)
+				col.set_sort_column_id(3)
 				self.affiliation_treeview[affiliation].append_column(col)
 
 			sw = gtk.ScrolledWindow()
