@@ -1810,7 +1810,8 @@ class AccountsWindow:
 				# change account variable for chat / gc controls
 				gajim.interface.msg_win_mgr.change_account_name(old_name, new_name)
 				# upgrade account variable in opened windows
-				for kind in ('infos', 'disco', 'gc_config', 'search'):
+				for kind in ('infos', 'disco', 'gc_config', 'search',
+				'online_dialog'):
 					for j in gajim.interface.instances[new_name][kind]:
 						gajim.interface.instances[new_name][kind][j].account = \
 							new_name
@@ -2227,7 +2228,7 @@ class AccountsWindow:
 			self.init_account_gpg()
 			# update variables
 			gajim.interface.instances[gajim.ZEROCONF_ACC_NAME] = {'infos': {},
-				'disco': {}, 'gc_config': {}, 'search': {}}
+				'disco': {}, 'gc_config': {}, 'search': {}, 'online_dialog': {}}
 			gajim.interface.minimized_controls[gajim.ZEROCONF_ACC_NAME] = {}
 			gajim.connections[gajim.ZEROCONF_ACC_NAME].connected = 0
 			gajim.groups[gajim.ZEROCONF_ACC_NAME] = {}
@@ -3490,7 +3491,7 @@ class AccountCreationWizardWindow:
 
 		# update variables
 		gajim.interface.instances[self.account] = {'infos': {}, 'disco': {},
-			'gc_config': {}, 'search': {}}
+			'gc_config': {}, 'search': {}, 'online_dialog': {}}
 		gajim.interface.minimized_controls[self.account] = {}
 		gajim.connections[self.account].connected = 0
 		gajim.connections[self.account].keepalives = gajim.config.get_per(

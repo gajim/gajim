@@ -598,6 +598,12 @@ class Interface:
 	def handle_event_status(self, account, status): # OUR status
 		#('STATUS', account, status)
 		model = self.roster.status_combobox.get_model()
+		if status in ('offline', 'error'):
+			for name in self.instances[account]['online_dialog'].keys():
+				# .keys() is needed to not have a dictionary length changed during
+				# iteration error
+				self.instances[account]['online_dialog'][name].destroy()
+				del self.instances[account]['online_dialog'][name]
 		if status == 'offline':
 			# sensitivity for this menuitem
 			if gajim.get_number_of_connected_accounts() == 0:
@@ -1957,6 +1963,7 @@ class Interface:
 		server = gajim.config.get_per('accounts', account, 'hostname')
 
 		def on_ok(is_checked):
+			del self.instances[account]['online_dialog']['ssl_error']
 			if is_checked[0]:
 				# Check if cert is already in file
 				certs = ''
@@ -1983,6 +1990,7 @@ class Interface:
 			gajim.connections[account].ssl_certificate_accepted()
 
 		def on_cancel():
+			del self.instances[account]['online_dialog']['ssl_error']
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
 
@@ -1993,18 +2001,23 @@ class Interface:
 		else:
 			checktext1 = ''
 		checktext2 = _('Ignore this error for this certificate.')
-		dialogs.ConfirmationDialogDubbleCheck(pritext, sectext, checktext1,
+		if 'ssl_error' in self.instances[account]['online_dialog']:
+			self.instances[account]['online_dialog']['ssl_error'].destroy()
+		self.instances[account]['online_dialog']['ssl_error'] = \
+			dialogs.ConfirmationDialogDubbleCheck(pritext, sectext, checktext1,
 			checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel)
 
 	def handle_event_fingerprint_error(self, account, data):
 		# ('FINGERPRINT_ERROR', account, (new_fingerprint,))
 		def on_yes(is_checked):
+			del self.instances[account]['online_dialog']['fingerprint_error']
 			gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
 				data[0])
 			# Reset the ignored ssl errors
 			gajim.config.set_per('accounts', account, 'ignore_ssl_errors', '')
 			gajim.connections[account].ssl_certificate_accepted()
 		def on_no():
+			del self.instances[account]['online_dialog']['fingerprint_error']
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
 		pritext = _('SSL certificate error')
@@ -2013,13 +2026,17 @@ class Interface:
 			'\n\nDo you still want to connect and update the fingerprint of the '
 			'certificate?') % {'old': gajim.config.get_per('accounts', account,
 			'ssl_fingerprint_sha1'), 'new': data[0]}
-		dialog = dialogs.YesNoDialog(pritext, sectext, on_response_yes=on_yes,
+		if 'fingerprint_error' in self.instances[account]['online_dialog']:
+			self.instances[account]['online_dialog']['fingerprint_error'].destroy()
+		self.instances[account]['online_dialog']['fingerprint_error'] = \
+			dialogs.YesNoDialog(pritext, sectext, on_response_yes=on_yes,
 			on_response_no=on_no)
 
 	def handle_event_plain_connection(self, account, data):
 		# ('PLAIN_CONNECTION', account, (connection))
 		server = gajim.config.get_per('accounts', account, 'hostname')
 		def on_ok(is_checked):
+			del self.instances[account]['online_dialog']['plain_connection']
 			if not is_checked[0]:
 				on_cancel()
 				return
@@ -2028,6 +2045,7 @@ class Interface:
 					'warn_when_plaintext_connection', False)
 			gajim.connections[account].connection_accepted(data[0], 'tcp')
 		def on_cancel():
+			del self.instances[account]['online_dialog']['plain_connection']
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
 		pritext = _('Insecure connection')
@@ -2035,7 +2053,10 @@ class Interface:
 			'connection. Are you sure you want to do that?')
 		checktext1 = _('Yes, I really want to connect insecurely')
 		checktext2 = _('Do _not ask me again')
-		dialog = dialogs.ConfirmationDialogDubbleCheck(pritext, sectext,
+		if 'plain_connection' in self.instances[account]['online_dialog']:
+			self.instances[account]['online_dialog']['plain_connection'].destroy()
+		self.instances[account]['online_dialog']['plain_connection'] = \
+			dialogs.ConfirmationDialogDubbleCheck(pritext, sectext,
 			checktext1, checktext2, on_response_ok=on_ok,
 			on_response_cancel=on_cancel, is_modal=False)
 
@@ -2043,6 +2064,7 @@ class Interface:
 		# ('INSECURE_SSL_CONNECTION', account, (connection, connection_type))
 		server = gajim.config.get_per('accounts', account, 'hostname')
 		def on_ok(is_checked):
+			del self.instances[account]['online_dialog']['insecure_ssl']
 			if not is_checked[0]:
 				on_cancel()
 				return
@@ -2058,6 +2080,7 @@ class Interface:
 				return
 			gajim.connections[account].connection_accepted(data[0], data[1])
 		def on_cancel():
+			del self.instances[account]['online_dialog']['insecure_ssl']
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
 		pritext = _('Insecure connection')
@@ -2065,7 +2088,10 @@ class Interface:
 			'connection. You should install PyOpenSSL to prevent that. Are you sure you want to do that?')
 		checktext1 = _('Yes, I really want to connect insecurely')
 		checktext2 = _('Do _not ask me again')
-		dialog = dialogs.ConfirmationDialogDubbleCheck(pritext, sectext,
+		if 'insecure_ssl' in self.instances[account]['online_dialog']:
+			self.instances[account]['online_dialog']['insecure_ssl'].destroy()
+		self.instances[account]['online_dialog']['insecure_ssl'] = \
+			dialogs.ConfirmationDialogDubbleCheck(pritext, sectext,
 			checktext1, checktext2, on_response_ok=on_ok,
 			on_response_cancel=on_cancel, is_modal=False)
 
@@ -3137,7 +3163,9 @@ class Interface:
 
 		for a in gajim.connections:
 			self.instances[a] = {'infos': {}, 'disco': {}, 'gc_config': {},
-				'search': {}}
+				'search': {}, 'online_dialog': {}}
+			# online_dialog contains all dialogs that have a meaning only when we
+			# are not disconnected
 			self.minimized_controls[a] = {}
 			gajim.contacts.add_account(a)
 			gajim.groups[a] = {}
