@@ -23,6 +23,7 @@ import re
 import logging
 log = logging.getLogger('gajim.c.resolver')
 
+from common import helpers
 from xmpp.idlequeue import IdleCommand
 
 # it is good to check validity of arguments, when calling system commands
@@ -238,7 +239,7 @@ class NSLookupResolver(CommonResolver):
 			elif helpers.decode_string(line).startswith(ufqdn):
 				line = helpers.decode_string(line)
 				domain = ufqdn # For nslookup 9.6
-			if domain
+			if domain:
 				rest = line[len(domain):].split('=')
 				if len(rest) != 2:
 					continue
