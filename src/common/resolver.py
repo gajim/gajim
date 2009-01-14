@@ -226,13 +226,20 @@ class NSLookupResolver(CommonResolver):
 		# _xmpp-client._tcp.jabber.org    service = 30 30 5222 jabber.org.
 		if not result:
 			return []
+		ufqdn = helpers.ascii_to_idn(fqdn) # Unicode domain name
 		hosts = []
 		lines = result.split('\n')
 		for line in lines:
 			if line == '':
 				continue
+			domain = None
 			if line.startswith(fqdn):
-				rest = line[len(fqdn):].split('=')
+				domain = fqdn # For nslookup 9.5
+			elif helpers.decode_string(line).startswith(ufqdn):
+				line = helpers.decode_string(line)
+				domain = ufqdn # For nslookup 9.6
+			if domain
+				rest = line[len(domain):].split('=')
 				if len(rest) != 2:
 					continue
 				answer_type, props_str = rest
@@ -250,8 +257,8 @@ class NSLookupResolver(CommonResolver):
 					port = int(port)
 				except ValueError:
 					continue
-				hosts.append({'host': host, 'port': port,'weight': weight,
-						'prio': prio})
+				hosts.append({'host': host, 'port': port, 'weight': weight,
+					'prio': prio})
 		return hosts
 	
 	def _on_ready(self, host, type, result):
