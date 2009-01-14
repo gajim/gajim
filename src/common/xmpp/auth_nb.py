@@ -212,10 +212,12 @@ class SASL(PlugIn):
 			self.mechanism = 'DIGEST-MD5'
 		elif 'PLAIN' in self.mecs:
 			self.mecs.remove('PLAIN')
-			sasl_data='%s\x00%s\x00%s' % (self.username+'@' + self._owner.Server,
-				self.username, self.password)
-			node = Node('auth', attrs={'xmlns':NS_SASL,'mechanism':'PLAIN'},
-				payload=[base64.encodestring(sasl_data).replace('\n','')])
+			sasl_data = u'%s\x00%s\x00%s' % (self.username + '@' + \
+				self._owner.Server, self.username, self.password)
+			sasl_data = sasl_data.encode('utf-8').encode('base64').replace(
+				'\n','')
+			node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'PLAIN'},
+				payload=[sasl_data])
 			self.mechanism = 'PLAIN'
 		else:
 			self.startsasl = SASL_FAILURE
@@ -312,16 +314,16 @@ class SASL(PlugIn):
 				resp['qop'], HH(A2)]))
 			resp['response'] = response
 			resp['charset'] = 'utf-8'
-			sasl_data = ''
+			sasl_data = u''
 			for key in ('charset', 'username', 'realm', 'nonce', 'nc', 'cnonce',
 			'digest-uri', 'response', 'qop'):
 				if key in ('nc','qop','response','charset'):
-					sasl_data += "%s=%s," % (key, resp[key])
+					sasl_data += u"%s=%s," % (key, resp[key])
 				else:
-					sasl_data += '%s="%s",' % (key, resp[key])
-			node = Node('response', attrs={'xmlns':NS_SASL},
-				payload=[base64.encodestring(sasl_data[:-1]).replace('\r','').
-				replace('\n','')])
+					sasl_data += u'%s="%s",' % (key, resp[key])
+			sasl_data = sasl_data[:-1].encode('utf-8').encode('base64').replace(
+				'\r','').replace('\n','')
+			node = Node('response', attrs={'xmlns':NS_SASL}, payload=[sasl_data])
 			self._owner.send(str(node))
 		elif 'rspauth' in chal:
 			self._owner.send(str(Node('response', attrs={'xmlns':NS_SASL})))
