@@ -2043,7 +2043,7 @@ class Interface:
 			if is_checked[1]:
 				gajim.config.set_per('accounts', account,
 					'warn_when_plaintext_connection', False)
-			gajim.connections[account].connection_accepted(data[0], 'tcp')
+			gajim.connections[account].connection_accepted(data[0], 'plain')
 		def on_cancel():
 			del self.instances[account]['online_dialog']['plain_connection']
 			gajim.connections[account].disconnect(on_purpose=True)
