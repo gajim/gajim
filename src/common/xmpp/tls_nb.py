@@ -299,7 +299,7 @@ class NonBlockingTLS(PlugIn):
 		else:
 			return False
 
-	def _load_user_certs(self, cert_path, cert_store):
+	def _load_cert_file(self, cert_path, cert_store, logg=True):
 		if not os.path.isfile(cert_path):
 			return
 		f = open(cert_path)
@@ -316,11 +316,12 @@ class NonBlockingTLS(PlugIn):
 						OpenSSL.crypto.FILETYPE_PEM, cert)
 					cert_store.add_cert(x509cert)
 				except OpenSSL.crypto.Error, exception_obj:
-					log.warning('Unable to load a certificate from file %s: %s' %\
-						(self.mycerts, exception_obj.args[0][0][2]))
+					if logg:
+						log.warning('Unable to load a certificate from file %s: %s' %\
+							(cert_path, exception_obj.args[0][0][2]))
 				except:
-					log.warning('Unknown error while loading certificate from file%s'
-						% self.mycerts)
+					log.warning('Unknown error while loading certificate from file '
+						'%s' % cert_path)
 				begin = -1
 			i += 1
 
@@ -337,7 +338,14 @@ class NonBlockingTLS(PlugIn):
 		except:
 			log.warning('Unable to load SSL certificates from file %s' % \
 				os.path.abspath(self.cacerts))
-		self._load_user_certs(self.mycerts, tcpsock._sslContext.get_cert_store())
+		store = tcpsock._sslContext.get_cert_store()
+		self._load_cert_file(self.mycerts, store)
+		if os.path.isdir('/etc/ssl/certs'):
+			for f in os.listdir('/etc/ssl/certs'):
+				# We don't logg because there is a lot a duplicated certs in this
+				# folder
+				self._load_cert_file(os.path.join('/etc/ssl/certs', f), store,
+					logg=False)
 
 		tcpsock._sslObj = OpenSSL.SSL.Connection(tcpsock._sslContext,
 			tcpsock._sock)
