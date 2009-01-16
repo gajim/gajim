@@ -1162,6 +1162,7 @@ class Connection(ConnectionHandlers):
 			fjid = str(session.jid)
 
 		if keyID and self.USE_GPG:
+			xhtml = None
 			if keyID ==  'UNKNOWN':
 				error = _('Neither the remote presence is signed, nor a key was assigned.')
 			elif keyID.endswith('MISMATCH'):

@@ -1232,7 +1232,8 @@ class ChatControl(ChatControlBase):
 	def update_toolbar(self):
 		# Formatting
 		if gajim.capscache.is_supported(self.contact, NS_XHTML_IM) \
-		and not gajim.capscache.is_supported(self.contact, 'notexistant'):
+		and not gajim.capscache.is_supported(self.contact, 'notexistant') \
+		and not self.gpg_is_active:
 			self._formattings_button.set_sensitive(True)
 		else:
 			self._formattings_button.set_sensitive(False)
