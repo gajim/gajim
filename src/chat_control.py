@@ -1073,6 +1073,7 @@ class ChatControl(ChatControlBase):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
 			'chat_child_vbox', contact, acct, resource)
 
+		self.gpg_is_active = False
 		# for muc use:
 		# widget = self.xml.get_widget('muc_window_actions_button')
 		self.actions_button = self.xml.get_widget('message_window_actions_button')
@@ -1200,7 +1201,6 @@ class ChatControl(ChatControlBase):
 		# Enable encryption if needed
 		self.no_autonegotiation = False
 		e2e_is_active = self.session and self.session.enable_encryption
-		self.gpg_is_active = False
 		gpg_pref = gajim.config.get_per('contacts', contact.jid,
 			'gpg_enabled')
 
