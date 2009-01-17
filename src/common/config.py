@@ -136,6 +136,7 @@ class Config:
 		'gc-hpaned-position': [opt_int, 430],
 		'gc_refer_to_nick_char': [opt_str, ',', _('Character to add after nickname when using nick completion (tab) in group chat.')],
 		'gc_proposed_nick_char': [opt_str, '_', _('Character to propose to add after desired nickname when desired nickname is used by someone else in group chat.')],
+		'msgwin-max-state': [opt_bool, False],
 		'msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
 		'msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
 		'msgwin-width': [opt_int, 500],
