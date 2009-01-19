@@ -25,6 +25,7 @@
 
 __all__ = ['get_password', 'save_password']
 
+import warnings
 from common import gajim
 
 USER_HAS_GNOMEKEYRING = False
@@ -66,10 +67,7 @@ class GnomePasswordStorage(PasswordStorage):
 		conf = gajim.config.get_per('accounts', account_name, 'password')
 		if conf is None:
 			return None
-		try:
-			auth_token = conf.split('gnomekeyring:')[1]
-			auth_token = int(auth_token)
-		except (IndexError, ValueError):
+		if not conf.startswith('gnomekeyring:'):
 			password = conf
 			## migrate the password over to keyring
 			try:
@@ -79,8 +77,21 @@ class GnomePasswordStorage(PasswordStorage):
 				set_storage(SimplePasswordStorage())
 			return password
 		try:
-			return gnomekeyring.item_get_info_sync(self.keyring,
-				auth_token).get_secret()
+			attributes = dict(account_name=str(account_name), gajim=1)
+			try:
+				items = gnomekeyring.find_items_sync(
+					gnomekeyring.ITEM_GENERIC_SECRET,
+					attributes)
+			except gnomekeyring.Error:
+				items = []
+			if len(items) > 1:
+				warnings.warn("multiple gnome keyring items found for account %s;"
+					      " trying to use the first one..."
+					      % account_name)
+			if items:
+				return items[0].secret
+			else:
+				return None
 		except gnomekeyring.DeniedError:
 			return None
 		except gnomekeyring.NoKeyringDaemonError:
@@ -99,8 +110,8 @@ class GnomePasswordStorage(PasswordStorage):
 			set_storage(SimplePasswordStorage())
 			storage.save_password(account_name, password)
 			return
-		token = 'gnomekeyring:%i' % auth_token
-		gajim.config.set_per('accounts', account_name, 'password', token)
+		gajim.config.set_per('accounts', account_name, 'password',
+			'gnomekeyring:')
 		if account_name in gajim.connections:
 			gajim.connections[account_name].password = password
 
