@@ -77,13 +77,25 @@ class GnomePasswordStorage(PasswordStorage):
 				set_storage(SimplePasswordStorage())
 			return password
 		try:
-			attributes = dict(account_name=str(account_name), gajim=1)
+			server = gajim.config.get_per('accounts', account_name, 'hostname')
+			user = gajim.config.get_per('accounts', account_name, 'name')
+			attributes1 = dict(server=str(server), user=str(user), protocol='xmpp')
+			attributes2 = dict(account_name=str(account_name), gajim=1)
 			try:
 				items = gnomekeyring.find_items_sync(
-					gnomekeyring.ITEM_GENERIC_SECRET,
-					attributes)
+					gnomekeyring.ITEM_NETWORK_PASSWORD, attributes1)
 			except gnomekeyring.Error:
-				items = []
+				try:
+					items = gnomekeyring.find_items_sync(
+						gnomekeyring.ITEM_GENERIC_SECRET, attributes2)
+					if items:
+						# We found an old item, move it to new way of storing
+						password = items[0].secret
+						self.save_password(account_name, password)
+						gnomekeyring.item_delete_sync(items[0].keyring,
+							int(items[0].item_id))
+				except gnomekeyring.Error:
+					items = []
 			if len(items) > 1:
 				warnings.warn("multiple gnome keyring items found for account %s;"
 					      " trying to use the first one..."
@@ -100,12 +112,14 @@ class GnomePasswordStorage(PasswordStorage):
 			return None
 
 	def save_password(self, account_name, password, update=True):
-		display_name = _('Gajim account %s') % account_name
-		attributes = dict(account_name=str(account_name), gajim=1)
+		server = gajim.config.get_per('accounts', account_name, 'hostname')
+		user = gajim.config.get_per('accounts', account_name, 'name')
+		display_name = _('XMPP account %s@%s') % (user, server)
+		attributes1 = dict(server=str(server), user=str(user), protocol='xmpp')
 		try:
 			auth_token = gnomekeyring.item_create_sync(
-				self.keyring, gnomekeyring.ITEM_GENERIC_SECRET,
-				display_name, attributes, password, update)
+				self.keyring, gnomekeyring.ITEM_NETWORK_PASSWORD,
+				display_name, attributes1, password, update)
 		except gnomekeyring.DeniedError:
 			set_storage(SimplePasswordStorage())
 			storage.save_password(account_name, password)
