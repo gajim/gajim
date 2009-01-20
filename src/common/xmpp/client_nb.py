@@ -363,6 +363,7 @@ class NonBlockingClient:
 					log.warn('While connecting with type = "tls": stream version ' +
 						'is less than 1.0')
 					self._on_connect()
+					return
 				if self.Dispatcher.Stream.features.getTag('starttls'):
 					# Server advertises TLS support, start negotiation
 					self.stream_started = False
