@@ -279,7 +279,6 @@ class MessageTextView(gtk.TextView):
 				continue
 			text += self.end_tags[tag_name]
 
-		print text, plaintext
 		if modified and text != plaintext:
 			return '<p>' + self.make_clickable_urls(text) + '</p>'
 		else:
