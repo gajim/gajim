@@ -221,10 +221,9 @@ class MessageTextView(gtk.TextView):
 		tags['bold'] = False
 		iter = buffer.get_start_iter()
 		old = buffer.get_start_iter()
-		start, finish = buffer.get_bounds()
-		plaintext = buffer.get_text(start, finish, False)
 		text = ''
 		modified = False
+
 		def xhtml_special(text):
 			text = text.replace('<', '&lt;')
 			text = text.replace('>', '&gt;')
@@ -238,17 +237,15 @@ class MessageTextView(gtk.TextView):
 			text += self.begin_tags[tag_name]
 			modified = True
 		while (iter.forward_to_tag_toggle(None) and not iter.is_end()):
-			modified = True
 			text += xhtml_special(buffer.get_text(old, iter))
 			old.forward_to_tag_toggle(None)
-			new_tags = []
-			old_tags = []
-			end_tags = []
+			new_tags, old_tags, end_tags = [], [], []
 			for tag in iter.get_toggled_tags(True):
 				tag_name = tag.get_property('name')
 				if tag_name not in self.begin_tags:
 					continue
 				new_tags.append(tag_name)
+				modified = True
 
 			for tag in iter.get_tags():
 				tag_name = tag.get_property('name')
@@ -279,7 +276,7 @@ class MessageTextView(gtk.TextView):
 				continue
 			text += self.end_tags[tag_name]
 
-		if modified and text != plaintext:
+		if modified:
 			return '<p>' + self.make_clickable_urls(text) + '</p>'
 		else:
 			return None
