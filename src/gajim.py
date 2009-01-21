@@ -2036,10 +2036,12 @@ class Interface:
 		# ('PLAIN_CONNECTION', account, (connection))
 		server = gajim.config.get_per('accounts', account, 'hostname')
 		def on_ok(is_checked):
-			del self.instances[account]['online_dialog']['plain_connection']
 			if not is_checked[0]:
 				on_cancel()
 				return
+			# On cancel call del self.instances, so don't call it another time
+			# before
+			del self.instances[account]['online_dialog']['plain_connection']
 			if is_checked[1]:
 				gajim.config.set_per('accounts', account,
 					'warn_when_plaintext_connection', False)
