@@ -330,7 +330,6 @@ class NonBlockingTLS(PlugIn):
 		tcpsock = self._owner
 		# See http://docs.python.org/dev/library/ssl.html
 		tcpsock._sslContext = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv23_METHOD)
-		tcpsock._sslContext.set_options(OpenSSL.SSL.OP_NO_SSLv2)
 		tcpsock.ssl_errnum = 0
 		tcpsock._sslContext.set_verify(OpenSSL.SSL.VERIFY_PEER,
 			self._ssl_verify_callback)
