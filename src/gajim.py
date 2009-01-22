@@ -2494,6 +2494,9 @@ class Interface:
 		# basic matches that may occur earlier
 		self.emot_and_basic = basic_pattern + emoticons_pattern
 
+		# needed for xhtml display
+		self.emot_only = emoticons_pattern
+
 		# at least one character in 3 parts (before @, after @, after .)
 		self.sth_at_sth_dot_sth = r'\S+@\S+\.\S*[^\s)?]'
 
