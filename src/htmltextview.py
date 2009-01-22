@@ -193,36 +193,8 @@ def build_patterns(view, config, interface):
 	view.basic_pattern_re = re.compile(basic_pattern)
 	# emoticons
 	emoticons_pattern = ''
-	try:
-		if config.get('emoticons_theme'):
-			# When an emoticon is bordered by an alpha-numeric character it is NOT
-			# expanded.  e.g., foo:) NO, foo :) YES, (brb) NO, (:)) YES, etc.
-			# We still allow multiple emoticons side-by-side like :P:P:P
-			# sort keys by length so :qwe emot is checked before :q
-			keys = interface.emoticons.keys()
-			keys.sort(interface.on_emoticon_sort)
-			emoticons_pattern_prematch = ''
-			emoticons_pattern_postmatch = ''
-			emoticon_length = 0
-			for emoticon in keys: # travel thru emoticons list
-				emoticon_escaped = re.escape(emoticon) # espace regexp metachars
-				emoticons_pattern += emoticon_escaped + '|'# | means or in regexp
-				if (emoticon_length != len(emoticon)):
-					# Build up expressions to match emoticons next to other emoticons
-					emoticons_pattern_prematch  = emoticons_pattern_prematch[:-1]  + ')|(?<='
-					emoticons_pattern_postmatch = emoticons_pattern_postmatch[:-1] + ')|(?='
-					emoticon_length = len(emoticon)
-				emoticons_pattern_prematch += emoticon_escaped  + '|'
-				emoticons_pattern_postmatch += emoticon_escaped + '|'
-			# We match from our list of emoticons, but they must either have
-			# whitespace, or another emoticon next to it to match successfully
-			# [\w.] alphanumeric and dot (for not matching 8) in (2.8))
-			emoticons_pattern = '|' + \
-			'(?:(?<![\w.]' + emoticons_pattern_prematch[:-1]   + '))' + \
-			'(?:'       + emoticons_pattern[:-1]            + ')'  + \
-			'(?:(?![\w.]'  + emoticons_pattern_postmatch[:-1]  + '))'
-	except Exception:
-		pass
+	if config.get('emoticons_theme'):
+		emoticons_pattern = gajim.interface.emot_only
 
 	view.emot_pattern_re = re.compile(emoticons_pattern, re.IGNORECASE)
 	# because emoticons match later (in the string) they need to be after
