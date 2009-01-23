@@ -2802,18 +2802,18 @@ class Interface:
 		state = self.sleeper.getState()
 		for account in gajim.connections:
 			if account not in gajim.sleeper_state or \
-					not gajim.sleeper_state[account]:
+			not gajim.sleeper_state[account]:
 				continue
 			if state == common.sleepy.STATE_AWAKE and \
-				gajim.sleeper_state[account] in ('autoaway', 'autoxa'):
+			gajim.sleeper_state[account] in ('autoaway', 'autoxa'):
 				# we go online
 				self.roster.send_status(account, 'online',
 					gajim.status_before_autoaway[account])
 				gajim.status_before_autoaway[account] = ''
 				gajim.sleeper_state[account] = 'online'
 			elif state == common.sleepy.STATE_AWAY and \
-				gajim.sleeper_state[account] == 'online' and \
-				gajim.config.get('autoaway'):
+			gajim.sleeper_state[account] == 'online' and \
+			gajim.config.get('autoaway'):
 				# we save out online status
 				gajim.status_before_autoaway[account] = \
 					gajim.connections[account].status
@@ -2830,10 +2830,9 @@ class Interface:
 						}
 				self.roster.send_status(account, 'away', auto_message, auto=True)
 				gajim.sleeper_state[account] = 'autoaway'
-			elif state == common.sleepy.STATE_XA and (\
-				gajim.sleeper_state[account] == 'autoaway' or \
-				gajim.sleeper_state[account] == 'online') and \
-				gajim.config.get('autoxa'):
+			elif state == common.sleepy.STATE_XA and \
+			gajim.sleeper_state[account] in ('online', 'autoaway',
+			'autoaway-forced') and gajim.config.get('autoxa'):
 				# we go extended away [we pass True to auto param]
 				auto_message = gajim.config.get('autoxa_message')
 				if not auto_message:
@@ -3200,6 +3199,13 @@ class Interface:
 		if dbus_support.supported:
 			def gnome_screensaver_ActiveChanged_cb(active):
 				if not active:
+					for account in gajim.connections:
+						if gajim.sleeper_state[account] == 'autoaway-forced':
+							# We came back online ofter gnome-screensaver autoaway
+							self.roster.send_status(account, 'online',
+								gajim.status_before_autoaway[account])
+							gajim.status_before_autoaway[account] = ''
+							gajim.sleeper_state[account] = 'online'
 					return
 				if not gajim.config.get('autoaway'):
 					# Don't go auto away if user disabled the option
@@ -3216,9 +3222,16 @@ class Interface:
 						auto_message = gajim.config.get('autoaway_message')
 						if not auto_message:
 							auto_message = gajim.connections[account].status
+						else:
+							auto_message = auto_message.replace('$S','%(status)s')
+							auto_message = auto_message.replace('$T','%(time)s')
+							auto_message = auto_message % {
+								'status': gajim.status_before_autoaway[account],
+								'time': gajim.config.get('autoxatime')
+							}
 						self.roster.send_status(account, 'away', auto_message,
 							auto=True)
-						gajim.sleeper_state[account] = 'autoaway'
+						gajim.sleeper_state[account] = 'autoaway-forced'
 
 			try:
 				bus = dbus.SessionBus()
