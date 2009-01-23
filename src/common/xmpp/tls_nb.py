@@ -302,7 +302,11 @@ class NonBlockingTLS(PlugIn):
 	def _load_cert_file(self, cert_path, cert_store, logg=True):
 		if not os.path.isfile(cert_path):
 			return
-		f = open(cert_path)
+		try:
+			f = open(cert_path)
+		except IOError, e:
+			log.warning('Unable to open certificate file %s: %s' % \
+				(cert_path, str(e)))
 		lines = f.readlines()
 		i = 0
 		begin = -1
