@@ -2813,6 +2813,7 @@ class RosterWindow:
 		if jid in gajim.interface.minimized_controls[account]:
 			ctrl = gajim.interface.minimized_controls[account][jid]
 			ctrl.shutdown()
+			ctrl.got_disconnected()
 		self.remove_groupchat(jid, account)
 
 	def on_send_single_message_menuitem_activate(self, widget, account,
