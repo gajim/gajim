@@ -222,6 +222,8 @@ class SASL(PlugIn):
 		else:
 			self.startsasl = SASL_FAILURE
 			log.error('I can only use DIGEST-MD5, GSSAPI and PLAIN mecanisms.')
+			if self.on_sasl:
+				self.on_sasl()
 			return
 		self.startsasl = SASL_IN_PROCESS
 		self._owner.send(str(node))
