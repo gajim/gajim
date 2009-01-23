@@ -1759,7 +1759,8 @@ class GroupchatControl(ChatControlBase):
 	def shutdown(self, status='offline'):
 		# destroy banner tooltip - bug #pygtk for that!
 		self.subject_tooltip.destroy()
-		if gajim.gc_connected[self.account][self.room_jid]:
+		if self.room_jid in gajim.gc_connected[self.account] and \
+		gajim.gc_connected[self.account][self.room_jid]:
 			# Tell connection to note the date we disconnect to avoid duplicate
 			# logs. We do it only when connected because if connection was lost
 			# there may be new messages since disconnection.
