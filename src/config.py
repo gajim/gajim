@@ -305,31 +305,7 @@ class PreferencesWindow:
 		if gajim.config.get('sounds_on'):
 			self.xml.get_widget('play_sounds_checkbutton').set_active(True)
 		else:
-			self.xml.get_widget('sounds_scrolledwindow').set_sensitive(False)
-			self.xml.get_widget('browse_sounds_hbox').set_sensitive(False)
-
-		# sounds treeview
-		self.sound_tree = self.xml.get_widget('sounds_treeview')
-
-		# active, event ui name, path to sound file, event_config_name
-		model = gtk.ListStore(bool, str, str, str)
-		self.sound_tree.set_model(model)
-
-		col = gtk.TreeViewColumn(_('Active'))
-		self.sound_tree.append_column(col)
-		renderer = gtk.CellRendererToggle()
-		renderer.set_property('activatable', True)
-		renderer.connect('toggled', self.sound_toggled_cb)
-		col.pack_start(renderer)
-		col.set_attributes(renderer, active = 0)
-
-		col = gtk.TreeViewColumn(_('Event'))
-		self.sound_tree.append_column(col)
-		renderer = gtk.CellRendererText()
-		col.pack_start(renderer)
-		col.set_attributes(renderer, text = 1)
-
-		self.fill_sound_treeview()
+			self.xml.get_widget('manage_sounds_button').set_sensitive(False)
 
 		# Notify user of new gmail e-mail messages,
 		# make checkbox sensitive if user has a gtalk account
@@ -500,8 +476,6 @@ class PreferencesWindow:
 
 		self.xml.signal_autoconnect(self)
 
-		self.sound_tree.get_model().connect('row-changed',
-					self.on_sounds_treemodel_row_changed)
 		self.msg_tree.get_model().connect('row-changed',
 					self.on_msg_treemodel_row_changed)
 		self.msg_tree.get_model().connect('row-deleted',
@@ -510,6 +484,7 @@ class PreferencesWindow:
 					self.on_default_msg_treemodel_row_changed)
 
 		self.theme_preferences = None
+		self.sounds_preferences = None
 
 		self.notebook.set_current_page(0)
 
@@ -750,16 +725,13 @@ class PreferencesWindow:
 
 	def on_play_sounds_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sounds_on',
-				[self.xml.get_widget('sounds_scrolledwindow'),
-				self.xml.get_widget('browse_sounds_hbox')])
-
-	def on_sounds_treemodel_row_changed(self, model, path, iter_):
-		sound_event = model[iter_][3].decode('utf-8')
-		gajim.config.set_per('soundevents', sound_event, 'enabled',
-					bool(model[path][0]))
-		gajim.config.set_per('soundevents', sound_event, 'path',
-					model[iter_][2].decode('utf-8'))
-		gajim.interface.save_config()
+			[self.xml.get_widget('manage_sounds_button')])
+			
+	def on_manage_sounds_button_clicked(self, widget):
+		if self.sounds_preferences is None:
+			self.sounds_preferences = ManageSoundsWindow()
+		else:
+			self.sounds_preferences.window.present()
 
 	def update_text_tags(self):
 		'''Update color tags in Opened Chat Windows'''
@@ -1031,88 +1003,6 @@ class PreferencesWindow:
 	def on_msg_treeview_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Delete:
 			self.on_delete_msg_button_clicked(widget)
-
-	def sound_toggled_cb(self, cell, path):
-		model = self.sound_tree.get_model()
-		model[path][0] = not model[path][0]
-
-	def fill_sound_treeview(self):
-		model = self.sound_tree.get_model()
-		model.clear()
-		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
-
-		# NOTE: sounds_ui_names MUST have all items of
-		# sounds = gajim.config.get_per('soundevents') as keys
-		sounds_dict = {
-			'first_message_received': _('First Message Received'),
-			'next_message_received_focused': _('Next Message Received Focused'),
-			'next_message_received_unfocused':
-				_('Next Message Received Unfocused'),
-			'contact_connected': _('Contact Connected'),
-			'contact_disconnected': _('Contact Disconnected'),
-			'message_sent': _('Message Sent'),
-			'muc_message_highlight': _('Group Chat Message Highlight'),
-			'muc_message_received': _('Group Chat Message Received'),
-			'gmail_received': _('GMail Email Received')
-		}
-
-		for sound_event_config_name, sound_ui_name in sounds_dict.items():
-			enabled = gajim.config.get_per('soundevents',
-				sound_event_config_name, 'enabled')
-			path = gajim.config.get_per('soundevents',
-				sound_event_config_name, 'path')
-			model.append((enabled, sound_ui_name, path, sound_event_config_name))
-
-	def on_treeview_sounds_cursor_changed(self, widget, data = None):
-		(model, iter_) = self.sound_tree.get_selection().get_selected()
-		sounds_entry = self.xml.get_widget('sounds_entry')
-		if not iter_:
-			sounds_entry.set_text('')
-			return
-		path_to_snd_file = model[iter_][2]
-		sounds_entry.set_text(path_to_snd_file)
-
-	def on_browse_for_sounds_button_clicked(self, widget, data = None):
-		(model, iter_) = self.sound_tree.get_selection().get_selected()
-		if not iter_:
-			return
-		def on_ok(widget, path_to_snd_file):
-			self.dialog.destroy()
-			model, iter_ = self.sound_tree.get_selection().get_selected()
-			if not path_to_snd_file:
-				model[iter_][2] = ''
-				self.xml.get_widget('sounds_entry').set_text('')
-				model[iter_][0] = False
-				return
-			directory = os.path.dirname(path_to_snd_file)
-			gajim.config.set('last_sounds_dir', directory)
-			self.xml.get_widget('sounds_entry').set_text(path_to_snd_file)
-
-			model[iter_][2] = path_to_snd_file # set new path to sounds_model
-			model[iter_][0] = True # set the sound to enabled
-
-		def on_cancel(widget):
-			self.dialog.destroy()
-			model, iter_ = self.sound_tree.get_selection().get_selected()
-			model[iter_][2] = ''
-			model[iter_][0] = False
-
-		path_to_snd_file = model[iter_][2].decode('utf-8')
-		path_to_snd_file = os.path.join(os.getcwd(), path_to_snd_file)
-		self.dialog = dialogs.SoundChooserDialog(path_to_snd_file, on_ok,
-			on_cancel)
-
-	def on_sounds_entry_changed(self, widget):
-		path_to_snd_file = widget.get_text()
-		model, iter_ = self.sound_tree.get_selection().get_selected()
-		model[iter_][2] = path_to_snd_file # set new path to sounds_model
-
-	def on_play_button_clicked(self, widget):
-		model, iter_ = self.sound_tree.get_selection().get_selected()
-		if not iter_:
-			return
-		snd_event_config_name = model[iter_][3]
-		helpers.play_sound(snd_event_config_name)
 
 	def on_open_advanced_editor_button_clicked(self, widget, data = None):
 		if 'advanced_config' in gajim.interface.instances:
@@ -3608,4 +3498,135 @@ class ManagePEPServicesWindow:
 		window.set_title(title)
 		window.show_all()
 
+class ManageSoundsWindow:
+	def __init__(self):
+		self.xml = gtkgui_helpers.get_glade('manage_sounds_window.glade')
+		self.window = self.xml.get_widget('manage_sounds_window')
+		
+		# sounds treeview
+		self.sound_tree = self.xml.get_widget('sounds_treeview')
+
+		# active, event ui name, path to sound file, event_config_name
+		model = gtk.ListStore(bool, str, str, str)
+		self.sound_tree.set_model(model)
+
+		col = gtk.TreeViewColumn(_('Active'))
+		self.sound_tree.append_column(col)
+		renderer = gtk.CellRendererToggle()
+		renderer.set_property('activatable', True)
+		renderer.connect('toggled', self.sound_toggled_cb)
+		col.pack_start(renderer)
+		col.set_attributes(renderer, active = 0)
+
+		col = gtk.TreeViewColumn(_('Event'))
+		self.sound_tree.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer)
+		col.set_attributes(renderer, text = 1)
+
+		self.fill_sound_treeview()
+		
+		self.xml.signal_autoconnect(self)
+
+		self.sound_tree.get_model().connect('row-changed',
+			self.on_sounds_treemodel_row_changed)
+		
+		self.window.show_all()
+		
+	def on_sounds_treemodel_row_changed(self, model, path, iter_):
+		sound_event = model[iter_][3].decode('utf-8')
+		gajim.config.set_per('soundevents', sound_event, 'enabled',
+					bool(model[path][0]))
+		gajim.config.set_per('soundevents', sound_event, 'path',
+					model[iter_][2].decode('utf-8'))
+		gajim.interface.save_config()
+		
+	def sound_toggled_cb(self, cell, path):
+		model = self.sound_tree.get_model()
+		model[path][0] = not model[path][0]
+
+	def fill_sound_treeview(self):
+		model = self.sound_tree.get_model()
+		model.clear()
+		model.set_sort_column_id(1, gtk.SORT_ASCENDING)
+
+		# NOTE: sounds_ui_names MUST have all items of
+		# sounds = gajim.config.get_per('soundevents') as keys
+		sounds_dict = {
+			'first_message_received': _('First Message Received'),
+			'next_message_received_focused': _('Next Message Received Focused'),
+			'next_message_received_unfocused':
+				_('Next Message Received Unfocused'),
+			'contact_connected': _('Contact Connected'),
+			'contact_disconnected': _('Contact Disconnected'),
+			'message_sent': _('Message Sent'),
+			'muc_message_highlight': _('Group Chat Message Highlight'),
+			'muc_message_received': _('Group Chat Message Received'),
+			'gmail_received': _('GMail Email Received')
+		}
+
+		for sound_event_config_name, sound_ui_name in sounds_dict.items():
+			enabled = gajim.config.get_per('soundevents',
+				sound_event_config_name, 'enabled')
+			path = gajim.config.get_per('soundevents',
+				sound_event_config_name, 'path')
+			model.append((enabled, sound_ui_name, path, sound_event_config_name))
+
+	def on_treeview_sounds_cursor_changed(self, widget, data = None):
+		(model, iter_) = self.sound_tree.get_selection().get_selected()
+		sounds_entry = self.xml.get_widget('sounds_entry')
+		if not iter_:
+			sounds_entry.set_text('')
+			return
+		path_to_snd_file = model[iter_][2]
+		sounds_entry.set_text(path_to_snd_file)
+
+	def on_browse_for_sounds_button_clicked(self, widget, data = None):
+		(model, iter_) = self.sound_tree.get_selection().get_selected()
+		if not iter_:
+			return
+		def on_ok(widget, path_to_snd_file):
+			self.dialog.destroy()
+			model, iter_ = self.sound_tree.get_selection().get_selected()
+			if not path_to_snd_file:
+				model[iter_][2] = ''
+				self.xml.get_widget('sounds_entry').set_text('')
+				model[iter_][0] = False
+				return
+			directory = os.path.dirname(path_to_snd_file)
+			gajim.config.set('last_sounds_dir', directory)
+			self.xml.get_widget('sounds_entry').set_text(path_to_snd_file)
+
+			model[iter_][2] = path_to_snd_file # set new path to sounds_model
+			model[iter_][0] = True # set the sound to enabled
+
+		def on_cancel(widget):
+			self.dialog.destroy()
+			model, iter_ = self.sound_tree.get_selection().get_selected()
+			model[iter_][2] = ''
+			model[iter_][0] = False
+
+		path_to_snd_file = model[iter_][2].decode('utf-8')
+		path_to_snd_file = os.path.join(os.getcwd(), path_to_snd_file)
+		self.dialog = dialogs.SoundChooserDialog(path_to_snd_file, on_ok,
+			on_cancel)
+
+	def on_sounds_entry_changed(self, widget):
+		path_to_snd_file = widget.get_text()
+		model, iter_ = self.sound_tree.get_selection().get_selected()
+		model[iter_][2] = path_to_snd_file # set new path to sounds_model
+
+	def on_play_button_clicked(self, widget):
+		model, iter_ = self.sound_tree.get_selection().get_selected()
+		if not iter_:
+			return
+		snd_event_config_name = model[iter_][3]
+		helpers.play_sound(snd_event_config_name)
+		
+	def on_close_button_clicked(self, widget):
+		self.window.hide()
+	
+	def on_manage_sounds_window_delete_event(self, widget, event):
+		self.window.hide()
+		return True # do NOT destroy the window
 # vim: se ts=3:
