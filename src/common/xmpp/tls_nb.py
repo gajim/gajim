@@ -307,6 +307,7 @@ class NonBlockingTLS(PlugIn):
 		except IOError, e:
 			log.warning('Unable to open certificate file %s: %s' % \
 				(cert_path, str(e)))
+			return
 		lines = f.readlines()
 		i = 0
 		begin = -1
