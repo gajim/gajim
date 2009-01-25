@@ -301,6 +301,15 @@ class PreferencesWindow:
 		st = gajim.config.get('autopopupaway')
 		self.auto_popup_away_checkbutton.set_active(st)
 
+		# Systray
+		systray_combobox = self.xml.get_widget('systray_combobox')
+		if gajim.config.get('trayicon') == 'never':
+			systray_combobox.set_active(0)
+		elif gajim.config.get('trayicon') == 'on_event':
+			systray_combobox.set_active(1)
+		else:
+			systray_combobox.set_active(2)
+
 		# sounds
 		if gajim.config.get('sounds_on'):
 			self.xml.get_widget('play_sounds_checkbutton').set_active(True)
@@ -720,6 +729,15 @@ class PreferencesWindow:
 	def on_auto_popup_away_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autopopupaway')
 
+	def on_systray_combobox_changed(self, widget):
+		active = widget.get_active()
+		if active == 0:
+			gajim.config.set('trayicon', 'never')
+		elif active == 1:
+			gajim.config.set('trayicon', 'on_event')
+		else:
+			gajim.config.set('trayicon', 'always')
+			
 	def on_advanced_notifications_button_clicked(self, widget):
 		dialogs.AdvancedNotificationsWindow()
 

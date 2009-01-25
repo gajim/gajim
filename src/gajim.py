@@ -3265,7 +3265,7 @@ class Interface:
 			if self.systray_capabilities:
 				self.systray = systray.Systray()
 
-		if self.systray_capabilities and gajim.config.get('trayicon'):
+		if self.systray_capabilities and gajim.config.get('trayicon') != 'never':
 			self.show_systray()
 
 		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'gajim.png')

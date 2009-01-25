@@ -99,6 +99,10 @@ class Systray:
 			state = 'event'
 		else:
 			state = self.status
+		if state != 'event' and gajim.config.get('trayicon') == 'on_event':
+			self.t.hide()
+		else:
+			self.t.show()
 		image = gajim.interface.jabber_state_images['16'][state]
 		if image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			self.img_tray.set_from_animation(image.get_animation())

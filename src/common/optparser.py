@@ -187,6 +187,8 @@ class OptionsParser:
 			self.update_config_to_01144()
 		if old < [0, 12, 0, 1] and new >= [0, 12, 0, 1]:
 			self.update_config_to_01201()
+		if old < [0, 12, 1, 1] and new >= [0, 12, 1, 1]:
+			self.update_config_to_01211()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -563,8 +565,8 @@ class OptionsParser:
 			cur.executescript(
 				'''
 				CREATE TABLE IF NOT EXISTS rooms_last_message_time(
-		        jid_id INTEGER PRIMARY KEY UNIQUE,
-      		  time INTEGER
+					jid_id INTEGER PRIMARY KEY UNIQUE,
+					time INTEGER
 				);
 				'''
 			)
@@ -607,5 +609,13 @@ class OptionsParser:
 				replace(' xmpp', '')
 			gajim.config.set('uri_schemes', new_values)
 		gajim.config.set('version', '0.12.0.1')
+		
+	def update_config_to_01211(self):
+		if 'trayicon' in self.old_values:
+			if self.old_values['trayicon'] == 'False':
+				gajim.config.set('trayicon', 'never')
+			else:
+				gajim.config.set('trayicon', 'always')
+		gajim.config.set('version', '0.12.1.1')
 
 # vim: se ts=3:
