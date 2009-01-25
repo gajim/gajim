@@ -1030,7 +1030,7 @@ msgstr "Odeslat _Soubor"
 
 #: ../data/glade/chat_control_popup_menu.glade.h:3
 msgid "Toggle End to End Encryption"
-msgstr "Přepnout Open_PGP šifrování"
+msgstr "Přepnout šifrování mezi uživateli"
 
 #: ../data/glade/chat_control_popup_menu.glade.h:4
 msgid "Toggle Open_PGP Encryption"
@@ -1338,17 +1338,13 @@ msgid ""
 "If you plan to do massive deletions, please make sure Gajim is not running. "
 "Generally avoid deletions with contacts you currently chat with."
 msgstr ""
-"<big><b>Vítejte do Gajimova Správce Historie</b></big>\n"
-"\n"
-"Můžete zvolit záznamy nalevo a/nebo prohledat databázi dole.\n"
-"\n"
 "<b>VAROVÁNÍ:</b>\n"
 "Pokud plánujete rozsáhlé promazání, ujistěte se, že Gajim neběží. Obecně se "
 "vyvarujte mazání historie kontaktu, se kterým si právě píšete."
 
 #: ../data/glade/history_manager.glade.h:3
 msgid "<big><b>Welcome to Gajim History Logs Manager</b></big>"
-msgstr "Gajimův Správce Historie"
+msgstr "<big><b>Vítejte do Gajimova Správce Historie</b></big>"
 
 #: ../data/glade/history_manager.glade.h:4
 msgid "Delete"
@@ -2223,7 +2219,7 @@ msgstr "<b>E-Mail:</b>"
 #: ../data/glade/profile_window.glade.h:9
 #: ../data/glade/vcard_information_window.glade.h:11
 msgid "<b>Extra Address:</b>"
-msgstr "<b>Další adresa:</b."
+msgstr "<b>Další adresa:</b>"
 
 #. Family Name
 #: ../data/glade/profile_window.glade.h:11
