@@ -28,6 +28,7 @@
 
 import sys
 import locale
+import urllib
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
@@ -507,6 +508,10 @@ class GajimRemote:
 			self.command = sys.argv[1] = 'open_chat'
 			return
 		(jid, action) = uri.split('?', 1)
+		try:
+			jid = urllib.unquote(jid)
+		except UnicodeDecodeError:
+			pass
 		sys.argv[2] = jid
 		if action == 'join':
 			self.command = sys.argv[1] = 'join_room'
