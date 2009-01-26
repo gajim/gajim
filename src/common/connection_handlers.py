@@ -661,15 +661,25 @@ class ConnectionDisco:
 	def request_register_agent_info(self, agent):
 		if not self.connection or self.connected < 2:
 			return None
-		iq=common.xmpp.Iq('get', common.xmpp.NS_REGISTER, to=agent)
+		iq = common.xmpp.Iq('get', common.xmpp.NS_REGISTER, to=agent)
 		id_ = self.connection.getAnID()
 		iq.setID(id_)
 		# Wait the answer during 30 secondes
 		self.awaiting_timeouts[gajim.idlequeue.current_time() + 30] = (id_,
-			_('Registration information for transport %s has not arrived in time') % \
-			agent)
+			_('Registration information for transport %s has not arrived in time')\
+			% agent)
 		self.connection.SendAndCallForResponse(iq, self._ReceivedRegInfo,
 			{'agent': agent})
+
+	def _agent_registered_cb(self, con, resp, agent):
+		if resp.getType() == 'result':
+			self.dispatch('INFORMATION', (_('Registration succeeded'),
+				_('Resgitration with agent %s succeeded') % agent))
+		if resp.getType() == 'error':
+			self.dispatch('ERROR', (_('Registration failed'), _('Resgitration with'
+				' agent %(agent)s failed with error %(error)s: %(error_msg)s') % {
+				'agent': agent, 'error': resp.getError(),
+				'error_msg': resp.getErrorMsg()}))
 
 	def register_agent(self, agent, info, is_form = False):
 		if not self.connection or self.connected < 2:
@@ -679,7 +689,8 @@ class ConnectionDisco:
 			query = iq.getTag('query')
 			info.setAttr('type', 'submit')
 			query.addChild(node = info)
-			self.connection.send(iq)
+			self.connection.SendAndCallForResponse(iq, self._agent_registered_cb,
+				{'agent': agent})
 		else:
 			# fixed: blocking
 			common.xmpp.features_nb.register(self.connection, agent, info, None)
