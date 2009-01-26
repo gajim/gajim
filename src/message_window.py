@@ -887,7 +887,6 @@ class MessageWindowMgr(gobject.GObject):
 		# we track the lifetime of this window
 		win.window.connect('delete-event', self._on_window_delete)
 		win.window.connect('destroy', self._on_window_destroy)
-		win.window.connect('window-state-event', self._on_window_state_change)
 		return win
 
 	def _gtk_win_to_msg_win(self, gtk_win):
@@ -1024,10 +1023,6 @@ class MessageWindowMgr(gobject.GObject):
 			del self._windows[old_key]
 		win.change_key(old_jid, new_jid, acct)
 
-	def _on_window_state_change(self,widget, event, *args):
-		"track window state"
-		self.win_maximized = (event.new_window_state == gtk.gdk.WINDOW_STATE_MAXIMIZED)
-
 	def _on_window_delete(self, win, event):
 		self.save_state(self._gtk_win_to_msg_win(win))
 		gajim.interface.save_config()
@@ -1123,7 +1118,9 @@ May be useful some day in the future?'''
 				gajim.config.set_per('accounts', acct, pos_y_key, y)
 
 		else:
-			gajim.config.set(max_win_key , self.win_maximized )
+			win_maximized = msg_win.window.window.get_state() == \
+				gtk.gdk.WINDOW_STATE_MAXIMIZED
+			gajim.config.set(max_win_key, win_maximized)
 			width += width_adjust
 			gajim.config.set(size_width_key, width)
 			gajim.config.set(size_height_key, height)
