@@ -40,6 +40,8 @@ try:
 			pass
 	import dbus
 	import dbus.glib
+	# test if dbus-x11 is installed
+	bus = dbus.SessionBus()
 	supported = True # does user have D-Bus bindings?
 except ImportError:
 	supported = False
