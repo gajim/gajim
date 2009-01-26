@@ -2022,10 +2022,11 @@ class Interface:
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
 		pritext = _('SSL certificate error')
-		sectext = _('It seems the SSL certificate has changed or your connection '
-			'is being hacked.\nOld fingerprint: %(old)s\nNew fingerprint: %(new)s'
-			'\n\nDo you still want to connect and update the fingerprint of the '
-			'certificate?') % {'old': gajim.config.get_per('accounts', account,
+		sectext = _('It seems the SSL certificate of account %(account)s has '
+			'changed or your connection is being hacked.\nOld fingerprint: %(old)s'
+			'\nNew fingerprint: %(new)s\n\nDo you still want to connect and update'
+			' the fingerprint of the certificate?') % {'account': account,
+			'old': gajim.config.get_per('accounts', account,
 			'ssl_fingerprint_sha1'), 'new': data[0]}
 		if 'fingerprint_error' in self.instances[account]['online_dialog']:
 			self.instances[account]['online_dialog']['fingerprint_error'].destroy()
