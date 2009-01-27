@@ -468,20 +468,32 @@ class PreferencesWindow:
 		self.xml.get_widget('log_show_changes_checkbutton').set_active(st)
 
 		# log encrypted chat sessions
-		st = gajim.config.get('log_encrypted_sessions')
-		self.xml.get_widget('log_encrypted_chats_checkbutton').set_active(st)
+		w = self.xml.get_widget('log_encrypted_chats_checkbutton')
+		st = self.get_per_account_option('log_encrypted_sessions')
+		if st == 'mixed':
+			w.set_inconsistent(True)
+		else:
+			w.set_active(st)
 
 		# send os info
-		st = gajim.config.get('send_os_info')
-		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
+		w = self.xml.get_widget('send_os_info_checkbutton')
+		st = self.get_per_account_option('send_os_info')
+		if st == 'mixed':
+			w.set_inconsistent(True)
+		else:
+			w.set_active(st)
 
 		# check if gajm is default
 		st = gajim.config.get('check_if_gajim_is_default')
 		self.xml.get_widget('check_default_client_checkbutton').set_active(st)
 
 		# Ignore messages from unknown contacts
-		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
-			set_active(gajim.config.get('ignore_unknown_contacts'))
+		w = self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton')
+		st = self.get_per_account_option('ignore_unknown_contacts')
+		if st == 'mixed':
+			w.set_inconsistent(True)
+		else:
+			w.set_active(st)
 
 		self.xml.signal_autoconnect(self)
 
@@ -504,9 +516,31 @@ class PreferencesWindow:
 		if event.keyval == gtk.keysyms.Escape:
 			self.window.hide()
 
+	def get_per_account_option(self, opt):
+		'''Return the value of the option opt if it's the same in all accoutns
+		else returns "mixed"'''
+		val = None
+		for account in gajim.connections:
+			v = gajim.config.get_per('accounts', account, opt)
+			if val is None:
+				val = v
+			elif val != v:
+				return 'mixed'
+		return val
+
 	def on_checkbutton_toggled(self, widget, config_name,
-		change_sensitivity_widgets = None):
+	change_sensitivity_widgets=None):
 		gajim.config.set(config_name, widget.get_active())
+		if change_sensitivity_widgets:
+			for w in change_sensitivity_widgets:
+				w.set_sensitive(widget.get_active())
+		gajim.interface.save_config()
+
+	def on_per_account_checkbutton_toggled(self, widget, config_name,
+	change_sensitivity_widgets=None):
+		for account in gajim.connections:
+			gajim.config.set_per('accounts', account, config_name,
+				widget.get_active())
 		if change_sensitivity_widgets:
 			for w in change_sensitivity_widgets:
 				w.set_sensitive(widget.get_active())
@@ -706,7 +740,8 @@ class PreferencesWindow:
 			gajim.config.set('displayed_chat_state_notifications', 'disabled')
 
 	def on_ignore_events_from_unknown_contacts_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'ignore_unknown_contacts')
+		widget.set_inconsistent(False)
+		self.on_per_account_checkbutton_toggled(widget, 'ignore_unknown_contacts')
 
 	def on_on_event_combobox_changed(self, widget):
 		active = widget.get_active()
@@ -953,10 +988,12 @@ class PreferencesWindow:
 		self.on_checkbutton_toggled(widget, 'log_contact_status_changes')
 
 	def on_log_encrypted_chats_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'log_encrypted_sessions')
+		widget.set_inconsistent(False)
+		self.on_per_account_checkbutton_toggled(widget, 'log_encrypted_sessions')
 
 	def on_send_os_info_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'send_os_info')
+		widget.set_inconsistent(False)
+		self.on_per_account_checkbutton_toggled(widget, 'send_os_info')
 
 	def on_check_default_client_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'check_if_gajim_is_default')

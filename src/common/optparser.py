@@ -189,6 +189,8 @@ class OptionsParser:
 			self.update_config_to_01201()
 		if old < [0, 12, 1, 1] and new >= [0, 12, 1, 1]:
 			self.update_config_to_01211()
+		if old < [0, 12, 1, 2] and new >= [0, 12, 1, 2]:
+			self.update_config_to_01212()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -617,5 +619,14 @@ class OptionsParser:
 			else:
 				gajim.config.set('trayicon', 'always')
 		gajim.config.set('version', '0.12.1.1')
+
+	def update_config_to_01212(self):
+		for opt in ('ignore_unknown_contacts', 'send_os_info',
+		'log_encrypted_sessions'):
+			if opt in self.old_values:
+				val = self.old_values[opt]
+				for account in gajim.config.get_per('accounts'):
+					gajim.config.set_per('accounts', account, opt, val)
+		gajim.config.set('version', '0.12.1.2')
 
 # vim: se ts=3:
