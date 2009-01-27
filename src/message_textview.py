@@ -217,6 +217,7 @@ class MessageTextView(gtk.TextView):
 		def xhtml_special(text):
 			text = text.replace('<', '&lt;')
 			text = text.replace('>', '&gt;')
+			text = text.replace('&', '&amp;')
 			text = text.replace('\n', '<br />')
 			return text
 
