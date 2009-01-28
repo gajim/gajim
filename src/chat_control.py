@@ -275,29 +275,7 @@ class ChatControlBase(MessageControl):
 
 		# Attach speller
 		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
-			try:
-				spell = gtkspell.Spell(self.msg_textview)
-				# loop removing non-existant dictionaries
-				# iterating on a copy
-				for lang in dict(langs):
-					try:
-						spell.set_language(langs[lang])
-					except Exception:
-						del langs[lang]
-				# now set the one the user selected
-				per_type = 'contacts'
-				if self.type_id == message_control.TYPE_GC:
-					per_type = 'rooms'
-				lang = gajim.config.get_per(per_type, self.contact.jid,
-					'speller_language')
-				if not lang:
-					# use the default one
-					lang = gajim.config.get('speller_language')
-				if lang:
-					self.msg_textview.lang = lang
-					spell.set_language(lang)
-			except (gobject.GError, RuntimeError):
-				dialogs.AspellDictError(lang)
+			self.set_speller()
 		self.conv_textview.tv.show()
 		self._paint_banner()
 
@@ -307,6 +285,33 @@ class ChatControlBase(MessageControl):
 		self.smooth = True
 		self.msg_textview.grab_focus()
 
+	def set_speller(self):
+		try:
+			lang = gajim.config.get('speller_language')
+			if not lang:
+				lang = gajim.LANG
+			spell = gtkspell.Spell(self.msg_textview, lang)
+			# loop removing non-existant dictionaries
+			# iterating on a copy
+			for lang in dict(langs):
+				try:
+					spell.set_language(langs[lang])
+				except Exception:
+					del langs[lang]
+			# now set the one the user selected
+			per_type = 'contacts'
+			if self.type_id == message_control.TYPE_GC:
+				per_type = 'rooms'
+			lang = gajim.config.get_per(per_type, self.contact.jid,
+				'speller_language')
+			if not lang:
+				# use the default one
+				lang = gajim.config.get('speller_language')
+			if lang:
+				self.msg_textview.lang = lang
+				spell.set_language(lang)
+		except (gobject.GError, RuntimeError):
+			dialogs.AspellDictError(lang)
 	def on_msg_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend an option to switch languages'''
 		def _on_select_dictionary(widget, lang):

@@ -2195,12 +2195,11 @@ class SingleMessageWindow:
 
 		if gajim.config.get('use_speller') and HAS_GTK_SPELL and action == 'send':
 			try:
-				spell1 = gtkspell.Spell(self.conversation_textview.tv)
-				spell2 = gtkspell.Spell(self.message_textview)
 				lang = gajim.config.get('speller_language')
-				if lang:
-					spell1.set_language(lang)
-					spell2.set_language(lang)
+				if not lang:
+					lang = gajim.LANG
+				gtkspell.Spell(self.conversation_textview.tv, lang)
+				gtkspell.Spell(self.message_textview, lang)
 			except gobject.GError:
 				AspellDictError(lang)
 

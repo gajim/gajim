@@ -635,7 +635,7 @@ class PreferencesWindow:
 					spell_obj = None
 
 				if not spell_obj:
-					gtkspell.Spell(ctrl.msg_textview)
+					ctrl.set_speller()
 
 	def remove_speller(self):
 		for ctrl in gajim.interface.msg_win_mgr.controls():
