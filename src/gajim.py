@@ -1253,6 +1253,8 @@ class Interface:
 		gc_control.on_message(nick, array[1], array[2], array[3], xhtml, array[5])
 
 		if self.remote_ctrl:
+			highlight = gc_control.needs_visual_notification(msg)
+			array += (highlight,)
 			self.remote_ctrl.raise_signal('GCMessage', (account, array))
 
 	def handle_event_gc_subject(self, account, array):
