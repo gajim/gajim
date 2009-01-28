@@ -1232,6 +1232,8 @@ class Interface:
 		jids = array[0].split('/', 1)
 		room_jid = jids[0]
 
+		msg = array[1]
+
 		gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
 		if not gc_control and \
 		room_jid in self.minimized_controls[account]:
@@ -1250,7 +1252,7 @@ class Interface:
 			# message from someone
 			nick = jids[1]
 
-		gc_control.on_message(nick, array[1], array[2], array[3], xhtml, array[5])
+		gc_control.on_message(nick, msg, array[2], array[3], xhtml, array[5])
 
 		if self.remote_ctrl:
 			highlight = gc_control.needs_visual_notification(msg)
