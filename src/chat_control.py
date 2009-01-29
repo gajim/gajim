@@ -1622,7 +1622,8 @@ class ChatControl(ChatControlBase):
 			ChatControlBase.print_conversation_line(self, msg,
 				'status', '', None)
 
-			loggable = gajim.config.get('log_encrypted_sessions')
+			loggable = gajim.config.get_per('accounts', self.account,
+				'log_encrypted_sessions')
 
 			if self.session:
 				self.session.loggable = loggable

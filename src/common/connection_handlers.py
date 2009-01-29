@@ -1550,7 +1550,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		qp = iq_obj.getTag('query')
 		qp.setTagData('name', 'Gajim')
 		qp.setTagData('version', gajim.version)
-		send_os = gajim.config.get('send_os_info')
+		send_os = gajim.config.get_per('accounts', self.name, 'send_os_info')
 		if send_os:
 			qp.setTagData('os', helpers.get_os_info())
 		self.connection.send(iq_obj)

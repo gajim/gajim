@@ -184,8 +184,9 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		if not msgtxt: # empty message text
 			return
 
-		if gajim.config.get('ignore_unknown_contacts') and \
-		not gajim.contacts.get_contacts(self.conn.name, jid) and not pm:
+		if gajim.config.get_per('accounts', self.conn.name,
+		'ignore_unknown_contacts') and not gajim.contacts.get_contacts(
+		self.conn.name, jid) and not pm:
 			return
 
 		if not contact:

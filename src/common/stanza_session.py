@@ -246,7 +246,7 @@ class EncryptedStanzaSession(StanzaSession):
 			return crypto.encode_mpi(gajim.pubkey.sign(hash_, '')[0])
 
 	def encrypt_stanza(self, stanza):
-		encryptable = [x for x in stanza.getChildren() if x.getName() not in 
+		encryptable = [x for x in stanza.getChildren() if x.getName() not in
 			('error', 'amp', 'thread')]
 
 		# FIXME can also encrypt contents of <error/> elements in stanzas @type =
@@ -353,7 +353,8 @@ class EncryptedStanzaSession(StanzaSession):
 		return self.decrypter.decrypt(ciphertext)
 
 	def logging_preference(self):
-		if gajim.config.get('log_encrypted_sessions'):
+		if gajim.config.get_per('accounts', self.conn.name,
+		'log_encrypted_sessions'):
 			return ['may', 'mustnot']
 		else:
 			return ['mustnot', 'may']
@@ -989,7 +990,7 @@ class EncryptedStanzaSession(StanzaSession):
 	def fail_bad_negotiation(self, reason, fields=None):
 		'''
 		Sends an error and cancels everything.
-		
+
 		If fields is None, the remote party has given us a bad cryptographic
 		value of some kind. Otherwise, list the fields we haven't implemented
 		'''
