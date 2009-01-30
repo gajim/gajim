@@ -1044,8 +1044,8 @@ class GroupchatControl(ChatControlBase):
 				color = gtkgui_helpers._get_fade_color(self.list_treeview,
 					selected, focus)
 				colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
-				name += '\n<span size="small" style="italic" foreground="%s">%s \
-				</span>' % (colorstring, gobject.markup_escape_text(status))
+				name += ('\n<span size="small" style="italic" foreground="%s">'
+				         '%s</span>') % (colorstring, gobject.markup_escape_text(status))
 
 		model[iter_][C_IMG] = image
 		model[iter_][C_TEXT] = name
