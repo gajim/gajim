@@ -1441,6 +1441,9 @@ class RosterWindow:
 			if contact.jid in gajim.to_be_removed[account]:
 				return True
 			return False
+		if gajim.config.get('show_only_chat_and_online') and contact.show in (
+		'away', 'xa', 'busy'):
+			return False
 		return True
 
 	def _visible_func(self, model, titer):
@@ -1500,12 +1503,14 @@ class RosterWindow:
 				for data in nearby_family:
 					jid = data['jid']
 					account = data['account']
-					contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+					contact = gajim.contacts.get_contact_with_highest_priority(
+						account, jid)
 					if contact and self.contact_is_visible(contact, account):
 						return True
 				return False
 			else:
-				contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+				contact = gajim.contacts.get_contact_with_highest_priority(account,
+					jid)
 				return self.contact_is_visible(contact, account)
 		if type_ == 'agent':
 			return gajim.config.get('show_transports_group') and \
@@ -3674,11 +3679,29 @@ class RosterWindow:
 		redraw the treeview'''
 		gajim.config.set('showoffline', not gajim.config.get('showoffline'))
 		self.refilter_shown_roster_items()
+		w = self.xml.get_widget('show_only_active_contacts_menuitem')
 		if gajim.config.get('showoffline'):
 			# We need to filter twice to show groups with no contacts inside
 			# in the correct expand state
 			self.refilter_shown_roster_items()
+			w.set_sensitive(False)
+		else:
+			w.set_sensitive(True)
 
+	def on_show_only_active_contacts_menuitem_activate(self, widget):
+		'''when show only active contact option is changed:
+		redraw the treeview'''
+		gajim.config.set('show_only_chat_and_online', not gajim.config.get(
+			'show_only_chat_and_online'))
+		self.refilter_shown_roster_items()
+		w = self.xml.get_widget('show_offline_contacts_menuitem')
+		if gajim.config.get('show_only_chat_and_online'):
+			# We need to filter twice to show groups with no contacts inside
+			# in the correct expand state
+			self.refilter_shown_roster_items()
+			w.set_sensitive(False)
+		else:
+			w.set_sensitive(True)
 
 	def on_view_menu_activate(self, widget):
 		# Hide the show roster menu if we are not in the right windowing mode.
@@ -6240,8 +6263,17 @@ class RosterWindow:
 		self.previous_status_combobox_active = number_of_menuitem
 
 		showOffline = gajim.config.get('showoffline')
-		self.xml.get_widget('show_offline_contacts_menuitem').set_active(
-			showOffline)
+		showOnlyChatAndOnline = gajim.config.get('show_only_chat_and_online')
+
+		w = self.xml.get_widget('show_offline_contacts_menuitem')
+		w.set_active(showOffline)
+		if showOnlyChatAndOnline:
+			w.set_sensitive(False)
+
+		w = self.xml.get_widget('show_only_active_contacts_menuitem')
+		w.set_active(showOnlyChatAndOnline)
+		if showOffline:
+			w.set_sensitive(False)
 
 		show_transports_group = gajim.config.get('show_transports_group')
 		self.xml.get_widget('show_transports_menuitem').set_active(

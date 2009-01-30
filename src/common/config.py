@@ -81,6 +81,7 @@ class Config:
 		'autopopupaway': [ opt_bool, False ],
 		'use_notif_daemon': [ opt_bool, True , _('Use D-Bus and Notification-Daemon to show notifications') ],
 		'showoffline': [ opt_bool, False ],
+		'show_only_chat_and_online': [ opt_bool, False, _('Show only online and free for chat contacts in roster.')],
 		'show_transports_group': [ opt_bool, True ],
 		'autoaway': [ opt_bool, True ],
 		'autoawaytime': [ opt_int, 5, _('Time in minutes, after which your status changes to away.') ],

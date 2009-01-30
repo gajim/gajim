@@ -215,6 +215,15 @@
                       </widget>
                     </child>
                     <child>
+                      <widget class="GtkCheckMenuItem" id="show_only_active_contacts_menuitem">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Show Only _Active Contacts</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_show_only_active_contacts_menuitem_activate"/>
+                        <accelerator key="Y" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+                      </widget>
+                    </child>
+                    <child>
                       <widget class="GtkCheckMenuItem" id="show_transports_menuitem">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Show Trans_ports</property>
