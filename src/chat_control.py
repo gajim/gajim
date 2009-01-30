@@ -2409,10 +2409,10 @@ class ChatControl(ChatControlBase):
 
 			e2e_is_active = self.session and \
 				self.session.enable_encryption
-			e2e_pref = gajim.config.get_per('accounts',
-				self.account, 'autonegotiate_esessions') and \
-				gajim.config.get_per('contacts',
-				self.contact.jid, 'autonegotiate_esessions')
+			e2e_pref = gajim.config.get_per('accounts', self.account,
+				'enable_esessions') and gajim.config.get_per('accounts',
+				self.account, 'autonegotiate_esessions') and gajim.config.get_per(
+				'contacts', self.contact.jid, 'autonegotiate_esessions')
 			want_e2e = not e2e_is_active and not self.gpg_is_active \
 				and e2e_pref
 
