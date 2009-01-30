@@ -37,6 +37,7 @@ log = logging.getLogger('gajim.c.latex')
 
 import gajim
 from exceptions import LatexError
+import helpers
 
 # some latex commands are really bad
 blacklist = ['\\def', '\\let', '\\futurelet',
@@ -121,7 +122,7 @@ def latex_to_image(str_):
 	except Exception, e:
 		exitcode = _('Error executing "%(command)s": %(error)s') % {
 			'command': 'latex --interaction=nonstopmode %s.tex' % tmpfile,
-			'error': str(e)}
+			'error': helpers.decode_string(e.message)}
 
 	if exitcode == 0:
 		# convert dvi to png
