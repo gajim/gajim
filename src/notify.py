@@ -513,8 +513,8 @@ class DesktopNotification:
 		timeout = gajim.config.get('notification_timeout') # in seconds
 		ntype = self.ntype
 		if self.kde_notifications:
-			notification_text = '<html><img src="%(image)s" align=left />' + \
-				'%(title)s<br/>%(text)s</html>' % {'title': self.title,
+			notification_text = ('<html><img src="%(image)s" align=left />' \
+				'%(title)s<br/>%(text)s</html>') % {'title': self.title,
 				'text': self.text, 'image': self.path_to_image}
 			gajim_icon = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps',
 				'gajim.png'))
