@@ -481,7 +481,8 @@ class DesktopNotification:
 			ntype = 'transfer'
 		elif event_type == _('File Transfer Error'):
 			ntype = 'transfer.error'
-		elif event_type in (_('File Transfer Completed'), _('File Transfer Stopped')):
+		elif event_type in (_('File Transfer Completed'),
+		_('File Transfer Stopped')):
 			ntype = 'transfer.complete'
 		elif event_type == _('New E-mail'):
 			ntype = 'email.arrived'
@@ -498,17 +499,41 @@ class DesktopNotification:
 					'chat_msg_recv.png')) # img to display
 			ntype = 'im' # Notification Type
 
-		self.notif = dbus_support.get_notifications_interface()
+		self.notif = dbus_support.get_notifications_interface(self)
 		if self.notif is None:
 			raise dbus.DBusException('unable to get notifications interface')
 		self.ntype = ntype
 
-		self.get_version()
+		if self.kde_notifications:
+			self.attempt_notify()
+		else:
+			self.get_version()
 
 	def attempt_notify(self):
-		version = self.version
 		timeout = gajim.config.get('notification_timeout') # in seconds
 		ntype = self.ntype
+		if self.kde_notifications:
+			notification_text = '<html><img src="%(image)s" align=left />' + \
+				'%(title)s<br/>%(text)s</html>' % {'title': self.title,
+				'text': self.text, 'image': self.path_to_image}
+			gajim_icon = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps',
+				'gajim.png'))
+			self.notif.Notify(
+				dbus.String(_('Gajim')),			# app_name (string)
+				dbus.UInt32(0),						# replaces_id (uint)
+				ntype,									# event_id (string)
+				dbus.String(gajim_icon),			# app_icon (string)
+				dbus.String(_('')),					# summary (string)
+				dbus.String(notification_text),	# body (string)
+				# actions (stringlist)
+				(dbus.String('default'), dbus.String(self.event_type),
+					dbus.String('ignore'), dbus.String(_('Ignore'))),
+				[],										# hints (not used in KDE yet)
+				dbus.UInt32(timeout*1000),			# timeout (int), in ms
+				reply_handler=self.attach_by_id,
+				error_handler=self.notify_another_way)
+			return
+		version = self.version
 		if version[:2] == [0, 2]:
 			try:
 				self.notif.Notify(
@@ -585,6 +610,9 @@ class DesktopNotification:
 			return
 		self.notif.CloseNotification(dbus.UInt32(id_))
 		self.notif = None
+
+		if reason == 'ignore':
+			return
 
 		gajim.interface.handle_event(self.account, self.jid, self.msg_type)
 

@@ -113,7 +113,7 @@ class SessionBus:
 
 session_bus = SessionBus()
 
-def get_interface(interface, path):
+def get_interface(interface, path, start_service=True):
 	'''Returns an interface on the current SessionBus. If the interface isn\'t
 	running, it tries to start it first.'''
 	if not supported:
@@ -129,7 +129,7 @@ def get_interface(interface, path):
 		started = True
 		if interface not in running_services:
 			# try to start the service
-			if dbus_iface.StartServiceByName(interface, dbus.UInt32(0)) == 1:
+			if start_service and dbus_iface.StartServiceByName(interface, dbus.UInt32(0)) == 1:
 				started = True
 			else:
 				started = False
@@ -142,10 +142,24 @@ def get_interface(interface, path):
 		return None
 
 
-def get_notifications_interface():
-	'''Returns the notifications interface.'''
-	return get_interface('org.freedesktop.Notifications',
-		'/org/freedesktop/Notifications')
+def get_notifications_interface(notif=None):
+	'''Returns the notifications interface.
+
+	:param notif: DesktopNotification instance'''
+	# try to see if KDE notifications are available
+	iface = get_interface('org.kde.VisualNotifications', '/VisualNotifications',
+		start_service=False)
+	if iface != None:
+		if notif != None:
+			notif.kde_notifications = True
+		return iface
+	# KDE notifications don't seem to be available, falling back to
+	# notification-daemon
+	else:
+		if notif != None:
+			notif.kde_notifications = False
+		return get_interface('org.freedesktop.Notifications',
+			'/org/freedesktop/Notifications')
 
 if supported:
 	class MissingArgument(dbus.DBusException):
