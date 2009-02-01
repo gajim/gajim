@@ -3177,7 +3177,7 @@ class RosterWindow:
 					jid += '/' + contact.resource
 				self.send_status(account, show, message, to=jid)
 
-		dialogs.ChangeStatusMessageDialog(on_response, show)
+		self.get_status_message(show, on_response)
 
 	def on_status_combobox_changed(self, widget):
 		'''When we change our status via the combobox'''
