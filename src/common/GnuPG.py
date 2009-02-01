@@ -40,6 +40,9 @@ if gajim.HAVE_GPG:
 			self.options.armor = 1
 			self.options.meta_interactive = 0
 			self.options.extra_args.append('--no-secmem-warning')
+			# disable photo viewer when verifying keys
+			self.options.extra_args.append('--verify-options')
+			self.options.extra_args.append('no-show-photo')
 			if self.use_agent:
 				self.options.extra_args.append('--use-agent')
 
