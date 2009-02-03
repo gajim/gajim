@@ -480,7 +480,8 @@ class MessageWindow(object):
 			bctrl = self.get_control(jid, ctrl.account)
 			# keep last_message_time around unless this was our last control with
 			# that jid
-			if not fctrl and not bctrl:
+			if not fctrl and not bctrl and \
+			fjid in gajim.last_message_time[ctrl.account]:
 				del gajim.last_message_time[ctrl.account][fjid]
 
 			# Disconnect tab DnD only if GTK version < 2.10
