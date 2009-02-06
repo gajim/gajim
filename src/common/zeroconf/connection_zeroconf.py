@@ -364,7 +364,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def send_message(self, jid, msg, keyID, type_='chat', subject='',
 	chatstate=None, msg_id=None, composing_xep=None, resource=None,
 	user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None,
-	original_message=None, delayed=None):
+	original_message=None, delayed=None, callback=None, callback_args=[]):
 		fjid = jid
 
 		if msg and not xhtml and gajim.config.get(
@@ -402,7 +402,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				# Encryption failed, do not send message
 				tim = time.localtime()
 				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim, session))
-				return 3
+				return
 
 		if type_ == 'chat':
 			msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ=type_,
@@ -458,7 +458,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			if session.enable_encryption:
 				msg_iq = session.encrypt_stanza(msg_iq)
 
-		def on_send_ok():
+		def on_send_ok(id):
 			no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
 			ji = gajim.get_jid_without_resource(jid)
 			if session.is_loggable() and self.name not in no_log_for and\
@@ -473,8 +473,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 					else:
 						kind = 'single_msg_sent'
 					gajim.logger.write(kind, jid, log_msg)
-			
+
 			self.dispatch('MSGSENT', (jid, msg, keyID))
+
+			if callback:
+				callback(id, *callback_args)
 
 		def on_send_not_ok(reason):
 			reason += ' ' + _('Your message could not be sent.')
@@ -484,8 +487,6 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		if ret == -1:
 			# Contact Offline
 			self.dispatch('MSGERROR', [jid, -1, _('Contact is offline. Your message could not be sent.'), None, None, session])
-		return ret
-		return ret
 
 
 	def send_stanza(self, stanza):

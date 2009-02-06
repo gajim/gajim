@@ -423,6 +423,7 @@ parser = optparser.OptionsParser(config_filename)
 import roster_window
 import profile_window
 import config
+from threading import Thread
 
 
 class PassphraseRequest:
@@ -481,6 +482,22 @@ class PassphraseRequest:
 		dialogs.PassphraseDialog(title, second, ok_handler=(_ok, 1),
 			cancel_handler=_cancel)
 		self.dialog_created = True
+
+
+class ThreadInterface: 
+		def __init__(self, func, func_args, callback, callback_args): 
+			'''Call a function in a thread 
+			
+			:param func: the function to call in the thread 
+			:param func_args: list or arguments for this function 
+			:param callback: callback to call once function is finished 
+			:param callback_args: list of arguments for this callback 
+			''' 
+			def thread_function(func, func_args, callback, callback_args): 
+				output = func(*func_args) 
+				gobject.idle_add(callback, output, *callback_args) 
+			Thread(target=thread_function, args=(func, func_args, callback, 
+				callback_args)).start()
 
 class Interface:
 
@@ -3071,6 +3088,7 @@ class Interface:
 
 	def __init__(self):
 		gajim.interface = self
+		gajim.thread_interface = ThreadInterface
 		# This is the manager and factory of message windows set by the module
 		self.msg_win_mgr = None
 		self.jabber_state_images = {'16': {}, '32': {}, 'opened': {},

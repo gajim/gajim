@@ -1135,7 +1135,7 @@ class Connection(ConnectionHandlers):
 	def send_message(self, jid, msg, keyID, type_='chat', subject='',
 	chatstate=None, msg_id=None, composing_xep=None, resource=None,
 	user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None,
-	original_message=None, delayed=None):
+	original_message=None, delayed=None, callback=None, callback_args=[]):
 		if not self.connection or self.connected < 2:
 			return 1
 		try:
@@ -1151,7 +1151,7 @@ class Connection(ConnectionHandlers):
 			from common.rst_xhtml_generator import create_xhtml
 			xhtml = create_xhtml(msg)
 		if not msg and chatstate is None and form_node is None:
-			return 2
+			return
 		fjid = jid
 		if resource:
 			fjid += '/' + resource
@@ -1168,30 +1168,61 @@ class Connection(ConnectionHandlers):
 			elif keyID.endswith('MISMATCH'):
 				error = _('The contact\'s key (%s) does not match the key assigned in Gajim.' % keyID[:8])
 			else:
-				#encrypt
-				msgenc, error = self.gpg.encrypt(msg, [keyID])
-			if msgenc and not error:
-				msgtxt = '[This message is *encrypted* (See :XEP:`27`]'
-				lang = os.getenv('LANG')
-				if lang is not None and lang != 'en': # we're not english
-					# one in locale and one en
-					msgtxt = _('[This message is *encrypted* (See :XEP:`27`]') + \
-						' (' + msgtxt + ')'
-			else:
-				# Encryption failed, do not send message
-				tim = localtime()
-				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim, session))
-				return 3
+				def encrypt_thread(msg, keyID):
+					# encrypt message. This function returns (msgenc, error)
+					return self.gpg.encrypt(msg, [keyID])
+				gajim.thread_interface(encrypt_thread, [msg, keyID],
+					self._on_message_encrypted, [type_, msg, msgtxt,
+						original_message, fjid, resource, jid, xhtml, subject,
+						chatstate, composing_xep, forward_from, delayed, session,
+						form_node, user_nick, keyID, callback, callback_args])
+				return
+
+			self._on_message_encrypted(self, ('', error), type_, msg, msgtxt,
+				original_message, fjid, resource, jid, xhtml, subject, chatstate,
+				composing_xep, forward_from, delayed, session, form_node, user_nick,
+				keyID, callback, callback_args)
+
+		self._on_continue_message(type_, msg, msgtxt, original_message, fjid,
+			resource, jid, xhtml, subject, msgenc, keyID, chatstate, composing_xep,
+			forward_from, delayed, session, form_node, user_nick, callback,
+			callback_args)
+
+	def _on_message_encrypted(self, output, type_, msg, msgtxt, original_message,
+	fjid, resource, jid, xhtml, subject, chatstate, composing_xep, forward_from,
+	delayed, session, form_node, user_nick, keyID, callback, callback_args):
+		msgenc, error = output
+
+		if msgenc and not error:
+			msgtxt = '[This message is *encrypted* (See :XEP:`27`]'
+			lang = os.getenv('LANG')
+			if lang is not None and lang != 'en': # we're not english
+				# one in locale and one en
+				msgtxt = _('[This message is *encrypted* (See :XEP:`27`]') + \
+					' (' + msgtxt + ')'
+			self._on_continue_message(type_, msg, msgtxt, original_message, fjid,
+				resource, jid, xhtml, subject, msgenc, keyID, chatstate,
+				composing_xep, forward_from, delayed, session, form_node, user_nick,
+				callback, callback_args)
+			return
+		# Encryption failed, do not send message
+		tim = localtime()
+		self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim, session))
+
+	def _on_continue_message(self, type_, msg, msgtxt, original_message, fjid,
+	resource, jid, xhtml, subject, msgenc, keyID, chatstate, composing_xep,
+	forward_from, delayed, session, form_node, user_nick, callback,
+	callback_args):
 		if type_ == 'chat':
-			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type_,
-				xhtml = xhtml)
+			msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ=type_,
+				xhtml=xhtml)
 		else:
 			if subject:
-				msg_iq = common.xmpp.Message(to = fjid, body = msgtxt,
-					typ = 'normal', subject = subject, xhtml = xhtml)
+				msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ='normal',
+					subject=subject, xhtml=xhtml)
 			else:
-				msg_iq = common.xmpp.Message(to = fjid, body = msgtxt,
-					typ = 'normal', xhtml = xhtml)
+				msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ='normal',
+					xhtml=xhtml)
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
 
@@ -1206,11 +1237,9 @@ class Connection(ConnectionHandlers):
 		# TODO: We might want to write a function so we don't need to
 		#	reproduce that ugly if somewhere else.
 		if resource:
-			contact = gajim.contacts.get_contact(self.name, jid,
-				resource)
+			contact = gajim.contacts.get_contact(self.name, jid, resource)
 		else:
-			contact = gajim.contacts. \
-				get_contact_with_highest_priority(self.name,
+			contact = gajim.contacts.get_contact_with_highest_priority(self.name,
 				jid)
 
 		# chatstates - if peer supports xep85 or xep22, send chatstates
@@ -1226,16 +1255,13 @@ class Connection(ConnectionHandlers):
 			not gajim.capscache.is_supported(contact,
 			'notexistant')):
 				# XEP-0085
-				msg_iq.setTag(chatstate,
-					namespace = common.xmpp.NS_CHATSTATES)
+				msg_iq.setTag(chatstate, namespace=common.xmpp.NS_CHATSTATES)
 			if composing_xep in ('XEP-0022', 'asked_once') or \
 			not composing_xep:
 				# XEP-0022
-				chatstate_node = msg_iq.setTag('x',
-					namespace = common.xmpp.NS_EVENT)
+				chatstate_node = msg_iq.setTag('x', namespace=common.xmpp.NS_EVENT)
 				if chatstate is 'composing' or msgtxt:
-					chatstate_node.addChild(
-						name = 'composing')
+					chatstate_node.addChild(name='composing')
 
 		if forward_from:
 			addresses = msg_iq.addChild('addresses',
@@ -1255,8 +1281,7 @@ class Connection(ConnectionHandlers):
 		if msgtxt and gajim.config.get_per('accounts', self.name,
 		'request_receipt') and gajim.capscache.is_supported(contact,
 		common.xmpp.NS_RECEIPTS):
-			msg_iq.setTag('request',
-				namespace=common.xmpp.NS_RECEIPTS)
+			msg_iq.setTag('request', namespace=common.xmpp.NS_RECEIPTS)
 
 		if session:
 			# XEP-0201
@@ -1294,7 +1319,8 @@ class Connection(ConnectionHandlers):
 							common.logger.LOG_DB_PATH
 		self.dispatch('MSGSENT', (jid, msg, keyID))
 
-		return msg_id
+		if callback:
+			callback(msg_id, *callback_args)
 
 	def send_stanza(self, stanza):
 		''' send a stanza untouched '''

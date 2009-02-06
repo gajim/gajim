@@ -155,11 +155,16 @@ class P2PClient(IdleObject):
 					if on_not_ok:
 						on_not_ok('Connection to host could not be established.')
 					return
-				id = stanza.getThread()
+				thread_id = stanza.getThread()
+				id_ = stanza.getID()
+				if not id_:
+					id_ = self.Dispatcher.getAnID()
 				if self.conn_holder.ids_of_awaiting_messages.has_key(self.fd):
-					self.conn_holder.ids_of_awaiting_messages[self.fd].append(id)
+					self.conn_holder.ids_of_awaiting_messages[self.fd].append((id_,
+						thread_id))
 				else:
-					self.conn_holder.ids_of_awaiting_messages[self.fd] = [id]
+					self.conn_holder.ids_of_awaiting_messages[self.fd] = [(id_,
+						thread_id)]
 
 	def add_stanza(self, stanza, is_message=False):
 		if self.Connection:
@@ -170,24 +175,32 @@ class P2PClient(IdleObject):
 			self.stanzaqueue.append((stanza, is_message))
 
 		if is_message:
-			id = stanza.getThread()
+			id_ = stanza.getID()
+			if not id_:
+				id_ = self.Dispatcher.getAnID()
 			if self.conn_holder.ids_of_awaiting_messages.has_key(self.fd):
-				self.conn_holder.ids_of_awaiting_messages[self.fd].append(id)
+				self.conn_holder.ids_of_awaiting_messages[self.fd].append((id_,
+					thread_id))
 			else:
-				self.conn_holder.ids_of_awaiting_messages[self.fd] = [id]
+				self.conn_holder.ids_of_awaiting_messages[self.fd] = [(id_,
+					thread_id)]
 
 		return True
 
 	def on_message_sent(self, connection_id):
-		self.conn_holder.ids_of_awaiting_messages[connection_id].pop(0)
+		id_, thread_id = \
+			self.conn_holder.ids_of_awaiting_messages[connection_id].pop(0)
+		if self.on_ok:
+			self.on_ok(id_)
+			# use on_ok only on first message. For others it's called in
+			# ClientZeroconf
+			self.on_ok = None
 
 	def on_connect(self, conn):
 		self.Connection = conn
 		self.Connection.PlugIn(self)
 		dispatcher_nb.Dispatcher().PlugIn(self)
 		self._register_handlers()
-		if self.on_ok:
-			self.on_ok()
 
 	def StreamInit(self):
 		''' Send an initial stream header. '''
@@ -393,8 +406,9 @@ class P2PConnection(IdleObject, PlugIn):
 	def read_timeout(self):
 		ids = self.client.conn_holder.ids_of_awaiting_messages
 		if self.fd in ids and len(ids[self.fd]) > 0:
-			for id in ids[self.fd]:
-				self._owner.Dispatcher.Event('', DATA_ERROR, (self.client.to, id))
+			for (id_, thread_id) in ids[self.fd]:
+				self._owner.Dispatcher.Event('', DATA_ERROR, (self.client.to,
+					thread_id))
 			ids[self.fd] = []
 		self.pollend()
 
@@ -679,8 +693,7 @@ class ClientZeroconf:
 			stanza.setID(id_)
 			if conn.add_stanza(stanza, is_message):
 				if on_ok:
-					on_ok()
-				return id_
+					on_ok(id_)
 
 		if item['address'] in self.ip_to_hash:
 			hash_ = self.ip_to_hash[item['address']]
@@ -690,14 +703,11 @@ class ClientZeroconf:
 				stanza.setID(id_)
 				if conn.add_stanza(stanza, is_message):
 					if on_ok:
-						on_ok()
-					return id_
+						on_ok(id_)
 
 		# otherwise open new connection
 		stanza.setID('zero')
 		P2PClient(None, item['address'], item['port'], self,
 			[(stanza, is_message)], to, on_ok=on_ok, on_not_ok=on_not_ok)
-
-		return 'zero'
 
 # vim: se ts=3:

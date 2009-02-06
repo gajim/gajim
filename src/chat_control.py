@@ -312,6 +312,7 @@ class ChatControlBase(MessageControl):
 				spell.set_language(lang)
 		except (gobject.GError, RuntimeError):
 			dialogs.AspellDictError(lang)
+
 	def on_msg_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend an option to switch languages'''
 		def _on_select_dictionary(widget, lang):
@@ -594,21 +595,19 @@ class ChatControlBase(MessageControl):
 			return True
 		return False
 
-	def send_message(self, message, keyID = '', type_ = 'chat', chatstate = None,
-	msg_id = None, composing_xep = None, resource = None,
-	process_command = True, xhtml = None):
+	def send_message(self, message, keyID='', type_='chat', chatstate=None,
+	msg_id=None, composing_xep=None, resource=None, process_command=True,
+	xhtml=None, callback=None, callback_args=[]):
 		'''Send the given message to the active tab. Doesn't return None if error
 		'''
 		if not message or message == '\n':
 			return None
 
-		ret = None
-
 		if not process_command or not self._process_command(message):
-			ret = MessageControl.send_message(self, message, keyID, type_ = type_,
-				chatstate = chatstate, msg_id = msg_id,
-				composing_xep = composing_xep, resource = resource,
-				user_nick = self.user_nick, xhtml = xhtml)
+			MessageControl.send_message(self, message, keyID, type_=type_,
+				chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
+				resource=resource, user_nick=self.user_nick, xhtml=xhtml,
+				callback=callback, callback_args=callback_args)
 
 			# Record message history
 			self.save_sent_message(message)
@@ -619,8 +618,6 @@ class ChatControlBase(MessageControl):
 		# Clear msg input
 		message_buffer = self.msg_textview.get_buffer()
 		message_buffer.set_text('') # clear message buffer (and tv of course)
-
-		return ret
 
 	def save_sent_message(self, message):
 		# save the message, so user can scroll though the list with key up/down
@@ -1802,11 +1799,7 @@ class ChatControl(ChatControlBase):
 				gobject.source_remove(self.possible_inactive_timeout_id)
 				self._schedule_activity_timers()
 
-		id_ = ChatControlBase.send_message(self, message, keyID,
-			type_ = 'chat', chatstate = chatstate_to_send,
-			composing_xep = composing_xep,
-			process_command = process_command, xhtml = xhtml)
-		if id_:
+		def _on_sent(id_, contact, message, encrypted, xhtml):
 			# XXX: Once we have fallback to disco, remove notexistant check
 			if gajim.capscache.is_supported(contact, NS_RECEIPTS) \
 			and not gajim.capscache.is_supported(contact,
@@ -1819,6 +1812,11 @@ class ChatControl(ChatControlBase):
 			self.print_conversation(message, self.contact.jid,
 				encrypted = encrypted, xep0184_id = xep0184_id,
 				xhtml = xhtml)
+
+		ChatControlBase.send_message(self, message, keyID, type_='chat',
+			chatstate=chatstate_to_send, composing_xep=composing_xep,
+			process_command=process_command, xhtml=xhtml, callback=_on_sent,
+			callback_args=[contact, message, encrypted, xhtml])
 
 	def check_for_possible_paused_chatstate(self, arg):
 		''' did we move mouse of that window or write something in message

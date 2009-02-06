@@ -1772,6 +1772,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		encrypted = False
 		xep_200_encrypted = msg.getTag('c', namespace=common.xmpp.NS_STANZA_CRYPTO)
 
+		session = None
 		if mtype != 'groupchat':
 			session = self.get_or_create_session(frm, thread_id)
 
@@ -1853,10 +1854,22 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 			keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 			if keyID:
-				decmsg = self.gpg.decrypt(encmsg, keyID)
-				# \x00 chars are not allowed in C (so in GTK)
-				msgtxt = decmsg.replace('\x00', '')
-				encrypted = 'xep27'
+				def decrypt_thread(encmsg, keyID):
+					decmsg = self.gpg.decrypt(encmsg, keyID)
+					# \x00 chars are not allowed in C (so in GTK)
+					msgtxt = decmsg.replace('\x00', '')
+					encrypted = 'xep27'
+					return (msgtxt, encrypted)
+				gajim.thread_interface(decrypt_thread, [encmsg, keyID],
+					self._on_message_decrypted, [mtype, msg, session, frm, jid,
+					invite, tim])
+				return
+		self._on_message_decrypted((msgtxt, encrypted), mtype, msg, session, frm,
+			jid, invite, tim)
+
+	def _on_message_decrypted(self, output, mtype, msg, session, frm, jid,
+	invite, tim):
+		msgtxt, encrypted = output
 		if mtype == 'error':
 			self.dispatch_error_message(msg, msgtxt, session, frm, tim)
 		elif mtype == 'groupchat':

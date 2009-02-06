@@ -134,7 +134,10 @@ class XMPPDispatcher(PlugIn):
 		self._owner.lastErrNode = None
 		self._owner.lastErr = None
 		self._owner.lastErrCode = None
-		self.StreamInit()
+		if hasattr(self._owner, 'StreamInit'):
+			self._owner.StreamInit()
+		else:
+			self.StreamInit()
 
 	def plugout(self):
 		''' Prepares instance to be destructed. '''

@@ -63,6 +63,7 @@ If you start gajim from svn:
 	sys.exit(1)
 
 interface = None # The actual interface (the gtk one for the moment)
+thread_interface = None # Interface to run a thread and then a callback
 config = config.Config()
 version = config.get('version')
 connections = {} # 'account name': 'account (connection.Connection) instance'
