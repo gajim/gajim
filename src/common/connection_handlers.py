@@ -766,9 +766,9 @@ class ConnectionDisco:
 		hostname = gajim.config.get_per('accounts', self.name,
 													'hostname')
 		id_ = iq_obj.getID()
-		if jid == hostname and id_[0] == 'p':
+		if jid == hostname and id_[:6] == 'Gajim_':
 			for item in items:
-				self.discoverInfo(item['jid'], id_prefix='p')
+				self.discoverInfo(item['jid'], id_prefix='Gajim_')
 		else:
 			self.dispatch('AGENT_INFO_ITEMS', (jid, node, items))
 
@@ -800,7 +800,7 @@ class ConnectionDisco:
 			raise common.xmpp.NodeProcessed
 
 		id_ = unicode(iq_obj.getAttr('id'))
-		if id_[0] == 'p':
+		if id_[:6] == 'Gajim_':
 			# We get this request from echo.server
 			raise common.xmpp.NodeProcessed
 
@@ -867,7 +867,7 @@ class ConnectionDisco:
 		if not identities: # ejabberd doesn't send identities when we browse online users
 		#FIXME: see http://www.jabber.ru/bugzilla/show_bug.cgi?id=225
 			identities = [{'category': 'server', 'type': 'im', 'name': node}]
-		if id_[0] == 'p':
+		if id_[:6] == 'Gajim_':
 			if jid == gajim.config.get_per('accounts', self.name, 'hostname'):
 				if features.__contains__(common.xmpp.NS_GMAILNOTIFY):
 					gajim.gmail_domains.append(jid)
@@ -2352,9 +2352,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			return
 		self.connection.getRoster(self._on_roster_set)
 		self.discoverItems(gajim.config.get_per('accounts', self.name,
-			'hostname'), id_prefix='p')
+			'hostname'), id_prefix='Gajim_')
 		self.discoverInfo(gajim.config.get_per('accounts', self.name,
-			'hostname'), id_prefix='p')
+			'hostname'), id_prefix='Gajim_')
 		if gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):
 			self.discover_ft_proxies()
 
