@@ -1857,7 +1857,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				def decrypt_thread(encmsg, keyID):
 					decmsg = self.gpg.decrypt(encmsg, keyID)
 					# \x00 chars are not allowed in C (so in GTK)
-					msgtxt = decmsg.replace('\x00', '')
+					msgtxt = helpers.decode_string(decmsg.replace('\x00', ''))
 					encrypted = 'xep27'
 					return (msgtxt, encrypted)
 				gajim.thread_interface(decrypt_thread, [encmsg, keyID],
