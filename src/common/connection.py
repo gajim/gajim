@@ -519,10 +519,7 @@ class Connection(ConnectionHandlers):
 		if len(self._hosts):
 			# No config option exist when creating a new account
 			if self.last_connection_type:
-				if self.last_connection_type == 'plain':
-					self._connection_types = ['plain']
-				else:
-					self._connection_types = [self.last_connection_type]
+				self._connection_types = [self.last_connection_type]
 			elif self.name in gajim.config.get_per('accounts'):
 				self._connection_types = gajim.config.get_per('accounts', self.name,
 					'connection_types').split()
