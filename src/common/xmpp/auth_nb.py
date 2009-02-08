@@ -499,14 +499,5 @@ class NonBlockingBind(PlugIn):
 			log.error('Session open failed.')
 			self.session = 0
 			self.on_bound(None)
-		self._owner.onreceive(None)
-		if isResultNode(resp):
-			log.info('Successfully opened session.')
-			self.session = 1
-			self.on_bound('ok')
-		else:
-			log.error('Session open failed.')
-			self.session = 0
-			self.on_bound(None)
 
 # vim: se ts=3:
