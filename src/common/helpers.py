@@ -42,15 +42,9 @@ import hashlib
 
 from encodings.punycode import punycode_encode
 
-import gajim
 from i18n import Q_
 from i18n import ngettext
 import xmpp
-
-try:
-	from osx import nsapp
-except ImportError:
-	pass
 
 try:
 	import winsound # windows-only built-in module for playing wav
@@ -186,65 +180,6 @@ def temp_failure_retry(func, *args, **kwargs):
 				continue
 			else:
 				raise
-
-def convert_bytes(string):
-	suffix = ''
-	# IEC standard says KiB = 1024 bytes KB = 1000 bytes
-	# but do we use the standard?
-	use_kib_mib = gajim.config.get('use_kib_mib')
-	align = 1024.
-	bytes = float(string)
-	if bytes >= align:
-		bytes = round(bytes/align, 1)
-		if bytes >= align:
-			bytes = round(bytes/align, 1)
-			if bytes >= align:
-				bytes = round(bytes/align, 1)
-				if use_kib_mib:
-					#GiB means gibibyte
-					suffix = _('%s GiB')
-				else:
-					#GB means gigabyte
-					suffix = _('%s GB')
-			else:
-				if use_kib_mib:
-					#MiB means mibibyte
-					suffix = _('%s MiB')
-				else:
-					#MB means megabyte
-					suffix = _('%s MB')
-		else:
-			if use_kib_mib:
-				#KiB means kibibyte
-				suffix = _('%s KiB')
-			else:
-				#KB means kilo bytes
-				suffix = _('%s KB')
-	else:
-		#B means bytes
-		suffix = _('%s B')
-	return suffix % unicode(bytes)
-
-
-def get_contact_dict_for_account(account):
-	''' create a dict of jid, nick -> contact with all contacts of account.
-	Can be used for completion lists'''
-	contacts_dict = {}
-	for jid in gajim.contacts.get_jid_list(account):
-		contact = gajim.contacts.get_contact_with_highest_priority(account,
-				jid)
-		contacts_dict[jid] = contact
-		name = contact.name
-		if name in contacts_dict:
-			contact1 = contacts_dict[name]
-			del contacts_dict[name]
-			contacts_dict['%s (%s)' % (name, contact1.jid)] = contact1
-			contacts_dict['%s (%s)' % (name, jid)] = contact
-		else:
-			if contact.name == gajim.get_nick_from_jid(jid):
-				del contacts_dict[jid]
-			contacts_dict[name] = contact
-	return contacts_dict
 
 def get_uf_show(show, use_mnemonic = False):
 	'''returns a userfriendly string for dnd/xa/chat
@@ -426,6 +361,347 @@ def build_command(executable, parameter):
 	command = '%s "%s"' % (executable, parameter)
 	return command
 
+def get_file_path_from_dnd_dropped_uri(uri):
+	path = urllib.unquote(uri) # escape special chars
+	path = path.strip('\r\n\x00') # remove \r\n and NULL
+	# get the path to file
+	if re.match('^file:///[a-zA-Z]:/', path): # windows
+		path = path[8:] # 8 is len('file:///')
+	elif path.startswith('file://'): # nautilus, rox
+		if sys.platform == 'darwin':
+			# OS/X includes hostname in file:// URI
+			path = re.sub('file://[^/]*', '', path)
+		else:
+			path = path[7:] # 7 is len('file://')
+	elif path.startswith('file:'): # xffm
+		path = path[5:] # 5 is len('file:')
+	return path
+
+def from_xs_boolean_to_python_boolean(value):
+	# this is xs:boolean so 'true', 'false', '1', '0'
+	# convert those to True/False (python booleans)
+	if value in ('1', 'true'):
+		val = True
+	else: # '0', 'false' or anything else
+		val = False
+
+	return val
+
+def get_xmpp_show(show):
+	if show in ('online', 'offline'):
+		return None
+	return show
+
+def get_output_of_command(command):
+	try:
+		child_stdin, child_stdout = os.popen2(command)
+	except ValueError:
+		return None
+
+	output = child_stdout.readlines()
+	child_stdout.close()
+	child_stdin.close()
+
+	return output
+
+def decode_string(string):
+	'''try to decode (to make it Unicode instance) given string'''
+	if isinstance(string, unicode):
+		return string
+	# by the time we go to iso15 it better be the one else we show bad characters
+	encodings = (locale.getpreferredencoding(), 'utf-8', 'iso-8859-15')
+	for encoding in encodings:
+		try:
+			string = string.decode(encoding)
+		except UnicodeError:
+			continue
+		break
+
+	return string
+
+def ensure_utf8_string(string):
+	'''make sure string is in UTF-8'''
+	try:
+		string = decode_string(string).encode('utf-8')
+	except Exception:
+		pass
+	return string
+
+def get_windows_reg_env(varname, default=''):
+	'''asks for paths commonly used but not exposed as ENVs
+	in english Windows 2003 those are:
+	'AppData' = %USERPROFILE%\Application Data (also an ENV)
+	'Desktop' = %USERPROFILE%\Desktop
+	'Favorites' = %USERPROFILE%\Favorites
+	'NetHood' = %USERPROFILE%\NetHood
+	'Personal' = D:\My Documents (PATH TO MY DOCUMENTS)
+	'PrintHood' = %USERPROFILE%\PrintHood
+	'Programs' = %USERPROFILE%\Start Menu\Programs
+	'Recent' = %USERPROFILE%\Recent
+	'SendTo' = %USERPROFILE%\SendTo
+	'Start Menu' = %USERPROFILE%\Start Menu
+	'Startup' = %USERPROFILE%\Start Menu\Programs\Startup
+	'Templates' = %USERPROFILE%\Templates
+	'My Pictures' = D:\My Documents\My Pictures
+	'Local Settings' = %USERPROFILE%\Local Settings
+	'Local AppData' = %USERPROFILE%\Local Settings\Application Data
+	'Cache' = %USERPROFILE%\Local Settings\Temporary Internet Files
+	'Cookies' = %USERPROFILE%\Cookies
+	'History' = %USERPROFILE%\Local Settings\History
+	'''
+
+	if os.name != 'nt':
+		return ''
+
+	val = default
+	try:
+		rkey = win32api.RegOpenKey(win32con.HKEY_CURRENT_USER,
+r'Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders')
+		try:
+			val = str(win32api.RegQueryValueEx(rkey, varname)[0])
+			val = win32api.ExpandEnvironmentStrings(val) # expand using environ
+		except Exception:
+			pass
+	finally:
+		win32api.RegCloseKey(rkey)
+	return val
+
+def get_my_pictures_path():
+	'''windows-only atm. [Unix lives in the past]'''
+	return get_windows_reg_env('My Pictures')
+
+def get_desktop_path():
+	if os.name == 'nt':
+		path = get_windows_reg_env('Desktop')
+	else:
+		path = os.path.join(os.path.expanduser('~'), 'Desktop')
+	return path
+
+def get_documents_path():
+	if os.name == 'nt':
+		path = get_windows_reg_env('Personal')
+	else:
+		path = os.path.expanduser('~')
+	return path
+
+def sanitize_filename(filename):
+	'''makes sure the filename we will write does contain only acceptable and
+	latin characters, and is not too long (in that case hash it)'''
+	# 48 is the limit
+	if len(filename) > 48:
+		hash = hashlib.md5(filename)
+		filename = base64.b64encode(hash.digest())
+
+	filename = punycode_encode(filename) # make it latin chars only
+	filename = filename.replace('/', '_')
+	if os.name == 'nt':
+		filename = filename.replace('?', '_').replace(':', '_')\
+			.replace('\\', '_').replace('"', "'").replace('|', '_')\
+			.replace('*', '_').replace('<', '_').replace('>', '_')
+
+	return filename
+
+def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
+	'''Cut the chars after 'max_chars' on each line
+	and show only the first 'max_lines'.
+	If any of the params is not present (None or 0) the action
+	on it is not performed'''
+
+	def _cut_if_long(string):
+		if len(string) > max_chars:
+			string = string[:max_chars - 3] + '...'
+		return string
+
+	if isinstance(text, str):
+		text = text.decode('utf-8')
+
+	if max_lines == 0:
+		lines = text.split('\n')
+	else:
+		lines = text.split('\n', max_lines)[:max_lines]
+	if max_chars > 0:
+		if lines:
+			lines = [_cut_if_long(e) for e in lines]
+	if lines:
+		reduced_text = '\n'.join(lines)
+		if reduced_text != text:
+			reduced_text += '...'
+	else:
+		reduced_text = ''
+	return reduced_text
+
+def get_account_status(account):
+	status = reduce_chars_newlines(account['status_line'], 100, 1)
+	return status
+
+def get_avatar_path(prefix):
+	'''Returns the filename of the avatar, distinguishes between user- and
+	contact-provided one.  Returns None if no avatar was found at all.
+	prefix is the path to the requested avatar just before the ".png" or
+	".jpeg".'''
+	# First, scan for a local, user-set avatar
+	for type_ in ('jpeg', 'png'):
+		file_ = prefix + '_local.' + type_
+		if os.path.exists(file_):
+			return file_
+	# If none available, scan for a contact-provided avatar
+	for type_ in ('jpeg', 'png'):
+		file_ = prefix + '.' + type_
+		if os.path.exists(file_):
+			return file_
+	return None
+
+def datetime_tuple(timestamp):
+	'''Converts timestamp using strptime and the format: %Y%m%dT%H:%M:%S
+	Because of various datetime formats are used the following exceptions
+	are handled:
+		- Optional milliseconds appened to the string are removed
+		- Optional Z (that means UTC) appened to the string are removed
+		- XEP-082 datetime strings have all '-' cahrs removed to meet
+		  the above format.'''
+	timestamp = timestamp.split('.')[0]
+	timestamp = timestamp.replace('-', '')
+	timestamp = timestamp.replace('z', '')
+	timestamp = timestamp.replace('Z', '')
+	from time import strptime
+	return strptime(timestamp, '%Y%m%dT%H:%M:%S')
+
+def sort_identities_func(i1, i2):
+	cat1 = i1['category']
+	cat2 = i2['category']
+	if cat1 < cat2:
+		return -1
+	if cat1 > cat2:
+		return 1
+	type1 = i1.get('type', '')
+	type2 = i2.get('type', '')
+	if type1 < type2:
+		return -1
+	if type1 > type2:
+		return 1
+	lang1 = i1.get('xml:lang', '')
+	lang2 = i2.get('xml:lang', '')
+	if lang1 < lang2:
+		return -1
+	if lang1 > lang2:
+		return 1
+	return 0
+
+def sort_dataforms_func(d1, d2):
+	f1 = d1.getField('FORM_TYPE')
+	f2 = d2.getField('FORM_TYPE')
+	if f1 and f2 and (f1.getValue() < f2.getValue()):
+		return -1
+	return 1
+
+def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
+	'''Compute caps hash according to XEP-0115, V1.5
+
+	dataforms are xmpp.DataForms objects as common.dataforms don't allow several
+	values without a field type list-multi'''
+	S = ''
+	identities.sort(cmp=sort_identities_func)
+	for i in identities:
+		c = i['category']
+		type_ = i.get('type', '')
+		lang = i.get('xml:lang', '')
+		name = i.get('name', '')
+		S += '%s/%s/%s/%s<' % (c, type_, lang, name)
+	features.sort()
+	for f in features:
+		S += '%s<' % f
+	dataforms.sort(cmp=sort_dataforms_func)
+	for dataform in dataforms:
+		# fields indexed by var
+		fields = {}
+		for f in dataform.getChildren():
+			fields[f.getVar()] = f
+		form_type = fields.get('FORM_TYPE')
+		if form_type:
+			S += form_type.getValue() + '<'
+			del fields['FORM_TYPE']
+		for var in sorted(fields.keys()):
+			S += '%s<' % var
+			values = sorted(fields[var].getValues())
+			for value in values:
+				S += '%s<' % value
+
+	if hash_method == 'sha-1':
+		hash_ = hashlib.sha1(S)
+	elif hash_method == 'md5':
+		hash_ = hashlib.md5(S)
+	else:
+		return ''
+	return base64.b64encode(hash_.digest())
+
+# import gajim only when needed (after decode_string is defined) see #4764
+
+import gajim
+
+try:
+	from osx import nsapp
+except ImportError:
+	pass
+
+
+def convert_bytes(string):
+	suffix = ''
+	# IEC standard says KiB = 1024 bytes KB = 1000 bytes
+	# but do we use the standard?
+	use_kib_mib = gajim.config.get('use_kib_mib')
+	align = 1024.
+	bytes = float(string)
+	if bytes >= align:
+		bytes = round(bytes/align, 1)
+		if bytes >= align:
+			bytes = round(bytes/align, 1)
+			if bytes >= align:
+				bytes = round(bytes/align, 1)
+				if use_kib_mib:
+					#GiB means gibibyte
+					suffix = _('%s GiB')
+				else:
+					#GB means gigabyte
+					suffix = _('%s GB')
+			else:
+				if use_kib_mib:
+					#MiB means mibibyte
+					suffix = _('%s MiB')
+				else:
+					#MB means megabyte
+					suffix = _('%s MB')
+		else:
+			if use_kib_mib:
+				#KiB means kibibyte
+				suffix = _('%s KiB')
+			else:
+				#KB means kilo bytes
+				suffix = _('%s KB')
+	else:
+		#B means bytes
+		suffix = _('%s B')
+	return suffix % unicode(bytes)
+
+def get_contact_dict_for_account(account):
+	''' create a dict of jid, nick -> contact with all contacts of account.
+	Can be used for completion lists'''
+	contacts_dict = {}
+	for jid in gajim.contacts.get_jid_list(account):
+		contact = gajim.contacts.get_contact_with_highest_priority(account,
+				jid)
+		contacts_dict[jid] = contact
+		name = contact.name
+		if name in contacts_dict:
+			contact1 = contacts_dict[name]
+			del contacts_dict[name]
+			contacts_dict['%s (%s)' % (name, contact1.jid)] = contact1
+			contacts_dict['%s (%s)' % (name, jid)] = contact
+		else:
+			if contact.name == gajim.get_nick_from_jid(jid):
+				del contacts_dict[jid]
+			contacts_dict[name] = contact
+	return contacts_dict
+
 def launch_browser_mailer(kind, uri):
 	#kind = 'url' or 'mail'
 	if os.name == 'nt':
@@ -517,49 +793,6 @@ def play_sound_file(path_to_soundfile):
 		command = build_command(player, path_to_soundfile)
 		exec_command(command)
 
-def get_file_path_from_dnd_dropped_uri(uri):
-	path = urllib.unquote(uri) # escape special chars
-	path = path.strip('\r\n\x00') # remove \r\n and NULL
-	# get the path to file
-	if re.match('^file:///[a-zA-Z]:/', path): # windows
-		path = path[8:] # 8 is len('file:///')
-	elif path.startswith('file://'): # nautilus, rox
-		if sys.platform == 'darwin':
-			# OS/X includes hostname in file:// URI
-			path = re.sub('file://[^/]*', '', path)
-		else:
-			path = path[7:] # 7 is len('file://')
-	elif path.startswith('file:'): # xffm
-		path = path[5:] # 5 is len('file:')
-	return path
-
-def from_xs_boolean_to_python_boolean(value):
-	# this is xs:boolean so 'true', 'false', '1', '0'
-	# convert those to True/False (python booleans)
-	if value in ('1', 'true'):
-		val = True
-	else: # '0', 'false' or anything else
-		val = False
-
-	return val
-
-def get_xmpp_show(show):
-	if show in ('online', 'offline'):
-		return None
-	return show
-
-def get_output_of_command(command):
-	try:
-		child_stdin, child_stdout = os.popen2(command)
-	except ValueError:
-		return None
-
-	output = child_stdout.readlines()
-	child_stdout.close()
-	child_stdin.close()
-
-	return output
-
 def get_global_show():
 	maxi = 0
 	for account in gajim.connections:
@@ -625,91 +858,6 @@ def get_icon_name_to_show(contact, account = None):
 		return contact.show
 	return 'not in roster'
 
-def decode_string(string):
-	'''try to decode (to make it Unicode instance) given string'''
-	if isinstance(string, unicode):
-		return string
-	# by the time we go to iso15 it better be the one else we show bad characters
-	encodings = (locale.getpreferredencoding(), 'utf-8', 'iso-8859-15')
-	for encoding in encodings:
-		try:
-			string = string.decode(encoding)
-		except UnicodeError:
-			continue
-		break
-
-	return string
-
-def ensure_utf8_string(string):
-	'''make sure string is in UTF-8'''
-	try:
-		string = decode_string(string).encode('utf-8')
-	except Exception:
-		pass
-	return string
-
-def remove_invalid_xml_chars(string):
-	if string:
-		string = re.sub(gajim.interface.invalid_XML_chars_re, '', string)
-	return string
-
-def get_windows_reg_env(varname, default=''):
-	'''asks for paths commonly used but not exposed as ENVs
-	in english Windows 2003 those are:
-	'AppData' = %USERPROFILE%\Application Data (also an ENV)
-	'Desktop' = %USERPROFILE%\Desktop
-	'Favorites' = %USERPROFILE%\Favorites
-	'NetHood' = %USERPROFILE%\NetHood
-	'Personal' = D:\My Documents (PATH TO MY DOCUMENTS)
-	'PrintHood' = %USERPROFILE%\PrintHood
-	'Programs' = %USERPROFILE%\Start Menu\Programs
-	'Recent' = %USERPROFILE%\Recent
-	'SendTo' = %USERPROFILE%\SendTo
-	'Start Menu' = %USERPROFILE%\Start Menu
-	'Startup' = %USERPROFILE%\Start Menu\Programs\Startup
-	'Templates' = %USERPROFILE%\Templates
-	'My Pictures' = D:\My Documents\My Pictures
-	'Local Settings' = %USERPROFILE%\Local Settings
-	'Local AppData' = %USERPROFILE%\Local Settings\Application Data
-	'Cache' = %USERPROFILE%\Local Settings\Temporary Internet Files
-	'Cookies' = %USERPROFILE%\Cookies
-	'History' = %USERPROFILE%\Local Settings\History
-	'''
-
-	if os.name != 'nt':
-		return ''
-
-	val = default
-	try:
-		rkey = win32api.RegOpenKey(win32con.HKEY_CURRENT_USER,
-r'Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders')
-		try:
-			val = str(win32api.RegQueryValueEx(rkey, varname)[0])
-			val = win32api.ExpandEnvironmentStrings(val) # expand using environ
-		except Exception:
-			pass
-	finally:
-		win32api.RegCloseKey(rkey)
-	return val
-
-def get_my_pictures_path():
-	'''windows-only atm. [Unix lives in the past]'''
-	return get_windows_reg_env('My Pictures')
-
-def get_desktop_path():
-	if os.name == 'nt':
-		path = get_windows_reg_env('Desktop')
-	else:
-		path = os.path.join(os.path.expanduser('~'), 'Desktop')
-	return path
-
-def get_documents_path():
-	if os.name == 'nt':
-		path = get_windows_reg_env('Personal')
-	else:
-		path = os.path.expanduser('~')
-	return path
-
 def get_full_jid_from_iq(iq_obj):
 	'''return the full jid (with resource) from an iq as unicode'''
 	return parse_jid(str(iq_obj.getFrom()))
@@ -723,6 +871,10 @@ def get_auth_sha(sid, initiator, target):
 	''' return sha of sid + initiator + target used for proxy auth'''
 	return hashlib.sha1("%s%s%s" % (sid, initiator, target)).hexdigest()
 
+def remove_invalid_xml_chars(string):
+	if string:
+		string = re.sub(gajim.interface.invalid_XML_chars_re, '', string)
+	return string
 
 distro_info = {
 	'Arch Linux': '/etc/arch-release',
@@ -832,22 +984,6 @@ def get_os_info():
 	gajim.os_info = os_info
 	return os_info
 
-def sanitize_filename(filename):
-	'''makes sure the filename we will write does contain only acceptable and
-	latin characters, and is not too long (in that case hash it)'''
-	# 48 is the limit
-	if len(filename) > 48:
-		hash = hashlib.md5(filename)
-		filename = base64.b64encode(hash.digest())
-
-	filename = punycode_encode(filename) # make it latin chars only
-	filename = filename.replace('/', '_')
-	if os.name == 'nt':
-		filename = filename.replace('?', '_').replace(':', '_')\
-			.replace('\\', '_').replace('"', "'").replace('|', '_')\
-			.replace('*', '_').replace('<', '_').replace('>', '_')
-
-	return filename
 
 def allow_showing_notification(account, type_ = 'notify_on_new_message',
 advanced_notif_num = None, is_first_message = True):
@@ -918,39 +1054,6 @@ def get_chat_control(account, contact):
 	else:
 		# unknown contact or offline message
 		return gajim.interface.msg_win_mgr.get_control(contact.jid, account)
-
-def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
-	'''Cut the chars after 'max_chars' on each line
-	and show only the first 'max_lines'.
-	If any of the params is not present (None or 0) the action
-	on it is not performed'''
-
-	def _cut_if_long(string):
-		if len(string) > max_chars:
-			string = string[:max_chars - 3] + '...'
-		return string
-
-	if isinstance(text, str):
-		text = text.decode('utf-8')
-
-	if max_lines == 0:
-		lines = text.split('\n')
-	else:
-		lines = text.split('\n', max_lines)[:max_lines]
-	if max_chars > 0:
-		if lines:
-			lines = [_cut_if_long(e) for e in lines]
-	if lines:
-		reduced_text = '\n'.join(lines)
-		if reduced_text != text:
-			reduced_text += '...'
-	else:
-		reduced_text = ''
-	return reduced_text
-
-def get_account_status(account):
-	status = reduce_chars_newlines(account['status_line'], 100, 1)
-	return status
 
 def get_notification_icon_tooltip_dict():
 	'''returns a dict of the form {acct: {'show': show, 'message': message,
@@ -1086,37 +1189,6 @@ def get_accounts_info():
 				'show': status, 'message': message})
 	return accounts
 
-def get_avatar_path(prefix):
-	'''Returns the filename of the avatar, distinguishes between user- and
-	contact-provided one.  Returns None if no avatar was found at all.
-	prefix is the path to the requested avatar just before the ".png" or
-	".jpeg".'''
-	# First, scan for a local, user-set avatar
-	for type_ in ('jpeg', 'png'):
-		file_ = prefix + '_local.' + type_
-		if os.path.exists(file_):
-			return file_
-	# If none available, scan for a contact-provided avatar
-	for type_ in ('jpeg', 'png'):
-		file_ = prefix + '.' + type_
-		if os.path.exists(file_):
-			return file_
-	return None
-
-def datetime_tuple(timestamp):
-	'''Converts timestamp using strptime and the format: %Y%m%dT%H:%M:%S
-	Because of various datetime formats are used the following exceptions
-	are handled:
-		- Optional milliseconds appened to the string are removed
-		- Optional Z (that means UTC) appened to the string are removed
-		- XEP-082 datetime strings have all '-' cahrs removed to meet
-		  the above format.'''
-	timestamp = timestamp.split('.')[0]
-	timestamp = timestamp.replace('-', '')
-	timestamp = timestamp.replace('z', '')
-	timestamp = timestamp.replace('Z', '')
-	from time import strptime
-	return strptime(timestamp, '%Y%m%dT%H:%M:%S')
 
 def get_iconset_path(iconset):
 	if os.path.isdir(os.path.join(gajim.DATA_DIR, 'iconsets', iconset)):
@@ -1178,74 +1250,6 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
 		elif keyID is None:
 			keyID = 'UNKNOWN'
 	return keyID
-
-def sort_identities_func(i1, i2):
-	cat1 = i1['category']
-	cat2 = i2['category']
-	if cat1 < cat2:
-		return -1
-	if cat1 > cat2:
-		return 1
-	type1 = i1.get('type', '')
-	type2 = i2.get('type', '')
-	if type1 < type2:
-		return -1
-	if type1 > type2:
-		return 1
-	lang1 = i1.get('xml:lang', '')
-	lang2 = i2.get('xml:lang', '')
-	if lang1 < lang2:
-		return -1
-	if lang1 > lang2:
-		return 1
-	return 0
-
-def sort_dataforms_func(d1, d2):
-	f1 = d1.getField('FORM_TYPE')
-	f2 = d2.getField('FORM_TYPE')
-	if f1 and f2 and (f1.getValue() < f2.getValue()):
-		return -1
-	return 1
-
-def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
-	'''Compute caps hash according to XEP-0115, V1.5
-
-	dataforms are xmpp.DataForms objects as common.dataforms don't allow several
-	values without a field type list-multi'''
-	S = ''
-	identities.sort(cmp=sort_identities_func)
-	for i in identities:
-		c = i['category']
-		type_ = i.get('type', '')
-		lang = i.get('xml:lang', '')
-		name = i.get('name', '')
-		S += '%s/%s/%s/%s<' % (c, type_, lang, name)
-	features.sort()
-	for f in features:
-		S += '%s<' % f
-	dataforms.sort(cmp=sort_dataforms_func)
-	for dataform in dataforms:
-		# fields indexed by var
-		fields = {}
-		for f in dataform.getChildren():
-			fields[f.getVar()] = f
-		form_type = fields.get('FORM_TYPE')
-		if form_type:
-			S += form_type.getValue() + '<'
-			del fields['FORM_TYPE']
-		for var in sorted(fields.keys()):
-			S += '%s<' % var
-			values = sorted(fields[var].getValues())
-			for value in values:
-				S += '%s<' % value
-
-	if hash_method == 'sha-1':
-		hash_ = hashlib.sha1(S)
-	elif hash_method == 'md5':
-		hash_ = hashlib.md5(S)
-	else:
-		return ''
-	return base64.b64encode(hash_.digest())
 
 def update_optional_features(account = None):
 	if account:
