@@ -3022,6 +3022,8 @@ class AccountCreationWizardWindow:
 			# connection instance is saved in gajim.connections and we canceled the
 			# addition of the account
 			del gajim.connections[self.account]
+			if self.account in gajim.config.del_per('accounts'):
+				gajim.config.del_per('accounts', self.account)
 		del gajim.interface.instances['account_creation_wizard']
 
 	def on_register_server_features_button_clicked(self, widget):
@@ -3281,6 +3283,8 @@ class AccountCreationWizardWindow:
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 		del gajim.connections[self.account]
+		if self.account in gajim.config.get_per('accounts'):
+			gajim.config.del_per('accounts', self.account)
 		self.back_button.show()
 		self.cancel_button.show()
 		self.go_online_checkbutton.hide()
@@ -3325,6 +3329,8 @@ class AccountCreationWizardWindow:
 		self.go_online_checkbutton.hide()
 		self.show_vcard_checkbutton.hide()
 		del gajim.connections[self.account]
+		if self.account in gajim.config.del_per('accounts'):
+			gajim.config.del_per('accounts', self.account)
 		img = self.xml.get_widget('finish_image')
 		img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
 		finish_text = '<big><b>%s</b></big>\n\n%s' % (_('An error occurred during '
