@@ -1154,7 +1154,7 @@ class ConversationTextview:
 				buffer_.insert_with_tags_by_name(end_iter, tim_format + '\n',
 					'time_sometimes')
 		# kind = info, we print things as if it was a status: same color, ...
-		if kind == 'info':
+		if kind in ('error', 'info'):
 			kind = 'status'
 		other_text_tag = self.detect_other_text_tag(text, kind)
 		text_tags = other_tags_for_text[:] # create a new list
