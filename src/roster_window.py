@@ -1591,6 +1591,18 @@ class RosterWindow:
 				return 1
 			if removing2 and not removing1:
 				return -1
+			sub1 = contact1.sub
+			sub2 = contact2.sub
+			# both goes before
+			if sub1 == 'both' and sub2 != 'both':
+				return -1
+			if sub1 != 'both' and sub2 == 'both':
+				return 1
+			# none goes after
+			if sub1 != 'none' and sub2 == 'none':
+				return -1
+			if sub1 == 'none' and sub2 != 'none':
+				return 1
 			if show1 < show2:
 				return -1
 			elif show1 > show2:
