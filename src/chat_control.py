@@ -1910,6 +1910,8 @@ class ChatControl(ChatControlBase):
 		'''Print a line in the conversation:
 		if frm is set to status: it's a status message
 		if frm is set to error: it's an error message
+			The difference between status and error is mainly that with error, msg
+			count as a new message (in systray and in control).
 		if frm is set to info: it's a information message
 		if frm is set to print_queue: it is incomming from queue
 		if frm is set to another value: it's an outgoing message
