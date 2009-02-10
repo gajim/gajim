@@ -1178,6 +1178,18 @@ class Interface:
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('OsInfo', (account, array))
 
+	def handle_event_entity_time(self, account, array):
+		#'ENTITY_TIME' (account, (jid, resource, time_info))
+		win = None
+		if array[0] in self.instances[account]['infos']:
+			win = self.instances[account]['infos'][array[0]]
+		elif array[0] + '/' + array[1] in self.instances[account]['infos']:
+			win = self.instances[account]['infos'][array[0] + '/' + array[1]]
+		if win:
+			win.set_entity_time(array[1], array[2])
+		if self.remote_ctrl:
+			self.remote_ctrl.raise_signal('EntityTime', (account, array))
+
 	def handle_event_gc_notify(self, account, array):
 		#'GC_NOTIFY' (account, (room_jid, show, status, nick,
 		# role, affiliation, jid, reason, actor, statusCode, newNick, avatar_sha))
@@ -2163,6 +2175,7 @@ class Interface:
 			'VCARD': self.handle_event_vcard,
 			'LAST_STATUS_TIME': self.handle_event_last_status_time,
 			'OS_INFO': self.handle_event_os_info,
+			'ENTITY_TIME': self.handle_event_entity_time,
 			'GC_NOTIFY': self.handle_event_gc_notify,
 			'GC_MSG': self.handle_event_gc_msg,
 			'GC_SUBJECT': self.handle_event_gc_subject,

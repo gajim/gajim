@@ -172,6 +172,10 @@ class SignalObject(dbus.service.Object):
 		pass
 
 	@dbus.service.signal(INTERFACE, signature='av')
+	def EntityTime(self, account_and_array):
+		pass
+
+	@dbus.service.signal(INTERFACE, signature='av')
 	def GCPresence(self, account_and_array):
 		pass
 

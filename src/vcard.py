@@ -112,6 +112,7 @@ class VcardWindow:
 		self.avatar_encoded = None
 		self.vcard_arrived = False
 		self.os_info_arrived = False
+		self.entity_time_arrived = False
 		self.update_progressbar_timeout_id = gobject.timeout_add(100,
 			self.update_progressbar)
 
@@ -215,7 +216,7 @@ class VcardWindow:
 
 	def test_remove_progressbar(self):
 		if self.update_progressbar_timeout_id is not None and \
-		self.vcard_arrived and self.os_info_arrived:
+		self.vcard_arrived and self.os_info_arrived and self.entity_time_arrived:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 			self.progressbar.hide()
 			self.update_progressbar_timeout_id = None
@@ -248,6 +249,26 @@ class VcardWindow:
 		self.xml.get_widget('client_name_version_label').set_text(client)
 		self.xml.get_widget('os_label').set_text(os)
 		self.os_info_arrived = True
+		self.test_remove_progressbar()
+
+	def set_entity_time(self, resource, time_info):
+		if self.xml.get_widget('information_notebook').get_n_pages() < 5:
+			return
+		i = 0
+		time_s = ''
+		while i in self.time_info:
+			if not self.time_info[i]['resource'] or \
+			self.time_info[i]['resource'] == resource:
+				self.time_info[i]['time'] = time_info
+			if i > 0:
+				time_s += '\n'
+			time_s += self.time_info[i]['time']
+			i += 1
+
+		if time_s == '':
+			time_s = Q_('?Time:Unknown')
+		self.xml.get_widget('time_label').set_text(time_s)
+		self.entity_time_arrived = True
 		self.test_remove_progressbar()
 
 	def fill_status_label(self):
@@ -364,8 +385,25 @@ class VcardWindow:
 			else:
 				gobject.idle_add(gajim.connections[self.account].request_os_info,
 					self.contact.jid, self.contact.resource)
+
+		# do not wait for entity_time if contact is not connected or has error
+		# additional check for observer is needed, as show is offline for him
+		if self.contact.show in ('offline', 'error')\
+		and not self.contact.is_observer():
+			self.entity_time_arrived = True
+		else: # Request entity time if contact is connected
+			if self.gc_contact:
+				j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
+				gobject.idle_add(gajim.connections[self.account].\
+					request_entity_time, j, r, self.contact.jid)
+			else:
+				gobject.idle_add(gajim.connections[self.account].\
+					request_entity_time, self.contact.jid, self.contact.resource)
+
+
 		self.os_info = {0: {'resource': self.contact.resource, 'client': '',
 			'os': ''}}
+		self.time_info = {0: {'resource': self.contact.resource, 'time': ''}}
 		i = 1
 		contact_list = gajim.contacts.get_contacts(self.account, self.contact.jid)
 		if contact_list:
@@ -379,11 +417,15 @@ class VcardWindow:
 						gobject.idle_add(
 							gajim.connections[self.account].request_os_info, c.jid,
 							c.resource)
+						gobject.idle_add(gajim.connections[self.account].\
+							request_entity_time, c.jid, c.resource)
 					gajim.connections[self.account].request_last_status_time(c.jid,
 						c.resource)
 					self.os_info[i] = {'resource': c.resource, 'client': '',
 						'os': ''}
+					self.time_info[i] = {'resource': c.resource, 'time': ''}
 					i += 1
+
 		self.xml.get_widget('resource_prio_label').set_text(resources)
 		resource_prio_label_eventbox = self.xml.get_widget(
 			'resource_prio_label_eventbox')

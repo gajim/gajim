@@ -1481,13 +1481,34 @@ class Connection(ConnectionHandlers):
 		to_whom_jid = jid
 		if resource:
 			to_whom_jid += '/' + resource
-		iq = common.xmpp.Iq(to = to_whom_jid, typ = 'get', queryNS =\
+		iq = common.xmpp.Iq(to=to_whom_jid, typ='get', queryNS=\
 			common.xmpp.NS_VERSION)
 		id_ = self.connection.getAnID()
 		iq.setID(id_)
 		if groupchat_jid:
 			self.groupchat_jids[id_] = groupchat_jid
 		self.version_ids.append(id_)
+		self.connection.send(iq)
+
+	def request_entity_time(self, jid, resource, groupchat_jid=None):
+		'''groupchat_jid is used when we want to send a request to a real jid
+		and act as if the answer comes from the groupchat_jid'''
+		if not self.connection:
+			return
+		# If we are invisible, do not request
+		if self.connected == gajim.SHOW_LIST.index('invisible'):
+			self.dispatch('ENTITY_TIME', (jid, resource, _('Not fetched because of invisible status')))
+			return
+		to_whom_jid = jid
+		if resource:
+			to_whom_jid += '/' + resource
+		iq = common.xmpp.Iq(to=to_whom_jid, typ='get', queryNS=\
+			common.xmpp.NS_TIME_REVISED)
+		id_ = self.connection.getAnID()
+		iq.setID(id_)
+		if groupchat_jid:
+			self.groupchat_jids[id_] = groupchat_jid
+		self.entity_time_ids.append(id_)
 		self.connection.send(iq)
 
 	def get_settings(self):

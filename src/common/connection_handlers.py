@@ -38,6 +38,7 @@ import hashlib
 from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
 	time as time_time, timezone, tzname)
 from calendar import timegm
+import datetime
 
 import socks5
 import common.xmpp
@@ -1426,6 +1427,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.last_ids = []
 		# IDs of jabber:iq:version requests
 		self.version_ids = []
+		# IDs of urn:xmpp:time requests
+		self.entity_time_ids = []
 		# ID of urn:xmpp:ping requests
 		self.awaiting_xmpp_ping_id = None
 		self.continue_connect_info = None
@@ -1474,6 +1477,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if id_ in self.last_ids:
 			self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, -1, ''))
 			self.last_ids.remove(id_)
+			return
+		if id_ in self.entity_time_ids:
+			self.dispatch('ENTITY_TIME', (jid_stripped, resource, ''))
+			self.entity_time_ids.remove(id_)
 			return
 		if id_ == self.awaiting_xmpp_ping_id:
 			self.awaiting_xmpp_ping_id = None
@@ -1638,6 +1645,47 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		qp.setTagData('tzo', '%+03d:%02d' % (tzo))
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
+
+	def _TimeRevisedResultCB(self, con, iq_obj):
+		log.debug('TimeRevisedResultCB')
+		time_info = ''
+		qp = iq_obj.getTag('time')
+		tzo = qp.getTag('tzo').getData()
+		if tzo == 'Z':
+			tzo = '0:0'
+		tzoh, tzom = tzo.split(':')
+		utc_time = qp.getTag('utc').getData()
+		ZERO = datetime.timedelta(0)
+		class UTC(datetime.tzinfo):
+			def utcoffset(self, dt):
+				return ZERO
+			def tzname(self, dt):
+				return "UTC"
+			def dst(self, dt):
+				return ZERO
+
+		class contact_tz(datetime.tzinfo):
+			def utcoffset(self, dt):
+				return datetime.timedelta(hours=int(tzoh), minutes=int(tzom))
+			def tzname(self, dt):
+				return "remote timezone"
+			def dst(self, dt):
+				return ZERO
+
+		t = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%SZ')
+		t = t.replace(tzinfo=UTC())
+
+		time_info = t.astimezone(contact_tz()).strftime('%c')
+		id_ = iq_obj.getID()
+		if id_ in self.groupchat_jids:
+			who = self.groupchat_jids[id_]
+			del self.groupchat_jids[id_]
+		else:
+			who = helpers.get_full_jid_from_iq(iq_obj)
+		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
+		if id_ in self.entity_time_ids:
+			self.entity_time_ids.remove(id_)
+		self.dispatch('ENTITY_TIME', (jid_stripped, resource, time_info))
 
 	def _gMailNewMailCB(self, con, gm):
 		'''Called when we get notified of new mail messages in gmail account'''
@@ -2543,6 +2591,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			common.xmpp.NS_LAST)
 		con.RegisterHandler('iq', self._VersionResultCB, 'result',
 			common.xmpp.NS_VERSION)
+		con.RegisterHandler('iq', self._TimeRevisedResultCB, 'result',
+			common.xmpp.NS_TIME_REVISED)
 		con.RegisterHandler('iq', self._MucOwnerCB, 'result',
 			common.xmpp.NS_MUC_OWNER)
 		con.RegisterHandler('iq', self._MucAdminCB, 'result',
