@@ -1640,7 +1640,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		qp = iq_obj.setTag('time',
 			namespace=common.xmpp.NS_TIME_REVISED)
 		qp.setTagData('utc', strftime('%Y-%m-%dT%H:%M:%SZ', gmtime()))
-		isdst = time.localtime().tm_isdst
+		isdst = localtime().tm_isdst
 		zone = -(timezone, altzone)[isdst] / 60
 		tzo = (zone / 60, abs(zone % 60))
 		qp.setTagData('tzo', '%+03d:%02d' % (tzo))
