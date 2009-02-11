@@ -389,7 +389,7 @@ class Contacts:
 					return tag
 		return None
 
-	def add_metacontact(self, brother_account, brother_jid, account, jid):
+	def add_metacontact(self, brother_account, brother_jid, account, jid, order=None):
 		tag = self.get_metacontacts_tag(brother_account, brother_jid)
 		if not tag:
 			tag = self.get_new_metacontacts_tag(brother_jid)
@@ -406,8 +406,12 @@ class Contacts:
 		if tag not in self._metacontacts_tags[account]:
 			self._metacontacts_tags[account][tag] = [{'jid': jid, 'tag': tag}]
 		else:
-			self._metacontacts_tags[account][tag].append({'jid': jid,
-				'tag': tag})
+			if order:
+				self._metacontacts_tags[account][tag].append({'jid': jid,
+					'tag': tag, 'order': order})
+			else:
+				self._metacontacts_tags[account][tag].append({'jid': jid,
+					'tag': tag})
 		common.gajim.connections[account].store_metacontacts(
 			self._metacontacts_tags[account])
 
@@ -510,6 +514,10 @@ class Contacts:
 				return 1
 			if data1['order'] < data2['order']:
 				return -1
+		if 'order' in data1:
+			return 1
+		if 'order' in data2:
+			return -1
 		transport1 = common.gajim.get_transport_name_from_jid(jid1)
 		transport2 = common.gajim.get_transport_name_from_jid(jid2)
 		if transport2 and not transport1:
