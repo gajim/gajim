@@ -24,12 +24,10 @@
 import locale
 import gettext
 import os
+import defs
 
 APP = 'gajim'
-if os.path.isdir('../po'):
-	DIR = '../po'
-else:
-	DIR = '../../locale'
+DIR = defs.localedir
 
 # set '' so each part of the locale that should be modified is set
 # according to the environment variables
