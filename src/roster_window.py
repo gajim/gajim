@@ -2043,11 +2043,6 @@ class RosterWindow:
 			if ctrl:
 				ctrl.update_status_display(name, uf_show, status)
 
-		# unset custom status
-		if account in gajim.interface.status_sent_to_users and \
-		contact.jid in gajim.interface.status_sent_to_users[account]:
-			del gajim.interface.status_sent_to_users[account][contact.jid]
-
 		# Delete pep if needed
 		keep_pep = any(c.show not in ('error', 'offline') for c in
 			contact_instances)

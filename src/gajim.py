@@ -774,6 +774,14 @@ class Interface:
 					self.roster.draw_contact(contact1.jid, account)
 					gobject.timeout_add_seconds(5, self.roster.remove_to_be_removed,
 						contact1.jid, account)
+
+			# unset custom status
+			if (old_show == 0 and new_show > 1) or (old_show > 1 and new_show == 0\
+			and conn.connected > 1):
+				if account in self.status_sent_to_users and \
+				jid in self.status_sent_to_users[account]:
+					del self.status_sent_to_users[account][jid]
+
 			contact1.show = array[1]
 			contact1.status = status_message
 			contact1.priority = priority
