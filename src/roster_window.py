@@ -3120,17 +3120,20 @@ class RosterWindow:
 			contact = list_[0][0]
 			pritext = _('Contact "%s" will be removed from your roster') % \
 				contact.get_shown_name()
+			sectext = _('You are about to remove "%(name)s" (%(jid)s) from your '
+				'roster.\n') % {'name': contact.get_shown_name(),
+				'jid': contact.jid}
 			if contact.sub == 'to':
-				dialogs.ConfirmationDialog(pritext,
+				dialogs.ConfirmationDialog(pritext, sectext + \
 					_('By removing this contact you also remove authorization '
 					'resulting in him or her always seeing you as offline.'),
 					on_response_ok = (on_ok2, list_))
 			elif _('Not in Roster') in contact.get_shown_groups():
 				# Contact is not in roster
-				dialogs.ConfirmationDialog(pritext, _('Do you want to continue?'),
-					on_response_ok = (on_ok2, list_))
+				dialogs.ConfirmationDialog(pritext, sectext + \
+					_('Do you want to continue?'), on_response_ok = (on_ok2, list_))
 			else:
-				dialogs.ConfirmationDialogCheck(pritext,
+				dialogs.ConfirmationDialogCheck(pritext, sectext + \
 					_('By removing this contact you also by default remove '
 					'authorization resulting in him or her always seeing you as '
 					'offline.'),
@@ -3141,7 +3144,8 @@ class RosterWindow:
 			pritext = _('Contacts will be removed from your roster')
 			jids = ''
 			for (contact, account) in list_:
-				jids += '\n  ' + contact.get_shown_name() + ','
+				jids += '\n  ' + contact.get_shown_name() + ' (%s)' % contact.jid +\
+					','
 			sectext = _('By removing these contacts:%s\nyou also remove '
 				'authorization resulting in them always seeing you as offline.') % \
 				jids
