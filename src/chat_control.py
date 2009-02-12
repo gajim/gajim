@@ -54,7 +54,7 @@ from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
 try:
 	import gtkspell
 	HAS_GTK_SPELL = True
-except Exception:
+except ImportError:
 	HAS_GTK_SPELL = False
 
 HAVE_MARKUP_TOOLTIPS = gtk.pygtk_version >= (2, 12, 0)
@@ -300,7 +300,7 @@ class ChatControlBase(MessageControl):
 			for lang in dict(langs):
 				try:
 					spell.set_language(langs[lang])
-				except Exception:
+				except OSError:
 					del langs[lang]
 			# now set the one the user selected
 			per_type = 'contacts'
@@ -314,7 +314,7 @@ class ChatControlBase(MessageControl):
 			if lang:
 				self.msg_textview.lang = lang
 				spell.set_language(lang)
-		except (gobject.GError, RuntimeError):
+		except (gobject.GError, RuntimeError, TypeError):
 			dialogs.AspellDictError(lang)
 
 	def on_msg_textview_populate_popup(self, textview, menu):

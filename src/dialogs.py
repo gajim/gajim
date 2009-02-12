@@ -45,7 +45,7 @@ from common import pep
 try:
 	import gtkspell
 	HAS_GTK_SPELL = True
-except Exception:
+except ImportError:
 	HAS_GTK_SPELL = False
 
 # those imports are not used in this file, but in files that 'import dialogs'
@@ -2200,7 +2200,7 @@ class SingleMessageWindow:
 					lang = gajim.LANG
 				gtkspell.Spell(self.conversation_textview.tv, lang)
 				gtkspell.Spell(self.message_textview, lang)
-			except gobject.GError:
+			except (gobject.GError, TypeError, RuntimeError):
 				AspellDictError(lang)
 
 		self.prepare_widgets_for(self.action)

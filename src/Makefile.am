@@ -6,21 +6,6 @@ INCLUDES = \
 	$(PYTHON_INCLUDES) 
 export MACOSX_DEPLOYMENT_TARGET=10.4
 
-if BUILD_GTKSPELL
-gtkspelllib_LTLIBRARIES = gtkspell.la
-gtkspelllibdir = $(pkglibdir)
-
-gtkspell_la_LIBADD = \
-	$(GTKSPELL_LIBS) $(PYGTK_LIBS) 
-
-gtkspell_la_SOURCES = \
-	gtkspellmodule.c
-
-gtkspell_la_LDFLAGS = \
-	-module -avoid-version 
-
-gtkspell_la_CFLAGS = $(GTKSPELL_CFLAGS) $(PYGTK_CFLAGS)
-endif
 if BUILD_TRAYICON
 trayiconlib_LTLIBRARIES = trayicon.la
 trayiconlibdir = $(pkglibdir)
@@ -64,7 +49,6 @@ EXTRA_DIST = $(gajimsrc_PYTHON) \
 			$(gajimsrc1_PYTHON) \
 			$(gajimsrc2_PYTHON) \
 			$(gajimsrc3_PYTHON) \
-			gtkspellmodule.c \
 			eggtrayicon.c \
 			trayiconmodule.c \
 			eggtrayicon.h \

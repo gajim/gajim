@@ -76,7 +76,7 @@ class FeaturesWindow:
 				_('Requires nslookup to use SRV records.')),
 			_('Spell Checker'): (self.speller_available,
 				_('Spellchecking of composed messages.'),
-				_('Requires python-gnome2-extras or compilation of gtkspell module from Gajim sources.'),
+				_('Requires libgtkspell.'),
 				_('Feature not available under Windows.')),
 			_('Notification'): (self.notification_available,
 				_('Passive popups notifying for new events.'),
@@ -217,7 +217,7 @@ class FeaturesWindow:
 			return False
 		try:
 			import gtkspell
-		except Exception:
+		except ImportError:
 			return False
 		return True
 
