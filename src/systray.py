@@ -64,10 +64,6 @@ class Systray:
 		self.added_hide_menuitem = False
 		self.img_tray = gtk.Image()
 		self.status = 'offline'
-		self.double_click = False
-		self.double_click_id = None
-		self.double_click_time = gtk.settings_get_default().get_property(
-			'gtk-double-click-time')
 		self.xml = gtkgui_helpers.get_glade('systray_context_menu.glade')
 		self.systray_context_menu = self.xml.get_widget('systray_context_menu')
 		self.xml.signal_autoconnect(self)
@@ -327,26 +323,25 @@ class Systray:
 		gajim.interface.roster.on_quit_request()
 
 	def on_left_click(self):
-		self.double_click_id = None
-		if self.double_click:
-			self.double_click = False
-			return
 		win = gajim.interface.roster.window
-		# toggle visible/hidden for roster window
-		if win.get_property('visible') and (win.get_property('has-toplevel-focus') or \
-			os.name == 'nt'):
-			# visible in ANY virtual desktop?
+		if len(gajim.events.get_systray_events()) == 0:
+			# No pending events, so toggle visible/hidden for roster window
+			if win.get_property('visible') and (win.get_property(
+			'has-toplevel-focus')):
+				# visible in ANY virtual desktop?
 
-			# we could be in another VD right now. eg vd2
-			# and we want to show it in vd2
-			if not gtkgui_helpers.possibly_move_window_in_current_desktop(win):
-				win.hide() # else we hide it from VD that was visible in
+				# we could be in another VD right now. eg vd2
+				# and we want to show it in vd2
+				if not gtkgui_helpers.possibly_move_window_in_current_desktop(win):
+					win.hide() # else we hide it from VD that was visible in
+			else:
+				# in Windows (perhaps other Window Managers too) minimize state
+				# is remembered, so make sure it's not minimized (iconified)
+				# because user wants to see roster
+				win.deiconify()
+				win.present()
 		else:
-			# in Windows (perhaps other Window Managers too) minimize state
-			# is remembered, so make sure it's not minimized (iconified)
-			# because user wants to see roster
-			win.deiconify()
-			win.present()
+			self.handle_first_event()
 
 	def handle_first_event(self):
 		account, jid, event = gajim.events.get_first_systray_event()
@@ -355,27 +350,18 @@ class Systray:
 	def on_middle_click(self):
 		'''middle click raises window to have complete focus (fe. get kbd events)
 		but if already raised, it hides it'''
-		if gajim.events.get_nb_systray_events() == 0:
-			return
-		self.handle_first_event()
+		win = gajim.interface.roster.window
+		if win.is_active(): # is it fully raised? (eg does it receive kbd events?)
+			win.hide()
+		else:
+			win.present()
 
 	def on_clicked(self, widget, event):
 		self.on_tray_leave_notify_event(widget, None)
-		if event.type == gtk.gdk._2BUTTON_PRESS:
-			if len(gajim.events.get_systray_events()) == 0:
-				return
-			self.double_click = True
-			self.on_middle_click()
 		if event.type != gtk.gdk.BUTTON_PRESS:
 			return
 		if event.button == 1: # Left click
-			if len(gajim.events.get_systray_events()) == 0:
-				self.on_left_click()
-			else:
-				if self.double_click_id:
-					gobject.source_remove(self.double_click_id)
-				self.double_click_id = gobject.timeout_add(
-					self.double_click_time, self.on_left_click)
+			self.on_left_click()
 		elif event.button == 2: # middle click
 			self.on_middle_click()
 		elif event.button == 3: # right click
