@@ -1047,6 +1047,21 @@ class GroupchatControl(ChatControlBase):
 				name += ('\n<span size="small" style="italic" foreground="%s">'
 				         '%s</span>') % (colorstring, gobject.markup_escape_text(status))
 
+		if image.get_storage_type() == gtk.IMAGE_PIXBUF:
+			pixbuf1 = image.get_pixbuf().copy()
+			pixbuf2 = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, True, 8, 4, 4)
+			if gc_contact.affiliation == 'owner':
+				pixbuf2.fill(0xff0000ff) # Red
+			elif gc_contact.affiliation == 'admin':
+				pixbuf2.fill(0xffb200ff) # Oragne
+			elif gc_contact.affiliation == 'member':
+				pixbuf2.fill(0x00ff00ff) # Green
+			else:
+				pixbuf2.fill(0x000000ff) # Green
+			pixbuf2.composite(pixbuf1, 12, 12, pixbuf2.get_property('width'),
+				pixbuf2.get_property('height'), 0, 0, 1.0, 1.0,
+				gtk.gdk.INTERP_HYPER, 127)
+			image = gtk.image_new_from_pixbuf(pixbuf1)
 		model[iter_][C_IMG] = image
 		model[iter_][C_TEXT] = name
 
