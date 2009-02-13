@@ -214,6 +214,8 @@ class SASL(PlugIn):
 			self.mecs.remove('PLAIN')
 			self.mechanism = 'PLAIN'
 			self._owner._caller.get_password(self.set_password)
+			self.startsasl = SASL_IN_PROCESS
+			raise NodeProcessed
 		else:
 			self.startsasl = SASL_FAILURE
 			log.error('I can only use DIGEST-MD5, GSSAPI and PLAIN mecanisms.')
