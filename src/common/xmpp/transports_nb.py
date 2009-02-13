@@ -529,7 +529,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 			return
 
 		if errnum:
-			log.error("Connection to %s:%s lost: %s %s" % (self.server, self.port,
+			log.info("Connection to %s:%s lost: %s %s" % (self.server, self.port,
 				errnum, errstr), exc_info=True)
 			self.disconnect()
 			return
