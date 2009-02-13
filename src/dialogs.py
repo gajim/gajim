@@ -1644,6 +1644,9 @@ class SubscriptionRequestWindow:
 	def on_deny_button_clicked(self, widget):
 		'''refuse the request'''
 		gajim.connections[self.account].refuse_authorization(self.jid)
+		contact = gajim.contacts.get_contact(self.account, self.jid)
+		if contact and _('Not in Roster') in contact.get_shown_groups():
+			gajim.interface.roster.remove_contact(self.jid, self.account)
 		self.window.destroy()
 
 	def on_actions_button_clicked(self, widget):

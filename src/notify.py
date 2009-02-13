@@ -492,6 +492,10 @@ class DesktopNotification:
 			ntype = 'presence.status'
 		elif event_type == _('Connection Failed'):
 			ntype = 'connection.failed'
+		elif event_type == _('Subscription request'):
+			ntype = 'subscription.request'
+		elif event_type == _('Unsubscribed'):
+			ntype = 'unsubscribed'
 		else:
 			# default failsafe values
 			self.path_to_image = os.path.abspath(

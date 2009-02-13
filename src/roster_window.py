@@ -1832,6 +1832,14 @@ class RosterWindow:
 				data[1])
 			gajim.events.remove_events(account, jid, event)
 			return True
+		elif event.type_ == 'subscription_request':
+			dialogs.SubscriptionRequestWindow(jid, data[0], account, data[1])
+			gajim.events.remove_events(account, jid, event)
+			return True
+		elif event.type_ == 'unsubscribed':
+			gajim.interface.show_unsubscribed_dialog(account, data)
+			gajim.events.remove_events(account, jid, event)
+			return True
 		return False
 
 ################################################################################
