@@ -54,7 +54,6 @@ import features_window
 
 from common import gajim
 from common import helpers
-from common import passwords
 from common.exceptions import GajimGeneralException
 from common import i18n
 from common import pep
@@ -1909,13 +1908,16 @@ class RosterWindow:
 		dialogs.InformationDialog(_('Authorization has been removed'),
 			_('Now "%s" will always see you as offline.') %jid)
 
-	def set_connecting_state(self, account):
+	def set_state(self, account, state):
 		child_iterA = self._get_account_iter(account, self.model)
 		if child_iterA:
 			self.model[child_iterA][0] = \
-				gajim.interface.jabber_state_images['16']['connecting']
+				gajim.interface.jabber_state_images['16'][state]
 		if gajim.interface.systray_enabled:
-			gajim.interface.systray.change_status('connecting')
+			gajim.interface.systray.change_status(state)
+
+	def set_connecting_state(self, account):
+		self.set_state(account, 'connecting')
 
 	def send_status(self, account, status, txt, auto=False, to=None):
 		child_iterA = self._get_account_iter(account, self.model)
@@ -1926,38 +1928,6 @@ class RosterWindow:
 					helpers.to_one_line(txt))
 			if gajim.connections[account].connected < 2:
 				self.set_connecting_state(account)
-
-				if not gajim.connections[account].password:
-					text = _('Enter your password for account %s') % account
-					if passwords.USER_HAS_GNOMEKEYRING and \
-					not passwords.USER_USES_GNOMEKEYRING:
-						text += '\n' + _('Gnome Keyring is installed but not \
-							correctly started (environment variable probably not \
-							correctly set)')
-					def on_ok(passphrase, save):
-						gajim.connections[account].password = passphrase
-						if save:
-							gajim.config.set_per('accounts', account, 'savepass', True)
-							passwords.save_password(account, passphrase)
-						keyid = gajim.config.get_per('accounts', account, 'keyid')
-						if keyid and not gajim.connections[account].gpg:
-							dialogs.WarningDialog(_('GPG is not usable'),
-								_('You will be connected to %s without OpenPGP.') % \
-								account)
-						self.send_status_continue(account, status, txt, auto, to)
-
-					def on_cancel():
-						if child_iterA:
-							self.model[child_iterA][0] = \
-								gajim.interface.jabber_state_images['16']['offline']
-						if gajim.interface.systray_enabled:
-							gajim.interface.systray.change_status('offline')
-						self.update_status_combobox()
-
-					dialogs.PassphraseDialog(_('Password Required'), text,
-						_('Save password'), ok_handler=on_ok,
-						cancel_handler=on_cancel)
-					return
 
 				keyid = gajim.config.get_per('accounts', account, 'keyid')
 				if keyid and not gajim.connections[account].gpg:

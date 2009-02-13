@@ -265,6 +265,7 @@ from common import socks5
 from common import helpers
 from common import optparser
 from common import dataforms
+from common import passwords
 
 if verbose: gajim.verbose = True
 del verbose
@@ -1522,6 +1523,28 @@ class Interface:
 			self.gpg_passphrase[keyid] = request
 		request.add_callback(account, callback)
 
+	def handle_event_password_required(self, account, array):
+		#('PASSWORD_REQUIRED', account, None)
+		text = _('Enter your password for account %s') % account
+		if passwords.USER_HAS_GNOMEKEYRING and \
+		not passwords.USER_USES_GNOMEKEYRING:
+			text += '\n' + _('Gnome Keyring is installed but not \
+				correctly started (environment variable probably not \
+				correctly set)')
+
+		def on_ok(passphrase, save):
+			if save:
+				gajim.config.set_per('accounts', account, 'savepass', True)
+				passwords.save_password(account, passphrase)
+			gajim.connections[account].set_password(passphrase)
+
+		def on_cancel():
+			self.roster.set_state(account, 'offline')
+			self.roster.update_status_combobox()
+
+		dialogs.PassphraseDialog(_('Password Required'), text, _('Save password'),
+			ok_handler=on_ok, cancel_handler=on_cancel)
+
 	def handle_event_roster_info(self, account, array):
 		#('ROSTER_INFO', account, (jid, name, sub, ask, groups))
 		jid = array[0]
@@ -2262,6 +2285,7 @@ class Interface:
 				self.handle_event_unique_room_id_unsupported,
 			'UNIQUE_ROOM_ID_SUPPORTED': self.handle_event_unique_room_id_supported,
 			'GPG_PASSWORD_REQUIRED': self.handle_event_gpg_password_required,
+			'PASSWORD_REQUIRED': self.handle_event_password_required,
 			'SSL_ERROR': self.handle_event_ssl_error,
 			'FINGERPRINT_ERROR': self.handle_event_fingerprint_error,
 			'PLAIN_CONNECTION': self.handle_event_plain_connection,

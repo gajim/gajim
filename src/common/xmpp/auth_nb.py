@@ -212,13 +212,8 @@ class SASL(PlugIn):
 			self.mechanism = 'DIGEST-MD5'
 		elif 'PLAIN' in self.mecs:
 			self.mecs.remove('PLAIN')
-			sasl_data = u'%s\x00%s\x00%s' % (self.username + '@' + \
-				self._owner.Server, self.username, self.password)
-			sasl_data = sasl_data.encode('utf-8').encode('base64').replace(
-				'\n','')
-			node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'PLAIN'},
-				payload=[sasl_data])
 			self.mechanism = 'PLAIN'
+			self._owner._caller.get_password(self.set_password)
 		else:
 			self.startsasl = SASL_FAILURE
 			log.error('I can only use DIGEST-MD5, GSSAPI and PLAIN mecanisms.')
@@ -297,36 +292,21 @@ class SASL(PlugIn):
 		if 'qop' in chal and ((isinstance(chal['qop'], str) and \
 		chal['qop'] =='auth') or (isinstance(chal['qop'], list) and 'auth' in \
 		chal['qop'])):
-			resp = {}
-			resp['username'] = self.username
+			self.resp = {}
+			self.resp['username'] = self.username
 			if self.realm:
-				resp['realm'] = self.realm
+				self.resp['realm'] = self.realm
 			else:
-				resp['realm'] = self._owner.Server
-			resp['nonce'] = chal['nonce']
-			resp['cnonce'] = ''.join("%x" % randint(0, 2**28) for randint in
+				self.resp['realm'] = self._owner.Server
+			self.resp['nonce'] = chal['nonce']
+			self.resp['cnonce'] = ''.join("%x" % randint(0, 2**28) for randint in
 				itertools.repeat(random.randint, 7))
-			resp['nc'] = ('00000001')
-			resp['qop'] = 'auth'
-			resp['digest-uri'] = 'xmpp/' + self._owner.Server
-			A1=C([H(C([resp['username'], resp['realm'], self.password])),
-				resp['nonce'], resp['cnonce']])
-			A2=C(['AUTHENTICATE',resp['digest-uri']])
-			response= HH(C([HH(A1), resp['nonce'], resp['nc'], resp['cnonce'],
-				resp['qop'], HH(A2)]))
-			resp['response'] = response
-			resp['charset'] = 'utf-8'
-			sasl_data = u''
-			for key in ('charset', 'username', 'realm', 'nonce', 'nc', 'cnonce',
-			'digest-uri', 'response', 'qop'):
-				if key in ('nc','qop','response','charset'):
-					sasl_data += u"%s=%s," % (key, resp[key])
-				else:
-					sasl_data += u'%s="%s",' % (key, resp[key])
-			sasl_data = sasl_data[:-1].encode('utf-8').encode('base64').replace(
-				'\r','').replace('\n','')
-			node = Node('response', attrs={'xmlns':NS_SASL}, payload=[sasl_data])
-			self._owner.send(str(node))
+			self.resp['nc'] = ('00000001')
+			self.resp['qop'] = 'auth'
+			self.resp['digest-uri'] = 'xmpp/' + self._owner.Server
+			self.resp['charset'] = 'utf-8'
+			# Password is now required
+			self._owner._caller.get_password(self.set_password)
 		elif 'rspauth' in chal:
 			self._owner.send(str(Node('response', attrs={'xmlns':NS_SASL})))
 		else:
@@ -335,6 +315,34 @@ class SASL(PlugIn):
 		if self.on_sasl:
 			self.on_sasl()
 		raise NodeProcessed
+	
+	def set_password(self, password):
+		self.password = password
+		if self.mechanism == 'DIGEST-MD5':
+			A1 = C([H(C([self.resp['username'], self.resp['realm'],
+				self.password])), self.resp['nonce'], self.resp['cnonce']])
+			A2 = C(['AUTHENTICATE', self.resp['digest-uri']])
+			response= HH(C([HH(A1), self.resp['nonce'], self.resp['nc'],
+				self.resp['cnonce'], self.resp['qop'], HH(A2)]))
+			self.resp['response'] = response
+			sasl_data = u''
+			for key in ('charset', 'username', 'realm', 'nonce', 'nc', 'cnonce',
+			'digest-uri', 'response', 'qop'):
+				if key in ('nc','qop','response','charset'):
+					sasl_data += u"%s=%s," % (key, self.resp[key])
+				else:
+					sasl_data += u'%s="%s",' % (key, self.resp[key])
+			sasl_data = sasl_data[:-1].encode('utf-8').encode('base64').replace(
+				'\r', '').replace('\n', '')
+			node = Node('response', attrs={'xmlns':NS_SASL}, payload=[sasl_data])
+		elif self.mechanism == 'PLAIN':
+			sasl_data = u'%s\x00%s\x00%s' % (self.username + '@' + \
+				self._owner.Server, self.username, self.password)
+			sasl_data = sasl_data.encode('utf-8').encode('base64').replace(
+				'\n', '')
+			node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'PLAIN'},
+				payload=[sasl_data])
+		self._owner.send(str(node))
 
 
 class NonBlockingNonSASL(PlugIn):

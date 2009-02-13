@@ -167,6 +167,7 @@ class Connection(ConnectionHandlers):
 		# request vcard or os info... to a real JID but act as if it comes from
 		# the fake jid
 		self.groupchat_jids = {} # {ID : groupchat_jid}
+		self.pasword_callback = None
 
 		self.on_connect_success = None
 		self.on_connect_failure = None
@@ -1814,6 +1815,19 @@ class Connection(ConnectionHandlers):
 		q.setTagData('username',username)
 		q.setTagData('password',password)
 		self.connection.send(iq)
+
+	def get_password(self, callback):
+		if self.password:
+			callback(self.password)
+			return
+		self.pasword_callback = callback
+		self.dispatch('PASSWORD_REQUIRED', None)
+
+	def set_password(self, password):
+		self.password = password
+		if self.pasword_callback:
+			self.pasword_callback(password)
+			self.pasword_callback = None
 
 	def unregister_account(self, on_remove_success):
 		# no need to write this as a class method and keep the value of
