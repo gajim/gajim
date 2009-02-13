@@ -1022,7 +1022,7 @@ def allow_popup_window(account, advanced_notif_num = None):
 		return True
 	return False
 
-def allow_sound_notification(sound_event, advanced_notif_num = None):
+def allow_sound_notification(account, sound_event, advanced_notif_num=None):
 	if advanced_notif_num is not None:
 		sound = gajim.config.get_per('notifications', str(advanced_notif_num),
 			'sound')
@@ -1030,7 +1030,9 @@ def allow_sound_notification(sound_event, advanced_notif_num = None):
 			return True
 		if sound == 'no':
 			return False
-	if gajim.config.get_per('soundevents', sound_event, 'enabled'):
+	if gajim.config.get('sounddnd') or gajim.connections[account].connected != \
+	gajim.SHOW_LIST.index('dnd') and gajim.config.get_per('soundevents',
+	sound_event, 'enabled'):
 		return True
 	return False
 

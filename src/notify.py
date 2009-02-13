@@ -184,16 +184,16 @@ def notify(event, jid, account, parameters, advanced_notif_num=None):
 		if helpers.allow_showing_notification(account, 'notify_on_new_message',
 		advanced_notif_num, is_first_message):
 			do_popup = True
-		if is_first_message and helpers.allow_sound_notification(
+		if is_first_message and helpers.allow_sound_notification(account,
 		'first_message_received', advanced_notif_num):
 			do_sound = True
 		elif not is_first_message and focused and \
-		helpers.allow_sound_notification('next_message_received_focused',
+		helpers.allow_sound_notification(account, 'next_message_received_focused',
 		advanced_notif_num):
 			do_sound = True
 		elif not is_first_message and not focused and \
-		helpers.allow_sound_notification('next_message_received_unfocused',
-		advanced_notif_num):
+		helpers.allow_sound_notification(account,
+		'next_message_received_unfocused', advanced_notif_num):
 			do_sound = True
 	else:
 		print '*Event not implemeted yet*'

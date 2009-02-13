@@ -79,6 +79,7 @@ class Config:
 		'notify_on_signout': [ opt_bool, False ],
 		'notify_on_new_message': [ opt_bool, True ],
 		'autopopupaway': [ opt_bool, False ],
+		'sounddnd': [ opt_bool, False, _('Play sound when user is busy')],
 		'use_notif_daemon': [ opt_bool, True , _('Use D-Bus and Notification-Daemon to show notifications') ],
 		'showoffline': [ opt_bool, False ],
 		'show_only_chat_and_online': [ opt_bool, False, _('Show only online and free for chat contacts in roster.')],

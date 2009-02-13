@@ -87,6 +87,7 @@ class PreferencesWindow:
 			'notify_on_signout_checkbutton')
 		self.auto_popup_away_checkbutton = self.xml.get_widget(
 			'auto_popup_away_checkbutton')
+		self.sound_dnd_checkbutton = self.xml.get_widget('sound_dnd_checkbutton')
 		self.auto_away_checkbutton = self.xml.get_widget('auto_away_checkbutton')
 		self.auto_away_time_spinbutton = self.xml.get_widget(
 			'auto_away_time_spinbutton')
@@ -300,6 +301,10 @@ class PreferencesWindow:
 		# autopopupaway
 		st = gajim.config.get('autopopupaway')
 		self.auto_popup_away_checkbutton.set_active(st)
+
+		# sounddnd
+		st = gajim.config.get('sounddnd')
+		self.sound_dnd_checkbutton.set_active(st)
 
 		# Systray
 		systray_combobox = self.xml.get_widget('systray_combobox')
@@ -763,6 +768,9 @@ class PreferencesWindow:
 
 	def on_auto_popup_away_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autopopupaway')
+
+	def on_sound_dnd_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'sounddnd')
 
 	def on_systray_combobox_changed(self, widget):
 		active = widget.get_active()
