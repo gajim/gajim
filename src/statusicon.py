@@ -64,10 +64,7 @@ class StatusIcon(systray.Systray):
 		self.unsubscribe_events()
 
 	def on_status_icon_left_clicked(self, widget):
-		if len(gajim.events.get_systray_events()) == 0:
-			self.on_left_click()
-		else:
-			self.on_middle_click()
+		self.on_left_click()
 
 	def set_img(self):
 		'''apart from image, we also update tooltip text here'''
