@@ -23,6 +23,8 @@
 import socket
 import struct
 import errno
+import logging
+log = logging.getLogger('gajim.c.proxy65_manager')
 
 import common.xmpp
 from common import gajim
@@ -106,19 +108,22 @@ class ProxyResolver:
 		self.jid = unicode(jid)
 		self.state = S_RESOLVED
 		#FIXME: re-enable proxy testing
-		self.state = S_FINISHED
-		#self.receiver_tester = ReceiverTester(self.host, self.port, self.jid,
-		#	self.sid, self.sender_jid, self._on_receiver_success,
-		#	self._on_connect_failure)
-		#self.receiver_tester.connect()
+		log.info('start resolving %s:%s' % (self.host, self.port))
+		self.receiver_tester = ReceiverTester(self.host, self.port, self.jid,
+			self.sid, self.sender_jid, self._on_receiver_success,
+			self._on_connect_failure)
+		self.receiver_tester.connect()
 
 	def _on_receiver_success(self):
+		log.debug('Receiver successfully connected %s:%s' % (self.host,
+			self.port))
 		self.host_tester = HostTester(self.host, self.port, self.jid,
 			self.sid, self.sender_jid, self._on_connect_success,
 			self._on_connect_failure)
 		self.host_tester.connect()
 
 	def _on_connect_success(self):
+		log.debug('Host successfully connected %s:%s' % (self.host, self.port))
 		iq = common.xmpp.Protocol(name='iq', to=self.jid, typ='set')
 		query = iq.setTag('query')
 		query.setNamespace(common.xmpp.NS_BYTESTREAM)
@@ -128,13 +133,22 @@ class ProxyResolver:
 		activate.setData('test@gajim.org/test2')
 
 		if self.active_connection:
-			self.active_connection.SendAndCallForResponse(iq, self.keep_conf)
+			log.debug('Activating bytestream on %s:%s' % (self.host, self.port))
+			self.active_connection.SendAndCallForResponse(iq,
+				 self._result_received)
 			self.state = S_ACTIVATED
 		else:
 			self.state = S_INITIAL
 
-	def keep_conf(self, data=None):
+	def _result_received(self, data):
 		self.disconnect(self.active_connection)
+		if data.getType() == 'result':
+			self.keep_conf()
+		else:
+			self._on_connect_failure()
+
+	def keep_conf(self):
+		log.debug('Bytestream activated %s:%s' % (self.host, self.port))
 		self.state = S_FINISHED
 
 	def _on_connect_failure(self):
@@ -268,7 +282,9 @@ class HostTester(Socks5, IdleObject):
 			data = self._get_request_buff(self._get_sha1_auth())
 			self.send_raw(data)
 			self.state += 1
+			log.debug('Host authenticating to %s:%s' % (self.host, self.port))
 		elif self.state == 3:
+			log.debug('Host authenticated to %s:%s' % (self.host, self.port))
 			self.on_success()
 			self.state += 1
 
@@ -276,6 +292,7 @@ class HostTester(Socks5, IdleObject):
 		try:
 			self._sock.connect((self.host, self.port))
 			self._sock.setblocking(False)
+			log.debug('Host Connecting to %s:%s' % (self.host, self.port))
 			self._send = self._sock.send
 			self._recv = self._sock.recv
 		except Exception, ee:
@@ -295,6 +312,7 @@ class HostTester(Socks5, IdleObject):
 			self._recv = self._sock.recv
 		self.buff = ''
 		self.state = 1 # connected
+		log.debug('Host connected to %s:%s' % (self.host, self.port))
 		self.idlequeue.plug_idle(self, True, False)
 		return
 
@@ -370,6 +388,7 @@ class ReceiverTester(Socks5, IdleObject):
 			if version != 0x05 or method == 0xff:
 				self.pollend()
 				return
+			log.debug('Receiver authenticating to %s:%s' % (self.host, self.port))
 			data = self._get_request_buff(self._get_sha1_auth())
 			self.send_raw(data)
 			self.state += 1
@@ -381,13 +400,15 @@ class ReceiverTester(Socks5, IdleObject):
 			if version != 0x05 or reply != 0x00:
 				self.pollend()
 				return
+			log.debug('Receiver authenticated to %s:%s' % (self.host, self.port))
 			self.on_success()
 			self.state += 1
 
 	def do_connect(self):
 		try:
-			self._sock.connect((self.host, self.port))
 			self._sock.setblocking(False)
+			self._sock.connect((self.host, self.port))
+			log.debug('Receiver Connecting to %s:%s' % (self.host, self.port))
 			self._send = self._sock.send
 			self._recv = self._sock.recv
 		except Exception, ee:
@@ -407,7 +428,7 @@ class ReceiverTester(Socks5, IdleObject):
 			self._recv = self._sock.recv
 		self.buff = ''
 		self.state = 1 # connected
+		log.debug('Receiver connected to %s:%s' % (self.host, self.port))
 		self.idlequeue.plug_idle(self, True, False)
-		return
 
 # vim: se ts=3:
