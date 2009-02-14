@@ -1651,6 +1651,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		log.debug('TimeRevisedResultCB')
 		time_info = ''
 		qp = iq_obj.getTag('time')
+		if not qp:
+			# wrong answer
+			return
 		tzo = qp.getTag('tzo').getData()
 		if tzo == 'Z':
 			tzo = '0:0'
