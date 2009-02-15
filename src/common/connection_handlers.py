@@ -675,9 +675,9 @@ class ConnectionDisco:
 	def _agent_registered_cb(self, con, resp, agent):
 		if resp.getType() == 'result':
 			self.dispatch('INFORMATION', (_('Registration succeeded'),
-				_('Resgitration with agent %s succeeded') % agent))
+				_('Registration with agent %s succeeded') % agent))
 		if resp.getType() == 'error':
-			self.dispatch('ERROR', (_('Registration failed'), _('Resgitration with'
+			self.dispatch('ERROR', (_('Registration failed'), _('Registration with'
 				' agent %(agent)s failed with error %(error)s: %(error_msg)s') % {
 				'agent': agent, 'error': resp.getError(),
 				'error_msg': resp.getErrorMsg()}))
