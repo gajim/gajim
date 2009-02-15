@@ -469,9 +469,10 @@ class XMPPDispatcher(PlugIn):
 				# would have placed the reply stanza in there
 				continue
 			if _id in self.on_responses:
-				self._owner.onreceive(None)
+				if len(self._expected) == 1:
+					self._owner.onreceive(None)
 				resp, args = self.on_responses[_id]
-				del(self.on_responses[_id])
+				del self.on_responses[_id]
 				if args is None:
 					resp(_iq)
 				else:
