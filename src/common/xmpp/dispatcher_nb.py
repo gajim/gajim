@@ -463,20 +463,20 @@ class XMPPDispatcher(PlugIn):
 		if not res:
 			return
 		self._owner.remove_timeout()
-		if self._expected[self._witid] is None:
-			# If the expected Stanza would have arrived, ProcessNonBlocking would
-			# have placed the reply stanza in there
-			return
-		if self._witid in self.on_responses:
-			i = self._witid # copy id cause it can change in resp() call
-			self._owner.onreceive(None)
-			resp, args = self.on_responses[self._witid]
-			del(self.on_responses[self._witid])
-			if args is None:
-				resp(self._expected[self._witid])
-			else:
-				resp(self._owner, self._expected[self._witid], **args)
-			del self._expected[i]
+		for (_id, _iq) in self._expected.items():
+			if _iq is None:
+				# If the expected Stanza would have arrived, ProcessNonBlocking
+				# would have placed the reply stanza in there
+				continue
+			if _id in self.on_responses:
+				self._owner.onreceive(None)
+				resp, args = self.on_responses[_id]
+				del(self.on_responses[_id])
+				if args is None:
+					resp(_iq)
+				else:
+					resp(self._owner, _iq, **args)
+				del self._expected[_id]
 
 	def SendAndWaitForResponse(self, stanza, timeout=None, func=None, args=None):
 		'''
@@ -487,14 +487,14 @@ class XMPPDispatcher(PlugIn):
 		'''
 		if timeout is None:
 			timeout = DEFAULT_TIMEOUT_SECONDS
-		self._witid = self.send(stanza)
+		_waitid = self.send(stanza)
 		if func:
-			self.on_responses[self._witid] = (func, args)
+			self.on_responses[_waitid] = (func, args)
 		if timeout:
 			self._owner.set_timeout(timeout)
 		self._owner.onreceive(self._WaitForData)
-		self._expected[self._witid] = None
-		return self._witid
+		self._expected[_waitid] = None
+		return _waitid
 
 	def SendAndCallForResponse(self, stanza, func=None, args=None):
 		''' Put stanza on the wire and call back when recipient replies.
