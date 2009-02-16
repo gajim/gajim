@@ -319,27 +319,28 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				callback(frac, *args)
 			return
 
-		val = float(value[:-2])
-		sign = cmp(val,0)
-		# validate length
-		val = sign*max(minl,min(abs(val*display_resolution),maxl))
+		def get_val():
+			val = float(value[:-2])
+			sign = cmp(val,0)
+			# validate length
+			return sign*max(minl,min(abs(val*display_resolution),maxl))
 		if value.endswith('pt'): # points
-			callback(val*display_resolution, *args)
+			callback(get_val()*display_resolution, *args)
 
 		elif value.endswith('em'): # ems, the width of the element's font
 			attrs = self._get_current_attributes()
 			font_size = attrs.font.get_size() / pango.SCALE
-			callback(val*display_resolution*font_size, *args)
+			callback(get_val()*display_resolution*font_size, *args)
 
 		elif value.endswith('ex'): # x-height, ~ the height of the letter 'x'
 			# FIXME: figure out how to calculate this correctly
 			#        for now 'em' size is used as approximation
 			attrs = self._get_current_attributes()
 			font_size = attrs.font.get_size() / pango.SCALE
-			callback(val*display_resolution*font_size, *args)
+			callback(get_val()*display_resolution*font_size, *args)
 
 		elif value.endswith('px'): # pixels
-			callback(val, *args)
+			callback(get_val(), *args)
 
 		else:
 			try:
