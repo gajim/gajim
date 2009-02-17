@@ -28,9 +28,7 @@ EXTRA_DIST = \
 	intltool-update.in	\
 	gajim.nsi \
 	setup_win32.py \
-	scripts/gajim.in	\
-	scripts/gajim-remote.in	\
-	scripts/gajim-history-manager.in
+	scripts/gajim.in
 	
 DISTCLEANFILES = 		\
 	intltool-extract 	\

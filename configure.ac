@@ -176,8 +176,8 @@ AC_CONFIG_FILES([
 	src/osx/growl/Makefile
 	src/osx/syncmenu/Makefile
 	scripts/gajim
-	scripts/gajim-remote
-	scripts/gajim-history-manager
+	scripts/gajim-remote:scripts/gajim.in
+	scripts/gajim-history-manager:scripts/gajim.in
 	po/Makefile.in
 ])
 AC_OUTPUT

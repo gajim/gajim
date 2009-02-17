@@ -21,14 +21,17 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+APP=`basename $0`
 if test $(id -u) -eq 0; then
-	echo "You must not launch Gajim as root, it is INSECURE"
+	echo "You must not launch $APP as root, it is INSECURE"
 	exit 1
 fi
+
+[ "$APP" = "gajim-history-manager" ] && APP="history_manager"
 
 export datadir=@DATADIR@/gajim
 PYTHON_EXEC=@PYTHON@
 
 cd ${datadir}/src
 export PYTHONPATH="$PYTHONPATH:@LIBDIR@/gajim"
-exec ${PYTHON_EXEC} -OO gajim.py $@
+exec ${PYTHON_EXEC} -OO $APP.py $@
