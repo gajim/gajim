@@ -1622,10 +1622,12 @@ class AccountsWindow:
 		custom_host = gajim.config.get_per('accounts', account, 'custom_host')
 		if not custom_host:
 			custom_host = gajim.config.get_per('accounts', account, 'hostname')
+			gajim.config.set_per('accounts', account, 'custom_host', custom_host)
 		self.xml.get_widget('custom_host_entry1').set_text(custom_host)
 		custom_port = gajim.config.get_per('accounts', account, 'custom_port')
 		if not custom_port:
 			custom_port = 5222
+			gajim.config.set_per('accounts', account, 'custom_port', custom_port)
 		self.xml.get_widget('custom_port_entry1').set_text(unicode(custom_port))
 
 		# Personal tab
