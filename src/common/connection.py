@@ -625,12 +625,17 @@ class Connection(ConnectionHandlers):
 			if not self.retrycount and self.connected != 0:
 				self.disconnect(on_purpose = True)
 				self.dispatch('STATUS', 'offline')
-				sectxt = ''
+				pritxt = _('Could not connect to "%s"') % self._hostname
+				sectxt = _('Check your connection or try again later.')
 				if self.streamError:
-					sectxt = _('Server replied: %s\n') % self.streamError
-				self.dispatch('CONNECTION_LOST',
-					(_('Could not connect to "%s"') % self._hostname,
-					_('%sCheck your connection or try again later.') % sectxt))
+					# show error dialog
+					key = common.xmpp.NS_XMPP_STREAMS + ' ' + self.streamError
+					if key in common.xmpp.ERRORS:
+						sectxt2 = _('Server replied: %s') % common.xmpp.ERRORS[key][2]
+						self.dispatch('ERROR', (pritxt, '%s\n%s' % (sectxt2, sectxt)))
+						return
+				# show popup
+				self.dispatch('CONNECTION_LOST', (pritxt, sectxt))
 
 	def on_proxy_failure(self, reason):
 		log.error('Connection to proxy failed: %s' % reason)
