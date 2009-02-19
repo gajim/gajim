@@ -1180,17 +1180,33 @@ class Connection(ConnectionHandlers):
 			elif keyID.endswith('MISMATCH'):
 				error = _('The contact\'s key (%s) does not match the key assigned in Gajim.' % keyID[:8])
 			else:
-				def encrypt_thread(msg, keyID):
+				def encrypt_thread(msg, keyID, always_trust=False):
 					# encrypt message. This function returns (msgenc, error)
-					return self.gpg.encrypt(msg, [keyID])
-				gajim.thread_interface(encrypt_thread, [msg, keyID],
-					self._on_message_encrypted, [type_, msg, msgtxt,
-						original_message, fjid, resource, jid, xhtml, subject,
-						chatstate, composing_xep, forward_from, delayed, session,
-						form_node, user_nick, keyID, callback, callback_args])
+					return self.gpg.encrypt(msg, [keyID], always_trust)
+				def _on_encrypted(output):
+					msgenc, error = output
+					if error == 'NOT_TRUSTED':
+						def _on_always_trust(answer):
+							if answer:
+								gajim.thread_interface(encrypt_thread, [msg, keyID,
+									True], _on_encrypted, [])
+							else:
+								self._on_message_encrypted(output, type_, msg, msgtxt,
+									original_message, fjid, resource, jid, xhtml,
+									subject, chatstate, composing_xep, forward_from,
+									delayed, session, form_node, user_nick, keyID,
+									callback, callback_args)
+						self.dispatch('GPG_ALWAYS_TRUST', _on_always_trust)
+					else:
+						self._on_message_encrypted(output, type_, msg, msgtxt,
+							original_message, fjid, resource, jid, xhtml, subject,
+							chatstate, composing_xep, forward_from, delayed, session,
+							form_node, user_nick, keyID, callback, callback_args)
+				gajim.thread_interface(encrypt_thread, [msg, keyID, False],
+					_on_encrypted, [])
 				return
 
-			self._on_message_encrypted(self, ('', error), type_, msg, msgtxt,
+			self._on_message_encrypted(('', error), type_, msg, msgtxt,
 				original_message, fjid, resource, jid, xhtml, subject, chatstate,
 				composing_xep, forward_from, delayed, session, form_node, user_nick,
 				keyID, callback, callback_args)
