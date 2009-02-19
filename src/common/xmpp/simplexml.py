@@ -355,6 +355,7 @@ class NodeBuilder:
 		self.last_is_data = 1
 		self._ptr=None
 		self.data_buffer = None
+		self.streamError = ''
 		if data:
 			self._parser.Parse(data,1)
 
@@ -411,6 +412,8 @@ class NodeBuilder:
 		log.info("DEPTH -> %i , tag -> %s" % (self.__depth, tag))
 		self.check_data_buffer()
 		if self.__depth == self._dispatch_depth:
+			if self._mini_dom.getName() == 'error':
+				self.streamError = self._mini_dom.getChildren()[0].getName()
 			self.dispatch(self._mini_dom)
 		elif self.__depth > self._dispatch_depth:
 			self._ptr = self._ptr.parent

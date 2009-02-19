@@ -122,6 +122,7 @@ class NonBlockingClient:
 				# proper connection is not established yet and it's not a proxy
 				# issue
 				log.debug('calling on_connect_failure cb')
+				self._caller.streamError = message
 				self.on_connect_failure()
 			else:
 				# with open connection, we are calling the disconnect handlers

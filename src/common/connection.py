@@ -178,6 +178,7 @@ class Connection(ConnectionHandlers):
 		# server {'icq': ['icq.server.com', 'icq2.server.com'], }
 		self.vcard_supported = True
 		self.private_storage_supported = True
+		self.streamError = ''
 	# END __init__
 
 	def put_event(self, ev):
@@ -515,7 +516,7 @@ class Connection(ConnectionHandlers):
 		self._connect_to_next_host()
 
 
-	def _connect_to_next_host(self, retry = False):
+	def _connect_to_next_host(self, retry=False):
 		log.debug('Connection to next host')
 		if len(self._hosts):
 			# No config option exist when creating a new account
@@ -618,15 +619,18 @@ class Connection(ConnectionHandlers):
 				msg = '%s over proxy %s:%s' % (msg, self._proxy['host'], self._proxy['port'])
 			log.info(msg)
 
-	def _connect_failure(self, con_type = None):
+	def _connect_failure(self, con_type=None):
 		if not con_type:
 			# we are not retrying, and not conecting
 			if not self.retrycount and self.connected != 0:
 				self.disconnect(on_purpose = True)
 				self.dispatch('STATUS', 'offline')
+				sectxt = ''
+				if self.streamError:
+					sectxt = _('Server replied: %s\n') % self.streamError
 				self.dispatch('CONNECTION_LOST',
 					(_('Could not connect to "%s"') % self._hostname,
-					_('Check your connection or try again later.')))
+					_('%sCheck your connection or try again later.') % sectxt))
 
 	def on_proxy_failure(self, reason):
 		log.error('Connection to proxy failed: %s' % reason)
