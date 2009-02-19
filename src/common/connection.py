@@ -964,13 +964,18 @@ class Connection(ConnectionHandlers):
 			self.dispatch('SIGNED_IN', ())
 
 	def test_gpg_passphrase(self, password):
+		'''Returns 'ok', 'bad_pass' or 'expired' '''
 		if not self.gpg:
 			return False
 		self.gpg.passphrase = password
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 		signed = self.gpg.sign('test', keyID)
 		self.gpg.password = None
-		return signed != 'BAD_PASSPHRASE'
+		if signed == 'KEYEXPIRED':
+			return 'expired'
+		elif signed == 'BAD_PASSPHRASE':
+			return 'bad_pass'
+		return 'ok'
 
 	def get_signed_presence(self, msg, callback = None):
 		if gajim.config.get_per('accounts', self.name, 'gpg_sign_presence'):

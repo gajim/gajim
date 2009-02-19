@@ -145,6 +145,8 @@ if gajim.HAVE_GPG:
 			except IOError: pass
 			if 'GOOD_PASSPHRASE' in resp or 'SIG_CREATED' in resp:
 				return self._stripHeaderFooter(output)
+			if 'KEYEXPIRED' in resp:
+				return 'KEYEXPIRED'
 			return 'BAD_PASSPHRASE'
 
 		def verify(self, str_, sign):

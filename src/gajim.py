@@ -466,9 +466,18 @@ class PassphraseRequest:
 			self.complete(None)
 
 		def _ok(passphrase, checked, count):
-			if gajim.connections[account].test_gpg_passphrase(passphrase):
+			result = gajim.connections[account].test_gpg_passphrase(passphrase)
+			if result == 'ok':
 				# passphrase is good
 				self.complete(passphrase)
+				return
+			elif result == 'expired':
+				dialogs.ErrorDialog(_('GPG key expired'),
+					_('Your GPG key has expied, you will be connected to %s without '
+					'OpenPGP.') % account)
+				# Don't try to connect with GPG
+				gajim.connections[account].continue_connect_info[2] = False
+				self.complete(None)
 				return
 
 			if count < 3:
