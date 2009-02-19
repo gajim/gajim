@@ -1547,6 +1547,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			for group in item.getTags('group'):
 				groups.append(group.getData())
 			self.dispatch('ROSTER_INFO', (jid, name, sub, ask, groups))
+		if not self.connection or self.connected < 2:
+			raise common.xmpp.NodeProcessed
+		server = gajim.config.get_per('accounts', self.name, 'hostname')
+		reply = common.xmpp.Iq(typ='result', attrs={'id': iq_obj.getID()},
+			to=server, frm=iq_obj.getTo(), xmlns=None)
+		self.connection.send(reply)
 		raise common.xmpp.NodeProcessed
 
 	def _VersionCB(self, con, iq_obj):
@@ -2400,6 +2406,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		raise common.xmpp.NodeProcessed
 
 	def _getRosterCB(self, con, iq_obj):
+		log.debug('getRosterCB')
 		if not self.connection:
 			return
 		self.connection.getRoster(self._on_roster_set)
