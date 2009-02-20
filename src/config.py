@@ -3032,7 +3032,7 @@ class AccountCreationWizardWindow:
 			# connection instance is saved in gajim.connections and we canceled the
 			# addition of the account
 			del gajim.connections[self.account]
-			if self.account in gajim.config.del_per('accounts'):
+			if self.account in gajim.config.get_per('accounts'):
 				gajim.config.del_per('accounts', self.account)
 		del gajim.interface.instances['account_creation_wizard']
 
@@ -3339,7 +3339,7 @@ class AccountCreationWizardWindow:
 		self.go_online_checkbutton.hide()
 		self.show_vcard_checkbutton.hide()
 		del gajim.connections[self.account]
-		if self.account in gajim.config.del_per('accounts'):
+		if self.account in gajim.config.get_per('accounts'):
 			gajim.config.del_per('accounts', self.account)
 		img = self.xml.get_widget('finish_image')
 		img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
