@@ -1017,7 +1017,7 @@ class RosterWindow:
 		else:
 			accounts = [account]
 		text = gobject.markup_escape_text(group)
-		if group in gajim.connections[account].blocked_groups:
+		if helpers.group_is_blocked(account, group):
 			text = '<span strikethrough="true">%s</span>' % text
 		if gajim.config.get('show_contacts_number'):
 			nbr_on, nbr_total = gajim.contacts.get_nb_online_total_contacts(
@@ -1070,11 +1070,11 @@ class RosterWindow:
 
 		# Strike name if blocked
 		strike = False
-		if jid in gajim.connections[account].blocked_contacts:
+		if helpers.jid_is_blocked(account, jid):
 			strike = True
 		else:
 			for group in contact.get_shown_groups():
-				if group in gajim.connections[account].blocked_groups:
+				if helpers.group_is_blocked(account, group):
 					strike = True
 					break
 		if strike:
@@ -5109,7 +5109,7 @@ class RosterWindow:
 			send_custom_status_menuitem = gtk.ImageMenuItem(
 				_('Send Cus_tom Status'))
 			# add a special img for this menuitem
-			if group in gajim.connections[account].blocked_groups:
+			if helpers.group_is_blocked(account, group):
 				send_custom_status_menuitem.set_image(gtkgui_helpers.load_icon(
 					'offline'))
 				send_custom_status_menuitem.set_sensitive(False)
@@ -5157,10 +5157,10 @@ class RosterWindow:
 			is_blocked = False
 			if self.regroup:
 				for g_account in gajim.connections:
-					if group in gajim.connections[g_account].blocked_groups:
+					if helpers.group_is_blocked(g_account, group):
 						is_blocked = True
 			else:
-				if group in gajim.connections[account].blocked_groups:
+				if helpers.group_is_blocked(account, group):
 					is_blocked = True
 
 			if is_blocked and gajim.connections[account].privacy_rules_supported:
@@ -5366,11 +5366,11 @@ class RosterWindow:
 
 		# send custom status icon
 		blocked = False
-		if jid in gajim.connections[account].blocked_contacts:
+		if helpers.jid_is_blocked(account, jid):
 			blocked = True
 		else:
 			for group in contact.get_shown_groups():
-				if group in gajim.connections[account].blocked_groups:
+				if helpers.group_is_blocked(account, group):
 					blocked = True
 					break
 		if gajim.get_transport_name_from_jid(jid, use_config_setting=False):
@@ -5535,7 +5535,7 @@ class RosterWindow:
 
 		if gajim.connections[account] and gajim.connections[account].\
 		privacy_rules_supported:
-			if jid in gajim.connections[account].blocked_contacts:
+			if helpers.jid_is_blocked(account, jid):
 				block_menuitem.set_no_show_all(True)
 				block_menuitem.hide()
 				if gajim.get_transport_name_from_jid(jid, use_config_setting=False):
@@ -5589,7 +5589,7 @@ class RosterWindow:
 				privacy_rules_supported = False
 			contact = gajim.contacts.get_contact_with_highest_priority(account,
 				jid)
-			if jid not in gajim.connections[account].blocked_contacts:
+			if helpers.jid_is_blocked(account, jid):
 				is_blocked = False
 			list_.append((contact, account))
 
@@ -5691,7 +5691,7 @@ class RosterWindow:
 		menu.append(item)
 
 		blocked = False
-		if jid in gajim.connections[account].blocked_contacts:
+		if helpers.jid_is_blocked(account, jid):
 			blocked = True
 
 		# Send Custom Status

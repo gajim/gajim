@@ -154,6 +154,7 @@ class Connection(ConnectionHandlers):
 		self.blocked_list = []
 		self.blocked_contacts = []
 		self.blocked_groups = []
+		self.blocked_all = False
 		self.music_track_info = 0
 		self.pep_supported = False
 		self.mood = {}

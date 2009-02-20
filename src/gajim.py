@@ -1948,7 +1948,7 @@ class Interface:
 			self.instances[account]['privacy_lists'].privacy_lists_received(data)
 
 	def handle_event_privacy_list_received(self, account, data):
-		# ('PRIVACY_LISTS_RECEIVED', account, (name, rules))
+		# ('PRIVACY_LIST_RECEIVED', account, (name, rules))
 		if account not in self.instances:
 			return
 		name = data[0]
@@ -1960,10 +1960,13 @@ class Interface:
 			gajim.connections[account].blocked_contacts = []
 			gajim.connections[account].blocked_groups = []
 			gajim.connections[account].blocked_list = []
+			gajim.connections[account].blocked_all = False
 			for rule in rules:
-				if rule['type'] == 'jid' and rule['action'] == 'deny':
+				if not 'type' in rule:
+					gajim.connections[account].blocked_all = True
+				elif rule['type'] == 'jid' and rule['action'] == 'deny':
 					gajim.connections[account].blocked_contacts.append(rule['value'])
-				if rule['type'] == 'group' and rule['action'] == 'deny':
+				elif rule['type'] == 'group' and rule['action'] == 'deny':
 					gajim.connections[account].blocked_groups.append(rule['value'])
 				gajim.connections[account].blocked_list.append(rule)
 				#elif rule['type'] == "group" and action == "deny":

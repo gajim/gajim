@@ -1287,4 +1287,12 @@ def update_optional_features(account = None):
 			gajim.connections[a].change_status(gajim.SHOW_LIST[connected],
 				gajim.connections[a].status)
 
+def jid_is_blocked(account, jid):
+	return ((jid in gajim.connections[account].blocked_contacts) or \
+		gajim.connections[account].blocked_all)
+
+def group_is_blocked(account, group):
+	return ((group in gajim.connections[account].blocked_groups) or \
+		gajim.connections[account].blocked_all)
+
 # vim: se ts=3:
