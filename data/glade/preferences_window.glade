@@ -211,62 +211,37 @@
                             <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
                             <child>
-                              <widget class="GtkLabel" id="label379">
+                              <widget class="GtkComboBox" id="one_window_type_combobox">
+                                <property name="width_request">50</property>
                                 <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="xpad">1</property>
-                                <property name="label" translatable="yes">_Window behavior:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">one_window_type_combobox</property>
-                              </widget>
-                              <packing>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkComboBox" id="emoticons_combobox">
-                                <property name="visible">True</property>
-                                <signal name="changed" handler="on_emoticons_combobox_changed"/>
+                                <property name="items" translatable="yes">Detached roster with detached chats
+Detached roster with single chat
+Single window for everything
+Detached roster with chat grouped by account
+Detached roster with chat grouped by type</property>
+                                <signal name="changed" handler="on_one_window_type_combo_changed"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkEventBox" id="eventbox5">
-                                <property name="visible">True</property>
-                                <property name="tooltip" translatable="yes">If not disabled, Gajim will replace ascii smilies like ':)' with equivalent animated or static graphical emoticons</property>
-                                <child>
-                                  <widget class="GtkLabel" id="label381">
-                                    <property name="visible">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="xpad">1</property>
-                                    <property name="label" translatable="yes">_Emoticons:</property>
-                                    <property name="use_underline">True</property>
-                                  </widget>
-                                </child>
-                              </widget>
-                              <packing>
-                                <property name="x_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkCheckButton" id="compact_view_checkbutton">
+                              <widget class="GtkCheckButton" id="speller_checkbutton">
                                 <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">Hide all buttons in chat windows</property>
-                                <property name="label" translatable="yes">Ma_ke message windows compact</property>
+                                <property name="tooltip" translatable="yes">If checked, Gajim will highlight spelling errors in input fields of chat windows. If no language is explicitly set via right click on the input field, the default language will be used for this contact or group chat.</property>
+                                <property name="label" translatable="yes">_Highlight misspelled words</property>
                                 <property name="use_underline">True</property>
                                 <property name="response_id">0</property>
                                 <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_compact_view_checkbutton_toggled"/>
+                                <signal name="toggled" handler="on_speller_checkbutton_toggled"/>
                               </widget>
                               <packing>
                                 <property name="right_attach">2</property>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
+                                <property name="top_attach">4</property>
+                                <property name="bottom_attach">5</property>
                                 <property name="x_options">GTK_FILL</property>
                               </packing>
                             </child>
@@ -289,38 +264,63 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkCheckButton" id="speller_checkbutton">
+                              <widget class="GtkCheckButton" id="compact_view_checkbutton">
                                 <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">If checked, Gajim will highlight spelling errors in input fields of chat windows. If no language is explicitly set via right click on the input field, the default language will be used for this contact or group chat.</property>
-                                <property name="label" translatable="yes">_Highlight misspelled words</property>
+                                <property name="tooltip" translatable="yes">Hide all buttons in chat windows</property>
+                                <property name="label" translatable="yes">Ma_ke message windows compact</property>
                                 <property name="use_underline">True</property>
                                 <property name="response_id">0</property>
                                 <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_speller_checkbutton_toggled"/>
+                                <signal name="toggled" handler="on_compact_view_checkbutton_toggled"/>
                               </widget>
                               <packing>
                                 <property name="right_attach">2</property>
-                                <property name="top_attach">4</property>
-                                <property name="bottom_attach">5</property>
+                                <property name="top_attach">2</property>
+                                <property name="bottom_attach">3</property>
                                 <property name="x_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkComboBox" id="one_window_type_combobox">
-                                <property name="width_request">50</property>
+                              <widget class="GtkEventBox" id="eventbox5">
                                 <property name="visible">True</property>
-                                <property name="items" translatable="yes">Detached roster with detached chats
-Detached roster with single chat
-Single window for everything
-Detached roster with chat grouped by account
-Detached roster with chat grouped by type</property>
-                                <signal name="changed" handler="on_one_window_type_combo_changed"/>
+                                <property name="tooltip" translatable="yes">If not disabled, Gajim will replace ascii smilies like ':)' with equivalent animated or static graphical emoticons</property>
+                                <child>
+                                  <widget class="GtkLabel" id="label381">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="xpad">1</property>
+                                    <property name="label" translatable="yes">_Emoticons:</property>
+                                    <property name="use_underline">True</property>
+                                  </widget>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkComboBox" id="emoticons_combobox">
+                                <property name="visible">True</property>
+                                <signal name="changed" handler="on_emoticons_combobox_changed"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label379">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="xpad">1</property>
+                                <property name="label" translatable="yes">_Window behavior:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">one_window_type_combobox</property>
+                              </widget>
+                              <packing>
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
                               </packing>
                             </child>
                           </widget>
@@ -730,18 +730,33 @@ Always</property>
                             <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
                             <child>
-                              <widget class="GtkComboBox" id="displayed_chat_states_combobox">
+                              <widget class="GtkComboBox" id="outgoing_chat_states_combobox">
                                 <property name="visible">True</property>
                                 <property name="items" translatable="yes">All chat states
 Composing only
 Disabled</property>
-                                <signal name="changed" handler="on_displayed_chat_states_combobox_changed"/>
+                                <signal name="changed" handler="on_outgoing_chat_states_combobox_changed"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkEventBox" id="eventbox9">
+                                <property name="visible">True</property>
+                                <property name="tooltip" translatable="yes">Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to send to the other party.</property>
+                                <child>
+                                  <widget class="GtkLabel" id="label34">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">_Send chat state notifications:</property>
+                                    <property name="use_underline">True</property>
+                                  </widget>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="x_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
@@ -764,33 +779,18 @@ Disabled</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkEventBox" id="eventbox9">
-                                <property name="visible">True</property>
-                                <property name="tooltip" translatable="yes">Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to send to the other party.</property>
-                                <child>
-                                  <widget class="GtkLabel" id="label34">
-                                    <property name="visible">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Send chat state notifications:</property>
-                                    <property name="use_underline">True</property>
-                                  </widget>
-                                </child>
-                              </widget>
-                              <packing>
-                                <property name="x_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkComboBox" id="outgoing_chat_states_combobox">
+                              <widget class="GtkComboBox" id="displayed_chat_states_combobox">
                                 <property name="visible">True</property>
                                 <property name="items" translatable="yes">All chat states
 Composing only
 Disabled</property>
-                                <signal name="changed" handler="on_outgoing_chat_states_combobox_changed"/>
+                                <signal name="changed" handler="on_displayed_chat_states_combobox_changed"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
                               </packing>
                             </child>
                           </widget>
@@ -854,88 +854,35 @@ Disabled</property>
                             <property name="column_spacing">12</property>
                             <property name="row_spacing">6</property>
                             <child>
-                              <widget class="GtkCheckButton" id="auto_away_checkbutton">
+                              <widget class="GtkEntry" id="auto_xa_message_entry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">If checked, Gajim will change status to Away when the computer is unused.</property>
-                                <property name="label" translatable="yes">_Away after:</property>
-                                <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
-                                <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_auto_away_checkbutton_toggled"/>
+                                <property name="tooltip" translatable="yes">The auto not available status message. If empty, Gajim will not change the current status message
+$S will be replaced by previous status message
+$T will be replaced by auto-not-available timeout</property>
+                                <signal name="changed" handler="on_auto_xa_message_entry_changed"/>
                               </widget>
                               <packing>
-                                <property name="x_options">GTK_FILL</property>
+                                <property name="left_attach">3</property>
+                                <property name="right_attach">4</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
                                 <property name="y_options"></property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkCheckButton" id="auto_xa_checkbutton">
+                              <widget class="GtkEntry" id="auto_away_message_entry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">If checked, Gajim will change status to Not Available when the computer has not been used even longer</property>
-                                <property name="label" translatable="yes">_Not available after:</property>
-                                <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
-                                <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_auto_xa_checkbutton_toggled"/>
+                                <property name="tooltip" translatable="yes">The auto away status message. If empty, Gajim will not change the current status message
+$S will be replaced by previous status message
+$T will be replaced by auto-away timeout</property>
+                                <signal name="changed" handler="on_auto_away_message_entry_changed"/>
                               </widget>
                               <packing>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
+                                <property name="left_attach">3</property>
+                                <property name="right_attach">4</property>
                                 <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkLabel" id="label77">
-                                <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">minutes</property>
-                              </widget>
-                              <packing>
-                                <property name="left_attach">2</property>
-                                <property name="right_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkLabel" id="label78">
-                                <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">minutes</property>
-                              </widget>
-                              <packing>
-                                <property name="left_attach">2</property>
-                                <property name="right_attach">3</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkAlignment" id="alignment33">
-                                <property name="visible">True</property>
-                                <property name="xalign">1</property>
-                                <property name="xscale">0</property>
-                                <child>
-                                  <widget class="GtkSpinButton" id="auto_away_time_spinbutton">
-                                    <property name="width_request">50</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="adjustment">12 1 720 1 10 10</property>
-                                    <property name="climb_rate">1</property>
-                                    <signal name="value_changed" handler="on_auto_away_time_spinbutton_value_changed"/>
-                                  </widget>
-                                </child>
-                              </widget>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
@@ -964,34 +911,87 @@ Disabled</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkEntry" id="auto_away_message_entry">
+                              <widget class="GtkAlignment" id="alignment33">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">The auto away status message. If empty, Gajim will not change the current status message
-$S will be replaced by previous status message
-$T will be replaced by auto-away timeout</property>
-                                <signal name="changed" handler="on_auto_away_message_entry_changed"/>
+                                <property name="xalign">1</property>
+                                <property name="xscale">0</property>
+                                <child>
+                                  <widget class="GtkSpinButton" id="auto_away_time_spinbutton">
+                                    <property name="width_request">50</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="adjustment">12 1 720 1 10 10</property>
+                                    <property name="climb_rate">1</property>
+                                    <signal name="value_changed" handler="on_auto_away_time_spinbutton_value_changed"/>
+                                  </widget>
+                                </child>
                               </widget>
                               <packing>
-                                <property name="left_attach">3</property>
-                                <property name="right_attach">4</property>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label78">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">minutes</property>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="right_attach">3</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
                                 <property name="y_options"></property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkEntry" id="auto_xa_message_entry">
+                              <widget class="GtkLabel" id="label77">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">The auto not available status message. If empty, Gajim will not change the current status message
-$S will be replaced by previous status message
-$T will be replaced by auto-not-available timeout</property>
-                                <signal name="changed" handler="on_auto_xa_message_entry_changed"/>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">minutes</property>
                               </widget>
                               <packing>
-                                <property name="left_attach">3</property>
-                                <property name="right_attach">4</property>
+                                <property name="left_attach">2</property>
+                                <property name="right_attach">3</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkCheckButton" id="auto_xa_checkbutton">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip" translatable="yes">If checked, Gajim will change status to Not Available when the computer has not been used even longer</property>
+                                <property name="label" translatable="yes">_Not available after:</property>
+                                <property name="use_underline">True</property>
+                                <property name="response_id">0</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="on_auto_xa_checkbutton_toggled"/>
+                              </widget>
+                              <packing>
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkCheckButton" id="auto_away_checkbutton">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip" translatable="yes">If checked, Gajim will change status to Away when the computer is unused.</property>
+                                <property name="label" translatable="yes">_Away after:</property>
+                                <property name="use_underline">True</property>
+                                <property name="response_id">0</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="on_auto_away_checkbutton_toggled"/>
+                              </widget>
+                              <packing>
+                                <property name="x_options">GTK_FILL</property>
                                 <property name="y_options"></property>
                               </packing>
                             </child>
@@ -1152,6 +1152,46 @@ $T will be replaced by auto-not-available timeout</property>
                               <placeholder/>
                             </child>
                             <child>
+                              <widget class="GtkScrolledWindow" id="scrolledwindow23">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
+                                <property name="vscrollbar_policy">GTK_POLICY_NEVER</property>
+                                <property name="shadow_type">GTK_SHADOW_IN</property>
+                                <child>
+                                  <widget class="GtkTextView" id="msg_textview">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="border_width">3</property>
+                                    <property name="wrap_mode">GTK_WRAP_WORD</property>
+                                  </widget>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkScrolledWindow" id="scrolledwindow22">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                                <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                                <property name="shadow_type">GTK_SHADOW_IN</property>
+                                <child>
+                                  <widget class="GtkTreeView" id="msg_treeview">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="headers_visible">False</property>
+                                    <signal name="key_press_event" handler="on_msg_treeview_key_press_event"/>
+                                    <signal name="cursor_changed" handler="on_msg_treeview_cursor_changed"/>
+                                  </widget>
+                                </child>
+                              </widget>
+                            </child>
+                            <child>
                               <widget class="GtkVButtonBox" id="vbuttonbox3">
                                 <property name="visible">True</property>
                                 <property name="spacing">5</property>
@@ -1186,46 +1226,6 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkScrolledWindow" id="scrolledwindow22">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                                <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                                <property name="shadow_type">GTK_SHADOW_IN</property>
-                                <child>
-                                  <widget class="GtkTreeView" id="msg_treeview">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="headers_visible">False</property>
-                                    <signal name="key_press_event" handler="on_msg_treeview_key_press_event"/>
-                                    <signal name="cursor_changed" handler="on_msg_treeview_cursor_changed"/>
-                                  </widget>
-                                </child>
-                              </widget>
-                            </child>
-                            <child>
-                              <widget class="GtkScrolledWindow" id="scrolledwindow23">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
-                                <property name="vscrollbar_policy">GTK_POLICY_NEVER</property>
-                                <property name="shadow_type">GTK_SHADOW_IN</property>
-                                <child>
-                                  <widget class="GtkTextView" id="msg_textview">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="border_width">3</property>
-                                    <property name="wrap_mode">GTK_WRAP_WORD</property>
-                                  </widget>
-                                </child>
-                              </widget>
-                              <packing>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
                                 <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
@@ -1291,15 +1291,14 @@ $T will be replaced by auto-not-available timeout</property>
                               <placeholder/>
                             </child>
                             <child>
-                              <widget class="GtkFontButton" id="conversation_fontbutton">
+                              <widget class="GtkLabel" id="label4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="response_id">0</property>
-                                <signal name="font_set" handler="on_conversation_fontbutton_font_set"/>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="label" translatable="yes">Chat message:</property>
                               </widget>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
@@ -1320,14 +1319,15 @@ $T will be replaced by auto-not-available timeout</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="label4">
+                              <widget class="GtkFontButton" id="conversation_fontbutton">
                                 <property name="visible">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="label" translatable="yes">Chat message:</property>
+                                <property name="can_focus">True</property>
+                                <property name="response_id">0</property>
+                                <signal name="font_set" handler="on_conversation_fontbutton_font_set"/>
                               </widget>
                               <packing>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
                               </packing>
                             </child>
                           </widget>
@@ -1377,60 +1377,16 @@ $T will be replaced by auto-not-available timeout</property>
                               <placeholder/>
                             </child>
                             <child>
-                              <widget class="GtkCheckButton" id="transports_iconsets_checkbutton">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">If checked, Gajim will use protocol-specific status icons. (eg. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)</property>
-                                <property name="label" translatable="yes">Use _transports icons</property>
-                                <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
-                                <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_transports_iconsets_checkbutton_toggled"/>
-                              </widget>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">3</property>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkComboBox" id="iconset_combobox">
-                                <property name="visible">True</property>
-                                <signal name="changed" handler="on_iconset_combobox_changed"/>
-                              </widget>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkLabel" id="label174">
+                              <widget class="GtkLabel" id="label249">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Status _iconset:</property>
+                                <property name="label" translatable="yes">T_heme:</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">iconset_combobox</property>
+                                <property name="mnemonic_widget">theme_combobox</property>
                               </widget>
                               <packing>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkComboBox" id="theme_combobox">
-                                <property name="visible">True</property>
-                                <signal name="changed" handler="on_theme_combobox_changed"/>
-                              </widget>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
                               </packing>
                             </child>
                             <child>
@@ -1451,16 +1407,60 @@ $T will be replaced by auto-not-available timeout</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="label249">
+                              <widget class="GtkComboBox" id="theme_combobox">
                                 <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">T_heme:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">theme_combobox</property>
+                                <signal name="changed" handler="on_theme_combobox_changed"/>
                               </widget>
                               <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label174">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Status _iconset:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">iconset_combobox</property>
+                              </widget>
+                              <packing>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkComboBox" id="iconset_combobox">
+                                <property name="visible">True</property>
+                                <signal name="changed" handler="on_iconset_combobox_changed"/>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkCheckButton" id="transports_iconsets_checkbutton">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip" translatable="yes">If checked, Gajim will use protocol-specific status icons. (eg. A contact from MSN will have the equivalent msn icon for status online, away, busy, etc...)</property>
+                                <property name="label" translatable="yes">Use _transports icons</property>
+                                <property name="use_underline">True</property>
+                                <property name="response_id">0</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="on_transports_iconsets_checkbutton_toggled"/>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">3</property>
+                                <property name="top_attach">2</property>
+                                <property name="bottom_attach">3</property>
                               </packing>
                             </child>
                           </widget>
@@ -1501,135 +1501,6 @@ $T will be replaced by auto-not-available timeout</property>
                             <property name="n_columns">4</property>
                             <property name="column_spacing">12</property>
                             <property name="row_spacing">6</property>
-                            <child>
-                              <widget class="GtkLabel" id="label72">
-                                <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_Incoming message:</property>
-                                <property name="use_underline">True</property>
-                                <property name="justify">GTK_JUSTIFY_CENTER</property>
-                                <property name="wrap">True</property>
-                                <property name="mnemonic_widget">incoming_msg_colorbutton</property>
-                              </widget>
-                              <packing>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkColorButton" id="incoming_msg_colorbutton">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="has_focus">True</property>
-                                <property name="can_default">True</property>
-                                <property name="has_default">True</property>
-                                <property name="response_id">0</property>
-                                <signal name="color_set" handler="on_incoming_msg_colorbutton_color_set"/>
-                              </widget>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="x_options"></property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkLabel" id="label70">
-                                <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_Outgoing message:</property>
-                                <property name="use_underline">True</property>
-                                <property name="justify">GTK_JUSTIFY_CENTER</property>
-                                <property name="wrap">True</property>
-                                <property name="mnemonic_widget">outgoing_msg_colorbutton</property>
-                              </widget>
-                              <packing>
-                                <property name="left_attach">2</property>
-                                <property name="right_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkColorButton" id="outgoing_msg_colorbutton">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="response_id">0</property>
-                                <signal name="color_set" handler="on_outgoing_msg_colorbutton_color_set"/>
-                              </widget>
-                              <packing>
-                                <property name="left_attach">3</property>
-                                <property name="right_attach">4</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkLabel" id="label71">
-                                <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_Status message:</property>
-                                <property name="use_underline">True</property>
-                                <property name="justify">GTK_JUSTIFY_CENTER</property>
-                                <property name="wrap">True</property>
-                                <property name="mnemonic_widget">status_msg_colorbutton</property>
-                              </widget>
-                              <packing>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkColorButton" id="status_msg_colorbutton">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="response_id">0</property>
-                                <signal name="color_set" handler="on_status_msg_colorbutton_color_set"/>
-                              </widget>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options"></property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkLabel" id="label371">
-                                <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_URL highlight:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">url_msg_colorbutton</property>
-                              </widget>
-                              <packing>
-                                <property name="left_attach">2</property>
-                                <property name="right_attach">3</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkColorButton" id="url_msg_colorbutton">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="response_id">0</property>
-                                <signal name="color_set" handler="on_url_msg_colorbutton_color_set"/>
-                              </widget>
-                              <packing>
-                                <property name="left_attach">3</property>
-                                <property name="right_attach">4</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
                             <child>
                               <widget class="GtkHBox" id="hbox3022">
                                 <property name="visible">True</property>
@@ -1696,6 +1567,132 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="top_attach">2</property>
                                 <property name="bottom_attach">3</property>
                                 <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkColorButton" id="url_msg_colorbutton">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="response_id">0</property>
+                                <signal name="color_set" handler="on_url_msg_colorbutton_color_set"/>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">3</property>
+                                <property name="right_attach">4</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label371">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">_URL highlight:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">url_msg_colorbutton</property>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="right_attach">3</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkColorButton" id="status_msg_colorbutton">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="response_id">0</property>
+                                <signal name="color_set" handler="on_status_msg_colorbutton_color_set"/>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options"></property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label71">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">_Status message:</property>
+                                <property name="use_underline">True</property>
+                                <property name="justify">GTK_JUSTIFY_CENTER</property>
+                                <property name="wrap">True</property>
+                                <property name="mnemonic_widget">status_msg_colorbutton</property>
+                              </widget>
+                              <packing>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkColorButton" id="outgoing_msg_colorbutton">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="response_id">0</property>
+                                <signal name="color_set" handler="on_outgoing_msg_colorbutton_color_set"/>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">3</property>
+                                <property name="right_attach">4</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label70">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">_Outgoing message:</property>
+                                <property name="use_underline">True</property>
+                                <property name="justify">GTK_JUSTIFY_CENTER</property>
+                                <property name="wrap">True</property>
+                                <property name="mnemonic_widget">outgoing_msg_colorbutton</property>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="right_attach">3</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkColorButton" id="incoming_msg_colorbutton">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="response_id">0</property>
+                                <signal name="color_set" handler="on_incoming_msg_colorbutton_color_set"/>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="x_options"></property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label72">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">_Incoming message:</property>
+                                <property name="use_underline">True</property>
+                                <property name="justify">GTK_JUSTIFY_CENTER</property>
+                                <property name="wrap">True</property>
+                                <property name="mnemonic_widget">incoming_msg_colorbutton</property>
+                              </widget>
+                              <packing>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"></property>
                               </packing>
                             </child>
                           </widget>
@@ -1782,57 +1779,15 @@ Custom</property>
                                         <property name="column_spacing">12</property>
                                         <property name="row_spacing">6</property>
                                         <child>
-                                          <widget class="GtkEntry" id="custom_file_manager_entry">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <signal name="changed" handler="on_custom_file_manager_entry_changed"/>
-                                          </widget>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
-                                            <property name="top_attach">2</property>
-                                            <property name="bottom_attach">3</property>
-                                            <property name="y_options"></property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <widget class="GtkLabel" id="label355">
+                                          <widget class="GtkLabel" id="label199">
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">_File manager:</property>
+                                            <property name="label" translatable="yes">_Browser:</property>
                                             <property name="use_underline">True</property>
-                                            <property name="mnemonic_widget">custom_file_manager_entry</property>
+                                            <property name="mnemonic_widget">custom_browser_entry</property>
                                           </widget>
                                           <packing>
-                                            <property name="top_attach">2</property>
-                                            <property name="bottom_attach">3</property>
                                             <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options"></property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <widget class="GtkEntry" id="custom_browser_entry">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <signal name="changed" handler="on_custom_browser_entry_changed"/>
-                                          </widget>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
-                                            <property name="y_options"></property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <widget class="GtkEntry" id="custom_mail_client_entry">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <signal name="changed" handler="on_custom_mail_client_entry_changed"/>
-                                          </widget>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
                                             <property name="y_options"></property>
                                           </packing>
                                         </child>
@@ -1852,15 +1807,57 @@ Custom</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <widget class="GtkLabel" id="label199">
+                                          <widget class="GtkEntry" id="custom_mail_client_entry">
                                             <property name="visible">True</property>
-                                            <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">_Browser:</property>
-                                            <property name="use_underline">True</property>
-                                            <property name="mnemonic_widget">custom_browser_entry</property>
+                                            <property name="can_focus">True</property>
+                                            <signal name="changed" handler="on_custom_mail_client_entry_changed"/>
                                           </widget>
                                           <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">1</property>
+                                            <property name="bottom_attach">2</property>
+                                            <property name="y_options"></property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkEntry" id="custom_browser_entry">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <signal name="changed" handler="on_custom_browser_entry_changed"/>
+                                          </widget>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="y_options"></property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkLabel" id="label355">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">0</property>
+                                            <property name="label" translatable="yes">_File manager:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">custom_file_manager_entry</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="top_attach">2</property>
+                                            <property name="bottom_attach">3</property>
                                             <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options"></property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkEntry" id="custom_file_manager_entry">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <signal name="changed" handler="on_custom_file_manager_entry_changed"/>
+                                          </widget>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">2</property>
+                                            <property name="bottom_attach">3</property>
                                             <property name="y_options"></property>
                                           </packing>
                                         </child>
@@ -1924,18 +1921,19 @@ Custom</property>
                             <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
                             <child>
-                              <widget class="GtkCheckButton" id="ignore_events_from_unknown_contacts_checkbutton">
+                              <widget class="GtkCheckButton" id="log_encrypted_chats_checkbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">If checked, Gajim will ignore incoming events from unauthorized contacts. Use with caution, because it blocks all messages from any contact that is not in the roster</property>
-                                <property name="label" translatable="yes">_Ignore events from contacts not in the roster</property>
+                                <property name="tooltip" translatable="yes">If checked, Gajim will keep logs for encrypted messages. Please note that when using E2E encryption the remote party has to agree on logging, else the messages will not be logged.</property>
+                                <property name="label" translatable="yes">Log _encrypted chat session</property>
                                 <property name="use_underline">True</property>
                                 <property name="response_id">0</property>
                                 <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_ignore_events_from_unknown_contacts_checkbutton_toggled"/>
+                                <signal name="toggled" handler="on_log_encrypted_chats_checkbutton_toggled"/>
                               </widget>
                               <packing>
-                                <property name="x_options">GTK_FILL</property>
+                                <property name="top_attach">2</property>
+                                <property name="bottom_attach">3</property>
                               </packing>
                             </child>
                             <child>
@@ -1955,19 +1953,18 @@ Custom</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkCheckButton" id="log_encrypted_chats_checkbutton">
+                              <widget class="GtkCheckButton" id="ignore_events_from_unknown_contacts_checkbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes">If checked, Gajim will keep logs for encrypted messages. Please note that when using E2E encryption the remote party has to agree on logging, else the messages will not be logged.</property>
-                                <property name="label" translatable="yes">Log _encrypted chat session</property>
+                                <property name="tooltip" translatable="yes">If checked, Gajim will ignore incoming events from unauthorized contacts. Use with caution, because it blocks all messages from any contact that is not in the roster</property>
+                                <property name="label" translatable="yes">_Ignore events from contacts not in the roster</property>
                                 <property name="use_underline">True</property>
                                 <property name="response_id">0</property>
                                 <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_log_encrypted_chats_checkbutton_toggled"/>
+                                <signal name="toggled" handler="on_ignore_events_from_unknown_contacts_checkbutton_toggled"/>
                               </widget>
                               <packing>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
+                                <property name="x_options">GTK_FILL</property>
                               </packing>
                             </child>
                           </widget>
