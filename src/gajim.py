@@ -155,6 +155,27 @@ del config_path
 common.configpaths.gajimpaths.init_profile(profile)
 del profile
 
+if os.name == 'nt':
+	class MyStderr(object):
+		_file = None
+		_error = None
+		def write(self, text):
+			fname=os.path.join(common.configpaths.gajimpaths.root,
+				os.path.split(sys.executable)[1]+'.log')
+			if self._file is None and self._error is None:
+				try:
+					self._file = open(fname, 'a')
+				except Exception, details:
+					self._error = details
+			if self._file is not None:
+				self._file.write(text)
+				self._file.flush()
+		def flush(self):
+			if self._file is not None:
+				self._file.flush()
+
+	sys.stderr = MyStderr()
+
 # PyGTK2.10+ only throws a warning
 warnings.filterwarnings('error', module='gtk')
 try:
