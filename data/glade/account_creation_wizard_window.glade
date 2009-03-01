@@ -143,7 +143,6 @@ to the Jabber network.</property>
                       <widget class="GtkEntry" id="username_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="has_focus">True</property>
                         <signal name="changed" handler="on_username_entry_changed"/>
                         <signal name="key_press_event" handler="on_username_entry_key_press_event"/>
                       </widget>
