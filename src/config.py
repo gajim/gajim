@@ -2477,7 +2477,7 @@ class GroupchatConfigWindow:
 				'2. user@domain (any resource matches).\n'
 				'3. domain/resource (only that resource matches).\n'
 				'4. domain (the domain itself matches, as does any user@domain,\n'
-				'domain/resource, or address containing a subdomain.')
+				'domain/resource, or address containing a subdomain).')
 
 		def on_ok(jid):
 			if not jid:
