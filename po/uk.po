@@ -3,22 +3,21 @@
 # Copyright (C) 2008 THE Gajim - A Jabber Instant Messager'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Gajim - A Jabber Instant Messager package.
 #
+#  <prapor@unixzone.org.ua>, 2008.
 # Sergiy Yegorov <prapor@unixzone.org.ua>, 2008.
-# Yuri Chornoivan <yurchor@ukr.net>, 2008
 msgid ""
 msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-28 22:48+0100\n"
-"PO-Revision-Date: 2008-12-28 13:38+0200\n"
-"Last-Translator: Sergiy Yegorov <prapor@unixzone.org.ua>\n"
-"Language-Team: Ukrainian <kde-i18n-doc@lists.kde.org>\n"
+"POT-Creation-Date: 2009-03-01 15:00+0100\n"
+"PO-Revision-Date: 2008-12-27 16:04+0200\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <translation@linux.org.ua>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 0.2\n"
 
 #: ../data/gajim.desktop.in.in.h:1
 msgid "A GTK+ Jabber client"
@@ -2978,7 +2977,7 @@ msgstr "Шифрування GPG увімкнено"
 #: ../src/chat_control.py:1174 ../src/chat_control.py:2042
 #: ../src/common/contacts.py:113 ../src/common/helpers.py:73
 #: ../src/common/helpers.py:303 ../src/conversation_textview.py:845
-#: ../src/dialogs.py:904 ../src/gajim.py:976 ../src/gajim.py:1636
+#: ../src/dialogs.py:904 ../src/gajim.py:977 ../src/gajim.py:1637
 #: ../src/roster_window.py:915 ../src/roster_window.py:1541
 #: ../src/roster_window.py:1543 ../src/roster_window.py:1879
 #: ../src/roster_window.py:3110 ../src/roster_window.py:3134
@@ -3348,7 +3347,7 @@ msgstr ""
 #. sorted alphanum
 #: ../src/common/config.py:112 ../src/common/config.py:448
 #: ../src/common/optparser.py:215 ../src/common/optparser.py:433
-#: ../src/common/optparser.py:467 ../src/gajim.py:3121
+#: ../src/common/optparser.py:467 ../src/gajim.py:3122
 msgid "default"
 msgstr "типовий"
 
@@ -4457,7 +4456,7 @@ msgstr "Спроба встановити з'єднання з проксі-се
 msgid "Could not connect to \"%s\""
 msgstr "Не вдалося з’єднатися з «%s»"
 
-#: ../src/common/connection.py:611 ../src/gajim.py:1053
+#: ../src/common/connection.py:611 ../src/gajim.py:1054
 msgid "Check your connection or try again later."
 msgstr "Перевірте ваше з’єднання, а потім повторіть спробу."
 
@@ -4555,13 +4554,13 @@ msgid "Not fetched because of invisible status"
 msgstr "Не отримано через стан невидимості"
 
 #: ../src/common/contacts.py:92 ../src/common/helpers.py:73
-#: ../src/gajim.py:976
+#: ../src/gajim.py:977
 msgid "Observers"
 msgstr "Спостерігачі"
 
 #: ../src/common/contacts.py:96 ../src/common/contacts.py:348
 #: ../src/common/helpers.py:73 ../src/disco.py:117 ../src/disco.py:118
-#: ../src/disco.py:1350 ../src/gajim.py:806 ../src/roster_window.py:818
+#: ../src/disco.py:1350 ../src/gajim.py:807 ../src/roster_window.py:818
 #: ../src/roster_window.py:1470 ../src/roster_window.py:1537
 #: ../src/roster_window.py:1539 ../src/roster_window.py:1676
 msgid "Transports"
@@ -6111,7 +6110,7 @@ msgstr ""
 msgid "Removing %s account"
 msgstr "Вилучення облікового запису %s"
 
-#: ../src/config.py:2580 ../src/gajim.py:1425 ../src/roster_window.py:1942
+#: ../src/config.py:2580 ../src/gajim.py:1426 ../src/roster_window.py:1942
 msgid "Password Required"
 msgstr "Слід ввести пароль"
 
@@ -6202,11 +6201,11 @@ msgid "Please provide a server on which you want to register."
 msgstr ""
 "Будь ласка, вкажіть назву сервера, на якому ви бажаєте зареєструватися."
 
-#: ../src/config.py:3189 ../src/gajim.py:2003
+#: ../src/config.py:3189 ../src/gajim.py:2004
 msgid "Certificate Already in File"
 msgstr "Сертифікат вже наявний у файлі"
 
-#: ../src/config.py:3190 ../src/gajim.py:2004
+#: ../src/config.py:3190 ../src/gajim.py:2005
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr ""
@@ -6227,7 +6226,7 @@ msgstr ""
 "Помилка SSL: %(error)s\n"
 "Ви все ще бажаєте з’єднатися з цим сервером?"
 
-#: ../src/config.py:3264 ../src/gajim.py:2027
+#: ../src/config.py:3264 ../src/gajim.py:2028
 #, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -6517,7 +6516,7 @@ msgstr "Запит на підписку до облікового запису 
 msgid "Subscription request from %s"
 msgstr "Запит на підписку від %s"
 
-#: ../src/dialogs.py:1669 ../src/gajim.py:2624
+#: ../src/dialogs.py:1669 ../src/gajim.py:2625
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "Ви вже берете участь у груповій балачці %s"
@@ -6671,32 +6670,32 @@ msgstr "Створити окреме повідомлення"
 msgid "New Private Message"
 msgstr "Нове конфіденційне повідомлення"
 
-#: ../src/dialogs.py:2061 ../src/gajim.py:1590 ../src/notify.py:484
+#: ../src/dialogs.py:2061 ../src/gajim.py:1591 ../src/notify.py:484
 #: ../src/osx/growler.py:13
 msgid "New E-mail"
 msgstr "Нове повідомлення електронної пошти"
 
-#: ../src/dialogs.py:2063 ../src/gajim.py:1656 ../src/notify.py:478
+#: ../src/dialogs.py:2063 ../src/gajim.py:1657 ../src/notify.py:478
 #: ../src/osx/growler.py:14
 msgid "File Transfer Request"
 msgstr "Запит на передавання файла"
 
-#: ../src/dialogs.py:2065 ../src/gajim.py:1556 ../src/gajim.py:1623
+#: ../src/dialogs.py:2065 ../src/gajim.py:1557 ../src/gajim.py:1624
 #: ../src/notify.py:480 ../src/osx/growler.py:14
 msgid "File Transfer Error"
 msgstr "Помилка під час передавання файла"
 
-#: ../src/dialogs.py:2067 ../src/gajim.py:1698 ../src/gajim.py:1720
-#: ../src/gajim.py:1737 ../src/notify.py:482 ../src/osx/growler.py:15
+#: ../src/dialogs.py:2067 ../src/gajim.py:1699 ../src/gajim.py:1721
+#: ../src/gajim.py:1738 ../src/notify.py:482 ../src/osx/growler.py:15
 msgid "File Transfer Completed"
 msgstr "Завершення передавання файла"
 
-#: ../src/dialogs.py:2068 ../src/gajim.py:1701 ../src/notify.py:482
+#: ../src/dialogs.py:2068 ../src/gajim.py:1702 ../src/notify.py:482
 #: ../src/osx/growler.py:15
 msgid "File Transfer Stopped"
 msgstr "Зупинка передавання файла"
 
-#: ../src/dialogs.py:2070 ../src/gajim.py:1446 ../src/notify.py:486
+#: ../src/dialogs.py:2070 ../src/gajim.py:1447 ../src/notify.py:486
 #: ../src/osx/growler.py:16
 msgid "Groupchat Invitation"
 msgstr "Запрошення до групової балачки"
@@ -7632,32 +7631,32 @@ msgstr "HTTP (%(method)s) уповноваження для %(url)s (ідент�
 msgid "Connection Failed"
 msgstr "Спроба з’єднання завершилася невдало"
 
-#: ../src/gajim.py:931 ../src/gajim.py:935
+#: ../src/gajim.py:932 ../src/gajim.py:936
 #, python-format
 msgid "Error %(code)s: %(msg)s"
 msgstr "Помилка %(code)s: %(msg)s"
 
 #. ('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
-#: ../src/gajim.py:945 ../src/gajim.py:958
+#: ../src/gajim.py:946 ../src/gajim.py:959
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "помилка під час надсилання %(message)s ( %(error)s )"
 
-#: ../src/gajim.py:990
+#: ../src/gajim.py:991
 msgid "Authorization accepted"
 msgstr "Уповноваження прийнято"
 
-#: ../src/gajim.py:991
+#: ../src/gajim.py:992
 #, python-format
 msgid "The contact \"%s\" has authorized you to see his or her status."
 msgstr "Контакт «%s» уповноважив вас на перегляд свого стану."
 
-#: ../src/gajim.py:1010
+#: ../src/gajim.py:1011
 #, python-format
 msgid "Contact \"%s\" removed subscription from you"
 msgstr "Контакт «%s» вилучив вашу підписку"
 
-#: ../src/gajim.py:1011
+#: ../src/gajim.py:1012
 msgid ""
 "You will always see him or her as offline.\n"
 "Do you want to remove him or her from your contact list?"
@@ -7665,73 +7664,73 @@ msgstr ""
 "Цей контакт завжди буде показано зі станом «поза мережею».\n"
 "Бажаєте вилучити контакт з вашого списку контактів?"
 
-#: ../src/gajim.py:1052
+#: ../src/gajim.py:1053
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
 msgstr "Зв’язок з «%s» встановити не вдалося"
 
-#: ../src/gajim.py:1228 ../src/groupchat_control.py:1167
+#: ../src/gajim.py:1229 ../src/groupchat_control.py:1167
 #, python-format
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s тепер стає %(new_nick)s"
 
-#: ../src/gajim.py:1246 ../src/groupchat_control.py:1342
+#: ../src/gajim.py:1247 ../src/groupchat_control.py:1342
 #: ../src/history_window.py:419 ../src/notify.py:232
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s тепер %(status)s"
 
-#: ../src/gajim.py:1309
+#: ../src/gajim.py:1310
 #, python-format
 msgid "%(jid)s has set the subject to %(subject)s"
 msgstr "%(jid)s встановив тему %(subject)s"
 
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
 #. Can be a message (see handle_event_gc_config_change in gajim.py)
-#: ../src/gajim.py:1373 ../src/groupchat_control.py:1127
+#: ../src/gajim.py:1374 ../src/groupchat_control.py:1127
 msgid "Any occupant is allowed to see your full JID"
 msgstr "Всі учасники можуть бачити ваш JID повністю"
 
-#: ../src/gajim.py:1376
+#: ../src/gajim.py:1377
 msgid "Room now shows unavailable member"
 msgstr "Тепер у кімнаті буде показано недоступних постійних учасників"
 
-#: ../src/gajim.py:1378
+#: ../src/gajim.py:1379
 msgid "room now does not show unavailable members"
 msgstr "тепер у кімнаті не можна буде бачити недоступних постійних учасників"
 
-#: ../src/gajim.py:1381
+#: ../src/gajim.py:1382
 msgid "A non-privacy-related room configuration change has occurred"
 msgstr "Сталася зміна налаштувань кімнати, не пов’язана з конфіденційністю"
 
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
-#: ../src/gajim.py:1384
+#: ../src/gajim.py:1385
 msgid "Room logging is now enabled"
 msgstr "Тепер увімкнено запис повідомлень кімнати"
 
-#: ../src/gajim.py:1386
+#: ../src/gajim.py:1387
 msgid "Room logging is now disabled"
 msgstr "Тепер запис кімнати вимкнено"
 
-#: ../src/gajim.py:1388
+#: ../src/gajim.py:1389
 msgid "Room is now non-anonymous"
 msgstr "Тепер у кімнаті вимкнено анонімність"
 
-#: ../src/gajim.py:1391
+#: ../src/gajim.py:1392
 msgid "Room is now semi-anonymous"
 msgstr "Тепер у кімнаті увімкнено напіванонімність"
 
-#: ../src/gajim.py:1394
+#: ../src/gajim.py:1395
 msgid "Room is now fully-anonymous"
 msgstr "Тепер у кімнаті увімкнено анонімність"
 
-#: ../src/gajim.py:1426
+#: ../src/gajim.py:1427
 #, python-format
 msgid "A Password is required to join the room %s. Please type it."
 msgstr ""
 "Для приєднання до кімнати %s потрібен пароль. Будь ласка, введіть його."
 
-#: ../src/gajim.py:1460
+#: ../src/gajim.py:1461
 msgid ""
 "You configured Gajim to use GPG agent, but there is no GPG agent running or "
 "it returned a wrong passphrase.\n"
@@ -7739,20 +7738,20 @@ msgstr ""
 "Ви налаштували Gajim на використання агента GPG, але агент GPG не запущено "
 "або цей агент повернув помилковий пароль.\n"
 
-#: ../src/gajim.py:1462
+#: ../src/gajim.py:1463
 msgid "You are currently connected without your OpenPGP key."
 msgstr "Ви виконали з’єднання без вашого ключа OpenPGP."
 
-#: ../src/gajim.py:1465
+#: ../src/gajim.py:1466
 msgid "Your passphrase is incorrect"
 msgstr "Ваш пароль не є коректним"
 
-#: ../src/gajim.py:1567
+#: ../src/gajim.py:1568
 #, python-format
 msgid "New mail on %(gmail_mail_address)s"
 msgstr "Нові повідомлення у %(gmail_mail_address)s"
 
-#: ../src/gajim.py:1569
+#: ../src/gajim.py:1570
 #, python-format
 msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
@@ -7760,7 +7759,7 @@ msgstr[0] "Отримано %d новий лист"
 msgstr[1] "Отримано %d нових листи"
 msgstr[2] "Отримано %d нових листів"
 
-#: ../src/gajim.py:1582
+#: ../src/gajim.py:1583
 #, python-format
 msgid ""
 "\n"
@@ -7775,34 +7774,34 @@ msgstr ""
 "Тема: %(subject)s\n"
 "%(snippet)s"
 
-#: ../src/gajim.py:1653
+#: ../src/gajim.py:1654
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "%s бажає надіслати вам файл."
 
-#: ../src/gajim.py:1721
+#: ../src/gajim.py:1722
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
 msgstr "Ви успішно отримали %(filename)s від %(name)s."
 
 #. ft stopped
-#: ../src/gajim.py:1725
+#: ../src/gajim.py:1726
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "Передавання файлу·%(filename)s·від·%(name)s·зупинено."
 
-#: ../src/gajim.py:1738
+#: ../src/gajim.py:1739
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "Ви успішно надіслали %(filename)s до %(name)s."
 
 #. ft stopped
-#: ../src/gajim.py:1742
+#: ../src/gajim.py:1743
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "Надсилання файлу %(filename)s до %(name)s зупинено"
 
-#: ../src/gajim.py:1830
+#: ../src/gajim.py:1831
 #, python-format
 msgid ""
 "Unable to decrypt message from %s\n"
@@ -7811,38 +7810,38 @@ msgstr ""
 "Не вдалося розшифрувати повідомлення від %s\n"
 "Можливо, хтось втрутився у ваше з’єднання."
 
-#: ../src/gajim.py:1837
+#: ../src/gajim.py:1838
 msgid "Unable to decrypt message"
 msgstr "Не вдалося розшифрувати повідомлення"
 
-#: ../src/gajim.py:1908
+#: ../src/gajim.py:1909
 msgid "Username Conflict"
 msgstr "Конфлікт імен користувачів"
 
-#: ../src/gajim.py:1909
+#: ../src/gajim.py:1910
 msgid "Please type a new username for your local account"
 msgstr ""
 "Будь ласка, введіть нове ім'я користувача для вашого локального облікового "
 "запису"
 
-#: ../src/gajim.py:1921
+#: ../src/gajim.py:1922
 msgid "Ping?"
 msgstr "Гу?"
 
-#: ../src/gajim.py:1934
+#: ../src/gajim.py:1935
 #, python-format
 msgid "Pong! (%s s.)"
 msgstr "Га! (%s s.)"
 
-#: ../src/gajim.py:1945
+#: ../src/gajim.py:1946
 msgid "Error."
 msgstr "Помилка."
 
-#: ../src/gajim.py:1970
+#: ../src/gajim.py:1971
 msgid "Resource Conflict"
 msgstr "Конфлікт ресурсів"
 
-#: ../src/gajim.py:1971
+#: ../src/gajim.py:1972
 msgid ""
 "You are already connected to this account with the same resource. Please "
 "type a new one"
@@ -7850,11 +7849,11 @@ msgstr ""
 "Ваш клієнт вже з’єднано з цим обліковим записом і тим самим ресурсом. Будь "
 "ласка, вкажіть інший ресурс"
 
-#: ../src/gajim.py:2024
+#: ../src/gajim.py:2025
 msgid "Error verifying SSL certificate"
 msgstr "Помилка під час перевірки сертифіката SSL"
 
-#: ../src/gajim.py:2025
+#: ../src/gajim.py:2026
 #, python-format
 msgid ""
 "There was an error verifying the SSL certificate of your jabber server: %"
@@ -7865,15 +7864,15 @@ msgstr ""
 "помилка: %(error)s\n"
 "Ви все ще маєте намір з’єднатися з сервером?"
 
-#: ../src/gajim.py:2030
+#: ../src/gajim.py:2031
 msgid "Ignore this error for this certificate."
 msgstr "Ігнорувати цю помилку для цього сертифіката."
 
-#: ../src/gajim.py:2045
+#: ../src/gajim.py:2046
 msgid "SSL certificate error"
 msgstr "Помилка сертифіката SSL"
 
-#: ../src/gajim.py:2046
+#: ../src/gajim.py:2047
 #, python-format
 msgid ""
 "It seems the SSL certificate has changed or your connection is being "
@@ -7889,11 +7888,11 @@ msgstr ""
 "\n"
 "Ви все ще маєте намір з’єднатися і оновити відбиток сертифіката?"
 
-#: ../src/gajim.py:2068 ../src/gajim.py:2098
+#: ../src/gajim.py:2069 ../src/gajim.py:2099
 msgid "Insecure connection"
 msgstr "Небезпечне з’єднання"
 
-#: ../src/gajim.py:2069
+#: ../src/gajim.py:2070
 msgid ""
 "You are about to send your password on an unencrypted connection. Are you "
 "sure you want to do that?"
@@ -7901,16 +7900,16 @@ msgstr ""
 "Ви маєте намір надіслати ваш пароль нешифрованим з’єднанням. Виконати "
 "надсилання пароля?"
 
-#: ../src/gajim.py:2071 ../src/gajim.py:2101
+#: ../src/gajim.py:2072 ../src/gajim.py:2102
 msgid "Yes, I really want to connect insecurely"
 msgstr "Так, я справді бажаю знехтувати безпекою"
 
-#: ../src/gajim.py:2072 ../src/gajim.py:2102 ../src/groupchat_control.py:1846
+#: ../src/gajim.py:2073 ../src/gajim.py:2103 ../src/groupchat_control.py:1846
 #: ../src/roster_window.py:3789
 msgid "Do _not ask me again"
 msgstr "Більше _не питати мене"
 
-#: ../src/gajim.py:2099
+#: ../src/gajim.py:2100
 msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
@@ -7919,27 +7918,27 @@ msgstr ""
 "безпеку з’єднання, вам слід встановити PyOpenSSL. Виконати надсилання пароля "
 "зараз?"
 
-#: ../src/gajim.py:2116
+#: ../src/gajim.py:2117
 msgid "PEP node was not removed"
 msgstr "Вузол повідомлення про стан було вилучено"
 
-#: ../src/gajim.py:2117
+#: ../src/gajim.py:2118
 #, python-format
 msgid "PEP node %(node)s was not removed: %(message)s"
 msgstr "Вузол повідомлення про стан %(node)s було вилучено: %(message)s"
 
 #. theme doesn't exist, disable emoticons
-#: ../src/gajim.py:2582 ../src/gajim.py:2603
+#: ../src/gajim.py:2583 ../src/gajim.py:2604
 msgid "Emoticons disabled"
 msgstr "Емоційки вимкнено"
 
-#: ../src/gajim.py:2583
+#: ../src/gajim.py:2584
 msgid ""
 "Your configured emoticons theme has not been found, so emoticons have been "
 "disabled."
 msgstr "Вказаної вами теми емоційок не було знайдено, емоційки буде вимкнено."
 
-#: ../src/gajim.py:2604
+#: ../src/gajim.py:2605
 msgid ""
 "Your configured emoticons theme cannot been loaded. You maybe need to update "
 "the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons "
@@ -7949,30 +7948,30 @@ msgstr ""
 "формат файла emoticons.py. Докладніше про новий формат можна дізнатися за "
 "адресою http://trac.gajim.org/wiki/Emoticons."
 
-#: ../src/gajim.py:2630 ../src/roster_window.py:3323
+#: ../src/gajim.py:2631 ../src/roster_window.py:3323
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Ви не можете приєднуватися до групової балачки зі станом «невидимий»"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gajim.py:2910
+#: ../src/gajim.py:2911
 msgid "Could not save your settings and preferences"
 msgstr "Не вдалося зберегти ваші налаштування і параметри"
 
-#: ../src/gajim.py:3007
+#: ../src/gajim.py:3008
 msgid "Bookmark already set"
 msgstr "Закладку вже встановлено"
 
-#: ../src/gajim.py:3008
+#: ../src/gajim.py:3009
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "Закладка на груповій балачці «%s» вже існує."
 
-#: ../src/gajim.py:3021
+#: ../src/gajim.py:3022
 msgid "Bookmark has been added successfully"
 msgstr "Закладку було успішно додано"
 
-#: ../src/gajim.py:3022
+#: ../src/gajim.py:3023
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
 "Керувати вашими закладками можна за допомогою меню дій у вашому реєстрі."
@@ -8915,7 +8914,7 @@ msgstr "%(nick)s змінив стан"
 #: ../src/notify.py:240
 #, python-format
 msgid "%(nickname)s Signed In"
-msgstr "%(nickname)s в мережі"
+msgstr "%(nickname)s увійшов до мережі"
 
 #: ../src/notify.py:248
 #, python-format
