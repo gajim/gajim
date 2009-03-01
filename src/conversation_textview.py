@@ -635,6 +635,10 @@ class ConversationTextview:
 			# Check if we should hide the line tooltip
 			if not over_line:
 				self.line_tooltip.hide_tooltip()
+		if self.xep0184_warning_tooltip.timeout != 0:
+			# Check if we should hide the XEP-184 warning tooltip
+			if not xep0184_warning:
+				self.xep0184_warning_tooltip.hide_tooltip()
 		if over_line and not self.line_tooltip.win:
 			self.line_tooltip.timeout = gobject.timeout_add(500,
 				self.show_line_tooltip)
