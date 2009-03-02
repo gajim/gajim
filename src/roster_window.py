@@ -2064,15 +2064,20 @@ class RosterWindow:
 		if sys.platform == 'darwin':
 			self.make_menu(force=True)
 
-	def get_status_message(self, show, on_response):
+	def get_status_message(self, show, on_response, always_ask=False):
+		''' get the status message by:
+		1/ looking in default status message
+		2/ asking to user if needed depending on ask_on(ff)line_status and
+			always_ask
+		'''
 		if show in gajim.config.get_per('defaultstatusmsg'):
 			if gajim.config.get_per('defaultstatusmsg', show, 'enabled'):
 				on_response(gajim.config.get_per('defaultstatusmsg', show,
 					'message'))
 				return
-		if (show == 'online' and not gajim.config.get('ask_online_status')) or \
-		(show in ('offline', 'invisible')
-		and not gajim.config.get('ask_offline_status')):
+		if not always_ask and ((show == 'online' and not gajim.config.get(
+		'ask_online_status')) or (show in ('offline', 'invisible') and not \
+		gajim.config.get('ask_offline_status'))):
 			on_response('')
 			return
 
@@ -3166,7 +3171,7 @@ class RosterWindow:
 					jid += '/' + contact.resource
 				self.send_status(account, show, message, to=jid)
 
-		self.get_status_message(show, on_response)
+		self.get_status_message(show, on_response, always_ask=True)
 
 	def on_status_combobox_changed(self, widget):
 		'''When we change our status via the combobox'''
