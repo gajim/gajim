@@ -3369,12 +3369,6 @@ class AccountCreationWizardWindow:
 		if go_online:
 			gajim.interface.roster.send_status(self.account, 'online', '')
 
-	def on_username_entry_changed(self, widget):
-		self.update_jid(widget)
-
-	def on_server_comboboxentry_changed(self, widget):
-		self.update_jid(widget)
-
 	def on_username_entry_key_press_event(self, widget, event):
 		# Check for pressed @ and jump to combobox if found
 		if event.keyval == gtk.keysyms.at:
@@ -3392,18 +3386,6 @@ class AccountCreationWizardWindow:
 			username_entry.grab_focus()
 			username_entry.set_position(-1)
 			return True
-
-	def update_jid(self,widget):
-		username_entry = self.xml.get_widget('username_entry')
-		name = username_entry.get_text().decode('utf-8')
-		combobox = self.xml.get_widget('server_comboboxentry')
-		server = combobox.get_active_text()
-		jid_label = self.xml.get_widget('jid_label')
-		if len(name) == 0 or len(server) == 0:
-			jid_label.set_label('')
-		else:
-			string = '<b>%s@%s</b>' % (name, server)
-			jid_label.set_label(string)
 
 	def get_config(self, login, server, savepass, password):
 		config = {}
