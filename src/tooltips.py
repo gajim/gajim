@@ -427,8 +427,8 @@ class RosterTooltip(NotificationAreaTooltip):
 		name_markup = u'<span weight="bold">' + \
 			gobject.markup_escape_text(prim_contact.get_shown_name())\
 			+ '</span>'
-		if self.account and prim_contact.jid in gajim.connections[
-		self.account].blocked_contacts:
+		if self.account and helpers.jid_is_blocked(self.account,
+		prim_contact.jid):
 			name_markup += _(' [blocked]')
 		if self.account and \
 		self.account in gajim.interface.minimized_controls and \

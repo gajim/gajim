@@ -1059,8 +1059,8 @@ class GroupchatControl(ChatControlBase):
 				color = gtkgui_helpers._get_fade_color(self.list_treeview,
 					selected, focus)
 				colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
-				name += '\n' '<span size="small" style="italic" foreground="%s">%s</span>'\
-					% (colorstring, gobject.markup_escape_text(status))
+				name += ('\n<span size="small" style="italic" foreground="%s">'
+					'%s</span>') % (colorstring, gobject.markup_escape_text(status))
 
 		model[iter][C_IMG] = image
 		model[iter][C_TEXT] = name
@@ -1774,7 +1774,8 @@ class GroupchatControl(ChatControlBase):
 	def shutdown(self, status='offline'):
 		# destroy banner tooltip - bug #pygtk for that!
 		self.subject_tooltip.destroy()
-		if gajim.gc_connected[self.account][self.room_jid]:
+		if self.room_jid in gajim.gc_connected[self.account] and \
+		gajim.gc_connected[self.account][self.room_jid]:
 			# Tell connection to note the date we disconnect to avoid duplicate 
 			# logs. We do it only when connected because if connection was lost
 			# there may be new messages since disconnection.

@@ -56,7 +56,7 @@ def Field(typ, **attrs):
 	''' Helper function to create a field of given type. '''
 	f = {
 		'boolean': BooleanField,
-		'fixed': TextMultiField, # not editable, still can have multiple lines of text
+		'fixed': StringField,
 		'hidden': StringField,
 		'text-private': StringField,
 		'text-single': StringField,
@@ -76,7 +76,7 @@ def ExtendField(node):
 	typ=node.getAttr('type')
 	f = {
 		'boolean': BooleanField,
-		'fixed': TextMultiField,
+		'fixed': StringField,
 		'hidden': StringField,
 		'text-private': StringField,
 		'text-single': StringField,

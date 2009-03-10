@@ -161,9 +161,6 @@ class EditGroupsDialog:
 						continue
 					groups[g] = 0
 			c_groups = contact.groups
-			# FIXME: Move to backend
-			if not c_groups:
-				c_groups = [_('General')]
 			for g in c_groups:
 				groups[g] += 1
 		group_list = []
@@ -1648,6 +1645,9 @@ class SubscriptionRequestWindow:
 	def on_deny_button_clicked(self, widget):
 		'''refuse the request'''
 		gajim.connections[self.account].refuse_authorization(self.jid)
+		contact = gajim.contacts.get_contact(self.account, self.jid)
+		if contact and _('Not in Roster') in contact.get_shown_groups():
+			gajim.interface.roster.remove_contact(self.jid, self.account)
 		self.window.destroy()
 
 	def on_actions_button_clicked(self, widget):
@@ -2199,12 +2199,11 @@ class SingleMessageWindow:
 
 		if gajim.config.get('use_speller') and HAS_GTK_SPELL and action == 'send':
 			try:
-				spell1 = gtkspell.Spell(self.conversation_textview.tv)
-				spell2 = gtkspell.Spell(self.message_textview)
 				lang = gajim.config.get('speller_language')
-				if lang:
-					spell1.set_language(lang)
-					spell2.set_language(lang)
+				if not lang:
+					lang = gajim.LANG
+				gtkspell.Spell(self.conversation_textview.tv, lang)
+				gtkspell.Spell(self.message_textview, lang)
 			except gobject.GError, msg:
 				AspellDictError(lang)
 

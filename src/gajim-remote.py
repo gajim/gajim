@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 ## src/gajim-remote.py
 ##
@@ -29,6 +28,7 @@
 
 import sys
 import locale
+import urllib
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
@@ -52,6 +52,8 @@ try:
 	import dbus
 	import dbus.service
 	import dbus.glib
+	# test if dbus-x11 is installed
+	bus = dbus.SessionBus()
 except Exception:
 	print str(exceptions.DbusNotSupported())
 	sys.exit(1)
@@ -521,6 +523,10 @@ class GajimRemote:
 			self.command = sys.argv[1] = 'open_chat'
 			return
 		(jid, action) = uri.split('?', 1)
+		try:
+			jid = urllib.unquote(jid)
+		except UnicodeDecodeError:
+			pass
 		sys.argv[2] = jid
 		if action == 'join':
 			self.command = sys.argv[1] = 'join_room'

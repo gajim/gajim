@@ -184,8 +184,9 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		if not msgtxt: # empty message text
 			return
 
-		if gajim.config.get('ignore_unknown_contacts') and \
-		not gajim.contacts.get_contacts(self.conn.name, jid) and not pm:
+		if gajim.config.get_per('accounts', self.conn.name,
+		'ignore_unknown_contacts') and not gajim.contacts.get_contacts(
+		self.conn.name, jid) and not pm:
 			return
 
 		if not contact:
@@ -295,12 +296,17 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 				self.conn.name, jid, user_nick)
 
 		if not self.control:
-			# if no control exists and message comes from highest prio, the new
-			# control shouldn't have a resource
-			if highest_contact and contact.resource == highest_contact.resource \
-			and not jid == gajim.get_jid_from_account(self.conn.name):
-				fjid = jid
-				resource_for_chat = None
+			ctrl = gajim.interface.msg_win_mgr.get_control(fjid, self.conn.name)
+			if ctrl:
+				self.control = ctrl
+				self.control.set_session(self)
+			else:
+				# if no control exists and message comes from highest prio, the new
+				# control shouldn't have a resource
+				if highest_contact and contact.resource == highest_contact.resource\
+				and not jid == gajim.get_jid_from_account(self.conn.name):
+					fjid = jid
+					resource_for_chat = None
 
 		# Do we have a queue?
 		no_queue = len(gajim.events.get_events(self.conn.name, fjid)) == 0
@@ -318,7 +324,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			typ = ''
 
 			if msg_type == 'error':
-				typ = 'status'
+				typ = 'error'
 
 			self.control.print_conversation(msg, typ, tim=tim, encrypted=encrypted,
 				subject=subject, xhtml=xhtml)

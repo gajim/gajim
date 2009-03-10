@@ -466,7 +466,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			errtxt = "Connection closed unexpectedly"
 
 		if errnum in (ERR_DISCONN, errno.ECONNRESET, errno.ENOTCONN, errno.ESHUTDOWN):
-			log.error("Connection to %s lost: %s [%d]", self.getName(), errtxt, errnum)
+			log.info("Connection to %s lost: %s [%d]", self.getName(), errtxt, errnum)
 			self.printed_error = True
 			if not errors_only:
 				self.pollend(retry=(errnum in (ERR_DISCONN, errno.ECONNRESET)))
@@ -481,7 +481,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 				return
 			elif errnum != 0:
 				self.DEBUG(errtxt, 'error')
-				log.error("Connection to %s lost: %s [%d]", self.getName(), errtxt, errnum)
+				log.info("Connection to %s lost: %s [%d]", self.getName(), errtxt, errnum)
 				self._owner.disconnected()
 				self.printed_error = True
 				if not errors_only and self.state >= 0:

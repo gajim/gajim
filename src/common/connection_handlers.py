@@ -55,8 +55,9 @@ if dbus_support.supported:
 	import dbus
 	from music_track_listener import MusicTrackListener
 
-STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-	'invisible', 'error']
+import logging
+log = logging.getLogger('gajim.c.connection_handlers')
+
 # kind of events we can wait for an answer
 VCARD_PUBLISHED = 'vcard_published'
 VCARD_ARRIVED = 'vcard_arrived'
@@ -631,15 +632,25 @@ class ConnectionDisco:
 	def request_register_agent_info(self, agent):
 		if not self.connection or self.connected < 2:
 			return None
-		iq=common.xmpp.Iq('get', common.xmpp.NS_REGISTER, to=agent)
+		iq = common.xmpp.Iq('get', common.xmpp.NS_REGISTER, to=agent)
 		id = self.connection.getAnID()
 		iq.setID(id)
 		# Wait the answer during 30 secondes
 		self.awaiting_timeouts[gajim.idlequeue.current_time() + 30] = (id,
-			_('Registration information for transport %s has not arrived in time') % \
-			agent)
+			_('Registration information for transport %s has not arrived in time')\
+			% agent)
 		self.connection.SendAndCallForResponse(iq, self._ReceivedRegInfo,
 			{'agent': agent})
+
+	def _agent_registered_cb(self, con, resp, agent):
+		if resp.getType() == 'result':
+			self.dispatch('INFORMATION', (_('Registration succeeded'),
+				_('Resgitration with agent %s succeeded') % agent))
+		if resp.getType() == 'error':
+			self.dispatch('ERROR', (_('Registration failed'), _('Resgitration with'
+				' agent %(agent)s failed with error %(error)s: %(error_msg)s') % {
+				'agent': agent, 'error': resp.getError(),
+				'error_msg': resp.getErrorMsg()}))
 
 	def register_agent(self, agent, info, is_form = False):
 		if not self.connection or self.connected < 2:
@@ -649,7 +660,8 @@ class ConnectionDisco:
 			query = iq.getTag('query')
 			info.setAttr('type', 'submit')
 			query.addChild(node = info)
-			self.connection.send(iq)
+			self.connection.SendAndCallForResponse(iq, self._agent_registered_cb,
+				{'agent': agent})
 		else:
 			# fixed: blocking
 			common.xmpp.features_nb.register(self.connection, agent, info, None)
@@ -725,9 +737,9 @@ class ConnectionDisco:
 		hostname = gajim.config.get_per('accounts', self.name,
 													'hostname')
 		id = iq_obj.getID()
-		if jid == hostname and id[0] == 'p':
+		if jid == hostname and id[0] == 'Gajim_':
 			for item in items:
-				self.discoverInfo(item['jid'], id_prefix='p')
+				self.discoverInfo(item['jid'], id_prefix='Gajim_')
 		else:
 			self.dispatch('AGENT_INFO_ITEMS', (jid, node, items))
 
@@ -759,7 +771,7 @@ class ConnectionDisco:
 			raise common.xmpp.NodeProcessed
 
 		id = unicode(iq_obj.getAttr('id'))
-		if id[0] == 'p':
+		if id[0] == 'Gajim_':
 			# We get this request from echo.server
 			raise common.xmpp.NodeProcessed
 
@@ -829,7 +841,7 @@ class ConnectionDisco:
 		if not identities: # ejabberd doesn't send identities when we browse online users
 		#FIXME: see http://www.jabber.ru/bugzilla/show_bug.cgi?id=225
 			identities = [{'category': 'server', 'type': 'im', 'name': node}]
-		if id[0] == 'p':
+		if id[0] == 'Gajim_':
 			if jid == gajim.config.get_per('accounts', self.name, 'hostname'):
 				if features.__contains__(common.xmpp.NS_GMAILNOTIFY):
 					gajim.gmail_domains.append(jid)
@@ -1056,12 +1068,12 @@ class ConnectionVcard:
 				self.save_vcard_to_hd(our_jid, vcard_iq)
 
 				# Send new presence if sha changed and we are not invisible
-				if self.vcard_sha != new_sha and STATUS_LIST[self.connected] != \
+				if self.vcard_sha != new_sha and gajim.SHOW_LIST[self.connected] !=\
 				'invisible':
 					if not self.connection or self.connected < 2:
 						return
 					self.vcard_sha = new_sha
-					sshow = helpers.get_xmpp_show(STATUS_LIST[self.connected])
+					sshow = helpers.get_xmpp_show(gajim.SHOW_LIST[self.connected])
 					p = common.xmpp.Presence(typ = None, priority = self.priority,
 						show = sshow, status = self.status)
 					p = self.add_sha(p)
@@ -1228,11 +1240,11 @@ class ConnectionVcard:
 			if self.vcard_sha == avatar_sha:
 				return
 			self.vcard_sha = avatar_sha
-			if STATUS_LIST[self.connected] == 'invisible':
+			if gajim.SHOW_LIST[self.connected] == 'invisible':
 				return
 			if not self.connection:
 				return
-			sshow = helpers.get_xmpp_show(STATUS_LIST[self.connected])
+			sshow = helpers.get_xmpp_show(gajim.SHOW_LIST[self.connected])
 			p = common.xmpp.Presence(typ = None, priority = self.priority,
 				show = sshow, status = self.status)
 			p = self.add_sha(p)
@@ -1501,6 +1513,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			for group in item.getTags('group'):
 				groups.append(group.getData())
 			self.dispatch('ROSTER_INFO', (jid, name, sub, ask, groups))
+		if not self.connection or self.connected < 2:
+			raise common.xmpp.NodeProcessed
+		server = gajim.config.get_per('accounts', self.name, 'hostname')
+		reply = common.xmpp.Iq(typ='result', attrs={'id': iq_obj.getID()},
+			to=server, frm=iq_obj.getTo(), xmlns=None)
+		self.connection.send(reply)
 		raise common.xmpp.NodeProcessed
 	
 	def _VersionCB(self, con, iq_obj):
@@ -1511,7 +1529,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		qp = iq_obj.getTag('query')
 		qp.setTagData('name', 'Gajim')
 		qp.setTagData('version', gajim.version)
-		send_os = gajim.config.get('send_os_info')
+		send_os = gajim.config.get_per('accounts', self.name, 'send_os_info')
 		if send_os:
 			qp.setTagData('os', helpers.get_os_info())
 		self.connection.send(iq_obj)
@@ -1594,7 +1612,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		qp = iq_obj.setTag('time',
 			namespace=common.xmpp.NS_TIME_REVISED)
 		qp.setTagData('utc', strftime('%Y-%m-%dT%H:%M:%SZ', gmtime()))
-		zone = -(timezone, altzone)[daylight] / 60
+		isdst = localtime().tm_isdst
+		zone = -(timezone, altzone)[isdst] / 60
 		tzo = (zone / 60, abs(zone % 60))
 		qp.setTagData('tzo', '%+03d:%02d' % (tzo))
 		self.connection.send(iq_obj)
@@ -1812,7 +1831,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if keyID:
 				decmsg = self.gpg.decrypt(encmsg, keyID)
 				# \x00 chars are not allowed in C (so in GTK)
-				msgtxt = decmsg.replace('\x00', '')
+				msgtxt = helpers.decode_string(decmsg.replace('\x00', ''))
 				encrypted = 'xep27'
 		if mtype == 'error':
 			self.dispatch_error_message(msg, msgtxt, session, frm, tim)
@@ -2292,13 +2311,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		raise common.xmpp.NodeProcessed
 
 	def _getRosterCB(self, con, iq_obj):
+		log.debug('getRosterCB')
 		if not self.connection:
 			return
 		self.connection.getRoster(self._on_roster_set)
 		self.discoverItems(gajim.config.get_per('accounts', self.name, 
-			'hostname'), id_prefix='p')
+			'hostname'), id_prefix='Gajim_')
 		self.discoverInfo(gajim.config.get_per('accounts', self.name, 
-			'hostname'), id_prefix='p')
+			'hostname'), id_prefix='Gajim_')
 		if gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):
 			self.discover_ft_proxies()
 	
@@ -2365,7 +2385,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					_('You will be connected to %s without OpenPGP.') % self.name))
 				self.USE_GPG = False
 				signed = ''
-		self.connected = STATUS_LIST.index(show)
+		self.connected = gajim.SHOW_LIST.index(show)
 		sshow = helpers.get_xmpp_show(show)
 		# send our presence
 		if show == 'invisible':

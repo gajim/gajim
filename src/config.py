@@ -486,20 +486,32 @@ class PreferencesWindow:
 		self.xml.get_widget('log_show_changes_checkbutton').set_active(st)
 
 		# log encrypted chat sessions
-		st = gajim.config.get('log_encrypted_sessions')
-		self.xml.get_widget('log_encrypted_chats_checkbutton').set_active(st)
+		w = self.xml.get_widget('log_encrypted_chats_checkbutton')
+		st = self.get_per_account_option('log_encrypted_sessions')
+		if st == 'mixed':
+			w.set_inconsistent(True)
+		else:
+			w.set_active(st)
 
 		# send os info
-		st = gajim.config.get('send_os_info')
-		self.xml.get_widget('send_os_info_checkbutton').set_active(st)
+		w = self.xml.get_widget('send_os_info_checkbutton')
+		st = self.get_per_account_option('send_os_info')
+		if st == 'mixed':
+			w.set_inconsistent(True)
+		else:
+			w.set_active(st)
 
 		# check if gajm is default
 		st = gajim.config.get('check_if_gajim_is_default')
 		self.xml.get_widget('check_default_client_checkbutton').set_active(st)
 
 		# Ignore messages from unknown contacts
-		self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton').\
-			set_active(gajim.config.get('ignore_unknown_contacts'))
+		w = self.xml.get_widget('ignore_events_from_unknown_contacts_checkbutton')
+		st = self.get_per_account_option('ignore_unknown_contacts')
+		if st == 'mixed':
+			w.set_inconsistent(True)
+		else:
+			w.set_active(st)
 
 		self.xml.signal_autoconnect(self)
 
@@ -523,9 +535,31 @@ class PreferencesWindow:
 		if event.keyval == gtk.keysyms.Escape:
 			self.window.hide()
 
+	def get_per_account_option(self, opt):
+		'''Return the value of the option opt if it's the same in all accoutns
+		else returns "mixed"'''
+		val = None
+		for account in gajim.connections:
+			v = gajim.config.get_per('accounts', account, opt)
+			if val is None:
+				val = v
+			elif val != v:
+				return 'mixed'
+		return val
+
 	def on_checkbutton_toggled(self, widget, config_name,
-		change_sensitivity_widgets = None):
+	change_sensitivity_widgets=None):
 		gajim.config.set(config_name, widget.get_active())
+		if change_sensitivity_widgets:
+			for w in change_sensitivity_widgets:
+				w.set_sensitive(widget.get_active())
+		gajim.interface.save_config()
+
+	def on_per_account_checkbutton_toggled(self, widget, config_name,
+	change_sensitivity_widgets=None):
+		for account in gajim.connections:
+			gajim.config.set_per('accounts', account, config_name,
+				widget.get_active())
 		if change_sensitivity_widgets:
 			for w in change_sensitivity_widgets:
 				w.set_sensitive(widget.get_active())
@@ -621,7 +655,7 @@ class PreferencesWindow:
 						spell_obj = None
 
 					if not spell_obj:
-						gtkspell.Spell(ctrl.msg_textview)
+						ctrl.set_speller()
 
 	def remove_speller(self):
 		for acct in gajim.connections:
@@ -727,7 +761,8 @@ class PreferencesWindow:
 			gajim.config.set('displayed_chat_state_notifications', 'disabled')
 
 	def on_ignore_events_from_unknown_contacts_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'ignore_unknown_contacts')
+		widget.set_inconsistent(False)
+		self.on_per_account_checkbutton_toggled(widget, 'ignore_unknown_contacts')
 
 	def on_on_event_combobox_changed(self, widget):
 		active = widget.get_active()
@@ -968,10 +1003,12 @@ class PreferencesWindow:
 		self.on_checkbutton_toggled(widget, 'log_contact_status_changes')
 	
 	def on_log_encrypted_chats_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'log_encrypted_sessions')
+		widget.set_inconsistent(False)
+		self.on_per_account_checkbutton_toggled(widget, 'log_encrypted_sessions')
 
 	def on_send_os_info_checkbutton_toggled(self, widget):
-		self.on_checkbutton_toggled(widget, 'send_os_info')
+		widget.set_inconsistent(False)
+		self.on_per_account_checkbutton_toggled(widget, 'send_os_info')
 
 	def on_check_default_client_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'check_if_gajim_is_default')
@@ -1615,10 +1652,12 @@ class AccountsWindow:
 		custom_host = gajim.config.get_per('accounts', account, 'custom_host')
 		if not custom_host:
 			custom_host = gajim.config.get_per('accounts', account, 'hostname')
+			gajim.config.set_per('accounts', account, 'custom_host', custom_host)
 		self.xml.get_widget('custom_host_entry1').set_text(custom_host)
 		custom_port = gajim.config.get_per('accounts', account, 'custom_port')
 		if not custom_port:
 			custom_port = 5222
+			gajim.config.set_per('accounts', account, 'custom_port', custom_port)
 		self.xml.get_widget('custom_port_entry1').set_text(unicode(custom_port))
 
 		# Personal tab
@@ -1756,7 +1795,8 @@ class AccountsWindow:
 				# change account variable for chat / gc controls
 				gajim.interface.msg_win_mgr.change_account_name(old_name, new_name)
 				# upgrade account variable in opened windows
-				for kind in ('infos', 'disco', 'gc_config', 'search'):
+				for kind in ('infos', 'disco', 'gc_config', 'search',
+				'online_dialog'):
 					for j in gajim.interface.instances[new_name][kind]:
 						gajim.interface.instances[new_name][kind][j].account = \
 							new_name
@@ -2177,7 +2217,7 @@ class AccountsWindow:
 			self.init_account_gpg()
 			# update variables
 			gajim.interface.instances[gajim.ZEROCONF_ACC_NAME] = {'infos': {},
-				'disco': {}, 'gc_config': {}, 'search': {}}
+				'disco': {}, 'gc_config': {}, 'search': {}, 'online_dialog': {}}
 			gajim.interface.minimized_controls[gajim.ZEROCONF_ACC_NAME] = {}
 			gajim.connections[gajim.ZEROCONF_ACC_NAME].connected = 0
 			gajim.groups[gajim.ZEROCONF_ACC_NAME] = {}
@@ -2406,6 +2446,8 @@ class GroupchatConfigWindow:
 			renderer = gtk.CellRendererText()
 			col = gtk.TreeViewColumn(_('JID'), renderer)
 			col.add_attribute(renderer, 'text', 0)
+			col.set_resizable(True)
+			col.set_sort_column_id(0)
 			self.affiliation_treeview[affiliation].append_column(col)
 
 			if affiliation == 'outcast':
@@ -2414,15 +2456,21 @@ class GroupchatConfigWindow:
 				renderer.connect('edited', self.on_cell_edited)
 				col = gtk.TreeViewColumn(_('Reason'), renderer)
 				col.add_attribute(renderer, 'text', 1)
+				col.set_resizable(True)
+				col.set_sort_column_id(1)
 				self.affiliation_treeview[affiliation].append_column(col)
 			elif affiliation == 'member':
 				renderer = gtk.CellRendererText()
 				col = gtk.TreeViewColumn(_('Nick'), renderer)
 				col.add_attribute(renderer, 'text', 2)
+				col.set_resizable(True)
+				col.set_sort_column_id(2)
 				self.affiliation_treeview[affiliation].append_column(col)
 				renderer = gtk.CellRendererText()
 				col = gtk.TreeViewColumn(_('Role'), renderer)
 				col.add_attribute(renderer, 'text', 3)
+				col.set_resizable(True)
+				col.set_sort_column_id(3)
 				self.affiliation_treeview[affiliation].append_column(col)
 
 			sw = gtk.ScrolledWindow()
@@ -3018,6 +3066,8 @@ class AccountCreationWizardWindow:
 			# connection instance is saved in gajim.connections and we canceled the
 			# addition of the account
 			del gajim.connections[self.account]
+			if self.account in gajim.config.get_per('accounts'):
+				gajim.config.del_per('accounts', self.account)
 		del gajim.interface.instances['account_creation_wizard']
 
 	def on_register_server_features_button_clicked(self, widget):
@@ -3277,6 +3327,8 @@ class AccountCreationWizardWindow:
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 		del gajim.connections[self.account]
+		if self.account in gajim.config.get_per('accounts'):
+			gajim.config.del_per('accounts', self.account)
 		self.back_button.show()
 		self.cancel_button.show()
 		self.go_online_checkbutton.hide()
@@ -3321,6 +3373,8 @@ class AccountCreationWizardWindow:
 		self.go_online_checkbutton.hide()
 		self.show_vcard_checkbutton.hide()
 		del gajim.connections[self.account]
+		if self.account in gajim.config.get_per('accounts'):
+			gajim.config.del_per('accounts', self.account)
 		img = self.xml.get_widget('finish_image')
 		img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
 		finish_text = '<big><b>%s</b></big>\n\n%s' % (_('An error occurred during '
@@ -3432,7 +3486,7 @@ class AccountCreationWizardWindow:
 
 		# update variables
 		gajim.interface.instances[self.account] = {'infos': {}, 'disco': {},
-			'gc_config': {}, 'search': {}}
+			'gc_config': {}, 'search': {}, 'online_dialog': {}}
 		gajim.interface.minimized_controls[self.account] = {}
 		gajim.connections[self.account].connected = 0
 		gajim.connections[self.account].keepalives = gajim.config.get_per(

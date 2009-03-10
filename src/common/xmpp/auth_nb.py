@@ -160,14 +160,18 @@ class SASL(PlugIn):
 			self.mechanism = "DIGEST-MD5"
 		elif "PLAIN" in self.mecs:
 			self.mecs.remove("PLAIN")
-			sasl_data='%s\x00%s\x00%s' % (self.username+'@' + self._owner.Server, 
-																	self.username, self.password)
-			node=Node('auth', attrs={'xmlns':NS_SASL,'mechanism':'PLAIN'}, 
-								payload=[base64.encodestring(sasl_data).replace('\n','')])
+			sasl_data = u'%s\x00%s\x00%s' % (self.username + '@' + \
+				self._owner.Server, self.username, self.password)
+			asl_data = sasl_data.encode('utf-8').encode('base64').replace(
+				'\n','')
+			node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'PLAIN'}, 
+				payload=[sasl_data])
 			self.mechanism = "PLAIN"
 		else:
 			self.startsasl='failure'
 			self.DEBUG('I can only use DIGEST-MD5, GSSAPI and PLAIN mecanisms.', 'error')
+			if self.on_sasl:
+				self.on_sasl()
 			return
 		self.startsasl='in-process'
 		self._owner.send(node.__str__())
@@ -249,15 +253,15 @@ class SASL(PlugIn):
 						resp['qop'], HH(A2)]))
 			resp['response'] = response
 			resp['charset'] = 'utf-8'
-			sasl_data=''
+			sasl_data = u''
 			for key in ('charset', 'username', 'realm', 'nonce', 'nc', 'cnonce', 'digest-uri', 'response', 'qop'):
 				if key in ['nc','qop','response','charset']: 
-					sasl_data += "%s=%s," % (key,resp[key])
+					sasl_data += u"%s=%s," % (key,resp[key])
 				else: 
-					sasl_data += '%s="%s",' % (key,resp[key])
-########################################3333
-			node=Node('response', attrs={'xmlns':NS_SASL}, 
-				payload=[base64.encodestring(sasl_data[:-1]).replace('\r','').replace('\n','')])
+					sasl_data += u'%s="%s",' % (key,resp[key])
+			sasl_data = sasl_data[:-1].encode('utf-8').encode('base64').replace(
+				'\r','').replace('\n','')
+			node = Node('response', attrs={'xmlns':NS_SASL}, payload=[sasl_data])
 			self._owner.send(node.__str__())
 		elif 'rspauth' in chal: 
 			self._owner.send(Node('response', attrs={'xmlns':NS_SASL}).__str__())

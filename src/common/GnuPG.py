@@ -35,11 +35,15 @@ if gajim.HAVE_GPG:
 			GnuPGInterface.GnuPG.__init__(self)
 			self.use_agent = use_agent
 			self._setup_my_options()
+			self.always_trust = False
 
 		def _setup_my_options(self):
 			self.options.armor = 1
 			self.options.meta_interactive = 0
 			self.options.extra_args.append('--no-secmem-warning')
+			# disable photo viewer when verifying keys
+			self.options.extra_args.append('--verify-options')
+			self.options.extra_args.append('no-show-photo')
 			if self.use_agent:
 				self.options.extra_args.append('--use-agent')
 
@@ -68,10 +72,13 @@ if gajim.HAVE_GPG:
 						resp[ keyword ] = ""
 			return resp
 
-		def encrypt(self, str_, recipients):
+		def encrypt(self, str_, recipients, always_trust=False):
 			self.options.recipients = recipients   # a list!
 
-			proc = self.run(['--encrypt'], create_fhs=['stdin', 'stdout', 'status',
+			opt = ['--encrypt']
+			if always_trust or self.always_trust:
+				opt.append('--always-trust')
+			proc = self.run(opt, create_fhs=['stdin', 'stdout', 'status',
 				'stderr'])
 			proc.handles['stdin'].write(str_)
 			try:
@@ -97,6 +104,9 @@ if gajim.HAVE_GPG:
 
 			try: proc.wait()
 			except IOError: pass
+			if 'INV_RECP' in resp and resp['INV_RECP'].split()[0] == '10':
+				# unusable recipient "Key not trusted"
+				return '', 'NOT_TRUSTED'
 			if 'BEGIN_ENCRYPTION' in resp and 'END_ENCRYPTION' in resp:
 				# Encryption succeeded, even if there is output on stderr. Maybe
 				# verbose is on
@@ -142,6 +152,8 @@ if gajim.HAVE_GPG:
 			except IOError: pass
 			if 'GOOD_PASSPHRASE' in resp or 'SIG_CREATED' in resp:
 				return self._stripHeaderFooter(output)
+			if 'KEYEXPIRED' in resp:
+				return 'KEYEXPIRED'
 			return 'BAD_PASSPHRASE'
 
 		def verify(self, str_, sign):

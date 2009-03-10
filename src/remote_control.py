@@ -102,7 +102,10 @@ class Remote:
 
 	def raise_signal(self, signal, arg):
 		if self.signal_object:
-			getattr(self.signal_object, signal)(get_dbus_struct(arg))
+			try:
+				getattr(self.signal_object, signal)(get_dbus_struct(arg))
+			except UnicodeDecodeError:
+				pass # ignore error when we fail to announce on dbus
 
 
 class SignalObject(dbus.service.Object):

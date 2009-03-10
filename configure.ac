@@ -1,5 +1,5 @@
 AC_INIT([Gajim - A Jabber Instant Messager],
-		[0.12.1],[http://trac.gajim.org/],[gajim])
+		[0.12.2],[http://trac.gajim.org/],[gajim])
 AC_PREREQ([2.59])
 AM_INIT_AUTOMAKE([1.8])
 AC_CONFIG_HEADER(config.h)
@@ -207,18 +207,12 @@ AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
 AC_SUBST([PYTHON_INCLUDES])
 
 AS_AC_EXPAND(DATADIR, "${datadir}")
-
-AS_AC_EXPAND(LIBDIR, ${libdir})
-
+AS_AC_EXPAND(LIBDIR, "${libdir}")
 AS_AC_EXPAND(DOCDIR, "${docdir}")
+AS_AC_EXPAND(LOCALEDIR, "${localedir}")
 
 AC_SUBST(VERSION)
 AC_SUBST(PACKAGE)
-AC_SUBST(DATADIR)
-AC_SUBST(LIBDIR)
-AS_AC_EXPAND(DATADIR, "${DATADIR}")
-AC_SUBST(DOCDIR)
-AS_AC_EXPAND(DOCDIR, "${DOCDIR}")
 
 AC_CONFIG_FILES([ 
 	Makefile
@@ -237,7 +231,8 @@ AC_CONFIG_FILES([
 	src/osx/growl/Makefile
 	src/osx/syncmenu/Makefile
 	scripts/gajim
-	scripts/gajim-remote
+	scripts/gajim-remote:scripts/gajim.in
+	scripts/gajim-history-manager:scripts/gajim.in
 	po/Makefile.in
 ])
 AC_OUTPUT

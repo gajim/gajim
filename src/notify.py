@@ -489,6 +489,10 @@ class DesktopNotification:
 			ntype = 'presence.status'
 		elif event_type == _('Connection Failed'):
 			ntype = 'connection.failed'
+		elif event_type == _('Subscription request'):
+			ntype = 'subscription.request'
+		elif event_type == _('Unsubscribed'):
+			ntype = 'unsubscribed'
 		else:
 			# default failsafe values
 			self.path_to_image = os.path.abspath(
@@ -589,6 +593,8 @@ class DesktopNotification:
 	def version_reply_handler(self, name, vendor, version, spec_version=None):
 		if spec_version:
 			version = spec_version
+		elif vendor == 'Xfce' and version == '0.1.0':
+			version = '0.9'
 		version_list = version.split('.')
 		self.version = []
 		while len(version_list):

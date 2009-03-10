@@ -105,6 +105,8 @@ if LANG is None:
 else:
 	LANG = LANG[:2] # en, fr, el etc..
 
+os_info = None # used to cache os information
+
 gmail_domains = ['gmail.com', 'googlemail.com']
 
 transport_type = {} # list the type of transport
@@ -173,6 +175,9 @@ else:
 	from os import system
 	if system('gpg -h >/dev/null 2>&1'):
 		HAVE_GPG = False
+
+import latex
+HAVE_LATEX = latex.check_for_latex_support()
 
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
 gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI, xmpp.NS_FILE,

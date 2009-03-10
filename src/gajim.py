@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 ## src/gajim.py
 ##
@@ -149,6 +148,27 @@ common.configpaths.gajimpaths.init(config_path)
 del config_path
 common.configpaths.gajimpaths.init_profile(profile)
 del profile
+
+if os.name == 'nt':
+	class MyStderr(object):
+		_file = None
+		_error = None
+		def write(self, text):
+			fname=os.path.join(common.configpaths.gajimpaths.root,
+				os.path.split(sys.executable)[1]+'.log')
+			if self._file is None and self._error is None:
+				try:
+					self._file = open(fname, 'a')
+				except Exception, details:
+					self._error = details
+			if self._file is not None:
+				self._file.write(text)
+				self._file.flush()
+		def flush(self):
+			if self._file is not None:
+				self._file.flush()
+
+	sys.stderr = MyStderr()
 
 # PyGTK2.10+ only throws a warning
 import warnings
@@ -503,9 +523,18 @@ class PassphraseRequest:
 			self.complete(None)
 
 		def _ok(passphrase, checked, count):
-			if gajim.connections[account].test_gpg_passphrase(passphrase):
+			result = gajim.connections[account].test_gpg_passphrase(passphrase)
+			if result == 'ok':
 				# passphrase is good
 				self.complete(passphrase)
+				return
+			elif result == 'expired':
+				dialogs.ErrorDialog(_('GPG key expired'),
+					_('Your GPG key has expied, you will be connected to %s without '
+					'OpenPGP.') % account)
+				# Don't try to connect with GPG
+				gajim.connections[account].continue_connect_info[2] = False
+				self.complete(None)
 				return
 
 			if count < 3:
@@ -634,6 +663,12 @@ class Interface:
 	def handle_event_status(self, account, status): # OUR status
 		#('STATUS', account, status)
 		model = self.roster.status_combobox.get_model()
+		if status in ('offline', 'error'):
+			for name in self.instances[account]['online_dialog'].keys():
+				# .keys() is needed to not have a dictionary length changed during
+				# iteration error
+				self.instances[account]['online_dialog'][name].destroy()
+				del self.instances[account]['online_dialog'][name]
 		if status == 'offline':
 			# sensitivity for this menuitem
 			if gajim.get_number_of_connected_accounts() == 0:
@@ -666,7 +701,8 @@ class Interface:
 					ctrl.parent_win.redraw_tab(ctrl)
 
 		self.roster.on_status_changed(account, status)
-		if account in self.show_vcard_when_connect:
+		if account in self.show_vcard_when_connect and status not in ('offline',
+		'error'):
 			self.edit_own_details(account)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('AccountPresence', (status, account))
@@ -786,6 +822,14 @@ class Interface:
 					self.roster.draw_contact(contact1.jid, account)
 					gobject.timeout_add_seconds(5, self.roster.remove_to_be_removed,
 						contact1.jid, account)
+
+			# unset custom status
+			if (old_show == 0 and new_show > 1) or (old_show > 1 and new_show == 0\
+			and conn.connected > 1):
+				if account in self.status_sent_to_users and \
+				jid in self.status_sent_to_users[account]:
+					del self.status_sent_to_users[account][jid]
+
 			contact1.show = array[1]
 			contact1.status = status_message
 			contact1.priority = priority
@@ -962,9 +1006,25 @@ class Interface:
 
 	def handle_event_subscribe(self, account, array):
 		#('SUBSCRIBE', account, (jid, text, user_nick)) user_nick is JEP-0172
-		dialogs.SubscriptionRequestWindow(array[0], array[1], account, array[2])
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('Subscribe', (account, array))
+
+		jid = array[0]
+		text = array[1]
+		nick = array[2]
+		if helpers.allow_popup_window(account) or not self.systray_enabled:
+			dialogs.SubscriptionRequestWindow(jid, text, account, nick)
+			return
+
+		self.add_event(account, jid, 'subscription_request', (text, nick))
+
+		if helpers.allow_showing_notification(account):
+			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+				'subscription_request.png')
+			path = gtkgui_helpers.get_path_to_generic_or_avatar(path)
+			event_type = _('Subscription request')
+			notify.popup(event_type, jid, account, 'subscription_request', path,
+				event_type, jid)
 
 	def handle_event_subscribed(self, account, array):
 		#('SUBSCRIBED', account, (jid, resource))
@@ -995,7 +1055,20 @@ class Interface:
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('Subscribed', (account, array))
 
+	def show_unsubscribed_dialog(self, account, contact):
+		def on_yes(is_checked, list_):
+			self.roster.on_req_usub(None, list_)
+		list_ = [(contact, account)]
+		dialogs.YesNoDialog(
+			_('Contact "%s" removed subscription from you') % contact.jid,
+			_('You will always see him or her as offline.\nDo you want to '
+				'remove him or her from your contact list?'),
+			on_response_yes=(on_yes, list_))
+			# FIXME: Per RFC 3921, we can "deny" ack as well, but the GUI does
+			# not show deny
+
 	def handle_event_unsubscribed(self, account, jid):
+		#('UNSUBSCRIBED', account, jid)
 		gajim.connections[account].ack_unsubscribed(jid)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('Unsubscribed', (account, jid))
@@ -1003,14 +1076,19 @@ class Interface:
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if not contact:
 			return
-		def on_yes(is_checked, list_):
-			self.roster.on_req_usub(None, list_)
-		list_ = [(contact, account)]
-		dialogs.YesNoDialog(
-			_('Contact "%s" removed subscription from you') % jid,
-			_('You will always see him or her as offline.\nDo you want to remove him or her from your contact list?'),
-			on_response_yes=(on_yes, list_))
-		# FIXME: Per RFC 3921, we can "deny" ack as well, but the GUI does not show deny
+
+		if helpers.allow_popup_window(account) or not self.systray_enabled:
+			self.show_unsubscribed_dialog(account, contact)
+
+		self.add_event(account, jid, 'unsubscribed', contact)
+
+		if helpers.allow_showing_notification(account):
+			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+				'unsubscribed.png')
+			path = gtkgui_helpers.get_path_to_generic_or_avatar(path)
+			event_type = _('Unsubscribed')
+			notify.popup(event_type, jid, account, 'unsubscribed', path,
+				event_type, jid)
 
 	def handle_event_agent_info_error(self, account, agent):
 		#('AGENT_ERROR_INFO', account, (agent))
@@ -1260,6 +1338,8 @@ class Interface:
 		jids = array[0].split('/', 1)
 		room_jid = jids[0]
 
+		msg = array[1]
+
 		gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
 		if not gc_control and \
 		room_jid in self.minimized_controls[account]:
@@ -1278,9 +1358,11 @@ class Interface:
 			# message from someone
 			nick = jids[1]
 
-		gc_control.on_message(nick, array[1], array[2], array[3], xhtml, array[5])
+		gc_control.on_message(nick, msg, array[2], array[3], xhtml, array[5])
 
 		if self.remote_ctrl:
+			highlight = gc_control.needs_visual_notification(msg)
+			array += (highlight,)
 			self.remote_ctrl.raise_signal('GCMessage', (account, array))
 
 	def handle_event_gc_subject(self, account, array):
@@ -1475,6 +1557,20 @@ class Interface:
 			self.gpg_passphrase[keyid] = request
 		request.add_callback(account, callback)
 
+	def handle_event_gpg_always_trust(self, account, callback):
+		#('GPG_ALWAYS_TRUST', account, callback)
+		def on_yes(checked):
+			if checked:
+				gajim.connections[account].gpg.always_trust = True
+			callback(True)
+
+		def on_no():
+			callback(False)
+
+		dialogs.YesNoDialog(_('GPG key not trusted'), _('The GPG key used to '
+			'encrypt this chat is not trusted. Do you really want to encrypt this '
+			'message?'), checktext=_('Do _not ask me again'),
+			on_response_yes=on_yes, on_response_no=on_no)
 	def handle_event_roster_info(self, account, array):
 		#('ROSTER_INFO', account, (jid, name, sub, ask, groups))
 		jid = array[0]
@@ -1499,7 +1595,7 @@ class Interface:
 			self.roster.add_contact(jid, account)
 		else:
 			# it is an existing contact that might has changed
-			re_draw = False
+			re_place = False
 			# If contact has changed (sub, ask or group) update roster
 			# Mind about observer status changes:
 			# 	According to xep 0162, a contact is not an observer anymore when 
@@ -1507,8 +1603,7 @@ class Interface:
 			old_groups = contacts[0].groups
 			if contacts[0].sub != sub or contacts[0].ask != ask\
 			or old_groups != groups:
-				re_draw = True
-			if re_draw:
+				re_place = True
 				# c.get_shown_groups() has changed. Reflect that in roster_winodow
 				self.roster.remove_contact(jid, account, force=True)
 			for contact in contacts:
@@ -1516,11 +1611,13 @@ class Interface:
 				contact.sub = sub
 				contact.ask = ask
 				contact.groups = groups or []
-			if re_draw:
+			if re_place:
 				self.roster.add_contact(jid, account)
 				# Refilter and update old groups
 				for group in old_groups:
 					self.roster.draw_group(group, account)
+			else:
+				self.roster.draw_contact(jid, account)
 
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('RosterInfo', (account, array))
@@ -1853,7 +1950,7 @@ class Interface:
 			self.instances[account]['privacy_lists'].privacy_lists_received(data)
 
 	def handle_event_privacy_list_received(self, account, data):
-		# ('PRIVACY_LISTS_RECEIVED', account, (name, rules))
+		# ('PRIVACY_LIST_RECEIVED', account, (name, rules))
 		if account not in self.instances:
 			return
 		name = data[0]
@@ -1865,10 +1962,13 @@ class Interface:
 			gajim.connections[account].blocked_contacts = []
 			gajim.connections[account].blocked_groups = []
 			gajim.connections[account].blocked_list = []
+			gajim.connections[account].blocked_all = False
 			for rule in rules:
-				if rule['type'] == 'jid' and rule['action'] == 'deny':
+				if not 'type' in rule:
+					gajim.connections[account].blocked_all = True
+				elif rule['type'] == 'jid' and rule['action'] == 'deny':
 					gajim.connections[account].blocked_contacts.append(rule['value'])
-				if rule['type'] == 'group' and rule['action'] == 'deny':
+				elif rule['type'] == 'group' and rule['action'] == 'deny':
 					gajim.connections[account].blocked_groups.append(rule['value'])
 				gajim.connections[account].blocked_list.append(rule)
 				#elif rule['type'] == "group" and action == "deny":
@@ -1992,6 +2092,7 @@ class Interface:
 		server = gajim.config.get_per('accounts', account, 'hostname')
 
 		def on_ok(is_checked):
+			del self.instances[account]['online_dialog']['ssl_error']
 			if is_checked[0]:
 				# Check if cert is already in file
 				certs = ''
@@ -2018,6 +2119,7 @@ class Interface:
 			gajim.connections[account].ssl_certificate_accepted()
 
 		def on_cancel():
+			del self.instances[account]['online_dialog']['ssl_error']
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
 
@@ -2028,27 +2130,36 @@ class Interface:
 		else:
 			checktext1 = ''
 		checktext2 = _('Ignore this error for this certificate.')
-		dialogs.ConfirmationDialogDubbleCheck(pritext, sectext, checktext1,
+		if 'ssl_error' in self.instances[account]['online_dialog']:
+			self.instances[account]['online_dialog']['ssl_error'].destroy()
+		self.instances[account]['online_dialog']['ssl_error'] = \
+			dialogs.ConfirmationDialogDubbleCheck(pritext, sectext, checktext1,
 			checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel)
 
 	def handle_event_fingerprint_error(self, account, data):
 		# ('FINGERPRINT_ERROR', account, (new_fingerprint,))
 		def on_yes(is_checked):
+			del self.instances[account]['online_dialog']['fingerprint_error']
 			gajim.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
 				data[0])
 			# Reset the ignored ssl errors
 			gajim.config.set_per('accounts', account, 'ignore_ssl_errors', '')
 			gajim.connections[account].ssl_certificate_accepted()
 		def on_no():
+			del self.instances[account]['online_dialog']['fingerprint_error']
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
 		pritext = _('SSL certificate error')
-		sectext = _('It seems the SSL certificate has changed or your connection '
-			'is being hacked.\nOld fingerprint: %(old)s\nNew fingerprint: %(new)s'
-			'\n\nDo you still want to connect and update the fingerprint of the '
-			'certificate?') % {'old': gajim.config.get_per('accounts', account,
+		sectext = _('It seems the SSL certificate of account %(account)s has '
+			'changed or your connection is being hacked.\nOld fingerprint: %(old)s'
+			'\nNew fingerprint: %(new)s\n\nDo you still want to connect and update'
+			' the fingerprint of the certificate?') % {'account': account,
+			'old': gajim.config.get_per('accounts', account,
 			'ssl_fingerprint_sha1'), 'new': data[0]}
-		dialog = dialogs.YesNoDialog(pritext, sectext, on_response_yes=on_yes,
+		if 'fingerprint_error' in self.instances[account]['online_dialog']:
+			self.instances[account]['online_dialog']['fingerprint_error'].destroy()
+		self.instances[account]['online_dialog']['fingerprint_error'] = \
+			dialogs.YesNoDialog(pritext, sectext, on_response_yes=on_yes,
 			on_response_no=on_no)
 
 	def handle_event_plain_connection(self, account, data):
@@ -2058,11 +2169,15 @@ class Interface:
 			if not is_checked[0]:
 				on_cancel()
 				return
+			# On cancel call del self.instances, so don't call it another time
+			# before
+			del self.instances[account]['online_dialog']['plain_connection']
 			if is_checked[1]:
 				gajim.config.set_per('accounts', account,
 					'warn_when_plaintext_connection', False)
 			gajim.connections[account].connection_accepted(data[0], 'tcp')
 		def on_cancel():
+			del self.instances[account]['online_dialog']['plain_connection']
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
 		pritext = _('Insecure connection')
@@ -2070,7 +2185,10 @@ class Interface:
 			'connection. Are you sure you want to do that?')
 		checktext1 = _('Yes, I really want to connect insecurely')
 		checktext2 = _('Do _not ask me again')
-		dialog = dialogs.ConfirmationDialogDubbleCheck(pritext, sectext,
+		if 'plain_connection' in self.instances[account]['online_dialog']:
+			self.instances[account]['online_dialog']['plain_connection'].destroy()
+		self.instances[account]['online_dialog']['plain_connection'] = \
+			dialogs.ConfirmationDialogDubbleCheck(pritext, sectext,
 			checktext1, checktext2, on_response_ok=on_ok,
 			on_response_cancel=on_cancel, is_modal=False)
 
@@ -2078,6 +2196,7 @@ class Interface:
 		# ('INSECURE_SSL_CONNECTION', account, (connection, connection_type))
 		server = gajim.config.get_per('accounts', account, 'hostname')
 		def on_ok(is_checked):
+			del self.instances[account]['online_dialog']['insecure_ssl']
 			if not is_checked[0]:
 				on_cancel()
 				return
@@ -2093,6 +2212,7 @@ class Interface:
 				return
 			gajim.connections[account].connection_accepted(data[0], data[1])
 		def on_cancel():
+			del self.instances[account]['online_dialog']['insecure_ssl']
 			gajim.connections[account].disconnect(on_purpose=True)
 			self.handle_event_status(account, 'offline')
 		pritext = _('Insecure connection')
@@ -2100,7 +2220,10 @@ class Interface:
 			'connection. You should install PyOpenSSL to prevent that. Are you sure you want to do that?')
 		checktext1 = _('Yes, I really want to connect insecurely')
 		checktext2 = _('Do _not ask me again')
-		dialog = dialogs.ConfirmationDialogDubbleCheck(pritext, sectext,
+		if 'insecure_ssl' in self.instances[account]['online_dialog']:
+			self.instances[account]['online_dialog']['insecure_ssl'].destroy()
+		self.instances[account]['online_dialog']['insecure_ssl'] = \
+			dialogs.ConfirmationDialogDubbleCheck(pritext, sectext,
 			checktext1, checktext2, on_response_ok=on_ok,
 			on_response_cancel=on_cancel, is_modal=False)
 
@@ -2191,6 +2314,7 @@ class Interface:
 				self.handle_event_unique_room_id_unsupported,
 			'UNIQUE_ROOM_ID_SUPPORTED': self.handle_event_unique_room_id_supported,
 			'GPG_PASSWORD_REQUIRED': self.handle_event_gpg_password_required,
+			'GPG_ALWAYS_TRUST': self.handle_event_gpg_always_trust,
 			'SSL_ERROR': self.handle_event_ssl_error,
 			'FINGERPRINT_ERROR': self.handle_event_fingerprint_error,
 			'PLAIN_CONNECTION': self.handle_event_plain_connection,
@@ -2219,8 +2343,8 @@ class Interface:
 		show_in_roster = notify.get_show_in_roster(event_type, account, jid)
 		show_in_systray = notify.get_show_in_systray(event_type, account, jid)
 		event = gajim.events.create_event(type_, event_args,
-			show_in_roster = show_in_roster,
-			show_in_systray = show_in_systray)
+			show_in_roster=show_in_roster,
+			show_in_systray=show_in_systray)
 		gajim.events.add_event(account, jid, event)
 
 		self.roster.show_title()
@@ -2350,6 +2474,18 @@ class Interface:
 			data = event.parameters
 			dialogs.InvitationReceivedDialog(account, data[0], jid, data[2],
 				data[1], data[3])
+			gajim.events.remove_events(account, jid, event)
+			self.roster.draw_contact(jid, account)
+		elif type_ == 'subscription_request':
+			event = gajim.events.get_first_event(account, jid, type_)
+			data = event.parameters
+			dialogs.SubscriptionRequestWindow(jid, data[0], account, data[1])
+			gajim.events.remove_events(account, jid, event)
+			self.roster.draw_contact(jid, account)
+		elif type_ == 'unsubscribed':
+			event = gajim.events.get_first_event(account, jid, type_)
+			contact = event.parameters
+			self.show_unsubscribed_dialog(account, contact)
 			gajim.events.remove_events(account, jid, event)
 			self.roster.draw_contact(jid, account)
 		if w:
@@ -2802,18 +2938,18 @@ class Interface:
 		state = self.sleeper.getState()
 		for account in gajim.connections:
 			if account not in gajim.sleeper_state or \
-					not gajim.sleeper_state[account]:
+			not gajim.sleeper_state[account]:
 				continue
 			if state == common.sleepy.STATE_AWAKE and \
-				gajim.sleeper_state[account] in ('autoaway', 'autoxa'):
+			gajim.sleeper_state[account] in ('autoaway', 'autoxa'):
 				# we go online
 				self.roster.send_status(account, 'online',
 					gajim.status_before_autoaway[account])
 				gajim.status_before_autoaway[account] = ''
 				gajim.sleeper_state[account] = 'online'
 			elif state == common.sleepy.STATE_AWAY and \
-				gajim.sleeper_state[account] == 'online' and \
-				gajim.config.get('autoaway'):
+			gajim.sleeper_state[account] == 'online' and \
+			gajim.config.get('autoaway'):
 				# we save out online status
 				gajim.status_before_autoaway[account] = \
 					gajim.connections[account].status
@@ -2830,10 +2966,9 @@ class Interface:
 						}
 				self.roster.send_status(account, 'away', auto_message, auto=True)
 				gajim.sleeper_state[account] = 'autoaway'
-			elif state == common.sleepy.STATE_XA and (\
-				gajim.sleeper_state[account] == 'autoaway' or \
-				gajim.sleeper_state[account] == 'online') and \
-				gajim.config.get('autoxa'):
+			elif state == common.sleepy.STATE_XA and \
+			gajim.sleeper_state[account] in ('online', 'autoaway',
+			'autoaway-forced') and gajim.config.get('autoxa'):
 				# we go extended away [we pass True to auto param]
 				auto_message = gajim.config.get('autoxa_message')
 				if not auto_message:
@@ -3176,7 +3311,9 @@ class Interface:
 
 		for a in gajim.connections:
 			self.instances[a] = {'infos': {}, 'disco': {}, 'gc_config': {},
-				'search': {}}
+				'search': {}, 'online_dialog': {}}
+			# online_dialog contains all dialogs that have a meaning only when we
+			# are not disconnected
 			self.minimized_controls[a] = {}
 			gajim.contacts.add_account(a)
 			gajim.groups[a] = {}
@@ -3205,6 +3342,13 @@ class Interface:
 		if dbus_support.supported:
 			def gnome_screensaver_ActiveChanged_cb(active):
 				if not active:
+					for account in gajim.connections:
+						if gajim.sleeper_state[account] == 'autoaway-forced':
+							# We came back online ofter gnome-screensaver autoaway
+							self.roster.send_status(account, 'online',
+								gajim.status_before_autoaway[account])
+							gajim.status_before_autoaway[account] = ''
+							gajim.sleeper_state[account] = 'online'
 					return
 				if not gajim.config.get('autoaway'):
 					# Don't go auto away if user disabled the option
@@ -3221,9 +3365,16 @@ class Interface:
 						auto_message = gajim.config.get('autoaway_message')
 						if not auto_message:
 							auto_message = gajim.connections[account].status
+						else:
+							auto_message = auto_message.replace('$S','%(status)s')
+							auto_message = auto_message.replace('$T','%(time)s')
+							auto_message = auto_message % {
+								'status': gajim.status_before_autoaway[account],
+								'time': gajim.config.get('autoxatime')
+							}
 						self.roster.send_status(account, 'away', auto_message,
 							auto=True)
-						gajim.sleeper_state[account] = 'autoaway'
+						gajim.sleeper_state[account] = 'autoaway-forced'
 
 			try:
 				bus = dbus.SessionBus()

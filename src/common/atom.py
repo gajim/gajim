@@ -64,7 +64,7 @@ class Entry(xmpp.Node, object):
 		xmpp.Node.__init__(self, 'entry', node=node)
 
 	def __repr__(self):
-		return '<Atom:Entry object of id="%r">' % self.id
+		return '<Atom:Entry object of id="%r">' % self.getAttr('id')
 
 class OldEntry(xmpp.Node, object):
 	''' Parser for feeds from pubsub.com. They use old Atom 0.3 format with
@@ -74,7 +74,7 @@ class OldEntry(xmpp.Node, object):
 		xmpp.Node.__init__(self, 'entry', node=node)
 
 	def __repr__(self):
-		return '<Atom0.3:Entry object of id="%r">' % self.id
+		return '<Atom0.3:Entry object of id="%r">' % self.getAttr('id')
 
 	def get_feed_title(self):
 		''' Returns title of feed, where the entry was created. The result is the feed name

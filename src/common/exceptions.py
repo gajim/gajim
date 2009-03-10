@@ -83,7 +83,7 @@ class Cancelled(Exception):
 	pass
 
 class LatexError(Exception):
-	'''sqlite2 raised pysqlite2.dbapi2.OperationalError'''
+	'''LaTeX processing failed for some reason'''
 	def __init__(self, text=''):
 		Exception.__init__(self)
 		self.text = text

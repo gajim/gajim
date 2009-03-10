@@ -606,7 +606,8 @@ _('Without a connection, you can not browse available services'))
 
 		# self.browser._get_agent_address() would break when no browser.
 		addr = get_agent_address(self.jid, self.node)
-		del gajim.interface.instances[self.account]['disco'][addr]
+		if addr in gajim.interface.instances[self.account]['disco']:
+			del gajim.interface.instances[self.account]['disco'][addr]
 
 		if self.browser:
 			self.window.hide()

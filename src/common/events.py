@@ -28,11 +28,12 @@ import time
 
 class Event:
 	'''Information concerning each event'''
-	def __init__(self, type_, time_, parameters, show_in_roster = False,
-	show_in_systray = True):
+	def __init__(self, type_, time_, parameters, show_in_roster=False,
+	show_in_systray=True):
 		''' type_ in chat, normal, file-request, file-error, file-completed,
 		file-request-error, file-send-error, file-stopped, gc_msg, pm,
-		printed_chat, printed_gc_msg, printed_marked_gc_msg, printed_pm
+		printed_chat, printed_gc_msg, printed_marked_gc_msg, printed_pm,
+		gc-invitation, subscription_request, unsubscribed
 		parameters is (per type_):
 			chat, normal, pm: [message, subject, kind, time, encrypted, resource,
 			msg_id]
@@ -41,7 +42,11 @@ class Event:
 			gc_msg: None
 			printed_chat: control
 			printed_*: None
-				messages that are already printed in chat, but not read'''
+				messages that are already printed in chat, but not read
+			gc-invitation: [room_jid, reason, password, is_continued]
+			subscription_request: [text, nick]
+			unsubscribed: contact
+		'''
 		self.type_ = type_
 		self.time_ = time_
 		self.parameters = parameters

@@ -351,7 +351,8 @@ class EncryptedStanzaSession(StanzaSession):
 		return self.decrypter.decrypt(ciphertext)
 
 	def logging_preference(self):
-		if gajim.config.get('log_encrypted_sessions'):
+		if gajim.config.get_per('accounts', self.conn.name,
+		'log_encrypted_sessions'):
 			return ['may', 'mustnot']
 		else:
 			return ['mustnot', 'may']

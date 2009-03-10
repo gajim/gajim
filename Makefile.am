@@ -8,7 +8,7 @@ else
 OPTIONAL_BIN =
 endif
 
-bin_SCRIPTS = scripts/gajim $(OPTIONAL_BIN)
+bin_SCRIPTS = scripts/gajim scripts/gajim-history-manager $(OPTIONAL_BIN)
 
 
 docfilesdir = $(docdir)
@@ -28,15 +28,15 @@ EXTRA_DIST = \
 	intltool-update.in	\
 	gajim.nsi \
 	setup_win32.py \
-	scripts/gajim.in	\
-	scripts/gajim-remote.in
+	scripts/gajim.in
 	
 DISTCLEANFILES = 		\
 	intltool-extract 	\
 	intltool-merge 		\
 	intltool-update		\
 	scripts/gajim		\
-	scripts/gajim-remote
+	scripts/gajim-remote	\
+	scripts/gajim-histrory-manager
 
 MAINTAINERCLEANFILES = \
 	configure \

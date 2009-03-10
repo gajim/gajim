@@ -80,7 +80,6 @@ class Config:
 		'notify_on_new_message': [ opt_bool, True ],
 		'autopopupaway': [ opt_bool, False ],
 		'use_notif_daemon': [ opt_bool, True , _('Use D-Bus and Notification-Daemon to show notifications') ],
-		'ignore_unknown_contacts': [ opt_bool, False ],
 		'showoffline': [ opt_bool, False ],
 		'show_transports_group': [ opt_bool, True ],
 		'autoaway': [ opt_bool, True ],
@@ -136,6 +135,7 @@ class Config:
 		'gc-hpaned-position': [opt_int, 430],
 		'gc_refer_to_nick_char': [opt_str, ',', _('Character to add after nickname when using nick completion (tab) in group chat.')],
 		'gc_proposed_nick_char': [opt_str, '_', _('Character to propose to add after desired nickname when desired nickname is used by someone else in group chat.')],
+		'msgwin-max-state': [opt_bool, False],
 		'msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
 		'msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
 		'msgwin-width': [opt_int, 500],
@@ -161,7 +161,6 @@ class Config:
 		'time_stamp': [ opt_str, '[%X] ', _('This option let you customize timestamp that is printed in conversation. For exemple "[%H:%M] " will show "[hour:minute] ". See python doc on strftime for full documentation: http://docs.python.org/lib/module-time.html') ],
 		'before_nickname': [ opt_str, '', _('Characters that are printed before the nickname in conversations') ],
 		'after_nickname': [ opt_str, ':', _('Characters that are printed after the nickname in conversations') ],
-		'send_os_info': [ opt_bool, True ],
 		'notify_on_new_gmail_email': [ opt_bool, True ],
 		'notify_on_new_gmail_email_extra': [ opt_bool, False ],
 		'use_gpg_agent': [ opt_bool, False ],
@@ -200,7 +199,6 @@ class Config:
 		'tabs_always_visible': [opt_bool, False, _('Show tab when only one conversation?')],
 		'tabs_border': [opt_bool, False, _('Show tabbed notebook border in chat windows?')],
 		'tabs_close_button': [opt_bool, True, _('Show close button in tab?')],
-		'log_encrypted_sessions': [opt_bool, True, _('When negotiating an encrypted session, should Gajim assume you want your messages to be logged?')],
 		'esession_modp': [opt_str, '5,14', _('A list of modp groups to use in a Diffie-Hellman, highest preference first, separated by commas. Valid groups are 1, 2, 5, 14, 15, 16, 17 and 18. Higher numbers are more secure, but take longer to calculate when you start a session.')],
 		'chat_avatar_width': [opt_int, 52],
 		'chat_avatar_height': [opt_int, 52],
@@ -338,6 +336,9 @@ class Config:
 			'subscribe_activity': [opt_bool, True],
 			'subscribe_tune': [opt_bool, True],
 			'subscribe_nick': [opt_bool, True],
+			'ignore_unknown_contacts': [ opt_bool, False ],
+			'send_os_info': [ opt_bool, True ],
+			'log_encrypted_sessions': [opt_bool, True, _('When negotiating an encrypted session, should Gajim assume you want your messages to be logged?')],
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],

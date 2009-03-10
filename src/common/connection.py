@@ -153,6 +153,7 @@ class Connection(ConnectionHandlers):
 		self.blocked_list = []
 		self.blocked_contacts = []
 		self.blocked_groups = []
+		self.blocked_all = False
 		self.music_track_info = 0
 		self.pep_supported = False
 		self.mood = {}
@@ -180,6 +181,7 @@ class Connection(ConnectionHandlers):
 
 	def put_event(self, ev):
 		if ev[0] in gajim.handlers:
+			log.debug('Sending %s event to GUI: %s' % (ev[0], ev[1:]))
 			gajim.handlers[ev[0]](self.name, ev[1])
 
 	def dispatch(self, event, data):
@@ -222,7 +224,7 @@ class Connection(ConnectionHandlers):
 		if gajim.account_is_connected(self.name):
 			# we cannot change our status to offline or connecting
 			# after we auth to server
-			self.old_show = STATUS_LIST[self.connected]
+			self.old_show = gajim.SHOW_LIST[self.connected]
 		self.connected = 0
 		if not self.on_purpose:
 			self.dispatch('STATUS', 'offline')
@@ -680,6 +682,9 @@ class Connection(ConnectionHandlers):
 					self.dispatch('FINGERPRINT_ERROR',
 						(con.Connection.ssl_fingerprint_sha1,))
 					return True
+			else:
+				gajim.config.set_per('accounts', self.name, 'ssl_fingerprint_sha1',
+					con.Connection.ssl_fingerprint_sha1)
 		self._register_handlers(con, con_type)
 		con.auth(name, self.password, self.server_resource, 1, self.__on_auth)
 
@@ -824,13 +829,38 @@ class Connection(ConnectionHandlers):
 			return
 		common.xmpp.features_nb.setDefaultPrivacyList(self.connection, listname)
 
-	def build_privacy_rule(self, name, action):
+	def build_privacy_rule(self, name, action, order=1):
 		'''Build a Privacy rule stanza for invisibility'''
 		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
 		l = iq.getTag('query').setTag('list', {'name': name})
-		i = l.setTag('item', {'action': action, 'order': '1'})
+		i = l.setTag('item', {'action': action, 'order': str(order)})
 		i.setTag('presence-out')
 		return iq
+
+	def build_invisible_rule(self):
+		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
+		l = iq.getTag('query').setTag('list', {'name': 'invisible'})
+		if self.name in gajim.interface.status_sent_to_groups and \
+		len(gajim.interface.status_sent_to_groups[self.name]) > 0:
+			for group in gajim.interface.status_sent_to_groups[self.name]:
+				i = l.setTag('item', {'type': 'group', 'value': group,
+					'action': 'allow', 'order': '1'})
+				i.setTag('presence-out')
+		if self.name in gajim.interface.status_sent_to_users and \
+		len(gajim.interface.status_sent_to_users[self.name]) > 0:
+			for jid in gajim.interface.status_sent_to_users[self.name]:
+				i = l.setTag('item', {'type': 'jid', 'value': jid,
+					'action': 'allow', 'order': '2'})
+				i.setTag('presence-out')
+		i = l.setTag('item', {'action': 'deny', 'order': '3'})
+		i.setTag('presence-out')
+		return iq
+
+	def set_invisible_rule(self):
+		if not gajim.account_is_connected(self.name):
+			return
+		iq = self.build_invisible_rule()
+		self.connection.send(iq)
 
 	def activate_privacy_rule(self, name):
 		'''activate a privacy rule'''
@@ -860,7 +890,7 @@ class Connection(ConnectionHandlers):
 			self.connection.send(p)
 
 		# try to set the privacy rule
-		iq = self.build_privacy_rule('invisible', 'deny')
+		iq = self.build_invisible_rule()
 		self.connection.SendAndCallForResponse(iq, self._continue_invisible,
 			{'msg': msg, 'signed': signed, 'initial': initial})
 
@@ -870,7 +900,7 @@ class Connection(ConnectionHandlers):
 		# active the privacy rule
 		self.privacy_rules_supported = True
 		self.activate_privacy_rule('invisible')
-		self.connected = STATUS_LIST.index('invisible')
+		self.connected = gajim.SHOW_LIST.index('invisible')
 		self.status = msg
 		priority = unicode(gajim.get_priority(self.name, 'invisible'))
 		p = common.xmpp.Presence(priority = priority)
@@ -896,13 +926,18 @@ class Connection(ConnectionHandlers):
 			self.dispatch('SIGNED_IN', ())
 
 	def test_gpg_passphrase(self, password):
+		'''Returns 'ok', 'bad_pass' or 'expired' '''
 		if not self.gpg:
 			return False
 		self.gpg.passphrase = password
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 		signed = self.gpg.sign('test', keyID)
 		self.gpg.password = None
-		return signed != 'BAD_PASSPHRASE'
+		if signed == 'KEYEXPIRED':
+			return 'expired'
+		elif signed == 'BAD_PASSPHRASE':
+			return 'bad_pass'
+		return 'ok'
 
 	def get_signed_presence(self, msg, callback = None):
 		if gajim.config.get_per('accounts', self.name, 'gpg_sign_presence'):
@@ -952,7 +987,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 	def send_custom_status(self, show, msg, jid):
-		if not show in STATUS_LIST:
+		if not show in gajim.SHOW_LIST:
 			return -1
 		if not self.connection:
 			return
@@ -978,7 +1013,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(p)
 
 	def change_status(self, show, msg, auto = False):
-		if not show in STATUS_LIST:
+		if not show in gajim.SHOW_LIST:
 			return -1
 		sshow = helpers.get_xmpp_show(show)
 		if not msg:
@@ -1033,8 +1068,8 @@ class Connection(ConnectionHandlers):
 				signed = self.get_signed_presence(msg)
 				self.send_invisible_presence(msg, signed)
 				return
-			was_invisible = self.connected == STATUS_LIST.index('invisible')
-			self.connected = STATUS_LIST.index(show)
+			was_invisible = self.connected == gajim.SHOW_LIST.index('invisible')
+			self.connected = gajim.SHOW_LIST.index(show)
 			if was_invisible and self.privacy_rules_supported:
 				iq = self.build_privacy_rule('visible', 'allow')
 				self.connection.send(iq)
@@ -1054,11 +1089,11 @@ class Connection(ConnectionHandlers):
 
 	def _on_disconnected(self):
 		''' called when a disconnect request has completed successfully'''
+		self.disconnect(on_purpose=True)
 		self.dispatch('STATUS', 'offline')
-		self.disconnect()
 
 	def get_status(self):
-		return STATUS_LIST[self.connected]
+		return gajim.SHOW_LIST[self.connected]
 
 
 	def send_motd(self, jid, subject = '', msg = '', xhtml = None):
@@ -1091,25 +1126,52 @@ class Connection(ConnectionHandlers):
 			fjid = str(session.jid)
 
 		if keyID and self.USE_GPG:
+			xhtml = None
 			if keyID ==  'UNKNOWN':
 				error = _('Neither the remote presence is signed, nor a key was assigned.')
 			elif keyID.endswith('MISMATCH'):
 				error = _('The contact\'s key (%s) does not match the key assigned in Gajim.' % keyID[:8])
 			else:
+				def _on_encrypted(msgenc, error):
+					output = (msgenc, error)
+					if error == 'NOT_TRUSTED':
+						def _on_always_trust(answer):
+							if answer:
+								msgenc, error = self.gpg.encrypt(msg, [keyID], False)
+								return _on_encrypted(msgenc, error)
+							else:
+								return self._on_message_encrypted(output, type_, msg,
+									msgtxt, original_message, fjid, resource, jid, xhtml,
+									subject, chatstate, composing_xep, forward_from,
+									delayed, session, form_node, user_nick, keyID)
+						self.dispatch('GPG_ALWAYS_TRUST', _on_always_trust)
+					else:
+						return self._on_message_encrypted(output, type_, msg, msgtxt,
+							original_message, fjid, resource, jid, xhtml, subject,
+							chatstate, composing_xep, forward_from, delayed, session,
+							form_node, user_nick, keyID)
 				#encrypt
-				msgenc, error = self.gpg.encrypt(msg, [keyID])
-			if msgenc and not error:
-				msgtxt = '[This message is *encrypted* (See :XEP:`27`]'
-				lang = os.getenv('LANG')
-				if lang is not None and lang != 'en': # we're not english
-					# one in locale and one en
-					msgtxt = _('[This message is *encrypted* (See :XEP:`27`]') + \
-						' (' + msgtxt + ')'
-			else:
-				# Encryption failed, do not send message
-				tim = localtime()
-				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim, session))
-				return 3
+				msgenc, error = self.gpg.encrypt(msg, [keyID], False)
+				return _on_encrypted(msgenc, error)
+
+	def _on_message_encrypted(self, output, type_, msg, msgtxt, original_message,
+	fjid, resource, jid, xhtml, subject, chatstate, composing_xep, forward_from,
+	delayed, session, form_node, user_nick, keyID):
+		msgenc, error = output
+
+		if not msgenc or error:
+			# Encryption failed, do not send message
+			tim = localtime()
+			self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim, session))
+			return 3
+
+		msgtxt = '[This message is *encrypted* (See :XEP:`27`]'
+		lang = os.getenv('LANG')
+		if lang is not None and lang != 'en': # we're not english
+			# one in locale and one en
+			msgtxt = _('[This message is *encrypted* (See :XEP:`27`]') + \
+				' (' + msgtxt + ')'
+
 		if type_ == 'chat':
 			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type_,
 				xhtml = xhtml)
@@ -1494,7 +1556,7 @@ class Connection(ConnectionHandlers):
 	def send_agent_status(self, agent, ptype):
 		if not self.connection:
 			return
-		show = helpers.get_xmpp_show(STATUS_LIST[self.connected])
+		show = helpers.get_xmpp_show(gajim.SHOW_LIST[self.connected])
 		p = common.xmpp.Presence(to = agent, typ = ptype, show = show)
 		p = self.add_sha(p, ptype != 'unavailable')
 		self.connection.send(p)
@@ -1517,7 +1579,7 @@ class Connection(ConnectionHandlers):
 		# FIXME: This room JID needs to be normalized; see #1364
 		if not self.connection:
 			return
-		show = helpers.get_xmpp_show(STATUS_LIST[self.connected])
+		show = helpers.get_xmpp_show(gajim.SHOW_LIST[self.connected])
 		if show == 'invisible':
 			# Never join a room when invisible
 			return
@@ -1586,7 +1648,7 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 	def send_gc_status(self, nick, jid, show, status):
-		if not self.connection:
+		if not gajim.account_is_connected(self.name):
 			return
 		if show == 'invisible':
 			show = 'offline'

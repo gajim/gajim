@@ -493,7 +493,8 @@ class MessageWindow(object):
 			bctrl = self.get_control(jid, ctrl.account)
 			# keep last_message_time around unless this was our last control with
 			# that jid
-			if not fctrl and not bctrl:
+			if not fctrl and not bctrl and \
+			fjid in gajim.last_message_time[ctrl.account]:
 				del gajim.last_message_time[ctrl.account][fjid]
 
 			# Disconnect tab DnD only if GTK version < 2.10
@@ -995,8 +996,11 @@ class MessageWindowMgr(gobject.GObject):
 
 		# Position and size window based on saved state and window mode
 		if not self.one_window_opened(contact, acct, type_):
-			self._resize_window(win, acct, type_)
-			self._position_window(win, acct, type_)
+			if gajim.config.get('msgwin-max-state'):
+				win.window.maximize()
+			else:
+				self._resize_window(win, acct, type_)
+				self._position_window(win, acct, type_)
 
 		self._windows[win_key] = win
 		return win
@@ -1068,6 +1072,7 @@ May be useful some day in the future?'''
 
 	def save_state(self, msg_win, width_adjust=0):
 		# Save window size and position
+		max_win_key = 'msgwin-max-state'
 		pos_x_key = 'msgwin-x-position'
 		pos_y_key = 'msgwin-y-position'
 		size_width_key = 'msgwin-width'
@@ -1106,6 +1111,9 @@ May be useful some day in the future?'''
 				gajim.config.set_per('accounts', acct, pos_y_key, y)
 
 		else:
+			win_maximized = msg_win.window.window.get_state() == \
+				gtk.gdk.WINDOW_STATE_MAXIMIZED
+			gajim.config.set(max_win_key, win_maximized)
 			width += width_adjust
 			gajim.config.set(size_width_key, width)
 			gajim.config.set(size_height_key, height)

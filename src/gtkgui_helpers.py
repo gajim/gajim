@@ -61,7 +61,7 @@ gtk.glade.textdomain(i18n.APP)
 screen_w = gtk.gdk.screen_width()
 screen_h = gtk.gdk.screen_height()
 
-GLADE_DIR = os.path.join('..', 'data', 'glade')
+GLADE_DIR = os.path.join(gajim.DATA_DIR, 'glade')
 def get_glade(file_name, root = None):
 	file_path = os.path.join(GLADE_DIR, file_name)
 	return gtk.glade.XML(file_path, root=root, domain=i18n.APP)

@@ -98,6 +98,15 @@ class MusicTrackListener(gobject.GObject):
 			'NameOwnerChanged', 'org.freedesktop.DBus',
 			arg0='net.sacredchao.QuodLibet')
 
+		## Totem
+		## patched by Lucky <lucky1.data@gmail.com>
+		## used with Totem DBus plugin:
+		## http://lucky.awardspace.co.uk/home/totem-plugins
+		bus.add_signal_receiver(self._totem_playing_started_cb,
+			'playingStarted', 'org.gnome.Totem')
+		bus.add_signal_receiver(self._totem_playing_stopped_cb,
+			'playingStopped', 'org.gnome.Totem')
+
 	def _player_name_owner_changed(self, name, old, new):
 		if not new:
 			self.emit('music-track-changed', None)
@@ -195,6 +204,17 @@ class MusicTrackListener(gobject.GObject):
 		info.artist = props.get('artist', None)
 		info.duration = int(props.get('~#length', 0))
 		return info
+
+	def _totem_playing_started_cb(self, title, album, artist, duration):
+		self._last_playing_music = MusicTrackInfo()
+		self._last_playing_music.title = title
+		self._last_playing_music.album = album
+		self._last_playing_music.artist = artist
+		self._last_playing_music.duration = duration
+		self.emit('music-track-changed', self._last_playing_music)
+
+	def _totem_playing_stopped_cb(self):
+		self.emit('music-track-changed', None)
 
 	def get_playing_track(self):
 		'''Return a MusicTrackInfo for the currently playing
