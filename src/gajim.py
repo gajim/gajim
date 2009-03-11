@@ -65,56 +65,18 @@ if os.name == 'nt':
 	# needed for docutils
 	sys.path.append('.')
 
-import logging
-consoleloghandler = logging.StreamHandler()
-consoleloghandler.setLevel(1)
-consoleloghandler.setFormatter(
-	logging.Formatter('%(asctime)s %(name)s: %(levelname)s: %(message)s')
-	)
-log = logging.getLogger('gajim')
-log.setLevel(logging.WARNING)
-log.addHandler(consoleloghandler)
-log.propagate = False
-log = logging.getLogger('gajim.gajim')
+from common import logging_helpers
+logging_helpers.init('TERM' in os.environ)
 
-# create intermediate loggers
-logging.getLogger('gajim.c')
-logging.getLogger('gajim.c.x')
+import logging
+# gajim.gui or gajim.gtk more appropriate ?
+log = logging.getLogger('gajim.gajim')
 
 import getopt
 from common import i18n
 
-def parseLogLevel(arg):
-	if arg.isdigit():
-		return int(arg)
-	if arg.isupper():
-		return getattr(logging, arg)
-	raise ValueError(_('%s is not a valid loglevel'), repr(arg))
-
-def parseLogTarget(arg):
-	arg = arg.lower()
-	if arg.startswith('.'): return arg[1:]
-	if arg.startswith('gajim'): return arg
-	return 'gajim.' + arg
-
-def parseAndSetLogLevels(arg):
-	for directive in arg.split(','):
-		directive = directive.strip()
-		targets, level = directive.rsplit('=', 1)
-		level = parseLogLevel(level.strip())
-		for target in targets.split('='):
-			target = parseLogTarget(target.strip())
-			if target == '':
-				consoleloghandler.setLevel(level)
-				print "consoleloghandler level set to %s" % level
-			else:
-				logger = logging.getLogger(target)
-				logger.setLevel(level)
-				print "Logger %s level set to %d" % (target, level)
-
 def parseOpts():
 	profile = ''
-	verbose = False
 	config_path = None
 
 	try:
@@ -130,21 +92,19 @@ def parseOpts():
 			print 'gajim [--help] [--quiet] [--verbose] [--loglevel subsystem=level[,subsystem=level[...]]] [--profile name] [--config-path]'
 			sys.exit()
 		elif o in ('-q', '--quiet'):
-			consoleloghandler.setLevel(logging.CRITICAL)
-			verbose = False
+			logging_helpers.set_quiet()
 		elif o in ('-v', '--verbose'):
-			consoleloghandler.setLevel(logging.INFO)
-			verbose = True
+			logging_helpers.set_verbose()
 		elif o in ('-p', '--profile'): # gajim --profile name
 			profile = a
 		elif o in ('-l', '--loglevel'):
-			parseAndSetLogLevels(a)
+			logging_helpers.set_loglevels(a)
 		elif o in ('-c', '--config-path'):
 			config_path = a
-	return profile, verbose, config_path
+	return profile, config_path
 
-profile, verbose, config_path = parseOpts()
-del parseOpts, parseAndSetLogLevels, parseLogTarget, parseLogLevel
+profile, config_path = parseOpts()
+del parseOpts
 
 import locale
 profile = unicode(profile, locale.getpreferredencoding())
@@ -287,9 +247,6 @@ from common import helpers
 from common import optparser
 from common import dataforms
 from common import passwords
-
-if verbose: gajim.verbose = True
-del verbose
 
 gajimpaths = common.configpaths.gajimpaths
 
@@ -3250,9 +3207,9 @@ class Interface:
 		}
 
 		cfg_was_read = parser.read()
-		# Do not set gajim.verbose to False if -v option was given
+		# override logging settings from config (don't take care of '-q' option)
 		if gajim.config.get('verbose'):
-			gajim.verbose = True
+			logging_helpers.set_verbose()
 
 		# Is Gajim default app?
 		if os.name != 'nt' and gajim.config.get('check_if_gajim_is_default'):
@@ -3299,11 +3256,6 @@ class Interface:
 
 		if gajim.config.get('autodetect_browser_mailer') or not cfg_was_read:
 			gtkgui_helpers.autodetect_browser_mailer()
-
-		if gajim.verbose:
-			gajim.log.setLevel(gajim.logging.DEBUG)
-		else:
-			gajim.log.setLevel(None)
 
 		gajim.idlequeue = idlequeue.get_idlequeue()
 		# resolve and keep current record of resolved hosts
@@ -3500,9 +3452,8 @@ if __name__ == '__main__':
 	# ^C exits the application normally to delete pid file
 	signal.signal(signal.SIGINT, sigint_cb)
 
-	if gajim.verbose:
-		print >> sys.stderr, "Encodings: d:%s, fs:%s, p:%s" % \
-		(sys.getdefaultencoding(), sys.getfilesystemencoding(), locale.getpreferredencoding())
+	log.info("Encodings: d:%s, fs:%s, p:%s", sys.getdefaultencoding(), \
+		sys.getfilesystemencoding(), locale.getpreferredencoding())
 
 	if ((os.name != 'nt') and (sys.platform != 'darwin')):
 		# Session Management support

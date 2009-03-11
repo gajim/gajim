@@ -67,16 +67,9 @@ thread_interface = None # Interface to run a thread and then a callback
 config = config.Config()
 version = config.get('version')
 connections = {} # 'account name': 'account (connection.Connection) instance'
-verbose = False
 ipython_window = None
 
-h = logging.StreamHandler()
-f = logging.Formatter('%(asctime)s %(name)s: %(message)s', '%d %b %Y %H:%M:%S')
-h.setFormatter(f)
-log = logging.getLogger('Gajim')
-log.addHandler(h)
-del h
-del f
+log = logging.getLogger('gajim')
 
 import logger
 logger = logger.Logger() # init the logger
