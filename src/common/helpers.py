@@ -733,6 +733,9 @@ def launch_browser_mailer(kind, uri):
 		if kind == 'mail' and not uri.startswith('mailto:'):
 			uri = 'mailto:' + uri
 
+		if kind == 'url' and uri.startswith('www.'):
+			uri = 'http://' + uri
+
 		if gajim.config.get('openwith') == 'gnome-open':
 			command = 'gnome-open'
 		elif gajim.config.get('openwith') == 'kfmclient exec':
