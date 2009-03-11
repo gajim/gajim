@@ -159,7 +159,10 @@ class DataField(ExtendedNode):
 	def label():
 		'''Human-readable field name.'''
 		def fget(self):
-			return self.getAttr('label')
+			l = self.getAttr('label')
+			if not l:
+				l = self.var
+			return l
 		
 		def fset(self, value):
 			assert isinstance(value, basestring)
@@ -263,7 +266,10 @@ class ListField(DataField):
 				v = element.getTagData('value')
 				if v is None:
 					raise WrongFieldValue
-				options.append((element.getAttr('label'), v))
+				l = element.getAttr('label')
+				if not l:
+					l = v
+				options.append((l, v))
 			return options
 		
 		def fset(self, values):
