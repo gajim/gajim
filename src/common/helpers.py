@@ -726,7 +726,9 @@ def launch_browser_mailer(kind, uri):
 		elif gajim.config.get('openwith') == 'custom':
 			if kind == 'url':
 				command = gajim.config.get('custombrowser')
-			if kind in ('mail', 'sth_at_sth'):
+				if uri.startswith('www.'):
+					uri = 'http://' + uri
+			elif kind in ('mail', 'sth_at_sth'):
 				command = gajim.config.get('custommailapp')
 			if command == '': # if no app is configured
 				return
