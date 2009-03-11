@@ -522,8 +522,11 @@ class PreferencesWindow:
 			self.window.hide()
 
 	def get_per_account_option(self, opt):
-		'''Return the value of the option opt if it's the same in all accoutns
+		'''Return the value of the option opt if it's the same in all accounts
 		else returns "mixed"'''
+		if len(gajim.connections) = 0:
+			# a non existant key return default value
+			return gajim.config.get_per('accounts', '__default__', opt)
 		val = None
 		for account in gajim.connections:
 			v = gajim.config.get_per('accounts', account, opt)
