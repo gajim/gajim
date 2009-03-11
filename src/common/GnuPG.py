@@ -111,7 +111,7 @@ if gajim.HAVE_GPG:
 				# Encryption succeeded, even if there is output on stderr. Maybe
 				# verbose is on
 				error = ''
-			return self._stripHeaderFooter(output), error
+			return self._stripHeaderFooter(output), helpers.decode_string(error)
 
 		def decrypt(self, str_, keyID):
 			proc = self.run(['--decrypt', '-q', '-u %s'%keyID], create_fhs=['stdin', 'stdout'])
