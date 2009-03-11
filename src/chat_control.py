@@ -314,7 +314,7 @@ class ChatControlBase(MessageControl):
 			if lang:
 				self.msg_textview.lang = lang
 				spell.set_language(lang)
-		except (gobject.GError, RuntimeError, TypeError):
+		except (gobject.GError, RuntimeError, TypeError, OSError):
 			dialogs.AspellDictError(lang)
 
 	def on_msg_textview_populate_popup(self, textview, menu):

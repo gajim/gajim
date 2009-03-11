@@ -636,7 +636,7 @@ class PreferencesWindow:
 			if isinstance(ctrl, chat_control.ChatControlBase):
 				try:
 					spell_obj = gtkspell.get_from_text_view(ctrl.msg_textview)
-				except (TypeError, RuntimeError):
+				except (TypeError, RuntimeError, OSError):
 					spell_obj = None
 
 				if not spell_obj:
@@ -663,7 +663,7 @@ class PreferencesWindow:
 			tv = gtk.TextView()
 			try:
 				gtkspell.Spell(tv, lang)
-			except (TypeError, RuntimeError):
+			except (TypeError, RuntimeError, OSError):
 				dialogs.ErrorDialog(
 					_('Dictionary for lang %s not available') % lang,
 					_('You have to install %s dictionary to use spellchecking, or '

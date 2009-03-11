@@ -2203,7 +2203,7 @@ class SingleMessageWindow:
 					lang = gajim.LANG
 				gtkspell.Spell(self.conversation_textview.tv, lang)
 				gtkspell.Spell(self.message_textview, lang)
-			except (gobject.GError, TypeError, RuntimeError):
+			except (gobject.GError, TypeError, RuntimeError, OSError):
 				AspellDictError(lang)
 
 		self.prepare_widgets_for(self.action)

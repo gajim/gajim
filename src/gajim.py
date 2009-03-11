@@ -3409,7 +3409,7 @@ class Interface:
 			try:
 				import gtkspell
 				spell = gtkspell.Spell(tv, lang)
-			except (ImportError, TypeError, RuntimeError):
+			except (ImportError, TypeError, RuntimeError, OSError):
 				dialogs.AspellDictError(lang)
 
 		if gajim.config.get('soundplayer') == '':
