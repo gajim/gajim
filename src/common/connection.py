@@ -1121,6 +1121,7 @@ class Connection(ConnectionHandlers):
 			fjid += '/' + resource
 		msgtxt = msg
 		msgenc = ''
+		error = None
 
 		if session:
 			fjid = str(session.jid)
@@ -1153,24 +1154,29 @@ class Connection(ConnectionHandlers):
 				#encrypt
 				msgenc, error = self.gpg.encrypt(msg, [keyID], False)
 				return _on_encrypted(msgenc, error)
+		return self._on_message_encrypted((msgenc, error), type_, msg, msgtxt,
+			original_message, fjid, resource, jid, xhtml, subject, chatstate,
+			composing_xep, forward_from, delayed, session, form_node, user_nick,
+			keyID)
 
 	def _on_message_encrypted(self, output, type_, msg, msgtxt, original_message,
 	fjid, resource, jid, xhtml, subject, chatstate, composing_xep, forward_from,
 	delayed, session, form_node, user_nick, keyID):
 		msgenc, error = output
 
-		if not msgenc or error:
-			# Encryption failed, do not send message
-			tim = localtime()
-			self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim, session))
-			return 3
+		if keyID and self.USE_GPG:
+			if error or not msgenc:
+				# Encryption failed, do not send message
+				tim = localtime()
+				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim, session))
+				return 3
 
-		msgtxt = '[This message is *encrypted* (See :XEP:`27`]'
-		lang = os.getenv('LANG')
-		if lang is not None and lang != 'en': # we're not english
-			# one in locale and one en
-			msgtxt = _('[This message is *encrypted* (See :XEP:`27`]') + \
-				' (' + msgtxt + ')'
+			msgtxt = '[This message is *encrypted* (See :XEP:`27`]'
+			lang = os.getenv('LANG')
+			if lang is not None and lang != 'en': # we're not english
+				# one in locale and one en
+				msgtxt = _('[This message is *encrypted* (See :XEP:`27`]') + \
+					' (' + msgtxt + ')'
 
 		if type_ == 'chat':
 			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type_,
