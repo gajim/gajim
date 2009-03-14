@@ -410,7 +410,12 @@ class PassphraseRequest:
 		self.keyid = keyid
 		self.callbacks = []
 		self.dialog_created = False
+		self.dialog = None
 		self.completed = False
+
+	def interrupt(self):
+		self.dialog.window.destroy()
+		self.callbacks = []
 
 	def run_callback(self, account, callback):
 		gajim.connections[account].gpg_passphrase(self.passphrase)
@@ -467,7 +472,7 @@ class PassphraseRequest:
 				# user failed 3 times, continue without GPG
 				self.complete(None)
 
-		dialogs.PassphraseDialog(title, second, ok_handler=(_ok, 1),
+		self.dialog = dialogs.PassphraseDialog(title, second, ok_handler=(_ok, 1),
 			cancel_handler=_cancel)
 		self.dialog_created = True
 
@@ -609,6 +614,9 @@ class Interface:
 				# iteration error
 				self.instances[account]['online_dialog'][name].destroy()
 				del self.instances[account]['online_dialog'][name]
+			for request in self.gpg_passphrase.values():
+				if request:
+					request.interrupt()
 		if status == 'offline':
 			# sensitivity for this menuitem
 			if gajim.get_number_of_connected_accounts() == 0:
