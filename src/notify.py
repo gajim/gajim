@@ -585,7 +585,7 @@ class DesktopNotification:
 					text = ' '
 				actions = ()
 				if 'actions' in self.capabilities:
-					actions = (dbus.String('default'), dbus.String(self.event_type)),
+					actions = (dbus.String('default'), dbus.String(self.event_type))
 				self.notif.Notify(
 					dbus.String(_('Gajim')),
 					dbus.UInt32(0), # this notification does not replace other
