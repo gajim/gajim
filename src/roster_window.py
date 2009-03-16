@@ -1592,15 +1592,10 @@ class RosterWindow:
 				return -1
 			sub1 = contact1.sub
 			sub2 = contact2.sub
-			# both goes before
-			if sub1 == 'both' and sub2 != 'both':
+			# none and from goes after
+			if sub1 not in ['none', 'from'] and sub2 in ['none', 'from']:
 				return -1
-			if sub1 != 'both' and sub2 == 'both':
-				return 1
-			# none goes after
-			if sub1 != 'none' and sub2 == 'none':
-				return -1
-			if sub1 == 'none' and sub2 != 'none':
+			if sub1 in ['none', 'from'] and sub2 not in ['none', 'from']:
 				return 1
 			if show1 < show2:
 				return -1
