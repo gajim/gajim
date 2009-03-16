@@ -3275,7 +3275,7 @@ class Interface:
 		gajim.proxy65_manager = proxy65_manager.Proxy65Manager(gajim.idlequeue)
 		gajim.default_session_type = ChatControlSession
 		self.register_handlers()
-		if gajim.config.get('enable_zeroconf'):
+		if gajim.config.get('enable_zeroconf') and gajim.HAVE_ZEROCONF:
 			gajim.connections[gajim.ZEROCONF_ACC_NAME] = \
 				connection_zeroconf.ConnectionZeroconf(gajim.ZEROCONF_ACC_NAME)
 		for account in gajim.config.get_per('accounts'):

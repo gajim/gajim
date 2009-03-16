@@ -1499,8 +1499,11 @@ class AccountsWindow:
 		self.notebook.set_current_page(1)
 
 	def init_zeroconf_account(self):
-		enable = gajim.config.get('enable_zeroconf')
+		enable = gajim.config.get('enable_zeroconf') and gajim.HAVE_ZEROCONF
 		self.xml.get_widget('enable_zeroconf_checkbutton2').set_active(enable)
+		if not gajim.HAVE_ZEROCONF:
+			self.xml.get_widget('enable_zeroconf_checkbutton2').set_sensitive(
+				False)
 		self.xml.get_widget('zeroconf_notebook').set_sensitive(enable)
 		# General tab
 		st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
