@@ -319,7 +319,10 @@ class SASL(PlugIn):
 		raise NodeProcessed
 	
 	def set_password(self, password):
-		self.password = password
+		if password is None:
+			self.password = ''
+		else:
+			self.password = password
 		if self.mechanism == 'DIGEST-MD5':
 			A1 = C([H(C([self.resp['username'], self.resp['realm'],
 				self.password])), self.resp['nonce'], self.resp['cnonce']])
@@ -356,7 +359,10 @@ class NonBlockingNonSASL(PlugIn):
 		''' Caches username, password and resource for auth. '''
 		PlugIn.__init__(self)
 		self.user = user
-		self.password= password
+		if self.password is None:
+			self.password = ''
+		else:
+			self.password = password
 		self.resource = resource
 		self.on_auth = on_auth
 
