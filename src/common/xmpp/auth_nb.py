@@ -196,35 +196,43 @@ class SASL(PlugIn):
 			self.mecs.remove('ANONYMOUS')
 			node = Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'ANONYMOUS'})
 			self.mechanism = 'ANONYMOUS'
-		elif 'GSSAPI' in self.mecs and have_kerberos:
+			self.startsasl = SASL_IN_PROCESS
+			self._owner.send(str(node))
+			raise NodeProcessed
+		if 'GSSAPI' in self.mecs and have_kerberos:
 			self.mecs.remove('GSSAPI')
-			self.gss_vc = kerberos.authGSSClientInit('xmpp@' + \
-				self._owner.xmpp_hostname)[1]
-			kerberos.authGSSClientStep(self.gss_vc, '')
-			response = kerberos.authGSSClientResponse(self.gss_vc)
-			node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'GSSAPI'},
-				payload=(response or ''))
-			self.mechanism = 'GSSAPI'
-			self.gss_step = GSS_STATE_STEP
-		elif 'DIGEST-MD5' in self.mecs:
+			try:
+				self.gss_vc = kerberos.authGSSClientInit('xmpp@' + \
+					self._owner.xmpp_hostname)[1]
+				kerberos.authGSSClientStep(self.gss_vc, '')
+				response = kerberos.authGSSClientResponse(self.gss_vc)
+				node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'GSSAPI'},
+					payload=(response or ''))
+				self.mechanism = 'GSSAPI'
+				self.gss_step = GSS_STATE_STEP
+				self.startsasl = SASL_IN_PROCESS
+				self._owner.send(str(node))
+				raise NodeProcessed
+			except GSSError, e:
+				log.info('GSSAPI authentication failed: %s' % str(e)
+		if 'DIGEST-MD5' in self.mecs:
 			self.mecs.remove('DIGEST-MD5')
 			node = Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'DIGEST-MD5'})
 			self.mechanism = 'DIGEST-MD5'
-		elif 'PLAIN' in self.mecs:
+			self.startsasl = SASL_IN_PROCESS
+			self._owner.send(str(node))
+			raise NodeProcessed
+		if 'PLAIN' in self.mecs:
 			self.mecs.remove('PLAIN')
 			self.mechanism = 'PLAIN'
 			self._owner._caller.get_password(self.set_password)
 			self.startsasl = SASL_IN_PROCESS
 			raise NodeProcessed
-		else:
-			self.startsasl = SASL_FAILURE
-			log.error('I can only use DIGEST-MD5, GSSAPI and PLAIN mecanisms.')
-			if self.on_sasl:
-				self.on_sasl()
-			return
-		self.startsasl = SASL_IN_PROCESS
-		self._owner.send(str(node))
-		raise NodeProcessed
+		self.startsasl = SASL_FAILURE
+		log.error('I can only use DIGEST-MD5, GSSAPI and PLAIN mecanisms.')
+		if self.on_sasl:
+			self.on_sasl()
+		return
 
 	def SASLHandler(self, conn, challenge):
 		''' Perform next SASL auth step. Used internally. '''
