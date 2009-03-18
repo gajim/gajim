@@ -214,7 +214,7 @@ class SASL(PlugIn):
 				self._owner.send(str(node))
 				raise NodeProcessed
 			except GSSError, e:
-				log.info('GSSAPI authentication failed: %s' % str(e)
+				log.info('GSSAPI authentication failed: %s' % str(e))
 		if 'DIGEST-MD5' in self.mecs:
 			self.mecs.remove('DIGEST-MD5')
 			node = Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'DIGEST-MD5'})
