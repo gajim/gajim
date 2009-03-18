@@ -359,7 +359,7 @@ class NonBlockingNonSASL(PlugIn):
 		''' Caches username, password and resource for auth. '''
 		PlugIn.__init__(self)
 		self.user = user
-		if self.password is None:
+		if password is None:
 			self.password = ''
 		else:
 			self.password = password
