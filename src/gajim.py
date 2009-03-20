@@ -733,6 +733,9 @@ class Interface:
 					# Create self contact and add to roster
 					if resource == conn.server_resource:
 						return
+					# Ignore offline presence of unknown self resource
+					if new_show < 2:
+						return
 					contact1 = gajim.contacts.create_contact(jid=ji,
 						name=gajim.nicks[account], groups=['self_contact'],
 						show=array[1], status=status_message, sub='both', ask='none',
