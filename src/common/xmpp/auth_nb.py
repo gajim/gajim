@@ -213,7 +213,7 @@ class SASL(PlugIn):
 				self.startsasl = SASL_IN_PROCESS
 				self._owner.send(str(node))
 				raise NodeProcessed
-			except GSSError, e:
+			except kerberos.GSSError, e:
 				log.info('GSSAPI authentication failed: %s' % str(e))
 		if 'DIGEST-MD5' in self.mecs:
 			self.mecs.remove('DIGEST-MD5')
