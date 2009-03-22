@@ -327,7 +327,7 @@ class Systray:
 		if len(gajim.events.get_systray_events()) == 0:
 			# No pending events, so toggle visible/hidden for roster window
 			if win.get_property('visible') and (win.get_property(
-			'has-toplevel-focus')):
+			'has-toplevel-focus') or os.name == 'nt'):
 				# visible in ANY virtual desktop?
 
 				# we could be in another VD right now. eg vd2
