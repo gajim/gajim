@@ -1253,7 +1253,8 @@ class ChatControl(ChatControlBase):
 			self._add_to_roster_button.hide()
 
 		# Send file
-		if gajim.capscache.is_supported(self.contact, NS_FILE):
+		if gajim.capscache.is_supported(self.contact, NS_FILE) and \
+		self.contact.resource:
 			self._send_file_button.set_sensitive(True)
 		else:
 			self._send_file_button.set_sensitive(False)
