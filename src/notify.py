@@ -508,11 +508,11 @@ class DesktopNotification:
 		if self.notif is None:
 			raise dbus.DBusException('unable to get notifications interface')
 		self.ntype = ntype
-		self.capabilities = self.notif.GetCapabilities()
 
 		if self.kde_notifications:
 			self.attempt_notify()
 		else:
+			self.capabilities = self.notif.GetCapabilities()
 			self.get_version()
 
 	def attempt_notify(self):
@@ -524,10 +524,6 @@ class DesktopNotification:
 				'text': self.text, 'image': self.path_to_image}
 			gajim_icon = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps',
 				'gajim.png'))
-			actions = ()
-			if 'actions' in self.capabilities:
-				actions = (dbus.String('default'), dbus.String(self.event_type),
-					dbus.String('ignore'), dbus.String(_('Ignore')))
 			self.notif.Notify(
 				dbus.String(_('Gajim')),			# app_name (string)
 				dbus.UInt32(0),						# replaces_id (uint)
@@ -535,7 +531,9 @@ class DesktopNotification:
 				dbus.String(gajim_icon),			# app_icon (string)
 				dbus.String(_('')),					# summary (string)
 				dbus.String(notification_text),	# body (string)
-				actions,									# actions (stringlist)
+				# actions (stringlist)
+				(dbus.String('default'), dbus.String(self.event_type),
+					dbus.String('ignore'), dbus.String(_('Ignore'))),
 				[],										# hints (not used in KDE yet)
 				dbus.UInt32(timeout*1000),			# timeout (int), in ms
 				reply_handler=self.attach_by_id,
