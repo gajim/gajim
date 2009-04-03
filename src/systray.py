@@ -333,13 +333,13 @@ class Systray:
 				# we could be in another VD right now. eg vd2
 				# and we want to show it in vd2
 				if not gtkgui_helpers.possibly_move_window_in_current_desktop(win):
-					win.hide() # else we hide it from VD that was visible in
+					win.iconify() # else we hide it from VD that was visible in
+					win.set_property('skip-taskbar-hint', True)
 			else:
-				# in Windows (perhaps other Window Managers too) minimize state
-				# is remembered, so make sure it's not minimized (iconified)
-				# because user wants to see roster
 				win.deiconify()
-				win.present()
+				if not gajim.config.get('roster_window_skip_taskbar'):
+					win.set_property('skip-taskbar-hint', False)
+				win.present_with_time(gtk.get_current_event_time())
 		else:
 			self.handle_first_event()
 
