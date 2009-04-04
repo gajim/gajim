@@ -32,6 +32,7 @@ import time
 import dialogs
 import gobject
 import gtkgui_helpers
+import gtk
 
 from common import gajim
 from common import helpers
@@ -55,6 +56,21 @@ try:
 	osx.growler.init()
 except Exception:
 	USER_HAS_GROWL = False
+
+def setup_indicator_server(): 
+	server = indicate.indicate_server_ref_default() 
+	server.set_type('message.im') 
+	server.set_desktop_file('/usr/share/applications/gajim.desktop') 
+	server.connect('server-display', server_display) 
+	server.show() 
+
+def display(indicator, account, jid, msg_type): 
+	gajim.interface.handle_event(account, jid, msg_type) 
+	indicator.hide() 
+
+def server_display(server): 
+	win = gajim.interface.roster.window 
+	win.present()
 
 def get_show_in_roster(event, account, contact, session=None):
 	'''Return True if this event must be shown in roster, else False'''
@@ -326,6 +342,18 @@ def popup(event_type, jid, account, msg_type='', path_to_image=None,
 		path_to_image = os.path.abspath(
 			os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
 				'chat_msg_recv.png')) # img to display
+
+	if gajim.HAVE_INDICATOR and event_type in (_('New Message'),
+	_('New Single Message'), _('New Private Message')):
+		indicator = indicate.IndicatorMessage()
+		indicator.set_property('subtype', 'im')
+		indicator.set_property('sender', jid)
+		indicator.set_property('body', text)
+		indicator.set_property_time('time', time.time())
+		pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_image)
+		indicator.set_property_icon('icon', pixbuf)
+		indicator.connect('user-display', display, account, jid, msg_type)
+		indicator.show()
 
 	# Try Growl first, as we might have D-Bus and notification daemon running
 	# on OS X for some reason.

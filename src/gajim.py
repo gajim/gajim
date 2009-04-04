@@ -3448,6 +3448,10 @@ class Interface:
 		if resolver.USE_LIBASYNCNS:
 			gobject.timeout_add(200, gajim.resolver.process)
 
+		# setup the indicator
+		if gajim.HAVE_INDICATOR:
+			notify.setup_indicator_server()
+
 		def remote_init():
 			if gajim.config.get('remote_control'):
 				try:

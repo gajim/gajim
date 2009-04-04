@@ -182,6 +182,12 @@ else:
 import latex
 HAVE_LATEX = latex.check_for_latex_support()
 
+HAVE_INDICATOR = True
+try:
+	import indicate
+except ImportError:
+	HAVE_INDICATOR = False
+
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
 gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI, xmpp.NS_FILE,
 	xmpp.NS_MUC, xmpp.NS_MUC_USER, xmpp.NS_MUC_ADMIN, xmpp.NS_MUC_OWNER,
