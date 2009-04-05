@@ -1197,13 +1197,14 @@ class Interface:
 			win = self.instances[account]['infos'][array[0]]
 		elif array[0] + '/' + array[1] in self.instances[account]['infos']:
 			win = self.instances[account]['infos'][array[0] + '/' + array[1]]
+		c = gajim.contacts.get_contact(account, array[0], array[1])
+		if c: # c can be none if it's a gc contact
+			c.last_status_time = time.localtime(time.time() - tim)
+			if array[3]:
+				c.status = array[3]
+				self.roster.draw_contact(c.jid, account) # draw offline status
 		if win:
-			c = gajim.contacts.get_contact(account, array[0], array[1])
-			if c: # c can be none if it's a gc contact
-				c.last_status_time = time.localtime(time.time() - tim)
-				if array[3]:
-					c.status = array[3]
-				win.set_last_status_time()
+			win.set_last_status_time()
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('LastStatusTime', (account, array))
 
