@@ -326,13 +326,14 @@ class Systray:
 		win = gajim.interface.roster.window
 		if len(gajim.events.get_systray_events()) == 0:
 			# No pending events, so toggle visible/hidden for roster window
-			if win.get_property('visible') and (win.get_property(
+			if not win.iconify_initially and (win.get_property(
 			'has-toplevel-focus') or os.name == 'nt'):
 				# visible in ANY virtual desktop?
 
 				# we could be in another VD right now. eg vd2
 				# and we want to show it in vd2
 				if not gtkgui_helpers.possibly_move_window_in_current_desktop(win):
+					win.set_property('skip-taskbar-hint', False)
 					win.iconify() # else we hide it from VD that was visible in
 					win.set_property('skip-taskbar-hint', True)
 			else:
