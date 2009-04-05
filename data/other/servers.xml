@@ -40,6 +40,9 @@
   <item jid="aszlig.net" name="">
     <active port="5222"/>
   </item>
+  <item jid="blabla.kz" name="">
+    <active port="5222"/>
+  </item>
   <item jid="bloodyxml.com" name="Hosted by Chote Networks (http://www.chote.com)">
     <active port="5222"/>
   </item>
