@@ -2645,7 +2645,8 @@ class RosterWindow:
 				return
 			old_text = jid
 			title = _('Rename Group')
-			message = _('Enter a new name for group %s') % jid
+			message = _('Enter a new name for group %s') % \
+				gobject.markup_escape_text(jid)
 
 		def on_renamed(new_text, account, row_type, jid, old_text):
 			if 'rename' in gajim.interface.instances:
