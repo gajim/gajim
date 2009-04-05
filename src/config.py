@@ -3112,18 +3112,6 @@ class AccountCreationWizardWindow:
 				dialogs.ErrorDialog(pritext, str(s))
 				return
 
-			already_in_jids = []
-			for account in gajim.connections:
-				j = gajim.config.get_per('accounts', account, 'name')
-				j += '@' + gajim.config.get_per('accounts', account, 'hostname')
-				already_in_jids.append(j)
-
-			if jid in already_in_jids:
-				pritext = _('Duplicate Jabber ID')
-				sectext = _('This account is already configured in Gajim.')
-				dialogs.ErrorDialog(pritext, sectext)
-				return
-
 			self.account = server
 			i = 1
 			while self.account in gajim.connections:
