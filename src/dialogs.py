@@ -218,7 +218,7 @@ class PassphraseDialog:
 		cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
 
 		self.xml.signal_autoconnect(self)
-		self.window.set_position(gtk.GTK_WIN_POS_CENTER_ON_PARENT)
+		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.window.show_all()
 
 		self.check = bool(checkbuttontext)
@@ -284,7 +284,7 @@ class ChooseGPGKeyDialog:
 		self.keys_treeview.set_search_column(1)
 		self.fill_tree(secret_keys, selected)
 		self.window.connect('response', self.on_dialog_response)
-		self.window.set_position(gtk.GTK_WIN_POS_CENTER_ON_PARENT)
+		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.window.show_all()
 
 	def sort_keys(self, model, iter1, iter2):
@@ -420,7 +420,7 @@ class ChangeActivityDialog:
 			self.entry.set_text(con.activity['text'])
 
 		self.xml.signal_autoconnect(self)
-		self.window.set_position(gtk.GTK_WIN_POS_CENTER_ON_PARENT)
+		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.window.show_all()
 
 	def on_enable_checkbutton_toggled(self, widget):
@@ -512,7 +512,7 @@ class ChangeMoodDialog:
 			self.entry.set_text(con.mood['text'])
 
 		self.xml.signal_autoconnect(self)
-		self.window.set_position(gtk.GTK_WIN_POS_CENTER_ON_PARENT)
+		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.window.show_all()
 
 	def on_mood_button_clicked(self, widget, data):
@@ -588,7 +588,7 @@ class ChangeStatusMessageDialog:
 			self.countdown()
 			gobject.timeout_add(1000, self.countdown)
 		self.window.connect('response', self.on_dialog_response)
-		self.window.set_position(gtk.GTK_WIN_POS_CENTER_ON_PARENT)
+		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.window.show_all()
 
 	def countdown(self):
@@ -3003,7 +3003,7 @@ class ProgressDialog:
 		self.progressbar = self.xml.get_widget('progressbar')
 		self.dialog.set_title(title_text)
 		self.dialog.set_default_size(450, 250)
-		self.window.set_position(gtk.GTK_WIN_POS_CENTER_ON_PARENT)
+		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.dialog.show_all()
 		self.xml.signal_autoconnect(self)
 
