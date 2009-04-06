@@ -35,14 +35,14 @@ for o, a in opts:
 			sys.exit(2)
 
 # new test modules need to be added manually
-#modules = ( 'test_xmpp_dispatcher_nb',
-#				'test_xmpp_client_nb',
-#				'test_xmpp_transports_nb',
-#				'test_resolver',
-#				'test_sessions',
-#				'test_caps',
-#			 )
-modules = ()
+modules = ( 'test_xmpp_dispatcher_nb',
+				'test_xmpp_client_nb',
+				'test_xmpp_transports_nb',
+				'test_resolver',
+				'test_sessions',
+				'test_caps',
+			 )
+#modules = ()
 
 if use_x:
 	modules += ('test_misc_interface',
