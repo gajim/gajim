@@ -32,8 +32,8 @@ class TestResolver(unittest.TestCase):
 		self.iq = self.idlequeue_thread.iq
 		self._reset()
 		self.resolver = None
-	
-	def tear_down(self):
+
+	def tearDown(self):
 		self.idlequeue_thread.stop_thread()
 		self.idlequeue_thread.join()
 
