@@ -13,6 +13,9 @@ from xmpp_mocks import MockConnection, IdleQueueThread
 from mock import Mock
 from common.xmpp import client_nb
 
+#import logging
+#log = logging.getLogger('gajim')
+#log.setLevel(logging.DEBUG)
 
 # (XMPP server hostname, c2s port). Script will connect to the machine.
 xmpp_server_port = ('gajim.org', 5222)
@@ -37,7 +40,7 @@ class TestNonBlockingClient(unittest.TestCase):
 
 		self.client = None
 
-	def open_stream(self, server_port):
+	def open_stream(self, server_port, wrong_pass=False):
 		'''
 		Method opening the XMPP connection. It returns when <stream:features>
 		is received from server.
@@ -46,10 +49,19 @@ class TestNonBlockingClient(unittest.TestCase):
 		connect.
 		'''
 
+		class TempConnection():
+			def get_password(self, cb):
+				if wrong_pass:
+					cb('wrong pass')
+				else:
+					cb(credentials[1])
+			def on_connect_failure(self):
+				pass
+
 		self.client = client_nb.NonBlockingClient(
 			domain=server_port[0],
 			idlequeue=self.idlequeue_thread.iq,
-			caller=Mock())
+			caller=Mock(realClass=TempConnection))
 
 		self.client.connect(
 			hostname=server_port[0],
@@ -86,7 +98,6 @@ class TestNonBlockingClient(unittest.TestCase):
 		Does disconnecting of connected client. Returns when TCP connection is 
 		closed.
 		'''
-		#self.client.start_disconnect(None, on_disconnect=self.connection.set_event)
 		self.client.RegisterDisconnectHandler(self.connection.set_event)
 		self.client.disconnect()
 
@@ -106,7 +117,7 @@ class TestNonBlockingClient(unittest.TestCase):
 
 		self.client_auth(credentials[0], credentials[1], credentials[2], sasl=1)
 		self.assert_(self.connection.con)
-		self.assert_(self.connection.auth=='sasl', msg="Unable to auth via SASL")
+		self.assert_(self.connection.auth=='sasl', msg='Unable to auth via SASL')
 
 		self.do_disconnect()
 
@@ -119,8 +130,12 @@ class TestNonBlockingClient(unittest.TestCase):
 		self.assert_(self.client.get_connect_type())
 		self.client_auth(credentials[0], credentials[1], credentials[2], sasl=0)
 		self.assert_(self.connection.con)
-		self.assert_(self.connection.auth=='old_auth',
-			msg="Unable to auth via old_auth")
+		features = self.client.Dispatcher.Stream.features
+		if not features.getTag('auth'):
+			print "Server doesn't support old authentication type, ignoring test"
+		else:
+			self.assert_(self.connection.auth=='old_auth',
+				msg='Unable to auth via old_auth')
 		self.do_disconnect()
 
 	def test_connect_to_nonexisting_host(self):
@@ -143,9 +158,9 @@ class TestNonBlockingClient(unittest.TestCase):
 		'''
 		Connecting with invalid password.
 		'''
-		self.open_stream(xmpp_server_port)
+		self.open_stream(xmpp_server_port, wrong_pass=True)
 		self.assert_(self.client.get_connect_type())
-		self.client_auth(credentials[0], "wrong pass", credentials[2], sasl=1)
+		self.client_auth(credentials[0], 'wrong pass', credentials[2], sasl=1)
 		self.assert_(self.connection.auth is None)
 		self.do_disconnect()
 
