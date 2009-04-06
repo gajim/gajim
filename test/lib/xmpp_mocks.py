@@ -47,7 +47,7 @@ class IdleMock:
 		Returns True if event was set, False on timeout
 		'''
 		self._event.wait(IDLEMOCK_TIMEOUT)
-		if self._event.is_set():
+		if self._event.isSet():
 			self._event.clear()
 			return True
 		else:
