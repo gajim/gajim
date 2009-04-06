@@ -1869,6 +1869,11 @@ class Interface:
 			win = self.instances[account]['profile']
 			win.vcard_not_published()
 
+	def ask_offline_status(self, account):
+		for contact in gajim.contacts.iter_contacts(account):
+			gajim.connections[account].request_last_status_time(contact.jid,
+				contact.resource)
+
 	def handle_event_signed_in(self, account, empty):
 		'''SIGNED_IN event is emitted when we sign in, so handle it'''
 		# block signed in notifications for 30 seconds
@@ -1877,6 +1882,10 @@ class Interface:
 		self.roster.draw_account(account)
 		state = self.sleeper.getState()
 		connected = gajim.connections[account].connected
+		if gajim.config.get('ask_offline_status_on_connection'):
+			# Ask offline status in 1 minute so w'are sure we got all online
+			# presences
+			gobject.timeout_add_seconds(60, self.ask_offline_status, account)
 		if state != common.sleepy.STATE_UNKNOWN and connected in (2, 3):
 			# we go online or free for chat, so we activate auto status
 			gajim.sleeper_state[account] = 'online'

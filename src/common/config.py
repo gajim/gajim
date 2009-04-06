@@ -269,6 +269,7 @@ class Config:
 		'check_idle_every_foo_seconds': [opt_int, 2, _('Choose interval between 2 checks of idleness.')],
 		'latex_png_dpi': [opt_str, '108',_('Change the value to change the size of latex formulas displayed. The higher is larger.') ],
 		'uri_schemes': [opt_str, 'aaa aaas acap cap cid crid data dav dict dns fax file ftp go gopher h323 http https icap im imap info ipp iris iris.beep iris.xpc iris.xpcs iris.lwz ldap mid modem msrp msrps mtqp mupdate news nfs nntp opaquelocktoken pop pres rtsp service shttp sip sips snmp soap.beep soap.beeps tag tel telnet tftp thismessage tip tv urn vemmi xmlrpc.beep xmlrpc.beeps z39.50r z39.50s about cvs daap ed2k feed fish git iax2 irc ircs ldaps magnet mms rsync ssh svn sftp smb webcal', _('Valid uri schemes. Only schemes in this list will be accepted as "real" uri. (mailto and xmpp are handled separately)'), True],
+		'ask_offline_status_on_connection': [ opt_bool, False, _('Ask offline status message to all offline contacts when connection to an accoutn is established. WARNING: This causes a lot of requests to be sent!') ],
 	}
 
 	__options_per_key = {
