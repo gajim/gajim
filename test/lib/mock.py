@@ -11,6 +11,7 @@
 #
 #
 #     Copyright (c) 2005, Dave Kirby
+#     Copyright (c) 2009, Yann Leboulanger
 #
 #     All rights reserved.
 #
@@ -60,7 +61,7 @@ import re
 class MockInterfaceError(Exception):
     pass
 
-class Mock:
+class Mock(object):
     """
     The Mock class emulates any other class for testing purposes.
     All method calls are stored for later examination.
@@ -83,6 +84,7 @@ class Mock:
         self.mockAllCalledMethods = []
         self.mockReturnValues = returnValues or {}
         self.mockExpectations = {}
+        self.realClass = realClass
         self.realClassMethods = None
         if realClass:
             self.realClassMethods = dict(inspect.getmembers(realClass, inspect.isroutine))
@@ -92,7 +94,7 @@ class Mock:
         self._setupSubclassMethodInterceptors()
 
     def _setupSubclassMethodInterceptors(self):
-        methods = inspect.getmembers(self.__class__,inspect.isroutine)
+        methods = inspect.getmembers(self.realClass,inspect.isroutine)
         baseMethods = dict(inspect.getmembers(Mock, inspect.ismethod))
         for m in methods:
             name = m[0]
@@ -119,7 +121,7 @@ class Mock:
         if self.realClassMethods is None:
             return
         if name not in self.realClassMethods:
-            raise MockInterfaceError("Calling mock method '%s' that was not found in the original class" % name)
+            return
 
         func = self.realClassMethods[name]
         try:
@@ -268,7 +270,7 @@ class MockCallable:
     def makeCall(self, params, kwparams):
         if self.handcrafted:
             allPosParams = (self.mock,) + params
-            func = _findFunc(self.mock.__class__, self.name)
+            func = _findFunc(self.mock.realClass, self.name)
             if not func:
                 raise NotImplementedError
             return func(*allPosParams, **kwparams)
