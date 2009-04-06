@@ -57,12 +57,13 @@ def get_proxy_data_from_dict(proxy):
 	if proxy_type == 'bosh' and not proxy['bosh_useproxy']:
 		# with BOSH not over proxy we have to parse the hostname from BOSH URI 
 		tcp_host, tcp_port = urisplit(proxy['bosh_uri'])[1], proxy['bosh_port'] 
+		tcp_host = tcp_host.split(':')[0]
 	else: 
 		# with proxy!=bosh or with bosh over HTTP proxy we're connecting to proxy 
 		# machine 
 		tcp_host, tcp_port = proxy['host'], proxy['port'] 
-		if proxy['useauth']:
-			proxy_user, proxy_pass = proxy['user'], proxy['pass']
+	if proxy['useauth']:
+		proxy_user, proxy_pass = proxy['user'], proxy['pass']
 	return tcp_host, tcp_port, proxy_user, proxy_pass
 
 #: timeout to connect to the server socket, it doesn't include auth
