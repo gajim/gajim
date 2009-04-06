@@ -35,6 +35,7 @@ class TestDispatcherNB(unittest.TestCase):
 	def _simulate_connect(self):
 		self.dispatcher.PlugIn(self.client) # client is owner
 		# Simulate that we have established a connection
+		self.dispatcher.StreamInit()
 		self.dispatcher.ProcessNonBlocking("<stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client'>")
 
 	def test_unbound_namespace_prefix(self):
