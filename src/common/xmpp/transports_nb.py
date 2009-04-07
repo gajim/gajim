@@ -687,6 +687,9 @@ class NonBlockingHTTP(NonBlockingTCP):
 			httpbody - string with http body)
 		'''
 		message = message.replace('\r','')
+		# Remove latest \n
+		if message.endswith('\n'):
+			message = message[:-1]
 		(header, httpbody) = message.split('\n\n', 1)
 		header = header.split('\n')
 		statusline = header[0].split(' ', 2)
