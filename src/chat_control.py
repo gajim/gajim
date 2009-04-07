@@ -836,6 +836,34 @@ class ChatControlBase(MessageControl):
 			gajim.interface.instances['logs'] = \
 				history_window.HistoryWindow(jid, self.account)
 
+	def _on_send_file(self, gc_contact=None):
+		'''gc_contact can be set when we are in a groupchat control'''
+		def _on_ok(c):
+			gajim.interface.instances['file_transfers'].show_file_send_request(
+				self.account, c)
+		if self.TYPE_ID == message_control.TYPE_PM:
+			gc_contact = self.gc_contact
+		if gc_contact:
+			# gc or pm
+			gc_control = gajim.interface.msg_win_mgr.get_gc_control(
+				gc_contact.room_jid, self.account)
+			self_contact = gajim.contacts.get_gc_contact(self.account,
+				gc_control.room_jid, gc_control.nick)
+			if gc_control.is_anonymous and gc_contact.affiliation not in ['admin',
+			'owner'] and self_contact.affiliation in ['admin', 'owner']:
+				contact = gajim.contacts.get_contact(self.account, gc_contact.jid)
+				if not contact or contact.sub not in ('both', 'to'):
+					prim_text = _('Really send file?')
+					sec_text = _('If you send a file to %s, he/she will know your '
+						'real Jabber ID.') % gc_contact.name
+					dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,
+						on_response_ok = (_on_ok, gc_contact))
+					dialog.popup()
+					return
+			_on_ok(gc_contact)
+			return
+		_on_ok(self.contact)
+
 	def on_minimize_menuitem_toggled(self, widget):
 		'''When a grouchat is minimized, unparent the tab, put it in roster etc'''
 		old_value = False
@@ -2635,12 +2663,7 @@ class ChatControl(ChatControlBase):
 		self.bigger_avatar_window.window.set_cursor(cursor)
 
 	def _on_send_file_menuitem_activate(self, widget):
-		if self.TYPE_ID == message_control.TYPE_PM:
-			c = self.gc_contact
-		else:
-			c = self.contact
-		gajim.interface.instances['file_transfers'].show_file_send_request(
-			self.account, c)
+		self._on_send_file()
 
 	def _on_add_to_roster_menuitem_activate(self, widget):
 		dialogs.AddNewContactWindow(self.account, self.contact.jid)

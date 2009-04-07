@@ -576,9 +576,9 @@ class Contacts:
 	def contact_from_gc_contact(self, gc_contact):
 		'''Create a Contact instance from a GC_Contact instance'''
 		jid = gc_contact.get_full_jid()
-		return Contact(jid=jid, resource='', name=gc_contact.name, groups=[],
-			show=gc_contact.show, status=gc_contact.status, sub='none',
-			caps_node=gc_contact.caps_node,
+		return Contact(jid=jid, resource=gc_contact.resource,
+			name=gc_contact.name, groups=[], show=gc_contact.show,
+			status=gc_contact.status, sub='none', caps_node=gc_contact.caps_node,
 			caps_hash_method=gc_contact.caps_hash_method,
 			caps_hash=gc_contact.caps_hash)
 
