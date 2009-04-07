@@ -1010,15 +1010,18 @@ class GroupchatControl(ChatControlBase):
 		self_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid,
 			self.nick)
 		if self.is_anonymous and gc_contact.affiliation not in ['admin', 'owner']\
-		and self_contact.affiliation in ['admin', 'owner']:
-			prim_text = _('Really send file?')
-			sec_text = _('If you send a file to %s, he/she will know your real '
-				'Jabber ID.') % gc_contact.name
-			dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,
-				on_response_ok = (_on_send_files, gc_contact))
-			dialog.popup()
-		else:
-			_on_send_files(gc_contact)
+		and self_contact.affiliation in ['admin', 'owner'] and \
+		gc_contact.jid not in gajim.contacts.get_jid_list(self.account):
+			contact = gajim.contacts.get_contact(self.account, gc_contact.jid)
+			if not contact or contact.sub not in ('both', 'to'):
+				prim_text = _('Really send file?')
+				sec_text = _('If you send a file to %s, he/she will know your real '
+					'Jabber ID.') % gc_contact.name
+				dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,
+					on_response_ok = (_on_send_files, gc_contact))
+				dialog.popup()
+				return
+		_on_send_files(gc_contact)
 
 	def draw_contact(self, nick, selected=False, focus=False):
 		iter_ = self.get_contact_iter(nick)
