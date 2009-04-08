@@ -982,4 +982,31 @@ def reload_jabber_state_images():
 	make_jabber_state_images()
 	gajim.interface.roster.update_jabber_state_images()
 
+def label_set_autowrap(widget):
+	'''Make labels automatically re-wrap if their containers are resized.
+	Accepts label or container widgets.'''
+	if isinstance (widget, gtk.Container):
+		children = widget.get_children()
+		for i in xrange (len (children)):
+			label_set_autowrap(children[i])
+	elif isinstance(widget, gtk.Label):
+		widget.set_line_wrap(True)
+		widget.connect_after('size-allocate', __label_size_allocate)
+
+def __label_size_allocate(widget, allocation):
+	'''Callback which re-allocates the size of a label.'''
+	layout = widget.get_layout()
+
+	lw_old, lh_old = layout.get_size()
+	# fixed width labels
+	if lw_old/pango.SCALE == allocation.width:
+		return
+
+	# set wrap width to the pango.Layout of the labels ###
+	layout.set_width (allocation.width * pango.SCALE)
+	lw, lh = layout.get_size ()
+
+	if lh_old != lh:
+		widget.set_size_request (-1, lh / pango.SCALE)
+
 # vim: se ts=3:

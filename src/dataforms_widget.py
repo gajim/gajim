@@ -81,6 +81,7 @@ class DataFormWidget(gtk.Alignment, object):
 			self.instructions_label.hide()
 		else:
 			self.instructions_label.set_text(dataform.instructions)
+			gtkgui_helpers.label_set_autowrap(self.instructions_label)
 
 	def get_data_form(self):
 		''' Data form displayed in the widget or None if no form. '''
