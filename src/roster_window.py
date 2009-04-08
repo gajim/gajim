@@ -2007,7 +2007,7 @@ class RosterWindow:
 
 		# print status in chat window and update status/GPG image
 		ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
-		if ctrl:
+		if ctrl and ctrl.type_id != message_control.TYPE_GC:
 			ctrl.contact = gajim.contacts.get_contact_with_highest_priority(
 				account, contact.jid)
 			ctrl.update_status_display(name, uf_show, status)
