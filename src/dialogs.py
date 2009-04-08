@@ -1625,7 +1625,9 @@ class SubscriptionRequestWindow:
 		'''accept the request'''
 		gajim.connections[self.account].send_authorization(self.jid)
 		self.window.destroy()
-		if self.jid not in gajim.contacts.get_jid_list(self.account):
+		contact = gajim.contacts.get_contact(self.account, self.jid)
+		if not contact or _('Not in Roster') in contact.groups:
+#		if self.jid not in gajim.contacts.get_jid_list(self.account):
 			AddNewContactWindow(self.account, self.jid, self.user_nick)
 
 	def on_contact_info_activate(self, widget):
