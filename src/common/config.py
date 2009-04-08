@@ -190,6 +190,7 @@ class Config:
 		'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],
 		'confirm_close_muc_rooms': [opt_str, '', _('Always ask before closing group chat tab/window in this space separated list of group chat jids.')],
 		'noconfirm_close_muc_rooms': [opt_str, '', _('Never ask before closing group chat tab/window in this space separated list of group chat jids.')],
+		'confirm_close_multiple_tabs': [opt_bool, True, _('Ask before closing tabbed chat window if there are control that can loose data (chat, private chat, groupchat that will not be minimized)')],
 		'notify_on_file_complete': [opt_bool, True],
 		'file_transfers_port': [opt_int, 28011],
 		'ft_add_hosts_to_send': [opt_str, '', _('Comma separated list of hosts that we send, in addition of local interfaces, for File Transfer in case of address translation/port forwarding.')],
