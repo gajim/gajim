@@ -1374,7 +1374,8 @@ class RosterWindow:
 		if self.dragging or not gajim.config.get('scroll_roster_to_last_message'):
 			# do not change selection while DND'ing
 			return
-		self.tree.expand_to_path(path)
+		# Expand his parent, so this path is visible, don't expand it.
+		self.tree.expand_to_path(path[:-1])
 		self.tree.scroll_to_cell(path)
 		self.tree.set_cursor(path)
 

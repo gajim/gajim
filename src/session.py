@@ -365,8 +365,16 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 				gajim.interface.roster.draw_contact(jid, self.conn.name)
 
 			gajim.interface.roster.show_title() # we show the * or [n]
-		# Select contact row in roster.
-		gajim.interface.roster.select_contact(jid, self.conn.name)
+		# Select the big brother contact in roster, it's visible because it has
+		# events.
+		family = gajim.contacts.get_metacontacts_family(self.conn.name, jid)
+		if family:
+			nearby_family, bb_jid, bb_account = \
+				gajim.interface.roster._get_nearby_family_and_big_brother(family,
+				self.conn.name)
+		else:
+			bb_jid, bb_account = jid, self.conn.name
+		gajim.interface.roster.select_contact(bb_jid, bb_account)
 
 	# ---- ESessions stuff ---
 

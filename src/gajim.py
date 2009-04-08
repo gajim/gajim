@@ -2357,8 +2357,15 @@ class Interface:
 			else:
 				self.roster.draw_contact(jid, account)
 
-		# Select the contact in roster, it's visible because it has events.
-		self.roster.select_contact(jid, account)
+		# Select the big brother contact in roster, it's visible because it has
+		# events.
+		family = gajim.contacts.get_metacontacts_family(account, jid)
+		if family:
+			nearby_family, bb_jid, bb_account = \
+				self.roster._get_nearby_family_and_big_brother(family, account)
+		else:
+			bb_jid, bb_account = jid, account
+		self.roster.select_contact(bb_jid, bb_account)
 
 	def handle_event(self, account, fjid, type_):
 		w = None
