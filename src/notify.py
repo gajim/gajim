@@ -57,19 +57,22 @@ try:
 except Exception:
 	USER_HAS_GROWL = False
 
-def setup_indicator_server(): 
-	server = indicate.indicate_server_ref_default() 
-	server.set_type('message.im') 
-	server.set_desktop_file('/usr/share/applications/gajim.desktop') 
-	server.connect('server-display', server_display) 
-	server.show() 
+if gajim.HAVE_INDICATOR:
+	import indicate
 
-def display(indicator, account, jid, msg_type): 
-	gajim.interface.handle_event(account, jid, msg_type) 
-	indicator.hide() 
+def setup_indicator_server():
+	server = indicate.indicate_server_ref_default()
+	server.set_type('message.im')
+	server.set_desktop_file('/usr/share/applications/gajim.desktop')
+	server.connect('server-display', server_display)
+	server.show()
 
-def server_display(server): 
-	win = gajim.interface.roster.window 
+def display(indicator, account, jid, msg_type):
+	gajim.interface.handle_event(account, jid, msg_type)
+	indicator.hide()
+
+def server_display(server):
+	win = gajim.interface.roster.window
 	win.present()
 
 def get_show_in_roster(event, account, contact, session=None):
@@ -604,7 +607,7 @@ class DesktopNotification:
 			if version >= [0, 3, 2]:
 				hints['urgency'] = dbus.Byte(0) # Low Urgency
 				hints['category'] = dbus.String(ntype)
-				# it seems notification-daemon doesn't like empty text 
+				# it seems notification-daemon doesn't like empty text
 				if self.text:
 					text = self.text
 				else:
