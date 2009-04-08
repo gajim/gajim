@@ -1440,7 +1440,8 @@ class GroupchatControl(ChatControlBase):
 					dialogs.ErrorDialog(_('Invalid nickname'),
 					_('The nickname has not allowed characters.'))
 					return True
-				gajim.connections[self.account].join_gc(nick, self.room_jid, None)
+				gajim.connections[self.account].join_gc(nick, self.room_jid, None,
+					change_nick=True)
 				self.new_nick = nick
 				self.clear(self.msg_textview)
 			else:
@@ -1723,7 +1724,8 @@ class GroupchatControl(ChatControlBase):
 				dialogs.ErrorDialog(_('Invalid nickname'),
 				_('The nickname has not allowed characters.'))
 				return
-			gajim.connections[self.account].join_gc(nick, self.room_jid, None)
+			gajim.connections[self.account].join_gc(nick, self.room_jid, None,
+				change_nick=True)
 			if gajim.gc_connected[self.account][self.room_jid]:
 				# We are changing nick, we will change self.nick when we receive
 				# presence that inform that it works
