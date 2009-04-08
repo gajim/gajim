@@ -34,6 +34,7 @@ import time
 import common
 import gtkgui_helpers
 import message_control
+import dialogs
 from chat_control import ChatControlBase
 
 from common import gajim
@@ -192,6 +193,29 @@ class MessageWindow(object):
 		if self.dont_warn_on_delete:
 			# Destroy the window
 			return False
+
+		# Number of controls that will be closed and for which we'll loose data:
+		# chat, pm, gc that won't go in roster
+		number_of_closed_control = 0
+		for ctrl in self.controls():
+			if not ctrl.safe_shutdown():
+				number_of_closed_control += 1
+
+		if number_of_closed_control > 1:
+			def on_yes1(checked):
+				if checked:
+					gajim.config.set('confirm_close_multiple_tabs', False)
+				self.dont_warn_on_delete = True
+				win.destroy()
+
+			if not gajim.config.get('confirm_close_multiple_tabs'):
+				# destroy window
+				return False
+			dialogs.YesNoDialog(
+				_('You are going to close several tabs'),
+            _('Do you really want to close them all?'),
+				checktext=_('Do _not ask me again'), on_response_yes=on_yes1)
+			return True
 
 		def on_yes(ctrl):
 			if self.on_delete_ok == 1:

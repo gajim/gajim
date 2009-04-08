@@ -1796,6 +1796,19 @@ class GroupchatControl(ChatControlBase):
 		# Remove unread events from systray
 		gajim.events.remove_events(self.account, self.room_jid)
 
+	def safe_shutdown(self):
+		if self.contact.jid in gajim.config.get_per('accounts', self.account,
+		'minimized_gc').split(' '):
+			return True
+		includes = gajim.config.get('confirm_close_muc_rooms').split(' ')
+		excludes = gajim.config.get('noconfirm_close_muc_rooms').split(' ')
+		# whether to ask for comfirmation before closing muc
+		if (gajim.config.get('confirm_close_muc') or self.room_jid in includes) \
+		and gajim.gc_connected[self.account][self.room_jid] and self.room_jid not\
+		in excludes:
+			return False
+		return True
+
 	def allow_shutdown(self, method, on_yes, on_no, on_minimize):
 		if self.contact.jid in gajim.config.get_per('accounts', self.account,
 		'minimized_gc').split(' '):

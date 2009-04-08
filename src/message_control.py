@@ -71,6 +71,12 @@ class MessageControl:
 		or inactive (state is False)'''
 		pass  # Derived classes MUST implement this method
 
+	def safe_shutdown(self):
+		'''Called to check if control can be closed without loosing data.
+		returns True if control can be closed safely else False'''
+		# NOTE: Derived classes MAY implement this
+		return True
+
 	def allow_shutdown(self, method, on_response_yes, on_response_no,
 	on_response_minimize):
 		'''Called to check is a control is allowed to shutdown.
