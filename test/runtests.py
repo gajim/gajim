@@ -39,7 +39,6 @@ modules = ( 'test_xmpp_dispatcher_nb',
 				'test_xmpp_client_nb',
 				'test_xmpp_transports_nb',
 				'test_resolver',
-				'test_sessions',
 				'test_caps',
 			 )
 #modules = ()
@@ -47,6 +46,7 @@ modules = ( 'test_xmpp_dispatcher_nb',
 if use_x:
 	modules += ('test_misc_interface',
 					'test_roster',
+					'test_sessions',
 	)
 
 nb_errors = 0
