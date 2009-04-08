@@ -438,22 +438,26 @@ class HistoryWindow:
 					helpers.get_uf_show(show) }
 			tag_msg = 'status'
 
-		# do not do this if gcstats, avoid dupping contact_name
-		# eg. nkour: nkour is now Offline
-		if contact_name and kind != constants.KIND_GCSTATUS:
-			# add stuff before and after contact name
-			before_str = gajim.config.get('before_nickname')
-			before_str = helpers.from_one_line(before_str)
-			after_str = gajim.config.get('after_nickname')
-			after_str = helpers.from_one_line(after_str)
-			format = before_str + contact_name + after_str + ' '
-			buf.insert_with_tags_by_name(end_iter, format, tag_name)
+		if message.startswith('/me ') or message.startswith('/me\n'):
+			tag_msg = tag_name
+		else:
+			# do not do this if gcstats, avoid dupping contact_name
+			# eg. nkour: nkour is now Offline
+			if contact_name and kind != constants.KIND_GCSTATUS:
+				# add stuff before and after contact name
+				before_str = gajim.config.get('before_nickname')
+				before_str = helpers.from_one_line(before_str)
+				after_str = gajim.config.get('after_nickname')
+				after_str = helpers.from_one_line(after_str)
+				format = before_str + contact_name + after_str + ' '
+				buf.insert_with_tags_by_name(end_iter, format, tag_name)
 
 		message = message + '\n'
 		if tag_msg:
-			self.history_textview.print_real_text(message, [tag_msg])
+			self.history_textview.print_real_text(message, [tag_msg],
+				name=contact_name)
 		else:
-			self.history_textview.print_real_text(message)
+			self.history_textview.print_real_text(message, name=contact_name)
 
 	def on_query_entry_activate(self, widget):
 		text = self.query_entry.get_text()
