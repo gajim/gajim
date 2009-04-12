@@ -38,6 +38,7 @@ import gtkgui_helpers
 
 from common import gajim
 from common import helpers
+from common import pep
 
 HAS_SYSTRAY_CAPABILITIES = True
 
@@ -385,7 +386,7 @@ class Systray:
 		model = gajim.interface.roster.status_combobox.get_model()
 		active = gajim.interface.roster.status_combobox.get_active()
 		status = model[active][2].decode('utf-8')
-		def on_response(message):
+		def on_response(message, pep_dict):
 			if message is None: # None if user press Cancel
 				return
 			accounts = gajim.connections.keys()
@@ -395,6 +396,7 @@ class Systray:
 					continue
 				show = gajim.SHOW_LIST[gajim.connections[acct].connected]
 				gajim.interface.roster.send_status(acct, show, message)
+				gajim.interface.roster.send_pep(acct, pep_dict)
 		dlg = dialogs.ChangeStatusMessageDialog(on_response, status)
 		dlg.window.present()
 

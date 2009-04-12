@@ -1932,6 +1932,37 @@ class RosterWindow:
 
 		self.send_status_continue(account, status, txt, auto, to)
 
+	def send_pep(self, account, pep_dict=None):
+		'''Sends pep information (activity, mood)'''
+		if not pep_dict:
+			return
+		# activity
+		if 'activity' in pep_dict and pep_dict['activity'] in pep.ACTIVITIES:
+			activity = pep_dict['activity']
+			if 'subactivity' in pep_dict and \
+			pep_dict['subactivity'] in pep.ACTIVITIES[activity]:
+				subactivity = pep_dict['subactivity']
+			else:
+				subactivity = 'other'
+			if 'activity_text' in pep_dict:
+				activity_text = pep_dict['activity_text']
+			else:
+				activity_text = ''
+			pep.user_send_activity(account, activity, subactivity, activity_text)
+		else:
+			pep.user_send_activity(account, '')
+
+		# mood
+		if 'mood' in pep_dict and pep_dict['mood'] in pep.MOODS:
+			mood = pep_dict['mood']
+			if 'mood_text' in pep_dict:
+				mood_text = pep_dict['mood_text']
+			else:
+				mood_text = ''
+			pep.user_send_mood(account, mood, mood_text)
+		else:
+			pep.user_send_mood(account, '')
+
 	def send_status_continue(self, account, status, txt, auto, to):
 		if gajim.account_is_connected(account) and not to:
 			if status == 'online' and gajim.interface.sleeper.getState() != \
@@ -2060,34 +2091,37 @@ class RosterWindow:
 		if sys.platform == 'darwin':
 			self.make_menu(force=True)
 
-	def get_status_message(self, show, on_response, always_ask=False):
+	def get_status_message(self, show, pep_dict, on_response, always_ask=False):
 		''' get the status message by:
 		1/ looking in default status message
 		2/ asking to user if needed depending on ask_on(ff)line_status and
 			always_ask
+		pep_dict can be None to hide pep things from status message or a dict
 		'''
 		if show in gajim.config.get_per('defaultstatusmsg'):
 			if gajim.config.get_per('defaultstatusmsg', show, 'enabled'):
 				on_response(gajim.config.get_per('defaultstatusmsg', show,
-					'message'))
+					'message'), pep_dict)
 				return
 		if not always_ask and ((show == 'online' and not gajim.config.get(
 		'ask_online_status')) or (show in ('offline', 'invisible') and not \
 		gajim.config.get('ask_offline_status'))):
-			on_response('')
+			on_response('', pep_dict)
 			return
 
-		dlg = dialogs.ChangeStatusMessageDialog(on_response, show)
+		dlg = dialogs.ChangeStatusMessageDialog(on_response, show, pep_dict)
 		dlg.window.present() # show it on current workspace
 
 	def change_status(self, widget, account, status):
 		def change(account, status):
-			def on_response(message):
+			def on_response(message, pep_dict):
 				if message is None:
 					# user pressed Cancel to change status message dialog
 					return
 				self.send_status(account, status, message)
-			self.get_status_message(status, on_response)
+				self.send_pep(account, pep_dict)
+			pep_dict = helpers.get_pep_dict(account)
+			self.get_status_message(status, pep_dict, on_response)
 
 		if status == 'invisible' and self.connected_rooms(account):
 			dialogs.ConfirmationDialog(
@@ -2217,7 +2251,7 @@ class RosterWindow:
 				get_msg = True
 				break
 
-		def on_continue2(message):
+		def on_continue2(message, pep_dict):
 			self.quit_on_next_offline = 0
 			accounts_to_disconnect = []
 			for acct in accounts:
@@ -2227,11 +2261,12 @@ class RosterWindow:
 
 			for acct in accounts_to_disconnect:
 				self.send_status(acct, 'offline', message)
+				self.send_pep(acct, pep_dict)
 
 			if not self.quit_on_next_offline:
 				self.quit_gtkgui_interface()
 
-		def on_continue(message):
+		def on_continue(message, pep_dict):
 			if message is None:
 				# user pressed Cancel to change status message dialog
 				return
@@ -2259,12 +2294,12 @@ class RosterWindow:
 				dialogs.ConfirmationDialog(_('You have unread messages'),
 					_('Messages will only be available for reading them later if you'
 					' have history enabled and contact is in your roster.'),
-					on_response_ok=(on_continue2, message))
+					on_response_ok=(on_continue2, message, pep_dict))
 				return
-			on_continue2(message)
+			on_continue2(message, pep_dict)
 
 		if get_msg:
-			self.get_status_message('offline', on_continue)
+			self.get_status_message('offline', None, on_continue)
 		else:
 			on_continue('')
 
@@ -2514,7 +2549,7 @@ class RosterWindow:
 	def on_block(self, widget, list_, group=None):
 		''' When clicked on the 'block' button in context menu.
 		list_ is a list of (contact, account)'''
-		def on_continue(msg):
+		def on_continue(msg, pep_dict):
 			if msg is None:
 				# user pressed Cancel to change status message dialog
 				return
@@ -2556,7 +2591,7 @@ class RosterWindow:
 					connection.set_default_list('block')
 				connection.get_privacy_list('block')
 
-		self.get_status_message('offline', on_continue)
+		self.get_status_message('offline', None, on_continue)
 
 	def on_unblock(self, widget, list_, group=None):
 		''' When clicked on the 'unblock' button in context menu. '''
@@ -2907,18 +2942,15 @@ class RosterWindow:
 		if url:
 			helpers.launch_browser_mailer('url', url)
 
-	def on_change_activity_activate(self, widget, account):
-		dialogs.ChangeActivityDialog(account)
-
-	def on_change_mood_activate(self, widget, account):
-		dialogs.ChangeMoodDialog(account)
-
 	def on_change_status_message_activate(self, widget, account):
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
-		def on_response(message):
-			if message is not None: # None is if user pressed Cancel
-				self.send_status(account, show, message)
-		dialogs.ChangeStatusMessageDialog(on_response, show)
+		pep_dict = helpers.get_pep_dict(account)
+		def on_response(message, pep_dict):
+			if message is None: # None is if user pressed Cancel
+				return
+			self.send_status(account, show, message)
+			self.send_pep(account, pep_dict)
+		dialogs.ChangeStatusMessageDialog(on_response, show, pep_dict)
 
 	def on_add_to_roster(self, widget, contact, account):
 		dialogs.AddNewContactWindow(account, contact.jid, contact.name)
@@ -3023,7 +3055,8 @@ class RosterWindow:
 				show = helpers.get_global_show()
 				if show == 'offline':
 					return True
-				def on_response(message):
+				pep_dict = helpers.get_global_pep()
+				def on_response(message, pep_dict):
 					if message is None:
 						return True
 					for acct in gajim.connections:
@@ -3033,7 +3066,8 @@ class RosterWindow:
 						current_show = gajim.SHOW_LIST[gajim.connections[acct].\
 							connected]
 						self.send_status(acct, current_show, message)
-				dialogs.ChangeStatusMessageDialog(on_response, show)
+						self.send_pep(acct, pep_dict)
+				dialogs.ChangeStatusMessageDialog(on_response, show, pep_dict)
 			return True
 
 		elif event.button == 1: # Left click
@@ -3135,7 +3169,7 @@ class RosterWindow:
 	def on_send_custom_status(self, widget, contact_list, show, group=None):
 		'''send custom status'''
 		# contact_list has only one element except if group != None
-		def on_response(message):
+		def on_response(message, pep_dict):
 			if message is None: # None if user pressed Cancel
 				return
 			account_list = []
@@ -3168,7 +3202,7 @@ class RosterWindow:
 					jid += '/' + contact.resource
 				self.send_status(account, show, message, to=jid)
 
-		self.get_status_message(show, on_response, always_ask=True)
+		self.get_status_message(show, None, on_response, always_ask=True)
 
 	def on_status_combobox_changed(self, widget):
 		'''When we change our status via the combobox'''
@@ -3192,7 +3226,8 @@ class RosterWindow:
 			# 'Change status message' selected:
 			# do not change show, just show change status dialog
 			status = model[self.previous_status_combobox_active][2].decode('utf-8')
-			def on_response(message):
+			pep_dict = helpers.get_global_pep()
+			def on_response(message, pep_dict):
 				if message is not None: # None if user pressed Cancel
 					for account in accounts:
 						if not gajim.config.get_per('accounts', account,
@@ -3201,11 +3236,12 @@ class RosterWindow:
 						current_show = gajim.SHOW_LIST[
 							gajim.connections[account].connected]
 						self.send_status(account, current_show, message)
+						self.send_pep(account, pep_dict)
 				self.combobox_callback_active = False
 				self.status_combobox.set_active(
 					self.previous_status_combobox_active)
 				self.combobox_callback_active = True
-			dialogs.ChangeStatusMessageDialog(on_response, status)
+			dialogs.ChangeStatusMessageDialog(on_response, status, pep_dict)
 			return
 		# we are about to change show, so save this new show so in case
 		# after user chooses "Change status message" menuitem
@@ -3213,7 +3249,7 @@ class RosterWindow:
 		self.previous_status_combobox_active = active
 		connected_accounts = gajim.get_number_of_connected_accounts()
 
-		def on_continue(message):
+		def on_continue(message, pep_dict):
 			if message is None:
 				# user pressed Cancel to change status message dialog
 				self.update_status_combobox()
@@ -3236,6 +3272,7 @@ class RosterWindow:
 				if not global_sync_connected_accounts > 0 or \
 				gajim.connections[account].connected > 0:
 					self.send_status(account, status, message)
+					self.send_pep(account, pep_dict)
 			self.update_status_combobox()
 
 		if status == 'invisible':
@@ -3251,7 +3288,7 @@ class RosterWindow:
 						break
 			if bug_user:
 				def on_ok():
-					self.get_status_message(status, on_continue)
+					self.get_status_message(status, None, on_continue)
 
 				def on_cancel():
 					self.update_status_combobox()
@@ -3264,7 +3301,8 @@ class RosterWindow:
 					on_response_cancel=on_cancel)
 				return
 
-		self.get_status_message(status, on_continue)
+		pep_dict = helpers.get_global_pep()
+		self.get_status_message(status, pep_dict, on_continue)
 
 	def on_preferences_menuitem_activate(self, widget):
 		if 'preferences' in gajim.interface.instances:
@@ -4907,14 +4945,6 @@ class RosterWindow:
 				else:
 					item.set_active(have_tune)
 					item.connect('toggled', self.on_publish_tune_toggled, account)
-				item = gtk.CheckMenuItem(_('Mood'))
-				pep_submenu.append(item)
-				item.set_active(len(gajim.connections[account].mood) > 0)
-				item.connect('activate', self.on_change_mood_activate, account)
-				item = gtk.CheckMenuItem(_('Activity'))
-				pep_submenu.append(item)
-				item.set_active(len(gajim.connections[account].activity) > 0)
-				item.connect('activate', self.on_change_activity_activate, account)
 
 				pep_config = gtk.ImageMenuItem(_('Configure Services...'))
 				item = gtk.SeparatorMenuItem()

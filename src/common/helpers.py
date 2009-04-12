@@ -45,6 +45,7 @@ from encodings.punycode import punycode_encode
 from i18n import Q_
 from i18n import ngettext
 import xmpp
+import pep
 
 try:
 	import winsound # windows-only built-in module for playing wav
@@ -800,7 +801,7 @@ def get_global_show():
 	maxi = 0
 	for account in gajim.connections:
 		if not gajim.config.get_per('accounts', account,
-			'sync_with_global_status'):
+		'sync_with_global_status'):
 			continue
 		connected = gajim.connections[account].connected
 		if connected > maxi:
@@ -811,13 +812,61 @@ def get_global_status():
 	maxi = 0
 	for account in gajim.connections:
 		if not gajim.config.get_per('accounts', account,
-			'sync_with_global_status'):
+		'sync_with_global_status'):
 			continue
 		connected = gajim.connections[account].connected
 		if connected > maxi:
 			maxi = connected
 			status = gajim.connections[account].status
 	return status
+
+def get_pep_dict(account):
+	pep_dict = {}
+	con = gajim.connections[account]
+	# activity
+	if 'activity' in con.activity and con.activity['activity'] in pep.ACTIVITIES:
+		activity = con.activity['activity']
+		if 'subactivity' in con.activity and con.activity['subactivity'] in \
+		pep.ACTIVITIES[activity]:
+			subactivity = con.activity['subactivity']
+		else:
+			subactivity = 'other'
+	else:
+		activity = ''
+		subactivity = ''
+	if 'text' in con.activity:
+		text = con.activity['text']
+	else:
+		text = ''
+	pep_dict['activity'] = activity
+	pep_dict['subactivity'] = subactivity
+	pep_dict['activity_text'] = text
+
+	# mood
+	if 'mood' in con.mood and con.mood['mood'] in pep.MOODS:
+		mood = con.mood['mood']
+	else:
+		mood = ''
+	if 'text' in con.mood:
+		text = con.mood['text']
+	else:
+		text = ''
+	pep_dict['mood'] = mood
+	pep_dict['mood_text'] = text
+	return pep_dict
+
+def get_global_pep():
+	maxi = 0
+	pep_dict = {'activity': '', 'mood': ''}
+	for account in gajim.connections:
+		if not gajim.config.get_per('accounts', account,
+		'sync_with_global_status'):
+			continue
+		connected = gajim.connections[account].connected
+		if connected > maxi:
+			maxi = connected
+			pep_dict = get_pep_dict(account)
+	return pep_dict
 
 def statuses_unified():
 	'''testing if all statuses are the same.'''

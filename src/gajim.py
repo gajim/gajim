@@ -3014,13 +3014,18 @@ class Interface:
 					shows[show] = [a]
 				else:
 					shows[show].append(a)
-		def on_message(message):
+		def on_message(message, pep_dict):
 			if message is None:
 				return
 			for a in shows[show]:
 				self.roster.send_status(a, show, message)
+				self.roster.send_pep(a, pep_dict)
 		for show in shows:
-			message = self.roster.get_status_message(show, on_message)
+			if len(shows[show]) == 1:
+				pep_dict = helpers.get_pep_dict(shows[show][0])
+			else:
+				pep_dict = helpers.get_global_pep()
+			message = self.roster.get_status_message(show, pep_dict, on_message)
 		return False
 
 	def show_systray(self):

@@ -5,7 +5,7 @@
 ## Copyright (C) 2007-2008 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
 ##                    Jean-Marie Traissard <jim AT lapin.org>
-##                    Jonathan Schleifer <js-gajim AT webkeks.org>
+##                    Jonathan Schleifer <js-common.gajim AT webkeks.org>
 ##                    Stephan Erb <steve-e AT h3c.de>
 ##
 ## This file is part of Gajim.
@@ -23,7 +23,8 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from common import gajim, xmpp
+import common.gajim
+from common import xmpp
 
 MOODS = {
 	'afraid':			_('Afraid'),
@@ -208,8 +209,8 @@ def user_mood(items, name, jid):
 	if items.getTag('retract') is not None:
 		retract = True
 
-	if jid == gajim.get_jid_from_account(name):
-		acc = gajim.connections[name]
+	if jid == common.gajim.get_jid_from_account(name):
+		acc = common.gajim.connections[name]
 		if has_child:
 			if 'mood' in acc.mood:
 				del acc.mood['mood']
@@ -225,8 +226,8 @@ def user_mood(items, name, jid):
 			if 'text' in acc.mood:
 				del acc.mood['text']
 
-	(user, resource) = gajim.get_room_and_nick_from_fjid(jid)
-	for contact in gajim.contacts.get_contacts(name, user):
+	(user, resource) = common.gajim.get_room_and_nick_from_fjid(jid)
+	for contact in common.gajim.contacts.get_contacts(name, user):
 		if has_child:
 			if 'mood' in contact.mood:
 				del contact.mood['mood']
@@ -242,10 +243,10 @@ def user_mood(items, name, jid):
 			if 'text' in contact.mood:
 				del contact.mood['text']
 
-	if jid == gajim.get_jid_from_account(name):
-		gajim.interface.roster.draw_account(name)
-	gajim.interface.roster.draw_mood(user, name)
-	ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
+	if jid == common.gajim.get_jid_from_account(name):
+		common.gajim.interface.roster.draw_account(name)
+	common.gajim.interface.roster.draw_mood(user, name)
+	ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
 	if ctrl:
 		ctrl.update_mood()
 
@@ -276,8 +277,8 @@ def user_tune(items, name, jid):
 	if items.getTag('retract') is not None:
 		retract = True
 
-	if jid == gajim.get_jid_from_account(name):
-		acc = gajim.connections[name]
+	if jid == common.gajim.get_jid_from_account(name):
+		acc = common.gajim.connections[name]
 		if has_child:
 			if 'artist' in acc.tune:
 				del acc.tune['artist']
@@ -311,8 +312,8 @@ def user_tune(items, name, jid):
 			if 'length' in acc.tune:
 				del acc.tune['length']
 
-	user = gajim.get_room_and_nick_from_fjid(jid)[0]
-	for contact in gajim.contacts.get_contacts(name, user):
+	user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
+	for contact in common.gajim.contacts.get_contacts(name, user):
 		if has_child:
 			if 'artist' in contact.tune:
 				del contact.tune['artist']
@@ -346,10 +347,10 @@ def user_tune(items, name, jid):
 			if 'length' in contact.tune:
 				del contact.tune['length']
 
-	if jid == gajim.get_jid_from_account(name):
-		gajim.interface.roster.draw_account(name)
-	gajim.interface.roster.draw_tune(user, name)
-	ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
+	if jid == common.gajim.get_jid_from_account(name):
+		common.gajim.interface.roster.draw_account(name)
+	common.gajim.interface.roster.draw_tune(user, name)
+	ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
 	if ctrl:
 		ctrl.update_tune()
 
@@ -377,8 +378,8 @@ def user_activity(items, name, jid):
 	if items.getTag('retract') is not None:
 		retract = True
 
-	if jid == gajim.get_jid_from_account(name):
-		acc = gajim.connections[name]
+	if jid == common.gajim.get_jid_from_account(name):
+		acc = common.gajim.connections[name]
 		if has_child:
 			if 'activity' in acc.activity:
 				del acc.activity['activity']
@@ -400,8 +401,8 @@ def user_activity(items, name, jid):
 			if 'text' in acc.activity:
 				del acc.activity['text']
 
-	user = gajim.get_room_and_nick_from_fjid(jid)[0]
-	for contact in gajim.contacts.get_contacts(name, user):
+	user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
+	for contact in common.gajim.contacts.get_contacts(name, user):
 		if has_child:
 			if 'activity' in contact.activity:
 				del contact.activity['activity']
@@ -423,10 +424,10 @@ def user_activity(items, name, jid):
 			if 'text' in contact.activity:
 				del contact.activity['text']
 
-	if jid == gajim.get_jid_from_account(name):
-		gajim.interface.roster.draw_account(name)
-	gajim.interface.roster.draw_activity(user, name)
-	ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
+	if jid == common.gajim.get_jid_from_account(name):
+		common.gajim.interface.roster.draw_account(name)
+	common.gajim.interface.roster.draw_activity(user, name)
+	ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
 	if ctrl:
 		ctrl.update_activity()
 
@@ -445,21 +446,21 @@ def user_nickname(items, name, jid):
 	if items.getTag('retract') is not None:
 		retract = True
 
-	if jid == gajim.get_jid_from_account(name):
+	if jid == common.gajim.get_jid_from_account(name):
 		if has_child:
-			gajim.nicks[name] = nick
+			common.gajim.nicks[name] = nick
 		if retract:
-			gajim.nicks[name] = gajim.config.get_per('accounts',
+			common.gajim.nicks[name] = common.gajim.config.get_per('accounts',
 				name, 'name')
 
-	user = gajim.get_room_and_nick_from_fjid(jid)[0]
+	user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
 	if has_child:
 		if nick is not None:
-			for contact in gajim.contacts.get_contacts(name, user):
+			for contact in common.gajim.contacts.get_contacts(name, user):
 				contact.contact_name = nick
-			gajim.interface.roster.draw_contact(user, name)
+			common.gajim.interface.roster.draw_contact(user, name)
 
-			ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
+			ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
 			if ctrl:
 				ctrl.update_ui()
 				win = ctrl.parent_win
@@ -469,7 +470,7 @@ def user_nickname(items, name, jid):
 		contact.contact_name = ''
 
 def user_send_mood(account, mood, message=''):
-	if not gajim.connections[account].pep_supported:
+	if not common.gajim.connections[account].pep_supported:
 		return
 	item = xmpp.Node('mood', {'xmlns': xmpp.NS_MOOD})
 	if mood != '':
@@ -478,10 +479,11 @@ def user_send_mood(account, mood, message=''):
 		i = item.addChild('text')
 		i.addData(message)
 
-	gajim.connections[account].send_pb_publish('', xmpp.NS_MOOD, item, '0')
+	common.gajim.connections[account].send_pb_publish('', xmpp.NS_MOOD, item,
+		'0')
 
 def user_send_activity(account, activity, subactivity='', message=''):
-	if not gajim.connections[account].pep_supported:
+	if not common.gajim.connections[account].pep_supported:
 		return
 	item = xmpp.Node('activity', {'xmlns': xmpp.NS_ACTIVITY})
 	if activity != '':
@@ -492,12 +494,13 @@ def user_send_activity(account, activity, subactivity='', message=''):
 		i = item.addChild('text')
 		i.addData(message)
 
-	gajim.connections[account].send_pb_publish('', xmpp.NS_ACTIVITY, item, '0')
+	common.gajim.connections[account].send_pb_publish('', xmpp.NS_ACTIVITY, item,
+		'0')
 
 def user_send_tune(account, artist='', title='', source='', track=0, length=0,
 items=None):
-	if not (gajim.config.get_per('accounts', account, 'publish_tune') and \
-	gajim.connections[account].pep_supported):
+	if not (common.gajim.config.get_per('accounts', account, 'publish_tune') and\
+	common.gajim.connections[account].pep_supported):
 		return
 	item = xmpp.Node('tune', {'xmlns': xmpp.NS_TUNE})
 	if artist != '':
@@ -518,33 +521,35 @@ items=None):
 	if items is not None:
 		item.addChild(payload=items)
 
-	gajim.connections[account].send_pb_publish('', xmpp.NS_TUNE, item, '0')
+	common.gajim.connections[account].send_pb_publish('', xmpp.NS_TUNE, item,
+		'0')
 
 def user_send_nickname(account, nick):
-	if not gajim.connections[account].pep_supported:
+	if not common.gajim.connections[account].pep_supported:
 		return
 	item = xmpp.Node('nick', {'xmlns': xmpp.NS_NICK})
 	item.addData(nick)
 
-	gajim.connections[account].send_pb_publish('', xmpp.NS_NICK, item, '0')
+	common.gajim.connections[account].send_pb_publish('', xmpp.NS_NICK, item,
+		'0')
 
 def user_retract_mood(account):
-	gajim.connections[account].send_pb_retract('', xmpp.NS_MOOD, '0')
+	common.gajim.connections[account].send_pb_retract('', xmpp.NS_MOOD, '0')
 
 def user_retract_activity(account):
-	gajim.connections[account].send_pb_retract('', xmpp.NS_ACTIVITY, '0')
+	common.gajim.connections[account].send_pb_retract('', xmpp.NS_ACTIVITY, '0')
 
 def user_retract_tune(account):
-	gajim.connections[account].send_pb_retract('', xmpp.NS_TUNE, '0')
+	common.gajim.connections[account].send_pb_retract('', xmpp.NS_TUNE, '0')
 
 def user_retract_nickname(account):
-	gajim.connections[account].send_pb_retract('', xmpp.NS_NICK, '0')
+	common.gajim.connections[account].send_pb_retract('', xmpp.NS_NICK, '0')
 
 def delete_pep(jid, name):
-	user = gajim.get_room_and_nick_from_fjid(jid)[0]
+	user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
 
-	if jid == gajim.get_jid_from_account(name):
-		acc = gajim.connections[name]
+	if jid == common.gajim.get_jid_from_account(name):
+		acc = common.gajim.connections[name]
 		del acc.activity
 		acc.activity = {}
 		user_send_tune(name)
@@ -553,7 +558,7 @@ def delete_pep(jid, name):
 		del acc.mood
 		acc.mood = {}
 
-	for contact in gajim.contacts.get_contacts(name, user):
+	for contact in common.gajim.contacts.get_contacts(name, user):
 		del contact.activity
 		contact.activity = {}
 		del contact.tune
@@ -561,13 +566,13 @@ def delete_pep(jid, name):
 		del contact.mood
 		contact.mood = {}
 
-	if jid == gajim.get_jid_from_account(name):
-		gajim.interface.roster.draw_account(name)
+	if jid == common.gajim.get_jid_from_account(name):
+		common.gajim.interface.roster.draw_account(name)
 
-	gajim.interface.roster.draw_activity(user, name)
-	gajim.interface.roster.draw_tune(user, name)
-	gajim.interface.roster.draw_mood(user, name)
-	ctrl = gajim.interface.msg_win_mgr.get_control(user, name)
+	common.gajim.interface.roster.draw_activity(user, name)
+	common.gajim.interface.roster.draw_tune(user, name)
+	common.gajim.interface.roster.draw_mood(user, name)
+	ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
 	if ctrl:
 		ctrl.update_activity()
 		ctrl.update_tune()
