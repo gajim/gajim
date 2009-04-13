@@ -586,8 +586,12 @@ class Logger:
 		seconds_in_a_day = 86400 # 60 * 60 * 24
 		last_second_of_month = start_of_month + (seconds_in_a_day * max_day) - 1
 
+		# Select times and 'floor' them to time 0:00
+		# (by dividing, they are integers)
+		# and take only one of the same values (distinct)
+		# Now we have timestamps of time 0:00 of every day with logs
 		self.cur.execute('''
-			SELECT time FROM logs
+			SELECT DISTINCT time/(86400)*86400 FROM logs
 			WHERE (%s)
 			AND time BETWEEN %d AND %d
 			AND kind NOT IN (%d, %d)
@@ -596,34 +600,10 @@ class Logger:
 			constants.KIND_STATUS, constants.KIND_GCSTATUS))
 		result = self.cur.fetchall()
 
-		# Copy all interesting times in a temporary table
-		try:
-			self.cur.execute('CREATE TEMPORARY TABLE temp_table(time,INTEGER)')
-		except sqlite.OperationalError, e:
-			raise exceptions.PysqliteOperationalError(str(e))
+		# convert timestamps to day of month
 		for line in result:
-			self.cur.execute('''
-				INSERT INTO temp_table (time) VALUES (%d)
-				''' % (line[0]))
+			days_with_logs[0:0]=[time.gmtime(line[0])[2]]
 
-		# then search in this small temp table for each day
-		for day in xrange(1, max_day + 1):  # count from 1 to 28 or to 30 or to 31
-			start_of_day = self.get_unix_time_from_date(year, month, day)
-			last_second_of_day = start_of_day + seconds_in_a_day - 1
-
-			# just ask one row to see if we have sth for this date
-			self.cur.execute('''
-				SELECT time FROM temp_table
-				WHERE time BETWEEN %d AND %d
-				LIMIT 1
-				''' % (start_of_day, last_second_of_day))
-			result = self.cur.fetchone()
-			if result:
-				days_with_logs[0:0]=[day]
-
-		# Delete temporary table
-		self.cur.execute('DROP TABLE temp_table')
-		result = self.cur.fetchone()
 		return days_with_logs
 
 	def get_last_date_that_has_logs(self, jid, account = None, is_room = False):
