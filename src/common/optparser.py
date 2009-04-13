@@ -191,6 +191,8 @@ class OptionsParser:
 			self.update_config_to_01211()
 		if old < [0, 12, 1, 2] and new >= [0, 12, 1, 2]:
 			self.update_config_to_01212()
+		if old < [0, 12, 1, 3] and new >= [0, 12, 1, 3]:
+			self.update_config_to_01213()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -628,5 +630,21 @@ class OptionsParser:
 				for account in gajim.config.get_per('accounts'):
 					gajim.config.set_per('accounts', account, opt, val)
 		gajim.config.set('version', '0.12.1.2')
+
+	def update_config_to_01213(self):
+		msgs = gajim.config.statusmsg_default
+		for msg_name in gajim.config.get_per('statusmsg'):
+			if msg_name in msgs:
+				gajim.config.set_per('statusmsg', msg_name, 'activity',
+					msgs[msg_name][1])
+				gajim.config.set_per('statusmsg', msg_name, 'subactivity',
+					msgs[msg_name][2])
+				gajim.config.set_per('statusmsg', msg_name, 'activity_text',
+					msgs[msg_name][3])
+				gajim.config.set_per('statusmsg', msg_name, 'mood',
+					msgs[msg_name][4])
+				gajim.config.set_per('statusmsg', msg_name, 'mood_text',
+					msgs[msg_name][5])
+		gajim.config.set('version', '0.12.1.3')
 
 # vim: se ts=3:

@@ -3264,10 +3264,17 @@ class Interface:
 			pass
 		# add default status messages if there is not in the config file
 		if len(gajim.config.get_per('statusmsg')) == 0:
-			for msg in gajim.config.statusmsg_default:
+			default = gajim.config.statusmsg_default
+			for msg in default:
 				gajim.config.add_per('statusmsg', msg)
-				gajim.config.set_per('statusmsg', msg, 'message',
-					gajim.config.statusmsg_default[msg])
+				gajim.config.set_per('statusmsg', msg, 'message', default[msg][0])
+				gajim.config.set_per('statusmsg', msg, 'activity', default[msg][1])
+				gajim.config.set_per('statusmsg', msg, 'subactivity',
+					default[msg][2])
+				gajim.config.set_per('statusmsg', msg, 'activity_text',
+					default[msg][3])
+				gajim.config.set_per('statusmsg', msg, 'mood', default[msg][4])
+				gajim.config.set_per('statusmsg', msg, 'mood_text', default[msg][5])
 		#add default themes if there is not in the config file
 		theme = gajim.config.get('roster_theme')
 		if not theme in gajim.config.get_per('themes'):

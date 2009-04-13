@@ -435,12 +435,6 @@ class ChangeActivityDialog:
 				self.entry.get_text().decode('utf-8'))
 		else:
 			self.on_response(None, None, '')
-#		if self.checkbutton.get_active():
-#			pep.user_send_activity(self.account, self.activity,
-#				self.subactivity,
-#				self.entry.get_text().decode('utf-8'))
-#		else:
-#			pep.user_send_activity(self.account, '')
 		self.window.destroy()
 
 	def on_cancel_button_clicked(self, widget):
@@ -523,10 +517,6 @@ class ChangeMoodDialog:
 		'''Return mood and messsage (None if no mood selected)'''
 		message = self.entry.get_text().decode('utf-8')
 		self.on_response(self.mood, message)
-#		if self.mood is None:
-#			pep.user_send_mood(self.account, '')
-#		else:
-#			pep.user_send_mood(self.account, self.mood, message)
 		self.window.destroy()
 
 	def on_cancel_button_clicked(self, widget):
@@ -559,11 +549,14 @@ class ChangeStatusMessageDialog:
 		self.message_buffer.set_text(msg)
 
 		# have an empty string selectable, so user can clear msg
-		self.preset_messages_dict = {'': ''}
+		self.preset_messages_dict = {'': ['', '', '', '', '', '']}
 		for msg_name in gajim.config.get_per('statusmsg'):
-			msg_text = gajim.config.get_per('statusmsg', msg_name, 'message')
-			msg_text = helpers.from_one_line(msg_text)
-			self.preset_messages_dict[msg_name] = msg_text
+			opts = []
+			for opt in ['message', 'activity', 'subactivity', 'activity_text',
+			'mood', 'mood_text']:
+				opts.append(gajim.config.get_per('statusmsg', msg_name, opt))
+			opts[0] = helpers.from_one_line(opts[0])
+			self.preset_messages_dict[msg_name] = opts
 		sorted_keys_list = helpers.get_sorted_keys(self.preset_messages_dict)
 
 		countdown_time = gajim.config.get('change_status_window_timeout')
@@ -671,7 +664,14 @@ class ChangeStatusMessageDialog:
 		if active < 0:
 			return None
 		name = model[active][0].decode('utf-8')
-		self.message_buffer.set_text(self.preset_messages_dict[name])
+		self.message_buffer.set_text(self.preset_messages_dict[name][0])
+		self.pep_dict['activity'] = self.preset_messages_dict[name][1]
+		self.pep_dict['subactivity'] = self.preset_messages_dict[name][2]
+		self.pep_dict['activity_text'] = self.preset_messages_dict[name][3]
+		self.pep_dict['mood'] = self.preset_messages_dict[name][4]
+		self.pep_dict['mood_text'] = self.preset_messages_dict[name][5]
+		self.draw_activity()
+		self.draw_mood()
 
 	def on_change_status_message_dialog_key_press_event(self, widget, event):
 		self.countdown_enabled = False
@@ -700,21 +700,32 @@ class ChangeStatusMessageDialog:
 			if not msg_name: # msg_name was ''
 				msg_name = msg_text_1l.decode('utf-8')
 
+			def on_ok2():
+				self.preset_messages_dict[msg_name] = [msg_text, self.pep_dict.get(
+					'activity'), self.pep_dict.get('subactivity'), self.pep_dict.get(
+					'activity_text'), self.pep_dict.get('mood'), self.pep_dict.get(
+					'mood_text')]
+				gajim.config.set_per('statusmsg', msg_name, 'message', msg_text_1l)
+				gajim.config.set_per('statusmsg', msg_name, 'activity',
+					self.pep_dict.get('activity'))
+				gajim.config.set_per('statusmsg', msg_name, 'subactivity',
+					self.pep_dict.get('subactivity'))
+				gajim.config.set_per('statusmsg', msg_name, 'activity_text',
+					self.pep_dict.get('activity_text'))
+				gajim.config.set_per('statusmsg', msg_name, 'mood',
+					self.pep_dict.get('mood'))
+				gajim.config.set_per('statusmsg', msg_name, 'mood_text',
+					self.pep_dict.get('mood_text'))
 			if msg_name in self.preset_messages_dict:
-				def on_ok2():
-					self.preset_messages_dict[msg_name] = msg_text
-					gajim.config.set_per('statusmsg', msg_name, 'message',
-						msg_text_1l)
 				ConfirmationDialog(_('Overwrite Status Message?'),
 					_('This name is already used. Do you want to overwrite this '
 					'status message?'), on_response_ok=on_ok2)
 				return
-			self.preset_messages_dict[msg_name] = msg_text
-			iter_ = self.message_liststore.append((msg_name,))
 			gajim.config.add_per('statusmsg', msg_name)
+			on_ok2()
+			iter_ = self.message_liststore.append((msg_name,))
 			# select in combobox the one we just saved
 			self.message_combobox.set_active_iter(iter_)
-			gajim.config.set_per('statusmsg', msg_name, 'message', msg_text_1l)
 		InputDialog(_('Save as Preset Status Message'),
 			_('Please type a name for this status message'), is_modal=False,
 			ok_handler=on_ok)
