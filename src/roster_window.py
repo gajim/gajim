@@ -2301,7 +2301,7 @@ class RosterWindow:
 		if get_msg:
 			self.get_status_message('offline', None, on_continue)
 		else:
-			on_continue('')
+			on_continue('', None)
 
 ################################################################################
 ### Menu and GUI callbacks
