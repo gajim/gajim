@@ -885,6 +885,8 @@ class ConnectionDisco:
 								gajim.interface.roster.music_track_changed(listener,
 										track, self.name)
 						break
+			if features.__contains__(common.xmpp.NS_PUBSUB):
+				self.pubsub_supported = True
 			if features.__contains__(common.xmpp.NS_BYTESTREAM):
 				our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name) +\
 					'/' + self.server_resource)
