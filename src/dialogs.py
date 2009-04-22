@@ -2506,9 +2506,14 @@ class XMLConsoleWindow:
 		self.tagIn = buffer_.create_tag('incoming')
 		color = gajim.config.get('inmsgcolor')
 		self.tagIn.set_property('foreground', color)
+		self.tagInComment = buffer_.create_tag('in_comment')
+		self.tagInComment.set_property('foreground', color)
+
 		self.tagOut = buffer_.create_tag('outgoing')
 		color = gajim.config.get('outmsgcolor')
 		self.tagOut.set_property('foreground', color)
+		self.tagOutComment = buffer_.create_tag('out_comment')
+		self.tagOutComment.set_property('foreground', color)
 
 		self.enabled = False
 
@@ -2561,6 +2566,13 @@ class XMLConsoleWindow:
 		visible_rect = self.stanzas_log_textview.get_visible_rect()
 		if end_rect.y <= (visible_rect.y + visible_rect.height):
 			at_the_end = True
+		end_iter = buffer.get_end_iter()
+		if kind == 'incoming':
+			buffer.insert_with_tags_by_name(end_iter, '<!-- In -->\n', 
+					'in_comment')
+		elif kind == 'outgoing':
+			buffer.insert_with_tags_by_name(end_iter, '<!-- Out -->\n', 
+					'out_comment')
 		end_iter = buffer.get_end_iter()
 		buffer.insert_with_tags_by_name(end_iter, stanza.replace('><', '>\n<') + \
 			'\n\n', kind)
