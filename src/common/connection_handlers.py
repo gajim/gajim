@@ -1549,9 +1549,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			self.dispatch('ROSTER_INFO', (jid, name, sub, ask, groups))
 		if not self.connection or self.connected < 2:
 			raise common.xmpp.NodeProcessed
-		server = gajim.config.get_per('accounts', self.name, 'hostname')
 		reply = common.xmpp.Iq(typ='result', attrs={'id': iq_obj.getID()},
-			to=server, frm=iq_obj.getTo(), xmlns=None)
+			to=iq_obj.getFrom(), frm=iq_obj.getTo(), xmlns=None)
 		self.connection.send(reply)
 		raise common.xmpp.NodeProcessed
 
