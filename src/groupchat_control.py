@@ -1742,6 +1742,12 @@ class GroupchatControl(ChatControlBase):
 			proposed_nick, is_modal=False, ok_handler=on_ok,
 			cancel_handler=on_cancel)
 
+	def minimizable(self):
+		if self.contact.jid in gajim.config.get_per('accounts', self.account,
+		'minimized_gc').split(' '):
+			return True
+		return False
+
 	def minimize(self, status='offline'):
 		# Minimize it
 		win = gajim.interface.msg_win_mgr.get_window(self.contact.jid,
@@ -1799,8 +1805,7 @@ class GroupchatControl(ChatControlBase):
 		gajim.events.remove_events(self.account, self.room_jid)
 
 	def safe_shutdown(self):
-		if self.contact.jid in gajim.config.get_per('accounts', self.account,
-		'minimized_gc').split(' '):
+		if self.minimizable():
 			return True
 		includes = gajim.config.get('confirm_close_muc_rooms').split(' ')
 		excludes = gajim.config.get('noconfirm_close_muc_rooms').split(' ')
@@ -1812,8 +1817,7 @@ class GroupchatControl(ChatControlBase):
 		return True
 
 	def allow_shutdown(self, method, on_yes, on_no, on_minimize):
-		if self.contact.jid in gajim.config.get_per('accounts', self.account,
-		'minimized_gc').split(' '):
+		if self.minimizable():
 			on_minimize(self)
 			return
 		if method == self.parent_win.CLOSE_ESC:

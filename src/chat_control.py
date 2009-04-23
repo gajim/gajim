@@ -2327,6 +2327,9 @@ class ChatControl(ChatControlBase):
 		self.conv_textview.del_handlers()
 		self.msg_textview.destroy()
 
+	def minimizable(self):
+		return False
+
 	def safe_shutdown(self):
 		return False
 

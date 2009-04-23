@@ -71,6 +71,11 @@ class MessageControl:
 		or inactive (state is False)'''
 		pass  # Derived classes MUST implement this method
 
+	def minimizable(self):
+		'''Called to check if control can be minimized'''
+		# NOTE: Derived classes MAY implement this
+		return False
+
 	def safe_shutdown(self):
 		'''Called to check if control can be closed without loosing data.
 		returns True if control can be closed safely else False'''

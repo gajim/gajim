@@ -206,6 +206,9 @@ class MessageWindow(object):
 				if checked:
 					gajim.config.set('confirm_close_multiple_tabs', False)
 				self.dont_warn_on_delete = True
+				for ctrl in self.controls():
+					if ctrl.minimizable():
+						ctrl.minimize()
 				win.destroy()
 
 			if not gajim.config.get('confirm_close_multiple_tabs'):
