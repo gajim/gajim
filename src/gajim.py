@@ -477,19 +477,19 @@ class PassphraseRequest:
 		self.dialog_created = True
 
 
-class ThreadInterface: 
-		def __init__(self, func, func_args, callback, callback_args): 
-			'''Call a function in a thread 
-			
-			:param func: the function to call in the thread 
-			:param func_args: list or arguments for this function 
-			:param callback: callback to call once function is finished 
-			:param callback_args: list of arguments for this callback 
-			''' 
-			def thread_function(func, func_args, callback, callback_args): 
-				output = func(*func_args) 
-				gobject.idle_add(callback, output, *callback_args) 
-			Thread(target=thread_function, args=(func, func_args, callback, 
+class ThreadInterface:
+		def __init__(self, func, func_args, callback, callback_args):
+			'''Call a function in a thread
+
+			:param func: the function to call in the thread
+			:param func_args: list or arguments for this function
+			:param callback: callback to call once function is finished
+			:param callback_args: list of arguments for this callback
+			'''
+			def thread_function(func, func_args, callback, callback_args):
+				output = func(*func_args)
+				gobject.idle_add(callback, output, *callback_args)
+			Thread(target=thread_function, args=(func, func_args, callback,
 				callback_args)).start()
 
 class Interface:
@@ -3536,6 +3536,7 @@ if __name__ == '__main__':
 	Interface()
 
 	try:
+		gtk.gdk.threads_init()
 		gtk.main()
 	except KeyboardInterrupt:
 		print >> sys.stderr, 'KeyboardInterrupt'
