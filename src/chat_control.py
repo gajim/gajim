@@ -1286,6 +1286,13 @@ class ChatControl(ChatControlBase):
 			self._send_file_button.set_sensitive(True)
 		else:
 			self._send_file_button.set_sensitive(False)
+			if not gajim.capscache.is_supported(self.contact, NS_FILE):
+				self._send_file_button.set_tooltip_text(_(
+					"This contact does not support file transfer."))
+			else:
+				self._send_file_button.set_tooltip_text(
+					_("You need to know the real JID of the contact to send him or "
+					"her a file."))
 
 		# Convert to GC
 		if gajim.capscache.is_supported(self.contact, NS_MUC):
