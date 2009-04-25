@@ -489,7 +489,12 @@ class PassphraseRequest:
 		self.keyid = keyid
 		self.callbacks = []
 		self.dialog_created = False
+		self.dialog = None
 		self.completed = False
+
+	def interrupt(self):
+		self.dialog.window.destroy()
+		self.callbacks = []
 
 	def run_callback(self, account, callback):
 		gajim.connections[account].gpg_passphrase(self.passphrase)
@@ -546,7 +551,7 @@ class PassphraseRequest:
 				# user failed 3 times, continue without GPG
 				self.complete(None)
 
-		dialogs.PassphraseDialog(title, second, ok_handler=(_ok, 1),
+		self.dialog = dialogs.PassphraseDialog(title, second, ok_handler=(_ok, 1),
 			cancel_handler=_cancel)
 		self.dialog_created = True
 
@@ -669,6 +674,9 @@ class Interface:
 				# iteration error
 				self.instances[account]['online_dialog'][name].destroy()
 				del self.instances[account]['online_dialog'][name]
+			for request in self.gpg_passphrase.values():
+				if request:
+					request.interrupt()
 		if status == 'offline':
 			# sensitivity for this menuitem
 			if gajim.get_number_of_connected_accounts() == 0:
@@ -784,6 +792,9 @@ class Interface:
 					# jid
 					# Create self contact and add to roster
 					if resource == conn.server_resource:
+						return
+					# Ignore offline presence of unknown self resource
+					if new_show < 2:
 						return
 					contact1 = gajim.contacts.create_contact(jid=ji,
 						name=gajim.nicks[account], groups=['self_contact'],
@@ -1245,13 +1256,14 @@ class Interface:
 			win = self.instances[account]['infos'][array[0]]
 		elif array[0] + '/' + array[1] in self.instances[account]['infos']:
 			win = self.instances[account]['infos'][array[0] + '/' + array[1]]
+		c = gajim.contacts.get_contact(account, array[0], array[1])
+		if c: # c can be none if it's a gc contact
+			c.last_status_time = time.localtime(time.time() - tim)
+			if array[3]:
+				c.status = array[3]
+				self.roster.draw_contact(c.jid, account) # draw offline status
 		if win:
-			c = gajim.contacts.get_contact(account, array[0], array[1])
-			if c: # c can be none if it's a gc contact
-				c.last_status_time = time.localtime(time.time() - tim)
-				if array[3]:
-					c.status = array[3]
-				win.set_last_status_time()
+			win.set_last_status_time()
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('LastStatusTime', (account, array))
 
@@ -2358,8 +2370,15 @@ class Interface:
 			else:
 				self.roster.draw_contact(jid, account)
 
-		# Select the contact in roster, it's visible because it has events.
-		self.roster.select_contact(jid, account)
+		# Select the big brother contact in roster, it's visible because it has
+		# events.
+		family = gajim.contacts.get_metacontacts_family(account, jid)
+		if family:
+			nearby_family, bb_jid, bb_account = \
+				self.roster._get_nearby_family_and_big_brother(family, account)
+		else:
+			bb_jid, bb_account = jid, account
+		self.roster.select_contact(bb_jid, bb_account)
 
 	def handle_event(self, account, fjid, type_):
 		w = None
@@ -3295,7 +3314,7 @@ class Interface:
 		gajim.proxy65_manager = proxy65_manager.Proxy65Manager(gajim.idlequeue)
 		gajim.default_session_type = ChatControlSession
 		self.register_handlers()
-		if gajim.config.get('enable_zeroconf'):
+		if gajim.config.get('enable_zeroconf') and gajim.HAVE_ZEROCONF:
 			gajim.connections[gajim.ZEROCONF_ACC_NAME] = common.zeroconf.connection_zeroconf.ConnectionZeroconf(gajim.ZEROCONF_ACC_NAME)
 		for account in gajim.config.get_per('accounts'):
 			if not gajim.config.get_per('accounts', account, 'is_zeroconf'):

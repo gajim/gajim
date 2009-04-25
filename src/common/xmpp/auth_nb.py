@@ -144,29 +144,32 @@ class SASL(PlugIn):
 		self.MechanismHandler()
 
 	def MechanismHandler(self):
-		if "GSSAPI" in self.mecs and have_kerberos:
-			self.mecs.remove("GSSAPI")
-			rc, self.gss_vc = kerberos.authGSSClientInit('xmpp@' +
-				self._owner.socket._hostfqdn)
-			rc = kerberos.authGSSClientStep(self.gss_vc, '')
-			response = kerberos.authGSSClientResponse(self.gss_vc)
-			node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'GSSAPI'},
-                   payload=(response or ""))
-			self.mechanism = "GSSAPI"
-			self.gss_step = GSS_STATE_STEP
-		elif "DIGEST-MD5" in self.mecs:
-			self.mecs.remove("DIGEST-MD5")
+		if 'GSSAPI' in self.mecs and have_kerberos:
+			self.mecs.remove('GSSAPI')
+			try:
+				self.gss_vc = kerberos.authGSSClientInit('xmpp@' + \
+					self._owner.xmpp_hostname)[1]
+				kerberos.authGSSClientStep(self.gss_vc, '')
+				response = kerberos.authGSSClientResponse(self.gss_vc)
+				node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'GSSAPI'},
+					payload=(response or ''))
+				self.mechanism = 'GSSAPI'
+				self.gss_step = GSS_STATE_STEP
+			except kerberos.GSSError, e:
+				self.DEBUG('GSSAPI authentication failed: %s' % str(e), 'warn')
+		elif 'DIGEST-MD5' in self.mecs:
+			self.mecs.remove('DIGEST-MD5')
 			node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'DIGEST-MD5'})
-			self.mechanism = "DIGEST-MD5"
-		elif "PLAIN" in self.mecs:
-			self.mecs.remove("PLAIN")
+			self.mechanism = 'DIGEST-MD5'
+		elif 'PLAIN' in self.mecs:
+			self.mecs.remove('PLAIN')
 			sasl_data = u'%s\x00%s\x00%s' % (self.username + '@' + \
 				self._owner.Server, self.username, self.password)
 			asl_data = sasl_data.encode('utf-8').encode('base64').replace(
 				'\n','')
 			node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'PLAIN'}, 
 				payload=[sasl_data])
-			self.mechanism = "PLAIN"
+			self.mechanism = 'PLAIN'
 		else:
 			self.startsasl='failure'
 			self.DEBUG('I can only use DIGEST-MD5, GSSAPI and PLAIN mecanisms.', 'error')
@@ -397,14 +400,17 @@ class NonBlockingBind(Bind):
 				func=self._on_bound)
 	def _on_bound(self, resp):
 		if isResultNode(resp):
-			self.bound.append(resp.getTag('bind').getTagData('jid'))
-			self.DEBUG('Successfully bound %s.'%self.bound[-1],'ok')
-			jid=JID(resp.getTag('bind').getTagData('jid'))
-			self._owner.User=jid.getNode()
-			self._owner.Resource=jid.getResource()
-			self._owner.SendAndWaitForResponse(Protocol('iq', typ='set', 
-				payload=[Node('session', attrs={'xmlns':NS_SESSION})]), func=self._on_session)
-		elif resp:
+			if resp.getTag('bind') and resp.getTag('bind').getTagData('jid'):
+				self.bound.append(resp.getTag('bind').getTagData('jid'))
+				self.DEBUG('Successfully bound %s.'%self.bound[-1],'ok')
+				jid=JID(resp.getTag('bind').getTagData('jid'))
+				self._owner.User=jid.getNode()
+				self._owner.Resource=jid.getResource()
+				self._owner.SendAndWaitForResponse(Protocol('iq', typ='set', 
+					payload=[Node('session', attrs={'xmlns':NS_SESSION})]),
+					func=self._on_session)
+				return
+		if resp:
 			self.DEBUG('Binding failed: %s.' % resp.getTag('error'),'error')
 			self.on_bound(None)
 		else:

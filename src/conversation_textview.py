@@ -1208,7 +1208,7 @@ class ConversationTextview:
 		if xhtml:
 			try:
 				if name and (text.startswith('/me ') or text.startswith('/me\n')):
-					xhtml = xhtml.replace('/me', '<dfn>%s</dfn>' % (name,), 1)
+					xhtml = xhtml.replace('/me', '<i>* %s</i>' % (name,), 1)
 				self.tv.display_html(xhtml.encode('utf-8'))
 				return
 			except Exception, e:

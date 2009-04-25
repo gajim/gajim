@@ -154,6 +154,15 @@ SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 # zeroconf account name
 ZEROCONF_ACC_NAME = 'Local'
 
+HAVE_ZEROCONF = True
+try:
+	import avahi
+except ImportError:
+	try:
+		import pybonjour
+	except ImportError:
+		HAVE_ZEROCONF = False
+
 HAVE_PYCRYPTO = True
 try:
 	import Crypto

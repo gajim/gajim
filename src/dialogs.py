@@ -218,6 +218,7 @@ class PassphraseDialog:
 		cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
 
 		self.xml.signal_autoconnect(self)
+		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.window.show_all()
 
 		self.check = bool(checkbuttontext)
@@ -283,6 +284,7 @@ class ChooseGPGKeyDialog:
 		self.keys_treeview.set_search_column(1)
 		self.fill_tree(secret_keys, selected)
 		self.window.connect('response', self.on_dialog_response)
+		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.window.show_all()
 
 	def sort_keys(self, model, iter1, iter2):
@@ -418,6 +420,7 @@ class ChangeActivityDialog:
 			self.entry.set_text(con.activity['text'])
 
 		self.xml.signal_autoconnect(self)
+		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.window.show_all()
 
 	def on_enable_checkbutton_toggled(self, widget):
@@ -510,6 +513,7 @@ class ChangeMoodDialog:
 			self.entry.set_text(con.mood['text'])
 
 		self.xml.signal_autoconnect(self)
+		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.window.show_all()
 
 	def on_mood_button_clicked(self, widget, data):
@@ -585,6 +589,7 @@ class ChangeStatusMessageDialog:
 			self.countdown()
 			gobject.timeout_add(1000, self.countdown)
 		self.window.connect('response', self.on_dialog_response)
+		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.window.show_all()
 
 	def countdown(self):
@@ -986,7 +991,7 @@ class AboutDialog:
 		dlg.set_transient_for(gajim.interface.roster.window)
 		dlg.set_name('Gajim')
 		dlg.set_version(gajim.version)
-		s = u'Copyright © 2003-2008 Gajim Team'
+		s = u'Copyright © 2003-2009 Gajim Team'
 		dlg.set_copyright(s)
 		copying_file_path = self.get_path('COPYING')
 		if copying_file_path:
@@ -1621,7 +1626,8 @@ class SubscriptionRequestWindow:
 		'''accept the request'''
 		gajim.connections[self.account].send_authorization(self.jid)
 		self.window.destroy()
-		if self.jid not in gajim.contacts.get_jid_list(self.account):
+		contact = gajim.contacts.get_contact(self.account, self.jid)
+		if not contact or _('Not in Roster') in contact.groups:
 			AddNewContactWindow(self.account, self.jid, self.user_nick)
 
 	def on_contact_info_activate(self, widget):
@@ -2420,9 +2426,14 @@ class XMLConsoleWindow:
 		self.tagIn = buffer.create_tag('incoming')
 		color = gajim.config.get('inmsgcolor')
 		self.tagIn.set_property('foreground', color)
+		self.tagInComment = buffer_.create_tag('in_comment')
+		self.tagInComment.set_property('foreground', color)
+
 		self.tagOut = buffer.create_tag('outgoing')
 		color = gajim.config.get('outmsgcolor')
 		self.tagOut.set_property('foreground', color)
+		self.tagOutComment = buffer_.create_tag('out_comment')
+		self.tagOutComment.set_property('foreground', color)
 
 		self.enabled = False
 
@@ -2475,6 +2486,13 @@ class XMLConsoleWindow:
 		visible_rect = self.stanzas_log_textview.get_visible_rect()
 		if end_rect.y <= (visible_rect.y + visible_rect.height):
 			at_the_end = True
+		end_iter = buffer.get_end_iter()
+		if kind == 'incoming':
+			buffer.insert_with_tags_by_name(end_iter, '<!-- In -->\n',
+				'in_comment')
+		elif kind == 'outgoing':
+			buffer.insert_with_tags_by_name(end_iter, '<!-- Out -->\n',
+				'out_comment')
 		end_iter = buffer.get_end_iter()
 		buffer.insert_with_tags_by_name(end_iter, stanza.replace('><', '>\n<') + \
 			'\n\n', kind)
@@ -2992,6 +3010,7 @@ class ProgressDialog:
 		self.progressbar = self.xml.get_widget('progressbar')
 		self.dialog.set_title(title_text)
 		self.dialog.set_default_size(450, 250)
+		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
 		self.dialog.show_all()
 		self.xml.signal_autoconnect(self)
 

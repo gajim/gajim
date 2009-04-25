@@ -1379,7 +1379,8 @@ class RosterWindow:
 		if self.dragging or not gajim.config.get('scroll_roster_to_last_message'):
 			# do not change selection while DND'ing
 			return
-		self.tree.expand_to_path(path)
+		# Expand his parent, so this path is visible, don't expand it.
+		self.tree.expand_to_path(path[:-1])
 		self.tree.scroll_to_cell(path)
 		self.tree.set_cursor(path)
 
@@ -2034,7 +2035,7 @@ class RosterWindow:
 
 		# print status in chat window and update status/GPG image
 		ctrl = gajim.interface.msg_win_mgr.get_control(contact.jid, account)
-		if ctrl:
+		if ctrl and ctrl.type_id != message_control.TYPE_GC:
 			ctrl.contact = gajim.contacts.get_contact_with_highest_priority(
 				account, contact.jid)
 			ctrl.update_status_display(name, uf_show, status)
@@ -2681,7 +2682,8 @@ class RosterWindow:
 				return
 			old_text = jid
 			title = _('Rename Group')
-			message = _('Enter a new name for group %s') % jid
+			message = _('Enter a new name for group %s') % \
+				gobject.markup_escape_text(jid)
 
 		def on_renamed(new_text, account, row_type, jid, old_text):
 			if 'rename' in gajim.interface.instances:

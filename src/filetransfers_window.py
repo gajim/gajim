@@ -308,7 +308,8 @@ _('Connection with peer cannot be established.'))
 		file requested by a contact'''
 		if file_props is None or 'name' not in file_props:
 			return
-		sec_text = '\t' + _('File: %s') % file_props['name']
+		sec_text = '\t' + _('File: %s') % gobject.markup_escape_text(
+			file_props['name'])
 		if 'size' in file_props:
 			sec_text += '\n\t' + _('Size: %s') % \
 				helpers.convert_bytes(file_props['size'])
