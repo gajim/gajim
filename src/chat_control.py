@@ -181,6 +181,8 @@ class ChatControlBase(MessageControl):
 			self.banner_status_label = gtk.Label()
 		self.banner_status_label.set_selectable(True)
 		self.banner_status_label.set_alignment(0,0.5)
+		self.banner_status_label.connect('populate_popup',
+			self.on_banner_label_populate_popup)
 
 		banner_vbox = self.xml.get_widget('banner_vbox')
 		banner_vbox.pack_start(self.banner_status_label)
@@ -316,6 +318,20 @@ class ChatControlBase(MessageControl):
 				spell.set_language(lang)
 		except (gobject.GError, RuntimeError, TypeError, OSError):
 			dialogs.AspellDictError(lang)
+
+	def on_banner_label_populate_popup(self, label, menu):
+		'''We override the default context menu and add our own menutiems'''
+		item = gtk.SeparatorMenuItem()
+		menu.prepend(item)
+
+		menu2 = self.prepare_context_menu()
+		i = 0
+		for item in menu2:
+			menu2.remove(item)
+			menu.prepend(item)
+			menu.reorder_child(item, i)
+			i += 1
+		menu.show_all()
 
 	def on_msg_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend an option to switch
@@ -2205,10 +2221,14 @@ class ChatControl(ChatControlBase):
 	convert_to_gc_menuitem, information_menuitem, history_menuitem):
 		# destroy accelerators
 		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
-		send_file_menuitem.remove_accelerator(ag, gtk.keysyms.f, gtk.gdk.CONTROL_MASK)
-		convert_to_gc_menuitem.remove_accelerator(ag, gtk.keysyms.g, gtk.gdk.CONTROL_MASK)
-		information_menuitem.remove_accelerator(ag, gtk.keysyms.i, gtk.gdk.CONTROL_MASK)
-		history_menuitem.remove_accelerator(ag, gtk.keysyms.h, gtk.gdk.CONTROL_MASK)
+		send_file_menuitem.remove_accelerator(ag, gtk.keysyms.f,
+			gtk.gdk.CONTROL_MASK)
+		convert_to_gc_menuitem.remove_accelerator(ag, gtk.keysyms.g,
+			gtk.gdk.CONTROL_MASK)
+		information_menuitem.remove_accelerator(ag, gtk.keysyms.i,
+			gtk.gdk.CONTROL_MASK)
+		history_menuitem.remove_accelerator(ag, gtk.keysyms.h,
+			gtk.gdk.CONTROL_MASK)
 		# destroy menu
 		menu.destroy()
 
