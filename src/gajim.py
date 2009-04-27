@@ -3406,7 +3406,7 @@ class Interface:
 		self.systray_enabled = False
 		self.systray_capabilities = False
 
-		if (((os.name == 'nt') or (sys.platform == 'darwin'):
+		if (os.name == 'nt') or (sys.platform == 'darwin'):
 			import statusicon
 			self.systray = statusicon.StatusIcon()
 			self.systray_capabilities = True
