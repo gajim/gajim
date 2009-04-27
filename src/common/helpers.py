@@ -45,7 +45,6 @@ from encodings.punycode import punycode_encode
 from i18n import Q_
 from i18n import ngettext
 import xmpp
-import pep
 
 try:
 	import winsound # windows-only built-in module for playing wav
@@ -638,6 +637,7 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 # import gajim only when needed (after decode_string is defined) see #4764
 
 import gajim
+import pep
 
 try:
 	from osx import nsapp
