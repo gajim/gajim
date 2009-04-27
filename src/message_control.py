@@ -188,7 +188,10 @@ class MessageControl:
 				jid += '/' + self.resource
 
 			if not sess:
-				sess = conn.make_new_session(jid)
+				if self.type_id == TYPE_PM:
+					sess = conn.make_new_session(jid, type_='pm')
+				else:
+					sess = conn.make_new_session(jid)
 
 			self.set_session(sess)
 
