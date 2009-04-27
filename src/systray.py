@@ -288,12 +288,11 @@ class Systray:
 		sounds_mute_menuitem.set_active(not gajim.config.get('sounds_on'))
 
 		if os.name == 'nt':
-			if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
-				if self.added_hide_menuitem is False:
-					self.systray_context_menu.prepend(gtk.SeparatorMenuItem())
-					item = gtk.MenuItem(_('Hide this menu'))
-					self.systray_context_menu.prepend(item)
-					self.added_hide_menuitem = True
+			if self.added_hide_menuitem is False:
+				self.systray_context_menu.prepend(gtk.SeparatorMenuItem())
+				item = gtk.MenuItem(_('Hide this menu'))
+				self.systray_context_menu.prepend(item)
+				self.added_hide_menuitem = True
 
 		self.systray_context_menu.show_all()
 		self.systray_context_menu.popup(None, None, None, 0,

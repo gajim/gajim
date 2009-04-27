@@ -164,13 +164,8 @@ class VcardWindow:
 	def set_value(self, entry_name, value):
 		try:
 			if value and entry_name == 'URL_label':
-				if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
-					widget = gtk.LinkButton(value, value)
-					widget.set_alignment(0, 0)
-				else:
-					widget = gtk.Label(value)
-					widget.set_alignment(0, 0)
-					widget.set_selectable(True)
+				widget = gtk.LinkButton(value, value)
+				widget.set_alignment(0, 0)
 				widget.show()
 				table = self.xml.get_widget('personal_info_table')
 				table.attach(widget, 1, 4, 3, 4, yoptions = 0)
@@ -492,13 +487,8 @@ class ZeroconfVcardWindow:
 	def set_value(self, entry_name, value):
 		try:
 			if value and entry_name == 'URL_label':
-				if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
-					widget = gtk.LinkButton(value, value)
-					widget.set_alignment(0, 0)
-				else:
-					widget = gtk.Label(value)
-					widget.set_selectable(True)
-					widget.set_alignment(0, 0)
+				widget = gtk.LinkButton(value, value)
+				widget.set_alignment(0, 0)
 				table = self.xml.get_widget('personal_info_table')
 				table.attach(widget, 1, 4, 3, 4, yoptions = 0)
 			else:

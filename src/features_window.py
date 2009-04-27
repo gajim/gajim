@@ -240,8 +240,7 @@ class FeaturesWindow:
 		return True
 
 	def trayicon_available(self):
-		if os.name == 'nt' and gtk.pygtk_version >= (2, 10, 0) and \
-		gtk.gtk_version >= (2, 10, 0):
+		if os.name == 'nt':
 			return True
 		try:
 			import systray

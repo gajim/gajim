@@ -170,12 +170,12 @@ else:
 		except Exception:
 			pass
 
-	if gtk.pygtk_version < (2, 8, 0):
-		pritext = _('Gajim needs PyGTK 2.8 or above')
-		sectext = _('Gajim needs PyGTK 2.8 or above to run. Quiting...')
-	elif gtk.gtk_version < (2, 8, 0):
-		pritext = _('Gajim needs GTK 2.8 or above')
-		sectext = _('Gajim needs GTK 2.8 or above to run. Quiting...')
+	if gtk.pygtk_version < (2, 12, 0):
+		pritext = _('Gajim needs PyGTK 2.12 or above')
+		sectext = _('Gajim needs PyGTK 2.12 or above to run. Quiting...')
+	elif gtk.gtk_version < (2, 12, 0):
+		pritext = _('Gajim needs GTK 2.12 or above')
+		sectext = _('Gajim needs GTK 2.12 or above to run. Quiting...')
 
 	try:
 		import gtk.glade # check if user has libglade (in pygtk and in gtk)
@@ -3317,8 +3317,7 @@ class Interface:
 		# gtk hooks
 		gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
 		gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
-		if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
-			gtk.link_button_set_uri_hook(self.on_launch_browser_mailer, 'url')
+		gtk.link_button_set_uri_hook(self.on_launch_browser_mailer, 'url')
 
 		self.instances = {}
 
@@ -3407,9 +3406,7 @@ class Interface:
 		self.systray_enabled = False
 		self.systray_capabilities = False
 
-		if (((os.name == 'nt') or (sys.platform == 'darwin')) and
-			(gtk.pygtk_version >= (2, 10, 0)) and
-			(gtk.gtk_version >= (2, 10, 0))):
+		if (((os.name == 'nt') or (sys.platform == 'darwin'):
 			import statusicon
 			self.systray = statusicon.StatusIcon()
 			self.systray_capabilities = True

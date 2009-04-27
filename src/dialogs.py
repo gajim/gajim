@@ -2106,8 +2106,7 @@ class PopupNotificationWindow:
 
 		xml = gtkgui_helpers.get_glade('popup_notification_window.glade')
 		self.window = xml.get_widget('popup_notification_window')
-		if gtk.gtk_version >= (2, 10, 0) and gtk.pygtk_version >= (2, 10, 0):
-			self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLTIP)
+		self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLTIP)
 		close_button = xml.get_widget('close_button')
 		event_type_label = xml.get_widget('event_type_label')
 		event_description_label = xml.get_widget('event_description_label')

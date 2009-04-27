@@ -57,8 +57,6 @@ try:
 except ImportError:
 	HAS_GTK_SPELL = False
 
-HAVE_MARKUP_TOOLTIPS = gtk.pygtk_version >= (2, 12, 0)
-
 # the next script, executed in the "po" directory,
 # generates the following list.
 ##!/bin/sh
@@ -453,8 +451,6 @@ class ChatControlBase(MessageControl):
 		self.connect_style_event(widget, opts[0], opts[1])
 
 	def _conv_textview_key_press_event(self, widget, event):
-		if gtk.gtk_version < (2, 12, 0):
-			return
 		if (event.state & gtk.gdk.CONTROL_MASK and event.keyval in (gtk.keysyms.c,
 		gtk.keysyms.Insert)) or (event.state & gtk.gdk.SHIFT_MASK and \
 		event.keyval in (gtk.keysyms.Page_Down, gtk.keysyms.Page_Up)):
@@ -1188,11 +1184,6 @@ class ChatControl(ChatControlBase):
 		self._activity_image = self.xml.get_widget('activity_image')
 		self._tune_image = self.xml.get_widget('tune_image')
 
-		if not HAVE_MARKUP_TOOLTIPS:
-			self._mood_tooltip = gtk.Tooltips()
-			self._activity_tooltip = gtk.Tooltips()
-			self._tune_tooltip = gtk.Tooltips()
-
 		self.update_mood()
 		self.update_activity()
 		self.update_tune()
@@ -1338,19 +1329,13 @@ class ChatControl(ChatControlBase):
 				self._mood_image.set_from_pixbuf(gtkgui_helpers.load_mood_icon(
 					'unknown').get_pixbuf())
 
-			if HAVE_MARKUP_TOOLTIPS:
-				mood = gobject.markup_escape_text(mood)
+			mood = gobject.markup_escape_text(mood)
 
-				tooltip = '<b>%s</b>' % mood
-				if text:
-					text = gobject.markup_escape_text(text)
-					tooltip += '\n' + text
-				self._mood_image.set_tooltip_markup(tooltip)
-			else:
-				tooltip = mood
-				if text:
-					tooltip += '\n' + text
-				self._mood_tooltip.set_tip(self._mood_image, tooltip)
+			tooltip = '<b>%s</b>' % mood
+			if text:
+				text = gobject.markup_escape_text(text)
+				tooltip += '\n' + text
+			self._mood_image.set_tooltip_markup(tooltip)
 			self._mood_image.show()
 		else:
 			self._mood_image.hide()
@@ -1388,21 +1373,13 @@ class ChatControl(ChatControlBase):
 
 			# Translate standard subactivities
 
-			if HAVE_MARKUP_TOOLTIPS:
-				tooltip = '<b>' + gobject.markup_escape_text(activity)
-				if subactivity:
-					tooltip += ': ' + gobject.markup_escape_text(subactivity)
-				tooltip += '</b>'
-				if text:
-					tooltip += '\n' + gobject.markup_escape_text(text)
-				self._activity_image.set_tooltip_markup(tooltip)
-			else:
-				tooltip = activity
-				if subactivity:
-					tooltip += ': ' + subactivity
-				if text:
-					tooltip += '\n' + text
-				self._activity_tooltip.set_tip(self._activity_image, tooltip)
+			tooltip = '<b>' + gobject.markup_escape_text(activity)
+			if subactivity:
+				tooltip += ': ' + gobject.markup_escape_text(subactivity)
+			tooltip += '</b>'
+			if text:
+				tooltip += '\n' + gobject.markup_escape_text(text)
+			self._activity_image.set_tooltip_markup(tooltip)
 
 			self._activity_image.show()
 		else:
@@ -1418,16 +1395,13 @@ class ChatControl(ChatControlBase):
 
 		if 'artist' in self.contact.tune:
 			artist = self.contact.tune['artist'].strip()
-			if HAVE_MARKUP_TOOLTIPS:
-				artist = gobject.markup_escape_text(artist)
+			artist = gobject.markup_escape_text(artist)
 		if 'title' in self.contact.tune:
 			title = self.contact.tune['title'].strip()
-			if HAVE_MARKUP_TOOLTIPS:
-				title = gobject.markup_escape_text(title)
+			title = gobject.markup_escape_text(title)
 		if 'source' in self.contact.tune:
 			source = self.contact.tune['source'].strip()
-			if HAVE_MARKUP_TOOLTIPS:
-				source = gobject.markup_escape_text(source)
+			source = gobject.markup_escape_text(source)
 
 		if artist or title:
 			if not artist:
@@ -1437,15 +1411,10 @@ class ChatControl(ChatControlBase):
 			if not source:
 				source = _('Unknown Source')
 
-			if HAVE_MARKUP_TOOLTIPS:
-				self._tune_image.set_tooltip_markup(
-					_('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
-					'from <i>%(source)s</i>') % {'title': title, 'artist': artist,
-					'source': source})
-			else:
-				self._tune_tooltip.set_tip(self._tune_image,
-					_('%(title)s by %(artist)s\nfrom %(source)s') % {'title': title,
-					'artist': artist, 'source': source})
+			self._tune_image.set_tooltip_markup(
+				_('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
+				'from <i>%(source)s</i>') % {'title': title, 'artist': artist,
+				'source': source})
 			self._tune_image.show()
 		else:
 			self._tune_image.hide()
@@ -2656,8 +2625,7 @@ class ChatControl(ChatControlBase):
 		# so this line adds that
 		window.set_events(gtk.gdk.POINTER_MOTION_MASK)
 		window.set_app_paintable(True)
-		if gtk.gtk_version >= (2, 10, 0) and gtk.pygtk_version >= (2, 10, 0):
-			window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLTIP)
+		window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLTIP)
 
 		window.realize()
 		window.window.set_back_pixmap(pixmap, False) # make it transparent
