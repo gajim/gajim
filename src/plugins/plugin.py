@@ -226,3 +226,9 @@ class GajimPluginConfig(UserDict.DictMixin):
 	@log_calls('GajimPluginConfig')
 	def load(self):
 		self.data = shelve.open(self.FILE_PATH)
+
+class GajimPluginException(Exception):
+	pass
+
+class GajimPluginInitError(GajimPluginException):
+	pass
