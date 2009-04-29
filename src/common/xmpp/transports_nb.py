@@ -496,7 +496,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		self.renew_send_timeout()
 		if self.on_receive:
 			if received.strip():
-				self.DEBUG(received, 'got')
+				log.info("Got: %s", received)
 			if hasattr(self._owner, 'Dispatcher'):
 				self._owner.Dispatcher.Event('', DATA_RECEIVED, received)
 			self.on_receive(received)
