@@ -112,13 +112,13 @@ class ConnectionBytestream:
 		for file_props in self.files_props.values():
 			if self.is_transfer_stopped(file_props):
 				continue
-			receiver_jid = unicode(file_props['receiver']).split('/')[0]
-			if contact.jid == receiver_jid:
+			receiver_jid = unicode(file_props['receiver'])
+			if contact.get_full_jid() == receiver_jid:
 				file_props['error'] = -5
 				self.remove_transfer(file_props)
 				self.dispatch('FILE_REQUEST_ERROR', (contact.jid, file_props, ''))
-			sender_jid = unicode(file_props['sender']).split('/')[0]
-			if contact.jid == sender_jid:
+			sender_jid = unicode(file_props['sender'])
+			if contact.get_full_jid() == sender_jid:
 				file_props['error'] = -3
 				self.remove_transfer(file_props)
 
