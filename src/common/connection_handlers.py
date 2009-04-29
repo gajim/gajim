@@ -2075,7 +2075,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		try:
 			who = helpers.get_full_jid_from_iq(prs)
 		except Exception:
-			if prs.getTag('error').getTag('jid-malformed'):
+			if prs.getTag('error') and prs.getTag('error').getTag('jid-malformed'):
 				# wrong jid, we probably tried to change our nick in a room to a non
 				# valid one
 				who = str(prs.getFrom())
