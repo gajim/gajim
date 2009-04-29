@@ -386,8 +386,8 @@ def on_exit():
 	# delete pid file on normal exit
 	if os.path.exists(pid_filename):
 		os.remove(pid_filename)
-	# Save config
-	gajim.interface.save_config()
+	# Shutdown GUI and save config
+	gajim.interface.roster.quit_gtkgui_interface()
 	if sys.platform == 'darwin':
 		try:
 			osx.shutdown()
