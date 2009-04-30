@@ -154,9 +154,15 @@ class TextViewImage(gtk.Image):
 		return False
 
 
-class ConversationTextview:
+class ConversationTextview(gobject.GObject):
 	'''Class for the conversation textview (where user reads already said
 	messages) for chat/groupchat windows'''
+	__gsignals__ = dict(
+		quote = (gobject.SIGNAL_RUN_LAST | gobject.SIGNAL_ACTION,
+			None, # return value
+			(str, ) # arguments
+		)
+	)
 
 	FOCUS_OUT_LINE_PIXBUF = gtk.gdk.pixbuf_new_from_file(os.path.join(
 		gajim.DATA_DIR, 'pixmaps', 'muc_separator.png'))
@@ -170,6 +176,7 @@ class ConversationTextview:
 	def __init__(self, account, used_in_history_window = False):
 		'''if used_in_history_window is True, then we do not show
 		Clear menuitem in context menu'''
+		gobject.GObject.__init__(self)
 		self.used_in_history_window = used_in_history_window
 
 		# no need to inherit TextView, use it as atrribute is safer
@@ -688,9 +695,15 @@ class ConversationTextview:
 				item = gtk.SeparatorMenuItem()
 				menu.prepend(item)
 
-			self.selected_phrase = helpers.reduce_chars_newlines(
+			if not self.used_in_history_window:
+				item = gtk.MenuItem(_('_Quote'))
+				id_ = item.connect('activate', self.on_quote)
+				self.handlers[id_] = item
+				menu.prepend(item)
+
+			_selected_phrase = helpers.reduce_chars_newlines(
 				self.selected_phrase, 25, 2)
-			item = gtk.MenuItem(_('_Actions for "%s"') % self.selected_phrase)
+			item = gtk.MenuItem(_('_Actions for "%s"') % _selected_phrase)
 			menu.prepend(item)
 			submenu = gtk.Menu()
 			item.set_submenu(submenu)
@@ -752,6 +765,9 @@ class ConversationTextview:
 			submenu.append(item)
 
 		menu.show_all()
+
+	def on_quote(self, widget):
+		self.emit('quote', self.selected_phrase)
 
 	def on_textview_button_press_event(self, widget, event):
 		# If we clicked on a taged text do NOT open the standard popup menu

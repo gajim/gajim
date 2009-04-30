@@ -200,6 +200,8 @@ class ChatControlBase(MessageControl):
 
 		# Create textviews and connect signals
 		self.conv_textview = ConversationTextview(self.account)
+		id_ = self.conv_textview.connect('quote', self.on_quote)
+		self.handlers[id_] = self.conv_textview.tv
 		id_ = self.conv_textview.tv.connect('key_press_event',
 			self._conv_textview_key_press_event)
 		self.handlers[id_] = self.conv_textview.tv
@@ -369,6 +371,11 @@ class ChatControlBase(MessageControl):
 				self.handlers[id_] = item
 
 		menu.show_all()
+
+	def on_quote(self, widget, text):
+		text = '>' + text.replace('\n', '\n>') + '\n'
+		message_buffer = self.msg_textview.get_buffer()
+		message_buffer.insert_at_cursor(text)
 
 	# moved from ChatControl
 	def _on_banner_eventbox_button_press_event(self, widget, event):
