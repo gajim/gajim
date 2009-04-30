@@ -413,7 +413,11 @@ class NodeBuilder:
 		self.check_data_buffer()
 		if self.__depth == self._dispatch_depth:
 			if self._mini_dom.getName() == 'error':
-				self.streamError = self._mini_dom.getChildren()[0].getName()
+				children = self._mini_dom.getChildren()
+				if children:
+					self.streamError = children[0].getName()
+				else:
+					self.streamError = self._mini_dom.getData()
 			self.dispatch(self._mini_dom)
 		elif self.__depth > self._dispatch_depth:
 			self._ptr = self._ptr.parent
