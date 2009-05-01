@@ -2099,16 +2099,17 @@ class RosterWindow:
 			always_ask
 		show_pep can be False to hide pep things from status message or True
 		'''
+		empty_pep = {'activity': '', 'subactivity': '', 'activity_text': '',
+			'mood': '', 'mood_text': ''}
 		if show in gajim.config.get_per('defaultstatusmsg'):
 			if gajim.config.get_per('defaultstatusmsg', show, 'enabled'):
 				on_response(gajim.config.get_per('defaultstatusmsg', show,
-					'message'), None)
+					'message'), empty_pep)
 				return
 		if not always_ask and ((show == 'online' and not gajim.config.get(
 		'ask_online_status')) or (show in ('offline', 'invisible') and not \
 		gajim.config.get('ask_offline_status'))):
-			on_response('', {'activity': '', 'subactivity': '',
-				'activity_text': '', 'mood': '', 'mood_text': ''})
+			on_response('', empty_pep)
 			return
 
 		dlg = dialogs.ChangeStatusMessageDialog(on_response, show, show_pep)
