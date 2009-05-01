@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-16 10:58+0200\n"
-"PO-Revision-Date: 2009-04-14 10:53+0100\n"
+"POT-Creation-Date: 2009-05-01 19:06+0200\n"
+"PO-Revision-Date: 2009-04-25 17:11+0100\n"
 "Last-Translator: Sławomir Domagała <godlark@gmail.com>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -100,7 +100,7 @@ msgstr "<b>Wybierz serwer</b>"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:7
 msgid "@"
-msgstr ""
+msgstr "@"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:8
 msgid ""
@@ -139,7 +139,7 @@ msgstr "Zarządzaj..."
 
 #: ../data/glade/account_creation_wizard_window.glade.h:17
 msgid "Prox_y:"
-msgstr "_Pośrednik:"
+msgstr "Prox_y:"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:18
 #: ../data/glade/account_modification_window.glade.h:40
@@ -293,8 +293,8 @@ msgstr "Gajim"
 #: ../data/glade/account_modification_window.glade.h:17
 #: ../data/glade/accounts_window.glade.h:21
 #: ../data/glade/preferences_window.glade.h:50 ../src/common/contacts.py:98
-#: ../src/dialogs.py:103 ../src/dialogs.py:111 ../src/roster_window.py:2680
-#: ../src/roster_window.py:5226
+#: ../src/dialogs.py:103 ../src/dialogs.py:111 ../src/roster_window.py:2684
+#: ../src/roster_window.py:5227
 msgid "General"
 msgstr "Ogólne"
 
@@ -370,8 +370,8 @@ msgstr "Nie wybrano żadnego klucza"
 #: ../src/config.py:1986 ../src/config.py:2064 ../src/config.py:2077
 #: ../src/config.py:3166 ../src/config.py:3234 ../src/dialogs.py:293
 #: ../src/dialogs.py:295 ../src/dialogs.py:498 ../src/dialogs.py:511
-#: ../src/roster_window.py:2750 ../src/roster_window.py:2756
-#: ../src/roster_window.py:2761
+#: ../src/roster_window.py:2754 ../src/roster_window.py:2760
+#: ../src/roster_window.py:2765
 msgid "None"
 msgstr "Żaden"
 
@@ -408,7 +408,7 @@ msgstr "Priorytet ulegnie zmianie automatycznie, stosownie do twojego statusu."
 
 #: ../data/glade/account_modification_window.glade.h:35
 msgid "Proxy:"
-msgstr "Pośrednik:"
+msgstr "Serwer Proxy:"
 
 #: ../data/glade/account_modification_window.glade.h:36
 #: ../data/glade/accounts_window.glade.h:42
@@ -478,9 +478,8 @@ msgid "<b>Proxy</b>"
 msgstr "<b>Proxy</b>"
 
 #: ../data/glade/accounts_window.glade.h:5
-#, fuzzy
 msgid "A_djust to status"
-msgstr "_Dostosuj do statusu"
+msgstr "D_ostosuj do statusu"
 
 #: ../data/glade/accounts_window.glade.h:7
 msgid "Accounts"
@@ -495,7 +494,6 @@ msgstr ""
 "nieszyfrowane połączenie."
 
 #: ../data/glade/accounts_window.glade.h:16
-#, fuzzy
 msgid "Co_nnect on Gajim startup"
 msgstr "P_ołącz przy starcie programu"
 
@@ -525,7 +523,7 @@ msgstr ""
 "Konieczna stać się może ponowna konfiguracja firewalla."
 
 #: ../data/glade/accounts_window.glade.h:31
-#: ../data/glade/zeroconf_information_window.glade.h:4 ../src/dialogs.py:754
+#: ../data/glade/zeroconf_information_window.glade.h:4 ../src/dialogs.py:780
 msgid "Jabber ID:"
 msgstr "Jabber ID:"
 
@@ -539,57 +537,47 @@ msgid "Mer_ge accounts"
 msgstr "_Połącz konta"
 
 #. Rename
-#: ../data/glade/accounts_window.glade.h:41 ../src/roster_window.py:5177
+#: ../data/glade/accounts_window.glade.h:41 ../src/roster_window.py:5178
 msgid "Re_name"
 msgstr "_Zmień nazwę"
 
 #: ../data/glade/accounts_window.glade.h:46
-#, fuzzy
 msgid "Send _keep-alive packets"
-msgstr "Wysyłaj pakiety podtrzymujące"
+msgstr "Wysyłaj pakiety _podtrzymujące"
 
 #: ../data/glade/accounts_window.glade.h:48
-#, fuzzy
 msgid "Synchroni_ze account status with global status"
 msgstr "Synch_ronizuj status konta z globalnym statusem"
 
 #: ../data/glade/accounts_window.glade.h:50
-#, fuzzy
 msgid "Use G_PG Agent"
-msgstr "Użyj _Agenta GPG"
+msgstr "Użyj Agenta G_PG"
 
 #: ../data/glade/accounts_window.glade.h:51
-#, fuzzy
 msgid "Use cust_om hostname/port"
-msgstr "Użyj własnej nazwy hosta/portu"
+msgstr "Użyj wła_snej nazwy hosta/portu"
 
 #: ../data/glade/accounts_window.glade.h:52
-#, fuzzy
 msgid "Use cust_om port:"
-msgstr "Użyj innego portu:"
+msgstr "Użyj inn_ego portu:"
 
 #: ../data/glade/accounts_window.glade.h:54
-#, fuzzy
 msgid "_Edit Personal Information..."
-msgstr "Zmień informacje o sobie..."
+msgstr "_Zmień informacje o sobie..."
 
 #: ../data/glade/accounts_window.glade.h:55
-#, fuzzy
 msgid "_Enable"
-msgstr "Włącz"
+msgstr "_Włącz"
 
 #: ../data/glade/accounts_window.glade.h:56
-#, fuzzy
 msgid "_Hostname: "
 msgstr "_Nazwa hosta: "
 
 #: ../data/glade/accounts_window.glade.h:58
-#, fuzzy
 msgid "_Manage..."
 msgstr "Zarządzaj..."
 
 #: ../data/glade/accounts_window.glade.h:60
-#, fuzzy
 msgid "_Port: "
 msgstr "_Port:"
 
@@ -598,9 +586,8 @@ msgid "_Warn before using an insecure connection"
 msgstr "_Ostrzegaj przed użyciem niezaszyfrowanego połączenia"
 
 #: ../data/glade/accounts_window.glade.h:62
-#, fuzzy
 msgid "_use HTTP__PROXY environment variable"
-msgstr "używaj zmiennej środowiskowej HTTP_PROXY"
+msgstr "_używaj zmiennej środowiskowej HTTP__PROXY"
 
 #: ../data/glade/accounts_window.glade.h:63
 msgid "gtk-add"
@@ -801,7 +788,7 @@ msgid "All statuses"
 msgstr "Dowolny status"
 
 #: ../data/glade/advanced_notifications_window.glade.h:8
-#: ../src/common/commands.py:101 ../src/common/helpers.py:216
+#: ../src/common/commands.py:101 ../src/common/helpers.py:215
 msgid "Away"
 msgstr "Zaraz wracam"
 
@@ -818,7 +805,7 @@ msgid "Have "
 msgstr "rozmawiam "
 
 #: ../data/glade/advanced_notifications_window.glade.h:12
-#: ../src/common/helpers.py:226
+#: ../src/common/helpers.py:225
 msgid "Invisible"
 msgstr "Niewidoczny"
 
@@ -827,7 +814,7 @@ msgid "Launch a command"
 msgstr "Wykonaj komendę"
 
 #: ../data/glade/advanced_notifications_window.glade.h:14
-#: ../src/common/helpers.py:199
+#: ../src/common/helpers.py:198
 msgid "Not Available"
 msgstr "Nieobecny"
 
@@ -928,7 +915,7 @@ msgstr "dla "
 
 #: ../data/glade/advanced_notifications_window.glade.h:42
 msgid "when I'm in"
-msgstr "kiedy mam "
+msgstr "kiedy jestem obecny"
 
 #: ../data/glade/atom_entry_window.glade.h:1
 msgid "Entry:"
@@ -952,7 +939,7 @@ msgstr "Otrzymałeś nowy artykuł:"
 
 #: ../data/glade/blocked_contacts_window.glade.h:1
 msgid "Blocked Contacts"
-msgstr "Kontakty zablokowane"
+msgstr "Zablokowane kontakty"
 
 #: ../data/glade/change_activity_dialog.glade.h:1
 msgid "<b>Message:</b> "
@@ -990,11 +977,11 @@ msgstr "Wpisz nowe hasło:"
 msgid "<b>Type your new status message</b>"
 msgstr "<b>Wpisz nowy opis statusu:</b>"
 
-#: ../data/glade/change_status_message_dialog.glade.h:2 ../src/tooltips.py:602
+#: ../data/glade/change_status_message_dialog.glade.h:2 ../src/tooltips.py:601
 msgid "Activity:"
 msgstr "Aktywność:"
 
-#: ../data/glade/change_status_message_dialog.glade.h:3 ../src/tooltips.py:587
+#: ../data/glade/change_status_message_dialog.glade.h:3 ../src/tooltips.py:586
 msgid "Mood:"
 msgstr "Nastrój:"
 
@@ -1066,7 +1053,7 @@ msgstr "Dod_aj do listy kontaktów"
 #: ../data/glade/roster_contact_context_menu.glade.h:17
 #: ../data/glade/roster_window.glade.h:21
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:6
-#: ../src/roster_window.py:5873
+#: ../src/roster_window.py:5874
 msgid "_History"
 msgstr "_Historia"
 
@@ -1140,7 +1127,7 @@ msgstr "Usuwa wybrany transfer pliku i usuwa niedokończony plik"
 
 #: ../data/glade/filetransfers.glade.h:5
 msgid "Clean _up"
-msgstr "P_osprzątaj"
+msgstr "Wyczy_ść"
 
 #: ../data/glade/filetransfers.glade.h:6
 msgid "File Transfers"
@@ -1192,7 +1179,7 @@ msgstr "_Zatrzymaj"
 
 #: ../data/glade/filetransfers.glade.h:17
 msgid "file transfers list"
-msgstr "Lista przesyłanych plików"
+msgstr "lista przesyłanych plików"
 
 #: ../data/glade/gajim_themes_window.glade.h:1
 msgid "<b>Chatstate Tab Colors</b>"
@@ -1210,7 +1197,7 @@ msgstr ""
 "Kontakt\n"
 "Banner"
 
-#: ../data/glade/gajim_themes_window.glade.h:6 ../src/chat_control.py:762
+#: ../data/glade/gajim_themes_window.glade.h:6 ../src/chat_control.py:761
 msgid "Bold"
 msgstr "Wytłuszczone"
 
@@ -1234,7 +1221,7 @@ msgstr "Zniknął"
 msgid "Inactive"
 msgstr "Nieaktywny"
 
-#: ../data/glade/gajim_themes_window.glade.h:12 ../src/chat_control.py:763
+#: ../data/glade/gajim_themes_window.glade.h:12 ../src/chat_control.py:762
 msgid "Italic"
 msgstr "Kursywa"
 
@@ -1338,7 +1325,7 @@ msgstr "_Głos"
 msgid "Create new post"
 msgstr "Utwórz nowy wpis"
 
-#: ../data/glade/groups_post_window.glade.h:2 ../src/common/helpers.py:241
+#: ../data/glade/groups_post_window.glade.h:2 ../src/common/helpers.py:240
 msgid "From"
 msgstr "Od"
 
@@ -1417,7 +1404,7 @@ msgstr "Szukaj"
 msgid "_Log conversation history"
 msgstr "_Zapisuj historię rozmowy"
 
-#: ../data/glade/join_groupchat_window.glade.h:1 ../src/dialogs.py:1777
+#: ../data/glade/join_groupchat_window.glade.h:1 ../src/dialogs.py:1803
 msgid "Join Group Chat"
 msgstr "Dołącz do pokoju"
 
@@ -1502,57 +1489,50 @@ msgid "<b>Settings</b>"
 msgstr "<b>Ustawienia</b>"
 
 #: ../data/glade/manage_proxies_window.glade.h:3
-#, fuzzy
 msgid "B_OSH Port:"
-msgstr "_Port:"
+msgstr "B_OSH Port:"
 
 #: ../data/glade/manage_proxies_window.glade.h:4
-#, fuzzy
 msgid ""
 "HTTP Connect\n"
 "SOCKS5\n"
 "BOSH"
 msgstr ""
 "Połączenie HTTP\n"
-"SOCKS5"
+"SOCKS5\n"
+"BOSH"
 
 #: ../data/glade/manage_proxies_window.glade.h:7
 msgid "Manage Proxy Profiles"
-msgstr "Zarządzaj profilami pośrednika"
+msgstr "Zarządzaj Profilami Proxy"
 
 #: ../data/glade/manage_proxies_window.glade.h:8
 msgid "Pass_word:"
 msgstr "_Hasło:"
 
 #: ../data/glade/manage_proxies_window.glade.h:9
-#, fuzzy
 msgid "Proxy _Host:"
-msgstr "Pośrednik:"
+msgstr "_Serwer Proxy:"
 
 #: ../data/glade/manage_proxies_window.glade.h:10
-#, fuzzy
 msgid "Proxy _Port:"
-msgstr "_Port:"
+msgstr "_Port Proxy"
 
 #: ../data/glade/manage_proxies_window.glade.h:11
-#, fuzzy
 msgid "Use HTTP prox_y"
-msgstr "_Korzystaj z pośrednika"
+msgstr "Korzystaj z pośrednik_a HTTP"
 
 #: ../data/glade/manage_proxies_window.glade.h:12
-#, fuzzy
 msgid "Use proxy auth_entication"
-msgstr "Używaj autoryzacji"
+msgstr "Używaj aut_oryzacji serwera proxy"
 
 #: ../data/glade/manage_proxies_window.glade.h:13
-#, fuzzy
 msgid "_BOSH URL:"
-msgstr "_URL:"
+msgstr "_BOSH URL:"
 
 #: ../data/glade/manage_proxies_window.glade.h:15
-#, fuzzy
 msgid "_Type:"
-msgstr "Typ:"
+msgstr "_Typ:"
 
 #: ../data/glade/manage_proxies_window.glade.h:16
 msgid "_Username:"
@@ -1591,9 +1571,8 @@ msgid "Show a list of emoticons (Alt+M)"
 msgstr "Kliknij by wyświetlić listę emotikon (Alt+M)"
 
 #: ../data/glade/message_window.glade.h:9
-#, fuzzy
 msgid "Show a list of formattings"
-msgstr "Kliknij by wyświetlić listę emotikon (Alt+M)"
+msgstr "Pokaż formatowanie tekstu"
 
 #: ../data/glade/message_window.glade.h:10
 msgid "Show a menu of advanced functions (Alt+A)"
@@ -1705,7 +1684,7 @@ msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:26
 msgid "Allow sound when I'm _busy"
-msgstr ""
+msgstr "Włącz dźwięki, kiedy jestem _zajęty"
 
 #: ../data/glade/preferences_window.glade.h:27
 msgid "Ask status message when I:"
@@ -1957,6 +1936,9 @@ msgid ""
 "Only when pending events\n"
 "Always"
 msgstr ""
+"Nigdy\n"
+"Tylko, kiedy wystąpią jakieś zdarzeniaZawsze\n"
+"Zawsze"
 
 #: ../data/glade/preferences_window.glade.h:74
 msgid "Notifications"
@@ -1997,7 +1979,6 @@ msgid "Preferences"
 msgstr "Ustawienia"
 
 #: ../data/glade/preferences_window.glade.h:84
-#, fuzzy
 msgid "Show systray:"
 msgstr "Pokaż _zdarzenie w obszarze powiadamiania"
 
@@ -2039,26 +2020,29 @@ msgid "T_heme:"
 msgstr "_Motyw:"
 
 #: ../data/glade/preferences_window.glade.h:93
-#, fuzzy
 msgid ""
 "The auto away status message. If empty, Gajim will not change the current "
 "status message\n"
 "$S will be replaced by previous status message\n"
 "$T will be replaced by auto-away timeout"
 msgstr ""
-"Opis atomatycznego statusu Zaraz wracam. Jeśli pusty, Gajim nie zmieni "
-"aktualnego opisu"
+"Opis automatycznego opisu statusu \"Zaraz Wracam\". Jeśli pusty, Gajim nie "
+"zmieni obecnego opisu\n"
+"$S będzie zastąpione przez poprzedni opis statusu\n"
+"$T będzie zastąpione przez czas, który jesteś nieaktywny"
 
 #: ../data/glade/preferences_window.glade.h:96
-#, fuzzy
 msgid ""
 "The auto not available status message. If empty, Gajim will not change the "
 "current status message\n"
 "$S will be replaced by previous status message\n"
 "$T will be replaced by auto-not-available timeout"
 msgstr ""
-"Opis automatycznego statusu Niedostępny. Jeśli pusty, Gajim nie zmieni "
-"aktualnego opisu"
+"Opis automatycznego opisu statusu \"Nieobecny\". Jeśli pusty, Gajim nie "
+"zmieni obecnego opisu\n"
+"$S będzie zastąpione przez poprzedni opis statusu\n"
+"$T będzie zastąpione przez czas, po którym ma zostać ustawiono status "
+"\"Nieobecny\""
 
 #: ../data/glade/preferences_window.glade.h:99
 msgid "Use _transports icons"
@@ -2150,7 +2134,7 @@ msgstr "_Zachowanie okna:"
 
 #: ../data/glade/preferences_window.glade.h:121
 msgid "in _group chats"
-msgstr "Dołącz do _pokoju"
+msgstr "w _konferencji"
 
 #: ../data/glade/preferences_window.glade.h:122
 msgid "in _roster"
@@ -2162,7 +2146,7 @@ msgstr "minutach"
 
 #: ../data/glade/privacy_lists_window.glade.h:1
 msgid "Privacy Lists:"
-msgstr "Listy prywatności"
+msgstr "Poufne listy:"
 
 #: ../data/glade/privacy_list_window.glade.h:1
 msgid "<b>Add / Edit a rule</b>"
@@ -2204,9 +2188,9 @@ msgstr "JID"
 msgid "Order:"
 msgstr "Kolejność:"
 
-#: ../data/glade/privacy_list_window.glade.h:11 ../src/dialogs.py:2651
+#: ../data/glade/privacy_list_window.glade.h:11 ../src/dialogs.py:2688
 msgid "Privacy List"
-msgstr "Lista prywatności"
+msgstr "Poufna Lista"
 
 #: ../data/glade/privacy_list_window.glade.h:12
 msgid "all by subscription"
@@ -2256,7 +2240,7 @@ msgstr "<b>Awatar:</b>"
 #: ../data/glade/profile_window.glade.h:3
 #: ../data/glade/vcard_information_window.glade.h:4
 msgid "<b>Birthday:</b>"
-msgstr "<b>Urodziny:</b>"
+msgstr "<b>Data urodzenia:</b>"
 
 #: ../data/glade/profile_window.glade.h:4
 #: ../data/glade/vcard_information_window.glade.h:5
@@ -2348,7 +2332,7 @@ msgid "<b>Prefix:</b>"
 msgstr "<b>Prefiks:</b>"
 
 #: ../data/glade/profile_window.glade.h:25
-#: ../data/glade/vcard_information_window.glade.h:30 ../src/vcard.py:328
+#: ../data/glade/vcard_information_window.glade.h:30 ../src/vcard.py:323
 msgid "<b>Role:</b>"
 msgstr "<b>Rola:</b>"
 
@@ -2408,14 +2392,14 @@ msgstr "Usuń konto z Gajima i z _serwera"
 
 #. Remove group
 #. Remove
-#: ../data/glade/remove_account_window.glade.h:4 ../src/roster_window.py:5214
-#: ../src/roster_window.py:5692 ../src/roster_window.py:5821
+#: ../data/glade/remove_account_window.glade.h:4 ../src/roster_window.py:5215
+#: ../src/roster_window.py:5693 ../src/roster_window.py:5822
 msgid "_Remove"
 msgstr "_Usuń"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:1
 msgid "A_sk to see his/her status"
-msgstr "Poproś o to, żeby móc widzieć jego/jej _status"
+msgstr "P_oproś o to, żeby móc widzieć jego/jej status"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:2
 msgid "Add Special _Notification..."
@@ -2431,24 +2415,24 @@ msgstr "Modyfikuj _grupy..."
 
 #. Execute Command
 #: ../data/glade/roster_contact_context_menu.glade.h:5
-#: ../src/roster_window.py:5764
+#: ../src/roster_window.py:5765
 msgid "Execute Command..."
 msgstr "Wykonaj komendę..."
 
 #. Invite to
 #. Invite to Groupchat
 #: ../data/glade/roster_contact_context_menu.glade.h:6
-#: ../src/roster_window.py:5132 ../src/roster_window.py:5645
+#: ../src/roster_window.py:5133 ../src/roster_window.py:5646
 msgid "In_vite to"
-msgstr "_Zaproś do"
+msgstr "Za_proś do"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:7
 msgid "Remo_ve"
-msgstr "_Usuń"
+msgstr "Us_uń"
 
 #. Send Custom Status
 #: ../data/glade/roster_contact_context_menu.glade.h:8
-#: ../src/roster_window.py:5142 ../src/roster_window.py:5730
+#: ../src/roster_window.py:5143 ../src/roster_window.py:5731
 msgid "Send Cus_tom Status"
 msgstr "Wyślij odrębny status"
 
@@ -2474,8 +2458,8 @@ msgid "_Allow him/her to see my status"
 msgstr "_Pozwól mu/jej widzieć swój status"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:15
-#: ../src/roster_window.py:5205 ../src/roster_window.py:5682
-#: ../src/roster_window.py:5811
+#: ../src/roster_window.py:5206 ../src/roster_window.py:5683
+#: ../src/roster_window.py:5812
 msgid "_Block"
 msgstr "_Zablokuj"
 
@@ -2501,8 +2485,8 @@ msgid "_Subscription"
 msgstr "_Autoryzacja"
 
 #: ../data/glade/roster_contact_context_menu.glade.h:22
-#: ../src/roster_window.py:5199 ../src/roster_window.py:5676
-#: ../src/roster_window.py:5808
+#: ../src/roster_window.py:5200 ../src/roster_window.py:5677
+#: ../src/roster_window.py:5809
 msgid "_Unblock"
 msgstr "_Cofnij blokadę"
 
@@ -2512,7 +2496,7 @@ msgstr "_Cofnij ignorowanie"
 
 #: ../data/glade/roster_window.glade.h:1
 msgid "Add _Contact..."
-msgstr "Dod_aj kontakt..."
+msgstr "Dodaj _kontakt..."
 
 #: ../data/glade/roster_window.glade.h:2
 msgid "Fea_tures"
@@ -2535,17 +2519,16 @@ msgid "Profile, A_vatar"
 msgstr "Profil, _Awatar"
 
 #: ../data/glade/roster_window.glade.h:9
-#, fuzzy
 msgid "Show Only _Active Contacts"
-msgstr "Pokaż kontakty niep_ołączone"
+msgstr "Pokaż kontakty _połączone"
 
 #: ../data/glade/roster_window.glade.h:10
 msgid "Show Trans_ports"
-msgstr "Pokaż _transporty"
+msgstr "Pokaż trans_porty"
 
 #: ../data/glade/roster_window.glade.h:11
 msgid "Show _Offline Contacts"
-msgstr "Pokaż kontakty niep_ołączone"
+msgstr "Pokaż kontakty _niepołączone"
 
 #: ../data/glade/roster_window.glade.h:12
 msgid "Show _roster"
@@ -2606,7 +2589,7 @@ msgid "_Add contact"
 msgstr "Dodaj _kontakt"
 
 #. Information
-#: ../data/glade/search_window.glade.h:4 ../src/roster_window.py:5833
+#: ../data/glade/search_window.glade.h:4 ../src/roster_window.py:5834
 msgid "_Information"
 msgstr "Informacje o kontakcie"
 
@@ -2748,9 +2731,8 @@ msgid "<b>Client:</b>"
 msgstr "<b>Klient:</b>"
 
 #: ../data/glade/vcard_information_window.glade.h:8
-#, fuzzy
 msgid "<b>Contact time:</b>"
-msgstr "<b>Województwo:</b>"
+msgstr "<b>Czas u niego/niej:</b>"
 
 #: ../data/glade/vcard_information_window.glade.h:19
 msgid "<b>Jabber ID:</b>"
@@ -2839,13 +2821,13 @@ msgstr "Przypisz klucz Open_PGP"
 
 #. Edit Groups
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:3
-#: ../src/roster_window.py:5665
+#: ../src/roster_window.py:5666
 msgid "Edit _Groups"
 msgstr "Modyfikuj _grupy"
 
 #. Rename
 #: ../data/glade/zeroconf_contact_context_menu.glade.h:8
-#: ../src/roster_window.py:5791
+#: ../src/roster_window.py:5792
 msgid "_Rename"
 msgstr "_Zmień nazwę"
 
@@ -2912,7 +2894,7 @@ msgstr "Liczba całkowita"
 msgid "Text"
 msgstr "Tekst"
 
-#: ../src/advanced.py:102 ../src/chat_control.py:782
+#: ../src/advanced.py:102 ../src/chat_control.py:781
 msgid "Color"
 msgstr "Kolor"
 
@@ -2942,179 +2924,184 @@ msgstr "Ukryte"
 #. #!/bin/sh
 #. LANG=$(for i in *.po; do j=${i/.po/}; echo -n "_('"$j"')":" '"$j"', " ; done)
 #. echo "{_('en'):'en'",$LANG"}"
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "English"
 msgstr "angielski"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Belarusian"
 msgstr "bułgarski"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Bulgarian"
 msgstr "bułgarski"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Breton"
 msgstr "bretoński"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Czech"
 msgstr "czeski"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "German"
 msgstr "niemiecki"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Greek"
 msgstr "grecki"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "British"
 msgstr "brytyjski"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Esperanto"
 msgstr "esperanto"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Spanish"
 msgstr "hiszpański"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Basque"
 msgstr "baskijski"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "French"
 msgstr "francuski"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Croatian"
 msgstr "chorwacki"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Italian"
 msgstr "włoski"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Norwegian (b)"
 msgstr "norweski (b)"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Dutch"
 msgstr "holenderski"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Norwegian"
 msgstr "norweski"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Polish"
 msgstr "polski"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Portuguese"
 msgstr "portugalski"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Brazilian Portuguese"
 msgstr "portugalski (Brazylia)"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Russian"
 msgstr "rosyjski"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Serbian"
 msgstr "serbski"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Slovak"
 msgstr "słowacki"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Swedish"
 msgstr "szwedzki"
 
-#: ../src/chat_control.py:67
+#: ../src/chat_control.py:65
 msgid "Chinese (Ch)"
 msgstr "chiński (Ch)"
 
-#: ../src/chat_control.py:358
+#: ../src/chat_control.py:359
 msgid "Spelling language"
 msgstr "Wybierz słownik"
 
 #. we are not connected
-#: ../src/chat_control.py:381 ../src/chat_control.py:569
+#: ../src/chat_control.py:382 ../src/chat_control.py:568
 msgid "A connection is not available"
 msgstr "Połączenie jest niemożliwe"
 
-#: ../src/chat_control.py:382 ../src/chat_control.py:570
+#: ../src/chat_control.py:383 ../src/chat_control.py:569
 msgid "Your message can not be sent until you are connected."
 msgstr "Nie możesz wysłać wiadomości dopóki nie będziesz połączony."
 
-#: ../src/chat_control.py:764
-#, fuzzy
+#: ../src/chat_control.py:763
 msgid "Underline"
-msgstr "Niezdefiniowany"
+msgstr "Podkreślenie"
 
-#: ../src/chat_control.py:765
-#, fuzzy
+#: ../src/chat_control.py:764
 msgid "Strike"
-msgstr "Ulica:"
+msgstr "Przekreślenie"
 
-#: ../src/chat_control.py:788
-#, fuzzy
+#: ../src/chat_control.py:787
 msgid "Font"
-msgstr "_Czcionka:"
+msgstr "Czcionka:"
 
-#: ../src/chat_control.py:797
-#, fuzzy
+#: ../src/chat_control.py:796
 msgid "Clear formating"
-msgstr "Informacje o kontakcie"
+msgstr "Usuń formatowanie"
 
-#: ../src/chat_control.py:869
+#: ../src/chat_control.py:868
 msgid "Really send file?"
 msgstr "Na pewno wysłać ten plik?"
 
-#: ../src/chat_control.py:870
+#: ../src/chat_control.py:869
 #, python-format
 msgid "If you send a file to %s, he/she will know your real Jabber ID."
 msgstr "Jeżeli wyślesz plik do %s, pozna on/ona twój pełny JID."
 
-#: ../src/chat_control.py:1261 ../src/chat_control.py:1665
+#: ../src/chat_control.py:1255 ../src/chat_control.py:1644
 msgid "GPG encryption enabled"
 msgstr "Szyfrowanie GPG włączone"
 
 #. Add to roster
 #. add_to_roster_menuitem
-#: ../src/chat_control.py:1291 ../src/chat_control.py:2167
-#: ../src/common/contacts.py:113 ../src/common/helpers.py:57
-#: ../src/common/helpers.py:228 ../src/conversation_textview.py:862
-#: ../src/dialogs.py:979 ../src/dialogs.py:1703 ../src/dialogs.py:1728
+#: ../src/chat_control.py:1285 ../src/chat_control.py:2146
+#: ../src/common/contacts.py:113 ../src/common/helpers.py:56
+#: ../src/common/helpers.py:227 ../src/conversation_textview.py:862
+#: ../src/dialogs.py:1005 ../src/dialogs.py:1729 ../src/dialogs.py:1754
 #: ../src/gajim.py:988 ../src/gajim.py:1721 ../src/normal_control.py:483
 #: ../src/roster_window.py:910 ../src/roster_window.py:1542
 #: ../src/roster_window.py:1544 ../src/roster_window.py:1890
-#: ../src/roster_window.py:3119 ../src/roster_window.py:3145
-#: ../src/roster_window.py:5326 ../src/roster_window.py:5511
+#: ../src/roster_window.py:3121 ../src/roster_window.py:3147
+#: ../src/roster_window.py:5327 ../src/roster_window.py:5512
 msgid "Not in Roster"
 msgstr "spoza listy kontaktów"
 
-#: ../src/chat_control.py:1424 ../src/tooltips.py:627
+#: ../src/chat_control.py:1298
+#, fuzzy
+msgid "This contact does not support file transfer."
+msgstr "Lista aktywnych, ukończonych i zatrzymanych transferów plików"
+
+#: ../src/chat_control.py:1301
+msgid "You need to know the real JID of the contact to send him or her a file."
+msgstr ""
+
+#: ../src/chat_control.py:1408 ../src/tooltips.py:626
 msgid "Unknown Artist"
 msgstr "Nieznany wykonawca"
 
-#: ../src/chat_control.py:1426 ../src/tooltips.py:632
+#: ../src/chat_control.py:1410 ../src/tooltips.py:631
 msgid "Unknown Title"
 msgstr "Nieznany tytuł"
 
-#: ../src/chat_control.py:1428 ../src/tooltips.py:637
+#: ../src/chat_control.py:1412 ../src/tooltips.py:636
 msgid "Unknown Source"
 msgstr "Nieznany album"
 
-#: ../src/chat_control.py:1432 ../src/tooltips.py:639
+#: ../src/chat_control.py:1415 ../src/tooltips.py:638
 #, python-format
 msgid ""
 "<b>\"%(title)s\"</b> by <i>%(artist)s</i>\n"
@@ -3123,24 +3110,17 @@ msgstr ""
 "<b>\"%(title)s\"</b> w wykonaniu <i>%(artist)s</i>\n"
 "z <i>%(source)s</i>"
 
-#: ../src/chat_control.py:1437
-#, python-format
-msgid ""
-"%(title)s by %(artist)s\n"
-"from %(source)s"
-msgstr "\"%(title)s\" w wykonaniu %(artist)sz %(source)s"
-
-#: ../src/chat_control.py:1560
+#: ../src/chat_control.py:1539
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s z pokoju %(room_name)s"
 
 #. No key assigned nor a key is used by remote contact
-#: ../src/chat_control.py:1645 ../src/dialogs.py:3993
+#: ../src/chat_control.py:1624 ../src/dialogs.py:4030
 msgid "No GPG key assigned"
 msgstr "Nie ma przypisanego klucza GPG"
 
-#: ../src/chat_control.py:1646
+#: ../src/chat_control.py:1625
 msgid ""
 "No GPG key is assigned to this contact. So you cannot encrypt messages with "
 "GPG."
@@ -3148,50 +3128,50 @@ msgstr ""
 "Nie ma klucza GPG przypisanego do tego kontaktu. Więc nie możesz szyfrować "
 "wiadomości do tego kontaktu, używając GPG."
 
-#: ../src/chat_control.py:1655
+#: ../src/chat_control.py:1634
 msgid "GPG encryption disabled"
 msgstr "Szyfrowanie GPG wyłączone"
 
-#: ../src/chat_control.py:1681
+#: ../src/chat_control.py:1660
 msgid "Session WILL be logged"
 msgstr "Sesja BĘDZIE logowana"
 
-#: ../src/chat_control.py:1683
+#: ../src/chat_control.py:1662
 msgid "Session WILL NOT be logged"
 msgstr "Sesja NIE BĘDZIE logowana"
 
 #. encryption %s active
-#: ../src/chat_control.py:1697
+#: ../src/chat_control.py:1676
 msgid "is"
 msgstr "jest"
 
-#: ../src/chat_control.py:1697
+#: ../src/chat_control.py:1676
 msgid "is NOT"
 msgstr "NIE jest"
 
 #. chat session %s be logged
-#: ../src/chat_control.py:1699
+#: ../src/chat_control.py:1678
 msgid "will"
 msgstr "będzie"
 
-#: ../src/chat_control.py:1699
+#: ../src/chat_control.py:1678
 msgid "will NOT"
 msgstr "NIE będzie"
 
 #. About encrypted chat session
-#: ../src/chat_control.py:1703
+#: ../src/chat_control.py:1682
 msgid "and authenticated"
 msgstr "oraz autoryzowana"
 
 #. About encrypted chat session
-#: ../src/chat_control.py:1707
+#: ../src/chat_control.py:1686
 msgid "and NOT authenticated"
 msgstr "oraz NIE autoryzowana"
 
 #. status will become 'is' or 'is not', authentificaed will become
 #. 'and authentificated' or 'and not authentificated', logged will become
 #. 'will' or 'will not'
-#: ../src/chat_control.py:1713
+#: ../src/chat_control.py:1692
 #, python-format
 msgid ""
 "%(type)s encryption %(status)s active %(authenticated)s.\n"
@@ -3200,26 +3180,26 @@ msgstr ""
 "%(type)s szyfrowanie %(status)s aktywne %(authenticated)s.\n"
 "Twoja sesja %(logged)s będzie logowana."
 
-#: ../src/chat_control.py:1761
+#: ../src/chat_control.py:1740
 msgid "Command not supported for zeroconf account."
 msgstr "Komenda nie jest wspierana dla konta zeroconf."
 
-#: ../src/chat_control.py:1772 ../src/groupchat_control.py:1644
+#: ../src/chat_control.py:1751 ../src/groupchat_control.py:1661
 #, python-format
 msgid "Commands: %s"
 msgstr "Polecenia: %s"
 
-#: ../src/chat_control.py:1775 ../src/groupchat_control.py:1658
+#: ../src/chat_control.py:1754 ../src/groupchat_control.py:1675
 #, python-format
 msgid "Usage: /%s, clears the text window."
 msgstr "Użycie: /%s czyście okno tekstowe."
 
-#: ../src/chat_control.py:1778 ../src/groupchat_control.py:1663
+#: ../src/chat_control.py:1757 ../src/groupchat_control.py:1680
 #, python-format
 msgid "Usage: /%s, hide the chat buttons."
 msgstr "Użycie: /%s ukrywa przyciski czatu."
 
-#: ../src/chat_control.py:1781 ../src/groupchat_control.py:1679
+#: ../src/chat_control.py:1760 ../src/groupchat_control.py:1696
 #, python-format
 msgid ""
 "Usage: /%(command)s <action>, sends action to the current group chat. Use "
@@ -3228,38 +3208,38 @@ msgstr ""
 "Użycie: /%(command)s <działanie> spowoduje wysłanie działania do aktualnego "
 "pokoju. Używaj w trzeciej osobie. (np. /%(command)s eksploduje.)"
 
-#: ../src/chat_control.py:1786
+#: ../src/chat_control.py:1765
 #, python-format
 msgid "Usage: /%s, sends a ping to the contact"
 msgstr "Uzycie: /%s, wysyła sygnał ping do kontaktu"
 
-#: ../src/chat_control.py:1789
+#: ../src/chat_control.py:1768
 #, python-format
 msgid "Usage: /%s, send the message to the contact"
 msgstr "Użycie: /%s wysyła wiadomość do kontaktu"
 
-#: ../src/chat_control.py:1792 ../src/groupchat_control.py:1702
+#: ../src/chat_control.py:1771 ../src/groupchat_control.py:1719
 #, python-format
 msgid "No help info for /%s"
 msgstr "Brak informacji o pomocy dla /%s"
 
-#: ../src/chat_control.py:1925
+#: ../src/chat_control.py:1904
 msgid "Session negotiation cancelled"
 msgstr "Negocjowanie sesji zostało przerwane"
 
-#: ../src/chat_control.py:1932
+#: ../src/chat_control.py:1911
 msgid "This session is encrypted"
 msgstr "[Ta wiadomość jest zaszyfrowana]"
 
-#: ../src/chat_control.py:1935
+#: ../src/chat_control.py:1914
 msgid " and WILL be logged"
 msgstr "i BĘDZIE logowana"
 
-#: ../src/chat_control.py:1937
+#: ../src/chat_control.py:1916
 msgid " and WILL NOT be logged"
 msgstr "i NIE BĘDZIE logowana"
 
-#: ../src/chat_control.py:1942
+#: ../src/chat_control.py:1921
 msgid ""
 "Remote contact's identity not verified. Click the shield button for more "
 "details."
@@ -3267,25 +3247,25 @@ msgstr ""
 "Tożsamość zdalnego rozmówny nie jest zweryfikowana. Kliknij na przycisk "
 "tarczy po więcej szczegółów."
 
-#: ../src/chat_control.py:1944
+#: ../src/chat_control.py:1923
 msgid "E2E encryption disabled"
 msgstr "Szyfrowanie E2E wyłączone"
 
-#: ../src/chat_control.py:1978 ../src/chat_control.py:1991
+#: ../src/chat_control.py:1957 ../src/chat_control.py:1970
 msgid "The following message was NOT encrypted"
 msgstr "Ta wiadomość NIE została zaszyfrowana"
 
-#: ../src/chat_control.py:1984
+#: ../src/chat_control.py:1963
 msgid "The following message was encrypted"
 msgstr "Ta wiadomość została zaszyfrowana"
 
 #. %s is being replaced in the code with JID
-#: ../src/chat_control.py:2358
+#: ../src/chat_control.py:2344
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "Właśnie otrzymałeś nową wiadomość od \"%s\""
 
-#: ../src/chat_control.py:2359
+#: ../src/chat_control.py:2345
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
@@ -3293,15 +3273,15 @@ msgstr ""
 "Jeśli zamkniesz tę kartę, a nie masz uaktywnionej opcji historii, to "
 "utracisz tę wiadomość."
 
-#: ../src/chat_control.py:2507 ../src/common/connection_handlers.py:1964
-#: ../src/common/connection_handlers.py:2010
-#: ../src/common/connection_handlers.py:2198
-#: ../src/common/connection_handlers.py:2331 ../src/common/connection.py:1344
+#: ../src/chat_control.py:2493 ../src/common/connection_handlers.py:1965
+#: ../src/common/connection_handlers.py:2011
+#: ../src/common/connection_handlers.py:2199
+#: ../src/common/connection_handlers.py:2332 ../src/common/connection.py:1357
 #: ../src/gajim.py:158
 msgid "Database Error"
 msgstr "Błąd bazy danych"
 
-#: ../src/chat_control.py:2508
+#: ../src/chat_control.py:2494
 #, python-format
 msgid ""
 "The database file (%s) cannot be read. Try to repair it or remove it (all "
@@ -3310,7 +3290,7 @@ msgstr ""
 "Plik (%s) bazy danych nie może zostać odczytany. Spróbuj to naprawić lub "
 "usunąć ten plik (cała historia rozmów będzie usunięta)."
 
-#: ../src/chat_control.py:2739
+#: ../src/chat_control.py:2724
 #, python-format
 msgid "%(name)s is now %(status)s"
 msgstr "%(name)s ma teraz status %(status)s"
@@ -3399,9 +3379,9 @@ msgstr "Wybierz pokoje, które chcesz opuścić"
 
 #. Make special context menu if group is Groupchats
 #: ../src/common/commands.py:205 ../src/common/contacts.py:94
-#: ../src/common/helpers.py:57 ../src/roster_window.py:784
+#: ../src/common/helpers.py:56 ../src/roster_window.py:784
 #: ../src/roster_window.py:1546 ../src/roster_window.py:1548
-#: ../src/roster_window.py:5102
+#: ../src/roster_window.py:5103
 msgid "Groupchats"
 msgstr "Pokoje"
 
@@ -3419,7 +3399,7 @@ msgstr "Wszystkie nieprzeczytane wiadomości zostały przesłane dalej."
 
 #: ../src/common/config.py:82
 msgid "Play sound when user is busy"
-msgstr ""
+msgstr "Włącz dźwięki, kiedy użytkownik jest zajęty"
 
 #: ../src/common/config.py:83
 msgid "Use D-Bus and Notification-Daemon to show notifications"
@@ -3427,7 +3407,7 @@ msgstr "Korzystaj z DBus i Demona Powiadomień aby wyświetlać powiadomienia"
 
 #: ../src/common/config.py:85
 msgid "Show only online and free for chat contacts in roster."
-msgstr ""
+msgstr "Pokaż tylko połączone i chętne do rozmowy kontakty."
 
 #: ../src/common/config.py:88
 msgid "Time in minutes, after which your status changes to away."
@@ -3457,31 +3437,33 @@ msgid "$S will be replaced by current status message, $T by autoxa time."
 msgstr ""
 "$S zostanie zastąpiony bieżącym opisem stanu, $T przez czas nieobecności"
 
-#: ../src/common/config.py:102
+#: ../src/common/config.py:95
 msgid "When to show systray icon. Can be 'never', 'on_event', 'always'."
 msgstr ""
+"Kiedy pokazać ikonę w obszarze powiadomienia. Może być 'nigdy', "
+"'podczas_zdarzenia', 'zawsze'."
 
-#: ../src/common/config.py:112
+#: ../src/common/config.py:105
 msgid ""
 "List (space separated) of rows (accounts and groups) that are collapsed."
 msgstr "Lista (oddzielona spacjami) kolumn (kont lub grup), które są zwinięte."
 
 #. sorted alphanum
-#: ../src/common/config.py:113 ../src/common/config.py:471
-#: ../src/common/optparser.py:223 ../src/common/optparser.py:441
-#: ../src/common/optparser.py:475 ../src/gajim.py:3281
+#: ../src/common/config.py:106 ../src/common/config.py:473
+#: ../src/common/optparser.py:225 ../src/common/optparser.py:443
+#: ../src/common/optparser.py:477 ../src/gajim.py:3277
 msgid "default"
 msgstr "domyślny"
 
-#: ../src/common/config.py:117
+#: ../src/common/config.py:110
 msgid "Enable link-local/zeroconf messaging"
 msgstr "Uaktywnij komunikację link-local/zeroconf"
 
-#: ../src/common/config.py:120
+#: ../src/common/config.py:113
 msgid "Language used by speller"
 msgstr "Język używany przez słownik"
 
-#: ../src/common/config.py:121
+#: ../src/common/config.py:114
 msgid ""
 "'always' - print time for every message.\n"
 "'sometimes' - print time every print_ichat_every_foo_minutes minute.\n"
@@ -3492,7 +3474,7 @@ msgstr ""
 "print_ichat_every_foo_minutes.\n"
 "'never' - nigdy nie wyświetlaj czasu."
 
-#: ../src/common/config.py:122
+#: ../src/common/config.py:115
 msgid ""
 "Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 "
 "to disable fuzzyclock. 1 is the most precise clock, 4 the least precise one. "
@@ -3503,18 +3485,18 @@ msgstr ""
 "najmniej dokładne. Ustawienie to brane jest pod uwagę jedynie wtedy, gdy "
 "opcja print_time ustawiona jest na 'sometimes'."
 
-#: ../src/common/config.py:125
+#: ../src/common/config.py:118
 msgid "Treat * / _ pairs as possible formatting characters."
 msgstr "Traktuj pary znaków * / _ jako znaki formatujące."
 
-#: ../src/common/config.py:126
+#: ../src/common/config.py:119
 msgid ""
 "If True, do not remove */_ . So *abc* will be bold but with * * not removed."
 msgstr ""
 "Jeśli ma wartość True, to */_ nie będą usuwane. Zatem napis *abc* będzie "
 "pogrubiony ale bez usuniętych znaków * *."
 
-#: ../src/common/config.py:129
+#: ../src/common/config.py:122
 msgid ""
 "Uses ReStructured text markup to send HTML, plus ascii formatting if "
 "selected. For syntax, see http://docutils.sourceforge.net/docs/ref/rst/"
@@ -3524,7 +3506,7 @@ msgstr ""
 "zainstalowany pakiet docutils. Wyjaśnienie składni dostępne na stronie "
 "http://docutils.sourceforge.net/docs/ref/rst/"
 
-#: ../src/common/config.py:138
+#: ../src/common/config.py:131
 msgid ""
 "Character to add after nickname when using nick completion (tab) in group "
 "chat."
@@ -3532,7 +3514,7 @@ msgstr ""
 "Znak dodawany do nicka przy użyciu autouzupełniania klawiszem TAB (tylko "
 "czat)"
 
-#: ../src/common/config.py:139
+#: ../src/common/config.py:132
 msgid ""
 "Character to propose to add after desired nickname when desired nickname is "
 "used by someone else in group chat."
@@ -3540,7 +3522,7 @@ msgstr ""
 "Znak proponowany do dodania do nicka w sytuacji, gdy dany nick jest już "
 "używany przez innego uzytkownika czatu"
 
-#: ../src/common/config.py:167
+#: ../src/common/config.py:160
 msgid ""
 "This option let you customize timestamp that is printed in conversation. For "
 "exemple \"[%H:%M] \" will show \"[hour:minute] \". See python doc on "
@@ -3551,19 +3533,19 @@ msgstr ""
 "minuta] \". Więcej informacji w dokumentacjy Pythona dotyczącą strftime: "
 "http://docs.python.org/lib/module-time.html"
 
-#: ../src/common/config.py:168
+#: ../src/common/config.py:161
 msgid "Characters that are printed before the nickname in conversations"
 msgstr "Znaki, które wyświetlane są podczas rozmowy przed nazwą użytkownika"
 
-#: ../src/common/config.py:169
+#: ../src/common/config.py:162
 msgid "Characters that are printed after the nickname in conversations"
 msgstr "Znaki, które wyświetlane są podczas rozmowy za nazwą użytkownika"
 
-#: ../src/common/config.py:173
+#: ../src/common/config.py:166
 msgid "Add * and [n] in roster title?"
 msgstr "Dodać * i [n] do tytułu listy kontaktów?"
 
-#: ../src/common/config.py:174
+#: ../src/common/config.py:167
 msgid ""
 "How many lines to remember from previous conversation when a chat tab/window "
 "is reopened."
@@ -3571,11 +3553,11 @@ msgstr ""
 "Ile linii z poprzedniej rozmowy powinno zostać zapamiętanych gdy okno/karta "
 "rozmowy zostanie ponownie otwarta."
 
-#: ../src/common/config.py:175
+#: ../src/common/config.py:168
 msgid "How many minutes should last lines from previous conversation last."
 msgstr "Ile minut powinny być widoczne linie z poprzedniej rozmowy."
 
-#: ../src/common/config.py:176
+#: ../src/common/config.py:169
 msgid ""
 "Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ "
 "Client default behaviour)."
@@ -3583,11 +3565,11 @@ msgstr ""
 "Kombinacja Ctrl+Enter wysyła wiadomość a Enter tworzy nową linię (domyślne "
 "zachowanie klienta Mirabilis ICQ)."
 
-#: ../src/common/config.py:178
+#: ../src/common/config.py:171
 msgid "How many lines to store for Ctrl+KeyUP."
 msgstr "Ile przechwywać linii dla kombinacji Ctrl+KeyUP."
 
-#: ../src/common/config.py:181
+#: ../src/common/config.py:174
 #, python-format
 msgid ""
 "Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' "
@@ -3596,13 +3578,13 @@ msgstr ""
 "Albo własny url zawierający %s, gdzie %s jest słowem/frazą, albo WIKTIONARY, "
 "co oznacza użycie wiktionary."
 
-#: ../src/common/config.py:184
+#: ../src/common/config.py:177
 msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 msgstr ""
 "Jeśli ta opcja jest zaznaczona, to Gajim będzie mógł być sterowany zdalnie z "
 "wykorzystaniem gajim-remote."
 
-#: ../src/common/config.py:185
+#: ../src/common/config.py:178
 msgid ""
 "If True, listen to D-Bus signals from NetworkManager and change the status "
 "of accounts (provided they do not have listen_to_network_manager set to "
@@ -3615,14 +3597,14 @@ msgstr ""
 "synchronizują się ze statusem globalnym) w oparciu o status wykorzystywanego "
 "połączenia sieciowego."
 
-#: ../src/common/config.py:186
+#: ../src/common/config.py:179
 msgid ""
 "Sent chat state notifications. Can be one of all, composing_only, disabled."
 msgstr ""
 "Wysyłaj informacje o twoim statusie podczas prowadzenia rozmowy. Może "
 "przyjmować wartości all, composing_only, disabled."
 
-#: ../src/common/config.py:187
+#: ../src/common/config.py:180
 msgid ""
 "Displayed chat state notifications in chat windows. Can be one of all, "
 "composing_only, disabled."
@@ -3630,7 +3612,7 @@ msgstr ""
 "Informacje o statusie rozmówcy wyświetlane w oknie rozmowy. Przyjmuje "
 "wartości all, composing_only, disabled."
 
-#: ../src/common/config.py:189
+#: ../src/common/config.py:182
 msgid ""
 "When not printing time for every message (print_time==sometimes), print it "
 "every x minutes."
@@ -3639,11 +3621,11 @@ msgstr ""
 "(print_time==sometimes), zmienna określa co ile minut Gajim ma wyświetlać "
 "czas nadejścia nowej wiadomości."
 
-#: ../src/common/config.py:190
+#: ../src/common/config.py:183
 msgid "Ask before closing a group chat tab/window."
 msgstr "Zapytaj przed zamknięciem karty/okna rozmowy grupowej."
 
-#: ../src/common/config.py:191
+#: ../src/common/config.py:184
 msgid ""
 "Always ask before closing group chat tab/window in this space separated list "
 "of group chat jids."
@@ -3652,7 +3634,7 @@ msgstr ""
 "na każdym z pokojów wymienionych na liście (nazwy pokojów rozdzielone "
 "spacją)."
 
-#: ../src/common/config.py:192
+#: ../src/common/config.py:185
 msgid ""
 "Never ask before closing group chat tab/window in this space separated list "
 "of group chat jids."
@@ -3661,13 +3643,16 @@ msgstr ""
 "prowadzona jest na dowolnym pokoju obecnym na tej liście (nazwy pokojów "
 "rozdzielone spacją)."
 
-#: ../src/common/config.py:193
+#: ../src/common/config.py:186
 msgid ""
 "Ask before closing tabbed chat window if there are control that can loose "
 "data (chat, private chat, groupchat that will not be minimized)"
 msgstr ""
+"Spytaj przed zamknięciem zakładki, jeśli po zamknięciu mogą zostać stracone "
+"pewne dane(rozmowy, prywatne rozmowy, grupowe rozmowy, które nie zostaną "
+"zminimalizowane)"
 
-#: ../src/common/config.py:196
+#: ../src/common/config.py:189
 msgid ""
 "Comma separated list of hosts that we send, in addition of local interfaces, "
 "for File Transfer in case of address translation/port forwarding."
@@ -3675,27 +3660,27 @@ msgstr ""
 "Oddzielona przecinkami lista hostów, którą wysyłamy w celu przesyłania "
 "plików, w przypadku tłumaczenia adresu/przekierowania portu."
 
-#: ../src/common/config.py:198
+#: ../src/common/config.py:191
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "Standard IEC mówi, że KiB = 1024 bajty, KB = 100 bajtów."
 
-#: ../src/common/config.py:200
+#: ../src/common/config.py:193
 msgid "Notify of events in the system trayicon."
 msgstr "Powiadamiaj o zdarzeniach za pomocą ikony w obszarze powiadamiania."
 
-#: ../src/common/config.py:206
+#: ../src/common/config.py:199
 msgid "Show tab when only one conversation?"
 msgstr "Czy pokazywać kartę gdy otwarta jest tylko jedna rozmowa?"
 
-#: ../src/common/config.py:207
+#: ../src/common/config.py:200
 msgid "Show tabbed notebook border in chat windows?"
 msgstr "Czy pokazywać rozgraniczenie kart w oknie czatu?"
 
-#: ../src/common/config.py:208
+#: ../src/common/config.py:201
 msgid "Show close button in tab?"
 msgstr "Czy pokazywać przycisk zamknięcia na karcie?"
 
-#: ../src/common/config.py:209
+#: ../src/common/config.py:202
 msgid ""
 "A list of modp groups to use in a Diffie-Hellman, highest preference first, "
 "separated by commas. Valid groups are 1, 2, 5, 14, 15, 16, 17 and 18. Higher "
@@ -3703,22 +3688,22 @@ msgid ""
 "session."
 msgstr ""
 "Lista modp-grup wykorzystywany w Diffie-Hellman, najwyższa preferencja jest "
-"pierwsza, oddzielonych cudzysłowem. Odpowiednie grupy to 1, 2, 5, 14, 15, "
+"pierwsza, oddzielonych przecinkiem. Odpowiednie grupy to 1, 2, 5, 14, 15, "
 "16, 17 i 18. Wyższy numery są bardziej bezpiecznie, lecz obliczanie zajmie "
 "więcej czasu podczas rozpoczynania sesji."
 
-#: ../src/common/config.py:218
+#: ../src/common/config.py:211
 msgid "Preview new messages in notification popup?"
 msgstr "Podgląd nowych wiadomości w oknie powiadomienia?"
 
-#: ../src/common/config.py:223
+#: ../src/common/config.py:216
 msgid ""
 "A semicolon-separated list of words that will be highlighted in group chats."
 msgstr ""
 "Lista słów oddzielonych średnikami, które będą podświetlane w trakcie "
 "rozmowy w pokoju."
 
-#: ../src/common/config.py:224
+#: ../src/common/config.py:217
 msgid ""
 "If True, quits Gajim when X button of Window Manager is clicked. This "
 "setting is taken into account only if trayicon is used."
@@ -3727,14 +3712,14 @@ msgstr ""
 "Menadżera Okien. Ta opcja jest brana pod uwagę tylko gdy używana jest tacka "
 "systemowa."
 
-#: ../src/common/config.py:225
+#: ../src/common/config.py:218
 msgid ""
 "If True, Gajim will check if it's the default jabber client on each startup."
 msgstr ""
 "Jeśli ma wartość True, Gajim sprawdzi przy każdym uruchomieniu czy jest "
 "domyślnym klientem Jabbera."
 
-#: ../src/common/config.py:226
+#: ../src/common/config.py:219
 msgid ""
 "If True, Gajim will display an icon on each tab containing unread messages. "
 "Depending on the theme, this icon may be animated."
@@ -3743,7 +3728,7 @@ msgstr ""
 "nieprzeczytaną wiadomość. Ikona ta może być animowana, w zależności od "
 "motywu."
 
-#: ../src/common/config.py:227
+#: ../src/common/config.py:220
 msgid ""
 "If True, Gajim will display the status message, if not empty, for every "
 "contact under the contact name in roster window."
@@ -3751,11 +3736,11 @@ msgstr ""
 "Jeśli ma wartość True, Gajim wyświetli opis statusu, jeśli nie jest on "
 "pusty, dla każdego kontaktu pod jego nazwą w oknie listy kontaktów."
 
-#: ../src/common/config.py:232
+#: ../src/common/config.py:225
 msgid "Define the position of the avatar in roster. Can be left or right"
 msgstr "Zdefiniuj pozycję avatara na liście kontaktów. Lewo lub prawo"
 
-#: ../src/common/config.py:233
+#: ../src/common/config.py:226
 msgid ""
 "If True, Gajim will ask for avatar each contact that did not have an avatar "
 "last time or has one cached that is too old."
@@ -3763,7 +3748,7 @@ msgstr ""
 "Jeśli ma wartość True, Gajim wyśle zapytanie o awatar każdego kontaktu, "
 "który ostatnio nie miał awatara lub ma zapisany jedynie stary."
 
-#: ../src/common/config.py:234
+#: ../src/common/config.py:227
 msgid ""
 "If False, Gajim will no longer print status line in chats when a contact "
 "changes his or her status and/or his or her status message."
@@ -3771,7 +3756,7 @@ msgstr ""
 "Jeśli ma wartość False, to nie będziesz informowany o zmianie statusu lub "
 "opisu statusu przez kontakt, z którym rozmawiasz."
 
-#: ../src/common/config.py:235
+#: ../src/common/config.py:228
 msgid ""
 "can be \"none\", \"all\" or \"in_and_out\". If \"none\", Gajim will no "
 "longer print status line in groupchats when a member changes his or her "
@@ -3786,30 +3771,30 @@ msgstr ""
 "\"in_and_out\" nakazuje programowi wyświetlanie jedynie informacji o wejściu "
 "użytkownika do pokoju lub jego opuszczeniu."
 
-#: ../src/common/config.py:237
+#: ../src/common/config.py:230
 msgid "Background color of contacts when they just signed in."
 msgstr "Kolor tła dla logujących się kontaktów."
 
-#: ../src/common/config.py:238
+#: ../src/common/config.py:231
 msgid "Background color of contacts when they just signed out."
 msgstr "Kolor tła dla kontaktów w trakcie wylogowywania."
 
-#: ../src/common/config.py:240
+#: ../src/common/config.py:233
 msgid ""
 "If True, restored messages will use a smaller font than the default one."
 msgstr ""
 "Jeżeli opcja ustawiona jest na True, przywrócone wiadomości będą wyświetlane "
 "mniejszą czcionką."
 
-#: ../src/common/config.py:241
+#: ../src/common/config.py:234
 msgid "Don't show avatar for the transport itself."
 msgstr "Nie pokazuj awatarów transportów."
 
-#: ../src/common/config.py:242
+#: ../src/common/config.py:235
 msgid "Don't show roster in the system taskbar."
 msgstr "Nie pokazuj okna rostera na pasku zadań."
 
-#: ../src/common/config.py:243
+#: ../src/common/config.py:236
 msgid ""
 "If True and installed GTK+ and PyGTK versions are at least 2.8, make the "
 "window flash (the default behaviour in most Window Managers) when holding "
@@ -3819,7 +3804,7 @@ msgstr ""
 "niższej niż 2.8, odebrane a nie przeczytane wiadomości spowodują miganie "
 "okna programu."
 
-#: ../src/common/config.py:245
+#: ../src/common/config.py:238
 msgid ""
 "Jabberd1.4 does not like sha info when one join a password protected group "
 "chat. Turn this option to False to stop sending sha info in group chat "
@@ -3830,7 +3815,7 @@ msgstr ""
 "wysyłania takiej informacji."
 
 #. always, never, peracct, pertype should not be translated
-#: ../src/common/config.py:248
+#: ../src/common/config.py:241
 msgid ""
 "Controls the window where new messages are placed.\n"
 "'always' - All messages are sent to a single window.\n"
@@ -3851,35 +3836,35 @@ msgstr ""
 "wspólne okno. Aby uaktywnić dokonane w tej opcji zmiany, trzeba ponownie "
 "uruchomić program."
 
-#: ../src/common/config.py:249
+#: ../src/common/config.py:242
 msgid "If False, you will no longer see the avatar in the chat window."
 msgstr ""
 "Jeżeli ustawisz tą opcję na False, Gajim nie będzie wyświetlał avatara w "
 "oknie rozmowy."
 
-#: ../src/common/config.py:250
+#: ../src/common/config.py:243
 msgid "If True, pressing the escape key closes a tab/window."
 msgstr ""
 "Ustawienie 'True' spowoduje zamykanie okna/karty rozmowy po naciśnięciu "
 "klawisza ESC."
 
-#: ../src/common/config.py:251
+#: ../src/common/config.py:244
 msgid "Hides the buttons in chat windows."
 msgstr "Ukrywa przyciski w oknie czatu."
 
-#: ../src/common/config.py:252
+#: ../src/common/config.py:245
 msgid "Hides the banner in a group chat window"
 msgstr "Ukrywa banner w oknie czatu"
 
-#: ../src/common/config.py:253
+#: ../src/common/config.py:246
 msgid "Hides the banner in two persons chat window"
 msgstr "Usuwa banner podczas rozmowy dwóch osób"
 
-#: ../src/common/config.py:254
+#: ../src/common/config.py:247
 msgid "Hides the group chat occupants list in group chat window."
 msgstr "Usuwa z okna rozmowy grupowej listę osób obecnych w pokoju."
 
-#: ../src/common/config.py:255
+#: ../src/common/config.py:248
 msgid ""
 "In a chat, show the nickname at the beginning of a line only when it's not "
 "the same person talking than in previous message."
@@ -3887,15 +3872,15 @@ msgstr ""
 "Podczas rozmowy grupowej, pokaż nazwę rozmówcy na początku linii tylko "
 "wówczas, gdy poprzednią wiadomość wysłała inna osoba."
 
-#: ../src/common/config.py:256
+#: ../src/common/config.py:249
 msgid "Indentation when using merge consecutive nickname."
 msgstr "Wcięcie stosowane przy łaczeniu tych samych nicków."
 
-#: ../src/common/config.py:257
+#: ../src/common/config.py:250
 msgid "Smooth scroll message in conversation window"
 msgstr "Płynne przewijanie w oknie rozmowy"
 
-#: ../src/common/config.py:258
+#: ../src/common/config.py:251
 msgid ""
 "List of colors, separated by \":\", that will be used to color nicknames in "
 "group chats."
@@ -3903,13 +3888,13 @@ msgstr ""
 "Lista kolorów, oddzielonych \":\", które używane będą do kolorowania nicków "
 "w oknach czatu."
 
-#: ../src/common/config.py:259
+#: ../src/common/config.py:252
 msgid "Ctrl-Tab go to next composing tab when none is unread."
 msgstr ""
 "Kombinacja klawiszy Ctrl-Tab przechodzi do następnej karty, o ile w żadnej z "
 "nich nie ma nieprzeczytanych wiadomości."
 
-#: ../src/common/config.py:260
+#: ../src/common/config.py:253
 msgid ""
 "Should we show the confirm metacontacts creation dialog or not? Empty string "
 "means we never show the dialog."
@@ -3917,7 +3902,7 @@ msgstr ""
 "Czy program powinien potwierdzać za każdym razem utworzenie metakontaktu? "
 "Pusty ciąg spowoduje, że okno dialogowe nie będzie wyświetlane."
 
-#: ../src/common/config.py:261
+#: ../src/common/config.py:254
 msgid ""
 "If True, you will be able to set a negative priority to your account in "
 "account modification window. BE CAREFUL, when you are logged in with a "
@@ -3928,7 +3913,7 @@ msgstr ""
 "ujemnym priorytetem nie będziesz otrzymywał żadnych wiadomości z twojego "
 "serwera."
 
-#: ../src/common/config.py:262
+#: ../src/common/config.py:255
 msgid ""
 "If True, Gajim will use Gnome Keyring (if available) to store account "
 "passwords."
@@ -3936,7 +3921,7 @@ msgstr ""
 "Jeśli opcja ta ustawiona jest na True, do przechowywania haseł Gajim będzie "
 "używał Menedżera bazy kluczy GNOME."
 
-#: ../src/common/config.py:263
+#: ../src/common/config.py:256
 msgid ""
 "If True, Gajim will show number of online and total contacts in account and "
 "group rows."
@@ -3945,7 +3930,7 @@ msgstr ""
 "połączonych kontaktów oraz ogólną liczbę kontaktów dla każdego konta oraz "
 "grupy"
 
-#: ../src/common/config.py:264
+#: ../src/common/config.py:257
 msgid ""
 "Can be empty, 'chat' or 'normal'. If not empty, treat all incoming messages "
 "as if they were of this type"
@@ -3954,7 +3939,7 @@ msgstr ""
 "Gajim będzie traktował każdą przychodzącą wiadomość jako czat lub pojedynczą "
 "wiadomość"
 
-#: ../src/common/config.py:265
+#: ../src/common/config.py:258
 msgid ""
 "If True, Gajim will scroll and select the contact who sent you the last "
 "message, if chat window is not already opened."
@@ -3963,7 +3948,7 @@ msgstr ""
 "kontakt, który wysłał ci ostatnią wiadomość, ale tylko wtedy gdy okno czatu "
 "nie jest już otwarte."
 
-#: ../src/common/config.py:266
+#: ../src/common/config.py:259
 msgid ""
 "If True, Gajim will convert string between $$ and $$ to an image using dvips "
 "and convert before insterting it in chat window."
@@ -3972,13 +3957,13 @@ msgstr ""
 "$$ i $$ do postaci obrazu (z wykorzystaniem dvips) przed wstawieniem ich do "
 "okna rozmowy."
 
-#: ../src/common/config.py:267
+#: ../src/common/config.py:260
 msgid "Time of inactivity needed before the change status window closes down."
 msgstr ""
 "Wymagany jest okres nieaktywności zanim zamknięte zostanie okno zmiany "
 "statusu."
 
-#: ../src/common/config.py:268
+#: ../src/common/config.py:261
 msgid ""
 "Maximum number of lines that are printed in conversations. Oldest lines are "
 "cleared."
@@ -3986,7 +3971,7 @@ msgstr ""
 "Maksymalna ilość linii, jaka jest wyświetlana podczas rozmów. Najstarsze są "
 "usuwane."
 
-#: ../src/common/config.py:269
+#: ../src/common/config.py:262
 msgid ""
 "If True, notification windows from notification-daemon will be attached to "
 "systray icon."
@@ -3994,32 +3979,34 @@ msgstr ""
 "Po nadaniu wartości True okna powiadomień będą połączone z obszarem "
 "powiadomień."
 
-#: ../src/common/config.py:270
+#: ../src/common/config.py:263
 msgid "Choose interval between 2 checks of idleness."
 msgstr "Wybierz odstęp czasu pomiędzy dwoma sprawdzeniami bezczynności."
 
-#: ../src/common/config.py:271
+#: ../src/common/config.py:264
 msgid ""
 "Change the value to change the size of latex formulas displayed. The higher "
 "is larger."
 msgstr "Zmień rozmiar pokazywanych formuł latex-a."
 
-#: ../src/common/config.py:272
-#, fuzzy
+#: ../src/common/config.py:265
 msgid ""
 "Valid uri schemes. Only schemes in this list will be accepted as \"real\" "
 "uri. (mailto and xmpp are handled separately)"
 msgstr ""
 "Wzorce ważnych uri. Tylko wzorce z tej listy będzie przyjmowane jako "
-"\"prawdziwe\" uri."
+"\"prawdziwe\" uri. (mailto i xmpp są traktowane oddzielnie)"
 
-#: ../src/common/config.py:273
+#: ../src/common/config.py:266
 msgid ""
 "Ask offline status message to all offline contacts when connection to an "
 "accoutn is established. WARNING: This causes a lot of requests to be sent!"
 msgstr ""
+"Pytaj o opis statusu \"Niepołączony\" wszystkich niepołączonych kontaktów, "
+"kiedy jest połączenie z kontem. OSTRZEŻENIE: To może być przyczyną wysyłania "
+"wielu zapytań!"
 
-#: ../src/common/config.py:284
+#: ../src/common/config.py:277
 msgid ""
 "Priority will change automatically according to your status. Priorities are "
 "defined in autopriority_* options."
@@ -4027,7 +4014,7 @@ msgstr ""
 "Priorytet ulegnie automatycznej zmianie, wraz ze zmianą statusu. Priorytety "
 "zdefiniowane są opcjach rozpoczynających się od autopriority_*."
 
-#: ../src/common/config.py:292
+#: ../src/common/config.py:285
 msgid ""
 "Status used to autoconnect as. Can be online, chat, away, xa, dnd, "
 "invisible. NOTE: this option is used only if restore_last_status is disabled"
@@ -4036,28 +4023,28 @@ msgstr ""
 "rozmowy, zaraz wracam, nieobecny, nie przeszkadzać, niewidoczny. UWAGA: ta "
 "opcja będzie używana tylko jeśli restore_last_status będzie wyłączone"
 
-#: ../src/common/config.py:293
+#: ../src/common/config.py:286
 msgid "If enabled, restore the last status that was used."
 msgstr "Jeśli włączone, przywróc ostatni status, który był użyty."
 
-#: ../src/common/config.py:298
+#: ../src/common/config.py:291
 msgid ""
 "If disabled, don't sign presences with GPG key, even if GPG is configured."
 msgstr ""
 "Po wyłączeniu tej opcji, Gajim nie podpisuje komunikatów o stanach kluczem "
 "GPG, nawet jeśli GPG jest skonfigurowany."
 
-#: ../src/common/config.py:300
+#: ../src/common/config.py:293
 msgid "Enable ESessions encryption for this account."
 msgstr "Włączono szyfrowanie ESession dla tego konta."
 
-#: ../src/common/config.py:301
+#: ../src/common/config.py:294
 msgid "Should Gajim automatically start an encrypted session when possible?"
 msgstr ""
 "Czy Gajim powinien automatycznie zaczynać zaszyfrowaną sesje jeśli to "
 "możliwe?"
 
-#: ../src/common/config.py:302
+#: ../src/common/config.py:295
 msgid ""
 "Ordered list (space separated) of connection type to try. Can contain tls, "
 "ssl or plain"
@@ -4065,35 +4052,44 @@ msgstr ""
 "Lista połączeń (rozdzielona spacjami) zawierająca wykaz rodzajów połączeń. "
 "Może zawierać tls, ssl lub plain"
 
-#: ../src/common/config.py:303
+#: ../src/common/config.py:296
 msgid ""
 "Show a warning dialog before sending password on an plaintext connection."
 msgstr "Pokaż ostrzeżenie przed wysłaniem hasła nieszyfrowanym połączeniem."
 
-#: ../src/common/config.py:304
+#: ../src/common/config.py:297
 msgid "Show a warning dialog before using standard SSL library."
 msgstr "Pokaż ostrzeżenie przed użyciem standardowej biblioteki SSL."
 
-#: ../src/common/config.py:306
+#: ../src/common/config.py:299
 msgid "Space separated list of ssl errors to ignore."
 msgstr ""
 "Lista błędów (rozdzielona spacjami) zawierająca wykaz błędów ssl, które "
 "program będzie ignorował."
 
-#: ../src/common/config.py:318
+#: ../src/common/config.py:308
+msgid "Whitespace sent after inactivity"
+msgstr ""
+
+#: ../src/common/config.py:309
+msgid "XMPP ping sent after inactivity"
+msgstr ""
+
+#: ../src/common/config.py:313
+#, fuzzy
 msgid ""
-"How many seconds to wait for the answer of keepalive packet before we try to "
-"reconnect."
+"How many seconds to wait for the answer of ping alive packet before we try "
+"to reconnect."
 msgstr ""
 "Czas oczekiwania (w sekundach) na odpowiedź na pakiet podtrzymujący "
 "połączenie przed podjęciem próby ponownego połączenia."
 
 #. yes, no, ask
-#: ../src/common/config.py:322
+#: ../src/common/config.py:317
 msgid "Jabberd2 workaround"
 msgstr "Obejście dla Jabberd2"
 
-#: ../src/common/config.py:326
+#: ../src/common/config.py:321
 msgid ""
 "If checked, Gajim will use your IP and proxies defined in "
 "file_transfer_proxies option for file transfer."
@@ -4101,15 +4097,15 @@ msgstr ""
 "Jeżeli ta opcja jest aktywna, Gajim pobierze adresy serwerów proxy z klucza "
 "file_transfers_proxies i użyje ich podczas przesyłania plików."
 
-#: ../src/common/config.py:340
+#: ../src/common/config.py:335
 msgid "Answer to receipt requests"
 msgstr "Odpowiedź na żądanie potwierdzenia"
 
-#: ../src/common/config.py:341
+#: ../src/common/config.py:336
 msgid "Sent receipt requests"
 msgstr "Wyślij żądanie potwierdzenia"
 
-#: ../src/common/config.py:349
+#: ../src/common/config.py:344
 msgid ""
 "When negotiating an encrypted session, should Gajim assume you want your "
 "messages to be logged?"
@@ -4117,11 +4113,11 @@ msgstr ""
 "Czy podczas negocjowania szyfrowanej sesji Gajim ma przyjąć, że chcesz ją "
 "logować?"
 
-#: ../src/common/config.py:412
+#: ../src/common/config.py:407
 msgid "Is OpenPGP enabled for this contact?"
 msgstr "Czy OpenPGP jest włączone dla tego kontaktu?"
 
-#: ../src/common/config.py:413
+#: ../src/common/config.py:408
 msgid ""
 "Should Gajim automatically start an encrypted session with this contact when "
 "possible?"
@@ -4129,101 +4125,101 @@ msgstr ""
 "Czy Gajim powinien automatycznie rozpoczynać zaszyfrowana sesję z tym "
 "kontaktem, jeśli to możliwe?"
 
-#: ../src/common/config.py:414 ../src/common/config.py:417
+#: ../src/common/config.py:409 ../src/common/config.py:412
 msgid "Language for which we want to check misspelled words"
 msgstr "Język, którego używa słownik przy sprawdzaniu pisowni"
 
-#: ../src/common/config.py:423
+#: ../src/common/config.py:418
 msgid "all or space separated status"
 msgstr "all lub komunikaty stanu rozdzielone spacjami"
 
-#: ../src/common/config.py:424
+#: ../src/common/config.py:419
 msgid "'yes', 'no', or 'both'"
 msgstr "'yes', 'no' lub 'both'"
 
-#: ../src/common/config.py:425 ../src/common/config.py:427
-#: ../src/common/config.py:428 ../src/common/config.py:431
-#: ../src/common/config.py:432
+#: ../src/common/config.py:420 ../src/common/config.py:422
+#: ../src/common/config.py:423 ../src/common/config.py:426
+#: ../src/common/config.py:427
 msgid "'yes', 'no' or ''"
 msgstr "'yes', 'no' lub \""
 
-#: ../src/common/config.py:438 ../src/common/pep.py:160
+#: ../src/common/config.py:433 ../src/common/pep.py:160
 msgid "Sleeping"
 msgstr "Śpię"
 
-#: ../src/common/config.py:439
+#: ../src/common/config.py:434
 msgid "Back soon"
 msgstr "Niedługo wrócę"
 
-#: ../src/common/config.py:439
+#: ../src/common/config.py:434
 msgid "Back in some minutes."
 msgstr "Wrócę za jakiś czas."
 
-#: ../src/common/config.py:440 ../src/common/pep.py:130
+#: ../src/common/config.py:435 ../src/common/pep.py:130
 msgid "Eating"
 msgstr "Jem"
 
-#: ../src/common/config.py:440
+#: ../src/common/config.py:435
 msgid "I'm eating, so leave me a message."
 msgstr "Jem. Zostaw wiadomość."
 
-#: ../src/common/config.py:441
+#: ../src/common/config.py:436
 msgid "Movie"
 msgstr "Film"
 
-#: ../src/common/config.py:441
+#: ../src/common/config.py:436
 msgid "I'm watching a movie."
 msgstr "Oglądam film."
 
-#: ../src/common/config.py:442 ../src/common/pep.py:189
+#: ../src/common/config.py:437 ../src/common/pep.py:189
 msgid "Working"
 msgstr "Praca"
 
-#: ../src/common/config.py:442
+#: ../src/common/config.py:437
 msgid "I'm working."
 msgstr "Pracuję."
 
-#: ../src/common/config.py:443
+#: ../src/common/config.py:438
 msgid "Phone"
 msgstr "Telefon"
 
-#: ../src/common/config.py:443
+#: ../src/common/config.py:438
 msgid "I'm on the phone."
 msgstr "Rozmawiam przez telefon."
 
-#: ../src/common/config.py:444
+#: ../src/common/config.py:439
 msgid "Out"
 msgstr "Wyszedłem"
 
-#: ../src/common/config.py:444
+#: ../src/common/config.py:439
 msgid "I'm out enjoying life."
 msgstr "Wyszedłem cieszyć się życiem."
 
-#: ../src/common/config.py:448
+#: ../src/common/config.py:450
 msgid "I'm available."
 msgstr "Dostępny."
 
-#: ../src/common/config.py:449
+#: ../src/common/config.py:451
 msgid "I'm free for chat."
 msgstr "Chętny do rozmowy."
 
-#: ../src/common/config.py:450 ../src/config.py:1412
+#: ../src/common/config.py:452 ../src/config.py:1412
 msgid "Be right back."
 msgstr "Zaraz wracam."
 
-#: ../src/common/config.py:451
+#: ../src/common/config.py:453
 msgid "I'm not available."
 msgstr "Nieobecny."
 
-#: ../src/common/config.py:452
+#: ../src/common/config.py:454
 msgid "Do not disturb."
 msgstr "Nie przeszkadzać."
 
-#: ../src/common/config.py:453 ../src/common/config.py:454
+#: ../src/common/config.py:455 ../src/common/config.py:456
 msgid "Bye!"
 msgstr "Żegnaj!"
 
-#: ../src/common/config.py:464
+#: ../src/common/config.py:466
 msgid ""
 "Sound to play when a group chat message contains one of the words in "
 "muc_highlight_words, or when a group chat message contains your nickname."
@@ -4232,23 +4228,23 @@ msgstr ""
 "wyrazów ze zmiennej muc_highlight_words lub gdy wiadomość MUC zawierać "
 "będzie twój pseudonim."
 
-#: ../src/common/config.py:465
+#: ../src/common/config.py:467
 msgid "Sound to play when any MUC message arrives."
 msgstr "Dźwięk, jaki będzie odtwarzany, gdy nadejdzie wiadomość MUC."
 
-#: ../src/common/config.py:474 ../src/common/optparser.py:237
+#: ../src/common/config.py:476 ../src/common/optparser.py:239
 msgid "green"
 msgstr "zielony"
 
-#: ../src/common/config.py:478 ../src/common/optparser.py:223
+#: ../src/common/config.py:480 ../src/common/optparser.py:225
 msgid "grocery"
 msgstr "grocery"
 
-#: ../src/common/config.py:482
+#: ../src/common/config.py:484
 msgid "human"
 msgstr "human"
 
-#: ../src/common/config.py:486
+#: ../src/common/config.py:488
 msgid "marine"
 msgstr "morski"
 
@@ -4272,58 +4268,57 @@ msgid "Registration information for transport %s has not arrived in time"
 msgstr "Informacje rejestracyjne transportu %s nie dotarły na czas"
 
 #: ../src/common/connection_handlers.py:677
-#, fuzzy
 msgid "Registration succeeded"
-msgstr "Publikacja vCard powiodła się"
+msgstr "Rejestracja zakończyła się sukcesem"
 
 #: ../src/common/connection_handlers.py:678
 #, python-format
 msgid "Registration with agent %s succeeded"
-msgstr ""
+msgstr "Rejestracja z %s zakończyła się sukcesem"
 
 #: ../src/common/connection_handlers.py:680
-#, fuzzy
 msgid "Registration failed"
-msgstr "Połączenie nie powiodło się"
+msgstr "Rejestracja nie powiodła się"
 
 #: ../src/common/connection_handlers.py:680
 #, python-format
 msgid ""
 "Registration with agent %(agent)s failed with error %(error)s: %(error_msg)s"
 msgstr ""
+"Rejestracja z %(agent)s nie powiodła się, błąd %(error)s: %(error_msg)s"
 
-#: ../src/common/connection_handlers.py:968
-#: ../src/common/connection_handlers.py:1962
-#: ../src/common/connection_handlers.py:2008
-#: ../src/common/connection_handlers.py:2196
-#: ../src/common/connection_handlers.py:2329 ../src/common/connection.py:1342
+#: ../src/common/connection_handlers.py:970
+#: ../src/common/connection_handlers.py:1963
+#: ../src/common/connection_handlers.py:2009
+#: ../src/common/connection_handlers.py:2197
+#: ../src/common/connection_handlers.py:2330 ../src/common/connection.py:1355
 #: ../src/gajim.py:378
 msgid "Disk Write Error"
 msgstr "Błąd zapisu na dysk"
 
-#: ../src/common/connection_handlers.py:1175 ../src/common/connection.py:917
+#: ../src/common/connection_handlers.py:1177 ../src/common/connection.py:929
 msgid "Invisibility not supported"
 msgstr "Niewidoczność nie jest obsługiwana"
 
-#: ../src/common/connection_handlers.py:1176 ../src/common/connection.py:918
+#: ../src/common/connection_handlers.py:1178 ../src/common/connection.py:930
 #, python-format
 msgid "Account %s doesn't support invisibility."
 msgstr "Konto %s nie obsługuje niewidoczności."
 
-#: ../src/common/connection_handlers.py:1790 ../src/common/connection.py:1157
+#: ../src/common/connection_handlers.py:1791 ../src/common/connection.py:1170
 #: ../src/config.py:1840 ../src/config.py:1848 ../src/config.py:1891
-#: ../src/config.py:3116 ../src/dataforms_widget.py:571 ../src/dialogs.py:2437
+#: ../src/config.py:3116 ../src/dataforms_widget.py:571 ../src/dialogs.py:2462
 msgid "Invalid Jabber ID"
 msgstr "Niepoprawny Jabber ID"
 
-#: ../src/common/connection_handlers.py:1791
+#: ../src/common/connection_handlers.py:1792
 msgid "A message from a non-valid JID arrived, it has been ignored."
-msgstr ""
+msgstr "Doszła wiadomość od nieprawidłowego JID, będzie zignorowana"
 
-#: ../src/common/connection_handlers.py:1965
-#: ../src/common/connection_handlers.py:2011
-#: ../src/common/connection_handlers.py:2199
-#: ../src/common/connection_handlers.py:2332 ../src/common/connection.py:1345
+#: ../src/common/connection_handlers.py:1966
+#: ../src/common/connection_handlers.py:2012
+#: ../src/common/connection_handlers.py:2200
+#: ../src/common/connection_handlers.py:2333 ../src/common/connection.py:1358
 #: ../src/gajim.py:159
 #, python-format
 msgid ""
@@ -4334,7 +4329,7 @@ msgstr ""
 "http://trac.gajim.org/wiki/DatabaseBackup) lub usuń ten plik(całe archiwum "
 "rozmów zostanie usunięte)."
 
-#: ../src/common/connection_handlers.py:2083
+#: ../src/common/connection_handlers.py:2084
 #, python-format
 msgid "Nickname not allowed: %s"
 msgstr "Pseudonim jest niedozwolony: %s"
@@ -4342,70 +4337,70 @@ msgstr "Pseudonim jest niedozwolony: %s"
 #. we are banned
 #. group chat does not exist
 #. user may close the window before we are here
-#: ../src/common/connection_handlers.py:2158
-#: ../src/common/connection_handlers.py:2161
-#: ../src/common/connection_handlers.py:2164
-#: ../src/common/connection_handlers.py:2167
-#: ../src/common/connection_handlers.py:2171 ../src/gajim.py:531
+#: ../src/common/connection_handlers.py:2159
+#: ../src/common/connection_handlers.py:2162
+#: ../src/common/connection_handlers.py:2165
+#: ../src/common/connection_handlers.py:2168
+#: ../src/common/connection_handlers.py:2172 ../src/gajim.py:531
 msgid "Unable to join group chat"
 msgstr "Nie można dołączyć do pokoju"
 
-#: ../src/common/connection_handlers.py:2159
+#: ../src/common/connection_handlers.py:2160
 #, python-format
 msgid "You are banned from group chat %s."
 msgstr "Zostałeś zabanowany w pokoju %s."
 
-#: ../src/common/connection_handlers.py:2162
+#: ../src/common/connection_handlers.py:2163
 #, python-format
 msgid "Group chat %s does not exist."
 msgstr "Pokój %s nie istnieje."
 
-#: ../src/common/connection_handlers.py:2165
+#: ../src/common/connection_handlers.py:2166
 msgid "Group chat creation is restricted."
 msgstr "Tworzenie pokoi jest ograniczone."
 
-#: ../src/common/connection_handlers.py:2168
+#: ../src/common/connection_handlers.py:2169
 #, python-format
 msgid "Your registered nickname must be used in group chat %s."
 msgstr "Twój pseudonim musi być używany w pokoju %s."
 
-#: ../src/common/connection_handlers.py:2172
+#: ../src/common/connection_handlers.py:2173
 #, python-format
 msgid "You are not in the members list in groupchat %s."
 msgstr "Nie jesteś na liście uczestników rozmów w pokoju %s."
 
 #. Room has been destroyed. see
 #. http://www.xmpp.org/extensions/xep-0045.html#destroyroom
-#: ../src/common/connection_handlers.py:2214
+#: ../src/common/connection_handlers.py:2215
 msgid "Room has been destroyed"
 msgstr "Pokój został usunięty"
 
-#: ../src/common/connection_handlers.py:2221
+#: ../src/common/connection_handlers.py:2222
 #, python-format
 msgid "You can join this room instead: %s"
 msgstr "W zamian możesz dołączyć do pokoju %s"
 
-#: ../src/common/connection_handlers.py:2248
+#: ../src/common/connection_handlers.py:2249
 msgid "I would like to add you to my roster."
 msgstr "Chciałbym dodać Cię do listy kontaktów."
 
 #. BE CAREFUL: no con.updateRosterItem() in a callback
-#: ../src/common/connection_handlers.py:2269
+#: ../src/common/connection_handlers.py:2270
 #, python-format
 msgid "we are now subscribed to %s"
 msgstr "Zapisaliśmy się do %s"
 
-#: ../src/common/connection_handlers.py:2271
+#: ../src/common/connection_handlers.py:2272
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "Prośba o cofnięcie autoryzacji od %s"
 
-#: ../src/common/connection_handlers.py:2273
+#: ../src/common/connection_handlers.py:2274
 #, python-format
 msgid "we are now unsubscribed from %s"
 msgstr "Wypisaliśmy się z %s"
 
-#: ../src/common/connection_handlers.py:2456
+#: ../src/common/connection_handlers.py:2457
 #, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
@@ -4416,13 +4411,13 @@ msgstr ""
 "jabberstudio.org/ aby go usunąć"
 
 #. We didn't set a passphrase
-#: ../src/common/connection_handlers.py:2481
+#: ../src/common/connection_handlers.py:2482
 #: ../src/common/zeroconf/connection_zeroconf.py:175
 msgid "OpenPGP passphrase was not given"
 msgstr "Nie podano klucza OpenPGP"
 
 #. %s is the account name here
-#: ../src/common/connection_handlers.py:2483
+#: ../src/common/connection_handlers.py:2484
 #: ../src/common/zeroconf/connection_zeroconf.py:177
 #: ../src/roster_window.py:1931
 #, python-format
@@ -4557,81 +4552,81 @@ msgstr "Tym kluczem nie można podpisywać certyfikatu"
 msgid "Application verification failure"
 msgstr "Błąd weryfikacji aplikacji"
 
-#: ../src/common/connection.py:271
+#: ../src/common/connection.py:278
 #: ../src/common/zeroconf/connection_zeroconf.py:217
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "Połączenie z kontem \"%s\"zostało zerwane."
 
-#: ../src/common/connection.py:272
+#: ../src/common/connection.py:279
 msgid "Reconnect manually."
 msgstr "Połącz ponownie ręcznie."
 
-#: ../src/common/connection.py:283
+#: ../src/common/connection.py:290
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
 "Serwer %(name)s udzielił nieprawidłowej odpowiedzi na żądanie rejestracji: %"
 "(error)s"
 
-#: ../src/common/connection.py:317
+#: ../src/common/connection.py:324
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "Serwer %s przesłał niezgodny formularz rejestracyjny"
 
-#: ../src/common/connection.py:330
+#: ../src/common/connection.py:337
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "Nieznany błąd SSL: %d"
 
 #. wrong answer
-#: ../src/common/connection.py:345
+#: ../src/common/connection.py:352
 msgid "Invalid answer"
 msgstr "Niepoprawna odpowiedź"
 
-#: ../src/common/connection.py:346
+#: ../src/common/connection.py:353
 #, python-format
 msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
 "Transport %(name)s udzielił nieprawidłowej odpowiedzi na żądanie "
 "rejestracji: %(error)s"
 
-#: ../src/common/connection.py:629 ../src/common/connection.py:755
-#: ../src/common/connection.py:1478
+#: ../src/common/connection.py:636 ../src/common/connection.py:762
+#: ../src/common/connection.py:1491
 #: ../src/common/zeroconf/connection_zeroconf.py:251
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Nie można połączyć się z \"%s\""
 
-#: ../src/common/connection.py:630 ../src/gajim.py:1083
+#: ../src/common/connection.py:637 ../src/gajim.py:1083
 msgid "Check your connection or try again later."
 msgstr "Sprawdź swoje połączenie lub spróbuj później."
 
-#: ../src/common/connection.py:635
-#, fuzzy, python-format
+#: ../src/common/connection.py:642
+#, python-format
 msgid "Server replied: %s"
-msgstr "Zapisane w: %s"
+msgstr "Serwer odpowiedział: %s"
 
-#: ../src/common/connection.py:648
+#: ../src/common/connection.py:655
 msgid "Connection to proxy failed"
-msgstr "Połączenie z proxy nie powiodło się"
+msgstr "Połączenie z serwerem proxy nie powiodło się"
 
-#: ../src/common/connection.py:679 ../src/common/connection.py:735
+#: ../src/common/connection.py:686 ../src/common/connection.py:742
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "Nie można połączyć się %s"
 
-#: ../src/common/connection.py:680 ../src/common/connection.py:736
+#: ../src/common/connection.py:687 ../src/common/connection.py:743
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "Połączenie z kontem %s zostało zerwane."
 
-#: ../src/common/connection.py:702
+#: ../src/common/connection.py:709
 #, python-format
 msgid "The authenticity of the %s certificate could be invalid."
 msgstr "Nie można potwierdzić autentyczności certyfikatu %s."
 
-#: ../src/common/connection.py:705
+#: ../src/common/connection.py:712
 #, python-format
 msgid ""
 "\n"
@@ -4640,7 +4635,7 @@ msgstr ""
 "\n"
 "Błąd SSL: <b>%s</b>"
 
-#: ../src/common/connection.py:707
+#: ../src/common/connection.py:714
 #, python-format
 msgid ""
 "\n"
@@ -4649,24 +4644,24 @@ msgstr ""
 "\n"
 "Nieznany błąd SSL: %d"
 
-#: ../src/common/connection.py:756
+#: ../src/common/connection.py:763
 msgid "Check your connection or try again later"
 msgstr "Sprawdź swoje połączenie lub spróbuj później"
 
-#: ../src/common/connection.py:781
+#: ../src/common/connection.py:788
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Autoryzacja z \"%s\" nie powiodła się"
 
-#: ../src/common/connection.py:783
+#: ../src/common/connection.py:790
 msgid "Please check your login and password for correctness."
 msgstr "Spawdź czy twój login i hasło są poprawne."
 
-#: ../src/common/connection.py:844
+#: ../src/common/connection.py:856
 msgid "Error while removing privacy list"
 msgstr "Błąd usuwaniu listy prywatności"
 
-#: ../src/common/connection.py:845
+#: ../src/common/connection.py:857
 #, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
@@ -4675,19 +4670,19 @@ msgstr ""
 "Lista prywatności %s nie została usunięta. Prawdopodobnie jest aktywna w "
 "jednym z połączonych zasobów. Wyłącz ją i spróbuj ponownie."
 
-#: ../src/common/connection.py:1158 ../src/dialogs.py:2438
-#, fuzzy, python-format
+#: ../src/common/connection.py:1171 ../src/dialogs.py:2463
+#, python-format
 msgid "It is not possible to send a message to %s, this JID is not valid."
-msgstr "Nie można wysłać pustego pliku"
+msgstr "Niemożna wysłać wiadomości do %s, JID jest nieprawidłowy."
 
-#: ../src/common/connection.py:1180
+#: ../src/common/connection.py:1193
 #: ../src/common/zeroconf/connection_zeroconf.py:391
 msgid "Neither the remote presence is signed, nor a key was assigned."
 msgstr ""
 "Komunikat o statusie obecności nie jest podpisany, nie przypisano mu też "
 "klucza."
 
-#: ../src/common/connection.py:1182
+#: ../src/common/connection.py:1195
 #: ../src/common/zeroconf/connection_zeroconf.py:393
 #, python-format
 msgid "The contact's key (%s) does not match the key assigned in Gajim."
@@ -4695,11 +4690,11 @@ msgstr "Klucz kontaktu (%s) nie pasuje do klucza przypisanego w Gajimie."
 
 #. we're not english
 #. one in locale and one en
-#: ../src/common/connection.py:1230
+#: ../src/common/connection.py:1243
 msgid "[This message is *encrypted* (See :XEP:`27`]"
 msgstr "[Ta wiadomość jest zaszyfrowana (Zobacz :XEP: '27']"
 
-#: ../src/common/connection.py:1332
+#: ../src/common/connection.py:1345
 #: ../src/common/zeroconf/connection_zeroconf.py:470
 #, python-format
 msgid ""
@@ -4709,17 +4704,17 @@ msgstr ""
 "Temat: %(subject)s\n"
 "%(message)s"
 
-#: ../src/common/connection.py:1511 ../src/common/connection.py:1532
+#: ../src/common/connection.py:1524 ../src/common/connection.py:1545
 msgid "Not fetched because of invisible status"
 msgstr "Nie wysłano z powodu statusu 'niewidoczny'"
 
-#: ../src/common/contacts.py:92 ../src/common/helpers.py:57
+#: ../src/common/contacts.py:92 ../src/common/helpers.py:56
 #: ../src/gajim.py:988
 msgid "Observers"
 msgstr "Obserwatorzy"
 
 #: ../src/common/contacts.py:96 ../src/common/contacts.py:348
-#: ../src/common/helpers.py:57 ../src/disco.py:117 ../src/disco.py:118
+#: ../src/common/helpers.py:56 ../src/disco.py:117 ../src/disco.py:118
 #: ../src/disco.py:1350 ../src/gajim.py:801 ../src/roster_window.py:814
 #: ../src/roster_window.py:1469 ../src/roster_window.py:1538
 #: ../src/roster_window.py:1540 ../src/roster_window.py:1684
@@ -4917,160 +4912,160 @@ msgstr "Koniec tygodnia"
 msgid "Weekend!"
 msgstr "Weekend!"
 
-#: ../src/common/helpers.py:142
+#: ../src/common/helpers.py:141
 msgid "Invalid character in username."
 msgstr "Niepoprawna litera w nazwie użytkownika."
 
-#: ../src/common/helpers.py:147
+#: ../src/common/helpers.py:146
 msgid "Server address required."
 msgstr "Wymagany adres serwera."
 
-#: ../src/common/helpers.py:153
+#: ../src/common/helpers.py:152
 msgid "Invalid character in hostname."
 msgstr "Niepoprawna litera w nazwie hosta."
 
-#: ../src/common/helpers.py:160
+#: ../src/common/helpers.py:159
 msgid "Invalid character in resource."
 msgstr "Niepoprawna litera w zasobach."
 
-#: ../src/common/helpers.py:192
+#: ../src/common/helpers.py:191
 msgid "_Busy"
 msgstr "_Zajęty"
 
-#: ../src/common/helpers.py:194
+#: ../src/common/helpers.py:193
 msgid "Busy"
 msgstr "Zajęty"
 
-#: ../src/common/helpers.py:197
+#: ../src/common/helpers.py:196
 msgid "_Not Available"
 msgstr "Nie_obecny"
 
-#: ../src/common/helpers.py:202
+#: ../src/common/helpers.py:201
 msgid "_Free for Chat"
 msgstr "_Chętny do rozmowy"
 
-#: ../src/common/helpers.py:204
+#: ../src/common/helpers.py:203
 msgid "Free for Chat"
 msgstr "Chętny do rozmowy"
 
-#: ../src/common/helpers.py:207
+#: ../src/common/helpers.py:206
 msgid "_Available"
 msgstr "_Dostępny"
 
-#: ../src/common/helpers.py:209 ../src/features_window.py:115
+#: ../src/common/helpers.py:208 ../src/features_window.py:115
 msgid "Available"
 msgstr "Dostępny"
 
-#: ../src/common/helpers.py:211
+#: ../src/common/helpers.py:210
 msgid "Connecting"
 msgstr "Łączę się"
 
-#: ../src/common/helpers.py:214
+#: ../src/common/helpers.py:213
 msgid "A_way"
 msgstr "Zaraz _wracam"
 
-#: ../src/common/helpers.py:219
+#: ../src/common/helpers.py:218
 msgid "_Offline"
 msgstr "R_ozłączony"
 
-#: ../src/common/helpers.py:221
+#: ../src/common/helpers.py:220
 msgid "Offline"
 msgstr "Rozłączony"
 
-#: ../src/common/helpers.py:224
+#: ../src/common/helpers.py:223
 msgid "_Invisible"
 msgstr "N_iewidoczny"
 
-#: ../src/common/helpers.py:230
+#: ../src/common/helpers.py:229
 msgid "?contact has status:Unknown"
 msgstr "?contact ma status: Nieznany"
 
-#: ../src/common/helpers.py:232
+#: ../src/common/helpers.py:231
 msgid "?contact has status:Has errors"
 msgstr "?contact ma status: Wystąpiły błędy"
 
-#: ../src/common/helpers.py:237
+#: ../src/common/helpers.py:236
 msgid "?Subscription we already have:None"
 msgstr "?Posiadane autoryzacje: Brak"
 
-#: ../src/common/helpers.py:239
+#: ../src/common/helpers.py:238
 msgid "To"
 msgstr "Do"
 
-#: ../src/common/helpers.py:243
+#: ../src/common/helpers.py:242
 msgid "Both"
 msgstr "Obustronna"
 
-#: ../src/common/helpers.py:251
+#: ../src/common/helpers.py:250
 msgid "?Ask (for Subscription):None"
 msgstr "?Poproś (o autoryzację): Brak"
 
-#: ../src/common/helpers.py:253
+#: ../src/common/helpers.py:252
 msgid "Subscribe"
 msgstr "Autoryzuj"
 
-#: ../src/common/helpers.py:262
+#: ../src/common/helpers.py:261
 msgid "?Group Chat Contact Role:None"
 msgstr "?Funkcja kontaktu w pokoju: Brak"
 
-#: ../src/common/helpers.py:265
+#: ../src/common/helpers.py:264
 msgid "Moderators"
 msgstr "Moderatorzy"
 
-#: ../src/common/helpers.py:267
+#: ../src/common/helpers.py:266
 msgid "Moderator"
 msgstr "Moderator"
 
-#: ../src/common/helpers.py:270
+#: ../src/common/helpers.py:269
 msgid "Participants"
 msgstr "Uczestnicy"
 
-#: ../src/common/helpers.py:272
+#: ../src/common/helpers.py:271
 msgid "Participant"
 msgstr "Uczestnik"
 
-#: ../src/common/helpers.py:275
+#: ../src/common/helpers.py:274
 msgid "Visitors"
 msgstr "Goście"
 
-#: ../src/common/helpers.py:277
+#: ../src/common/helpers.py:276
 msgid "Visitor"
 msgstr "Gość"
 
-#: ../src/common/helpers.py:283
+#: ../src/common/helpers.py:282
 msgid "?Group Chat Contact Affiliation:None"
 msgstr "?Powiązanie kontaktu z czata: brak"
 
-#: ../src/common/helpers.py:285
+#: ../src/common/helpers.py:284
 msgid "Owner"
 msgstr "Właściciel"
 
-#: ../src/common/helpers.py:287
+#: ../src/common/helpers.py:286
 msgid "Administrator"
 msgstr "Administrator"
 
-#: ../src/common/helpers.py:289
+#: ../src/common/helpers.py:288
 msgid "Member"
 msgstr "Uczestnik"
 
-#: ../src/common/helpers.py:326
+#: ../src/common/helpers.py:325
 msgid "is paying attention to the conversation"
 msgstr "jest skupiony na rozmowie"
 
-#: ../src/common/helpers.py:328
+#: ../src/common/helpers.py:327
 msgid "is doing something else"
 msgstr "robi coś innego"
 
-#: ../src/common/helpers.py:330
+#: ../src/common/helpers.py:329
 msgid "is composing a message..."
 msgstr "pisze wiadomość..."
 
 #. paused means he or she was composing but has stopped for a while
-#: ../src/common/helpers.py:333
+#: ../src/common/helpers.py:332
 msgid "paused composing a message"
 msgstr "przerwał pisanie wiadomości"
 
-#: ../src/common/helpers.py:335
+#: ../src/common/helpers.py:334
 msgid "has closed the chat window or tab"
 msgstr "zamknął okno lub kartę rozmowy"
 
@@ -5168,18 +5163,18 @@ msgstr "%s nie jest prawidłowym poziomem logowania"
 msgid "error: cannot open %s for reading"
 msgstr "błąd: nie można otworzyć %s do odczytu"
 
-#: ../src/common/optparser.py:232 ../src/common/optparser.py:233
+#: ../src/common/optparser.py:234 ../src/common/optparser.py:235
 msgid "cyan"
 msgstr "cyjan"
 
-#: ../src/common/optparser.py:349
+#: ../src/common/optparser.py:351
 msgid "migrating logs database to indices"
 msgstr "indeksowanie archiwum rozmów"
 
 #: ../src/common/passwords.py:117
-#, fuzzy, python-format
+#, python-format
 msgid "XMPP account %s@%s"
-msgstr "dla konta %s"
+msgstr "Konto XMPP %s@%s"
 
 #: ../src/common/pep.py:30
 msgid "Afraid"
@@ -5936,7 +5931,7 @@ msgstr "Zawsze używaj domyślnych apikacji OS X"
 msgid "Custom"
 msgstr "Własne"
 
-#: ../src/config.py:676 ../src/dialogs.py:1275
+#: ../src/config.py:676 ../src/dialogs.py:1301
 #, python-format
 msgid "Dictionary for lang %s not available"
 msgstr "Brak słownika dla tego języka (%s)"
@@ -5959,7 +5954,7 @@ msgid "status message text"
 msgstr "treść informacji o statusie"
 
 #. Name column
-#: ../src/config.py:1334 ../src/dialogs.py:1903 ../src/dialogs.py:1967
+#: ../src/config.py:1334 ../src/dialogs.py:1929 ../src/dialogs.py:1993
 #: ../src/disco.py:771 ../src/disco.py:1563 ../src/disco.py:1809
 #: ../src/history_window.py:87
 msgid "Name"
@@ -5976,7 +5971,6 @@ msgstr ""
 "zalogować się ponownie."
 
 #: ../src/config.py:1549 ../src/config.py:1650
-#, fuzzy
 msgid "OpenPGP is not usable on this computer"
 msgstr "Nie można używać OpenPGP na tym komputerze"
 
@@ -6080,8 +6074,8 @@ msgstr "Takie konto nie jest dostępne"
 msgid "You must create your account before editing your personal information."
 msgstr "Musisz najpierw stworzyć konto by móc edytować informacje o sobie."
 
-#: ../src/config.py:2113 ../src/dialogs.py:1755 ../src/dialogs.py:1891
-#: ../src/dialogs.py:2070 ../src/disco.py:439 ../src/profile_window.py:317
+#: ../src/config.py:2113 ../src/dialogs.py:1781 ../src/dialogs.py:1917
+#: ../src/dialogs.py:2096 ../src/disco.py:439 ../src/profile_window.py:317
 msgid "You are not connected to the server"
 msgstr "Nie jesteś połączony z serwerem"
 
@@ -6201,7 +6195,6 @@ msgstr ""
 "\n"
 
 #: ../src/config.py:2486
-#, fuzzy
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -6210,7 +6203,7 @@ msgid ""
 "4. domain (the domain itself matches, as does any user@domain,\n"
 "domain/resource, or address containing a subdomain)."
 msgstr ""
-"Może wyglądać nastepująco:\n"
+"Może wyglądać następująco:\n"
 "1. użytkownik@domena/zasób (dotyczy tylko tego zasobu).\n"
 "2. użytkownik@domena (dotyczy dowolnego zasobu).\n"
 "3. domena/zasób (dotyczy tylko tego zasobu).\n"
@@ -6515,123 +6508,123 @@ msgstr "Nazwa kontaktu"
 msgid "Set Mood"
 msgstr "Ustaw Nastrój"
 
-#: ../src/dialogs.py:536
+#: ../src/dialogs.py:537
 #, python-format
 msgid "%s Status Message"
 msgstr "Informacja o statusie %s"
 
-#: ../src/dialogs.py:539
+#: ../src/dialogs.py:551
 msgid "Status Message"
 msgstr "Opis statusu"
 
-#: ../src/dialogs.py:720
+#: ../src/dialogs.py:746
 msgid "Overwrite Status Message?"
 msgstr "Zmienić opis statusu?"
 
-#: ../src/dialogs.py:721
+#: ../src/dialogs.py:747
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
 msgstr "Status o tej nazwie jest w użyciu. Czy chcesz go zmienić?"
 
-#: ../src/dialogs.py:729
+#: ../src/dialogs.py:755
 msgid "Save as Preset Status Message"
 msgstr "Szablony opisów"
 
-#: ../src/dialogs.py:730
+#: ../src/dialogs.py:756
 msgid "Please type a name for this status message"
 msgstr "Podaj nazwę dla tego szablonu"
 
-#: ../src/dialogs.py:755
+#: ../src/dialogs.py:781
 msgid "AIM Address:"
 msgstr "_Adres AIM:"
 
-#: ../src/dialogs.py:756
+#: ../src/dialogs.py:782
 msgid "GG Number:"
 msgstr "Numer GG:"
 
-#: ../src/dialogs.py:757
+#: ../src/dialogs.py:783
 msgid "ICQ Number:"
 msgstr "Numer ICQ:"
 
-#: ../src/dialogs.py:758
+#: ../src/dialogs.py:784
 msgid "MSN Address:"
 msgstr "_Adres MSN:"
 
-#: ../src/dialogs.py:759
+#: ../src/dialogs.py:785
 msgid "Yahoo! Address:"
 msgstr "Adres _Yahoo:"
 
-#: ../src/dialogs.py:795
+#: ../src/dialogs.py:821
 #, python-format
 msgid "Please fill in the data of the contact you want to add in account %s"
 msgstr "Wypełnij informacje o kontakcie, który chcesz dodać do konta %s"
 
-#: ../src/dialogs.py:797
+#: ../src/dialogs.py:823
 msgid "Please fill in the data of the contact you want to add"
 msgstr "Wypełnij informacje o kontakcie, który chcesz dodać"
 
-#: ../src/dialogs.py:954 ../src/dialogs.py:960 ../src/dialogs.py:965
+#: ../src/dialogs.py:980 ../src/dialogs.py:986 ../src/dialogs.py:991
 msgid "Invalid User ID"
 msgstr "Niepoprawny identyfikator użytkownika"
 
-#: ../src/dialogs.py:961
+#: ../src/dialogs.py:987
 msgid "The user ID must not contain a resource."
 msgstr "ID użytkownika nie może zawierać zasobu."
 
-#: ../src/dialogs.py:966
+#: ../src/dialogs.py:992
 msgid "You cannot add yourself to your roster."
 msgstr "Ty nie możesz dodać siebie do swojej listy kontaktów."
 
-#: ../src/dialogs.py:980
+#: ../src/dialogs.py:1006
 msgid "Contact already in roster"
 msgstr "Kontakt jest już na liście kontaktów"
 
-#: ../src/dialogs.py:981
+#: ../src/dialogs.py:1007
 msgid "This contact is already listed in your roster."
 msgstr "Ten kontakt znajduje się już na twojej liście kontaktów."
 
-#: ../src/dialogs.py:1017
+#: ../src/dialogs.py:1043
 msgid "User ID:"
 msgstr "ID uzytkownika:"
 
-#: ../src/dialogs.py:1075
+#: ../src/dialogs.py:1101
 msgid "A GTK+ jabber client"
 msgstr "Klient jabbera w GTK+."
 
-#: ../src/dialogs.py:1076
+#: ../src/dialogs.py:1102
 msgid "GTK+ Version:"
 msgstr "Wersja GTK+:"
 
-#: ../src/dialogs.py:1077
+#: ../src/dialogs.py:1103
 msgid "PyGTK Version:"
 msgstr "Wersja PyGTK:"
 
-#: ../src/dialogs.py:1087
+#: ../src/dialogs.py:1113
 msgid "Current Developers:"
 msgstr "Bieżący deweloperzy:"
 
-#: ../src/dialogs.py:1089
+#: ../src/dialogs.py:1115
 msgid "Past Developers:"
 msgstr "Poprzedni deweloperzy:"
 
-#: ../src/dialogs.py:1095
+#: ../src/dialogs.py:1121
 msgid "THANKS:"
 msgstr "Podziękowania:"
 
 #. remove one english sentence
 #. and add it manually as translatable
-#: ../src/dialogs.py:1101
+#: ../src/dialogs.py:1127
 msgid "Last but not least, we would like to thank all the package maintainers."
 msgstr "I wreszcie, chcielibyśmy podziękować wszystkim opiekunom pakietów."
 
 #. here you write your name in the form Name FamilyName <someone@somewhere>
-#: ../src/dialogs.py:1114
+#: ../src/dialogs.py:1140
 msgid "translator-credits"
 msgstr ""
 "Tłumaczenie na język polski: Witold Kieraś\n"
 "Maciej Chojnacki <maciej@chojnacki.name>Sławomir Domagała <godlark@gmail.com>"
 
-#: ../src/dialogs.py:1276
+#: ../src/dialogs.py:1302
 #, python-format
 msgid ""
 "You have to install %s dictionary to use spellchecking, or choose another "
@@ -6643,89 +6636,89 @@ msgstr ""
 "inny język korzystać z opcji speller_langugage.\n"
 "Do tego czasu podświetlanie błędnie wpisanych słów nie będzie działało"
 
-#: ../src/dialogs.py:1680
+#: ../src/dialogs.py:1706
 #, python-format
 msgid "Subscription request for account %(account)s from %(jid)s"
 msgstr "Prośba o autoryzację dla konta %(account)s od %(jid)s"
 
-#: ../src/dialogs.py:1683
+#: ../src/dialogs.py:1709
 #, python-format
 msgid "Subscription request from %s"
 msgstr "Prośba o autoryzację od %s"
 
-#: ../src/dialogs.py:1748 ../src/gajim.py:2773
+#: ../src/dialogs.py:1774 ../src/gajim.py:2773
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "Już jesteś w pokoju %s"
 
-#: ../src/dialogs.py:1756
+#: ../src/dialogs.py:1782
 msgid "You can not join a group chat unless you are connected."
 msgstr "Nie możesz dołączyć do pokoju gdy nie jesteś połączony."
 
-#: ../src/dialogs.py:1775
+#: ../src/dialogs.py:1801
 #, python-format
 msgid "Join Group Chat with account %s"
 msgstr "Dołącz do pokoju z konta %s"
 
-#: ../src/dialogs.py:1846
+#: ../src/dialogs.py:1872
 msgid "Invalid Nickname"
 msgstr "Niepoprawny pseudonim"
 
-#: ../src/dialogs.py:1847 ../src/groupchat_control.py:1441
-#: ../src/groupchat_control.py:1725
+#: ../src/dialogs.py:1873 ../src/groupchat_control.py:1458
+#: ../src/groupchat_control.py:1742
 msgid "The nickname has not allowed characters."
 msgstr "Używany przez ciebie pseudonim zawiera niedozwolone znaki."
 
-#: ../src/dialogs.py:1851 ../src/dialogs.py:1857
-#: ../src/groupchat_control.py:1909
+#: ../src/dialogs.py:1877 ../src/dialogs.py:1883
+#: ../src/groupchat_control.py:1930
 msgid "Invalid group chat Jabber ID"
 msgstr "Niepoprawny Jabber ID"
 
-#: ../src/dialogs.py:1852 ../src/dialogs.py:1858
-#: ../src/groupchat_control.py:1910
+#: ../src/dialogs.py:1878 ../src/dialogs.py:1884
+#: ../src/groupchat_control.py:1931
 msgid "The group chat Jabber ID has not allowed characters."
 msgstr "Używane przez ciebie Jabber ID zawiera niedozwolone znaki."
 
-#: ../src/dialogs.py:1864
+#: ../src/dialogs.py:1890
 msgid "This is not a group chat"
 msgstr "To nie jest czat"
 
-#: ../src/dialogs.py:1865
+#: ../src/dialogs.py:1891
 #, python-format
 msgid "%s is not the name of a group chat."
 msgstr "%s nie jest nazwą czatu."
 
-#: ../src/dialogs.py:1892
+#: ../src/dialogs.py:1918
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "Nie możesz zsynchronizować kontaktów przy niektywnym połączeniu."
 
-#: ../src/dialogs.py:1906
+#: ../src/dialogs.py:1932
 msgid "Server"
 msgstr "Serwer"
 
-#: ../src/dialogs.py:1939
+#: ../src/dialogs.py:1965
 msgid "This account is not connected to the server"
 msgstr "To konto nie jest połączone z serwerem"
 
-#: ../src/dialogs.py:1940
+#: ../src/dialogs.py:1966
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr ""
 "Nie możesz synchronizować kontaktów z kontem, które nie jest połączone."
 
-#: ../src/dialogs.py:1964
+#: ../src/dialogs.py:1990
 msgid "Synchronise"
 msgstr "Synchronizuj"
 
-#: ../src/dialogs.py:2022
+#: ../src/dialogs.py:2048
 #, python-format
 msgid "Start Chat with account %s"
 msgstr "Rozpocznij rozmowę z konta %s"
 
-#: ../src/dialogs.py:2024
+#: ../src/dialogs.py:2050
 msgid "Start Chat"
 msgstr "Rozpocznij rozmowę"
 
-#: ../src/dialogs.py:2025
+#: ../src/dialogs.py:2051
 msgid ""
 "Fill in the nickname or the Jabber ID of the contact you would like\n"
 "to send a chat message to:"
@@ -6734,276 +6727,276 @@ msgstr ""
 "wysłać wiadomość:"
 
 #. if offline or connecting
-#: ../src/dialogs.py:2049 ../src/dialogs.py:2423 ../src/dialogs.py:2573
+#: ../src/dialogs.py:2075 ../src/dialogs.py:2448 ../src/dialogs.py:2610
 #: ../src/normal_control.py:640
 msgid "Connection not available"
 msgstr "Połączenie jest niedostępne"
 
-#: ../src/dialogs.py:2050 ../src/dialogs.py:2424 ../src/dialogs.py:2574
+#: ../src/dialogs.py:2076 ../src/dialogs.py:2449 ../src/dialogs.py:2611
 #: ../src/normal_control.py:641
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Sprawdź, czy jesteś połączony z \"%s\"."
 
-#: ../src/dialogs.py:2059 ../src/dialogs.py:2062
+#: ../src/dialogs.py:2085 ../src/dialogs.py:2088
 msgid "Invalid JID"
 msgstr "Niepoprawny JID"
 
-#: ../src/dialogs.py:2062
+#: ../src/dialogs.py:2088
 #, python-format
 msgid "Unable to parse \"%s\"."
 msgstr "Nie można sparsować \"%s\"."
 
-#: ../src/dialogs.py:2071
+#: ../src/dialogs.py:2097
 msgid "Without a connection, you can not change your password."
 msgstr "Nie możesz zmienić hasła, jeśli nie jesteś połączony."
 
-#: ../src/dialogs.py:2090
+#: ../src/dialogs.py:2116
 msgid "Invalid password"
 msgstr "Niepoprawne hasło"
 
-#: ../src/dialogs.py:2090
+#: ../src/dialogs.py:2116
 msgid "You must enter a password."
 msgstr "Musisz wpisać hasło."
 
-#: ../src/dialogs.py:2094
+#: ../src/dialogs.py:2120
 msgid "Passwords do not match"
 msgstr "Hasła nie zgadzają się"
 
-#: ../src/dialogs.py:2095
+#: ../src/dialogs.py:2121
 msgid "The passwords typed in both fields must be identical."
 msgstr "Hasła wpisane w obydwu polach muszą być identyczne."
 
 #. img to display
 #. default value
-#: ../src/dialogs.py:2135 ../src/notify.py:264 ../src/notify.py:505
+#: ../src/dialogs.py:2160 ../src/notify.py:264 ../src/notify.py:505
 #: ../src/osx/growler.py:12
 msgid "Contact Signed In"
 msgstr "Kontakt połączył się"
 
-#: ../src/dialogs.py:2137 ../src/notify.py:272 ../src/notify.py:507
+#: ../src/dialogs.py:2162 ../src/notify.py:272 ../src/notify.py:507
 #: ../src/osx/growler.py:12
 msgid "Contact Signed Out"
 msgstr "Kontakt rozłączył się"
 
 #. chat message
 #. img to display
-#: ../src/dialogs.py:2139 ../src/notify.py:295 ../src/notify.py:349
+#: ../src/dialogs.py:2164 ../src/notify.py:295 ../src/notify.py:349
 #: ../src/notify.py:509 ../src/osx/growler.py:12
 msgid "New Message"
 msgstr "Nowa wiadomość"
 
 #. single message
-#: ../src/dialogs.py:2139 ../src/notify.py:276 ../src/notify.py:350
+#: ../src/dialogs.py:2164 ../src/notify.py:276 ../src/notify.py:350
 #: ../src/notify.py:509 ../src/osx/growler.py:13
 msgid "New Single Message"
 msgstr "Nowa wiadomość"
 
 #. private message
-#: ../src/dialogs.py:2140 ../src/notify.py:283 ../src/notify.py:350
+#: ../src/dialogs.py:2165 ../src/notify.py:283 ../src/notify.py:350
 #: ../src/notify.py:510 ../src/osx/growler.py:13
 msgid "New Private Message"
 msgstr "Wyślij prywatną wiadomość"
 
-#: ../src/dialogs.py:2140 ../src/gajim.py:1675 ../src/notify.py:519
+#: ../src/dialogs.py:2165 ../src/gajim.py:1675 ../src/notify.py:519
 #: ../src/osx/growler.py:13
 msgid "New E-mail"
 msgstr "Nowy adres e-mail"
 
-#: ../src/dialogs.py:2142 ../src/gajim.py:1741 ../src/notify.py:512
+#: ../src/dialogs.py:2167 ../src/gajim.py:1741 ../src/notify.py:512
 #: ../src/osx/growler.py:14
 msgid "File Transfer Request"
 msgstr "Pytanie o przysłanie pliku"
 
-#: ../src/dialogs.py:2144 ../src/gajim.py:1641 ../src/gajim.py:1708
+#: ../src/dialogs.py:2169 ../src/gajim.py:1641 ../src/gajim.py:1708
 #: ../src/notify.py:514 ../src/osx/growler.py:14
 msgid "File Transfer Error"
 msgstr "Błąd przesyłania pliku"
 
-#: ../src/dialogs.py:2146 ../src/gajim.py:1783 ../src/gajim.py:1805
+#: ../src/dialogs.py:2171 ../src/gajim.py:1783 ../src/gajim.py:1805
 #: ../src/gajim.py:1822 ../src/notify.py:516 ../src/osx/growler.py:15
 msgid "File Transfer Completed"
 msgstr "Zakończono przesyłanie pliku"
 
-#: ../src/dialogs.py:2147 ../src/gajim.py:1786 ../src/notify.py:517
+#: ../src/dialogs.py:2172 ../src/gajim.py:1786 ../src/notify.py:517
 #: ../src/osx/growler.py:15
 msgid "File Transfer Stopped"
 msgstr "Przesyłanie pliku zatrzymane"
 
-#: ../src/dialogs.py:2149 ../src/gajim.py:1493 ../src/notify.py:521
+#: ../src/dialogs.py:2174 ../src/gajim.py:1493 ../src/notify.py:521
 #: ../src/osx/growler.py:16
 msgid "Groupchat Invitation"
 msgstr "Zaproszenie na czat"
 
-#: ../src/dialogs.py:2151 ../src/notify.py:256 ../src/notify.py:523
+#: ../src/dialogs.py:2176 ../src/notify.py:256 ../src/notify.py:523
 #: ../src/osx/growler.py:16
 msgid "Contact Changed Status"
 msgstr "Kontakt zmienił status"
 
-#: ../src/dialogs.py:2342 ../src/normal_control.py:241
+#: ../src/dialogs.py:2367 ../src/normal_control.py:241
 #, python-format
 msgid "Single Message using account %s"
 msgstr "Wiadomość z konta %s"
 
-#: ../src/dialogs.py:2344 ../src/normal_control.py:243
+#: ../src/dialogs.py:2369 ../src/normal_control.py:243
 #, python-format
 msgid "Single Message in account %s"
 msgstr "Wiadomość z konta %s"
 
-#: ../src/dialogs.py:2346 ../src/normal_control.py:245
+#: ../src/dialogs.py:2371 ../src/normal_control.py:245
 msgid "Single Message"
 msgstr "Pojedyncza wiadomość"
 
 #. prepare UI for Sending
-#: ../src/dialogs.py:2349 ../src/normal_control.py:248
+#: ../src/dialogs.py:2374 ../src/normal_control.py:248
 #, python-format
 msgid "Send %s"
 msgstr "Wyślij %s"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:2372 ../src/normal_control.py:290
+#: ../src/dialogs.py:2397 ../src/normal_control.py:290
 #, python-format
 msgid "Received %s"
 msgstr "Odebrane %s"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:2395 ../src/normal_control.py:324
+#: ../src/dialogs.py:2420 ../src/normal_control.py:324
 #, python-format
 msgid "Form %s"
 msgstr "Od %s"
 
 #. we create a new blank window to send and we preset RE: and to jid
-#: ../src/dialogs.py:2474 ../src/normal_control.py:692
+#: ../src/dialogs.py:2499 ../src/normal_control.py:692
 #, python-format
 msgid "RE: %s"
 msgstr "RE: %s"
 
-#: ../src/dialogs.py:2475 ../src/normal_control.py:696
+#: ../src/dialogs.py:2500 ../src/normal_control.py:696
 #, python-format
 msgid "%s wrote:\n"
 msgstr "%s napisał:\n"
 
-#: ../src/dialogs.py:2519
+#: ../src/dialogs.py:2549
 #, python-format
 msgid "XML Console for %s"
 msgstr "Kosola XML dla %s"
 
-#: ../src/dialogs.py:2521
+#: ../src/dialogs.py:2551
 msgid "XML Console"
 msgstr "Konsola XML"
 
-#: ../src/dialogs.py:2645
+#: ../src/dialogs.py:2682
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
 msgstr "Lista prywatności <b><i>%s</i></b>"
 
-#: ../src/dialogs.py:2649
+#: ../src/dialogs.py:2686
 #, python-format
 msgid "Privacy List for %s"
 msgstr "Lista prywatności dla %s"
 
-#: ../src/dialogs.py:2705
+#: ../src/dialogs.py:2742
 #, python-format
 msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 msgstr ""
 "Kolejność: %(order)s, akcja: %(action)s, typ: %(type)s, wartość: %(value)s"
 
-#: ../src/dialogs.py:2710
+#: ../src/dialogs.py:2747
 #, python-format
 msgid "Order: %(order)s, action: %(action)s"
 msgstr "Kolejność: %(order)s, akcja: %(action)s"
 
-#: ../src/dialogs.py:2752
+#: ../src/dialogs.py:2789
 msgid "<b>Edit a rule</b>"
 msgstr "<b>Edytuj regułę</b>"
 
-#: ../src/dialogs.py:2839
+#: ../src/dialogs.py:2876
 msgid "<b>Add a rule</b>"
 msgstr "<b>Dodaj regułę</b>"
 
-#: ../src/dialogs.py:2935
+#: ../src/dialogs.py:2972
 #, python-format
 msgid "Privacy Lists for %s"
 msgstr "Listy prywatności dla %s"
 
-#: ../src/dialogs.py:2937
+#: ../src/dialogs.py:2974
 msgid "Privacy Lists"
 msgstr "Listy prywatności"
 
-#: ../src/dialogs.py:3007
+#: ../src/dialogs.py:3044
 msgid "Invalid List Name"
 msgstr "Niepoprawna nazwa listy"
 
-#: ../src/dialogs.py:3008
+#: ../src/dialogs.py:3045
 msgid "You must enter a name to create a privacy list."
 msgstr "Musisz podać nazwę nowej listy prywatności."
 
-#: ../src/dialogs.py:3040
+#: ../src/dialogs.py:3077
 msgid "You are invited to a groupchat"
 msgstr "Jestes zaproszony do rozmowy grupowej"
 
-#: ../src/dialogs.py:3043
+#: ../src/dialogs.py:3080
 msgid "$Contact has invited you to join a discussion"
 msgstr "$Contact zaprasza cię do rozmowy"
 
-#: ../src/dialogs.py:3045
+#: ../src/dialogs.py:3082
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr "$Contact zaprasza cię do pokoju %(room_jid)s"
 
-#: ../src/dialogs.py:3053
+#: ../src/dialogs.py:3090
 #, python-format
 msgid "Comment: %s"
 msgstr "Komentarz: %s"
 
-#: ../src/dialogs.py:3055
+#: ../src/dialogs.py:3092
 msgid "Do you want to accept the invitation?"
 msgstr "Czy chcesz zaakceptować zaproszenie?"
 
-#: ../src/dialogs.py:3111
+#: ../src/dialogs.py:3148
 msgid "Choose Sound"
 msgstr "Wybierz dźwięk"
 
-#: ../src/dialogs.py:3121 ../src/dialogs.py:3172
+#: ../src/dialogs.py:3158 ../src/dialogs.py:3209
 msgid "All files"
 msgstr "Wszystkie pliki"
 
-#: ../src/dialogs.py:3126
+#: ../src/dialogs.py:3163
 msgid "Wav Sounds"
 msgstr "Dźwięki w Wav"
 
-#: ../src/dialogs.py:3159
+#: ../src/dialogs.py:3196
 msgid "Choose Image"
 msgstr "Wybierz obrazek"
 
-#: ../src/dialogs.py:3177
+#: ../src/dialogs.py:3214
 msgid "Images"
 msgstr "Obrazki"
 
-#: ../src/dialogs.py:3242
+#: ../src/dialogs.py:3279
 #, python-format
 msgid "When %s becomes:"
 msgstr "Gdy %s ma status:"
 
-#: ../src/dialogs.py:3244
+#: ../src/dialogs.py:3281
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr "Dodaję specjalne powiadomienia dla %s"
 
 #. # means number
-#: ../src/dialogs.py:3313
+#: ../src/dialogs.py:3350
 msgid "#"
 msgstr "Nr"
 
-#: ../src/dialogs.py:3319
+#: ../src/dialogs.py:3356
 msgid "Condition"
 msgstr "Warunek"
 
-#: ../src/dialogs.py:3437
+#: ../src/dialogs.py:3474
 msgid "when I am "
 msgstr "kiedy mam "
 
-#: ../src/dialogs.py:3909
+#: ../src/dialogs.py:3946
 #, python-format
 msgid ""
 "Your chat session with <b>%(jid)s</b> is encrypted.\n"
@@ -7014,19 +7007,19 @@ msgstr ""
 "\n"
 "This session's Short Authentication String is <b>%(sas)s</b>."
 
-#: ../src/dialogs.py:3913
+#: ../src/dialogs.py:3950
 msgid "You have already verified this contact's identity."
 msgstr "Już zweryfikowałeś tożsamość tego kontaktu."
 
-#: ../src/dialogs.py:3919 ../src/dialogs.py:4006
+#: ../src/dialogs.py:3956 ../src/dialogs.py:4043
 msgid "Contact's identity verified"
 msgstr "Tożsamość rozmówcy zweryfikowana"
 
-#: ../src/dialogs.py:3927
+#: ../src/dialogs.py:3964
 msgid "Verify again..."
 msgstr "Ponowna weryfikacja..."
 
-#: ../src/dialogs.py:3932
+#: ../src/dialogs.py:3969
 msgid ""
 "To be certain that <b>only</b> the expected person can read your messages or "
 "send you messages, you need to verify their identity by clicking the button "
@@ -7036,19 +7029,19 @@ msgstr ""
 "wiadomości lub wysyłać wiadomości do ciebie, powinieneś zweryfikować ich "
 "tożsamość poprzez kliknięcie przycisku poniżej."
 
-#: ../src/dialogs.py:3935 ../src/dialogs.py:3987 ../src/dialogs.py:4000
+#: ../src/dialogs.py:3972 ../src/dialogs.py:4024 ../src/dialogs.py:4037
 msgid "Contact's identity NOT verified"
 msgstr "Tożsamość rozmówcy NIE zweryfikowana"
 
-#: ../src/dialogs.py:3942
+#: ../src/dialogs.py:3979
 msgid "Verify..."
 msgstr "Weryfikowanie..."
 
-#: ../src/dialogs.py:3954
+#: ../src/dialogs.py:3991
 msgid "Have you verified the contact's identity?"
 msgstr "Czy zweryfikowałeś/zweryfikowałaś tożsamość zdalnego rozmówcy?"
 
-#: ../src/dialogs.py:3955
+#: ../src/dialogs.py:3992
 #, python-format
 msgid ""
 "To prevent talking to an unknown person, you should speak to <b>%(jid)s</b> "
@@ -7062,23 +7055,23 @@ msgstr ""
 "zobaczy ten sam Short Authentication String (SAS) jak ty.\n"
 "Tej sesji Short Authentication String to <b>%(sas)s</b>."
 
-#: ../src/dialogs.py:3956
+#: ../src/dialogs.py:3993
 msgid "Did you talk to the remote contact and verify the SAS?"
 msgstr "Czy rozmawiałeś(aś) ze zdalnym rozmówcą i zweryfikowałeś(aś) SAS?"
 
-#: ../src/dialogs.py:3988
+#: ../src/dialogs.py:4025
 #, python-format
 msgid "The contact's key (%s) <b>does not match</b> the key assigned in Gajim."
 msgstr ""
 "Klucz kontaktu (%s) <b>nie pasuje</b> do klucza przypisanego w Gajimie."
 
-#: ../src/dialogs.py:3994
+#: ../src/dialogs.py:4031
 msgid "No GPG key is assigned to this contact. So you cannot encrypt messages."
 msgstr ""
 "Nie ma klucza GPG przypisanego do tego kontaktu. Więc nie możesz szyfrować "
 "wiadomości do niego, używając GPG."
 
-#: ../src/dialogs.py:4001
+#: ../src/dialogs.py:4038
 msgid ""
 "GPG key is assigned to this contact, but <b>you do not trust his key</b>, so "
 "message <b>cannot</b> be encrypted. Use your GPG client to trust this key."
@@ -7087,7 +7080,7 @@ msgstr ""
 "klucza</b>, więc wiadomość <b>nie będzie</b> odszyfrowana. Użyj twojego "
 "klienta GPG, aby importować klucz."
 
-#: ../src/dialogs.py:4007
+#: ../src/dialogs.py:4044
 msgid ""
 "GPG Key is assigned to this contact, and you trust his key, so messages will "
 "be encrypted."
@@ -7203,9 +7196,8 @@ msgid "_Unsubscribe"
 msgstr "_Cofnij autoryzację"
 
 #: ../src/features_window.py:45
-#, fuzzy
 msgid "SSL certificat validation"
-msgstr "Błąd certyfikatu SSL"
+msgstr "Sprawdzanie certyfikatu SSL"
 
 #: ../src/features_window.py:46
 msgid ""
@@ -7237,9 +7229,8 @@ msgid "Requires pybonjour (http://o2s.csail.mit.edu/o2s-wiki/pybonjour)."
 msgstr "Wymaga pybonjour (http://o2s.csail.mit.edu/o2s-wiki/pybonjour)"
 
 #: ../src/features_window.py:53
-#, fuzzy
 msgid "Command line"
-msgstr "Polecenia: %s"
+msgstr "Linia poleceń"
 
 #: ../src/features_window.py:54
 msgid "A script to control Gajim via commandline."
@@ -7257,12 +7248,10 @@ msgid "Feature not available under Windows."
 msgstr "Funkcjonalność niedostępna dla systemu Windows."
 
 #: ../src/features_window.py:57
-#, fuzzy
 msgid "OpenGPG message encryption"
 msgstr "Szyfrowanie OpenPGP"
 
 #: ../src/features_window.py:58
-#, fuzzy
 msgid "Encrypting chat messages with gpg keys."
 msgstr "Szyfrowanie wiadomości kluczami GPG."
 
@@ -7271,7 +7260,6 @@ msgid "Requires gpg and python-GnuPGInterface."
 msgstr "Wymaga GPG oraz python-GnuPGInterface."
 
 #: ../src/features_window.py:61
-#, fuzzy
 msgid "Network-manager"
 msgstr "Menedżer sieci"
 
@@ -7298,9 +7286,8 @@ msgid "Requires python-gnome2."
 msgstr "Wymaga python-gnome2."
 
 #: ../src/features_window.py:69
-#, fuzzy
 msgid "Password encryption"
-msgstr "Hasło do pokoju"
+msgstr "Hasło"
 
 #: ../src/features_window.py:70
 msgid "Passwords can be stored securely and not just in plaintext."
@@ -7335,12 +7322,10 @@ msgid "Spellchecking of composed messages."
 msgstr "Zwraca uwagę na błędy w wysyłanych wiadomościach."
 
 #: ../src/features_window.py:79
-#, fuzzy
 msgid "Requires libgtkspell."
-msgstr "Wymaga python-sexy"
+msgstr "Wymaga libgtkspell"
 
 #: ../src/features_window.py:81
-#, fuzzy
 msgid "Notification"
 msgstr "Powiadomienia"
 
@@ -7375,9 +7360,8 @@ msgid "Requires PyGTK >= 2.10."
 msgstr "Wymaga PyGTK >= 2.10."
 
 #: ../src/features_window.py:89
-#, fuzzy
 msgid "Automatic status"
-msgstr "_Dostosuj do statusu"
+msgstr "Automatyczny status"
 
 #: ../src/features_window.py:90
 msgid "Ability to measure idle time, in order to set auto status."
@@ -7386,12 +7370,11 @@ msgstr ""
 
 #: ../src/features_window.py:91
 msgid "Requires libxss library."
-msgstr ""
+msgstr "Wymaga biblioteki libxss."
 
 #: ../src/features_window.py:92
-#, fuzzy
 msgid "Requires python2.5."
-msgstr "Wymaga python-gnome2."
+msgstr "Wymaga python2.5"
 
 #: ../src/features_window.py:93
 msgid "LaTeX"
@@ -7418,12 +7401,10 @@ msgstr ""
 "zmienną 'use_latex' na 'True' w Zaawansowanym Edytorze Ustawień."
 
 #: ../src/features_window.py:97
-#, fuzzy
 msgid "End to End message encryption"
 msgstr "Szyfrowanie typu \"end to end\""
 
 #: ../src/features_window.py:98
-#, fuzzy
 msgid "Encrypting chat messages."
 msgstr "Szyfrowanie wysyłanych wiadomości."
 
@@ -7449,7 +7430,7 @@ msgstr "Wymaga python-docutils."
 
 #: ../src/features_window.py:105
 msgid "Banners and clickable links"
-msgstr ""
+msgstr "Banery i klikalne linki"
 
 #: ../src/features_window.py:106
 msgid "Ability to have clickable URLs in chat and groupchat window banners."
@@ -7498,7 +7479,7 @@ msgid "Sender: %s"
 msgstr "Nadawca: %s"
 
 #: ../src/filetransfers_window.py:185 ../src/filetransfers_window.py:597
-#: ../src/tooltips.py:671
+#: ../src/tooltips.py:670
 msgid "Recipient: "
 msgstr "Odbiorca: "
 
@@ -7537,7 +7518,7 @@ msgstr "Przesyłanie pliku zostało zatrzymane przez drugą osobę"
 msgid "Choose File to Send..."
 msgstr "Wybierz plik do wysłania..."
 
-#: ../src/filetransfers_window.py:268 ../src/tooltips.py:709
+#: ../src/filetransfers_window.py:268 ../src/tooltips.py:708
 msgid "Description: "
 msgstr "Opis: "
 
@@ -7632,11 +7613,11 @@ msgstr "Plik: "
 msgid "It is not possible to send empty files"
 msgstr "Nie można wysłać pustego pliku"
 
-#: ../src/filetransfers_window.py:593 ../src/tooltips.py:661
+#: ../src/filetransfers_window.py:593 ../src/tooltips.py:660
 msgid "Name: "
 msgstr "Nazwa: "
 
-#: ../src/filetransfers_window.py:595 ../src/tooltips.py:665
+#: ../src/filetransfers_window.py:595 ../src/tooltips.py:664
 msgid "Sender: "
 msgstr "Nadawca: "
 
@@ -7649,21 +7630,25 @@ msgid "Gajim needs X server to run. Quiting..."
 msgstr "Gajim wymaga do działania serwera X. Zamykanie programu..."
 
 #: ../src/gajim.py:174
-msgid "Gajim needs PyGTK 2.8 or above"
+#, fuzzy
+msgid "Gajim needs PyGTK 2.12 or above"
 msgstr "Gajim wymaga PyGTK w wersji 2.8 lub wyższej"
 
 #: ../src/gajim.py:175
-msgid "Gajim needs PyGTK 2.8 or above to run. Quiting..."
+#, fuzzy
+msgid "Gajim needs PyGTK 2.12 or above to run. Quiting..."
 msgstr ""
 "Gajim wymaga do działania PyGTK w wersji 2.8 lub wyższej. Zamykanie "
 "programu..."
 
 #: ../src/gajim.py:177
-msgid "Gajim needs GTK 2.8 or above"
+#, fuzzy
+msgid "Gajim needs GTK 2.12 or above"
 msgstr "Gajim wymaga GTK w wersji 2.8 lub wyższej"
 
 #: ../src/gajim.py:178
-msgid "Gajim needs GTK 2.8 or above to run. Quiting..."
+#, fuzzy
+msgid "Gajim needs GTK 2.12 or above to run. Quiting..."
 msgstr ""
 "Gajim wymaga do działania GTK w wersji 2.8 lub wyższej. Zamykanie programu..."
 
@@ -7726,14 +7711,13 @@ msgid "Enter GPG key passphrase for key %(keyid)s (account %(account)s)."
 msgstr "Wprowadź hasło dla klucza GPG %(keyid)s (konto %(account)s)."
 
 #: ../src/gajim.py:458
-#, fuzzy
 msgid "GPG key expired"
-msgstr "Nie ma przypisanego klucza GPG"
+msgstr "Klucz GPG stracił ważność"
 
 #: ../src/gajim.py:459
-#, fuzzy, python-format
+#, python-format
 msgid "Your GPG key has expied, you will be connected to %s without OpenPGP."
-msgstr "Zostanie połączony z %s bez obsługi OpenPGP."
+msgstr "Twój klucz GPG stracił ważność, zostaniesz połączony z %s bez OpenGPG"
 
 #. ask again
 #: ../src/gajim.py:468
@@ -7786,7 +7770,6 @@ msgid "error while sending %(message)s ( %(error)s )"
 msgstr "błąd przy wysyłaniu %(message)s ( %(error)s )"
 
 #: ../src/gajim.py:977 ../src/notify.py:527
-#, fuzzy
 msgid "Subscription request"
 msgstr "Prośba o autoryzację"
 
@@ -7813,21 +7796,20 @@ msgstr ""
 "Czy chcesz go usunąć z listy kontaktów?"
 
 #: ../src/gajim.py:1041 ../src/notify.py:529
-#, fuzzy
 msgid "Unsubscribed"
-msgstr "_Cofnij autoryzację"
+msgstr "Cofnij autoryzację"
 
 #: ../src/gajim.py:1082
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
 msgstr "Nie można ustanowić połączenia z \"%s\""
 
-#: ../src/gajim.py:1271 ../src/groupchat_control.py:1152
+#: ../src/gajim.py:1271 ../src/groupchat_control.py:1169
 #, python-format
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s występuje teraz jako %(new_nick)s"
 
-#: ../src/gajim.py:1289 ../src/groupchat_control.py:1327
+#: ../src/gajim.py:1289 ../src/groupchat_control.py:1344
 #: ../src/history_window.py:428 ../src/notify.py:251
 #, python-format
 msgid "%(nick)s is now %(status)s"
@@ -7840,7 +7822,7 @@ msgstr "%(jid)s ustawił temat na %(subject)s"
 
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
 #. Can be a message (see handle_event_gc_config_change in gajim.py)
-#: ../src/gajim.py:1420 ../src/groupchat_control.py:1112
+#: ../src/gajim.py:1420 ../src/groupchat_control.py:1129
 msgid "Any occupant is allowed to see your full JID"
 msgstr "Każdy uczestnik może zobaczyć twój pełny JID"
 
@@ -7899,33 +7881,31 @@ msgid "Your passphrase is incorrect"
 msgstr "Twoje hasło jest niepoprawne"
 
 #: ../src/gajim.py:1535
-#, fuzzy
 msgid "GPG key not trusted"
-msgstr "GPG nie nadaje się do użycia"
+msgstr "GPG nie jest zaufany"
 
 #: ../src/gajim.py:1535
-#, fuzzy
 msgid ""
 "The GPG key used to encrypt this chat is not trusted. Do you really want to "
 "encrypt this message?"
 msgstr ""
-"Nie ma klucza GPG przypisanego do tego kontaktu. Więc nie możesz szyfrować "
-"wiadomości do niego, używając GPG."
+"Klucz GPG używany do szyfrowania tej rozmowy nie jest zaufany. Czyn naprawdę "
+"chcesz zaszyfrować tą wiadomość?"
 
 #: ../src/gajim.py:1537 ../src/gajim.py:2184 ../src/gajim.py:2219
-#: ../src/groupchat_control.py:1850 ../src/message_window.py:217
-#: ../src/roster_window.py:3866
+#: ../src/groupchat_control.py:1871 ../src/message_window.py:212
+#: ../src/roster_window.py:3867
 msgid "Do _not ask me again"
 msgstr "_Nie pytaj mnie o to ponownie"
 
 #: ../src/gajim.py:1545
-#, fuzzy
 msgid ""
 "Gnome Keyring is installed but not \t\t\t\tcorrectly started (environment "
 "variable probably not \t\t\t\tcorrectly set)"
 msgstr ""
-"Menedżer bazy kluczy GNOME jest zainstalowany, ale nie został prawidłowo "
-"uruchomiony\t\t\t\t\t\t\t\t(prawodpodobnie niepoprawna zmienna środowiskowa"
+"Menedżer bazy kluczy GNOME jest zainstalowany, ale nie został \t\t\t"
+"\tprawidłowo uruchomiony(zmienna środowiskowa prawdopodobnie nie jest \t\t\t"
+"\t właściwie ustawiona)"
 
 #: ../src/gajim.py:1652
 #, python-format
@@ -8052,7 +8032,7 @@ msgid "SSL certificate error"
 msgstr "Błąd certyfikatu SSL"
 
 #: ../src/gajim.py:2150
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "It seems the SSL certificate of account %(account)s has changed or your "
 "connection is being hacked.\n"
@@ -8061,7 +8041,8 @@ msgid ""
 "\n"
 "Do you still want to connect and update the fingerprint of the certificate?"
 msgstr ""
-"Certyfikat SSL uległ zmianie lub połączenie to jest podsłuchiwane.\n"
+"Certyfikat SSL konta %(account)s uległ zmianie lub połączenie to jest "
+"podsłuchiwane.\n"
 "Poprzedni odcisk klucza: %(old)s\n"
 "Nowy odcisk klucza: %(new)s\n"
 "\n"
@@ -8123,30 +8104,30 @@ msgstr ""
 "potrzebować aktualizacji  formatu pliku emoticons.file. Aby poznać więcej "
 "szczegółów, zobacz http://trac.gajim.org/wiki/Emoticons."
 
-#: ../src/gajim.py:2779 ../src/roster_window.py:3354
+#: ../src/gajim.py:2779 ../src/roster_window.py:3355
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Nie możesz dołączyć do pokoju gdy jesteś niewidoczny"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gajim.py:3062
+#: ../src/gajim.py:3058
 msgid "Could not save your settings and preferences"
 msgstr "Nie można zapisać twoich ustawień i opcji"
 
-#: ../src/gajim.py:3159
+#: ../src/gajim.py:3155
 msgid "Bookmark already set"
 msgstr "Zakładka została już dodana"
 
-#: ../src/gajim.py:3160
+#: ../src/gajim.py:3156
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "Pokój \"%s\" jest już w Twoich zakładkach."
 
-#: ../src/gajim.py:3173
+#: ../src/gajim.py:3169
 msgid "Bookmark has been added successfully"
 msgstr "Zakładka została dodana"
 
-#: ../src/gajim.py:3174
+#: ../src/gajim.py:3170
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr "Możesz zarządzać zakładkami poprzez menu Działania w oknie kontaktów."
 
@@ -8581,133 +8562,133 @@ msgstr "Wysyłanie prywatnej wiadomości nie powiodło się"
 msgid "You are no longer in group chat \"%(room)s\" or \"%(nick)s\" has left."
 msgstr "Nie jesteś już w pokoju \"%(room)s\" lub \"%(nick)s\" opuścił go."
 
-#: ../src/groupchat_control.py:453
+#: ../src/groupchat_control.py:410
 msgid "Insert Nickname"
 msgstr "Wstaw pseudonim"
 
-#: ../src/groupchat_control.py:605
+#: ../src/groupchat_control.py:562
 msgid "Conversation with "
 msgstr "Rozmowa z"
 
-#: ../src/groupchat_control.py:607
+#: ../src/groupchat_control.py:564
 msgid "Continued conversation"
 msgstr "Kontynuacja rozmowy"
 
 #. Can be a message (see handle_event_gc_config_change in gajim.py)
-#: ../src/groupchat_control.py:1115
+#: ../src/groupchat_control.py:1132
 msgid "Room logging is enabled"
 msgstr "Zapisywanie rozmów prowadzonych w pokoju jest włączone"
 
-#: ../src/groupchat_control.py:1117
+#: ../src/groupchat_control.py:1134
 msgid "A new room has been created"
 msgstr "Został utworzony nowy pokój"
 
-#: ../src/groupchat_control.py:1120
+#: ../src/groupchat_control.py:1137
 msgid "The server has assigned or modified your roomnick"
 msgstr ""
 "Serwer przypisał ci lub zmodyfikował twój pseudonim używany w tym pokoju"
 
 #. do not print 'kicked by None'
-#: ../src/groupchat_control.py:1126
+#: ../src/groupchat_control.py:1143
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s został wyrzucony: %(reason)s"
 
-#: ../src/groupchat_control.py:1130
+#: ../src/groupchat_control.py:1147
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s został wyrzucony przez %(who)s: %(reason)s"
 
 #. do not print 'banned by None'
-#: ../src/groupchat_control.py:1137
+#: ../src/groupchat_control.py:1154
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s został zabanowany: %(reason)s"
 
-#: ../src/groupchat_control.py:1141
+#: ../src/groupchat_control.py:1158
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s został zabanowany przez %(who)s: %(reason)s"
 
-#: ../src/groupchat_control.py:1150
+#: ../src/groupchat_control.py:1167
 #, python-format
 msgid "You are now known as %s"
 msgstr "Występujesz teraz jako %s"
 
-#: ../src/groupchat_control.py:1188 ../src/groupchat_control.py:1192
-#: ../src/groupchat_control.py:1197
+#: ../src/groupchat_control.py:1205 ../src/groupchat_control.py:1209
+#: ../src/groupchat_control.py:1214
 #, python-format
 msgid "%(nick)s has been removed from the room (%(reason)s)"
 msgstr "%(nick)s został wyrzucony z pokoju: %(reason)s"
 
-#: ../src/groupchat_control.py:1189
+#: ../src/groupchat_control.py:1206
 msgid "affiliation changed"
 msgstr "afiliacja została zmieniona "
 
-#: ../src/groupchat_control.py:1194
+#: ../src/groupchat_control.py:1211
 msgid "room configuration changed to members-only"
 msgstr "konfiguracja pokoju zmieniona na 'tylko dla członków'"
 
-#: ../src/groupchat_control.py:1199
+#: ../src/groupchat_control.py:1216
 msgid "system shutdown"
 msgstr "zamknięcie systemu"
 
-#: ../src/groupchat_control.py:1268
+#: ../src/groupchat_control.py:1285
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s by %(actor)s"
 msgstr ""
 "** Grupa użytkownika %(nick)s została ustawiona na %(affiliation)s przez %"
 "(actor)s"
 
-#: ../src/groupchat_control.py:1272
+#: ../src/groupchat_control.py:1289
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s"
 msgstr "** Grupa użytkownika %(nick)s została ustawiona na %(affiliation)s"
 
-#: ../src/groupchat_control.py:1287
+#: ../src/groupchat_control.py:1304
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s by %(actor)s"
 msgstr ""
 "** Uprawnienia użytkownika %(nick)s zostały zmieniona na %(role)s przez %"
 "(actor)s"
 
-#: ../src/groupchat_control.py:1291
+#: ../src/groupchat_control.py:1308
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s"
 msgstr "** Uprawnienia użytkownika %(nick)s została zmienione na %(role)s"
 
-#: ../src/groupchat_control.py:1320
+#: ../src/groupchat_control.py:1337
 #, python-format
 msgid "%s has left"
 msgstr "%s wychodzi"
 
-#: ../src/groupchat_control.py:1325
+#: ../src/groupchat_control.py:1342
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s dołączył do pokoju"
 
 #. Invalid Nickname
 #. invalid char
-#: ../src/groupchat_control.py:1440 ../src/groupchat_control.py:1724
+#: ../src/groupchat_control.py:1457 ../src/groupchat_control.py:1741
 msgid "Invalid nickname"
 msgstr "Niepoprawny pseudonim"
 
-#: ../src/groupchat_control.py:1465 ../src/groupchat_control.py:1483
-#: ../src/groupchat_control.py:1569 ../src/groupchat_control.py:1586
+#: ../src/groupchat_control.py:1482 ../src/groupchat_control.py:1500
+#: ../src/groupchat_control.py:1586 ../src/groupchat_control.py:1603
 #, python-format
 msgid "Nickname not found: %s"
 msgstr "Pseudonim nie został odnaleziony: %s"
 
-#: ../src/groupchat_control.py:1499
+#: ../src/groupchat_control.py:1516
 msgid "This group chat has no subject"
 msgstr "Ten pokój nie ma tematu"
 
-#: ../src/groupchat_control.py:1511
+#: ../src/groupchat_control.py:1528
 #, python-format
 msgid "Invited %(contact_jid)s to %(room_jid)s."
 msgstr "%(contact_jid)s zaproszony do %(room_jid)s."
 
-#: ../src/groupchat_control.py:1647
+#: ../src/groupchat_control.py:1664
 #, python-format
 msgid ""
 "Usage: /%s <nickname|JID> [reason], bans the JID from the group chat. The "
@@ -8719,14 +8700,14 @@ msgstr ""
 "może zostać zmieniony o ile nie zawiera \"@\". Jeśli JID jest obecnie w "
 "pokoju, to zostanie z niego wyrzucony. NIE toleruje spacji w pseudonimie."
 
-#: ../src/groupchat_control.py:1654
+#: ../src/groupchat_control.py:1671
 #, python-format
 msgid ""
 "Usage: /%s <nickname>, opens a private chat window with the specified "
 "occupant."
 msgstr "Użycie: /%s <pseudonim>, otwiera okno prywatnej rozmowy z tą osobą."
 
-#: ../src/groupchat_control.py:1660
+#: ../src/groupchat_control.py:1677
 #, python-format
 msgid ""
 "Usage: /%s [reason], closes the current window or tab, displaying reason if "
@@ -8735,7 +8716,7 @@ msgstr ""
 "Użycie: /%s [powód] zamyka aktualne okno lub kartę i wyświetla powóc, jeśli "
 "został podany."
 
-#: ../src/groupchat_control.py:1666
+#: ../src/groupchat_control.py:1683
 #, python-format
 msgid ""
 "Usage: /%s <JID> [reason], invites JID to the current group chat, optionally "
@@ -8744,7 +8725,7 @@ msgstr ""
 "Użycie: /%s <JID> [powód] zaprasza JID do aktualnego pokoju, opcjonalnie "
 "wyświetlając powód."
 
-#: ../src/groupchat_control.py:1670
+#: ../src/groupchat_control.py:1687
 #, python-format
 msgid ""
 "Usage: /%s <room>@<server>[/nickname], offers to join room@server optionally "
@@ -8753,7 +8734,7 @@ msgstr ""
 "Użycie: /%s <pokój>@<serwer>[/pseudonim] oferuje przyłączenie się do "
 "pokój@serwer opcjonalnie z wykorzystaniem podanego psedonimu."
 
-#: ../src/groupchat_control.py:1674
+#: ../src/groupchat_control.py:1691
 #, python-format
 msgid ""
 "Usage: /%s <nickname> [reason], removes the occupant specified by nickname "
@@ -8763,7 +8744,7 @@ msgstr ""
 "Użycie: /%s <pseudonim> [powód] usuwa podaną poprzez pseudonim osobę z "
 "pokoju i opcjonalnie wyświetla powód. NIE wspiera spacji w pseudonimie."
 
-#: ../src/groupchat_control.py:1683
+#: ../src/groupchat_control.py:1700
 #, python-format
 msgid ""
 "Usage: /%s <nickname> [message], opens a private message window and sends "
@@ -8772,61 +8753,61 @@ msgstr ""
 "Użycie: /%s <pseudonim> [wiadomość] otwiera okno prywatnej wiadomości i "
 "wysyła ją do osoby o takim pseudonimie."
 
-#: ../src/groupchat_control.py:1688
+#: ../src/groupchat_control.py:1705
 #, python-format
 msgid "Usage: /%s <nickname>, changes your nickname in current group chat."
 msgstr "Użycie: /%s <pseudonim> zmienia twój pseudonim w aktualnym pokoju."
 
-#: ../src/groupchat_control.py:1692
+#: ../src/groupchat_control.py:1709
 #, python-format
 msgid "Usage: /%s , display the names of group chat occupants."
 msgstr "Użycie: /%s , wyświetla osoby obecne w danym pokoju."
 
-#: ../src/groupchat_control.py:1696
+#: ../src/groupchat_control.py:1713
 #, python-format
 msgid "Usage: /%s [topic], displays or updates the current group chat topic."
 msgstr "Użycie: /%s [temat] wyświetla lub aktualizuje temat aktualnego pokoju."
 
-#: ../src/groupchat_control.py:1699
+#: ../src/groupchat_control.py:1716
 #, python-format
 msgid ""
 "Usage: /%s <message>, sends a message without looking for other commands."
 msgstr ""
 "Użycie: /%s <wiadomość> wysyła wiadomość bez sprawdzania innych poleceń."
 
-#: ../src/groupchat_control.py:1844
+#: ../src/groupchat_control.py:1865
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "Czy jesteś pewien, że chcesz opuścić pokój \"%s\"?"
 
-#: ../src/groupchat_control.py:1846
+#: ../src/groupchat_control.py:1867
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr "Jeśli zamkniesz to okno, połączenie z tym pokojem zostanie zerwane."
 
-#: ../src/groupchat_control.py:1883
+#: ../src/groupchat_control.py:1904
 msgid "Changing Subject"
 msgstr "Zmiana tematu"
 
-#: ../src/groupchat_control.py:1884
+#: ../src/groupchat_control.py:1905
 msgid "Please specify the new subject:"
 msgstr "Wpisz nowy temat:"
 
-#: ../src/groupchat_control.py:1888
+#: ../src/groupchat_control.py:1909
 msgid "Changing Nickname"
 msgstr "Zmiana pseudonimu"
 
-#: ../src/groupchat_control.py:1889
+#: ../src/groupchat_control.py:1910
 msgid "Please specify the new nickname you want to use:"
 msgstr "Wpisz nowy pseudonim, którego chcesz używać:"
 
 #. Ask for a reason
-#: ../src/groupchat_control.py:1916
+#: ../src/groupchat_control.py:1937
 #, python-format
 msgid "Destroying %s"
 msgstr "Usuwam pokój %s"
 
-#: ../src/groupchat_control.py:1917
+#: ../src/groupchat_control.py:1938
 msgid ""
 "You are going to definitively destroy this room.\n"
 "You may specify a reason below:"
@@ -8834,22 +8815,22 @@ msgstr ""
 "Zamierzasz całkowicie usunąć ten pokój. \n"
 "Poniżej możesz podać powód swojej decyzji:"
 
-#: ../src/groupchat_control.py:1919
+#: ../src/groupchat_control.py:1940
 msgid "You may also enter an alternate venue:"
 msgstr "Możesz również podać alternatywne miejsce spotkań:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:2090
+#: ../src/groupchat_control.py:2111
 #, python-format
 msgid "Kicking %s"
 msgstr "Wyrzuć %s"
 
-#: ../src/groupchat_control.py:2091 ../src/groupchat_control.py:2382
+#: ../src/groupchat_control.py:2112 ../src/groupchat_control.py:2403
 msgid "You may specify a reason below:"
 msgstr "Podaj przyczynę:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:2381
+#: ../src/groupchat_control.py:2402
 #, python-format
 msgid "Banning %s"
 msgstr "Zabanuj %s"
@@ -9024,37 +9005,35 @@ msgstr "Obecny status: %(status)s: %(status_msg)s"
 msgid "Status is now: %(status)s"
 msgstr "Obecny status: %(status)s"
 
-#: ../src/htmltextview.py:564 ../src/htmltextview.py:575
+#: ../src/htmltextview.py:528 ../src/htmltextview.py:539
 msgid "Timeout loading image"
 msgstr "Przekroczono czas ładowania obrazu"
 
-#: ../src/htmltextview.py:585
+#: ../src/htmltextview.py:549
 msgid "Image is too big"
 msgstr "Obraz jest za duży"
 
-#: ../src/message_window.py:215
-#, fuzzy
+#: ../src/message_window.py:210
 msgid "You are going to close several tabs"
-msgstr "Nie jesteś połączony z serwerem"
+msgstr "Ty zamierzasz zamknąć wszystkie zakładki"
 
-#: ../src/message_window.py:216
-#, fuzzy
+#: ../src/message_window.py:211
 msgid "Do you really want to close them all?"
-msgstr "Czy na pewno chcesz usunąć wybraną wiadomość?"
+msgstr "Czy na pewno chcesz zamknąć wszystkie?"
 
-#: ../src/message_window.py:457
+#: ../src/message_window.py:448
 msgid "Chats"
 msgstr "Rozmowy"
 
-#: ../src/message_window.py:459
+#: ../src/message_window.py:450
 msgid "Group Chats"
 msgstr "Czaty"
 
-#: ../src/message_window.py:461
+#: ../src/message_window.py:452
 msgid "Private Chats"
 msgstr "Rozmowy prywatne"
 
-#: ../src/message_window.py:467
+#: ../src/message_window.py:458
 msgid "Messages"
 msgstr "Wiadomości"
 
@@ -9107,7 +9086,6 @@ msgid "New Message from %(nickname)s"
 msgstr "Nowa wiadomość od %(nickname)s"
 
 #: ../src/notify.py:567
-#, fuzzy
 msgid "Ignore"
 msgstr "Ignoruj"
 
@@ -9119,18 +9097,18 @@ msgstr "Ogólne"
 msgid "Retrieving profile..."
 msgstr "Pobieranie profilu..."
 
-#: ../src/profile_window.py:108 ../src/roster_window.py:2795
+#: ../src/profile_window.py:108 ../src/roster_window.py:2799
 msgid "File is empty"
 msgstr "Plik jest pusty"
 
-#: ../src/profile_window.py:111 ../src/roster_window.py:2798
+#: ../src/profile_window.py:111 ../src/roster_window.py:2802
 msgid "File does not exist"
 msgstr "Plik nie istnieje."
 
 #. keep identation
 #. unknown format
 #: ../src/profile_window.py:125 ../src/profile_window.py:141
-#: ../src/roster_window.py:2800 ../src/roster_window.py:2811
+#: ../src/roster_window.py:2804 ../src/roster_window.py:2815
 msgid "Could not load image"
 msgstr "Nie można załadować obrazka."
 
@@ -9199,11 +9177,11 @@ msgstr "Teraz \"%s\" zawsze będzie cię widział jako rozłączonego."
 msgid "GPG is not usable"
 msgstr "GPG nie nadaje się do użycia"
 
-#: ../src/roster_window.py:2128 ../src/roster_window.py:3297
+#: ../src/roster_window.py:2130 ../src/roster_window.py:3299
 msgid "You are participating in one or more group chats"
 msgstr "Znajdujesz się w jednym lub kilku pokojach"
 
-#: ../src/roster_window.py:2129 ../src/roster_window.py:3298
+#: ../src/roster_window.py:2131 ../src/roster_window.py:3300
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
@@ -9211,15 +9189,15 @@ msgstr ""
 "Zmiana statusu na Niewidoczny spowoduje rozłaczeniem z tym pokojami. Czy na "
 "pewno chcesz stać się niewidoczny?"
 
-#: ../src/roster_window.py:2155
+#: ../src/roster_window.py:2157
 msgid "desync'ed"
 msgstr "rozsynchronizowany"
 
-#: ../src/roster_window.py:2294 ../src/roster_window.py:2531
+#: ../src/roster_window.py:2298 ../src/roster_window.py:2535
 msgid "You have unread messages"
 msgstr "Masz nieprzeczytane wiadomości"
 
-#: ../src/roster_window.py:2295
+#: ../src/roster_window.py:2299
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled and contact is in your roster."
@@ -9227,16 +9205,16 @@ msgstr ""
 "Wiadomości będą dostępne do odczytania ich później, tylko wtedy, gdy masz "
 "włączoną obsługę historii."
 
-#: ../src/roster_window.py:2532
+#: ../src/roster_window.py:2536
 msgid "You must read them before removing this transport."
 msgstr "Przejrzyj je wszystkie przed usunięciem tego transportu."
 
-#: ../src/roster_window.py:2535
+#: ../src/roster_window.py:2539
 #, python-format
 msgid "Transport \"%s\" will be removed"
 msgstr "Transport \"%s\" zostanie usunięty"
 
-#: ../src/roster_window.py:2536
+#: ../src/roster_window.py:2540
 msgid ""
 "You will no longer be able to send and receive messages from contacts using "
 "this transport."
@@ -9244,11 +9222,11 @@ msgstr ""
 "Nie będziesz już mógł wysyłać i odbierać wiadomości od kontaktów za pomocą "
 "tego transportu."
 
-#: ../src/roster_window.py:2539
+#: ../src/roster_window.py:2543
 msgid "Transports will be removed"
 msgstr "Transporty zostaną usunięte"
 
-#: ../src/roster_window.py:2544
+#: ../src/roster_window.py:2548
 #, python-format
 msgid ""
 "You will no longer be able to send and receive messages to contacts from "
@@ -9258,56 +9236,57 @@ msgstr ""
 "następujących transportów: %s"
 
 #. it's jid
-#: ../src/roster_window.py:2675
+#: ../src/roster_window.py:2679
 msgid "Rename Contact"
 msgstr "Zmień nazwę dla kontaktu"
 
-#: ../src/roster_window.py:2676
+#: ../src/roster_window.py:2680
 #, python-format
 msgid "Enter a new nickname for contact %s"
 msgstr "Wpisz nazwę dla kontaktu %s."
 
-#: ../src/roster_window.py:2683
+#: ../src/roster_window.py:2687
 msgid "Rename Group"
 msgstr "Zmień nazwę grupy"
 
-#: ../src/roster_window.py:2684
+#: ../src/roster_window.py:2688
 #, python-format
 msgid "Enter a new name for group %s"
 msgstr "Wpisz nową nazwę dla grupy %s."
 
-#: ../src/roster_window.py:2741
+#: ../src/roster_window.py:2745
 msgid "Remove Group"
 msgstr "Usuń grupę"
 
-#: ../src/roster_window.py:2742
+#: ../src/roster_window.py:2746
 #, python-format
 msgid "Do you want to remove group %s from the roster?"
 msgstr "Czy chcesz usunąć z rostera grupę %s?"
 
-#: ../src/roster_window.py:2743
+#: ../src/roster_window.py:2747
 msgid "Also remove all contacts in this group from your roster"
 msgstr "Usuń z rostera wszystkie kontakty należące do tej grupy"
 
-#: ../src/roster_window.py:2782
+#: ../src/roster_window.py:2786
 msgid "Assign OpenPGP Key"
 msgstr "Przypisz klucz OpenPGP"
 
-#: ../src/roster_window.py:2783
+#: ../src/roster_window.py:2787
 msgid "Select a key to apply to the contact"
 msgstr "Wybierz klucz, który chcesz przypisać kontaktowi"
 
-#: ../src/roster_window.py:3135
+#: ../src/roster_window.py:3137
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr "Kontakt \"%s\" zostanie usunięty z Twojej listy kontaktów"
 
-#: ../src/roster_window.py:3137
+#: ../src/roster_window.py:3139
 #, python-format
 msgid "You are about to remove \"%(name)s\" (%(jid)s) from your roster.\n"
 msgstr ""
+"Ty zamierzasz usunąć \"%(name)s\" (%(jid)s) ze swojej listy kontaktów.\n"
 
-#: ../src/roster_window.py:3142
+#: ../src/roster_window.py:3144
 msgid ""
 "By removing this contact you also remove authorization resulting in him or "
 "her always seeing you as offline."
@@ -9316,11 +9295,11 @@ msgstr ""
 "będzie zawsze widział Cię jako rozłączonego."
 
 #. Contact is not in roster
-#: ../src/roster_window.py:3148
+#: ../src/roster_window.py:3150
 msgid "Do you want to continue?"
 msgstr "Czy chcesz kontynuować?"
 
-#: ../src/roster_window.py:3151
+#: ../src/roster_window.py:3153
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
@@ -9328,16 +9307,16 @@ msgstr ""
 "Usuwając kontakt usuniesz również autoryzację, co spowoduje, że kontakt "
 "będzie zawsze widział Cię jako rozłączonego."
 
-#: ../src/roster_window.py:3154
+#: ../src/roster_window.py:3156
 msgid "I want this contact to know my status after removal"
 msgstr "Chcę żeby po usunięciu ten kontakt znał mój status"
 
 #. several contact to remove at the same time
-#: ../src/roster_window.py:3158
+#: ../src/roster_window.py:3160
 msgid "Contacts will be removed from your roster"
 msgstr "Kontakty zostaną usunięte z twojej listy kontaktów"
 
-#: ../src/roster_window.py:3163
+#: ../src/roster_window.py:3165
 #, python-format
 msgid ""
 "By removing these contacts:%s\n"
@@ -9347,19 +9326,19 @@ msgstr ""
 "cofniesz im również autoryzację, co spowoduje, że będziesz dla nich widoczny "
 "jako rozłączony."
 
-#: ../src/roster_window.py:3218
+#: ../src/roster_window.py:3221
 msgid "No account available"
 msgstr "Żadne konto nie jest dostępne"
 
-#: ../src/roster_window.py:3219
+#: ../src/roster_window.py:3222
 msgid "You must create an account before you can chat with other contacts."
 msgstr "Aby rozmawiać z innymi osobami musisz założyć konto Jabbera."
 
-#: ../src/roster_window.py:3773
+#: ../src/roster_window.py:3774
 msgid "Metacontacts storage not supported by your server"
 msgstr "Twój serwer uniemożliwia przechowywanie metakontaktów"
 
-#: ../src/roster_window.py:3775
+#: ../src/roster_window.py:3776
 msgid ""
 "Your server does not support storing metacontacts information. So those "
 "information will not be saved on next reconnection."
@@ -9367,12 +9346,12 @@ msgstr ""
 "Twój serwer uniemożliwia przechowywanie metakontaktów. Informacja ta nie "
 "zostanie przywrócona podczas następnego połączenia."
 
-#: ../src/roster_window.py:3860
+#: ../src/roster_window.py:3861
 msgid ""
 "You are about to create a metacontact. Are you sure you want to continue?"
 msgstr "Chcesz utworzyć metakontakt. Kontynuować?"
 
-#: ../src/roster_window.py:3862
+#: ../src/roster_window.py:3863
 msgid ""
 "Metacontacts are a way to regroup several contacts in one line. Generally it "
 "is used when the same person has several Jabber accounts or transport "
@@ -9382,11 +9361,11 @@ msgstr ""
 "rostera. Używa się ich przede wszystkim wtedy, gdy jedna osoba ma kilka kont "
 "Jabbera lub zarejestrowana jest w kilku transportach."
 
-#: ../src/roster_window.py:3975
+#: ../src/roster_window.py:3976
 msgid "Invalid file URI:"
 msgstr "Niepoprawny adres pliku:"
 
-#: ../src/roster_window.py:3986
+#: ../src/roster_window.py:3987
 #, python-format
 msgid "Do you want to send this file to %s:"
 msgid_plural "Do you want to send these files to %s:"
@@ -9399,115 +9378,115 @@ msgstr[2] "Czy chcesz wysłać te pliki do %s:"
 #. for chat_with
 #. for single message
 #. join gc
-#: ../src/roster_window.py:4663 ../src/roster_window.py:4734
-#: ../src/roster_window.py:4743 ../src/systray.py:216 ../src/systray.py:263
+#: ../src/roster_window.py:4664 ../src/roster_window.py:4735
+#: ../src/roster_window.py:4744 ../src/systray.py:216 ../src/systray.py:263
 #: ../src/systray.py:269
 #, python-format
 msgid "using account %s"
 msgstr "używając konta %s"
 
 #. add
-#: ../src/roster_window.py:4750
+#: ../src/roster_window.py:4751
 #, python-format
 msgid "to %s account"
 msgstr "do konta %s"
 
 #. disco
-#: ../src/roster_window.py:4755
+#: ../src/roster_window.py:4756
 #, python-format
 msgid "using %s account"
 msgstr "używając konta %s"
 
-#: ../src/roster_window.py:4792 ../src/systray.py:279
+#: ../src/roster_window.py:4793 ../src/systray.py:279
 msgid "_Manage Bookmarks..."
 msgstr "_Zarządzaj zakładkami..."
 
 #. profile, avatar
-#: ../src/roster_window.py:4812
+#: ../src/roster_window.py:4813
 #, python-format
 msgid "of account %s"
 msgstr "dla konta %s"
 
-#: ../src/roster_window.py:4852
+#: ../src/roster_window.py:4853
 #, python-format
 msgid "for account %s"
 msgstr "dla konta %s"
 
-#: ../src/roster_window.py:4914 ../src/roster_window.py:5015
+#: ../src/roster_window.py:4915 ../src/roster_window.py:5016
 msgid "_Change Status Message"
 msgstr "_Zmień opis statusu"
 
-#: ../src/roster_window.py:4941
+#: ../src/roster_window.py:4942
 msgid "Publish Tune"
 msgstr "_Publikuj Utwór"
 
-#: ../src/roster_window.py:4949
+#: ../src/roster_window.py:4950
 msgid "Configure Services..."
 msgstr "Konfiguruj Usługi..."
 
-#: ../src/roster_window.py:5103
+#: ../src/roster_window.py:5104
 msgid "_Maximize All"
 msgstr "_Maksymalizuj wszystkie"
 
 #. Send Group Message
-#: ../src/roster_window.py:5111 ../src/roster_window.py:5637
+#: ../src/roster_window.py:5112 ../src/roster_window.py:5638
 msgid "Send Group M_essage"
 msgstr "_Wyślij wiadomość grupową"
 
-#: ../src/roster_window.py:5119
+#: ../src/roster_window.py:5120
 msgid "To all users"
 msgstr "Do wszystkich użytkowników"
 
-#: ../src/roster_window.py:5123
+#: ../src/roster_window.py:5124
 msgid "To all online users"
 msgstr "Do wszystkich połączonych użytkowników"
 
-#: ../src/roster_window.py:5534
+#: ../src/roster_window.py:5535
 msgid "I would like to add you to my roster"
 msgstr "Chciałbym dodać Cię do listy kontaktów"
 
 #. Manage Transport submenu
-#: ../src/roster_window.py:5657
+#: ../src/roster_window.py:5658
 msgid "_Manage Contacts"
 msgstr "_Zarządzaj kontaktami"
 
 #. Send single message
-#: ../src/roster_window.py:5718
+#: ../src/roster_window.py:5719
 msgid "Send Single Message"
 msgstr "Wyślij wiadomość"
 
 #. Manage Transport submenu
-#: ../src/roster_window.py:5774
+#: ../src/roster_window.py:5775
 msgid "_Manage Transport"
 msgstr "_Zarządzaj transportami"
 
 #. Modify Transport
-#: ../src/roster_window.py:5782
+#: ../src/roster_window.py:5783
 msgid "_Modify Transport"
 msgstr "_Modyfikuj transport"
 
-#: ../src/roster_window.py:5856
+#: ../src/roster_window.py:5857
 msgid "_Maximize"
 msgstr "_Maksymalizuj"
 
-#: ../src/roster_window.py:5863
+#: ../src/roster_window.py:5864
 msgid "_Disconnect"
 msgstr "_Rozłącz"
 
-#: ../src/roster_window.py:5943
+#: ../src/roster_window.py:5944
 msgid "_New Group Chat"
 msgstr "_Nowa rozmowa grupowa"
 
 #. History manager
-#: ../src/roster_window.py:6056
+#: ../src/roster_window.py:6057
 msgid "History Manager"
 msgstr "Historia rozmów"
 
-#: ../src/roster_window.py:6065
+#: ../src/roster_window.py:6066
 msgid "_Join New Group Chat"
 msgstr "_Dołącz do pokoju"
 
-#: ../src/roster_window.py:6275
+#: ../src/roster_window.py:6276
 msgid "Change Status Message..."
 msgstr "Zmień opis statusu..."
 
@@ -9572,112 +9551,112 @@ msgstr ""
 msgid "_Change Status Message..."
 msgstr "_Zmień opis statusu..."
 
-#: ../src/systray.py:294
+#: ../src/systray.py:293
 msgid "Hide this menu"
 msgstr "Ukryj to menu"
 
-#: ../src/tooltips.py:327 ../src/tooltips.py:521
+#: ../src/tooltips.py:326 ../src/tooltips.py:520
 msgid "Jabber ID: "
 msgstr "Jabber ID:"
 
-#: ../src/tooltips.py:330 ../src/tooltips.py:525
+#: ../src/tooltips.py:329 ../src/tooltips.py:524
 msgid "Resource: "
 msgstr "Zasoby: "
 
-#: ../src/tooltips.py:335
+#: ../src/tooltips.py:334
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr "%(owner_or_admin_or_member)s tego pokoju"
 
-#: ../src/tooltips.py:432
+#: ../src/tooltips.py:431
 msgid " [blocked]"
 msgstr " [zablokowany]"
 
-#: ../src/tooltips.py:436
+#: ../src/tooltips.py:435
 msgid " [minimized]"
 msgstr " [zminimalizowany]"
 
-#: ../src/tooltips.py:451 ../src/tooltips.py:706
+#: ../src/tooltips.py:450 ../src/tooltips.py:705
 msgid "Status: "
 msgstr "Status: "
 
-#: ../src/tooltips.py:481
+#: ../src/tooltips.py:480
 #, python-format
 msgid "Last status: %s"
 msgstr "Ostatni status %s"
 
-#: ../src/tooltips.py:483
+#: ../src/tooltips.py:482
 #, python-format
 msgid " since %s"
 msgstr " od %s"
 
-#: ../src/tooltips.py:501
+#: ../src/tooltips.py:500
 msgid "Connected"
 msgstr "Połączony"
 
-#: ../src/tooltips.py:503
+#: ../src/tooltips.py:502
 msgid "Disconnected"
 msgstr "Rozłączony"
 
 #. ('both' is the normal sub so we don't show it)
-#: ../src/tooltips.py:532
+#: ../src/tooltips.py:531
 msgid "Subscription: "
 msgstr "Autoryzacja: "
 
-#: ../src/tooltips.py:542
+#: ../src/tooltips.py:541
 msgid "OpenPGP: "
 msgstr "OpenPGP: "
 
-#: ../src/tooltips.py:638
+#: ../src/tooltips.py:637
 msgid "Tune:"
 msgstr "Utwór"
 
-#: ../src/tooltips.py:664
+#: ../src/tooltips.py:663
 msgid "Download"
 msgstr "Pobieranie"
 
-#: ../src/tooltips.py:670
+#: ../src/tooltips.py:669
 msgid "Upload"
 msgstr "Prześlij"
 
-#: ../src/tooltips.py:677
+#: ../src/tooltips.py:676
 msgid "Type: "
 msgstr "Typ: "
 
-#: ../src/tooltips.py:681
+#: ../src/tooltips.py:680
 msgid "Transferred: "
 msgstr "Przesłane: "
 
-#: ../src/tooltips.py:684 ../src/tooltips.py:705
+#: ../src/tooltips.py:683 ../src/tooltips.py:704
 msgid "Not started"
 msgstr "Nie włączony"
 
-#: ../src/tooltips.py:688
+#: ../src/tooltips.py:687
 msgid "Stopped"
 msgstr "Zatrzymany"
 
-#: ../src/tooltips.py:690 ../src/tooltips.py:693
+#: ../src/tooltips.py:689 ../src/tooltips.py:692
 msgid "Completed"
 msgstr "Ukończony"
 
-#: ../src/tooltips.py:697
+#: ../src/tooltips.py:696
 msgid "?transfer status:Paused"
 msgstr "?status transferu:wstrzymany"
 
 #. stalled is not paused. it is like 'frozen' it stopped alone
-#: ../src/tooltips.py:701
+#: ../src/tooltips.py:700
 msgid "Stalled"
 msgstr "Wygaszony"
 
-#: ../src/tooltips.py:703
+#: ../src/tooltips.py:702
 msgid "Transferring"
 msgstr "Przesyłanie"
 
-#: ../src/tooltips.py:739
+#: ../src/tooltips.py:738
 msgid "This service has not yet responded with detailed information"
 msgstr "Ta usługa nie odesłała jeszcze szczegółowych informacji"
 
-#: ../src/tooltips.py:742
+#: ../src/tooltips.py:741
 msgid ""
 "This service could not respond with detailed information.\n"
 "It is most likely legacy or broken"
@@ -9685,29 +9664,28 @@ msgstr ""
 "Ta usługa nie była w stanie odesłać szczegółowych informacji.\n"
 "Prawdopodobnie została zamknięta lub jest zepsuta"
 
-#: ../src/vcard.py:246
+#: ../src/vcard.py:241
 msgid "?Client:Unknown"
 msgstr "?Klient: Nieznany"
 
-#: ../src/vcard.py:248
+#: ../src/vcard.py:243
 msgid "?OS:Unknown"
 msgstr "?System operacyjny: Nieznany"
 
-#: ../src/vcard.py:269
-#, fuzzy
+#: ../src/vcard.py:264
 msgid "?Time:Unknown"
-msgstr "?Klient: Nieznany"
+msgstr "?Czas: Nieznany"
 
-#: ../src/vcard.py:293 ../src/vcard.py:303 ../src/vcard.py:524
+#: ../src/vcard.py:288 ../src/vcard.py:298 ../src/vcard.py:514
 #, python-format
 msgid "since %s"
 msgstr "od %s"
 
-#: ../src/vcard.py:332
+#: ../src/vcard.py:327
 msgid "<b>Affiliation:</b>"
 msgstr "<b>Grupy:</b>"
 
-#: ../src/vcard.py:340
+#: ../src/vcard.py:335
 msgid ""
 "This contact is interested in your presence information, but you are not "
 "interested in his/her presence"
@@ -9715,7 +9693,7 @@ msgstr ""
 "Ten kontakt jest zaintersowany informacjami o twoim statusie, ale ty nie "
 "interesujesz się jego/jej statusem."
 
-#: ../src/vcard.py:342
+#: ../src/vcard.py:337
 msgid ""
 "You are interested in the contact's presence information, but he/she is not "
 "interested in yours"
@@ -9723,12 +9701,12 @@ msgstr ""
 "Jesteś zainteresowany informacjami o statusie tego kontaktu, ale on/ona nie "
 "jest zainteresowana twoim."
 
-#: ../src/vcard.py:344
+#: ../src/vcard.py:339
 msgid "You and the contact are interested in each other's presence information"
 msgstr "Oboje jesteście zaintersowani nawzajem swoimi informacjami o statusie"
 
 #. None
-#: ../src/vcard.py:346
+#: ../src/vcard.py:341
 msgid ""
 "You are not interested in the contact's presence, and neither he/she is "
 "interested in yours"
@@ -9736,17 +9714,22 @@ msgstr ""
 "Nie jesteś zainteresowany informacjami o statusie kontaktu i on również nie "
 "jest zainteresowany twoim"
 
-#: ../src/vcard.py:353
+#: ../src/vcard.py:348
 msgid "You are waiting contact's answer about your subscription request"
 msgstr "Oczekujesz na odpowiedź kontaktu dotyczącą prośby o autoryzację"
 
-#: ../src/vcard.py:355
+#: ../src/vcard.py:350
 msgid "There is no pending subscription request."
 msgstr "Nie ma oczekujących żądań autoryzacji."
 
-#: ../src/vcard.py:360 ../src/vcard.py:415 ../src/vcard.py:549
+#: ../src/vcard.py:355 ../src/vcard.py:410 ../src/vcard.py:539
 msgid " resource with priority "
 msgstr " zasób o wysokim priorytecie "
+
+#~ msgid ""
+#~ "%(title)s by %(artist)s\n"
+#~ "from %(source)s"
+#~ msgstr "\"%(title)s\" w wykonaniu %(artist)sz %(source)s"
 
 #~ msgid "Click to see features (like MSN, ICQ transports) of jabber servers"
 #~ msgstr ""
