@@ -205,6 +205,9 @@ class IdleQueue:
 
 		# when there is a timeout it executes obj.read_timeout()
 		# timeout is not removed automatically!
+		# {fd1: {timeout1: func1, timeout2: func2}}
+		# timout are unique (timeout1 must be != timeout2)
+		# If func1 is None, read_time function is called
 		self.read_timeouts = {}
 
 		# cb, which are executed after XX sec., alarms are removed automatically
@@ -247,39 +250,57 @@ class IdleQueue:
 		else: 
 			return False
 
-	def remove_timeout(self, fd):
+	def remove_timeout(self, fd, timeout=None):
 		''' Removes the read timeout '''
 		log.info('read timeout removed for fd %s' % fd)
 		if fd in self.read_timeouts:
-			del(self.read_timeouts[fd])
+			if timeout:
+				if timeout in self.read_timeouts[fd]:
+					del(self.read_timeouts[fd][timeout])
+				if len(self.read_timeouts[fd]) == 0:
+					del(self.read_timeouts[fd])
+			else:
+				del(self.read_timeouts[fd])
 
-	def set_read_timeout(self, fd, seconds):
+	def set_read_timeout(self, fd, seconds, func=None):
 		'''
 		Sets a new timeout. If it is not removed after specified seconds,
-		obj.read_timeout() will be called.
+		func or obj.read_timeout() will be called.
 
-		A filedescriptor fd can have only one timeout.
+		A filedescriptor fd can have several timeouts.
 		'''
-		log.info('read timeout set for fd %s on %s seconds' % (fd, seconds))
+		log_txt = 'read timeout set for fd %s on %s seconds' % (fd, seconds)
+		if func:
+			log_txt += ' with function ' + str(func)
+		log.info(log_txt)
 		timeout = self.current_time() + seconds
-		self.read_timeouts[fd] = timeout
+		if fd in self.read_timeouts:
+			self.read_timeouts[fd][timeout] = func
+		else:
+			self.read_timeouts[fd] = {timeout: func}
 
 	def _check_time_events(self):
 		'''
-		Execute and remove alarm callbacks and execute read_timeout() for plugged
-		objects if specified time has ellapsed.
+		Execute and remove alarm callbacks and execute func() or read_timeout()
+		for plugged objects if specified time has ellapsed.
 		'''
 		log.info('check time evs')
 		current_time = self.current_time()
 
-		for fd, timeout in self.read_timeouts.items():
-			if timeout > current_time:
-				continue
-			if fd in self.queue:
-				log.debug('Calling read_timeout for fd %s' % fd) 
-				self.queue[fd].read_timeout()
-			else:
+		for fd, timeouts in self.read_timeouts.items():
+			if fd not in self.queue:
 				self.remove_timeout(fd)
+				continue
+			for timeout, func in timeouts.items():
+				if timeout > current_time:
+					continue
+				if func:
+					log.debug('Calling %s for fd %s' % (func, fd))
+					func()
+				else:
+					log.debug('Calling read_timeout for fd %s' % fd) 
+					self.queue[fd].read_timeout()
+				self.remove_timeout(fd, timeout)
 
 		times = self.alarms.keys()
 		for alarm_time in times:

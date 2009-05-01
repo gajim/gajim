@@ -127,13 +127,15 @@ class NonBlockingTransport(PlugIn):
 		# type of used ssl lib (if any) will be assigned to this member var 
 		self.ssl_lib = None
 		self._exported_methods=[self.onreceive, self.set_send_timeout,
-			 self.set_timeout, self.remove_timeout, self.start_disconnect]
+			self.set_send_timeout2, self.set_timeout, self.remove_timeout,
+			self.start_disconnect]
 
 		# time to wait for SOME stanza to come and then send keepalive
 		self.sendtimeout = 0
 
 		# in case we want to something different than sending keepalives
 		self.on_timeout = None
+		self.on_timeout2 = None
 
 	def plugin(self, owner):
 		owner.Connection = self
@@ -218,14 +220,25 @@ class NonBlockingTransport(PlugIn):
 			self.on_timeout()
 		self.renew_send_timeout()
 
+	def read_timeout2(self): 
+		''' called when there's no response from server in defined timeout '''
+		if self.on_timeout2:
+			self.on_timeout2()
+		self.renew_send_timeout2()
+
 	def renew_send_timeout(self):
 		if self.on_timeout and self.sendtimeout > 0:
 			self.set_timeout(self.sendtimeout)
-		else:
-			self.remove_timeout()
+
+	def renew_send_timeout2(self):
+		if self.on_timeout2 and self.sendtimeout2 > 0:
+			self.set_timeout2(self.sendtimeout2)
 
 	def set_timeout(self, timeout):
 		self.idlequeue.set_read_timeout(self.fd, timeout)
+
+	def set_timeout2(self, timeout2):
+		self.idlequeue.set_read_timeout(self.fd, timeout2, self.read_timeout2)
 
 	def get_fd(self):
 		pass
@@ -239,6 +252,13 @@ class NonBlockingTransport(PlugIn):
 			self.on_timeout = on_timeout
 		else:
 			self.on_timeout = None
+
+	def set_send_timeout2(self, timeout2, on_timeout2):
+		self.sendtimeout2 = timeout2
+		if self.sendtimeout2 > 0:
+			self.on_timeout2 = on_timeout2
+		else:
+			self.on_timeout2 = None
 
 	# FIXME: where and why does this need to be called
 	def start_disconnect(self):
@@ -541,7 +561,9 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 			return
 
 		# we have received some bytes, stop the timeout!
+		self.remove_timeout()
 		self.renew_send_timeout()
+		self.renew_send_timeout2()
 		# pass received data to owner
 		if self.on_receive:
 			self.raise_event(DATA_RECEIVED, received)

@@ -800,6 +800,11 @@ class Connection(ConnectionHandlers):
 			return
 		common.xmpp.features_nb.getPrivacyLists(self.connection)
 
+	def send_keepalive(self):
+		# nothing received for the last foo seconds
+		if self.connection:
+			self.connection.send(' ')
+
 	def sendPing(self, pingTo=None):
 		'''Send XMPP Ping (XEP-0199) request. If pingTo is not set, ping is sent
 		to server to detect connection failure at application level.'''
@@ -1018,7 +1023,8 @@ class Connection(ConnectionHandlers):
 		self.connection = con
 		if not self.connection:
 			return
-		self.connection.set_send_timeout(self.keepalives, self.sendPing)
+		self.connection.set_send_timeout(self.keepalives, self.send_keepalive)
+		self.connection.set_send_timeout2(self.keepalives * 2, self.sendPing)
 		self.connection.onreceive(None)
 		iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')
 		id_ = self.connection.getAnID()
