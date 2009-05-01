@@ -92,13 +92,6 @@ class Config:
 		'autoxa_message': [ opt_str, _('$S (Not available as a result of being idle more than $T min)'), _('$S will be replaced by current status message, $T by autoxa time.') ],
 		'ask_online_status': [ opt_bool, False ],
 		'ask_offline_status': [ opt_bool, False ],
-		'last_status_msg_online': [ opt_str, '' ],
-		'last_status_msg_chat': [ opt_str, '' ],
-		'last_status_msg_away': [ opt_str, '' ],
-		'last_status_msg_xa': [ opt_str, '' ],
-		'last_status_msg_dnd': [ opt_str, '' ],
-		'last_status_msg_invisible': [ opt_str, '' ],
-		'last_status_msg_offline': [ opt_str, '' ],
 		'trayicon': [opt_str, 'always', _("When to show systray icon. Can be 'never', 'on_event', 'always'."), True],
 		'iconset': [ opt_str, DEFAULT_ICONSET, '', True ],
 		'mood_iconset': [ opt_str, DEFAULT_MOOD_ICONSET, '', True ],
@@ -444,6 +437,13 @@ class Config:
 		_('Working'): [ _("I'm working."), 'working', 'other', '', '', '' ],
 		_('Phone'): [ _("I'm on the phone."), 'talking', 'on_the_phone', '', '', '' ],
 		_('Out'): [ _("I'm out enjoying life."), 'relaxing', 'going_out', '', '', '' ],
+		'_last_online': ['', '', '', '', '', ''],
+		'_last_chat': ['', '', '', '', '', ''],
+		'_last_away': ['', '', '', '', '', ''],
+		'_last_xa': ['', '', '', '', '', ''],
+		'_last_dnd': ['', '', '', '', '', ''],
+		'_last_invisible': ['', '', '', '', '', ''],
+		'_last_offline': ['', '', '', '', '', ''],
 	}
 
 	defaultstatusmsg_default = {

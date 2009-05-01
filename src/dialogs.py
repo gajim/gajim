@@ -523,9 +523,10 @@ class ChangeMoodDialog:
 		self.window.destroy()
 
 class ChangeStatusMessageDialog:
-	def __init__(self, on_response, show=None, pep_dict=None):
+	def __init__(self, on_response, show=None, show_pep=True):
 		self.show = show
-		self.pep_dict = pep_dict
+		self.pep_dict = {}
+		self.show_pep = show_pep
 		self.on_response = on_response
 		self.xml = gtkgui_helpers.get_glade('change_status_message_dialog.glade')
 		self.window = self.xml.get_widget('change_status_message_dialog')
@@ -534,7 +535,18 @@ class ChangeStatusMessageDialog:
 		if show:
 			uf_show = helpers.get_uf_show(show)
 			self.title_text = _('%s Status Message') % uf_show
-			msg = gajim.config.get('last_status_msg_' + show)
+			msg = gajim.config.get_per('statusmsg', '_last_' + self.show,
+				'message')
+			self.pep_dict['activity'] = gajim.config.get_per('statusmsg',
+				'_last_' + self.show, 'activity')
+			self.pep_dict['subactivity'] = gajim.config.get_per('statusmsg',
+				'_last_' + self.show, 'subactivity')
+			self.pep_dict['activity_text'] = gajim.config.get_per('statusmsg',
+				'_last_' + self.show, 'activity_text')
+			self.pep_dict['mood'] = gajim.config.get_per('statusmsg',
+				'_last_' + self.show, 'mood')
+			self.pep_dict['mood_text'] = gajim.config.get_per('statusmsg',
+				'_last_' + self.show, 'mood_text')
 		else:
 			self.title_text = _('Status Message')
 		self.window.set_title(self.title_text)
@@ -551,6 +563,8 @@ class ChangeStatusMessageDialog:
 		# have an empty string selectable, so user can clear msg
 		self.preset_messages_dict = {'': ['', '', '', '', '', '']}
 		for msg_name in gajim.config.get_per('statusmsg'):
+			if msg_name.startswith('_last_'):
+				continue
 			opts = []
 			for opt in ['message', 'activity', 'subactivity', 'activity_text',
 			'mood', 'mood_text']:
@@ -572,7 +586,7 @@ class ChangeStatusMessageDialog:
 		for msg_name in sorted_keys_list:
 			self.message_liststore.append((msg_name,))
 
-		if pep_dict:
+		if show_pep:
 			self.draw_activity()
 			self.draw_mood()
 		else:
@@ -651,7 +665,19 @@ class ChangeStatusMessageDialog:
 			message = helpers.remove_invalid_xml_chars(message)
 			msg = helpers.to_one_line(message)
 			if self.show:
-				gajim.config.set('last_status_msg_' + self.show, msg)
+				gajim.config.set_per('statusmsg', '_last_' + self.show, 'message',
+					msg)
+				if self.show_pep:
+					gajim.config.set_per('statusmsg', '_last_' + self.show,
+						'activity', self.pep_dict['activity'])
+					gajim.config.set_per('statusmsg', '_last_' + self.show,
+						'subactivity', self.pep_dict['subactivity'])
+					gajim.config.set_per('statusmsg', '_last_' + self.show,
+						'activity_text', self.pep_dict['activity_text'])
+					gajim.config.set_per('statusmsg', '_last_' + self.show, 'mood',
+						self.pep_dict['mood'])
+					gajim.config.set_per('statusmsg', '_last_' + self.show,
+						'mood_text', self.pep_dict['mood_text'])
 		else:
 			message = None # user pressed Cancel button or X wm button
 		self.window.destroy()

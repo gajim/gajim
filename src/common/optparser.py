@@ -193,6 +193,8 @@ class OptionsParser:
 			self.update_config_to_01212()
 		if old < [0, 12, 1, 3] and new >= [0, 12, 1, 3]:
 			self.update_config_to_01213()
+		if old < [0, 12, 1, 4] and new >= [0, 12, 1, 4]:
+			self.update_config_to_01214()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -646,5 +648,13 @@ class OptionsParser:
 				gajim.config.set_per('statusmsg', msg_name, 'mood_text',
 					msgs[msg_name][5])
 		gajim.config.set('version', '0.12.1.3')
+
+	def update_config_to_01214(self):
+		for status in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
+		'offline']:
+			gajim.config.add_per('statusmsg', '_last_' + status)
+			gajim.config.set_per('statusmsg', '_last_' + status, 'message',
+				self.old_values['last_status_msg_' + status])
+		gajim.config.set('version', '0.12.1.4')
 
 # vim: se ts=3:
