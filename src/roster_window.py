@@ -2102,7 +2102,7 @@ class RosterWindow:
 		if show in gajim.config.get_per('defaultstatusmsg'):
 			if gajim.config.get_per('defaultstatusmsg', show, 'enabled'):
 				on_response(gajim.config.get_per('defaultstatusmsg', show,
-					'message'), pep_dict)
+					'message'), None)
 				return
 		if not always_ask and ((show == 'online' and not gajim.config.get(
 		'ask_online_status')) or (show in ('offline', 'invisible') and not \
