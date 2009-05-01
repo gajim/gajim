@@ -387,7 +387,7 @@ def on_exit():
 	if os.path.exists(pid_filename):
 		os.remove(pid_filename)
 	# Shutdown GUI and save config
-	gajim.interface.roster.quit_gtkgui_interface()
+	gajim.interface.roster.prepare_quit()
 	if sys.platform == 'darwin':
 		try:
 			osx.shutdown()

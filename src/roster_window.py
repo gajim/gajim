@@ -2206,9 +2206,7 @@ class RosterWindow:
 			self.on_quit_request()
 		return True # do NOT destroy the window
 
-	def quit_gtkgui_interface(self):
-		'''When we quit the gtk interface :
-		tell that to the core and exit gtk'''
+	def prepare_quit(self):
 		msgwin_width_adjust = 0
 
 		# in case show_roster_on_start is False and roster is never shown
@@ -2239,6 +2237,10 @@ class RosterWindow:
 			self.close_all(account)
 		if gajim.interface.systray_enabled:
 			gajim.interface.hide_systray()
+
+	def quit_gtkgui_interface(self):
+		'''When we quit the gtk interface : exit gtk'''
+		self.prepare_quit()
 		gtk.main_quit()
 
 	def on_quit_request(self, widget=None):
