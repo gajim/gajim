@@ -424,8 +424,8 @@ def on_exit():
 	# delete pid file on normal exit
 	if os.path.exists(pid_filename):
 		os.remove(pid_filename)
-	# Save config
-	gajim.interface.save_config()
+	# Shutdown GUI and save config
+	gajim.interface.roster.prepare_quit()
 	if sys.platform == 'darwin':
 		try:
 			import osx
@@ -3486,6 +3486,7 @@ class Interface:
 				except Exception:
 					pass
 		gobject.timeout_add_seconds(5, remote_init)
+		self.create_ipython_window()
 
 if __name__ == '__main__':
 	def sigint_cb(num, stack):

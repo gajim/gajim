@@ -2426,13 +2426,13 @@ class XMLConsoleWindow:
 		self.tagIn = buffer.create_tag('incoming')
 		color = gajim.config.get('inmsgcolor')
 		self.tagIn.set_property('foreground', color)
-		self.tagInComment = buffer_.create_tag('in_comment')
+		self.tagInComment = buffer.create_tag('in_comment')
 		self.tagInComment.set_property('foreground', color)
 
 		self.tagOut = buffer.create_tag('outgoing')
 		color = gajim.config.get('outmsgcolor')
 		self.tagOut.set_property('foreground', color)
-		self.tagOutComment = buffer_.create_tag('out_comment')
+		self.tagOutComment = buffer.create_tag('out_comment')
 		self.tagOutComment.set_property('foreground', color)
 
 		self.enabled = False

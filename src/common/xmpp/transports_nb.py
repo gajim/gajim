@@ -243,8 +243,9 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		IdleObject.__init__(self)
 		PlugIn.__init__(self)
 		self.DBG_LINE='socket'
-		self._exported_methods=[self.send, self.disconnect, self.onreceive, self.set_send_timeout, 
-			self.start_disconnect, self.set_timeout, self.remove_timeout]
+		self._exported_methods=[self.send, self.disconnect, self.onreceive,
+			self.set_send_timeout, self.set_send_timeout2, self.start_disconnect,
+			self.set_timeout, self.remove_timeout]
 		self._server = server
 		self._hostfqdn = server[0]
 		self.on_connect  = on_connect
@@ -267,9 +268,11 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		
 		# time to wait for SOME stanza to come and then send keepalive
 		self.sendtimeout = 0
+		self.sendtimeout2 = 0
 		
 		# in case we want to something different than sending keepalives
 		self.on_timeout = None
+		self.on_timeout2 = None
 		
 		# writable, readable  -  keep state of the last pluged flags
 		# This prevents replug of same object with the same flags
@@ -288,7 +291,7 @@ class NonBlockingTcp(PlugIn, IdleObject):
 		if self.connect(self._server) is False:
 			return False
 		return True
-		
+
 	def read_timeout(self):
 		if self.state == 0:
 			self.idlequeue.unplug_idle(self.fd)
@@ -298,6 +301,11 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			if self.on_timeout:
 				self.on_timeout()
 			self.renew_send_timeout()
+
+	def read_timeout2(self):
+		if self.on_timeout2:
+			self.on_timeout2()
+		self.renew_send_timeout2()
 
 	def connect(self,server=None, proxy = None, secure = None):
 		''' Try to establish connection. '''
@@ -408,6 +416,10 @@ class NonBlockingTcp(PlugIn, IdleObject):
 	def set_timeout(self, timeout):
 		if self.state >= 0 and self.fd > 0:
 			self.idlequeue.set_read_timeout(self.fd, timeout)
+
+	def set_timeout2(self, timeout2):
+		if self.state >= 0 and self.fd > 0:
+			self.idlequeue.set_read_timeout(self.fd, timeout2, self.read_timeout2)
 	
 	def remove_timeout(self):
 		if self.fd:
@@ -493,7 +505,9 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			return
 
 		# we have received some bites, stop the timeout!
+		self.remove_timeout()
 		self.renew_send_timeout()
+		self.renew_send_timeout2()
 		if self.on_receive:
 			if received.strip():
 				log.info("Got: %s", received)
@@ -643,13 +657,22 @@ class NonBlockingTcp(PlugIn, IdleObject):
 			self.on_timeout = on_timeout
 		else:
 			self.on_timeout = None
-	
+
+	def set_send_timeout2(self, timeout2, on_timeout2):
+		self.sendtimeout2 = timeout2
+		if self.sendtimeout2 > 0:
+			self.on_timeout2 = on_timeout2
+		else:
+			self.on_timeout2 = None
+
 	def renew_send_timeout(self):
 		if self.on_timeout and self.sendtimeout > 0:
 			self.set_timeout(self.sendtimeout)
-		else:
-			self.remove_timeout()
-	
+
+	def renew_send_timeout2(self):
+		if self.on_timeout2 and self.sendtimeout2 > 0:
+			self.set_timeout2(self.sendtimeout2)
+
 	def getHost(self):
 		''' Return the 'host' value that is connection is [will be] made to.'''
 		return self._server[0]

@@ -146,9 +146,15 @@ class Connection(ConnectionHandlers):
 				'hostname': socket.gethostname()
 			})
 		if gajim.config.get_per('accounts', self.name, 'keep_alives_enabled'):
-			self.keepalives = gajim.config.get_per('accounts', self.name,'keep_alive_every_foo_secs')
+			self.keepalives = gajim.config.get_per('accounts', self.name,
+				'keep_alive_every_foo_secs')
 		else:
 			self.keepalives = 0
+		if gajim.config.get_per('accounts', self.name, 'ping_alives_enabled'):
+			self.pingalives = gajim.config.get_per('accounts', self.name,
+				'ping_alive_every_foo_secs')
+		else:
+			self.pingalives = 0
 		self.privacy_rules_supported = False
 		self.blocked_list = []
 		self.blocked_contacts = []
@@ -760,6 +766,11 @@ class Connection(ConnectionHandlers):
 			return
 		common.xmpp.features_nb.getPrivacyLists(self.connection)
 
+	def send_keepalive(self):
+		# nothing received for the last foo seconds
+		if self.connection:
+			self.connection.send(' ')
+
 	def sendPing(self, pingTo=None):
 		'''Send XMPP Ping (XEP-0199) request. If pingTo is not set, ping is sent
 		to server to detect connection failure at application level.'''
@@ -787,8 +798,8 @@ class Connection(ConnectionHandlers):
 			self.connection.SendAndCallForResponse(iq, _on_response)
 		else:
 			self.connection.send(iq)
-			gajim.idlequeue.set_alarm(self.check_keepalive, gajim.config.get_per(
-				'accounts', self.name, 'time_for_keep_alive_answer'))
+			gajim.idlequeue.set_alarm(self.check_pingalive, gajim.config.get_per(
+				'accounts', self.name, 'time_for_ping_alive_answer'))
 
 	def get_active_default_lists(self):
 		if not self.connection:
@@ -978,7 +989,8 @@ class Connection(ConnectionHandlers):
 		self.connection = con
 		if not self.connection:
 			return
-		self.connection.set_send_timeout(self.keepalives, self.sendPing)
+		self.connection.set_send_timeout(self.keepalives, self.send_keepalive)
+		self.connection.set_send_timeout2(self.pingalives, self.sendPing)
 		self.connection.onreceive(None)
 		iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')
 		id = self.connection.getAnID()
@@ -1798,7 +1810,7 @@ class Connection(ConnectionHandlers):
 			c.setTagData('reason', reason)
 		self.connection.send(message)
 
-	def check_keepalive(self):
+	def check_pingalive(self):
 		if self.awaiting_xmpp_ping_id:
 			# We haven't got the pong in time, disco and reconnect
 			self._disconnectedReconnCB()

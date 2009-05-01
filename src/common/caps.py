@@ -229,7 +229,11 @@ class ConnectionCaps(object):
 		# for disco... so that disco will learn how to interpret
 		# these caps
 		pm_ctrl = None
-		jid = helpers.get_full_jid_from_iq(presence)
+		try:
+			jid = helpers.get_full_jid_from_iq(presence)
+		except:
+			# Bad jid
+			return
 		contact = gajim.contacts.get_contact_from_full_jid(self.name, jid)
 		if contact is None:
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)

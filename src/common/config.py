@@ -304,11 +304,13 @@ class Config:
 			'no_log_for': [ opt_str, '' ],
 			'minimized_gc': [ opt_str, '' ],
 			'attached_gpg_keys': [ opt_str, '' ],
-			'keep_alives_enabled': [ opt_bool, True],
+			'keep_alives_enabled': [ opt_bool, True, _('Whitespace sent after inactivity')],
+			'ping_alives_enabled': [ opt_bool, True, _('XMPP ping sent after inactivity')],
 			# send keepalive every N seconds of inactivity
 			'keep_alive_every_foo_secs': [ opt_int, 55 ],
-			'time_for_keep_alive_answer': [ opt_int, 30, _('How many seconds to wait for the answer of keepalive packet before we try to reconnect.') ],
-			# try for 2 minutes before giving up (aka. timeout after those seconds)
+			'ping_alive_every_foo_secs': [ opt_int, 120 ],
+			'time_for_ping_alive_answer': [ opt_int, 60, _('How many seconds to wait for the answer of ping alive packet before we try to reconnect.') ],
+			# try for 1 minutes before giving up (aka. timeout after those seconds)
 			'try_connecting_for_foo_secs': [ opt_int, 60 ],
 			'http_auth': [opt_str, 'ask'], # yes, no, ask
 			'dont_ack_subscription': [opt_bool, False, _('Jabberd2 workaround')],
