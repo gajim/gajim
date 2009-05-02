@@ -3486,7 +3486,6 @@ class Interface:
 				except Exception:
 					pass
 		gobject.timeout_add_seconds(5, remote_init)
-		self.create_ipython_window()
 
 if __name__ == '__main__':
 	def sigint_cb(num, stack):
