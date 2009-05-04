@@ -96,7 +96,7 @@ class SASL(PlugIn):
 	def __init__(self,username,password, on_sasl):
 		PlugIn.__init__(self)
 		self.username=username
-		self.password=password
+		self.password=password or ''
 		self.on_sasl = on_sasl
 		self.realm = None
 	def plugin(self,owner):
@@ -284,7 +284,7 @@ class NonBlockingNonSASL(PlugIn):
 		PlugIn.__init__(self)
 		self.DBG_LINE ='gen_auth'
 		self.user = user
-		self.password= password
+		self.password= password or ''
 		self.resource = resource
 		self.on_auth = on_auth
 

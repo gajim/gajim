@@ -35,7 +35,7 @@ class NonSASL(PlugIn):
         PlugIn.__init__(self)
         self.DBG_LINE='gen_auth'
         self.user=user
-        self.password=password
+        self.password=password or ''
         self.resource=resource
 
     def plugin(self,owner):
@@ -99,7 +99,7 @@ class SASL(PlugIn):
     def __init__(self,username,password):
         PlugIn.__init__(self)
         self.username=username
-        self.password=password
+        self.password=password or ''
 
     def plugin(self,owner):
         if 'version' not in self._owner.Dispatcher.Stream._document_attrs: self.startsasl='not-supported'
