@@ -208,10 +208,14 @@ class CapsCache(object):
 		#	 likely implement a fallback to disco (could be disabled
 		#	 for mobile users who pay for traffic)
 		if contact.caps_hash_method == 'old':
-			features = self[(contact.caps_hash_method, contact.caps_node + '#' + \
-				contact.caps_hash)].features
+			if not contact.caps_node or not contact.caps_hash:
+				features = []
+			else:
+				features = self[('old', contact.caps_node + '#' + \
+					contact.caps_hash)].features
 		else:
-			features = self[(contact.caps_hash_method, contact.caps_hash)].features
+			features = self[(contact.caps_hash_method, contact.caps_hash)].\
+				features
 		if feature in features or features == []:
 			return True
 
