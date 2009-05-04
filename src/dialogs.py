@@ -2355,10 +2355,17 @@ class SingleMessageWindow:
 		else:
 			sender_list = [self.to_entry.get_text().decode('utf-8')]
 
+		jid_jist = []
 		for to_whom_jid in sender_list:
 			if to_whom_jid in self.completion_dict:
 				to_whom_jid = self.completion_dict[to_whom_jid].jid
+			try:
+				jid_jist.append(helpers.parse_jid(to_whom_jid))
+			except helpers.InvalidFormat, e:
+				ErrorDialog(_('Invalid JID'), e[0])
+				return
 
+		for to_whom_jid in jid_jist:
 			subject = self.subject_entry.get_text().decode('utf-8')
 			begin, end = self.message_tv_buffer.get_bounds()
 			message = self.message_tv_buffer.get_text(begin, end).decode('utf-8')
