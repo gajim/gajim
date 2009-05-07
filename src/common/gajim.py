@@ -160,7 +160,7 @@ try:
 except ImportError:
 	try:
 		import pybonjour
-	except ImportError:
+	except: # Linux raises ImportError, Windows raises WindowsError
 		HAVE_ZEROCONF = False
 
 HAVE_PYCRYPTO = True
