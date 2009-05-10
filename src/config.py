@@ -1026,6 +1026,8 @@ class PreferencesWindow:
 		model.clear()
 		preset_status = []
 		for msg_name in gajim.config.get_per('statusmsg'):
+			if msg_name.startswith('_last_'):
+				continue
 			preset_status.append(msg_name)
 		preset_status.sort()
 		for msg_name in preset_status:
