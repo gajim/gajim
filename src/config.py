@@ -1748,6 +1748,8 @@ class AccountsWindow:
 			remove(account)
 
 	def on_rename_button_clicked(self, widget):
+		if not self.current_account:
+			return
 		enable = gajim.config.get('enable_zeroconf')
 		if (self.current_account != gajim.ZEROCONF_ACC_NAME or enable) and \
 		gajim.connections[self.current_account].connected != 0:
