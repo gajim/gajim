@@ -3529,7 +3529,10 @@ if __name__ == '__main__':
 	Interface()
 
 	try:
-		gtk.gdk.threads_init()
+		if os.name != 'nt':
+			# This makes Gajim unusable under windows, and threads are used only
+			# for GPG, so not under windows
+			gtk.gdk.threads_init()
 		gtk.main()
 	except KeyboardInterrupt:
 		print >> sys.stderr, 'KeyboardInterrupt'
