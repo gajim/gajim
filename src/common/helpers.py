@@ -773,11 +773,52 @@ def play_sound(event):
 	path_to_soundfile = gajim.config.get_per('soundevents', event, 'path')
 	play_sound_file(path_to_soundfile)
 
+def check_soundfile_path(file,
+								 dirs=(gajim.gajimpaths.root, gajim.DATA_DIR)):
+	'''Check if the sound file exists.
+	:param file: the file to check, absolute or relative to 'dirs' path
+	:param dirs: list of knows paths to fallback if the file doesn't exists
+					 (eg: ~/.gajim/sounds/, DATADIR/sounds...).
+	:return      the path to file or None if it doesn't exists.'''
+	if not file:
+		return None
+	elif os.path.exists(file):
+		return file
+
+	for d in dirs:
+		d = os.path.join(d, 'sounds', file)
+		if os.path.exists(d):
+			return d
+	return None
+
+def strip_soundfile_path(file,
+								 dirs=(gajim.gajimpaths.root, gajim.DATA_DIR),
+								 abs=True):
+	'''Remove knowns paths from a sound file:
+	Filechooser returns absolute path. If path is a known fallback path, we remove it.
+	So config have no hardcoded path	to DATA_DIR and text in textfield is shorther.
+	param: file: the filename to strip.
+	param: dirs: list of knowns paths from which the filename should be stripped.
+	param:  abs: force absolute path on dirs
+	'''
+	if not file:
+		return None
+
+	name = os.path.basename(file)
+	for d in dirs:
+		d = os.path.join(d, 'sounds', name)
+		if abs:
+			d = os.path.abspath(d)
+		if file == d:
+			return name
+	return file
+
 def play_sound_file(path_to_soundfile):
 	if path_to_soundfile == 'beep':
 		exec_command('beep')
 		return
-	if path_to_soundfile is None or not os.path.exists(path_to_soundfile):
+	path_to_soundfile = check_soundfile_path(path_to_soundfile)
+	if path_to_soundfile is None:
 		return
 	if sys.platform == 'darwin':
 		try:

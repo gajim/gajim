@@ -30,6 +30,7 @@ import os
 import locale
 import re
 from common import gajim
+from common import helpers
 
 import exceptions
 try:
@@ -195,6 +196,8 @@ class OptionsParser:
 			self.update_config_to_01213()
 		if old < [0, 12, 1, 4] and new >= [0, 12, 1, 4]:
 			self.update_config_to_01214()
+		if old < [0, 12, 1, 5] and new >= [0, 12, 1, 5]:
+			self.update_config_to_01215()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -656,5 +659,16 @@ class OptionsParser:
 			gajim.config.set_per('statusmsg', '_last_' + status, 'message',
 				self.old_values['last_status_msg_' + status])
 		gajim.config.set('version', '0.12.1.4')
+
+	def update_config_to_01215(self):
+		'''Remove hardcoded ../data/sounds from config'''
+		dirs = ('../data', gajim.gajimpaths.root, gajim.DATA_DIR)
+		for evt in gajim.config.get_per('soundevents'):
+			path = gajim.config.get_per('soundevents', evt ,'path')
+			# absolute and relative passes are necessary
+			path = helpers.strip_soundfile_path(path, dirs, abs=False)
+			path = helpers.strip_soundfile_path(path, dirs, abs=True)
+			gajim.config.set_per('soundevents', evt, 'path', path)
+		gajim.config.set('version', '0.12.1.5')
 
 # vim: se ts=3:

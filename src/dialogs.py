@@ -3165,7 +3165,10 @@ class SoundChooserDialog(FileChooserDialog):
 		self.add_filter(filter_)
 		self.set_filter(filter_)
 
+		path_to_snd_file = helpers.check_soundfile_path(path_to_snd_file)
 		if path_to_snd_file:
+			# set_filename accept only absolute path
+			path_to_snd_file = os.path.abspath(path_to_snd_file)
 			self.set_filename(path_to_snd_file)
 
 class ImageChooserDialog(FileChooserDialog):

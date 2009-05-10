@@ -457,15 +457,15 @@ class Config:
 	}
 
 	soundevents_default = {
-		'first_message_received': [ True, '../data/sounds/message1.wav' ],
-		'next_message_received_focused': [ True, '../data/sounds/message2.wav' ],
-		'next_message_received_unfocused': [ True, '../data/sounds/message2.wav' ],
-		'contact_connected': [ True, '../data/sounds/connected.wav' ],
-		'contact_disconnected': [ True, '../data/sounds/disconnected.wav' ],
-		'message_sent': [ True, '../data/sounds/sent.wav' ],
-		'muc_message_highlight': [ True, '../data/sounds/gc_message1.wav', _('Sound to play when a group chat message contains one of the words in muc_highlight_words, or when a group chat message contains your nickname.')],
-		'muc_message_received': [ False, '../data/sounds/gc_message2.wav', _('Sound to play when any MUC message arrives.') ],
-		'gmail_received': [ False, '../data/sounds/message1.wav' ],
+		'first_message_received': [ True, 'message1.wav' ],
+		'next_message_received_focused': [ True, 'message2.wav' ],
+		'next_message_received_unfocused': [ True, 'message2.wav' ],
+		'contact_connected': [ True, 'connected.wav' ],
+		'contact_disconnected': [ True, 'disconnected.wav' ],
+		'message_sent': [ True, 'sent.wav' ],
+		'muc_message_highlight': [ True, 'gc_message1.wav', _('Sound to play when a group chat message contains one of the words in muc_highlight_words, or when a group chat message contains your nickname.')],
+		'muc_message_received': [ False, 'gc_message2.wav', _('Sound to play when any MUC message arrives.') ],
+		'gmail_received': [ False, 'message1.wav' ],
 	}
 
 	themes_default = {
