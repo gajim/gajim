@@ -888,7 +888,7 @@ class EncryptedStanzaSession(StanzaSession):
 		srses = secrets.secrets().retained_secrets(self.conn.name,
 			self.jid.getStripped())
 
-		srshash = base64.b64decode(form['srshash'])
+		srshash = base64.b64decode(form.getField('srshash'))
 
 		for (secret, verified) in srses:
 			if self.hmac(secret, 'Shared Retained Secret') == srshash:
