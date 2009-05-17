@@ -886,7 +886,10 @@ class EncryptedStanzaSession(StanzaSession):
 		srses = secrets.secrets().retained_secrets(self.conn.name,
 			self.jid.getStripped())
 
-		srshash = base64.b64decode(form.getField('srshash'))
+		try:
+			srshash = base64.b64decode(form['srshash'])
+		except IndexError:
+			return
 
 		for s in srses:
 			secret = s[0]
