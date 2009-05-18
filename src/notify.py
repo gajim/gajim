@@ -544,6 +544,8 @@ class DesktopNotification:
 			self.attempt_notify()
 		else:
 			self.capabilities = self.notif.GetCapabilities()
+			if self.capabilities is None:
+				self.capabilities = ['actions']
 			self.get_version()
 
 	def attempt_notify(self):
