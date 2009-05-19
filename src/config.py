@@ -381,7 +381,7 @@ class PreferencesWindow:
 
 		# Default Status messages
 		self.default_msg_tree = self.xml.get_widget('default_msg_treeview')
-		col2 = self.default_msg_tree.rc_get_style().bg[gtk.STATE_ACTIVE]
+		col2 = self.default_msg_tree.rc_get_style().bg[gtk.STATE_ACTIVE].to_string()
 		# (status, translated_status, message, enabled)
 		model = gtk.ListStore(str, str, str, bool)
 		self.default_msg_tree.set_model(model)
