@@ -953,6 +953,10 @@ class Interface:
 		#('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
 		msg = _('error while sending %(message)s ( %(error)s )') % {
 			'message': array[2], 'error': array[1]}
+		if not array[4]:
+			# No session. This can happen when sending a message from gajim-remote
+			log.warn(msg)
+			return
 		array[4].roster_message(array[0], msg, array[3], account,
 			msg_type='error')
 
