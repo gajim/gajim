@@ -2072,6 +2072,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if ptype and not ptype in rfc_types:
 			ptype = None
 		log.debug('PresenceCB: %s' % ptype)
+		if not self.connection or self.connected < 2:
+			log.debug('account is no more connected')
+			return
 		try:
 			who = helpers.get_full_jid_from_iq(prs)
 		except Exception:
