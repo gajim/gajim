@@ -346,6 +346,8 @@ class Systray:
 
 	def handle_first_event(self):
 		account, jid, event = gajim.events.get_first_systray_event()
+		if not event:
+			return
 		gajim.interface.handle_event(account, jid, event.type_)
 
 	def on_middle_click(self):
