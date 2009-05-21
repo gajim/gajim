@@ -802,6 +802,8 @@ class ConnectionDisco:
 
 	def _DiscoverInfoCB(self, con, iq_obj):
 		gajim.log.debug('DiscoverInfoCB')
+		if not self.connection or self.connected < 2:
+			return
 		# According to XEP-0030:
 		# For identity: category, type is mandatory, name is optional.
 		# For feature: var is mandatory
