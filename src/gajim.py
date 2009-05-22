@@ -3097,18 +3097,30 @@ class Interface:
 				typ = 'png'
 				extension = '.png'
 		path_to_original_file = path_to_file + extension
-		pixbuf.save(path_to_original_file, typ)
+		try:
+			pixbuf.save(path_to_original_file, typ)
+		except Exception, e:
+			log.error('Error writing avatar file %s: %s' % (path_to_original_file,
+				str(e)))
 		# Generate and save the resized, color avatar
 		pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'notification')
 		if pixbuf:
 			path_to_normal_file = path_to_file + '_notif_size_colored' + extension
-			pixbuf.save(path_to_normal_file, 'png')
+			try:
+				pixbuf.save(path_to_normal_file, 'png')
+			except Exception, e:
+				log.error('Error writing avatar file %s: %s' % \
+					(path_to_original_file, str(e)))
 			# Generate and save the resized, black and white avatar
 			bwbuf = gtkgui_helpers.get_scaled_pixbuf(
 				gtkgui_helpers.make_pixbuf_grayscale(pixbuf), 'notification')
 			if bwbuf:
 				path_to_bw_file = path_to_file + '_notif_size_bw' + extension
-				bwbuf.save(path_to_bw_file, 'png')
+				try:
+					bwbuf.save(path_to_bw_file, 'png')
+				except Exception, e:
+					log.error('Error writing avatar file %s: %s' % \
+						(path_to_original_file, str(e)))
 
 	def remove_avatar_files(self, jid, puny_nick = None, local = False):
 		'''remove avatar files of a jid'''
