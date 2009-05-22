@@ -194,6 +194,9 @@ if gajim.HAVE_GPG:
 			output = proc.handles['stdout'].read()
 			proc.handles['stdout'].close()
 
+			try: proc.wait()
+			except IOError: pass
+
 			keys = {}
 			lines = output.split('\n')
 			for line in lines:
@@ -234,4 +237,4 @@ if gajim.HAVE_GPG:
 			out = out + "-----END PGP %s-----\n" % type_
 			return out
 
-# vim: se ts=3:
+# vim: set ts=3:
