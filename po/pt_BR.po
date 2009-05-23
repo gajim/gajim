@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-22 00:20+0200\n"
-"PO-Revision-Date: 2009-04-03 15:49-0300\n"
+"POT-Creation-Date: 2009-05-22 13:07+0200\n"
+"PO-Revision-Date: 2009-05-22 21:40-0300\n"
 "Last-Translator: Djavan Fagundes <dnoway@gmail.com>\n"
 "Language-Team: Português Brasileiro <gajim-devel@gajim.org>\n"
 "MIME-Version: 1.0\n"
@@ -477,9 +477,8 @@ msgid "<b>Proxy</b>"
 msgstr "<b>Proxy</b>"
 
 #: ../data/glade/accounts_window.glade.h:5
-#, fuzzy
 msgid "A_djust to status"
-msgstr "_Ajustar para status"
+msgstr "Aj_ustar para status"
 
 #: ../data/glade/accounts_window.glade.h:7
 msgid "Accounts"
@@ -494,9 +493,8 @@ msgstr ""
 "através de uma conexão não-segura."
 
 #: ../data/glade/accounts_window.glade.h:16
-#, fuzzy
 msgid "Co_nnect on Gajim startup"
-msgstr "C_onectar na inicialização do Gajim"
+msgstr "Co_nectar Gajim ao inicializar"
 
 #: ../data/glade/accounts_window.glade.h:18
 #: ../data/glade/zeroconf_information_window.glade.h:2
@@ -542,52 +540,42 @@ msgid "Re_name"
 msgstr "Re_nomear"
 
 #: ../data/glade/accounts_window.glade.h:46
-#, fuzzy
 msgid "Send _keep-alive packets"
-msgstr "Enviar pacotes para manter a conexão (keep-alive)"
+msgstr "Enviar pacotes para manter a c_onexão (keep-alive)"
 
 #: ../data/glade/accounts_window.glade.h:48
-#, fuzzy
 msgid "Synchroni_ze account status with global status"
-msgstr "_Sincronizar status da conta com status global"
+msgstr "Sincroni_zar status da conta com status global"
 
 #: ../data/glade/accounts_window.glade.h:50
-#, fuzzy
 msgid "Use G_PG Agent"
-msgstr "Usar o _Agente GPG"
+msgstr "Usar o agente G_PG"
 
 #: ../data/glade/accounts_window.glade.h:51
-#, fuzzy
 msgid "Use cust_om hostname/port"
-msgstr "Usa nome de máquina/porta customizados"
+msgstr "Usa nome de máquina/porta cust_omizados"
 
 #: ../data/glade/accounts_window.glade.h:52
-#, fuzzy
 msgid "Use cust_om port:"
-msgstr "Usar servidor/porta personalizado"
+msgstr "Usar servidor/porta personalizad_o"
 
 #: ../data/glade/accounts_window.glade.h:54
-#, fuzzy
 msgid "_Edit Personal Information..."
-msgstr "Editar detalhes pessoais..."
+msgstr "_Editar detalhes pessoais..."
 
 #: ../data/glade/accounts_window.glade.h:55
-#, fuzzy
 msgid "_Enable"
-msgstr "Habilitar"
+msgstr "Ha_bilitar"
 
 #: ../data/glade/accounts_window.glade.h:56
-#, fuzzy
 msgid "_Hostname: "
 msgstr "_Nome do computador:"
 
 #: ../data/glade/accounts_window.glade.h:58
-#, fuzzy
 msgid "_Manage..."
-msgstr "Gerenciar..."
+msgstr "Ge_renciar..."
 
 #: ../data/glade/accounts_window.glade.h:60
-#, fuzzy
 msgid "_Port: "
 msgstr "_Porta:"
 
@@ -596,9 +584,8 @@ msgid "_Warn before using an insecure connection"
 msgstr "A_visar antes de usar uma conexão não-segura"
 
 #: ../data/glade/accounts_window.glade.h:62
-#, fuzzy
 msgid "_use HTTP__PROXY environment variable"
-msgstr "Usar variável de ambiente HTTP_PROXY"
+msgstr "_usar variável de ambiente HTTP_PROXY"
 
 #: ../data/glade/accounts_window.glade.h:63
 msgid "gtk-add"
@@ -3942,20 +3929,19 @@ msgstr "Lista separada por espaços de erros do ssl para ignorar."
 
 #: ../src/common/config.py:307
 msgid "Whitespace sent after inactivity"
-msgstr ""
+msgstr "Espaço em branco enviado após inatividade"
 
 #: ../src/common/config.py:308
 msgid "XMPP ping sent after inactivity"
-msgstr ""
+msgstr "Ping XMPP enviado após inatividade"
 
 #: ../src/common/config.py:312
-#, fuzzy
 msgid ""
 "How many seconds to wait for the answer of ping alive packet before we try "
 "to reconnect."
 msgstr ""
-"Quantos segundos aguardar para a resposta do pacote de tempo-de-vida antes "
-"de tentarmos reconectar."
+"Quantos segundos aguardar a resposta do pacote de tempo-de-vida antes de "
+"tentarmos reconectar."
 
 #. yes, no, ask
 #: ../src/common/config.py:316
@@ -4140,25 +4126,24 @@ msgid "Registration information for transport %s has not arrived in time"
 msgstr "A informação do registo para o transporte %s não chegou a tempo"
 
 #: ../src/common/connection_handlers.py:647
-#, fuzzy
 msgid "Registration succeeded"
-msgstr "Registro para %s"
+msgstr "Registro realizado com sucesso"
 
 #: ../src/common/connection_handlers.py:648
 #, python-format
 msgid "Resgitration with agent %s succeeded"
-msgstr ""
+msgstr "Registro com agente %s com sucesso"
 
 #: ../src/common/connection_handlers.py:650
-#, fuzzy
 msgid "Registration failed"
-msgstr "Falha na conexão"
+msgstr "Falha no registro"
 
 #: ../src/common/connection_handlers.py:650
 #, python-format
 msgid ""
 "Resgitration with agent %(agent)s failed with error %(error)s: %(error_msg)s"
 msgstr ""
+"O registro com agente %(agent)s falhou com erro %(error)s: %(error_msg)s"
 
 #: ../src/common/connection_handlers.py:944
 #: ../src/common/connection_handlers.py:1865
@@ -7571,14 +7556,13 @@ msgstr ""
 "(account)s)."
 
 #: ../src/gajim.py:537
-#, fuzzy
 msgid "GPG key expired"
-msgstr "Nenhuma chave GPG atribuída"
+msgstr "Chave GPG expirada"
 
 #: ../src/gajim.py:538
-#, fuzzy, python-format
+#, python-format
 msgid "Your GPG key has expied, you will be connected to %s without OpenPGP."
-msgstr "Você será conectado ao %s sem OpenPGP."
+msgstr "Sua chave GPG está expirada, você será conectado ao %s sem OpenPGP."
 
 #. ask again
 #: ../src/gajim.py:547
@@ -7630,7 +7614,6 @@ msgid "error while sending %(message)s ( %(error)s )"
 msgstr "erro ao enviar %(message)s ( %(error)s )"
 
 #: ../src/gajim.py:1040 ../src/notify.py:492
-#, fuzzy
 msgid "Subscription request"
 msgstr "Solicitação de inscrição"
 
@@ -7657,9 +7640,8 @@ msgstr ""
 "Você quer removê-lo ou removê-la da sua lista de contatos?"
 
 #: ../src/gajim.py:1104 ../src/notify.py:494
-#, fuzzy
 msgid "Unsubscribed"
-msgstr "_Desinscrever"
+msgstr "Desinscrever"
 
 #: ../src/gajim.py:1145
 #, python-format
@@ -7745,18 +7727,16 @@ msgid "Your passphrase is incorrect"
 msgstr "Sua frase de acesso está incorreta"
 
 #: ../src/gajim.py:1586
-#, fuzzy
 msgid "GPG key not trusted"
-msgstr "GPG não é usável"
+msgstr "Chave GPG não confiável"
 
 #: ../src/gajim.py:1586
-#, fuzzy
 msgid ""
 "The GPG key used to encrypt this chat is not trusted. Do you really want to "
 "encrypt this message?"
 msgstr ""
-"Nenhuma chave GPG está atribuída para este contato. Então, você não pode "
-"criptografar mensagens."
+"A chave GPG usada para criptografar esta conferência não é confiável. Você "
+"realmente deseja criptografar esta mensagem?"
 
 #: ../src/gajim.py:1588 ../src/gajim.py:2203 ../src/gajim.py:2238
 #: ../src/groupchat_control.py:1849 ../src/roster_window.py:3839
@@ -7887,7 +7867,7 @@ msgid "SSL certificate error"
 msgstr "Erro de certificado SSL"
 
 #: ../src/gajim.py:2169
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "It seems the SSL certificate of account %(account)s has changed or your "
 "connection is being hacked.\n"
@@ -7896,7 +7876,8 @@ msgid ""
 "\n"
 "Do you still want to connect and update the fingerprint of the certificate?"
 msgstr ""
-"Parece que o certificado SSL foi alterado ou sua conexão foi hackeada.\n"
+"Parece que o certificado SSL da conta %(account)s foi alterado ou sua "
+"conexão foi hackeada.\n"
 "Fingerprint antigo: %(old)s\n"
 "Novo fingerprint: %(new)s\n"
 "\n"
@@ -9140,7 +9121,7 @@ msgstr "Contato \"%s\" será removido de sua lista"
 #: ../src/roster_window.py:3142
 #, python-format
 msgid "You are about to remove \"%(name)s\" (%(jid)s) from your roster.\n"
-msgstr ""
+msgstr "Você está prestes a remover \"%(name)s\" (%(jid)s) da sua lista.\n"
 
 #: ../src/roster_window.py:3147
 msgid ""
