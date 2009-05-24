@@ -4,13 +4,13 @@
 # This file is distributed under the same license as the gajim package.
 #
 # B. Kokanovic <branko.kokanovic@gmail.com>, 2007.
-# Branko Kokanovic <branko.kokanovic@gmail.com>, 2008.
+# Branko Kokanovic <branko.kokanovic@gmail.com>, 2008, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: sr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-21 22:39+0200\n"
-"PO-Revision-Date: 2008-12-01 21:36+0100\n"
+"POT-Creation-Date: 2009-05-22 13:07+0200\n"
+"PO-Revision-Date: 2009-05-24 00:05+0200\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -247,8 +247,8 @@ msgid ""
 msgstr ""
 "Označite ovo da biste se povezali na port 5223 gde se predpostavlja da "
 "stariji serveri imaju SSL  mogućnosti. Primetite da Gajim koristi "
-"podrazumevano TLS enkripciju akoje server traži, a sa ovo opcijom "
-"omogućenom, TLS će biti isključen"
+"podrazumevano TLS enkripciju koju server traži, a sa ovo opcijom omogućenom, "
+"TLS će biti isključen"
 
 #: ../data/glade/account_modification_window.glade.h:11
 #: ../data/glade/accounts_window.glade.h:13
@@ -351,7 +351,7 @@ msgstr "Informacije o Vama, kako su uskladištene na serveru"
 
 #: ../data/glade/account_modification_window.glade.h:27
 #: ../data/glade/accounts_window.glade.h:34 ../src/config.py:1605
-#: ../src/config.py:2108
+#: ../src/config.py:2110
 msgid "No key selected"
 msgstr "Nije odabran nijedan ključ"
 
@@ -360,8 +360,8 @@ msgstr "Nije odabran nijedan ključ"
 #: ../data/glade/accounts_window.glade.h:36
 #: ../data/glade/change_mood_dialog.glade.h:3 ../src/config.py:1192
 #: ../src/config.py:1263 ../src/config.py:1510 ../src/config.py:1515
-#: ../src/config.py:2016 ../src/config.py:2094 ../src/config.py:2107
-#: ../src/config.py:3200 ../src/config.py:3268 ../src/dialogs.py:293
+#: ../src/config.py:2018 ../src/config.py:2096 ../src/config.py:2109
+#: ../src/config.py:3202 ../src/config.py:3270 ../src/dialogs.py:293
 #: ../src/dialogs.py:295 ../src/dialogs.py:524 ../src/roster_window.py:2753
 #: ../src/roster_window.py:2759 ../src/roster_window.py:2764
 msgid "None"
@@ -391,7 +391,7 @@ msgid ""
 msgstr ""
 "Prioritet se u džaberu koristi da odredi ko dobija događaje sa servera u "
 "slučaju da su dva ili više klijenata povezana na njega; klijent sa najvećim "
-"prioritetomdobija događaje"
+"prioritetom dobija događaje"
 
 #: ../data/glade/account_modification_window.glade.h:34
 #: ../data/glade/accounts_window.glade.h:40
@@ -437,7 +437,7 @@ msgstr "Šalji podatke o živosti"
 #: ../data/glade/account_modification_window.glade.h:42
 #: ../data/glade/accounts_window.glade.h:47
 msgid "Synch_ronize account status with global status"
-msgstr "Sinhroniziraj status naloga sa globalnim statusom"
+msgstr "Sinhronizuj status naloga sa globalnim statusom"
 
 #: ../data/glade/account_modification_window.glade.h:43
 #: ../data/glade/accounts_window.glade.h:49
@@ -472,7 +472,6 @@ msgid "<b>Proxy</b>"
 msgstr "<b>Proksi</b>"
 
 #: ../data/glade/accounts_window.glade.h:5
-#, fuzzy
 msgid "A_djust to status"
 msgstr "_Podesi prema statusu"
 
@@ -489,7 +488,6 @@ msgstr ""
 "nesigurne veze."
 
 #: ../data/glade/accounts_window.glade.h:16
-#, fuzzy
 msgid "Co_nnect on Gajim startup"
 msgstr "Po_veži se prilikom pokretanja Gajima"
 
@@ -537,52 +535,42 @@ msgid "Re_name"
 msgstr "Prei_menuj"
 
 #: ../data/glade/accounts_window.glade.h:46
-#, fuzzy
 msgid "Send _keep-alive packets"
 msgstr "Šalji podatke o živosti"
 
 #: ../data/glade/accounts_window.glade.h:48
-#, fuzzy
 msgid "Synchroni_ze account status with global status"
-msgstr "Sinhroniziraj status naloga sa globalnim statusom"
+msgstr "Sinhroni_zuj status naloga sa globalnim statusom"
 
 #: ../data/glade/accounts_window.glade.h:50
-#, fuzzy
 msgid "Use G_PG Agent"
-msgstr "Koristi GPG agenta"
+msgstr "Koristi G_PG agenta"
 
 #: ../data/glade/accounts_window.glade.h:51
-#, fuzzy
 msgid "Use cust_om hostname/port"
-msgstr "Koristi Vaše određeno ime hosta/port "
+msgstr "Koristi Vaše _određeno ime hosta/port "
 
 #: ../data/glade/accounts_window.glade.h:52
-#, fuzzy
 msgid "Use cust_om port:"
-msgstr "Koristi svoj port:"
+msgstr "Koristi sv_oj port:"
 
 #: ../data/glade/accounts_window.glade.h:54
-#, fuzzy
 msgid "_Edit Personal Information..."
-msgstr "Izmeni lične informacije"
+msgstr "Izm_eni lične informacije"
 
 #: ../data/glade/accounts_window.glade.h:55
-#, fuzzy
 msgid "_Enable"
-msgstr "Omogući"
+msgstr "O_mogući"
 
 #: ../data/glade/accounts_window.glade.h:56
-#, fuzzy
 msgid "_Hostname: "
-msgstr "Ime hosta:"
+msgstr "Ime _hosta:"
 
 #: ../data/glade/accounts_window.glade.h:58
-#, fuzzy
 msgid "_Manage..."
-msgstr "Podesi..."
+msgstr "Po_desi..."
 
 #: ../data/glade/accounts_window.glade.h:60
-#, fuzzy
 msgid "_Port: "
 msgstr "_Port:"
 
@@ -591,9 +579,8 @@ msgid "_Warn before using an insecure connection"
 msgstr "Upozori pre korišćenja nesigurne veze"
 
 #: ../data/glade/accounts_window.glade.h:62
-#, fuzzy
 msgid "_use HTTP__PROXY environment variable"
-msgstr "koristi HTTP_PROXY promenljivu okruženja"
+msgstr "koristi HTTP_PROXY promenljiv_u okruženja"
 
 #: ../data/glade/accounts_window.glade.h:63
 msgid "gtk-add"
@@ -1339,7 +1326,7 @@ msgid ""
 "If you plan to do massive deletions, please make sure Gajim is not running. "
 "Generally avoid deletions with contacts you currently chat with."
 msgstr ""
-"<b>UPOZORENjE:</b>\n"
+"<b>UPOZORENJE:</b>\n"
 "Ako planirate da radite veća uklanjanja, potrudite se da Gajim nije "
 "pokrenut. Uopšte, izbegavakte uklanjanja kontakata sa kojima trenutno "
 "razgovorate."
@@ -2978,7 +2965,7 @@ msgstr "GPG enkripcija omogućena"
 #: ../src/common/contacts.py:113 ../src/common/helpers.py:67
 #: ../src/common/helpers.py:238 ../src/conversation_textview.py:847
 #: ../src/dialogs.py:906 ../src/dialogs.py:1630 ../src/dialogs.py:1655
-#: ../src/gajim.py:1047 ../src/gajim.py:1745 ../src/roster_window.py:915
+#: ../src/gajim.py:1051 ../src/gajim.py:1749 ../src/roster_window.py:915
 #: ../src/roster_window.py:1542 ../src/roster_window.py:1544
 #: ../src/roster_window.py:1888 ../src/roster_window.py:3123
 #: ../src/roster_window.py:3150 ../src/roster_window.py:5307
@@ -3178,10 +3165,10 @@ msgstr ""
 "Ako zatvorite ovaj jezičak, a istorijat razgovora nije omogućen, ova poruka "
 "će biti izgubljena."
 
-#: ../src/chat_control.py:2399 ../src/common/connection_handlers.py:1865
-#: ../src/common/connection_handlers.py:1911
-#: ../src/common/connection_handlers.py:2099
-#: ../src/common/connection_handlers.py:2232 ../src/common/connection.py:1298
+#: ../src/chat_control.py:2399 ../src/common/connection_handlers.py:1867
+#: ../src/common/connection_handlers.py:1913
+#: ../src/common/connection_handlers.py:2104
+#: ../src/common/connection_handlers.py:2237 ../src/common/connection.py:1298
 #: ../src/gajim.py:194
 msgid "Database Error"
 msgstr "Greška sa bazom podataka"
@@ -3344,7 +3331,7 @@ msgstr ""
 #. sorted alphanum
 #: ../src/common/config.py:111 ../src/common/config.py:451
 #: ../src/common/optparser.py:217 ../src/common/optparser.py:435
-#: ../src/common/optparser.py:469 ../src/gajim.py:3275
+#: ../src/common/optparser.py:469 ../src/gajim.py:3279
 msgid "default"
 msgstr "podrazumevano"
 
@@ -3871,7 +3858,7 @@ msgid ""
 "invisible. NOTE: this option is used only if restore_last_status is disabled"
 msgstr ""
 "Status sa kojim se automatski povezujete. Može biti online, chat, away, xa, "
-"dnd, invisible. PAŽNjA: ova opcija se koristi samo ako je "
+"dnd, invisible. PAŽNJA: ova opcija se koristi samo ako je "
 "restore_last_status  onemogućena."
 
 #: ../src/common/config.py:285
@@ -3917,19 +3904,18 @@ msgstr "Lista ssl grešaka za ignorisanje, odvojena razmacima."
 
 #: ../src/common/config.py:307
 msgid "Whitespace sent after inactivity"
-msgstr ""
+msgstr "Belina poslata posle neaktivnosti"
 
 #: ../src/common/config.py:308
 msgid "XMPP ping sent after inactivity"
-msgstr ""
+msgstr "XMPP ping poslat posle neaktivnosti"
 
 #: ../src/common/config.py:312
-#, fuzzy
 msgid ""
 "How many seconds to wait for the answer of ping alive packet before we try "
 "to reconnect."
 msgstr ""
-"Koliko sekundi čekati na odgovor o pkaetima o živosti pre nego što pokušamo "
+"Koliko sekundi čekati na odgovor o paketima o živosti pre nego što pokušamo "
 "ponovno uspostavljanje veze."
 
 #. yes, no, ask
@@ -4116,48 +4102,47 @@ msgid "Registration information for transport %s has not arrived in time"
 msgstr "Informacije o registraciji za transport %s nisu došle na vreme"
 
 #: ../src/common/connection_handlers.py:647
-#, fuzzy
 msgid "Registration succeeded"
-msgstr "Registruj se na %s"
+msgstr "Registracija uspela"
 
 #: ../src/common/connection_handlers.py:648
 #, python-format
 msgid "Resgitration with agent %s succeeded"
-msgstr ""
+msgstr "Registracija sa agentom %s uspela"
 
 #: ../src/common/connection_handlers.py:650
-#, fuzzy
 msgid "Registration failed"
-msgstr "Veza prekinuta"
+msgstr "Registracija neuspela"
 
 #: ../src/common/connection_handlers.py:650
 #, python-format
 msgid ""
 "Resgitration with agent %(agent)s failed with error %(error)s: %(error_msg)s"
 msgstr ""
+"Registracija sa agentom %(agent)s neuspela uz grešku %(error)s: %(error_msg)s"
 
-#: ../src/common/connection_handlers.py:942
-#: ../src/common/connection_handlers.py:1863
-#: ../src/common/connection_handlers.py:1909
-#: ../src/common/connection_handlers.py:2097
-#: ../src/common/connection_handlers.py:2230 ../src/common/connection.py:1296
+#: ../src/common/connection_handlers.py:944
+#: ../src/common/connection_handlers.py:1865
+#: ../src/common/connection_handlers.py:1911
+#: ../src/common/connection_handlers.py:2102
+#: ../src/common/connection_handlers.py:2235 ../src/common/connection.py:1296
 #: ../src/gajim.py:416
 msgid "Disk Write Error"
 msgstr "Greška pri upisu na disk"
 
-#: ../src/common/connection_handlers.py:1149 ../src/common/connection.py:889
+#: ../src/common/connection_handlers.py:1151 ../src/common/connection.py:889
 msgid "Invisibility not supported"
 msgstr "Nevidljivost nije podržana"
 
-#: ../src/common/connection_handlers.py:1150 ../src/common/connection.py:890
+#: ../src/common/connection_handlers.py:1152 ../src/common/connection.py:890
 #, python-format
 msgid "Account %s doesn't support invisibility."
 msgstr "Nalog %s ne podržava nevidljivost."
 
-#: ../src/common/connection_handlers.py:1866
-#: ../src/common/connection_handlers.py:1912
-#: ../src/common/connection_handlers.py:2100
-#: ../src/common/connection_handlers.py:2233 ../src/common/connection.py:1299
+#: ../src/common/connection_handlers.py:1868
+#: ../src/common/connection_handlers.py:1914
+#: ../src/common/connection_handlers.py:2105
+#: ../src/common/connection_handlers.py:2238 ../src/common/connection.py:1299
 #: ../src/gajim.py:195
 #, python-format
 msgid ""
@@ -4168,7 +4153,7 @@ msgstr ""
 "(pogledajte http://trac.gajim.org/wiki/DatabaseBackup) ili  uklonite (sav "
 "istorijat poruka će biti izgubljen)."
 
-#: ../src/common/connection_handlers.py:1984
+#: ../src/common/connection_handlers.py:1989
 #, python-format
 msgid "Nickname not allowed: %s"
 msgstr "Nedozvoljen nadimak: %s "
@@ -4176,70 +4161,70 @@ msgstr "Nedozvoljen nadimak: %s "
 #. we are banned
 #. group chat does not exist
 #. user may close the window before we are here
-#: ../src/common/connection_handlers.py:2059
-#: ../src/common/connection_handlers.py:2062
-#: ../src/common/connection_handlers.py:2065
-#: ../src/common/connection_handlers.py:2068
-#: ../src/common/connection_handlers.py:2072 ../src/gajim.py:594
+#: ../src/common/connection_handlers.py:2064
+#: ../src/common/connection_handlers.py:2067
+#: ../src/common/connection_handlers.py:2070
+#: ../src/common/connection_handlers.py:2073
+#: ../src/common/connection_handlers.py:2077 ../src/gajim.py:594
 msgid "Unable to join group chat"
 msgstr "Nije moguće pridružiti se grupnom razgovoru"
 
-#: ../src/common/connection_handlers.py:2060
+#: ../src/common/connection_handlers.py:2065
 #, python-format
 msgid "You are banned from group chat %s."
 msgstr "Zabranjen Vam je pristup ovom grupnom razgovoru %s."
 
-#: ../src/common/connection_handlers.py:2063
+#: ../src/common/connection_handlers.py:2068
 #, python-format
 msgid "Group chat %s does not exist."
 msgstr "Grupni razgovor.%s ne postoji."
 
-#: ../src/common/connection_handlers.py:2066
+#: ../src/common/connection_handlers.py:2071
 msgid "Group chat creation is restricted."
 msgstr "Stvaranje grupnih razgovora Vam nije dozvoljeno."
 
-#: ../src/common/connection_handlers.py:2069
+#: ../src/common/connection_handlers.py:2074
 #, python-format
 msgid "Your registered nickname must be used in group chat %s."
 msgstr "Morate koristiti Vaš registrovani nadimak u grupnom razgovoru %s."
 
-#: ../src/common/connection_handlers.py:2073
+#: ../src/common/connection_handlers.py:2078
 #, python-format
 msgid "You are not in the members list in groupchat %s."
 msgstr "Niste u listi članova grupnog razgovora %s."
 
 #. Room has been destroyed. see
 #. http://www.xmpp.org/extensions/xep-0045.html#destroyroom
-#: ../src/common/connection_handlers.py:2115
+#: ../src/common/connection_handlers.py:2120
 msgid "Room has been destroyed"
 msgstr "Soba grupnog razgovora je uništena"
 
-#: ../src/common/connection_handlers.py:2122
+#: ../src/common/connection_handlers.py:2127
 #, python-format
 msgid "You can join this room instead: %s"
 msgstr "Možete se priključiti sobi %s umesto ove"
 
-#: ../src/common/connection_handlers.py:2149
+#: ../src/common/connection_handlers.py:2154
 msgid "I would like to add you to my roster."
 msgstr "Želeo bih da te dodam na moju listu kontakata."
 
 #. BE CAREFUL: no con.updateRosterItem() in a callback
-#: ../src/common/connection_handlers.py:2170
+#: ../src/common/connection_handlers.py:2175
 #, python-format
 msgid "we are now subscribed to %s"
 msgstr "sada ste pretplaćeni na %s"
 
-#: ../src/common/connection_handlers.py:2172
+#: ../src/common/connection_handlers.py:2177
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "zahtev za ukidanje pretplate od kontakta %s"
 
-#: ../src/common/connection_handlers.py:2174
+#: ../src/common/connection_handlers.py:2179
 #, python-format
 msgid "we are now unsubscribed from %s"
 msgstr "sada Vam je ukinuta pretplata od kontakta %s"
 
-#: ../src/common/connection_handlers.py:2357
+#: ../src/common/connection_handlers.py:2362
 #, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
@@ -4250,13 +4235,13 @@ msgstr ""
 "ga uklonili"
 
 #. We didn't set a passphrase
-#: ../src/common/connection_handlers.py:2382
+#: ../src/common/connection_handlers.py:2387
 #: ../src/common/zeroconf/connection_zeroconf.py:174
 msgid "OpenPGP passphrase was not given"
 msgstr "Lozinka za OpenPGP nije uneta"
 
 #. %s is the account name here
-#: ../src/common/connection_handlers.py:2384
+#: ../src/common/connection_handlers.py:2389
 #: ../src/common/zeroconf/connection_zeroconf.py:176
 #: ../src/roster_window.py:1939 ../src/roster_window.py:1959
 #, python-format
@@ -4437,7 +4422,7 @@ msgstr "Veza sa proksijem prekinuta"
 msgid "Could not connect to \"%s\""
 msgstr "Veza sa \"%s\" nije moguća"
 
-#: ../src/common/connection.py:619 ../src/gajim.py:1142
+#: ../src/common/connection.py:619 ../src/gajim.py:1146
 msgid "Check your connection or try again later."
 msgstr "Proverite Vašu konekciju ili pokušajte kasnije."
 
@@ -4532,7 +4517,7 @@ msgid "Not fetched because of invisible status"
 msgstr "Nije dohvaćeno zbog statusa nevidljivosti"
 
 #: ../src/common/contacts.py:92 ../src/common/helpers.py:67
-#: ../src/gajim.py:1047
+#: ../src/gajim.py:1051
 msgid "Observers"
 msgstr "Posmatrači"
 
@@ -5832,7 +5817,7 @@ msgstr ""
 msgid "OpenPGP is not usable in this computer"
 msgstr "OpenPGP nije moguće koristiti na ovom računaru"
 
-#: ../src/config.py:1716 ../src/config.py:1759
+#: ../src/config.py:1716 ../src/config.py:1761
 msgid "Unread events"
 msgstr "Nepročitani događaji"
 
@@ -5851,168 +5836,168 @@ msgstr ""
 "Prozori svih razgovora i grupnih razgovora će biti zatvoreni. Želite li da "
 "nastavite?"
 
-#: ../src/config.py:1755
+#: ../src/config.py:1757
 msgid "You are currently connected to the server"
 msgstr "Trenutno ste spojeni na server"
 
-#: ../src/config.py:1756
+#: ../src/config.py:1758
 msgid "To change the account name, you must be disconnected."
 msgstr "Za promenu imena naloga, morate otići sa veze."
 
-#: ../src/config.py:1760
+#: ../src/config.py:1762
 msgid "To change the account name, you must read all pending events."
 msgstr ""
 "Da biste promenili ime naloga, morate prvo pročitati sve događaje na čekanju."
 
-#: ../src/config.py:1766
+#: ../src/config.py:1768
 msgid "Account Name Already Used"
 msgstr "Ime Naloga Već U Upotrebi"
 
-#: ../src/config.py:1767
+#: ../src/config.py:1769
 msgid ""
 "This name is already used by another of your accounts. Please choose another "
 "name."
 msgstr ""
 "Ovo ime već koristi jedan od Vaših naloga. Molimo Vas, odaberite drugo ime."
 
-#: ../src/config.py:1771 ../src/config.py:1775
+#: ../src/config.py:1773 ../src/config.py:1777
 msgid "Invalid account name"
 msgstr "Neispravno ime naloga"
 
-#: ../src/config.py:1772
+#: ../src/config.py:1774
 msgid "Account name cannot be empty."
 msgstr "Ime naloga ne može biti prazno."
 
-#: ../src/config.py:1776
+#: ../src/config.py:1778
 msgid "Account name cannot contain spaces."
 msgstr "Ime naloga ne može da sadrži beline."
 
-#: ../src/config.py:1851
+#: ../src/config.py:1853
 msgid "Rename Account"
 msgstr "Preimenuj nalog"
 
-#: ../src/config.py:1852
+#: ../src/config.py:1854
 #, python-format
 msgid "Enter a new name for account %s"
 msgstr "Unesite novo ime za nalog%s"
 
-#: ../src/config.py:1870 ../src/config.py:1878 ../src/config.py:1921
-#: ../src/config.py:3150 ../src/dataforms_widget.py:536
+#: ../src/config.py:1872 ../src/config.py:1880 ../src/config.py:1923
+#: ../src/config.py:3152 ../src/dataforms_widget.py:536
 msgid "Invalid Jabber ID"
 msgstr "Neispravan džaber ID"
 
-#: ../src/config.py:1879
+#: ../src/config.py:1881
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "Džaber ID mora biti oblika \"korisnik@server\"."
 
-#: ../src/config.py:2069 ../src/config.py:3210
+#: ../src/config.py:2071 ../src/config.py:3212
 msgid "Invalid entry"
 msgstr "Neispravan unos"
 
-#: ../src/config.py:2070 ../src/config.py:3211
+#: ../src/config.py:2072 ../src/config.py:3213
 msgid "Custom port must be a port number."
 msgstr "Vaš port mora biti broj porta."
 
-#: ../src/config.py:2091
+#: ../src/config.py:2093
 msgid "Failed to get secret keys"
 msgstr "Neuspelo uzimanje tajnih ključeva"
 
-#: ../src/config.py:2092
+#: ../src/config.py:2094
 msgid "There was a problem retrieving your OpenPGP secret keys."
 msgstr "Došlo je do problema u uzimanju Vaših OpenPGP tajnih ključeva."
 
-#: ../src/config.py:2127
+#: ../src/config.py:2129
 msgid "OpenPGP Key Selection"
 msgstr "Odabir OpenPGP Ključeva"
 
-#: ../src/config.py:2128
+#: ../src/config.py:2130
 msgid "Choose your OpenPGP key"
 msgstr "Odaberite Vaš OpenPGP ključ"
 
-#: ../src/config.py:2139
+#: ../src/config.py:2141
 msgid "No such account available"
 msgstr "Nije dostupan takav nalog"
 
-#: ../src/config.py:2140
+#: ../src/config.py:2142
 msgid "You must create your account before editing your personal information."
 msgstr "Morate napraviti Vaš nalog pre izmena ličnih informacija."
 
-#: ../src/config.py:2147 ../src/dialogs.py:1682 ../src/dialogs.py:1818
+#: ../src/config.py:2149 ../src/dialogs.py:1682 ../src/dialogs.py:1818
 #: ../src/dialogs.py:1997 ../src/disco.py:439 ../src/profile_window.py:320
 msgid "You are not connected to the server"
 msgstr "Niste povezani na server"
 
-#: ../src/config.py:2148
+#: ../src/config.py:2150
 msgid "Without a connection, you can not edit your personal information."
 msgstr "Bez veze sa serverom, nije moguća izmena ličnih informacija."
 
-#: ../src/config.py:2152
+#: ../src/config.py:2154
 msgid "Your server doesn't support Vcard"
 msgstr "Vaš server ne podržava Vcard"
 
-#: ../src/config.py:2153
+#: ../src/config.py:2155
 msgid "Your server can't save your personal information."
 msgstr "Vaš server ne može da sačuva Vaše lične informacije."
 
-#: ../src/config.py:2184
+#: ../src/config.py:2186
 msgid "Account Local already exists."
 msgstr "Račun lokal već postoji."
 
-#: ../src/config.py:2185
+#: ../src/config.py:2187
 msgid "Please rename or remove it before enabling link-local messaging."
 msgstr "Molimo Vas, preimenujte ili uklonite pre omogućavanja lokalnih poruka."
 
-#: ../src/config.py:2368
+#: ../src/config.py:2370
 #, python-format
 msgid "Edit %s"
 msgstr "Izmeni %s"
 
-#: ../src/config.py:2370
+#: ../src/config.py:2372
 #, python-format
 msgid "Register to %s"
 msgstr "Registruj se na %s"
 
 #. list at the beginning
-#: ../src/config.py:2406
+#: ../src/config.py:2408
 msgid "Ban List"
 msgstr "Lista zabrana"
 
-#: ../src/config.py:2407
+#: ../src/config.py:2409
 msgid "Member List"
 msgstr "Lista članova"
 
-#: ../src/config.py:2408
+#: ../src/config.py:2410
 msgid "Owner List"
 msgstr "Lista vlasnika"
 
-#: ../src/config.py:2409
+#: ../src/config.py:2411
 msgid "Administrator List"
 msgstr "Lista administratora"
 
 #. Address column
 #. holds JID (who said this)
-#: ../src/config.py:2458 ../src/disco.py:778 ../src/history_manager.py:183
+#: ../src/config.py:2460 ../src/disco.py:778 ../src/history_manager.py:183
 msgid "JID"
-msgstr "DžID"
+msgstr "DŽID"
 
-#: ../src/config.py:2468
+#: ../src/config.py:2470
 msgid "Reason"
 msgstr "Razlog"
 
-#: ../src/config.py:2475
+#: ../src/config.py:2477
 msgid "Nick"
 msgstr "Nadimak"
 
-#: ../src/config.py:2481
+#: ../src/config.py:2483
 msgid "Role"
 msgstr "Uloga"
 
-#: ../src/config.py:2508
+#: ../src/config.py:2510
 msgid "Banning..."
 msgstr "Zabrana..."
 
 #. You can move '\n' before user@domain if that line is TOO BIG
-#: ../src/config.py:2510
+#: ../src/config.py:2512
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -6020,11 +6005,11 @@ msgstr ""
 "<b>Koga želite zabraniti?</b>\n"
 "\n"
 
-#: ../src/config.py:2512
+#: ../src/config.py:2514
 msgid "Adding Member..."
 msgstr "Dodavanje člana..."
 
-#: ../src/config.py:2513
+#: ../src/config.py:2515
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -6032,11 +6017,11 @@ msgstr ""
 "<b>Koga želite da postavite članom?</b>\n"
 "\n"
 
-#: ../src/config.py:2515
+#: ../src/config.py:2517
 msgid "Adding Owner..."
 msgstr "Dodavanje vlasnika..."
 
-#: ../src/config.py:2516
+#: ../src/config.py:2518
 msgid ""
 "<b>Whom do you want to make an owner?</b>\n"
 "\n"
@@ -6044,11 +6029,11 @@ msgstr ""
 "<b>Koga želite da postavite za vlasnika?</b>\n"
 "\n"
 
-#: ../src/config.py:2518
+#: ../src/config.py:2520
 msgid "Adding Administrator..."
 msgstr "Dodavanje administratora..."
 
-#: ../src/config.py:2519
+#: ../src/config.py:2521
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -6056,7 +6041,7 @@ msgstr ""
 "<b>Koga želite da postavite za administratora?</b>\n"
 "\n"
 
-#: ../src/config.py:2520
+#: ../src/config.py:2522
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -6072,76 +6057,76 @@ msgstr ""
 "4. domen (samo se domen poklapa, kao i bilo koji korisnik@domen,\n"
 "domen/resurs, ili adresa koja sadrži poddomen."
 
-#: ../src/config.py:2617
+#: ../src/config.py:2619
 #, python-format
 msgid "Removing %s account"
 msgstr "Uklanjanje računa %s"
 
-#: ../src/config.py:2639 ../src/gajim.py:1519 ../src/roster_window.py:1951
+#: ../src/config.py:2641 ../src/gajim.py:1523 ../src/roster_window.py:1951
 msgid "Password Required"
 msgstr "Lozinka zahtevana"
 
-#: ../src/config.py:2640 ../src/roster_window.py:1925
+#: ../src/config.py:2642 ../src/roster_window.py:1925
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Unesite Vašu lozinku za račun %s"
 
-#: ../src/config.py:2641 ../src/roster_window.py:1952
+#: ../src/config.py:2643 ../src/roster_window.py:1952
 msgid "Save password"
 msgstr "Sačuvaj lozinku"
 
-#: ../src/config.py:2650
+#: ../src/config.py:2652
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "Račun \"%s\" je povezan na server"
 
-#: ../src/config.py:2651
+#: ../src/config.py:2653
 msgid "If you remove it, the connection will be lost."
 msgstr "Ukoliko ga uklonite, veza će biti izgubljena."
 
-#: ../src/config.py:2747
+#: ../src/config.py:2749
 msgid "Default"
 msgstr "Podrazumevano"
 
-#: ../src/config.py:2747
+#: ../src/config.py:2749
 msgid "?print_status:All"
 msgstr "?ispis statusa:Sve"
 
-#: ../src/config.py:2748
+#: ../src/config.py:2750
 msgid "Enter and leave only"
 msgstr "Samo ući i napustiti"
 
-#: ../src/config.py:2749
+#: ../src/config.py:2751
 msgid "?print_status:None"
 msgstr "?print_status:None"
 
-#: ../src/config.py:2817
+#: ../src/config.py:2819
 msgid "New Group Chat"
 msgstr "Novi grupni razgovor"
 
-#: ../src/config.py:2850
+#: ../src/config.py:2852
 msgid "This bookmark has invalid data"
 msgstr "Ovaj marker ima neispravne podatke"
 
-#: ../src/config.py:2851
+#: ../src/config.py:2853
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
 "Molimo obavezno ispunite polja servera i sobe ili uklonite ovaj marker."
 
-#: ../src/config.py:3133
+#: ../src/config.py:3135
 msgid "Invalid username"
 msgstr "Neispravno korisničko ime"
 
-#: ../src/config.py:3135
+#: ../src/config.py:3137
 msgid "You must provide a username to configure this account."
 msgstr "Morate upisati korisničko ime da biste konfigurisali ovaj nalog."
 
-#: ../src/config.py:3167
+#: ../src/config.py:3169
 msgid "Account has been added successfully"
 msgstr "Nalog je uspešno dodat"
 
-#: ../src/config.py:3168 ../src/config.py:3359
+#: ../src/config.py:3170 ../src/config.py:3361
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
 "later by choosing the Accounts menuitem under the Edit menu from the main "
@@ -6151,24 +6136,24 @@ msgstr ""
 "ili kasnije, klikom na stavku menija Nalozi pod menijem Uredi iz glavnog "
 "prozora."
 
-#: ../src/config.py:3186
+#: ../src/config.py:3188
 msgid "Invalid server"
 msgstr "Neispravan server"
 
-#: ../src/config.py:3187
+#: ../src/config.py:3189
 msgid "Please provide a server on which you want to register."
 msgstr "Molimo odredite server na kome želite da se registrujete."
 
-#: ../src/config.py:3238 ../src/gajim.py:2116
+#: ../src/config.py:3240 ../src/gajim.py:2120
 msgid "Certificate Already in File"
 msgstr "Sertifikat je već u datoteci"
 
-#: ../src/config.py:3239 ../src/gajim.py:2117
+#: ../src/config.py:3241 ../src/gajim.py:2121
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr "Sertifikat je već u datoteci %s, pa nije ponovo dodat."
 
-#: ../src/config.py:3307
+#: ../src/config.py:3309
 #, python-format
 msgid ""
 "<b>Security Warning</b>\n"
@@ -6183,7 +6168,7 @@ msgstr ""
 "SSL greška: %(error)s\n"
 "Da li i dalje želite da se povežete na ovaj server?"
 
-#: ../src/config.py:3313 ../src/gajim.py:2141
+#: ../src/config.py:3315 ../src/gajim.py:2145
 #, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -6194,19 +6179,19 @@ msgstr ""
 "SHA1 otisak ovog sertifikata:\n"
 "%s"
 
-#: ../src/config.py:3338 ../src/config.py:3379
+#: ../src/config.py:3340 ../src/config.py:3381
 msgid "An error occurred during account creation"
 msgstr "Pojavila se greška pri kreiranju naloga"
 
-#: ../src/config.py:3358
+#: ../src/config.py:3360
 msgid "Your new account has been created successfully"
 msgstr "Vaš novi nalog je uspešno napravljen"
 
-#: ../src/config.py:3463
+#: ../src/config.py:3465
 msgid "Account name is in use"
 msgstr "Ime naloga je već upotrebljeno"
 
-#: ../src/config.py:3464
+#: ../src/config.py:3466
 msgid "You already have an account using this name."
 msgstr "Već imate nalog sa tim imenom."
 
@@ -6464,7 +6449,7 @@ msgstr "Zahtev pretplate na račun %(account)s od %(jid)s"
 msgid "Subscription request from %s"
 msgstr "Zahtev pretplate od %s"
 
-#: ../src/dialogs.py:1675 ../src/gajim.py:2779
+#: ../src/dialogs.py:1675 ../src/gajim.py:2783
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "Već ste u grupnom razgovoru %s"
@@ -6612,32 +6597,32 @@ msgstr "Nova Samostalna Poruka"
 msgid "New Private Message"
 msgstr "Nova Privatna Poruka"
 
-#: ../src/dialogs.py:2067 ../src/gajim.py:1699 ../src/notify.py:484
+#: ../src/dialogs.py:2067 ../src/gajim.py:1703 ../src/notify.py:484
 #: ../src/osx/growler.py:13
 msgid "New E-mail"
 msgstr "Novi E-mejl"
 
-#: ../src/dialogs.py:2069 ../src/gajim.py:1765 ../src/notify.py:478
+#: ../src/dialogs.py:2069 ../src/gajim.py:1769 ../src/notify.py:478
 #: ../src/osx/growler.py:14
 msgid "File Transfer Request"
 msgstr "Zahtev za prenosom datoteke"
 
-#: ../src/dialogs.py:2071 ../src/gajim.py:1665 ../src/gajim.py:1732
+#: ../src/dialogs.py:2071 ../src/gajim.py:1669 ../src/gajim.py:1736
 #: ../src/notify.py:480 ../src/osx/growler.py:14
 msgid "File Transfer Error"
 msgstr "Greška pri prenosu datoteke"
 
-#: ../src/dialogs.py:2073 ../src/gajim.py:1807 ../src/gajim.py:1829
-#: ../src/gajim.py:1846 ../src/notify.py:482 ../src/osx/growler.py:15
+#: ../src/dialogs.py:2073 ../src/gajim.py:1811 ../src/gajim.py:1833
+#: ../src/gajim.py:1850 ../src/notify.py:482 ../src/osx/growler.py:15
 msgid "File Transfer Completed"
 msgstr "Prenos datoteke završen"
 
-#: ../src/dialogs.py:2074 ../src/gajim.py:1810 ../src/notify.py:482
+#: ../src/dialogs.py:2074 ../src/gajim.py:1814 ../src/notify.py:482
 #: ../src/osx/growler.py:15
 msgid "File Transfer Stopped"
 msgstr "Prenos datoteke zaustavljen"
 
-#: ../src/dialogs.py:2076 ../src/gajim.py:1540 ../src/notify.py:486
+#: ../src/dialogs.py:2076 ../src/gajim.py:1544 ../src/notify.py:486
 #: ../src/osx/growler.py:16
 msgid "Groupchat Invitation"
 msgstr "Poziv na grupni razgovor"
@@ -7521,14 +7506,13 @@ msgid "Enter GPG key passphrase for key %(keyid)s (account %(account)s)."
 msgstr "Unesite lozinku GPG ključa %(keyid)s (nalog %(account)s)."
 
 #: ../src/gajim.py:537
-#, fuzzy
 msgid "GPG key expired"
-msgstr "Nema dodeljenog GPG ključa"
+msgstr "GPG ključ istekao"
 
 #: ../src/gajim.py:538
-#, fuzzy, python-format
+#, python-format
 msgid "Your GPG key has expied, you will be connected to %s without OpenPGP."
-msgstr "Povezaćete se na %s bez OpenPGP ključa."
+msgstr "GPG ključ je istekao, bićete povezani sa %s bez OpenPGP šifrovanja."
 
 #. ask again
 #: ../src/gajim.py:547
@@ -7579,26 +7563,25 @@ msgstr "Greška %(code)s: %(msg)s"
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "greška prilikom slanja %(message)s ( %(error)s )"
 
-#: ../src/gajim.py:1036 ../src/notify.py:492
-#, fuzzy
+#: ../src/gajim.py:1040 ../src/notify.py:492
 msgid "Subscription request"
 msgstr "Zahtev za pretplatom"
 
-#: ../src/gajim.py:1061
+#: ../src/gajim.py:1065
 msgid "Authorization accepted"
 msgstr "Autorizacija prihvaćena"
 
-#: ../src/gajim.py:1062
+#: ../src/gajim.py:1066
 #, python-format
 msgid "The contact \"%s\" has authorized you to see his or her status."
 msgstr "Kontakt \"%s\" je prihvatio da vidite njegov/njen status."
 
-#: ../src/gajim.py:1074
+#: ../src/gajim.py:1078
 #, python-format
 msgid "Contact \"%s\" removed subscription from you"
 msgstr "Kontakt \"%s\" je ukinuo pretplatu na njega"
 
-#: ../src/gajim.py:1075
+#: ../src/gajim.py:1079
 msgid ""
 "You will always see him or her as offline.\n"
 "Do you want to remove him or her from your contact list?"
@@ -7606,79 +7589,78 @@ msgstr ""
 "Uvek ćete ga/je videti kao da nije na vezi.\n"
 "Da li želite da ga/je uklonite sa liste kontakata?"
 
-#: ../src/gajim.py:1100 ../src/notify.py:494
-#, fuzzy
+#: ../src/gajim.py:1104 ../src/notify.py:494
 msgid "Unsubscribed"
-msgstr "_Ukini pretplatu"
+msgstr "Ukinuta pretplata"
 
-#: ../src/gajim.py:1141
+#: ../src/gajim.py:1145
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
 msgstr "Kontakt sa \"%s\" se ne može uspostaviti"
 
-#: ../src/gajim.py:1318 ../src/groupchat_control.py:1167
+#: ../src/gajim.py:1322 ../src/groupchat_control.py:1167
 #, python-format
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s je od sada poznat kao %(new_nick)s"
 
-#: ../src/gajim.py:1336 ../src/groupchat_control.py:1342
+#: ../src/gajim.py:1340 ../src/groupchat_control.py:1342
 #: ../src/history_window.py:419 ../src/notify.py:232
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s je trenutno %(status)s"
 
-#: ../src/gajim.py:1403
+#: ../src/gajim.py:1407
 #, python-format
 msgid "%(jid)s has set the subject to %(subject)s"
 msgstr "%(jid)s je postavio temu na %(subject)s"
 
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
 #. Can be a message (see handle_event_gc_config_change in gajim.py)
-#: ../src/gajim.py:1467 ../src/groupchat_control.py:1127
+#: ../src/gajim.py:1471 ../src/groupchat_control.py:1127
 msgid "Any occupant is allowed to see your full JID"
 msgstr "Svima prisutnima je dozvoljeno da vide vaš pun džaber ID"
 
-#: ../src/gajim.py:1470
+#: ../src/gajim.py:1474
 msgid "Room now shows unavailable member"
 msgstr "Soba sada prikazuje nedostupne članove"
 
-#: ../src/gajim.py:1472
+#: ../src/gajim.py:1476
 msgid "room now does not show unavailable members"
 msgstr "soba sada ne prikazuje nedostupne članove"
 
-#: ../src/gajim.py:1475
+#: ../src/gajim.py:1479
 msgid "A non-privacy-related room configuration change has occurred"
 msgstr ""
 "Desila se promena u konfiguraciji sobe (napomena: ne utiče na privatnost "
 "korisnika)"
 
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
-#: ../src/gajim.py:1478
+#: ../src/gajim.py:1482
 msgid "Room logging is now enabled"
 msgstr "Logovanje u sobi je sada omogućeno"
 
-#: ../src/gajim.py:1480
+#: ../src/gajim.py:1484
 msgid "Room logging is now disabled"
 msgstr "Logovanje u sobi je sada onemogućeno"
 
-#: ../src/gajim.py:1482
+#: ../src/gajim.py:1486
 msgid "Room is now non-anonymous"
 msgstr "Soba sada više nije anonimna"
 
-#: ../src/gajim.py:1485
+#: ../src/gajim.py:1489
 msgid "Room is now semi-anonymous"
 msgstr "Soba je sada polu anonimna"
 
-#: ../src/gajim.py:1488
+#: ../src/gajim.py:1492
 msgid "Room is now fully-anonymous"
 msgstr "Soba je sada potpuno anonimna"
 
-#: ../src/gajim.py:1520
+#: ../src/gajim.py:1524
 #, python-format
 msgid "A Password is required to join the room %s. Please type it."
 msgstr "Lozinka potrebna za pridruživanje grupnom razgovoru %s. Unesite je."
 
-#: ../src/gajim.py:1554
+#: ../src/gajim.py:1558
 msgid ""
 "You configured Gajim to use GPG agent, but there is no GPG agent running or "
 "it returned a wrong passphrase.\n"
@@ -7686,39 +7668,37 @@ msgstr ""
 "Konfigurisali ste Gajim da koristi GPG agenta, ali ne postoji GPG agent koji "
 "radi ili je vratio lošu frazu lozinke.\n"
 
-#: ../src/gajim.py:1556
+#: ../src/gajim.py:1560
 msgid "You are currently connected without your OpenPGP key."
 msgstr "Trenutno ste povezani bez OpenPGP ključa."
 
-#: ../src/gajim.py:1559
+#: ../src/gajim.py:1563
 msgid "Your passphrase is incorrect"
 msgstr "Vaša lozinka nije tačna"
 
-#: ../src/gajim.py:1582
-#, fuzzy
+#: ../src/gajim.py:1586
 msgid "GPG key not trusted"
-msgstr "GPG nije upotrebljiv"
+msgstr "GPG ključ nije od poverenja"
 
-#: ../src/gajim.py:1582
-#, fuzzy
+#: ../src/gajim.py:1586
 msgid ""
 "The GPG key used to encrypt this chat is not trusted. Do you really want to "
 "encrypt this message?"
 msgstr ""
-"Nijedan GPG ključ nije dodeljen kontaktu. Ne možete mu slati šifrovane "
-"poruke."
+"GPG ključ korišćen za šifrovanje nije od poverenja. Da li ipak želite da "
+"šifrujete ovu poruku?"
 
-#: ../src/gajim.py:1584 ../src/gajim.py:2199 ../src/gajim.py:2234
+#: ../src/gajim.py:1588 ../src/gajim.py:2203 ../src/gajim.py:2238
 #: ../src/groupchat_control.py:1849 ../src/roster_window.py:3839
 msgid "Do _not ask me again"
 msgstr "_Ne pitaj me više"
 
-#: ../src/gajim.py:1676
+#: ../src/gajim.py:1680
 #, python-format
 msgid "New mail on %(gmail_mail_address)s"
 msgstr "Novi e-mejl za %(gmail_mail_address)s"
 
-#: ../src/gajim.py:1678
+#: ../src/gajim.py:1682
 #, python-format
 msgid "You have %d new mail conversation"
 msgid_plural "You have %d new mail conversations"
@@ -7726,7 +7706,7 @@ msgstr[0] "Imate %d novi e-mejl razgovor"
 msgstr[1] "Imate %d nova e-mejl razgovora"
 msgstr[2] "Imate %d novih e-mejl razgovora"
 
-#: ../src/gajim.py:1691
+#: ../src/gajim.py:1695
 #, python-format
 msgid ""
 "\n"
@@ -7741,34 +7721,34 @@ msgstr ""
 "Tema: %(subject)s\n"
 "%(snippet)s"
 
-#: ../src/gajim.py:1762
+#: ../src/gajim.py:1766
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "%s Vam želi poslati datoteku."
 
-#: ../src/gajim.py:1830
+#: ../src/gajim.py:1834
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
 msgstr "Uspešno ste primili datoteku %(filename)s od kontakta %(name)s."
 
 #. ft stopped
-#: ../src/gajim.py:1834
+#: ../src/gajim.py:1838
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "Prenos datoteke %(filename)s od kontakta %(name)s je zaustavljen."
 
-#: ../src/gajim.py:1847
+#: ../src/gajim.py:1851
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "Uspešno ste poslali datoteku %(filename)s za kontakt %(name)s"
 
 #. ft stopped
-#: ../src/gajim.py:1851
+#: ../src/gajim.py:1855
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "Prenos %(filename)s za kontakt %(name)s je zaustavljen. "
 
-#: ../src/gajim.py:1939
+#: ../src/gajim.py:1943
 #, python-format
 msgid ""
 "Unable to decrypt message from %s\n"
@@ -7777,36 +7757,36 @@ msgstr ""
 "Ne mogu da dešifrujem poruku od kontakta %s\n"
 "Možda je promenjena."
 
-#: ../src/gajim.py:1946
+#: ../src/gajim.py:1950
 msgid "Unable to decrypt message"
 msgstr "Ne mogu da dešifrujem poruku"
 
-#: ../src/gajim.py:2020
+#: ../src/gajim.py:2024
 msgid "Username Conflict"
 msgstr "Konflikt korisničkog imena"
 
-#: ../src/gajim.py:2021
+#: ../src/gajim.py:2025
 msgid "Please type a new username for your local account"
 msgstr "Molimo Vas unesite novo korisničko ime za Vaš lokalni nalog"
 
-#: ../src/gajim.py:2033
+#: ../src/gajim.py:2037
 msgid "Ping?"
 msgstr "Ping?"
 
-#: ../src/gajim.py:2046
+#: ../src/gajim.py:2050
 #, python-format
 msgid "Pong! (%s s.)"
 msgstr "Pong! (%s s.)"
 
-#: ../src/gajim.py:2057
+#: ../src/gajim.py:2061
 msgid "Error."
 msgstr "Greška."
 
-#: ../src/gajim.py:2082
+#: ../src/gajim.py:2086
 msgid "Resource Conflict"
 msgstr "Konflikt resursa"
 
-#: ../src/gajim.py:2083
+#: ../src/gajim.py:2087
 msgid ""
 "You are already connected to this account with the same resource. Please "
 "type a new one"
@@ -7814,11 +7794,11 @@ msgstr ""
 "Već ste konektovani na ovaj nalog sa istim resursem. Molimo Vas, otkucajte "
 "novo ime resursa"
 
-#: ../src/gajim.py:2138
+#: ../src/gajim.py:2142
 msgid "Error verifying SSL certificate"
 msgstr "Greška pri verifikaciji SSL sertifikata"
 
-#: ../src/gajim.py:2139
+#: ../src/gajim.py:2143
 #, python-format
 msgid ""
 "There was an error verifying the SSL certificate of your jabber server: %"
@@ -7829,16 +7809,16 @@ msgstr ""
 "servera:%(error)s\n"
 "Da li i dalje želite da se konektujete na ovaj server?"
 
-#: ../src/gajim.py:2144
+#: ../src/gajim.py:2148
 msgid "Ignore this error for this certificate."
 msgstr "Ignoriši ovu grešku za ovaj sertifikat."
 
-#: ../src/gajim.py:2164
+#: ../src/gajim.py:2168
 msgid "SSL certificate error"
 msgstr "Greška SSL sertifikata"
 
-#: ../src/gajim.py:2165
-#, fuzzy, python-format
+#: ../src/gajim.py:2169
+#, python-format
 msgid ""
 "It seems the SSL certificate of account %(account)s has changed or your "
 "connection is being hacked.\n"
@@ -7847,17 +7827,18 @@ msgid ""
 "\n"
 "Do you still want to connect and update the fingerprint of the certificate?"
 msgstr ""
-"Čini se da se SSL sertifikat promenio ili je Vaša konekcija napadnuta.\n"
+"Čini se da se SSL sertifikat naloga %(account)s promenio ili je Vaša "
+"konekcija napadnuta.\n"
 "Stari otisak: %(old)s\n"
 "Novi otisak: %(new)s\n"
 "\n"
-"Da li i dalje želite da se konektujete i osvežite otisak ovog sertifikata?"
+"Da li i dalje želite da se povežete i osvežite otisak ovog sertifikata?"
 
-#: ../src/gajim.py:2195 ../src/gajim.py:2230
+#: ../src/gajim.py:2199 ../src/gajim.py:2234
 msgid "Insecure connection"
 msgstr "Nesigurna veza"
 
-#: ../src/gajim.py:2196
+#: ../src/gajim.py:2200
 msgid ""
 "You are about to send your password on an unencrypted connection. Are you "
 "sure you want to do that?"
@@ -7865,11 +7846,11 @@ msgstr ""
 "Upravo ćete poslati lozinku preko nešifrovane veze. Jeste li sigurni da "
 "želite to da uradite?"
 
-#: ../src/gajim.py:2198 ../src/gajim.py:2233
+#: ../src/gajim.py:2202 ../src/gajim.py:2237
 msgid "Yes, I really want to connect insecurely"
 msgstr "Da, zaista želim da se konektujem nesigurnom vezom"
 
-#: ../src/gajim.py:2231
+#: ../src/gajim.py:2235
 msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
@@ -7877,27 +7858,27 @@ msgstr ""
 "Upravo ćete poslati lozinku preko nesigurne veze. Trebalo bi da instalirate "
 "PyOpenSSL da sprečite ovo. Da li želite da nastavite?"
 
-#: ../src/gajim.py:2251
+#: ../src/gajim.py:2255
 msgid "PEP node was not removed"
 msgstr "PEP čvor nije uklonjen"
 
-#: ../src/gajim.py:2252
+#: ../src/gajim.py:2256
 #, python-format
 msgid "PEP node %(node)s was not removed: %(message)s"
 msgstr "PEP čvor %(node)s nije uklonjen: %(message)s"
 
 #. theme doesn't exist, disable emoticons
-#: ../src/gajim.py:2737 ../src/gajim.py:2758
+#: ../src/gajim.py:2741 ../src/gajim.py:2762
 msgid "Emoticons disabled"
 msgstr "Smajliji isključeni"
 
-#: ../src/gajim.py:2738
+#: ../src/gajim.py:2742
 msgid ""
 "Your configured emoticons theme has not been found, so emoticons have been "
 "disabled."
 msgstr "Vaša tema za smajlije nije nađena, pa su smajliji isključeni."
 
-#: ../src/gajim.py:2759
+#: ../src/gajim.py:2763
 msgid ""
 "Your configured emoticons theme cannot been loaded. You maybe need to update "
 "the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons "
@@ -7907,30 +7888,30 @@ msgstr ""
 "emoticons.py datoteke. Pogledajte http://trac.gajim.org/wiki/Emoticons za "
 "više detalja."
 
-#: ../src/gajim.py:2785 ../src/roster_window.py:3356
+#: ../src/gajim.py:2789 ../src/roster_window.py:3356
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Nemoguće je pristupiti grupnom razgovoru ako ste nevidljivi"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gajim.py:3064
+#: ../src/gajim.py:3068
 msgid "Could not save your settings and preferences"
 msgstr "Nije moguće čuvanje Vaših podešavanja"
 
-#: ../src/gajim.py:3161
+#: ../src/gajim.py:3165
 msgid "Bookmark already set"
 msgstr "Marker je već postavljen"
 
-#: ../src/gajim.py:3162
+#: ../src/gajim.py:3166
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "Grupni razgovor \"%s\" je već markiran."
 
-#: ../src/gajim.py:3175
+#: ../src/gajim.py:3179
 msgid "Bookmark has been added successfully"
 msgstr "Marker uspešno dodat"
 
-#: ../src/gajim.py:3176
+#: ../src/gajim.py:3180
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
 "Možete upravljati Vašim markerima pomoću menija Akcije iz Vaše liste "
@@ -8508,7 +8489,7 @@ msgid ""
 "the JID is currently in the group chat, he/she/it will also be kicked. Does "
 "NOT support spaces in nickname."
 msgstr ""
-"Korišćenje: /%s <nadimak|džid> [razlog], zabranjuje pristup DžID-u u sobu. "
+"Korišćenje: /%s <nadimak|džid> [razlog], zabranjuje pristup DŽID-u u sobu. "
 "Nadimak učesnika može biti zamenjen, ali ne i ako sadrži \"@\". Ako je "
 "Džaber ID trenutno u sobi, on/ona će biti izbačen(a). Razmaci u imenima NISU "
 "podržani."
@@ -8536,7 +8517,7 @@ msgid ""
 "Usage: /%s <JID> [reason], invites JID to the current group chat, optionally "
 "providing a reason."
 msgstr ""
-"Način korišćenja: /%s DžID> [razlog], poziva Džaber ID u trenutni grupni "
+"Način korišćenja: /%s DŽID> [razlog], poziva Džaber ID u trenutni grupni "
 "razgovor, opciono dajući razlog."
 
 #: ../src/groupchat_control.py:1683
@@ -8784,6 +8765,7 @@ msgstr[0] "Da li zaista želite izbrisati dnevnik razgovora označenog kontakta?
 msgstr[1] ""
 "Da li zaista želite izbrisati dnevnike razgovora označenih kontakata?"
 msgstr[2] ""
+"Da li zaista želite izbrisati dnevnike razgovora označenih kontakata?"
 
 #: ../src/history_manager.py:552 ../src/history_manager.py:587
 msgid "This is an irreversible operation."
@@ -8794,7 +8776,7 @@ msgid "Do you really want to delete the selected message?"
 msgid_plural "Do you really want to delete the selected messages?"
 msgstr[0] "Da li zaista želite da izbrišete označenu poruku?"
 msgstr[1] "Da li zaista želite da izbrišete označene poruke?"
-msgstr[2] ""
+msgstr[2] "Da li zaista želite da izbrišete označene poruke?"
 
 #: ../src/history_window.py:289
 #, python-format
@@ -9092,7 +9074,7 @@ msgstr "Kontakt \"%s\" će biti uklonjen sa Vaše liste kontakata"
 #: ../src/roster_window.py:3142
 #, python-format
 msgid "You are about to remove \"%(name)s\" (%(jid)s) from your roster.\n"
-msgstr ""
+msgstr "Uklonićete \"%(name)s\" (%(jid)s) iz Vaših kontakata.\n"
 
 #: ../src/roster_window.py:3147
 msgid ""
