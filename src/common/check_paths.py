@@ -92,7 +92,7 @@ def create_log_db():
 			hash TEXT,
 			data BLOB);
 
-		CREATE TABLE IF NOT EXISTS rooms_last_message_time(
+		CREATE TABLE rooms_last_message_time(
 			jid_id INTEGER PRIMARY KEY UNIQUE,
 			time INTEGER
 		);
