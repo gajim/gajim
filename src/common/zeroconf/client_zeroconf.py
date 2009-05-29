@@ -96,8 +96,9 @@ class ZeroconfListener(IdleObject):
 				break
 		P2PClient(sock[0], ipaddr, sock[1][1], self.conn_holder, [], from_jid)
 
-	def disconnect(self):
+	def disconnect(self, message=''):
 		''' free all resources, we are not listening anymore '''
+		log.info('Disconnecting ZeroconfListener: %s' % message)
 		gajim.idlequeue.remove_timeout(self.fd)
 		gajim.idlequeue.unplug_idle(self.fd)
 		self.fd = -1
