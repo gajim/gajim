@@ -1164,7 +1164,9 @@ class ConnectionVcard:
 				if iq_obj.getErrorCode() not in ('403', '406', '404'):
 					self.private_storage_supported = False
 			# We can now continue connection by requesting the roster
-			self.connection.initRoster()
+			version = gajim.config.get_per('accounts', self.name,
+				'roster_version')
+			self.connection.initRoster(version=version)
 		elif self.awaiting_answers[id_][0] == PRIVACY_ARRIVED:
 			if iq_obj.getType() != 'error':
 				self.privacy_rules_supported = True

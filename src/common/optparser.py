@@ -671,4 +671,29 @@ class OptionsParser:
 			gajim.config.set_per('soundevents', evt, 'path', path)
 		gajim.config.set('version', '0.12.1.5')
 
+	def update_config_to_01216(self):
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE IF NOT EXISTS roster_entry(
+					account_jid_id INTEGER PRIMARY KEY,
+					jid_id INTEGER,
+					subscription INTEGER
+				);
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError:
+			pass
+		con.close()
+		gajim.config.set('version', '0.12.1.6')
+
+
+
+
 # vim: se ts=3:

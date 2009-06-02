@@ -96,6 +96,12 @@ def create_log_db():
 			jid_id INTEGER PRIMARY KEY UNIQUE,
 			time INTEGER
 		);
+
+		CREATE TABLE IF NOT EXISTS roster_entry(
+			account_jid_id INTEGER PRIMARY KEY,
+			jid_id INTEGER,
+			subscription INTEGER
+		);
 		'''
 		)
 

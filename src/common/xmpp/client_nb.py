@@ -503,10 +503,10 @@ class NonBlockingClient:
 		self.NonBlockingBind.NonBlockingBind(self._Resource, self._on_sasl_auth)
 		return True
 
-	def initRoster(self):
+	def initRoster(self, version=''):
 		''' Plug in the roster. '''
 		if not self.__dict__.has_key('NonBlockingRoster'):
-			roster_nb.NonBlockingRoster.get_instance().PlugIn(self)
+			roster_nb.NonBlockingRoster.get_instance(version=version).PlugIn(self)
 
 	def getRoster(self, on_ready=None):
 		''' Return the Roster instance, previously plugging it in and

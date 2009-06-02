@@ -36,9 +36,10 @@ class NonBlockingRoster(PlugIn):
 		You can also use mapping interface for access to the internal representation of
 		contacts in roster.
 		'''
-	def __init__(self):
+	def __init__(self, version=''):
 		''' Init internal variables. '''
 		PlugIn.__init__(self)
+		self.version = version
 		self._data = {}
 		self.set=None
 		self._exported_methods=[self.getRoster]
@@ -48,7 +49,10 @@ class NonBlockingRoster(PlugIn):
 			(or if the 'force' argument is set). '''
 		if self.set is None: self.set=0
 		elif not force: return
-		self._owner.send(Iq('get',NS_ROSTER))
+
+		iq = Iq('get',NS_ROSTER)
+		iq.setTagAttr('query', 'ver', self.version)
+		self._owner.send(iq)
 		log.info('Roster requested from server')
 
 	def RosterIqHandler(self,dis,stanza):
