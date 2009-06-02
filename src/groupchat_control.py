@@ -1236,6 +1236,11 @@ class GroupchatControl(ChatControlBase):
 		else:
 			iter = self.get_contact_iter(nick)
 			if not iter:
+				if '210' in statusCode:
+					# Server changed our nick
+					self.nick = nick
+					s = _('You are now known as %s') % nick
+					self.print_conversation(s, 'info', tim=tim)
 				iter = self.add_contact_to_roster(nick, show, role, affiliation,
 					status, jid)
 				newly_created = True
