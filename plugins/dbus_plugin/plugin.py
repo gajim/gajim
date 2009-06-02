@@ -43,6 +43,10 @@ from common import dbus_support
 if dbus_support.supported:
 	import dbus
 	if dbus_support:
+		INTERFACE = 'org.gajim.dbusplugin.RemoteInterface'
+		OBJ_PATH = '/org/gajim/dbusplugin/RemoteObject'
+		SERVICE = 'org.gajim.dbusplugin'
+		
 		import dbus.service
 		import dbus.glib
 		# type mapping
@@ -665,10 +669,6 @@ if dbus_support.supported:
 							JoinGroupchatWindow(account, room_jid, nick)
 				else:
 					gajim.interface.join_gc_room(account, room_jid, nick, password)
-
-INTERFACE = 'org.gajim.dbusplugin.RemoteInterface'
-OBJ_PATH = '/org/gajim/dbusplugin/RemoteObject'
-SERVICE = 'org.gajim.dbusplugin'
 
 from common import gajim
 from common import helpers
