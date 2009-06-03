@@ -1,3 +1,18 @@
+Gajim 0.12.2 (XX June 2009)
+
+  * Better keepalive / ping behaviour
+  * Fix custom port handling
+  * Improve error messages handling
+  * Totem support for played music
+  * Fix SSL with some servers
+  * Handle XFCE notification-daemon
+  * Restore old behaviour of click on systray: left click to open events
+  * Network manager 0.7 support
+  * Move logs file under windows to $APPDATA/gajim
+  * Improve Kerberos support
+  * Many bugfixes here and there
+  * Add -c option to history_manager
+
 Gajim 0.12.1 (21 December 2008)
 
   * Fix filetransfer
