@@ -1022,7 +1022,11 @@ class ChatControlBase(MessageControl):
 		self.parent_win.get_active_control() == self and \
 		self.parent_win.window.is_active():
 			# we are at the end
-			if self.session and self.session.remove_events(types_list):
+			if self.type_id == message_control.TYPE_GC:
+				if not gajim.events.remove_events(self.account, jid,
+				types=types_list):
+					self.redraw_after_event_removed(jid)
+			elif self.session and self.session.remove_events(types_list):
 				# There were events to remove
 				self.redraw_after_event_removed(jid)
 
