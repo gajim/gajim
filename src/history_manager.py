@@ -525,7 +525,7 @@ class HistoryManager:
 				continue
 
 			try:
-				time_ = time.strftime('%x', time.localtime(float(time_))).decode(
+				time_ = time.strftime('%c', time.localtime(float(time_))).decode(
 					locale.getpreferredencoding())
 			except ValueError:
 				pass
