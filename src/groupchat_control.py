@@ -1252,6 +1252,9 @@ class GroupchatControl(ChatControlBase):
 			else:
 				gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid,
 					nick)
+				if not gc_c:
+					log.error('%s has an iter, but no gc_contact instance')
+					return
 				# Re-get vcard if avatar has changed
 				# We do that here because we may request it to the real JID if we
 				# knows it. connections.py doesn't know it.
