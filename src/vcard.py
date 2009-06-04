@@ -90,12 +90,16 @@ class VcardWindow:
 			gc_contact.room_jid, account)
 			if gc_contact.jid and not gc_control.is_anonymous:
 				self.real_jid = gc_contact.jid
+				self.real_jid_for_vcard = gc_contact.jid
 				if gc_contact.resource:
 					self.real_jid += '/' + gc_contact.resource
 			else:
 				self.real_jid = gc_contact.get_full_jid()
+				self.real_jid_for_vcard = self.real_jid
+			self.real_resource = gc_contact.name
 		else:
 			self.real_jid = contact.get_full_jid()
+			self.real_resource = contact.resource
 
 		puny_jid = helpers.sanitize_filename(contact.jid)
 		local_avatar_basepath = os.path.join(gajim.AVATAR_PATH, puny_jid) + \
@@ -395,10 +399,9 @@ class VcardWindow:
 				gobject.idle_add(gajim.connections[self.account].\
 					request_entity_time, self.contact.jid, self.contact.resource)
 
-
-		self.os_info = {0: {'resource': self.contact.resource, 'client': '',
+		self.os_info = {0: {'resource': self.real_resource, 'client': '',
 			'os': ''}}
-		self.time_info = {0: {'resource': self.contact.resource, 'time': ''}}
+		self.time_info = {0: {'resource': self.real_resource, 'time': ''}}
 		i = 1
 		contact_list = gajim.contacts.get_contacts(self.account, self.contact.jid)
 		if contact_list:
@@ -430,11 +433,7 @@ class VcardWindow:
 
 		if self.gc_contact:
 			# If we know the real jid, remove the resource from vcard request
-			if self.gc_contact.jid:
-				jid = self.gc_contact.jid
-			else:
-				jid = self.real_jid
-			gajim.connections[self.account].request_vcard(jid,
+			gajim.connections[self.account].request_vcard(self.real_jid_for_vcard,
 				self.gc_contact.get_full_jid())
 		else:
 			gajim.connections[self.account].request_vcard(self.contact.jid)
