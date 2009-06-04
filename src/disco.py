@@ -1241,7 +1241,8 @@ class ToplevelAgentBrowser(AgentBrowser):
 			return
 		service = model[iter_][0].decode('utf-8')
 		if service in gajim.interface.instances[self.account]['search']:
-			gajim.interface.instances[self.account]['search'][service].present()
+			gajim.interface.instances[self.account]['search'][service].window.\
+				present()
 		else:
 			gajim.interface.instances[self.account]['search'][service] = \
 				search_window.SearchWindow(self.account, service)
