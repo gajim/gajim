@@ -3476,7 +3476,7 @@ class Interface:
 
 		if gajim.config.get('soundplayer') == '':
 			# only on first time Gajim starts
-			commands = ('aplay', 'play', 'esdplay', 'artsplay')
+			commands = ('aplay', 'play', 'esdplay', 'artsplay', 'ossplay')
 			for command in commands:
 				if helpers.is_in_path(command):
 					if command == 'aplay':
