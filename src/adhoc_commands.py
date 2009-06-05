@@ -44,7 +44,7 @@ class CommandWindow:
 
 	TODO: gtk 2.10 has a special wizard-widget, consider using it...'''
 
-	def __init__(self, account, jid):
+	def __init__(self, account, jid, commandnode=None):
 		'''Create new window.'''
 
 		# an account object
@@ -55,7 +55,7 @@ class CommandWindow:
 		self.commandlist=None	# a list of (commandname, commanddescription)
 
 		# command's data
-		self.commandnode = None
+		self.commandnode = commandnode
 		self.sessionid = None
 		self.dataform = None
 		self.allow_stage3_close = False
@@ -78,8 +78,12 @@ class CommandWindow:
 		self.data_form_widget.show()
 		self.sending_form_stage_vbox.pack_start(self.data_form_widget)
 
-		# setting initial stage
-		self.stage1()
+		if self.commandnode:
+			# Execute command
+			self.stage3()
+		else:
+			# setting initial stage
+			self.stage1()
 
 		# displaying the window
 		self.xml.signal_autoconnect(self)
