@@ -145,10 +145,10 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="accounts_menuitem">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">A_ccounts</property>
+                        <property name="label" translatable="yes">_Accounts</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_accounts_menuitem_activate"/>
-                        <accelerator key="A" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+                        <accelerator key="A" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK" signal="activate"/>
                         <child internal-child="image">
                           <widget class="GtkImage" id="image1610">
                             <property name="visible">True</property>
@@ -227,6 +227,15 @@
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_show_offline_contacts_menuitem_activate"/>
                         <accelerator key="O" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckMenuItem" id="show_only_active_contacts_menuitem">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Show Only _Active Contacts</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_show_only_active_contacts_menuitem_activate"/>
+                        <accelerator key="Y" modifiers="GDK_CONTROL_MASK" signal="activate"/>
                       </widget>
                     </child>
                     <child>

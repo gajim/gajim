@@ -1,11 +1,10 @@
-##	common/xmpp_stringprep.py
+# -*- coding:utf-8 -*-
+## src/common/xmpp_stringprep.py
 ##
-## Contributors for this file:
-##	- Yann Leboulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
-##
-##	Copyright (C) 2001-2005 Twisted Matrix Laboratories.
-##	Copyright (C) 2005 Gajim Team
+## Copyright (C) 2001-2005 Twisted Matrix Laboratories
+## Copyright (C) 2005-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006 Stefan Bethge <stefan AT lanpartei.de>
+## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -15,11 +14,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import sys, warnings
@@ -88,7 +87,7 @@ class MappingTableFromFunction:
 		self.map = map_table_function
 
 class EmptyMappingTable:
-	
+
 	__implements__ = IMappingTable
 
 	def __init__(self, in_table_function):
@@ -146,7 +145,7 @@ class Profile:
 		for c in string:
 			if stringprep.in_table_a1(c):
 				raise UnicodeError, "Unassigned code point %s" % repr(c)
-	
+
 	def check_bidirectionals(self, string):
 		found_LCat = False
 		found_RandALCat = False
@@ -230,12 +229,12 @@ if crippled:
 						prohibiteds=[LookupTable([u' ', u'"', u'&', u"'", u'/',
 												u':', u'<', u'>', u'@'])],
 						check_unassigneds=False,
-						check_bidi=False) 
+						check_bidi=False)
 
 	resourceprep = Profile(normalize=False,
 							check_unassigneds=False,
 							check_bidi=False)
-	
+
 else:
 	C_11 = LookupTableFromFunction(stringprep.in_table_c11)
 	C_12 = LookupTableFromFunction(stringprep.in_table_c12)
@@ -263,3 +262,5 @@ else:
 													C_3, C_4, C_5, C_6, C_7, C_8, C_9])
 
 nameprep = NamePrep()
+
+# vim: se ts=3:

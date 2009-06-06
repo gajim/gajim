@@ -50,7 +50,7 @@ class log_calls(object):
     Decorator class for functions to easily log when they are entered and left.
     '''
     
-    filter_out_classes = ['GajimPlugin', 'GajimPluginConfig', 'PluginManager',
+    filter_out_classes = ['GajimPluginConfig', 'PluginManager',
                           'GajimPluginConfigDialog', 'PluginsWindow']
     '''
     List of classes from which no logs should be emited when methods are called,

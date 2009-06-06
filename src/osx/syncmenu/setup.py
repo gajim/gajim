@@ -1,3 +1,4 @@
+import sys
 from distutils.core import setup, Extension
 import commands
 
@@ -25,3 +26,5 @@ setup(name='syncmenu', version='0.2',
 				  extra_link_args=libs + ['-framework', 'Carbon'],
 				  extra_compile_args=['-Wall'] + cflags)
       ])
+
+# vim: se ts=3:

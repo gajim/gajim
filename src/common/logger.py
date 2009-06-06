@@ -1,7 +1,13 @@
-## logger.py
+# -*- coding:utf-8 -*-
+## src/common/logger.py
 ##
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
+## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2007 Tomasz Melcer <liori AT exroot.org>
+##                    Julien Pivotto <roidelapluie AT gmail.com>
 ##
 ## This file is part of Gajim.
 ##
@@ -11,11 +17,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 ''' This module allows to access the on-disk database of logs. '''
@@ -83,7 +89,8 @@ class Constants:
 			self.TYPE_NEWMAIL,
 			self.TYPE_RSS,
 			self.TYPE_WEATHER,
-		) = range(13)
+			self.TYPE_MRIM,
+		) = range(14)
 
 constants = Constants()
 
@@ -169,9 +176,9 @@ class Logger:
 		pm (so higly unlikely) and if we fail we do not go chaos
 		(user will see the first pm as if it was message in room's public chat)
 		and after that all okay'''
-		
-		if jid.find('/') > -1: 
-			possible_room_jid, possible_nick = jid.split('/', 1)
+
+		if jid.find('/') > -1:
+			possible_room_jid = jid.split('/', 1)[0]
 			return self.jid_is_room_jid(possible_room_jid)
 		else:
 			# it's not a full jid, so it's not a pm one
@@ -211,14 +218,13 @@ class Logger:
 		try:
 			self.cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid,
 				typ))
+			self.con.commit()
 		except sqlite.IntegrityError, e:
 			# Jid already in DB, maybe added by another instance. re-read DB
 			self.get_jids_already_in_db()
 			return self.get_jid_id(jid, typestr)
-		try:
-			self.con.commit()
 		except sqlite.OperationalError, e:
-			print >> sys.stderr, str(e)
+			raise exceptions.PysqliteOperationalError(str(e))
 		jid_id = self.cur.lastrowid
 		self.jids_already_in.append(jid)
 		return jid_id
@@ -290,6 +296,8 @@ class Logger:
 			return constants.TYPE_RSS
 		if type_ == 'weather':
 			return constants.TYPE_WEATHER
+		if type_ == 'mrim':
+			return constants.TYPE_MRIM
 		return None
 
 	def convert_api_values_to_human_transport_type(self, type_id):
@@ -320,13 +328,15 @@ class Logger:
 			return 'rss'
 		if type_id == constants.TYPE_WEATHER:
 			return 'weather'
+		if type_id == constants.TYPE_MRIM:
+			return 'mrim'
 
 	def commit_to_db(self, values, write_unread = False):
 		sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message, subject) VALUES (?, ?, ?, ?, ?, ?, ?)'
 		try:
 			self.cur.execute(sql, values)
 		except sqlite.DatabaseError:
-			raise exceptions.DatabaseMalformed 
+			raise exceptions.DatabaseMalformed
 		except sqlite.OperationalError, e:
 			raise exceptions.PysqliteOperationalError(str(e))
 		message_id = None
@@ -358,12 +368,12 @@ class Logger:
 			self.cur.execute(
 				'SELECT message_id from unread_messages')
 			results = self.cur.fetchall()
-		except:
+		except Exception:
 			pass
 		for message in results:
 			msg_id = message[0]
 			# here we get infos for that message, and related jid from jids table
-			# do NOT change order of SELECTed things, unless you change function(s) 
+			# do NOT change order of SELECTed things, unless you change function(s)
 			# that called this function
 			self.cur.execute('''
 				SELECT logs.log_line_id, logs.message, logs.time, logs.subject,
@@ -413,7 +423,10 @@ class Logger:
 		# now we may have need to do extra care for some values in columns
 		if kind == 'status': # we store (not None) time, jid, show, msg
 			# status for roster items
-			jid_id = self.get_jid_id(jid)
+			try:
+				jid_id = self.get_jid_id(jid)
+			except exceptions.PysqliteOperationalError, e:
+				raise exceptions.PysqliteOperationalError(str(e))
 			if show is None: # show is None (xmpp), but we say that 'online'
 				show_col = constants.SHOW_ONLINE
 
@@ -422,7 +435,11 @@ class Logger:
 			if show is None: # show is None (xmpp), but we say that 'online'
 				show_col = constants.SHOW_ONLINE
 			jid, nick = jid.split('/', 1)
-			jid_id = self.get_jid_id(jid, 'ROOM') # re-get jid_id for the new jid
+			try:
+				# re-get jid_id for the new jid
+				jid_id = self.get_jid_id(jid, 'ROOM')
+			except exceptions.PysqliteOperationalError, e:
+				raise exceptions.PysqliteOperationalError(str(e))
 			contact_name_col = nick
 
 		elif kind == 'gc_msg':
@@ -432,10 +449,17 @@ class Logger:
 				# it's server message f.e. error message
 				# when user tries to ban someone but he's not allowed to
 				nick = None
-			jid_id = self.get_jid_id(jid, 'ROOM') # re-get jid_id for the new jid
+			try:
+				# re-get jid_id for the new jid
+				jid_id = self.get_jid_id(jid, 'ROOM')
+			except exceptions.PysqliteOperationalError, e:
+				raise exceptions.PysqliteOperationalError(str(e))
 			contact_name_col = nick
 		else:
-			jid_id = self.get_jid_id(jid)
+			try:
+				jid_id = self.get_jid_id(jid)
+			except exceptions.PysqliteOperationalError, e:
+				raise exceptions.PysqliteOperationalError(str(e))
 			if kind == 'chat_msg_recv':
 				if not self.jid_is_from_pm(jid):
 					# Save in unread table only if it's not a pm
@@ -455,7 +479,11 @@ class Logger:
 		and are already logged but pending to be viewed,
 		returns a list of tupples containg time, kind, message,
 		list with empty tupple if nothing found to meet our demands'''
-		jid_id = self.get_jid_id(jid)
+		try:
+			self.get_jid_id(jid)
+		except exceptions.PysqliteOperationalError, e:
+			# Error trying to create a new jid_id. This means there is no log
+			return []
 		where_sql = self._build_contact_where(account, jid)
 
 		now = int(float(time.time()))
@@ -493,7 +521,11 @@ class Logger:
 		'''returns contact_name, time, kind, show, message
 		for each row in a list of tupples,
 		returns list with empty tupple if we found nothing to meet our demands'''
-		jid_id = self.get_jid_id(jid)
+		try:
+			self.get_jid_id(jid)
+		except exceptions.PysqliteOperationalError, e:
+			# Error trying to create a new jid_id. This means there is no log
+			return []
 		where_sql = self._build_contact_where(account, jid)
 
 		start_of_day = self.get_unix_time_from_date(year, month, day)
@@ -514,7 +546,11 @@ class Logger:
 		'''returns contact_name, time, kind, show, message
 		for each row in a list of tupples,
 		returns list with empty tupple if we found nothing to meet our demands'''
-		jid_id = self.get_jid_id(jid)
+		try:
+			self.get_jid_id(jid)
+		except exceptions.PysqliteOperationalError, e:
+			# Error trying to create a new jid_id. This means there is no log
+			return []
 
 		if False: #query.startswith('SELECT '): # it's SQL query (FIXME)
 			try:
@@ -537,7 +573,11 @@ class Logger:
 
 	def get_days_with_logs(self, jid, year, month, max_day, account):
 		'''returns the list of days that have logs (not status messages)'''
-		jid_id = self.get_jid_id(jid)
+		try:
+			self.get_jid_id(jid)
+		except exceptions.PysqliteOperationalError, e:
+			# Error trying to create a new jid_id. This means there is no log
+			return []
 		days_with_logs = []
 		where_sql = self._build_contact_where(account, jid)
 
@@ -546,8 +586,12 @@ class Logger:
 		seconds_in_a_day = 86400 # 60 * 60 * 24
 		last_second_of_month = start_of_month + (seconds_in_a_day * max_day) - 1
 
+		# Select times and 'floor' them to time 0:00
+		# (by dividing, they are integers)
+		# and take only one of the same values (distinct)
+		# Now we have timestamps of time 0:00 of every day with logs
 		self.cur.execute('''
-			SELECT time FROM logs
+			SELECT DISTINCT time/(86400)*86400 FROM logs
 			WHERE (%s)
 			AND time BETWEEN %d AND %d
 			AND kind NOT IN (%d, %d)
@@ -556,31 +600,10 @@ class Logger:
 			constants.KIND_STATUS, constants.KIND_GCSTATUS))
 		result = self.cur.fetchall()
 
-		# Copy all interesting times in a temporary table
-		self.cur.execute('CREATE TEMPORARY TABLE temp_table(time,INTEGER)')
+		# convert timestamps to day of month
 		for line in result:
-			self.cur.execute('''
-				INSERT INTO temp_table (time) VALUES (%d)
-				''' % (line[0]))
+			days_with_logs[0:0]=[time.gmtime(line[0])[2]]
 
-		# then search in this small temp table for each day
-		for day in xrange(1, max_day + 1):  # count from 1 to 28 or to 30 or to 31
-			start_of_day = self.get_unix_time_from_date(year, month, day)
-			last_second_of_day = start_of_day + seconds_in_a_day - 1
-
-			# just ask one row to see if we have sth for this date
-			self.cur.execute('''
-				SELECT time FROM temp_table
-				WHERE time BETWEEN %d AND %d
-				LIMIT 1
-				''' % (start_of_day, last_second_of_day))
-			result = self.cur.fetchone()
-			if result:
-				days_with_logs[0:0]=[day]
-
-		# Delete temporary table
-		self.cur.execute('DROP TABLE temp_table')
-		result = self.cur.fetchone()
 		return days_with_logs
 
 	def get_last_date_that_has_logs(self, jid, account = None, is_room = False):
@@ -590,7 +613,11 @@ class Logger:
 		if not is_room:
 			where_sql = self._build_contact_where(account, jid)
 		else:
-			jid_id = self.get_jid_id(jid, 'ROOM')
+			try:
+				jid_id = self.get_jid_id(jid, 'ROOM')
+			except exceptions.PysqliteOperationalError, e:
+				# Error trying to create a new jid_id. This means there is no log
+				return None
 			where_sql = 'jid_id = %s' % jid_id
 		self.cur.execute('''
 			SELECT MAX(time) FROM logs
@@ -608,7 +635,11 @@ class Logger:
 	def get_room_last_message_time(self, jid):
 		'''returns FASTLY last time (in seconds since EPOCH) for which
 		we had logs for that room from rooms_last_message_time table'''
-		jid_id = self.get_jid_id(jid, 'ROOM')
+		try:
+			jid_id = self.get_jid_id(jid, 'ROOM')
+		except exceptions.PysqliteOperationalError, e:
+			# Error trying to create a new jid_id. This means there is no log
+			return None
 		where_sql = 'jid_id = %s' % jid_id
 		self.cur.execute('''
 			SELECT time FROM rooms_last_message_time
@@ -640,7 +671,10 @@ class Logger:
 		family = gajim.contacts.get_metacontacts_family(account, jid)
 		if family:
 			for user in family:
-				jid_id = self.get_jid_id(user['jid'])
+				try:
+					jid_id = self.get_jid_id(user['jid'])
+				except exceptions.PysqliteOperationalError, e:
+					continue
 				where_sql += 'jid_id = %s' % jid_id
 				if user != family[-1]:
 					where_sql += ' OR '
@@ -696,21 +730,26 @@ class Logger:
 		# get data from table
 		# the data field contains binary object (gzipped data), this is a hack
 		# to get that data without trying to convert it to unicode
-		#tmp, self.con.text_factory = self.con.text_factory, str
 		try:
-			self.cur.execute('SELECT hash_method, hash, data FROM caps_cache;');
+			self.cur.execute('SELECT hash_method, hash, data FROM caps_cache;')
 		except sqlite.OperationalError:
 			# might happen when there's no caps_cache table yet
 			# -- there's no data to read anyway then
-			#self.con.text_factory = tmp
 			return
-		#self.con.text_factory = tmp
-		for hash_method, hash, data in self.cur:
+
+		# list of corrupted entries that will be removed
+		to_be_removed = []
+		for hash_method, hash_, data in self.cur:
 			# for each row: unpack the data field
 			# (format: (category, type, name, category, type, name, ...
 			#   ..., 'FEAT', feature1, feature2, ...).join(' '))
 			# NOTE: if there's a need to do more gzip, put that to a function
-			data = GzipFile(fileobj=StringIO(str(data))).read().split('\0')
+			try:
+				data = GzipFile(fileobj=StringIO(str(data))).read().decode('utf-8').split('\0')
+			except IOError:
+				# This data is corrupted. It probably contains non-ascii chars
+				to_be_removed.append((hash_method, hash_))
+				continue
 			i=0
 			identities = list()
 			features = list()
@@ -728,9 +767,12 @@ class Logger:
 				i += 1
 
 			# yield the row
-			yield hash_method, hash, identities, features
+			yield hash_method, hash_, identities, features
+		for hash_method, hash_ in to_be_removed:
+			sql = 'DELETE FROM caps_cache WHERE hash_method = "%s" AND hash = "%s"' % (hash_method, hash_)
+			self.simple_commit(sql)
 
-	def add_caps_entry(self, hash_method, hash, identities, features):
+	def add_caps_entry(self, hash_method, hash_, identities, features):
 		data=[]
 		for identity in identities:
 			# there is no FEAT category
@@ -744,14 +786,17 @@ class Logger:
 		# if there's a need to do more gzip, put that to a function
 		string = StringIO()
 		gzip = GzipFile(fileobj=string, mode='w')
+		data = data.encode('utf-8') # the gzip module can't handle unicode objects
 		gzip.write(data)
 		gzip.close()
 		data = string.getvalue()
 		self.cur.execute('''
 			INSERT INTO caps_cache ( hash_method, hash, data )
 			VALUES (?, ?, ?);
-			''', (hash_method, hash, buffer(data))) # (1) -- note above
+			''', (hash_method, hash_, buffer(data))) # (1) -- note above
 		try:
 			self.con.commit()
 		except sqlite.OperationalError, e:
 			print >> sys.stderr, str(e)
+
+# vim: se ts=3:

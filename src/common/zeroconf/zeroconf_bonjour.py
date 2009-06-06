@@ -18,10 +18,8 @@
 ##
 
 from common import gajim
-import sys
 import select
 import re
-from string import split
 from common.zeroconf.zeroconf import C_BARE_NAME, C_DOMAIN
 
 try:
@@ -33,23 +31,23 @@ except ImportError, e:
 resolve_timeout  = 1
 
 class Zeroconf:
-	def __init__(self, new_serviceCB, remove_serviceCB, name_conflictCB, 
+	def __init__(self, new_serviceCB, remove_serviceCB, name_conflictCB,
 		disconnected_CB, error_CB, name, host, port):
 		self.domain = None   # specific domain to browse
-		self.stype = '_presence._tcp'	
-		self.port = port  # listening port that gets announced	
+		self.stype = '_presence._tcp'
+		self.port = port  # listening port that gets announced
 		self.username = name
 		self.host = host
 		self.txt = pybonjour.TXTRecord()		# service data
-		
-		# XXX these CBs should be set to None when we destroy the object 
-		# (go offline), because they create a circular reference 
+
+		# XXX these CBs should be set to None when we destroy the object
+		# (go offline), because they create a circular reference
 		self.new_serviceCB = new_serviceCB
 		self.remove_serviceCB = remove_serviceCB
 		self.name_conflictCB = name_conflictCB
 		self.disconnected_CB = disconnected_CB
 		self.error_CB = error_CB
-		
+
 		self.contacts = {}    # all current local contacts with data
 		self.connected = False
 		self.announced = False
@@ -66,7 +64,7 @@ class Zeroconf:
 		if not (flags & pybonjour.kDNSServiceFlagsAdd):
 			self.remove_service_callback(serviceName)
 			return
-		
+
 		# asynchronous resolving
 		resolve_sdRef = pybonjour.DNSServiceResolve(0, interfaceIndex, serviceName, regtype, replyDomain, self.service_resolved_callback)
 
@@ -100,14 +98,11 @@ class Zeroconf:
 	# takes a TXTRecord instance
 	def txt_array_to_dict(self, txt):
 		items = pybonjour.TXTRecord.parse(txt)._items
-		dict = {}
-		for val in items.values():
-			dict[val[0]] = val[1]
-		return dict
+		return dict((v[0], v[1]) for v in items.values())
 
-	def service_resolved_callback(self, sdRef, flags, interfaceIndex, errorCode, fullname, 
+	def service_resolved_callback(self, sdRef, flags, interfaceIndex, errorCode, fullname,
 			hosttarget, port, txtRecord):
-        
+
         # TODO: do proper decoding...
 		escaping= {
 		r'\.': '.',
@@ -116,8 +111,10 @@ class Zeroconf:
 		}
 
 		# Split on '.' but do not split on '\.'
-		name, stype, protocol, domain, dummy = re.split('(?<!\\\\)\.', fullname)
-		
+		result = re.split('(?<!\\\\)\.', fullname)
+		name = result[0]
+		protocol, domain = result[2:4]
+
 		# Replace the escaped values
 		for src, trg in escaping.items():
 			name = name.replace(src, trg)
@@ -129,11 +126,11 @@ class Zeroconf:
 
 		if not self.connected:
 			return
-		
+
 		bare_name = name
 		if '@' not in name:
 			name = name + '@' + name
-		
+
 		# we don't want to see ourselves in the list
 		if name != self.name:
 			self.contacts[name] = (name, domain, interfaceIndex, protocol, hosttarget, hosttarget, port, bare_name, txtRecord)
@@ -149,18 +146,18 @@ class Zeroconf:
 		self.resolved.append(True)
 
 	# different handler when resolving all contacts
-	def service_resolved_all_callback(self, sdRef, flags, interfaceIndex, errorCode, fullname, hosttarget, port, txtRecord):	
+	def service_resolved_all_callback(self, sdRef, flags, interfaceIndex, errorCode, fullname, hosttarget, port, txtRecord):
 		if not self.connected:
 			return
-		
+
 		escaping= {
 		r'\.': '.',
 		r'\032': ' ',
 		r'\064': '@',
 		}
 
-		name, stype, protocol, domain, dummy = split(fullname, '.')
-		
+		name, stype, protocol, domain, dummy = fullname.split('.')
+
 		# Replace the escaped values
 		for src, trg in escaping.items():
 			name = name.replace(src, trg)
@@ -168,7 +165,7 @@ class Zeroconf:
 		bare_name = name
 		if name.find('@') == -1:
 			name = name + '@' + name
-		
+
 		# we don't want to see ourselves in the list
 		if name != self.name:
 			self.contacts[name] = (name, domain, interfaceIndex, protocol, hosttarget, hosttarget, port, bare_name, txtRecord)
@@ -186,7 +183,7 @@ class Zeroconf:
 			#check if last part is a number and if, increment it
 			try:
 				stripped = str(int(parts[-1]))
-			except:
+			except Exception:
 				stripped = 1
 			alternative_name = self.username + str(stripped+1)
 			self.name_conflictCB(alternative_name)
@@ -204,12 +201,12 @@ class Zeroconf:
 
 	def create_service(self):
 		txt = {}
-			
+
 		#remove empty keys
 		for key,val in self.txt:
 			if val:
 				txt[key] = val
-			
+
 		txt['port.p2pj'] = self.port
 		txt['version'] = 1
 		txt['txtvers'] = 1
@@ -221,7 +218,7 @@ class Zeroconf:
 			txt['status'] = 'avail'
 
 		self.txt = pybonjour.TXTRecord(txt, strict=True)
-		
+
 		try:
 			sdRef = pybonjour.DNSServiceRegister(name = self.name,
 		   	   	regtype = self.stype, port = self.port, txtRecord = self.txt,
@@ -252,7 +249,7 @@ class Zeroconf:
 			self.announced = False
 			return True
 		except pybonjour.BonjourError, e:
-			geajim.log.debug(e)
+			gajim.log.debug(e)
 			return False
 
 
@@ -260,7 +257,7 @@ class Zeroconf:
 		self.name = self.username + '@' + self.host # service name
 
 		self.connected = True
-		
+
 		# start browsing
 		if self.domain is None:
 			# Explicitly browse .local
@@ -271,7 +268,7 @@ class Zeroconf:
 
 		else:
 			self.browse_domain(self.domain)
-		
+
 		return True
 
 	def disconnect(self):
@@ -279,10 +276,10 @@ class Zeroconf:
 			self.connected = False
 			self.browse_sdRef.close()
 			self.remove_announce()
-	
-	
+
+
 	def browse_domain(self, domain=None):
- 		gajim.log.debug('starting to browse')
+		gajim.log.debug('starting to browse')
 		try:
 			self.browse_sdRef = pybonjour.DNSServiceBrowse(regtype=self.stype, domain=domain, callBack=self.browse_callback)
 		except pybonjour.BonjourError, e:
@@ -323,14 +320,16 @@ class Zeroconf:
 		if not jid in self.contacts:
 			return None
 		return self.contacts[jid]
-		
+
 	def update_txt(self, show = None):
 		if show:
 			self.txt['status'] = self.replace_show(show)
 
 		try:
 			pybonjour.DNSServiceUpdateRecord(self.service_sdRef, None, 0, self.txt)
-		except pybonjour.BonjourError, e:
+		except pybonjour.BonjourError:
 			return False
 		return True
 
+
+# vim: se ts=3:

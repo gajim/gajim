@@ -6,8 +6,3 @@ Tune use cases:
 
 Tooltips use cases:
 • Show PEP in GC tooltips
-
-Mood/Activity use cases
-• on connection of an account set them to None
-• on disconnection of an account set them to None
-• on explicit set publish them

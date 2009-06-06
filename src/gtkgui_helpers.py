@@ -1,12 +1,16 @@
-##	gtkgui_helpers.py
+# -*- coding:utf-8 -*-
+## src/gtkgui_helpers.py
 ##
-## Copyright (C) 2003-2007 Yann Leboulanger <asterix@lagaule.org>
-## Copyright (C) 2004-2005 Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
-##						  Travis Shirk <travis@pobox.com>
-##						  Norman Rasmussen <norman@rasmussen.co.za>
-## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de>
+## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
+## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006 Travis Shirk <travis AT pobox.com>
+## Copyright (C) 2006-2007 Junglecow J <junglecow AT gmail.com>
+## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2007 James Newton <redshodan AT gmail.com>
+##                    Julien Pivotto <roidelapluie AT gmail.com>
+## Copyright (C) 2007-2008 Stephan Erb <steve-e AT h3c.de>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -16,11 +20,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import xml.sax.saxutils
@@ -51,13 +55,13 @@ from common import i18n
 from common import gajim
 from common import helpers
 
-gtk.glade.bindtextdomain(i18n.APP, i18n.DIR) 
+gtk.glade.bindtextdomain(i18n.APP, i18n.DIR)
 gtk.glade.textdomain(i18n.APP)
 
 screen_w = gtk.gdk.screen_width()
 screen_h = gtk.gdk.screen_height()
 
-GLADE_DIR = os.path.join('..', 'data', 'glade')
+GLADE_DIR = os.path.join(gajim.DATA_DIR, 'glade')
 def get_glade(file_name, root = None):
 	file_path = os.path.join(GLADE_DIR, file_name)
 	return gtk.glade.XML(file_path, root=root, domain=i18n.APP)
@@ -67,11 +71,11 @@ def get_completion_liststore(entry):
 	completion list consists of (Pixbuf, Text) rows'''
 	completion = gtk.EntryCompletion()
 	liststore = gtk.ListStore(gtk.gdk.Pixbuf, str)
-	
+
 	render_pixbuf = gtk.CellRendererPixbuf()
 	completion.pack_start(render_pixbuf, expand = False)
 	completion.add_attribute(render_pixbuf, 'pixbuf', 0)
-	
+
 	render_text = gtk.CellRendererText()
 	completion.pack_start(render_text, expand = True)
 	completion.add_attribute(render_text, 'text', 1)
@@ -79,21 +83,21 @@ def get_completion_liststore(entry):
 	completion.set_model(liststore)
 	entry.set_completion(completion)
 	return liststore
-	
-	
+
+
 def popup_emoticons_under_button(menu, button, parent_win):
 	''' pops emoticons menu under button, which is in parent_win'''
 	window_x1, window_y1 = parent_win.get_origin()
 	def position_menu_under_button(menu):
 		# inline function, which will not keep refs, when used as CB
 		button_x, button_y = button.allocation.x, button.allocation.y
-		
+
 		# now convert them to X11-relative
 		window_x, window_y = window_x1, window_y1
 		x = window_x + button_x
 		y = window_y + button_y
 
-		menu_width, menu_height = menu.size_request()
+		menu_height = menu.size_request()[1]
 
 		## should we pop down or up?
 		if (y + button.allocation.height + menu_height
@@ -109,7 +113,7 @@ def popup_emoticons_under_button(menu, button, parent_win):
 		return (x, y, push_in)
 
 	menu.popup(None, None, position_menu_under_button, 1, 0)
-	
+
 def get_theme_font_for_option(theme, option):
 	'''return string description of the font, stored in
 	theme preferences'''
@@ -124,12 +128,12 @@ def get_theme_font_for_option(theme, option):
 	fd = pango.FontDescription(font_name)
 	fd.merge(font_desc, True)
 	return fd.to_string()
-	
+
 def get_default_font():
 	'''Get the desktop setting for application font
 	first check for GNOME, then Xfce and last KDE
 	it returns None on failure or else a string 'Font Size' '''
-	
+
 	try:
 		import gconf
 		# in try because daemon may not be there
@@ -137,7 +141,7 @@ def get_default_font():
 
 		return client.get_string('/desktop/gnome/interface/font_name'
 			).decode('utf-8')
-	except:
+	except Exception:
 		pass
 
 	# try to get xfce default font
@@ -146,24 +150,24 @@ def get_default_font():
 	# and http://freedesktop.org/Standards/basedir-spec
 	xdg_config_home = os.environ.get('XDG_CONFIG_HOME', '')
 	if xdg_config_home == '':
-		xdg_config_home = os.path.expanduser('~/.config') # default	
+		xdg_config_home = os.path.expanduser('~/.config') # default
 	xfce_config_file = os.path.join(xdg_config_home, 'xfce4/mcs_settings/gtk.xml')
-	
+
 	kde_config_file = os.path.expanduser('~/.kde/share/config/kdeglobals')
-	
+
 	if os.path.exists(xfce_config_file):
 		try:
-			for line in file(xfce_config_file):
+			for line in open(xfce_config_file):
 				if line.find('name="Gtk/FontName"') != -1:
 					start = line.find('value="') + 7
 					return line[start:line.find('"', start)].decode('utf-8')
-		except:
+		except Exception:
 			#we talk about file
 			print >> sys.stderr, _('Error: cannot open %s for reading') % xfce_config_file
-	
+
 	elif os.path.exists(kde_config_file):
 		try:
-			for line in file(kde_config_file):
+			for line in open(kde_config_file):
 				if line.find('font=') == 0: # font=Verdana,9,other_numbers
 					start = 5 # 5 is len('font=')
 					line = line[start:]
@@ -172,12 +176,12 @@ def get_default_font():
 					font_size = values[1]
 					font_string = '%s %s' % (font_name, font_size) # Verdana 9
 					return font_string.decode('utf-8')
-		except:
+		except Exception:
 			#we talk about file
 			print >> sys.stderr, _('Error: cannot open %s for reading') % kde_config_file
-	
+
 	return None
-	
+
 def autodetect_browser_mailer():
 	# recognize the environment and set appropriate browser/mailer
 	if user_runs_gnome():
@@ -225,19 +229,19 @@ def get_running_processes():
 		files = filter(str.isdigit, files)
 
 		# files that aren't directories...
-		files = filter(lambda f:os.path.isdir('/proc/' + f), files)
+		files = [f for f in files if os.path.isdir('/proc/' + f)]
 
 		# processes owned by somebody not running gajim...
 		# (we check if we have access to that file)
-		files = filter(lambda f:os.access('/proc/' + f +'/exe', os.F_OK), files)
+		files = [f for f in files if os.access('/proc/' + f +'/exe', os.F_OK)]
 
 		# be sure that /proc/[number]/exe is really a symlink
 		# to avoid TBs in incorrectly configured systems
-		files = filter(lambda f:os.path.islink('/proc/' + f + '/exe'), files)
+		files = [f for f in files if os.path.islink('/proc/' + f + '/exe')]
 
 		# list of processes
 		processes = [os.path.basename(os.readlink('/proc/' + f +'/exe')) for f in files]
-		
+
 		return processes
 	return []
 
@@ -269,10 +273,10 @@ class HashDigest:
 		self.algo = self.cleanID(algo)
 		self.digest = self.cleanID(digest)
 
-	def cleanID(self, id):
-		id = id.strip().lower()
-		for strip in (' :.-_'): id = id.replace(strip, '')
-		return id
+	def cleanID(self, id_):
+		id_ = id_.strip().lower()
+		for strip in (' :.-_'): id_ = id_.replace(strip, '')
+		return id_
 
 	def __eq__(self, other):
 		sa, sd = self.algo, self.digest
@@ -367,17 +371,17 @@ def get_abspath_for_script(scriptname, want_type = False):
 	'''checks if we are svn or normal user and returns abspath to asked script
 	if want_type is True we return 'svn' or 'install' '''
 	if os.path.isdir('.svn'): # we are svn user
-		type = 'svn'
+		type_ = 'svn'
 		cwd = os.getcwd() # it's always ending with src
 
 		if scriptname == 'gajim-remote':
 			path_to_script = cwd + '/gajim-remote.py'
-		
+
 		elif scriptname == 'gajim':
 			script = '#!/bin/sh\n' # the script we may create
 			script += 'cd %s' % cwd
 			path_to_script = cwd + '/../scripts/gajim_sm_script'
-				
+
 			try:
 				if os.path.exists(path_to_script):
 					os.remove(path_to_script)
@@ -393,13 +397,13 @@ def get_abspath_for_script(scriptname, want_type = False):
 				print >> sys.stderr, s
 
 	else: # normal user (not svn user)
-		type = 'install'
+		type_ = 'install'
 		# always make it like '/usr/local/bin/gajim'
 		path_to_script = helpers.is_in_path(scriptname, True)
-		
-	
+
+
 	if want_type:
-		return path_to_script, type
+		return path_to_script, type_
 	else:
 		return path_to_script
 
@@ -454,7 +458,7 @@ def possibly_move_window_in_current_desktop(window):
 	root_window = gtk.gdk.screen_get_default().get_root_window()
 	# current user's vd
 	current_virtual_desktop_no = get_current_desktop(root_window)
-	
+
 	# vd roster window is in
 	window_virtual_desktop = get_current_desktop(window.window)
 
@@ -472,13 +476,13 @@ def file_is_locked(path_to_file):
 	'''returns True if file is locked (WINDOWS ONLY)'''
 	if os.name != 'nt': # just in case
 		return
-	
+
 	if not HAS_PYWIN32:
 		return
-	
+
 	secur_att = pywintypes.SECURITY_ATTRIBUTES()
 	secur_att.Initialize()
-	
+
 	try:
 		# try make a handle for READING the file
 		hfile = win32file.CreateFile(
@@ -490,7 +494,7 @@ def file_is_locked(path_to_file):
 			win32con.FILE_ATTRIBUTE_NORMAL,	# normal file
 			0								# no attr. template
 		)
-	except pywintypes.error, e:
+	except pywintypes.error:
 		return True
 	else: # in case all went ok, close file handle (go to hell WinAPI)
 		hfile.Close()
@@ -519,7 +523,7 @@ def _get_fade_color(treeview, selected, focused):
 def get_scaled_pixbuf(pixbuf, kind):
 	'''returns scaled pixbuf, keeping ratio etc or None
 	kind is either "chat", "roster", "notification", "tooltip", "vcard"'''
-	
+
 	# resize to a width / height for the avatar not to have distortion
 	# (keep aspect ratio)
 	width = gajim.config.get(kind + '_avatar_width')
@@ -583,7 +587,7 @@ def get_avatar_pixbuf_from_cache(fjid, is_fake_jid = False, use_local = True):
 		is_fake_jid)
 	if not vcard_dict: # This can happen if cached vcard is too old
 		return 'ask'
-	if not vcard_dict.has_key('PHOTO'):
+	if 'PHOTO' not in vcard_dict:
 		return None
 	pixbuf = vcard.get_avatar_pixbuf_encoded_mime(vcard_dict['PHOTO'])[0]
 	return pixbuf
@@ -615,16 +619,21 @@ def make_pixbuf_grayscale(pixbuf):
 def get_path_to_generic_or_avatar(generic, jid = None, suffix = None):
 	'''Chooses between avatar image and default image.
 	Returns full path to the avatar image if it exists,
-	otherwise returns full path to the image.'''
+	otherwise returns full path to the image.
+	generic must be with extension and suffix without'''
 	if jid:
+		# we want an avatar
 		puny_jid = helpers.sanitize_filename(jid)
 		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + suffix
-		filepath, extension = os.path.splitext(path_to_file) 
-		path_to_local_file = filepath + '_local' + extension 
-		if os.path.exists(path_to_local_file):
-			return path_to_local_file
-		if os.path.exists(path_to_file):
-			return path_to_file
+		path_to_local_file = path_to_file + '_local'
+		for extension in ('.png', '.jpeg'):
+			path_to_local_file_full = path_to_local_file + extension
+			if os.path.exists(path_to_local_file_full):
+				return path_to_local_file_full
+		for extension in ('.png', '.jpeg'):
+			path_to_file_full = path_to_file + extension
+			if os.path.exists(path_to_file_full):
+				return path_to_file_full
 	return os.path.abspath(generic)
 
 def decode_filechooser_file_paths(file_paths):
@@ -632,7 +641,7 @@ def decode_filechooser_file_paths(file_paths):
 	ask sys.getfilesystemencoding() in POSIX
 	file_paths MUST be LIST'''
 	file_paths_list = list()
-	
+
 	if os.name == 'nt': # decode as UTF-8 under Windows
 		for file_path in file_paths:
 			file_path = file_path.decode('utf8')
@@ -641,20 +650,20 @@ def decode_filechooser_file_paths(file_paths):
 		for file_path in file_paths:
 			try:
 				file_path = file_path.decode(sys.getfilesystemencoding())
-			except:
+			except Exception:
 				try:
 					file_path = file_path.decode('utf-8')
-				except:
+				except Exception:
 					pass
 			file_paths_list.append(file_path)
-	
+
 	return file_paths_list
 
 def possibly_set_gajim_as_xmpp_handler():
 	'''registers (by default only the first time) xmmp: to Gajim.'''
 	path_to_dot_kde = os.path.expanduser('~/.kde')
 	if os.path.exists(path_to_dot_kde):
-		path_to_kde_file = os.path.join(path_to_dot_kde, 
+		path_to_kde_file = os.path.join(path_to_dot_kde,
 			'share/services/xmpp.protocol')
 	else:
 		path_to_kde_file = None
@@ -704,7 +713,7 @@ Description=xmpp
 		import gconf
 		# in try because daemon may not be there
 		client = gconf.client_get_default()
-	except:
+	except Exception:
 		return
 
 	old_command = client.get_string('/desktop/gnome/url-handlers/xmpp/command')
@@ -725,9 +734,8 @@ Description=xmpp
 		sectext = _('Would you like to make Gajim the default Jabber client?')
 		checktext = _('Always check to see if Gajim is the default Jabber client '
 			'on startup')
-		def on_cancel():
-			gajim.config.set('check_if_gajim_is_default',
-				dlg.is_checked())
+		def on_cancel(checked):
+			gajim.config.set('check_if_gajim_is_default', checked)
 		dlg = dialogs.ConfirmationDialogCheck(pritext, sectext, checktext,
 			set_gajim_as_xmpp_handler, on_cancel)
 		if gajim.config.get('check_if_gajim_is_default'):
@@ -764,38 +772,9 @@ def destroy_widget(widget):
 
 def on_avatar_save_as_menuitem_activate(widget, jid, account,
 default_name = ''):
-	def on_ok(widget):
-		def on_ok2(file_path, pixbuf):
-			pixbuf.save(file_path, 'jpeg')
-			dialog.destroy()
-
-		file_path = dialog.get_filename()
-		file_path = decode_filechooser_file_paths((file_path,))[0]
-		if os.path.exists(file_path):
-			# check if we have write permissions
-			if not os.access(file_path, os.W_OK):
-				file_name = os.path.basename(file_path)
-				dialogs.ErrorDialog(_('Cannot overwrite existing file "%s"' % 
-					file_name),
-				_('A file with this name already exists and you do not have '
-				'permission to overwrite it.'))
-				return
-			dialog2 = dialogs.FTOverwriteConfirmationDialog(
-				_('This file already exists'), _('What do you want to do?'),
-				False)
-			dialog2.set_transient_for(dialog)
-			dialog2.set_destroy_with_parent(True)
-			response = dialog2.get_response()
-			if response < 0:
-				return
-		else:
-			dirname = os.path.dirname(file_path)
-			if not os.access(dirname, os.W_OK):
-				dialogs.ErrorDialog(_('Directory "%s" is not writable') % \
-				dirname, _('You do not have permission to create files in this'
-				' directory.'))
-				return
-
+	def on_continue(response, file_path):
+		if response < 0:
+			return
 		# Get pixbuf
 		pixbuf = None
 		is_fake = False
@@ -816,28 +795,54 @@ default_name = ''):
 		# Save image
 		try:
 			pixbuf.save(file_path, type_)
-		except:
+		except Exception:
 			if os.path.exists(file_path):
 				os.remove(file_path)
 			new_file_path = '.'.join(file_path.split('.')[:-1]) + '.jpeg'
+			def on_ok(file_path, pixbuf):
+				pixbuf.save(file_path, 'jpeg')
 			dialogs.ConfirmationDialog(_('Extension not supported'),
 				_('Image cannot be saved in %(type)s format. Save as %(new_filename)s?') % {'type': type_, 'new_filename': new_file_path},
-				on_response_ok = (on_ok2, new_file_path, pixbuf))
+				on_response_ok = (on_ok, new_file_path, pixbuf))
 		else:
 			dialog.destroy()
+
+	def on_ok(widget):
+		file_path = dialog.get_filename()
+		file_path = decode_filechooser_file_paths((file_path,))[0]
+		if os.path.exists(file_path):
+			# check if we have write permissions
+			if not os.access(file_path, os.W_OK):
+				file_name = os.path.basename(file_path)
+				dialogs.ErrorDialog(_('Cannot overwrite existing file "%s"' %
+					file_name),
+				_('A file with this name already exists and you do not have '
+				'permission to overwrite it.'))
+				return
+			dialog2 = dialogs.FTOverwriteConfirmationDialog(
+				_('This file already exists'), _('What do you want to do?'),
+				propose_resume=False, on_response=(on_continue, file_path))
+			dialog2.set_transient_for(dialog)
+			dialog2.set_destroy_with_parent(True)
+		else:
+			dirname = os.path.dirname(file_path)
+			if not os.access(dirname, os.W_OK):
+				dialogs.ErrorDialog(_('Directory "%s" is not writable') % \
+				dirname, _('You do not have permission to create files in this'
+				' directory.'))
+				return
+
+		on_continue(0, file_path)
 
 	def on_cancel(widget):
 		dialog.destroy()
 
-	dialog = dialogs.FileChooserDialog(
-		title_text = _('Save Image as...'), 
-		action = gtk.FILE_CHOOSER_ACTION_SAVE, 
-		buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, 
-		gtk.STOCK_SAVE, gtk.RESPONSE_OK),
-		default_response = gtk.RESPONSE_OK,
-		current_folder = gajim.config.get('last_save_dir'),
-		on_response_ok = on_ok,
-		on_response_cancel = on_cancel)
+	dialog = dialogs.FileChooserDialog(title_text=_('Save Image as...'),
+		action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL,
+		gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK),
+		default_response=gtk.RESPONSE_OK,
+		current_folder=gajim.config.get('last_save_dir'), on_response_ok=on_ok,
+		on_response_cancel=on_cancel)
 
 	dialog.set_current_name(default_name)
 	dialog.connect('delete-event', lambda widget, event:
@@ -868,23 +873,40 @@ def load_iconset(path, pixbuf2 = None, transport = False):
 	pixbuf2 on top left of each static images'''
 	path += '/'
 	if transport:
-		list = ('online', 'chat', 'away', 'xa', 'dnd', 'offline',
+		list_ = ('online', 'chat', 'away', 'xa', 'dnd', 'offline',
 			'not in roster')
 	else:
-		list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
+		list_ = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 			'invisible', 'offline', 'error', 'requested', 'event', 'opened',
 			'closed', 'not in roster', 'muc_active', 'muc_inactive')
 		if pixbuf2:
-			list = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
+			list_ = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 				'offline', 'error', 'requested', 'event', 'not in roster')
-	return _load_icon_list(list, path, pixbuf2)
+	return _load_icon_list(list_, path, pixbuf2)
 
 def load_icon(icon_name):
 	'''load an icon from the iconset in 16x16'''
 	iconset = gajim.config.get('iconset')
-	path = os.path.join(helpers.get_iconset_path(iconset), '16x16' + '/')
+	path = os.path.join(helpers.get_iconset_path(iconset), '16x16', '')
 	icon_list = _load_icon_list([icon_name], path)
 	return icon_list[icon_name]
+
+def load_mood_icon(icon_name):
+	'''load an icon from the mood iconset in 16x16'''
+	iconset = gajim.config.get('mood_iconset')
+	path = os.path.join(helpers.get_mood_iconset_path(iconset), '')
+	icon_list = _load_icon_list([icon_name], path)
+	return icon_list[icon_name]
+
+def load_activity_icon(category, activity = None):
+	'''load an icon from the activity iconset in 16x16'''
+	iconset = gajim.config.get('activity_iconset')
+	path = os.path.join(helpers.get_activity_iconset_path(iconset),
+		category, '')
+	if activity is None:
+		activity = 'category'
+	icon_list = _load_icon_list([activity], path)
+	return icon_list[activity]
 
 def load_icons_meta():
 	'''load and return  - AND + small icons to put on top left of an icon
@@ -922,9 +944,9 @@ def _load_icon_list(icons_list, path, pixbuf2 = None):
 		image = gtk.Image()
 		image.show()
 		imgs[icon] = image
-		for file in files: # loop seeking for either gif or png
-			if os.path.exists(file):
-				image.set_from_file(file)
+		for file_ in files: # loop seeking for either gif or png
+			if os.path.exists(file_):
+				image.set_from_file(file_)
 				if pixbuf2 and image.get_storage_type() == gtk.IMAGE_PIXBUF:
 					# add pixbuf2 on top-left corner of image
 					pixbuf1 = image.get_pixbuf()
@@ -959,3 +981,32 @@ def make_jabber_state_images():
 def reload_jabber_state_images():
 	make_jabber_state_images()
 	gajim.interface.roster.update_jabber_state_images()
+
+def label_set_autowrap(widget):
+	'''Make labels automatically re-wrap if their containers are resized.
+	Accepts label or container widgets.'''
+	if isinstance (widget, gtk.Container):
+		children = widget.get_children()
+		for i in xrange (len (children)):
+			label_set_autowrap(children[i])
+	elif isinstance(widget, gtk.Label):
+		widget.set_line_wrap(True)
+		widget.connect_after('size-allocate', __label_size_allocate)
+
+def __label_size_allocate(widget, allocation):
+	'''Callback which re-allocates the size of a label.'''
+	layout = widget.get_layout()
+
+	lw_old, lh_old = layout.get_size()
+	# fixed width labels
+	if lw_old/pango.SCALE == allocation.width:
+		return
+
+	# set wrap width to the pango.Layout of the labels ###
+	layout.set_width (allocation.width * pango.SCALE)
+	lw, lh = layout.get_size ()
+
+	if lh_old != lh:
+		widget.set_size_request (-1, lh / pango.SCALE)
+
+# vim: se ts=3:

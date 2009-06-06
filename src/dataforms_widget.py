@@ -1,9 +1,9 @@
-##	dataforms.py
+# -*- coding:utf-8 -*-
+## src/dataforms_widget.py
 ##
-## Copyright (C) 2003-2007 Yann Leboulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <nkour@jabber.org>
-## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
-## Copyright (C) 2003-2005 Vincent Hanquez <tab@snarc.org>
+## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>
+## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -13,12 +13,13 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
+
 ''' This module contains widget that can display data form (JEP-0004).
 Words single and multiple refers here to types of data forms:
 single means these with one record of data (without <reported/> element),
@@ -80,6 +81,7 @@ class DataFormWidget(gtk.Alignment, object):
 			self.instructions_label.hide()
 		else:
 			self.instructions_label.set_text(dataform.instructions)
+			gtkgui_helpers.label_set_autowrap(self.instructions_label)
 
 	def get_data_form(self):
 		''' Data form displayed in the widget or None if no form. '''
@@ -109,7 +111,7 @@ class DataFormWidget(gtk.Alignment, object):
 # "private" methods
 
 # we have actually two different kinds of data forms: one is a simple form to fill,
-# second is a table with several records; 
+# second is a table with several records;
 
 	def empty_method(self):
 		pass
@@ -163,9 +165,9 @@ class DataFormWidget(gtk.Alignment, object):
 
 		# moving all data to model
 		for item in self._data_form.iter_records():
-			iter = self.multiplemodel.append()
+			iter_ = self.multiplemodel.append()
 			for field in item.iter_fields():
-				self.multiplemodel.set_value(iter, fieldvars.index(field.var),
+				self.multiplemodel.set_value(iter_, fieldvars.index(field.var),
 					field.value)
 
 		# constructing columns...
@@ -213,8 +215,8 @@ class DataFormWidget(gtk.Alignment, object):
 			self.remove_button.set_sensitive(True)
 			self.edit_button.set_sensitive(True)
 			_, (path,) = selection.get_selected_rows()
-			iter = model.get_iter(path)
-			if model.iter_next(iter) is None:
+			iter_ = model.get_iter(path)
+			if model.iter_next(iter_) is None:
 				self.up_button.set_sensitive(True)
 				self.down_button.set_sensitive(False)
 			elif path == (0, ):
@@ -251,19 +253,19 @@ class DataFormWidget(gtk.Alignment, object):
 	def on_up_button_clicked(self, widget):
 		selection = self.records_treeview.get_selection()
 		model, (path,) = selection.get_selected_rows()
-		iter = model.get_iter(path)
+		iter_ = model.get_iter(path)
 		# constructing path for previous iter
 		previter = model.get_iter((path[0]-1,))
-		model.swap(iter, previter)
+		model.swap(iter_, previter)
 
 		self.refresh_multiple_buttons()
 
 	def on_down_button_clicked(self, widget):
 		selection = self.records_treeview.get_selection()
 		model, (path,) = selection.get_selected_rows()
-		iter = model.get_iter(path)
-		nextiter = model.iter_next(iter)
-		model.swap(iter, nextiter)
+		iter_ = model.get_iter(path)
+		nextiter = model.iter_next(iter_)
+		model.swap(iter_, nextiter)
 
 		self.refresh_multiple_buttons()
 
@@ -325,7 +327,7 @@ class SingleForm(gtk.Table, object):
 				if field.label is None:
 					commonlabel = False
 					leftattach = 0
-				
+
 				commonwidget = False
 				widget = gtk.Label(field.value)
 				widget.set_line_wrap(True)
@@ -355,10 +357,10 @@ class SingleForm(gtk.Table, object):
 				else:
 					# more than 5 options: show combobox
 					def on_list_single_combobox_changed(combobox, f):
-						iter = combobox.get_active_iter()
-						if iter:
+						iter_ = combobox.get_active_iter()
+						if iter_:
 							model = combobox.get_model()
-							f.value = model[iter][1]
+							f.value = model[iter_][1]
 						else:
 							f.value = ''
 					widget = gtkgui_helpers.create_combobox(field.options,
@@ -554,24 +556,23 @@ class SingleForm(gtk.Table, object):
 			while _('new%d@jabber.id') % i in field.values:
 				i += 1
 			jid = _('new%d@jabber.id') % i
-		iter = model.insert(999999, (jid,))
-		treeview.set_cursor(model.get_path(iter), treeview.get_column(0), True)
+		iter_ = model.insert(999999, (jid,))
+		treeview.set_cursor(model.get_path(iter_), treeview.get_column(0), True)
 		field.values = field.values + [jid]
 
 	def on_jid_multi_edit_button_clicked(self, widget, treeview):
-		model, iter = treeview.get_selection().get_selected()
-		assert iter is not None
+		model, iter_ = treeview.get_selection().get_selected()
+		assert iter_ is not None
 
-		treeview.set_cursor(model.get_path(iter), treeview.get_column(0), True)
+		treeview.set_cursor(model.get_path(iter_), treeview.get_column(0), True)
 
 	def on_jid_multi_remove_button_clicked(self, widget, treeview, field):
 		selection = treeview.get_selection()
-		model = treeview.get_model()
 		deleted = []
 
-		def remove(model, path, iter, deleted):
-			deleted+=model[iter]
-			model.remove(iter)
+		def remove(model, path, iter_, deleted):
+			deleted+=model[iter_]
+			model.remove(iter_)
 
 		selection.selected_foreach(remove, deleted)
 		field.values = (v for v in field.values if v not in deleted)
@@ -579,3 +580,5 @@ class SingleForm(gtk.Table, object):
 	def on_jid_multi_clean_button_clicked(self, widget, model, field):
 		model.clear()
 		del field.values
+
+# vim: se ts=3:

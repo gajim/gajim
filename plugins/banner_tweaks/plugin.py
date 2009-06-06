@@ -69,13 +69,16 @@ http://trac.gajim.org/attachment/ticket/4133'''
 									  'old_chat_avatar_height' : (52, _('chat_avatar_height value before plugin was activated')),
 									  }
 		
+	@log_calls('BannerTweaksPlugin')
 	def activate(self):
 		self.config['old_chat_avatar_height'] = gajim.config.get('chat_avatar_height')
 		#gajim.config.set('chat_avatar_height', 28)
 		
+	@log_calls('BannerTweaksPlugin')
 	def deactivate(self):
 		gajim.config.set('chat_avatar_height', self.config['old_chat_avatar_height'])
 		
+	@log_calls('BannerTweaksPlugin')
 	def chat_control_base_draw_banner_called(self, chat_control):
 		if not self.config['show_banner_online_msg']:
 			chat_control.banner_status_label.hide()
@@ -158,7 +161,8 @@ http://trac.gajim.org/attachment/ticket/4133'''
 					(font_attrs, name, font_attrs_small, acct_info)
 			
 			banner_name_label.set_markup(label_text)
-			
+
+	@log_calls('BannerTweaksPlugin')
 	def chat_control_base_draw_banner_deactivation(self, chat_control):
 		pass
 		#chat_control.draw_banner()

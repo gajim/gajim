@@ -89,10 +89,12 @@ class GoogleTranslationPlugin(GajimPlugin):
 			text = text.replace(char, replacement)
 			
 		return text
-		
+	
+	@log_calls('DBusPlugin')
 	def activate(self):
 		pass
 		
+	@log_calls('DBusPlugin')
 	def deactivate(self):
 		pass
 	

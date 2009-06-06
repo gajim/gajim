@@ -40,6 +40,9 @@
   <item jid="aszlig.net" name="">
     <active port="5222"/>
   </item>
+  <item jid="blabla.kz" name="">
+    <active port="5222"/>
+  </item>
   <item jid="bloodyxml.com" name="Hosted by Chote Networks (http://www.chote.com)">
     <active port="5222"/>
   </item>
@@ -70,7 +73,7 @@
   <item jid="foxalpha.de" name="">
     <active port="5222"/>
   </item>
-  <item jid="fritalk.com" name="French Jabber Server">
+  <item jid="fritalk.org" name="French Jabber Server">
     <active port="5222"/>
   </item>
   <item jid="here.dk" name="Jabber server in Denmark">
@@ -158,6 +161,9 @@
     <active port="5222"/>
   </item>
   <item jid="jabber.i-pobox.net" name="Server in Germany">
+    <active port="5222"/>
+  </item>
+  <item jid="jabber.kiev.ua" name="Server in Ukrain (Kiev)">
     <active port="5222"/>
   </item>
   <item jid="jabber.killerbees.org.uk" name="">

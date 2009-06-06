@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
-##	adhoc_commands.py
+## src/adhoc_commands.py
 ##
-## Copyright (C) 2006 Yann Leboulanger <asterix@lagaule.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
+## Copyright (C) 2006 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006-2007 Tomasz Melcer <liori AT exroot.org>
+## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
+##                    Stephan Erb <steve-e AT h3c.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -12,11 +15,12 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
 
 # FIXME: think if we need caching command list. it may be wrong if there will
 # be entities that often change the list, it may be slow to fetch it every time
@@ -54,6 +58,7 @@ class CommandWindow:
 		self.commandnode = None
 		self.sessionid = None
 		self.dataform = None
+		self.allow_stage3_close = False
 
 		# retrieving widgets from xml
 		self.xml = gtkgui_helpers.get_glade('adhoc_commands_window.glade')
@@ -247,18 +252,20 @@ class CommandWindow:
 				self.window.destroy()
 			return False
 
-		dialog = dialogs.HigDialog(self.window, gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
-			gtk.BUTTONS_YES_NO, _('Cancel confirmation'),
-			_('You are in process of executing command. Do you really want to cancel it?'))
-		dialog.popup()
-		if dialog.get_response()==gtk.RESPONSE_YES:
-			self.send_cancel()
-			if widget==self.window:
-				return False
-			else:
-				self.window.destroy()
+		if self.allow_stage3_close:
 			return False
-		return True
+
+		def on_yes(button):
+			self.send_cancel()
+			self.allow_stage3_close = True
+			self.window.destroy()
+
+		dialog = dialogs.HigDialog(self.window, gtk.DIALOG_DESTROY_WITH_PARENT | \
+			gtk.DIALOG_MODAL, gtk.BUTTONS_YES_NO, _('Cancel confirmation'),
+			_('You are in process of executing command. Do you really want to '
+			'cancel it?'), on_response_yes=on_yes)
+		dialog.popup()
+		return True # Block event, don't close window
 
 	def stage3_back_button_clicked(self, widget):
 		self.stage3_submit_form('prev')
@@ -437,7 +444,7 @@ class CommandWindow:
 # handling xml stanzas
 	def request_command_list(self):
 		'''Request the command list. Change stage on delivery.'''
-		query = xmpp.Iq(typ='get', to=xmpp.JID(self.jid), xmlns=xmpp.NS_DISCO_ITEMS)
+		query = xmpp.Iq(typ='get', to=xmpp.JID(self.jid), queryNS=xmpp.NS_DISCO_ITEMS)
 		query.setQuerynode(xmpp.NS_COMMANDS)
 
 		def callback(response):
@@ -473,11 +480,8 @@ class CommandWindow:
 		assert action in ('execute', 'prev', 'next', 'complete')
 
 		stanza = xmpp.Iq(typ='set', to=self.jid)
-		cmdnode = stanza.addChild('command', attrs={
-				'xmlns':xmpp.NS_COMMANDS,
-				'node':self.commandnode,
-				'action':action
-			})
+		cmdnode = stanza.addChild('command', namespace=xmpp.NS_COMMANDS, attrs={
+			'node':self.commandnode, 'action':action})
 
 		if self.sessionid:
 			cmdnode.setAttr('sessionid', self.sessionid)
@@ -485,7 +489,7 @@ class CommandWindow:
 		if self.data_form_widget.data_form:
 #			cmdnode.addChild(node=dataforms.DataForm(tofill=self.data_form_widget.data_form))
 			# FIXME: simplified form to send
-			
+
 			cmdnode.addChild(node=self.data_form_widget.data_form)
 
 		def callback(response):
@@ -504,8 +508,7 @@ class CommandWindow:
 		if self.sessionid and self.account.connection:
 			# we already have sessionid, so the service sent at least one reply.
 			stanza = xmpp.Iq(typ='set', to=self.jid)
-			stanza.addChild('command', attrs={
-					'xmlns':xmpp.NS_COMMANDS,
+			stanza.addChild('command', namespace=xmpp.NS_COMMANDS, attrs={
 					'node':self.commandnode,
 					'sessionid':self.sessionid,
 					'action':'cancel'
@@ -516,3 +519,5 @@ class CommandWindow:
 			# we did not received any reply from service; FIXME: we should wait and
 			# then send cancel; for now we do nothing
 			pass
+
+# vim: se ts=3:

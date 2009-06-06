@@ -79,11 +79,13 @@ class NewEventsExamplePlugin(GajimPlugin):
 	def customized_message_received(self, event_object):
 		pass
 		#print "Event '%s' occured. Event object: %s\n\n===\n"%(event_object.name, 
-														#event_object)
-		
+														#event_object
+														
+	@log_calls('DBusPlugin')
 	def activate(self):
 		pass
-		
+
+	@log_calls('DBusPlugin')
 	def deactivate(self):
 		pass
 	

@@ -1,7 +1,12 @@
+# -*- coding:utf-8 -*-
+## src/common/check_paths.py
 ##
-## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
+## Copyright (C) 2005-2006 Travis Shirk <travis AT pobox.com>
+##                         Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
+## Copyright (C) 2007 Tomasz Melcer <liori AT exroot.org>
+## Copyright (C) 2008 Jean-Marie Traissard <jim AT lapin.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -11,17 +16,18 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import os
 import sys
 import stat
 
+import exceptions
 from common import gajim
 import logger
 
@@ -36,7 +42,7 @@ except ImportError:
 
 def create_log_db():
 	print _('creating logs database')
-	con = sqlite.connect(logger.LOG_DB_PATH) 
+	con = sqlite.connect(logger.LOG_DB_PATH)
 	os.chmod(logger.LOG_DB_PATH, 0600) # rw only for us
 	cur = con.cursor()
 	# create the tables
@@ -55,19 +61,19 @@ def create_log_db():
 			jid TEXT UNIQUE,
 			type INTEGER
 		);
-		
+
 		CREATE TABLE unread_messages(
 			message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 			jid_id INTEGER
 		);
-		
+
 		CREATE INDEX idx_unread_messages_jid_id ON unread_messages (jid_id);
-		
+
 		CREATE TABLE transports_cache (
 			transport TEXT UNIQUE,
 			type INTEGER
 		);
-		
+
 		CREATE TABLE logs(
 			log_line_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 			jid_id INTEGER,
@@ -78,7 +84,7 @@ def create_log_db():
 			message TEXT,
 			subject TEXT
 		);
-		
+
 		CREATE INDEX idx_logs_jid_id_kind ON logs (jid_id, kind);
 
 		CREATE TABLE caps_cache (
@@ -86,7 +92,7 @@ def create_log_db():
 			hash TEXT,
 			data BLOB);
 
-		CREATE TABLE IF NOT EXISTS rooms_last_message_time(
+		CREATE TABLE rooms_last_message_time(
 			jid_id INTEGER PRIMARY KEY UNIQUE,
 			time INTEGER
 		);
@@ -141,7 +147,7 @@ def check_and_possibly_create_paths():
 			print _('Gajim will now exit')
 			sys.exit()
 
-		
+
 	else: # dot_gajim doesn't exist
 		if dot_gajim: # is '' on win9x so avoid that
 			create_path(dot_gajim)
@@ -156,3 +162,5 @@ def check_and_possibly_create_paths():
 def create_path(directory):
 	print _('creating %s directory') % directory
 	os.mkdir(directory, 0700)
+
+# vim: se ts=3:

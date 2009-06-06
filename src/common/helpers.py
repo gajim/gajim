@@ -1,12 +1,19 @@
-##	common/helpers.py
+# -*- coding:utf-8 -*-
+## src/common/helpers.py
 ##
-## Copyright (C) 2003-2007 Yann Leboulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
-##                    Stephan Erb <steve-e@h3c.de> 
-##			
+## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
+##                         Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006 Alex Mauer <hawke AT hawkesnest.net>
+## Copyright (C) 2006-2007 Travis Shirk <travis AT pobox.com>
+## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2007 Lukas Petrovicky <lukas AT petrovicky.net>
+##                    James Newton <redshodan AT gmail.com>
+##                    Julien Pivotto <roidelapluie AT gmail.com>
+## Copyright (C) 2007-2008 Stephan Erb <steve-e AT h3c.de>
+## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
+##                    Jonathan Schleifer <js-gajim AT webkeks.org>
+##
 ## This file is part of Gajim.
 ##
 ## Gajim is free software; you can redistribute it and/or modify
@@ -15,11 +22,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import re
@@ -29,38 +36,21 @@ import subprocess
 import urllib
 import errno
 import select
-import sha
 import base64
 import sys
-from encodings.punycode import punycode_encode
-from encodings import idna
+import hashlib
 
-import gajim
+from encodings.punycode import punycode_encode
+
 from i18n import Q_
 from i18n import ngettext
-from xmpp_stringprep import nodeprep, resourceprep, nameprep
 import xmpp
-
-try:
-	# Python 2.5
-	import hashlib
-	hash_md5  = hashlib.md5
-	hash_sha1 = hashlib.sha1
-except ImportError:
-	# Python 2.4
-	import md5
-	import sha
-	hash_md5 = md5.new
-	hash_sha1 = sha.new
-
-if sys.platform == 'darwin':
-	from osx import nsapp
 
 try:
 	import winsound # windows-only built-in module for playing wav
 	import win32api
 	import win32con
-except:
+except Exception:
 	pass
 
 special_groups = (_('Transports'), _('Not in Roster'), _('Observers'), _('Groupchats'))
@@ -110,17 +100,30 @@ def parse_jid(jidstring):
 	return prep(*decompose_jid(jidstring))
 
 def idn_to_ascii(host):
-	'''convert IDN (Internationalized Domain Names) to ACE (ASCII-compatible encoding)'''
+	'''convert IDN (Internationalized Domain Names) to ACE
+	(ASCII-compatible encoding)'''
+	from encodings import idna
 	labels = idna.dots.split(host)
 	converted_labels = []
 	for label in labels:
 		converted_labels.append(idna.ToASCII(label))
 	return ".".join(converted_labels)
 
+def ascii_to_idn(host):
+	'''convert ACE (ASCII-compatible encoding) to IDN
+	(Internationalized Domain Names)'''
+	from encodings import idna
+	labels = idna.dots.split(host)
+	converted_labels = []
+	for label in labels:
+		converted_labels.append(idna.ToUnicode(label))
+	return ".".join(converted_labels)
+
 def parse_resource(resource):
 	'''Perform stringprep on resource and return it'''
 	if resource:
 		try:
+			from xmpp_stringprep import resourceprep
 			return resourceprep.prepare(unicode(resource))
 		except UnicodeError:
 			raise InvalidFormat, 'Invalid character in resource.'
@@ -132,6 +135,7 @@ def prep(user, server, resource):
 
 	if user:
 		try:
+			from xmpp_stringprep import nodeprep
 			user = nodeprep.prepare(unicode(user))
 		except UnicodeError:
 			raise InvalidFormat, _('Invalid character in username.')
@@ -142,12 +146,14 @@ def prep(user, server, resource):
 		raise InvalidFormat, _('Server address required.')
 	else:
 		try:
+			from xmpp_stringprep import nameprep
 			server = nameprep.prepare(unicode(server))
 		except UnicodeError:
 			raise InvalidFormat, _('Invalid character in hostname.')
 
 	if resource:
 		try:
+			from xmpp_stringprep import resourceprep
 			resource = resourceprep.prepare(unicode(resource))
 		except UnicodeError:
 			raise InvalidFormat, _('Invalid character in resource.')
@@ -174,65 +180,6 @@ def temp_failure_retry(func, *args, **kwargs):
 				continue
 			else:
 				raise
-
-def convert_bytes(string):
-	suffix = ''
-	# IEC standard says KiB = 1024 bytes KB = 1000 bytes
-	# but do we use the standard?
-	use_kib_mib = gajim.config.get('use_kib_mib')
-	align = 1024.
-	bytes = float(string)
-	if bytes >= align:
-		bytes = round(bytes/align, 1)
-		if bytes >= align:
-			bytes = round(bytes/align, 1)
-			if bytes >= align:
-				bytes = round(bytes/align, 1)
-				if use_kib_mib:
-					#GiB means gibibyte
-					suffix = _('%s GiB')
-				else:
-					#GB means gigabyte
-					suffix = _('%s GB')
-			else:
-				if use_kib_mib:
-					#MiB means mibibyte
-					suffix = _('%s MiB')
-				else:
-					#MB means megabyte
-					suffix = _('%s MB')
-		else:
-			if use_kib_mib:
-				#KiB means kibibyte
-				suffix = _('%s KiB')
-			else:
-				#KB means kilo bytes
-				suffix = _('%s KB')
-	else:
-		#B means bytes
-		suffix = _('%s B')
-	return suffix % unicode(bytes)
-
-
-def get_contact_dict_for_account(account):
-	''' create a dict of jid, nick -> contact with all contacts of account.
-	Can be used for completion lists'''
-	contacts_dict = {}
-	for jid in gajim.contacts.get_jid_list(account):
-		contact = gajim.contacts.get_contact_with_highest_priority(account,
-				jid)
-		contacts_dict[jid] = contact
-		name = contact.name
-		if contacts_dict.has_key(name):
-			contact1 = contacts_dict[name]
-			del contacts_dict[name]
-			contacts_dict['%s (%s)' % (name, contact1.jid)] = contact1
-			contacts_dict['%s (%s)' % (name, jid)] = contact
-		else:
-			if contact.name == gajim.get_nick_from_jid(jid):
-				del contacts_dict[jid]
-			contacts_dict[name] = contact
-	return contacts_dict
 
 def get_uf_show(show, use_mnemonic = False):
 	'''returns a userfriendly string for dnd/xa/chat
@@ -328,10 +275,10 @@ def get_uf_role(role, plural = False):
 		else:
 			role_name = _('Visitor')
 	return role_name
-	
+
 def get_uf_affiliation(affiliation):
 	'''Get a nice and translated affilition for muc'''
-	if affiliation == 'none': 
+	if affiliation == 'none':
 		affiliation_name = Q_('?Group Chat Contact Affiliation:None')
 	elif affiliation == 'owner':
 		affiliation_name = _('Owner')
@@ -343,82 +290,8 @@ def get_uf_affiliation(affiliation):
 		affiliation_name = affiliation.capitalize()
 	return affiliation_name
 
-def get_uf_mood(mood):
-	'''returns a userfriendly mood string and makes all strings translatable'''
-	moods = {'afraid':_('afraid'), 'amazed':_('amazed'), 'angry':_('angry'), 
-		'annoyed':_('annoyed'), 'anxious':_('anxious'), 'aroused':_('aroused'),
-		'ashamed':_('ashamed'), 'bored':_('bored'), 'brave':_('brave'),
-		'calm':_('calm'), 'cold':_('cold'), 'confused':_('confused'),
-		'contented':_('contented'), 'cranky':_('cranky'), 'curious':_('curious'),
-		'depressed':_('depressed'), 'disappointed':_('disappointed'),
-		'disgusted':_('disgusted'), 'distracted':_('distracted'), 
-		'embarrassed':_('embarrassed'), 'excited':_('excited'),
-		'flirtatious':_('flirtatious'), 'frustrated':_('frustrated'), 
-		'grumpy':_('grumpy'), 'guilty':_('guilty'), 'happy':_('happy'),
-		'hot':_('hot'), 'humbled':_('humbled'), 'humiliated':_('humiliated'),
-		 'hungry':_('hungry'), 'hurt':_('hurt'), 'impressed':_('impressed'),
-		 'in_awe':_('in awe'), 'in_love':_('in love'), 'indignant':_('indignant'),
-		 'interested':_('interested'), 'intoxicated':_('intoxicated'), 
-		'invincible':_('invincible'), 'jealous':_('jealous'), 'lonely':_('lonely'), 
-		'mean':_('mean'), 'moody':_('moody'), 'nervous':_('nervous'),
-		'neutral':_('neutral'), 'offended':_('offended'), 'playful':_('playful'),
-		'proud':_('proud'), 'relieved':_('relieved'), 'remorseful':_('remorseful'),
-		'restless':_('restless'), 'sad':_('sad'), 'sarcastic':_('sarcastic'), 
-		'serious':_('serious'), 'shocked':_('shocked'), 'shy':_('shy'),
-		'sick':_('sick'), 'sleepy':_('sleepy'), 'stressed':_('stressed'),
-		'surprised':_('surprised'), 'thirsty':_('thirsty'), 'worried':_('worried')}
-	if moods.has_key(mood):
-		return moods[mood]
-	else:
-		return mood # # Argl! An unknown mood!
-	
-def get_uf_activity(activity):
-	'''returns a userfriendly activity or subactivity string and makes all 
-	strings translatable'''
-	activities = {
-		# Activities
-		'working':_('working'), 'eating':_('eating'),
-		'excercising':_('excercising'), 'relaxing':_('relaxing'), 'talking':_('talking'),
-		'doing_chores':_('doing chores'), 'inactive':_('inactive'),
-		'traveling':_('traveling'), 'having_appointment':_('having an appointment'),
-		'grooming':_('grooming'), 'drinking':_('drinking'),
-		# Subactivites
-		'on_the_phone':_('on the phone'), 'gardening':_('gardening'),
-		'hiking':_('hiking'), 'on_vacation':_('on vacation'), 'coding': _('coding'),
-		'walking':_('walking'), 'rehearsing': _('rehearsing'), 'sleeping': _('sleeping'),
-		'brushing_teeth':_('brushing teeth'), 'playing_sports':_('playing sports'),
-		'skiing':_('skiing'), 'having_breakfast':_('having breakfast'),
-		'watching_tv':_('watching TV'), 'doing_the_dishes':_('doing the dishes'),
-		'at_the_spa':_('at the spa'), 'cycling':_('cycling'), 
-		'hanging_out':_('hanging out'), 'driving':_('driving'), 'commuting':_('commuting'),
-		'cooking':_('cooking'), 'walking_the_dog':_('walking the dog'),
-		'writing':_('writing'), 'on_a_trip':_('on a trip'), 'day_off':_('day off'),
-		'having_tea':_('having tea'), 'on_a_bus':_('on a bus'),
-		'having_a_beer':_('having a beer'), 'reading':_('reading'),
-		'buying_groceries':_('buying groceries'), 'shaving':_('shaving'),
-		'getting_a_haircut':_('getting a haircut'), 'gaming':_('gaming'),
-		'having_dinner':_('having dinner'), 'doing_maintenance':_('doing maintenance'),
-		'doing_the_laundry':_('doing the laundry'), 'on_video_phone':_('on video phone'),
-		'scheduled_holiday':_('scheduled holiday'), 'going_out':_('going out'),
-		'partying':_('partying'), 'having_a_snack':_('having a snack'),
-		'having_lunch':_('having lunch'), 'working_out':_('working out'),
-		'cleaning':_('cleaning'), 'watching_a_movie':_('watching a movie'),
-		'sunbathing':_('sunbathing'), 'socializing':_('socializing'),
-		'running_an_errand':_('running an errand'), 'taking_a_bath':_('taking a bath'),
-		'in_real_life': _('in real life'), 'on_a_plane': _('on a plane'),
-		'shopping':_('shopping'), 'on_a_train':_('on a train'), 'running':_('running'),
-		'taking_a_shower':_('taking a shower'), 'jogging':_('jogging'),
-		'in_a_meeting': _('in a meeting'), 'in_a_car':_('in a car'),
-		'studying': _('studying'), 'swimming': _('swimming'),
-		'having_coffee': _('having coffee')}
-	if activities.has_key(activity):
-		return activities[activity]
-	else:
-		return activity # # Argl! An unknown activity!
-	
 def get_sorted_keys(adict):
-	keys = adict.keys()
-	keys.sort()
+	keys = sorted(adict.keys())
 	return keys
 
 def to_one_line(msg):
@@ -461,30 +334,22 @@ def get_uf_chatstate(chatstate):
 		return _('has closed the chat window or tab')
 	return ''
 
-def is_in_path(name_of_command, return_abs_path = False):
-	# if return_abs_path is True absolute path will be returned
-	# for name_of_command
-	# on failures False is returned
-	is_in_dir = False
-	found_in_which_dir = None
-	path = os.getenv('PATH').split(os.pathsep)
-	for path_to_directory in path:
-		try:
-			contents = os.listdir(path_to_directory)
-		except OSError: # user can have something in PATH that is not a dir
-			pass
-		else:
-			is_in_dir = name_of_command in contents
-		if is_in_dir:
-			if return_abs_path:
-				found_in_which_dir = path_to_directory
-			break
+def is_in_path(command, return_abs_path=False):
+	'''Returns True if 'command' is found in one of the directories in the
+		user's path. If 'return_abs_path' is True, returns the absolute path of
+		the first found command instead. Returns False otherwise and on errors.'''
 
-	if found_in_which_dir:
-		abs_path = os.path.join(path_to_directory, name_of_command)
-		return abs_path
-	else:
-		return is_in_dir
+	for directory in os.getenv('PATH').split(os.pathsep):
+		try:
+			if command in os.listdir(directory):
+				if return_abs_path:
+					return os.path.join(directory, command)
+				else:
+					return True
+		except OSError:
+			# If the user has non directories in his path
+			pass
+	return False
 
 def exec_command(command):
 	subprocess.Popen(command, shell = True)
@@ -495,94 +360,6 @@ def build_command(executable, parameter):
 	parameter = parameter.replace('"', '\\"') # but first escape "
 	command = '%s "%s"' % (executable, parameter)
 	return command
-
-def launch_browser_mailer(kind, uri):
-	#kind = 'url' or 'mail'
-	if os.name == 'nt':
-		try:
-			os.startfile(uri) # if pywin32 is installed we open
-		except:
-			pass
-
-	else:
-		if kind == 'mail' and not uri.startswith('mailto:'):
-			uri = 'mailto:' + uri
-
-		if gajim.config.get('openwith') == 'gnome-open':
-			command = 'gnome-open'
-		elif gajim.config.get('openwith') == 'kfmclient exec':
-			command = 'kfmclient exec'
-		elif gajim.config.get('openwith') == 'exo-open':
-			command = 'exo-open'
-		elif ((sys.platform == 'darwin') and\
-		(gajim.config.get('openwith') == 'open')):
-			command = 'open'
-		elif gajim.config.get('openwith') == 'custom':
-			if kind == 'url':
-				command = gajim.config.get('custombrowser')
-			if kind == 'mail':
-				command = gajim.config.get('custommailapp')
-			if command == '': # if no app is configured
-				return
-
-		command = build_command(command, uri)
-		try:
-			exec_command(command)
-		except:
-			pass
-
-def launch_file_manager(path_to_open):
-	if os.name == 'nt':
-		try:
-			os.startfile(path_to_open) # if pywin32 is installed we open
-		except:
-			pass
-	else:
-		if gajim.config.get('openwith') == 'gnome-open':
-			command = 'gnome-open'
-		elif gajim.config.get('openwith') == 'kfmclient exec':
-			command = 'kfmclient exec'
-		elif gajim.config.get('openwith') == 'exo-open':
-			command = 'exo-open'
-		elif ((sys.platform == 'darwin') and\
-		(gajim.config.get('openwith') == 'open')):
-			command = 'open'
-		elif gajim.config.get('openwith') == 'custom':
-			command = gajim.config.get('custom_file_manager')
-		if command == '': # if no app is configured
-			return
-		command = build_command(command, path_to_open)
-		try:
-			exec_command(command)
-		except:
-			pass
-
-def play_sound(event):
-	if not gajim.config.get('sounds_on'):
-		return
-	path_to_soundfile = gajim.config.get_per('soundevents', event, 'path')
-	play_sound_file(path_to_soundfile)
-
-def play_sound_file(path_to_soundfile):
-	if path_to_soundfile == 'beep':
-		exec_command('beep')
-		return
-	if path_to_soundfile is None or not os.path.exists(path_to_soundfile):
-		return
-	if sys.platform == 'darwin':
-		nsapp.playFile(path_to_soundfile)
-	elif os.name == 'nt':
-		try:
-			winsound.PlaySound(path_to_soundfile,
-				winsound.SND_FILENAME|winsound.SND_ASYNC)
-		except:
-			pass
-	elif os.name == 'posix':
-		if gajim.config.get('soundplayer') == '':
-			return
-		player = gajim.config.get('soundplayer')
-		command = build_command(player, path_to_soundfile)
-		exec_command(command)
 
 def get_file_path_from_dnd_dropped_uri(uri):
 	path = urllib.unquote(uri) # escape special chars
@@ -627,69 +404,6 @@ def get_output_of_command(command):
 
 	return output
 
-def get_global_show():
-	maxi = 0
-	for account in gajim.connections:
-		if not gajim.config.get_per('accounts', account,
-			'sync_with_global_status'):
-			continue
-		connected = gajim.connections[account].connected
-		if connected > maxi:
-			maxi = connected
-	return gajim.SHOW_LIST[maxi]
-
-def get_global_status():
-	maxi = 0
-	for account in gajim.connections:
-		if not gajim.config.get_per('accounts', account,
-			'sync_with_global_status'):
-			continue
-		connected = gajim.connections[account].connected
-		if connected > maxi:
-			maxi = connected
-			status = gajim.connections[account].status
-	return status
-
-def statuses_unified(): 
-	'''testing if all statuses are the same.'''
-	reference = None
-	for account in gajim.connections:
-		if not gajim.config.get_per('accounts', account,
-		'sync_with_global_status'):
-			continue
-		if reference is None:
-			reference = gajim.connections[account].connected
-		elif reference != gajim.connections[account].connected:
-			return False
-	return True
-
-def get_icon_name_to_show(contact, account = None):
-	'''Get the icon name to show in online, away, requested, ...'''
-	if account and gajim.events.get_nb_roster_events(account, contact.jid):
-		return 'event'
-	if account and gajim.events.get_nb_roster_events(account,
-	contact.get_full_jid()):
-		return 'event'
-	if account and gajim.interface.minimized_controls.has_key(account) and \
-	contact.jid in gajim.interface.minimized_controls[account] and gajim.interface.\
-		minimized_controls[account][contact.jid].get_nb_unread_pm() > 0:
-		return 'event'
-	if account and gajim.gc_connected[account].has_key(contact.jid):
-		if gajim.gc_connected[account][contact.jid]:
-			return 'muc_active'
-		else:
-			return 'muc_inactive'
-	if contact.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
-		return contact.show
-	if contact.sub in ('both', 'to'):
-		return contact.show
-	if contact.ask == 'subscribe':
-		return 'requested'
-	transport = gajim.get_transport_name_from_jid(contact.jid)
-	if transport:
-		return contact.show
-	return 'not in roster'
-
 def decode_string(string):
 	'''try to decode (to make it Unicode instance) given string'''
 	if isinstance(string, unicode):
@@ -709,7 +423,7 @@ def ensure_utf8_string(string):
 	'''make sure string is in UTF-8'''
 	try:
 		string = decode_string(string).encode('utf-8')
-	except:
+	except Exception:
 		pass
 	return string
 
@@ -746,7 +460,7 @@ r'Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders')
 		try:
 			val = str(win32api.RegQueryValueEx(rkey, varname)[0])
 			val = win32api.ExpandEnvironmentStrings(val) # expand using environ
-		except:
+		except Exception:
 			pass
 	finally:
 		win32api.RegCloseKey(rkey)
@@ -770,6 +484,473 @@ def get_documents_path():
 		path = os.path.expanduser('~')
 	return path
 
+def sanitize_filename(filename):
+	'''makes sure the filename we will write does contain only acceptable and
+	latin characters, and is not too long (in that case hash it)'''
+	# 48 is the limit
+	if len(filename) > 48:
+		hash = hashlib.md5(filename)
+		filename = base64.b64encode(hash.digest())
+
+	filename = punycode_encode(filename) # make it latin chars only
+	filename = filename.replace('/', '_')
+	if os.name == 'nt':
+		filename = filename.replace('?', '_').replace(':', '_')\
+			.replace('\\', '_').replace('"', "'").replace('|', '_')\
+			.replace('*', '_').replace('<', '_').replace('>', '_')
+
+	return filename
+
+def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
+	'''Cut the chars after 'max_chars' on each line
+	and show only the first 'max_lines'.
+	If any of the params is not present (None or 0) the action
+	on it is not performed'''
+
+	def _cut_if_long(string):
+		if len(string) > max_chars:
+			string = string[:max_chars - 3] + '...'
+		return string
+
+	if isinstance(text, str):
+		text = text.decode('utf-8')
+
+	if max_lines == 0:
+		lines = text.split('\n')
+	else:
+		lines = text.split('\n', max_lines)[:max_lines]
+	if max_chars > 0:
+		if lines:
+			lines = [_cut_if_long(e) for e in lines]
+	if lines:
+		reduced_text = '\n'.join(lines)
+		if reduced_text != text:
+			reduced_text += '...'
+	else:
+		reduced_text = ''
+	return reduced_text
+
+def get_account_status(account):
+	status = reduce_chars_newlines(account['status_line'], 100, 1)
+	return status
+
+def get_avatar_path(prefix):
+	'''Returns the filename of the avatar, distinguishes between user- and
+	contact-provided one.  Returns None if no avatar was found at all.
+	prefix is the path to the requested avatar just before the ".png" or
+	".jpeg".'''
+	# First, scan for a local, user-set avatar
+	for type_ in ('jpeg', 'png'):
+		file_ = prefix + '_local.' + type_
+		if os.path.exists(file_):
+			return file_
+	# If none available, scan for a contact-provided avatar
+	for type_ in ('jpeg', 'png'):
+		file_ = prefix + '.' + type_
+		if os.path.exists(file_):
+			return file_
+	return None
+
+def datetime_tuple(timestamp):
+	'''Converts timestamp using strptime and the format: %Y%m%dT%H:%M:%S
+	Because of various datetime formats are used the following exceptions
+	are handled:
+		- Optional milliseconds appened to the string are removed
+		- Optional Z (that means UTC) appened to the string are removed
+		- XEP-082 datetime strings have all '-' cahrs removed to meet
+		  the above format.'''
+	timestamp = timestamp.split('.')[0]
+	timestamp = timestamp.replace('-', '')
+	timestamp = timestamp.replace('z', '')
+	timestamp = timestamp.replace('Z', '')
+	from time import strptime
+	return strptime(timestamp, '%Y%m%dT%H:%M:%S')
+
+def sort_identities_func(i1, i2):
+	cat1 = i1['category']
+	cat2 = i2['category']
+	if cat1 < cat2:
+		return -1
+	if cat1 > cat2:
+		return 1
+	type1 = i1.get('type', '')
+	type2 = i2.get('type', '')
+	if type1 < type2:
+		return -1
+	if type1 > type2:
+		return 1
+	lang1 = i1.get('xml:lang', '')
+	lang2 = i2.get('xml:lang', '')
+	if lang1 < lang2:
+		return -1
+	if lang1 > lang2:
+		return 1
+	return 0
+
+def sort_dataforms_func(d1, d2):
+	f1 = d1.getField('FORM_TYPE')
+	f2 = d2.getField('FORM_TYPE')
+	if f1 and f2 and (f1.getValue() < f2.getValue()):
+		return -1
+	return 1
+
+def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
+	'''Compute caps hash according to XEP-0115, V1.5
+
+	dataforms are xmpp.DataForms objects as common.dataforms don't allow several
+	values without a field type list-multi'''
+	S = ''
+	identities.sort(cmp=sort_identities_func)
+	for i in identities:
+		c = i['category']
+		type_ = i.get('type', '')
+		lang = i.get('xml:lang', '')
+		name = i.get('name', '')
+		S += '%s/%s/%s/%s<' % (c, type_, lang, name)
+	features.sort()
+	for f in features:
+		S += '%s<' % f
+	dataforms.sort(cmp=sort_dataforms_func)
+	for dataform in dataforms:
+		# fields indexed by var
+		fields = {}
+		for f in dataform.getChildren():
+			fields[f.getVar()] = f
+		form_type = fields.get('FORM_TYPE')
+		if form_type:
+			S += form_type.getValue() + '<'
+			del fields['FORM_TYPE']
+		for var in sorted(fields.keys()):
+			S += '%s<' % var
+			values = sorted(fields[var].getValues())
+			for value in values:
+				S += '%s<' % value
+
+	if hash_method == 'sha-1':
+		hash_ = hashlib.sha1(S)
+	elif hash_method == 'md5':
+		hash_ = hashlib.md5(S)
+	else:
+		return ''
+	return base64.b64encode(hash_.digest())
+
+# import gajim only when needed (after decode_string is defined) see #4764
+
+import gajim
+import pep
+
+try:
+	from osx import nsapp
+except ImportError:
+	pass
+
+
+def convert_bytes(string):
+	suffix = ''
+	# IEC standard says KiB = 1024 bytes KB = 1000 bytes
+	# but do we use the standard?
+	use_kib_mib = gajim.config.get('use_kib_mib')
+	align = 1024.
+	bytes = float(string)
+	if bytes >= align:
+		bytes = round(bytes/align, 1)
+		if bytes >= align:
+			bytes = round(bytes/align, 1)
+			if bytes >= align:
+				bytes = round(bytes/align, 1)
+				if use_kib_mib:
+					#GiB means gibibyte
+					suffix = _('%s GiB')
+				else:
+					#GB means gigabyte
+					suffix = _('%s GB')
+			else:
+				if use_kib_mib:
+					#MiB means mibibyte
+					suffix = _('%s MiB')
+				else:
+					#MB means megabyte
+					suffix = _('%s MB')
+		else:
+			if use_kib_mib:
+				#KiB means kibibyte
+				suffix = _('%s KiB')
+			else:
+				#KB means kilo bytes
+				suffix = _('%s KB')
+	else:
+		#B means bytes
+		suffix = _('%s B')
+	return suffix % unicode(bytes)
+
+def get_contact_dict_for_account(account):
+	''' create a dict of jid, nick -> contact with all contacts of account.
+	Can be used for completion lists'''
+	contacts_dict = {}
+	for jid in gajim.contacts.get_jid_list(account):
+		contact = gajim.contacts.get_contact_with_highest_priority(account,
+				jid)
+		contacts_dict[jid] = contact
+		name = contact.name
+		if name in contacts_dict:
+			contact1 = contacts_dict[name]
+			del contacts_dict[name]
+			contacts_dict['%s (%s)' % (name, contact1.jid)] = contact1
+			contacts_dict['%s (%s)' % (name, jid)] = contact
+		else:
+			if contact.name == gajim.get_nick_from_jid(jid):
+				del contacts_dict[jid]
+			contacts_dict[name] = contact
+	return contacts_dict
+
+def launch_browser_mailer(kind, uri):
+	#kind = 'url' or 'mail'
+	if os.name == 'nt':
+		try:
+			os.startfile(uri) # if pywin32 is installed we open
+		except Exception:
+			pass
+
+	else:
+		if kind in ('mail', 'sth_at_sth') and not uri.startswith('mailto:'):
+			uri = 'mailto:' + uri
+
+		if kind == 'url' and uri.startswith('www.'):
+			uri = 'http://' + uri
+
+		if gajim.config.get('openwith') == 'gnome-open':
+			command = 'gnome-open'
+		elif gajim.config.get('openwith') == 'kfmclient exec':
+			command = 'kfmclient exec'
+		elif gajim.config.get('openwith') == 'exo-open':
+			command = 'exo-open'
+		elif ((sys.platform == 'darwin') and\
+		(gajim.config.get('openwith') == 'open')):
+			command = 'open'
+		elif gajim.config.get('openwith') == 'custom':
+			if kind == 'url':
+				command = gajim.config.get('custombrowser')
+			elif kind in ('mail', 'sth_at_sth'):
+				command = gajim.config.get('custommailapp')
+			if command == '': # if no app is configured
+				return
+
+		command = build_command(command, uri)
+		try:
+			exec_command(command)
+		except Exception:
+			pass
+
+def launch_file_manager(path_to_open):
+	if os.name == 'nt':
+		try:
+			os.startfile(path_to_open) # if pywin32 is installed we open
+		except Exception:
+			pass
+	else:
+		if gajim.config.get('openwith') == 'gnome-open':
+			command = 'gnome-open'
+		elif gajim.config.get('openwith') == 'kfmclient exec':
+			command = 'kfmclient exec'
+		elif gajim.config.get('openwith') == 'exo-open':
+			command = 'exo-open'
+		elif ((sys.platform == 'darwin') and\
+		(gajim.config.get('openwith') == 'open')):
+			command = 'open'
+		elif gajim.config.get('openwith') == 'custom':
+			command = gajim.config.get('custom_file_manager')
+		if command == '': # if no app is configured
+			return
+		command = build_command(command, path_to_open)
+		try:
+			exec_command(command)
+		except Exception:
+			pass
+
+def play_sound(event):
+	if not gajim.config.get('sounds_on'):
+		return
+	path_to_soundfile = gajim.config.get_per('soundevents', event, 'path')
+	play_sound_file(path_to_soundfile)
+
+def check_soundfile_path(file,
+								 dirs=(gajim.gajimpaths.root, gajim.DATA_DIR)):
+	'''Check if the sound file exists.
+	:param file: the file to check, absolute or relative to 'dirs' path
+	:param dirs: list of knows paths to fallback if the file doesn't exists
+					 (eg: ~/.gajim/sounds/, DATADIR/sounds...).
+	:return      the path to file or None if it doesn't exists.'''
+	if not file:
+		return None
+	elif os.path.exists(file):
+		return file
+
+	for d in dirs:
+		d = os.path.join(d, 'sounds', file)
+		if os.path.exists(d):
+			return d
+	return None
+
+def strip_soundfile_path(file,
+								 dirs=(gajim.gajimpaths.root, gajim.DATA_DIR),
+								 abs=True):
+	'''Remove knowns paths from a sound file:
+	Filechooser returns absolute path. If path is a known fallback path, we remove it.
+	So config have no hardcoded path	to DATA_DIR and text in textfield is shorther.
+	param: file: the filename to strip.
+	param: dirs: list of knowns paths from which the filename should be stripped.
+	param:  abs: force absolute path on dirs
+	'''
+	if not file:
+		return None
+
+	name = os.path.basename(file)
+	for d in dirs:
+		d = os.path.join(d, 'sounds', name)
+		if abs:
+			d = os.path.abspath(d)
+		if file == d:
+			return name
+	return file
+
+def play_sound_file(path_to_soundfile):
+	if path_to_soundfile == 'beep':
+		exec_command('beep')
+		return
+	path_to_soundfile = check_soundfile_path(path_to_soundfile)
+	if path_to_soundfile is None:
+		return
+	if sys.platform == 'darwin':
+		try:
+			nsapp.playFile(path_to_soundfile)
+		except NameError:
+			pass
+	elif os.name == 'nt':
+		try:
+			winsound.PlaySound(path_to_soundfile,
+				winsound.SND_FILENAME|winsound.SND_ASYNC)
+		except Exception:
+			pass
+	elif os.name == 'posix':
+		if gajim.config.get('soundplayer') == '':
+			return
+		player = gajim.config.get('soundplayer')
+		command = build_command(player, path_to_soundfile)
+		exec_command(command)
+
+def get_global_show():
+	maxi = 0
+	for account in gajim.connections:
+		if not gajim.config.get_per('accounts', account,
+		'sync_with_global_status'):
+			continue
+		connected = gajim.connections[account].connected
+		if connected > maxi:
+			maxi = connected
+	return gajim.SHOW_LIST[maxi]
+
+def get_global_status():
+	maxi = 0
+	for account in gajim.connections:
+		if not gajim.config.get_per('accounts', account,
+		'sync_with_global_status'):
+			continue
+		connected = gajim.connections[account].connected
+		if connected > maxi:
+			maxi = connected
+			status = gajim.connections[account].status
+	return status
+
+def get_pep_dict(account):
+	pep_dict = {}
+	con = gajim.connections[account]
+	# activity
+	if 'activity' in con.activity and con.activity['activity'] in pep.ACTIVITIES:
+		activity = con.activity['activity']
+		if 'subactivity' in con.activity and con.activity['subactivity'] in \
+		pep.ACTIVITIES[activity]:
+			subactivity = con.activity['subactivity']
+		else:
+			subactivity = 'other'
+	else:
+		activity = ''
+		subactivity = ''
+	if 'text' in con.activity:
+		text = con.activity['text']
+	else:
+		text = ''
+	pep_dict['activity'] = activity
+	pep_dict['subactivity'] = subactivity
+	pep_dict['activity_text'] = text
+
+	# mood
+	if 'mood' in con.mood and con.mood['mood'] in pep.MOODS:
+		mood = con.mood['mood']
+	else:
+		mood = ''
+	if 'text' in con.mood:
+		text = con.mood['text']
+	else:
+		text = ''
+	pep_dict['mood'] = mood
+	pep_dict['mood_text'] = text
+	return pep_dict
+
+def get_global_pep():
+	maxi = 0
+	pep_dict = {'activity': '', 'mood': ''}
+	for account in gajim.connections:
+		if not gajim.config.get_per('accounts', account,
+		'sync_with_global_status'):
+			continue
+		connected = gajim.connections[account].connected
+		if connected > maxi:
+			maxi = connected
+			pep_dict = get_pep_dict(account)
+	return pep_dict
+
+def statuses_unified():
+	'''testing if all statuses are the same.'''
+	reference = None
+	for account in gajim.connections:
+		if not gajim.config.get_per('accounts', account,
+		'sync_with_global_status'):
+			continue
+		if reference is None:
+			reference = gajim.connections[account].connected
+		elif reference != gajim.connections[account].connected:
+			return False
+	return True
+
+def get_icon_name_to_show(contact, account = None):
+	'''Get the icon name to show in online, away, requested, ...'''
+	if account and gajim.events.get_nb_roster_events(account, contact.jid):
+		return 'event'
+	if account and gajim.events.get_nb_roster_events(account,
+	contact.get_full_jid()):
+		return 'event'
+	if account and account in gajim.interface.minimized_controls and \
+	contact.jid in gajim.interface.minimized_controls[account] and gajim.interface.\
+		minimized_controls[account][contact.jid].get_nb_unread_pm() > 0:
+		return 'event'
+	if account and contact.jid in gajim.gc_connected[account]:
+		if gajim.gc_connected[account][contact.jid]:
+			return 'muc_active'
+		else:
+			return 'muc_inactive'
+	if contact.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
+		return contact.show
+	if contact.sub in ('both', 'to'):
+		return contact.show
+	if contact.ask == 'subscribe':
+		return 'requested'
+	transport = gajim.get_transport_name_from_jid(contact.jid)
+	if transport:
+		return contact.show
+	if contact.show in gajim.SHOW_LIST:
+		return contact.show
+	return 'not in roster'
+
 def get_full_jid_from_iq(iq_obj):
 	'''return the full jid (with resource) from an iq as unicode'''
 	return parse_jid(str(iq_obj.getFrom()))
@@ -781,8 +962,12 @@ def get_jid_from_iq(iq_obj):
 
 def get_auth_sha(sid, initiator, target):
 	''' return sha of sid + initiator + target used for proxy auth'''
-	return sha.new("%s%s%s" % (sid, initiator, target)).hexdigest()
+	return hashlib.sha1("%s%s%s" % (sid, initiator, target)).hexdigest()
 
+def remove_invalid_xml_chars(string):
+	if string:
+		string = re.sub(gajim.interface.invalid_XML_chars_re, '', string)
+	return string
 
 distro_info = {
 	'Arch Linux': '/etc/arch-release',
@@ -812,12 +997,13 @@ def get_random_string_16():
 	''' create random string of length 16'''
 	rng = range(65, 90)
 	rng.extend(range(48, 57))
-	char_sequence = map(lambda e:chr(e), rng)
+	char_sequence = [chr(e) for e in rng]
 	from random import sample
-	return reduce(lambda e1, e2: e1 + e2, 
-			sample(char_sequence, 16))
-	
+	return ''.join(sample(char_sequence, 16))
+
 def get_os_info():
+	if gajim.os_info:
+		return gajim.os_info
 	if os.name == 'nt':
 		ver = os.sys.getwindowsversion()
 		ver_format = ver[3], ver[0], ver[1]
@@ -831,22 +1017,25 @@ def get_os_info():
 			(2, 5, 2): '2003',
 			(2, 6, 0): 'Vista',
 		}
-		if win_version.has_key(ver_format):
-			return 'Windows' + ' ' + win_version[ver_format]
+		if ver_format in win_version:
+			os_info = 'Windows' + ' ' + win_version[ver_format]
 		else:
-			return 'Windows'
+			os_info = 'Windows'
+		gajim.os_info = os_info
+		return os_info
 	elif os.name == 'posix':
 		executable = 'lsb_release'
-		params = ' --id --codename --release --short'
+		params = ' --description --codename --release --short'
 		full_path_to_executable = is_in_path(executable, return_abs_path = True)
 		if full_path_to_executable:
 			command = executable + params
-			p = subprocess.Popen([command], shell=True, stdin=subprocess.PIPE, 
-				stdout=subprocess.PIPE, close_fds=True) 
-			p.wait() 
+			p = subprocess.Popen([command], shell=True, stdin=subprocess.PIPE,
+				stdout=subprocess.PIPE, close_fds=True)
+			p.wait()
 			output = temp_failure_retry(p.stdout.readline).strip()
 			# some distros put n/a in places, so remove those
 			output = output.replace('n/a', '').replace('N/A', '')
+			gajim.os_info = output
 			return output
 
 		# lsb_release executable not available, so parse files
@@ -874,31 +1063,22 @@ def get_os_info():
 						text = distro_name
 					elif path_to_file.endswith('lfs-release'): # file just has version
 						text = distro_name + ' ' + text
-				return text
+				os_info = text.replace('\n', '')
+				gajim.os_info = os_info
+				return os_info
 
 		# our last chance, ask uname and strip it
 		uname_output = get_output_of_command('uname -sr')
 		if uname_output is not None:
-			return uname_output[0] # only first line
-	return 'N/A'
+			os_info = uname_output[0] # only first line
+			gajim.os_info = os_info
+			return os_info
+	os_info = 'N/A'
+	gajim.os_info = os_info
+	return os_info
 
-def sanitize_filename(filename):
-	'''makes sure the filename we will write does contain only
-	acceptable and latin characters'''
-	filename = punycode_encode(filename) # make it latin chars only
-	filename = filename.replace('/', '_')
-	if os.name == 'nt':
-		filename = filename.replace('?', '_').replace(':', '_')\
-			.replace('\\', '_').replace('"', "'").replace('|', '_')\
-			.replace('*', '_').replace('<', '_').replace('>', '_')
-		# 48 is the limit
-		if len(filename) > 48:
-			extension = filename.split('.')[-1]
-			filename = filename[0:48]
-	
-	return filename
 
-def allow_showing_notification(account, type = 'notify_on_new_message',
+def allow_showing_notification(account, type_ = 'notify_on_new_message',
 advanced_notif_num = None, is_first_message = True):
 	'''is it allowed to show nofication?
 	check OUR status and if we allow notifications for that status
@@ -911,7 +1091,7 @@ advanced_notif_num = None, is_first_message = True):
 			return True
 		if popup == 'no':
 			return False
-	if type and (not gajim.config.get(type) or not is_first_message):
+	if type_ and (not gajim.config.get(type_) or not is_first_message):
 		return False
 	if gajim.config.get('autopopupaway'): # always show notification
 		return True
@@ -935,7 +1115,7 @@ def allow_popup_window(account, advanced_notif_num = None):
 		return True
 	return False
 
-def allow_sound_notification(sound_event, advanced_notif_num = None):
+def allow_sound_notification(account, sound_event, advanced_notif_num=None):
 	if advanced_notif_num is not None:
 		sound = gajim.config.get_per('notifications', str(advanced_notif_num),
 			'sound')
@@ -943,7 +1123,9 @@ def allow_sound_notification(sound_event, advanced_notif_num = None):
 			return True
 		if sound == 'no':
 			return False
-	if gajim.config.get_per('soundevents', sound_event, 'enabled'):
+	if gajim.config.get('sounddnd') or gajim.connections[account].connected != \
+	gajim.SHOW_LIST.index('dnd') and gajim.config.get_per('soundevents',
+	sound_event, 'enabled'):
 		return True
 	return False
 
@@ -953,55 +1135,23 @@ def get_chat_control(account, contact):
 		full_jid_with_resource += '/' + contact.resource
 	highest_contact = gajim.contacts.get_contact_with_highest_priority(
 		account, contact.jid)
+
 	# Look for a chat control that has the given resource, or default to
 	# one without resource
 	ctrl = gajim.interface.msg_win_mgr.get_control(full_jid_with_resource,
 		account)
+
 	if ctrl:
 		return ctrl
-	elif not highest_contact or not highest_contact.resource:
-		# unknow contact or offline message
-		return gajim.interface.msg_win_mgr.get_control(contact.jid, account)
-	elif highest_contact and contact.resource != \
-	highest_contact.resource:
+	elif highest_contact and highest_contact.resource and \
+	contact.resource != highest_contact.resource:
 		return None
-	return gajim.interface.msg_win_mgr.get_control(contact.jid, account)
-
-def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
-	'''Cut the chars after 'max_chars' on each line
-	and show only the first 'max_lines'.
-	If any of the params is not present (None or 0) the action
-	on it is not performed'''
-
-	def _cut_if_long(string):
-		if len(string) > max_chars:
-			string = string[:max_chars - 3] + '...'
-		return string
-
-	if isinstance(text, str):
-		text = text.decode('utf-8')
-
-	if max_lines == 0:
-		lines = text.split('\n')
 	else:
-		lines = text.split('\n', max_lines)[:max_lines]
-	if max_chars > 0:
-		if lines:
-			lines = map(lambda e: _cut_if_long(e), lines)
-	if lines:
-		reduced_text = reduce(lambda e, e1: e + '\n' + e1, lines)
-		if reduced_text != text:
-			reduced_text += '...'
-	else:
-		reduced_text = ''
-	return reduced_text
-
-def get_account_status(account):
-	status = reduce_chars_newlines(account['status_line'], 100, 1)
-	return status
+		# unknown contact or offline message
+		return gajim.interface.msg_win_mgr.get_control(contact.jid, account)
 
 def get_notification_icon_tooltip_dict():
-	'''returns a dict of the form {acct: {'show': show, 'message': message, 
+	'''returns a dict of the form {acct: {'show': show, 'message': message,
 	'event_lines': [list of text lines to show in tooltip]}'''
 	# How many events must there be before they're shown summarized, not per-user
 	max_ungrouped_events = 10
@@ -1049,7 +1199,7 @@ def get_notification_icon_tooltip_dict():
 					else:
 						text += _(' from %s') % (jid)
 					account['event_lines'].append(text)
-		
+
 		# Display unseen events numbers, if any
 		if total_non_messages > 0:
 			if total_non_messages > max_ungrouped_events:
@@ -1072,7 +1222,7 @@ def get_notification_icon_tooltip_dict():
 def get_notification_icon_tooltip_text():
 	text = None
 	# How many events must there be before they're shown summarized, not per-user
-	max_ungrouped_events = 10
+	# max_ungrouped_events = 10
 	# Character which should be used to indent in the tooltip.
 	indent_with = ' '
 
@@ -1093,7 +1243,7 @@ def get_notification_icon_tooltip_text():
 	# If there is only one account, its status is shown on the first line.
 	if show_more_accounts:
 		text = _('Gajim')
-	else:		
+	else:
 		text = _('Gajim - %s') % (get_account_status(accounts[0]))
 
 	# Gather and display events. (With accounts, when there are more.)
@@ -1116,8 +1266,7 @@ def get_notification_icon_tooltip_text():
 def get_accounts_info():
 	'''helper for notification icon tooltip'''
 	accounts = []
-	accounts_list = gajim.contacts.get_accounts()
-	accounts_list.sort()
+	accounts_list = sorted(gajim.contacts.get_accounts())
 	for account in accounts_list:
 		status_idx = gajim.connections[account].connected
 		# uncomment the following to hide offline accounts
@@ -1131,44 +1280,29 @@ def get_accounts_info():
 			message = message.strip()
 		if message != '':
 			single_line += ': ' + message
-		accounts.append({'name': account, 'status_line': single_line, 
+		accounts.append({'name': account, 'status_line': single_line,
 				'show': status, 'message': message})
 	return accounts
 
-def get_avatar_path(prefix):
-	'''Returns the filename of the avatar, distinguishes between user- and
-	contact-provided one.  Returns None if no avatar was found at all.
-	prefix is the path to the requested avatar just before the ".png" or
-	".jpeg".'''
-	# First, scan for a local, user-set avatar
-	for type_ in ('jpeg', 'png'):
-		file_ = prefix + '_local.' + type_
-		if os.path.exists(file_):
-			return file_
-	# If none available, scan for a contact-provided avatar
-	for type_ in ('jpeg', 'png'):
-		file_ = prefix + '.' + type_
-		if os.path.exists(file_):
-			return file_
-	return None
-
-def datetime_tuple(timestamp):
-	'''Converts timestamp using strptime and the format: %Y%m%dT%H:%M:%S
-	Because of various datetime formats are used the following exceptions
-	are handled:
-		- Optional milliseconds appened to the string are removed
-		- XEP-082 datetime strings have all '-' cahrs removed to meet
-		  the above format.'''
-	timestamp = timestamp.split('.')[0]
-	timestamp = timestamp.replace('-', '')
-	from time import strptime
-	return strptime(timestamp, '%Y%m%dT%H:%M:%S')
 
 def get_iconset_path(iconset):
 	if os.path.isdir(os.path.join(gajim.DATA_DIR, 'iconsets', iconset)):
 		return os.path.join(gajim.DATA_DIR, 'iconsets', iconset)
 	elif os.path.isdir(os.path.join(gajim.MY_ICONSETS_PATH, iconset)):
 		return os.path.join(gajim.MY_ICONSETS_PATH, iconset)
+
+def get_mood_iconset_path(iconset):
+	if os.path.isdir(os.path.join(gajim.DATA_DIR, 'moods', iconset)):
+		return os.path.join(gajim.DATA_DIR, 'moods', iconset)
+	elif os.path.isdir(os.path.join(gajim.MY_MOOD_ICONSETS_PATH, iconset)):
+		return os.path.join(gajim.MY_MOOD_ICONSETS_PATH, iconset)
+
+def get_activity_iconset_path(iconset):
+	if os.path.isdir(os.path.join(gajim.DATA_DIR, 'activities', iconset)):
+		return os.path.join(gajim.DATA_DIR, 'activities', iconset)
+	elif os.path.isdir(os.path.join(gajim.MY_ACTIVITY_ICONSETS_PATH,
+	iconset)):
+		return os.path.join(gajim.MY_ACTIVITY_ICONSETS_PATH, iconset)
 
 def get_transport_path(transport):
 	if os.path.isdir(os.path.join(gajim.DATA_DIR, 'iconsets', 'transports',
@@ -1184,13 +1318,13 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
 	'''Returns an eight char long keyID that can be used with for GPG encryption with this contact.
 	If the given keyID is None, return UNKNOWN; if the key does not match the assigned key
 	XXXXXXXXMISMATCH is returned. If the key is trusted and not yet assigned, assign it'''
-	if gajim.connections[account].USE_GPG:	
+	if gajim.connections[account].USE_GPG:
 		if keyID and len(keyID) == 16:
 			keyID = keyID[8:]
-		
+
 		attached_keys = gajim.config.get_per('accounts', account,
 			'attached_gpg_keys').split()
-		
+
 		if jid in attached_keys and keyID:
 			attachedkeyID = attached_keys[attached_keys.index(jid) + 1]
 			if attachedkeyID != keyID:
@@ -1199,10 +1333,10 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
 		elif jid in attached_keys:
 			# An unsigned presence, just use the assigned key
 			keyID = attached_keys[attached_keys.index(jid) + 1]
-		elif keyID: 
+		elif keyID:
 			public_keys = gajim.connections[account].ask_gpg_keys()
 			# Assign the corresponding key, if we have it in our keyring
-			if public_keys.has_key(keyID):
+			if keyID in public_keys:
 				for u in gajim.contacts.get_contacts(account, jid):
 					u.keyID = keyID
 				keys_str = gajim.config.get_per('accounts', account, 'attached_gpg_keys')
@@ -1212,98 +1346,6 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
 			keyID = 'UNKNOWN'
 	return keyID
 
-def sort_identities_func(i1, i2):
-	cat1 = i1['category']
-	cat2 = i2['category']
-	if cat1 < cat2:
-		return -1
-	if cat1 > cat2:
-		return 1
-	if i1.has_key('type'):
-		type1 = i1['type']
-	else:
-		type1 = ''
-	if i2.has_key('type'):
-		type2 = i2['type']
-	else:
-		type2 = ''
-	if type1 < type2:
-		return -1
-	if type1 > type2:
-		return 1
-	if i1.has_key('xml:lang'):
-		lang1 = i1['xml:lang']
-	else:
-		lang1 = ''
-	if i2.has_key('xml:lang'):
-		lang2 = i2['xml:lang']
-	else:
-		lang2 = ''
-	if lang1 < lang2:
-		return -1
-	if lang1 > lang2:
-		return 1
-	return 0
-
-def sort_dataforms_func(d1, d2):
-	f1 = d1.getField('FORM_TYPE')
-	f2 = d2.getField('FORM_TYPE')
-	if f1 and f2 and (f1.getValue() < f2.getValue()):
-		return -1
-	return 1
-
-def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
-	'''Compute caps hash according to XEP-0115, V1.5
-	
-	dataforms are xmpp.DataForms objects as common.dataforms don't allow several
-	values without a field type list-multi'''
-	S = ''
-	identities.sort(cmp=sort_identities_func)
-	for i in identities:
-		c = i['category']
-		if i.has_key('type'):
-			type_ = i['type']
-		else:
-			type_ = ''
-		if i.has_key('xml:lang'):
-			lang = i['xml:lang']
-		else:
-			lang = ''
-		if i.has_key('name'):
-			name = i['name']
-		else:
-			name = ''
-		S += '%s/%s/%s/%s<' % (c, type_, lang, name)
-	features.sort()
-	for f in features:
-		S += '%s<' % f
-	dataforms.sort(cmp=sort_dataforms_func)
-	for dataform in dataforms:
-		# fields indexed by var
-		fields = {}
-		for f in dataform.getChildren():
-			fields[f.getVar()] = f
-		form_type = fields.get('FORM_TYPE')
-		if form_type:
-			S += form_type.getValue() + '<'
-			del fields['FORM_TYPE']
-		vars = fields.keys()
-		vars.sort()
-		for var in vars:
-			S += '%s<' % var
-			values = fields[var].getValues()
-			values.sort()
-			for value in values:
-				S += '%s<' % value
-
-	if hash_method == 'sha-1':
-		hash = hash_sha1(S)
-	elif hash_method == 'md5':
-		hash = hash_md5(S)
-	else:
-		return ''
-	return base64.b64encode(hash.digest())
-
 def update_optional_features(account = None):
 	if account:
 		accounts = [account]
@@ -1311,28 +1353,25 @@ def update_optional_features(account = None):
 		accounts = [a for a in gajim.connections]
 	for a in accounts:
 		gajim.gajim_optional_features[a] = []
-		if gajim.config.get_per('accounts', a, 'publish_mood'):
-			gajim.gajim_optional_features[a].append(xmpp.NS_MOOD)
 		if gajim.config.get_per('accounts', a, 'subscribe_mood'):
 			gajim.gajim_optional_features[a].append(xmpp.NS_MOOD + '+notify')
-		if gajim.config.get_per('accounts', a, 'publish_activity'):
-			gajim.gajim_optional_features[a].append(xmpp.NS_ACTIVITY)
 		if gajim.config.get_per('accounts', a, 'subscribe_activity'):
 			gajim.gajim_optional_features[a].append(xmpp.NS_ACTIVITY + '+notify')
 		if gajim.config.get_per('accounts', a, 'publish_tune'):
 			gajim.gajim_optional_features[a].append(xmpp.NS_TUNE)
 		if gajim.config.get_per('accounts', a, 'subscribe_tune'):
 			gajim.gajim_optional_features[a].append(xmpp.NS_TUNE + '+notify')
-		if gajim.config.get_per('accounts', a, 'publish_nick'):
-			gajim.gajim_optional_features[a].append(xmpp.NS_NICK)
 		if gajim.config.get_per('accounts', a, 'subscribe_nick'):
 			gajim.gajim_optional_features[a].append(xmpp.NS_NICK + '+notify')
 		if gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
 			gajim.gajim_optional_features[a].append(xmpp.NS_CHATSTATES)
 		if not gajim.config.get('ignore_incoming_xhtml'):
 			gajim.gajim_optional_features[a].append(xmpp.NS_XHTML_IM)
-		if gajim.HAVE_PYCRYPTO:
-			gajim.gajim_optional_features[a].append(xmpp.NS_ESESSION_INIT)
+		if gajim.HAVE_PYCRYPTO \
+		and gajim.config.get_per('accounts', a, 'enable_esessions'):
+			gajim.gajim_optional_features[a].append(xmpp.NS_ESESSION)
+		if gajim.config.get_per('accounts', a, 'answer_receipts'):
+			gajim.gajim_optional_features[a].append(xmpp.NS_RECEIPTS)
 		gajim.caps_hash[a] = compute_caps_hash([gajim.gajim_identity],
 			gajim.gajim_common_features + gajim.gajim_optional_features[a])
 		# re-send presence with new hash
@@ -1340,3 +1379,13 @@ def update_optional_features(account = None):
 		if connected > 1 and gajim.SHOW_LIST[connected] != 'invisible':
 			gajim.connections[a].change_status(gajim.SHOW_LIST[connected],
 				gajim.connections[a].status)
+
+def jid_is_blocked(account, jid):
+	return ((jid in gajim.connections[account].blocked_contacts) or \
+		gajim.connections[account].blocked_all)
+
+def group_is_blocked(account, group):
+	return ((group in gajim.connections[account].blocked_groups) or \
+		gajim.connections[account].blocked_all)
+
+# vim: se ts=3:

@@ -6,7 +6,7 @@ INCLUDES = \
 
 if BUILD_CARBON
 _growllib_LTLIBRARIES = _growl.la
-_growllibdir = $(libdir)/gajim
+_growllibdir = $(pkglibdir)
 
 _growl_la_LIBADD = $(CARBON_LIBS) 
 
@@ -20,7 +20,7 @@ endif
 
 if BUILD_COCOA
 _growlImagelib_LTLIBRARIES = _growlImage.la
-_growlImagelibdir = $(libdir)/gajim
+_growlImagelibdir = $(pkglibdir)
 
 _growlImage_la_LIBADD = $(COCOA_LIBS) 
 

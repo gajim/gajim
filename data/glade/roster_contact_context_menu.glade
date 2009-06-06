@@ -92,13 +92,6 @@
       </widget>
     </child>
     <child>
-      <widget class="GtkImageMenuItem" id="tictactoe_menuitem">
-        <property name="visible">True</property>
-        <property name="label" translatable="yes">Play Tic Tac Toe</property>
-        <property name="use_underline">True</property>
-      </widget>
-    </child>
-    <child>
       <widget class="GtkImageMenuItem" id="manage_contact">
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -249,7 +242,6 @@
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">_Unblock</property>
                 <property name="use_underline">True</property>
-                <signal name="activate" handler="on_unblock_menuitem_activate"/>
                 <child internal-child="image">
                   <widget class="GtkImage" id="image1715">
                     <property name="visible">True</property>
@@ -264,9 +256,36 @@
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">_Block</property>
                 <property name="use_underline">True</property>
-                <signal name="activate" handler="on_block_menuitem_activate"/>
                 <child internal-child="image">
                   <widget class="GtkImage" id="image1714">
+                    <property name="visible">True</property>
+                    <property name="stock">gtk-stop</property>
+                    <property name="icon_size">1</property>
+                  </widget>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkImageMenuItem" id="unignore_menuitem">
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">_Unignore</property>
+                <property name="use_underline">True</property>
+                <child internal-child="image">
+                  <widget class="GtkImage" id="menu-item-image22">
+                    <property name="visible">True</property>
+                    <property name="stock">gtk-stop</property>
+                    <property name="icon_size">1</property>
+                  </widget>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkImageMenuItem" id="ignore_menuitem">
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">_Ignore</property>
+                <property name="use_underline">True</property>
+                <child internal-child="image">
+                  <widget class="GtkImage" id="menu-item-image23">
                     <property name="visible">True</property>
                     <property name="stock">gtk-stop</property>
                     <property name="icon_size">1</property>
@@ -289,7 +308,7 @@
             </child>
             <child>
               <widget class="GtkImageMenuItem" id="remove_from_roster_menuitem">
-                <property name="label" translatable="yes">_Remove</property>
+                <property name="label" translatable="yes">Remo_ve</property>
                 <property name="use_underline">True</property>
                 <child internal-child="image">
                   <widget class="GtkImage" id="image1717">

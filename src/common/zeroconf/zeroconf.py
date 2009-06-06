@@ -45,3 +45,5 @@ if test_avahi():
 elif test_bonjour():
 	from common.zeroconf import zeroconf_bonjour
 	Zeroconf = zeroconf_bonjour.Zeroconf
+
+# vim: se ts=3:

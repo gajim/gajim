@@ -1,35 +1,37 @@
-#!/bin/bash
-##      gajim
+#!/bin/sh
+## scripts/gajim.in
 ##
-## Contributors for this file:
-##      - Yann Le Boulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2005 Yann Le Boulanger <asterix AT lagaule.org>
+## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
+##                    Stefan Bethge <stefan AT lanpartei.de>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## This file is part of Gajim.
 ##
-## This program is free software; you can redistribute it and/or modify
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
 
-if [ `id -u` -eq 0 ]; then
-	echo "You must not launch Gajim as root, it is INSECURE"
+APP=`basename $0`
+if test $(id -u) -eq 0; then
+	echo "You must not launch $APP as root, it is INSECURE"
+	exit 1
 fi
 
-datadir=@DATADIR@
+[ "$APP" = "gajim-history-manager" ] && APP="history_manager"
+
+export datadir=@DATADIR@/gajim
 PYTHON_EXEC=@PYTHON@
 
-cd ${datadir}/gajim/src
+cd ${datadir}/src
 export PYTHONPATH="$PYTHONPATH:@LIBDIR@/gajim"
-exec -a gajim ${PYTHON_EXEC} -OO gajim.py $@
+exec ${PYTHON_EXEC} -OO $APP.py "$@"

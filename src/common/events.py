@@ -1,15 +1,13 @@
-## common/events.py
+# -*- coding:utf-8 -*-
+## src/common/events.py
 ##
-## Contributors for this file:
-##	- Yann Leboulanger <asterix@lagaule.org>
-##
-## Copyright (C) 2006 Yann Leboulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
-## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
+## Copyright (C) 2006 Jean-Marie Traissard <jim AT lapin.org>
+##                    Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>
+## Copyright (C) 2007-2008 Stephan Erb <steve-e AT h3c.de>
+## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
+##                    Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -19,35 +17,44 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import time
 
 class Event:
 	'''Information concerning each event'''
-	def __init__(self, type_, time_, parameters, show_in_roster = False,
-	show_in_systray = True):
+	def __init__(self, type_, time_, parameters, show_in_roster=False,
+	show_in_systray=True):
 		''' type_ in chat, normal, file-request, file-error, file-completed,
 		file-request-error, file-send-error, file-stopped, gc_msg, pm,
-		printed_chat, printed_gc_msg, printed_marked_gc_msg, printed_pm
+		printed_chat, printed_gc_msg, printed_marked_gc_msg, printed_pm,
+		gc-invitation, subscription_request, unsubscribed
 		parameters is (per type_):
-			chat, normal: [message, subject, kind, time, encrypted, resource,
+			chat, normal, pm: [message, subject, kind, time, encrypted, resource,
 			msg_id]
 				where kind in error, incoming
 			file-*: file_props
 			gc_msg: None
+			printed_chat: control
 			printed_*: None
-				messages that are already printed in chat, but not read'''
+				messages that are already printed in chat, but not read
+			gc-invitation: [room_jid, reason, password, is_continued]
+			subscription_request: [text, nick]
+			unsubscribed: contact
+		'''
 		self.type_ = type_
 		self.time_ = time_
 		self.parameters = parameters
 		self.show_in_roster = show_in_roster
 		self.show_in_systray = show_in_systray
+		# Set when adding the event
+		self.jid = None
+		self.account = None
 
 class Events:
 	'''Information concerning all events'''
@@ -85,7 +92,7 @@ class Events:
 			listener(event_list)
 
 	def change_account_name(self, old_name, new_name):
-		if self._events.has_key(old_name):
+		if old_name in self._events:
 			self._events[new_name] = self._events[old_name]
 			del self._events[old_name]
 
@@ -105,22 +112,24 @@ class Events:
 
 	def add_event(self, account, jid, event):
 		# No such account before ?
-		if not self._events.has_key(account):
+		if account not in self._events:
 			self._events[account] = {jid: [event]}
 		# no such jid before ?
-		elif not self._events[account].has_key(jid):
+		elif jid not in self._events[account]:
 			self._events[account][jid] = [event]
 		else:
 			self._events[account][jid].append(event)
+		event.jid = jid
+		event.account = account
 		self.fire_event_added(event)
 
 	def remove_events(self, account, jid, event = None, types = []):
 		'''if event is not specified, remove all events from this jid,
 		optionally only from given type
 		return True if no such event found'''
-		if not self._events.has_key(account):
+		if account not in self._events:
 			return True
-		if not self._events[account].has_key(jid):
+		if jid not in self._events[account]:
 			return True
 		if event: # remove only one event
 			if event in self._events[account][jid]:
@@ -153,9 +162,9 @@ class Events:
 		del self._events[account][jid]
 
 	def change_jid(self, account, old_jid, new_jid):
-		if not self._events[account].has_key(old_jid):
+		if old_jid not in self._events[account]:
 			return
-		if self._events[account].has_key(new_jid):
+		if new_jid in self._events[account]:
 			self._events[account][new_jid] += self._events[account][old_jid]
 		else:
 			self._events[account][new_jid] = self._events[account][old_jid]
@@ -169,7 +178,7 @@ class Events:
 		{jid1: [], jid2: []}
 		if jid is given, returns all events from the given jid in a list: []
 		optionally only from given type'''
-		if not self._events.has_key(account):
+		if account not in self._events:
 			return []
 		if not jid:
 			events_list = {} # list of events
@@ -181,7 +190,7 @@ class Events:
 				if events:
 					events_list[jid_] = events
 			return events_list
-		if not self._events[account].has_key(jid):
+		if jid not in self._events[account]:
 			return []
 		events_list = [] # list of events
 		for ev in self._events[account][jid]:
@@ -210,14 +219,14 @@ class Events:
 		else:
 			accounts = self._events.keys()
 		for acct in accounts:
-			if not self._events.has_key(acct):
+			if acct not in self._events:
 				continue
 			if jid:
 				jids = [jid]
 			else:
 				jids = self._events[acct].keys()
 			for j in jids:
-				if not self._events[acct].has_key(j):
+				if j not in self._events[acct]:
 					continue
 				for event in self._events[acct][j]:
 					if types and event.type_ not in types:
@@ -285,3 +294,5 @@ class Events:
 		'''return all events that must be displayed in roster:
 		{account1: {jid1: [ev1, ev2], },. }'''
 		return self._get_some_events('roster')
+
+# vim: se ts=3:

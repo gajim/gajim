@@ -19,6 +19,8 @@
 
   which glibtoolize >/dev/null 2>&1 && LIBTOOLIZE="glibtoolize" || LIBTOOLIZE="libtoolize"
 
+  mkdir -p config
+
   intltoolize --force --automake \
   && aclocal -I ./m4 \
   && $LIBTOOLIZE --copy --force --automake \

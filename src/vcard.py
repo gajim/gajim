@@ -1,9 +1,18 @@
-##	vcard.py (has VcardWindow class and a func get_avatar_pixbuf_encoded_mime)
+# -*- coding:utf-8 -*-
+## src/vcard.py
 ##
-## Copyright (C) 2003-2007 Yann Leboulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
-## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
+## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005 Vincent Hanquez <tab AT snarc.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006 Junglecow J <junglecow AT gmail.com>
+##                    Dimitur Kirov <dkirov AT gmail.com>
+##                    Travis Shirk <travis AT pobox.com>
+##                    Stefan Bethge <stefan AT lanpartei.de>
+## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2007 Lukas Petrovicky <lukas AT petrovicky.net>
+## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
+##                    Jonathan Schleifer <js-gajim AT webkeks.org>
+##                    Stephan Erb <steve-e AT h3c.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -13,11 +22,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 # THIS FILE IS FOR **OTHERS'** PROFILE (when we VIEW their INFO)
@@ -30,7 +39,6 @@ import locale
 import os
 
 import gtkgui_helpers
-import message_control
 
 from common import helpers
 from common import gajim
@@ -44,15 +52,15 @@ def get_avatar_pixbuf_encoded_mime(photo):
 	img_decoded = None
 	avatar_encoded = None
 	avatar_mime_type = None
-	if photo.has_key('BINVAL'):
+	if 'BINVAL' in photo:
 		img_encoded = photo['BINVAL']
 		avatar_encoded = img_encoded
 		try:
 			img_decoded = base64.decodestring(img_encoded)
-		except:
+		except Exception:
 			pass
 	if img_decoded:
-		if photo.has_key('TYPE'):
+		if 'TYPE' in photo:
 			avatar_mime_type = photo['TYPE']
 			pixbuf = gtkgui_helpers.get_pixbuf_from_data(img_decoded)
 		else:
@@ -77,14 +85,21 @@ class VcardWindow:
 
 		# Get real jid
 		if gc_contact:
-			if gc_contact.jid:
+			# Don't use real jid if room is (semi-)anonymous
+			gc_control = gajim.interface.msg_win_mgr.get_gc_control(
+			gc_contact.room_jid, account)
+			if gc_contact.jid and not gc_control.is_anonymous:
 				self.real_jid = gc_contact.jid
+				self.real_jid_for_vcard = gc_contact.jid
 				if gc_contact.resource:
 					self.real_jid += '/' + gc_contact.resource
 			else:
 				self.real_jid = gc_contact.get_full_jid()
+				self.real_jid_for_vcard = self.real_jid
+			self.real_resource = gc_contact.name
 		else:
 			self.real_jid = contact.get_full_jid()
+			self.real_resource = contact.resource
 
 		puny_jid = helpers.sanitize_filename(contact.jid)
 		local_avatar_basepath = os.path.join(gajim.AVATAR_PATH, puny_jid) + \
@@ -101,14 +116,15 @@ class VcardWindow:
 		self.avatar_encoded = None
 		self.vcard_arrived = False
 		self.os_info_arrived = False
+		self.entity_time_arrived = False
 		self.update_progressbar_timeout_id = gobject.timeout_add(100,
 			self.update_progressbar)
 
 		self.fill_jabber_page()
 		annotations = gajim.connections[self.account].annotations
 		if self.contact.jid in annotations:
-			buffer = self.xml.get_widget('textview_annotation').get_buffer()
-			buffer.set_text(annotations[self.contact.jid])
+			buffer_ = self.xml.get_widget('textview_annotation').get_buffer()
+			buffer_.set_text(annotations[self.contact.jid])
 
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
@@ -118,22 +134,13 @@ class VcardWindow:
 		self.progressbar.pulse()
 		return True # loop forever
 
-	def update_avatar_in_gui(self):
-		jid = self.contact.jid
-		# Update roster
-		gajim.interface.roster.draw_avatar(jid, self.account)
-		# Update chat windows
-		for ctrl in gajim.interface.msg_win_mgr.get_chat_controls(jid, self.account):
-			if ctrl.type_id != message_control.TYPE_GC:
-				ctrl.show_avatar()
-
 	def on_vcard_information_window_destroy(self, widget):
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 		del gajim.interface.instances[self.account]['infos'][self.contact.jid]
-		buffer = self.xml.get_widget('textview_annotation').get_buffer()
-		annotation = buffer.get_text(buffer.get_start_iter(),
-			buffer.get_end_iter())
+		buffer_ = self.xml.get_widget('textview_annotation').get_buffer()
+		annotation = buffer_.get_text(buffer_.get_start_iter(),
+			buffer_.get_end_iter())
 		connection = gajim.connections[self.account]
 		if annotation != connection.annotations.get(self.contact.jid, ''):
 			connection.annotations[self.contact.jid] = annotation
@@ -153,7 +160,7 @@ class VcardWindow:
 				self.contact.jid, self.account, self.contact.get_shown_name() +
 				'.jpeg')
 			menu.append(menuitem)
-			menu.connect('selection-done', lambda w:w.destroy())	
+			menu.connect('selection-done', lambda w:w.destroy())
 			# show the menu
 			menu.show_all()
 			menu.popup(None, None, None, event.button, event.time)
@@ -161,13 +168,8 @@ class VcardWindow:
 	def set_value(self, entry_name, value):
 		try:
 			if value and entry_name == 'URL_label':
-				if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
-					widget = gtk.LinkButton(value, value)
-					widget.set_alignment(0, 0)
-				else:
-					widget = gtk.Label(value)
-					widget.set_alignment(0, 0)
-					widget.set_selectable(True)
+				widget = gtk.LinkButton(value, value)
+				widget.set_alignment(0, 0)
 				widget.show()
 				table = self.xml.get_widget('personal_info_table')
 				table.attach(widget, 1, 4, 3, 4, yoptions = 0)
@@ -213,7 +215,7 @@ class VcardWindow:
 
 	def test_remove_progressbar(self):
 		if self.update_progressbar_timeout_id is not None and \
-		self.vcard_arrived and self.os_info_arrived:
+		self.vcard_arrived and self.os_info_arrived and self.entity_time_arrived:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 			self.progressbar.hide()
 			self.update_progressbar_timeout_id = None
@@ -227,7 +229,7 @@ class VcardWindow:
 		i = 0
 		client = ''
 		os = ''
-		while self.os_info.has_key(i):
+		while i in self.os_info:
 			if not self.os_info[i]['resource'] or \
 					self.os_info[i]['resource'] == resource:
 				self.os_info[i]['client'] = client_info
@@ -246,6 +248,26 @@ class VcardWindow:
 		self.xml.get_widget('client_name_version_label').set_text(client)
 		self.xml.get_widget('os_label').set_text(os)
 		self.os_info_arrived = True
+		self.test_remove_progressbar()
+
+	def set_entity_time(self, resource, time_info):
+		if self.xml.get_widget('information_notebook').get_n_pages() < 5:
+			return
+		i = 0
+		time_s = ''
+		while i in self.time_info:
+			if not self.time_info[i]['resource'] or \
+			self.time_info[i]['resource'] == resource:
+				self.time_info[i]['time'] = time_info
+			if i > 0:
+				time_s += '\n'
+			time_s += self.time_info[i]['time']
+			i += 1
+
+		if time_s == '':
+			time_s = Q_('?Time:Unknown')
+		self.xml.get_widget('time_label').set_text(time_s)
+		self.entity_time_arrived = True
 		self.test_remove_progressbar()
 
 	def fill_status_label(self):
@@ -298,7 +320,7 @@ class VcardWindow:
 			self.contact.get_shown_name() +
 			'</span></b>')
 		self.xml.get_widget('jid_label').set_text(self.contact.jid)
-		
+
 		subscription_label = self.xml.get_widget('subscription_label')
 		ask_label = self.xml.get_widget('ask_label')
 		if self.gc_contact:
@@ -339,14 +361,15 @@ class VcardWindow:
 		if not self.contact.status:
 			self.contact.status = ''
 
-		# Request list time status
-		if self.gc_contact:
-			j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
-			gajim.connections[self.account].request_last_status_time(j, r,
-				self.contact.jid)
-		else:
-			gajim.connections[self.account].request_last_status_time(
-				self.contact.jid, self.contact.resource)
+		# Request list time status only if contact is offline
+		if self.contact.show == 'offline':
+			if self.gc_contact:
+				j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
+				gajim.connections[self.account].request_last_status_time(j, r,
+					self.contact.jid)
+			else:
+				gajim.connections[self.account].request_last_status_time(
+					self.contact.jid, self.contact.resource)
 
 		# do not wait for os_info if contact is not connected or has error
 		# additional check for observer is needed, as show is offline for him
@@ -361,8 +384,24 @@ class VcardWindow:
 			else:
 				gobject.idle_add(gajim.connections[self.account].request_os_info,
 					self.contact.jid, self.contact.resource)
-		self.os_info = {0: {'resource': self.contact.resource, 'client': '',
+
+		# do not wait for entity_time if contact is not connected or has error
+		# additional check for observer is needed, as show is offline for him
+		if self.contact.show in ('offline', 'error')\
+		and not self.contact.is_observer():
+			self.entity_time_arrived = True
+		else: # Request entity time if contact is connected
+			if self.gc_contact:
+				j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
+				gobject.idle_add(gajim.connections[self.account].\
+					request_entity_time, j, r, self.contact.jid)
+			else:
+				gobject.idle_add(gajim.connections[self.account].\
+					request_entity_time, self.contact.jid, self.contact.resource)
+
+		self.os_info = {0: {'resource': self.real_resource, 'client': '',
 			'os': ''}}
+		self.time_info = {0: {'resource': self.real_resource, 'time': ''}}
 		i = 1
 		contact_list = gajim.contacts.get_contacts(self.account, self.contact.jid)
 		if contact_list:
@@ -376,11 +415,15 @@ class VcardWindow:
 						gobject.idle_add(
 							gajim.connections[self.account].request_os_info, c.jid,
 							c.resource)
+						gobject.idle_add(gajim.connections[self.account].\
+							request_entity_time, c.jid, c.resource)
 					gajim.connections[self.account].request_last_status_time(c.jid,
 						c.resource)
 					self.os_info[i] = {'resource': c.resource, 'client': '',
 						'os': ''}
+					self.time_info[i] = {'resource': c.resource, 'time': ''}
 					i += 1
+
 		self.xml.get_widget('resource_prio_label').set_text(resources)
 		resource_prio_label_eventbox = self.xml.get_widget(
 			'resource_prio_label_eventbox')
@@ -390,11 +433,7 @@ class VcardWindow:
 
 		if self.gc_contact:
 			# If we know the real jid, remove the resource from vcard request
-			if self.gc_contact.jid:
-				jid = self.gc_contact.jid
-			else:
-				jid = self.real_jid
-			gajim.connections[self.account].request_vcard(jid,
+			gajim.connections[self.account].request_vcard(self.real_jid_for_vcard,
 				self.gc_contact.get_full_jid())
 		else:
 			gajim.connections[self.account].request_vcard(self.contact.jid)
@@ -439,7 +478,7 @@ class ZeroconfVcardWindow:
 				self.contact.jid, self.account, self.contact.get_shown_name() +
 				'.jpeg')
 			menu.append(menuitem)
-			menu.connect('selection-done', lambda w:w.destroy())	
+			menu.connect('selection-done', lambda w:w.destroy())
 			# show the menu
 			menu.show_all()
 			menu.popup(None, None, None, event.button, event.time)
@@ -447,13 +486,8 @@ class ZeroconfVcardWindow:
 	def set_value(self, entry_name, value):
 		try:
 			if value and entry_name == 'URL_label':
-				if gtk.pygtk_version >= (2, 10, 0) and gtk.gtk_version >= (2, 10, 0):
-					widget = gtk.LinkButton(value, value)
-					widget.set_alignment(0, 0)
-				else:
-					widget = gtk.Label(value)
-					widget.set_selectable(True)
-					widget.set_alignment(0, 0)
+				widget = gtk.LinkButton(value, value)
+				widget.set_alignment(0, 0)
 				table = self.xml.get_widget('personal_info_table')
 				table.attach(widget, 1, 4, 3, 4, yoptions = 0)
 			else:
@@ -490,7 +524,7 @@ class ZeroconfVcardWindow:
 		tip = gtk.Tooltips()
 		status_label_eventbox = self.xml.get_widget('status_label_eventbox')
 		tip.set_tip(status_label_eventbox, stats)
-	
+
 	def fill_contact_page(self):
 		tooltips = gtk.Tooltips()
 		self.xml.get_widget('nickname_label').set_markup(
@@ -518,11 +552,11 @@ class ZeroconfVcardWindow:
 		self.fill_status_label()
 
 	#	gajim.connections[self.account].request_vcard(self.contact.jid, self.is_fake)
-	
+
 	def fill_personal_page(self):
 		contact = gajim.connections[gajim.ZEROCONF_ACC_NAME].roster.getItem(self.contact.jid)
 		for key in ('1st', 'last', 'jid', 'email'):
-			if not contact['txt_dict'].has_key(key):
+			if key not in contact['txt_dict']:
 				contact['txt_dict'][key] = ''
 		self.xml.get_widget('first_name_label').set_text(contact['txt_dict']['1st'])
 		self.xml.get_widget('last_name_label').set_text(contact['txt_dict']['last'])
@@ -531,3 +565,5 @@ class ZeroconfVcardWindow:
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
+
+# vim: se ts=3:

@@ -1,7 +1,101 @@
-Gajim 0.XX.X (svn)
+Gajim 0.12.1 (21 December 2008)
 
-  * Modified the format of emoticons list file, so we can choose the default code (#3696)
+  * Fix filetransfer
+  * Updated german translation
+  * Fix click on notifications when text string is empty
+  * Improve systray popup menu
+
+Gajim 0.12 (17 December 2008)
+
+  * Fix text rendering in notifications
+  * Fix forward unread messages under Windows
+  * Better sessions support
+  * Better auto-away support
+  * Fix banshee support
+  * Quodlibet support
+  * Fix GSSAPI authentification 
+  * Fix IPV4 filetransfer on Windows Vista when IPV6 is used too
+  * Fix caps usage
+  * Fix end to end encryption autonegotiation
+
+Gajim 0.12-beta1 (11 November 2008)
+
+  * SECURITY
+  * Implement Kerberos (GSSAPI) SASL Authentication mechanism
+  * Prevent affiliation spoofing in groupchats
+  * Improve GPG and E2E support
+
+  * GUI
+  * Highlight all valid IANA schemes
+  * Improved E2E, Mood and Activity dialogs
+  * Show number of participants in groupchats
+
+  * Connection
+  * Correctly parse IDNA names in SRV records
+  * Disable proxy resolution (#4299)
+  * Fix handling of namespace invalid XML
+  * Do not freeze on connection failures (#4366, #4107)
+
+  * OTHERS
+  * Do not crash on fluxbox restarts
+  * Update several hotkeys and make them work on non-latin keyboards
+  * Prevent a user from sending invalid XML chars
+  * Do not try to save a file with a too long filename when a nick is long
+  * Implement XEP-0203 (Delayed Delivery)
+  * Improved windows installer
+  * Latex support for windows
+
+Gajim 0.12-alpha1 (12 August 2008)
+
+  * Change licence from GPLv2 to GPLv3
+
+  * SECURITY
+  * Support for End-To-End encryption (XEP-0116)
+  * SSL certificate verification
+  * Improve GPG support (#2390, #2783)
+  * Ability to disable message previews in notify popups
+
+  * GROUP CHATS
+  * Support for sending files over group chats
   * List of bookmarked rooms is now sorted alphabetically
+  * Support for transforming a one-to-one chat into a groupchat
+  * Send invitation by drag-and-dropping a contact from roster
+  * Send messages to conference using gajim-remote
+  * Ability to destroy a room when we are owner, give a reason and alternative room jid
+  * Ability to minimize group chats in roster
+  
+  * USABILITY
+  * Files transfers using drag and drop
+  * Ability to select and interact with status messages in chat windows (using libsexy)
+  * Ability to set a custom avatar for a contact
+  * Better handling of resource collisions
+  * Option to Sign On as a Certain Status (#3314)
+  * Block/Unblock contact directly from roster using privacy lists
+  
+  * GUI
+  * Single window mode
+  * Close change status windows after 15 seconds of inactivity
+  * Simplified "Accounts" dialog
+  * Preferences window redesign
+  * New GUI for chat window
+  * Roster treeview now uses modelfilter (way way much faster)
+
+  * OTHER
+  * Support of PEP (Personal Eventing Protocol) (XEP-0163)
+    * User Mood (XEP-0107)
+    * User Activity (XEP-0108)
+    * User Tune (XEP-0118)
+    * User Nickname (XEP-0172)
+  * Support for Google Talk accounts with non gmail.com domain (+ GMail notifications)
+  * Modified the format of emoticons list file, so we can choose the default code (#3696)
+  * New Remote Controlling Option (XEP-0146): forward unread messages
+  * Support for User Search (XEP-0055)
+  * Support for jabber:x:data in message elements (Part of XEP-0004)
+  * Added a «supported features» window
+  * Latex support (#2796)
+  * Link-local messaging with Windows (#2883)
+  * Ability to send a custom status to a group, a contact or a transport
+  * Support of Message Receipts (XEP-0184)
 
 Gajim 0.11.4 (06 December 2007)
 

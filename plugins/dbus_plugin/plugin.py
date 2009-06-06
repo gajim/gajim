@@ -706,13 +706,14 @@ Gajim core but uses new events handling system.'''
 		self.events_handlers = {}
 		self._set_handling_methods()
 		
-		
+	@log_calls('DBusPlugin')	
 	def activate(self):
 		session_bus = dbus_support.session_bus.SessionBus()
 
 		bus_name = dbus.service.BusName(SERVICE, bus=session_bus)
 		self.signal_object = SignalObject(bus_name)
-		
+	
+	@log_calls('DBusPlugin')	
 	def deactivate(self):
 		self.signal_object.remove_from_connection()
 		self.signal_object = None

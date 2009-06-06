@@ -1,3 +1,24 @@
+## setup_osx.py
+##
+## Copyright (C) 2007 James Newton <redshodan AT gmail.com>
+## Copyright (C) 2007-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
+##
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
+
 """
 Usage:
     python setup_osx.py [build | dist]
@@ -14,7 +35,7 @@ from shutil import move, copy, copytree, rmtree
 
 GTK_DIR="/Library/Frameworks/GTK+.framework/Versions/Current"
 NAME = 'Gajim'
-VERSION = '0.11'
+VERSION = '0.12.1'
 DESCRIPTION = 'A full featured Jabber client'
 AUTHOR = 'Gajim Development Team'
 URL = 'http://www.gajim.org/'
@@ -49,10 +70,10 @@ exec ${TOPDIR}/MacOS/Python ${RESOURCEPATH}/gajim-remote.py $* \n\
 ###
 
 def check(ret):
-	if type(ret) == types.ListType:
+	if isinstance(ret, list):
 		if ret[0] != 0:
 			raise Exception("Command failed: " + ret[1])
-	elif type(ret) == types.IntType:
+	elif isinstance(ret, int):
 		if ret != 0:
 			raise Exception("Command failed")
 	return
@@ -61,13 +82,13 @@ def check(ret):
 def force(func):
 	try:
 		func()
-	except:
+	except Exception:
 		pass
 	return
 
 
 def writeScript(filename, contents):
-	script = file(filename, "w+")
+	script = open(filename, "w+")
 	script.write(contents)
 	script.close()
 	system("chmod +x %s" % filename)
@@ -127,8 +148,8 @@ def setupPrep():
 	copy("src/osx/prep_py2app.py", APP_RS)
 	move("dist/Gajim.app/Contents/Resources/__boot__.py",
 		 "dist/Gajim.app/Contents/Resources/__boot__.py.org")
-	new = file("dist/Gajim.app/Contents/Resources/__boot__.py", "w+")
-	org = file("dist/Gajim.app/Contents/Resources/__boot__.py.org")
+	new = open("dist/Gajim.app/Contents/Resources/__boot__.py", "w+")
+	org = open("dist/Gajim.app/Contents/Resources/__boot__.py.org")
 	for line in org:
 		new.write(line)
 		if (('site.addsitedir' in line) and ('Python' in line)):
@@ -198,3 +219,5 @@ elif sys.argv[1] == "build":
 	finishApp()
 elif sys.argv[1] == "dist":
 	distApp()
+
+# vim: se ts=3:

@@ -1,17 +1,10 @@
-##	common/i18n.py
-## -*- coding: utf-8 -*-
-## Contributors for this file:
-##  - Yann Leboulanger <asterix@lagaule.org>
-##  - Nikos Kouremenos <kourem@gmail.com>
+# -*- coding:utf-8 -*-
+## src/common/i18n.py
 ##
-## Copyright (C) 2003-2004 Yann Leboulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Leboulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2003-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2004 Vincent Hanquez <tab AT snarc.org>
+## Copyright (C) 2004-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ##
 ## This file is part of Gajim.
 ##
@@ -21,22 +14,20 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import locale
 import gettext
 import os
+import defs
 
 APP = 'gajim'
-if os.path.isdir('../po'):
-	DIR = '../po'
-else:
-	DIR = '../../locale'
+DIR = defs.localedir
 
 # set '' so each part of the locale that should be modified is set
 # according to the environment variables
@@ -65,7 +56,7 @@ def Q_(s):
 	# so we must use as:
 	# s = Q_('?vcard:Unknown')
 	# widget.set_text(s)
-	# Q_() removes the ?vcard: 
+	# Q_() removes the ?vcard:
 	# but gettext while parsing the file detects ?vcard:Unknown as a whole string.
 	# translator can either put the ?vcard: part or no (easier for him or her to no)
 	# nothing fails
@@ -77,7 +68,7 @@ def Q_(s):
 def ngettext(s_sing, s_plural, n, replace_sing = None, replace_plural = None):
 	'''use as:
 	i18n.ngettext('leave room %s', 'leave rooms %s', len(rooms), 'a', 'a, b, c')
-	
+
 	in other words this is a hack to ngettext() to support %s %d etc..
 	'''
 	text = _translation.ungettext(s_sing, s_plural, n)
@@ -86,3 +77,5 @@ def ngettext(s_sing, s_plural, n, replace_sing = None, replace_plural = None):
 	elif n > 1 and replace_plural is not None:
 		text = text % replace_plural
 	return text
+
+# vim: se ts=3:

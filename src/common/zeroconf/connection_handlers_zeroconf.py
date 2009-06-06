@@ -6,7 +6,7 @@
 ##	- Nikos Kouremenos <nkour@jabber.org>
 ##	- Dimitur Kirov <dkirov@gmail.com>
 ##	- Travis Shirk <travis@pobox.com>
-## - Stefan Bethge <stefan@lanpartei.de> 
+## - Stefan Bethge <stefan@lanpartei.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -23,7 +23,6 @@
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import os
 import time
 import socket
 
@@ -45,7 +44,7 @@ AGENT_REMOVED = 'agent_removed'
 HAS_IDLE = True
 try:
 	import idle
-except:
+except Exception:
 	gajim.log.debug(_('Unable to load idle module'))
 	HAS_IDLE = False
 
@@ -69,7 +68,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 	def send_socks5_info(self, file_props, fast = True, receiver = None,
 		sender = None):
 		''' send iq for the present streamhosts and proxies '''
-		if type(self.peerhost) != tuple:
+		if not isinstance(self.peerhost, tuple):
 			return
 		port = gajim.config.get('file_transfers_port')
 		ft_add_hosts_to_send = gajim.config.get('ft_add_hosts_to_send')
@@ -77,14 +76,12 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 			receiver = file_props['receiver']
 		if sender is None:
 			sender = file_props['sender']
-		proxyhosts = []
 		sha_str = helpers.get_auth_sha(file_props['sid'], sender,
 			receiver)
 		file_props['sha_str'] = sha_str
 		ft_add_hosts = []
 		if ft_add_hosts_to_send:
-			ft_add_hosts_to_send = map(lambda e:e.strip(),
-				ft_add_hosts_to_send.split(','))
+			ft_add_hosts_to_send = [e.strip() for e in ft_add_hosts_to_send.split(',')]
 			for ft_host in ft_add_hosts_to_send:
 				try:
 					ft_host = socket.gethostbyname(ft_host)
@@ -93,7 +90,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 					self.dispatch('ERROR', (_('Wrong host'), _('The host %s you configured as the ft_add_hosts_to_send advanced option is not valid, so ignored.') % ft_host))
 		listener = gajim.socks5queue.start_listener(port,
 			sha_str, self._result_socks5_sid, file_props['sid'])
-		if listener == None:
+		if listener is None:
 			file_props['error'] = -5
 			self.dispatch('FILE_REQUEST_ERROR', (unicode(receiver), file_props,
 				''))
@@ -146,7 +143,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		file_tag.setAttr('name', file_props['name'])
 		file_tag.setAttr('size', file_props['size'])
 		desc = file_tag.setTag('desc')
-		if file_props.has_key('desc'):
+		if 'desc' in file_props:
 			desc.setData(file_props['desc'])
 		file_tag.setTag('range')
 		feature = si.setTag('feature')
@@ -161,7 +158,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 	def _bytestreamSetCB(self, con, iq_obj):
 		gajim.log.debug('_bytestreamSetCB')
 		target = unicode(iq_obj.getAttr('to'))
-		id = unicode(iq_obj.getAttr('id'))
+		id_ = unicode(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
 		sid = unicode(query.getAttr('sid'))
 		file_props = gajim.socks5queue.get_file_props(
@@ -172,7 +169,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 				host_dict={
 					'state': 0,
 					'target': target,
-					'id': id,
+					'id': id_,
 					'sid': sid,
 					'initiator': unicode(iq_obj.getFrom())
 				}
@@ -180,11 +177,11 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 					host_dict[attr] = item.getAttr(attr)
 				streamhosts.append(host_dict)
 		if file_props is None:
-			if self.files_props.has_key(sid):
+			if sid in self.files_props:
 				file_props = self.files_props[sid]
 				file_props['fast'] = streamhosts
 				if file_props['type'] == 's':
-					if file_props.has_key('streamhosts'):
+					if 'streamhosts' in file_props:
 						file_props['streamhosts'].extend(streamhosts)
 					else:
 						file_props['streamhosts'] = streamhosts
@@ -208,12 +205,12 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		if not real_id.startswith('au_'):
 			return
 		frm = unicode(iq_obj.getFrom())
-		id = real_id[3:]
-		if self.files_props.has_key(id):
-			file_props = self.files_props[id]
+		id_ = real_id[3:]
+		if id_ in self.files_props:
+			file_props = self.files_props[id_]
 			if file_props['streamhost-used']:
 				for host in file_props['proxyhosts']:
-					if host['initiator'] == frm and host.has_key('idx'):
+					if host['initiator'] == frm and 'idx' in host:
 						gajim.socks5queue.activate_proxy(host['idx'])
 						raise common.xmpp.NodeProcessed
 
@@ -226,21 +223,21 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 
 		try:
 			streamhost =  query.getTag('streamhost-used')
-		except: # this bytestream result is not what we need
+		except Exception: # this bytestream result is not what we need
 			pass
-		id = real_id[3:]
-		if self.files_props.has_key(id):
-			file_props = self.files_props[id]
+		id_ = real_id[3:]
+		if id_ in self.files_props:
+			file_props = self.files_props[id_]
 		else:
 			raise common.xmpp.NodeProcessed
 		if streamhost is None:
 			# proxy approves the activate query
-			if real_id[:3] == 'au_':
-				id = real_id[3:]
-				if not file_props.has_key('streamhost-used') or \
+			if real_id.startswith('au_'):
+				id_ = real_id[3:]
+				if 'streamhost-used' not in file_props or \
 					file_props['streamhost-used'] is False:
 					raise common.xmpp.NodeProcessed
-				if not file_props.has_key('proxyhosts'):
+				if 'proxyhosts' not in file_props:
 					raise common.xmpp.NodeProcessed
 				for host in file_props['proxyhosts']:
 					if host['initiator'] == frm and \
@@ -249,23 +246,23 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 						break
 			raise common.xmpp.NodeProcessed
 		jid = streamhost.getAttr('jid')
-		if file_props.has_key('streamhost-used') and \
+		if 'streamhost-used' in file_props and \
 			file_props['streamhost-used'] is True:
 			raise common.xmpp.NodeProcessed
 
-		if real_id[:3] == 'au_':
+		if real_id.startswith('au_'):
 			gajim.socks5queue.send_file(file_props, self.name)
 			raise common.xmpp.NodeProcessed
 
 		proxy = None
-		if file_props.has_key('proxyhosts'):
+		if 'proxyhosts' in file_props:
 			for proxyhost in file_props['proxyhosts']:
 				if proxyhost['jid'] == jid:
 					proxy = proxyhost
 
-		if proxy != None:
+		if proxy is not None:
 			file_props['streamhost-used'] = True
-			if not file_props.has_key('streamhosts'):
+			if 'streamhosts' not in file_props:
 				file_props['streamhosts'] = []
 			file_props['streamhosts'].append(proxy)
 			file_props['is_a_proxy'] = True
@@ -277,7 +274,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 
 		else:
 			gajim.socks5queue.send_file(file_props, self.name)
-			if file_props.has_key('fast'):
+			if 'fast' in file_props:
 				fasts = file_props['fast']
 				if len(fasts) > 0:
 					self._connect_error(frm, fasts[0]['id'], file_props['sid'],
@@ -288,15 +285,15 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 	def _siResultCB(self, con, iq_obj):
 		gajim.log.debug('_siResultCB')
 		self.peerhost = con._owner.Connection._sock.getsockname()
-		id = iq_obj.getAttr('id')
-		if not self.files_props.has_key(id):
+		id_ = iq_obj.getAttr('id')
+		if id_ not in self.files_props:
 			# no such jid
 			return
-		file_props = self.files_props[id]
+		file_props = self.files_props[id_]
 		if file_props is None:
 			# file properties for jid is none
 			return
-		if file_props.has_key('request-id'):
+		if 'request-id' in file_props:
 			# we have already sent streamhosts info
 			return
 		file_props['receiver'] = unicode(iq_obj.getFrom())
@@ -361,11 +358,11 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		profile = si.getAttr('profile')
 		if profile != common.xmpp.NS_FILE:
 			return
-		id = iq_obj.getAttr('id')
-		if not self.files_props.has_key(id):
+		id_ = iq_obj.getAttr('id')
+		if id_ not in self.files_props:
 			# no such jid
 			return
-		file_props = self.files_props[id]
+		file_props = self.files_props[id_]
 		if file_props is None:
 			# file properties for jid is none
 			return
@@ -382,7 +379,8 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream, connecti
 
 		try:
 			idle.init()
-		except:
+		except Exception:
+			global HAS_IDLE
 			HAS_IDLE = False
 
 	def _messageCB(self, ip, con, msg):
@@ -397,7 +395,7 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream, connecti
 		if not mtype:
 			mtype = 'normal'
 
-		if frm == None:
+		if frm is None:
 			for key in self.connection.zeroconf.contacts:
 				if ip == self.connection.zeroconf.contacts[key][zeroconf.C_ADDRESS]:
 					frm = key
@@ -429,7 +427,7 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream, connecti
 
 			try:
 				msg = session.decrypt_stanza(msg)
-			except:
+			except Exception:
 				self.dispatch('FAILED_DECRYPT', (frm, tim))
 
 		msgtxt = msg.getBody()
@@ -460,7 +458,7 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream, connecti
 		else:
 			# XXX this shouldn't be hardcoded
 			if isinstance(session, ChatControlSession):
-				session.received(frm, msgtxt, tim, encrypted, subject, msg)
+				session.received(frm, msgtxt, tim, encrypted, msg)
 			else:
 				session.received(msg)
 	# END messageCB
@@ -481,3 +479,5 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream, connecti
 
 	def remove_transfer(self, file_props, remove_from_list = True):
 		pass
+
+# vim: se ts=3:

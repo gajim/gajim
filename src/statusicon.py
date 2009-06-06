@@ -1,22 +1,26 @@
-## statusicon.py
+# -*- coding:utf-8 -*-
+## src/statusicon.py
 ##
-## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
+## Copyright (C) 2006 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007 Lukas Petrovicky <lukas AT petrovicky.net>
+##                    Julien Pivotto <roidelapluie AT gmail.com>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##
-## Gajim is free software; you can redistribute it and/or
-## modify it under the terms of the GNU General Public License
-## as published by the Free Software Foundation; either version 2
-## of the License, or (at your option) any later version.
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import sys
@@ -27,19 +31,20 @@ from common import gajim
 from common import helpers
 
 if sys.platform == 'darwin':
-	import osx
+	try:
+		import osx
+	except ImportError:
+		pass
 
 class StatusIcon(systray.Systray):
 	'''Class for the notification area icon'''
-	#FIXME: when we migrate to GTK 2.10 stick only to this class
-	# (move base stuff from systray.py and rm it)
 	#NOTE: gtk api does NOT allow:
 	# leave, enter motion notify
 	# and can't do cool tooltips we use
 	def __init__(self):
 		systray.Systray.__init__(self)
 		self.status_icon = None
-		
+
 	def show_icon(self):
 		if not self.status_icon:
 			self.status_icon = gtk.StatusIcon()
@@ -69,13 +74,16 @@ class StatusIcon(systray.Systray):
 		self.status_icon.set_tooltip(text)
 		if gajim.events.get_nb_systray_events():
 			if sys.platform == 'darwin':
-				osx.nsapp.requestUserAttention()
+				try:
+					osx.nsapp.requestUserAttention()
+				except NameError:
+					pass
 			state = 'event'
 			self.status_icon.set_blinking(True)
 		else:
 			state = self.status
 			self.status_icon.set_blinking(False)
-		
+
 		#FIXME: do not always use 16x16 (ask actually used size and use that)
 		image = gajim.interface.jabber_state_images['16'][state]
 		if image.get_storage_type() == gtk.IMAGE_PIXBUF:
@@ -84,3 +92,5 @@ class StatusIcon(systray.Systray):
 		#or they were lazy to get it to work under Windows! WTF!
 		#elif image.get_storage_type() == gtk.IMAGE_ANIMATION:
 		#	self.img_tray.set_from_animation(image.get_animation())
+
+# vim: se ts=3:

@@ -1,3 +1,22 @@
+gajim (0.12.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Fix coming back from suspend. Closes: #500523
+  * Fix menuitem shortcut. Closes: #440530
+  * Warn user when logs database is brocken. Closes: #447889
+  * Check server certificate using python-openssl. Closes: #450756
+  * Don't pool to get played music from Banshee. Closes: #472862
+  * Escape non-ascii password correcly. Closes: #495540
+  * Fix URL recognition. Closes: #407806
+  * Suggest python-kerberos for GSSAPI authentication.
+  * Suggest python-sexy for clickable links in chat banners.
+  * Recommends python-openssl instead of python-pyopenssl. Package name has
+    changed.
+  * Depends on libc6 for gtkspell.so module
+  * Build Gajim modules against python2.5
+
+ -- Yann Leboulanger <asterix@lagaule.org>  Wed, 21 Dec 2008 14:40:16 +0100
+
 gajim (0.11.4-1) unstable; urgency=low
 
   * New upstream release.

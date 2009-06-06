@@ -1,7 +1,26 @@
+# -*- coding:utf-8 -*-
+## src/negotiation.py
+##
+## Copyright (C) 2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>
+##
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
+
 import gtkgui_helpers
 import dataforms_widget
-
-import dialogs
 
 from common import dataforms
 from common import gajim
@@ -13,23 +32,6 @@ def describe_features(features):
 		return _('- messages will be logged')
 	elif features['logging'] == 'mustnot':
 		return _('- messages will not be logged')
-
-def show_sas_dialog(session, jid, sas, on_success):
-	def success_cb(checked):
-		on_success(checked)
-
-	def failure_cb():
-		session.reject_negotiation()
-
-	dialogs.ConfirmationDialogCheck(_('''OK to continue with negotiation?'''),
-		_('''You've begun an encrypted session with %s, but it can't be guaranteed that you're talking directly to the person you think you are.
-
-You should speak with them directly (in person or on the phone) and confirm that their Short Authentication String is identical to this one: %s
-
-Would you like to continue with the encrypted session?''') % (jid, sas),
-
-		_('Yes, I verified the Short Authentication String'),
-		on_response_ok=success_cb, on_response_cancel=failure_cb, is_modal=False)
 
 class FeatureNegotiationWindow:
 	'''FeatureNegotiotionWindow class'''
@@ -67,8 +69,6 @@ class FeatureNegotiationWindow:
 		self.window.destroy()
 
 	def on_cancel_button_clicked(self, widget):
-		# XXX determine whether to reveal presence
-
 		rejection = xmpp.Message(self.jid)
 		rejection.setThread(self.session.thread_id)
 		feature = rejection.NT.feature
@@ -80,8 +80,8 @@ class FeatureNegotiationWindow:
 
 		feature.addChild(node=x)
 
-		# XXX optional <body/>
-
 		gajim.connections[self.account].send_stanza(rejection)
 
 		self.window.destroy()
+
+# vim: se ts=3:

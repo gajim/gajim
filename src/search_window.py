@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-##	search_window.py
+## src/search_window.py
 ##
-## Copyright (C) 2007 Yann Leboulanger <asterix@lagaule.org>
+## Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
+## Copyright (C) 2007-2008 Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -11,11 +12,12 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
 
 import gobject
 import gtk
@@ -56,7 +58,7 @@ class SearchWindow:
 
 	def request_form(self):
 		gajim.connections[self.account].request_search_fields(self.jid)
-	
+
 	def pulse_callback(self):
 		self.progressbar.pulse()
 		return True
@@ -77,10 +79,10 @@ class SearchWindow:
 		if self.is_form:
 			self.data_form_widget.data_form.type = 'submit'
 			gajim.connections[self.account].send_search_form(self.jid,
-				self.data_form_widget.data_form, True)
+				self.data_form_widget.data_form.get_purged(), True)
 		else:
 			infos = self.data_form_widget.get_infos()
-			if infos.has_key('instructions'):
+			if 'instructions' in infos:
 				del infos['instructions']
 			gajim.connections[self.account].send_search_form(self.jid, infos,
 				False)
@@ -94,18 +96,18 @@ class SearchWindow:
 		self.search_button.hide()
 
 	def on_add_contact_button_clicked(self, widget):
-		(model, iter) = self.result_treeview.get_selection().get_selected()
-		if not iter:
+		(model, iter_) = self.result_treeview.get_selection().get_selected()
+		if not iter_:
 			return
-		jid = model[iter][self.jid_column]
+		jid = model[iter_][self.jid_column]
 		dialogs.AddNewContactWindow(self.account, jid)
-	
+
 	def on_information_button_clicked(self, widget):
-		(model, iter) = self.result_treeview.get_selection().get_selected()
-		if not iter:
+		(model, iter_) = self.result_treeview.get_selection().get_selected()
+		if not iter_:
 			return
-		jid = model[iter][self.jid_column]
-		if gajim.interface.instances[self.account]['infos'].has_key(jid):
+		jid = model[iter_][self.jid_column]
+		if jid in gajim.interface.instances[self.account]['infos']:
 			gajim.interface.instances[self.account]['infos'][jid].window.present()
 		else:
 			contact = gajim.contacts.create_contact(jid = jid, name='', groups=[],
@@ -144,10 +146,10 @@ class SearchWindow:
 	def on_result_treeview_cursor_changed(self, treeview):
 		if self.jid_column == -1:
 			return
-		(model, iter) = treeview.get_selection().get_selected()
-		if not iter:
+		(model, iter_) = treeview.get_selection().get_selected()
+		if not iter_:
 			return
-		if model[iter][self.jid_column]:
+		if model[iter_][self.jid_column]:
 			self.add_contact_button.set_sensitive(True)
 			self.information_button.set_sensitive(True)
 		else:
@@ -231,3 +233,5 @@ class SearchWindow:
 			self.window.set_title('%s - Search - Gajim' % \
 				self.data_form_widget.title)
 
+
+# vim: se ts=3:

@@ -1,9 +1,31 @@
-import string
+# -*- coding:utf-8 -*-
+## src/common/dh.py
+##
+## Copyright (C) 2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
+##
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
 
-# This file defines a number of constants; specifically, large primes suitable for
-# use with the Diffie-Hellman key exchange.
-#
-# These constants have been obtained from RFC2409 and RFC3526.
+'''
+This module defines a number of constants; specifically, large primes suitable
+for use with the Diffie-Hellman key exchange.
+
+These constants have been obtained from RFC2409 and RFC3526.
+'''
+import string
 
 generators = [	None, # one to get the right offset
 								2,
@@ -117,7 +139,7 @@ BBE11757 7A615D6C 770988C0 BAD946E2 08E24FA0 74E5AB31
 2583E9CA 2AD44CE8 DBBBC2DB 04DE8EF9 2E8EFC14 1FBECAA6
 287C5947 4E6BC05D 99B2964F A090C3A2 233BA186 515BE7ED
 1F612970 CEE2D7AF B81BDD76 2170481C D0069127 D5B05AA9
-93B4EA98 8D8FDDC1 86FFFB7DC 90A6C08F 4DF435C9 34063199
+93B4EA98 8D8FDDC1 86FFB7DC 90A6C08F 4DF435C9 34063199
 FFFFFFFF FFFFFFFF''',
 
 # group 17
@@ -205,3 +227,5 @@ def hex_to_decimal(stripee):
 	return int(stripee.translate(all_ascii, string.whitespace), 16)
 
 primes = map(hex_to_decimal, hex_primes)
+
+# vim: se ts=3:

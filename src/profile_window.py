@@ -1,7 +1,9 @@
-##	profile_window.py
+# -*- coding:utf-8 -*-
+## src/profile_window.py
 ##
-## Copyright (C) 2003-2007 Yann Leboulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -11,11 +13,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 # THIS FILE IS FOR **OUR** PROFILE (when we edit our INFO)
@@ -31,7 +33,6 @@ import dialogs
 import vcard
 
 from common import gajim
-from common.i18n import Q_
 
 
 class ProfileWindow:
@@ -129,11 +130,11 @@ class ProfileWindow:
 							'avatar_scaled.png')
 						scaled_pixbuf.save(path_to_file, 'png')
 						must_delete = True
-			
+
 			fd = open(path_to_file, 'rb')
 			data = fd.read()
 			pixbuf = gtkgui_helpers.get_pixbuf_from_data(data)
-			try:			
+			try:
 				# rescale it
 				pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
 			except AttributeError: # unknown format
@@ -150,10 +151,10 @@ class ProfileWindow:
 			self.avatar_encoded = base64.encodestring(data)
 			# returns None if unknown type
 			self.avatar_mime_type = mimetypes.guess_type(path_to_file)[0]
-			if must_delete: 
-				try: 
-					os.remove(path_to_file) 
-				except OSError: 
+			if must_delete:
+				try:
+					os.remove(path_to_file)
+				except OSError:
 					gajim.log.debug('Cannot remove %s' % path_to_file)
 
 		def on_clear(widget):
@@ -175,7 +176,7 @@ class ProfileWindow:
 		'''If right-clicked, show popup'''
 		if event.button == 3 and self.avatar_encoded: # right click
 			menu = gtk.Menu()
-			
+
 			# Try to get pixbuf
 			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.jid,
 				use_local = False)
@@ -191,7 +192,7 @@ class ProfileWindow:
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
 			menuitem.connect('activate', self.on_clear_button_clicked)
 			menu.append(menuitem)
-			menu.connect('selection-done', lambda w:w.destroy())	
+			menu.connect('selection-done', lambda w:w.destroy())
 			# show the menu
 			menu.show_all()
 			menu.popup(None, None, None, event.button, event.time)
@@ -260,20 +261,18 @@ class ProfileWindow:
 		entries = entry.split('_')
 		loc = vcard_
 		if len(entries) == 3: # We need to use lists
-			if not loc.has_key(entries[0]):
+			if entries[0] not in loc:
 				loc[entries[0]] = []
 			found = False
 			for e in loc[entries[0]]:
 				if entries[1] in e:
-					found = True
+					e[entries[2]] = txt
 					break
-			if found:
-				e[entries[2]] = txt
 			else:
 				loc[entries[0]].append({entries[1]: '', entries[2]: txt})
 			return vcard_
 		while len(entries) > 1:
-			if not loc.has_key(entries[0]):
+			if entries[0] not in loc:
 				loc[entries[0]] = {}
 			loc = loc[entries[0]]
 			del entries[0]
@@ -290,7 +289,7 @@ class ProfileWindow:
 			'ADR_WORK_STREET', 'ADR_WORK_EXTADR', 'ADR_WORK_LOCALITY',
 			'ADR_WORK_REGION', 'ADR_WORK_PCODE', 'ADR_WORK_CTRY']
 		vcard_ = {}
-		for e in entries: 
+		for e in entries:
 			txt = self.xml.get_widget(e + '_entry').get_text().decode('utf-8')
 			if txt != '':
 				vcard_ = self.add_to_vcard(vcard_, e, txt)
@@ -321,7 +320,7 @@ class ProfileWindow:
 			return
 		vcard_ = self.make_vcard()
 		nick = ''
-		if vcard_.has_key('NICKNAME'):
+		if 'NICKNAME' in vcard_:
 			nick = vcard_['NICKNAME']
 			from common import pep
 			pep.user_send_nickname(self.account, nick)
@@ -358,3 +357,5 @@ class ProfileWindow:
 
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
+
+# vim: se ts=3:

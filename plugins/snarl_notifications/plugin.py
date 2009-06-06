@@ -54,12 +54,15 @@ PySnarl bindings are used (http://code.google.com/p/pysnarl/).'''
 		
 		self.events_handlers = {'NewMessage' : (ged.POSTCORE, self.newMessage)}
 
+	@log_calls('SnarlNotificationsPlugin')
 	def activate(self):
 		pass
 		
+	@log_calls('SnarlNotificationsPlugin')
 	def deactivate(self):
 		pass
 	
+	@log_calls('SnarlNotificationsPlugin')
 	def newMessage(self, args):
 		event_name = "NewMessage"
 		data = args

@@ -13,89 +13,275 @@
         <property name="visible">True</property>
         <property name="spacing">6</property>
         <child>
-          <widget class="GtkTable" id="table1">
+          <widget class="GtkCheckButton" id="enable_checkbutton">
             <property name="visible">True</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="n_rows">3</property>
-            <property name="n_columns">2</property>
-            <property name="column_spacing">6</property>
-            <property name="row_spacing">6</property>
+            <property name="can_focus">True</property>
+            <property name="label" translatable="yes">Set an activity</property>
+            <property name="response_id">0</property>
+            <property name="draw_indicator">True</property>
+            <signal name="toggled" handler="on_enable_checkbutton_toggled"/>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkNotebook" id="notebook">
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <property name="can_focus">True</property>
             <child>
-              <widget class="GtkLabel" id="label4">
+              <widget class="GtkVBox" id="doing_chores_vbox">
                 <property name="visible">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">Message:</property>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkImage" id="doing_chores_image">
+                <property name="visible">True</property>
+                <property name="stock">gtk-missing-image</property>
+                <property name="icon_size">1</property>
               </widget>
               <packing>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
+                <property name="type">tab</property>
+                <property name="tab_fill">False</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkLabel" id="label3">
+              <widget class="GtkVBox" id="drinking_vbox">
                 <property name="visible">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">Specific:</property>
               </widget>
               <packing>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkLabel" id="label2">
+              <widget class="GtkImage" id="drinking_image">
                 <property name="visible">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">General:</property>
+                <property name="stock">gtk-missing-image</property>
+                <property name="icon_size">1</property>
               </widget>
               <packing>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
+                <property name="type">tab</property>
+                <property name="position">1</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkVBox" id="eating_vbox">
+                <property name="visible">True</property>
+              </widget>
+              <packing>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkImage" id="eating_image">
+                <property name="visible">True</property>
+                <property name="stock">gtk-missing-image</property>
+                <property name="icon_size">1</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+                <property name="position">2</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkVBox" id="exercising_vbox">
+                <property name="visible">True</property>
+              </widget>
+              <packing>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkImage" id="exercising_image">
+                <property name="visible">True</property>
+                <property name="stock">gtk-missing-image</property>
+                <property name="icon_size">1</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+                <property name="position">3</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkVBox" id="grooming_vbox">
+                <property name="visible">True</property>
+              </widget>
+              <packing>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkImage" id="grooming_image">
+                <property name="visible">True</property>
+                <property name="stock">gtk-missing-image</property>
+                <property name="icon_size">1</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+                <property name="position">4</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkVBox" id="having_appointment_vbox">
+                <property name="visible">True</property>
+              </widget>
+              <packing>
+                <property name="position">5</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkImage" id="having_appointment_image">
+                <property name="visible">True</property>
+                <property name="stock">gtk-missing-image</property>
+                <property name="icon_size">1</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+                <property name="position">5</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkVBox" id="inactive_vbox">
+                <property name="visible">True</property>
+              </widget>
+              <packing>
+                <property name="position">6</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkImage" id="inactive_image">
+                <property name="visible">True</property>
+                <property name="stock">gtk-missing-image</property>
+                <property name="icon_size">1</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+                <property name="position">6</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkVBox" id="relaxing_vbox">
+                <property name="visible">True</property>
+              </widget>
+              <packing>
+                <property name="position">7</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkImage" id="relaxing_image">
+                <property name="visible">True</property>
+                <property name="stock">gtk-missing-image</property>
+                <property name="icon_size">1</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+                <property name="position">7</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkVBox" id="talking_vbox">
+                <property name="visible">True</property>
+              </widget>
+              <packing>
+                <property name="position">8</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkImage" id="talking_image">
+                <property name="visible">True</property>
+                <property name="stock">gtk-missing-image</property>
+                <property name="icon_size">1</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+                <property name="position">8</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkVBox" id="traveling_vbox">
+                <property name="visible">True</property>
+              </widget>
+              <packing>
+                <property name="position">9</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkImage" id="traveling_image">
+                <property name="visible">True</property>
+                <property name="stock">gtk-missing-image</property>
+                <property name="icon_size">1</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+                <property name="position">9</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkVBox" id="working_vbox">
+                <property name="visible">True</property>
+              </widget>
+              <packing>
+                <property name="position">10</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkImage" id="working_image">
+                <property name="visible">True</property>
+                <property name="stock">gtk-missing-image</property>
+                <property name="icon_size">1</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+                <property name="position">10</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkHBox" id="hbox1">
+            <property name="visible">True</property>
+            <child>
+              <widget class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&lt;b&gt;Message:&lt;/b&gt; </property>
+                <property name="use_markup">True</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
               </packing>
             </child>
             <child>
               <widget class="GtkEntry" id="description_entry">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
               </widget>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkComboBox" id="subactivity_combobox">
-                <property name="visible">True</property>
-              </widget>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkComboBox" id="activity_combobox">
-                <property name="visible">True</property>
-                <signal name="changed" handler="on_activity_combobox_changed"/>
-              </widget>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="y_options"></property>
+                <property name="position">1</property>
               </packing>
             </child>
           </widget>
           <packing>
-            <property name="position">2</property>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">4</property>
           </packing>
         </child>
         <child internal-child="action_area">

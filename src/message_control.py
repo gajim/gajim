@@ -1,7 +1,15 @@
-##	message_control.py
+# -*- coding:utf-8 -*-
+## src/message_control.py
 ##
-## Copyright (C) 2006-2007 Travis Shirk <travis@pobox.com>
-## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
+## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
+##                    Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
+##                         Travis Shirk <travis AT pobox.com>
+## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>
+##                    Stephan Erb <steve-e AT h3c.de>
+## Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -11,15 +19,17 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
+
 import gtkgui_helpers
 
 from common import gajim
+from common import helpers
 
 # Derived types MUST register their type IDs here if custom behavor is required
 TYPE_CHAT = 'chat'
@@ -43,6 +53,8 @@ class MessageControl(object):
 		self.hide_chat_buttons = False
 		self.resource = resource
 
+		self.session = None
+
 		gajim.last_message_time[self.account][self.get_full_jid()] = 0
 
 		self.xml = gtkgui_helpers.get_glade('message_window.glade', widget_name)
@@ -59,12 +71,25 @@ class MessageControl(object):
 		or inactive (state is False)'''
 		pass  # Derived classes MUST implement this method
 
-	def allow_shutdown(self, method):
+	def minimizable(self):
+		'''Called to check if control can be minimized'''
+		# NOTE: Derived classes MAY implement this
+		return False
+
+	def safe_shutdown(self):
+		'''Called to check if control can be closed without loosing data.
+		returns True if control can be closed safely else False'''
+		# NOTE: Derived classes MAY implement this
+		return True
+
+	def allow_shutdown(self, method, on_response_yes, on_response_no,
+	on_response_minimize):
 		'''Called to check is a control is allowed to shutdown.
 		If a control is not in a suitable shutdown state this method
-		should return 'no', else 'yes' or 'minimize' '''
+		should call on_response_no, else on_response_yes or
+		on_response_minimize '''
 		# NOTE: Derived classes MAY implement this
-		return 'yes'
+		on_response_yes(self)
 
 	def shutdown(self):
 		# NOTE: Derived classes MUST implement this
@@ -128,76 +153,53 @@ class MessageControl(object):
 
 		self.session = session
 
-		new_key = None
 		if session:
 			session.control = self
-			new_key = session.thread_id
 
 		if oldsession:
-			self.parent_win.change_thread_key(
-				self.contact.jid, self.account,
-				oldsession.thread_id, new_key)
+			oldsession.control = None
 
-			if oldsession.enable_encryption:
-				self.print_esession_details()
+			jid = self.contact.jid
+			if self.resource:
+				jid += '/' + self.resource
 
-	def send_message(self, message, keyID = '', type = 'chat',
-	chatstate = None, msg_id = None, composing_xep = None, resource = None,
-	user_nick = None):
+		crypto_changed = bool(session and session.enable_encryption) != \
+			bool(oldsession and oldsession.enable_encryption)
+
+		if crypto_changed:
+			self.print_esession_details()
+
+	def send_message(self, message, keyID='', type_='chat', chatstate=None,
+	msg_id=None, composing_xep=None, resource=None, user_nick=None, xhtml=None,
+	callback=None, callback_args=[]):
 		# Send the given message to the active tab.
 		# Doesn't return None if error
 		jid = self.contact.jid
+
+		message = helpers.remove_invalid_xml_chars(message)
+
 		original_message = message
+		conn = gajim.connections[self.account]
 
 		if not self.session:
-			sess = gajim.connections[self.account].make_new_session(jid)
+			sess = conn.find_controlless_session(jid)
+
+			if self.resource:
+				jid += '/' + self.resource
+
+			if not sess:
+				if self.type_id == TYPE_PM:
+					sess = conn.make_new_session(jid, type_='pm')
+				else:
+					sess = conn.make_new_session(jid)
+
 			self.set_session(sess)
-			self.parent_win.move_from_sessionless(self)
-
-		xep_200 = bool(self.session) and self.session.enable_encryption
-
-		if gajim.otr_module and not xep_200 and (jid not in gajim.otr_dont_append_tag):
-			if type == 'chat' and isinstance(message, unicode):
-				d = {'kwargs': {'keyID': keyID, 'type': type,
-					'chatstate': chatstate,
-					'msg_id': msg_id,
-					'composing_xep': composing_xep,
-					'resource': self.resource,
-					'user_nick': user_nick,
-					'session': self.session,
-					'original_message': original_message},
-					'account': self.account}
-
-				new_msg = gajim.otr_module.otrl_message_sending(
-					self.session.conn.otr_userstates,
-					(gajim.otr_ui_ops, d),
-					gajim.get_jid_from_account(
-					self.account).encode(),
-					gajim.OTR_PROTO,
-					self.contact.get_full_jid().encode(),
-					message.encode(), None,
-					(gajim.otr_add_appdata, self.account))
-
-				ctx = gajim.otr_module.otrl_context_find(
-					self.session.conn.otr_userstates,
-					self.contact.get_full_jid().encode(),
-					gajim.get_jid_from_account(
-					self.account).encode(),
-					gajim.OTR_PROTO, 1,
-					(gajim.otr_add_appdata,
-					self.account))[0]
-
-				# we send all because inject_message can filter
-				# on HTML stuff then
-				gajim.otr_module.otrl_message_fragment_and_send(
-					(gajim.otr_ui_ops, d), ctx, new_msg,
-					gajim.otr_module.OTRL_FRAGMENT_SEND_ALL)
-				return
 
 		# Send and update history
-		return gajim.connections[self.account].send_message(jid,
-			message, keyID, type = type, chatstate = chatstate,
-			msg_id = msg_id, composing_xep = composing_xep,
-			resource = self.resource, user_nick = user_nick,
-			session = self.session,
-			original_message = original_message)
+		conn.send_message(jid, message, keyID, type_=type_, chatstate=chatstate,
+			msg_id=msg_id, composing_xep=composing_xep, resource=self.resource,
+			user_nick=user_nick, session=self.session,
+			original_message=original_message, xhtml=xhtml, callback=callback,
+			callback_args=callback_args)
+
+# vim: se ts=3:

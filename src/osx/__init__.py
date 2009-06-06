@@ -1,14 +1,11 @@
 import sys, commands
 from network_manager_listener import device_now_active, device_no_longer_active
-import nsapp
 
 
-if sys.platform != "darwin":
-	raise ImportError("System platform is not OS/X")
-
+if sys.platform != 'darwin':
+	raise ImportError('System platform is not OS X')
 
 net_device_active = True
-
 
 ###
 ### Utility functions
@@ -21,6 +18,7 @@ def checkPID(pid, procname):
 		return True
 	return False
 
+import nsapp
 
 def init():
 	nsapp.init()
@@ -43,3 +41,5 @@ def netDeviceChanged():
 		net_device_active = True
 		device_now_active(None)
 	return
+
+# vim: se ts=3:

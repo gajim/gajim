@@ -1,24 +1,29 @@
-### Copyright (C) 2005 Gustavo J. A. M. Carneiro
-### Copyright (C) 2006 Santiago Gala
-###
-### This library is free software; you can redistribute it and/or
-### modify it under the terms of the GNU Lesser General Public
-### License as published by the Free Software Foundation; either
-### version 2 of the License, or (at your option) any later version.
-###
-### This library is distributed in the hope that it will be useful,
-### but WITHOUT ANY WARRANTY; without even the implied warranty of
-### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-### Lesser General Public License for more details.
+# -*- coding:utf-8 -*-
+## src/htmltextview.py
+##
+## Copyright (C) 2005 Gustavo J. A. M. Carneiro
+## Copyright (C) 2006 Santiago Gala
+## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
+##                    Julien Pivotto <roidelapluie AT gmail.com>
+##                    Stephan Erb <steve-e AT h3c.de>
+##
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
-###
-### You should have received a copy of the GNU Lesser General Public
-### License along with this library; if not, write to the
-### Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-### Boston, MA 02111-1307, USA.
-
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
 
 '''
 A gtk.TextView-based renderer for XHTML-IM, as described in:
@@ -86,77 +91,76 @@ element_styles['tt']  = element_styles['kbd']
 element_styles['i']   = element_styles['em']
 element_styles['b']   = element_styles['strong']
 
-'''
-==========
-  JEP-0071
-==========
-
-This Integration Set includes a subset of the modules defined for 
-XHTML 1.0 but does not redefine any existing modules, nor 
-does it define any new modules. Specifically, it includes the 
-following modules only:
-
-- Structure
-- Text
-  
-  * Block
-    
-    phrasal
-       addr, blockquote, pre
-    Struc
-       div,p
-    Heading
-       h1, h2, h3, h4, h5, h6
-    
-  * Inline
-    
-    phrasal
-       abbr, acronym, cite, code, dfn, em, kbd, q, samp, strong, var
-    structural
-       br, span
-  
-- Hypertext (a)
-- List (ul, ol, dl)
-- Image (img)
-- Style Attribute
-     
-Therefore XHTML-IM uses the following content models:
-
-  Block.mix
-            Block-like elements, e.g., paragraphs
-  Flow.mix
-            Any block or inline elements
-  Inline.mix
-            Character-level elements
-  InlineNoAnchor.class
-			Anchor element 
-  InlinePre.mix
-            Pre element
-
-XHTML-IM also uses the following Attribute Groups:
-
-Core.extra.attrib
-	TBD
-I18n.extra.attrib
-	TBD
-Common.extra
-	style
-
-
-...
-#block level:
-#Heading    h
-#           ( pres           = h1 | h2 | h3 | h4 | h5 | h6 )
-#Block      ( phrasal        = address | blockquote | pre )
-#NOT           ( presentational = hr )
-#           ( structural     = div | p )
-#other:     section
-#Inline     ( phrasal        = abbr | acronym | cite | code | dfn | em | kbd | q | samp | strong | var )
-#NOT        ( presentational =  b  | big | i | small | sub | sup | tt )
-#           ( structural     =  br | span )
-#Param/Legacy    param, font, basefont, center, s, strike, u, dir, menu, isindex
+# ==========
+#   JEP-0071
+# ==========
 #
-'''
+# This Integration Set includes a subset of the modules defined for
+# XHTML 1.0 but does not redefine any existing modules, nor
+# does it define any new modules. Specifically, it includes the
+# following modules only:
+#
+# - Structure
+# - Text
+#
+#   * Block
+#
+#     phrasal
+#        addr, blockquote, pre
+#     Struc
+#        div,p
+#     Heading
+#        h1, h2, h3, h4, h5, h6
+#
+#   * Inline
+#
+#     phrasal
+#        abbr, acronym, cite, code, dfn, em, kbd, q, samp, strong, var
+#     structural
+#        br, span
+#
+# - Hypertext (a)
+# - List (ul, ol, dl)
+# - Image (img)
+# - Style Attribute
+#
+# Therefore XHTML-IM uses the following content models:
+#
+#   Block.mix
+#             Block-like elements, e.g., paragraphs
+#   Flow.mix
+#             Any block or inline elements
+#   Inline.mix
+#             Character-level elements
+#   InlineNoAnchor.class
+# 			Anchor element
+#   InlinePre.mix
+#             Pre element
+#
+# XHTML-IM also uses the following Attribute Groups:
+#
+# Core.extra.attrib
+# 	TBD
+# I18n.extra.attrib
+# 	TBD
+# Common.extra
+# 	style
+#
+#
+# ...
+# block level:
+# Heading    h
+#            ( pres           = h1 | h2 | h3 | h4 | h5 | h6 )
+# Block      ( phrasal        = address | blockquote | pre )
+# NOT           ( presentational = hr )
+#            ( structural     = div | p )
+# other:     section
+# Inline     ( phrasal        = abbr | acronym | cite | code | dfn | em |
+#                               kbd | q | samp | strong | var )
+# NOT        ( presentational =  b  | big | i | small | sub | sup | tt )
+#            ( structural     =  br | span )
+# Param/Legacy    param, font, basefont, center, s, strike, u, dir, menu,
+#                 isindex
 
 BLOCK_HEAD = set(( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', ))
 BLOCK_PHRASAL = set(( 'address', 'blockquote', 'pre', ))
@@ -189,36 +193,8 @@ def build_patterns(view, config, interface):
 	view.basic_pattern_re = re.compile(basic_pattern)
 	# emoticons
 	emoticons_pattern = ''
-	try:
-		if config.get('emoticons_theme'):
-			# When an emoticon is bordered by an alpha-numeric character it is NOT
-			# expanded.  e.g., foo:) NO, foo :) YES, (brb) NO, (:)) YES, etc.
-			# We still allow multiple emoticons side-by-side like :P:P:P
-			# sort keys by length so :qwe emot is checked before :q
-			keys = interface.emoticons.keys()
-			keys.sort(interface.on_emoticon_sort)
-			emoticons_pattern_prematch = ''
-			emoticons_pattern_postmatch = ''
-			emoticon_length = 0
-			for emoticon in keys: # travel thru emoticons list
-				emoticon_escaped = re.escape(emoticon) # espace regexp metachars
-				emoticons_pattern += emoticon_escaped + '|'# | means or in regexp
-				if (emoticon_length != len(emoticon)):
-					# Build up expressions to match emoticons next to other emoticons
-					emoticons_pattern_prematch  = emoticons_pattern_prematch[:-1]  + ')|(?<='
-					emoticons_pattern_postmatch = emoticons_pattern_postmatch[:-1] + ')|(?='
-					emoticon_length = len(emoticon)
-				emoticons_pattern_prematch += emoticon_escaped  + '|'
-				emoticons_pattern_postmatch += emoticon_escaped + '|'
-			# We match from our list of emoticons, but they must either have
-			# whitespace, or another emoticon next to it to match successfully
-			# [\w.] alphanumeric and dot (for not matching 8) in (2.8))
-			emoticons_pattern = '|' + \
-			'(?:(?<![\w.]' + emoticons_pattern_prematch[:-1]   + '))' + \
-			'(?:'       + emoticons_pattern[:-1]            + ')'  + \
-			'(?:(?![\w.]'  + emoticons_pattern_postmatch[:-1]  + '))'
-	except:
-		pass
+	if config.get('emoticons_theme'):
+		emoticons_pattern = gajim.interface.emot_only
 
 	view.emot_pattern_re = re.compile(emoticons_pattern, re.IGNORECASE)
 	# because emoticons match later (in the string) they need to be after
@@ -236,8 +212,9 @@ def _parse_css_color(color):
 		return gtk.gdk.color_parse(color)
 
 def style_iter(style):
-	return (map(lambda x:x.strip(),item.split(':', 1)) for item in style.split(';') if len(item.strip()))
-	
+	return ([x.strip() for x in item.split(':', 1)] for item in style.split(';')\
+		if len(item.strip()))
+
 
 class HtmlHandler(xml.sax.handler.ContentHandler):
 	"""A handler to display html to a gtk textview.
@@ -267,48 +244,12 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		tag.set_property('paragraph-background-gdk', color)
 
 
-	#FIXME: when we migrate to 2.10 rm this
-	if gtk.gtk_version >= (2, 8, 5) or gobject.pygtk_version >= (2, 8, 1):
-
-		def _get_current_attributes(self):
-			attrs = self.textview.get_default_attributes()
-			self.iter.backward_char()
-			self.iter.get_attributes(attrs)
-			self.iter.forward_char()
-			return attrs
-		
-	else:
-		
-		# Workaround http://bugzilla.gnome.org/show_bug.cgi?id=317455
-		def _get_current_style_attr(self, propname, comb_oper=None):
-			tags = [tag for tag in self.styles if tag is not None]
-			tags.reverse()
-			is_set_name = propname + '-set'
-			value = None
-			for tag in tags:
-				if tag.get_property(is_set_name):
-					if value is None:
-						value = tag.get_property(propname)
-						if comb_oper is None:
-							return value
-					else:
-						value = comb_oper(value, tag.get_property(propname))
-			return value
-
-		class _FakeAttrs(object):
-			__slots__ = ('font', 'font_scale')
-
-		def _get_current_attributes(self):
-			attrs = self._FakeAttrs()
-			attrs.font_scale = self._get_current_style_attr('scale',
-															operator.mul)
-			if attrs.font_scale is None:
-				attrs.font_scale = 1.0
-			attrs.font = self._get_current_style_attr('font-desc')
-			if attrs.font is None:
-				attrs.font = self.textview.style.font_desc
-			return attrs
-
+	def _get_current_attributes(self):
+		attrs = self.textview.get_default_attributes()
+		self.iter.backward_char()
+		self.iter.get_attributes(attrs)
+		self.iter.forward_char()
+		return attrs
 
 	def __parse_length_frac_size_allocate(self, textview, allocation,
 										  frac, callback, args):
@@ -322,7 +263,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			sign = cmp(val,0)
 			# limits: 1% to 500%
 			val = sign*max(1,min(abs(val),500))
-			frac = val/100 
+			frac = val/100
 			if font_relative:
 				attrs = self._get_current_attributes()
 				font_size = attrs.font.get_size() / pango.SCALE
@@ -342,27 +283,28 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				callback(frac, *args)
 			return
 
-		val = float(value[:-2])
-		sign = cmp(val,0)
-		# validate length
-		val = sign*max(minl,min(abs(val*display_resolution),maxl))
+		def get_val():
+			val = float(value[:-2])
+			sign = cmp(val,0)
+			# validate length
+			return sign*max(minl,min(abs(val*display_resolution),maxl))
 		if value.endswith('pt'): # points
-			callback(val*display_resolution, *args)
+			callback(get_val()*display_resolution, *args)
 
 		elif value.endswith('em'): # ems, the width of the element's font
 			attrs = self._get_current_attributes()
 			font_size = attrs.font.get_size() / pango.SCALE
-			callback(val*display_resolution*font_size, *args)
+			callback(get_val()*display_resolution*font_size, *args)
 
 		elif value.endswith('ex'): # x-height, ~ the height of the letter 'x'
 			# FIXME: figure out how to calculate this correctly
 			#        for now 'em' size is used as approximation
 			attrs = self._get_current_attributes()
 			font_size = attrs.font.get_size() / pango.SCALE
-			callback(val*display_resolution*font_size, *args)
+			callback(get_val()*display_resolution*font_size, *args)
 
 		elif value.endswith('px'): # pixels
-			callback(val, *args)
+			callback(get_val(), *args)
 
 		else:
 			try:
@@ -372,9 +314,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				# validate length
 				val = sign*max(minl,min(abs(val),maxl))
 				callback(val, *args)
-			except:
+			except Exception:
 				warnings.warn('Unable to parse length value "%s"' % value)
-		
+
 	def __parse_font_size_cb(length, tag):
 		tag.set_property('size-points', length/display_resolution)
 	__parse_font_size_cb = staticmethod(__parse_font_size_cb)
@@ -428,7 +370,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			length += styles[-1].get_property(propname)
 		tag.set_property(propname, length)
 	#__frac_length_tag_cb = staticmethod(__frac_length_tag_cb)
-		
+
 	def _parse_style_margin_left(self, tag, value):
 		# block relative
 		self._parse_length(value, False, True, 1, 1000, self.__frac_length_tag_cb,
@@ -475,26 +417,25 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			warnings.warn('Invalid text-align:%s requested' % value)
 		else:
 			tag.set_property('justification', align)
-	
+
 	def _parse_style_text_decoration(self, tag, value):
-		if value == 'none':
+		values = value.split(' ')
+		if 'none' in values:
 			tag.set_property('underline', pango.UNDERLINE_NONE)
 			tag.set_property('strikethrough', False)
-		elif value == 'underline':
+		if 'underline' in values:
 			tag.set_property('underline', pango.UNDERLINE_SINGLE)
-			tag.set_property('strikethrough', False)
-		elif value == 'overline':
-			warnings.warn('text-decoration:overline not implemented')
-			tag.set_property('underline', pango.UNDERLINE_NONE)
-			tag.set_property('strikethrough', False)
-		elif value == 'line-through':
-			tag.set_property('underline', pango.UNDERLINE_NONE)
-			tag.set_property('strikethrough', True)
-		elif value == 'blink':
-			warnings.warn('text-decoration:blink not implemented')
 		else:
-			warnings.warn('text-decoration:%s not implemented' % value)
-	
+			tag.set_property('underline', pango.UNDERLINE_NONE)
+		if 'line-through' in values:
+			tag.set_property('strikethrough', True)
+		else:
+			tag.set_property('strikethrough', False)
+		if 'blink' in values:
+			warnings.warn('text-decoration:blink not implemented')
+		if 'overline' in values:
+			warnings.warn('text-decoration:overline not implemented')
+
 	def _parse_style_white_space(self, tag, value):
 		if value == 'pre':
 			tag.set_property('wrap_mode', gtk.WRAP_NONE)
@@ -506,9 +447,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 	def __length_tag_cb(self, value, tag, propname):
 		try:
 			tag.set_property(propname, value)
-		except:
+		except Exception:
 			gajim.log.warn( "Error with prop: " + propname + " for tag: " + str(tag))
-		
+
 
 	def _parse_style_width(self, tag, value):
 		if value == 'auto':
@@ -520,14 +461,14 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			return
 		self._parse_length(value, False, False, 1, 1000, self.__length_tag_cb,
 						   tag, "height")
-	 
-	
+
+
 	# build a dictionary mapping styles to methods, for greater speed
 	__style_methods = dict()
-	for style in ['background-color', 'color', 'font-family', 'font-size',
+	for style in ('background-color', 'color', 'font-family', 'font-size',
 				  'font-style', 'font-weight', 'margin-left', 'margin-right',
 				  'text-align', 'text-decoration', 'white-space', 'display',
-				  'width', 'height' ]:
+				  'width', 'height' ):
 		try:
 			method = locals()['_parse_style_%s' % style.replace('-', '_')]
 		except KeyError:
@@ -559,20 +500,20 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		'''Process a img tag.
 		'''
 		try:
-			# Wait maximum 1s for connection 
+			# Wait maximum 1s for connection
 			socket.setdefaulttimeout(1)
-			try: 
-				f = urllib2.urlopen(attrs['src']) 
-			except Exception, ex: 
-				gajim.log.debug(str('Error loading image %s ' % attrs['src'] + ex)) 
-				pixbuf = None 
-				alt = attrs.get('alt', 'Broken image') 
-			else: 
-				# Wait 0.1s between each byte 
-				try: 
-					f.fp._sock.fp._sock.settimeout(0.5) 
-				except: 
-					pass 
+			try:
+				f = urllib2.urlopen(attrs['src'])
+			except Exception, ex:
+				gajim.log.debug('Error loading image %s ' % attrs['src']  + str(ex))
+				pixbuf = None
+				alt = attrs.get('alt', 'Broken image')
+			else:
+				# Wait 0.1s between each byte
+				try:
+					f.fp._sock.fp._sock.settimeout(0.5)
+				except Exception:
+					pass
 			# Max image size = 2 MB (to try to prevent DoS)
 			mem = ''
 			deadline = time.time() + 3
@@ -637,11 +578,11 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 					pifbufs for every resize, gtk.gdk.Pixbuf.scale_simple
 					or similar.
 					'''
-					if type(dims[0]) == float:
+					if isinstance(dims[0], float):
 						dims[0] = int(dims[0]*w)
 					elif not dims[0]:
 						dims[0] = w
-					if type(dims[1]) == float:
+					if isinstance(dims[1], float):
 						dims[1] = int(dims[1]*h)
 					if not dims[1]:
 						dims[1] = h
@@ -671,7 +612,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			alt = attrs.get('alt', 'Broken image')
 			try:
 				loader.close()
-			except:
+			except Exception:
 				pass
 		return pixbuf
 
@@ -714,7 +655,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 
 	def _starts_line(self):
 		return self.starting or self.iter.starts_line()
-		
+
 	def _flush_text(self):
 		if not self.text: return
 		text, self.text = self.text, ''
@@ -724,7 +665,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		else:
 			self._insert_text(text.strip('\n'))
 
-	def _anchor_event(self, tag, textview, event, iter, href, type_):
+	def _anchor_event(self, tag, textview, event, iter_, href, type_):
 		if event.type == gtk.gdk.BUTTON_PRESS:
 			self.textview.emit('url-clicked', href, type_)
 			return True
@@ -759,7 +700,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				img = gtk.Image()
 				img.set_from_file(self.textview.interface.emoticons[emot_ascii])
 				img.show()
-				# TODO: add alt/tooltip with the special_text (a11y) 
+				# TODO: add alt/tooltip with the special_text (a11y)
 				self.textview.add_child_at_anchor(img, anchor)
 			elif af:
 				# now print it
@@ -776,7 +717,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 					self.endElement('i')
 		if index < len(text):
 			self._insert_text(text[index:])
-		
+
 	def characters(self, content):
 		if self.preserve:
 			self.text += content
@@ -801,7 +742,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		#FIXME: if we want to use id, it needs to be unique across
 		# the whole textview, so we need to add something like the
 		# message-id to it.
-		#id_ = attrs.get('id',None) 
+		#id_ = attrs.get('id',None)
 		id_ = None
 		if name == 'a':
 			#TODO: accesskey, charset, hreflang, rel, rev, tabindex, type
@@ -824,11 +765,11 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			tag = self._process_img(attrs)
 		if name in element_styles:
 			style += element_styles[name]
-		# so that explicit styles override implicit ones, 
+		# so that explicit styles override implicit ones,
 		# we add the attribute last
 		style += ";"+attrs.get('style','')
 		if style == '':
-			style = None        
+			style = None
 		self._begin_span(style, tag, id_)
 
 		if name == 'br':
@@ -914,7 +855,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		#    self.text = ' '
 
 class HtmlTextView(gtk.TextView):
-	
+
 	def __init__(self):
 		gobject.GObject.__init__(self)
 		self.set_wrap_mode(gtk.WRAP_CHAR)
@@ -964,39 +905,35 @@ class HtmlTextView(gtk.TextView):
 		x, y, _ = widget.window.get_pointer()
 		x, y = widget.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, x, y)
 		tags = widget.get_iter_at_location(x, y).get_tags()
-		is_over_anchor = False
-		for tag in tags:
-			if getattr(tag, 'is_anchor', False):
-				is_over_anchor = True
-				break
+		anchor_tags = [tag for tag in tags if getattr(tag, 'is_anchor', False)]
 		if self.tooltip.timeout != 0:
 			# Check if we should hide the line tooltip
-			if not is_over_anchor:
+			if not anchor_tags:
 				self.tooltip.hide_tooltip()
-		if not self._changed_cursor and is_over_anchor:
+		if not self._changed_cursor and anchor_tags:
 			window = widget.get_window(gtk.TEXT_WINDOW_TEXT)
 			window.set_cursor(gtk.gdk.Cursor(gtk.gdk.HAND2))
 			self._changed_cursor = True
-			self.tooltip.timeout = gobject.timeout_add(500, self.show_tooltip, tag)
-		elif self._changed_cursor and not is_over_anchor:
+			self.tooltip.timeout = gobject.timeout_add(500, self.show_tooltip, anchor_tags[0])
+		elif self._changed_cursor and not anchor_tags:
 			window = widget.get_window(gtk.TEXT_WINDOW_TEXT)
 			window.set_cursor(gtk.gdk.Cursor(gtk.gdk.XTERM))
 			self._changed_cursor = False
 		return False
 
 	def display_html(self, html):
-		buffer = self.get_buffer()
-		eob = buffer.get_end_iter()
+		buffer_ = self.get_buffer()
+		eob = buffer_.get_end_iter()
 		## this works too if libxml2 is not available
 		# parser = xml.sax.make_parser(['drv_libxml2'])
 		# parser.setFeature(xml.sax.handler.feature_validation, True)
 		parser = xml.sax.make_parser()
 		parser.setContentHandler(HtmlHandler(self, eob))
 		parser.parse(StringIO(html))
-		
+
 		# too much space after :)
 		#if not eob.starts_line():
-		#    buffer.insert(eob, '\n')
+		#    buffer_.insert(eob, '\n')
 
 
 
@@ -1004,7 +941,6 @@ change_cursor = None
 
 if __name__ == '__main__':
 	import os
-	from common import gajim
 
 	class log(object):
 
@@ -1031,7 +967,7 @@ if __name__ == '__main__':
 	def on_textview_motion_notify_event(widget, event):
 		'''change the cursor to a hand when we are over a mail or an url'''
 		global change_cursor
-		pointer_x, pointer_y, spam = htmlview.window.get_pointer()
+		pointer_x, pointer_y = htmlview.window.get_pointer()[0:2]
 		x, y = htmlview.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer_x,
 								   pointer_y)
 		tags = htmlview.get_iter_at_location(x, y).get_tags()
@@ -1040,7 +976,6 @@ if __name__ == '__main__':
 					 gtk.gdk.Cursor(gtk.gdk.XTERM))
 			change_cursor = None
 		tag_table = htmlview.get_buffer().get_tag_table()
-		over_line = False
 		for tag in tags:
 			try:
 				if tag.is_anchor:
@@ -1049,7 +984,8 @@ if __name__ == '__main__':
 					change_cursor = tag
 				elif tag == tag_table.lookup('focus-out-line'):
 					over_line = True
-			except: pass
+			except Exception:
+				pass
 
 		#if line_tooltip.timeout != 0:
 			# Check if we should hide the line tooltip
@@ -1064,7 +1000,7 @@ if __name__ == '__main__':
 
 	htmlview.connect('motion_notify_event', on_textview_motion_notify_event)
 
-	def handler(texttag, widget, event, iter, kind, href):
+	def handler(texttag, widget, event, iter_, kind, href):
 		if event.type == gtk.gdk.BUTTON_PRESS:
 			print href
 
@@ -1077,7 +1013,7 @@ if __name__ == '__main__':
 	htmlview.display_html('<hr />')
 	htmlview.display_html('''
 	  <p style='font-size:large'>
-		<span style='font-style: italic'>O<span style='font-size:larger'>M</span>G</span>, 
+		<span style='font-style: italic'>O<span style='font-size:larger'>M</span>G</span>,
 		I&apos;m <span style='color:green'>green</span>
 		with <span style='font-weight: bold'>envy</span>!
 	  </p>
@@ -1096,8 +1032,8 @@ if __name__ == '__main__':
 	<body xmlns='http://www.w3.org/1999/xhtml'>
 	  <p style='text-align:center'>Hey, are you licensed to <a href='http://www.jabber.org/'>Jabber</a>?</p>
 	  <p style='text-align:right'><img src='http://www.jabber.org/images/psa-license.jpg'
-			  alt='A License to Jabber' 
-			  width='50%' height='50%' 
+			  alt='A License to Jabber'
+			  width='50%' height='50%'
 			  /></p>
 	</body>
 		''')
@@ -1109,7 +1045,7 @@ if __name__ == '__main__':
 	   <li> Two </li>
 	   <li> Three </li>
 	  </ul><hr /><pre style="background-color:rgb(120,120,120)">def fac(n):
-  def faciter(n,acc): 
+  def faciter(n,acc):
 	if n==0: return acc
 	return faciter(n-1, acc*n)
   if n&lt;0: raise ValueError('Must be non-negative')
@@ -1147,3 +1083,5 @@ if __name__ == '__main__':
 	w.show_all()
 	w.connect('destroy', lambda w: gtk.main_quit())
 	gtk.main()
+
+# vim: se ts=3:

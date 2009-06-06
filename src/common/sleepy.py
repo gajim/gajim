@@ -1,13 +1,10 @@
-## common/sleepy.py
+# -*- coding:utf-8 -*-
+## src/common/sleepy.py
 ##
-## Contributors for this file:
-##	  - Yann Leboulanger <asterix@lagaule.org>
-##	  - Nikos Kouremenos <kourem@gmail.com>
-##
-## Copyright (C) 2003-2004 Yann Leboulanger <asterix@lagaule.org>
-##						 Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
-##					Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2003-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2008 Mateusz Biliński <mateusz AT bilinski.it>
 ##
 ## This file is part of Gajim.
 ##
@@ -17,11 +14,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 from common import gajim
@@ -50,8 +47,8 @@ try:
 	elif sys.platform == 'darwin':
 		import osx.idle as idle
 	else: # unix
-		import idle
-except:
+		from common import idle
+except Exception:
 	gajim.log.debug('Unable to load idle module')
 	SUPPORTED = False
 
@@ -90,14 +87,10 @@ class SleepyWindows:
 
 class SleepyUnix:
 	def __init__(self, away_interval = 60, xa_interval = 120):
+		global SUPPORTED
 		self.away_interval = away_interval
 		self.xa_interval = xa_interval
 		self.state = STATE_AWAKE # assume we are awake
-		try:
-			idle.init()
-		except:
-			SUPPORTED = False
-			self.state = STATE_UNKNOWN
 
 	def getIdleSec(self):
 		return idle.getIdleSec()
@@ -128,3 +121,5 @@ if os.name == 'nt':
 	Sleepy = SleepyWindows
 else:
 	Sleepy = SleepyUnix
+
+# vim: se ts=3:

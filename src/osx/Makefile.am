@@ -10,7 +10,7 @@ INCLUDES = \
 
 if BUILD_IDLE_OSX
 idlelib_LTLIBRARIES = idle.la
-idlelibdir = $(libdir)/gajim
+idlelibdir = $(pkglibdir)
 
 idle_la_LIBADD = $(CARBON_LIBS) 
 
@@ -24,7 +24,7 @@ endif
 
 if BUILD_COCOA
 nsapplib_LTLIBRARIES = nsapp.la
-nsapplibdir = $(libdir)/gajim
+nsapplibdir = $(pkglibdir)
 
 nsapp_la_LIBADD = $(COCOA_LIBS) 
 

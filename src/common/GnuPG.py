@@ -1,17 +1,12 @@
-##	common/GnuPG.py
+## src/common/GnuPG.py
 ##
-## Contributors for this file:
-##	- Yann Leboulanger <asterix@lagaule.org>
-##	- Nikos Kouremenos <kourem@gmail.com>
-##
-## Copyright (C) 2003-2004 Yann Leboulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Leboulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005 Alex Mauer <hawke AT hawkesnest.net>
+## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
+## Copyright (C) 2008 Jean-Marie Traissard <jim AT lapin.org>
+##                    Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -21,11 +16,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import gajim
@@ -40,11 +35,15 @@ if gajim.HAVE_GPG:
 			GnuPGInterface.GnuPG.__init__(self)
 			self.use_agent = use_agent
 			self._setup_my_options()
+			self.always_trust = False
 
 		def _setup_my_options(self):
 			self.options.armor = 1
 			self.options.meta_interactive = 0
 			self.options.extra_args.append('--no-secmem-warning')
+			# disable photo viewer when verifying keys
+			self.options.extra_args.append('--verify-options')
+			self.options.extra_args.append('no-show-photo')
 			if self.use_agent:
 				self.options.extra_args.append('--use-agent')
 
@@ -58,7 +57,7 @@ if gajim.HAVE_GPG:
 			# for that keyword.
 
 			resp = {}
-			while 1:
+			while True:
 				line = helpers.temp_failure_retry(child_stdout.readline)
 				if line == "": break
 				line = line.rstrip()
@@ -73,12 +72,15 @@ if gajim.HAVE_GPG:
 						resp[ keyword ] = ""
 			return resp
 
-		def encrypt(self, str, recipients):
+		def encrypt(self, str_, recipients, always_trust=False):
 			self.options.recipients = recipients   # a list!
 
-			proc = self.run(['--encrypt'], create_fhs=['stdin', 'stdout', 'status',
+			opt = ['--encrypt']
+			if always_trust or self.always_trust:
+				opt.append('--always-trust')
+			proc = self.run(opt, create_fhs=['stdin', 'stdout', 'status',
 				'stderr'])
-			proc.handles['stdin'].write(str)
+			proc.handles['stdin'].write(str_)
 			try:
 				proc.handles['stdin'].close()
 			except IOError:
@@ -102,18 +104,21 @@ if gajim.HAVE_GPG:
 
 			try: proc.wait()
 			except IOError: pass
+			if 'INV_RECP' in resp and resp['INV_RECP'].split()[0] == '10':
+				# unusable recipient "Key not trusted"
+				return '', 'NOT_TRUSTED'
 			if 'BEGIN_ENCRYPTION' in resp and 'END_ENCRYPTION' in resp:
 				# Encryption succeeded, even if there is output on stderr. Maybe
 				# verbose is on
 				error = ''
-			return self._stripHeaderFooter(output), error
+			return self._stripHeaderFooter(output), helpers.decode_string(error)
 
-		def decrypt(self, str, keyID):
+		def decrypt(self, str_, keyID):
 			proc = self.run(['--decrypt', '-q', '-u %s'%keyID], create_fhs=['stdin', 'stdout'])
-			enc = self._addHeaderFooter(str, 'MESSAGE')
+			enc = self._addHeaderFooter(str_, 'MESSAGE')
 			proc.handles['stdin'].write(enc)
 			proc.handles['stdin'].close()
-	
+
 			output = proc.handles['stdout'].read()
 			proc.handles['stdout'].close()
 
@@ -121,9 +126,9 @@ if gajim.HAVE_GPG:
 			except IOError: pass
 			return output
 
-		def sign(self, str, keyID):
+		def sign(self, str_, keyID):
 			proc = self.run(['-b', '-u %s'%keyID], create_fhs=['stdin', 'stdout', 'status', 'stderr'])
-			proc.handles['stdin'].write(str)
+			proc.handles['stdin'].write(str_)
 			try:
 				proc.handles['stdin'].close()
 			except IOError:
@@ -145,16 +150,18 @@ if gajim.HAVE_GPG:
 
 			try: proc.wait()
 			except IOError: pass
-			if resp.has_key('GOOD_PASSPHRASE') or resp.has_key('SIG_CREATED'):
+			if 'GOOD_PASSPHRASE' in resp or 'SIG_CREATED' in resp:
 				return self._stripHeaderFooter(output)
+			if 'KEYEXPIRED' in resp:
+				return 'KEYEXPIRED'
 			return 'BAD_PASSPHRASE'
 
-		def verify(self, str, sign):
-			if str is None:
+		def verify(self, str_, sign):
+			if str_ is None:
 				return ''
 			f = tmpfile()
 			fd = f.fileno()
-			f.write(str)
+			f.write(str_)
 			f.seek(0)
 
 			proc = self.run(['--verify', '--enable-special-filenames', '-', '-&%s'%fd], create_fhs=['stdin', 'status', 'stderr'])
@@ -171,9 +178,9 @@ if gajim.HAVE_GPG:
 
 			try: proc.wait()
 			except IOError: pass
-			
+
 			keyid = ''
-			if resp.has_key('GOODSIG'):
+			if 'GOODSIG' in resp:
 				keyid = resp['GOODSIG'].split()[0]
 			return keyid
 
@@ -187,6 +194,9 @@ if gajim.HAVE_GPG:
 			output = proc.handles['stdout'].read()
 			proc.handles['stdout'].close()
 
+			try: proc.wait()
+			except IOError: pass
+
 			keys = {}
 			lines = output.split('\n')
 			for line in lines:
@@ -198,8 +208,6 @@ if gajim.HAVE_GPG:
 					# make it unicode instance
 					keys[sline[4][8:]] = helpers.decode_string(name)
 			return keys
-			try: proc.wait()
-			except IOError: pass
 
 		def get_secret_keys(self):
 			return self.get_keys(True)
@@ -220,11 +228,13 @@ if gajim.HAVE_GPG:
 			line = '\n'.join(lines[0:i])
 			return line
 
-		def _addHeaderFooter(self, data, type):
+		def _addHeaderFooter(self, data, type_):
 			"""Add header and footer from data"""
-			out = "-----BEGIN PGP %s-----\n" % type
+			out = "-----BEGIN PGP %s-----\n" % type_
 			out = out + "Version: PGP\n"
 			out = out + "\n"
 			out = out + data + "\n"
-			out = out + "-----END PGP %s-----\n" % type
+			out = out + "-----END PGP %s-----\n" % type_
 			return out
+
+# vim: set ts=3:

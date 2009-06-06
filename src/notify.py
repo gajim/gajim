@@ -1,12 +1,16 @@
-##	notify.py
+# -*- coding:utf-8 -*-
+## src/notify.py
 ##
-## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2007 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2005-2006 Andrew Sayman <lorien420@myrealbox.com>
-## Copyright (C) 2007 Stephan Erb <steve-e@h3c.de> 
-##
-## Notification daemon connection via D-Bus code:
-## Copyright (C) 2005 by Sebastian Estienne
+## Copyright (C) 2005 Sebastian Estienne
+## Copyright (C) 2005-2006 Andrew Sayman <lorien420 AT myrealbox.com>
+## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006 Travis Shirk <travis AT pobox.com>
+## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>
+##                    Stephan Erb <steve-e AT h3c.de>
+## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
+##                    Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -16,11 +20,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import os
@@ -28,6 +32,7 @@ import time
 import dialogs
 import gobject
 import gtkgui_helpers
+import gtk
 
 from common import gajim
 from common import helpers
@@ -36,7 +41,6 @@ from common import dbus_support
 if dbus_support.supported:
 	import dbus
 	import dbus.glib
-	import dbus.service
 
 
 USER_HAS_PYNOTIFY = True # user has pynotify module
@@ -50,10 +54,28 @@ USER_HAS_GROWL = True
 try:
 	import osx.growler
 	osx.growler.init()
-except:
+except Exception:
 	USER_HAS_GROWL = False
 
-def get_show_in_roster(event, account, contact, session = None):
+if gajim.HAVE_INDICATOR:
+	import indicate
+
+def setup_indicator_server():
+	server = indicate.indicate_server_ref_default()
+	server.set_type('message.im')
+	server.set_desktop_file('/usr/share/applications/gajim.desktop')
+	server.connect('server-display', server_display)
+	server.show()
+
+def display(indicator, account, jid, msg_type):
+	gajim.interface.handle_event(account, jid, msg_type)
+	indicator.hide()
+
+def server_display(server):
+	win = gajim.interface.roster.window
+	win.present()
+
+def get_show_in_roster(event, account, contact, session=None):
 	'''Return True if this event must be shown in roster, else False'''
 	if event == 'gc_message_received':
 		return True
@@ -130,7 +152,7 @@ def get_advanced_notification(event, account, contact):
 		num += 1
 		notif = gajim.config.get_per('notifications', str(num))
 
-def notify(event, jid, account, parameters, advanced_notif_num = None):
+def notify(event, jid, account, parameters, advanced_notif_num=None):
 	'''Check what type of notifications we want, depending on basic
 	and the advanced configuration of notifications and do these notifications;
 	advanced_notif_num holds the number of the first (top most) advanced
@@ -181,16 +203,16 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 		if helpers.allow_showing_notification(account, 'notify_on_new_message',
 		advanced_notif_num, is_first_message):
 			do_popup = True
-		if is_first_message and helpers.allow_sound_notification(
+		if is_first_message and helpers.allow_sound_notification(account,
 		'first_message_received', advanced_notif_num):
 			do_sound = True
 		elif not is_first_message and focused and \
-		helpers.allow_sound_notification('next_message_received_focused',
+		helpers.allow_sound_notification(account, 'next_message_received_focused',
 		advanced_notif_num):
 			do_sound = True
 		elif not is_first_message and not focused and \
-		helpers.allow_sound_notification('next_message_received_unfocused',
-		advanced_notif_num):
+		helpers.allow_sound_notification(account,
+		'next_message_received_unfocused', advanced_notif_num):
 			do_sound = True
 	else:
 		print '*Event not implemeted yet*'
@@ -205,13 +227,13 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 		'status_change'): # Common code for popup for these three events
 			if event == 'contact_disconnected':
 				show_image = 'offline.png'
-				suffix = '_notif_size_bw.png'
+				suffix = '_notif_size_bw'
 			else: #Status Change or Connected
 				# FIXME: for status change,
 				# we don't always 'online.png', but we
 				# first need 48x48 for all status
 				show_image = 'online.png'
-				suffix = '_notif_size_colored.png'
+				suffix = '_notif_size_colored'
 			transport_name = gajim.get_transport_name_from_jid(jid)
 			img = None
 			if transport_name:
@@ -232,7 +254,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 				if status_message:
 					text = text + " : " + status_message
 				popup(_('Contact Changed Status'), jid, account,
-					path_to_image = path, title = title, text = text)
+					path_to_image=path, title=title, text=text)
 			elif event == 'contact_connected':
 				title = _('%(nickname)s Signed In') % \
 					{'nickname': gajim.get_name_from_jid(account, jid)}
@@ -240,7 +262,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 				if status_message:
 					text = status_message
 				popup(_('Contact Signed In'), jid, account,
-					path_to_image = path, title = title, text = text)
+					path_to_image=path, title=title, text=text)
 			elif event == 'contact_disconnected':
 				title = _('%(nickname)s Signed Out') % \
 					{'nickname': gajim.get_name_from_jid(account, jid)}
@@ -248,7 +270,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 				if status_message:
 					text = status_message
 				popup(_('Contact Signed Out'), jid, account,
-					path_to_image = path, title = title, text = text)
+					path_to_image=path, title=title, text=text)
 		elif event == 'new_message':
 			if message_type == 'normal': # single message
 				event_type = _('New Single Message')
@@ -278,7 +300,7 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 				text = message
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			popup(event_type, jid, account, message_type,
-				path_to_image = path, title = title, text = text)
+				path_to_image=path, title=title, text=text)
 
 	if do_sound:
 		snd_file = None
@@ -309,18 +331,45 @@ def notify(event, jid, account, parameters, advanced_notif_num = None):
 			'command')
 		try:
 			helpers.exec_command(command)
-		except:
+		except Exception:
 			pass
 
-def popup(event_type, jid, account, msg_type = '', path_to_image = None,
-	title = None, text = None):
+def popup(event_type, jid, account, msg_type='', path_to_image=None,
+	title=None, text=None):
 	'''Notifies a user of an event. It first tries to a valid implementation of
 	the Desktop Notification Specification. If that fails, then we fall back to
 	the older style PopupNotificationWindow method.'''
+
+	# default image
+	if not path_to_image:
+		path_to_image = os.path.abspath(
+			os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+				'chat_msg_recv.png')) # img to display
+
+	if gajim.HAVE_INDICATOR and event_type in (_('New Message'),
+	_('New Single Message'), _('New Private Message')):
+		indicator = indicate.IndicatorMessage()
+		indicator.set_property('subtype', 'im')
+		indicator.set_property('sender', jid)
+		indicator.set_property('body', text)
+		indicator.set_property_time('time', time.time())
+		pixbuf = gtk.gdk.pixbuf_new_from_file(path_to_image)
+		indicator.set_property_icon('icon', pixbuf)
+		indicator.connect('user-display', display, account, jid, msg_type)
+		indicator.show()
+
+	# Try Growl first, as we might have D-Bus and notification daemon running
+	# on OS X for some reason.
+	if USER_HAS_GROWL:
+		osx.growler.notify(event_type, jid, account, msg_type, path_to_image,
+			title, text)
+		return
+
+	# Try to show our popup via D-Bus and notification daemon
 	if gajim.config.get('use_notif_daemon') and dbus_support.supported:
 		try:
 			DesktopNotification(event_type, jid, account, msg_type,
-				path_to_image, title, text)
+				path_to_image, title, gobject.markup_escape_text(text))
 			return	# sucessfully did D-Bus Notification procedure!
 		except dbus.DBusException, e:
 			# Connection to D-Bus failed
@@ -328,21 +377,23 @@ def popup(event_type, jid, account, msg_type = '', path_to_image = None,
 		except TypeError, e:
 			# This means that we sent the message incorrectly
 			gajim.log.debug(str(e))
-	# we failed to speak to notification daemon via D-Bus
-	if USER_HAS_PYNOTIFY: # try via libnotify
+
+	# Ok, that failed. Let's try pynotify, which also uses notification daemon
+	if gajim.config.get('use_notif_daemon') and USER_HAS_PYNOTIFY:
 		if not text and event_type == 'new_message':
 			# empty text for new_message means do_preview = False
-			text = gajim.get_name_from_jid(account, jid) # default value of text
+			# -> default value for text
+			_text = gobject.markup_escape_text(
+				gajim.get_name_from_jid(account, jid))
+		else:
+			_text = gobject.markup_escape_text(text)
+
 		if not title:
-			title = event_type
-		# default image
-		if not path_to_image:
-			path_to_image = os.path.abspath(
-				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-					'chat_msg_recv.png')) # img to display
+			_title = ''
+		else:
+			_title = title
 
-
-		notification = pynotify.Notification(title, text)
+		notification = pynotify.Notification(_title, _text)
 		timeout = gajim.config.get('notification_timeout') * 1000 # make it ms
 		notification.set_timeout(timeout)
 
@@ -352,8 +403,9 @@ def popup(event_type, jid, account, msg_type = '', path_to_image = None,
 		notification.set_data('account', account)
 		notification.set_data('msg_type', msg_type)
 		notification.set_property('icon-name', path_to_image)
-		notification.add_action('default', 'Default Action',
-			on_pynotify_notification_clicked)
+		if 'actions' in pynotify.get_server_caps():
+			notification.add_action('default', 'Default Action',
+				on_pynotify_notification_clicked)
 
 		try:
 			notification.show()
@@ -361,13 +413,8 @@ def popup(event_type, jid, account, msg_type = '', path_to_image = None,
 		except gobject.GError, e:
 			# Connection to notification-daemon failed, see #2893
 			gajim.log.debug(str(e))
-	# try os/x growl
-	if USER_HAS_GROWL:
-		osx.growler.notify(event_type, jid, account, msg_type, path_to_image,
-			title, text)
-		return
 
-	# go old style
+	# Either nothing succeeded or the user wants old-style notifications
 	instance = dialogs.PopupNotificationWindow(event_type, jid, account,
 		msg_type, path_to_image, title, text)
 	gajim.interface.roster.popup_notification_windows.append(instance)
@@ -396,12 +443,12 @@ class NotificationResponseManager:
 		self.interface.connect_to_signal('ActionInvoked', self.on_action_invoked)
 		self.interface.connect_to_signal('NotificationClosed', self.on_closed)
 
-	def on_action_invoked(self, id, reason):
-		self.received.append((id, time.time(), reason))
-		if self.pending.has_key(id):
-			notification = self.pending[id]
-			notification.on_action_invoked(id, reason)
-			del self.pending[id]
+	def on_action_invoked(self, id_, reason):
+		self.received.append((id_, time.time(), reason))
+		if id_ in self.pending:
+			notification = self.pending[id_]
+			notification.on_action_invoked(id_, reason)
+			del self.pending[id_]
 		if len(self.received) > 20:
 			curt = time.time()
 			for rec in self.received:
@@ -409,21 +456,21 @@ class NotificationResponseManager:
 				if diff > 10:
 					self.received.remove(rec)
 
-	def on_closed(self, id, reason = None):
-		if self.pending.has_key(id):
-			del self.pending[id]
+	def on_closed(self, id_, reason=None):
+		if id_ in self.pending:
+			del self.pending[id_]
 
-	def add_pending(self, id, object):
+	def add_pending(self, id_, object_):
 		# Check to make sure that we handle an event immediately if we're adding
 		# an id that's already been triggered
 		for rec in self.received:
-			if rec[0] == id:
-				object.on_action_invoked(id, rec[2])
+			if rec[0] == id_:
+				object_.on_action_invoked(id_, rec[2])
 				self.received.remove(rec)
 				return
-		if id not in self.pending:
+		if id_ not in self.pending:
 			# Add it
-			self.pending[id] = object
+			self.pending[id_] = object_
 		else:
 			# We've triggered an event that has a duplicate ID!
 			gajim.log.debug('Duplicate ID of notification. Can\'t handle this.')
@@ -433,13 +480,15 @@ notification_response_manager = NotificationResponseManager()
 class DesktopNotification:
 	'''A DesktopNotification that interfaces with D-Bus via the Desktop
 	Notification specification'''
-	def __init__(self, event_type, jid, account, msg_type = '',
-		path_to_image = None, title = None, text = None):
+	def __init__(self, event_type, jid, account, msg_type='',
+		path_to_image=None, title=None, text=None):
 		self.path_to_image = path_to_image
 		self.event_type = event_type
 		self.title = title
 		self.text = text
-		'''0.3.1 is the only version of notification daemon that has no way to determine which version it is. If no method exists, it means they're using that one.'''
+		# 0.3.1 is the only version of notification daemon that has no way
+		# to determine which version it is. If no method exists, it means
+		# they're using that one.
 		self.default_version = [0, 3, 1]
 		self.account = account
 		self.jid = jid
@@ -464,7 +513,8 @@ class DesktopNotification:
 			ntype = 'transfer'
 		elif event_type == _('File Transfer Error'):
 			ntype = 'transfer.error'
-		elif event_type in (_('File Transfer Completed'), _('File Transfer Stopped')):
+		elif event_type in (_('File Transfer Completed'),
+		_('File Transfer Stopped')):
 			ntype = 'transfer.complete'
 		elif event_type == _('New E-mail'):
 			ntype = 'email.arrived'
@@ -474,6 +524,10 @@ class DesktopNotification:
 			ntype = 'presence.status'
 		elif event_type == _('Connection Failed'):
 			ntype = 'connection.failed'
+		elif event_type == _('Subscription request'):
+			ntype = 'subscription.request'
+		elif event_type == _('Unsubscribed'):
+			ntype = 'unsubscribed'
 		else:
 			# default failsafe values
 			self.path_to_image = os.path.abspath(
@@ -481,18 +535,48 @@ class DesktopNotification:
 					'chat_msg_recv.png')) # img to display
 			ntype = 'im' # Notification Type
 
-		self.notif = dbus_support.get_notifications_interface()
+		self.notif = dbus_support.get_notifications_interface(self)
 		if self.notif is None:
 			raise dbus.DBusException('unable to get notifications interface')
 		self.ntype = ntype
 
-		self.get_version()
+		if self.kde_notifications:
+			self.attempt_notify()
+		else:
+			self.capabilities = self.notif.GetCapabilities()
+			if self.capabilities is None:
+				self.capabilities = ['actions']
+			self.get_version()
 
 	def attempt_notify(self):
-		version = self.version
 		timeout = gajim.config.get('notification_timeout') # in seconds
 		ntype = self.ntype
+		if self.kde_notifications:
+			notification_text = ('<html><img src="%(image)s" align=left />' \
+				'%(title)s<br/>%(text)s</html>') % {'title': self.title,
+				'text': self.text, 'image': self.path_to_image}
+			gajim_icon = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps',
+				'gajim.png'))
+			self.notif.Notify(
+				dbus.String(_('Gajim')),			# app_name (string)
+				dbus.UInt32(0),						# replaces_id (uint)
+				ntype,									# event_id (string)
+				dbus.String(gajim_icon),			# app_icon (string)
+				dbus.String(''),						# summary (string)
+				dbus.String(notification_text),	# body (string)
+				# actions (stringlist)
+				(dbus.String('default'), dbus.String(self.event_type),
+					dbus.String('ignore'), dbus.String(_('Ignore'))),
+				[],										# hints (not used in KDE yet)
+				dbus.UInt32(timeout*1000),			# timeout (int), in ms
+				reply_handler=self.attach_by_id,
+				error_handler=self.notify_another_way)
+			return
+		version = self.version
 		if version[:2] == [0, 2]:
+			actions = {}
+			if 'actions' in self.capabilities:
+				actions = {'default': 0}
 			try:
 				self.notif.Notify(
 					dbus.String(_('Gajim')),
@@ -503,7 +587,7 @@ class DesktopNotification:
 					dbus.String(self.title),
 					dbus.String(self.text),
 					[dbus.String(self.path_to_image)],
-					{'default': 0},
+					actions,
 					[''],
 					True,
 					dbus.UInt32(timeout),
@@ -514,9 +598,9 @@ class DesktopNotification:
 		if version > [0, 3]:
 			if gajim.interface.systray_enabled and \
 			gajim.config.get('attach_notifications_to_systray'):
-				x, y = gajim.interface.systray.img_tray.window.get_position()
-				x_, y_, width, height, depth = \
-					gajim.interface.systray.img_tray.window.get_geometry()
+				x, y = gajim.interface.systray.img_tray.window.get_origin()
+				width, height, = \
+					gajim.interface.systray.img_tray.window.get_geometry()[2:4]
 				pos_x = x + (width / 2)
 				pos_y = y + (height / 2)
 				hints = {'x': pos_x, 'y': pos_y}
@@ -525,13 +609,21 @@ class DesktopNotification:
 			if version >= [0, 3, 2]:
 				hints['urgency'] = dbus.Byte(0) # Low Urgency
 				hints['category'] = dbus.String(ntype)
+				# it seems notification-daemon doesn't like empty text
+				if self.text:
+					text = self.text
+				else:
+					text = ' '
+				actions = ()
+				if 'actions' in self.capabilities:
+					actions = (dbus.String('default'), dbus.String(self.event_type))
 				self.notif.Notify(
 					dbus.String(_('Gajim')),
 					dbus.UInt32(0), # this notification does not replace other
 					dbus.String(self.path_to_image),
 					dbus.String(self.title),
-					dbus.String(self.text),
-					( dbus.String('default'), dbus.String(self.event_type) ),
+					dbus.String(text),
+					actions,
 					hints,
 					dbus.UInt32(timeout*1000),
 					reply_handler=self.attach_by_id,
@@ -549,8 +641,8 @@ class DesktopNotification:
 					reply_handler=self.attach_by_id,
 					error_handler=self.notify_another_way)
 
-	def attach_by_id(self, id):
-		self.id = id
+	def attach_by_id(self, id_):
+		self.id = id_
 		notification_response_manager.attach_to_interface()
 		notification_response_manager.add_pending(self.id, self)
 
@@ -558,15 +650,22 @@ class DesktopNotification:
 		gajim.log.debug(str(e))
 		gajim.log.debug('Need to implement a new way of falling back')
 
-	def on_action_invoked(self, id, reason):
+	def on_action_invoked(self, id_, reason):
 		if self.notif is None:
 			return
-		self.notif.CloseNotification(dbus.UInt32(id))
+		self.notif.CloseNotification(dbus.UInt32(id_))
 		self.notif = None
+
+		if reason == 'ignore':
+			return
 
 		gajim.interface.handle_event(self.account, self.jid, self.msg_type)
 
-	def version_reply_handler(self, name, vendor, version, spec_version = None):
+	def version_reply_handler(self, name, vendor, version, spec_version=None):
+		if spec_version:
+			version = spec_version
+		elif vendor == 'Xfce' and version == '0.1.0':
+			version = '0.9'
 		version_list = version.split('.')
 		self.version = []
 		while len(version_list):
@@ -585,3 +684,5 @@ class DesktopNotification:
 	def version_error_handler_3_x_try(self, e):
 		self.version = self.default_version
 		self.attempt_notify()
+
+# vim: se ts=3:

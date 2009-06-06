@@ -1,6 +1,12 @@
+# -*- coding:utf-8 -*-
+## src/common/passwords.py
 ##
-## Copyright (C) 2006 Gustavo J. A. M. Carneiro <gjcarneiro@gmail.com>
-## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2006 Gustavo J. A. M. Carneiro <gjcarneiro AT gmail.com>
+##                    Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
+##                    Julien Pivotto <roidelapluie AT gmail.com>
+## Copyright (C) 2008 Stephan Erb <steve-e AT h3c.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -10,15 +16,16 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 __all__ = ['get_password', 'save_password']
 
+import warnings
 from common import gajim
 
 USER_HAS_GNOMEKEYRING = False
@@ -60,10 +67,7 @@ class GnomePasswordStorage(PasswordStorage):
 		conf = gajim.config.get_per('accounts', account_name, 'password')
 		if conf is None:
 			return None
-		try:
-			unused, auth_token = conf.split('gnomekeyring:')
-			auth_token = int(auth_token)
-		except ValueError:
+		if not conf.startswith('gnomekeyring:'):
 			password = conf
 			## migrate the password over to keyring
 			try:
@@ -73,8 +77,33 @@ class GnomePasswordStorage(PasswordStorage):
 				set_storage(SimplePasswordStorage())
 			return password
 		try:
-			return gnomekeyring.item_get_info_sync(self.keyring,
-				auth_token).get_secret()
+			server = gajim.config.get_per('accounts', account_name, 'hostname')
+			user = gajim.config.get_per('accounts', account_name, 'name')
+			attributes1 = dict(server=str(server), user=str(user), protocol='xmpp')
+			attributes2 = dict(account_name=str(account_name), gajim=1)
+			try:
+				items = gnomekeyring.find_items_sync(
+					gnomekeyring.ITEM_NETWORK_PASSWORD, attributes1)
+			except gnomekeyring.Error:
+				try:
+					items = gnomekeyring.find_items_sync(
+						gnomekeyring.ITEM_GENERIC_SECRET, attributes2)
+					if items:
+						# We found an old item, move it to new way of storing
+						password = items[0].secret
+						self.save_password(account_name, password)
+						gnomekeyring.item_delete_sync(items[0].keyring,
+							int(items[0].item_id))
+				except gnomekeyring.Error:
+					items = []
+			if len(items) > 1:
+				warnings.warn("multiple gnome keyring items found for account %s;"
+					      " trying to use the first one..."
+					      % account_name)
+			if items:
+				return items[0].secret
+			else:
+				return None
 		except gnomekeyring.DeniedError:
 			return None
 		except gnomekeyring.NoKeyringDaemonError:
@@ -83,19 +112,21 @@ class GnomePasswordStorage(PasswordStorage):
 			return None
 
 	def save_password(self, account_name, password, update=True):
-		display_name = _('Gajim account %s') % account_name
-		attributes = dict(account_name=str(account_name), gajim=1)
+		server = gajim.config.get_per('accounts', account_name, 'hostname')
+		user = gajim.config.get_per('accounts', account_name, 'name')
+		display_name = _('XMPP account %s@%s') % (user, server)
+		attributes1 = dict(server=str(server), user=str(user), protocol='xmpp')
 		try:
 			auth_token = gnomekeyring.item_create_sync(
-				self.keyring, gnomekeyring.ITEM_GENERIC_SECRET,
-				display_name, attributes, password, update)
+				self.keyring, gnomekeyring.ITEM_NETWORK_PASSWORD,
+				display_name, attributes1, password, update)
 		except gnomekeyring.DeniedError:
 			set_storage(SimplePasswordStorage())
 			storage.save_password(account_name, password)
 			return
-		token = 'gnomekeyring:%i' % auth_token
-		gajim.config.set_per('accounts', account_name, 'password', token)
-		if gajim.connections.has_key(account_name):
+		gajim.config.set_per('accounts', account_name, 'password',
+			'gnomekeyring:')
+		if account_name in gajim.connections:
 			gajim.connections[account_name].password = password
 
 storage = None
@@ -137,3 +168,5 @@ def get_password(account_name):
 
 def save_password(account_name, password):
 	return get_storage().save_password(account_name, password)
+
+# vim: se ts=3:

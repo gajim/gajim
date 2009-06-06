@@ -1,5 +1,11 @@
+# -*- coding:utf-8 -*-
+## src/common/commands.py
 ##
-## Copyright (C) 2006 Gajim Team
+## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
+##                         Tomasz Melcer <liori AT exroot.org>
+## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
+##                    Stephan Erb <steve-e AT h3c.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -9,11 +15,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import xmpp
@@ -30,7 +36,7 @@ class AdHocCommand:
 	def isVisibleFor(samejid):
 		''' This returns True if that command should be visible and invokable
 		for others.
-		samejid - True when command is invoked by an entity with the same bare 
+		samejid - True when command is invoked by an entity with the same bare
 		jid.'''
 		return True
 
@@ -44,8 +50,7 @@ class AdHocCommand:
 		assert status in ('executing', 'completed', 'canceled')
 
 		response = request.buildReply('result')
-		cmd = response.addChild('command', {
-			'xmlns': xmpp.NS_COMMANDS,
+		cmd = response.addChild('command', namespace=xmpp.NS_COMMANDS, attrs={
 			'sessionid': self.sessionid,
 			'node': self.commandnode,
 			'status': status})
@@ -65,7 +70,7 @@ class AdHocCommand:
 			' bad-request'))
 
 	def cancel(self, request):
-		response, cmd = self.buildResponse(request, status = 'canceled')
+		response = self.buildResponse(request, status = 'canceled')[0]
 		self.connection.connection.send(response)
 		return False	# finish the session
 
@@ -82,7 +87,7 @@ class ChangeStatusCommand(AdHocCommand):
 		# first query...
 		response, cmd = self.buildResponse(request, defaultaction = 'execute',
 			actions = ['execute'])
-		
+
 		cmd.addChild(node = dataforms.SimpleDataForm(
 			title = _('Change status'),
 			instructions = _('Set the presence type and description'),
@@ -91,7 +96,7 @@ class ChangeStatusCommand(AdHocCommand):
 					var = 'presence-type',
 					label = 'Type of presence:',
 					options = [
-						(u'free-for-chat', _('Free for chat')),
+						(u'chat', _('Free for chat')),
 						(u'online', _('Online')),
 						(u'away', _('Away')),
 						(u'xa', _('Extended away')),
@@ -107,7 +112,7 @@ class ChangeStatusCommand(AdHocCommand):
 
 		# for next invocation
 		self.execute = self.changestatus
-		
+
 		return True	# keep the session
 
 	def changestatus(self, request):
@@ -115,24 +120,24 @@ class ChangeStatusCommand(AdHocCommand):
 		try:
 			form = dataforms.SimpleDataForm(extend = request.getTag('command').\
 				getTag('x'))
-		except:
+		except Exception:
 			self.badRequest(request)
 			return False
 
 		try:
 			presencetype = form['presence-type'].value
 			if not presencetype in \
-			('free-for-chat', 'online', 'away', 'xa', 'dnd', 'offline'):
+			('chat', 'online', 'away', 'xa', 'dnd', 'offline'):
 				self.badRequest(request)
 				return False
-		except:	# KeyError if there's no presence-type field in form or
+		except Exception:	# KeyError if there's no presence-type field in form or
 			# AttributeError if that field is of wrong type
 			self.badRequest(request)
 			return False
 
 		try:
 			presencedesc = form['presence-desc'].value
-		except:	# same exceptions as in last comment
+		except Exception:	# same exceptions as in last comment
 			presencedesc = u''
 
 		response, cmd = self.buildResponse(request, status = 'completed')
@@ -152,14 +157,15 @@ def find_current_groupchats(account):
 	import message_control
 	rooms = []
 	for gc_control in gajim.interface.msg_win_mgr.get_controls(
-	message_control.TYPE_GC):
+	message_control.TYPE_GC) + gajim.interface.minimized_controls[account].\
+	values():
 		acct = gc_control.account
 		# check if account is the good one
 		if acct != account:
 			continue
 		room_jid = gc_control.room_jid
 		nick = gc_control.nick
-		if gajim.gc_connected[acct].has_key(room_jid) and \
+		if room_jid in gajim.gc_connected[acct] and \
 		gajim.gc_connected[acct][room_jid]:
 			rooms.append((room_jid, nick,))
 	return rooms
@@ -186,7 +192,7 @@ class LeaveGroupchatsCommand(AdHocCommand):
 		if not len(options):
 			response, cmd = self.buildResponse(request, status = 'completed')
 			cmd.addChild('note', {}, _('You have not joined a groupchat.'))
-		
+
 			self.connection.connection.send(response)
 			return False
 
@@ -212,14 +218,13 @@ class LeaveGroupchatsCommand(AdHocCommand):
 		try:
 			form = dataforms.SimpleDataForm(extend = request.getTag('command').\
 				getTag('x'))
-		except:
+		except Exception:
 			self.badRequest(request)
 			return False
 
 		try:
 			gc = form['groupchats'].values
-		except:	# KeyError if there's no presence-type field in form or
-			# AttributeError if that field is of wrong type
+		except Exception:	# KeyError if there's no groupchats in form
 			self.badRequest(request)
 			return False
 		account = self.connection.name
@@ -227,8 +232,14 @@ class LeaveGroupchatsCommand(AdHocCommand):
 			for room_jid in gc:
 				gc_control = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
 					account)
+				if not gc_control:
+					gc_control = gajim.interface.minimized_controls[account]\
+						[room_jid]
+					gc_control.shutdown()
+					gajim.interface.roster.remove_groupchat(room_jid, account)
+					continue
 				gc_control.parent_win.remove_tab(gc_control, None, force = True)
-		except:	# KeyError if there's no presence-type field in form or
+		except Exception:	# KeyError if there's no such room opened
 			self.badRequest(request)
 			return False
 		response, cmd = self.buildResponse(request, status = 'completed')
@@ -259,8 +270,8 @@ class ForwardMessagesCommand(AdHocCommand):
 		for jid in events:
 			for event in events[jid]:
 				self.connection.send_message(j, event.parameters[0], '',
-					type=event.type_, subject=event.parameters[1],
-					resource=resource, forward_from=jid)
+					type_=event.type_, subject=event.parameters[1],
+					resource=resource, forward_from=jid, delayed=event.time_)
 
 		# Inform other client of completion
 		response, cmd = self.buildResponse(request, status = 'completed')
@@ -412,3 +423,5 @@ class ConnectionCommands:
 				del self.__sessions[magictuple]
 
 			raise xmpp.NodeProcessed
+
+# vim: se ts=3:

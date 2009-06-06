@@ -1,14 +1,9 @@
-##      fuzzyclock.py
+# -*- coding:utf-8 -*-
+## src/common/fuzzyclock.py
 ##
-## Contributors for this file:
-##
-## - Yann Leboulanger <asterix@lagaule.org>
-## - Christoph Neuroth <delmonico@gmx.net>
-##
-## Copyright (C) 2006 Christoph Neuroth <delmonico@gmx.net>
-##                    Yann Leboulanger <asterix@lagaule.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
+## Copyright (C) 2006 Christoph Neuroth <delmonico AT gmx.net>
+## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
 ##
 ## This file is part of Gajim.
 ##
@@ -18,11 +13,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 '''
@@ -139,3 +134,5 @@ class FuzzyClock:
 				newTimeStr = self.__fuzzyWeek[3]
 
 		return newTimeStr
+
+# vim: se ts=3:

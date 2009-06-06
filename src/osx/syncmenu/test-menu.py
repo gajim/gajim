@@ -6,7 +6,6 @@ copy_item = None
 
 
 def menu_item_activate_cb(item, user_data):
-	global open_item, copy_item
 	print "Item activated: %s" % user_data
 
 	#g_object_get (G_OBJECT (copy_item),
@@ -76,3 +75,5 @@ menubar.hide()
 syncmenu.takeover_menu(menubar)
 
 gtk.main()
+
+# vim: se ts=3:

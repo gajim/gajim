@@ -1,4 +1,4 @@
-﻿##      common/zeroconf/client_zeroconf.py
+##      common/zeroconf/client_zeroconf.py
 ##
 ## Copyright (C) 2006 Stefan Bethge <stefan@lanpartei.de>
 ## 				2006 Dimitur Kirov <dkirov@gmail.com>
@@ -21,8 +21,9 @@ from common import gajim
 import common.xmpp
 from common.xmpp.idlequeue import IdleObject
 from common.xmpp import dispatcher_nb, simplexml
-from common.xmpp.client import *
+from common.xmpp.plugin import *
 from common.xmpp.simplexml import ustr
+from common.xmpp.transports_nb import DATA_RECEIVED, DATA_SENT
 from common.zeroconf import zeroconf
 
 from common.xmpp.protocol import *
@@ -36,8 +37,6 @@ log = logging.getLogger('gajim.c.z.client_zeroconf')
 from common.zeroconf import roster_zeroconf
 
 MAX_BUFF_LEN = 65536
-DATA_RECEIVED = 'DATA RECEIVED'
-DATA_SENT = 'DATA SENT'
 TYPE_SERVER, TYPE_CLIENT = range(2)
 
 # wait XX sec to establish a connection
@@ -71,7 +70,7 @@ class ZeroconfListener(IdleObject):
 		# will fail when port is busy, or we don't have rights to bind
 		try:
 			self._serv.bind((ai[4][0], self.port))
-		except Exception, e:
+		except Exception:
 			# unable to bind, show error dialog
 			return None
 		self._serv.listen(socket.SOMAXCONN)
@@ -87,25 +86,26 @@ class ZeroconfListener(IdleObject):
 	def pollin(self):
 		''' accept a new incomming connection and notify queue'''
 		sock = self.accept_conn()
-		''' loop through roster to find who has connected to us'''
+		# loop through roster to find who has connected to us
 		from_jid = None
 		ipaddr = sock[1][0]
 		for jid in self.conn_holder.getRoster().keys():
 			entry = self.conn_holder.getRoster().getItem(jid)
 			if (entry['address'] == ipaddr):
 				from_jid = jid
-				break;
+				break
 		P2PClient(sock[0], ipaddr, sock[1][1], self.conn_holder, [], from_jid)
 
-	def disconnect(self):
+	def disconnect(self, message=''):
 		''' free all resources, we are not listening anymore '''
+		log.info('Disconnecting ZeroconfListener: %s' % message)
 		gajim.idlequeue.remove_timeout(self.fd)
 		gajim.idlequeue.unplug_idle(self.fd)
 		self.fd = -1
 		self.started = False
 		try:
 			self._serv.close()
-		except:
+		except socket.error:
 			pass
 		self.conn_holder.kill_all_connections()
 
@@ -120,6 +120,7 @@ class P2PClient(IdleObject):
 	on_ok=None, on_not_ok=None):
 		self._owner = self
 		self.Namespace = 'jabber:client'
+		self.protocol_type = 'XMPP'
 		self.defaultNamespace = self.Namespace
 		self._component = 0
 		self._registered_name = None
@@ -130,16 +131,7 @@ class P2PClient(IdleObject):
 		self.Server = host
 		self.on_ok = on_ok
 		self.on_not_ok = on_not_ok
-		self.DBG = 'client'
 		self.Connection = None
-		if gajim.verbose:
-			debug = ['always', 'nodebuilder']
-		else:
-			debug = []
-		self._DEBUG = Debug.Debug(debug)
-		self.DEBUG = self._DEBUG.Show
-		self.debug_flags = self._DEBUG.debug_flags
-		self.debug_flags.append(self.DBG)
 		self.sock_hash = None
 		if _sock:
 			self.sock_type = TYPE_SERVER
@@ -164,10 +156,16 @@ class P2PClient(IdleObject):
 					if on_not_ok:
 						on_not_ok('Connection to host could not be established.')
 					return
-				if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
-					self.conn_holder.number_of_awaiting_messages[self.fd] += 1
+				thread_id = stanza.getThread()
+				id_ = stanza.getID()
+				if not id_:
+					id_ = self.Dispatcher.getAnID()
+				if self.conn_holder.ids_of_awaiting_messages.has_key(self.fd):
+					self.conn_holder.ids_of_awaiting_messages[self.fd].append((id_,
+						thread_id))
 				else:
-					self.conn_holder.number_of_awaiting_messages[self.fd] = 1
+					self.conn_holder.ids_of_awaiting_messages[self.fd] = [(id_,
+						thread_id)]
 
 	def add_stanza(self, stanza, is_message=False):
 		if self.Connection:
@@ -178,23 +176,32 @@ class P2PClient(IdleObject):
 			self.stanzaqueue.append((stanza, is_message))
 
 		if is_message:
-			if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
-				self.conn_holder.number_of_awaiting_messages[self.fd] += 1
+			id_ = stanza.getID()
+			if not id_:
+				id_ = self.Dispatcher.getAnID()
+			if self.conn_holder.ids_of_awaiting_messages.has_key(self.fd):
+				self.conn_holder.ids_of_awaiting_messages[self.fd].append((id_,
+					thread_id))
 			else:
-				self.conn_holder.number_of_awaiting_messages[self.fd] = 1
+				self.conn_holder.ids_of_awaiting_messages[self.fd] = [(id_,
+					thread_id)]
 
 		return True
 
 	def on_message_sent(self, connection_id):
-		self.conn_holder.number_of_awaiting_messages[connection_id] -= 1
+		id_, thread_id = \
+			self.conn_holder.ids_of_awaiting_messages[connection_id].pop(0)
+		if self.on_ok:
+			self.on_ok(id_)
+			# use on_ok only on first message. For others it's called in
+			# ClientZeroconf
+			self.on_ok = None
 
 	def on_connect(self, conn):
 		self.Connection = conn
 		self.Connection.PlugIn(self)
 		dispatcher_nb.Dispatcher().PlugIn(self)
 		self._register_handlers()
-		if self.on_ok:
-			self.on_ok()
 
 	def StreamInit(self):
 		''' Send an initial stream header. '''
@@ -202,8 +209,6 @@ class P2PClient(IdleObject):
 		self.Dispatcher.Stream._dispatch_depth = 2
 		self.Dispatcher.Stream.dispatch = self.Dispatcher.dispatch
 		self.Dispatcher.Stream.stream_header_received = self._check_stream_start
-		self.debug_flags.append(simplexml.DBG_NODEBUILDER)
-		self.Dispatcher.Stream.DEBUG = self.DEBUG
 		self.Dispatcher.Stream.features = None
 		if self.sock_type == TYPE_CLIENT:
 			self.send_stream_header()
@@ -220,9 +225,8 @@ class P2PClient(IdleObject):
 			self.Dispatcher._metastream)[:-2])
 
 	def _check_stream_start(self, ns, tag, attrs):
-		if ns<>NS_STREAMS or tag<>'stream':
-			self.Connection.DEBUG('Incorrect stream start: (%s,%s).Terminating! ' \
-				% (tag, ns), 'error')
+		if ns != NS_STREAMS or tag != 'stream':
+			log.error('Incorrect stream start: (%s,%s).Terminating!' % (tag, ns), 'error')
 			self.Connection.disconnect()
 			if self.on_not_ok:
 				self.on_not_ok('Connection to host could not be established: Incorrect answer from server.')
@@ -245,8 +249,8 @@ class P2PClient(IdleObject):
 
 	def on_disconnect(self):
 		if self.conn_holder:
-			if self.conn_holder.number_of_awaiting_messages.has_key(self.fd):
-				del self.conn_holder.number_of_awaiting_messages[self.fd]
+			if self.conn_holder.ids_of_awaiting_messages.has_key(self.fd):
+				del self.conn_holder.ids_of_awaiting_messages[self.fd]
 			self.conn_holder.remove_connection(self.sock_hash)
 		if self.__dict__.has_key('Dispatcher'):
 			self.Dispatcher.PlugOut()
@@ -299,7 +303,6 @@ class P2PConnection(IdleObject, PlugIn):
 		IdleObject.__init__(self)
 		self._owner = client
 		PlugIn.__init__(self)
-		self.DBG_LINE = 'socket'
 		self.sendqueue = []
 		self.sendbuff = None
 		self.buff_is_message = False
@@ -341,7 +344,7 @@ class P2PConnection(IdleObject, PlugIn):
 			self._sock = socket.socket(*ai[:3])
 			self._sock.setblocking(False)
 			self._server = ai[4]
-		except:
+		except socket.error:
 			if sys.exc_value[0] != errno.EINPROGRESS:
 				# for all errors, we try other addresses
 				self.connect_to_next_ip()
@@ -402,11 +405,12 @@ class P2PConnection(IdleObject, PlugIn):
 		self._plug_idle()
 
 	def read_timeout(self):
-		if self.client.conn_holder.number_of_awaiting_messages.has_key(self.fd) \
-		and self.client.conn_holder.number_of_awaiting_messages[self.fd] > 0:
-			self.client._caller.dispatch('MSGERROR',[unicode(self.client.to), -1,
-				_('Connection to host could not be established: Timeout while sending data.'), None, None])
-			self.client.conn_holder.number_of_awaiting_messages[self.fd] = 0
+		ids = self.client.conn_holder.ids_of_awaiting_messages
+		if self.fd in ids and len(ids[self.fd]) > 0:
+			for (id_, thread_id) in ids[self.fd]:
+				self._owner.Dispatcher.Event('', DATA_ERROR, (self.client.to,
+					thread_id))
+			ids[self.fd] = []
 		self.pollend()
 
 	def do_connect(self):
@@ -472,27 +476,15 @@ class P2PConnection(IdleObject, PlugIn):
 			if self._owner.sock_type == TYPE_CLIENT:
 				self.set_timeout(ACTIVITY_TIMEOUT_SECONDS)
 			if received.strip():
-				self.DEBUG(received, 'got')
+				log.debug('received: %s', received)
 			if hasattr(self._owner, 'Dispatcher'):
 				self._owner.Dispatcher.Event('', DATA_RECEIVED, received)
 			self.on_receive(received)
 		else:
 			# This should never happed, so we need the debug
-			self.DEBUG('Unhandled data received: %s' % received,'error')
+			log.error('Unhandled data received: %s' % received)
 			self.disconnect()
 		return True
-
-	def onreceive(self, recv_handler):
-		if not recv_handler:
-			if hasattr(self._owner, 'Dispatcher'):
-				self.on_receive = self._owner.Dispatcher.ProcessNonBlocking
-			else:
-				self.on_receive = None
-			return
-		_tmp = self.on_receive
-		# make sure this cb is not overriden by recursive calls
-		if not recv_handler(None) and _tmp == self.on_receive:
-			self.on_receive = recv_handler
 
 	def disconnect(self):
 		''' Closes the socket. '''
@@ -501,7 +493,7 @@ class P2PConnection(IdleObject, PlugIn):
 		try:
 			self._sock.shutdown(socket.SHUT_RDWR)
 			self._sock.close()
-		except:
+		except socket.error:
 			# socket is already closed
 			pass
 		self.fd = -1
@@ -553,7 +545,7 @@ class P2PConnection(IdleObject, PlugIn):
 
 	def _on_send(self):
 		if self.sent_data and self.sent_data.strip():
-			self.DEBUG(self.sent_data,'sent')
+			log.debug('sent: %s' % self.sent_data)
 			if hasattr(self._owner, 'Dispatcher'):
 				self._owner.Dispatcher.Event('', DATA_SENT, self.sent_data)
 		self.sent_data = None
@@ -562,7 +554,7 @@ class P2PConnection(IdleObject, PlugIn):
 			self.buff_is_message = False
 
 	def _on_send_failure(self):
-		self.DEBUG("Socket error while sending data",'error')
+		log.error('Socket error while sending data')
 		self._owner.disconnected()
 		self.sent_data = None
 
@@ -577,7 +569,7 @@ class ClientZeroconf:
 		self.ip_to_hash = {}
 		self.hash_to_port = {}
 		self.listener = None
-		self.number_of_awaiting_messages = {}
+		self.ids_of_awaiting_messages = {}
 
 	def connect(self, show, msg):
 		self.port = self.start_listener(self.caller.port)
@@ -698,20 +690,28 @@ class ClientZeroconf:
 		# look for hashed connections
 		if to in self.recipient_to_hash:
 			conn = self.connections[self.recipient_to_hash[to]]
+			if not stanza.getID():
+				id_ = conn.Dispatcher.getAnID()
+				stanza.setID(id_)
 			if conn.add_stanza(stanza, is_message):
 				if on_ok:
-					on_ok()
-				return 0
+					on_ok(id_)
 
 		if item['address'] in self.ip_to_hash:
-			hash = self.ip_to_hash[item['address']]
-			if self.hash_to_port[hash] == item['port']:
-				conn = self.connections[hash]
+			hash_ = self.ip_to_hash[item['address']]
+			if self.hash_to_port[hash_] == item['port']:
+				conn = self.connections[hash_]
+				if not stanza.getID():
+					id_ = conn.Dispatcher.getAnID()
+					stanza.setID(id_)
 				if conn.add_stanza(stanza, is_message):
 					if on_ok:
-						on_ok()
-					return 0
+						on_ok(id_)
 
 		# otherwise open new connection
+		if not stanza.getID():
+			stanza.setID('zero')
 		P2PClient(None, item['address'], item['port'], self,
 			[(stanza, is_message)], to, on_ok=on_ok, on_not_ok=on_not_ok)
+
+# vim: se ts=3:

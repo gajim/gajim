@@ -20,14 +20,14 @@ _GTK_BASE = "/Library/Frameworks/GTK+.framework/Versions/Current"
 def readEnv():
 	gajimpaths.add_from_root(u'dbus.env', u'dbus.env')
 	try:
-		dbus_env = file(gajimpaths[u'dbus.env'], "r")
-	except:
+		dbus_env = open(gajimpaths[u'dbus.env'], "r")
+	except Exception:
 		return False
 	try:
 		line1 = dbus_env.readline()
 		line2 = dbus_env.readline()
 		dbus_env.close()
-	except:
+	except Exception:
 		print "Invalid dbus.env file"
 		return False
 	return parseEnv(line1, line2)
@@ -64,7 +64,7 @@ def setEnv(env):
 def writeEnv(env):
 	gajimpaths.add_from_root(u'dbus.env', u'dbus.env')
 	try:
-		dbus_env = file(gajimpaths[u'dbus.env'], "w+")
+		dbus_env = open(gajimpaths[u'dbus.env'], "w+")
 		dbus_env.write("DBUS_SESSION_BUS_ADDRESS=\"" + env[0] + "\"\n")
 		dbus_env.write("DBUS_SESSION_BUS_PID=\"" + env[1] + "\"\n")
 		dbus_env.close()
@@ -129,3 +129,5 @@ def shutdown():
 		return
 	os.kill(int(env[1]), signal.SIGINT)
 	return
+
+# vim: se ts=3:
