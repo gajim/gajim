@@ -2,14 +2,7 @@ SUBDIRS = src data po
 
 ACLOCAL_AMFLAGS = -I m4
 
-if BUILD_REMOTE_CONTROL
-OPTIONAL_BIN = scripts/gajim-remote
-else
-OPTIONAL_BIN =
-endif
-
-bin_SCRIPTS = scripts/gajim scripts/gajim-history-manager $(OPTIONAL_BIN)
-
+bin_SCRIPTS = scripts/gajim scripts/gajim-history-manager scripts/gajim-remote
 
 docfilesdir = $(docdir)
 docfiles_DATA = README \
