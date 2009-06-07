@@ -589,7 +589,7 @@ _('Connection with peer cannot be established.'))
 			return
 		file_props['elapsed-time'] = 0
 		self.files_props[file_props['type']][file_props['sid']] = file_props
-		iter_ = self.model.append()
+		iter_ = self.model.prepend()
 		text_labels = '<b>' + _('Name: ') + '</b>\n'
 		if file_props['type'] == 'r':
 			text_labels += '<b>' + _('Sender: ') + '</b>'

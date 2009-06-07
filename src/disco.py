@@ -1258,14 +1258,15 @@ class ToplevelAgentBrowser(AgentBrowser):
 			self._renderer.set_property('cell-background', bgcolor)
 		self.window.services_treeview.queue_draw()
 
-	def on_execute_button_clicked(self, widget = None):
+	def on_execute_button_clicked(self, widget=None):
 		'''When we want to execute a command:
 		open adhoc command window'''
 		model, iter_ = self.window.services_treeview.get_selection().get_selected()
 		if not iter_:
 			return
 		service = model[iter_][0].decode('utf-8')
-		adhoc_commands.CommandWindow(self.account, service)
+		node = model[iter_][1].decode('utf-8')
+		adhoc_commands.CommandWindow(self.account, service, commandnode=node)
 
 	def on_register_button_clicked(self, widget = None):
 		'''When we want to register an agent:
