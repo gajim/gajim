@@ -771,7 +771,7 @@ class ConnectionDisco:
 			raise common.xmpp.NodeProcessed
 
 		id = unicode(iq_obj.getAttr('id'))
-		if id[0] == 'Gajim_':
+		if id[:6] == 'Gajim_':
 			# We get this request from echo.server
 			raise common.xmpp.NodeProcessed
 
@@ -843,7 +843,7 @@ class ConnectionDisco:
 		if not identities: # ejabberd doesn't send identities when we browse online users
 		#FIXME: see http://www.jabber.ru/bugzilla/show_bug.cgi?id=225
 			identities = [{'category': 'server', 'type': 'im', 'name': node}]
-		if id[0] == 'Gajim_':
+		if id[:6] == 'Gajim_':
 			if jid == gajim.config.get_per('accounts', self.name, 'hostname'):
 				if features.__contains__(common.xmpp.NS_GMAILNOTIFY):
 					gajim.gmail_domains.append(jid)
