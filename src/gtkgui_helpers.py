@@ -962,11 +962,17 @@ def make_jabber_state_images():
 	'''initialise jabber_state_images dict'''
 	iconset = gajim.config.get('iconset')
 	if iconset:
-		path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-		if not os.path.exists(path):
+		if helpers.get_iconset_path(iconset):
+			path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
+			if not os.path.exists(path):
+				iconset = gajim.config.DEFAULT_ICONSET
+				gajim.config.set('iconset', iconset)
+		else:
 			iconset = gajim.config.DEFAULT_ICONSET
+			gajim.config.set('iconset', iconset)
 	else:
 		iconset = gajim.config.DEFAULT_ICONSET
+		gajim.config.set('iconset', iconset)
 
 	path = os.path.join(helpers.get_iconset_path(iconset), '32x32')
 	gajim.interface.jabber_state_images['32'] = load_iconset(path)
