@@ -165,7 +165,7 @@ class SASL(PlugIn):
 			self.mecs.remove('PLAIN')
 			sasl_data = u'%s\x00%s\x00%s' % (self.username + '@' + \
 				self._owner.Server, self.username, self.password)
-			asl_data = sasl_data.encode('utf-8').encode('base64').replace(
+			sasl_data = sasl_data.encode('utf-8').encode('base64').replace(
 				'\n','')
 			node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'PLAIN'}, 
 				payload=[sasl_data])
