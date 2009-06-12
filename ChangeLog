@@ -1,3 +1,8 @@
+Gajim 0.12.3 (12 June 2009)
+
+  * Fix PLAIN authentication (in particular with Gtalk
+  * fix PEP discovery
+
 Gajim 0.12.2 (07 June 2009)
 
   * Better keepalive / ping behaviour
