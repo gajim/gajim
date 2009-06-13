@@ -24,6 +24,7 @@
 import sys
 from common import gajim
 
+
 def device_now_active(self, *args):
 	'''For Network Manager 0.6'''
 	for connection in gajim.connections.itervalues():
@@ -53,10 +54,15 @@ def state_changed(state):
 
 supported = False
 
+from common import dbus_support
+
 if sys.platform == 'darwin':
 	supported = True
-else:
-	try:
+elif dbus_support.supported:
+	import dbus
+	import dbus.glib
+	
+	try:		
 		from common.dbus_support import system_bus
 
 		bus = system_bus.bus()
@@ -71,8 +77,8 @@ else:
 				'org.freedesktop.NetworkManager', 
 				'/org/freedesktop/NetworkManager')
 			supported = True
-
-	except Exception:
+			
+	except dbus.DBusException:
 		try:
 			if 'org.freedesktop.NetworkManager' in bus.list_names():
 				supported = True
