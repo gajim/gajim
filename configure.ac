@@ -45,27 +45,6 @@ AC_SUBST(PYGTK_LIBS)
 PYGTK_DEFS=`$PKG_CONFIG --variable=defsdir pygtk-2.0`
 AC_SUBST(PYGTK_DEFS)
 
-dnl *****
-dnl dbus
-dnl *****
-AC_ARG_ENABLE([remote], 
-  [  --disable-remote        disable remote control via DBus [default auto]],
-  enable_remote=$enableval, enable_remote=auto)
-
-if test "x$enable_remote" = "xauto"; then
-	 PKG_CHECK_EXISTS([dbus-1],enable_remote=yes,enable_remote=no)
-fi
-
-if test "x$enable_remote" = "xyes";then
-	PKG_CHECK_MODULES([DBUS], [dbus-1 >= 0.60])
-	AC_SUBST(DBUS_CFLAGS)
-	AC_SUBST(DBUS_LIBS)
-	have_remote=true
-else
-	have_remote=false
-fi
-AM_CONDITIONAL(BUILD_REMOTE_CONTROL, $have_remote)
-
 AM_PATH_PYTHON([2.5])
 if test "x$PYTHON" = "x:"; then
 	AC_MSG_ERROR([Python not found])
@@ -184,7 +163,6 @@ AC_OUTPUT
 echo " 
 ***************************** 
   Build features:
-    remote control ... ${have_remote}
     trayicon ......... ${have_trayicon}
     idle module OSX .. ${have_idle_osx}
     cocoa (OSX)....... ${have_cocoa}
