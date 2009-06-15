@@ -59,16 +59,10 @@ class Config:
 	DEFAULT_ICONSET = 'dcraven'
 	DEFAULT_MOOD_ICONSET = 'default'
 	DEFAULT_ACTIVITY_ICONSET = 'default'
-	if sys.platform == 'darwin':
-		DEFAULT_OPENWITH = 'open'
-		DEFAULT_BROWSER = 'open -a Safari'
-		DEFAULT_MAILAPP = 'open -a Mail'
-		DEFAULT_FILE_MANAGER = 'open -a Finder'
-	else:
-		DEFAULT_OPENWITH = 'gnome-open'
-		DEFAULT_BROWSER = 'firefox'
-		DEFAULT_MAILAPP = 'mozilla-thunderbird -compose'
-		DEFAULT_FILE_MANAGER = 'xffm'
+	DEFAULT_OPENWITH = 'gnome-open'
+	DEFAULT_BROWSER = 'firefox'
+	DEFAULT_MAILAPP = 'mozilla-thunderbird -compose'
+	DEFAULT_FILE_MANAGER = 'xffm'
 
 	__options = {
 		# name: [ type, default_value, help_string ]

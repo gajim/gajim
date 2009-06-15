@@ -367,11 +367,7 @@ def get_file_path_from_dnd_dropped_uri(uri):
 	if re.match('^file:///[a-zA-Z]:/', path): # windows
 		path = path[8:] # 8 is len('file:///')
 	elif path.startswith('file://'): # nautilus, rox
-		if sys.platform == 'darwin':
-			# OS/X includes hostname in file:// URI
-			path = re.sub('file://[^/]*', '', path)
-		else:
-			path = path[7:] # 7 is len('file://')
+		path = path[7:] # 7 is len('file://')
 	elif path.startswith('file:'): # xffm
 		path = path[5:] # 5 is len('file:')
 	return path
@@ -638,11 +634,6 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 import gajim
 import pep
 
-try:
-	from osx import nsapp
-except ImportError:
-	pass
-
 
 def convert_bytes(string):
 	suffix = ''
@@ -723,9 +714,6 @@ def launch_browser_mailer(kind, uri):
 			command = 'kfmclient exec'
 		elif gajim.config.get('openwith') == 'exo-open':
 			command = 'exo-open'
-		elif ((sys.platform == 'darwin') and\
-		(gajim.config.get('openwith') == 'open')):
-			command = 'open'
 		elif gajim.config.get('openwith') == 'custom':
 			if kind == 'url':
 				command = gajim.config.get('custombrowser')
@@ -753,9 +741,6 @@ def launch_file_manager(path_to_open):
 			command = 'kfmclient exec'
 		elif gajim.config.get('openwith') == 'exo-open':
 			command = 'exo-open'
-		elif ((sys.platform == 'darwin') and\
-		(gajim.config.get('openwith') == 'open')):
-			command = 'open'
 		elif gajim.config.get('openwith') == 'custom':
 			command = gajim.config.get('custom_file_manager')
 		if command == '': # if no app is configured
@@ -819,11 +804,6 @@ def play_sound_file(path_to_soundfile):
 	path_to_soundfile = check_soundfile_path(path_to_soundfile)
 	if path_to_soundfile is None:
 		return
-	if sys.platform == 'darwin':
-		try:
-			nsapp.playFile(path_to_soundfile)
-		except NameError:
-			pass
 	elif os.name == 'nt':
 		try:
 			winsound.PlaySound(path_to_soundfile,

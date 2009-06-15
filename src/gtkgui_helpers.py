@@ -190,8 +190,6 @@ def autodetect_browser_mailer():
 		gajim.config.set('openwith', 'kfmclient exec')
 	elif user_runs_xfce():
 		gajim.config.set('openwith', 'exo-open')
-	elif user_runs_osx():
-		gajim.config.set('openwith', 'open')
 	else:
 		gajim.config.set('openwith', 'custom')
 
@@ -206,9 +204,6 @@ def user_runs_xfce():
 	if 'startxfce4' in procs or 'xfce4-session' in procs:
 		return True
 	return False
-
-def user_runs_osx():
-	return sys.platform == 'darwin'
 
 def get_running_processes():
 	'''returns running processes or None (if not /proc exists)'''

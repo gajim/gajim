@@ -43,9 +43,6 @@ try:
 
 		lastInputInfo = LASTINPUTINFO()
 		lastInputInfo.cbSize = ctypes.sizeof(lastInputInfo)
-
-	elif sys.platform == 'darwin':
-		import osx.idle as idle
 	else: # unix
 		from common import idle
 except Exception:

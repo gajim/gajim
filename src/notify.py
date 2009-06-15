@@ -50,13 +50,6 @@ try:
 except ImportError:
 	USER_HAS_PYNOTIFY = False
 
-USER_HAS_GROWL = True
-try:
-	import osx.growler
-	osx.growler.init()
-except Exception:
-	USER_HAS_GROWL = False
-
 if gajim.HAVE_INDICATOR:
 	import indicate
 
@@ -357,13 +350,6 @@ def popup(event_type, jid, account, msg_type='', path_to_image=None,
 		indicator.set_property_icon('icon', pixbuf)
 		indicator.connect('user-display', display, account, jid, msg_type)
 		indicator.show()
-
-	# Try Growl first, as we might have D-Bus and notification daemon running
-	# on OS X for some reason.
-	if USER_HAS_GROWL:
-		osx.growler.notify(event_type, jid, account, msg_type, path_to_image,
-			title, text)
-		return
 
 	# Try to show our popup via D-Bus and notification daemon
 	if gajim.config.get('use_notif_daemon') and dbus_support.supported:
