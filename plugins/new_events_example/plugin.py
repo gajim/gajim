@@ -81,11 +81,11 @@ class NewEventsExamplePlugin(GajimPlugin):
 		#print "Event '%s' occured. Event object: %s\n\n===\n"%(event_object.name, 
 														#event_object
 														
-	@log_calls('DBusPlugin')
+	@log_calls('NewEventsExamplePlugin')
 	def activate(self):
 		pass
 
-	@log_calls('DBusPlugin')
+	@log_calls('NewEventsExamplePlugin')
 	def deactivate(self):
 		pass
 	
@@ -137,6 +137,7 @@ class EnrichedChatMessageReceivedEvent(nec.NetworkIncomingEvent):
 			self.from_jid = helpers.get_full_jid_from_iq(self.xmpp_msg)
 			self.from_jid_without_resource = gajim.get_jid_without_resource(self.from_jid)
 			self.account = unicode(self.xmpp_msg.attrs['to'])
+			# FIXME: KeyError: u'vardo@jabber.org/Gajim'
 			self.from_nickname = gajim.get_contact_name_from_jid(
 				self.account, 
 				self.from_jid_without_resource)

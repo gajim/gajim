@@ -718,6 +718,7 @@ Gajim core but uses new events handling system.'''
 		self.signal_object.remove_from_connection()
 		self.signal_object = None
 
+	@log_calls('DBusPlugin')
 	def _set_handling_methods(self):
 		for event_name in self.events_names:
 			setattr(self, event_name, 

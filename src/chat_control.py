@@ -292,6 +292,10 @@ class ChatControlBase(MessageControl):
 
 		self.smooth = True
 		self.msg_textview.grab_focus()
+		
+		# PluginSystem: adding GUI extension point for ChatControlBase
+		# instance object (also subclasses, eg. ChatControl or GroupchatControl)
+		gajim.plugin_manager.gui_extension_point('chat_control_base', self)
 
 	def set_speller(self):
 		try:
@@ -334,10 +338,7 @@ class ChatControlBase(MessageControl):
 			menu.reorder_child(item, i)
 			i += 1
 		menu.show_all()
-		
-		# PluginSystem: adding GUI extension point for ChatControlBase
-		# instance object (also subclasses, eg. ChatControl or GroupchatControl)
-		gajim.plugin_manager.gui_extension_point('chat_control_base', self)
+
 		
 	def shutdown(self):
 		# PluginSystem: removing GUI extension points connected with ChatControlBase

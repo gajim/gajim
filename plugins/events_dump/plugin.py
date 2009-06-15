@@ -103,14 +103,15 @@ class EventsDumpPlugin(GajimPlugin):
 		self.events_handlers = {}
 		self._set_handling_methods()
 		
-	@log_calls('DBusPlugin')
+	@log_calls('EventsDumpPlugin')
 	def activate(self):
 		pass
 		
-	@log_calls('DBusPlugin')
+	@log_calls('EventsDumpPlugin')
 	def deactivate(self):
 		pass
 
+	@log_calls('EventsDumpPlugin')
 	def _set_handling_methods(self):
 		for event_name in self.events_names:
 			setattr(self, event_name, 

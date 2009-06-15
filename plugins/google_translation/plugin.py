@@ -63,6 +63,7 @@ class GoogleTranslationPlugin(GajimPlugin):
 		self.translated_text_re = \
 			re.compile(r'google.language.callbacks.id100\(\'22\',{"translatedText":"(?P<text>[^"]*)"}, 200, null, 200\)')
 		
+	@log_calls('GoogleTranslationPlugin')
 	def translate_text(self, text, from_lang, to_lang):
 		text = self.prepare_text_for_url(text)
 		headers = { 'User-Agent' : self.config['user_agent'] }
@@ -76,6 +77,7 @@ class GoogleTranslationPlugin(GajimPlugin):
 		
 		return translated_text
 	
+	@log_calls('GoogleTranslationPlugin')
 	def prepare_text_for_url(self, text):
 		'''
 		Converts text so it can be used within URL as query to Google Translate.
@@ -90,11 +92,11 @@ class GoogleTranslationPlugin(GajimPlugin):
 			
 		return text
 	
-	@log_calls('DBusPlugin')
+	@log_calls('GoogleTranslationPlugin')
 	def activate(self):
 		pass
 		
-	@log_calls('DBusPlugin')
+	@log_calls('GoogleTranslationPlugin')
 	def deactivate(self):
 		pass
 	
