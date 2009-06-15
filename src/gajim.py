@@ -54,13 +54,6 @@ if os.name == 'nt':
 		os.environ['PATH'] = ';'.join(new_list)
 		os.environ['GTK_BASEPATH'] = 'gtk'
 
-import sys
-if sys.platform == 'darwin':
-	try:
-		import osx
-	except ImportError:
-		pass
-
 if os.name == 'nt':
 	# needed for docutils
 	sys.path.append('.')
@@ -316,12 +309,6 @@ def pid_alive():
 		if get_p(pid) in ('python.exe', 'gajim.exe'):
 			return True
 		return False
-	elif sys.platform == 'darwin':
-		try:
-			from osx import checkPID
-			return checkPID(pid, 'Gajim.bin')
-		except ImportError:
-			return
 	try:
 		if not os.path.exists('/proc'):
 			return True # no /proc, assume Gajim is running
@@ -388,11 +375,6 @@ def on_exit():
 		os.remove(pid_filename)
 	# Shutdown GUI and save config
 	gajim.interface.roster.prepare_quit()
-	if sys.platform == 'darwin':
-		try:
-			osx.shutdown()
-		except Exception:
-			pass
 
 import atexit
 atexit.register(on_exit)
@@ -3418,7 +3400,7 @@ class Interface:
 		self.systray_enabled = False
 		self.systray_capabilities = False
 
-		if (os.name == 'nt') or (sys.platform == 'darwin'):
+		if (os.name == 'nt'):
 			import statusicon
 			self.systray = statusicon.StatusIcon()
 			self.systray_capabilities = True
@@ -3508,7 +3490,7 @@ if __name__ == '__main__':
 	log.info("Encodings: d:%s, fs:%s, p:%s", sys.getdefaultencoding(), \
 		sys.getfilesystemencoding(), locale.getpreferredencoding())
 
-	if ((os.name != 'nt') and (sys.platform != 'darwin')):
+	if os.name != 'nt':
 		# Session Management support
 		try:
 			import gnome.ui
@@ -3535,12 +3517,6 @@ if __name__ == '__main__':
 					cli.set_restart_command(len(argv), argv)
 
 	check_paths.check_and_possibly_create_paths()
-
-	if sys.platform == 'darwin':
-		try:
-			osx.init()
-		except Exception:
-			pass
 
 	Interface()
 

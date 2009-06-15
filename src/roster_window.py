@@ -68,11 +68,6 @@ if dbus_support.supported:
 from common.xmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC
 from common.pep import MOODS, ACTIVITIES
 
-try:
-	from osx import syncmenu
-except ImportError:
-	pass
-
 #(icon, name, type, jid, account, editable, second pixbuf)
 (
 C_IMG, # image to show state (online, new message etc)
@@ -2086,10 +2081,6 @@ class RosterWindow:
 						self.chg_contact_status(contact, 'offline', '', account)
 			self.actions_menu_needs_rebuild = True
 		self.update_status_combobox()
-		# Force the rebuild now since the on_activates on the menu itself does
-		# not work with the os/x top level menubar
-		if sys.platform == 'darwin':
-			self.make_menu(force=True)
 
 	def get_status_message(self, show, on_response, show_pep=True,
 	always_ask=False):
@@ -4862,12 +4853,6 @@ class RosterWindow:
 			advanced_menuitem.set_submenu(advanced_sub_menu)
 			advanced_sub_menu.show_all()
 
-		if sys.platform == 'darwin':
-			try:
-				syncmenu.takeover_menu(self.xml.get_widget('menubar'))
-			except NameError:
-				pass
-
 		self.actions_menu_needs_rebuild = False
 
 	def build_account_menu(self, account):
@@ -6080,14 +6065,6 @@ class RosterWindow:
 				account, bookmark)
 			gc_sub_menu.append(item)
 
-	def set_actions_menu_needs_rebuild(self):
-		self.actions_menu_needs_rebuild = True
-		# Force the rebuild now since the on_activates on the menu itself does
-		# not work with the os/x top level menubar
-		if sys.platform == 'darwin':
-			self.make_menu(force=True)
-		return
-
 	def show_appropriate_context_menu(self, event, iters):
 		# iters must be all of the same type
 		model = self.modelfilter
@@ -6127,54 +6104,6 @@ class RosterWindow:
 		self.show_appropriate_context_menu(event, iters)
 
 		return True
-
-	def setup_for_osx(self):
-		'''Massage the GTK menu so it will match up to the OS/X nib style menu
-		when passed to sync-menu and merged'''
-		pass
-		# This is broken
-#		main_menu = self.xml.get_widget('menubar')
-#		app_item = gtk.MenuItem('Gajim')
-#		main_menu.insert(app_item, 0)
-#		win_item = gtk.MenuItem('Window')
-#		main_menu.insert(win_item, 4)
-#		actions_menu = self.xml.get_widget('actions_menu_menu')
-#		quit_item = self.xml.get_widget('quit_menuitem')
-#		actions_menu.remove(quit_item)
-#		actions_menu.remove(self.xml.get_widget('separator1'))
-#		edit_menu = self.xml.get_widget('edit_menu_menu')
-#		#edit_menu.remove(self.xml.get_widget('preferences_menuitem'))
-#		edit_menu.remove(self.xml.get_widget('separator2'))
-#		help_menu = self.xml.get_widget('help_menu_menu')
-#		about_item = self.xml.get_widget('about_menuitem')
-#		help_menu.remove(about_item)
-#		# Build up App menu
-#		app_menu = gtk.Menu()
-#		app_item.set_submenu(app_menu)
-#		app_menu.append(about_item)
-#		app_menu.append(gtk.MenuItem('__SKIP__'))
-#		prefs_item = gtk.MenuItem('Preferences...')
-#		prefs_item.connect('activate', self.on_preferences_menuitem_activate)
-#		accels = gtk.AccelGroup()
-#		self.xml.get_widget('roster_window').add_accel_group(accels)
-#		prefs_item.add_accelerator('activate', accels, ord(','),
-#						gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
-#		app_menu.append(prefs_item)
-#		app_menu.append(gtk.MenuItem('__SKIP__'))
-#		app_menu.append(gtk.MenuItem('__SKIP__'))
-#		app_menu.append(gtk.MenuItem('__SKIP__'))
-#		app_menu.append(gtk.MenuItem('__SKIP__'))
-#		app_menu.append(gtk.MenuItem('__SKIP__'))
-#		app_menu.append(gtk.MenuItem('__SKIP__'))
-#		app_menu.append(gtk.MenuItem('__SKIP__'))
-#		app_menu.append(quit_item)
-#		app_menu.show_all()
-#		# Do the merge baby!
-#		syncmenu.takeover_menu(main_menu)
-#		self.make_menu(force=True)
-#		# Hide the GTK menubar itself and let the OS/X menubar do its thing
-#		#self.xml.get_widget('menubar').hide()
-#		return
 
 ################################################################################
 ###
@@ -6433,9 +6362,5 @@ class RosterWindow:
 			# Create zeroconf in config file
 			from common.zeroconf import connection_zeroconf
 			connection_zeroconf.ConnectionZeroconf(gajim.ZEROCONF_ACC_NAME)
-
-		if sys.platform == 'darwin':
-			self.setup_for_osx()
-
 
 # vim: se ts=3:

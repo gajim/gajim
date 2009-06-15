@@ -56,9 +56,7 @@ supported = False
 
 from common import dbus_support
 
-if sys.platform == 'darwin':
-	supported = True
-elif dbus_support.supported:
+if dbus_support.supported:
 	import dbus
 	import dbus.glib
 

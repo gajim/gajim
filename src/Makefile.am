@@ -1,5 +1,3 @@
-SUBDIRS = osx
-
 CLEANFILES = \
 	trayicon.c
 INCLUDES = \
