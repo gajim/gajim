@@ -43,7 +43,6 @@ from encodings.punycode import punycode_encode
 
 from i18n import Q_
 from i18n import ngettext
-import xmpp
 
 try:
 	# Python 2.5
@@ -1272,6 +1271,7 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
 	return keyID
 
 def update_optional_features(account = None):
+	import xmpp
 	if account:
 		accounts = [account]
 	else:
