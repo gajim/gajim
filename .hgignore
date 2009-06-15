@@ -1,0 +1,27 @@
+syntax: glob
+*.gmo
+*.in
+*.la
+*.lo
+*.m4
+*.pyc
+*.pyo
+*.o
+*.Plo
+*~
+autom4te.cache
+data/defs.py
+data/gajim.desktop
+libtool
+po/.intltool-merge-cache
+po/POTFILES
+po/stamp-it
+stamp-h1
+Makefile
+
+syntax: regexp
+^config\.*
+^config\/
+^src\/\.libs
+^src\/trayicon.c
+^scripts\/gajim.*
