@@ -16,7 +16,7 @@
 
 
 '''
-Main xmpp decision making logic. Provides library with methods to assign 
+Main xmpp decision making logic. Provides library with methods to assign
 different handlers to different XMPP stanzas and namespaces.
 '''
 
@@ -54,12 +54,12 @@ class Dispatcher():
 			BOSHDispatcher().PlugIn(client_obj, after_SASL, old_features)
 		else:
 			assert False # should never be reached
-	
+
 	@classmethod
 	def get_instance(cls, *args, **kwargs):
 		'''
 		Factory Method for object creation.
-		
+
 		Use this instead of directly initializing the class in order to make
 		unit testing much easier.
 		'''
@@ -70,7 +70,7 @@ class XMPPDispatcher(PlugIn):
 	'''
 	Handles XMPP stream and is the first who takes control over a fresh stanza.
 
-	Is plugged into NonBlockingClient but can be replugged to restart handled 
+	Is plugged into NonBlockingClient but can be replugged to restart handled
 	stream headers (used by SASL f.e.).
 	'''
 	def __init__(self):
@@ -84,7 +84,7 @@ class XMPPDispatcher(PlugIn):
 		self._exported_methods=[self.RegisterHandler, self.RegisterDefaultHandler,
 			self.RegisterEventHandler, self.UnregisterCycleHandler,
 			self.RegisterCycleHandler, self.RegisterHandlerOnce,
-			self.UnregisterHandler, self.RegisterProtocol, 
+			self.UnregisterHandler, self.RegisterProtocol,
 			self.SendAndWaitForResponse, self.SendAndCallForResponse,
 			self.getAnID, self.Event, self.send]
 
@@ -104,7 +104,7 @@ class XMPPDispatcher(PlugIn):
 	def restoreHandlers(self, handlers):
 		'''
 			Restores user-registered callbacks structure from dump previously
-			obtained via dumpHandlers. Used within the library to carry user 
+			obtained via dumpHandlers. Used within the library to carry user
 			handlers set over Dispatcher replugins.
 		'''
 		self.handlers = handlers
@@ -213,7 +213,7 @@ class XMPPDispatcher(PlugIn):
 	def RegisterNamespace(self, xmlns, order='info'):
 		'''
 		Creates internal structures for newly registered namespace.
-		You can register handlers for this namespace afterwards. By default 
+		You can register handlers for this namespace afterwards. By default
 		one namespace is already registered
 		(jabber:client or jabber:component:accept depending on context.
 		'''
@@ -226,7 +226,7 @@ class XMPPDispatcher(PlugIn):
 		'''
 		Used to declare some top-level stanza name to dispatcher.
 		Needed to start registering handlers for such stanzas.
-		
+
 		Iq, message and presence protocols are registered by default.
 		'''
 		if not xmlns:
@@ -246,12 +246,12 @@ class XMPPDispatcher(PlugIn):
 			makefirst=False, system=False):
 		'''
 		Register user callback as stanzas handler of declared type.
-		
+
 		Callback must take (if chained, see later) arguments:
 		dispatcher instance (for replying), incoming return of previous handlers.
 		The callback must raise xmpp.NodeProcessed just before return if it wants
 		other callbacks to be called with the same stanza as argument _and_, more
-		importantly	library from returning stanza to sender with error set. 		
+		importantly	library from returning stanza to sender with error set.
 
 		:param name: name of stanza. F.e. "iq".
 		:param handler: user callback.
@@ -279,13 +279,13 @@ class XMPPDispatcher(PlugIn):
 		if typ+ns not in self.handlers[xmlns][name]:
 			self.handlers[xmlns][name][typ+ns]=[]
 		if makefirst:
-			self.handlers[xmlns][name][typ+ns].insert(0,{'func':handler, 
+			self.handlers[xmlns][name][typ+ns].insert(0,{'func':handler,
 				'system':system})
 		else:
-			self.handlers[xmlns][name][typ+ns].append({'func':handler, 
+			self.handlers[xmlns][name][typ+ns].append({'func':handler,
 				'system':system})
 
-	def RegisterHandlerOnce(self, name, handler, typ='', ns='', xmlns=None, 
+	def RegisterHandlerOnce(self, name, handler, typ='', ns='', xmlns=None,
 	makefirst=0, system=0):
 		''' Unregister handler after first call (not implemented yet).	'''
 		# FIXME Drop or implement
@@ -352,8 +352,8 @@ class XMPPDispatcher(PlugIn):
 
 	def Event(self, realm, event, data):
 		'''
-		Raise some event. 
-			
+		Raise some event.
+
 		:param realm: scope of event. Usually a namespace.
 		:param event: the event itself. F.e. "SUCCESSFUL SEND".
 		:param data: data that comes along with event. Depends on event.
@@ -453,7 +453,7 @@ class XMPPDispatcher(PlugIn):
 
 	def _WaitForData(self, data):
 		'''
-		Internal wrapper around ProcessNonBlocking. Will check for 
+		Internal wrapper around ProcessNonBlocking. Will check for
 		'''
 		if data is None:
 			return
@@ -520,7 +520,7 @@ class XMPPDispatcher(PlugIn):
 		return ID
 
 
-class BOSHDispatcher(XMPPDispatcher): 
+class BOSHDispatcher(XMPPDispatcher):
 
 	def PlugIn(self, owner, after_SASL=False, old_features=None):
 		self.old_features = old_features
@@ -543,7 +543,7 @@ class BOSHDispatcher(XMPPDispatcher):
 		if locale.getdefaultlocale()[0]:
 			self._metastream.setAttr('xml:lang',
 				locale.getdefaultlocale()[0].split('_')[0])
-		
+
 		self.restart = True
 		self._owner.Connection.send_init(after_SASL=self.after_SASL)
 

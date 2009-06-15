@@ -259,7 +259,7 @@ egg_tray_icon_manager_filter (GdkXEvent *xevent, GdkEvent *event, gpointer user_
   return GDK_FILTER_CONTINUE;
 }
 
-#endif  
+#endif
 
 static void
 egg_tray_icon_unrealize (GtkWidget *widget)
@@ -568,7 +568,7 @@ egg_tray_icon_cancel_message (EggTrayIcon *icon,
 {
   g_return_if_fail (EGG_IS_TRAY_ICON (icon));
   g_return_if_fail (id > 0);
-#ifdef GDK_WINDOWING_X11  
+#ifdef GDK_WINDOWING_X11
   egg_tray_icon_send_manager_message (icon, SYSTEM_TRAY_CANCEL_MESSAGE,
 				      (Window)gtk_plug_get_id (GTK_PLUG (icon)),
 				      id, 0, 0);

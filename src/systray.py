@@ -203,8 +203,8 @@ class Systray:
 		single_message_menuitem.set_sensitive(iskey)
 		join_gc_menuitem.set_sensitive(iskey)
 
-		accounts_list = sorted(gajim.contacts.get_accounts()) 
-		# items that get shown whether an account is zeroconf or not 
+		accounts_list = sorted(gajim.contacts.get_accounts())
+		# items that get shown whether an account is zeroconf or not
 		if connected_accounts > 1: # 2 or more connections? make submenus
 			account_menu_for_chat_with = gtk.Menu()
 			chat_with_menuitem.set_submenu(account_menu_for_chat_with)

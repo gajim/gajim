@@ -30,7 +30,7 @@ log = logging.getLogger('gajim.c.x.roster_nb')
 
 class NonBlockingRoster(PlugIn):
 	''' Defines a plenty of methods that will allow you to manage roster.
-		Also automatically track presences from remote JIDs taking into 
+		Also automatically track presences from remote JIDs taking into
 		account that every JID can have multiple resources connected. Does not
 		currently support 'error' presences.
 		You can also use mapping interface for access to the internal representation of
@@ -44,7 +44,7 @@ class NonBlockingRoster(PlugIn):
 		self._exported_methods=[self.getRoster]
 
 	def Request(self,force=0):
-		''' Request roster from server if it were not yet requested 
+		''' Request roster from server if it were not yet requested
 			(or if the 'force' argument is set). '''
 		if self.set is None: self.set=0
 		elif not force: return
@@ -182,7 +182,7 @@ class NonBlockingRoster(PlugIn):
 		''' Authorise JID 'jid'. Works only if these JID requested auth previously. '''
 		self._owner.send(Presence(jid,'subscribed'))
 	def Unauthorize(self,jid):
-		''' Unauthorise JID 'jid'. Use for declining authorisation request 
+		''' Unauthorise JID 'jid'. Use for declining authorisation request
 			or for removing existing authorization. '''
 		self._owner.send(Presence(jid,'unsubscribed'))
 	def getRaw(self):

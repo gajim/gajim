@@ -268,14 +268,14 @@ class AdvancedConfigurationWindow(object):
 
 	def visible_func(self, model, treeiter):
 		search_string  = self.entry.get_text().lower()
-		for it in tree_model_pre_order(model,treeiter): 
-			if model[it][C_TYPE] != '': 
-				opt_path = self.get_option_path(model, it) 
-				if len(opt_path) == 3: 
-					desc = gajim.config.get_desc_per(opt_path[2], opt_path[1], 
-						opt_path[0]) 
-				elif len(opt_path) == 1: 
-					desc = gajim.config.get_desc(opt_path[0]) 
+		for it in tree_model_pre_order(model,treeiter):
+			if model[it][C_TYPE] != '':
+				opt_path = self.get_option_path(model, it)
+				if len(opt_path) == 3:
+					desc = gajim.config.get_desc_per(opt_path[2], opt_path[1],
+						opt_path[0])
+				elif len(opt_path) == 1:
+					desc = gajim.config.get_desc(opt_path[0])
 				if search_string in model[it][C_PREFNAME] or (desc and \
 				search_string in desc.lower()):
 					return True

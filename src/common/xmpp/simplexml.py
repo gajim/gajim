@@ -438,7 +438,7 @@ class NodeBuilder:
 	def handle_namespace_start(self, prefix, uri):
 		'''XML Parser callback. Used internally'''
 		self.check_data_buffer()
-	
+
 	def getDom(self):
 		''' Returns just built Node. '''
 		self.check_data_buffer()

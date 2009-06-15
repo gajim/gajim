@@ -618,7 +618,7 @@ class OptionsParser:
 				replace(' xmpp', '')
 			gajim.config.set('uri_schemes', new_values)
 		gajim.config.set('version', '0.12.0.1')
-		
+
 	def update_config_to_01211(self):
 		if 'trayicon' in self.old_values:
 			if self.old_values['trayicon'] == 'False':

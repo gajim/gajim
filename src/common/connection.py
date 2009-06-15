@@ -727,11 +727,11 @@ class Connection(ConnectionHandlers):
 				gajim.config.set_per('accounts', self.name, 'ssl_fingerprint_sha1',
 					con.Connection.ssl_fingerprint_sha1)
 		self._register_handlers(con, con_type)
-		con.auth( 
-			user=name, 
-			password=self.password, 
-			resource=self.server_resource, 
-			sasl=1, 
+		con.auth(
+			user=name,
+			password=self.password,
+			resource=self.server_resource,
+			sasl=1,
 			on_auth=self.__on_auth)
 
 	def ssl_certificate_accepted(self):

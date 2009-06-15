@@ -104,7 +104,7 @@ class DataField(ExtendedNode):
 	""" Keeps data about one field - var, field type, labels, instructions...
 	Base class for different kinds of fields. Use Field() function to
 	construct one of these. """
-	
+
 	def __init__(self, typ=None, var=None, value=None, label=None, desc=None,
 	required=False, options=None, extend=None):
 
@@ -137,7 +137,7 @@ class DataField(ExtendedNode):
 		def fset(self, value):
 			assert isinstance(value, basestring)
 			self.setAttr('type', value)
-		
+
 		return locals()
 
 	@nested_property
@@ -152,7 +152,7 @@ class DataField(ExtendedNode):
 
 		def fdel(self):
 			self.delAttr('var')
-		
+
 		return locals()
 
 	@nested_property
@@ -163,15 +163,15 @@ class DataField(ExtendedNode):
 			if not l:
 				l = self.var
 			return l
-		
+
 		def fset(self, value):
 			assert isinstance(value, basestring)
 			self.setAttr('label', value)
-		
+
 		def fdel(self):
 			if self.getAttr('label'):
 				self.delAttr('label')
-		
+
 		return locals()
 
 	@nested_property
@@ -179,19 +179,19 @@ class DataField(ExtendedNode):
 		'''Human-readable description of field meaning.'''
 		def fget(self):
 			return self.getTagData('desc') or u''
-		
+
 		def fset(self, value):
 			assert isinstance(value, basestring)
 			if value == '':
 				fdel(self)
 			else:
 				self.setTagData('desc', value)
-		
+
 		def fdel(self):
 			t = self.getTag('desc')
 			if t is not None:
 				self.delChild(t)
-		
+
 		return locals()
 
 	@nested_property
@@ -199,14 +199,14 @@ class DataField(ExtendedNode):
 		'''Controls whether this field required to fill. Boolean.'''
 		def fget(self):
 			return bool(self.getTag('required'))
-		
+
 		def fset(self, value):
 			t = self.getTag('required')
 			if t and not value:
 				self.delChild(t)
 			elif not t and value:
 				self.addChild('required')
-		
+
 		return locals()
 
 class BooleanField(DataField):
@@ -222,15 +222,15 @@ class BooleanField(DataField):
 			if v is None:
 				return False # default value is False
 			raise WrongFieldValue
-		
+
 		def fset(self, value):
 			self.setTagData('value', value and '1' or '0')
-		
+
 		def fdel(self, value):
 			t = self.getTag('value')
 			if t is not None:
 				self.delChild(t)
-		
+
 		return locals()
 
 class StringField(DataField):
@@ -240,19 +240,19 @@ class StringField(DataField):
 		'''Value of field. May be any unicode string.'''
 		def fget(self):
 			return self.getTagData('value') or u''
-		
+
 		def fset(self, value):
 			assert isinstance(value, basestring)
 			if value == '':
 				return fdel(self)
 			self.setTagData('value', value)
-		
+
 		def fdel(self):
 			try:
 				self.delChild(self.getTag('value'))
 			except ValueError: # if there already were no value tag
 				pass
-		
+
 		return locals()
 
 class ListField(DataField):
@@ -271,16 +271,16 @@ class ListField(DataField):
 					l = v
 				options.append((l, v))
 			return options
-		
+
 		def fset(self, values):
 			fdel(self)
 			for value, label in values:
 				self.addChild('option', {'label': label}).setTagData('value', value)
-		
+
 		def fdel(self):
 			for element in self.getTags('option'):
 				self.delChild(element)
-		
+
 		return locals()
 
 	def iter_options(self):
@@ -307,16 +307,16 @@ class ListMultiField(ListField):
 			for element in self.getTags('value'):
 				values.append(element.getData())
 			return values
-		
+
 		def fset(self, values):
 			fdel(self)
 			for value in values:
 				self.addChild('value').setData(value)
-		
+
 		def fdel(self):
 			for element in self.getTags('value'):
 				self.delChild(element)
-		
+
 		return locals()
 
 	def iter_values(self):
@@ -332,18 +332,18 @@ class TextMultiField(DataField):
 			for element in self.iterTags('value'):
 				value += '\n' + element.getData()
 			return value[1:]
-		
+
 		def fset(self, value):
 			fdel(self)
 			if value == '':
 				return
 			for line in value.split('\n'):
 				self.addChild('value').setData(line)
-		
+
 		def fdel(self):
 			for element in self.getTags('value'):
 				self.delChild(element)
-		
+
 		return locals()
 
 class DataRecord(ExtendedNode):
@@ -376,18 +376,18 @@ class DataRecord(ExtendedNode):
 		'''List of fields in this record.'''
 		def fget(self):
 			return self.getTags('field')
-		
+
 		def fset(self, fields):
 			fdel(self)
 			for field in fields:
 				if not isinstance(field, DataField):
 					ExtendField(extend=field)
 				self.addChild(node=field)
-		
+
 		def fdel(self):
 			for element in self.getTags('field'):
 				self.delChild(element)
-		
+
 		return locals()
 
 	def iter_fields(self):
@@ -425,11 +425,11 @@ class DataForm(ExtendedNode):
 			filledform = DataForm(replyto=thisform)...'''
 		def fget(self):
 			return self.getAttr('type')
-		
+
 		def fset(self, type_):
 			assert type_ in ('form', 'submit', 'cancel', 'result')
 			self.setAttr('type', type_)
-		
+
 		return locals()
 
 	@nested_property
@@ -437,16 +437,16 @@ class DataForm(ExtendedNode):
 		''' Title of the form. Human-readable, should not contain any \\r\\n.'''
 		def fget(self):
 			return self.getTagData('title')
-		
+
 		def fset(self, title):
 			self.setTagData('title', title)
-		
+
 		def fdel(self):
 			try:
 				self.delChild('title')
 			except ValueError:
 				pass
-		
+
 		return locals()
 
 	@nested_property
@@ -458,17 +458,17 @@ class DataForm(ExtendedNode):
 			for valuenode in self.getTags('instructions'):
 				value += '\n' + valuenode.getData()
 			return value[1:]
-		
+
 		def fset(self, value):
 			fdel(self)
 			if value == '': return
 			for line in value.split('\n'):
 				self.addChild('instructions').setData(line)
-		
+
 		def fdel(self):
 			for value in self.getTags('instructions'):
 				self.delChild(value)
-		
+
 		return locals()
 
 class SimpleDataForm(DataForm, DataRecord):
@@ -523,18 +523,18 @@ class MultipleDataForm(DataForm):
 		''' A list of all records. '''
 		def fget(self):
 			return list(self.iter_records())
-		
+
 		def fset(self, records):
 			fdel(self)
 			for record in records:
 				if not isinstance(record, DataRecord):
 					DataRecord(extend=record)
 				self.addChild(node=record)
-		
+
 		def fdel(self):
 			for record in self.getTags('item'):
 				self.delChild(record)
-		
+
 		return locals()
 
 	def iter_records(self):

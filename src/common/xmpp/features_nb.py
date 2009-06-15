@@ -41,7 +41,7 @@ def getRegInfo(disp, host, info={}, sync=True):
 	'''
 	Gets registration form from remote host. Info dict can be prefilled
 	:param disp: plugged dispatcher instance
-	:param info: dict, like {'username':'joey'}. 
+	:param info: dict, like {'username':'joey'}.
 
 	See JEP-0077 for details.
 	'''
@@ -79,7 +79,7 @@ def _ReceivedRegInfo(con, resp, agent):
 def register(disp, host, info, cb):
 	'''
 	Perform registration on remote server with provided info.
-		
+
 	If registration fails you can get additional info from the dispatcher's
 	owner	attributes lastErrNode, lastErr and lastErrCode.
 	'''
@@ -187,8 +187,8 @@ def setDefaultPrivacyList(disp, listname=None):
 
 def setPrivacyList(disp, listname, tags):
 	'''
-	Set the ruleset. 
-	
+	Set the ruleset.
+
 	'list' should be the simpleXML node formatted according to RFC 3921 (XMPP-IM) 	I.e. Node('list',{'name':listname},payload=[...]).	Returns true on success.
 	'''
 	iq = Iq('set', NS_PRIVACY, xmlns = '')
@@ -196,7 +196,7 @@ def setPrivacyList(disp, listname, tags):
 	for item in tags:
 		if 'type' in item and 'value' in item:
 			item_tag = list_query.setTag('item', {'action': item['action'],
-				'order': item['order'], 'type': item['type'], 
+				'order': item['order'], 'type': item['type'],
 				'value': item['value']})
 		else:
 			item_tag = list_query.setTag('item', {'action': item['action'],

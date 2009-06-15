@@ -29,12 +29,12 @@ DL_EXPORT(void)
 inittrayicon(void)
 {
     PyObject *m, *d;
-	
+
     init_pygobject ();
 
     m = Py_InitModule ("trayicon", trayicon_functions);
     d = PyModule_GetDict (m);
-	
+
     trayicon_register_classes (d);
 
     if (PyErr_Occurred ()) {

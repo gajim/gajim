@@ -40,7 +40,7 @@ class NonBlockingClient:
 
 		:param domain: domain - for to: attribute (from account info)
 		:param idlequeue: processing idlequeue
-		:param caller: calling object - it has to implement methods 
+		:param caller: calling object - it has to implement methods
 			_event_dispatcher which is called from dispatcher instance
 		'''
 		self.Namespace = protocol.NS_CLIENT
@@ -100,7 +100,7 @@ class NonBlockingClient:
 
 		self.connected = ''
 		self.stream_started = False
- 
+
 		self.disconnecting = True
 
 		log.debug('Client disconnected..')
@@ -117,7 +117,7 @@ class NonBlockingClient:
 		else:
 			# we are connected to XMPP server
 			if not stream_started:
-				# if error occur before XML stream was opened, e.g. no response on 
+				# if error occur before XML stream was opened, e.g. no response on
 				# init request, we call the on_connect_failure callback because
 				# proper connection is not established yet and it's not a proxy
 				# issue
@@ -133,12 +133,12 @@ class NonBlockingClient:
 
 	def connect(self, on_connect, on_connect_failure, hostname=None, port=5222,
 	on_proxy_failure=None, proxy=None, secure_tuple=('plain', None, None)):
-		''' 
+		'''
 		Open XMPP connection (open XML streams in both directions).
 
 		:param on_connect: called after stream is successfully opened
 		:param on_connect_failure: called when error occures during connection
-		:param hostname: hostname of XMPP server from SRV request  
+		:param hostname: hostname of XMPP server from SRV request
 		:param port: port number of XMPP server
 		:param on_proxy_failure: called if error occurres during TCP connection to
 			proxy server or during proxy connecting process
@@ -163,10 +163,10 @@ class NonBlockingClient:
 			self.xmpp_hostname = hostname
 		else:
 			self.xmpp_hostname = self.Server
-		
-		# We only check for SSL here as for TLS we will first have to start a 
+
+		# We only check for SSL here as for TLS we will first have to start a
 		# PLAIN connection and negotiate TLS afterwards.
-		# establish_tls will instruct transport to start secure connection 
+		# establish_tls will instruct transport to start secure connection
 		# directly
 		establish_tls = self.desired_security == 'ssl'
 		certs = (self.cacerts, self.mycerts)
@@ -182,7 +182,7 @@ class NonBlockingClient:
 			# (DNS request will be done for proxy or BOSH CM hostname)
 			tcp_host, tcp_port, proxy_user, proxy_pass = \
 				transports_nb.get_proxy_data_from_dict(proxy)
-		
+
 			if proxy['type'] == 'bosh':
 				# Setup BOSH transport
 				self.socket = bosh.NonBlockingBOSH.get_instance(
@@ -238,8 +238,8 @@ class NonBlockingClient:
 		if err_message:
 			log.debug('While looping over DNS A records: %s' % err_message)
 		if self.ip_addresses == []:
-			msg = 'Run out of hosts for name %s:%s.' % (self.Server, self.Port) 
-			msg = msg + ' Error for last IP: %s' % err_message 
+			msg = 'Run out of hosts for name %s:%s.' % (self.Server, self.Port)
+			msg = msg + ' Error for last IP: %s' % err_message
 			self.disconnect(msg)
 		else:
 			self.current_ip = self.ip_addresses.pop(0)
@@ -374,7 +374,7 @@ class NonBlockingClient:
 					log.warn('While connecting with type = "tls": TLS unsupported ' +
 						'by remote server')
 					self._on_connect()
-	
+
 		elif self.connected in ['ssl', 'tls']:
 			self._on_connect()
 		else:
@@ -434,14 +434,14 @@ class NonBlockingClient:
 		:param resource: resource that shall be used for auth/connecting
 		:param sasl: Boolean indicating if SASL shall be used. (default: True)
 		:param on_auth: Callback, called after auth. On auth failure, argument
-			is None. 
+			is None.
 		'''
 		self._User, self._Password = user, password
 		self._Resource, self._sasl = resource, sasl
 		self.on_auth = on_auth
 		self._on_doc_attrs()
 		return
-	
+
 	def _on_old_auth(self, res):
 		''' Callback used by NON-SASL auth. On auth failure, res is None. '''
 		if res:
@@ -472,7 +472,7 @@ class NonBlockingClient:
 			return
 		self.SASL.auth()
 		return True
-		
+
 	def _on_start_sasl(self, data=None):
 		''' Callback used by SASL, called on each auth step.'''
 		if data:
@@ -493,7 +493,7 @@ class NonBlockingClient:
 			auth_nb.NonBlockingBind.get_instance().PlugIn(self)
 			self.onreceive(self._on_auth_bind)
 		return True
-		
+
 	def _on_auth_bind(self, data):
 		# FIXME: Why use this callback and not bind directly?
 		if data:

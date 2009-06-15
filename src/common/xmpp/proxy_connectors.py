@@ -1,6 +1,6 @@
 ##   proxy_connectors.py
 ##       based on transports_nb.py
-##  
+##
 ##   Copyright (C) 2003-2004 Alexey "Snake" Nezhdanov
 ##       modified by Dimitur Kirov <dkirov@gmail.com>
 ##       modified by Tomas Karasek <tom.to.the.k@gmail.com>
@@ -16,7 +16,7 @@
 ##   GNU General Public License for more details.
 '''
 Module containing classes for proxy connecting. So far its HTTP CONNECT
-and SOCKS5 proxy. 
+and SOCKS5 proxy.
 Authentication to NTLM (Microsoft implementation) proxies can be next.
 '''
 
@@ -38,7 +38,7 @@ class ProxyConnector:
 
 		:param send_method: transport send method
 		:param onreceive: method to set on_receive callbacks
-		:param old_on_receive: on_receive callback that should be set when 
+		:param old_on_receive: on_receive callback that should be set when
 			proxy connection was successful
 		:param on_success: called after proxy connection was successfully opened
 		:param on_failure: called when errors occured while connecting
@@ -55,12 +55,12 @@ class ProxyConnector:
 		self.old_on_receive = old_on_receive
 
 		self.start_connecting()
-	
+
 	@classmethod
 	def get_instance(cls, *args, **kwargs):
 		'''
 		Factory Method for object creation.
-		
+
 		Use this instead of directly initializing the class in order to make
 		unit testing much easier.
 		'''
@@ -72,7 +72,7 @@ class ProxyConnector:
 	def connecting_over(self):
 		self.onreceive(self.old_on_receive)
 		self.on_success()
-		
+
 class HTTPCONNECTConnector(ProxyConnector):
 	def start_connecting(self):
 		'''
@@ -93,14 +93,14 @@ class HTTPCONNECTConnector(ProxyConnector):
 		connector.append('\r\n')
 		self.onreceive(self._on_headers_sent)
 		self.send('\r\n'.join(connector))
-		
+
 	def _on_headers_sent(self, reply):
 		if reply is None:
 			return
 		self.reply = reply.replace('\r', '')
-		try: 
+		try:
 			proto, code, desc = reply.split('\n')[0].split(' ', 2)
-		except: 
+		except:
 			log.error("_on_headers_sent:", exc_info=True)
 			#traceback.print_exc()
 			self.on_failure('Invalid proxy reply')
@@ -117,7 +117,7 @@ class HTTPCONNECTConnector(ProxyConnector):
 class SOCKS5Connector(ProxyConnector):
 	'''
 	SOCKS5 proxy connection class. Allows to use SOCKS5 proxies with
-	(optionally) simple authentication (only USERNAME/PASSWORD auth). 
+	(optionally) simple authentication (only USERNAME/PASSWORD auth).
 	'''
 	def start_connecting(self):
 		log.info('Proxy server contacted, performing authentification')

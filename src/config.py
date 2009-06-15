@@ -788,14 +788,14 @@ class PreferencesWindow:
 			gajim.config.set('trayicon', 'on_event')
 		else:
 			gajim.config.set('trayicon', 'always')
-			
+
 	def on_advanced_notifications_button_clicked(self, widget):
 		dialogs.AdvancedNotificationsWindow()
 
 	def on_play_sounds_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sounds_on',
 			[self.xml.get_widget('manage_sounds_button')])
-			
+
 	def on_manage_sounds_button_clicked(self, widget):
 		if self.sounds_preferences is None:
 			self.sounds_preferences = ManageSoundsWindow()
@@ -3558,7 +3558,7 @@ class ManageSoundsWindow:
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('manage_sounds_window.glade')
 		self.window = self.xml.get_widget('manage_sounds_window')
-		
+
 		# sounds treeview
 		self.sound_tree = self.xml.get_widget('sounds_treeview')
 
@@ -3581,14 +3581,14 @@ class ManageSoundsWindow:
 		col.set_attributes(renderer, text = 1)
 
 		self.fill_sound_treeview()
-		
+
 		self.xml.signal_autoconnect(self)
 
 		self.sound_tree.get_model().connect('row-changed',
 			self.on_sounds_treemodel_row_changed)
-		
+
 		self.window.show_all()
-		
+
 	def on_sounds_treemodel_row_changed(self, model, path, iter_):
 		sound_event = model[iter_][3].decode('utf-8')
 		gajim.config.set_per('soundevents', sound_event, 'enabled',
@@ -3596,7 +3596,7 @@ class ManageSoundsWindow:
 		gajim.config.set_per('soundevents', sound_event, 'path',
 					model[iter_][2].decode('utf-8'))
 		gajim.interface.save_config()
-		
+
 	def sound_toggled_cb(self, cell, path):
 		model = self.sound_tree.get_model()
 		model[path][0] = not model[path][0]
@@ -3675,10 +3675,10 @@ class ManageSoundsWindow:
 			return
 		snd_event_config_name = model[iter_][3]
 		helpers.play_sound(snd_event_config_name)
-		
+
 	def on_close_button_clicked(self, widget):
 		self.window.hide()
-	
+
 	def on_manage_sounds_window_delete_event(self, widget, event):
 		self.window.hide()
 		return True # do NOT destroy the window

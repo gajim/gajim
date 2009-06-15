@@ -12,8 +12,8 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-''' 
-Idlequeues are Gajim's network heartbeat. Transports can be plugged as 
+'''
+Idlequeues are Gajim's network heartbeat. Transports can be plugged as
 idle objects and be informed about possible IO.
 '''
 import os
@@ -35,13 +35,13 @@ elif os.name == 'posix':
 	import fcntl
 
 FLAG_WRITE			= 20 # write only
-FLAG_READ			= 19 # read only 
+FLAG_READ			= 19 # read only
 FLAG_READ_WRITE	= 23 # read and write
 FLAG_CLOSE			= 16 # wait for close
 
 PENDING_READ		= 3 # waiting read event
 PENDING_WRITE		= 4 # waiting write event
-IS_CLOSED			= 16 # channel closed 
+IS_CLOSED			= 16 # channel closed
 
 
 def get_idlequeue():
@@ -91,30 +91,30 @@ class IdleCommand(IdleObject):
 		IdleObject.__init__(self)
 		# how long (sec.) to wait for result ( 0 - forever )
 		# it is a class var, instead of a constant and we can override it.
-		self.commandtimeout = 0 
+		self.commandtimeout = 0
 		# when we have some kind of result (valid, ot not) we call this handler
 		self.result_handler = on_result
 		# if it is True, we can safetely execute the command
 		self.canexecute = True
 		self.idlequeue = None
 		self.result =''
-	
+
 	def set_idlequeue(self, idlequeue):
 		self.idlequeue = idlequeue
-	
+
 	def _return_result(self):
 		if self.result_handler:
 			self.result_handler(self.result)
 		self.result_handler = None
-	
+
 	def _compose_command_args(self):
 		return ['echo', 'da']
-	
+
 	def _compose_command_line(self):
 		''' return one line representation of command and its arguments '''
-		return  reduce(lambda left, right: left + ' ' + right, 
+		return  reduce(lambda left, right: left + ' ' + right,
 			self._compose_command_args())
-	
+
 	def wait_child(self):
 		if self.pipe.poll() is None:
 			# result timeout
@@ -141,16 +141,16 @@ class IdleCommand(IdleObject):
 			self._start_nt()
 		elif os.name == 'posix':
 			self._start_posix()
-	
+
 	def _start_nt(self):
-		# if gajim is started from noninteraactive shells stdin is closed and 
+		# if gajim is started from noninteraactive shells stdin is closed and
 		# cannot be forwarded, so we have to keep it open
-		self.pipe = Popen(self._compose_command_args(), stdout=PIPE, 
+		self.pipe = Popen(self._compose_command_args(), stdout=PIPE,
 			bufsize = 1024, shell = True, stderr = STDOUT, stdin = PIPE)
 		if self.commandtimeout >= 0:
 			self.endtime = self.idlequeue.current_time() + self.commandtimeout
 			self.idlequeue.set_alarm(self.wait_child, 0.1)
-	
+
 	def _start_posix(self):
 		self.pipe = os.popen(self._compose_command_line())
 		self.fd = self.pipe.fileno()
@@ -158,19 +158,19 @@ class IdleCommand(IdleObject):
 		self.idlequeue.plug_idle(self, False, True)
 		if self.commandtimeout >= 0:
 			self.idlequeue.set_read_timeout(self.fd, self.commandtimeout)
-		
+
 	def end(self):
 		self.idlequeue.unplug_idle(self.fd)
 		try:
 			self.pipe.close()
 		except:
 			pass
-	
+
 	def pollend(self):
 		self.idlequeue.remove_timeout(self.fd)
 		self.end()
 		self._return_result()
-	
+
 	def pollin(self):
 		try:
 			res = self.pipe.read()
@@ -180,25 +180,25 @@ class IdleCommand(IdleObject):
 			return self.pollend()
 		else:
 			self.result += res
-	
+
 	def read_timeout(self):
 		self.end()
 		self._return_result()
-		
+
 
 class IdleQueue:
 	'''
 	IdleQueue provide three distinct time based features. Uses select.poll()
-	
+
 		1. Alarm timeout: Execute a callback after foo seconds
-		2. Timeout event: Call read_timeout() of an plugged object if a timeout 
+		2. Timeout event: Call read_timeout() of an plugged object if a timeout
 		has been set, but not removed in time.
 		3. Check file descriptor of plugged objects for read, write and error
-		events 
+		events
 	'''
 	# (timeout, boolean)
 	# Boolean is True if timeout is specified in seconds, False means miliseconds
-	PROCESS_TIMEOUT = (200, False) 
+	PROCESS_TIMEOUT = (200, False)
 
 	def __init__(self):
 		self.queue = {}
@@ -219,7 +219,7 @@ class IdleQueue:
 		self.selector = select.poll()
 
 	def set_alarm(self, alarm_cb, seconds):
-		''' 
+		'''
 		Sets up a new alarm. alarm_cb will be called after specified seconds.
 		'''
 		alarm_time = self.current_time() + seconds
@@ -230,24 +230,24 @@ class IdleQueue:
 			self.alarms[alarm_time] = [alarm_cb]
 		return alarm_time
 
-	def remove_alarm(self, alarm_cb, alarm_time): 
+	def remove_alarm(self, alarm_cb, alarm_time):
 		'''
 		Removes alarm callback alarm_cb scheduled on alarm_time.
 		Returns True if it was removed sucessfully, otherwise False
-		''' 
+		'''
 		if not alarm_time in self.alarms:
-			return False 
-		i = -1 
+			return False
+		i = -1
 		for i in range(len(self.alarms[alarm_time])):
-			# let's not modify the list inside the loop 
+			# let's not modify the list inside the loop
 			if self.alarms[alarm_time][i] is alarm_cb:
-				break 
+				break
 		if i != -1:
-			del self.alarms[alarm_time][i] 
+			del self.alarms[alarm_time][i]
 			if self.alarms[alarm_time] == []:
-				del self.alarms[alarm_time] 
-			return True 
-		else: 
+				del self.alarms[alarm_time]
+			return True
+		else:
 			return False
 
 	def remove_timeout(self, fd, timeout=None):
@@ -298,7 +298,7 @@ class IdleQueue:
 					log.debug('Calling %s for fd %s' % (func, fd))
 					func()
 				else:
-					log.debug('Calling read_timeout for fd %s' % fd) 
+					log.debug('Calling read_timeout for fd %s' % fd)
 					self.queue[fd].read_timeout()
 				self.remove_timeout(fd, timeout)
 
@@ -314,7 +314,7 @@ class IdleQueue:
 
 	def plug_idle(self, obj, writable=True, readable=True):
 		'''
-		Plug an IdleObject into idlequeue. Filedescriptor fd must be set. 
+		Plug an IdleObject into idlequeue. Filedescriptor fd must be set.
 
 		:param obj: the IdleObject
 		:param writable: True if obj has data to sent
@@ -371,7 +371,7 @@ class IdleQueue:
 			obj.pollout()
 			return True
 
-		elif flags & IS_CLOSED: 
+		elif flags & IS_CLOSED:
 			# io error, don't expect more events
 			self.remove_timeout(obj.fd)
 			self.unplug_idle(obj.fd)
@@ -472,7 +472,7 @@ class GlibIdleQueue(IdleQueue):
 	'''
 	# (timeout, boolean)
 	# Boolean is True if timeout is specified in seconds, False means miliseconds
-	PROCESS_TIMEOUT = (2, True) 
+	PROCESS_TIMEOUT = (2, True)
 
 	def _init_idle(self):
 		'''

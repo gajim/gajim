@@ -34,7 +34,7 @@ host_pattern = re.compile('^[a-z0-9\-._]*[a-z0-9]\.[a-z]{2,}$')
 
 try:
 	#raise ImportError("Manually disabled libasync")
-	import libasyncns 
+	import libasyncns
 	USE_LIBASYNCNS = True
 	log.info("libasyncns-python loaded")
 except ImportError:
@@ -75,7 +75,7 @@ class CommonResolver():
 			return
 		if self.handlers.has_key(host+type):
 			# host is about to be resolved by another connection,
-			# attach our callback 
+			# attach our callback
 			self.handlers[host+type].append(on_ready)
 		else:
 			# host has never been resolved, start now
@@ -97,10 +97,10 @@ class CommonResolver():
 # FIXME: API usage is not consistent! This one requires that process is called
 class LibAsyncNSResolver(CommonResolver):
 	'''
-	Asynchronous resolver using libasyncns-python. process() method has to be 
+	Asynchronous resolver using libasyncns-python. process() method has to be
 	called in order to proceed the pending requests.
-	Based on patch submitted by Damien Thebault. 
-	'''	
+	Based on patch submitted by Damien Thebault.
+	'''
 	def __init__(self):
 		self.asyncns = libasyncns.Asyncns()
 		CommonResolver.__init__(self)
@@ -163,16 +163,16 @@ class NSLookupResolver(CommonResolver):
 		self.idlequeue = idlequeue
 		self.process = False
 		CommonResolver.__init__(self)
-	
+
 	def parse_srv_result(self, fqdn, result):
-		''' parse the output of nslookup command and return list of 
+		''' parse the output of nslookup command and return list of
 		properties: 'host', 'port','weight', 'priority'	corresponding to the found
 		srv hosts '''
 		if os.name == 'nt':
 			return self._parse_srv_result_nt(fqdn, result)
 		elif os.name == 'posix':
 			return self._parse_srv_result_posix(fqdn, result)
-	
+
 	def _parse_srv_result_nt(self, fqdn, result):
 		# output from win32 nslookup command
 		if not result:
@@ -195,7 +195,7 @@ class NSLookupResolver(CommonResolver):
 						hosts.append(current_host)
 					current_host = None
 					continue
-				prop_type = res[0].strip() 
+				prop_type = res[0].strip()
 				prop_value = res[1].strip()
 				if prop_type.find('prio') > -1:
 					try:
@@ -221,7 +221,7 @@ class NSLookupResolver(CommonResolver):
 					hosts.append(current_host)
 					current_host = None
 		return hosts
-	
+
 	def _parse_srv_result_posix(self, fqdn, result):
 		# typical output of bind-tools nslookup command:
 		# _xmpp-client._tcp.jabber.org    service = 30 30 5222 jabber.org.
@@ -261,12 +261,12 @@ class NSLookupResolver(CommonResolver):
 				hosts.append({'host': host, 'port': port, 'weight': weight,
 					'prio': prio})
 		return hosts
-	
+
 	def _on_ready(self, host, type, result):
 		# nslookup finished, parse the result and call the handlers
 		result_list = self.parse_srv_result(host, result)
 		CommonResolver._on_ready(self, host, type, result_list)
-		
+
 	def start_resolve(self, host, type):
 		''' spawn new nslookup process and start waiting for results '''
 		ns = NsLookup(self._on_ready, host, type)
@@ -278,7 +278,7 @@ class NSLookupResolver(CommonResolver):
 class NsLookup(IdleCommand):
 	def __init__(self, on_result, host='_xmpp-client', type='srv'):
 		IdleCommand.__init__(self, on_result)
-		self.commandtimeout = 10 
+		self.commandtimeout = 10
 		self.host = host.lower()
 		self.type = type.lower()
 		if not host_pattern.match(self.host):
@@ -290,24 +290,24 @@ class NsLookup(IdleCommand):
 			log.error('Invalid querytype: %s' % self.type)
 			self.canexecute = False
 			return
-	
+
 	def _compose_command_args(self):
 		return ['nslookup', '-type=' + self.type , self.host]
-	
+
 	def _return_result(self):
 		if self.result_handler:
 			self.result_handler(self.host, self.type, self.result)
 		self.result_handler = None
-	
+
 # below lines is on how to use API and assist in testing
 if __name__ == '__main__':
 	import gobject
 	import gtk
 	from xmpp import idlequeue
-	
+
 	idlequeue = idlequeue.get_idlequeue()
 	resolver = get_resolver(idlequeue)
-	
+
 	def clicked(widget):
 		global resolver
 		host = text_view.get_text()

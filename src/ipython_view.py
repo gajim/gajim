@@ -382,7 +382,7 @@ class ConsoleView(gtk.TextView):
   def _showReturned(self, text):
     '''
     Show returned text from last command and print new prompt.
- 
+
     @param text: Text to show.
     @type text: string
     '''

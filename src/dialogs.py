@@ -2593,10 +2593,10 @@ class XMLConsoleWindow:
 			at_the_end = True
 		end_iter = buffer.get_end_iter()
 		if kind == 'incoming':
-			buffer.insert_with_tags_by_name(end_iter, '<!-- In -->\n', 
+			buffer.insert_with_tags_by_name(end_iter, '<!-- In -->\n',
 					'in_comment')
 		elif kind == 'outgoing':
-			buffer.insert_with_tags_by_name(end_iter, '<!-- Out -->\n', 
+			buffer.insert_with_tags_by_name(end_iter, '<!-- Out -->\n',
 					'out_comment')
 		end_iter = buffer.get_end_iter()
 		buffer.insert_with_tags_by_name(end_iter, stanza.replace('><', '>\n<') + \

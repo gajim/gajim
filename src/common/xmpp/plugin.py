@@ -23,12 +23,12 @@ log = logging.getLogger('gajim.c.x.plugin')
 
 class PlugIn:
 	'''
-	Abstract xmpppy plugin infrastructure code, providing plugging in/out and 
+	Abstract xmpppy plugin infrastructure code, providing plugging in/out and
 	debugging functionality.
 
 	Inherit to develop pluggable objects. No code change on the owner class
 	required (the object where we plug into)
-	
+
 	For every instance of PlugIn class the 'owner' is the class in what the plug
 	was plugged.
 	'''
@@ -38,7 +38,7 @@ class PlugIn:
 	def PlugIn(self, owner):
 		'''
 		Attach to owner and register ourself and our _exported_methods in it.
-		If defined by a subclass, call self.plugin(owner) to execute hook 
+		If defined by a subclass, call self.plugin(owner) to execute hook
 		code after plugging.
 		'''
 		self._owner=owner
@@ -57,7 +57,7 @@ class PlugIn:
 			owner.__dict__['Dispatcher']=self
 		else:
 			owner.__dict__[self.__class__.__name__]=self
-		
+
 		# Execute hook
 		if hasattr(self,'plugin'):
 			return self.plugin(owner)
@@ -82,12 +82,12 @@ class PlugIn:
 		if hasattr(self,'plugout'):
 			return self.plugout()
 		del self._owner
-	
+
 	@classmethod
 	def get_instance(cls, *args, **kwargs):
 		'''
 		Factory Method for object creation.
-		
+
 		Use this instead of directly initializing the class in order to make
 		unit testing easier. For testing, this method can be patched to inject
 		mock objects.

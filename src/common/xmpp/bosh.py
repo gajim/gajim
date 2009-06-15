@@ -1,4 +1,4 @@
-## bosh.py	
+## bosh.py
 ##
 ##
 ## Copyright (C) 2008 Tomas Karasek <tom.to.the.k@gmail.com>
@@ -83,12 +83,12 @@ class NonBlockingBOSH(NonBlockingTransport):
 		self.proxy_dict = {}
 		if self.over_proxy and self.estabilish_tls:
 			self.proxy_dict['type'] = 'http'
-			# with SSL over proxy, we do HTTP CONNECT to proxy to open a channel to 
+			# with SSL over proxy, we do HTTP CONNECT to proxy to open a channel to
 			# BOSH Connection Manager
 			self.proxy_dict['xmpp_server'] = (urisplit(self.bosh_uri)[1], self.bosh_port)
 			self.proxy_dict['credentials'] = self.proxy_creds
 
-		
+
 	def connect(self, conn_5tuple, on_connect, on_connect_failure):
 		NonBlockingTransport.connect(self, conn_5tuple, on_connect, on_connect_failure)
 
@@ -146,7 +146,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 		else:
 			self.send_BOSH(None)
 
-		
+
 
 	def get_socket_in(self, state):
 		''' gets sockets in desired state '''
@@ -177,12 +177,12 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 	def send_BOSH(self, payload):
 		'''
-		Tries to send a stanza in payload by appeding it to a buffer and plugging a 
+		Tries to send a stanza in payload by appeding it to a buffer and plugging a
 		free socket for writing.
 		'''
 		total_pending_reqs = sum([s.pending_requests for s in self.http_socks])
 
-		# when called after HTTP response (Payload=None) and when there are already 
+		# when called after HTTP response (Payload=None) and when there are already
 		# some pending requests and no data to send, or when the socket is
 		# disconnected, we do nothing
 		if      payload is None and \
@@ -199,7 +199,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 		# sent after HTTP response from CM, exception is when we're disconnecting - then we
 		# send anyway
 		if total_pending_reqs >= self.bosh_requests and self.get_state()!=DISCONNECTING:
-			log.warn('attemp to make more requests than allowed by Connection Manager:\n%s' % 
+			log.warn('attemp to make more requests than allowed by Connection Manager:\n%s' %
 				self.get_current_state())
 			return
 
@@ -212,7 +212,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 		# if there is a connecting socket, we just wait for when it connects,
 		# payload will be sent in a sec when the socket connects
 		if self.get_socket_in(CONNECTING): return
-		
+
 		# being here means there are either DISCONNECTED sockets or all sockets are
 		# CONNECTED with too many pending requests
 		s = self.get_socket_in(DISCONNECTED)
@@ -240,8 +240,8 @@ class NonBlockingBOSH(NonBlockingTransport):
 		Builds a BOSH body tag from data in buffers and adds key, rid and ack
 		attributes to it.
 		This method is called from _do_send() of underlying transport. This is to
-		ensure rid and keys will be processed in correct order. If I generate them 
-		before	plugging a socket for write (and did it for two sockets/HTTP 
+		ensure rid and keys will be processed in correct order. If I generate them
+		before	plugging a socket for write (and did it for two sockets/HTTP
 		connections) in parallel, they might be sent in wrong order, which results
 		in violating the BOSH session and server-side disconnect.
 		'''
@@ -299,7 +299,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 		else:
 			socket.disconnect()
 
-		
+
 
 	def handle_body_attrs(self, stanza_attrs):
 		'''
@@ -322,7 +322,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 		ack = None
 		if stanza_attrs.has_key('ack'):
 			ack = stanza_attrs['ack']
-		self.ack_checker.process_incoming_ack(ack=ack, 
+		self.ack_checker.process_incoming_ack(ack=ack,
 			socket=self.current_recv_socket)
 
 		if stanza_attrs.has_key('type'):
@@ -359,7 +359,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 		self.send_BOSH(stanza)
 
 
-		
+
 	def get_current_state(self):
 		t = '------ SOCKET_ID\tSOCKET_STATE\tPENDING_REQS\n'
 		for s in self.http_socks:
@@ -368,11 +368,11 @@ class NonBlockingBOSH(NonBlockingTransport):
 			% (t, self.prio_bosh_stanzas, self.stanza_buffer,
 			self.ack_checker.get_not_acked_rids())
 		return t
-		
+
 
 	def connect_and_flush(self, socket):
 		socket.connect(
-			conn_5tuple = self.conn_5tuple, 
+			conn_5tuple = self.conn_5tuple,
 			on_connect = self.on_http_request_possible,
 			on_connect_failure = self.disconnect)
 
@@ -415,7 +415,7 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 
 	def get_new_http_socket(self):
-		http_dict = {'http_uri': self.bosh_uri,			
+		http_dict = {'http_uri': self.bosh_uri,
 			'http_port': self.bosh_port,
 			'http_version': self.http_version,
 			'http_persistent': self.http_persistent,
@@ -461,13 +461,13 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 def get_rand_number():
 	# with 50-bit random initial rid, session would have to go up
-	# to 7881299347898368 messages to raise rid over 2**53 
+	# to 7881299347898368 messages to raise rid over 2**53
 	# (see http://www.xmpp.org/extensions/xep-0124.html#rids)
 	# it's also used for sequence key initialization
 	r = random.Random()
 	r.seed()
 	return r.getrandbits(50)
-	
+
 
 
 class AckChecker():
@@ -507,11 +507,11 @@ class AckChecker():
 
 		self.ack = ack
 
-		
+
 	def get_rid(self):
 		self.rid = self.rid + 1
 		return self.rid
-		
+
 
 
 
@@ -537,7 +537,7 @@ class KeyStack():
 		if self.first_call:
 			self.first_call = False
 			return (None, self.keys.pop())
-			
+
 		if len(self.keys)>1:
 			return (self.keys.pop(), None)
 		else:

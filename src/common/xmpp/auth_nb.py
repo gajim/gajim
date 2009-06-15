@@ -127,7 +127,7 @@ class SASL(PlugIn):
 		self.password = password
 		self.on_sasl = on_sasl
 		self.realm = None
-	
+
 	def plugin(self, owner):
 		if 'version' not in self._owner.Dispatcher.Stream._document_attrs:
 			self.startsasl = SASL_UNSUPPORTED
@@ -257,11 +257,11 @@ class SASL(PlugIn):
 			self.startsasl = SASL_SUCCESS
 			log.info('Successfully authenticated with remote server.')
 			handlers = self._owner.Dispatcher.dumpHandlers()
-	
+
 			# Bosh specific dispatcher replugging
 			# save old features. They will be used in case we won't get response on
 			# stream restart after SASL auth (happens with XMPP over BOSH with
-			# Openfire) 
+			# Openfire)
 			old_features = self._owner.Dispatcher.Stream.features
 			self._owner.Dispatcher.PlugOut()
 			dispatcher_nb.Dispatcher.get_instance().PlugIn(self._owner,
@@ -294,7 +294,7 @@ class SASL(PlugIn):
 			self._owner.send(Node('response', attrs={'xmlns':NS_SASL},
 				payload=response).__str__())
 			raise NodeProcessed
-		
+
 		# magic foo...
 		chal = challenge_splitter(data)
 		if not self.realm and 'realm' in chal:
@@ -325,7 +325,7 @@ class SASL(PlugIn):
 		if self.on_sasl:
 			self.on_sasl()
 		raise NodeProcessed
-	
+
 	def set_password(self, password):
 		if password is None:
 			self.password = ''
@@ -450,7 +450,7 @@ class NonBlockingBind(PlugIn):
 		''' Start resource binding, if allowed at this time. Used internally. '''
 		if self._owner.Dispatcher.Stream.features:
 			try:
-				self.FeaturesHandler(self._owner.Dispatcher, 
+				self.FeaturesHandler(self._owner.Dispatcher,
 					self._owner.Dispatcher.Stream.features)
 			except NodeProcessed:
 				pass
