@@ -6065,6 +6065,9 @@ class RosterWindow:
 				account, bookmark)
 			gc_sub_menu.append(item)
 
+	def set_actions_menu_needs_rebuild(self):
+		self.actions_menu_needs_rebuild = True
+
 	def show_appropriate_context_menu(self, event, iters):
 		# iters must be all of the same type
 		model = self.modelfilter
