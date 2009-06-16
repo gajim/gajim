@@ -36,6 +36,7 @@
 ##
 
 import os
+import sys
 import warnings
 
 if os.name == 'nt':
