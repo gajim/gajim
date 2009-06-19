@@ -39,7 +39,7 @@ AM_NLS
 dnl ****
 dnl pygtk and gtk+
 dnl ****
-PKG_CHECK_MODULES([PYGTK], [gtk+-2.0 >= 2.8.0 pygtk-2.0 >= 2.8.0])
+PKG_CHECK_MODULES([PYGTK], [gtk+-2.0 >= 2.12.0 pygtk-2.0 >= 2.12.0])
 AC_SUBST(PYGTK_CFLAGS)
 AC_SUBST(PYGTK_LIBS)
 PYGTK_DEFS=`$PKG_CONFIG --variable=defsdir pygtk-2.0`
