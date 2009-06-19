@@ -625,6 +625,8 @@ class ChangeStatusMessageDialog:
 #			gtk.Tooltips().set_tip(item, pep.ACTIVITIES[category]['category'])
 			if self.pep_dict['activity_text']:
 				label.set_text(self.pep_dict['activity_text'])
+			else:
+				label.set_text('')
 		else:
 			img.set_from_pixbuf(None)
 			label.set_text('')
@@ -638,6 +640,8 @@ class ChangeStatusMessageDialog:
 				self.pep_dict['mood']).get_pixbuf())
 			if self.pep_dict['mood_text']:
 				label.set_text(self.pep_dict['mood_text'])
+			else:
+				label.set_text('')
 		else:
 			img.set_from_pixbuf(None)
 			label.set_text('')
