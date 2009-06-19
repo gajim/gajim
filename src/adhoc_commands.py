@@ -297,7 +297,9 @@ class CommandWindow:
 		self.send_command(action)
 
 	def stage3_next_form(self, command):
-		assert isinstance(command, xmpp.Node)
+		if not isinstance(command, xmpp.Node):
+			self.stage5(error=_('Service sent malformed data'), senderror=True)
+			return
 
 		self.remove_pulsing()
 		self.sending_form_progressbar.hide()
@@ -307,6 +309,7 @@ class CommandWindow:
 		elif self.sessionid != command.getAttr('sessionid'):
 			self.stage5(error=_('Service changed the session identifier.'),
 				senderror=True)
+			return
 
 		self.form_status = command.getAttr('status')
 
