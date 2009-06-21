@@ -2059,6 +2059,10 @@ class Interface:
 		# ('PEP_CONFIG', account, (node, form))
 		if 'pep_services' in self.instances[account]:
 			self.instances[account]['pep_services'].config(data[0], data[1])
+			
+	def handle_event_roster_item_exchange(self, account, data):
+		# data = (action in [add, delete, modify], exchange_list, jid_from)
+		dialogs.RosterItemExchangeWindow(account, data[0], data[1], data[2])
 
 	def handle_event_unique_room_id_supported(self, account, data):
 		'''Receive confirmation that unique_room_id are supported'''
@@ -2294,6 +2298,7 @@ class Interface:
 			'SEARCH_FORM': self.handle_event_search_form,
 			'SEARCH_RESULT': self.handle_event_search_result,
 			'RESOURCE_CONFLICT': self.handle_event_resource_conflict,
+			'ROSTERX': self.handle_event_roster_item_exchange,
 			'PEP_CONFIG': self.handle_event_pep_config,
 			'UNIQUE_ROOM_ID_UNSUPPORTED': \
 				self.handle_event_unique_room_id_unsupported,

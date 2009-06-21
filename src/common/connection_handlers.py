@@ -1771,6 +1771,27 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				self.dispatch('GMAIL_NOTIFY', (jid, newmsgs, gmail_messages_list))
 			raise common.xmpp.NodeProcessed
 
+		
+	def _rosterItemExchangeCB(self, con, msg):
+		''' XEP-0144 Roster Item Echange '''
+		exchange_items_list = {}
+		jid_from = msg.getAttr('from')
+		items_list = msg.getTag('x').getChildren()
+		action = items_list[0].getAttr('action')
+		if action == None:
+			action = 'add'
+		for item in msg.getTag('x').getChildren():
+			jid = item.getAttr('jid')
+			name = item.getAttr('name')
+			groups=[]
+			for group in item.getChildren():
+				groups.append(group.getData())
+			exchange_items_list[jid] = []
+			exchange_items_list[jid].append(name)
+			exchange_items_list[jid].append(groups)
+		self.dispatch('ROSTERX', (action, exchange_items_list, jid_from))
+
+
 	def _messageCB(self, con, msg):
 		'''Called when we receive a message'''
 		log.debug('MessageCB')
@@ -1780,6 +1801,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if msg.getTag('error') is None:
 				self._pubsubEventCB(con, msg)
 			return
+		
+		# check if the message is a roster item exchange (XEP-0144)
+		#if msg.getTag('x') and msg.getTag('x').namespace == common.xmpp.NS_ROSTERX:
+			#self._rosterItemExchangeCB(con, msg)
+			#return
 
 		# check if the message is a XEP-0070 confirmation request
 		if msg.getTag('confirm', namespace=common.xmpp.NS_HTTP_AUTH):
@@ -2579,6 +2605,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			common.xmpp.NS_ROSTER)
 		con.RegisterHandler('iq', self._siSetCB, 'set',
 			common.xmpp.NS_SI)
+		con.RegisterHandler('iq', self._rosterItemExchangeCB, 'set',
+			common.xmpp.NS_ROSTERX)
 		con.RegisterHandler('iq', self._siErrorCB, 'error',
 			common.xmpp.NS_SI)
 		con.RegisterHandler('iq', self._siResultCB, 'result',
