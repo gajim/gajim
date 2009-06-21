@@ -51,10 +51,10 @@ class GoogleTranslationPlugin(GajimPlugin):
 	def init(self):
 		self.config_dialog = None
 		#self.gui_extension_points = {}
-		self.config_default_values = {'from_lang' : ('en', _('Language of text to be translated')),
-									  'to_lang' : ('fr', _('Language to which translation will be made')),
-									  'user_agent' : ('Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.12) Gecko/20080213 Firefox/2.0.0.11',
-													  _('User Agent data to be used with urllib2 when connecting to Google Translate service'))}
+		self.config_default_values = {'from_lang' : (u'en', _(u'Language of text to be translated')),
+									  'to_lang' : (u'fr', _(u'Language to which translation will be made')),
+									  'user_agent' : (u'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.12) Gecko/20080213 Firefox/2.0.0.11',
+													  _(u'User Agent data to be used with urllib2 when connecting to Google Translate service'))}
 		
 		#self.events_handlers = {}
 		
@@ -67,7 +67,7 @@ class GoogleTranslationPlugin(GajimPlugin):
 	def translate_text(self, text, from_lang, to_lang):
 		text = self.prepare_text_for_url(text)
 		headers = { 'User-Agent' : self.config['user_agent'] }
-		translation_url = 'http://www.google.com/uds/Gtranslate?callback=google.language.callbacks.id100&context=22&q=%(text)s&langpair=%(from_lang)s%%7C%(to_lang)s&key=notsupplied&v=1.0'%locals()
+		translation_url = u'http://www.google.com/uds/Gtranslate?callback=google.language.callbacks.id100&context=22&q=%(text)s&langpair=%(from_lang)s%%7C%(to_lang)s&key=notsupplied&v=1.0'%locals()
 		
 		request = urllib2.Request(translation_url, headers=headers)
 		response = urllib2.urlopen(request)
@@ -105,7 +105,7 @@ class GoogleTranslateMessageReceivedEvent(nec.NetworkIncomingEvent):
 	base_network_events = ['raw-message-received']
 	
 	def generate(self):
-		msg_type = self.base_event.xmpp_msg.attrs['type']
+		msg_type = self.base_event.xmpp_msg.attrs.get('type', None)
 		if msg_type == u'chat':
 			msg_text = "".join(self.base_event.xmpp_msg.kids[0].data)
 			if msg_text:

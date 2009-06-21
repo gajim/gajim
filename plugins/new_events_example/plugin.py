@@ -113,7 +113,7 @@ class ModifyOnlyMessageReceivedEvent(nec.NetworkIncomingEvent):
 	base_network_events = ['raw-message-received']
 	
 	def generate(self):
-		msg_type = self.base_event.xmpp_msg.attrs['type']
+		msg_type = self.base_event.xmpp_msg.attrs.get('type', None)
 		if msg_type == u'chat':
 			msg_text = "".join(self.base_event.xmpp_msg.kids[0].data)
 			self.base_event.xmpp_msg.kids[0].setData(
@@ -130,14 +130,13 @@ class EnrichedChatMessageReceivedEvent(nec.NetworkIncomingEvent):
 	base_network_events = ['raw-message-received']
 	
 	def generate(self):
-		msg_type = self.base_event.xmpp_msg.attrs['type']
+		msg_type = self.base_event.xmpp_msg.attrs.get('type', None)
 		if msg_type == u'chat':
 			self.xmpp_msg = self.base_event.xmpp_msg
 			self.conn = self.base_event.conn
 			self.from_jid = helpers.get_full_jid_from_iq(self.xmpp_msg)
 			self.from_jid_without_resource = gajim.get_jid_without_resource(self.from_jid)
-			self.account = unicode(self.xmpp_msg.attrs['to'])
-			# FIXME: KeyError: u'vardo@jabber.org/Gajim'
+			self.account = self.base_event.account
 			self.from_nickname = gajim.get_contact_name_from_jid(
 				self.account, 
 				self.from_jid_without_resource)

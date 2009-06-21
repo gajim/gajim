@@ -1782,7 +1782,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		
 		gajim.nec.push_incoming_event(NetworkEvent('raw-message-received',
 												   conn = con,
-												   xmpp_msg = msg))
+												   xmpp_msg = msg,
+												   account = self.name))
 		
 		# check if the message is pubsub#event
 		if msg.getTag('event') is not None:
