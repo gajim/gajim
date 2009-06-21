@@ -88,7 +88,7 @@ class EditGroupsDialog:
 		if self.changes_made:
 			for (contact, account) in self.list_:
 				gajim.connections[account].update_contact(contact.jid, contact.name,
-														  contact.groups)
+					contact.groups)
 
 	def on_edit_groups_dialog_response(self, widget, response_id):
 		if response_id == gtk.RESPONSE_CLOSE:
@@ -200,7 +200,7 @@ class EditGroupsDialog:
 class PassphraseDialog:
 	'''Class for Passphrase dialog'''
 	def __init__(self, titletext, labeltext, checkbuttontext=None,
-				 ok_handler=None, cancel_handler=None):
+	ok_handler=None, cancel_handler=None):
 		self.xml = gtkgui_helpers.get_glade('passphrase_dialog.glade')
 		self.window = self.xml.get_widget('passphrase_dialog')
 		self.passphrase_entry = self.xml.get_widget('passphrase_entry')
@@ -236,7 +236,7 @@ class PassphraseDialog:
 
 		if self.check:
 			checked = self.xml.get_widget('save_passphrase_checkbutton').\
-					get_active()
+				get_active()
 		else:
 			checked = False
 
@@ -275,11 +275,11 @@ class ChooseGPGKeyDialog:
 		#columns
 		renderer = gtk.CellRendererText()
 		col = self.keys_treeview.insert_column_with_attributes(-1, _('KeyID'),
-															   renderer, text = 0)
+			renderer, text=0)
 		col.set_sort_column_id(0)
 		renderer = gtk.CellRendererText()
 		col = self.keys_treeview.insert_column_with_attributes(-1,
-															   _('Contact name'), renderer, text=1)
+			_('Contact name'), renderer, text=1)
 		col.set_sort_column_id(1)
 		self.keys_treeview.set_search_column(1)
 		self.fill_tree(secret_keys, selected)
@@ -303,7 +303,7 @@ class ChooseGPGKeyDialog:
 		(model, iter_) = selection.get_selected()
 		if iter_ and response == gtk.RESPONSE_OK:
 			keyID = [ model[iter_][0].decode('utf-8'),
-					  model[iter_][1].decode('utf-8') ]
+				model[iter_][1].decode('utf-8') ]
 		else:
 			keyID = None
 		self.on_response(keyID)
@@ -320,8 +320,8 @@ class ChooseGPGKeyDialog:
 
 class ChangeActivityDialog:
 	PAGELIST = ['doing_chores', 'drinking', 'eating', 'exercising', 'grooming',
-				'having_appointment', 'inactive', 'relaxing', 'talking', 'traveling',
-				'working']
+		'having_appointment', 'inactive', 'relaxing', 'talking', 'traveling',
+		'working']
 
 	def __init__(self, on_response, activity=None, subactivity=None, text=''):
 		self.on_response = on_response
@@ -358,14 +358,14 @@ class ChangeActivityDialog:
 				rbtns[act] = group = gtk.RadioButton()
 
 			hbox = gtk.HBox(False, 5)
-			hbox.pack_start(gtkgui_helpers.load_activity_icon(category),
-							False, False, 0)
+			hbox.pack_start(gtkgui_helpers.load_activity_icon(category), False,
+				False, 0)
 			lbl = gtk.Label('<b>' + pep.ACTIVITIES[category]['category'] + '</b>')
 			lbl.set_use_markup(True)
 			hbox.pack_start(lbl, False, False, 0)
 			rbtns[act].add(hbox)
 			rbtns[act].connect('toggled', self.on_rbtn_toggled,
-							   [category, 'other'])
+				[category, 'other'])
 			vbox.pack_start(rbtns[act], False, False, 0)
 
 			activities = []
@@ -386,11 +386,11 @@ class ChangeActivityDialog:
 
 				hbox = gtk.HBox(False, 5)
 				hbox.pack_start(gtkgui_helpers.load_activity_icon(category,
-																  activity), False, False, 0)
+					activity), False, False, 0)
 				hbox.pack_start(gtk.Label(pep.ACTIVITIES[category][activity]),
-								False, False, 0)
+					False, False, 0)
 				rbtns[act].connect('toggled', self.on_rbtn_toggled,
-								   [category, activity])
+					[category, activity])
 				rbtns[act].add(hbox)
 				vbox.pack_start(rbtns[act], False, False, 0)
 
@@ -432,7 +432,7 @@ class ChangeActivityDialog:
 		'''
 		if self.checkbutton.get_active():
 			self.on_response(self.activity, self.subactivity,
-							 self.entry.get_text().decode('utf-8'))
+				self.entry.get_text().decode('utf-8'))
 		else:
 			self.on_response(None, None, '')
 		self.window.destroy()
@@ -460,7 +460,7 @@ class ChangeMoodDialog:
 		no_mood_button = self.xml.get_widget('no_mood_button')
 		no_mood_button.set_mode(False)
 		no_mood_button.connect('clicked',
-							   self.on_mood_button_clicked, None)
+			self.on_mood_button_clicked, None)
 
 		x = 1
 		y = 0
@@ -479,7 +479,7 @@ class ChangeMoodDialog:
 			self.mood_buttons[mood].set_relief(gtk.RELIEF_NONE)
 			gtk.Tooltips().set_tip(self.mood_buttons[mood], pep.MOODS[mood])
 			self.mood_buttons[mood].connect('clicked',
-											self.on_mood_button_clicked, mood)
+				self.on_mood_button_clicked, mood)
 			table.attach(self.mood_buttons[mood], x, x + 1, y, y + 1)
 
 			# Calculate the next position
