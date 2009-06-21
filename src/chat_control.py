@@ -50,6 +50,7 @@ from common.logger import constants
 from common.pep import MOODS, ACTIVITIES
 from common.xmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
+from whiteboardwidget import Whiteboard
 
 try:
 	import gtkspell
@@ -290,6 +291,12 @@ class ChatControlBase(MessageControl):
 
 		self.smooth = True
 		self.msg_textview.grab_focus()
+		
+		# Whiteboard
+		whiteboard = Whiteboard()
+		hbox = self.xml.get_widget('chat_child_hbox')
+		hbox.pack_start(whiteboard)
+
 
 	def set_speller(self):
 		try:
@@ -1022,7 +1029,11 @@ class ChatControlBase(MessageControl):
 		self.parent_win.get_active_control() == self and \
 		self.parent_win.window.is_active():
 			# we are at the end
-			if self.session and self.session.remove_events(types_list):
+			if self.type_id == message_control.TYPE_GC:
+				if not gajim.events.remove_events(self.account, jid,
+				types=types_list):
+					self.redraw_after_event_removed(jid)
+			elif self.session and self.session.remove_events(types_list):
 				# There were events to remove
 				self.redraw_after_event_removed(jid)
 
@@ -1125,7 +1136,7 @@ class ChatControl(ChatControlBase):
 
 	def __init__(self, parent_win, contact, acct, session, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
-			'chat_child_vbox', contact, acct, resource)
+			'chat_child_hbox', contact, acct, resource)
 
 		self.gpg_is_active = False
 		# for muc use:
@@ -2497,8 +2508,9 @@ class ChatControl(ChatControlBase):
 			rows = gajim.logger.get_last_conversation_lines(jid, restore_how_many,
 				pending_how_many, timeout, self.account)
 		except exceptions.DatabaseMalformed:
+			import common.logger
 			dialogs.ErrorDialog(_('Database Error'),
-				_('The database file (%s) cannot be read. Try to repair it or remove it (all history will be lost).') % constants.LOG_DB_PATH)
+				_('The database file (%s) cannot be read. Try to repair it or remove it (all history will be lost).') % common.logger.LOG_DB_PATH)
 			rows = []
 		local_old_kind = None
 		for row in rows: # row[0] time, row[1] has kind, row[2] the message
