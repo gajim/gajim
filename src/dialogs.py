@@ -2714,6 +2714,10 @@ class RosterItemExchangeWindow:
 				if not is_in_roster:
 					iter = model.append()
 					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
+					
+			# Change label for accept_button to action name instead of 'OK'.
+			accept_button_label = self.accept_button.get_children()[0].get_children()[0].get_children()[1]
+			accept_button_label.set_label(_('Add'))
 		elif action == 'modify':
 			for jid in self.exchange_list:
 				groups = ''
@@ -2741,6 +2745,10 @@ class RosterItemExchangeWindow:
 				if not is_right and is_in_roster:
 					iter = model.append()
 					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
+					
+			# Change label for accept_button to action name instead of 'OK'.
+			accept_button_label = self.accept_button.get_children()[0].get_children()[0].get_children()[1]
+			accept_button_label.set_label(_('Modify'))
 		elif action == 'delete':
 			for jid in self.exchange_list:
 				groups = ''
@@ -2760,7 +2768,13 @@ class RosterItemExchangeWindow:
 						groups = groups + group + ', '
 				if not is_right and is_in_roster:
 					iter = model.append()
-					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)        
+					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
+					
+			# Change label for accept_button to action name instead of 'OK'.
+			accept_button_label = self.accept_button.get_children()[0].get_children()[0].get_children()[1]
+			accept_button_label.set_label(_('Delete'))
+					
+
 
 		self.window.show_all()
 

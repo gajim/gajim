@@ -36,7 +36,7 @@
                 <property name="editable">False</property>
                 <property name="justification">center</property>
                 <property name="cursor_visible">False</property>
-                <property name="text" translatable="yes">Message Body</property>
+                <property name="text" translatable="yes">Message Body &lt;currently unused, so it's hidden by default&gt;</property>
               </widget>
             </child>
           </widget>
@@ -63,9 +63,10 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox1">
+          <widget class="GtkHButtonBox" id="hbuttonbox1">
             <property name="visible">True</property>
-            <property name="spacing">3</property>
+            <property name="spacing">12</property>
+            <property name="layout_style">end</property>
             <child>
               <widget class="GtkButton" id="cancel_button">
                 <property name="label" translatable="yes">gtk-cancel</property>
