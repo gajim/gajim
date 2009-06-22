@@ -7,8 +7,9 @@
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
+        <property name="border_width">6</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="spacing">8</property>
         <child>
           <widget class="GtkLabel" id="type_label">
             <property name="visible">True</property>
@@ -77,6 +78,8 @@
                 <signal name="clicked" handler="on_cancel_button_clicked"/>
               </widget>
               <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -90,6 +93,8 @@
                 <signal name="clicked" handler="on_accept_button_clicked"/>
               </widget>
               <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
