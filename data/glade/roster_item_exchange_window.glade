@@ -15,8 +15,11 @@
             <property name="label" translatable="yes">&lt;b&gt;someone@somewhere.com&lt;/b&gt; would like you to &lt;b&gt;add&lt;/b&gt; some contacts in your roster.</property>
             <property name="use_markup">True</property>
             <property name="justify">center</property>
+            <property name="selectable">True</property>
           </widget>
           <packing>
+            <property name="expand">False</property>
+            <property name="padding">4</property>
             <property name="position">0</property>
           </packing>
         </child>
@@ -51,6 +54,7 @@
               <widget class="GtkTreeView" id="items_list_treeview">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
               </widget>
             </child>
           </widget>
@@ -90,6 +94,7 @@
             </child>
           </widget>
           <packing>
+            <property name="expand">False</property>
             <property name="position">3</property>
           </packing>
         </child>
