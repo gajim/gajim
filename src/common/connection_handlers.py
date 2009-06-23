@@ -1553,9 +1553,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				groups.append(group.getData())
 			self.dispatch('ROSTER_INFO', (jid, name, sub, ask, groups))
 			if version:
-				account_jid = '%s@%s' % (
-					gajim.config.get_per('accounts', self.name, 'name'),
-					gajim.config.get_per('accounts', self.name, 'hostname'))
+				account_jid = gajim.get_jid_from_account(self.name)
 				gajim.logger.add_or_update_contact(account_jid, jid, name, sub,
 					groups)
 				gajim.config.set_per('accounts', self.name, 'roster_version',
