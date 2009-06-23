@@ -2203,7 +2203,7 @@ class RosterWindow:
 				if checked:
 					gajim.config.set('quit_on_roster_x_button', True)
 				self.on_quit_request()
-			dialogs.ConfirmationDialogiCheck(_('Really quit Gajim?'),
+			dialogs.ConfirmationDialogCheck(_('Really quit Gajim?'),
 				_('Are you sure you want to quit Gajim?'),
 				_('Do _not ask me again'), on_response_ok=on_ok)
 		return True # do NOT destroy the window
