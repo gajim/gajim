@@ -769,10 +769,18 @@ class PreferencesWindow:
 		active = widget.get_active()
 		if active == 0:
 			gajim.config.set('trayicon', 'never')
+			gajim.interface.systray_enabled = False
+			gajim.interface.systray.hide_icon()
 		elif active == 1:
 			gajim.config.set('trayicon', 'on_event')
+			gajim.interface.systray_enabled = True
+			gajim.interface.systray.show_icon()
+			gajim.interface.systray.set_img()
 		else:
 			gajim.config.set('trayicon', 'always')
+			gajim.interface.systray_enabled = True
+			gajim.interface.systray.show_icon()
+			gajim.interface.systray.set_img()
 
 	def on_advanced_notifications_button_clicked(self, widget):
 		dialogs.AdvancedNotificationsWindow()
