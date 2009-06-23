@@ -2205,7 +2205,7 @@ class RosterWindow:
 				self.on_quit_request()
 			dialogs.ConfirmationDialogCheck(_('Really quit Gajim?'),
 				_('Are you sure you want to quit Gajim?'),
-				_('Do _not ask me again'), on_response_ok=on_ok)
+				_('Always close Gajim'), on_response_ok=on_ok)
 		return True # do NOT destroy the window
 
 	def prepare_quit(self):
