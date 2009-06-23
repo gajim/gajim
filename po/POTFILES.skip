@@ -1,3 +1,6 @@
 data/gajim.desktop.in
 src/eggtrayicon.c
 src/ipython_view.py
+src/osx/dbus.py
+src/osx/growler.py
+src/osx/__init__.py
