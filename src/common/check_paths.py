@@ -98,9 +98,18 @@ def create_log_db():
 		);
 
 		CREATE TABLE IF NOT EXISTS roster_entry(
-			account_jid_id INTEGER PRIMARY KEY,
+			account_jid_id INTEGER,
 			jid_id INTEGER,
-			subscription INTEGER
+			name TEXT,
+			subscription INTEGER,
+			PRIMARY KEY (account_jid_id, jid_id)
+		);
+
+		CREATE TABLE IF NOT EXISTS roster_group(
+			account_jid_id INTEGER,
+			jid_id INTEGER,
+			group_name TEXT,
+			PRIMARY KEY (account_jid_id, jid_id, group_name)
 		);
 		'''
 		)

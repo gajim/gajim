@@ -92,6 +92,13 @@ class Constants:
 			self.TYPE_MRIM,
 		) = range(14)
 
+		(
+			self.SUBSCRIPTION_NONE,
+			self.SUBSCRIPTION_TO,
+			self.SUBSCRIPTION_FROM,
+			self.SUBSCRIPTION_BOTH,
+		) = range(4)
+
 constants = Constants()
 
 class Logger:
@@ -330,6 +337,16 @@ class Logger:
 			return 'weather'
 		if type_id == constants.TYPE_MRIM:
 			return 'mrim'
+
+	def convert_human_subscription_values_to_db_api_values(self, sub):
+		if sub == 'none':
+			return constants.SUBSCRIPTION_NONE
+		if sub == 'to':
+			return constants.SUBSCRIPTION_TO
+		if sub == 'from':
+			return constants.SUBSCRIPTION_FROM
+		if sub == 'both':
+			return constants.SUBSCRIPTION_BOTH
 
 	def commit_to_db(self, values, write_unread = False):
 		sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message, subject) VALUES (?, ?, ?, ?, ?, ?, ?)'
@@ -798,5 +815,40 @@ class Logger:
 			self.con.commit()
 		except sqlite.OperationalError, e:
 			print >> sys.stderr, str(e)
+
+	def del_contact(self, account_jid, jid):
+		try:
+			account_jid_id = self.get_jid_id(account_jid)
+			jid_id = self.get_jid_id(jid)
+		except exceptions.PysqliteOperationalError, e:
+			raise exceptions.PysqliteOperationalError(str(e))
+		sql = 'DELETE FROM roster_entry WHERE account_jid_id = %d AND jid_id = %d' % (account_jid_id, jid_id)
+		self.simple_commit(sql)
+
+	def add_or_update_contact(self, account_jid, jid, name, sub, groups):
+		if sub == 'remove':
+			self.del_contact(account_jid, jid)
+			return
+
+		try:
+			account_jid_id = self.get_jid_id(account_jid)
+			jid_id = self.get_jid_id(jid)
+		except exceptions.PysqliteOperationalError, e:
+			raise exceptions.PysqliteOperationalError(str(e))
+
+		# update groups information
+		# first we delete all previous groups information
+		sql = 'DELETE FROM roster_group WHERE account_jid_id = %d AND jid_id = %d' % (account_jid_id, jid_id)
+		self.cur.execute(sql)
+		# then we add all new groups information
+		for group in groups:
+			sql = 'INSERT INTO roster_group VALUES("%d", "%d", "%s")' % (
+				account_jid_id, jid_id, group)
+			self.cur.execute(sql)
+
+		sql = 'REPLACE INTO roster_entry VALUES("%d", "%d", "%s", "%d")' % (
+			account_jid_id, jid_id, name,
+			self.convert_human_subscription_values_to_db_api_values(sub))
+		self.simple_commit(sql)
 
 # vim: se ts=3:

@@ -198,6 +198,8 @@ class OptionsParser:
 			self.update_config_to_01214()
 		if old < [0, 12, 1, 5] and new >= [0, 12, 1, 5]:
 			self.update_config_to_01215()
+		if old < [0, 12, 1, 6] and new >= [0, 12, 1, 6]:
+			self.update_config_to_01216()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -681,9 +683,18 @@ class OptionsParser:
 			cur.executescript(
 				'''
 				CREATE TABLE IF NOT EXISTS roster_entry(
-					account_jid_id INTEGER PRIMARY KEY,
+					account_jid_id INTEGER,
 					jid_id INTEGER,
-					subscription INTEGER
+					name TEXT,
+					subscription INTEGER,
+					PRIMARY KEY (account_jid_id, jid_id)
+				);
+
+				CREATE TABLE IF NOT EXISTS roster_group(
+					account_jid_id INTEGER,
+					jid_id INTEGER,
+   					group_name TEXT,
+					PRIMARY KEY (account_jid_id, jid_id, group_name)
 				);
 				'''
 			)
