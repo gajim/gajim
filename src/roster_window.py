@@ -2193,7 +2193,7 @@ class RosterWindow:
 	def on_roster_window_delete_event(self, widget, event):
 		'''Main window X button was clicked'''
 		if gajim.interface.systray_enabled and not gajim.config.get(
-		'quit_on_roster_x_button'):
+		'quit_on_roster_x_button') and gajim.config.get('trayicon') != 'on_event':
 			self.tooltip.hide_tooltip()
 			self.window.hide()
 		else:
