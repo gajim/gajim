@@ -2196,8 +2196,16 @@ class RosterWindow:
 		'quit_on_roster_x_button') and gajim.config.get('trayicon') != 'on_event':
 			self.tooltip.hide_tooltip()
 			self.window.hide()
-		else:
+		elif gajim.config.get('quit_on_roster_x_button'):
 			self.on_quit_request()
+		else:
+			def on_ok(checked):
+				if checked:
+					gajim.config.set('quit_on_roster_x_button', True)
+				self.on_quit_request()
+			dialogs.ConfirmationDialogiCheck(_('Really quit Gajim?'),
+				_('Are you sure you want to quit Gajim?'),
+				_('Do _not ask me again'), on_response_ok=on_ok)
 		return True # do NOT destroy the window
 
 	def prepare_quit(self):
