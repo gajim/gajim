@@ -295,8 +295,10 @@ class ChatControlBase(MessageControl):
 		# Whiteboard
 		whiteboard = Whiteboard()
 		hbox = self.xml.get_widget('chat_child_hbox')
-		hbox.pack_start(whiteboard)
-
+		try:
+			hbox.pack_start(whiteboard)
+		except:
+			pass # It is a group chat, do it later
 
 	def set_speller(self):
 		try:
