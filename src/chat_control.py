@@ -2373,6 +2373,12 @@ class ChatControl(ChatControlBase):
 			self.send_chatstate('active', self.contact)
 		else:
 			self.send_chatstate('inactive', self.contact)
+		# Hide bigger avatar window
+		if self.bigger_avatar_window:
+			self.bigger_avatar_window.destroy()
+			self.bigger_avatar_window = None
+			# Re-show the small avatar
+			self.show_avatar()
 
 	def show_avatar(self, resource = None):
 		if not gajim.config.get('show_avatar_in_chat'):
