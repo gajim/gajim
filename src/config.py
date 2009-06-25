@@ -1995,6 +1995,8 @@ class AccountsWindow:
 			return
 		self.on_checkbutton_toggled(widget, 'keep_alives_enabled',
 			account=self.current_account)
+		gajim.config.set_per('accounts', self.current_account,
+			'ping_alives_enabled', widget.get_active())
 
 	def on_custom_host_port_checkbutton1_toggled(self, widget):
 		if self.option_changed('use_custom_host', widget.get_active()):
