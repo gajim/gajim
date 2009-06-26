@@ -1781,8 +1781,7 @@ class ChatControl(ChatControlBase):
 		else:
 			self.print_conversation(_('No help info for /%s') % command, 'info')
 
-	def send_message(self, message, keyID = '', chatstate = None,
-	xhtml = None):
+	def send_message(self, message, keyID='', chatstate=None, xhtml=None):
 		'''Send a message to contact'''
 		if message in ('', None, '\n') or self._process_command(message):
 			return None
@@ -1846,9 +1845,8 @@ class ChatControl(ChatControlBase):
 			else:
 				xep0184_id = None
 
-			self.print_conversation(message, self.contact.jid,
-				encrypted = encrypted, xep0184_id = xep0184_id,
-				xhtml = xhtml)
+			self.print_conversation(message, self.contact.jid, encrypted=encrypted,
+				xep0184_id=xep0184_id, xhtml=xhtml)
 
 		ChatControlBase.send_message(self, message, keyID, type_='chat',
 			chatstate=chatstate_to_send, composing_xep=composing_xep,
