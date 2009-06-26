@@ -379,8 +379,6 @@ class VcardWindow:
 						gobject.idle_add(
 							gajim.connections[self.account].request_os_info, c.jid,
 							c.resource)
-					gajim.connections[self.account].request_last_status_time(c.jid,
-						c.resource)
 					self.os_info[i] = {'resource': c.resource, 'client': '',
 						'os': ''}
 					i += 1
