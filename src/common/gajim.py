@@ -345,12 +345,14 @@ def get_transport_name_from_jid(jid, use_config_setting = True):
 		host = host_splitted[0]
 
 	if host in ('aim', 'irc', 'icq', 'msn', 'sms', 'tlen', 'weather', 'yahoo',
-	'mrim'):
+	'mrim', 'facebook'):
 		return host
 	elif host == 'gg':
 		return 'gadu-gadu'
 	elif host == 'jit':
 		return 'icq'
+	elif host == 'facebook':
+		return 'facebook'
 	else:
 		return None
 
@@ -385,7 +387,7 @@ def get_hostname_from_account(account_name, use_srv = False):
 def get_notification_image_prefix(jid):
 	'''returns the prefix for the notification images'''
 	transport_name = get_transport_name_from_jid(jid)
-	if transport_name in ('aim', 'icq', 'msn', 'yahoo'):
+	if transport_name in ('aim', 'icq', 'msn', 'yahoo', 'facebook'):
 		prefix = transport_name
 	else:
 		prefix = 'jabber'
