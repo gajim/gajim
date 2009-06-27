@@ -171,9 +171,9 @@ class PrivateChatControl(ChatControl):
 class GroupchatControl(ChatControlBase):
 	TYPE_ID = message_control.TYPE_GC
 	# alphanum sorted
-	MUC_CMDS = ['ban', 'chat', 'query', 'clear', 'close', 'compact',
+	MUC_CMDS = ['ban', 'block', 'chat', 'query', 'clear', 'close', 'compact',
 		'help', 'invite', 'join', 'kick', 'leave', 'me', 'msg', 'nick',
-		'part', 'names', 'say', 'topic']
+		'part', 'names', 'say', 'topic', 'unblock']
 
 	def __init__(self, parent_win, contact, acct, is_continued=False):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
@@ -1037,6 +1037,12 @@ class GroupchatControl(ChatControlBase):
 			image = state_images[gc_contact.show]
 
 		name = gobject.markup_escape_text(gc_contact.name)
+
+		# Strike name if blocked
+		fjid = self.room_jid + '/' + nick
+		if helpers.jid_is_blocked(self.account, fjid):
+			name = '<span strikethrough="true">%s</span>' % name
+
 		status = gc_contact.status
 		# add status msg, if not empty, under contact name in the treeview
 		if status and gajim.config.get('show_status_msgs_in_roster'):
@@ -1641,6 +1647,22 @@ class GroupchatControl(ChatControlBase):
 									message[4:])
 			self.clear(self.msg_textview)
 			return True
+		elif command == 'block':
+			if len(message_array) == 0:
+				self.get_command_help(command)
+				return True
+			nick = message_array[0].strip()
+			self.on_block(None, nick)
+			self.clear(self.msg_textview)
+			return True
+		elif command == 'unblock':
+			if len(message_array) == 0:
+				self.get_command_help(command)
+				return True
+			nick = message_array[0].strip()
+			self.on_unblock(None, nick)
+			self.clear(self.msg_textview)
+			return True
 
 		return False
 
@@ -1723,6 +1745,12 @@ class GroupchatControl(ChatControlBase):
 		elif command == 'say':
 			self.print_conversation(_('Usage: /%s <message>, sends a message '
 				'without looking for other commands.') % command, 'info')
+		elif command == 'block':
+			self.print_conversation(_('Usage: /%s <nickname>, prevent <nickname> '
+				'to send you messages or private messages.') % command, 'info')
+		elif command == 'unblock':
+			self.print_conversation(_('Usage: /%s <nickname>, allow <nickname> '
+				'to send you messages and private messages.') % command, 'info')
 		else:
 			self.print_conversation(_('No help info for /%s') % command, 'info')
 
@@ -2124,6 +2152,7 @@ class GroupchatControl(ChatControlBase):
 		model = self.list_treeview.get_model()
 		nick = model[iter_][C_NICK].decode('utf-8')
 		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+		fjid = self.room_jid + '/' + nick
 		jid = c.jid
 		target_affiliation = c.affiliation
 		target_role = c.role
@@ -2213,6 +2242,19 @@ class GroupchatControl(ChatControlBase):
 		else:
 			id_ = item.connect('activate', self.on_add_to_roster, jid)
 			self.handlers[id_] = item
+
+		item = xml.get_widget('block_menuitem')
+		item2 = xml.get_widget('unblock_menuitem')
+		if helpers.jid_is_blocked(self.account, fjid):
+			item.set_no_show_all(True)
+			item.hide()
+			id_ = item2.connect('activate', self.on_unblock, nick)
+			self.handlers[id_] = item2
+		else:
+			id_ = item.connect('activate', self.on_block, nick)
+			self.handlers[id_] = item
+			item2.set_no_show_all(True)
+			item2.hide()
 
 		item = xml.get_widget('send_private_message_menuitem')
 		id_ = item.connect('activate', self.on_send_pm, model, iter_)
@@ -2457,6 +2499,48 @@ class GroupchatControl(ChatControlBase):
 
 	def on_add_to_roster(self, widget, jid):
 		dialogs.AddNewContactWindow(self.account, jid)
+
+	def on_block(self, widget, nick):
+		fjid = self.room_jid + '/' + nick
+		connection = gajim.connections[self.account]
+		if fjid in connection.blocked_contacts:
+			return
+		new_rule = {'order': u'1', 'type': u'jid', 'action': u'deny',
+			'value' : fjid, 'child': [u'message', u'iq', u'presence-out']}
+		connection.blocked_list.append(new_rule)
+		connection.blocked_contacts.append(fjid)
+		self.draw_contact(nick)
+		connection.set_privacy_list('block', connection.blocked_list)
+		if len(connection.blocked_list) == 1:
+			connection.set_active_list('block')
+			connection.set_default_list('block')
+		connection.get_privacy_list('block')
+
+	def on_unblock(self, widget, nick):
+		fjid = self.room_jid + '/' + nick
+		connection = gajim.connections[self.account]
+		connection.new_blocked_list = []
+		# needed for draw_contact:
+		if fjid in connection.blocked_contacts:
+			connection.blocked_contacts.remove(fjid)
+		self.draw_contact(nick)
+		for rule in connection.blocked_list:
+			if rule['action'] != 'deny' or rule['type'] != 'jid' \
+			or rule['value'] != fjid:
+				connection.new_blocked_list.append(rule)
+
+		connection.set_privacy_list('block', connection.new_blocked_list)
+		connection.get_privacy_list('block')
+		if len(connection.new_blocked_list) == 0:
+			connection.blocked_list = []
+			connection.blocked_contacts = []
+			connection.blocked_groups = []
+			connection.set_default_list('')
+			connection.set_active_list('')
+			connection.del_privacy_list('block')
+			if 'blocked_contacts' in gajim.interface.instances[self.account]:
+				gajim.interface.instances[self.account]['blocked_contacts'].\
+					privacy_list_received([])
 
 	def on_voice_checkmenuitem_activate(self, widget, nick):
 		if widget.get_active():
