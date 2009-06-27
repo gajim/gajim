@@ -846,7 +846,8 @@ class Logger:
 		# Fill roster tables with the new roster
 		for jid in roster:
 			self.add_or_update_contact(account_jid, jid, roster[jid]['name'],
-				roster[jid]['subscription'], roster[jid]['groups'])
+				roster[jid]['subscription'], roster[jid]['ask'],
+				roster[jid]['groups'])
 		gajim.config.set_per('accounts', account_name, 'roster_version',
 			roster_version)
 
@@ -860,7 +861,7 @@ class Logger:
 		sql = 'DELETE FROM roster_entry WHERE account_jid_id = %d AND jid_id = %d' % (account_jid_id, jid_id)
 		self.simple_commit(sql)
 
-	def add_or_update_contact(self, account_jid, jid, name, sub, groups):
+	def add_or_update_contact(self, account_jid, jid, name, sub, ask, groups):
 		''' Add or update a contact from account_jid roster. '''
 		if sub == 'remove':
 			self.del_contact(account_jid, jid)
@@ -882,9 +883,13 @@ class Logger:
 				account_jid_id, jid_id, group)
 			self.cur.execute(sql)
 
-		sql = 'REPLACE INTO roster_entry VALUES("%d", "%d", "%s", "%d")' % (
-			account_jid_id, jid_id, name,
-			self.convert_human_subscription_values_to_db_api_values(sub))
+		if name is None:
+			name = ''
+
+		sql = 'REPLACE INTO roster_entry VALUES("%d", "%d", "%s", "%s", "%d")'\
+			% (account_jid_id, jid_id, name,
+			self.convert_human_subscription_values_to_db_api_values(sub),
+			bool(ask))
 		self.simple_commit(sql)
 
 	def get_roster(self, account_jid):
@@ -893,14 +898,20 @@ class Logger:
 		account_jid_id = self.get_jid_id(account_jid)
 
 		# First we fill data with roster_entry informations
-		self.cur.execute('SELECT j.jid, re.jid_id, re.name, re.subscription FROM roster_entry re, jids j WHERE re.account_jid_id="%(account_jid_id)s" AND j.jid_id=re.jid_id' % {'account_jid_id': account_jid_id})
-		for jid, jid_id, name, subscription in self.cur:
+		self.cur.execute('SELECT j.jid, re.jid_id, re.name, re.subscription, re.ask FROM roster_entry re, jids j WHERE re.account_jid_id="%(account_jid_id)s" AND j.jid_id=re.jid_id' % {'account_jid_id': account_jid_id})
+		for jid, jid_id, name, subscription, ask in self.cur:
 			data[jid] = {}
-			data[jid]['name'] = name
+			if name:
+				data[jid]['name'] = name
+			else:
+				data[jid]['name'] = None
 			data[jid]['subscription'] = self.convert_db_api_values_to_human_subscription_values(subscription)
 			data[jid]['groups'] = []
 			data[jid]['resources'] = {}
-			data[jid]['ask'] = None
+			if ask:
+				data[jid]['ask'] = 'subscribe'
+			else:
+				data[jid]['ask'] = None
 			data[jid]['id'] = jid_id
 
 		# Then we add group for roster entries

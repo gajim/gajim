@@ -102,6 +102,7 @@ def create_log_db():
 			jid_id INTEGER,
 			name TEXT,
 			subscription INTEGER,
+			ask BOOLEAN,
 			PRIMARY KEY (account_jid_id, jid_id)
 		);
 
