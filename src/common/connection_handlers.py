@@ -65,6 +65,7 @@ VCARD_PUBLISHED = 'vcard_published'
 VCARD_ARRIVED = 'vcard_arrived'
 AGENT_REMOVED = 'agent_removed'
 METACONTACTS_ARRIVED = 'metacontacts_arrived'
+ROSTER_ARRIVED = 'roster_arrived'
 PRIVACY_ARRIVED = 'privacy_arrived'
 PEP_CONFIG = 'pep_config'
 HAS_IDLE = True
@@ -1166,7 +1167,16 @@ class ConnectionVcard:
 			# We can now continue connection by requesting the roster
 			version = gajim.config.get_per('accounts', self.name,
 				'roster_version')
-			self.connection.initRoster(version=version)
+			iq_id = self.connection.initRoster(version=version)
+			self.awaiting_answers[iq_id] = (ROSTER_ARRIVED, )
+		elif self.awaiting_answers[id_][0] == ROSTER_ARRIVED:
+			if iq_obj.getType() == 'result':
+				if not iq_obj.getTag('query'):
+					account_jid = gajim.get_jid_from_account(self.name)
+					roster_data = gajim.logger.get_roster(account_jid)
+					roster = self.connection.getRoster(force=True)
+					roster.setRaw(roster_data)
+				self._getRoster()
 		elif self.awaiting_answers[id_][0] == PRIVACY_ARRIVED:
 			if iq_obj.getType() != 'error':
 				self.privacy_rules_supported = True
@@ -2418,7 +2428,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.connection.send(result)
 		raise common.xmpp.NodeProcessed
 
-	def _getRosterCB(self, con, iq_obj):
+	def _getRoster(self):
 		log.debug('getRosterCB')
 		if not self.connection:
 			return
@@ -2441,6 +2451,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				gajim.proxy65_manager.resolve(proxy, self.connection, our_jid)
 
 	def _on_roster_set(self, roster):
+		roster_version = roster.version
 		raw_roster = roster.getRaw()
 		roster = {}
 		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
@@ -2480,6 +2491,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						self.discoverInfo(jid)
 
 		self.dispatch('ROSTER', roster)
+		gajim.logger.replace_roster(self.name, roster_version, roster)
+		print raw_roster
 
 	def _send_first_presence(self, signed = ''):
 		show = self.continue_connect_info[0]
@@ -2621,8 +2634,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			common.xmpp.NS_MUC_OWNER)
 		con.RegisterHandler('iq', self._MucAdminCB, 'result',
 			common.xmpp.NS_MUC_ADMIN)
-		con.RegisterHandler('iq', self._getRosterCB, 'result',
-			common.xmpp.NS_ROSTER)
 		con.RegisterHandler('iq', self._PrivateCB, 'result',
 			common.xmpp.NS_PRIVATE)
 		con.RegisterHandler('iq', self._HttpAuthCB, 'get',

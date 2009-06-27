@@ -52,8 +52,11 @@ class NonBlockingRoster(PlugIn):
 
 		iq = Iq('get',NS_ROSTER)
 		iq.setTagAttr('query', 'ver', self.version)
+		id_ = self._owner.getAnID()
+		iq.setID(id_)
 		self._owner.send(iq)
 		log.info('Roster requested from server')
+		return id_
 
 	def RosterIqHandler(self,dis,stanza):
 		''' Subscription tracker. Used internally for setting items state in
@@ -64,6 +67,9 @@ class NonBlockingRoster(PlugIn):
 			return
 		query = stanza.getTag('query')
 		if query:
+			self.version = stanza.getTagAttr('query', 'ver')
+			if self.version is None:
+				self.version = ''
 			for item in query.getTags('item'):
 				jid=item.getAttr('jid')
 				if item.getAttr('subscription')=='remove':
@@ -192,6 +198,11 @@ class NonBlockingRoster(PlugIn):
 	def getRaw(self):
 		'''Returns the internal data representation of the roster.'''
 		return self._data
+	def setRaw(self, data):
+		'''Returns the internal data representation of the roster.'''
+		self._data = data
+		self._data[self._owner.User+'@'+self._owner.Server]={'resources':{},'name':None,'ask':None,'subscription':None,'groups':None,}
+		self.set=1
 	# copypasted methods for roster.py from constructor to here
 
 
@@ -203,7 +214,7 @@ class NonBlockingRoster(PlugIn):
 		self._owner.RegisterHandler('iq', self.RosterIqHandler, 'set', NS_ROSTER)
 		self._owner.RegisterHandler('presence', self.PresenceHandler)
 		if request:
-			self.Request()
+			return self.Request()
 
 	def _on_roster_set(self, data):
 		if data:
@@ -216,16 +227,18 @@ class NonBlockingRoster(PlugIn):
 			self.on_ready = None
 		return True
 
-	def getRoster(self, on_ready=None):
+	def getRoster(self, on_ready=None, force=False):
 		''' Requests roster from server if neccessary and returns self. '''
+		return_self = True
 		if not self.set:
 			self.on_ready = on_ready
 			self._owner.onreceive(self._on_roster_set)
-			return
-		if on_ready:
+			return_self = False
+		elif on_ready:
 			on_ready(self)
-			on_ready = None
-		else:
+			return_self = False
+		if return_self or force:
 			return self
+		return None
 
 # vim: se ts=3:
