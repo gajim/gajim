@@ -9,7 +9,7 @@ SVG Paths.
 """
 
 class Whiteboard(goocanvas.Canvas):
-    def __init__(self):
+    def __init__(self, connection):
         goocanvas.Canvas.__init__(self)
         self.set_flags(gtk.CAN_FOCUS)
         self.root = self.get_root_item()
