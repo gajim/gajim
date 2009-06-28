@@ -294,8 +294,9 @@ class ChatControlBase(MessageControl):
 		
 		# Hook up whiteboard button
 		widget = self.xml.get_widget('start_whiteboard_button')
-		id_ = widget.connect('clicked', self._on_whiteboard_button_clicked)
-		self.handlers[id_] = widget
+		if widget is not None:
+			id_ = widget.connect('clicked', self._on_whiteboard_button_clicked)
+			self.handlers[id_] = widget
 		
 	def set_speller(self):
 		try:
@@ -2748,12 +2749,13 @@ class ChatControl(ChatControlBase):
 			self.print_conversation(')', 'status', simple=True)
 			
 	def _on_whiteboard_button_clicked(self, widget):
-		whiteboard = Whiteboard(gajim.connections[self.account])
 		hbox = self.xml.get_widget('chat_child_hbox')
-		try:
-			hbox.pack_start(whiteboard)
-			whiteboard.show()
-		except:
-			pass # TODO: Fix problem with groupchat?
+		if len(hbox.get_children()) == 1:
+			whiteboard = Whiteboard(gajim.connections[self.account])
+			try:
+				hbox.pack_start(whiteboard)
+				whiteboard.show()
+			except:
+				pass # TODO: Fix problem with groupchat?
 		
 # vim: se ts=3:

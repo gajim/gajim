@@ -353,7 +353,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">4</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
                         <child>
@@ -377,7 +377,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">5</property>
+                            <property name="position">6</property>
                           </packing>
                         </child>
                         <child>
@@ -401,7 +401,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">6</property>
+                            <property name="position">7</property>
                           </packing>
                         </child>
                         <child>
@@ -425,7 +425,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">7</property>
+                            <property name="position">8</property>
                           </packing>
                         </child>
                         <child>
@@ -436,7 +436,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">8</property>
+                            <property name="position">9</property>
                           </packing>
                         </child>
                         <child>
@@ -460,7 +460,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">9</property>
+                            <property name="position">10</property>
                           </packing>
                         </child>
                         <child>
@@ -472,7 +472,7 @@
                             </child>
                           </widget>
                           <packing>
-                            <property name="position">10</property>
+                            <property name="position">11</property>
                           </packing>
                         </child>
                         <child>
@@ -519,7 +519,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">11</property>
+                            <property name="position">12</property>
                           </packing>
                         </child>
                       </widget>
