@@ -858,7 +858,7 @@ class Logger:
 			jid_id = self.get_jid_id(jid)
 		except exceptions.PysqliteOperationalError, e:
 			raise exceptions.PysqliteOperationalError(str(e))
-		sql = 'DELETE FROM roster_entry WHERE account_jid_id = %d AND jid_id = %d' % (account_jid_id, jid_id)
+		sql = 'DELETE FROM roster_entry WHERE account_jid_id=%d AND jid_id=%d' % (account_jid_id, jid_id)
 		self.simple_commit(sql)
 
 	def add_or_update_contact(self, account_jid, jid, name, sub, ask, groups):
@@ -875,7 +875,7 @@ class Logger:
 
 		# Update groups information
 		# First we delete all previous groups information
-		sql = 'DELETE FROM roster_group WHERE account_jid_id = %d AND jid_id = %d' % (account_jid_id, jid_id)
+		sql = 'DELETE FROM roster_group WHERE account_jid_id=%d AND jid_id=%d' % (account_jid_id, jid_id)
 		self.cur.execute(sql)
 		# Then we add all new groups information
 		for group in groups:
@@ -922,5 +922,16 @@ class Logger:
 			del data[jid]['id']
 
 		return data
+
+	def remove_roster(self, account_jid):
+		account_jid_id = self.get_jid_id(account_jid)
+
+		sql = 'DELETE FROM roster_group WHERE account_jid_id=%d' % (
+			account_jid_id)
+		self.cur.execute(sql)
+
+		sql = 'DELETE FROM roster_entry WHERE account_jid_id=%d' % (
+			account_jid_id)
+		self.simple_commit(sql)
 
 # vim: se ts=3:
