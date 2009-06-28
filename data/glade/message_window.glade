@@ -346,7 +346,7 @@
                               <widget class="GtkImage" id="image12">
                                 <property name="visible">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="stock">gtk-info</property>
+                                <property name="stock">gtk-orientation-portrait</property>
                                 <property name="icon-size">2</property>
                               </widget>
                             </child>
