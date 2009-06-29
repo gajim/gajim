@@ -867,6 +867,9 @@ class ConnectionDisco:
 			gajim.transport_type[jid] = transport_type
 			gajim.logger.save_transport_type(jid, transport_type)
 		id_ = iq_obj.getID()
+		if id_ is None:
+			log.warn('Invalid IQ received without an ID. Ignoring it: %s' % iq_obj)
+			return
 		if not identities: # ejabberd doesn't send identities when we browse online users
 		#FIXME: see http://www.jabber.ru/bugzilla/show_bug.cgi?id=225
 			identities = [{'category': 'server', 'type': 'im', 'name': node}]
