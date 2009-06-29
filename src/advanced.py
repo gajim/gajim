@@ -267,7 +267,7 @@ class AdvancedConfigurationWindow(object):
 				self.model.append(parent, [name, value, type_])
 
 	def visible_func(self, model, treeiter):
-		search_string  = self.entry.get_text().lower()
+		search_string  = self.entry.get_text().decode('utf-8').lower()
 		for it in tree_model_pre_order(model,treeiter):
 			if model[it][C_TYPE] != '':
 				opt_path = self.get_option_path(model, it)
