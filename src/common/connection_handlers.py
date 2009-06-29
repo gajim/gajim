@@ -1562,10 +1562,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			for group in item.getTags('group'):
 				groups.append(group.getData())
 			self.dispatch('ROSTER_INFO', (jid, name, sub, ask, groups))
+			account_jid = gajim.get_jid_from_account(self.name)
+			gajim.logger.add_or_update_contact(account_jid, jid, name, sub, ask,
+				groups)
 			if version:
-				account_jid = gajim.get_jid_from_account(self.name)
-				gajim.logger.add_or_update_contact(account_jid, jid, name, sub,
-					ask, groups)
 				gajim.config.set_per('accounts', self.name, 'roster_version',
 					version)
 		if not self.connection or self.connected < 2:
