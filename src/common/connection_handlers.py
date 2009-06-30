@@ -2491,10 +2491,17 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						# we can't determine which iconset to use
 						self.discoverInfo(jid)
 
-		print raw_roster
 		gajim.logger.replace_roster(self.name, roster_version, roster)
 		if received_from_server:
-			self.dispatch('ROSTER', roster)
+			for contact in gajim.contacts.iter_contacts(self.name):
+				if contact.jid not in roster:
+					self.dispatch('ROSTER_INFO', (self.name,
+						(contact.jid, None, None, None, ())))
+			for jid in roster:
+				self.dispatch('ROSTER_INFO', (jid, roster[jid]['name'],
+					roster[jid]['subscription'], roster[jid]['ask'],
+					roster[jid]['groups']))
+			#self.dispatch('ROSTER', roster)
 
 	def _send_first_presence(self, signed = ''):
 		show = self.continue_connect_info[0]
