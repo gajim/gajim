@@ -3423,6 +3423,7 @@ class Interface:
 		gtk.window_set_default_icon(pix)
 
 		self.roster = roster_window.RosterWindow()
+		self.roster.init_roster()
 
 		self.init_emoticons()
 		self.make_regexps()

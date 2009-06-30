@@ -43,6 +43,7 @@ class NonBlockingRoster(PlugIn):
 		self._data = {}
 		self.set=None
 		self._exported_methods=[self.getRoster]
+		self.received_from_server = False
 
 	def Request(self,force=0):
 		''' Request roster from server if it were not yet requested 
@@ -67,6 +68,7 @@ class NonBlockingRoster(PlugIn):
 			return
 		query = stanza.getTag('query')
 		if query:
+			self.received_from_server = True
 			self.version = stanza.getTagAttr('query', 'ver')
 			if self.version is None:
 				self.version = ''

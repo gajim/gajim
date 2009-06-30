@@ -2452,6 +2452,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _on_roster_set(self, roster):
 		roster_version = roster.version
+		received_from_server = roster.received_from_server
 		raw_roster = roster.getRaw()
 		roster = {}
 		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
@@ -2490,9 +2491,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						# we can't determine which iconset to use
 						self.discoverInfo(jid)
 
-		self.dispatch('ROSTER', roster)
-		gajim.logger.replace_roster(self.name, roster_version, roster)
 		print raw_roster
+		gajim.logger.replace_roster(self.name, roster_version, roster)
+		if received_from_server:
+			self.dispatch('ROSTER', roster)
 
 	def _send_first_presence(self, signed = ''):
 		show = self.continue_connect_info[0]
