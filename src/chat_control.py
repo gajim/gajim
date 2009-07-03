@@ -2747,15 +2747,17 @@ class ChatControl(ChatControlBase):
 			self.print_conversation(' (', 'status', simple=True)
 			self.print_conversation('%s' % (status), 'status', simple=True)
 			self.print_conversation(')', 'status', simple=True)
-			
+	
 	def _on_whiteboard_button_clicked(self, widget):
 		hbox = self.xml.get_widget('chat_child_hbox')
 		if len(hbox.get_children()) == 1:
-			whiteboard = Whiteboard(gajim.connections[self.account])
+			whiteboard = Whiteboard(gajim.connections[self.account],
+						self.account,
+						self.contact)
 			try:
 				hbox.pack_start(whiteboard)
 				whiteboard.show()
 			except:
 				pass # TODO: Fix problem with groupchat?
-		
+
 # vim: se ts=3:
