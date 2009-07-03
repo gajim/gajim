@@ -18,7 +18,7 @@ class Whiteboard(goocanvas.Canvas):
         goocanvas.Canvas.__init__(self)
         self.set_flags(gtk.CAN_FOCUS)
         self.root = self.get_root_item()
-        self.session = SXESession()
+        session = SXESession(connection, account, contact)
 
         # Events
         self.connect("button-press-event", self.button_press_event)
@@ -32,7 +32,7 @@ class Whiteboard(goocanvas.Canvas):
 
         # SVG Storage
         # TODO: get height width info
-        self.image = SVGObject(self.root)
+        self.image = SVGObject(self.root, session)
 
         # Temporary Variables for items
         self.item_temp = None
@@ -95,7 +95,7 @@ class Whiteboard(goocanvas.Canvas):
             self.item_temp.remove()
             self.item_temp = None
     
-    #TODO: get keypresses working
+    # TODO: get keypresses working
     def key_press_event(self, widget, event):
         print 'test'
         if event.keyval == 'p':
@@ -105,10 +105,13 @@ class SVGObject():
     ''' A class to store the svg document and make changes to it.
     Stores items in a tuple that's (minidom node, goocanvas object).'''
     
-    def __init__(self, root, height = 300, width = 300):
-        self.items = [] # Will be [{ID: (Node, GooCanvas )}] instance
+    def __init__(self, root, session, height = 300, width = 300):
+        self.items = {} # Will be {ID: (Node, GooCanvas ), ID2: ()} instance
         self.root = root
-
+        
+        # sxe session
+        self.session = session
+        
         # initialize svg document
         self.svg = Node(node = '<svg/>')
         self.svg.setAttr('version', '1.1')
@@ -116,11 +119,10 @@ class SVGObject():
         self.svg.setAttr('width', str(width))
         self.svg.setAttr('xmlns', 'http://www.w3.org/2000/svg')
 
-        #TODO: make this settable        
-        self.g = Node(node = '<g/>')
+        # TODO: make this settable        
+        self.g = self.svg.addChild(name = '<g/>')
         self.g.setAttr('fill', 'none')
         self.g.setAttr('stroke-linecap', 'round')
-        self.svg.addChild(node = self.g)
 
     def add_path(self, data, line_width):
         ''' adds the path to the items listing, both minidom node and goocanvas
@@ -130,13 +132,14 @@ class SVGObject():
                                     data = data,
                                     line_width = line_width))
 
-        node = Node(node = '<path />')
+        node = self.g.addChild(name = '<path />')
         node.setAttr('d', data)
         node.setAttr('stroke-width', str(line_width))
         node.setAttr('stroke', 'black')
         self.g.addChild(node = node)
         
-        self.items.append((goocanvas_obj))
+        rid = session.send(node)
+        self.items[rid] = (child, goocanvas_obj)
 
         
     def print_xml(self):
@@ -144,26 +147,31 @@ class SVGObject():
         file.writelines(str(self.svg, True))
         file.close()
 
-def SXESession():
+class SXESession():
     ''' stores all the sxe session methods and info'''
     def __init__(self, connection, account, contact, sid = None):
         self.connection = connection
         self.account = account
         self.contact = contact
+        self.last_rid = -1
         
-        #generate unique session ID
+        # generate unique session ID
         if sid is None:
             chars = string.letters + string.digits
             self.sid = ''.join([choice(chars) for i in range(7)])
         else:
             self.sid = sid
     
+    def send(node):
+        self.last_rid += 1
+        rid = 'GUID%s' % (str(self.last_rid))
+        
     def connect(self):
         pass
     
     def encode(self, xml):
-        #encodes it sendable string
-        return 'data:text/xml' + urllib.quote(xml)
+        # encodes it sendable string
+        return 'data:text/xml,' + urllib.quote(xml)
     
 
 
