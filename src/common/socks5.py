@@ -792,6 +792,7 @@ class Socks5Listener(IdleObject):
 		self.port = port
 		self.ais = socket.getaddrinfo(None, port, socket.AF_UNSPEC,
 			socket.SOCK_STREAM, socket.SOL_TCP, socket.AI_PASSIVE)
+		self.ais.sort(reverse=True) # Try IPv6 first
 		self.queue_idx = -1
 		self.idlequeue = idlequeue
 		self.queue = None
