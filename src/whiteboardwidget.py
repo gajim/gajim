@@ -8,11 +8,11 @@ from random import choice
 import string
 import urllib
 
-""" 
+''' 
 A whiteboard widget made for Gajim. Only has basic line tool that draws
 SVG Paths. 
 - Ummu
-"""
+'''
 
 class Whiteboard(goocanvas.Canvas):
 	def __init__(self, account, contact):
@@ -49,14 +49,14 @@ class Whiteboard(goocanvas.Canvas):
 
 		if self.draw_tool == 'brush':
 			self.item_data = 'M %s,%s ' % (x, y)
-			self.item_temp = goocanvas.Ellipse(parent = self.root,
-												center_x = x,
-												center_y = y,
-												radius_x = 1,
-												radius_y = 1,
-												stroke_color = 'black',
-												fill_color = 'black',
-												line_width = self.line_width)
+			self.item_temp = goocanvas.Ellipse(parent=self.root,
+				center_x=x,
+				center_y=y,
+				radius_x=1,
+				radius_y=1,
+				stroke_color='black',
+				fill_color='black',
+				line_width=self.line_width)
 			self.item_data = self.item_data + 'L '
 
 	def motion_notify_event(self, widget, event):
@@ -69,10 +69,9 @@ class Whiteboard(goocanvas.Canvas):
 		if self.draw_tool == 'brush':
 			if self.item_data is not None:
 				self.item_data = self.item_data + '%s,%s ' % (x, y)
-				self.item_temp = goocanvas.Path(parent = self.root,
-												data = self.item_data,
-												line_width = self.line_width)
-	
+				self.item_temp = goocanvas.Path(parent=self.root,
+					data=self.item_data, line_width=self.line_width)
+
 	def button_release_event(self, widget, event):
 		x = event.x
 		y = event.y
@@ -81,14 +80,14 @@ class Whiteboard(goocanvas.Canvas):
 		if self.draw_tool == 'brush':
 			self.item_data = self.item_data + '%s,%s' % (x, y)
 			if x == self.item_temp_coords[0] and y == self.item_temp_coords[1]:
-				goocanvas.Ellipse(parent = self.root,
-												center_x = x,
-												center_y = y,
-												radius_x = 1,
-												radius_y = 1,
-												stroke_color = 'black',
-												fill_color = 'black',
-												line_width = self.line_width)
+				goocanvas.Ellipse(parent=self.root,
+					center_x=x,
+					center_y=y,
+					radius_x=1,
+					radius_y=1,
+					stroke_color='black',
+					fill_color='black',
+					line_width=self.line_width)
 			self.image.add_path(self.item_data, self.line_width)
 
 		self.item_data = None
@@ -105,7 +104,7 @@ class Whiteboard(goocanvas.Canvas):
 class SVGObject():
 	''' A class to store the svg document and make changes to it.
 	Stores items in a tuple that's (minidom node, goocanvas object).'''
-	
+
 	def __init__(self, root, session, height=300, width=300):
 		self.items = {} # Will be {ID: (Node, GooCanvas ), ID2: ()} instance
 		self.root = root
@@ -114,14 +113,14 @@ class SVGObject():
 		self.session = session
 		
 		# initialize svg document
-		self.svg = Node(node = '<svg/>')
+		self.svg = Node(node='<svg/>')
 		self.svg.setAttr('version', '1.1')
 		self.svg.setAttr('height', str(height))
 		self.svg.setAttr('width', str(width))
 		self.svg.setAttr('xmlns', 'http://www.w3.org/2000/svg')
 
 		# TODO: make this settable		
-		self.g = self.svg.addChild(name = '<g/>')
+		self.g = self.svg.addChild(name='<g/>')
 		self.g.setAttr('fill', 'none')
 		self.g.setAttr('stroke-linecap', 'round')
 
@@ -129,19 +128,17 @@ class SVGObject():
 		''' adds the path to the items listing, both minidom node and goocanvas
 		object in a tuple '''
 
-		goocanvas_obj = goocanvas.Path(parent = self.root,
-									data = data,
-									line_width = line_width)
+		goocanvas_obj = goocanvas.Path(parent=self.root, data=data,
+			line_width=line_width)
 
-		node = self.g.addChild(name = 'path')
+		node = self.g.addChild(name='path')
 		node.setAttr('d', data)
 		node.setAttr('stroke-width', str(line_width))
 		node.setAttr('stroke', 'black')
-		self.g.addChild(node = node)
-		
+		self.g.addChild(node=node)
+
 		rid = self.session.rid()
 		self.items[rid] = (node, goocanvas_obj)
-
 		
 	def print_xml(self):
 		file = open('whiteboardtest.svg','w')
@@ -162,20 +159,20 @@ class SXESession():
 		else:
 			self.sid = sid
 		self.connect()
-	
+
 	def rid(self):
 		rid = str(self.last_rid)
 		self.last_rid += 1
 		return rid
-	
+
 	def connect(self):
 		# connect to the message
 
 		# FIXME Create a function in src/common/connection.py
-		message = Node(node = "<message to='%s' xmlns='jabber:client'/>"
-					   % self.contact.get_full_jid())
+		message = Node(node="<message to='%s' xmlns='jabber:client'/>"
+		   % self.contact.get_full_jid())
 		sxe = message.addChild(name='sxe', attrs={'session':self.sid},
-				namespace='urn:xmpp:tmp:sxe')
+			namespace='urn:xmpp:tmp:sxe')
 		sxe.addChild(name='connect')
 
 		gajim.connections[self.account].send_sxe(message)
