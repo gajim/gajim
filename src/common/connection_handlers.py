@@ -1928,7 +1928,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				return
 		self._on_message_decrypted((msgtxt, encrypted), mtype, msg, session, frm,
 			jid, invite, tim)
-
+		
+		# Whiteboard Handler
+		if msg.getTag('sxe', namespace='urn:xmpp:tmp:sxe'):
+			self._whiteboardCB(con, msg)
+		
 	def _on_message_decrypted(self, output, mtype, msg, session, frm, jid,
 	invite, tim):
 		msgtxt, encrypted = output
@@ -2642,5 +2646,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		con.RegisterHandler('presence', self._StanzaArrivedCB)
 		con.RegisterHandler('message', self._StanzaArrivedCB)
 		con.RegisterHandler('unknown', self._StreamCB, 'urn:ietf:params:xml:ns:xmpp-streams', xmlns='http://etherx.jabber.org/streams')
-
+				    
+	def _whiteboardCB(self, con, msg):
+		# Handles whiteboard messages
+		print 'got whiteboard message'
+		
 # vim: se ts=3:

@@ -1950,6 +1950,9 @@ class Connection(ConnectionHandlers):
 			self.dispatch('SEARCH_RESULT', (jid, df, False))
 
 		self.connection.SendAndCallForResponse(iq, _on_response)
+		
+	def send_sxe(self, message):
+		self.connection.send(message)
 
 # END Connection
 

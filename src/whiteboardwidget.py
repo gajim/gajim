@@ -128,18 +128,18 @@ class SVGObject():
         ''' adds the path to the items listing, both minidom node and goocanvas
         object in a tuple '''
 
-        goocanvas_obj = self.items.append(goocanvas.Path(parent = self.root,
+        goocanvas_obj = goocanvas.Path(parent = self.root,
                                     data = data,
-                                    line_width = line_width))
+                                    line_width = line_width)
 
-        node = self.g.addChild(name = '<path />')
+        node = self.g.addChild(name = 'path')
         node.setAttr('d', data)
         node.setAttr('stroke-width', str(line_width))
         node.setAttr('stroke', 'black')
         self.g.addChild(node = node)
         
-        rid = session.send(node)
-        self.items[rid] = (child, goocanvas_obj)
+        rid = self.session.rid()
+        self.items[rid] = (node, goocanvas_obj)
 
         
     def print_xml(self):
@@ -153,7 +153,7 @@ class SXESession():
         self.connection = connection
         self.account = account
         self.contact = contact
-        self.last_rid = -1
+        self.last_rid = 0
         
         # generate unique session ID
         if sid is None:
@@ -161,33 +161,26 @@ class SXESession():
             self.sid = ''.join([choice(chars) for i in range(7)])
         else:
             self.sid = sid
+        self.connect()
     
-    def send(node):
+    def rid(self):
+        rid = str(self.last_rid)
         self.last_rid += 1
-        rid = 'GUID%s' % (str(self.last_rid))
-        
+        return rid
+    
     def connect(self):
-        pass
+        # connect to the message
+
+        message = Node(node = "<message from='%s' to='%s' xmlns='jabber:client'/>"
+                       % (self.account, self.contact))
+        sxe = message.addChild(name = "sxe",
+                               attrs = {'session':self.sid},
+                               namespace = 'urn:xmpp:tmp:sxe')
+        sxe.addChild(name = 'connect')
+
+        self.connection.send_sxe(message)
+
     
     def encode(self, xml):
         # encodes it sendable string
         return 'data:text/xml,' + urllib.quote(xml)
-    
-
-
-def main():
-    window = gtk.Window()
-    window.set_events(gtk.gdk.EXPOSURE_MASK
-                        | gtk.gdk.LEAVE_NOTIFY_MASK
-                        | gtk.gdk.BUTTON_PRESS_MASK
-                        | gtk.gdk.POINTER_MOTION_MASK
-                        | gtk.gdk.KEY_PRESS_MASK)
-    board = Whiteboard()
-    window.add(board)
-    window.connect("destroy", gtk.main_quit)
-    window.show_all()
-
-    gtk.main()
-    
-if __name__ == "__main__":
-    main()
