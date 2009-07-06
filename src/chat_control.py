@@ -2751,9 +2751,7 @@ class ChatControl(ChatControlBase):
 	def _on_whiteboard_button_clicked(self, widget):
 		hbox = self.xml.get_widget('chat_child_hbox')
 		if len(hbox.get_children()) == 1:
-			whiteboard = Whiteboard(gajim.connections[self.account],
-						self.get_full_jid(),
-						self.contact.get_full_jid())
+			whiteboard = Whiteboard(self.account, self.contact)
 			try:
 				hbox.pack_start(whiteboard)
 				whiteboard.show()
