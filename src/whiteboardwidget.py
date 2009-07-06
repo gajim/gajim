@@ -100,7 +100,7 @@ class Whiteboard(goocanvas.Canvas):
 		print 'test'
 		if event.keyval == 'p':
 			self.image.print_xml()
-  
+
 class SVGObject():
 	''' A class to store the svg document and make changes to it.
 	Stores items in a tuple that's (minidom node, goocanvas object).'''
@@ -158,7 +158,6 @@ class SXESession():
 			self.sid = ''.join([choice(chars) for i in range(7)])
 		else:
 			self.sid = sid
-		self.connect()
 
 	def rid(self):
 		rid = str(self.last_rid)
@@ -167,16 +166,8 @@ class SXESession():
 
 	def connect(self):
 		# connect to the message
-
-		# FIXME Create a function in src/common/connection.py
-		message = Node(node="<message to='%s' xmlns='jabber:client'/>"
-		   % self.contact.get_full_jid())
-		sxe = message.addChild(name='sxe', attrs={'session':self.sid},
-			namespace='urn:xmpp:tmp:sxe')
-		sxe.addChild(name='connect')
-
-		gajim.connections[self.account].send_sxe(message)
-
+		gajim.connections[self.account].send_whiteboard_connect(
+			self.contact.get_full_jid(), self.sid)
 	
 	def encode(self, xml):
 		# encodes it sendable string

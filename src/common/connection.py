@@ -1951,7 +1951,14 @@ class Connection(ConnectionHandlers):
 
 		self.connection.SendAndCallForResponse(iq, _on_response)
 		
-	def send_sxe(self, message):
+	def send_whiteboard_connect(self, jid, sid):
+		
+		message = common.xmpp.Node(node="<message to='%s' xmlns='jabber:client'/>"
+		   % jid)
+		sxe = message.addChild(name='sxe', attrs={'session':sid},
+			namespace='urn:xmpp:tmp:sxe')
+		sxe.addChild(name='connect')
+
 		self.connection.send(message)
 
 # END Connection
