@@ -1799,8 +1799,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		'''Called when we receive a message'''
 		log.debug('MessageCB')
 
+		mtype = msg.getType()
 		# check if the message is pubsub#event
 		if msg.getTag('event') is not None:
+			if mtype == 'groupchat':
+				return
 			if msg.getTag('error') is None:
 				self._pubsubEventCB(con, msg)
 			return
@@ -1854,7 +1857,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					is_continued))
 				return
 
-		mtype = msg.getType()
 		thread_id = msg.getThread()
 
 		if not mtype:
