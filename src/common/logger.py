@@ -858,6 +858,8 @@ class Logger:
 			jid_id = self.get_jid_id(jid)
 		except exceptions.PysqliteOperationalError, e:
 			raise exceptions.PysqliteOperationalError(str(e))
+		sql = 'DELETE FROM roster_group WHERE account_jid_id=%d AND jid_id=%d' % (account_jid_id, jid_id)
+		self.cur.execute(sql)
 		sql = 'DELETE FROM roster_entry WHERE account_jid_id=%d AND jid_id=%d' % (account_jid_id, jid_id)
 		self.simple_commit(sql)
 
