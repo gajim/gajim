@@ -484,7 +484,7 @@ class ConnectionBytestream:
 						gajim.socks5queue.activate_proxy(host['idx'])
 						break
 			raise common.xmpp.NodeProcessed
-		jid = gajim.parse_jid(streamhost.getAttr('jid'))
+		jid = helpers.parse_jid(streamhost.getAttr('jid'))
 		if 'streamhost-used' in file_props and \
 			file_props['streamhost-used'] is True:
 			raise common.xmpp.NodeProcessed
@@ -1122,7 +1122,7 @@ class ConnectionVcard:
 				storage = query.getTag('storage')
 				metas = storage.getTags('meta')
 				for meta in metas:
-					jid = gajim.parse_jid(meta.getAttr('jid'))
+					jid = helpers.parse_jid(meta.getAttr('jid'))
 					tag = meta.getAttr('tag')
 					data = {'jid': jid}
 					order = meta.getAttr('order')
@@ -1483,7 +1483,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					if not print_status:
 						print_status = conf.getTagData('show_status')
 					bm = {'name': conf.getAttr('name'),
-							'jid': gajim.parse_jid(conf.getAttr('jid')),
+							'jid': helpers.parse_jid(conf.getAttr('jid')),
 							'autojoin': autojoin_val,
 							'minimize': minimize_val,
 							'password': conf.getTagData('password'),
@@ -1503,7 +1503,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				# http://www.xmpp.org/extensions/xep-0145.html
 				notes = storage.getTags('note')
 				for note in notes:
-					jid = gajim.parse_jid(note.getAttr('jid'))
+					jid = helpers.parse_jid(note.getAttr('jid'))
 					annotation = note.getData()
 					self.annotations[jid] = annotation
 
@@ -1718,7 +1718,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if addressTag and jid == gajim.get_jid_from_account(self.name):
 			address = addressTag.getTag('address', attrs={'type': 'ofrom'})
 			if address:
-				frm = gajim.parse_jid(address.getAttr('jid'))
+				frm = helpers.parse_jid(address.getAttr('jid'))
 				jid = gajim.get_jid_without_resource(frm)
 
 		# invitations
@@ -1736,7 +1736,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		xtags = msg.getTags('x')
 		for xtag in xtags:
 			if xtag.getNamespace() == common.xmpp.NS_CONFERENCE and not invite:
-				room_jid = gajim.parse_jid(xtag.getAttr('jid'))
+				room_jid = helpers.parse_jid(xtag.getAttr('jid'))
 				is_continued = False
 				if xtag.getTag('continue'):
 					is_continued = True
@@ -1923,7 +1923,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def dispatch_invite_message(self, invite, frm):
 		item = invite.getTag('invite')
-		jid_from = gajim.parse_jid(item.getAttr('from'))
+		jid_from = helpers.parse_jid(item.getAttr('from'))
 		reason = item.getTagData('reason')
 		item = invite.getTag('password')
 		password = invite.getTagData('password')
@@ -2127,7 +2127,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					r = destroy.getTagData('reason')
 					if r:
 						reason += ' (%s)' % r
-					jid = gajim.parse_jid(destroy.getAttr('jid'))
+					jid = helpers.parse_jid(destroy.getAttr('jid'))
 					if jid:
 						reason += '\n' + _('You can join this room instead: %s') % jid
 					statusCode = ['destroyed']
@@ -2274,7 +2274,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		users_dict = {}
 		for item in items:
 			if item.has_attr('jid') and item.has_attr('affiliation'):
-				jid = gajim.parse_jid(item.getAttr('jid'))
+				jid = helpers.parse_jid(item.getAttr('jid'))
 				affiliation = item.getAttr('affiliation')
 				users_dict[jid] = {'affiliation': affiliation}
 				if item.has_attr('nick'):
