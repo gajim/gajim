@@ -3767,6 +3767,10 @@ class RosterWindow:
 	def drag_end(self, treeview, context):
 		self.dragging = False
 
+	def on_drop_rosterx(self, widget, account_source, c_source, account_dest,
+	c_dest, was_big_brother, context, etime):
+		gajim.connections[account_dest].send_contacts([c_source], c_dest.jid)
+
 	def on_drop_in_contact(self, widget, account_source, c_source, account_dest,
 	c_dest, was_big_brother, context, etime):
 
@@ -4089,9 +4093,26 @@ class RosterWindow:
 			if not c_dest:
 				# c_dest is None if jid_dest doesn't belong to account
 				return
-			self.on_drop_in_contact(treeview, account_source, c_source,
-				account_dest, c_dest, is_big_brother, context, etime)
-			return
+			menu = gtk.Menu()
+			item = gtk.MenuItem(_('Send %s to %s') % (c_source.get_shown_name(),
+				c_dest.get_shown_name()))
+			item.connect('activate', self.on_drop_rosterx, account_source,
+				c_source, account_dest, c_dest, is_big_brother, context, etime)
+			menu.append(item)
+
+			item = gtk.MenuItem(_('Make %s and %s metacontacts') % (
+				c_source.get_shown_name(), c_dest.get_shown_name()))
+			item.connect('activate', self.on_drop_in_contact, account_source,
+				c_source, account_dest, c_dest, is_big_brother, context, etime)
+
+			menu.append(item)
+
+			menu.attach_to_widget(self.tree, None)
+			menu.connect('selection-done', gtkgui_helpers.destroy_widget)
+			menu.show_all()
+			menu.popup(None, None, None, 1, etime)
+#			self.on_drop_in_contact(treeview, account_source, c_source,
+#				account_dest, c_dest, is_big_brother, context, etime)
 
 ################################################################################
 ### Everything about images and icons....

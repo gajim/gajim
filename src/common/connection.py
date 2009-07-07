@@ -1364,6 +1364,25 @@ class Connection(ConnectionHandlers):
 		if callback:
 			callback(msg_id, *callback_args)
 
+	def send_contacts(self, contacts, jid):
+		'''Send contacts with RosterX (Xep-0144)'''
+		if not self.connection:
+			return
+		if len(contacts) == 1:
+			msg = _('Sent contact: "%s" (%s)') % (contacts[0].get_full_jid(),
+				contacts[0].get_shown_name())
+		else:
+			msg = _('Sent contacts:')
+			for contact in contacts:
+				msg += '\n "%s" (%s)' % (contact.get_full_jid(),
+					contact.get_shown_name())
+		msg_iq = common.xmpp.Message(to=jid, body=msg)
+		x = msg_iq.addChild(name='x', namespace=common.xmpp.NS_ROSTERX)
+		for contact in contacts:
+			x.addChild(name='item', attrs={'action': 'add', 'jid': contact.jid,
+				'name': contact.get_shown_name()})
+		self.connection.send(msg_iq)
+
 	def send_stanza(self, stanza):
 		''' send a stanza untouched '''
 		if not self.connection:

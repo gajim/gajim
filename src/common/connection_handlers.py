@@ -1783,11 +1783,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		action = items_list[0].getAttr('action')
 		if action == None:
 			action = 'add'
-		for item in msg.getTag('x').getChildren():
+		for item in msg.getTag('x',
+		namespace=common.xmpp.NS_ROSTERX).getChildren():
 			jid = item.getAttr('jid')
 			name = item.getAttr('name')
 			groups=[]
-			for group in item.getChildren():
+			for group in item.getTags('group'):
 				groups.append(group.getData())
 			exchange_items_list[jid] = []
 			exchange_items_list[jid].append(name)
@@ -1809,9 +1810,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			return
 		
 		# check if the message is a roster item exchange (XEP-0144)
-		#if msg.getTag('x') and msg.getTag('x').namespace == common.xmpp.NS_ROSTERX:
-			#self._rosterItemExchangeCB(con, msg)
-			#return
+		if msg.getTag('x', namespace=common.xmpp.NS_ROSTERX):
+			self._rosterItemExchangeCB(con, msg)
+			return
 
 		# check if the message is a XEP-0070 confirmation request
 		if msg.getTag('confirm', namespace=common.xmpp.NS_HTTP_AUTH):
