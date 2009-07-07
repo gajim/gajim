@@ -1778,7 +1778,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 	def _rosterItemExchangeCB(self, con, msg):
 		''' XEP-0144 Roster Item Echange '''
 		exchange_items_list = {}
-		jid_from = gajim.get_full_jid_from_iq(msg)
+		jid_from = helpers.get_full_jid_from_iq(msg)
 		items_list = msg.getTag('x').getChildren()
 		action = items_list[0].getAttr('action')
 		if action == None:
