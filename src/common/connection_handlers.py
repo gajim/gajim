@@ -728,7 +728,7 @@ class ConnectionDisco:
 			if 'jid' not in attr:
 				continue
 			try:
-				helpers.parse_jid(attr['jid'])
+				attr['jid'] = helpers.parse_jid(attr['jid'])
 			except common.helpers.InvalidFormat:
 				# jid is not conform
 				continue
@@ -1122,7 +1122,10 @@ class ConnectionVcard:
 				storage = query.getTag('storage')
 				metas = storage.getTags('meta')
 				for meta in metas:
-					jid = helpers.parse_jid(meta.getAttr('jid'))
+					try:
+						jid = helpers.parse_jid(meta.getAttr('jid'))
+					except common.helpers.InvalidFormat:
+						continue
 					tag = meta.getAttr('tag')
 					data = {'jid': jid}
 					order = meta.getAttr('order')
@@ -1482,14 +1485,18 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					print_status = conf.getTagData('print_status')
 					if not print_status:
 						print_status = conf.getTagData('show_status')
-					bm = {'name': conf.getAttr('name'),
+					try:
+						bm = {'name': conf.getAttr('name'),
 							'jid': helpers.parse_jid(conf.getAttr('jid')),
 							'autojoin': autojoin_val,
 							'minimize': minimize_val,
 							'password': conf.getTagData('password'),
 							'nick': conf.getTagData('nick'),
 							'print_status': print_status}
-					
+					except common.helpers.InvalidFormat:
+						log.warn('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
+						continue
+
 					self.bookmarks.append(bm)
 				self.dispatch('BOOKMARKS', self.bookmarks)
 
@@ -1503,14 +1510,22 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				# http://www.xmpp.org/extensions/xep-0145.html
 				notes = storage.getTags('note')
 				for note in notes:
-					jid = helpers.parse_jid(note.getAttr('jid'))
+					try:
+						jid = helpers.parse_jid(note.getAttr('jid'))
+					except common.helpers.InvalidFormat:
+						log.warn('Invalid JID: %s, ignoring it' % note.getAttr('jid'))
+						continue
 					annotation = note.getData()
 					self.annotations[jid] = annotation
 
 	def _rosterSetCB(self, con, iq_obj):
 		gajim.log.debug('rosterSetCB')
 		for item in iq_obj.getTag('query').getChildren():
-			jid = helpers.parse_jid(item.getAttr('jid'))
+			try:
+				jid = helpers.parse_jid(item.getAttr('jid'))
+			except common.helpers.InvalidFormat:
+				log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
+				continue
 			name = item.getAttr('name')
 			sub = item.getAttr('subscription')
 			ask = item.getAttr('ask')
@@ -1718,7 +1733,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if addressTag and jid == gajim.get_jid_from_account(self.name):
 			address = addressTag.getTag('address', attrs={'type': 'ofrom'})
 			if address:
-				frm = helpers.parse_jid(address.getAttr('jid'))
+				try:
+					frm = helpers.parse_jid(address.getAttr('jid'))
+				except common.helpers.InvalidFormat:
+					log.warn('Invalid JID: %s, ignoring it' % address.getAttr('jid'))
+					return
 				jid = gajim.get_jid_without_resource(frm)
 
 		# invitations
@@ -1736,7 +1755,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		xtags = msg.getTags('x')
 		for xtag in xtags:
 			if xtag.getNamespace() == common.xmpp.NS_CONFERENCE and not invite:
-				room_jid = helpers.parse_jid(xtag.getAttr('jid'))
+				try:
+					room_jid = helpers.parse_jid(xtag.getAttr('jid'))
+				except common.helpers.InvalidFormat:
+					log.warn('Invalid JID: %s, ignoring it' % xtag.getAttr('jid'))
+					continue
 				is_continued = False
 				if xtag.getTag('continue'):
 					is_continued = True
@@ -1923,7 +1946,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def dispatch_invite_message(self, invite, frm):
 		item = invite.getTag('invite')
-		jid_from = helpers.parse_jid(item.getAttr('from'))
+		try:
+			jid_from = helpers.parse_jid(item.getAttr('from'))
+		except common.helpers.InvalidFormat:
+			log.warn('Invalid JID: %s, ignoring it' % item.getAttr('from'))
+			return
 		reason = item.getTagData('reason')
 		item = invite.getTag('password')
 		password = invite.getTagData('password')
@@ -2127,7 +2154,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					r = destroy.getTagData('reason')
 					if r:
 						reason += ' (%s)' % r
-					jid = helpers.parse_jid(destroy.getAttr('jid'))
+					try:
+						jid = helpers.parse_jid(destroy.getAttr('jid'))
+					except common.helpers.InvalidFormat:
+						pass
 					if jid:
 						reason += '\n' + _('You can join this room instead: %s') % jid
 					statusCode = ['destroyed']
@@ -2274,7 +2304,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		users_dict = {}
 		for item in items:
 			if item.has_attr('jid') and item.has_attr('affiliation'):
-				jid = helpers.parse_jid(item.getAttr('jid'))
+				try:
+					jid = helpers.parse_jid(item.getAttr('jid'))
+				except common.helpers.InvalidFormat:
+					log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
+					return
 				affiliation = item.getAttr('affiliation')
 				users_dict[jid] = {'affiliation': affiliation}
 				if item.has_attr('nick'):
