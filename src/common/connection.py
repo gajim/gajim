@@ -1960,6 +1960,35 @@ class Connection(ConnectionHandlers):
 		sxe.addChild(name='connect')
 
 		self.connection.send(message)
+		
+	def send_whiteboard_node(self, jid, sid, items, rids):
+		# takes int rid and dict items and sends it as a node
+		# sends new item
+		
+		message = common.xmpp.Node(node="<message to='%s' xmlns='jabber:client'/>"
+		   % jid)
+		sxe = message.addChild(name='sxe', attrs={'session':sid},
+			namespace='urn:xmpp:tmp:sxe')
+		
+		for x in rids:
+			if items[x]['type'] == 'element':
+				parent = x
+				attrs = {'rid':x,
+					 'name':items[x]['data'][0].getName(),
+					 'type':items[x]['type']}
+				sxe.addChild(name='new', attrs=attrs)
+			if items[x]['type'] == 'attr':
+				attr_name = items[x]['data']
+				chdata = items[parent]['data'][0].getAttr(attr_name)
+				attrs = {'rid':x,
+					 'name':attr_name,
+					 'type':items[x]['type'],
+					 'chdata':chdata,
+					 'parent':parent}
+				sxe.addChild(name='new', attrs=attrs)
+		self.connection.send(message)
+	
+	
 
 # END Connection
 

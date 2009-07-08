@@ -135,12 +135,15 @@ class SVGObject():
 		node.setAttr('stroke-width', str(line_width))
 		node.setAttr('stroke', 'black')
 		self.g.addChild(node=node)
-
-		self.items[self.session.rid()] = {'type':'element', data:[node, goocanvas_obj]}
-		self.items[self.session.rid()] = {'type':'attr', 'data':'d', 'parent':node}
-		self.items[self.session.rid()] = {'type':'attr', 'data':'d', 'parent':node}
-		self.items[self.session.rid()] = {'type':'attr', 'data':'d', 'parent':node}
 		
+		rids = self.session.generate_rids(4)
+		self.items[rids[0]] = {'type':'element', 'data':[node, goocanvas_obj]}
+		self.items[rids[1]] = {'type':'attr', 'data':'d', 'parent':node}
+		self.items[rids[2]] = {'type':'attr', 'data':'stroke-width', 'parent':node}
+		self.items[rids[3]] = {'type':'attr', 'data':'stroke', 'parent':node}
+		
+		self.session.send_items(self.items, rids)
+
 	def print_xml(self):
 		file = open('whiteboardtest.svg','w')
 		file.writelines(str(self.svg, True))
@@ -160,16 +163,29 @@ class SXESession():
 		else:
 			self.sid = sid
 
-	def rid(self):
-		rid = str(self.last_rid)
-		self.last_rid += 1
-		return rid
+	def generate_rids(self, x):
+		# generates x number of rids and returns in list
+		
+		rids = []
+		for x in range(x):
+			rids.append(str(self.last_rid))
+			self.last_rid += 1
+		return rids
 
 	def connect(self):
 		# connect to the message
 		gajim.connections[self.account].send_whiteboard_connect(
 			self.contact.get_full_jid(), self.sid)
-	
+		
+	def send_items(self, items, rids):
+		# recieves dict items and a list of rids of items to send
+		# TODO: is there a less clumsy way that doesn't involve passing
+		# whole list
+		
+		gajim.connections[self.account].send_whiteboard_node(
+			self.contact.get_full_jid(), self.sid, items, rids
+		)
+		
 	def encode(self, xml):
 		# encodes it sendable string
 		return 'data:text/xml,' + urllib.quote(xml)
