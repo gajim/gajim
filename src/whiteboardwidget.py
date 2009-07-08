@@ -40,7 +40,7 @@ class Whiteboard(goocanvas.Canvas):
 		self.item_temp_coords = (0,0)
 		self.item_data = None
 
- 
+
 	def button_press_event(self, widget, event):
 		x = event.x
 		y = event.y
@@ -102,11 +102,11 @@ class Whiteboard(goocanvas.Canvas):
 			self.image.print_xml()
 
 class SVGObject():
-	''' A class to store the svg document and make changes to it.
-	Stores items in a tuple that's (minidom node, goocanvas object).'''
+	''' A class to store the svg document and make changes to it.'''
 
 	def __init__(self, root, session, height=300, width=300):
-		self.items = {} # Will be {ID: (Node, GooCanvas ), ID2: ()} instance
+		# Will be {ID: {type:'element', data:[node, goocanvas]}, ID2: {}} instance
+		self.items = {}
 		self.root = root
 		
 		# sxe session
@@ -118,7 +118,6 @@ class SVGObject():
 		self.svg.setAttr('height', str(height))
 		self.svg.setAttr('width', str(width))
 		self.svg.setAttr('xmlns', 'http://www.w3.org/2000/svg')
-
 		# TODO: make this settable		
 		self.g = self.svg.addChild(name='<g/>')
 		self.g.setAttr('fill', 'none')
@@ -137,8 +136,10 @@ class SVGObject():
 		node.setAttr('stroke', 'black')
 		self.g.addChild(node=node)
 
-		rid = self.session.rid()
-		self.items[rid] = (node, goocanvas_obj)
+		self.items[self.session.rid()] = {'type':'element', data:[node, goocanvas_obj]}
+		self.items[self.session.rid()] = {'type':'attr', 'data':'d', 'parent':node}
+		self.items[self.session.rid()] = {'type':'attr', 'data':'d', 'parent':node}
+		self.items[self.session.rid()] = {'type':'attr', 'data':'d', 'parent':node}
 		
 	def print_xml(self):
 		file = open('whiteboardtest.svg','w')
