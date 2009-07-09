@@ -1159,8 +1159,9 @@ class GroupchatControl(ChatControlBase):
 							'reason': reason }
 					self.print_conversation(s, 'info', tim = tim)
 				elif '303' in statusCode: # Someone changed his or her nick
-					if new_nick == self.new_nick: # We changed our nick
-						self.nick = self.new_nick
+					if new_nick == self.new_nick or nick == self.nick:
+						# We changed our nick
+						self.nick = new_nick
 						self.new_nick = ''
 						s = _('You are now known as %s') % new_nick
 					else:
