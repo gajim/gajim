@@ -198,8 +198,8 @@ class OptionsParser:
 			self.update_config_to_01214()
 		if old < [0, 12, 1, 5] and new >= [0, 12, 1, 5]:
 			self.update_config_to_01215()
-		if old < [0, 12, 1, 6] and new >= [0, 12, 1, 6]:
-			self.update_config_to_01216()
+		if old < [0, 12, 3, 1] and new >= [0, 12, 3, 1]:
+			self.update_config_to_01231()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -673,7 +673,7 @@ class OptionsParser:
 			gajim.config.set_per('soundevents', evt, 'path', path)
 		gajim.config.set('version', '0.12.1.5')
 
-	def update_config_to_01216(self):
+	def update_config_to_01231(self):
 		back = os.getcwd()
 		os.chdir(logger.LOG_DB_FOLDER)
 		con = sqlite.connect(logger.LOG_DB_FILE)
@@ -703,7 +703,7 @@ class OptionsParser:
 		except sqlite.OperationalError:
 			pass
 		con.close()
-		gajim.config.set('version', '0.12.1.6')
+		gajim.config.set('version', '0.12.3.1')
 
 
 
