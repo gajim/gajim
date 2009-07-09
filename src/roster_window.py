@@ -6176,11 +6176,6 @@ class RosterWindow:
 #		#self.xml.get_widget('menubar').hide()
 #		return
 
-	def init_roster(self):
-		for account in gajim.connections:
-			roster = gajim.logger.get_roster(gajim.get_jid_from_account(account))
-			gajim.handlers['ROSTER'](account, roster)
-
 ################################################################################
 ###
 ################################################################################

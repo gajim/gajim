@@ -1951,6 +1951,11 @@ class Connection(ConnectionHandlers):
 
 		self.connection.SendAndCallForResponse(iq, _on_response)
 
+	def load_roster_from_db(self):
+		roster = gajim.logger.get_roster(gajim.get_jid_from_account(self.name))
+		self.dispatch('ROSTER', roster)
+
+
 # END Connection
 
 # vim: se ts=3:
