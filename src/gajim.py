@@ -600,6 +600,9 @@ class Interface:
 			for request in self.gpg_passphrase.values():
 				if request:
 					request.interrupt()
+			# .keys() is needed because dict changes during loop
+			for account in self.pass_dialog.keys():
+				self.pass_dialog[account].window.destroy()
 		if status == 'offline':
 			# sensitivity for this menuitem
 			if gajim.get_number_of_connected_accounts() == 0:
@@ -1526,6 +1529,8 @@ class Interface:
 
 	def handle_event_password_required(self, account, array):
 		#('PASSWORD_REQUIRED', account, None)
+		if account in self.pass_dialog:
+			return
 		text = _('Enter your password for account %s') % account
 		if passwords.USER_HAS_GNOMEKEYRING and \
 		not passwords.USER_USES_GNOMEKEYRING:
@@ -1538,13 +1543,16 @@ class Interface:
 				gajim.config.set_per('accounts', account, 'savepass', True)
 				passwords.save_password(account, passphrase)
 			gajim.connections[account].set_password(passphrase)
+			del self.pass_dialog[account]
 
 		def on_cancel():
 			self.roster.set_state(account, 'offline')
 			self.roster.update_status_combobox()
+			del self.pass_dialog[account]
 
-		dialogs.PassphraseDialog(_('Password Required'), text, _('Save password'),
-			ok_handler=on_ok, cancel_handler=on_cancel)
+		self.pass_dialog[account] = dialogs.PassphraseDialog(
+			_('Password Required'), text, _('Save password'), ok_handler=on_ok,
+			cancel_handler=on_cancel)
 
 	def handle_event_roster_info(self, account, array):
 		#('ROSTER_INFO', account, (jid, name, sub, ask, groups))
@@ -3231,7 +3239,7 @@ class Interface:
 		self.status_sent_to_users = {}
 		self.status_sent_to_groups = {}
 		self.gpg_passphrase = {}
-		self.gpg_dialog = None
+		self.pass_dialog = {}
 		self.default_colors = {
 			'inmsgcolor': gajim.config.get('inmsgcolor'),
 			'outmsgcolor': gajim.config.get('outmsgcolor'),
