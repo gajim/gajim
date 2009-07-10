@@ -1584,39 +1584,65 @@ class GroupchatControl(ChatControlBase):
 			return True
 		elif command == 'ban':
 			if len(message_array):
-				message_array = message_array[0].split()
-				nick = message_array.pop(0)
 				room_nicks = gajim.contacts.get_nick_list(self.account,
 					self.room_jid)
-				reason = ' '.join(message_array)
-				if nick in room_nicks:
+				nb_match = 0
+				nick_ban = ''
+				for nick in room_nicks:
+					if message_array[0].startswith(nick):
+						nb_match += 1
+						nick_ban = nick
+						test_reason = message_array[0][len(nick) + 1:]
+						if len(test_reason) == 0:
+							reason = 'None'
+						else:
+							reason = test_reason
+				if nb_match == 1:
 					gc_contact = gajim.contacts.get_gc_contact(self.account,
-						self.room_jid, nick)
+							self.room_jid, nick_ban)
 					nick = gc_contact.jid
-				if nick.find('@') >= 0:
+				elif nb_match > 1:
+					self.print_conversation(_('There is an ambiguity: %d nicks '
+						'match.\n Please use graphical interface ') % nb_match,
+						'info')
+					self.clear(self.msg_textview)
+				elif message_array[0].split()[0].find('@') > 0:
 					gajim.connections[self.account].gc_set_affiliation(self.room_jid,
-						nick, 'outcast', reason)
+						message_array[0].split()[0], 'outcast', reason)
 					self.clear(self.msg_textview)
 				else:
-					self.print_conversation(_('Nickname not found: %s') % nick,
-						'info')
+					self.print_conversation(_('Nickname not found'), 'info')
 			else:
 				self.get_command_help(command)
 			return True
 		elif command == 'kick':
 			if len(message_array):
-				message_array = message_array[0].split()
-				nick = message_array.pop(0)
+				nick_kick = ''
 				room_nicks = gajim.contacts.get_nick_list(self.account,
 					self.room_jid)
-				reason = ' '.join(message_array)
-				if nick in room_nicks:
+				nb_match = 0
+				for nick in room_nicks:
+					if message_array[0].startswith(nick):
+						nb_match += 1
+						nick_kick = nick
+						test_reason = message_array[0][len(nick) + 1:]
+						if len(test_reason) == 0:
+							reason = 'None'
+						else:
+							reason = test_reason
+				if nb_match == 1:
 					gajim.connections[self.account].gc_set_role(self.room_jid, nick,
 						'none', reason)
 					self.clear(self.msg_textview)
+				elif nb_match > 1:
+					self.print_conversation(_('There is an ambiguity: %d nicks '
+						'match.\n Please use graphical interface') % nb_match ,
+						'info' )
+					self.clear(self.msg_textview)
 				else:
-					self.print_conversation(_('Nickname not found: %s') % nick,
-						'info')
+					# We can't do the difference between nick and reason
+					# So we don't say the nick
+					self.print_conversation(_('Nickname not found') , 'info')
 			else:
 				self.get_command_help(command)
 			return True
@@ -1695,8 +1721,7 @@ class GroupchatControl(ChatControlBase):
 			s = _('Usage: /%s <nickname|JID> [reason], bans the JID from the group'
 				' chat. The nickname of an occupant may be substituted, but not if '
 				'it contains "@". If the JID is currently in the group chat, '
-				'he/she/it will also be kicked. Does NOT support spaces in '
-				'nickname.') % command
+				'he/she/it will also be kicked.') % command
 			self.print_conversation(s, 'info')
 		elif command == 'chat' or command == 'query':
 			self.print_conversation(_('Usage: /%s <nickname>, opens a private chat'
@@ -1721,8 +1746,7 @@ class GroupchatControl(ChatControlBase):
 		elif command == 'kick':
 			self.print_conversation(_('Usage: /%s <nickname> [reason], removes '
 				'the occupant specified by nickname from the group chat and '
-				'optionally displays a reason. Does NOT support spaces in '
-				'nickname.') % command, 'info')
+				'optionally displays a reason.') % command, 'info')
 		elif command == 'me':
 			self.print_conversation(_('Usage: /%(command)s <action>, sends action '
 				'to the current group chat. Use third person. (e.g. /%(command)s '
