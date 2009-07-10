@@ -336,6 +336,7 @@ class Config:
 			'ignore_unknown_contacts': [ opt_bool, False ],
 			'send_os_info': [ opt_bool, True ],
 			'log_encrypted_sessions': [opt_bool, True, _('When negotiating an encrypted session, should Gajim assume you want your messages to be logged?')],
+			'roster_version': [opt_str, ''],
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],

@@ -198,6 +198,8 @@ class OptionsParser:
 			self.update_config_to_01214()
 		if old < [0, 12, 1, 5] and new >= [0, 12, 1, 5]:
 			self.update_config_to_01215()
+		if old < [0, 12, 3, 1] and new >= [0, 12, 3, 1]:
+			self.update_config_to_01231()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -670,5 +672,40 @@ class OptionsParser:
 			path = helpers.strip_soundfile_path(path, dirs, abs=True)
 			gajim.config.set_per('soundevents', evt, 'path', path)
 		gajim.config.set('version', '0.12.1.5')
+
+	def update_config_to_01231(self):
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE IF NOT EXISTS roster_entry(
+					account_jid_id INTEGER,
+					jid_id INTEGER,
+					name TEXT,
+					subscription INTEGER,
+					ask BOOLEAN,
+					PRIMARY KEY (account_jid_id, jid_id)
+				);
+
+				CREATE TABLE IF NOT EXISTS roster_group(
+					account_jid_id INTEGER,
+					jid_id INTEGER,
+   					group_name TEXT,
+					PRIMARY KEY (account_jid_id, jid_id, group_name)
+				);
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError:
+			pass
+		con.close()
+		gajim.config.set('version', '0.12.3.1')
+
+
+
 
 # vim: se ts=3:

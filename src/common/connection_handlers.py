@@ -65,6 +65,7 @@ VCARD_PUBLISHED = 'vcard_published'
 VCARD_ARRIVED = 'vcard_arrived'
 AGENT_REMOVED = 'agent_removed'
 METACONTACTS_ARRIVED = 'metacontacts_arrived'
+ROSTER_ARRIVED = 'roster_arrived'
 PRIVACY_ARRIVED = 'privacy_arrived'
 PEP_CONFIG = 'pep_config'
 HAS_IDLE = True
@@ -1172,7 +1173,18 @@ class ConnectionVcard:
 				if iq_obj.getErrorCode() not in ('403', '406', '404'):
 					self.private_storage_supported = False
 			# We can now continue connection by requesting the roster
-			self.connection.initRoster()
+			version = gajim.config.get_per('accounts', self.name,
+				'roster_version')
+			iq_id = self.connection.initRoster(version=version)
+			self.awaiting_answers[iq_id] = (ROSTER_ARRIVED, )
+		elif self.awaiting_answers[id_][0] == ROSTER_ARRIVED:
+			if iq_obj.getType() == 'result':
+				if not iq_obj.getTag('query'):
+					account_jid = gajim.get_jid_from_account(self.name)
+					roster_data = gajim.logger.get_roster(account_jid)
+					roster = self.connection.getRoster(force=True)
+					roster.setRaw(roster_data)
+				self._getRoster()
 		elif self.awaiting_answers[id_][0] == PRIVACY_ARRIVED:
 			if iq_obj.getType() != 'error':
 				self.privacy_rules_supported = True
@@ -1556,6 +1568,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _rosterSetCB(self, con, iq_obj):
 		log.debug('rosterSetCB')
+		version = iq_obj.getTagAttr('query', 'ver')
 		for item in iq_obj.getTag('query').getChildren():
 			try:
 				jid = helpers.parse_jid(item.getAttr('jid'))
@@ -1569,6 +1582,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			for group in item.getTags('group'):
 				groups.append(group.getData())
 			self.dispatch('ROSTER_INFO', (jid, name, sub, ask, groups))
+			account_jid = gajim.get_jid_from_account(self.name)
+			gajim.logger.add_or_update_contact(account_jid, jid, name, sub, ask,
+				groups)
+			if version:
+				gajim.config.set_per('accounts', self.name, 'roster_version',
+					version)
 		if not self.connection or self.connected < 2:
 			raise common.xmpp.NodeProcessed
 		reply = common.xmpp.Iq(typ='result', attrs={'id': iq_obj.getID()},
@@ -2484,7 +2503,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.connection.send(result)
 		raise common.xmpp.NodeProcessed
 
-	def _getRosterCB(self, con, iq_obj):
+	def _getRoster(self):
 		log.debug('getRosterCB')
 		if not self.connection:
 			return
@@ -2507,6 +2526,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				gajim.proxy65_manager.resolve(proxy, self.connection, our_jid)
 
 	def _on_roster_set(self, roster):
+		roster_version = roster.version
+		received_from_server = roster.received_from_server
 		raw_roster = roster.getRaw()
 		roster = {}
 		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
@@ -2545,7 +2566,16 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						# we can't determine which iconset to use
 						self.discoverInfo(jid)
 
-		self.dispatch('ROSTER', roster)
+		gajim.logger.replace_roster(self.name, roster_version, roster)
+		if received_from_server:
+			for contact in gajim.contacts.iter_contacts(self.name):
+				if not contact.is_groupchat() and contact.jid not in roster:
+					self.dispatch('ROSTER_INFO', (self.name,
+						(contact.jid, None, None, None, ())))
+			for jid in roster:
+				self.dispatch('ROSTER_INFO', (jid, roster[jid]['name'],
+					roster[jid]['subscription'], roster[jid]['ask'],
+					roster[jid]['groups']))
 
 	def _send_first_presence(self, signed = ''):
 		show = self.continue_connect_info[0]
@@ -2689,8 +2719,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			common.xmpp.NS_MUC_OWNER)
 		con.RegisterHandler('iq', self._MucAdminCB, 'result',
 			common.xmpp.NS_MUC_ADMIN)
-		con.RegisterHandler('iq', self._getRosterCB, 'result',
-			common.xmpp.NS_ROSTER)
 		con.RegisterHandler('iq', self._PrivateCB, 'result',
 			common.xmpp.NS_PRIVATE)
 		con.RegisterHandler('iq', self._HttpAuthCB, 'get',

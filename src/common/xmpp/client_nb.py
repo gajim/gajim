@@ -503,16 +503,16 @@ class NonBlockingClient:
 		self.NonBlockingBind.NonBlockingBind(self._Resource, self._on_sasl_auth)
 		return True
 
-	def initRoster(self):
+	def initRoster(self, version=''):
 		''' Plug in the roster. '''
 		if not self.__dict__.has_key('NonBlockingRoster'):
-			roster_nb.NonBlockingRoster.get_instance().PlugIn(self)
+			return roster_nb.NonBlockingRoster.get_instance(version=version).PlugIn(self)
 
-	def getRoster(self, on_ready=None):
+	def getRoster(self, on_ready=None, force=False):
 		''' Return the Roster instance, previously plugging it in and
 			requesting roster from server if needed. '''
 		if self.__dict__.has_key('NonBlockingRoster'):
-			return self.NonBlockingRoster.getRoster(on_ready)
+			return self.NonBlockingRoster.getRoster(on_ready, force)
 		return None
 
 	def sendPresence(self, jid=None, typ=None, requestRoster=0):

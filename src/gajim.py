@@ -3435,6 +3435,8 @@ class Interface:
 		gtk.window_set_default_icon(pix)
 
 		self.roster = roster_window.RosterWindow()
+		for account in gajim.connections:
+			gajim.connections[account].load_roster_from_db()
 
 		self.init_emoticons()
 		self.make_regexps()
