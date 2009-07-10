@@ -588,6 +588,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	            _('Connection to host could not be established: Timeout while '
 					'sending data.'), None, None, session])
 
+	def load_roster_from_db(self):
+		return
+
 # END ConnectionZeroconf
 
 # vim: se ts=3:
