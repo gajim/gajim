@@ -1,5 +1,6 @@
 pixmapsdir = $(pkgdatadir)/data/pixmaps
 pixmaps_DATA = $(srcdir)/*.png \
+				gajim.svg \
 			   gajim.ico
 
 pixmapseventsdir = $(pkgdatadir)/data/pixmaps/events
