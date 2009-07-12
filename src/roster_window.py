@@ -569,21 +569,22 @@ class RosterWindow:
 			big_brother_jid)
 		child_iters = self._get_contact_iter(big_brother_jid, big_brother_account,
 			model=self.model)
-		parent_iter = self.model.iter_parent(child_iters[0])
-		parent_type = self.model[parent_iter][C_TYPE]
+		if child_iters:
+			parent_iter = self.model.iter_parent(child_iters[0])
+			parent_type = self.model[parent_iter][C_TYPE]
 
-		# Check if the current BigBrother has even been before.
-		if parent_type == 'contact':
-			for data in nearby_family:
-				# recalibrate after remove to keep highlight
-				if data['jid'] in gajim.to_be_removed[data['account']]:
-					return
+			# Check if the current BigBrother has even been before.
+			if parent_type == 'contact':
+				for data in nearby_family:
+					# recalibrate after remove to keep highlight
+					if data['jid'] in gajim.to_be_removed[data['account']]:
+						return
 
-			self._remove_metacontact_family(family, account)
-			brothers = self._add_metacontact_family(family, account)
+				self._remove_metacontact_family(family, account)
+				brothers = self._add_metacontact_family(family, account)
 
-			for c, acc in brothers:
-				self.draw_completely(c.jid, acc)
+				for c, acc in brothers:
+					self.draw_completely(c.jid, acc)
 
 		# Check is small brothers are under the big brother
 		for child in nearby_family:
