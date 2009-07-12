@@ -1908,6 +1908,7 @@ class Interface:
 
 	def handle_event_metacontacts(self, account, tags_list):
 		gajim.contacts.define_metacontacts(account, tags_list)
+		self.roster.redraw_metacontacts(account)
 
 	def handle_atom_entry(self, account, data):
 		atom_entry, = data

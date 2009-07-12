@@ -379,6 +379,12 @@ class Contacts:
 		#FIXME: can this append ?
 		assert False
 
+	def get_metacontacts_tags(self, account):
+		'''return a list of tags for a given account'''
+		if not account in self._metacontacts_tags:
+			return []
+		return self._metacontacts_tags[account].keys()
+
 	def get_metacontacts_tag(self, account, jid):
 		'''Returns the tag of a jid'''
 		if not account in self._metacontacts_tags:
@@ -462,6 +468,9 @@ class Contacts:
 		[{'account': acct, 'jid': jid, 'order': order}, ]
 		'order' is optional'''
 		tag = self.get_metacontacts_tag(account, jid)
+		return self.get_metacontacts_family_from_tag(account, tag)
+
+	def get_metacontacts_family_from_tag(self, account, tag):
 		if not tag:
 			return []
 		answers = []
