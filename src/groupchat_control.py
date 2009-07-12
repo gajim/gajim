@@ -1631,8 +1631,8 @@ class GroupchatControl(ChatControlBase):
 						else:
 							reason = test_reason
 				if nb_match == 1:
-					gajim.connections[self.account].gc_set_role(self.room_jid, nick,
-						'none', reason)
+					gajim.connections[self.account].gc_set_role(self.room_jid,
+						nick_kick, 'none', reason)
 					self.clear(self.msg_textview)
 				elif nb_match > 1:
 					self.print_conversation(_('There is an ambiguity: %d nicks '
