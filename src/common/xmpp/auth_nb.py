@@ -504,7 +504,8 @@ class NonBlockingBind(PlugIn):
 				jid = JID(resp.getTag('bind').getTagData('jid'))
 				self._owner.User = jid.getNode()
 				self._owner.Resource = jid.getResource()
-				if self.session == -1: #Server don't want us to initialize a session
+				if hasattr(self, 'session') and self.session == -1:
+					# Server don't want us to initialize a session
 					log.info('No session required.')
 					self.on_bound('ok')
 				else:
