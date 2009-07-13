@@ -535,7 +535,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 		except tls_nb.SSLWrapper.Error, e:
 			log.info("_do_receive, caught SSL error, got %s:" % received,
 				exc_info=True)
-			errnum, errstr = e.exc
+			errnum, errstr = e.errno, e.strerror
 
 		if received == '':
 			errstr = 'zero bytes on recv'
