@@ -833,21 +833,25 @@ class Logger:
 		accout_name is the name of the account to change
 		roster_version is the version of the new roster
 		roster is the new version '''
+		# First we must reset roster_version value to ensure that the server
+		# sends back all the roster at the next connexion if the replacement
+		# didn't work properly.
 		gajim.config.set_per('accounts', account_name, 'roster_version', '')
+
 		account_jid = gajim.get_jid_from_account(account_name)
 		account_jid_id = self.get_jid_id(account_jid)
 
 		# Delete old roster
-		sql = 'DELETE FROM roster_entry WHERE account_jid_id = %d' % (
-			account_jid_id)
-		sql = 'DELETE FROM roster_group WHERE account_jid_id = %d' % (
-			account_jid_id)
+		self.remove_roster(account_jid)
 
 		# Fill roster tables with the new roster
 		for jid in roster:
 			self.add_or_update_contact(account_jid, jid, roster[jid]['name'],
 				roster[jid]['subscription'], roster[jid]['ask'],
 				roster[jid]['groups'])
+
+		# At this point, we are sure the replacement works properly so we can
+		# set the new roster_version value.
 		gajim.config.set_per('accounts', account_name, 'roster_version',
 			roster_version)
 
@@ -858,10 +862,9 @@ class Logger:
 			jid_id = self.get_jid_id(jid)
 		except exceptions.PysqliteOperationalError, e:
 			raise exceptions.PysqliteOperationalError(str(e))
-		sql = 'DELETE FROM roster_group WHERE account_jid_id=%d AND jid_id=%d' % (account_jid_id, jid_id)
-		self.cur.execute(sql)
-		sql = 'DELETE FROM roster_entry WHERE account_jid_id=%d AND jid_id=%d' % (account_jid_id, jid_id)
-		self.simple_commit(sql)
+		self.cur.execute('DELETE FROM roster_group WHERE account_jid_id=? AND jid_id=?', (account_jid_id, jid_id))
+		self.cur.execute('DELETE FROM roster_entry WHERE account_jid_id=? AND jid_id=?', (account_jid_id, jid_id))
+		self.con.commit()
 
 	def add_or_update_contact(self, account_jid, jid, name, sub, ask, groups):
 		''' Add or update a contact from account_jid roster. '''
@@ -877,22 +880,20 @@ class Logger:
 
 		# Update groups information
 		# First we delete all previous groups information
-		sql = 'DELETE FROM roster_group WHERE account_jid_id=%d AND jid_id=%d' % (account_jid_id, jid_id)
-		self.cur.execute(sql)
+		self.cur.execute('DELETE FROM roster_group WHERE account_jid_id=? AND jid_id=?', (account_jid_id, jid_id))
 		# Then we add all new groups information
 		for group in groups:
-			sql = 'INSERT INTO roster_group VALUES("%d", "%d", "%s")' % (
-				account_jid_id, jid_id, group)
-			self.cur.execute(sql)
+			self.cur.execute('INSERT INTO roster_group VALUES(?, ?, ?)',
+				(account_jid_id, jid_id, group))
 
 		if name is None:
 			name = ''
 
-		sql = 'REPLACE INTO roster_entry VALUES("%d", "%d", "%s", "%s", "%d")'\
-			% (account_jid_id, jid_id, name,
+		self.cur.execute('REPLACE INTO roster_entry VALUES(?, ?, ?, ?, ?)',
+			(account_jid_id, jid_id, name,
 			self.convert_human_subscription_values_to_db_api_values(sub),
-			bool(ask))
-		self.simple_commit(sql)
+			bool(ask)))
+		self.con.commit()
 
 	def get_roster(self, account_jid):
 		''' Return the accound_jid roster in NonBlockingRoster format. '''
@@ -900,7 +901,7 @@ class Logger:
 		account_jid_id = self.get_jid_id(account_jid)
 
 		# First we fill data with roster_entry informations
-		self.cur.execute('SELECT j.jid, re.jid_id, re.name, re.subscription, re.ask FROM roster_entry re, jids j WHERE re.account_jid_id="%(account_jid_id)s" AND j.jid_id=re.jid_id' % {'account_jid_id': account_jid_id})
+		self.cur.execute('SELECT j.jid, re.jid_id, re.name, re.subscription, re.ask FROM roster_entry re, jids j WHERE re.account_jid_id=? AND j.jid_id=re.jid_id', (account_jid_id,))
 		for jid, jid_id, name, subscription, ask in self.cur:
 			data[jid] = {}
 			if name:
@@ -918,7 +919,7 @@ class Logger:
 
 		# Then we add group for roster entries
 		for jid in data:
-			self.cur.execute('SELECT group_name FROM roster_group WHERE account_jid_id="%(account_jid_id)s" AND jid_id="%(jid_id)s"' % {'account_jid_id': account_jid_id, 'jid_id': data[jid]['id']})
+			self.cur.execute('SELECT group_name FROM roster_group WHERE account_jid_id=? AND jid_id=?', (account_jid_id, data[jid]['id']))
 			for (group_name,) in self.cur:
 				data[jid]['groups'].append(group_name)
 			del data[jid]['id']
@@ -926,14 +927,13 @@ class Logger:
 		return data
 
 	def remove_roster(self, account_jid):
+		''' Remove all entry from account_jid roster. '''
 		account_jid_id = self.get_jid_id(account_jid)
 
-		sql = 'DELETE FROM roster_group WHERE account_jid_id=%d' % (
-			account_jid_id)
-		self.cur.execute(sql)
-
-		sql = 'DELETE FROM roster_entry WHERE account_jid_id=%d' % (
-			account_jid_id)
-		self.simple_commit(sql)
+		self.cur.execute('DELETE FROM roster_entry WHERE account_jid_id=?',
+			(account_jid_id,))
+		self.cur.execute('DELETE FROM roster_group WHERE account_jid_id=?',
+			(account_jid_id,))
+		self.con.commit()
 
 # vim: se ts=3:
