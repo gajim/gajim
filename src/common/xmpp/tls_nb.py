@@ -63,7 +63,7 @@ class SSLWrapper:
 		peer=None):
 			self.parent = IOError
 
-			errno = errno or gattr(exc, 'errno')
+			errno = errno or gattr(exc, 'errno') or exc[0]
 			strerror = strerror or gattr(exc, 'strerror') or gattr(exc, 'args')
 			if not isinstance(strerror, basestring):
 				strerror = repr(strerror)
