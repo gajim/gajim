@@ -669,8 +669,8 @@ class Connection(ConnectionHandlers):
 		'warn_when_plaintext_connection'):
 			self.dispatch('PLAIN_CONNECTION', (con,))
 			return True
-		if _con_type in ('tls', 'ssl') and not hasattr(con.Connection,
-		'_sslContext') and gajim.config.get_per('accounts', self.name,
+		if _con_type in ('tls', 'ssl') and con.Connection.ssl_lib != 'PYOPENSSL' \
+		and gajim.config.get_per('accounts', self.name,
 		'warn_when_insecure_ssl_connection') and \
 		not self.connection_auto_accepted:
 			# Pyopenssl is not used
