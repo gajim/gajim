@@ -21,22 +21,21 @@
 
 class ArchivingPreferences:
 	def __init__(self):
-		self.auto = None
+		self.auto_save = None
 		self.method_auto = None
 		self.method_local = None
 		self.method_manual = None
 		self.default = None
 		self.items = {}
 		
-	def set(self, auto, method_auto, method_local, method_manual, default):
-		self.auto = auto
+	def set(self, auto_save, method_auto, method_local, method_manual):
+		self.auto_save = auto_save
 		self.method_auto = method_auto
 		self.method_local = method_local
 		self.method_manual = method_manual
-		self.default = default
 
-	def set_default(self, expire, otr, save):
-		self.default = {'expire': expire, 'otr': otr, 'save': save}
+	def set_default(self, otr, save, expire=None, unset=False):
+		self.default = {'expire': expire, 'otr': otr, 'save': save, 'unset': unset}
 
 	def append_or_update_item(self, jid, expire, otr, save):
 		self.items[jid] = {'expire': expire, 'otr': otr, 'save': save}
