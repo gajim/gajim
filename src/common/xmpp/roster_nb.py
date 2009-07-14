@@ -21,7 +21,7 @@ Simple roster implementation. Can be used though for different tasks like
 mass-renaming of contacts.
 '''
 
-from protocol import JID, Iq, Presence, Node, NodeProcessed, NS_ROSTER
+from protocol import JID, Iq, Presence, Node, NodeProcessed, NS_MUC_USER, NS_ROSTER
 from plugin import PlugIn
 
 import logging
@@ -94,6 +94,8 @@ class NonBlockingRoster(PlugIn):
 	def PresenceHandler(self,dis,pres):
 		''' Presence tracker. Used internally for setting items' resources state in
 			internal roster representation. '''
+		if pres.getTag('x', namespace=NS_MUC_USER):
+			return
 		jid=pres.getFrom()
 		if not jid:
 			# If no from attribue, it's from server
