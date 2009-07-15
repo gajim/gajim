@@ -51,6 +51,7 @@ from common import exceptions
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.caps import ConnectionCaps
+from common.message_archiving import ConnectionArchive
 
 from common import dbus_support
 if dbus_support.supported:
@@ -1433,8 +1434,9 @@ sent a message to.'''
 
 		return sess
 
-class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionCaps, ConnectionHandlersBase):
+class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionCaps, ConnectionHandlersBase):
 	def __init__(self):
+		ConnectionArchive.__init__(self)
 		ConnectionVcard.__init__(self)
 		ConnectionBytestream.__init__(self)
 		ConnectionCommands.__init__(self)
@@ -2739,6 +2741,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			common.xmpp.NS_SEARCH)
 		con.RegisterHandler('iq', self._PrivacySetCB, 'set',
 			common.xmpp.NS_PRIVACY)
+		con.RegisterHandler('iq', self._ArchiveCB, ns=common.xmpp.NS_ARCHIVE)
 		con.RegisterHandler('iq', self._PubSubCB, 'result')
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._IqCB)

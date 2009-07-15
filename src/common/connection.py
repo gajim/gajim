@@ -1032,6 +1032,13 @@ class Connection(ConnectionHandlers):
 		self.connection.set_send_timeout(self.keepalives, self.send_keepalive)
 		self.connection.set_send_timeout2(self.pingalives, self.sendPing)
 		self.connection.onreceive(None)
+
+		# Request message archiving preferences
+		iq = common.xmpp.Iq('get')
+		iq.setTag('pref', namespace=common.xmpp.NS_ARCHIVE)
+		self.connection.send(iq)
+
+		# Request privacy list
 		iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')
 		id_ = self.connection.getAnID()
 		iq.setID(id_)
