@@ -30,6 +30,7 @@ import gtkgui_helpers
 
 from common import gajim
 from common import helpers
+from common import kwalletbinding
 
 class FeaturesWindow:
 	'''Class for features window'''
@@ -66,9 +67,9 @@ class FeaturesWindow:
 				_('Gajim session is stored on logout and restored on login.'),
 				_('Requires python-gnome2.'),
 				_('Feature not available under Windows.')),
-			_('Password encryption'): (self.gnome_keyring_available,
+			_('Password encryption'): (self.some_keyring_available,
 				_('Passwords can be stored securely and not just in plaintext.'),
-				_('Requires gnome-keyring and python-gnome2-desktop.'),
+				_('Requires gnome-keyring and python-gnome2-desktop, or kwalletcli.'),
 				_('Feature not available under Windows.')),
 			_('SRV'): (self.srv_available,
 				_('Ability to connect to servers which are using SRV records.'),
@@ -200,9 +201,11 @@ class FeaturesWindow:
 			return False
 		return True
 
-	def gnome_keyring_available(self):
+	def some_keyring_available(self):
 		if os.name == 'nt':
 			return False
+		if kwalletbinding.kwallet_available():
+			return True
 		try:
 			import gnomekeyring
 		except Exception:
