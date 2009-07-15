@@ -21,6 +21,10 @@
 
 class ConnectionArchive:
 	def __init__(self):
+		self.archive_auto_supported = False
+		self.archive_manage_supported = False
+		self.archive_manual_supported = False
+		self.archive_pref_supported = False
 		self.auto_save = None
 		self.method_auto = None
 		self.method_local = None

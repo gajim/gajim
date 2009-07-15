@@ -10,6 +10,13 @@
       </widget>
     </child>
     <child>
+      <widget class="GtkMenuItem" id="archiving_preferences_menuitem">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Edit Archi_ving Preferences...</property>
+        <property name="use_underline">True</property>
+      </widget>
+    </child>
+    <child>
       <widget class="GtkMenuItem" id="privacy_lists_menuitem">
         <property name="label" translatable="yes">Edit _Privacy Lists...</property>
         <property name="use_underline">True</property>

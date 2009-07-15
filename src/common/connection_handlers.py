@@ -894,6 +894,14 @@ class ConnectionDisco:
 						break
 			if features.__contains__(common.xmpp.NS_PUBSUB):
 				self.pubsub_supported = True
+			if features.__contains__(common.xmpp.NS_ARCHIVE_AUTO):
+				self.archive_auto_supported = True
+			if features.__contains__(common.xmpp.NS_ARCHIVE_MANAGE):
+				self.archive_manage_supported = True
+			if features.__contains__(common.xmpp.NS_ARCHIVE_MANUAL):
+				self.archive_manual_supported = True
+			if features.__contains__(common.xmpp.NS_ARCHIVE_PREF):
+				self.archive_pref_supported = True
 			if features.__contains__(common.xmpp.NS_BYTESTREAM):
 				our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name) +\
 					'/' + self.server_resource)

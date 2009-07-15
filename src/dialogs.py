@@ -2848,6 +2848,11 @@ class RosterItemExchangeWindow:
 		self.window.destroy()
 		
 
+class ArchivingPreferencesWindow:
+	def __init__(self, account):
+		self.account = account
+
+
 class PrivacyListWindow:
 	'''Window that is used for creating NEW or EDITING already there privacy
 	lists'''
