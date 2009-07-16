@@ -176,6 +176,7 @@ class P2PClient(IdleObject):
 			self.stanzaqueue.append((stanza, is_message))
 
 		if is_message:
+			thread_id = stanza.getThread()
 			id_ = stanza.getID()
 			if not id_:
 				id_ = self.Dispatcher.getAnID()
