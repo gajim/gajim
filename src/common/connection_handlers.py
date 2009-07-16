@@ -2233,8 +2233,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				# print in the window the error
 				self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 					errmsg, errcode))
-			self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource, prio,
-				keyID, timestamp, None))
+			if errcode != '409': # conflict # See #5120
+				self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
+					prio, keyID, timestamp, None))
 
 		if ptype == 'unavailable' and jid_stripped in self.sessions:
 			# automatically terminate sessions that they haven't sent a thread ID
