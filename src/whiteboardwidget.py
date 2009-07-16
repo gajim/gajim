@@ -79,7 +79,6 @@ class Whiteboard(goocanvas.Canvas):
 					radius_x=abs(x - self.item_temp_coords[0]) / 2,
 					radius_y=abs(y - self.item_temp_coords[1]) / 2,
 					stroke_color='black',
-					fill_color='white',
 					line_width=self.line_width)
 
 	def button_release_event(self, widget, event):
@@ -96,19 +95,16 @@ class Whiteboard(goocanvas.Canvas):
 					radius_x=1,
 					radius_y=1,
 					stroke_color='black',
-					fill_color='white',
+					fill_color='black',
 					line_width=self.line_width)
 			self.image.add_path(self.item_data, self.line_width)
 			
 		if self.draw_tool == 'oval':
-			self.item_temp = goocanvas.Ellipse(parent=self.root,
-				center_x=self.item_temp_coords[0] + (x - self.item_temp_coords[0]) / 2,
-				center_y=self.item_temp_coords[1] + (y - self.item_temp_coords[1]) / 2,
-				radius_x=abs(x - self.item_temp_coords[0]) / 2,
-				radius_y=abs(y - self.item_temp_coords[1]) / 2,
-				stroke_color='black',
-				fill_color='white',
-				line_width=self.line_width)
+			cx = self.item_temp_coords[0] + (x - self.item_temp_coords[0]) / 2
+			cy = self.item_temp_coords[1] + (y - self.item_temp_coords[1]) / 2
+			rx = abs(x - self.item_temp_coords[0]) / 2
+			ry = abs(y - self.item_temp_coords[1]) / 2
+			self.image.add_ellipse(cx, cy, rx, ry, self.line_width)
 
 		self.item_data = None
 		if self.item_temp is not None:
@@ -163,7 +159,39 @@ class SVGObject():
 		self.items[rids[3]] = {'type':'attr', 'data':'stroke', 'parent':node}
 		
 		self.session.send_items(self.items, rids)
+		
+	def add_ellipse(self, cx, cy, rx, ry, line_width):
+		''' adds the ellipse to the items listing, both minidom node and goocanvas
+		object in a tuple '''
 
+		goocanvas_obj = goocanvas.Ellipse(parent=self.root,
+					center_x=cx,
+					center_y=cy,
+					radius_x=rx,
+					radius_y=ry,
+					stroke_color='black',
+					line_width=line_width)
+
+		node = self.g.addChild(name='ellipse')
+		node.setAttr('cx', str(cx))
+		node.setAttr('cy', str(cy))
+		node.setAttr('rx', str(rx))
+		node.setAttr('ry', str(ry))
+		node.setAttr('stroke-width', str(line_width))
+		node.setAttr('stroke', 'black')
+		self.g.addChild(node=node)
+		
+		rids = self.session.generate_rids(7)
+		self.items[rids[0]] = {'type':'element', 'data':[node, goocanvas_obj]}
+		self.items[rids[1]] = {'type':'attr', 'data':'cx', 'parent':node}
+		self.items[rids[2]] = {'type':'attr', 'data':'cy', 'parent':node}
+		self.items[rids[3]] = {'type':'attr', 'data':'rx', 'parent':node}
+		self.items[rids[4]] = {'type':'attr', 'data':'ry', 'parent':node}
+		self.items[rids[5]] = {'type':'attr', 'data':'stroke-width', 'parent':node}
+		self.items[rids[6]] = {'type':'attr', 'data':'stroke', 'parent':node}
+		
+		self.session.send_items(self.items, rids)
+		
 	def print_xml(self):
 		file = open('whiteboardtest.svg','w')
 		file.writelines(str(self.svg, True))
