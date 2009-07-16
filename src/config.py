@@ -2693,6 +2693,7 @@ class RemoveAccountWindow:
 		gajim.interface.roster.set_actions_menu_needs_rebuild()
 		if 'accounts' in gajim.interface.instances:
 			gajim.interface.instances['accounts'].init_accounts()
+			gajim.interface.instances['accounts'].init_account()
 		self.window.destroy()
 
 #---------- ManageBookmarksWindow class -------------#
