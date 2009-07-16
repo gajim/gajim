@@ -2755,6 +2755,9 @@ class ChatControl(ChatControlBase):
 			try:
 				hbox.pack_start(whiteboard)
 				whiteboard.show()
+				# set minimum size
+				whiteboard.set_size_request(300, 0)
+				hbox.pack_start(whiteboard, expand=False, fill=False)
 			except:
 				pass # TODO: Fix problem with groupchat?
 

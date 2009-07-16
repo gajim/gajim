@@ -28,8 +28,8 @@ class Whiteboard(goocanvas.Canvas):
 		self.connect('key-press-event', self.key_press_event)
 
 		# Config
-		self.draw_tool = 'brush'
-		self.line_width = 10
+		self.draw_tool = 'oval'
+		self.line_width = 2
 
 		# SVG Storage
 		# TODO: get height width info
@@ -48,7 +48,6 @@ class Whiteboard(goocanvas.Canvas):
 		self.item_temp_coords = (x,y)
 
 		if self.draw_tool == 'brush':
-			self.item_data = 'M %s,%s ' % (x, y)
 			self.item_temp = goocanvas.Ellipse(parent=self.root,
 				center_x=x,
 				center_y=y,
@@ -57,7 +56,9 @@ class Whiteboard(goocanvas.Canvas):
 				stroke_color='black',
 				fill_color='black',
 				line_width=self.line_width)
-			self.item_data = self.item_data + 'L '
+			self.item_data = 'M %s,%s L ' % (x, y)
+		elif self.draw_tool == 'oval':
+			self.item_data = True
 
 	def motion_notify_event(self, widget, event):
 		x = event.x
@@ -66,11 +67,20 @@ class Whiteboard(goocanvas.Canvas):
 		if self.item_temp is not None:
 			self.item_temp.remove()
 			
-		if self.draw_tool == 'brush':
-			if self.item_data is not None:
+		if self.item_data is not None:
+			if self.draw_tool == 'brush':
 				self.item_data = self.item_data + '%s,%s ' % (x, y)
 				self.item_temp = goocanvas.Path(parent=self.root,
 					data=self.item_data, line_width=self.line_width)
+			elif self.draw_tool == 'oval':
+				self.item_temp = goocanvas.Ellipse(parent=self.root,
+					center_x=self.item_temp_coords[0] + (x - self.item_temp_coords[0]) / 2,
+					center_y=self.item_temp_coords[1] + (y - self.item_temp_coords[1]) / 2,
+					radius_x=abs(x - self.item_temp_coords[0]) / 2,
+					radius_y=abs(y - self.item_temp_coords[1]) / 2,
+					stroke_color='black',
+					fill_color='white',
+					line_width=self.line_width)
 
 	def button_release_event(self, widget, event):
 		x = event.x
@@ -86,9 +96,19 @@ class Whiteboard(goocanvas.Canvas):
 					radius_x=1,
 					radius_y=1,
 					stroke_color='black',
-					fill_color='black',
+					fill_color='white',
 					line_width=self.line_width)
 			self.image.add_path(self.item_data, self.line_width)
+			
+		if self.draw_tool == 'oval':
+			self.item_temp = goocanvas.Ellipse(parent=self.root,
+				center_x=self.item_temp_coords[0] + (x - self.item_temp_coords[0]) / 2,
+				center_y=self.item_temp_coords[1] + (y - self.item_temp_coords[1]) / 2,
+				radius_x=abs(x - self.item_temp_coords[0]) / 2,
+				radius_y=abs(y - self.item_temp_coords[1]) / 2,
+				stroke_color='black',
+				fill_color='white',
+				line_width=self.line_width)
 
 		self.item_data = None
 		if self.item_temp is not None:
