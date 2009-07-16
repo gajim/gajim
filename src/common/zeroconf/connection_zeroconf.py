@@ -495,6 +495,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		# send a stanza untouched
 		if not self.connection:
 			return
+		if not isinstance(stanza, common.xmpp.Node):
+			stanza = common.xmpp.Protocol(node=stanza)
 		self.connection.send(stanza)
 
 	def ack_subscribed(self, jid):
