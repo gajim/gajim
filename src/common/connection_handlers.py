@@ -227,12 +227,18 @@ class ConnectionBytestream:
 			ostreamhost.setAttr('host', ft_host)
 			ostreamhost.setAttr('jid', sender)
 		try:
-			thehost = self.peerhost[0]
-			streamhost = common.xmpp.Node(tag = 'streamhost') # My IP
-			query.addChild(node = streamhost)
-			streamhost.setAttr('port', unicode(port))
-			streamhost.setAttr('host', thehost)
-			streamhost.setAttr('jid', sender)
+			# The ip we're connected to server with
+			my_ips = [self.peerhost[0]]
+			# all IPs from local DNS
+			for addr in socket.getaddrinfo(socket.gethostname(), None):
+				if not addr[4][0] in my_ips:
+					my_ips.append(addr[4][0])
+			for ip in my_ips:
+				streamhost = common.xmpp.Node(tag = 'streamhost')
+				query.addChild(node = streamhost)
+				streamhost.setAttr('port', unicode(port))
+				streamhost.setAttr('host', ip)
+				streamhost.setAttr('jid', sender)
 		except socket.gaierror:
 			self.dispatch('ERROR', (_('Wrong host'),
 				_('Invalid local address? :-O')))
