@@ -26,7 +26,10 @@ import subprocess
 
 def kwallet_available():
 	"""Return True if kwalletcli can be run, False otherwise."""
-	p = subprocess.Popen(["kwalletcli", "-qV"])
+	try:
+		p = subprocess.Popen(["kwalletcli", "-qV"])
+	except Exception:
+		return False
 	p.communicate()
 	if p.returncode == 0:
 		return True
