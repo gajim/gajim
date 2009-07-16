@@ -697,6 +697,7 @@ class ClientZeroconf:
 			if conn.add_stanza(stanza, is_message):
 				if on_ok:
 					on_ok(id_)
+				return
 
 		if item['address'] in self.ip_to_hash:
 			hash_ = self.ip_to_hash[item['address']]
@@ -708,6 +709,7 @@ class ClientZeroconf:
 				if conn.add_stanza(stanza, is_message):
 					if on_ok:
 						on_ok(id_)
+					return
 
 		# otherwise open new connection
 		if not stanza.getID():
