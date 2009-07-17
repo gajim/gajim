@@ -1606,6 +1606,12 @@ class GroupchatControl(ChatControlBase):
 						'info')
 					self.clear(self.msg_textview)
 				elif message_array[0].split()[0].find('@') > 0:
+					message_splited = message_array[0].split(' ', 1)
+					jid = message_splited[0]
+					if len(message_splited) == 2:
+						reason = message_splited[1]
+					else:
+						reason = 'None'
 					gajim.connections[self.account].gc_set_affiliation(self.room_jid,
 						message_array[0].split()[0], 'outcast', reason)
 					self.clear(self.msg_textview)
