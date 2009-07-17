@@ -1580,6 +1580,7 @@ class CommonInputDialog:
 		self.dialog.set_title(title)
 		label.set_markup(label_str)
 		self.cancel_handler = cancel_handler
+		self.vbox = self.xml.get_widget('vbox')
 
 		self.ok_handler = ok_handler
 		okbutton = self.xml.get_widget('okbutton')
@@ -1589,7 +1590,7 @@ class CommonInputDialog:
 		self.xml.signal_autoconnect(self)
 		self.dialog.show_all()
 
-	def on_input_dialog_destroy(self, widget):
+	def on_input_dialog_delete_event(self, widget, event):
 		if self.cancel_handler:
 			self.cancel_handler()
 
@@ -1610,17 +1611,141 @@ class CommonInputDialog:
 class InputDialog(CommonInputDialog):
 	'''Class for Input dialog'''
 	def __init__(self, title, label_str, input_str=None, is_modal=True,
-				 ok_handler=None, cancel_handler=None):
+	ok_handler=None, cancel_handler=None):
 		self.xml = gtkgui_helpers.get_glade('input_dialog.glade')
 		CommonInputDialog.__init__(self, title, label_str, is_modal, ok_handler,
-								   cancel_handler)
+			cancel_handler)
+		self.input_entry = self.xml.get_widget('input_entry')
+		if input_str:
+			self.set_entry(input_str)
+
+	def set_entry(self, value):
+		self.input_entry.set_text(value)
+		self.input_entry.select_region(0, -1) # select all
+
+	def get_text(self):
+		return self.input_entry.get_text().decode('utf-8')
+
+class InputDialogCheck(InputDialog):
+	'''Class for Input dialog'''
+	def __init__(self, title, label_str, checktext='', input_str=None,
+	is_modal=True, ok_handler=None, cancel_handler=None):
+		self.xml = gtkgui_helpers.get_glade('input_dialog.glade')
+		InputDialog.__init__(self, title, label_str, input_str=input_str,
+			is_modal=is_modal, ok_handler=ok_handler,
+			cancel_handler=cancel_handler)
 		self.input_entry = self.xml.get_widget('input_entry')
 		if input_str:
 			self.input_entry.set_text(input_str)
 			self.input_entry.select_region(0, -1) # select all
 
+		self.checkbutton = gtk.CheckButton(checktext)
+		self.vbox.pack_start(self.checkbutton, expand=False, fill=True)
+		self.checkbutton.show()
+
+	def on_okbutton_clicked(self, widget):
+		user_input = self.get_text()
+		if user_input:
+			user_input = user_input.decode('utf-8')
+		self.cancel_handler = None
+		self.dialog.destroy()
+		if isinstance(self.ok_handler, tuple):
+			self.ok_handler[0](user_input, self.is_checked(), *self.ok_handler[1:])
+		else:
+			self.ok_handler(user_input, self.is_checked())
+
 	def get_text(self):
 		return self.input_entry.get_text().decode('utf-8')
+
+	def is_checked(self):
+		''' Get active state of the checkbutton '''
+		return self.checkbutton.get_active()
+
+class ChangeNickDialog(InputDialogCheck):
+	'''Class for changing room nickname in case of conflict'''
+	def __init__(self, account, room_jid):
+		title = _('Unable to join group chat')
+		check_text = _('Always use this nickname when there is a conflict')
+		InputDialogCheck.__init__(self, title, '', checktext=check_text,
+			input_str='', is_modal=True, ok_handler=None, cancel_handler=None)
+		self.room_queue = [(account, room_jid)]
+		self.check_next()
+
+	def on_input_dialog_delete_event(self, widget, event):
+		self.on_cancelbutton_clicked(widget)
+		return True
+
+	def setup_dialog(self):
+		self.gc_control = gajim.interface.msg_win_mgr.get_gc_control(
+			self.room_jid, self.account)
+		if not self.gc_control and \
+		self.room_jid in gajim.interface.minimized_controls[self.account]:
+			self.gc_control = \
+				gajim.interface.minimized_controls[self.account][self.room_jid]
+		if not self.gc_control:
+			self.check_next()
+			return
+		label = self.xml.get_widget('label')
+		prompt = _('Your desired nickname in group chat %s is in use or '
+			'registered by another occupant.\nPlease specify another nickname '
+			'below:') % self.room_jid
+		label.set_markup(prompt)
+		self.set_entry(self.gc_control.nick + \
+			gajim.config.get('gc_proposed_nick_char'))
+
+	def check_next(self):
+		if len(self.room_queue) == 0:
+			self.cancel_handler = None
+			self.dialog.destroy()
+			del gajim.interface.instances['change_nick_dialog']
+			return
+		self.account, self.room_jid = self.room_queue.pop(0)
+		self.setup_dialog()
+
+		if gajim.new_room_nick is not None and not gajim.gc_connected[
+		self.account][self.room_jid] and self.gc_control.nick != \
+		gajim.new_room_nick:
+			self.dialog.hide()
+			self.on_ok(gajim.new_room_nick, True)
+		else:
+			self.dialog.show()
+
+	def on_okbutton_clicked(self, widget):
+		nick = self.get_text()
+		if nick:
+			nick = nick.decode('utf-8')
+		# send presence to room
+		try:
+			nick = helpers.parse_resource(nick)
+		except Exception:
+			# invalid char
+			dialogs.ErrorDialog(_('Invalid nickname'),
+				_('The nickname has not allowed characters.'))
+			return
+		self.on_ok(nick, self.is_checked())
+
+	def on_ok(self, nick, is_checked):
+		if is_checked:
+			gajim.new_room_nick = nick
+		gajim.connections[self.account].join_gc(nick, self.room_jid, None,
+			change_nick=True)
+		if gajim.gc_connected[self.account][self.room_jid]:
+			# We are changing nick, we will change self.nick when we receive
+			# presence that inform that it works
+			self.gc_control.new_nick = nick
+		else:
+			# We are connecting, we will not get a changed nick presence so
+			# change it NOW. We don't already have a nick so it's harmless
+			self.gc_control.nick = nick
+		self.check_next()
+
+	def on_cancelbutton_clicked(self, widget):
+		self.gc_control.new_nick = ''
+		self.check_next()
+
+	def add_room(self, account, room_jid):
+		if (account, room_jid) not in self.room_queue:
+			self.room_queue.append((account, room_jid))
 
 class InputTextDialog(CommonInputDialog):
 	'''Class for multilines Input dialog (more place than InputDialog)'''

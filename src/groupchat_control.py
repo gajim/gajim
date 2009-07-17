@@ -181,7 +181,6 @@ class GroupchatControl(ChatControlBase):
 
 		self.is_continued=is_continued
 		self.is_anonymous = True
-		self.change_nick_dialog = None
 
 		self.actions_button = self.xml.get_widget('muc_window_actions_button')
 		id_ = self.actions_button.connect('clicked',
@@ -1786,39 +1785,6 @@ class GroupchatControl(ChatControlBase):
 			return gc_contact.role
 		else:
 			return 'visitor'
-
-	def show_change_nick_input_dialog(self, title, prompt):
-		'''asks user for new nick and on ok it sets it on room'''
-		if self.change_nick_dialog:
-			# A dialog is already opened
-			return
-		def on_ok(widget):
-			nick = self.change_nick_dialog.input_entry.get_text().decode('utf-8')
-			self.change_nick_dialog = None
-			try:
-				nick = helpers.parse_resource(nick)
-			except Exception:
-				# invalid char
-				dialogs.ErrorDialog(_('Invalid nickname'),
-				_('The nickname has not allowed characters.'))
-				return
-			gajim.connections[self.account].join_gc(nick, self.room_jid, None,
-				change_nick=True)
-			if gajim.gc_connected[self.account][self.room_jid]:
-				# We are changing nick, we will change self.nick when we receive
-				# presence that inform that it works
-				self.new_nick = nick
-			else:
-				# We are connecting, we will not get a changed nick presence so
-				# change it NOW. We don't already have a nick so it's harmless
-				self.nick = nick
-		def on_cancel():
-			self.change_nick_dialog = None
-			self.new_nick = ''
-		proposed_nick = self.nick + gajim.config.get('gc_proposed_nick_char')
-		self.change_nick_dialog = dialogs.InputDialog(title, prompt,
-			proposed_nick, is_modal=False, ok_handler=on_ok,
-			cancel_handler=on_cancel)
 
 	def minimizable(self):
 		if self.contact.jid in gajim.config.get_per('accounts', self.account,

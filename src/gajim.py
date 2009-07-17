@@ -506,16 +506,11 @@ class Interface:
 	def handle_event_ask_new_nick(self, account, data):
 		#('ASK_NEW_NICK', account, (room_jid,))
 		room_jid = data[0]
-		gc_control = self.msg_win_mgr.get_gc_control(room_jid, account)
-		if not gc_control and \
-		room_jid in self.minimized_controls[account]:
-			gc_control = self.minimized_controls[account][room_jid]
-		if gc_control: # user may close the window before we are here
-			title = _('Unable to join group chat')
-			prompt = _('Your desired nickname in group chat %s is in use or '
-				'registered by another occupant.\nPlease specify another nickname '
-				'below:') % room_jid
-			gc_control.show_change_nick_input_dialog(title, prompt)
+		if 'change_nick_dialog' in self.instances:
+			self.instances['change_nick_dialog'].add_room(account, room_jid)
+		else:
+			self.instances['change_nick_dialog'] = dialogs.ChangeNickDialog(
+				account, room_jid)
 
 	def handle_event_http_auth(self, account, data):
 		#('HTTP_AUTH', account, (method, url, transaction_id, iq_obj, msg))

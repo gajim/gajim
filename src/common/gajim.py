@@ -113,6 +113,7 @@ contacts = Contacts()
 gc_connected = {} # tell if we are connected to the room or not {acct: {room_jid: True}}
 gc_passwords = {} # list of the pass required to enter a room {room_jid: password}
 automatic_rooms = {} # list of rooms that must be automaticaly configured and for which we have a list of invities {account: {room_jid: {'invities': []}}}
+new_room_nick = None # if it's != None, use this nick instead of asking for a new nickname when there is a conflict.
 
 groups = {} # list of groups
 newly_added = {} # list of contacts that has just signed in
