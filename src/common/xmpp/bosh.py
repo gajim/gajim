@@ -62,7 +62,6 @@ class NonBlockingBOSH(NonBlockingTransport):
 			self.bosh_hold = bosh_dict['bosh_hold']
 		self.bosh_requests = self.bosh_hold
 		self.bosh_uri = bosh_dict['bosh_uri']
-		self.bosh_port = bosh_dict['bosh_port']
 		self.bosh_content = bosh_dict['bosh_content']
 		self.over_proxy = bosh_dict['bosh_useproxy']
 		if estabilish_tls:
@@ -85,7 +84,8 @@ class NonBlockingBOSH(NonBlockingTransport):
 			self.proxy_dict['type'] = 'http'
 			# with SSL over proxy, we do HTTP CONNECT to proxy to open a channel to
 			# BOSH Connection Manager
-			self.proxy_dict['xmpp_server'] = (urisplit(self.bosh_uri)[1], self.bosh_port)
+			host, port = urisplit(self.bosh_uri)[1].split(':', 1)
+			self.proxy_dict['xmpp_server'] = (host, int(port))
 			self.proxy_dict['credentials'] = self.proxy_creds
 
 
@@ -416,7 +416,6 @@ class NonBlockingBOSH(NonBlockingTransport):
 
 	def get_new_http_socket(self):
 		http_dict = {'http_uri': self.bosh_uri,
-			'http_port': self.bosh_port,
 			'http_version': self.http_version,
 			'http_persistent': self.http_persistent,
 			'add_proxy_headers': self.over_proxy and not self.estabilish_tls}

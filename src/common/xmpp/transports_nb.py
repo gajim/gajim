@@ -56,8 +56,9 @@ def get_proxy_data_from_dict(proxy):
 	proxy_type = proxy['type']
 	if proxy_type == 'bosh' and not proxy['bosh_useproxy']:
 		# with BOSH not over proxy we have to parse the hostname from BOSH URI
-		tcp_host, tcp_port = urisplit(proxy['bosh_uri'])[1], proxy['bosh_port']
-		tcp_host = tcp_host.split(':')[0]
+		tcp_host = urisplit(proxy['bosh_uri'])[1]
+		tcp_host, tcp_port = tcp_host.split(':', 1)
+		tcp_port = int(tcp_port)
 	else:
 		# with proxy!=bosh or with bosh over HTTP proxy we're connecting to proxy
 		# machine
@@ -603,9 +604,10 @@ class NonBlockingHTTP(NonBlockingTCP):
 
 		self.http_protocol, self.http_host, self.http_path = urisplit(
 			http_dict['http_uri'])
+		self.http_host, self.http_port = self.http_host.split(':', 1)
+		self.http_port = int(self.http_port)
 		self.http_protocol = self.http_protocol or 'http'
 		self.http_path = self.http_path or '/'
-		self.http_port = http_dict['http_port']
 		self.http_version = http_dict['http_version']
 		self.http_persistent = http_dict['http_persistent']
 		self.add_proxy_headers =  http_dict['add_proxy_headers']

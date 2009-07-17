@@ -1085,9 +1085,7 @@ class ManageProxiesWindow:
 	def show_bosh_fields(self, show=True):
 		if show:
 			self.xml.get_widget('boshuri_entry').show()
-			self.xml.get_widget('boshport_entry').show()
 			self.xml.get_widget('boshuri_label').show()
-			self.xml.get_widget('boshport_label').show()
 			self.xml.get_widget('boshuseproxy_checkbutton').show()
 		else:
 			cb = self.xml.get_widget('boshuseproxy_checkbutton')
@@ -1095,9 +1093,7 @@ class ManageProxiesWindow:
 			cb.set_active(True)
 			self.on_boshuseproxy_checkbutton_toggled(cb)
 			self.xml.get_widget('boshuri_entry').hide()
-			self.xml.get_widget('boshport_entry').hide()
 			self.xml.get_widget('boshuri_label').hide()
-			self.xml.get_widget('boshport_label').hide()
 
 
 	def fill_proxies_treeview(self):
@@ -1178,7 +1174,6 @@ class ManageProxiesWindow:
 		proxyuser_entry = self.xml.get_widget('proxyuser_entry')
 		proxypass_entry = self.xml.get_widget('proxypass_entry')
 		boshuri_entry = self.xml.get_widget('boshuri_entry')
-		boshport_entry = self.xml.get_widget('boshport_entry')
 		useauth_checkbutton = self.xml.get_widget('useauth_checkbutton')
 		boshuseproxy_checkbutton = self.xml.get_widget('boshuseproxy_checkbutton')
 		proxyhost_entry.set_text('')
@@ -1218,8 +1213,6 @@ class ManageProxiesWindow:
 				'pass'))
 			boshuri_entry.set_text(gajim.config.get_per('proxies', proxy,
 				'bosh_uri'))
-			boshport_entry.set_text(unicode(gajim.config.get_per('proxies', proxy,
-				'bosh_port')))
 			types = ['http', 'socks5', 'bosh']
 			self.proxytype_combobox.set_active(types.index(proxytype))
 			boshuseproxy_checkbutton.set_active(
@@ -1275,11 +1268,6 @@ class ManageProxiesWindow:
 		value = widget.get_text().decode('utf-8')
 		proxy = self.proxyname_entry.get_text().decode('utf-8')
 		gajim.config.set_per('proxies', proxy, 'bosh_uri', value)
-
-	def on_boshport_entry_changed(self, widget):
-		value = widget.get_text().decode('utf-8')
-		proxy = self.proxyname_entry.get_text().decode('utf-8')
-		gajim.config.set_per('proxies', proxy, 'bosh_port', value)
 
 	def on_proxypass_entry_changed(self, widget):
 		value = widget.get_text().decode('utf-8')

@@ -363,7 +363,6 @@ class Config:
 			'user': [ opt_str, '' ],
 			'pass': [ opt_str, '' ],
 			'bosh_uri': [ opt_str, '' ],
-			'bosh_port': [ opt_int, 80 ],
 			'bosh_useproxy': [ opt_bool, False ],
 			'bosh_wait': [ opt_int, 30 ],
 			'bosh_hold': [ opt_int, 2 ],

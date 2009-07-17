@@ -622,7 +622,7 @@ class Connection(ConnectionHandlers):
 		if self._proxy:
 			msg = '>>>>>> '
 			if self._proxy['type']=='bosh':
-				msg = '%s over BOSH %s:%s' % (msg, self._proxy['bosh_uri'], self._proxy['bosh_port'])
+				msg = '%s over BOSH %s' % (msg, self._proxy['bosh_uri'])
 			if self._proxy['type'] in ['http','socks5'] or self._proxy['bosh_useproxy']:
 				msg = '%s over proxy %s:%s' % (msg, self._proxy['host'], self._proxy['port'])
 			log.info(msg)
