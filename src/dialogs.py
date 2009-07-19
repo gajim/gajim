@@ -2852,6 +2852,94 @@ class ArchivingPreferencesWindow:
 	def __init__(self, account):
 		self.account = account
 
+		# Connect to glade
+		self.xml = gtkgui_helpers.get_glade('archiving_preferences_window.glade')
+		self.window = self.xml.get_widget('archiving_preferences_window')
+
+		# Add Widgets
+		for widget_to_add in ('auto_save_yes_radiobutton',
+		'auto_save_no_radiobutton', 'method_auto_combobox',
+		'method_local_combobox', 'method_manual_combobox', 'close_button',
+		'item_treeview', 'item_notebook', 'otr_combobox', 'save_combobox',
+		'expire_entry'):
+			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
+
+
+		auto_save = gajim.connections[account].auto_save == 'true'
+		self.auto_save_yes_radiobutton.set_active(auto_save)
+		self.auto_save_no_radiobutton.set_active(not auto_save)
+
+		method_index = {'prefer': 0, 'concede': 1, 'forbid': 2}
+		self.method_auto_combobox.set_active(method_index[gajim.connections[
+			self.account].method_auto])
+		self.method_local_combobox.set_active(method_index[gajim.connections[
+			self.account].method_local])
+		self.method_manual_combobox.set_active(method_index[gajim.connections[
+			self.account].method_manual])
+
+		model = gtk.ListStore(str)
+		self.item_treeview.set_model(model)
+		col = gtk.TreeViewColumn('name')
+		self.item_treeview.append_column(col)
+		renderer = gtk.CellRendererText()
+		col.pack_start(renderer, True)
+		col.set_attributes(renderer, text=0)
+		#renderer.connect('edited', self.on_msg_cell_edited)
+		renderer.set_property('editable', False)
+		#self.fill_item_treeview()
+		iter_ = model.append()
+		model.set(iter_, 0, 'Default')
+		for item in gajim.connections[account].items:
+			iter_ = model.append()
+			model.set(iter_, 0, item)
+		self.current_item = None
+
+		self.window.set_title(_('Archiving Preferences for %s') % self.account)
+
+		self.window.show_all()
+
+		self.xml.signal_autoconnect(self)
+
+	def on_archiving_preferences_window_destroy(self, widget):
+		if 'archiving_preferences' in gajim.interface.instances[self.account]:
+			del gajim.interface.instances[self.account]['archiving_preferences']
+
+	def on_add_item_button_clicked(self, widget):
+		model = self.item_treeview.get_model()
+		iter_ = model.append()
+		model.set(iter_, 0, 'jid@example.net')
+
+	def on_item_treeview_cursor_changed(self, widget):
+		sel = self.item_treeview.get_selection()
+		(model, iter_) = sel.get_selected()
+		item = None
+		if iter_:
+			item = model[iter_][0]
+		if self.current_item and self.current_item == item:
+				return
+
+		if iter:
+			otr_index = {'approve': 0, 'concede': 1, 'forbid': 2, 'oppose': 3,
+				'prefer': 4, 'require': 5}
+			save_index = {'body': 0, 'false': 1, 'message': 2, 'stream': 3}
+			item_config = None
+			if item == 'Default':
+				item_config = gajim.connections[self.account].default
+			else:
+				item_config = gajim.connections[self.account].items[item]
+			self.otr_combobox.set_active(otr_index[item_config['otr']])
+			self.save_combobox.set_active(save_index[item_config['save']])
+			expire_value = item_config['expire'] or ''
+			self.expire_entry.set_text(expire_value)
+			self.current_item = item
+		if self.current_item:
+			self.item_notebook.set_current_page(1)
+		else:
+			self.item_notebook.set_current_page(0)
+
+	def on_close_button_clicked(self, widget):
+		self.window.destroy()
+
 
 class PrivacyListWindow:
 	'''Window that is used for creating NEW or EDITING already there privacy

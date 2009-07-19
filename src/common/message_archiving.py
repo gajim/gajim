@@ -36,7 +36,7 @@ class ConnectionArchive:
 		self.default = {'expire': expire, 'otr': otr, 'save': save,
 			'unset': unset}
 
-	def append_or_update_item(self, jid, expire, otr, save):
+	def append_or_update_item(self, jid, otr, save, expire):
 		self.items[jid] = {'expire': expire, 'otr': otr, 'save': save}
 
 	def remove_item(self, jid):
