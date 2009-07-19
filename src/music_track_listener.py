@@ -130,10 +130,10 @@ class MusicTrackListener(gobject.GObject):
 		return info
 
 	def _mpris_playing_changed_cb(self, playing):
-		if playing[0] == 0:
-			self.emit('music-track-changed', self._last_playing_music)
-		else:
+		if playing:
 			self.emit('music-track-changed', None)
+		else:
+			self.emit('music-track-changed', self._last_playing_music)
 
 	def _mpris_music_track_change_cb(self, arg):
 		self._last_playing_music = self._mpris_properties_extract(arg)
