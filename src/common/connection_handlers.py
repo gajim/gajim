@@ -2577,8 +2577,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if received_from_server:
 			for contact in gajim.contacts.iter_contacts(self.name):
 				if not contact.is_groupchat() and contact.jid not in roster:
-					self.dispatch('ROSTER_INFO', (self.name,
-						(contact.jid, None, None, None, ())))
+					self.dispatch('ROSTER_INFO', (contact.jid, None, None, None,
+						()))
 			for jid in roster:
 				self.dispatch('ROSTER_INFO', (jid, roster[jid]['name'],
 					roster[jid]['subscription'], roster[jid]['ask'],
