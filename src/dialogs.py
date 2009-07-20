@@ -1639,9 +1639,10 @@ class InputDialogCheck(InputDialog):
 			self.input_entry.set_text(input_str)
 			self.input_entry.select_region(0, -1) # select all
 
-		self.checkbutton = gtk.CheckButton(checktext)
-		self.vbox.pack_start(self.checkbutton, expand=False, fill=True)
-		self.checkbutton.show()
+		if checktext:
+			self.checkbutton = gtk.CheckButton(checktext)
+			self.vbox.pack_start(self.checkbutton, expand=False, fill=True)
+			self.checkbutton.show()
 
 	def on_okbutton_clicked(self, widget):
 		user_input = self.get_text()
@@ -1659,16 +1660,18 @@ class InputDialogCheck(InputDialog):
 
 	def is_checked(self):
 		''' Get active state of the checkbutton '''
-		return self.checkbutton.get_active()
+		try:
+			return self.checkbutton.get_active()
+		except Exception:
+			# There is no checkbutton
+			return False
 
 class ChangeNickDialog(InputDialogCheck):
 	'''Class for changing room nickname in case of conflict'''
-	def __init__(self, account, room_jid):
-		title = _('Unable to join group chat')
-		check_text = _('Always use this nickname when there is a conflict')
+	def __init__(self, account, room_jid, title, prompt, check_text=None):
 		InputDialogCheck.__init__(self, title, '', checktext=check_text,
 			input_str='', is_modal=True, ok_handler=None, cancel_handler=None)
-		self.room_queue = [(account, room_jid)]
+		self.room_queue = [(account, room_jid, prompt)]
 		self.check_next()
 
 	def on_input_dialog_delete_event(self, widget, event):
@@ -1686,10 +1689,7 @@ class ChangeNickDialog(InputDialogCheck):
 			self.check_next()
 			return
 		label = self.xml.get_widget('label')
-		prompt = _('Your desired nickname in group chat %s is in use or '
-			'registered by another occupant.\nPlease specify another nickname '
-			'below:') % self.room_jid
-		label.set_markup(prompt)
+		label.set_markup(self.prompt)
 		self.set_entry(self.gc_control.nick + \
 			gajim.config.get('gc_proposed_nick_char'))
 
@@ -1699,7 +1699,7 @@ class ChangeNickDialog(InputDialogCheck):
 			self.dialog.destroy()
 			del gajim.interface.instances['change_nick_dialog']
 			return
-		self.account, self.room_jid = self.room_queue.pop(0)
+		self.account, self.room_jid, self.prompt = self.room_queue.pop(0)
 		self.setup_dialog()
 
 		if gajim.new_room_nick is not None and not gajim.gc_connected[
@@ -1743,9 +1743,9 @@ class ChangeNickDialog(InputDialogCheck):
 		self.gc_control.new_nick = ''
 		self.check_next()
 
-	def add_room(self, account, room_jid):
-		if (account, room_jid) not in self.room_queue:
-			self.room_queue.append((account, room_jid))
+	def add_room(self, account, room_jid, pompt):
+		if (account, room_jid, prompt) not in self.room_queue:
+			self.room_queue.append((account, room_jid, prompt))
 
 class InputTextDialog(CommonInputDialog):
 	'''Class for multilines Input dialog (more place than InputDialog)'''

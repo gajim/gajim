@@ -1939,9 +1939,14 @@ class GroupchatControl(ChatControlBase):
 			ok_handler=on_ok)
 
 	def _on_change_nick_menuitem_activate(self, widget):
-		title = _('Changing Nickname')
-		prompt = _('Please specify the new nickname you want to use:')
-		self.show_change_nick_input_dialog(title, prompt)
+		if 'change_nick_dialog' in gajim.interface.instances:
+			gajim.interface.instances['change_nick_dialog'].present()
+		else:
+			title = _('Changing Nickname')
+			prompt = _('Please specify the new nickname you want to use:')
+			gajim.interface.instances['change_nick_dialog'] = \
+				dialogs.ChangeNickDialog(self.account, self.room_jid, title,
+				prompt)
 
 	def _on_configure_room_menuitem_activate(self, widget):
 		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, self.nick)
