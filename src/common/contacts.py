@@ -292,7 +292,7 @@ class Contacts:
 	def iter_contacts(self, account):
 		if account in self._contacts:
 			for jid in self._contacts[account].keys():
-				for contact in self._contacts[account][jid].keys():
+				for contact in self._contacts[account][jid]:
 					yield contact
 
 	def get_contact_from_full_jid(self, account, fjid):
