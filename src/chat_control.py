@@ -2750,7 +2750,7 @@ class ChatControl(ChatControlBase):
 	
 	def _on_whiteboard_button_clicked(self, widget):
 		gajim.connections[self.account].startWhiteboard(
-			self.contact.get_full_jid())
+			self.contact.get_full_jid(), self)
 
 	def draw_whiteboard(self, session):
 		hbox = self.xml.get_widget('chat_child_hbox')

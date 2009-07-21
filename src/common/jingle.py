@@ -20,6 +20,8 @@ import gobject
 import xmpp
 import urllib
 
+from common import helpers
+
 import logging
 log = logging.getLogger('gajim.c.jingle')
 
@@ -327,10 +329,11 @@ class JingleContent(object):
 
 class JingleWhiteboard(JingleContent):
 	''' Jingle Whiteboard sessions consist of xhtml content'''
-	def __init__(self, session, node=None):
-		JingleContent.__init__(self, session, node)
+	def __init__(self, session, control=None):
+		JingleContent.__init__(self, session)
 		self.negotiated = True # there is nothing to negotiate
 		self.last_rid = 0
+		self.control = control
 
 	def stanzaCB(self, stanza, content, error, action):
 		''' Called when something related to our content was sent by peer. '''
@@ -343,6 +346,7 @@ class JingleWhiteboard(JingleContent):
 			'transport-info': [],
 			'iq-result': [],
 			'iq-error': [],
+			'edit': [self.__editCB],
 			# these are called when *we* sent these stanzas
 			'session-initiate-sent': [self.__sessionInitiateSentCB],
 			'session-accept-sent': [self.__sessionInitiateSentCB],
@@ -350,6 +354,10 @@ class JingleWhiteboard(JingleContent):
 		}[action]
 		for callback in callbacks:
 			callback(stanza, content, error, action)
+
+	def __editCB(self, stanza, content, error, action):
+		log.debug('got a whiteboard edit')
+		#TODO: extract data, draw it. We have self.control which point to the ChatControl
 
 	def __sessionAcceptCB(self, stanza, content, error, action):
 		log.debug('session accepted')
@@ -655,7 +663,11 @@ class ConnectionJingle(object):
 		route it adequatelly.'''
 
 		# get data
-		jid = stanza.getFrom()
+		try:
+			jid = helpers.get_full_jid_from_iq(stanza)
+		except helpers.InvalidFormat:
+			self.dispatch('ERROR', (_('Invalid Jabber ID'),
+				_('A message from a non-valid JID arrived, it has been ignored.')))
 		id = stanza.getID()
 
 		if (jid, id) in self.__iq_responses.keys():
@@ -664,7 +676,8 @@ class ConnectionJingle(object):
 			raise xmpp.NodeProcessed
 
 		jingle = stanza.getTag('jingle')
-		if not jingle: return
+		if not jingle:
+			return
 		sid = jingle.getAttr('sid')
 
 		# do we need to create a new jingle object
@@ -677,6 +690,36 @@ class ConnectionJingle(object):
 
 		raise xmpp.NodeProcessed
 
+	def _whiteboardCB(self, con, msg):
+		# Handles whiteboard messages
+		log.debug('_whiteboardCB')
+		try:
+			jid = helpers.get_full_jid_from_iq(msg)
+		except helpers.InvalidFormat:
+			self.dispatch('ERROR', (_('Invalid Jabber ID'),
+				_('A message from a non-valid JID arrived, it has been ignored.')))
+
+		sxe = msg.getTag('sxe')
+		if not sxe:
+			return
+		sid = sxe.getAttr('session')
+		if (jid, sid) not in self.__sessions:
+			newjingle = JingleSession(con=self, weinitiate=False, jid=jid, sid=sid)
+			self.addJingle(newjingle)
+
+		# we already have such session in dispatcher...
+		session = self.__sessions[(jid, sid)]
+		cn = session.contents[('initiator', 'xhtml')]
+		error = msg.getTag('error')
+		if error:
+			action = 'iq-error'
+		else:
+			action = 'edit'
+
+		cn.stanzaCB(msg, sxe, error, action)
+
+		raise xmpp.NodeProcessed
+
 	def addJingleIqCallback(self, jid, id, jingle):
 		self.__iq_responses[(jid, id)]=jingle
 
@@ -686,10 +729,10 @@ class ConnectionJingle(object):
 		jingle.addContent('voice', JingleVoiP(jingle))
 		jingle.startSession()
 
-	def startWhiteboard(self, jid):
+	def startWhiteboard(self, jid, control):
 		jingle = JingleSession(self, weinitiate=True, jid=jid)
 		self.addJingle(jingle)
-		jingle.addContent('xhtml', JingleWhiteboard(jingle))
+		jingle.addContent('xhtml', JingleWhiteboard(jingle, control))
 		jingle.startSession()
 
 	def getJingleSession(self, jid, sid):

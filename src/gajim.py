@@ -2265,6 +2265,7 @@ class Interface:
 						self.new_chat_from_jid(account, jid)
 						ctrl = self.msg_win_mgr.get_control(jid, account)
 					session = session.contents[('initiator', 'xhtml')]
+					session.control = ctrl
 					ctrl.draw_whiteboard(session)
 
 				def on_cancel():
