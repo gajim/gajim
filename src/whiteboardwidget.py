@@ -113,9 +113,12 @@ class Whiteboard(goocanvas.Canvas):
 	
 	def export(self, widget):
 		self.image.print_xml()
+		
+	def tool_brush(self,widget):
+		self.draw_tool = 'brush'
 	
-	def tool_change(self, widget, tool):
-		self.draw_tool = tool
+	def tool_oval(self, widget):
+		self.draw_tool = 'oval'
 
 class SVGObject():
 	''' A class to store the svg document and make changes to it.'''

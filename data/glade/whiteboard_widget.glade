@@ -19,6 +19,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="whiteboard.tool_brush"/>
               </widget>
               <packing>
                 <property name="position">0</property>
@@ -30,6 +31,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="whiteboard.tool_oval"/>
               </widget>
               <packing>
                 <property name="position">1</property>
@@ -41,6 +43,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="whiteboard.export"/>
               </widget>
               <packing>
                 <property name="position">2</property>
