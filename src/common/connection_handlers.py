@@ -737,7 +737,7 @@ class ConnectionDisco:
 		hostname = gajim.config.get_per('accounts', self.name,
 													'hostname')
 		id = iq_obj.getID()
-		if jid == hostname and id[0] == 'Gajim_':
+		if jid == hostname and id[:6] == 'Gajim_':
 			for item in items:
 				self.discoverInfo(item['jid'], id_prefix='Gajim_')
 		else:
