@@ -130,10 +130,16 @@ class MusicTrackListener(gobject.GObject):
 		return info
 
 	def _mpris_playing_changed_cb(self, playing):
-		if playing:
-			self.emit('music-track-changed', None)
-		else:
-			self.emit('music-track-changed', self._last_playing_music)
+		if type(playing) is dbus.Struct:
+			if playing[0]:
+				self.emit('music-track-changed', None)
+			else:
+				self.emit('music-track-changed', self._last_playing_music)
+		else: # Workaround for e.g. Audacious
+			if playing:
+				self.emit('music-track-changed', None)
+			else:
+				self.emit('music-track-changed', self._last_playing_music)
 
 	def _mpris_music_track_change_cb(self, arg):
 		self._last_playing_music = self._mpris_properties_extract(arg)
