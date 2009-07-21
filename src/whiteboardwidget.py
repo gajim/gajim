@@ -1,4 +1,5 @@
 import gtk
+import gtkgui_helpers
 import goocanvas
 from common.xmpp import Node
 from common import gajim
@@ -14,17 +15,24 @@ SVG Paths.
 - Ummu
 '''
 
-class Whiteboard(goocanvas.Canvas):
+class Whiteboard(object):
 	def __init__(self, account, contact):
-		goocanvas.Canvas.__init__(self)
-		self.set_flags(gtk.CAN_FOCUS)
-		self.root = self.get_root_item()
+		xml = gtkgui_helpers.get_glade('whiteboard_widget.glade',
+			'whiteboard_hbox')
+		self.hbox = xml.get_widget('whiteboard_hbox')
+		self.canevas = goocanvas.Canvas()
+		self.hbox.pack_start(self.canevas)
+		self.hbox.reorder_child(self.canevas, 0)
+		self.canevas.set_flags(gtk.CAN_FOCUS)
+		xml.signal_autoconnect(self)
+
+		self.root = self.canevas.get_root_item()
 		session = SXESession(account, contact)
 
 		# Events
-		self.connect('button-press-event', self.button_press_event)
-		self.connect('button-release-event', self.button_release_event)
-		self.connect('motion-notify-event', self.motion_notify_event)
+		self.canevas.connect('button-press-event', self.button_press_event)
+		self.canevas.connect('button-release-event', self.button_release_event)
+		self.canevas.connect('motion-notify-event', self.motion_notify_event)
 
 		# Config
 		self.draw_tool = 'oval'
@@ -39,6 +47,14 @@ class Whiteboard(goocanvas.Canvas):
 		self.item_temp_coords = (0,0)
 		self.item_data = None
 
+	def on_brush_button_clicked(self, widget):
+		print 'on_brush_button_clicked'
+
+	def on_oval_button_clicked(self, widget):
+		print 'on_oval_button_clicked'
+
+	def on_export_button_clicked(self, widget):
+		print 'on_export_button_clicked'
 
 	def button_press_event(self, widget, event):
 		x = event.x

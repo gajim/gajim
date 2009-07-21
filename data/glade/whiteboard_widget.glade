@@ -6,51 +6,62 @@
     <child>
       <widget class="GtkHBox" id="whiteboard_hbox">
         <property name="visible">True</property>
+        <property name="spacing">6</property>
         <child>
           <placeholder/>
         </child>
         <child>
-          <widget class="GtkVBox" id="whiteboard_menu_vbox">
+          <widget class="GtkVButtonBox" id="vbuttonbox1">
             <property name="visible">True</property>
-            <property name="orientation">vertical</property>
+            <property name="border_width">6</property>
+            <property name="spacing">6</property>
+            <property name="layout_style">start</property>
             <child>
-              <widget class="GtkButton" id="whiteboard_brush_button">
+              <widget class="GtkButton" id="brush_button">
                 <property name="label" translatable="yes">Brush Tool</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="whiteboard.tool_brush"/>
+                <signal name="clicked" handler="on_brush_button_clicked"/>
               </widget>
               <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="whiteboard_oval_tool">
+              <widget class="GtkButton" id="oval_button">
                 <property name="label" translatable="yes">Oval Tool</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="whiteboard.tool_oval"/>
+                <signal name="clicked" handler="on_oval_button_clicked"/>
               </widget>
               <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="whiteboard_export_button">
+              <widget class="GtkButton" id="export_button">
                 <property name="label" translatable="yes">Export XML</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="whiteboard.export"/>
+                <signal name="clicked" handler="on_export_button_clicked"/>
               </widget>
               <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">2</property>
               </packing>
             </child>
           </widget>
           <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
             <property name="position">1</property>
           </packing>
         </child>
