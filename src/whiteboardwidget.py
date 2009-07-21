@@ -25,7 +25,6 @@ class Whiteboard(goocanvas.Canvas):
 		self.connect('button-press-event', self.button_press_event)
 		self.connect('button-release-event', self.button_release_event)
 		self.connect('motion-notify-event', self.motion_notify_event)
-		self.connect('key-press-event', self.key_press_event)
 
 		# Config
 		self.draw_tool = 'oval'
@@ -57,6 +56,7 @@ class Whiteboard(goocanvas.Canvas):
 				fill_color='black',
 				line_width=self.line_width)
 			self.item_data = 'M %s,%s L ' % (x, y)
+			
 		elif self.draw_tool == 'oval':
 			self.item_data = True
 
@@ -111,11 +111,11 @@ class Whiteboard(goocanvas.Canvas):
 			self.item_temp.remove()
 			self.item_temp = None
 	
-	# TODO: get keypresses working
-	def key_press_event(self, widget, event):
-		print 'test'
-		if event.keyval == 'p':
-			self.image.print_xml()
+	def export(self, widget):
+		self.image.print_xml()
+	
+	def tool_change(self, widget, tool):
+		self.draw_tool = tool
 
 class SVGObject():
 	''' A class to store the svg document and make changes to it.'''

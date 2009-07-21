@@ -2750,14 +2750,33 @@ class ChatControl(ChatControlBase):
 	
 	def _on_whiteboard_button_clicked(self, widget):
 		hbox = self.xml.get_widget('chat_child_hbox')
-		if len(hbox.get_children()) == 1:
+		if 1 == 1:
+			whiteboard_container = self.xml.get_widget('whiteboard_hbox')
 			whiteboard = Whiteboard(self.account, self.contact)
 			try:
-				hbox.pack_start(whiteboard)
-				whiteboard.show()
-				# set minimum size
+				hbox.pack_start(whiteboard_container)
+				whiteboard_container.show()
+
 				whiteboard.set_size_request(300, 0)
-				hbox.pack_start(whiteboard, expand=False, fill=False)
+				whiteboard_container.pack_start(whiteboard, expand=False, fill=False)
+				whiteboard.show()
+				
+				widget = self.xml.get_widget('whiteboard_brush_button')
+				if widget is not None:
+					id_ = widget.connect('clicked', whiteboard.tool_change, 'brush')
+					self.handlers[id_] = widget
+				
+				widget = self.xml.get_widget('whiteboard_oval_button')
+				if widget is not None:
+					id_ = widget.connect('clicked', whiteboard.tool_change, 'oval')
+					self.handlers[id_] = widget
+				
+				widget = self.xml.get_widget('whiteboard_export_button')
+				if widget is not None:
+					id_ = widget.connect('clicked', whiteboard.export)
+					self.handlers[id_] = widget
+
+
 			except:
 				pass # TODO: Fix problem with groupchat?
 
