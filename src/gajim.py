@@ -2237,6 +2237,82 @@ class Interface:
 				_('PEP node %(node)s was not removed: %(message)s') % {
 				'node': data[1], 'message': data[2]})
 
+	def handle_event_jingle_incoming(self, account, data):
+		# ('JINGLE_INCOMING', account, (peer jid, sid,
+		# tuple-of-contents==(type, data...)))
+		# TODO: conditional blocking if peer is not in roster
+
+		# unpack data
+		peerjid, sid, contents = data
+		content_types = set(c[0] for c in contents)
+		jid = gajim.get_jid_without_resource(peerjid)
+
+		# check type of jingle session
+		if 'WHITEBOARD' in content_types:
+			# a whiteboard session...
+			if helpers.allow_popup_window(account):
+				session = gajim.connections[account].getJingleSession(peerjid, sid)
+				def on_ok():
+					session = gajim.connections[account].getJingleSession(peerjid,
+						sid)
+					session.approveSession()
+					for _jid in [peerjid, jid]:
+						ctrl = self.msg_win_mgr.get_control(_jid, account)
+						if ctrl:
+							break
+					if not ctrl:
+						# create it
+						self.new_chat_from_jid(account, jid)
+						ctrl = self.msg_win_mgr.get_control(jid, account)
+					session = session.contents[('initiator', 'xhtml')]
+					ctrl.draw_whiteboard(session)
+
+				def on_cancel():
+					session.declineSession()
+
+				contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+				if contact:
+					name = contact.get_shown_name()
+				else:
+					name = jid
+				pritext = _('Incoming Whiteboard')
+				sectext = _('%(name)s (%(jid)s) wants to start a whiteboard with '
+					'you. Do you want to accept?') % {'name': name, 'jid': jid}
+				dialog = dialogs.NonModalConfirmationDialog(pritext,
+					sectext=sectext, on_response_ok=on_ok,
+					on_response_cancel=on_cancel)
+				dialog.popup()
+
+			self.add_event(account, peerjid, 'whiteboard-incoming', (peerjid, sid))
+
+			if helpers.allow_showing_notification(account):
+				# TODO: we should use another pixmap ;-)
+				img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+					'ft_request.png')
+				txt = _('%s wants to start a whiteboard session.') % \
+					gajim.get_name_from_jid(account, peerjid)
+				path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+				event_type = _('Whiteboard Request')
+				notify.popup(event_type, peerjid, account, 'whiteboard-incoming',
+					path_to_image = path, title = event_type, text = txt)
+		else:
+			# unknown session type... it should be declined in common/jingle.py
+			return
+
+	def handle_event_whiteboard_accepted(self, account, data):
+		# ('WHITEBOARD_ACCEPTED', account, (jid, sid))
+		fjid = data[0]
+		sid = data[1]
+		for jid in [fjid, gajim.get_jid_without_resource(fjid)]:
+			ctrl = self.msg_win_mgr.get_control(jid, account)
+			if ctrl:
+				break
+		if not ctrl:
+			return
+		session = gajim.connections[account].getJingleSession(fjid, sid)
+		session = session.contents[('initiator', 'xhtml')]
+		ctrl.draw_whiteboard(session)
+
 	def register_handlers(self):
 		self.handlers = {
 			'ROSTER': self.handle_event_roster,
@@ -2320,6 +2396,8 @@ class Interface:
 			'INSECURE_SSL_CONNECTION': self.handle_event_insecure_ssl_connection,
 			'PUBSUB_NODE_REMOVED': self.handle_event_pubsub_node_removed,
 			'PUBSUB_NODE_NOT_REMOVED': self.handle_event_pubsub_node_not_removed,
+			'JINGLE_INCOMING': self.handle_event_jingle_incoming,
+			'WHITEBOARD_ACCEPTED': self.handle_event_whiteboard_accepted,
 		}
 		gajim.handlers = self.handlers
 
@@ -2334,7 +2412,7 @@ class Interface:
 		jid = gajim.get_jid_without_resource(jid)
 		no_queue = len(gajim.events.get_events(account, jid)) == 0
 		# type_ can be gc-invitation file-send-error file-error file-request-error
-		# file-request file-completed file-stopped
+		# file-request file-completed file-stopped whiteboard-incoming
 		# event_type can be in advancedNotificationWindow.events_list
 		event_types = {'file-request': 'ft_request',
 			'file-completed': 'ft_finished'}
@@ -2494,6 +2572,40 @@ class Interface:
 			self.show_unsubscribed_dialog(account, contact)
 			gajim.events.remove_events(account, jid, event)
 			self.roster.draw_contact(jid, account)
+		elif type_ == 'whiteboard-incoming':
+			event = gajim.events.get_first_event(account, jid, type_)
+			peerjid, sid = event.parameters
+			session = gajim.connections[account].getJingleSession(peerjid, sid)
+			def on_ok():
+				session.approveSession()
+				jid = gajim.get_jid_without_resource(peerjid)
+				for _jid in [peerjid, jid]:
+					ctrl = self.msg_win_mgr.get_control(_jid, account)
+					if ctrl:
+						break
+				if not ctrl:
+					# create it
+					self.new_chat_from_jid(account, jid)
+					ctrl = self.msg_win_mgr.get_control(jid, account)
+				session = session.contents[('initiator', 'xhtml')]
+				ctrl.draw_whiteboard(session)
+
+			def on_cancel():
+				session.declineSession()
+
+			contact = gajim.contacts.get_first_contact_from_jid(account,
+				gajim.get_jid_without_resource(peerjid))
+			if contact:
+				name = contact.get_shown_name()
+			else:
+				name = peerjid
+			pritext = _('Incoming Whiteboard')
+			sectext = _('%(name)s (%(jid)s) wants to start a whiteboard with '
+				'you. Do you want to accept?') % {'name': name, 'jid': peerjid}
+			dialog = dialogs.NonModalConfirmationDialog(pritext, sectext=sectext,
+				on_response_ok=on_ok, on_response_cancel=on_cancel)
+			dialog.popup()
+			gajim.events.remove_events(account, jid, event)
 		if w:
 			w.set_active_tab(ctrl)
 			w.window.window.focus()

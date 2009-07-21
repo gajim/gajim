@@ -16,7 +16,7 @@ SVG Paths.
 '''
 
 class Whiteboard(object):
-	def __init__(self, account, contact):
+	def __init__(self, account, contact, session):
 		xml = gtkgui_helpers.get_glade('whiteboard_widget.glade',
 			'whiteboard_hbox')
 		self.hbox = xml.get_widget('whiteboard_hbox')
@@ -27,7 +27,6 @@ class Whiteboard(object):
 		xml.signal_autoconnect(self)
 
 		self.root = self.canevas.get_root_item()
-		session = SXESession(account, contact)
 
 		# Events
 		self.canevas.connect('button-press-event', self.button_press_event)
@@ -215,44 +214,3 @@ class SVGObject():
 		file = open('whiteboardtest.svg','w')
 		file.writelines(str(self.svg, True))
 		file.close()
-
-class SXESession():
-	''' stores all the sxe session methods and info'''
-	def __init__(self, account, contact, sid=None):
-		self.account = account
-		self.contact = contact
-		self.last_rid = 0
-		
-		# generate unique session ID
-		if sid is None:
-			chars = string.letters + string.digits
-			self.sid = ''.join([choice(chars) for i in range(7)])
-		else:
-			self.sid = sid
-
-	def generate_rids(self, x):
-		# generates x number of rids and returns in list
-		
-		rids = []
-		for x in range(x):
-			rids.append(str(self.last_rid))
-			self.last_rid += 1
-		return rids
-
-	def connect(self):
-		# connect to the message
-		gajim.connections[self.account].send_whiteboard_connect(
-			self.contact.get_full_jid(), self.sid)
-		
-	def send_items(self, items, rids):
-		# recieves dict items and a list of rids of items to send
-		# TODO: is there a less clumsy way that doesn't involve passing
-		# whole list
-		
-		gajim.connections[self.account].send_whiteboard_node(
-			self.contact.get_full_jid(), self.sid, items, rids
-		)
-		
-	def encode(self, xml):
-		# encodes it sendable string
-		return 'data:text/xml,' + urllib.quote(xml)

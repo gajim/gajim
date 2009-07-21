@@ -2749,14 +2749,18 @@ class ChatControl(ChatControlBase):
 			self.print_conversation(')', 'status', simple=True)
 	
 	def _on_whiteboard_button_clicked(self, widget):
+		gajim.connections[self.account].startWhiteboard(
+			self.contact.get_full_jid())
+
+	def draw_whiteboard(self, session):
 		hbox = self.xml.get_widget('chat_child_hbox')
 		if len(hbox.get_children()) == 1:
-			whiteboard = Whiteboard(self.account, self.contact)
+			whiteboard = Whiteboard(self.account, self.contact, session)
 			try:
+				# set minimum size
 				whiteboard.hbox.set_size_request(300, 0)
 				hbox.pack_start(whiteboard.hbox, expand=False, fill=False)
 				whiteboard.hbox.show_all()
-
 			except:
 				pass # TODO: Fix problem with groupchat?
 

@@ -4063,4 +4063,35 @@ class GPGInfoWindow:
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 
+class WhiteboardReceivedDialog(object):
+	def __init__(self, account, contact_jid, sid):
+		self.account = account
+		self.jid = contact_jid
+		self.sid = sid
+
+		contact = gajim.contacts.get_first_contact_from_jid(account, contact_jid)
+		if contact and contact.name:
+			contact_text = '%s (%s)' % (contact.name, contact_jid)
+		else:
+			contact_text = contact_jid
+
+		# do the substitution
+		dialog = xml.get_widget('voip_call_received_messagedialog')
+		dialog.set_property('secondary-text',
+			dialog.get_property('secondary-text') % {'contact': contact_text})
+
+		dialog.show_all()
+
+	def on_voip_call_received_messagedialog_close(self, dialog):
+		return self.on_voip_call_received_messagedialog_response(dialog, gtk.RESPONSE_NO)
+	def on_voip_call_received_messagedialog_response(self, dialog, response):
+		# we've got response from user, either stop connecting or accept the call
+		session = gajim.connections[self.account].getJingleSession(self.jid, self.sid)
+		if response==gtk.RESPONSE_YES:
+			session.approveSession()
+		else: # response==gtk.RESPONSE_NO
+			session.declineSession()
+
+		dialog.destroy()
+
 # vim: se ts=3:
