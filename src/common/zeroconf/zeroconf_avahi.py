@@ -17,7 +17,8 @@
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from common import gajim
+import logging
+log = logging.getLogger('gajim.c.z.zeroconf_avahi')
 
 try:
 	import dbus.glib
@@ -62,10 +63,10 @@ class Zeroconf:
 		pass
 
 	def error_callback1(self, err):
-		gajim.log.debug('Error while resolving: ' + str(err))
+		log.debug('Error while resolving: ' + str(err))
 
 	def error_callback(self, err):
-		gajim.log.debug(str(err))
+		log.debug(str(err))
 		# timeouts are non-critical
 		if str(err) != 'Timeout reached':
 			self.disconnect()
@@ -73,7 +74,7 @@ class Zeroconf:
 
 	def new_service_callback(self, interface, protocol, name, stype, domain,
 	flags):
-		gajim.log.debug('Found service %s in domain %s on %i.%i.' % (name, domain,
+		log.debug('Found service %s in domain %s on %i.%i.' % (name, domain,
 			interface, protocol))
 		if not self.connected:
 		 	return
@@ -86,7 +87,7 @@ class Zeroconf:
 
 	def remove_service_callback(self, interface, protocol, name, stype, domain,
 	flags):
-		gajim.log.debug('Service %s in domain %s on %i.%i disappeared.' % (name,
+		log.debug('Service %s in domain %s on %i.%i disappeared.' % (name,
 			domain, interface, protocol))
 		if not self.connected:
 		 	return
@@ -142,9 +143,9 @@ class Zeroconf:
 
 	def service_resolved_callback(self, interface, protocol, name, stype, domain,
 	host, aprotocol, address, port, txt, flags):
-		gajim.log.debug('Service data for service %s in domain %s on %i.%i:'
+		log.debug('Service data for service %s in domain %s on %i.%i:'
 			% (name, domain, interface, protocol))
-		gajim.log.debug('Host %s (%s), port %i, TXT data: %s' % (host, address,
+		log.debug('Host %s (%s), port %i, TXT data: %s' % (host, address,
 			port, self.txt_array_to_dict(txt)))
 		if not self.connected:
 			return
@@ -178,16 +179,16 @@ class Zeroconf:
 			port, bare_name, txt)
 
 	def service_added_callback(self):
-		gajim.log.debug('Service successfully added')
+		log.debug('Service successfully added')
 
 	def service_committed_callback(self):
-		gajim.log.debug('Service successfully committed')
+		log.debug('Service successfully committed')
 
 	def service_updated_callback(self):
-		gajim.log.debug('Service successfully updated')
+		log.debug('Service successfully updated')
 
 	def service_add_fail_callback(self, err):
-		gajim.log.debug('Error while adding service. %s' % str(err))
+		log.debug('Error while adding service. %s' % str(err))
 		if 'Local name collision' in str(err):
 			alternative_name = self.server.GetAlternativeServiceName(self.username)
 			self.name_conflictCB(alternative_name)
@@ -196,7 +197,7 @@ class Zeroconf:
 		self.disconnect()
 
 	def server_state_changed_callback(self, state, error):
-		gajim.log.debug('server state changed to %s' % state)
+		log.debug('server state changed to %s' % state)
 		if state == self.avahi.SERVER_RUNNING:
 			self.create_service()
 		elif state in (self.avahi.SERVER_COLLISION,
@@ -205,17 +206,17 @@ class Zeroconf:
 			self.entrygroup.Reset()
 		elif state == self.avahi.CLIENT_FAILURE:
 			# does it ever go here?
-			gajim.log.debug('CLIENT FAILURE')
+			log.debug('CLIENT FAILURE')
 
 	def entrygroup_state_changed_callback(self, state, error):
 		# the name is already present, so recreate
 		if state == self.avahi.ENTRY_GROUP_COLLISION:
-			gajim.log.debug('zeroconf.py: local name collision')
+			log.debug('zeroconf.py: local name collision')
 			self.service_add_fail_callback('Local name collision')
 		elif state == self.avahi.ENTRY_GROUP_FAILURE:
 			self.disconnect()
 			self.entrygroup.Reset()
-			gajim.log.debug('zeroconf.py: ENTRY_GROUP_FAILURE reached(that'
+			log.debug('zeroconf.py: ENTRY_GROUP_FAILURE reached(that'
 				' should not happen)')
 
 	# make zeroconf-valid names
@@ -264,7 +265,7 @@ class Zeroconf:
 				txt['status'] = 'avail'
 
 			self.txt = txt
-			gajim.log.debug('Publishing service %s of type %s' % (self.name,
+			log.debug('Publishing service %s of type %s' % (self.name,
 				self.stype))
 			self.entrygroup.AddService(self.avahi.IF_UNSPEC,
 				self.avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '',
@@ -278,7 +279,7 @@ class Zeroconf:
 			return True
 
 		except dbus.DBusException, e:
-			gajim.log.debug(str(e))
+			log.debug(str(e))
 			return False
 
 	def announce(self):
@@ -308,26 +309,26 @@ class Zeroconf:
 			else:
 				return False
 		except dbus.DBusException:
-			gajim.log.debug("Can't remove service. That should not happen")
+			log.debug("Can't remove service. That should not happen")
 
 	def browse_domain(self, interface, protocol, domain):
 		self.new_service_type(interface, protocol, self.stype, domain, '')
 
 	def avahi_dbus_connect_cb(self, a, connect, disconnect):
 		if connect != "":
-			gajim.log.debug('Lost connection to avahi-daemon')
+			log.debug('Lost connection to avahi-daemon')
 			self.disconnect()
 			if self.disconnected_CB:
 				self.disconnected_CB()
 		else:
-			gajim.log.debug('We are connected to avahi-daemon')
+			log.debug('We are connected to avahi-daemon')
 
 	# connect to dbus
 	def connect_dbus(self):
 		try:
 			import dbus
 		except ImportError:
-			gajim.log.debug('Error: python-dbus needs to be installed. No '
+			log.debug('Error: python-dbus needs to be installed. No '
 				'zeroconf support.')
 			return False
 		if self.bus:
@@ -340,7 +341,7 @@ class Zeroconf:
 		except Exception, e:
 			# System bus is not present
 			self.bus = None
-			gajim.log.debug(str(e))
+			log.debug(str(e))
 			return False
 		else:
 			return True
@@ -353,7 +354,7 @@ class Zeroconf:
 			import avahi
 			self.avahi = avahi
 		except ImportError:
-			gajim.log.debug('Error: python-avahi needs to be installed. No '
+			log.debug('Error: python-avahi needs to be installed. No '
 				'zeroconf support.')
 			return False
 
@@ -367,7 +368,7 @@ class Zeroconf:
 		except Exception, e:
 			# Avahi service is not present
 			self.server = None
-			gajim.log.debug(str(e))
+			log.debug(str(e))
 			return False
 		else:
 			return True
