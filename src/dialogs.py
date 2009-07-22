@@ -670,18 +670,18 @@ class ChangeStatusMessageDialog:
 			msg = helpers.to_one_line(message)
 			if self.show:
 				gajim.config.set_per('statusmsg', '_last_' + self.show, 'message',
-									 msg)
+					msg)
 				if self.show_pep:
 					gajim.config.set_per('statusmsg', '_last_' + self.show,
-										 'activity', self.pep_dict['activity'])
+						'activity', self.pep_dict['activity'])
 					gajim.config.set_per('statusmsg', '_last_' + self.show,
-										 'subactivity', self.pep_dict['subactivity'])
+						'subactivity', self.pep_dict['subactivity'])
 					gajim.config.set_per('statusmsg', '_last_' + self.show,
-										 'activity_text', self.pep_dict['activity_text'])
+						'activity_text', self.pep_dict['activity_text'])
 					gajim.config.set_per('statusmsg', '_last_' + self.show, 'mood',
-										 self.pep_dict['mood'])
+						self.pep_dict['mood'])
 					gajim.config.set_per('statusmsg', '_last_' + self.show,
-										 'mood_text', self.pep_dict['mood_text'])
+						'mood_text', self.pep_dict['mood_text'])
 		else:
 			message = None # user pressed Cancel button or X wm button
 		self.window.destroy()
@@ -763,8 +763,8 @@ class ChangeStatusMessageDialog:
 	def on_activity_button_clicked(self, widget):
 		self.countdown_enabled = False
 		def on_response(activity, subactivity, text):
-			self.pep_dict['activity'] = activity
-			self.pep_dict['subactivity'] = subactivity
+			self.pep_dict['activity'] = activity or ''
+			self.pep_dict['subactivity'] = subactivity or ''
 			self.pep_dict['activity_text'] = text
 			self.draw_activity()
 		ChangeActivityDialog(on_response, self.pep_dict['activity'],
@@ -773,7 +773,7 @@ class ChangeStatusMessageDialog:
 	def on_mood_button_clicked(self, widget):
 		self.countdown_enabled = False
 		def on_response(mood, text):
-			self.pep_dict['mood'] = mood
+			self.pep_dict['mood'] = mood or ''
 			self.pep_dict['mood_text'] = text
 			self.draw_mood()
 		ChangeMoodDialog(on_response, self.pep_dict['mood'],
