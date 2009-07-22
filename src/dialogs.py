@@ -2737,7 +2737,7 @@ class XMLConsoleWindow:
 		if gajim.connections[self.account].connected <= 1:
 			#if offline or connecting
 			ErrorDialog(_('Connection not available'),
-						_('Please make sure you are connected with "%s".') % self.account)
+				_('Please make sure you are connected with "%s".') % self.account)
 			return
 		begin_iter, end_iter = self.input_tv_buffer.get_bounds()
 		stanza = self.input_tv_buffer.get_text(begin_iter, end_iter).decode(
@@ -2748,18 +2748,16 @@ class XMLConsoleWindow:
 
 	def on_presence_button_clicked(self, widget):
 		self.input_tv_buffer.set_text(
-			'<presence><show></show><status></status><priority></priority></presence>'
-		)
+			'<presence><show></show><status></status><priority></priority>'
+			'</presence>')
 
 	def on_iq_button_clicked(self, widget):
 		self.input_tv_buffer.set_text(
-			'<iq to="" type=""><query xmlns=""></query></iq>'
-		)
+			'<iq to="" type=""><query xmlns=""></query></iq>')
 
 	def on_message_button_clicked(self, widget):
 		self.input_tv_buffer.set_text(
-			'<message to="" type=""><body></body></message>'
-		)
+			'<message to="" type=""><body></body></message>')
 
 	def on_expander_activate(self, widget):
 		if not widget.get_expanded(): # it's the opposite!
@@ -2768,7 +2766,8 @@ class XMLConsoleWindow:
 
 class RosterItemExchangeWindow:
 	''' Windows used when someone send you a exchange contact suggestion '''
-	def __init__(self, account, action, exchange_list, jid_from, message_body=None):
+	def __init__(self, account, action, exchange_list, jid_from,
+	message_body=None):
 		self.account = account
 		self.action = action
 		self.exchange_list = exchange_list
@@ -2781,14 +2780,14 @@ class RosterItemExchangeWindow:
 
 		# Add Widgets.
 		for widget_to_add in ['cancel_button', 'accept_button', 'type_label',
-							  'body_scrolledwindow', 'body_textview', 'items_list_treeview']:
+		'body_scrolledwindow', 'body_textview', 'items_list_treeview']:
 			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
 
 		# Set labels
-		#self.action can be 'add', 'modify' or 'remove'
+		# self.action can be 'add', 'modify' or 'remove'
 		self.type_label.set_label(\
-			_('<b>%s</b> would like you to <b>%s</b> some contacts in your roster.') \
-			% (jid_from, _(self.action)))
+			_('<b>%s</b> would like you to <b>%s</b> some contacts in your '
+			'roster.') % (jid_from, _(self.action)))
 		if message_body:
 			buffer = self.body_textview.get_buffer()
 			buffer.set_text(self.message_body)
@@ -2801,17 +2800,23 @@ class RosterItemExchangeWindow:
 		renderer1 = gtk.CellRendererToggle()
 		renderer1.set_property('activatable', True)
 		renderer1.connect('toggled', self.toggled_callback)
-		self.items_list_treeview.insert_column_with_attributes(-1,
-															   _(self.action), renderer1, active = 0)
+		if self.action == 'add':
+			title = _('Add')
+		elif self.action == 'modify':
+			title = _('Modify')
+		elif self.action == 'delete':
+			title = _('Delete')
+		self.items_list_treeview.insert_column_with_attributes(-1, title,
+			renderer1, active=0)
 		renderer2 = gtk.CellRendererText()
-		self.items_list_treeview.insert_column_with_attributes(-1,
-															   _('Jabber ID'), renderer2, text = 1)
+		self.items_list_treeview.insert_column_with_attributes(-1, _('Jabber ID'),
+			renderer2, text=1)
 		renderer3 = gtk.CellRendererText()
-		self.items_list_treeview.insert_column_with_attributes(-1,
-															   _('Name'), renderer3, text = 2)
+		self.items_list_treeview.insert_column_with_attributes(-1, _('Name'),
+			renderer3, text=2)
 		renderer4 = gtk.CellRendererText()
-		self.items_list_treeview.insert_column_with_attributes(-1,
-															   _('Groups'), renderer4, text = 3)
+		self.items_list_treeview.insert_column_with_attributes(-1, _('Groups'),
+			renderer4, text=3)
 
 		# Init contacts
 		model = self.items_list_treeview.get_model()
@@ -2821,7 +2826,7 @@ class RosterItemExchangeWindow:
 			for jid in self.exchange_list:
 				groups = ''
 				is_in_roster = True
-				contact = gajim.contacts.get_contact_with_highest_priority(\
+				contact = gajim.contacts.get_contact_with_highest_priority(
 					self.account, jid)
 				if not contact:
 					is_in_roster = False
@@ -2839,16 +2844,17 @@ class RosterItemExchangeWindow:
 				if not is_in_roster:
 					iter = model.append()
 					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
-					
+
 			# Change label for accept_button to action name instead of 'OK'.
-			accept_button_label = self.accept_button.get_children()[0].get_children()[0].get_children()[1]
+			accept_button_label = self.accept_button.get_children()[0].\
+				get_children()[0].get_children()[1]
 			accept_button_label.set_label(_('Add'))
 		elif action == 'modify':
 			for jid in self.exchange_list:
 				groups = ''
 				is_in_roster = True
 				is_right = True
-				contact = gajim.contacts.get_contact_with_highest_priority(\
+				contact = gajim.contacts.get_contact_with_highest_priority(
 					self.account, jid)
 				name = self.exchange_list[jid][0]
 				if not contact:
@@ -2870,15 +2876,16 @@ class RosterItemExchangeWindow:
 				if not is_right and is_in_roster:
 					iter = model.append()
 					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
-					
+
 			# Change label for accept_button to action name instead of 'OK'.
-			accept_button_label = self.accept_button.get_children()[0].get_children()[0].get_children()[1]
+			accept_button_label = self.accept_button.get_children()[0].\
+				get_children()[0].get_children()[1]
 			accept_button_label.set_label(_('Modify'))
 		elif action == 'delete':
 			for jid in self.exchange_list:
 				groups = ''
 				is_in_roster = True
-				contact = gajim.contacts.get_contact_with_highest_priority(\
+				contact = gajim.contacts.get_contact_with_highest_priority(
 					self.account, jid)
 				name = self.exchange_list[jid][0]
 				if not contact:
@@ -2894,12 +2901,11 @@ class RosterItemExchangeWindow:
 				if is_in_roster:
 					iter = model.append()
 					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
-					
-			# Change label for accept_button to action name instead of 'OK'.
-			accept_button_label = self.accept_button.get_children()[0].get_children()[0].get_children()[1]
-			accept_button_label.set_label(_('Delete'))
-					
 
+			# Change label for accept_button to action name instead of 'OK'.
+			accept_button_label = self.accept_button.get_children()[0].\
+				get_children()[0].get_children()[1]
+			accept_button_label.set_label(_('Delete'))
 
 		self.window.show_all()
 
@@ -2920,14 +2926,15 @@ class RosterItemExchangeWindow:
 					a+=1
 					# it is selected
 					#remote_jid = model[iter][1].decode('utf-8')
-					message = _('%s suggested me to add you in my roster.' % self.jid_from)
+					message = _('%s suggested me to add you in my roster.'
+						% self.jid_from)
 					# keep same groups and same nickname
 					groups = model[iter][3].split(', ')
 					if groups == ['']:
 						groups = []
 					gajim.interface.roster.req_sub(self, model[iter][1], message,
-												   self.account, groups = groups,
-												   nickname = model[iter][2], auto_auth = True)
+						self.account, groups=groups, nickname=model[iter][2],
+						auto_auth=True)
 				iter = model.iter_next(iter)
 			InformationDialog('Added  %s contacts' % str(a))
 		elif self.action == 'modify':
@@ -2937,20 +2944,21 @@ class RosterItemExchangeWindow:
 					a+=1
 					# it is selected
 					jid = model[iter][1].decode('utf-8')
-					# message = _('%s suggested me to add you in my roster.' % self.jid_from)
 					# keep same groups and same nickname
 					groups = model[iter][3].split(', ')
 					if groups == ['']:
 						groups = []
 					for u in gajim.contacts.get_contact(self.account, jid):
 						u.name = model[iter][2]
-					gajim.connections[self.account].update_contact(jid, model[iter][2], groups)
+					gajim.connections[self.account].update_contact(jid,
+						model[iter][2], groups)
 					self.draw_contact(jid, account)
 					# Update opened chat
 					ctrl = gajim.interface.msg_win_mgr.get_control(jid, self.account)
 					if ctrl:
 						ctrl.update_ui()
-						win = gajim.interface.msg_win_mgr.get_window(jid, self.account)
+						win = gajim.interface.msg_win_mgr.get_window(jid,
+							self.account)
 						win.redraw_tab(ctrl)
 						win.show_title()
 				iter = model.iter_next(iter)
@@ -2967,10 +2975,10 @@ class RosterItemExchangeWindow:
 				iter = model.iter_next(iter)
 			InformationDialog('Removed  %s contacts' % str(a))
 		self.window.destroy()
-		
+
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
-		
+
 
 class PrivacyListWindow:
 	'''Window that is used for creating NEW or EDITING already there privacy
