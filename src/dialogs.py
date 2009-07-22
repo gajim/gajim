@@ -2891,7 +2891,7 @@ class RosterItemExchangeWindow:
 						groups = groups + group
 					else:
 						groups = groups + group + ', '
-				if not is_right and is_in_roster:
+				if is_in_roster:
 					iter = model.append()
 					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
 					
@@ -2962,11 +2962,10 @@ class RosterItemExchangeWindow:
 					# it is selected
 					jid = model[iter][1].decode('utf-8')
 					gajim.connections[self.account].unsubscribe(jid)
-					for c in gajim.contacts.get_contact(self.account, jid):
-						self.remove_contact(c, self.account)
+					gajim.interface.roster.remove_contact(jid, self.account)
 					gajim.contacts.remove_jid(self.account, jid)
 				iter = model.iter_next(iter)
-			InformationDialog('Added  %s contacts' % str(a))
+			InformationDialog('Removed  %s contacts' % str(a))
 		self.window.destroy()
 		
 	def on_cancel_button_clicked(self, widget):
