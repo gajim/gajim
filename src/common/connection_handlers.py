@@ -1820,6 +1820,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		exchange_items_list = {}
 		jid_from = helpers.get_full_jid_from_iq(msg)
 		items_list = msg.getTag('x').getChildren()
+		if not items_list:
+			return
 		action = items_list[0].getAttr('action')
 		if action == None:
 			action = 'add'
