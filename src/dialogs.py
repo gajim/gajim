@@ -2932,7 +2932,11 @@ class RosterItemExchangeWindow:
 					groups = model[iter][3].split(', ')
 					if groups == ['']:
 						groups = []
-					gajim.interface.roster.req_sub(self, model[iter][1], message,
+					jid = model[iter][1].decode('utf-8')
+					if gajim.jid_is_transport(self.jid_from):
+						gajim.connections[self.account].automatically_added.append(
+							jid)
+					gajim.interface.roster.req_sub(self, jid, message,
 						self.account, groups=groups, nickname=model[iter][2],
 						auto_auth=True)
 				iter = model.iter_next(iter)
