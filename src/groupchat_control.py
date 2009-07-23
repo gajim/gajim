@@ -1596,10 +1596,11 @@ class GroupchatControl(ChatControlBase):
 							reason = 'None'
 						else:
 							reason = test_reason
+				banned_jid = None
 				if nb_match == 1:
 					gc_contact = gajim.contacts.get_gc_contact(self.account,
 							self.room_jid, nick_ban)
-					nick = gc_contact.jid
+					banned_jid = gc_contact.jid
 				elif nb_match > 1:
 					self.print_conversation(_('There is an ambiguity: %d nicks '
 						'match.\n Please use graphical interface ') % nb_match,
@@ -1607,13 +1608,14 @@ class GroupchatControl(ChatControlBase):
 					self.clear(self.msg_textview)
 				elif message_array[0].split()[0].find('@') > 0:
 					message_splited = message_array[0].split(' ', 1)
-					jid = message_splited[0]
+					banned_jid = message_splited[0]
 					if len(message_splited) == 2:
 						reason = message_splited[1]
 					else:
 						reason = 'None'
+				if banned_jid:
 					gajim.connections[self.account].gc_set_affiliation(self.room_jid,
-						message_array[0].split()[0], 'outcast', reason)
+						banned_jid, 'outcast', reason)
 					self.clear(self.msg_textview)
 				else:
 					self.print_conversation(_('Nickname not found'), 'info')
