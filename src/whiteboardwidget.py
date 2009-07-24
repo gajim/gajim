@@ -4,11 +4,6 @@ import goocanvas
 from common.xmpp import Node
 from common import gajim
 
-#for sxe session
-from random import choice
-import string
-import urllib
-
 ''' 
 A whiteboard widget made for Gajim. Only has basic line tool that draws
 SVG Paths. 
@@ -48,10 +43,10 @@ class Whiteboard(object):
 		self.item_data = None
 
 	def on_brush_button_clicked(self, widget):
-		print 'on_brush_button_clicked'
+		self.draw_tool = 'brush'
 
 	def on_oval_button_clicked(self, widget):
-		print 'on_oval_button_clicked'
+		self.draw_tool = 'oval'
 
 	def on_export_button_clicked(self, widget):
 		self.image.print_xml()

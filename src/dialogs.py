@@ -4083,7 +4083,7 @@ class WhiteboardReceivedDialog(object):
 		dialog.show_all()
 
 	def on_voip_call_received_messagedialog_close(self, dialog):
-		return self.on_voip_call_received_messagedialog_response(dialog, gtk.RESPONSE_NO)
+		return self .on_voip_call_received_messagedialog_response(dialog, gtk.RESPONSE_NO)
 	def on_voip_call_received_messagedialog_response(self, dialog, response):
 		# we've got response from user, either stop connecting or accept the call
 		session = gajim.connections[self.account].getJingleSession(self.jid, self.sid)
