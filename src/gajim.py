@@ -2578,6 +2578,7 @@ class Interface:
 			peerjid, sid = event.parameters
 			session = gajim.connections[account].getJingleSession(peerjid, sid)
 			def on_ok():
+				session = gajim.connections[account].getJingleSession(peerjid, sid)
 				session.approveSession()
 				jid = gajim.get_jid_without_resource(peerjid)
 				for _jid in [peerjid, jid]:
