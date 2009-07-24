@@ -17,6 +17,7 @@ SVG Paths.
 
 class Whiteboard(object):
 	def __init__(self, account, contact, session):
+		print 'init'
 		xml = gtkgui_helpers.get_glade('whiteboard_widget.glade',
 			'whiteboard_hbox')
 		self.hbox = xml.get_widget('whiteboard_hbox')
@@ -53,7 +54,7 @@ class Whiteboard(object):
 		print 'on_oval_button_clicked'
 
 	def on_export_button_clicked(self, widget):
-		print 'on_export_button_clicked'
+		self.image.print_xml()
 
 	def button_press_event(self, widget, event):
 		x = event.x
@@ -125,15 +126,6 @@ class Whiteboard(object):
 		if self.item_temp is not None:
 			self.item_temp.remove()
 			self.item_temp = None
-	
-	def export(self, widget):
-		self.image.print_xml()
-		
-	def tool_brush(self,widget):
-		self.draw_tool = 'brush'
-	
-	def tool_oval(self, widget):
-		self.draw_tool = 'oval'
 
 class SVGObject():
 	''' A class to store the svg document and make changes to it.'''
