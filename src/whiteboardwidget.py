@@ -199,5 +199,5 @@ class SVGObject():
 		
 	def print_xml(self):
 		file = open('whiteboardtest.svg','w')
-		file.writelines(str(self.svg, True))
+		file.writelines(str(self.svg))
 		file.close()

@@ -2758,9 +2758,9 @@ class ChatControl(ChatControlBase):
 			self.whiteboard = Whiteboard(self.account, self.contact, session)
 			try:
 				# set minimum size
-				whiteboard.hbox.set_size_request(300, 0)
-				hbox.pack_start(whiteboard.hbox, expand=False, fill=False)
-				whiteboard.hbox.show_all()
+				self.whiteboard.hbox.set_size_request(300, 0)
+				hbox.pack_start(self.whiteboard.hbox, expand=False, fill=False)
+				self.whiteboard.hbox.show_all()
 			except:
 				pass # TODO: Fix problem with groupchat
 
