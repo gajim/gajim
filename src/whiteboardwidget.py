@@ -4,11 +4,6 @@ import goocanvas
 from common.xmpp import Node
 from common import gajim
 
-#for sxe session
-from random import choice
-import string
-import urllib
-
 ''' 
 A whiteboard widget made for Gajim. Only has basic line tool that draws
 SVG Paths. 
