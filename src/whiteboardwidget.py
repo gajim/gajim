@@ -12,7 +12,6 @@ SVG Paths.
 
 class Whiteboard(object):
 	def __init__(self, account, contact, session):
-		print 'init'
 		xml = gtkgui_helpers.get_glade('whiteboard_widget.glade',
 			'whiteboard_hbox')
 		self.hbox = xml.get_widget('whiteboard_hbox')
@@ -30,17 +29,20 @@ class Whiteboard(object):
 		self.canevas.connect('motion-notify-event', self.motion_notify_event)
 
 		# Config
-		self.draw_tool = 'oval'
+		self.draw_tool = 'brush'
 		self.line_width = 2
 
 		# SVG Storage
-		# TODO: get height width info
 		self.image = SVGObject(self.root, session)
 
 		# Temporary Variables for items
 		self.item_temp = None
 		self.item_temp_coords = (0,0)
 		self.item_data = None
+		
+		# Recieving item storage, format is
+		# {parent rid: [element, [child, child,]}
+		self.recieving = {}
 
 	def on_brush_button_clicked(self, widget):
 		self.draw_tool = 'brush'
@@ -122,6 +124,73 @@ class Whiteboard(object):
 			self.item_temp.remove()
 			self.item_temp = None
 
+	def recieve_element(self, element):
+		self.recieving[element.getAttr('rid')] = [element,[]]
+
+
+	def recieve_attr(self, element):
+		self.recieving[element.getAttr('parent')][1].append(element)
+
+		# put the element up regardless if it is completed or not
+		self.image.del_item(element.getAttr('parent'))
+
+		if self.recieving[element.getAttr('parent')][0].getAttr('name') == 'path':
+			d = None
+			line_width = None
+			
+			for x in self.recieving[element.getAttr('parent')][1]:
+				if x.getAttr('name') == 'd':
+					d = x.getAttr('chdata')
+				elif x.getAttr('name') == 'stroke-width':
+					line_width = x.getAttr('chdata')
+			# TODO: the other attributes
+			if d is None:
+				d = 'M 0,0'
+			if line_width is None:
+				line_width = self.line_width
+				
+			goocanvas.Path(parent=self.root, data=d,
+			line_width=int(line_width))
+			
+		if self.recieving[element.getAttr('parent')][0].getAttr('name') == 'ellipse':
+			cx = None
+			cy = None
+			rx = None
+			ry = None
+			line_width = None
+
+			for x in self.recieving[element.getAttr('parent')][1]:
+				if x.getAttr('name') == 'cx':
+					cx = float(x.getAttr('chdata'))
+				elif x.getAttr('name') == 'cy':
+					cy = float(x.getAttr('chdata'))
+				elif x.getAttr('name') == 'rx':
+					rx = float(x.getAttr('chdata'))
+				elif x.getAttr('name') == 'ry':
+					ry = float(x.getAttr('chdata'))
+				elif x.getAttr('name') == 'stroke-width':
+					line_width = int(x.getAttr('chdata'))
+			# TODO: the other attributes
+			if cx is None:
+				cx = 0
+			if cy is None:
+				cy = 0
+			if ry is None:
+				ry = 0
+			if rx is None:
+				rx = 0
+			if line_width is None:
+				line_width = self.line_width
+				
+			goocanvas.Ellipse(parent=self.root,
+					center_x=cx,
+					center_y=cy,
+					radius_x=rx,
+					radius_y=ry,
+					stroke_color='black',
+					line_width=int(line_width))
+
+
 class SVGObject():
 	''' A class to store the svg document and make changes to it.'''
 
@@ -144,28 +213,36 @@ class SVGObject():
 		self.g.setAttr('fill', 'none')
 		self.g.setAttr('stroke-linecap', 'round')
 
-	def add_path(self, data, line_width):
+	def add_path(self, data, line_width, send = True, node = None):
 		''' adds the path to the items listing, both minidom node and goocanvas
 		object in a tuple '''
 
 		goocanvas_obj = goocanvas.Path(parent=self.root, data=data,
 			line_width=line_width)
 
-		node = self.g.addChild(name='path')
-		node.setAttr('d', data)
-		node.setAttr('stroke-width', str(line_width))
-		node.setAttr('stroke', 'black')
-		self.g.addChild(node=node)
-		
-		rids = self.session.generate_rids(4)
-		self.items[rids[0]] = {'type':'element', 'data':[node, goocanvas_obj]}
-		self.items[rids[1]] = {'type':'attr', 'data':'d', 'parent':node}
-		self.items[rids[2]] = {'type':'attr', 'data':'stroke-width', 'parent':node}
-		self.items[rids[3]] = {'type':'attr', 'data':'stroke', 'parent':node}
-		
-		self.session.send_items(self.items, rids)
-		
-	def add_ellipse(self, cx, cy, rx, ry, line_width):
+		if send:
+			node = self.g.addChild(name='path')
+			node.setAttr('d', data)
+			node.setAttr('stroke-width', str(line_width))
+			node.setAttr('stroke', 'black')
+			self.g.addChild(node=node)
+
+			rids = self.session.generate_rids(4)
+			self.items[rids[0]] = {'type':'element', 'data':[node, goocanvas_obj], 'children':rids[1:]}
+			self.items[rids[1]] = {'type':'attr', 'data':'d', 'parent':node}
+			self.items[rids[2]] = {'type':'attr', 'data':'stroke-width', 'parent':node}
+			self.items[rids[3]] = {'type':'attr', 'data':'stroke', 'parent':node}
+
+			self.session.send_items(self.items, rids)
+		else:
+			rids = self.session.generate_rids(4)
+			self.items[rids[0]] = {'type':'element', 'data':[node, goocanvas_obj], 'children':rids[1:]}
+			self.items[rids[1]] = {'type':'attr', 'data':'d', 'parent':node}
+			self.items[rids[2]] = {'type':'attr', 'data':'stroke-width', 'parent':node}
+			self.items[rids[3]] = {'type':'attr', 'data':'stroke', 'parent':node}
+
+
+	def add_ellipse(self, cx, cy, rx, ry, line_width, send = True):
 		''' adds the ellipse to the items listing, both minidom node and goocanvas
 		object in a tuple '''
 
@@ -187,7 +264,7 @@ class SVGObject():
 		self.g.addChild(node=node)
 		
 		rids = self.session.generate_rids(7)
-		self.items[rids[0]] = {'type':'element', 'data':[node, goocanvas_obj]}
+		self.items[rids[0]] = {'type':'element', 'data':[node, goocanvas_obj], 'children':rids[1:]}
 		self.items[rids[1]] = {'type':'attr', 'data':'cx', 'parent':node}
 		self.items[rids[2]] = {'type':'attr', 'data':'cy', 'parent':node}
 		self.items[rids[3]] = {'type':'attr', 'data':'rx', 'parent':node}
@@ -195,9 +272,13 @@ class SVGObject():
 		self.items[rids[5]] = {'type':'attr', 'data':'stroke-width', 'parent':node}
 		self.items[rids[6]] = {'type':'attr', 'data':'stroke', 'parent':node}
 		
-		self.session.send_items(self.items, rids)
+		if send:
+			self.session.send_items(self.items, rids)
 		
 	def print_xml(self):
 		file = open('whiteboardtest.svg','w')
 		file.writelines(str(self.svg))
 		file.close()
+		
+	def del_item(self, rid):
+		pass

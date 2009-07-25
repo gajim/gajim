@@ -356,8 +356,14 @@ class JingleWhiteboard(JingleContent):
 			callback(stanza, content, error, action)
 
 	def __editCB(self, stanza, content, error, action):
-		log.debug('got a whiteboard edit')
-		#TODO: extract data, draw it. We have self.control which point to the ChatControl
+		new_edits = content.getTags('new')
+		
+		# Process new elements
+		for new in new_edits:
+			if new.getAttr('type') == 'element':
+				self.control.whiteboard.recieve_element(new)
+			elif new.getAttr('type') == 'attr':
+				self.control.whiteboard.recieve_attr(new)
 
 	def __sessionAcceptCB(self, stanza, content, error, action):
 		log.debug('session accepted')
