@@ -2763,5 +2763,6 @@ class ChatControl(ChatControlBase):
 				self.whiteboard.hbox.show_all()
 			except:
 				pass # TODO: Fix problem with groupchat
+			session.control = self
 
 # vim: se ts=3:
