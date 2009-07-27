@@ -356,7 +356,6 @@ class JingleWhiteboard(JingleContent):
 			callback(stanza, content, error, action)
 
 	def __editCB(self, stanza, content, error, action):
-		new_edits = None
 		new_edits = content.getTags('new')
 		
 		if new_edits is not None:

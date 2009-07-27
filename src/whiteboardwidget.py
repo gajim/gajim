@@ -144,7 +144,7 @@ class Whiteboard(object):
 			if self.recieving[x]['type'] == 'element':
 				self.image.add_recieved(x, self.recieving)
 		
-		self.recieving = None
+		self.recieving = {}
 
 class SVGObject():
 	''' A class to store the svg document and make changes to it.'''
