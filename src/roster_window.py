@@ -1835,6 +1835,11 @@ class RosterWindow:
 			gajim.interface.show_unsubscribed_dialog(account, data)
 			gajim.events.remove_events(account, jid, event)
 			return True
+		elif event.type_ == 'whiteboard-incoming':
+			peerjid, sid = data
+			gajim.interface.show_whiteboard_dialog(account, peerjid, sid)
+			gajim.events.remove_events(account, jid, event)
+			return True
 		return False
 
 ################################################################################

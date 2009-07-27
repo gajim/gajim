@@ -2237,6 +2237,38 @@ class Interface:
 				_('PEP node %(node)s was not removed: %(message)s') % {
 				'node': data[1], 'message': data[2]})
 
+	def show_whiteboard_dialog(self, account, peerjid, sid):
+		def on_ok():
+			session = gajim.connections[account].getJingleSession(peerjid, sid)
+			session.approveSession()
+			jid = gajim.get_jid_without_resource(peerjid)
+			for _jid in [peerjid, jid]:
+				ctrl = self.msg_win_mgr.get_control(_jid, account)
+				if ctrl:
+					break
+			if not ctrl:
+				# create it
+				self.new_chat_from_jid(account, jid)
+				ctrl = self.msg_win_mgr.get_control(jid, account)
+			session = session.contents[('initiator', 'xhtml')]
+			ctrl.draw_whiteboard(session)
+
+		def on_cancel():
+			session.declineSession()
+
+		contact = gajim.contacts.get_first_contact_from_jid(account,
+			gajim.get_jid_without_resource(peerjid))
+		if contact:
+			name = contact.get_shown_name()
+		else:
+			name = peerjid
+		pritext = _('Incoming Whiteboard')
+		sectext = _('%(name)s (%(jid)s) wants to start a whiteboard with '
+			'you. Do you want to accept?') % {'name': name, 'jid': peerjid}
+		dialog = dialogs.NonModalConfirmationDialog(pritext, sectext=sectext,
+			on_response_ok=on_ok, on_response_cancel=on_cancel)
+		dialog.popup()
+
 	def handle_event_jingle_incoming(self, account, data):
 		# ('JINGLE_INCOMING', account, (peer jid, sid,
 		# tuple-of-contents==(type, data...)))
@@ -2251,38 +2283,7 @@ class Interface:
 		if 'WHITEBOARD' in content_types:
 			# a whiteboard session...
 			if helpers.allow_popup_window(account):
-				session = gajim.connections[account].getJingleSession(peerjid, sid)
-				def on_ok():
-					session = gajim.connections[account].getJingleSession(peerjid,
-						sid)
-					session.approveSession()
-					for _jid in [peerjid, jid]:
-						ctrl = self.msg_win_mgr.get_control(_jid, account)
-						if ctrl:
-							break
-					if not ctrl:
-						# create it
-						self.new_chat_from_jid(account, jid)
-						ctrl = self.msg_win_mgr.get_control(jid, account)
-					session = session.contents[('initiator', 'xhtml')]
-					session.control = ctrl
-					ctrl.draw_whiteboard(session)
-
-				def on_cancel():
-					session.declineSession()
-
-				contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-				if contact:
-					name = contact.get_shown_name()
-				else:
-					name = jid
-				pritext = _('Incoming Whiteboard')
-				sectext = _('%(name)s (%(jid)s) wants to start a whiteboard with '
-					'you. Do you want to accept?') % {'name': name, 'jid': jid}
-				dialog = dialogs.NonModalConfirmationDialog(pritext,
-					sectext=sectext, on_response_ok=on_ok,
-					on_response_cancel=on_cancel)
-				dialog.popup()
+				self.show_whiteboard_dialog(account, peerjid, sid)
 
 			self.add_event(account, peerjid, 'whiteboard-incoming', (peerjid, sid))
 
@@ -2577,36 +2578,6 @@ class Interface:
 			event = gajim.events.get_first_event(account, jid, type_)
 			peerjid, sid = event.parameters
 			session = gajim.connections[account].getJingleSession(peerjid, sid)
-			def on_ok():
-				session = gajim.connections[account].getJingleSession(peerjid, sid)
-				session.approveSession()
-				jid = gajim.get_jid_without_resource(peerjid)
-				for _jid in [peerjid, jid]:
-					ctrl = self.msg_win_mgr.get_control(_jid, account)
-					if ctrl:
-						break
-				if not ctrl:
-					# create it
-					self.new_chat_from_jid(account, jid)
-					ctrl = self.msg_win_mgr.get_control(jid, account)
-				session = session.contents[('initiator', 'xhtml')]
-				ctrl.draw_whiteboard(session)
-
-			def on_cancel():
-				session.declineSession()
-
-			contact = gajim.contacts.get_first_contact_from_jid(account,
-				gajim.get_jid_without_resource(peerjid))
-			if contact:
-				name = contact.get_shown_name()
-			else:
-				name = peerjid
-			pritext = _('Incoming Whiteboard')
-			sectext = _('%(name)s (%(jid)s) wants to start a whiteboard with '
-				'you. Do you want to accept?') % {'name': name, 'jid': peerjid}
-			dialog = dialogs.NonModalConfirmationDialog(pritext, sectext=sectext,
-				on_response_ok=on_ok, on_response_cancel=on_cancel)
-			dialog.popup()
 			gajim.events.remove_events(account, jid, event)
 		if w:
 			w.set_active_tab(ctrl)
