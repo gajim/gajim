@@ -2577,7 +2577,7 @@ class Interface:
 		elif type_ == 'whiteboard-incoming':
 			event = gajim.events.get_first_event(account, jid, type_)
 			peerjid, sid = event.parameters
-			session = gajim.connections[account].getJingleSession(peerjid, sid)
+			self.show_whiteboard_dialog(account, peerjid, sid)
 			gajim.events.remove_events(account, jid, event)
 		if w:
 			w.set_active_tab(ctrl)
