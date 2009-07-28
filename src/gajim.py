@@ -1768,7 +1768,10 @@ class Interface:
 				if gajim.config.get('notify_on_file_complete'):
 					ft.show_completed(jid, file_props)
 			elif file_props['error'] == -1:
-				ft.show_stopped(jid, file_props)
+				ft.show_stopped(jid, file_props,
+					error_msg=_('Remote contact stopped transfer'))
+			elif file_props['error'] == -6:
+				ft.show_stopped(jid, file_props, error_msg=_('Error opening file'))
 			return
 
 		msg_type = ''
@@ -1777,7 +1780,7 @@ class Interface:
 		'notify_on_file_complete'):
 			msg_type = 'file-completed'
 			event_type = _('File Transfer Completed')
-		elif file_props['error'] == -1:
+		elif file_props['error'] in (-1, -6):
 			msg_type = 'file-stopped'
 			event_type = _('File Transfer Stopped')
 

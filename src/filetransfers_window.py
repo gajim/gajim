@@ -228,8 +228,7 @@ _('Connection with peer cannot be established.'))
 		sectext += '\n\t' + _('Recipient: %s') % jid
 		if error_msg:
 			sectext += '\n\t' + _('Error message: %s') % error_msg
-		dialogs.ErrorDialog(_('File transfer stopped by the contact at the other '
-			'end'), sectext)
+		dialogs.ErrorDialog(_('File transfer stopped'), sectext)
 		self.tree.get_selection().unselect_all()
 
 	def show_file_send_request(self, account, contact):
