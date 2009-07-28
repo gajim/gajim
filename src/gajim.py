@@ -2725,7 +2725,7 @@ class Interface:
 					if emot_file.endswith('.gif'):
 						pix = gtk.gdk.PixbufAnimation(emot_file)
 					else:
-						pix = gtk.gdk.pixbuf_new_from_file(emot_file)
+						pix = gtk.gdk.pixbuf_new_from_file_at_size(emot_file, 16, 16)
 					self.emoticons_images.append((emot, pix))
 				self.emoticons[emot.upper()] = emot_file
 		del emoticons
