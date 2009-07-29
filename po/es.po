@@ -674,7 +674,7 @@ msgstr "<b>Elige el comando a ejecutar:</b>"
 
 #: ../data/glade/adhoc_commands_window.glade.h:3
 msgid "Ad-hoc Commands - Gajim"
-msgstr "Comandos Ad-hoc - Gajim"
+msgstr "Comandos Ad hoc - Gajim"
 
 #: ../data/glade/adhoc_commands_window.glade.h:4
 msgid "Check once more"
