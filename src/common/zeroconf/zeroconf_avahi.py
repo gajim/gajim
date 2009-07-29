@@ -124,11 +124,7 @@ class Zeroconf:
 		for els in txt_array:
 			key, val = '', None
 			for c in els:
-					#FIXME: remove when outdated, this is for avahi < 0.6.14
-					if c < 0 or c > 255:
-						c = '.'
-					else:
-						c = chr(c)
+					c = chr(c)
 					if val is None:
 						if c == '=':
 							val = ''
@@ -138,7 +134,7 @@ class Zeroconf:
 						val += c
 			if val is None: # missing '='
 				val = ''
-			txt_dict[key] = val.decode('utf-8')
+			txt_dict[key] = val.decode('utf-8', 'ignore')
 		return txt_dict
 
 	def service_resolved_callback(self, interface, protocol, name, stype, domain,
