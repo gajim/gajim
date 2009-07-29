@@ -1,3 +1,10 @@
+Gajim 0.12.4 (XX August 2009)
+
+  * Fix History manager
+  * Fix file transfer proxy discovering at connection
+  * Improve filetransfer with IPv6
+  * Fix zeroconf when receiving badly encoded info
+
 Gajim 0.12.3 (12 June 2009)
 
   * Fix PLAIN authentication (in particular with Gtalk
