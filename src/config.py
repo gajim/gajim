@@ -2906,20 +2906,42 @@ class ManageBookmarksWindow:
 	def on_nick_entry_changed(self, widget):
 		(model, iter_) = self.selection.get_selected()
 		if iter_:
-			model[iter_][6] = self.nick_entry.get_text()
+			nick = self.nick_entry.get_text().decode('utf-8')
+			try:
+				nick = helpers.parse_resource(nick)
+			except helpers.InvalidFormat, e:
+				dialogs.ErrorDialog(_('Invalid nickname'),
+					_('Character not allowed'))
+				self.nick_entry.set_text(model[iter_][6])
+				return True
+			model[iter_][6] = nick
 
 	def on_server_entry_changed(self, widget):
 		(model, iter_) = self.selection.get_selected()
 		if iter_:
 			room_jid = self.room_entry.get_text().decode('utf-8').strip() + '@' + \
 				self.server_entry.get_text().decode('utf-8').strip()
-			model[iter_][2] = room_jid.replace(' ', '')
+			try:
+				room_jid = helpers.parse_resource(room_jid)
+			except helpers.InvalidFormat, e:
+				dialogs.ErrorDialog(_('Invalid server'),
+					_('Character not allowed'))
+				self.server_entry.set_text(model[iter_][2].split('@')[1])
+				return True
+			model[iter_][2] = room_jid
 
 	def on_room_entry_changed(self, widget):
 		(model, iter_) = self.selection.get_selected()
 		if iter_:
-			room_jid = self.room_entry.get_text().decode('utf-8') + '@' + \
-				self.server_entry.get_text().decode('utf-8')
+			room_jid = self.room_entry.get_text().decode('utf-8').strip() + '@' + \
+				self.server_entry.get_text().decode('utf-8').strip()
+			try:
+				room_jid = helpers.parse_resource(room_jid)
+			except helpers.InvalidFormat, e:
+				dialogs.ErrorDialog(_('Invalid room'),
+					_('Character not allowed'))
+				self.room_entry.set_text(model[iter_][2].split('@')[0])
+				return True
 			model[iter_][2] = room_jid
 
 	def on_pass_entry_changed(self, widget):
