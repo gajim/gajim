@@ -1,21 +1,21 @@
 Source: gajim
 Section: net
 Priority: optional
-Maintainer: Yann Le Boulanger <asterix@lagaule.org>
-Build-Depends: debhelper (>= 5.0.37.2), cdbs (>= 0.4.43), python-support (>= 0.7.1), python-dev, libgtk2.0-dev, python-gtk2-dev, libgtkspell-dev, gettext (>= 0.17-4), libxss-dev, intltool (>= 0.40.1), imagemagick, python-central (>= 0.5), libdbus-1-dev
+Maintainer: Yann Leboulanger <asterix@lagaule.org>
+Build-Depends: debhelper (>= 6), cdbs (>= 0.4.43), python-support (>= 0.7.1), python-dev, libgtk2.0-dev, python-gtk2-dev, libgtkspell-dev, gettext (>= 0.17-4), libxss-dev, intltool (>= 0.40.1), imagemagick, python-central (>= 0.5), libdbus-1-dev
 Build-Conflicts: python2.3
 XS-Python-Version: >= 2.4
-Standards-Version: 3.7.3
+Standards-Version: 3.8.2
 Homepage: http://www.gajim.org
-Vcs-Svn: svn://svn.gajim.org/gajim/
-Vcs-Browser: http://trac.gajim.org/browser
+Vcs-Hg: http://hg.gajim.org/gajim/
+Vcs-Browser: http://hg.gajim.org/gajim/file
 
 Package: gajim
 Architecture: any
 XB-Python-Version: ${python:Versions}
-Depends: python (>= 2.4), python-support (>= 0.7.1), python-glade2 (>= 2.8.0), python-gtk2 (>= 2.8.0), python-pysqlite2 | python (>= 2.5), dnsutils, libc6
-Recommends: dbus, python-dbus, notification-daemon, python-gnupginterface, python-openssl
-Suggests: python-gnome2, nautilus-sendto, avahi-daemon, python-avahi, network-manager, libgtkspell0, aspell-en, python-gnome2-desktop (>= 2.16.0), gnome-keyring, python-sexy, python-kerberos (>= 1.1)
+Depends: ${misc:Depends}, ${shlibs:Depends}, ${python:Depends}, python-support (>= 0.7.1), python-glade2 (>= 2.8.0), python-gtk2 (>= 2.8.0), dnsutils
+Recommends: dbus, python-dbus, notification-daemon, python-gnupginterface, python-openssl, python-crypto
+Suggests: python-gnome2, nautilus-sendto, avahi-daemon, python-avahi, network-manager, libgtkspell0, aspell-en, python-gnome2-desktop (>= 2.16.0), gnome-keyring, python-sexy, python-kerberos (>= 1.1), texlive-latex-base, dvipng
 Description: Jabber client written in PyGTK
  Gajim is a Jabber client. It has a tabbed user interface with normal chats,
  group chats, and has many features such as, TLS, GPG, SSL, multiple accounts,

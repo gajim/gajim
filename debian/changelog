@@ -1,3 +1,15 @@
+gajim (0.12.3-1) unstable; urgency=low
+
+  * New upstream release.
+  * OS info are now caches. Closes: #509675
+  * keepalive system has been improved. Closes: #521144
+  * Recommends python-crypto for encryption. Closes: #513892
+  * update to 3.8.2 Debian Policy
+  * update to debhelper V6
+  * added watch file
+
+ -- Yann Leboulanger <asterix@lagaule.org>  Sun, 24 Jun 2009 20:46:15 +0100
+
 gajim (0.12.1-1) unstable; urgency=low
 
   * New upstream release.
