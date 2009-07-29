@@ -164,7 +164,7 @@ class SVGObject():
 		self.svg.setAttr('width', str(width))
 		self.svg.setAttr('xmlns', 'http://www.w3.org/2000/svg')
 		# TODO: make this settable		
-		self.g = self.svg.addChild(name='<g/>')
+		self.g = self.svg.addChild(name='g')
 		self.g.setAttr('fill', 'none')
 		self.g.setAttr('stroke-linecap', 'round')
 
