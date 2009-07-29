@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: sr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-07-29 13:42+0200\n"
-"PO-Revision-Date: 2009-05-24 00:05+0200\n"
+"PO-Revision-Date: 2009-07-29 18:58+0200\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -7291,7 +7291,6 @@ msgid "Error message: %s"
 msgstr "Порука грешке: %s"
 
 #: ../src/filetransfers_window.py:231
-#, fuzzy
 msgid "File transfer stopped"
 msgstr "Пренос датотеке заустављен"
 
@@ -7710,14 +7709,12 @@ msgid "%s wants to send you a file."
 msgstr "%s Вам жели послати датотеку."
 
 #: ../src/gajim.py:1804 ../src/roster_window.py:1821
-#, fuzzy
 msgid "Remote contact stopped transfer"
-msgstr "Уклања контакт са листе"
+msgstr "Друга страна је прекинула пренос"
 
 #: ../src/gajim.py:1806 ../src/roster_window.py:1823
-#, fuzzy
 msgid "Error opening file"
-msgstr "Грешка при читању датотеке:"
+msgstr "Грешка при отварању датотеке"
 
 #: ../src/gajim.py:1837
 #, python-format
