@@ -2254,6 +2254,7 @@ class Interface:
 			ctrl.draw_whiteboard(session)
 
 		def on_cancel():
+			session = gajim.connections[account].getJingleSession(peerjid, sid)
 			session.declineSession()
 
 		contact = gajim.contacts.get_first_contact_from_jid(account,
