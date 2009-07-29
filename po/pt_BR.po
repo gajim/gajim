@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-07-29 13:42+0200\n"
-"PO-Revision-Date: 2009-05-22 21:40-0300\n"
+"PO-Revision-Date: 2009-07-29 10:00-0300\n"
 "Last-Translator: Djavan Fagundes <dnoway@gmail.com>\n"
 "Language-Team: Português Brasileiro <gajim-devel@gajim.org>\n"
 "MIME-Version: 1.0\n"
@@ -5454,7 +5454,7 @@ msgstr "Trabalhando fora"
 
 #: ../src/common/pep.py:144
 msgid "Grooming"
-msgstr "Afagando"
+msgstr "Cuidando da aparência"
 
 #: ../src/common/pep.py:145
 msgid "At the Spa"
@@ -5578,7 +5578,7 @@ msgstr "Ao telefone"
 
 #: ../src/common/pep.py:177
 msgid "On Video Phone"
-msgstr "Ao telefone"
+msgstr "Em uma videoconferência"
 
 #: ../src/common/pep.py:178
 msgid "Traveling"
@@ -7344,7 +7344,6 @@ msgid "Error message: %s"
 msgstr "Mensagem de erro: %s"
 
 #: ../src/filetransfers_window.py:231
-#, fuzzy
 msgid "File transfer stopped"
 msgstr "Transferência do arquivo parada"
 
@@ -7767,14 +7766,12 @@ msgid "%s wants to send you a file."
 msgstr "%s quer te enviar um arquivo."
 
 #: ../src/gajim.py:1804 ../src/roster_window.py:1821
-#, fuzzy
 msgid "Remote contact stopped transfer"
-msgstr "Remover contato da lista"
+msgstr "O contato removo parou a transferência"
 
 #: ../src/gajim.py:1806 ../src/roster_window.py:1823
-#, fuzzy
 msgid "Error opening file"
-msgstr "Erro lendo arquivo:"
+msgstr "Erro ao abrir o arquivo"
 
 #: ../src/gajim.py:1837
 #, python-format
