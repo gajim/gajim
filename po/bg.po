@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Gajim 0.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-07-29 13:42+0200\n"
-"PO-Revision-Date: 2009-05-30 18:54+0300\n"
+"PO-Revision-Date: 2009-07-29 19:16+0300\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -6894,7 +6894,7 @@ msgstr ""
 
 #: ../src/dialogs.py:3900
 msgid "Did you talk to the remote contact and verify the SAS?"
-msgstr "Говорихте ли с отдалечение контакт за проверка на SAS?"
+msgstr "Говорихте ли с отсрещния контакт за проверка на SAS?"
 
 #: ../src/dialogs.py:3932
 #, python-format
@@ -7345,7 +7345,6 @@ msgid "Error message: %s"
 msgstr "Грешка: %s"
 
 #: ../src/filetransfers_window.py:231
-#, fuzzy
 msgid "File transfer stopped"
 msgstr "Файловият трансфер е преустановен"
 
@@ -7765,14 +7764,12 @@ msgid "%s wants to send you a file."
 msgstr "%s иска да ви изпрати файл."
 
 #: ../src/gajim.py:1804 ../src/roster_window.py:1821
-#, fuzzy
 msgid "Remote contact stopped transfer"
-msgstr "Премахване на контакт от списъка"
+msgstr "Отсрещният контакт преустанови трансфера"
 
 #: ../src/gajim.py:1806 ../src/roster_window.py:1823
-#, fuzzy
 msgid "Error opening file"
-msgstr "Грешка при четене на файл:"
+msgstr "Грешка при отваряне на файла"
 
 #: ../src/gajim.py:1837
 #, python-format
@@ -9571,6 +9568,3 @@ msgstr "Няма чакащо запитване за записване."
 #: ../src/vcard.py:339 ../src/vcard.py:377 ../src/vcard.py:505
 msgid " resource with priority "
 msgstr " ресурс с приоритет "
-
-#~ msgid "File transfer stopped by the contact at the other end"
-#~ msgstr "Файловият трансфер е преустановен от отсрещната страна"
