@@ -137,7 +137,9 @@ try:
 except Warning, msg:
 	if str(msg) == 'could not open display':
 		print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
-		sys.exit()
+	else:
+		print >> sys.stderr, _('importing PyGTK failed: %s') % str(msg)
+	sys.exit()
 warnings.resetwarnings()
 
 if os.name == 'nt':
