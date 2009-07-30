@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-07-29 13:42+0200\n"
-"PO-Revision-Date: 2009-05-27 23:31+0300\n"
+"PO-Revision-Date: 2009-07-30 08:34+0300\n"
 "Last-Translator: Sergiy Yegorov <prapor@unixzone.org.ua>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -1486,7 +1486,6 @@ msgid "<b>Settings</b>"
 msgstr "<b>Параметри</b>"
 
 #: ../data/glade/manage_proxies_window.glade.h:3
-#, fuzzy
 msgid ""
 "HTTP Connect\n"
 "SOCKS5"
@@ -1508,19 +1507,16 @@ msgid "Pass_word:"
 msgstr "Па_роль:"
 
 #: ../data/glade/manage_proxies_window.glade.h:8
-#, fuzzy
 msgid "Type:"
 msgstr "Тип:"
 
 #: ../data/glade/manage_proxies_window.glade.h:9
-#, fuzzy
 msgid "Use authentication"
-msgstr "Використовувати розпізнавання на проксі"
+msgstr "Використовувати авторизацію"
 
 #: ../data/glade/manage_proxies_window.glade.h:10
-#, fuzzy
 msgid "_Host:"
-msgstr "Назва _вузла:"
+msgstr "_Вузол:"
 
 #: ../data/glade/message_window.glade.h:1
 msgid "Add this contact to roster (Ctrl+D)"
@@ -1984,7 +1980,6 @@ msgid "T_heme:"
 msgstr "Т_ема:"
 
 #: ../data/glade/preferences_window.glade.h:88
-#, fuzzy
 msgid ""
 "The auto away status message. If empty, Gajim will not change the current "
 "status message"
@@ -1993,7 +1988,6 @@ msgstr ""
 "повідомлення, Gajim не змінюватиме поточного повідомлення про стан."
 
 #: ../data/glade/preferences_window.glade.h:89
-#, fuzzy
 msgid ""
 "The auto not available status message. If empty, Gajim will not change the "
 "current status message"
@@ -3904,7 +3898,6 @@ msgstr ""
 "значення відповідають більшим символам формул."
 
 #: ../src/common/config.py:265
-#, fuzzy
 msgid ""
 "Valid uri schemes. Only schemes in this list will be made accepted as \"real"
 "\" uri."
@@ -4181,7 +4174,7 @@ msgid "Registration succeeded"
 msgstr "Зареєструватися на %s"
 
 #: ../src/common/connection_handlers.py:654
-#, fuzzy, python-format
+#, python-format
 msgid "Resgitration with agent %s succeeded"
 msgstr "Реєстрацію з агентом %s вдало закінчено"
 
@@ -4190,7 +4183,7 @@ msgid "Registration failed"
 msgstr "Спроба з’єднання завершилася невдало"
 
 #: ../src/common/connection_handlers.py:656
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Resgitration with agent %(agent)s failed with error %(error)s: %(error_msg)s"
 msgstr ""
@@ -5905,7 +5898,6 @@ msgstr ""
 "облікового запису, а потім знову туди увійти."
 
 #: ../src/config.py:1579 ../src/config.py:1680
-#, fuzzy
 msgid "OpenPGP is not usable in this computer"
 msgstr "На цьому комп'ютері OpenPGP не придатне для використання"
 
@@ -6143,7 +6135,6 @@ msgstr ""
 "\n"
 
 #: ../src/config.py:2524
-#, fuzzy
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -7158,7 +7149,6 @@ msgid "OpenGPG"
 msgstr "OpenGPG"
 
 #: ../src/features_window.py:60
-#, fuzzy
 msgid "Encrypting chatmessages with gpg keys."
 msgstr "Шифрування повідомлень балачки за допомогою ключів gpg."
 
@@ -7167,7 +7157,6 @@ msgid "Requires gpg and python-GnuPGInterface."
 msgstr "Потрібні gpg і python-GnuPGInterface."
 
 #: ../src/features_window.py:63
-#, fuzzy
 msgid "network-manager"
 msgstr "network-manager"
 
@@ -7283,7 +7272,6 @@ msgstr ""
 "автоматичного стану."
 
 #: ../src/features_window.py:93 ../src/features_window.py:94
-#, fuzzy
 msgid "Requires compilation of the idle module from Gajim sources."
 msgstr ""
 "Потрібен пакунок python-gnome2-extras або модуль gtkspell, зібраний з "
@@ -7315,12 +7303,10 @@ msgstr ""
 "додаткових налаштувань."
 
 #: ../src/features_window.py:99
-#, fuzzy
 msgid "End to End Encryption"
-msgstr "Увімкнути або вимкнути наскрізне шифрування"
+msgstr "Шифрування E2E"
 
 #: ../src/features_window.py:100
-#, fuzzy
 msgid "Encrypting chatmessages."
 msgstr "Шифрування повідомлень балачки."
 
@@ -7429,7 +7415,6 @@ msgid "Error message: %s"
 msgstr "Повідомлення про помилку: %s"
 
 #: ../src/filetransfers_window.py:231
-#, fuzzy
 msgid "File transfer stopped"
 msgstr "Зупинка передавання файла"
 
@@ -7554,26 +7539,22 @@ msgid "Gajim needs X server to run. Quiting..."
 msgstr "Для роботи Gajim потрібен запущений сервер X. Завершення роботи..."
 
 #: ../src/gajim.py:210
-#, fuzzy
 msgid "Gajim needs PyGTK 2.8 or above"
-msgstr "Для роботи Gajim потрібен PyGTK 2.12 або новіша версія"
+msgstr "Для роботи Gajim потрібен PyGTK 2.8 або новіша версія"
 
 #: ../src/gajim.py:211
-#, fuzzy
 msgid "Gajim needs PyGTK 2.8 or above to run. Quiting..."
 msgstr ""
-"Для запуску Gajim потрібен PyGTK 2.12 або новіша версія. Завершення роботи..."
+"Для запуску Gajim потрібен PyGTK 2.8 або новіша версія. Завершення роботи..."
 
 #: ../src/gajim.py:213
-#, fuzzy
 msgid "Gajim needs GTK 2.8 or above"
-msgstr "Для роботи Gajim потрібна бібліотека GTK 2.12 або новіша версія"
+msgstr "Для роботи Gajim потрібна бібліотека GTK 2.8 або новіша версія"
 
 #: ../src/gajim.py:214
-#, fuzzy
 msgid "Gajim needs GTK 2.8 or above to run. Quiting..."
 msgstr ""
-"Для запуску Gajim потрібна бібліотека GTK 2.12 або новіша версія. Завершення "
+"Для запуску Gajim потрібна бібліотека GTK 2.8 або новіша версія. Завершення "
 "роботи..."
 
 #: ../src/gajim.py:219
@@ -7857,14 +7838,12 @@ msgid "%s wants to send you a file."
 msgstr "%s бажає надіслати вам файл."
 
 #: ../src/gajim.py:1804 ../src/roster_window.py:1821
-#, fuzzy
 msgid "Remote contact stopped transfer"
-msgstr "Вилучає контакт з реєстру"
+msgstr "Віддалений контакт зупинив передавання файлу"
 
 #: ../src/gajim.py:1806 ../src/roster_window.py:1823
-#, fuzzy
 msgid "Error opening file"
-msgstr "Помилка під час спроби прочитати файл:"
+msgstr "Помилка під час спроби прочитати файл"
 
 #: ../src/gajim.py:1837
 #, python-format
@@ -9109,7 +9088,6 @@ msgid "Now \"%s\" will always see you as offline."
 msgstr "Тепер «%s» завжди бачитиме вас як «поза мережею»."
 
 #: ../src/roster_window.py:1939
-#, fuzzy
 msgid ""
 "Gnome Keyring is installed but not \t\t\t\t\t\t\tcorrectly started "
 "(environment variable probably not \t\t\t\t\t\t\tcorrectly set)"
