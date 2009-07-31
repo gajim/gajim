@@ -1589,38 +1589,47 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 	def get_bookmarks(self):
-		'''Get Bookmarks from storage as described in XEP 0048'''
+		'''Get Bookmarks from storage or PubSub if supported as described in
+		XEP 0048'''
 		self.bookmarks = [] #avoid multiple bookmarks when re-connecting
 		if not self.connection:
 			return
-		iq = common.xmpp.Iq(typ='get')
-		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
-		iq2.addChild(name='storage', namespace='storage:bookmarks')
-		self.connection.send(iq)
+		if self.pubsub_supported:
+			self.send_pb_retrieve('', 'storage:bookmarks', self._PrivatePubsubCB)
+		else:
+			iq = common.xmpp.Iq(typ='get')
+			iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
+			iq2.addChild(name='storage', namespace='storage:bookmarks')
+			self.connection.send(iq)
 
 	def store_bookmarks(self):
-		''' Send bookmarks to the storage namespace '''
+		''' Send bookmarks to the storage namespace or PubSub if supported'''
 		if not self.connection:
 			return
-		iq = common.xmpp.Iq(typ='set')
-		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
-		iq3 = iq2.addChild(name='storage', namespace='storage:bookmarks')
+		iq = common.xmpp.Node(tag='storage', attrs={'xmlns': 'storage:bookmarks'})
 		for bm in self.bookmarks:
-			iq4 = iq3.addChild(name = "conference")
-			iq4.setAttr('jid', bm['jid'])
-			iq4.setAttr('autojoin', bm['autojoin'])
-			iq4.setAttr('minimize', bm['minimize'])
-			iq4.setAttr('name', bm['name'])
+			iq2 = iq.addChild(name = "conference")
+			iq2.setAttr('jid', bm['jid'])
+			iq2.setAttr('autojoin', bm['autojoin'])
+			iq2.setAttr('minimize', bm['minimize'])
+			iq2.setAttr('name', bm['name'])
 			# Only add optional elements if not empty
 			# Note: need to handle both None and '' as empty
 			#   thus shouldn't use "is not None"
 			if bm.get('nick', None):
-				iq4.setTagData('nick', bm['nick'])
+				iq2.setTagData('nick', bm['nick'])
 			if bm.get('password', None):
-				iq4.setTagData('password', bm['password'])
+				iq2.setTagData('password', bm['password'])
 			if bm.get('print_status', None):
-				iq4.setTagData('print_status', bm['print_status'])
-		self.connection.send(iq)
+				iq2.setTagData('print_status', bm['print_status'])
+
+		if self.pubsub_supported:
+			self.send_pb_publish('', 'storage:bookmarks', iq, 'current')
+		else:
+			iqA = common.xmpp.Iq(typ='set')
+			iqB = iqA.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
+			iqB.addChild(node=iq)
+			self.connection.send(iqA)
 
 	def get_annotations(self):
 		'''Get Annonations from storage as described in XEP 0048, and XEP 0145'''

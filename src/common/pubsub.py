@@ -75,6 +75,17 @@ class ConnectionPubSub:
 
 		self.connection.send(query)
 
+	def send_pb_retrieve(self, jid, node, cb, *args, **kwargs): 
+		'''Get items from a node''' 
+		if not self.connection or self.connected < 2: 
+			return 
+		query = xmpp.Iq('get', to=jid) 
+		r = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB) 
+		r = r.addChild('items', {'node': node}) 
+		id_ = self.connection.send(query)
+
+		self.__callbacks[id_]=(cb, args, kwargs)
+
 	def send_pb_retract(self, jid, node, id_):
 		'''Delete item from a node'''
 		if not self.connection or self.connected < 2:

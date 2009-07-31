@@ -1527,34 +1527,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if storage:
 			ns = storage.getNamespace()
 			if ns == 'storage:bookmarks':
-				# Bookmarked URLs and Conferences
-				# http://www.xmpp.org/extensions/xep-0048.html
-				confs = storage.getTags('conference')
-				for conf in confs:
-					autojoin_val = conf.getAttr('autojoin')
-					if autojoin_val is None: # not there (it's optional)
-						autojoin_val = False
-					minimize_val = conf.getAttr('minimize')
-					if minimize_val is None: # not there (it's optional)
-						minimize_val = False
-					print_status = conf.getTagData('print_status')
-					if not print_status:
-						print_status = conf.getTagData('show_status')
-					try:
-						bm = {'name': conf.getAttr('name'),
-							'jid': helpers.parse_jid(conf.getAttr('jid')),
-							'autojoin': autojoin_val,
-							'minimize': minimize_val,
-							'password': conf.getTagData('password'),
-							'nick': conf.getTagData('nick'),
-							'print_status': print_status}
-					except common.helpers.InvalidFormat:
-						log.warn('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
-						continue
-
-					self.bookmarks.append(bm)
-				self.dispatch('BOOKMARKS', self.bookmarks)
-
+				self._parse_bookmarks(storage)
 			elif ns == 'gajim:prefs':
 				# Preferences data
 				# http://www.xmpp.org/extensions/xep-0049.html
@@ -1572,6 +1545,53 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						continue
 					annotation = note.getData()
 					self.annotations[jid] = annotation
+
+	def _PrivatePubsubCB(self, conn, request):
+		'''Private data from PubSub'''
+		gajim.log.debug('_PrivatePubsubCB')
+		pubsub = request.getTag('pubsub')
+		if not pubsub:
+			return
+		items = pubsub.getTag('items')
+		if not items:
+			return
+		item = items.getTag('item')
+		if not item:
+			return
+		storage = item.getTag('storage')
+		if storage:
+			ns = storage.getNamespace()
+			if ns == 'storage:bookmarks':
+				self._parse_bookmarks(storage)
+
+	def _parse_bookmarks(self, storage):
+		# Bookmarked URLs and Conferences
+		# http://www.xmpp.org/extensions/xep-0048.html
+		confs = storage.getTags('conference')
+		for conf in confs:
+			autojoin_val = conf.getAttr('autojoin')
+			if autojoin_val is None: # not there (it's optional)
+				autojoin_val = False
+			minimize_val = conf.getAttr('minimize')
+			if minimize_val is None: # not there (it's optional)
+				minimize_val = False
+			print_status = conf.getTagData('print_status')
+			if not print_status:
+				print_status = conf.getTagData('show_status')
+			try:
+				bm = {'name': conf.getAttr('name'),
+					'jid': helpers.parse_jid(conf.getAttr('jid')),
+					'autojoin': autojoin_val,
+					'minimize': minimize_val,
+					'password': conf.getTagData('password'),
+					'nick': conf.getTagData('nick'),
+					'print_status': print_status}
+			except common.helpers.InvalidFormat:
+				log.warn('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
+				continue
+
+			self.bookmarks.append(bm)
+		self.dispatch('BOOKMARKS', self.bookmarks)
 
 	def _rosterSetCB(self, con, iq_obj):
 		log.debug('rosterSetCB')
@@ -1815,7 +1835,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				self.dispatch('GMAIL_NOTIFY', (jid, newmsgs, gmail_messages_list))
 			raise common.xmpp.NodeProcessed
 
-		
+
 	def _rosterItemExchangeCB(self, con, msg):
 		''' XEP-0144 Roster Item Echange '''
 		exchange_items_list = {}
@@ -1855,7 +1875,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			if msg.getTag('error') is None:
 				self._pubsubEventCB(con, msg)
 			return
-		
+
 		# check if the message is a roster item exchange (XEP-0144)
 		if msg.getTag('x', namespace=common.xmpp.NS_ROSTERX):
 			self._rosterItemExchangeCB(con, msg)
