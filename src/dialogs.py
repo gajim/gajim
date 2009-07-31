@@ -2848,51 +2848,209 @@ class RosterItemExchangeWindow:
 		self.window.destroy()
 		
 
+class ItemArchivingPreferencesWindow:
+	otr_name = ('approve', 'concede', 'forbid', 'oppose', 'prefer', 'require')
+	otr_index = dict([(j, i) for i, j in enumerate(otr_name)])
+	save_name = ('body', 'false', 'message', 'stream')
+	save_index = dict([(j, i) for i, j in enumerate(save_name)])
+
+	def __init__(self, account, item):
+		self.account = account
+		self.item = item
+		if self.item and self.item != 'Default':
+			self.item_config = gajim.connections[self.account].items[self.item]
+		else:
+			self.item_config = gajim.connections[self.account].default
+		print self.item, self.item_config
+		self.waiting = None
+
+		# Connect to glade
+		self.xml = gtkgui_helpers.get_glade(
+			'item_archiving_preferences_window.glade')
+		self.window = self.xml.get_widget('item_archiving_preferences_window')
+
+		# Add Widgets
+		for widget_to_add in ('jid_entry', 'expire_entry', 'otr_combobox',
+		'save_combobox', 'cancel_button', 'ok_button', 'progressbar'):
+			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
+
+		if self.item:
+			self.jid_entry.set_text(self.item)
+		expire_value = self.item_config['expire'] or ''
+		self.otr_combobox.set_active(self.otr_index[self.item_config['otr']])
+		self.save_combobox.set_active(
+			self.save_index[self.item_config['save']])
+		self.expire_entry.set_text(expire_value)
+
+		self.window.set_title(_('Archiving Preferences for %s') % self.account)
+
+		self.window.show_all()
+		self.progressbar.hide()
+		self.xml.signal_autoconnect(self)
+
+	def update_progressbar(self):
+		if self.waiting:
+			self.progressbar.pulse()
+			return True
+		return False
+
+	def on_ok_button_clicked(self, widget):
+		# Return directly if operation in progress
+		if self.waiting:
+			return
+
+		item = self.jid_entry.get_text()
+		otr = self.otr_name[self.otr_combobox.get_active()]
+		save = self.save_name[self.save_combobox.get_active()]
+		expire = self.expire_entry.get_text()
+
+		if self.item != 'Default':
+			try:
+				item = helpers.parse_jid(item)
+			except helpers.InvalidFormat, s:
+				pritext = _('Invalid User ID')
+				ErrorDialog(pritext, str(s))
+				return
+
+		if expire:
+			try:
+				if int(expire) < 0 or str(int(expire)) != expire:
+					raise ValueError
+			except ValueError:
+				pritext = _('Invalid expire value')
+				sectext = _('Expire must be a valid positive integer.')
+				ErrorDialog(pritext, sectext)
+				return
+
+		if not (item == self.item and expire == self.item_config['expire'] and
+		otr == self.item_config['otr'] and save == self.item_config['save']):
+			if not self.item or self.item == item:
+				if self.item == 'Default':
+					self.waiting = 'default'
+					gajim.connections[self.account].set_default(
+						otr, save, expire)
+				else:
+					self.waiting = 'item'
+					gajim.connections[self.account].append_or_update_item(
+						item, otr, save, expire)
+			else:
+				self.waiting = 'item'
+				gajim.connections[self.account].append_or_update_item(
+					item, otr, save, expire)
+				gajim.connections[self.account].remove_item(self.item)
+			self.launch_progressbar()
+		#self.window.destroy()
+
+	def on_cancel_button_clicked(self, widget):
+		self.window.destroy()
+
+	def on_item_archiving_preferences_window_destroy(self, widget):
+		if self.item:
+			key_name = 'edit_item_archiving_preferences_%s' % self.item
+		else:
+			key_name = 'new_item_archiving_preferences'
+		if key_name in gajim.interface.instances[self.account]:
+			del gajim.interface.instances[self.account][key_name]
+
+	def launch_progressbar(self):
+		self.progressbar.show()
+		self.update_progressbar_timeout_id = gobject.timeout_add(
+			100, self.update_progressbar)
+
+	def response_arrived(self, data):
+		if self.waiting:
+			self.window.destroy()
+
+	def error_arrived(self, error):
+		if self.waiting:
+			self.waiting = None
+			self.progressbar.hide()
+			pritext = _('There is an error with the form')
+			sectext = error
+			ErrorDialog(pritext, sectext)
+
+
 class ArchivingPreferencesWindow:
+	auto_name = ('false', 'true')
+	auto_index = dict([(j, i) for i, j in enumerate(auto_name)])
+	method_foo_name = ('prefer', 'concede', 'forbid')
+	method_foo_index = dict([(j, i) for i, j in enumerate(method_foo_name)])
+
 	def __init__(self, account):
 		self.account = account
+		self.waiting = []
 
 		# Connect to glade
 		self.xml = gtkgui_helpers.get_glade('archiving_preferences_window.glade')
 		self.window = self.xml.get_widget('archiving_preferences_window')
 
 		# Add Widgets
-		for widget_to_add in ('auto_save_yes_radiobutton',
-		'auto_save_no_radiobutton', 'method_auto_combobox',
+		for widget_to_add in ('auto_combobox', 'method_auto_combobox',
 		'method_local_combobox', 'method_manual_combobox', 'close_button',
 		'item_treeview', 'item_notebook', 'otr_combobox', 'save_combobox',
-		'expire_entry'):
+		'expire_entry', 'remove_button', 'edit_button'):
 			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
 
+		self.auto_combobox.set_active(
+			self.auto_index[gajim.connections[self.account].auto])
+		self.method_auto_combobox.set_active(
+			self.method_foo_index[gajim.connections[self.account].method_auto])
+		self.method_local_combobox.set_active(
+			self.method_foo_index[gajim.connections[self.account].method_local])
+		self.method_manual_combobox.set_active(
+			self.method_foo_index[gajim.connections[self.account].method_manual])
 
-		auto_save = gajim.connections[account].auto_save == 'true'
-		self.auto_save_yes_radiobutton.set_active(auto_save)
-		self.auto_save_no_radiobutton.set_active(not auto_save)
-
-		method_index = {'prefer': 0, 'concede': 1, 'forbid': 2}
-		self.method_auto_combobox.set_active(method_index[gajim.connections[
-			self.account].method_auto])
-		self.method_local_combobox.set_active(method_index[gajim.connections[
-			self.account].method_local])
-		self.method_manual_combobox.set_active(method_index[gajim.connections[
-			self.account].method_manual])
-
-		model = gtk.ListStore(str)
+		model = gtk.ListStore(str, str, str, str)
 		self.item_treeview.set_model(model)
-		col = gtk.TreeViewColumn('name')
+		col = gtk.TreeViewColumn('jid')
 		self.item_treeview.append_column(col)
 		renderer = gtk.CellRendererText()
 		col.pack_start(renderer, True)
 		col.set_attributes(renderer, text=0)
-		#renderer.connect('edited', self.on_msg_cell_edited)
-		renderer.set_property('editable', False)
-		#self.fill_item_treeview()
-		iter_ = model.append()
-		model.set(iter_, 0, 'Default')
-		for item in gajim.connections[account].items:
-			iter_ = model.append()
-			model.set(iter_, 0, item)
+
+		col = gtk.TreeViewColumn('expire')
+		col.pack_start(renderer, True)
+		col.set_attributes(renderer, text=1)
+		self.item_treeview.append_column(col)
+
+		col = gtk.TreeViewColumn('otr')
+		col.pack_start(renderer, True)
+		col.set_attributes(renderer, text=2)
+		self.item_treeview.append_column(col)
+
+		col = gtk.TreeViewColumn('save')
+		col.pack_start(renderer, True)
+		col.set_attributes(renderer, text=3)
+		self.item_treeview.append_column(col)
+
+		self.fill_items()
+
 		self.current_item = None
+
+		def sort_items(model, iter1, iter2):
+			item1 = model.get_value(iter1, 0)
+			item2 = model.get_value(iter2, 0)
+			if item1 == 'Default':
+				return -1
+			if item2 == 'Default':
+				return 1
+			if '@' in item1:
+				if '@' not in item2:
+					return 1
+			elif '@' in item2:
+				return -1
+			if item1 < item2:
+				return -1
+			if item1 > item2:
+				return 1
+			# item1 == item2 ? WTF?
+			return 0
+
+		model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+		model.set_sort_func(0, sort_items)
+
+		self.remove_button.set_sensitive(False)
+		self.edit_button.set_sensitive(False)
 
 		self.window.set_title(_('Archiving Preferences for %s') % self.account)
 
@@ -2900,14 +3058,37 @@ class ArchivingPreferencesWindow:
 
 		self.xml.signal_autoconnect(self)
 
-	def on_archiving_preferences_window_destroy(self, widget):
-		if 'archiving_preferences' in gajim.interface.instances[self.account]:
-			del gajim.interface.instances[self.account]['archiving_preferences']
-
 	def on_add_item_button_clicked(self, widget):
-		model = self.item_treeview.get_model()
-		iter_ = model.append()
-		model.set(iter_, 0, 'jid@example.net')
+		key_name = 'new_item_archiving_preferences'
+		if key_name in gajim.interface.instances[self.account]:
+			gajim.interface.instances[self.account][key_name].window.present()
+		else:
+			gajim.interface.instances[self.account][key_name] = \
+				ItemArchivingPreferencesWindow(self.account, '')
+
+	def on_remove_item_button_clicked(self, widget):
+		if not self.current_item:
+			return
+
+		self.waiting.append('itemremove')
+		sel = self.item_treeview.get_selection()
+		(model, iter_) = sel.get_selected()
+		gajim.connections[self.account].remove_item(model[iter_][0])
+		model.remove(iter_)
+		self.remove_button.set_sensitive(False)
+		self.edit_button.set_sensitive(False)
+
+	def on_edit_item_button_clicked(self, widget):
+		if not self.current_item:
+			print 'there is no current item'
+			return
+
+		key_name = 'edit_item_archiving_preferences_%s' % self.current_item
+		if key_name in gajim.interface.instances[self.account]:
+			gajim.interface.instances[self.account][key_name].window.present()
+		else:
+			gajim.interface.instances[self.account][key_name] = \
+				ItemArchivingPreferencesWindow(self.account, self.current_item)
 
 	def on_item_treeview_cursor_changed(self, widget):
 		sel = self.item_treeview.get_selection()
@@ -2918,27 +3099,101 @@ class ArchivingPreferencesWindow:
 		if self.current_item and self.current_item == item:
 				return
 
-		if iter:
-			otr_index = {'approve': 0, 'concede': 1, 'forbid': 2, 'oppose': 3,
-				'prefer': 4, 'require': 5}
-			save_index = {'body': 0, 'false': 1, 'message': 2, 'stream': 3}
-			item_config = None
-			if item == 'Default':
-				item_config = gajim.connections[self.account].default
-			else:
-				item_config = gajim.connections[self.account].items[item]
-			self.otr_combobox.set_active(otr_index[item_config['otr']])
-			self.save_combobox.set_active(save_index[item_config['save']])
-			expire_value = item_config['expire'] or ''
-			self.expire_entry.set_text(expire_value)
-			self.current_item = item
-		if self.current_item:
-			self.item_notebook.set_current_page(1)
+		self.current_item = item
+		if self.current_item == 'Default':
+			self.remove_button.set_sensitive(False)
+			self.edit_button.set_sensitive(True)
+		elif self.current_item:
+			self.remove_button.set_sensitive(True)
+			self.edit_button.set_sensitive(True)
 		else:
-			self.item_notebook.set_current_page(0)
+			self.remove_button.set_sensitive(False)
+			self.edit_button.set_sensitive(False)
+
+	def on_auto_combobox_changed(self, widget):
+		save = self.auto_name[widget.get_active()]
+		gajim.connections[self.account].set_auto(save)
+
+	def on_method_foo_combobox_changed(self, widget):
+		# We retrieve method type from widget name
+		# ('foo' in 'method_foo_combobox')
+		method_type = widget.name.split('_')[1]
+		use = self.method_foo_name[widget.get_active()]
+		self.waiting.append('method_%s' % method_type)
+		gajim.connections[self.account].set_method(method_type, use)
+
+	def get_child_window(self):
+		edit_key_name = 'edit_item_archiving_preferences_%s' % \
+			self.current_item
+		new_key_name = 'new_item_archiving_preferences'
+
+		if edit_key_name in gajim.interface.instances[self.account]:
+			return gajim.interface.instances[self.account][edit_key_name]
+
+		if new_key_name in gajim.interface.instances[self.account]:
+			return gajim.interface.instances[self.account][new_key_name]
+
+	def archiving_changed(self, data):
+		if data[0] in ('auto', 'method_auto', 'method_local', 'method_manual'):
+			if data[0] in self.waiting:
+				self.waiting.remove(data[0])
+		elif data[0] == 'default':
+			key_name = 'edit_item_archiving_preferences_%s' % \
+				self.current_item
+			if key_name in gajim.interface.instances[self.account]:
+				gajim.interface.instances[self.account][key_name].\
+					response_arrived(data[1:])
+			self.fill_items(True)
+		elif data[0] == 'item':
+			child = self.get_child_window()
+			if child:
+				is_new = not child.item
+				child.response_arrived(data[1:])
+				if is_new:
+					model = self.item_treeview.get_model()
+					model.append((data[1], data[2]['expire'], data[2]['otr'],
+						data[2]['save']))
+					return
+			self.fill_items(True)
+		elif data[0] == 'itemremove' == self.waiting:
+			if data[0] in self.waiting:
+				self.waiting.remove(data[0])
+			self.fill_items(True)
+
+	def fill_items(self, clear=False):
+		model = self.item_treeview.get_model()
+		if clear:
+			model.clear()
+		default_config = gajim.connections[self.account].default
+		expire_value = default_config['expire'] or ''
+		model.append(('Default', expire_value,
+			default_config['otr'], default_config['save']))
+		for item, item_config in \
+		gajim.connections[self.account].items.items():
+			expire_value = item_config['expire'] or ''
+			model.append((item, expire_value, item_config['otr'],
+				item_config['save']))
+
+	def archiving_error(self, error):
+		if self.waiting:
+			pritext = _('There is an error')
+			sectext = error
+			ErrorDialog(pritext, sectext)
+			self.waiting.pop()
+		else:
+			child = self.get_child_window()
+			if child:
+				child.error_arrived(error)
+		print error
 
 	def on_close_button_clicked(self, widget):
-		self.window.destroy()
+		if not self.waiting:
+			self.window.destroy()
+
+	def on_archiving_preferences_window_destroy(self, widget):
+		if 'archiving_preferences' in gajim.interface.instances[self.account]:
+			del gajim.interface.instances[self.account]['archiving_preferences']
+
 
 
 class PrivacyListWindow:

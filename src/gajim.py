@@ -2236,6 +2236,16 @@ class Interface:
 				_('PEP node %(node)s was not removed: %(message)s') % {
 				'node': data[1], 'message': data[2]})
 
+	def handle_event_archiving_changed(self, account, data):
+		if 'archiving_preferences' in self.instances[account]:
+			self.instances[account]['archiving_preferences'].archiving_changed(
+				data)
+
+	def handle_event_archiving_error(self, account, data):
+		if 'archiving_preferences' in self.instances[account]:
+			self.instances[account]['archiving_preferences'].archiving_error(
+				data)
+
 	def register_handlers(self):
 		self.handlers = {
 			'ROSTER': self.handle_event_roster,
@@ -2320,6 +2330,8 @@ class Interface:
 			'INSECURE_SSL_CONNECTION': self.handle_event_insecure_ssl_connection,
 			'PUBSUB_NODE_REMOVED': self.handle_event_pubsub_node_removed,
 			'PUBSUB_NODE_NOT_REMOVED': self.handle_event_pubsub_node_not_removed,
+			'ARCHIVING_CHANGED': self.handle_event_archiving_changed,
+			'ARCHIVING_ERROR': self.handle_event_archiving_error,
 		}
 		gajim.handlers = self.handlers
 
