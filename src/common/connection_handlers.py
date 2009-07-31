@@ -231,7 +231,7 @@ class ConnectionBytestream:
 			my_ips = [self.peerhost[0]]
 			# all IPs from local DNS
 			for addr in socket.getaddrinfo(socket.gethostname(), None):
-				if not addr[4][0] in my_ips:
+				if not addr[4][0] in my_ips and not addr[4][0].startswith('127'):
 					my_ips.append(addr[4][0])
 			for ip in my_ips:
 				streamhost = common.xmpp.Node(tag = 'streamhost')
