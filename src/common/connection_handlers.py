@@ -912,6 +912,7 @@ class ConnectionDisco:
 					self.available_transports[transport_type].append(jid)
 				else:
 					self.available_transports[transport_type] = [jid]
+			self._request_privacy()
 
 		self.dispatch('AGENT_INFO_INFO', (jid, node, identities,
 			features, data))
@@ -2518,8 +2519,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			return
 		self.connection.getRoster(self._on_roster_set)
 		self.discoverItems(gajim.config.get_per('accounts', self.name,
-			'hostname'), id_prefix='Gajim_')
-		self.discoverInfo(gajim.config.get_per('accounts', self.name,
 			'hostname'), id_prefix='Gajim_')
 		if gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):
 			self.discover_ft_proxies()

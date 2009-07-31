@@ -207,7 +207,7 @@ class Connection(ConnectionHandlers):
 			self.connected = 1
 			self.dispatch('STATUS', 'connecting')
 			self.retrycount += 1
-			self.on_connect_auth = self._init_roster
+			self.on_connect_auth = self._discover_server_at_connection
 			self.connect_and_init(self.old_show, self.status, self.USE_GPG)
 		else:
 			# reconnect succeeded
@@ -1022,16 +1022,20 @@ class Connection(ConnectionHandlers):
 
 	def connect_and_init(self, show, msg, sign_msg):
 		self.continue_connect_info = [show, msg, sign_msg]
-		self.on_connect_auth = self._init_roster
+		self.on_connect_auth = self._discover_server_at_connection
 		self.connect_and_auth()
 
-	def _init_roster(self, con):
+	def _discover_server_at_connection(self, con):
 		self.connection = con
 		if not self.connection:
 			return
 		self.connection.set_send_timeout(self.keepalives, self.send_keepalive)
 		self.connection.set_send_timeout2(self.pingalives, self.sendPing)
 		self.connection.onreceive(None)
+		self.discoverInfo(gajim.config.get_per('accounts', self.name, 'hostname'),
+			id_prefix='Gajim_')
+
+	def _request_privacy(self):
 		iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')
 		id_ = self.connection.getAnID()
 		iq.setID(id_)
