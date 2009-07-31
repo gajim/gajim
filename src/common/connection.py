@@ -1589,22 +1589,24 @@ class Connection(ConnectionHandlers):
 		iq2.addChild(name='gajim', namespace='gajim:prefs')
 		self.connection.send(iq)
 
-	def get_bookmarks(self):
+	def get_bookmarks(self, storage_type=None):
 		'''Get Bookmarks from storage or PubSub if supported as described in
-		XEP 0048'''
-		self.bookmarks = [] #avoid multiple bookmarks when re-connecting
+		XEP 0048
+		storage_type can be set to xml to force request to xml storage'''
 		if not self.connection:
 			return
-		if self.pubsub_supported:
-			self.send_pb_retrieve('', 'storage:bookmarks', self._PrivatePubsubCB)
+		if self.pubsub_supported and storage_type != 'xml':
+			self.send_pb_retrieve('', 'storage:bookmarks')
 		else:
 			iq = common.xmpp.Iq(typ='get')
 			iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 			iq2.addChild(name='storage', namespace='storage:bookmarks')
 			self.connection.send(iq)
 
-	def store_bookmarks(self):
-		''' Send bookmarks to the storage namespace or PubSub if supported'''
+	def store_bookmarks(self, storage_type=None):
+		''' Send bookmarks to the storage namespace or PubSub if supported
+		storage_type can be set to 'pubsub' or 'xml' so store in only one method
+		else it will be stored on both'''
 		if not self.connection:
 			return
 		iq = common.xmpp.Node(tag='storage', attrs={'xmlns': 'storage:bookmarks'})
@@ -1624,7 +1626,7 @@ class Connection(ConnectionHandlers):
 			if bm.get('print_status', None):
 				iq2.setTagData('print_status', bm['print_status'])
 
-		if self.pubsub_supported:
+		if self.pubsub_supported and storage_type != 'xml':
 			if self.pubsub_publish_options_supported:
 				options = common.xmpp.Node(common.xmpp.NS_DATA + ' x',
 					attrs={'type': 'submit'})
@@ -1639,7 +1641,7 @@ class Connection(ConnectionHandlers):
 				options = None
 			self.send_pb_publish('', 'storage:bookmarks', iq, 'current',
 				options=options)
-		else:
+		if storage_type != 'pubsub':
 			iqA = common.xmpp.Iq(typ='set')
 			iqB = iqA.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 			iqB.addChild(node=iq)

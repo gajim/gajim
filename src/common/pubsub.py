@@ -78,7 +78,7 @@ class ConnectionPubSub:
 
 		self.connection.send(query)
 
-	def send_pb_retrieve(self, jid, node, cb, *args, **kwargs): 
+	def send_pb_retrieve(self, jid, node, cb=None, *args, **kwargs): 
 		'''Get items from a node''' 
 		if not self.connection or self.connected < 2: 
 			return 
@@ -87,7 +87,8 @@ class ConnectionPubSub:
 		r = r.addChild('items', {'node': node}) 
 		id_ = self.connection.send(query)
 
-		self.__callbacks[id_]=(cb, args, kwargs)
+		if cb:
+			self.__callbacks[id_]=(cb, args, kwargs)
 
 	def send_pb_retract(self, jid, node, id_):
 		'''Delete item from a node'''
@@ -143,11 +144,27 @@ class ConnectionPubSub:
 		self.connection.send(query)
 
 	def _PubSubCB(self, conn, stanza):
+		gajim.log.debug('_PubsubCB')
 		try:
 			cb, args, kwargs = self.__callbacks.pop(stanza.getID())
 			cb(conn, stanza, *args, **kwargs)
 		except Exception:
 			pass
+
+		pubsub = stanza.getTag('pubsub')
+		if not pubsub:
+			return
+		items = pubsub.getTag('items')
+		if not items:
+			return
+		item = items.getTag('item')
+		if not item:
+			return
+		storage = item.getTag('storage')
+		if storage:
+			ns = storage.getNamespace()
+			if ns == 'storage:bookmarks':
+				self._parse_bookmarks(storage, 'pubsub')
 
 	def request_pb_configuration(self, jid, node):
 		if not self.connection or self.connected < 2:

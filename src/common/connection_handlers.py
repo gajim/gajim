@@ -1529,7 +1529,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if storage:
 			ns = storage.getNamespace()
 			if ns == 'storage:bookmarks':
-				self._parse_bookmarks(storage)
+				self._parse_bookmarks(storage, 'xml')
 			elif ns == 'gajim:prefs':
 				# Preferences data
 				# http://www.xmpp.org/extensions/xep-0049.html
@@ -1548,27 +1548,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					annotation = note.getData()
 					self.annotations[jid] = annotation
 
-	def _PrivatePubsubCB(self, conn, request):
-		'''Private data from PubSub'''
-		gajim.log.debug('_PrivatePubsubCB')
-		pubsub = request.getTag('pubsub')
-		if not pubsub:
-			return
-		items = pubsub.getTag('items')
-		if not items:
-			return
-		item = items.getTag('item')
-		if not item:
-			return
-		storage = item.getTag('storage')
-		if storage:
-			ns = storage.getNamespace()
-			if ns == 'storage:bookmarks':
-				self._parse_bookmarks(storage)
-
-	def _parse_bookmarks(self, storage):
+	def _parse_bookmarks(self, storage, storage_type):
+		'''storage_type can be 'pubsub' or 'xml' to tell from where we got
+		bookmarks'''
 		# Bookmarked URLs and Conferences
 		# http://www.xmpp.org/extensions/xep-0048.html
+		resend_to_pubsub = False
 		confs = storage.getTags('conference')
 		for conf in confs:
 			autojoin_val = conf.getAttr('autojoin')
@@ -1592,8 +1577,17 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				log.warn('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
 				continue
 
-			self.bookmarks.append(bm)
+			if bm not in self.bookmarks:
+				self.bookmarks.append(bm)
+				if storage_type == 'xml':
+					# We got a bookmark that was not in pubsub
+					resend_to_pubsub = True
 		self.dispatch('BOOKMARKS', self.bookmarks)
+		if storage_type == 'pubsub':
+			# We gor bookmarks from pubsub, now get those from xml to merge them
+			self.get_bookmarks(storage_type='xml')
+		if self.pubsub_supported and resend_to_pubsub:
+			self.store_bookmarks('pubsub')
 
 	def _rosterSetCB(self, con, iq_obj):
 		log.debug('rosterSetCB')
