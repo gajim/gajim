@@ -81,6 +81,7 @@ NS_PRIVACY	  ='jabber:iq:privacy'
 NS_PRIVATE	  ='jabber:iq:private'
 NS_PROFILE	  ='http://jabber.org/protocol/profile'				   # XEP-0154
 NS_PUBSUB	   ='http://jabber.org/protocol/pubsub'					# XEP-0060
+NS_PUBSUB_PUBLISH_OPTIONS = NS_PUBSUB + '#publish-options'			# XEP-0060
 NS_PUBSUB_OWNER ='http://jabber.org/protocol/pubsub#owner'			  # JEP-0060
 NS_REGISTER	 ='jabber:iq:register'
 NS_ROSTER	   ='jabber:iq:roster'
