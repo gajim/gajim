@@ -19,8 +19,8 @@ class Whiteboard(object):
 		self.hbox.pack_start(self.canevas)
 		self.hbox.reorder_child(self.canevas, 0)
 		self.canevas.set_flags(gtk.CAN_FOCUS)
+		self.fg_color_select_button = xml.get_widget('fg_color_button')
 		xml.signal_autoconnect(self)
-
 		self.root = self.canevas.get_root_item()
 
 		# Events
@@ -31,6 +31,7 @@ class Whiteboard(object):
 		# Config
 		self.draw_tool = 'brush'
 		self.line_width = 2
+		self.color = str(self.fg_color_select_button.get_color())
 
 		# SVG Storage
 		self.image = SVGObject(self.root, session)
@@ -51,6 +52,9 @@ class Whiteboard(object):
 
 	def on_export_button_clicked(self, widget):
 		self.image.print_xml()
+	
+	def on_fg_color_button_color_set(self, widget):
+		self.color = str(self.fg_color_select_button.get_color())
 
 	def button_press_event(self, widget, event):
 		x = event.x
@@ -64,8 +68,8 @@ class Whiteboard(object):
 				center_y=y,
 				radius_x=1,
 				radius_y=1,
-				stroke_color='black',
-				fill_color='black',
+				stroke_color=self.color,
+				fill_color=self.color,
 				line_width=self.line_width)
 			self.item_data = 'M %s,%s L ' % (x, y)
 			
@@ -83,14 +87,15 @@ class Whiteboard(object):
 			if self.draw_tool == 'brush':
 				self.item_data = self.item_data + '%s,%s ' % (x, y)
 				self.item_temp = goocanvas.Path(parent=self.root,
-					data=self.item_data, line_width=self.line_width)
+					data=self.item_data, line_width=self.line_width,
+					stroke_color=self.color)
 			elif self.draw_tool == 'oval':
 				self.item_temp = goocanvas.Ellipse(parent=self.root,
 					center_x=self.item_temp_coords[0] + (x - self.item_temp_coords[0]) / 2,
 					center_y=self.item_temp_coords[1] + (y - self.item_temp_coords[1]) / 2,
 					radius_x=abs(x - self.item_temp_coords[0]) / 2,
 					radius_y=abs(y - self.item_temp_coords[1]) / 2,
-					stroke_color='black',
+					stroke_color=self.color,
 					line_width=self.line_width)
 
 	def button_release_event(self, widget, event):
@@ -106,17 +111,17 @@ class Whiteboard(object):
 					center_y=y,
 					radius_x=1,
 					radius_y=1,
-					stroke_color='black',
-					fill_color='black',
+					stroke_color=self.color,
+					fill_color=self.color,
 					line_width=self.line_width)
-			self.image.add_path(self.item_data, self.line_width)
+			self.image.add_path(self.item_data, self.line_width, self.color)
 			
 		if self.draw_tool == 'oval':
 			cx = self.item_temp_coords[0] + (x - self.item_temp_coords[0]) / 2
 			cy = self.item_temp_coords[1] + (y - self.item_temp_coords[1]) / 2
 			rx = abs(x - self.item_temp_coords[0]) / 2
 			ry = abs(y - self.item_temp_coords[1]) / 2
-			self.image.add_ellipse(cx, cy, rx, ry, self.line_width)
+			self.image.add_ellipse(cx, cy, rx, ry, self.line_width, self.color)
 
 		self.item_data = None
 		if self.item_temp is not None:
@@ -168,17 +173,17 @@ class SVGObject():
 		self.g.setAttr('fill', 'none')
 		self.g.setAttr('stroke-linecap', 'round')
 
-	def add_path(self, data, line_width):
+	def add_path(self, data, line_width, color):
 		''' adds the path to the items listing, both minidom node and goocanvas
 		object in a tuple '''
 
 		goocanvas_obj = goocanvas.Path(parent=self.root, data=data,
-			line_width=line_width)
+			line_width=line_width, stroke_color=color)
 
 		node = self.g.addChild(name='path')
 		node.setAttr('d', data)
 		node.setAttr('stroke-width', str(line_width))
-		node.setAttr('stroke', 'black')
+		node.setAttr('stroke', color)
 		self.g.addChild(node=node)
 
 		rids = self.session.generate_rids(4)
@@ -199,8 +204,10 @@ class SVGObject():
 			self.items[x] = new_items[x]
 
 		if node.getName() == 'path':
-			goocanvas_obj = goocanvas.Path(parent=self.root, data=node.getAttr('d'),
-				line_width=int(node.getAttr('stroke-width')))
+			goocanvas_obj = goocanvas.Path(parent=self.root,
+					data=node.getAttr('d'),
+					line_width=int(node.getAttr('stroke-width')),
+					stroke_color=node.getAttr('stroke'))
 
 		if node.getName() == 'ellipse':
 			goocanvas_obj = goocanvas.Ellipse(parent=self.root,
@@ -213,7 +220,7 @@ class SVGObject():
 
 		self.items[parent_rid]['data'].append(goocanvas_obj)
 
-	def add_ellipse(self, cx, cy, rx, ry, line_width):
+	def add_ellipse(self, cx, cy, rx, ry, line_width, stroke_color):
 		''' adds the ellipse to the items listing, both minidom node and goocanvas
 		object in a tuple '''
 
@@ -222,7 +229,7 @@ class SVGObject():
 					center_y=cy,
 					radius_x=rx,
 					radius_y=ry,
-					stroke_color='black',
+					stroke_color=stroke_color,
 					line_width=line_width)
 
 		node = self.g.addChild(name='ellipse')
@@ -231,7 +238,7 @@ class SVGObject():
 		node.setAttr('rx', str(rx))
 		node.setAttr('ry', str(ry))
 		node.setAttr('stroke-width', str(line_width))
-		node.setAttr('stroke', 'black')
+		node.setAttr('stroke', stroke_color)
 		self.g.addChild(node=node)
 		
 		rids = self.session.generate_rids(7)
