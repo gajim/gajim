@@ -49,6 +49,9 @@ class Whiteboard(object):
 
 	def on_oval_button_clicked(self, widget):
 		self.draw_tool = 'oval'
+	
+	def on_line_button_clicked(self, widget):
+		self.draw_tool = 'line'
 
 	def on_export_button_clicked(self, widget):
 		self.image.print_xml()
@@ -75,6 +78,9 @@ class Whiteboard(object):
 			
 		elif self.draw_tool == 'oval':
 			self.item_data = True
+			
+		if self.draw_tool == 'line':
+			self.item_data = 'M %s,%s L' % (x, y)
 
 	def motion_notify_event(self, widget, event):
 		x = event.x
@@ -97,6 +103,11 @@ class Whiteboard(object):
 					radius_y=abs(y - self.item_temp_coords[1]) / 2,
 					stroke_color=self.color,
 					line_width=self.line_width)
+			elif self.draw_tool == 'line':
+				self.item_data = 'M %s,%s L' % self.item_temp_coords
+				self.item_data = self.item_data + ' %s,%s' % (x,y)
+				self.item_temp = self.item_temp = goocanvas.Path(parent=self.root,
+					data=self.item_data, line_width=self.line_width)
 
 	def button_release_event(self, widget, event):
 		x = event.x
@@ -122,6 +133,20 @@ class Whiteboard(object):
 			rx = abs(x - self.item_temp_coords[0]) / 2
 			ry = abs(y - self.item_temp_coords[1]) / 2
 			self.image.add_ellipse(cx, cy, rx, ry, self.line_width, self.color)
+
+		if self.draw_tool == 'line':
+			self.item_data = 'M %s,%s L' % self.item_temp_coords
+			self.item_data = self.item_data + ' %s,%s' % (x,y)
+			if x == self.item_temp_coords[0] and y == self.item_temp_coords[1]:
+				goocanvas.Ellipse(parent=self.root,
+					center_x=x,
+					center_y=y,
+					radius_x=1,
+					radius_y=1,
+					stroke_color='black',
+					fill_color='black',
+					line_width=self.line_width)
+			self.image.add_path(self.item_data, self.line_width)
 
 		self.item_data = None
 		if self.item_temp is not None:
