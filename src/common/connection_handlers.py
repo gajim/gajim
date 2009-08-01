@@ -2329,12 +2329,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					r = destroy.getTagData('reason')
 					if r:
 						reason += ' (%s)' % r
-					try:
-						jid = helpers.parse_jid(destroy.getAttr('jid'))
-					except common.helpers.InvalidFormat:
-						pass
-					if jid:
-						reason += '\n' + _('You can join this room instead: %s') % jid
+					if destroy.getAttr('jid'):
+						try:
+							jid = helpers.parse_jid(destroy.getAttr('jid'))
+							reason += '\n' + _('You can join this room instead: %s') \
+								% jid
+						except common.helpers.InvalidFormat:
+							pass
 					statusCode = ['destroyed']
 				else:
 					reason = prs.getReason()
