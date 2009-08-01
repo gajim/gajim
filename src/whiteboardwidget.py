@@ -106,8 +106,9 @@ class Whiteboard(object):
 			elif self.draw_tool == 'line':
 				self.item_data = 'M %s,%s L' % self.item_temp_coords
 				self.item_data = self.item_data + ' %s,%s' % (x,y)
-				self.item_temp = self.item_temp = goocanvas.Path(parent=self.root,
-					data=self.item_data, line_width=self.line_width)
+				self.item_temp = goocanvas.Path(parent=self.root,
+					data=self.item_data, line_width=self.line_width,
+					stroke_color=self.color)
 
 	def button_release_event(self, widget, event):
 		x = event.x
@@ -146,7 +147,7 @@ class Whiteboard(object):
 					stroke_color='black',
 					fill_color='black',
 					line_width=self.line_width)
-			self.image.add_path(self.item_data, self.line_width)
+			self.image.add_path(self.item_data, self.line_width, self.color)
 
 		self.item_data = None
 		if self.item_temp is not None:
