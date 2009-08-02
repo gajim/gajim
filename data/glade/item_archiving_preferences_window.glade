@@ -47,6 +47,7 @@ forbid
 oppose
 prefer
 require</property>
+                <signal name="changed" handler="on_otr_combobox_changed"/>
               </widget>
               <packing>
                 <property name="left_attach">1</property>

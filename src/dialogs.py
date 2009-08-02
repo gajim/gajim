@@ -2894,6 +2894,11 @@ class ItemArchivingPreferencesWindow:
 			return True
 		return False
 
+	def on_otr_combobox_changed(self, widget):
+		otr = self.otr_name[self.otr_combobox.get_active()]
+		if otr == 'require':
+			self.save_combobox.set_active(self.save_index['false'])
+
 	def on_ok_button_clicked(self, widget):
 		# Return directly if operation in progress
 		if self.waiting:
