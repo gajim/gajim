@@ -1035,6 +1035,7 @@ class Connection(ConnectionHandlers):
 		self.connection.onreceive(None)
 		self.discoverInfo(gajim.config.get_per('accounts', self.name, 'hostname'),
 			id_prefix='Gajim_')
+		self._request_privacy()
 
 	def _request_privacy(self):
 		iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')

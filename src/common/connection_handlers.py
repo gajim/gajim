@@ -914,7 +914,6 @@ class ConnectionDisco:
 					self.available_transports[transport_type].append(jid)
 				else:
 					self.available_transports[transport_type] = [jid]
-			self._request_privacy()
 
 		self.dispatch('AGENT_INFO_INFO', (jid, node, identities,
 			features, data))
