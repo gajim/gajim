@@ -166,6 +166,18 @@ class ConnectionPubSub:
 			if ns == 'storage:bookmarks':
 				self._parse_bookmarks(storage, 'pubsub')
 
+	def _PubSubErrorCB(self, conn, stanza):
+		gajim.log.debug('_PubsubErrorCB')
+		pubsub = stanza.getTag('pubsub')
+		if not pubsub:
+			return
+		items = pubsub.getTag('items')
+		if not items:
+			return
+		if items.getAttr('node') == 'storage:bookmarks':
+			# Receiving bookmarks from pubsub failed, so take them from xml
+			self.get_bookmarks(storage_type='xml')
+
 	def request_pb_configuration(self, jid, node):
 		if not self.connection or self.connected < 2:
 			return
