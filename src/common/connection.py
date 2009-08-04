@@ -157,6 +157,8 @@ class Connection(ConnectionHandlers):
 		else:
 			self.pingalives = 0
 		self.privacy_rules_supported = False
+		# Used to ask privacy only once at connection
+		self.privacy_rules_requested = False
 		self.blocked_list = []
 		self.blocked_contacts = []
 		self.blocked_groups = []
@@ -1035,7 +1037,7 @@ class Connection(ConnectionHandlers):
 		self.connection.onreceive(None)
 		self.discoverInfo(gajim.config.get_per('accounts', self.name, 'hostname'),
 			id_prefix='Gajim_')
-		self._request_privacy()
+		self.privacy_rules_requested = False
 
 	def _request_privacy(self):
 		iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')
