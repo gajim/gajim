@@ -1743,7 +1743,7 @@ class ChangeNickDialog(InputDialogCheck):
 		self.gc_control.new_nick = ''
 		self.check_next()
 
-	def add_room(self, account, room_jid, pompt):
+	def add_room(self, account, room_jid, prompt):
 		if (account, room_jid, prompt) not in self.room_queue:
 			self.room_queue.append((account, room_jid, prompt))
 
