@@ -1742,6 +1742,8 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 	def send_gc_config(self, room_jid, form):
+		if not self.connection:
+			return
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
 			common.xmpp.NS_MUC_OWNER)
 		query = iq.getTag('query')
