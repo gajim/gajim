@@ -1553,23 +1553,44 @@ class AccountsWindow:
 		use_gpg_agent_checkbutton.set_sensitive(True)
 		use_gpg_agent_checkbutton.set_active(use_gpg_agent)
 
+	def draw_normal_jid(self):
+		account = self.current_account
+		self.ignore_events = True
+		if gajim.config.get_per('accounts', account, 'anonymous_auth'):
+			self.xml.get_widget('anonymous_checkbutton1').set_active(True)
+			self.xml.get_widget('jid_label1').set_text(_('Server:'))
+			save_password = self.xml.get_widget('save_password_checkbutton1')
+			save_password.set_active(False)
+			save_password.set_sensitive(False)
+			password_entry = self.xml.get_widget('password_entry1')
+			password_entry.set_text('')
+			password_entry.set_sensitive(False)
+			jid = gajim.config.get_per('accounts', account, 'hostname')
+		else:
+			self.xml.get_widget('anonymous_checkbutton1').set_active(False)
+			self.xml.get_widget('jid_label1').set_text(_('Jabber ID:'))
+			savepass = gajim.config.get_per('accounts', account, 'savepass')
+			save_password = self.xml.get_widget('save_password_checkbutton1')
+			save_password.set_sensitive(True)
+			save_password.set_active(savepass)
+			password_entry = self.xml.get_widget('password_entry1')
+			if savepass:
+				passstr = passwords.get_password(account) or ''
+				password_entry.set_sensitive(True)
+			else:
+				passstr = ''
+				password_entry.set_sensitive(False)
+			password_entry.set_text(passstr)
+
+			jid = gajim.config.get_per('accounts', account, 'name') \
+				+ '@' + gajim.config.get_per('accounts', account, 'hostname')
+		self.xml.get_widget('jid_entry1').set_text(jid)
+		self.ignore_events = False
+
 	def init_normal_account(self):
 		account = self.current_account
 		# Account tab
-		jid = gajim.config.get_per('accounts', account, 'name') \
-			+ '@' + gajim.config.get_per('accounts', account, 'hostname')
-		self.xml.get_widget('jid_entry1').set_text(jid)
-		savepass = gajim.config.get_per('accounts', account, 'savepass')
-		self.xml.get_widget('save_password_checkbutton1').set_active(savepass)
-		password_entry = self.xml.get_widget('password_entry1')
-		if savepass:
-			passstr = passwords.get_password(account) or ''
-			password_entry.set_sensitive(True)
-		else:
-			passstr = ''
-			password_entry.set_sensitive(False)
-		password_entry.set_text(passstr)
-
+		self.draw_normal_jid()
 		self.xml.get_widget('resource_entry1').set_text(gajim.config.get_per(
 			'accounts', account, 'resource'))
 		self.xml.get_widget('adjust_priority_with_status_checkbutton1').\
@@ -1817,7 +1838,8 @@ class AccountsWindow:
 			return True
 
 		jid_splited = jid.split('@', 1)
-		if len(jid_splited) != 2:
+		if len(jid_splited) != 2 and not gajim.config.get_per('accounts',
+		self.current_account, 'anonymous_auth'):
 			if not widget.is_focus():
 				pritext = _('Invalid Jabber ID')
 				sectext = _('A Jabber ID must be in the form "user@servername".')
@@ -1825,14 +1847,30 @@ class AccountsWindow:
 				gobject.idle_add(lambda: widget.grab_focus())
 			return True
 
-		if self.option_changed('name', jid_splited[0]) or \
-		self.option_changed('hostname', jid_splited[1]):
-			self.need_relogin = True
 
-		gajim.config.set_per('accounts', self.current_account, 'name',
-			jid_splited[0])
-		gajim.config.set_per('accounts', self.current_account, 'hostname',
-			jid_splited[1])
+		if gajim.config.get_per('accounts', self.current_account,
+		'anonymous_auth'):
+			gajim.config.set_per('accounts', self.current_account, 'hostname',
+				jid_splited[0])
+			if self.option_changed('hostname', jid_splited[0]):
+				self.need_relogin = True
+		else:
+			if self.option_changed('name', jid_splited[0]) or \
+			self.option_changed('hostname', jid_splited[1]):
+				self.need_relogin = True
+
+			gajim.config.set_per('accounts', self.current_account, 'name',
+				jid_splited[0])
+			gajim.config.set_per('accounts', self.current_account, 'hostname',
+				jid_splited[1])
+
+	def on_anonymous_checkbutton1_toggled(self, widget):
+		if self.ignore_events:
+			return
+		active = widget.get_active()
+		gajim.config.set_per('accounts', self.current_account, 'anonymous_auth',
+			active)
+		self.draw_normal_jid()
 
 	def on_password_entry1_changed(self, widget):
 		if self.ignore_events:
@@ -3077,6 +3115,42 @@ class AccountCreationWizardWindow:
 			else:
 				self.notebook.set_current_page(2) # Go to server page
 
+	def on_anonymous_checkbutton1_toggled(self, widget):
+		active = widget.get_active()
+		self.xml.get_widget('username_entry').set_sensitive(not active)
+		self.xml.get_widget('password_entry').set_sensitive(not active)
+		self.xml.get_widget('save_password_checkbutton').set_sensitive(not active)
+
+	def show_finish_page(self):
+		self.cancel_button.hide()
+		self.back_button.hide()
+		self.forward_button.hide()
+		if self.modify:
+			finish_text = '<big><b>%s</b></big>\n\n%s' % (
+				_('Account has been added successfully'),
+				_('You can set advanced account options by pressing the '
+				'Advanced button, or later by choosing the Accounts menuitem '
+				'under the Edit menu from the main window.'))
+		else:
+			finish_text = '<big><b>%s</b></big>\n\n%s' % (
+				_('Your new account has been created successfully'),
+				_('You can set advanced account options by pressing the Advanced '
+				'button, or later by choosing the Accounts menuitem under the Edit '
+				'menu from the main window.'))
+		self.finish_label.set_markup(finish_text)
+		self.finish_button.show()
+		self.finish_button.set_property('has-default', True)
+		self.advanced_button.show()
+		self.go_online_checkbutton.show()
+		img = self.xml.get_widget('finish_image')
+		if self.modify:
+			img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
+		else:
+			path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'gajim.png')
+			img.set_from_file(path_to_file)
+		self.show_vcard_checkbutton.set_active(not self.modify)
+		self.notebook.set_current_page(6) # show finish page
+
 	def on_forward_button_clicked(self, widget):
 		cur_page = self.notebook.get_current_page()
 
@@ -3093,9 +3167,10 @@ class AccountCreationWizardWindow:
 
 		elif cur_page == 1:
 			# We are adding an existing account
+			anonymous = self.xml.get_widget('anonymous_checkbutton1').get_active()
 			username = self.xml.get_widget('username_entry').get_text().decode(
 				'utf-8').strip()
-			if not username:
+			if not username and not anonymous:
 				pritext = _('Invalid username')
 				sectext = _(
 					'You must provide a username to configure this account.')
@@ -3124,25 +3199,11 @@ class AccountCreationWizardWindow:
 				i += 1
 
 			username, server = gajim.get_name_and_server_from_jid(jid)
-			self.save_account(username, server, savepass, password)
-			self.cancel_button.hide()
-			self.back_button.hide()
-			self.forward_button.hide()
-			if self.modify:
-				finish_text = '<big><b>%s</b></big>\n\n%s' % (
-				_('Account has been added successfully'),
-				_('You can set advanced account options by pressing the '
-				'Advanced button, or later by choosing the Accounts menuitem '
-					'under the Edit menu from the main window.'))
-			self.finish_label.set_markup(finish_text)
-			self.finish_button.show()
-			self.finish_button.set_property('has-default', True)
-			self.advanced_button.show()
-			self.go_online_checkbutton.show()
-			img = self.xml.get_widget('finish_image')
-			img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
-			self.notebook.set_current_page(6) # show finish page
-			self.show_vcard_checkbutton.set_active(False)
+			if self.xml.get_widget('anonymous_checkbutton1').get_active():
+				self.save_account('', server, False, '', anonymous=True)
+			else:
+				self.save_account(username, server, savepass, password)
+			self.show_finish_page()
 		elif cur_page == 2:
 			# We are creating a new account
 			server = self.xml.get_widget('server_comboboxentry1').child.get_text()\
@@ -3180,15 +3241,20 @@ class AccountCreationWizardWindow:
 			config['custom_host'] = self.xml.get_widget(
 				'custom_host_entry').get_text().decode('utf-8')
 
-			self.notebook.set_current_page(5) # show creating page
-			self.back_button.hide()
-			self.forward_button.hide()
-			self.update_progressbar_timeout_id = gobject.timeout_add(100,
-				self.update_progressbar)
-			# Get form from serveur
-			con = connection.Connection(self.account)
-			gajim.connections[self.account] = con
-			con.new_account(self.account, config)
+			if self.xml.get_widget('anonymous_checkbutton2').get_active():
+				self.modify = True
+				self.save_account('', server, False, '', anonymous=True)
+				self.show_finish_page()
+			else:
+				self.notebook.set_current_page(5) # show creating page
+				self.back_button.hide()
+				self.forward_button.hide()
+				self.update_progressbar_timeout_id = gobject.timeout_add(100,
+					self.update_progressbar)
+				# Get form from serveur
+				con = connection.Connection(self.account)
+				gajim.connections[self.account] = con
+				con.new_account(self.account, config)
 		elif cur_page == 3:
 			checked = self.xml.get_widget('ssl_checkbutton').get_active()
 			if checked:
@@ -3308,25 +3374,7 @@ class AccountCreationWizardWindow:
 	def acc_is_ok(self, config):
 		'''Account creation succeeded'''
 		self.create_vars(config)
-		self.cancel_button.hide()
-		self.back_button.hide()
-		self.forward_button.hide()
-		self.finish_button.show()
-		self.finish_button.set_property('has-default', True)
-		self.advanced_button.show()
-		self.go_online_checkbutton.show()
-		self.show_vcard_checkbutton.show()
-		img = self.xml.get_widget('finish_image')
-		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'gajim.png')
-		img.set_from_file(path_to_file)
-
-		finish_text = '<big><b>%s</b></big>\n\n%s' % (
-			_('Your new account has been created successfully'),
-			_('You can set advanced account options by pressing the Advanced '
-			'button, or later by choosing the Accounts menuitem under the Edit '
-			'menu from the main window.'))
-		self.finish_label.set_markup(finish_text)
-		self.notebook.set_current_page(6) # show finish page
+		self.show_finish_page()
 
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
@@ -3386,13 +3434,14 @@ class AccountCreationWizardWindow:
 			username_entry.set_position(-1)
 			return True
 
-	def get_config(self, login, server, savepass, password):
+	def get_config(self, login, server, savepass, password, anonymous=False):
 		config = {}
 		config['name'] = login
 		config['hostname'] = server
 		config['savepass'] = savepass
 		config['password'] = password
 		config['resource'] = 'Gajim'
+		config['anonymous_auth'] = anonymous
 		config['priority'] = 5
 		config['autoconnect'] = True
 		config['no_log_for'] = ''
@@ -3406,7 +3455,7 @@ class AccountCreationWizardWindow:
 		config['keyid'] = ''
 		return config
 
-	def save_account(self, login, server, savepass, password):
+	def save_account(self, login, server, savepass, password, anonymous=False):
 		if self.account in gajim.connections:
 			dialogs.ErrorDialog(_('Account name is in use'),
 				_('You already have an account using this name.'))
@@ -3414,7 +3463,7 @@ class AccountCreationWizardWindow:
 		con = connection.Connection(self.account)
 		con.password = password
 
-		config = self.get_config(login, server, savepass, password)
+		config = self.get_config(login, server, savepass, password, anonymous)
 
 		if not self.modify:
 			con.new_account(self.account, config)

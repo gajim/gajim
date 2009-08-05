@@ -700,7 +700,10 @@ class Connection(ConnectionHandlers):
 			self._current_host['host'], self._current_host['port'], con_type))
 
 		self.last_connection_type = con_type
-		name = gajim.config.get_per('accounts', self.name, 'name')
+		if gajim.config.get_per('accounts', self.name, 'anonymous_auth'):
+			name = None
+		else:
+			name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		self.connection = con
 		try:
@@ -775,6 +778,9 @@ class Connection(ConnectionHandlers):
 				return
 		if hasattr(con, 'Resource'):
 			self.server_resource = con.Resource
+		if gajim.config.get_per('accounts', self.name, 'anonymous_auth'):
+			# Get jid given by server
+			gajim.config.set_per('accounts', self.name, 'name', con.User)
 		if auth:
 			self.last_io = gajim.idlequeue.current_time()
 			self.connected = 2

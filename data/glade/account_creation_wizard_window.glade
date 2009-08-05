@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--*- mode: xml -*-->
+<?xml version="1.0"?>
 <glade-interface>
+  <!-- interface-requires gtk+ 2.16 -->
+  <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="account_creation_wizard_window">
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Gajim: Account Creation Wizard</property>
@@ -30,13 +30,14 @@ to the Jabber network.</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkFrame" id="frame33">
                     <property name="visible">True</property>
                     <property name="label_xalign">0</property>
-                    <property name="shadow_type">GTK_SHADOW_NONE</property>
+                    <property name="shadow_type">none</property>
                     <child>
                       <widget class="GtkAlignment" id="alignment68">
                         <property name="visible">True</property>
@@ -49,25 +50,26 @@ to the Jabber network.</property>
                             <property name="spacing">6</property>
                             <child>
                               <widget class="GtkRadioButton" id="use_existing_account_radiobutton">
+                                <property name="label" translatable="yes">I already have an account I want to _use</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="label" translatable="yes">I already have an account I want to _use</property>
+                                <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
                                 <property name="draw_indicator">True</property>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <widget class="GtkRadioButton" id="register_new_account_radiobutton">
+                                <property name="label" translatable="yes">I want to _register for a new account</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="label" translatable="yes">I want to _register for a new account</property>
+                                <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">use_existing_account_radiobutton</property>
                               </widget>
@@ -105,8 +107,8 @@ to the Jabber network.</property>
                 <property name="visible">True</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
             <child>
@@ -124,12 +126,13 @@ to the Jabber network.</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkTable" id="table27">
                     <property name="visible">True</property>
-                    <property name="n_rows">2</property>
+                    <property name="n_rows">3</property>
                     <property name="n_columns">4</property>
                     <property name="column_spacing">12</property>
                     <property name="row_spacing">6</property>
@@ -154,21 +157,21 @@ to the Jabber network.</property>
                         <property name="mnemonic_widget">password_entry</property>
                       </widget>
                       <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
                       <widget class="GtkCheckButton" id="save_password_checkbutton">
+                        <property name="label" translatable="yes">Save pass_word</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
                         <property name="tooltip" translatable="yes">If checked, Gajim will remember the password for this account</property>
-                        <property name="label" translatable="yes">Save pass_word</property>
                         <property name="use_underline">True</property>
                         <property name="focus_on_click">False</property>
-                        <property name="response_id">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <signal name="toggled" handler="on_save_password_checkbutton_toggled"/>
@@ -176,8 +179,8 @@ to the Jabber network.</property>
                       <packing>
                         <property name="left_attach">2</property>
                         <property name="right_attach">4</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options"></property>
                       </packing>
@@ -192,8 +195,8 @@ to the Jabber network.</property>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
@@ -225,10 +228,6 @@ to the Jabber network.</property>
                     <child>
                       <widget class="GtkComboBoxEntry" id="server_comboboxentry">
                         <property name="visible">True</property>
-                        <child internal-child="entry">
-                          <widget class="GtkEntry" id="comboboxentry-entry1">
-                          </widget>
-                        </child>
                       </widget>
                       <packing>
                         <property name="left_attach">3</property>
@@ -236,6 +235,26 @@ to the Jabber network.</property>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options">GTK_FILL</property>
                       </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckButton" id="anonymous_checkbutton1">
+                        <property name="label" translatable="yes">Anon_ymous authentication</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="on_anonymous_checkbutton1_toggled"/>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">4</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </widget>
                   <packing>
@@ -253,9 +272,9 @@ to the Jabber network.</property>
                 <property name="visible">True</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="position">1</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
             <child>
@@ -273,6 +292,7 @@ to the Jabber network.</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -289,15 +309,12 @@ to the Jabber network.</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <widget class="GtkComboBoxEntry" id="server_comboboxentry1">
                         <property name="visible">True</property>
-                        <child internal-child="entry">
-                          <widget class="GtkEntry" id="comboboxentry-entry2">
-                          </widget>
-                        </child>
                       </widget>
                       <packing>
                         <property name="position">1</property>
@@ -308,6 +325,20 @@ to the Jabber network.</property>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkCheckButton" id="anonymous_checkbutton2">
+                    <property name="label" translatable="yes">Anon_ymous authentication</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
@@ -347,11 +378,11 @@ to the Jabber network.</property>
                         </child>
                         <child>
                           <widget class="GtkButton" id="manage_proxies_button">
+                            <property name="label" translatable="yes">Manage...</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Manage...</property>
+                            <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
                             <signal name="clicked" handler="on_manage_proxies_button_clicked"/>
                           </widget>
                           <packing>
@@ -363,11 +394,11 @@ to the Jabber network.</property>
                         </child>
                         <child>
                           <widget class="GtkCheckButton" id="custom_host_port_checkbutton">
+                            <property name="label" translatable="yes">Use custom hostname/port</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Use custom hostname/port</property>
+                            <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_custom_host_port_checkbutton_toggled"/>
                           </widget>
@@ -394,6 +425,7 @@ to the Jabber network.</property>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
@@ -454,7 +486,7 @@ to the Jabber network.</property>
                     </child>
                   </widget>
                   <packing>
-                    <property name="position">2</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
               </widget>
@@ -467,9 +499,9 @@ to the Jabber network.</property>
                 <property name="visible">True</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="position">2</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
             <child>
@@ -484,10 +516,11 @@ to the Jabber network.</property>
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="stock">gtk-dialog-warning</property>
-                        <property name="icon_size">5</property>
+                        <property name="icon-size">5</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
@@ -502,17 +535,18 @@ to the Jabber network.</property>
                   </widget>
                   <packing>
                     <property name="fill">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkCheckButton" id="ssl_checkbutton">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="label" translatable="yes">Add this certificate to the list of trusted certificates.
 SHA1 fingerprint of the certificate:
 </property>
-                    <property name="response_id">0</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="draw_indicator">True</property>
                   </widget>
                   <packing>
@@ -530,9 +564,9 @@ SHA1 fingerprint of the certificate:
                 <property name="visible">True</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="position">3</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
             <child>
@@ -551,9 +585,9 @@ SHA1 fingerprint of the certificate:
                 <property name="visible">True</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="position">4</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
             <child>
@@ -566,10 +600,11 @@ SHA1 fingerprint of the certificate:
 
 Please wait...</property>
                     <property name="use_markup">True</property>
-                    <property name="justify">GTK_JUSTIFY_CENTER</property>
+                    <property name="justify">center</property>
                   </widget>
                   <packing>
                     <property name="fill">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -593,9 +628,9 @@ Please wait...</property>
                 <property name="visible">True</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="position">5</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
             <child>
@@ -613,6 +648,7 @@ Please wait...</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
@@ -627,14 +663,17 @@ Please wait...</property>
                       </packing>
                     </child>
                   </widget>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
                 <child>
                   <widget class="GtkCheckButton" id="go_online_checkbutton">
+                    <property name="label" translatable="yes">Connect when I press Finish</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">Connect when I press Finish</property>
+                    <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="response_id">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                   </widget>
@@ -646,11 +685,11 @@ Please wait...</property>
                 </child>
                 <child>
                   <widget class="GtkCheckButton" id="show_vcard_checkbutton">
+                    <property name="label" translatable="yes">Set my profile when I connect</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">Set my profile when I connect</property>
+                    <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
-                    <property name="response_id">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                   </widget>
@@ -670,56 +709,68 @@ Please wait...</property>
                 <property name="visible">True</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="position">6</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
           </widget>
+          <packing>
+            <property name="position">0</property>
+          </packing>
         </child>
         <child>
           <widget class="GtkHButtonBox" id="hbuttonbox19">
             <property name="visible">True</property>
             <property name="spacing">12</property>
-            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <property name="layout_style">end</property>
             <child>
               <widget class="GtkButton" id="cancel_button">
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
-                <property name="label">gtk-cancel</property>
+                <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">0</property>
                 <signal name="clicked" handler="on_cancel_button_clicked"/>
               </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <widget class="GtkButton" id="back_button">
+                <property name="label">gtk-go-back</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
-                <property name="label">gtk-go-back</property>
+                <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">0</property>
                 <signal name="clicked" handler="on_back_button_clicked"/>
               </widget>
               <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
             <child>
               <widget class="GtkButton" id="forward_button">
+                <property name="label">gtk-go-forward</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
-                <property name="label">gtk-go-forward</property>
+                <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">0</property>
                 <signal name="clicked" handler="on_forward_button_clicked"/>
               </widget>
               <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">2</property>
               </packing>
             </child>
@@ -727,8 +778,8 @@ Please wait...</property>
               <widget class="GtkButton" id="advanced_button">
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
+                <property name="receives_default">False</property>
                 <property name="no_show_all">True</property>
-                <property name="response_id">0</property>
                 <signal name="clicked" handler="on_advanced_button_clicked"/>
                 <child>
                   <widget class="GtkAlignment" id="alignment96">
@@ -747,6 +798,7 @@ Please wait...</property>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -767,6 +819,8 @@ Please wait...</property>
                 </child>
               </widget>
               <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">3</property>
               </packing>
             </child>
@@ -774,8 +828,8 @@ Please wait...</property>
               <widget class="GtkButton" id="finish_button">
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
+                <property name="receives_default">False</property>
                 <property name="no_show_all">True</property>
-                <property name="response_id">0</property>
                 <signal name="clicked" handler="on_finish_button_clicked"/>
                 <child>
                   <widget class="GtkAlignment" id="alignment87">
@@ -794,6 +848,7 @@ Please wait...</property>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -814,6 +869,8 @@ Please wait...</property>
                 </child>
               </widget>
               <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">4</property>
               </packing>
             </child>

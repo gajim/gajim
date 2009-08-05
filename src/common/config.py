@@ -265,6 +265,7 @@ class Config:
 		'accounts': ({
 			'name': [ opt_str, '', '', True ],
 			'hostname': [ opt_str, '', '', True ],
+			'anonymous_auth': [ opt_bool, False ],
 			'savepass': [ opt_bool, False ],
 			'password': [ opt_str, '' ],
 			'resource': [ opt_str, 'gajim', '', True ],
