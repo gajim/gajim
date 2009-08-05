@@ -329,8 +329,8 @@ class SignalObject(dbus.service.Object):
 			return DBUS_BOOLEAN(True)
 		return DBUS_BOOLEAN(False)
 
-	@dbus.service.method(INTERFACE, in_signature='ss', out_signature='b')
-	def open_chat(self, jid, account):
+	@dbus.service.method(INTERFACE, in_signature='sss', out_signature='b')
+	def open_chat(self, jid, account, message):
 		'''Shows the tabbed window for new message to 'jid', using account
 		(optional) 'account' '''
 		if not jid:
@@ -372,7 +372,7 @@ class SignalObject(dbus.service.Object):
 			connected_account = first_connected_acct
 
 		if connected_account:
-			gajim.interface.new_chat_from_jid(connected_account, jid)
+			gajim.interface.new_chat_from_jid(connected_account, jid, message)
 			# preserve the 'steal focus preservation'
 			win = gajim.interface.msg_win_mgr.get_window(jid,
 				connected_account).window

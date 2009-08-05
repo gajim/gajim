@@ -2887,7 +2887,7 @@ class Interface:
 
 		return chat_control
 
-	def new_chat_from_jid(self, account, fjid):
+	def new_chat_from_jid(self, account, fjid, message=None):
 		jid, resource = gajim.get_room_and_nick_from_fjid(fjid)
 		contact = gajim.contacts.get_contact(account, jid, resource)
 		added_to_roster = False
@@ -2904,6 +2904,9 @@ class Interface:
 			if len(gajim.events.get_events(account, fjid)):
 				ctrl.read_queue()
 
+		if message:
+			buffer = ctrl.msg_textview.get_buffer()
+			buffer.set_text(message)
 		mw = ctrl.parent_win
 		mw.set_active_tab(ctrl)
 		# For JEP-0172
