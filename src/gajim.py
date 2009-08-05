@@ -2922,6 +2922,7 @@ class Interface:
 		# For JEP-0172
 		if added_to_roster:
 			ctrl.user_nick = gajim.nicks[account]
+		gobject.idle_add(lambda: mw.window.grab_focus())
 
 	def on_open_chat_window(self, widget, contact, account, resource=None,
 	session=None):
