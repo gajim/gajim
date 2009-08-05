@@ -134,3 +134,60 @@ class ConnectionArchive:
 				del self.items[item.getAttr('jid')]
 				self.dispatch('ARCHIVING_CHANGED', ('itemremove',
 					item.getAttr('jid')))
+
+	def request_collections_list_page(self, with='', start=None, end=None,
+	after=None, max=30, exact_match=False):
+		iq_ = common.xmpp.Iq('get')
+		list_ = iq_.setTag('list', namespace=common.xmpp.NS_ARCHIVE)
+		if with:
+			list_.setAttr('with', with)
+			if exact_match:
+				list_.setAttr('exactmatch', 'true')
+		if start:
+			list_.setAttr('start', start)
+		if end:
+			list_.setAttr('end', end)
+		set_ = list_.setTag('set', namespace=common.xmpp.NS_RSM)
+		set_.setTagData('max', max)
+		if after:
+			set_.setTagData('after', after)
+		self.connection.send(iq_)
+
+	def request_collection_page(self, with, start, end=None, after=None,
+	max=30, exact_match=False):
+		iq_ = common.xmpp.Iq('get')
+		retrieve = iq_.setTag('retrieve', namespace=common.xmpp.NS_ARCHIVE,
+			attrs={'with': with, 'start': start})
+		if exact_match:
+			retrieve.setAttr('exactmatch', 'true')
+		set_ = retrieve.setTag('set', namespace=common.xmpp.NS_RSM)
+		set_.setTagData('max', max)
+		if after:
+			set_.setTagData('after', after)
+		self.connection.send(iq_)
+		
+	def remove_collection(self, with='', start=None, end=None,
+	exact_match=False, open=False):
+		iq_ = common.xmpp.Iq('set')
+		remove = iq_.setTag('remove', namespace=common.xmpp.NS_ARCHIVE)
+		if with:
+			remove.setAttr('with', with)
+			if exact_match:
+				remove.setAttr('exactmatch', 'true')
+		if start:
+			remove.setAttr('start', start)
+		if end:
+			remove.setAttr('end', end)
+		if open:
+			remove.setAttr('open', 'true')
+		self.connection.send(iq_)
+	
+	def request_modifications_page(self, start, version, after=None, max=30):
+		iq_ = common.xmpp.Iq('get')
+		moified = iq_.setTag('modified', namespace=common.xmpp.NS_ARCHIVE,
+			attrs={'start': start, 'version': version})
+		set_ = retrieve.setTag('set', namespace=common.xmpp.NS_RSM)
+		set_.setTagData('max', max)
+		if after:
+			set_.setTagData('after', after)
+		self.connection.send(iq_)
