@@ -95,7 +95,7 @@ Forbid</property>
             <child>
               <widget class="GtkLabel" id="label5">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">label</property>
+                <property name="label" translatable="yes">Auto</property>
               </widget>
             </child>
             <child>
