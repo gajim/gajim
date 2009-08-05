@@ -597,8 +597,11 @@ class DesktopNotification:
 			version = '0.9'
 		version_list = version.split('.')
 		self.version = []
-		while len(version_list):
-			self.version.append(int(version_list.pop(0)))
+		try:
+			while len(version_list):
+				self.version.append(int(version_list.pop(0)))
+		except ValueError:
+			self.version_error_handler_3_x_try(None)
 		self.attempt_notify()
 
 	def get_version(self):
