@@ -1,6 +1,14 @@
 gajim (0.12.3-1) unstable; urgency=low
 
   * New upstream release.
+  * Fix history manager. Closes: #539109
+  * Fix custom host / port usage. Closes: #539267
+
+ -- Yann Leboulanger <asterix@lagaule.org>  Sun, 07 Aug 2009 18:16:15 +0100
+
+gajim (0.12.3-1) unstable; urgency=low
+
+  * New upstream release.
   * OS info are now caches. Closes: #509675
   * keepalive system has been improved. Closes: #521144
   * Recommends python-crypto for encryption. Closes: #513892
