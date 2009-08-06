@@ -42,6 +42,10 @@ class AtomWindow:
 		else:
 			cls.window.updateCounter()
 
+	@classmethod
+	def windowClosed(cls):
+		cls.window = None
+
 	def __init__(self):
 		''' Create new window... only if we have anything to show. '''
 		assert len(self.__class__.entries)>0
@@ -113,6 +117,7 @@ class AtomWindow:
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
+		self.windowClosed()
 
 	def on_next_button_clicked(self, widget):
 		self.displayNextEntry()
