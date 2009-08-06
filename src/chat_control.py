@@ -401,8 +401,10 @@ class ChatControlBase(MessageControl):
 		if default_bg or default_fg:
 			self._on_style_set_event(banner_name_label, None, default_fg,
 				default_bg)
-			self._on_style_set_event(self.banner_status_label, None, default_fg,
-				default_bg)
+			if self.banner_status_label.get_property('window'):
+				# Widget is realized
+				self._on_style_set_event(self.banner_status_label, None, default_fg,
+					default_bg)
 
 	def disconnect_style_event(self, widget):
 		# Try to find the event_id
