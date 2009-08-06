@@ -105,14 +105,13 @@ class AtomWindow:
 		''' We display number of events on the top of window, sometimes it needs to be
 		changed...'''
 		count = len(self.__class__.entries)
-		# TODO: translate
 		if count>0:
-			self.new_entry_label.set_text( \
-				'You have received new entries (and %(count)d not displayed):' % \
+			self.new_entry_label.set_text(
+				_('You have received new entries (and %(count)d not displayed):') %\
 				{'count': count})
 			self.next_button.set_sensitive(True)
 		else:
-			self.new_entry_label.set_text('You have received new entry:')
+			self.new_entry_label.set_text(_('You have received new entry:'))
 			self.next_button.set_sensitive(False)
 
 	def on_close_button_clicked(self, widget):
