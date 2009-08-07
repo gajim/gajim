@@ -1,3 +1,7 @@
+Gajim 0.12.4 (08 August 2009)
+
+  * Don't depend on GTK 2.14
+
 Gajim 0.12.4 (07 August 2009)
 
   * Fix History manager

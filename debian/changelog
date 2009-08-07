@@ -1,4 +1,10 @@
-gajim (0.12.3-1) unstable; urgency=low
+gajim (0.12.5-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Yann Leboulanger <asterix@lagaule.org>  Sun, 08 Aug 2009 00:06:15 +0100
+
+gajim (0.12.4-1) unstable; urgency=low
 
   * New upstream release.
   * Fix history manager. Closes: #539109
