@@ -43,7 +43,7 @@ class FuzzyClock:
 			_('seven'), _('eight'), _('nine'), _('ten'), _('eleven'),
 			_('twelve')]
 
-		#Strings to use for the output. %0 will be replaced with the preceding hour (e.g. "x PAST %0"), %1 with the coming hour (e.g. "x TO %1). '''
+		#Strings to use for the output. $0 will be replaced with the preceding hour (e.g. "x PAST $0"), $1 with the coming hour (e.g. "x TO $1). '''
 		self.__normalFuzzy = [ _("$0 o'clock"), _('five past $0'),
 			_('ten past $0'), _('quarter past $0'),
 			_('twenty past $0'), _('twenty five past $0'),

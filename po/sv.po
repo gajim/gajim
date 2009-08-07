@@ -4680,7 +4680,7 @@ msgstr "elva"
 msgid "twelve"
 msgstr "tolv"
 
-#. Strings to use for the output. %0 will be replaced with the preceding hour (e.g. "x PAST %0"), %1 with the coming hour (e.g. "x TO %1). '''
+#. Strings to use for the output. $0 will be replaced with the preceding hour (e.g. "x PAST $0"), $1 with the coming hour (e.g. "x TO $1). '''
 #. A "singular-form". It is used when talking about hour 0
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
 msgid "$0 o'clock"

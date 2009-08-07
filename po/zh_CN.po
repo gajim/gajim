@@ -4600,72 +4600,72 @@ msgstr "十一"
 msgid "twelve"
 msgstr "十二"
 
-#. Strings to use for the output. %0 will be replaced with the preceding hour (e.g. "x PAST %0"), %1 with the coming hour (e.g. "x TO %1). '''
+#. Strings to use for the output. $0 will be replaced with the preceding hour (e.g. "x PAST $0"), $1 with the coming hour (e.g. "x TO $1). '''
 #. A "singular-form". It is used when talking about hour 0
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
 #, fuzzy
 msgid "$0 o'clock"
-msgstr "%0 点钟"
+msgstr "$0 点钟"
 
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
 #, fuzzy
 msgid "five past $0"
-msgstr "五过 %0"
+msgstr "五过 $0"
 
 #: ../src/common/fuzzyclock.py:48 ../src/common/fuzzyclock.py:56
 #, fuzzy
 msgid "ten past $0"
-msgstr "十过 %0"
+msgstr "十过 $0"
 
 #: ../src/common/fuzzyclock.py:48 ../src/common/fuzzyclock.py:56
 #, fuzzy
 msgid "quarter past $0"
-msgstr "四分之一过 %0"
+msgstr "四分之一过 $0"
 
 #: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:57
 #, fuzzy
 msgid "twenty past $0"
-msgstr "二十过 %0"
+msgstr "二十过 $0"
 
 #: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:57
 #, fuzzy
 msgid "twenty five past $0"
-msgstr "二十五过 %0"
+msgstr "二十五过 $0"
 
 #: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:58
 #, fuzzy
 msgid "half past $0"
-msgstr "半过 %0"
+msgstr "半过 $0"
 
 #: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:58
 #, fuzzy
 msgid "twenty five to $1"
-msgstr "二十五到 %1"
+msgstr "二十五到 $1"
 
 #: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:59
 #, fuzzy
 msgid "twenty to $1"
-msgstr "二十到 %1"
+msgstr "二十到 $1"
 
 #: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:59
 #, fuzzy
 msgid "quarter to $1"
-msgstr "四分之一到 %1"
+msgstr "四分之一到 $1"
 
 #: ../src/common/fuzzyclock.py:52 ../src/common/fuzzyclock.py:60
 #, fuzzy
 msgid "ten to $1"
-msgstr "十到 %1"
+msgstr "十到 $1"
 
 #: ../src/common/fuzzyclock.py:52 ../src/common/fuzzyclock.py:60
 #, fuzzy
 msgid "five to $1"
-msgstr "五到 %1"
+msgstr "五到 $1"
 
 #: ../src/common/fuzzyclock.py:52 ../src/common/fuzzyclock.py:61
 #, fuzzy
 msgid "$1 o'clock"
-msgstr "%1 点"
+msgstr "$1 点"
 
 #: ../src/common/fuzzyclock.py:64
 msgid "Night"

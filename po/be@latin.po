@@ -4679,7 +4679,7 @@ msgstr "adzinaccataja"
 msgid "twelve"
 msgstr "dvanaccataja"
 
-#. Strings to use for the output. %0 will be replaced with the preceding hour (e.g. "x PAST %0"), %1 with the coming hour (e.g. "x TO %1). '''
+#. Strings to use for the output. $0 will be replaced with the preceding hour (e.g. "x PAST $0"), $1 with the coming hour (e.g. "x TO $1). '''
 #. A "singular-form". It is used when talking about hour 0
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
 msgid "$0 o'clock"
@@ -4731,7 +4731,7 @@ msgstr "bieź piaci chvilinaŭ $1"
 
 #: ../src/common/fuzzyclock.py:52 ../src/common/fuzzyclock.py:61
 msgid "$1 o'clock"
-msgstr "%1 hadzinaŭ"
+msgstr "$1 hadzinaŭ"
 
 #: ../src/common/fuzzyclock.py:64
 msgid "Night"
