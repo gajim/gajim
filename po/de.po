@@ -4879,15 +4879,15 @@ msgstr "zwanzig nach $0"
 
 #: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:57
 msgid "twenty five past $0"
-msgstr "fünfundzwanzig nach $0"
+msgstr "fünf vor halb $1"
 
 #: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:58
 msgid "half past $0"
-msgstr "dreißig nach $0"
+msgstr "halb $1"
 
 #: ../src/common/fuzzyclock.py:50 ../src/common/fuzzyclock.py:58
 msgid "twenty five to $1"
-msgstr "fünfundzwanzig vor $1"
+msgstr "fünf nach halb $1"
 
 #: ../src/common/fuzzyclock.py:51 ../src/common/fuzzyclock.py:59
 msgid "twenty to $1"
