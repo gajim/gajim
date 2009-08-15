@@ -27,6 +27,7 @@ class Whiteboard(object):
 		self.canevas.connect('button-press-event', self.button_press_event)
 		self.canevas.connect('button-release-event', self.button_release_event)
 		self.canevas.connect('motion-notify-event', self.motion_notify_event)
+		self.canevas.connect('item-created', self.item_created)
 
 		# Config
 		self.draw_tool = 'brush'
@@ -52,13 +53,31 @@ class Whiteboard(object):
 	
 	def on_line_button_clicked(self, widget):
 		self.draw_tool = 'line'
+	
+	def on_delete_button_clicked(self, widget):
+		self.draw_tool = 'delete'
+		
+	def on_clear_button_clicked(self, widget):
+		self.image.clear_canvas()
 
 	def on_export_button_clicked(self, widget):
 		self.image.print_xml()
 	
 	def on_fg_color_button_color_set(self, widget):
 		self.color = str(self.fg_color_select_button.get_color())
-
+		
+	def item_created(self, canvas, item, model):
+		print 'item created'
+		item.connect('button-press-event', self.item_button_press_events)
+		
+	def item_button_press_events(self, item, target_item, event):
+		if self.draw_tool == 'delete':
+			self.image.del_item(item)
+	
+	def on_size_scale_format_value(self, widget, value):
+		# self.line_width = value
+		pass
+	
 	def button_press_event(self, widget, event):
 		x = event.x
 		y = event.y
@@ -148,6 +167,9 @@ class Whiteboard(object):
 					fill_color='black',
 					line_width=self.line_width)
 			self.image.add_path(self.item_data, self.line_width, self.color)
+			
+		if self.draw_tool == 'delete':
+			pass
 
 		self.item_data = None
 		if self.item_temp is not None:
@@ -205,6 +227,7 @@ class SVGObject():
 
 		goocanvas_obj = goocanvas.Path(parent=self.root, data=data,
 			line_width=line_width, stroke_color=color)
+		goocanvas_obj.connect('button-press-event', self.item_button_press_events)
 
 		node = self.g.addChild(name='path')
 		node.setAttr('d', data)
@@ -245,6 +268,7 @@ class SVGObject():
 					line_width=float(node.getAttr('stroke-width')))
 
 		self.items[parent_rid]['data'].append(goocanvas_obj)
+		goocanvas_obj.connect('button-press-event', self.item_button_press_events)
 
 	def add_ellipse(self, cx, cy, rx, ry, line_width, stroke_color):
 		''' adds the ellipse to the items listing, both minidom node and goocanvas
@@ -257,6 +281,7 @@ class SVGObject():
 					radius_y=ry,
 					stroke_color=stroke_color,
 					line_width=line_width)
+		goocanvas_obj.connect('button-press-event', self.item_button_press_events)
 
 		node = self.g.addChild(name='ellipse')
 		node.setAttr('cx', str(cx))
@@ -266,7 +291,7 @@ class SVGObject():
 		node.setAttr('stroke-width', str(line_width))
 		node.setAttr('stroke', stroke_color)
 		self.g.addChild(node=node)
-		
+
 		rids = self.session.generate_rids(7)
 		self.items[rids[0]] = {'type':'element', 'data':[node, goocanvas_obj], 'children':rids[1:]}
 		self.items[rids[1]] = {'type':'attr', 'data':'cx', 'parent':node}
@@ -278,10 +303,31 @@ class SVGObject():
 		
 		self.session.send_items(self.items, rids)
 
+	def del_item(self, item):
+		for x in self.items.keys():
+			print item
+			if self.items[x]['type'] == 'element':
+				if self.items[x]['data'][1] == item:
+					print 'found'
+					for y in self.items[x]['children']:
+						self.del_rid(y)
+					self.del_rid(x)
+	
+	def clear_canvas(self):
+		for x in self.items.keys():
+			if self.items[x]['type'] == 'element':
+				self.del_rid(x)
+	
+	def del_rid(self, rid):
+		if self.items[rid]['type'] == 'element':
+			self.items[rid]['data'][1].remove()
+		del self.items[rid]
+
 	def print_xml(self):
 		file = open('whiteboardtest.svg','w')
 		file.writelines(str(self.svg))
 		file.close()
 		
-	def del_item(self, rid):
-		pass
+	def item_button_press_events(self, item, target_item, event):
+		# should not be put here because cannot see what draw_tool is.
+		self.del_item(item)

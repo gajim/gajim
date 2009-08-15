@@ -43,7 +43,8 @@
                 <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
-            </child><child>
+            </child>
+            <child>
               <widget class="GtkButton" id="line_button">
                 <property name="label" translatable="yes">Line Tool</property>
                 <property name="visible">True</property>
@@ -58,6 +59,35 @@
               </packing>
             </child>
             <child>
+              <widget class="GtkButton" id="delete_button">
+                <property name="label" translatable="yes">Delete Tool
+</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_delete_button_clicked"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="clear_button">
+                <property name="label" translatable="yes">Clear Canvas</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_clear_button_clicked"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child>
               <widget class="GtkButton" id="export_button">
                 <property name="label" translatable="yes">Export XML</property>
                 <property name="visible">True</property>
@@ -68,7 +98,20 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">3</property>
+                <property name="position">5</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkHScale" id="size_scale">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <signal name="format_value" handler="on_size_scale_format_value"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">6</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
             <child>
@@ -104,12 +147,9 @@ Color:</property>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">4</property>
+                <property name="position">7</property>
                 <property name="secondary">True</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </widget>
           <packing>
