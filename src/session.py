@@ -114,7 +114,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			log_type = 'chat_msg_recv'
 		else:
 			log_type = 'single_msg_recv'
-
 		if self.is_loggable() and msgtxt:
 			try:
 				msg_id = gajim.logger.write(log_type, full_jid_with_resource,
@@ -386,40 +385,53 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		# encrypted session states. these are described in stanza_session.py
 
 		try:
-			# bob responds
 			if form.getType() == 'form' and 'security' in form.asDict():
-				# we don't support 3-message negotiation as the responder
-				if 'dhkeys' in form.asDict():
-					self.fail_bad_negotiation('3 message negotiation not supported '
-						'when responding', ('dhkeys',))
-					return
+				security_options = [x[1] for x in form.getField('security').getOptions()]
+				if security_options == ['none']:
+					self.respond_archiving_bob(form)
+				else:
+					# bob responds
 
-				negotiated, not_acceptable, ask_user = self.verify_options_bob(form)
+					# we don't support 3-message negotiation as the responder
+					if 'dhkeys' in form.asDict():
+						self.fail_bad_negotiation('3 message negotiation not supported '
+							'when responding', ('dhkeys',))
+						return
 
-				if ask_user:
-					def accept_nondefault_options(is_checked):
-						self.dialog.destroy()
-						negotiated.update(ask_user)
-						self.respond_e2e_bob(form, negotiated, not_acceptable)
+					negotiated, not_acceptable, ask_user = self.verify_options_bob(form)
 
-					def reject_nondefault_options():
-						self.dialog.destroy()
-						for key in ask_user.keys():
-							not_acceptable.append(key)
-						self.respond_e2e_bob(form, negotiated, not_acceptable)
+					if ask_user:
+						def accept_nondefault_options(is_checked):
+							self.dialog.destroy()
+							negotiated.update(ask_user)
+							self.respond_e2e_bob(form, negotiated, not_acceptable)
 
-					self.dialog = dialogs.YesNoDialog(_('Confirm these session '
-						'options'),
-						_('''The remote client wants to negotiate an session with these features:
+						def reject_nondefault_options():
+							self.dialog.destroy()
+							for key in ask_user.keys():
+								not_acceptable.append(key)
+							self.respond_e2e_bob(form, negotiated, not_acceptable)
+
+						self.dialog = dialogs.YesNoDialog(_('Confirm these session '
+							'options'),
+							_('''The remote client wants to negotiate an session with these features:
 
 	%s
 
 	Are these options acceptable?''') % (negotiation.describe_features(
-						ask_user)),
-						on_response_yes=accept_nondefault_options,
-						on_response_no=reject_nondefault_options)
-				else:
-					self.respond_e2e_bob(form, negotiated, not_acceptable)
+							ask_user)),
+							on_response_yes=accept_nondefault_options,
+							on_response_no=reject_nondefault_options)
+					else:
+						self.respond_e2e_bob(form, negotiated, not_acceptable)
+
+				return
+
+			elif self.status == 'requested' and form.getType() == 'submit':
+				try:
+					self.accept_archiving_alice(form)
+				except exceptions.NegotiationError, details:
+					self.fail_bad_negotiation(details)
 
 				return
 
@@ -454,6 +466,13 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 						self.accept_e2e_alice(form, negotiated)
 					except exceptions.NegotiationError, details:
 						self.fail_bad_negotiation(details)
+
+				return
+			elif self.status == 'responded' and form.getType() == 'result':
+				try:
+					self.accept_archiving_bob(form)
+				except exceptions.NegotiationError, details:
+					self.fail_bad_negotiation(details)
 
 				return
 			elif self.status == 'responded-e2e' and form.getType() == 'result':

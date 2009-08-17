@@ -166,7 +166,114 @@ class StanzaSession(object):
 		self.status = None
 
 
-class EncryptedStanzaSession(StanzaSession):
+class ArchivingStanzaSession(StanzaSession):
+	def __init__(self, conn, jid, thread_id, type_='chat'):
+		StanzaSession.__init__(self, conn, jid, thread_id, type_='chat')
+		self.accepted = False
+
+	def archiving_logging_preference(self, initiator_options=None):
+		return self.conn.logging_preference(self.jid, initiator_options)
+
+	def negotiate_archiving(self):
+		self.negotiated = {}
+
+		request = xmpp.Message()
+		feature = request.NT.feature
+		feature.setNamespace(xmpp.NS_FEATURE)
+
+		x = xmpp.DataForm(typ='form')
+
+		x.addChild(node=xmpp.DataField(name='FORM_TYPE', value='urn:xmpp:ssn',
+			typ='hidden'))
+		x.addChild(node=xmpp.DataField(name='accept', value='1', typ='boolean',
+			required=True))
+
+		x.addChild(node=xmpp.DataField(name='logging', typ='list-single',
+			options=self.archiving_logging_preference(), required=True))
+
+		x.addChild(node=xmpp.DataField(name='disclosure', typ='list-single',
+			options=['never'], required=True))
+		x.addChild(node=xmpp.DataField(name='security', typ='list-single',
+			options=['none'], required=True))
+
+		feature.addChild(node=x)
+
+		self.status = 'requested'
+
+		self.send(request)
+
+	def respond_archiving_bob(self, form):
+		field = form.getField('logging')
+		options = [x[1] for x in field.getOptions()]
+		values = field.getValues()
+
+		logging = self.archiving_logging_preference(options)
+		self.negotiated['logging'] = logging
+
+		response = xmpp.Message()
+		feature = response.NT.feature
+		feature.setNamespace(xmpp.NS_FEATURE)
+
+		x = xmpp.DataForm(typ='submit')
+
+		x.addChild(node=xmpp.DataField(name='FORM_TYPE', value='urn:xmpp:ssn'))
+		x.addChild(node=xmpp.DataField(name='accept', value='true'))
+
+		x.addChild(node=xmpp.DataField(name='logging', value=logging))
+
+		self.status = 'responded'
+
+		feature.addChild(node=x)
+
+		if not logging:
+			response = xmpp.Error(response, xmpp.ERR_NOT_ACCEPTABLE)
+
+			feature = xmpp.Node(xmpp.NS_FEATURE + ' feature')
+
+			n = xmpp.Node('field')
+			n['var'] = 'logging'
+			feature.addChild(node=n)
+
+			response.T.error.addChild(node=feature)
+
+		self.send(response)
+
+	def accept_archiving_bob(self, form):
+		if self.negotiated['logging'] == 'mustnot':
+			self.loggable = False
+		print 'SESSION ACCEPTED', self.loggable
+		self.accepted = True
+
+	def accept_archiving_alice(self, form):
+		negotiated = {}
+		ask_user = {}
+		not_acceptable = []
+
+		if form['logging'] not in self.archiving_logging_preference():
+			raise
+
+		self.negotiated['logging'] = form['logging']
+
+		accept = xmpp.Message()
+		feature = accept.NT.feature
+		feature.setNamespace(xmpp.NS_FEATURE)
+
+		result = xmpp.DataForm(typ='result')
+
+		result.addChild(node=xmpp.DataField(name='FORM_TYPE',
+			value='urn:xmpp:ssn'))
+		result.addChild(node=xmpp.DataField(name='accept', value='1'))
+
+		feature.addChild(node=result)
+
+		self.send(accept)
+		if self.negotiated['logging'] == 'mustnot':
+			self.loggable = False
+		print 'SESSION ACCEPTED', self.loggable
+		self.accepted = True
+
+
+class EncryptedStanzaSession(ArchivingStanzaSession):
 	'''
 	An encrypted stanza negotiation has several states. They arerepresented	as
 	the following values in the 'status' attribute of the session object:

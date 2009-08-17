@@ -2477,6 +2477,8 @@ class ChatControl(ChatControlBase):
 			NS_ESESSION) and not gajim.capscache.is_supported(
 			self.contact, 'notexistant'):
 				self.begin_e2e_negotiation()
+			elif not self.session.accepted:
+				self.begin_archiving_negotiation()
 		else:
 			self.send_chatstate('active', self.contact)
 
@@ -2710,7 +2712,7 @@ class ChatControl(ChatControlBase):
 		else:
 			self.begin_e2e_negotiation()
 
-	def begin_e2e_negotiation(self):
+	def begin_negotiation(self):
 		self.no_autonegotiation = True
 
 		if not self.session:
@@ -2718,7 +2720,13 @@ class ChatControl(ChatControlBase):
 			new_sess = gajim.connections[self.account].make_new_session(fjid, type_=self.type_id)
 			self.set_session(new_sess)
 
+	def begin_e2e_negotiation(self):
+		self.begin_negotiation()
 		self.session.negotiate_e2e(False)
+
+	def begin_archiving_negotiation(self):
+		self.begin_negotiation()
+		self.session.negotiate_archiving()
 
 	def got_connected(self):
 		ChatControlBase.got_connected(self)

@@ -73,6 +73,47 @@ class ConnectionArchive:
 		print iq_
 		self.connection.send(iq_)
 
+	def get_item_pref(self, jid):
+		jid = common.xmpp.JID(jid)
+		if unicode(jid) in self.items:
+			return self.items[jid]
+
+		if jid.getStripped() in self.items:
+			return self.items[jid.getStripped()]
+
+		if jid.getDomain() in self.items:
+			return self.items[jid.getDomain()]
+
+		return self.default
+
+	def logging_preference(self, jid, initiator_options=None):
+		otr = self.get_item_pref(jid)['otr']
+		if initiator_options:
+			if ((initiator_options == ['mustnot'] and otr == 'forbid') or
+			(initiator_options == ['may'] and otr == 'require')):
+					return None
+
+			if (initiator_options == ['mustnot'] or
+			(initiator_options[0] == 'mustnot' and
+			otr not in ('opppose', 'forbid')) or
+			(initiator_options == ['may', 'mustnot'] and
+			otr in ('require', 'prefer'))):
+				return 'mustnot'
+
+			return 'may'
+
+		if otr == 'require':
+			return ['mustnot']
+
+		if otr in ('prefer', 'approve'):
+			return ['mustnot', 'may']
+
+		if otr in ('concede', 'oppose'):
+			return ['may', 'mustnot']
+
+		# otr == 'forbid'
+		return ['may']
+
 	def _ArchiveCB(self, con, iq_obj):
 		print '_ArchiveCB', iq_obj.getType()
 		if iq_obj.getType() == 'error':
