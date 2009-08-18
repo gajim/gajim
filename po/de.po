@@ -3140,7 +3140,7 @@ msgid ""
 "from %(source)s"
 msgstr ""
 "%(title)s von %(artist)s\n"
-"von %(source)s"
+"aus %(source)s"
 
 #: ../src/chat_control.py:1519
 #, python-format
@@ -4859,7 +4859,7 @@ msgstr "Zwölf"
 #. A "singular-form". It is used when talking about hour 0
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
 msgid "$0 o'clock"
-msgstr "$0 Uhr"
+msgstr "$0"
 
 #: ../src/common/fuzzyclock.py:47 ../src/common/fuzzyclock.py:55
 msgid "five past $0"
