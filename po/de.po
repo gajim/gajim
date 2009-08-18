@@ -3131,7 +3131,7 @@ msgid ""
 "from <i>%(source)s</i>"
 msgstr ""
 "<b>\"%(title)s\"</b> von <i>%(artist)s</i>\n"
-"von <i>%(source)s</i>"
+"aus <i>%(source)s</i>"
 
 #: ../src/chat_control.py:1396
 #, python-format
