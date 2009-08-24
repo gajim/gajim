@@ -304,14 +304,17 @@ class SVGObject():
 		self.session.send_items(self.items, rids)
 
 	def del_item(self, item):
+		rids = []
 		for x in self.items.keys():
-			print item
 			if self.items[x]['type'] == 'element':
 				if self.items[x]['data'][1] == item:
-					print 'found'
 					for y in self.items[x]['children']:
+						rids.append(y)
 						self.del_rid(y)
+					rids.append(x)
 					self.del_rid(x)
+					break
+		self.session.del_item(rids)
 	
 	def clear_canvas(self):
 		for x in self.items.keys():

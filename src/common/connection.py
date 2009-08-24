@@ -1987,6 +1987,16 @@ class Connection(ConnectionHandlers):
 					 'parent':parent}
 				sxe.addChild(name='new', attrs=attrs)
 		self.connection.send(message)
+
+	def delete_whiteboard_node(self, jid, sid, rids):
+		message = common.xmpp.Node(node="<message to='%s' xmlns='jabber:client'/>"
+		   % jid)
+		sxe = message.addChild(name='sxe', attrs={'session':sid},
+			namespace='urn:xmpp:tmp:sxe')
+		
+		for x in rids:
+			sxe.addChild(name='remove', attrs = {'target':x})
+		self.connection.send(message)
 	
 	
 

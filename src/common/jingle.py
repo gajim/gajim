@@ -388,6 +388,10 @@ class JingleWhiteboard(JingleContent):
 
 		self.session.connection.send_whiteboard_node(self.session.peerjid,
 			self.session.sid, items, rids)
+		
+	def del_item(self, rids):
+		self.session.connection.delete_whiteboard_node(self.session.peerjid,
+			self.session.sid, rids)
 
 	def encode(self, xml):
 		# encodes it sendable string
