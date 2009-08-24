@@ -356,16 +356,23 @@ class JingleWhiteboard(JingleContent):
 			callback(stanza, content, error, action)
 
 	def __editCB(self, stanza, content, error, action):
-		new_edits = content.getTags('new')
+		new_tags = content.getTags('new')
+		remove_tags = content.getTags('remove')
 		
-		if new_edits is not None:
+		if new_tags is not None:
 			# Process new elements
-			for new in new_edits:
-				if new.getAttr('type') == 'element':
-					self.control.whiteboard.recieve_element(new)
-				elif new.getAttr('type') == 'attr':
-					self.control.whiteboard.recieve_attr(new)
+			for tag in new_tags:
+				if tag.getAttr('type') == 'element':
+					self.control.whiteboard.recieve_element(tag)
+				elif tag.getAttr('type') == 'attr':
+					self.control.whiteboard.recieve_attr(tag)
 			self.control.whiteboard.apply_new()
+		
+		if remove_tags is not None:
+			# Delete rids
+			for tag in remove_tags:
+				target = tag.getAttr('target')
+				self.control.whiteboard.image.del_rid(target)
 			
 	def __sessionAcceptCB(self, stanza, content, error, action):
 		log.debug('session accepted')
