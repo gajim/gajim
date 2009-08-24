@@ -30,7 +30,6 @@ class Whiteboard(object):
 		self.canevas.connect('item-created', self.item_created)
 
 		# Config
-		self.draw_tool = 'brush'
 		self.line_width = 2
 		self.color = str(self.fg_color_select_button.get_color())
 
@@ -46,16 +45,16 @@ class Whiteboard(object):
 		self.recieving = {}
 
 	def on_brush_button_clicked(self, widget):
-		self.draw_tool = 'brush'
+		self.image.draw_tool = 'brush'
 
 	def on_oval_button_clicked(self, widget):
-		self.draw_tool = 'oval'
+		self.image.draw_tool = 'oval'
 	
 	def on_line_button_clicked(self, widget):
-		self.draw_tool = 'line'
+		self.image.draw_tool = 'line'
 	
 	def on_delete_button_clicked(self, widget):
-		self.draw_tool = 'delete'
+		self.image.draw_tool = 'delete'
 		
 	def on_clear_button_clicked(self, widget):
 		self.image.clear_canvas()
@@ -71,7 +70,7 @@ class Whiteboard(object):
 		item.connect('button-press-event', self.item_button_press_events)
 		
 	def item_button_press_events(self, item, target_item, event):
-		if self.draw_tool == 'delete':
+		if self.image.draw_tool == 'delete':
 			self.image.del_item(item)
 	
 	def on_size_scale_format_value(self, widget, value):
@@ -84,7 +83,7 @@ class Whiteboard(object):
 		state = event.state
 		self.item_temp_coords = (x,y)
 
-		if self.draw_tool == 'brush':
+		if self.image.draw_tool == 'brush':
 			self.item_temp = goocanvas.Ellipse(parent=self.root,
 				center_x=x,
 				center_y=y,
@@ -95,10 +94,10 @@ class Whiteboard(object):
 				line_width=self.line_width)
 			self.item_data = 'M %s,%s L ' % (x, y)
 			
-		elif self.draw_tool == 'oval':
+		elif self.image.draw_tool == 'oval':
 			self.item_data = True
 			
-		if self.draw_tool == 'line':
+		if self.image.draw_tool == 'line':
 			self.item_data = 'M %s,%s L' % (x, y)
 
 	def motion_notify_event(self, widget, event):
@@ -109,12 +108,12 @@ class Whiteboard(object):
 			self.item_temp.remove()
 			
 		if self.item_data is not None:
-			if self.draw_tool == 'brush':
+			if self.image.draw_tool == 'brush':
 				self.item_data = self.item_data + '%s,%s ' % (x, y)
 				self.item_temp = goocanvas.Path(parent=self.root,
 					data=self.item_data, line_width=self.line_width,
 					stroke_color=self.color)
-			elif self.draw_tool == 'oval':
+			elif self.image.draw_tool == 'oval':
 				self.item_temp = goocanvas.Ellipse(parent=self.root,
 					center_x=self.item_temp_coords[0] + (x - self.item_temp_coords[0]) / 2,
 					center_y=self.item_temp_coords[1] + (y - self.item_temp_coords[1]) / 2,
@@ -122,7 +121,7 @@ class Whiteboard(object):
 					radius_y=abs(y - self.item_temp_coords[1]) / 2,
 					stroke_color=self.color,
 					line_width=self.line_width)
-			elif self.draw_tool == 'line':
+			elif self.image.draw_tool == 'line':
 				self.item_data = 'M %s,%s L' % self.item_temp_coords
 				self.item_data = self.item_data + ' %s,%s' % (x,y)
 				self.item_temp = goocanvas.Path(parent=self.root,
@@ -134,7 +133,7 @@ class Whiteboard(object):
 		y = event.y
 		state = event.state
 		
-		if self.draw_tool == 'brush':
+		if self.image.draw_tool == 'brush':
 			self.item_data = self.item_data + '%s,%s' % (x, y)
 			if x == self.item_temp_coords[0] and y == self.item_temp_coords[1]:
 				goocanvas.Ellipse(parent=self.root,
@@ -147,14 +146,14 @@ class Whiteboard(object):
 					line_width=self.line_width)
 			self.image.add_path(self.item_data, self.line_width, self.color)
 			
-		if self.draw_tool == 'oval':
+		if self.image.draw_tool == 'oval':
 			cx = self.item_temp_coords[0] + (x - self.item_temp_coords[0]) / 2
 			cy = self.item_temp_coords[1] + (y - self.item_temp_coords[1]) / 2
 			rx = abs(x - self.item_temp_coords[0]) / 2
 			ry = abs(y - self.item_temp_coords[1]) / 2
 			self.image.add_ellipse(cx, cy, rx, ry, self.line_width, self.color)
 
-		if self.draw_tool == 'line':
+		if self.image.draw_tool == 'line':
 			self.item_data = 'M %s,%s L' % self.item_temp_coords
 			self.item_data = self.item_data + ' %s,%s' % (x,y)
 			if x == self.item_temp_coords[0] and y == self.item_temp_coords[1]:
@@ -168,7 +167,7 @@ class Whiteboard(object):
 					line_width=self.line_width)
 			self.image.add_path(self.item_data, self.line_width, self.color)
 			
-		if self.draw_tool == 'delete':
+		if self.image.draw_tool == 'delete':
 			pass
 
 		self.item_data = None
@@ -206,6 +205,7 @@ class SVGObject():
 		# Will be {ID: {type:'element', data:[node, goocanvas]}, ID2: {}} instance
 		self.items = {}
 		self.root = root
+		self.draw_tool = 'brush'
 		
 		# sxe session
 		self.session = session
@@ -329,5 +329,4 @@ class SVGObject():
 		file.close()
 		
 	def item_button_press_events(self, item, target_item, event):
-		# should not be put here because cannot see what draw_tool is.
 		self.del_item(item)
