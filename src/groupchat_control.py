@@ -47,6 +47,9 @@ from chat_control import ChatControl
 from chat_control import ChatControlBase
 from common.exceptions import GajimGeneralException
 
+import logging
+log = logging.getLogger('gajim.groupchat_control')
+
 #(status_image, type, nick, shown_nick)
 (
 C_IMG, # image to show state (online, new message etc)
