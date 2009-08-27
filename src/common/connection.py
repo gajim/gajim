@@ -1746,6 +1746,16 @@ class Connection(ConnectionHandlers):
 		self.add_lang(p)
 		if not change_nick:
 			t = p.setTag(common.xmpp.NS_MUC + ' x')
+		last_date = gajim.logger.get_last_date_that_has_logs(room_jid, self.name,
+			is_room=True)
+		if last_date is None:
+			last_date = time.time() - gajim.config.get('muc_restore_timeout') * 60
+		else:
+			last_time = min(last_date, time.time() - gajim.config.get(
+				'muc_restore_timeout') * 60)
+		last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(last_date))
+		t.setTag('history', {'maxstanzas': gajim.config.get('muc_restore_lines'),
+			'since': last_date})
 		if password:
 			t.setTagData('password', password)
 		self.connection.send(p)

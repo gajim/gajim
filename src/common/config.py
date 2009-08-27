@@ -160,6 +160,8 @@ class Config:
 		'change_roster_title': [ opt_bool, True, _('Add * and [n] in roster title?')],
 		'restore_lines': [opt_int, 4, _('How many lines to remember from previous conversation when a chat tab/window is reopened.')],
 		'restore_timeout': [opt_int, 60, _('How many minutes should last lines from previous conversation last.')],
+		'muc_restore_lines': [opt_int, 20, _('How many lines to request to server when entering a groupchat.')],
+		'muc_restore_timeout': [opt_int, 60, _('How many minutes back to request logs when a entering a groupchat.')],
 		'send_on_ctrl_enter': [opt_bool, False, _('Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour).')],
 		'show_roster_on_startup': [opt_bool, True],
 		'key_up_lines': [opt_int, 25, _('How many lines to store for Ctrl+KeyUP.')],
