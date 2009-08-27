@@ -3577,9 +3577,9 @@ class RosterWindow:
 
 		type_ = model[titer][C_TYPE]
 		if type_ == 'group':
+			group = model[titer][C_JID].decode('utf-8')
 			child_model[child_iter][C_IMG] = gajim.interface.jabber_state_images[
 				'16']['opened']
-			group = model[titer][C_JID].decode('utf-8')
 			for account in accounts:
 				if group in gajim.groups[account]: # This account has this group
 					gajim.groups[account][group]['expand'] = True
