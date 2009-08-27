@@ -3445,12 +3445,12 @@ class Interface:
 		# set the icon to all windows
 		gtk.window_set_default_icon(pix)
 
+		self.init_emoticons()
+		self.make_regexps()
+
 		self.roster = roster_window.RosterWindow()
 		for account in gajim.connections:
 			gajim.connections[account].load_roster_from_db()
-
-		self.init_emoticons()
-		self.make_regexps()
 
 		# get instances for windows/dialogs that will show_all()/hide()
 		self.instances['file_transfers'] = dialogs.FileTransfersWindow()
