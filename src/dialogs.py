@@ -1368,7 +1368,8 @@ class WarningDialog(HigDialog):
 		HigDialog.__init__( self, None,
 							gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, pritext, sectext)
 		self.set_modal(False)
-		self.set_transient_for(gajim.interface.roster.window)
+		if hasattr(gajim.interface, 'roster'):
+			self.set_transient_for(gajim.interface.roster.window)
 		self.popup()
 
 class InformationDialog(HigDialog):
