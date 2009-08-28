@@ -953,9 +953,12 @@ class ConversationTextview(gobject.GObject):
 
 		buffer_ = self.tv.get_buffer()
 
-		start = 0
-		end = 0
 		index = 0
+
+		# Too many special elements (emoticons, LaTeX formulas, etc)
+		# may cause Gajim to freeze (see #5129).
+		# We impose an arbitrary limit of 100 specials per message.
+		specials_limit = 100
 
 		# basic: links + mail + formatting is always checked (we like that)
 		if gajim.config.get('emoticons_theme'): # search for emoticons & urls
@@ -965,7 +968,7 @@ class ConversationTextview(gobject.GObject):
 		for match in iterator:
 			start, end = match.span()
 			special_text = otext[start:end]
-			if start != 0:
+			if start > index:
 				text_before_special_text = otext[index:start]
 				end_iter = buffer_.get_end_iter()
 				# we insert normal text
@@ -975,6 +978,9 @@ class ConversationTextview(gobject.GObject):
 
 			# now print it
 			self.print_special_text(special_text, other_tags)
+			specials_limit -= 1
+			if specials_limit <= 0:
+				break
 
 		return index # the position after *last* special text
 
