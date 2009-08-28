@@ -1838,7 +1838,7 @@ class RosterWindow:
 			gajim.events.remove_events(account, jid, event)
 			return True
 		elif event.type_ in ('file-error', 'file-stopped'):
-			msg_error = ''
+			msg_err = ''
 			if data['error'] == -1:
 				msg_err = _('Remote contact stopped transfer')
 			elif data['error'] == -6:
