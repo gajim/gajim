@@ -1235,6 +1235,7 @@ class Interface:
 		fjid = room_jid + '/' + nick
 		show = array[1]
 		status = array[2]
+		conn = gajim.connections[account]
 
 		# Get the window and control for the updated status, this may be a
 		# PrivateChatControl
@@ -1267,6 +1268,13 @@ class Interface:
 				c = gajim.contacts.contact_from_gc_contact(gc_c)
 				ctrl.gc_contact = gc_c
 				ctrl.contact = c
+				if ctrl.session:
+					# stop e2e
+					if ctrl.session.enable_encryption:
+						thread_id = ctrl.session.thread_id
+						ctrl.session.terminate_e2e()
+						conn.delete_session(fjid, thread_id)
+						ctrl.no_autonegotiation = False
 				ctrl.draw_banner()
 				old_jid = room_jid + '/' + nick
 				new_jid = room_jid + '/' + new_nick

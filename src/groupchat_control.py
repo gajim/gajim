@@ -170,6 +170,15 @@ class PrivateChatControl(ChatControl):
 	def update_contact(self):
 		self.contact = gajim.contacts.contact_from_gc_contact(self.gc_contact)
 
+	def begin_e2e_negotiation(self):
+		self.no_autonegotiation = True
+
+		if not self.session:
+			fjid = self.gc_contact.get_full_jid()
+			new_sess = gajim.connections[self.account].make_new_session(fjid, type_=self.type_id)
+			self.set_session(new_sess)
+
+		self.session.negotiate_e2e(False)
 
 class GroupchatControl(ChatControlBase):
 	TYPE_ID = message_control.TYPE_GC
@@ -1174,6 +1183,20 @@ class GroupchatControl(ChatControlBase):
 						self.nick = new_nick
 						self.new_nick = ''
 						s = _('You are now known as %s') % new_nick
+						# Stop all E2E sessions
+						nick_list = gajim.contacts.get_nick_list(self.account,
+							self.room_jid)
+						for nick in nick_list:
+							fjid = self.room_jid + '/' + nick
+							ctrl = gajim.interface.msg_win_mgr.get_control(fjid,
+								self.account)
+							if ctrl and ctrl.session and \
+							ctrl.session.enable_encryption:
+								thread_id = ctrl.session.thread_id
+								ctrl.session.terminate_e2e()
+								gajim.connections[self.account].delete_session(fjid,
+									thread_id)
+								ctrl.no_autonegotiation = False
 					else:
 						s = _('%(nick)s is now known as %(new_nick)s') % {
 							'nick': nick, 'new_nick': new_nick}
@@ -1844,6 +1867,13 @@ class GroupchatControl(ChatControlBase):
 				contact.status = ''
 				ctrl.update_ui()
 				ctrl.parent_win.redraw_tab(ctrl)
+			for sess in gajim.connections[self.account].get_sessions(fjid):
+				if sess.control:
+					sess.control.no_autonegotiation = False
+				if sess.enable_encryption:
+					sess.terminate_e2e()
+					gajim.connections[self.account].delete_session(fjid,
+						sess.thread_id)
 		# They can already be removed by the destroy function
 		if self.room_jid in gajim.contacts.get_gc_list(self.account):
 			gajim.contacts.remove_room(self.account, self.room_jid)
