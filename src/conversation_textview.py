@@ -1129,9 +1129,12 @@ class ConversationTextview(gobject.GObject):
 			buffer_.delete(i1, i2)
 			buffer_.delete_mark(m1)
 		end_iter = buffer_.get_end_iter()
-		at_the_end = False
-		if self.at_the_end():
-			at_the_end = True
+		end_offset = end_iter.get_offset()
+		at_the_end = self.at_the_end()
+		move_selection = False
+		if buffer_.get_has_selection() and buffer_.get_selection_bounds()[1].\
+		get_offset() == end_offset:
+			move_selection = True
 
 		# Create one mark and add it to queue once if it's the first line
 		# else twice (one for end bound, one for start bound)
@@ -1139,6 +1142,10 @@ class ConversationTextview(gobject.GObject):
 		if buffer_.get_char_count() > 0:
 			if not simple:
 				buffer_.insert_with_tags_by_name(end_iter, '\n', 'eol')
+				if move_selection:
+					sel_start, sel_end = buffer_.get_selection_bounds()
+					sel_end.backward_char()
+					buffer_.select_range(sel_start, sel_end)
 			mark = buffer_.create_mark(None, end_iter, left_gravity=True)
 			self.marks_queue.put(mark)
 		if not mark:
