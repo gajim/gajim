@@ -1999,7 +1999,8 @@ class RosterWindow:
 			if status == 'online' and gajim.interface.sleeper.getState() != \
 			common.sleepy.STATE_UNKNOWN:
 				gajim.sleeper_state[account] = 'online'
-			elif gajim.sleeper_state[account] not in ('autoaway', 'autoxa'):
+			elif gajim.sleeper_state[account] not in ('autoaway', 'autoxa') or \
+			status == 'offline':
 				gajim.sleeper_state[account] = 'off'
 
 		if to:
