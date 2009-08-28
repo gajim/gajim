@@ -897,6 +897,8 @@ class ConnectionDisco:
 								gajim.interface.roster.music_track_changed(listener,
 										track, self.name)
 						break
+			if features.__contains__(common.xmpp.NS_VCARD):
+				self.vard_supported = True
 			if features.__contains__(common.xmpp.NS_PUBSUB):
 				self.pubsub_supported = True
 				if features.__contains__(common.xmpp.NS_PUBSUB_PUBLISH_OPTIONS):
@@ -1136,10 +1138,6 @@ class ConnectionVcard:
 				# We do as if it comes from the fake_jid
 				frm = groupchat_jid
 			our_jid = gajim.get_jid_from_account(self.name)
-			if iq_obj.getType() == 'error' and jid == our_jid:
-				# our server doesn't support vcard
-				log.debug('xxx error xxx')
-				self.vcard_supported = False
 			if not iq_obj.getTag('vCard') or iq_obj.getType() == 'error':
 				if frm and frm != our_jid:
 					# Write an empty file
@@ -2638,8 +2636,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			self.connection.send(p)
 			self.priority = priority
 		self.dispatch('STATUS', show)
-		# ask our VCard
-		self.request_vcard(None)
+		if self.vcard_supported:
+			# ask our VCard
+			self.request_vcard(None)
 
 		# Get bookmarks from private namespace
 		self.get_bookmarks()

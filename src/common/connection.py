@@ -187,7 +187,7 @@ class Connection(ConnectionHandlers):
 		self.muc_jid = {} # jid of muc server for each transport type
 		self.available_transports = {} # list of available transports on this
 		# server {'icq': ['icq.server.com', 'icq2.server.com'], }
-		self.vcard_supported = True
+		self.vcard_supported = False
 		self.private_storage_supported = True
 		self.streamError = ''
 	# END __init__
