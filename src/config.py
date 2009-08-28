@@ -2073,8 +2073,7 @@ class AccountsWindow:
 				secret_keys = []
 		if not secret_keys:
 			dialogs.ErrorDialog(_('Failed to get secret keys'),
-				_('There was a problem retrieving your OpenPGP secret keys.'))
-			return
+				_('There is no OpenPGP secret key available.'))
 		secret_keys[_('None')] = _('None')
 
 		def on_key_selected(keyID):
