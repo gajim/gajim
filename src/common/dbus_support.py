@@ -34,14 +34,21 @@ _GAJIM_ERROR_IFACE = 'org.gajim.dbus.Error'
 try:
 	import dbus
 	import dbus.glib
-	# test if dbus-x11 is installed
-	bus = dbus.SessionBus()
-	supported = True # does user have D-Bus bindings?
 except ImportError:
 	supported = False
 	if not os.name == 'nt': # only say that to non Windows users
 		print _('D-Bus python bindings are missing in this computer')
 		print _('D-Bus capabilities of Gajim cannot be used')
+else:
+	try:
+		# test if dbus-x11 is installed
+		bus = dbus.SessionBus()
+		supported = True # does user have D-Bus bindings?
+	except dbus.DBusException:
+		supported = False
+		if not os.name == 'nt': # only say that to non Windows users
+			print _('D-Bus does not run correctly on this machine')
+			print _('D-Bus capabilities of Gajim cannot be used')
 
 class SystemBus:
 	'''A Singleton for the DBus SystemBus'''
