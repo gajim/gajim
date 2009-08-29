@@ -5305,6 +5305,7 @@ class RosterWindow:
 				'zeroconf_contact_context_menu')
 
 			start_chat_menuitem = xml.get_widget('start_chat_menuitem')
+			execute_command_menuitem = xml.get_widget('execute_command_menuitem')
 			rename_menuitem = xml.get_widget('rename_menuitem')
 			edit_groups_menuitem = xml.get_widget('edit_groups_menuitem')
 			send_file_menuitem = xml.get_widget('send_file_menuitem')
@@ -5363,6 +5364,9 @@ class RosterWindow:
 					self.on_send_file_menuitem_activate, contact, account)
 			else:
 				send_file_menuitem.set_sensitive(False)
+
+			execute_command_menuitem.connect('activate',
+				self.on_execute_command, contact, account)
 
 			rename_menuitem.connect('activate', self.on_rename, 'contact', jid,
 				account)
