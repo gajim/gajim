@@ -898,7 +898,7 @@ class ConnectionDisco:
 										track, self.name)
 						break
 			if features.__contains__(common.xmpp.NS_VCARD):
-				self.vard_supported = True
+				self.vcard_supported = True
 			if features.__contains__(common.xmpp.NS_PUBSUB):
 				self.pubsub_supported = True
 				if features.__contains__(common.xmpp.NS_PUBSUB_PUBLISH_OPTIONS):
