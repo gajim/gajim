@@ -3247,7 +3247,6 @@ class Interface:
 	def __init__(self):
 		gajim.interface = self
 		gajim.thread_interface = ThreadInterface
-		gajim.logger.reset_shown_unread_messages()
 		# This is the manager and factory of message windows set by the module
 		self.msg_win_mgr = None
 		self.jabber_state_images = {'16': {}, '32': {}, 'opened': {},
@@ -3268,6 +3267,7 @@ class Interface:
 		}
 
 		cfg_was_read = parser.read()
+		gajim.logger.reset_shown_unread_messages()
 		# override logging settings from config (don't take care of '-q' option)
 		if gajim.config.get('verbose'):
 			logging_helpers.set_verbose()
