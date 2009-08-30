@@ -1989,8 +1989,8 @@ class ChatControl(ChatControlBase):
 			else:
 				kind = 'outgoing'
 				name = gajim.nicks[self.account]
-				if not xhtml and not encrypted and gajim.config.get(
-				'rst_formatting_outgoing_messages'):
+				if not xhtml and not (encrypted and self.gpg_is_active) and \
+				gajim.config.get('rst_formatting_outgoing_messages'):
 					from common.rst_xhtml_generator import create_xhtml
 					xhtml = create_xhtml(text)
 					if xhtml:
