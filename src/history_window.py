@@ -430,7 +430,12 @@ class HistoryWindow:
 			tag_msg = 'status'
 		else: # 'status'
 			# message here (if not None) is status message
-			if message:
+			if show is None: # it means error
+				if message:
+					message = _('Error: %s') % message
+				else:
+					message = _('Error')
+			elif message:
 				message = _('Status is now: %(status)s: %(status_msg)s') % \
 					{'status': helpers.get_uf_show(show), 'status_msg': message}
 			else:
