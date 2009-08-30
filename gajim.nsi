@@ -184,6 +184,7 @@ Section "Gajim" SecGajim
 	File "bin\win32file.pyd"
 	File "bin\winsound.pyd"
 	File "bin\zlib1.dll"
+	File /r "bin\docutils"
 
 	WriteRegStr HKCU "Software\Gajim" "" $INSTDIR
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayName" "Gajim"
@@ -695,6 +696,7 @@ Section "Uninstall"
 	Delete "$INSTDIR\bin\win32file.pyd"
 	Delete "$INSTDIR\bin\winsound.pyd"
 	Delete "$INSTDIR\bin\zlib1.dll"
+	RMDir /r "$INSTDIR\bin\docutils"
 	RMDir "$INSTDIR\bin"
 	RMDir /r "$INSTDIR\data\glade"
 	RMDir /r "$INSTDIR\data\moods"
