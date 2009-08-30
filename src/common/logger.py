@@ -381,7 +381,8 @@ class Logger:
 
 	def insert_unread_events(self, message_id, jid_id):
 		''' add unread message with id: message_id'''
-		sql = 'INSERT INTO unread_messages VALUES (%d, %d)' % (message_id, jid_id)
+		sql = 'INSERT INTO unread_messages VALUES (%d, %d, 0)' % (message_id,
+			jid_id)
 		self.simple_commit(sql)
 
 	def set_read_messages(self, message_ids):
