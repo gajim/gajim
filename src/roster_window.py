@@ -1654,7 +1654,9 @@ class RosterWindow:
 		results = gajim.logger.get_unread_msgs()
 		for result in results:
 			jid = result[4]
-			if gajim.contacts.get_first_contact_from_jid(account, jid):
+			shown = result[5]
+			if gajim.contacts.get_first_contact_from_jid(account, jid) and not \
+			shown:
 				# We have this jid in our contacts list
 				# XXX unread messages should probably have their session saved with
 				# them
@@ -1663,6 +1665,7 @@ class RosterWindow:
 				tim = time.localtime(float(result[2]))
 				session.roster_message(jid, result[1], tim, msg_type='chat',
 					msg_id=result[0])
+				gajim.logger.set_shown_unread_msgs(result[0])
 
 			elif (time.time() - result[2]) > 2592000:
 				# ok, here we see that we have a message in unread messages table

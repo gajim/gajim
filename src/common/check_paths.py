@@ -64,7 +64,8 @@ def create_log_db():
 
 		CREATE TABLE unread_messages(
 			message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-			jid_id INTEGER
+			jid_id INTEGER,
+			shown BOOLEAN default 0
 		);
 
 		CREATE INDEX idx_unread_messages_jid_id ON unread_messages (jid_id);
