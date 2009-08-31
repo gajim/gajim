@@ -2482,7 +2482,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 	def _MucAdminCB(self, con, iq_obj):
 		log.debug('MucAdminCB')
-		items = iq_obj.getTag('query', namespace = common.xmpp.NS_MUC_ADMIN).getTags('item')
+		items = iq_obj.getTag('query', namespace=common.xmpp.NS_MUC_ADMIN).\
+			getTags('item')
 		users_dict = {}
 		for item in items:
 			if item.has_attr('jid') and item.has_attr('affiliation'):
@@ -2490,7 +2491,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					jid = helpers.parse_jid(item.getAttr('jid'))
 				except common.helpers.InvalidFormat:
 					log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
-					return
+					continue
 				affiliation = item.getAttr('affiliation')
 				users_dict[jid] = {'affiliation': affiliation}
 				if item.has_attr('nick'):
@@ -2502,7 +2503,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					users_dict[jid]['reason'] = reason
 
 		self.dispatch('GC_AFFILIATION', (helpers.get_full_jid_from_iq(iq_obj),
-															users_dict))
+			users_dict))
 
 	def _MucErrorCB(self, con, iq_obj):
 		log.debug('MucErrorCB')
