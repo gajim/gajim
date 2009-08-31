@@ -832,6 +832,11 @@ class ConnectionDisco:
 	def _DiscoverInfoErrorCB(self, con, iq_obj):
 		log.debug('DiscoverInfoErrorCB')
 		jid = helpers.get_full_jid_from_iq(iq_obj)
+		id_ = iq_obj.getID()
+		if id_[:6] == 'Gajim_':
+			if not self.privacy_rules_requested:
+				self.privacy_rules_requested = True
+				self._request_privacy()
 		self.dispatch('AGENT_ERROR_INFO', (jid))
 
 	def _DiscoverInfoCB(self, con, iq_obj):
