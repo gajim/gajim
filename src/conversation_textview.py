@@ -827,8 +827,7 @@ class ConversationTextview(gobject.GObject):
 			gajim.interface.instances[self.account]['join_gc'].window.present()
 		else:
 			try:
-				gajim.interface.instances[self.account]['join_gc'] = \
-				dialogs.JoinGroupchatWindow(self.account, room_jid)
+				dialogs.JoinGroupchatWindow(account=None, room_jid=room_jid)
 			except GajimGeneralException:
 				pass
 

@@ -1893,28 +1893,42 @@ class SubscriptionRequestWindow:
 
 
 class JoinGroupchatWindow:
-	def __init__(self, account, room_jid='', nick='', password='',
+	def __init__(self, account=None, room_jid='', nick='', password='',
 				 automatic=False):
 		'''automatic is a dict like {'invities': []}
 		If automatic is not empty, this means room must be automaticaly configured
 		and when done, invities must be automatically invited'''
-		if room_jid != '':
-			if room_jid in gajim.gc_connected[account] and\
-			   gajim.gc_connected[account][room_jid]:
+		self.xml = gtkgui_helpers.get_glade('join_groupchat_window.glade')
+		if account:
+			if room_jid != '' and room_jid in gajim.gc_connected[account] and\
+		   gajim.gc_connected[account][room_jid]:
 				ErrorDialog(_('You are already in group chat %s') % room_jid)
 				raise GajimGeneralException, 'You are already in this group chat'
+			if nick == '':
+				nick = gajim.nicks[account]
+			if gajim.connections[account].connected < 2:
+				ErrorDialog(_('You are not connected to the server'),
+					_('You can not join a group chat unless you are connected.'))
+				raise GajimGeneralException, 'You must be connected to join a groupchat'
+		else:
+			account_label = self.xml.get_widget('account_label')
+			account_combobox = self.xml.get_widget('account_combobox')
+			account_label.set_no_show_all(False)
+			account_combobox.set_no_show_all(False)
+			liststore = gtk.ListStore(str)
+			account_combobox.set_model(liststore)
+			cell = gtk.CellRendererText()
+			account_combobox.pack_start(cell, True)
+			account_combobox.add_attribute(cell, 'text', 0)
+			for acct in [a for a in gajim.connections if \
+			gajim.account_is_connected(a)]:
+				account_combobox.append_text(acct)
+			account_combobox.set_active(-1)
+
 		self.account = account
 		self.automatic = automatic
-		if nick == '':
-			nick = gajim.nicks[self.account]
-		if gajim.connections[account].connected < 2:
-			ErrorDialog(_('You are not connected to the server'),
-						_('You can not join a group chat unless you are connected.'))
-			raise GajimGeneralException, 'You must be connected to join a groupchat'
-
 		self._empty_required_widgets = []
 
-		self.xml = gtkgui_helpers.get_glade('join_groupchat_window.glade')
 		self.window = self.xml.get_widget('join_groupchat_window')
 		self._room_jid_entry = self.xml.get_widget('room_jid_entry')
 		self._nickname_entry = self.xml.get_widget('nickname_entry')
@@ -1925,11 +1939,13 @@ class JoinGroupchatWindow:
 		if password:
 			self._password_entry.set_text(password)
 		self.xml.signal_autoconnect(self)
-		# now add us to open windows
-		gajim.interface.instances[account]['join_gc'] = self
-		if len(gajim.connections) > 1:
-			title = _('Join Group Chat with account %s') % account
-		else:
+		title = None
+		if account:
+			# now add us to open windows
+			gajim.interface.instances[account]['join_gc'] = self
+			if len(gajim.connections) > 1:
+				title = _('Join Group Chat with account %s') % account
+		if title is None:
 			title = _('Join Group Chat')
 		self.window.set_title(title)
 
@@ -1957,15 +1973,16 @@ class JoinGroupchatWindow:
 		if len(self._empty_required_widgets):
 			self.xml.get_widget('join_button').set_sensitive(False)
 
-		if not gajim.connections[account].private_storage_supported:
+		if account and not gajim.connections[account].private_storage_supported:
 			self.xml.get_widget('auto_join_checkbutton').set_sensitive(False)
 
 		self.window.show_all()
 
 	def on_join_groupchat_window_destroy(self, widget):
 		'''close window'''
-		# remove us from open windows
-		del gajim.interface.instances[self.account]['join_gc']
+		if self.account and 'join_gc' in gajim.interface.instances[self.account]:
+			# remove us from open windows
+			del gajim.interface.instances[self.account]['join_gc']
 
 	def on_join_groupchat_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
@@ -1978,8 +1995,14 @@ class JoinGroupchatWindow:
 		else:
 			if widget in self._empty_required_widgets:
 				self._empty_required_widgets.remove(widget)
-				if len(self._empty_required_widgets) == 0:
-					self.xml.get_widget('join_button').set_sensitive(True)
+			if len(self._empty_required_widgets) == 0 and self.account:
+				self.xml.get_widget('join_button').set_sensitive(True)
+
+	def on_account_combobox_changed(self, widget):
+		model = widget.get_model()
+		iter_ = widget.get_active_iter()
+		self.account = model[iter_][0].decode('utf-8')
+		self.on_required_entry_changed(self._nickname_entry)
 
 	def on_recently_combobox_changed(self, widget):
 		model = widget.get_model()
@@ -1993,6 +2016,11 @@ class JoinGroupchatWindow:
 
 	def on_join_button_clicked(self, widget):
 		'''When Join button is clicked'''
+		if not self.account:
+			ErrorDialog(_('Invalid Account'),
+				_('You have to choose an account from which you want to join the '
+				'groupchat.'))
+			return
 		nickname = self._nickname_entry.get_text().decode('utf-8')
 		room_jid = self._room_jid_entry.get_text().decode('utf-8')
 		password = self._password_entry.get_text().decode('utf-8')
@@ -2000,25 +2028,26 @@ class JoinGroupchatWindow:
 			nickname = helpers.parse_resource(nickname)
 		except Exception:
 			ErrorDialog(_('Invalid Nickname'),
-						_('The nickname has not allowed characters.'))
+				_('The nickname has not allowed characters.'))
 			return
 		user, server, resource = helpers.decompose_jid(room_jid)
 		if not user or not server or resource:
 			ErrorDialog(_('Invalid group chat Jabber ID'),
-						_('The group chat Jabber ID has not allowed characters.'))
+				_('The group chat Jabber ID has not allowed characters.'))
 			return
 		try:
 			room_jid = helpers.parse_jid(room_jid)
 		except Exception:
 			ErrorDialog(_('Invalid group chat Jabber ID'),
-						_('The group chat Jabber ID has not allowed characters.'))
+				_('The group chat Jabber ID has not allowed characters.'))
 			return
 
 		if gajim.interface.msg_win_mgr.has_window(room_jid, self.account):
-			ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid, self.account)
+			ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
+				self.account)
 			if ctrl.type_id != message_control.TYPE_GC:
 				ErrorDialog(_('This is not a group chat'),
-							_('%s is not the name of a group chat.') % room_jid)
+					_('%s is not the name of a group chat.') % room_jid)
 				return
 		if room_jid in self.recently_groupchat:
 			self.recently_groupchat.remove(room_jid)
@@ -2026,13 +2055,13 @@ class JoinGroupchatWindow:
 		if len(self.recently_groupchat) > 10:
 			self.recently_groupchat = self.recently_groupchat[0:10]
 		gajim.config.set('recently_groupchat',
-						 ' '.join(self.recently_groupchat))
+			' '.join(self.recently_groupchat))
 
 		if self.xml.get_widget('auto_join_checkbutton').get_active():
 			# Add as bookmark, with autojoin and not minimized
 			name = gajim.get_nick_from_jid(room_jid)
 			gajim.interface.add_gc_bookmark(self.account, name, room_jid, '1', \
-											'0', password, nickname)
+				'0', password, nickname)
 
 		if self.automatic:
 			gajim.automatic_rooms[self.account][room_jid] = self.automatic
