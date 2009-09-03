@@ -401,6 +401,31 @@ class SignalObject(dbus.service.Object):
 					status, message)
 		return DBUS_BOOLEAN(False)
 
+	@dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
+	def set_priority(self, prio, account):
+		''' set_priority(prio, account). account is optional -
+		if not specified priority is changed for all accounts. that are synced
+		with global status'''
+		if account:
+			gajim.config.set_per('accounts', account, 'priority', prio)
+			show = gajim.SHOW_LIST[gajim.connections[account].connected]
+			status = gajim.connections[account].status
+			gobject.idle_add(gajim.connections[account].change_status, show,
+				status)
+		else:
+			# account not specified, so change prio of all accounts
+			for acc in gajim.contacts.get_accounts():
+				if not gajim.account_is_connected(acc):
+					continue
+				if not gajim.config.get_per('accounts', acc,
+				'sync_with_global_status'):
+					continue
+				gajim.config.set_per('accounts', acc, 'priority', prio)
+				show = gajim.SHOW_LIST[gajim.connections[acc].connected]
+				status = gajim.connections[acc].status
+				gobject.idle_add(gajim.connections[acc].change_status, show,
+					status)
+
 	@dbus.service.method(INTERFACE, in_signature='', out_signature='')
 	def show_next_pending_event(self):
 		'''Show the window(s) with next pending event in tabbed/group chats.'''

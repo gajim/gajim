@@ -114,6 +114,16 @@ class GajimRemote:
 		'"sync with global status" option set'), False)
 					]
 				],
+			'set_priority': [
+					_('Changes the priority of account or accounts'),
+					[
+						(_('priority'), _('priority you want to give to the account'),
+							True),
+						(_('account'), _('change the priority of the given account. '
+							'If not specified, change status of all accounts that have'
+							' "sync with global status" option set'), False)
+					]
+				],
 			'open_chat': [
 					_('Shows the chat dialog so that you can send messages to a contact'),
 					[
