@@ -107,7 +107,7 @@ def try_run(argv):
 	except Exception, e:
 		return _('Error executing "%(command)s": %(error)s') % {
 			'command': " ".join(argv),
-			'error': helpers.decode_string(e.message)}
+			'error': helpers.decode_string(str(e))}
 
 
 def latex_to_image(str_):
