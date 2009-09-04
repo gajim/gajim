@@ -291,9 +291,9 @@ class GroupchatControl(ChatControlBase):
 		self.event_box = self.xml.get_widget('banner_eventbox')
 
 		# set the position of the current hpaned
-		self.hpaned_position = gajim.config.get('gc-hpaned-position')
+		hpaned_position = gajim.config.get('gc-hpaned-position')
 		self.hpaned = self.xml.get_widget('hpaned')
-		self.hpaned.set_position(self.hpaned_position)
+		self.hpaned.set_position(hpaned_position)
 
 		self.list_treeview = self.xml.get_widget('list_treeview')
 		selection = self.list_treeview.get_selection()
@@ -434,8 +434,15 @@ class GroupchatControl(ChatControlBase):
 
 	def on_treeview_size_allocate(self, widget, allocation):
 		'''The MUC treeview has resized. Move the hpaned in all tabs to match'''
-		self.hpaned_position = self.hpaned.get_position()
-		self.hpaned.set_position(self.hpaned_position)
+		hpaned_position = self.hpaned.get_position()
+		for account in gajim.gc_connected:
+			for room_jid in [i for i in gajim.gc_connected[account] if \
+			gajim.gc_connected[account][i]]:
+				ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid, account)
+				if not ctrl:
+					ctrl = gajim.interface.minimized_controls[account][room_jid]
+				if ctrl:
+					ctrl.hpaned.set_position(hpaned_position)
 
 	def iter_contact_rows(self):
 		'''iterate over all contact rows in the tree model'''
@@ -1878,7 +1885,7 @@ class GroupchatControl(ChatControlBase):
 			gajim.contacts.remove_room(self.account, self.room_jid)
 			del gajim.gc_connected[self.account][self.room_jid]
 		# Save hpaned position
-		gajim.config.set('gc-hpaned-position', self.hpaned_position)
+		gajim.config.set('gc-hpaned-position', self.hpaned.get_position())
 		# remove all register handlers on wigets, created by self.xml
 		# to prevent circular references among objects
 		for i in self.handlers.keys():
