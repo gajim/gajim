@@ -64,6 +64,17 @@ except ImportError:
 #echo "{_('en'):'en'",$LANG"}"
 langs = {_('English'): 'en', _('Belarusian'): 'be', _('Bulgarian'): 'bg', _('Breton'): 'br', _('Czech'): 'cs', _('German'): 'de', _('Greek'): 'el', _('British'): 'en_GB', _('Esperanto'): 'eo', _('Spanish'): 'es', _('Basque'): 'eu', _('French'): 'fr', _('Croatian'): 'hr', _('Italian'): 'it', _('Norwegian (b)'): 'nb', _('Dutch'): 'nl', _('Norwegian'): 'no', _('Polish'): 'pl', _('Portuguese'): 'pt', _('Brazilian Portuguese'): 'pt_BR', _('Russian'): 'ru', _('Serbian'): 'sr', _('Slovak'): 'sk', _('Swedish'): 'sv', _('Chinese (Ch)'): 'zh_CN'}
 
+if gajim.config.get('use_speller') and HAS_GTK_SPELL:
+	# loop removing non-existent dictionaries
+	# iterating on a copy
+	tv = gtk.TextView()
+	spell = gtkspell.Spell(tv)
+	for lang in dict(langs):
+		try:
+			spell.set_language(langs[lang])
+		except OSError:
+			del langs[lang]
+
 ################################################################################
 class ChatControlBase(MessageControl):
 	'''A base class containing a banner, ConversationTextview, MessageTextView
@@ -292,32 +303,23 @@ class ChatControlBase(MessageControl):
 		self.msg_textview.grab_focus()
 
 	def set_speller(self):
-		try:
+		# now set the one the user selected
+		per_type = 'contacts'
+		if self.type_id == message_control.TYPE_GC:
+			per_type = 'rooms'
+		lang = gajim.config.get_per(per_type, self.contact.jid,
+			'speller_language')
+		if not lang:
+			# use the default one
 			lang = gajim.config.get('speller_language')
 			if not lang:
 				lang = gajim.LANG
-			spell = gtkspell.Spell(self.msg_textview, lang)
-			# loop removing non-existant dictionaries
-			# iterating on a copy
-			for lang in dict(langs):
-				try:
-					spell.set_language(langs[lang])
-				except OSError:
-					del langs[lang]
-			# now set the one the user selected
-			per_type = 'contacts'
-			if self.type_id == message_control.TYPE_GC:
-				per_type = 'rooms'
-			lang = gajim.config.get_per(per_type, self.contact.jid,
-				'speller_language')
-			if not lang:
-				# use the default one
-				lang = gajim.config.get('speller_language')
-			if lang:
+		if lang:
+			try:
+				gtkspell.Spell(self.msg_textview, lang)
 				self.msg_textview.lang = lang
-				spell.set_language(lang)
-		except (gobject.GError, RuntimeError, TypeError, OSError):
-			dialogs.AspellDictError(lang)
+			except (gobject.GError, RuntimeError, TypeError, OSError):
+				dialogs.AspellDictError(lang)
 
 	def on_banner_label_populate_popup(self, label, menu):
 		'''We override the default context menu and add our own menutiems'''
