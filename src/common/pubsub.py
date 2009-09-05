@@ -24,6 +24,8 @@
 import xmpp
 import gajim
 import connection_handlers
+import logging
+log = logging.getLogger('gajim.c.pubsub')
 
 class ConnectionPubSub:
 	def __init__(self):
@@ -144,7 +146,7 @@ class ConnectionPubSub:
 		self.connection.send(query)
 
 	def _PubSubCB(self, conn, stanza):
-		gajim.log.debug('_PubsubCB')
+		log.debug('_PubsubCB')
 		try:
 			cb, args, kwargs = self.__callbacks.pop(stanza.getID())
 			cb(conn, stanza, *args, **kwargs)
@@ -167,7 +169,7 @@ class ConnectionPubSub:
 				self._parse_bookmarks(storage, 'pubsub')
 
 	def _PubSubErrorCB(self, conn, stanza):
-		gajim.log.debug('_PubsubErrorCB')
+		log.debug('_PubsubErrorCB')
 		pubsub = stanza.getTag('pubsub')
 		if not pubsub:
 			return
