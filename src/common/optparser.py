@@ -659,9 +659,10 @@ class OptionsParser:
 	def update_config_to_01214(self):
 		for status in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
 		'offline']:
-			gajim.config.add_per('statusmsg', '_last_' + status)
-			gajim.config.set_per('statusmsg', '_last_' + status, 'message',
-				self.old_values['last_status_msg_' + status])
+			if 'last_status_msg_' + status in self.old_values:
+				gajim.config.add_per('statusmsg', '_last_' + status)
+				gajim.config.set_per('statusmsg', '_last_' + status, 'message',
+					self.old_values['last_status_msg_' + status])
 		gajim.config.set('version', '0.12.1.4')
 
 	def update_config_to_01215(self):
