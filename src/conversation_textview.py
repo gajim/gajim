@@ -179,6 +179,9 @@ class ConversationTextview(gobject.GObject):
 		gobject.GObject.__init__(self)
 		self.used_in_history_window = used_in_history_window
 
+		self.fc = FuzzyClock()
+
+
 		# no need to inherit TextView, use it as atrribute is safer
 		self.tv = HtmlTextView()
 		self.tv.html_hyperlink_handler = self.html_hyperlink_handler
@@ -1178,9 +1181,7 @@ class ConversationTextview(gobject.GObject):
 				self.last_time_printout = time.mktime(tim)
 				end_iter = buffer_.get_end_iter()
 				if gajim.config.get('print_time_fuzzy') > 0:
-					fc = FuzzyClock()
-					fc.setTime(time.strftime('%H:%M', tim))
-					ft = fc.getFuzzyTime(gajim.config.get('print_time_fuzzy'))
+					ft = self.fc.fuzzy_time(gajim.config.get('print_time_fuzzy'), tim)
 					tim_format = ft.decode(locale.getpreferredencoding())
 				else:
 					tim_format = self.get_time_to_show(tim)
