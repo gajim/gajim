@@ -194,6 +194,14 @@ class GroupchatControl(ChatControlBase):
 		self.is_continued=is_continued
 		self.is_anonymous = True
 
+		# Controls the state of autorejoin.
+		# None - autorejoin is neutral.
+		# False - autorejoin is to be prevented (gets reset to initial state in
+		#         got_connected()).
+		# int - autorejoin is being active and working (gets reset to initial
+		#       state in got_connected()).
+		self.autorejoin = None
+
 		self.actions_button = self.xml.get_widget('muc_window_actions_button')
 		id_ = self.actions_button.connect('clicked',
 			self.on_actions_button_clicked)
@@ -981,6 +989,11 @@ class GroupchatControl(ChatControlBase):
 		self.draw_banner_text()
 
 	def got_connected(self):
+		# Make autorejoin stop.
+		if self.autorejoin:
+			gobject.source_remove(self.autorejoin)
+		self.autorejoin = None
+
 		gajim.gc_connected[self.account][self.room_jid] = True
 		ChatControlBase.got_connected(self)
 		# We don't redraw the whole banner here, because only icon change
@@ -1014,6 +1027,20 @@ class GroupchatControl(ChatControlBase):
 		self._update_banner_state_image()
 		if self.parent_win:
 			self.parent_win.redraw_tab(self)
+
+		# Autorejoin stuff goes here.
+		if self.autorejoin is None:
+			ar_to = gajim.config.get('muc_autorejoin_timeout')
+			if ar_to:
+				self.autorejoin = gobject.timeout_add_seconds(ar_to, self.rejoin)
+
+	def rejoin(self):
+		if not self.autorejoin:
+			return False
+		password = gajim.gc_passwords.get(self.room_jid, '')
+		gajim.connections[self.account].join_gc(self.nick, self.room_jid,
+			password)
+		return True
 
 	def draw_roster(self):
 		self.list_treeview.get_model().clear()
@@ -1173,6 +1200,9 @@ class GroupchatControl(ChatControlBase):
 							'who': actor,
 							'reason': reason }
 					self.print_conversation(s, 'info', tim=tim)
+					if nick == self.nick and not gajim.config.get(
+					'muc_autorejoin_on_kick'):
+						self.autorejoin = False
 				elif '301' in statusCode:
 					if actor is None: # do not print 'banned by None'
 						s = _('%(nick)s has been banned: %(reason)s') % {
@@ -1184,6 +1214,8 @@ class GroupchatControl(ChatControlBase):
 							'who': actor,
 							'reason': reason }
 					self.print_conversation(s, 'info', tim=tim)
+					if nick == self.nick:
+						self.autorejoin = False
 				elif '303' in statusCode: # Someone changed his or her nick
 					if new_nick == self.new_nick or nick == self.nick:
 						# We changed our nick
@@ -1853,6 +1885,10 @@ class GroupchatControl(ChatControlBase):
 	def shutdown(self, status='offline'):
 		# destroy banner tooltip - bug #pygtk for that!
 		self.subject_tooltip.destroy()
+
+		# Preventing autorejoin from being activated
+		self.autorejoin = False
+
 		if self.room_jid in gajim.gc_connected[self.account] and \
 		gajim.gc_connected[self.account][self.room_jid]:
 			# Tell connection to note the date we disconnect to avoid duplicate
