@@ -262,8 +262,10 @@ class AdvancedConfigurationWindow(object):
 				if name == 'password':
 					value = _('Hidden')
 				else:
-					value = self.right_true_dict.get(option[OPT_VAL],
-						option[OPT_VAL])
+					if type_ == self.types['boolean']:
+						value = self.right_true_dict[option[OPT_VAL]]
+					else:
+						value = option[OPT_VAL]
 				self.model.append(parent, [name, value, type_])
 
 	def visible_func(self, model, treeiter):
