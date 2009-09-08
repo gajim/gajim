@@ -1,20 +1,36 @@
+# -*- coding:utf-8 -*-
+## src/common/optparser.py
 ##
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2003-2005 Vincent Hanquez <tab AT snarc.org>
+## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
+##                         Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2007 James Newton <redshodan AT gmail.com>
+##                    Brendan Taylor <whateley AT gmail.com>
+##                    Tomasz Melcer <liori AT exroot.org>
+##                    Stephan Erb <steve-e AT h3c.de>
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import os
 import locale
+import re
 from common import gajim
+from common import helpers
 
 import exceptions
 try:
@@ -32,49 +48,46 @@ class OptionsParser:
 		self.old_values = {}	# values that are saved in the file and maybe
 								# no longer valid
 
-	def read_line(self, line):
-		index = line.find(' = ')
-		var_str = line[0:index]
-		value_str = line[index + 3:-1]
-		
-		i_start = var_str.find('.')
-		i_end = var_str.rfind('.')
-		
-		if i_start == -1:
-			self.old_values[var_str] = value_str
-			gajim.config.set(var_str, value_str)
-		else:
-			optname = var_str[0:i_start]
-			key = var_str[i_start + 1:i_end]
-			subname = var_str[i_end + 1:]
-			gajim.config.add_per(optname, key)
-			gajim.config.set_per(optname, key, subname, value_str)
-		
 	def read(self):
 		try:
 			fd = open(self.__filename)
-		except:
+		except Exception:
 			if os.path.exists(self.__filename):
 				#we talk about a file
 				print _('error: cannot open %s for reading') % self.__filename
-			return
+			return False
 
 		new_version = gajim.config.get('version')
-		for line in fd.readlines():
+		new_version = new_version.split('-', 1)[0]
+		seen = set()
+		regex = re.compile(r"(?P<optname>[^.]+)(?:(?:\.(?P<key>.+))?\.(?P<subname>[^.]+))?\s=\s(?P<value>.*)")
+
+		for line in fd:
 			try:
 				line = line.decode('utf-8')
 			except UnicodeDecodeError:
 				line = line.decode(locale.getpreferredencoding())
-			self.read_line(line)
+			optname, key, subname, value = regex.match(line).groups()
+			if key is None:
+				self.old_values[optname] = value
+				gajim.config.set(optname, value)
+			else:
+				if (optname, key) not in seen:
+					gajim.config.add_per(optname, key)
+					seen.add((optname, key))
+				gajim.config.set_per(optname, key, subname, value)
+
 		old_version = gajim.config.get('version')
+		old_version = old_version.split('-', 1)[0]
 
 		self.update_config(old_version, new_version)
 		self.old_values = {} # clean mem
 
 		fd.close()
+		return True
 
 	def write_line(self, fd, opt, parents, value):
-		if value == None:
+		if value is None:
 			return
 		value = value[1]
 		# convert to utf8 before writing to file if needed
@@ -94,7 +107,7 @@ class OptionsParser:
 				s += p + '.'
 		s += opt
 		fd.write(s + ' = ' + value + '\n')
-	
+
 	def write(self):
 		(base_dir, filename) = os.path.split(self.__filename)
 		self.__tempfile = os.path.join(base_dir, '.' + filename)
@@ -111,7 +124,7 @@ class OptionsParser:
 			# win32 needs this
 			try:
 				os.remove(self.__filename)
-			except:
+			except Exception:
 				pass
 		try:
 			os.rename(self.__tempfile, self.__filename)
@@ -163,23 +176,49 @@ class OptionsParser:
 			self.update_config_to_01114()
 		if old < [0, 11, 1, 5] and new >= [0, 11, 1, 5]:
 			self.update_config_to_01115()
+		if old < [0, 11, 2, 1] and new >= [0, 11, 2, 1]:
+			self.update_config_to_01121()
+		if old < [0, 11, 4, 1] and new >= [0, 11, 4, 1]:
+			self.update_config_to_01141()
+		if old < [0, 11, 4, 2] and new >= [0, 11, 4, 2]:
+			self.update_config_to_01142()
+		if old < [0, 11, 4, 3] and new >= [0, 11, 4, 3]:
+			self.update_config_to_01143()
+		if old < [0, 11, 4, 4] and new >= [0, 11, 4, 4]:
+			self.update_config_to_01144()
+		if old < [0, 12, 0, 1] and new >= [0, 12, 0, 1]:
+			self.update_config_to_01201()
+		if old < [0, 12, 1, 1] and new >= [0, 12, 1, 1]:
+			self.update_config_to_01211()
+		if old < [0, 12, 1, 2] and new >= [0, 12, 1, 2]:
+			self.update_config_to_01212()
+		if old < [0, 12, 1, 3] and new >= [0, 12, 1, 3]:
+			self.update_config_to_01213()
+		if old < [0, 12, 1, 4] and new >= [0, 12, 1, 4]:
+			self.update_config_to_01214()
+		if old < [0, 12, 1, 5] and new >= [0, 12, 1, 5]:
+			self.update_config_to_01215()
+		if old < [0, 12, 3, 1] and new >= [0, 12, 3, 1]:
+			self.update_config_to_01231()
+		if old < [0, 12, 5, 1] and new >= [0, 12, 5, 1]:
+			self.update_config_to_01251()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
 
 		gajim.capscache.load_from_db()
-	
+
 	def update_config_x_to_09(self):
 		# Var name that changed:
 		# avatar_width /height -> chat_avatar_width / height
-		if self.old_values.has_key('avatar_width'):
+		if 'avatar_width' in self.old_values:
 			gajim.config.set('chat_avatar_width', self.old_values['avatar_width'])
-		if self.old_values.has_key('avatar_height'):
+		if 'avatar_height' in self.old_values:
 			gajim.config.set('chat_avatar_height', self.old_values['avatar_height'])
-		if self.old_values.has_key('use_dbus'):
+		if 'use_dbus' in self.old_values:
 			gajim.config.set('remote_control', self.old_values['use_dbus'])
 		# always_compact_view -> always_compact_view_chat / _gc
-		if self.old_values.has_key('always_compact_view'):
+		if 'always_compact_view' in self.old_values:
 			gajim.config.set('always_compact_view_chat',
 				self.old_values['always_compact_view'])
 			gajim.config.set('always_compact_view_gc',
@@ -188,7 +227,7 @@ class OptionsParser:
 		d = ['accounttextcolor', 'accountbgcolor', 'accountfont',
 			'accountfontattrs', 'grouptextcolor', 'groupbgcolor', 'groupfont',
 			'groupfontattrs', 'contacttextcolor', 'contactbgcolor', 'contactfont',
-			'contactfontattrs', 'bannertextcolor', 'bannerbgcolor', 'bannerfont', 
+			'contactfontattrs', 'bannertextcolor', 'bannerbgcolor', 'bannerfont',
 			'bannerfontattrs']
 		for theme_name in (_('grocery'), _('default')):
 			if theme_name not in gajim.config.get_per('themes'):
@@ -237,35 +276,35 @@ class OptionsParser:
 			)
 			con.commit()
 			gajim.logger.init_vars()
-		except sqlite.OperationalError, e:
+		except sqlite.OperationalError:
 			pass
 		con.close()
 
 	def update_config_09_to_010(self):
-		if self.old_values.has_key('usetabbedchat') and not \
+		if 'usetabbedchat' in self.old_values and not \
 		self.old_values['usetabbedchat']:
 			gajim.config.set('one_message_window', 'never')
-		if self.old_values.has_key('autodetect_browser_mailer') and \
+		if 'autodetect_browser_mailer' in self.old_values and \
 		self.old_values['autodetect_browser_mailer'] is True:
 			gajim.config.set('autodetect_browser_mailer', False)
-		if self.old_values.has_key('useemoticons') and \
+		if 'useemoticons' in self.old_values and \
 		not self.old_values['useemoticons']:
 			gajim.config.set('emoticons_theme', '')
-		if self.old_values.has_key('always_compact_view_chat') and \
+		if 'always_compact_view_chat' in self.old_values and \
 		self.old_values['always_compact_view_chat'] != 'False':
 			gajim.config.set('always_hide_chat_buttons', True)
-		if self.old_values.has_key('always_compact_view_gc') and \
+		if 'always_compact_view_gc' in self.old_values and \
 		self.old_values['always_compact_view_gc'] != 'False':
 			gajim.config.set('always_hide_groupchat_buttons', True)
-		
+
 		for account in gajim.config.get_per('accounts'):
 			proxies_str = gajim.config.get_per('accounts', account,
 				'file_transfer_proxies')
 			proxies = proxies_str.split(',')
 			for i in range(0, len(proxies)):
 				proxies[i] = proxies[i].strip()
-			for wrong_proxy in ['proxy65.jabber.autocom.pl', 
-				'proxy65.jabber.ccc.de']: 
+			for wrong_proxy in ('proxy65.jabber.autocom.pl',
+				'proxy65.jabber.ccc.de'):
 				if wrong_proxy in proxies:
 					proxies.remove(wrong_proxy)
 			if not 'transfer.jabber.freenet.de' in proxies:
@@ -279,14 +318,14 @@ class OptionsParser:
 		gajim.config.set('version', '0.10')
 
 	def update_config_to_01011(self):
-		if self.old_values.has_key('print_status_in_muc') and \
+		if 'print_status_in_muc' in self.old_values and \
 			self.old_values['print_status_in_muc'] in (True, False):
 			gajim.config.set('print_status_in_muc', 'in_and_out')
 		gajim.config.set('version', '0.10.1.1')
 
 	def update_config_to_01012(self):
 		# See [6456]
-		if self.old_values.has_key('emoticons_theme') and \
+		if 'emoticons_theme' in self.old_values and \
 			self.old_values['emoticons_theme'] == 'Disabled':
 			gajim.config.set('emoticons_theme', '')
 		gajim.config.set('version', '0.10.1.2')
@@ -309,7 +348,7 @@ class OptionsParser:
 				'''
 			)
 			con.commit()
-		except sqlite.OperationalError, e:
+		except sqlite.OperationalError:
 			pass
 		con.close()
 		gajim.config.set('version', '0.10.1.3')
@@ -333,7 +372,7 @@ class OptionsParser:
 			)
 
 			con.commit()
-		except:
+		except Exception:
 			pass
 		con.close()
 		gajim.config.set('version', '0.10.1.4')
@@ -356,11 +395,11 @@ class OptionsParser:
 		cur.close() # remove this in 2007 [pysqlite old versions need this]
 		con.close()
 		gajim.config.set('version', '0.10.1.5')
-		
+
 	def update_config_to_01016(self):
-		'''#2494 : Now we play gc_received_message sound even if 
+		'''#2494 : Now we play gc_received_message sound even if
 		notify_on_all_muc_messages is false. Keep precedent behaviour.'''
-		if self.old_values.has_key('notify_on_all_muc_messages') and \
+		if 'notify_on_all_muc_messages' in self.old_values and \
 		self.old_values['notify_on_all_muc_messages'] == 'False' and \
 		gajim.config.get_per('soundevents', 'muc_message_received', 'enabled'):
 			gajim.config.set_per('soundevents',\
@@ -370,43 +409,43 @@ class OptionsParser:
 	def update_config_to_01017(self):
 		'''trayicon_notification_on_new_messages ->
 		trayicon_notification_on_events '''
-		if self.old_values.has_key('trayicon_notification_on_new_messages'):
+		if 'trayicon_notification_on_new_messages' in self.old_values:
 			gajim.config.set('trayicon_notification_on_events',
 				self.old_values['trayicon_notification_on_new_messages'])
 		gajim.config.set('version', '0.10.1.7')
 
 	def update_config_to_01018(self):
 		'''chat_state_notifications -> outgoing_chat_state_notifications'''
-		if self.old_values.has_key('chat_state_notifications'):
+		if 'chat_state_notifications' in self.old_values:
 			gajim.config.set('outgoing_chat_state_notifications',
 				self.old_values['chat_state_notifications'])
 		gajim.config.set('version', '0.10.1.8')
 
 	def update_config_to_01101(self):
 		'''fill time_stamp from before_time and after_time'''
-		if self.old_values.has_key('before_time'):
+		if 'before_time' in self.old_values:
 			gajim.config.set('time_stamp', '%s%%X%s ' % (
 				self.old_values['before_time'], self.old_values['after_time']))
 		gajim.config.set('version', '0.11.0.1')
 
 	def update_config_to_01102(self):
 		'''fill time_stamp from before_time and after_time'''
-		if self.old_values.has_key('ft_override_host_to_send'):
+		if 'ft_override_host_to_send' in self.old_values:
 			gajim.config.set('ft_add_hosts_to_send',
 				self.old_values['ft_override_host_to_send'])
 		gajim.config.set('version', '0.11.0.2')
-	
+
 	def update_config_to_01111(self):
 		'''always_hide_chatbuttons -> compact_view'''
-		if self.old_values.has_key('always_hide_groupchat_buttons') and \
-		self.old_values.has_key('always_hide_chat_buttons'):
+		if 'always_hide_groupchat_buttons' in self.old_values and \
+		'always_hide_chat_buttons' in self.old_values:
 			gajim.config.set('compact_view', self.old_values['always_hide_groupchat_buttons'] and \
 			self.old_values['always_hide_chat_buttons'])
 		gajim.config.set('version', '0.11.1.1')
 
 	def update_config_to_01112(self):
 		'''gtk+ theme is renamed to default'''
-		if self.old_values.has_key('roster_theme') and \
+		if 'roster_theme' in self.old_values and \
 		self.old_values['roster_theme'] == 'gtk+':
 			gajim.config.set('roster_theme', _('default'))
 		gajim.config.set('version', '0.11.1.2')
@@ -430,7 +469,7 @@ class OptionsParser:
 				'''
 			)
 			con.commit()
-		except sqlite.OperationalError, e:
+		except sqlite.OperationalError:
 			pass
 		con.close()
 		gajim.config.set('version', '0.11.1.3')
@@ -440,7 +479,7 @@ class OptionsParser:
 		d = ['accounttextcolor', 'accountbgcolor', 'accountfont',
 			'accountfontattrs', 'grouptextcolor', 'groupbgcolor', 'groupfont',
 			'groupfontattrs', 'contacttextcolor', 'contactbgcolor', 'contactfont',
-			'contactfontattrs', 'bannertextcolor', 'bannerbgcolor', 'bannerfont', 
+			'contactfontattrs', 'bannertextcolor', 'bannerbgcolor', 'bannerfont',
 			'bannerfontattrs']
 		theme_name = _('default')
 		if theme_name not in gajim.config.get_per('themes'):
@@ -457,7 +496,7 @@ class OptionsParser:
 				for o in d:
 					gajim.config.set_per('themes', theme_name, o, theme[d.index(o)])
 		gajim.config.set('version', '0.11.1.4')
-	
+
 	def update_config_to_01115(self):
 		# copy&pasted from update_config_to_01013, possibly 'FIXME see #2812' applies too
 		back = os.getcwd()
@@ -472,7 +511,220 @@ class OptionsParser:
 				'''
 			)
 			con.commit()
-		except sqlite.OperationalError, e:
+		except sqlite.OperationalError:
 			pass
 		con.close()
 		gajim.config.set('version', '0.11.1.5')
+
+	def update_config_to_01121(self):
+		# remove old unencrypted secrets file
+		from common.configpaths import gajimpaths
+
+		new_file = gajimpaths['SECRETS_FILE']
+
+		old_file = os.path.dirname(new_file) + '/secrets'
+
+		if os.path.exists(old_file):
+			os.remove(old_file)
+
+		gajim.config.set('version', '0.11.2.1')
+
+	def update_config_to_01141(self):
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE IF NOT EXISTS caps_cache (
+					node TEXT,
+					ver TEXT,
+					ext TEXT,
+					data BLOB
+				);
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError:
+			pass
+		con.close()
+		gajim.config.set('version', '0.11.4.1')
+
+	def update_config_to_01142(self):
+		'''next_message_received sound event is splittedin 2 events'''
+		gajim.config.add_per('soundevents', 'next_message_received_focused')
+		gajim.config.add_per('soundevents', 'next_message_received_unfocused')
+		if gajim.config.get_per('soundevents', 'next_message_received'):
+			enabled = gajim.config.get_per('soundevents', 'next_message_received',
+				'enabled')
+			path = gajim.config.get_per('soundevents', 'next_message_received',
+				'path')
+			gajim.config.del_per('soundevents', 'next_message_received')
+			gajim.config.set_per('soundevents', 'next_message_received_focused',
+				'enabled', enabled)
+			gajim.config.set_per('soundevents', 'next_message_received_focused',
+				'path', path)
+		gajim.config.set('version', '0.11.1.2')
+
+	def update_config_to_01143(self):
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE IF NOT EXISTS rooms_last_message_time(
+					jid_id INTEGER PRIMARY KEY UNIQUE,
+					time INTEGER
+				);
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError:
+			pass
+		con.close()
+		gajim.config.set('version', '0.11.4.3')
+
+	def update_config_to_01144(self):
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript('DROP TABLE caps_cache;')
+			con.commit()
+		except sqlite.OperationalError:
+			pass
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE caps_cache (
+					hash_method TEXT,
+					hash TEXT,
+					data BLOB
+				);
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError, e:
+			pass
+		con.close()
+		gajim.config.set('version', '0.11.4.4')
+
+	def update_config_to_01201(self):
+		if 'uri_schemes' in self.old_values:
+			new_values = self.old_values['uri_schemes'].replace(' mailto', '').\
+				replace(' xmpp', '')
+			gajim.config.set('uri_schemes', new_values)
+		gajim.config.set('version', '0.12.0.1')
+
+	def update_config_to_01211(self):
+		if 'trayicon' in self.old_values:
+			if self.old_values['trayicon'] == 'False':
+				gajim.config.set('trayicon', 'never')
+			else:
+				gajim.config.set('trayicon', 'always')
+		gajim.config.set('version', '0.12.1.1')
+
+	def update_config_to_01212(self):
+		for opt in ('ignore_unknown_contacts', 'send_os_info',
+		'log_encrypted_sessions'):
+			if opt in self.old_values:
+				val = self.old_values[opt]
+				for account in gajim.config.get_per('accounts'):
+					gajim.config.set_per('accounts', account, opt, val)
+		gajim.config.set('version', '0.12.1.2')
+
+	def update_config_to_01213(self):
+		msgs = gajim.config.statusmsg_default
+		for msg_name in gajim.config.get_per('statusmsg'):
+			if msg_name in msgs:
+				gajim.config.set_per('statusmsg', msg_name, 'activity',
+					msgs[msg_name][1])
+				gajim.config.set_per('statusmsg', msg_name, 'subactivity',
+					msgs[msg_name][2])
+				gajim.config.set_per('statusmsg', msg_name, 'activity_text',
+					msgs[msg_name][3])
+				gajim.config.set_per('statusmsg', msg_name, 'mood',
+					msgs[msg_name][4])
+				gajim.config.set_per('statusmsg', msg_name, 'mood_text',
+					msgs[msg_name][5])
+		gajim.config.set('version', '0.12.1.3')
+
+	def update_config_to_01214(self):
+		for status in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
+		'offline']:
+			if 'last_status_msg_' + status in self.old_values:
+				gajim.config.add_per('statusmsg', '_last_' + status)
+				gajim.config.set_per('statusmsg', '_last_' + status, 'message',
+					self.old_values['last_status_msg_' + status])
+		gajim.config.set('version', '0.12.1.4')
+
+	def update_config_to_01215(self):
+		'''Remove hardcoded ../data/sounds from config'''
+		dirs = ('../data', gajim.gajimpaths.root, gajim.DATA_DIR)
+		for evt in gajim.config.get_per('soundevents'):
+			path = gajim.config.get_per('soundevents', evt ,'path')
+			# absolute and relative passes are necessary
+			path = helpers.strip_soundfile_path(path, dirs, abs=False)
+			path = helpers.strip_soundfile_path(path, dirs, abs=True)
+			gajim.config.set_per('soundevents', evt, 'path', path)
+		gajim.config.set('version', '0.12.1.5')
+
+	def update_config_to_01231(self):
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE IF NOT EXISTS roster_entry(
+					account_jid_id INTEGER,
+					jid_id INTEGER,
+					name TEXT,
+					subscription INTEGER,
+					ask BOOLEAN,
+					PRIMARY KEY (account_jid_id, jid_id)
+				);
+
+				CREATE TABLE IF NOT EXISTS roster_group(
+					account_jid_id INTEGER,
+					jid_id INTEGER,
+   					group_name TEXT,
+					PRIMARY KEY (account_jid_id, jid_id, group_name)
+				);
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError:
+			pass
+		con.close()
+		gajim.config.set('version', '0.12.3.1')
+
+	def update_config_to_01251(self):
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				ALTER TABLE unread_messages
+				ADD shown BOOLEAN default 0;
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError:
+			pass
+		con.close()
+		gajim.config.set('version', '0.12.5.1')
+
+# vim: se ts=3:

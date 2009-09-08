@@ -15,8 +15,8 @@ Welcome to Gajim and thank you for trying out our client.
 
 <h2>Runtime Requirements</h2>
 <ul>
-<li>python2.4 or higher</li>
-<li>pygtk2.6 or higher</li>
+<li>python2.5 or higher</li>
+<li>pygtk2.12 or higher</li>
 <li>python-libglade</li>
 <li>pysqlite2 (if you have python 2.5, you already have this)</li>
 </ul>
@@ -29,14 +29,18 @@ Gajim is a GTK+ app that loves GNOME. You can do 'make' so you don't require gno
 <h2>Optional Runtime Requirements</h2>
 <ul>
 <li><a href="http://pyopenssl.sourceforge.net/">PyOpenSSL</a> (python-pyopenssl package in Debian) for <em>secure</em> SSL/TLS. Python's default SSL is insecure, so this package is highly recommended!</li>
+<li>python-crypto to enable End to end encryption</li>
+<li>For idle module, libxss library</li>
 <li>For zeroconf (bonjour), the "enable link-local messaging" checkbox, you need dbus-glib, python-avahi</li>
-<li>dnsutils (or whatever package provides the nslookup binary) for SRV support; if you don't know what that is, you don't need it</li>
+<li>dnsutils (or whatever package provides the nslookup binary) for SRV support</li>
 <li>gtkspell and aspell-LANG where lang is your locale eg. en, fr etc</li>
 <li>GnomePythonExtras 2.10 or above (aka gnome-python-desktop) so you can avoid compiling trayicon and gtkspell</li>
 <li>gnome-python-desktop (for GnomeKeyring support)</li>
 <li>notification-daemon or notify-python (and D-Bus) to get cooler popups</li>
-<li>D-Bus running to have gajim-remote working</li>
+<li>D-Bus running to have gajim-remote working. Some distributions split dbus-x11, which is needed for dbus to work with Gajim. Version >= 0.60 is required.</li>
 <li>python-dbus bindings</li>
+<li>python-sexy to have clickable URLs in chat windows</li>
+<li>python-kerberos to use GSSAPI authentification. Note: version1.1 or higher is required</li>
 </ul>
 
 <p>
@@ -50,9 +54,8 @@ the xml lib that *comes* with python and not pyxml or whatever.
 <li>python-dev</li>
 <li>python-gtk2-dev</li>
 <li>libgtk2.0-dev aka. gtk2-devel</li>
-<li>libxss-dev (for idle detection module; some distributions such as Debian split xscreensaver)</li>
 <li>libgtkspell-dev	(for the gtkspell module)</li>
-<li>intltool</li>
+<li>intltool (>= 0.40.1)</li>
 </ul>
 
 <p>
@@ -92,7 +95,7 @@ You will need GNU autotools in order to install Gajim from svn. This includes:
 <li>automake &gt;= 1.8 </li>
 <li>autoconf &gt;= 2.59 </li>
 <li>libtool</li>
-<li>intltool-0.35.0 </li>
+<li>intltool-0.40.1 </li>
 <li>pkgconfig &gt;= 0.19</li>
 </ul>
 </p>
@@ -139,7 +142,7 @@ That is all, <strong>enjoy!</strong>
 <br/>
 <br/>
 <br/>
-(C) 2003-2006<br/>
+(C) 2003-200888888888<br/>
 The Gajim Team<br/>
 http://gajim.org<br/>
 <br/>

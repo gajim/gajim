@@ -1,14 +1,25 @@
+# -*- coding:utf-8 -*-
+## src/common/commands.py
 ##
-## Copyright (C) 2006 Gajim Team
+## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
+##                         Tomasz Melcer <liori AT exroot.org>
+## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
+##                    Stephan Erb <steve-e AT h3c.de>
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import xmpp
@@ -25,7 +36,7 @@ class AdHocCommand:
 	def isVisibleFor(samejid):
 		''' This returns True if that command should be visible and invokable
 		for others.
-		samejid - True when command is invoked by an entity with the same bare 
+		samejid - True when command is invoked by an entity with the same bare
 		jid.'''
 		return True
 
@@ -39,8 +50,7 @@ class AdHocCommand:
 		assert status in ('executing', 'completed', 'canceled')
 
 		response = request.buildReply('result')
-		cmd = response.addChild('command', {
-			'xmlns': xmpp.NS_COMMANDS,
+		cmd = response.addChild('command', namespace=xmpp.NS_COMMANDS, attrs={
 			'sessionid': self.sessionid,
 			'node': self.commandnode,
 			'status': status})
@@ -60,7 +70,7 @@ class AdHocCommand:
 			' bad-request'))
 
 	def cancel(self, request):
-		response, cmd = self.buildResponse(request, status = 'canceled')
+		response = self.buildResponse(request, status = 'canceled')[0]
 		self.connection.connection.send(response)
 		return False	# finish the session
 
@@ -77,7 +87,7 @@ class ChangeStatusCommand(AdHocCommand):
 		# first query...
 		response, cmd = self.buildResponse(request, defaultaction = 'execute',
 			actions = ['execute'])
-		
+
 		cmd.addChild(node = dataforms.SimpleDataForm(
 			title = _('Change status'),
 			instructions = _('Set the presence type and description'),
@@ -86,7 +96,7 @@ class ChangeStatusCommand(AdHocCommand):
 					var = 'presence-type',
 					label = 'Type of presence:',
 					options = [
-						(u'free-for-chat', _('Free for chat')),
+						(u'chat', _('Free for chat')),
 						(u'online', _('Online')),
 						(u'away', _('Away')),
 						(u'xa', _('Extended away')),
@@ -102,7 +112,7 @@ class ChangeStatusCommand(AdHocCommand):
 
 		# for next invocation
 		self.execute = self.changestatus
-		
+
 		return True	# keep the session
 
 	def changestatus(self, request):
@@ -110,24 +120,24 @@ class ChangeStatusCommand(AdHocCommand):
 		try:
 			form = dataforms.SimpleDataForm(extend = request.getTag('command').\
 				getTag('x'))
-		except:
+		except Exception:
 			self.badRequest(request)
 			return False
 
 		try:
 			presencetype = form['presence-type'].value
 			if not presencetype in \
-			('free-for-chat', 'online', 'away', 'xa', 'dnd', 'offline'):
+			('chat', 'online', 'away', 'xa', 'dnd', 'offline'):
 				self.badRequest(request)
 				return False
-		except:	# KeyError if there's no presence-type field in form or
+		except Exception:	# KeyError if there's no presence-type field in form or
 			# AttributeError if that field is of wrong type
 			self.badRequest(request)
 			return False
 
 		try:
 			presencedesc = form['presence-desc'].value
-		except:	# same exceptions as in last comment
+		except Exception:	# same exceptions as in last comment
 			presencedesc = u''
 
 		response, cmd = self.buildResponse(request, status = 'completed')
@@ -147,14 +157,15 @@ def find_current_groupchats(account):
 	import message_control
 	rooms = []
 	for gc_control in gajim.interface.msg_win_mgr.get_controls(
-	message_control.TYPE_GC):
+	message_control.TYPE_GC) + gajim.interface.minimized_controls[account].\
+	values():
 		acct = gc_control.account
 		# check if account is the good one
 		if acct != account:
 			continue
 		room_jid = gc_control.room_jid
 		nick = gc_control.nick
-		if gajim.gc_connected[acct].has_key(room_jid) and \
+		if room_jid in gajim.gc_connected[acct] and \
 		gajim.gc_connected[acct][room_jid]:
 			rooms.append((room_jid, nick,))
 	return rooms
@@ -162,7 +173,7 @@ def find_current_groupchats(account):
 
 class LeaveGroupchatsCommand(AdHocCommand):
 	commandnode = 'leave-groupchats'
-	commandname = 'Leave Groupchats'
+	commandname = _('Leave Groupchats')
 
 	@staticmethod
 	def isVisibleFor(samejid):
@@ -181,7 +192,7 @@ class LeaveGroupchatsCommand(AdHocCommand):
 		if not len(options):
 			response, cmd = self.buildResponse(request, status = 'completed')
 			cmd.addChild('note', {}, _('You have not joined a groupchat.'))
-		
+
 			self.connection.connection.send(response)
 			return False
 
@@ -199,7 +210,7 @@ class LeaveGroupchatsCommand(AdHocCommand):
 
 		# for next invocation
 		self.execute = self.leavegroupchats
-		
+
 		return True	# keep the session
 
 	def leavegroupchats(self, request):
@@ -207,23 +218,28 @@ class LeaveGroupchatsCommand(AdHocCommand):
 		try:
 			form = dataforms.SimpleDataForm(extend = request.getTag('command').\
 				getTag('x'))
-		except:
+		except Exception:
 			self.badRequest(request)
 			return False
 
 		try:
 			gc = form['groupchats'].values
-		except:	# KeyError if there's no presence-type field in form or
-			# AttributeError if that field is of wrong type
+		except Exception:	# KeyError if there's no groupchats in form
 			self.badRequest(request)
 			return False
 		account = self.connection.name
 		try:
 			for room_jid in gc:
-				gc_control = gajim.interface.msg_win_mgr.get_control(room_jid,
+				gc_control = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
 					account)
+				if not gc_control:
+					gc_control = gajim.interface.minimized_controls[account]\
+						[room_jid]
+					gc_control.shutdown()
+					gajim.interface.roster.remove_groupchat(room_jid, account)
+					continue
 				gc_control.parent_win.remove_tab(gc_control, None, force = True)
-		except:	# KeyError if there's no presence-type field in form or
+		except Exception:	# KeyError if there's no such room opened
 			self.badRequest(request)
 			return False
 		response, cmd = self.buildResponse(request, status = 'completed')
@@ -254,8 +270,8 @@ class ForwardMessagesCommand(AdHocCommand):
 		for jid in events:
 			for event in events[jid]:
 				self.connection.send_message(j, event.parameters[0], '',
-					type=event.type_, subject=event.parameters[1],
-					resource=resource, forward_from=jid)
+					type_=event.type_, subject=event.parameters[1],
+					resource=resource, forward_from=jid, delayed=event.time_)
 
 		# Inform other client of completion
 		response, cmd = self.buildResponse(request, status = 'completed')
@@ -288,6 +304,8 @@ class ConnectionCommands:
 		iq = iq_obj.buildReply('result')
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		q = iq.getTag('query')
+		# buildReply don't copy the node attribute. Re-add it
+		q.setAttr('node', xmpp.NS_COMMANDS)
 
 		for node, cmd in self.__commands.iteritems():
 			if cmd.isVisibleFor(self.isSameJID(jid)):
@@ -299,8 +317,8 @@ class ConnectionCommands:
 
 		self.connection.send(iq)
 
-	def commandQuery(self, con, iq_obj):
-		''' Send disco result for query for command (JEP-0050, example 6.).
+	def commandInfoQuery(self, con, iq_obj):
+		''' Send disco#info result for query for command (JEP-0050, example 6.).
 		Return True if the result was sent, False if not. '''
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		node = iq_obj.getTagAttr('query', 'node')
@@ -318,6 +336,22 @@ class ConnectionCommands:
 			for feature in cmd.commandfeatures:
 				q.addChild('feature', attrs = {'var': feature})
 
+			self.connection.send(iq)
+			return True
+
+		return False
+
+	def commandItemsQuery(self, con, iq_obj):
+		''' Send disco#items result for query for command.
+		Return True if the result was sent, False if not. '''
+		jid = helpers.get_full_jid_from_iq(iq_obj)
+		node = iq_obj.getTagAttr('query', 'node')
+
+		if node not in self.__commands: return False
+
+		cmd = self.__commands[node]
+		if cmd.isVisibleFor(self.isSameJID(jid)):
+			iq = iq_obj.buildReply('result')
 			self.connection.send(iq)
 			return True
 
@@ -389,3 +423,5 @@ class ConnectionCommands:
 				del self.__sessions[magictuple]
 
 			raise xmpp.NodeProcessed
+
+# vim: se ts=3:

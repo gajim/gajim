@@ -1,4 +1,4 @@
-SUBDIRS = glade emoticons pixmaps iconsets 
+SUBDIRS = glade emoticons pixmaps iconsets moods activities
 @INTLTOOL_DESKTOP_RULE@
 
 desktopdir = $(datadir)/applications
@@ -12,7 +12,7 @@ soundsdir = $(pkgdatadir)/data/sounds
 sounds_DATA = $(srcdir)/sounds/*.wav
 
 otherdir = $(pkgdatadir)/data/other
-other_DATA = other/servers.xml
+other_DATA = other/servers.xml other/cacerts.pem
 
 man_MANS = gajim.1 gajim-remote.1
 

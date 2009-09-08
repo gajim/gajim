@@ -1,15 +1,15 @@
 ##	common/zeroconf/connection_zeroconf.py
 ##
 ## Contributors for this file:
-##	- Yann Le Boulanger <asterix@lagaule.org>
+##	- Yann Leboulanger <asterix@lagaule.org>
 ##	- Nikos Kouremenos <nkour@jabber.org>
 ##	- Dimitur Kirov <dkirov@gmail.com>
 ##	- Travis Shirk <travis@pobox.com>
 ##  - Stefan Bethge <stefan@lanpartei.de>
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2003-2004 Yann Leboulanger <asterix@lagaule.org>
 ##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2006 Yann Leboulanger <asterix@lagaule.org>
 ##                    Vincent Hanquez <tab@snarc.org>
 ##                    Nikos Kouremenos <nkour@jabber.org>
 ##                    Dimitur Kirov <dkirov@gmail.com>
@@ -17,14 +17,19 @@
 ##                    Norman Rasmussen <norman@rasmussen.co.za>
 ##                    Stefan Bethge <stefan@lanpartei.de>
 ##
-## This program is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## This file is part of Gajim.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
 
@@ -41,9 +46,8 @@ import gobject
 from common import gajim
 from common import GnuPG
 from common.zeroconf import client_zeroconf
+from common.zeroconf import zeroconf
 from connection_handlers_zeroconf import *
-
-USE_GPG = GnuPG.USE_GPG
 
 class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	'''Connection class'''
@@ -56,16 +60,22 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.connected = 0 # offline
 		self.connection = None
 		self.gpg = None
+		self.USE_GPG = False
+		if gajim.HAVE_GPG:
+			self.USE_GPG = True
+			self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 		self.is_zeroconf = True
 		self.privacy_rules_supported = False
+		self.blocked_list = []
 		self.blocked_contacts = []
 		self.blocked_groups = []
+		self.blocked_all = False
 		self.status = ''
 		self.old_show = ''
 		self.priority = 0
-	
+
 		self.call_resolve_timeout = False
-		
+
 		self.time_to_reconnect = None
 		#self.new_account_info = None
 		self.bookmarks = []
@@ -78,23 +88,25 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.no_log_for = False
 
 		self.pep_supported = False
+		self.mood = {}
+		self.tune = {}
+		self.activity = {}
 		# Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
-		if USE_GPG:
-			self.gpg = GnuPG.GnuPG()
-			gajim.config.set('usegpg', True)
-		else:
-			gajim.config.set('usegpg', False)
-		
+		if gajim.HAVE_GPG:
+			self.USE_GPG = True
+			self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
+
 		self.get_config_values_or_default()
-		
+
 		self.muc_jid = {} # jid of muc server for each transport type
 		self.vcard_supported = False
+		self.private_storage_supported = False
 
 	def get_config_values_or_default(self):
-		''' get name, host, port from config, or 
+		''' get name, host, port from config, or
 		create zeroconf account with default values'''
-		
+
 		if not gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'name'):
 			gajim.log.debug('Creating zeroconf account')
 			gajim.config.add_per('accounts', gajim.ZEROCONF_ACC_NAME)
@@ -125,8 +137,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	# END __init__
 
 	def dispatch(self, event, data):
-		if gajim.handlers.has_key(event):
+		if event in gajim.handlers:
 			gajim.handlers[event](self.name, data)
+
 
 	def _reconnect(self):
 		# Do not try to reco while we are already trying
@@ -134,12 +147,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		gajim.log.debug('reconnect')
 
 #		signed = self.get_signed_msg(self.status)
-		self.connect(self.old_show, self.status)
+		self.disconnect()
+		self.change_status(self.old_show, self.status)
 
 	def quit(self, kill_core):
 		if kill_core and self.connected > 1:
 			self.disconnect()
-	
+
 	def disable_account(self):
 		self.disconnect()
 
@@ -153,17 +167,19 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def get_signed_msg(self, msg):
 		signed = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
-		if keyID and USE_GPG:
+		if keyID and self.USE_GPG:
 			use_gpg_agent = gajim.config.get('use_gpg_agent')
 			if self.connected < 2 and self.gpg.passphrase is None and \
-				not use_gpg_agent:
+			not use_gpg_agent:
 				# We didn't set a passphrase
 				self.dispatch('ERROR', (_('OpenPGP passphrase was not given'),
 					#%s is the account name here
 					_('You will be connected to %s without OpenPGP.') % self.name))
+				self.USE_GPG = False
 			elif self.gpg.passphrase is not None or use_gpg_agent:
 				signed = self.gpg.sign(msg, keyID)
 				if signed == 'BAD_PASSPHRASE':
+					self.USE_GPG = False
 					signed = ''
 					if self.connected < 2:
 						self.dispatch('BAD_PASSPHRASE', ())
@@ -182,12 +198,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				#XXX open chat windows don't get refreshed (full name), add that
 		return self.call_resolve_timeout
 
-	# callbacks called from zeroconf	
-	def _on_new_service(self,jid):
+	# callbacks called from zeroconf
+	def _on_new_service(self, jid):
 		self.roster.setItem(jid)
 		self.dispatch('ROSTER_INFO', (jid, self.roster.getName(jid), 'both', 'no', self.roster.getGroups(jid)))
 		self.dispatch('NOTIFY', (jid, self.roster.getStatus(jid), self.roster.getMessage(jid), 'local', 0, None, 0, None))
-	
+
 	def _on_remove_service(self, jid):
 		self.roster.delItem(jid)
 		# 'NOTIFY' (account, (jid, status, status message, resource, priority,
@@ -228,12 +244,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.get_config_values_or_default()
 		if not self.connection:
 			self.connection = client_zeroconf.ClientZeroconf(self)
-			if not self.connection.test_avahi():
+			if not zeroconf.test_zeroconf():
 				self.dispatch('STATUS', 'offline')
 				self.status = 'offline'
 				self.dispatch('CONNECTION_LOST',
 					(_('Could not connect to "%s"') % self.name,
-					_('Please check if Avahi is installed.')))
+					_('Please check if Avahi or Bonjour is installed.')))
 				self.disconnect()
 				return
 			result = self.connection.connect(show, msg)
@@ -264,7 +280,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 		# refresh all contacts data every five seconds
 		self.call_resolve_timeout = True
-		gobject.timeout_add(5000, self._on_resolve_timeout)
+		gobject.timeout_add_seconds(5, self._on_resolve_timeout)
 		return True
 
 	def disconnect(self, on_purpose = False):
@@ -313,12 +329,13 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				check = self.connection.announce()
 			else:
 				self.connected = STATUS_LIST.index(show)
+			self.dispatch('SIGNED_IN', ())
 
 		# 'disconnect'
 		elif show == 'offline' and self.connected:
 			self.disconnect()
 			self.time_to_reconnect = None
-			
+
 		# update status
 		elif show != 'offline' and self.connected:
 			was_invisible = self.connected == STATUS_LIST.index('invisible')
@@ -336,35 +353,47 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		if check:
 			self.dispatch('STATUS', show)
 		else:
-			# show notification that avahi or system bus is down	
+			# show notification that avahi or system bus is down
 			self.dispatch('STATUS', 'offline')
 			self.status = 'offline'
 			self.dispatch('CONNECTION_LOST',
 				(_('Could not change status of account "%s"') % self.name,
 				_('Please check if avahi-daemon is running.')))
-			
+
 	def get_status(self):
 		return STATUS_LIST[self.connected]
 
-	def send_message(self, jid, msg, keyID, type = 'chat', subject='',
-	chatstate = None, msg_id = None, composing_xep = None, resource = None, 
-	user_nick = None):
+	def send_message(self, jid, msg, keyID, type_='chat', subject='',
+	chatstate=None, msg_id=None, composing_xep=None, resource=None,
+	user_nick=None, xhtml=None, session=None, forward_from=None, form_node=None,
+	original_message=None, delayed=None, callback=None, callback_args=[]):
 		fjid = jid
 
+		if msg and not xhtml and gajim.config.get(
+		'rst_formatting_outgoing_messages'):
+			from common.rst_xhtml_generator import create_xhtml
+			xhtml = create_xhtml(msg)
 		if not self.connection:
 			return
 		if not msg and chatstate is None:
 			return
 
 		if self.status in ('invisible', 'offline'):
-			self.dispatch('MSGERROR', [unicode(jid), '-1', _('You are not connected or not visible to others. Your message could not be sent.'), None, None])
+			self.dispatch('MSGERROR', [unicode(jid), -1,
+				 _('You are not connected or not visible to others. Your message '
+				'could not be sent.'), None, None, session])
 			return
 
 		msgtxt = msg
 		msgenc = ''
-		if keyID and USE_GPG:
-			# encrypt
-			msgenc, error = self.gpg.encrypt(msg, [keyID])
+		if keyID and self.USE_GPG:
+			if keyID ==  'UNKNOWN':
+				error = _('Neither the remote presence is signed, nor a key was assigned.')
+			elif keyID.endswith('MISMATCH'):
+				error = _('The contact\'s key (%s) does not match the key assigned in Gajim.' % keyID[:8])
+			else:
+				# encrypt
+				msgenc, error = self.gpg.encrypt(msg, [keyID])
 			if msgenc and not error:
 				msgtxt = '[This message is encrypted]'
 				lang = os.getenv('LANG')
@@ -374,19 +403,20 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			else:
 				# Encryption failed, do not send message
 				tim = time.localtime()
-				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim))
-				return 3
+				self.dispatch('MSGNOTSENT', (jid, error, msgtxt, tim, session))
+				return
 
-		if type == 'chat':
-			msg_iq = common.xmpp.Message(to = fjid, body = msgtxt, typ = type)
+		if type_ == 'chat':
+			msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ=type_,
+				xhtml=xhtml)
 
 		else:
 			if subject:
-				msg_iq = common.xmpp.Message(to = fjid, body = msgtxt,
-					typ = 'normal', subject = subject)
+				msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ='normal',
+					subject=subject, xhtml=xhtml)
 			else:
-				msg_iq = common.xmpp.Message(to = fjid, body = msgtxt,
-					typ = 'normal')
+				msg_iq = common.xmpp.Message(to=fjid, body=msgtxt, typ='normal',
+					xhtml=xhtml)
 
 		if msgenc:
 			msg_iq.setTag(common.xmpp.NS_ENCRYPTED + ' x').setData(msgenc)
@@ -406,33 +436,69 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 						msg_id = ''
 					chatstate_node.setTagData('id', msg_id)
 				# when msgtxt, requests JEP-0022 composing notification
-				if chatstate is 'composing' or msgtxt: 
-					chatstate_node.addChild(name = 'composing') 
+				if chatstate is 'composing' or msgtxt:
+					chatstate_node.addChild(name = 'composing')
 
-		if not self.connection.send(msg_iq, msg != None):
-			return
+		if forward_from:
+			addresses = msg_iq.addChild('addresses',
+				namespace=common.xmpp.NS_ADDRESS)
+			addresses.addChild('address', attrs = {'type': 'ofrom',
+				'jid': forward_from})
 
-		no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
-		ji = gajim.get_jid_without_resource(jid)
-		if self.name not in no_log_for and ji not in no_log_for:
-			log_msg = msg
-			if subject:
-				log_msg = _('Subject: %s\n%s') % (subject, msg)
-			if log_msg:
-				if type == 'chat':
-					kind = 'chat_msg_sent'
-				else:
-					kind = 'single_msg_sent'
-				gajim.logger.write(kind, jid, log_msg)
-		
-		self.dispatch('MSGSENT', (jid, msg, keyID))
-		
+		# XEP-0203
+		if delayed:
+			our_jid = gajim.get_jid_from_account(self.name) + '/' + \
+				self.server_resource
+			timestamp = time.strftime('%Y-%m-%dT%TZ', time.gmtime(delayed))
+			msg_iq.addChild('delay', namespace=common.xmpp.NS_DELAY2,
+				attrs={'from': our_jid, 'stamp': timestamp})
+
+		if session:
+			session.last_send = time.time()
+			msg_iq.setThread(session.thread_id)
+
+			if session.enable_encryption:
+				msg_iq = session.encrypt_stanza(msg_iq)
+
+		def on_send_ok(id):
+			no_log_for = gajim.config.get_per('accounts', self.name, 'no_log_for')
+			ji = gajim.get_jid_without_resource(jid)
+			if session.is_loggable() and self.name not in no_log_for and\
+			ji not in no_log_for:
+				log_msg = msg
+				if subject:
+					log_msg = _('Subject: %(subject)s\n%(message)s') % \
+					{'subject': subject, 'message': msg}
+				if log_msg:
+					if type_ == 'chat':
+						kind = 'chat_msg_sent'
+					else:
+						kind = 'single_msg_sent'
+					gajim.logger.write(kind, jid, log_msg)
+
+			self.dispatch('MSGSENT', (jid, msg, keyID))
+
+			if callback:
+				callback(id, *callback_args)
+
+		def on_send_not_ok(reason):
+			reason += ' ' + _('Your message could not be sent.')
+			self.dispatch('MSGERROR', [jid, -1, reason, None, None, session])
+		ret = self.connection.send(msg_iq, msg is not None, on_ok=on_send_ok,
+			on_not_ok=on_send_not_ok)
+		if ret == -1:
+			# Contact Offline
+			self.dispatch('MSGERROR', [jid, -1, _('Contact is offline. Your message could not be sent.'), None, None, session])
+
+
 	def send_stanza(self, stanza):
 		# send a stanza untouched
 		if not self.connection:
 			return
+		if not isinstance(stanza, common.xmpp.Node):
+			stanza = common.xmpp.Protocol(node=stanza)
 		self.connection.send(stanza)
-	
+
 	def ack_subscribed(self, jid):
 		gajim.log.debug('This should not happen (ack_subscribed)')
 
@@ -455,11 +521,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	def unsubscribe_agent(self, agent):
 		gajim.log.debug('This should not happen (unsubscribe_agent)')
 
-	def update_contact(self, jid, name, groups):	
+	def update_contact(self, jid, name, groups):
 		if self.connection:
 			self.connection.getRoster().setItem(jid = jid, name = name,
 				groups = groups)
-	
+
 	def new_account(self, name, config, sync = False):
 		gajim.log.debug('This should not happen (new_account)')
 
@@ -480,18 +546,18 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
 	def get_bookmarks(self):
 		gajim.log.debug('This should not happen (get_bookmarks)')
-		
+
 	def store_bookmarks(self):
 		gajim.log.debug('This should not happen (store_bookmarks)')
-		
+
 	def get_metacontacts(self):
 		gajim.log.debug('This should not happen (get_metacontacts)')
-		
+
 	def send_agent_status(self, agent, ptype):
 		gajim.log.debug('This should not happen (send_agent_status)')
 
 	def gpg_passphrase(self, passphrase):
-		if USE_GPG:
+		if self.gpg:
 			use_gpg_agent = gajim.config.get('use_gpg_agent')
 			if use_gpg_agent:
 				self.gpg.passphrase = None
@@ -499,22 +565,34 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				self.gpg.passphrase = passphrase
 
 	def ask_gpg_keys(self):
-		if USE_GPG:
+		if self.gpg:
 			keys = self.gpg.get_keys()
 			return keys
 		return None
 
 	def ask_gpg_secrete_keys(self):
-		if USE_GPG:
+		if self.gpg:
 			keys = self.gpg.get_secret_keys()
 			return keys
 		return None
 
 	def _event_dispatcher(self, realm, event, data):
 		if realm == '':
-			if event == common.xmpp.transports.DATA_RECEIVED:
+			if event == common.xmpp.transports_nb.DATA_RECEIVED:
 				self.dispatch('STANZA_ARRIVED', unicode(data, errors = 'ignore'))
-			elif event == common.xmpp.transports.DATA_SENT:
+			elif event == common.xmpp.transports_nb.DATA_SENT:
 				self.dispatch('STANZA_SENT', unicode(data))
+			elif event == common.xmpp.transports.DATA_ERROR:
+				thread_id = data[1]
+				frm = unicode(data[0])
+				session = self.get_or_create_session(frm, thread_id)
+				self.dispatch('MSGERROR', [frm, -1,
+	            _('Connection to host could not be established: Timeout while '
+					'sending data.'), None, None, session])
+
+	def load_roster_from_db(self):
+		return
 
 # END ConnectionZeroconf
+
+# vim: se ts=3:

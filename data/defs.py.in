@@ -5,3 +5,5 @@ docdir = "@DOCDIR@"
 datadir = "@DATADIR@"
 
 version = "@VERSION@"
+
+localedir = "@LOCALEDIR@"

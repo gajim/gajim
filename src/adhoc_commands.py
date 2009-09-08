@@ -1,17 +1,26 @@
 # -*- coding: utf-8 -*-
-##	adhoc_commands.py
+## src/adhoc_commands.py
 ##
-## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
-##                    Nikos Kouremenos <nkour@jabber.org>
+## Copyright (C) 2006 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006-2007 Tomasz Melcer <liori AT exroot.org>
+## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
+##                    Stephan Erb <steve-e AT h3c.de>
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
 
 # FIXME: think if we need caching command list. it may be wrong if there will
 # be entities that often change the list, it may be slow to fetch it every time
@@ -35,7 +44,7 @@ class CommandWindow:
 
 	TODO: gtk 2.10 has a special wizard-widget, consider using it...'''
 
-	def __init__(self, account, jid):
+	def __init__(self, account, jid, commandnode=None):
 		'''Create new window.'''
 
 		# an account object
@@ -46,9 +55,10 @@ class CommandWindow:
 		self.commandlist=None	# a list of (commandname, commanddescription)
 
 		# command's data
-		self.commandnode = None
+		self.commandnode = commandnode
 		self.sessionid = None
 		self.dataform = None
+		self.allow_stage3_close = False
 
 		# retrieving widgets from xml
 		self.xml = gtkgui_helpers.get_glade('adhoc_commands_window.glade')
@@ -68,8 +78,12 @@ class CommandWindow:
 		self.data_form_widget.show()
 		self.sending_form_stage_vbox.pack_start(self.data_form_widget)
 
-		# setting initial stage
-		self.stage1()
+		if self.commandnode:
+			# Execute command
+			self.stage3()
+		else:
+			# setting initial stage
+			self.stage1()
 
 		# displaying the window
 		self.xml.signal_autoconnect(self)
@@ -105,7 +119,7 @@ class CommandWindow:
 		return self.stage_adhoc_commands_window_delete_event(self.window)
 
 	def __del__(self):
-		print "Object has been deleted."
+		print 'Object has been deleted.'
 
 # stage 1: waiting for command list
 	def stage1(self):
@@ -242,18 +256,20 @@ class CommandWindow:
 				self.window.destroy()
 			return False
 
-		dialog = dialogs.HigDialog(self.window, gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
-			gtk.BUTTONS_YES_NO, 'Cancel confirmation',
-			'You are in process of executing command. Do you really want to cancel it?')
-		dialog.popup()
-		if dialog.get_response()==gtk.RESPONSE_YES:
-			self.send_cancel()
-			if widget==self.window:
-				return False
-			else:
-				self.window.destroy()
+		if self.allow_stage3_close:
 			return False
-		return True
+
+		def on_yes(button):
+			self.send_cancel()
+			self.allow_stage3_close = True
+			self.window.destroy()
+
+		dialog = dialogs.HigDialog(self.window, gtk.DIALOG_DESTROY_WITH_PARENT | \
+			gtk.DIALOG_MODAL, gtk.BUTTONS_YES_NO, _('Cancel confirmation'),
+			_('You are in process of executing command. Do you really want to '
+			'cancel it?'), on_response_yes=on_yes)
+		dialog.popup()
+		return True # Block event, don't close window
 
 	def stage3_back_button_clicked(self, widget):
 		self.stage3_submit_form('prev')
@@ -281,13 +297,19 @@ class CommandWindow:
 		self.send_command(action)
 
 	def stage3_next_form(self, command):
-		assert isinstance(command, xmpp.Node)
+		if not isinstance(command, xmpp.Node):
+			self.stage5(error=_('Service sent malformed data'), senderror=True)
+			return
 
 		self.remove_pulsing()
 		self.sending_form_progressbar.hide()
 
 		if not self.sessionid:
 			self.sessionid = command.getAttr('sessionid')
+		elif self.sessionid != command.getAttr('sessionid'):
+			self.stage5(error=_('Service changed the session identifier.'),
+				senderror=True)
+			return
 
 		self.form_status = command.getAttr('status')
 
@@ -299,12 +321,11 @@ class CommandWindow:
 			try:
 				self.data_form_widget.data_form=self.dataform
 			except dataforms.Error:
-				# FIXME: translate
-				self.stage5(error='Service sent malformed data', senderror=True)
+				self.stage5(error=_('Service sent malformed data'), senderror=True)
 				return
 			self.data_form_widget.show()
 			if self.data_form_widget.title:
-				self.window.set_title("%s - Ad-hoc Commands - Gajim" % \
+				self.window.set_title('%s - Ad-hoc Commands - Gajim' % \
 					self.data_form_widget.title)
 		else:
 			self.data_form_widget.hide()
@@ -381,7 +402,7 @@ class CommandWindow:
 				error = errordesc.decode('utf-8')
 				del errorname, errordesc
 			except KeyError:	# when stanza doesn't have error description
-				error = 'Service returned an error.'
+				error = _('Service returned an error.')
 		elif error:
 			# we've got error message
 			pass
@@ -430,7 +451,7 @@ class CommandWindow:
 # handling xml stanzas
 	def request_command_list(self):
 		'''Request the command list. Change stage on delivery.'''
-		query = xmpp.Iq(typ='get', to=xmpp.JID(self.jid), xmlns=xmpp.NS_DISCO_ITEMS)
+		query = xmpp.Iq(typ='get', to=xmpp.JID(self.jid), queryNS=xmpp.NS_DISCO_ITEMS)
 		query.setQuerynode(xmpp.NS_COMMANDS)
 
 		def callback(response):
@@ -446,7 +467,7 @@ class CommandWindow:
 			# no commands => no commands stage
 			# commands => command selection stage
 			query = response.getTag('query')
-			if query:
+			if query and query.getAttr('node') == xmpp.NS_COMMANDS:
 				items = query.getTags('item')
 			else:
 				items = []
@@ -466,11 +487,8 @@ class CommandWindow:
 		assert action in ('execute', 'prev', 'next', 'complete')
 
 		stanza = xmpp.Iq(typ='set', to=self.jid)
-		cmdnode = stanza.addChild('command', attrs={
-				'xmlns':xmpp.NS_COMMANDS,
-				'node':self.commandnode,
-				'action':action
-			})
+		cmdnode = stanza.addChild('command', namespace=xmpp.NS_COMMANDS, attrs={
+			'node':self.commandnode, 'action':action})
 
 		if self.sessionid:
 			cmdnode.setAttr('sessionid', self.sessionid)
@@ -478,7 +496,7 @@ class CommandWindow:
 		if self.data_form_widget.data_form:
 #			cmdnode.addChild(node=dataforms.DataForm(tofill=self.data_form_widget.data_form))
 			# FIXME: simplified form to send
-			
+
 			cmdnode.addChild(node=self.data_form_widget.data_form)
 
 		def callback(response):
@@ -497,8 +515,7 @@ class CommandWindow:
 		if self.sessionid and self.account.connection:
 			# we already have sessionid, so the service sent at least one reply.
 			stanza = xmpp.Iq(typ='set', to=self.jid)
-			stanza.addChild('command', attrs={
-					'xmlns':xmpp.NS_COMMANDS,
+			stanza.addChild('command', namespace=xmpp.NS_COMMANDS, attrs={
 					'node':self.commandnode,
 					'sessionid':self.sessionid,
 					'action':'cancel'
@@ -509,3 +526,5 @@ class CommandWindow:
 			# we did not received any reply from service; FIXME: we should wait and
 			# then send cancel; for now we do nothing
 			pass
+
+# vim: se ts=3:

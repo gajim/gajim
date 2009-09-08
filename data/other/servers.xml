@@ -40,6 +40,9 @@
   <item jid="aszlig.net" name="">
     <active port="5222"/>
   </item>
+  <item jid="blabla.kz" name="">
+    <active port="5222"/>
+  </item>
   <item jid="bloodyxml.com" name="Hosted by Chote Networks (http://www.chote.com)">
     <active port="5222"/>
   </item>
@@ -70,7 +73,10 @@
   <item jid="foxalpha.de" name="">
     <active port="5222"/>
   </item>
-  <item jid="fritalk.com" name="French Jabber Server">
+  <item jid="fritalk.org" name="French Jabber Server">
+    <active port="5222"/>
+  </item>
+  <item jid="gnubox.eu" name="">
     <active port="5222"/>
   </item>
   <item jid="here.dk" name="Jabber server in Denmark">
@@ -83,6 +89,9 @@
     <active port='5222'/> 
   </item>
   <item jid="im.flosoft.biz" name="">
+    <active port="5222"/>
+  </item>
+  <item jid="im.toile-libre.org" name="">
     <active port="5222"/>
   </item>
   <item jid="ims.kelkoo.net" name="Server hosted by Kelkoo (France)">
@@ -160,10 +169,16 @@
   <item jid="jabber.i-pobox.net" name="Server in Germany">
     <active port="5222"/>
   </item>
+  <item jid="jabber.kiev.ua" name="Server in Ukrain (Kiev)">
+    <active port="5222"/>
+  </item>
   <item jid="jabber.killerbees.org.uk" name="">
     <active port="5222"/>
   </item>
   <item jid="jabber.linux.it" name="Jabber server in Italy">
+    <active port="5222"/>
+  </item>
+  <item jid="jabber.lutix.org" name="">
     <active port="5222"/>
   </item>
   <item jid="jabber.meta.net.nz" name="Jabber server in New Zealand">
@@ -235,6 +250,9 @@
     <active port="5222"/>
   </item>
   <item jid="jabber.turk-php.com" name="">
+    <active port="5222"/>
+  </item>
+  <item jid="jabber.tuxfamily.org" name="">
     <active port="5222"/>
   </item>
   <item jid="jabber.typhon.net" name="">

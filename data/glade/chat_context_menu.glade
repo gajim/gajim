@@ -135,7 +135,7 @@
   <child>
     <widget class="GtkImageMenuItem" id="add_to_roster_menuitem">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">_Add to Roster</property>
+      <property name="label" translatable="yes">_Add to Roster...</property>
       <property name="use_underline">True</property>
 
       <child internal-child="image">

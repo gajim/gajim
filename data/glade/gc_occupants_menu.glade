@@ -18,6 +18,20 @@
       </widget>
     </child>
     <child>
+      <widget class="GtkImageMenuItem" id="send_file_menuitem">
+        <property name="visible">True</property>
+        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+        <property name="label" translatable="yes">Send _File</property>
+        <property name="use_underline">True</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="menu-item-image4">
+            <property name="stock">gtk-save</property>
+            <property name="icon_size">1</property>
+          </widget>
+        </child>
+      </widget>
+    </child>
+    <child>
       <widget class="GtkMenuItem" id="group_chat_actions_menuitem">
         <property name="visible">True</property>
         <property name="label" translatable="yes">Occupant Actions</property>
@@ -88,20 +102,6 @@
       </widget>
     </child>
     <child>
-      <widget class="GtkImageMenuItem" id="send_file_menuitem">
-        <property name="visible">True</property>
-        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-        <property name="label" translatable="yes">Send _File</property>
-        <property name="use_underline">True</property>
-        <child internal-child="image">
-          <widget class="GtkImage" id="menu-item-image4">
-            <property name="stock">gtk-save</property>
-            <property name="icon_size">1</property>
-          </widget>
-        </child>
-      </widget>
-    </child>
-    <child>
       <widget class="GtkSeparatorMenuItem" id="separator6">
         <property name="visible">True</property>
       </widget>
@@ -121,7 +121,35 @@
       </widget>
     </child>
     <child>
-      <widget class="GtkSeparatorMenuItem" id="separator6">
+      <widget class="GtkImageMenuItem" id="block_menuitem">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">_Block</property>
+        <property name="use_underline">True</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="menu-item-image5">
+            <property name="visible">True</property>
+            <property name="stock">gtk-stop</property>
+            <property name="icon_size">1</property>
+          </widget>
+        </child>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkImageMenuItem" id="unblock_menuitem">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">_Unblock</property>
+        <property name="use_underline">True</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="menu-item-image6">
+            <property name="visible">True</property>
+            <property name="stock">gtk-stop</property>
+            <property name="icon_size">1</property>
+          </widget>
+        </child>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkSeparatorMenuItem" id="separator1">
         <property name="visible">True</property>
       </widget>
     </child>

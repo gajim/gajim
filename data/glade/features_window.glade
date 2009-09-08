@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.2.2 on Sat Jul  7 01:08:57 2007 by stephan@ThinkPad-->
+<!--Generated with glade3 3.4.1 on Sun Mar  2 00:51:06 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="features_window">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -66,6 +66,7 @@
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="wrap">True</property>
+                    <property name="selectable">True</property>
                   </widget>
                 </child>
               </widget>

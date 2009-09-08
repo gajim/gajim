@@ -68,7 +68,6 @@
 	      <property name="max_length">0</property>
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
-	      <property name="invisible_char">*</property>
 	      <property name="activates_default">False</property>
 	    </widget>
 	    <packing>
@@ -173,7 +172,6 @@
 		  <property name="max_length">0</property>
 		  <property name="text" translatable="yes"></property>
 		  <property name="has_frame">True</property>
-		  <property name="invisible_char">*</property>
 		  <property name="activates_default">True</property>
 		</widget>
 		<packing>
@@ -408,7 +406,6 @@
 		  <property name="max_length">0</property>
 		  <property name="text" translatable="yes"></property>
 		  <property name="has_frame">True</property>
-		  <property name="invisible_char">*</property>
 		  <property name="activates_default">True</property>
 		</widget>
 		<packing>
@@ -430,7 +427,6 @@
 		  <property name="max_length">0</property>
 		  <property name="text" translatable="yes">Gajim</property>
 		  <property name="has_frame">True</property>
-		  <property name="invisible_char">*</property>
 		  <property name="activates_default">False</property>
 		</widget>
 		<packing>
@@ -812,7 +808,6 @@
 				  <property name="max_length">0</property>
 				  <property name="text" translatable="yes"></property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <signal name="changed" handler="on_custom_host_entry_changed" last_modification_time="Mon, 13 Jun 2005 10:44:25 GMT"/>
 				</widget>
@@ -857,7 +852,6 @@
 				  <property name="max_length">0</property>
 				  <property name="text">5222</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">6</property>
 				  <signal name="changed" handler="on_custom_port_entry_changed" last_modification_time="Mon, 13 Jun 2005 10:44:32 GMT"/>
@@ -1092,7 +1086,6 @@
 				  <property name="max_length">0</property>
 				  <property name="text" translatable="yes"></property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				</widget>
 				<packing>

@@ -76,7 +76,6 @@
 	      <property name="max_length">0</property>
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
-	      <property name="invisible_char">*</property>
 	      <property name="activates_default">False</property>
 	      <signal name="changed" handler="on_advanced_entry_changed" last_modification_time="Wed, 27 Apr 2005 11:58:56 GMT"/>
 	    </widget>

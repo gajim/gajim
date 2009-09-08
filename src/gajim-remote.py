@@ -1,32 +1,43 @@
-#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+## src/gajim-remote.py
 ##
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2005 Dimitur Kirov <dkirov@gmail.com>
+## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
+##                         Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006 Junglecow <junglecow AT gmail.com>
+##                    Travis Shirk <travis AT pobox.com>
+## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 # gajim-remote help will show you the D-BUS API of Gajim
 
 import sys
 import locale
+import urllib
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
 from common import exceptions
-from common import i18n
+from common import i18n # This installs _() function
 
 try:
 	PREFERRED_ENCODING = locale.getpreferredencoding()
-except:
+except Exception:
 	PREFERRED_ENCODING = 'UTF-8'
 
 def send_error(error_message):
@@ -38,7 +49,9 @@ try:
 	import dbus
 	import dbus.service
 	import dbus.glib
-except:
+	# test if dbus-x11 is installed
+	bus = dbus.SessionBus()
+except Exception:
 	print str(exceptions.DbusNotSupported())
 	sys.exit(1)
 
@@ -51,7 +64,7 @@ BASENAME = 'gajim-remote'
 class GajimRemote:
 
 	def __init__(self):
-		self.argv_len = len(sys.argv) 
+		self.argv_len = len(sys.argv)
 		# define commands dict. Prototype :
 		# {
 		#	'command': [comment, [list of arguments] ]
@@ -65,14 +78,14 @@ class GajimRemote:
 					_('Shows a help on specific command'),
 					[
 						#User gets help for the command, specified by this parameter
-						(_('command'), 
+						(_('command'),
 						_('show help on command'), False)
 					]
-				], 
+				],
 			'toggle_roster_appearance' : [
 					_('Shows or hides the roster window'),
 					[]
-				], 
+				],
 			'show_next_pending_event': [
 					_('Pops up a window with the next pending event'),
 					[]
@@ -85,35 +98,48 @@ class GajimRemote:
 							False)
 					]
 
-				],	
+				],
 			'list_accounts': [
 					_('Prints a list of registered accounts'),
 					[]
-				], 
+				],
 			'change_status': [
 					_('Changes the status of account or accounts'),
 					[
 #offline, online, chat, away, xa, dnd, invisible should not be translated
-						(_('status'), _('one of: offline, online, chat, away, xa, dnd, invisible '), True), 
-						(_('message'), _('status message'), False), 
+						(_('status'), _('one of: offline, online, chat, away, xa, dnd, invisible '), True),
+						(_('message'), _('status message'), False),
 						(_('account'), _('change status of account "account". '
 		'If not specified, try to change status of all accounts that have '
 		'"sync with global status" option set'), False)
 					]
 				],
-			'open_chat': [ 
-					_('Shows the chat dialog so that you can send messages to a contact'), 
+			'set_priority': [
+					_('Changes the priority of account or accounts'),
+					[
+						(_('priority'), _('priority you want to give to the account'),
+							True),
+						(_('account'), _('change the priority of the given account. '
+							'If not specified, change status of all accounts that have'
+							' "sync with global status" option set'), False)
+					]
+				],
+			'open_chat': [
+					_('Shows the chat dialog so that you can send messages to a contact'),
 					[
 						('jid', _('JID of the contact that you want to chat with'),
-							True), 
+							True),
 						(_('account'), _('if specified, contact is taken from the '
-						'contact list of this account'), False)
+							'contact list of this account'), False),
+						(_('message'),
+							_('message content. The account must be specified or ""'),
+							False)
 					]
 				],
 			'send_chat_message':[
 					_('Sends new chat message to a contact in the roster. Both OpenPGP key '
 					'and account are optional. If you want to set only \'account\', '
-					'without \'OpenPGP key\', just set \'OpenPGP key\' to \'\'.'), 
+					'without \'OpenPGP key\', just set \'OpenPGP key\' to \'\'.'),
 					[
 						('jid', _('JID of the contact that will receive the message'), True),
 						(_('message'), _('message contents'), True),
@@ -126,7 +152,7 @@ class GajimRemote:
 			'send_single_message':[
 					_('Sends new single message to a contact in the roster. Both OpenPGP key '
 					'and account are optional. If you want to set only \'account\', '
-					'without \'OpenPGP key\', just set \'OpenPGP key\' to \'\'.'), 
+					'without \'OpenPGP key\', just set \'OpenPGP key\' to \'\'.'),
 					[
 						('jid', _('JID of the contact that will receive the message'), True),
 						(_('subject'), _('message subject'), True),
@@ -136,9 +162,9 @@ class GajimRemote:
 						(_('account'), _('if specified, the message will be sent '
 							'using this account'), False),
 					]
-				], 
+				],
 			'send_groupchat_message':[
-					_('Sends new message to a groupchat you\'ve joined.'), 
+					_('Sends new message to a groupchat you\'ve joined.'),
 					[
 						('room_jid', _('JID of the room that will receive the message'), True),
 						(_('message'), _('message contents'), True),
@@ -147,13 +173,13 @@ class GajimRemote:
 					]
 				],
 			'contact_info': [
-					_('Gets detailed info on a contact'), 
+					_('Gets detailed info on a contact'),
 					[
 						('jid', _('JID of the contact'), True)
 					]
 				],
 			'account_info': [
-					_('Gets detailed info on a account'), 
+					_('Gets detailed info on a account'),
 					[
 						('account', _('Name of the account'), True)
 					]
@@ -180,8 +206,8 @@ class GajimRemote:
 				],
 			'prefs_del': [
 					_('Deletes a preference item'),
-					[ 
-						(_('key'), _('name of the preference to be deleted'), True) 
+					[
+						(_('key'), _('name of the preference to be deleted'), True)
 					]
 				],
 			'prefs_store': [
@@ -191,7 +217,7 @@ class GajimRemote:
 				],
 			'remove_contact': [
 					_('Removes contact from roster'),
-					[ 
+					[
 						('jid', _('JID of the contact'), True),
 						(_('account'), _('if specified, contact is taken from the '
 							'contact list of this account'), False)
@@ -200,7 +226,7 @@ class GajimRemote:
 				],
 			'add_contact': [
 					_('Adds contact to roster'),
-					[ 
+					[
 						(_('jid'), _('JID of the contact'), True),
 						(_('account'), _('Adds new contact to this account'), False)
 					]
@@ -209,16 +235,16 @@ class GajimRemote:
 			'get_status': [
 				_('Returns current status (the global one unless account is specified)'),
 					[
-						(_('account'), _(''), False)
+						(_('account'), '', False)
 					]
 				],
 
 			'get_status_message': [
-				_('Returns current status message(the global one unless account is specified)'),
+				_('Returns current status message (the global one unless account is specified)'),
 					[
-						(_('account'), _(''), False)
+						(_('account'), '', False)
 					]
-				],				
+				],
 
 			'get_unread_msgs_number': [
 				_('Returns number of unread messages'),
@@ -231,7 +257,7 @@ class GajimRemote:
 					]
 				],
 			'send_xml': [
-					_('Sends custom XML'), 
+					_('Sends custom XML'),
 					[
 						('xml', _('XML to send'), True),
 						('account', _('Account in which the xml will be sent; '
@@ -242,23 +268,36 @@ class GajimRemote:
 			'handle_uri': [
 					_('Handle a xmpp:/ uri'),
 					[
-						(_('uri'), _(''), True),
-						(_('account'), _(''), False)
+						(_('uri'), _('URI to handle'), True),
+						(_('account'), _('Account in which you want to handle it'),
+							False),
+						(_('message'), _('Message content'), False)
 					]
 				],
 			'join_room': [
 					_('Join a MUC room'),
 					[
-						(_('room'), _(''), True),
-						(_('nick'), _(''), False),
-						(_('password'), _(''), False),
-						(_('account'), _(''), False)
+						(_('room'), _('Room JID'), True),
+						(_('nick'), _('Nickname to use'), False),
+						(_('password'), _('Password to enter the room'), False),
+						(_('account'), _('Account from which you want to enter the '
+							'room'), False)
 					]
+				],
+			'check_gajim_running':[
+					_('Check if Gajim is running'),
+					[]
+				],
+			'toggle_ipython' : [
+					_('Shows or hides the ipython window'),
+					[]
 				],
 
 			}
-		if self.argv_len  < 2 or \
-			sys.argv[1] not in self.commands.keys(): # no args or bad args
+
+		self.sbus = None
+		if self.argv_len < 2 or sys.argv[1] not in self.commands.keys():
+			# no args or bad args
 			send_error(self.compose_help())
 		self.command = sys.argv[1]
 		if self.command == 'help':
@@ -269,6 +308,9 @@ class GajimRemote:
 			sys.exit(0)
 		if self.command == 'handle_uri':
 			self.handle_uri()
+		if self.command == 'check_gajim_running':
+			print self.check_gajim_running()
+			sys.exit(0)
 		self.init_connection()
 		self.check_arguments()
 
@@ -311,11 +353,10 @@ class GajimRemote:
 				for account_dict in res:
 					print self.print_info(0, account_dict, True)
 			elif self.command == 'prefs_list':
-				pref_keys = res.keys()
-				pref_keys.sort()
+				pref_keys = sorted(res.keys())
 				for pref_key in pref_keys:
 					result = '%s = %s' % (pref_key, res[pref_key])
-					if isinstance(result, unicode):	
+					if isinstance(result, unicode):
 						print result.encode(PREFERRED_ENCODING)
 					else:
 						print result
@@ -324,14 +365,32 @@ class GajimRemote:
 			elif res:
 				print unicode(res).encode(PREFERRED_ENCODING)
 
+	def check_gajim_running(self):
+		if not self.sbus:
+			try:
+				self.sbus = dbus.SessionBus()
+			except Exception:
+				raise exceptions.SessionBusNotPresent
+
+		test = False
+		if hasattr(self.sbus, 'name_has_owner'):
+			if self.sbus.name_has_owner(SERVICE):
+				test = True
+		elif dbus.dbus_bindings.bus_name_has_owner(self.sbus.get_connection(),
+		SERVICE):
+			test = True
+		return test
+
 	def init_connection(self):
 		''' create the onnection to the session dbus,
 		or exit if it is not possible '''
 		try:
 			self.sbus = dbus.SessionBus()
-		except:
+		except Exception:
 			raise exceptions.SessionBusNotPresent
 
+		if not self.check_gajim_running():
+			send_error(_('It seems Gajim is not running. So you can\'t use gajim-remote.'))
 		obj = self.sbus.get_object(SERVICE, OBJ_PATH)
 		interface = dbus.Interface(obj, INTERFACE)
 
@@ -341,54 +400,41 @@ class GajimRemote:
 	def make_arguments_row(self, args):
 		''' return arguments list. Mandatory arguments are enclosed with:
 		'<', '>', optional arguments - with '[', ']' '''
-		str = ''
-		for argument in args:
-			str += ' '
-			if argument[2]:
-				str += '<'
+		s = ''
+		for arg in args:
+			if arg[2]:
+				s += ' <' + arg[0] + '>'
 			else:
-				str += '['
-			str += argument[0]
-			if argument[2]:
-				str += '>'
-			else:
-				str += ']'
-		return str
+				s += ' [' + arg[0] + ']'
+		return s
 
 	def help_on_command(self, command):
 		''' return help message for a given command '''
 		if command in self.commands:
 			command_props = self.commands[command]
 			arguments_str = self.make_arguments_row(command_props[1])
-			str = _('Usage: %s %s %s \n\t %s') % (BASENAME, command, 
-					arguments_str, command_props[0])
+			str_ = _('Usage: %(basename)s %(command)s %(arguments)s \n\t %(help)s')\
+				% {'basename': BASENAME, 'command': command,
+				'arguments': arguments_str, 'help': command_props[0]}
 			if len(command_props[1]) > 0:
-				str += '\n\n' + _('Arguments:') + '\n'
+				str_ += '\n\n' + _('Arguments:') + '\n'
 				for argument in command_props[1]:
-					str += ' ' +  argument[0] + ' - ' + argument[1] + '\n'
-			return str
+					str_ += ' ' + argument[0] + ' - ' + argument[1] + '\n'
+			return str_
 		send_error(_('%s not found') % command)
 
 	def compose_help(self):
 		''' print usage, and list available commands '''
-		str = _('Usage: %s command [arguments]\nCommand is one of:\n' ) % BASENAME
-		commands = self.commands.keys()
-		commands.sort()
-		for command in commands:
-			str += '  ' + command 
-			for argument in self.commands[command][1]:
-				str += ' '
-				if argument[2]:
-					str += '<'
+		s = _('Usage: %s command [arguments]\nCommand is one of:\n' ) % BASENAME
+		for command in sorted(self.commands):
+			s += '  ' + command
+			for arg in self.commands[command][1]:
+				if arg[2]:
+					s += ' <' + arg[0] + '>'
 				else:
-					str += '['
-				str += argument[0]
-				if argument[2]:
-					str += '>'
-				else:
-					str += ']'
-			str += '\n'
-		return str
+					s += ' [' + arg[0] + ']'
+			s += '\n'
+		return s
 
 	def print_info(self, level, prop_dict, encode_return = False):
 		''' return formated string from data structure '''
@@ -435,7 +481,7 @@ class GajimRemote:
 		if (encode_return):
 			try:
 				ret_str = ret_str.encode(PREFERRED_ENCODING)
-			except:
+			except Exception:
 				pass
 		return ret_str
 
@@ -445,12 +491,14 @@ class GajimRemote:
 		args = self.commands[self.command][1]
 		if len(args) < argv_len:
 			send_error(_('Too many arguments. \n'
-				'Type "%s help %s" for more info') % (BASENAME, self.command))
+				'Type "%(basename)s help %(command)s" for more info') % {
+				'basename': BASENAME, 'command': self.command})
 		if len(args) > argv_len:
 			if args[argv_len][2]:
-				send_error(_('Argument "%s" is not specified. \n'
-					'Type "%s help %s" for more info') % 
-					(args[argv_len][0], BASENAME, self.command))
+				send_error(_('Argument "%(arg)s" is not specified. \n'
+					'Type "%(basename)s help %(command)s" for more info') %
+					{'arg': args[argv_len][0], 'basename': BASENAME,
+					'command': self.command})
 		self.arguments = []
 		i = 0
 		for arg in sys.argv[2:]:
@@ -465,19 +513,49 @@ class GajimRemote:
 		self.arguments += ['']*(len(args)-i)
 
 	def handle_uri(self):
-		if not sys.argv[2:][0].startswith('xmpp:'):
+		if not sys.argv[2].startswith('xmpp:'):
 			send_error(_('Wrong uri'))
 		sys.argv[2] = sys.argv[2][5:]
-		uri = sys.argv[2:][0]
+		uri = sys.argv[2]
 		if not '?' in uri:
 			self.command = sys.argv[1] = 'open_chat'
 			return
+		if 'body=' in uri:
+			# Open chat window and paste the text in the input message dialog
+			self.command = sys.argv[1] = 'open_chat'
+			message = uri.split('body=')
+			message = message[1].split(';')[0]
+			try:
+				message = urllib.unquote(message)
+			except UnicodeDecodeError:
+				pass
+			sys.argv[2] = uri.split('?')[0]
+			if len(sys.argv) == 4:
+				# jid in the sys.argv
+				sys.argv.append(message)
+			else:
+				sys.argv.append('')
+				sys.argv.append(message)
+				sys.argv[3] = ''
+				sys.argv[4] = message
+			return
 		(jid, action) = uri.split('?', 1)
+		try:
+			jid = urllib.unquote(jid)
+		except UnicodeDecodeError:
+			pass
 		sys.argv[2] = jid
 		if action == 'join':
 			self.command = sys.argv[1] = 'join_room'
+			# Move account parameter from position 3 to 5
+			sys.argv.append('')
+			sys.argv.append(sys.argv[3])
+			sys.argv[3] = ''
 			return
-			
+		if action.startswith('roster'):
+			# Add contact to roster
+			self.command = sys.argv[1] = 'add_contact'
+			return
 		sys.exit(0)
 
 	def call_remote_method(self):
@@ -493,3 +571,5 @@ class GajimRemote:
 
 if __name__ == '__main__':
 	GajimRemote()
+
+# vim: se ts=3:

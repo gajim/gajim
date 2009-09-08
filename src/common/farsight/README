@@ -1,3 +1,0 @@
-This directory contains python bindings for farsight, a gstreamer-based
-library that allows handling different kinds of audio/video conferencing
-protocols. These bindings are neither official nor finished.

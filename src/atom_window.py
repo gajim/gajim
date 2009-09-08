@@ -1,20 +1,24 @@
-##	atom_window.py - a window to display atom entries from pubsub.
+# -*- coding:utf-8 -*-
+## src/atom_window.py
 ##
-## For now greatly simplified, supports only simple feeds like the
-## one from pubsub.com.
+## Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>
+## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
-## Copyright (C) 2006-2007 Yann Le Boulanger <asterix@lagaule.org>
-## Copyright (C) 2007 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2006-2007 Liori (I think) put ur self here please
+## This file is part of Gajim.
 ##
-## This program is free software; you can redistribute it and/or modify
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 
@@ -37,6 +41,10 @@ class AtomWindow:
 			cls.window = AtomWindow()
 		else:
 			cls.window.updateCounter()
+
+	@classmethod
+	def windowClosed(cls):
+		cls.window = None
 
 	def __init__(self):
 		''' Create new window... only if we have anything to show. '''
@@ -64,7 +72,7 @@ class AtomWindow:
 		assert len(self.__class__.entries)>0
 
 		newentry = self.__class__.entries.pop(0)
-		
+
 		# fill the fields
 		if newentry.feed_link is not None:
 			self.feed_title_label.set_markup(
@@ -97,18 +105,18 @@ class AtomWindow:
 		''' We display number of events on the top of window, sometimes it needs to be
 		changed...'''
 		count = len(self.__class__.entries)
-		# TODO: translate
 		if count>0:
-			self.new_entry_label.set_text( \
-				'You have received new entries (and %(count)d not displayed):' % \
+			self.new_entry_label.set_text(
+				_('You have received new entries (and %(count)d not displayed):') %\
 				{'count': count})
 			self.next_button.set_sensitive(True)
 		else:
-			self.new_entry_label.set_text('You have received new entry:')
+			self.new_entry_label.set_text(_('You have received new entry:'))
 			self.next_button.set_sensitive(False)
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
+		self.windowClosed()
 
 	def on_next_button_clicked(self, widget):
 		self.displayNextEntry()
@@ -128,3 +136,5 @@ class AtomWindow:
 			if uri is not None:
 				helpers.launch_browser_mailer('url', uri)
 		return True
+
+# vim: se ts=3:

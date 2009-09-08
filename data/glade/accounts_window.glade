@@ -1,12 +1,14 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--*- mode: xml -*-->
+<?xml version="1.0"?>
 <glade-interface>
+  <!-- interface-requires gtk+ 2.12 -->
+  <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="accounts_window">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="border_width">12</property>
-    <property name="default_width">600</property>
+    <property name="title" translatable="yes">Accounts</property>
+    <property name="default_width">800</property>
     <signal name="destroy" handler="on_accounts_window_destroy"/>
+    <signal name="key_press_event" handler="on_accounts_window_key_press_event"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -28,28 +30,30 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                    <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                    <property name="shadow_type">GTK_SHADOW_IN</property>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
+                    <property name="shadow_type">in</property>
                     <child>
                       <widget class="GtkTreeView" id="accounts_treeview">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="headers_visible">False</property>
-                        <property name="headers_clickable">True</property>
                         <signal name="cursor_changed" handler="on_accounts_treeview_cursor_changed"/>
                       </widget>
                     </child>
                   </widget>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
                 <child>
                   <widget class="GtkButton" id="add_button">
+                    <property name="label" translatable="yes">gtk-add</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="label" translatable="yes">gtk-add</property>
                     <property name="use_stock">True</property>
                     <signal name="clicked" handler="on_add_button_clicked"/>
                   </widget>
@@ -60,11 +64,11 @@
                 </child>
                 <child>
                   <widget class="GtkButton" id="remove_button">
+                    <property name="label" translatable="yes">gtk-remove</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="label" translatable="yes">gtk-remove</property>
                     <property name="use_stock">True</property>
                     <signal name="clicked" handler="on_remove_button_clicked"/>
                   </widget>
@@ -92,6 +96,7 @@
                           </widget>
                           <packing>
                             <property name="fill">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -138,6 +143,7 @@
               </widget>
               <packing>
                 <property name="resize">False</property>
+                <property name="shrink">True</property>
               </packing>
             </child>
             <child>
@@ -152,9 +158,6 @@
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                   </widget>
-                  <packing>
-                    <property name="tab_expand">False</property>
-                  </packing>
                 </child>
                 <child>
                   <placeholder/>
@@ -175,34 +178,138 @@
                         <property name="column_spacing">6</property>
                         <property name="row_spacing">6</property>
                         <child>
-                          <widget class="GtkEntry" id="resource_entry1">
+                          <widget class="GtkLabel" id="jid_label1">
                             <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">_Jabber ID:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">jid_entry1</property>
+                          </widget>
+                          <packing>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="label3">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">_Password:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">password_entry1</property>
+                          </widget>
+                          <packing>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkEntry" id="password_entry1">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
-                            <property name="tooltip" translatable="yes">Resource is sent to the Jabber server in order to separate the same JID in two or more parts depending on the number of the clients connected in the same server with the same account. So you might be connected in the same account with resource 'Home' and 'Work' at the same time. The resource which has the highest priority will get the events. (see below)</property>
-                            <property name="invisible_char">*</property>
-                            <property name="text" translatable="yes">Gajim</property>
-                            <signal name="focus_out_event" handler="on_resource_entry1_focus_out_event"/>
+                            <property name="visibility">False</property>
+                            <property name="activates_default">True</property>
+                            <signal name="changed" handler="on_password_entry1_changed"/>
                           </widget>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="right_attach">3</property>
-                            <property name="top_attach">2</property>
-                            <property name="bottom_attach">3</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
                             <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
                             <property name="y_options"></property>
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkEntry" id="jid_entry1">
+                          <widget class="GtkCheckButton" id="save_password_checkbutton1">
+                            <property name="label" translatable="yes">Save pass_word</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">*</property>
-                            <property name="activates_default">True</property>
-                            <signal name="focus_out_event" handler="on_jid_entry1_focus_out_event"/>
+                            <property name="receives_default">False</property>
+                            <property name="tooltip" translatable="yes">If checked, Gajim will remember the password for this account</property>
+                            <property name="use_underline">True</property>
+                            <property name="focus_on_click">False</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="on_save_password_checkbutton1_toggled"/>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="label4">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">Resour_ce:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">resource_entry1</property>
+                          </widget>
+                          <packing>
+                            <property name="top_attach">2</property>
+                            <property name="bottom_attach">3</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="label5">
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">Priori_ty:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">priority_spinbutton1</property>
+                          </widget>
+                          <packing>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkCheckButton" id="adjust_priority_with_status_checkbutton1">
+                            <property name="label" translatable="yes">A_djust to status</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="tooltip" translatable="yes">Priority will change automatically according to your status.</property>
+                            <property name="use_underline">True</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="on_adjust_priority_with_status_checkbutton1_toggled"/>
                           </widget>
                           <packing>
                             <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkSpinButton" id="priority_spinbutton1">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip" translatable="yes">Priority is used in Jabber to determine who gets the events from the jabber server when two or more clients are connected using the same account; The client with the highest priority gets the events</property>
+                            <property name="adjustment">5 0 127 1 5 0</property>
+                            <property name="climb_rate">1</property>
+                            <property name="numeric">True</property>
+                            <signal name="value_changed" handler="on_priority_spinbutton1_value_changed"/>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">2</property>
                             <property name="right_attach">3</property>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
+                            <property name="x_options">GTK_FILL</property>
                             <property name="y_options"></property>
                           </packing>
                         </child>
@@ -217,23 +324,26 @@
                                 <property name="homogeneous">True</property>
                                 <child>
                                   <widget class="GtkButton" id="synchronise_contacts_button1">
+                                    <property name="label" translatable="yes">Synchronise contacts</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
                                     <property name="tooltip" translatable="yes">Click to request authorization to all contacts of another account</property>
-                                    <property name="label" translatable="yes">Synchronise contacts</property>
                                     <property name="use_underline">True</property>
                                     <signal name="clicked" handler="on_synchronise_contacts_button1_clicked"/>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <widget class="GtkButton" id="change_password_button1">
+                                    <property name="label" translatable="yes">Chan_ge Password</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
                                     <property name="tooltip" translatable="yes">Click to change account's password</property>
-                                    <property name="label" translatable="yes">Chan_ge Password</property>
                                     <property name="use_underline">True</property>
                                     <signal name="clicked" handler="on_change_password_button1_clicked"/>
                                   </widget>
@@ -263,140 +373,52 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkSpinButton" id="priority_spinbutton1">
+                          <widget class="GtkEntry" id="jid_entry1">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="tooltip" translatable="yes">Priority is used in Jabber to determine who gets the events from the jabber server when two or more clients are connected using the same account; The client with the highest priority gets the events</property>
-                            <property name="adjustment">5 0 127 1 5 5</property>
-                            <property name="climb_rate">1</property>
-                            <property name="numeric">True</property>
-                            <signal name="value_changed" handler="on_priority_spinbutton1_value_changed"/>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                            <property name="top_attach">3</property>
-                            <property name="bottom_attach">4</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkCheckButton" id="adjust_priority_with_status_checkbutton1">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip" translatable="yes">Priority will change automatically according to your status.</property>
-                            <property name="label" translatable="yes">_Adjust to status</property>
-                            <property name="use_underline">True</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="on_adjust_priority_with_status_checkbutton1_toggled"/>
+                            <property name="activates_default">True</property>
+                            <signal name="focus_out_event" handler="on_jid_entry1_focus_out_event"/>
                           </widget>
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="right_attach">2</property>
-                            <property name="top_attach">3</property>
-                            <property name="bottom_attach">4</property>
-                            <property name="x_options">GTK_FILL</property>
                             <property name="y_options"></property>
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="label5">
+                          <widget class="GtkEntry" id="resource_entry1">
                             <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Priori_ty:</property>
-                            <property name="use_underline">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip" translatable="yes">Resource is sent to the Jabber server in order to separate the same JID in two or more parts depending on the number of the clients connected in the same server with the same account. So you might be connected in the same account with resource 'Home' and 'Work' at the same time. The resource which has the highest priority will get the events. (see below)</property>
+                            <property name="text" translatable="yes">Gajim</property>
+                            <signal name="focus_out_event" handler="on_resource_entry1_focus_out_event"/>
                           </widget>
                           <packing>
-                            <property name="top_attach">3</property>
-                            <property name="bottom_attach">4</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="label4">
-                            <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Resour_ce:</property>
-                            <property name="use_underline">True</property>
-                          </widget>
-                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">3</property>
                             <property name="top_attach">2</property>
                             <property name="bottom_attach">3</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkCheckButton" id="save_password_checkbutton1">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip" translatable="yes">If checked, Gajim will remember the password for this account</property>
-                            <property name="label" translatable="yes">Save pass_word</property>
-                            <property name="use_underline">True</property>
-                            <property name="focus_on_click">False</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="on_save_password_checkbutton1_toggled"/>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkEntry" id="password_entry1">
-                            <property name="visible">True</property>
-                            <property name="sensitive">False</property>
-                            <property name="can_focus">True</property>
-                            <property name="visibility">False</property>
-                            <property name="invisible_char">*</property>
-                            <property name="activates_default">True</property>
-                            <signal name="changed" handler="on_password_entry1_changed"/>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
                             <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
                             <property name="y_options"></property>
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="label3">
+                          <widget class="GtkCheckButton" id="anonymous_checkbutton1">
+                            <property name="label" translatable="yes">Anonymous authentication</property>
                             <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Password:</property>
-                            <property name="use_underline">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="on_anonymous_checkbutton1_toggled"/>
                           </widget>
                           <packing>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="label2">
-                            <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Jabber ID:</property>
-                            <property name="use_underline">True</property>
-                          </widget>
-                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
                             <property name="x_options">GTK_FILL</property>
                             <property name="y_options"></property>
                           </packing>
                         </child>
                       </widget>
-                      <packing>
-                        <property name="tab_expand">False</property>
-                      </packing>
                     </child>
                     <child>
                       <widget class="GtkLabel" id="label7">
@@ -404,9 +426,8 @@
                         <property name="label" translatable="yes">Account</property>
                       </widget>
                       <packing>
-                        <property name="type">tab</property>
-                        <property name="tab_expand">False</property>
                         <property name="tab_fill">False</property>
+                        <property name="type">tab</property>
                       </packing>
                     </child>
                     <child>
@@ -416,10 +437,11 @@
                         <property name="spacing">6</property>
                         <child>
                           <widget class="GtkCheckButton" id="autoconnect_checkbutton1">
+                            <property name="label" translatable="yes">C_onnect on Gajim startup</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
                             <property name="tooltip" translatable="yes">If checked, Gajim, when launched, will automatically connect to jabber using this account</property>
-                            <property name="label" translatable="yes">C_onnect on Gajim startup</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_autoconnect_checkbutton_toggled"/>
@@ -427,13 +449,15 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <widget class="GtkCheckButton" id="autoreconnect_checkbutton1">
+                            <property name="label" translatable="yes">Auto-reconnect when connection is lost</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Auto-reconnect when connection is lost</property>
+                            <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_autoreconnect_checkbutton_toggled"/>
@@ -446,9 +470,10 @@
                         </child>
                         <child>
                           <widget class="GtkCheckButton" id="log_history_checkbutton1">
+                            <property name="label" translatable="yes">Save conversation _logs for all contacts</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Save conversation _logs for all contacts</property>
+                            <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -462,10 +487,11 @@
                         </child>
                         <child>
                           <widget class="GtkCheckButton" id="sync_with_global_status_checkbutton1">
+                            <property name="label" translatable="yes">Synch_ronize account status with global status</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
                             <property name="tooltip" translatable="yes">If checked, any change to the global status (handled by the combobox at the bottom of the roster window) will change the status of this account accordingly</property>
-                            <property name="label" translatable="yes">Synch_ronize account status with global status</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_sync_with_global_status_checkbutton_toggled"/>
@@ -478,10 +504,11 @@
                         </child>
                         <child>
                           <widget class="GtkCheckButton" id="use_ft_proxies_checkbutton1">
+                            <property name="label" translatable="yes">Use file transfer proxies</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
                             <property name="tooltip" translatable="yes">If checked, Gajim will also broadcast some more IPs except from just your IP, so file transfer has higher chances of working.</property>
-                            <property name="label" translatable="yes">Use file transfer proxies</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_use_ft_proxies_checkbutton1_toggled"/>
@@ -495,7 +522,6 @@
                       </widget>
                       <packing>
                         <property name="position">1</property>
-                        <property name="tab_expand">False</property>
                       </packing>
                     </child>
                     <child>
@@ -505,10 +531,9 @@
                         <property name="use_markup">True</property>
                       </widget>
                       <packing>
-                        <property name="type">tab</property>
                         <property name="position">1</property>
-                        <property name="tab_expand">False</property>
                         <property name="tab_fill">False</property>
+                        <property name="type">tab</property>
                       </packing>
                     </child>
                     <child>
@@ -517,54 +542,98 @@
                         <property name="border_width">6</property>
                         <property name="spacing">12</property>
                         <child>
-                          <widget class="GtkHBox" id="hbox2">
+                          <widget class="GtkFrame" id="frame3">
                             <property name="visible">True</property>
-                            <property name="border_width">6</property>
-                            <property name="spacing">6</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="label_xalign">0</property>
+                            <property name="shadow_type">none</property>
+                            <child>
+                              <widget class="GtkAlignment" id="alignment4">
+                                <property name="visible">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="left_padding">12</property>
+                                <child>
+                                  <widget class="GtkVBox" id="vbox11">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="border_width">6</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <widget class="GtkCheckButton" id="use_env_http_proxy_checkbutton1">
+                                        <property name="label" translatable="yes">_use HTTP__PROXY environment variable</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="draw_indicator">True</property>
+                                        <signal name="toggled" handler="on_use_env_http_proxy_checkbutton1_toggled"/>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkHBox" id="proxy_hbox1">
+                                        <property name="visible">True</property>
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <widget class="GtkComboBox" id="proxies_combobox1">
+                                            <property name="visible">True</property>
+                                            <property name="items" translatable="yes" comments="None means no proxy profile selected">None</property>
+                                            <signal name="changed" handler="on_proxies_combobox1_changed"/>
+                                          </widget>
+                                          <packing>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkButton" id="manage_proxies_button1">
+                                            <property name="label" translatable="yes">_Manage...</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="use_underline">True</property>
+                                            <signal name="clicked" handler="on_manage_proxies_button1_clicked"/>
+                                          </widget>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">False</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </widget>
+                                </child>
+                              </widget>
+                            </child>
                             <child>
                               <widget class="GtkLabel" id="label9">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Proxy:</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Proxy&lt;/b&gt;</property>
+                                <property name="use_markup">True</property>
                               </widget>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkComboBox" id="proxies_combobox1">
-                                <property name="visible">True</property>
-                                <property name="items" translatable="yes" comments="None means no proxy profile selected">None</property>
-                                <signal name="changed" handler="on_proxies_combobox1_changed"/>
-                              </widget>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkButton" id="manage_proxies_button1">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="label" translatable="yes">Manage...</property>
-                                <property name="use_underline">True</property>
-                                <signal name="clicked" handler="on_manage_proxies_button1_clicked"/>
-                              </widget>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">2</property>
+                                <property name="type">label_item</property>
                               </packing>
                             </child>
                           </widget>
                           <packing>
-                            <property name="expand">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <widget class="GtkFrame" id="misc_frame1">
                             <property name="visible">True</property>
                             <property name="label_xalign">0</property>
-                            <property name="shadow_type">GTK_SHADOW_NONE</property>
+                            <property name="shadow_type">none</property>
                             <child>
                               <widget class="GtkAlignment" id="alignment1">
                                 <property name="visible">True</property>
@@ -575,26 +644,29 @@
                                     <property name="border_width">6</property>
                                     <property name="spacing">6</property>
                                     <child>
-                                      <widget class="GtkCheckButton" id="use_ssl_checkbutton1">
+                                      <widget class="GtkCheckButton" id="warn_when_insecure_connection_checkbutton1">
+                                        <property name="label" translatable="yes">_Warn before using an insecure connection</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="tooltip" translatable="yes">Check this so Gajim will connect in port 5223 where legacy servers are expected to have SSL capabilities. Note that Gajim uses TLS encryption by default if broadcasted by the server, and with this option enabled TLS will be disabled</property>
-                                        <property name="label" translatable="yes">Use _SSL (legacy)</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="tooltip" translatable="yes">Check this so Gajim will ask you before sending your password over an insecure connection.</property>
                                         <property name="use_underline">True</property>
                                         <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="on_use_ssl_checkbutton1_toggled"/>
+                                        <signal name="toggled" handler="on_warn_when_insecure_connection_checkbutton1_toggled"/>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">False</property>
+                                        <property name="position">0</property>
                                       </packing>
                                     </child>
                                     <child>
                                       <widget class="GtkCheckButton" id="send_keepalive_checkbutton1">
+                                        <property name="label" translatable="yes">Send _keep-alive packets</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
                                         <property name="tooltip" translatable="yes">If checked, Gajim will send keep-alive packets to prevent connection timeout which results in disconnection</property>
-                                        <property name="label" translatable="yes">Send keep-alive packets</property>
                                         <property name="use_underline">True</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
@@ -608,9 +680,10 @@
                                     </child>
                                     <child>
                                       <widget class="GtkCheckButton" id="custom_host_port_checkbutton1">
+                                        <property name="label" translatable="yes">Use cust_om hostname/port</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">Use custom hostname/port</property>
+                                        <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="on_custom_host_port_checkbutton1_toggled"/>
@@ -629,18 +702,19 @@
                                         <child>
                                           <widget class="GtkLabel" id="label10">
                                             <property name="visible">True</property>
-                                            <property name="label" translatable="yes">Hostname: </property>
+                                            <property name="label" translatable="yes">_Hostname: </property>
+                                            <property name="use_underline">True</property>
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
                                             <property name="fill">False</property>
+                                            <property name="position">0</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <widget class="GtkEntry" id="custom_host_entry1">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="invisible_char">*</property>
                                             <signal name="changed" handler="on_custom_host_entry1_changed"/>
                                           </widget>
                                           <packing>
@@ -650,7 +724,8 @@
                                         <child>
                                           <widget class="GtkLabel" id="label18">
                                             <property name="visible">True</property>
-                                            <property name="label" translatable="yes">Port: </property>
+                                            <property name="label" translatable="yes">_Port: </property>
+                                            <property name="use_underline">True</property>
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
@@ -662,7 +737,6 @@
                                           <widget class="GtkEntry" id="custom_port_entry1">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="invisible_char">*</property>
                                             <property name="width_chars">6</property>
                                             <property name="text">5222</property>
                                             <signal name="focus_out_event" handler="on_custom_port_entry_focus_out_event"/>
@@ -700,7 +774,6 @@
                       </widget>
                       <packing>
                         <property name="position">2</property>
-                        <property name="tab_expand">False</property>
                       </packing>
                     </child>
                     <child>
@@ -709,10 +782,9 @@
                         <property name="label" translatable="yes">Connection</property>
                       </widget>
                       <packing>
-                        <property name="type">tab</property>
                         <property name="position">2</property>
-                        <property name="tab_expand">False</property>
                         <property name="tab_fill">False</property>
+                        <property name="type">tab</property>
                       </packing>
                     </child>
                     <child>
@@ -724,7 +796,7 @@
                           <widget class="GtkFrame" id="frame1">
                             <property name="visible">True</property>
                             <property name="label_xalign">0</property>
-                            <property name="shadow_type">GTK_SHADOW_NONE</property>
+                            <property name="shadow_type">none</property>
                             <child>
                               <widget class="GtkAlignment" id="alignment2">
                                 <property name="visible">True</property>
@@ -748,6 +820,7 @@
                                           <packing>
                                             <property name="expand">False</property>
                                             <property name="fill">False</property>
+                                            <property name="position">0</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -762,9 +835,10 @@
                                         </child>
                                         <child>
                                           <widget class="GtkButton" id="gpg_choose_button1">
+                                            <property name="label" translatable="yes">Choose _Key...</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="label" translatable="yes">Choose _Key...</property>
+                                            <property name="receives_default">False</property>
                                             <property name="use_underline">True</property>
                                             <signal name="clicked" handler="on_gpg_choose_button_clicked"/>
                                           </widget>
@@ -777,44 +851,24 @@
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
+                                        <property name="position">0</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkHBox" id="hbox4">
+                                      <widget class="GtkCheckButton" id="use_gpg_agent_checkbutton1">
+                                        <property name="label" translatable="yes">Use G_PG Agent</property>
                                         <property name="visible">True</property>
-                                        <property name="spacing">6</property>
-                                        <child>
-                                          <widget class="GtkCheckButton" id="gpg_save_password_checkbutton1">
-                                            <property name="visible">True</property>
-                                            <property name="sensitive">False</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="tooltip" translatable="yes">If checked, Gajim will store the password in ~/.gajim/config with 'read' permission only for you</property>
-                                            <property name="label" translatable="yes">Save _passphrase (insecure)</property>
-                                            <property name="use_underline">True</property>
-                                            <property name="draw_indicator">True</property>
-                                            <signal name="toggled" handler="on_gpg_save_password_checkbutton_toggled"/>
-                                          </widget>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <widget class="GtkEntry" id="gpg_password_entry1">
-                                            <property name="visible">True</property>
-                                            <property name="sensitive">False</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="visibility">False</property>
-                                            <property name="invisible_char">*</property>
-                                            <signal name="changed" handler="on_gpg_password_entry_changed"/>
-                                          </widget>
-                                          <packing>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
+                                        <property name="sensitive">False</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="tooltip" translatable="yes">If checked, Gajim will get the password from a GPG agent like seahorse</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="draw_indicator">True</property>
+                                        <signal name="toggled" handler="on_use_gpg_agent_checkbutton_toggled"/>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
+                                        <property name="fill">False</property>
                                         <property name="position">1</property>
                                       </packing>
                                     </child>
@@ -835,13 +889,14 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <widget class="GtkFrame" id="frame2">
                             <property name="visible">True</property>
                             <property name="label_xalign">0</property>
-                            <property name="shadow_type">GTK_SHADOW_NONE</property>
+                            <property name="shadow_type">none</property>
                             <child>
                               <widget class="GtkAlignment" id="alignment3">
                                 <property name="visible">True</property>
@@ -849,10 +904,11 @@
                                 <property name="left_padding">12</property>
                                 <child>
                                   <widget class="GtkButton" id="edit_details_button1">
+                                    <property name="label" translatable="yes">_Edit Personal Information...</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
                                     <property name="tooltip" translatable="yes">Information about you, as stored in the server</property>
-                                    <property name="label" translatable="yes">Edit Personal Information...</property>
                                     <property name="use_underline">True</property>
                                     <signal name="clicked" handler="on_edit_details_button1_clicked"/>
                                   </widget>
@@ -878,7 +934,6 @@
                       </widget>
                       <packing>
                         <property name="position">3</property>
-                        <property name="tab_expand">False</property>
                       </packing>
                     </child>
                     <child>
@@ -887,16 +942,14 @@
                         <property name="label" translatable="yes">Personal Information</property>
                       </widget>
                       <packing>
-                        <property name="type">tab</property>
                         <property name="position">3</property>
-                        <property name="tab_expand">False</property>
                         <property name="tab_fill">False</property>
+                        <property name="type">tab</property>
                       </packing>
                     </child>
                   </widget>
                   <packing>
                     <property name="position">1</property>
-                    <property name="tab_expand">False</property>
                   </packing>
                 </child>
                 <child>
@@ -911,15 +964,18 @@
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
                       <widget class="GtkCheckButton" id="enable_zeroconf_checkbutton2">
+                        <property name="label" translatable="yes">_Enable</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="label" translatable="yes">Enable</property>
+                        <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                         <signal name="toggled" handler="on_enable_zeroconf_checkbutton2_toggled"/>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
@@ -933,10 +989,11 @@
                             <property name="spacing">6</property>
                             <child>
                               <widget class="GtkCheckButton" id="autoconnect_checkbutton2">
+                                <property name="label" translatable="yes">Co_nnect on Gajim startup</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
                                 <property name="tooltip" translatable="yes">If checked, Gajim, when launched, will automatically connect to jabber using this account</property>
-                                <property name="label" translatable="yes">C_onnect on Gajim startup</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="on_autoconnect_checkbutton_toggled"/>
@@ -944,13 +1001,15 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <widget class="GtkCheckButton" id="log_history_checkbutton2">
+                                <property name="label" translatable="yes">Save conversation _logs for all contacts</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="label" translatable="yes">Save conversation _logs for all contacts</property>
+                                <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="on_log_history_checkbutton_toggled"/>
@@ -963,10 +1022,11 @@
                             </child>
                             <child>
                               <widget class="GtkCheckButton" id="sync_with_global_status_checkbutton2">
+                                <property name="label" translatable="yes">Synchroni_ze account status with global status</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
                                 <property name="tooltip" translatable="yes">If checked, any change to the global status (handled by the combobox at the bottom of the roster window) will change the status of this account accordingly</property>
-                                <property name="label" translatable="yes">Synch_ronize account status with global status</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="on_sync_with_global_status_checkbutton_toggled"/>
@@ -982,11 +1042,12 @@
                                 <property name="visible">True</property>
                                 <child>
                                   <widget class="GtkCheckButton" id="custom_port_checkbutton2">
+                                    <property name="label" translatable="yes">Use cust_om port:</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
                                     <property name="tooltip" translatable="yes">If the default port that is used for incoming messages is unfitting for your setup you can select another one here.
 You might consider to change possible firewall settings.</property>
-                                    <property name="label" translatable="yes">Use custom port:</property>
                                     <property name="use_underline">True</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="on_custom_port_checkbutton2_toggled"/>
@@ -994,6 +1055,7 @@ You might consider to change possible firewall settings.</property>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -1017,9 +1079,6 @@ You might consider to change possible firewall settings.</property>
                               </packing>
                             </child>
                           </widget>
-                          <packing>
-                            <property name="tab_expand">False</property>
-                          </packing>
                         </child>
                         <child>
                           <widget class="GtkLabel" id="label11">
@@ -1028,9 +1087,8 @@ You might consider to change possible firewall settings.</property>
                             <property name="use_markup">True</property>
                           </widget>
                           <packing>
-                            <property name="type">tab</property>
-                            <property name="tab_expand">False</property>
                             <property name="tab_fill">False</property>
+                            <property name="type">tab</property>
                           </packing>
                         </child>
                         <child>
@@ -1042,91 +1100,99 @@ You might consider to change possible firewall settings.</property>
                             <property name="column_spacing">2</property>
                             <property name="row_spacing">5</property>
                             <child>
-                              <widget class="GtkEntry" id="jabber_id_entry2">
+                              <widget class="GtkVBox" id="vbox10">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <signal name="changed" handler="on_jabber_id_entry2_changed"/>
+                                <property name="spacing">5</property>
+                                <child>
+                                  <widget class="GtkLabel" id="label17">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;OpenPGP&lt;/b&gt;</property>
+                                    <property name="use_markup">True</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkHBox" id="hbox6">
+                                    <property name="visible">True</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <widget class="GtkLabel" id="gpg_key_label2">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">No key selected</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkLabel" id="gpg_name_label2">
+                                        <property name="visible">True</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkButton" id="gpg_choose_button2">
+                                        <property name="label" translatable="yes">Choose _Key...</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="use_underline">True</property>
+                                        <signal name="clicked" handler="on_gpg_choose_button_clicked"/>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">2</property>
+                                      </packing>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkCheckButton" id="use_gpg_agent_checkbutton2">
+                                    <property name="label" translatable="yes">Use G_PG Agent</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="tooltip" translatable="yes">If checked, Gajim will get the password from a GPG agent like seahorse</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="on_use_gpg_agent_checkbutton_toggled"/>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
                               </widget>
                               <packing>
-                                <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
-                                <property name="top_attach">4</property>
-                                <property name="bottom_attach">5</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkLabel" id="label12">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">Jabber ID:</property>
-                              </widget>
-                              <packing>
-                                <property name="top_attach">4</property>
-                                <property name="bottom_attach">5</property>
                                 <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="label13">
+                              <widget class="GtkLabel" id="label16">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">E-Mail:</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Personal Information&lt;/b&gt;</property>
+                                <property name="use_markup">True</property>
                               </widget>
                               <packing>
-                                <property name="top_attach">5</property>
-                                <property name="bottom_attach">6</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkEntry" id="email_entry2">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <signal name="changed" handler="on_email_entry2_changed"/>
-                              </widget>
-                              <packing>
-                                <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
-                                <property name="top_attach">5</property>
-                                <property name="bottom_attach">6</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkLabel" id="label14">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">Last Name:</property>
-                              </widget>
-                              <packing>
-                                <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkEntry" id="last_name_entry2">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <signal name="changed" handler="on_last_name_entry2_changed"/>
-                              </widget>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkLabel" id="label15">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">First Name:</property>
-                              </widget>
-                              <packing>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options"></property>
                               </packing>
@@ -1146,124 +1212,98 @@ You might consider to change possible firewall settings.</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="label16">
+                              <widget class="GtkLabel" id="label15">
                                 <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Personal Information&lt;/b&gt;</property>
-                                <property name="use_markup">True</property>
+                                <property name="label" translatable="yes">First Name:</property>
                               </widget>
                               <packing>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
+                                <property name="top_attach">2</property>
+                                <property name="bottom_attach">3</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options"></property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkVBox" id="vbox10">
+                              <widget class="GtkEntry" id="last_name_entry2">
                                 <property name="visible">True</property>
-                                <property name="spacing">5</property>
-                                <child>
-                                  <widget class="GtkLabel" id="label17">
-                                    <property name="visible">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">&lt;b&gt;OpenPGP&lt;/b&gt;</property>
-                                    <property name="use_markup">True</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <widget class="GtkHBox" id="hbox6">
-                                    <property name="visible">True</property>
-                                    <property name="spacing">6</property>
-                                    <child>
-                                      <widget class="GtkLabel" id="gpg_key_label2">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes">No key selected</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkLabel" id="gpg_name_label2">
-                                        <property name="visible">True</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkButton" id="gpg_choose_button2">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">Choose _Key...</property>
-                                        <property name="use_underline">True</property>
-                                        <signal name="clicked" handler="on_gpg_choose_button_clicked"/>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">2</property>
-                                      </packing>
-                                    </child>
-                                  </widget>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <widget class="GtkHBox" id="hbox7">
-                                    <property name="visible">True</property>
-                                    <property name="spacing">6</property>
-                                    <child>
-                                      <widget class="GtkCheckButton" id="gpg_save_password_checkbutton2">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="tooltip" translatable="yes">If checked, Gajim will store the password in ~/.gajim/config with 'read' permission only for you</property>
-                                        <property name="label" translatable="yes">Save _passphrase (insecure)</property>
-                                        <property name="use_underline">True</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="on_gpg_save_password_checkbutton_toggled"/>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkEntry" id="gpg_password_entry2">
-                                        <property name="visible">True</property>
-                                        <property name="sensitive">False</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="visibility">False</property>
-                                        <property name="invisible_char">*</property>
-                                        <signal name="changed" handler="on_gpg_password_entry_changed"/>
-                                      </widget>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </widget>
-                                  <packing>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
+                                <property name="can_focus">True</property>
+                                <signal name="changed" handler="on_last_name_entry2_changed"/>
                               </widget>
                               <packing>
+                                <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
+                                <property name="top_attach">3</property>
+                                <property name="bottom_attach">4</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label14">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Last Name:</property>
+                              </widget>
+                              <packing>
+                                <property name="top_attach">3</property>
+                                <property name="bottom_attach">4</property>
                                 <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkEntry" id="email_entry2">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <signal name="changed" handler="on_email_entry2_changed"/>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">5</property>
+                                <property name="bottom_attach">6</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label13">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">E-Mail:</property>
+                              </widget>
+                              <packing>
+                                <property name="top_attach">5</property>
+                                <property name="bottom_attach">6</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label12">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Jabber ID:</property>
+                              </widget>
+                              <packing>
+                                <property name="top_attach">4</property>
+                                <property name="bottom_attach">5</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkEntry" id="jabber_id_entry2">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <signal name="changed" handler="on_jabber_id_entry2_changed"/>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">4</property>
+                                <property name="bottom_attach">5</property>
+                                <property name="y_options"></property>
                               </packing>
                             </child>
                           </widget>
                           <packing>
                             <property name="position">1</property>
-                            <property name="tab_expand">False</property>
                           </packing>
                         </child>
                         <child>
@@ -1272,10 +1312,9 @@ You might consider to change possible firewall settings.</property>
                             <property name="label" translatable="yes">Personal Information</property>
                           </widget>
                           <packing>
-                            <property name="type">tab</property>
                             <property name="position">1</property>
-                            <property name="tab_expand">False</property>
                             <property name="tab_fill">False</property>
+                            <property name="type">tab</property>
                           </packing>
                         </child>
                       </widget>
@@ -1286,7 +1325,6 @@ You might consider to change possible firewall settings.</property>
                   </widget>
                   <packing>
                     <property name="position">2</property>
-                    <property name="tab_expand">False</property>
                   </packing>
                 </child>
                 <child>
@@ -1296,18 +1334,25 @@ You might consider to change possible firewall settings.</property>
                   </packing>
                 </child>
               </widget>
+              <packing>
+                <property name="resize">True</property>
+                <property name="shrink">True</property>
+              </packing>
             </child>
           </widget>
+          <packing>
+            <property name="position">0</property>
+          </packing>
         </child>
         <child>
           <widget class="GtkCheckButton" id="merge_checkbutton">
+            <property name="label" translatable="yes">Mer_ge accounts</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="label" translatable="yes">Mer_ge accounts</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
-            <signal name="toggled" handler="on_merge_checkbutton_toggled"/>
           </widget>
           <packing>
             <property name="expand">False</property>
@@ -1315,31 +1360,26 @@ You might consider to change possible firewall settings.</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkHSeparator" id="hseparator2">
-            <property name="visible">True</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
           <widget class="GtkHButtonBox" id="hbuttonbox1">
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <property name="spacing">6</property>
-            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <property name="layout_style">end</property>
             <child>
               <widget class="GtkButton" id="close_button">
+                <property name="label" translatable="yes">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">gtk-close</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="on_close_button_clicked"/>
               </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
             </child>
           </widget>
           <packing>

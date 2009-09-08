@@ -1,4 +1,25 @@
 # -*- coding: utf-8 -*-
+## src/common/atom.py
+##
+## Copyright (C) 2006 Jean-Marie Traissard <jim AT lapin.org>
+##                    Tomasz Melcer <liori AT exroot.org>
+## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
+##
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
+
 ''' Atom (rfc 4287) feed parser, used to read data from atom-over-pubsub transports
 and services. Very simple. Actually implements only atom:entry. Implement more features
 if you need. '''
@@ -43,7 +64,7 @@ class Entry(xmpp.Node, object):
 		xmpp.Node.__init__(self, 'entry', node=node)
 
 	def __repr__(self):
-		return '<Atom:Entry object of id="%r">' % self.id
+		return '<Atom:Entry object of id="%r">' % self.getAttr('id')
 
 class OldEntry(xmpp.Node, object):
 	''' Parser for feeds from pubsub.com. They use old Atom 0.3 format with
@@ -53,7 +74,7 @@ class OldEntry(xmpp.Node, object):
 		xmpp.Node.__init__(self, 'entry', node=node)
 
 	def __repr__(self):
-		return '<Atom0.3:Entry object of id="%r">' % self.id
+		return '<Atom0.3:Entry object of id="%r">' % self.getAttr('id')
 
 	def get_feed_title(self):
 		''' Returns title of feed, where the entry was created. The result is the feed name
@@ -67,7 +88,7 @@ class OldEntry(xmpp.Node, object):
 			source_feed = self.getTag('feed').getTagData('title')
 		else:
 			source_feed = None
-		
+
 
 		if main_feed is not None and source_feed is not None:
 			return u'%s: %s' % (main_feed, source_feed)
@@ -78,7 +99,7 @@ class OldEntry(xmpp.Node, object):
 		else:
 			return u''
 
-	feed_title = property(get_feed_title, None, None, 
+	feed_title = property(get_feed_title, None, None,
 		''' Title of feed. It is built from entry''s original feed title and title of feed
 		which delivered this entry. ''')
 
@@ -86,7 +107,7 @@ class OldEntry(xmpp.Node, object):
 		''' Get source link '''
 		try:
 			return self.getTag('feed').getTags('link',{'rel':'alternate'})[1].getData()
-		except:
+		except Exception:
 			return None
 
 	feed_link = property(get_feed_link, None, None,
@@ -103,7 +124,7 @@ class OldEntry(xmpp.Node, object):
 		''' Get the uri the entry points to (entry's first link element with rel='alternate'
 		or without rel attribute). '''
 		for element in self.getTags('link'):
-			if element.attrs.has_key('rel') and element.attrs['rel']<>'alternate': continue
+			if 'rel' in element.attrs and element.attrs['rel']!='alternate': continue
 			try:
 				return element.attrs['href']
 			except AttributeError:
@@ -130,7 +151,9 @@ class OldEntry(xmpp.Node, object):
 
 		return date
 
-	updated = property(get_updated, None, None, 
+	updated = property(get_updated, None, None,
 		''' Last significant modification time. ''')
 
 	feed_tagline = u''
+
+# vim: se ts=3:

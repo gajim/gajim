@@ -1,18 +1,30 @@
-##	common/gajim.py
+# -*- coding:utf-8 -*-
+## src/common/gajim.py
 ##
-## Copyright (C) 2003-2006 Yann Le Boulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
-## Copyright (C) 2005-2006 Travis Shirk <travis@pobox.com>
+## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
+##                         Travis Shirk <travis AT pobox.com>
+##                         Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006 Junglecow J <junglecow AT gmail.com>
+##                    Stefan Bethge <stefan AT lanpartei.de>
+## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>
+##                         Stephan Erb <steve-e AT h3c.de>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import sys
@@ -22,6 +34,7 @@ import locale
 import config
 from contacts import Contacts
 from events import Events
+import xmpp
 
 try:
 	import defs
@@ -50,16 +63,13 @@ If you start gajim from svn:
 	sys.exit(1)
 
 interface = None # The actual interface (the gtk one for the moment)
+thread_interface = None # Interface to run a thread and then a callback
 config = config.Config()
 version = config.get('version')
 connections = {} # 'account name': 'account (connection.Connection) instance'
-verbose = False
+ipython_window = None
 
-h = logging.StreamHandler()
-f = logging.Formatter('%(asctime)s %(name)s: %(message)s', '%d %b %Y %H:%M:%S')
-h.setFormatter(f)
-log = logging.getLogger('Gajim')
-log.addHandler(h)
+log = logging.getLogger('gajim')
 
 import logger
 logger = logger.Logger() # init the logger
@@ -72,6 +82,9 @@ VCARD_PATH = gajimpaths['VCARD']
 AVATAR_PATH = gajimpaths['AVATAR']
 MY_EMOTS_PATH = gajimpaths['MY_EMOTS']
 MY_ICONSETS_PATH = gajimpaths['MY_ICONSETS']
+MY_MOOD_ICONSETS_PATH = gajimpaths['MY_MOOD_ICONSETS']
+MY_ACTIVITY_ICONSETS_PATH = gajimpaths['MY_ACTIVITY_ICONSETS']
+MY_CACERTS =  gajimpaths['MY_CACERTS']
 TMP = gajimpaths['TMP']
 DATA_DIR = gajimpaths['DATA']
 HOME_DIR = gajimpaths['HOME']
@@ -86,6 +99,8 @@ if LANG is None:
 else:
 	LANG = LANG[:2] # en, fr, el etc..
 
+os_info = None # used to cache os information
+
 gmail_domains = ['gmail.com', 'googlemail.com']
 
 transport_type = {} # list the type of transport
@@ -98,6 +113,7 @@ contacts = Contacts()
 gc_connected = {} # tell if we are connected to the room or not {acct: {room_jid: True}}
 gc_passwords = {} # list of the pass required to enter a room {room_jid: password}
 automatic_rooms = {} # list of rooms that must be automaticaly configured and for which we have a list of invities {account: {room_jid: {'invities': []}}}
+new_room_nick = None # if it's != None, use this nick instead of asking for a new nickname when there is a conflict.
 
 groups = {} # list of groups
 newly_added = {} # list of contacts that has just signed in
@@ -132,9 +148,61 @@ SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 
 # zeroconf account name
 ZEROCONF_ACC_NAME = 'Local'
-priority_dict = {}
-for status in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
-	priority_dict[status] = config.get('autopriority' + status)
+
+HAVE_ZEROCONF = True
+try:
+	import avahi
+except ImportError:
+	try:
+		import pybonjour
+	except Exception: # Linux raises ImportError, Windows raises WindowsError
+		HAVE_ZEROCONF = False
+
+HAVE_PYCRYPTO = True
+try:
+	import Crypto
+except ImportError:
+	HAVE_PYCRYPTO = False
+
+HAVE_PYSEXY = True
+try:
+	import sexy
+except ImportError:
+	HAVE_PYSEXY = False
+
+HAVE_GPG = True
+try:
+	import GnuPGInterface
+except ImportError:
+	HAVE_GPG = False
+else:
+	from os import system
+	if system('gpg -h >/dev/null 2>&1'):
+		HAVE_GPG = False
+
+import latex
+HAVE_LATEX = latex.check_for_latex_support()
+
+HAVE_INDICATOR = True
+try:
+	import indicate
+except ImportError:
+	HAVE_INDICATOR = False
+
+gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
+gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI, xmpp.NS_FILE,
+	xmpp.NS_MUC, xmpp.NS_MUC_USER, xmpp.NS_MUC_ADMIN, xmpp.NS_MUC_OWNER,
+	xmpp.NS_MUC_CONFIG, xmpp.NS_COMMANDS, xmpp.NS_DISCO_INFO, 'ipv6',
+	'jabber:iq:gateway', xmpp.NS_LAST, xmpp.NS_PRIVACY, xmpp.NS_PRIVATE,
+	xmpp.NS_REGISTER, xmpp.NS_VERSION, xmpp.NS_DATA, xmpp.NS_ENCRYPTED, 'msglog',
+	'sslc2s', 'stringprep', xmpp.NS_PING, xmpp.NS_TIME_REVISED, xmpp.NS_SSN,
+	xmpp.NS_MOOD, xmpp.NS_ACTIVITY, xmpp.NS_NICK, xmpp.NS_ROSTERX]
+
+# Optional features gajim supports per account
+gajim_optional_features = {}
+
+# Capabilities hash per account
+caps_hash = {}
 
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
@@ -170,7 +238,7 @@ def get_real_jid_from_fjid(account, fjid):
 	if not nick: # It's not a fake_jid, it is a real jid
 		return fjid # we return the real jid
 	real_jid = fjid
-	if interface.msg_win_mgr.get_control(room_jid, account):
+	if interface.msg_win_mgr.get_gc_control(room_jid, account):
 		# It's a pm, so if we have real jid it's in contact.jid
 		gc_contact = contacts.get_gc_contact(account, room_jid, nick)
 		if not gc_contact:
@@ -203,12 +271,11 @@ def get_resource_from_jid(jid):
 		return jids[1] # abc@doremi.org/res/res-continued
 	else:
 		return ''
-	'''\
-[15:34:28] <asterix> we should add contact.fake_jid I think
-[15:34:46] <asterix> so if we know real jid, it wil be in contact.jid, or we look in contact.fake_jid
-[15:32:54] <asterix> they can have resource if we know the real jid
-[15:33:07] <asterix> and that resource is in contact.resource
-'''
+
+# [15:34:28] <asterix> we should add contact.fake_jid I think
+# [15:34:46] <asterix> so if we know real jid, it wil be in contact.jid, or we look in contact.fake_jid
+# [15:32:54] <asterix> they can have resource if we know the real jid
+# [15:33:07] <asterix> and that resource is in contact.resource
 
 def get_number_of_accounts():
 	'''returns the number of ALL accounts'''
@@ -239,16 +306,21 @@ def account_is_connected(account):
 def account_is_disconnected(account):
 	return not account_is_connected(account)
 
+def zeroconf_is_connected():
+	return account_is_connected(ZEROCONF_ACC_NAME) and \
+		config.get_per('accounts', ZEROCONF_ACC_NAME, 'is_zeroconf')
+
 def get_number_of_securely_connected_accounts():
 	'''returns the number of the accounts that are SSL/TLS connected'''
 	num_of_secured = 0
-	for account in connections:
+	for account in connections.keys():
 		if account_is_securely_connected(account):
 			num_of_secured += 1
 	return num_of_secured
 
 def account_is_securely_connected(account):
-	if account in con_types and con_types[account] in ('tls', 'ssl'):
+	if account_is_connected(account) and \
+	account in con_types and con_types[account] in ('tls', 'ssl'):
 		return True
 	else:
 		return False
@@ -272,12 +344,15 @@ def get_transport_name_from_jid(jid, use_config_setting = True):
 		# now we support both 'icq.' and 'icq' but not icqsucks.org
 		host = host_splitted[0]
 
-	if host in ('aim', 'irc', 'icq', 'msn', 'sms', 'tlen', 'weather', 'yahoo'):
+	if host in ('aim', 'irc', 'icq', 'msn', 'sms', 'tlen', 'weather', 'yahoo',
+	'mrim', 'facebook'):
 		return host
 	elif host == 'gg':
 		return 'gadu-gadu'
 	elif host == 'jit':
 		return 'icq'
+	elif host == 'facebook':
+		return 'facebook'
 	else:
 		return None
 
@@ -312,7 +387,7 @@ def get_hostname_from_account(account_name, use_srv = False):
 def get_notification_image_prefix(jid):
 	'''returns the prefix for the notification images'''
 	transport_name = get_transport_name_from_jid(jid)
-	if transport_name in ('aim', 'icq', 'msn', 'yahoo'):
+	if transport_name in ('aim', 'icq', 'msn', 'yahoo', 'facebook'):
 		prefix = transport_name
 	else:
 		prefix = 'jabber'
@@ -336,3 +411,5 @@ def get_priority(account, show):
 	config.get_per('accounts', account, 'adjust_priority_with_status'):
 		return config.get_per('accounts', account, 'autopriority_' + show)
 	return config.get_per('accounts', account, 'priority')
+
+# vim: se ts=3:

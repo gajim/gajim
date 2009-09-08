@@ -1,30 +1,36 @@
-##	features_window.py
+# -*- coding:utf-8 -*-
+## src/features_window.py
 ##
-## Copyright (C) 2007 Yann Le Boulanger <asterix@lagaule.org>
+## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
+##                    Julien Pivotto <roidelapluie AT gmail.com>
+##                    Stefan Bethge <stefan AT lanpartei.de>
+##                    Stephan Erb <steve-e AT h3c.de>
+## Copyright (C) 2007-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import os
+import sys
 import gtk
-import gobject
 import gtkgui_helpers
-
-import dialogs
 
 from common import gajim
 from common import helpers
-
-import random
-from tempfile import gettempdir
-from subprocess import Popen
+from common import kwalletbinding
 
 class FeaturesWindow:
 	'''Class for features window'''
@@ -37,23 +43,23 @@ class FeaturesWindow:
 
 		# {name: (available_function, unix_text, windows_text)}
 		self.features = {
-			_('PyOpenSSL'): (self.pyopenssl_available,
+			_('SSL certificat validation'): (self.pyopenssl_available,
 				_('A library used to validate server certificates to ensure a secure connection.'),
 				_('Requires python-pyopenssl.'),
 				_('Requires python-pyopenssl.')),
 			_('Bonjour / Zeroconf'): (self.zeroconf_available,
 				_('Serverless chatting with autodetected clients in a local network.'),
-				_('Requires python-avahai.'),
-				_('Feature not available under Windows.')),
-			_('gajim-remote'): (self.dbus_available,
-				_('A script to controle gajim via commandline.'),
+				_('Requires python-avahi.'),
+				_('Requires pybonjour (http://o2s.csail.mit.edu/o2s-wiki/pybonjour).')),
+			_('Command line'): (self.dbus_available,
+				_('A script to control Gajim via commandline.'),
 				_('Requires python-dbus.'),
 				_('Feature not available under Windows.')),
-			_('OpenGPG'): (self.gpg_available,
-				_('Encrypting chatmessages with gpg keys.'),
+			_('OpenGPG message encryption'): (self.gpg_available,
+				_('Encrypting chat messages with gpg keys.'),
 				_('Requires gpg and python-GnuPGInterface.'),
 				_('Feature not available under Windows.')),
-			_('network-manager'): (self.network_manager_available,
+			_('Network-manager'): (self.network_manager_available,
 				_('Autodetection of network status.'),
 				_('Requires gnome-network-manager and python-dbus.'),
 				_('Feature not available under Windows.')),
@@ -61,34 +67,46 @@ class FeaturesWindow:
 				_('Gajim session is stored on logout and restored on login.'),
 				_('Requires python-gnome2.'),
 				_('Feature not available under Windows.')),
-			_('gnome-keyring'): (self.gnome_keyring_available,
+			_('Password encryption'): (self.some_keyring_available,
 				_('Passwords can be stored securely and not just in plaintext.'),
-				_('Requires gnome-keyring and python-gnome2-desktop.'),
+				_('Requires gnome-keyring and python-gnome2-desktop, or kwalletcli.'),
 				_('Feature not available under Windows.')),
 			_('SRV'): (self.srv_available,
-				_('Ability to connect to servers which is using SRV records.'),
+				_('Ability to connect to servers which are using SRV records.'),
 				_('Requires dnsutils.'),
 				_('Requires nslookup to use SRV records.')),
 			_('Spell Checker'): (self.speller_available,
 				_('Spellchecking of composed messages.'),
-				_('Requires python-gnome2-extras or compilation of gtkspell module from Gajim sources.'),
+				_('Requires libgtkspell.'),
 				_('Feature not available under Windows.')),
-			_('Notification-daemon'): (self.notification_available,
-				_('Passive popups notifying for new events.'),	
+			_('Notification'): (self.notification_available,
+				_('Passive popups notifying for new events.'),
 				_('Requires python-notify or instead python-dbus in conjunction with notification-daemon.'),
 				_('Feature not available under Windows.')),
 			_('Trayicon'): (self.trayicon_available,
-				_('A icon in systemtray reflecting the current presence.'), 
-				_('Requires python-gnome2-extras or compiled  trayicon module from Gajim sources.'),
+				_('A icon in systemtray reflecting the current presence.'),
+				_('Requires python-gnome2-extras or compiled trayicon module from Gajim sources.'),
 				_('Requires PyGTK >= 2.10.')),
-			_('Idle'): (self.idle_available,
+			_('Automatic status'): (self.idle_available,
 				_('Ability to measure idle time, in order to set auto status.'),
-				_('Requires compilation of the idle module from Gajim sources.'),
-				_('Requires compilation of the idle module from Gajim sources.')),
+				_('Requires libxss library.'),
+				_('Requires python2.5.')),
 			_('LaTeX'): (self.latex_available,
-				_('Transform LaTeX espressions between $$ $$.'),
-				_('Requires texlive-latex-base, dvips and imagemagick. You have to set \'use_latex\' to True in the Advanced Configuration Editor.'),
-				_('Feature not available under Windows.')),
+				_('Transform LaTeX expressions between $$ $$.'),
+				_('Requires texlive-latex-base and dvipng. You have to set \'use_latex\' to True in the Advanced Configuration Editor.'),
+				_('Requires texlive-latex-base and dvipng (All is in MikTeX). You have to set \'use_latex\' to True in the Advanced Configuration Editor.')),
+			_('End to End message encryption'): (self.pycrypto_available,
+				_('Encrypting chat messages.'),
+				_('Requires python-crypto.'),
+				_('Requires python-crypto.')),
+			_('RST Generator'): (self.docutils_available,
+				_('Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html).'),
+				_('Requires python-docutils.'),
+				_('Requires python-docutils.')),
+			_('Banners and clickable links'): (self.pysexy_available,
+				_('Ability to have clickable URLs in chat and groupchat window banners.'),
+				_('Requires python-sexy.'),
+				_('Requires python-sexy.')),
 		}
 
 		# name, supported
@@ -113,6 +131,9 @@ class FeaturesWindow:
 			func = self.features[feature][0]
 			rep = func()
 			self.model.append([feature, rep])
+
+		self.model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 		self.xml.get_widget('close_button').grab_focus()
@@ -122,9 +143,13 @@ class FeaturesWindow:
 
 	def on_features_treeview_cursor_changed(self, widget):
 		selection = widget.get_selection()
-		path = selection.get_selected_rows()[1][0]
-		available = self.model[path][1]
-		feature = self.model[path][0]
+		if not selection:
+			return
+		rows = selection.get_selected_rows()[1]
+		if not rows:
+			return
+		path = rows[0]
+		feature = self.model[path][0].decode('utf-8')
 		text = self.features[feature][1] + '\n'
 		if os.name == 'nt':
 			text = text + self.features[feature][3]
@@ -136,17 +161,18 @@ class FeaturesWindow:
 		try:
 			import OpenSSL.SSL
 			import OpenSSL.crypto
-		except:
+		except Exception:
 			return False
 		return True
 
 	def zeroconf_available(self):
-		if os.name == 'nt':
-			return False
 		try:
 			import avahi
-		except:
-			return False
+		except Exception:
+			try:
+				import pybonjour
+			except Exception:
+				return False
 		return True
 
 	def dbus_available(self):
@@ -158,8 +184,7 @@ class FeaturesWindow:
 	def gpg_available(self):
 		if os.name == 'nt':
 			return False
-		from common import GnuPG
-		return GnuPG.USE_GPG
+		return gajim.HAVE_GPG
 
 	def network_manager_available(self):
 		if os.name == 'nt':
@@ -172,16 +197,18 @@ class FeaturesWindow:
 			return False
 		try:
 			import gnome.ui
-		except:
+		except Exception:
 			return False
 		return True
 
-	def gnome_keyring_available(self):
+	def some_keyring_available(self):
 		if os.name == 'nt':
 			return False
+		if kwalletbinding.kwallet_available():
+			return True
 		try:
 			import gnomekeyring
-		except:
+		except Exception:
 			return False
 		return True
 
@@ -193,7 +220,7 @@ class FeaturesWindow:
 			return False
 		try:
 			import gtkspell
-		except:
+		except ImportError:
 			return False
 		return True
 
@@ -205,17 +232,16 @@ class FeaturesWindow:
 			return True
 		try:
 			import pynotify
-		except:
+		except Exception:
 			return False
 		return True
 
 	def trayicon_available(self):
-		if os.name == 'nt' and gtk.pygtk_version >= (2, 10, 0) and \
-		gtk.gtk_version >= (2, 10, 0):
+		if os.name == 'nt':
 			return True
 		try:
 			import systray
-		except:
+		except Exception:
 			return False
 		return True
 
@@ -224,52 +250,19 @@ class FeaturesWindow:
 		return sleepy.SUPPORTED
 
 	def latex_available(self):
-		'''check is latex is available and if it can create a picture.'''
+		return gajim.HAVE_LATEX
 
-		if os.name == 'nt':
-			return False
+	def pycrypto_available(self):
+		return gajim.HAVE_PYCRYPTO
 
-		exitcode = 0
-		random.seed()
-		tmpfile = os.path.join(gettempdir(), "gajimtex_" + \
-			random.randint(0,100).__str__())
-
-		# build latex string
-		texstr = '\\documentclass[12pt]{article}\\usepackage[dvips]{graphicx}'
-		texstr += '\\usepackage{amsmath}\\usepackage{amssymb}\\pagestyle{empty}'
-		texstr += '\\begin{document}\\begin{large}\\begin{gather*}test'
-		texstr += '\\end{gather*}\\end{large}\\end{document}'
-
-		file = open(os.path.join(tmpfile + ".tex"), "w+")
-		file.write(texstr)
-		file.flush()
-		file.close()
+	def docutils_available(self):
 		try:
-			p = Popen(['latex', '--interaction=nonstopmode', tmpfile + '.tex'],
-				cwd=gettempdir())
-			exitcode = p.wait()
-		except:
-			exitcode = 1
-		if exitcode == 0:
-			try:
-				p = Popen(['dvips', '-E', '-o', tmpfile + '.ps', tmpfile + '.dvi'],
-					cwd=gettempdir())
-				exitcode = p.wait()
-			except:
-				exitcode = 1
-		if exitcode == 0:
-			try:
-				p = Popen(['convert', tmpfile + '.ps', tmpfile + '.png'],
-					cwd=gettempdir())
-				exitcode = p.wait()
-			except:
-				exitcode = 1
-		extensions = [".tex", ".log", ".aux", ".dvi", ".ps", ".png"]
-		for ext in extensions:
-			try:
-				os.remove(tmpfile + ext)
-			except Exception:
-				pass
-		if exitcode == 0:
-			return True
-		return False
+			import docutils
+		except Exception:
+			return False
+		return True
+
+	def pysexy_available(self):
+		return gajim.HAVE_PYSEXY
+
+# vim: se ts=3:

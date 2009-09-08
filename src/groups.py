@@ -1,6 +1,25 @@
-'''Window to create new post for discussion groups service.'''
+# -*- coding:utf-8 -*-
+## src/groups.py
+##
+## Copyright (C) 2006 Yann Leboulanger <asterix AT lagaule.org>
+##                    Tomasz Melcer <liori AT exroot.org>
+##
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
 
-import gtk
+'''Window to create new post for discussion groups service.'''
 
 from common import gajim, xmpp
 import gtkgui_helpers
@@ -37,11 +56,13 @@ class GroupsPostWindow:
 		item.addChild('title', {}, [self.subject_entry.get_text()])
 		item.addChild('id', {}, ['0'])
 
-		buffer = self.contents_textview.get_buffer()
-		item.addChild('content', {}, [buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter())])
+		buf = self.contents_textview.get_buffer()
+		item.addChild('content', {}, [buf.get_text(buf.get_start_iter(), buf.get_end_iter())])
 
 		# publish it to node
 		gajim.connections[self.account].send_pb_publish(self.servicejid, self.groupid, item, '0')
 
 		# close the window
 		self.window.destroy()
+
+# vim: se ts=3:

@@ -1,20 +1,29 @@
-##	remote_control.py
+# -*- coding:utf-8 -*-
+## src/remote_control.py
 ##
-## Copyright (C) 2005-2006 Yann Le Boulanger <asterix@lagaule.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
-## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
-## Copyright (C) 2005-2006 Andrew Sayman <lorien420@myrealbox.com>
-## Copyright (C) 2007 Lukas Petrovicky <lukas@petrovicky.net>
-## Copyright (C) 2007 Julien Pivotto <roidelapluie@gmail.com>
+## Copyright (C) 2005-2006 Andrew Sayman <lorien420 AT myrealbox.com>
+##                         Dimitur Kirov <dkirov AT gmail.com>
+##                         Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2005-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2007 Travis Shirk <travis AT pobox.com>
+## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2007 Lukas Petrovicky <lukas AT petrovicky.net>
+##                    Julien Pivotto <roidelapluie AT gmail.com>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 import gobject
@@ -81,7 +90,7 @@ def get_dbus_struct(obj):
 			return DBUS_NONE()
 		return result
 	# unknown type
-	return DBUS_NONE() 
+	return DBUS_NONE()
 
 class Remote:
 	def __init__(self):
@@ -93,7 +102,10 @@ class Remote:
 
 	def raise_signal(self, signal, arg):
 		if self.signal_object:
-			getattr(self.signal_object, signal)(get_dbus_struct(arg))
+			try:
+				getattr(self.signal_object, signal)(get_dbus_struct(arg))
+			except UnicodeDecodeError:
+				pass # ignore error when we fail to announce on dbus
 
 
 class SignalObject(dbus.service.Object):
@@ -121,6 +133,10 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.signal(INTERFACE, signature='av')
 	def ContactAbsence(self, account_and_array):
+		pass
+
+	@dbus.service.signal(INTERFACE, signature='av')
+	def ContactStatus(self, account_and_array):
 		pass
 
 	@dbus.service.signal(INTERFACE, signature='av')
@@ -153,6 +169,10 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.signal(INTERFACE, signature='av')
 	def OsInfo(self, account_and_array):
+		pass
+
+	@dbus.service.signal(INTERFACE, signature='av')
+	def EntityTime(self, account_and_array):
 		pass
 
 	@dbus.service.signal(INTERFACE, signature='av')
@@ -252,13 +272,13 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.method(INTERFACE, in_signature='sss', out_signature='b')
 	def send_file(self, file_path, jid, account):
-		'''send file, located at 'file_path' to 'jid', using account 
+		'''send file, located at 'file_path' to 'jid', using account
 		(optional) 'account' '''
 		jid = self._get_real_jid(jid, account)
 		connected_account, contact = self._get_account_and_contact(account, jid)
 
 		if connected_account:
-			if file_path[:7] == 'file://':
+			if file_path.startswith('file://'):
 				file_path=file_path[7:]
 			if os.path.isfile(file_path): # is it file?
 				gajim.interface.instances['file_transfers'].send_file(
@@ -266,7 +286,7 @@ class SignalObject(dbus.service.Object):
 				return DBUS_BOOLEAN(True)
 		return DBUS_BOOLEAN(False)
 
-	def _send_message(self, jid, message, keyID, account, type = 'chat',
+	def _send_message(self, jid, message, keyID, account, type_ = 'chat',
 	subject = None):
 		'''can be called from send_chat_message (default when send_message)
 		or send_single_message'''
@@ -278,7 +298,7 @@ class SignalObject(dbus.service.Object):
 		connected_account, contact = self._get_account_and_contact(account, jid)
 		if connected_account:
 			connection = gajim.connections[connected_account]
-			connection.send_message(jid, message, keyID, type, subject)
+			connection.send_message(jid, message, keyID, type_, subject)
 			return DBUS_BOOLEAN(True)
 		return DBUS_BOOLEAN(False)
 
@@ -309,17 +329,16 @@ class SignalObject(dbus.service.Object):
 			return DBUS_BOOLEAN(True)
 		return DBUS_BOOLEAN(False)
 
-	@dbus.service.method(INTERFACE, in_signature='ss', out_signature='b')
-	def open_chat(self, jid, account):
+	@dbus.service.method(INTERFACE, in_signature='sss', out_signature='b')
+	def open_chat(self, jid, account, message):
 		'''Shows the tabbed window for new message to 'jid', using account
 		(optional) 'account' '''
 		if not jid:
-			raise MissingArgument
-			return DBUS_BOOLEAN(False)
+			raise dbus_support.MissingArgument()
 		jid = self._get_real_jid(jid, account)
 		try:
 			jid = helpers.parse_jid(jid)
-		except:
+		except Exception:
 			# Jid is not conform, ignore it
 			return DBUS_BOOLEAN(False)
 
@@ -343,7 +362,7 @@ class SignalObject(dbus.service.Object):
 					break
 				# we send the message to jid not in roster, because account is
 				# specified, or there is only one account
-				elif account: 
+				elif account:
 					connected_account = acct
 				elif first_connected_acct is None:
 					first_connected_acct = acct
@@ -353,7 +372,7 @@ class SignalObject(dbus.service.Object):
 			connected_account = first_connected_acct
 
 		if connected_account:
-			gajim.interface.roster.new_chat_from_jid(connected_account, jid)
+			gajim.interface.new_chat_from_jid(connected_account, jid, message)
 			# preserve the 'steal focus preservation'
 			win = gajim.interface.msg_win_mgr.get_window(jid,
 				connected_account).window
@@ -366,9 +385,8 @@ class SignalObject(dbus.service.Object):
 	def change_status(self, status, message, account):
 		''' change_status(status, message, account). account is optional -
 		if not specified status is changed for all accounts. '''
-		if status not in ('offline', 'online', 'chat', 
+		if status not in ('offline', 'online', 'chat',
 			'away', 'xa', 'dnd', 'invisible'):
-			raise InvalidArgument
 			return DBUS_BOOLEAN(False)
 		if account:
 			gobject.idle_add(gajim.interface.roster.send_status, account,
@@ -383,6 +401,31 @@ class SignalObject(dbus.service.Object):
 					status, message)
 		return DBUS_BOOLEAN(False)
 
+	@dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
+	def set_priority(self, prio, account):
+		''' set_priority(prio, account). account is optional -
+		if not specified priority is changed for all accounts. that are synced
+		with global status'''
+		if account:
+			gajim.config.set_per('accounts', account, 'priority', prio)
+			show = gajim.SHOW_LIST[gajim.connections[account].connected]
+			status = gajim.connections[account].status
+			gobject.idle_add(gajim.connections[account].change_status, show,
+				status)
+		else:
+			# account not specified, so change prio of all accounts
+			for acc in gajim.contacts.get_accounts():
+				if not gajim.account_is_connected(acc):
+					continue
+				if not gajim.config.get_per('accounts', acc,
+				'sync_with_global_status'):
+					continue
+				gajim.config.set_per('accounts', acc, 'priority', prio)
+				show = gajim.SHOW_LIST[gajim.connections[acc].connected]
+				status = gajim.connections[acc].status
+				gobject.idle_add(gajim.connections[acc].change_status, show,
+					status)
+
 	@dbus.service.method(INTERFACE, in_signature='', out_signature='')
 	def show_next_pending_event(self):
 		'''Show the window(s) with next pending event in tabbed/group chats.'''
@@ -396,8 +439,7 @@ class SignalObject(dbus.service.Object):
 		if not isinstance(jid, unicode):
 			jid = unicode(jid)
 		if not jid:
-			raise MissingArgument
-			return DBUS_DICT_SV()
+			raise dbus_support.MissingArgument()
 		jid = self._get_real_jid(jid)
 
 		cached_vcard = gajim.connections.values()[0].get_cached_vcard(jid)
@@ -421,7 +463,7 @@ class SignalObject(dbus.service.Object):
 	def account_info(self, account):
 		'''show info on account: resource, jid, nick, prio, message'''
 		result = DBUS_DICT_SS()
-		if gajim.connections.has_key(account):
+		if account in gajim.connections:
 			# account is valid
 			con = gajim.connections[account]
 			index = con.connected
@@ -434,11 +476,11 @@ class SignalObject(dbus.service.Object):
 				'accounts', con.name, 'resource')))
 		return result
 
-	@dbus.service.method(INTERFACE, in_signature='s', out_signature='av')
+	@dbus.service.method(INTERFACE, in_signature='s', out_signature='aa{sv}')
 	def list_contacts(self, account):
 		'''list all contacts in the roster. If the first argument is specified,
 		then return the contacts for the specified account'''
-		result = dbus.Array([], signature='a{sv}')
+		result = dbus.Array([], signature='aa{sv}')
 		accounts = gajim.contacts.get_accounts()
 		if len(accounts) == 0:
 			return result
@@ -468,6 +510,19 @@ class SignalObject(dbus.service.Object):
 				win.window.focus()
 			else:
 				win.window.focus(long(time()))
+
+	@dbus.service.method(INTERFACE, in_signature='', out_signature='')
+	def toggle_ipython(self):
+		''' shows/hides the ipython window '''
+		win = gajim.ipython_window
+		if win:
+			if win.window.is_visible():
+				gobject.idle_add(win.hide)
+			else:
+				win.show_all()
+				win.present()
+		else:
+			gajim.interface.create_ipython_window()
 
 	@dbus.service.method(INTERFACE, in_signature='', out_signature='a{ss}')
 	def prefs_list(self):
@@ -523,7 +578,7 @@ class SignalObject(dbus.service.Object):
 		if account:
 			if account in gajim.connections and \
 				gajim.connections[account].connected > 1:
-				# if given account is active, use it 
+				# if given account is active, use it
 				AddNewContactWindow(account = account, jid = jid)
 			else:
 				# wrong account
@@ -592,7 +647,7 @@ class SignalObject(dbus.service.Object):
 			return None
 		prim_contact = None # primary contact
 		for contact in contacts:
-			if prim_contact == None or contact.priority > prim_contact.priority:
+			if prim_contact is None or contact.priority > prim_contact.priority:
 				prim_contact = contact
 		contact_dict = DBUS_DICT_SV()
 		contact_dict['name'] = DBUS_STRING(prim_contact.name)
@@ -611,6 +666,9 @@ class SignalObject(dbus.service.Object):
 			resource_props = dbus.Struct((DBUS_STRING(contact.resource),
 				dbus.Int32(contact.priority), DBUS_STRING(contact.status)))
 			contact_dict['resources'].append(resource_props)
+		contact_dict['groups'] = dbus.Array([], signature='(s)')
+		for group in prim_contact.groups:
+			contact_dict['groups'].append((DBUS_STRING(group),))
 		return contact_dict
 
 	@dbus.service.method(INTERFACE, in_signature='', out_signature='s')
@@ -628,10 +686,10 @@ class SignalObject(dbus.service.Object):
 	@dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
 	def send_xml(self, xml, account):
 		if account:
-			gajim.connections[account].send_stanza(xml)
+			gajim.connections[account].send_stanza(str(xml))
 		else:
 			for acc in gajim.contacts.get_accounts():
-				gajim.connections[acc].send_stanza(xml)
+				gajim.connections[acc].send_stanza(str(xml))
 
 	@dbus.service.method(INTERFACE, in_signature='ssss', out_signature='')
 	def join_room(self, room_jid, nick, password, account):
@@ -649,4 +707,6 @@ class SignalObject(dbus.service.Object):
 			gajim.interface.instances[account]['join_gc'] = \
 					JoinGroupchatWindow(account, room_jid, nick)
 		else:
-			gajim.connections[account].join_gc(nick, room_jid, password)
+			gajim.interface.join_gc_room(account, room_jid, nick, password)
+
+# vim: se ts=3:

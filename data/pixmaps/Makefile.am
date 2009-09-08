@@ -1,5 +1,6 @@
 pixmapsdir = $(pkgdatadir)/data/pixmaps
 pixmaps_DATA = $(srcdir)/*.png \
+				gajim.svg \
 			   gajim.ico
 
 pixmapseventsdir = $(pkgdatadir)/data/pixmaps/events
@@ -12,6 +13,7 @@ EXTRA_DIST = $(pixmaps_DATA) $(pixmapsevents_DATA) $(pixmapsagents_DATA)
 
 gajimpixmapdir = $(datadir)/pixmaps
 gajimpixmap_DATA = gajim.png \
-				   gajim_about.png
+						gajim.svg \
+						gajim_about.png
 
 MAINTAINERCLEANFILES = Makefile.in

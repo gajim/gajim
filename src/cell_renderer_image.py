@@ -1,27 +1,26 @@
-##	cell_renderer_image.py
+# -*- coding:utf-8 -*-
+## src/cell_renderer_image.py
 ##
-## Contributors for this file:
-## - Yann Le Boulanger <asterix@lagaule.org>
-## - Nikos Kouremenos <kourem@gmail.com>
+## Copyright (C) 2003-2008 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005 Vincent Hanquez <tab AT snarc.org>
+## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006 Travis Shirk <travis AT pobox.com>
 ##
-## Copyright (C) 2003-2004 Yann Le Boulanger <asterix@lagaule.org>
-##                         Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2005 Yann Le Boulanger <asterix@lagaule.org>
-##                    Vincent Hanquez <tab@snarc.org>
-##                    Nikos Kouremenos <kourem@gmail.com>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
+## This file is part of Gajim.
 ##
-## This program is free software; you can redistribute it and/or modify
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
+
 
 import gtk
 import gobject
@@ -29,7 +28,7 @@ import gobject
 class CellRendererImage(gtk.GenericCellRenderer):
 
 	__gproperties__ = {
-		'image': (gobject.TYPE_OBJECT, 'Image', 
+		'image': (gobject.TYPE_OBJECT, 'Image',
 			'Image', gobject.PARAM_READWRITE),
 	}
 
@@ -46,13 +45,14 @@ class CellRendererImage(gtk.GenericCellRenderer):
 	def do_get_property(self, pspec):
 		return getattr(self, pspec.name)
 
-	def func(self, model, path, iter, (image, tree)):
-		if model.get_value(iter, self.tv_index) != image:
+	def func(self, model, path, iter_, image_tree):
+		image, tree = image_tree
+		if model.get_value(iter_, self.tv_index) != image:
 			return
 		self.redraw = 1
 		col = tree.get_column(self.col_index)
 		cell_area = tree.get_cell_area(path, col)
-		
+
 		tree.queue_draw_area(cell_area.x, cell_area.y,
 					cell_area.width, cell_area.height)
 
@@ -60,17 +60,17 @@ class CellRendererImage(gtk.GenericCellRenderer):
 		if image.get_storage_type() != gtk.IMAGE_ANIMATION:
 			return
 		self.redraw = 0
-		iter = self.iters[image]
-		iter.advance()
+		iter_ = self.iters[image]
+		iter_.advance()
 		model = tree.get_model()
 		if model:
 			model.foreach(self.func, (image, tree))
 		if self.redraw:
-			gobject.timeout_add(iter.get_delay_time(),
+			gobject.timeout_add(iter_.get_delay_time(),
 					self.animation_timeout, tree, image)
 		elif image in self.iters:
 			del self.iters[image]
-				
+
 	def on_render(self, window, widget, background_area, cell_area,
 					expose_area, flags):
 		if not self.image:
@@ -89,10 +89,12 @@ class CellRendererImage(gtk.GenericCellRenderer):
 
 		if self.image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			if self.image not in self.iters:
+				if not isinstance(widget, gtk.TreeView):
+					return
 				animation = self.image.get_animation()
-				iter =  animation.get_iter()
-				self.iters[self.image] = iter
-				gobject.timeout_add(iter.get_delay_time(),
+				iter_ = animation.get_iter()
+				self.iters[self.image] = iter_
+				gobject.timeout_add(iter_.get_delay_time(),
 					self.animation_timeout, widget, self.image)
 
 			pix = self.iters[self.image].get_pixbuf()
@@ -105,7 +107,7 @@ class CellRendererImage(gtk.GenericCellRenderer):
 		window.draw_pixbuf(widget.style.black_gc, pix,
 					draw_rect.x - pix_rect.x,
 					draw_rect.y - pix_rect.y,
-					draw_rect.x, draw_rect.y + 2,
+					draw_rect.x, draw_rect.y,
 					draw_rect.width, draw_rect.height,
 					gtk.gdk.RGB_DITHER_NONE, 0, 0)
 
@@ -133,3 +135,5 @@ class CellRendererImage(gtk.GenericCellRenderer):
 					(cell_area.height - calc_height - \
 					self.get_property('ypad'))
 		return x_offset, y_offset, calc_width, calc_height
+
+# vim: se ts=3:

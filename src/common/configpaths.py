@@ -1,3 +1,27 @@
+# -*- coding:utf-8 -*-
+## src/common/configpaths.py
+##
+## Copyright (C) 2006 Jean-Marie Traissard <jim AT lapin.org>
+##                    Junglecow J <junglecow AT gmail.com>
+## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007 Brendan Taylor <whateley AT gmail.com>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
+##
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
+
 import os
 import sys
 import tempfile
@@ -79,19 +103,30 @@ class ConfigPaths:
 
 		# LOG is deprecated
 		k = ( 'LOG',   'LOG_DB',   'VCARD',   'AVATAR',   'MY_EMOTS',
-			'MY_ICONSETS' )
+			'MY_ICONSETS', 'MY_MOOD_ICONSETS',
+			'MY_ACTIVITY_ICONSETS', 'MY_CACERTS')
 		v = (u'logs', u'logs.db', u'vcards', u'avatars', u'emoticons',
-			u'iconsets')
+			u'iconsets',  u'moods', u'activities', u'cacerts.pem')
 
 		if os.name == 'nt':
-			v = map(lambda x: x.capitalize(), v)
+			v = [x.capitalize() for x in v]
 
 		for n, p in zip(k, v):
 			self.add_from_root(n, p)
 
-		self.add('DATA', os.path.join(u'..', windowsify(u'data')))
+		datadir = ''
+		if u'datadir' in os.environ:
+			datadir = fse(os.environ[u'datadir'])
+		if not datadir:
+			datadir = u'..'
+		self.add('DATA', os.path.join(datadir, windowsify(u'data')))
 		self.add('HOME', fse(os.path.expanduser('~')))
-		self.add('TMP', fse(tempfile.gettempdir()))
+		try:
+			self.add('TMP', fse(tempfile.gettempdir()))
+		except IOError, e:
+			print >> sys.stderr, 'Error opening tmp folder: %s\nUsing %s' % (
+				str(e), os.path.expanduser('~'))
+			self.add('TMP', fse(os.path.expanduser('~')))
 
 		try:
 			import svn_config
@@ -102,18 +137,23 @@ class ConfigPaths:
 		# for k, v in paths.iteritems():
 		# 	print "%s: %s" % (repr(k), repr(v))
 
-	def init_profile(self, profile):
+	def init_profile(self, profile = ''):
 		conffile = windowsify(u'config')
 		pidfile = windowsify(u'gajim')
+		secretsfile = windowsify(u'secrets')
 
 		if len(profile) > 0:
 			conffile += u'.' + profile
 			pidfile += u'.' + profile
+			secretsfile += u'.' + profile
 		pidfile += u'.pid'
 		self.add_from_root('CONFIG_FILE', conffile)
 		self.add_from_root('PID_FILE', pidfile)
+		self.add_from_root('SECRETS_FILE', secretsfile)
 
 		# for k, v in paths.iteritems():
 		# 	print "%s: %s" % (repr(k), repr(v))
 
 gajimpaths = ConfigPaths()
+
+# vim: se ts=3:

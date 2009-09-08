@@ -1,17 +1,24 @@
-##	rst_xhtml_generator.py
+# -*- coding:utf-8 -*-
+## src/common/rst_xhtml_generator.py
 ##
-## Copyright (C) 2006 Yann Le Boulanger <asterix@lagaule.org>
-## Copyright (C) 2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2006 Santiago Gala
+##                    Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2006-2007 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
 ##
-## This program is free software; you can redistribute it and/or modify
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 2 only.
+## by the Free Software Foundation; version 3 only.
 ##
-## This program is distributed in the hope that it will be useful,
+## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 try:
@@ -20,7 +27,7 @@ try:
 	from docutils.parsers.rst import roles
 	from docutils import nodes,utils
 	from docutils.parsers.rst.roles import set_classes
-except:
+except ImportError:
 	print "Requires docutils 0.4 for set_classes to be available"
 	def create_xhtml(text):
 		return None
@@ -50,7 +57,7 @@ else:
 		interpret_url:
 			this, modulo the validated text, will be added to it
 		validator:
-			should return the validated text, or raise ValueError 
+			should return the validated text, or raise ValueError
 		'''
 		def uri_reference_role(role, rawtext, text, lineno, inliner,
 			options={}, content=[]):
@@ -136,7 +143,7 @@ else:
 
 	def create_xhtml(text):
 		return Generator.create_xhtml(text)
-	
+
 
 if __name__ == '__main__':
 	print "test 1\n", Generator.create_xhtml("""
@@ -156,3 +163,5 @@ this `` should    trigger`` should trigger the &nbsp; problem.
 test2_
 """)
 	print "test 3\n", Generator.create_xhtml(""":ticket:`316` implements :xep:`71`""")
+
+# vim: se ts=3:
