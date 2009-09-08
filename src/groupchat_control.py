@@ -1031,7 +1031,7 @@ class GroupchatControl(ChatControlBase):
 		# Autorejoin stuff goes here.
 		# Notice that we don't need to activate autorejoin if connection is lost
 		# or in progress.
-		if self.autorejoin is None and gajim.cccount_is_connectedself.account):
+		if self.autorejoin is None and gajim.account_is_connected(self.account):
 			ar_to = gajim.config.get('muc_autorejoin_timeout')
 			if ar_to:
 				self.autorejoin = gobject.timeout_add_seconds(ar_to, self.rejoin)
