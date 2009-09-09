@@ -86,6 +86,10 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		'''dispatch a received <message> stanza'''
 		msg_type = msg.getType()
 		subject = msg.getSubject()
+		if self.jid != full_jid_with_resource:
+			self.resource = gajim.get_nick_from_fjid(full_jid_with_resource)
+			if self.control:
+				self.control.resource = self.resource
 
 		if not msg_type or msg_type not in ('chat', 'groupchat', 'error'):
 			msg_type = 'normal'

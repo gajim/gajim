@@ -1199,7 +1199,7 @@ class Connection(ConnectionHandlers):
 		msgenc = ''
 
 		if session:
-			fjid = str(session.jid)
+			fjid = session.get_to()
 
 		if keyID and self.USE_GPG:
 			xhtml = None
