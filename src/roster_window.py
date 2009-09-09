@@ -62,7 +62,6 @@ from message_window import MessageWindowMgr
 
 from common import dbus_support
 if dbus_support.supported:
-	from music_track_listener import MusicTrackListener
 	import dbus
 
 from common.xmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC
@@ -1762,38 +1761,6 @@ class RosterWindow:
 		except Exception:
 			pass
 
-	def music_track_changed(self, unused_listener, music_track_info,
-	account=''):
-		if account == '':
-			accounts = gajim.connections.keys()
-		if music_track_info is None:
-			artist = ''
-			title = ''
-			source = ''
-		elif hasattr(music_track_info, 'paused') and music_track_info.paused == 0:
-			artist = ''
-			title = ''
-			source = ''
-		else:
-			artist = music_track_info.artist
-			title = music_track_info.title
-			source = music_track_info.album
-		if account == '':
-			for account in accounts:
-				if not gajim.account_is_connected(account):
-					continue
-				if not gajim.connections[account].pep_supported:
-					continue
-				if gajim.connections[account].music_track_info == music_track_info:
-					continue
-				pep.user_send_tune(account, artist, title, source)
-				gajim.connections[account].music_track_info = music_track_info
-		elif account in gajim.connections and \
-		gajim.connections[account].pep_supported:
-			if gajim.connections[account].music_track_info != music_track_info:
-				pep.user_send_tune(account, artist, title, source)
-				gajim.connections[account].music_track_info = music_track_info
-
 	def connected_rooms(self, account):
 		if account in gajim.gc_connected[account].values():
 			return True
@@ -3354,21 +3321,14 @@ class RosterWindow:
 		act = widget.get_active()
 		gajim.config.set_per('accounts', account, 'publish_tune', act)
 		if act:
-			listener = MusicTrackListener.get()
-			if not self.music_track_changed_signal:
-				self.music_track_changed_signal = listener.connect(
-					'music-track-changed', self.music_track_changed)
-			track = listener.get_playing_track()
-			self.music_track_changed(listener, track)
+			gajim.interface.enable_music_listener()
 		else:
 			# disable it only if no other account use it
 			for acct in gajim.connections:
 				if gajim.config.get_per('accounts', acct, 'publish_tune'):
 					break
 			else:
-				listener = MusicTrackListener.get()
-				listener.disconnect(self.music_track_changed_signal)
-				self.music_track_changed_signal = None
+				gajim.interface.disable_music_listener()
 
 			if gajim.connections[account].pep_supported:
 				# As many implementations don't support retracting items, we send a
@@ -6190,7 +6150,6 @@ class RosterWindow:
 		self.xml = gtkgui_helpers.get_glade('roster_window.glade')
 		self.window = self.xml.get_widget('roster_window')
 		self.hpaned = self.xml.get_widget('roster_hpaned')
-		self.music_track_changed_signal = None
 		gajim.interface.msg_win_mgr = MessageWindowMgr(self.window, self.hpaned)
 		gajim.interface.msg_win_mgr.connect('window-delete',
 			self.on_message_window_delete)
@@ -6410,16 +6369,6 @@ class RosterWindow:
 		# Workaroung: For strange reasons signal is behaving like row-changed
 		self._toggeling_row = False
 		self.setup_and_draw_roster()
-
-		for account in gajim.connections:
-			if gajim.config.get_per('accounts', account, 'publish_tune') and \
-			dbus_support.supported:
-				listener = MusicTrackListener.get()
-				self.music_track_changed_signal = listener.connect(
-					'music-track-changed', self.music_track_changed)
-				track = listener.get_playing_track()
-				self.music_track_changed(listener, track)
-				break
 
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()

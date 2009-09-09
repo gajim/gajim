@@ -899,8 +899,8 @@ class ConnectionDisco:
 							track = listener.get_playing_track()
 							if gajim.config.get_per('accounts', self.name,
 							'publish_tune'):
-								gajim.interface.roster.music_track_changed(listener,
-										track, self.name)
+								gajim.interface.music_track_changed(listener, track,
+									self.name)
 						break
 			if features.__contains__(common.xmpp.NS_VCARD):
 				self.vcard_supported = True

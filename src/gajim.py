@@ -156,6 +156,7 @@ except exceptions.DatabaseMalformed:
 else:
 	from common import dbus_support
 	if dbus_support.supported:
+		from music_track_listener import MusicTrackListener
 		import dbus
 
 	if os.name == 'posix': # dl module is Unix Only
@@ -243,6 +244,7 @@ from common import helpers
 from common import optparser
 from common import dataforms
 from common import passwords
+from common import pep
 
 gajimpaths = common.configpaths.gajimpaths
 
@@ -2961,6 +2963,48 @@ class Interface:
 ### Other Methods
 ################################################################################
 
+	def enable_music_listener(self):
+		if not self.music_track_changed_signal:
+			listener = MusicTrackListener.get()
+			self.music_track_changed_signal = listener.connect(
+				'music-track-changed', self.music_track_changed)
+		track = listener.get_playing_track()
+		self.music_track_changed(listener, track)
+
+	def disable_music_listener(self):
+		listener = MusicTrackListener.get()
+		listener.disconnect(self.music_track_changed_signal)
+		self.music_track_changed_signal = None
+
+	def music_track_changed(self, unused_listener, music_track_info, account=''):
+		if account == '':
+			accounts = gajim.connections.keys()
+		else:
+			accounts = [account]
+		if music_track_info is None:
+			artist = ''
+			title = ''
+			source = ''
+		elif hasattr(music_track_info, 'paused') and music_track_info.paused == 0:
+			artist = ''
+			title = ''
+			source = ''
+		else:
+			artist = music_track_info.artist
+			title = music_track_info.title
+			source = music_track_info.album
+		for acct in accounts:
+			if acct not in gajim.connections:
+				continue
+			if not gajim.account_is_connected(acct):
+				continue
+			if not gajim.connections[acct].pep_supported:
+				continue
+			if gajim.connections[acct].music_track_info == music_track_info:
+				continue
+			pep.user_send_tune(acct, artist, title, source)
+			gajim.connections[acct].music_track_info = music_track_info
+
 	def read_sleepy(self):
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
@@ -3516,6 +3560,12 @@ class Interface:
 				except Exception:
 					pass
 		gobject.timeout_add_seconds(5, remote_init)
+		self.music_track_changed_signal = None
+		for account in gajim.connections:
+			if gajim.config.get_per('accounts', account, 'publish_tune') and \
+			dbus_support.supported:
+				self.enable_music_listener()
+				break
 
 if __name__ == '__main__':
 	def sigint_cb(num, stack):

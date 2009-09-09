@@ -219,7 +219,7 @@ class Connection(ConnectionHandlers):
 
 	# We are doing disconnect at so many places, better use one function in all
 	def disconnect(self, on_purpose=False):
-		gajim.interface.roster.music_track_changed(None, None, self.name)
+		gajim.interface.music_track_changed(None, None, self.name)
 		self.on_purpose = on_purpose
 		self.connected = 0
 		self.time_to_reconnect = None
