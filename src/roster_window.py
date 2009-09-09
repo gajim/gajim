@@ -1735,32 +1735,6 @@ class RosterWindow:
 			if chat_control:
 				chat_control.contact = contact1
 
-	def _change_awn_icon_status(self, status):
-		if not dbus_support.supported:
-			# do nothing if user doesn't have D-Bus bindings
-			return
-		try:
-			bus = dbus.SessionBus()
-			if not 'com.google.code.Awn' in bus.list_names():
-				# Awn is not installed
-				return
-		except Exception:
-			return
-		iconset = gajim.config.get('iconset')
-		prefix = os.path.join(helpers.get_iconset_path(iconset), '32x32')
-		if status in ('chat', 'away', 'xa', 'dnd', 'invisible', 'offline'):
-			status = status + '.png'
-		elif status == 'online':
-			prefix = os.path.join(gajim.DATA_DIR, 'pixmaps')
-			status = 'gajim.png'
-		path = os.path.join(prefix, status)
-		try:
-			obj = bus.get_object('com.google.code.Awn', '/com/google/code/Awn')
-			awn = dbus.Interface(obj, 'com.google.code.Awn')
-			awn.SetTaskIconByName('Gajim', os.path.abspath(path))
-		except Exception:
-			pass
-
 	def connected_rooms(self, account):
 		if account in gajim.gc_connected[account].values():
 			return True
@@ -2156,7 +2130,7 @@ class RosterWindow:
 			liststore.prepend([status_combobox_text,
 				gajim.interface.jabber_state_images['16'][show], show, False])
 			self.status_combobox.set_active(0)
-		self._change_awn_icon_status(show)
+		gajim.interface._change_awn_icon_status(show)
 		self.combobox_callback_active = True
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.change_status(show)
