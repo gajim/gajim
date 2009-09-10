@@ -2844,6 +2844,13 @@ class RosterWindow:
 			ctrl.got_disconnected()
 		self.remove_groupchat(jid, account)
 
+	def on_reconnect(self, widget, jid, account):
+		'''When disconnect menuitem is activated: disconect from room'''
+		if jid in gajim.interface.minimized_controls[account]:
+			ctrl = gajim.interface.minimized_controls[account][jid]
+		gajim.interface.join_gc_room(account, jid, ctrl.nick,
+			gajim.gc_passwords.get(jid, ''))
+
 	def on_send_single_message_menuitem_activate(self, widget, account,
 	contact=None):
 		if contact is None:
@@ -5888,6 +5895,13 @@ class RosterWindow:
 				jid, account)
 			menu.append(maximize_menuitem)
 
+		if not gajim.gc_connected[account].get(jid, False):
+			connect_menuitem = gtk.ImageMenuItem(_('_Reconnect'))
+			connect_icon = gtk.image_new_from_stock(gtk.STOCK_CONNECT, \
+				gtk.ICON_SIZE_MENU)
+			connect_menuitem.set_image(connect_icon)
+			connect_menuitem.connect('activate', self.on_reconnect, jid, account)
+			menu.append(connect_menuitem)
 		disconnect_menuitem = gtk.ImageMenuItem(_('_Disconnect'))
 		disconnect_icon = gtk.image_new_from_stock(gtk.STOCK_DISCONNECT, \
 			gtk.ICON_SIZE_MENU)
