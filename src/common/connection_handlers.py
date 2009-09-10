@@ -2615,9 +2615,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if sign_msg and not signed:
 			signed = self.get_signed_presence(msg)
 			if signed is None:
-				self.dispatch('ERROR', (_('OpenPGP passphrase was not given'),
-					#%s is the account name here
-					_('You will be connected to %s without OpenPGP.') % self.name))
+				self.dispatch('BAD_PASSPHRASE', ())
 				self.USE_GPG = False
 				signed = ''
 		self.connected = gajim.SHOW_LIST.index(show)

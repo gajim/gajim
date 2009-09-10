@@ -1509,10 +1509,15 @@ class Interface:
 		if use_gpg_agent:
 			sectext = _('You configured Gajim to use GPG agent, but there is no '
 			'GPG agent running or it returned a wrong passphrase.\n')
-		sectext += _('You are currently connected without your OpenPGP key.')
+			sectext += _('You are currently connected without your OpenPGP key.')
+			dialogs.WarningDialog(_('Your passphrase is incorrect'), sectext)
+		else:
+			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'warning.png')
+			notify.popup('warning', account, account, 'warning', path,
+				_('OpenGPG Passphrase Incorrect'),
+				_('You are currently connected without your OpenPGP key.'))
 		keyID = gajim.config.get_per('accounts', account, 'keyid')
 		self.forget_gpg_passphrase(keyID)
-		dialogs.WarningDialog(_('Your passphrase is incorrect'), sectext)
 
 	def handle_event_gpg_password_required(self, account, array):
 		#('GPG_PASSWORD_REQUIRED', account, (callback,))
