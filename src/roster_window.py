@@ -3184,8 +3184,26 @@ class RosterWindow:
 					jid += '/' + contact.resource
 				self.send_status(account, show, message, to=jid)
 
-		self.get_status_message(show, on_response, show_pep=False,
-			always_ask=True)
+		def send_it(is_checked=None):
+			if is_checked is not None: # dialog has been shown
+				if is_checked: # user does not want to be asked again
+					gajim.config.set('confirm_custom_status', 'no')
+				else:
+					gajim.config.set('confirm_custom_status', 'yes')
+			self.get_status_message(show, on_response, show_pep=False,
+				always_ask=True)
+
+		confirm_custom_status = gajim.config.get('confirm_custom_status')
+		if confirm_custom_status == 'no':
+			send_it()
+			return
+		pritext = _('You are about to send a custom status. Are you sure you want'
+			' to continue?')
+		sectext = _('This contact will temporarily see you as %(status)s, '
+			'but only until you change your status. Then he will see your global '
+			'status.') % {'status': show}
+		dlg = dialogs.ConfirmationDialogCheck(pritext, sectext,
+			_('Do _not ask me again'), on_response_ok=send_it)
 
 	def on_status_combobox_changed(self, widget):
 		'''When we change our status via the combobox'''
