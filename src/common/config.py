@@ -249,6 +249,8 @@ class Config:
 		'gc_nicknames_colors': [ opt_str, '#a34526:#c000ff:#0012ff:#388a99:#045723:#7c7c7c:#ff8a00:#94452d:#244b5a:#32645a', _('List of colors, separated by ":", that will be used to color nicknames in group chats.'), True ],
 		'ctrl_tab_go_to_next_composing': [opt_bool, True, _('Ctrl-Tab go to next composing tab when none is unread.')],
 		'confirm_metacontacts': [ opt_str, '', _('Should we show the confirm metacontacts creation dialog or not? Empty string means we never show the dialog.')],
+		'confirm_block': [ opt_str, '', _('Should we show the confirm block contact dialog or not? Empty string means we never show the dialog.')],
+		'confirm_custom_status': [ opt_str, '', _('Should we show the confirm custom status dialog or not? Empty string means we never show the dialog.')],
 		'enable_negative_priority': [ opt_bool, False, _('If True, you will be able to set a negative priority to your account in account modification window. BE CAREFUL, when you are logged in with a negative priority, you will NOT receive any message from your server.')],
 		'use_gnomekeyring': [opt_bool, True, _('If True, Gajim will use Gnome Keyring (if available) to store account passwords.')],
 		'use_kwalletcli': [opt_bool, True, _('If True, Gajim will use KDE Wallet (if kwalletcli is available) to store account passwords.')],

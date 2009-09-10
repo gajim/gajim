@@ -2575,7 +2575,24 @@ class RosterWindow:
 					connection.set_default_list('block')
 				connection.get_privacy_list('block')
 
-		self.get_status_message('offline', on_continue, show_pep=False)
+		def _block_it(is_checked=None):
+			if is_checked is not None: # dialog has been shown
+				if is_checked: # user does not want to be asked again
+					gajim.config.set('confirm_block', 'no')
+				else:
+					gajim.config.set('confirm_block', 'yes')
+			self.get_status_message('offline', on_continue, show_pep=False)
+
+		confirm_block = gajim.config.get('confirm_block')
+		if confirm_block == 'no':
+			_block_it()
+			return
+		pritext = _('You are about to block a contact. Are you sure you want'
+			' to continue?')
+		sectext = _('This contact will see you offline and you will not receive '
+			'messages he will send you.')
+		dlg = dialogs.ConfirmationDialogCheck(pritext, sectext,
+			_('Do _not ask me again'), on_response_ok=_block_it)
 
 	def on_unblock(self, widget, list_, group=None):
 		''' When clicked on the 'unblock' button in context menu. '''
@@ -2828,7 +2845,7 @@ class RosterWindow:
 		self.remove_groupchat(jid, account)
 
 	def on_send_single_message_menuitem_activate(self, widget, account,
-	contact = None):
+	contact=None):
 		if contact is None:
 			dialogs.SingleMessageWindow(account, action='send')
 		elif isinstance(contact, list):
@@ -2878,7 +2895,7 @@ class RosterWindow:
 				break
 
 	def on_invite_to_room(self, widget, list_, room_jid, room_account,
-		resource = None):
+		resource=None):
 		''' resource parameter MUST NOT be used if more than one contact in
 		list '''
 		for e in list_:
