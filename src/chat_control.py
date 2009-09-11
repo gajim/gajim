@@ -603,45 +603,24 @@ class ChatControlBase(MessageControl):
 			self.drag_entered_conv = True
 			self.conv_textview.tv.set_editable(True)
 
-	def _process_command(self, message):
-		if not message or message[0] != '/':
-			return False
-
-		message = message[1:]
-		message_array = message.split(' ', 1)
-		command = message_array.pop(0).lower()
-		if message_array == ['']:
-			message_array = []
-
-		if command == 'clear' and not len(message_array):
-			self.conv_textview.clear() # clear conversation
-			self.clear(self.msg_textview) # clear message textview too
-			return True
-		elif message == 'compact' and not len(message_array):
-			self.chat_buttons_set_visible(not self.hide_chat_buttons)
-			self.clear(self.msg_textview)
-			return True
-		return False
-
 	def send_message(self, message, keyID='', type_='chat', chatstate=None,
-	msg_id=None, composing_xep=None, resource=None, process_command=True,
+	msg_id=None, composing_xep=None, resource=None,
 	xhtml=None, callback=None, callback_args=[]):
 		'''Send the given message to the active tab. Doesn't return None if error
 		'''
 		if not message or message == '\n':
 			return None
 
-		if not process_command or not self._process_command(message):
-			MessageControl.send_message(self, message, keyID, type_=type_,
-				chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
-				resource=resource, user_nick=self.user_nick, xhtml=xhtml,
-				callback=callback, callback_args=callback_args)
+		MessageControl.send_message(self, message, keyID, type_=type_,
+			chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
+			resource=resource, user_nick=self.user_nick, xhtml=xhtml,
+			callback=callback, callback_args=callback_args)
 
-			# Record message history
-			self.save_sent_message(message)
+		# Record message history
+		self.save_sent_message(message)
 
-			# Be sure to send user nickname only once according to JEP-0172
-			self.user_nick = None
+		# Be sure to send user nickname only once according to JEP-0172
+		self.user_nick = None
 
 		# Clear msg input
 		message_buffer = self.msg_textview.get_buffer()
@@ -1129,7 +1108,6 @@ class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
 	TYPE_ID = message_control.TYPE_CHAT
 	old_msg_kind = None # last kind of the printed message
-	CHAT_CMDS = ['clear', 'compact', 'help', 'me', 'ping', 'say']
 
 	def __init__(self, parent_win, contact, acct, session, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
@@ -1718,82 +1696,10 @@ class ChatControl(ChatControlBase):
 		elif self.session and self.session.enable_encryption:
 			dialogs.ESessionInfoWindow(self.session)
 
-	def _process_command(self, message):
-		if message[0] != '/':
-			return False
-
-		# Handle common commands
-		if ChatControlBase._process_command(self, message):
-			return True
-
-		message = message[1:]
-		message_array = message.split(' ', 1)
-		command = message_array.pop(0).lower()
-		if message_array == ['']:
-			message_array = []
-
-		if command == 'me':
-			if len(message_array):
-				return False # /me is not really a command
-			else:
-				self.get_command_help(command)
-				return True # do not send "/me" as message
-
-		if command == 'help':
-			if len(message_array):
-				subcommand = message_array.pop(0)
-				self.get_command_help(subcommand)
-			else:
-				self.get_command_help(command)
-			self.clear(self.msg_textview)
-			return True
-		elif command == 'ping':
-			if not len(message_array):
-				if self.account == gajim.ZEROCONF_ACC_NAME:
-					self.print_conversation(
-						_('Command not supported for zeroconf account.'), 'info')
-				else:
-					gajim.connections[self.account].sendPing(self.contact)
-			else:
-				self.get_command_help(command)
-			self.clear(self.msg_textview)
-			return True
-		return False
-
-	def get_command_help(self, command):
-		if command == 'help':
-			self.print_conversation(_('Commands: %s') % ChatControl.CHAT_CMDS,
-				'info')
-		elif command == 'clear':
-			self.print_conversation(_('Usage: /%s, clears the text window.') % \
-				command, 'info')
-		elif command == 'compact':
-			self.print_conversation(_('Usage: /%s, hide the chat buttons.') % \
-				command, 'info')
-		elif command == 'me':
-			self.print_conversation(_('Usage: /%(command)s <action>, sends action '
-				'to the current group chat. Use third person. (e.g. /%(command)s '
-				'explodes.)'
-				) % {'command': command}, 'info')
-		elif command == 'ping':
-			self.print_conversation(_('Usage: /%s, sends a ping to the contact') %\
-				command, 'info')
-		elif command == 'say':
-			self.print_conversation(_('Usage: /%s, send the message to the contact') %\
-				command, 'info')
-		else:
-			self.print_conversation(_('No help info for /%s') % command, 'info')
-
 	def send_message(self, message, keyID='', chatstate=None, xhtml=None):
 		'''Send a message to contact'''
-		if message in ('', None, '\n') or self._process_command(message):
+		if message in ('', None, '\n'):
 			return None
-
-		# Do we need to process command for the message ?
-		process_command = True
-		if message.startswith('/say'):
-			message = message[5:]
-			process_command = False
 
 		# refresh timers
 		self.reset_kbd_mouse_timeout_vars()
@@ -1853,7 +1759,7 @@ class ChatControl(ChatControlBase):
 
 		ChatControlBase.send_message(self, message, keyID, type_='chat',
 			chatstate=chatstate_to_send, composing_xep=composing_xep,
-			process_command=process_command, xhtml=xhtml, callback=_on_sent,
+			xhtml=xhtml, callback=_on_sent,
 			callback_args=[contact, message, encrypted, xhtml])
 
 	def check_for_possible_paused_chatstate(self, arg):
