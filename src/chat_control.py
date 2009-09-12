@@ -51,6 +51,8 @@ from common.pep import MOODS, ACTIVITIES
 from common.xmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
 
+from commands.implementation import CommonCommands, ChatCommands
+
 try:
 	import gtkspell
 	HAS_GTK_SPELL = True
@@ -76,9 +78,12 @@ if gajim.config.get('use_speller') and HAS_GTK_SPELL:
 			del langs[lang]
 
 ################################################################################
-class ChatControlBase(MessageControl):
+class ChatControlBase(MessageControl, CommonCommands):
 	'''A base class containing a banner, ConversationTextview, MessageTextView
 	'''
+
+	DISPATCHED_BY = CommonCommands
+
 	def make_href(self, match):
 		url_color = gajim.config.get('urlmsgcolor')
 		return '<a href="%s"><span color="%s">%s</span></a>' % (match.group(),
@@ -605,11 +610,14 @@ class ChatControlBase(MessageControl):
 
 	def send_message(self, message, keyID='', type_='chat', chatstate=None,
 	msg_id=None, composing_xep=None, resource=None,
-	xhtml=None, callback=None, callback_args=[]):
+	xhtml=None, callback=None, callback_args=[], process_commands=True):
 		'''Send the given message to the active tab. Doesn't return None if error
 		'''
 		if not message or message == '\n':
 			return None
+
+		if process_commands and self.process_as_command(message):
+			return
 
 		MessageControl.send_message(self, message, keyID, type_=type_,
 			chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
@@ -1104,10 +1112,12 @@ class ChatControlBase(MessageControl):
 		# FIXME: Set sensitivity for toolbar
 
 ################################################################################
-class ChatControl(ChatControlBase):
+class ChatControl(ChatControlBase, ChatCommands):
 	'''A control for standard 1-1 chat'''
 	TYPE_ID = message_control.TYPE_CHAT
 	old_msg_kind = None # last kind of the printed message
+
+	DISPATCHED_BY = ChatCommands
 
 	def __init__(self, parent_win, contact, acct, session, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
@@ -1696,7 +1706,8 @@ class ChatControl(ChatControlBase):
 		elif self.session and self.session.enable_encryption:
 			dialogs.ESessionInfoWindow(self.session)
 
-	def send_message(self, message, keyID='', chatstate=None, xhtml=None):
+	def send_message(self, message, keyID='', chatstate=None, xhtml=None,
+			process_commands=True):
 		'''Send a message to contact'''
 		if message in ('', None, '\n'):
 			return None
@@ -1760,7 +1771,8 @@ class ChatControl(ChatControlBase):
 		ChatControlBase.send_message(self, message, keyID, type_='chat',
 			chatstate=chatstate_to_send, composing_xep=composing_xep,
 			xhtml=xhtml, callback=_on_sent,
-			callback_args=[contact, message, encrypted, xhtml])
+			callback_args=[contact, message, encrypted, xhtml],
+			process_commands=process_commands)
 
 	def check_for_possible_paused_chatstate(self, arg):
 		''' did we move mouse of that window or write something in message

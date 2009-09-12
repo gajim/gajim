@@ -47,6 +47,8 @@ from chat_control import ChatControl
 from chat_control import ChatControlBase
 from common.exceptions import GajimGeneralException
 
+from commands.implementation import PrivateChatCommands, GroupChatCommands
+
 import logging
 log = logging.getLogger('gajim.groupchat_control')
 
@@ -116,8 +118,10 @@ def tree_cell_data_func(column, renderer, model, iter_, tv=None):
 			renderer.set_property('font',
 				gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
 
-class PrivateChatControl(ChatControl):
+class PrivateChatControl(ChatControl, PrivateChatCommands):
 	TYPE_ID = message_control.TYPE_PM
+
+	DISPATCHED_BY = PrivateChatCommands
 
 	def __init__(self, parent_win, gc_contact, contact, account, session):
 		room_jid = contact.jid.split('/')[0]
@@ -132,7 +136,7 @@ class PrivateChatControl(ChatControl):
 		ChatControl.__init__(self, parent_win, contact, account, session)
 		self.TYPE_ID = 'pm'
 
-	def send_message(self, message, xhtml=None):
+	def send_message(self, message, xhtml=None, process_commands=True):
 		'''call this function to send our message'''
 		if not message:
 			return
@@ -158,7 +162,8 @@ class PrivateChatControl(ChatControl):
 					'left.') % {'room': room, 'nick': nick})
 				return
 
-		ChatControl.send_message(self, message, xhtml=xhtml)
+		ChatControl.send_message(self, message, xhtml=xhtml,
+				process_commands=process_commands)
 
 	def update_ui(self):
 		if self.contact.show == 'offline':
@@ -180,8 +185,10 @@ class PrivateChatControl(ChatControl):
 
 		self.session.negotiate_e2e(False)
 
-class GroupchatControl(ChatControlBase):
+class GroupchatControl(ChatControlBase, GroupChatCommands):
 	TYPE_ID = message_control.TYPE_GC
+
+	DISPATCHED_BY = GroupChatCommands
 
 	def __init__(self, parent_win, contact, acct, is_continued=False):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
@@ -1505,9 +1512,12 @@ class GroupchatControl(ChatControlBase):
 		if model.iter_n_children(parent_iter) == 0:
 			model.remove(parent_iter)
 
-	def send_message(self, message, xhtml=None):
+	def send_message(self, message, xhtml=None, process_commands=True):
 		'''call this function to send our message'''
 		if not message:
+			return
+
+		if process_commands and self.process_as_command(message):
 			return
 
 		message = helpers.remove_invalid_xml_chars(message)
