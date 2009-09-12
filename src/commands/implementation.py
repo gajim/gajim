@@ -100,7 +100,7 @@ class ChatCommands(CommonCommands):
         Send a ping to the contact
         """
         if self.account == gajim.ZEROCONF_ACC_NAME:
-            raise CommandError(ping, _('Command is not supported for zeroconf accounts'))
+            raise CommandError(_('Command is not supported for zeroconf accounts'))
         gajim.connections[self.account].sendPing(self.contact)
 
 class PrivateChatCommands(CommonCommands):

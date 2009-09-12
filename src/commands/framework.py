@@ -25,6 +25,20 @@ from inspect import getargspec
 class CommandInternalError(Exception):
     pass
 
+class CommandError(Exception):
+    def __init__(self, message=None, command=None, name=None):
+        if command:
+            self.command = command
+            self.name = command.first_name
+        elif name:
+            self.command = None
+            self.name = name
+
+        if message:
+            super(CommandError, self).__init__(message)
+        else:
+            super(CommandError, self).__init__()
+
 class Command(object):
 
     DOC_STRIP_PATTERN = re.compile(r'(?:^[ \t]+|\A\n)', re.MULTILINE)
@@ -43,7 +57,13 @@ class Command(object):
         self.empty = empty
 
     def __call__(self, *args, **kwargs):
-        return self.handler(*args, **kwargs)
+        try:
+            return self.handler(*args, **kwargs)
+        except CommandError, exception:
+            if not exception.command and not exception.name:
+                raise CommandError(exception.message, self)
+        except TypeError:
+            raise CommandError("Command received invalid arguments", self)
 
     def __repr__(self):
         return "<Command %s>" % ', '.join(self.names)
@@ -56,7 +76,7 @@ class Command(object):
 
     @property
     def first_name(self):
-        return self.names[0]    
+        return self.names[0]
 
     @property
     def native_name(self):
@@ -162,14 +182,6 @@ class Command(object):
 
         return usage if not complete else self.ARG_USAGE_PATTERN % (names, usage)
 
-class CommandError(Exception):
-    def __init__(self, command, *args, **kwargs):
-        if isinstance(command, Command):
-            self.command = command
-            self.name = command.first_name
-        self.name = command
-        super(Exception, self).__init__(*args, **kwargs)
-
 class Dispatcher(type):
     table = {}
     hosted = {}
@@ -180,7 +192,7 @@ class Dispatcher(type):
 
         if Dispatcher.is_suitable(cls, dct):
             Dispatcher.register_processor(cls)
-        
+
         # Sanitize names even if processor is not suitable for registering,
         # because it might be inherited by an another processor.
         Dispatcher.sanitize_names(cls)
@@ -226,7 +238,7 @@ class Dispatcher(type):
 
         if 'HOSTED_BY' in proc.__dict__:
             cls.register_adhocs(proc)
-        
+
         commands = cls.traverse_commands(proc, inherited)
         cls.register_commands(proc, commands)
 
@@ -362,7 +374,7 @@ class CommandProcessor(object):
         name = cls.prepare_name(name)
         command = Dispatcher.retrieve_command(cls, name)
         if not command:
-            raise CommandError(name, "Command does not exist")
+            raise CommandError("Command does not exist", name=name)
         return command
 
     @classmethod
@@ -446,7 +458,7 @@ class CommandProcessor(object):
             if len(spec_args) == 1:
                 if arguments or command.empty:
                     return (arguments,), {}
-                raise CommandError(command, "Can not be used without arguments")
+                raise CommandError("Can not be used without arguments", command)
             raise CommandInternalError("Raw command must define no more then one argument")
 
         if '__optional__' in spec_args:
@@ -520,13 +532,10 @@ class CommandProcessor(object):
         args, kwargs = self.parse_command_arguments(arguments) if arguments else ([], {})
         args, kwargs = self.adapt_command_arguments(command, arguments, args, kwargs)
 
-        try:
-            if self.command_preprocessor(name, command, arguments, args, kwargs):
-                return
-            value = command(self, *args, **kwargs)
-            self.command_postprocessor(name, command, arguments, args, kwargs, value)
-        except TypeError:
-           raise CommandError(name, "Command received invalid arguments")
+        if self.command_preprocessor(name, command, arguments, args, kwargs):
+            return
+        value = command(self, *args, **kwargs)
+        self.command_postprocessor(name, command, arguments, args, kwargs, value)
 
     def command_preprocessor(self, name, command, arguments, args, kwargs):
         """
