@@ -82,8 +82,6 @@ class ChatControlBase(MessageControl, CommonCommands):
 	'''A base class containing a banner, ConversationTextview, MessageTextView
 	'''
 
-	DISPATCHED_BY = CommonCommands
-
 	def make_href(self, match):
 		url_color = gajim.config.get('urlmsgcolor')
 		return '<a href="%s"><span color="%s">%s</span></a>' % (match.group(),

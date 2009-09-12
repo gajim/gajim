@@ -19,7 +19,6 @@ would be dropped in. Defines a little bit of scaffolding to support interaction
 between the two and a few utility methods so you don't need to dig up the host
 code to write basic commands.
 """
-
 from types import StringTypes
 from framework import CommandProcessor, CommandError
 from traceback import print_exc

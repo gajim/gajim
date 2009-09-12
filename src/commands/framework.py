@@ -27,12 +27,11 @@ class CommandInternalError(Exception):
 
 class CommandError(Exception):
     def __init__(self, message=None, command=None, name=None):
+        self.command = command
+        self.name = name
+
         if command:
-            self.command = command
             self.name = command.first_name
-        elif name:
-            self.command = None
-            self.name = name
 
         if message:
             super(CommandError, self).__init__(message)
@@ -343,7 +342,7 @@ class CommandProcessor(object):
 
     # Quite complex piece of regular expression logic.
     ARG_PATTERN = re.compile(r'(\'|")?(?P<body>(?(1).+?|\S+))(?(1)\1)')
-    OPT_PATTERN = re.compile(r'--?(?P<key>[\w-]+)(?:(?:=|\s)(\'|")?(?P<value>(?(2)[^-]+?|[^-\s]+))(?(2)\2))?')
+    OPT_PATTERN = re.compile(r'(?<!\w)--?(?P<key>[\w-]+)(?:(?:=|\s)(\'|")?(?P<value>(?(2)[^-]+?|[^-\s]+))(?(2)\2))?')
 
     EXPAND_SHORT_OPTIONS = True
 
@@ -509,7 +508,7 @@ class CommandProcessor(object):
             return False
 
         text = text[len(self.COMMAND_PREFIX):]
-        text = text.lstrip()
+        text = text.strip()
 
         parts = text.split(' ', 1)
 
