@@ -2098,6 +2098,7 @@ class Interface:
 
 		if helpers.allow_popup_window(account):
 			dialogs.VoIPCallReceivedDialog(account, peerjid, sid)
+			return
 
 		self.add_event(account, peerjid, 'voip-incoming', (peerjid, sid,))
 

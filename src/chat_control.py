@@ -50,6 +50,7 @@ from common.logger import constants
 from common.pep import MOODS, ACTIVITIES
 from common.xmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
+from common.xmpp.protocol import NS_JINGLE_RTP_AUDIO
 
 try:
 	import gtkspell
@@ -1634,7 +1635,7 @@ class ChatControl(ChatControlBase):
 		banner_name_tooltip.set_tip(banner_name_label, label_tooltip)
 
 	def _on_start_voip_menuitem_activate(self, *things):
-		gajim.connections[self.account].startVoiP(self.contact.jid+'/'+self.contact.resource)
+		gajim.connections[self.account].startVoIP(self.contact.jid+'/'+self.contact.resource)
 
 	def _toggle_gpg(self):
 		if not self.gpg_is_active and not self.contact.keyID:
@@ -2167,6 +2168,12 @@ class ChatControl(ChatControlBase):
 			send_file_menuitem.set_sensitive(True)
 		else:
 			send_file_menuitem.set_sensitive(False)
+
+		# check if it's possible to start jingle sessions
+		if gajim.capscache.is_supported(contact, NS_JINGLE_RTP_AUDIO):
+			start_voip_menuitem.set_sensitive(True)
+		else:
+			start_voip_menuitem.set_sensitive(False)
 
 		# check if it's possible to convert to groupchat
 		if gajim.capscache.is_supported(contact, NS_MUC):
