@@ -466,7 +466,8 @@ class CommandProcessor(object):
                 optional = args[hard_len:]
                 args = args[:hard_len]
                 args.insert(spec_args.index('__optional__'), optional)
-            raise CommandInternalError("Cant have both, __optional__ and *args")
+            else:
+                raise CommandInternalError("Cant have both, __optional__ and *args")
 
         if command.dashes:
             for key, value in kwargs.items():

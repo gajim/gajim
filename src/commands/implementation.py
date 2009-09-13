@@ -29,8 +29,6 @@ class CommonCommands(ChatMiddleware):
     PrivateChatControl or GroupchatControl when command is being called.
     """
 
-    IS_COMMAND_PROCESSOR = True
-
     @command
     def clear(self):
         """
