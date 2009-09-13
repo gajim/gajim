@@ -17,7 +17,10 @@
 Provides an actual implementation of the standard commands.
 """
 
+import dialogs
 from common import gajim
+from common import helpers
+from common.exceptions import GajimGeneralException
 
 from framework import command, CommandError
 from middleware import ChatMiddleware
@@ -120,3 +123,142 @@ class GroupChatCommands(CommonCommands):
 
     IS_COMMAND_PROCESSOR = True
     INHERITED = True
+
+    @command(raw=True)
+    def nick(self, new_nick):
+        """
+        Change your nickname in a group chat
+        """
+        try:
+            new_nick = helpers.parse_resource(new_nick)
+        except Exception:
+            raise CommandError(_("Invalid nickname"))
+        self.connection.join_gc(new_nick, self.room_jid, None, change_nick=True)
+
+    @command('query', raw=True)
+    def chat(self, nick):
+        """
+        Open a private chat window with a specified occupant
+        """
+        nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
+        if nick in nicks:
+            self.on_send_pm(nick=nick)
+        else:
+            raise CommandError(_("Nickname not found"))
+
+    @command('msg')
+    def message(self, nick, *a_message):
+        """
+        Open a private chat window with a specified occupant and send him a
+        message
+        """
+        a_message = self.collect(a_message, False)
+        nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
+        if nick in nicks:
+            self.on_send_pm(nick=nick, msg=a_message)
+        else:
+            raise CommandError(_("Nickname not found"))
+
+    @command(raw=True, empty=True)
+    def topic(self, new_topic):
+        """
+        Display or change a group chat topic
+        """
+        if new_topic:
+            self.connection.send_gc_subject(self.room_jid, new_topic)
+        else:
+            return self.subject
+
+    @command
+    def invite(self, jid, *reason):
+        """
+        Invite a user to a room for a reason
+        """
+        reason = self.collect(reason)
+        self.connection.send_invite(self.room_jid, jid, reason)
+        return _("Invited %s to %s") % (jid, self.room_jid)
+
+    @command
+    def join(self, jid, *nick):
+        """
+        Join a group chat given by a jid, optionally using given nickname
+        """
+        nick = self.collect(nick) or self.nick
+
+        if '@' not in jid:
+            jid = jid + '@' + gajim.get_server_from_jid(self.room_jid)
+
+        try:
+            gajim.interface.instances[self.account]['join_gc'].window.present()
+        except KeyError:
+            try:
+                dialogs.JoinGroupchatWindow(account=None, room_jid=jid, nick=nick)
+            except GajimGeneralException:
+                pass
+
+    @command('part', 'close', raw=True, empty=True)
+    def leave(self, reason):
+        """
+        Leave the groupchat, optionally giving a reason, and close tab or window
+        """
+        self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND, reason)
+
+    @command
+    def ban(self, who, *reason):
+        """
+        Ban user by a nick or a jid from a groupchat
+
+        If given nickname is not found it will be treated as a jid.
+        """
+        reason = self.collect(reason, none=False)
+        if who in gajim.contacts.get_nick_list(self.account, self.room_jid):
+            contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, who)
+            who = contact.jid
+        self.connection.gc_set_affiliation(self.room_jid, who, 'outcast', reason)
+
+    @command
+    def kick(self, who, *reason):
+        """
+        Kick user by a nick from a groupchat
+        """
+        reason = self.collect(reason, none=False)
+        if not who in gajim.contacts.get_nick_list(self.account, self.room_jid):
+            raise CommandError(_("Nickname not found"))
+        self.connection.gc_set_role(self.room_jid, who, 'none', reason)
+
+    @command
+    def names(self, verbose=False):
+        """
+        Display names of all group chat occupants
+        """
+        get_contact = lambda nick: gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+        nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
+
+        # First we do alpha-numeric sort and then role-based one.
+        nicks.sort()
+        nicks.sort(key=lambda nick: get_contact(nick).role)
+
+        if verbose:
+            for nick in nicks:
+                contact = get_contact(nick)
+
+                role = helpers.get_uf_role(contact.role)
+                affiliation = helpers.get_uf_affiliation(contact.affiliation)
+
+                self.echo("%s - %s - %s" % (nick, role, affiliation))
+        else:
+            return ', '.join(nicks)
+
+    @command(raw=True)
+    def block(self, who):
+        """
+        Forbid an occupant to send you public or private messages
+        """
+        self.on_block(None, who)
+
+    @command(raw=True)
+    def unblock(self, who):
+        """
+        Allow an occupant to send you public or privates messages
+        """
+        self.on_unblock(None, who)

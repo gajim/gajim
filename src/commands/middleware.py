@@ -19,6 +19,8 @@ would be dropped in. Defines a little bit of scaffolding to support interaction
 between the two and a few utility methods so you don't need to dig up the host
 code to write basic commands.
 """
+from common import gajim
+
 from types import StringTypes
 from framework import CommandProcessor, CommandError
 from traceback import print_exc
@@ -94,3 +96,19 @@ class ChatMiddleware(CommandProcessor):
         using ctrl + up/down arrow keys.
         """
         self.save_sent_message(text)
+
+    def collect(self, arguments, empty=True, separator=' ', none=True):
+        """
+        Might come in handy in case if you want to map some arguments and
+        collect the rest of them into a string.
+        """
+        if not empty and not arguments:
+            raise CommandError(_("Missing argument"))
+        return None if not arguments and none else separator.join(arguments)
+
+    @property
+    def connection(self):
+        """
+        Get the current connection object.
+        """
+        return gajim.connections[self.account]
