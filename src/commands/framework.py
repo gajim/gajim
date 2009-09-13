@@ -347,7 +347,7 @@ class CommandProcessor(object):
     EXPAND_SHORT_OPTIONS = True
 
     COMMAND_PREFIX = '/'
-    CASE_SENVITIVE_COMMANDS = False
+    CASE_SENSITIVE_COMMANDS = False
 
     ARG_ENCODING = 'utf8'
 
@@ -366,7 +366,7 @@ class CommandProcessor(object):
 
     @classmethod
     def prepare_name(cls, name):
-        return name if cls.CASE_SENVITIVE_COMMANDS else name.lower()
+        return name if cls.CASE_SENSITIVE_COMMANDS else name.lower()
 
     @classmethod
     def retrieve_command(cls, name):
