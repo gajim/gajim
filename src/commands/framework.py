@@ -186,8 +186,8 @@ class Dispatcher(type):
     hosted = {}
 
     def __init__(cls, name, bases, dct):
-        dispatchable = Dispatcher.check_if_dispatchable(bases, dct)
-        hostable = Dispatcher.check_if_hostable(bases, dct)
+        Dispatcher.check_if_dispatchable(bases, dct)
+        Dispatcher.check_if_hostable(bases, dct)
 
         if Dispatcher.is_suitable(cls, dct):
             Dispatcher.register_processor(cls)
@@ -208,22 +208,20 @@ class Dispatcher(type):
     def check_if_dispatchable(cls, bases, dct):
         dispatcher = dct.get('DISPATCHED_BY')
         if not dispatcher:
-            return False
+            return
         if dispatcher not in bases:
             raise CommandInternalError("Should be dispatched by the same processor it inherits from")
-        return True
 
     @classmethod
     def check_if_hostable(cls, bases, dct):
         hosters = dct.get('HOSTED_BY')
         if not hosters:
-            return False
+            return
         if not isinstance(hosters, (TupleType, ListType)):
             hosters = (hosters,)
         for hoster in hosters:
             if hoster not in bases:
                 raise CommandInternalError("Should be hosted by the same processors it inherits from")
-        return True
 
     @classmethod
     def check_if_conformed(cls, dispatchable, hostable):
