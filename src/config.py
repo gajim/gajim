@@ -1077,6 +1077,7 @@ class ManageProxiesWindow:
 		self.proxytype_combobox = self.xml.get_widget('proxytype_combobox')
 
 		self.init_list()
+		self.block_signal = False
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 		# hide the BOSH fields by default
@@ -1134,6 +1135,7 @@ class ManageProxiesWindow:
 		iter_ = model.append()
 		model.set(iter_, 0, 'proxy' + unicode(i))
 		gajim.config.add_per('proxies', 'proxy' + unicode(i))
+		self.proxies_treeview.set_cursor(model.get_path(iter_))
 
 	def on_remove_proxy_button_clicked(self, widget):
 		(model, iter_) = self.proxies_treeview.get_selection().get_selected()
@@ -1143,11 +1145,16 @@ class ManageProxiesWindow:
 		model.remove(iter_)
 		gajim.config.del_per('proxies', proxy)
 		self.xml.get_widget('remove_proxy_button').set_sensitive(False)
+		self.block_signal = True
+		self.on_proxies_treeview_cursor_changed(self.proxies_treeview)
+		self.block_signal = False
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 
 	def on_useauth_checkbutton_toggled(self, widget):
+		if self.block_signal:
+			return
 		act = widget.get_active()
 		proxy = self.proxyname_entry.get_text().decode('utf-8')
 		gajim.config.set_per('proxies', proxy, 'useauth', act)
@@ -1155,6 +1162,8 @@ class ManageProxiesWindow:
 		self.xml.get_widget('proxypass_entry').set_sensitive(act)
 
 	def on_boshuseproxy_checkbutton_toggled(self, widget):
+		if self.block_signal:
+			return
 		act = widget.get_active()
 		proxy = self.proxyname_entry.get_text().decode('utf-8')
 		gajim.config.set_per('proxies', proxy, 'bosh_useproxy', act)
@@ -1164,11 +1173,6 @@ class ManageProxiesWindow:
 	def on_proxies_treeview_cursor_changed(self, widget):
 		#FIXME: check if off proxy settings are correct (see
 		# http://trac.gajim.org/changeset/1921#file2 line 1221
-		(model, iter_) = widget.get_selection().get_selected()
-		if not iter_:
-			return
-		proxy = model[iter_][0]
-		self.xml.get_widget('proxyname_entry').set_text(proxy)
 		proxyhost_entry = self.xml.get_widget('proxyhost_entry')
 		proxyport_entry = self.xml.get_widget('proxyport_entry')
 		proxyuser_entry = self.xml.get_widget('proxyuser_entry')
@@ -1176,6 +1180,7 @@ class ManageProxiesWindow:
 		boshuri_entry = self.xml.get_widget('boshuri_entry')
 		useauth_checkbutton = self.xml.get_widget('useauth_checkbutton')
 		boshuseproxy_checkbutton = self.xml.get_widget('boshuseproxy_checkbutton')
+		self.block_signal = True
 		proxyhost_entry.set_text('')
 		proxyport_entry.set_text('')
 		proxyuser_entry.set_text('')
@@ -1187,6 +1192,17 @@ class ManageProxiesWindow:
 
 		#useauth_checkbutton.set_active(False)
 		#self.on_useauth_checkbutton_toggled(useauth_checkbutton)
+
+		(model, iter_) = widget.get_selection().get_selected()
+		if not iter_:
+			self.xml.get_widget('proxyname_entry').set_text('')
+			self.xml.get_widget('proxytype_combobox').set_sensitive(False)
+			self.xml.get_widget('proxy_table').set_sensitive(False)
+			self.block_signal = False
+			return
+
+		proxy = model[iter_][0]
+		self.xml.get_widget('proxyname_entry').set_text(proxy)
 
 		if proxy == _('None'): # special proxy None
 			self.show_bosh_fields(False)
@@ -1219,12 +1235,15 @@ class ManageProxiesWindow:
 				gajim.config.get_per('proxies', proxy, 'bosh_useproxy'))
 			useauth_checkbutton.set_active(
 				gajim.config.get_per('proxies', proxy, 'useauth'))
+		self.block_signal = False
 
 	def on_proxies_treeview_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Delete:
 			self.on_remove_proxy_button_clicked(widget)
 
 	def on_proxyname_entry_changed(self, widget):
+		if self.block_signal:
+			return
 		(model, iter_) = self.proxies_treeview.get_selection().get_selected()
 		if not iter_:
 			return
@@ -1243,6 +1262,8 @@ class ManageProxiesWindow:
 		model.set_value(iter_, 0, new_name)
 
 	def on_proxytype_combobox_changed(self, widget):
+		if self.block_signal:
+			return
 		types = ['http', 'socks5', 'bosh']
 		type_ = self.proxytype_combobox.get_active()
 		self.show_bosh_fields(types[type_]=='bosh')
@@ -1250,26 +1271,36 @@ class ManageProxiesWindow:
 		gajim.config.set_per('proxies', proxy, 'type', types[type_])
 
 	def on_proxyhost_entry_changed(self, widget):
+		if self.block_signal:
+			return
 		value = widget.get_text().decode('utf-8')
 		proxy = self.proxyname_entry.get_text().decode('utf-8')
 		gajim.config.set_per('proxies', proxy, 'host', value)
 
 	def on_proxyport_entry_changed(self, widget):
+		if self.block_signal:
+			return
 		value = widget.get_text().decode('utf-8')
 		proxy = self.proxyname_entry.get_text().decode('utf-8')
 		gajim.config.set_per('proxies', proxy, 'port', value)
 
 	def on_proxyuser_entry_changed(self, widget):
+		if self.block_signal:
+			return
 		value = widget.get_text().decode('utf-8')
 		proxy = self.proxyname_entry.get_text().decode('utf-8')
 		gajim.config.set_per('proxies', proxy, 'user', value)
 
 	def on_boshuri_entry_changed(self, widget):
+		if self.block_signal:
+			return
 		value = widget.get_text().decode('utf-8')
 		proxy = self.proxyname_entry.get_text().decode('utf-8')
 		gajim.config.set_per('proxies', proxy, 'bosh_uri', value)
 
 	def on_proxypass_entry_changed(self, widget):
+		if self.block_signal:
+			return
 		value = widget.get_text().decode('utf-8')
 		proxy = self.proxyname_entry.get_text().decode('utf-8')
 		gajim.config.set_per('proxies', proxy, 'pass', value)
