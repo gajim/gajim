@@ -382,8 +382,9 @@ class CommandProcessor(object):
     def parse_command_arguments(cls, arguments):
         """
         Simple yet effective and sufficient in most cases parser which parses
-        command arguments and maps them to *args and **kwargs, which we all use
-        extensivly in daily Python coding.
+        command arguments and returns them as two lists, first representing
+        positional arguments, and second representing options as (key, value)
+        tuples.
 
         The format of the input arguments should be:
             <arg1, arg2> <<optional>> [-(-o)ption=value1, -(-a)nother=value2] [[extra_options]]
@@ -394,37 +395,38 @@ class CommandProcessor(object):
         'one two three' or "one two three"; that is between single or double
         quotes.
         """
-        args, kwargs = [], {}
+        args, opts = [], []
 
-        # Need to store every option we have parsed in order to get arguments
-        # to be parsed correct later.
-        options = []
+        # Need to store position of every option we have parsed in order to get
+        # arguments to be parsed correct later.
+        opt_positions = []
 
         def intersects((given_start, given_end)):
             """
             Check if something intersects with boundaries of any parsed options.
             """
-            for start, end in options:
+            for start, end in opt_positions:
                 if given_start == start or given_end == end:
                     return True
             return False
 
         for match in re.finditer(cls.OPT_PATTERN, arguments):
             if match:
-                options.append(match.span())
-                kwargs[match.group('key')] = match.group('value') or True
+                opt_positions.append(match.span())
+                opts.append((match.group('key'), match.group('value') or True))
 
         for match in re.finditer(cls.ARG_PATTERN, arguments):
             if match and not intersects(match.span()):
                 args.append(match.group('body'))
 
-        return args, kwargs
+        return args, opts
 
     @classmethod
-    def adapt_command_arguments(cls, command, arguments, args, kwargs):
+    def adapt_command_arguments(cls, command, arguments, args, opts):
         """
-        Adapts *args and **kwargs got from a parser to a specific handler by
-        means of arguments specified on command definition.
+        Adapts args and opts got from the parser to a specific handler by means
+        of arguments specified on command definition. That is transforms them to
+        *args and **kwargs suitable for passing to a command handler.
 
         When EXPAND_SHORT_OPTIONS is set then if command receives one-latter
         options (like -v or -f) they will be expanded to a verbose ones (like
@@ -467,35 +469,33 @@ class CommandProcessor(object):
                 raise CommandInternalError("Cant have both, __optional__ and *args")
 
         if command.dashes:
-            for key, value in kwargs.items():
+            for index, (key, value) in enumerate(opts):
                 if '-' in key:
-                    del kwargs[key]
-                    kwargs[key.replace('-', '_')] = value
+                    opts[index] = (key.replace('-', '_'), value)
 
         if cls.EXPAND_SHORT_OPTIONS:
             expanded = []
-            for key, value in spec_kwargs.iteritems():
-                letter = key[0] if len(key) > 1 else None
-                if letter and letter in kwargs and letter not in expanded:
-                    expanded.append(letter)
-                    kwargs[key] = kwargs[letter]
-                    del kwargs[letter]
+            for spec_key, spec_value in spec_kwargs.iteritems():
+                letter = spec_key[0] if len(spec_key) > 1 else None
+                if letter and letter not in expanded:
+                    for index, (key, value) in enumerate(opts):
+                        if key == letter:
+                            expanded.append(letter)
+                            opts[index] = (spec_key, value)
+                            break
 
         # We need to encode every keyword argument to a simple string, not the
-        # unicode one, because ** expanding does not support it. The nasty issue
-        # here to consider is that if dict key was initially set as u'test',
-        # then resetting it to just 'test' leaves u'test' as it was...
-        for key, value in kwargs.items():
+        # unicode one, because ** expanding does not support it.
+        for index, (key, value) in enumerate(opts):
             if isinstance(key, UnicodeType):
-                del kwargs[key]
-                kwargs[key.encode(cls.ARG_ENCODING)] = value
+                opts[index] = (key.encode(cls.ARG_ENCODING), value)
 
         if '__arguments__' in spec_args:
             if len(spec_args) == 1 and not spec_kwargs and not var_args and not var_kwargs:
                 return (arguments,), {}
             args.insert(spec_args.index('__arguments__'), arguments)
 
-        return args, kwargs
+        return tuple(args), dict(opts)
 
     def process_as_command(self, text):
         """
@@ -526,8 +526,8 @@ class CommandProcessor(object):
     def execute_command(self, name, arguments):
         command = self.retrieve_command(name)
 
-        args, kwargs = self.parse_command_arguments(arguments) if arguments else ([], {})
-        args, kwargs = self.adapt_command_arguments(command, arguments, args, kwargs)
+        args, opts = self.parse_command_arguments(arguments) if arguments else ([], [])
+        args, kwargs = self.adapt_command_arguments(command, arguments, args, opts)
 
         if self.command_preprocessor(name, command, arguments, args, kwargs):
             return
