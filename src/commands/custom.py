@@ -29,7 +29,7 @@ class CustomCommonCommands(ChatCommands, PrivateChatCommands, GroupChatCommands)
     here will be available to all of them.
     """
 
-    IS_COMMAND_PROCESSOR = True
+    DISPATCH = True
     HOSTED_BY = ChatCommands, PrivateChatCommands, GroupChatCommands
 
     @command
@@ -52,7 +52,7 @@ class CustomChatCommands(ChatCommands):
     only to a chat.
     """
 
-    IS_COMMAND_PROCESSOR = True
+    DISPATCH = True
     HOSTED_BY = ChatCommands
 
     @command
@@ -66,7 +66,7 @@ class CustomPrivateChatCommands(PrivateChatCommands):
     available only to a private chat.
     """
 
-    IS_COMMAND_PROCESSOR = True
+    DISPATCH = True
     HOSTED_BY = PrivateChatCommands
 
     @command
@@ -80,7 +80,7 @@ class CustomGroupChatCommands(GroupChatCommands):
     available only to a group chat.
     """
 
-    IS_COMMAND_PROCESSOR = True
+    DISPATCH = True
     HOSTED_BY = GroupChatCommands
 
     @command

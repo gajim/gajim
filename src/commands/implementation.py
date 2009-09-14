@@ -92,8 +92,8 @@ class ChatCommands(CommonCommands):
     an instance of ChatControl when command is being called.
     """
 
-    IS_COMMAND_PROCESSOR = True
-    INHERITED = True
+    DISPATCH = True
+    INHERIT = True
 
     @command
     def ping(self):
@@ -111,8 +111,8 @@ class PrivateChatCommands(CommonCommands):
     self is set to an instance of PrivateChatControl when command is being called.
     """
 
-    IS_COMMAND_PROCESSOR = True
-    INHERITED = True
+    DISPATCH = True
+    INHERIT = True
 
 class GroupChatCommands(CommonCommands):
     """
@@ -121,8 +121,8 @@ class GroupChatCommands(CommonCommands):
     self is set to an instance of GroupchatControl when command is being called.
     """
 
-    IS_COMMAND_PROCESSOR = True
-    INHERITED = True
+    DISPATCH = True
+    INHERIT = True
 
     @command(raw=True)
     def nick(self, new_nick):

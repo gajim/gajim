@@ -201,8 +201,8 @@ class Dispatcher(type):
     @classmethod
     def is_suitable(cls, proc, dct):
         is_not_root = dct.get('__metaclass__') is not cls
-        is_processor = bool(dct.get('IS_COMMAND_PROCESSOR'))
-        return is_not_root and is_processor
+        to_be_dispatched = bool(dct.get('DISPATCH'))
+        return is_not_root and to_be_dispatched
 
     @classmethod
     def check_if_dispatchable(cls, bases, dct):
@@ -231,18 +231,18 @@ class Dispatcher(type):
     @classmethod
     def register_processor(cls, proc):
         cls.table[proc] = {}
-        inherited = proc.__dict__.get('INHERITED')
+        inherit = proc.__dict__.get('INHERIT')
 
         if 'HOSTED_BY' in proc.__dict__:
             cls.register_adhocs(proc)
 
-        commands = cls.traverse_commands(proc, inherited)
+        commands = cls.traverse_commands(proc, inherit)
         cls.register_commands(proc, commands)
 
     @classmethod
     def sanitize_names(cls, proc):
-        inherited = proc.__dict__.get('INHERITED')
-        commands = cls.traverse_commands(proc, inherited)
+        inherit = proc.__dict__.get('INHERIT')
+        commands = cls.traverse_commands(proc, inherit)
         for key, command in commands:
             if not proc.SAFE_NAME_SCAN_PATTERN.match(key):
                 setattr(proc, proc.SAFE_NAME_SUBS_PATTERN % key, command)
@@ -252,8 +252,8 @@ class Dispatcher(type):
                     pass
 
     @classmethod
-    def traverse_commands(cls, proc, inherited=True):
-        keys = dir(proc) if inherited else proc.__dict__.iterkeys()
+    def traverse_commands(cls, proc, inherit=True):
+        keys = dir(proc) if inherit else proc.__dict__.iterkeys()
         for key in keys:
             value = getattr(proc, key)
             if isinstance(value, Command):
@@ -295,8 +295,8 @@ class Dispatcher(type):
         commands = dict(cls.traverse_commands(proc.DISPATCHED_BY))
         if proc.DISPATCHED_BY in cls.hosted:
             for adhoc in cls.hosted[proc.DISPATCHED_BY]:
-                inherited = adhoc.__dict__.get('INHERITED')
-                commands.update(dict(cls.traverse_commands(adhoc, inherited)))
+                inherit = adhoc.__dict__.get('INHERIT')
+                commands.update(dict(cls.traverse_commands(adhoc, inherit)))
         return commands.values()
 
 class CommandProcessor(object):
@@ -311,8 +311,7 @@ class CommandProcessor(object):
     to an object you are adding commands to.
 
     Your subclass, which will contain commands should define in its body
-    IS_COMMAND_PROCESSOR = True in order to be included in the dispatching
-    table.
+    DISPATCH = True in order to be included in the dispatching table.
 
     Every class you will drop the processor in should define DISPATCHED_BY set
     to the same processor you are inheriting from.
@@ -326,7 +325,7 @@ class CommandProcessor(object):
     whatever includes the host) you need to inherit you processor from the host
     and set HOSTED_BY to that host.
 
-    INHERITED controls whether commands inherited from base classes (which could
+    INHERIT controls whether commands inherited from base classes (which could
     include other processors) will be registered or not. This is disabled
     by-default because it leads to unpredictable consequences when used in adhoc
     processors which inherit from more then one processor or has such processors
