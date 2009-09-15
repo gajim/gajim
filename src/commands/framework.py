@@ -19,8 +19,9 @@ to implement commands in a streight and flexible, declarative way.
 """
 
 import re
-from types import FunctionType, UnicodeType, TupleType, ListType
+from types import FunctionType, UnicodeType, TupleType, ListType, BooleanType
 from inspect import getargspec
+from operator import itemgetter
 
 class CommandInternalError(Exception):
     pass
@@ -59,8 +60,13 @@ class Command(object):
         try:
             return self.handler(*args, **kwargs)
         except CommandError, exception:
+            # Re-raise an excepttion with a proper command attribute set,
+            # unless it is already set by the one who raised an exception.
             if not exception.command and not exception.name:
                 raise CommandError(exception.message, self)
+        # This one is a little bit too wide, but as Python does not have
+        # anything more constrained - there is no other choice. Take a look here
+        # if command complains about invalid arguments while they are ok.
         except TypeError:
             raise CommandError("Command received invalid arguments", self)
 
@@ -136,13 +142,15 @@ class Command(object):
 
         for key, value in spec_kwargs:
             letter = key[0]
+
             key = key.replace('_', '-')
+            value = ('=%s' % value) if not isinstance(value, BooleanType) else str()
 
             if letter not in letters:
-                kwargs.append('-(-%s)%s=%s' % (letter, key[1:], value))
+                kwargs.append('-(-%s)%s%s' % (letter, key[1:], value))
                 letters.append(letter)
             else:
-                kwargs.append('--%s=%s' % (key, value))
+                kwargs.append('--%s%s' % (key, value))
 
         usage = str()
         args = str()
@@ -371,9 +379,10 @@ class CommandProcessor(object):
     def parse_command_arguments(cls, arguments):
         """
         Simple yet effective and sufficient in most cases parser which parses
-        command arguments and returns them as two lists, first representing
-        positional arguments, and second representing options as (key, value)
-        tuples.
+        command arguments and returns them as two lists. First represents
+        positional arguments as (argument, position), and second representing
+        options as (key, value, position) tuples, where position is a (start,
+        end) span tuple of where it was found in the string.
 
         The format of the input arguments should be:
             <arg1, arg2> <<extra>> [-(-o)ption=value1, -(-a)nother=value2] [[extra_options]]
@@ -386,27 +395,36 @@ class CommandProcessor(object):
         """
         args, opts = [], []
 
-        # Need to store position of every option we have parsed in order to get
-        # arguments to be parsed correct later.
-        opt_positions = []
+        def intersects_opts((given_start, given_end)):
+            """
+            Check if something intersects with boundaries of any parsed option.
+            """
+            for key, value, (start, end) in opts:
+                if given_start >= start and given_end <= end:
+                    return True
+            return False
 
-        def intersects((given_start, given_end)):
+        def intersects_args((given_start, given_end)):
             """
-            Check if something intersects with boundaries of any parsed options.
+            Check if something intersects with boundaries of any parsed argument.
             """
-            for start, end in opt_positions:
-                if given_start == start or given_end == end:
+            for arg, (start, end) in args:
+                if given_start >= start and given_end <= end:
                     return True
             return False
 
         for match in re.finditer(cls.OPT_PATTERN, arguments):
             if match:
-                opt_positions.append(match.span())
-                opts.append((match.group('key'), match.group('value') or True))
+                key = match.group('key')
+                value = match.group('value') or None
+                position = match.span()
+                opts.append((key, value, position))
 
         for match in re.finditer(cls.ARG_PATTERN, arguments):
-            if match and not intersects(match.span()):
-                args.append(match.group('body'))
+            if match and not intersects_opts(match.span()):
+                body = match.group('body')
+                position = match.span()
+                args.append((body, position))
 
         return args, opts
 
@@ -423,16 +441,48 @@ class CommandProcessor(object):
 
         Dashes (-) in the option names will be converted to underscores. So you
         can map --one-more-option to a one_more_option=None.
+
+        If initial value of a keyword argument is a boolean (False in most
+        cases) then this option will be treated as a switch, that is an option
+        which does not take an argument. Argument preceded by a switch will be
+        treated just like a normal positional argument.
         """
         spec_args, spec_kwargs, var_args, var_kwargs = command.extract_arg_spec()
         spec_kwargs = dict(spec_kwargs)
 
         if command.raw:
-            if len(spec_args) == 1:
+            if len(spec_args) == 1 and not spec_kwargs and not var_args and not var_kwargs:
                 if arguments or command.empty:
                     return (arguments,), {}
                 raise CommandError("Can not be used without arguments", command)
             raise CommandInternalError("Raw command must define no more then one argument")
+
+        if command.expand_short:
+            expanded = []
+            for spec_key, spec_value in spec_kwargs.iteritems():
+                letter = spec_key[0] if len(spec_key) > 1 else None
+                if letter and letter not in expanded:
+                    for index, (key, value, position) in enumerate(opts):
+                        if key == letter:
+                            expanded.append(letter)
+                            opts[index] = (spec_key, value, position)
+                            break
+
+        for index, (key, value, position) in enumerate(opts):
+            if isinstance(spec_kwargs.get(key), BooleanType):
+                opts[index] = (key, True, position)
+                if value:
+                    args.append((value, position))
+
+        # Sorting arguments and options (just to be sure) in regarding to their
+        # positions in the string.
+        args.sort(key=itemgetter(1))
+        opts.sort(key=itemgetter(2))
+
+        # Stripping down position information supplied with arguments and options as it
+        # won't be needed again.
+        args = map(lambda (arg, position): arg, args)
+        opts = map(lambda (key, value, position): (key, value), opts)
 
         if command.extra:
             if not var_args:
@@ -442,17 +492,6 @@ class CommandProcessor(object):
                 args.append(extra)
             else:
                 raise CommandInternalError("Can not have both, extra and *args")
-
-        if command.expand_short:
-            expanded = []
-            for spec_key, spec_value in spec_kwargs.iteritems():
-                letter = spec_key[0] if len(spec_key) > 1 else None
-                if letter and letter not in expanded:
-                    for index, (key, value) in enumerate(opts):
-                        if key == letter:
-                            expanded.append(letter)
-                            opts[index] = (spec_key, value)
-                            break
 
         for index, (key, value) in enumerate(opts):
             if '-' in key:
