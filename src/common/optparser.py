@@ -202,6 +202,8 @@ class OptionsParser:
 			self.update_config_to_01231()
 		if old < [0, 12, 5, 1] and new >= [0, 12, 5, 1]:
 			self.update_config_to_01251()
+		if old < [0, 12, 5, 2] and new >= [0, 12, 5, 2]:
+			self.update_config_to_01252()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -726,5 +728,12 @@ class OptionsParser:
 			pass
 		con.close()
 		gajim.config.set('version', '0.12.5.1')
+
+	def update_config_to_01252(self):
+		if 'alwaysauth' in self.old_values:
+			val = self.old_values['alwaysauth']
+			for account in gajim.config.get_per('accounts'):
+				gajim.config.set_per('accounts', account, 'autoauth', val)
+		gajim.config.set('version', '0.12.5.2')
 
 # vim: se ts=3:
