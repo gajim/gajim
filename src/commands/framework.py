@@ -45,12 +45,13 @@ class Command(object):
 
     ARG_USAGE_PATTERN = 'Usage: %s %s'
 
-    def __init__(self, handler, usage, raw, optional, empty, expand_short):
+    def __init__(self, handler, usage, source, raw, extra, empty, expand_short):
         self.handler = handler
 
         self.usage = usage
+        self.source = source
         self.raw = raw
-        self.optional = optional
+        self.extra = extra
         self.empty = empty
         self.expand_short = expand_short
 
@@ -100,8 +101,7 @@ class Command(object):
         keep them simple yet meaningful.
         """
         doc = self.extract_doc()
-        if doc:
-            return doc.split('\n', 1)[0]
+        return doc.split('\n', 1)[0] if doc else None
 
     def extract_arg_spec(self):
         names, var_args, var_kwargs, defaults = getargspec(self.handler)
@@ -126,19 +126,10 @@ class Command(object):
         """
         spec_args, spec_kwargs, var_args, var_kwargs = self.extract_arg_spec()
 
-        # If command defines special __arguments__ parameter - it should not be
-        # included in the usage information, but may be used for internal
-        # purposes while generating usage information.
-        sp_arguments = '__arguments__' in spec_args
-        if sp_arguments:
-            spec_args.remove('__arguments__')
-
-        # If command defines special __optional__ parameter - it should not be
-        # included in the usage information, but may be used for internal
-        # purposes while generating usage information.
-        sp_optional = '__optional__' in spec_args
-        if sp_optional:
-            spec_args.remove('__optional__')
+        # Remove some special positional arguments from the specifiaction, but
+        # store their names so they can be used for usage info generation.
+        sp_source = spec_args.pop(0) if self.source else None
+        sp_extra = spec_args.pop() if self.extra else None
 
         kwargs = []
         letters = []
@@ -158,11 +149,11 @@ class Command(object):
 
         if len(spec_args) == 1 and self.raw:
             args += ('(|%s|)' if self.empty else '|%s|') % spec_args[0]
-        elif spec_args or var_args or sp_optional:
+        elif spec_args or var_args or sp_extra:
             if spec_args:
                 args += '<%s>' % ', '.join(spec_args)
-            if var_args or sp_optional:
-                args += (' ' if spec_args else str()) + '<<%s>>' % (var_args or self.optional)
+            if var_args or sp_extra:
+                args += (' ' if spec_args else str()) + '<<%s>>' % (var_args or sp_extra)
 
         usage += args
 
@@ -385,7 +376,7 @@ class CommandProcessor(object):
         tuples.
 
         The format of the input arguments should be:
-            <arg1, arg2> <<optional>> [-(-o)ption=value1, -(-a)nother=value2] [[extra_options]]
+            <arg1, arg2> <<extra>> [-(-o)ption=value1, -(-a)nother=value2] [[extra_options]]
 
         Options may be given in --long or -short format. As --option=value or
         --option value or -option value. Keys without values will get True as
@@ -426,17 +417,6 @@ class CommandProcessor(object):
         of arguments specified on command definition. That is transforms them to
         *args and **kwargs suitable for passing to a command handler.
 
-        If command defines __arguments__ as a first argument - then this
-        argument will receive raw and unprocessed arguments. Also, if nothing
-        except __arguments__ (including *args, *kwargs splatting) is defined -
-        then all parsed arguments will be discarded. It will be discarded in the
-        argument usage information.
-
-        If command defines __optional__ - that is an analogue for *args, to
-        collect extra arguments. This is a preffered way over *args. Because of
-        some Python limitations, *args could not be mapped to as expected. And
-        it is hardly advised to define it after all hard arguments.
-
         Extra arguments which are not considered extra (or optional) - will be
         passed as if they were value for keywords, in the order keywords are
         defined and printed in usage.
@@ -447,10 +427,6 @@ class CommandProcessor(object):
         spec_args, spec_kwargs, var_args, var_kwargs = command.extract_arg_spec()
         spec_kwargs = dict(spec_kwargs)
 
-        # Check if some special arguments are present.
-        sp_arguments = '__arguments__' in spec_args
-        sp_optional = '__optional__' in spec_args
-
         if command.raw:
             if len(spec_args) == 1:
                 if arguments or command.empty:
@@ -458,18 +434,14 @@ class CommandProcessor(object):
                 raise CommandError("Can not be used without arguments", command)
             raise CommandInternalError("Raw command must define no more then one argument")
 
-        if sp_optional:
+        if command.extra:
             if not var_args:
-                hard_len = len(spec_args) - (1 if not sp_arguments else 2)
-                optional = args[hard_len:]
-                args = args[:hard_len]
-                args.insert(spec_args.index('__optional__'), optional)
+                positional_len = len(spec_args) - (1 if not command.source else 2)
+                extra = args[positional_len:]
+                args = args[:positional_len]
+                args.append(extra)
             else:
-                raise CommandInternalError("Can not have both, __optional__ and *args")
-
-        for index, (key, value) in enumerate(opts):
-            if '-' in key:
-                opts[index] = (key.replace('-', '_'), value)
+                raise CommandInternalError("Can not have both, extra and *args")
 
         if command.expand_short:
             expanded = []
@@ -482,16 +454,18 @@ class CommandProcessor(object):
                             opts[index] = (spec_key, value)
                             break
 
+        for index, (key, value) in enumerate(opts):
+            if '-' in key:
+                opts[index] = (key.replace('-', '_'), value)
+
         # We need to encode every keyword argument to a simple string, not the
         # unicode one, because ** expansion does not support it.
         for index, (key, value) in enumerate(opts):
             if isinstance(key, UnicodeType):
                 opts[index] = (key.encode(cls.ARG_ENCODING), value)
 
-        if sp_arguments:
-            if len(spec_args) == 1 and not spec_kwargs and not var_args and not var_kwargs:
-                return (arguments,), {}
-            args.insert(spec_args.index('__arguments__'), arguments)
+        if command.source:
+            args.insert(0, arguments)
 
         return tuple(args), dict(opts)
 
@@ -561,22 +535,29 @@ def command(*names, **kwargs):
     A decorator which provides a declarative way of defining commands.
 
     You can specify a set of names by which you can call the command. If names
-    are empty - then the name of the command will be set to native (extracted
-    from the handler name). If include_native=True argument is given and names
-    is non-empty - then native name will be added as well.
+    is empty - then the name of the command will be set to native one (extracted
+    from the handler name).
+
+    If include_native=True argument is given and names is non-empty - then
+    native name will be added as well.
 
     If usage=True is given - then handler's doc will be appended with an
     auto-generated usage info.
 
+    If source=True is given - then the first positional argument of the command
+    handler will receive a string with a raw and unprocessed source arguments.
+
     If raw=True is given - then command should define only one argument to
-    which all raw, unprocessed command arguments will be given.
+    which all raw and unprocessed source arguments will be given.
 
-    If optional is set to a string then if __optional__ specified - its name
-    ('optional' by-default) in the usage info will be substitued by whatever is
-    given.
+    If empty=True is given - then when raw=True is set and command receives no
+    arguments - an exception will be raised.
 
-    If empty=True is given - then if raw is enabled it will allow to pass empty
-    (None) raw arguments to a command.
+    If extra=True is given - then last positional argument will receive every
+    extra positional argument that will be given to a command. This is an
+    analogue to specifing *args, but the latter one should be used in simplest
+    cases only because of some Python limitations on this - arguments can't be
+    mapped correctly when there are keyword arguments present.
 
     If expand_short=True is given - then if command receives one-letter
     options (like -v or -f) they will be expanded to a verbose ones (like
@@ -589,13 +570,14 @@ def command(*names, **kwargs):
     include_native = kwargs.get('include_native', True)
 
     usage = kwargs.get('usage', True)
+    source = kwargs.get('source', False)
     raw = kwargs.get('raw', False)
-    optional = kwargs.get('optional', 'optional')
+    extra = kwargs.get('extra', False)
     empty = kwargs.get('empty', False)
     expand_short = kwargs.get('expand_short', True)
 
     def decorator(handler):
-        command = Command(handler, usage, raw, optional, empty, expand_short)
+        command = Command(handler, usage, source, raw, extra, empty, expand_short)
 
         # Extract and inject native name while making sure it is going to be the
         # first one in the list.
