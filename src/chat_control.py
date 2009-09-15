@@ -74,6 +74,9 @@ if gajim.config.get('use_speller') and HAS_GTK_SPELL:
 			spell.set_language(langs[lang])
 		except OSError:
 			del langs[lang]
+	if spell:
+		spell.detach()
+	del tv
 
 ################################################################################
 class ChatControlBase(MessageControl):
@@ -2346,6 +2349,10 @@ class ChatControl(ChatControlBase):
 				self.handlers[i].disconnect(i)
 			del self.handlers[i]
 		self.conv_textview.del_handlers()
+		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
+			spell_obj = gtkspell.get_from_text_view(self.msg_textview)
+			if spell_obj:
+				spell_obj.detach()
 		self.msg_textview.destroy()
 
 	def minimizable(self):
