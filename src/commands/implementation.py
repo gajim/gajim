@@ -134,6 +134,7 @@ class GroupChatCommands(CommonCommands):
         except Exception:
             raise CommandError(_("Invalid nickname"))
         self.connection.join_gc(new_nick, self.room_jid, None, change_nick=True)
+        self.new_nick = new_nick
 
     @command('query', raw=True)
     def chat(self, nick):
