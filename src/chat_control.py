@@ -1433,6 +1433,19 @@ class ChatControl(ChatControlBase):
 		else:
 			self._tune_image.hide()
 
+	def change_resource(self, resource):
+		old_full_jid = self.get_full_jid()
+		self.resource = resource
+		new_full_jid = self.get_full_jid()
+		# update gajim.last_message_time
+		if old_full_jid in gajim.last_message_time[self.account]:
+			gajim.last_message_time[self.account][new_full_jid] = \
+				gajim.last_message_time[self.account][old_full_jid]
+		# update events
+		gajim.events.change_jid(self.account, old_full_jid, new_full_jid)
+		# update MessageWindow._controls
+		self.parent_win.change_jid(self.account, old_full_jid, new_full_jid)
+
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		'''
 		we enter the eventbox area so we under conditions add a timeout
