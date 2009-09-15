@@ -223,11 +223,6 @@ class Dispatcher(type):
                 raise CommandInternalError("Should be hosted by the same processors it inherits from")
 
     @classmethod
-    def check_if_conformed(cls, dispatchable, hostable):
-        if dispatchable and hostable:
-            raise CommandInternalError("Processor can not be dispatchable and hostable at the same time")
-
-    @classmethod
     def register_processor(cls, proc):
         cls.table[proc] = {}
         inherit = proc.__dict__.get('INHERIT')
