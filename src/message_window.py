@@ -165,7 +165,7 @@ class MessageWindow(object):
 		if old_jid not in self._controls[account]:
 			return
 		self._controls[account][new_jid] = self._controls[account][old_jid]
-			del self._controls[account][old_jid]
+		del self._controls[account][old_jid]
 
 	def get_num_controls(self):
 		return sum(len(d) for d in self._controls.values())
