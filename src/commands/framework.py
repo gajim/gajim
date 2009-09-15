@@ -45,15 +45,14 @@ class Command(object):
 
     ARG_USAGE_PATTERN = 'Usage: %s %s'
 
-    def __init__(self, handler, is_instance, usage, raw, dashes, optional, empty):
+    def __init__(self, handler, usage, raw, optional, empty, expand_short):
         self.handler = handler
 
-        self.is_instance = is_instance
         self.usage = usage
         self.raw = raw
-        self.dashes = dashes
         self.optional = optional
         self.empty = empty
+        self.expand_short = expand_short
 
     def __call__(self, *args, **kwargs):
         try:
@@ -110,12 +109,12 @@ class Command(object):
         # Behavior of this code need to be checked. Might yield incorrect
         # results on some rare occasions.
         spec_args = names[:-len(defaults) if defaults else len(names)]
-        spec_kwargs = dict(zip(names[-len(defaults):], defaults)) if defaults else {}
+        spec_kwargs = list(zip(names[-len(defaults):], defaults)) if defaults else {}
 
-        # Removing self from arguments specification in case if command handler
-        # is an instance method.
-        if self.is_instance and spec_args.pop(0) != 'self':
-            raise CommandInternalError("Invalid arguments specification")
+        # Removing self from arguments specification. Command handler should
+        # normally be an instance method.
+        if spec_args.pop(0) != 'self':
+            raise CommandInternalError("First argument must be self")
 
         return spec_args, spec_kwargs, var_args, var_kwargs
 
@@ -125,27 +124,28 @@ class Command(object):
         human-readable format. If complete is given - then ARG_USAGE_PATTERN
         will be used to render it completly.
         """
-        names, _var_args, _var_kwargs, defaults = getargspec(self.handler)
         spec_args, spec_kwargs, var_args, var_kwargs = self.extract_arg_spec()
 
-        '__arguments__' not in spec_args or spec_args.remove('__arguments__')
+        # If command defines special __arguments__ parameter - it should not be
+        # included in the usage information, but may be used for internal
+        # purposes while generating usage information.
+        sp_arguments = '__arguments__' in spec_args
+        if sp_arguments:
+            spec_args.remove('__arguments__')
 
-        optional = '__optional__' in spec_args
-        if optional:
+        # If command defines special __optional__ parameter - it should not be
+        # included in the usage information, but may be used for internal
+        # purposes while generating usage information.
+        sp_optional = '__optional__' in spec_args
+        if sp_optional:
             spec_args.remove('__optional__')
 
         kwargs = []
         letters = []
 
-        # The reason we don't iterate here through spec_kwargs, like we would
-        # normally do is that it does not retains order of items. We need to be
-        # sure that arguments will be printed in the order they were specified.
-        for key in (names[-len(defaults):] if defaults else ()):
-            value = spec_kwargs[key]
+        for key, value in spec_kwargs:
             letter = key[0]
-
-            if self.dashes:
-                key = key.replace('_', '-')
+            key = key.replace('_', '-')
 
             if letter not in letters:
                 kwargs.append('-(-%s)%s=%s' % (letter, key[1:], value))
@@ -158,10 +158,10 @@ class Command(object):
 
         if len(spec_args) == 1 and self.raw:
             args += ('(|%s|)' if self.empty else '|%s|') % spec_args[0]
-        elif spec_args or var_args or optional:
+        elif spec_args or var_args or sp_optional:
             if spec_args:
                 args += '<%s>' % ', '.join(spec_args)
-            if var_args or optional:
+            if var_args or sp_optional:
                 args += (' ' if spec_args else str()) + '<<%s>>' % (var_args or self.optional)
 
         usage += args
@@ -341,8 +341,6 @@ class CommandProcessor(object):
     ARG_PATTERN = re.compile(r'(\'|")?(?P<body>(?(1).+?|\S+))(?(1)\1)')
     OPT_PATTERN = re.compile(r'(?<!\w)--?(?P<key>[\w-]+)(?:(?:=|\s)(\'|")?(?P<value>(?(2)[^-]+?|[^-\s]+))(?(2)\2))?')
 
-    EXPAND_SHORT_OPTIONS = True
-
     COMMAND_PREFIX = '/'
     CASE_SENSITIVE_COMMANDS = False
 
@@ -428,13 +426,6 @@ class CommandProcessor(object):
         of arguments specified on command definition. That is transforms them to
         *args and **kwargs suitable for passing to a command handler.
 
-        When EXPAND_SHORT_OPTIONS is set then if command receives one-latter
-        options (like -v or -f) they will be expanded to a verbose ones (like
-        --verbose or --file) if the latter are defined as a command optional
-        argumens. Expansion is made on a first-latter comparison basis. If more
-        then one long option with the same first letter defined - only first one
-        will be used in expanding.
-
         If command defines __arguments__ as a first argument - then this
         argument will receive raw and unprocessed arguments. Also, if nothing
         except __arguments__ (including *args, *kwargs splatting) is defined -
@@ -449,8 +440,16 @@ class CommandProcessor(object):
         Extra arguments which are not considered extra (or optional) - will be
         passed as if they were value for keywords, in the order keywords are
         defined and printed in usage.
+
+        Dashes (-) in the option names will be converted to underscores. So you
+        can map --one-more-option to a one_more_option=None.
         """
         spec_args, spec_kwargs, var_args, var_kwargs = command.extract_arg_spec()
+        spec_kwargs = dict(spec_kwargs)
+
+        # Check if some special arguments are present.
+        sp_arguments = '__arguments__' in spec_args
+        sp_optional = '__optional__' in spec_args
 
         if command.raw:
             if len(spec_args) == 1:
@@ -459,21 +458,20 @@ class CommandProcessor(object):
                 raise CommandError("Can not be used without arguments", command)
             raise CommandInternalError("Raw command must define no more then one argument")
 
-        if '__optional__' in spec_args:
+        if sp_optional:
             if not var_args:
-                hard_len = len(spec_args) - 1
+                hard_len = len(spec_args) - (1 if not sp_arguments else 2)
                 optional = args[hard_len:]
                 args = args[:hard_len]
                 args.insert(spec_args.index('__optional__'), optional)
             else:
-                raise CommandInternalError("Cant have both, __optional__ and *args")
+                raise CommandInternalError("Can not have both, __optional__ and *args")
 
-        if command.dashes:
-            for index, (key, value) in enumerate(opts):
-                if '-' in key:
-                    opts[index] = (key.replace('-', '_'), value)
+        for index, (key, value) in enumerate(opts):
+            if '-' in key:
+                opts[index] = (key.replace('-', '_'), value)
 
-        if cls.EXPAND_SHORT_OPTIONS:
+        if command.expand_short:
             expanded = []
             for spec_key, spec_value in spec_kwargs.iteritems():
                 letter = spec_key[0] if len(spec_key) > 1 else None
@@ -485,12 +483,12 @@ class CommandProcessor(object):
                             break
 
         # We need to encode every keyword argument to a simple string, not the
-        # unicode one, because ** expanding does not support it.
+        # unicode one, because ** expansion does not support it.
         for index, (key, value) in enumerate(opts):
             if isinstance(key, UnicodeType):
                 opts[index] = (key.encode(cls.ARG_ENCODING), value)
 
-        if '__arguments__' in spec_args:
+        if sp_arguments:
             if len(spec_args) == 1 and not spec_kwargs and not var_args and not var_kwargs:
                 return (arguments,), {}
             args.insert(spec_args.index('__arguments__'), arguments)
@@ -564,22 +562,14 @@ def command(*names, **kwargs):
 
     You can specify a set of names by which you can call the command. If names
     are empty - then the name of the command will be set to native (extracted
-    from the handler name). If no_native=True argument is given and names is
-    non-empty - then native name will not be added.
-
-    If command handler is not an instance method then is_instance=False should
-    be given. Though mentioned case is not covered by defined behaviour, and
-    should not be used, unless you know what you are doing.
+    from the handler name). If include_native=True argument is given and names
+    is non-empty - then native name will be added as well.
 
     If usage=True is given - then handler's doc will be appended with an
-    auto-gereated usage info.
+    auto-generated usage info.
 
-    If raw=True is given then command should define only one argument to
+    If raw=True is given - then command should define only one argument to
     which all raw, unprocessed command arguments will be given.
-
-    If dashes=True is given, then dashes (-) in the option
-    names will be converted to underscores. So you can map --one-more-option to
-    a one_more_option=None.
 
     If optional is set to a string then if __optional__ specified - its name
     ('optional' by-default) in the usage info will be substitued by whatever is
@@ -587,29 +577,36 @@ def command(*names, **kwargs):
 
     If empty=True is given - then if raw is enabled it will allow to pass empty
     (None) raw arguments to a command.
+
+    If expand_short=True is given - then if command receives one-letter
+    options (like -v or -f) they will be expanded to a verbose ones (like
+    --verbose or --file) if the latter are defined as a command optional
+    arguments. Expansion is made on a first-letter comparison basis. If more
+    then one long option with the same first letter defined - only first one
+    will be used in expansion.
     """
     names = list(names)
+    include_native = kwargs.get('include_native', True)
 
-    no_native = kwargs.get('no_native', False)
-    is_instance = kwargs.get('is_instance', True)
     usage = kwargs.get('usage', True)
     raw = kwargs.get('raw', False)
-    dashes = kwargs.get('dashes', True)
     optional = kwargs.get('optional', 'optional')
     empty = kwargs.get('empty', False)
+    expand_short = kwargs.get('expand_short', True)
 
     def decorator(handler):
-        command = Command(handler, is_instance, usage, raw, dashes, optional, empty)
+        command = Command(handler, usage, raw, optional, empty, expand_short)
 
         # Extract and inject native name while making sure it is going to be the
         # first one in the list.
-        if not names or names and not no_native:
+        if not names or include_native:
             names.insert(0, command.native_name)
         command.names = tuple(names)
 
         return command
 
-    # Workaround if we are getting called without parameters.
+    # Workaround if we are getting called without parameters. Keep in mind that
+    # in that case - first item in the names will be the handler.
     if len(names) == 1 and isinstance(names[0], FunctionType):
         return decorator(names.pop())
 
