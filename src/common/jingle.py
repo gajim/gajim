@@ -85,26 +85,27 @@ class JingleSession(object):
 	''' This represents one jingle session. '''
 	def __init__(self, con, weinitiate, jid, sid=None):
 		''' con -- connection object,
-		    weinitiate -- boolean, are we the initiator?
-		    jid - jid of the other entity'''
-		self.contents={}	# negotiated contents
-		self.connection=con	# connection to use
+			 weinitiate -- boolean, are we the initiator?
+			 jid - jid of the other entity'''
+		self.contents = {} # negotiated contents
+		self.connection = con # connection to use
 		# our full jid
-		self.ourjid=gajim.get_jid_from_account(self.connection.name)+'/'+con.server_resource
-		self.peerjid=jid	# jid we connect to
+		self.ourjid = gajim.get_jid_from_account(self.connection.name) + '/' + \
+			con.server_resource
+		self.peerjid = jid # jid we connect to
 		# jid we use as the initiator
-		self.initiator=weinitiate and self.ourjid or self.peerjid
+		self.initiator = weinitiate and self.ourjid or self.peerjid
 		# jid we use as the responder
-		self.responder=weinitiate and self.peerjid or self.ourjid
+		self.responder = weinitiate and self.peerjid or self.ourjid
 		# are we an initiator?
-		self.weinitiate=weinitiate
+		self.weinitiate = weinitiate
 		# what state is session in? (one from JingleStates)
-		self.state=JingleStates.ended
+		self.state = JingleStates.ended
 		if not sid:
-			sid=con.connection.getAnID()
-		self.sid=sid		# sessionid
+			sid = con.connection.getAnID()
+		self.sid = sid # sessionid
 
-		self.accepted=True	# is this session accepted by user
+		self.accepted = True # is this session accepted by user
 		self.candidates_ready = False # True when local candidates are prepared
 
 		# callbacks to call on proper contents
@@ -118,10 +119,13 @@ class JingleSession(object):
 			'content-remove':	[self.__defaultCB, self.__contentRemoveCB],
 			'description-info':	[self.__defaultCB], #TODO
 			'security-info':	[self.__defaultCB], #TODO
-			'session-accept':	[self.__sessionAcceptCB, self.__contentAcceptCB, self.__broadcastCB, self.__defaultCB],
+			'session-accept':	[self.__sessionAcceptCB, self.__contentAcceptCB,
+				self.__broadcastCB, self.__defaultCB],
 			'session-info':		[self.__sessionInfoCB, self.__broadcastCB],
-			'session-initiate':	[self.__sessionInitiateCB, self.__broadcastCB, self.__defaultCB],
-			'session-terminate':	[self.__sessionTerminateCB, self.__broadcastAllCB, self.__defaultCB],
+			'session-initiate':	[self.__sessionInitiateCB, self.__broadcastCB,
+				self.__defaultCB],
+			'session-terminate':	[self.__sessionTerminateCB, self.__broadcastAllCB,
+				self.__defaultCB],
 			'transport-info':	[self.__broadcastCB, self.__defaultCB],
 			'transport-replace':	[self.__broadcastCB, self.__transportReplaceCB], #TODO
 			'transport-accept':	[self.__defaultCB], #TODO
@@ -132,12 +136,14 @@ class JingleSession(object):
 
 	''' Interaction with user '''
 	def approveSession(self):
-		''' Called when user accepts session in UI (when we aren't the initiator).'''
-		self.accepted=True
+		''' Called when user accepts session in UI (when we aren't the initiator).
+		'''
+		self.accepted = True
 		self.acceptSession()
 
 	def declineSession(self):
-		''' Called when user declines session in UI (when we aren't the initiator)'''
+		''' Called when user declines session in UI (when we aren't the initiator)
+		'''
 		reason = xmpp.Node('reason')
 		reason.addChild('decline')
 		self.__sessionTerminate(reason)
@@ -151,18 +157,20 @@ class JingleSession(object):
 		Creator must be one of ('we', 'peer', 'initiator', 'responder')'''
 		assert creator in ('we', 'peer', 'initiator', 'responder')
 
-		if self.state==JingleStates.pending:
+		if self.state == JingleStates.pending:
 			raise WrongState
 
-		if (creator=='we' and self.weinitiate) or (creator=='peer' and not self.weinitiate):
-			creator='initiator'
-		elif (creator=='peer' and self.weinitiate) or (creator=='we' and not self.weinitiate):
-			creator='responder'
+		if (creator == 'we' and self.weinitiate) or (creator == 'peer' and \
+		not self.weinitiate):
+			creator = 'initiator'
+		elif (creator == 'peer' and self.weinitiate) or (creator == 'we' and \
+		not self.weinitiate):
+			creator = 'responder'
 		content.creator = creator
 		content.name = name
-		self.contents[(creator,name)]=content
+		self.contents[(creator,name)] = content
 
-		if self.state==JingleStates.active:
+		if self.state == JingleStates.active:
 			pass # TODO: send proper stanza, shouldn't be needed now
 
 	def removeContent(self, creator, name):
@@ -187,7 +195,7 @@ class JingleSession(object):
 	def sendSessionInfo(self): pass
 
 	def sendContentAccept(self, content):
-		assert self.state!=JingleStates.ended
+		assert self.state != JingleStates.ended
 		stanza, jingle = self.__makeJingle('content-accept')
 		jingle.addChild(node=content)
 		self.connection.connection.send(stanza)
@@ -258,7 +266,7 @@ class JingleSession(object):
 				else:
 					stanza, jingle = self.__makeJingle('transport-reject')
 					c = jingle.setTag('content', attrs={'creator': creator,
-					                                    'name': name})
+						'name': name})
 					c.setTag('transport', namespace=transport_ns)
 					self.connection.connection.send(stanza)
 					raise xmpp.NodeProcessed
@@ -267,7 +275,7 @@ class JingleSession(object):
 				#For now, reject the transport
 				stanza, jingle = self.__makeJingle('transport-reject')
 				c = jingle.setTag('content', attrs={'creator': creator,
-				                                    'name': name})
+					'name': name})
 				c.setTag('transport', namespace=transport_ns)
 				self.connection.connection.send(stanza)
 				raise xmpp.NodeProcessed
@@ -357,7 +365,8 @@ class JingleSession(object):
 		self.state = JingleStates.pending
 
 		# Send event about starting a session
-		self.connection.dispatch('JINGLE_INCOMING', (self.initiator, self.sid, contents))
+		self.connection.dispatch('JINGLE_INCOMING', (self.initiator, self.sid,
+			contents))
 
 	def __broadcastCB(self, stanza, jingle, error, action):
 		''' Broadcast the stanza contents to proper content handlers. '''
@@ -419,14 +428,14 @@ class JingleSession(object):
 		self.state=JingleStates.active
 
 	def __sessionInfo(self, payload=None):
-		assert self.state!=JingleStates.ended
+		assert self.state != JingleStates.ended
 		stanza, jingle = self.__makeJingle('session-info')
 		if payload:
 			jingle.addChild(node=payload)
 		self.connection.connection.send(stanza)
 
 	def __sessionTerminate(self, reason=None):
-		assert self.state!=JingleStates.ended
+		assert self.state != JingleStates.ended
 		stanza, jingle = self.__makeJingle('session-terminate')
 		if reason is not None:
 			jingle.addChild(node=reason)
@@ -435,16 +444,16 @@ class JingleSession(object):
 		self.connection.deleteJingle(self)
 
 	def __contentAdd(self):
-		assert self.state==JingleStates.active
+		assert self.state == JingleStates.active
 
 	def __contentAccept(self):
-		assert self.state!=JingleStates.ended
+		assert self.state != JingleStates.ended
 
 	def __contentModify(self):
-		assert self.state!=JingleStates.ended
+		assert self.state != JingleStates.ended
 
 	def __contentRemove(self):
-		assert self.state!=JingleStates.ended
+		assert self.state != JingleStates.ended
 
 
 class JingleTransport(object):
@@ -469,7 +478,7 @@ class JingleContent(object):
 		self.senders = 'both' #FIXME
 		self.allow_sending = True # Used for stream direction, attribute 'senders'
 
-		self.callbacks =  {
+		self.callbacks = {
 			# these are called when *we* get stanzas
 			'content-accept': [],
 			'content-add': [],
@@ -507,21 +516,21 @@ class JingleContent(object):
 			#cand.type = farsight.CANDIDATE_TYPE_LOCAL
 			cand.priority = int(candidate['priority'])
 
-			if candidate['protocol']=='udp':
+			if candidate['protocol'] == 'udp':
 				cand.proto=farsight.NETWORK_PROTOCOL_UDP
 			else:
 				# we actually don't handle properly different tcp options in jingle
-				cand.proto=farsight.NETWORK_PROTOCOL_TCP
+				cand.proto = farsight.NETWORK_PROTOCOL_TCP
 
 			cand.username = str(transport['ufrag'])
 			cand.password = str(transport['pwd'])
 
 			#FIXME: huh?
 			types = {'host': farsight.CANDIDATE_TYPE_HOST,
-			         'srflx': farsight.CANDIDATE_TYPE_SRFLX,
-			         'prflx': farsight.CANDIDATE_TYPE_PRFLX,
-			         'relay': farsight.CANDIDATE_TYPE_RELAY,
-			         'multicast': farsight.CANDIDATE_TYPE_MULTICAST}
+						'srflx': farsight.CANDIDATE_TYPE_SRFLX,
+						'prflx': farsight.CANDIDATE_TYPE_PRFLX,
+						'relay': farsight.CANDIDATE_TYPE_RELAY,
+						'multicast': farsight.CANDIDATE_TYPE_MULTICAST}
 			if 'type' in candidate and candidate['type'] in types:
 				cand.type = types[candidate['type']]
 			candidates.append(cand)
@@ -538,10 +547,10 @@ class JingleContent(object):
 
 	def __candidate(self, candidate):
 		types = {farsight.CANDIDATE_TYPE_HOST: 'host',
-			     farsight.CANDIDATE_TYPE_SRFLX: 'srlfx',
-			     farsight.CANDIDATE_TYPE_PRFLX: 'prlfx',
-			     farsight.CANDIDATE_TYPE_RELAY: 'relay',
-			     farsight.CANDIDATE_TYPE_MULTICAST: 'multicast'}
+			farsight.CANDIDATE_TYPE_SRFLX: 'srlfx',
+			farsight.CANDIDATE_TYPE_PRFLX: 'prlfx',
+			farsight.CANDIDATE_TYPE_RELAY: 'relay',
+			farsight.CANDIDATE_TYPE_MULTICAST: 'multicast'}
 		attrs={
 			'component': candidate.component_id,
 			'foundation': '1', # hack
@@ -554,10 +563,10 @@ class JingleContent(object):
 		if candidate.type in types:
 			attrs['type'] = types[candidate.type]
 		if candidate.proto==farsight.NETWORK_PROTOCOL_UDP:
-			attrs['protocol']='udp'
+			attrs['protocol'] = 'udp'
 		else:
 			# we actually don't handle properly different tcp options in jingle
-			attrs['protocol']='tcp'
+			attrs['protocol'] = 'tcp'
 		return xmpp.Node('candidate', attrs=attrs)
 
 	def iterCandidates(self):
@@ -565,11 +574,11 @@ class JingleContent(object):
 			yield self.__candidate(candidate)
 
 	def send_candidate(self, candidate):
-		c=self.__content()
-		t=c.addChild(xmpp.NS_JINGLE_ICE_UDP+' transport')
+		c = self.__content()
+		t = c.addChild(xmpp.NS_JINGLE_ICE_UDP + ' transport')
 
-		if candidate.username: t['ufrag']=candidate.username
-		if candidate.password: t['pwd']=candidate.password
+		if candidate.username: t['ufrag'] = candidate.username
+		if candidate.password: t['pwd'] = candidate.password
 
 		t.addChild(node=self.__candidate(candidate))
 		self.session.sendTransportInfo(c)
@@ -578,14 +587,14 @@ class JingleContent(object):
 		''' Add our things to session-initiate stanza. '''
 		self._fillContent(content)
 
-		if self.candidates and self.candidates[0].username and self.candidates[0].password:
+		if self.candidates and self.candidates[0].username and \
+		self.candidates[0].password:
 			attrs = {'ufrag': self.candidates[0].username,
-			         'pwd': self.candidates[0].password}
+				'pwd': self.candidates[0].password}
 		else:
 			attrs = {}
-		content.addChild(xmpp.NS_JINGLE_ICE_UDP+' transport', attrs=attrs,
-		                 payload=self.iterCandidates())
-
+		content.addChild(xmpp.NS_JINGLE_ICE_UDP + ' transport', attrs=attrs,
+			payload=self.iterCandidates())
 
 class JingleRTPContent(JingleContent):
 	def __init__(self, session, media, node=None):
@@ -613,8 +622,8 @@ class JingleRTPContent(JingleContent):
 		self.funnel = None
 
 	def _fillContent(self, content):
-		content.addChild(xmpp.NS_JINGLE_RTP+' description', attrs={'media': self.media},
-		                 payload=self.iterCodecs())
+		content.addChild(xmpp.NS_JINGLE_RTP + ' description',
+			attrs={'media': self.media}, payload=self.iterCodecs())
 
 	def _on_gst_message(self, bus, message):
 		if message.type == gst.MESSAGE_ELEMENT:
@@ -631,7 +640,8 @@ class JingleRTPContent(JingleContent):
 			elif name == 'farsight-new-local-candidate':
 				candidate = message.structure['candidate']
 				self.candidates.append(candidate)
-				if self.session.candidates_ready: #FIXME: Is this case even possible?
+				if self.session.candidates_ready:
+					#FIXME: Is this case even possible?
 					self.send_candidate(candidate)
 			elif name == 'farsight-component-state-changed':
 				state = message.structure['state']
@@ -641,7 +651,8 @@ class JingleRTPContent(JingleContent):
 					#TODO: farsight.DIRECTION_BOTH only if senders='both'
 					self.p2pstream.set_property('direction', farsight.DIRECTION_BOTH)
 					#if not self.session.weinitiate: #FIXME: one more FIXME...
-					#	self.session.sendContentAccept(self.__content((xmpp.Node('description', payload=self.iterCodecs()),)))
+					#	self.session.sendContentAccept(self.__content((xmpp.Node(
+					#		'description', payload=self.iterCodecs()),)))
 			elif name == 'farsight-error':
 				print 'Farsight error #%d!' % message.structure['error-no']
 				print 'Message: %s' % message.structure['error-msg']
@@ -656,30 +667,32 @@ class JingleRTPContent(JingleContent):
 		codecs = []
 		for codec in content.getTag('description').iterTags('payload-type'):
 			c = farsight.Codec(int(codec['id']), codec['name'],
-			                   farsight.MEDIA_TYPE_AUDIO, int(codec['clockrate']))
+				farsight.MEDIA_TYPE_AUDIO, int(codec['clockrate']))
 			if 'channels' in codec:
 				c.channels = int(codec['channels'])
 			else:
 				c.channels = 1
-			c.optional_params = [(str(p['name']), str(p['value'])) for p in codec.iterTags('parameter')]
+			c.optional_params = [(str(p['name']), str(p['value'])) for p in \
+				codec.iterTags('parameter')]
 			codecs.append(c)
-		if len(codecs)==0: return
+		if len(codecs) == 0: return
 
 		#FIXME: Handle this case:
-		# glib.GError: There was no intersection between the remote codecs and the local ones
+		# glib.GError: There was no intersection between the remote codecs and
+		# the local ones
 		self.p2pstream.set_remote_codecs(codecs)
-		self.got_codecs=True
+		self.got_codecs = True
 
 	def iterCodecs(self):
 		codecs=self.p2psession.get_property('codecs')
 		for codec in codecs:
 			a = {'name': codec.encoding_name,
-			     'id': codec.id,
-			     'channels': codec.channels}
+				'id': codec.id,
+				'channels': codec.channels}
 			if codec.clock_rate: a['clockrate']=codec.clock_rate
 			if codec.optional_params:
 				p = (xmpp.Node('parameter', {'name': name, 'value': value})
-				     for name, value in codec.optional_params)
+					for name, value in codec.optional_params)
 			else:	p = ()
 			yield xmpp.Node('payload-type', a, p)
 
@@ -708,7 +721,7 @@ class JingleVoIP(JingleRTPContent):
 		# the network part
 		participant = self.conference.new_participant(self.session.peerjid)
 		params = {'controlling-mode': self.session.weinitiate,# 'debug': False}
-		          'stun-ip': '69.0.208.27', 'debug': False}
+			'stun-ip': '69.0.208.27', 'debug': False}
 
 		self.p2psession = self.conference.new_session(farsight.MEDIA_TYPE_AUDIO)
 
@@ -716,13 +729,13 @@ class JingleVoIP(JingleRTPContent):
 		#FIXME: codec ID is an important thing for psi (and pidgin?)
 		# So, if it doesn't work with pidgin or psi, LOOK AT THIS
 		codecs = [farsight.Codec(farsight.CODEC_ID_ANY, 'SPEEX',
-		                         farsight.MEDIA_TYPE_AUDIO, 8000),
-		          farsight.Codec(farsight.CODEC_ID_ANY, 'SPEEX',
-		                         farsight.MEDIA_TYPE_AUDIO, 16000)]
+			farsight.MEDIA_TYPE_AUDIO, 8000),
+			farsight.Codec(farsight.CODEC_ID_ANY, 'SPEEX',
+			farsight.MEDIA_TYPE_AUDIO, 16000)]
 		self.p2psession.set_codec_preferences(codecs)
 
-		self.p2pstream = self.p2psession.new_stream(participant, farsight.DIRECTION_NONE,
-		                                            'nice', params)
+		self.p2pstream = self.p2psession.new_stream(participant,
+			farsight.DIRECTION_NONE, 'nice', params)
 
 		# the local parts
 		# TODO: use gconfaudiosink?
@@ -754,7 +767,8 @@ class JingleVoIP(JingleRTPContent):
 				self.funnel.link(sink)
 			pad.link(self.funnel.get_pad('sink%d'))
 
-		self.mic_volume.get_pad('src').link(self.p2psession.get_property('sink-pad'))
+		self.mic_volume.get_pad('src').link(self.p2psession.get_property(
+			'sink-pad'))
 		self.p2pstream.connect('src-pad-added', src_pad_added)
 
 		# The following is needed for farsight to process ICE requests:
@@ -775,7 +789,7 @@ class ConnectionJingle(object):
 		''' Add a jingle session to a jingle stanza dispatcher
 		jingle - a JingleSession object.
 		'''
-		self.__sessions[(jingle.peerjid, jingle.sid)]=jingle
+		self.__sessions[(jingle.peerjid, jingle.sid)] = jingle
 
 	def deleteJingle(self, jingle):
 		''' Remove a jingle session from a jingle stanza dispatcher '''
@@ -812,13 +826,14 @@ class ConnectionJingle(object):
 		raise xmpp.NodeProcessed
 
 	def addJingleIqCallback(self, jid, id, jingle):
-		self.__iq_responses[(jid, id)]=jingle
+		self.__iq_responses[(jid, id)] = jingle
 
 	def startVoIP(self, jid):
 		jingle = JingleSession(self, weinitiate=True, jid=jid)
 		self.addJingle(jingle)
 		jingle.addContent('voice', JingleVoIP(jingle))
 		jingle.startSession()
+
 	def getJingleSession(self, jid, sid):
 		try:
 			return self.__sessions[(jid, sid)]
