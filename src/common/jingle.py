@@ -148,6 +148,14 @@ class JingleSession(object):
 		reason.addChild('decline')
 		self.__sessionTerminate(reason)
 
+	def end_session(self):
+		reason = xmpp.Node('reason')
+		if self.state == JingleStates.active:
+			reason.addChild('success')
+		else:
+			reason.addChild('abort')
+		self.__sessionTerminate(reason)
+
 	''' Middle-level functions to manage contents. Handle local content
 	cache and send change notifications. '''
 	def addContent(self, name, content, creator='we'):
@@ -337,12 +345,15 @@ class JingleSession(object):
 			desc_ns = element.getTag('description').getNamespace()
 			media = element.getTag('description')['media']
 			tran_ns = element.getTag('transport').getNamespace()
-			if desc_ns == xmpp.NS_JINGLE_RTP and media == 'audio':
+			if desc_ns == xmpp.NS_JINGLE_RTP and media in ('audio', 'video'):
 				contents_ok = True
 				if tran_ns == xmpp.NS_JINGLE_ICE_UDP:
 					# we've got voip content
-					self.addContent(element['name'], JingleVoIP(self), 'peer')
-					contents.append(('VOIP',))
+					if media == 'audio':
+						self.addContent(element['name'], JingleVoIP(self), 'peer')
+					else:
+						self.addContent(element['name'], JingleVideo(self), 'peer')
+					contents.append((media,))
 					transports_ok = True
 
 		# If there's no content we understand...
@@ -600,6 +611,8 @@ class JingleRTPContent(JingleContent):
 	def __init__(self, session, media, node=None):
 		JingleContent.__init__(self, session, node)
 		self.media = media
+		self.farsight_media = {'audio': farsight.MEDIA_TYPE_AUDIO,
+								'video': farsight.MEDIA_TYPE_VIDEO}[media]
 		self.got_codecs = False
 
 		self.callbacks['content-accept'] += [self.__getRemoteCodecsCB]
@@ -620,6 +633,15 @@ class JingleRTPContent(JingleContent):
 		self.conference.set_property("sdes-cname", self.session.ourjid)
 		self.pipeline.add(self.conference)
 		self.funnel = None
+
+		self.p2psession = self.conference.new_session(self.farsight_media)
+
+		participant = self.conference.new_participant(self.session.peerjid)
+		params = {'controlling-mode': self.session.weinitiate,# 'debug': False}
+			'stun-ip': '69.0.208.27', 'debug': False}
+
+		self.p2pstream = self.p2psession.new_stream(participant,
+			farsight.DIRECTION_RECV, 'nice', params)
 
 	def _fillContent(self, content):
 		content.addChild(xmpp.NS_JINGLE_RTP + ' description',
@@ -646,7 +668,7 @@ class JingleRTPContent(JingleContent):
 			elif name == 'farsight-component-state-changed':
 				state = message.structure['state']
 				print message.structure['component'], state
-				if state==farsight.STREAM_STATE_CONNECTED:
+				if state==farsight.STREAM_STATE_READY:
 					self.negotiated = True
 					#TODO: farsight.DIRECTION_BOTH only if senders='both'
 					self.p2pstream.set_property('direction', farsight.DIRECTION_BOTH)
@@ -667,7 +689,7 @@ class JingleRTPContent(JingleContent):
 		codecs = []
 		for codec in content.getTag('description').iterTags('payload-type'):
 			c = farsight.Codec(int(codec['id']), codec['name'],
-				farsight.MEDIA_TYPE_AUDIO, int(codec['clockrate']))
+				self.farsight_media, int(codec['clockrate']))
 			if 'channels' in codec:
 				c.channels = int(codec['channels'])
 			else:
@@ -709,21 +731,12 @@ class JingleVoIP(JingleRTPContent):
 	def __init__(self, session, node=None):
 		JingleRTPContent.__init__(self, session, 'audio', node)
 
-		self.got_codecs = False
-
 		self.setupStream()
 
 
 	''' Things to control the gstreamer's pipeline '''
 	def setupStream(self):
 		JingleRTPContent.setupStream(self)
-
-		# the network part
-		participant = self.conference.new_participant(self.session.peerjid)
-		params = {'controlling-mode': self.session.weinitiate,# 'debug': False}
-			'stun-ip': '69.0.208.27', 'debug': False}
-
-		self.p2psession = self.conference.new_session(farsight.MEDIA_TYPE_AUDIO)
 
 		# Configure SPEEX
 		#FIXME: codec ID is an important thing for psi (and pidgin?)
@@ -734,9 +747,6 @@ class JingleVoIP(JingleRTPContent):
 			farsight.MEDIA_TYPE_AUDIO, 16000)]
 		self.p2psession.set_codec_preferences(codecs)
 
-		self.p2pstream = self.p2psession.new_stream(participant,
-			farsight.DIRECTION_RECV, 'nice', params)
-
 		# the local parts
 		# TODO: use gconfaudiosink?
 		# sink = get_first_gst_element(['alsasink', 'osssink', 'autoaudiosink'])
@@ -744,19 +754,17 @@ class JingleVoIP(JingleRTPContent):
 		sink.set_property('sync', False)
 		#sink.set_property('latency-time', 20000)
 		#sink.set_property('buffer-time', 80000)
-		self.pipeline.add(sink)
 
 		# TODO: use gconfaudiosrc?
-		self.src_mic = gst.element_factory_make('alsasrc')
-		self.src_mic.set_property('blocksize', 320)
-		self.pipeline.add(self.src_mic)
+		src_mic = gst.element_factory_make('alsasrc')
+		src_mic.set_property('blocksize', 320)
 
 		self.mic_volume = gst.element_factory_make('volume')
 		self.mic_volume.set_property('volume', 1)
-		self.pipeline.add(self.mic_volume)
 
 		# link gst elements
-		self.src_mic.link(self.mic_volume)
+		self.pipeline.add(sink, src_mic, self.mic_volume)
+		src_mic.link(self.mic_volume)
 
 		def src_pad_added (stream, pad, codec):
 			if not self.funnel:
@@ -774,6 +782,43 @@ class JingleVoIP(JingleRTPContent):
 		# The following is needed for farsight to process ICE requests:
 		self.pipeline.set_state(gst.STATE_PLAYING)
 
+class JingleVideo(JingleRTPContent):
+	def __init__(self, session, node=None):
+		JingleRTPContent.__init__(self, session, 'video', node)
+		self.setupStream()
+
+	''' Things to control the gstreamer's pipeline '''
+	def setupStream(self):
+		#TODO: Everything is not working properly:
+		# sometimes, one window won't show up,
+		# sometimes it'll freeze...
+		JingleRTPContent.setupStream(self)
+		# the local parts
+		src_vid = gst.element_factory_make('videotestsrc')
+		videoscale = gst.element_factory_make('videoscale')
+		caps = gst.element_factory_make('capsfilter')
+		caps.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
+		colorspace = gst.element_factory_make('ffmpegcolorspace')
+
+		self.pipeline.add(src_vid, videoscale, caps, colorspace)
+		gst.element_link_many(src_vid, videoscale, caps, colorspace)
+
+		def src_pad_added (stream, pad, codec):
+			if not self.funnel:
+				self.funnel = gst.element_factory_make('fsfunnel')
+				self.pipeline.add(self.funnel)
+				videosink = gst.element_factory_make('xvimagesink')
+				self.pipeline.add(videosink)
+				self.funnel.set_state (gst.STATE_PLAYING)
+				videosink.set_state(gst.STATE_PLAYING)
+				self.funnel.link(videosink)
+			pad.link(self.funnel.get_pad('sink%d'))
+
+		colorspace.get_pad('src').link(self.p2psession.get_property('sink-pad'))
+		self.p2pstream.connect('src-pad-added', src_pad_added)
+
+		# The following is needed for farsight to process ICE requests:
+		self.pipeline.set_state(gst.STATE_PLAYING)
 
 class ConnectionJingle(object):
 	''' This object depends on that it is a part of Connection class. '''

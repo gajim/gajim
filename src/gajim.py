@@ -2087,7 +2087,7 @@ class Interface:
 		content_types = set(c[0] for c in contents)
 
 		# check type of jingle session
-		if 'VOIP' in content_types:
+		if 'audio' in content_types or 'video' in content_types:
 			# a voip session...
 			# we now handle only voip, so the only thing we will do here is
 			# not to return from function

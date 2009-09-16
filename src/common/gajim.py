@@ -198,7 +198,7 @@ gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI, xmpp.NS_FILE,
 	'sslc2s', 'stringprep', xmpp.NS_PING, xmpp.NS_TIME_REVISED, xmpp.NS_SSN,
 	xmpp.NS_MOOD, xmpp.NS_ACTIVITY, xmpp.NS_NICK, xmpp.NS_ROSTERX,
 	xmpp.NS_JINGLE, xmpp.NS_JINGLE_RTP, xmpp.NS_JINGLE_RTP_AUDIO,
-	xmpp.NS_JINGLE_ICE_UDP]
+	xmpp.NS_JINGLE_RTP_VIDEO, xmpp.NS_JINGLE_ICE_UDP]
 
 # Optional features gajim supports per account
 gajim_optional_features = {}

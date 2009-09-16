@@ -67,6 +67,7 @@ NS_JINGLE       ='urn:xmpp:jingle:1'                                    # XEP-01
 NS_JINGLE_ERRORS='urn:xmpp:jingle:errors:1'                             # XEP-0166
 NS_JINGLE_RTP   ='urn:xmpp:jingle:apps:rtp:1'                           # XEP-0167
 NS_JINGLE_RTP_AUDIO='urn:xmpp:jingle:apps:rtp:audio'                    # XEP-0167
+NS_JINGLE_RTP_VIDEO='urn:xmpp:jingle:apps:rtp:video'                    # XEP-0167
 NS_JINGLE_RAW_UDP='urn:xmpp:jingle:transports:raw-udp:1'                # XEP-0177
 NS_JINGLE_ICE_UDP='urn:xmpp:jingle:transports:ice-udp:1'                # XEP-0176
 NS_LAST		 ='jabber:iq:last'
