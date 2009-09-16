@@ -735,7 +735,7 @@ class JingleVoIP(JingleRTPContent):
 		self.p2psession.set_codec_preferences(codecs)
 
 		self.p2pstream = self.p2psession.new_stream(participant,
-			farsight.DIRECTION_NONE, 'nice', params)
+			farsight.DIRECTION_RECV, 'nice', params)
 
 		# the local parts
 		# TODO: use gconfaudiosink?
