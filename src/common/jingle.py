@@ -13,7 +13,7 @@
 ''' Handles the jingle signalling protocol. '''
 
 #TODO:
-# * things in XEP 0166, includign:
+# * things in XEP 0166, including:
 #   - 'senders' attribute of 'content' element
 #   - security preconditions
 #   * actions:
@@ -24,13 +24,19 @@
 #   * sid/content related:
 #      - tiebreaking
 #      - if there already is a session, use it
+# * things in XEP 0176, including:
+#      - http://xmpp.org/extensions/xep-0176.html#protocol-restarts
+#      - http://xmpp.org/extensions/xep-0176.html#fallback
+# * XEP 0177 (raw udp)
+
 # * UI:
 #   - hang up button!
 #   - make state and codec informations available to the user
 #   * config:
 #     - codecs
 #     - STUN
-# * figure out why it doesn't work with pidgin, and why it doesn't work well with psi
+# * DONE: figure out why it doesn't work with pidgin:
+#     That's a bug in pidgin: http://xmpp.org/extensions/xep-0176.html#protocol-checks
 # * destroy sessions when user is unavailable, see handle_event_notify?
 # * timeout
 # * video
@@ -460,6 +466,7 @@ class JingleContent(object):
 		self.negotiated = False		# is this content already negotiated?
 		self.candidates = [] # Local transport candidates
 
+		self.senders = 'both' #FIXME
 		self.allow_sending = True # Used for stream direction, attribute 'senders'
 
 		self.callbacks =  {
@@ -581,13 +588,16 @@ class JingleContent(object):
 
 
 class JingleRTPContent(JingleContent):
-	def __init__(self, session, node=None):
+	def __init__(self, session, media, node=None):
 		JingleContent.__init__(self, session, node)
+		self.media = media
 		self.got_codecs = False
 
 		self.callbacks['content-accept'] += [self.__getRemoteCodecsCB]
 		self.callbacks['session-accept'] += [self.__getRemoteCodecsCB]
 		self.callbacks['session-initiate'] += [self.__getRemoteCodecsCB]
+		self.callbacks['session-terminate'] += [self.__stop]
+		self.callbacks['session-terminate-sent'] += [self.__stop]
 
 	def setupStream(self):
 		# pipeline and bus
@@ -601,6 +611,10 @@ class JingleRTPContent(JingleContent):
 		self.conference.set_property("sdes-cname", self.session.ourjid)
 		self.pipeline.add(self.conference)
 		self.funnel = None
+
+	def _fillContent(self, content):
+		content.addChild(xmpp.NS_JINGLE_RTP+' description', attrs={'media': self.media},
+		                 payload=self.iterCodecs())
 
 	def _on_gst_message(self, bus, message):
 		if message.type == gst.MESSAGE_ELEMENT:
@@ -622,15 +636,18 @@ class JingleRTPContent(JingleContent):
 			elif name == 'farsight-component-state-changed':
 				state = message.structure['state']
 				print message.structure['component'], state
-				if state==farsight.STREAM_STATE_READY:
+				if state==farsight.STREAM_STATE_CONNECTED:
 					self.negotiated = True
-					self.pipeline.set_state(gst.STATE_PLAYING)
+					#TODO: farsight.DIRECTION_BOTH only if senders='both'
+					self.p2pstream.set_property('direction', farsight.DIRECTION_BOTH)
 					#if not self.session.weinitiate: #FIXME: one more FIXME...
 					#	self.session.sendContentAccept(self.__content((xmpp.Node('description', payload=self.iterCodecs()),)))
 			elif name == 'farsight-error':
 				print 'Farsight error #%d!' % message.structure['error-no']
 				print 'Message: %s' % message.structure['error-msg']
 				print 'Debug: %s' % message.structure['debug-msg']
+			else:
+				print name
 
 	def __getRemoteCodecsCB(self, stanza, content, error, action):
 		''' Get peer codecs from what we get from peer. '''
@@ -666,24 +683,23 @@ class JingleRTPContent(JingleContent):
 			else:	p = ()
 			yield xmpp.Node('payload-type', a, p)
 
+	def __stop(self, *things):
+		self.pipeline.set_state(gst.STATE_NULL)
+
+	def __del__(self):
+		self.__stop()
+
 
 class JingleVoIP(JingleRTPContent):
 	''' Jingle VoIP sessions consist of audio content transported
 	over an ICE UDP protocol. '''
 	def __init__(self, session, node=None):
-		JingleRTPContent.__init__(self, session, node)
-		self.got_codecs = False
+		JingleRTPContent.__init__(self, session, 'audio', node)
 
-		self.callbacks['session-accept'] += [self.__startMic]
-		self.callbacks['session-terminate'] += [self.__stop]
-		self.callbacks['session-accept-sent'] += [self.__startMic]
-		self.callbacks['session-terminate-sent'] += [self.__stop]
+		self.got_codecs = False
 
 		self.setupStream()
 
-	def _fillContent(self, content):
-		content.addChild(xmpp.NS_JINGLE_RTP+' description', attrs={'media': 'audio'},
-		                 payload=self.iterCodecs())
 
 	''' Things to control the gstreamer's pipeline '''
 	def setupStream(self):
@@ -705,8 +721,7 @@ class JingleVoIP(JingleRTPContent):
 		                         farsight.MEDIA_TYPE_AUDIO, 16000)]
 		self.p2psession.set_codec_preferences(codecs)
 
-		#TODO: farsight.DIRECTION_BOTH only if senders='both'
-		self.p2pstream = self.p2psession.new_stream(participant, farsight.DIRECTION_BOTH,
+		self.p2pstream = self.p2psession.new_stream(participant, farsight.DIRECTION_NONE,
 		                                            'nice', params)
 
 		# the local parts
@@ -724,7 +739,7 @@ class JingleVoIP(JingleRTPContent):
 		self.pipeline.add(self.src_mic)
 
 		self.mic_volume = gst.element_factory_make('volume')
-		self.mic_volume.set_property('volume', 0)
+		self.mic_volume.set_property('volume', 1)
 		self.pipeline.add(self.mic_volume)
 
 		# link gst elements
@@ -743,17 +758,7 @@ class JingleVoIP(JingleRTPContent):
 		self.p2pstream.connect('src-pad-added', src_pad_added)
 
 		# The following is needed for farsight to process ICE requests:
-		self.conference.set_state(gst.STATE_PLAYING)
-
-	def __startMic(self, *things):
-		self.mic_volume.set_property('volume', 1)
-
-	def __stop(self, *things):
-		self.conference.set_state(gst.STATE_NULL)
-		self.pipeline.set_state(gst.STATE_NULL)
-
-	def __del__(self):
-		self.__stop()
+		self.pipeline.set_state(gst.STATE_PLAYING)
 
 
 class ConnectionJingle(object):
