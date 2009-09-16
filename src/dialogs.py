@@ -1698,7 +1698,8 @@ class ChangeNickDialog(InputDialogCheck):
 		if len(self.room_queue) == 0:
 			self.cancel_handler = None
 			self.dialog.destroy()
-			del gajim.interface.instances['change_nick_dialog']
+			if 'change_nick_dialog' in gajim.interface.instances:
+				del gajim.interface.instances['change_nick_dialog']
 			return
 		self.account, self.room_jid, self.prompt = self.room_queue.pop(0)
 		self.setup_dialog()
