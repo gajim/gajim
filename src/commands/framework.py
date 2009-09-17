@@ -370,11 +370,10 @@ class CommandProcessor(object):
         """
         command_name = self.SAFE_NAME_SCAN_PATTERN.match(name)
         if command_name:
-            command = Dispatcher.retrieve_command(self, command_name.group('name'))
+            command = self.retrieve_command(command_name.group('name'))
             if command:
                 return command
-            raise AttributeError(name)
-        return super(CommandProcessor, self).__getattr__(name)
+        raise AttributeError(name)
 
     @classmethod
     def prepare_name(cls, name):

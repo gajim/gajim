@@ -1783,6 +1783,13 @@ class GroupchatControl(ChatControlBase, GroupChatCommands):
 
 			splitted_text = text.split()
 
+			# HACK: Not the best soltution.
+			if (text.startswith(self.COMMAND_PREFIX) and not
+				text.startswith(self.COMMAND_PREFIX * 2)):
+				return super(GroupchatControl,
+					self).handle_message_textview_mykey_press(widget, event_keyval,
+							event_keymod)
+
 			# nick completion
 			# check if tab is pressed with empty message
 			if len(splitted_text): # if there are any words

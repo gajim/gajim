@@ -148,7 +148,52 @@ class ChatControlBase(MessageControl, CommonCommands):
 	event_keymod):
 		# Derived should implement this rather than connecting to the event
 		# itself.
-		pass
+
+		event = gtk.gdk.Event(gtk.gdk.KEY_PRESS)
+		event.keyval = event_keyval
+		event.state = event_keymod
+		event.time = 0
+
+		buffer = widget.get_buffer()
+		start, end = buffer.get_bounds()
+
+		if event.keyval -- gtk.keysyms.Tab:
+			position = buffer.get_insert()
+			end = buffer.get_iter_at_mark(position)
+
+			text = buffer.get_text(start, end, False)
+			text = text.decode('utf8')
+
+			if (text.startswith(self.COMMAND_PREFIX) and not
+				text.startswith(self.COMMAND_PREFIX * 2)):
+
+				text = text.split()[0]
+				bare = text.lstrip(self.COMMAND_PREFIX)
+
+				if len(text) == 1:
+					self.command_hits = []
+					for command in self.list_commands():
+						for name in command.names:
+							self.command_hits.append(name)
+				else:
+					if (self.last_key_tabs and self.command_hits and
+						self.command_hits[0].startswith(bare)):
+						self.command_hits.append(self.command_hits.pop(0))
+					else:
+						self.command_hits = []
+						for command in self.list_commands():
+							for name in command.names:
+								if name.startswith(bare):
+									self.command_hits.append(name)
+
+				if self.command_hits:
+					buffer.delete(start, end)
+					buffer.insert_at_cursor(self.COMMAND_PREFIX + self.command_hits[0] + ' ')
+					self.last_key_tabs = True
+
+				return True
+
+			self.last_key_tabs = False
 
 	def status_url_clicked(self, widget, url):
 		helpers.launch_browser_mailer('url', url)
@@ -304,6 +349,8 @@ class ChatControlBase(MessageControl, CommonCommands):
 
 		self.smooth = True
 		self.msg_textview.grab_focus()
+
+		self.command_hits = []
 
 	def set_speller(self):
 		# now set the one the user selected
