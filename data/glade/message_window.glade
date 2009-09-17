@@ -333,6 +333,48 @@
                       </packing>
                     </child>
                     <child>
+                      <widget class="GtkButton" id="start_audio_button">
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="tooltip" translatable="yes">Start audio session</property>
+                        <property name="relief">none</property>
+                        <signal name="activate" handler="on_start_audio_button_activate"/>
+                        <child>
+                          <widget class="GtkImage" id="start_audio_image">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-missing-image</property>
+                            <property name="icon-size">1</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="stop_audio_button">
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="tooltip" translatable="yes">Stop audio session</property>
+                        <property name="relief">none</property>
+                        <signal name="activate" handler="on_stop_audio_button_activate"/>
+                        <child>
+                          <widget class="GtkImage" id="stop_audio_image">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-missing-image</property>
+                            <property name="icon-size">1</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">6</property>
+                      </packing>
+                    </child>
+                    <child>
                       <widget class="GtkButton" id="convert_to_gc_button">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -352,7 +394,7 @@
                       </widget>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">5</property>
+                        <property name="position">7</property>
                       </packing>
                     </child>
                     <child>
@@ -375,7 +417,7 @@
                       </widget>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">6</property>
+                        <property name="position">8</property>
                       </packing>
                     </child>
                     <child>
@@ -398,7 +440,7 @@
                       </widget>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">7</property>
+                        <property name="position">9</property>
                       </packing>
                     </child>
                     <child>
@@ -408,7 +450,7 @@
                       </widget>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">8</property>
+                        <property name="position">10</property>
                       </packing>
                     </child>
                     <child>
@@ -431,7 +473,7 @@
                       </widget>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">9</property>
+                        <property name="position">11</property>
                       </packing>
                     </child>
                     <child>
@@ -443,7 +485,7 @@
                         </child>
                       </widget>
                       <packing>
-                        <property name="position">10</property>
+                        <property name="position">12</property>
                       </packing>
                     </child>
                     <child>
@@ -490,7 +532,7 @@
                       </widget>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">11</property>
+                        <property name="position">13</property>
                       </packing>
                     </child>
                   </widget>

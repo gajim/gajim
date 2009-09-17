@@ -2079,7 +2079,8 @@ class Interface:
 			is_modal = False, ok_handler = on_ok)
 
 	def handle_event_jingle_incoming(self, account, data):
-		# ('JINGLE_INCOMING', account, peer jid, sid, tuple-of-contents==(type, data...))
+		# ('JINGLE_INCOMING', account, peer jid, sid, tuple-of-contents==(type,
+		# data...))
 		# TODO: conditional blocking if peer is not in roster
 		
 		# unpack data
@@ -2134,15 +2135,15 @@ class Interface:
 				ctrl.set_audio_state('connected', sid)
 
 	def handle_event_jingle_disconnected(self, account, data):
-		# ('JINGLE_DISCONNECTED', account, (peerjid, sid))
-		peerjid, sid = data
+		# ('JINGLE_DISCONNECTED', account, (peerjid, sid, reason))
+		peerjid, sid, reason = data
 		jid = gajim.get_jid_without_resource(peerjid)
 		resource = gajim.get_resource_from_jid(peerjid)
 		ctrl = self.msg_win_mgr.get_control(peerjid, account)
 		if not ctrl:
 			ctrl = self.msg_win_mgr.get_control(jid, account)
 		if ctrl:
-			ctrl.set_audio_state('available', sid)
+			ctrl.set_audio_state('stop', sid=sid, reason=reason)
 
 	def handle_event_jingle_error(self, account, data):
 		# ('JINGLE_ERROR', account, (peerjid, sid, reason))

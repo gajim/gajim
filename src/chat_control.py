@@ -1161,6 +1161,16 @@ class ChatControl(ChatControlBase):
 			self._on_add_to_roster_menuitem_activate)
 		self.handlers[id_] = self._add_to_roster_button
 
+		self._start_audio_button = self.xml.get_widget('start_audio_button')
+		id_ = self._start_audio_button.connect('clicked',
+			self.on_start_audio_button_activate)
+		self.handlers[id_] = self._start_audio_button
+
+		self._stop_audio_button = self.xml.get_widget('stop_audio_button')
+		id_ = self._stop_audio_button.connect('clicked',
+			self.on_stop_audio_button_activate)
+		self.handlers[id_] = self._stop_audio_button
+
 		self._send_file_button = self.xml.get_widget('send_file_button')
 		# add a special img for send file button
 		path_to_upload_img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'upload.png')
@@ -1203,22 +1213,22 @@ class ChatControl(ChatControlBase):
 		img.set_from_pixbuf(gtkgui_helpers.load_icon(
 			'muc_active').get_pixbuf())
 
-		self.update_toolbar()
-
-		self._mood_image = self.xml.get_widget('mood_image')
-		self._activity_image = self.xml.get_widget('activity_image')
-		self._tune_image = self.xml.get_widget('tune_image')
 		self._audio_image = self.xml.get_widget('audio_image')
-
-		self.update_mood()
-		self.update_activity()
-		self.update_tune()
 		if gajim.capscache.is_supported(contact, NS_JINGLE_RTP_AUDIO):
 			self.set_audio_state('available')
 		else:
 			self.set_audio_state('not_available')
 		self.audio_sid = None
 
+		self.update_toolbar()
+
+		self._mood_image = self.xml.get_widget('mood_image')
+		self._activity_image = self.xml.get_widget('activity_image')
+		self._tune_image = self.xml.get_widget('tune_image')
+
+		self.update_mood()
+		self.update_activity()
+		self.update_tune()
 
 		# keep timeout id and window obj for possible big avatar
 		# it is on enter-notify and leave-notify so no need to be
@@ -1317,6 +1327,20 @@ class ChatControl(ChatControlBase):
 			self._add_to_roster_button.show()
 		else:
 			self._add_to_roster_button.hide()
+
+		# Audio buttons
+		if self.audio_state == self.AUDIO_STATE_NOT_AVAILABLE:
+			self._start_audio_button.show()
+			self._start_audio_button.set_sensitive(False)
+			self._stop_audio_button.hide()
+		elif self.audio_state in (self.AUDIO_STATE_AVAILABLE,
+		self.AUDIO_STATE_ERROR):
+			self._start_audio_button.show()
+			self._start_audio_button.set_sensitive(True)
+			self._stop_audio_button.hide()
+		else:
+			self._start_audio_button.hide()
+			self._stop_audio_button.show()
 
 		# Send file
 		if gajim.capscache.is_supported(self.contact, NS_FILE) and \
@@ -1451,11 +1475,10 @@ class ChatControl(ChatControlBase):
 			self._tune_image.hide()
 
 	def update_audio(self):
-		if self.audio_state == self.AUDIO_STATE_NOT_AVAILABLE:
+		if self.audio_state in (self.AUDIO_STATE_NOT_AVAILABLE,
+		self.AUDIO_STATE_AVAILABLE):
 			self._audio_image.hide()
 			return
-		elif self.audio_state == self.AUDIO_STATE_AVAILABLE:
-			self._audio_image.set_from_stock(gtk.STOCK_APPLY, 1)
 		elif self.audio_state == self.AUDIO_STATE_CONNECTING:
 			self._audio_image.set_from_stock(gtk.STOCK_CONVERT, 1)
 		elif self.audio_state == self.AUDIO_STATE_CONNECTION_RECEIVED:
@@ -1465,12 +1488,14 @@ class ChatControl(ChatControlBase):
 		elif self.audio_state == self.AUDIO_STATE_ERROR:
 			self._audio_image.set_from_stock(gtk.STOCK_DIALOG_WARNING, 1)
 		self._audio_image.show()
+		self.update_toolbar()
 
 	def set_audio_state(self, state, sid=None, reason=None):
-		str = 'Audio state : %s' % state
-		if reason:
-			str += ', reason: %s' % reason
-		self.print_conversation(str, 'info')
+		if state in ('connecting', 'connected', 'stop'):
+			str = _('Audio state : %s') % state
+			if reason:
+				str += ', ' + _('reason: %s') % reason
+			self.print_conversation(str, 'info')
 		if state == 'not_available':
 			self.audio_state = self.AUDIO_STATE_NOT_AVAILABLE
 			self.audio_sid = None
@@ -1485,6 +1510,9 @@ class ChatControl(ChatControlBase):
 			self.audio_sid = sid
 		elif state == 'connected':
 			self.audio_state = self.AUDIO_STATE_CONNECTED
+		elif state == 'stop':
+			self.audio_state = self.AUDIO_STATE_AVAILABLE
+			self.audio_sid = None
 		elif state == 'error':
 			self.audio_state = self.AUDIO_STATE_ERROR
 		self.update_audio()
@@ -1689,17 +1717,16 @@ class ChatControl(ChatControlBase):
 		banner_name_label.set_markup(label_text)
 		banner_name_tooltip.set_tip(banner_name_label, label_tooltip)
 
-	def _on_start_voip_menuitem_activate(self, *things):
+	def on_start_audio_button_activate(self, *things):
 		sid = gajim.connections[self.account].startVoIP(self.contact.get_full_jid(
 			))
 		self.set_audio_state('connecting', sid)
 
-	def _on_stop_voip_menuitem_activate(self, *things):
+	def on_stop_audio_button_activate(self, *things):
 		session = gajim.connections[self.account].getJingleSession(
 			self.contact.get_full_jid(), self.audio_sid)
 		if session:
 			session.end_session()
-		self.set_audio_state('available')
 
 	def _toggle_gpg(self):
 		if not self.gpg_is_active and not self.contact.keyID:
@@ -2163,8 +2190,6 @@ class ChatControl(ChatControlBase):
 		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
 		history_menuitem = xml.get_widget('history_menuitem')
 		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
-		start_voip_menuitem = xml.get_widget('start_voip_menuitem')
-		stop_voip_menuitem = xml.get_widget('stop_voip_menuitem')
 		toggle_e2e_menuitem = xml.get_widget('toggle_e2e_menuitem')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
 		information_menuitem = xml.get_widget('information_menuitem')
@@ -2234,17 +2259,6 @@ class ChatControl(ChatControlBase):
 		else:
 			send_file_menuitem.set_sensitive(False)
 
-		# check if it's possible to start jingle sessions
-		if self.audio_state == self.AUDIO_STATE_NOT_AVAILABLE:
-			start_voip_menuitem.show()
-			start_voip_menuitem.set_sensitive(False)
-		elif self.audio_state in (self.AUDIO_STATE_AVAILABLE,
-		self.AUDIO_STATE_ERROR):
-			start_voip_menuitem.show()
-			start_voip_menuitem.set_sensitive(True)
-		else:
-			stop_voip_menuitem.show()
-
 		# check if it's possible to convert to groupchat
 		if gajim.capscache.is_supported(contact, NS_MUC):
 			convert_to_gc_menuitem.set_sensitive(True)
@@ -2264,12 +2278,6 @@ class ChatControl(ChatControlBase):
 		id_ = toggle_gpg_menuitem.connect('activate',
 			self._on_toggle_gpg_menuitem_activate)
 		self.handlers[id_] = toggle_gpg_menuitem
-		id = start_voip_menuitem.connect('activate',
-			self._on_start_voip_menuitem_activate)
-		self.handlers[id] = start_voip_menuitem
-		id = stop_voip_menuitem.connect('activate',
-			self._on_stop_voip_menuitem_activate)
-		self.handlers[id] = stop_voip_menuitem
 		id_ = toggle_e2e_menuitem.connect('activate',
 			self._on_toggle_e2e_menuitem_activate)
 		self.handlers[id_] = toggle_e2e_menuitem
