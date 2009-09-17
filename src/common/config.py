@@ -67,7 +67,6 @@ class Config:
 	__options = {
 		# name: [ type, default_value, help_string ]
 		'verbose': [ opt_bool, False, '', True ],
-		'alwaysauth': [ opt_bool, False ],
 		'autopopup': [ opt_bool, False ],
 		'notify_on_signin': [ opt_bool, True ],
 		'notify_on_signout': [ opt_bool, False ],
@@ -287,6 +286,7 @@ class Config:
 			'autoconnect_as': [ opt_str, 'online', _('Status used to autoconnect as. Can be online, chat, away, xa, dnd, invisible. NOTE: this option is used only if restore_last_status is disabled'), True ],
 			'restore_last_status': [ opt_bool, False, _('If enabled, restore the last status that was used.') ],
 			'autoreconnect': [ opt_bool, True ],
+			'autoauth': [ opt_bool, False, _('If True, Contacts requesting authorization will be automatically accepted.')],
 			'active': [ opt_bool, True],
 			'proxy': [ opt_str, '', '', True ],
 			'keyid': [ opt_str, '', '', True ],

@@ -2353,13 +2353,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		if ptype == 'subscribe':
 			log.debug('subscribe request from %s' % who)
-			if gajim.config.get('alwaysauth') or who.find("@") <= 0 or \
-			jid_stripped in self.jids_for_auto_auth or transport_auto_auth:
+			if gajim.config.get_per('accounts', self.name, 'autoauth') or \
+			who.find('@') <= 0 or jid_stripped in self.jids_for_auto_auth or \
+			transport_auto_auth:
 				if self.connection:
 					p = common.xmpp.Presence(who, 'subscribed')
 					p = self.add_sha(p)
 					self.connection.send(p)
-				if who.find("@") <= 0 or transport_auto_auth:
+				if who.find('@') <= 0 or transport_auto_auth:
 					self.dispatch('NOTIFY', (jid_stripped, 'offline', 'offline',
 						resource, prio, keyID, timestamp, None))
 				if transport_auto_auth:

@@ -3045,6 +3045,25 @@ class Interface:
 			pep.user_send_tune(acct, artist, title, source)
 			gajim.connections[acct].music_track_info = music_track_info
 
+	def get_bg_fg_colors(self):
+		def gdkcolor_to_rgb (gdkcolor):
+			return [c / 65535. for c in (gdkcolor.red, gdkcolor.green,
+				gdkcolor.blue)]
+
+		def format_rgb (r, g, b):
+			return ' '.join([str(c) for c in ('rgb', r, g, b)])
+
+		def format_gdkcolor (gdkcolor):
+			return format_rgb (*gdkcolor_to_rgb (gdkcolor))
+		
+		# get style colors and create string for dvipng
+		dummy = gtk.Invisible()
+		dummy.ensure_style()
+		style = dummy.get_style()
+		bg_str = format_gdkcolor(style.base[gtk.STATE_NORMAL])
+		fg_str = format_gdkcolor(style.text[gtk.STATE_NORMAL])
+		return (bg_str, fg_str)
+
 	def read_sleepy(self):
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():

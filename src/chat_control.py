@@ -76,6 +76,9 @@ if gajim.config.get('use_speller') and HAS_GTK_SPELL:
 			spell.set_language(langs[lang])
 		except OSError:
 			del langs[lang]
+	if spell:
+		spell.detach()
+	del tv
 
 ################################################################################
 class ChatControlBase(MessageControl, CommonCommands):
@@ -1469,6 +1472,19 @@ class ChatControl(ChatControlBase, ChatCommands):
 		else:
 			self._tune_image.hide()
 
+	def change_resource(self, resource):
+		old_full_jid = self.get_full_jid()
+		self.resource = resource
+		new_full_jid = self.get_full_jid()
+		# update gajim.last_message_time
+		if old_full_jid in gajim.last_message_time[self.account]:
+			gajim.last_message_time[self.account][new_full_jid] = \
+				gajim.last_message_time[self.account][old_full_jid]
+		# update events
+		gajim.events.change_jid(self.account, old_full_jid, new_full_jid)
+		# update MessageWindow._controls
+		self.parent_win.change_jid(self.account, old_full_jid, new_full_jid)
+
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		'''
 		we enter the eventbox area so we under conditions add a timeout
@@ -2299,6 +2315,10 @@ class ChatControl(ChatControlBase, ChatCommands):
 				self.handlers[i].disconnect(i)
 			del self.handlers[i]
 		self.conv_textview.del_handlers()
+		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
+			spell_obj = gtkspell.get_from_text_view(self.msg_textview)
+			if spell_obj:
+				spell_obj.detach()
 		self.msg_textview.destroy()
 
 	def minimizable(self):
