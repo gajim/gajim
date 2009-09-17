@@ -65,6 +65,11 @@ class Command(object):
             # unless it is already set by the one who raised an exception.
             if not exception.command and not exception.name:
                 raise CommandError(exception.message, self)
+
+            # Do not forget to re-raise an exception just like it was if at
+            # least either, command or name attribute is set properly.
+            raise
+
         # This one is a little bit too wide, but as Python does not have
         # anything more constrained - there is no other choice. Take a look here
         # if command complains about invalid arguments while they are ok.
@@ -603,8 +608,14 @@ class CommandProcessor(object):
         for key, value in opts:
             initial = norm_kwargs.get(key)
             if isinstance(initial, (TupleType, ListType)) and value not in initial:
-                if value:
-                    raise CommandError("Wrong argument", command)
+                raise CommandError("Wrong argument", command)
+
+        # Detect every switch and ensure it will not receive any arguments.
+        # Normally this does not happen unless overlapping is enabled.
+        for key, value in opts:
+            initial = norm_kwargs.get(key)
+            if isinstance(initial, BooleanType) and not isinstance(value, BooleanType):
+                raise CommandError("Switches do not take arguments", command)
 
         # We need to encode every keyword argument to a simple string, not the
         # unicode one, because ** expansion does not support it.
