@@ -512,7 +512,10 @@ class CommandProcessor(object):
                 args.sort(key=itemgetter(1))
 
                 if spec_len > 1:
-                    stopper, (start, end) = args[spec_len - 2]
+                    try:
+                        stopper, (start, end) = args[spec_len - 2]
+                    except IndexError:
+                        raise CommandError("Missing arguments", command)
 
                     raw = arguments[end:]
                     raw = raw.strip() or None
