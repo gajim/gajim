@@ -1128,6 +1128,15 @@ class ChatControlBase(MessageControl):
 ################################################################################
 class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
+	(
+		AUDIO_STATE_NOT_AVAILABLE,
+		AUDIO_STATE_AVAILABLE,
+		AUDIO_STATE_CONNECTING,
+		AUDIO_STATE_CONNECTION_RECEIVED,
+		AUDIO_STATE_CONNECTED,
+		AUDIO_STATE_ERROR
+	) = range(6)
+
 	TYPE_ID = message_control.TYPE_CHAT
 	old_msg_kind = None # last kind of the printed message
 	CHAT_CMDS = ['clear', 'compact', 'help', 'me', 'ping', 'say']
@@ -1199,10 +1208,17 @@ class ChatControl(ChatControlBase):
 		self._mood_image = self.xml.get_widget('mood_image')
 		self._activity_image = self.xml.get_widget('activity_image')
 		self._tune_image = self.xml.get_widget('tune_image')
+		self._audio_image = self.xml.get_widget('audio_image')
 
 		self.update_mood()
 		self.update_activity()
 		self.update_tune()
+		if gajim.capscache.is_supported(contact, NS_JINGLE_RTP_AUDIO):
+			self.set_audio_state('available')
+		else:
+			self.set_audio_state('not_available')
+		self.audio_sid = None
+
 
 		# keep timeout id and window obj for possible big avatar
 		# it is on enter-notify and leave-notify so no need to be
@@ -1434,6 +1450,45 @@ class ChatControl(ChatControlBase):
 		else:
 			self._tune_image.hide()
 
+	def update_audio(self):
+		if self.audio_state == self.AUDIO_STATE_NOT_AVAILABLE:
+			self._audio_image.hide()
+			return
+		elif self.audio_state == self.AUDIO_STATE_AVAILABLE:
+			self._audio_image.set_from_stock(gtk.STOCK_APPLY, 1)
+		elif self.audio_state == self.AUDIO_STATE_CONNECTING:
+			self._audio_image.set_from_stock(gtk.STOCK_CONVERT, 1)
+		elif self.audio_state == self.AUDIO_STATE_CONNECTION_RECEIVED:
+			self._audio_image.set_from_stock(gtk.STOCK_NETWORK, 1)
+		elif self.audio_state == self.AUDIO_STATE_CONNECTED:
+			self._audio_image.set_from_stock(gtk.STOCK_CONNECT, 1)
+		elif self.audio_state == self.AUDIO_STATE_ERROR:
+			self._audio_image.set_from_stock(gtk.STOCK_DIALOG_WARNING, 1)
+		self._audio_image.show()
+
+	def set_audio_state(self, state, sid=None, reason=None):
+		str = 'Audio state : %s' % state
+		if reason:
+			str += ', reason: %s' % reason
+		self.print_conversation(str, 'info')
+		if state == 'not_available':
+			self.audio_state = self.AUDIO_STATE_NOT_AVAILABLE
+			self.audio_sid = None
+		elif state == 'available':
+			self.audio_state = self.AUDIO_STATE_AVAILABLE
+			self.audio_sid = None
+		elif state == 'connecting':
+			self.audio_state = self.AUDIO_STATE_CONNECTING
+			self.audio_sid = sid
+		elif state == 'connection_received':
+			self.audio_state = self.AUDIO_STATE_CONNECTION_RECEIVED
+			self.audio_sid = sid
+		elif state == 'connected':
+			self.audio_state = self.AUDIO_STATE_CONNECTED
+		elif state == 'error':
+			self.audio_state = self.AUDIO_STATE_ERROR
+		self.update_audio()
+
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		'''
 		we enter the eventbox area so we under conditions add a timeout
@@ -1635,7 +1690,16 @@ class ChatControl(ChatControlBase):
 		banner_name_tooltip.set_tip(banner_name_label, label_tooltip)
 
 	def _on_start_voip_menuitem_activate(self, *things):
-		gajim.connections[self.account].startVoIP(self.contact.jid+'/'+self.contact.resource)
+		sid = gajim.connections[self.account].startVoIP(self.contact.get_full_jid(
+			))
+		self.set_audio_state('connecting', sid)
+
+	def _on_stop_voip_menuitem_activate(self, *things):
+		session = gajim.connections[self.account].getJingleSession(
+			self.contact.get_full_jid(), self.audio_sid)
+		if session:
+			session.end_session()
+		self.set_audio_state('available')
 
 	def _toggle_gpg(self):
 		if not self.gpg_is_active and not self.contact.keyID:
@@ -2100,6 +2164,7 @@ class ChatControl(ChatControlBase):
 		history_menuitem = xml.get_widget('history_menuitem')
 		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
 		start_voip_menuitem = xml.get_widget('start_voip_menuitem')
+		stop_voip_menuitem = xml.get_widget('stop_voip_menuitem')
 		toggle_e2e_menuitem = xml.get_widget('toggle_e2e_menuitem')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
 		information_menuitem = xml.get_widget('information_menuitem')
@@ -2170,10 +2235,15 @@ class ChatControl(ChatControlBase):
 			send_file_menuitem.set_sensitive(False)
 
 		# check if it's possible to start jingle sessions
-		if gajim.capscache.is_supported(contact, NS_JINGLE_RTP_AUDIO):
+		if self.audio_state == self.AUDIO_STATE_NOT_AVAILABLE:
+			start_voip_menuitem.show()
+			start_voip_menuitem.set_sensitive(False)
+		elif self.audio_state in (self.AUDIO_STATE_AVAILABLE,
+		self.AUDIO_STATE_ERROR):
+			start_voip_menuitem.show()
 			start_voip_menuitem.set_sensitive(True)
 		else:
-			start_voip_menuitem.set_sensitive(False)
+			stop_voip_menuitem.show()
 
 		# check if it's possible to convert to groupchat
 		if gajim.capscache.is_supported(contact, NS_MUC):
@@ -2197,6 +2267,9 @@ class ChatControl(ChatControlBase):
 		id = start_voip_menuitem.connect('activate',
 			self._on_start_voip_menuitem_activate)
 		self.handlers[id] = start_voip_menuitem
+		id = stop_voip_menuitem.connect('activate',
+			self._on_stop_voip_menuitem_activate)
+		self.handlers[id] = stop_voip_menuitem
 		id_ = toggle_e2e_menuitem.connect('activate',
 			self._on_toggle_e2e_menuitem_activate)
 		self.handlers[id_] = toggle_e2e_menuitem

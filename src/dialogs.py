@@ -4443,15 +4443,16 @@ class GPGInfoWindow:
 class VoIPCallReceivedDialog(object):
 	def __init__(self, account, contact_jid, sid):
 		self.account = account
-		self.jid = contact_jid
+		self.fjid = contact_jid
 		self.sid = sid
 
 		xml = gtkgui_helpers.get_glade('voip_call_received_dialog.glade')
 		xml.signal_autoconnect(self)
-		
-		contact = gajim.contacts.get_first_contact_from_jid(account, contact_jid)
+
+		jid = gajim.get_jid_without_resource(self.fjid)
+		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if contact and contact.name:
-			contact_text = '%s (%s)' % (contact.name, contact_jid)
+			contact_text = '%s (%s)' % (contact.name, jid)
 		else:
 			contact_text = contact_jid
 
@@ -4463,12 +4464,29 @@ class VoIPCallReceivedDialog(object):
 		dialog.show_all()
 
 	def on_voip_call_received_messagedialog_close(self, dialog):
-		return self.on_voip_call_received_messagedialog_response(dialog, gtk.RESPONSE_NO)
+		return self.on_voip_call_received_messagedialog_response(dialog,
+			gtk.RESPONSE_NO)
+
 	def on_voip_call_received_messagedialog_response(self, dialog, response):
 		# we've got response from user, either stop connecting or accept the call
-		session = gajim.connections[self.account].getJingleSession(self.jid, self.sid)
+		session = gajim.connections[self.account].getJingleSession(self.fjid,
+			self.sid)
 		if response==gtk.RESPONSE_YES:
 			session.approveSession()
+			jid = gajim.get_jid_without_resource(self.fjid)
+			resource = gajim.get_resource_from_jid(self.fjid)
+			ctrl = gajim.interface.msg_win_mgr.get_control(self.fjid, self.account)
+			if not ctrl:
+				ctrl = gajim.interface.msg_win_mgr.get_control(jid, self.account)
+			if not ctrl:
+				# open chat control
+				contact = gajim.contacts.get_contact(self.account, jid, resource)
+				if not contact:
+					contact = gajim.contacts.get_contact(self.account, jid)
+				if not contact:
+					return
+				ctrl = gajim.interface.new_chat(contact, self.account)
+			ctrl.set_audio_state('connecting', self.sid)
 		else: # response==gtk.RESPONSE_NO
 			session.declineSession()
 

@@ -76,7 +76,6 @@ class TransportType(object):
 
 class Error(Exception): pass
 class WrongState(Error): pass
-class NoSuchSession(Error): pass
 
 class OutOfOrder(Exception):
 	''' Exception that should be raised when an action is received when in the wrong state. '''
@@ -389,6 +388,7 @@ class JingleSession(object):
 
 	def __sessionTerminateCB(self, stanza, jingle, error, action):
 		self.connection.deleteJingle(self)
+		self.connection.dispatch('JINGLE_DISCONNECTED', (self.peerjid, self.sid))
 
 	def __broadcastAllCB(self, stanza, jingle, error, action):
 		''' Broadcast the stanza to all content handlers. '''
@@ -466,6 +466,9 @@ class JingleSession(object):
 	def __contentRemove(self):
 		assert self.state != JingleStates.ended
 
+	def content_negociated(self, media):
+		self.connection.dispatch('JINGLE_CONNECTED', (self.peerjid, self.sid,
+			media))
 
 class JingleTransport(object):
 	''' An abstraction of a transport in Jingle sessions. '''
@@ -668,10 +671,11 @@ class JingleRTPContent(JingleContent):
 			elif name == 'farsight-component-state-changed':
 				state = message.structure['state']
 				print message.structure['component'], state
-				if state==farsight.STREAM_STATE_READY:
+				if state == farsight.STREAM_STATE_READY:
 					self.negotiated = True
 					#TODO: farsight.DIRECTION_BOTH only if senders='both'
 					self.p2pstream.set_property('direction', farsight.DIRECTION_BOTH)
+					self.session.content_negociated(self.media)
 					#if not self.session.weinitiate: #FIXME: one more FIXME...
 					#	self.session.sendContentAccept(self.__content((xmpp.Node(
 					#		'description', payload=self.iterCodecs()),)))
@@ -878,9 +882,10 @@ class ConnectionJingle(object):
 		self.addJingle(jingle)
 		jingle.addContent('voice', JingleVoIP(jingle))
 		jingle.startSession()
+		return jingle.sid
 
 	def getJingleSession(self, jid, sid):
 		try:
 			return self.__sessions[(jid, sid)]
 		except KeyError:
-			raise NoSuchSession
+			return None

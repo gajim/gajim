@@ -2096,6 +2096,14 @@ class Interface:
 			# unknown session type... it should be declined in common/jingle.py
 			return
 
+		jid = gajim.get_jid_without_resource(peerjid)
+		resource = gajim.get_resource_from_jid(peerjid)
+		ctrl = self.msg_win_mgr.get_control(peerjid, account)
+		if not ctrl:
+			ctrl = self.msg_win_mgr.get_control(jid, account)
+		if ctrl:
+			ctrl.set_audio_state('connection_received', sid)
+
 		if helpers.allow_popup_window(account):
 			dialogs.VoIPCallReceivedDialog(account, peerjid, sid)
 			return
@@ -2112,6 +2120,40 @@ class Interface:
 			event_type = _('Voice Chat Request')
 			notify.popup(event_type, peerjid, account, 'voip-incoming',
 				path_to_image = path, title = event_type, text = txt)
+
+	def handle_event_jingle_connected(self, account, data):
+		# ('JINGLE_CONNECTED', account, (peerjid, sid, media))
+		peerjid, sid, media = data
+		if media == 'audio':
+			jid = gajim.get_jid_without_resource(peerjid)
+			resource = gajim.get_resource_from_jid(peerjid)
+			ctrl = self.msg_win_mgr.get_control(peerjid, account)
+			if not ctrl:
+				ctrl = self.msg_win_mgr.get_control(jid, account)
+			if ctrl:
+				ctrl.set_audio_state('connected', sid)
+
+	def handle_event_jingle_disconnected(self, account, data):
+		# ('JINGLE_DISCONNECTED', account, (peerjid, sid))
+		peerjid, sid = data
+		jid = gajim.get_jid_without_resource(peerjid)
+		resource = gajim.get_resource_from_jid(peerjid)
+		ctrl = self.msg_win_mgr.get_control(peerjid, account)
+		if not ctrl:
+			ctrl = self.msg_win_mgr.get_control(jid, account)
+		if ctrl:
+			ctrl.set_audio_state('available', sid)
+
+	def handle_event_jingle_error(self, account, data):
+		# ('JINGLE_ERROR', account, (peerjid, sid, reason))
+		peerjid, sid, reason = data
+		jid = gajim.get_jid_without_resource(peerjid)
+		resource = gajim.get_resource_from_jid(peerjid)
+		ctrl = self.msg_win_mgr.get_control(peerjid, account)
+		if not ctrl:
+			ctrl = self.msg_win_mgr.get_control(jid, account)
+		if ctrl:
+			ctrl.set_audio_state('error', reason=reason)
 
 	def handle_event_pep_config(self, account, data):
 		# ('PEP_CONFIG', account, (node, form))
@@ -2371,6 +2413,9 @@ class Interface:
 			'PUBSUB_NODE_REMOVED': self.handle_event_pubsub_node_removed,
 			'PUBSUB_NODE_NOT_REMOVED': self.handle_event_pubsub_node_not_removed,
 			'JINGLE_INCOMING': self.handle_event_jingle_incoming,
+			'JINGLE_CONNECTED': self.handle_event_jingle_connected,
+			'JINGLE_DISCONNECTED': self.handle_event_jingle_disconnected,
+			'JINGLE_ERROR': self.handle_event_jingle_error,
 		}
 		gajim.handlers = self.handlers
 
