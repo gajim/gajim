@@ -85,15 +85,6 @@ class CommonCommands(ChatMiddleware):
         """
         self.send("/me %s" % action)
 
-    @command(raw=True, empty=True)
-    def test(self, one, two, three):
-        self.echo(one)
-        self.echo(two)
-        self.echo(three)
-
-        from pprint import pformat
-        return "Locals:\n%s" % pformat(locals())
-
 class ChatCommands(CommonCommands):
     """
     Here defined commands will be unique to a chat. Use it as a hoster to provide
