@@ -1478,7 +1478,6 @@ class ChatControl(ChatControlBase):
 		if self.audio_state in (self.AUDIO_STATE_NOT_AVAILABLE,
 		self.AUDIO_STATE_AVAILABLE):
 			self._audio_image.hide()
-			return
 		elif self.audio_state == self.AUDIO_STATE_CONNECTING:
 			self._audio_image.set_from_stock(gtk.STOCK_CONVERT, 1)
 		elif self.audio_state == self.AUDIO_STATE_CONNECTION_RECEIVED:

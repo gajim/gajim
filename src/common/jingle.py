@@ -105,7 +105,6 @@ class JingleSession(object):
 		self.sid = sid # sessionid
 
 		self.accepted = True # is this session accepted by user
-		self.candidates_ready = False # True when local candidates are prepared
 
 		# callbacks to call on proper contents
 		# use .prepend() to add new callbacks, especially when you're going
@@ -130,7 +129,7 @@ class JingleSession(object):
 			'transport-accept':	[self.__defaultCB], #TODO
 			'transport-reject':	[self.__defaultCB], #TODO
 			'iq-result':		[],
-			'iq-error':		[],
+			'iq-error':		[self.__errorCB],
 		}
 
 	''' Interaction with user '''
@@ -152,7 +151,7 @@ class JingleSession(object):
 		if self.state == JingleStates.active:
 			reason.addChild('success')
 		else:
-			reason.addChild('abort')
+			reason.addChild('cancel')
 		self.__sessionTerminate(reason)
 
 	''' Middle-level functions to manage contents. Handle local content
@@ -190,13 +189,17 @@ class JingleSession(object):
 
 	def acceptSession(self):
 		''' Check if all contents and user agreed to start session. '''
-		if not self.weinitiate and self.accepted and self.candidates_ready:
+		if not self.weinitiate and self.accepted and \
+		all((i.candidates_ready for i in self.contents.itervalues())) and \
+		all((i.p2psession.get_property('codecs-ready') for i in self.contents.itervalues())):
 			self.__sessionAccept()
 
 	''' Middle-level function to do stanza exchange. '''
 	def startSession(self):
 		''' Start session. '''
-		if self.weinitiate and self.candidates_ready:
+		if self.weinitiate and \
+		all((i.candidates_ready for i in self.contents.itervalues())) and \
+		all((i.p2psession.get_property('codecs-ready') for i in self.contents.itervalues())):
 			self.__sessionInitiate()
 
 	def sendSessionInfo(self): pass
@@ -227,15 +230,11 @@ class JingleSession(object):
 			# it's a jingle action
 			action = jingle.getAttr('action')
 			if action not in self.callbacks:
-				err = xmpp.Error(stanza, xmpp.NS_STANZAS + ' bad_request')
-				self.connection.connection.send(err)
+				self.__send_error('bad_request')
 				return
 			#FIXME: If we aren't initiated and it's not a session-initiate...
 			if action != 'session-initiate' and self.state == JingleStates.ended:
-				err = xmpp.Error(stanza, xmpp.NS_STANZAS + ' item-not-found')
-				err.setTag('unknown-session', namespace=xmpp.NS_JINGLE_ERRORS)
-				self.connection.connection.send(err)
-				self.connection.deleteJingle(self)
+				self.__send_error('item-not-found', 'unknown-session')
 				return
 		else:
 			# it's an iq-result (ack) stanza
@@ -249,15 +248,27 @@ class JingleSession(object):
 		except xmpp.NodeProcessed:
 			pass
 		except OutOfOrder:
-			err = xmpp.Error(stanza, xmpp.NS_STANZAS + ' unexpected-request')
-			err.setTag('out-of-order', namespace=xmpp.NS_JINGLE_ERRORS)
-			self.connection.connection.send(err)
+			self.__send_error('unexpected-request', 'out-of-order')#FIXME
 
 	def __defaultCB(self, stanza, jingle, error, action):
 		''' Default callback for action stanzas -- simple ack
 		and stop processing. '''
 		response = stanza.buildReply('result')
 		self.connection.connection.send(response)
+
+	def __errorCB(self, stanza, jingle, error, action):
+		#FIXME
+		text = error.getTagData('text')
+		jingle_error = None
+		xmpp_error = None
+		for child in error.getChildren():
+			if child.getNamespace() == xmpp.NS_JINGLE_ERRORS:
+				jingle_error = child.getName()
+			elif child.getNamespace() == xmpp.NS_STANZAS:
+				xmpp_error = child.getName()
+		self.__dispatch_error(xmpp_error, jingle_error, text)
+		#FIXME: Not sure if we would want to do that... not yet...
+		#self.connection.deleteJingle(self)
 
 	def __transportReplaceCB(self, stanza, jingle, error, action):
 		for content in jingle.iterTags('content'):
@@ -290,9 +301,7 @@ class JingleSession(object):
 	def __sessionInfoCB(self, stanza, jingle, error, action):
 		payload = jingle.getPayload()
 		if len(payload) > 0:
-			err = xmpp.Error(stanza, xmpp.NS_STANZAS + ' feature-not-implemented')
-			err.setTag('unsupported-info', namespace=xmpp.NS_JINGLE_ERRORS)
-			self.connection.connection.send(err)
+			self.__send_error('feature-not-implemented', 'unsupported-info')
 			raise xmpp.NodeProcessed
 
 	def __contentRemoveCB(self, stanza, jingle, error, action):
@@ -309,6 +318,7 @@ class JingleSession(object):
 	def __sessionAcceptCB(self, stanza, jingle, error, action):
 		if self.state != JingleStates.pending: #FIXME
 			raise OutOfOrder
+		self.state = JingleStates.active
 
 	def __contentAcceptCB(self, stanza, jingle, error, action):
 		''' Called when we get content-accept stanza or equivalent one
@@ -388,12 +398,54 @@ class JingleSession(object):
 
 	def __sessionTerminateCB(self, stanza, jingle, error, action):
 		self.connection.deleteJingle(self)
-		self.connection.dispatch('JINGLE_DISCONNECTED', (self.peerjid, self.sid))
+		reason, text = self.__reason_from_stanza(jingle)
+		if reason not in ('success', 'cancel', 'decline'):
+			self.__dispatch_error(reason, reason, text)
+		if text:
+			text = '%s (%s)' % (reason, text)
+		else:
+			text = reason#TODO
+		self.connection.dispatch('JINGLE_DISCONNECTED', (self.peerjid, self.sid, text))
+
+	def __send_error(self, stanza, error, jingle_error=None, text=None):
+		err = xmpp.Error(stanza, error)
+		err.setNamespace(xmpp.NS_STANZAS)
+		if jingle_error:
+			err.setTag(jingle_error, namespace=xmpp.NS_JINGLE_ERRORS)
+		if text:
+			err.setTagData('text', text)
+		self.connection.connection.send(err)
+		self.__dispatch_error(error, jingle_error, text)
+
+	def __dispatch_error(error, jingle_error=None, text=None):
+		if jingle_error:
+			error = jingle_error
+		if text:
+			text = '%s (%s)' % (error, text)
+		else:
+			text = error
+		self.connection.dispatch('JINGLE_ERROR', (self.peerjid, self.sid, text))
 
 	def __broadcastAllCB(self, stanza, jingle, error, action):
 		''' Broadcast the stanza to all content handlers. '''
 		for content in self.contents.itervalues():
 			content.stanzaCB(stanza, None, error, action)
+
+	def __reason_from_stanza(self, stanza):
+		reason = 'success'
+		reasons = ['success', 'busy', 'cancel', 'connectivity-error',
+			'decline', 'expired', 'failed-application', 'failed-transport',
+			'general-error', 'gone', 'incompatible-parameters', 'media-error',
+			'security-error', 'timeout', 'unsupported-applications',
+			'unsupported-transports']
+		tag = stanza.getTag('reason')
+		if tag:
+			text = tag.getTagData('text')
+			for r in reasons:
+				if tag.getTag(r):
+					reason = r
+					break
+		return (reason, text)
 
 	''' Methods that make/send proper pieces of XML. They check if the session
 	is in appropriate state. '''
@@ -436,7 +488,7 @@ class JingleSession(object):
 		self.__appendContents(jingle)
 		self.__broadcastCB(stanza, jingle, None, 'session-accept-sent')
 		self.connection.connection.send(stanza)
-		self.state=JingleStates.active
+		self.state = JingleStates.active
 
 	def __sessionInfo(self, payload=None):
 		assert self.state != JingleStates.ended
@@ -452,6 +504,14 @@ class JingleSession(object):
 			jingle.addChild(node=reason)
 		self.__broadcastAllCB(stanza, jingle, None, 'session-terminate-sent')
 		self.connection.connection.send(stanza)
+		reason, text = self.__reason_from_stanza(jingle)
+		if reason not in ('success', 'cancel', 'decline'):
+			self.__dispatch_error(reason, reason, text)
+		if text:
+			text = '%s (%s)' % (reason, text)
+		else:
+			text = reason
+		self.connection.dispatch('JINGLE_DISCONNECTED', (self.peerjid, self.sid, text))
 		self.connection.deleteJingle(self)
 
 	def __contentAdd(self):
@@ -618,6 +678,8 @@ class JingleRTPContent(JingleContent):
 								'video': farsight.MEDIA_TYPE_VIDEO}[media]
 		self.got_codecs = False
 
+		self.candidates_ready = False # True when local candidates are prepared
+
 		self.callbacks['content-accept'] += [self.__getRemoteCodecsCB]
 		self.callbacks['session-accept'] += [self.__getRemoteCodecsCB]
 		self.callbacks['session-initiate'] += [self.__getRemoteCodecsCB]
@@ -658,14 +720,17 @@ class JingleRTPContent(JingleContent):
 				pass
 			elif name == 'farsight-recv-codecs-changed':
 				pass
+			elif name == 'farsight-codecs-changed':
+				self.session.acceptSession()
+				self.session.startSession()
 			elif name == 'farsight-local-candidates-prepared':
-				self.session.candidates_ready = True
+				self.candidates_ready = True
 				self.session.acceptSession()
 				self.session.startSession()
 			elif name == 'farsight-new-local-candidate':
 				candidate = message.structure['candidate']
 				self.candidates.append(candidate)
-				if self.session.candidates_ready:
+				if self.candidates_ready:
 					#FIXME: Is this case even possible?
 					self.send_candidate(candidate)
 			elif name == 'farsight-component-state-changed':
@@ -734,7 +799,6 @@ class JingleVoIP(JingleRTPContent):
 	over an ICE UDP protocol. '''
 	def __init__(self, session, node=None):
 		JingleRTPContent.__init__(self, session, 'audio', node)
-
 		self.setupStream()
 
 
@@ -786,6 +850,7 @@ class JingleVoIP(JingleRTPContent):
 		# The following is needed for farsight to process ICE requests:
 		self.pipeline.set_state(gst.STATE_PLAYING)
 
+
 class JingleVideo(JingleRTPContent):
 	def __init__(self, session, node=None):
 		JingleRTPContent.__init__(self, session, 'video', node)
@@ -823,6 +888,7 @@ class JingleVideo(JingleRTPContent):
 
 		# The following is needed for farsight to process ICE requests:
 		self.pipeline.set_state(gst.STATE_PLAYING)
+
 
 class ConnectionJingle(object):
 	''' This object depends on that it is a part of Connection class. '''
