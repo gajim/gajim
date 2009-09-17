@@ -164,10 +164,12 @@ class ChatControlBase(MessageControl, CommonCommands):
 			text = buffer.get_text(start, end, False)
 			text = text.decode('utf8')
 
-			if (text.startswith(self.COMMAND_PREFIX) and not
-				text.startswith(self.COMMAND_PREFIX * 2)):
+			splitted = text.split()
 
-				text = text.split()[0]
+			if (text.startswith(self.COMMAND_PREFIX) and not
+				text.startswith(self.COMMAND_PREFIX * 2) and len(splitted) == 1):
+
+				text = splitted[0]
 				bare = text.lstrip(self.COMMAND_PREFIX)
 
 				if len(text) == 1:
@@ -351,6 +353,7 @@ class ChatControlBase(MessageControl, CommonCommands):
 		self.msg_textview.grab_focus()
 
 		self.command_hits = []
+		self.last_key_tabs = False
 
 	def set_speller(self):
 		# now set the one the user selected

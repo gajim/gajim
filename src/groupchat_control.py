@@ -1785,7 +1785,7 @@ class GroupchatControl(ChatControlBase, GroupChatCommands):
 
 			# HACK: Not the best soltution.
 			if (text.startswith(self.COMMAND_PREFIX) and not
-				text.startswith(self.COMMAND_PREFIX * 2)):
+				text.startswith(self.COMMAND_PREFIX * 2) and len(splitted_text) == 1):
 				return super(GroupchatControl,
 					self).handle_message_textview_mykey_press(widget, event_keyval,
 							event_keymod)
