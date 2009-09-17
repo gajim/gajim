@@ -97,15 +97,6 @@ class ChatMiddleware(CommandProcessor):
         """
         self.save_sent_message(text)
 
-    def collect(self, arguments, empty=True, separator=' ', none=True):
-        """
-        Might come in handy in case if you want to map some arguments and
-        collect the rest of them into a string.
-        """
-        if not empty and not arguments:
-            raise CommandError(_("Missing argument"))
-        return None if not arguments and none else separator.join(arguments)
-
     @property
     def connection(self):
         """

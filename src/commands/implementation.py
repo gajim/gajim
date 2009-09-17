@@ -46,7 +46,7 @@ class CommonCommands(ChatMiddleware):
         """
         self.chat_buttons_set_visible(not self.hide_chat_buttons)
 
-    @command
+    @command(overlap=True)
     def help(self, command=None, all=False):
         """
         Show help on a given command or a list of available commands if -(-a)ll is
@@ -84,6 +84,15 @@ class CommonCommands(ChatMiddleware):
         Send action (in the third person) to the current chat
         """
         self.send("/me %s" % action)
+
+    @command(raw=True, empty=True)
+    def test(self, one, two, three):
+        self.echo(one)
+        self.echo(two)
+        self.echo(three)
+
+        from pprint import pformat
+        return "Locals:\n%s" % pformat(locals())
 
 class ChatCommands(CommonCommands):
     """
@@ -147,13 +156,12 @@ class GroupChatCommands(CommonCommands):
         else:
             raise CommandError(_("Nickname not found"))
 
-    @command('msg')
-    def message(self, nick, *a_message):
+    @command('msg', raw=True)
+    def message(self, nick, a_message):
         """
         Open a private chat window with a specified occupant and send him a
         message
         """
-        a_message = self.collect(a_message, False)
         nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
         if nick in nicks:
             self.on_send_pm(nick=nick, msg=a_message)
@@ -170,21 +178,21 @@ class GroupChatCommands(CommonCommands):
         else:
             return self.subject
 
-    @command
-    def invite(self, jid, *reason):
+    @command(raw=True, empty=True)
+    def invite(self, jid, reason):
         """
         Invite a user to a room for a reason
         """
-        reason = self.collect(reason)
         self.connection.send_invite(self.room_jid, jid, reason)
         return _("Invited %s to %s") % (jid, self.room_jid)
 
-    @command
-    def join(self, jid, *nick):
+    @command(raw=True, empty=True)
+    def join(self, jid, nick):
         """
         Join a group chat given by a jid, optionally using given nickname
         """
-        nick = self.collect(nick) or self.nick
+        if not nick:
+            nick = self.nick
 
         if '@' not in jid:
             jid = jid + '@' + gajim.get_server_from_jid(self.room_jid)
@@ -204,28 +212,26 @@ class GroupChatCommands(CommonCommands):
         """
         self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND, reason)
 
-    @command
-    def ban(self, who, *reason):
+    @command(raw=True, empty=True)
+    def ban(self, who, reason):
         """
         Ban user by a nick or a jid from a groupchat
 
         If given nickname is not found it will be treated as a jid.
         """
-        reason = self.collect(reason, none=False)
         if who in gajim.contacts.get_nick_list(self.account, self.room_jid):
             contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, who)
             who = contact.jid
-        self.connection.gc_set_affiliation(self.room_jid, who, 'outcast', reason)
+        self.connection.gc_set_affiliation(self.room_jid, who, 'outcast', reason or str())
 
-    @command
-    def kick(self, who, *reason):
+    @command(raw=True, empty=True)
+    def kick(self, who, reason):
         """
         Kick user by a nick from a groupchat
         """
-        reason = self.collect(reason, none=False)
         if not who in gajim.contacts.get_nick_list(self.account, self.room_jid):
             raise CommandError(_("Nickname not found"))
-        self.connection.gc_set_role(self.room_jid, who, 'none', reason)
+        self.connection.gc_set_role(self.room_jid, who, 'none', reason or str())
 
     @command
     def names(self, verbose=False):
