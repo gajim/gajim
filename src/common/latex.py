@@ -114,6 +114,12 @@ def latex_to_image(str_):
 	result = None
 	exitcode = 0
 
+	try:
+		bg_str, fg_str = gajim.interface.get_bg_fg_colors()
+	except:
+		# interface may not be available when we test latext at startup
+		bg_str, fg_str = 'rgb 1.0 1.0 1.0', 'rgb 0.0 0.0 0.0'
+
 	# filter latex code with bad commands
 	if check_blacklist(str_):
 		# we triggered the blacklist, immediately return None
@@ -131,7 +137,7 @@ def latex_to_image(str_):
 	if exitcode == 0:
 		# convert dvi to png
 		latex_png_dpi = gajim.config.get('latex_png_dpi')
-		exitcode = try_run(['dvipng', '-bg', 'rgb 1.0 1.0 1.0', '-T',
+		exitcode = try_run(['dvipng', '-bg', bg_str, '-fg', fg_str, '-T',
 				'tight', '-D', latex_png_dpi, tmpfile + '.dvi', '-o',
 				tmpfile + '.png'])
 
