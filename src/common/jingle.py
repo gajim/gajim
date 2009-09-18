@@ -30,16 +30,17 @@
 # * XEP 0177 (raw udp)
 
 # * UI:
-#   - hang up button!
 #   - make state and codec informations available to the user
+#   - video integration
 #   * config:
 #     - codecs
 #     - STUN
+
 # * DONE: figure out why it doesn't work with pidgin:
 #     That's a bug in pidgin: http://xmpp.org/extensions/xep-0176.html#protocol-checks
+
 # * destroy sessions when user is unavailable, see handle_event_notify?
 # * timeout
-# * video
 # * security (see XEP 0166)
 
 # * split this file in several modules
@@ -190,16 +191,18 @@ class JingleSession(object):
 	def acceptSession(self):
 		''' Check if all contents and user agreed to start session. '''
 		if not self.weinitiate and self.accepted and \
-		all((i.candidates_ready for i in self.contents.itervalues())) and \
-		all((i.p2psession.get_property('codecs-ready') for i in self.contents.itervalues())):
+		self.state == JingleStates.pending and self.is_ready():
 			self.__sessionAccept()
+
+	def is_ready(self):
+		return all((c.candidates_ready and c.p2psession.get_property('codecs-ready')
+			for c in self.contents.itervalues()))
 
 	''' Middle-level function to do stanza exchange. '''
 	def startSession(self):
 		''' Start session. '''
-		if self.weinitiate and \
-		all((i.candidates_ready for i in self.contents.itervalues())) and \
-		all((i.p2psession.get_property('codecs-ready') for i in self.contents.itervalues())):
+		#FIXME: Start only once
+		if self.weinitiate and self.state == JingleStates.ended and self.is_ready():
 			self.__sessionInitiate()
 
 	def sendSessionInfo(self): pass
@@ -230,11 +233,11 @@ class JingleSession(object):
 			# it's a jingle action
 			action = jingle.getAttr('action')
 			if action not in self.callbacks:
-				self.__send_error('bad_request')
+				self.__send_error(stanza, 'bad_request')
 				return
 			#FIXME: If we aren't initiated and it's not a session-initiate...
 			if action != 'session-initiate' and self.state == JingleStates.ended:
-				self.__send_error('item-not-found', 'unknown-session')
+				self.__send_error(stanza, 'item-not-found', 'unknown-session')
 				return
 		else:
 			# it's an iq-result (ack) stanza
@@ -248,7 +251,7 @@ class JingleSession(object):
 		except xmpp.NodeProcessed:
 			pass
 		except OutOfOrder:
-			self.__send_error('unexpected-request', 'out-of-order')#FIXME
+			self.__send_error(stanza, 'unexpected-request', 'out-of-order')#FIXME
 
 	def __defaultCB(self, stanza, jingle, error, action):
 		''' Default callback for action stanzas -- simple ack
@@ -267,8 +270,9 @@ class JingleSession(object):
 			elif child.getNamespace() == xmpp.NS_STANZAS:
 				xmpp_error = child.getName()
 		self.__dispatch_error(xmpp_error, jingle_error, text)
-		#FIXME: Not sure if we would want to do that... not yet...
-		#self.connection.deleteJingle(self)
+		#FIXME: Not sure when we would want to do that...
+		if xmpp_error == 'item-not-found':
+			self.connection.deleteJingle(self)
 
 	def __transportReplaceCB(self, stanza, jingle, error, action):
 		for content in jingle.iterTags('content'):
@@ -301,7 +305,7 @@ class JingleSession(object):
 	def __sessionInfoCB(self, stanza, jingle, error, action):
 		payload = jingle.getPayload()
 		if len(payload) > 0:
-			self.__send_error('feature-not-implemented', 'unsupported-info')
+			self.__send_error(stanza, 'feature-not-implemented', 'unsupported-info')
 			raise xmpp.NodeProcessed
 
 	def __contentRemoveCB(self, stanza, jingle, error, action):
@@ -417,7 +421,7 @@ class JingleSession(object):
 		self.connection.connection.send(err)
 		self.__dispatch_error(error, jingle_error, text)
 
-	def __dispatch_error(error, jingle_error=None, text=None):
+	def __dispatch_error(self, error, jingle_error=None, text=None):
 		if jingle_error:
 			error = jingle_error
 		if text:
@@ -863,7 +867,7 @@ class JingleVideo(JingleRTPContent):
 		# sometimes it'll freeze...
 		JingleRTPContent.setupStream(self)
 		# the local parts
-		src_vid = gst.element_factory_make('videotestsrc')
+		src_vid = gst.element_factory_make('v4l2src')
 		videoscale = gst.element_factory_make('videoscale')
 		caps = gst.element_factory_make('capsfilter')
 		caps.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))

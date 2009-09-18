@@ -1478,7 +1478,9 @@ class ChatControl(ChatControlBase):
 		if self.audio_state in (self.AUDIO_STATE_NOT_AVAILABLE,
 		self.AUDIO_STATE_AVAILABLE):
 			self._audio_image.hide()
-		elif self.audio_state == self.AUDIO_STATE_CONNECTING:
+		else:
+			self._audio_image.show()
+		if self.audio_state == self.AUDIO_STATE_CONNECTING:
 			self._audio_image.set_from_stock(gtk.STOCK_CONVERT, 1)
 		elif self.audio_state == self.AUDIO_STATE_CONNECTION_RECEIVED:
 			self._audio_image.set_from_stock(gtk.STOCK_NETWORK, 1)
@@ -1486,7 +1488,6 @@ class ChatControl(ChatControlBase):
 			self._audio_image.set_from_stock(gtk.STOCK_CONNECT, 1)
 		elif self.audio_state == self.AUDIO_STATE_ERROR:
 			self._audio_image.set_from_stock(gtk.STOCK_DIALOG_WARNING, 1)
-		self._audio_image.show()
 		self.update_toolbar()
 
 	def set_audio_state(self, state, sid=None, reason=None):
