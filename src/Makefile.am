@@ -41,7 +41,7 @@ gajimsrc3dir = $(pkgdatadir)/src/common/zeroconf
 gajimsrc3_PYTHON = \
 				$(srcdir)/common/zeroconf/*.py
 
-gajimsrc4dir = $(pkglibdir)/src/commands
+gajimsrc4dir = $(pkgdatadir)/src/commands
 gajimsrc4_PYTHON = \
 				   $(srcdir)/commands/*.py
 
