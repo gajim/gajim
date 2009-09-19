@@ -4470,10 +4470,10 @@ class VoIPCallReceivedDialog(object):
 
 	def on_voip_call_received_messagedialog_response(self, dialog, response):
 		# we've got response from user, either stop connecting or accept the call
-		session = gajim.connections[self.account].getJingleSession(self.fjid,
+		session = gajim.connections[self.account].get_jingle_session(self.fjid,
 			self.sid)
 		if response==gtk.RESPONSE_YES:
-			session.approveSession()
+			session.approve_session()
 			jid = gajim.get_jid_without_resource(self.fjid)
 			resource = gajim.get_resource_from_jid(self.fjid)
 			ctrl = gajim.interface.msg_win_mgr.get_control(self.fjid, self.account)
@@ -4489,7 +4489,7 @@ class VoIPCallReceivedDialog(object):
 				ctrl = gajim.interface.new_chat(contact, self.account)
 			ctrl.set_audio_state('connecting', self.sid)
 		else: # response==gtk.RESPONSE_NO
-			session.declineSession()
+			session.decline_session()
 
 		dialog.destroy()
 

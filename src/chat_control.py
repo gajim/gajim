@@ -1775,7 +1775,7 @@ class ChatControl(ChatControlBase, ChatCommands):
 		self.set_audio_state('connecting', sid)
 
 	def on_stop_audio_button_activate(self, *things):
-		session = gajim.connections[self.account].getJingleSession(
+		session = gajim.connections[self.account].get_jingle_session(
 			self.contact.get_full_jid(), self.audio_sid)
 		if session:
 			session.end_session()
