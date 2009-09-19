@@ -54,6 +54,7 @@ class StanzaSession(object):
 		self.conn = conn
 		self.jid = jid
 		self.type = type_
+		self.resource = None
 
 		if thread_id:
 			self.received_thread_id = True
@@ -74,6 +75,12 @@ class StanzaSession(object):
 
 	def is_loggable(self):
 		return self.loggable and gajim.config.should_log(self.conn.name, self.jid)
+
+	def get_to(self):
+		to = str(self.jid)
+		if self.resource:
+			to += '/' + self.resource
+		return to
 
 	def remove_events(self, types):
 		'''
@@ -107,7 +114,7 @@ class StanzaSession(object):
 		if self.thread_id:
 			msg.NT.thread = self.thread_id
 
-		msg.setAttr('to', self.jid)
+		msg.setAttr('to', self.get_to())
 		self.conn.send_stanza(msg)
 
 		if isinstance(msg, xmpp.Message):

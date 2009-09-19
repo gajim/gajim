@@ -1137,11 +1137,11 @@ class ToplevelAgentBrowser(AgentBrowser):
 		# Icon Renderer
 		renderer = gtk.CellRendererPixbuf()
 		renderer.set_property('xpad', 6)
-		col.pack_start(renderer, expand = False)
+		col.pack_start(renderer, expand=False)
 		col.set_cell_data_func(renderer, self._pixbuf_renderer_data_func)
 		# Text Renderer
 		renderer = gtk.CellRendererText()
-		col.pack_start(renderer, expand = True)
+		col.pack_start(renderer, expand=True)
 		col.set_cell_data_func(renderer, self._text_renderer_data_func)
 		renderer.set_property('foreground', 'dark gray')
 		# Save this so we can go along with theme changes
@@ -1487,7 +1487,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 		if not cat:
 			cat = self._create_category(*cat_args)
 		self.model.append(cat, (jid, node, pix, descr, 1))
-		self._expand_all()
+		gobject.idle_add(self._expand_all)
 		# Grab info on the service
 		self.cache.get_info(jid, node, self._agent_info, force=force)
 		self._update_progressbar()

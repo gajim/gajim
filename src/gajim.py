@@ -156,6 +156,7 @@ except exceptions.DatabaseMalformed:
 else:
 	from common import dbus_support
 	if dbus_support.supported:
+		from music_track_listener import MusicTrackListener
 		import dbus
 
 	if os.name == 'posix': # dl module is Unix Only
@@ -229,6 +230,15 @@ from chat_control import ChatControlBase
 from chat_control import ChatControl
 from groupchat_control import GroupchatControl
 from groupchat_control import PrivateChatControl
+
+# Here custom adhoc processors should be loaded. At this point there is
+# everything they need to function properly. The next line loads custom exmple
+# adhoc processors. Technically, they could be loaded earlier as host processors
+# themself does not depend on the chat controls, but that should not be done
+# uless there is a really good reason for that..
+#
+# from commands import custom
+
 from atom_window import AtomWindow
 from session import ChatControlSession
 
@@ -243,6 +253,7 @@ from common import helpers
 from common import optparser
 from common import dataforms
 from common import passwords
+from common import pep
 
 gajimpaths = common.configpaths.gajimpaths
 
@@ -1507,10 +1518,15 @@ class Interface:
 		if use_gpg_agent:
 			sectext = _('You configured Gajim to use GPG agent, but there is no '
 			'GPG agent running or it returned a wrong passphrase.\n')
-		sectext += _('You are currently connected without your OpenPGP key.')
+			sectext += _('You are currently connected without your OpenPGP key.')
+			dialogs.WarningDialog(_('Your passphrase is incorrect'), sectext)
+		else:
+			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'warning.png')
+			notify.popup('warning', account, account, 'warning', path,
+				_('OpenGPG Passphrase Incorrect'),
+				_('You are currently connected without your OpenPGP key.'))
 		keyID = gajim.config.get_per('accounts', account, 'keyid')
 		self.forget_gpg_passphrase(keyID)
-		dialogs.WarningDialog(_('Your passphrase is incorrect'), sectext)
 
 	def handle_event_gpg_password_required(self, account, array):
 		#('GPG_PASSWORD_REQUIRED', account, (callback,))
@@ -3048,6 +3064,93 @@ class Interface:
 ### Other Methods
 ################################################################################
 
+	def _change_awn_icon_status(self, status):
+		if not dbus_support.supported:
+			# do nothing if user doesn't have D-Bus bindings
+			return
+		try:
+			bus = dbus.SessionBus()
+			if not 'com.google.code.Awn' in bus.list_names():
+				# Awn is not installed
+				return
+		except Exception:
+			return
+		iconset = gajim.config.get('iconset')
+		prefix = os.path.join(helpers.get_iconset_path(iconset), '32x32')
+		if status in ('chat', 'away', 'xa', 'dnd', 'invisible', 'offline'):
+			status = status + '.png'
+		elif status == 'online':
+			prefix = os.path.join(gajim.DATA_DIR, 'pixmaps')
+			status = 'gajim.png'
+		path = os.path.join(prefix, status)
+		try:
+			obj = bus.get_object('com.google.code.Awn', '/com/google/code/Awn')
+			awn = dbus.Interface(obj, 'com.google.code.Awn')
+			awn.SetTaskIconByName('Gajim', os.path.abspath(path))
+		except Exception:
+			pass
+
+	def enable_music_listener(self):
+		if not self.music_track_changed_signal:
+			listener = MusicTrackListener.get()
+			self.music_track_changed_signal = listener.connect(
+				'music-track-changed', self.music_track_changed)
+		track = listener.get_playing_track()
+		self.music_track_changed(listener, track)
+
+	def disable_music_listener(self):
+		listener = MusicTrackListener.get()
+		listener.disconnect(self.music_track_changed_signal)
+		self.music_track_changed_signal = None
+
+	def music_track_changed(self, unused_listener, music_track_info, account=''):
+		if account == '':
+			accounts = gajim.connections.keys()
+		else:
+			accounts = [account]
+		if music_track_info is None:
+			artist = ''
+			title = ''
+			source = ''
+		elif hasattr(music_track_info, 'paused') and music_track_info.paused == 0:
+			artist = ''
+			title = ''
+			source = ''
+		else:
+			artist = music_track_info.artist
+			title = music_track_info.title
+			source = music_track_info.album
+		for acct in accounts:
+			if acct not in gajim.connections:
+				continue
+			if not gajim.account_is_connected(acct):
+				continue
+			if not gajim.connections[acct].pep_supported:
+				continue
+			if gajim.connections[acct].music_track_info == music_track_info:
+				continue
+			pep.user_send_tune(acct, artist, title, source)
+			gajim.connections[acct].music_track_info = music_track_info
+
+	def get_bg_fg_colors(self):
+		def gdkcolor_to_rgb (gdkcolor):
+			return [c / 65535. for c in (gdkcolor.red, gdkcolor.green,
+				gdkcolor.blue)]
+
+		def format_rgb (r, g, b):
+			return ' '.join([str(c) for c in ('rgb', r, g, b)])
+
+		def format_gdkcolor (gdkcolor):
+			return format_rgb (*gdkcolor_to_rgb (gdkcolor))
+		
+		# get style colors and create string for dvipng
+		dummy = gtk.Invisible()
+		dummy.ensure_style()
+		style = dummy.get_style()
+		bg_str = format_gdkcolor(style.base[gtk.STATE_NORMAL])
+		fg_str = format_gdkcolor(style.text[gtk.STATE_NORMAL])
+		return (bg_str, fg_str)
+
 	def read_sleepy(self):
 		'''Check idle status and change that status if needed'''
 		if not self.sleeper.poll():
@@ -3603,6 +3706,12 @@ class Interface:
 				except Exception:
 					pass
 		gobject.timeout_add_seconds(5, remote_init)
+		self.music_track_changed_signal = None
+		for account in gajim.connections:
+			if gajim.config.get_per('accounts', account, 'publish_tune') and \
+			dbus_support.supported:
+				self.enable_music_listener()
+				break
 
 if __name__ == '__main__':
 	def sigint_cb(num, stack):

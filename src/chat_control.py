@@ -52,6 +52,8 @@ from common.xmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
 from common.xmpp.protocol import NS_JINGLE_RTP_AUDIO
 
+from commands.implementation import CommonCommands, ChatCommands
+
 try:
 	import gtkspell
 	HAS_GTK_SPELL = True
@@ -75,11 +77,15 @@ if gajim.config.get('use_speller') and HAS_GTK_SPELL:
 			spell.set_language(langs[lang])
 		except OSError:
 			del langs[lang]
+	if spell:
+		spell.detach()
+	del tv
 
 ################################################################################
-class ChatControlBase(MessageControl):
+class ChatControlBase(MessageControl, CommonCommands):
 	'''A base class containing a banner, ConversationTextview, MessageTextView
 	'''
+
 	def make_href(self, match):
 		url_color = gajim.config.get('urlmsgcolor')
 		return '<a href="%s"><span color="%s">%s</span></a>' % (match.group(),
@@ -146,7 +152,54 @@ class ChatControlBase(MessageControl):
 	event_keymod):
 		# Derived should implement this rather than connecting to the event
 		# itself.
-		pass
+
+		event = gtk.gdk.Event(gtk.gdk.KEY_PRESS)
+		event.keyval = event_keyval
+		event.state = event_keymod
+		event.time = 0
+
+		buffer = widget.get_buffer()
+		start, end = buffer.get_bounds()
+
+		if event.keyval -- gtk.keysyms.Tab:
+			position = buffer.get_insert()
+			end = buffer.get_iter_at_mark(position)
+
+			text = buffer.get_text(start, end, False)
+			text = text.decode('utf8')
+
+			splitted = text.split()
+
+			if (text.startswith(self.COMMAND_PREFIX) and not
+				text.startswith(self.COMMAND_PREFIX * 2) and len(splitted) == 1):
+
+				text = splitted[0]
+				bare = text.lstrip(self.COMMAND_PREFIX)
+
+				if len(text) == 1:
+					self.command_hits = []
+					for command in self.list_commands():
+						for name in command.names:
+							self.command_hits.append(name)
+				else:
+					if (self.last_key_tabs and self.command_hits and
+						self.command_hits[0].startswith(bare)):
+						self.command_hits.append(self.command_hits.pop(0))
+					else:
+						self.command_hits = []
+						for command in self.list_commands():
+							for name in command.names:
+								if name.startswith(bare):
+									self.command_hits.append(name)
+
+				if self.command_hits:
+					buffer.delete(start, end)
+					buffer.insert_at_cursor(self.COMMAND_PREFIX + self.command_hits[0] + ' ')
+					self.last_key_tabs = True
+
+				return True
+
+			self.last_key_tabs = False
 
 	def status_url_clicked(self, widget, url):
 		helpers.launch_browser_mailer('url', url)
@@ -302,6 +355,9 @@ class ChatControlBase(MessageControl):
 
 		self.smooth = True
 		self.msg_textview.grab_focus()
+
+		self.command_hits = []
+		self.last_key_tabs = False
 
 	def set_speller(self):
 		# now set the one the user selected
@@ -604,45 +660,27 @@ class ChatControlBase(MessageControl):
 			self.drag_entered_conv = True
 			self.conv_textview.tv.set_editable(True)
 
-	def _process_command(self, message):
-		if not message or message[0] != '/':
-			return False
-
-		message = message[1:]
-		message_array = message.split(' ', 1)
-		command = message_array.pop(0).lower()
-		if message_array == ['']:
-			message_array = []
-
-		if command == 'clear' and not len(message_array):
-			self.conv_textview.clear() # clear conversation
-			self.clear(self.msg_textview) # clear message textview too
-			return True
-		elif message == 'compact' and not len(message_array):
-			self.chat_buttons_set_visible(not self.hide_chat_buttons)
-			self.clear(self.msg_textview)
-			return True
-		return False
-
 	def send_message(self, message, keyID='', type_='chat', chatstate=None,
-	msg_id=None, composing_xep=None, resource=None, process_command=True,
-	xhtml=None, callback=None, callback_args=[]):
+	msg_id=None, composing_xep=None, resource=None,
+	xhtml=None, callback=None, callback_args=[], process_commands=True):
 		'''Send the given message to the active tab. Doesn't return None if error
 		'''
 		if not message or message == '\n':
 			return None
 
-		if not process_command or not self._process_command(message):
-			MessageControl.send_message(self, message, keyID, type_=type_,
-				chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
-				resource=resource, user_nick=self.user_nick, xhtml=xhtml,
-				callback=callback, callback_args=callback_args)
+		if process_commands and self.process_as_command(message):
+			return
 
-			# Record message history
-			self.save_sent_message(message)
+		MessageControl.send_message(self, message, keyID, type_=type_,
+			chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
+			resource=resource, user_nick=self.user_nick, xhtml=xhtml,
+			callback=callback, callback_args=callback_args)
 
-			# Be sure to send user nickname only once according to JEP-0172
-			self.user_nick = None
+		# Record message history
+		self.save_sent_message(message)
+
+		# Be sure to send user nickname only once according to JEP-0172
+		self.user_nick = None
 
 		# Clear msg input
 		message_buffer = self.msg_textview.get_buffer()
@@ -1126,7 +1164,7 @@ class ChatControlBase(MessageControl):
 		# FIXME: Set sensitivity for toolbar
 
 ################################################################################
-class ChatControl(ChatControlBase):
+class ChatControl(ChatControlBase, ChatCommands):
 	'''A control for standard 1-1 chat'''
 	(
 		AUDIO_STATE_NOT_AVAILABLE,
@@ -1139,7 +1177,8 @@ class ChatControl(ChatControlBase):
 
 	TYPE_ID = message_control.TYPE_CHAT
 	old_msg_kind = None # last kind of the printed message
-	CHAT_CMDS = ['clear', 'compact', 'help', 'me', 'ping', 'say']
+
+	DISPATCHED_BY = ChatCommands
 
 	def __init__(self, parent_win, contact, acct, session, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
@@ -1490,6 +1529,19 @@ class ChatControl(ChatControlBase):
 			self._audio_image.set_from_stock(gtk.STOCK_DIALOG_WARNING, 1)
 		self.update_toolbar()
 
+	def change_resource(self, resource):
+		old_full_jid = self.get_full_jid()
+		self.resource = resource
+		new_full_jid = self.get_full_jid()
+		# update gajim.last_message_time
+		if old_full_jid in gajim.last_message_time[self.account]:
+			gajim.last_message_time[self.account][new_full_jid] = \
+				gajim.last_message_time[self.account][old_full_jid]
+		# update events
+		gajim.events.change_jid(self.account, old_full_jid, new_full_jid)
+		# update MessageWindow._controls
+		self.parent_win.change_jid(self.account, old_full_jid, new_full_jid)
+
 	def set_audio_state(self, state, sid=None, reason=None):
 		if state in ('connecting', 'connected', 'stop'):
 			str = _('Audio state : %s') % state
@@ -1813,82 +1865,11 @@ class ChatControl(ChatControlBase):
 		elif self.session and self.session.enable_encryption:
 			dialogs.ESessionInfoWindow(self.session)
 
-	def _process_command(self, message):
-		if message[0] != '/':
-			return False
-
-		# Handle common commands
-		if ChatControlBase._process_command(self, message):
-			return True
-
-		message = message[1:]
-		message_array = message.split(' ', 1)
-		command = message_array.pop(0).lower()
-		if message_array == ['']:
-			message_array = []
-
-		if command == 'me':
-			if len(message_array):
-				return False # /me is not really a command
-			else:
-				self.get_command_help(command)
-				return True # do not send "/me" as message
-
-		if command == 'help':
-			if len(message_array):
-				subcommand = message_array.pop(0)
-				self.get_command_help(subcommand)
-			else:
-				self.get_command_help(command)
-			self.clear(self.msg_textview)
-			return True
-		elif command == 'ping':
-			if not len(message_array):
-				if self.account == gajim.ZEROCONF_ACC_NAME:
-					self.print_conversation(
-						_('Command not supported for zeroconf account.'), 'info')
-				else:
-					gajim.connections[self.account].sendPing(self.contact)
-			else:
-				self.get_command_help(command)
-			self.clear(self.msg_textview)
-			return True
-		return False
-
-	def get_command_help(self, command):
-		if command == 'help':
-			self.print_conversation(_('Commands: %s') % ChatControl.CHAT_CMDS,
-				'info')
-		elif command == 'clear':
-			self.print_conversation(_('Usage: /%s, clears the text window.') % \
-				command, 'info')
-		elif command == 'compact':
-			self.print_conversation(_('Usage: /%s, hide the chat buttons.') % \
-				command, 'info')
-		elif command == 'me':
-			self.print_conversation(_('Usage: /%(command)s <action>, sends action '
-				'to the current group chat. Use third person. (e.g. /%(command)s '
-				'explodes.)'
-				) % {'command': command}, 'info')
-		elif command == 'ping':
-			self.print_conversation(_('Usage: /%s, sends a ping to the contact') %\
-				command, 'info')
-		elif command == 'say':
-			self.print_conversation(_('Usage: /%s, send the message to the contact') %\
-				command, 'info')
-		else:
-			self.print_conversation(_('No help info for /%s') % command, 'info')
-
-	def send_message(self, message, keyID='', chatstate=None, xhtml=None):
+	def send_message(self, message, keyID='', chatstate=None, xhtml=None,
+			process_commands=True):
 		'''Send a message to contact'''
-		if message in ('', None, '\n') or self._process_command(message):
+		if message in ('', None, '\n'):
 			return None
-
-		# Do we need to process command for the message ?
-		process_command = True
-		if message.startswith('/say'):
-			message = message[5:]
-			process_command = False
 
 		# refresh timers
 		self.reset_kbd_mouse_timeout_vars()
@@ -1948,8 +1929,9 @@ class ChatControl(ChatControlBase):
 
 		ChatControlBase.send_message(self, message, keyID, type_='chat',
 			chatstate=chatstate_to_send, composing_xep=composing_xep,
-			process_command=process_command, xhtml=xhtml, callback=_on_sent,
-			callback_args=[contact, message, encrypted, xhtml])
+			xhtml=xhtml, callback=_on_sent,
+			callback_args=[contact, message, encrypted, xhtml],
+			process_commands=process_commands)
 
 	def check_for_possible_paused_chatstate(self, arg):
 		''' did we move mouse of that window or write something in message
@@ -2428,6 +2410,10 @@ class ChatControl(ChatControlBase):
 				self.handlers[i].disconnect(i)
 			del self.handlers[i]
 		self.conv_textview.del_handlers()
+		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
+			spell_obj = gtkspell.get_from_text_view(self.msg_textview)
+			if spell_obj:
+				spell_obj.detach()
 		self.msg_textview.destroy()
 
 	def minimizable(self):

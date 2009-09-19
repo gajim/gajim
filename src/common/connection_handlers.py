@@ -900,8 +900,8 @@ class ConnectionDisco:
 							track = listener.get_playing_track()
 							if gajim.config.get_per('accounts', self.name,
 							'publish_tune'):
-								gajim.interface.roster.music_track_changed(listener,
-										track, self.name)
+								gajim.interface.music_track_changed(listener, track,
+									self.name)
 						break
 			if features.__contains__(common.xmpp.NS_VCARD):
 				self.vcard_supported = True
@@ -2355,13 +2355,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		if ptype == 'subscribe':
 			log.debug('subscribe request from %s' % who)
-			if gajim.config.get('alwaysauth') or who.find("@") <= 0 or \
-			jid_stripped in self.jids_for_auto_auth or transport_auto_auth:
+			if gajim.config.get_per('accounts', self.name, 'autoauth') or \
+			who.find('@') <= 0 or jid_stripped in self.jids_for_auto_auth or \
+			transport_auto_auth:
 				if self.connection:
 					p = common.xmpp.Presence(who, 'subscribed')
 					p = self.add_sha(p)
 					self.connection.send(p)
-				if who.find("@") <= 0 or transport_auto_auth:
+				if who.find('@') <= 0 or transport_auto_auth:
 					self.dispatch('NOTIFY', (jid_stripped, 'offline', 'offline',
 						resource, prio, keyID, timestamp, None))
 				if transport_auto_auth:
@@ -2617,9 +2618,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if sign_msg and not signed:
 			signed = self.get_signed_presence(msg)
 			if signed is None:
-				self.dispatch('ERROR', (_('OpenPGP passphrase was not given'),
-					#%s is the account name here
-					_('You will be connected to %s without OpenPGP.') % self.name))
+				self.dispatch('BAD_PASSPHRASE', ())
 				self.USE_GPG = False
 				signed = ''
 		self.connected = gajim.SHOW_LIST.index(show)

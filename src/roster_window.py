@@ -62,7 +62,6 @@ from message_window import MessageWindowMgr
 
 from common import dbus_support
 if dbus_support.supported:
-	from music_track_listener import MusicTrackListener
 	import dbus
 
 from common.xmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC
@@ -1736,64 +1735,6 @@ class RosterWindow:
 			if chat_control:
 				chat_control.contact = contact1
 
-	def _change_awn_icon_status(self, status):
-		if not dbus_support.supported:
-			# do nothing if user doesn't have D-Bus bindings
-			return
-		try:
-			bus = dbus.SessionBus()
-			if not 'com.google.code.Awn' in bus.list_names():
-				# Awn is not installed
-				return
-		except Exception:
-			return
-		iconset = gajim.config.get('iconset')
-		prefix = os.path.join(helpers.get_iconset_path(iconset), '32x32')
-		if status in ('chat', 'away', 'xa', 'dnd', 'invisible', 'offline'):
-			status = status + '.png'
-		elif status == 'online':
-			prefix = os.path.join(gajim.DATA_DIR, 'pixmaps')
-			status = 'gajim.png'
-		path = os.path.join(prefix, status)
-		try:
-			obj = bus.get_object('com.google.code.Awn', '/com/google/code/Awn')
-			awn = dbus.Interface(obj, 'com.google.code.Awn')
-			awn.SetTaskIconByName('Gajim', os.path.abspath(path))
-		except Exception:
-			pass
-
-	def music_track_changed(self, unused_listener, music_track_info,
-	account=''):
-		if account == '':
-			accounts = gajim.connections.keys()
-		if music_track_info is None:
-			artist = ''
-			title = ''
-			source = ''
-		elif hasattr(music_track_info, 'paused') and music_track_info.paused == 0:
-			artist = ''
-			title = ''
-			source = ''
-		else:
-			artist = music_track_info.artist
-			title = music_track_info.title
-			source = music_track_info.album
-		if account == '':
-			for account in accounts:
-				if not gajim.account_is_connected(account):
-					continue
-				if not gajim.connections[account].pep_supported:
-					continue
-				if gajim.connections[account].music_track_info == music_track_info:
-					continue
-				pep.user_send_tune(account, artist, title, source)
-				gajim.connections[account].music_track_info = music_track_info
-		elif account in gajim.connections and \
-		gajim.connections[account].pep_supported:
-			if gajim.connections[account].music_track_info != music_track_info:
-				pep.user_send_tune(account, artist, title, source)
-				gajim.connections[account].music_track_info = music_track_info
-
 	def connected_rooms(self, account):
 		if account in gajim.gc_connected[account].values():
 			return True
@@ -2189,7 +2130,7 @@ class RosterWindow:
 			liststore.prepend([status_combobox_text,
 				gajim.interface.jabber_state_images['16'][show], show, False])
 			self.status_combobox.set_active(0)
-		self._change_awn_icon_status(show)
+		gajim.interface._change_awn_icon_status(show)
 		self.combobox_callback_active = True
 		if gajim.interface.systray_enabled:
 			gajim.interface.systray.change_status(show)
@@ -2634,7 +2575,24 @@ class RosterWindow:
 					connection.set_default_list('block')
 				connection.get_privacy_list('block')
 
-		self.get_status_message('offline', on_continue, show_pep=False)
+		def _block_it(is_checked=None):
+			if is_checked is not None: # dialog has been shown
+				if is_checked: # user does not want to be asked again
+					gajim.config.set('confirm_block', 'no')
+				else:
+					gajim.config.set('confirm_block', 'yes')
+			self.get_status_message('offline', on_continue, show_pep=False)
+
+		confirm_block = gajim.config.get('confirm_block')
+		if confirm_block == 'no':
+			_block_it()
+			return
+		pritext = _('You are about to block a contact. Are you sure you want'
+			' to continue?')
+		sectext = _('This contact will see you offline and you will not receive '
+			'messages he will send you.')
+		dlg = dialogs.ConfirmationDialogCheck(pritext, sectext,
+			_('Do _not ask me again'), on_response_ok=_block_it)
 
 	def on_unblock(self, widget, list_, group=None):
 		''' When clicked on the 'unblock' button in context menu. '''
@@ -2886,8 +2844,15 @@ class RosterWindow:
 			ctrl.got_disconnected()
 		self.remove_groupchat(jid, account)
 
+	def on_reconnect(self, widget, jid, account):
+		'''When disconnect menuitem is activated: disconect from room'''
+		if jid in gajim.interface.minimized_controls[account]:
+			ctrl = gajim.interface.minimized_controls[account][jid]
+		gajim.interface.join_gc_room(account, jid, ctrl.nick,
+			gajim.gc_passwords.get(jid, ''))
+
 	def on_send_single_message_menuitem_activate(self, widget, account,
-	contact = None):
+	contact=None):
 		if contact is None:
 			dialogs.SingleMessageWindow(account, action='send')
 		elif isinstance(contact, list):
@@ -2937,7 +2902,7 @@ class RosterWindow:
 				break
 
 	def on_invite_to_room(self, widget, list_, room_jid, room_account,
-		resource = None):
+		resource=None):
 		''' resource parameter MUST NOT be used if more than one contact in
 		list '''
 		for e in list_:
@@ -3243,8 +3208,26 @@ class RosterWindow:
 					jid += '/' + contact.resource
 				self.send_status(account, show, message, to=jid)
 
-		self.get_status_message(show, on_response, show_pep=False,
-			always_ask=True)
+		def send_it(is_checked=None):
+			if is_checked is not None: # dialog has been shown
+				if is_checked: # user does not want to be asked again
+					gajim.config.set('confirm_custom_status', 'no')
+				else:
+					gajim.config.set('confirm_custom_status', 'yes')
+			self.get_status_message(show, on_response, show_pep=False,
+				always_ask=True)
+
+		confirm_custom_status = gajim.config.get('confirm_custom_status')
+		if confirm_custom_status == 'no':
+			send_it()
+			return
+		pritext = _('You are about to send a custom status. Are you sure you want'
+			' to continue?')
+		sectext = _('This contact will temporarily see you as %(status)s, '
+			'but only until you change your status. Then he will see your global '
+			'status.') % {'status': show}
+		dlg = dialogs.ConfirmationDialogCheck(pritext, sectext,
+			_('Do _not ask me again'), on_response_ok=send_it)
 
 	def on_status_combobox_changed(self, widget):
 		'''When we change our status via the combobox'''
@@ -3354,21 +3337,14 @@ class RosterWindow:
 		act = widget.get_active()
 		gajim.config.set_per('accounts', account, 'publish_tune', act)
 		if act:
-			listener = MusicTrackListener.get()
-			if not self.music_track_changed_signal:
-				self.music_track_changed_signal = listener.connect(
-					'music-track-changed', self.music_track_changed)
-			track = listener.get_playing_track()
-			self.music_track_changed(listener, track)
+			gajim.interface.enable_music_listener()
 		else:
 			# disable it only if no other account use it
 			for acct in gajim.connections:
 				if gajim.config.get_per('accounts', acct, 'publish_tune'):
 					break
 			else:
-				listener = MusicTrackListener.get()
-				listener.disconnect(self.music_track_changed_signal)
-				self.music_track_changed_signal = None
+				gajim.interface.disable_music_listener()
 
 			if gajim.connections[account].pep_supported:
 				# As many implementations don't support retracting items, we send a
@@ -5919,6 +5895,13 @@ class RosterWindow:
 				jid, account)
 			menu.append(maximize_menuitem)
 
+		if not gajim.gc_connected[account].get(jid, False):
+			connect_menuitem = gtk.ImageMenuItem(_('_Reconnect'))
+			connect_icon = gtk.image_new_from_stock(gtk.STOCK_CONNECT, \
+				gtk.ICON_SIZE_MENU)
+			connect_menuitem.set_image(connect_icon)
+			connect_menuitem.connect('activate', self.on_reconnect, jid, account)
+			menu.append(connect_menuitem)
 		disconnect_menuitem = gtk.ImageMenuItem(_('_Disconnect'))
 		disconnect_icon = gtk.image_new_from_stock(gtk.STOCK_DISCONNECT, \
 			gtk.ICON_SIZE_MENU)
@@ -6190,7 +6173,6 @@ class RosterWindow:
 		self.xml = gtkgui_helpers.get_glade('roster_window.glade')
 		self.window = self.xml.get_widget('roster_window')
 		self.hpaned = self.xml.get_widget('roster_hpaned')
-		self.music_track_changed_signal = None
 		gajim.interface.msg_win_mgr = MessageWindowMgr(self.window, self.hpaned)
 		gajim.interface.msg_win_mgr.connect('window-delete',
 			self.on_message_window_delete)
@@ -6410,16 +6392,6 @@ class RosterWindow:
 		# Workaroung: For strange reasons signal is behaving like row-changed
 		self._toggeling_row = False
 		self.setup_and_draw_roster()
-
-		for account in gajim.connections:
-			if gajim.config.get_per('accounts', account, 'publish_tune') and \
-			dbus_support.supported:
-				listener = MusicTrackListener.get()
-				self.music_track_changed_signal = listener.connect(
-					'music-track-changed', self.music_track_changed)
-				track = listener.get_playing_track()
-				self.music_track_changed(listener, track)
-				break
 
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()
