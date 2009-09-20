@@ -3004,8 +3004,8 @@ class Interface:
 			pass
 
 	def enable_music_listener(self):
+		listener = MusicTrackListener.get()
 		if not self.music_track_changed_signal:
-			listener = MusicTrackListener.get()
 			self.music_track_changed_signal = listener.connect(
 				'music-track-changed', self.music_track_changed)
 		track = listener.get_playing_track()
