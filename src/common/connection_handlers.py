@@ -51,7 +51,14 @@ from common import exceptions
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.caps import ConnectionCaps
-from common.jingle import ConnectionJingle
+if gajim.HAVE_FARSIGHT:
+	from common.jingle import ConnectionJingle
+else:
+	class ConnectionJingle():
+		def __init__(self):
+			pass
+		def _JingleCB(self, con, stanza):
+			pass
 
 from common import dbus_support
 if dbus_support.supported:

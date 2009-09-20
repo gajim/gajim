@@ -1253,7 +1253,8 @@ class ChatControl(ChatControlBase, ChatCommands):
 			'muc_active').get_pixbuf())
 
 		self._audio_image = self.xml.get_widget('audio_image')
-		if gajim.capscache.is_supported(contact, NS_JINGLE_RTP_AUDIO):
+		if gajim.capscache.is_supported(contact, NS_JINGLE_RTP_AUDIO) and \
+		gajim.HAVE_FARSIGHT:
 			self.set_audio_state('available')
 		else:
 			self.set_audio_state('not_available')

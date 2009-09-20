@@ -189,6 +189,11 @@ try:
 except ImportError:
 	HAVE_INDICATOR = False
 
+HAVE_FARSIGHT = True
+try:
+	import farsight, gst
+except ImportError:
+	HAVE_FARSIGHT = False
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
 gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI, xmpp.NS_FILE,
 	xmpp.NS_MUC, xmpp.NS_MUC_USER, xmpp.NS_MUC_ADMIN, xmpp.NS_MUC_OWNER,
@@ -196,9 +201,7 @@ gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI, xmpp.NS_FILE,
 	'jabber:iq:gateway', xmpp.NS_LAST, xmpp.NS_PRIVACY, xmpp.NS_PRIVATE,
 	xmpp.NS_REGISTER, xmpp.NS_VERSION, xmpp.NS_DATA, xmpp.NS_ENCRYPTED, 'msglog',
 	'sslc2s', 'stringprep', xmpp.NS_PING, xmpp.NS_TIME_REVISED, xmpp.NS_SSN,
-	xmpp.NS_MOOD, xmpp.NS_ACTIVITY, xmpp.NS_NICK, xmpp.NS_ROSTERX,
-	xmpp.NS_JINGLE, xmpp.NS_JINGLE_RTP, xmpp.NS_JINGLE_RTP_AUDIO,
-	xmpp.NS_JINGLE_RTP_VIDEO, xmpp.NS_JINGLE_ICE_UDP]
+	xmpp.NS_MOOD, xmpp.NS_ACTIVITY, xmpp.NS_NICK, xmpp.NS_ROSTERX]
 
 # Optional features gajim supports per account
 gajim_optional_features = {}
