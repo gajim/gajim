@@ -191,8 +191,7 @@ class JingleSession(object):
 	def is_ready(self):
 		''' Returns True when all codecs and candidates are ready
 		(for all contents). '''
-		return all((c.candidates_ready and c.p2psession.get_property('codecs-ready')
-			for c in self.contents.itervalues()))
+		return all((content.is_ready() for content in self.contents.itervalues()))
 
 	''' Middle-level function to do stanza exchange. '''
 	def start_session(self):
@@ -572,6 +571,11 @@ class JingleContent(object):
 			'session-terminate-sent': [],
 		}
 
+	def is_ready(self):
+		#print '[%s] %s, %s' % (self.media, self.candidates_ready,
+		#	self.p2psession.get_property('codecs-ready'))
+		return self.candidates_ready and self.p2psession.get_property('codecs-ready')
+
 	def stanzaCB(self, stanza, content, error, action):
 		''' Called when something related to our content was sent by peer. '''
 		if action in self.callbacks:
@@ -943,6 +947,9 @@ class ConnectionJingle(object):
 		self.__sessions[(jid, sid)].stanzaCB(stanza)
 
 		raise xmpp.NodeProcessed
+
+	def addJingleIqCallback(self, jid, id, jingle):
+		self.__iq_responses[(jid, id)] = jingle
 
 	def startVoIP(self, jid):
 		jingle = JingleSession(self, weinitiate=True, jid=jid)
