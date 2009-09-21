@@ -807,6 +807,11 @@ class RosterWindow:
 			gajim.contacts.add_contact(account, contact)
 			self.add_contact(jid, account)
 		else:
+			if jid not in gajim.interface.minimized_controls[account]:
+				# there is a window that we can minimize
+				gc_control = gajim.interface.msg_win_mgr.get_gc_control(jid,
+					account)
+				gajim.interface.minimized_controls[account][jid] = gc_control
 			contact.show = show
 			contact.status = status
 			self.adjust_and_draw_contact_context(jid, account)
@@ -2919,6 +2924,12 @@ class RosterWindow:
 	def on_groupchat_maximized(self, widget, jid, account):
 		'''When a groupchat is maximised'''
 		if not jid in gajim.interface.minimized_controls[account]:
+			# Already opened?
+			gc_control = gajim.interface.msg_win_mgr.get_gc_control(jid, account)
+			if gc_control:
+				mw = gajim.interface.msg_win_mgr.get_window(jid, account)
+				mw.set_active_tab(gc_control)
+				mw.window.window.focus()
 			return
 		ctrl = gajim.interface.minimized_controls[account][jid]
 		mw = gajim.interface.msg_win_mgr.get_window(jid, account)

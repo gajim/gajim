@@ -2503,6 +2503,13 @@ class SingleMessageWindow:
 
 	def on_single_message_window_destroy(self, widget):
 		self.instances.remove(self)
+		c = gajim.contacts.get_contact_with_highest_priority(self.account,
+			self.from_whom)
+		if c.is_groupchat() and not self.from_whom in \
+		gajim.interface.minimized_controls[self.account] and self.action == \
+		'receive' and gajim.events.get_nb_roster_events(self.account,
+		self.from_whom, types=['chat', 'normal']) == 0:
+			gajim.interface.roster.remove_groupchat(self.from_whom, self.account)
 
 	def set_cursor_to_end(self):
 		end_iter = self.message_tv_buffer.get_end_iter()
