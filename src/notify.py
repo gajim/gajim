@@ -650,7 +650,7 @@ class DesktopNotification:
 	def version_reply_handler(self, name, vendor, version, spec_version=None):
 		if spec_version:
 			version = spec_version
-		elif vendor == 'Xfce' and version == '0.1.0':
+		elif vendor == 'Xfce' and version.startswith('0.1.0'):
 			version = '0.9'
 		version_list = version.split('.')
 		self.version = []
