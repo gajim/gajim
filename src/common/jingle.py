@@ -141,7 +141,7 @@ class JingleSession(object):
 		'''
 		reason = xmpp.Node('reason')
 		reason.addChild('decline')
-		self.__session_terminate(reason)
+		self._session_terminate(reason)
 
 	def end_session(self):
 		''' Called when user stops or cancel session in UI. '''
@@ -150,7 +150,7 @@ class JingleSession(object):
 			reason.addChild('success')
 		else:
 			reason.addChild('cancel')
-		self.__session_terminate(reason)
+		self._session_terminate(reason)
 
 	''' Middle-level functions to manage contents. Handle local content
 	cache and send change notifications. '''
@@ -313,7 +313,7 @@ class JingleSession(object):
 		if len(self.contents) == 0:
 			reason = xmpp.Node('reason')
 			reason.setTag('success') #FIXME: Is it the good one?
-			self.__session_terminate(reason)
+			self._session_terminate(reason)
 
 	def __sessionAcceptCB(self, stanza, jingle, error, action):
 		if self.state != JingleStates.pending: #FIXME
@@ -371,7 +371,7 @@ class JingleSession(object):
 			reason = xmpp.Node('reason')
 			reason.setTag('unsupported-applications')
 			self.__defaultCB(stanza, jingle, error, action)
-			self.__session_terminate(reason)
+			self._session_terminate(reason)
 			raise xmpp.NodeProcessed
 
 		if not transports_ok:
@@ -379,7 +379,7 @@ class JingleSession(object):
 			reason = xmpp.Node('reason')
 			reason.setTag('unsupported-transports')
 			self.__defaultCB(stanza, jingle, error, action)
-			self.__session_terminate(reason)
+			self._session_terminate(reason)
 			raise xmpp.NodeProcessed
 
 		self.state = JingleStates.pending
@@ -497,7 +497,7 @@ class JingleSession(object):
 			jingle.addChild(node=payload)
 		self.connection.connection.send(stanza)
 
-	def __session_terminate(self, reason=None):
+	def _session_terminate(self, reason=None):
 		assert self.state != JingleStates.ended
 		stanza, jingle = self.__make_jingle('session-terminate')
 		if reason is not None:
@@ -742,7 +742,11 @@ class JingleRTPContent(JingleContent):
 			elif name == 'farsight-component-state-changed':
 				state = message.structure['state']
 				print message.structure['component'], state
-				if state == farsight.STREAM_STATE_READY:
+				if state == farsight.STREAM_STATE_FAILED:
+					reason = xmpp.Node('reason')
+					reason.setTag('failed-transport')
+					self.session._session_terminate(reason)
+				elif state == farsight.STREAM_STATE_READY:
 					self.negotiated = True
 					#TODO: farsight.DIRECTION_BOTH only if senders='both'
 					self.p2pstream.set_property('direction', farsight.DIRECTION_BOTH)
@@ -947,9 +951,6 @@ class ConnectionJingle(object):
 		self.__sessions[(jid, sid)].stanzaCB(stanza)
 
 		raise xmpp.NodeProcessed
-
-	def addJingleIqCallback(self, jid, id, jingle):
-		self.__iq_responses[(jid, id)] = jingle
 
 	def startVoIP(self, jid):
 		jingle = JingleSession(self, weinitiate=True, jid=jid)
