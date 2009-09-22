@@ -3988,6 +3988,8 @@ class RosterWindow:
 				return
 			c_dest = gajim.contacts.get_contact_with_highest_priority(account_dest,
 				jid_dest)
+			if not gajim.capscache.is_supported(c_dest, NS_FILE):
+				return
 			uri = data.strip()
 			uri_splitted = uri.split() # we may have more than one file dropped
 			try:
