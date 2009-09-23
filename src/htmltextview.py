@@ -483,6 +483,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 	def _process_img(self, attrs):
 		'''Process a img tag.
 		'''
+		mem = ''
 		try:
 			# Wait maximum 1s for connection
 			socket.setdefaulttimeout(1)
@@ -498,40 +499,38 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 					f.fp._sock.fp._sock.settimeout(0.5)
 				except Exception:
 					pass
-			# Max image size = 2 MB (to try to prevent DoS)
-			mem = ''
-			deadline = time.time() + 3
-			while True:
-				if time.time() > deadline:
-					gajim.log.debug(str('Timeout loading image %s ' % \
-						attrs['src'] + ex))
-					mem = ''
-					alt = attrs.get('alt', '')
-					if alt:
-						alt += '\n'
-					alt += _('Timeout loading image')
-					break
-				try:
-					temp = f.read(100)
-				except socket.timeout, ex:
-					gajim.log.debug('Timeout loading image %s ' % attrs['src'] + \
-						str(ex))
-					mem = ''
-					alt = attrs.get('alt', '')
-					if alt:
-						alt += '\n'
-					alt += _('Timeout loading image')
-					break
-				if temp:
-					mem += temp
-				else:
-					break
-				if len(mem) > 2*1024*1024:
-					alt = attrs.get('alt', '')
-					if alt:
-						alt += '\n'
-					alt += _('Image is too big')
-					break
+				# Max image size = 2 MB (to try to prevent DoS)
+				deadline = time.time() + 3
+				while True:
+					if time.time() > deadline:
+						gajim.log.debug(str('Timeout loading image %s ' % \
+							attrs['src'] + ex))
+						mem = ''
+						alt = attrs.get('alt', '')
+						if alt:
+							alt += '\n'
+						alt += _('Timeout loading image')
+						break
+					try:
+						temp = f.read(100)
+					except socket.timeout, ex:
+						gajim.log.debug('Timeout loading image %s ' % attrs['src'] + \
+							str(ex))
+						alt = attrs.get('alt', '')
+						if alt:
+							alt += '\n'
+						alt += _('Timeout loading image')
+						break
+					if temp:
+						mem += temp
+					else:
+						break
+					if len(mem) > 2*1024*1024:
+						alt = attrs.get('alt', '')
+						if alt:
+							alt += '\n'
+						alt += _('Image is too big')
+						break
 			pixbuf = None
 			if mem:
 				# Caveat: GdkPixbuf is known not to be safe to load
