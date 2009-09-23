@@ -1271,8 +1271,10 @@ class GroupchatControl(ChatControlBase, GroupChatCommands):
 							os.path.join(path, puny_new_nick + ext)
 					for old_file in files:
 						if os.path.exists(old_file) and old_file != files[old_file]:
-							if os.path.exists(files[old_file]):
-								# Windows require this
+							if os.path.exists(files[old_file]) and helpers.windowsify(
+							old_file) != helpers.windowsify(files[old_file]):
+								# Windows require this, but os.remove('test') will also
+								# remove 'TEST'
 								os.remove(files[old_file])
 							os.rename(old_file, files[old_file])
 					self.print_conversation(s, 'info', tim)
