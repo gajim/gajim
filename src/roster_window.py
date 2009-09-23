@@ -2929,7 +2929,7 @@ class RosterWindow:
 			if gc_control:
 				mw = gajim.interface.msg_win_mgr.get_window(jid, account)
 				mw.set_active_tab(gc_control)
-				mw.window.window.focus()
+				mw.window.window.focus(gtk.get_current_event_time())
 			return
 		ctrl = gajim.interface.minimized_controls[account][jid]
 		mw = gajim.interface.msg_win_mgr.get_window(jid, account)
@@ -2939,7 +2939,7 @@ class RosterWindow:
 		ctrl.parent_win = mw
 		mw.new_tab(ctrl)
 		mw.set_active_tab(ctrl)
-		mw.window.window.focus()
+		mw.window.window.focus(gtk.get_current_event_time())
 		self.remove_groupchat(jid, account)
 
 	def on_edit_account(self, widget, account):

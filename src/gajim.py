@@ -2527,7 +2527,7 @@ class Interface:
 			self.roster.draw_contact(jid, account)
 		if w:
 			w.set_active_tab(ctrl)
-			w.window.window.focus()
+			w.window.window.focus(gtk.get_current_event_time())
 			# Using isinstance here because we want to catch all derived types
 			if isinstance(ctrl, ChatControlBase):
 				tv = ctrl.conv_textview

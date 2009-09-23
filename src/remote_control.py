@@ -27,6 +27,7 @@
 ##
 
 import gobject
+import gtk
 import os
 
 from common import gajim
@@ -377,7 +378,7 @@ class SignalObject(dbus.service.Object):
 			win = gajim.interface.msg_win_mgr.get_window(jid,
 				connected_account).window
 			if win.get_property('visible'):
-				win.window.focus()
+				win.window.focus(gtk.get_current_event_time())
 			return DBUS_BOOLEAN(True)
 		return DBUS_BOOLEAN(False)
 
@@ -507,7 +508,7 @@ class SignalObject(dbus.service.Object):
 			win.present()
 			# preserve the 'steal focus preservation'
 			if self._is_first():
-				win.window.focus()
+				win.window.focus(gtk.get_current_event_time())
 			else:
 				win.window.focus(long(time()))
 
