@@ -3347,6 +3347,49 @@ class Interface:
 		view.updateNamespace({'gajim': gajim})
 		gajim.ipython_window = window
 
+	def run(self):
+		if self.systray_capabilities and gajim.config.get('trayicon') != 'never':
+			self.show_systray()
+
+		self.roster = roster_window.RosterWindow()
+		for account in gajim.connections:
+			gajim.connections[account].load_roster_from_db()
+
+		# get instances for windows/dialogs that will show_all()/hide()
+		self.instances['file_transfers'] = dialogs.FileTransfersWindow()
+
+		gobject.timeout_add(100, self.autoconnect)
+		timeout, in_seconds = gajim.idlequeue.PROCESS_TIMEOUT
+		if in_seconds:
+			gobject.timeout_add_seconds(timeout, self.process_connections)
+		else:
+			gobject.timeout_add(timeout, self.process_connections)
+		gobject.timeout_add_seconds(gajim.config.get(
+			'check_idle_every_foo_seconds'), self.read_sleepy)
+
+		# when using libasyncns we need to process resolver in regular intervals
+		if resolver.USE_LIBASYNCNS:
+			gobject.timeout_add(200, gajim.resolver.process)
+
+		# setup the indicator
+		if gajim.HAVE_INDICATOR:
+			notify.setup_indicator_server()
+
+		def remote_init():
+			if gajim.config.get('remote_control'):
+				try:
+					import remote_control
+					self.remote_ctrl = remote_control.Remote()
+				except Exception:
+					pass
+		gobject.timeout_add_seconds(5, remote_init)
+
+		for account in gajim.connections:
+			if gajim.config.get_per('accounts', account, 'publish_tune') and \
+			dbus_support.supported:
+				self.enable_music_listener()
+				break
+
 	def __init__(self):
 		gajim.interface = self
 		gajim.thread_interface = ThreadInterface
@@ -3549,9 +3592,6 @@ class Interface:
 			if self.systray_capabilities:
 				self.systray = systray.Systray()
 
-		if self.systray_capabilities and gajim.config.get('trayicon') != 'never':
-			self.show_systray()
-
 		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'gajim.png')
 		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
 		# set the icon to all windows
@@ -3559,13 +3599,6 @@ class Interface:
 
 		self.init_emoticons()
 		self.make_regexps()
-
-		self.roster = roster_window.RosterWindow()
-		for account in gajim.connections:
-			gajim.connections[account].load_roster_from_db()
-
-		# get instances for windows/dialogs that will show_all()/hide()
-		self.instances['file_transfers'] = dialogs.FileTransfersWindow()
 
 		# get transports type from DB
 		gajim.transport_type = gajim.logger.get_transports_type()
@@ -3594,37 +3627,7 @@ class Interface:
 
 		self.last_ftwindow_update = 0
 
-		gobject.timeout_add(100, self.autoconnect)
-		timeout, in_seconds = gajim.idlequeue.PROCESS_TIMEOUT
-		if in_seconds:
-			gobject.timeout_add_seconds(timeout, self.process_connections)
-		else:
-			gobject.timeout_add(timeout, self.process_connections)
-		gobject.timeout_add_seconds(gajim.config.get(
-			'check_idle_every_foo_seconds'), self.read_sleepy)
-
-		# when using libasyncns we need to process resolver in regular intervals
-		if resolver.USE_LIBASYNCNS:
-			gobject.timeout_add(200, gajim.resolver.process)
-
-		# setup the indicator
-		if gajim.HAVE_INDICATOR:
-			notify.setup_indicator_server()
-
-		def remote_init():
-			if gajim.config.get('remote_control'):
-				try:
-					import remote_control
-					self.remote_ctrl = remote_control.Remote()
-				except Exception:
-					pass
-		gobject.timeout_add_seconds(5, remote_init)
 		self.music_track_changed_signal = None
-		for account in gajim.connections:
-			if gajim.config.get_per('accounts', account, 'publish_tune') and \
-			dbus_support.supported:
-				self.enable_music_listener()
-				break
 
 if __name__ == '__main__':
 	def sigint_cb(num, stack):
@@ -3663,7 +3666,8 @@ if __name__ == '__main__':
 
 	check_paths.check_and_possibly_create_paths()
 
-	Interface()
+	interface = Interface()
+	interface.run()
 
 	try:
 		if os.name != 'nt':
