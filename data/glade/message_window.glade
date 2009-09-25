@@ -102,7 +102,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkImage" id="audio_image">
+                                  <widget class="GtkImage" id="audio_banner_image">
                                     <property name="visible">True</property>
                                     <property name="stock">None</property>
                                     <property name="icon-size">1</property>
@@ -333,15 +333,13 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkButton" id="start_audio_button">
+                      <widget class="GtkToggleButton" id="audio_togglebutton">
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="no_show_all">True</property>
-                        <property name="tooltip" translatable="yes">Start audio session</property>
+                        <property name="tooltip" translatable="yes">Toggle audio session</property>
                         <property name="relief">none</property>
-                        <signal name="activate" handler="on_start_audio_button_activate"/>
                         <child>
-                          <widget class="GtkImage" id="start_audio_image">
+                          <widget class="GtkImage" id="audio_image">
                             <property name="visible">True</property>
                             <property name="stock">gtk-missing-image</property>
                             <property name="icon-size">1</property>
@@ -354,15 +352,13 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkButton" id="stop_audio_button">
+                      <widget class="GtkToggleButton" id="video_togglebutton">
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="no_show_all">True</property>
-                        <property name="tooltip" translatable="yes">Stop audio session</property>
+                        <property name="tooltip" translatable="yes">Toggle video session</property>
                         <property name="relief">none</property>
-                        <signal name="activate" handler="on_stop_audio_button_activate"/>
                         <child>
-                          <widget class="GtkImage" id="stop_audio_image">
+                          <widget class="GtkImage" id="video_image">
                             <property name="visible">True</property>
                             <property name="stock">gtk-missing-image</property>
                             <property name="icon-size">1</property>

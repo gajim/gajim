@@ -953,14 +953,42 @@ class ConnectionJingle(object):
 		raise xmpp.NodeProcessed
 
 	def startVoIP(self, jid):
-		jingle = JingleSession(self, weinitiate=True, jid=jid)
-		self.add_jingle(jingle)
-		jingle.add_content('voice', JingleVoIP(jingle))
-		jingle.start_session()
+		jingle = self.get_jingle_session(jid, media='video')
+		if jingle:
+			jingle.add_content('voice', JingleVoIP(jingle))
+		else:
+			jingle = JingleSession(self, weinitiate=True, jid=jid)
+			self.add_jingle(jingle)
+			jingle.add_content('voice', JingleVoIP(jingle))
+			jingle.start_session()
 		return jingle.sid
 
-	def get_jingle_session(self, jid, sid):
-		try:
-			return self.__sessions[(jid, sid)]
-		except KeyError:
-			return None
+	def startVideoIP(self, jid):
+		jingle = self.get_jingle_session(jid, media='audio')
+		if jingle:
+			jingle.add_content('video', JingleVideo(jingle))
+		else:
+			jingle = JingleSession(self, weinitiate=True, jid=jid)
+			self.add_jingle(jingle)
+			jingle.add_content('video', JingleVideo(jingle))
+			jingle.start_session()
+		return jingle.sid
+
+	def get_jingle_session(self, jid, sid=None, media=None):
+		if sid:
+			if (jid, sid) in self.__sessions:
+				return self.__sessions[(jid, sid)]
+			else:
+				return None
+		elif media:
+			if media == 'audio':
+				cls = JingleVoIP
+			elif media == 'video':
+				cls = JingleVideo
+			else:
+				return None
+			for session in self.__sessions.values():
+				for content in session.contents.values():
+					if isinstance(content, cls):
+						return session
+		return None

@@ -1167,12 +1167,12 @@ class ChatControlBase(MessageControl, CommonCommands):
 class ChatControl(ChatControlBase, ChatCommands):
 	'''A control for standard 1-1 chat'''
 	(
-		AUDIO_STATE_NOT_AVAILABLE,
-		AUDIO_STATE_AVAILABLE,
-		AUDIO_STATE_CONNECTING,
-		AUDIO_STATE_CONNECTION_RECEIVED,
-		AUDIO_STATE_CONNECTED,
-		AUDIO_STATE_ERROR
+		JINGLE_STATE_NOT_AVAILABLE,
+		JINGLE_STATE_AVAILABLE,
+		JINGLE_STATE_CONNECTING,
+		JINGLE_STATE_CONNECTION_RECEIVED,
+		JINGLE_STATE_CONNECTED,
+		JINGLE_STATE_ERROR
 	) = range(6)
 
 	TYPE_ID = message_control.TYPE_CHAT
@@ -1200,15 +1200,13 @@ class ChatControl(ChatControlBase, ChatCommands):
 			self._on_add_to_roster_menuitem_activate)
 		self.handlers[id_] = self._add_to_roster_button
 
-		self._start_audio_button = self.xml.get_widget('start_audio_button')
-		id_ = self._start_audio_button.connect('clicked',
-			self.on_start_audio_button_activate)
-		self.handlers[id_] = self._start_audio_button
+		self._audio_button = self.xml.get_widget('audio_togglebutton')
+		id_ = self._audio_button.connect('toggled', self.on_audio_button_toggled)
+		self.handlers[id_] = self._audio_button
 
-		self._stop_audio_button = self.xml.get_widget('stop_audio_button')
-		id_ = self._stop_audio_button.connect('clicked',
-			self.on_stop_audio_button_activate)
-		self.handlers[id_] = self._stop_audio_button
+		self._video_button = self.xml.get_widget('video_togglebutton')
+		id_ = self._video_button.connect('toggled', self.on_video_button_toggled)
+		self.handlers[id_] = self._video_button
 
 		self._send_file_button = self.xml.get_widget('send_file_button')
 		# add a special img for send file button
@@ -1252,13 +1250,20 @@ class ChatControl(ChatControlBase, ChatCommands):
 		img.set_from_pixbuf(gtkgui_helpers.load_icon(
 			'muc_active').get_pixbuf())
 
-		self._audio_image = self.xml.get_widget('audio_image')
+		self._audio_banner_image = self.xml.get_widget('audio_banner_image')
+		self._video_banner_image = self.xml.get_widget('video_banner_image')
 		if gajim.capscache.is_supported(contact, NS_JINGLE_RTP_AUDIO) and \
 		gajim.HAVE_FARSIGHT:
 			self.set_audio_state('available')
 		else:
 			self.set_audio_state('not_available')
+		if gajim.capscache.is_supported(contact, NS_JINGLE_RTP_VIDEO) and \
+		gajim.HAVE_FARSIGHT:
+			self.set_video_state('available')
+		else:
+			self.set_video_state('not_available')
 		self.audio_sid = None
+		self.video_sid = None
 
 		self.update_toolbar()
 
@@ -1369,18 +1374,16 @@ class ChatControl(ChatControlBase, ChatCommands):
 			self._add_to_roster_button.hide()
 
 		# Audio buttons
-		if self.audio_state == self.AUDIO_STATE_NOT_AVAILABLE:
-			self._start_audio_button.show()
-			self._start_audio_button.set_sensitive(False)
-			self._stop_audio_button.hide()
-		elif self.audio_state in (self.AUDIO_STATE_AVAILABLE,
-		self.AUDIO_STATE_ERROR):
-			self._start_audio_button.show()
-			self._start_audio_button.set_sensitive(True)
-			self._stop_audio_button.hide()
+		if self.audio_state == self.JINGLE_STATE_NOT_AVAILABLE:
+			self._audio_button.set_sensitive(False)
 		else:
-			self._start_audio_button.hide()
-			self._stop_audio_button.show()
+			self._audio_button.set_sensitive(True)
+
+		# Video buttons
+		if self.video_state == self.JINGLE_STATE_NOT_AVAILABLE:
+			self._video_button.set_sensitive(False)
+		else:
+			self._video_button.set_sensitive(True)
 
 		# Send file
 		if gajim.capscache.is_supported(self.contact, NS_FILE) and \
@@ -1515,19 +1518,35 @@ class ChatControl(ChatControlBase, ChatCommands):
 			self._tune_image.hide()
 
 	def update_audio(self):
-		if self.audio_state in (self.AUDIO_STATE_NOT_AVAILABLE,
-		self.AUDIO_STATE_AVAILABLE):
-			self._audio_image.hide()
+		if self.audio_state in (self.JINGLE_STATE_NOT_AVAILABLE,
+		self.JINGLE_STATE_AVAILABLE):
+			self._audio_banner_image.hide()
 		else:
-			self._audio_image.show()
-		if self.audio_state == self.AUDIO_STATE_CONNECTING:
-			self._audio_image.set_from_stock(gtk.STOCK_CONVERT, 1)
-		elif self.audio_state == self.AUDIO_STATE_CONNECTION_RECEIVED:
-			self._audio_image.set_from_stock(gtk.STOCK_NETWORK, 1)
-		elif self.audio_state == self.AUDIO_STATE_CONNECTED:
-			self._audio_image.set_from_stock(gtk.STOCK_CONNECT, 1)
-		elif self.audio_state == self.AUDIO_STATE_ERROR:
-			self._audio_image.set_from_stock(gtk.STOCK_DIALOG_WARNING, 1)
+			self._audio_banner_image.show()
+		if self.audio_state == self.JINGLE_STATE_CONNECTING:
+			self._audio_banner_image.set_from_stock(gtk.STOCK_CONVERT, 1)
+		elif self.audio_state == self.JINGLE_STATE_CONNECTION_RECEIVED:
+			self._audio_banner_image.set_from_stock(gtk.STOCK_NETWORK, 1)
+		elif self.audio_state == self.JINGLE_STATE_CONNECTED:
+			self._audio_banner_image.set_from_stock(gtk.STOCK_CONNECT, 1)
+		elif self.audio_state == self.JINGLE_STATE_ERROR:
+			self._audio_banner_image.set_from_stock(gtk.STOCK_DIALOG_WARNING, 1)
+		self.update_toolbar()
+
+	def update_video(self):
+		if self.video_state in (self.JINGLE_STATE_NOT_AVAILABLE,
+		self.JINGLE_STATE_AVAILABLE):
+			self._video_banner_image.hide()
+		else:
+			self._video_banner_image.show()
+		if self.video_state == self.JINGLE_STATE_CONNECTING:
+			self._video_banner_image.set_from_stock(gtk.STOCK_CONVERT, 1)
+		elif self.video_state == self.JINGLE_STATE_CONNECTION_RECEIVED:
+			self._video_banner_image.set_from_stock(gtk.STOCK_NETWORK, 1)
+		elif self.video_state == self.JINGLE_STATE_CONNECTED:
+			self._video_banner_image.set_from_stock(gtk.STOCK_CONNECT, 1)
+		elif self.video_state == self.JINGLE_STATE_ERROR:
+			self._video_banner_image.set_from_stock(gtk.STOCK_DIALOG_WARNING, 1)
 		self.update_toolbar()
 
 	def change_resource(self, resource):
@@ -1550,25 +1569,52 @@ class ChatControl(ChatControlBase, ChatCommands):
 				str += ', ' + _('reason: %s') % reason
 			self.print_conversation(str, 'info')
 		if state == 'not_available':
-			self.audio_state = self.AUDIO_STATE_NOT_AVAILABLE
+			self.audio_state = self.JINGLE_STATE_NOT_AVAILABLE
 			self.audio_sid = None
 		elif state == 'available':
-			self.audio_state = self.AUDIO_STATE_AVAILABLE
+			self.audio_state = self.JINGLE_STATE_AVAILABLE
 			self.audio_sid = None
 		elif state == 'connecting':
-			self.audio_state = self.AUDIO_STATE_CONNECTING
+			self.audio_state = self.JINGLE_STATE_CONNECTING
 			self.audio_sid = sid
 		elif state == 'connection_received':
-			self.audio_state = self.AUDIO_STATE_CONNECTION_RECEIVED
+			self.audio_state = self.JINGLE_STATE_CONNECTION_RECEIVED
 			self.audio_sid = sid
 		elif state == 'connected':
-			self.audio_state = self.AUDIO_STATE_CONNECTED
+			self.audio_state = self.JINGLE_STATE_CONNECTED
 		elif state == 'stop':
-			self.audio_state = self.AUDIO_STATE_AVAILABLE
+			self.audio_state = self.JINGLE_STATE_AVAILABLE
 			self.audio_sid = None
 		elif state == 'error':
-			self.audio_state = self.AUDIO_STATE_ERROR
+			self.audio_state = self.JINGLE_STATE_ERROR
 		self.update_audio()
+
+	def set_video_state(self, state, sid=None, reason=None):
+		if state in ('connecting', 'connected', 'stop'):
+			str = _('Video state : %s') % state
+			if reason:
+				str += ', ' + _('reason: %s') % reason
+			self.print_conversation(str, 'info')
+		if state == 'not_available':
+			self.video_state = self.JINGLE_STATE_NOT_AVAILABLE
+			self.video_sid = None
+		elif state == 'available':
+			self.video_state = self.JINGLE_STATE_AVAILABLE
+			self.video_sid = None
+		elif state == 'connecting':
+			self.video_state = self.JINGLE_STATE_CONNECTING
+			self.video_sid = sid
+		elif state == 'connection_received':
+			self.video_state = self.JINGLE_STATE_CONNECTION_RECEIVED
+			self.video_sid = sid
+		elif state == 'connected':
+			self.video_state = self.JINGLE_STATE_CONNECTED
+		elif state == 'stop':
+			self.video_state = self.JINGLE_STATE_AVAILABLE
+			self.video_sid = None
+		elif state == 'error':
+			self.video_state = self.JINGLE_STATE_ERROR
+		self.update_video()
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		'''
@@ -1770,16 +1816,29 @@ class ChatControl(ChatControlBase, ChatCommands):
 		banner_name_label.set_markup(label_text)
 		banner_name_tooltip.set_tip(banner_name_label, label_tooltip)
 
-	def on_start_audio_button_activate(self, *things):
-		sid = gajim.connections[self.account].startVoIP(self.contact.get_full_jid(
-			))
-		self.set_audio_state('connecting', sid)
+	def on_audio_button_toggled(self, widget):
+		if widget.get_active():
+			sid = gajim.connections[self.account].startVoIP(
+				self.contact.get_full_jid())
+			self.set_audio_state('connecting', sid)
+		else:
+			session = gajim.connections[self.account].get_jingle_session(
+				self.contact.get_full_jid(), self.audio_sid)
+			if session:
+				# TODO: end only audio
+				session.end_session()
 
-	def on_stop_audio_button_activate(self, *things):
-		session = gajim.connections[self.account].get_jingle_session(
-			self.contact.get_full_jid(), self.audio_sid)
-		if session:
-			session.end_session()
+	def on_video_button_toggled(self, widget):
+		if widget.get_active():
+			sid = gajim.connections[self.account].startVideoIP(
+				self.contact.get_full_jid())
+			self.set_video_state('connecting', sid)
+		else:
+			session = gajim.connections[self.account].get_jingle_session(
+				self.contact.get_full_jid(), self.video_sid)
+			if session:
+				# TODO: end only video
+				session.end_session()
 
 	def _toggle_gpg(self):
 		if not self.gpg_is_active and not self.contact.keyID:
