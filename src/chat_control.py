@@ -1579,14 +1579,17 @@ class ChatControl(ChatControlBase, ChatCommands):
 		elif state == 'connecting':
 			self.audio_state = self.JINGLE_STATE_CONNECTING
 			self.audio_sid = sid
+			self._audio_button.set_active(True)
 		elif state == 'connection_received':
 			self.audio_state = self.JINGLE_STATE_CONNECTION_RECEIVED
 			self.audio_sid = sid
+			self._audio_button.set_active(True)
 		elif state == 'connected':
 			self.audio_state = self.JINGLE_STATE_CONNECTED
 		elif state == 'stop':
 			self.audio_state = self.JINGLE_STATE_AVAILABLE
 			self.audio_sid = None
+			self._audio_button.set_active(False)
 		elif state == 'error':
 			self.audio_state = self.JINGLE_STATE_ERROR
 		self.update_audio()
@@ -1605,15 +1608,18 @@ class ChatControl(ChatControlBase, ChatCommands):
 			self.video_sid = None
 		elif state == 'connecting':
 			self.video_state = self.JINGLE_STATE_CONNECTING
+			self._video_button.set_active(True)
 			self.video_sid = sid
 		elif state == 'connection_received':
 			self.video_state = self.JINGLE_STATE_CONNECTION_RECEIVED
+			self._video_button.set_active(True)
 			self.video_sid = sid
 		elif state == 'connected':
 			self.video_state = self.JINGLE_STATE_CONNECTED
 		elif state == 'stop':
 			self.video_state = self.JINGLE_STATE_AVAILABLE
 			self.video_sid = None
+			self._video_button.set_active(False)
 		elif state == 'error':
 			self.video_state = self.JINGLE_STATE_ERROR
 		self.update_video()
@@ -1825,10 +1831,11 @@ class ChatControl(ChatControlBase, ChatCommands):
 			self.set_audio_state('connecting', sid)
 		else:
 			session = gajim.connections[self.account].get_jingle_session(
-				self.contact.get_full_jid(), self.audio_sid)
+				self.contact.get_full_jid(), self.video_sid)
 			if session:
-				# TODO: end only audio
-				session.end_session()
+				content = session.get_content('audio')
+				if content:
+					session.remove_content(content.creator, content.name)
 
 	def on_video_button_toggled(self, widget):
 		if widget.get_active():
@@ -1839,8 +1846,9 @@ class ChatControl(ChatControlBase, ChatCommands):
 			session = gajim.connections[self.account].get_jingle_session(
 				self.contact.get_full_jid(), self.video_sid)
 			if session:
-				# TODO: end only video
-				session.end_session()
+				content = session.get_content('video')
+				if content:
+					session.remove_content(content.creator, content.name)
 
 	def _toggle_gpg(self):
 		if not self.gpg_is_active and not self.contact.keyID:

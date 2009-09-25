@@ -2119,7 +2119,10 @@ class Interface:
 		if not ctrl:
 			ctrl = self.msg_win_mgr.get_control(jid, account)
 		if ctrl:
-			ctrl.set_audio_state('connection_received', sid)
+			if 'audio' in content_types:
+				ctrl.set_audio_state('connection_received', sid)
+			if 'video' in content_types:
+				ctrl.set_video_state('connection_received', sid)
 
 		if helpers.allow_popup_window(account):
 			dialogs.VoIPCallReceivedDialog(account, peerjid, sid)
@@ -2141,14 +2144,17 @@ class Interface:
 	def handle_event_jingle_connected(self, account, data):
 		# ('JINGLE_CONNECTED', account, (peerjid, sid, media))
 		peerjid, sid, media = data
-		if media == 'audio':
+		if media in ('audio', 'video'):
 			jid = gajim.get_jid_without_resource(peerjid)
 			resource = gajim.get_resource_from_jid(peerjid)
 			ctrl = self.msg_win_mgr.get_control(peerjid, account)
 			if not ctrl:
 				ctrl = self.msg_win_mgr.get_control(jid, account)
 			if ctrl:
-				ctrl.set_audio_state('connected', sid)
+				if media == 'audio':
+					ctrl.set_audio_state('connected', sid)
+				else:
+					ctrl.set_video_state('connected', sid)
 
 	def handle_event_jingle_disconnected(self, account, data):
 		# ('JINGLE_DISCONNECTED', account, (peerjid, sid, reason))
@@ -2160,6 +2166,10 @@ class Interface:
 			ctrl = self.msg_win_mgr.get_control(jid, account)
 		if ctrl:
 			ctrl.set_audio_state('stop', sid=sid, reason=reason)
+			ctrl.set_video_state('stop', sid=sid, reason=reason)
+		dialog = dialogs.VoIPCallReceivedDialog.get_dialog(peerjid, sid)
+		if dialog:
+			dialog._dialog.destroy()
 
 	def handle_event_jingle_error(self, account, data):
 		# ('JINGLE_ERROR', account, (peerjid, sid, reason))

@@ -32,6 +32,7 @@
 import gtk
 import gobject
 import os
+from weakref import WeakValueDictionary
 
 import gtkgui_helpers
 import vcard
@@ -4442,10 +4443,14 @@ class GPGInfoWindow:
 		self.window.destroy()
 
 class VoIPCallReceivedDialog(object):
+	instances = WeakValueDictionary()
+
 	def __init__(self, account, contact_jid, sid):
 		self.account = account
 		self.fjid = contact_jid
 		self.sid = sid
+
+		self.instances[(contact_jid, sid)] = self
 
 		xml = gtkgui_helpers.get_glade('voip_call_received_dialog.glade')
 		xml.signal_autoconnect(self)
@@ -4461,8 +4466,16 @@ class VoIPCallReceivedDialog(object):
 		dialog = xml.get_widget('voip_call_received_messagedialog')
 		dialog.set_property('secondary-text',
 			dialog.get_property('secondary-text') % {'contact': contact_text})
+		self._dialog = dialog
 
 		dialog.show_all()
+
+	@classmethod
+	def get_dialog(cls, jid, sid):
+		if (jid, sid) in cls.instances:
+			return cls.instances[(jid, sid)]
+		else:
+			return None
 
 	def on_voip_call_received_messagedialog_close(self, dialog):
 		return self.on_voip_call_received_messagedialog_response(dialog,
@@ -4487,7 +4500,10 @@ class VoIPCallReceivedDialog(object):
 				if not contact:
 					return
 				ctrl = gajim.interface.new_chat(contact, self.account)
-			ctrl.set_audio_state('connecting', self.sid)
+			if session.get_content('audio'):
+				ctrl.set_audio_state('connecting', self.sid)
+			if session.get_content('video'):
+				ctrl.set_video_state('connecting', self.sid)
 		else: # response==gtk.RESPONSE_NO
 			session.decline_session()
 
