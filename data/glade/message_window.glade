@@ -112,6 +112,16 @@
                                   </packing>
                                 </child>
                                 <child>
+                                  <widget class="GtkImage" id="video_banner_image">
+                                    <property name="visible">True</property>
+                                    <property name="stock">None</property>
+                                    <property name="icon-size">1</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">4</property>
+                                  </packing>
+                                </child>
+                                <child>
                                   <widget class="GtkAlignment" id="alignment3">
                                     <property name="width_request">11</property>
                                     <property name="visible">True</property>
@@ -120,7 +130,7 @@
                                     </child>
                                   </widget>
                                   <packing>
-                                    <property name="position">4</property>
+                                    <property name="position">5</property>
                                   </packing>
                                 </child>
                               </widget>

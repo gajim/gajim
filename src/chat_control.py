@@ -1263,7 +1263,9 @@ class ChatControl(ChatControlBase, ChatCommands):
 		else:
 			self.set_video_state('not_available')
 		self.audio_sid = None
+		self.audio_state = self.JINGLE_STATE_NOT_AVAILABLE
 		self.video_sid = None
+		self.video_state = self.JINGLE_STATE_NOT_AVAILABLE
 
 		self.update_toolbar()
 
