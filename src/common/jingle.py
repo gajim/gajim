@@ -91,7 +91,7 @@ class JingleSession(object):
 		# our full jid
 		self.ourjid = gajim.get_jid_from_account(self.connection.name) + '/' + \
 			con.server_resource
-		self.peerjid = str(jid) # jid we connect to
+		self.peerjid = jid # jid we connect to
 		# jid we use as the initiator
 		self.initiator = weinitiate and self.ourjid or self.peerjid
 		# jid we use as the responder
@@ -1023,7 +1023,7 @@ class ConnectionJingle(object):
 		route it adequatelly.'''
 
 		# get data
-		jid = stanza.getFrom()
+		jid = helpers.get_full_jid_from_iq(stanza)
 		id = stanza.getID()
 
 		if (jid, id) in self.__iq_responses.keys():
