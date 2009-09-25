@@ -147,6 +147,18 @@ class JingleSession(object):
 		reason.addChild('decline')
 		self._session_terminate(reason)
 
+	def approve_content(self, media):
+		content = self.get_content(media)
+		if content:
+			content.accepted = True
+			self.on_session_state_changed(content)
+
+	def reject_content(self, media):
+		content = self.get_content(media)
+		if content:
+			content.destroy()
+			self.on_session_state_changed()
+
 	def end_session(self):
 		''' Called when user stops or cancel session in UI. '''
 		reason = xmpp.Node('reason')
@@ -623,7 +635,7 @@ class JingleContent(object):
 		# (a JingleContent not added to session shouldn't send anything)
 		#self.creator = None
 		#self.name = None
-		self.negotiated = False		# is this content already negotiated?
+		self.accepted = False
 		self.candidates = [] # Local transport candidates
 
 		self.senders = 'both' #FIXME
@@ -653,7 +665,8 @@ class JingleContent(object):
 	def is_ready(self):
 		#print '[%s] %s, %s' % (self.media, self.candidates_ready,
 		#	self.p2psession.get_property('codecs-ready'))
-		return self.candidates_ready and self.p2psession.get_property('codecs-ready')
+		return (self.accepted and self.candidates_ready
+			and self.p2psession.get_property('codecs-ready'))
 
 	def stanzaCB(self, stanza, content, error, action):
 		''' Called when something related to our content was sent by peer. '''
@@ -843,7 +856,6 @@ class JingleRTPContent(JingleContent):
 					reason.setTag('failed-transport')
 					self.session._session_terminate(reason)
 				elif state == farsight.STREAM_STATE_READY:
-					self.negotiated = True
 					#TODO: farsight.DIRECTION_BOTH only if senders='both'
 					self.p2pstream.set_property('direction', farsight.DIRECTION_BOTH)
 					self.session.content_negociated(self.media)
