@@ -50,7 +50,7 @@ from common.logger import constants
 from common.pep import MOODS, ACTIVITIES
 from common.xmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
-from common.xmpp.protocol import NS_JINGLE_RTP_AUDIO
+from common.xmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
 
 from commands.implementation import CommonCommands, ChatCommands
 
@@ -1252,6 +1252,10 @@ class ChatControl(ChatControlBase, ChatCommands):
 
 		self._audio_banner_image = self.xml.get_widget('audio_banner_image')
 		self._video_banner_image = self.xml.get_widget('video_banner_image')
+		self.audio_sid = None
+		self.audio_state = self.JINGLE_STATE_NOT_AVAILABLE
+		self.video_sid = None
+		self.video_state = self.JINGLE_STATE_NOT_AVAILABLE
 		if gajim.capscache.is_supported(contact, NS_JINGLE_RTP_AUDIO) and \
 		gajim.HAVE_FARSIGHT:
 			self.set_audio_state('available')
@@ -1262,10 +1266,6 @@ class ChatControl(ChatControlBase, ChatCommands):
 			self.set_video_state('available')
 		else:
 			self.set_video_state('not_available')
-		self.audio_sid = None
-		self.audio_state = self.JINGLE_STATE_NOT_AVAILABLE
-		self.video_sid = None
-		self.video_state = self.JINGLE_STATE_NOT_AVAILABLE
 
 		self.update_toolbar()
 
