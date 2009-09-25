@@ -200,6 +200,10 @@ class JingleSession(object):
 		content.name = name
 		self.contents[(creator, name)] = content
 
+		if (creator == 'initiator') == self.weinitiate:
+			# The content is from us, accept it
+			content.accepted = True
+
 	def remove_content(self, creator, name):
 		''' We do not need this now '''
 		#TODO:
