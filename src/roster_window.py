@@ -1113,7 +1113,9 @@ class RosterWindow:
 			if c.show not in ('error', 'offline'):
 				nb_connected_contact += 1
 		if nb_connected_contact > 1:
-			name += ' (' + unicode(nb_connected_contact) + ')'
+			# switch back to default writing direction
+			name += i18n.paragraph_direction_mark(unicode(name))
+			name += u' (%d)' % nb_connected_contact
 
 		# show (account_name) if there are 2 contact with same jid
 		# in merged mode
