@@ -384,22 +384,20 @@ class JingleSession(object):
 		#TODO: Needs to be rewritten
 		if self.state == JingleStates.ended:
 			raise OutOfOrder
-		for element in jingle.iterTags('content'):
-			# checking what kind of session this will be
-			desc_ns = element.getTag('description').getNamespace()
-			media = element.getTag('description')['media']
-			tran_ns = element.getTag('transport').getNamespace()
-			if desc_ns == xmpp.NS_JINGLE_RTP and media in ('audio', 'video') \
-			and tran_ns == xmpp.NS_JINGLE_ICE_UDP:
-				if media == 'audio':
-					self.add_content(element['name'], JingleVoIP(self), 'peer')
-				else:
-					self.add_content(element['name'], JingleVideo(self), 'peer')
-			else:
-				content = JingleContent()
-				self.add_content(element['name'], content, 'peer')
-				self.__content_reject(content)
-				self.contents[(content.creator, content.name)].destroy()
+
+		parse_result = self.__parse_contents(jingle)
+		contents = parse_result[2]
+		rejected_contents = parse_result[3]
+
+		for name, creator in rejected_contents:
+			#TODO:
+			content = JingleContent()
+			self.add_content(name, content, creator)
+			self.__content_reject(content)
+			self.contents[(content.creator, content.name)].destroy()
+
+		self.connection.dispatch('JINGLE_INCOMING', (self.initiator, self.sid,
+			contents))
 
 	def __sessionInitiateCB(self, stanza, jingle, error, action):
 		''' We got a jingle session request from other entity,
@@ -419,24 +417,7 @@ class JingleSession(object):
 		# error.
 
 		# Lets check what kind of jingle session does the peer want
-		contents = []
-		contents_ok = False
-		transports_ok = False
-		for element in jingle.iterTags('content'):
-			# checking what kind of session this will be
-			desc_ns = element.getTag('description').getNamespace()
-			media = element.getTag('description')['media']
-			tran_ns = element.getTag('transport').getNamespace()
-			if desc_ns == xmpp.NS_JINGLE_RTP and media in ('audio', 'video'):
-				contents_ok = True
-				if tran_ns == xmpp.NS_JINGLE_ICE_UDP:
-					# we've got voip content
-					if media == 'audio':
-						self.add_content(element['name'], JingleVoIP(self), 'peer')
-					else:
-						self.add_content(element['name'], JingleVideo(self), 'peer')
-					contents.append((media,))
-					transports_ok = True
+		contents_ok, transports_ok, contents, pouet = self.__parse_contents(jingle)
 
 		# If there's no content we understand...
 		if not contents_ok:
@@ -485,15 +466,34 @@ class JingleSession(object):
 		for content in self.contents.itervalues():
 			content.stanzaCB(stanza, None, error, action)
 
-	def __send_error(self, stanza, error, jingle_error=None, text=None):
-		err = xmpp.Error(stanza, error)
-		err.setNamespace(xmpp.NS_STANZAS)
-		if jingle_error:
-			err.setTag(jingle_error, namespace=xmpp.NS_JINGLE_ERRORS)
-		if text:
-			err.setTagData('text', text)
-		self.connection.connection.send(err)
-		self.__dispatch_error(error, jingle_error, text)
+	''' Internal methods. '''
+	def __parse_contents(self, jingle):
+		#TODO: WIP
+		contents = []
+		contents_rejected = []
+		contents_ok = False
+		transports_ok = False
+
+		for element in jingle.iterTags('content'):
+			desc = element.getTag('description')
+			desc_ns = desc.getNamespace()
+			tran_ns = element.getTag('transport').getNamespace()
+			if desc_ns == xmpp.NS_JINGLE_RTP and desc['media'] in ('audio', 'video'):
+				contents_ok = True
+				#TODO: Everything here should be moved somewhere else
+				if tran_ns == xmpp.NS_JINGLE_ICE_UDP:
+					if desc['media'] == 'audio':
+						self.add_content(element['name'], JingleVoIP(self), 'peer')
+					else:
+						self.add_content(element['name'], JingleVideo(self), 'peer')
+					contents.append((desc['media'],))
+					transports_ok = True
+				else:
+					contents_rejected.append((element['name'], 'peer'))
+			else:
+				contents_rejected.append((element['name'], 'peer'))
+
+		return (contents_ok, transports_ok, contents, contents_rejected)
 
 	def __dispatch_error(self, error, jingle_error=None, text=None):
 		if jingle_error:
@@ -532,6 +532,16 @@ class JingleSession(object):
 			attrs['responder'] = self.responder
 		jingle = stanza.addChild('jingle', attrs=attrs, namespace=xmpp.NS_JINGLE)
 		return stanza, jingle
+
+	def __send_error(self, stanza, error, jingle_error=None, text=None):
+		err = xmpp.Error(stanza, error)
+		err.setNamespace(xmpp.NS_STANZAS)
+		if jingle_error:
+			err.setTag(jingle_error, namespace=xmpp.NS_JINGLE_ERRORS)
+		if text:
+			err.setTagData('text', text)
+		self.connection.connection.send(err)
+		self.__dispatch_error(error, jingle_error, text)
 
 	def __append_content(self, jingle, content):
 		''' Append <content/> element to <jingle/> element,
