@@ -816,10 +816,14 @@ class JingleRTPContent(JingleContent):
 
 		self.candidates_ready = False # True when local candidates are prepared
 
-		self.callbacks['content-accept'] += [self.__getRemoteCodecsCB]
-		self.callbacks['content-add'] += [self.__getRemoteCodecsCB]
-		self.callbacks['session-accept'] += [self.__getRemoteCodecsCB]
 		self.callbacks['session-initiate'] += [self.__getRemoteCodecsCB]
+		self.callbacks['content-add'] += [self.__getRemoteCodecsCB]
+		self.callbacks['content-accept'] += [self.__getRemoteCodecsCB,
+			self.__contentAcceptCB]
+		self.callbacks['session-accept'] += [self.__getRemoteCodecsCB,
+			self.__contentAcceptCB]
+		self.callbacks['session-accept-sent'] += [self.__contentAcceptCB]
+		self.callbacks['content-accept-sent'] += [self.__contentAcceptCB]
 		self.callbacks['session-terminate'] += [self.__stop]
 		self.callbacks['session-terminate-sent'] += [self.__stop]
 
@@ -888,16 +892,18 @@ class JingleRTPContent(JingleContent):
 					reason = xmpp.Node('reason')
 					reason.setTag('failed-transport')
 					self.session._session_terminate(reason)
-				elif state == farsight.STREAM_STATE_READY:
-					#TODO: farsight.DIRECTION_BOTH only if senders='both'
-					self.p2pstream.set_property('direction', farsight.DIRECTION_BOTH)
-					self.session.content_negociated(self.media)
 			elif name == 'farsight-error':
 				print 'Farsight error #%d!' % message.structure['error-no']
 				print 'Message: %s' % message.structure['error-msg']
 				print 'Debug: %s' % message.structure['debug-msg']
 			else:
 				print name
+
+	def __contentAcceptCB(self, stanza, content, error, action):
+		if self.accepted:
+			#TODO: farsight.DIRECTION_BOTH only if senders='both'
+			self.p2pstream.set_property('direction', farsight.DIRECTION_BOTH)
+			self.session.content_negociated(self.media)
 
 	def __getRemoteCodecsCB(self, stanza, content, error, action):
 		''' Get peer codecs from what we get from peer. '''
