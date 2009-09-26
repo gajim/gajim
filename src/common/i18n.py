@@ -29,14 +29,18 @@ import defs
 import unicodedata
 
 def paragraph_direction_mark(text):
-	"""Determine paragraph writing direction according to
+	"""
+	Determine paragraph writing direction according to
 	http://www.unicode.org/reports/tr9/#The_Paragraph_Level
 	
-	Returns either Unicode LTR mark or RTL mark."""
-	for c in text:
-		bidi = unicodedata.bidirectional(c)
-		if bidi == 'L': return u'\u200E'
-		elif bidi == 'AL' or bidi == 'R': return u'\u200F' 
+	Returns either Unicode LTR mark or RTL mark.
+	"""
+	for char in text:
+		bidi = unicodedata.bidirectional(char)
+		if bidi == 'L':
+			 return u'\u200E'
+		elif bidi == 'AL' or bidi == 'R':
+			 return u'\u200F'
 
 	return u'\u200E'
 
