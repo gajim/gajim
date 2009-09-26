@@ -4530,7 +4530,11 @@ class VoIPCallReceivedDialog(object):
 			if session.get_content('video'):
 				ctrl.set_video_state('connecting', self.sid)
 		else: # response==gtk.RESPONSE_NO
-			session.decline_session()
+			if not session.accepted:
+				session.decline_session()
+			else:
+				for content in self.content_types:
+					session.reject_content(content)
 
 		dialog.destroy()
 

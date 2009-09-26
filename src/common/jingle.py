@@ -157,6 +157,8 @@ class JingleSession(object):
 	def reject_content(self, media):
 		content = self.get_content(media)
 		if content:
+			if self.state == JingleStates.active:
+				self.__content_reject(content)
 			content.destroy()
 			self.on_session_state_changed()
 
