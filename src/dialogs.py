@@ -4443,14 +4443,14 @@ class GPGInfoWindow:
 		self.window.destroy()
 
 class VoIPCallReceivedDialog(object):
-	instances = WeakValueDictionary()
+	instances = {}
 
-	def __init__(self, account, contact_jid, sid):
+	def __init__(self, account, contact_jid, sid, content_types):
+		self.instances[(contact_jid, sid)] = self
 		self.account = account
 		self.fjid = contact_jid
 		self.sid = sid
-
-		self.instances[(contact_jid, sid)] = self
+		self.content_types = content_types
 
 		xml = gtkgui_helpers.get_glade('voip_call_received_dialog.glade')
 		xml.signal_autoconnect(self)
@@ -4458,17 +4458,14 @@ class VoIPCallReceivedDialog(object):
 		jid = gajim.get_jid_without_resource(self.fjid)
 		contact = gajim.contacts.get_first_contact_from_jid(account, jid)
 		if contact and contact.name:
-			contact_text = '%s (%s)' % (contact.name, jid)
+			self.contact_text = '%s (%s)' % (contact.name, jid)
 		else:
-			contact_text = contact_jid
+			self.contact_text = contact_jid
 
-		# do the substitution
-		dialog = xml.get_widget('voip_call_received_messagedialog')
-		dialog.set_property('secondary-text',
-			dialog.get_property('secondary-text') % {'contact': contact_text})
-		self._dialog = dialog
+		self.dialog = xml.get_widget('voip_call_received_messagedialog')
+		self.set_secondary_text()
 
-		dialog.show_all()
+		self.dialog.show_all()
 
 	@classmethod
 	def get_dialog(cls, jid, sid):
@@ -4476,6 +4473,29 @@ class VoIPCallReceivedDialog(object):
 			return cls.instances[(jid, sid)]
 		else:
 			return None
+
+	def set_secondary_text(self):
+		if 'audio' in self.content_types and 'video' in self.content_types:
+			types_text = _('an audio and video')
+		elif 'audio' in self.content_types:
+			types_text = _('an audio')
+		elif 'video' in self.content_types:
+			types_text = _('a video')
+
+		# do the substitution
+		self.dialog.set_property('secondary-text',
+			_('%(contact)s wants to start %(type)s session with you. Do you want '
+			'to answer the call?') % {'contact': self.contact_text, 'type': types_text})
+
+	def add_contents(self, content_types):
+		for type_ in content_types:
+			if type_ not in self.content_types:
+				self.content_types.append(type_)
+		self.set_secondary_text()
+
+	def on_voip_call_received_messagedialog_destroy(self, dialog):
+		if (self.fjid, self.sid) in self.instances:
+			del self.instances[(self.fjid, self.sid)]
 
 	def on_voip_call_received_messagedialog_close(self, dialog):
 		return self.on_voip_call_received_messagedialog_response(dialog,
@@ -4485,8 +4505,13 @@ class VoIPCallReceivedDialog(object):
 		# we've got response from user, either stop connecting or accept the call
 		session = gajim.connections[self.account].get_jingle_session(self.fjid,
 			self.sid)
-		if response==gtk.RESPONSE_YES:
-			session.approve_session()
+		if not session:
+			return
+		if response == gtk.RESPONSE_YES:
+			if not session.accepted:
+				session.approve_session()
+			for content in self.content_types:
+				session.approve_content(content)
 			jid = gajim.get_jid_without_resource(self.fjid)
 			resource = gajim.get_resource_from_jid(self.fjid)
 			ctrl = gajim.interface.msg_win_mgr.get_control(self.fjid, self.account)

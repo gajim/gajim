@@ -1831,7 +1831,7 @@ class ChatControl(ChatControlBase, ChatCommands):
 			self.set_audio_state('connecting', sid)
 		else:
 			session = gajim.connections[self.account].get_jingle_session(
-				self.contact.get_full_jid(), self.video_sid)
+				self.contact.get_full_jid(), self.audio_sid)
 			if session:
 				content = session.get_content('audio')
 				if content:

@@ -2098,7 +2098,7 @@ class Interface:
 		# ('JINGLE_INCOMING', account, peer jid, sid, tuple-of-contents==(type,
 		# data...))
 		# TODO: conditional blocking if peer is not in roster
-		
+
 		# unpack data
 		peerjid, sid, contents = data
 		content_types = set(c[0] for c in contents)
@@ -2124,11 +2124,17 @@ class Interface:
 			if 'video' in content_types:
 				ctrl.set_video_state('connection_received', sid)
 
-		if helpers.allow_popup_window(account):
-			dialogs.VoIPCallReceivedDialog(account, peerjid, sid)
+		dlg = dialogs.VoIPCallReceivedDialog.get_dialog(peerjid, sid)
+		if dlg:
+			dlg.add_contents(content_types)
 			return
 
-		self.add_event(account, peerjid, 'voip-incoming', (peerjid, sid,))
+		if helpers.allow_popup_window(account):
+			dialogs.VoIPCallReceivedDialog(account, peerjid, sid, content_types)
+			return
+
+		self.add_event(account, peerjid, 'jingle-incoming', (peerjid, sid,
+			content_types))
 
 		if helpers.allow_showing_notification(account):
 			# TODO: we should use another pixmap ;-)
@@ -2138,7 +2144,7 @@ class Interface:
 				account, peerjid)
 			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			event_type = _('Voice Chat Request')
-			notify.popup(event_type, peerjid, account, 'voip-incoming',
+			notify.popup(event_type, peerjid, account, 'jingle-incoming',
 				path_to_image = path, title = event_type, text = txt)
 
 	def handle_event_jingle_connected(self, account, data):
@@ -2169,7 +2175,7 @@ class Interface:
 			ctrl.set_video_state('stop', sid=sid, reason=reason)
 		dialog = dialogs.VoIPCallReceivedDialog.get_dialog(peerjid, sid)
 		if dialog:
-			dialog._dialog.destroy()
+			dialog.dialog.destroy()
 
 	def handle_event_jingle_error(self, account, data):
 		# ('JINGLE_ERROR', account, (peerjid, sid, reason))
@@ -2457,7 +2463,7 @@ class Interface:
 		jid = gajim.get_jid_without_resource(jid)
 		no_queue = len(gajim.events.get_events(account, jid)) == 0
 		# type_ can be gc-invitation file-send-error file-error file-request-error
-		# file-request file-completed file-stopped voip-incoming
+		# file-request file-completed file-stopped jingle-incoming
 		# event_type can be in advancedNotificationWindow.events_list
 		event_types = {'file-request': 'ft_request',
 			'file-completed': 'ft_finished'}
@@ -2617,10 +2623,10 @@ class Interface:
 			self.show_unsubscribed_dialog(account, contact)
 			gajim.events.remove_events(account, jid, event)
 			self.roster.draw_contact(jid, account)
-		elif type_ == 'voip-incoming': 
- 			event = gajim.events.get_first_event(account, jid, type_) 
- 			peerjid, sid = event.parameters 
- 			dialogs.VoIPCallReceivedDialog(account, peerjid, sid) 
+		elif type_ == 'jingle-incoming':
+ 			event = gajim.events.get_first_event(account, jid, type_)
+ 			peerjid, sid, content_types = event.parameters
+ 			dialogs.VoIPCallReceivedDialog(account, peerjid, sid, content_types)
  			gajim.events.remove_events(account, jid, event)
 		if w:
 			w.set_active_tab(ctrl)
