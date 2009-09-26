@@ -1487,6 +1487,11 @@ class Connection(ConnectionHandlers):
 			self.connection.getRoster().setItem(jid = jid, name = name,
 				groups = groups)
 
+	def update_contacts(self, contacts):
+		'''update multiple roster items on jabber server'''
+		if self.connection:
+			self.connection.getRoster().setItemMulti(contacts)
+
 	def send_new_account_infos(self, form, is_form):
 		if is_form:
 			# Get username and password and put them in new_account_info

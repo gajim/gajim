@@ -88,6 +88,10 @@ class Roster:
 		self._data[jid]['status'] = status
 		self._data[jid]['show'] = status
 
+	def setItemMulti(self, items):
+		for i in items:
+			self.setItem(jid=i['jid'], name=i['name'], groups=i['groups'])
+
 	def delItem(self, jid):
 		#print 'roster_zeroconf.py: delItem %s' % jid
 		if jid in self._data:

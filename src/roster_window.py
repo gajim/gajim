@@ -848,6 +848,51 @@ class RosterWindow:
 		'''Remove transport from roster and redraw account and group.'''
 		self.remove_contact(jid, account, force=True, backend=True)
 		return True
+		
+	def rename_group(self, old_name, new_name):
+		"""
+		rename a roster group
+		"""
+		if old_name == new_name:
+			return
+		
+		# Groups may not change name from or to a special groups
+		for g in helpers.special_groups:
+			if g in (new_name, old_name):
+				return
+		
+		# update all contacts in the given group
+		if self.regroup:
+			accounts = gajim.connections.keys()
+		else:
+			accounts = [account,]
+		
+		for acc in accounts:
+			changed_contacts = []
+			for jid in gajim.contacts.get_jid_list(acc):
+				contact = gajim.contacts.get_first_contact_from_jid(acc, jid)
+				if old_name not in contact.groups:
+					continue
+				
+				self.remove_contact(jid, acc, force=True)
+				
+				contact.groups.remove(old_name)
+				if new_name not in contact.groups:
+					contact.groups.append(new_name)
+			
+				changed_contacts.append({'jid':jid, 'name':contact.name, 
+					'groups':contact.groups})
+			
+			gajim.connections[acc].update_contacts(changed_contacts)				
+			
+			for c in changed_contacts:
+				self.add_contact(c['jid'], acc)
+				
+			self._adjust_group_expand_collapse_state(new_name, acc)
+			
+			self.draw_group(old_name, acc)
+			self.draw_group(new_name, acc)
+					
 
 	def add_contact_to_groups(self, jid, account, groups, update=True):
 		'''Add contact to given groups and redraw them.
@@ -2711,23 +2756,7 @@ class RosterWindow:
 					win.show_title()
 			elif row_type == 'group':
 				# in C_JID column, we hold the group name (which is not escaped)
-				if old_text == new_text:
-					return
-				# Groups may not change name from or to a special groups
-				for g in helpers.special_groups:
-					if g in (new_text, old_text):
-						return
-				# update all contacts in the given group
-				if self.regroup:
-					accounts = gajim.connections.keys()
-				else:
-					accounts = [account,]
-				for acc in accounts:
-					for jid in gajim.contacts.get_jid_list(acc):
-						contact = gajim.contacts.get_first_contact_from_jid(acc, jid)
-						if old_text in contact.groups:
-							self.add_contact_to_groups(jid, acc, [new_text,])
-							self.remove_contact_from_groups(jid, acc, [old_text,])
+				self.rename_group(old_text, new_text)
 
 		def on_canceled():
 			if 'rename' in gajim.interface.instances:
