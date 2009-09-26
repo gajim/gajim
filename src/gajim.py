@@ -2164,15 +2164,17 @@ class Interface:
 
 	def handle_event_jingle_disconnected(self, account, data):
 		# ('JINGLE_DISCONNECTED', account, (peerjid, sid, reason))
-		peerjid, sid, reason = data
+		peerjid, sid, media, reason = data
 		jid = gajim.get_jid_without_resource(peerjid)
 		resource = gajim.get_resource_from_jid(peerjid)
 		ctrl = self.msg_win_mgr.get_control(peerjid, account)
 		if not ctrl:
 			ctrl = self.msg_win_mgr.get_control(jid, account)
 		if ctrl:
-			ctrl.set_audio_state('stop', sid=sid, reason=reason)
-			ctrl.set_video_state('stop', sid=sid, reason=reason)
+			if media in ('audio', None):
+				ctrl.set_audio_state('stop', sid=sid, reason=reason)
+			if media in ('video', None):
+				ctrl.set_video_state('stop', sid=sid, reason=reason)
 		dialog = dialogs.VoIPCallReceivedDialog.get_dialog(peerjid, sid)
 		if dialog:
 			dialog.dialog.destroy()

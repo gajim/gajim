@@ -364,7 +364,11 @@ class JingleSession(object):
 			creator = content['creator']
 			name = content['name']
 			if (creator, name) in self.contents:
-				self.contents[(creator, name)].destroy()
+				content = self.contents[(creator, name)]
+				#TODO: this will fail if content is not an RTP content
+				self.connection.dispatch('JINGLE_DISCONNECTED',
+					(self.peerjid, self.sid, content.media, 'removed'))
+				content.destroy()
 		if len(self.contents) == 0:
 			reason = xmpp.Node('reason')
 			reason.setTag('success')
@@ -399,7 +403,7 @@ class JingleSession(object):
 			self.__content_reject(content)
 			self.contents[(content.creator, content.name)].destroy()
 
-		self.connection.dispatch('JINGLE_INCOMING', (self.initiator, self.sid,
+		self.connection.dispatch('JINGLE_INCOMING', (self.peerjid, self.sid,
 			contents))
 
 	def __sessionInitiateCB(self, stanza, jingle, error, action):
@@ -442,7 +446,7 @@ class JingleSession(object):
 		self.state = JingleStates.pending
 
 		# Send event about starting a session
-		self.connection.dispatch('JINGLE_INCOMING', (self.initiator, self.sid,
+		self.connection.dispatch('JINGLE_INCOMING', (self.peerjid, self.sid,
 			contents))
 
 	def __broadcastCB(self, stanza, jingle, error, action):
@@ -462,7 +466,8 @@ class JingleSession(object):
 			text = '%s (%s)' % (reason, text)
 		else:
 			text = reason#TODO
-		self.connection.dispatch('JINGLE_DISCONNECTED', (self.peerjid, self.sid, text))
+		self.connection.dispatch('JINGLE_DISCONNECTED',
+			(self.peerjid, self.sid, None, text))
 
 	def __broadcastAllCB(self, stanza, jingle, error, action):
 		''' Broadcast the stanza to all content handlers. '''
@@ -598,7 +603,8 @@ class JingleSession(object):
 		else:
 			text = reason
 		self.connection.delete_jingle(self)
-		self.connection.dispatch('JINGLE_DISCONNECTED', (self.peerjid, self.sid, text))
+		self.connection.dispatch('JINGLE_DISCONNECTED',
+			(self.peerjid, self.sid, None, text))
 
 	def __content_add(self, content):
 		#TODO: test
@@ -630,7 +636,9 @@ class JingleSession(object):
 		stanza, jingle = self.__make_jingle('content-remove')
 		self.__append_content(jingle, content)
 		self.connection.connection.send(stanza)
-		#TODO: dispatch something?
+		#TODO: this will fail if content is not an RTP content
+		self.connection.dispatch('JINGLE_DISCONNECTED',
+			(self.peerjid, self.sid, content.media, 'removed'))
 
 	def content_negociated(self, media):
 		self.connection.dispatch('JINGLE_CONNECTED', (self.peerjid, self.sid,
