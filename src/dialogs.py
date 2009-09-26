@@ -4490,7 +4490,7 @@ class VoIPCallReceivedDialog(object):
 	def add_contents(self, content_types):
 		for type_ in content_types:
 			if type_ not in self.content_types:
-				self.content_types.append(type_)
+				self.content_types.add(type_)
 		self.set_secondary_text()
 
 	def on_voip_call_received_messagedialog_destroy(self, dialog):

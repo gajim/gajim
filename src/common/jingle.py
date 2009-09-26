@@ -17,10 +17,7 @@
 #   - 'senders' attribute of 'content' element
 #   - security preconditions
 #   * actions:
-#     - content-accept: see content-add
-#     - content-reject: sending it ; receiving is ok
-#     - content-add: handling ; sending is ok
-#     - content-modify: both
+#     - content-modify
 #     - description-info, session-info
 #     - security-info
 #     - transport-accept, transport-reject
@@ -223,7 +220,20 @@ class JingleSession(object):
 		pass
 
 	def on_session_state_changed(self, content=None):
-		if self.state == JingleStates.active and self.accepted:
+		if self.state == JingleStates.ended:
+			# Session not yet started, only one action possible: session-initiate
+			if self.is_ready() and self.weinitiate:
+				self.__session_initiate()
+		elif self.state == JingleStates.pending:
+			# We can either send a session-accept or a content-add
+			if self.is_ready() and not self.weinitiate:
+				self.__session_accept()
+			elif content and (content.creator == 'initiator') == self.weinitiate:
+				self.__content_add(content)
+			elif content and self.weinitiate:
+				self.__content_accept(content)
+		elif self.state == JingleStates.active:
+			# We can either send a content-add or a content-accept
 			if not content:
 				return
 			if (content.creator == 'initiator') == self.weinitiate:
@@ -232,11 +242,6 @@ class JingleSession(object):
 			else:
 				# The other side created this content, we accept it.
 				self.__content_accept(content)
-		elif self.is_ready():
-			if not self.weinitiate and self.state == JingleStates.pending:
-				self.__session_accept()
-			elif self.weinitiate and self.state == JingleStates.ended:
-				self.__session_initiate()
 
 	def is_ready(self):
 		''' Returns True when all codecs and candidates are ready
@@ -388,7 +393,6 @@ class JingleSession(object):
 			name = content['name']#TODO...
 
 	def __contentAddCB(self, stanza, jingle, error, action):
-		#TODO: Needs to be rewritten
 		if self.state == JingleStates.ended:
 			raise OutOfOrder
 
@@ -476,7 +480,7 @@ class JingleSession(object):
 
 	''' Internal methods. '''
 	def __parse_contents(self, jingle):
-		#TODO: WIP
+		#TODO: Needs some reworking
 		contents = []
 		contents_rejected = []
 		contents_ok = False
@@ -627,6 +631,9 @@ class JingleSession(object):
 		stanza, jingle = self.__make_jingle('content-reject')
 		self.__append_content(jingle, content)
 		self.connection.connection.send(stanza)
+		#TODO: this will fail if content is not an RTP content
+		self.connection.dispatch('JINGLE_DISCONNECTED',
+			(self.peerjid, self.sid, content.media, 'rejected'))
 
 	def __content_modify(self):
 		assert self.state != JingleStates.ended
@@ -734,6 +741,7 @@ class JingleContent(object):
 		# Instead, it should be etablished after session-accept!
 		if len(candidates) > 0:
 			self.p2pstream.set_remote_candidates(candidates)
+			print self.media, self.creator, self.name, candidates
 
 	def __content(self, payload=[]):
 		''' Build a XML content-wrapper for our data. '''
@@ -1002,6 +1010,7 @@ class JingleVideo(JingleRTPContent):
 		JingleRTPContent.setup_stream(self)
 		# the local parts
 		src_vid = gst.element_factory_make('videotestsrc')
+		src_vid.set_property('is-live', True)
 		videoscale = gst.element_factory_make('videoscale')
 		caps = gst.element_factory_make('capsfilter')
 		caps.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
@@ -1072,7 +1081,7 @@ class ConnectionJingle(object):
 
 	def startVoIP(self, jid):
 		if self.get_jingle_session(jid, media='audio'):
-			return
+			return self.get_jingle_session(jid, media='audio').sid
 		jingle = self.get_jingle_session(jid, media='video')
 		if jingle:
 			jingle.add_content('voice', JingleVoIP(jingle))
@@ -1085,7 +1094,7 @@ class ConnectionJingle(object):
 
 	def startVideoIP(self, jid):
 		if self.get_jingle_session(jid, media='video'):
-			return
+			return self.get_jingle_session(jid, media='video').sid
 		jingle = self.get_jingle_session(jid, media='audio')
 		if jingle:
 			jingle.add_content('video', JingleVideo(jingle))
