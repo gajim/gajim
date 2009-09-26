@@ -46,7 +46,7 @@ class Event:
 			gc-invitation: [room_jid, reason, password, is_continued]
 			subscription_request: [text, nick]
 			unsubscribed: contact
-			jingle-*: (fulljid, sessionid)
+			jingle-incoming: (fulljid, sessionid, content_types)
 		'''
 		self.type_ = type_
 		self.time_ = time_

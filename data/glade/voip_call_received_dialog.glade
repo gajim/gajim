@@ -13,7 +13,7 @@
     <property name="buttons">yes-no</property>
     <property name="text">&lt;b&gt;&lt;big&gt;Incoming call&lt;/big&gt;&lt;/b&gt;</property>
     <property name="use_markup">True</property>
-    <property name="secondary_text">%(contact)s wants to start a voice chat with you. Do you want to answer the call?</property>
+    <signal name="destroy" handler="on_voip_call_received_messagedialog_destroy"/>
     <signal name="close" handler="on_voip_call_received_messagedialog_close"/>
     <signal name="response" handler="on_voip_call_received_messagedialog_response"/>
     <child internal-child="vbox">

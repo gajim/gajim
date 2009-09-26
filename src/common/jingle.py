@@ -54,6 +54,7 @@
 
 import gajim
 import xmpp
+import helpers
 
 import farsight, gst
 
