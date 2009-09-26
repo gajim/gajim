@@ -38,9 +38,9 @@ def paragraph_direction_mark(text):
 	for char in text:
 		bidi = unicodedata.bidirectional(char)
 		if bidi == 'L':
-			 return u'\u200E'
+			return u'\u200E'
 		elif bidi == 'AL' or bidi == 'R':
-			 return u'\u200F'
+			return u'\u200F'
 
 	return u'\u200E'
 
