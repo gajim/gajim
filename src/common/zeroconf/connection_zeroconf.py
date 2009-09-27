@@ -526,6 +526,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 			self.connection.getRoster().setItem(jid = jid, name = name,
 				groups = groups)
 
+	def update_contacts(self, contacts):
+		'''update multiple roster items'''
+		if self.connection:
+			self.connection.getRoster().setItemMulti(contacts)
+
 	def new_account(self, name, config, sync = False):
 		gajim.log.debug('This should not happen (new_account)')
 
