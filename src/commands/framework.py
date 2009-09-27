@@ -642,21 +642,21 @@ class CommandProcessor(object):
         if not text.startswith(self.COMMAND_PREFIX):
             return False
 
-        text = text[len(self.COMMAND_PREFIX):]
-        text = text.strip()
+        body = text[len(self.COMMAND_PREFIX):]
+        body = body.strip()
 
-        parts = text.split(' ', 1)
+        parts = body.split(' ', 1)
         name, arguments = parts if len(parts) > 1 else (parts[0], None)
 
-        flag = self.looks_like_command(text, name, arguments)
+        flag = self.looks_like_command(body, name, arguments)
         if flag is not None:
             return flag
 
-        self.execute_command(name, arguments)
+        self.execute_command(text, name, arguments)
 
         return True
 
-    def execute_command(self, name, arguments):
+    def execute_command(self, text, name, arguments):
         command = self.retrieve_command(name)
 
         args, opts = self.parse_command_arguments(arguments) if arguments else ([], [])

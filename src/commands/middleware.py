@@ -31,16 +31,14 @@ class ChatMiddleware(CommandProcessor):
     Also provides some few basic utilities for the same purpose.
     """
 
-    def process_as_command(self, text):
+    def execute_command(self, text, name, arguments):
         try:
-            return super(ChatMiddleware, self).process_as_command(text)
+            super(ChatMiddleware, self).execute_command(text, name, arguments)
         except CommandError, exception:
             self.echo("%s: %s" %(exception.name, exception.message), 'error')
-            return True
         except Exception:
             self.echo("An error occured while trying to execute the command", 'error')
             print_exc()
-            return True
         finally:
             self.add_history(text)
             self.clear_input()
