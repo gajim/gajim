@@ -119,7 +119,7 @@ class JingleSession(object):
 			'security-info':	[self.__defaultCB], #TODO
 			'session-accept':	[self.__sessionAcceptCB, self.__contentAcceptCB,
 				self.__broadcastCB, self.__defaultCB],
-			'session-info':		[self.__sessionInfoCB, self.__broadcastCB],
+			'session-info':		[self.__sessionInfoCB, self.__broadcastCB, self.__defaultCB],
 			'session-initiate':	[self.__sessionInitiateCB, self.__broadcastCB,
 				self.__defaultCB],
 			'session-terminate':	[self.__sessionTerminateCB, self.__broadcastAllCB,
@@ -359,6 +359,7 @@ class JingleSession(object):
 				raise xmpp.NodeProcessed
 
 	def __sessionInfoCB(self, stanza, jingle, error, action):
+		#TODO: ringing, active, (un)hold, (un)mute
 		payload = jingle.getPayload()
 		if len(payload) > 0:
 			self.__send_error(stanza, 'feature-not-implemented', 'unsupported-info')
@@ -668,6 +669,7 @@ class JingleContent(object):
 		#self.creator = None
 		#self.name = None
 		self.accepted = False
+		self.sent = False
 		self.candidates = [] # Local transport candidates
 
 		self.senders = 'both' #FIXME
@@ -697,7 +699,7 @@ class JingleContent(object):
 	def is_ready(self):
 		#print '[%s] %s, %s' % (self.media, self.candidates_ready,
 		#	self.p2psession.get_property('codecs-ready'))
-		return (self.accepted and self.candidates_ready
+		return (self.accepted and self.candidates_ready and not self.sent
 			and self.p2psession.get_property('codecs-ready'))
 
 	def stanzaCB(self, stanza, content, error, action):
@@ -792,6 +794,8 @@ class JingleContent(object):
 		''' Add our things to session-initiate stanza. '''
 		self._fillContent(content)
 
+		self.sent = True
+
 		if self.candidates and self.candidates[0].username and \
 		self.candidates[0].password:
 			attrs = {'ufrag': self.candidates[0].username,
@@ -843,6 +847,9 @@ class JingleRTPContent(JingleContent):
 		self.p2psession = self.conference.new_session(self.farsight_media)
 
 		participant = self.conference.new_participant(self.session.peerjid)
+		#FIXME: Consider a workaround, here... 
+		# pidgin and telepathy-gabble don't follow the XEP, and it won't work
+		# due to bad controlling-mode
 		params = {'controlling-mode': self.session.weinitiate,# 'debug': False}
 			'stun-ip': '69.0.208.27', 'debug': False}
 
@@ -968,12 +975,15 @@ class JingleVoIP(JingleRTPContent):
 		JingleRTPContent.setup_stream(self)
 
 		# Configure SPEEX
-		#FIXME: codec ID is an important thing for psi (and pidgin?)
-		# So, if it doesn't work with pidgin or psi, LOOK AT THIS
+		# Workaround for psi (not needed since rev
+		# 147aedcea39b43402fe64c533d1866a25449888a):
+		#  place 16kHz before 8kHz, as buggy psi versions will take in
+		#  account only the first codec
+
 		codecs = [farsight.Codec(farsight.CODEC_ID_ANY, 'SPEEX',
-			farsight.MEDIA_TYPE_AUDIO, 8000),
+			farsight.MEDIA_TYPE_AUDIO, 16000),
 			farsight.Codec(farsight.CODEC_ID_ANY, 'SPEEX',
-			farsight.MEDIA_TYPE_AUDIO, 16000)]
+			farsight.MEDIA_TYPE_AUDIO, 8000)]
 		self.p2psession.set_codec_preferences(codecs)
 
 		# the local parts
