@@ -531,6 +531,7 @@ class CommandProcessor(object):
                     args.append((raw, (end, arguments_end)))
                 elif spec_len == 1:
                     args = [(arguments, (0, arguments_end))]
+                    opts = []
                 else:
                     raise InternalError("Raw command must define a collector")
             else:
