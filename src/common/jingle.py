@@ -762,7 +762,7 @@ class JingleContent(object):
 	def __candidate(self, candidate):
 		types = {farsight.CANDIDATE_TYPE_HOST: 'host',
 			farsight.CANDIDATE_TYPE_SRFLX: 'srflx',
-			farsight.CANDIDATE_TYPE_PRFLX: 'prlfx',
+			farsight.CANDIDATE_TYPE_PRFLX: 'prflx',
 			farsight.CANDIDATE_TYPE_RELAY: 'relay',
 			farsight.CANDIDATE_TYPE_MULTICAST: 'multicast'}
 		attrs = {
