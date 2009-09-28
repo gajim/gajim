@@ -115,7 +115,7 @@ class JingleSession(object):
 			'content-modify':	[self.__defaultCB], #TODO
 			'content-reject':	[self.__defaultCB, self.__contentRemoveCB], #TODO
 			'content-remove':	[self.__defaultCB, self.__contentRemoveCB],
-			'description-info':	[self.__defaultCB], #TODO
+			'description-info':	[self.__broadcastCB, self.__defaultCB], #TODO
 			'security-info':	[self.__defaultCB], #TODO
 			'session-accept':	[self.__sessionAcceptCB, self.__contentAcceptCB,
 				self.__broadcastCB, self.__defaultCB],
@@ -680,12 +680,18 @@ class JingleContent(object):
 			'content-accept': [self.__transportInfoCB],
 			'content-add': [self.__transportInfoCB],
 			'content-modify': [],
+			'content-reject': [],
 			'content-remove': [],
+			'description-info': [],
+			'security-info': [],
 			'session-accept': [self.__transportInfoCB],
 			'session-info': [],
 			'session-initiate': [self.__transportInfoCB],
 			'session-terminate': [],
 			'transport-info': [self.__transportInfoCB],
+			'transport-replace': [],
+			'transport-accept': [],
+			'transport-reject': [],
 			'iq-result': [],
 			'iq-error': [],
 			# these are called when *we* sent these stanzas
@@ -738,6 +744,8 @@ class JingleContent(object):
 						'multicast': farsight.CANDIDATE_TYPE_MULTICAST}
 			if 'type' in candidate and candidate['type'] in types:
 				cand.type = types[candidate['type']]
+			else:
+				print 'Unknown type %s', candidate['type']
 			candidates.append(cand)
 		#FIXME: connectivity should not be etablished yet
 		# Instead, it should be etablished after session-accept!
@@ -753,7 +761,7 @@ class JingleContent(object):
 
 	def __candidate(self, candidate):
 		types = {farsight.CANDIDATE_TYPE_HOST: 'host',
-			farsight.CANDIDATE_TYPE_SRFLX: 'srlfx',
+			farsight.CANDIDATE_TYPE_SRFLX: 'srflx',
 			farsight.CANDIDATE_TYPE_PRFLX: 'prlfx',
 			farsight.CANDIDATE_TYPE_RELAY: 'relay',
 			farsight.CANDIDATE_TYPE_MULTICAST: 'multicast'}
@@ -882,6 +890,7 @@ class JingleRTPContent(JingleContent):
 			elif name == 'farsight-codecs-changed':
 				if self.is_ready():
 					self.session.on_session_state_changed(self)
+				#TODO: description-info
 			elif name == 'farsight-local-candidates-prepared':
 				self.candidates_ready = True
 				if self.is_ready():
@@ -1087,6 +1096,7 @@ class ConnectionJingle(object):
 
 		# do we need to create a new jingle object
 		if (jid, sid) not in self.__sessions:
+			#TODO: tie-breaking and other things...
 			newjingle = JingleSession(con=self, weinitiate=False, jid=jid, sid=sid)
 			self.add_jingle(newjingle)
 
