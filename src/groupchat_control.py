@@ -1229,15 +1229,15 @@ class GroupchatControl(ChatControlBase, GroupChatCommands):
 						# Stop all E2E sessions
 						nick_list = gajim.contacts.get_nick_list(self.account,
 							self.room_jid)
-						for nick in nick_list:
-							fjid = self.room_jid + '/' + nick
-							ctrl = gajim.interface.msg_win_mgr.get_control(fjid,
+						for nick_ in nick_list:
+							fjid_ = self.room_jid + '/' + nick_
+							ctrl = gajim.interface.msg_win_mgr.get_control(fjid_,
 								self.account)
 							if ctrl and ctrl.session and \
 							ctrl.session.enable_encryption:
 								thread_id = ctrl.session.thread_id
 								ctrl.session.terminate_e2e()
-								gajim.connections[self.account].delete_session(fjid,
+								gajim.connections[self.account].delete_session(fjid_,
 									thread_id)
 								ctrl.no_autonegotiation = False
 					else:
