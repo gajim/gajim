@@ -2505,6 +2505,9 @@ class SingleMessageWindow:
 		self.instances.remove(self)
 		c = gajim.contacts.get_contact_with_highest_priority(self.account,
 			self.from_whom)
+		if not c:
+			# Groupchat is maybe already destroyed
+			return
 		if c.is_groupchat() and not self.from_whom in \
 		gajim.interface.minimized_controls[self.account] and self.action == \
 		'receive' and gajim.events.get_nb_roster_events(self.account,
