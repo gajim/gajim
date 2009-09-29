@@ -250,7 +250,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 		if self.control:
 			parent_win = self.control.parent_win
-			if self.control == parent_win.get_active_control() and \
+			if parent_win and self.control == parent_win.get_active_control() and \
 			parent_win.window.has_focus:
 				focused = True
 

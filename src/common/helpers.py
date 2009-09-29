@@ -170,6 +170,11 @@ def prep(user, server, resource):
 		else:
 			return server
 
+def windowsify(s):
+	if os.name == 'nt':
+		return s.capitalize()
+	return s
+
 def temp_failure_retry(func, *args, **kwargs):
 	while True:
 		try:

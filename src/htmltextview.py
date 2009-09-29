@@ -50,6 +50,8 @@ import operator
 
 if __name__ == '__main__':
 	from common import i18n
+	import common.configpaths
+	common.configpaths.gajimpaths.init(None)
 from common import gajim
 
 import tooltips
@@ -184,25 +186,6 @@ for name in BLOCK_HEAD:
 													('font-weight: bold', 'font-style: oblique')[weigth],
 											  )
 
-
-def build_patterns(view, config, interface):
-	# extra, rst does not mark _underline_ or /it/ up
-	# actually <b>, <i> or <u> are not in the JEP-0071, but are seen in the wild
-	basic_pattern = r'(?<!\w|\<|/|:)' r'/[^\s/]' r'([^/]*[^\s/])?' r'/(?!\w|/|:)|'\
-					r'(?<!\w)' r'_[^\s_]' r'([^_]*[^\s_])?' r'_(?!\w)'
-	view.basic_pattern_re = re.compile(basic_pattern)
-	# emoticons
-	emoticons_pattern = ''
-	if config.get('emoticons_theme'):
-		emoticons_pattern = gajim.interface.emot_only
-
-	view.emot_pattern_re = re.compile(emoticons_pattern, re.IGNORECASE)
-	# because emoticons match later (in the string) they need to be after
-	# basic matches that may occur earlier
-	emot_and_basic_pattern = basic_pattern + emoticons_pattern
-	view.emot_and_basic_re = re.compile(emot_and_basic_pattern, re.IGNORECASE)
-
-
 def _parse_css_color(color):
 	'''_parse_css_color(css_color) -> gtk.gdk.Color'''
 	if color.startswith('rgb(') and color.endswith(')'):
@@ -222,11 +205,12 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 	It keeps a stack of "style spans" (start/end element pairs)
 	and a stack of list counters, for nested lists.
 	"""
-	def __init__(self, textview, startiter):
+	def __init__(self, conv_textview, startiter):
 		xml.sax.handler.ContentHandler.__init__(self)
-		self.textbuf = textview.get_buffer()
-		self.textview = textview
+		self.textbuf = conv_textview.tv.get_buffer()
+		self.textview = conv_textview.tv
 		self.iter = startiter
+		self.conv_textview = conv_textview
 		self.text = ''
 		self.starting=True
 		self.preserve = False
@@ -499,6 +483,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 	def _process_img(self, attrs):
 		'''Process a img tag.
 		'''
+		mem = ''
 		try:
 			# Wait maximum 1s for connection
 			socket.setdefaulttimeout(1)
@@ -514,40 +499,38 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 					f.fp._sock.fp._sock.settimeout(0.5)
 				except Exception:
 					pass
-			# Max image size = 2 MB (to try to prevent DoS)
-			mem = ''
-			deadline = time.time() + 3
-			while True:
-				if time.time() > deadline:
-					gajim.log.debug(str('Timeout loading image %s ' % \
-						attrs['src'] + ex))
-					mem = ''
-					alt = attrs.get('alt', '')
-					if alt:
-						alt += '\n'
-					alt += _('Timeout loading image')
-					break
-				try:
-					temp = f.read(100)
-				except socket.timeout, ex:
-					gajim.log.debug('Timeout loading image %s ' % attrs['src'] + \
-						str(ex))
-					mem = ''
-					alt = attrs.get('alt', '')
-					if alt:
-						alt += '\n'
-					alt += _('Timeout loading image')
-					break
-				if temp:
-					mem += temp
-				else:
-					break
-				if len(mem) > 2*1024*1024:
-					alt = attrs.get('alt', '')
-					if alt:
-						alt += '\n'
-					alt += _('Image is too big')
-					break
+				# Max image size = 2 MB (to try to prevent DoS)
+				deadline = time.time() + 3
+				while True:
+					if time.time() > deadline:
+						gajim.log.debug(str('Timeout loading image %s ' % \
+							attrs['src'] + ex))
+						mem = ''
+						alt = attrs.get('alt', '')
+						if alt:
+							alt += '\n'
+						alt += _('Timeout loading image')
+						break
+					try:
+						temp = f.read(100)
+					except socket.timeout, ex:
+						gajim.log.debug('Timeout loading image %s ' % attrs['src'] + \
+							str(ex))
+						alt = attrs.get('alt', '')
+						if alt:
+							alt += '\n'
+						alt += _('Timeout loading image')
+						break
+					if temp:
+						mem += temp
+					else:
+						break
+					if len(mem) > 2*1024*1024:
+						alt = attrs.get('alt', '')
+						if alt:
+							alt += '\n'
+						alt += _('Image is too big')
+						break
 			pixbuf = None
 			if mem:
 				# Caveat: GdkPixbuf is known not to be safe to load
@@ -672,51 +655,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		return False
 
 	def handle_specials(self, text):
-		index = 0
-		se = self.textview.config.get('show_ascii_formatting_chars')
-		af = gajim.config.get('ascii_formatting')
-		if self.textview.config.get('emoticons_theme'):
-			if af:
-				iterator = self.textview.emot_and_basic_re.finditer(text)
-			else:
-				iterator = self.textview.emot_pattern_re.finditer(text)
-		elif af:
-			iterator = self.textview.basic_pattern_re.finditer(text)
-		else:
-			iterator = []
-		for match in iterator:
-			start, end = match.span()
-			special_text = text[start:end]
-			if start != 0:
-				self._insert_text(text[index:start])
-			index = end # update index
-			#emoticons
-			possible_emot_ascii_caps = special_text.upper() # emoticons keys are CAPS
-			if self.textview.config.get('emoticons_theme') and \
-					possible_emot_ascii_caps in self.textview.interface.emoticons.keys():
-				#it's an emoticon
-				emot_ascii = possible_emot_ascii_caps
-				anchor = self.textbuf.create_child_anchor(self.iter)
-				img = gtk.Image()
-				img.set_from_file(self.textview.interface.emoticons[emot_ascii])
-				img.show()
-				# TODO: add alt/tooltip with the special_text (a11y)
-				self.textview.add_child_at_anchor(img, anchor)
-			elif af:
-				# now print it
-				if special_text.startswith('/'): # it's explicit italics
-					self.startElement('i', {})
-				elif special_text.startswith('_'): # it's explicit underline
-					self.startElement('u', {})
-				if se: self._insert_text(special_text[0])
-				self.handle_specials(special_text[1:-1])
-				if se: self._insert_text(special_text[0])
-				if special_text.startswith('_'): # it's explicit underline
-					self.endElement('u')
-				if special_text.startswith('/'): # it's explicit italics
-					self.endElement('i')
-		if index < len(text):
-			self._insert_text(text[index:])
+		self.iter = self.conv_textview.detect_and_print_special_text(text, 							self._get_style_tags())
 
 	def characters(self, content):
 		if self.preserve:
@@ -870,7 +809,6 @@ class HtmlTextView(gtk.TextView):
 		self.config = gajim.config
 		self.interface = gajim.interface
 		# end big hack
-		build_patterns(self,gajim.config,gajim.interface)
 
 	def __destroy_event(self, widget):
 		if self.tooltip.timeout != 0:
@@ -921,14 +859,14 @@ class HtmlTextView(gtk.TextView):
 			self._changed_cursor = False
 		return False
 
-	def display_html(self, html):
+	def display_html(self, html, conv_textview):
 		buffer_ = self.get_buffer()
 		eob = buffer_.get_end_iter()
 		## this works too if libxml2 is not available
 		# parser = xml.sax.make_parser(['drv_libxml2'])
 		# parser.setFeature(xml.sax.handler.feature_validation, True)
 		parser = xml.sax.make_parser()
-		parser.setContentHandler(HtmlHandler(self, eob))
+		parser.setContentHandler(HtmlHandler(conv_textview, eob))
 		parser.parse(StringIO(html))
 
 		# too much space after :)
@@ -942,6 +880,9 @@ change_cursor = None
 if __name__ == '__main__':
 	import os
 
+	from conversation_textview import ConversationTextview
+	import gajim as gaj
+
 	class log(object):
 
 		def debug(self, text):
@@ -953,33 +894,32 @@ if __name__ == '__main__':
 
 	gajim.log=log()
 
-	if gajim.config.get('emoticons_theme'):
-		print "emoticons"
+	gaj.Interface()
 
-	htmlview = HtmlTextView()
+	htmlview = ConversationTextview(None)
 
 	path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
 	# use this for hr
-	htmlview.focus_out_line_pixbuf =  gtk.gdk.pixbuf_new_from_file(path_to_file)
+	htmlview.tv.focus_out_line_pixbuf =  gtk.gdk.pixbuf_new_from_file(path_to_file)
 
 
 	tooltip = tooltips.BaseTooltip()
 	def on_textview_motion_notify_event(widget, event):
 		'''change the cursor to a hand when we are over a mail or an url'''
 		global change_cursor
-		pointer_x, pointer_y = htmlview.window.get_pointer()[0:2]
-		x, y = htmlview.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer_x,
+		pointer_x, pointer_y = htmlview.tv.window.get_pointer()[0:2]
+		x, y = htmlview.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer_x,
 								   pointer_y)
-		tags = htmlview.get_iter_at_location(x, y).get_tags()
+		tags = htmlview.tv.get_iter_at_location(x, y).get_tags()
 		if change_cursor:
-			htmlview.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
+			htmlview.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
 					 gtk.gdk.Cursor(gtk.gdk.XTERM))
 			change_cursor = None
-		tag_table = htmlview.get_buffer().get_tag_table()
+		tag_table = htmlview.tv.get_buffer().get_tag_table()
 		for tag in tags:
 			try:
 				if tag.is_anchor:
-					htmlview.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
+					htmlview.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
 										gtk.gdk.Cursor(gtk.gdk.HAND2))
 					change_cursor = tag
 				elif tag == tag_table.lookup('focus-out-line'):
@@ -994,32 +934,38 @@ if __name__ == '__main__':
 		#if over_line and not line_tooltip.win:
 		#	line_tooltip.timeout = gobject.timeout_add(500,
 		#		show_line_tooltip)
-		#	htmlview.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
+		#	htmlview.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
 		#		gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
 		#	change_cursor = tag
 
-	htmlview.connect('motion_notify_event', on_textview_motion_notify_event)
+	htmlview.tv.connect('motion_notify_event', on_textview_motion_notify_event)
 
 	def handler(texttag, widget, event, iter_, kind, href):
 		if event.type == gtk.gdk.BUTTON_PRESS:
 			print href
 
-	htmlview.html_hyperlink_handler = handler
+	htmlview.tv.html_hyperlink_handler = handler
 
-	htmlview.display_html('<div><span style="color: red; text-decoration:underline">Hello</span><br/>\n'
+	htmlview.print_real_text(None, xhtml='<div><span style="color: red; text-decoration:underline">Hello</span><br/>\n'
 						  '  <img src="http://images.slashdot.org/topics/topicsoftware.gif"/><br/>\n'
 						  '  <span style="font-size: 500%; font-family: serif">World</span>\n'
 						  '</div>\n')
-	htmlview.display_html('<hr />')
-	htmlview.display_html('''
+	htmlview.print_real_text(None, xhtml='<hr />')
+	htmlview.print_real_text(None, xhtml='''
 	  <p style='font-size:large'>
 		<span style='font-style: italic'>O<span style='font-size:larger'>M</span>G</span>,
 		I&apos;m <span style='color:green'>green</span>
 		with <span style='font-weight: bold'>envy</span>!
 	  </p>
 		''')
-	htmlview.display_html('<hr />')
-	htmlview.display_html('''
+	htmlview.print_real_text(None, xhtml='<hr />')
+	htmlview.print_real_text(None, xhtml='''
+	<body xmlns='http://www.w3.org/1999/xhtml'>
+		http://test.com/  testing links autolinkifying	
+	</body>
+		''')
+	htmlview.print_real_text(None, xhtml='<hr />')
+	htmlview.print_real_text(None, xhtml='''
 	<body xmlns='http://www.w3.org/1999/xhtml'>
 	  <p>As Emerson said in his essay <span style='font-style: italic; background-color:cyan'>Self-Reliance</span>:</p>
 	  <p style='margin-left: 5px; margin-right: 2%'>
@@ -1027,8 +973,8 @@ if __name__ == '__main__':
 	  </p>
 	</body>
 		''')
-	htmlview.display_html('<hr />')
-	htmlview.display_html('''
+	htmlview.print_real_text(None, xhtml='<hr />')
+	htmlview.print_real_text(None, xhtml='''
 	<body xmlns='http://www.w3.org/1999/xhtml'>
 	  <p style='text-align:center'>Hey, are you licensed to <a href='http://www.jabber.org/'>Jabber</a>?</p>
 	  <p style='text-align:right'><img src='http://www.jabber.org/images/psa-license.jpg'
@@ -1037,8 +983,8 @@ if __name__ == '__main__':
 			  /></p>
 	</body>
 		''')
-	htmlview.display_html('<hr />')
-	htmlview.display_html('''
+	htmlview.print_real_text(None, xhtml='<hr />')
+	htmlview.print_real_text(None, xhtml='''
 	<body xmlns='http://www.w3.org/1999/xhtml'>
 	  <ul style='background-color:rgb(120,140,100)'>
 	   <li> One </li>
@@ -1052,8 +998,8 @@ if __name__ == '__main__':
   return faciter(n,1)</pre>
 	</body>
 		''')
-	htmlview.display_html('<hr />')
-	htmlview.display_html('''
+	htmlview.print_real_text(None, xhtml='<hr />')
+	htmlview.print_real_text(None, xhtml='''
 	<body xmlns='http://www.w3.org/1999/xhtml'>
 	 <ol style='background-color:rgb(120,140,100)'>
 	   <li> One </li>
@@ -1066,12 +1012,12 @@ if __name__ == '__main__':
 	   <li> Three </li></ol>
 	</body>
 		''')
-	htmlview.show()
+	htmlview.tv.show()
 	sw = gtk.ScrolledWindow()
 	sw.set_property('hscrollbar-policy', gtk.POLICY_AUTOMATIC)
 	sw.set_property('vscrollbar-policy', gtk.POLICY_AUTOMATIC)
 	sw.set_property('border-width', 0)
-	sw.add(htmlview)
+	sw.add(htmlview.tv)
 	sw.show()
 	frame = gtk.Frame()
 	frame.set_shadow_type(gtk.SHADOW_IN)

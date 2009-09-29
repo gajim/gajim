@@ -174,6 +174,16 @@ class NonBlockingRoster(PlugIn):
 		item=query.setTag('item',attrs)
 		for group in groups: item.addChild(node=Node('group',payload=[group]))
 		self._owner.send(iq)
+	def setItemMulti(self,items):
+		''' Renames multiple contacts and sets their group lists.'''
+		iq=Iq('set',NS_ROSTER)
+		query=iq.getTag('query')
+		for i in items:
+			attrs={'jid':i['jid']}
+			if i['name']: attrs['name']=i['name']
+			item=query.setTag('item',attrs)
+			for group in i['groups']: item.addChild(node=Node('group',payload=[group]))
+		self._owner.send(iq)
 	def getItems(self):
 		''' Return list of all [bare] JIDs that the roster is currently tracks.'''
 		return self._data.keys()

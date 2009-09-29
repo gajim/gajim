@@ -954,6 +954,13 @@ class ConversationTextview(gobject.GObject):
 		print_conversation_line()'''
 
 		buffer_ = self.tv.get_buffer()
+		
+		insert_tags_func = buffer_.insert_with_tags_by_name
+		# detect_and_print_special_text() is also used by 
+		# HtmlHandler.handle_specials() and there tags is gtk.TextTag objects,
+		# not strings
+		if len(other_tags) > 0 and isinstance(other_tags[0], gtk.TextTag):
+			insert_tags_func = buffer_.insert_with_tags
 
 		index = 0
 
@@ -974,8 +981,7 @@ class ConversationTextview(gobject.GObject):
 				text_before_special_text = otext[index:start]
 				end_iter = buffer_.get_end_iter()
 				# we insert normal text
-				buffer_.insert_with_tags_by_name(end_iter,
-					text_before_special_text, *other_tags)
+				insert_tags_func(end_iter, text_before_special_text, *other_tags)
 			index = end # update index
 
 			# now print it
@@ -984,7 +990,11 @@ class ConversationTextview(gobject.GObject):
 			if specials_limit <= 0:
 				break
 
-		return index # the position after *last* special text
+		# add the rest of text located in the index and after
+		end_iter = buffer_.get_end_iter()
+		insert_tags_func(end_iter, otext[index:], *other_tags)
+		
+		return buffer_.get_end_iter()
 
 	def print_special_text(self, special_text, other_tags):
 		'''is called by detect_and_print_special_text and prints
@@ -1280,22 +1290,17 @@ class ConversationTextview(gobject.GObject):
 			try:
 				if name and (text.startswith('/me ') or text.startswith('/me\n')):
 					xhtml = xhtml.replace('/me', '<i>* %s</i>' % (name,), 1)
-				self.tv.display_html(xhtml.encode('utf-8'))
+				self.tv.display_html(xhtml.encode('utf-8'), self)
 				return
 			except Exception, e:
 				gajim.log.debug(str('Error processing xhtml') + str(e))
 				gajim.log.debug(str('with |' + xhtml + '|'))
 
-		buffer_ = self.tv.get_buffer()
 		# /me is replaced by name if name is given
 		if name and (text.startswith('/me ') or text.startswith('/me\n')):
 			text = '* ' + name + text[3:]
 			text_tags.append('italic')
 		# detect urls formatting and if the user has it on emoticons
-		index = self.detect_and_print_special_text(text, text_tags)
-
-		# add the rest of text located in the index and after
-		end_iter = buffer_.get_end_iter()
-		buffer_.insert_with_tags_by_name(end_iter, text[index:], *text_tags)
+		self.detect_and_print_special_text(text, text_tags)
 
 # vim: se ts=3:

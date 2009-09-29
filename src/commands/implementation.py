@@ -192,7 +192,7 @@ class GroupChatCommands(CommonCommands):
             gajim.interface.instances[self.account]['join_gc'].window.present()
         except KeyError:
             try:
-                dialogs.JoinGroupchatWindow(account=None, room_jid=jid, nick=nick)
+                dialogs.JoinGroupchatWindow(account=self.account, room_jid=jid, nick=nick)
             except GajimGeneralException:
                 pass
 

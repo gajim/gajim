@@ -183,7 +183,7 @@ else:
 import latex
 HAVE_LATEX = latex.check_for_latex_support()
 
-HAVE_INDICATOR = True
+HAVE_INDICATOR = False
 try:
 	import indicate
 except ImportError:
