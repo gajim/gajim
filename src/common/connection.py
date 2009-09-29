@@ -1603,6 +1603,16 @@ class Connection(ConnectionHandlers):
 		iq2.addChild(name='gajim', namespace='gajim:prefs')
 		self.connection.send(iq)
 
+	def _request_bookmarks_xml(self):
+		iq = common.xmpp.Iq(typ='get')
+		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
+		iq2.addChild(name='storage', namespace='storage:bookmarks')
+		self.connection.send(iq)
+
+	def _check_bookmarks_received(self):
+		if not self.bookmarks:
+			self._request_bookmarks_xml()
+
 	def get_bookmarks(self, storage_type=None):
 		'''Get Bookmarks from storage or PubSub if supported as described in
 		XEP 0048
@@ -1611,11 +1621,11 @@ class Connection(ConnectionHandlers):
 			return
 		if self.pubsub_supported and storage_type != 'xml':
 			self.send_pb_retrieve('', 'storage:bookmarks')
+			# some server (ejabberd) are so slow to answer that we request via XML
+			# if we don't get answer in the next 30 seconds
+			gajim.idlequeue.set_alarm(self._check_bookmarks_received, 30)
 		else:
-			iq = common.xmpp.Iq(typ='get')
-			iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
-			iq2.addChild(name='storage', namespace='storage:bookmarks')
-			self.connection.send(iq)
+			self._request_bookmarks_xml()
 
 	def store_bookmarks(self, storage_type=None):
 		''' Send bookmarks to the storage namespace or PubSub if supported
