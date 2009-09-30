@@ -33,10 +33,11 @@ import string
 import time
 import base64
 import os
+from hashlib import sha256
+from hmac import HMAC
 
 if gajim.HAVE_PYCRYPTO:
 	from Crypto.Cipher import AES
-	from Crypto.Hash import HMAC, SHA256
 	from Crypto.PublicKey import RSA
 	from common import crypto
 
@@ -249,7 +250,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 	def sign(self, string):
 		if self.negotiated['sign_algs'] == (XmlDsig + 'rsa-sha256'):
-			hash_ = crypto.sha256(string)
+			hash_ = sha256(string)
 			return crypto.encode_mpi(gajim.pubkey.sign(hash_, '')[0])
 
 	def encrypt_stanza(self, stanza):
@@ -370,7 +371,7 @@ class EncryptedStanzaSession(StanzaSession):
 		if (not 1 < e < (p - 1)):
 			raise NegotiationError('invalid DH value')
 
-		return crypto.sha256(crypto.encode_mpi(crypto.powmod(e, y, p)))
+		return sha256(crypto.encode_mpi(crypto.powmod(e, y, p)))
 
 	def c7lize_mac_id(self, form):
 		kids = form.getChildren()
@@ -434,7 +435,7 @@ class EncryptedStanzaSession(StanzaSession):
 		mac_o_calculated = self.hmac(self.ks_o, content)
 
 		if self.negotiated['recv_pubkey']:
-			hash_ = crypto.sha256(mac_o_calculated)
+			hash_ = sha256(mac_o_calculated)
 
 			if not eir_pubkey.verify(hash_, signature):
 				raise NegotiationError('public key signature verification failed!')
@@ -582,7 +583,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 		self.sas_algs = 'sas28x5'
 		self.cipher = AES
-		self.hash_alg = SHA256
+		self.hash_alg = sha256
 		self.compression = None
 
 		for name in form.asDict():
@@ -826,7 +827,7 @@ class EncryptedStanzaSession(StanzaSession):
 		e = crypto.decode_mpi(base64.b64decode(form['dhkeys']))
 		p = dh.primes[self.modp]
 
-		if crypto.sha256(crypto.encode_mpi(e)) != self.negotiated['He']:
+		if sha256(crypto.encode_mpi(e)) != self.negotiated['He']:
 			raise NegotiationError('SHA256(e) != He')
 
 		k = self.get_shared_secret(e, self.y, p)
@@ -853,7 +854,7 @@ class EncryptedStanzaSession(StanzaSession):
 		# (we're not using one)
 		oss = ''
 
-		k = crypto.sha256(k + srs + oss)
+		k = sha256(k + srs + oss)
 
 		self.kc_s, self.km_s, self.ks_s = self.generate_responder_keys(k)
 		self.kc_o, self.km_o, self.ks_o = self.generate_initiator_keys(k)
@@ -905,7 +906,7 @@ class EncryptedStanzaSession(StanzaSession):
 				break
 
 		oss = ''
-		k = crypto.sha256(self.k + srs + oss)
+		k = sha256(self.k + srs + oss)
 		del self.k
 
 		self.do_retained_secret(k, srs)
@@ -983,7 +984,7 @@ class EncryptedStanzaSession(StanzaSession):
 				dhs.append(base64.b64encode(crypto.encode_mpi(e)))
 				name = 'dhkeys'
 			else:
-				He = crypto.sha256(crypto.encode_mpi(e))
+				He = sha256(crypto.encode_mpi(e))
 				dhs.append(base64.b64encode(He))
 				name = 'dhhashes'
 
