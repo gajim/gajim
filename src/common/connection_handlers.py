@@ -2264,32 +2264,43 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		if is_gc:
 			if ptype == 'error':
-				errmsg = prs.getError()
+				errcon = prs.getError()
+				errmsg = prs.getErrorMsg()
 				errcode = prs.getErrorCode()
 				room_jid, nick = gajim.get_room_and_nick_from_fjid(who)
-				if errcode == '502': # Internal Timeout:
+				if errcode == '502':
+					# Internal Timeout:
 					self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
 						prio, keyID, timestamp, None))
-				elif errcode == '401': # password required to join
+				elif (errcode == '503'):
+					# maximum user number reached
+					self.dispatch('ERROR', (_('Unable to join group chat'),
+						_('Maximum number of users for %s has been reached') % \
+						room_jid))
+				elif (errcode == '401') or (errcon == 'not-authorized'):
+					# password required to join
 					self.dispatch('GC_PASSWORD_REQUIRED', (room_jid, nick))
-				elif errcode == '403': # we are banned
+				elif (errcode == '403') or (errcon == 'forbidden'):
+					# we are banned
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('You are banned from group chat %s.') % room_jid))
-				elif errcode == '404': # group chat does not exist
+				elif (errcode == '404') or (errcon == 'item-not-found'):
+					# group chat does not exist
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('Group chat %s does not exist.') % room_jid))
-				elif errcode == '405':
+				elif (errcode == '405') or (errcon == 'not-allowed'):
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('Group chat creation is restricted.')))
-				elif errcode == '406':
+				elif (errcode == '406') or (errcon == 'not-acceptable'):
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('Your registered nickname must be used in group chat %s.') \
 						% room_jid))
-				elif errcode == '407':
+				elif (errcode == '407') or (errcon == 'registration-required'):
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('You are not in the members list in groupchat %s.') % \
 						room_jid))
-				elif errcode == '409': # nick conflict
+				elif (errcode == '409') or (errcon == 'conflict'):
+					# nick conflict
 					room_jid = gajim.get_room_from_fjid(who)
 					self.dispatch('ASK_NEW_NICK', (room_jid,))
 				else:	# print in the window the error
