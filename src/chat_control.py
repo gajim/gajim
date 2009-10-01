@@ -2130,7 +2130,8 @@ class ChatControl(ChatControlBase, ChatCommands):
 		# XXX: Once we have fallback to disco, remove notexistant check
 		if not gajim.HAVE_PYCRYPTO or \
 		not gajim.capscache.is_supported(contact, NS_ESESSION) or \
-		gajim.capscache.is_supported(contact, 'notexistant'):
+		gajim.capscache.is_supported(contact, 'notexistant') or \
+		not gajim.config.get_per('accounts', self.account, 'enable_esessions'):
 			toggle_e2e_menuitem.set_sensitive(False)
 		else:
 			toggle_e2e_menuitem.set_active(e2e_is_active)
