@@ -2004,7 +2004,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if msg.getTag('request', namespace=common.xmpp.NS_RECEIPTS) \
 		and gajim.config.get_per('accounts', self.name,
 		'answer_receipts') and ((contact and contact.sub \
-		not in (u'to', u'none')) or gc_contact):
+		not in (u'to', u'none')) or gc_contact) and mtype != 'error':
 			receipt = common.xmpp.Message(to=frm, typ='chat')
 			receipt.setID(msg.getID())
 			receipt.setTag('received',

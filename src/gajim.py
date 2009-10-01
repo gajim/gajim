@@ -892,6 +892,11 @@ class Interface:
 		jids = full_jid_with_resource.split('/', 1)
 		jid = jids[0]
 
+		if array[1] == '503':
+			# If we get server-not-found error, stop sending chatstates
+			for contact in gajim.contacts.get_contacts(account, jid):
+				contact.composing_xep = False
+
 		session = None
 		if len(array) > 5:
 			session = array[5]
