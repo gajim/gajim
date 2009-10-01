@@ -29,6 +29,8 @@ def c14n(node):
 
 	sorted_attrs = sorted(node.attrs.keys())
 	for key in sorted_attrs:
+		if key == 'xmlns':
+			continue
 		val = ustr(node.attrs[key])
 		# like XMLescape() but with whitespace and without &gt;
 		s = s + ' %s="%s"' % ( key, normalise_attr(val) )
