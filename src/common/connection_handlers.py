@@ -1861,8 +1861,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			exchange_items_list[jid] = []
 			exchange_items_list[jid].append(name)
 			exchange_items_list[jid].append(groups)
-		self.dispatch('ROSTERX', (action, exchange_items_list, jid_from))
-
+		if exchange_items_list:
+			self.dispatch('ROSTERX', (action, exchange_items_list, jid_from))
 
 	def _messageCB(self, con, msg):
 		'''Called when we receive a message'''
