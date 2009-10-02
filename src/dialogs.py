@@ -2815,6 +2815,8 @@ class RosterItemExchangeWindow:
 		self.message_body = message_body
 		self.jid_from = jid_from
 
+		show_dialog = False
+
 		# Connect to glade
 		self.xml = gtkgui_helpers.get_glade('roster_item_exchange_window.glade')
 		self.window = self.xml.get_widget('roster_item_exchange_window')
@@ -2883,6 +2885,7 @@ class RosterItemExchangeWindow:
 					else:
 						groups = groups + group + ', '
 				if not is_in_roster:
+					show_dialog = True
 					iter = model.append()
 					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
 
@@ -2915,6 +2918,7 @@ class RosterItemExchangeWindow:
 					else:
 						groups = groups + group + ', '
 				if not is_right and is_in_roster:
+					show_dialog = True
 					iter = model.append()
 					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
 
@@ -2940,6 +2944,7 @@ class RosterItemExchangeWindow:
 					else:
 						groups = groups + group + ', '
 				if is_in_roster:
+					show_dialog = True
 					iter = model.append()
 					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
 
@@ -2948,9 +2953,9 @@ class RosterItemExchangeWindow:
 				get_children()[0].get_children()[1]
 			accept_button_label.set_label(_('Delete'))
 
-		self.window.show_all()
-
-		self.xml.signal_autoconnect(self)
+		if show_dialog:
+			self.window.show_all()
+			self.xml.signal_autoconnect(self)
 
 	def toggled_callback(self, cell, path):
 		model = self.items_list_treeview.get_model()
