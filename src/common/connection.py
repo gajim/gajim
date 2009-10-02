@@ -1781,7 +1781,7 @@ class Connection(ConnectionHandlers):
 		if not change_nick:
 			t = p.setTag(common.xmpp.NS_MUC + ' x')
 			last_date = self.last_history_time[room_jid]
-			if last_date = 0:
+			if last_date == 0:
 				last_date = time.time() - gajim.config.get(
 					'muc_restore_timeout') * 60
 			else:
