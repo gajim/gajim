@@ -231,14 +231,6 @@ from chat_control import ChatControl
 from groupchat_control import GroupchatControl
 from groupchat_control import PrivateChatControl
 
-# Here custom adhoc processors should be loaded. At this point there is
-# everything they need to function properly. The next line loads custom exmple
-# adhoc processors. Technically, they could be loaded earlier as host processors
-# themself does not depend on the chat controls, but that should not be done
-# uless there is a really good reason for that..
-#
-# from commands import custom
-
 from atom_window import AtomWindow
 from session import ChatControlSession
 

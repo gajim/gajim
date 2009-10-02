@@ -51,7 +51,13 @@ from common.pep import MOODS, ACTIVITIES
 from common.xmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
 
-from commands.implementation import CommonCommands, ChatCommands
+from command_system.implementation.middleware import ChatCommandProcessor
+from command_system.implementation.middleware import CommandTools
+from command_system.implementation.hosts import ChatCommands
+
+# Here we load the module with the standard commands, so they are being detected
+# and dispatched.
+import command_system.implementation.standard
 
 try:
 	import gtkspell
@@ -81,7 +87,7 @@ if gajim.config.get('use_speller') and HAS_GTK_SPELL:
 	del tv
 
 ################################################################################
-class ChatControlBase(MessageControl, CommonCommands):
+class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 	'''A base class containing a banner, ConversationTextview, MessageTextView
 	'''
 
@@ -1164,12 +1170,14 @@ class ChatControlBase(MessageControl, CommonCommands):
 		# FIXME: Set sensitivity for toolbar
 
 ################################################################################
-class ChatControl(ChatControlBase, ChatCommands):
+class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
 	TYPE_ID = message_control.TYPE_CHAT
 	old_msg_kind = None # last kind of the printed message
 
-	DISPATCHED_BY = ChatCommands
+	# Set a command host to bound to. Every command given through a chat will be
+	# processed with this command host.
+	COMMAND_HOST = ChatCommands
 
 	def __init__(self, parent_win, contact, acct, session, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,

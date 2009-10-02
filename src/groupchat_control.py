@@ -47,7 +47,8 @@ from chat_control import ChatControl
 from chat_control import ChatControlBase
 from common.exceptions import GajimGeneralException
 
-from commands.implementation import PrivateChatCommands, GroupChatCommands
+from command_system.implementation.hosts import PrivateChatCommands
+from command_system.implementation.hosts import GroupChatCommands
 
 import logging
 log = logging.getLogger('gajim.groupchat_control')
@@ -118,10 +119,12 @@ def tree_cell_data_func(column, renderer, model, iter_, tv=None):
 			renderer.set_property('font',
 				gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
 
-class PrivateChatControl(ChatControl, PrivateChatCommands):
+class PrivateChatControl(ChatControl):
 	TYPE_ID = message_control.TYPE_PM
 
-	DISPATCHED_BY = PrivateChatCommands
+   # Set a command host to bound to. Every command given through a private chat
+   # will be processed with this command host.
+	COMMAND_HOST = PrivateChatCommands
 
 	def __init__(self, parent_win, gc_contact, contact, account, session):
 		room_jid = contact.jid.split('/')[0]
@@ -185,10 +188,12 @@ class PrivateChatControl(ChatControl, PrivateChatCommands):
 
 		self.session.negotiate_e2e(False)
 
-class GroupchatControl(ChatControlBase, GroupChatCommands):
+class GroupchatControl(ChatControlBase):
 	TYPE_ID = message_control.TYPE_GC
 
-	DISPATCHED_BY = GroupChatCommands
+   # Set a command host to bound to. Every command given through a group chat
+   # will be processed with this command host.
+	COMMAND_HOST = GroupChatCommands
 
 	def __init__(self, parent_win, contact, acct, is_continued=False):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,

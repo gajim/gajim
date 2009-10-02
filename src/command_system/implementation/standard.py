@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Provides an actual implementation of the standard commands.
+Provides an actual implementation for the standard commands.
 """
 
 import dialogs
@@ -22,15 +22,18 @@ from common import gajim
 from common import helpers
 from common.exceptions import GajimGeneralException
 
-from framework import command, CommandError
-from middleware import ChatMiddleware
+from ..framework import CommandContainer, command
+from ..mapping import generate_usage
 
-class CommonCommands(ChatMiddleware):
+from hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
+
+class StandardCommonCommands(CommandContainer):
     """
-    Here defined commands will be common to all, chat, private chat and group
-    chat. Keep in mind that self is set to an instance of either ChatControl,
-    PrivateChatControl or GroupchatControl when command is being called.
+    This command container contains standard commands which are common to all -
+    chat, private chat, group chat.
     """
+
+    HOSTS = (ChatCommands, PrivateChatCommands, GroupChatCommands)
 
     @command
     def clear(self):
@@ -44,24 +47,30 @@ class CommonCommands(ChatMiddleware):
         """
         Hide the chat buttons
         """
-        self.chat_buttons_set_visible(not self.hide_chat_buttons)
+        new_status = not self.hide_chat_buttons
+        self.chat_buttons_set_visible(new_status)
 
     @command(overlap=True)
     def help(self, command=None, all=False):
         """
-        Show help on a given command or a list of available commands if -(-a)ll is
-        given
+        Show help on a given command or a list of available commands if -(-a)ll
+        is given
         """
         if command:
-            command = self.retrieve_command(command)
+            command = self.get_command(command)
 
-            doc = _(command.extract_doc())
-            usage = command.extract_arg_usage()
+            documentation = _(command.extract_documentation())
+            usage = generate_usage(command)
 
-            if doc:
-                return (doc + '\n\n' + usage) if command.usage else doc
-            else:
-                return usage
+            text = str()
+
+            if documentation:
+                text += documentation
+
+            if command.usage:
+                text += ('\n\n' + usage) if text else usage
+
+            return text
         elif all:
             for command in self.list_commands():
                 names = ', '.join(command.names)
@@ -69,7 +78,8 @@ class CommonCommands(ChatMiddleware):
 
                 self.echo("%s - %s" % (names, description))
         else:
-            self.echo(self._help_(self, 'help'))
+            help = self.get_command('help')
+            self.echo(help(self, 'help'))
 
     @command(raw=True)
     def say(self, message):
@@ -85,15 +95,12 @@ class CommonCommands(ChatMiddleware):
         """
         self.send("/me %s" % action)
 
-class ChatCommands(CommonCommands):
+class StandardChatCommands(CommandContainer):
     """
-    Here defined commands will be unique to a chat. Use it as a hoster to provide
-    commands which should be unique to a chat. Keep in mind that self is set to
-    an instance of ChatControl when command is being called.
+    This command container contains standard command which are unique to a chat.
     """
 
-    DISPATCH = True
-    INHERIT = True
+    HOSTS = (ChatCommands,)
 
     @command
     def ping(self):
@@ -104,25 +111,21 @@ class ChatCommands(CommonCommands):
             raise CommandError(_('Command is not supported for zeroconf accounts'))
         gajim.connections[self.account].sendPing(self.contact)
 
-class PrivateChatCommands(CommonCommands):
+class StandardPrivateChatCommands(CommandContainer):
     """
-    Here defined commands will be unique to a private chat. Use it as a hoster to
-    provide commands which should be unique to a private chat. Keep in mind that
-    self is set to an instance of PrivateChatControl when command is being called.
-    """
-
-    DISPATCH = True
-    INHERIT = True
-
-class GroupChatCommands(CommonCommands):
-    """
-    Here defined commands will be unique to a group chat. Use it as a hoster to
-    provide commands which should be unique to a group chat. Keep in mind that
-    self is set to an instance of GroupchatControl when command is being called.
+    This command container contains standard command which are unique to a
+    private chat.
     """
 
-    DISPATCH = True
-    INHERIT = True
+    HOSTS = (PrivateChatCommands,)
+
+class StandardGroupchatCommands(CommandContainer):
+    """
+    This command container contains standard command which are unique to a group
+    chat.
+    """
+
+    HOSTS = (GroupChatCommands,)
 
     @command(raw=True)
     def nick(self, new_nick):
@@ -192,7 +195,7 @@ class GroupChatCommands(CommonCommands):
             gajim.interface.instances[self.account]['join_gc'].window.present()
         except KeyError:
             try:
-                dialogs.JoinGroupchatWindow(account=self.account, room_jid=jid, nick=nick)
+                dialogs.JoinGroupchatWindow(account=None, room_jid=jid, nick=nick)
             except GajimGeneralException:
                 pass
 
@@ -257,6 +260,6 @@ class GroupChatCommands(CommonCommands):
     @command(raw=True)
     def unblock(self, who):
         """
-        Allow an occupant to send you public or privates messages
+        Allow an occupant to send you public or private messages
         """
         self.on_unblock(None, who)
