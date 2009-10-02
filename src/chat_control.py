@@ -704,7 +704,8 @@ class ChatControlBase(MessageControl, CommonCommands):
 
 	def print_conversation_line(self, text, kind, name, tim,
 	other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
-	count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False, xep0184_id = None):
+	count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False,
+	xep0184_id=None, graphics=True):
 		'''prints 'chat' type messages'''
 		jid = self.contact.jid
 		full_jid = self.get_full_jid()
@@ -714,7 +715,7 @@ class ChatControlBase(MessageControl, CommonCommands):
 			end = True
 		textview.print_conversation_line(text, jid, kind, name, tim,
 			other_tags_for_name, other_tags_for_time, other_tags_for_text,
-			subject, old_kind, xhtml, simple=simple)
+			subject, old_kind, xhtml, simple=simple, graphics=graphics)
 
 		if xep0184_id is not None:
 			textview.show_xep0184_warning(xep0184_id)
