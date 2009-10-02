@@ -1119,8 +1119,11 @@ class ConversationTextview(gobject.GObject):
 			# It's nothing special
 			if use_other_tags:
 				end_iter = buffer_.get_end_iter()
-				buffer_.insert_with_tags_by_name(end_iter, special_text,
-					*other_tags)
+				insert_tags_func = buffer_.insert_with_tags_by_name
+				if len(other_tags) > 0 and isinstance(other_tags[0], gtk.TextTag):
+					insert_tags_func = buffer_.insert_with_tags
+
+				insert_tags_func(end_iter, special_text, *other_tags)
 
 		if len(tags) > 0:
 			end_iter = buffer_.get_end_iter()
@@ -1290,14 +1293,14 @@ class ConversationTextview(gobject.GObject):
 	graphics=True):
 		'''this adds normal and special text. call this to add text'''
 		if xhtml:
-			try:
-				if name and (text.startswith('/me ') or text.startswith('/me\n')):
-					xhtml = xhtml.replace('/me', '<i>* %s</i>' % (name,), 1)
-				self.tv.display_html(xhtml.encode('utf-8'), self)
-				return
-			except Exception, e:
-				gajim.log.debug(str('Error processing xhtml') + str(e))
-				gajim.log.debug(str('with |' + xhtml + '|'))
+#			try:
+			if name and (text.startswith('/me ') or text.startswith('/me\n')):
+				xhtml = xhtml.replace('/me', '<i>* %s</i>' % (name,), 1)
+			self.tv.display_html(xhtml.encode('utf-8'), self)
+			return
+#			except Exception, e:
+#				gajim.log.debug(str('Error processing xhtml') + str(e))
+#				gajim.log.debug(str('with |' + xhtml + '|'))
 
 		# /me is replaced by name if name is given
 		if name and (text.startswith('/me ') or text.startswith('/me\n')):

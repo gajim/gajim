@@ -951,12 +951,15 @@ if __name__ == '__main__':
 						  '  <span style="font-size: 500%; font-family: serif">World</span>\n'
 						  '</div>\n')
 	htmlview.print_real_text(None, xhtml='<hr />')
+	htmlview.print_real_text(None, xhtml='''<body xmlns='http://www.w3.org/1999/xhtml'><p xmlns='http://www.w3.org/1999/xhtml'>a:b<a href='http://google.com/' xmlns='http://www.w3.org/1999/xhtml'>Google</a></p><br/></body>''')
 	htmlview.print_real_text(None, xhtml='''
+	 <body xmlns='http://www.w3.org/1999/xhtml'>
 	  <p style='font-size:large'>
 		<span style='font-style: italic'>O<span style='font-size:larger'>M</span>G</span>,
 		I&apos;m <span style='color:green'>green</span>
 		with <span style='font-weight: bold'>envy</span>!
 	  </p>
+	 </body>
 		''')
 	htmlview.print_real_text(None, xhtml='<hr />')
 	htmlview.print_real_text(None, xhtml='''
