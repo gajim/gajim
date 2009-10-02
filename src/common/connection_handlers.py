@@ -1836,7 +1836,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				self.dispatch('GMAIL_NOTIFY', (jid, newmsgs, gmail_messages_list))
 			raise common.xmpp.NodeProcessed
 
-
 	def _rosterItemExchangeCB(self, con, msg):
 		''' XEP-0144 Roster Item Echange '''
 		exchange_items_list = {}
@@ -1863,6 +1862,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			exchange_items_list[jid].append(groups)
 		if exchange_items_list:
 			self.dispatch('ROSTERX', (action, exchange_items_list, jid_from))
+		raise common.xmpp.NodeProcessed
 
 	def _messageCB(self, con, msg):
 		'''Called when we receive a message'''
