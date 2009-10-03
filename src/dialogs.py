@@ -4518,10 +4518,7 @@ class VoIPCallReceivedDialog(object):
 		if not session:
 			return
 		if response == gtk.RESPONSE_YES:
-			if not session.accepted:
-				session.approve_session()
-			for content in self.content_types:
-				session.approve_content(content)
+			#TODO: Ensure that ctrl.contact.resource == resource
 			jid = gajim.get_jid_without_resource(self.fjid)
 			resource = gajim.get_resource_from_jid(self.fjid)
 			ctrl = gajim.interface.msg_win_mgr.get_control(self.fjid, self.account)
@@ -4535,10 +4532,17 @@ class VoIPCallReceivedDialog(object):
 				if not contact:
 					return
 				ctrl = gajim.interface.new_chat(contact, self.account)
+			# Chat control opened, update content's status
 			if session.get_content('audio'):
 				ctrl.set_audio_state('connecting', self.sid)
 			if session.get_content('video'):
 				ctrl.set_video_state('connecting', self.sid)
+			# Now, accept the content/sessions.
+			# This should be done after the chat control is running
+			if not session.accepted:
+				session.approve_session()
+			for content in self.content_types:
+				session.approve_content(content)
 		else: # response==gtk.RESPONSE_NO
 			if not session.accepted:
 				session.decline_session()

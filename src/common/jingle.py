@@ -671,6 +671,7 @@ class JingleContent(object):
 		self.accepted = False
 		self.sent = False
 		self.candidates = [] # Local transport candidates
+		self.remote_candidates = [] # Remote transport candidates
 
 		self.senders = 'both' #FIXME
 		self.allow_sending = True # Used for stream direction, attribute 'senders'
@@ -750,8 +751,12 @@ class JingleContent(object):
 		#FIXME: connectivity should not be etablished yet
 		# Instead, it should be etablished after session-accept!
 		if len(candidates) > 0:
-			self.p2pstream.set_remote_candidates(candidates)
-			print self.media, self.creator, self.name, candidates
+			if self.sent:
+				self.p2pstream.set_remote_candidates(candidates)
+			else:
+				self.remote_candidates.extend(candidates)
+			#self.p2pstream.set_remote_candidates(candidates)
+			#print self.media, self.creator, self.name, candidates
 
 	def __content(self, payload=[]):
 		''' Build a XML content-wrapper for our data. '''
@@ -917,6 +922,9 @@ class JingleRTPContent(JingleContent):
 
 	def __contentAcceptCB(self, stanza, content, error, action):
 		if self.accepted:
+			if len(self.remote_candidates) > 0:
+				self.p2pstream.set_remote_candidates(self.remote_candidates)
+				self.remote_candidates = []
 			#TODO: farsight.DIRECTION_BOTH only if senders='both'
 			self.p2pstream.set_property('direction', farsight.DIRECTION_BOTH)
 			self.session.content_negociated(self.media)

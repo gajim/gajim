@@ -50,7 +50,7 @@ from common.logger import constants
 from common.pep import MOODS, ACTIVITIES
 from common.xmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
-from common.xmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
+from common.xmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO, NS_JINGLE_ICE_UDP
 
 from commands.implementation import CommonCommands, ChatCommands
 
@@ -1256,16 +1256,6 @@ class ChatControl(ChatControlBase, ChatCommands):
 		self.audio_state = self.JINGLE_STATE_NOT_AVAILABLE
 		self.video_sid = None
 		self.video_state = self.JINGLE_STATE_NOT_AVAILABLE
-		if gajim.capscache.is_supported(contact, NS_JINGLE_RTP_AUDIO) and \
-		gajim.HAVE_FARSIGHT:
-			self.set_audio_state('available')
-		else:
-			self.set_audio_state('not_available')
-		if gajim.capscache.is_supported(contact, NS_JINGLE_RTP_VIDEO) and \
-		gajim.HAVE_FARSIGHT:
-			self.set_video_state('available')
-		else:
-			self.set_video_state('not_available')
 
 		self.update_toolbar()
 
@@ -1374,6 +1364,26 @@ class ChatControl(ChatControlBase, ChatCommands):
 			self._add_to_roster_button.show()
 		else:
 			self._add_to_roster_button.hide()
+
+		# Jingle detection
+		if gajim.capscache.is_supported(self.contact, NS_JINGLE_ICE_UDP) and \
+		gajim.HAVE_FARSIGHT and self.contact.resource:
+			if gajim.capscache.is_supported(self.contact, NS_JINGLE_RTP_AUDIO):
+				if self.audio_state == self.JINGLE_STATE_NOT_AVAILABLE:
+					self.set_audio_state('available')
+			else:
+				self.set_audio_state('not_available')
+
+			if gajim.capscache.is_supported(self.contact, NS_JINGLE_RTP_VIDEO):
+				if self.video_state == self.JINGLE_STATE_NOT_AVAILABLE:
+					self.set_video_state('available')
+			else:
+				self.set_video_state('not_available')
+		else:
+			if self.audio_state != self.JINGLE_STATE_NOT_AVAILABLE:
+				self.set_audio_state('not_available')
+			if self.video_state != self.JINGLE_STATE_NOT_AVAILABLE:
+				self.set_video_state('not_available')
 
 		# Audio buttons
 		if self.audio_state == self.JINGLE_STATE_NOT_AVAILABLE:
@@ -1579,22 +1589,26 @@ class ChatControl(ChatControlBase, ChatCommands):
 		elif state == 'connecting':
 			self.audio_state = self.JINGLE_STATE_CONNECTING
 			self.audio_sid = sid
-			self._audio_button.set_active(True)
 		elif state == 'connection_received':
 			self.audio_state = self.JINGLE_STATE_CONNECTION_RECEIVED
 			self.audio_sid = sid
-			self._audio_button.set_active(True)
 		elif state == 'connected':
 			self.audio_state = self.JINGLE_STATE_CONNECTED
 		elif state == 'stop':
 			self.audio_state = self.JINGLE_STATE_AVAILABLE
 			self.audio_sid = None
-			self._audio_button.set_active(False)
 		elif state == 'error':
 			self.audio_state = self.JINGLE_STATE_ERROR
+
+		if state in ('connecting', 'connected', 'connection_received'):
+			self._audio_button.set_active(True)
+		elif state in ('not_available', 'stop'):
+			#TODO: Destroy existing session(s) with this user?
+			self._audio_button.set_active(False)
 		self.update_audio()
 
 	def set_video_state(self, state, sid=None, reason=None):
+		#TODO: Share code with set_audio_state?
 		if state in ('connecting', 'connected', 'stop'):
 			str = _('Video state : %s') % state
 			if reason:
@@ -1608,11 +1622,9 @@ class ChatControl(ChatControlBase, ChatCommands):
 			self.video_sid = None
 		elif state == 'connecting':
 			self.video_state = self.JINGLE_STATE_CONNECTING
-			self._video_button.set_active(True)
 			self.video_sid = sid
 		elif state == 'connection_received':
 			self.video_state = self.JINGLE_STATE_CONNECTION_RECEIVED
-			self._video_button.set_active(True)
 			self.video_sid = sid
 		elif state == 'connected':
 			self.video_state = self.JINGLE_STATE_CONNECTED
@@ -1622,6 +1634,12 @@ class ChatControl(ChatControlBase, ChatCommands):
 			self._video_button.set_active(False)
 		elif state == 'error':
 			self.video_state = self.JINGLE_STATE_ERROR
+
+		if state in ('connecting', 'connected', 'connection_received'):
+			self._video_button.set_active(True)
+		elif state in ('not_available', 'stop'):
+			#TODO: Destroy existing session(s) with this user?
+			self._video_button.set_active(False)
 		self.update_video()
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
@@ -1826,9 +1844,10 @@ class ChatControl(ChatControlBase, ChatCommands):
 
 	def on_audio_button_toggled(self, widget):
 		if widget.get_active():
-			sid = gajim.connections[self.account].startVoIP(
-				self.contact.get_full_jid())
-			self.set_audio_state('connecting', sid)
+			if self.audio_state == self.JINGLE_STATE_AVAILABLE:
+				sid = gajim.connections[self.account].startVoIP(
+					self.contact.get_full_jid())
+				self.set_audio_state('connecting', sid)
 		else:
 			session = gajim.connections[self.account].get_jingle_session(
 				self.contact.get_full_jid(), self.audio_sid)
@@ -1839,9 +1858,10 @@ class ChatControl(ChatControlBase, ChatCommands):
 
 	def on_video_button_toggled(self, widget):
 		if widget.get_active():
-			sid = gajim.connections[self.account].startVideoIP(
-				self.contact.get_full_jid())
-			self.set_video_state('connecting', sid)
+			if self.video_state == self.JINGLE_STATE_AVAILABLE:
+				sid = gajim.connections[self.account].startVideoIP(
+					self.contact.get_full_jid())
+				self.set_video_state('connecting', sid)
 		else:
 			session = gajim.connections[self.account].get_jingle_session(
 				self.contact.get_full_jid(), self.video_sid)
