@@ -959,7 +959,7 @@ class ConversationTextview(gobject.GObject):
 		# detect_and_print_special_text() is also used by 
 		# HtmlHandler.handle_specials() and there tags is gtk.TextTag objects,
 		# not strings
-		if len(other_tags) and isinstance(other_tags[0], gtk.TextTag):
+		if other_tags and isinstance(other_tags[0], gtk.TextTag):
 			insert_tags_func = buffer_.insert_with_tags
 
 		index = 0
@@ -1120,12 +1120,12 @@ class ConversationTextview(gobject.GObject):
 			if use_other_tags:
 				end_iter = buffer_.get_end_iter()
 				insert_tags_func = buffer_.insert_with_tags_by_name
-				if len(other_tags) and isinstance(other_tags[0], gtk.TextTag):
+				if other_tags and isinstance(other_tags[0], gtk.TextTag):
 					insert_tags_func = buffer_.insert_with_tags
 
 				insert_tags_func(end_iter, special_text, *other_tags)
 
-		if len(tags):
+		if tags:
 			end_iter = buffer_.get_end_iter()
 			all_tags = tags[:]
 			if use_other_tags:
