@@ -318,3 +318,18 @@ def command(*names, **properties):
         return decorator(names.pop(0))
 
     return decorator
+
+def documentation(text):
+    """
+    This decorator is used to bind a documentation (a help) to a command.
+
+    Though this can be done easily by using doc-strings in a declarative and
+    Pythonic way - some of Gajim's developers are against it because of the
+    scaffolding needed to support the tranlation of such documentation.
+    """
+    def decorator(command):
+        handler = command.handler
+        handler.__doc__ = text
+        return command
+
+    return decorator

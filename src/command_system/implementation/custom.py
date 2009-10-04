@@ -21,7 +21,7 @@ Keep in mind that this module is not being loaded, so the code will not be
 executed and commands defined here will not be detected.
 """
 
-from ..framework import CommandContainer, command
+from ..framework import CommandContainer, command, documentation
 from hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
 
 class CustomCommonCommands(CommandContainer):
@@ -56,6 +56,7 @@ class CustomChatCommands(CommandContainer):
 
     HOSTS = (ChatCommands,)
 
+    @documentation(_("The same as using a doc-string, except it supports translation"))
     @command
     def sing(self):
         return "Are you phreaking kidding me? Buy yourself a damn stereo..."

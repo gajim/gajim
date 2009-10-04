@@ -22,7 +22,7 @@ from common import gajim
 from common import helpers
 from common.exceptions import GajimGeneralException
 
-from ..framework import CommandContainer, command
+from ..framework import CommandContainer, command, documentation
 from ..mapping import generate_usage
 
 from hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
@@ -35,27 +35,20 @@ class StandardCommonCommands(CommandContainer):
 
     HOSTS = (ChatCommands, PrivateChatCommands, GroupChatCommands)
 
+    @documentation(_("Clear the text window"))
     @command
     def clear(self):
-        """
-        Clear the text window
-        """
         self.conv_textview.clear()
 
+    @documentation(_("Hide the chat buttons"))
     @command
     def compact(self):
-        """
-        Hide the chat buttons
-        """
         new_status = not self.hide_chat_buttons
         self.chat_buttons_set_visible(new_status)
 
+    @documentation(_("Show help on a given command or a list of available commands if -(-a)ll is given"))
     @command(overlap=True)
     def help(self, command=None, all=False):
-        """
-        Show help on a given command or a list of available commands if -(-a)ll
-        is given
-        """
         if command:
             command = self.get_command(command)
 
@@ -80,18 +73,14 @@ class StandardCommonCommands(CommandContainer):
             help = self.get_command('help')
             self.echo(help(self, 'help'))
 
+    @documentation(_("Send a message to the contact"))
     @command(raw=True)
     def say(self, message):
-        """
-        Send a message to the contact
-        """
         self.send(message)
 
+    @documentation(_("Send action (in the third person) to the current chat"))
     @command(raw=True)
     def me(self, action):
-        """
-        Send action (in the third person) to the current chat
-        """
         self.send("/me %s" % action)
 
 class StandardChatCommands(CommandContainer):
@@ -101,11 +90,9 @@ class StandardChatCommands(CommandContainer):
 
     HOSTS = (ChatCommands,)
 
+    @documentation(_("Send a ping to the contact"))
     @command
     def ping(self):
-        """
-        Send a ping to the contact
-        """
         if self.account == gajim.ZEROCONF_ACC_NAME:
             raise CommandError(_('Command is not supported for zeroconf accounts'))
         gajim.connections[self.account].sendPing(self.contact)
@@ -126,11 +113,9 @@ class StandardGroupchatCommands(CommandContainer):
 
     HOSTS = (GroupChatCommands,)
 
+    @documentation(_("Change your nickname in a group chat"))
     @command(raw=True)
     def nick(self, new_nick):
-        """
-        Change your nickname in a group chat
-        """
         try:
             new_nick = helpers.parse_resource(new_nick)
         except Exception:
@@ -138,52 +123,41 @@ class StandardGroupchatCommands(CommandContainer):
         self.connection.join_gc(new_nick, self.room_jid, None, change_nick=True)
         self.new_nick = new_nick
 
+    @documentation(_("Open a private chat window with a specified occupant"))
     @command('query', raw=True)
     def chat(self, nick):
-        """
-        Open a private chat window with a specified occupant
-        """
         nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
         if nick in nicks:
             self.on_send_pm(nick=nick)
         else:
             raise CommandError(_("Nickname not found"))
 
+    @documentation(_("Open a private chat window with a specified occupant and send him a message"))
     @command('msg', raw=True)
     def message(self, nick, a_message):
-        """
-        Open a private chat window with a specified occupant and send him a
-        message
-        """
         nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
         if nick in nicks:
             self.on_send_pm(nick=nick, msg=a_message)
         else:
             raise CommandError(_("Nickname not found"))
 
+    @documentation(_("Display or change a group chat topic"))
     @command(raw=True, empty=True)
     def topic(self, new_topic):
-        """
-        Display or change a group chat topic
-        """
         if new_topic:
             self.connection.send_gc_subject(self.room_jid, new_topic)
         else:
             return self.subject
 
+    @documentation(_("Invite a user to a room for a reason"))
     @command(raw=True, empty=True)
     def invite(self, jid, reason):
-        """
-        Invite a user to a room for a reason
-        """
         self.connection.send_invite(self.room_jid, jid, reason)
         return _("Invited %s to %s") % (jid, self.room_jid)
 
+    @documentation(_("Join a group chat given by a jid, optionally using given nickname"))
     @command(raw=True, empty=True)
     def join(self, jid, nick):
-        """
-        Join a group chat given by a jid, optionally using given nickname
-        """
         if not nick:
             nick = self.nick
 
@@ -198,39 +172,33 @@ class StandardGroupchatCommands(CommandContainer):
             except GajimGeneralException:
                 pass
 
+    @documentation(_("Leave the groupchat, optionally giving a reason, and close tab or window"))
     @command('part', 'close', raw=True, empty=True)
     def leave(self, reason):
-        """
-        Leave the groupchat, optionally giving a reason, and close tab or window
-        """
         self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND, reason)
 
+    @documentation(_("""
+    Ban user by a nick or a jid from a groupchat
+
+    If given nickname is not found it will be treated as a jid.
+    """))
     @command(raw=True, empty=True)
     def ban(self, who, reason):
-        """
-        Ban user by a nick or a jid from a groupchat
-
-        If given nickname is not found it will be treated as a jid.
-        """
         if who in gajim.contacts.get_nick_list(self.account, self.room_jid):
             contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, who)
             who = contact.jid
         self.connection.gc_set_affiliation(self.room_jid, who, 'outcast', reason or str())
 
+    @documentation(_("Kick user by a nick from a groupchat"))
     @command(raw=True, empty=True)
     def kick(self, who, reason):
-        """
-        Kick user by a nick from a groupchat
-        """
         if not who in gajim.contacts.get_nick_list(self.account, self.room_jid):
             raise CommandError(_("Nickname not found"))
         self.connection.gc_set_role(self.room_jid, who, 'none', reason or str())
 
+    @documentation(_("Display names of all group chat occupants"))
     @command
     def names(self, verbose=False):
-        """
-        Display names of all group chat occupants
-        """
         get_contact = lambda nick: gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
         nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
 
@@ -249,16 +217,12 @@ class StandardGroupchatCommands(CommandContainer):
         else:
             return ', '.join(nicks)
 
+    @documentation(_("Forbid an occupant to send you public or private messages"))
     @command(raw=True)
     def block(self, who):
-        """
-        Forbid an occupant to send you public or private messages
-        """
         self.on_block(None, who)
 
+    @documentation(_("Allow an occupant to send you public or private messages"))
     @command(raw=True)
     def unblock(self, who):
-        """
-        Allow an occupant to send you public or private messages
-        """
         self.on_unblock(None, who)
