@@ -62,15 +62,14 @@ class StandardCommonCommands(CommandContainer):
             documentation = _(command.extract_documentation())
             usage = generate_usage(command)
 
-            text = str()
+            text = []
 
             if documentation:
-                text += documentation
-
+                text.append(documentation)
             if command.usage:
-                text += ('\n\n' + usage) if text else usage
+                text.append(usage)
 
-            return text
+            return '\n\n'.join(text)
         elif all:
             for command in self.list_commands():
                 names = ', '.join(command.names)
