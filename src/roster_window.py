@@ -3510,6 +3510,28 @@ class RosterWindow:
 			not gajim.config.get('quit_on_roster_x_button'):
 				self.tooltip.hide_tooltip()
 				self.window.hide()
+		elif gtk.gdk.CONTROL_MASK and event.keyval == gtk.keysyms.i:
+			treeselection = self.tree.get_selection()
+			model, list_of_paths = treeselection.get_selected_rows()
+			for path in list_of_paths:
+				type_ = model[path][C_TYPE]
+				if type_ in ('contact', 'agent'):
+					jid = model[path][C_JID].decode('utf-8')
+					account = model[path][C_ACCOUNT].decode('utf-8')
+					contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+					self.on_info(widget, contact, account)
+		elif gtk.gdk.CONTROL_MASK and event.keyval == gtk.keysyms.h:
+			treeselection = self.tree.get_selection()
+			model, list_of_paths = treeselection.get_selected_rows()
+			if len(list_of_paths) != 1:
+				return
+			path = list_of_paths[0]
+			type_ = model[path][C_TYPE]
+			if type_ in ('contact', 'agent'):
+				jid = model[path][C_JID].decode('utf-8')
+				account = model[path][C_ACCOUNT].decode('utf-8')
+				contact = gajim.contacts.get_first_contact_from_jid(account, jid)
+				self.on_history(widget, contact, account)
 
 	def on_roster_window_popup_menu(self, widget):
 		event = gtk.gdk.Event(gtk.gdk.KEY_PRESS)
