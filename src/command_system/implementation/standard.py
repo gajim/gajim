@@ -218,11 +218,11 @@ class StandardGroupchatCommands(CommandContainer):
             return ', '.join(nicks)
 
     @documentation(_("Forbid an occupant to send you public or private messages"))
-    @command(raw=True)
+    @command('ignore', raw=True)
     def block(self, who):
         self.on_block(None, who)
 
     @documentation(_("Allow an occupant to send you public or private messages"))
-    @command(raw=True)
+    @command('unignore', raw=True)
     def unblock(self, who):
         self.on_unblock(None, who)
