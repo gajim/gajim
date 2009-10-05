@@ -871,7 +871,9 @@ class ConnectionDisco:
 					is_muc = True
 				identities.append(attr)
 			elif i.getName() == 'feature':
-				features.append(i.getAttr('var'))
+				var = i.getAttr('var')
+				if var:
+					features.append(var)
 			elif i.getName() == 'x' and i.getNamespace() == common.xmpp.NS_DATA:
 				data.append(common.xmpp.DataForm(node=i))
 		jid = helpers.get_full_jid_from_iq(iq_obj)
