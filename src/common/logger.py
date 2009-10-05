@@ -561,7 +561,7 @@ class Logger:
 		return start_of_day
 
 	def get_conversation_for_date(self, jid, year, month, day, account):
-		'''returns contact_name, time, kind, show, message
+		'''returns contact_name, time, kind, show, message, subject
 		for each row in a list of tupples,
 		returns list with empty tupple if we found nothing to meet our demands'''
 		try:
@@ -576,7 +576,7 @@ class Logger:
 		last_second_of_day = start_of_day + seconds_in_a_day - 1
 
 		self.cur.execute('''
-			SELECT contact_name, time, kind, show, message FROM logs
+			SELECT contact_name, time, kind, show, message, subject FROM logs
 			WHERE (%s)
 			AND time BETWEEN %d AND %d
 			ORDER BY time
