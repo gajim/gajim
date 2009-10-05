@@ -165,9 +165,13 @@ else:
 	
 	sysname = platform.system()
 	libc = CDLL(find_library('c'))
+
+	# The constant defined in <linux/prctl.h> which is used to set the name of
+	# the process.
+	PR_SET_NAME = 15
 	
 	if sysname == 'Linux':
-		libc.prctl(15, 'gajim', 0, 0, 0)
+		libc.prctl(PR_SET_NAME, 'gajim')
 	elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
 		libc.setproctitle('gajim')
 
