@@ -167,9 +167,9 @@ else:
 	libc = CDLL(find_library('c'))
 	
 	if sysname == 'Linux':
-		libc.prctl(15, 'Gajim', 0, 0, 0)
+		libc.prctl(15, 'gajim', 0, 0, 0)
 	elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
-		libc.setproctitle('Gajim')
+		libc.setproctitle('gajim')
 
 	if gtk.pygtk_version < (2, 12, 0):
 		pritext = _('Gajim needs PyGTK 2.12 or above')
