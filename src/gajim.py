@@ -158,14 +158,18 @@ else:
 	if dbus_support.supported:
 		from music_track_listener import MusicTrackListener
 		import dbus
-
-	if os.name == 'posix': # dl module is Unix Only
-		try: # rename the process name to gajim
-			import dl
-			libc = dl.open('/lib/libc.so.6')
-			libc.call('prctl', 15, 'gajim\0', 0, 0, 0)
-		except Exception:
-			pass
+		
+	from ctypes import CDLL
+	from ctypes.util import find_library
+	import platform
+	
+	sysname = platform.system()
+	libc = CDLL(find_library('c'))
+	
+	if sysname == 'Linux':
+		libc.prctl(15, 'Gajim', 0, 0, 0)
+	elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
+		libc.setproctitle('Gajim')
 
 	if gtk.pygtk_version < (2, 12, 0):
 		pritext = _('Gajim needs PyGTK 2.12 or above')
