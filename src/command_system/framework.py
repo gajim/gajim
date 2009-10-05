@@ -327,9 +327,11 @@ def documentation(text):
     Pythonic way - some of Gajim's developers are against it because of the
     scaffolding needed to support the tranlation of such documentation.
     """
-    def decorator(command):
-        handler = command.handler
-        handler.__doc__ = text
-        return command
+    def decorator(target):
+        if isinstance(target, Command):
+            target.handler.__doc__ = text
+        else:
+            target.__doc__ = text
+        return target
 
     return decorator
