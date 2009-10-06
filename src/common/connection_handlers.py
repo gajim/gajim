@@ -1408,12 +1408,11 @@ sent a message to.'''
 
 		if chat_sessions:
 			# return the session that we last sent a message in
-			return sorted(chat_sessions,
-				key=operator.attrgetter("last_send"))[-1]
+			return sorted(chat_sessions, key=operator.attrgetter("last_send"))[-1]
 		else:
 			return None
 
-	def find_controlless_session(self, jid):
+	def find_controlless_session(self, jid, resource=None):
 		'''find an active session that doesn't have a control attached'''
 
 		try:
@@ -1424,6 +1423,9 @@ sent a message to.'''
 				gajim.default_session_type)]
 
 			orphaned = [s for s in chat_sessions if not s.control]
+
+			if resource:
+				orphaned = [s for s in orphaned if s.resource == resource]
 
 			return orphaned[0]
 		except (KeyError, IndexError):
@@ -2184,7 +2186,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		ptype = prs.getType()
 		if ptype == 'available':
 			ptype = None
-		rfc_types = ('unavailable', 'error', 'subscribe', 'subscribed', 'unsubscribe', 'unsubscribed')
+		rfc_types = ('unavailable', 'error', 'subscribe', 'subscribed',
+			'unsubscribe', 'unsubscribed')
 		if ptype and not ptype in rfc_types:
 			ptype = None
 		log.debug('PresenceCB: %s' % ptype)
@@ -2432,19 +2435,22 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
 					prio, keyID, timestamp, None))
 
-		if ptype == 'unavailable' and jid_stripped in self.sessions:
-			# automatically terminate sessions that they haven't sent a thread ID
-			# in, only if other part support thread ID
-			for sess in self.sessions[jid_stripped].values():
-				if not sess.received_thread_id:
-					contact = gajim.contacts.get_contact(self.name, jid_stripped)
+		if ptype == 'unavailable':
+			for jid in [jid_stripped, who]:
+				if jid not in self.sessions:
+					continue
+				# automatically terminate sessions that they haven't sent a thread
+				# ID in, only if other part support thread ID
+				for sess in self.sessions[jid].values():
+					if not sess.received_thread_id:
+						contact = gajim.contacts.get_contact(self.name, jid)
 
-					session_supported = gajim.capscache.is_supported(contact,
-						common.xmpp.NS_SSN) or gajim.capscache.is_supported(contact,
-						common.xmpp.NS_ESESSION)
-					if session_supported:
-						sess.terminate()
-						del self.sessions[jid_stripped][sess.thread_id]
+						session_supported = gajim.capscache.is_supported(contact,
+							common.xmpp.NS_SSN) or gajim.capscache.is_supported(
+							contact, common.xmpp.NS_ESESSION)
+						if session_supported:
+							sess.terminate()
+							del self.sessions[jid][sess.thread_id]
 
 		if avatar_sha is not None and ptype != 'error':
 			if jid_stripped not in self.vcard_shas:

@@ -79,7 +79,7 @@ class StanzaSession(object):
 
 	def get_to(self):
 		to = str(self.jid)
-		if self.resource:
+		if self.resource and not to.endswith(self.resource):
 			to += '/' + self.resource
 		return to
 

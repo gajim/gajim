@@ -746,9 +746,9 @@ class Interface:
 					lcontact.append(contact1)
 				elif contact1.show in statuss:
 					old_show = statuss.index(contact1.show)
-				# FIXME: What am I?
 				if (resources != [''] and (len(lcontact) != 1 or \
 				lcontact[0].show != 'offline')) and jid.find('@') > 0:
+					# Another resource of an existing contact connected
 					old_show = 0
 					contact1 = gajim.contacts.copy_contact(contact1)
 					lcontact.append(contact1)
@@ -883,6 +883,7 @@ class Interface:
 			ctrl = self.msg_win_mgr.get_control(jid, account)
 
 			if ctrl:
+				ctrl.no_autonegotiation = False
 				ctrl.set_session(None)
 				ctrl.contact = highest
 
@@ -2945,7 +2946,6 @@ class Interface:
 
 	def on_open_chat_window(self, widget, contact, account, resource=None,
 	session=None):
-
 		# Get the window containing the chat
 		fjid = contact.jid
 

@@ -1287,14 +1287,12 @@ class ChatControl(ChatControlBase):
 		self.handlers[id_] = widget
 
 		if not session:
-			session = gajim.connections[self.account]. \
-				find_controlless_session(self.contact.jid)
-			if session:
-				# Don't use previous session if we want to a specific resource
-				# and it's not the same
-				r = gajim.get_room_and_nick_from_fjid(str(session.jid))[1]
-				if resource and resource != r:
-					session = None
+			# Don't use previous session if we want to a specific resource
+			# and it's not the same
+			if not resource:
+				resource = contact.resource
+			session = gajim.connections[self.account].find_controlless_session(
+				self.contact.jid, resource)
 
 		if session:
 			session.control = self
