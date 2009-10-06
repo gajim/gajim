@@ -206,6 +206,8 @@ class OptionsParser:
 			self.update_config_to_01252()
 		if old < [0, 12, 5, 3] and new >= [0, 12, 5, 3]:
 			self.update_config_to_01253()
+		if old < [0, 12, 5, 4] and new >= [0, 12, 5, 4]:
+			self.update_config_to_01254()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -747,5 +749,19 @@ class OptionsParser:
 				else:
 					gajim.config.set_per('accounts', account, 'active', True)
 		gajim.config.set('version', '0.12.5.3')
+
+	def update_config_to_01254(self):
+		vals = {'inmsgcolor': ['#a34526', '#a40000'],
+			'outmsgcolor': ['#164e6f', '#3465a4'],
+			'restored_messages_color': ['grey', '#555753'],
+			'statusmsgcolor': ['#1eaa1e', '#73d216'],
+			'urlmsgcolor': ['#0000ff', '#204a87'],
+			'gc_nicknames_colors': ['#a34526:#c000ff:#0012ff:#388a99:#045723:#7c7c7c:#ff8a00:#94452d:#244b5a:#32645a', '#4e9a06:#f57900:#ce5c00:#3465a4:#204a87:#75507b:#5c3566:#c17d11:#8f5902:#ef2929:#cc0000:#a40000']}
+		for c in vals:
+			val = self.old_values[c]
+			if val == vals[c][0]:
+				# We didn't change default value, so update it with new default
+				gajim.config.set(c, vals[c][1])
+		gajim.config.set('version', '0.12.5.4')
 
 # vim: se ts=3:
