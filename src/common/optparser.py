@@ -204,6 +204,8 @@ class OptionsParser:
 			self.update_config_to_01251()
 		if old < [0, 12, 5, 2] and new >= [0, 12, 5, 2]:
 			self.update_config_to_01252()
+		if old < [0, 12, 5, 3] and new >= [0, 12, 5, 3]:
+			self.update_config_to_01253()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -735,5 +737,15 @@ class OptionsParser:
 			for account in gajim.config.get_per('accounts'):
 				gajim.config.set_per('accounts', account, 'autoauth', val)
 		gajim.config.set('version', '0.12.5.2')
+
+	def update_config_to_01253(self):
+		if 'enable_zeroconf' in self.old_values:
+			val = self.old_values['enable_zeroconf']
+			for account in gajim.config.get_per('accounts'):
+				if gajim.config.get_per('accounts', account, 'is_zeroconf'):
+					gajim.config.set_per('accounts', account, 'active', val)
+				else:
+					gajim.config.set_per('accounts', account, 'active', True)
+		gajim.config.set('version', '0.12.5.3')
 
 # vim: se ts=3:
