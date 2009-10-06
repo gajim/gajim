@@ -356,7 +356,7 @@ def is_in_path(command, return_abs_path=False):
 	return False
 
 def exec_command(command):
-	subprocess.Popen(command, shell = True)
+	subprocess.Popen(command + ' &', shell = True).wait()
 
 def build_command(executable, parameter):
 	# we add to the parameter (can hold path with spaces)
