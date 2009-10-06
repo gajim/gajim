@@ -1604,6 +1604,8 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 	def _request_bookmarks_xml(self):
+		if not self.connection:
+			return
 		iq = common.xmpp.Iq(typ='get')
 		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq2.addChild(name='storage', namespace='storage:bookmarks')
