@@ -86,7 +86,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		'''dispatch a received <message> stanza'''
 		msg_type = msg.getType()
 		subject = msg.getSubject()
-		resource = gajim.get_nick_from_fjid(full_jid_with_resource)
+		resource = gajim.get_resource_from_jid(full_jid_with_resource)
 		if self.resource != resource:
 			self.resource = resource
 			if self.control and self.control.resource:
