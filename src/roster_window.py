@@ -2396,7 +2396,7 @@ class RosterWindow:
 			else: # user is running svn
 				helpers.exec_command('%s history_manager.py' % sys.executable)
 		else: # Unix user
-			helpers.exec_command('%s history_manager.py &' % sys.executable)
+			helpers.exec_command('%s history_manager.py' % sys.executable)
 
 	def on_info(self, widget, contact, account):
 		'''Call vcard_information_window class to display contact's information'''

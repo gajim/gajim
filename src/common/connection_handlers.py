@@ -351,7 +351,7 @@ class ConnectionBytestream:
 		file_props['hash'] = hash_id
 		return
 
-	def _connect_error(self, to, _id, sid, code = 404):
+	def _connect_error(self, to, _id, sid, code=404):
 		''' cb, when there is an error establishing BS connection, or
 		when connection is rejected'''
 		if not self.connection or self.connected < 2:
