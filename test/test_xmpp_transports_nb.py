@@ -37,7 +37,6 @@ class TestModuleLevelFunctions(unittest.TestCase):
 		bosh_dict = {'bosh_content': u'text/xml; charset=utf-8',
  						'bosh_hold': 2,
  						'bosh_http_pipelining': False,
- 						'bosh_port': 5280,
  						'bosh_uri': u'http://gajim.org:5280/http-bind',
 						'bosh_useproxy': False,
  						'bosh_wait': 30,
@@ -173,17 +172,16 @@ class TestNonBlockingTCP(AbstractTransportTest):
 	def test_connect_disconnect_plain(self):
 		''' Establish plain connection '''
 		self.client.do_connect(establish_tls=False)
-		self.assert_(self.client.socket.state == 'CONNECTED')
+		self.assertEquals(self.client.socket.state, 'CONNECTED')
 		self.client.do_disconnect()
-		self.assert_(self.client.socket.state == 'DISCONNECTED')
+		self.assertEquals(self.client.socket.state, 'DISCONNECTED')
 	
-	# FIXME: testcase not working...
-	#def test_connect_disconnect_ssl(self):
-	#	''' Establish SSL (not TLS) connection '''
-	#	self.client.do_connect(establish_tls=True)
-	#	self.assert_(self.client.socket.state == 'CONNECTED')
-	#	self.client.do_disconnect()
-	#	self.assert_(self.client.socket.state == 'DISCONNECTED')
+#	def test_connect_disconnect_ssl(self):
+#		''' Establish SSL (not TLS) connection '''
+#		self.client.do_connect(establish_tls=True)
+#		self.assertEquals(self.client.socket.state, 'CONNECTED')
+#		self.client.do_disconnect()
+#		self.assertEquals(self.client.socket.state, 'DISCONNECTED')
 
 	def test_do_receive(self):
 		''' Test _do_receive method by overwriting socket.recv '''
@@ -259,12 +257,11 @@ class TestNonBlockingHTTP(AbstractTransportTest):
 	''' Test class for NonBlockingHTTP transport'''
 
 	bosh_http_dict = {
-		'http_uri': 'http://httpcm.jabber.org/webclient',			
-		'http_port': 1010,
+		'http_uri': 'http://gajim.org:5280/http-bind',			
 		'http_version': 'HTTP/1.1',
 		'http_persistent': True,
 		'add_proxy_headers': False
-		}
+	}
 
 	def _get_transport(self, http_dict, proxy_dict=None):
 		return transports_nb.NonBlockingHTTP(
@@ -308,12 +305,22 @@ class TestNonBlockingHTTP(AbstractTransportTest):
 		transport._on_receive(message)
 		self.assertTrue(self.have_received_expected(), msg='Failed: In one go')
 
-		# try to receive in chunks
-		chunk1, chunk2, chunk3  = message[:20], message[20:73], message[73:]
-		nextmessage_chunk = "\r\n\r\nHTTP/1.1 200 OK\r\nContent-Type: text/x"
-		chunks = (chunk1, chunk2, chunk3, nextmessage_chunk)
-
-		#TODO: BOSH implementatio ndoesn't support that for the moment
+# FIXME: Not yet implemented.
+#	def test_receive_http_message_in_chunks(self):
+#		''' Let _on_receive handle some chunked http messages  '''
+#		transport = self._get_transport(self.bosh_http_dict)
+#		
+#		header = ("HTTP/1.1 200 OK\r\nContent-Type: text/xml; charset=utf-8\r\n" +
+#			"Content-Length: 88\r\n\r\n")
+#		payload = "<test>Please don't fail!</test>"
+#		body = "<body xmlns='http://jabber.org/protocol/httpbind'>%s</body>" \
+#			% payload
+#		message = "%s%s" % (header, body)
+#
+#		chunk1, chunk2, chunk3  = message[:20], message[20:73], message[73:]
+#		nextmessage_chunk = "\r\n\r\nHTTP/1.1 200 OK\r\nContent-Type: text/x"
+#		chunks = (chunk1, chunk2, chunk3, nextmessage_chunk)
+#
 #		transport.onreceive(self.expect_receive(body, msg='Failed: In chunks'))
 #		for chunk in chunks:
 #			transport._on_receive(chunk)
