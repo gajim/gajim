@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-## src/common/xmpp_stringprep.py
+## src/common/xmpp/stringprepare.py
 ##
 ## Copyright (C) 2001-2005 Twisted Matrix Laboratories
 ## Copyright (C) 2005-2007 Yann Leboulanger <asterix AT lagaule.org>
