@@ -849,7 +849,7 @@ class RosterWindow:
 		self.remove_contact(jid, account, force=True, backend=True)
 		return True
 		
-	def rename_group(self, old_name, new_name):
+	def rename_group(self, old_name, new_name, account):
 		"""
 		rename a roster group
 		"""
@@ -2756,7 +2756,7 @@ class RosterWindow:
 					win.show_title()
 			elif row_type == 'group':
 				# in C_JID column, we hold the group name (which is not escaped)
-				self.rename_group(old_text, new_text)
+				self.rename_group(old_text, new_text, account)
 
 		def on_canceled():
 			if 'rename' in gajim.interface.instances:
