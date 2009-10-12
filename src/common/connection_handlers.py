@@ -2273,6 +2273,21 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				errmsg = prs.getErrorMsg()
 				errcode = prs.getErrorCode()
 				room_jid, nick = gajim.get_room_and_nick_from_fjid(who)
+
+				gc_control = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
+						self.name)
+				
+				# gc_control might be in the other place if it's minimized. Note:
+				# this solution might have an impact on the performance.
+				if gc_control is None:
+					for control in gajim.interface.minimized_controls[self.name]:
+						# Using here this hack instead of isinstance() to avoid risk
+						# of cycle import when trying to import GroupchatControl from
+						# groupchat_control.py
+						if control.__class__.__name__ == 'GroupchatControl' and \
+								control.room_jid == room_jid:
+							gc_control = control
+
 				if errcode == '502':
 					# Internal Timeout:
 					self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
@@ -2290,9 +2305,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('You are banned from group chat %s.') % room_jid))
 				elif (errcode == '404') or (errcon == 'item-not-found'):
-					# group chat does not exist
-					self.dispatch('ERROR', (_('Unable to join group chat'),
-						_('Group chat %s does not exist.') % room_jid))
+					if gc_control is None or gc_control.autorejoin is None:
+						# group chat does not exist
+						self.dispatch('ERROR', (_('Unable to join group chat'),
+							_('Group chat %s does not exist.') % room_jid))
 				elif (errcode == '405') or (errcon == 'not-allowed'):
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('Group chat creation is restricted.')))
