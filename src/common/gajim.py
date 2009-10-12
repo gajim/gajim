@@ -212,10 +212,10 @@ def get_server_from_jid(jid):
 	pos = jid.find('@') + 1 # after @
 	return jid[pos:]
 
-def get_nick_from_fjid(jid):
-	# fake jid is the jid for a contact in a room
-	# gaim@conference.jabber.no/nick/nick-continued
-	return jid.split('/', 1)[1]
+def get_resource_from_jid(jid):
+    tokens = jid.split('/', 1)
+    if len(tokens) > 1:
+        return tokens[1]
 
 def get_name_and_server_from_jid(jid):
 	name = get_nick_from_jid(jid)

@@ -270,6 +270,16 @@ def adapt_arguments(command, arguments, args, opts):
             if value not in initial:
                 raise CommandError("%s: Invalid argument" % key, command)
 
+    # If argument to an option constrained by a sequence was not given - then
+    # it's value should be set to None.
+    for spec_key, spec_value in spec_kwargs:
+        if isinstance(spec_value, (TupleType, ListType)):
+            for key, value in opts:
+                if spec_key == key:
+                    break
+            else:
+                opts.append((spec_key, None))
+
     # We need to encode every keyword argument to a simple string, not the
     # unicode one, because ** expansion does not support it.
     for index, (key, value) in enumerate(opts):
