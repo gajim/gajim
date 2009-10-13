@@ -2281,7 +2281,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				# this solution might have an impact on the performance.
 				if gc_control is None and \
 				room_jid in gajim.interface.minimized_controls[self.name]:
-					gc_control = control
+					gc_control = gajim.interface.minimized_controls[self.name][
+						room_jid]
 
 				if errcode == '502':
 					# Internal Timeout:
