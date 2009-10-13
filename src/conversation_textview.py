@@ -230,13 +230,35 @@ class ConversationTextview(gobject.GObject):
 
 		self.tagIn = buffer_.create_tag('incoming')
 		color = gajim.config.get('inmsgcolor')
+		font = pango.FontDescription(gajim.config.get('inmsgfont'))
 		self.tagIn.set_property('foreground', color)
+		self.tagIn.set_property('font-desc', font)
+
 		self.tagOut = buffer_.create_tag('outgoing')
 		color = gajim.config.get('outmsgcolor')
+		font = pango.FontDescription(gajim.config.get('outmsgfont'))
 		self.tagOut.set_property('foreground', color)
+		self.tagOut.set_property('font-desc', font)
+
 		self.tagStatus = buffer_.create_tag('status')
 		color = gajim.config.get('statusmsgcolor')
+		font = pango.FontDescription(gajim.config.get('satusmsgfont'))
 		self.tagStatus.set_property('foreground', color)
+		self.tagStatus.set_property('font-desc', font)
+
+		self.tagInText = buffer_.create_tag('incomingtxt')
+		color = gajim.config.get('inmsgtxtcolor')
+		font = pango.FontDescription(gajim.config.get('inmsgtxtfont'))
+		if color:
+			self.tagInText.set_property('foreground', color)
+		self.tagInText.set_property('font-desc', font)
+
+		self.tagOutText = buffer_.create_tag('outgoingtxt')
+		color = gajim.config.get('outmsgtxtcolor')
+		if color:
+			font = pango.FontDescription(gajim.config.get('outmsgtxtfont'))
+		self.tagOutText.set_property('foreground', color)
+		self.tagOutText.set_property('font-desc', font)
 
 		colors = gajim.config.get('gc_nicknames_colors')
 		colors = colors.split(':')
@@ -1219,6 +1241,10 @@ class ConversationTextview(gobject.GObject):
 						'chat_merge_consecutive_nickname_indent'))
 			else:
 				self.print_name(name, kind, other_tags_for_name)
+			if kind == 'incoming':
+				text_tags.append('incomingtxt')
+			elif kind == 'outgoing':
+				text_tags.append('outgoingtxt')
 		self.print_subject(subject)
 		self.print_real_text(text, text_tags, name, xhtml, graphics=graphics)
 
