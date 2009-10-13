@@ -2253,7 +2253,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			# Error presences may not include sent stanza, so we don't detect it's
 			# a muc preence. So detect it by ID
 			h = hmac.new(self.secret_hmac, jid_stripped).hexdigest()[:6]
-			if id_.split('_')[-1] = h:
+			if id_.split('_')[-1] == h:
 				is_gc = True
 		status = prs.getStatus() or ''
 		show = prs.getShow()
