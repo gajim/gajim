@@ -34,6 +34,7 @@ import socket
 import sys
 import operator
 import hashlib
+import hmac
 
 from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
 	time as time_time, timezone, tzname)
@@ -2207,6 +2208,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			return
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		timestamp = None
+		id_ = prs.getID()
 		is_gc = False # is it a GC presence ?
 		sigTag = None
 		ns_muc_user_x = None
@@ -2246,6 +2248,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				if self.connection.getRoster().getItem(agent): # to be sure it's a transport contact
 					transport_auto_auth = True
 
+		if not is_gc and id_ and id_.startswith('gajim_muc_') and \
+		ptype == 'error':
+			# Error presences may not include sent stanza, so we don't detect it's
+			# a muc preence. So detect it by ID
+			h = hmac.new(self.secret_hmac, jid_stripped).hexdigest()[:6]
+			if id_.split('_')[-1] = h:
+				is_gc = True
 		status = prs.getStatus() or ''
 		show = prs.getShow()
 		if not show in gajim.SHOW_LIST:
