@@ -2279,14 +2279,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				
 				# gc_control might be in the other place if it's minimized. Note:
 				# this solution might have an impact on the performance.
-				if gc_control is None:
-					for control in gajim.interface.minimized_controls[self.name]:
-						# Using here this hack instead of isinstance() to avoid risk
-						# of cycle import when trying to import GroupchatControl from
-						# groupchat_control.py
-						if control.__class__.__name__ == 'GroupchatControl' and \
-								control.room_jid == room_jid:
-							gc_control = control
+				if gc_control is None and \
+				room_jid in gajim.interface.minimized_controls[self.name]:
+					gc_control = control
 
 				if errcode == '502':
 					# Internal Timeout:
