@@ -2277,12 +2277,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				gc_control = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
 						self.name)
 				
-				# gc_control might be in the other place if it's minimized. Note:
-				# this solution might have an impact on the performance.
-				if gc_control is None and \
-				room_jid in gajim.interface.minimized_controls[self.name]:
-					gc_control = gajim.interface.minimized_controls[self.name][
-						room_jid]
+				# If gc_control is missing - it may be minimized. Try to get it from
+				# there. If it's not there - then it's missing anyway and will
+				# remain set to None.
+				if gc_control is None:
+					minimized = gajim.interface.minimized_controls[self.name]
+					gc_control = minimized.get(room_jid)
 
 				if errcode == '502':
 					# Internal Timeout:
