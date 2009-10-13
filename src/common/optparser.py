@@ -208,6 +208,8 @@ class OptionsParser:
 			self.update_config_to_01253()
 		if old < [0, 12, 5, 4] and new >= [0, 12, 5, 4]:
 			self.update_config_to_01254()
+		if old < [0, 12, 5, 5] and new >= [0, 12, 5, 5]:
+			self.update_config_to_01255()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -763,5 +765,15 @@ class OptionsParser:
 				# We didn't change default value, so update it with new default
 				gajim.config.set(c, vals[c][1])
 		gajim.config.set('version', '0.12.5.4')
+
+	def update_config_to_01254(self):
+		vals = {'statusmsgcolor': ['#73d216', '#4e9a06'],
+			'outmsgtxtcolor': ['#a2a2a2', '#555753']}
+		for c in vals:
+			val = self.old_values[c]
+			if val == vals[c][0]:
+				# We didn't change default value, so update it with new default
+				gajim.config.set(c, vals[c][1])
+		gajim.config.set('version', '0.12.5.5')
 
 # vim: se ts=3:
