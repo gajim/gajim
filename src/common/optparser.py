@@ -766,7 +766,7 @@ class OptionsParser:
 				gajim.config.set(c, vals[c][1])
 		gajim.config.set('version', '0.12.5.4')
 
-	def update_config_to_01254(self):
+	def update_config_to_01255(self):
 		vals = {'statusmsgcolor': ['#73d216', '#4e9a06'],
 			'outmsgtxtcolor': ['#a2a2a2', '#555753']}
 		for c in vals:
