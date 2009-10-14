@@ -210,6 +210,8 @@ class OptionsParser:
 			self.update_config_to_01254()
 		if old < [0, 12, 5, 5] and new >= [0, 12, 5, 5]:
 			self.update_config_to_01255()
+		if old < [0, 12, 5, 6] and new >= [0, 12, 5, 6]:
+			self.update_config_to_01256()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -779,5 +781,16 @@ class OptionsParser:
 				# We didn't change default value, so update it with new default
 				gajim.config.set(c, vals[c][1])
 		gajim.config.set('version', '0.12.5.5')
+
+	def update_config_to_01256(self):
+		vals = {'gc_nicknames_colors': ['#4e9a06:#f57900:#ce5c00:#3465a4:#204a87:#75507b:#5c3566:#c17d11:#8f5902:#ef2929:#cc0000:#a40000', '#f57900:#ce5c00:#204a87:#75507b:#5c3566:#c17d11:#8f5902:#ef2929:#cc0000:#a40000']}
+		for c in vals:
+			if c not in self.old_values:
+				continue
+			val = self.old_values[c]
+			if val == vals[c][0]:
+				# We didn't change default value, so update it with new default
+				gajim.config.set(c, vals[c][1])
+		gajim.config.set('version', '0.12.5.6')
 
 # vim: se ts=3:
