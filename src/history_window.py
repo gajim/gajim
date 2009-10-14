@@ -409,6 +409,7 @@ class HistoryWindow:
 		constants.KIND_CHAT_MSG_RECV):
 			contact_name = self.completion_dict[self.jid][C_INFO_NAME]
 			tag_name = 'incoming'
+			tag_msg = 'incomingtxt'
 		elif kind in (constants.KIND_SINGLE_MSG_SENT,
 		constants.KIND_CHAT_MSG_SENT):
 			if self.account:
@@ -419,6 +420,7 @@ class HistoryWindow:
 				account = gajim.contacts.get_accounts()[0]
 				contact_name = gajim.nicks[account]
 			tag_name = 'outgoing'
+			tag_msg = 'outgoingtxt'
 		elif kind == constants.KIND_GCSTATUS:
 			# message here (if not None) is status message
 			if message:

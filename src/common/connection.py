@@ -39,6 +39,7 @@ import operator
 
 import time
 import locale
+import hmac
 
 try:
 	randomsource = random.SystemRandom()
@@ -190,6 +191,7 @@ class Connection(ConnectionHandlers):
 		self.vcard_supported = False
 		self.private_storage_supported = True
 		self.streamError = ''
+		self.secret_hmac = str(random.random())[2:]
 	# END __init__
 
 	def put_event(self, ev):
@@ -1775,8 +1777,12 @@ class Connection(ConnectionHandlers):
 				last_log = 0
 			self.last_history_time[room_jid] = last_log
 
-		p = common.xmpp.Presence(to = '%s/%s' % (room_jid, nick),
-			show = show, status = self.status)
+		p = common.xmpp.Presence(to='%s/%s' % (room_jid, nick),
+			show=show, status=self.status)
+		h = hmac.new(self.secret_hmac, room_jid).hexdigest()[:6]
+		id_ = self.connection.getAnID()
+		id_ = 'gajim_muc_' + id_ + '_' + h
+		p.setID(id_)
 		if gajim.config.get('send_sha_in_gc_presence'):
 			p = self.add_sha(p)
 		self.add_lang(p)
@@ -1843,6 +1849,10 @@ class Connection(ConnectionHandlers):
 		xmpp_show = helpers.get_xmpp_show(show)
 		p = common.xmpp.Presence(to = '%s/%s' % (jid, nick), typ = ptype,
 			show = xmpp_show, status = status)
+		h = hmac.new(self.secret_hmac, jid).hexdigest()[:6]
+		id_ = self.connection.getAnID()
+		id_ = 'gajim_muc_' + id_ + '_' + h
+		p.setID(id_)
 		if gajim.config.get('send_sha_in_gc_presence') and show != 'offline':
 			p = self.add_sha(p, ptype != 'unavailable')
 		self.add_lang(p)

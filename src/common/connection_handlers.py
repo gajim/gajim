@@ -34,6 +34,7 @@ import socket
 import sys
 import operator
 import hashlib
+import hmac
 
 from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
 	time as time_time, timezone, tzname)
@@ -2207,6 +2208,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			return
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		timestamp = None
+		id_ = prs.getID()
 		is_gc = False # is it a GC presence ?
 		sigTag = None
 		ns_muc_user_x = None
@@ -2246,6 +2248,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				if self.connection.getRoster().getItem(agent): # to be sure it's a transport contact
 					transport_auto_auth = True
 
+		if not is_gc and id_ and id_.startswith('gajim_muc_') and \
+		ptype == 'error':
+			# Error presences may not include sent stanza, so we don't detect it's
+			# a muc preence. So detect it by ID
+			h = hmac.new(self.secret_hmac, jid_stripped).hexdigest()[:6]
+			if id_.split('_')[-1] == h:
+				is_gc = True
 		status = prs.getStatus() or ''
 		show = prs.getShow()
 		if not show in gajim.SHOW_LIST:
@@ -2273,6 +2282,17 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				errmsg = prs.getErrorMsg()
 				errcode = prs.getErrorCode()
 				room_jid, nick = gajim.get_room_and_nick_from_fjid(who)
+
+				gc_control = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
+						self.name)
+				
+				# If gc_control is missing - it may be minimized. Try to get it from
+				# there. If it's not there - then it's missing anyway and will
+				# remain set to None.
+				if gc_control is None:
+					minimized = gajim.interface.minimized_controls[self.name]
+					gc_control = minimized.get(room_jid)
+
 				if errcode == '502':
 					# Internal Timeout:
 					self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
@@ -2290,9 +2310,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('You are banned from group chat %s.') % room_jid))
 				elif (errcode == '404') or (errcon == 'item-not-found'):
-					# group chat does not exist
-					self.dispatch('ERROR', (_('Unable to join group chat'),
-						_('Group chat %s does not exist.') % room_jid))
+					if gc_control is None or gc_control.autorejoin is None:
+						# group chat does not exist
+						self.dispatch('ERROR', (_('Unable to join group chat'),
+							_('Group chat %s does not exist.') % room_jid))
 				elif (errcode == '405') or (errcon == 'not-allowed'):
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('Group chat creation is restricted.')))
