@@ -1326,6 +1326,9 @@ class ChatControl(ChatControlBase):
 
 		self.status_tooltip = gtk.Tooltips()
 
+		if gajim.otr_module:
+			self.update_otr(True)
+
 		self.update_ui()
 		# restore previous conversation
 		self.restore_conversation()
@@ -1559,6 +1562,52 @@ class ChatControl(ChatControlBase):
 		# The name banner is drawn here
 		ChatControlBase.update_ui(self)
 		self.update_toolbar()
+
+	def get_otr_status(self):
+		if not self.session:
+			return 0
+
+		ctx = gajim.otr_module.otrl_context_find(
+			gajim.connections[self.account].otr_userstates,
+			self.contact.get_full_jid().encode(),
+			gajim.get_jid_from_account(self.account).encode(),
+			gajim.OTR_PROTO, 1, (gajim.otr_add_appdata,
+			self.account))[0]
+
+		if ctx.msgstate == gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED:
+			if ctx.active_fingerprint.trust:
+				return 2
+			else:
+				return 1
+		elif ctx.msgstate == gajim.otr_module.OTRL_MSGSTATE_FINISHED:
+			return 3
+		return 0
+
+	def update_otr(self, print_status=False):
+		otr_status_text = ''
+		otr_status = self.get_otr_status()
+		authenticated = False
+
+		if otr_status > 0:
+			enc_status = True
+		else:
+			enc_status = False
+
+		if otr_status == 1:
+			otr_status_text = u'*unauthenticated* secure OTR ' + \
+				u'connection'
+		elif otr_status == 2:
+			otr_status_text = u'authenticated secure OTR ' + \
+				u'connection'
+			authenticated = True
+		elif otr_status == 3:
+			otr_status_text = u'finished OTR connection'
+
+		self._show_lock_image(enc_status, u'OTR', enc_status, True,
+			authenticated)
+		if print_status and otr_status_text != '':
+			self.print_conversation_line(u'[OTR] %s' % \
+				otr_status_text, 'status', '', None)
 
 	def _update_banner_state_image(self):
 		contact = gajim.contacts.get_contact_with_highest_priority(self.account,
@@ -2085,6 +2134,11 @@ class ChatControl(ChatControlBase):
 		history_menuitem = xml.get_widget('history_menuitem')
 		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
 		toggle_e2e_menuitem = xml.get_widget('toggle_e2e_menuitem')
+		otr_submenu = xml.get_widget('otr_submenu')
+		otr_settings_menuitem = xml.get_widget('otr_settings_menuitem')
+		smp_otr_menuitem = xml.get_widget('smp_otr_menuitem')
+		start_otr_menuitem = xml.get_widget('start_otr_menuitem')
+		end_otr_menuitem = xml.get_widget('end_otr_menuitem')
 		send_file_menuitem = xml.get_widget('send_file_menuitem')
 		information_menuitem = xml.get_widget('information_menuitem')
 		convert_to_gc_menuitem = xml.get_widget('convert_to_groupchat')
@@ -2182,6 +2236,32 @@ class ChatControl(ChatControlBase):
 		id_ = convert_to_gc_menuitem.connect('activate',
 			self._on_convert_to_gc_menuitem_activate)
 		self.handlers[id_] = convert_to_gc_menuitem
+
+		if gajim.otr_module:
+			otr_submenu.set_sensitive(True)
+			id = otr_settings_menuitem.connect('activate',
+				self._on_otr_settings_menuitem_activate)
+			self.handlers[id] = otr_settings_menuitem
+			id = start_otr_menuitem.connect('activate',
+				self._on_start_otr_menuitem_activate)
+			self.handlers[id] = start_otr_menuitem
+			id = end_otr_menuitem.connect('activate',
+				self._on_end_otr_menuitem_activate)
+			self.handlers[id] = end_otr_menuitem
+			id = smp_otr_menuitem.connect('activate',
+				self._on_smp_otr_menuitem_activate)
+			self.handlers[id] = smp_otr_menuitem
+
+			ctx = gajim.otr_module.otrl_context_find(gajim.connections[self.account].otr_userstates,
+				self.contact.get_full_jid().encode(),
+				gajim.get_jid_from_account(self.account).encode(), gajim.OTR_PROTO, 1,
+				(gajim.otr_add_appdata, self.account))[0]
+			# can end only when PLAINTEXT
+			end_otr_menuitem.set_sensitive(ctx.msgstate !=
+				gajim.otr_module.OTRL_MSGSTATE_PLAINTEXT)
+			# can SMP only when ENCRYPTED
+			smp_otr_menuitem.set_sensitive(ctx.msgstate ==
+				gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED)
 
 		menu.connect('selection-done', self.destroy_menu,
 			send_file_menuitem, convert_to_gc_menuitem,
@@ -2709,6 +2789,14 @@ class ChatControl(ChatControlBase):
 			self.begin_e2e_negotiation()
 
 	def begin_e2e_negotiation(self):
+		ctx = gajim.otr_module.otrl_context_find(gajim.connections[self.account].otr_userstates,
+			self.contact.get_full_jid().encode(),
+			gajim.get_jid_from_account(self.account).encode(), gajim.OTR_PROTO, 1,
+			(gajim.otr_add_appdata, self.account))[0]
+		if ctx and ctx.msgstate == \
+		gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED:
+			self._on_end_otr_menuitem_activate()
+
 		self.no_autonegotiation = True
 
 		if not self.session:
@@ -2717,6 +2805,33 @@ class ChatControl(ChatControlBase):
 			self.set_session(new_sess)
 
 		self.session.negotiate_e2e(False)
+
+	def _on_start_otr_menuitem_activate(self, *args):
+		# ?OTR? gets replaced with a better message internally in otrl_message_sending
+		MessageControl.send_message(self, u'?OTR?', type_='chat')
+	def _on_end_otr_menuitem_activate(self, *args):
+		fjid = self.contact.get_full_jid()
+		thread_id = None
+		if self.session:
+			thread_id = self.session.thread_id
+		gajim.otr_module.otrl_message_disconnect(
+			gajim.connections[self.account].otr_userstates, (gajim.otr_ui_ops,
+			{'account': self.account, 'urgent': True,
+				'thread_id':thread_id}),
+			gajim.get_jid_from_account(self.account).encode(),
+			gajim.OTR_PROTO, fjid.encode())
+		gajim.otr_ui_ops.gajim_log(_('Private conversation with ' \
+			'%s lost.') % fjid, self.account, fjid.encode())
+		self.update_otr()
+	def _on_otr_settings_menuitem_activate(self, *args):
+		gajim.otr_windows.ContactOtrWindow(self.contact.get_full_jid(),
+				self.account, self)
+	def _on_smp_otr_menuitem_activate(self, *args):
+		ctx = gajim.otr_module.otrl_context_find(gajim.connections[self.account].otr_userstates,
+			self.contact.get_full_jid().encode(),
+			gajim.get_jid_from_account(self.account).encode(), gajim.OTR_PROTO, 1,
+			(gajim.otr_add_appdata, self.account))[0]
+		ctx.app_data.show(False)
 
 	def got_connected(self):
 		ChatControlBase.got_connected(self)

@@ -180,6 +180,10 @@ else:
 	if system('gpg -h >/dev/null 2>&1'):
 		HAVE_GPG = False
 
+OTR_PROTO = "xmpp"
+otr_userstates = {}
+otr_policy = {}
+
 import latex
 HAVE_LATEX = latex.check_for_latex_support()
 

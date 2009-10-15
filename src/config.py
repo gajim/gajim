@@ -504,6 +504,181 @@ class PreferencesWindow:
 
 		self.notebook.set_current_page(0)
 
+		if gajim.otr_module:
+			B = self.otr_gtk_builder = gtk.Builder()
+			file_path = os.path.join(gtkgui_helpers.GLADE_DIR,
+					'otr_options_page.glade')
+			self.otr_gtk_builder.add_from_file(file_path)
+
+
+			self.otr_account_store = B.get_object('account_store')
+			for account in sorted(gajim.config.get_per('accounts')):
+				self.otr_account_store.append(row=(account,))
+
+			B.get_object('fingerprint_view').set_model(gajim.otr_ui_ops.fpr_model)
+			B.get_object('fingerprint_view').get_selection().set_mode(gtk.SELECTION_MULTIPLE)
+			gajim.otr_ui_ops.update_context_list()
+
+			class otr_options_page_handler:
+				config = self
+
+				def __init__(self):
+					self.flags = {
+							gajim.otr_module.OTRL_POLICY_ALLOW_V2:B.get_object('enable_check').get_active,
+							gajim.otr_module.OTRL_POLICY_SEND_WHITESPACE_TAG:B.get_object('advertise_check').get_active,
+							gajim.otr_module.OTRL_POLICY_WHITESPACE_START_AKE:B.get_object('autoinitiate_check').get_active,
+							gajim.otr_module.OTRL_POLICY_REQUIRE_ENCRYPTION:B.get_object('require_check').get_active,
+							}
+
+				def flags_toggled_cb(self, button):
+					if button == B.get_object('enable_check'):
+						new_status = button.get_active()
+						B.get_object('advertise_check').set_sensitive(new_status)
+						B.get_object('autoinitiate_check').set_sensitive(new_status)
+						B.get_object('require_check').set_sensitive(new_status)
+
+						if new_status is False:
+							B.get_object('advertise_check').set_active(False)
+							B.get_object('autoinitiate_check').set_active(False)
+							B.get_object('require_check').set_active(False)
+
+					box = B.get_object('account_combobox')
+					active = box.get_active()
+					if active > -1:
+						account = self.config.otr_account_store[active][0]
+
+						otr_flags = sum([ val if state() else 0 for val, state in
+								self.flags.iteritems()])
+						gajim.config.set_per('accounts', account, 'otr_flags',
+								otr_flags)
+
+				def account_combobox_changed_cb(self, box, *args):
+					fpr_label = B.get_object('fingerprint_label')
+					regen_button = B.get_object('regenerate_button')
+
+					active = box.get_active()
+					fpr = '-------- -------- -------- -------- --------'
+					try:
+						if active > -1:
+							regen_button.set_sensitive(True)
+							account = self.config.otr_account_store[active][0]
+
+							otr_flags = gajim.config.get_per('accounts', account,
+									'otr_flags')
+
+							B.get_object('enable_check').set_active(otr_flags &
+									gajim.otr_module.OTRL_POLICY_ALLOW_V2)
+							B.get_object('advertise_check').set_active(otr_flags &
+									gajim.otr_module.OTRL_POLICY_SEND_WHITESPACE_TAG)
+							B.get_object('autoinitiate_check').set_active(otr_flags &
+									gajim.otr_module.OTRL_POLICY_WHITESPACE_START_AKE)
+							B.get_object('require_check').set_active(otr_flags &
+									gajim.otr_module.OTRL_POLICY_REQUIRE_ENCRYPTION)
+
+							fpr = gajim.otr_module.otrl_privkey_fingerprint(
+									gajim.connections[account].otr_userstates,
+									gajim.get_jid_from_account(account).encode(),
+									gajim.OTR_PROTO)
+							regen_button.set_label('Regenerate')
+						else:
+							regen_button.set_sensitive(False)
+					except LookupError, e:
+						# Account not found, no private key available - display the
+						# empty one
+						regen_button.set_label('Generate')
+					finally:
+						B.get_object('fingerprint_label').set_markup('<tt>%s</tt>'%fpr)
+
+				def forget_button_clicked_cb(self, button, *args):
+					accounts = {}
+					for acc in gajim.connections.iterkeys():
+						accounts[gajim.get_jid_from_account(acc)] = acc
+
+					tw = B.get_object('fingerprint_view')
+
+					mod, paths = tw.get_selection().get_selected_rows()
+
+					for path in paths:
+						it = mod.get_iter(path)
+						user, human_cmp_fpr, a = mod.get(it, 0, 3, 4)
+
+						dlg = gtk.Dialog('Confirm removal of fingerprint',
+								self.config.window,
+								gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+									(gtk.STOCK_YES, gtk.RESPONSE_YES,
+									gtk.STOCK_NO, gtk.RESPONSE_NO)
+								)
+						l = gtk.Label()
+						l.set_markup('Are you sure you want remove the following ' 
+								'fingerprint for the contact %s on the account %s?'
+								'\n\n%s' % (user, a, human_cmp_fpr))
+						l.set_line_wrap(True)
+						dlg.vbox.pack_start(l)
+						dlg.show_all()
+
+						if dlg.run() == gtk.RESPONSE_YES:
+							ctx = gajim.otr_module.otrl_context_find(
+									gajim.connections[accounts[a]].otr_userstates,
+									user.encode(), a.encode(), gajim.OTR_PROTO, 1)[0]
+							fpr = ctx.fingerprint_root
+							while fpr and fpr.next:
+								human_fpr = gajim.otr_module.otrl_privkey_hash_to_human(
+										fpr.next.fingerprint)
+								if human_cmp_fpr == '<tt>%s</tt>' % human_fpr:
+									gajim.otr_module.otrl_context_forget_fingerprint(
+											fpr.next, 0)
+									gajim.otr_ui_ops.write_fingerprints({'account':
+											accounts[a]})
+								fpr = fpr.next
+
+						dlg.destroy()
+					gajim.otr_ui_ops.update_context_list()
+
+				def verify_button_clicked_cb(self, button, *args):
+					accounts = {}
+					for acc in gajim.connections.iterkeys():
+						accounts[gajim.get_jid_from_account(acc)] = acc
+
+					tw = B.get_object('fingerprint_view')
+
+					mod, paths = tw.get_selection().get_selected_rows()
+
+					# at most open the window for the first selected row
+					for path in paths[0:1]:
+						it = mod.get_iter(path)
+						fjid, human_cmp_fpr, a = mod.get(it, 0, 3, 4)
+
+						ctx = gajim.otr_module.otrl_context_find(
+								gajim.connections[accounts[a]].otr_userstates,
+								fjid.encode(), a.encode(), gajim.OTR_PROTO, 1)[0]
+						fpr = ctx.fingerprint_root
+						while fpr and fpr.next:
+							human_fpr = gajim.otr_module.otrl_privkey_hash_to_human(
+									fpr.next.fingerprint)
+							if human_cmp_fpr == '<tt>%s</tt>' % human_fpr:
+								gajim.otr_windows.ContactOtrWindow(fjid,
+										accounts[a], fpr=fpr.next)
+							fpr = fpr.next
+
+				def regenerate_button_clicked_cb(self, button, *args):
+					box = B.get_object('account_combobox')
+					active = box.get_active()
+					if active > -1:
+						account = self.config.otr_account_store[active][0]
+						button.set_sensitive(False)
+						gajim.otr_ui_ops.create_privkey({'account':account},
+								gajim.get_jid_from_account(account).encode(),
+								gajim.OTR_PROTO)
+						button.set_sensitive(True)
+						self.account_combobox_changed_cb(box, *args)
+
+			B.connect_signals(otr_options_page_handler())
+
+			if len(self.otr_account_store) > 0:
+				B.get_object('account_combobox').set_active(0)
+			self.notebook.append_page(B.get_object('notebook1'),
+					gtk.Label('OTR Settings'))
+
 		self.window.show_all()
 		gtkgui_helpers.possibly_move_window_in_current_desktop(self.window)
 

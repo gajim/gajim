@@ -1333,6 +1333,9 @@ class ConnectionHandlersBase:
 		# keep track of sessions this connection has with other JIDs
 		self.sessions = {}
 
+		if gajim.otr_module:
+			self.otr_userstates = gajim.otr_module.otrl_userstate_create()
+
 	def get_sessions(self, jid):
 		'''get all sessions for the given full jid'''
 
@@ -1376,6 +1379,16 @@ class ConnectionHandlersBase:
 
 	def terminate_sessions(self, send_termination=False):
 		'''send termination messages and delete all active sessions'''
+		if gajim.otr_module:
+			# disconnect from ENCRYPTED OTR contexts
+			ctx = self.otr_userstates.context_root
+			while ctx is not None:
+				if ctx.msgstate == gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED:
+					gajim.otr_module.otrl_message_disconnect(self.otr_userstates,
+							(gajim.otr_ui_ops, {'account': self.name,'urgent': True}),
+							ctx.accountname, ctx.protocol, ctx.username)
+				ctx = ctx.next
+
 		for jid in self.sessions:
 			for thread_id in self.sessions[jid]:
 				self.sessions[jid][thread_id].terminate(send_termination)
@@ -1869,6 +1882,37 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			self.dispatch('ROSTERX', (action, exchange_items_list, jid_from))
 		raise common.xmpp.NodeProcessed
 
+	def disconnect_otr_helper(self, frm, thread_id):
+		""" disconnect OTR context - it's safe to call this helper
+		function any time a OTR context might exist and should be
+		disconnected. this method checks for otr module existance as
+		well as whether the context is encrypted """
+		if not gajim.otr_module:
+			return
+
+		ctx = gajim.otr_module.otrl_context_find(self.otr_userstates,
+				frm.encode(),
+				gajim.get_jid_from_account(self.name).encode(),
+				gajim.OTR_PROTO, 0, (gajim.otr_add_appdata,
+					self.name))[0]
+
+		if not ctx or ctx.msgstate != \
+		gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED:
+			return
+
+		gajim.otr_module.otrl_message_disconnect(self.otr_userstates,
+				(gajim.otr_ui_ops, {'account': self.name,
+					'urgent':False, 'thread_id':thread_id}),
+				ctx.accountname, gajim.OTR_PROTO, ctx.username)
+
+		gajim.otr_ui_ops.gajim_log(_('Private conversation with %s ' \
+				'lost.') % frm, self.name, frm.encode())
+
+		ctrl = gajim.otr_ui_ops.get_control(frm.encode(), self.name)
+		if ctrl:
+			ctrl.update_otr()
+
+
 	def _messageCB(self, con, msg):
 		'''Called when we receive a message'''
 		log.debug('MessageCB')
@@ -1965,6 +2009,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				form = common.xmpp.DataForm(node=feature.getTag('x'))
 
 				if form['FORM_TYPE'] == 'urn:xmpp:ssn':
+					self.disconnect_otr_helper(frm,
+							thread_id)
+
 					session.handle_negotiation(form)
 				else:
 					reply = msg.buildReply()
@@ -1984,9 +2031,67 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			init = msg.getTag(name='init', namespace=common.xmpp.NS_ESESSION_INIT)
 			form = common.xmpp.DataForm(node=init.getTag('x'))
 
+			self.disconnect_otr_helper(frm, thread_id)
 			session.handle_negotiation(form)
 
 			raise common.xmpp.NodeProcessed
+
+		if gajim.otr_module and not xep_200_encrypted \
+		and isinstance(msgtxt, unicode):
+			otr_msg_tuple = \
+				gajim.otr_module.otrl_message_receiving(
+				self.otr_userstates,
+				(gajim.otr_ui_ops, {'account': self.name,
+				'thread_id':thread_id}),
+				gajim.get_jid_from_account(self.name).encode(),
+				gajim.OTR_PROTO,
+				frm.encode(),
+				msgtxt.encode(),
+				(gajim.otr_add_appdata, self.name))
+			msgtxt = unicode(otr_msg_tuple[1])
+
+			html_node = msg.getTag('html')
+			if html_node:
+				msg.delChild(html_node)
+			msg.setBody(msgtxt)
+
+			if gajim.otr_module.otrl_tlv_find(
+			otr_msg_tuple[2],
+			gajim.otr_module.OTRL_TLV_DISCONNECTED) != None:
+				gajim.otr_ui_ops.gajim_log(_('%s ' \
+					'has ended his/her private ' \
+					'conversation with you. You should ' \
+					'do the same.') % frm,
+					self.name,
+					frm.encode())
+
+				ctrl = gajim.interface.msg_win_mgr.get_control(
+						jid, self.name)
+				if ctrl:
+					ctrl.update_otr()
+
+			ctx = gajim.otr_module.otrl_context_find(
+				self.otr_userstates, frm.encode(),
+				gajim.get_jid_from_account(self.name).encode(),
+				gajim.OTR_PROTO, 1, (gajim.otr_add_appdata,
+				self.name))[0]
+			tlvs = otr_msg_tuple[2]
+			ctx.app_data.handle_tlv(tlvs)
+
+			if msgtxt == '':
+				return
+		elif msgtxt != None and msgtxt != '':
+			# We're also here if we just don't
+			# support OTR. Thus, we should strip
+			# the tags from plaintext messages
+			# since they look ugly.
+			msgtxt = msgtxt.replace('\x20\x09\x20' \
+				'\x20\x09\x09\x09\x09\x20\x09' \
+				'\x20\x09\x20\x09\x20\x20', '')
+			msgtxt = msgtxt.replace('\x20\x09\x20' \
+				'\x09\x20\x20\x09\x20', '')
+			msgtxt = msgtxt.replace('\x20\x20\x09' \
+				'\x09\x20\x20\x09\x20', '')
 
 		tim = msg.getTimestamp()
 		tim = helpers.datetime_tuple(tim)

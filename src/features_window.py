@@ -99,6 +99,10 @@ class FeaturesWindow:
 				_('Encrypting chat messages.'),
 				_('Requires python-crypto.'),
 				_('Requires python-crypto.')),
+			_('Off the Record Encryption'): (self.otr_available,
+				_('Encrypting chatmessages in a way that even works through gateways.'),
+				_('Requires pyotr and libotr (see http://trac.gajim.org/wiki/OTR).'),
+				_('Requires pyotr and libotr (see http://trac.gajim.org/wiki/OTR).')),
 			_('RST Generator'): (self.docutils_available,
 				_('Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html).'),
 				_('Requires python-docutils.'),
@@ -254,6 +258,11 @@ class FeaturesWindow:
 
 	def pycrypto_available(self):
 		return gajim.HAVE_PYCRYPTO
+
+	def otr_available(self):
+		if gajim.otr_module:
+			return True
+		return False
 
 	def docutils_available(self):
 		try:

@@ -342,6 +342,7 @@ class Config:
 			'use_env_http_proxy' : [opt_bool, False],
 			'answer_receipts' : [opt_bool, True, _('Answer to receipt requests')],
 			'request_receipt' : [opt_bool, True, _('Sent receipt requests')],
+			'otr_flags': [opt_int, 50 ],
 			'publish_tune': [opt_bool, False],
 			'subscribe_mood': [opt_bool, True],
 			'subscribe_activity': [opt_bool, True],
@@ -415,6 +416,7 @@ class Config:
 			'gpg_enabled': [ opt_bool, False, _('Is OpenPGP enabled for this contact?')],
 			'autonegotiate_esessions': [opt_bool, True, _('Should Gajim automatically start an encrypted session with this contact when possible?')],
 			'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
+			'otr_flags': [opt_int, -1 ],
 		}, {}),
 		'rooms': ({
 			'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
