@@ -2789,13 +2789,14 @@ class ChatControl(ChatControlBase):
 			self.begin_e2e_negotiation()
 
 	def begin_e2e_negotiation(self):
-		ctx = gajim.otr_module.otrl_context_find(gajim.connections[self.account].otr_userstates,
-			self.contact.get_full_jid().encode(),
-			gajim.get_jid_from_account(self.account).encode(), gajim.OTR_PROTO, 1,
-			(gajim.otr_add_appdata, self.account))[0]
-		if ctx and ctx.msgstate == \
-		gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED:
-			self._on_end_otr_menuitem_activate()
+		if gajim.otr_module:
+			ctx = gajim.otr_module.otrl_context_find(
+					gajim.connections[self.account].otr_userstates,
+					self.contact.get_full_jid().encode(),
+					gajim.get_jid_from_account(self.account).encode(), gajim.OTR_PROTO, 1,
+					(gajim.otr_add_appdata, self.account))[0]
+			if ctx and ctx.msgstate == gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED:
+				self._on_end_otr_menuitem_activate()
 
 		self.no_autonegotiation = True
 
