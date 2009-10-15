@@ -158,22 +158,23 @@ else:
 	if dbus_support.supported:
 		from music_track_listener import MusicTrackListener
 		import dbus
-		
+
 	from ctypes import CDLL
 	from ctypes.util import find_library
 	import platform
-	
-	sysname = platform.system()
-	libc = CDLL(find_library('c'))
 
-	# The constant defined in <linux/prctl.h> which is used to set the name of
-	# the process.
-	PR_SET_NAME = 15
-	
-	if sysname == 'Linux':
-		libc.prctl(PR_SET_NAME, 'gajim')
-	elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
-		libc.setproctitle('gajim')
+	sysname = platform.system()
+	if sysname in ('Linux', 'FreeBSD', 'OpenBSD', 'NetBSD'):
+		libc = CDLL(find_library('c'))
+
+		# The constant defined in <linux/prctl.h> which is used to set the name of
+		# the process.
+		PR_SET_NAME = 15
+
+		if sysname == 'Linux':
+			libc.prctl(PR_SET_NAME, 'gajim')
+		elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
+			libc.setproctitle('gajim')
 
 	if gtk.pygtk_version < (2, 12, 0):
 		pritext = _('Gajim needs PyGTK 2.12 or above')
