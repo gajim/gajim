@@ -1387,6 +1387,8 @@ class AccountsWindow:
 			model.set(iter_, 0, account)
 
 	def resend(self, account):
+		if not account in gajim.connections:
+			return
 		show = gajim.SHOW_LIST[gajim.connections[account].connected]
 		status = gajim.connections[account].status
 		gajim.connections[account].change_status(show, status)
@@ -1420,10 +1422,12 @@ class AccountsWindow:
 			def on_no(account):
 				if self.resend_presence:
 					self.resend(account)
-			self.dialog = dialogs.YesNoDialog(_('Relogin now?'),
-				_('If you want all the changes to apply instantly, '
-				'you must relogin.'), on_response_yes=(on_yes,
-				self.current_account), on_response_no=(on_no, self.current_account))
+			if self.current_account in gajim.connections:
+				self.dialog = dialogs.YesNoDialog(_('Relogin now?'),
+					_('If you want all the changes to apply instantly, '
+					'you must relogin.'), on_response_yes=(on_yes,
+					self.current_account), on_response_no=(on_no,
+					self.current_account))
 		elif self.resend_presence:
 			self.resend(self.current_account)
 
@@ -1507,12 +1511,13 @@ class AccountsWindow:
 		self.notebook.set_current_page(1)
 
 	def init_zeroconf_account(self):
-		enable = gajim.config.get('enable_zeroconf') and gajim.HAVE_ZEROCONF
-		self.xml.get_widget('enable_zeroconf_checkbutton2').set_active(enable)
+		active = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
+			'active')
+		self.xml.get_widget('enable_zeroconf_checkbutton2').set_active(active)
 		if not gajim.HAVE_ZEROCONF:
 			self.xml.get_widget('enable_zeroconf_checkbutton2').set_sensitive(
 				False)
-		self.xml.get_widget('zeroconf_notebook').set_sensitive(enable)
+		self.xml.get_widget('zeroconf_notebook').set_sensitive(active)
 		# General tab
 		st = gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
 			'autoconnect')
@@ -1573,7 +1578,7 @@ class AccountsWindow:
 		use_gpg_agent_checkbutton = self.xml.get_widget(
 			'use_gpg_agent_checkbutton' + widget_name_add)
 
-		if not keyid or not gajim.connections[account].gpg:
+		if not keyid:
 			use_gpg_agent_checkbutton.set_sensitive(False)
 			gpg_key_label.set_text(_('No key selected'))
 			gpg_name_label.set_text('')
@@ -1587,6 +1592,9 @@ class AccountsWindow:
 	def draw_normal_jid(self):
 		account = self.current_account
 		self.ignore_events = True
+		active = gajim.config.get_per('accounts', account, 'active')
+		self.xml.get_widget('enable_checkbutton1').set_active(active)
+		self.xml.get_widget('normal_notebook1').set_sensitive(active)
 		if gajim.config.get_per('accounts', account, 'anonymous_auth'):
 			self.xml.get_widget('anonymous_checkbutton1').set_active(True)
 			self.xml.get_widget('jid_label1').set_text(_('Server:'))
@@ -1667,7 +1675,7 @@ class AccountsWindow:
 
 		# Personal tab
 		gpg_key_label = self.xml.get_widget('gpg_key_label1')
-		if gajim.connections[account].gpg:
+		if gajim.HAVE_GPG:
 			self.xml.get_widget('gpg_choose_button1').set_sensitive(True)
 			self.init_account_gpg()
 		else:
@@ -1744,9 +1752,8 @@ class AccountsWindow:
 	def on_rename_button_clicked(self, widget):
 		if not self.current_account:
 			return
-		enable = gajim.config.get('enable_zeroconf')
-		if (self.current_account != gajim.ZEROCONF_ACC_NAME or enable) and \
-		gajim.connections[self.current_account].connected != 0:
+		active = gajim.config.get_per('accounts', self.current_account, 'active')
+		if active and gajim.connections[self.current_account].connected != 0:
 			dialogs.ErrorDialog(
 				_('You are currently connected to the server'),
 				_('To change the account name, you must be disconnected.'))
@@ -1771,7 +1778,7 @@ class AccountsWindow:
 				dialogs.ErrorDialog(_('Invalid account name'),
 					_('Account name cannot contain spaces.'))
 				return
-			if self.current_account != gajim.ZEROCONF_ACC_NAME or enable:
+			if active:
 				# update variables
 				gajim.interface.instances[new_name] = gajim.interface.instances[
 					old_name]
@@ -2179,15 +2186,101 @@ class AccountsWindow:
 
 	def on_merge_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'mergeaccounts')
-		if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
+		if len(gajim.connections) >= 2: # Do not merge accounts if only one active
 			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
 		else:
 			gajim.interface.roster.regroup = False
 		gajim.interface.roster.setup_and_draw_roster()
 
+	def _disable_account(self, account):
+		gajim.interface.roster.close_all(account)
+		if account == gajim.ZEROCONF_ACC_NAME:
+			gajim.connections[account].disable_account()
+		del gajim.connections[account]
+		gajim.interface.save_config()
+		del gajim.interface.instances[account]
+		del gajim.interface.minimized_controls[account]
+		del gajim.nicks[account]
+		del gajim.block_signed_in_notifications[account]
+		del gajim.groups[account]
+		gajim.contacts.remove_account(account)
+		del gajim.gc_connected[account]
+		del gajim.automatic_rooms[account]
+		del gajim.to_be_removed[account]
+		del gajim.newly_added[account]
+		del gajim.sleeper_state[account]
+		del gajim.encrypted_chats[account]
+		del gajim.last_message_time[account]
+		del gajim.status_before_autoaway[account]
+		del gajim.transport_avatar[account]
+		del gajim.gajim_optional_features[account]
+		del gajim.caps_hash[account]
+		if len(gajim.connections) >= 2:
+			# Do not merge accounts if only one exists
+			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
+		else:
+			gajim.interface.roster.regroup = False
+		gajim.interface.roster.setup_and_draw_roster()
+		gajim.interface.roster.set_actions_menu_needs_rebuild()
+
+	def _enable_account(self, account):
+		if account == gajim.ZEROCONF_ACC_NAME:
+			gajim.connections[account] = connection_zeroconf.ConnectionZeroconf(
+				account)
+			if gajim.connections[account].gpg:
+				self.xml.get_widget('gpg_choose_button2').set_sensitive(True)
+		else:
+			gajim.connections[account] = common.connection.Connection(account)
+			if gajim.connections[account].gpg:
+				self.xml.get_widget('gpg_choose_button1').set_sensitive(True)
+		self.init_account_gpg()
+		# update variables
+		gajim.interface.instances[account] = {'infos': {},
+			'disco': {}, 'gc_config': {}, 'search': {}, 'online_dialog': {}}
+		gajim.interface.minimized_controls[account] = {}
+		gajim.connections[account].connected = 0
+		gajim.groups[account] = {}
+		gajim.contacts.add_account(account)
+		gajim.gc_connected[account] = {}
+		gajim.automatic_rooms[account] = {}
+		gajim.newly_added[account] = []
+		gajim.to_be_removed[account] = []
+		if account == gajim.ZEROCONF_ACC_NAME:
+			gajim.nicks[account] = gajim.ZEROCONF_ACC_NAME
+		else:
+			gajim.nicks[account] = gajim.config.get_per('accounts', account,
+				'name')
+		gajim.block_signed_in_notifications[account] = True
+		gajim.sleeper_state[account] = 'off'
+		gajim.encrypted_chats[account] = []
+		gajim.last_message_time[account] = {}
+		gajim.status_before_autoaway[account] = ''
+		gajim.transport_avatar[account] = {}
+		gajim.gajim_optional_features[account] = []
+		gajim.caps_hash[account] = ''
+		# refresh roster
+		if len(gajim.connections) >= 2:
+			# Do not merge accounts if only one exists
+			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
+		else:
+			gajim.interface.roster.regroup = False
+		gajim.interface.roster.setup_and_draw_roster()
+		gajim.interface.roster.set_actions_menu_needs_rebuild()
+		gajim.interface.save_config()
+
 	def on_enable_zeroconf_checkbutton2_toggled(self, widget):
 		# don't do anything if there is an account with the local name but is a
 		# normal account
+		if self.ignore_events:
+			return
+		if gajim.account_is_connected(self.current_account):
+			self.ignore_events = True
+			self.xml.get_widget('enable_zeroconf_checkbutton2').set_active(True)
+			self.ignore_events = False
+			dialogs.ErrorDialog(
+				_('You are currently connected to the server'),
+				_('To disable the account, you must be disconnected.'))
+			return
 		if gajim.ZEROCONF_ACC_NAME in gajim.connections and not \
 		gajim.connections[gajim.ZEROCONF_ACC_NAME].is_zeroconf:
 			gajim.connections[gajim.ZEROCONF_ACC_NAME].dispatch('ERROR',
@@ -2196,77 +2289,42 @@ class AccountsWindow:
 				'.')))
 			return
 
-		if gajim.config.get('enable_zeroconf') and not widget.get_active():
+		if gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'active') \
+		and not widget.get_active():
 			self.xml.get_widget('zeroconf_notebook').set_sensitive(False)
 			# disable
-			gajim.interface.roster.close_all(gajim.ZEROCONF_ACC_NAME)
-			gajim.connections[gajim.ZEROCONF_ACC_NAME].disable_account()
-			del gajim.connections[gajim.ZEROCONF_ACC_NAME]
-			gajim.interface.save_config()
-			del gajim.interface.instances[gajim.ZEROCONF_ACC_NAME]
-			del gajim.interface.minimized_controls[gajim.ZEROCONF_ACC_NAME]
-			del gajim.nicks[gajim.ZEROCONF_ACC_NAME]
-			del gajim.block_signed_in_notifications[gajim.ZEROCONF_ACC_NAME]
-			del gajim.groups[gajim.ZEROCONF_ACC_NAME]
-			gajim.contacts.remove_account(gajim.ZEROCONF_ACC_NAME)
-			del gajim.gc_connected[gajim.ZEROCONF_ACC_NAME]
-			del gajim.automatic_rooms[gajim.ZEROCONF_ACC_NAME]
-			del gajim.to_be_removed[gajim.ZEROCONF_ACC_NAME]
-			del gajim.newly_added[gajim.ZEROCONF_ACC_NAME]
-			del gajim.sleeper_state[gajim.ZEROCONF_ACC_NAME]
-			del gajim.encrypted_chats[gajim.ZEROCONF_ACC_NAME]
-			del gajim.last_message_time[gajim.ZEROCONF_ACC_NAME]
-			del gajim.status_before_autoaway[gajim.ZEROCONF_ACC_NAME]
-			del gajim.transport_avatar[gajim.ZEROCONF_ACC_NAME]
-			del gajim.gajim_optional_features[gajim.ZEROCONF_ACC_NAME]
-			del gajim.caps_hash[gajim.ZEROCONF_ACC_NAME]
-			if len(gajim.connections) >= 2:
-				# Do not merge accounts if only one exists
-				gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
-			else:
-				gajim.interface.roster.regroup = False
-			gajim.interface.roster.setup_and_draw_roster()
-			gajim.interface.roster.set_actions_menu_needs_rebuild()
+			self._disable_account(gajim.ZEROCONF_ACC_NAME)
 
-		elif not gajim.config.get('enable_zeroconf') and widget.get_active():
+		elif not gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME,
+		'active') and widget.get_active():
 			self.xml.get_widget('zeroconf_notebook').set_sensitive(True)
 			# enable (will create new account if not present)
-			gajim.connections[gajim.ZEROCONF_ACC_NAME] = connection_zeroconf.\
-				ConnectionZeroconf(gajim.ZEROCONF_ACC_NAME)
-			if gajim.connections[gajim.ZEROCONF_ACC_NAME].gpg:
-				self.xml.get_widget('gpg_choose_button2').set_sensitive(True)
-			self.init_account_gpg()
-			# update variables
-			gajim.interface.instances[gajim.ZEROCONF_ACC_NAME] = {'infos': {},
-				'disco': {}, 'gc_config': {}, 'search': {}, 'online_dialog': {}}
-			gajim.interface.minimized_controls[gajim.ZEROCONF_ACC_NAME] = {}
-			gajim.connections[gajim.ZEROCONF_ACC_NAME].connected = 0
-			gajim.groups[gajim.ZEROCONF_ACC_NAME] = {}
-			gajim.contacts.add_account(gajim.ZEROCONF_ACC_NAME)
-			gajim.gc_connected[gajim.ZEROCONF_ACC_NAME] = {}
-			gajim.automatic_rooms[gajim.ZEROCONF_ACC_NAME] = {}
-			gajim.newly_added[gajim.ZEROCONF_ACC_NAME] = []
-			gajim.to_be_removed[gajim.ZEROCONF_ACC_NAME] = []
-			gajim.nicks[gajim.ZEROCONF_ACC_NAME] = gajim.ZEROCONF_ACC_NAME
-			gajim.block_signed_in_notifications[gajim.ZEROCONF_ACC_NAME] = True
-			gajim.sleeper_state[gajim.ZEROCONF_ACC_NAME] = 'off'
-			gajim.encrypted_chats[gajim.ZEROCONF_ACC_NAME] = []
-			gajim.last_message_time[gajim.ZEROCONF_ACC_NAME] = {}
-			gajim.status_before_autoaway[gajim.ZEROCONF_ACC_NAME] = ''
-			gajim.transport_avatar[gajim.ZEROCONF_ACC_NAME] = {}
-			gajim.gajim_optional_features[gajim.ZEROCONF_ACC_NAME] = []
-			gajim.caps_hash[gajim.ZEROCONF_ACC_NAME] = ''
-			# refresh roster
-			if len(gajim.connections) >= 2:
-				# Do not merge accounts if only one exists
-				gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
-			else:
-				gajim.interface.roster.regroup = False
-			gajim.interface.roster.setup_and_draw_roster()
-			gajim.interface.roster.set_actions_menu_needs_rebuild()
-			gajim.interface.save_config()
+			self._enable_account(gajim.ZEROCONF_ACC_NAME)
 
-		self.on_checkbutton_toggled(widget, 'enable_zeroconf')
+		self.on_checkbutton_toggled(widget, 'active',
+			account=gajim.ZEROCONF_ACC_NAME)
+
+	def on_enable_checkbutton1_toggled(self, widget):
+		if self.ignore_events:
+			return
+		if gajim.account_is_connected(self.current_account):
+			self.ignore_events = True
+			self.xml.get_widget('enable_checkbutton1').set_active(True)
+			self.ignore_events = False
+			dialogs.ErrorDialog(
+				_('You are currently connected to the server'),
+				_('To disable the account, you must be disconnected.'))
+			return
+		# add/remove account in roster and all variables
+		if widget.get_active():
+			# enable
+			self._enable_account(self.current_account)
+		else:
+			# disable
+			self._disable_account(self.current_account)
+		self.on_checkbutton_toggled(widget, 'active',
+			account=self.current_account, change_sensitivity_widgets=[
+			self.xml.get_widget('normal_notebook1')])
 
 	def on_custom_port_checkbutton2_toggled(self, widget):
 		self.xml.get_widget('custom_port_entry2').set_sensitive(

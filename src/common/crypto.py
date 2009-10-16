@@ -22,7 +22,7 @@
 import os
 import math
 
-from Crypto.Hash import SHA256
+from hashlib import sha256 as SHA256
 
 # convert a large integer to a big-endian bitstring
 def encode_mpi(n):
@@ -58,7 +58,7 @@ def decode_mpi(s):
 		return 256 * decode_mpi(s[:-1]) + ord(s[-1])
 
 def sha256(string):
-	sh = SHA256.new()
+	sh = SHA256()
 	sh.update(string)
 	return sh.digest()
 

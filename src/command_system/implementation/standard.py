@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Provides an actual implementation of the standard commands.
+Provides an actual implementation for the standard commands.
 """
 
 import dialogs
@@ -22,46 +22,47 @@ from common import gajim
 from common import helpers
 from common.exceptions import GajimGeneralException
 
-from framework import command, CommandError
-from middleware import ChatMiddleware
+from ..framework import CommandContainer, command, documentation
+from ..mapping import generate_usage
 
-class CommonCommands(ChatMiddleware):
+from hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
+
+class StandardCommonCommands(CommandContainer):
     """
-    Here defined commands will be common to all, chat, private chat and group
-    chat. Keep in mind that self is set to an instance of either ChatControl,
-    PrivateChatControl or GroupchatControl when command is being called.
+    This command container contains standard commands which are common to all -
+    chat, private chat, group chat.
     """
+
+    HOSTS = (ChatCommands, PrivateChatCommands, GroupChatCommands)
 
     @command
+    @documentation(_("Clear the text window"))
     def clear(self):
-        """
-        Clear the text window
-        """
         self.conv_textview.clear()
 
     @command
+    @documentation(_("Hide the chat buttons"))
     def compact(self):
-        """
-        Hide the chat buttons
-        """
-        self.chat_buttons_set_visible(not self.hide_chat_buttons)
+        new_status = not self.hide_chat_buttons
+        self.chat_buttons_set_visible(new_status)
 
     @command(overlap=True)
+    @documentation(_("Show help on a given command or a list of available commands if -(-a)ll is given"))
     def help(self, command=None, all=False):
-        """
-        Show help on a given command or a list of available commands if -(-a)ll is
-        given
-        """
         if command:
-            command = self.retrieve_command(command)
+            command = self.get_command(command)
 
-            doc = _(command.extract_doc())
-            usage = command.extract_arg_usage()
+            documentation = _(command.extract_documentation())
+            usage = generate_usage(command)
 
-            if doc:
-                return (doc + '\n\n' + usage) if command.usage else doc
-            else:
-                return usage
+            text = []
+
+            if documentation:
+                text.append(documentation)
+            if command.usage:
+                text.append(usage)
+
+            return '\n\n'.join(text)
         elif all:
             for command in self.list_commands():
                 names = ', '.join(command.names)
@@ -69,66 +70,52 @@ class CommonCommands(ChatMiddleware):
 
                 self.echo("%s - %s" % (names, description))
         else:
-            self.echo(self._help_(self, 'help'))
+            help = self.get_command('help')
+            self.echo(help(self, 'help'))
 
     @command(raw=True)
+    @documentation(_("Send a message to the contact"))
     def say(self, message):
-        """
-        Send a message to the contact
-        """
         self.send(message)
 
     @command(raw=True)
+    @documentation(_("Send action (in the third person) to the current chat"))
     def me(self, action):
-        """
-        Send action (in the third person) to the current chat
-        """
         self.send("/me %s" % action)
 
-class ChatCommands(CommonCommands):
+class StandardChatCommands(CommandContainer):
     """
-    Here defined commands will be unique to a chat. Use it as a hoster to provide
-    commands which should be unique to a chat. Keep in mind that self is set to
-    an instance of ChatControl when command is being called.
+    This command container contains standard command which are unique to a chat.
     """
 
-    DISPATCH = True
-    INHERIT = True
+    HOSTS = (ChatCommands,)
 
     @command
+    @documentation(_("Send a ping to the contact"))
     def ping(self):
-        """
-        Send a ping to the contact
-        """
         if self.account == gajim.ZEROCONF_ACC_NAME:
             raise CommandError(_('Command is not supported for zeroconf accounts'))
         gajim.connections[self.account].sendPing(self.contact)
 
-class PrivateChatCommands(CommonCommands):
+class StandardPrivateChatCommands(CommandContainer):
     """
-    Here defined commands will be unique to a private chat. Use it as a hoster to
-    provide commands which should be unique to a private chat. Keep in mind that
-    self is set to an instance of PrivateChatControl when command is being called.
-    """
-
-    DISPATCH = True
-    INHERIT = True
-
-class GroupChatCommands(CommonCommands):
-    """
-    Here defined commands will be unique to a group chat. Use it as a hoster to
-    provide commands which should be unique to a group chat. Keep in mind that
-    self is set to an instance of GroupchatControl when command is being called.
+    This command container contains standard command which are unique to a
+    private chat.
     """
 
-    DISPATCH = True
-    INHERIT = True
+    HOSTS = (PrivateChatCommands,)
+
+class StandardGroupchatCommands(CommandContainer):
+    """
+    This command container contains standard command which are unique to a group
+    chat.
+    """
+
+    HOSTS = (GroupChatCommands,)
 
     @command(raw=True)
+    @documentation(_("Change your nickname in a group chat"))
     def nick(self, new_nick):
-        """
-        Change your nickname in a group chat
-        """
         try:
             new_nick = helpers.parse_resource(new_nick)
         except Exception:
@@ -137,10 +124,8 @@ class GroupChatCommands(CommonCommands):
         self.new_nick = new_nick
 
     @command('query', raw=True)
+    @documentation(_("Open a private chat window with a specified occupant"))
     def chat(self, nick):
-        """
-        Open a private chat window with a specified occupant
-        """
         nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
         if nick in nicks:
             self.on_send_pm(nick=nick)
@@ -148,11 +133,8 @@ class GroupChatCommands(CommonCommands):
             raise CommandError(_("Nickname not found"))
 
     @command('msg', raw=True)
+    @documentation(_("Open a private chat window with a specified occupant and send him a message"))
     def message(self, nick, a_message):
-        """
-        Open a private chat window with a specified occupant and send him a
-        message
-        """
         nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
         if nick in nicks:
             self.on_send_pm(nick=nick, msg=a_message)
@@ -160,28 +142,22 @@ class GroupChatCommands(CommonCommands):
             raise CommandError(_("Nickname not found"))
 
     @command(raw=True, empty=True)
+    @documentation(_("Display or change a group chat topic"))
     def topic(self, new_topic):
-        """
-        Display or change a group chat topic
-        """
         if new_topic:
             self.connection.send_gc_subject(self.room_jid, new_topic)
         else:
             return self.subject
 
     @command(raw=True, empty=True)
+    @documentation(_("Invite a user to a room for a reason"))
     def invite(self, jid, reason):
-        """
-        Invite a user to a room for a reason
-        """
         self.connection.send_invite(self.room_jid, jid, reason)
         return _("Invited %s to %s") % (jid, self.room_jid)
 
     @command(raw=True, empty=True)
+    @documentation(_("Join a group chat given by a jid, optionally using given nickname"))
     def join(self, jid, nick):
-        """
-        Join a group chat given by a jid, optionally using given nickname
-        """
         if not nick:
             nick = self.nick
 
@@ -192,43 +168,37 @@ class GroupChatCommands(CommonCommands):
             gajim.interface.instances[self.account]['join_gc'].window.present()
         except KeyError:
             try:
-                dialogs.JoinGroupchatWindow(account=self.account, room_jid=jid, nick=nick)
+                dialogs.JoinGroupchatWindow(account=None, room_jid=jid, nick=nick)
             except GajimGeneralException:
                 pass
 
     @command('part', 'close', raw=True, empty=True)
+    @documentation(_("Leave the groupchat, optionally giving a reason, and close tab or window"))
     def leave(self, reason):
-        """
-        Leave the groupchat, optionally giving a reason, and close tab or window
-        """
         self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND, reason)
 
     @command(raw=True, empty=True)
-    def ban(self, who, reason):
-        """
-        Ban user by a nick or a jid from a groupchat
+    @documentation(_("""
+    Ban user by a nick or a jid from a groupchat
 
-        If given nickname is not found it will be treated as a jid.
-        """
+    If given nickname is not found it will be treated as a jid.
+    """))
+    def ban(self, who, reason):
         if who in gajim.contacts.get_nick_list(self.account, self.room_jid):
             contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, who)
             who = contact.jid
         self.connection.gc_set_affiliation(self.room_jid, who, 'outcast', reason or str())
 
     @command(raw=True, empty=True)
+    @documentation(_("Kick user by a nick from a groupchat"))
     def kick(self, who, reason):
-        """
-        Kick user by a nick from a groupchat
-        """
         if not who in gajim.contacts.get_nick_list(self.account, self.room_jid):
             raise CommandError(_("Nickname not found"))
         self.connection.gc_set_role(self.room_jid, who, 'none', reason or str())
 
     @command
+    @documentation(_("Display names of all group chat occupants"))
     def names(self, verbose=False):
-        """
-        Display names of all group chat occupants
-        """
         get_contact = lambda nick: gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
         nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
 
@@ -247,16 +217,12 @@ class GroupChatCommands(CommonCommands):
         else:
             return ', '.join(nicks)
 
-    @command(raw=True)
+    @command('ignore', raw=True)
+    @documentation(_("Forbid an occupant to send you public or private messages"))
     def block(self, who):
-        """
-        Forbid an occupant to send you public or private messages
-        """
         self.on_block(None, who)
 
-    @command(raw=True)
+    @command('unignore', raw=True)
+    @documentation(_("Allow an occupant to send you public or private messages"))
     def unblock(self, who):
-        """
-        Allow an occupant to send you public or privates messages
-        """
         self.on_unblock(None, who)

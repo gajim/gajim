@@ -39,6 +39,7 @@ import operator
 
 import time
 import locale
+import hmac
 
 try:
 	randomsource = random.SystemRandom()
@@ -190,6 +191,7 @@ class Connection(ConnectionHandlers):
 		self.vcard_supported = False
 		self.private_storage_supported = True
 		self.streamError = ''
+		self.secret_hmac = str(random.random())[2:]
 	# END __init__
 
 	def put_event(self, ev):
@@ -1604,6 +1606,8 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 	def _request_bookmarks_xml(self):
+		if not self.connection:
+			return
 		iq = common.xmpp.Iq(typ='get')
 		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
 		iq2.addChild(name='storage', namespace='storage:bookmarks')
@@ -1754,27 +1758,6 @@ class Connection(ConnectionHandlers):
 		if show == 'invisible':
 			# Never join a room when invisible
 			return
-		p = common.xmpp.Presence(to = '%s/%s' % (room_jid, nick),
-			show = show, status = self.status)
-		if gajim.config.get('send_sha_in_gc_presence'):
-			p = self.add_sha(p)
-		self.add_lang(p)
-		if not change_nick:
-			t = p.setTag(common.xmpp.NS_MUC + ' x')
-			last_date = gajim.logger.get_last_date_that_has_logs(room_jid,
-				self.name, is_room=True)
-			if last_date is None:
-				last_date = time.time() - gajim.config.get(
-					'muc_restore_timeout') * 60
-			else:
-				last_time = min(last_date, time.time() - gajim.config.get(
-					'muc_restore_timeout') * 60)
-			last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(last_date))
-			t.setTag('history', {'maxstanzas': gajim.config.get(
-				'muc_restore_lines'), 'since': last_date})
-			if password:
-				t.setTagData('password', password)
-		self.connection.send(p)
 
 		# last date/time in history to avoid duplicate
 		if room_jid not in self.last_history_time:
@@ -1787,12 +1770,37 @@ class Connection(ConnectionHandlers):
 				if last_log is None:
 					# Not in special table, get it from messages DB
 					last_log = gajim.logger.get_last_date_that_has_logs(room_jid,
-						is_room = True)
+						is_room=True)
 			# Create self.last_history_time[room_jid] even if not logging,
 			# could be used in connection_handlers
 			if last_log is None:
 				last_log = 0
-			self.last_history_time[room_jid]= last_log
+			self.last_history_time[room_jid] = last_log
+
+		p = common.xmpp.Presence(to='%s/%s' % (room_jid, nick),
+			show=show, status=self.status)
+		h = hmac.new(self.secret_hmac, room_jid).hexdigest()[:6]
+		id_ = self.connection.getAnID()
+		id_ = 'gajim_muc_' + id_ + '_' + h
+		p.setID(id_)
+		if gajim.config.get('send_sha_in_gc_presence'):
+			p = self.add_sha(p)
+		self.add_lang(p)
+		if not change_nick:
+			t = p.setTag(common.xmpp.NS_MUC + ' x')
+			last_date = self.last_history_time[room_jid]
+			if last_date == 0:
+				last_date = time.time() - gajim.config.get(
+					'muc_restore_timeout') * 60
+			else:
+				last_time = min(last_date, time.time() - gajim.config.get(
+					'muc_restore_timeout') * 60)
+			last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(last_date))
+			t.setTag('history', {'maxstanzas': gajim.config.get(
+				'muc_restore_lines'), 'since': last_date})
+			if password:
+				t.setTagData('password', password)
+		self.connection.send(p)
 
 	def send_gc_message(self, jid, msg, xhtml = None):
 		if not self.connection:
@@ -1841,6 +1849,10 @@ class Connection(ConnectionHandlers):
 		xmpp_show = helpers.get_xmpp_show(show)
 		p = common.xmpp.Presence(to = '%s/%s' % (jid, nick), typ = ptype,
 			show = xmpp_show, status = status)
+		h = hmac.new(self.secret_hmac, jid).hexdigest()[:6]
+		id_ = self.connection.getAnID()
+		id_ = 'gajim_muc_' + id_ + '_' + h
+		p.setID(id_)
 		if gajim.config.get('send_sha_in_gc_presence') and show != 'offline':
 			p = self.add_sha(p, ptype != 'unavailable')
 		self.add_lang(p)

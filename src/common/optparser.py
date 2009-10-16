@@ -204,6 +204,14 @@ class OptionsParser:
 			self.update_config_to_01251()
 		if old < [0, 12, 5, 2] and new >= [0, 12, 5, 2]:
 			self.update_config_to_01252()
+		if old < [0, 12, 5, 3] and new >= [0, 12, 5, 3]:
+			self.update_config_to_01253()
+		if old < [0, 12, 5, 4] and new >= [0, 12, 5, 4]:
+			self.update_config_to_01254()
+		if old < [0, 12, 5, 5] and new >= [0, 12, 5, 5]:
+			self.update_config_to_01255()
+		if old < [0, 12, 5, 6] and new >= [0, 12, 5, 6]:
+			self.update_config_to_01256()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -735,5 +743,54 @@ class OptionsParser:
 			for account in gajim.config.get_per('accounts'):
 				gajim.config.set_per('accounts', account, 'autoauth', val)
 		gajim.config.set('version', '0.12.5.2')
+
+	def update_config_to_01253(self):
+		if 'enable_zeroconf' in self.old_values:
+			val = self.old_values['enable_zeroconf']
+			for account in gajim.config.get_per('accounts'):
+				if gajim.config.get_per('accounts', account, 'is_zeroconf'):
+					gajim.config.set_per('accounts', account, 'active', val)
+				else:
+					gajim.config.set_per('accounts', account, 'active', True)
+		gajim.config.set('version', '0.12.5.3')
+
+	def update_config_to_01254(self):
+		vals = {'inmsgcolor': ['#a34526', '#a40000'],
+			'outmsgcolor': ['#164e6f', '#3465a4'],
+			'restored_messages_color': ['grey', '#555753'],
+			'statusmsgcolor': ['#1eaa1e', '#73d216'],
+			'urlmsgcolor': ['#0000ff', '#204a87'],
+			'gc_nicknames_colors': ['#a34526:#c000ff:#0012ff:#388a99:#045723:#7c7c7c:#ff8a00:#94452d:#244b5a:#32645a', '#4e9a06:#f57900:#ce5c00:#3465a4:#204a87:#75507b:#5c3566:#c17d11:#8f5902:#ef2929:#cc0000:#a40000']}
+		for c in vals:
+			if c not in self.old_values:
+				continue
+			val = self.old_values[c]
+			if val == vals[c][0]:
+				# We didn't change default value, so update it with new default
+				gajim.config.set(c, vals[c][1])
+		gajim.config.set('version', '0.12.5.4')
+
+	def update_config_to_01255(self):
+		vals = {'statusmsgcolor': ['#73d216', '#4e9a06'],
+			'outmsgtxtcolor': ['#a2a2a2', '#555753']}
+		for c in vals:
+			if c not in self.old_values:
+				continue
+			val = self.old_values[c]
+			if val == vals[c][0]:
+				# We didn't change default value, so update it with new default
+				gajim.config.set(c, vals[c][1])
+		gajim.config.set('version', '0.12.5.5')
+
+	def update_config_to_01256(self):
+		vals = {'gc_nicknames_colors': ['#4e9a06:#f57900:#ce5c00:#3465a4:#204a87:#75507b:#5c3566:#c17d11:#8f5902:#ef2929:#cc0000:#a40000', '#f57900:#ce5c00:#204a87:#75507b:#5c3566:#c17d11:#8f5902:#ef2929:#cc0000:#a40000']}
+		for c in vals:
+			if c not in self.old_values:
+				continue
+			val = self.old_values[c]
+			if val == vals[c][0]:
+				# We didn't change default value, so update it with new default
+				gajim.config.set(c, vals[c][1])
+		gajim.config.set('version', '0.12.5.6')
 
 # vim: se ts=3:

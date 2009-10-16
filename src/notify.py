@@ -341,7 +341,7 @@ def popup(event_type, jid, account, msg_type='', path_to_image=None,
 
 	if gajim.HAVE_INDICATOR and event_type in (_('New Message'),
 	_('New Single Message'), _('New Private Message')):
-		indicator = indicate.IndicatorMessage()
+		indicator = indicate.Indicator()
 		indicator.set_property('subtype', 'im')
 		indicator.set_property('sender', jid)
 		indicator.set_property('body', text)

@@ -21,7 +21,7 @@
 ''' XML canonicalisation methods (for XEP-0116) '''
 from simplexml import ustr
 
-def c14n(node):
+def c14n(node, is_buggy):
 	s = "<" + node.name
 	if node.namespace:
 		if not node.parent or node.parent.namespace != node.namespace:
@@ -29,6 +29,8 @@ def c14n(node):
 
 	sorted_attrs = sorted(node.attrs.keys())
 	for key in sorted_attrs:
+		if not is_buggy and key == 'xmlns':
+			continue
 		val = ustr(node.attrs[key])
 		# like XMLescape() but with whitespace and without &gt;
 		s = s + ' %s="%s"' % ( key, normalise_attr(val) )
@@ -38,7 +40,7 @@ def c14n(node):
 		for a in node.kids:
 			if (len(node.data)-1) >= cnt:
 				s = s + normalise_text(node.data[cnt])
-			s = s + c14n(a)
+			s = s + c14n(a, is_buggy)
 			cnt=cnt+1
 	if (len(node.data)-1) >= cnt: s = s + normalise_text(node.data[cnt])
 	if not node.kids and s.endswith('>'):

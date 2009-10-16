@@ -182,7 +182,12 @@ class MessageControl:
 		conn = gajim.connections[self.account]
 
 		if not self.session:
-			sess = conn.find_controlless_session(jid)
+			if not resource:
+				if self.resource:
+					resource = self.resource
+				else:
+					resource = self.contact.resource
+			sess = conn.find_controlless_session(jid, resource=resource)
 
 			if self.resource:
 				jid += '/' + self.resource

@@ -41,9 +41,13 @@ gajimsrc3dir = $(pkgdatadir)/src/common/zeroconf
 gajimsrc3_PYTHON = \
 				$(srcdir)/common/zeroconf/*.py
 
-gajimsrc4dir = $(pkgdatadir)/src/commands
+gajimsrc4dir = $(pkgdatadir)/src/command_system
 gajimsrc4_PYTHON = \
-				   $(srcdir)/commands/*.py
+				   $(srcdir)/command_system/*.py
+
+gajimsrc5dir = $(pkgdatadir)/src/command_system/implementation
+gajimsrc5_PYTHON = \
+				   $(srcdir)/command_system/implementation/*.py
 
 DISTCLEANFILES =
 
@@ -52,6 +56,7 @@ EXTRA_DIST = $(gajimsrc_PYTHON) \
 			$(gajimsrc2_PYTHON) \
 			$(gajimsrc3_PYTHON) \
 			$(gajimsrc4_PYTHON) \
+			$(gajimsrc5_PYTHON) \
 			eggtrayicon.c \
 			trayiconmodule.c \
 			eggtrayicon.h \

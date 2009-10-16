@@ -554,8 +554,7 @@ class ChangeStatusMessageDialog:
 
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
-		self.message_buffer.connect('changed',
-									self.toggle_sensitiviy_of_save_as_preset)
+		self.message_buffer.connect('changed', self.on_message_buffer_changed)
 		if not msg:
 			msg = ''
 		msg = helpers.from_one_line(msg)
@@ -713,7 +712,11 @@ class ChangeStatusMessageDialog:
 				# Stop the event
 				return True
 
-	def toggle_sensitiviy_of_save_as_preset(self, widget):
+	def on_message_buffer_changed(self, widget):
+		self.countdown_enabled = False
+		self.toggle_sensitiviy_of_save_as_preset()
+
+	def toggle_sensitiviy_of_save_as_preset(self):
 		btn = self.xml.get_widget('save_as_preset_button')
 		if self.message_buffer.get_char_count() == 0:
 			btn.set_sensitive(False)
@@ -1976,7 +1979,7 @@ class JoinGroupchatWindow:
 			self.xml.get_widget('join_button').set_sensitive(False)
 
 		if account and not gajim.connections[account].private_storage_supported:
-			self.xml.get_widget('auto_join_checkbutton').set_sensitive(False)
+			self.xml.get_widget('bookmark_checkbutton').set_sensitive(False)
 
 		self.window.show_all()
 
@@ -2015,6 +2018,13 @@ class JoinGroupchatWindow:
 	def on_cancel_button_clicked(self, widget):
 		'''When Cancel button is clicked'''
 		self.window.destroy()
+
+	def on_bookmark_checkbutton_toggled(self, widget):
+		auto_join_checkbutton = self.xml.get_widget('auto_join_checkbutton')
+		if widget.get_active():
+			auto_join_checkbutton.set_sensitive(True)
+		else:
+			auto_join_checkbutton.set_sensitive(False)
 
 	def on_join_button_clicked(self, widget):
 		'''When Join button is clicked'''
@@ -2059,10 +2069,14 @@ class JoinGroupchatWindow:
 		gajim.config.set('recently_groupchat',
 			' '.join(self.recently_groupchat))
 
-		if self.xml.get_widget('auto_join_checkbutton').get_active():
+		if self.xml.get_widget('bookmark_checkbutton').get_active():
+			if self.xml.get_widget('auto_join_checkbutton').get_active():
+				autojoin = '1'
+			else:
+				autojoin = '0'
 			# Add as bookmark, with autojoin and not minimized
 			name = gajim.get_nick_from_jid(room_jid)
-			gajim.interface.add_gc_bookmark(self.account, name, room_jid, '1', \
+			gajim.interface.add_gc_bookmark(self.account, name, room_jid, autojoin,
 				'0', password, nickname)
 
 		if self.automatic:
@@ -2816,6 +2830,8 @@ class RosterItemExchangeWindow:
 		self.message_body = message_body
 		self.jid_from = jid_from
 
+		show_dialog = False
+
 		# Connect to glade
 		self.xml = gtkgui_helpers.get_glade('roster_item_exchange_window.glade')
 		self.window = self.xml.get_widget('roster_item_exchange_window')
@@ -2884,6 +2900,7 @@ class RosterItemExchangeWindow:
 					else:
 						groups = groups + group + ', '
 				if not is_in_roster:
+					show_dialog = True
 					iter = model.append()
 					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
 
@@ -2916,6 +2933,7 @@ class RosterItemExchangeWindow:
 					else:
 						groups = groups + group + ', '
 				if not is_right and is_in_roster:
+					show_dialog = True
 					iter = model.append()
 					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
 
@@ -2941,6 +2959,7 @@ class RosterItemExchangeWindow:
 					else:
 						groups = groups + group + ', '
 				if is_in_roster:
+					show_dialog = True
 					iter = model.append()
 					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
 
@@ -2949,9 +2968,9 @@ class RosterItemExchangeWindow:
 				get_children()[0].get_children()[1]
 			accept_button_label.set_label(_('Delete'))
 
-		self.window.show_all()
-
-		self.xml.signal_autoconnect(self)
+		if show_dialog:
+			self.window.show_all()
+			self.xml.signal_autoconnect(self)
 
 	def toggled_callback(self, cell, path):
 		model = self.items_list_treeview.get_model()
@@ -3051,20 +3070,20 @@ class PrivacyListWindow:
 		# Add Widgets
 
 		for widget_to_add in ('title_hbox', 'privacy_lists_title_label',
-							  'list_of_rules_label', 'add_edit_rule_label', 'delete_open_buttons_hbox',
-							  'privacy_list_active_checkbutton', 'privacy_list_default_checkbutton',
-							  'list_of_rules_combobox', 'delete_open_buttons_hbox',
-							  'delete_rule_button', 'open_rule_button', 'edit_allow_radiobutton',
-							  'edit_deny_radiobutton', 'edit_type_jabberid_radiobutton',
-							  'edit_type_jabberid_entry', 'edit_type_group_radiobutton',
-							  'edit_type_group_combobox', 'edit_type_subscription_radiobutton',
-							  'edit_type_subscription_combobox', 'edit_type_select_all_radiobutton',
-							  'edit_queries_send_checkbutton', 'edit_send_messages_checkbutton',
-							  'edit_view_status_checkbutton', 'edit_order_spinbutton',
-							  'new_rule_button', 'save_rule_button', 'privacy_list_refresh_button',
-							  'privacy_list_close_button', 'edit_send_status_checkbutton',
-							  'add_edit_vbox', 'privacy_list_active_checkbutton',
-							  'privacy_list_default_checkbutton'):
+		'list_of_rules_label', 'add_edit_rule_label', 'delete_open_buttons_hbox',
+		'privacy_list_active_checkbutton', 'privacy_list_default_checkbutton',
+		'list_of_rules_combobox', 'delete_open_buttons_hbox',
+		'delete_rule_button', 'open_rule_button', 'edit_allow_radiobutton',
+		'edit_deny_radiobutton', 'edit_type_jabberid_radiobutton',
+		'edit_type_jabberid_entry', 'edit_type_group_radiobutton',
+		'edit_type_group_combobox', 'edit_type_subscription_radiobutton',
+		'edit_type_subscription_combobox', 'edit_type_select_all_radiobutton',
+		'edit_queries_send_checkbutton', 'edit_send_messages_checkbutton',
+		'edit_view_status_checkbutton', 'edit_all_checkbutton',
+		'edit_order_spinbutton', 'new_rule_button', 'save_rule_button',
+		'privacy_list_refresh_button', 'privacy_list_close_button',
+		'edit_send_status_checkbutton', 'add_edit_vbox',
+		'privacy_list_active_checkbutton', 'privacy_list_default_checkbutton'):
 			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
 
 		self.privacy_lists_title_label.set_label(
@@ -3129,12 +3148,12 @@ class PrivacyListWindow:
 		for rule in rules:
 			if 'type' in rule:
 				text_item = _('Order: %(order)s, action: %(action)s, type: %(type)s'
-							  ', value: %(value)s') % {'order': rule['order'],
-													   'action': rule['action'], 'type': rule['type'],
-													   'value': rule['value']}
+					', value: %(value)s') % {'order': rule['order'],
+					'action': rule['action'], 'type': rule['type'],
+					'value': rule['value']}
 			else:
 				text_item = _('Order: %(order)s, action: %(action)s') % \
-						  {'order': rule['order'], 'action': rule['action']}
+					{'order': rule['order'], 'action': rule['action']}
 			self.global_rules[text_item] = rule
 			self.list_of_rules_combobox.append_text(text_item)
 		if len(rules) == 0:
@@ -3215,14 +3234,17 @@ class PrivacyListWindow:
 			self.edit_queries_send_checkbutton.set_active(False)
 			self.edit_view_status_checkbutton.set_active(False)
 			self.edit_send_status_checkbutton.set_active(False)
-			for child in rule_info['child']:
-				if child == 'presence-out':
+			self.edit_all_checkbutton.set_active(False)
+			if not rule_info['child']:
+				self.edit_all_checkbutton.set_active(True)
+			else:
+				if 'presence-out' in rule_info['child']:
 					self.edit_send_status_checkbutton.set_active(True)
-				elif child == 'presence-in':
+				if 'presence-in' in rule_info['child']:
 					self.edit_view_status_checkbutton.set_active(True)
-				elif child == 'iq':
+				if 'iq' in rule_info['child']:
 					self.edit_queries_send_checkbutton.set_active(True)
-				elif child == 'message':
+				if 'message' in rule_info['child']:
 					self.edit_send_messages_checkbutton.set_active(True)
 
 			if rule_info['action'] == 'allow':
@@ -3230,6 +3252,26 @@ class PrivacyListWindow:
 			else:
 				self.edit_deny_radiobutton.set_active(True)
 		self.add_edit_vbox.show()
+
+	def on_edit_all_checkbutton_toggled(self, widget):
+		if widget.get_active():
+			self.edit_send_messages_checkbutton.set_active(True)
+			self.edit_queries_send_checkbutton.set_active(True)
+			self.edit_view_status_checkbutton.set_active(True)
+			self.edit_send_status_checkbutton.set_active(True)
+			self.edit_send_messages_checkbutton.set_sensitive(False)
+			self.edit_queries_send_checkbutton.set_sensitive(False)
+			self.edit_view_status_checkbutton.set_sensitive(False)
+			self.edit_send_status_checkbutton.set_sensitive(False)
+		else:
+			self.edit_send_messages_checkbutton.set_active(False)
+			self.edit_queries_send_checkbutton.set_active(False)
+			self.edit_view_status_checkbutton.set_active(False)
+			self.edit_send_status_checkbutton.set_active(False)
+			self.edit_send_messages_checkbutton.set_sensitive(True)
+			self.edit_queries_send_checkbutton.set_sensitive(True)
+			self.edit_view_status_checkbutton.set_sensitive(True)
+			self.edit_send_status_checkbutton.set_sensitive(True)
 
 	def on_privacy_list_active_checkbutton_toggled(self, widget):
 		if widget.get_active():
@@ -3258,6 +3300,7 @@ class PrivacyListWindow:
 		self.edit_queries_send_checkbutton.set_active(False)
 		self.edit_view_status_checkbutton.set_active(False)
 		self.edit_send_status_checkbutton.set_active(False)
+		self.edit_all_checkbutton.set_active(False)
 		self.edit_order_spinbutton.set_value(1)
 		self.edit_type_group_combobox.set_active(0)
 		self.edit_type_subscription_combobox.set_active(0)
@@ -3284,14 +3327,15 @@ class PrivacyListWindow:
 		else:
 			edit_deny = 'deny'
 		child = []
-		if self.edit_send_messages_checkbutton.get_active():
-			child.append('message')
-		if self.edit_queries_send_checkbutton.get_active():
-			child.append('iq')
-		if self.edit_send_status_checkbutton.get_active():
-			child.append('presence-out')
-		if self.edit_view_status_checkbutton.get_active():
-			child.append('presence-in')
+		if not self.edit_all_checkbutton.get_active():
+			if self.edit_send_messages_checkbutton.get_active():
+				child.append('message')
+			if self.edit_queries_send_checkbutton.get_active():
+				child.append('iq')
+			if self.edit_send_status_checkbutton.get_active():
+				child.append('presence-out')
+			if self.edit_view_status_checkbutton.get_active():
+				child.append('presence-in')
 		if edit_type != '':
 			return {'order': edit_order, 'action': edit_deny,
 					'type': edit_type, 'value': edit_value, 'child': child}

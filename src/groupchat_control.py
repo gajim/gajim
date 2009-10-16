@@ -47,7 +47,8 @@ from chat_control import ChatControl
 from chat_control import ChatControlBase
 from common.exceptions import GajimGeneralException
 
-from commands.implementation import PrivateChatCommands, GroupChatCommands
+from command_system.implementation.hosts import PrivateChatCommands
+from command_system.implementation.hosts import GroupChatCommands
 
 import logging
 log = logging.getLogger('gajim.groupchat_control')
@@ -118,10 +119,12 @@ def tree_cell_data_func(column, renderer, model, iter_, tv=None):
 			renderer.set_property('font',
 				gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
 
-class PrivateChatControl(ChatControl, PrivateChatCommands):
+class PrivateChatControl(ChatControl):
 	TYPE_ID = message_control.TYPE_PM
 
-	DISPATCHED_BY = PrivateChatCommands
+   # Set a command host to bound to. Every command given through a private chat
+   # will be processed with this command host.
+	COMMAND_HOST = PrivateChatCommands
 
 	def __init__(self, parent_win, gc_contact, contact, account, session):
 		room_jid = contact.jid.split('/')[0]
@@ -185,10 +188,12 @@ class PrivateChatControl(ChatControl, PrivateChatCommands):
 
 		self.session.negotiate_e2e(False)
 
-class GroupchatControl(ChatControlBase, GroupChatCommands):
+class GroupchatControl(ChatControlBase):
 	TYPE_ID = message_control.TYPE_GC
 
-	DISPATCHED_BY = GroupChatCommands
+   # Set a command host to bound to. Every command given through a group chat
+   # will be processed with this command host.
+	COMMAND_HOST = GroupChatCommands
 
 	def __init__(self, parent_win, contact, acct, is_continued=False):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
@@ -842,7 +847,8 @@ class GroupchatControl(ChatControlBase, GroupChatCommands):
 			small_attr, small_attr + ['restored_message'],
 			small_attr + ['restored_message'], count_as_new=False, xhtml=xhtml)
 
-	def print_conversation(self, text, contact='', tim=None, xhtml=None):
+	def print_conversation(self, text, contact='', tim=None, xhtml=None,
+	graphics=True):
 		'''Print a line in the conversation:
 		if contact is set: it's a message from someone or an info message (contact
 		= 'info' in such a case)
@@ -905,7 +911,8 @@ class GroupchatControl(ChatControlBase, GroupChatCommands):
 			self.check_and_possibly_add_focus_out_line()
 
 		ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
-			other_tags_for_name, [], other_tags_for_text, xhtml=xhtml)
+			other_tags_for_name, [], other_tags_for_text, xhtml=xhtml,
+			graphics=graphics)
 
 	def get_nb_unread(self):
 		type_events = ['printed_marked_gc_msg']
@@ -1203,7 +1210,7 @@ class GroupchatControl(ChatControlBase, GroupChatCommands):
 							'nick': nick,
 							'who': actor,
 							'reason': reason }
-					self.print_conversation(s, 'info', tim=tim)
+					self.print_conversation(s, 'info', tim=tim, graphics=False)
 					if nick == self.nick and not gajim.config.get(
 					'muc_autorejoin_on_kick'):
 						self.autorejoin = False
@@ -1217,7 +1224,7 @@ class GroupchatControl(ChatControlBase, GroupChatCommands):
 							'nick': nick,
 							'who': actor,
 							'reason': reason }
-					self.print_conversation(s, 'info', tim=tim)
+					self.print_conversation(s, 'info', tim=tim, graphics=False)
 					if nick == self.nick:
 						self.autorejoin = False
 				elif '303' in statusCode: # Someone changed his or her nick
@@ -1277,23 +1284,23 @@ class GroupchatControl(ChatControlBase, GroupChatCommands):
 								# remove 'TEST'
 								os.remove(files[old_file])
 							os.rename(old_file, files[old_file])
-					self.print_conversation(s, 'info', tim)
+					self.print_conversation(s, 'info', tim=tim, graphics=False)
 				elif '321' in statusCode:
 					s = _('%(nick)s has been removed from the room (%(reason)s)') % {
 						'nick': nick, 'reason': _('affiliation changed') }
-					self.print_conversation(s, 'info', tim=tim)
+					self.print_conversation(s, 'info', tim=tim, graphics=False)
 				elif '322' in statusCode:
 					s = _('%(nick)s has been removed from the room (%(reason)s)') % {
 						'nick': nick,
 						'reason': _('room configuration changed to members-only') }
-					self.print_conversation(s, 'info', tim=tim)
+					self.print_conversation(s, 'info', tim=tim, graphics=False)
 				elif '332' in statusCode:
 					s = _('%(nick)s has been removed from the room (%(reason)s)') % {
 						'nick': nick,
 						'reason': _('system shutdown') }
-					self.print_conversation(s, 'info', tim=tim)
+					self.print_conversation(s, 'info', tim=tim, graphics=False)
 				elif 'destroyed' in statusCode: # Room has been destroyed
-					self.print_conversation(reason, 'info', tim)
+					self.print_conversation(reason, 'info', tim, graphics=False)
 
 			if len(gajim.events.get_events(self.account, jid=fake_jid,
 			types=['pm'])) == 0:
@@ -1319,7 +1326,7 @@ class GroupchatControl(ChatControlBase, GroupChatCommands):
 					# Server changed our nick
 					self.nick = nick
 					s = _('You are now known as %s') % nick
-					self.print_conversation(s, 'info', tim=tim)
+					self.print_conversation(s, 'info', tim=tim, graphics=False)
 				iter_ = self.add_contact_to_roster(nick, show, role, affiliation,
 					status, jid)
 				newly_created = True
@@ -1376,7 +1383,7 @@ class GroupchatControl(ChatControlBase, GroupChatCommands):
 							'affiliation': affiliation}
 					if reason:
 						st += ' (%s)' % reason
-					self.print_conversation(st, tim=tim)
+					self.print_conversation(st, tim=tim, graphics=False)
 					right_changed = True
 				actual_role = self.get_role(nick)
 				if role != actual_role:
@@ -1394,7 +1401,7 @@ class GroupchatControl(ChatControlBase, GroupChatCommands):
 							'nick': nick_jid, 'role': role}
 					if reason:
 						st += ' (%s)' % reason
-					self.print_conversation(st, tim=tim)
+					self.print_conversation(st, tim=tim, graphics=False)
 					right_changed = True
 				else:
 					if gc_c.show == show and gc_c.status == status and \
@@ -1431,7 +1438,7 @@ class GroupchatControl(ChatControlBase, GroupChatCommands):
 			if st:
 				if status:
 					st += ' (' + status + ')'
-				self.print_conversation(st, tim=tim)
+				self.print_conversation(st, tim=tim, graphics=False)
 
 	def add_contact_to_roster(self, nick, show, role, affiliation, status,
 	jid=''):
@@ -1849,7 +1856,23 @@ class GroupchatControl(ChatControlBase, GroupChatCommands):
 					start_iter.backward_chars(len(begin))
 
 				message_buffer.delete(start_iter, end_iter)
-				message_buffer.insert_at_cursor(self.nick_hits[0] + add)
+				completion = self.nick_hits[0]
+				# get a shell-like completion
+				# if there's more than one nick for this completion, complete only
+				# the part that all  these nicks have in common
+				if gajim.config.get('shell_like_completion') and \
+				len(self.nick_hits) > 1:
+					end = False
+					cur = ''
+					while not end:
+						cur = self.nick_hits[0][:len(cur)+1]
+						for nick in self.nick_hits:
+							if cur.lower() not in nick.lower():
+								end = True
+					cur = cur[:-1]
+					completion = cur
+					add = "" # if nick is not complete, don't but any comma or so
+				message_buffer.insert_at_cursor(completion + add)
 				self.last_key_tabs = True
 				return True
 			self.last_key_tabs = False

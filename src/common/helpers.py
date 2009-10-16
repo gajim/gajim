@@ -122,7 +122,7 @@ def parse_resource(resource):
 	'''Perform stringprep on resource and return it'''
 	if resource:
 		try:
-			from xmpp_stringprep import resourceprep
+			from xmpp.stringprepare import resourceprep
 			return resourceprep.prepare(unicode(resource))
 		except UnicodeError:
 			raise InvalidFormat, 'Invalid character in resource.'
@@ -134,7 +134,7 @@ def prep(user, server, resource):
 
 	if user:
 		try:
-			from xmpp_stringprep import nodeprep
+			from xmpp.stringprepare import nodeprep
 			user = nodeprep.prepare(unicode(user))
 		except UnicodeError:
 			raise InvalidFormat, _('Invalid character in username.')
@@ -145,14 +145,14 @@ def prep(user, server, resource):
 		raise InvalidFormat, _('Server address required.')
 	else:
 		try:
-			from xmpp_stringprep import nameprep
+			from xmpp.stringprepare import nameprep
 			server = nameprep.prepare(unicode(server))
 		except UnicodeError:
 			raise InvalidFormat, _('Invalid character in hostname.')
 
 	if resource:
 		try:
-			from xmpp_stringprep import resourceprep
+			from xmpp.stringprepare import resourceprep
 			resource = resourceprep.prepare(unicode(resource))
 		except UnicodeError:
 			raise InvalidFormat, _('Invalid character in resource.')
@@ -356,7 +356,7 @@ def is_in_path(command, return_abs_path=False):
 	return False
 
 def exec_command(command):
-	subprocess.Popen(command, shell = True)
+	subprocess.Popen('%s &' % command, shell=True).wait()
 
 def build_command(executable, parameter):
 	# we add to the parameter (can hold path with spaces)
