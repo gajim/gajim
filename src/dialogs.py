@@ -3066,20 +3066,20 @@ class PrivacyListWindow:
 		# Add Widgets
 
 		for widget_to_add in ('title_hbox', 'privacy_lists_title_label',
-							  'list_of_rules_label', 'add_edit_rule_label', 'delete_open_buttons_hbox',
-							  'privacy_list_active_checkbutton', 'privacy_list_default_checkbutton',
-							  'list_of_rules_combobox', 'delete_open_buttons_hbox',
-							  'delete_rule_button', 'open_rule_button', 'edit_allow_radiobutton',
-							  'edit_deny_radiobutton', 'edit_type_jabberid_radiobutton',
-							  'edit_type_jabberid_entry', 'edit_type_group_radiobutton',
-							  'edit_type_group_combobox', 'edit_type_subscription_radiobutton',
-							  'edit_type_subscription_combobox', 'edit_type_select_all_radiobutton',
-							  'edit_queries_send_checkbutton', 'edit_send_messages_checkbutton',
-							  'edit_view_status_checkbutton', 'edit_order_spinbutton',
-							  'new_rule_button', 'save_rule_button', 'privacy_list_refresh_button',
-							  'privacy_list_close_button', 'edit_send_status_checkbutton',
-							  'add_edit_vbox', 'privacy_list_active_checkbutton',
-							  'privacy_list_default_checkbutton'):
+		'list_of_rules_label', 'add_edit_rule_label', 'delete_open_buttons_hbox',
+		'privacy_list_active_checkbutton', 'privacy_list_default_checkbutton',
+		'list_of_rules_combobox', 'delete_open_buttons_hbox',
+		'delete_rule_button', 'open_rule_button', 'edit_allow_radiobutton',
+		'edit_deny_radiobutton', 'edit_type_jabberid_radiobutton',
+		'edit_type_jabberid_entry', 'edit_type_group_radiobutton',
+		'edit_type_group_combobox', 'edit_type_subscription_radiobutton',
+		'edit_type_subscription_combobox', 'edit_type_select_all_radiobutton',
+		'edit_queries_send_checkbutton', 'edit_send_messages_checkbutton',
+		'edit_view_status_checkbutton', 'edit_all_checkbutton',
+		'edit_order_spinbutton', 'new_rule_button', 'save_rule_button',
+		'privacy_list_refresh_button', 'privacy_list_close_button',
+		'edit_send_status_checkbutton', 'add_edit_vbox',
+		'privacy_list_active_checkbutton', 'privacy_list_default_checkbutton'):
 			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
 
 		self.privacy_lists_title_label.set_label(
@@ -3144,12 +3144,12 @@ class PrivacyListWindow:
 		for rule in rules:
 			if 'type' in rule:
 				text_item = _('Order: %(order)s, action: %(action)s, type: %(type)s'
-							  ', value: %(value)s') % {'order': rule['order'],
-													   'action': rule['action'], 'type': rule['type'],
-													   'value': rule['value']}
+					', value: %(value)s') % {'order': rule['order'],
+					'action': rule['action'], 'type': rule['type'],
+					'value': rule['value']}
 			else:
 				text_item = _('Order: %(order)s, action: %(action)s') % \
-						  {'order': rule['order'], 'action': rule['action']}
+					{'order': rule['order'], 'action': rule['action']}
 			self.global_rules[text_item] = rule
 			self.list_of_rules_combobox.append_text(text_item)
 		if len(rules) == 0:
@@ -3230,14 +3230,17 @@ class PrivacyListWindow:
 			self.edit_queries_send_checkbutton.set_active(False)
 			self.edit_view_status_checkbutton.set_active(False)
 			self.edit_send_status_checkbutton.set_active(False)
-			for child in rule_info['child']:
-				if child == 'presence-out':
+			self.edit_all_checkbutton.set_active(False)
+			if not rule_info['child']:
+				self.edit_all_checkbutton.set_active(True)
+			else:
+				if 'presence-out' in rule_info['child']:
 					self.edit_send_status_checkbutton.set_active(True)
-				elif child == 'presence-in':
+				if 'presence-in' in rule_info['child']:
 					self.edit_view_status_checkbutton.set_active(True)
-				elif child == 'iq':
+				if 'iq' in rule_info['child']:
 					self.edit_queries_send_checkbutton.set_active(True)
-				elif child == 'message':
+				if 'message' in rule_info['child']:
 					self.edit_send_messages_checkbutton.set_active(True)
 
 			if rule_info['action'] == 'allow':
@@ -3245,6 +3248,26 @@ class PrivacyListWindow:
 			else:
 				self.edit_deny_radiobutton.set_active(True)
 		self.add_edit_vbox.show()
+
+	def on_edit_all_checkbutton_toggled(self, widget):
+		if widget.get_active():
+			self.edit_send_messages_checkbutton.set_active(True)
+			self.edit_queries_send_checkbutton.set_active(True)
+			self.edit_view_status_checkbutton.set_active(True)
+			self.edit_send_status_checkbutton.set_active(True)
+			self.edit_send_messages_checkbutton.set_sensitive(False)
+			self.edit_queries_send_checkbutton.set_sensitive(False)
+			self.edit_view_status_checkbutton.set_sensitive(False)
+			self.edit_send_status_checkbutton.set_sensitive(False)
+		else:
+			self.edit_send_messages_checkbutton.set_active(False)
+			self.edit_queries_send_checkbutton.set_active(False)
+			self.edit_view_status_checkbutton.set_active(False)
+			self.edit_send_status_checkbutton.set_active(False)
+			self.edit_send_messages_checkbutton.set_sensitive(True)
+			self.edit_queries_send_checkbutton.set_sensitive(True)
+			self.edit_view_status_checkbutton.set_sensitive(True)
+			self.edit_send_status_checkbutton.set_sensitive(True)
 
 	def on_privacy_list_active_checkbutton_toggled(self, widget):
 		if widget.get_active():
@@ -3273,6 +3296,7 @@ class PrivacyListWindow:
 		self.edit_queries_send_checkbutton.set_active(False)
 		self.edit_view_status_checkbutton.set_active(False)
 		self.edit_send_status_checkbutton.set_active(False)
+		self.edit_all_checkbutton.set_active(False)
 		self.edit_order_spinbutton.set_value(1)
 		self.edit_type_group_combobox.set_active(0)
 		self.edit_type_subscription_combobox.set_active(0)
@@ -3299,14 +3323,15 @@ class PrivacyListWindow:
 		else:
 			edit_deny = 'deny'
 		child = []
-		if self.edit_send_messages_checkbutton.get_active():
-			child.append('message')
-		if self.edit_queries_send_checkbutton.get_active():
-			child.append('iq')
-		if self.edit_send_status_checkbutton.get_active():
-			child.append('presence-out')
-		if self.edit_view_status_checkbutton.get_active():
-			child.append('presence-in')
+		if not self.edit_all_checkbutton.get_active():
+			if self.edit_send_messages_checkbutton.get_active():
+				child.append('message')
+			if self.edit_queries_send_checkbutton.get_active():
+				child.append('iq')
+			if self.edit_send_status_checkbutton.get_active():
+				child.append('presence-out')
+			if self.edit_view_status_checkbutton.get_active():
+				child.append('presence-in')
 		if edit_type != '':
 			return {'order': edit_order, 'action': edit_deny,
 					'type': edit_type, 'value': edit_value, 'child': child}
