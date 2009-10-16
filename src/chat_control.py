@@ -1536,38 +1536,33 @@ class ChatControl(ChatControlBase):
 		else:
 			self._tune_image.hide()
 
-	def update_audio(self):
-		if self.audio_state in (self.JINGLE_STATE_NOT_AVAILABLE,
-		self.JINGLE_STATE_AVAILABLE):
-			self._audio_banner_image.hide()
+	def _update_jingle(self, jingle_type):
+		if jingle_type not in ('audio', 'video'):
+			return
+		if self.__dict__[jingle_type + '_state'] in (
+		self.JINGLE_STATE_NOT_AVAILABLE, self.JINGLE_STATE_AVAILABLE):
+			self.__dict__['_' + jingle_type + '_banner_image'].hide()
 		else:
-			self._audio_banner_image.show()
+			self.__dict__['_' + jingle_type + '_banner_image'].show()
 		if self.audio_state == self.JINGLE_STATE_CONNECTING:
-			self._audio_banner_image.set_from_stock(gtk.STOCK_CONVERT, 1)
+			self.__dict__['_' + jingle_type + '_banner_image'].set_from_stock(
+				gtk.STOCK_CONVERT, 1)
 		elif self.audio_state == self.JINGLE_STATE_CONNECTION_RECEIVED:
-			self._audio_banner_image.set_from_stock(gtk.STOCK_NETWORK, 1)
+			self.__dict__['_' + jingle_type + '_banner_image'].set_from_stock(
+				gtk.STOCK_NETWORK, 1)
 		elif self.audio_state == self.JINGLE_STATE_CONNECTED:
-			self._audio_banner_image.set_from_stock(gtk.STOCK_CONNECT, 1)
+			self.__dict__['_' + jingle_type + '_banner_image'].set_from_stock(
+				gtk.STOCK_CONNECT, 1)
 		elif self.audio_state == self.JINGLE_STATE_ERROR:
-			self._audio_banner_image.set_from_stock(gtk.STOCK_DIALOG_WARNING, 1)
+			self.__dict__['_' + jingle_type + '_banner_image'].set_from_stock(
+				gtk.STOCK_DIALOG_WARNING, 1)
 		self.update_toolbar()
 
+	def update_audio(self):
+		self._update_jingle('audio')
+
 	def update_video(self):
-		#TODO: Share code with update_audio?
-		if self.video_state in (self.JINGLE_STATE_NOT_AVAILABLE,
-		self.JINGLE_STATE_AVAILABLE):
-			self._video_banner_image.hide()
-		else:
-			self._video_banner_image.show()
-		if self.video_state == self.JINGLE_STATE_CONNECTING:
-			self._video_banner_image.set_from_stock(gtk.STOCK_CONVERT, 1)
-		elif self.video_state == self.JINGLE_STATE_CONNECTION_RECEIVED:
-			self._video_banner_image.set_from_stock(gtk.STOCK_NETWORK, 1)
-		elif self.video_state == self.JINGLE_STATE_CONNECTED:
-			self._video_banner_image.set_from_stock(gtk.STOCK_CONNECT, 1)
-		elif self.video_state == self.JINGLE_STATE_ERROR:
-			self._video_banner_image.set_from_stock(gtk.STOCK_DIALOG_WARNING, 1)
-		self.update_toolbar()
+		self._update_jingle('video')
 
 	def change_resource(self, resource):
 		old_full_jid = self.get_full_jid()
@@ -1582,11 +1577,12 @@ class ChatControl(ChatControlBase):
 		# update MessageWindow._controls
 		self.parent_win.change_jid(self.account, old_full_jid, new_full_jid)
 
-	def set_audio_state(self, state, sid=None, reason=None):
-		if state in ('connecting', 'connected', 'stop'):
-			str = _('Audio state : %s') % state
-			if reason:
-				str += ', ' + _('reason: %s') % reason
+	def _set_jingle_state(self, jingle_type, state, sid=None, reason=None):
+		if jingle_type not in ('audio', 'video'):
+			return
+		if state in ('connecting', 'connected', 'stop') and reason:
+			str = _('%(type)s state : %(state)s, reason: %(reason)s') % {
+				'type': jingle_type.capitalize(), 'state': state, 'reason': reason}
 			self.print_conversation(str, 'info')
 
 		states = {'not_available': self.JINGLE_STATE_NOT_AVAILABLE,
@@ -1598,62 +1594,31 @@ class ChatControl(ChatControlBase):
 			'error': self.JINGLE_STATE_ERROR}
 
 		if state in states:
-			self.audio_state = states[state]
+			self.__dict__[jingle_type + '_state'] = states[state]
 
 		# Destroy existing session with the user when he signs off
 		# We need to do that before modifying the sid
 		if state == 'not_available':
 			gajim.connections[self.account].delete_jingle_session(
-				self.contact.get_full_jid(), self.audio_sid)
+				self.contact.get_full_jid(), self.__dict__[jingle_type + '_sid'])
 
 		if state in ('not_available', 'available', 'stop'):
-			self.audio_sid = None
+			self.__dict__[jingle_type + '_sid'] = None
 		if state in ('connection_received', 'connecting'):
-			self.audio_sid = sid
+			self.__dict__[jingle_type + '_sid'] = sid
 
 		if state in ('connecting', 'connected', 'connection_received'):
-			self._audio_button.set_active(True)
+			self.__dict__['_' + jingle_type + '_button'].set_active(True)
 		elif state in ('not_available', 'stop'):
-			self._audio_button.set_active(False)
+			self.__dict__['_' + jingle_type + '_button'].set_active(False)
 
-		self.update_audio()
+		eval('self.update_' + jingle_type)()
+
+	def set_audio_state(self, state, sid=None, reason=None):
+		self._set_jingle_state('audio', state, sid=sid, reason=reason)
 
 	def set_video_state(self, state, sid=None, reason=None):
-		#TODO: Share code with set_audio_state?
-		if state in ('connecting', 'connected', 'stop'):
-			str = _('Video state : %s') % state
-			if reason:
-				str += ', ' + _('reason: %s') % reason
-			self.print_conversation(str, 'info')
-
-		states = {'not_available': self.JINGLE_STATE_NOT_AVAILABLE,
-			'available': self.JINGLE_STATE_AVAILABLE,
-			'connecting': self.JINGLE_STATE_CONNECTING,
-			'connection_received': self.JINGLE_STATE_CONNECTION_RECEIVED,
-			'connected': self.JINGLE_STATE_CONNECTED,
-			'stop': self.JINGLE_STATE_AVAILABLE,
-			'error': self.JINGLE_STATE_ERROR}
-
-		if state in states:
-			self.video_state = states[state]
-
-		# Destroy existing session with the user when he signs off
-		# We need to do that before modifying the sid
-		if state == 'not_available':
-			gajim.connections[self.account].delete_jingle_session(
-				self.contact.get_full_jid(), self.video_sid)
-
-		if state in ('not_available', 'available', 'stop'):
-			self.video_sid = None
-		if state in ('connection_received', 'connecting'):
-			self.video_sid = sid
-
-		if state in ('connecting', 'connected', 'connection_received'):
-			self._video_button.set_active(True)
-		elif state in ('not_available', 'stop'):
-			self._video_button.set_active(False)
-
-		self.update_video()
+		self._set_jingle_state('video', state, sid=sid, reason=reason)
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		'''
