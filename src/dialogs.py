@@ -553,8 +553,7 @@ class ChangeStatusMessageDialog:
 
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
-		self.message_buffer.connect('changed',
-									self.toggle_sensitiviy_of_save_as_preset)
+		self.message_buffer.connect('changed', self.on_message_buffer_changed)
 		if not msg:
 			msg = ''
 		msg = helpers.from_one_line(msg)
@@ -712,7 +711,11 @@ class ChangeStatusMessageDialog:
 				# Stop the event
 				return True
 
-	def toggle_sensitiviy_of_save_as_preset(self, widget):
+	def on_message_buffer_changed(self, widget):
+		self.countdown_enabled = False
+		self.toggle_sensitiviy_of_save_as_preset()
+
+	def toggle_sensitiviy_of_save_as_preset(self):
 		btn = self.xml.get_widget('save_as_preset_button')
 		if self.message_buffer.get_char_count() == 0:
 			btn.set_sensitive(False)
