@@ -1553,6 +1553,7 @@ class ChatControl(ChatControlBase):
 		self.update_toolbar()
 
 	def update_video(self):
+		#TODO: Share code with update_audio?
 		if self.video_state in (self.JINGLE_STATE_NOT_AVAILABLE,
 		self.JINGLE_STATE_AVAILABLE):
 			self._video_banner_image.hide()
@@ -1588,74 +1589,67 @@ class ChatControl(ChatControlBase):
 				str += ', ' + _('reason: %s') % reason
 			self.print_conversation(str, 'info')
 
+		states = {'not_available': self.JINGLE_STATE_NOT_AVAILABLE,
+			'available': self.JINGLE_STATE_AVAILABLE,
+			'connecting': self.JINGLE_STATE_CONNECTING,
+			'connection_received': self.JINGLE_STATE_CONNECTION_RECEIVED,
+			'connected': self.JINGLE_STATE_CONNECTED,
+			'stop': self.JINGLE_STATE_AVAILABLE,
+			'error': self.JINGLE_STATE_ERROR}
+
+		if state in states:
+			self.audio_state = states[state]
+
+		if state in ('not_available', 'available', 'stop'):
+			self.audio_sid = None
+		if state in ('connection_received', 'connecting'):
+			self.audio_sid = sid
+
 		if state in ('connecting', 'connected', 'connection_received'):
 			self._audio_button.set_active(True)
 		elif state in ('not_available', 'stop'):
-			# Destroy existing session with the user when he signs off
-			if state == 'not_available':
-				gajim.connections[self.account].delete_jingle_session(
-					self.contact.get_full_jid(), self.audio_sid)
 			self._audio_button.set_active(False)
 
+		# Destroy existing session with the user when he signs off
 		if state == 'not_available':
-			self.audio_state = self.JINGLE_STATE_NOT_AVAILABLE
-			self.audio_sid = None
-		elif state == 'available':
-			self.audio_state = self.JINGLE_STATE_AVAILABLE
-			self.audio_sid = None
-		elif state == 'connecting':
-			self.audio_state = self.JINGLE_STATE_CONNECTING
-			self.audio_sid = sid
-		elif state == 'connection_received':
-			self.audio_state = self.JINGLE_STATE_CONNECTION_RECEIVED
-			self.audio_sid = sid
-		elif state == 'connected':
-			self.audio_state = self.JINGLE_STATE_CONNECTED
-		elif state == 'stop':
-			self.audio_state = self.JINGLE_STATE_AVAILABLE
-			self.audio_sid = None
-		elif state == 'error':
-			self.audio_state = self.JINGLE_STATE_ERROR
+			gajim.connections[self.account].delete_jingle_session(
+				self.contact.get_full_jid(), self.audio_sid)
 
 		self.update_audio()
 
 	def set_video_state(self, state, sid=None, reason=None):
 		#TODO: Share code with set_audio_state?
-		if state in ('connecting', 'connected', 'stop'):
+				if state in ('connecting', 'connected', 'stop'):
 			str = _('Video state : %s') % state
 			if reason:
 				str += ', ' + _('reason: %s') % reason
 			self.print_conversation(str, 'info')
 
+		states = {'not_available': self.JINGLE_STATE_NOT_AVAILABLE,
+			'available': self.JINGLE_STATE_AVAILABLE,
+			'connecting': self.JINGLE_STATE_CONNECTING,
+			'connection_received': self.JINGLE_STATE_CONNECTION_RECEIVED,
+			'connected': self.JINGLE_STATE_CONNECTED,
+			'stop': self.JINGLE_STATE_AVAILABLE,
+			'error': self.JINGLE_STATE_ERROR}
+
+		if state in states:
+			self.video_state = states[state]
+
+		if state in ('not_available', 'available', 'stop'):
+			self.video_sid = None
+		if state in ('connection_received', 'connecting'):
+			self.video_sid = sid
+
 		if state in ('connecting', 'connected', 'connection_received'):
 			self._video_button.set_active(True)
 		elif state in ('not_available', 'stop'):
-			# Destroy existing session with the user when he signs off
-			if state == 'not_available':
-				gajim.connections[self.account].delete_jingle_session(
-					self.contact.get_full_jid(), self.video_sid)
 			self._video_button.set_active(False)
 
+		# Destroy existing session with the user when he signs off
 		if state == 'not_available':
-			self.video_state = self.JINGLE_STATE_NOT_AVAILABLE
-			self.video_sid = None
-		elif state == 'available':
-			self.video_state = self.JINGLE_STATE_AVAILABLE
-			self.video_sid = None
-		elif state == 'connecting':
-			self.video_state = self.JINGLE_STATE_CONNECTING
-			self.video_sid = sid
-		elif state == 'connection_received':
-			self.video_state = self.JINGLE_STATE_CONNECTION_RECEIVED
-			self.video_sid = sid
-		elif state == 'connected':
-			self.video_state = self.JINGLE_STATE_CONNECTED
-		elif state == 'stop':
-			self.video_state = self.JINGLE_STATE_AVAILABLE
-			self.video_sid = None
-			self._video_button.set_active(False)
-		elif state == 'error':
-			self.video_state = self.JINGLE_STATE_ERROR
+			gajim.connections[self.account].delete_jingle_session(
+				self.contact.get_full_jid(), self.video_sid)
 
 		self.update_video()
 
