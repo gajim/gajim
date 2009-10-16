@@ -2641,7 +2641,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		gajim.logger.replace_roster(self.name, roster_version, roster)
 		if received_from_server:
 			for contact in gajim.contacts.iter_contacts(self.name):
-				if not contact.is_groupchat() and contact.jid not in roster:
+				if not contact.is_groupchat() and contact.jid not in roster and \
+				contact.jid != gajim.get_jid_from_account(self.name):
 					self.dispatch('ROSTER_INFO', (contact.jid, None, None, None,
 						()))
 			for jid in roster:

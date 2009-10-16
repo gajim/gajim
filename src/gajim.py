@@ -603,10 +603,10 @@ class Interface:
 	def unblock_signed_in_notifications(self, account):
 		gajim.block_signed_in_notifications[account] = False
 
-	def handle_event_status(self, account, status): # OUR status
-		#('STATUS', account, status)
+	def handle_event_status(self, account, show): # OUR status
+		#('STATUS', account, show)
 		model = self.roster.status_combobox.get_model()
-		if status in ('offline', 'error'):
+		if show in ('offline', 'error'):
 			for name in self.instances[account]['online_dialog'].keys():
 				# .keys() is needed to not have a dictionary length changed during
 				# iteration error
@@ -618,7 +618,7 @@ class Interface:
 			# .keys() is needed because dict changes during loop
 			for account in self.pass_dialog.keys():
 				self.pass_dialog[account].window.destroy()
-		if status == 'offline':
+		if show == 'offline':
 			# sensitivity for this menuitem
 			if gajim.get_number_of_connected_accounts() == 0:
 				model[self.roster.status_message_menuitem_iter][3] = False
@@ -639,7 +639,7 @@ class Interface:
 			ctrls += self.minimized_controls[account].values()
 		for ctrl in ctrls:
 			if ctrl.account == account:
-				if status == 'offline' or (status == 'invisible' and \
+				if show == 'offline' or (show == 'invisible' and \
 				gajim.connections[account].is_zeroconf):
 					ctrl.got_disconnected()
 				else:
@@ -649,12 +649,12 @@ class Interface:
 				if ctrl.parent_win:
 					ctrl.parent_win.redraw_tab(ctrl)
 
-		self.roster.on_status_changed(account, status)
-		if account in self.show_vcard_when_connect and status not in ('offline',
+		self.roster.on_status_changed(account, show)
+		if account in self.show_vcard_when_connect and show not in ('offline',
 		'error'):
 			self.edit_own_details(account)
 		if self.remote_ctrl:
-			self.remote_ctrl.raise_signal('AccountPresence', (status, account))
+			self.remote_ctrl.raise_signal('AccountPresence', (show, account))
 
 	def edit_own_details(self, account):
 		jid = gajim.get_jid_from_account(account)

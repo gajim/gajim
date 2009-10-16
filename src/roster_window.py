@@ -676,7 +676,12 @@ class RosterWindow:
 			return
 
 		if jid == gajim.get_jid_from_account(account):
-			if contact.resource != gajim.connections[account].server_resource:
+			show_self_contact = gajim.config.get('show_self_contact')
+			if show_self_contact == 'never':
+				return
+			if (contact.resource != gajim.connections[account].server_resource and\
+			show_self_contact == 'when_other_resource') or show_self_contact == \
+			'always':
 				return self._add_self_contact(account)
 			return
 
@@ -1733,6 +1738,12 @@ class RosterWindow:
 			gajim.contacts.add_account(account)
 		if account not in gajim.groups:
 			gajim.groups[account] = {}
+		if gajim.config.get('show_self_contact') == 'always':
+			self_jid = gajim.get_jid_from_account(account)
+			if gajim.connections[account].server_resource:
+				self_jid += '/' + gajim.connections[account].server_resource
+			array[self_jid] = {'name': gajim.nicks[account],
+				'groups': ['self_contact'], 'subscription': 'both', 'ask': 'none'}
 		# .keys() is needed
 		for jid in array.keys():
 			# Remove the contact in roster. It might has changed
@@ -2058,9 +2069,10 @@ class RosterWindow:
 
 		elif contact.jid == gajim.get_jid_from_account(account) and \
 		show in ('offline', 'error'):
-			# SelfContact went offline. Remove him when last pending
-			# message was read
-			self.remove_contact(contact.jid, account, backend=True)
+			if gajim.config.get('show_self_contact') != 'never':
+				# SelfContact went offline. Remove him when last pending
+				# message was read
+				self.remove_contact(contact.jid, account, backend=True)
 
 		uf_show = helpers.get_uf_show(show)
 
@@ -2087,13 +2099,20 @@ class RosterWindow:
 		self.adjust_and_draw_contact_context(contact.jid, account)
 
 
-	def on_status_changed(self, account, status):
+	def on_status_changed(self, account, show):
 		'''the core tells us that our status has changed'''
 		if account not in gajim.contacts.get_accounts():
 			return
 		child_iterA = self._get_account_iter(account, self.model)
+		if gajim.config.get('show_self_contact') == 'always':
+			self_resource = gajim.connections[account].server_resource
+			self_contact = gajim.contacts.get_contact(account,
+				gajim.get_jid_from_account(account), resource=self_resource)
+			if self_contact:
+				status = gajim.connections[account].status
+				self.chg_contact_status(self_contact, show, status, account)
 		self.set_account_status_icon(account)
-		if status == 'offline':
+		if show == 'offline':
 			if self.quit_on_next_offline > -1:
 				# we want to quit, we are waiting for all accounts to be offline
 				self.quit_on_next_offline -= 1
