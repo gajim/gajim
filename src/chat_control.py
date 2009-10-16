@@ -1600,6 +1600,12 @@ class ChatControl(ChatControlBase):
 		if state in states:
 			self.audio_state = states[state]
 
+		# Destroy existing session with the user when he signs off
+		# We need to do that before modifying the sid
+		if state == 'not_available':
+			gajim.connections[self.account].delete_jingle_session(
+				self.contact.get_full_jid(), self.audio_sid)
+
 		if state in ('not_available', 'available', 'stop'):
 			self.audio_sid = None
 		if state in ('connection_received', 'connecting'):
@@ -1610,16 +1616,11 @@ class ChatControl(ChatControlBase):
 		elif state in ('not_available', 'stop'):
 			self._audio_button.set_active(False)
 
-		# Destroy existing session with the user when he signs off
-		if state == 'not_available':
-			gajim.connections[self.account].delete_jingle_session(
-				self.contact.get_full_jid(), self.audio_sid)
-
 		self.update_audio()
 
 	def set_video_state(self, state, sid=None, reason=None):
 		#TODO: Share code with set_audio_state?
-				if state in ('connecting', 'connected', 'stop'):
+		if state in ('connecting', 'connected', 'stop'):
 			str = _('Video state : %s') % state
 			if reason:
 				str += ', ' + _('reason: %s') % reason
@@ -1636,6 +1637,12 @@ class ChatControl(ChatControlBase):
 		if state in states:
 			self.video_state = states[state]
 
+		# Destroy existing session with the user when he signs off
+		# We need to do that before modifying the sid
+		if state == 'not_available':
+			gajim.connections[self.account].delete_jingle_session(
+				self.contact.get_full_jid(), self.video_sid)
+
 		if state in ('not_available', 'available', 'stop'):
 			self.video_sid = None
 		if state in ('connection_received', 'connecting'):
@@ -1645,11 +1652,6 @@ class ChatControl(ChatControlBase):
 			self._video_button.set_active(True)
 		elif state in ('not_available', 'stop'):
 			self._video_button.set_active(False)
-
-		# Destroy existing session with the user when he signs off
-		if state == 'not_available':
-			gajim.connections[self.account].delete_jingle_session(
-				self.contact.get_full_jid(), self.video_sid)
 
 		self.update_video()
 
