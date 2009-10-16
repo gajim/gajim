@@ -1587,6 +1587,16 @@ class ChatControl(ChatControlBase):
 			if reason:
 				str += ', ' + _('reason: %s') % reason
 			self.print_conversation(str, 'info')
+
+		if state in ('connecting', 'connected', 'connection_received'):
+			self._audio_button.set_active(True)
+		elif state in ('not_available', 'stop'):
+			# Destroy existing session with the user when he signs off
+			if state == 'not_available':
+				gajim.connections[self.account].delete_jingle_session(
+					self.contact.get_full_jid(), self.audio_sid)
+			self._audio_button.set_active(False)
+
 		if state == 'not_available':
 			self.audio_state = self.JINGLE_STATE_NOT_AVAILABLE
 			self.audio_sid = None
@@ -1607,11 +1617,6 @@ class ChatControl(ChatControlBase):
 		elif state == 'error':
 			self.audio_state = self.JINGLE_STATE_ERROR
 
-		if state in ('connecting', 'connected', 'connection_received'):
-			self._audio_button.set_active(True)
-		elif state in ('not_available', 'stop'):
-			#TODO: Destroy existing session(s) with this user?
-			self._audio_button.set_active(False)
 		self.update_audio()
 
 	def set_video_state(self, state, sid=None, reason=None):
@@ -1621,6 +1626,16 @@ class ChatControl(ChatControlBase):
 			if reason:
 				str += ', ' + _('reason: %s') % reason
 			self.print_conversation(str, 'info')
+
+		if state in ('connecting', 'connected', 'connection_received'):
+			self._video_button.set_active(True)
+		elif state in ('not_available', 'stop'):
+			# Destroy existing session with the user when he signs off
+			if state == 'not_available':
+				gajim.connections[self.account].delete_jingle_session(
+					self.contact.get_full_jid(), self.video_sid)
+			self._video_button.set_active(False)
+
 		if state == 'not_available':
 			self.video_state = self.JINGLE_STATE_NOT_AVAILABLE
 			self.video_sid = None
@@ -1642,11 +1657,6 @@ class ChatControl(ChatControlBase):
 		elif state == 'error':
 			self.video_state = self.JINGLE_STATE_ERROR
 
-		if state in ('connecting', 'connected', 'connection_received'):
-			self._video_button.set_active(True)
-		elif state in ('not_available', 'stop'):
-			#TODO: Destroy existing session(s) with this user?
-			self._video_button.set_active(False)
 		self.update_video()
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):

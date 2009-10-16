@@ -39,13 +39,11 @@
 # * DONE: figure out why it doesn't work with pidgin:
 #     That's a bug in pidgin: http://xmpp.org/extensions/xep-0176.html#protocol-checks
 
-# * destroy sessions when user is unavailable, see handle_event_notify?
 # * timeout
-# * security (see XEP 0166)
 
 # * split this file in several modules
 #   For example, a file dedicated for XEP0166, one for XEP0176,
-#   and one for each media of XEP0167
+#   and one for XEP0167
 
 # * handle different kinds of sink and src elements
 
@@ -77,6 +75,9 @@ class TransportType(object):
 
 class OutOfOrder(Exception):
 	''' Exception that should be raised when an action is received when in the wrong state. '''
+
+class TieBreak(Exception):
+	''' Exception that should be raised in case of a tie, when we overrule the other action. '''
 
 class JingleSession(object):
 	''' This represents one jingle session. '''
@@ -306,6 +307,8 @@ class JingleSession(object):
 				callable(stanza=stanza, jingle=jingle, error=error, action=action)
 		except xmpp.NodeProcessed:
 			pass
+		except TieBreak:
+			self.__send_error(stanza, 'conflict', 'tiebreak')
 		except OutOfOrder:
 			self.__send_error(stanza, 'unexpected-request', 'out-of-order')#FIXME
 
@@ -328,7 +331,7 @@ class JingleSession(object):
 		self.__dispatch_error(xmpp_error, jingle_error, text)
 		#FIXME: Not sure when we would want to do that...
 		if xmpp_error == 'item-not-found':
-			self.connection.delete_jingle(self)
+			self.connection.delete_jingle_session(self.peerjid, self.sid)
 
 	def __transportReplaceCB(self, stanza, jingle, error, action):
 		for content in jingle.iterTags('content'):
@@ -415,7 +418,8 @@ class JingleSession(object):
 		''' We got a jingle session request from other entity,
 		therefore we are the receiver... Unpack the data,
 		inform the user. '''
-		if self.state != JingleStates.ended: #FIXME
+
+		if self.state != JingleStates.ended:
 			raise OutOfOrder
 
 		self.initiator = jingle['initiator']
@@ -463,7 +467,7 @@ class JingleSession(object):
 			cn.stanzaCB(stanza, content, error, action)
 
 	def __sessionTerminateCB(self, stanza, jingle, error, action):
-		self.connection.delete_jingle(self)
+		self.connection.delete_jingle_session(self.peerjid, self.sid)
 		reason, text = self.__reason_from_stanza(jingle)
 		if reason not in ('success', 'cancel', 'decline'):
 			self.__dispatch_error(reason, reason, text)
@@ -607,7 +611,7 @@ class JingleSession(object):
 			text = '%s (%s)' % (reason, text)
 		else:
 			text = reason
-		self.connection.delete_jingle(self)
+		self.connection.delete_jingle_session(self.peerjid, self.sid)
 		self.connection.dispatch('JINGLE_DISCONNECTED',
 			(self.peerjid, self.sid, None, text))
 
@@ -1078,9 +1082,15 @@ class ConnectionJingle(object):
 		'''
 		self.__sessions[(jingle.peerjid, jingle.sid)] = jingle
 
-	def delete_jingle(self, jingle):
+	def delete_jingle_session(self, peerjid, sid):
 		''' Remove a jingle session from a jingle stanza dispatcher '''
-		del self.__sessions[(jingle.peerjid, jingle.sid)]
+		key = (peerjid, sid)
+		if key in self.__sessions:
+			#FIXME: Move this elsewhere?
+			for content in self.__sessions[key].contents.values():
+				content.destroy()
+			self.__sessions[key].callbacks = []
+			del self.__sessions[key]
 
 	def _JingleCB(self, con, stanza):
 		''' The jingle stanza dispatcher.
