@@ -1848,7 +1848,7 @@ class GroupchatControl(ChatControlBase):
 					# have to accomodate for the added space from last
 					# completion
 					start_iter.backward_chars(len(begin) + 2)
-				elif self.last_key_tabs:
+				elif self.last_key_tabs and not gajim.config.get('shell_like_completion'):
 					# have to accomodate for the added space from last
 					# completion
 					start_iter.backward_chars(len(begin) + 1)
@@ -1871,7 +1871,7 @@ class GroupchatControl(ChatControlBase):
 								end = True
 					cur = cur[:-1]
 					completion = cur
-					add = "" # if nick is not complete, don't but any comma or so
+					add = "" # if nick is not complete, don't add anything
 				message_buffer.insert_at_cursor(completion + add)
 				self.last_key_tabs = True
 				return True
