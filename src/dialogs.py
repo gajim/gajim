@@ -52,7 +52,7 @@ except ImportError:
 # so they can do dialog.GajimThemesWindow() for example
 from filetransfers_window import FileTransfersWindow
 from gajim_themes_window import GajimThemesWindow
-from advanced import AdvancedConfigurationWindow
+from advanced_configuration_window import AdvancedConfigurationWindow
 
 from common import gajim
 from common import helpers
