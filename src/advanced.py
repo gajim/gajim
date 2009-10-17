@@ -69,14 +69,6 @@ def tree_model_pre_order(model, treeiter):
 		for it in tree_model_pre_order(model, childiter):
 			yield it
 
-try:
-	any(()) # builtin since python 2.5
-except Exception:
-	def any(iterable):
-		for element in iterable:
-			if element:
-				return True
-		return False
 
 class AdvancedConfigurationWindow(object):
 	def __init__(self):
