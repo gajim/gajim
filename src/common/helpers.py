@@ -1191,7 +1191,7 @@ def get_notification_icon_tooltip_dict():
 					'%d event pending',
 					'%d events pending',
 					total_non_messages, total_non_messages, total_non_messages)
-				accounts[account]['event_lines'].append(text)
+				account['event_lines'].append(text)
 			else:
 				for jid in non_messages.keys():
 					text = ngettext(
@@ -1199,7 +1199,7 @@ def get_notification_icon_tooltip_dict():
 						'%d events pending',
 						non_messages[jid], non_messages[jid], non_messages[jid])
 					text += _(' from user %s') % (jid)
-					accounts[account]['event_lines'].append(text)
+					account[account]['event_lines'].append(text)
 
 	return accounts
 
