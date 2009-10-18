@@ -194,14 +194,9 @@ class Connection(ConnectionHandlers):
 		self.secret_hmac = str(random.random())[2:]
 	# END __init__
 
-	def put_event(self, ev):
-		if ev[0] in gajim.handlers:
-			log.debug('Sending %s event to GUI: %s' % (ev[0], ev[1:]))
-			gajim.handlers[ev[0]](self.name, ev[1])
-
 	def dispatch(self, event, data):
 		'''always passes account name as first param'''
-		self.put_event((event, data))
+		gajim.interface.dispatch(event, self.name, data)
 
 
 	def _reconnect(self):

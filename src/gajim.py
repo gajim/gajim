@@ -2359,7 +2359,17 @@ class Interface:
 			'PUBSUB_NODE_REMOVED': self.handle_event_pubsub_node_removed,
 			'PUBSUB_NODE_NOT_REMOVED': self.handle_event_pubsub_node_not_removed,
 		}
-		gajim.handlers = self.handlers
+	
+	def dispatch(self, event, account, data):
+		'''
+		Dispatches an network event to the event handlers of this class
+		'''
+		if event not in self.handlers:
+			log.warning('Unknown event %s dispatched to GUI: %s' % (event, data))
+		else:
+			log.debug('Event %s distpached to GUI: %s' % (event, data))
+			self.handlers[event](account, data)
+		
 
 ################################################################################
 ### Methods dealing with gajim.events
