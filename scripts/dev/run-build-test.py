@@ -6,10 +6,12 @@ import sys
 if os.getcwd().endswith('dev'):
 	os.chdir('../../') # we were in scripts/dev
 
-ret1 = os.system("make clean > " + os.devnull + " 2>&1")
-ret2 = os.system("make > " + os.devnull + " 2>&1")  
+ret = 0
+ret += os.system("make clean > " + os.devnull)
+ret += os.system("make > " + os.devnull)  
+ret += os.system("make check > " + os.devnull)
 
-if ret1 + ret2 == 0:
+if ret == 0:
 	print "Build successfull"
 	sys.exit(0)
 else:
