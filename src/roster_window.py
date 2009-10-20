@@ -2156,7 +2156,7 @@ class RosterWindow:
 			return
 
 		dlg = dialogs.ChangeStatusMessageDialog(on_response, show, show_pep)
-		dlg.window.present() # show it on current workspace
+		dlg.dialog.present() # show it on current workspace
 
 	def change_status(self, widget, account, status):
 		def change(account, status):

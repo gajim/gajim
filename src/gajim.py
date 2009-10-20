@@ -2097,9 +2097,11 @@ class Interface:
 			gajim.config.set_per('accounts', account, 'resource', new_resource)
 			self.roster.send_status(account, gajim.connections[account].old_show,
 				gajim.connections[account].status)
-		dlg = dialogs.InputDialog(_('Resource Conflict'),
-			_('You are already connected to this account with the same resource. Please type a new one'), input_str = gajim.connections[account].server_resource,
-			is_modal = False, ok_handler = on_ok)
+		proposed_resource = gajim.connections[account].server_resource
+		proposed_resource += gajim.config.get('gc_proposed_nick_char')
+		dlg = dialogs.ResourceConflictDialog(_('Resource Conflict'),
+			_('You are already connected to this account with the same resource. '
+			'Please type a new one'), resource=proposed_resource, ok_handler=on_ok)
 
 	def handle_event_pep_config(self, account, data):
 		# ('PEP_CONFIG', account, (node, form))
