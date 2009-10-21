@@ -3217,14 +3217,14 @@ class AccountCreationWizardWindow:
 			finish_text = '<big><b>%s</b></big>\n\n%s' % (
 				_('Account has been added successfully'),
 				_('You can set advanced account options by pressing the '
-				'Advanced button, or later by choosing the Accounts menuitem '
+				'Advanced button, or later by choosing the Accounts menu item '
 				'under the Edit menu from the main window.'))
 		else:
 			finish_text = '<big><b>%s</b></big>\n\n%s' % (
 				_('Your new account has been created successfully'),
 				_('You can set advanced account options by pressing the Advanced '
-				'button, or later by choosing the Accounts menuitem under the Edit '
-				'menu from the main window.'))
+				'button, or later by choosing the Accounts menu item under the Edit'
+				' menu from the main window.'))
 		self.finish_label.set_markup(finish_text)
 		self.finish_button.show()
 		self.finish_button.set_property('has-default', True)
