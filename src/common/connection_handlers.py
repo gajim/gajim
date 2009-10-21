@@ -897,13 +897,6 @@ class ConnectionDisco:
 					if identity['category'] == 'pubsub' and identity.get('type') == \
 					'pep':
 						self.pep_supported = True
-						if dbus_support.supported:
-							listener = MusicTrackListener.get()
-							track = listener.get_playing_track()
-							if gajim.config.get_per('accounts', self.name,
-							'publish_tune'):
-								gajim.interface.music_track_changed(listener, track,
-									self.name)
 						break
 			if features.__contains__(common.xmpp.NS_VCARD):
 				self.vcard_supported = True
