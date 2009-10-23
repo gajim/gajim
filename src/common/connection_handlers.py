@@ -2302,7 +2302,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					# we are banned
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('You are banned from group chat %s.') % room_jid))
-				elif (errcode == '404') or (errcon == 'item-not-found'):
+				elif (errcode == '404') or (errcon in ('item-not-found',
+				'remote-server-not-found')):
 					if gc_control is None or gc_control.autorejoin is None:
 						# group chat does not exist
 						self.dispatch('ERROR', (_('Unable to join group chat'),
