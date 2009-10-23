@@ -2045,13 +2045,16 @@ class ChatControl(ChatControlBase):
 			label_str = '<b>' + unread + label_str + '</b>'
 		return (label_str, color)
 
-	def get_tab_image(self):
+	def get_tab_image(self, count_unread=True):
 		if self.resource:
 			jid = self.contact.get_full_jid()
 		else:
 			jid = self.contact.jid
-		num_unread = len(gajim.events.get_events(self.account, jid,
-			['printed_' + self.type_id, self.type_id]))
+		if count_unread:
+			num_unread = len(gajim.events.get_events(self.account, jid,
+				['printed_' + self.type_id, self.type_id]))
+		else:
+			num_unread = 0
 		# Set tab image (always 16x16); unread messages show the 'event' image
 		tab_img = None
 
@@ -2066,7 +2069,7 @@ class ChatControl(ChatControlBase):
 				# For transient contacts
 				contact = self.contact
 			img_16 = gajim.interface.roster.get_appropriate_state_images(
-				self.contact.jid, icon_name = contact.show)
+				self.contact.jid, icon_name=contact.show)
 			tab_img = img_16[contact.show]
 
 		return tab_img

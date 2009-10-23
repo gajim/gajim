@@ -535,7 +535,7 @@ class GroupchatControl(ChatControlBase):
 		label_str = unread + label_str
 		return (label_str, color)
 
-	def get_tab_image(self):
+	def get_tab_image(self, count_unread=True):
 		# Set tab image (always 16x16)
 		tab_image = None
 		if gajim.gc_connected[self.account][self.room_jid]:
