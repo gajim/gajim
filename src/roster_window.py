@@ -5357,10 +5357,8 @@ class RosterWindow:
 		jid = model[titer][C_JID].decode('utf-8')
 		tree_path = model.get_path(titer)
 		account = model[titer][C_ACCOUNT].decode('utf-8')
+		our_jid = jid == gajim.get_jid_from_account(account)
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
-		menu = gtkgui_helpers.get_contact_menu(contact, account)
-		menu.attach_to_widget(self.tree, None)
-
 		if not contact:
 			return
 
