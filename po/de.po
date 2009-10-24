@@ -1286,7 +1286,7 @@ msgstr "Spitz_name ändern …"
 
 #: ../data/glade/gc_control_popup_menu.glade.h:2
 msgid "Change _Subject..."
-msgstr "_Design ändern …"
+msgstr "_Thema ändern …"
 
 #: ../data/glade/gc_control_popup_menu.glade.h:3
 msgid "Configure _Room..."
@@ -2630,7 +2630,7 @@ msgstr "Einzelne _Nachricht senden …"
 
 #: ../data/glade/roster_window.glade.h:26
 msgid "_View"
-msgstr "_Ansicht"
+msgstr "A_nsicht"
 
 #: ../data/glade/search_window.glade.h:1
 msgid "Please wait while retrieving search form..."
@@ -5230,7 +5230,7 @@ msgstr "Vom Chatraum %s"
 #: ../src/common/helpers.py:1177 ../src/common/helpers.py:1196
 #, python-format
 msgid " from user %s"
-msgstr "Vom Benutzer %s"
+msgstr " vom Benutzer %s"
 
 #: ../src/common/helpers.py:1179
 #, python-format
