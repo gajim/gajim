@@ -5148,17 +5148,6 @@ class RosterWindow:
 
 			zeroconf_properties_menuitem.connect('activate',
 				self.on_zeroconf_properties, account)
-			#gc_sub_menu = gtk.Menu() # gc is always a submenu
-			#join_group_chat_menuitem.set_submenu(gc_sub_menu)
-			#self.add_bookmarks_list(gc_sub_menu, account)
-			#new_message_menuitem.connect('activate',
-			#	self.on_new_message_menuitem_activate, account)
-
-			# make some items insensitive if account is offline
-			#if gajim.connections[account].connected < 2:
-			#	for widget in [join_group_chat_menuitem, new_message_menuitem]:
-			#		widget.set_sensitive(False)
-			#	new_message_menuitem.set_sensitive(False)
 
 		return account_context_menu
 
