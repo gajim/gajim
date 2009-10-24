@@ -23,7 +23,6 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from itertools import *
 import gajim
 import helpers
 
@@ -89,31 +88,31 @@ class CapsCache(object):
 			__names = {}
 			def __init__(ciself, hash_method, hash_):
 				# cached into db
-				ciself.hash_method = hash_method
-				ciself.hash = hash_
-				ciself._features = []
-				ciself._identities = []
+				self.hash_method = hash_method
+				self.hash = hash_
+				self._features = []
+				self._identities = []
 
 				# not cached into db:
 				# have we sent the query?
 				# 0 == not queried
 				# 1 == queried
 				# 2 == got the answer
-				ciself.queried = 0
+				self.queried = 0
 
-			def _get_features(ciself):
-				return ciself._features
+			def _get_features(self):
+				return self._features
 
-			def _set_features(ciself, value):
-				ciself._features = []
+			def _set_features(self, value):
+				self._features = []
 				for feature in value:
-					ciself._features.append(ciself.__names.setdefault(feature,
+					self._features.append(self.__names.setdefault(feature,
 						feature))
 			features = property(_get_features, _set_features)
 
-			def _get_identities(ciself):
+			def _get_identities(self):
 				list_ = []
-				for i in ciself._identities:
+				for i in self._identities:
 					# transforms it back in a dict
 					d = dict()
 					d['category'] = i[0]
@@ -125,20 +124,20 @@ class CapsCache(object):
 						d['name'] = i[3]
 					list_.append(d)
 				return list_
-			def _set_identities(ciself, value):
-				ciself._identities = []
+			def _set_identities(self, value):
+				self._identities = []
 				for identity in value:
 					# dict are not hashable, so transform it into a tuple
 					t = (identity['category'], identity.get('type'),
 						identity.get('xml:lang'), identity.get('name'))
-					ciself._identities.append(ciself.__names.setdefault(t, t))
+					self._identities.append(self.__names.setdefault(t, t))
 			identities = property(_get_identities, _set_identities)
 
-			def update(ciself, identities, features):
+			def update(self, identities, features):
 				# NOTE: self refers to CapsCache object, not to CacheItem
-				ciself.identities=identities
-				ciself.features=features
-				self.logger.add_caps_entry(ciself.hash_method, ciself.hash,
+				self.identities=identities
+				self.features=features
+				self.logger.add_caps_entry(self.hash_method, self.hash,
 					identities, features)
 
 		self.__CacheItem = CacheItem
