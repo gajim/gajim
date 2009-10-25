@@ -136,9 +136,21 @@ class TestEntityCapabilities(CommonCapsTest):
 		
 		connection.mockCheckCall(0, "discoverInfo", 'test@gajim.org', 
 				'http://gajim.org#RNzJvJnTWqczirzu+YF4V8am9ro=')
+		
+	def test_is_supported(self):		
+		self.assertTrue(self.entity.supports_feature(self.chatstates),
+				msg="Assume everything is supported, if we don't have caps")
+		
+		self.cc.initialize_from_db()
+		
+		self.assertFalse(self.entity.supports_feature(self.chatstates),
+				msg="Must return false on unsupported feature")
+		
+		self.assertTrue(self.entity.supports_feature(self.muc),
+				msg="Must return True on supported feature")
 	
 	
-class TestOldEntityCapabilities(TestEntityCapabilities):
+class TestOldEntityCapabilities(TestEntityCapabilities):	
 
 	def setUp(self):
 		TestEntityCapabilities.setUp(self)

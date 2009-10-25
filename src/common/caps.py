@@ -58,10 +58,18 @@ class AbstractEntityCapabilities(object):
 		Query will only be sent if the data is not already cached.
 		'''
 		q = self._lookup_in_cache()
-		if q and q.queried == 0:
+		if q.queried == 0:
 			self._discover(connection, jid)
 			q.queried = 1
-
+		
+	def supports_feature(self, feature):
+		''' Returns true if these capabilities contain the given feature '''
+		features = self._lookup_in_cache().features
+		
+		if feature in features or features == []:
+			return True
+		else:
+			return False
 			
 	def _discover(self, connection, jid):
 		''' To be implemented by subclassess '''
@@ -108,8 +116,11 @@ class NullEntityCapabilities(AbstractEntityCapabilities):
 	Assumes everything is supported.
 	''' 
 	
-	def _lookup_in_cache(self):
-		return None
+	def query_client_of_jid_if_unknown(self, connection, jid):
+		pass
+	
+	def supports_feature(self, feature):
+		return True
 
 
 class CapsCache(object):
