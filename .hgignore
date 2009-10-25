@@ -1,4 +1,5 @@
 syntax: glob
+*.orig
 *.gmo
 *.in
 *.la
