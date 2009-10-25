@@ -216,7 +216,7 @@ class OptionsParser:
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
 
-		gajim.capscache.load_from_db()
+		gajim.capscache.initialize_from_db()
 
 	def update_config_x_to_09(self):
 		# Var name that changed:

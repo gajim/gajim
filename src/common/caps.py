@@ -29,45 +29,20 @@ import helpers
 class CapsCache(object):
 	''' This object keeps the mapping between caps data and real disco
 	features they represent, and provides simple way to query that info.
+	
 	It is application-wide, that is there's one object for all
 	connections.
+	
 	Goals:
 	 * handle storing/retrieving info from database
 	 * cache info in memory
 	 * expose simple interface
+	 
 	Properties:
 	 * one object for all connections (move to logger.py?)
 	 * store info efficiently (a set() of urls -- we can assume there won't be
 	   too much of these, ensure that (X,Y,Z1) and (X,Y,Z2) has different
 	   features.
-
-	Connections with other objects: (TODO)
-
-	Interface:
-
-	# object creation
-	>>> cc=CapsCache(logger_object)
-
-	>>> caps = ('sha-1', '66/0NaeaBKkwk85efJTGmU47vXI=')
-	>>> muc = 'http://jabber.org/protocol/muc'
-	>>> chatstates = 'http://jabber.org/protocol/chatstates'
-
-	# setting data
-	>>> cc[caps].identities = [{'category':'client', 'type':'pc'}]
-	>>> cc[caps].features = [muc]
-
-	# retrieving data
-	>>> muc in cc[caps].features
-	True
-	>>> chatstates in cc[caps].features
-	False
-	>>> cc[caps].identities
-	[{'category': 'client', 'type': 'pc'}]
-	>>> x = cc[caps] # more efficient if making several queries for one set of caps
-	ATypicalBlackBoxObject
-	>>> muc in x.features
-	True
-
 	'''
 	def __init__(self, logger=None):
 		''' Create a cache for entity capabilities. '''
@@ -86,12 +61,14 @@ class CapsCache(object):
 			#   TODO: maybe put all known xmpp namespace strings here
 			#   (strings given in xmpppy)?
 			__names = {}
-			def __init__(ciself, hash_method, hash_):
+			
+			def __init__(self, hash_method, hash_, logger):
 				# cached into db
 				self.hash_method = hash_method
 				self.hash = hash_
 				self._features = []
 				self._identities = []
+				self._logger = logger
 
 				# not cached into db:
 				# have we sent the query?
@@ -106,8 +83,7 @@ class CapsCache(object):
 			def _set_features(self, value):
 				self._features = []
 				for feature in value:
-					self._features.append(self.__names.setdefault(feature,
-						feature))
+					self._features.append(self.__names.setdefault(feature, feature))
 			features = property(_get_features, _set_features)
 
 			def _get_identities(self):
@@ -137,7 +113,7 @@ class CapsCache(object):
 				# NOTE: self refers to CapsCache object, not to CacheItem
 				self.identities=identities
 				self.features=features
-				self.logger.add_caps_entry(self.hash_method, self.hash,
+				self._logger.add_caps_entry(self.hash_method, self.hash,
 					identities, features)
 
 		self.__CacheItem = CacheItem
@@ -153,7 +129,7 @@ class CapsCache(object):
 		# start logging data from the net
 		self.logger = logger
 
-	def load_from_db(self):
+	def initialize_from_db(self):
 		# get data from logger...
 		if self.logger is not None:
 			for hash_method, hash_, identities, features in \
@@ -169,7 +145,7 @@ class CapsCache(object):
 
 		hash_method, hash_ = caps
 
-		x = self.__CacheItem(hash_method, hash_)
+		x = self.__CacheItem(hash_method, hash_, self.logger)
 		self.__cache[(hash_method, hash_)] = x
 		return x
 
