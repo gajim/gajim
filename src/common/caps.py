@@ -58,9 +58,10 @@ class AbstractEntityCapabilities(object):
 		Query will only be sent if the data is not already cached.
 		'''
 		q = self._lookup_in_cache()
-		if q and q.query_status == q.NOT_QUERIED:
-			q.query_status = q.QUERIED
-			q._discover(connection, jid)
+		if q and q.queried == 0:
+			self._discover(connection, jid)
+			q.queried = 1
+
 			
 	def _discover(self, connection, jid):
 		''' To be implemented by subclassess '''
@@ -92,8 +93,8 @@ class OldEntityCapabilities(AbstractEntityCapabilities):
 	def __init__(self, caps_cache, caps_hash, node):
 		AbstractEntityCapabilities.__init__(self, caps_cache, caps_hash, node)
 
-	def _lookup_in_cache(self, caps_cache):
-		return caps_cache[('old', self._node + '#' + self._hash)]
+	def _lookup_in_cache(self):
+		return self._caps_cache[('old', self._node + '#' + self._hash)]
 	
 	def _discover(self, connection, jid):
 		connection.discoverInfo(jid)

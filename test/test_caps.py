@@ -8,7 +8,7 @@ lib.setup_env()
 
 from common import helpers
 from common.contacts import Contact
-from common.caps import CapsCache
+from common.caps import CapsCache, EntityCapabilities, OldEntityCapabilities
 
 from mock import Mock
 
@@ -28,21 +28,18 @@ class CommonCapsTest(unittest.TestCase):
 
 		self.identities = [self.identity]
 		self.features = [self.muc]
+		
+		# Simulate a filled db
+		db_caps_cache = [
+				(self.caps_method, self.caps_hash, self.identities, self.features),
+				('old', self.node + '#' + self.caps_hash, self.identities, self.features)]
+		self.logger = Mock(returnValues={"iter_caps_data":db_caps_cache})
+		
+		self.cc = CapsCache(self.logger)
 			
 			
 class TestCapsCache(CommonCapsTest):
 	
-	def setUp(self):
-		CommonCapsTest.setUp(self)
-
-		# Simulate a filled db
-		db_caps_cache = [
-				(self.caps_method, self.caps_hash, self.identities, self.features),
-				(self.caps_method, self.caps_hash, self.identities, self.features)]
-		self.logger = Mock(returnValues={"iter_caps_data":db_caps_cache})
-		
-		self.cc = CapsCache(self.logger)
-
 	def test_set_retrieve(self):
 		''' Test basic set / retrieve cycle '''
 
@@ -116,6 +113,51 @@ class TestCapsCache(CommonCapsTest):
 		computed_hash = helpers.compute_caps_hash(self.identities, self.features)
 		self.assertEqual(self.caps_hash, computed_hash)
 
+
+class TestEntityCapabilities(CommonCapsTest):
+	
+	def setUp(self):
+		CommonCapsTest.setUp(self)
+		self.entity = EntityCapabilities(self.cc, self.caps_hash, self.node,
+			self.caps_method) 
+	
+	def test_no_query_client_of_jid(self):
+		''' Client must not be queried if the data is already cached '''		
+		connection = Mock()
+		self.cc.initialize_from_db()
+		self.entity.query_client_of_jid_if_unknown(connection, "test@gajim.org")
+		
+		self.assertEqual(0, len(connection.mockGetAllCalls()))
+	
+	def test_query_client_of_jid_if_unknown(self):
+		''' Client must be queried if the data is unkown '''	
+		connection = Mock()
+		self.entity.query_client_of_jid_if_unknown(connection, "test@gajim.org")	
+		
+		connection.mockCheckCall(0, "discoverInfo", 'test@gajim.org', 
+				'http://gajim.org#RNzJvJnTWqczirzu+YF4V8am9ro=')
+	
+	
+class TestOldEntityCapabilities(TestEntityCapabilities):
+
+	def setUp(self):
+		TestEntityCapabilities.setUp(self)
+		self.entity = OldEntityCapabilities(self.cc, self.caps_hash, self.node) 
+
+	def test_no_query_client_of_jid(self):
+		''' Client must not be queried if the data is already cached '''		
+		connection = Mock()
+		self.cc.initialize_from_db()
+		self.entity.query_client_of_jid_if_unknown(connection, "test@gajim.org")
+		
+		self.assertEqual(0, len(connection.mockGetAllCalls()))
+	
+	def test_query_client_of_jid_if_unknown(self):
+		''' Client must be queried if the data is unkown '''	
+		connection = Mock()
+		self.entity.query_client_of_jid_if_unknown(connection, "test@gajim.org")	
+		
+		connection.mockCheckCall(0, "discoverInfo", "test@gajim.org")
 
 
 
