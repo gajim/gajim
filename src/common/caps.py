@@ -62,7 +62,7 @@ class AbstractEntityCapabilities(object):
 			self._discover(connection, jid)
 			q.queried = 1
 		
-	def supports_feature(self, feature):
+	def contains_feature(self, feature):
 		''' Returns true if these capabilities contain the given feature '''
 		features = self._lookup_in_cache().features
 		
@@ -116,10 +116,13 @@ class NullEntityCapabilities(AbstractEntityCapabilities):
 	Assumes everything is supported.
 	''' 
 	
+	def __init__(self):
+		pass
+	
 	def query_client_of_jid_if_unknown(self, connection, jid):
 		pass
 	
-	def supports_feature(self, feature):
+	def contains_feature(self, feature):
 		return True
 
 

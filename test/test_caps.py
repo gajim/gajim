@@ -118,35 +118,35 @@ class TestEntityCapabilities(CommonCapsTest):
 	
 	def setUp(self):
 		CommonCapsTest.setUp(self)
-		self.entity = EntityCapabilities(self.cc, self.caps_hash, self.node,
+		self.caps = EntityCapabilities(self.cc, self.caps_hash, self.node,
 			self.caps_method) 
 	
 	def test_no_query_client_of_jid(self):
 		''' Client must not be queried if the data is already cached '''		
 		connection = Mock()
 		self.cc.initialize_from_db()
-		self.entity.query_client_of_jid_if_unknown(connection, "test@gajim.org")
+		self.caps.query_client_of_jid_if_unknown(connection, "test@gajim.org")
 		
 		self.assertEqual(0, len(connection.mockGetAllCalls()))
 	
 	def test_query_client_of_jid_if_unknown(self):
 		''' Client must be queried if the data is unkown '''	
 		connection = Mock()
-		self.entity.query_client_of_jid_if_unknown(connection, "test@gajim.org")	
+		self.caps.query_client_of_jid_if_unknown(connection, "test@gajim.org")	
 		
 		connection.mockCheckCall(0, "discoverInfo", 'test@gajim.org', 
 				'http://gajim.org#RNzJvJnTWqczirzu+YF4V8am9ro=')
 		
 	def test_is_supported(self):		
-		self.assertTrue(self.entity.supports_feature(self.chatstates),
+		self.assertTrue(self.caps.contains_feature(self.chatstates),
 				msg="Assume everything is supported, if we don't have caps")
 		
 		self.cc.initialize_from_db()
 		
-		self.assertFalse(self.entity.supports_feature(self.chatstates),
+		self.assertFalse(self.caps.contains_feature(self.chatstates),
 				msg="Must return false on unsupported feature")
 		
-		self.assertTrue(self.entity.supports_feature(self.muc),
+		self.assertTrue(self.caps.contains_feature(self.muc),
 				msg="Must return True on supported feature")
 	
 	
@@ -154,20 +154,20 @@ class TestOldEntityCapabilities(TestEntityCapabilities):
 
 	def setUp(self):
 		TestEntityCapabilities.setUp(self)
-		self.entity = OldEntityCapabilities(self.cc, self.caps_hash, self.node) 
+		self.caps = OldEntityCapabilities(self.cc, self.caps_hash, self.node) 
 
 	def test_no_query_client_of_jid(self):
 		''' Client must not be queried if the data is already cached '''		
 		connection = Mock()
 		self.cc.initialize_from_db()
-		self.entity.query_client_of_jid_if_unknown(connection, "test@gajim.org")
+		self.caps.query_client_of_jid_if_unknown(connection, "test@gajim.org")
 		
 		self.assertEqual(0, len(connection.mockGetAllCalls()))
 	
 	def test_query_client_of_jid_if_unknown(self):
 		''' Client must be queried if the data is unkown '''	
 		connection = Mock()
-		self.entity.query_client_of_jid_if_unknown(connection, "test@gajim.org")	
+		self.caps.query_client_of_jid_if_unknown(connection, "test@gajim.org")	
 		
 		connection.mockCheckCall(0, "discoverInfo", "test@gajim.org")
 
