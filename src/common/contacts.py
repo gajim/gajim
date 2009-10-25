@@ -187,6 +187,32 @@ class GC_Contact:
 
 	def get_shown_name(self):
 		return self.name
+	
+	def _set_supported_caps(self, value):
+		'''
+		Set an EntityCapabilities object
+		'''
+		self._caps = value
+		
+	def _get_supported_caps(self):
+		'''
+		Returns a function which delegates to the EntityCapabilites	support checker
+		
+		This allows easy checks like:
+			if contact.supports(NS_COOL_FEATURE): ...
+		'''
+		def test(feature):
+			if self.show == 'offline':
+				# Unfortunately, if all resources are offline, the contact
+				# includes the last resource that was online. Check for its
+				# show, so we can be sure it's existant. Otherwise, we still
+				# return caps for a contact that has no resources left.
+				return False
+			else:
+				return self._caps.contains_feature(feature)
+		return test
+		
+	supports = property(_get_supported_caps, _set_supported_caps)
 
 class Contacts:
 	'''Information concerning all contacts and groupchat contacts'''
