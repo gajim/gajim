@@ -6,7 +6,7 @@
 ## Copyright (C) 2007-2008 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
 ##                    Jonathan Schleifer <js-gajim AT webkeks.org>
-##                    Stephan Erb <steve-e AT h3c.de>
+## Copyright (C) 2008-2009 Stephan Erb <steve-e AT h3c.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -23,8 +23,93 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+'''
+Module containing all XEP-115 (Entity Capabilities) related classes 
+
+Basic Idea:
+CapsCache caches features to hash relationships. The cache is queried
+through EntityCapabilities objects which are hold by contact instances. 
+
+EntityCapabilities represent the client of contacts. It is set on the receive
+of a presence. The respective jid is then queried with a disco if the advertised
+client/hash is unknown.
+''' 
+
 import gajim
 import helpers
+
+
+class AbstractEntityCapabilities(object):
+	'''
+	Base class representing a client and its capabilities as advertised by
+	a caps tag in a presence
+	'''
+	
+	def __init__(self, caps_cache, caps_hash, node):
+		self._caps_cache = caps_cache
+		self._hash = caps_hash
+		self._node = node
+		
+	def query_client_of_jid_if_unknown(self, connection, jid):
+		'''
+		Asynchronously query the give jid for its (node, ver, exts) caps data
+		using a disco query.
+		
+		Query will only be sent if the data is not already cached.
+		'''
+		q = self._lookup_in_cache()
+		if q and q.query_status == q.NOT_QUERIED:
+			q.query_status = q.QUERIED
+			q._discover(connection, jid)
+			
+	def _discover(self, connection, jid):
+		''' To be implemented by subclassess '''
+		raise NotImplementedError()
+	
+	def _lookup_in_cache(self):
+		''' To be implemented by subclassess '''
+		raise NotImplementedError()
+					
+
+class EntityCapabilities(AbstractEntityCapabilities):
+	''' The current XEP-115 implementation '''
+	
+	def __init__(self, caps_cache, caps_hash, node, hash_method):
+		AbstractEntityCapabilities.__init__(self, caps_cache, caps_hash, node)
+		assert hash_method != 'old'
+		self._hash_method = hash_method
+	
+	def _lookup_in_cache(self):
+		return self._caps_cache[(self._hash_method, self._hash)]
+	
+	def _discover(self, connection, jid):
+		connection.discoverInfo(jid, '%s#%s' % (self._node, self._hash))
+				
+	
+class OldEntityCapabilities(AbstractEntityCapabilities):
+	''' Old XEP-115 implemtation. Kept around for background competability.  '''
+	
+	def __init__(self, caps_cache, caps_hash, node):
+		AbstractEntityCapabilities.__init__(self, caps_cache, caps_hash, node)
+
+	def _lookup_in_cache(self, caps_cache):
+		return caps_cache[('old', self._node + '#' + self._hash)]
+	
+	def _discover(self, connection, jid):
+		connection.discoverInfo(jid)
+		
+		
+class NullEntityCapabilities(AbstractEntityCapabilities):
+	'''
+	This is a NULL-Object to streamline caps handling is a client has not
+	advertised any caps or has advertised them in an improper way. 
+	
+	Assumes everything is supported.
+	''' 
+	
+	def _lookup_in_cache(self):
+		return None
+
 
 class CapsCache(object):
 	''' This object keeps the mapping between caps data and real disco
@@ -54,12 +139,9 @@ class CapsCache(object):
 		self.__cache = {}
 
 		class CacheItem(object):
-			''' TODO: logging data into db '''
 			# __names is a string cache; every string long enough is given
 			#   another object, and we will have plenty of identical long
 			#   strings. therefore we can cache them
-			#   TODO: maybe put all known xmpp namespace strings here
-			#   (strings given in xmpppy)?
 			__names = {}
 			
 			def __init__(self, hash_method, hash_, logger):
@@ -84,6 +166,7 @@ class CapsCache(object):
 				self._features = []
 				for feature in value:
 					self._features.append(self.__names.setdefault(feature, feature))
+					
 			features = property(_get_features, _set_features)
 
 			def _get_identities(self):
@@ -100,6 +183,7 @@ class CapsCache(object):
 						d['name'] = i[3]
 					list_.append(d)
 				return list_
+			
 			def _set_identities(self, value):
 				self._identities = []
 				for identity in value:
@@ -107,6 +191,7 @@ class CapsCache(object):
 					t = (identity['category'], identity.get('type'),
 						identity.get('xml:lang'), identity.get('name'))
 					self._identities.append(self.__names.setdefault(t, t))
+					
 			identities = property(_get_identities, _set_identities)
 
 			def update(self, identities, features):
