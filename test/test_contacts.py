@@ -7,13 +7,11 @@ import lib
 lib.setup_env()
 
 from common.contacts import Contact
-from common.caps import NullEntityCapabilities
+from common.caps import NullClientCaps
 
 from mock import Mock
 
 class TestContact(unittest.TestCase):
-
-
 
 		def test_supports(self):
 			''' Test the Entity Capabilities part of the contact instance '''
@@ -35,12 +33,10 @@ class TestContact(unittest.TestCase):
 			self.assertFalse(contact.supports(NS_MUC))
 			
 			# Test with EntityCapabilites to detect API changes
-			contact.supports = NullEntityCapabilities()
+			contact.supports = NullClientCaps()
 			self.assertTrue(contact.supports(NS_MUC),
 				msg="Default behaviour is to support everything on unknown caps")
 			
-			
-
 
 if __name__ == "__main__":
 		unittest.main()

@@ -8,7 +8,9 @@ lib.setup_env()
 
 from common import helpers
 from common.contacts import Contact
-from common.caps import CapsCache, EntityCapabilities, OldEntityCapabilities
+from common.xmpp import NS_MUC, NS_PING, NS_XHTML_IM
+
+from common.caps import CapsCache, ClientCaps, OldClientCaps
 
 from mock import Mock
 
@@ -17,17 +19,14 @@ class CommonCapsTest(unittest.TestCase):
 	
 	def setUp(self):
 		self.caps_method = 'sha-1'
-		self.caps_hash = 'RNzJvJnTWqczirzu+YF4V8am9ro='
+		self.caps_hash = 'm3P2WeXPMGVH2tZPe7yITnfY0Dw='
 		self.caps = (self.caps_method, self.caps_hash)
 		
 		self.node = "http://gajim.org"
 		self.identity = {'category': 'client', 'type': 'pc', 'name':'Gajim'}
 
-		self.muc = 'http://jabber.org/protocol/muc'
-		self.chatstates = 'http://jabber.org/protocol/chatstates'
-
 		self.identities = [self.identity]
-		self.features = [self.muc]
+		self.features = [NS_MUC, NS_XHTML_IM] # NS_MUC not supported!
 		
 		# Simulate a filled db
 		db_caps_cache = [
@@ -46,8 +45,8 @@ class TestCapsCache(CommonCapsTest):
 		self.cc[self.caps].identities = self.identities
 		self.cc[self.caps].features = self.features
 
-		self.assert_(self.muc in self.cc[self.caps].features)
-		self.assert_(self.chatstates not in self.cc[self.caps].features)
+		self.assert_(NS_MUC in self.cc[self.caps].features)
+		self.assert_(NS_PING not in self.cc[self.caps].features)
 
 		identities = self.cc[self.caps].identities
 
@@ -79,8 +78,8 @@ class TestCapsCache(CommonCapsTest):
 		self.cc.preload(connection, "test@gajim.org", self.node,
 				self.caps_method, self.caps_hash)
 		
-		connection.mockCheckCall(0, "discoverInfo", 'test@gajim.org', 
-				'http://gajim.org#RNzJvJnTWqczirzu+YF4V8am9ro=')
+		connection.mockCheckCall(0, "discoverInfo", "test@gajim.org", 
+				"http://gajim.org#m3P2WeXPMGVH2tZPe7yITnfY0Dw=")
 		
 	def test_no_preload_query_if_cashed(self):
 		''' Preload must not send a query if the data is already cached '''
@@ -97,15 +96,15 @@ class TestCapsCache(CommonCapsTest):
 								caps_hash_method=self.caps_method,
 								caps_hash=self.caps_hash)
 		
-		self.assertTrue(self.cc.is_supported(contact, self.chatstates),
+		self.assertTrue(self.cc.is_supported(contact, NS_PING),
 				msg="Assume everything is supported, if we don't have caps")
 		
 		self.cc.initialize_from_db()
 		
-		self.assertFalse(self.cc.is_supported(contact, self.chatstates),
+		self.assertFalse(self.cc.is_supported(contact, NS_PING),
 				msg="Must return false on unsupported feature")
 		
-		self.assertTrue(self.cc.is_supported(contact, self.muc),
+		self.assertTrue(self.cc.is_supported(contact, NS_MUC),
 				msg="Must return True on supported feature")
 		
 	def test_hash(self):
@@ -114,11 +113,11 @@ class TestCapsCache(CommonCapsTest):
 		self.assertEqual(self.caps_hash, computed_hash)
 
 
-class TestEntityCapabilities(CommonCapsTest):
+class TestClientCaps(CommonCapsTest):
 	
 	def setUp(self):
 		CommonCapsTest.setUp(self)
-		self.caps = EntityCapabilities(self.cc, self.caps_hash, self.node,
+		self.caps = ClientCaps(self.cc, self.caps_hash, self.node,
 			self.caps_method) 
 	
 	def test_no_query_client_of_jid(self):
@@ -134,27 +133,33 @@ class TestEntityCapabilities(CommonCapsTest):
 		connection = Mock()
 		self.caps.query_client_of_jid_if_unknown(connection, "test@gajim.org")	
 		
-		connection.mockCheckCall(0, "discoverInfo", 'test@gajim.org', 
-				'http://gajim.org#RNzJvJnTWqczirzu+YF4V8am9ro=')
+		connection.mockCheckCall(0, "discoverInfo", "test@gajim.org", 
+				"http://gajim.org#m3P2WeXPMGVH2tZPe7yITnfY0Dw=")
 		
 	def test_is_supported(self):		
-		self.assertTrue(self.caps.contains_feature(self.chatstates),
-				msg="Assume everything is supported, if we don't have caps")
+		self.assertTrue(self.caps.contains_feature(NS_PING),
+				msg="Assume supported, if we don't have caps")
+		
+		self.assertFalse(self.caps.contains_feature(NS_XHTML_IM),
+			msg="Must not assume blacklisted feature is supported on default")
 		
 		self.cc.initialize_from_db()
 		
-		self.assertFalse(self.caps.contains_feature(self.chatstates),
+		self.assertFalse(self.caps.contains_feature(NS_PING),
 				msg="Must return false on unsupported feature")
 		
-		self.assertTrue(self.caps.contains_feature(self.muc),
+		self.assertTrue(self.caps.contains_feature(NS_XHTML_IM),
 				msg="Must return True on supported feature")
+		
+		self.assertTrue(self.caps.contains_feature(NS_MUC),
+				msg="Must return True on supported feature")	
 	
-	
-class TestOldEntityCapabilities(TestEntityCapabilities):	
+
+class TestOldClientCaps(TestClientCaps):	
 
 	def setUp(self):
-		TestEntityCapabilities.setUp(self)
-		self.caps = OldEntityCapabilities(self.cc, self.caps_hash, self.node) 
+		TestClientCaps.setUp(self)
+		self.caps = OldClientCaps(self.cc, self.caps_hash, self.node) 
 
 	def test_no_query_client_of_jid(self):
 		''' Client must not be queried if the data is already cached '''		

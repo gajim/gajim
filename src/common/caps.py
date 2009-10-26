@@ -28,9 +28,9 @@ Module containing all XEP-115 (Entity Capabilities) related classes
 
 Basic Idea:
 CapsCache caches features to hash relationships. The cache is queried
-through EntityCapabilities objects which are hold by contact instances. 
+through ClientCaps objects which are hold by contact instances. 
 
-EntityCapabilities represent the client of contacts. It is set on the receive
+ClientCaps represent the client of contacts. It is set on the receive
 of a presence. The respective jid is then queried with a disco if the advertised
 client/hash is unknown.
 ''' 
@@ -38,8 +38,13 @@ client/hash is unknown.
 import gajim
 import helpers
 
+from common.xmpp import NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION, NS_CHATSTATES
 
-class AbstractEntityCapabilities(object):
+# Features where we cannot safely assume that the other side supports them
+FEATURE_BLACKLIST = [NS_CHATSTATES, NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION]
+
+
+class AbstractClientCaps(object):
 	'''
 	Base class representing a client and its capabilities as advertised by
 	a caps tag in a presence
@@ -62,12 +67,15 @@ class AbstractEntityCapabilities(object):
 			self._discover(connection, jid)
 			q.queried = 1
 		
-	def contains_feature(self, feature):
+	def contains_feature(self, requested_feature):
 		''' Returns true if these capabilities contain the given feature '''
-		features = self._lookup_in_cache().features
-		
-		if feature in features or features == []:
+		cach_entry = self._lookup_in_cache()
+		supported_features = cach_entry.features
+		if requested_feature in supported_features:
 			return True
+		elif supported_features == [] and cach_entry.queried in (0, 1):
+			# assume feature is supported, if not blacklisted
+			return requested_feature not in FEATURE_BLACKLIST
 		else:
 			return False
 			
@@ -80,11 +88,11 @@ class AbstractEntityCapabilities(object):
 		raise NotImplementedError()
 					
 
-class EntityCapabilities(AbstractEntityCapabilities):
+class ClientCaps(AbstractClientCaps):
 	''' The current XEP-115 implementation '''
 	
 	def __init__(self, caps_cache, caps_hash, node, hash_method):
-		AbstractEntityCapabilities.__init__(self, caps_cache, caps_hash, node)
+		AbstractClientCaps.__init__(self, caps_cache, caps_hash, node)
 		assert hash_method != 'old'
 		self._hash_method = hash_method
 	
@@ -95,11 +103,11 @@ class EntityCapabilities(AbstractEntityCapabilities):
 		connection.discoverInfo(jid, '%s#%s' % (self._node, self._hash))
 				
 	
-class OldEntityCapabilities(AbstractEntityCapabilities):
+class OldClientCaps(AbstractClientCaps):
 	''' Old XEP-115 implemtation. Kept around for background competability.  '''
 	
 	def __init__(self, caps_cache, caps_hash, node):
-		AbstractEntityCapabilities.__init__(self, caps_cache, caps_hash, node)
+		AbstractClientCaps.__init__(self, caps_cache, caps_hash, node)
 
 	def _lookup_in_cache(self):
 		return self._caps_cache[('old', self._node + '#' + self._hash)]
@@ -108,12 +116,12 @@ class OldEntityCapabilities(AbstractEntityCapabilities):
 		connection.discoverInfo(jid)
 		
 		
-class NullEntityCapabilities(AbstractEntityCapabilities):
+class NullClientCaps(AbstractClientCaps):
 	'''
-	This is a NULL-Object to streamline caps handling is a client has not
+	This is a NULL-Object to streamline caps handling if a client has not
 	advertised any caps or has advertised them in an improper way. 
 	
-	Assumes everything is supported.
+	Assumes (almost) everything is supported.
 	''' 
 	
 	def __init__(self):
@@ -123,7 +131,7 @@ class NullEntityCapabilities(AbstractEntityCapabilities):
 		pass
 	
 	def contains_feature(self, feature):
-		return True
+		return feature not in FEATURE_BLACKLIST
 
 
 class CapsCache(object):
