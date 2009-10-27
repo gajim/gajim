@@ -1299,8 +1299,6 @@ class Connection(ConnectionHandlers):
 		# please note that the only valid tag inside a message containing a <body>
 		# tag is the active event
 		if chatstate is not None:
-			# XXX: Once we have fallback to disco,
-			#      remove notexistant check
 			if ((composing_xep == 'XEP-0085' or not composing_xep) \
 			and composing_xep != 'asked_once') or \
 			contact.supports(common.xmpp.NS_CHATSTATES):

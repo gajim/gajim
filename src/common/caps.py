@@ -29,10 +29,6 @@ Module containing all XEP-115 (Entity Capabilities) related classes
 Basic Idea:
 CapsCache caches features to hash relationships. The cache is queried
 through ClientCaps objects which are hold by contact instances. 
-
-ClientCaps represent the client of contacts. It is set on the receive
-of a presence. The respective jid is then queried with a disco if the advertised
-client/hash is unknown.
 ''' 
 
 import gajim
@@ -42,12 +38,12 @@ from common.xmpp import NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION, NS_CHATSTATES
 # Features where we cannot safely assume that the other side supports them
 FEATURE_BLACKLIST = [NS_CHATSTATES, NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION]
 
+
 class AbstractClientCaps(object):
 	'''
 	Base class representing a client and its capabilities as advertised by
-	a caps tag in a presence
+	a caps tag in a presence. 
 	'''
-	
 	def __init__(self, caps_hash, node):
 		self._hash = caps_hash
 		self._node = node
@@ -108,6 +104,7 @@ class OldClientCaps(AbstractClientCaps):
 	def _is_hash_valid(self, identities, features, dataforms):
 		return True	
 		
+		
 class NullClientCaps(AbstractClientCaps):
 	'''
 	This is a NULL-Object to streamline caps handling if a client has not
@@ -128,13 +125,13 @@ class NullClientCaps(AbstractClientCaps):
 	def _is_hash_valid(self, identities, features, dataforms):
 		return False	
 
+
 class CapsCache(object):
 	''' 
 	This object keeps the mapping between caps data and real disco
 	features they represent, and provides simple way to query that info.
 	'''
 	def __init__(self, logger=None):
-		''' Create a cache for entity capabilities. '''
 		# our containers:
 		# __cache is a dictionary mapping: pair of hash method and hash maps
 		#   to CapsCacheItem object
@@ -199,7 +196,6 @@ class CapsCache(object):
 			identities = property(_get_identities, _set_identities)
 
 			def update(self, identities, features):
-				# NOTE: self refers to CapsCache object, not to CacheItem
 				self.identities = identities
 				self.features = features
 				self._logger.add_caps_entry(self.hash_method, self.hash,
@@ -238,9 +234,10 @@ class CapsCache(object):
 		return x
 
 	def query_client_of_jid_if_unknown(self, connection, jid, client_caps):
-		''' Preload data about (node, ver, exts) caps using disco
-		query to jid using proper connection. Don't query if
-		the data is already in cache. '''
+		'''
+		Start a disco query to determine caps (node, ver, exts).
+		Won't query if the data is already in cache.
+		'''
 		lookup_cache_item = client_caps.get_cache_lookup_strategy()
 		q = lookup_cache_item(self)	
 		
@@ -258,13 +255,11 @@ class ConnectionCaps(object):
 	'''
 	This class highly depends on that it is a part of Connection class.
 	'''
-
 	def _capsPresenceCB(self, con, presence):
 		'''
 		Handle incoming presence stanzas... This is a callback for xmpp
 		registered in connection_handlers.py
 		'''
-
 		# we will put these into proper Contact object and ask
 		# for disco... so that disco will learn how to interpret
 		# these caps

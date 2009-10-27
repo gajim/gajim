@@ -1824,7 +1824,6 @@ class ChatControl(ChatControlBase):
 				self._schedule_activity_timers()
 
 		def _on_sent(id_, contact, message, encrypted, xhtml):
-			# XXX: Once we have fallback to disco, remove notexistant check
 			if contact.supports(NS_RECEIPTS) and gajim.config.get_per('accounts',
 			self.account, 'request_receipt'):
 				xep0184_id = id_
