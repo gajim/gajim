@@ -30,12 +30,15 @@
 
 import common.gajim
 
+from common.caps import NullClientCaps, FEATURE_BLACKLIST
+
+
 class Contact(object):
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
-	ask='', resource='', priority=0, keyID='', caps_node=None,
-	caps_hash_method=None, caps_hash=None, our_chatstate=None, chatstate=None,
-	last_status_time=None, msg_id = None, composing_xep = None,	mood={}, tune={},
+	ask='', resource='', priority=0, keyID='', client_caps=None, caps_cache=None,
+	our_chatstate=None, chatstate=None, last_status_time=None, msg_id = None,
+	composing_xep = None,	mood={}, tune={},
 	activity={}):
 		self.jid = jid
 		self.name = name
@@ -49,11 +52,9 @@ class Contact(object):
 		self.priority = priority
 		self.keyID = keyID
 
-		# Capabilities; filled by caps.py/ConnectionCaps object
-		# every time it gets these from presence stanzas
-		self.caps_node = caps_node
-		self.caps_hash_method = caps_hash_method
-		self.caps_hash = caps_hash
+		# Entity Capabilities
+		self._client_caps = client_caps or NullClientCaps()
+		self._caps_cache = caps_cache or common.gajim.capscache 
 
 		# please read xep-85 http://www.xmpp.org/extensions/xep-0085.html
 		# we keep track of xep85 support with the peer by three extra states:
@@ -135,32 +136,34 @@ class Contact(object):
 		return False
 
 
-	def _set_supported_caps(self, value):
-		'''
-		Set an EntityCapabilities object
-		'''
-		self._caps = value
-		
-	def _get_supported_caps(self):
-		'''
-		Returns a function which delegates to the EntityCapabilites	support checker
-		
-		This allows easy checks like:
-			if contact.supports(NS_COOL_FEATURE): ...
-		'''
-		def test(feature):
-			if self.show == 'offline':
-				# Unfortunately, if all resources are offline, the contact
-				# includes the last resource that was online. Check for its
-				# show, so we can be sure it's existant. Otherwise, we still
-				# return caps for a contact that has no resources left.
-				return False
-			else:
-				return self._caps.contains_feature(feature)
-		return test
-		
-	supports = property(_get_supported_caps, _set_supported_caps)
+	def supports(self, requested_feature):
+		if self.show == 'offline':
+			# Unfortunately, if all resources are offline, the contact
+			# includes the last resource that was online. Check for its
+			# show, so we can be sure it's existant. Otherwise, we still
+			# return caps for a contact that has no resources left.
+			return False
+		else:
+			return self._client_supports(requested_feature)
 
+	def _client_supports(self, requested_feature):
+		lookup_item = self._client_caps.get_cache_lookup_strategy()
+		cache_item = lookup_item(self._caps_cache)
+
+		supported_features = cache_item.features
+		if requested_feature in supported_features:
+			return True
+		elif supported_features == [] and cache_item.queried in (0, 1):
+			# assume feature is supported, if we don't know yet, what the client
+			# is capable of
+			return requested_feature not in FEATURE_BLACKLIST
+		else:
+			return False
+
+	def set_supported_client_caps(self, client_caps):
+		''' Set an EntityCapabilities object '''
+		self._client_caps = client_caps
+		
 
 class GC_Contact:
 	'''Information concerning each groupchat contact'''
@@ -175,9 +178,11 @@ class GC_Contact:
 		self.affiliation = affiliation
 		self.jid = jid
 		self.resource = resource
-		self.caps_node = None
-		self.caps_hash_method = None
-		self.caps_hash = None
+		
+		# Entity Capabilities
+		self._client_caps = NullClientCaps()
+		self._caps_cache = common.gajim.capscache 
+		
 		self.our_chatstate = our_chatstate
 		self.composing_xep = composing_xep
 		self.chatstate = chatstate
@@ -188,31 +193,33 @@ class GC_Contact:
 	def get_shown_name(self):
 		return self.name
 	
-	def _set_supported_caps(self, value):
-		'''
-		Set an EntityCapabilities object
-		'''
-		self._caps = value
-		
-	def _get_supported_caps(self):
-		'''
-		Returns a function which delegates to the EntityCapabilites	support checker
-		
-		This allows easy checks like:
-			if contact.supports(NS_COOL_FEATURE): ...
-		'''
-		def test(feature):
-			if self.show == 'offline':
-				# Unfortunately, if all resources are offline, the contact
-				# includes the last resource that was online. Check for its
-				# show, so we can be sure it's existant. Otherwise, we still
-				# return caps for a contact that has no resources left.
-				return False
-			else:
-				return self._caps.contains_feature(feature)
-		return test
-		
-	supports = property(_get_supported_caps, _set_supported_caps)
+	def supports(self, requested_feature):
+		if self.show == 'offline':
+			# Unfortunately, if all resources are offline, the contact
+			# includes the last resource that was online. Check for its
+			# show, so we can be sure it's existant. Otherwise, we still
+			# return caps for a contact that has no resources left.
+			return False
+		else:
+			return self._client_supports(requested_feature)
+
+	def _client_supports(self, requested_feature):
+		lookup_item = self._client_caps.get_cache_lookup_strategy()
+		cache_item = lookup_item(self._caps_cache)
+
+		supported_features = cache_item.features
+		if requested_feature in supported_features:
+			return True
+		elif supported_features == [] and cache_item.queried in (0, 1):
+			# assume feature is supported, if we don't know yet, what the client
+			# is capable of
+			return requested_feature not in FEATURE_BLACKLIST
+		else:
+			return False
+
+	def set_supported_client_caps(self, client_caps):
+		''' Set an EntityCapabilities object '''
+		self._client_caps = client_caps
 
 class Contacts:
 	'''Information concerning all contacts and groupchat contacts'''
@@ -246,8 +253,8 @@ class Contacts:
 		del self._metacontacts_tags[account]
 
 	def create_contact(self, jid='', name='', groups=[], show='', status='',
-		sub='', ask='', resource='', priority=0, keyID='', caps_node=None,
-		caps_hash_method=None, caps_hash=None, our_chatstate=None,
+		sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
+		caps_cache=None, our_chatstate=None,
 		chatstate=None, last_status_time=None, composing_xep=None,
 		mood={}, tune={}, activity={}):
 
@@ -259,8 +266,8 @@ class Contacts:
 
 		return Contact(jid=jid, name=name, groups=groups_unique, show=show,
 			status=status, sub=sub, ask=ask, resource=resource, priority=priority,
-			keyID=keyID, caps_node=caps_node, caps_hash_method=caps_hash_method,
-			caps_hash=caps_hash, our_chatstate=our_chatstate, chatstate=chatstate,
+			keyID=keyID, client_caps=client_caps, caps_cache=caps_cache,
+			our_chatstate=our_chatstate, chatstate=chatstate,
 			last_status_time=last_status_time, composing_xep=composing_xep,
 			mood=mood, tune=tune, activity=activity)
 
@@ -269,8 +276,8 @@ class Contacts:
 			groups=contact.groups, show=contact.show, status=contact.status,
 			sub=contact.sub, ask=contact.ask, resource=contact.resource,
 			priority=contact.priority, keyID=contact.keyID,
-			caps_node=contact.caps_node, caps_hash_method=contact.caps_hash_method,
-			caps_hash=contact.caps_hash, our_chatstate=contact.our_chatstate,
+			client_caps=contact._client_caps, caps_cache=contact._caps_cache,
+			our_chatstate=contact.our_chatstate,
 			chatstate=contact.chatstate, last_status_time=contact.last_status_time)
 
 	def add_contact(self, account, contact):
@@ -640,9 +647,8 @@ class Contacts:
 		jid = gc_contact.get_full_jid()
 		return Contact(jid=jid, resource=gc_contact.resource,
 			name=gc_contact.name, groups=[], show=gc_contact.show,
-			status=gc_contact.status, sub='none', caps_node=gc_contact.caps_node,
-			caps_hash_method=gc_contact.caps_hash_method,
-			caps_hash=gc_contact.caps_hash)
+			status=gc_contact.status, sub='none', client_caps=gc_contact._client_caps,
+			caps_cache=gc_contact._caps_cache)
 
 	def create_gc_contact(self, room_jid='', name='', show='', status='',
 		role='', affiliation='', jid='', resource=''):

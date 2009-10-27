@@ -39,10 +39,8 @@ import gajim
 import helpers
 
 from common.xmpp import NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION, NS_CHATSTATES
-
 # Features where we cannot safely assume that the other side supports them
 FEATURE_BLACKLIST = [NS_CHATSTATES, NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION]
-
 
 class AbstractClientCaps(object):
 	'''
@@ -50,40 +48,21 @@ class AbstractClientCaps(object):
 	a caps tag in a presence
 	'''
 	
-	def __init__(self, caps_cache, caps_hash, node):
-		self._caps_cache = caps_cache
+	def __init__(self, caps_hash, node):
 		self._hash = caps_hash
 		self._node = node
 		
-	def query_client_of_jid_if_unknown(self, connection, jid):
-		'''
-		Asynchronously query the give jid for its (node, ver, exts) caps data
-		using a disco query.
-		
-		Query will only be sent if the data is not already cached.
-		'''
-		q = self._lookup_in_cache()
-		if q.queried == 0:
-			self._discover(connection, jid)
-			q.queried = 1
-		
-	def contains_feature(self, requested_feature):
-		''' Returns true if these capabilities contain the given feature '''
-		cach_entry = self._lookup_in_cache()
-		supported_features = cach_entry.features
-		if requested_feature in supported_features:
-			return True
-		elif supported_features == [] and cach_entry.queried in (0, 1):
-			# assume feature is supported, if not blacklisted
-			return requested_feature not in FEATURE_BLACKLIST
-		else:
-			return False
-			
+	def get_discover_strategy(self):
+		return self._discover
+							
 	def _discover(self, connection, jid):
 		''' To be implemented by subclassess '''
 		raise NotImplementedError()
 	
-	def _lookup_in_cache(self):
+	def get_cache_lookup_strategy(self):
+		return self._lookup_in_cache
+	
+	def _lookup_in_cache(self, caps_cache):
 		''' To be implemented by subclassess '''
 		raise NotImplementedError()
 					
@@ -91,13 +70,13 @@ class AbstractClientCaps(object):
 class ClientCaps(AbstractClientCaps):
 	''' The current XEP-115 implementation '''
 	
-	def __init__(self, caps_cache, caps_hash, node, hash_method):
-		AbstractClientCaps.__init__(self, caps_cache, caps_hash, node)
+	def __init__(self, caps_hash, node, hash_method):
+		AbstractClientCaps.__init__(self, caps_hash, node)
 		assert hash_method != 'old'
 		self._hash_method = hash_method
 	
-	def _lookup_in_cache(self):
-		return self._caps_cache[(self._hash_method, self._hash)]
+	def _lookup_in_cache(self, caps_cache):
+		return caps_cache[(self._hash_method, self._hash)]
 	
 	def _discover(self, connection, jid):
 		connection.discoverInfo(jid, '%s#%s' % (self._node, self._hash))
@@ -106,11 +85,11 @@ class ClientCaps(AbstractClientCaps):
 class OldClientCaps(AbstractClientCaps):
 	''' Old XEP-115 implemtation. Kept around for background competability.  '''
 	
-	def __init__(self, caps_cache, caps_hash, node):
-		AbstractClientCaps.__init__(self, caps_cache, caps_hash, node)
+	def __init__(self, caps_hash, node):
+		AbstractClientCaps.__init__(self, caps_hash, node)
 
-	def _lookup_in_cache(self):
-		return self._caps_cache[('old', self._node + '#' + self._hash)]
+	def _lookup_in_cache(self, caps_cache):
+		return caps_cache[('old', self._node + '#' + self._hash)]
 	
 	def _discover(self, connection, jid):
 		connection.discoverInfo(jid)
@@ -125,32 +104,19 @@ class NullClientCaps(AbstractClientCaps):
 	''' 
 	
 	def __init__(self):
-		pass
+		AbstractClientCaps.__init__(self, None, None)
 	
-	def query_client_of_jid_if_unknown(self, connection, jid):
-		pass
+	def _lookup_in_cache(self, caps_cache):
+		return caps_cache[('old', '')]
 	
-	def contains_feature(self, feature):
-		return feature not in FEATURE_BLACKLIST
+	def _discover(self, connection, jid):
+		pass
 
 
 class CapsCache(object):
-	''' This object keeps the mapping between caps data and real disco
+	''' 
+	This object keeps the mapping between caps data and real disco
 	features they represent, and provides simple way to query that info.
-	
-	It is application-wide, that is there's one object for all
-	connections.
-	
-	Goals:
-	 * handle storing/retrieving info from database
-	 * cache info in memory
-	 * expose simple interface
-	 
-	Properties:
-	 * one object for all connections (move to logger.py?)
-	 * store info efficiently (a set() of urls -- we can assume there won't be
-	   too much of these, ensure that (X,Y,Z1) and (X,Y,Z2) has different
-	   features.
 	'''
 	def __init__(self, logger=None):
 		''' Create a cache for entity capabilities. '''
@@ -219,15 +185,14 @@ class CapsCache(object):
 
 			def update(self, identities, features):
 				# NOTE: self refers to CapsCache object, not to CacheItem
-				self.identities=identities
-				self.features=features
+				self.identities = identities
+				self.features = features
 				self._logger.add_caps_entry(self.hash_method, self.hash,
 					identities, features)
 
 		self.__CacheItem = CacheItem
 
 		# prepopulate data which we are sure of; note: we do not log these info
-
 		for account in gajim.connections:
 			gajimcaps = self[('sha-1', gajim.caps_hash[account])]
 			gajimcaps.identities = [gajim.gajim_identity]
@@ -257,48 +222,19 @@ class CapsCache(object):
 		self.__cache[(hash_method, hash_)] = x
 		return x
 
-	def preload(self, con, jid, node, hash_method, hash_):
+	def query_client_of_jid_if_unknown(self, connection, jid, client_caps):
 		''' Preload data about (node, ver, exts) caps using disco
 		query to jid using proper connection. Don't query if
 		the data is already in cache. '''
-		if hash_method == 'old':
-			q = self[(hash_method, node + '#' + hash_)]
-		else:
-			q = self[(hash_method, hash_)]
-
-		if q.queried==0:
+		lookup_cache_item = client_caps.get_cache_lookup_strategy()
+		q = lookup_cache_item(self)	
+		
+		if q.queried == 0:
 			# do query for bare node+hash pair
 			# this will create proper object
-			q.queried=1
-			if hash_method == 'old':
-				con.discoverInfo(jid)
-			else:
-				con.discoverInfo(jid, '%s#%s' % (node, hash_))
-
-	def is_supported(self, contact, feature):
-		if not contact:
-			return False
-
-		# Unfortunately, if all resources are offline, the contact
-		# includes the last resource that was online. Check for its
-		# show, so we can be sure it's existant. Otherwise, we still
-		# return caps for a contact that has no resources left.
-		if contact.show == 'offline':
-			return False
-
-		# FIXME: We assume everything is supported if we got no caps.
-		#	 This is the "Asterix way", after 0.12 release, I will
-		#	 likely implement a fallback to disco (could be disabled
-		#	 for mobile users who pay for traffic)
-		if contact.caps_hash_method == 'old':
-			features = self[(contact.caps_hash_method, contact.caps_node + '#' + \
-				contact.caps_hash)].features
-		else:
-			features = self[(contact.caps_hash_method, contact.caps_hash)].features
-		if feature in features or features == []:
-			return True
-
-		return False
+			q.queried = 1
+			discover = client_caps.get_discover_strategy()
+			discover(connection, jid)
 
 gajim.capscache = CapsCache(gajim.logger)
 
