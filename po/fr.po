@@ -9278,7 +9278,7 @@ msgstr "%(nick)s a changé d'état"
 #: ../src/notify.py:252
 #, python-format
 msgid "%(nickname)s Signed In"
-msgstr "%(nickname)s s'est connecté"
+msgstr "%(nickname)s s'est connecté(e)"
 
 #: ../src/notify.py:260
 #, python-format
