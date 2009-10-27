@@ -53,7 +53,7 @@ class Contact(object):
 		self.keyID = keyID
 
 		# Entity Capabilities
-		self._client_caps = client_caps or NullClientCaps()
+		self.client_caps = client_caps or NullClientCaps()
 		self._caps_cache = caps_cache or common.gajim.capscache 
 
 		# please read xep-85 http://www.xmpp.org/extensions/xep-0085.html
@@ -147,8 +147,8 @@ class Contact(object):
 			return self._client_supports(requested_feature)
 
 	def _client_supports(self, requested_feature):
-		lookup_item = self._client_caps.get_cache_lookup_strategy()
-		cache_item = lookup_item(self._caps_cache)
+		lookup = self.client_caps.get_cache_lookup_strategy()
+		cache_item = lookup(self._caps_cache)
 
 		supported_features = cache_item.features
 		if requested_feature in supported_features:
@@ -159,11 +159,6 @@ class Contact(object):
 			return requested_feature not in FEATURE_BLACKLIST
 		else:
 			return False
-
-	def set_supported_client_caps(self, client_caps):
-		''' Set an EntityCapabilities object '''
-		self._client_caps = client_caps
-		
 
 class GC_Contact:
 	'''Information concerning each groupchat contact'''
@@ -180,7 +175,7 @@ class GC_Contact:
 		self.resource = resource
 		
 		# Entity Capabilities
-		self._client_caps = NullClientCaps()
+		self.client_caps = NullClientCaps()
 		self._caps_cache = common.gajim.capscache 
 		
 		self.our_chatstate = our_chatstate
@@ -204,7 +199,7 @@ class GC_Contact:
 			return self._client_supports(requested_feature)
 
 	def _client_supports(self, requested_feature):
-		lookup_item = self._client_caps.get_cache_lookup_strategy()
+		lookup_item = self.client_caps.get_cache_lookup_strategy()
 		cache_item = lookup_item(self._caps_cache)
 
 		supported_features = cache_item.features
@@ -216,10 +211,6 @@ class GC_Contact:
 			return requested_feature not in FEATURE_BLACKLIST
 		else:
 			return False
-
-	def set_supported_client_caps(self, client_caps):
-		''' Set an EntityCapabilities object '''
-		self._client_caps = client_caps
 
 class Contacts:
 	'''Information concerning all contacts and groupchat contacts'''
@@ -276,7 +267,7 @@ class Contacts:
 			groups=contact.groups, show=contact.show, status=contact.status,
 			sub=contact.sub, ask=contact.ask, resource=contact.resource,
 			priority=contact.priority, keyID=contact.keyID,
-			client_caps=contact._client_caps, caps_cache=contact._caps_cache,
+			client_caps=contact.client_caps, caps_cache=contact._caps_cache,
 			our_chatstate=contact.our_chatstate,
 			chatstate=contact.chatstate, last_status_time=contact.last_status_time)
 
@@ -647,7 +638,7 @@ class Contacts:
 		jid = gc_contact.get_full_jid()
 		return Contact(jid=jid, resource=gc_contact.resource,
 			name=gc_contact.name, groups=[], show=gc_contact.show,
-			status=gc_contact.status, sub='none', client_caps=gc_contact._client_caps,
+			status=gc_contact.status, sub='none', client_caps=gc_contact.client_caps,
 			caps_cache=gc_contact._caps_cache)
 
 	def create_gc_contact(self, room_jid='', name='', show='', status='',

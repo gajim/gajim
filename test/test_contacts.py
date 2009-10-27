@@ -24,8 +24,7 @@ class TestCommonContact(unittest.TestCase):
 		self.assertTrue(self.contact.supports(NS_MUC),
 			msg="Must not backtrace on simple check for supported feature")
 		
-		client_caps = NullClientCaps()
-		self.contact.set_supported_client_caps(client_caps)
+		self.contact.client_caps = NullClientCaps()
 					
 		self.assertTrue(self.contact.supports(NS_MUC),
 			msg="Must not backtrace on simple check for supported feature")

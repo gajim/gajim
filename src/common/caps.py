@@ -65,8 +65,14 @@ class AbstractClientCaps(object):
 	def _lookup_in_cache(self, caps_cache):
 		''' To be implemented by subclassess '''
 		raise NotImplementedError()
+	
+	def get_hash_validation_strategy(self):
+		return self._is_hash_valid
 					
-
+	def _is_hash_valid(self, identities, features, dataforms):
+		raise NotImplementedError()		
+	
+	
 class ClientCaps(AbstractClientCaps):
 	''' The current XEP-115 implementation '''
 	
@@ -81,6 +87,11 @@ class ClientCaps(AbstractClientCaps):
 	def _discover(self, connection, jid):
 		connection.discoverInfo(jid, '%s#%s' % (self._node, self._hash))
 				
+	def _is_hash_valid(self, identities, features, dataforms):
+		computed_hash = helpers.compute_caps_hash(identities, features,
+				dataforms=dataforms, hash_method=self._hash_method)
+		return computed_hash == self._hash	
+	
 	
 class OldClientCaps(AbstractClientCaps):
 	''' Old XEP-115 implemtation. Kept around for background competability.  '''
@@ -94,6 +105,8 @@ class OldClientCaps(AbstractClientCaps):
 	def _discover(self, connection, jid):
 		connection.discoverInfo(jid)
 		
+	def _is_hash_valid(self, identities, features, dataforms):
+		return True	
 		
 class NullClientCaps(AbstractClientCaps):
 	'''
@@ -112,6 +125,8 @@ class NullClientCaps(AbstractClientCaps):
 	def _discover(self, connection, jid):
 		pass
 
+	def _is_hash_valid(self, identities, features, dataforms):
+		return False	
 
 class CapsCache(object):
 	''' 
@@ -238,11 +253,17 @@ class CapsCache(object):
 
 gajim.capscache = CapsCache(gajim.logger)
 
+
 class ConnectionCaps(object):
-	''' This class highly depends on that it is a part of Connection class. '''
+	'''
+	This class highly depends on that it is a part of Connection class.
+	'''
+
 	def _capsPresenceCB(self, con, presence):
-		''' Handle incoming presence stanzas... This is a callback
-		for xmpp registered in connection_handlers.py'''
+		'''
+		Handle incoming presence stanzas... This is a callback for xmpp
+		registered in connection_handlers.py
+		'''
 
 		# we will put these into proper Contact object and ask
 		# for disco... so that disco will learn how to interpret
@@ -264,64 +285,47 @@ class ConnectionCaps(object):
 				# into Contacts
 				return
 
-		# get the caps element
-		caps = presence.getTag('c')
-		if not caps:
-			contact.caps_node = None
-			contact.caps_hash = None
-			contact.caps_hash_method = None
-			return
+		caps_tag = presence.getTag('c')
+		if not caps_tag:
+			# presence did not contain caps_tag
+			client_caps = NullClientCaps()
+		else:
+			hash_method, node, caps_hash = caps_tag['hash'], caps_tag['node'], caps_tag['ver']
 
-		hash_method, node, hash_ = caps['hash'], caps['node'], caps['ver']
+			if node is None or caps_hash is None:
+				# improper caps in stanza, ignore client capabilities.
+				client_caps = NullClientCaps()
+			elif hash_method is None:
+				client_caps = OldClientCaps(caps_hash, node)
+			else:
+				client_caps = ClientCaps(caps_hash, node, hash_method)
+		
+		gajim.capscache.query_client_of_jid_if_unknown(self, jid, client_caps)
+		contact.client_caps = client_caps
 
-		if hash_method is None and node and hash_:
-			# Old XEP-115 implentation
-			hash_method = 'old'
-
-		if hash_method is None or node is None or hash_ is None:
-			# improper caps in stanza, ignoring
-			contact.caps_node = None
-			contact.caps_hash = None
-			contact.hash_method = None
-			return
-
-		# start disco query...
-		gajim.capscache.preload(self, jid, node, hash_method, hash_)
-
-		# overwriting old data
-		contact.caps_node = node
-		contact.caps_hash_method = hash_method
-		contact.caps_hash = hash_
 		if pm_ctrl:
 			pm_ctrl.update_contact()
 
-	def _capsDiscoCB(self, jid, node, identities, features, dataforms):
+	def _capsDiscoCB(self, jid, node, identities, features, dataforms):		
 		contact = gajim.contacts.get_contact_from_full_jid(self.name, jid)
 		if not contact:
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
 			contact = gajim.contacts.get_gc_contact(self.name, room_jid, nick)
 			if contact is None:
 				return
-		if not contact.caps_node:
-			return # we didn't asked for that?
-		if contact.caps_hash_method != 'old':
-			computed_hash = helpers.compute_caps_hash(identities, features,
-				dataforms=dataforms, hash_method=contact.caps_hash_method)
-			if computed_hash != contact.caps_hash:
-				# wrong hash, forget it
-				contact.caps_node = ''
-				contact.caps_hash_method = ''
-				contact.caps_hash = ''
-				return
-			# if we don't have this info already...
-			caps = gajim.capscache[(contact.caps_hash_method, contact.caps_hash)]
-		else:
-			# if we don't have this info already...
-			caps = gajim.capscache[(contact.caps_hash_method, contact.caps_node + \
-				'#' + contact.caps_hash)]
-		if caps.queried == 2:
-			return
 
-		caps.update(identities, features)
+		lookup = contact.client_caps.get_cache_lookup_strategy()
+		cache_item = lookup(gajim.capscache)	
+					
+		if cache_item.queried == 2:
+			return
+		else:
+			validate = contact.client_caps.get_hash_validation_strategy()
+			hash_is_valid = validate(identities, features, dataforms)
+			
+			if hash_is_valid:
+				cache_item.update(identities, features)
+			else:
+				contact.client_caps = NullClientCaps()
 
 # vim: se ts=3:

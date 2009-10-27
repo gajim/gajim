@@ -1333,9 +1333,7 @@ class ChatControl(ChatControlBase):
 
 	def update_toolbar(self):
 		# Formatting
-		if gajim.capscache.is_supported(self.contact, NS_XHTML_IM) \
-		and not gajim.capscache.is_supported(self.contact, 'notexistant') \
-		and not self.gpg_is_active:
+		if self.contact.supports(NS_XHTML_IM) and not self.gpg_is_active:
 			self._formattings_button.set_sensitive(True)
 		else:
 			self._formattings_button.set_sensitive(False)
@@ -1348,12 +1346,11 @@ class ChatControl(ChatControlBase):
 			self._add_to_roster_button.hide()
 
 		# Send file
-		if gajim.capscache.is_supported(self.contact, NS_FILE) and \
-		self.contact.resource:
+		if self.contact.supports(NS_FILE) and self.contact.resource:
 			self._send_file_button.set_sensitive(True)
 		else:
 			self._send_file_button.set_sensitive(False)
-			if not gajim.capscache.is_supported(self.contact, NS_FILE):
+			if not self.contact.supports(NS_FILE):
 				self._send_file_button.set_tooltip_text(_(
 					"This contact does not support file transfer."))
 			else:
@@ -1362,7 +1359,7 @@ class ChatControl(ChatControlBase):
 					"her a file."))
 
 		# Convert to GC
-		if gajim.capscache.is_supported(self.contact, NS_MUC):
+		if self.contact.supports(NS_MUC):
 			self._convert_to_gc_button.set_sensitive(True)
 		else:
 			self._convert_to_gc_button.set_sensitive(False)
@@ -1828,9 +1825,7 @@ class ChatControl(ChatControlBase):
 
 		def _on_sent(id_, contact, message, encrypted, xhtml):
 			# XXX: Once we have fallback to disco, remove notexistant check
-			if gajim.capscache.is_supported(contact, NS_RECEIPTS) \
-			and not gajim.capscache.is_supported(contact,
-			'notexistant') and gajim.config.get_per('accounts',
+			if contact.supports(NS_RECEIPTS) and gajim.config.get_per('accounts',
 			self.account, 'request_receipt'):
 				xep0184_id = id_
 			else:
@@ -2137,10 +2132,7 @@ class ChatControl(ChatControlBase):
 			toggle_gpg_menuitem.set_active(self.gpg_is_active)
 
 		# disable esessions if we or the other client don't support them
-		# XXX: Once we have fallback to disco, remove notexistant check
-		if not gajim.HAVE_PYCRYPTO or \
-		not gajim.capscache.is_supported(contact, NS_ESESSION) or \
-		gajim.capscache.is_supported(contact, 'notexistant') or \
+		if not gajim.HAVE_PYCRYPTO or not contact.supports(NS_ESESSION) or \
 		not gajim.config.get_per('accounts', self.account, 'enable_esessions'):
 			toggle_e2e_menuitem.set_sensitive(False)
 		else:
@@ -2152,13 +2144,13 @@ class ChatControl(ChatControlBase):
 			add_to_roster_menuitem.show()
 
 		# check if it's possible to send a file
-		if gajim.capscache.is_supported(contact, NS_FILE):
+		if contact.supports(NS_FILE):
 			send_file_menuitem.set_sensitive(True)
 		else:
 			send_file_menuitem.set_sensitive(False)
 
 		# check if it's possible to convert to groupchat
-		if gajim.capscache.is_supported(contact, NS_MUC):
+		if contact.supports(NS_MUC):
 			convert_to_gc_menuitem.set_sensitive(True)
 		else:
 			convert_to_gc_menuitem.set_sensitive(False)
@@ -2471,12 +2463,8 @@ class ChatControl(ChatControlBase):
 			want_e2e = not e2e_is_active and not self.gpg_is_active \
 				and e2e_pref
 
-			# XXX: Once we have fallback to disco, remove notexistant check
 			if want_e2e and not self.no_autonegotiation \
-			and gajim.HAVE_PYCRYPTO \
-			and gajim.capscache.is_supported(self.contact,
-			NS_ESESSION) and not gajim.capscache.is_supported(
-			self.contact, 'notexistant'):
+			and gajim.HAVE_PYCRYPTO and self.contact.supports(NS_ESESSION):
 				self.begin_e2e_negotiation()
 		else:
 			self.send_chatstate('active', self.contact)
