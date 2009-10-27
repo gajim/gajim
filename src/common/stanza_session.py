@@ -223,7 +223,7 @@ class EncryptedStanzaSession(StanzaSession):
 
 	def _is_buggy_gajim(self):
 		c = self._get_contact()
-		if c.supports(xmpp.NS_ROSTERX):
+		if c and c.supports(xmpp.NS_ROSTERX):
 			return False
 		return True
 
