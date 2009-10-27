@@ -399,7 +399,7 @@ class Systray:
 				gajim.interface.roster.send_status(acct, show, message)
 				gajim.interface.roster.send_pep(acct, pep_dict)
 		dlg = dialogs.ChangeStatusMessageDialog(on_response, status)
-		dlg.window.present()
+		dlg.dialog.present()
 
 	def show_tooltip(self, widget):
 		position = widget.window.get_origin()

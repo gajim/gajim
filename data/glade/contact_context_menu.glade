@@ -1,102 +1,150 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--*- mode: xml -*-->
+<?xml version="1.0"?>
 <glade-interface>
-  <widget class="GtkMenu" id="roster_contact_context_menu">
+  <!-- interface-requires gtk+ 2.16 -->
+  <!-- interface-naming-policy toplevel-contextual -->
+  <widget class="GtkMenu" id="contact_context_menu">
     <child>
       <widget class="GtkImageMenuItem" id="start_chat_menuitem">
-        <property name="visible">True</property>
         <property name="label" translatable="yes">Start _Chat</property>
+        <property name="visible">True</property>
         <property name="use_underline">True</property>
+        <property name="use_stock">False</property>
         <child internal-child="image">
-          <widget class="GtkImage" id="image1701">
+          <widget class="GtkImage" id="image2">
             <property name="visible">True</property>
             <property name="stock">gtk-jump-to</property>
-            <property name="icon_size">1</property>
+            <property name="icon-size">1</property>
           </widget>
         </child>
       </widget>
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="send_single_message_menuitem">
-        <property name="visible">True</property>
         <property name="label" translatable="yes">Send Single _Message...</property>
+        <property name="visible">True</property>
         <property name="use_underline">True</property>
+        <property name="use_stock">False</property>
         <child internal-child="image">
-          <widget class="GtkImage" id="image1703">
+          <widget class="GtkImage" id="image3">
             <property name="visible">True</property>
             <property name="stock">gtk-new</property>
-            <property name="icon_size">1</property>
+            <property name="icon-size">1</property>
           </widget>
         </child>
       </widget>
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="send_file_menuitem">
-        <property name="visible">True</property>
         <property name="label" translatable="yes">Send _File...</property>
+        <property name="visible">True</property>
         <property name="use_underline">True</property>
+        <property name="use_stock">False</property>
         <child internal-child="image">
-          <widget class="GtkImage" id="image1706">
+          <widget class="GtkImage" id="image4">
             <property name="visible">True</property>
             <property name="stock">gtk-save</property>
-            <property name="icon_size">1</property>
+            <property name="icon-size">1</property>
           </widget>
         </child>
       </widget>
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="invite_menuitem">
-        <property name="visible">True</property>
         <property name="label" translatable="yes">In_vite to</property>
+        <property name="visible">True</property>
         <property name="use_underline">True</property>
+        <property name="use_stock">False</property>
         <child internal-child="image">
-          <widget class="GtkImage" id="image1704">
+          <widget class="GtkImage" id="image5">
             <property name="visible">True</property>
-            <property name="stock">gtk-go-back</property>
-            <property name="icon_size">1</property>
+            <property name="stock">gtk-missing-image</property>
+            <property name="icon-size">1</property>
           </widget>
         </child>
       </widget>
     </child>
     <child>
-      <widget class="GtkSeparatorMenuItem" id="above_send_file_separator">
+      <widget class="GtkImageMenuItem" id="convert_to_groupchat_menuitem">
+        <property name="label" translatable="yes">Invite _Contacts</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">False</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="image1">
+            <property name="visible">True</property>
+            <property name="stock">gtk-missing-image</property>
+            <property name="icon-size">1</property>
+          </widget>
+        </child>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkSeparatorMenuItem" id="encryption_separator">
+        <property name="visible">True</property>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkCheckMenuItem" id="toggle_gpg_menuitem">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Toggle Open_PGP Encryption</property>
+        <property name="use_underline">True</property>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkCheckMenuItem" id="toggle_e2e_menuitem">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Toggle End to End Encryption</property>
+        <property name="use_underline">True</property>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkSeparatorMenuItem" id="menuitem3">
         <property name="visible">True</property>
       </widget>
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="send_custom_status_menuitem">
-        <property name="visible">True</property>
         <property name="label" translatable="yes">Send Cus_tom Status</property>
+        <property name="visible">True</property>
         <property name="use_underline">True</property>
+        <property name="use_stock">False</property>
         <child>
           <widget class="GtkMenu" id="menu5">
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
           </widget>
         </child>
+        <child internal-child="image">
+          <widget class="GtkImage" id="image6">
+            <property name="visible">True</property>
+            <property name="stock">gtk-missing-image</property>
+            <property name="icon-size">1</property>
+          </widget>
+        </child>
       </widget>
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="execute_command_menuitem">
+        <property name="label" translatable="yes">E_xecute Command...</property>
         <property name="visible">True</property>
-        <property name="label" translatable="yes">Execute Command...</property>
         <property name="use_underline">True</property>
+        <property name="use_stock">False</property>
         <child internal-child="image">
-          <widget class="GtkImage" id="image1709">
+          <widget class="GtkImage" id="image7">
             <property name="visible">True</property>
             <property name="stock">gtk-execute</property>
-            <property name="icon_size">1</property>
+            <property name="icon-size">1</property>
           </widget>
         </child>
       </widget>
     </child>
     <child>
       <widget class="GtkImageMenuItem" id="manage_contact">
+        <property name="label" translatable="yes">_Manage Contact</property>
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-        <property name="label" translatable="yes">_Manage Contact</property>
         <property name="use_underline">True</property>
+        <property name="use_stock">False</property>
         <child>
           <widget class="GtkMenu" id="menu2">
             <property name="visible">True</property>
@@ -105,11 +153,12 @@
               <widget class="GtkImageMenuItem" id="rename_menuitem">
                 <property name="label" translatable="yes">_Rename...</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
                 <child internal-child="image">
-                  <widget class="GtkImage" id="image1705">
+                  <widget class="GtkImage" id="image9">
                     <property name="visible">True</property>
                     <property name="stock">gtk-refresh</property>
-                    <property name="icon_size">1</property>
+                    <property name="icon-size">1</property>
                   </widget>
                 </child>
               </widget>
@@ -118,12 +167,12 @@
               <widget class="GtkImageMenuItem" id="edit_groups_menuitem">
                 <property name="label" translatable="yes">Edit _Groups...</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
                 <child internal-child="image">
-                  <widget class="GtkImage" id="menu-item-image21">
+                  <widget class="GtkImage" id="image10">
                     <property name="visible">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="stock">gtk-edit</property>
-                    <property name="icon_size">1</property>
+                    <property name="icon-size">1</property>
                   </widget>
                 </child>
               </widget>
@@ -132,42 +181,44 @@
               <widget class="GtkImageMenuItem" id="assign_openpgp_key_menuitem">
                 <property name="label" translatable="yes">Assign Open_PGP Key...</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
                 <signal name="activate" handler="on_assign_openpgp_key_menuitem_activate"/>
                 <child internal-child="image">
-                  <widget class="GtkImage" id="image1707">
+                  <widget class="GtkImage" id="image11">
                     <property name="visible">True</property>
                     <property name="stock">gtk-dialog-authentication</property>
-                    <property name="icon_size">1</property>
+                    <property name="icon-size">1</property>
                   </widget>
                 </child>
               </widget>
             </child>
             <child>
               <widget class="GtkImageMenuItem" id="set_custom_avatar_menuitem">
+                <property name="label" translatable="yes">Set Custom _Avatar...</property>
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">Set Custom _Avatar...</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
                 <child internal-child="image">
-                  <widget class="GtkImage" id="menu-item-image20">
+                  <widget class="GtkImage" id="image12">
                     <property name="visible">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="stock">gtk-orientation-portrait</property>
-                    <property name="icon_size">1</property>
+                    <property name="icon-size">1</property>
                   </widget>
                 </child>
               </widget>
             </child>
             <child>
               <widget class="GtkImageMenuItem" id="add_special_notification_menuitem">
-                <property name="no_show_all">True</property>
                 <property name="label" translatable="yes">Add Special _Notification...</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
                 <child internal-child="image">
-                  <widget class="GtkImage" id="image1708">
+                  <widget class="GtkImage" id="image13">
                     <property name="visible">True</property>
                     <property name="stock">gtk-info</property>
-                    <property name="icon_size">1</property>
+                    <property name="icon-size">1</property>
                   </widget>
                 </child>
               </widget>
@@ -182,46 +233,50 @@
               <widget class="GtkImageMenuItem" id="subscription_menuitem">
                 <property name="label" translatable="yes">_Subscription</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
                 <child>
                   <widget class="GtkMenu" id="subscription_menuitem_menu">
                     <child>
                       <widget class="GtkImageMenuItem" id="resend_authorization_to_menuitem">
-                        <property name="visible">True</property>
                         <property name="label" translatable="yes">_Allow him/her to see my status</property>
+                        <property name="visible">True</property>
                         <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
                         <child internal-child="image">
-                          <widget class="GtkImage" id="image1711">
+                          <widget class="GtkImage" id="image15">
                             <property name="visible">True</property>
                             <property name="stock">gtk-go-up</property>
-                            <property name="icon_size">1</property>
+                            <property name="icon-size">1</property>
                           </widget>
                         </child>
                       </widget>
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="rerequest_authorization_from_menuitem">
-                        <property name="visible">True</property>
                         <property name="label" translatable="yes">A_sk to see his/her status</property>
+                        <property name="visible">True</property>
                         <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
                         <child internal-child="image">
-                          <widget class="GtkImage" id="image1712">
+                          <widget class="GtkImage" id="image16">
                             <property name="visible">True</property>
                             <property name="stock">gtk-go-down</property>
-                            <property name="icon_size">1</property>
+                            <property name="icon-size">1</property>
                           </widget>
                         </child>
                       </widget>
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="forbid_him/her_to_see_my_status1">
-                        <property name="visible">True</property>
                         <property name="label" translatable="yes">_Forbid him/her to see my status</property>
+                        <property name="visible">True</property>
                         <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
                         <child internal-child="image">
-                          <widget class="GtkImage" id="image1713">
+                          <widget class="GtkImage" id="image17">
                             <property name="visible">True</property>
                             <property name="stock">gtk-stop</property>
-                            <property name="icon_size">1</property>
+                            <property name="icon-size">1</property>
                           </widget>
                         </child>
                       </widget>
@@ -229,66 +284,70 @@
                   </widget>
                 </child>
                 <child internal-child="image">
-                  <widget class="GtkImage" id="image1710">
+                  <widget class="GtkImage" id="image14">
                     <property name="visible">True</property>
                     <property name="stock">gtk-dialog-question</property>
-                    <property name="icon_size">1</property>
+                    <property name="icon-size">1</property>
                   </widget>
                 </child>
               </widget>
             </child>
             <child>
               <widget class="GtkImageMenuItem" id="unblock_menuitem">
-                <property name="visible">True</property>
                 <property name="label" translatable="yes">_Unblock</property>
+                <property name="visible">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
                 <child internal-child="image">
-                  <widget class="GtkImage" id="image1715">
+                  <widget class="GtkImage" id="image18">
                     <property name="visible">True</property>
                     <property name="stock">gtk-stop</property>
-                    <property name="icon_size">1</property>
+                    <property name="icon-size">1</property>
                   </widget>
                 </child>
               </widget>
             </child>
             <child>
               <widget class="GtkImageMenuItem" id="block_menuitem">
-                <property name="visible">True</property>
                 <property name="label" translatable="yes">_Block</property>
+                <property name="visible">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
                 <child internal-child="image">
-                  <widget class="GtkImage" id="image1714">
+                  <widget class="GtkImage" id="image19">
                     <property name="visible">True</property>
                     <property name="stock">gtk-stop</property>
-                    <property name="icon_size">1</property>
+                    <property name="icon-size">1</property>
                   </widget>
                 </child>
               </widget>
             </child>
             <child>
               <widget class="GtkImageMenuItem" id="unignore_menuitem">
-                <property name="no_show_all">True</property>
                 <property name="label" translatable="yes">_Unignore</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
                 <child internal-child="image">
-                  <widget class="GtkImage" id="menu-item-image22">
+                  <widget class="GtkImage" id="image20">
                     <property name="visible">True</property>
                     <property name="stock">gtk-stop</property>
-                    <property name="icon_size">1</property>
+                    <property name="icon-size">1</property>
                   </widget>
                 </child>
               </widget>
             </child>
             <child>
               <widget class="GtkImageMenuItem" id="ignore_menuitem">
-                <property name="no_show_all">True</property>
                 <property name="label" translatable="yes">_Ignore</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
                 <child internal-child="image">
-                  <widget class="GtkImage" id="menu-item-image23">
+                  <widget class="GtkImage" id="image21">
                     <property name="visible">True</property>
                     <property name="stock">gtk-stop</property>
-                    <property name="icon_size">1</property>
+                    <property name="icon-size">1</property>
                   </widget>
                 </child>
               </widget>
@@ -297,11 +356,12 @@
               <widget class="GtkImageMenuItem" id="add_to_roster_menuitem">
                 <property name="label" translatable="yes">_Add to Roster...</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
                 <child internal-child="image">
-                  <widget class="GtkImage" id="image1716">
+                  <widget class="GtkImage" id="image22">
                     <property name="visible">True</property>
                     <property name="stock">gtk-add</property>
-                    <property name="icon_size">1</property>
+                    <property name="icon-size">1</property>
                   </widget>
                 </child>
               </widget>
@@ -310,11 +370,12 @@
               <widget class="GtkImageMenuItem" id="remove_from_roster_menuitem">
                 <property name="label" translatable="yes">Remo_ve</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">False</property>
                 <child internal-child="image">
-                  <widget class="GtkImage" id="image1717">
+                  <widget class="GtkImage" id="image23">
                     <property name="visible">True</property>
                     <property name="stock">gtk-remove</property>
-                    <property name="icon_size">1</property>
+                    <property name="icon-size">1</property>
                   </widget>
                 </child>
               </widget>
@@ -322,17 +383,16 @@
           </widget>
         </child>
         <child internal-child="image">
-          <widget class="GtkImage" id="menu-item-image19">
+          <widget class="GtkImage" id="image8">
             <property name="visible">True</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <property name="stock">gtk-properties</property>
-            <property name="icon_size">1</property>
+            <property name="icon-size">1</property>
           </widget>
         </child>
       </widget>
     </child>
     <child>
-      <widget class="GtkSeparatorMenuItem" id="separator6">
+      <widget class="GtkSeparatorMenuItem" id="last_separator">
         <property name="visible">True</property>
       </widget>
     </child>
@@ -347,11 +407,12 @@
       <widget class="GtkImageMenuItem" id="history_menuitem">
         <property name="label" translatable="yes">_History</property>
         <property name="use_underline">True</property>
+        <property name="use_stock">False</property>
         <child internal-child="image">
-          <widget class="GtkImage" id="image1718">
+          <widget class="GtkImage" id="image24">
             <property name="visible">True</property>
             <property name="stock">gtk-justify-fill</property>
-            <property name="icon_size">1</property>
+            <property name="icon-size">1</property>
           </widget>
         </child>
       </widget>
