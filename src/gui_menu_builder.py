@@ -25,7 +25,7 @@ import message_control
 
 from common import gajim
 from common import helpers
-from common.xmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC
+from common.xmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC, NS_ESESSION
 
 def build_resources_submenu(contacts, account, action, room_jid=None,
 room_account=None, cap=None):
@@ -143,7 +143,11 @@ def build_invite_submenu(invite_menuitem, list_):
 					room_jid, account, resource)
 			invite_to_submenu.append(menuitem)
 
-def get_contact_menu(contact, account, use_multiple_contacts=True):
+def get_contact_menu(contact, account, use_multiple_contacts=True,
+show_start_chat=True, show_encryption=False, show_buttonbar_items=True,
+control=None):
+	''' Build contact popup menu for roster and chat window.
+	If control is not set, we hide invite_contacts_menuitem'''
 	if not contact:
 		return
 
@@ -151,12 +155,8 @@ def get_contact_menu(contact, account, use_multiple_contacts=True):
 	our_jid = jid == gajim.get_jid_from_account(account)
 	roster = gajim.interface.roster
 
-	if gajim.config.get_per('accounts', account, 'is_zeroconf'):
-		xml = gtkgui_helpers.get_glade('zeroconf_contact_context_menu.glade')
-		contact_context_menu = xml.get_widget('zeroconf_contact_context_menu')
-	else:
-		xml = gtkgui_helpers.get_glade('roster_contact_context_menu.glade')
-		contact_context_menu = xml.get_widget('roster_contact_context_menu')
+	xml = gtkgui_helpers.get_glade('roster_contact_context_menu.glade')
+	contact_context_menu = xml.get_widget('roster_contact_context_menu')
 
 	start_chat_menuitem = xml.get_widget('start_chat_menuitem')
 	execute_command_menuitem = xml.get_widget('execute_command_menuitem')
@@ -168,6 +168,29 @@ def get_contact_menu(contact, account, use_multiple_contacts=True):
 		'add_special_notification_menuitem')
 	information_menuitem = xml.get_widget('information_menuitem')
 	history_menuitem = xml.get_widget('history_menuitem')
+	send_custom_status_menuitem = xml.get_widget('send_custom_status_menuitem')
+	send_single_message_menuitem = xml.get_widget('send_single_message_menuitem')
+	invite_menuitem = xml.get_widget('invite_menuitem')
+	block_menuitem = xml.get_widget('block_menuitem')
+	unblock_menuitem = xml.get_widget('unblock_menuitem')
+	ignore_menuitem = xml.get_widget('ignore_menuitem')
+	unignore_menuitem = xml.get_widget('unignore_menuitem')
+	set_custom_avatar_menuitem = xml.get_widget('set_custom_avatar_menuitem')
+	# Subscription submenu
+	subscription_menuitem = xml.get_widget('subscription_menuitem')
+	send_auth_menuitem, ask_auth_menuitem, revoke_auth_menuitem = \
+		subscription_menuitem.get_submenu().get_children()
+	add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
+	remove_from_roster_menuitem = xml.get_widget(
+		'remove_from_roster_menuitem')
+	manage_contact_menuitem = xml.get_widget('manage_contact')
+	convert_to_gc_menuitem = xml.get_widget('convert_to_groupchat_menuitem')
+	encryption_separator = xml.get_widget('encryption_separator')
+	toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
+	toggle_e2e_menuitem = xml.get_widget('toggle_e2e_menuitem')
+	last_separator = xml.get_widget('last_separator')
+
+	items_to_hide = []
 
 	# add a special img for send file menuitem
 	path_to_upload_img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'upload.png')
@@ -182,6 +205,10 @@ def get_contact_menu(contact, account, use_multiple_contacts=True):
 		img = gtk.Image()
 		img.set_from_file(path_to_kbd_input_img)
 		rename_menuitem.set_image(img)
+
+	muc_icon = gtkgui_helpers.load_icon('muc_active')
+	if muc_icon:
+		convert_to_gc_menuitem.set_image(muc_icon)
 
 	contacts = gajim.contacts.get_contacts(account, jid)
 	if len(contacts) > 1 and use_multiple_contacts: # several resources
@@ -229,9 +256,7 @@ def get_contact_menu(contact, account, use_multiple_contacts=True):
 
 	# Hide items when it's self contact row
 	if our_jid:
-		for menuitem in (rename_menuitem, edit_groups_menuitem):
-			menuitem.set_no_show_all(True)
-			menuitem.hide()
+		items_to_hide += [rename_menuitem, edit_groups_menuitem]
 
 	# Unsensitive many items when account is offline
 	if gajim.account_is_disconnected(account):
@@ -239,8 +264,58 @@ def get_contact_menu(contact, account, use_multiple_contacts=True):
 		edit_groups_menuitem, send_file_menuitem):
 			widget.set_sensitive(False)
 
+	if not show_start_chat:
+		items_to_hide.append(start_chat_menuitem)
+
+	if not show_encryption or not control:
+		items_to_hide += [encryption_separator, toggle_gpg_menuitem,
+			toggle_e2e_menuitem]
+	else:
+		e2e_is_active = control.session is not None and \
+			control.session.enable_encryption
+
+		# check if we support and use gpg
+		if not gajim.config.get_per('accounts', account, 'keyid') or \
+		not gajim.connections[account].USE_GPG or gajim.jid_is_transport(
+		contact.jid):
+			toggle_gpg_menuitem.set_sensitive(False)
+		else:
+			toggle_gpg_menuitem.set_sensitive(control.gpg_is_active or \
+				not e2e_is_active)
+			toggle_gpg_menuitem.set_active(control.gpg_is_active)
+
+		# disable esessions if we or the other client don't support them
+		# XXX: Once we have fallback to disco, remove notexistant check
+		if not gajim.HAVE_PYCRYPTO or \
+		not gajim.capscache.is_supported(contact, NS_ESESSION) or \
+		gajim.capscache.is_supported(contact, 'notexistant') or \
+		not gajim.config.get_per('accounts', account, 'enable_esessions'):
+			toggle_e2e_menuitem.set_sensitive(False)
+		else:
+			toggle_e2e_menuitem.set_active(e2e_is_active)
+			toggle_e2e_menuitem.set_sensitive(e2e_is_active or \
+				not control.gpg_is_active)
+
+	if not show_buttonbar_items:
+		items_to_hide += [history_menuitem, send_file_menuitem,
+			information_menuitem, convert_to_gc_menuitem, last_separator]
+	
+	if not control:
+		items_to_hide.append(convert_to_gc_menuitem)
+
+	for item in items_to_hide:
+		item.set_no_show_all(True)
+		item.hide()
+
 	# Zeroconf Account
 	if gajim.config.get_per('accounts', account, 'is_zeroconf'):
+		for item in (send_custom_status_menuitem, send_single_message_menuitem,
+		invite_menuitem, block_menuitem, unblock_menuitem, ignore_menuitem,
+		unignore_menuitem, set_custom_avatar_menuitem, subscription_menuitem,
+		manage_contact_menuitem):
+			item.set_no_show_all(True)
+			item.hide()
+
 		if contact.show in ('offline', 'error'):
 			information_menuitem.set_sensitive(False)
 			send_file_menuitem.set_sensitive(False)
@@ -254,14 +329,6 @@ def get_contact_menu(contact, account, use_multiple_contacts=True):
 		return contact_context_menu
 
 	# normal account
-	send_custom_status_menuitem = xml.get_widget('send_custom_status_menuitem')
-	send_single_message_menuitem = xml.get_widget('send_single_message_menuitem')
-	invite_menuitem = xml.get_widget('invite_menuitem')
-	block_menuitem = xml.get_widget('block_menuitem')
-	unblock_menuitem = xml.get_widget('unblock_menuitem')
-	ignore_menuitem = xml.get_widget('ignore_menuitem')
-	unignore_menuitem = xml.get_widget('unignore_menuitem')
-	set_custom_avatar_menuitem = xml.get_widget('set_custom_avatar_menuitem')
 
 	# send custom status icon
 	blocked = False
@@ -291,14 +358,6 @@ def get_contact_menu(contact, account, use_multiple_contacts=True):
 		invite_menuitem.set_image(muc_icon)
 
 	build_invite_submenu(invite_menuitem, [(contact, account)])
-
-	# Subscription submenu
-	subscription_menuitem = xml.get_widget('subscription_menuitem')
-	send_auth_menuitem, ask_auth_menuitem, revoke_auth_menuitem = \
-		subscription_menuitem.get_submenu().get_children()
-	add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
-	remove_from_roster_menuitem = xml.get_widget(
-		'remove_from_roster_menuitem')
 
 	# One or several resource, we do the same for send_custom_status
 	status_menuitems = gtk.Menu()
@@ -359,8 +418,7 @@ def get_contact_menu(contact, account, use_multiple_contacts=True):
 
 	# Hide items when it's self contact row
 	if our_jid:
-		menuitem = xml.get_widget('manage_contact')
-		menuitem.set_sensitive(False)
+		manage_contact_menuitem.set_sensitive(False)
 
 	# Unsensitive items when account is offline
 	if gajim.account_is_disconnected(account):
