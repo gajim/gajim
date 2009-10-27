@@ -2,7 +2,7 @@
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy toplevel-contextual -->
-  <widget class="GtkMenu" id="roster_contact_context_menu">
+  <widget class="GtkMenu" id="contact_context_menu">
     <child>
       <widget class="GtkImageMenuItem" id="start_chat_menuitem">
         <property name="label" translatable="yes">Start _Chat</property>

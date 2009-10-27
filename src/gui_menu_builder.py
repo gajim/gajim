@@ -155,8 +155,8 @@ control=None):
 	our_jid = jid == gajim.get_jid_from_account(account)
 	roster = gajim.interface.roster
 
-	xml = gtkgui_helpers.get_glade('roster_contact_context_menu.glade')
-	contact_context_menu = xml.get_widget('roster_contact_context_menu')
+	xml = gtkgui_helpers.get_glade('contact_context_menu.glade')
+	contact_context_menu = xml.get_widget('contact_context_menu')
 
 	start_chat_menuitem = xml.get_widget('start_chat_menuitem')
 	execute_command_menuitem = xml.get_widget('execute_command_menuitem')
