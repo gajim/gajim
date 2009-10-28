@@ -1844,8 +1844,8 @@ class GroupchatControl(ChatControlBase):
 				else:
 					add = ' '
 				start_iter = end_iter.copy()
-				if self.last_key_tabs and with_refer_to_nick_char or \
-				text[-1] == ' ':
+				if self.last_key_tabs and with_refer_to_nick_char or (text and \
+				text[-1] == ' '):
 					# have to accomodate for the added space from last
 					# completion
 					# gc_refer_to_nick_char may be more than one char!
