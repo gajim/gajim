@@ -764,6 +764,9 @@ class MessageWindow(object):
 			old_ctrl.set_control_active(False)
 
 		new_ctrl = self._widget_to_control(notebook.get_nth_page(page_num))
+		if not new_ctrl:
+			# This event is sometimes exposed without any reason. see #5366
+			return
 		new_ctrl.set_control_active(True)
 		self.show_title(control = new_ctrl)
 
