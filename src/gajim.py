@@ -3609,6 +3609,8 @@ class Interface:
 			self.systray_capabilities = systray.HAS_SYSTRAY_CAPABILITIES
 			if self.systray_capabilities:
 				self.systray = systray.Systray()
+			else:
+				gajim.config.set('trayicon', 'never')
 
 		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'gajim.png')
 		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
