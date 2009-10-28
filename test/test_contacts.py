@@ -6,14 +6,16 @@ import unittest
 import lib
 lib.setup_env()
 
-from common.contacts import Contact, GC_Contact
+from common.contacts import CommonContact, Contact, GC_Contact
 from common.caps import NullClientCaps
 from common.xmpp import NS_MUC
 
 class TestCommonContact(unittest.TestCase):
 	
 	def setUp(self):
-		self.contact = Contact()
+		self.contact = CommonContact(jid='', resource='', show='', status='',
+			name='', our_chatstate=None, composing_xep=None, chatstate=None,
+			client_caps=None, caps_cache=None)
 
 	def test_default_client_supports(self):
 		'''
