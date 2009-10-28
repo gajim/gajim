@@ -1794,10 +1794,10 @@ class GroupchatControl(ChatControlBase):
 
 			# HACK: Not the best soltution.
 			if (text.startswith(self.COMMAND_PREFIX) and not
-				text.startswith(self.COMMAND_PREFIX * 2) and len(splitted_text) == 1):
+			text.startswith(self.COMMAND_PREFIX * 2) and len(splitted_text) == 1):
 				return super(GroupchatControl,
 					self).handle_message_textview_mykey_press(widget, event_keyval,
-							event_keymod)
+					event_keymod)
 
 			# nick completion
 			# check if tab is pressed with empty message
@@ -1813,8 +1813,8 @@ class GroupchatControl(ChatControlBase):
 			if gc_refer_to_nick_char and begin.endswith(gc_refer_to_nick_char):
 				with_refer_to_nick_char = True
 			if len(self.nick_hits) and self.last_key_tabs and \
-			(text[:-1].endswith(self.nick_hits[0]) or \
-			text[:-2].endswith(self.nick_hits[0])): # we should cycle
+			text[:-len(gc_refer_to_nick_char + ' ')].endswith(self.nick_hits[0]):
+				# we should cycle
 				# Previous nick in list may had a space inside, so we check text and
 				# not splitted_text and store it into 'begin' var
 				self.nick_hits.append(self.nick_hits[0])
@@ -1844,34 +1844,48 @@ class GroupchatControl(ChatControlBase):
 				else:
 					add = ' '
 				start_iter = end_iter.copy()
-				if self.last_key_tabs and with_refer_to_nick_char:
+				if self.last_key_tabs and with_refer_to_nick_char or \
+				text[-1] == ' ':
 					# have to accomodate for the added space from last
 					# completion
-					start_iter.backward_chars(len(begin) + 2)
-				elif self.last_key_tabs and not gajim.config.get('shell_like_completion'):
+					# gc_refer_to_nick_char may be more than one char!
+					start_iter.backward_chars(len(begin) + len(add))
+				elif self.last_key_tabs and not gajim.config.get(
+				'shell_like_completion'):
 					# have to accomodate for the added space from last
 					# completion
-					start_iter.backward_chars(len(begin) + 1)
+					start_iter.backward_chars(len(begin) + \
+						len(gc_refer_to_nick_char))
 				else:
 					start_iter.backward_chars(len(begin))
 
 				message_buffer.delete(start_iter, end_iter)
-				completion = self.nick_hits[0]
 				# get a shell-like completion
 				# if there's more than one nick for this completion, complete only
-				# the part that all  these nicks have in common
+				# the part that all these nicks have in common
 				if gajim.config.get('shell_like_completion') and \
 				len(self.nick_hits) > 1:
 					end = False
-					cur = ''
-					while not end:
-						cur = self.nick_hits[0][:len(cur)+1]
-						for nick in self.nick_hits:
-							if cur.lower() not in nick.lower():
-								end = True
-					cur = cur[:-1]
-					completion = cur
+					completion = ''
 					add = "" # if nick is not complete, don't add anything
+					while not end and len(completion) < len(self.nick_hits[0]):
+						completion = self.nick_hits[0][:len(completion)+1]
+						for nick in self.nick_hits:
+							if completion.lower() not in nick.lower():
+								end = True
+								completion = completion[:-1]
+								break
+					# if the current nick matches a COMPLETE existing nick,
+					# and if the user tab TWICE, complete that nick (with the "add")
+					if self.last_key_tabs:
+						for nick in self.nick_hits:
+							if nick == completion:
+							# The user seems to want this nick, so
+							# complete it as if it were the only nick
+							# available
+								add = gc_refer_to_nick_char + ' '
+				else:
+					completion = self.nick_hits[0]
 				message_buffer.insert_at_cursor(completion + add)
 				self.last_key_tabs = True
 				return True
