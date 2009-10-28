@@ -213,6 +213,8 @@ class OptionsParser:
 			self.update_config_to_01255()
 		if old < [0, 12, 5, 6] and new >= [0, 12, 5, 6]:
 			self.update_config_to_01256()
+		if old < [0, 12, 5, 7] and new >= [0, 12, 5, 7]:
+			self.update_config_to_01257()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -802,4 +804,10 @@ class OptionsParser:
 				gajim.config.set(c, vals[c][1])
 		gajim.config.set('version', '0.12.5.6')
 
+	def update_config_to_01257(self):
+		if 'iconset' in self.old_values:
+			if self.old_values['iconset'] in ('nuvola', 'crystal', 'gossip',
+			'simplebulb', 'stellar'):
+				gajim.config.set('iconset', gajim.config.DEFAULT_ICONSET)
+		gajim.config.set('version', '0.12.5.7')
 # vim: se ts=3:
