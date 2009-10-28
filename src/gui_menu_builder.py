@@ -31,6 +31,7 @@ def build_resources_submenu(contacts, account, action, room_jid=None,
 room_account=None, cap=None):
 	''' Build a submenu with contact's resources.
 	room_jid and room_account are for action self.on_invite_to_room '''
+	roster = gajim.interface.roster
 	sub_menu = gtk.Menu()
 
 	iconset = gajim.config.get('iconset')
