@@ -120,7 +120,7 @@ class MessageControl:
 		#return (label_str, None)
 		pass
 
-	def get_tab_image(self):
+	def get_tab_image(self, count_unread=True):
 		# Return a suitable tab image for display.
 		# None clears any current label.
 		return None

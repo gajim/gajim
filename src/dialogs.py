@@ -53,7 +53,7 @@ except ImportError:
 # so they can do dialog.GajimThemesWindow() for example
 from filetransfers_window import FileTransfersWindow
 from gajim_themes_window import GajimThemesWindow
-from advanced import AdvancedConfigurationWindow
+from advanced_configuration_window import AdvancedConfigurationWindow
 
 from common import gajim
 from common import helpers
@@ -523,15 +523,50 @@ class ChangeMoodDialog:
 	def on_cancel_button_clicked(self, widget):
 		self.window.destroy()
 
-class ChangeStatusMessageDialog:
+class TimeoutDialog:
+	'''
+	Class designed to be derivated to create timeout'd dialogs (dialogs that
+	closes automatically after a timeout)
+	'''
+	def __init__(self, timeout, on_timeout):
+		self.countdown_left = timeout
+		self.countdown_enabled = True
+		self.title_text = ''
+		self.on_timeout = on_timeout
+
+	def run_timeout(self):
+		if self.countdown_left > 0:
+			self.countdown()
+			gobject.timeout_add_seconds(1, self.countdown)
+
+	def on_timeout():
+		'''To be implemented in derivated classes'''
+		pass
+
+	def countdown(self):
+		if self.countdown_enabled:
+			if self.countdown_left <= 0:
+				self.on_timeout()
+				return False
+			self.dialog.set_title('%s [%s]' % (self.title_text,
+				str(self.countdown_left)))
+			self.countdown_left -= 1
+			return True
+		else:
+			self.dialog.set_title(self.title_text)
+			return False
+
+class ChangeStatusMessageDialog(TimeoutDialog):
 	def __init__(self, on_response, show=None, show_pep=True):
+		countdown_time = gajim.config.get('change_status_window_timeout')
+		TimeoutDialog.__init__(self, countdown_time, self.on_timeout)
 		self.show = show
 		self.pep_dict = {}
 		self.show_pep = show_pep
 		self.on_response = on_response
 		self.xml = gtkgui_helpers.get_glade('change_status_message_dialog.glade')
-		self.window = self.xml.get_widget('change_status_message_dialog')
-		self.window.set_transient_for(gajim.interface.roster.window)
+		self.dialog = self.xml.get_widget('change_status_message_dialog')
+		self.dialog.set_transient_for(gajim.interface.roster.window)
 		msg = None
 		if show:
 			uf_show = helpers.get_uf_show(show)
@@ -550,7 +585,7 @@ class ChangeStatusMessageDialog:
 															  '_last_' + self.show, 'mood_text')
 		else:
 			self.title_text = _('Status Message')
-		self.window.set_title(self.title_text)
+		self.dialog.set_title(self.title_text)
 
 		message_textview = self.xml.get_widget('message_textview')
 		self.message_buffer = message_textview.get_buffer()
@@ -572,10 +607,6 @@ class ChangeStatusMessageDialog:
 			opts[0] = helpers.from_one_line(opts[0])
 			self.preset_messages_dict[msg_name] = opts
 		sorted_keys_list = helpers.get_sorted_keys(self.preset_messages_dict)
-
-		countdown_time = gajim.config.get('change_status_window_timeout')
-		self.countdown_left = countdown_time
-		self.countdown_enabled = True
 
 		self.message_liststore = gtk.ListStore(str) # msg_name
 		self.message_combobox = self.xml.get_widget('message_combobox')
@@ -601,12 +632,10 @@ class ChangeStatusMessageDialog:
 			self.xml.get_widget('mood_button').hide()
 
 		self.xml.signal_autoconnect(self)
-		if countdown_time > 0:
-			self.countdown()
-			gobject.timeout_add(1000, self.countdown)
-		self.window.connect('response', self.on_dialog_response)
-		self.window.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
-		self.window.show_all()
+		self.run_timeout()
+		self.dialog.connect('response', self.on_dialog_response)
+		self.dialog.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
+		self.dialog.show_all()
 
 	def draw_activity(self):
 		'''Set activity button'''
@@ -646,26 +675,16 @@ class ChangeStatusMessageDialog:
 			img.set_from_pixbuf(None)
 			label.set_text('')
 
-	def countdown(self):
-		if self.countdown_enabled:
-			if self.countdown_left <= 0:
-				# Prevent GUI freeze when the combobox menu is opened on close
-				self.message_combobox.popdown()
-				self.window.response(gtk.RESPONSE_OK)
-				return False
-			self.window.set_title('%s [%s]' % (self.title_text,
-											   str(self.countdown_left)))
-			self.countdown_left -= 1
-			return True
-		else:
-			self.window.set_title(self.title_text)
-			return False
+	def on_timeout(self):
+		# Prevent GUI freeze when the combobox menu is opened on close
+		self.message_combobox.popdown()
+		self.dialog.response(gtk.RESPONSE_OK)
 
 	def on_dialog_response(self, dialog, response):
 		if response == gtk.RESPONSE_OK:
 			beg, end = self.message_buffer.get_bounds()
 			message = self.message_buffer.get_text(beg, end).decode('utf-8')\
-					.strip()
+				.strip()
 			message = helpers.remove_invalid_xml_chars(message)
 			msg = helpers.to_one_line(message)
 			if self.show:
@@ -684,7 +703,7 @@ class ChangeStatusMessageDialog:
 						'mood_text', self.pep_dict['mood_text'])
 		else:
 			message = None # user pressed Cancel button or X wm button
-		self.window.destroy()
+		self.dialog.destroy()
 		self.on_response(message, self.pep_dict)
 
 	def on_message_combobox_changed(self, widget):
@@ -708,7 +727,7 @@ class ChangeStatusMessageDialog:
 		if event.keyval == gtk.keysyms.Return or \
 		   event.keyval == gtk.keysyms.KP_Enter: # catch CTRL+ENTER
 			if (event.state & gtk.gdk.CONTROL_MASK):
-				self.window.response(gtk.RESPONSE_OK)
+				self.dialog.response(gtk.RESPONSE_OK)
 				# Stop the event
 				return True
 
@@ -4496,9 +4515,23 @@ class GPGInfoWindow:
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 
+
+
+class ResourceConflictDialog(TimeoutDialog, InputDialog):
+	def __init__(self, title, text, resource, ok_handler):
+		TimeoutDialog.__init__(self, 15, self.on_timeout)
+		InputDialog.__init__(self, title, text, input_str=resource,
+			is_modal=False, ok_handler=ok_handler)
+		self.title_text = title
+		self.run_timeout()
+
+	def on_timeout(self):
+		self.on_okbutton_clicked(None)
+
+
+
 class VoIPCallReceivedDialog(object):
 	instances = {}
-
 	def __init__(self, account, contact_jid, sid, content_types):
 		self.instances[(contact_jid, sid)] = self
 		self.account = account
@@ -4595,5 +4628,6 @@ class VoIPCallReceivedDialog(object):
 					session.reject_content(content)
 
 		dialog.destroy()
+
 
 # vim: se ts=3:

@@ -201,6 +201,7 @@ class OptionsParser:
 		if old < [0, 12, 3, 1] and new >= [0, 12, 3, 1]:
 			self.update_config_to_01231()
 		if old < [0, 12, 5, 1] and new >= [0, 12, 5, 1]:
+			self.update_config_from_0125()
 			self.update_config_to_01251()
 		if old < [0, 12, 5, 2] and new >= [0, 12, 5, 2]:
 			self.update_config_to_01252()
@@ -212,6 +213,8 @@ class OptionsParser:
 			self.update_config_to_01255()
 		if old < [0, 12, 5, 6] and new >= [0, 12, 5, 6]:
 			self.update_config_to_01256()
+		if old < [0, 12, 5, 7] and new >= [0, 12, 5, 7]:
+			self.update_config_to_01257()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -718,6 +721,14 @@ class OptionsParser:
 		con.close()
 		gajim.config.set('version', '0.12.3.1')
 
+	def update_config_from_0125(self):
+		# All those functions need to be called for 0.12.5 to 0.13 transition
+		self.update_config_to_01211()
+		self.update_config_to_01213()
+		self.update_config_to_01214()
+		self.update_config_to_01215()
+		self.update_config_to_01231()
+
 	def update_config_to_01251(self):
 		back = os.getcwd()
 		os.chdir(logger.LOG_DB_FOLDER)
@@ -793,4 +804,10 @@ class OptionsParser:
 				gajim.config.set(c, vals[c][1])
 		gajim.config.set('version', '0.12.5.6')
 
+	def update_config_to_01257(self):
+		if 'iconset' in self.old_values:
+			if self.old_values['iconset'] in ('nuvola', 'crystal', 'gossip',
+			'simplebulb', 'stellar'):
+				gajim.config.set('iconset', gajim.config.DEFAULT_ICONSET)
+		gajim.config.set('version', '0.12.5.7')
 # vim: se ts=3:
