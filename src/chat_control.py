@@ -1594,7 +1594,10 @@ class ChatControl(ChatControlBase):
 			'error': self.JINGLE_STATE_ERROR}
 
 		if state in states:
-			self.__dict__[jingle_type + '_state'] = states[state]
+			jingle_state = states[state]
+			if self.__dict__[jingle_type + '_state'] == jingle_state:
+				return
+			self.__dict__[jingle_type + '_state'] = jingle_state
 
 		# Destroy existing session with the user when he signs off
 		# We need to do that before modifying the sid
