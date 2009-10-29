@@ -2107,6 +2107,102 @@ class Interface:
 			_('You are already connected to this account with the same resource. '
 			'Please type a new one'), resource=proposed_resource, ok_handler=on_ok)
 
+	def handle_event_jingle_incoming(self, account, data):
+		# ('JINGLE_INCOMING', account, peer jid, sid, tuple-of-contents==(type,
+		# data...))
+		# TODO: conditional blocking if peer is not in roster
+
+		# unpack data
+		peerjid, sid, contents = data
+		content_types = set(c[0] for c in contents)
+
+		# check type of jingle session
+		if 'audio' in content_types or 'video' in content_types:
+			# a voip session...
+			# we now handle only voip, so the only thing we will do here is
+			# not to return from function
+			pass
+		else:
+			# unknown session type... it should be declined in common/jingle.py
+			return
+
+		jid = gajim.get_jid_without_resource(peerjid)
+		resource = gajim.get_resource_from_jid(peerjid)
+		ctrl = self.msg_win_mgr.get_control(peerjid, account)
+		if not ctrl:
+			ctrl = self.msg_win_mgr.get_control(jid, account)
+		if ctrl:
+			if 'audio' in content_types:
+				ctrl.set_audio_state('connection_received', sid)
+			if 'video' in content_types:
+				ctrl.set_video_state('connection_received', sid)
+
+		dlg = dialogs.VoIPCallReceivedDialog.get_dialog(peerjid, sid)
+		if dlg:
+			dlg.add_contents(content_types)
+			return
+
+		if helpers.allow_popup_window(account):
+			dialogs.VoIPCallReceivedDialog(account, peerjid, sid, content_types)
+			return
+
+		self.add_event(account, peerjid, 'jingle-incoming', (peerjid, sid,
+			content_types))
+
+		if helpers.allow_showing_notification(account):
+			# TODO: we should use another pixmap ;-)
+			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+				'ft_request.png')
+			txt = _('%s wants to start a voice chat.') % gajim.get_name_from_jid(
+				account, peerjid)
+			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+			event_type = _('Voice Chat Request')
+			notify.popup(event_type, peerjid, account, 'jingle-incoming',
+				path_to_image = path, title = event_type, text = txt)
+
+	def handle_event_jingle_connected(self, account, data):
+		# ('JINGLE_CONNECTED', account, (peerjid, sid, media))
+		peerjid, sid, media = data
+		if media in ('audio', 'video'):
+			jid = gajim.get_jid_without_resource(peerjid)
+			resource = gajim.get_resource_from_jid(peerjid)
+			ctrl = self.msg_win_mgr.get_control(peerjid, account)
+			if not ctrl:
+				ctrl = self.msg_win_mgr.get_control(jid, account)
+			if ctrl:
+				if media == 'audio':
+					ctrl.set_audio_state('connected', sid)
+				else:
+					ctrl.set_video_state('connected', sid)
+
+	def handle_event_jingle_disconnected(self, account, data):
+		# ('JINGLE_DISCONNECTED', account, (peerjid, sid, reason))
+		peerjid, sid, media, reason = data
+		jid = gajim.get_jid_without_resource(peerjid)
+		resource = gajim.get_resource_from_jid(peerjid)
+		ctrl = self.msg_win_mgr.get_control(peerjid, account)
+		if not ctrl:
+			ctrl = self.msg_win_mgr.get_control(jid, account)
+		if ctrl:
+			if media in ('audio', None):
+				ctrl.set_audio_state('stop', sid=sid, reason=reason)
+			if media in ('video', None):
+				ctrl.set_video_state('stop', sid=sid, reason=reason)
+		dialog = dialogs.VoIPCallReceivedDialog.get_dialog(peerjid, sid)
+		if dialog:
+			dialog.dialog.destroy()
+
+	def handle_event_jingle_error(self, account, data):
+		# ('JINGLE_ERROR', account, (peerjid, sid, reason))
+		peerjid, sid, reason = data
+		jid = gajim.get_jid_without_resource(peerjid)
+		resource = gajim.get_resource_from_jid(peerjid)
+		ctrl = self.msg_win_mgr.get_control(peerjid, account)
+		if not ctrl:
+			ctrl = self.msg_win_mgr.get_control(jid, account)
+		if ctrl:
+			ctrl.set_audio_state('error', reason=reason)
+
 	def handle_event_pep_config(self, account, data):
 		# ('PEP_CONFIG', account, (node, form))
 		if 'pep_services' in self.instances[account]:
@@ -2364,6 +2460,10 @@ class Interface:
 			'INSECURE_SSL_CONNECTION': self.handle_event_insecure_ssl_connection,
 			'PUBSUB_NODE_REMOVED': self.handle_event_pubsub_node_removed,
 			'PUBSUB_NODE_NOT_REMOVED': self.handle_event_pubsub_node_not_removed,
+			'JINGLE_INCOMING': self.handle_event_jingle_incoming,
+			'JINGLE_CONNECTED': self.handle_event_jingle_connected,
+			'JINGLE_DISCONNECTED': self.handle_event_jingle_disconnected,
+			'JINGLE_ERROR': self.handle_event_jingle_error,
 		}
 	
 	def dispatch(self, event, account, data):
@@ -2388,7 +2488,7 @@ class Interface:
 		jid = gajim.get_jid_without_resource(jid)
 		no_queue = len(gajim.events.get_events(account, jid)) == 0
 		# type_ can be gc-invitation file-send-error file-error file-request-error
-		# file-request file-completed file-stopped
+		# file-request file-completed file-stopped jingle-incoming
 		# event_type can be in advancedNotificationWindow.events_list
 		event_types = {'file-request': 'ft_request',
 			'file-completed': 'ft_finished'}
@@ -2548,6 +2648,11 @@ class Interface:
 			self.show_unsubscribed_dialog(account, contact)
 			gajim.events.remove_events(account, jid, event)
 			self.roster.draw_contact(jid, account)
+		elif type_ == 'jingle-incoming':
+ 			event = gajim.events.get_first_event(account, jid, type_)
+ 			peerjid, sid, content_types = event.parameters
+ 			dialogs.VoIPCallReceivedDialog(account, peerjid, sid, content_types)
+ 			gajim.events.remove_events(account, jid, event)
 		if w:
 			w.set_active_tab(ctrl)
 			w.window.window.focus(gtk.get_current_event_time())
