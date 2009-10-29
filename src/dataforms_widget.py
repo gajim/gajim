@@ -283,8 +283,6 @@ class SingleForm(gtk.Table, object):
 		self.set_col_spacings(12)
 		self.set_row_spacings(6)
 
-		self.tooltips = gtk.Tooltips()
-
 		def decorate_with_tooltip(widget, field):
 			''' Adds a tooltip containing field's description to a widget.
 			Creates EventBox if widget doesn't have its own gdk window.
@@ -294,7 +292,7 @@ class SingleForm(gtk.Table, object):
 					evbox = gtk.EventBox()
 					evbox.add(widget)
 					widget = evbox
-				self.tooltips.set_tip(widget, field.description)
+				widget.set_tooltip_text(field.description)
 			return widget
 
 		self._data_form = dataform
