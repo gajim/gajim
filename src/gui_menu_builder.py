@@ -240,6 +240,12 @@ control=None):
 		account)
 	history_menuitem.connect('activate', roster.on_history, contact, account)
 
+	if control:
+		convert_to_gc_menuitem.connect('activate',
+			control._on_convert_to_gc_menuitem_activate)
+	else:
+		items_to_hide.append(convert_to_gc_menuitem)
+
 	if _('Not in Roster') not in contact.get_shown_groups():
 		# contact is in normal group
 		edit_groups_menuitem.connect('activate', roster.on_edit_groups, [(contact,
@@ -262,7 +268,7 @@ control=None):
 	# Unsensitive many items when account is offline
 	if gajim.account_is_disconnected(account):
 		for widget in (start_chat_menuitem,	rename_menuitem,
-		edit_groups_menuitem, send_file_menuitem):
+		edit_groups_menuitem, send_file_menuitem, convert_to_gc_menuitem):
 			widget.set_sensitive(False)
 
 	if not show_start_chat:
@@ -284,6 +290,8 @@ control=None):
 			toggle_gpg_menuitem.set_sensitive(control.gpg_is_active or \
 				not e2e_is_active)
 			toggle_gpg_menuitem.set_active(control.gpg_is_active)
+			toggle_gpg_menuitem.connect('activate',
+				control._on_toggle_gpg_menuitem_activate)
 
 		# disable esessions if we or the other client don't support them
 		# XXX: Once we have fallback to disco, remove notexistant check
@@ -296,6 +304,8 @@ control=None):
 			toggle_e2e_menuitem.set_active(e2e_is_active)
 			toggle_e2e_menuitem.set_sensitive(e2e_is_active or \
 				not control.gpg_is_active)
+			toggle_e2e_menuitem.connect('activate',
+				control._on_toggle_e2e_menuitem_activate)
 
 	if not show_buttonbar_items:
 		items_to_hide += [history_menuitem, send_file_menuitem,
@@ -313,7 +323,7 @@ control=None):
 		for item in (send_custom_status_menuitem, send_single_message_menuitem,
 		invite_menuitem, block_menuitem, unblock_menuitem, ignore_menuitem,
 		unignore_menuitem, set_custom_avatar_menuitem, subscription_menuitem,
-		manage_contact_menuitem):
+		manage_contact_menuitem, convert_to_gc_menuitems):
 			item.set_no_show_all(True)
 			item.hide()
 
