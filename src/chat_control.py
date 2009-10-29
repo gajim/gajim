@@ -1235,7 +1235,6 @@ class ChatControl(ChatControlBase):
 
 		# Add lock image to show chat encryption
 		self.lock_image = self.xml.get_widget('lock_image')
-		self.lock_tooltip = gtk.Tooltips()
 
 		# Convert to GC icon
 		img = self.xml.get_widget('convert_to_gc_button_image')
@@ -1324,8 +1323,6 @@ class ChatControl(ChatControlBase):
 			# GPG is always authenticated as we use GPG's WoT
 			self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active,
 				self.session and self.session.is_loggable(), True)
-
-		self.status_tooltip = gtk.Tooltips()
 
 		self.update_ui()
 		# restore previous conversation
@@ -1604,7 +1601,6 @@ class ChatControl(ChatControlBase):
 		jid = contact.jid
 
 		banner_name_label = self.xml.get_widget('banner_name_label')
-		banner_name_tooltip = gtk.Tooltips()
 
 		name = contact.get_shown_name()
 		if self.resource:
@@ -1679,8 +1675,7 @@ class ChatControl(ChatControlBase):
 				status_text = '<span %s>%s</span>' % (font_attrs_small, status_text)
 			else:
 				status_text = '<span %s>%s</span>' % (font_attrs_small, status_escaped)
-			self.status_tooltip.set_tip(self.banner_status_label,
-					status)
+			self.banner_status_label.set_tooltip_text(status)
 			self.banner_status_label.show()
 			self.banner_status_label.set_no_show_all(False)
 		else:
@@ -1691,7 +1686,7 @@ class ChatControl(ChatControlBase):
 		self.banner_status_label.set_markup(status_text)
 		# setup the label that holds name and jid
 		banner_name_label.set_markup(label_text)
-		banner_name_tooltip.set_tip(banner_name_label, label_tooltip)
+		banner_name_label.set_tooltip_text(label_tooltip)
 
 	def _toggle_gpg(self):
 		if not self.gpg_is_active and not self.contact.keyID:
@@ -1768,7 +1763,7 @@ class ChatControl(ChatControlBase):
 			'status': status_string, 'authenticated': authenticated_string,
 			'logged': logged_string}
 
-		self.lock_tooltip.set_tip(self.authentication_button, tooltip)
+		self.authentication_button.set_tooltip_text(tooltip)
 		self.widget_set_visible(self.authentication_button, not visible)
 		self.lock_image.set_sensitive(enc_enabled)
 
@@ -2171,9 +2166,6 @@ class ChatControl(ChatControlBase):
 			self.reset_kbd_mouse_timeout_vars()
 
 	def shutdown(self):
-		# destroy banner tooltip - bug #pygtk for that!
-		self.status_tooltip.destroy()
-
 		# Send 'gone' chatstate
 		self.send_chatstate('gone', self.contact)
 		self.contact.chatstate = None

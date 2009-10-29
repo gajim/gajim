@@ -344,7 +344,7 @@ class ChangeActivityDialog:
 			item = self.xml.get_widget(category + '_image')
 			item.set_from_pixbuf(
 				gtkgui_helpers.load_activity_icon(category).get_pixbuf())
-			gtk.Tooltips().set_tip(item, pep.ACTIVITIES[category]['category'])
+			item.set_tooltip_text(pep.ACTIVITIES[category]['category'])
 
 			vbox = self.xml.get_widget(category + '_vbox')
 			vbox.set_border_width(5)
@@ -477,7 +477,7 @@ class ChangeMoodDialog:
 			self.mood_buttons[mood].set_mode(False)
 			self.mood_buttons[mood].add(gtkgui_helpers.load_mood_icon(mood))
 			self.mood_buttons[mood].set_relief(gtk.RELIEF_NONE)
-			gtk.Tooltips().set_tip(self.mood_buttons[mood], pep.MOODS[mood])
+			self.mood_buttons[mood].set_tooltip_text(pep.MOODS[mood])
 			self.mood_buttons[mood].connect('clicked',
 				self.on_mood_button_clicked, mood)
 			table.attach(self.mood_buttons[mood], x, x + 1, y, y + 1)
@@ -650,7 +650,7 @@ class ChangeStatusMessageDialog(TimeoutDialog):
 			else:
 				img.set_from_pixbuf(gtkgui_helpers.load_activity_icon(
 					self.pep_dict['activity']).get_pixbuf())
-#			gtk.Tooltips().set_tip(item, pep.ACTIVITIES[category]['category'])
+#			item.set_tooltip_text(pep.ACTIVITIES[category]['category'])
 			if self.pep_dict['activity_text']:
 				label.set_text(self.pep_dict['activity_text'])
 			else:

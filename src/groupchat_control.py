@@ -292,7 +292,6 @@ class GroupchatControl(ChatControlBase):
 		self.last_key_tabs = False
 
 		self.subject = ''
-		self.subject_tooltip = gtk.Tooltips()
 
 		self.tooltip = tooltips.GCTooltip()
 
@@ -622,12 +621,12 @@ class GroupchatControl(ChatControlBase):
 				subject_text = '<span %s>%s</span>' % (font_attrs_small, subject)
 
 			# tooltip must always hold ALL the subject
-			self.subject_tooltip.set_tip(self.event_box, self.subject)
+			self.event_box.set_tooltip_text(self.subject)
 			self.banner_status_label.show()
 			self.banner_status_label.set_no_show_all(False)
 		else:
 			subject_text = ''
-			self.subject_tooltip.disable()
+			self.event_box.set_has_tooltip(False)
 			self.banner_status_label.hide()
 			self.banner_status_label.set_no_show_all(True)
 
@@ -1576,9 +1575,6 @@ class GroupchatControl(ChatControlBase):
 		del win._controls[self.account][self.contact.jid]
 
 	def shutdown(self, status='offline'):
-		# destroy banner tooltip - bug #pygtk for that!
-		self.subject_tooltip.destroy()
-
 		# Preventing autorejoin from being activated
 		self.autorejoin = False
 
