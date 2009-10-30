@@ -33,6 +33,8 @@ through ClientCaps objects which are hold by contact instances.
 
 import gajim
 import helpers
+import base64
+import hashlib
 
 from common.xmpp import NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION, NS_CHATSTATES
 # Features where we cannot safely assume that the other side supports them
@@ -44,6 +46,76 @@ def initialize(logger):
 	''' Initializes the capscache global '''
 	global capscache
 	capscache = CapsCache(logger)
+
+
+def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
+	'''Compute caps hash according to XEP-0115, V1.5
+
+	dataforms are xmpp.DataForms objects as common.dataforms don't allow several
+	values without a field type list-multi'''
+	
+	def sort_identities_func(i1, i2):
+		cat1 = i1['category']
+		cat2 = i2['category']
+		if cat1 < cat2:
+			return -1
+		if cat1 > cat2:
+			return 1
+		type1 = i1.get('type', '')
+		type2 = i2.get('type', '')
+		if type1 < type2:
+			return -1
+		if type1 > type2:
+			return 1
+		lang1 = i1.get('xml:lang', '')
+		lang2 = i2.get('xml:lang', '')
+		if lang1 < lang2:
+			return -1
+		if lang1 > lang2:
+			return 1
+		return 0
+	
+	def sort_dataforms_func(d1, d2):
+		f1 = d1.getField('FORM_TYPE')
+		f2 = d2.getField('FORM_TYPE')
+		if f1 and f2 and (f1.getValue() < f2.getValue()):
+			return -1
+		return 1
+	
+	S = ''
+	identities.sort(cmp=sort_identities_func)
+	for i in identities:
+		c = i['category']
+		type_ = i.get('type', '')
+		lang = i.get('xml:lang', '')
+		name = i.get('name', '')
+		S += '%s/%s/%s/%s<' % (c, type_, lang, name)
+	features.sort()
+	for f in features:
+		S += '%s<' % f
+	dataforms.sort(cmp=sort_dataforms_func)
+	for dataform in dataforms:
+		# fields indexed by var
+		fields = {}
+		for f in dataform.getChildren():
+			fields[f.getVar()] = f
+		form_type = fields.get('FORM_TYPE')
+		if form_type:
+			S += form_type.getValue() + '<'
+			del fields['FORM_TYPE']
+		for var in sorted(fields.keys()):
+			S += '%s<' % var
+			values = sorted(fields[var].getValues())
+			for value in values:
+				S += '%s<' % value
+
+	if hash_method == 'sha-1':
+		hash_ = hashlib.sha1(S)
+	elif hash_method == 'md5':
+		hash_ = hashlib.md5(S)
+	else:
+		return ''
+	return base64.b64encode(hash_.digest())
 	
 
 class AbstractClientCaps(object):
@@ -92,7 +164,7 @@ class ClientCaps(AbstractClientCaps):
 		connection.discoverInfo(jid, '%s#%s' % (self._node, self._hash))
 				
 	def _is_hash_valid(self, identities, features, dataforms):
-		computed_hash = helpers.compute_caps_hash(identities, features,
+		computed_hash = compute_caps_hash(identities, features,
 				dataforms=dataforms, hash_method=self._hash_method)
 		return computed_hash == self._hash	
 	

@@ -6,8 +6,6 @@ import unittest
 import lib
 lib.setup_env()
 
-from common import gajim
-from common import helpers
 from common.xmpp import NS_MUC, NS_PING, NS_XHTML_IM
 from common import caps
 from common.contacts import Contact
@@ -95,7 +93,7 @@ class TestCapsCache(CommonCapsTest):
 		
 	def test_hash(self):
 		'''tests the hash computation'''
-		computed_hash = helpers.compute_caps_hash(self.identities, self.features)
+		computed_hash = caps.compute_caps_hash(self.identities, self.features)
 		self.assertEqual(self.caps_hash, computed_hash)
 
 

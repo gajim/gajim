@@ -31,6 +31,7 @@ import locale
 import re
 from common import gajim
 from common import helpers
+from common import caps
 
 import exceptions
 try:
@@ -216,7 +217,7 @@ class OptionsParser:
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
 
-		gajim.capscache.initialize_from_db()
+		caps.capscache.initialize_from_db()
 
 	def update_config_x_to_09(self):
 		# Var name that changed:
