@@ -162,6 +162,8 @@ class Events:
 		del self._events[account][jid]
 
 	def change_jid(self, account, old_jid, new_jid):
+		if account not in self._events:
+			return
 		if old_jid not in self._events[account]:
 			return
 		if new_jid in self._events[account]:
