@@ -9,7 +9,7 @@ lib.setup_env()
 from common import gajim
 from common import helpers
 from common.xmpp import NS_MUC, NS_PING, NS_XHTML_IM
-from common.caps import CapsCache, ClientCaps, OldClientCaps
+from common import caps
 from common.contacts import Contact
 
 from mock import Mock
@@ -34,11 +34,8 @@ class CommonCapsTest(unittest.TestCase):
 				('old', self.node + '#' + self.caps_hash, self.identities, self.features)]
 		self.logger = Mock(returnValues={"iter_caps_data":db_caps_cache})
 		
-		self.cc = CapsCache(self.logger)
-		# This is a temporary hack required by the way contacts rely on the 
-		# existance of a cache. Hopefully this can be refactored to work via
-		# dependency injection
-		gajim.capscache = self.cc
+		self.cc = caps.CapsCache(self.logger)
+		caps.capscache = self.cc
 			
 			
 class TestCapsCache(CommonCapsTest):
@@ -78,7 +75,7 @@ class TestCapsCache(CommonCapsTest):
 	def test_preload_triggering_query(self):
 		''' Make sure that preload issues a disco '''
 		connection = Mock()
-		client_caps = ClientCaps(self.caps_hash, self.node, self.caps_method)
+		client_caps = caps.ClientCaps(self.caps_hash, self.node, self.caps_method)
 				
 		self.cc.query_client_of_jid_if_unknown(connection, "test@gajim.org",
 				client_caps)
@@ -88,7 +85,7 @@ class TestCapsCache(CommonCapsTest):
 	def test_no_preload_query_if_cashed(self):
 		''' Preload must not send a query if the data is already cached '''
 		connection = Mock()
-		client_caps = ClientCaps(self.caps_hash, self.node, self.caps_method)
+		client_caps = caps.ClientCaps(self.caps_hash, self.node, self.caps_method)
 
 		self.cc.initialize_from_db()
 		self.cc.query_client_of_jid_if_unknown(connection, "test@gajim.org",
@@ -106,7 +103,7 @@ class TestClientCaps(CommonCapsTest):
 	
 	def setUp(self):
 		CommonCapsTest.setUp(self)
-		self.client_caps = ClientCaps(self.caps_hash, self.node, self.caps_method) 
+		self.client_caps = caps.ClientCaps(self.caps_hash, self.node, self.caps_method) 
 		
 	def test_query_by_get_discover_strategy(self):
 		''' Client must be queried if the data is unkown '''	
@@ -118,7 +115,7 @@ class TestClientCaps(CommonCapsTest):
 				"http://gajim.org#m3P2WeXPMGVH2tZPe7yITnfY0Dw=")
 		
 	def test_client_supports(self):
-		contact = Contact(caps_cache=self.cc, client_caps=self.client_caps)
+		contact = Contact(client_caps=self.client_caps)
 			
 		self.assertTrue(contact.supports(NS_PING),
 				msg="Assume supported, if we don't have caps")
@@ -142,7 +139,7 @@ class TestOldClientCaps(TestClientCaps):
 
 	def setUp(self):
 		TestClientCaps.setUp(self)
-		self.client_caps = OldClientCaps(self.caps_hash, self.node) 
+		self.client_caps = caps.OldClientCaps(self.caps_hash, self.node) 
 	
 	def test_query_by_get_discover_strategy(self):
 		''' Client must be queried if the data is unknown '''	

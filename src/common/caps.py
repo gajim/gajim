@@ -39,6 +39,13 @@ from common.xmpp import NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION, NS_CHATSTATES
 FEATURE_BLACKLIST = [NS_CHATSTATES, NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION]
 
 
+capscache = None
+def initialize(logger):
+	''' Initializes the capscache global '''
+	global capscache
+	capscache = CapsCache(logger)
+	
+
 class AbstractClientCaps(object):
 	'''
 	Base class representing a client and its capabilities as advertised by
@@ -66,6 +73,7 @@ class AbstractClientCaps(object):
 		return self._is_hash_valid
 					
 	def _is_hash_valid(self, identities, features, dataforms):
+		''' To be implemented by subclassess '''
 		raise NotImplementedError()		
 	
 	
@@ -117,7 +125,10 @@ class NullClientCaps(AbstractClientCaps):
 		AbstractClientCaps.__init__(self, None, None)
 	
 	def _lookup_in_cache(self, caps_cache):
-		return caps_cache[('old', '')]
+		# lookup something which does not exist to get a new CacheItem created
+		cache_item = caps_cache[('old', '')]
+		assert cache_item.queried == 0
+		return cache_item
 	
 	def _discover(self, connection, jid):
 		pass
@@ -202,15 +213,6 @@ class CapsCache(object):
 					identities, features)
 
 		self.__CacheItem = CacheItem
-
-		# prepopulate data which we are sure of; note: we do not log these info
-		for account in gajim.connections:
-			gajimcaps = self[('sha-1', gajim.caps_hash[account])]
-			gajimcaps.identities = [gajim.gajim_identity]
-			gajimcaps.features = gajim.gajim_common_features + \
-				gajim.gajim_optional_features[account]
-
-		# start logging data from the net
 		self.logger = logger
 
 	def initialize_from_db(self):
@@ -247,8 +249,6 @@ class CapsCache(object):
 			q.queried = 1
 			discover = client_caps.get_discover_strategy()
 			discover(connection, jid)
-
-gajim.capscache = CapsCache(gajim.logger)
 
 
 class ConnectionCaps(object):
@@ -295,7 +295,7 @@ class ConnectionCaps(object):
 			else:
 				client_caps = ClientCaps(caps_hash, node, hash_method)
 		
-		gajim.capscache.query_client_of_jid_if_unknown(self, jid, client_caps)
+		capscache.query_client_of_jid_if_unknown(self, jid, client_caps)
 		contact.client_caps = client_caps
 
 		if pm_ctrl:
@@ -310,7 +310,7 @@ class ConnectionCaps(object):
 				return
 
 		lookup = contact.client_caps.get_cache_lookup_strategy()
-		cache_item = lookup(gajim.capscache)	
+		cache_item = lookup(capscache)	
 					
 		if cache_item.queried == 2:
 			return

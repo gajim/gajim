@@ -30,13 +30,14 @@
 
 import common.gajim
 
-from common.caps import NullClientCaps, FEATURE_BLACKLIST
+
+from common import caps
 
 
 class CommonContact(object):
 	
 	def __init__(self, jid, resource, show, status, name, our_chatstate,
-	composing_xep, chatstate, client_caps=None, caps_cache=None):
+	composing_xep, chatstate, client_caps=None):
 		
 		self.jid = jid
 		self.resource = resource
@@ -44,8 +45,7 @@ class CommonContact(object):
 		self.status = status
 		self.name = name
 		
-		self.client_caps = client_caps or NullClientCaps()
-		self._caps_cache = caps_cache or common.gajim.capscache 
+		self.client_caps = client_caps or caps.NullClientCaps()
 		
 		# please read xep-85 http://www.xmpp.org/extensions/xep-0085.html
 		# we keep track of xep85 support with the peer by three extra states:
@@ -84,7 +84,7 @@ class CommonContact(object):
 
 	def _client_supports(self, requested_feature):
 		lookup_item = self.client_caps.get_cache_lookup_strategy()
-		cache_item = lookup_item(self._caps_cache)
+		cache_item = lookup_item(caps.capscache)
 
 		supported_features = cache_item.features
 		if requested_feature in supported_features:
@@ -92,7 +92,7 @@ class CommonContact(object):
 		elif supported_features == [] and cache_item.queried in (0, 1):
 			# assume feature is supported, if we don't know yet, what the client
 			# is capable of
-			return requested_feature not in FEATURE_BLACKLIST
+			return requested_feature not in caps.FEATURE_BLACKLIST
 		else:
 			return False
 
@@ -100,13 +100,12 @@ class CommonContact(object):
 class Contact(CommonContact):
 	'''Information concerning each contact'''
 	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
-	ask='', resource='', priority=0, keyID='', client_caps=None, caps_cache=None,
+	ask='', resource='', priority=0, keyID='', client_caps=None,
 	our_chatstate=None, chatstate=None, last_status_time=None, msg_id = None,
 	composing_xep=None, mood={}, tune={}, activity={}):
 		
 		CommonContact.__init__(self, jid, resource, show, status, name, 
-			our_chatstate, composing_xep, chatstate, client_caps=client_caps,
-			caps_cache=caps_cache)
+			our_chatstate, composing_xep, chatstate, client_caps=client_caps)
 		
 		self.contact_name = '' # nick choosen by contact
 		self.groups = groups
@@ -236,9 +235,8 @@ class Contacts:
 
 	def create_contact(self, jid='', name='', groups=[], show='', status='',
 		sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
-		caps_cache=None, our_chatstate=None,
-		chatstate=None, last_status_time=None, composing_xep=None,
-		mood={}, tune={}, activity={}):
+		our_chatstate=None, chatstate=None, last_status_time=None,
+		composing_xep=None, mood={}, tune={}, activity={}):
 
 		# We don't want duplicated group values
 		groups_unique = []
@@ -248,18 +246,16 @@ class Contacts:
 
 		return Contact(jid=jid, name=name, groups=groups_unique, show=show,
 			status=status, sub=sub, ask=ask, resource=resource, priority=priority,
-			keyID=keyID, client_caps=client_caps, caps_cache=caps_cache,
-			our_chatstate=our_chatstate, chatstate=chatstate,
-			last_status_time=last_status_time, composing_xep=composing_xep,
-			mood=mood, tune=tune, activity=activity)
+			keyID=keyID, client_caps=client_caps, our_chatstate=our_chatstate,
+			chatstate=chatstate, last_status_time=last_status_time,
+			composing_xep=composing_xep, mood=mood, tune=tune, activity=activity)
 
 	def copy_contact(self, contact):
 		return self.create_contact(jid=contact.jid, name=contact.name,
 			groups=contact.groups, show=contact.show, status=contact.status,
 			sub=contact.sub, ask=contact.ask, resource=contact.resource,
 			priority=contact.priority, keyID=contact.keyID,
-			client_caps=contact.client_caps, caps_cache=contact._caps_cache,
-			our_chatstate=contact.our_chatstate,
+			client_caps=contact.client_caps, our_chatstate=contact.our_chatstate,
 			chatstate=contact.chatstate, last_status_time=contact.last_status_time)
 
 	def add_contact(self, account, contact):
@@ -629,8 +625,7 @@ class Contacts:
 		jid = gc_contact.get_full_jid()
 		return Contact(jid=jid, resource=gc_contact.resource,
 			name=gc_contact.name, groups=[], show=gc_contact.show,
-			status=gc_contact.status, sub='none', client_caps=gc_contact.client_caps,
-			caps_cache=gc_contact._caps_cache)
+			status=gc_contact.status, sub='none', client_caps=gc_contact.client_caps)
 
 	def create_gc_contact(self, room_jid='', name='', show='', status='',
 		role='', affiliation='', jid='', resource=''):

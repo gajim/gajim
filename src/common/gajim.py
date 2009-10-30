@@ -205,6 +205,9 @@ gajim_optional_features = {}
 # Capabilities hash per account
 caps_hash = {}
 
+import caps
+caps.initialize(logger)
+
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
 	return jid[:pos]
