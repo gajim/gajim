@@ -1,3 +1,34 @@
+Gajim 0.12.5 (08 August 2009)
+
+  * Don't depend on GTK 2.14
+
+Gajim 0.12.4 (07 August 2009)
+
+  * Fix History manager
+  * Fix file transfer proxy discovering at connection
+  * Improve filetransfer with IPv6
+  * Fix zeroconf when receiving badly encoded info
+
+Gajim 0.12.3 (12 June 2009)
+
+  * Fix PLAIN authentication (in particular with Gtalk
+  * fix PEP discovery
+
+Gajim 0.12.2 (07 June 2009)
+
+  * Better keepalive / ping behaviour
+  * Fix custom port handling
+  * Improve error messages handling
+  * Totem support for played music
+  * Fix SSL with some servers
+  * Handle XFCE notification-daemon
+  * Restore old behaviour of click on systray: left click to open events
+  * Network manager 0.7 support
+  * Move logs file under windows to $APPDATA/gajim
+  * Improve Kerberos support
+  * Many bugfixes here and there
+  * Add -c option to history_manager
+
 Gajim 0.12.1 (21 December 2008)
 
   * Fix filetransfer
