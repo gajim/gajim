@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-28 22:17+0100\n"
-"PO-Revision-Date: 2009-10-29 00:00+0200\n"
+"POT-Creation-Date: 2009-10-29 10:48+0100\n"
+"PO-Revision-Date: 2009-10-30 00:24+0200\n"
 "Last-Translator: Sergiy Yegorov <prapor@unixzone.org.ua>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -1071,7 +1071,6 @@ msgid "Assign Open_PGP Key..."
 msgstr "Призначити кл_юч OpenPGP..."
 
 #: ../data/glade/contact_context_menu.glade.h:4
-#, fuzzy
 msgid "E_xecute Command..."
 msgstr "Виконати команду..."
 
@@ -1505,9 +1504,8 @@ msgid "_Log conversation history"
 msgstr "_Зберігати журнал спілкування"
 
 #: ../data/glade/join_groupchat_window.glade.h:2
-#, fuzzy
 msgid "Bookmark this room"
-msgstr "Зробити закладку на цій кімнаті (Ctrl+B)"
+msgstr "Зробити закладку на цій кімнаті"
 
 #: ../data/glade/join_groupchat_window.glade.h:3 ../src/dialogs.py:1972
 msgid "Join Group Chat"
@@ -2273,9 +2271,8 @@ msgid "All"
 msgstr "Всі"
 
 #: ../data/glade/privacy_list_window.glade.h:7
-#, fuzzy
 msgid "All (including subscription)"
-msgstr "всі за підпискою"
+msgstr "Всі (за підпискою)"
 
 #: ../data/glade/privacy_list_window.glade.h:8
 msgid "Allow"
@@ -3416,49 +3413,44 @@ msgstr ""
 "події (on_event) та завжди (always)."
 
 #: ../src/common/config.py:93
-#, fuzzy
 msgid "Incoming nickname color."
-msgstr "Некоректний псевдонім"
+msgstr "Колір вхідного псевдоніму"
 
 #: ../src/common/config.py:94
 msgid "Outgoing nickname color."
-msgstr ""
+msgstr "Колір вихідного псевдоніма"
 
 #: ../src/common/config.py:95
 msgid "Incoming text color."
-msgstr ""
+msgstr "Колір вхідного тексту"
 
 #: ../src/common/config.py:96
 msgid "Outgoing text color."
-msgstr ""
+msgstr "Колір вихідного тексту"
 
 #: ../src/common/config.py:97
-#, fuzzy
 msgid "Status message text color."
-msgstr "текст повідомлення про стан"
+msgstr "Колір тексту повідомлення сповіщення про стан."
 
 #: ../src/common/config.py:100
-#, fuzzy
 msgid "Incoming nickname font."
-msgstr "Некоректний псевдонім"
+msgstr "Шрифт вхідного псевдоніму"
 
 #: ../src/common/config.py:101
-#, fuzzy
 msgid "Outgoing nickname font."
-msgstr "Зміна псевдоніма"
+msgstr "Шрифт вихідного псевдоніма."
 
 #: ../src/common/config.py:102
 msgid "Incoming text font."
-msgstr ""
+msgstr "Шрифт вхідного тексту"
 
 #: ../src/common/config.py:103
 msgid "Outgoing text font."
-msgstr ""
+msgstr "Шрифт вихідного тексту"
 
 #: ../src/common/config.py:104
-#, fuzzy
 msgid "Status message text font."
-msgstr "текст повідомлення про стан"
+msgstr "Шрифт тексту сповіщення про стан."
 
 #: ../src/common/config.py:105
 msgid ""
@@ -3577,16 +3569,20 @@ msgstr ""
 #: ../src/common/config.py:168
 msgid "How many lines to request to server when entering a groupchat."
 msgstr ""
+"Як багато робити запитів до сервера при під’єднанні до групової балачки."
 
 #: ../src/common/config.py:169
 msgid "How many minutes back to request logs when a entering a groupchat."
-msgstr ""
+msgstr "За скільки хвилин запитувати журнал, при вході у групову балачку."
 
 #: ../src/common/config.py:170
 msgid ""
 "How many seconds to wait before trying to autorejoin to a conference you are "
 "being disconnected from. Set to 0 to disable autorejoining."
 msgstr ""
+"Скільки секунд очікувати перш ніж повторити спробу перепід’єднатись до "
+"конференції від якої вас було від’єднано. Встановіть 0 для блокування "
+"автоматичного перепід’єднання."
 
 #: ../src/common/config.py:172
 msgid ""
@@ -3939,22 +3935,21 @@ msgstr ""
 "Порожній рядок вказуватиме на те, що це діалогове вікно не слід показувати."
 
 #: ../src/common/config.py:257
-#, fuzzy
 msgid ""
 "Should we show the confirm block contact dialog or not? Empty string means "
 "we never show the dialog."
 msgstr ""
-"Чи слід показувати діалогове вікно підтвердження створення метаконтактів? "
+"Чи слід показувати діалогове вікно підтвердження блокування контактів? "
 "Порожній рядок вказуватиме на те, що це діалогове вікно не слід показувати."
 
 #: ../src/common/config.py:258
-#, fuzzy
 msgid ""
 "Should we show the confirm custom status dialog or not? Empty string means "
 "we never show the dialog."
 msgstr ""
-"Чи слід показувати діалогове вікно підтвердження створення метаконтактів? "
-"Порожній рядок вказуватиме на те, що це діалогове вікно не слід показувати."
+"Чи слід показувати діалогове вікно підтвердження створення особливих "
+"статусів? Порожній рядок вказуватиме на те, що це діалогове вікно не слід "
+"показувати."
 
 #: ../src/common/config.py:259
 msgid ""
@@ -4074,12 +4069,16 @@ msgstr ""
 #: ../src/common/config.py:273
 msgid "If True, completion in groupchats will be like a shell auto-completion"
 msgstr ""
+"Якщо Істино, доповнення у групових балачках будуть схожі на автодоповнення "
+"командної оболонки."
 
 #: ../src/common/config.py:274
 msgid ""
 "When is self contact row displayed. Can be \"always\", \"when_other_resource"
 "\" or \"never\""
 msgstr ""
+"Коли показувати запис власного контакту. Може бути \"завжди\", "
+"\"коли_інший_ресурс\" або \"ніколи\""
 
 #: ../src/common/config.py:286
 msgid ""
@@ -4105,15 +4104,14 @@ msgstr "Якщо увімкнено, відновлювати попередні
 #: ../src/common/config.py:297
 msgid ""
 "If True, Contacts requesting authorization will be automatically accepted."
-msgstr ""
+msgstr "Якщо Істино, усі запити авторизації буде автоматично задоволено."
 
 #: ../src/common/config.py:298
-#, fuzzy
 msgid ""
 "If False, this account will be disabled and will not appear in roster window."
 msgstr ""
-"Якщо цей параметр матиме значення «False», ви не бачитимете аватарів у вікні "
-"балачки."
+"Якщо цей параметр матиме значення «False», обліковий запис буде вимкнено та "
+"не буде відображатись у вікні реєстру."
 
 #: ../src/common/config.py:301
 msgid ""
@@ -4442,7 +4440,7 @@ msgstr "Не вдалося приєднатися до групової бал�
 #: ../src/common/connection_handlers.py:2296
 #, python-format
 msgid "Maximum number of users for %s has been reached"
-msgstr ""
+msgstr "Максимальна кількість користувачів %s вже досягнута."
 
 #: ../src/common/connection_handlers.py:2304
 #, python-format
@@ -4806,15 +4804,14 @@ msgid "Not fetched because of invisible status"
 msgstr "Не отримано через стан невидимості"
 
 #: ../src/common/connection.py:1982
-#, fuzzy
 msgid "Unregister failed"
-msgstr "Спроба з’єднання завершилася невдало"
+msgstr "Спроба скасування реєстрації завершилася невдало"
 
 #: ../src/common/connection.py:1983
-#, fuzzy, python-format
+#, python-format
 msgid "Unregistration with server %(server)s failed: %(error)s"
 msgstr ""
-"Реєстрація з агентом %(agent)s невдала через помилку %(error)s: %(error_msg)s"
+"Видалення реєстрації з серверу %(server)s не вдалося через помилку: %(error)s"
 
 #: ../src/common/contacts.py:92 ../src/common/helpers.py:55
 #: ../src/gajim.py:999
@@ -4845,7 +4842,7 @@ msgstr "Можливості роботи з D-Bus у Gajim не може бут
 #. only say that to non Windows users
 #: ../src/common/dbus_support.py:50
 msgid "D-Bus does not run correctly on this machine"
-msgstr ""
+msgstr "D-Bus не працює коректно на цій машині."
 
 #: ../src/common/exceptions.py:30
 msgid "pysqlite2 (aka python-pysqlite2) dependency is missing. Exiting..."
@@ -6193,9 +6190,8 @@ msgid "Failed to get secret keys"
 msgstr "Спроба отримання закритих ключів завершилася невдало"
 
 #: ../src/config.py:2116
-#, fuzzy
 msgid "There is no OpenPGP secret key available."
-msgstr "Виникла проблема з отриманням ваших закритих ключів OpenPGP."
+msgstr "Немає доступних закритих ключів OpenPGP."
 
 #: ../src/config.py:2150
 msgid "OpenPGP Key Selection"
@@ -6233,10 +6229,9 @@ msgid "Your server can't save your personal information."
 msgstr "Ваш сервер не може зберігати ваші особисті відомості."
 
 #: ../src/config.py:2284 ../src/config.py:2318
-#, fuzzy
 msgid "To disable the account, you must be disconnected."
 msgstr ""
-"Для зміни назви облікового запису вам слід від’єднати клієнт від сервера."
+"Для відключення облікового запису вам слід від’єднати клієнт від сервера."
 
 #: ../src/config.py:2289
 msgid "Account Local already exists."
@@ -6436,7 +6431,6 @@ msgid "Account has been added successfully"
 msgstr "Обліковий запис було успішно додано"
 
 #: ../src/config.py:3221 ../src/config.py:3227
-#, fuzzy
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
 "later by choosing the Accounts menu item under the Edit menu from the main "
@@ -6838,15 +6832,15 @@ msgid "Join Group Chat with account %s"
 msgstr "Приєднатися до групової балачки з облікового запису %s"
 
 #: ../src/dialogs.py:2050
-#, fuzzy
 msgid "Invalid Account"
-msgstr "Некоректна назва облікового запису"
+msgstr "Некоректний обліковий запис"
 
 #: ../src/dialogs.py:2051
-#, fuzzy
 msgid ""
 "You have to choose an account from which you want to join the groupchat."
-msgstr "Обліковий запис, з якого ви бажаєте увійти до кімнати"
+msgstr ""
+"Ви маєте обрати обліковий запис, з якого ви бажаєте приєднатись до групової "
+"балачки."
 
 #: ../src/dialogs.py:2060
 msgid "Invalid Nickname"
@@ -8122,9 +8116,8 @@ msgid "Your passphrase is incorrect"
 msgstr "Ваш пароль не є коректним"
 
 #: ../src/gajim.py:1533
-#, fuzzy
 msgid "OpenGPG Passphrase Incorrect"
-msgstr "Ваш пароль не є коректним"
+msgstr "Ваш OpenPGP пароль не є коректним"
 
 #: ../src/gajim.py:1559
 msgid "GPG key not trusted"
@@ -8451,28 +8444,24 @@ msgstr ""
 "позначено пункт «синхронізувати з загальним станом»"
 
 #: ../src/gajim-remote.py:118
-#, fuzzy
 msgid "Changes the priority of account or accounts"
-msgstr "Змінює стан облікового запису або обліковий запис"
+msgstr "Змінює пріоритет одного або кількох облікових записів"
 
 #: ../src/gajim-remote.py:120
-#, fuzzy
 msgid "priority"
-msgstr "Пріорите_т:"
+msgstr "пріоритет"
 
 #: ../src/gajim-remote.py:120
-#, fuzzy
 msgid "priority you want to give to the account"
-msgstr "Я бажаю _зареєструвати новий обліковий запис"
+msgstr "пріоритет який ви бажаєте надати обліковому запису"
 
 #: ../src/gajim-remote.py:122
-#, fuzzy
 msgid ""
 "change the priority of the given account. If not specified, change status of "
 "all accounts that have \"sync with global status\" option set"
 msgstr ""
-"змінити стан облікового запису «account». Якщо назви облікового запису не "
-"вказано, спробувати змінити стан всіх облікових записів, для яких було "
+"змінити пріоритет вказаного облікового запису. Якщо назви облікового запису "
+"не вказано, спробувати змінити стан всіх облікових записів, для яких було "
 "позначено пункт «синхронізувати з загальним станом»"
 
 #: ../src/gajim-remote.py:128
@@ -9173,12 +9162,11 @@ msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s тепер %(status)s: %(status_msg)s"
 
 #: ../src/history_window.py:438
-#, fuzzy, python-format
+#, python-format
 msgid "Error: %s"
-msgstr "Повідомлення про помилку: %s"
+msgstr "Помилка: %s"
 
 #: ../src/history_window.py:440
-#, fuzzy
 msgid "Error"
 msgstr "Помилка."
 
@@ -9430,7 +9418,6 @@ msgstr ""
 "допомогою цих транспортів: %s"
 
 #: ../src/roster_window.py:2662
-#, fuzzy
 msgid "You are about to block a contact. Are you sure you want to continue?"
 msgstr "Ви маєте намір створити метаконтакт. Ви справді цього бажаєте?"
 
@@ -9439,6 +9426,8 @@ msgid ""
 "This contact will see you offline and you will not receive messages he will "
 "send you."
 msgstr ""
+"Цей контакт буде бачити вас як \"поза мережею\" та ви не будете отримувати "
+"від нього повідомлень."
 
 #. it's jid
 #: ../src/roster_window.py:2748
@@ -9531,10 +9520,9 @@ msgstr ""
 "поза мережею."
 
 #: ../src/roster_window.py:3286
-#, fuzzy
 msgid ""
 "You are about to send a custom status. Are you sure you want to continue?"
-msgstr "Ви маєте намір створити метаконтакт. Ви справді цього бажаєте?"
+msgstr "Ви маєте намір надіслати особливий статус. Ви справді цього бажаєте?"
 
 #: ../src/roster_window.py:3288
 #, python-format
@@ -9542,6 +9530,8 @@ msgid ""
 "This contact will temporarily see you as %(status)s, but only until you "
 "change your status. Then he will see your global status."
 msgstr ""
+"Цей контакт тимчасово бачитиме вас як %(status)s, но лише до зміни вашого "
+"статусу. Потім він бачитиме ваш глобальний статус."
 
 #: ../src/roster_window.py:3305
 msgid "No account available"
@@ -9710,9 +9700,8 @@ msgid "_Maximize"
 msgstr "_Максимізувати"
 
 #: ../src/roster_window.py:5631
-#, fuzzy
 msgid "_Reconnect"
-msgstr "_Роз'єднати"
+msgstr "_Перез’єднати"
 
 #: ../src/roster_window.py:5637
 msgid "_Disconnect"
