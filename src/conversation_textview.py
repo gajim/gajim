@@ -43,6 +43,7 @@ import gtkgui_helpers
 from common import gajim
 from common import helpers
 from common import latex
+from common import i18n
 from calendar import timegm
 from common.fuzzyclock import FuzzyClock
 
@@ -1270,12 +1271,10 @@ class ConversationTextview(gobject.GObject):
 			int(timegm(tim)) / 86400
 		if diff_day == 0:
 			day_str = ''
-		elif diff_day == 1:
-			day_str = _('Yesterday')
 		else:
-			#the number is >= 2
-			# %i is day in year (1-365), %d (1-31) we want %i
-			day_str = _('%i days ago') % diff_day
+			#%i is day in year (1-365)
+			day_str = i18n.ngettext('Yesterday', '%i days ago', diff_day,
+				replace_plural=diff_day)
 		if day_str:
 			format += day_str + ' '
 		timestamp_str = gajim.config.get('time_stamp')

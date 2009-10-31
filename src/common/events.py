@@ -33,7 +33,7 @@ class Event:
 		''' type_ in chat, normal, file-request, file-error, file-completed,
 		file-request-error, file-send-error, file-stopped, gc_msg, pm,
 		printed_chat, printed_gc_msg, printed_marked_gc_msg, printed_pm,
-		gc-invitation, subscription_request, unsubscribed
+		gc-invitation, subscription_request, unsubscribedm jingle-incoming
 		parameters is (per type_):
 			chat, normal, pm: [message, subject, kind, time, encrypted, resource,
 			msg_id]
@@ -46,6 +46,7 @@ class Event:
 			gc-invitation: [room_jid, reason, password, is_continued]
 			subscription_request: [text, nick]
 			unsubscribed: contact
+			jingle-incoming: (fulljid, sessionid, content_types)
 		'''
 		self.type_ = type_
 		self.time_ = time_
@@ -162,6 +163,8 @@ class Events:
 		del self._events[account][jid]
 
 	def change_jid(self, account, old_jid, new_jid):
+		if account not in self._events:
+			return
 		if old_jid not in self._events[account]:
 			return
 		if new_jid in self._events[account]:

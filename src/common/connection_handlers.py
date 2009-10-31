@@ -52,6 +52,14 @@ from common import exceptions
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.caps import ConnectionCaps
+if gajim.HAVE_FARSIGHT:
+	from common.jingle import ConnectionJingle
+else:
+	class ConnectionJingle():
+		def __init__(self):
+			pass
+		def _JingleCB(self, con, stanza):
+			pass
 
 from common import dbus_support
 if dbus_support.supported:
@@ -1445,12 +1453,13 @@ sent a message to.'''
 
 		return sess
 
-class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionCaps, ConnectionHandlersBase):
+class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 	def __init__(self):
 		ConnectionVcard.__init__(self)
 		ConnectionBytestream.__init__(self)
 		ConnectionCommands.__init__(self)
 		ConnectionPubSub.__init__(self)
+		ConnectionJingle.__init__(self)
 		ConnectionHandlersBase.__init__(self)
 		self.gmail_url = None
 
@@ -2806,6 +2815,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			common.xmpp.NS_PRIVACY)
 		con.RegisterHandler('iq', self._PubSubCB, 'result')
 		con.RegisterHandler('iq', self._PubSubErrorCB, 'error')
+		con.RegisterHandler('iq', self._JingleCB, 'result')
+		con.RegisterHandler('iq', self._JingleCB, 'error')
+		con.RegisterHandler('iq', self._JingleCB, 'set',
+			common.xmpp.NS_JINGLE)
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._IqCB)
 		con.RegisterHandler('iq', self._StanzaArrivedCB)

@@ -309,12 +309,10 @@ class VcardWindow:
 		status_label.set_max_width_chars(15)
 		status_label.set_text(stats)
 
-		tip = gtk.Tooltips()
 		status_label_eventbox = self.xml.get_widget('status_label_eventbox')
-		tip.set_tip(status_label_eventbox, stats)
+		status_label_eventbox.set_tooltip_text(stats)
 
 	def fill_jabber_page(self):
-		tooltips = gtk.Tooltips()
 		self.xml.get_widget('nickname_label').set_markup(
 			'<b><span size="x-large">' +
 			self.contact.get_shown_name() +
@@ -343,7 +341,7 @@ class VcardWindow:
 				tt_text = _("You and the contact are interested in each other's presence information")
 			else: # None
 				tt_text = _("You are not interested in the contact's presence, and neither he/she is interested in yours")
-			tooltips.set_tip(eb, tt_text)
+			eb.set_tooltip_text(tt_text)
 
 			uf_ask = helpers.get_uf_ask(self.contact.ask)
 			ask_label.set_text(uf_ask)
@@ -352,7 +350,7 @@ class VcardWindow:
 				tt_text = _("You are waiting contact's answer about your subscription request")
 			else:
 				tt_text = _("There is no pending subscription request.")
-			tooltips.set_tip(eb, tt_text)
+			eb.set_tooltip_text(tt_text)
 
 		resources = '%s (%s)' % (self.contact.resource, unicode(
 			self.contact.priority))
@@ -425,7 +423,7 @@ class VcardWindow:
 		self.xml.get_widget('resource_prio_label').set_text(resources)
 		resource_prio_label_eventbox = self.xml.get_widget(
 			'resource_prio_label_eventbox')
-		tooltips.set_tip(resource_prio_label_eventbox, uf_resources)
+		resource_prio_label_eventbox.set_tooltip_text(uf_resources)
 
 		self.fill_status_label()
 
@@ -519,12 +517,10 @@ class ZeroconfVcardWindow:
 		status_label.set_max_width_chars(15)
 		status_label.set_text(stats)
 
-		tip = gtk.Tooltips()
 		status_label_eventbox = self.xml.get_widget('status_label_eventbox')
-		tip.set_tip(status_label_eventbox, stats)
+		status_label_eventbox.set_tooltip_text(stats)
 
 	def fill_contact_page(self):
-		tooltips = gtk.Tooltips()
 		self.xml.get_widget('nickname_label').set_markup(
 			'<b><span size="x-large">' +
 			self.contact.get_shown_name() +
@@ -545,7 +541,7 @@ class ZeroconfVcardWindow:
 		self.xml.get_widget('resource_prio_label').set_text(resources)
 		resource_prio_label_eventbox = self.xml.get_widget(
 			'resource_prio_label_eventbox')
-		tooltips.set_tip(resource_prio_label_eventbox, uf_resources)
+		resource_prio_label_eventbox.set_tooltip_text(uf_resources)
 
 		self.fill_status_label()
 

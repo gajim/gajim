@@ -297,6 +297,9 @@ class Node(object):
 	def __delitem__(self,item):
 		''' Deletes node's attribute "item". '''
 		return self.delAttr(item)
+	def __contains__(self,item):
+		""" Checks if node has attribute "item" """
+		return self.has_attr(item)
 	def __getattr__(self,attr):
 		''' Reduce memory usage caused by T/NT classes - use memory only when needed. '''
 		if attr=='T':
