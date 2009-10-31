@@ -33,6 +33,7 @@ import gtk
 import pango
 import gobject
 import gtkgui_helpers
+import gui_menu_builder
 import message_control
 import dialogs
 import history_window
@@ -50,6 +51,7 @@ from common.logger import constants
 from common.pep import MOODS, ACTIVITIES
 from common.xmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
+from common.xmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO, NS_JINGLE_ICE_UDP
 
 from command_system.implementation.middleware import ChatCommandProcessor
 from command_system.implementation.middleware import CommandTools
@@ -874,7 +876,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
 	def on_actions_button_clicked(self, widget):
 		'''popup action menu'''
-		menu = self.prepare_context_menu(True)
+		menu = self.prepare_context_menu(hide_buttonbar_items=True)
 		menu.show_all()
 		gtkgui_helpers.popup_emoticons_under_button(menu, widget,
 			self.parent_win)
@@ -1172,6 +1174,15 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 ################################################################################
 class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
+	(
+		JINGLE_STATE_NOT_AVAILABLE,
+		JINGLE_STATE_AVAILABLE,
+		JINGLE_STATE_CONNECTING,
+		JINGLE_STATE_CONNECTION_RECEIVED,
+		JINGLE_STATE_CONNECTED,
+		JINGLE_STATE_ERROR
+	) = range(6)
+
 	TYPE_ID = message_control.TYPE_CHAT
 	old_msg_kind = None # last kind of the printed message
 
@@ -1198,6 +1209,14 @@ class ChatControl(ChatControlBase):
 		id_ = self._add_to_roster_button.connect('clicked',
 			self._on_add_to_roster_menuitem_activate)
 		self.handlers[id_] = self._add_to_roster_button
+
+		self._audio_button = self.xml.get_widget('audio_togglebutton')
+		id_ = self._audio_button.connect('toggled', self.on_audio_button_toggled)
+		self.handlers[id_] = self._audio_button
+
+		self._video_button = self.xml.get_widget('video_togglebutton')
+		id_ = self._video_button.connect('toggled', self.on_video_button_toggled)
+		self.handlers[id_] = self._video_button
 
 		self._send_file_button = self.xml.get_widget('send_file_button')
 		# add a special img for send file button
@@ -1234,12 +1253,18 @@ class ChatControl(ChatControlBase):
 
 		# Add lock image to show chat encryption
 		self.lock_image = self.xml.get_widget('lock_image')
-		self.lock_tooltip = gtk.Tooltips()
 
 		# Convert to GC icon
 		img = self.xml.get_widget('convert_to_gc_button_image')
 		img.set_from_pixbuf(gtkgui_helpers.load_icon(
 			'muc_active').get_pixbuf())
+
+		self._audio_banner_image = self.xml.get_widget('audio_banner_image')
+		self._video_banner_image = self.xml.get_widget('video_banner_image')
+		self.audio_sid = None
+		self.audio_state = self.JINGLE_STATE_NOT_AVAILABLE
+		self.video_sid = None
+		self.video_state = self.JINGLE_STATE_NOT_AVAILABLE
 
 		self.update_toolbar()
 
@@ -1324,8 +1349,6 @@ class ChatControl(ChatControlBase):
 			self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active,
 				self.session and self.session.is_loggable(), True)
 
-		self.status_tooltip = gtk.Tooltips()
-
 		if gajim.otr_module:
 			self.update_otr(True)
 
@@ -1349,6 +1372,38 @@ class ChatControl(ChatControlBase):
 			self._add_to_roster_button.show()
 		else:
 			self._add_to_roster_button.hide()
+
+		# Jingle detection
+		if gajim.capscache.is_supported(self.contact, NS_JINGLE_ICE_UDP) and \
+		gajim.HAVE_FARSIGHT and self.contact.resource:
+			if gajim.capscache.is_supported(self.contact, NS_JINGLE_RTP_AUDIO):
+				if self.audio_state == self.JINGLE_STATE_NOT_AVAILABLE:
+					self.set_audio_state('available')
+			else:
+				self.set_audio_state('not_available')
+
+			if gajim.capscache.is_supported(self.contact, NS_JINGLE_RTP_VIDEO):
+				if self.video_state == self.JINGLE_STATE_NOT_AVAILABLE:
+					self.set_video_state('available')
+			else:
+				self.set_video_state('not_available')
+		else:
+			if self.audio_state != self.JINGLE_STATE_NOT_AVAILABLE:
+				self.set_audio_state('not_available')
+			if self.video_state != self.JINGLE_STATE_NOT_AVAILABLE:
+				self.set_video_state('not_available')
+
+		# Audio buttons
+		if self.audio_state == self.JINGLE_STATE_NOT_AVAILABLE:
+			self._audio_button.set_sensitive(False)
+		else:
+			self._audio_button.set_sensitive(True)
+
+		# Video buttons
+		if self.video_state == self.JINGLE_STATE_NOT_AVAILABLE:
+			self._video_button.set_sensitive(False)
+		else:
+			self._video_button.set_sensitive(True)
 
 		# Send file
 		if gajim.capscache.is_supported(self.contact, NS_FILE) and \
@@ -1482,6 +1537,34 @@ class ChatControl(ChatControlBase):
 		else:
 			self._tune_image.hide()
 
+	def _update_jingle(self, jingle_type):
+		if jingle_type not in ('audio', 'video'):
+			return
+		if self.__dict__[jingle_type + '_state'] in (
+		self.JINGLE_STATE_NOT_AVAILABLE, self.JINGLE_STATE_AVAILABLE):
+			self.__dict__['_' + jingle_type + '_banner_image'].hide()
+		else:
+			self.__dict__['_' + jingle_type + '_banner_image'].show()
+		if self.audio_state == self.JINGLE_STATE_CONNECTING:
+			self.__dict__['_' + jingle_type + '_banner_image'].set_from_stock(
+				gtk.STOCK_CONVERT, 1)
+		elif self.audio_state == self.JINGLE_STATE_CONNECTION_RECEIVED:
+			self.__dict__['_' + jingle_type + '_banner_image'].set_from_stock(
+				gtk.STOCK_NETWORK, 1)
+		elif self.audio_state == self.JINGLE_STATE_CONNECTED:
+			self.__dict__['_' + jingle_type + '_banner_image'].set_from_stock(
+				gtk.STOCK_CONNECT, 1)
+		elif self.audio_state == self.JINGLE_STATE_ERROR:
+			self.__dict__['_' + jingle_type + '_banner_image'].set_from_stock(
+				gtk.STOCK_DIALOG_WARNING, 1)
+		self.update_toolbar()
+
+	def update_audio(self):
+		self._update_jingle('audio')
+
+	def update_video(self):
+		self._update_jingle('video')
+
 	def change_resource(self, resource):
 		old_full_jid = self.get_full_jid()
 		self.resource = resource
@@ -1494,6 +1577,52 @@ class ChatControl(ChatControlBase):
 		gajim.events.change_jid(self.account, old_full_jid, new_full_jid)
 		# update MessageWindow._controls
 		self.parent_win.change_jid(self.account, old_full_jid, new_full_jid)
+
+	def _set_jingle_state(self, jingle_type, state, sid=None, reason=None):
+		if jingle_type not in ('audio', 'video'):
+			return
+		if state in ('connecting', 'connected', 'stop') and reason:
+			str = _('%(type)s state : %(state)s, reason: %(reason)s') % {
+				'type': jingle_type.capitalize(), 'state': state, 'reason': reason}
+			self.print_conversation(str, 'info')
+
+		states = {'not_available': self.JINGLE_STATE_NOT_AVAILABLE,
+			'available': self.JINGLE_STATE_AVAILABLE,
+			'connecting': self.JINGLE_STATE_CONNECTING,
+			'connection_received': self.JINGLE_STATE_CONNECTION_RECEIVED,
+			'connected': self.JINGLE_STATE_CONNECTED,
+			'stop': self.JINGLE_STATE_AVAILABLE,
+			'error': self.JINGLE_STATE_ERROR}
+
+		if state in states:
+			jingle_state = states[state]
+			if self.__dict__[jingle_type + '_state'] == jingle_state:
+				return
+			self.__dict__[jingle_type + '_state'] = jingle_state
+
+		# Destroy existing session with the user when he signs off
+		# We need to do that before modifying the sid
+		if state == 'not_available':
+			gajim.connections[self.account].delete_jingle_session(
+				self.contact.get_full_jid(), self.__dict__[jingle_type + '_sid'])
+
+		if state in ('not_available', 'available', 'stop'):
+			self.__dict__[jingle_type + '_sid'] = None
+		if state in ('connection_received', 'connecting'):
+			self.__dict__[jingle_type + '_sid'] = sid
+
+		if state in ('connecting', 'connected', 'connection_received'):
+			self.__dict__['_' + jingle_type + '_button'].set_active(True)
+		elif state in ('not_available', 'stop'):
+			self.__dict__['_' + jingle_type + '_button'].set_active(False)
+
+		eval('self.update_' + jingle_type)()
+
+	def set_audio_state(self, state, sid=None, reason=None):
+		self._set_jingle_state('audio', state, sid=sid, reason=reason)
+
+	def set_video_state(self, state, sid=None, reason=None):
+		self._set_jingle_state('video', state, sid=sid, reason=reason)
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		'''
@@ -1568,11 +1697,10 @@ class ChatControl(ChatControlBase):
 			return 0
 
 		ctx = gajim.otr_module.otrl_context_find(
-			gajim.connections[self.account].otr_userstates,
-			self.contact.get_full_jid().encode(),
-			gajim.get_jid_from_account(self.account).encode(),
-			gajim.OTR_PROTO, 1, (gajim.otr_add_appdata,
-			self.account))[0]
+				gajim.connections[self.account].otr_userstates,
+				self.contact.get_full_jid().encode(),
+				gajim.get_jid_from_account(self.account).encode(),
+				gajim.OTR_PROTO, 1, (gajim.otr_add_appdata, self.account))[0]
 
 		if ctx.msgstate == gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED:
 			if ctx.active_fingerprint.trust:
@@ -1594,11 +1722,9 @@ class ChatControl(ChatControlBase):
 			enc_status = False
 
 		if otr_status == 1:
-			otr_status_text = u'*unauthenticated* secure OTR ' + \
-				u'connection'
+			otr_status_text = u'*unauthenticated* secure OTR connection'
 		elif otr_status == 2:
-			otr_status_text = u'authenticated secure OTR ' + \
-				u'connection'
+			otr_status_text = u'authenticated secure OTR connection'
 			authenticated = True
 		elif otr_status == 3:
 			otr_status_text = u'finished OTR connection'
@@ -1606,8 +1732,8 @@ class ChatControl(ChatControlBase):
 		self._show_lock_image(enc_status, u'OTR', enc_status, True,
 			authenticated)
 		if print_status and otr_status_text != '':
-			self.print_conversation_line(u'[OTR] %s' % \
-				otr_status_text, 'status', '', None)
+			self.print_conversation_line(u'[OTR] %s' % otr_status_text,
+					'status', '', None)
 
 	def _update_banner_state_image(self):
 		contact = gajim.contacts.get_contact_with_highest_priority(self.account,
@@ -1652,7 +1778,6 @@ class ChatControl(ChatControlBase):
 		jid = contact.jid
 
 		banner_name_label = self.xml.get_widget('banner_name_label')
-		banner_name_tooltip = gtk.Tooltips()
 
 		name = contact.get_shown_name()
 		if self.resource:
@@ -1727,8 +1852,7 @@ class ChatControl(ChatControlBase):
 				status_text = '<span %s>%s</span>' % (font_attrs_small, status_text)
 			else:
 				status_text = '<span %s>%s</span>' % (font_attrs_small, status_escaped)
-			self.status_tooltip.set_tip(self.banner_status_label,
-					status)
+			self.banner_status_label.set_tooltip_text(status)
 			self.banner_status_label.show()
 			self.banner_status_label.set_no_show_all(False)
 		else:
@@ -1739,7 +1863,35 @@ class ChatControl(ChatControlBase):
 		self.banner_status_label.set_markup(status_text)
 		# setup the label that holds name and jid
 		banner_name_label.set_markup(label_text)
-		banner_name_tooltip.set_tip(banner_name_label, label_tooltip)
+		banner_name_label.set_tooltip_text(label_tooltip)
+
+	def on_audio_button_toggled(self, widget):
+		if widget.get_active():
+			if self.audio_state == self.JINGLE_STATE_AVAILABLE:
+				sid = gajim.connections[self.account].startVoIP(
+					self.contact.get_full_jid())
+				self.set_audio_state('connecting', sid)
+		else:
+			session = gajim.connections[self.account].get_jingle_session(
+				self.contact.get_full_jid(), self.audio_sid)
+			if session:
+				content = session.get_content('audio')
+				if content:
+					session.remove_content(content.creator, content.name)
+
+	def on_video_button_toggled(self, widget):
+		if widget.get_active():
+			if self.video_state == self.JINGLE_STATE_AVAILABLE:
+				sid = gajim.connections[self.account].startVideoIP(
+					self.contact.get_full_jid())
+				self.set_video_state('connecting', sid)
+		else:
+			session = gajim.connections[self.account].get_jingle_session(
+				self.contact.get_full_jid(), self.video_sid)
+			if session:
+				content = session.get_content('video')
+				if content:
+					session.remove_content(content.creator, content.name)
 
 	def _toggle_gpg(self):
 		if not self.gpg_is_active and not self.contact.keyID:
@@ -1816,7 +1968,7 @@ class ChatControl(ChatControlBase):
 			'status': status_string, 'authenticated': authenticated_string,
 			'logged': logged_string}
 
-		self.lock_tooltip.set_tip(self.authentication_button, tooltip)
+		self.authentication_button.set_tooltip_text(tooltip)
 		self.widget_set_visible(self.authentication_button, not visible)
 		self.lock_image.set_sensitive(enc_enabled)
 
@@ -2094,13 +2246,16 @@ class ChatControl(ChatControlBase):
 			label_str = '<b>' + unread + label_str + '</b>'
 		return (label_str, color)
 
-	def get_tab_image(self):
+	def get_tab_image(self, count_unread=True):
 		if self.resource:
 			jid = self.contact.get_full_jid()
 		else:
 			jid = self.contact.jid
-		num_unread = len(gajim.events.get_events(self.account, jid,
-			['printed_' + self.type_id, self.type_id]))
+		if count_unread:
+			num_unread = len(gajim.events.get_events(self.account, jid,
+				['printed_' + self.type_id, self.type_id]))
+		else:
+			num_unread = 0
 		# Set tab image (always 16x16); unread messages show the 'event' image
 		tab_img = None
 
@@ -2115,177 +2270,23 @@ class ChatControl(ChatControlBase):
 				# For transient contacts
 				contact = self.contact
 			img_16 = gajim.interface.roster.get_appropriate_state_images(
-				self.contact.jid, icon_name = contact.show)
+				self.contact.jid, icon_name=contact.show)
 			tab_img = img_16[contact.show]
 
 		return tab_img
 
-	def prepare_context_menu(self, hide_buttonbar_entries = False):
+	def prepare_context_menu(self, hide_buttonbar_items=False):
 		'''sets compact view menuitem active state
 		sets active and sensitivity state for toggle_gpg_menuitem
 		sets sensitivity for history_menuitem (False for tranasports)
 		and file_transfer_menuitem
 		and hide()/show() for add_to_roster_menuitem
 		'''
-		xml = gtkgui_helpers.get_glade('chat_control_popup_menu.glade')
-		menu = xml.get_widget('chat_control_popup_menu')
-
-		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
-		history_menuitem = xml.get_widget('history_menuitem')
-		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
-		toggle_e2e_menuitem = xml.get_widget('toggle_e2e_menuitem')
-		otr_submenu = xml.get_widget('otr_submenu')
-		otr_settings_menuitem = xml.get_widget('otr_settings_menuitem')
-		smp_otr_menuitem = xml.get_widget('smp_otr_menuitem')
-		start_otr_menuitem = xml.get_widget('start_otr_menuitem')
-		end_otr_menuitem = xml.get_widget('end_otr_menuitem')
-		send_file_menuitem = xml.get_widget('send_file_menuitem')
-		information_menuitem = xml.get_widget('information_menuitem')
-		convert_to_gc_menuitem = xml.get_widget('convert_to_groupchat')
-		separatormenuitem1 = xml.get_widget('separatormenuitem1')
-		separatormenuitem2 = xml.get_widget('separatormenuitem2')
-
-		# add a special img for send file menuitem
-		path_to_upload_img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'upload.png')
-		img = gtk.Image()
-		img.set_from_file(path_to_upload_img)
-		send_file_menuitem.set_image(img)
-
-		muc_icon = gtkgui_helpers.load_icon('muc_active')
-		if muc_icon:
-			convert_to_gc_menuitem.set_image(muc_icon)
-
-		if not hide_buttonbar_entries:
-			history_menuitem.show()
-			send_file_menuitem.show()
-			information_menuitem.show()
-			convert_to_gc_menuitem.show()
-			separatormenuitem1.show()
-			separatormenuitem2.show()
-
-		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
-		send_file_menuitem.add_accelerator('activate', ag, gtk.keysyms.f, gtk.gdk.CONTROL_MASK,
-			gtk.ACCEL_VISIBLE)
-		convert_to_gc_menuitem.add_accelerator('activate', ag, gtk.keysyms.g, gtk.gdk.CONTROL_MASK,
-			gtk.ACCEL_VISIBLE)
-		history_menuitem.add_accelerator('activate', ag, gtk.keysyms.h, gtk.gdk.CONTROL_MASK,
-			gtk.ACCEL_VISIBLE)
-		information_menuitem.add_accelerator('activate', ag, gtk.keysyms.i,
-			gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
-
-		contact = self.parent_win.get_active_contact()
-		jid = contact.jid
-
-		e2e_is_active = self.session is not None and self.session.enable_encryption
-
-		# check if we support and use gpg
-		if not gajim.config.get_per('accounts', self.account, 'keyid') or\
-		not gajim.connections[self.account].USE_GPG or\
-		gajim.jid_is_transport(jid):
-			toggle_gpg_menuitem.set_sensitive(False)
-		else:
-			toggle_gpg_menuitem.set_sensitive(self.gpg_is_active or not e2e_is_active)
-			toggle_gpg_menuitem.set_active(self.gpg_is_active)
-
-		# disable esessions if we or the other client don't support them
-		# XXX: Once we have fallback to disco, remove notexistant check
-		if not gajim.HAVE_PYCRYPTO or \
-		not gajim.capscache.is_supported(contact, NS_ESESSION) or \
-		gajim.capscache.is_supported(contact, 'notexistant') or \
-		not gajim.config.get_per('accounts', self.account, 'enable_esessions'):
-			toggle_e2e_menuitem.set_sensitive(False)
-		else:
-			toggle_e2e_menuitem.set_active(e2e_is_active)
-			toggle_e2e_menuitem.set_sensitive(e2e_is_active or not self.gpg_is_active)
-
-		# add_to_roster_menuitem
-		if not hide_buttonbar_entries and _('Not in Roster') in contact.groups:
-			add_to_roster_menuitem.show()
-
-		# check if it's possible to send a file
-		if gajim.capscache.is_supported(contact, NS_FILE):
-			send_file_menuitem.set_sensitive(True)
-		else:
-			send_file_menuitem.set_sensitive(False)
-
-		# check if it's possible to convert to groupchat
-		if gajim.capscache.is_supported(contact, NS_MUC):
-			convert_to_gc_menuitem.set_sensitive(True)
-		else:
-			convert_to_gc_menuitem.set_sensitive(False)
-
-		# connect signals
-		id_ = history_menuitem.connect('activate',
-			self._on_history_menuitem_activate)
-		self.handlers[id_] = history_menuitem
-		id_ = send_file_menuitem.connect('activate',
-			self._on_send_file_menuitem_activate)
-		self.handlers[id_] = send_file_menuitem
-		id_ = add_to_roster_menuitem.connect('activate',
-			self._on_add_to_roster_menuitem_activate)
-		self.handlers[id_] = add_to_roster_menuitem
-		id_ = toggle_gpg_menuitem.connect('activate',
-			self._on_toggle_gpg_menuitem_activate)
-		self.handlers[id_] = toggle_gpg_menuitem
-		id_ = toggle_e2e_menuitem.connect('activate',
-			self._on_toggle_e2e_menuitem_activate)
-		self.handlers[id_] = toggle_e2e_menuitem
-		id_ = information_menuitem.connect('activate',
-			self._on_contact_information_menuitem_activate)
-		self.handlers[id_] = information_menuitem
-		id_ = convert_to_gc_menuitem.connect('activate',
-			self._on_convert_to_gc_menuitem_activate)
-		self.handlers[id_] = convert_to_gc_menuitem
-
-		if gajim.otr_module:
-			otr_submenu.set_sensitive(True)
-			id_ = otr_settings_menuitem.connect('activate',
-					self._on_otr_settings_menuitem_activate)
-			self.handlers[id_] = otr_settings_menuitem
-
-			id_ = start_otr_menuitem.connect('activate',
-					self._on_start_otr_menuitem_activate)
-			self.handlers[id_] = start_otr_menuitem
-
-			id_ = end_otr_menuitem.connect('activate',
-					self._on_end_otr_menuitem_activate)
-			self.handlers[id_] = end_otr_menuitem
-
-			id_ = smp_otr_menuitem.connect('activate',
-					self._on_smp_otr_menuitem_activate)
-			self.handlers[id_] = smp_otr_menuitem
-
-			ctx = gajim.otr_module.otrl_context_find(
-					gajim.connections[self.account].otr_userstates,
-					self.contact.get_full_jid().encode(),
-					gajim.get_jid_from_account(self.account).encode(),
-					gajim.OTR_PROTO, 1, (gajim.otr_add_appdata, self.account))[0]
-			# can end only when PLAINTEXT
-			end_otr_menuitem.set_sensitive(ctx.msgstate !=
-					gajim.otr_module.OTRL_MSGSTATE_PLAINTEXT)
-			# can SMP only when ENCRYPTED
-			smp_otr_menuitem.set_sensitive(ctx.msgstate ==
-					gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED)
-
-		menu.connect('selection-done', self.destroy_menu,
-			send_file_menuitem, convert_to_gc_menuitem,
-			information_menuitem, history_menuitem)
+		menu = gui_menu_builder.get_contact_menu(self.contact, self.account,
+			use_multiple_contacts=False, show_start_chat=False,
+			show_encryption=True, control=self,
+			show_buttonbar_items=not hide_buttonbar_items)
 		return menu
-
-	def destroy_menu(self, menu, send_file_menuitem,
-	convert_to_gc_menuitem, information_menuitem, history_menuitem):
-		# destroy accelerators
-		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
-		send_file_menuitem.remove_accelerator(ag, gtk.keysyms.f,
-			gtk.gdk.CONTROL_MASK)
-		convert_to_gc_menuitem.remove_accelerator(ag, gtk.keysyms.g,
-			gtk.gdk.CONTROL_MASK)
-		information_menuitem.remove_accelerator(ag, gtk.keysyms.i,
-			gtk.gdk.CONTROL_MASK)
-		history_menuitem.remove_accelerator(ag, gtk.keysyms.h,
-			gtk.gdk.CONTROL_MASK)
-		# destroy menu
-		menu.destroy()
 
 	def send_chatstate(self, state, contact = None):
 		''' sends OUR chatstate as STANDLONE chat state message (eg. no body)
@@ -2370,9 +2371,6 @@ class ChatControl(ChatControlBase):
 			self.reset_kbd_mouse_timeout_vars()
 
 	def shutdown(self):
-		# destroy banner tooltip - bug #pygtk for that!
-		self.status_tooltip.destroy()
-
 		# Send 'gone' chatstate
 		self.send_chatstate('gone', self.contact)
 		self.contact.chatstate = None
@@ -2797,8 +2795,8 @@ class ChatControl(ChatControlBase):
 			ctx = gajim.otr_module.otrl_context_find(
 					gajim.connections[self.account].otr_userstates,
 					self.contact.get_full_jid().encode(),
-					gajim.get_jid_from_account(self.account).encode(), gajim.OTR_PROTO, 1,
-					(gajim.otr_add_appdata, self.account))[0]
+					gajim.get_jid_from_account(self.account).encode(),
+					gajim.OTR_PROTO, 1, (gajim.otr_add_appdata, self.account))[0]
 			if ctx and ctx.msgstate == gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED:
 				self._on_end_otr_menuitem_activate()
 
@@ -2817,16 +2815,20 @@ class ChatControl(ChatControlBase):
 	def _on_end_otr_menuitem_activate(self, *args):
 		fjid = self.contact.get_full_jid()
 		thread_id = None
+
 		if self.session:
 			thread_id = self.session.thread_id
+
 		gajim.otr_module.otrl_message_disconnect(
-			gajim.connections[self.account].otr_userstates, (gajim.otr_ui_ops,
-			{'account': self.account, 'urgent': True,
-				'thread_id':thread_id}),
-			gajim.get_jid_from_account(self.account).encode(),
-			gajim.OTR_PROTO, fjid.encode())
-		gajim.otr_ui_ops.gajim_log(_('Private conversation with ' \
-			'%s lost.') % fjid, self.account, fjid.encode())
+				gajim.connections[self.account].otr_userstates, (gajim.otr_ui_ops,
+				{'account': self.account,
+					'urgent': True,
+					'thread_id':thread_id,}),
+				gajim.get_jid_from_account(self.account).encode(),
+				gajim.OTR_PROTO, fjid.encode())
+
+		gajim.otr_ui_ops.gajim_log(_('Private conversation with %s lost.') % \
+				fjid, self.account, fjid.encode())
 		self.update_otr()
 	def _on_otr_settings_menuitem_activate(self, *args):
 		gajim.otr_windows.ContactOtrWindow(self.contact.get_full_jid(),

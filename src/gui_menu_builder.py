@@ -189,6 +189,9 @@ control=None):
 	encryption_separator = xml.get_widget('encryption_separator')
 	toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
 	toggle_e2e_menuitem = xml.get_widget('toggle_e2e_menuitem')
+	otr_submenu = xml.get_widget('otr_submenu')
+	otr_settings_menuitem, smp_otr_menuitem, start_otr_menuitem, \
+			end_otr_menuitem = otr_submenu.get_submenu().get_children()
 	last_separator = xml.get_widget('last_separator')
 
 	items_to_hide = []
@@ -276,7 +279,7 @@ control=None):
 
 	if not show_encryption or not control:
 		items_to_hide += [encryption_separator, toggle_gpg_menuitem,
-			toggle_e2e_menuitem]
+			toggle_e2e_menuitem, otr_submenu]
 	else:
 		e2e_is_active = control.session is not None and \
 			control.session.enable_encryption
@@ -306,6 +309,34 @@ control=None):
 				not control.gpg_is_active)
 			toggle_e2e_menuitem.connect('activate',
 				control._on_toggle_e2e_menuitem_activate)
+
+		if gajim.otr_module:
+			otr_submenu.set_sensitive(True)
+			otr_settings_menuitem.connect('activate',
+					control._on_otr_settings_menuitem_activate)
+
+			start_otr_menuitem.connect('activate',
+					control._on_start_otr_menuitem_activate)
+
+			end_otr_menuitem.connect('activate',
+					control._on_end_otr_menuitem_activate)
+
+			smp_otr_menuitem.connect('activate',
+					control._on_smp_otr_menuitem_activate)
+
+			ctx = gajim.otr_module.otrl_context_find(
+					gajim.connections[account].otr_userstates,
+					contact.get_full_jid().encode(),
+					gajim.get_jid_from_account(account).encode(),
+					gajim.OTR_PROTO, 1, (gajim.otr_add_appdata, account))[0]
+			# can end only when PLAINTEXT
+			end_otr_menuitem.set_sensitive(ctx.msgstate !=
+					gajim.otr_module.OTRL_MSGSTATE_PLAINTEXT)
+			# can SMP only when ENCRYPTED
+			smp_otr_menuitem.set_sensitive(ctx.msgstate ==
+					gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED)
+		else:
+			otr_submenu.set_sensitive(False)
 
 	if not show_buttonbar_items:
 		items_to_hide += [history_menuitem, send_file_menuitem,
