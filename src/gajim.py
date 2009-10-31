@@ -454,8 +454,8 @@ class PassphraseRequest:
 				return
 			elif result == 'expired':
 				dialogs.ErrorDialog(_('GPG key expired'),
-					_('Your GPG key has expied, you will be connected to %s without '
-					'OpenPGP.') % account)
+					_('Your GPG key has expired, you will be connected to %s without'
+					' OpenPGP.') % account)
 				# Don't try to connect with GPG
 				gajim.connections[account].continue_connect_info[2] = False
 				self.complete(None)
