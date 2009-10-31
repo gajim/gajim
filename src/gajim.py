@@ -3530,6 +3530,8 @@ class Interface:
 		self.default_colors = {
 			'inmsgcolor': gajim.config.get('inmsgcolor'),
 			'outmsgcolor': gajim.config.get('outmsgcolor'),
+			'inmsgtxtcolor': gajim.config.get('inmsgtxtcolor'),
+			'outmsgtxtcolor': gajim.config.get('outmsgtxtcolor'),
 			'statusmsgcolor': gajim.config.get('statusmsgcolor'),
 			'urlmsgcolor': gajim.config.get('urlmsgcolor'),
 		}

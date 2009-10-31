@@ -4346,7 +4346,7 @@ class TransformChatToMUC:
 		gajim.automatic_rooms[self.account][room_jid]['invities'] = guest_list
 		gajim.automatic_rooms[self.account][room_jid]['continue_tag'] = True
 		gajim.interface.join_gc_room(self.account, room_jid,
-									 gajim.nicks[self.account], None, is_continued=True)
+			gajim.nicks[self.account], None, is_continued=True)
 		self.window.destroy()
 
 	def on_cancel_button_clicked(self, widget):
@@ -4354,8 +4354,8 @@ class TransformChatToMUC:
 
 	def unique_room_id_error(self, server):
 		self.unique_room_id_supported(server,
-									  gajim.nicks[self.account].lower().replace(' ','') + str(randrange(
-										  9999999)))
+			gajim.nicks[self.account].lower().replace(' ','') + str(randrange(
+			9999999)))
 
 class DataFormWindow(Dialog):
 	def __init__(self, form, on_response_ok):
