@@ -4983,12 +4983,12 @@ msgstr "zwanzig nach %(0)s"
 #: ../src/common/fuzzyclock.py:45
 #, python-format
 msgid "twenty five past %(0)s"
-msgstr "fünfundzwanzig  nach %(0)s"
+msgstr "fünf vor %(1)s"
 
 #: ../src/common/fuzzyclock.py:46
 #, python-format
 msgid "half past %(0)s"
-msgstr "dreißig nach %(0)s"
+msgstr "halb %(1)s"
 
 #: ../src/common/fuzzyclock.py:46
 #, python-format
