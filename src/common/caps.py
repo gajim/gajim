@@ -278,7 +278,7 @@ class CapsCache(object):
 					
 			identities = property(_get_identities, _set_identities)
 
-			def update(self, identities, features):
+			def set_and_store(self, identities, features):
 				self.identities = identities
 				self.features = features
 				self._logger.add_caps_entry(self.hash_method, self.hash,
@@ -391,7 +391,7 @@ class ConnectionCaps(object):
 			hash_is_valid = validate(identities, features, dataforms)
 			
 			if hash_is_valid:
-				cache_item.update(identities, features)
+				cache_item.set_and_store(identities, features)
 			else:
 				contact.client_caps = NullClientCaps()
 

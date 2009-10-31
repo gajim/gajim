@@ -55,11 +55,11 @@ class TestCapsCache(CommonCapsTest):
 		self.assertEqual('client', identity['category'])
 		self.assertEqual('pc', identity['type'])
 		
-	def test_update(self):
+	def test_set_and_store(self):
 		''' Test client_caps update gets logged into db '''
 		
 		item = self.cc[self.client_caps]
-		item.update(self.identities, self.features)
+		item.set_and_store(self.identities, self.features)
 		
 		self.logger.mockCheckCall(0, "add_caps_entry", self.caps_method,
 				self.caps_hash, self.identities, self.features)
