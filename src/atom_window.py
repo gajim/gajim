@@ -27,6 +27,7 @@ import gobject
 
 import gtkgui_helpers
 from common import helpers
+from common import i18n
 
 class AtomWindow:
 	window = None
@@ -106,9 +107,10 @@ class AtomWindow:
 		changed...'''
 		count = len(self.__class__.entries)
 		if count>0:
-			self.new_entry_label.set_text(
-				_('You have received new entries (and %(count)d not displayed):') %\
-				{'count': count})
+			self.new_entry_label.set_text(i18n.ngettext(
+				'You have received new entries (and %d not displayed):',
+				'You have received new entries (and %d not displayed):', count,
+				count, count))
 			self.next_button.set_sensitive(True)
 		else:
 			self.new_entry_label.set_text(_('You have received new entry:'))

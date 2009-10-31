@@ -1191,7 +1191,7 @@ def get_notification_icon_tooltip_dict():
 					'%d event pending',
 					'%d events pending',
 					total_non_messages, total_non_messages, total_non_messages)
-				accounts[account]['event_lines'].append(text)
+				account['event_lines'].append(text)
 			else:
 				for jid in non_messages.keys():
 					text = ngettext(
@@ -1199,7 +1199,7 @@ def get_notification_icon_tooltip_dict():
 						'%d events pending',
 						non_messages[jid], non_messages[jid], non_messages[jid])
 					text += _(' from user %s') % (jid)
-					accounts[account]['event_lines'].append(text)
+					account[account]['event_lines'].append(text)
 
 	return accounts
 
@@ -1357,6 +1357,12 @@ def update_optional_features(account = None):
 			gajim.gajim_optional_features[a].append(xmpp.NS_ESESSION)
 		if gajim.config.get_per('accounts', a, 'answer_receipts'):
 			gajim.gajim_optional_features[a].append(xmpp.NS_RECEIPTS)
+		if gajim.HAVE_FARSIGHT:
+			gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE)
+			gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_RTP)
+			gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_RTP_AUDIO)
+			gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_RTP_VIDEO)
+			gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_ICE_UDP)
 		gajim.caps_hash[a] = compute_caps_hash([gajim.gajim_identity],
 			gajim.gajim_common_features + gajim.gajim_optional_features[a])
 		# re-send presence with new hash

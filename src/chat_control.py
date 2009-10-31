@@ -2239,29 +2239,33 @@ class ChatControl(ChatControlBase):
 
 		if gajim.otr_module:
 			otr_submenu.set_sensitive(True)
-			id = otr_settings_menuitem.connect('activate',
-				self._on_otr_settings_menuitem_activate)
-			self.handlers[id] = otr_settings_menuitem
-			id = start_otr_menuitem.connect('activate',
-				self._on_start_otr_menuitem_activate)
-			self.handlers[id] = start_otr_menuitem
-			id = end_otr_menuitem.connect('activate',
-				self._on_end_otr_menuitem_activate)
-			self.handlers[id] = end_otr_menuitem
-			id = smp_otr_menuitem.connect('activate',
-				self._on_smp_otr_menuitem_activate)
-			self.handlers[id] = smp_otr_menuitem
+			id_ = otr_settings_menuitem.connect('activate',
+					self._on_otr_settings_menuitem_activate)
+			self.handlers[id_] = otr_settings_menuitem
 
-			ctx = gajim.otr_module.otrl_context_find(gajim.connections[self.account].otr_userstates,
-				self.contact.get_full_jid().encode(),
-				gajim.get_jid_from_account(self.account).encode(), gajim.OTR_PROTO, 1,
-				(gajim.otr_add_appdata, self.account))[0]
+			id_ = start_otr_menuitem.connect('activate',
+					self._on_start_otr_menuitem_activate)
+			self.handlers[id_] = start_otr_menuitem
+
+			id_ = end_otr_menuitem.connect('activate',
+					self._on_end_otr_menuitem_activate)
+			self.handlers[id_] = end_otr_menuitem
+
+			id_ = smp_otr_menuitem.connect('activate',
+					self._on_smp_otr_menuitem_activate)
+			self.handlers[id_] = smp_otr_menuitem
+
+			ctx = gajim.otr_module.otrl_context_find(
+					gajim.connections[self.account].otr_userstates,
+					self.contact.get_full_jid().encode(),
+					gajim.get_jid_from_account(self.account).encode(),
+					gajim.OTR_PROTO, 1, (gajim.otr_add_appdata, self.account))[0]
 			# can end only when PLAINTEXT
 			end_otr_menuitem.set_sensitive(ctx.msgstate !=
-				gajim.otr_module.OTRL_MSGSTATE_PLAINTEXT)
+					gajim.otr_module.OTRL_MSGSTATE_PLAINTEXT)
 			# can SMP only when ENCRYPTED
 			smp_otr_menuitem.set_sensitive(ctx.msgstate ==
-				gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED)
+					gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED)
 
 		menu.connect('selection-done', self.destroy_menu,
 			send_file_menuitem, convert_to_gc_menuitem,

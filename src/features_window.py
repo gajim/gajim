@@ -111,6 +111,10 @@ class FeaturesWindow:
 				_('Ability to have clickable URLs in chat and groupchat window banners.'),
 				_('Requires python-sexy.'),
 				_('Requires python-sexy.')),
+			_('Audio / Video'): (self.farsight_available,
+				_('Ability to start audio and video chat.'),
+				_('Requires python-farsight.'),
+				_('Feature not available under Windows.')),
 		}
 
 		# name, supported
@@ -273,5 +277,8 @@ class FeaturesWindow:
 
 	def pysexy_available(self):
 		return gajim.HAVE_PYSEXY
+
+	def farsight_available(self):
+		return gajim.HAVE_FARSIGHT
 
 # vim: se ts=3:

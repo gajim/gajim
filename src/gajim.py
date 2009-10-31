@@ -884,10 +884,10 @@ class Interface:
 	def unblock_signed_in_notifications(self, account):
 		gajim.block_signed_in_notifications[account] = False
 
-	def handle_event_status(self, account, status): # OUR status
-		#('STATUS', account, status)
+	def handle_event_status(self, account, show): # OUR status
+		#('STATUS', account, show)
 		model = self.roster.status_combobox.get_model()
-		if status in ('offline', 'error'):
+		if show in ('offline', 'error'):
 			for name in self.instances[account]['online_dialog'].keys():
 				# .keys() is needed to not have a dictionary length changed during
 				# iteration error
@@ -899,7 +899,7 @@ class Interface:
 			# .keys() is needed because dict changes during loop
 			for account in self.pass_dialog.keys():
 				self.pass_dialog[account].window.destroy()
-		if status == 'offline':
+		if show == 'offline':
 			# sensitivity for this menuitem
 			if gajim.get_number_of_connected_accounts() == 0:
 				model[self.roster.status_message_menuitem_iter][3] = False
@@ -920,7 +920,7 @@ class Interface:
 			ctrls += self.minimized_controls[account].values()
 		for ctrl in ctrls:
 			if ctrl.account == account:
-				if status == 'offline' or (status == 'invisible' and \
+				if show == 'offline' or (show == 'invisible' and \
 				gajim.connections[account].is_zeroconf):
 					ctrl.got_disconnected()
 				else:
@@ -930,12 +930,12 @@ class Interface:
 				if ctrl.parent_win:
 					ctrl.parent_win.redraw_tab(ctrl)
 
-		self.roster.on_status_changed(account, status)
-		if account in self.show_vcard_when_connect and status not in ('offline',
+		self.roster.on_status_changed(account, show)
+		if account in self.show_vcard_when_connect and show not in ('offline',
 		'error'):
 			self.edit_own_details(account)
 		if self.remote_ctrl:
-			self.remote_ctrl.raise_signal('AccountPresence', (status, account))
+			self.remote_ctrl.raise_signal('AccountPresence', (show, account))
 
 	def edit_own_details(self, account):
 		jid = gajim.get_jid_from_account(account)
@@ -2223,6 +2223,10 @@ class Interface:
 			nick = gc_control.nick
 			password = gajim.gc_passwords.get(room_jid, '')
 			gajim.connections[account].join_gc(nick, room_jid, password)
+		# send currently played music
+		if gajim.connections[account].pep_supported and dbus_support.supported \
+		and gajim.config.get_per('accounts', account, 'publish_tune'):
+			self.enable_music_listener()
 
 	def handle_event_metacontacts(self, account, tags_list):
 		gajim.contacts.define_metacontacts(account, tags_list)
@@ -2378,9 +2382,107 @@ class Interface:
 			gajim.config.set_per('accounts', account, 'resource', new_resource)
 			self.roster.send_status(account, gajim.connections[account].old_show,
 				gajim.connections[account].status)
-		dlg = dialogs.InputDialog(_('Resource Conflict'),
-			_('You are already connected to this account with the same resource. Please type a new one'), input_str = gajim.connections[account].server_resource,
-			is_modal = False, ok_handler = on_ok)
+		proposed_resource = gajim.connections[account].server_resource
+		proposed_resource += gajim.config.get('gc_proposed_nick_char')
+		dlg = dialogs.ResourceConflictDialog(_('Resource Conflict'),
+			_('You are already connected to this account with the same resource. '
+			'Please type a new one'), resource=proposed_resource, ok_handler=on_ok)
+
+	def handle_event_jingle_incoming(self, account, data):
+		# ('JINGLE_INCOMING', account, peer jid, sid, tuple-of-contents==(type,
+		# data...))
+		# TODO: conditional blocking if peer is not in roster
+
+		# unpack data
+		peerjid, sid, contents = data
+		content_types = set(c[0] for c in contents)
+
+		# check type of jingle session
+		if 'audio' in content_types or 'video' in content_types:
+			# a voip session...
+			# we now handle only voip, so the only thing we will do here is
+			# not to return from function
+			pass
+		else:
+			# unknown session type... it should be declined in common/jingle.py
+			return
+
+		jid = gajim.get_jid_without_resource(peerjid)
+		resource = gajim.get_resource_from_jid(peerjid)
+		ctrl = self.msg_win_mgr.get_control(peerjid, account)
+		if not ctrl:
+			ctrl = self.msg_win_mgr.get_control(jid, account)
+		if ctrl:
+			if 'audio' in content_types:
+				ctrl.set_audio_state('connection_received', sid)
+			if 'video' in content_types:
+				ctrl.set_video_state('connection_received', sid)
+
+		dlg = dialogs.VoIPCallReceivedDialog.get_dialog(peerjid, sid)
+		if dlg:
+			dlg.add_contents(content_types)
+			return
+
+		if helpers.allow_popup_window(account):
+			dialogs.VoIPCallReceivedDialog(account, peerjid, sid, content_types)
+			return
+
+		self.add_event(account, peerjid, 'jingle-incoming', (peerjid, sid,
+			content_types))
+
+		if helpers.allow_showing_notification(account):
+			# TODO: we should use another pixmap ;-)
+			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
+				'ft_request.png')
+			txt = _('%s wants to start a voice chat.') % gajim.get_name_from_jid(
+				account, peerjid)
+			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+			event_type = _('Voice Chat Request')
+			notify.popup(event_type, peerjid, account, 'jingle-incoming',
+				path_to_image = path, title = event_type, text = txt)
+
+	def handle_event_jingle_connected(self, account, data):
+		# ('JINGLE_CONNECTED', account, (peerjid, sid, media))
+		peerjid, sid, media = data
+		if media in ('audio', 'video'):
+			jid = gajim.get_jid_without_resource(peerjid)
+			resource = gajim.get_resource_from_jid(peerjid)
+			ctrl = self.msg_win_mgr.get_control(peerjid, account)
+			if not ctrl:
+				ctrl = self.msg_win_mgr.get_control(jid, account)
+			if ctrl:
+				if media == 'audio':
+					ctrl.set_audio_state('connected', sid)
+				else:
+					ctrl.set_video_state('connected', sid)
+
+	def handle_event_jingle_disconnected(self, account, data):
+		# ('JINGLE_DISCONNECTED', account, (peerjid, sid, reason))
+		peerjid, sid, media, reason = data
+		jid = gajim.get_jid_without_resource(peerjid)
+		resource = gajim.get_resource_from_jid(peerjid)
+		ctrl = self.msg_win_mgr.get_control(peerjid, account)
+		if not ctrl:
+			ctrl = self.msg_win_mgr.get_control(jid, account)
+		if ctrl:
+			if media in ('audio', None):
+				ctrl.set_audio_state('stop', sid=sid, reason=reason)
+			if media in ('video', None):
+				ctrl.set_video_state('stop', sid=sid, reason=reason)
+		dialog = dialogs.VoIPCallReceivedDialog.get_dialog(peerjid, sid)
+		if dialog:
+			dialog.dialog.destroy()
+
+	def handle_event_jingle_error(self, account, data):
+		# ('JINGLE_ERROR', account, (peerjid, sid, reason))
+		peerjid, sid, reason = data
+		jid = gajim.get_jid_without_resource(peerjid)
+		resource = gajim.get_resource_from_jid(peerjid)
+		ctrl = self.msg_win_mgr.get_control(peerjid, account)
+		if not ctrl:
+			ctrl = self.msg_win_mgr.get_control(jid, account)
+		if ctrl:
+			ctrl.set_audio_state('error', reason=reason)
 
 	def handle_event_pep_config(self, account, data):
 		# ('PEP_CONFIG', account, (node, form))
@@ -2639,8 +2741,22 @@ class Interface:
 			'INSECURE_SSL_CONNECTION': self.handle_event_insecure_ssl_connection,
 			'PUBSUB_NODE_REMOVED': self.handle_event_pubsub_node_removed,
 			'PUBSUB_NODE_NOT_REMOVED': self.handle_event_pubsub_node_not_removed,
+			'JINGLE_INCOMING': self.handle_event_jingle_incoming,
+			'JINGLE_CONNECTED': self.handle_event_jingle_connected,
+			'JINGLE_DISCONNECTED': self.handle_event_jingle_disconnected,
+			'JINGLE_ERROR': self.handle_event_jingle_error,
 		}
-		gajim.handlers = self.handlers
+	
+	def dispatch(self, event, account, data):
+		'''
+		Dispatches an network event to the event handlers of this class
+		'''
+		if event not in self.handlers:
+			log.warning('Unknown event %s dispatched to GUI: %s' % (event, data))
+		else:
+			log.debug('Event %s distpached to GUI: %s' % (event, data))
+			self.handlers[event](account, data)
+		
 
 ################################################################################
 ### Methods dealing with gajim.events
@@ -2653,7 +2769,7 @@ class Interface:
 		jid = gajim.get_jid_without_resource(jid)
 		no_queue = len(gajim.events.get_events(account, jid)) == 0
 		# type_ can be gc-invitation file-send-error file-error file-request-error
-		# file-request file-completed file-stopped
+		# file-request file-completed file-stopped jingle-incoming
 		# event_type can be in advancedNotificationWindow.events_list
 		event_types = {'file-request': 'ft_request',
 			'file-completed': 'ft_finished'}
@@ -2813,6 +2929,11 @@ class Interface:
 			self.show_unsubscribed_dialog(account, contact)
 			gajim.events.remove_events(account, jid, event)
 			self.roster.draw_contact(jid, account)
+		elif type_ == 'jingle-incoming':
+ 			event = gajim.events.get_first_event(account, jid, type_)
+ 			peerjid, sid, content_types = event.parameters
+ 			dialogs.VoIPCallReceivedDialog(account, peerjid, sid, content_types)
+ 			gajim.events.remove_events(account, jid, event)
 		if w:
 			w.set_active_tab(ctrl)
 			w.window.window.focus(gtk.get_current_event_time())
@@ -2911,7 +3032,7 @@ class Interface:
 		#detects eg. *b* *bold* *bold bold* test *bold* *bold*! (*bold*)
 		#doesn't detect (it's a feature :P) * bold* *bold * * bold * test*bold*
 		formatting = r'|(?<!\w)' r'\*[^\s*]' r'([^*]*[^\s*])?' r'\*(?!\w)|'\
-			r'(?<!\w|\<)' r'/[^\s/]' r'([^/]*[^\s/])?' r'/(?!\w)|'\
+			r'(?<!\S)' r'/[^\s/]' r'([^/]*[^\s/])?' r'/(?!\S)|'\
 			r'(?<!\w)' r'_[^\s_]' r'([^_]*[^\s_])?' r'_(?!\w)'
 
 		latex = r'|\$\$[^$\\]*?([\]\[0-9A-Za-z()|+*/-]|[\\][\]\[0-9A-Za-z()|{}$])(.*?[^\\])?\$\$'
@@ -3671,12 +3792,6 @@ class Interface:
 					pass
 		gobject.timeout_add_seconds(5, remote_init)
 
-		for account in gajim.connections:
-			if gajim.config.get_per('accounts', account, 'publish_tune') and \
-			dbus_support.supported:
-				self.enable_music_listener()
-				break
-
 	def __init__(self):
 		gajim.interface = self
 		gajim.thread_interface = ThreadInterface
@@ -3880,6 +3995,8 @@ class Interface:
 			self.systray_capabilities = systray.HAS_SYSTRAY_CAPABILITIES
 			if self.systray_capabilities:
 				self.systray = systray.Systray()
+			else:
+				gajim.config.set('trayicon', 'never')
 
 		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'gajim.png')
 		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)

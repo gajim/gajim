@@ -27,7 +27,7 @@ docdir = '../'
 datadir = '../'
 localedir = '../po'
 
-version = '0.12.5.6-dev'
+version = '0.12.5.7-dev'
 
 import sys, os.path
 for base in ('.', 'common'):

@@ -146,6 +146,7 @@ class MessageWindow(object):
 		else:
 			self.notebook.set_show_tabs(False)
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
+		self.show_icon()
 
 	def change_account_name(self, old_name, new_name):
 		if old_name in self._controls:
@@ -417,6 +418,29 @@ class MessageWindow(object):
 		'''When close button is pressed: close a tab'''
 		self.remove_tab(control, self.CLOSE_CLOSE_BUTTON)
 
+	def show_icon(self):
+		window_mode = gajim.interface.msg_win_mgr.mode
+		icon = None
+		if window_mode == MessageWindowMgr.ONE_MSG_WINDOW_NEVER:
+			ctrl = self.get_active_control()
+			if not ctrl:
+				return
+			icon = ctrl.get_tab_image(count_unread=False)
+		elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS:
+			pass # keep default icon
+		elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
+			pass # keep default icon
+		elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERACCT:
+			pass # keep default icon
+		elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE:
+			if self.type_ == 'gc':
+				icon = gtkgui_helpers.load_icon('muc_active')
+			else:
+				# chat, pm
+				icon = gtkgui_helpers.load_icon('online')
+		if icon:
+			self.window.set_icon(icon.get_pixbuf())
+
 	def show_title(self, urgent=True, control=None):
 		'''redraw the window's title'''
 		if not control:
@@ -586,6 +610,8 @@ class MessageWindow(object):
 				status_img.set_from_animation(tab_img.get_animation())
 			else:
 				status_img.set_from_pixbuf(tab_img.get_pixbuf())
+
+		self.show_icon()
 
 	def repaint_themed_widgets(self):
 		'''Repaint controls in the window with theme color'''

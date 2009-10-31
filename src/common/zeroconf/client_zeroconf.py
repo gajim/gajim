@@ -563,7 +563,7 @@ class P2PConnection(IdleObject, PlugIn):
 
 	def _on_send_failure(self):
 		log.error('Socket error while sending data')
-		self._owner.disconnected()
+		self._owner.on_disconnect()
 		self.sent_data = None
 
 class ClientZeroconf:
@@ -698,9 +698,7 @@ class ClientZeroconf:
 		# look for hashed connections
 		if to in self.recipient_to_hash:
 			conn = self.connections[self.recipient_to_hash[to]]
-			if not stanza.getID():
-				id_ = conn.Dispatcher.getAnID()
-				stanza.setID(id_)
+			id_ = stanza.getID() or ''
 			if conn.add_stanza(stanza, is_message):
 				if on_ok:
 					on_ok(id_)
@@ -710,9 +708,7 @@ class ClientZeroconf:
 			hash_ = self.ip_to_hash[item['address']]
 			if self.hash_to_port[hash_] == item['port']:
 				conn = self.connections[hash_]
-				if not stanza.getID():
-					id_ = conn.Dispatcher.getAnID()
-					stanza.setID(id_)
+				id_ = stanza.getID() or ''
 				if conn.add_stanza(stanza, is_message):
 					if on_ok:
 						on_ok(id_)

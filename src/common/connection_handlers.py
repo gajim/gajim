@@ -52,6 +52,14 @@ from common import exceptions
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.caps import ConnectionCaps
+if gajim.HAVE_FARSIGHT:
+	from common.jingle import ConnectionJingle
+else:
+	class ConnectionJingle():
+		def __init__(self):
+			pass
+		def _JingleCB(self, con, stanza):
+			pass
 
 from common import dbus_support
 if dbus_support.supported:
@@ -897,13 +905,6 @@ class ConnectionDisco:
 					if identity['category'] == 'pubsub' and identity.get('type') == \
 					'pep':
 						self.pep_supported = True
-						if dbus_support.supported:
-							listener = MusicTrackListener.get()
-							track = listener.get_playing_track()
-							if gajim.config.get_per('accounts', self.name,
-							'publish_tune'):
-								gajim.interface.music_track_changed(listener, track,
-									self.name)
 						break
 			if features.__contains__(common.xmpp.NS_VCARD):
 				self.vcard_supported = True
@@ -1465,12 +1466,13 @@ sent a message to.'''
 
 		return sess
 
-class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionCaps, ConnectionHandlersBase):
+class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 	def __init__(self):
 		ConnectionVcard.__init__(self)
 		ConnectionBytestream.__init__(self)
 		ConnectionCommands.__init__(self)
 		ConnectionPubSub.__init__(self)
+		ConnectionJingle.__init__(self)
 		ConnectionHandlersBase.__init__(self)
 		self.gmail_url = None
 
@@ -2414,7 +2416,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					# we are banned
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('You are banned from group chat %s.') % room_jid))
-				elif (errcode == '404') or (errcon == 'item-not-found'):
+				elif (errcode == '404') or (errcon in ('item-not-found',
+				'remote-server-not-found')):
 					if gc_control is None or gc_control.autorejoin is None:
 						# group chat does not exist
 						self.dispatch('ERROR', (_('Unable to join group chat'),
@@ -2746,7 +2749,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		gajim.logger.replace_roster(self.name, roster_version, roster)
 		if received_from_server:
 			for contact in gajim.contacts.iter_contacts(self.name):
-				if not contact.is_groupchat() and contact.jid not in roster:
+				if not contact.is_groupchat() and contact.jid not in roster and \
+				contact.jid != gajim.get_jid_from_account(self.name):
 					self.dispatch('ROSTER_INFO', (contact.jid, None, None, None,
 						()))
 			for jid in roster:
@@ -2917,6 +2921,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			common.xmpp.NS_PRIVACY)
 		con.RegisterHandler('iq', self._PubSubCB, 'result')
 		con.RegisterHandler('iq', self._PubSubErrorCB, 'error')
+		con.RegisterHandler('iq', self._JingleCB, 'result')
+		con.RegisterHandler('iq', self._JingleCB, 'error')
+		con.RegisterHandler('iq', self._JingleCB, 'set',
+			common.xmpp.NS_JINGLE)
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._IqCB)
 		con.RegisterHandler('iq', self._StanzaArrivedCB)

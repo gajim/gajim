@@ -57,3 +57,12 @@ MAINTAINERCLEANDIRS = \
 	autom4te.cache \
 	build \
 	dist
+
+
+test:
+	python test/runtests.py
+.PHONY: test
+
+doc:
+	epydoc --config=doc/epydoc.conf
+.PHONY: doc

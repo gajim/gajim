@@ -292,7 +292,6 @@ class GroupchatControl(ChatControlBase):
 		self.last_key_tabs = False
 
 		self.subject = ''
-		self.subject_tooltip = gtk.Tooltips()
 
 		self.tooltip = tooltips.GCTooltip()
 
@@ -535,7 +534,7 @@ class GroupchatControl(ChatControlBase):
 		label_str = unread + label_str
 		return (label_str, color)
 
-	def get_tab_image(self):
+	def get_tab_image(self, count_unread=True):
 		# Set tab image (always 16x16)
 		tab_image = None
 		if gajim.gc_connected[self.account][self.room_jid]:
@@ -622,18 +621,18 @@ class GroupchatControl(ChatControlBase):
 				subject_text = '<span %s>%s</span>' % (font_attrs_small, subject)
 
 			# tooltip must always hold ALL the subject
-			self.subject_tooltip.set_tip(self.event_box, self.subject)
+			self.event_box.set_tooltip_text(self.subject)
 			self.banner_status_label.show()
 			self.banner_status_label.set_no_show_all(False)
 		else:
 			subject_text = ''
-			self.subject_tooltip.disable()
+			self.event_box.set_has_tooltip(False)
 			self.banner_status_label.hide()
 			self.banner_status_label.set_no_show_all(True)
 
 		self.banner_status_label.set_markup(subject_text)
 
-	def prepare_context_menu(self, hide_buttonbar_entries=False):
+	def prepare_context_menu(self, hide_buttonbar_items=False):
 		'''sets sensitivity state for configure_room'''
 		xml = gtkgui_helpers.get_glade('gc_control_popup_menu.glade')
 		menu = xml.get_widget('gc_control_popup_menu')
@@ -1576,9 +1575,6 @@ class GroupchatControl(ChatControlBase):
 		del win._controls[self.account][self.contact.jid]
 
 	def shutdown(self, status='offline'):
-		# destroy banner tooltip - bug #pygtk for that!
-		self.subject_tooltip.destroy()
-
 		# Preventing autorejoin from being activated
 		self.autorejoin = False
 
@@ -1794,10 +1790,10 @@ class GroupchatControl(ChatControlBase):
 
 			# HACK: Not the best soltution.
 			if (text.startswith(self.COMMAND_PREFIX) and not
-				text.startswith(self.COMMAND_PREFIX * 2) and len(splitted_text) == 1):
+			text.startswith(self.COMMAND_PREFIX * 2) and len(splitted_text) == 1):
 				return super(GroupchatControl,
 					self).handle_message_textview_mykey_press(widget, event_keyval,
-							event_keymod)
+					event_keymod)
 
 			# nick completion
 			# check if tab is pressed with empty message
@@ -1813,8 +1809,8 @@ class GroupchatControl(ChatControlBase):
 			if gc_refer_to_nick_char and begin.endswith(gc_refer_to_nick_char):
 				with_refer_to_nick_char = True
 			if len(self.nick_hits) and self.last_key_tabs and \
-			(text[:-1].endswith(self.nick_hits[0]) or \
-			text[:-2].endswith(self.nick_hits[0])): # we should cycle
+			text[:-len(gc_refer_to_nick_char + ' ')].endswith(self.nick_hits[0]):
+				# we should cycle
 				# Previous nick in list may had a space inside, so we check text and
 				# not splitted_text and store it into 'begin' var
 				self.nick_hits.append(self.nick_hits[0])
@@ -1844,19 +1840,49 @@ class GroupchatControl(ChatControlBase):
 				else:
 					add = ' '
 				start_iter = end_iter.copy()
-				if self.last_key_tabs and with_refer_to_nick_char:
+				if self.last_key_tabs and with_refer_to_nick_char or (text and \
+				text[-1] == ' '):
 					# have to accomodate for the added space from last
 					# completion
-					start_iter.backward_chars(len(begin) + 2)
-				elif self.last_key_tabs:
+					# gc_refer_to_nick_char may be more than one char!
+					start_iter.backward_chars(len(begin) + len(add))
+				elif self.last_key_tabs and not gajim.config.get(
+				'shell_like_completion'):
 					# have to accomodate for the added space from last
 					# completion
-					start_iter.backward_chars(len(begin) + 1)
+					start_iter.backward_chars(len(begin) + \
+						len(gc_refer_to_nick_char))
 				else:
 					start_iter.backward_chars(len(begin))
 
 				message_buffer.delete(start_iter, end_iter)
-				message_buffer.insert_at_cursor(self.nick_hits[0] + add)
+				# get a shell-like completion
+				# if there's more than one nick for this completion, complete only
+				# the part that all these nicks have in common
+				if gajim.config.get('shell_like_completion') and \
+				len(self.nick_hits) > 1:
+					end = False
+					completion = ''
+					add = "" # if nick is not complete, don't add anything
+					while not end and len(completion) < len(self.nick_hits[0]):
+						completion = self.nick_hits[0][:len(completion)+1]
+						for nick in self.nick_hits:
+							if completion.lower() not in nick.lower():
+								end = True
+								completion = completion[:-1]
+								break
+					# if the current nick matches a COMPLETE existing nick,
+					# and if the user tab TWICE, complete that nick (with the "add")
+					if self.last_key_tabs:
+						for nick in self.nick_hits:
+							if nick == completion:
+							# The user seems to want this nick, so
+							# complete it as if it were the only nick
+							# available
+								add = gc_refer_to_nick_char + ' '
+				else:
+					completion = self.nick_hits[0]
+				message_buffer.insert_at_cursor(completion + add)
 				self.last_key_tabs = True
 				return True
 			self.last_key_tabs = False
