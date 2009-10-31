@@ -1356,9 +1356,7 @@ class ChatControl(ChatControlBase):
 
 	def update_toolbar(self):
 		# Formatting
-		if gajim.capscache.is_supported(self.contact, NS_XHTML_IM) \
-		and not gajim.capscache.is_supported(self.contact, 'notexistant') \
-		and not self.gpg_is_active:
+		if self.contact.supports(NS_XHTML_IM) and not self.gpg_is_active:
 			self._formattings_button.set_sensitive(True)
 		else:
 			self._formattings_button.set_sensitive(False)
@@ -1371,15 +1369,15 @@ class ChatControl(ChatControlBase):
 			self._add_to_roster_button.hide()
 
 		# Jingle detection
-		if gajim.capscache.is_supported(self.contact, NS_JINGLE_ICE_UDP) and \
+		if self.contact.supports(NS_JINGLE_ICE_UDP) and \
 		gajim.HAVE_FARSIGHT and self.contact.resource:
-			if gajim.capscache.is_supported(self.contact, NS_JINGLE_RTP_AUDIO):
+			if self.contact.supports(NS_JINGLE_RTP_AUDIO):
 				if self.audio_state == self.JINGLE_STATE_NOT_AVAILABLE:
 					self.set_audio_state('available')
 			else:
 				self.set_audio_state('not_available')
 
-			if gajim.capscache.is_supported(self.contact, NS_JINGLE_RTP_VIDEO):
+			if self.contact.supports(NS_JINGLE_RTP_VIDEO):
 				if self.video_state == self.JINGLE_STATE_NOT_AVAILABLE:
 					self.set_video_state('available')
 			else:
@@ -1403,12 +1401,11 @@ class ChatControl(ChatControlBase):
 			self._video_button.set_sensitive(True)
 
 		# Send file
-		if gajim.capscache.is_supported(self.contact, NS_FILE) and \
-		self.contact.resource:
+		if self.contact.supports(NS_FILE) and self.contact.resource:
 			self._send_file_button.set_sensitive(True)
 		else:
 			self._send_file_button.set_sensitive(False)
-			if not gajim.capscache.is_supported(self.contact, NS_FILE):
+			if not self.contact.supports(NS_FILE):
 				self._send_file_button.set_tooltip_text(_(
 					"This contact does not support file transfer."))
 			else:
@@ -1417,7 +1414,7 @@ class ChatControl(ChatControlBase):
 					"her a file."))
 
 		# Convert to GC
-		if gajim.capscache.is_supported(self.contact, NS_MUC):
+		if self.contact.supports(NS_MUC):
 			self._convert_to_gc_button.set_sensitive(True)
 		else:
 			self._convert_to_gc_button.set_sensitive(False)
@@ -1982,10 +1979,7 @@ class ChatControl(ChatControlBase):
 				self._schedule_activity_timers()
 
 		def _on_sent(id_, contact, message, encrypted, xhtml):
-			# XXX: Once we have fallback to disco, remove notexistant check
-			if gajim.capscache.is_supported(contact, NS_RECEIPTS) \
-			and not gajim.capscache.is_supported(contact,
-			'notexistant') and gajim.config.get_per('accounts',
+			if contact.supports(NS_RECEIPTS) and gajim.config.get_per('accounts',
 			self.account, 'request_receipt'):
 				xep0184_id = id_
 			else:
@@ -2504,12 +2498,8 @@ class ChatControl(ChatControlBase):
 			want_e2e = not e2e_is_active and not self.gpg_is_active \
 				and e2e_pref
 
-			# XXX: Once we have fallback to disco, remove notexistant check
 			if want_e2e and not self.no_autonegotiation \
-			and gajim.HAVE_PYCRYPTO \
-			and gajim.capscache.is_supported(self.contact,
-			NS_ESESSION) and not gajim.capscache.is_supported(
-			self.contact, 'notexistant'):
+			and gajim.HAVE_PYCRYPTO and self.contact.supports(NS_ESESSION):
 				self.begin_e2e_negotiation()
 		else:
 			self.send_chatstate('active', self.contact)

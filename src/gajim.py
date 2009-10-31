@@ -255,6 +255,7 @@ from common import optparser
 from common import dataforms
 from common import passwords
 from common import pep
+from common import caps
 
 gajimpaths = common.configpaths.gajimpaths
 
@@ -3641,6 +3642,12 @@ class Interface:
 			gajim.caps_hash[a] = ''
 
 		helpers.update_optional_features()
+		# prepopulate data which we are sure of; note: we do not log these info
+		for account in gajim.connections:
+			gajimcaps = caps.capscache[('sha-1', gajim.caps_hash[account])]
+			gajimcaps.identities = [gajim.gajim_identity]
+			gajimcaps.features = gajim.gajim_common_features + \
+				gajim.gajim_optional_features[account]
 
 		self.remote_ctrl = None
 

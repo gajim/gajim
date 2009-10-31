@@ -55,7 +55,7 @@ room_account=None, cap=None):
 		else: # start_chat, execute_command, send_file
 			item.connect('activate', action, c, account, c.resource)
 
-		if cap and not gajim.capscache.is_supported(c, cap):
+		if cap and not c.supports(cap):
 			item.set_sensitive(False)
 
 	return sub_menu
@@ -92,7 +92,7 @@ def build_invite_submenu(invite_menuitem, list_):
 	if len(contact_list) > 1: # several resources
 		invite_to_new_room_menuitem.set_submenu(build_resources_submenu(
 			contact_list, account, roster.on_invite_to_new_room, cap=NS_MUC))
-	elif len(list_) == 1 and gajim.capscache.is_supported(contact, NS_MUC):
+	elif len(list_) == 1 and contact.supports(NS_MUC):
 		invite_menuitem.set_sensitive(True)
 		# use resource if it's self contact
 		if contact.jid == gajim.get_jid_from_account(account):
@@ -222,14 +222,14 @@ control=None):
 	else:
 		start_chat_menuitem.connect('activate',
 			gajim.interface.on_open_chat_window, contact, account)
-		if gajim.capscache.is_supported(contact, NS_FILE):
+		if contact.supports(NS_FILE):
 			send_file_menuitem.set_sensitive(True)
 			send_file_menuitem.connect('activate',
 				roster.on_send_file_menuitem_activate, contact, account)
 		else:
 			send_file_menuitem.set_sensitive(False)
 
-		if gajim.capscache.is_supported(contact, NS_COMMANDS):
+		if contact.supports(NS_COMMANDS):
 			execute_command_menuitem.set_sensitive(True)
 			execute_command_menuitem.connect('activate', roster.on_execute_command,
 				contact, account, contact.resource)
@@ -294,10 +294,7 @@ control=None):
 				control._on_toggle_gpg_menuitem_activate)
 
 		# disable esessions if we or the other client don't support them
-		# XXX: Once we have fallback to disco, remove notexistant check
-		if not gajim.HAVE_PYCRYPTO or \
-		not gajim.capscache.is_supported(contact, NS_ESESSION) or \
-		gajim.capscache.is_supported(contact, 'notexistant') or \
+		if not gajim.HAVE_PYCRYPTO or not contact.supports(NS_ESESSION) or \
 		not gajim.config.get_per('accounts', account, 'enable_esessions'):
 			toggle_e2e_menuitem.set_sensitive(False)
 		else:

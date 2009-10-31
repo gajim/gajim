@@ -4061,7 +4061,7 @@ class RosterWindow:
 				return
 			c_dest = gajim.contacts.get_contact_with_highest_priority(account_dest,
 				jid_dest)
-			if not gajim.capscache.is_supported(c_dest, NS_FILE):
+			if not c_dest.supports(NS_FILE):
 				return
 			uri = data.strip()
 			uri_splitted = uri.split() # we may have more than one file dropped
@@ -5157,17 +5157,6 @@ class RosterWindow:
 
 			zeroconf_properties_menuitem.connect('activate',
 				self.on_zeroconf_properties, account)
-			#gc_sub_menu = gtk.Menu() # gc is always a submenu
-			#join_group_chat_menuitem.set_submenu(gc_sub_menu)
-			#self.add_bookmarks_list(gc_sub_menu, account)
-			#new_message_menuitem.connect('activate',
-			#	self.on_new_message_menuitem_activate, account)
-
-			# make some items insensitive if account is offline
-			#if gajim.connections[account].connected < 2:
-			#	for widget in [join_group_chat_menuitem, new_message_menuitem]:
-			#		widget.set_sensitive(False)
-			#	new_message_menuitem.set_sensitive(False)
 
 		return account_context_menu
 

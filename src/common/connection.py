@@ -1299,14 +1299,9 @@ class Connection(ConnectionHandlers):
 		# please note that the only valid tag inside a message containing a <body>
 		# tag is the active event
 		if chatstate is not None:
-			# XXX: Once we have fallback to disco,
-			#      remove notexistant check
 			if ((composing_xep == 'XEP-0085' or not composing_xep) \
 			and composing_xep != 'asked_once') or \
-			(gajim.capscache.is_supported(contact,
-			common.xmpp.NS_CHATSTATES) and \
-			not gajim.capscache.is_supported(contact,
-			'notexistant')):
+			contact.supports(common.xmpp.NS_CHATSTATES):
 				# XEP-0085
 				msg_iq.setTag(chatstate, namespace=common.xmpp.NS_CHATSTATES)
 			if composing_xep in ('XEP-0022', 'asked_once') or \
@@ -1332,8 +1327,7 @@ class Connection(ConnectionHandlers):
 
 		# XEP-0184
 		if msgtxt and gajim.config.get_per('accounts', self.name,
-		'request_receipt') and gajim.capscache.is_supported(contact,
-		common.xmpp.NS_RECEIPTS):
+		'request_receipt') and contact.supports(common.xmpp.NS_RECEIPTS):
 			msg_iq.setTag('request', namespace=common.xmpp.NS_RECEIPTS)
 
 		if session:
