@@ -149,12 +149,9 @@ class Logger:
 		self.open_db()
 		self.get_jids_already_in_db()
 
-	def simple_commit(self, sql_to_commit, values=None):
+	def simple_commit(self, sql_to_commit):
 		'''helper to commit'''
-		if values:
-			self.cur.execute(sql_to_commit, values)
-		else:
-			self.cur.execute(sql_to_commit)
+		self.cur.execute(sql_to_commit)
 		try:
 			self.con.commit()
 		except sqlite.OperationalError, e:
@@ -386,19 +383,21 @@ class Logger:
 
 	def insert_unread_events(self, message_id, jid_id):
 		''' add unread message with id: message_id'''
-		sql = 'INSERT INTO unread_messages VALUES (?, ?, 0)'
-		self.simple_commit(sql, values=(message_id, jid_id))
+		sql = 'INSERT INTO unread_messages VALUES (%d, %d, 0)' % (message_id,
+			jid_id)
+		self.simple_commit(sql)
 
 	def set_read_messages(self, message_ids):
 		''' mark all messages with ids in message_ids as read'''
 		ids = ','.join([str(i) for i in message_ids])
-		sql = 'DELETE FROM unread_messages WHERE message_id IN (?)'
-		self.simple_commit(sql, values=(ids,))
+		sql = 'DELETE FROM unread_messages WHERE message_id IN (%s)' % ids
+		self.simple_commit(sql)
 
 	def set_shown_unread_msgs(self, msg_id):
 		''' mark unread message as shown un GUI '''
-		sql = 'UPDATE unread_messages SET shown = 1 where message_id = ?'
-		self.simple_commit(sql, values=(msg_id,))
+		sql = 'UPDATE unread_messages SET shown = 1 where message_id = %s' % \
+			msg_id
+		self.simple_commit(sql)
 
 	def reset_shown_unread_messages(self):
 		''' Set shown field to False in unread_messages table '''
@@ -424,8 +423,8 @@ class Logger:
 				SELECT logs.log_line_id, logs.message, logs.time, logs.subject,
 				jids.jid
 				FROM logs, jids
-				WHERE logs.log_line_id = ? AND logs.jid_id = jids.jid_id
-				''', (msg_id,)
+				WHERE logs.log_line_id = %d AND logs.jid_id = jids.jid_id
+				''' % msg_id
 				)
 			results = self.cur.fetchall()
 			if len(results) == 0:
@@ -537,9 +536,9 @@ class Logger:
 		try:
 			self.cur.execute('''
 				SELECT time, kind, message FROM logs
-				WHERE (?) AND kind IN (?, ?, ?, ?, ?) AND time > ?
-				ORDER BY time DESC LIMIT ? OFFSET ?
-				''', (where_sql, constants.KIND_SINGLE_MSG_RECV,
+				WHERE (%s) AND kind IN (%d, %d, %d, %d, %d) AND time > %d
+				ORDER BY time DESC LIMIT %d OFFSET %d
+				''' % (where_sql, constants.KIND_SINGLE_MSG_RECV,
 					constants.KIND_CHAT_MSG_RECV, constants.KIND_SINGLE_MSG_SENT,
 					constants.KIND_CHAT_MSG_SENT, constants.KIND_ERROR,
 					timed_out, restore_how_many_rows, pending_how_many)
@@ -578,10 +577,10 @@ class Logger:
 
 		self.cur.execute('''
 			SELECT contact_name, time, kind, show, message, subject FROM logs
-			WHERE (?)
-			AND time BETWEEN ? AND ?
+			WHERE (%s)
+			AND time BETWEEN %d AND %d
 			ORDER BY time
-			''', (where_sql, start_of_day, last_second_of_day))
+			''' % (where_sql, start_of_day, last_second_of_day))
 
 		results = self.cur.fetchall()
 		return results
@@ -608,9 +607,9 @@ class Logger:
 			like_sql = '%' + query.replace("'", "''") + '%'
 			self.cur.execute('''
 				SELECT contact_name, time, kind, show, message, subject FROM logs
-				WHERE (?) AND message LIKE '?'
+				WHERE (%s) AND message LIKE '%s'
 				ORDER BY time
-				''', (where_sql, like_sql))
+				''' % (where_sql, like_sql))
 
 		results = self.cur.fetchall()
 		return results
@@ -636,11 +635,11 @@ class Logger:
 		# Now we have timestamps of time 0:00 of every day with logs
 		self.cur.execute('''
 			SELECT DISTINCT time/(86400)*86400 FROM logs
-			WHERE (?)
-			AND time BETWEEN ? AND ?
-			AND kind NOT IN (?, ?)
+			WHERE (%s)
+			AND time BETWEEN %d AND %d
+			AND kind NOT IN (%d, %d)
 			ORDER BY time
-			''', (where_sql, start_of_month, last_second_of_month,
+			''' % (where_sql, start_of_month, last_second_of_month,
 			constants.KIND_STATUS, constants.KIND_GCSTATUS))
 		result = self.cur.fetchall()
 
@@ -665,9 +664,9 @@ class Logger:
 			where_sql = 'jid_id = %s' % jid_id
 		self.cur.execute('''
 			SELECT MAX(time) FROM logs
-			WHERE (?)
-			AND kind NOT IN (?, ?)
-			''', (where_sql, constants.KIND_STATUS, constants.KIND_GCSTATUS))
+			WHERE (%s)
+			AND kind NOT IN (%d, %d)
+			''' % (where_sql, constants.KIND_STATUS, constants.KIND_GCSTATUS))
 
 		results = self.cur.fetchone()
 		if results is not None:
@@ -687,8 +686,8 @@ class Logger:
 		where_sql = 'jid_id = %s' % jid_id
 		self.cur.execute('''
 			SELECT time FROM rooms_last_message_time
-			WHERE (?)
-			''', (where_sql,))
+			WHERE (%s)
+			''' % (where_sql))
 
 		results = self.cur.fetchone()
 		if results is not None:
@@ -702,8 +701,9 @@ class Logger:
 		we had logs for that room in rooms_last_message_time table'''
 		jid_id = self.get_jid_id(jid, 'ROOM')
 		# jid_id is unique in this table, create or update :
-		sql = 'REPLACE INTO rooms_last_message_time VALUES (?, ?)'
-		self.simple_commit(sql, (jid_id, time))
+		sql = 'REPLACE INTO rooms_last_message_time VALUES (%d, %d)' % \
+			(jid_id, time)
+		self.simple_commit(sql)
 
 	def _build_contact_where(self, account, jid):
 		'''build the where clause for a jid, including metacontacts
@@ -733,17 +733,18 @@ class Logger:
 			# unknown type
 			return
 		self.cur.execute(
-			'SELECT type from transports_cache WHERE transport = "?"', (jid,))
+			'SELECT type from transports_cache WHERE transport = "%s"' % jid)
 		results = self.cur.fetchall()
 		if results:
 			result = results[0][0]
 			if result == type_id:
 				return
-			sql = 'UPDATE transports_cache SET type = ? WHERE transport = "?"'
-			self.simple_commit(sql, values=(type_id, jid))
+			sql = 'UPDATE transports_cache SET type = %d WHERE transport = "%s"' %\
+				(type_id, jid)
+			self.simple_commit(sql)
 			return
-		sql = 'INSERT INTO transports_cache VALUES ("?", ?)'
-		self.simple_commit(sql, values=(jid, type_id))
+		sql = 'INSERT INTO transports_cache VALUES ("%s", %d)' % (jid, type_id)
+		self.simple_commit(sql)
 
 	def get_transports_type(self):
 		'''return all the type of the transports in DB'''
@@ -814,9 +815,9 @@ class Logger:
 			# yield the row
 			yield hash_method, hash_, identities, features
 		for hash_method, hash_ in to_be_removed:
-			sql = '''DELETE FROM caps_cache WHERE hash_method = "?" AND
-				hash = "?"'''
-			self.simple_commit(sql, values=(hash_method, hash_))
+			sql = '''DELETE FROM caps_cache WHERE hash_method = "%s" AND
+				hash = "%s"''' % (hash_method, hash_)
+			self.simple_commit(sql)
 
 	def add_caps_entry(self, hash_method, hash_, identities, features):
 		data = []
