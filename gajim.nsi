@@ -286,6 +286,11 @@ Section "sun" SecIconsetsSun
 	File /r "data\iconsets\sun"
 SectionEnd
 
+Section "wroop" SecIconsetsSun
+	SetOutPath "$INSTDIR\data\iconsets"
+	File /r "data\iconsets\wroop"
+SectionEnd
+
 Section "transports" SecIconsetsTransports
 	SetOutPath "$INSTDIR\data\iconsets"
 	File /r "data\iconsets\transports"
@@ -692,6 +697,7 @@ Section "Uninstall"
 	RMDir /r "$INSTDIR\data\iconsets\gota"
 	RMDir /r "$INSTDIR\data\iconsets\jabberbulb"
 	RMDir /r "$INSTDIR\data\iconsets\sun"
+	RMDir /r "$INSTDIR\data\iconsets\wroop"
 	RMDir /r "$INSTDIR\data\iconsets\transports"
 	RMDir "$INSTDIR\data\iconsets"
 	RMDir "$INSTDIR\data"
