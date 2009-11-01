@@ -647,7 +647,7 @@ class GroupchatControl(ChatControlBase):
 		bookmark_separator = xml.get_widget('bookmark_separator')
 		separatormenuitem2 = xml.get_widget('separatormenuitem2')
 
-		if hide_buttonbar_entries:
+		if hide_buttonbar_items:
 			change_nick_menuitem.hide()
 			change_subject_menuitem.hide()
 			bookmark_room_menuitem.hide()
