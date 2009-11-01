@@ -2070,7 +2070,7 @@ class JoinGroupchatWindow:
 		user, server, resource = helpers.decompose_jid(room_jid)
 		if not user or not server or resource:
 			ErrorDialog(_('Invalid group chat Jabber ID'),
-				_('The group chat Jabber ID has not allowed characters.'))
+				_('Please enter the group chat Jabber ID as room@server.'))
 			return
 		try:
 			room_jid = helpers.parse_jid(room_jid)
