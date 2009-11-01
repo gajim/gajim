@@ -158,7 +158,7 @@ class Command(object):
         # in case if they was not set by the one who raised an exception.
         except CommandError, error:
             if not error.command and not error.name:
-                raise CommandError(exception.message, self)
+                raise CommandError(error.message, self)
             raise
 
         # This one is a little bit too wide, but as Python does not have

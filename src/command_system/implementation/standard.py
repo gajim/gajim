@@ -22,6 +22,7 @@ from common import gajim
 from common import helpers
 from common.exceptions import GajimGeneralException
 
+from ..errors import CommandError
 from ..framework import CommandContainer, command, documentation
 from ..mapping import generate_usage
 
