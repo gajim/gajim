@@ -1,3 +1,26 @@
+Gajim 0.13 (XX November 2009)
+
+  * Improve gtkspell (fix memleak)
+  * BOSH connection
+  * Roster versioning
+  * Ability to send contacts
+  * GUI to send XHTML messages
+  * Improve sessions handling
+  * pubsub storage (for bookmarks)
+  * Ability to select account when joining a groupchat
+  * Better Gnome keyring support
+  * Ability to ignore occupants in groupchats
+  * Ability to show / hide self contact row
+  * Automatically go away when screensaver is enabled under windows
+  * Ability to enable / disable accounts
+  * better URL recognition
+  * groupchat autoreconnect
+  * Store passwords in KDE wallet is available
+  * Better MUC errors handling
+  * Fix sound player launch (don't create zombies anymore)
+  * Optional shell like completion
+  * New color theme
+
 Gajim 0.12.5 (08 August 2009)
 
   * Don't depend on GTK 2.14
