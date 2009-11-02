@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim - A Jabber Instant Messager 0.11.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-28 22:17+0100\n"
+"POT-Creation-Date: 2009-10-30 19:59+0100\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -30,9 +30,8 @@ msgstr "Jabber IM Klientas"
 
 #: ../data/glade/account_context_menu.glade.h:1
 #: ../data/glade/roster_window.glade.h:7
-#, fuzzy
 msgid "Join _Group Chat..."
-msgstr "Prisijungti prie pokalbio grupėje"
+msgstr "Jungtis į _Grupės Pokalbį..."
 
 #: ../data/glade/account_context_menu.glade.h:2
 msgid "_Add Contact..."
@@ -48,24 +47,21 @@ msgid "_Execute Command..."
 msgstr "_Vykdyti komandą..."
 
 #: ../data/glade/account_context_menu.glade.h:5
-#, fuzzy
 msgid "_Modify Account"
-msgstr "Keisti Prieigą"
+msgstr "_Keisti Prieigą"
 
 #: ../data/glade/account_context_menu.glade.h:6
 msgid "_Open Gmail Inbox"
 msgstr "_Atidaryti Gmail paštą"
 
 #: ../data/glade/account_context_menu.glade.h:7
-#, fuzzy
 msgid "_Personal Events"
-msgstr "Asmeninė Informacija"
+msgstr "_Asmeniniai Įvykiai"
 
 #: ../data/glade/account_context_menu.glade.h:8
 #: ../data/glade/roster_window.glade.h:25
-#, fuzzy
 msgid "_Start Chat..."
-msgstr "_Pradėti pokalbį"
+msgstr "_Pradėti pokalbį..."
 
 #: ../data/glade/account_context_menu.glade.h:9
 #: ../data/glade/zeroconf_context_menu.glade.h:2
@@ -73,13 +69,12 @@ msgid "_Status"
 msgstr "_Būklė"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:1
-#, fuzzy
 msgid ""
 "<b>Connecting to server</b>\n"
 "\n"
 "Please wait..."
 msgstr ""
-"<b>Prieiga kuriama</b>\n"
+"<b>Jungiamasi prie serverio</b>\n"
 "\n"
 "Prašome palaukti..."
 
@@ -88,9 +83,8 @@ msgid "<b>Please choose one of the options below:</b>"
 msgstr "<b>Prašome pasirinkti vieną iš variantų žemiau:</b>"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:5
-#, fuzzy
 msgid "<b>Please fill in the data for your existing account</b>"
-msgstr "<b>Prašome užpildyti naujos Jūsų prieigos duomenis</b>"
+msgstr "<b>Įveskite jūsų turimos prieigos duomenis</b>"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:6
 msgid "<b>Please select a server</b>"
@@ -107,9 +101,8 @@ msgid ""
 msgstr ""
 
 #: ../data/glade/account_creation_wizard_window.glade.h:11
-#, fuzzy
 msgid "Anon_ymous authentication"
-msgstr "Naudoti autentifikaciją"
+msgstr "Anoniminė autentikacija"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:12
 msgid "Connect when I press Finish"
@@ -120,9 +113,8 @@ msgid "Gajim: Account Creation Wizard"
 msgstr "Gajim: Prieigos kūrimo vedlys"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:14
-#, fuzzy
 msgid "I already have an account I want to _use"
-msgstr "Jau turiu prieigą, kurią noriu naudoti"
+msgstr "Jau turiu prieigą, kurią noriu _naudoti"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:15
 msgid "I want to _register for a new account"
@@ -140,9 +132,8 @@ msgid "Manage..."
 msgstr "Valdyti..."
 
 #: ../data/glade/account_creation_wizard_window.glade.h:18
-#, fuzzy
 msgid "Prox_y:"
-msgstr "Proksis:"
+msgstr "_Proksis:"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:19
 #: ../data/glade/account_modification_window.glade.h:40
@@ -177,9 +168,8 @@ msgid "_Finish"
 msgstr "_Baigti"
 
 #: ../data/glade/account_creation_wizard_window.glade.h:26
-#, fuzzy
 msgid "_Hostname:"
-msgstr "Serverio adresas: "
+msgstr "_Serverio adresas: "
 
 #: ../data/glade/account_creation_wizard_window.glade.h:27
 #: ../data/glade/account_modification_window.glade.h:48
@@ -229,9 +219,8 @@ msgstr "Prieigos keitimas"
 
 #: ../data/glade/account_modification_window.glade.h:6
 #: ../data/glade/accounts_window.glade.h:8
-#, fuzzy
 msgid "Administration operations"
-msgstr "Administrator List"
+msgstr "Administravimo operacijos"
 
 #: ../data/glade/account_modification_window.glade.h:7
 #: ../data/glade/accounts_window.glade.h:10
@@ -452,9 +441,8 @@ msgstr "Sinchronizuoti prieigos būklę su globalia būkle"
 #: ../data/glade/account_modification_window.glade.h:43
 #: ../data/glade/accounts_window.glade.h:50
 #: ../data/glade/synchronise_select_account_dialog.glade.h:2
-#, fuzzy
 msgid "Synchronise contacts"
-msgstr "Rodyti _Atsijungusius Asmenis"
+msgstr "Sinchronizuoti kontaktus"
 
 #: ../data/glade/account_modification_window.glade.h:44
 msgid "Use _SSL (legacy)"
@@ -475,12 +463,10 @@ msgid "_Name:"
 msgstr "_Pavadinimas:"
 
 #: ../data/glade/accounts_window.glade.h:4
-#, fuzzy
 msgid "<b>Proxy</b>"
-msgstr "<i>Privatus Sąrašas</i>"
+msgstr "<i>Proksis</i>"
 
 #: ../data/glade/accounts_window.glade.h:5
-#, fuzzy
 msgid "A_djust to status"
 msgstr "_Nustatyti būklei"
 
@@ -489,9 +475,8 @@ msgid "Accounts"
 msgstr "Prieiga"
 
 #: ../data/glade/accounts_window.glade.h:9
-#, fuzzy
 msgid "Anonymous authentication"
-msgstr "Naudoti autentifikaciją"
+msgstr "Anoniminė autentikaciją"
 
 #: ../data/glade/accounts_window.glade.h:13
 msgid ""
@@ -500,7 +485,6 @@ msgid ""
 msgstr ""
 
 #: ../data/glade/accounts_window.glade.h:17
-#, fuzzy
 msgid "Co_nnect on Gajim startup"
 msgstr "_Prisijungti, kai Gajim pasileis"
 
@@ -515,9 +499,8 @@ msgid "First Name:"
 msgstr "Vardas:"
 
 #: ../data/glade/accounts_window.glade.h:24
-#, fuzzy
 msgid "If checked, Gajim will get the password from a GPG agent like seahorse"
-msgstr "Jei pažymėta, Gajim prisimins šios prieigos slaptažodį"
+msgstr "Jei pažymėta, Gajim ims slaptažodį iš GPG agento, tokio kaip seahorse"
 
 #: ../data/glade/accounts_window.glade.h:29
 msgid ""
@@ -550,12 +533,10 @@ msgid "Re_name"
 msgstr "Pe_rvadinti"
 
 #: ../data/glade/accounts_window.glade.h:47
-#, fuzzy
 msgid "Send _keep-alive packets"
 msgstr "Siųsti „aš-gyvas“ paketus"
 
 #: ../data/glade/accounts_window.glade.h:49
-#, fuzzy
 msgid "Synchroni_ze account status with global status"
 msgstr "Sinchronizuoti prieigos būklę su globalia būkle"
 
@@ -564,39 +545,32 @@ msgid "Use G_PG Agent"
 msgstr ""
 
 #: ../data/glade/accounts_window.glade.h:52
-#, fuzzy
 msgid "Use cust_om hostname/port"
 msgstr "Naudoti parinktą serverio adresą/prievadą"
 
 #: ../data/glade/accounts_window.glade.h:53
-#, fuzzy
 msgid "Use cust_om port:"
-msgstr "Use custom port:"
+msgstr "Naudoti parinktą prievadą:"
 
 #: ../data/glade/accounts_window.glade.h:55
-#, fuzzy
 msgid "_Edit Personal Information..."
-msgstr "Keisti asmeninę informaciją..."
+msgstr "_Keisti Asmeninę Informaciją..."
 
 #: ../data/glade/accounts_window.glade.h:56
-#, fuzzy
 msgid "_Enable"
-msgstr "Įjungti"
+msgstr "Į_jungti"
 
 #: ../data/glade/accounts_window.glade.h:57
-#, fuzzy
 msgid "_Hostname: "
-msgstr "Serverio adresas: "
+msgstr "_Serverio adresas: "
 
 #: ../data/glade/accounts_window.glade.h:59
-#, fuzzy
 msgid "_Manage..."
-msgstr "Valdyti..."
+msgstr "_Valdyti..."
 
 #: ../data/glade/accounts_window.glade.h:61
-#, fuzzy
 msgid "_Port: "
-msgstr "_Portas:"
+msgstr "_Prievadas:"
 
 #: ../data/glade/accounts_window.glade.h:62
 msgid "_Warn before using an insecure connection"
@@ -739,18 +713,16 @@ msgid "Deletes Message of the Day"
 msgstr "Ištrins dienos žinutę"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:3
-#, fuzzy
 msgid "Edit _Privacy Lists..."
-msgstr "_Privatūs sąrašai"
+msgstr "Keisti _Privačiuosius Sąrašus..."
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:4
 msgid "Sends a message to users currently connected to this server"
 msgstr "Bus išsiųstos žinutės naudotojams, prisijungusiems prie šio serverio"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:5
-#, fuzzy
 msgid "Set MOTD..."
-msgstr "Nustatyti MOTD"
+msgstr "Nustatyti MOTD..."
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:6
 msgid "Sets Message of the Day"
@@ -761,9 +733,8 @@ msgid "Show _XML Console"
 msgstr "Rodyti _XML konsolę"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:8
-#, fuzzy
 msgid "Update MOTD..."
-msgstr "Atnaujinti MOTD"
+msgstr "Atnaujinti MOTD..."
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:9
 msgid "Updates Message of the Day"
@@ -774,9 +745,8 @@ msgid "_Administrator"
 msgstr "_Administratorius"
 
 #: ../data/glade/advanced_menuitem_menu.glade.h:11
-#, fuzzy
 msgid "_Send Server Message..."
-msgstr "_Siųsti žinutę serveriui"
+msgstr "_Siųsti Žinutę Serveriui..."
 
 #: ../data/glade/advanced_notifications_window.glade.h:1
 msgid " a window/tab opened with that contact "
@@ -960,14 +930,12 @@ msgid "You have received new entry:"
 msgstr "Jūs gavote naują įrašą:"
 
 #: ../data/glade/blocked_contacts_window.glade.h:1
-#, fuzzy
 msgid "Blocked Contacts"
-msgstr "Contacts"
+msgstr "Užblokuoti Kontaktai"
 
 #: ../data/glade/change_activity_dialog.glade.h:1
-#, fuzzy
 msgid "<b>Message:</b> "
-msgstr "<b>Nustatytosios būklės žinutės</b>"
+msgstr "<b>Žinutė:</b> "
 
 #: ../data/glade/change_activity_dialog.glade.h:2
 msgid "Set Activity"
@@ -978,14 +946,12 @@ msgid "Set an activity"
 msgstr ""
 
 #: ../data/glade/change_mood_dialog.glade.h:1
-#, fuzzy
 msgid "<b>Message:</b>"
-msgstr "<b>Savybės</b>"
+msgstr "<b>Žinutė:</b>"
 
 #: ../data/glade/change_mood_dialog.glade.h:2
-#, fuzzy
 msgid "<b>Mood:</b>"
-msgstr "<b>Garsai</b>"
+msgstr "<b>Nuotaika:</b>"
 
 #: ../data/glade/change_password_dialog.glade.h:1
 msgid "Change Password"
@@ -1004,14 +970,12 @@ msgid "<b>Type your new status message</b>"
 msgstr "<b>Įveskite naują būklės žinutę</b>"
 
 #: ../data/glade/change_status_message_dialog.glade.h:2 ../src/tooltips.py:601
-#, fuzzy
 msgid "Activity:"
-msgstr "Activated"
+msgstr "Aktyvumas:"
 
 #: ../data/glade/change_status_message_dialog.glade.h:3 ../src/tooltips.py:586
-#, fuzzy
 msgid "Mood:"
-msgstr "Kambarys:"
+msgstr "Nuotaika:"
 
 #: ../data/glade/change_status_message_dialog.glade.h:4
 msgid "Preset messages:"
@@ -1027,9 +991,8 @@ msgstr "Prisijungti prie pokalbio grupėje"
 
 #: ../data/glade/chat_context_menu.glade.h:2
 #: ../data/glade/contact_context_menu.glade.h:16
-#, fuzzy
 msgid "_Add to Roster..."
-msgstr "Įtr_aukti į kontaktų sąrašą"
+msgstr "Įtr_aukti į kontaktų sąrašą..."
 
 #: ../data/glade/chat_context_menu.glade.h:3
 msgid "_Copy JID/Email Address"
@@ -1054,18 +1017,16 @@ msgid "_Start Chat"
 msgstr "_Pradėti pokalbį"
 
 #: ../data/glade/chat_to_muc_window.glade.h:1
-#, fuzzy
 msgid "In_vite"
-msgstr "Pak_viesti į"
+msgstr "Pak_viesti"
 
 #: ../data/glade/chat_to_muc_window.glade.h:2
 msgid "Invite Friends!"
 msgstr ""
 
 #: ../data/glade/chat_to_muc_window.glade.h:3
-#, fuzzy
 msgid "MUC server"
-msgstr "Observers"
+msgstr "MUC serveris"
 
 #: ../data/glade/chat_to_muc_window.glade.h:4
 msgid "Please select a MUC server."
@@ -1082,24 +1043,20 @@ msgid "A_sk to see his/her status"
 msgstr "Siųsti užklausimą, kad galėtumėte matyti jo/jos būklę"
 
 #: ../data/glade/contact_context_menu.glade.h:2
-#, fuzzy
 msgid "Add Special _Notification..."
-msgstr "Add Special _Notification"
+msgstr "Įtraukti Specialų Pranešimą..."
 
 #: ../data/glade/contact_context_menu.glade.h:3
-#, fuzzy
 msgid "Assign Open_PGP Key..."
-msgstr "Priskirti Open_PGP Raktą"
+msgstr "Priskirti Open_PGP Raktą..."
 
 #: ../data/glade/contact_context_menu.glade.h:4
-#, fuzzy
 msgid "E_xecute Command..."
-msgstr "Vykdyti Komandą..."
+msgstr "_Vykdyti Komandą..."
 
 #: ../data/glade/contact_context_menu.glade.h:5
-#, fuzzy
 msgid "Edit _Groups..."
-msgstr "Redaguoti _Grupes"
+msgstr "Keisti _Grupes..."
 
 #. Invite to
 #. Invite to Groupchat
@@ -1109,30 +1066,26 @@ msgid "In_vite to"
 msgstr "Pak_viesti į"
 
 #: ../data/glade/contact_context_menu.glade.h:7
-#, fuzzy
 msgid "Invite _Contacts"
-msgstr "Rename Contact"
+msgstr "Kviesti Kontaktus"
 
 #: ../data/glade/contact_context_menu.glade.h:8
-#, fuzzy
 msgid "Remo_ve"
 msgstr "_Trinti"
 
 #. Send Custom Status
 #: ../data/glade/contact_context_menu.glade.h:9 ../src/roster_window.py:5267
 #: ../src/roster_window.py:5497
-#, fuzzy
 msgid "Send Cus_tom Status"
-msgstr "Sends custom XML"
+msgstr "Siųsti _Parinktą Būklę"
 
 #: ../data/glade/contact_context_menu.glade.h:10
 msgid "Send Single _Message..."
 msgstr "Siųsti ži_nutę..."
 
 #: ../data/glade/contact_context_menu.glade.h:11
-#, fuzzy
 msgid "Send _File..."
-msgstr "Siųsti _Failą"
+msgstr "Siųsti _Failą..."
 
 #: ../data/glade/contact_context_menu.glade.h:12
 msgid "Set Custom _Avatar..."
@@ -1143,9 +1096,8 @@ msgid "Start _Chat"
 msgstr "Pradėti _Pokalbį"
 
 #: ../data/glade/contact_context_menu.glade.h:14
-#, fuzzy
 msgid "Toggle End to End Encryption"
-msgstr "Įjungti Open_PGP kodavimą"
+msgstr "Įjungti Abipusį Šifravimą"
 
 #: ../data/glade/contact_context_menu.glade.h:15
 msgid "Toggle Open_PGP Encryption"
@@ -1177,14 +1129,12 @@ msgid "_Ignore"
 msgstr ""
 
 #: ../data/glade/contact_context_menu.glade.h:22
-#, fuzzy
 msgid "_Manage Contact"
-msgstr "Rename Contact"
+msgstr "_Valdyti Kontaktus"
 
 #: ../data/glade/contact_context_menu.glade.h:23
-#, fuzzy
 msgid "_Rename..."
-msgstr "_Pervadinti"
+msgstr "_Pervadinti..."
 
 #: ../data/glade/contact_context_menu.glade.h:24
 msgid "_Subscription"
@@ -1197,9 +1147,8 @@ msgid "_Unblock"
 msgstr ""
 
 #: ../data/glade/contact_context_menu.glade.h:26
-#, fuzzy
 msgid "_Unignore"
-msgstr "nine"
+msgstr "_Nebeignoruoti"
 
 #: ../data/glade/data_form_window.glade.h:1
 msgid "Fill in the form."
@@ -1214,9 +1163,8 @@ msgid "Edit Groups"
 msgstr "Keisti grupę"
 
 #: ../data/glade/esession_info_window.glade.h:1
-#, fuzzy
 msgid "(<b>ESession</b> info)"
-msgstr "<b>Aprašymas</b>"
+msgstr ""
 
 #: ../data/glade/esession_info_window.glade.h:2
 msgid "_Verify"
@@ -1227,9 +1175,8 @@ msgid "<b>List of possible features in Gajim:</b>"
 msgstr ""
 
 #: ../data/glade/features_window.glade.h:3
-#, fuzzy
 msgid "Features"
-msgstr "Serverio teikiamos paslaugos"
+msgstr "Savybės"
 
 #: ../data/glade/filetransfers.glade.h:1
 msgid "A list of active, completed and stopped file transfers"
@@ -1380,33 +1327,28 @@ msgid "_Background:"
 msgstr "_Fonas:"
 
 #: ../data/glade/gc_control_popup_menu.glade.h:1
-#, fuzzy
 msgid "Change _Nickname..."
-msgstr "Keisti _slapyvardį"
+msgstr "Keisti _Slapyvardį..."
 
 #: ../data/glade/gc_control_popup_menu.glade.h:2
-#, fuzzy
 msgid "Change _Subject..."
-msgstr "Keisti _temą"
+msgstr "Keisti _Temą..."
 
 #: ../data/glade/gc_control_popup_menu.glade.h:3
-#, fuzzy
 msgid "Configure _Room..."
-msgstr "Keisti kambario nustatymus"
+msgstr "Keisti Kambario Nustatymus..."
 
 #: ../data/glade/gc_control_popup_menu.glade.h:4 ../src/disco.py:1624
-#, fuzzy
 msgid "_Bookmark"
-msgstr "Žy_mėti šį kambarį"
+msgstr "Žy_mės"
 
 #: ../data/glade/gc_control_popup_menu.glade.h:5
 msgid "_Destroy Room"
 msgstr ""
 
 #: ../data/glade/gc_control_popup_menu.glade.h:7
-#, fuzzy
 msgid "_Manage Room"
-msgstr "Žymių valdymas"
+msgstr "_Valdyti Kambarį"
 
 #: ../data/glade/gc_control_popup_menu.glade.h:8
 msgid "_Minimize on close"
@@ -1417,9 +1359,8 @@ msgid "Mo_derator"
 msgstr "Mo_deratorius"
 
 #: ../data/glade/gc_occupants_menu.glade.h:2
-#, fuzzy
 msgid "Occupant Actions"
-msgstr "_Valdytojo Veiksmai"
+msgstr "Valdytojo Veiksmai"
 
 #: ../data/glade/gc_occupants_menu.glade.h:3
 msgid "Send _File"
@@ -1472,24 +1413,18 @@ msgid "Subject"
 msgstr "Tema"
 
 #: ../data/glade/history_manager.glade.h:1
-#, fuzzy
 msgid ""
 "<b>WARNING:</b>\n"
 "If you plan to do massive deletions, please make sure Gajim is not running. "
 "Generally avoid deletions with contacts you currently chat with."
 msgstr ""
-"<big><b>Gajim istorijos žurnalų valdymas</b></big>\n"
-"\n"
-"Galite pasirinkti žurnalą kairėje ir/arba žemiau ieškoti duomenų bazę.\n"
-"\n"
 "<b>ĮSPĖJIMAS:</b>\n"
-"Jei planuojate daryti daug trynimų, įsitikinkite, kad Gajim yra išjungtas. "
-"Stengitės netrinti iš asmenų su kuriais dabar bendraujate."
+"Jei planuojate daryti masinius trynimus, įsitikinkite, kad Gajim yra "
+"išjungtas. Stenkitės netrinti kontaktų su kuriais dabar bendraujate."
 
 #: ../data/glade/history_manager.glade.h:3
-#, fuzzy
 msgid "<big><b>Welcome to Gajim History Logs Manager</b></big>"
-msgstr "Gajim Istorijos Žurnalų Valdymas"
+msgstr "<big><b>Gajim Istorijos Žurnalų Valdymas</b></big>"
 
 #: ../data/glade/history_manager.glade.h:4 ../src/dialogs.py:2884
 #: ../src/dialogs.py:2987
@@ -1529,9 +1464,8 @@ msgid ""
 msgstr ""
 
 #: ../data/glade/history_window.glade.h:5
-#, fuzzy
 msgid "Search:"
-msgstr "Ieškoti"
+msgstr "Ieškoti:"
 
 #: ../data/glade/history_window.glade.h:6
 #: ../data/glade/zeroconf_information_window.glade.h:10
@@ -1607,19 +1541,16 @@ msgid "Title:"
 msgstr "Antraštė:"
 
 #: ../data/glade/manage_pep_services_window.glade.h:1
-#, fuzzy
 msgid "PEP Service Configuration"
-msgstr "Kambario nustatymai"
+msgstr "PEP Paslaugos Konfigūracija"
 
 #: ../data/glade/manage_pep_services_window.glade.h:2
-#, fuzzy
 msgid "_Configure"
-msgstr "_Tęsti"
+msgstr "_Konfigūruoti"
 
 #: ../data/glade/manage_pep_services_window.glade.h:3
-#, fuzzy
 msgid "gtk-delete"
-msgstr "Trinti"
+msgstr ""
 
 #: ../data/glade/manage_proxies_window.glade.h:1
 msgid "<b>Properties</b>"
@@ -1630,12 +1561,11 @@ msgid "<b>Settings</b>"
 msgstr "<b>Nustatymai</b>"
 
 #: ../data/glade/manage_proxies_window.glade.h:3
-#, fuzzy
 msgid ""
 "HTTP Connect\n"
 "SOCKS5\n"
 "BOSH"
-msgstr "HTTP jungimąsis"
+msgstr ""
 
 #: ../data/glade/manage_proxies_window.glade.h:6
 msgid "Manage Proxy Profiles"
@@ -1646,43 +1576,36 @@ msgid "Pass_word:"
 msgstr "_Slaptažodis:"
 
 #: ../data/glade/manage_proxies_window.glade.h:8
-#, fuzzy
 msgid "Proxy _Host:"
-msgstr "Proksis:"
+msgstr "Proksi _Serveris:"
 
 #: ../data/glade/manage_proxies_window.glade.h:9
-#, fuzzy
 msgid "Proxy _Port:"
-msgstr "_Portas:"
+msgstr "Proksi _Prievadas:"
 
 #: ../data/glade/manage_proxies_window.glade.h:10
-#, fuzzy
 msgid "Use HTTP prox_y"
-msgstr "_Naudoti proksi"
+msgstr "_Naudoti HTTP proksi"
 
 #: ../data/glade/manage_proxies_window.glade.h:11
-#, fuzzy
 msgid "Use proxy auth_entication"
-msgstr "Naudoti autentifikaciją"
+msgstr "Naudoti proksi _autentikaciją"
 
 #: ../data/glade/manage_proxies_window.glade.h:12
-#, fuzzy
 msgid "_BOSH URL:"
-msgstr "_URL:"
+msgstr ""
 
 #: ../data/glade/manage_proxies_window.glade.h:14
-#, fuzzy
 msgid "_Type:"
-msgstr "Tipas:"
+msgstr "_Tipas:"
 
 #: ../data/glade/manage_proxies_window.glade.h:15
 msgid "_Username:"
 msgstr "_Naudotojo vardas:"
 
 #: ../data/glade/message_window.glade.h:1
-#, fuzzy
 msgid "Add this contact to roster (Ctrl+D)"
-msgstr "Adds contact to roster"
+msgstr "Įtraukti šį kontaktą į sąrašą (Ctrl+D)"
 
 #: ../data/glade/message_window.glade.h:2
 msgid "Bookmark this room (Ctrl+B)"
@@ -1701,23 +1624,20 @@ msgid "Change your nickname (Ctrl+N)"
 msgstr ""
 
 #: ../data/glade/message_window.glade.h:6
-#, fuzzy
 msgid "Invite contacts to the conversation (Ctrl+G)"
-msgstr "is paying attention to the conversation"
+msgstr "Pakviesti kontaktus į pokalbį (Ctrl+G)"
 
 #: ../data/glade/message_window.glade.h:7
 msgid "Send a file (Ctrl+F)"
 msgstr ""
 
 #: ../data/glade/message_window.glade.h:8
-#, fuzzy
 msgid "Show a list of emoticons (Alt+M)"
-msgstr "Įterpti emocijų paveiksliuką (Alt+M)"
+msgstr "Rodyti šypsenėlių sąrašą (Alt+M)"
 
 #: ../data/glade/message_window.glade.h:9
-#, fuzzy
 msgid "Show a list of formattings"
-msgstr "Įterpti emocijų paveiksliuką (Alt+M)"
+msgstr "Rodyti formatavimo sąrašą"
 
 #: ../data/glade/message_window.glade.h:10
 msgid "Show a menu of advanced functions (Alt+A)"
@@ -1747,24 +1667,20 @@ msgid "<b>Applications</b>"
 msgstr "<b>Programos</b>"
 
 #: ../data/glade/preferences_window.glade.h:3
-#, fuzzy
 msgid "<b>Auto Status</b>"
-msgstr "<b>Veiksmai</b>"
+msgstr "<b>Automatinė Būklė</b>"
 
 #: ../data/glade/preferences_window.glade.h:4
-#, fuzzy
 msgid "<b>Chat Appearance</b>"
-msgstr "<b>Edit a rule</b>"
+msgstr "<b>Pokalbio Išvaizda</b>"
 
 #: ../data/glade/preferences_window.glade.h:5
-#, fuzzy
 msgid "<b>Chat Line Colors</b>"
-msgstr "<b>Pokalbių būklės žymių spalvos</b>"
+msgstr "<b>Pokalbio Eilutės Spalvos</b>"
 
 #: ../data/glade/preferences_window.glade.h:6
-#, fuzzy
 msgid "<b>Chat state notifications</b>"
-msgstr "<b>Vizualinis informavimas</b>"
+msgstr "<b>Pokalbio būklės pranešimai</b>"
 
 #. a header for custom browser/client/file manager. so translate sth like: Custom Settings
 #: ../data/glade/preferences_window.glade.h:8
@@ -1772,9 +1688,8 @@ msgid "<b>Custom</b>"
 msgstr "<b>Kitaip</b>"
 
 #: ../data/glade/preferences_window.glade.h:9
-#, fuzzy
 msgid "<b>Font</b>"
-msgstr "<b>Garsai</b>"
+msgstr "<b>Šriftas</b>"
 
 #: ../data/glade/preferences_window.glade.h:10
 msgid "<b>GMail Options</b>"
@@ -1785,23 +1700,20 @@ msgid "<b>Preset Status Messages</b>"
 msgstr "<b>Nustatytosios būklės žinutės</b>"
 
 #: ../data/glade/preferences_window.glade.h:13
-#, fuzzy
 msgid "<b>Privacy</b>"
-msgstr "<i>Privatus Sąrašas</i>"
+msgstr "<i>Privatumas</i>"
 
 #: ../data/glade/preferences_window.glade.h:14
 msgid "<b>Roster Appearance</b>"
 msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:16
-#, fuzzy
 msgid "<b>Status Messages</b>"
-msgstr "<b>Nustatytosios būklės žinutės</b>"
+msgstr "<b>Būklės Žinutės</b>"
 
 #: ../data/glade/preferences_window.glade.h:17
-#, fuzzy
 msgid "<b>Themes</b>"
-msgstr "<b>Savybės</b>"
+msgstr "<b>Temos</b>"
 
 #: ../data/glade/preferences_window.glade.h:18
 msgid "<b>Visual Notifications</b>"
@@ -1812,9 +1724,8 @@ msgid "Advanced"
 msgstr "Išplėstinis"
 
 #: ../data/glade/preferences_window.glade.h:20
-#, fuzzy
 msgid "Advanced..."
-msgstr "Išplėstinis"
+msgstr "Išplėstinis..."
 
 #: ../data/glade/preferences_window.glade.h:21
 msgid ""
@@ -1844,7 +1755,6 @@ msgid "Ask status message when I:"
 msgstr "Prašyti įvesti būklės žinutę, kai aš:"
 
 #: ../data/glade/preferences_window.glade.h:28
-#, fuzzy
 msgid ""
 "Autodetect on every Gajim startup\n"
 "Always use GNOME default applications\n"
@@ -1855,18 +1765,16 @@ msgstr ""
 "Automatiškai aptikti, startuojant Gajim\n"
 "Visada naudoti GNOME programas pagal nutylėjimą\n"
 "Visada naudoti KDĘ programas pagal nutylėjimą\n"
-"Visada naudoti XFCE4 programas pagal nutylėjimą\n"
-"Kita"
+"Visada naudoti Xfce programas pagal nutylėjimą\n"
+"Pasirinktinis"
 
 #: ../data/glade/preferences_window.glade.h:33
-#, fuzzy
 msgid "Chat message:"
-msgstr "_Būklės pranešimas:"
+msgstr "Būklės pranešimas:"
 
 #: ../data/glade/preferences_window.glade.h:34
-#, fuzzy
 msgid "Check on startup if Gajim is the _default Jabber client"
-msgstr "Startuojant visada tikrinti ar Gajim yra pagrindinis Jabber klientas"
+msgstr "Startuojant tikrinti ar Gajim yra pagrindinis Jabber klientas"
 
 #: ../data/glade/preferences_window.glade.h:35
 msgid "Configure color and font of the interface"
@@ -1882,27 +1790,24 @@ msgid ""
 msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:41
-#, fuzzy
 msgid "Display _activity of contacts in roster"
-msgstr "Rodyti asmenų _paveiksliukus kontaktų sąraše"
+msgstr "Rodyti kontaktų _aktyvumą sąraše"
 
 #: ../data/glade/preferences_window.glade.h:42
 msgid "Display _extra email details"
 msgstr "Rodyti papildomus _el. pašto duomenis"
 
 #: ../data/glade/preferences_window.glade.h:43
-#, fuzzy
 msgid "Display _tunes of contacts in roster"
-msgstr "Rodyti asmenų _paveiksliukus kontaktų sąraše"
+msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:44
 msgid "Display a_vatars of contacts in roster"
 msgstr "Rodyti asmenų _paveiksliukus kontaktų sąraše"
 
 #: ../data/glade/preferences_window.glade.h:45
-#, fuzzy
 msgid "Display m_ood of contacts in roster"
-msgstr "Rodyti asmenų _paveiksliukus kontaktų sąraše"
+msgstr "Rodyti kontaktų nuotaikas sąraše"
 
 #: ../data/glade/preferences_window.glade.h:46
 msgid "Display status _messages of contacts in roster"
@@ -1937,16 +1842,15 @@ msgstr ""
 "langelyje, dešiniajame apatiniame ekrano kampe"
 
 #: ../data/glade/preferences_window.glade.h:51
-#, fuzzy
 msgid "Hide all buttons in chat windows"
-msgstr "Hides the buttons in group chat window."
+msgstr "Slėpti visus mygtukus pokalbio languose"
 
 #: ../data/glade/preferences_window.glade.h:52
-#, fuzzy
 msgid ""
 "If checked, Gajim will allow others to detect the operation system you are "
 "using"
-msgstr "Jei pažymėta, Gajim, startuodamas jungsis prie šio pokalbio grupėje"
+msgstr ""
+"Jei pažymėta, Gajim leis kitiems matyti kokią operacijų sistemą naudojate"
 
 #: ../data/glade/preferences_window.glade.h:53
 msgid ""
@@ -1983,28 +1887,19 @@ msgstr ""
 "kontaktų sąraše ir pokalbių grupėse"
 
 #: ../data/glade/preferences_window.glade.h:58
-#, fuzzy
 msgid ""
 "If checked, Gajim will display the activity of contacts in the roster window"
-msgstr ""
-"Jei pažymėta, Gajim rodys asmens paveiksliuką kontaktų sąraše ir pokalbio "
-"lange"
+msgstr "Jei pažymėta, Gajim rodys kontaktų aktyvumą sąrašo lange"
 
 #: ../data/glade/preferences_window.glade.h:59
-#, fuzzy
 msgid ""
 "If checked, Gajim will display the mood of contacts in the roster window"
-msgstr ""
-"Jei pažymėta, Gajim rodys asmens paveiksliuką kontaktų sąraše ir pokalbio "
-"lange"
+msgstr "Jei pažymėta, Gajim rodys kontaktų nuotaiką sąrašo lange"
 
 #: ../data/glade/preferences_window.glade.h:60
-#, fuzzy
 msgid ""
 "If checked, Gajim will display the tunes of contacts in the roster window"
 msgstr ""
-"Jei pažymėta, Gajim rodys asmens paveiksliuką kontaktų sąraše ir pokalbio "
-"lange"
 
 #: ../data/glade/preferences_window.glade.h:61
 msgid ""
@@ -2014,15 +1909,15 @@ msgid ""
 msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:62
-#, fuzzy
 msgid ""
 "If checked, Gajim will ignore incoming events from unauthorized contacts. "
 "Use with caution, because it blocks all messages from any contact that is "
 "not in the roster"
 msgstr ""
-"Pažymėkite šį laukelį, tik jei kas nors, kas nėra jūsų kantaktų sąraše rašo "
-"jums nepageidaujamas žinutes. Naudokite atsargiai, nes šis dalykas blokuos "
-"vias žinutes, siunčiamas iš žmonių, kurie nėra Jūsų kontaktų sąraše."
+"Jei pažymėta, Gajim ignoruos visas įeinančias žinutes iš kontaktų, kurie "
+"neįtraukti į jūsų kontaktų sąrašą. Naudokite šią funkciją atsargiai, todėl, "
+"kad negausite jokių žinučių iš žmonių, kurie neįtraukti į jūsų kontaktų "
+"sąrašą."
 
 #: ../data/glade/preferences_window.glade.h:63
 msgid ""
@@ -2032,12 +1927,11 @@ msgid ""
 msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:64
-#, fuzzy
 msgid ""
 "If checked, Gajim will show a notification when a new e-mail is received via "
 "GMail"
 msgstr ""
-"Jei pažymėsite, Gajim taip pat įtrauks informaciją apie naujo laiško siuntėją"
+"Jei pažymėsite, Gajim parodys pranešimą, kai gausite naują laišką į GMail"
 
 #: ../data/glade/preferences_window.glade.h:65
 msgid ""
@@ -2068,9 +1962,8 @@ msgid "Log _encrypted chat session"
 msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:69
-#, fuzzy
 msgid "Ma_ke message windows compact"
-msgstr "Vienas žinučių langas:"
+msgstr "_Padaryti žinučių langus kompaktiškus"
 
 #: ../data/glade/preferences_window.glade.h:70
 msgid "Ma_nage..."
@@ -2084,28 +1977,24 @@ msgid ""
 msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:74
-#, fuzzy
 msgid "Notifications"
-msgstr "Prieigos keitimas"
+msgstr "Pranešimai"
 
 #: ../data/glade/preferences_window.glade.h:75
-#, fuzzy
 msgid "Notify me about contacts that sign _in"
-msgstr "Pranešk man apie asmenius, kurie: "
+msgstr "Pranešti apie _prisijungusius kontaktus"
 
 #: ../data/glade/preferences_window.glade.h:76
-#, fuzzy
 msgid "Notify me about contacts that sign _out"
-msgstr "Pranešk man apie asmenius, kurie: "
+msgstr "Pranešti apie _atsijungusius kontaktus"
 
 #: ../data/glade/preferences_window.glade.h:77
 msgid "Notify on new _GMail email"
 msgstr "Pranešk apie naujus _GMail laiškus"
 
 #: ../data/glade/preferences_window.glade.h:78
-#, fuzzy
 msgid "Personal Events"
-msgstr "Asmeninė Informacija"
+msgstr "Asmeniniai Įvykiai"
 
 #: ../data/glade/preferences_window.glade.h:79
 msgid "Play _sounds"
@@ -2123,9 +2012,8 @@ msgid "Preferences"
 msgstr "Parinktys"
 
 #: ../data/glade/preferences_window.glade.h:84
-#, fuzzy
 msgid "Show systray:"
-msgstr "_Rodyti įvykį sistemos dėkle"
+msgstr "Rodyti sisteminį dėklą:"
 
 #: ../data/glade/preferences_window.glade.h:85
 msgid "Sign _in"
@@ -2144,23 +2032,20 @@ msgstr ""
 "pan.). Jei pažymėsite, Gajim rodys tiesiog tekstą, be jokių formatavimų."
 
 #: ../data/glade/preferences_window.glade.h:88
-#, fuzzy
 msgid "Sort contacts by status"
-msgstr "_Rūšiuoti kontaktus pagal būklę"
+msgstr "Rūšiuoti kontaktus pagal būklę"
 
 #: ../data/glade/preferences_window.glade.h:89 ../src/config.py:390
 msgid "Status"
 msgstr "Būklė"
 
 #: ../data/glade/preferences_window.glade.h:90
-#, fuzzy
 msgid "Status _iconset:"
-msgstr "Būklės p_iktogramų rinkinys, pagal nutylėjimą:"
+msgstr "Būklės _piktogramų rinkinys:"
 
 #: ../data/glade/preferences_window.glade.h:91
-#, fuzzy
 msgid "Style"
-msgstr "Stalled"
+msgstr "Stilius"
 
 #: ../data/glade/preferences_window.glade.h:92
 msgid "T_heme:"
@@ -2183,37 +2068,32 @@ msgid ""
 msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:99
-#, fuzzy
 msgid "Use _transports icons"
-msgstr "Naudoti _pernašos paveiksliukus"
+msgstr "Naudoti _pernašos piktogramas"
 
 #: ../data/glade/preferences_window.glade.h:100
 msgid "Use system _default"
 msgstr "Naudoti sisteminius nustatymus"
 
 #: ../data/glade/preferences_window.glade.h:101
-#, fuzzy
 msgid "When new event is received:"
-msgstr "Naujam įvykiui ivykus"
+msgstr "Naujam įvykiui įvykus:"
 
 #: ../data/glade/preferences_window.glade.h:102
-#, fuzzy
 msgid "_Away after:"
-msgstr "Automatiškai keisti būklė į nuėjęs, po:"
+msgstr "_Nuėjęs po:"
 
 #: ../data/glade/preferences_window.glade.h:103
 msgid "_Browser:"
 msgstr "_Naršyklė:"
 
 #: ../data/glade/preferences_window.glade.h:104
-#, fuzzy
 msgid "_Display chat state notifications:"
 msgstr "Rodyti _pokalbio būklės pranešimus:"
 
 #: ../data/glade/preferences_window.glade.h:105
-#, fuzzy
 msgid "_Emoticons:"
-msgstr "Rožiukai:"
+msgstr "Šyp_senėlės:"
 
 #: ../data/glade/preferences_window.glade.h:106
 msgid "_File manager:"
@@ -2228,9 +2108,8 @@ msgid "_Ignore events from contacts not in the roster"
 msgstr "_Ignoruoti įvykius nuo asmenų nesančių kontaktų sąraše"
 
 #: ../data/glade/preferences_window.glade.h:109
-#, fuzzy
 msgid "_Ignore rich content in incoming messages"
-msgstr "Ignoruoti formatuotą turinį ateinančioms žinutėms"
+msgstr "_Ignoruoti formatuotą turinį įeinančioms žinutėms"
 
 #: ../data/glade/preferences_window.glade.h:110
 msgid "_Incoming message:"
@@ -2245,9 +2124,8 @@ msgid "_Mail client:"
 msgstr "_El. pašto programa:"
 
 #: ../data/glade/preferences_window.glade.h:113
-#, fuzzy
 msgid "_Not available after:"
-msgstr "Automatiškai keisti būklę į nepasiekamas, po:"
+msgstr "_Nepasiekiamas po:"
 
 #: ../data/glade/preferences_window.glade.h:114
 msgid "_Open..."
@@ -2262,9 +2140,8 @@ msgid "_Reset to Default Colors"
 msgstr "_Grąžinti buvusias spalvas pagal nutylėjimą"
 
 #: ../data/glade/preferences_window.glade.h:117
-#, fuzzy
 msgid "_Send chat state notifications:"
-msgstr "Rodyti _pokalbio būklės pranešimus:"
+msgstr "_Siųsti pokalbio būklės pranešimus:"
 
 #: ../data/glade/preferences_window.glade.h:118
 msgid "_Status message:"
@@ -2279,14 +2156,12 @@ msgid "_Window behavior:"
 msgstr ""
 
 #: ../data/glade/preferences_window.glade.h:121
-#, fuzzy
 msgid "in _group chats"
-msgstr "Prisijungti prie pokalbio grupėje"
+msgstr "pokalbiuose _grupėje"
 
 #: ../data/glade/preferences_window.glade.h:122
-#, fuzzy
 msgid "in _roster"
-msgstr "Not in roster"
+msgstr "_sąraše"
 
 #: ../data/glade/preferences_window.glade.h:123
 msgid "minutes"
@@ -2321,9 +2196,8 @@ msgid "All"
 msgstr "Visi"
 
 #: ../data/glade/privacy_list_window.glade.h:7
-#, fuzzy
 msgid "All (including subscription)"
-msgstr "visus pagal užsisakymą"
+msgstr "Visi (įskaitant prenumeratas)"
 
 #: ../data/glade/privacy_list_window.glade.h:8
 msgid "Allow"
@@ -2383,151 +2257,127 @@ msgstr "mano būklės peržiūrai"
 
 #: ../data/glade/profile_window.glade.h:1
 #: ../data/glade/vcard_information_window.glade.h:1
-#, fuzzy
 msgid "<b>Address</b>"
-msgstr "<b>Add a rule</b>"
+msgstr "<b>Adresas</b>"
 
 #: ../data/glade/profile_window.glade.h:2
-#, fuzzy
 msgid "<b>Avatar:</b>"
-msgstr "Atvaizdas:"
+msgstr "<b>Atvaizdas:</b>"
 
 #: ../data/glade/profile_window.glade.h:3
 #: ../data/glade/vcard_information_window.glade.h:4
-#, fuzzy
 msgid "<b>Birthday:</b>"
-msgstr "Gimtadienis:"
+msgstr "<b>Gimtadienis:</b>"
 
 #: ../data/glade/profile_window.glade.h:4
 #: ../data/glade/vcard_information_window.glade.h:5
-#, fuzzy
 msgid "<b>City:</b>"
-msgstr "<b>Kitaip</b>"
+msgstr "<b>Miestas:</b>"
 
 #: ../data/glade/profile_window.glade.h:5
 #: ../data/glade/vcard_information_window.glade.h:7
-#, fuzzy
 msgid "<b>Company:</b>"
-msgstr "<b>Kitaip</b>"
+msgstr "<b>Kompanija:</b>"
 
 #: ../data/glade/profile_window.glade.h:6
 #: ../data/glade/vcard_information_window.glade.h:9
-#, fuzzy
 msgid "<b>Country:</b>"
-msgstr "<b>Garsai</b>"
+msgstr "<b>Šalis:</b>"
 
 #: ../data/glade/profile_window.glade.h:7
 #: ../data/glade/vcard_information_window.glade.h:10
-#, fuzzy
 msgid "<b>Department:</b>"
-msgstr "Skyrius:"
+msgstr "<b>Skyrius:</b>"
 
 #: ../data/glade/profile_window.glade.h:8
 #: ../data/glade/vcard_information_window.glade.h:11
-#, fuzzy
 msgid "<b>E-Mail:</b>"
-msgstr "El. paštas:"
+msgstr "<b>El. paštas:</b>"
 
 #: ../data/glade/profile_window.glade.h:9
 #: ../data/glade/vcard_information_window.glade.h:12
-#, fuzzy
 msgid "<b>Extra Address:</b>"
-msgstr "Papildomas adresas:"
+msgstr "<b>Papildomas adresas:</b>"
 
 #. Family Name
 #: ../data/glade/profile_window.glade.h:11
 #: ../data/glade/vcard_information_window.glade.h:14
-#, fuzzy
 msgid "<b>Family:</b>"
-msgstr "Pavardė:"
+msgstr "<b>Pavardė:</b>"
 
 #: ../data/glade/profile_window.glade.h:12
 #: ../data/glade/vcard_information_window.glade.h:15
-#, fuzzy
 msgid "<b>Full Name</b>"
-msgstr "Name"
+msgstr "<b>Pilnas Vardas</b>"
 
 #. Given Name
 #: ../data/glade/profile_window.glade.h:14
 #: ../data/glade/vcard_information_window.glade.h:17
-#, fuzzy
 msgid "<b>Given:</b>"
-msgstr "<b>OpenPGP</b>"
+msgstr "<b>Duotas:</b>"
 
 #: ../data/glade/profile_window.glade.h:15
 #: ../data/glade/vcard_information_window.glade.h:18
-#, fuzzy
 msgid "<b>Homepage:</b>"
-msgstr "Asmeninė svetainė:"
+msgstr "<b>Asmeninė svetainė:</b>"
 
 #. Middle Name
 #: ../data/glade/profile_window.glade.h:17
 #: ../data/glade/vcard_information_window.glade.h:21
-#, fuzzy
 msgid "<b>Middle:</b>"
-msgstr "<b>Add a rule</b>"
+msgstr "<b>Antras:</b>"
 
 #: ../data/glade/profile_window.glade.h:18
 #: ../data/glade/vcard_information_window.glade.h:22
-#, fuzzy
 msgid "<b>Name:</b>"
-msgstr "<b>Savybės</b>"
+msgstr "<b>Vardas:</b>"
 
 #: ../data/glade/profile_window.glade.h:19
 #: ../data/glade/vcard_information_window.glade.h:23
-#, fuzzy
 msgid "<b>Nickname:</b>"
-msgstr "Slapyvardis:"
+msgstr "<b>Slapyvardis:</b>"
 
 #: ../data/glade/profile_window.glade.h:20
 #: ../data/glade/vcard_information_window.glade.h:24
-#, fuzzy
 msgid "<b>Phone No.:</b>"
-msgstr "Tel. Nr.:"
+msgstr "<b>Tel. Nr.:</b>"
 
 #: ../data/glade/profile_window.glade.h:21
 #: ../data/glade/vcard_information_window.glade.h:25
-#, fuzzy
 msgid "<b>Position:</b>"
-msgstr "<b>Sąlygos</b>"
+msgstr "<b>Pareigos:</b>"
 
 #: ../data/glade/profile_window.glade.h:22
 #: ../data/glade/vcard_information_window.glade.h:26
-#, fuzzy
 msgid "<b>Postal Code:</b>"
-msgstr "Pašto kodas:"
+msgstr "<b>Pašto Kodas:</b>"
 
 #. Prefix in Name
 #: ../data/glade/profile_window.glade.h:24
 #: ../data/glade/vcard_information_window.glade.h:28
-#, fuzzy
 msgid "<b>Prefix:</b>"
-msgstr "<i>Privatus Sąrašas</i>"
+msgstr "<b>Titulas:</b>"
 
 #: ../data/glade/profile_window.glade.h:25
-#: ../data/glade/vcard_information_window.glade.h:30 ../src/vcard.py:327
-#, fuzzy
+#: ../data/glade/vcard_information_window.glade.h:30 ../src/vcard.py:325
 msgid "<b>Role:</b>"
-msgstr "<b>Garsai</b>"
+msgstr "<b>Vaidmuo:</b>"
 
 #: ../data/glade/profile_window.glade.h:26
 #: ../data/glade/vcard_information_window.glade.h:31
-#, fuzzy
 msgid "<b>State:</b>"
-msgstr "<b>Nustatymai</b>"
+msgstr "<b>Valstija:</b>"
 
 #: ../data/glade/profile_window.glade.h:27
 #: ../data/glade/vcard_information_window.glade.h:33
-#, fuzzy
 msgid "<b>Street:</b>"
-msgstr "<b>Nustatymai</b>"
+msgstr "<b>Gatvė:</b>"
 
 #. Suffix in Name
 #: ../data/glade/profile_window.glade.h:29
 #: ../data/glade/vcard_information_window.glade.h:37
-#, fuzzy
 msgid "<b>Suffix:</b>"
-msgstr "<b>Garsai</b>"
+msgstr "<b>Sufiksas:</b>"
 
 #. "About" is the text of a tab of vcard window
 #: ../data/glade/profile_window.glade.h:31
@@ -2589,24 +2439,20 @@ msgid "Roster Item Exchange"
 msgstr ""
 
 #: ../data/glade/roster_item_exchange_window.glade.h:4
-#, fuzzy
 msgid "gtk-cancel"
-msgstr "Trinti"
+msgstr ""
 
 #: ../data/glade/roster_item_exchange_window.glade.h:5
-#, fuzzy
 msgid "gtk-ok"
-msgstr "gtk+"
+msgstr ""
 
 #: ../data/glade/roster_window.glade.h:1
-#, fuzzy
 msgid "Add _Contact..."
-msgstr "_Įtraukti asmenį..."
+msgstr "Įtraukti _Kontaktą..."
 
 #: ../data/glade/roster_window.glade.h:2
-#, fuzzy
 msgid "Fea_tures"
-msgstr "Serverio teikiamos paslaugos"
+msgstr "_Savybės"
 
 #: ../data/glade/roster_window.glade.h:3
 msgid "File _Transfers"
@@ -2625,9 +2471,8 @@ msgid "Profile, A_vatar"
 msgstr "Profilis, At_vaizdas"
 
 #: ../data/glade/roster_window.glade.h:9
-#, fuzzy
 msgid "Show Only _Active Contacts"
-msgstr "Rodyti _Atsijungusius Asmenis"
+msgstr "Rodyti Tik _Aktyvius Kontaktus"
 
 #: ../data/glade/roster_window.glade.h:10
 msgid "Show Trans_ports"
@@ -2643,9 +2488,8 @@ msgid "Show _Roster"
 msgstr "Rodyk _Kontaktų Sąrašą"
 
 #: ../data/glade/roster_window.glade.h:13
-#, fuzzy
 msgid "_Accounts"
-msgstr "Prieiga"
+msgstr "_Prieigos"
 
 #. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
 #: ../data/glade/roster_window.glade.h:14
@@ -2678,33 +2522,29 @@ msgid "_Quit"
 msgstr "_Išjungti"
 
 #: ../data/glade/roster_window.glade.h:24
-#, fuzzy
 msgid "_Send Single Message..."
-msgstr "Siųsti ži_nutę..."
+msgstr "_Siųsti Žinutę..."
 
 #: ../data/glade/roster_window.glade.h:26
 msgid "_View"
 msgstr "_Rodinys"
 
 #: ../data/glade/search_window.glade.h:1
-#, fuzzy
 msgid "Please wait while retrieving search form..."
-msgstr "Prašome luktelti, kol atsisiųs komandų sąrašas..."
+msgstr "Palaukite, kol atsisiųs paieškos forma..."
 
 #: ../data/glade/search_window.glade.h:2
 msgid "Search"
 msgstr "Ieškoti"
 
 #: ../data/glade/search_window.glade.h:3
-#, fuzzy
 msgid "_Add contact"
-msgstr "Įtraukti _Asmenį"
+msgstr "Įtr_aukti Kontaktą"
 
 #. Information
 #: ../data/glade/search_window.glade.h:4 ../src/roster_window.py:5600
-#, fuzzy
 msgid "_Information"
-msgstr "Asmens Informacija"
+msgstr "_Informacija"
 
 #: ../data/glade/search_window.glade.h:5 ../src/disco.py:1213
 msgid "_Search"
@@ -2799,14 +2639,12 @@ msgid "Select the account with which you want to synchronise"
 msgstr ""
 
 #: ../data/glade/synchronise_select_contacts_dialog.glade.h:1
-#, fuzzy
 msgid "Select the contacts you want to synchronise"
-msgstr "JID of the contact that you want to chat with"
+msgstr "Pažymėkite kontaktus kuriuos norėsite sinchronizuoti"
 
 #: ../data/glade/synchronise_select_contacts_dialog.glade.h:2
-#, fuzzy
 msgid "Synchronise : select contacts"
-msgstr "Rodyti _Atsijungusius Asmenis"
+msgstr "Sinchronizuoti : pažymėkite kontaktus"
 
 #: ../data/glade/systray_context_menu.glade.h:1
 msgid "Mute Sounds"
@@ -2830,54 +2668,45 @@ msgstr "Pokalbiai _Grupėje"
 
 #. Given Name
 #: ../data/glade/vcard_information_window.glade.h:3
-#, fuzzy
 msgid "<b>Ask:</b>"
-msgstr "<b>Veiksmai</b>"
+msgstr "<b>Klausk:</b>"
 
 #: ../data/glade/vcard_information_window.glade.h:6
-#, fuzzy
 msgid "<b>Client:</b>"
-msgstr "<b>Kitaip</b>"
+msgstr "<b>Klientas:</b>"
 
 #: ../data/glade/vcard_information_window.glade.h:8
-#, fuzzy
 msgid "<b>Contact time:</b>"
-msgstr "<b>Nustatymai</b>"
+msgstr "<b>Kontakto laikas:</b>"
 
 #: ../data/glade/vcard_information_window.glade.h:19
-#, fuzzy
 msgid "<b>Jabber ID:</b>"
-msgstr "Jabber ID:"
+msgstr "<b>Jabber ID:</b>"
 
 #: ../data/glade/vcard_information_window.glade.h:29
-#, fuzzy
 msgid "<b>Resource:</b>"
-msgstr "Šaltinis:"
+msgstr "<b>Šaltinis:</b>"
 
 #: ../data/glade/vcard_information_window.glade.h:32
-#, fuzzy
 msgid "<b>Status:</b>"
-msgstr "<b>Nustatymai</b>"
+msgstr "<b>Būklė:</b>"
 
 #. Family Name
 #: ../data/glade/vcard_information_window.glade.h:35
-#, fuzzy
 msgid "<b>Subscription:</b>"
-msgstr "<b>Aprašymas</b>"
+msgstr "<b>Prenumerata:</b>"
 
 #: ../data/glade/vcard_information_window.glade.h:38
-#, fuzzy
 msgid "<b>System:</b>"
-msgstr "<b>Kitaip</b>"
+msgstr "<b>Sistema:</b>"
 
 #: ../data/glade/vcard_information_window.glade.h:41
 msgid "Comments"
 msgstr "Komentarai"
 
 #: ../data/glade/vcard_information_window.glade.h:42
-#, fuzzy
 msgid "Configured avatar:"
-msgstr "Keisti kambario nustatymus"
+msgstr "Nustatytas atvaizdas:"
 
 #: ../data/glade/vcard_information_window.glade.h:43
 #: ../data/glade/zeroconf_information_window.glade.h:1
@@ -2893,9 +2722,8 @@ msgid "More"
 msgstr "Daugiau"
 
 #: ../data/glade/vcard_information_window.glade.h:49
-#, fuzzy
 msgid "User avatar:"
-msgstr "Atvaizdas:"
+msgstr "Naudotojo atvaizdas:"
 
 #: ../data/glade/xml_console_window.glade.h:1
 msgid "<b>Jabber Traffic</b>"
@@ -2949,9 +2777,8 @@ msgid "Status:"
 msgstr "Būklė:"
 
 #: ../src/adhoc_commands.py:268
-#, fuzzy
 msgid "Cancel confirmation"
-msgstr "Asmens Informacija"
+msgstr "Atšaukti sutikimą"
 
 #: ../src/adhoc_commands.py:269
 msgid ""
@@ -3018,9 +2845,9 @@ msgid "Hidden"
 msgstr "Hidden"
 
 #: ../src/atom_window.py:110
-#, fuzzy, python-format
+#, python-format
 msgid "You have received new entries (and %(count)d not displayed):"
-msgstr "Jūs gavote naują įrašą:"
+msgstr "Jūs gavote naujų įrašų (ir %(count) nerodomi):"
 
 #. the next script, executed in the "po" directory,
 #. generates the following list.
@@ -3040,298 +2867,282 @@ msgid "Bulgarian"
 msgstr "Bulgarian"
 
 #: ../src/chat_control.py:74
-#, fuzzy
 msgid "Breton"
-msgstr "Briton"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "Czech"
-msgstr "Czech"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "German"
-msgstr "German"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "Greek"
-msgstr "Greek"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "British"
-msgstr "British"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "Esperanto"
-msgstr "Esperanto"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "Spanish"
-msgstr "Spanish"
+msgstr ""
 
 #: ../src/chat_control.py:74
-#, fuzzy
 msgid "Basque"
-msgstr "Basc"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "French"
-msgstr "French"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "Croatian"
-msgstr "Croatian"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "Italian"
-msgstr "Italian"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "Norwegian (b)"
-msgstr "Norwegian (b)"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "Dutch"
-msgstr "Dutch"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "Norwegian"
-msgstr "Norwegian"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "Polish"
-msgstr "Polish"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "Portuguese"
-msgstr "Portuguese"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "Brazilian Portuguese"
-msgstr "Brazilian Portuguese"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "Russian"
-msgstr "Russian"
+msgstr ""
 
 #: ../src/chat_control.py:74
-#, fuzzy
 msgid "Serbian"
-msgstr "German"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "Slovak"
-msgstr "Slovak"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "Swedish"
-msgstr "Swedish"
+msgstr ""
 
 #: ../src/chat_control.py:74
 msgid "Chinese (Ch)"
-msgstr "Chinese (Ch)"
+msgstr ""
 
 #: ../src/chat_control.py:426
 msgid "Spelling language"
-msgstr "Spelling language"
+msgstr "Rašybos tikrinimo kalba"
 
 #. we are not connected
 #: ../src/chat_control.py:454 ../src/chat_control.py:642
 msgid "A connection is not available"
-msgstr "A connection is not available"
+msgstr ""
 
 #: ../src/chat_control.py:455 ../src/chat_control.py:643
 msgid "Your message can not be sent until you are connected."
-msgstr "Your message can not be sent until you are connected."
+msgstr ""
 
 #: ../src/chat_control.py:820
-#, fuzzy
 msgid "Underline"
-msgstr "nine"
+msgstr "Pabraukimas"
 
 #: ../src/chat_control.py:821
-#, fuzzy
 msgid "Strike"
-msgstr "Nick"
+msgstr "Perbraukimas"
 
 #: ../src/chat_control.py:844
-#, fuzzy
 msgid "Font"
-msgstr "Šri_ftas:"
+msgstr "Šriftas"
 
 #: ../src/chat_control.py:853
-#, fuzzy
 msgid "Clear formating"
-msgstr "Asmens Informacija"
+msgstr "Valyti formatavimą"
 
 #: ../src/chat_control.py:925
 msgid "Really send file?"
-msgstr ""
+msgstr "Tikrai siųsti failą?"
 
 #: ../src/chat_control.py:926
 #, python-format
 msgid "If you send a file to %s, he/she will know your real Jabber ID."
 msgstr ""
 
-#: ../src/chat_control.py:1317 ../src/chat_control.py:1718
-#, fuzzy
+#: ../src/chat_control.py:1316 ../src/chat_control.py:1713
 msgid "GPG encryption enabled"
-msgstr "Encryption enabled"
+msgstr "GPG šifravimas įjungtas"
 
 #. Add to roster
-#: ../src/chat_control.py:1346 ../src/common/contacts.py:113
+#: ../src/chat_control.py:1343 ../src/common/contacts.py:113
 #: ../src/common/helpers.py:55 ../src/common/helpers.py:231
 #: ../src/conversation_textview.py:903 ../src/dialogs.py:1031
 #: ../src/dialogs.py:1882 ../src/dialogs.py:1907 ../src/gajim.py:999
-#: ../src/gajim.py:1750 ../src/gui_menu_builder.py:243
-#: ../src/gui_menu_builder.py:385 ../src/roster_window.py:988
+#: ../src/gajim.py:1750 ../src/gui_menu_builder.py:249
+#: ../src/gui_menu_builder.py:395 ../src/roster_window.py:988
 #: ../src/roster_window.py:1622 ../src/roster_window.py:1624
 #: ../src/roster_window.py:1926 ../src/roster_window.py:3187
 #: ../src/roster_window.py:3213
 msgid "Not in Roster"
-msgstr "Not in Roster"
+msgstr "Ne Sąraše"
+
+#: ../src/chat_control.py:1356
+msgid "This contact does not support file transfer."
+msgstr "Šis kontaktas neturi failų siuntimo funkcijos."
 
 #: ../src/chat_control.py:1359
-#, fuzzy
-msgid "This contact does not support file transfer."
-msgstr "Sąrašas aktyvių, baigtų ar sustabdytų failų siuntimų"
-
-#: ../src/chat_control.py:1362
 msgid "You need to know the real JID of the contact to send him or her a file."
 msgstr ""
 
-#: ../src/chat_control.py:1469 ../src/tooltips.py:626
+#: ../src/chat_control.py:1466 ../src/tooltips.py:626
 msgid "Unknown Artist"
 msgstr ""
 
-#: ../src/chat_control.py:1471 ../src/tooltips.py:631
+#: ../src/chat_control.py:1468 ../src/tooltips.py:631
 msgid "Unknown Title"
 msgstr ""
 
-#: ../src/chat_control.py:1473 ../src/tooltips.py:636
+#: ../src/chat_control.py:1470 ../src/tooltips.py:636
 msgid "Unknown Source"
 msgstr ""
 
-#: ../src/chat_control.py:1476 ../src/tooltips.py:638
+#: ../src/chat_control.py:1473 ../src/tooltips.py:638
 #, python-format
 msgid ""
 "<b>\"%(title)s\"</b> by <i>%(artist)s</i>\n"
 "from <i>%(source)s</i>"
 msgstr ""
 
-#: ../src/chat_control.py:1613
+#: ../src/chat_control.py:1609
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s from group chat %(room_name)s"
 
 #. No key assigned nor a key is used by remote contact
-#: ../src/chat_control.py:1698 ../src/dialogs.py:4484
+#: ../src/chat_control.py:1693 ../src/dialogs.py:4484
 msgid "No GPG key assigned"
 msgstr ""
 
-#: ../src/chat_control.py:1699
+#: ../src/chat_control.py:1694
 msgid ""
 "No GPG key is assigned to this contact. So you cannot encrypt messages with "
 "GPG."
 msgstr ""
 
-#: ../src/chat_control.py:1708
-#, fuzzy
+#: ../src/chat_control.py:1703
 msgid "GPG encryption disabled"
-msgstr "Encryption disabled"
+msgstr "GPG šifravimas išjungtas"
 
-#: ../src/chat_control.py:1734
+#: ../src/chat_control.py:1729
 msgid "Session WILL be logged"
 msgstr ""
 
-#: ../src/chat_control.py:1736
+#: ../src/chat_control.py:1731
 msgid "Session WILL NOT be logged"
 msgstr ""
 
 #. encryption %s active
-#: ../src/chat_control.py:1750
+#: ../src/chat_control.py:1745
 msgid "is"
 msgstr ""
 
-#: ../src/chat_control.py:1750
+#: ../src/chat_control.py:1745
 msgid "is NOT"
 msgstr ""
 
 #. chat session %s be logged
-#: ../src/chat_control.py:1752
+#: ../src/chat_control.py:1747
 msgid "will"
 msgstr ""
 
-#: ../src/chat_control.py:1752
+#: ../src/chat_control.py:1747
 msgid "will NOT"
 msgstr ""
 
 #. About encrypted chat session
-#: ../src/chat_control.py:1756
-#, fuzzy
+#: ../src/chat_control.py:1751
 msgid "and authenticated"
-msgstr "Naudoti autentifikaciją"
+msgstr "ir patvirtintas"
 
 #. About encrypted chat session
-#: ../src/chat_control.py:1760
-#, fuzzy
+#: ../src/chat_control.py:1755
 msgid "and NOT authenticated"
-msgstr "Naudoti autentifikaciją"
+msgstr "ir NEpatvirtintas"
 
 #. status will become 'is' or 'is not', authentificaed will become
 #. 'and authentificated' or 'and not authentificated', logged will become
 #. 'will' or 'will not'
-#: ../src/chat_control.py:1766
+#: ../src/chat_control.py:1761
 #, python-format
 msgid ""
 "%(type)s encryption %(status)s active %(authenticated)s.\n"
 "Your chat session %(logged)s be logged."
 msgstr ""
 
-#: ../src/chat_control.py:1906
+#: ../src/chat_control.py:1901
 msgid "Session negotiation cancelled"
 msgstr ""
 
-#: ../src/chat_control.py:1913
-#, fuzzy
+#: ../src/chat_control.py:1908
 msgid "This session is encrypted"
-msgstr "[This message is encrypted]"
+msgstr "Ši žinutė šifruota"
 
-#: ../src/chat_control.py:1916
+#: ../src/chat_control.py:1911
 msgid " and WILL be logged"
 msgstr ""
 
-#: ../src/chat_control.py:1918
+#: ../src/chat_control.py:1913
 msgid " and WILL NOT be logged"
 msgstr ""
 
-#: ../src/chat_control.py:1923
+#: ../src/chat_control.py:1918
 msgid ""
 "Remote contact's identity not verified. Click the shield button for more "
 "details."
 msgstr ""
 
-#: ../src/chat_control.py:1925
-#, fuzzy
+#: ../src/chat_control.py:1920
 msgid "E2E encryption disabled"
-msgstr "Encryption disabled"
+msgstr "E2E šifravimas išjungtas"
 
-#: ../src/chat_control.py:1959 ../src/chat_control.py:1972
-#, fuzzy
+#: ../src/chat_control.py:1954 ../src/chat_control.py:1967
 msgid "The following message was NOT encrypted"
-msgstr "[This message is encrypted]"
+msgstr "Ši žinutė NEBUVO šifruota"
 
-#: ../src/chat_control.py:1965
-#, fuzzy
+#: ../src/chat_control.py:1960
 msgid "The following message was encrypted"
-msgstr "[This message is encrypted]"
+msgstr "Ši žinutė buvo šifruota"
 
 #. %s is being replaced in the code with JID
-#: ../src/chat_control.py:2235
+#: ../src/chat_control.py:2227
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "You just received a new message from \"%s\""
 
-#: ../src/chat_control.py:2236
+#: ../src/chat_control.py:2228
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
@@ -3339,7 +3150,7 @@ msgstr ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
 
-#: ../src/chat_control.py:2391 ../src/common/connection_handlers.py:2073
+#: ../src/chat_control.py:2383 ../src/common/connection_handlers.py:2073
 #: ../src/common/connection_handlers.py:2119
 #: ../src/common/connection_handlers.py:2347
 #: ../src/common/connection_handlers.py:2489 ../src/common/connection.py:1368
@@ -3347,17 +3158,17 @@ msgstr ""
 msgid "Database Error"
 msgstr ""
 
-#: ../src/chat_control.py:2392
+#: ../src/chat_control.py:2384
 #, python-format
 msgid ""
 "The database file (%s) cannot be read. Try to repair it or remove it (all "
 "history will be lost)."
 msgstr ""
 
-#: ../src/chat_control.py:2622
-#, fuzzy, python-format
+#: ../src/chat_control.py:2614
+#, python-format
 msgid "%(name)s is now %(status)s"
-msgstr "%(nick)s is now %(status)s"
+msgstr "%(name) dabar %(status)"
 
 #: ../src/common/check_paths.py:44
 msgid "creating logs database"
@@ -3450,14 +3261,12 @@ msgid "Groupchats"
 msgstr "Groupchats"
 
 #: ../src/common/commands.py:246
-#, fuzzy
 msgid "You left the following groupchats:"
-msgstr "You left the following groupchats:"
+msgstr "Jūs palikote šių grupių pokalbius:"
 
 #: ../src/common/commands.py:258
-#, fuzzy
 msgid "Forward unread messages"
-msgstr " %d unread message"
+msgstr "Persiųsti neskaitytas žinutes"
 
 #: ../src/common/commands.py:278
 msgid "All unread messages have been forwarded."
@@ -3480,9 +3289,8 @@ msgid "Time in minutes, after which your status changes to away."
 msgstr "Time in minutes, after which your status changes to away."
 
 #: ../src/common/config.py:82
-#, fuzzy
 msgid "$S (Away as a result of being idle more than $T min)"
-msgstr "Away as a result of being idle"
+msgstr "$S (Nutolęs, nes nesinaudoja kompiuteriu, daugiau kaip $T min)"
 
 #: ../src/common/config.py:82
 msgid "$S will be replaced by current status message, $T by autoaway time."
@@ -3490,12 +3298,11 @@ msgstr ""
 
 #: ../src/common/config.py:84
 msgid "Time in minutes, after which your status changes to not available."
-msgstr "Time in minutes, after which your status changes to not available."
+msgstr ""
 
 #: ../src/common/config.py:85
-#, fuzzy
 msgid "$S (Not available as a result of being idle more than $T min)"
-msgstr "Not available as a result of being idle"
+msgstr "$S (Nepasiekiamas, nes nesinaudoja kompiuteriu daugiau kaip $T min)"
 
 #: ../src/common/config.py:85
 msgid "$S will be replaced by current status message, $T by autoxa time."
@@ -3506,9 +3313,8 @@ msgid "When to show systray icon. Can be 'never', 'on_event', 'always'."
 msgstr ""
 
 #: ../src/common/config.py:93
-#, fuzzy
 msgid "Incoming nickname color."
-msgstr "Invalid username"
+msgstr "Įeinančio slapyvardžio spalva."
 
 #: ../src/common/config.py:94
 msgid "Outgoing nickname color."
@@ -3523,19 +3329,16 @@ msgid "Outgoing text color."
 msgstr ""
 
 #: ../src/common/config.py:97
-#, fuzzy
 msgid "Status message text color."
-msgstr "status message text"
+msgstr "Būklės žinutės teksto spalva."
 
 #: ../src/common/config.py:100
-#, fuzzy
 msgid "Incoming nickname font."
-msgstr "Invalid username"
+msgstr "Įeinančio slapyvardžio šriftas."
 
 #: ../src/common/config.py:101
-#, fuzzy
 msgid "Outgoing nickname font."
-msgstr "Changing Nickname"
+msgstr "Išeinančio slapyvardžio spalva."
 
 #: ../src/common/config.py:102
 msgid "Incoming text font."
@@ -3546,9 +3349,8 @@ msgid "Outgoing text font."
 msgstr ""
 
 #: ../src/common/config.py:104
-#, fuzzy
 msgid "Status message text font."
-msgstr "status message text"
+msgstr "Būklės žinutės teksto šriftas."
 
 #: ../src/common/config.py:105
 msgid ""
@@ -3560,9 +3362,8 @@ msgstr ""
 #: ../src/common/config.py:106 ../src/common/config.py:483
 #: ../src/common/optparser.py:245 ../src/common/optparser.py:463
 #: ../src/common/optparser.py:497 ../src/gajim.py:3471
-#, fuzzy
 msgid "default"
-msgstr "Default"
+msgstr "įprastas"
 
 #: ../src/common/config.py:112
 msgid "Language used by speller"
@@ -3584,9 +3385,6 @@ msgid ""
 "to disable fuzzyclock. 1 is the most precise clock, 4 the least precise one. "
 "This is used only if print_time is 'sometimes'."
 msgstr ""
-"Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 "
-"to disable fuzzyclock. 1 is the most precise clock, 4 the least precise one. "
-"This is used only if print_time is 'sometimes'."
 
 #: ../src/common/config.py:117
 msgid "Treat * / _ pairs as possible formatting characters."
@@ -3758,13 +3556,10 @@ msgid ""
 msgstr ""
 
 #: ../src/common/config.py:192
-#, fuzzy
 msgid ""
 "Comma separated list of hosts that we send, in addition of local interfaces, "
 "for File Transfer in case of address translation/port forwarding."
 msgstr ""
-"Overrides the host we send for File Transfer in case of address translation/"
-"port forwarding."
 
 #: ../src/common/config.py:194
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
@@ -3912,7 +3707,6 @@ msgstr ""
 
 #. always, never, peracct, pertype should not be translated
 #: ../src/common/config.py:244
-#, fuzzy
 msgid ""
 "Controls the window where new messages are placed.\n"
 "'always' - All messages are sent to a single window.\n"
@@ -3923,13 +3717,6 @@ msgid ""
 "'pertype' - Each message type (e.g., chats vs. groupchats) are sent to a "
 "specific window."
 msgstr ""
-"Controls the window where new messages are placed.\n"
-"'always' - All messages are sent to a single window.\n"
-"'never' - All messages get their own window.\n"
-"'peracct' - Messages for each account are sent to a specific window.\n"
-"'pertype' - Each message type (e.g., chats vs. groupchats) are sent to a "
-"specific window. Note, changing this option requires restarting Gajim before "
-"the changes will take effect."
 
 #: ../src/common/config.py:245
 msgid "If False, you will no longer see the avatar in the chat window."
@@ -3940,9 +3727,8 @@ msgid "If True, pressing the escape key closes a tab/window."
 msgstr "If True, pressing the escape key closes a tab/window."
 
 #: ../src/common/config.py:247
-#, fuzzy
 msgid "Hides the buttons in chat windows."
-msgstr "Hides the buttons in group chat window."
+msgstr "Paslėps mygtukus pokalbių languose."
 
 #: ../src/common/config.py:248
 msgid "Hides the banner in a group chat window"
@@ -3969,16 +3755,14 @@ msgid "Indentation when using merge consecutive nickname."
 msgstr "Indentation when using merge consecutive nickname."
 
 #: ../src/common/config.py:253
-#, fuzzy
 msgid "Smooth scroll message in conversation window"
-msgstr "Išsiųsti žinutę ir uždaryti langą"
+msgstr "Lygus žinutės slinkimas pokalbio lange"
 
 #: ../src/common/config.py:254
-#, fuzzy
 msgid ""
 "List of colors, separated by \":\", that will be used to color nicknames in "
 "group chats."
-msgstr "List of colours that will be used to colour nicknames in group chats."
+msgstr ""
 
 #: ../src/common/config.py:255
 msgid "Ctrl-Tab go to next composing tab when none is unread."
@@ -3993,22 +3777,16 @@ msgstr ""
 "string means we never show the dialogue."
 
 #: ../src/common/config.py:257
-#, fuzzy
 msgid ""
 "Should we show the confirm block contact dialog or not? Empty string means "
 "we never show the dialog."
 msgstr ""
-"Should we show the confirm metacontacts creation dialogue or not? Empty "
-"string means we never show the dialogue."
 
 #: ../src/common/config.py:258
-#, fuzzy
 msgid ""
 "Should we show the confirm custom status dialog or not? Empty string means "
 "we never show the dialog."
 msgstr ""
-"Should we show the confirm metacontacts creation dialogue or not? Empty "
-"string means we never show the dialogue."
 
 #: ../src/common/config.py:259
 msgid ""
@@ -4029,13 +3807,10 @@ msgstr ""
 "passwords."
 
 #: ../src/common/config.py:261
-#, fuzzy
 msgid ""
 "If True, Gajim will use KDE Wallet (if kwalletcli is available) to store "
 "account passwords."
 msgstr ""
-"If True, Gajim will use Gnome Keyring (if available) to store account "
-"passwords."
 
 #: ../src/common/config.py:262
 msgid ""
@@ -4137,10 +3912,9 @@ msgid ""
 msgstr ""
 
 #: ../src/common/config.py:298
-#, fuzzy
 msgid ""
 "If False, this account will be disabled and will not appear in roster window."
-msgstr "If False, you will no longer see the avatar in the chat window."
+msgstr ""
 
 #: ../src/common/config.py:301
 msgid ""
@@ -4367,9 +4141,8 @@ msgid "Registration information for transport %s has not arrived in time"
 msgstr "Registration information for transport %s has not arrived in time"
 
 #: ../src/common/connection_handlers.py:685
-#, fuzzy
 msgid "Registration succeeded"
-msgstr "Register to %s"
+msgstr "Registracija sėkminga"
 
 #: ../src/common/connection_handlers.py:686
 #, python-format
@@ -4377,9 +4150,8 @@ msgid "Registration with agent %s succeeded"
 msgstr ""
 
 #: ../src/common/connection_handlers.py:688
-#, fuzzy
 msgid "Registration failed"
-msgstr "Connection Failed"
+msgstr "Registracija nesėkminga"
 
 #: ../src/common/connection_handlers.py:688
 #, python-format
@@ -4397,9 +4169,8 @@ msgid "Disk Write Error"
 msgstr ""
 
 #: ../src/common/connection_handlers.py:1207 ../src/common/connection.py:935
-#, fuzzy
 msgid "Invisibility not supported"
-msgstr "Extension not supported"
+msgstr "Nematomumo funkcijos nėra"
 
 #: ../src/common/connection_handlers.py:1208 ../src/common/connection.py:936
 #, python-format
@@ -4408,7 +4179,7 @@ msgstr ""
 
 #: ../src/common/connection_handlers.py:1892 ../src/common/connection.py:1181
 #: ../src/config.py:1875 ../src/config.py:1884 ../src/config.py:1943
-#: ../src/config.py:3281 ../src/dataforms_widget.py:555 ../src/dialogs.py:2665
+#: ../src/config.py:3281 ../src/dataforms_widget.py:553 ../src/dialogs.py:2665
 msgid "Invalid Jabber ID"
 msgstr "Invalid Jabber ID"
 
@@ -4450,35 +4221,35 @@ msgid "Maximum number of users for %s has been reached"
 msgstr ""
 
 #: ../src/common/connection_handlers.py:2304
-#, fuzzy, python-format
+#, python-format
 msgid "You are banned from group chat %s."
-msgstr "You are banned from this group chat."
+msgstr "Jūs esate išmestas iš grupės pokalbio %s."
 
 #: ../src/common/connection_handlers.py:2310
-#, fuzzy, python-format
+#, python-format
 msgid "Group chat %s does not exist."
-msgstr "Such group chat does not exist."
+msgstr "Tokios grupės pokalbis %s neegzistuoja."
 
 #: ../src/common/connection_handlers.py:2313
 msgid "Group chat creation is restricted."
 msgstr "Group chat creation is restricted."
 
 #: ../src/common/connection_handlers.py:2316
-#, fuzzy, python-format
+#, python-format
 msgid "Your registered nickname must be used in group chat %s."
-msgstr "Your registered nickname must be used."
+msgstr ""
+"Jūsų užregistruotas slapyvardis turi būti naudojamas grupės pokalbyje %s."
 
 #: ../src/common/connection_handlers.py:2320
-#, fuzzy, python-format
+#, python-format
 msgid "You are not in the members list in groupchat %s."
-msgstr "You are not in the members list."
+msgstr "Jūs estate grupės pokalbio %s narių sąraše."
 
 #. Room has been destroyed. see
 #. http://www.xmpp.org/extensions/xep-0045.html#destroyroom
 #: ../src/common/connection_handlers.py:2363
-#, fuzzy
 msgid "Room has been destroyed"
-msgstr "Authorisation has been removed"
+msgstr "Kambarys buvo sunaikintas"
 
 #: ../src/common/connection_handlers.py:2371
 #, python-format
@@ -4531,9 +4302,8 @@ msgid "Unable to decrypt CRL's signature"
 msgstr ""
 
 #: ../src/common/connection.py:72
-#, fuzzy
 msgid "Unable to decode issuer public key"
-msgstr "Unable to load idle module"
+msgstr "Nepavyksta iškoduoti siuntėjo viešojo rakto"
 
 #: ../src/common/connection.py:73
 msgid "Certificate signature failure"
@@ -4604,9 +4374,8 @@ msgid "Certificate revoked"
 msgstr ""
 
 #: ../src/common/connection.py:90
-#, fuzzy
 msgid "Invalid CA certificate"
-msgstr "Invalid username"
+msgstr "Blogas CA sertifikatas"
 
 #: ../src/common/connection.py:91
 msgid "Path length constraint exceeded"
@@ -4655,9 +4424,10 @@ msgid "Reconnect manually."
 msgstr "Reconnect manually."
 
 #: ../src/common/connection.py:290
-#, fuzzy, python-format
+#, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
-msgstr "Transport %s answered wrongly to register request: %s"
+msgstr ""
+"Serveris %(name)s atsiuntė blogą atsakymą į registravimo užklausą: %(error)s"
 
 #: ../src/common/connection.py:324
 #, python-format
@@ -4675,9 +4445,11 @@ msgid "Invalid answer"
 msgstr "Invalid answer"
 
 #: ../src/common/connection.py:353
-#, fuzzy, python-format
+#, python-format
 msgid "Transport %(name)s answered wrongly to register request: %(error)s"
-msgstr "Transport %s answered wrongly to register request: %s"
+msgstr ""
+"Pernaša %(name)s atsiuntė klaidingą atsakymą į registravimo užklausą: %"
+"(error)s"
 
 #: ../src/common/connection.py:636 ../src/common/connection.py:765
 #: ../src/common/connection.py:1526
@@ -4691,24 +4463,23 @@ msgid "Check your connection or try again later."
 msgstr "Check your connection or try again later."
 
 #: ../src/common/connection.py:642
-#, fuzzy, python-format
+#, python-format
 msgid "Server replied: %s"
-msgstr "Saved in: %s"
+msgstr "Serveris atsakė: %s"
 
 #: ../src/common/connection.py:655
-#, fuzzy
 msgid "Connection to proxy failed"
-msgstr "Connection Failed"
+msgstr "Nepavyko prisijungti prie proksi"
 
 #: ../src/common/connection.py:686 ../src/common/connection.py:745
-#, fuzzy, python-format
+#, python-format
 msgid "Could not connect to account %s"
-msgstr "Could not connect to \"%s\""
+msgstr "Nepavyko prisijungti prie %s"
 
 #: ../src/common/connection.py:687 ../src/common/connection.py:746
-#, fuzzy, python-format
+#, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
-msgstr "Connection with account \"%s\" has been lost"
+msgstr "Prarastas ryšys su %s. Jungiamasi iš naujo."
 
 #: ../src/common/connection.py:712
 #, python-format
@@ -4747,18 +4518,16 @@ msgid "Error while removing privacy list"
 msgstr "Error while removing privacy list"
 
 #: ../src/common/connection.py:863
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
 "connected resources. Deactivate it and try again."
 msgstr ""
-"Privacy list %s has not been removed. It is maybe active in one of your "
-"connected resources. Deactivate it and try again."
 
 #: ../src/common/connection.py:1182 ../src/dialogs.py:2666
-#, fuzzy, python-format
+#, python-format
 msgid "It is not possible to send a message to %s, this JID is not valid."
-msgstr "It is not possible to send empty files"
+msgstr ""
 
 #: ../src/common/connection.py:1204
 #: ../src/common/zeroconf/connection_zeroconf.py:389
@@ -4774,19 +4543,18 @@ msgstr ""
 #. we're not english
 #. one in locale and one en
 #: ../src/common/connection.py:1254
-#, fuzzy
 msgid "[This message is *encrypted* (See :XEP:`27`]"
-msgstr "[This message is *encrypted* (See :JEP:`27`]"
+msgstr ""
 
 #: ../src/common/connection.py:1356
 #: ../src/common/zeroconf/connection_zeroconf.py:468
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Subject: %(subject)s\n"
 "%(message)s"
 msgstr ""
-"Subject: %s\n"
-"%s"
+"Tema: %(subject)s\n"
+"%(message)s"
 
 #: ../src/common/connection.py:1383
 #, python-format
@@ -4794,18 +4562,16 @@ msgid "Sent contact: \"%s\" (%s)"
 msgstr ""
 
 #: ../src/common/connection.py:1386
-#, fuzzy
 msgid "Sent contacts:"
-msgstr "Rename Contact"
+msgstr "Siųsti kontaktus:"
 
 #: ../src/common/connection.py:1559 ../src/common/connection.py:1580
 msgid "Not fetched because of invisible status"
 msgstr "Not fetched because of invisible status"
 
 #: ../src/common/connection.py:1982
-#, fuzzy
 msgid "Unregister failed"
-msgstr "Connection Failed"
+msgstr "Išsiregistruoti nepavyko"
 
 #: ../src/common/connection.py:1983
 #, python-format
@@ -4848,9 +4614,8 @@ msgid "pysqlite2 (aka python-pysqlite2) dependency is missing. Exiting..."
 msgstr "pysqlite2 (aka python-pysqlite2) dependency is missing. Exiting..."
 
 #: ../src/common/exceptions.py:47
-#, fuzzy
 msgid "Database cannot be read."
-msgstr "Account name cannot be empty."
+msgstr "Negalima nuskaityti duomenų bazės."
 
 #: ../src/common/exceptions.py:55
 msgid "Service not available: Gajim is not running, or remote_control is False"
@@ -4871,182 +4636,182 @@ msgstr ""
 
 #: ../src/common/fuzzyclock.py:38
 msgid "twelve"
-msgstr "twelve"
+msgstr "dvylika"
 
 #: ../src/common/fuzzyclock.py:38
 msgid "one"
-msgstr "one"
+msgstr "vienas"
 
 #: ../src/common/fuzzyclock.py:38
 msgid "two"
-msgstr "two"
+msgstr "du"
 
 #: ../src/common/fuzzyclock.py:38
 msgid "three"
-msgstr "three"
+msgstr "trys"
 
 #: ../src/common/fuzzyclock.py:38
 msgid "four"
-msgstr "four"
+msgstr "keturi"
 
 #: ../src/common/fuzzyclock.py:39
 msgid "five"
-msgstr "five"
+msgstr "penki"
 
 #: ../src/common/fuzzyclock.py:39
 msgid "six"
-msgstr "six"
+msgstr "šeši"
 
 #: ../src/common/fuzzyclock.py:39
 msgid "seven"
-msgstr "seven"
+msgstr "septyni"
 
 #: ../src/common/fuzzyclock.py:39
 msgid "eight"
-msgstr "eight"
+msgstr "aštuoni"
 
 #: ../src/common/fuzzyclock.py:39
 msgid "nine"
-msgstr "nine"
+msgstr "devyni"
 
 #: ../src/common/fuzzyclock.py:39
 msgid "ten"
-msgstr "ten"
+msgstr "dešimt"
 
 #: ../src/common/fuzzyclock.py:40
 msgid "eleven"
-msgstr "eleven"
+msgstr "vienuolika"
 
 #. Strings to use for the output. %(0)s will be replaced with the preceding hour
 #. (e.g. "x PAST %(0)s"), %(1)s with the coming hour (e.g. "x TO %(0)s"). '''
 #: ../src/common/fuzzyclock.py:44
 #, python-format
 msgid "%(0)s o'clock"
-msgstr "%(0)s o'clock"
+msgstr "%(0)s"
 
 #: ../src/common/fuzzyclock.py:44
 #, python-format
 msgid "five past %(0)s"
-msgstr "five past %(0)s"
+msgstr "penkios po %(0)s"
 
 #: ../src/common/fuzzyclock.py:44
 #, python-format
 msgid "ten past %(0)s"
-msgstr "ten past %(0)s"
+msgstr "dešimt po %(0)s"
 
 #: ../src/common/fuzzyclock.py:45
 #, python-format
 msgid "quarter past %(0)s"
-msgstr "quarter past %(0)s"
+msgstr "ketvirtis po %(0)s"
 
 #: ../src/common/fuzzyclock.py:45
 #, python-format
 msgid "twenty past %(0)s"
-msgstr "twenty past %(0)s"
+msgstr "dvylika po %(0)s"
 
 #: ../src/common/fuzzyclock.py:45
 #, python-format
 msgid "twenty five past %(0)s"
-msgstr "twenty five past %(0)s"
+msgstr "dvidešimt penkios po %(0)s"
 
 #: ../src/common/fuzzyclock.py:46
 #, python-format
 msgid "half past %(0)s"
-msgstr "half past %(0)s"
+msgstr "pusė %(0)s"
 
 #: ../src/common/fuzzyclock.py:46
 #, python-format
 msgid "twenty five to %(1)s"
-msgstr "twenty five to %(1)s"
+msgstr "be dvidešimt penkių %(1)s"
 
 #: ../src/common/fuzzyclock.py:46
 #, python-format
 msgid "twenty to %(1)s"
-msgstr "twenty to %(1)s"
+msgstr "be dvylikos %(1)s"
 
 #: ../src/common/fuzzyclock.py:47
 #, python-format
 msgid "quarter to %(1)s"
-msgstr "quarter to %(1)s"
+msgstr "be penkiolikos %(1)s"
 
 #: ../src/common/fuzzyclock.py:47
 #, python-format
 msgid "ten to %(1)s"
-msgstr "ten to %(1)s"
+msgstr "be dešimt %(1)s"
 
 #: ../src/common/fuzzyclock.py:47
 #, python-format
 msgid "five to %(1)s"
-msgstr "five to %(1)s"
+msgstr "be penkių %(1)s"
 
 #: ../src/common/fuzzyclock.py:47
 #, python-format
 msgid "%(1)s o'clock"
-msgstr "%(1)s o'clock"
+msgstr "%(1)s"
 
 #: ../src/common/fuzzyclock.py:49 ../src/common/fuzzyclock.py:51
 msgid "Night"
-msgstr "Night"
+msgstr "Naktis"
 
 #: ../src/common/fuzzyclock.py:49
 msgid "Early morning"
-msgstr "Early morning"
+msgstr ""
 
 #: ../src/common/fuzzyclock.py:49
 msgid "Morning"
-msgstr "Morning"
+msgstr "Rytas"
 
 #: ../src/common/fuzzyclock.py:50
 msgid "Almost noon"
-msgstr "Almost noon"
+msgstr ""
 
 #: ../src/common/fuzzyclock.py:50
 msgid "Noon"
-msgstr "Noon"
+msgstr ""
 
 #: ../src/common/fuzzyclock.py:50
 msgid "Afternoon"
-msgstr "Afternoon"
+msgstr ""
 
 #: ../src/common/fuzzyclock.py:50
 msgid "Evening"
-msgstr "Evening"
+msgstr "Vakaras"
 
 #: ../src/common/fuzzyclock.py:51
 msgid "Late evening"
-msgstr "Late evening"
+msgstr ""
 
 #: ../src/common/fuzzyclock.py:53
 msgid "Start of week"
-msgstr "Start of week"
+msgstr ""
 
 #: ../src/common/fuzzyclock.py:53 ../src/common/fuzzyclock.py:54
 msgid "Middle of week"
-msgstr "Middle of week"
+msgstr ""
 
 #: ../src/common/fuzzyclock.py:54
 msgid "End of week"
-msgstr "End of week"
+msgstr ""
 
 #: ../src/common/fuzzyclock.py:54
 msgid "Weekend!"
-msgstr "Weekend!"
+msgstr ""
 
 #: ../src/common/helpers.py:140
 msgid "Invalid character in username."
-msgstr "Invalid character in username."
+msgstr ""
 
 #: ../src/common/helpers.py:145
 msgid "Server address required."
-msgstr "Server address required."
+msgstr ""
 
 #: ../src/common/helpers.py:151
 msgid "Invalid character in hostname."
-msgstr "Invalid character in hostname."
+msgstr ""
 
 #: ../src/common/helpers.py:158
 msgid "Invalid character in resource."
-msgstr "Invalid character in resource."
+msgstr ""
 
 #: ../src/common/helpers.py:195
 msgid "_Busy"
@@ -5232,11 +4997,11 @@ msgid "%s B"
 msgstr "%s B"
 
 #: ../src/common/helpers.py:1166 ../src/common/helpers.py:1173
-#, fuzzy, python-format
+#, python-format
 msgid "%d message pending"
 msgid_plural "%d messages pending"
-msgstr[0] "Siųsti žinutę"
-msgstr[1] "Siųsti žinutę"
+msgstr[0] "%d žinutė laukia"
+msgstr[1] "%d žinutės laukia"
 
 #: ../src/common/helpers.py:1179
 #, python-format
@@ -5292,7 +5057,7 @@ msgstr "migrating logs database to indices"
 #: ../src/common/passwords.py:123
 #, fuzzy, python-format
 msgid "XMPP account %s@%s"
-msgstr "of account %s"
+msgstr "XMPP prieiga %s@%s"
 
 #: ../src/common/pep.py:30
 msgid "Afraid"
@@ -5319,56 +5084,48 @@ msgid "Anxious"
 msgstr ""
 
 #: ../src/common/pep.py:36
-#, fuzzy
 msgid "Aroused"
-msgstr "sustabdytas"
+msgstr ""
 
 #: ../src/common/pep.py:37
 msgid "Ashamed"
 msgstr ""
 
 #: ../src/common/pep.py:38
-#, fuzzy
 msgid "Bored"
-msgstr "Paryškintas"
+msgstr ""
 
 #: ../src/common/pep.py:39
-#, fuzzy
 msgid "Brave"
-msgstr "Turiu "
+msgstr ""
 
 #: ../src/common/pep.py:40
 msgid "Calm"
 msgstr ""
 
 #: ../src/common/pep.py:41
-#, fuzzy
 msgid "Cautious"
-msgstr "Chats"
+msgstr ""
 
 #: ../src/common/pep.py:42
-#, fuzzy
 msgid "Cold"
-msgstr "Paryškintas"
+msgstr ""
 
 #: ../src/common/pep.py:43
-#, fuzzy
 msgid "Confident"
-msgstr "_Turinys"
+msgstr ""
 
 #: ../src/common/pep.py:44
 msgid "Confused"
 msgstr ""
 
 #: ../src/common/pep.py:45
-#, fuzzy
 msgid "Contemplative"
-msgstr "Completed"
+msgstr ""
 
 #: ../src/common/pep.py:46
-#, fuzzy
 msgid "Contented"
-msgstr "_Turinys"
+msgstr ""
 
 #: ../src/common/pep.py:47
 msgid "Cranky"
@@ -5379,42 +5136,36 @@ msgid "Crazy"
 msgstr ""
 
 #: ../src/common/pep.py:49
-#, fuzzy
 msgid "Creative"
-msgstr "Deactivated"
+msgstr ""
 
 #: ../src/common/pep.py:50
-#, fuzzy
 msgid "Curious"
-msgstr "uri"
+msgstr ""
 
 #: ../src/common/pep.py:51
-#, fuzzy
 msgid "Dejected"
-msgstr "Trinti"
+msgstr ""
 
 #: ../src/common/pep.py:52
 msgid "Depressed"
 msgstr ""
 
 #: ../src/common/pep.py:53
-#, fuzzy
 msgid "Disappointed"
-msgstr "Contact Disconnected"
+msgstr ""
 
 #: ../src/common/pep.py:54
 msgid "Disgusted"
 msgstr ""
 
 #: ../src/common/pep.py:55
-#, fuzzy
 msgid "Dismayed"
-msgstr "Disabled"
+msgstr ""
 
 #: ../src/common/pep.py:56
-#, fuzzy
 msgid "Distracted"
-msgstr "Disabled"
+msgstr ""
 
 #: ../src/common/pep.py:57
 msgid "Embarrassed"
@@ -5425,9 +5176,8 @@ msgid "Envious"
 msgstr ""
 
 #: ../src/common/pep.py:59
-#, fuzzy
 msgid "Excited"
-msgstr "Activated"
+msgstr ""
 
 #: ../src/common/pep.py:60
 msgid "Flirtatious"
@@ -5446,9 +5196,8 @@ msgid "Grieving"
 msgstr ""
 
 #: ../src/common/pep.py:64
-#, fuzzy
 msgid "Grumpy"
-msgstr "Group"
+msgstr ""
 
 #: ../src/common/pep.py:65
 msgid "Guilty"
@@ -5463,9 +5212,8 @@ msgid "Hopeful"
 msgstr ""
 
 #: ../src/common/pep.py:68
-#, fuzzy
 msgid "Hot"
-msgstr "_Hostas:"
+msgstr ""
 
 #: ../src/common/pep.py:69
 msgid "Humbled"
@@ -5484,9 +5232,8 @@ msgid "Hurt"
 msgstr ""
 
 #: ../src/common/pep.py:73
-#, fuzzy
 msgid "Impressed"
-msgstr "message"
+msgstr ""
 
 #: ../src/common/pep.py:74
 msgid "In Awe"
@@ -5505,42 +5252,36 @@ msgid "Interested"
 msgstr ""
 
 #: ../src/common/pep.py:78
-#, fuzzy
 msgid "Intoxicated"
-msgstr "Activated"
+msgstr ""
 
 #: ../src/common/pep.py:79
-#, fuzzy
 msgid "Invincible"
-msgstr "Nematomas"
+msgstr ""
 
 #: ../src/common/pep.py:80
 msgid "Jealous"
 msgstr ""
 
 #: ../src/common/pep.py:81
-#, fuzzy
 msgid "Lonely"
-msgstr "one"
+msgstr ""
 
 #: ../src/common/pep.py:82
-#, fuzzy
 msgid "Lost"
-msgstr "_Hostas:"
+msgstr ""
 
 #: ../src/common/pep.py:83
 msgid "Lucky"
 msgstr ""
 
 #: ../src/common/pep.py:84
-#, fuzzy
 msgid "Mean"
-msgstr "German"
+msgstr ""
 
 #: ../src/common/pep.py:85
-#, fuzzy
 msgid "Moody"
-msgstr "_Keisti"
+msgstr ""
 
 #: ../src/common/pep.py:86
 msgid "Nervous"
@@ -5551,9 +5292,8 @@ msgid "Neutral"
 msgstr ""
 
 #: ../src/common/pep.py:88
-#, fuzzy
 msgid "Offended"
-msgstr "Atsijungęs"
+msgstr ""
 
 #: ../src/common/pep.py:89
 msgid "Outraged"
@@ -5564,18 +5304,16 @@ msgid "Playful"
 msgstr ""
 
 #: ../src/common/pep.py:91
-#, fuzzy
 msgid "Proud"
-msgstr "Group"
+msgstr ""
 
 #: ../src/common/pep.py:92
 msgid "Relaxed"
 msgstr ""
 
 #: ../src/common/pep.py:93
-#, fuzzy
 msgid "Relieved"
-msgstr "eleven"
+msgstr ""
 
 #: ../src/common/pep.py:94
 msgid "Remorseful"
@@ -5586,18 +5324,16 @@ msgid "Restless"
 msgstr ""
 
 #: ../src/common/pep.py:96
-#, fuzzy
 msgid "Sad"
-msgstr "Stalled"
+msgstr ""
 
 #: ../src/common/pep.py:97
 msgid "Sarcastic"
 msgstr ""
 
 #: ../src/common/pep.py:98
-#, fuzzy
 msgid "Satisfied"
-msgstr "Paskutinį kartą keista:"
+msgstr ""
 
 #: ../src/common/pep.py:99
 msgid "Serious"
@@ -5612,32 +5348,28 @@ msgid "Shy"
 msgstr ""
 
 #: ../src/common/pep.py:102
-#, fuzzy
 msgid "Sick"
-msgstr "Nick"
+msgstr ""
 
 #: ../src/common/pep.py:103
-#, fuzzy
 msgid "Sleepy"
-msgstr "Sleeping"
+msgstr ""
 
 #: ../src/common/pep.py:104
 msgid "Spontaneous"
 msgstr ""
 
 #: ../src/common/pep.py:105
-#, fuzzy
 msgid "Stressed"
-msgstr "Gatvė:"
+msgstr ""
 
 #: ../src/common/pep.py:106
 msgid "Strong"
 msgstr ""
 
 #: ../src/common/pep.py:107
-#, fuzzy
 msgid "Surprised"
-msgstr "Subscribed"
+msgstr ""
 
 #: ../src/common/pep.py:108
 msgid "Thankful"
@@ -5648,14 +5380,12 @@ msgid "Thirsty"
 msgstr ""
 
 #: ../src/common/pep.py:110
-#, fuzzy
 msgid "Tired"
-msgstr "Time"
+msgstr ""
 
 #: ../src/common/pep.py:111
-#, fuzzy
 msgid "Undefined"
-msgstr "nine"
+msgstr ""
 
 #: ../src/common/pep.py:112
 msgid "Weak"
@@ -5666,23 +5396,20 @@ msgid "Worried"
 msgstr ""
 
 #: ../src/common/pep.py:116
-#, fuzzy
 msgid "Doing Chores"
-msgstr "Wrong host"
+msgstr ""
 
 #: ../src/common/pep.py:117
 msgid "Buying Groceries"
 msgstr ""
 
 #: ../src/common/pep.py:118
-#, fuzzy
 msgid "Cleaning"
-msgstr "Evening"
+msgstr ""
 
 #: ../src/common/pep.py:119
-#, fuzzy
 msgid "Cooking"
-msgstr "Kuriama"
+msgstr ""
 
 #: ../src/common/pep.py:120
 msgid "Doing Maintenance"
@@ -5697,23 +5424,20 @@ msgid "Doing the Laundry"
 msgstr ""
 
 #: ../src/common/pep.py:123
-#, fuzzy
 msgid "Gardening"
-msgstr "Morning"
+msgstr ""
 
 #: ../src/common/pep.py:124
 msgid "Running an Errand"
 msgstr ""
 
 #: ../src/common/pep.py:125
-#, fuzzy
 msgid "Walking the Dog"
-msgstr "visus grupėje"
+msgstr ""
 
 #: ../src/common/pep.py:126
-#, fuzzy
 msgid "Drinking"
-msgstr "Working"
+msgstr ""
 
 #: ../src/common/pep.py:127
 msgid "Having a Beer"
@@ -5752,19 +5476,16 @@ msgid "Cycling"
 msgstr ""
 
 #: ../src/common/pep.py:137
-#, fuzzy
 msgid "Dancing"
-msgstr "Evening"
+msgstr ""
 
 #: ../src/common/pep.py:138
-#, fuzzy
 msgid "Hiking"
-msgstr "Kicking %s"
+msgstr ""
 
 #: ../src/common/pep.py:139
-#, fuzzy
 msgid "Jogging"
-msgstr "_Jungtis"
+msgstr ""
 
 #: ../src/common/pep.py:140
 msgid "Playing Sports"
@@ -5775,23 +5496,20 @@ msgid "Running"
 msgstr ""
 
 #: ../src/common/pep.py:142
-#, fuzzy
 msgid "Skiing"
-msgstr "Working"
+msgstr ""
 
 #: ../src/common/pep.py:143
 msgid "Swimming"
 msgstr ""
 
 #: ../src/common/pep.py:144
-#, fuzzy
 msgid "Working out"
-msgstr "Working"
+msgstr ""
 
 #: ../src/common/pep.py:145
-#, fuzzy
 msgid "Grooming"
-msgstr "room"
+msgstr ""
 
 #: ../src/common/pep.py:146
 msgid "At the Spa"
@@ -5806,9 +5524,8 @@ msgid "Getting a Haircut"
 msgstr ""
 
 #: ../src/common/pep.py:149
-#, fuzzy
 msgid "Shaving"
-msgstr "Eating"
+msgstr ""
 
 #: ../src/common/pep.py:150
 msgid "Taking a Bath"
@@ -5827,122 +5544,104 @@ msgid "Day Off"
 msgstr ""
 
 #: ../src/common/pep.py:155
-#, fuzzy
 msgid "Hanging out"
-msgstr "Changing Subject"
+msgstr ""
 
 #: ../src/common/pep.py:156
-#, fuzzy
 msgid "Hiding"
-msgstr "Kicking %s"
+msgstr ""
 
 #: ../src/common/pep.py:157
 msgid "On Vacation"
 msgstr ""
 
 #: ../src/common/pep.py:158
-#, fuzzy
 msgid "Praying"
-msgstr "Eating"
+msgstr ""
 
 #: ../src/common/pep.py:159
 msgid "Scheduled Holiday"
 msgstr ""
 
 #: ../src/common/pep.py:161
-#, fuzzy
 msgid "Thinking"
-msgstr "Working"
+msgstr ""
 
 #: ../src/common/pep.py:162
 msgid "Relaxing"
 msgstr ""
 
 #: ../src/common/pep.py:163
-#, fuzzy
 msgid "Fishing"
-msgstr "Kicking %s"
+msgstr ""
 
 #: ../src/common/pep.py:164
-#, fuzzy
 msgid "Gaming"
-msgstr "Eating"
+msgstr ""
 
 #: ../src/common/pep.py:165
-#, fuzzy
 msgid "Going out"
-msgstr "_Atsijungti"
+msgstr ""
 
 #: ../src/common/pep.py:166
-#, fuzzy
 msgid "Partying"
-msgstr "Eating"
+msgstr ""
 
 #: ../src/common/pep.py:167
-#, fuzzy
 msgid "Reading"
-msgstr "Reason"
+msgstr ""
 
 #: ../src/common/pep.py:168
-#, fuzzy
 msgid "Rehearsing"
-msgstr "Reason"
+msgstr ""
 
 #: ../src/common/pep.py:169
-#, fuzzy
 msgid "Shopping"
-msgstr "Sleeping"
+msgstr ""
 
 #: ../src/common/pep.py:170
-#, fuzzy
 msgid "Smoking"
-msgstr "Working"
+msgstr ""
 
 #: ../src/common/pep.py:171
 msgid "Socializing"
 msgstr ""
 
 #: ../src/common/pep.py:172
-#, fuzzy
 msgid "Sunbathing"
-msgstr "Eating"
+msgstr ""
 
 #: ../src/common/pep.py:173
 msgid "Watching TV"
 msgstr ""
 
 #: ../src/common/pep.py:174
-#, fuzzy
 msgid "Watching a Movie"
-msgstr "I'm watching a movie."
+msgstr ""
 
 #: ../src/common/pep.py:175
-#, fuzzy
 msgid "Talking"
-msgstr "Eating"
+msgstr ""
 
 #: ../src/common/pep.py:176
 msgid "In Real Life"
 msgstr ""
 
 #: ../src/common/pep.py:177
-#, fuzzy
 msgid "On the Phone"
-msgstr "I'm on the phone."
+msgstr ""
 
 #: ../src/common/pep.py:178
 msgid "On Video Phone"
 msgstr ""
 
 #: ../src/common/pep.py:179
-#, fuzzy
 msgid "Traveling"
-msgstr "Transferring"
+msgstr ""
 
 #: ../src/common/pep.py:180
-#, fuzzy
 msgid "Commuting"
-msgstr "Kuriama"
+msgstr ""
 
 #: ../src/common/pep.py:182
 msgid "Driving"
@@ -5957,28 +5656,24 @@ msgid "On a Bus"
 msgstr ""
 
 #: ../src/common/pep.py:185
-#, fuzzy
 msgid "On a Plane"
-msgstr "Online"
+msgstr ""
 
 #: ../src/common/pep.py:186
-#, fuzzy
 msgid "On a Train"
-msgstr "Open as _Link"
+msgstr ""
 
 #: ../src/common/pep.py:187
 msgid "On a Trip"
 msgstr ""
 
 #: ../src/common/pep.py:188
-#, fuzzy
 msgid "Walking"
-msgstr "Working"
+msgstr ""
 
 #: ../src/common/pep.py:190
-#, fuzzy
 msgid "Coding"
-msgstr "Kuriama"
+msgstr ""
 
 #: ../src/common/pep.py:191
 msgid "In a Meeting"
@@ -5989,9 +5684,8 @@ msgid "Studying"
 msgstr ""
 
 #: ../src/common/pep.py:193
-#, fuzzy
 msgid "Writing"
-msgstr "Working"
+msgstr ""
 
 #. We cannot bind port, call error callback and fail
 #: ../src/common/socks5.py:86
@@ -6015,13 +5709,11 @@ msgid ""
 msgstr ""
 
 #: ../src/common/zeroconf/connection_handlers_zeroconf.py:94
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The host %s you configured as the ft_add_hosts_to_send advanced option is "
 "not valid, so ignored."
 msgstr ""
-"The host you configured as the ft_override_host_to_send advanced option is "
-"not valid, so ignored."
 
 #. We didn't set a passphrase
 #: ../src/common/zeroconf/connection_zeroconf.py:173
@@ -6054,9 +5746,8 @@ msgstr ""
 "Link-local messaging might not work properly."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:250
-#, fuzzy
 msgid "Please check if Avahi or Bonjour is installed."
-msgstr "Please check if Avahi is installed."
+msgstr ""
 
 #: ../src/common/zeroconf/connection_zeroconf.py:259
 #: ../src/common/zeroconf/connection_zeroconf.py:263
@@ -6092,9 +5783,8 @@ msgid "[This message is encrypted]"
 msgstr "[This message is encrypted]"
 
 #: ../src/common/zeroconf/connection_zeroconf.py:483
-#, fuzzy
 msgid "Your message could not be sent."
-msgstr "Contact is offline. Your message could not be sent."
+msgstr ""
 
 #. Contact Offline
 #: ../src/common/zeroconf/connection_zeroconf.py:489
@@ -6120,12 +5810,11 @@ msgstr "Disabled"
 #: ../src/config.py:396
 #, fuzzy
 msgid "Default Message"
-msgstr "Būklės žinutė, pagal nutylėjimą"
+msgstr "Žinutė pagal nutylėjimą"
 
 #: ../src/config.py:405
-#, fuzzy
 msgid "Enabled"
-msgstr "Įjungti"
+msgstr "Įjungtas"
 
 #: ../src/config.py:663 ../src/dialogs.py:1327
 #, python-format
@@ -6165,9 +5854,8 @@ msgid "If you want all the changes to apply instantly, you must relogin."
 msgstr "If you want all the changes to apply instantly, you must relogin."
 
 #: ../src/config.py:1559 ../src/config.py:1684
-#, fuzzy
 msgid "OpenPGP is not usable on this computer"
-msgstr "OpenPGP is not usable in this computer"
+msgstr ""
 
 #: ../src/config.py:1720 ../src/config.py:1764
 msgid "Unread events"
@@ -6224,14 +5912,13 @@ msgid "Account name cannot contain spaces."
 msgstr "Account name cannot contain spaces."
 
 #: ../src/config.py:1856
-#, fuzzy
 msgid "Rename Account"
-msgstr "Prieigų valdymas"
+msgstr "Pervadinti Prieigą"
 
 #: ../src/config.py:1857
-#, fuzzy, python-format
+#, python-format
 msgid "Enter a new name for account %s"
-msgstr "Enter a new name for group %s"
+msgstr "Įveskite naują prieigos %s pavadinimą"
 
 #: ../src/config.py:1885
 msgid "A Jabber ID must be in the form \"user@servername\"."
@@ -6250,9 +5937,8 @@ msgid "Failed to get secret keys"
 msgstr "Failed to get secret keys"
 
 #: ../src/config.py:2116
-#, fuzzy
 msgid "There is no OpenPGP secret key available."
-msgstr "There was a problem retrieving your OpenPGP secret keys."
+msgstr ""
 
 #: ../src/config.py:2150
 msgid "OpenPGP Key Selection"
@@ -6288,9 +5974,8 @@ msgid "Your server can't save your personal information."
 msgstr "Your server can't save your personal information."
 
 #: ../src/config.py:2284 ../src/config.py:2318
-#, fuzzy
 msgid "To disable the account, you must be disconnected."
-msgstr "To change the account name, you must be disconnected."
+msgstr ""
 
 #: ../src/config.py:2289
 msgid "Account Local already exists."
@@ -6395,7 +6080,6 @@ msgstr ""
 "\n"
 
 #: ../src/config.py:2590
-#, fuzzy
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -6404,17 +6088,11 @@ msgid ""
 "4. domain (the domain itself matches, as does any user@domain,\n"
 "domain/resource, or address containing a subdomain)."
 msgstr ""
-"Can be one of the following:\n"
-"1. user@domain/resource (only that resource matches).\n"
-"2. user@domain (any resource matches).\n"
-"3. domain/resource (only that resource matches).\n"
-"4. domain (the domain itself matches, as does any user@domain,\n"
-"domain/resource, or address containing a subdomain."
 
 #: ../src/config.py:2687
 #, python-format
 msgid "Removing %s account"
-msgstr "Removing %s account"
+msgstr ""
 
 #: ../src/config.py:2709 ../src/gajim.py:1491 ../src/gajim.py:1588
 msgid "Password Required"
@@ -6470,39 +6148,31 @@ msgstr ""
 
 #. invalid char
 #: ../src/config.py:3041 ../src/dialogs.py:1746
-#, fuzzy
 msgid "Invalid nickname"
-msgstr "Invalid username"
+msgstr ""
 
 #: ../src/config.py:3042 ../src/config.py:3056 ../src/config.py:3070
-#, fuzzy
 msgid "Character not allowed"
-msgstr "Nickname not allowed: %s"
+msgstr ""
 
 #: ../src/config.py:3055 ../src/config.py:3303
-#, fuzzy
 msgid "Invalid server"
-msgstr "Invalid username"
+msgstr ""
 
 #: ../src/config.py:3069
-#, fuzzy
 msgid "Invalid room"
-msgstr "Invalid entry"
+msgstr ""
 
 #: ../src/config.py:3220
 msgid "Account has been added successfully"
 msgstr "Account has been added successfully"
 
 #: ../src/config.py:3221 ../src/config.py:3227
-#, fuzzy
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
 "later by choosing the Accounts menu item under the Edit menu from the main "
 "window."
 msgstr ""
-"You can set advanced account options by pressing the Advanced button, or "
-"later by choosing the Accounts menuitem under the Edit menu from the main "
-"window."
 
 #: ../src/config.py:3226
 msgid "Your new account has been created successfully"
@@ -6517,14 +6187,12 @@ msgid "You must provide a username to configure this account."
 msgstr "You must provide a username to configure this account."
 
 #: ../src/config.py:3304
-#, fuzzy
 msgid "Please provide a server on which you want to register."
-msgstr "Please specify the new nickname you want to use:"
+msgstr ""
 
 #: ../src/config.py:3360 ../src/gajim.py:2144
-#, fuzzy
 msgid "Certificate Already in File"
-msgstr "Contact already in roster"
+msgstr ""
 
 #: ../src/config.py:3361 ../src/gajim.py:2145
 #, python-format
@@ -6574,14 +6242,12 @@ msgid "First Message Received"
 msgstr "First Message Received"
 
 #: ../src/config.py:3748
-#, fuzzy
 msgid "Next Message Received Focused"
-msgstr "Next Message Received"
+msgstr ""
 
 #: ../src/config.py:3750
-#, fuzzy
 msgid "Next Message Received Unfocused"
-msgstr "Next Message Received"
+msgstr ""
 
 #: ../src/config.py:3751
 msgid "Contact Connected"
@@ -6615,18 +6281,14 @@ msgid ""
 msgstr ""
 
 #: ../src/conversation_textview.py:611
-#, fuzzy
 msgid ""
 "Text below this line is what has been said since the\n"
 "last time you paid attention to this group chat"
 msgstr ""
-"Text below this line is what has been said since the last time you paid "
-"attention to this group chat"
 
 #: ../src/conversation_textview.py:724
-#, fuzzy
 msgid "_Quote"
-msgstr "_Išjungti"
+msgstr "_Cituoti"
 
 #: ../src/conversation_textview.py:731
 #, python-format
@@ -6677,21 +6339,20 @@ msgstr "%i days ago"
 msgid "Subject: %s\n"
 msgstr "Subject: %s\n"
 
-#: ../src/dataforms_widget.py:559
-#, fuzzy
+#: ../src/dataforms_widget.py:557
 msgid "Jabber ID already in list"
-msgstr "Jabber IM Klientas"
+msgstr ""
 
-#: ../src/dataforms_widget.py:560
+#: ../src/dataforms_widget.py:558
 msgid "The Jabber ID you entered is already in the list. Choose another one."
 msgstr ""
 
 #. Default jid
-#: ../src/dataforms_widget.py:571
+#: ../src/dataforms_widget.py:569
 msgid "new@jabber.id"
 msgstr ""
 
-#: ../src/dataforms_widget.py:574 ../src/dataforms_widget.py:576
+#: ../src/dataforms_widget.py:572 ../src/dataforms_widget.py:574
 #, python-format
 msgid "new%d@jabber.id"
 msgstr ""
@@ -6736,17 +6397,13 @@ msgid "Status Message"
 msgstr "Status Message"
 
 #: ../src/dialogs.py:772
-#, fuzzy
 msgid "Overwrite Status Message?"
-msgstr "Status Message"
+msgstr ""
 
 #: ../src/dialogs.py:773
-#, fuzzy
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
 msgstr ""
-"This name is already used by another of your accounts. Please choose another "
-"name."
 
 #: ../src/dialogs.py:781
 msgid "Save as Preset Status Message"
@@ -6794,9 +6451,8 @@ msgid "The user ID must not contain a resource."
 msgstr "The user ID must not contain a resource."
 
 #: ../src/dialogs.py:1018
-#, fuzzy
 msgid "You cannot add yourself to your roster."
-msgstr "I would like to add you to my roster."
+msgstr ""
 
 #: ../src/dialogs.py:1032
 msgid "Contact already in roster"
@@ -6847,25 +6503,22 @@ msgid "translator-credits"
 msgstr "Jeff Bailes <thepizzaking@gmail.com>"
 
 #: ../src/dialogs.py:1328
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You have to install %s dictionary to use spellchecking, or choose another "
 "language by setting the speller_language option.\n"
 "\n"
 "Highlighting misspelled words feature will not be used"
 msgstr ""
-"You have to install %s dictionary to use spellchecking, or choose another "
-"language by setting the speller_language option."
 
 #: ../src/dialogs.py:1747 ../src/dialogs.py:2061
-#, fuzzy
 msgid "The nickname has not allowed characters."
-msgstr "The group chat Jabber ID has invalid characters."
+msgstr ""
 
 #: ../src/dialogs.py:1859
-#, fuzzy, python-format
+#, python-format
 msgid "Subscription request for account %(account)s from %(jid)s"
-msgstr "Subscription request for account %s from %s"
+msgstr ""
 
 #: ../src/dialogs.py:1862
 #, python-format
@@ -6887,28 +6540,25 @@ msgid "Join Group Chat with account %s"
 msgstr "Join Group Chat with account %s"
 
 #: ../src/dialogs.py:2050
-#, fuzzy
 msgid "Invalid Account"
-msgstr "Invalid account name"
+msgstr ""
 
 #: ../src/dialogs.py:2051
-#, fuzzy
 msgid ""
 "You have to choose an account from which you want to join the groupchat."
-msgstr "You must create an account before you can chat with other contacts."
+msgstr ""
 
 #: ../src/dialogs.py:2060
-#, fuzzy
 msgid "Invalid Nickname"
-msgstr "Invalid username"
+msgstr ""
 
 #: ../src/dialogs.py:2065 ../src/dialogs.py:2071
-#: ../src/groupchat_control.py:1738
+#: ../src/groupchat_control.py:1734
 msgid "Invalid group chat Jabber ID"
 msgstr "Invalid group chat Jabber ID"
 
 #: ../src/dialogs.py:2066 ../src/dialogs.py:2072
-#: ../src/groupchat_control.py:1739
+#: ../src/groupchat_control.py:1735
 msgid "The group chat Jabber ID has not allowed characters."
 msgstr "The group chat Jabber ID has invalid characters."
 
@@ -6922,23 +6572,20 @@ msgid "%s is not the name of a group chat."
 msgstr "%s is not the name of a group chat."
 
 #: ../src/dialogs.py:2111
-#, fuzzy
 msgid "Without a connection, you can not synchronise your contacts."
-msgstr "Without a connection, you can not change your password."
+msgstr ""
 
 #: ../src/dialogs.py:2125
 msgid "Server"
 msgstr "Server"
 
 #: ../src/dialogs.py:2158
-#, fuzzy
 msgid "This account is not connected to the server"
-msgstr "Account \"%s\" is connected to the server"
+msgstr ""
 
 #: ../src/dialogs.py:2159
-#, fuzzy
 msgid "You cannot synchronize with an account unless it is connected."
-msgstr "You can not join a group chat unless you are connected."
+msgstr ""
 
 #: ../src/dialogs.py:2183
 msgid "Synchronise"
@@ -7087,9 +6734,9 @@ msgstr "Received %s"
 
 #. prepare UI for Receiving
 #: ../src/dialogs.py:2623
-#, fuzzy, python-format
+#, python-format
 msgid "Form %s"
-msgstr "I'm %s"
+msgstr ""
 
 #. we create a new blank window to send and we preset RE: and to jid
 #: ../src/dialogs.py:2702
@@ -7114,36 +6761,32 @@ msgstr "XML Console"
 #. Set labels
 #. self.action can be 'add', 'modify' or 'remove'
 #: ../src/dialogs.py:2865
-#, fuzzy, python-format
+#, python-format
 msgid "<b>%s</b> would like you to <b>%s</b> some contacts in your roster."
-msgstr "Norėšiau jus įtraukti į savo kontaktų sąrašą."
+msgstr ""
 
 #: ../src/dialogs.py:2880 ../src/dialogs.py:2928
-#, fuzzy
 msgid "Add"
-msgstr "Adresas"
+msgstr "Įtraukti"
 
 #: ../src/dialogs.py:2882 ../src/dialogs.py:2961
-#, fuzzy
 msgid "Modify"
-msgstr "_Keisti"
+msgstr "Keisti"
 
 #: ../src/dialogs.py:2888
-#, fuzzy
 msgid "Jabber ID"
-msgstr "Jabber ID:"
+msgstr ""
 
 #: ../src/dialogs.py:2894
-#, fuzzy
 msgid "Groups"
-msgstr "Group"
+msgstr "Grupės"
 
 #. it is selected
 #. remote_jid = model[iter][1].decode('utf-8')
 #: ../src/dialogs.py:3008
-#, fuzzy, python-format
+#, python-format
 msgid "%s suggested me to add you in my roster."
-msgstr "I would like to add you to my roster."
+msgstr ""
 
 #: ../src/dialogs.py:3108
 #, python-format
@@ -7156,64 +6799,61 @@ msgid "Privacy List for %s"
 msgstr "Privacy List for %s"
 
 #: ../src/dialogs.py:3168
-#, fuzzy, python-format
+#, python-format
 msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
-msgstr "Order: %s, action: %s, type: %s, value: %s"
+msgstr ""
 
 #: ../src/dialogs.py:3173
-#, fuzzy, python-format
+#, python-format
 msgid "Order: %(order)s, action: %(action)s"
-msgstr "Order: %s, action: %s"
+msgstr ""
 
 #: ../src/dialogs.py:3215
 msgid "<b>Edit a rule</b>"
-msgstr "<b>Edit a rule</b>"
+msgstr ""
 
 #: ../src/dialogs.py:3326
 msgid "<b>Add a rule</b>"
-msgstr "<b>Add a rule</b>"
+msgstr ""
 
 #: ../src/dialogs.py:3423
 #, python-format
 msgid "Privacy Lists for %s"
-msgstr "Privacy Lists for %s"
+msgstr ""
 
 #: ../src/dialogs.py:3425
 msgid "Privacy Lists"
-msgstr "Privacy Lists"
+msgstr ""
 
 #: ../src/dialogs.py:3495
 msgid "Invalid List Name"
-msgstr "Invalid List Name"
+msgstr ""
 
 #: ../src/dialogs.py:3496
 msgid "You must enter a name to create a privacy list."
-msgstr "You must enter a name to create a privacy list."
+msgstr ""
 
 #: ../src/dialogs.py:3528
-#, fuzzy
 msgid "You are invited to a groupchat"
-msgstr "You have not joined a groupchat."
+msgstr ""
 
 #: ../src/dialogs.py:3531
-#, fuzzy
 msgid "$Contact has invited you to join a discussion"
-msgstr "$Contact has invited you to group chat %(room_jid)s"
+msgstr ""
 
 #: ../src/dialogs.py:3533
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
-msgstr "$Contact has invited you to group chat %(room_jid)s"
+msgstr ""
 
 #: ../src/dialogs.py:3541
 #, python-format
 msgid "Comment: %s"
-msgstr "Comment: %s"
+msgstr ""
 
 #: ../src/dialogs.py:3543
-#, fuzzy
 msgid "Do you want to accept the invitation?"
-msgstr "%s wants to send you a file:"
+msgstr ""
 
 #: ../src/dialogs.py:3599
 msgid "Choose Sound"
@@ -7375,14 +7015,13 @@ msgid "This type of service does not contain any items to browse."
 msgstr "This type of service does not contain any items to browse."
 
 #: ../src/disco.py:702 ../src/disco.py:712
-#, fuzzy
 msgid "Invalid Server Name"
-msgstr "Invalid username"
+msgstr ""
 
 #: ../src/disco.py:759
-#, fuzzy, python-format
+#, python-format
 msgid "Browsing %(address)s using account %(account)s"
-msgstr "Browsing %s using account %s"
+msgstr ""
 
 #: ../src/disco.py:799
 msgid "_Browse"
@@ -7393,18 +7032,17 @@ msgid "This service does not contain any items to browse."
 msgstr "This service does not contain any items to browse."
 
 #: ../src/disco.py:1183
-#, fuzzy
 msgid "_Execute Command"
-msgstr "_Vykdyti komandą..."
+msgstr "_Vykdyti komandą"
 
 #: ../src/disco.py:1193 ../src/disco.py:1359
 msgid "Re_gister"
 msgstr "Re_gister"
 
 #: ../src/disco.py:1396
-#, fuzzy, python-format
+#, python-format
 msgid "Scanning %(current)d / %(total)d.."
-msgstr "Scanning %d / %d.."
+msgstr ""
 
 #. Users column
 #: ../src/disco.py:1578
@@ -7443,21 +7081,20 @@ msgid "Subscribed"
 msgstr "Subscribed"
 
 #: ../src/disco.py:1871
-#, fuzzy
 msgid "Node"
-msgstr "Joks"
+msgstr ""
 
 #: ../src/disco.py:1933
 msgid "New post"
-msgstr "New post"
+msgstr ""
 
 #: ../src/disco.py:1939
 msgid "_Subscribe"
-msgstr "_Subscribe"
+msgstr ""
 
 #: ../src/disco.py:1945
 msgid "_Unsubscribe"
-msgstr "_Unsubscribe"
+msgstr ""
 
 #: ../src/features_window.py:46
 msgid "SSL certificat validation"
@@ -7489,9 +7126,8 @@ msgid "Requires pybonjour (http://o2s.csail.mit.edu/o2s-wiki/pybonjour)."
 msgstr ""
 
 #: ../src/features_window.py:54
-#, fuzzy
 msgid "Command line"
-msgstr "Commands: %s"
+msgstr ""
 
 #: ../src/features_window.py:55
 msgid "A script to control Gajim via commandline."
@@ -7509,23 +7145,20 @@ msgid "Feature not available under Windows."
 msgstr ""
 
 #: ../src/features_window.py:58
-#, fuzzy
 msgid "OpenGPG message encryption"
-msgstr "OpenPGP Šifravimas"
+msgstr ""
 
 #: ../src/features_window.py:59
-#, fuzzy
 msgid "Encrypting chat messages with gpg keys."
-msgstr "Į_einanti žinutė:"
+msgstr ""
 
 #: ../src/features_window.py:60
 msgid "Requires gpg and python-GnuPGInterface."
 msgstr ""
 
 #: ../src/features_window.py:62
-#, fuzzy
 msgid "Network-manager"
-msgstr "History Manager"
+msgstr ""
 
 #: ../src/features_window.py:63
 msgid "Autodetection of network status."
@@ -7536,9 +7169,8 @@ msgid "Requires gnome-network-manager and python-dbus."
 msgstr ""
 
 #: ../src/features_window.py:66
-#, fuzzy
 msgid "Session Management"
-msgstr "Message Sent"
+msgstr ""
 
 #: ../src/features_window.py:67
 msgid "Gajim session is stored on logout and restored on login."
@@ -7549,9 +7181,8 @@ msgid "Requires python-gnome2."
 msgstr ""
 
 #: ../src/features_window.py:70
-#, fuzzy
 msgid "Password encryption"
-msgstr "Passwords do not match"
+msgstr ""
 
 #: ../src/features_window.py:71
 msgid "Passwords can be stored securely and not just in plaintext."
@@ -7590,9 +7221,8 @@ msgid "Requires libgtkspell."
 msgstr ""
 
 #: ../src/features_window.py:82
-#, fuzzy
 msgid "Notification"
-msgstr "Prieigos keitimas"
+msgstr ""
 
 #: ../src/features_window.py:83
 msgid "Passive popups notifying for new events."
@@ -7622,9 +7252,8 @@ msgid "Requires PyGTK >= 2.10."
 msgstr ""
 
 #: ../src/features_window.py:90
-#, fuzzy
 msgid "Automatic status"
-msgstr "_Nustatyti būklei"
+msgstr ""
 
 #: ../src/features_window.py:91
 msgid "Ability to measure idle time, in order to set auto status."
@@ -7659,23 +7288,20 @@ msgid ""
 msgstr ""
 
 #: ../src/features_window.py:98
-#, fuzzy
 msgid "End to End message encryption"
-msgstr "Įjungti Open_PGP kodavimą"
+msgstr ""
 
 #: ../src/features_window.py:99
-#, fuzzy
 msgid "Encrypting chat messages."
-msgstr "Į_einanti žinutė:"
+msgstr "Šifruojamos pokalbio žinutės."
 
 #: ../src/features_window.py:100 ../src/features_window.py:101
 msgid "Requires python-crypto."
 msgstr ""
 
 #: ../src/features_window.py:102
-#, fuzzy
 msgid "RST Generator"
-msgstr "Bendros parinktys"
+msgstr "RST Generatorius"
 
 #: ../src/features_window.py:103
 msgid ""
@@ -7700,9 +7326,8 @@ msgid "Requires python-sexy."
 msgstr ""
 
 #: ../src/features_window.py:123
-#, fuzzy
 msgid "Feature"
-msgstr "Serverio teikiamos paslaugos"
+msgstr "Savybė"
 
 #: ../src/filetransfers_window.py:76
 msgid "File"
@@ -7771,18 +7396,16 @@ msgid "Error message: %s"
 msgstr "Error message: %s"
 
 #: ../src/filetransfers_window.py:231
-#, fuzzy
 msgid "File transfer stopped"
-msgstr "File Transfer Stopped"
+msgstr "Failo siuntimas sustabdytas"
 
 #: ../src/filetransfers_window.py:251
 msgid "Choose File to Send..."
 msgstr "Choose File to Send..."
 
 #: ../src/filetransfers_window.py:267 ../src/tooltips.py:708
-#, fuzzy
 msgid "Description: "
-msgstr "Description: %s"
+msgstr "Aprašymas: "
 
 #: ../src/filetransfers_window.py:278
 msgid "Gajim cannot access this file"
@@ -7898,24 +7521,20 @@ msgid "importing PyGTK failed: %s"
 msgstr ""
 
 #: ../src/gajim.py:180
-#, fuzzy
 msgid "Gajim needs PyGTK 2.12 or above"
-msgstr "Gajim needs PyGTK 2.6 or above"
+msgstr ""
 
 #: ../src/gajim.py:181
-#, fuzzy
 msgid "Gajim needs PyGTK 2.12 or above to run. Quiting..."
-msgstr "Gajim needs PyGTK 2.6 or above to run. Quiting..."
+msgstr ""
 
 #: ../src/gajim.py:183
-#, fuzzy
 msgid "Gajim needs GTK 2.12 or above"
-msgstr "Gajim needs GTK 2.6 or above"
+msgstr ""
 
 #: ../src/gajim.py:184
-#, fuzzy
 msgid "Gajim needs GTK 2.12 or above to run. Quiting..."
-msgstr "Gajim needs GTK 2.6 or above to run. Quiting..."
+msgstr ""
 
 #: ../src/gajim.py:189
 msgid "GTK+ runtime is missing libglade support"
@@ -7971,37 +7590,35 @@ msgid "Passphrase Required"
 msgstr "Passphrase Required"
 
 #: ../src/gajim.py:441
-#, fuzzy, python-format
+#, python-format
 msgid "Enter GPG key passphrase for key %(keyid)s (account %(account)s)."
-msgstr "Enter GPG key passphrase for account %s."
+msgstr ""
 
 #: ../src/gajim.py:455
 msgid "GPG key expired"
 msgstr ""
 
 #: ../src/gajim.py:456
-#, fuzzy, python-format
+#, python-format
 msgid "Your GPG key has expied, you will be connected to %s without OpenPGP."
-msgstr "You will be connected to %s without OpenPGP."
+msgstr ""
 
 #. ask again
 #: ../src/gajim.py:465
 msgid "Wrong Passphrase"
-msgstr "Wrong Passphrase"
+msgstr ""
 
 #: ../src/gajim.py:466
 msgid "Please retype your GPG passphrase or press Cancel."
 msgstr "Please retype your GPG passphrase or press Cancel."
 
 #: ../src/gajim.py:524
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Your desired nickname in group chat %s is in use or registered by another "
 "occupant.\n"
 "Please specify another nickname below:"
 msgstr ""
-"Your desired nickname is in use or registered by another occupant.\n"
-"Please specify another nickname below:"
 
 #: ../src/gajim.py:527
 msgid "Always use this nickname when there is a conflict"
@@ -8012,32 +7629,31 @@ msgid "Do you accept this request?"
 msgstr "Do you accept this request?"
 
 #: ../src/gajim.py:546
-#, fuzzy, python-format
+#, python-format
 msgid "Do you accept this request on account %s?"
-msgstr "Do you accept this request?"
+msgstr ""
 
 #: ../src/gajim.py:549
-#, fuzzy, python-format
+#, python-format
 msgid "HTTP (%(method)s) Authorization for %(url)s (id: %(id)s)"
-msgstr "HTTP (%s) Authorisation for %s (id: %s)"
+msgstr ""
 
 #: ../src/gajim.py:600 ../src/notify.py:511
 msgid "Connection Failed"
-msgstr "Connection Failed"
+msgstr ""
 
 #: ../src/gajim.py:933 ../src/gajim.py:937
-#, fuzzy, python-format
+#, python-format
 msgid "Error %(code)s: %(msg)s"
-msgstr "%(nickname)s: %(message)s"
+msgstr ""
 
 #. ('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
 #: ../src/gajim.py:947 ../src/gajim.py:961
-#, fuzzy, python-format
+#, python-format
 msgid "error while sending %(message)s ( %(error)s )"
-msgstr "error while sending %s ( %s )"
+msgstr ""
 
 #: ../src/gajim.py:988 ../src/notify.py:513
-#, fuzzy
 msgid "Subscription request"
 msgstr "Sutikimo užklausimas"
 
@@ -8062,21 +7678,20 @@ msgid ""
 msgstr ""
 
 #: ../src/gajim.py:1052 ../src/notify.py:515
-#, fuzzy
 msgid "Unsubscribed"
-msgstr "_Unsubscribe"
+msgstr ""
 
 #: ../src/gajim.py:1093
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
 msgstr "Contact with \"%s\" cannot be established"
 
-#: ../src/gajim.py:1283 ../src/groupchat_control.py:1251
-#, fuzzy, python-format
+#: ../src/gajim.py:1283 ../src/groupchat_control.py:1250
+#, python-format
 msgid "%(nick)s is now known as %(new_nick)s"
-msgstr "%s is now known as %s"
+msgstr ""
 
-#: ../src/gajim.py:1308 ../src/groupchat_control.py:1436
+#: ../src/gajim.py:1308 ../src/groupchat_control.py:1435
 #: ../src/history_window.py:431 ../src/notify.py:244
 #, python-format
 msgid "%(nick)s is now %(status)s"
@@ -8089,7 +7704,7 @@ msgstr ""
 
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
 #. Can be a message (see handle_event_gc_config_change in gajim.py)
-#: ../src/gajim.py:1439 ../src/groupchat_control.py:1191
+#: ../src/gajim.py:1439 ../src/groupchat_control.py:1190
 msgid "Any occupant is allowed to see your full JID"
 msgstr ""
 
@@ -8127,9 +7742,9 @@ msgid "Room is now fully-anonymous"
 msgstr ""
 
 #: ../src/gajim.py:1492
-#, fuzzy, python-format
+#, python-format
 msgid "A Password is required to join the room %s. Please type it."
-msgstr "A password is required to join this group chat."
+msgstr ""
 
 #: ../src/gajim.py:1526
 msgid ""
@@ -8146,9 +7761,8 @@ msgid "Your passphrase is incorrect"
 msgstr "Your passphrase is incorrect"
 
 #: ../src/gajim.py:1533
-#, fuzzy
 msgid "OpenGPG Passphrase Incorrect"
-msgstr "Your passphrase is incorrect"
+msgstr ""
 
 #: ../src/gajim.py:1559
 msgid "GPG key not trusted"
@@ -8161,20 +7775,17 @@ msgid ""
 msgstr ""
 
 #: ../src/gajim.py:1561 ../src/gajim.py:2227 ../src/gajim.py:2262
-#: ../src/groupchat_control.py:1674 ../src/message_window.py:222
+#: ../src/groupchat_control.py:1670 ../src/message_window.py:222
 #: ../src/roster_window.py:2667 ../src/roster_window.py:3292
 #: ../src/roster_window.py:3970
 msgid "Do _not ask me again"
 msgstr "Do _not ask me again"
 
 #: ../src/gajim.py:1571
-#, fuzzy
 msgid ""
 "Gnome Keyring is installed but not \t\t\t\tcorrectly started (environment "
 "variable probably not \t\t\t\tcorrectly set)"
 msgstr ""
-"Gnomekeyring is installed but not correctly started (environment variable "
-"probably not correctly set)"
 
 #: ../src/gajim.py:1681
 #, python-format
@@ -8204,14 +7815,12 @@ msgid "%s wants to send you a file."
 msgstr "%s wants to send you a file."
 
 #: ../src/gajim.py:1805 ../src/roster_window.py:1851
-#, fuzzy
 msgid "Remote contact stopped transfer"
-msgstr "Removes contact from roster"
+msgstr ""
 
 #: ../src/gajim.py:1807 ../src/roster_window.py:1853
-#, fuzzy
 msgid "Error opening file"
-msgstr "Error reading file:"
+msgstr ""
 
 #: ../src/gajim.py:1838
 #, python-format
@@ -8243,9 +7852,8 @@ msgid ""
 msgstr ""
 
 #: ../src/gajim.py:1968
-#, fuzzy
 msgid "Unable to decrypt message"
-msgstr "_Kiekvienai žinutei"
+msgstr "Nepavyko iškoduoti žinutės"
 
 #: ../src/gajim.py:2042
 msgid "Username Conflict"
@@ -8269,9 +7877,8 @@ msgid "Error."
 msgstr ""
 
 #: ../src/gajim.py:2106
-#, fuzzy
 msgid "Resource Conflict"
-msgstr "Username Conflict"
+msgstr ""
 
 #: ../src/gajim.py:2107
 msgid ""
@@ -8311,17 +7918,14 @@ msgid ""
 msgstr ""
 
 #: ../src/gajim.py:2223 ../src/gajim.py:2258
-#, fuzzy
 msgid "Insecure connection"
-msgstr "Prisijungimas"
+msgstr "Nesaugus ryšys"
 
 #: ../src/gajim.py:2224
-#, fuzzy
 msgid ""
 "You are about to send your password on an unencrypted connection. Are you "
 "sure you want to do that?"
 msgstr ""
-"You are about to create a metacontact. Are you sure you want to continue?"
 
 #: ../src/gajim.py:2226 ../src/gajim.py:2261
 msgid "Yes, I really want to connect insecurely"
@@ -8344,9 +7948,8 @@ msgstr ""
 
 #. theme doesn't exist, disable emoticons
 #: ../src/gajim.py:2784 ../src/gajim.py:2806
-#, fuzzy
 msgid "Emoticons disabled"
-msgstr "Encryption disabled"
+msgstr ""
 
 #: ../src/gajim.py:2785
 msgid ""
@@ -8451,28 +8054,22 @@ msgstr ""
 "of all accounts that have \"sync with global status\" option set"
 
 #: ../src/gajim-remote.py:118
-#, fuzzy
 msgid "Changes the priority of account or accounts"
-msgstr "Changes the status of account or accounts"
+msgstr ""
 
 #: ../src/gajim-remote.py:120
-#, fuzzy
 msgid "priority"
-msgstr "_Prioritetas:"
+msgstr ""
 
 #: ../src/gajim-remote.py:120
-#, fuzzy
 msgid "priority you want to give to the account"
-msgstr "Noriu už_registruoti naują prieigą"
+msgstr ""
 
 #: ../src/gajim-remote.py:122
-#, fuzzy
 msgid ""
 "change the priority of the given account. If not specified, change status of "
 "all accounts that have \"sync with global status\" option set"
 msgstr ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
 
 #: ../src/gajim-remote.py:128
 msgid "Shows the chat dialog so that you can send messages to a contact"
@@ -8545,9 +8142,8 @@ msgid "Sends new message to a groupchat you've joined."
 msgstr ""
 
 #: ../src/gajim-remote.py:169
-#, fuzzy
 msgid "JID of the room that will receive the message"
-msgstr "JID of the contact that will receive the message"
+msgstr ""
 
 #: ../src/gajim-remote.py:176
 msgid "Gets detailed info on a contact"
@@ -8685,9 +8281,8 @@ msgid "Account in which you want to handle it"
 msgstr ""
 
 #: ../src/gajim-remote.py:274
-#, fuzzy
 msgid "Message content"
-msgstr "message contents"
+msgstr ""
 
 #: ../src/gajim-remote.py:278
 msgid "Join a MUC room"
@@ -8698,41 +8293,36 @@ msgid "room"
 msgstr "room"
 
 #: ../src/gajim-remote.py:280
-#, fuzzy
 msgid "Room JID"
-msgstr "Kambarys:"
+msgstr "Kambario JID"
 
 #: ../src/gajim-remote.py:281
 msgid "nick"
 msgstr "nick"
 
 #: ../src/gajim-remote.py:281
-#, fuzzy
 msgid "Nickname to use"
-msgstr "Nickname not found: %s"
+msgstr ""
 
 #: ../src/gajim-remote.py:282
 msgid "password"
 msgstr "password"
 
 #: ../src/gajim-remote.py:282
-#, fuzzy
 msgid "Password to enter the room"
-msgstr "Passwords do not match"
+msgstr ""
 
 #: ../src/gajim-remote.py:283
 msgid "Account from which you want to enter the room"
 msgstr ""
 
 #: ../src/gajim-remote.py:288
-#, fuzzy
 msgid "Check if Gajim is running"
-msgstr "Please check if avahi-daemon is running."
+msgstr ""
 
 #: ../src/gajim-remote.py:292
-#, fuzzy
 msgid "Shows or hides the ipython window"
-msgstr "Shows or hides the roster window"
+msgstr ""
 
 #: ../src/gajim-remote.py:319
 msgid "Missing argument \"contact_jid\""
@@ -8781,35 +8371,30 @@ msgstr ""
 "Command is one of:\n"
 
 #: ../src/gajim-remote.py:493
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Too many arguments. \n"
 "Type \"%(basename)s help %(command)s\" for more info"
 msgstr ""
-"Too many arguments. \n"
-"Type \"%s help %s\" for more info"
 
 #: ../src/gajim-remote.py:498
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Argument \"%(arg)s\" is not specified. \n"
 "Type \"%(basename)s help %(command)s\" for more info"
 msgstr ""
-"Argument \"%s\" is not specified. \n"
-"Type \"%s help %s\" for more info"
 
 #: ../src/gajim-remote.py:517
 msgid "Wrong uri"
-msgstr "Wrong uri"
+msgstr ""
 
 #: ../src/gajim_themes_window.py:59
 msgid "Theme"
 msgstr "Theme"
 
 #: ../src/gajim_themes_window.py:97
-#, fuzzy
 msgid "You cannot make changes to the default theme"
-msgstr "You cannot delete your current theme"
+msgstr ""
 
 #: ../src/gajim_themes_window.py:98
 msgid "Please create a clean new theme with your desired name."
@@ -8834,282 +8419,272 @@ msgstr "Sending private message failed"
 
 #. in second %s code replaces with nickname
 #: ../src/groupchat_control.py:164
-#, fuzzy, python-format
+#, python-format
 msgid "You are no longer in group chat \"%(room)s\" or \"%(nick)s\" has left."
-msgstr "You are no longer in group chat \"%s\" or \"%s\" has left."
+msgstr ""
 
-#: ../src/groupchat_control.py:436
+#: ../src/groupchat_control.py:435
 msgid "Insert Nickname"
 msgstr "Insert Nickname"
 
-#: ../src/groupchat_control.py:595
-#, fuzzy
+#: ../src/groupchat_control.py:594
 msgid "Conversation with "
-msgstr "Pokalbio istorija"
+msgstr "Pokalbis su "
 
-#: ../src/groupchat_control.py:597
-#, fuzzy
+#: ../src/groupchat_control.py:596
 msgid "Continued conversation"
-msgstr "Prisijungimas"
+msgstr "Pokalbio tęsinys"
 
 #. Can be a message (see handle_event_gc_config_change in gajim.py)
-#: ../src/groupchat_control.py:1194
+#: ../src/groupchat_control.py:1193
 msgid "Room logging is enabled"
 msgstr ""
 
-#: ../src/groupchat_control.py:1196
-#, fuzzy
+#: ../src/groupchat_control.py:1195
 msgid "A new room has been created"
-msgstr "Your new account has been successfully created"
+msgstr ""
 
-#: ../src/groupchat_control.py:1199
+#: ../src/groupchat_control.py:1198
 msgid "The server has assigned or modified your roomnick"
 msgstr ""
 
 #. do not print 'kicked by None'
-#: ../src/groupchat_control.py:1205
+#: ../src/groupchat_control.py:1204
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s has been kicked: %(reason)s"
 
-#: ../src/groupchat_control.py:1209
+#: ../src/groupchat_control.py:1208
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s has been kicked by %(who)s: %(reason)s"
 
 #. do not print 'banned by None'
-#: ../src/groupchat_control.py:1219
+#: ../src/groupchat_control.py:1218
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s has been banned: %(reason)s"
 
-#: ../src/groupchat_control.py:1223
+#: ../src/groupchat_control.py:1222
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s has been banned by %(who)s: %(reason)s"
 
-#: ../src/groupchat_control.py:1235 ../src/groupchat_control.py:1328
+#: ../src/groupchat_control.py:1234 ../src/groupchat_control.py:1327
 #, python-format
 msgid "You are now known as %s"
 msgstr "You are now known as %s"
 
-#: ../src/groupchat_control.py:1289 ../src/groupchat_control.py:1293
-#: ../src/groupchat_control.py:1298
-#, fuzzy, python-format
+#: ../src/groupchat_control.py:1288 ../src/groupchat_control.py:1292
+#: ../src/groupchat_control.py:1297
+#, python-format
 msgid "%(nick)s has been removed from the room (%(reason)s)"
-msgstr "%(nick)s has been kicked by %(who)s: %(reason)s"
+msgstr ""
 
-#: ../src/groupchat_control.py:1290
-#, fuzzy
+#: ../src/groupchat_control.py:1289
 msgid "affiliation changed"
-msgstr "Affiliation:"
+msgstr ""
 
-#: ../src/groupchat_control.py:1295
+#: ../src/groupchat_control.py:1294
 msgid "room configuration changed to members-only"
 msgstr ""
 
-#: ../src/groupchat_control.py:1300
+#: ../src/groupchat_control.py:1299
 msgid "system shutdown"
 msgstr ""
 
-#: ../src/groupchat_control.py:1377
+#: ../src/groupchat_control.py:1376
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s by %(actor)s"
 msgstr ""
 
-#: ../src/groupchat_control.py:1381
+#: ../src/groupchat_control.py:1380
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s"
 msgstr ""
 
-#: ../src/groupchat_control.py:1396
-#, fuzzy, python-format
+#: ../src/groupchat_control.py:1395
+#, python-format
 msgid "** Role of %(nick)s has been set to %(role)s by %(actor)s"
-msgstr "%(nick)s has been kicked by %(who)s: %(reason)s"
+msgstr ""
 
-#: ../src/groupchat_control.py:1400
-#, fuzzy, python-format
+#: ../src/groupchat_control.py:1399
+#, python-format
 msgid "** Role of %(nick)s has been set to %(role)s"
-msgstr "%(nick)s has been kicked: %(reason)s"
+msgstr ""
 
-#: ../src/groupchat_control.py:1429
+#: ../src/groupchat_control.py:1428
 #, python-format
 msgid "%s has left"
-msgstr "%s has left"
+msgstr ""
 
-#: ../src/groupchat_control.py:1434
+#: ../src/groupchat_control.py:1433
 #, python-format
 msgid "%s has joined the group chat"
-msgstr "%s has joined the group chat"
+msgstr ""
 
-#: ../src/groupchat_control.py:1668
+#: ../src/groupchat_control.py:1664
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
-msgstr "Are you sure you want to leave group chat \"%s\"?"
+msgstr ""
 
-#: ../src/groupchat_control.py:1670
+#: ../src/groupchat_control.py:1666
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr ""
-"If you close this window, you will be disconnected from this group chat."
 
-#: ../src/groupchat_control.py:1707
+#: ../src/groupchat_control.py:1703
 msgid "Changing Subject"
-msgstr "Changing Subject"
+msgstr ""
 
-#: ../src/groupchat_control.py:1708
+#: ../src/groupchat_control.py:1704
 msgid "Please specify the new subject:"
-msgstr "Please specify the new subject:"
+msgstr ""
 
-#: ../src/groupchat_control.py:1715
+#: ../src/groupchat_control.py:1711
 msgid "Changing Nickname"
-msgstr "Changing Nickname"
+msgstr ""
 
-#: ../src/groupchat_control.py:1716
+#: ../src/groupchat_control.py:1712
 msgid "Please specify the new nickname you want to use:"
-msgstr "Please specify the new nickname you want to use:"
+msgstr ""
 
 #. Ask for a reason
-#: ../src/groupchat_control.py:1745
-#, fuzzy, python-format
+#: ../src/groupchat_control.py:1741
+#, python-format
 msgid "Destroying %s"
-msgstr "Description: %s"
+msgstr ""
 
-#: ../src/groupchat_control.py:1746
+#: ../src/groupchat_control.py:1742
 msgid ""
 "You are going to definitively destroy this room.\n"
 "You may specify a reason below:"
 msgstr ""
 
-#: ../src/groupchat_control.py:1748
+#: ../src/groupchat_control.py:1744
 msgid "You may also enter an alternate venue:"
 msgstr ""
 
 #. ask for reason
-#: ../src/groupchat_control.py:1921
+#: ../src/groupchat_control.py:1917
 #, python-format
 msgid "Kicking %s"
-msgstr "Kicking %s"
+msgstr ""
 
-#: ../src/groupchat_control.py:1922 ../src/groupchat_control.py:2227
+#: ../src/groupchat_control.py:1918 ../src/groupchat_control.py:2223
 msgid "You may specify a reason below:"
-msgstr "You may specify a reason below:"
+msgstr ""
 
 #. ask for reason
-#: ../src/groupchat_control.py:2226
+#: ../src/groupchat_control.py:2222
 #, python-format
 msgid "Banning %s"
-msgstr "Banning %s"
+msgstr ""
 
 #: ../src/gtkexcepthook.py:46
 msgid "A programming error has been detected"
-msgstr "A programming error has been detected"
+msgstr ""
 
 #: ../src/gtkexcepthook.py:47
 msgid ""
 "It probably is not fatal, but should be reported to the developers "
 "nonetheless."
 msgstr ""
-"It is probably not fatal, but should be reported to the developers "
-"nonetheless."
 
 #: ../src/gtkexcepthook.py:54
 msgid "_Report Bug"
-msgstr "_Report Bug"
+msgstr ""
 
 #: ../src/gtkexcepthook.py:77
 msgid "Details"
-msgstr "Details"
+msgstr ""
 
 #. we talk about file
 #: ../src/gtkgui_helpers.py:166 ../src/gtkgui_helpers.py:181
 #, python-format
 msgid "Error: cannot open %s for reading"
-msgstr "Error: cannot open %s for reading"
+msgstr ""
 
 #: ../src/gtkgui_helpers.py:351
 msgid "Error reading file:"
-msgstr "Error reading file:"
+msgstr ""
 
 #: ../src/gtkgui_helpers.py:354
 msgid "Error parsing file:"
-msgstr "Error parsing file:"
+msgstr ""
 
 #. do not traceback (could be a permission problem)
 #. we talk about a file here
 #: ../src/gtkgui_helpers.py:391
 #, python-format
 msgid "Could not write to %s. Session Management support will not work"
-msgstr "Could not write to %s. Session Management support will not work"
+msgstr ""
 
 #. xmpp: is currently handled by another program, so ask the user
 #: ../src/gtkgui_helpers.py:728
 msgid "Gajim is not the default Jabber client"
-msgstr "Gajim is not the default Jabber client"
+msgstr ""
 
 #: ../src/gtkgui_helpers.py:729
 msgid "Would you like to make Gajim the default Jabber client?"
-msgstr "Would you like to make Gajim the default Jabber client?"
+msgstr ""
 
 #: ../src/gtkgui_helpers.py:730
 msgid "Always check to see if Gajim is the default Jabber client on startup"
-msgstr "Always check to see if Gajim is the default Jabber client on startup"
+msgstr ""
 
 #: ../src/gtkgui_helpers.py:799
 msgid "Extension not supported"
-msgstr "Extension not supported"
+msgstr ""
 
 #: ../src/gtkgui_helpers.py:800
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
-msgstr "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
+msgstr ""
 
 #: ../src/gtkgui_helpers.py:835
 msgid "Save Image as..."
-msgstr "Save Image as..."
+msgstr ""
 
 #: ../src/gui_menu_builder.py:89
-#, fuzzy
 msgid "_New Group Chat"
-msgstr "New Group Chat"
+msgstr ""
 
-#: ../src/gui_menu_builder.py:400
+#: ../src/gui_menu_builder.py:410
 msgid "I would like to add you to my roster"
-msgstr "I would like to add you to my roster"
+msgstr ""
 
 #: ../src/history_manager.py:121
 msgid "Cannot find history logs database"
-msgstr "Cannot find history logs database"
+msgstr ""
 
 #. holds jid
 #: ../src/history_manager.py:161
 msgid "Contacts"
-msgstr "Contacts"
+msgstr ""
 
 #. holds time
 #: ../src/history_manager.py:174 ../src/history_manager.py:214
 #: ../src/history_window.py:95
 msgid "Date"
-msgstr "Date"
+msgstr ""
 
 #. holds nickname
 #: ../src/history_manager.py:180 ../src/history_manager.py:232
 msgid "Nickname"
-msgstr "Nickname"
+msgstr ""
 
 #. holds message
 #: ../src/history_manager.py:188 ../src/history_manager.py:220
 #: ../src/history_window.py:103
 msgid "Message"
-msgstr "Message"
+msgstr ""
 
 #: ../src/history_manager.py:248
 msgid ""
 "Do you want to clean up the database? (STRONGLY NOT RECOMMENDED IF GAJIM IS "
 "RUNNING)"
 msgstr ""
-"Do you want to clean up the database? (STRONGLY NOT RECOMMENDED IF GAJIM IS "
-"RUNNING)"
 
 #: ../src/history_manager.py:250
 msgid ""
@@ -9119,26 +8694,21 @@ msgid ""
 "\n"
 "In case you click YES, please wait..."
 msgstr ""
-"Normally allocated database size will not be freed, it will just become "
-"reusable. If you really want to reduce database filesize, click YES, "
-"otherwise click NO.\n"
-"\n"
-"In case you click YES, please wait..."
 
 #: ../src/history_manager.py:458
 msgid "Exporting History Logs..."
-msgstr "Exporting History Logs..."
+msgstr ""
 
 #: ../src/history_manager.py:533
 #, python-format
 msgid "%(who)s on %(time)s said: %(message)s\n"
-msgstr "%(who)s on %(time)s said: %(message)s\n"
+msgstr ""
 
 #: ../src/history_manager.py:570
 msgid "Do you really want to delete logs of the selected contact?"
 msgid_plural "Do you really want to delete logs of the selected contacts?"
-msgstr[0] "Do you really want to delete the logs of the selected contact?"
-msgstr[1] "Do you really want to delete the logs of the selected contacts?"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/history_manager.py:574 ../src/history_manager.py:609
 msgid "This is an irreversible operation."
@@ -9147,13 +8717,13 @@ msgstr "This is an irreversible operation."
 #: ../src/history_manager.py:606
 msgid "Do you really want to delete the selected message?"
 msgid_plural "Do you really want to delete the selected messages?"
-msgstr[0] "Do you really want to delete the selected message?"
-msgstr[1] "Do you really want to delete the selected messages?"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/history_window.py:298
 #, python-format
 msgid "Conversation History with %s"
-msgstr "Conversation History with %s"
+msgstr ""
 
 #: ../src/history_window.py:343
 msgid "Disk Error"
@@ -9162,12 +8732,12 @@ msgstr ""
 #: ../src/history_window.py:427
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
-msgstr "%(nick)s is now %(status)s: %(status_msg)s"
+msgstr ""
 
 #: ../src/history_window.py:438
-#, fuzzy, python-format
+#, python-format
 msgid "Error: %s"
-msgstr "Error message: %s"
+msgstr ""
 
 #: ../src/history_window.py:440
 msgid "Error"
@@ -9176,31 +8746,28 @@ msgstr ""
 #: ../src/history_window.py:442
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
-msgstr "Status is now: %(status)s: %(status_msg)s"
+msgstr ""
 
 #: ../src/history_window.py:445
 #, python-format
 msgid "Status is now: %(status)s"
-msgstr "Status is now: %(status)s"
+msgstr ""
 
 #: ../src/htmltextview.py:512 ../src/htmltextview.py:522
-#, fuzzy
 msgid "Timeout loading image"
-msgstr "Could not load image"
+msgstr ""
 
 #: ../src/htmltextview.py:532
 msgid "Image is too big"
 msgstr ""
 
 #: ../src/message_window.py:220
-#, fuzzy
 msgid "You are going to close several tabs"
-msgstr "You are not connected to the server"
+msgstr ""
 
 #: ../src/message_window.py:221
-#, fuzzy
 msgid "Do you really want to close them all?"
-msgstr "Do you really want to delete the selected message?"
+msgstr ""
 
 #: ../src/message_window.py:481
 msgid "Chats"
@@ -9257,33 +8824,30 @@ msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s: %(message)s"
 
 #: ../src/notify.py:285
-#, fuzzy, python-format
+#, python-format
 msgid "Messaged by %(nickname)s"
-msgstr "New Message from %(nickname)s"
+msgstr ""
 
 #: ../src/notify.py:291
 #, python-format
 msgid "New Message from %(nickname)s"
-msgstr "New Message from %(nickname)s"
+msgstr ""
 
 #: ../src/notify.py:555
-#, fuzzy
 msgid "Ignore"
-msgstr "nine"
+msgstr ""
 
 #: ../src/profile_window.py:55
 msgid "Retrieving profile..."
 msgstr "Retrieving profile..."
 
 #: ../src/profile_window.py:108 ../src/roster_window.py:2852
-#, fuzzy
 msgid "File is empty"
-msgstr "File path"
+msgstr ""
 
 #: ../src/profile_window.py:111 ../src/roster_window.py:2855
-#, fuzzy
 msgid "File does not exist"
-msgstr "Such group chat does not exist."
+msgstr ""
 
 #. keep identation
 #. unknown format
@@ -9376,9 +8940,8 @@ msgid "Really quit Gajim?"
 msgstr ""
 
 #: ../src/roster_window.py:2258
-#, fuzzy
 msgid "Are you sure you want to quit Gajim?"
-msgstr "Are you sure you want to leave group chat \"%s\"?"
+msgstr ""
 
 #: ../src/roster_window.py:2259
 msgid "Always close Gajim"
@@ -9389,49 +8952,40 @@ msgid "You have unread messages"
 msgstr "You have unread messages"
 
 #: ../src/roster_window.py:2351
-#, fuzzy
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled and contact is in your roster."
 msgstr ""
-"Messages will only be available for reading them later if you have history "
-"enabled."
 
 #: ../src/roster_window.py:2588
 msgid "You must read them before removing this transport."
-msgstr "You must read them before removing this transport."
+msgstr ""
 
 #: ../src/roster_window.py:2591
 #, python-format
 msgid "Transport \"%s\" will be removed"
-msgstr "Transport \"%s\" will be removed"
+msgstr ""
 
 #: ../src/roster_window.py:2592
 msgid ""
 "You will no longer be able to send and receive messages from contacts using "
 "this transport."
 msgstr ""
-"You will no longer be able to send and receive messages from contacts using "
-"this transport."
 
 #: ../src/roster_window.py:2595
 msgid "Transports will be removed"
-msgstr "Transports will be removed"
+msgstr ""
 
 #: ../src/roster_window.py:2600
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You will no longer be able to send and receive messages to contacts from "
 "these transports: %s"
 msgstr ""
-"You will no longer be able to send and receive messages to contacts from "
-"these transports:%s"
 
 #: ../src/roster_window.py:2662
-#, fuzzy
 msgid "You are about to block a contact. Are you sure you want to continue?"
 msgstr ""
-"You are about to create a metacontact. Are you sure you want to continue?"
 
 #: ../src/roster_window.py:2664
 msgid ""
@@ -9442,48 +8996,47 @@ msgstr ""
 #. it's jid
 #: ../src/roster_window.py:2748
 msgid "Rename Contact"
-msgstr "Rename Contact"
+msgstr ""
 
 #: ../src/roster_window.py:2749
 #, python-format
 msgid "Enter a new nickname for contact %s"
-msgstr "Enter a new nickname for contact %s"
+msgstr ""
 
 #: ../src/roster_window.py:2756
 msgid "Rename Group"
-msgstr "Rename Group"
+msgstr ""
 
 #: ../src/roster_window.py:2757
 #, python-format
 msgid "Enter a new name for group %s"
-msgstr "Enter a new name for group %s"
+msgstr ""
 
 #: ../src/roster_window.py:2798
 msgid "Remove Group"
-msgstr "Remove Group"
+msgstr ""
 
 #: ../src/roster_window.py:2799
 #, python-format
 msgid "Do you want to remove group %s from the roster?"
-msgstr "Do you want to remove group %s from the roster?"
+msgstr ""
 
 #: ../src/roster_window.py:2800
-#, fuzzy
 msgid "Also remove all contacts in this group from your roster"
-msgstr "Remove also all contacts in this group from your roster"
+msgstr ""
 
 #: ../src/roster_window.py:2839
 msgid "Assign OpenPGP Key"
-msgstr "Assign OpenPGP Key"
+msgstr ""
 
 #: ../src/roster_window.py:2840
 msgid "Select a key to apply to the contact"
-msgstr "Select a key to apply to the contact"
+msgstr ""
 
 #: ../src/roster_window.py:3203
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
-msgstr "Contact \"%s\" will be removed from your roster"
+msgstr ""
 
 #: ../src/roster_window.py:3205
 #, python-format
@@ -9495,31 +9048,26 @@ msgid ""
 "By removing this contact you also remove authorization resulting in him or "
 "her always seeing you as offline."
 msgstr ""
-"By removing this contact you also remove authorisation resulting in him or "
-"her always seeing you as offline."
 
 #. Contact is not in roster
 #: ../src/roster_window.py:3216
-#, fuzzy
 msgid "Do you want to continue?"
-msgstr "What do you want to do?"
+msgstr ""
 
 #: ../src/roster_window.py:3219
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
 msgstr ""
-"By removing this contact you also by default remove authorisation resulting "
-"in him or her always seeing you as offline."
 
 #: ../src/roster_window.py:3222
 msgid "I want this contact to know my status after removal"
-msgstr "I want this contact to know my status after removal"
+msgstr ""
 
 #. several contact to remove at the same time
 #: ../src/roster_window.py:3226
 msgid "Contacts will be removed from your roster"
-msgstr "Contacts will be removed from your roster"
+msgstr ""
 
 #: ../src/roster_window.py:3231
 #, python-format
@@ -9527,15 +9075,11 @@ msgid ""
 "By removing these contacts:%s\n"
 "you also remove authorization resulting in them always seeing you as offline."
 msgstr ""
-"By removing these contacts:%s\n"
-"you also remove authorisation resulting in them always seeing you as offline."
 
 #: ../src/roster_window.py:3286
-#, fuzzy
 msgid ""
 "You are about to send a custom status. Are you sure you want to continue?"
 msgstr ""
-"You are about to create a metacontact. Are you sure you want to continue?"
 
 #: ../src/roster_window.py:3288
 #, python-format
@@ -9546,30 +9090,26 @@ msgstr ""
 
 #: ../src/roster_window.py:3305
 msgid "No account available"
-msgstr "No account available"
+msgstr ""
 
 #: ../src/roster_window.py:3306
 msgid "You must create an account before you can chat with other contacts."
-msgstr "You must create an account before you can chat with other contacts."
+msgstr ""
 
 #: ../src/roster_window.py:3877
 msgid "Metacontacts storage not supported by your server"
-msgstr "Metacontacts storage not supported by your server"
+msgstr ""
 
 #: ../src/roster_window.py:3879
-#, fuzzy
 msgid ""
 "Your server does not support storing metacontacts information. So those "
 "information will not be saved on next reconnection."
 msgstr ""
-"Your server does not support storing metacontacts information. So those "
-"information will not be save on next reconnection."
 
 #: ../src/roster_window.py:3964
 msgid ""
 "You are about to create a metacontact. Are you sure you want to continue?"
 msgstr ""
-"You are about to create a metacontact. Are you sure you want to continue?"
 
 #: ../src/roster_window.py:3966
 msgid ""
@@ -9577,31 +9117,27 @@ msgid ""
 "is used when the same person has several Jabber accounts or transport "
 "accounts."
 msgstr ""
-"Metacontacts are a way to regroup several contacts in one line. Generally it "
-"is used when the same person has several Jabber accounts or transport "
-"accounts."
 
 #: ../src/roster_window.py:4081
-#, fuzzy
 msgid "Invalid file URI:"
-msgstr "Invalid File"
+msgstr ""
 
 #: ../src/roster_window.py:4092
-#, fuzzy, python-format
+#, python-format
 msgid "Do you want to send this file to %s:"
 msgid_plural "Do you want to send these files to %s:"
-msgstr[0] "%s wants to send you a file:"
-msgstr[1] "%s wants to send you a file:"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/roster_window.py:4207
-#, fuzzy, python-format
+#, python-format
 msgid "Send %s to %s"
-msgstr "Send %s"
+msgstr ""
 
 #: ../src/roster_window.py:4213
 #, python-format
 msgid "Make %s and %s metacontacts"
-msgstr "Make %s and %s metacontacts"
+msgstr ""
 
 #. new chat
 #. single message
@@ -9613,48 +9149,46 @@ msgstr "Make %s and %s metacontacts"
 #: ../src/systray.py:269
 #, python-format
 msgid "using account %s"
-msgstr "using account %s"
+msgstr ""
 
 #. add
 #: ../src/roster_window.py:4881
 #, python-format
 msgid "to %s account"
-msgstr "to %s account"
+msgstr ""
 
 #. disco
 #: ../src/roster_window.py:4886
 #, python-format
 msgid "using %s account"
-msgstr "using %s account"
+msgstr ""
 
 #: ../src/roster_window.py:4923 ../src/systray.py:279
 msgid "_Manage Bookmarks..."
-msgstr "_Manage Bookmarks..."
+msgstr ""
 
 #. profile, avatar
 #: ../src/roster_window.py:4943
 #, python-format
 msgid "of account %s"
-msgstr "of account %s"
+msgstr ""
 
 #: ../src/roster_window.py:4983
 #, python-format
 msgid "for account %s"
-msgstr "for account %s"
+msgstr ""
 
 #: ../src/roster_window.py:5039 ../src/roster_window.py:5140
 msgid "_Change Status Message"
 msgstr "_Keisti Būklės Žinutę"
 
 #: ../src/roster_window.py:5066
-#, fuzzy
 msgid "Publish Tune"
-msgstr "_Publish"
+msgstr ""
 
 #: ../src/roster_window.py:5074
-#, fuzzy
 msgid "Configure Services..."
-msgstr "Keisti kambario nustatymus"
+msgstr "Konfigūruoti Paslaugas..."
 
 #: ../src/roster_window.py:5228
 msgid "_Maximize All"
@@ -9663,11 +9197,11 @@ msgstr ""
 #. Send Group Message
 #: ../src/roster_window.py:5236 ../src/roster_window.py:5404
 msgid "Send Group M_essage"
-msgstr "Send Group M_essage"
+msgstr ""
 
 #: ../src/roster_window.py:5244
 msgid "To all users"
-msgstr "Visiems"
+msgstr "Visiems naudotojams"
 
 #: ../src/roster_window.py:5248
 msgid "To all online users"
@@ -9675,9 +9209,8 @@ msgstr "Visiems prisijungusiems"
 
 #. Manage Transport submenu
 #: ../src/roster_window.py:5424
-#, fuzzy
 msgid "_Manage Contacts"
-msgstr "Rename Contact"
+msgstr ""
 
 #. Edit Groups
 #: ../src/roster_window.py:5432
@@ -9686,9 +9219,8 @@ msgstr "Redaguoti _Grupes"
 
 #. Send single message
 #: ../src/roster_window.py:5485
-#, fuzzy
 msgid "Send Single Message"
-msgstr "_Siųsti vieną žinutę"
+msgstr "Siųsti Vieną Žinutę"
 
 #. Execute Command
 #: ../src/roster_window.py:5531
@@ -9697,15 +9229,13 @@ msgstr "Vykdyti Komandą..."
 
 #. Manage Transport submenu
 #: ../src/roster_window.py:5541
-#, fuzzy
 msgid "_Manage Transport"
-msgstr "Transports"
+msgstr "_Valdyti Pernašą"
 
 #. Modify Transport
 #: ../src/roster_window.py:5549
-#, fuzzy
 msgid "_Modify Transport"
-msgstr "Rodyti _Pernašas"
+msgstr "_Keisti Pernašą"
 
 #. Rename
 #: ../src/roster_window.py:5558
@@ -9717,14 +9247,12 @@ msgid "_Maximize"
 msgstr ""
 
 #: ../src/roster_window.py:5631
-#, fuzzy
 msgid "_Reconnect"
-msgstr "Contact Disconnected"
+msgstr ""
 
 #: ../src/roster_window.py:5637
-#, fuzzy
 msgid "_Disconnect"
-msgstr "Contact Disconnected"
+msgstr ""
 
 #. History manager
 #: ../src/roster_window.py:5716
@@ -9829,128 +9357,121 @@ msgid " since %s"
 msgstr " since %s"
 
 #: ../src/tooltips.py:500
-#, fuzzy
 msgid "Connected"
-msgstr "Prisijungimas"
+msgstr "Prisijungta"
 
 #: ../src/tooltips.py:502
-#, fuzzy
 msgid "Disconnected"
-msgstr "Contact Disconnected"
+msgstr "Atsijungta"
 
 #. ('both' is the normal sub so we don't show it)
 #: ../src/tooltips.py:531
 msgid "Subscription: "
-msgstr "Subscription: "
+msgstr ""
 
 #: ../src/tooltips.py:541
 msgid "OpenPGP: "
-msgstr "OpenPGP: "
+msgstr ""
 
 #: ../src/tooltips.py:637
-#, fuzzy
 msgid "Tune:"
-msgstr "Tipas:"
+msgstr ""
 
 #: ../src/tooltips.py:663
 msgid "Download"
-msgstr "Download"
+msgstr ""
 
 #: ../src/tooltips.py:669
 msgid "Upload"
-msgstr "Upload"
+msgstr ""
 
 #: ../src/tooltips.py:676
 msgid "Type: "
-msgstr "Type: "
+msgstr ""
 
 #: ../src/tooltips.py:680
 msgid "Transferred: "
-msgstr "Transferred: "
+msgstr ""
 
 #: ../src/tooltips.py:683 ../src/tooltips.py:704
 msgid "Not started"
-msgstr "Not started"
+msgstr ""
 
 #: ../src/tooltips.py:687
 msgid "Stopped"
-msgstr "Stopped"
+msgstr ""
 
 #: ../src/tooltips.py:689 ../src/tooltips.py:692
 msgid "Completed"
-msgstr "Completed"
+msgstr ""
 
 #: ../src/tooltips.py:696
 msgid "?transfer status:Paused"
-msgstr "Paused"
+msgstr ""
 
 #. stalled is not paused. it is like 'frozen' it stopped alone
 #: ../src/tooltips.py:700
 msgid "Stalled"
-msgstr "Stalled"
+msgstr ""
 
 #: ../src/tooltips.py:702
 msgid "Transferring"
-msgstr "Transferring"
+msgstr ""
 
 #: ../src/tooltips.py:738
 msgid "This service has not yet responded with detailed information"
-msgstr "This service has not yet responded with detailed information"
+msgstr ""
 
 #: ../src/tooltips.py:741
 msgid ""
 "This service could not respond with detailed information.\n"
 "It is most likely legacy or broken"
 msgstr ""
-"This service could not respond with detailed information.\n"
-"It is most likely legacy or broken"
 
 #: ../src/vcard.py:245
 msgid "?Client:Unknown"
-msgstr "Unknown"
+msgstr ""
 
 #: ../src/vcard.py:247
 msgid "?OS:Unknown"
-msgstr "Unknown"
+msgstr ""
 
 #: ../src/vcard.py:268
-#, fuzzy
 msgid "?Time:Unknown"
-msgstr "Unknown"
+msgstr ""
 
-#: ../src/vcard.py:292 ../src/vcard.py:302 ../src/vcard.py:511
+#: ../src/vcard.py:292 ../src/vcard.py:302 ../src/vcard.py:509
 #, python-format
 msgid "since %s"
 msgstr "since %s"
 
-#: ../src/vcard.py:331
-#, fuzzy
+#: ../src/vcard.py:329
 msgid "<b>Affiliation:</b>"
-msgstr "<b>Programos</b>"
+msgstr ""
+
+#: ../src/vcard.py:337
+msgid ""
+"This contact is interested in your presence information, but you are not "
+"interested in his/her presence"
+msgstr ""
+"This contact is interested in your presence information, but you are not "
+"interested in his/her presence"
 
 #: ../src/vcard.py:339
 msgid ""
-"This contact is interested in your presence information, but you are not "
-"interested in his/her presence"
+"You are interested in the contact's presence information, but he/she is not "
+"interested in yours"
 msgstr ""
-"This contact is interested in your presence information, but you are not "
-"interested in his/her presence"
+"You are interested in the contact's presence information, but he/she is not "
+"interested in yours"
 
 #: ../src/vcard.py:341
-msgid ""
-"You are interested in the contact's presence information, but he/she is not "
-"interested in yours"
-msgstr ""
-"You are interested in the contact's presence information, but he/she is not "
-"interested in yours"
-
-#: ../src/vcard.py:343
 msgid "You and the contact are interested in each other's presence information"
 msgstr ""
 "You and the contact are interested in each other's presence information"
 
 #. None
-#: ../src/vcard.py:345
+#: ../src/vcard.py:343
 msgid ""
 "You are not interested in the contact's presence, and neither he/she is "
 "interested in yours"
@@ -9958,15 +9479,15 @@ msgstr ""
 "You are not interested in the contact's presence, and neither he/she is "
 "interested in yours"
 
-#: ../src/vcard.py:352
+#: ../src/vcard.py:350
 msgid "You are waiting contact's answer about your subscription request"
 msgstr "You are waiting contact's answer about your subscription request"
 
-#: ../src/vcard.py:354
+#: ../src/vcard.py:352
 msgid "There is no pending subscription request."
 msgstr ""
 
-#: ../src/vcard.py:359 ../src/vcard.py:413 ../src/vcard.py:536
+#: ../src/vcard.py:357 ../src/vcard.py:411 ../src/vcard.py:532
 msgid " resource with priority "
 msgstr " resource with priority "
 
