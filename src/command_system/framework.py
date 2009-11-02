@@ -65,7 +65,7 @@ class CommandProcessor(object):
         Try to process text as a command. Returns True if it has been processed
         as a command and False otherwise.
         """
-        if not text.startswith(self.COMMAND_PREFIX):
+        if not (text.startswith(self.COMMAND_PREFIX) and len(text) > 1):
             return False
 
         body = text[len(self.COMMAND_PREFIX):]
