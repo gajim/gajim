@@ -41,11 +41,12 @@ modules = ( 'test_xmpp_dispatcher_nb',
 				'test_resolver',
 				'test_caps',
 				'test_contacts',
+				'test_gui_interface',
 			 )
 #modules = ()
 
 if use_x:
-	modules += ('test_misc_interface',
+	modules += ('test_gui_event_integration',
 					'test_roster',
 					'test_sessions',
 	)
