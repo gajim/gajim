@@ -285,7 +285,7 @@ Section "sun" SecIconsetsSun
 	File /r "data\iconsets\sun"
 SectionEnd
 
-Section "wroop" SecIconsetsSun
+Section "wroop" SecIconsetsWroop
 	SetOutPath "$INSTDIR\data\iconsets"
 	File /r "data\iconsets\wroop"
 SectionEnd
