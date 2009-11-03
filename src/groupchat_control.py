@@ -626,7 +626,7 @@ class GroupchatControl(ChatControlBase):
 			self.banner_status_label.set_no_show_all(False)
 		else:
 			subject_text = ''
-			self.event_box.set_has_tooltip(False)
+			self.event_box.set_tooltip_text(subject_text)
 			self.banner_status_label.hide()
 			self.banner_status_label.set_no_show_all(True)
 
