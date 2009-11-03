@@ -15,7 +15,7 @@ Gajim 0.13 (XX November 2009)
   * Ability to enable / disable accounts
   * better URL recognition
   * groupchat autoreconnect
-  * Store passwords in KDE wallet is available
+  * Store passwords in KDE wallet if available
   * Better MUC errors handling
   * Fix sound player launch (don't create zombies anymore)
   * Optional shell like completion
