@@ -9,7 +9,6 @@ from mock import Mock, expectParams
 from gajim_mocks import *
 
 from common import gajim
-from common import zeroconf
 import roster_window
 
 gajim.get_jid_from_account = lambda acc: 'myjid@' + acc

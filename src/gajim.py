@@ -255,6 +255,7 @@ from common import optparser
 from common import dataforms
 from common import passwords
 from common import pep
+from common import caps
 
 from common.xmpp import Message as XmppMessage
 
@@ -734,8 +735,8 @@ class PassphraseRequest:
 				return
 			elif result == 'expired':
 				dialogs.ErrorDialog(_('GPG key expired'),
-					_('Your GPG key has expied, you will be connected to %s without '
-					'OpenPGP.') % account)
+					_('Your GPG key has expired, you will be connected to %s without'
+					' OpenPGP.') % account)
 				# Don't try to connect with GPG
 				gajim.connections[account].continue_connect_info[2] = False
 				self.complete(None)
@@ -3810,6 +3811,8 @@ class Interface:
 		self.default_colors = {
 			'inmsgcolor': gajim.config.get('inmsgcolor'),
 			'outmsgcolor': gajim.config.get('outmsgcolor'),
+			'inmsgtxtcolor': gajim.config.get('inmsgtxtcolor'),
+			'outmsgtxtcolor': gajim.config.get('outmsgtxtcolor'),
 			'statusmsgcolor': gajim.config.get('statusmsgcolor'),
 			'urlmsgcolor': gajim.config.get('urlmsgcolor'),
 		}
@@ -3922,6 +3925,12 @@ class Interface:
 			gajim.caps_hash[a] = ''
 
 		helpers.update_optional_features()
+		# prepopulate data which we are sure of; note: we do not log these info
+		for account in gajim.connections:
+			gajimcaps = caps.capscache[('sha-1', gajim.caps_hash[account])]
+			gajimcaps.identities = [gajim.gajim_identity]
+			gajimcaps.features = gajim.gajim_common_features + \
+				gajim.gajim_optional_features[account]
 
 		self.remote_ctrl = None
 

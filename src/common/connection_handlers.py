@@ -2364,7 +2364,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				is_gc = True
 		status = prs.getStatus() or ''
 		show = prs.getShow()
-		if not show in gajim.SHOW_LIST:
+		if show not in ('chat', 'away', 'xa', 'dnd'):
 			show = '' # We ignore unknown show
 		if not ptype and not show:
 			show = 'online'
@@ -2574,9 +2574,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					if not sess.received_thread_id:
 						contact = gajim.contacts.get_contact(self.name, jid)
 
-						session_supported = gajim.capscache.is_supported(contact,
-							common.xmpp.NS_SSN) or gajim.capscache.is_supported(
-							contact, common.xmpp.NS_ESESSION)
+						session_supported = contact.supports(common.xmpp.NS_SSN) or \
+							contact.supports(common.xmpp.NS_ESESSION)
 						if session_supported:
 							sess.terminate()
 							del self.sessions[jid][sess.thread_id]

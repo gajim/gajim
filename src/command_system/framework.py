@@ -65,7 +65,9 @@ class CommandProcessor(object):
         Try to process text as a command. Returns True if it has been processed
         as a command and False otherwise.
         """
-        if not text.startswith(self.COMMAND_PREFIX):
+        prefix = text.startswith(self.COMMAND_PREFIX)
+        length = len(text) > len(self.COMMAND_PREFIX)
+        if not (prefix and length):
             return False
 
         body = text[len(self.COMMAND_PREFIX):]
@@ -158,7 +160,7 @@ class Command(object):
         # in case if they was not set by the one who raised an exception.
         except CommandError, error:
             if not error.command and not error.name:
-                raise CommandError(exception.message, self)
+                raise CommandError(error.message, self)
             raise
 
         # This one is a little bit too wide, but as Python does not have

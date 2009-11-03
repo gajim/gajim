@@ -6,7 +6,7 @@
 ## Copyright (C) 2007-2008 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
 ##                    Jonathan Schleifer <js-gajim AT webkeks.org>
-##                    Stephan Erb <steve-e AT h3c.de>
+## Copyright (C) 2008-2009 Stephan Erb <steve-e AT h3c.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -23,55 +23,198 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from itertools import *
+'''
+Module containing all XEP-115 (Entity Capabilities) related classes 
+
+Basic Idea:
+CapsCache caches features to hash relationships. The cache is queried
+through ClientCaps objects which are hold by contact instances. 
+''' 
+
 import gajim
 import helpers
+import base64
+import hashlib
+
+from common.xmpp import NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION, NS_CHATSTATES
+# Features where we cannot safely assume that the other side supports them
+FEATURE_BLACKLIST = [NS_CHATSTATES, NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION]
+
+
+capscache = None
+def initialize(logger):
+	''' Initializes the capscache global '''
+	global capscache
+	capscache = CapsCache(logger)
+
+
+def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
+	'''Compute caps hash according to XEP-0115, V1.5
+
+	dataforms are xmpp.DataForms objects as common.dataforms don't allow several
+	values without a field type list-multi'''
+	
+	def sort_identities_func(i1, i2):
+		cat1 = i1['category']
+		cat2 = i2['category']
+		if cat1 < cat2:
+			return -1
+		if cat1 > cat2:
+			return 1
+		type1 = i1.get('type', '')
+		type2 = i2.get('type', '')
+		if type1 < type2:
+			return -1
+		if type1 > type2:
+			return 1
+		lang1 = i1.get('xml:lang', '')
+		lang2 = i2.get('xml:lang', '')
+		if lang1 < lang2:
+			return -1
+		if lang1 > lang2:
+			return 1
+		return 0
+	
+	def sort_dataforms_func(d1, d2):
+		f1 = d1.getField('FORM_TYPE')
+		f2 = d2.getField('FORM_TYPE')
+		if f1 and f2 and (f1.getValue() < f2.getValue()):
+			return -1
+		return 1
+	
+	S = ''
+	identities.sort(cmp=sort_identities_func)
+	for i in identities:
+		c = i['category']
+		type_ = i.get('type', '')
+		lang = i.get('xml:lang', '')
+		name = i.get('name', '')
+		S += '%s/%s/%s/%s<' % (c, type_, lang, name)
+	features.sort()
+	for f in features:
+		S += '%s<' % f
+	dataforms.sort(cmp=sort_dataforms_func)
+	for dataform in dataforms:
+		# fields indexed by var
+		fields = {}
+		for f in dataform.getChildren():
+			fields[f.getVar()] = f
+		form_type = fields.get('FORM_TYPE')
+		if form_type:
+			S += form_type.getValue() + '<'
+			del fields['FORM_TYPE']
+		for var in sorted(fields.keys()):
+			S += '%s<' % var
+			values = sorted(fields[var].getValues())
+			for value in values:
+				S += '%s<' % value
+
+	if hash_method == 'sha-1':
+		hash_ = hashlib.sha1(S)
+	elif hash_method == 'md5':
+		hash_ = hashlib.md5(S)
+	else:
+		return ''
+	return base64.b64encode(hash_.digest())
+	
+
+class AbstractClientCaps(object):
+	'''
+	Base class representing a client and its capabilities as advertised by
+	a caps tag in a presence. 
+	'''
+	def __init__(self, caps_hash, node):
+		self._hash = caps_hash
+		self._node = node
+		
+	def get_discover_strategy(self):
+		return self._discover
+							
+	def _discover(self, connection, jid):
+		''' To be implemented by subclassess '''
+		raise NotImplementedError()
+	
+	def get_cache_lookup_strategy(self):
+		return self._lookup_in_cache
+	
+	def _lookup_in_cache(self, caps_cache):
+		''' To be implemented by subclassess '''
+		raise NotImplementedError()
+	
+	def get_hash_validation_strategy(self):
+		return self._is_hash_valid
+					
+	def _is_hash_valid(self, identities, features, dataforms):
+		''' To be implemented by subclassess '''
+		raise NotImplementedError()		
+	
+	
+class ClientCaps(AbstractClientCaps):
+	''' The current XEP-115 implementation '''
+	
+	def __init__(self, caps_hash, node, hash_method):
+		AbstractClientCaps.__init__(self, caps_hash, node)
+		assert hash_method != 'old'
+		self._hash_method = hash_method
+	
+	def _lookup_in_cache(self, caps_cache):
+		return caps_cache[(self._hash_method, self._hash)]
+	
+	def _discover(self, connection, jid):
+		connection.discoverInfo(jid, '%s#%s' % (self._node, self._hash))
+				
+	def _is_hash_valid(self, identities, features, dataforms):
+		computed_hash = compute_caps_hash(identities, features,
+				dataforms=dataforms, hash_method=self._hash_method)
+		return computed_hash == self._hash	
+	
+	
+class OldClientCaps(AbstractClientCaps):
+	''' Old XEP-115 implemtation. Kept around for background competability.  '''
+	
+	def __init__(self, caps_hash, node):
+		AbstractClientCaps.__init__(self, caps_hash, node)
+
+	def _lookup_in_cache(self, caps_cache):
+		return caps_cache[('old', self._node + '#' + self._hash)]
+	
+	def _discover(self, connection, jid):
+		connection.discoverInfo(jid)
+		
+	def _is_hash_valid(self, identities, features, dataforms):
+		return True	
+		
+		
+class NullClientCaps(AbstractClientCaps):
+	'''
+	This is a NULL-Object to streamline caps handling if a client has not
+	advertised any caps or has advertised them in an improper way. 
+	
+	Assumes (almost) everything is supported.
+	''' 
+	
+	def __init__(self):
+		AbstractClientCaps.__init__(self, None, None)
+	
+	def _lookup_in_cache(self, caps_cache):
+		# lookup something which does not exist to get a new CacheItem created
+		cache_item = caps_cache[('old', '')]
+		assert cache_item.queried == 0
+		return cache_item
+	
+	def _discover(self, connection, jid):
+		pass
+
+	def _is_hash_valid(self, identities, features, dataforms):
+		return False	
+
 
 class CapsCache(object):
-	''' This object keeps the mapping between caps data and real disco
+	''' 
+	This object keeps the mapping between caps data and real disco
 	features they represent, and provides simple way to query that info.
-	It is application-wide, that is there's one object for all
-	connections.
-	Goals:
-	 * handle storing/retrieving info from database
-	 * cache info in memory
-	 * expose simple interface
-	Properties:
-	 * one object for all connections (move to logger.py?)
-	 * store info efficiently (a set() of urls -- we can assume there won't be
-	   too much of these, ensure that (X,Y,Z1) and (X,Y,Z2) has different
-	   features.
-
-	Connections with other objects: (TODO)
-
-	Interface:
-
-	# object creation
-	>>> cc=CapsCache(logger_object)
-
-	>>> caps = ('sha-1', '66/0NaeaBKkwk85efJTGmU47vXI=')
-	>>> muc = 'http://jabber.org/protocol/muc'
-	>>> chatstates = 'http://jabber.org/protocol/chatstates'
-
-	# setting data
-	>>> cc[caps].identities = [{'category':'client', 'type':'pc'}]
-	>>> cc[caps].features = [muc]
-
-	# retrieving data
-	>>> muc in cc[caps].features
-	True
-	>>> chatstates in cc[caps].features
-	False
-	>>> cc[caps].identities
-	[{'category': 'client', 'type': 'pc'}]
-	>>> x = cc[caps] # more efficient if making several queries for one set of caps
-	ATypicalBlackBoxObject
-	>>> muc in x.features
-	True
-
 	'''
 	def __init__(self, logger=None):
-		''' Create a cache for entity capabilities. '''
 		# our containers:
 		# __cache is a dictionary mapping: pair of hash method and hash maps
 		#   to CapsCacheItem object
@@ -80,40 +223,39 @@ class CapsCache(object):
 		self.__cache = {}
 
 		class CacheItem(object):
-			''' TODO: logging data into db '''
 			# __names is a string cache; every string long enough is given
 			#   another object, and we will have plenty of identical long
 			#   strings. therefore we can cache them
-			#   TODO: maybe put all known xmpp namespace strings here
-			#   (strings given in xmpppy)?
 			__names = {}
-			def __init__(ciself, hash_method, hash_):
+			
+			def __init__(self, hash_method, hash_, logger):
 				# cached into db
-				ciself.hash_method = hash_method
-				ciself.hash = hash_
-				ciself._features = []
-				ciself._identities = []
+				self.hash_method = hash_method
+				self.hash = hash_
+				self._features = []
+				self._identities = []
+				self._logger = logger
 
 				# not cached into db:
 				# have we sent the query?
 				# 0 == not queried
 				# 1 == queried
 				# 2 == got the answer
-				ciself.queried = 0
+				self.queried = 0
 
-			def _get_features(ciself):
-				return ciself._features
+			def _get_features(self):
+				return self._features
 
-			def _set_features(ciself, value):
-				ciself._features = []
+			def _set_features(self, value):
+				self._features = []
 				for feature in value:
-					ciself._features.append(ciself.__names.setdefault(feature,
-						feature))
+					self._features.append(self.__names.setdefault(feature, feature))
+					
 			features = property(_get_features, _set_features)
 
-			def _get_identities(ciself):
+			def _get_identities(self):
 				list_ = []
-				for i in ciself._identities:
+				for i in self._identities:
 					# transforms it back in a dict
 					d = dict()
 					d['category'] = i[0]
@@ -125,36 +267,27 @@ class CapsCache(object):
 						d['name'] = i[3]
 					list_.append(d)
 				return list_
-			def _set_identities(ciself, value):
-				ciself._identities = []
+			
+			def _set_identities(self, value):
+				self._identities = []
 				for identity in value:
 					# dict are not hashable, so transform it into a tuple
 					t = (identity['category'], identity.get('type'),
 						identity.get('xml:lang'), identity.get('name'))
-					ciself._identities.append(ciself.__names.setdefault(t, t))
+					self._identities.append(self.__names.setdefault(t, t))
+					
 			identities = property(_get_identities, _set_identities)
 
-			def update(ciself, identities, features):
-				# NOTE: self refers to CapsCache object, not to CacheItem
-				ciself.identities=identities
-				ciself.features=features
-				self.logger.add_caps_entry(ciself.hash_method, ciself.hash,
+			def set_and_store(self, identities, features):
+				self.identities = identities
+				self.features = features
+				self._logger.add_caps_entry(self.hash_method, self.hash,
 					identities, features)
 
 		self.__CacheItem = CacheItem
-
-		# prepopulate data which we are sure of; note: we do not log these info
-
-		for account in gajim.connections:
-			gajimcaps = self[('sha-1', gajim.caps_hash[account])]
-			gajimcaps.identities = [gajim.gajim_identity]
-			gajimcaps.features = gajim.gajim_common_features + \
-				gajim.gajim_optional_features[account]
-
-		# start logging data from the net
 		self.logger = logger
 
-	def load_from_db(self):
+	def initialize_from_db(self):
 		# get data from logger...
 		if self.logger is not None:
 			for hash_method, hash_, identities, features in \
@@ -170,61 +303,35 @@ class CapsCache(object):
 
 		hash_method, hash_ = caps
 
-		x = self.__CacheItem(hash_method, hash_)
+		x = self.__CacheItem(hash_method, hash_, self.logger)
 		self.__cache[(hash_method, hash_)] = x
 		return x
 
-	def preload(self, con, jid, node, hash_method, hash_):
-		''' Preload data about (node, ver, exts) caps using disco
-		query to jid using proper connection. Don't query if
-		the data is already in cache. '''
-		if hash_method == 'old':
-			q = self[(hash_method, node + '#' + hash_)]
-		else:
-			q = self[(hash_method, hash_)]
-
-		if q.queried==0:
+	def query_client_of_jid_if_unknown(self, connection, jid, client_caps):
+		'''
+		Start a disco query to determine caps (node, ver, exts).
+		Won't query if the data is already in cache.
+		'''
+		lookup_cache_item = client_caps.get_cache_lookup_strategy()
+		q = lookup_cache_item(self)	
+		
+		if q.queried == 0:
 			# do query for bare node+hash pair
 			# this will create proper object
-			q.queried=1
-			if hash_method == 'old':
-				con.discoverInfo(jid)
-			else:
-				con.discoverInfo(jid, '%s#%s' % (node, hash_))
+			q.queried = 1
+			discover = client_caps.get_discover_strategy()
+			discover(connection, jid)
 
-	def is_supported(self, contact, feature):
-		if not contact:
-			return False
-
-		# Unfortunately, if all resources are offline, the contact
-		# includes the last resource that was online. Check for its
-		# show, so we can be sure it's existant. Otherwise, we still
-		# return caps for a contact that has no resources left.
-		if contact.show == 'offline':
-			return False
-
-		# FIXME: We assume everything is supported if we got no caps.
-		#	 This is the "Asterix way", after 0.12 release, I will
-		#	 likely implement a fallback to disco (could be disabled
-		#	 for mobile users who pay for traffic)
-		if contact.caps_hash_method == 'old':
-			features = self[(contact.caps_hash_method, contact.caps_node + '#' + \
-				contact.caps_hash)].features
-		else:
-			features = self[(contact.caps_hash_method, contact.caps_hash)].features
-		if feature in features or features == []:
-			return True
-
-		return False
-
-gajim.capscache = CapsCache(gajim.logger)
 
 class ConnectionCaps(object):
-	''' This class highly depends on that it is a part of Connection class. '''
+	'''
+	This class highly depends on that it is a part of Connection class.
+	'''
 	def _capsPresenceCB(self, con, presence):
-		''' Handle incoming presence stanzas... This is a callback
-		for xmpp registered in connection_handlers.py'''
-
+		'''
+		Handle incoming presence stanzas... This is a callback for xmpp
+		registered in connection_handlers.py
+		'''
 		# we will put these into proper Contact object and ask
 		# for disco... so that disco will learn how to interpret
 		# these caps
@@ -245,64 +352,47 @@ class ConnectionCaps(object):
 				# into Contacts
 				return
 
-		# get the caps element
-		caps = presence.getTag('c')
-		if not caps:
-			contact.caps_node = None
-			contact.caps_hash = None
-			contact.caps_hash_method = None
-			return
+		caps_tag = presence.getTag('c')
+		if not caps_tag:
+			# presence did not contain caps_tag
+			client_caps = NullClientCaps()
+		else:
+			hash_method, node, caps_hash = caps_tag['hash'], caps_tag['node'], caps_tag['ver']
 
-		hash_method, node, hash_ = caps['hash'], caps['node'], caps['ver']
+			if node is None or caps_hash is None:
+				# improper caps in stanza, ignore client capabilities.
+				client_caps = NullClientCaps()
+			elif hash_method is None:
+				client_caps = OldClientCaps(caps_hash, node)
+			else:
+				client_caps = ClientCaps(caps_hash, node, hash_method)
+		
+		capscache.query_client_of_jid_if_unknown(self, jid, client_caps)
+		contact.client_caps = client_caps
 
-		if hash_method is None and node and hash_:
-			# Old XEP-115 implentation
-			hash_method = 'old'
-
-		if hash_method is None or node is None or hash_ is None:
-			# improper caps in stanza, ignoring
-			contact.caps_node = None
-			contact.caps_hash = None
-			contact.hash_method = None
-			return
-
-		# start disco query...
-		gajim.capscache.preload(self, jid, node, hash_method, hash_)
-
-		# overwriting old data
-		contact.caps_node = node
-		contact.caps_hash_method = hash_method
-		contact.caps_hash = hash_
 		if pm_ctrl:
 			pm_ctrl.update_contact()
 
-	def _capsDiscoCB(self, jid, node, identities, features, dataforms):
+	def _capsDiscoCB(self, jid, node, identities, features, dataforms):		
 		contact = gajim.contacts.get_contact_from_full_jid(self.name, jid)
 		if not contact:
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
 			contact = gajim.contacts.get_gc_contact(self.name, room_jid, nick)
 			if contact is None:
 				return
-		if not contact.caps_node:
-			return # we didn't asked for that?
-		if contact.caps_hash_method != 'old':
-			computed_hash = helpers.compute_caps_hash(identities, features,
-				dataforms=dataforms, hash_method=contact.caps_hash_method)
-			if computed_hash != contact.caps_hash:
-				# wrong hash, forget it
-				contact.caps_node = ''
-				contact.caps_hash_method = ''
-				contact.caps_hash = ''
-				return
-			# if we don't have this info already...
-			caps = gajim.capscache[(contact.caps_hash_method, contact.caps_hash)]
-		else:
-			# if we don't have this info already...
-			caps = gajim.capscache[(contact.caps_hash_method, contact.caps_node + \
-				'#' + contact.caps_hash)]
-		if caps.queried == 2:
-			return
 
-		caps.update(identities, features)
+		lookup = contact.client_caps.get_cache_lookup_strategy()
+		cache_item = lookup(capscache)	
+					
+		if cache_item.queried == 2:
+			return
+		else:
+			validate = contact.client_caps.get_hash_validation_strategy()
+			hash_is_valid = validate(identities, features, dataforms)
+			
+			if hash_is_valid:
+				cache_item.set_and_store(identities, features)
+			else:
+				contact.client_caps = NullClientCaps()
 
 # vim: se ts=3:

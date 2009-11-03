@@ -7,7 +7,6 @@ import threading, time
 from mock import Mock
 
 from common.xmpp import idlequeue
-from common.xmpp.plugin import PlugIn
 
 IDLEQUEUE_INTERVAL = 0.2 # polling interval. 200ms is used in Gajim as default
 IDLEMOCK_TIMEOUT = 30 # how long we wait for an event

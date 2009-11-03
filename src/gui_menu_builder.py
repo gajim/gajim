@@ -55,7 +55,7 @@ room_account=None, cap=None):
 		else: # start_chat, execute_command, send_file
 			item.connect('activate', action, c, account, c.resource)
 
-		if cap and not gajim.capscache.is_supported(c, cap):
+		if cap and not c.supports(cap):
 			item.set_sensitive(False)
 
 	return sub_menu
@@ -92,7 +92,7 @@ def build_invite_submenu(invite_menuitem, list_):
 	if len(contact_list) > 1: # several resources
 		invite_to_new_room_menuitem.set_submenu(build_resources_submenu(
 			contact_list, account, roster.on_invite_to_new_room, cap=NS_MUC))
-	elif len(list_) == 1 and gajim.capscache.is_supported(contact, NS_MUC):
+	elif len(list_) == 1 and contact.supports(NS_MUC):
 		invite_menuitem.set_sensitive(True)
 		# use resource if it's self contact
 		if contact.jid == gajim.get_jid_from_account(account):
@@ -189,9 +189,7 @@ control=None):
 	encryption_separator = xml.get_widget('encryption_separator')
 	toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
 	toggle_e2e_menuitem = xml.get_widget('toggle_e2e_menuitem')
-	otr_submenu = xml.get_widget('otr_submenu')
-	otr_settings_menuitem, smp_otr_menuitem, start_otr_menuitem, \
-			end_otr_menuitem = otr_submenu.get_submenu().get_children()
+	otr_submenu = get_contact_otr_menu(contact, account, control, xml=xml)
 	last_separator = xml.get_widget('last_separator')
 
 	items_to_hide = []
@@ -225,14 +223,14 @@ control=None):
 	else:
 		start_chat_menuitem.connect('activate',
 			gajim.interface.on_open_chat_window, contact, account)
-		if gajim.capscache.is_supported(contact, NS_FILE):
+		if contact.supports(NS_FILE):
 			send_file_menuitem.set_sensitive(True)
 			send_file_menuitem.connect('activate',
 				roster.on_send_file_menuitem_activate, contact, account)
 		else:
 			send_file_menuitem.set_sensitive(False)
 
-		if gajim.capscache.is_supported(contact, NS_COMMANDS):
+		if contact.supports(NS_COMMANDS):
 			execute_command_menuitem.set_sensitive(True)
 			execute_command_menuitem.connect('activate', roster.on_execute_command,
 				contact, account, contact.resource)
@@ -297,10 +295,7 @@ control=None):
 				control._on_toggle_gpg_menuitem_activate)
 
 		# disable esessions if we or the other client don't support them
-		# XXX: Once we have fallback to disco, remove notexistant check
-		if not gajim.HAVE_PYCRYPTO or \
-		not gajim.capscache.is_supported(contact, NS_ESESSION) or \
-		gajim.capscache.is_supported(contact, 'notexistant') or \
+		if not gajim.HAVE_PYCRYPTO or not contact.supports(NS_ESESSION) or \
 		not gajim.config.get_per('accounts', account, 'enable_esessions'):
 			toggle_e2e_menuitem.set_sensitive(False)
 		else:
@@ -309,34 +304,6 @@ control=None):
 				not control.gpg_is_active)
 			toggle_e2e_menuitem.connect('activate',
 				control._on_toggle_e2e_menuitem_activate)
-
-		if gajim.otr_module:
-			otr_submenu.set_sensitive(True)
-			otr_settings_menuitem.connect('activate',
-					control._on_otr_settings_menuitem_activate)
-
-			start_otr_menuitem.connect('activate',
-					control._on_start_otr_menuitem_activate)
-
-			end_otr_menuitem.connect('activate',
-					control._on_end_otr_menuitem_activate)
-
-			smp_otr_menuitem.connect('activate',
-					control._on_smp_otr_menuitem_activate)
-
-			ctx = gajim.otr_module.otrl_context_find(
-					gajim.connections[account].otr_userstates,
-					contact.get_full_jid().encode(),
-					gajim.get_jid_from_account(account).encode(),
-					gajim.OTR_PROTO, 1, (gajim.otr_add_appdata, account))[0]
-			# can end only when PLAINTEXT
-			end_otr_menuitem.set_sensitive(ctx.msgstate !=
-					gajim.otr_module.OTRL_MSGSTATE_PLAINTEXT)
-			# can SMP only when ENCRYPTED
-			smp_otr_menuitem.set_sensitive(ctx.msgstate ==
-					gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED)
-		else:
-			otr_submenu.set_sensitive(False)
 
 	if not show_buttonbar_items:
 		items_to_hide += [history_menuitem, send_file_menuitem,
@@ -503,5 +470,44 @@ control=None):
 	contact_context_menu.connect('selection-done', gtkgui_helpers.destroy_widget)
 	contact_context_menu.show_all()
 	return contact_context_menu
+
+def get_contact_otr_menu(contact, account, control, xml=None):
+	if xml is None:
+		xml = gtkgui_helpers.get_glade('contact_context_menu.glade')
+
+	otr_submenu = xml.get_widget('otr_submenu')
+	otr_settings_menuitem, smp_otr_menuitem, start_otr_menuitem, \
+			end_otr_menuitem = otr_submenu.get_submenu().get_children()
+
+	if control:
+		if gajim.otr_module:
+			otr_submenu.set_sensitive(True)
+			otr_settings_menuitem.connect('activate',
+					control._on_otr_settings_menuitem_activate)
+
+			start_otr_menuitem.connect('activate',
+					control._on_start_otr_menuitem_activate)
+
+			end_otr_menuitem.connect('activate',
+					control._on_end_otr_menuitem_activate)
+
+			smp_otr_menuitem.connect('activate',
+					control._on_smp_otr_menuitem_activate)
+
+			ctx = gajim.otr_module.otrl_context_find(
+					gajim.connections[account].otr_userstates,
+					contact.get_full_jid().encode(),
+					gajim.get_jid_from_account(account).encode(),
+					gajim.OTR_PROTO, 1, (gajim.otr_add_appdata, account))[0]
+			# can end only when PLAINTEXT
+			end_otr_menuitem.set_sensitive(ctx.msgstate !=
+					gajim.otr_module.OTRL_MSGSTATE_PLAINTEXT)
+			# can SMP only when ENCRYPTED
+			smp_otr_menuitem.set_sensitive(ctx.msgstate ==
+					gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED)
+		else:
+			otr_submenu.set_sensitive(False)
+
+	return otr_submenu
 
 # vim: se ts=3:

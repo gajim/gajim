@@ -1922,7 +1922,7 @@ class JoinGroupchatWindow:
 		'''automatic is a dict like {'invities': []}
 		If automatic is not empty, this means room must be automaticaly configured
 		and when done, invities must be automatically invited'''
-		self.xml = gtkgui_helpers.get_glade('join_groupchat_window.glade')
+
 		if account:
 			if room_jid != '' and room_jid in gajim.gc_connected[account] and\
 		   gajim.gc_connected[account][room_jid]:
@@ -1934,21 +1934,27 @@ class JoinGroupchatWindow:
 				ErrorDialog(_('You are not connected to the server'),
 					_('You can not join a group chat unless you are connected.'))
 				raise GajimGeneralException, 'You must be connected to join a groupchat'
-		else:
-			account_label = self.xml.get_widget('account_label')
-			account_combobox = self.xml.get_widget('account_combobox')
-			account_label.set_no_show_all(False)
-			account_combobox.set_no_show_all(False)
-			liststore = gtk.ListStore(str)
-			account_combobox.set_model(liststore)
-			cell = gtk.CellRendererText()
-			account_combobox.pack_start(cell, True)
-			account_combobox.add_attribute(cell, 'text', 0)
-			for acct in [a for a in gajim.connections if \
-			gajim.account_is_connected(a)]:
-				account_combobox.append_text(acct)
-			account_combobox.set_active(-1)
 
+		self.xml = gtkgui_helpers.get_glade('join_groupchat_window.glade')
+		
+		account_label = self.xml.get_widget('account_label')
+		account_combobox = self.xml.get_widget('account_combobox')
+		account_label.set_no_show_all(False)
+		account_combobox.set_no_show_all(False)
+		liststore = gtk.ListStore(str)
+		account_combobox.set_model(liststore)
+		cell = gtk.CellRendererText()
+		account_combobox.pack_start(cell, True)
+		account_combobox.add_attribute(cell, 'text', 0)
+		account_combobox.set_active(-1)
+		
+		# Add accounts, set current as active if it matches 'account'
+		for acct in [a for a in gajim.connections if \
+		gajim.account_is_connected(a)]:
+			account_combobox.append_text(acct)
+			if account and account == acct:
+				account_combobox.set_active(liststore.iter_n_children(None)-1)
+		
 		self.account = account
 		self.automatic = automatic
 		self._empty_required_widgets = []
@@ -2064,7 +2070,7 @@ class JoinGroupchatWindow:
 		user, server, resource = helpers.decompose_jid(room_jid)
 		if not user or not server or resource:
 			ErrorDialog(_('Invalid group chat Jabber ID'),
-				_('The group chat Jabber ID has not allowed characters.'))
+				_('Please enter the group chat Jabber ID as room@server.'))
 			return
 		try:
 			room_jid = helpers.parse_jid(room_jid)
@@ -4346,7 +4352,7 @@ class TransformChatToMUC:
 		gajim.automatic_rooms[self.account][room_jid]['invities'] = guest_list
 		gajim.automatic_rooms[self.account][room_jid]['continue_tag'] = True
 		gajim.interface.join_gc_room(self.account, room_jid,
-									 gajim.nicks[self.account], None, is_continued=True)
+			gajim.nicks[self.account], None, is_continued=True)
 		self.window.destroy()
 
 	def on_cancel_button_clicked(self, widget):
@@ -4354,8 +4360,8 @@ class TransformChatToMUC:
 
 	def unique_room_id_error(self, server):
 		self.unique_room_id_supported(server,
-									  gajim.nicks[self.account].lower().replace(' ','') + str(randrange(
-										  9999999)))
+			gajim.nicks[self.account].lower().replace(' ','') + str(randrange(
+			9999999)))
 
 class DataFormWindow(Dialog):
 	def __init__(self, form, on_response_ok):

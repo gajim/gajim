@@ -30,31 +30,23 @@
 
 import common.gajim
 
-class Contact:
-	'''Information concerning each contact'''
-	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
-	ask='', resource='', priority=0, keyID='', caps_node=None,
-	caps_hash_method=None, caps_hash=None, our_chatstate=None, chatstate=None,
-	last_status_time=None, msg_id = None, composing_xep = None,	mood={}, tune={},
-	activity={}):
+
+from common import caps
+
+
+class CommonContact(object):
+	
+	def __init__(self, jid, resource, show, status, name, our_chatstate,
+	composing_xep, chatstate, client_caps=None):
+		
 		self.jid = jid
-		self.name = name
-		self.contact_name = '' # nick choosen by contact
-		self.groups = groups
+		self.resource = resource
 		self.show = show
 		self.status = status
-		self.sub = sub
-		self.ask = ask
-		self.resource = resource
-		self.priority = priority
-		self.keyID = keyID
-
-		# Capabilities; filled by caps.py/ConnectionCaps object
-		# every time it gets these from presence stanzas
-		self.caps_node = caps_node
-		self.caps_hash_method = caps_hash_method
-		self.caps_hash = caps_hash
-
+		self.name = name
+		
+		self.client_caps = client_caps or caps.NullClientCaps()
+		
 		# please read xep-85 http://www.xmpp.org/extensions/xep-0085.html
 		# we keep track of xep85 support with the peer by three extra states:
 		# None, False and 'ask'
@@ -63,14 +55,69 @@ class Contact:
 		# 'ask' if we sent the first 'active' chatstate and are waiting for reply
 		# this holds what WE SEND to contact (our current chatstate)
 		self.our_chatstate = our_chatstate
-		self.msg_id = msg_id
 		# tell which XEP we're using for composing state
 		# None = have to ask, XEP-0022 = use this xep,
 		# XEP-0085 = use this xep, False = no composing support
 		self.composing_xep = composing_xep
 		# this is contact's chatstate
 		self.chatstate = chatstate
+	
+	def get_full_jid(self):
+		raise NotImplementedError
+	
+	def get_shown_name(self):
+		raise NotImplementedError
+
+	def supports(self, requested_feature):
+		'''
+		Returns True if the contact has advertised to support the feature
+		identified by the given namespace. False otherwise.
+		'''
+		if self.show == 'offline':
+			# Unfortunately, if all resources are offline, the contact
+			# includes the last resource that was online. Check for its
+			# show, so we can be sure it's existant. Otherwise, we still
+			# return caps for a contact that has no resources left.
+			return False
+		else:
+			return self._client_supports(requested_feature)
+
+	def _client_supports(self, requested_feature):
+		lookup_item = self.client_caps.get_cache_lookup_strategy()
+		cache_item = lookup_item(caps.capscache)
+
+		supported_features = cache_item.features
+		if requested_feature in supported_features:
+			return True
+		elif supported_features == [] and cache_item.queried in (0, 1):
+			# assume feature is supported, if we don't know yet, what the client
+			# is capable of
+			return requested_feature not in caps.FEATURE_BLACKLIST
+		else:
+			return False
+
+
+class Contact(CommonContact):
+	'''Information concerning each contact'''
+	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
+	ask='', resource='', priority=0, keyID='', client_caps=None,
+	our_chatstate=None, chatstate=None, last_status_time=None, msg_id = None,
+	composing_xep=None, mood={}, tune={}, activity={}):
+		
+		CommonContact.__init__(self, jid, resource, show, status, name, 
+			our_chatstate, composing_xep, chatstate, client_caps=client_caps)
+		
+		self.contact_name = '' # nick choosen by contact
+		self.groups = groups
+
+		self.sub = sub
+		self.ask = ask
+		
+		self.priority = priority
+		self.keyID = keyID
+		self.msg_id = msg_id
 		self.last_status_time = last_status_time
+		
 		self.mood = mood.copy()
 		self.tune = tune.copy()
 		self.activity = activity.copy()
@@ -135,31 +182,25 @@ class Contact:
 		return False
 
 
-class GC_Contact:
+class GC_Contact(CommonContact):
 	'''Information concerning each groupchat contact'''
 	def __init__(self, room_jid='', name='', show='', status='', role='',
-	affiliation='', jid = '', resource = '', our_chatstate = None,
-	composing_xep = None, chatstate = None):
+	affiliation='', jid='', resource='', our_chatstate=None,
+	composing_xep=None, chatstate=None):
+		
+		CommonContact.__init__(self, jid, resource, show, status, name,
+				our_chatstate, composing_xep, chatstate)
+		
 		self.room_jid = room_jid
-		self.name = name
-		self.show = show
-		self.status = status
 		self.role = role
 		self.affiliation = affiliation
-		self.jid = jid
-		self.resource = resource
-		self.caps_node = None
-		self.caps_hash_method = None
-		self.caps_hash = None
-		self.our_chatstate = our_chatstate
-		self.composing_xep = composing_xep
-		self.chatstate = chatstate
-
+		
 	def get_full_jid(self):
 		return self.room_jid + '/' + self.name
 
 	def get_shown_name(self):
 		return self.name
+	
 
 class Contacts:
 	'''Information concerning all contacts and groupchat contacts'''
@@ -193,10 +234,9 @@ class Contacts:
 		del self._metacontacts_tags[account]
 
 	def create_contact(self, jid='', name='', groups=[], show='', status='',
-		sub='', ask='', resource='', priority=0, keyID='', caps_node=None,
-		caps_hash_method=None, caps_hash=None, our_chatstate=None,
-		chatstate=None, last_status_time=None, composing_xep=None,
-		mood={}, tune={}, activity={}):
+		sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
+		our_chatstate=None, chatstate=None, last_status_time=None,
+		composing_xep=None, mood={}, tune={}, activity={}):
 
 		# We don't want duplicated group values
 		groups_unique = []
@@ -206,18 +246,16 @@ class Contacts:
 
 		return Contact(jid=jid, name=name, groups=groups_unique, show=show,
 			status=status, sub=sub, ask=ask, resource=resource, priority=priority,
-			keyID=keyID, caps_node=caps_node, caps_hash_method=caps_hash_method,
-			caps_hash=caps_hash, our_chatstate=our_chatstate, chatstate=chatstate,
-			last_status_time=last_status_time, composing_xep=composing_xep,
-			mood=mood, tune=tune, activity=activity)
+			keyID=keyID, client_caps=client_caps, our_chatstate=our_chatstate,
+			chatstate=chatstate, last_status_time=last_status_time,
+			composing_xep=composing_xep, mood=mood, tune=tune, activity=activity)
 
 	def copy_contact(self, contact):
 		return self.create_contact(jid=contact.jid, name=contact.name,
 			groups=contact.groups, show=contact.show, status=contact.status,
 			sub=contact.sub, ask=contact.ask, resource=contact.resource,
 			priority=contact.priority, keyID=contact.keyID,
-			caps_node=contact.caps_node, caps_hash_method=contact.caps_hash_method,
-			caps_hash=contact.caps_hash, our_chatstate=contact.our_chatstate,
+			client_caps=contact.client_caps, our_chatstate=contact.our_chatstate,
 			chatstate=contact.chatstate, last_status_time=contact.last_status_time)
 
 	def add_contact(self, account, contact):
@@ -587,9 +625,7 @@ class Contacts:
 		jid = gc_contact.get_full_jid()
 		return Contact(jid=jid, resource=gc_contact.resource,
 			name=gc_contact.name, groups=[], show=gc_contact.show,
-			status=gc_contact.status, sub='none', caps_node=gc_contact.caps_node,
-			caps_hash_method=gc_contact.caps_hash_method,
-			caps_hash=gc_contact.caps_hash)
+			status=gc_contact.status, sub='none', client_caps=gc_contact.client_caps)
 
 	def create_gc_contact(self, room_jid='', name='', show='', status='',
 		role='', affiliation='', jid='', resource=''):

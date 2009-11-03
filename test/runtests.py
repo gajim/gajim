@@ -40,6 +40,7 @@ modules = ( 'test_xmpp_dispatcher_nb',
 				'test_xmpp_transports_nb',
 				'test_resolver',
 				'test_caps',
+				'test_contacts',
 			 )
 #modules = ()
 
