@@ -58,8 +58,13 @@ def urisplit(uri):
 	else:
 		try:
 			port = int(port)
-		except:
-			port = 80
+		except ValueError:
+			if proto == 'https':
+				port = 443
+			else:
+				port = 80
+			log.warn('port cannot be extracted from BOSH URL %s, using port %i',
+				uri, port)
 	return proto, host, port, path
 
 def get_proxy_data_from_dict(proxy):
