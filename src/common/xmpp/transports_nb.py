@@ -41,33 +41,33 @@ log = logging.getLogger('gajim.c.x.transports_nb')
 
 def urisplit(uri):
 	'''
-	Function for splitting URI string to tuple (protocol, host, path).
-	e.g. urisplit('http://httpcm.jabber.org/webclient') returns
-	('http', 'httpcm.jabber.org', '/webclient')
+	Function for splitting URI string to tuple (protocol, host, port, path).
+	e.g. urisplit('http://httpcm.jabber.org:123/webclient') returns
+	('http', 'httpcm.jabber.org', 123, '/webclient')
+	return 443 as default port if proto is https else 80
 	'''
 	import re
-	regex = '(([^:/]+)(://))?([^/]*)(/?.*)'
+	regex = '(([^:/]+)(://))?([^/]*)(:)*([^/]*)(/?.*)'
 	grouped = re.match(regex, uri).groups()
-	proto, host, path = grouped[1], grouped[3], grouped[4]
-	return proto, host, path
+	proto, host, port, path = grouped[1], grouped[3], grouped[5], grouped[6]
+	if not port:
+		if proto == 'https':
+			port = 443
+		else:
+			port = 80
+	else:
+		try:
+			port = int(port)
+		except:
+			port = 80
+	return proto, host, port, path
 
 def get_proxy_data_from_dict(proxy):
 	tcp_host, tcp_port, proxy_user, proxy_pass = None, None, None, None
 	proxy_type = proxy['type']
 	if proxy_type == 'bosh' and not proxy['bosh_useproxy']:
 		# with BOSH not over proxy we have to parse the hostname from BOSH URI
-		proto, tcp_host, path = urisplit(proxy['bosh_uri'])
-		spl = tcp_host.split(':', 1)
-		if len(spl) == 1:
-			# No port were set
-			tcp_host = tcp_host[0]
-			if proto == 'https':
-				tcp_port = 443
-			else:
-				tcp_port = 80
-		else:
-			tcp_host, tcp_port = spl
-			tcp_port = int(tcp_port)
+		proto, tcp_host, tcp_port, path = urisplit(proxy['bosh_uri'])
 	else:
 		# with proxy!=bosh or with bosh over HTTP proxy we're connecting to proxy
 		# machine
@@ -611,10 +611,8 @@ class NonBlockingHTTP(NonBlockingTCP):
 		NonBlockingTCP.__init__(self, raise_event, on_disconnect, idlequeue,
 			estabilish_tls, certs, proxy_dict)
 
-		self.http_protocol, self.http_host, self.http_path = urisplit(
-			http_dict['http_uri'])
-		self.http_host, self.http_port = self.http_host.split(':', 1)
-		self.http_port = int(self.http_port)
+		self.http_protocol, self.http_host, self.http_port, self.http_path = \
+			urisplit(http_dict['http_uri'])
 		self.http_protocol = self.http_protocol or 'http'
 		self.http_path = self.http_path or '/'
 		self.http_version = http_dict['http_version']
