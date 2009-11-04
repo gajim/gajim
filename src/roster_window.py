@@ -1234,6 +1234,9 @@ class RosterWindow:
 				child_path = self.model.get_path(child_iter)
 				path = self.modelfilter.convert_child_path_to_path(child_path)
 
+				if not path:
+					continue
+
 				if not self.tree.row_expanded(path) and icon_name != 'event':
 					iterC = self.model.iter_children(child_iter)
 					while iterC:
