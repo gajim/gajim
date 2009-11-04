@@ -56,9 +56,18 @@ def get_proxy_data_from_dict(proxy):
 	proxy_type = proxy['type']
 	if proxy_type == 'bosh' and not proxy['bosh_useproxy']:
 		# with BOSH not over proxy we have to parse the hostname from BOSH URI
-		tcp_host = urisplit(proxy['bosh_uri'])[1]
-		tcp_host, tcp_port = tcp_host.split(':', 1)
-		tcp_port = int(tcp_port)
+		proto, tcp_host, path = urisplit(proxy['bosh_uri'])
+		spl = tcp_host.split(':', 1)
+		if len(spl) == 1:
+			# No port were set
+			tcp_host = tcp_host[0]
+			if proto == 'https':
+				tcp_port = 443
+			else:
+				tcp_port = 80
+		else:
+			tcp_host, tcp_port = spl
+			tcp_port = int(tcp_port)
 	else:
 		# with proxy!=bosh or with bosh over HTTP proxy we're connecting to proxy
 		# machine
