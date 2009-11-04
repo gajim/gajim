@@ -84,8 +84,8 @@ class NonBlockingBOSH(NonBlockingTransport):
 			self.proxy_dict['type'] = 'http'
 			# with SSL over proxy, we do HTTP CONNECT to proxy to open a channel to
 			# BOSH Connection Manager
-			host, port = urisplit(self.bosh_uri)[1].split(':', 1)
-			self.proxy_dict['xmpp_server'] = (host, int(port))
+			host, port = urisplit(self.bosh_uri)[1:3]
+			self.proxy_dict['xmpp_server'] = (host, port)
 			self.proxy_dict['credentials'] = self.proxy_creds
 
 
