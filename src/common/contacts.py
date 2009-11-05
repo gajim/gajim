@@ -219,22 +219,21 @@ class Contacts:
 		self._contacts = {} # list of contacts {acct: {jid1: [C1, C2]}, } one Contact per resource
 		self._gc_contacts = {} # list of contacts that are in gc {acct: {room_jid: {nick: C}}}
 
-		# For meta contacts:
-		self._metacontacts_tags = {}
-
+		self._metacontact_manager = MetacontactManager();
+		
 	def change_account_name(self, old_name, new_name):
 		self._contacts[new_name] = self._contacts[old_name]
 		self._gc_contacts[new_name] = self._gc_contacts[old_name]
-		self._metacontacts_tags[new_name] = self._metacontacts_tags[old_name]
 		del self._contacts[old_name]
 		del self._gc_contacts[old_name]
-		del self._metacontacts_tags[old_name]
+		
+		self._metacontact_manager.change_account_name(old_name, new_name)
 
 	def add_account(self, account):
 		self._contacts[account] = {}
 		self._gc_contacts[account] = {}
-		if account not in self._metacontacts_tags:
-			self._metacontacts_tags[account] = {}
+		
+		self._metacontact_manager.add_account(account)
 
 	def get_accounts(self):
 		return self._contacts.keys()
@@ -242,7 +241,8 @@ class Contacts:
 	def remove_account(self, account):
 		del self._contacts[account]
 		del self._gc_contacts[account]
-		del self._metacontacts_tags[account]
+		
+		self._metacontact_manager.remove_account(account)
 
 	def create_contact(self, jid, account, name='', groups=[], show='', status='',
 		sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
@@ -314,8 +314,7 @@ class Contacts:
 			return
 		del self._contacts[account][jid]
 		if remove_meta:
-			# remove metacontacts info
-			self.remove_metacontact(account, jid)
+			self._metacontact_manager.remove_metacontact(account, jid)
 
 	def get_contacts(self, account, jid):
 		'''Returns the list of contact instances for this jid.'''
@@ -422,10 +421,153 @@ class Contacts:
 		return nbr_online, nbr_total
 
 	def define_metacontacts(self, account, tags_list):
+		self._metacontact_manager.define_metacontacts(account, tags_list)
+
+	def get_new_metacontacts_tag(self, jid):
+		self._metacontact_manager.get_new_metacontacts_tag(jid)
+
+	def get_metacontacts_tags(self, account):
+		self._metacontact_manager.get_metacontacts_tags(account)
+
+	def get_metacontacts_tag(self, account, jid):
+		self._metacontact_manager.get_metacontacts_tag(account, jid)
+
+	def add_metacontact(self, brother_account, brother_jid, account, jid, order=None):
+		self._metacontact_manager.add_metacontact(brother_account, brother_jid, account, jid, order)
+
+	def remove_metacontact(self, account, jid):
+		self._metacontact_manager.remove_metacontact(account, jid)
+
+	def has_brother(self, account, jid, accounts):
+		self._metacontact_manager.has_brother(account, jid, accounts)
+
+	def is_big_brother(self, account, jid, accounts):
+		self._metacontact_manager.is_big_brother(account, jid, accounts)
+
+	def get_metacontacts_jids(self, tag, accounts):
+		self._metacontact_manager.get_metacontacts_jids(tag, accounts)
+
+	def get_metacontacts_family(self, account, jid):
+		self._metacontact_manager.get_metacontacts_family(account, jid)
+
+	def get_metacontacts_family_from_tag(self, account, tag):
+		self._metacontact_manager.get_metacontacts_family_from_tag(account, tag)
+
+	def compare_metacontacts(self, data1, data2):
+		self._metacontact_manager.compare_metacontacts(data1, data2)
+
+	def get_metacontacts_big_brother(self, family):
+		self._metacontact_manager.get_metacontacts_big_brother(family)
+
+	def is_pm_from_jid(self, account, jid):
+		'''Returns True if the given jid is a private message jid'''
+		if jid in self._contacts[account]:
+			return False
+		return True
+
+	def is_pm_from_contact(self, account, contact):
+		'''Returns True if the given contact is a private message contact'''
+		if isinstance(contact, Contact):
+			return False
+		return True
+
+	def get_jid_list(self, account):
+		return self._contacts[account].keys()
+
+	def create_gc_contact(self, room_jid, account, name='', show='', status='',
+		role='', affiliation='', jid='', resource=''):
+		return GC_Contact(room_jid, account, name, show, status, role, affiliation, jid,
+			resource)
+
+	def add_gc_contact(self, account, gc_contact):
+		assert account == gc_contact.account # migration check
+		
+		# No such account before ?
+		if account not in self._gc_contacts:
+			self._contacts[account] = {gc_contact.room_jid : {gc_contact.name: \
+				gc_contact}}
+			return
+		# No such room_jid before ?
+		if gc_contact.room_jid not in self._gc_contacts[account]:
+			self._gc_contacts[account][gc_contact.room_jid] = {gc_contact.name: \
+				gc_contact}
+			return
+		self._gc_contacts[account][gc_contact.room_jid][gc_contact.name] = \
+			gc_contact
+
+	def remove_gc_contact(self, account, gc_contact):
+		if account not in self._gc_contacts:
+			return
+		if gc_contact.room_jid not in self._gc_contacts[account]:
+			return
+		if gc_contact.name not in self._gc_contacts[account][
+		gc_contact.room_jid]:
+			return
+		del self._gc_contacts[account][gc_contact.room_jid][gc_contact.name]
+		# It was the last nick in room ?
+		if not len(self._gc_contacts[account][gc_contact.room_jid]):
+			del self._gc_contacts[account][gc_contact.room_jid]
+
+	def remove_room(self, account, room_jid):
+		if account not in self._gc_contacts:
+			return
+		if room_jid not in self._gc_contacts[account]:
+			return
+		del self._gc_contacts[account][room_jid]
+
+	def get_gc_list(self, account):
+		if account not in self._gc_contacts:
+			return []
+		return self._gc_contacts[account].keys()
+
+	def get_nick_list(self, account, room_jid):
+		gc_list = self.get_gc_list(account)
+		if not room_jid in gc_list:
+			return []
+		return self._gc_contacts[account][room_jid].keys()
+
+	def get_gc_contact(self, account, room_jid, nick):
+		nick_list = self.get_nick_list(account, room_jid)
+		if not nick in nick_list:
+			return None
+		return self._gc_contacts[account][room_jid][nick]
+
+	def get_nb_role_total_gc_contacts(self, account, room_jid, role):
+		'''Returns the number of group chat contacts for the given role and the
+		total number of group chat contacts'''
+		if account not in self._gc_contacts:
+			return 0, 0
+		if room_jid not in self._gc_contacts[account]:
+			return 0, 0
+		nb_role = nb_total = 0
+		for nick in self._gc_contacts[account][room_jid]:
+			if self._gc_contacts[account][room_jid][nick].role == role:
+				nb_role += 1
+			nb_total += 1
+		return nb_role, nb_total
+	
+
+class MetacontactManager():
+	
+	def __init__(self):
+		self._metacontacts_tags = {}
+	
+	def change_account_name(self, old_name, new_name):
+		self._metacontacts_tags[new_name] = self._metacontacts_tags[old_name]
+		del self._metacontacts_tags[old_name]
+		
+	def add_account(self, account):
+		if account not in self._metacontacts_tags:
+			self._metacontacts_tags[account] = {}
+	
+	def remove_account(self, account):
+		del self._metacontacts_tags[account]
+		
+	def define_metacontacts(self, account, tags_list):
 		self._metacontacts_tags[account] = tags_list
 
 	def get_new_metacontacts_tag(self, jid):
-		if not jid in self._metacontacts_tags.keys():
+		if not jid in self._metacontacts_tags:
 			return jid
 		#FIXME: can this append ?
 		assert False
@@ -617,91 +759,5 @@ class Contacts:
 		others will be ?'''
 		family.sort(cmp=self.compare_metacontacts)
 		return family[-1]
-
-	def is_pm_from_jid(self, account, jid):
-		'''Returns True if the given jid is a private message jid'''
-		if jid in self._contacts[account]:
-			return False
-		return True
-
-	def is_pm_from_contact(self, account, contact):
-		'''Returns True if the given contact is a private message contact'''
-		if isinstance(contact, Contact):
-			return False
-		return True
-
-	def get_jid_list(self, account):
-		return self._contacts[account].keys()
-
-	def create_gc_contact(self, room_jid, account, name='', show='', status='',
-		role='', affiliation='', jid='', resource=''):
-		return GC_Contact(room_jid, account, name, show, status, role, affiliation, jid,
-			resource)
-
-	def add_gc_contact(self, account, gc_contact):
-		assert account == gc_contact.account # migration check
-		
-		# No such account before ?
-		if account not in self._gc_contacts:
-			self._contacts[account] = {gc_contact.room_jid : {gc_contact.name: \
-				gc_contact}}
-			return
-		# No such room_jid before ?
-		if gc_contact.room_jid not in self._gc_contacts[account]:
-			self._gc_contacts[account][gc_contact.room_jid] = {gc_contact.name: \
-				gc_contact}
-			return
-		self._gc_contacts[account][gc_contact.room_jid][gc_contact.name] = \
-			gc_contact
-
-	def remove_gc_contact(self, account, gc_contact):
-		if account not in self._gc_contacts:
-			return
-		if gc_contact.room_jid not in self._gc_contacts[account]:
-			return
-		if gc_contact.name not in self._gc_contacts[account][
-		gc_contact.room_jid]:
-			return
-		del self._gc_contacts[account][gc_contact.room_jid][gc_contact.name]
-		# It was the last nick in room ?
-		if not len(self._gc_contacts[account][gc_contact.room_jid]):
-			del self._gc_contacts[account][gc_contact.room_jid]
-
-	def remove_room(self, account, room_jid):
-		if account not in self._gc_contacts:
-			return
-		if room_jid not in self._gc_contacts[account]:
-			return
-		del self._gc_contacts[account][room_jid]
-
-	def get_gc_list(self, account):
-		if account not in self._gc_contacts:
-			return []
-		return self._gc_contacts[account].keys()
-
-	def get_nick_list(self, account, room_jid):
-		gc_list = self.get_gc_list(account)
-		if not room_jid in gc_list:
-			return []
-		return self._gc_contacts[account][room_jid].keys()
-
-	def get_gc_contact(self, account, room_jid, nick):
-		nick_list = self.get_nick_list(account, room_jid)
-		if not nick in nick_list:
-			return None
-		return self._gc_contacts[account][room_jid][nick]
-
-	def get_nb_role_total_gc_contacts(self, account, room_jid, role):
-		'''Returns the number of group chat contacts for the given role and the
-		total number of group chat contacts'''
-		if account not in self._gc_contacts:
-			return 0, 0
-		if room_jid not in self._gc_contacts[account]:
-			return 0, 0
-		nb_role = nb_total = 0
-		for nick in self._gc_contacts[account][room_jid]:
-			if self._gc_contacts[account][room_jid][nick].role == role:
-				nb_role += 1
-			nb_total += 1
-		return nb_role, nb_total
+	
 # vim: se ts=3:
