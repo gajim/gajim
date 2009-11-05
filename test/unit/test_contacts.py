@@ -55,7 +55,7 @@ class TestGC_Contact(TestCommonContact):
 
 	def setUp(self):
 		TestCommonContact.setUp(self)
-		self.contact = GC_Contact("confernce@gajim.org", "account")
+		self.contact = GC_Contact(room_jid="confernce@gajim.org", account="account")
 	
 	def test_attributes_available(self):
 		'''This test supports the migration from the old to the new contact

@@ -2540,7 +2540,7 @@ class RosterWindow:
 							show = roster.getShow(jid+'/'+resource)
 							if not show:
 								show = 'online'
-							contact = gajim.contacts.create_contact(jid=jid,
+							contact = gajim.contacts.create_contact(jid=jid, account=account,
 								name=account, groups=['self_contact'], show=show,
 								status=roster.getStatus(jid + '/' + resource),
 								resource=resource,

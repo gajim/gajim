@@ -190,7 +190,7 @@ class TestRosterWindowMetaContacts(TestRosterWindowRegrouped):
 		self.test_fill_roster_model()
 
 		jid = u'coolstuff@gajim.org'
-		contact = gajim.contacts.create_contact(jid)
+		contact = gajim.contacts.create_contact(jid, account1)
 		gajim.contacts.add_contact(account1, contact)
 		self.roster.add_contact(jid, account1)
 		self.roster.chg_contact_status(contact, 'offline', '', account1)
