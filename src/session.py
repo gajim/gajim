@@ -203,7 +203,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		if not contact:
 			# contact is not in the roster, create a fake one to display
 			# notification
-			contact = contacts.Contact(jid=jid, resource=resource)
+			contact = gajim.contacts.create_contact(jid=jid, account=self.conn.name, resource=resource)
 
 		advanced_notif_num = notify.get_advanced_notification('message_received',
 			self.conn.name, contact)

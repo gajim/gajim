@@ -46,8 +46,6 @@ class CommonContact(XMPPEntity):
 		
 		XMPPEntity.__init__(self, jid, account, resource)
 		
-		self.jid = jid
-		self.resource = resource
 		self.show = show
 		self.status = status
 		self.name = name
@@ -637,7 +635,7 @@ class Contacts:
 
 	def create_gc_contact(self, room_jid, account, name='', show='', status='',
 		role='', affiliation='', jid='', resource=''):
-		return GC_Contact(room_jid, name, show, status, role, affiliation, jid,
+		return GC_Contact(room_jid, account, name, show, status, role, affiliation, jid,
 			resource)
 
 	def add_gc_contact(self, account, gc_contact):
