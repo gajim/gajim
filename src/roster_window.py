@@ -808,7 +808,7 @@ class RosterWindow:
 			else:
 				name = jid.split('@')[0]
 			# New groupchat
-			contact = gajim.contacts.create_contact(jid=jid, name=name,
+			contact = gajim.contacts.create_contact(jid=jid, account=account, name=name,
 				groups=[_('Groupchats')], show=show, status=status, sub='none')
 			gajim.contacts.add_contact(account, contact)
 			self.add_contact(jid, account)
@@ -843,7 +843,7 @@ class RosterWindow:
 		Return the added contact instance.'''
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if contact is None:
-			contact = gajim.contacts.create_contact(jid=jid, name=jid,
+			contact = gajim.contacts.create_contact(jid=jid, account=account, name=jid,
 				groups=[_('Transports')], show='offline', status='offline',
 				sub='from')
 			gajim.contacts.add_contact(account, contact)
@@ -984,7 +984,7 @@ class RosterWindow:
 			'attached_gpg_keys').split()
 		if jid in attached_keys:
 			keyID = attached_keys[attached_keys.index(jid) + 1]
-		contact = gajim.contacts.create_contact(jid=jid, name=nick,
+		contact = gajim.contacts.create_contact(jid=jid, account=account, name=nick,
 			groups=[_('Not in Roster')], show='not in roster', status='',
 			sub='none', resource=resource, keyID=keyID)
 		gajim.contacts.add_contact(account, contact)
@@ -1774,7 +1774,7 @@ class RosterWindow:
 
 			if gajim.jid_is_transport(jid):
 				array[jid]['groups'] = [_('Transports')]
-			contact1 = gajim.contacts.create_contact(jid=ji, name=name,
+			contact1 = gajim.contacts.create_contact(jid=ji, account=account, name=name,
 				groups=array[jid]['groups'], show=show, status=status,
 				sub=array[jid]['subscription'], ask=array[jid]['ask'],
 				resource=resource, keyID=keyID)
@@ -1921,7 +1921,7 @@ class RosterWindow:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			contact = gajim.contacts.create_contact(jid=jid, name=nickname,
+			contact = gajim.contacts.create_contact(jid=jid, account=account, name=nickname,
 				groups=groups, show='requested', status='', ask='none',
 				sub='subscribe', keyID=keyID)
 			gajim.contacts.add_contact(account, contact)
@@ -2511,7 +2511,7 @@ class RosterWindow:
 				account_name = account
 				if gajim.account_is_connected(account):
 					account_name += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
-				contact = gajim.contacts.create_contact(jid=jid, name=account_name,
+				contact = gajim.contacts.create_contact(jid=jid, account=account, name=account_name,
 					show=connection.get_status(), sub='', status=connection.status,
 					resource=connection.server_resource,
 					priority=connection.priority, mood=connection.mood,
@@ -5102,7 +5102,7 @@ class RosterWindow:
 			service_discovery_menuitem.connect('activate',
 				self.on_service_disco_menuitem_activate, account)
 			hostname = gajim.config.get_per('accounts', account, 'hostname')
-			contact = gajim.contacts.create_contact(jid=hostname) # Fake contact
+			contact = gajim.contacts.create_contact(jid=hostname, account=account) # Fake contact
 			execute_command_menuitem.connect('activate',
 				self.on_execute_command, contact, account)
 

@@ -110,7 +110,7 @@ class SearchWindow:
 		if jid in gajim.interface.instances[self.account]['infos']:
 			gajim.interface.instances[self.account]['infos'][jid].window.present()
 		else:
-			contact = gajim.contacts.create_contact(jid = jid, name='', groups=[],
+			contact = gajim.contacts.create_contact(jid=jid, account=self.account, name='', groups=[],
 				show='', status='', sub='', ask='', resource='', priority=0,
 				keyID='', our_chatstate=None, chatstate=None)
 			gajim.interface.instances[self.account]['infos'][jid] = \

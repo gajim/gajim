@@ -1463,7 +1463,7 @@ class GroupchatControl(ChatControlBase):
 			self.draw_all_roles()
 		iter_ = model.append(role_iter, (None, nick, 'contact', name, None))
 		if not nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
-			gc_contact = gajim.contacts.create_gc_contact(room_jid=self.room_jid,
+			gc_contact = gajim.contacts.create_gc_contact(room_jid=self.room_jid, account=self.account,
 				name=nick, show=show, status=status, role=role,
 				affiliation=affiliation, jid=j, resource=resource)
 			gajim.contacts.add_gc_contact(self.account, gc_contact)

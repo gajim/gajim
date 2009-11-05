@@ -29,15 +29,22 @@
 ##
 
 import common.gajim
-
-
 from common import caps
 
-
-class CommonContact(object):
+class XMPPEntity(object):
+	'''Base representation of entities in XMPP'''
 	
-	def __init__(self, jid, resource, show, status, name, our_chatstate,
+	def __init__(self, jid, account, resource):
+		self.jid = jid
+		self.resource = resource
+		self.account = account
+
+class CommonContact(XMPPEntity):
+	
+	def __init__(self, jid, account, resource, show, status, name, our_chatstate,
 	composing_xep, chatstate, client_caps=None):
+		
+		XMPPEntity.__init__(self, jid, account, resource)
 		
 		self.jid = jid
 		self.resource = resource
@@ -99,12 +106,12 @@ class CommonContact(object):
 
 class Contact(CommonContact):
 	'''Information concerning each contact'''
-	def __init__(self, jid='', name='', groups=[], show='', status='', sub='',
+	def __init__(self, jid, account, name='', groups=[], show='', status='', sub='',
 	ask='', resource='', priority=0, keyID='', client_caps=None,
 	our_chatstate=None, chatstate=None, last_status_time=None, msg_id = None,
 	composing_xep=None, mood={}, tune={}, activity={}):
 		
-		CommonContact.__init__(self, jid, resource, show, status, name, 
+		CommonContact.__init__(self, jid, account, resource, show, status, name, 
 			our_chatstate, composing_xep, chatstate, client_caps=client_caps)
 		
 		self.contact_name = '' # nick choosen by contact
@@ -184,11 +191,11 @@ class Contact(CommonContact):
 
 class GC_Contact(CommonContact):
 	'''Information concerning each groupchat contact'''
-	def __init__(self, room_jid='', name='', show='', status='', role='',
+	def __init__(self, room_jid, account, name='', show='', status='', role='',
 	affiliation='', jid='', resource='', our_chatstate=None,
 	composing_xep=None, chatstate=None):
 		
-		CommonContact.__init__(self, jid, resource, show, status, name,
+		CommonContact.__init__(self, jid, account, resource, show, status, name,
 				our_chatstate, composing_xep, chatstate)
 		
 		self.room_jid = room_jid
@@ -233,7 +240,7 @@ class Contacts:
 		del self._gc_contacts[account]
 		del self._metacontacts_tags[account]
 
-	def create_contact(self, jid='', name='', groups=[], show='', status='',
+	def create_contact(self, jid, account, name='', groups=[], show='', status='',
 		sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
 		our_chatstate=None, chatstate=None, last_status_time=None,
 		composing_xep=None, mood={}, tune={}, activity={}):
@@ -244,21 +251,23 @@ class Contacts:
 			if group not in groups_unique:
 				groups_unique.append(group)
 
-		return Contact(jid=jid, name=name, groups=groups_unique, show=show,
-			status=status, sub=sub, ask=ask, resource=resource, priority=priority,
+		return Contact(jid=jid, account=account, name=name, groups=groups_unique,
+			show=show, status=status, sub=sub, ask=ask, resource=resource, priority=priority,
 			keyID=keyID, client_caps=client_caps, our_chatstate=our_chatstate,
 			chatstate=chatstate, last_status_time=last_status_time,
 			composing_xep=composing_xep, mood=mood, tune=tune, activity=activity)
 
 	def copy_contact(self, contact):
-		return self.create_contact(jid=contact.jid, name=contact.name,
-			groups=contact.groups, show=contact.show, status=contact.status,
+		return self.create_contact(jid=contact.jid, account=contact.account,
+			name=contact.name, groups=contact.groups, show=contact.show, status=contact.status,
 			sub=contact.sub, ask=contact.ask, resource=contact.resource,
 			priority=contact.priority, keyID=contact.keyID,
 			client_caps=contact.client_caps, our_chatstate=contact.our_chatstate,
 			chatstate=contact.chatstate, last_status_time=contact.last_status_time)
 
 	def add_contact(self, account, contact):
+		assert account == contact.account # migration check
+		
 		# No such account before ?
 		if account not in self._contacts:
 			self._contacts[account] = {contact.jid : [contact]}
@@ -623,16 +632,18 @@ class Contacts:
 	def contact_from_gc_contact(self, gc_contact):
 		'''Create a Contact instance from a GC_Contact instance'''
 		jid = gc_contact.get_full_jid()
-		return Contact(jid=jid, resource=gc_contact.resource,
+		return Contact(jid=jid, account=gc_contact.account, resource=gc_contact.resource,
 			name=gc_contact.name, groups=[], show=gc_contact.show,
 			status=gc_contact.status, sub='none', client_caps=gc_contact.client_caps)
 
-	def create_gc_contact(self, room_jid='', name='', show='', status='',
+	def create_gc_contact(self, room_jid, account, name='', show='', status='',
 		role='', affiliation='', jid='', resource=''):
 		return GC_Contact(room_jid, name, show, status, role, affiliation, jid,
 			resource)
 
 	def add_gc_contact(self, account, gc_contact):
+		assert account == gc_contact.account # migration check
+		
 		# No such account before ?
 		if account not in self._gc_contacts:
 			self._contacts[account] = {gc_contact.room_jid : {gc_contact.name: \
