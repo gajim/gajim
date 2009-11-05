@@ -35,6 +35,7 @@ import errno
 import time
 import traceback
 import base64
+import urlparse
 
 import logging
 log = logging.getLogger('gajim.c.x.transports_nb')
@@ -46,25 +47,19 @@ def urisplit(uri):
 	('http', 'httpcm.jabber.org', 123, '/webclient')
 	return 443 as default port if proto is https else 80
 	'''
-	import re
-	regex = '(([^:/]+)(://))?([^:/]*)(:)?([^/]*)(/?.*)'
-	grouped = re.match(regex, uri).groups()
-	proto, host, port, path = grouped[1], grouped[3], grouped[5], grouped[6]
+	splitted =  urlparse.urlsplit(uri)
+	proto, host, path = splitted.scheme, splitted.hostname, splitted.path
+	try:
+		port = splitted.port
+	except ValueError:
+		log.warn('port cannot be extracted from BOSH URL %s, using default port' \
+			% uri)
+		port = ''
 	if not port:
 		if proto == 'https':
 			port = 443
 		else:
 			port = 80
-	else:
-		try:
-			port = int(port)
-		except ValueError:
-			if proto == 'https':
-				port = 443
-			else:
-				port = 80
-			log.warn('port cannot be extracted from BOSH URL %s, using port %i',
-				uri, port)
 	return proto, host, port, path
 
 def get_proxy_data_from_dict(proxy):
