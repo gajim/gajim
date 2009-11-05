@@ -1298,7 +1298,7 @@ class Connection(ConnectionHandlers):
 		# chatstates - if peer supports xep85 or xep22, send chatstates
 		# please note that the only valid tag inside a message containing a <body>
 		# tag is the active event
-		if chatstate is not None:
+		if chatstate is not None and contact:
 			if ((composing_xep == 'XEP-0085' or not composing_xep) \
 			and composing_xep != 'asked_once') or \
 			contact.supports(common.xmpp.NS_CHATSTATES):
@@ -1327,7 +1327,8 @@ class Connection(ConnectionHandlers):
 
 		# XEP-0184
 		if msgtxt and gajim.config.get_per('accounts', self.name,
-		'request_receipt') and contact.supports(common.xmpp.NS_RECEIPTS):
+		'request_receipt') and contact and contact.supports(
+		common.xmpp.NS_RECEIPTS):
 			msg_iq.setTag('request', namespace=common.xmpp.NS_RECEIPTS)
 
 		if session:
