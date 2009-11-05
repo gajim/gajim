@@ -228,25 +228,8 @@ class PreferencesWindow:
 		st = gajim.config.get('use_transports_iconsets')
 		self.xml.get_widget('transports_iconsets_checkbutton').set_active(st)
 
-		# Color for incoming messages
-		colSt = gajim.config.get('inmsgcolor')
-		self.xml.get_widget('incoming_msg_colorbutton').set_color(
-			gtk.gdk.color_parse(colSt))
-
-		# Color for outgoing messages
-		colSt = gajim.config.get('outmsgcolor')
-		self.xml.get_widget('outgoing_msg_colorbutton').set_color(
-			gtk.gdk.color_parse(colSt))
-
-		# Color for status messages
-		colSt = gajim.config.get('statusmsgcolor')
-		self.xml.get_widget('status_msg_colorbutton').set_color(
-			gtk.gdk.color_parse(colSt))
-
-		# Color for hyperlinks
-		colSt = gajim.config.get('urlmsgcolor')
-		self.xml.get_widget('url_msg_colorbutton').set_color(
-			gtk.gdk.color_parse(colSt))
+		# Color widgets
+		self.draw_color_widgets()
 
 		# Font for messages
 		font = gajim.config.get('conversation_font')
@@ -823,11 +806,17 @@ class PreferencesWindow:
 		for win in gajim.interface.msg_win_mgr.windows():
 			win.update_font()
 
-	def on_incoming_msg_colorbutton_color_set(self, widget):
+	def on_incoming_nick_colorbutton_color_set(self, widget):
 		self.on_preference_widget_color_set(widget, 'inmsgcolor')
 
-	def on_outgoing_msg_colorbutton_color_set(self, widget):
+	def on_outgoing_nick_colorbutton_color_set(self, widget):
 		self.on_preference_widget_color_set(widget, 'outmsgcolor')
+
+	def on_incoming_msg_colorbutton_color_set(self, widget):
+		self.on_preference_widget_color_set(widget, 'inmsgtxtcolor')
+
+	def on_outgoing_msg_colorbutton_color_set(self, widget):
+		self.on_preference_widget_color_set(widget, 'outmsgtxtcolor')
 
 	def on_url_msg_colorbutton_color_set(self, widget):
 		self.on_preference_widget_color_set(widget, 'urlmsgcolor')
@@ -846,21 +835,70 @@ class PreferencesWindow:
 		else:
 			font_widget.set_sensitive(True)
 		self.on_preference_widget_font_set(font_widget, 'conversation_font')
+	
+	def draw_color_widgets(self):
+		col_to_widget = {'inmsgcolor': 'incoming_nick_colorbutton',
+				'outmsgcolor': 'outgoing_nick_colorbutton',
+				'inmsgtxtcolor': ['incoming_msg_colorbutton',
+					'incoming_msg_checkbutton'],
+				'outmsgtxtcolor': ['outgoing_msg_colorbutton',
+					'outgoing_msg_checkbutton'],
+				'statusmsgcolor': 'status_msg_colorbutton',
+				'urlmsgcolor': 'url_msg_colorbutton'}
+		for c in col_to_widget:
+			col = gajim.config.get(c)
+			if col:
+				if isinstance(col_to_widget[c], list):
+					self.xml.get_widget(col_to_widget[c][0]).set_color(
+						gtk.gdk.color_parse(col))
+					self.xml.get_widget(col_to_widget[c][0]).set_sensitive(True)
+					self.xml.get_widget(col_to_widget[c][1]).set_active(True)
+				else:
+					self.xml.get_widget(col_to_widget[c]).set_color(
+						gtk.gdk.color_parse(col))
+			else:
+				if isinstance(col_to_widget[c], list):
+					self.xml.get_widget(col_to_widget[c][0]).set_color(
+						gtk.gdk.color_parse('#000000'))
+					self.xml.get_widget(col_to_widget[c][0]).set_sensitive(False)
+					self.xml.get_widget(col_to_widget[c][1]).set_active(False)
+				else:
+					self.xml.get_widget(col_to_widget[c]).set_color(
+						gtk.gdk.color_parse('#000000'))
 
 	def on_reset_colors_button_clicked(self, widget):
-		for i in ('inmsgcolor', 'outmsgcolor', 'statusmsgcolor', 'urlmsgcolor'):
-			gajim.config.set(i, gajim.interface.default_colors[i])
+		col_to_widget = {'inmsgcolor': 'incoming_nick_colorbutton',
+				'outmsgcolor': 'outgoing_nick_colorbutton',
+				'inmsgtxtcolor': 'incoming_msg_colorbutton',
+				'outmsgtxtcolor': 'outgoing_msg_colorbutton',
+				'statusmsgcolor': 'status_msg_colorbutton',
+				'urlmsgcolor': 'url_msg_colorbutton'}
+		for c in col_to_widget:
+			gajim.config.set(c, gajim.interface.default_colors[c])
+		self.draw_color_widgets()
 
-		self.xml.get_widget('incoming_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(gajim.config.get('inmsgcolor')))
-		self.xml.get_widget('outgoing_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(gajim.config.get('outmsgcolor')))
-		self.xml.get_widget('status_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(gajim.config.get('statusmsgcolor')))
-		self.xml.get_widget('url_msg_colorbutton').set_color(\
-			gtk.gdk.color_parse(gajim.config.get('urlmsgcolor')))
 		self.update_text_tags()
 		gajim.interface.save_config()
+
+	def _set_color(self, state, widget_name, option):
+		''' set color value in prefs and update the UI '''
+		if state:
+			color = self.xml.get_widget(widget_name).get_color()
+			color_string = gtkgui_helpers.make_color_string(color)
+		else:
+			color_string = ''
+		gajim.config.set(option, color_string)
+		gajim.interface.save_config()
+
+	def on_incoming_msg_checkbutton_toggled(self, widget):
+		state = widget.get_active()
+		self.xml.get_widget('incoming_msg_colorbutton').set_sensitive(state)
+		self._set_color(state, 'incoming_msg_colorbutton', 'inmsgtxtcolor')
+
+	def on_outgoing_msg_checkbutton_toggled(self, widget):
+		state = widget.get_active()
+		self.xml.get_widget('outgoing_msg_colorbutton').set_sensitive(state)
+		self._set_color(state, 'outgoing_msg_colorbutton', 'outmsgtxtcolor')
 
 	def on_auto_away_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'autoaway',

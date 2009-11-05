@@ -5,19 +5,27 @@ import time
 import lib
 lib.setup_env()
 
+
+import notify
+
 from common import gajim
 from common import xmpp
+
+from common.stanza_session import StanzaSession
+from session import ChatControlSession
 
 from mock import Mock, expectParams
 from gajim_mocks import *
 
-from common.stanza_session import StanzaSession
+gajim.interface = MockInterface()
+
 
 # name to use for the test account
 account_name = 'test'
 
 class TestStanzaSession(unittest.TestCase):
 	''' Testclass for common/stanzasession.py '''
+
 	def setUp(self):
 		self.jid = 'test@example.org/Gajim'
 		self.conn = MockConnection(account_name, {'send_stanza': None})
@@ -68,14 +76,10 @@ class TestStanzaSession(unittest.TestCase):
 		calls = self.conn.mockGetNamedCalls('send_stanza')
 		self.assertEqual(0, len(calls))
 
-from session import ChatControlSession
-
-gajim.interface = MockInterface()
-
-import notify
 
 class TestChatControlSession(unittest.TestCase):
 	''' Testclass for session.py '''
+
 	def setUp(self):
 		self.jid = 'test@example.org/Gajim'
 		self.conn = MockConnection(account_name, {'send_stanza': None})

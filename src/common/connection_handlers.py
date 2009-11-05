@@ -2259,7 +2259,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				is_gc = True
 		status = prs.getStatus() or ''
 		show = prs.getShow()
-		if not show in gajim.SHOW_LIST:
+		if show not in ('chat', 'away', 'xa', 'dnd'):
 			show = '' # We ignore unknown show
 		if not ptype and not show:
 			show = 'online'

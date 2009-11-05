@@ -174,7 +174,6 @@ Section "Gajim" SecGajim
 	File "bin\pywintypes25.dll"
 	File "bin\OpenSSL.rand.pyd"
 	File "bin\select.pyd"
-	File "bin\Crypto.Hash.SHA256.pyd"
 	File "bin\sqlite3.dll"
 	File "bin\ssleay32.dll"
 	File "bin\OpenSSL.SSL.pyd"
@@ -284,6 +283,11 @@ SectionEnd
 Section "sun" SecIconsetsSun
 	SetOutPath "$INSTDIR\data\iconsets"
 	File /r "data\iconsets\sun"
+SectionEnd
+
+Section "wroop" SecIconsetsWroop
+	SetOutPath "$INSTDIR\data\iconsets"
+	File /r "data\iconsets\wroop"
 SectionEnd
 
 Section "transports" SecIconsetsTransports
@@ -646,7 +650,6 @@ Section "Uninstall"
 	Delete "$INSTDIR\bin\bz2.pyd"
 	Delete "$INSTDIR\bin\cairo._cairo.pyd"
 	Delete "$INSTDIR\bin\Crypto.Cipher.AES.pyd"
-	Delete "$INSTDIR\bin\Crypto.Hash.SHA256.pyd"
 	Delete "$INSTDIR\bin\gajim.exe"
 	Delete "$INSTDIR\bin\gobject._gobject.pyd"
 	Delete "$INSTDIR\bin\gtk._gtk.pyd"
@@ -692,6 +695,7 @@ Section "Uninstall"
 	RMDir /r "$INSTDIR\data\iconsets\gota"
 	RMDir /r "$INSTDIR\data\iconsets\jabberbulb"
 	RMDir /r "$INSTDIR\data\iconsets\sun"
+	RMDir /r "$INSTDIR\data\iconsets\wroop"
 	RMDir /r "$INSTDIR\data\iconsets\transports"
 	RMDir "$INSTDIR\data\iconsets"
 	RMDir "$INSTDIR\data"

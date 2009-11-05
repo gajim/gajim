@@ -198,7 +198,7 @@ class NullClientCaps(AbstractClientCaps):
 	
 	def _lookup_in_cache(self, caps_cache):
 		# lookup something which does not exist to get a new CacheItem created
-		cache_item = caps_cache[('old', '')]
+		cache_item = caps_cache[('dummy', '')]
 		assert cache_item.queried == 0
 		return cache_item
 	
@@ -359,10 +359,10 @@ class ConnectionCaps(object):
 		else:
 			hash_method, node, caps_hash = caps_tag['hash'], caps_tag['node'], caps_tag['ver']
 
-			if node is None or caps_hash is None:
+			if not node or not caps_hash:
 				# improper caps in stanza, ignore client capabilities.
 				client_caps = NullClientCaps()
-			elif hash_method is None:
+			elif not hash_method:
 				client_caps = OldClientCaps(caps_hash, node)
 			else:
 				client_caps = ClientCaps(caps_hash, node, hash_method)

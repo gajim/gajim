@@ -216,11 +216,50 @@ class OptionsParser:
 			self.update_config_to_01256()
 		if old < [0, 12, 5, 7] and new >= [0, 12, 5, 7]:
 			self.update_config_to_01257()
+		if old < [0, 12, 5, 8] and new >= [0, 12, 5, 8]:
+			self.update_config_to_01258()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
 
 		caps.capscache.initialize_from_db()
+
+	def assert_unread_msgs_table_exists(self):
+		'''create table unread_messages if there is no such table'''
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE unread_messages (
+					message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+					jid_id INTEGER
+				);
+				'''
+			)
+			con.commit()
+			gajim.logger.init_vars()
+		except sqlite.OperationalError:
+			pass
+		con.close()
+
+	def update_ft_proxies(self, to_remove=[], to_add=[]):
+		for account in gajim.config.get_per('accounts'):
+			proxies_str = gajim.config.get_per('accounts', account,
+				'file_transfer_proxies')
+			proxies = [p.strip() for p in proxies_str.split(',')]
+			for wrong_proxy in to_remove:
+				if wrong_proxy in proxies:
+					proxies.remove(wrong_proxy)
+			for new_proxy in to_add:
+				if new_proxy not in proxies:
+					proxies.append(new_proxy)
+			proxies_str = ', '.join(proxies)
+			gajim.config.set_per('accounts', account, 'file_transfer_proxies',
+				proxies_str)
 
 	def update_config_x_to_09(self):
 		# Var name that changed:
@@ -262,37 +301,9 @@ class OptionsParser:
 				theme = gajim.config.get_per('themes')[0]
 			gajim.config.set('roster_theme', theme)
 		# new proxies in accounts.name.file_transfer_proxies
-		for account in gajim.config.get_per('accounts'):
-			proxies = gajim.config.get_per('accounts', account,
-				'file_transfer_proxies')
-			if proxies.find('proxy.netlab.cz') < 0:
-				proxies += ', ' + 'proxy.netlab.cz'
-			gajim.config.set_per('accounts', account, 'file_transfer_proxies',
-				proxies)
+		self.update_ft_proxies(to_add=['proxy.netlab.cz'])
 
 		gajim.config.set('version', '0.9')
-
-	def assert_unread_msgs_table_exists(self):
-		'''create table unread_messages if there is no such table'''
-		back = os.getcwd()
-		os.chdir(logger.LOG_DB_FOLDER)
-		con = sqlite.connect(logger.LOG_DB_FILE)
-		os.chdir(back)
-		cur = con.cursor()
-		try:
-			cur.executescript(
-				'''
-				CREATE TABLE unread_messages (
-					message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-					jid_id INTEGER
-				);
-				'''
-			)
-			con.commit()
-			gajim.logger.init_vars()
-		except sqlite.OperationalError:
-			pass
-		con.close()
 
 	def update_config_09_to_010(self):
 		if 'usetabbedchat' in self.old_values and not \
@@ -311,21 +322,8 @@ class OptionsParser:
 		self.old_values['always_compact_view_gc'] != 'False':
 			gajim.config.set('always_hide_groupchat_buttons', True)
 
-		for account in gajim.config.get_per('accounts'):
-			proxies_str = gajim.config.get_per('accounts', account,
-				'file_transfer_proxies')
-			proxies = proxies_str.split(',')
-			for i in range(0, len(proxies)):
-				proxies[i] = proxies[i].strip()
-			for wrong_proxy in ('proxy65.jabber.autocom.pl',
-				'proxy65.jabber.ccc.de'):
-				if wrong_proxy in proxies:
-					proxies.remove(wrong_proxy)
-			if not 'transfer.jabber.freenet.de' in proxies:
-				proxies.append('transfer.jabber.freenet.de')
-			proxies_str = ', '.join(proxies)
-			gajim.config.set_per('accounts', account, 'file_transfer_proxies',
-				proxies_str)
+		self.update_ft_proxies(to_remove=['proxy65.jabber.autocom.pl',
+			'proxy65.jabber.ccc.de'], to_add=['transfer.jabber.freenet.de'])
 		# create unread_messages table if needed
 		self.assert_unread_msgs_table_exists()
 
@@ -811,4 +809,12 @@ class OptionsParser:
 			'simplebulb', 'stellar'):
 				gajim.config.set('iconset', gajim.config.DEFAULT_ICONSET)
 		gajim.config.set('version', '0.12.5.7')
+
+	def update_config_to_01258(self):
+		self.update_ft_proxies(to_remove=['proxy65.talkonaut.com',
+			'proxy.jabber.org', 'proxy.netlab.cz', 'transfer.jabber.freenet.de',
+			'proxy.jabber.cd.chalmers.se'], to_add=['proxy.eu.jabber.org',
+			'proxy.jabber.ru', 'proxy.jabbim.cz'])
+		gajim.config.set('version', '0.12.5.8')
+
 # vim: se ts=3:
