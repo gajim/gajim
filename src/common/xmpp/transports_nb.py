@@ -47,7 +47,7 @@ def urisplit(uri):
 	return 443 as default port if proto is https else 80
 	'''
 	import re
-	regex = '(([^:/]+)(://))?([^/]*)(:)*([^/]*)(/?.*)'
+	regex = '(([^:/]+)(://))?([^:/]*)(:)*([^/]*)(/?.*)'
 	grouped = re.match(regex, uri).groups()
 	proto, host, port, path = grouped[1], grouped[3], grouped[5], grouped[6]
 	if not port:
