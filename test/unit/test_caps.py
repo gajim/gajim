@@ -113,7 +113,7 @@ class TestClientCaps(CommonCapsTest):
 				"http://gajim.org#m3P2WeXPMGVH2tZPe7yITnfY0Dw=")
 		
 	def test_client_supports(self):
-		contact = Contact(client_caps=self.client_caps)
+		contact = Contact(jid=None, account=None, client_caps=self.client_caps)
 			
 		self.assertTrue(contact.supports(NS_PING),
 				msg="Assume supported, if we don't have caps")
