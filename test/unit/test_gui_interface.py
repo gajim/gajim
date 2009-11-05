@@ -3,13 +3,15 @@ import unittest
 import lib
 lib.setup_env()
 
-from gajim_mocks import *
-gajim.logger = MockLogger()
-
 from common import logging_helpers
 logging_helpers.set_quiet()
 
-from interface import Interface
+from common import gajim 
+
+from gajim_mocks import MockLogger
+gajim.logger = MockLogger()
+
+from gui_interface import Interface
 
 class Test(unittest.TestCase):
 
@@ -76,9 +78,8 @@ class Test(unittest.TestCase):
 		sut.dispatch(event, 'account', 'data')
 		self.assertTrue(self.called_a and self.called_b,
 			msg="Both handlers should have been called")
-		
 
-def test_links_regexp_entire(self):
+	def test_links_regexp_entire(self):
 		sut = Interface()
 		def assert_matches_all(str_):
 			m = sut.basic_pattern_re.match(str_)
