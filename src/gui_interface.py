@@ -344,11 +344,9 @@ class Interface:
 					# Ignore offline presence of unknown self resource
 					if new_show < 2:
 						return
-					contact1 = gajim.contacts.create_contact(jid=ji, account=account,
-						name=gajim.nicks[account], groups=['self_contact'],
-						show=array[1], status=status_message, sub='both', ask='none',
-						priority=priority, keyID=keyID, resource=resource,
-						mood=conn.mood, tune=conn.tune, activity=conn.activity)
+					contact1 = gajim.contacts.create_self_contact(jid=ji,
+						account=account, show=array[1], status=status_message,
+						priority=priority, keyID=keyID, resource=resource)
 					old_show = 0
 					gajim.contacts.add_contact(account, contact1)
 					lcontact.append(contact1)
@@ -1353,9 +1351,8 @@ class Interface:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			contact = gajim.contacts.create_contact(jid=jid, account=account, name='',
-				groups=[_('Not in Roster')], show='not in roster', status='',
-				sub='none', keyID=keyID)
+			contact = gajim.contacts.create_not_in_roster_contact(jid=jid,
+				account=account, keyID=keyID)
 			gajim.contacts.add_contact(account, contact)
 			self.roster.add_contact(contact.jid, account)
 		file_props = array[1]
@@ -2567,6 +2564,7 @@ class Interface:
 		account):
 			# Join new groupchat
 			if minimize:
+				#GCMIN
 				contact = gajim.contacts.create_contact(jid=room_jid, account=account, name=nick)
 				gc_control = GroupchatControl(None, contact, account)
 				gajim.interface.minimized_controls[account][room_jid] = gc_control
@@ -2590,6 +2588,7 @@ class Interface:
 
 	def new_room(self, room_jid, nick, account, is_continued=False):
 		# Get target window, create a control, and associate it with the window
+		# GCMIN
 		contact = gajim.contacts.create_contact(jid=room_jid, account=account, name=nick)
 		mw = self.msg_win_mgr.get_window(contact.jid, account)
 		if not mw:

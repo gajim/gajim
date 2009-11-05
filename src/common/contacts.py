@@ -187,6 +187,7 @@ class Contact(CommonContact):
 		return False
 
 
+
 class GC_Contact(CommonContact):
 	'''Information concerning each groupchat contact'''
 	def __init__(self, room_jid, account, name='', show='', status='', role='',
@@ -260,6 +261,20 @@ class Contacts:
 			keyID=keyID, client_caps=client_caps, our_chatstate=our_chatstate,
 			chatstate=chatstate, last_status_time=last_status_time,
 			composing_xep=composing_xep, mood=mood, tune=tune, activity=activity)
+		
+	def create_self_contact(self, jid, account, resource, show, status, priority, keyID=''):
+		conn = common.gajim.connections[account]
+		nick = common.gajim.nicks[account]
+		return self.create_contact(jid=jid, account=account,
+			name=nick, groups=['self_contact'], show=show, status=status,
+			sub='both', ask='none',	priority=priority, keyID=keyID,
+			resource=resource, mood=conn.mood, tune=conn.tune,
+			activity=conn.activity)
+		
+	def create_not_in_roster_contact(self, jid, account, resource='', name='', keyID=''):
+		return self.create_contact(jid=jid, account=account, resource=resource,
+				name=name, groups=[_('Not in Roster')], show='not in roster',
+				status='', sub='none', keyID=keyID)
 
 	def copy_contact(self, contact):
 		return self.create_contact(jid=contact.jid, account=contact.account,

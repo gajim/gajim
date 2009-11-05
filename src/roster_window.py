@@ -806,6 +806,7 @@ class RosterWindow:
 			else:
 				name = jid.split('@')[0]
 			# New groupchat
+			#GCMIN
 			contact = gajim.contacts.create_contact(jid=jid, account=account, name=name,
 				groups=[_('Groupchats')], show=show, status=status, sub='none')
 			gajim.contacts.add_contact(account, contact)
@@ -841,6 +842,7 @@ class RosterWindow:
 		Return the added contact instance.'''
 		contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
 		if contact is None:
+			#TRANSP
 			contact = gajim.contacts.create_contact(jid=jid, account=account, name=jid,
 				groups=[_('Transports')], show='offline', status='offline',
 				sub='from')
@@ -982,9 +984,8 @@ class RosterWindow:
 			'attached_gpg_keys').split()
 		if jid in attached_keys:
 			keyID = attached_keys[attached_keys.index(jid) + 1]
-		contact = gajim.contacts.create_contact(jid=jid, account=account, name=nick,
-			groups=[_('Not in Roster')], show='not in roster', status='',
-			sub='none', resource=resource, keyID=keyID)
+		contact = gajim.contacts.create_not_in_roster_contact(jid=jid,
+			account=account, resource=resource, name=nick, keyID=keyID)
 		gajim.contacts.add_contact(account, contact)
 		self.add_contact(contact.jid, account)
 		return contact
@@ -1772,6 +1773,7 @@ class RosterWindow:
 
 			if gajim.jid_is_transport(jid):
 				array[jid]['groups'] = [_('Transports')]
+			#TRANSP - potential
 			contact1 = gajim.contacts.create_contact(jid=ji, account=account, name=name,
 				groups=array[jid]['groups'], show=show, status=status,
 				sub=array[jid]['subscription'], ask=array[jid]['ask'],
@@ -2538,11 +2540,10 @@ class RosterWindow:
 							show = roster.getShow(jid+'/'+resource)
 							if not show:
 								show = 'online'
-							contact = gajim.contacts.create_contact(jid=jid, account=account,
-								name=account, groups=['self_contact'], show=show,
-								status=roster.getStatus(jid + '/' + resource),
-								resource=resource,
-								priority=roster.getPriority(jid + '/' + resource))
+							contact = gajim.contacts.create_self_contact(jid=jid,
+								account=account, show=show, status=roster.getStatus(jid + '/' + resource),
+								priority=roster.getPriority(jid + '/' + resource),
+								resource=resource)
 							contacts.append(contact)
 				if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
 					self.tooltip.id = row
