@@ -41,14 +41,6 @@ except ImportError:
 	USE_LIBASYNCNS = False
 	log.debug("Import of libasyncns-python failed, getaddrinfo will block", exc_info=True)
 
-	# FIXME: Remove these prints before release, replace with a warning dialog.
-	print >> sys.stderr, "=" * 79
-	print >> sys.stderr, "libasyncns-python not installed which means:"
-	print >> sys.stderr, " - nslookup will be used for SRV and TXT requests"
-	print >> sys.stderr, " - getaddrinfo will block"
-	print >> sys.stderr, "libasyncns-python can be found at https://launchpad.net/libasyncns-python"
-	print >> sys.stderr, "=" * 79
-
 
 def get_resolver(idlequeue):
 	if USE_LIBASYNCNS:
