@@ -5,7 +5,6 @@ import unittest
 
 import lib
 lib.setup_env()
-from mock import Mock
 
 from common.contacts import CommonContact, Contact, GC_Contact, Contacts
 from common.xmpp import NS_MUC
@@ -33,8 +32,6 @@ class TestCommonContact(unittest.TestCase):
 		self.assertTrue(self.contact.supports(NS_MUC),
 			msg="Must not backtrace on simple check for supported feature")
 	
-
-		
 			
 class TestContact(TestCommonContact):
 	
@@ -66,6 +63,7 @@ class TestGC_Contact(TestCommonContact):
 			"composing_xep", "chatstate", "client_caps", "role", "room_jid"]
 		for attr in attributes:
 			self.assertTrue(hasattr(self.contact, attr), msg="expected: " + attr)
+			
 			
 class TestContacts(unittest.TestCase):
 	
@@ -100,43 +98,6 @@ class TestContacts(unittest.TestCase):
 		# Not yet implemented to remain backwart compatible
 		# self.assertEqual(contact, copy, msg="Must be equal")
 		
-		
-	
-	# AUto generated tests. Can be dropped after migration	
-	
-
-	def test_creation(self):
-		contacts = Contacts()
-#Makesureitdoesn'traiseanyexceptions.
-
-	def test_add_account_3_times(self):
-		contacts = Contacts()
-		
-		from common import gajim
-		gajim.connections[u'dingdong.org'] = Mock()
-		gajim.connections[u'Cool"ch\xe2r\xdf\xe9\xb5\xf6'] = Mock()
-		gajim.connections[u'acc1'] = Mock()
-		
-		self.assertEqual(None, contacts.add_account(account=u'acc1'))
-		self.assertEqual(None, contacts.add_account(account=u'Cool"ch\xe2r\xdf\xe9\xb5\xf6'))
-		self.assertEqual(None, contacts.add_account(account=u'dingdong.org'))
-
-	def test_add_metacontact_4_times_and_define_metacontacts_3_times(self):
-		contacts = Contacts()
-		
-		from common import gajim
-		gajim.connections[u'dingdong.org'] = Mock()
-		gajim.connections[u'Cool"ch\xe2r\xdf\xe9\xb5\xf6'] = Mock()
-		gajim.connections[u'acc1'] = Mock()
-		
-		self.assertEqual(None, contacts.define_metacontacts(account=u'acc1', tags_list={}))
-		self.assertEqual(None, contacts.define_metacontacts(account=u'Cool"ch\xe2r\xdf\xe9\xb5\xf6', tags_list={}))
-		self.assertEqual(None, contacts.define_metacontacts(account=u'dingdong.org', tags_list={}))
-		self.assertEqual(None, contacts.add_metacontact(account=u'dingdong.org', brother_account=u'dingdong.org', brother_jid=u'guypsych0\\40h.com@msn.dingdong.org', jid=u'guypsych0%h.com@msn.delx.cjb.net', order=None))
-		self.assertEqual(None, contacts.add_metacontact(account=u'dingdong.org', brother_account=u'dingdong.org', brother_jid=u'guypsych0\\40h.com@msn.dingdong.org', jid=u'guypsych0%h.com@msn.jabber.wiretrip.org', order=None))
-		self.assertEqual(None, contacts.add_metacontact(account=u'dingdong.org', brother_account=u'dingdong.org', brother_jid=u'guypsych0\\40h.com@msn.dingdong.org', jid=u'guypsycho\\40g.com@gtalk.dingdong.org', order=None))
-		self.assertEqual(None, contacts.add_metacontact(account=u'Cool"ch\xe2r\xdf\xe9\xb5\xf6', brother_account=u'acc1', brother_jid=u'samejid@gajim.org', jid=u'samejid@gajim.org', order=None))
-
 
 if __name__ == "__main__":
 		unittest.main()
