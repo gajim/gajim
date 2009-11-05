@@ -176,7 +176,7 @@ class PrivateChatControl(ChatControl):
 		ChatControl.update_ui(self)
 
 	def update_contact(self):
-		self.contact = gajim.contacts.contact_from_gc_contact(self.gc_contact)
+		self.contact = self.gc_contact.as_contact()
 
 	def begin_e2e_negotiation(self):
 		self.no_autonegotiation = True
@@ -2254,14 +2254,14 @@ class GroupchatControl(ChatControlBase):
 
 	def on_info(self, widget, nick):
 		'''Call vcard_information_window class to display user's information'''
-		c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
-		c2 = gajim.contacts.contact_from_gc_contact(c)
-		if c2.jid in gajim.interface.instances[self.account]['infos']:
-			gajim.interface.instances[self.account]['infos'][c2.jid].window.\
+		gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
+		contact = gc_contact.as_contact()
+		if contact.jid in gajim.interface.instances[self.account]['infos']:
+			gajim.interface.instances[self.account]['infos'][contact.jid].window.\
 				present()
 		else:
-			gajim.interface.instances[self.account]['infos'][c2.jid] = \
-				vcard.VcardWindow(c2, self.account, c)
+			gajim.interface.instances[self.account]['infos'][contact.jid] = \
+				vcard.VcardWindow(contact, self.account, gc_contact)
 
 	def on_history(self, widget, nick):
 		jid = gajim.construct_fjid(self.room_jid, nick)

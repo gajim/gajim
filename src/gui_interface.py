@@ -533,8 +533,8 @@ class Interface:
 						show = model[iter_][3]
 					else:
 						show = 'offline'
-					gc_c = gajim.contacts.create_gc_contact(room_jid = jid,
-						name = nick, show = show)
+					gc_c = gajim.contacts.create_gc_contact(room_jid=jid, account=account,
+						name=nick, show=show)
 					ctrl = self.new_private_chat(gc_c, account, session)
 
 				ctrl.print_conversation(_('Error %(code)s: %(msg)s') % {
@@ -890,7 +890,7 @@ class Interface:
 				ctrl.print_conversation(_('%(nick)s is now known as %(new_nick)s') \
 					% {'nick': nick, 'new_nick': new_nick}, 'status')
 				gc_c = gajim.contacts.get_gc_contact(account, room_jid, new_nick)
-				c = gajim.contacts.contact_from_gc_contact(gc_c)
+				c = gc_c.as_contact()
 				ctrl.gc_contact = gc_c
 				ctrl.contact = c
 				if ctrl.session:
@@ -2223,7 +2223,7 @@ class Interface:
 				else:
 					show = 'offline'
 					gc_contact = gajim.contacts.create_gc_contact(
-						room_jid = room_jid, name = nick, show = show)
+						room_jid=room_jid, account=account, name=nick, show=show)
 
 				if not session:
 					session = gajim.connections[account].make_new_session(
@@ -2600,7 +2600,7 @@ class Interface:
 		mw.new_tab(gc_control)
 
 	def new_private_chat(self, gc_contact, account, session=None):
-		contact = gajim.contacts.contact_from_gc_contact(gc_contact)
+		contact = gc_contact.as_contact()
 		type_ = message_control.TYPE_PM
 		fjid = gc_contact.room_jid + '/' + gc_contact.name
 

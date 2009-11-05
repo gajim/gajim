@@ -208,6 +208,12 @@ class GC_Contact(CommonContact):
 	def get_shown_name(self):
 		return self.name
 	
+	def as_contact(self):
+		'''Create a Contact instance from this GC_Contact instance'''
+		return Contact(jid=self.get_full_jid(), account=self.account,
+			resource=self.resource, name=self.name, groups=[], show=self.show,
+			status=self.status, sub='none', client_caps=self.client_caps)
+	
 
 class Contacts:
 	'''Information concerning all contacts and groupchat contacts'''
@@ -628,13 +634,6 @@ class Contacts:
 
 	def get_jid_list(self, account):
 		return self._contacts[account].keys()
-
-	def contact_from_gc_contact(self, gc_contact):
-		'''Create a Contact instance from a GC_Contact instance'''
-		jid = gc_contact.get_full_jid()
-		return Contact(jid=jid, account=gc_contact.account, resource=gc_contact.resource,
-			name=gc_contact.name, groups=[], show=gc_contact.show,
-			status=gc_contact.status, sub='none', client_caps=gc_contact.client_caps)
 
 	def create_gc_contact(self, room_jid, account, name='', show='', status='',
 		role='', affiliation='', jid='', resource=''):
