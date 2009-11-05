@@ -689,9 +689,7 @@ class RosterWindow:
 		is_observer = contact.is_observer()
 		if is_observer:
 			# if he has a tag, remove it
-			tag = gajim.contacts.get_metacontacts_tag(account, jid)
-			if tag:
-				gajim.contacts.remove_metacontact(account, jid)
+			gajim.contacts.remove_metacontact(account, jid)
 
 		# Add contact to roster
 		family = gajim.contacts.get_metacontacts_family(account, jid)

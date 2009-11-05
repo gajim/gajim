@@ -219,7 +219,7 @@ class Contacts:
 		self._contacts = {} # list of contacts {acct: {jid1: [C1, C2]}, } one Contact per resource
 		self._gc_contacts = {} # list of contacts that are in gc {acct: {room_jid: {nick: C}}}
 
-		self._metacontact_manager = MetacontactManager();
+		self._metacontact_manager = MetacontactManager(self);
 		
 	def change_account_name(self, old_name, new_name):
 		self._contacts[new_name] = self._contacts[old_name]
@@ -421,43 +421,34 @@ class Contacts:
 		return nbr_online, nbr_total
 
 	def define_metacontacts(self, account, tags_list):
-		self._metacontact_manager.define_metacontacts(account, tags_list)
-
-	def get_new_metacontacts_tag(self, jid):
-		self._metacontact_manager.get_new_metacontacts_tag(jid)
+		return self._metacontact_manager.define_metacontacts(account, tags_list)
 
 	def get_metacontacts_tags(self, account):
-		self._metacontact_manager.get_metacontacts_tags(account)
-
-	def get_metacontacts_tag(self, account, jid):
-		self._metacontact_manager.get_metacontacts_tag(account, jid)
+		return self._metacontact_manager.get_metacontacts_tags(account)
 
 	def add_metacontact(self, brother_account, brother_jid, account, jid, order=None):
-		self._metacontact_manager.add_metacontact(brother_account, brother_jid, account, jid, order)
+		return self._metacontact_manager.add_metacontact(brother_account, brother_jid, account, jid, order)
 
 	def remove_metacontact(self, account, jid):
-		self._metacontact_manager.remove_metacontact(account, jid)
+		return self._metacontact_manager.remove_metacontact(account, jid)
 
 	def has_brother(self, account, jid, accounts):
-		self._metacontact_manager.has_brother(account, jid, accounts)
+		return self._metacontact_manager.has_brother(account, jid, accounts)
 
 	def is_big_brother(self, account, jid, accounts):
-		self._metacontact_manager.is_big_brother(account, jid, accounts)
+		return self._metacontact_manager.is_big_brother(account, jid, accounts)
 
 	def get_metacontacts_jids(self, tag, accounts):
-		self._metacontact_manager.get_metacontacts_jids(tag, accounts)
+		return self._metacontact_manager.get_metacontacts_jids(tag, accounts)
 
 	def get_metacontacts_family(self, account, jid):
-		self._metacontact_manager.get_metacontacts_family(account, jid)
+		return self._metacontact_manager.get_metacontacts_family(account, jid)
 
 	def get_metacontacts_family_from_tag(self, account, tag):
-		self._metacontact_manager.get_metacontacts_family_from_tag(account, tag)
-
-	def compare_metacontacts(self, data1, data2):
-		self._metacontact_manager.compare_metacontacts(data1, data2)
+		return self._metacontact_manager.get_metacontacts_family_from_tag(account, tag)
 
 	def get_metacontacts_big_brother(self, family):
-		self._metacontact_manager.get_metacontacts_big_brother(family)
+		return self._metacontact_manager.get_metacontacts_big_brother(family)
 
 	def is_pm_from_jid(self, account, jid):
 		'''Returns True if the given jid is a private message jid'''
@@ -549,8 +540,9 @@ class Contacts:
 
 class MetacontactManager():
 	
-	def __init__(self):
+	def __init__(self, contacts):
 		self._metacontacts_tags = {}
+		self._contacts = contacts
 	
 	def change_account_name(self, old_name, new_name):
 		self._metacontacts_tags[new_name] = self._metacontacts_tags[old_name]
@@ -566,7 +558,7 @@ class MetacontactManager():
 	def define_metacontacts(self, account, tags_list):
 		self._metacontacts_tags[account] = tags_list
 
-	def get_new_metacontacts_tag(self, jid):
+	def _get_new_metacontacts_tag(self, jid):
 		if not jid in self._metacontacts_tags:
 			return jid
 		#FIXME: can this append ?
@@ -578,7 +570,7 @@ class MetacontactManager():
 			return []
 		return self._metacontacts_tags[account].keys()
 
-	def get_metacontacts_tag(self, account, jid):
+	def _get_metacontacts_tag(self, account, jid):
 		'''Returns the tag of a jid'''
 		if not account in self._metacontacts_tags:
 			return None
@@ -589,19 +581,19 @@ class MetacontactManager():
 		return None
 
 	def add_metacontact(self, brother_account, brother_jid, account, jid, order=None):
-		tag = self.get_metacontacts_tag(brother_account, brother_jid)
+		tag = self._get_metacontacts_tag(brother_account, brother_jid)
 		if not tag:
-			tag = self.get_new_metacontacts_tag(brother_jid)
+			tag = self._get_new_metacontacts_tag(brother_jid)
 			self._metacontacts_tags[brother_account][tag] = [{'jid': brother_jid,
 				'tag': tag}]
 			if brother_account != account:
 				common.gajim.connections[brother_account].store_metacontacts(
 					self._metacontacts_tags[brother_account])
 		# be sure jid has no other tag
-		old_tag = self.get_metacontacts_tag(account, jid)
+		old_tag = self._get_metacontacts_tag(account, jid)
 		while old_tag:
 			self.remove_metacontact(account, jid)
-			old_tag = self.get_metacontacts_tag(account, jid)
+			old_tag = self._get_metacontacts_tag(account, jid)
 		if tag not in self._metacontacts_tags[account]:
 			self._metacontacts_tags[account][tag] = [{'jid': jid, 'tag': tag}]
 		else:
@@ -615,6 +607,9 @@ class MetacontactManager():
 			self._metacontacts_tags[account])
 
 	def remove_metacontact(self, account, jid):
+		if not account in self._metacontacts_tags:
+			return None
+		
 		found = None
 		for tag in self._metacontacts_tags[account]:
 			for data in self._metacontacts_tags[account][tag]:
@@ -628,7 +623,7 @@ class MetacontactManager():
 				break
 
 	def has_brother(self, account, jid, accounts):
-		tag = self.get_metacontacts_tag(account, jid)
+		tag = self._get_metacontacts_tag(account, jid)
 		if not tag:
 			return False
 		meta_jids = self.get_metacontacts_jids(tag, accounts)
@@ -660,7 +655,7 @@ class MetacontactManager():
 		'''return the family of the given jid, including jid in the form:
 		[{'account': acct, 'jid': jid, 'order': order}, ]
 		'order' is optional'''
-		tag = self.get_metacontacts_tag(account, jid)
+		tag = self._get_metacontacts_tag(account, jid)
 		return self.get_metacontacts_family_from_tag(account, tag)
 
 	def get_metacontacts_family_from_tag(self, account, tag):
@@ -674,7 +669,7 @@ class MetacontactManager():
 					answers.append(data)
 		return answers
 
-	def compare_metacontacts(self, data1, data2):
+	def _compare_metacontacts(self, data1, data2):
 		'''compare 2 metacontacts.
 		Data is {'jid': jid, 'account': account, 'order': order}
 		order is optional'''
@@ -682,8 +677,8 @@ class MetacontactManager():
 		jid2 = data2['jid']
 		account1 = data1['account']
 		account2 = data2['account']
-		contact1 = self.get_contact_with_highest_priority(account1, jid1)
-		contact2 = self.get_contact_with_highest_priority(account2, jid2)
+		contact1 = self._contacts.get_contact_with_highest_priority(account1, jid1)
+		contact2 = self._contacts.get_contact_with_highest_priority(account2, jid2)
 		show_list = ['not in roster', 'error', 'offline', 'invisible', 'dnd',
 			'xa', 'away', 'chat', 'online', 'requested', 'message']
 		# contact can be null when a jid listed in the metacontact data
@@ -757,7 +752,7 @@ class MetacontactManager():
 	def get_metacontacts_big_brother(self, family):
 		'''which of the family will be the big brother under wich all
 		others will be ?'''
-		family.sort(cmp=self.compare_metacontacts)
+		family.sort(cmp=self._compare_metacontacts)
 		return family[-1]
 	
 # vim: se ts=3:
