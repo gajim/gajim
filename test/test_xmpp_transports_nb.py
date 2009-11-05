@@ -17,13 +17,16 @@ class TestModuleLevelFunctions(unittest.TestCase):
 	Test class for functions defined at module level
 	'''
 	def test_urisplit(self):
-		def check_uri(uri, proto, host, path):
-			_proto, _host, _path = transports_nb.urisplit(uri)
+		def check_uri(uri, proto, host, port, path):
+			_proto, _host, _port, _path = transports_nb.urisplit(uri)
 			self.assertEqual(proto, _proto)
 			self.assertEqual(host, _host)
+			self.assertEqual(port, _port)
 			self.assertEqual(path, _path)
 		check_uri('http://httpcm.jabber.org/webclient',
-			proto='http', host='httpcm.jabber.org', path='/webclient')
+			proto='http', host='httpcm.jabber.org', port=80, path='/webclient')
+		check_uri('http://httpcm.jabber.org:5280/webclient',
+			proto='http', host='httpcm.jabber.org', port=5280, path='/webclient')
 
 	def test_get_proxy_data_from_dict(self):
 		def check_dict(proxy_dict, host, port, user, passwd):
