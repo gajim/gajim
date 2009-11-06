@@ -712,7 +712,7 @@ class NonBlockingHTTP(NonBlockingTCP):
 			headers.append('Connection: Keep-Alive')
 		headers.append('\r\n')
 		headers = '\r\n'.join(headers)
-		return('%s%s\r\n' % (headers, httpbody))
+		return('%s%s' % (headers, httpbody))
 
 	def parse_http_message(self, message):
 		'''
