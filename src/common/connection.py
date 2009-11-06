@@ -1585,8 +1585,8 @@ class Connection(ConnectionHandlers):
 		to_whom_jid = jid
 		if resource:
 			to_whom_jid += '/' + resource
-		iq = common.xmpp.Iq(to=to_whom_jid, typ='get', queryNS=\
-			common.xmpp.NS_TIME_REVISED)
+		iq = common.xmpp.Iq(to=to_whom_jid, typ='get')
+		iq.addChild('time', namespace=common.xmpp.NS_TIME_REVISED)
 		id_ = self.connection.getAnID()
 		iq.setID(id_)
 		if groupchat_jid:
