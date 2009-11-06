@@ -165,6 +165,8 @@ class MessageWindow(object):
 			return
 		if old_jid not in self._controls[account]:
 			return
+		if old_jid == new_jid:
+			return
 		self._controls[account][new_jid] = self._controls[account][old_jid]
 		del self._controls[account][old_jid]
 
