@@ -473,7 +473,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			tag.href = href
 			tag.type_ = type_ # to be used by the URL handler
 			tag.connect('event', self.textview.html_hyperlink_handler, 'url', href)
-			tag.set_property('foreground', '#0000ff')
+			tag.set_property('foreground', gajim.config.get('urlmsgcolor'))
 			tag.set_property('underline', pango.UNDERLINE_SINGLE)
 			tag.is_anchor = True
 		if title:
