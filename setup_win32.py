@@ -65,6 +65,7 @@ opts = {
         'excludes': [
             'docutils'
         ],
+		  'optimize': 2,
     }
 }
 
