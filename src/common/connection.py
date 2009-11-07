@@ -777,7 +777,10 @@ class Connection(ConnectionHandlers):
 			self.server_resource = con.Resource
 		if gajim.config.get_per('accounts', self.name, 'anonymous_auth'):
 			# Get jid given by server
+			old_jid = gajim.get_jid_from_account(self.name)
 			gajim.config.set_per('accounts', self.name, 'name', con.User)
+			new_jid = gajim.get_jid_from_account(self.name)
+			self.dispatch('NEW_JID', (old_jid, new_jid))
 		if auth:
 			self.last_io = gajim.idlequeue.current_time()
 			self.connected = 2
