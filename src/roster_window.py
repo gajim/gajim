@@ -784,6 +784,21 @@ class RosterWindow:
 
 		return True
 
+	def rename_self_contact(self, old_jid, new_jid, account):
+		'''Rename the self_contact jid
+
+		Keyword arguments:
+		old_jid -- our old jid
+		new_jid -- our new jid
+		account -- the corresponding account.
+		'''
+		gajim.contacts.change_contact_jid(old_jid, new_jid, account)
+		self_iter = self._get_self_contact_iter(account, model=self.model)
+		if not self_iter:
+			return
+		self.model[self_iter][C_JID] = new_jid
+		self.draw_contact(new_jid, account)
+
 	def add_groupchat(self, jid, account, status=''):
 		'''Add groupchat to roster and draw it.
 		Return the added contact instance.

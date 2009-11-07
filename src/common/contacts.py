@@ -219,6 +219,17 @@ class Contacts:
 		del self._gc_contacts[old_name]
 		del self._metacontacts_tags[old_name]
 
+	def change_contact_jid(self, old_jid, new_jid, account):
+		if account not in self._contacts:
+			return
+		if old_jid not in self._contacts[account]:
+			return
+		self._contacts[account][new_jid] = []
+		for _contact in self._contacts[account][old_jid]:
+			_contact.jid = new_jid
+			self._contacts[account][new_jid].append(_contact)
+		del self._contacts[account][old_jid]
+
 	def add_account(self, account):
 		self._contacts[account] = {}
 		self._gc_contacts[account] = {}
