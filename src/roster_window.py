@@ -134,11 +134,10 @@ class RosterWindow:
 		return group_iter
 
 
-	def _get_self_contact_iter(self, jid, account, model=None):
+	def _get_self_contact_iter(self, account, model=None):
 		''' Return the gtk.TreeIter of SelfContact or None if not found.
 
 		Keyword arguments:
-		jid -- the jid of SelfContact
 		account -- the account of SelfContact
 		model -- the data model (default TreeFilterModel)
 
@@ -153,8 +152,8 @@ class RosterWindow:
 		while iterC:
 			if model[iterC][C_TYPE] != 'self_contact':
 				break
-			iter_jid = model[iterC][C_JID]
-			if iter_jid and jid == iter_jid.decode('utf-8'):
+			iter_account = model[iterC][C_ACCOUNT]
+			if account == iter_account.decode('utf-8'):
 				return iterC
 			iterC = model.iter_next(iterC)
 		return None
@@ -177,7 +176,7 @@ class RosterWindow:
 				return []
 
 		if jid == gajim.get_jid_from_account(account):
-			contact_iter = self._get_self_contact_iter(jid,	account, model)
+			contact_iter = self._get_self_contact_iter(account, model)
 			if contact_iter:
 				return [contact_iter]
 			else:
