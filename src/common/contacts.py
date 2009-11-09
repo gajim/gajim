@@ -99,7 +99,7 @@ class Contact(CommonContact):
 			our_chatstate, composing_xep, chatstate, client_caps=client_caps)
 		
 		self.contact_name = '' # nick choosen by contact
-		self.groups = groups
+		self.groups = [i for i in set(groups)] # filter duplicate values
 
 		self.sub = sub
 		self.ask = ask
@@ -236,13 +236,7 @@ class Contacts:
 		our_chatstate=None, chatstate=None, last_status_time=None,
 		composing_xep=None, mood={}, tune={}, activity={}):
 
-		# We don't want duplicated group values
-		groups_unique = []
-		for group in groups:
-			if group not in groups_unique:
-				groups_unique.append(group)
-
-		return Contact(jid=jid, account=account, name=name, groups=groups_unique,
+		return Contact(jid=jid, account=account, name=name, groups=groups,
 			show=show, status=status, sub=sub, ask=ask, resource=resource, priority=priority,
 			keyID=keyID, client_caps=client_caps, our_chatstate=our_chatstate,
 			chatstate=chatstate, last_status_time=last_status_time,
