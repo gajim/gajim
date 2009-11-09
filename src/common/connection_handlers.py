@@ -2468,8 +2468,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				for sess in self.sessions[jid].values():
 					if not sess.received_thread_id:
 						contact = gajim.contacts.get_contact(self.name, jid)
-
-						session_supported = contact.supports(common.xmpp.NS_SSN) or \
+						# FIXME: I don't know if this is the correct behavior here.
+						# Anyway, it is the old behavior when we assumed that
+						# not-existing contacts don't support anything
+						contact_exists = bool(contact)
+						session_supported = contact_exists and \
+							contact.supports(common.xmpp.NS_SSN) or \
 							contact.supports(common.xmpp.NS_ESESSION)
 						if session_supported:
 							sess.terminate()
