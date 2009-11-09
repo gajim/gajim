@@ -632,7 +632,7 @@ class GroupchatControl(ChatControlBase):
 
 		self.banner_status_label.set_markup(subject_text)
 
-	def prepare_context_menu(self, hide_buttonbar_entries=False):
+	def prepare_context_menu(self, hide_buttonbar_items=False):
 		'''sets sensitivity state for configure_room'''
 		xml = gtkgui_helpers.get_glade('gc_control_popup_menu.glade')
 		menu = xml.get_widget('gc_control_popup_menu')
