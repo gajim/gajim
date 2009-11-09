@@ -7,6 +7,7 @@ import lib
 lib.setup_env()
 
 from common import gajim
+from common import contacts as contacts_module
 from gajim import Interface
 
 from gajim_mocks import *
@@ -25,6 +26,9 @@ class TestStatusChange(unittest.TestCase):
 	'''tests gajim.py's incredibly complex handle_event_notify'''
 
 	def setUp(self):
+		
+		gajim.connections = {}
+		gajim.contacts = contacts_module.Contacts()
 		gajim.interface.roster = roster_window.RosterWindow()
 
 		for acc in contacts:
@@ -38,13 +42,6 @@ class TestStatusChange(unittest.TestCase):
 		self.assertEqual(0, len(notify.notifications))
 
 	def tearDown(self):
-		gajim.interface.roster.model.clear()
-
-		for acc in contacts:
-			gajim.contacts.clear_contacts(acc)
-
-		del gajim.interface.roster
-
 		notify.notifications = []
 
 	def contact_comes_online(self, account, jid, resource, prio):

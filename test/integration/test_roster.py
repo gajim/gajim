@@ -9,15 +9,16 @@ from mock import Mock, expectParams
 from gajim_mocks import *
 
 from common import gajim
+from common import contacts as contacts_module
 import roster_window
 
 gajim.get_jid_from_account = lambda acc: 'myjid@' + acc
+
 
 class TestRosterWindow(unittest.TestCase):
 
 	def setUp(self):
 		gajim.interface = MockInterface()
-		self.roster = roster_window.RosterWindow()
 
 		self.C_NAME = roster_window.C_NAME
 		self.C_TYPE = roster_window.C_TYPE
@@ -26,13 +27,13 @@ class TestRosterWindow(unittest.TestCase):
 
 		# Add after creating RosterWindow
 		# We want to test the filling explicitly
+		gajim.contacts = contacts_module.Contacts()
+		gajim.connections = {}
+		self.roster = roster_window.RosterWindow()
+		
 		for acc in contacts:
 			gajim.connections[acc] = MockConnection(acc)
-
-	def tearDown(self):
-		self.roster.model.clear()
-		for acc in gajim.contacts.get_accounts():
-			gajim.contacts.clear_contacts(acc)
+			gajim.contacts.add_account(acc)	
 
 	### Custom assertions
 	def assert_all_contacts_are_in_roster(self, acc):
@@ -141,11 +142,6 @@ class TestRosterWindow(unittest.TestCase):
 					msg='Group Missmatch')
 
 				groups = contacts[acc][jid]['groups'] or ['General',]
-
-		# cleanup
-		self.roster.model.clear()
-		for acc in contacts:
-			gajim.contacts.clear_contacts(acc)
 
 	def test_fill_roster_model(self):
 		for acc in contacts:
