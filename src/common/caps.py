@@ -41,12 +41,29 @@ from common.xmpp import NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION, NS_CHATSTATES
 FEATURE_BLACKLIST = [NS_CHATSTATES, NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION]
 
 
+################################################################################
+### Public API of this module
+################################################################################
+
 capscache = None
 def initialize(logger):
-	''' Initializes the capscache global '''
+	''' Initializes this module '''
 	global capscache
 	capscache = CapsCache(logger)
 
+def client_supports(client_caps, requested_feature):
+	lookup_item = client_caps.get_cache_lookup_strategy()
+	cache_item = lookup_item(capscache)
+
+	supported_features = cache_item.features
+	if requested_feature in supported_features:
+		return True
+	elif supported_features == [] and cache_item.queried in (0, 1):
+		# assume feature is supported, if we don't know yet, what the client
+		# is capable of
+		return requested_feature not in FEATURE_BLACKLIST
+	else:
+		return False
 
 def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 	'''Compute caps hash according to XEP-0115, V1.5
@@ -117,6 +134,10 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 		return ''
 	return base64.b64encode(hash_.digest())
 	
+
+################################################################################
+### Internal classes of this module
+################################################################################
 
 class AbstractClientCaps(object):
 	'''
@@ -322,6 +343,10 @@ class CapsCache(object):
 			discover = client_caps.get_discover_strategy()
 			discover(connection, jid)
 
+
+################################################################################
+### Caps network coding
+################################################################################
 
 class ConnectionCaps(object):
 	'''

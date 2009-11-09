@@ -29,7 +29,7 @@
 ##
 
 import common.gajim
-from common import caps
+import caps
 
 class XMPPEntity(object):
 	'''Base representation of entities in XMPP'''
@@ -72,7 +72,7 @@ class CommonContact(XMPPEntity):
 	
 	def get_shown_name(self):
 		raise NotImplementedError
-
+	
 	def supports(self, requested_feature):
 		'''
 		Returns True if the contact has advertised to support the feature
@@ -85,21 +85,7 @@ class CommonContact(XMPPEntity):
 			# return caps for a contact that has no resources left.
 			return False
 		else:
-			return self._client_supports(requested_feature)
-
-	def _client_supports(self, requested_feature):
-		lookup_item = self.client_caps.get_cache_lookup_strategy()
-		cache_item = lookup_item(caps.capscache)
-
-		supported_features = cache_item.features
-		if requested_feature in supported_features:
-			return True
-		elif supported_features == [] and cache_item.queried in (0, 1):
-			# assume feature is supported, if we don't know yet, what the client
-			# is capable of
-			return requested_feature not in caps.FEATURE_BLACKLIST
-		else:
-			return False
+			return caps.client_supports(self.client_caps, requested_feature)
 
 
 class Contact(CommonContact):

@@ -113,25 +113,23 @@ class TestClientCaps(CommonCapsTest):
 				"http://gajim.org#m3P2WeXPMGVH2tZPe7yITnfY0Dw=")
 		
 	def test_client_supports(self):
-		contact = Contact(jid=None, account=None, client_caps=self.client_caps)
-			
-		self.assertTrue(contact.supports(NS_PING),
+		self.assertTrue(caps.client_supports(self.client_caps, NS_PING),
 				msg="Assume supported, if we don't have caps")
 		
-		self.assertFalse(contact.supports(NS_XHTML_IM),
+		self.assertFalse(caps.client_supports(self.client_caps, NS_XHTML_IM),
 			msg="Must not assume blacklisted feature is supported on default")
 		
 		self.cc.initialize_from_db()
 		
-		self.assertFalse(contact.supports(NS_PING),
+		self.assertFalse(caps.client_supports(self.client_caps, NS_PING),
 				msg="Must return false on unsupported feature")
 		
-		self.assertTrue(contact.supports(NS_XHTML_IM),
+		self.assertTrue(caps.client_supports(self.client_caps, NS_XHTML_IM),
 				msg="Must return True on supported feature")
 		
-		self.assertTrue(contact.supports(NS_MUC),
-				msg="Must return True on supported feature")	
-	
+		self.assertTrue(caps.client_supports(self.client_caps, NS_MUC),
+				msg="Must return True on supported feature")
+			
 
 class TestOldClientCaps(TestClientCaps):	
 
