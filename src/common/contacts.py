@@ -411,36 +411,6 @@ class Contacts:
 					nbr_total += 1
 		return nbr_online, nbr_total
 
-	def define_metacontacts(self, account, tags_list):
-		return self._metacontact_manager.define_metacontacts(account, tags_list)
-
-	def get_metacontacts_tags(self, account):
-		return self._metacontact_manager.get_metacontacts_tags(account)
-
-	def add_metacontact(self, brother_account, brother_jid, account, jid, order=None):
-		return self._metacontact_manager.add_metacontact(brother_account, brother_jid, account, jid, order)
-
-	def remove_metacontact(self, account, jid):
-		return self._metacontact_manager.remove_metacontact(account, jid)
-
-	def has_brother(self, account, jid, accounts):
-		return self._metacontact_manager.has_brother(account, jid, accounts)
-
-	def is_big_brother(self, account, jid, accounts):
-		return self._metacontact_manager.is_big_brother(account, jid, accounts)
-
-	def get_metacontacts_jids(self, tag, accounts):
-		return self._metacontact_manager.get_metacontacts_jids(tag, accounts)
-
-	def get_metacontacts_family(self, account, jid):
-		return self._metacontact_manager.get_metacontacts_family(account, jid)
-
-	def get_metacontacts_family_from_tag(self, account, tag):
-		return self._metacontact_manager.get_metacontacts_family_from_tag(account, tag)
-
-	def get_metacontacts_big_brother(self, family):
-		return self._metacontact_manager.get_metacontacts_big_brother(family)
-
 	def is_pm_from_jid(self, account, jid):
 		'''Returns True if the given jid is a private message jid'''
 		if jid in self._contacts[account]:
@@ -452,34 +422,20 @@ class Contacts:
 		if isinstance(contact, Contact):
 			return False
 		return True
-
+	
 	def get_jid_list(self, account):
 		return self._contacts[account].keys()
 
-	def create_gc_contact(self, room_jid, account, name='', show='', status='',
-		role='', affiliation='', jid='', resource=''):
-		return self._gc_contacts.create_gc_contact(room_jid, account, name, show, status, role, affiliation, jid, resource)
-
-	def add_gc_contact(self, account, gc_contact):
-		return self._gc_contacts.add_gc_contact(account, gc_contact)
-
-	def remove_gc_contact(self, account, gc_contact):
-		return self._gc_contacts.remove_gc_contact(account, gc_contact)
-
-	def remove_room(self, account, room_jid):
-		return self._gc_contacts.remove_room(account, room_jid)
-
-	def get_gc_list(self, account):
-		return self._gc_contacts.get_gc_list(account)
-
-	def get_nick_list(self, account, room_jid):
-		return self._gc_contacts.get_nick_list(account, room_jid)
-
-	def get_gc_contact(self, account, room_jid, nick):
-		return self._gc_contacts.get_gc_contact(account, room_jid, nick)
-
-	def get_nb_role_total_gc_contacts(self, account, room_jid, role):
-		return self._gc_contacts.get_nb_role_total_gc_contacts(account, room_jid, role)
+	
+	def __getattr__(self, attr_name):
+		# Only called if self has no attr_name
+		if hasattr(self._gc_contacts, attr_name):
+			return getattr(self._gc_contacts, attr_name)
+		elif hasattr(self._metacontact_manager, attr_name):
+			return getattr(self._metacontact_manager, attr_name)
+		else:
+			raise AttributeError(attr_name)
+		
 	
 	
 class GC_Contacts():
@@ -508,7 +464,7 @@ class GC_Contacts():
 		
 		# No such account before ?
 		if account not in self._gc_contacts:
-			self._contacts[account] = {gc_contact.room_jid : {gc_contact.name: \
+			self._gc_contacts[account] = {gc_contact.room_jid : {gc_contact.name: \
 				gc_contact}}
 			return
 		# No such room_jid before ?
