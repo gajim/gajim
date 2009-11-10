@@ -103,7 +103,7 @@ class MessageWindow(object):
 			'<Control>l', '<Control>L', '<Control>n', '<Control>u',
 			'<Control>b', '<Control><Shift>Tab', '<Control>Tab', '<Control>F4',
 			'<Control>w', '<Control>Page_Up', '<Control>Page_Down', '<Alt>Right',
-			'<Alt>Left', '<Alt>a', '<Alt>c', '<Alt>m', '<Alt>t', 'Escape'] + \
+			'<Alt>Left', '<Alt>d', '<Alt>c', '<Alt>m', '<Alt>t', 'Escape'] + \
 			['<Alt>'+str(i) for i in xrange(10)]
 		accel_group = gtk.AccelGroup()
 		for key in keys:
@@ -405,7 +405,7 @@ class MessageWindow(object):
 				control.chat_buttons_set_visible(not control.hide_chat_buttons)
 			elif keyval == gtk.keysyms.m: # ALT + M show emoticons menu
 				control.show_emoticons_menu()
-			elif keyval == gtk.keysyms.a: # ALT + A show actions menu
+			elif keyval == gtk.keysyms.d: # ALT + D show actions menu
 				control.on_actions_button_clicked(control.actions_button)
 			elif control.type_id == message_control.TYPE_GC and \
 			keyval == gtk.keysyms.t: # ALT + t
