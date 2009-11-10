@@ -30,6 +30,7 @@
 
 import common.gajim
 import caps
+from account import Account
 
 class XMPPEntity(object):
 	'''Base representation of entities in XMPP'''
@@ -204,21 +205,21 @@ class Contacts:
 	'''Information concerning all contacts and groupchat contacts'''
 	def __init__(self):
 		self._contacts = {} # list of contacts {acct: {jid1: [C1, C2]}, } one Contact per resource
-
-		self._gc_contacts = GC_Contacts()
 		self._metacontact_manager = MetacontactManager(self)
+		self._accounts = {}
 		
 	def change_account_name(self, old_name, new_name):
 		self._contacts[new_name] = self._contacts[old_name]
 		del self._contacts[old_name]
 		
-		self._gc_contacts.change_account_name(old_name, new_name)
+		self._accounts[new_name] = self._accounts[old_name]
+		del self._accounts[old_name]
+		
 		self._metacontact_manager.change_account_name(old_name, new_name)
 
 	def add_account(self, account):
 		self._contacts[account] = {}
-		
-		self._gc_contacts.add_account(account)
+		self._accounts[account] = Account(GC_Contacts())
 		self._metacontact_manager.add_account(account)
 
 	def get_accounts(self):
@@ -226,8 +227,7 @@ class Contacts:
 
 	def remove_account(self, account):
 		del self._contacts[account]
-		
-		self._gc_contacts.remove_account(account)
+		del self._accounts[account]
 		self._metacontact_manager.remove_account(account)
 
 	def create_contact(self, jid, account, name='', groups=[], show='', status='',
@@ -426,33 +426,12 @@ class Contacts:
 	def get_jid_list(self, account):
 		return self._contacts[account].keys()
 
-	
 	def __getattr__(self, attr_name):
 		# Only called if self has no attr_name
-		if hasattr(self._gc_contacts, attr_name):
-			return getattr(self._gc_contacts, attr_name)
-		elif hasattr(self._metacontact_manager, attr_name):
+		if hasattr(self._metacontact_manager, attr_name):
 			return getattr(self._metacontact_manager, attr_name)
 		else:
 			raise AttributeError(attr_name)
-		
-	
-	
-class GC_Contacts():
-	
-	def __init__(self):
-		self._gc_contacts = {} # list of contacts that are in gc {acct: {room_jid: {nick: C}}}
-
-	def change_account_name(self, old_name, new_name):
-		self._gc_contacts[new_name] = self._gc_contacts[old_name]
-		del self._gc_contacts[old_name]
-		
-	def add_account(self, account):
-		if account not in self._gc_contacts:
-			self._gc_contacts[account] = {}
-	
-	def remove_account(self, account):
-		del self._gc_contacts[account]
 	
 	def create_gc_contact(self, room_jid, account, name='', show='', status='',
 		role='', affiliation='', jid='', resource=''):
@@ -460,68 +439,77 @@ class GC_Contacts():
 			resource)
 
 	def add_gc_contact(self, account, gc_contact):
-		assert account == gc_contact.account # migration check
-		
-		# No such account before ?
-		if account not in self._gc_contacts:
-			self._gc_contacts[account] = {gc_contact.room_jid : {gc_contact.name: \
-				gc_contact}}
-			return
-		# No such room_jid before ?
-		if gc_contact.room_jid not in self._gc_contacts[account]:
-			self._gc_contacts[account][gc_contact.room_jid] = {gc_contact.name: \
-				gc_contact}
-			return
-		self._gc_contacts[account][gc_contact.room_jid][gc_contact.name] = \
-			gc_contact
+		return self._accounts[account].gc_contacts.add_gc_contact(gc_contact)
 
 	def remove_gc_contact(self, account, gc_contact):
-		if account not in self._gc_contacts:
-			return
-		if gc_contact.room_jid not in self._gc_contacts[account]:
-			return
-		if gc_contact.name not in self._gc_contacts[account][
-		gc_contact.room_jid]:
-			return
-		del self._gc_contacts[account][gc_contact.room_jid][gc_contact.name]
-		# It was the last nick in room ?
-		if not len(self._gc_contacts[account][gc_contact.room_jid]):
-			del self._gc_contacts[account][gc_contact.room_jid]
+		return self._accounts[account].gc_contacts.remove_gc_contact(gc_contact)
 
 	def remove_room(self, account, room_jid):
-		if account not in self._gc_contacts:
-			return
-		if room_jid not in self._gc_contacts[account]:
-			return
-		del self._gc_contacts[account][room_jid]
+		return self._accounts[account].gc_contacts.remove_room(room_jid)
 
 	def get_gc_list(self, account):
-		if account not in self._gc_contacts:
-			return []
-		return self._gc_contacts[account].keys()
+		return self._accounts[account].gc_contacts.get_gc_list()
 
 	def get_nick_list(self, account, room_jid):
-		gc_list = self.get_gc_list(account)
-		if not room_jid in gc_list:
-			return []
-		return self._gc_contacts[account][room_jid].keys()
+		return self._accounts[account].gc_contacts.get_nick_list(room_jid)
 
 	def get_gc_contact(self, account, room_jid, nick):
-		nick_list = self.get_nick_list(account, room_jid)
-		if not nick in nick_list:
-			return None
-		return self._gc_contacts[account][room_jid][nick]
+		return self._accounts[account].gc_contacts.get_gc_contact(room_jid, nick)
 
 	def get_nb_role_total_gc_contacts(self, account, room_jid, role):
+		return self._accounts[account].gc_contacts.get_nb_role_total_gc_contacts(room_jid, role)
+		
+				
+class GC_Contacts():
+	
+	def __init__(self):
+		# list of contacts that are in gc {room_jid: {nick: C}}}
+		self._rooms = {}
+	
+	def add_gc_contact(self, gc_contact):
+		if gc_contact.room_jid not in self._rooms:
+			self._rooms[gc_contact.room_jid] = {gc_contact.name: gc_contact}
+		else:
+			self._rooms[gc_contact.room_jid][gc_contact.name] = gc_contact
+
+	def remove_gc_contact(self, gc_contact):
+		if gc_contact.room_jid not in self._rooms:
+			return
+		if gc_contact.name not in self._rooms[gc_contact.room_jid]:
+			return
+		del self._rooms[gc_contact.room_jid][gc_contact.name]
+		# It was the last nick in room ?
+		if not len(self._rooms[gc_contact.room_jid]):
+			del self._rooms[gc_contact.room_jid]
+
+	def remove_room(self, room_jid):
+		if room_jid not in self._rooms:
+			return
+		del self._rooms[room_jid]
+
+	def get_gc_list(self):
+		return self._rooms.keys()
+
+	def get_nick_list(self, room_jid):
+		gc_list = self.get_gc_list()
+		if not room_jid in gc_list:
+			return []
+		return self._rooms[room_jid].keys()
+
+	def get_gc_contact(self, room_jid, nick):
+		nick_list = self.get_nick_list(room_jid)
+		if not nick in nick_list:
+			return None
+		return self._rooms[room_jid][nick]
+
+	def get_nb_role_total_gc_contacts(self, room_jid, role):
 		'''Returns the number of group chat contacts for the given role and the
 		total number of group chat contacts'''
-		if account not in self._gc_contacts:
-			return 0, 0
-		if room_jid not in self._gc_contacts[account]:
+		if room_jid not in self._rooms:
 			return 0, 0
 		nb_role = nb_total = 0
-		for nick in self._gc_contacts[account][room_jid]:
-			if self._gc_contacts[account][room_jid][nick].role == role:
+		for nick in self._rooms[room_jid]:
+			if self._rooms[room_jid][nick].role == role:
 				nb_role += 1
 			nb_total += 1
 		return nb_role, nb_total
