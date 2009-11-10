@@ -20,7 +20,9 @@
 
 class Account(object):
 	
-	def __init__(self, gc_contacts):
+	def __init__(self, name, contacts, gc_contacts):
+		self.name = name
+		self.contacts = contacts
 		self.gc_contacts = gc_contacts
 		
 		

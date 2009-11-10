@@ -174,7 +174,6 @@ class Contact(CommonContact):
 		return False
 
 
-
 class GC_Contact(CommonContact):
 	'''Information concerning each groupchat contact'''
 	def __init__(self, room_jid, account, name='', show='', status='', role='',
@@ -204,29 +203,25 @@ class GC_Contact(CommonContact):
 class Contacts:
 	'''Information concerning all contacts and groupchat contacts'''
 	def __init__(self):
-		self._contacts = {} # list of contacts {acct: {jid1: [C1, C2]}, } one Contact per resource
+		
 		self._metacontact_manager = MetacontactManager(self)
 		self._accounts = {}
 		
-	def change_account_name(self, old_name, new_name):
-		self._contacts[new_name] = self._contacts[old_name]
-		del self._contacts[old_name]
-		
+	def change_account_name(self, old_name, new_name):		
 		self._accounts[new_name] = self._accounts[old_name]
 		del self._accounts[old_name]
 		
 		self._metacontact_manager.change_account_name(old_name, new_name)
 
-	def add_account(self, account):
-		self._contacts[account] = {}
-		self._accounts[account] = Account(GC_Contacts())
-		self._metacontact_manager.add_account(account)
+	def add_account(self, account_name):
+		self._accounts[account_name] = Account(account_name,
+				Contacts_New(), GC_Contacts())
+		self._metacontact_manager.add_account(account_name)
 
 	def get_accounts(self):
-		return self._contacts.keys()
+		return self._accounts.keys()
 
 	def remove_account(self, account):
-		del self._contacts[account]
 		del self._accounts[account]
 		self._metacontact_manager.remove_account(account)
 
@@ -264,82 +259,41 @@ class Contacts:
 			chatstate=contact.chatstate, last_status_time=contact.last_status_time)
 
 	def add_contact(self, account, contact):
-		assert account == contact.account # migration check
-		
-		# No such account before ?
-		if account not in self._contacts:
-			self._contacts[account] = {contact.jid : [contact]}
-			return
-		# No such jid before ?
-		if contact.jid not in self._contacts[account]:
-			self._contacts[account][contact.jid] = [contact]
-			return
-		contacts = self._contacts[account][contact.jid]
-		# We had only one that was offline, remove it
-		if len(contacts) == 1 and contacts[0].show == 'offline':
-			# Do not use self.remove_contact: it deteles
-			# self._contacts[account][contact.jid]
-			contacts.remove(contacts[0])
-		# If same JID with same resource already exists, use the new one
-		for c in contacts:
-			if c.resource == contact.resource:
-				self.remove_contact(account, c)
-				break
-		contacts.append(contact)
+		if account not in self._accounts:
+			self.add_account(account)
+		return self._accounts[account].contacts.add_contact(contact)
 
 	def remove_contact(self, account, contact):
-		if account not in self._contacts:
+		if account not in self._accounts:
 			return
-		if contact.jid not in self._contacts[account]:
-			return
-		if contact in self._contacts[account][contact.jid]:
-			self._contacts[account][contact.jid].remove(contact)
-		if len(self._contacts[account][contact.jid]) == 0:
-			del self._contacts[account][contact.jid]
+		return self._accounts[account].contacts.remove_contact(contact)
 
 	def remove_jid(self, account, jid, remove_meta=True):
-		'''Removes all contacts for a given jid'''
-		if account not in self._contacts:
-			return
-		if jid not in self._contacts[account]:
-			return
-		del self._contacts[account][jid]
+		self._accounts[account].contacts.remove_jid(jid)
 		if remove_meta:
 			self._metacontact_manager.remove_metacontact(account, jid)
-
+		
 	def get_contacts(self, account, jid):
-		'''Returns the list of contact instances for this jid.'''
-		if jid in self._contacts[account]:
-			return self._contacts[account][jid]
-		else:
-			return []
+		return self._accounts[account].contacts.get_contacts(jid)
 
 	def get_contact(self, account, jid, resource=None):
-		### WARNING ###
-		# This function returns a *RANDOM* resource if resource = None!
-		# Do *NOT* use if you need to get the contact to which you
-		# send a message for example, as a bare JID in Jabber means
-		# highest available resource, which this function ignores!
-		'''Returns the contact instance for the given resource if it's given else
-		the first contact is no resource is given or None if there is not'''
-		if jid in self._contacts[account]:
-			if not resource:
-				return self._contacts[account][jid][0]
-			for c in self._contacts[account][jid]:
-				if c.resource == resource:
-					return c
-		return None
+		return self._accounts[account].contacts.get_contact(jid, resource=resource)
 
 	def iter_contacts(self, account):
-		if account in self._contacts:
-			for jid in self._contacts[account].keys():
-				for contact in self._contacts[account][jid][:]:
-					yield contact
+		for contact in self._accounts[account].contacts.iter_contacts():
+			yield contact
 
 	def get_contact_from_full_jid(self, account, fjid):
-		''' Get Contact object for specific resource of given jid'''
-		barejid, resource = common.gajim.get_room_and_nick_from_fjid(fjid)
-		return self.get_contact(account, barejid, resource)
+		return self._accounts[account].contacts.get_contact_from_full_jid(fjid)
+	
+	def get_first_contact_from_jid(self, account, jid):
+		return self._accounts[account].contacts.get_first_contact_from_jid(jid)
+
+	def get_contacts_from_group(self, account, group):
+		return self._accounts[account].contacts.get_contacts_from_group(group)
+	
+	def get_jid_list(self, account):
+		return self._accounts[account].contacts.get_jid_list()
 
 	def get_highest_prio_contact_from_contacts(self, contacts):
 		if not contacts:
@@ -358,21 +312,7 @@ class Contacts:
 			contact = self.get_gc_contact(account, room, nick)
 			return contact
 		return self.get_highest_prio_contact_from_contacts(contacts)
-
-	def get_first_contact_from_jid(self, account, jid):
-		if jid in self._contacts[account]:
-			return self._contacts[account][jid][0]
-		return None
-
-	def get_contacts_from_group(self, account, group):
-		'''Returns all contacts in the given group'''
-		group_contacts = []
-		for jid in self._contacts[account]:
-			contacts = self.get_contacts(account, jid)
-			if group in contacts[0].groups:
-				group_contacts += contacts
-		return group_contacts
-
+	
 	def get_nb_online_total_contacts(self, accounts=[], groups=[]):
 		'''Returns the number of online contacts and the total number of
 		contacts'''
@@ -423,9 +363,6 @@ class Contacts:
 			return False
 		return True
 	
-	def get_jid_list(self, account):
-		return self._contacts[account].keys()
-
 	def __getattr__(self, attr_name):
 		# Only called if self has no attr_name
 		if hasattr(self._metacontact_manager, attr_name):
@@ -459,6 +396,95 @@ class Contacts:
 	def get_nb_role_total_gc_contacts(self, account, room_jid, role):
 		return self._accounts[account].gc_contacts.get_nb_role_total_gc_contacts(room_jid, role)
 		
+		
+class Contacts_New():
+	
+	def __init__(self):
+		# list of contacts  {jid1: [C1, C2]}, } one Contact per resource
+		self._contacts = {}
+		
+	def add_contact(self, contact):		
+		if contact.jid not in self._contacts:
+			self._contacts[contact.jid] = [contact]
+			return
+		contacts = self._contacts[contact.jid]
+		# We had only one that was offline, remove it
+		if len(contacts) == 1 and contacts[0].show == 'offline':
+			# Do not use self.remove_contact: it deteles
+			# self._contacts[account][contact.jid]
+			contacts.remove(contacts[0])
+		# If same JID with same resource already exists, use the new one
+		for c in contacts:
+			if c.resource == contact.resource:
+				self.remove_contact(c)
+				break
+		contacts.append(contact)
+		
+	def remove_contact(self, contact):
+		if contact.jid not in self._contacts:
+			return
+		if contact in self._contacts[contact.jid]:
+			self._contacts[contact.jid].remove(contact)
+		if len(self._contacts[contact.jid]) == 0:
+			del self._contacts[contact.jid]
+			
+	def remove_jid(self, jid):
+		'''Removes all contacts for a given jid'''
+		if jid not in self._contacts:
+			return
+		del self._contacts[jid]
+			
+	def get_contacts(self, jid):
+		'''Returns the list of contact instances for this jid.'''
+		if jid in self._contacts:
+			return self._contacts[jid]
+		else:
+			return []
+		
+	def get_contact(self, jid, resource=None):
+		### WARNING ###
+		# This function returns a *RANDOM* resource if resource = None!
+		# Do *NOT* use if you need to get the contact to which you
+		# send a message for example, as a bare JID in Jabber means
+		# highest available resource, which this function ignores!
+		'''Returns the contact instance for the given resource if it's given else
+		the first contact is no resource is given or None if there is not'''
+		if jid in self._contacts:
+			if not resource:
+				return self._contacts[jid][0]
+			for c in self._contacts[jid]:
+				if c.resource == resource:
+					return c
+		return None
+
+	def iter_contacts(self):
+		for jid in self._contacts.keys():
+			for contact in self._contacts[jid][:]:
+				yield contact
+				
+	def get_jid_list(self):
+		return self._contacts.keys()
+				
+	def get_contact_from_full_jid(self, fjid):
+		''' Get Contact object for specific resource of given jid'''
+		barejid, resource = common.gajim.get_room_and_nick_from_fjid(fjid)
+		return self.get_contact(barejid, resource)
+	
+	def get_first_contact_from_jid(self, jid):
+		if jid in self._contacts:
+			return self._contacts[jid][0]
+		return None
+
+	def get_contacts_from_group(self, group):
+		'''Returns all contacts in the given group'''
+		group_contacts = []
+		for jid in self._contacts:
+			contacts = self.get_contacts(jid)
+			if group in contacts[0].groups:
+				group_contacts += contacts
+		return group_contacts
+	
+	
 				
 class GC_Contacts():
 	
@@ -513,7 +539,7 @@ class GC_Contacts():
 				nb_role += 1
 			nb_total += 1
 		return nb_role, nb_total
-	
+		
 
 class MetacontactManager():
 	

@@ -98,6 +98,32 @@ class TestContacts(unittest.TestCase):
 		# Not yet implemented to remain backwart compatible
 		# self.assertEqual(contact, copy, msg="Must be equal")
 		
-
+	def test_legacy_accounts_handling(self):		
+		self.contacts.add_account("one")
+		self.contacts.add_account("two")
+		
+		self.contacts.change_account_name("two", "old")
+		self.contacts.remove_account("one")
+		
+		self.assertEqual(["old"], self.contacts.get_accounts())
+		
+	def test_legacy_contacts_from_groups(self):
+		jid1 = "test1@gajim.org"
+		jid2 = "test2@gajim.org"
+		account = "account"
+		group = "GroupA"
+		
+		contact1 = self.contacts.create_contact(jid=jid1, account=account,
+			groups=[group])
+		self.contacts.add_contact(account, contact1)
+		
+		contact2 = self.contacts.create_contact(jid=jid2, account=account,
+			groups=[group])
+		self.contacts.add_contact(account, contact2)
+		
+		self.assertEqual(2, len(self.contacts.get_contacts_from_group(account, group)))
+		self.assertEqual(0, len(self.contacts.get_contacts_from_group(account, '')))							
+				
+		
 if __name__ == "__main__":
 		unittest.main()
