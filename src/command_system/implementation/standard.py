@@ -98,6 +98,22 @@ class StandardChatCommands(CommandContainer):
             raise CommandError(_('Command is not supported for zeroconf accounts'))
         gajim.connections[self.account].sendPing(self.contact)
 
+    @command('audio')
+    @documentation(_("Toggle audio session"))
+    def audio(self):
+        if self.audio_state == self.JINGLE_STATE_NOT_AVAILABLE:
+            raise CommandError(_("Video sessions are not available"))
+        else:
+            self._audio_button.toggled()
+
+    @command('video')
+    @documentation(_("Toggle video session"))
+    def video(self):
+        if self.video_state == self.JINGLE_STATE_NOT_AVAILABLE:
+            raise CommandError(_("Video sessions are not available"))
+        else:
+            self._video_button.toggled()
+
 class StandardPrivateChatCommands(CommandContainer):
     """
     This command container contains standard command which are unique to a
