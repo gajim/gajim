@@ -204,22 +204,21 @@ class Contacts:
 	'''Information concerning all contacts and groupchat contacts'''
 	def __init__(self):
 		self._contacts = {} # list of contacts {acct: {jid1: [C1, C2]}, } one Contact per resource
-		self._gc_contacts = {} # list of contacts that are in gc {acct: {room_jid: {nick: C}}}
 
-		self._metacontact_manager = MetacontactManager(self);
+		self._gc_contacts = GC_Contacts()
+		self._metacontact_manager = MetacontactManager(self)
 		
 	def change_account_name(self, old_name, new_name):
 		self._contacts[new_name] = self._contacts[old_name]
-		self._gc_contacts[new_name] = self._gc_contacts[old_name]
 		del self._contacts[old_name]
-		del self._gc_contacts[old_name]
 		
+		self._gc_contacts.change_account_name(old_name, new_name)
 		self._metacontact_manager.change_account_name(old_name, new_name)
 
 	def add_account(self, account):
 		self._contacts[account] = {}
-		self._gc_contacts[account] = {}
 		
+		self._gc_contacts.add_account(account)
 		self._metacontact_manager.add_account(account)
 
 	def get_accounts(self):
@@ -227,8 +226,8 @@ class Contacts:
 
 	def remove_account(self, account):
 		del self._contacts[account]
-		del self._gc_contacts[account]
 		
+		self._gc_contacts.remove_account(account)
 		self._metacontact_manager.remove_account(account)
 
 	def create_contact(self, jid, account, name='', groups=[], show='', status='',
@@ -457,6 +456,48 @@ class Contacts:
 	def get_jid_list(self, account):
 		return self._contacts[account].keys()
 
+	def create_gc_contact(self, room_jid, account, name='', show='', status='',
+		role='', affiliation='', jid='', resource=''):
+		return self._gc_contacts.create_gc_contact(room_jid, account, name, show, status, role, affiliation, jid, resource)
+
+	def add_gc_contact(self, account, gc_contact):
+		return self._gc_contacts.add_gc_contact(account, gc_contact)
+
+	def remove_gc_contact(self, account, gc_contact):
+		return self._gc_contacts.remove_gc_contact(account, gc_contact)
+
+	def remove_room(self, account, room_jid):
+		return self._gc_contacts.remove_room(account, room_jid)
+
+	def get_gc_list(self, account):
+		return self._gc_contacts.get_gc_list(account)
+
+	def get_nick_list(self, account, room_jid):
+		return self._gc_contacts.get_nick_list(account, room_jid)
+
+	def get_gc_contact(self, account, room_jid, nick):
+		return self._gc_contacts.get_gc_contact(account, room_jid, nick)
+
+	def get_nb_role_total_gc_contacts(self, account, room_jid, role):
+		return self._gc_contacts.get_nb_role_total_gc_contacts(account, room_jid, role)
+	
+	
+class GC_Contacts():
+	
+	def __init__(self):
+		self._gc_contacts = {} # list of contacts that are in gc {acct: {room_jid: {nick: C}}}
+
+	def change_account_name(self, old_name, new_name):
+		self._gc_contacts[new_name] = self._gc_contacts[old_name]
+		del self._gc_contacts[old_name]
+		
+	def add_account(self, account):
+		if account not in self._gc_contacts:
+			self._gc_contacts[account] = {}
+	
+	def remove_account(self, account):
+		del self._gc_contacts[account]
+	
 	def create_gc_contact(self, room_jid, account, name='', show='', status='',
 		role='', affiliation='', jid='', resource=''):
 		return GC_Contact(room_jid, account, name, show, status, role, affiliation, jid,
