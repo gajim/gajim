@@ -104,7 +104,10 @@ class StandardChatCommands(CommandContainer):
         if self.audio_state == self.JINGLE_STATE_NOT_AVAILABLE:
             raise CommandError(_("Video sessions are not available"))
         else:
-            self._audio_button.toggled()
+            # A state of an audio session is toggled by inverting a state of the
+            # appropriate button.
+            state = self._audio_button.get_active()
+            self._audio_button.set_active(not state)
 
     @command('video')
     @documentation(_("Toggle video session"))
@@ -112,7 +115,10 @@ class StandardChatCommands(CommandContainer):
         if self.video_state == self.JINGLE_STATE_NOT_AVAILABLE:
             raise CommandError(_("Video sessions are not available"))
         else:
-            self._video_button.toggled()
+            # A state of a video session is toggled by inverting a state of the
+            # appropriate button.
+            state = self._video_button.get_active()
+            self._video_button.set_active(not state)
 
 class StandardPrivateChatCommands(CommandContainer):
     """
