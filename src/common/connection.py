@@ -777,7 +777,10 @@ class Connection(ConnectionHandlers):
 			self.server_resource = con.Resource
 		if gajim.config.get_per('accounts', self.name, 'anonymous_auth'):
 			# Get jid given by server
+			old_jid = gajim.get_jid_from_account(self.name)
 			gajim.config.set_per('accounts', self.name, 'name', con.User)
+			new_jid = gajim.get_jid_from_account(self.name)
+			self.dispatch('NEW_JID', (old_jid, new_jid))
 		if auth:
 			self.last_io = gajim.idlequeue.current_time()
 			self.connected = 2
@@ -1298,7 +1301,7 @@ class Connection(ConnectionHandlers):
 		# chatstates - if peer supports xep85 or xep22, send chatstates
 		# please note that the only valid tag inside a message containing a <body>
 		# tag is the active event
-		if chatstate is not None:
+		if chatstate is not None and contact:
 			if ((composing_xep == 'XEP-0085' or not composing_xep) \
 			and composing_xep != 'asked_once') or \
 			contact.supports(common.xmpp.NS_CHATSTATES):
@@ -1327,7 +1330,8 @@ class Connection(ConnectionHandlers):
 
 		# XEP-0184
 		if msgtxt and gajim.config.get_per('accounts', self.name,
-		'request_receipt') and contact.supports(common.xmpp.NS_RECEIPTS):
+		'request_receipt') and contact and contact.supports(
+		common.xmpp.NS_RECEIPTS):
 			msg_iq.setTag('request', namespace=common.xmpp.NS_RECEIPTS)
 
 		if session:
@@ -1576,8 +1580,8 @@ class Connection(ConnectionHandlers):
 		to_whom_jid = jid
 		if resource:
 			to_whom_jid += '/' + resource
-		iq = common.xmpp.Iq(to=to_whom_jid, typ='get', queryNS=\
-			common.xmpp.NS_TIME_REVISED)
+		iq = common.xmpp.Iq(to=to_whom_jid, typ='get')
+		iq.addChild('time', namespace=common.xmpp.NS_TIME_REVISED)
 		id_ = self.connection.getAnID()
 		iq.setID(id_)
 		if groupchat_jid:

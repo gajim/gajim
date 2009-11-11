@@ -286,7 +286,10 @@ class HostTester(Socks5, IdleObject):
 		elif self.state == 3:
 			log.debug('Host authenticated to %s:%s' % (self.host, self.port))
 			self.on_success()
+			self.disconnect()
 			self.state += 1
+		else:
+			assert False, 'unexpected state: %d' % self.state
 
 	def do_connect(self):
 		try:
@@ -402,7 +405,10 @@ class ReceiverTester(Socks5, IdleObject):
 				return
 			log.debug('Receiver authenticated to %s:%s' % (self.host, self.port))
 			self.on_success()
+			self.disconnect()
 			self.state += 1
+		else:
+			assert False, 'unexpected state: %d' % self.state
 
 	def do_connect(self):
 		try:

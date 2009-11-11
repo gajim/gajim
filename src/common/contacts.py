@@ -73,7 +73,7 @@ class CommonContact(XMPPEntity):
 	
 	def get_shown_name(self):
 		raise NotImplementedError
-	
+
 	def supports(self, requested_feature):
 		'''
 		Returns True if the contact has advertised to support the feature
@@ -297,6 +297,9 @@ class Contacts:
 	def get_jid_list(self, account):
 		return self._accounts[account].contacts.get_jid_list()
 
+	def change_contact_jid(self, old_jid, new_jid, account):
+		return self._accounts[account].change_contact_jid(old_jid, new_jid)
+
 	def get_highest_prio_contact_from_contacts(self, contacts):
 		if not contacts:
 			return None
@@ -486,9 +489,17 @@ class Contacts_New():
 			if group in contacts[0].groups:
 				group_contacts += contacts
 		return group_contacts
-	
-	
-				
+
+	def change_contact_jid(self, old_jid, new_jid):
+		if old_jid not in self._contacts:
+			return
+		self._contacts[new_jid] = []
+		for _contact in self._contacts[old_jid]:
+			_contact.jid = new_jid
+			self._contacts[new_jid].append(_contact)
+			del self._contacts[old_jid]
+
+
 class GC_Contacts():
 	
 	def __init__(self):

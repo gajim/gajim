@@ -172,7 +172,7 @@ class AbstractClientCaps(object):
 	def _is_hash_valid(self, identities, features, dataforms):
 		''' To be implemented by subclassess '''
 		raise NotImplementedError()		
-		
+
 
 class ClientCaps(AbstractClientCaps):
 	''' The current XEP-115 implementation '''
@@ -252,7 +252,7 @@ class CapsCache(object):
 			#   another object, and we will have plenty of identical long
 			#   strings. therefore we can cache them
 			__names = {}
-						
+			
 			def __init__(self, hash_method, hash_, logger):
 				# cached into db
 				self.hash_method = hash_method

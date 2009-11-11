@@ -1213,10 +1213,22 @@ class ChatControl(ChatControlBase):
 		self._audio_button = self.xml.get_widget('audio_togglebutton')
 		id_ = self._audio_button.connect('toggled', self.on_audio_button_toggled)
 		self.handlers[id_] = self._audio_button
+		# add a special img
+		path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+			'mic_inactive.png')
+		img = gtk.Image()
+		img.set_from_file(path_to_img)
+		self._audio_button.set_image(img)
 
 		self._video_button = self.xml.get_widget('video_togglebutton')
 		id_ = self._video_button.connect('toggled', self.on_video_button_toggled)
 		self.handlers[id_] = self._video_button
+		# add a special img
+		path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+			'cam_inactive.png')
+		img = gtk.Image()
+		img.set_from_file(path_to_img)
+		self._video_button.set_image(img)
 
 		self._send_file_button = self.xml.get_widget('send_file_button')
 		# add a special img for send file button
@@ -1818,31 +1830,43 @@ class ChatControl(ChatControlBase):
 
 	def on_audio_button_toggled(self, widget):
 		if widget.get_active():
+			path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+				'mic_active.png')
 			if self.audio_state == self.JINGLE_STATE_AVAILABLE:
 				sid = gajim.connections[self.account].startVoIP(
 					self.contact.get_full_jid())
 				self.set_audio_state('connecting', sid)
 		else:
+			path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+				'mic_inactive.png')
 			session = gajim.connections[self.account].get_jingle_session(
 				self.contact.get_full_jid(), self.audio_sid)
 			if session:
 				content = session.get_content('audio')
 				if content:
 					session.remove_content(content.creator, content.name)
+		img = self._audio_button.get_property('image')
+		img.set_from_file(path_to_img)
 
 	def on_video_button_toggled(self, widget):
 		if widget.get_active():
+			path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+				'cam_active.png')
 			if self.video_state == self.JINGLE_STATE_AVAILABLE:
 				sid = gajim.connections[self.account].startVideoIP(
 					self.contact.get_full_jid())
 				self.set_video_state('connecting', sid)
 		else:
+			path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+				'cam_inactive.png')
 			session = gajim.connections[self.account].get_jingle_session(
 				self.contact.get_full_jid(), self.video_sid)
 			if session:
 				content = session.get_content('video')
 				if content:
 					session.remove_content(content.creator, content.name)
+		img = self._video_button.get_property('image')
+		img.set_from_file(path_to_img)
 
 	def _toggle_gpg(self):
 		if not self.gpg_is_active and not self.contact.keyID:

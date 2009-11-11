@@ -2860,7 +2860,7 @@ class RosterItemExchangeWindow:
 		self.window = self.xml.get_widget('roster_item_exchange_window')
 
 		# Add Widgets.
-		for widget_to_add in ['cancel_button', 'accept_button', 'type_label',
+		for widget_to_add in ['accept_button_label', 'type_label',
 		'body_scrolledwindow', 'body_textview', 'items_list_treeview']:
 			self.__dict__[widget_to_add] = self.xml.get_widget(widget_to_add)
 
@@ -2928,9 +2928,7 @@ class RosterItemExchangeWindow:
 					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
 
 			# Change label for accept_button to action name instead of 'OK'.
-			accept_button_label = self.accept_button.get_children()[0].\
-				get_children()[0].get_children()[1]
-			accept_button_label.set_label(_('Add'))
+			self.accept_button_label.set_label(_('Add'))
 		elif action == 'modify':
 			for jid in self.exchange_list:
 				groups = ''
@@ -2961,9 +2959,7 @@ class RosterItemExchangeWindow:
 					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
 
 			# Change label for accept_button to action name instead of 'OK'.
-			accept_button_label = self.accept_button.get_children()[0].\
-				get_children()[0].get_children()[1]
-			accept_button_label.set_label(_('Modify'))
+			self.accept_button_label.set_label(_('Modify'))
 		elif action == 'delete':
 			for jid in self.exchange_list:
 				groups = ''
@@ -2987,9 +2983,7 @@ class RosterItemExchangeWindow:
 					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
 
 			# Change label for accept_button to action name instead of 'OK'.
-			accept_button_label = self.accept_button.get_children()[0].\
-				get_children()[0].get_children()[1]
-			accept_button_label.set_label(_('Delete'))
+			self.accept_button_label.set_label(_('Delete'))
 
 		if show_dialog:
 			self.window.show_all()
