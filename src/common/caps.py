@@ -40,6 +40,10 @@ from common.xmpp import NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION, NS_CHATSTATES
 # Features where we cannot safely assume that the other side supports them
 FEATURE_BLACKLIST = [NS_CHATSTATES, NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION]
 
+# Query entry status codes
+NEW = 0
+QUERIED = 1
+CACHED = 2 # got the answer
 
 ################################################################################
 ### Public API of this module
@@ -58,7 +62,7 @@ def client_supports(client_caps, requested_feature):
 	supported_features = cache_item.features
 	if requested_feature in supported_features:
 		return True
-	elif supported_features == [] and cache_item.queried in (0, 1):
+	elif supported_features == [] and cache_item.status in (NEW, QUERIED):
 		# assume feature is supported, if we don't know yet, what the client
 		# is capable of
 		return requested_feature not in FEATURE_BLACKLIST
@@ -168,8 +172,8 @@ class AbstractClientCaps(object):
 	def _is_hash_valid(self, identities, features, dataforms):
 		''' To be implemented by subclassess '''
 		raise NotImplementedError()		
-	
-	
+		
+
 class ClientCaps(AbstractClientCaps):
 	''' The current XEP-115 implementation '''
 	
@@ -188,7 +192,7 @@ class ClientCaps(AbstractClientCaps):
 		computed_hash = compute_caps_hash(identities, features,
 				dataforms=dataforms, hash_method=self._hash_method)
 		return computed_hash == self._hash	
-	
+
 	
 class OldClientCaps(AbstractClientCaps):
 	''' Old XEP-115 implemtation. Kept around for background competability.  '''
@@ -204,7 +208,7 @@ class OldClientCaps(AbstractClientCaps):
 		
 	def _is_hash_valid(self, identities, features, dataforms):
 		return True	
-		
+
 		
 class NullClientCaps(AbstractClientCaps):
 	'''
@@ -220,7 +224,7 @@ class NullClientCaps(AbstractClientCaps):
 	def _lookup_in_cache(self, caps_cache):
 		# lookup something which does not exist to get a new CacheItem created
 		cache_item = caps_cache[('dummy', '')]
-		assert cache_item.queried == 0
+		assert cache_item.status != CACHED
 		return cache_item
 	
 	def _discover(self, connection, jid):
@@ -248,7 +252,7 @@ class CapsCache(object):
 			#   another object, and we will have plenty of identical long
 			#   strings. therefore we can cache them
 			__names = {}
-			
+						
 			def __init__(self, hash_method, hash_, logger):
 				# cached into db
 				self.hash_method = hash_method
@@ -257,12 +261,8 @@ class CapsCache(object):
 				self._identities = []
 				self._logger = logger
 
-				# not cached into db:
-				# have we sent the query?
-				# 0 == not queried
-				# 1 == queried
-				# 2 == got the answer
-				self.queried = 0
+				self.status = NEW
+				self._recently_seen = False
 
 			def _get_features(self):
 				return self._features
@@ -304,19 +304,28 @@ class CapsCache(object):
 				self.features = features
 				self._logger.add_caps_entry(self.hash_method, self.hash,
 					identities, features)
+				self.status = CACHED
+				
+			def update_last_seen(self):
+				if not self._recently_seen:
+					self._recently_seen = True
+					self._logger.update_caps_time(self.hash_method, self.hash)
 
 		self.__CacheItem = CacheItem
 		self.logger = logger
 
 	def initialize_from_db(self):
-		# get data from logger...
-		if self.logger is not None:
-			for hash_method, hash_, identities, features in \
-			self.logger.iter_caps_data():
-				x = self[(hash_method, hash_)]
-				x.identities = identities
-				x.features = features
-				x.queried = 2
+		self._remove_outdated_caps()
+		for hash_method, hash_, identities, features in \
+		self.logger.iter_caps_data():
+			x = self[(hash_method, hash_)]
+			x.identities = identities
+			x.features = features
+			x.status = CACHED
+	
+	def _remove_outdated_caps(self):
+		'''Removes outdated values from the db'''
+		self.logger.clean_caps_table()
 
 	def __getitem__(self, caps):
 		if caps in self.__cache:
@@ -336,13 +345,14 @@ class CapsCache(object):
 		lookup_cache_item = client_caps.get_cache_lookup_strategy()
 		q = lookup_cache_item(self)	
 		
-		if q.queried == 0:
+		if q.status == NEW:
 			# do query for bare node+hash pair
 			# this will create proper object
-			q.queried = 1
+			q.status = QUERIED
 			discover = client_caps.get_discover_strategy()
 			discover(connection, jid)
-
+		else: 
+			q.update_last_seen()
 
 ################################################################################
 ### Caps network coding
@@ -391,7 +401,7 @@ class ConnectionCaps(object):
 				client_caps = OldClientCaps(caps_hash, node)
 			else:
 				client_caps = ClientCaps(caps_hash, node, hash_method)
-		
+
 		capscache.query_client_of_jid_if_unknown(self, jid, client_caps)
 		contact.client_caps = client_caps
 
@@ -409,7 +419,7 @@ class ConnectionCaps(object):
 		lookup = contact.client_caps.get_cache_lookup_strategy()
 		cache_item = lookup(capscache)	
 					
-		if cache_item.queried == 2:
+		if cache_item.status == CACHED:
 			return
 		else:
 			validate = contact.client_caps.get_hash_validation_strategy()

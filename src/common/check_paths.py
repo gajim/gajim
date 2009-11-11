@@ -91,7 +91,8 @@ def create_log_db():
 		CREATE TABLE caps_cache (
 			hash_method TEXT,
 			hash TEXT,
-			data BLOB);
+			data BLOB,
+			last_seen INTEGER);
 
 		CREATE TABLE rooms_last_message_time(
 			jid_id INTEGER PRIMARY KEY UNIQUE,

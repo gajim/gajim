@@ -66,9 +66,9 @@ class TestCapsCache(CommonCapsTest):
 		
 	def test_initialize_from_db(self):
 		''' Read cashed dummy data from db ''' 
-		self.assertEqual(self.cc[self.client_caps].queried, 0)
+		self.assertEqual(self.cc[self.client_caps].status, caps.NEW)
 		self.cc.initialize_from_db()
-		self.assertEqual(self.cc[self.client_caps].queried, 2)
+		self.assertEqual(self.cc[self.client_caps].status, caps.CACHED)
 
 	def test_preload_triggering_query(self):
 		''' Make sure that preload issues a disco '''
