@@ -66,9 +66,9 @@ class TestCapsCache(CommonCapsTest):
 		
 	def test_initialize_from_db(self):
 		''' Read cashed dummy data from db ''' 
-		self.assertEqual(self.cc[self.client_caps].queried, 0)
+		self.assertEqual(self.cc[self.client_caps].status, caps.NEW)
 		self.cc.initialize_from_db()
-		self.assertEqual(self.cc[self.client_caps].queried, 2)
+		self.assertEqual(self.cc[self.client_caps].status, caps.CACHED)
 
 	def test_preload_triggering_query(self):
 		''' Make sure that preload issues a disco '''
@@ -113,25 +113,23 @@ class TestClientCaps(CommonCapsTest):
 				"http://gajim.org#m3P2WeXPMGVH2tZPe7yITnfY0Dw=")
 		
 	def test_client_supports(self):
-		contact = Contact(client_caps=self.client_caps)
-			
-		self.assertTrue(contact.supports(NS_PING),
+		self.assertTrue(caps.client_supports(self.client_caps, NS_PING),
 				msg="Assume supported, if we don't have caps")
 		
-		self.assertFalse(contact.supports(NS_XHTML_IM),
+		self.assertFalse(caps.client_supports(self.client_caps, NS_XHTML_IM),
 			msg="Must not assume blacklisted feature is supported on default")
 		
 		self.cc.initialize_from_db()
 		
-		self.assertFalse(contact.supports(NS_PING),
+		self.assertFalse(caps.client_supports(self.client_caps, NS_PING),
 				msg="Must return false on unsupported feature")
 		
-		self.assertTrue(contact.supports(NS_XHTML_IM),
+		self.assertTrue(caps.client_supports(self.client_caps, NS_XHTML_IM),
 				msg="Must return True on supported feature")
 		
-		self.assertTrue(contact.supports(NS_MUC),
-				msg="Must return True on supported feature")	
-	
+		self.assertTrue(caps.client_supports(self.client_caps, NS_MUC),
+				msg="Must return True on supported feature")
+			
 
 class TestOldClientCaps(TestClientCaps):	
 

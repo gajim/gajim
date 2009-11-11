@@ -2774,7 +2774,7 @@ class ChatControl(ChatControlBase):
 		contact = gajim.contacts.get_contact_with_highest_priority(
 			self.account, self.contact.jid)
 		if isinstance(contact, GC_Contact):
-			contact = gajim.contacts.contact_from_gc_contact(contact)
+			contact = contact.as_contact()
 		if contact:
 			self.contact = contact
 		self.draw_banner()

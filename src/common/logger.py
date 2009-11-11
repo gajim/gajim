@@ -838,13 +838,26 @@ class Logger:
 		gzip.close()
 		data = string.getvalue()
 		self.cur.execute('''
-			INSERT INTO caps_cache ( hash_method, hash, data )
-			VALUES (?, ?, ?);
-			''', (hash_method, hash_, buffer(data))) # (1) -- note above
+			INSERT INTO caps_cache ( hash_method, hash, data, last_seen )
+			VALUES (?, ?, ?, ?);
+			''', (hash_method, hash_, buffer(data), int(time.time())))
+		# (1) -- note above
 		try:
 			self.con.commit()
 		except sqlite.OperationalError, e:
 			print >> sys.stderr, str(e)
+
+	def update_caps_time(self, method, hash_):
+		sql = '''UPDATE caps_cache SET last_seen = %d
+			WHERE hash_method = "%s" and hash = "%s"''' % \
+			(int(time.time()), method, hash_)
+		self.simple_commit(sql)
+
+	def clean_caps_table(self):
+		'''Remove caps which was not seen for 3 months'''
+		sql = '''DELETE FROM caps_cache WHERE last_seen < %d''' % \
+			int(time.time() - 3*30*24*3600)
+		self.simple_commit(sql)
 
 	def replace_roster(self, account_name, roster_version, roster):
 		''' Replace current roster in DB by a new one.

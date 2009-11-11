@@ -29,6 +29,7 @@
 import os
 import locale
 import re
+from time import time
 from common import gajim
 from common import helpers
 from common import caps
@@ -218,6 +219,8 @@ class OptionsParser:
 			self.update_config_to_01257()
 		if old < [0, 12, 5, 8] and new >= [0, 12, 5, 8]:
 			self.update_config_to_01258()
+		if old < [0, 13, 0, 1] and new >= [0, 13, 0, 1]:
+			self.update_config_to_01301()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -816,5 +819,24 @@ class OptionsParser:
 			'proxy.jabber.cd.chalmers.se'], to_add=['proxy.eu.jabber.org',
 			'proxy.jabber.ru', 'proxy.jabbim.cz'])
 		gajim.config.set('version', '0.12.5.8')
+
+	def update_config_to_01301(self):
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				ALTER TABLE caps_cache
+				ADD last_seen INTEGER default %d;
+				''' % int(time())
+			)
+			con.commit()
+		except sqlite.OperationalError:
+			pass
+		con.close()
+		gajim.config.set('version', '0.13.0.1')
 
 # vim: se ts=3:

@@ -352,11 +352,9 @@ class Interface:
 					# Ignore offline presence of unknown self resource
 					if new_show < 2:
 						return
-					contact1 = gajim.contacts.create_contact(jid=ji,
-						name=gajim.nicks[account], groups=['self_contact'],
-						show=array[1], status=status_message, sub='both', ask='none',
-						priority=priority, keyID=keyID, resource=resource,
-						mood=conn.mood, tune=conn.tune, activity=conn.activity)
+					contact1 = gajim.contacts.create_self_contact(jid=ji,
+						account=account, show=array[1], status=status_message,
+						priority=priority, keyID=keyID, resource=resource)
 					old_show = 0
 					gajim.contacts.add_contact(account, contact1)
 					lcontact.append(contact1)
@@ -541,8 +539,8 @@ class Interface:
 						show = model[iter_][3]
 					else:
 						show = 'offline'
-					gc_c = gajim.contacts.create_gc_contact(room_jid = jid,
-						name = nick, show = show)
+					gc_c = gajim.contacts.create_gc_contact(room_jid=jid, account=account,
+						name=nick, show=show)
 					ctrl = self.new_private_chat(gc_c, account, session)
 
 				ctrl.print_conversation(_('Error %(code)s: %(msg)s') % {
@@ -620,8 +618,8 @@ class Interface:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
 			name = jid.split('@', 1)[0]
 			name = name.split('%', 1)[0]
-			contact1 = gajim.contacts.create_contact(jid=jid, name=name,
-				groups=[], show='online', status='online',
+			contact1 = gajim.contacts.create_contact(jid=jid, account=account,
+				name=name, groups=[], show='online', status='online',
 				ask='to', resource=array[1], keyID=keyID)
 			gajim.contacts.add_contact(account, contact1)
 			self.roster.add_contact(jid, account)
@@ -898,7 +896,7 @@ class Interface:
 				ctrl.print_conversation(_('%(nick)s is now known as %(new_nick)s') \
 					% {'nick': nick, 'new_nick': new_nick}, 'status')
 				gc_c = gajim.contacts.get_gc_contact(account, room_jid, new_nick)
-				c = gajim.contacts.contact_from_gc_contact(gc_c)
+				c = gc_c.as_contact()
 				ctrl.gc_contact = gc_c
 				ctrl.contact = c
 				if ctrl.session:
@@ -1221,8 +1219,8 @@ class Interface:
 			if sub == 'remove':
 				return
 			# Add new contact to roster
-			contact = gajim.contacts.create_contact(jid=jid, name=name,
-				groups=groups, show='offline', sub=sub, ask=ask)
+			contact = gajim.contacts.create_contact(jid=jid, account=account,
+				name=name, groups=groups, show='offline', sub=sub, ask=ask)
 			gajim.contacts.add_contact(account, contact)
 			self.roster.add_contact(jid, account)
 		else:
@@ -1361,9 +1359,8 @@ class Interface:
 				'attached_gpg_keys').split()
 			if jid in attached_keys:
 				keyID = attached_keys[attached_keys.index(jid) + 1]
-			contact = gajim.contacts.create_contact(jid=jid, name='',
-				groups=[_('Not in Roster')], show='not in roster', status='',
-				sub='none', keyID=keyID)
+			contact = gajim.contacts.create_not_in_roster_contact(jid=jid,
+				account=account, keyID=keyID)
 			gajim.contacts.add_contact(account, contact)
 			self.roster.add_contact(contact.jid, account)
 		file_props = array[1]
@@ -2233,7 +2230,7 @@ class Interface:
 				else:
 					show = 'offline'
 					gc_contact = gajim.contacts.create_gc_contact(
-						room_jid = room_jid, name = nick, show = show)
+						room_jid=room_jid, account=account, name=nick, show=show)
 
 				if not session:
 					session = gajim.connections[account].make_new_session(
@@ -2577,7 +2574,8 @@ class Interface:
 		account):
 			# Join new groupchat
 			if minimize:
-				contact = gajim.contacts.create_contact(jid=room_jid, name=nick)
+				#GCMIN
+				contact = gajim.contacts.create_contact(jid=room_jid, account=account, name=nick)
 				gc_control = GroupchatControl(None, contact, account)
 				gajim.interface.minimized_controls[account][room_jid] = gc_control
 				self.roster.add_groupchat(room_jid, account)
@@ -2600,7 +2598,8 @@ class Interface:
 
 	def new_room(self, room_jid, nick, account, is_continued=False):
 		# Get target window, create a control, and associate it with the window
-		contact = gajim.contacts.create_contact(jid=room_jid, name=nick)
+		# GCMIN
+		contact = gajim.contacts.create_contact(jid=room_jid, account=account, name=nick)
 		mw = self.msg_win_mgr.get_window(contact.jid, account)
 		if not mw:
 			mw = self.msg_win_mgr.create_window(contact, account,
@@ -2610,7 +2609,7 @@ class Interface:
 		mw.new_tab(gc_control)
 
 	def new_private_chat(self, gc_contact, account, session=None):
-		contact = gajim.contacts.contact_from_gc_contact(gc_contact)
+		contact = gc_contact.as_contact()
 		type_ = message_control.TYPE_PM
 		fjid = gc_contact.room_jid + '/' + gc_contact.name
 

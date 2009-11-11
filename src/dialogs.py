@@ -1888,9 +1888,7 @@ class SubscriptionRequestWindow:
 		if self.jid in gajim.interface.instances[self.account]['infos']:
 			gajim.interface.instances[self.account]['infos'][self.jid].window.present()
 		else:
-			contact = gajim.contacts.create_contact(jid=self.jid, name='',
-													groups=[], show='', status='', sub='', ask='', resource='',
-													priority=5, keyID='', our_chatstate=None, chatstate=None)
+			contact = gajim.contacts.create_contact(jid=self.jid, account=self.account)
 			gajim.interface.instances[self.account]['infos'][self.jid] = \
 				 vcard.VcardWindow(contact, self.account)
 			# Remove jabber page

@@ -1,12 +1,7 @@
 # -*- coding:utf-8 -*-
-## src/common/defs.py
+## src/common/contacts.py
 ##
-## Copyright (C) 2006 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
-##                         Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2007 Brendan Taylor <whateley AT gmail.com>
-##                    Tomasz Melcer <liori AT exroot.org>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
+## Copyright (C) 2009 Stephan Erb <steve-e AT h3c.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -23,14 +18,15 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-docdir = '../'
-datadir = '../'
-localedir = '../po'
-
-version = '0.13.0.1-dev'
-
-import sys, os.path
-for base in ('.', 'common'):
-	sys.path.append(os.path.join(base, '.libs'))
-
-# vim: se ts=3:
+class Account(object):
+	
+	def __init__(self, name, contacts, gc_contacts):
+		self.name = name
+		self.contacts = contacts
+		self.gc_contacts = gc_contacts
+		
+	def __repr__(self):
+		return self.name
+	
+	def __hash__(self):
+		return self.name.__hash__()

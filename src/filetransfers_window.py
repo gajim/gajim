@@ -284,7 +284,7 @@ _('Connection with peer cannot be established.'))
 			if contact.find('/') == -1:
 				return
 			(jid, resource) = contact.split('/', 1)
-			contact = gajim.contacts.create_contact(jid=jid, resource=resource)
+			contact = gajim.contacts.create_contact(jid=jid, account=account, resource=resource)
 		file_name = os.path.split(file_path)[1]
 		file_props = self.get_send_file_props(account, contact,
 				file_path, file_name, file_desc)
