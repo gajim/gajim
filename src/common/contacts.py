@@ -229,7 +229,7 @@ class Contacts:
 		sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
 		our_chatstate=None, chatstate=None, last_status_time=None,
 		composing_xep=None, mood={}, tune={}, activity={}):
-
+		account = self._accounts.get(account, account) # Use Account object if available
 		return Contact(jid=jid, account=account, name=name, groups=groups,
 			show=show, status=status, sub=sub, ask=ask, resource=resource, priority=priority,
 			keyID=keyID, client_caps=client_caps, our_chatstate=our_chatstate,
@@ -239,6 +239,7 @@ class Contacts:
 	def create_self_contact(self, jid, account, resource, show, status, priority, keyID=''):
 		conn = common.gajim.connections[account]
 		nick = common.gajim.nicks[account]
+		account = self._accounts.get(account, account) # Use Account object if available
 		return self.create_contact(jid=jid, account=account,
 			name=nick, groups=['self_contact'], show=show, status=status,
 			sub='both', ask='none',	priority=priority, keyID=keyID,
@@ -246,6 +247,7 @@ class Contacts:
 			activity=conn.activity)
 		
 	def create_not_in_roster_contact(self, jid, account, resource='', name='', keyID=''):
+		account = self._accounts.get(account, account) # Use Account object if available
 		return self.create_contact(jid=jid, account=account, resource=resource,
 				name=name, groups=[_('Not in Roster')], show='not in roster',
 				status='', sub='none', keyID=keyID)
@@ -372,6 +374,7 @@ class Contacts:
 	
 	def create_gc_contact(self, room_jid, account, name='', show='', status='',
 		role='', affiliation='', jid='', resource=''):
+		account = self._accounts.get(account, account) # Use Account object if available
 		return GC_Contact(room_jid, account, name, show, status, role, affiliation, jid,
 			resource)
 

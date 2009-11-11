@@ -25,4 +25,8 @@ class Account(object):
 		self.contacts = contacts
 		self.gc_contacts = gc_contacts
 		
-		
+	def __repr__(self):
+		return self.name
+	
+	def __hash__(self):
+		return self.name.__hash__()
