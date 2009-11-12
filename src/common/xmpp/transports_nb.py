@@ -653,7 +653,8 @@ class NonBlockingHTTP(NonBlockingTCP):
 
 		# append currently received data to HTTP msg in buffer
 		self.recvbuff = '%s%s' % (self.recvbuff or '', data)
-		statusline, headers, httpbody, self.recvbuff = self.parse_http_message(self.recvbuff)
+		statusline, headers, httpbody, buffer_rest = self.parse_http_message(
+			self.recvbuff)
 		
 		if not (statusline and headers and httpbody):
 			log.debug('Received incomplete HTTP response')
@@ -673,6 +674,10 @@ class NonBlockingHTTP(NonBlockingTCP):
 			log.info('not enough bytes in HTTP response - %d expected, %d got' %
 				(self.expected_length, len(self.recvbuff)))
 		else:
+			# First part of buffer has been extraced and is going to be handled,
+			# remove it from buffer
+			self.recvbuff = buffer_rest
+
 			# everything was received
 			self.expected_length = 0
 
@@ -716,6 +721,7 @@ class NonBlockingHTTP(NonBlockingTCP):
 			headers - dictionary of headers e.g. {'Content-Length': '604',
 				'Content-Type': 'text/xml; charset=utf-8'},
 			httpbody - string with http body)
+			http_rest - what is left in the message after a full HTTP header + body
 		'''
 		message = message.replace('\r','')
 		splitted = message.split('\n\n')
