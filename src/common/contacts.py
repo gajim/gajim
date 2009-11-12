@@ -581,11 +581,10 @@ class MetacontactManager():
 		#FIXME: can this append ?
 		assert False
 
-	def get_metacontacts_tags(self, account):
-		'''return a list of tags for a given account'''
-		if not account in self._metacontacts_tags:
-			return []
-		return self._metacontacts_tags[account].keys()
+	def iter_metacontacts_families(self, account):		
+		for tag in self._metacontacts_tags[account]:
+			family = self._get_metacontacts_family_from_tag(account, tag)
+			yield family
 
 	def _get_metacontacts_tag(self, account, jid):
 		'''Returns the tag of a jid'''
@@ -643,7 +642,7 @@ class MetacontactManager():
 		tag = self._get_metacontacts_tag(account, jid)
 		if not tag:
 			return False
-		meta_jids = self.get_metacontacts_jids(tag, accounts)
+		meta_jids = self._get_metacontacts_jids(tag, accounts)
 		return len(meta_jids) > 1 or len(meta_jids[account]) > 1
 
 	def is_big_brother(self, account, jid, accounts):
@@ -651,12 +650,12 @@ class MetacontactManager():
 		if family:
 			nearby_family = [data for data in family
 				if account in accounts]
-			bb_data = self.get_metacontacts_big_brother(nearby_family)
+			bb_data = self._get_metacontacts_big_brother(nearby_family)
 			if bb_data['jid'] == jid and bb_data['account'] == account:
 				return True
 		return False
 
-	def get_metacontacts_jids(self, tag, accounts):
+	def _get_metacontacts_jids(self, tag, accounts):
 		'''Returns all jid for the given tag in the form {acct: [jid1, jid2],.}'''
 		answers = {}
 		for account in self._metacontacts_tags:
@@ -673,9 +672,9 @@ class MetacontactManager():
 		[{'account': acct, 'jid': jid, 'order': order}, ]
 		'order' is optional'''
 		tag = self._get_metacontacts_tag(account, jid)
-		return self.get_metacontacts_family_from_tag(account, tag)
+		return self._get_metacontacts_family_from_tag(account, tag)
 
-	def get_metacontacts_family_from_tag(self, account, tag):
+	def _get_metacontacts_family_from_tag(self, account, tag):
 		if not tag:
 			return []
 		answers = []
@@ -765,8 +764,30 @@ class MetacontactManager():
 		if account2 > account1:
 			return -1
 		return 0
+	
+	def get_nearby_family_and_big_brother(self, family, account):
+		'''Return the nearby family and its Big Brother
 
-	def get_metacontacts_big_brother(self, family):
+		Nearby family is the part of the family that is grouped with the metacontact.
+		A metacontact may be over different accounts. If accounts are not merged
+		then the given family is split account wise.
+
+		(nearby_family, big_brother_jid, big_brother_account)
+		'''
+		if common.gajim.config.get('mergeaccounts'):
+			# group all together
+			nearby_family = family
+		else:
+			# we want one nearby_family per account
+			nearby_family = [data for data in family if account == data['account']]
+
+		big_brother_data = self._get_metacontacts_big_brother(nearby_family)
+		big_brother_jid = big_brother_data['jid']
+		big_brother_account = big_brother_data['account']
+
+		return (nearby_family, big_brother_jid, big_brother_account)
+
+	def _get_metacontacts_big_brother(self, family):
 		'''which of the family will be the big brother under wich all
 		others will be ?'''
 		family.sort(cmp=self._compare_metacontacts)
