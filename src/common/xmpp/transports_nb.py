@@ -645,44 +645,39 @@ class NonBlockingHTTP(NonBlockingTCP):
 		if self.get_state() == PROXY_CONNECTING:
 			NonBlockingTCP._on_receive(self, data)
 			return
-		if not self.recvbuff:
-			# recvbuff empty - fresh HTTP message was received
-			try:
-				statusline, headers, self.recvbuff = self.parse_http_message(data)
-			except ValueError:
-				self.disconnect()
-				return
-			if statusline[1] != '200':
-				log.error('HTTP Error: %s %s' % (statusline[1], statusline[2]))
-				self.disconnect()
-				return
-			self.expected_length = int(headers['Content-Length'])
-			if 'Connection' in headers and headers['Connection'].strip()=='close':
-				self.close_current_connection = True
-		else:
-			#sth in recvbuff - append currently received data to HTTP msg in buffer
-			self.recvbuff = '%s%s' % (self.recvbuff, data)
 
-		if self.expected_length > len(self.recvbuff):
+		# append currently received data to HTTP msg in buffer
+		self.recvbuff = '%s%s' % (self.recvbuff or '', data)
+		statusline, headers, httpbody, self.recvbuff = self.parse_http_message(self.recvbuff)
+		
+		if not (statusline and headers and httpbody):
+			log.debug('Received incomplete HTTP response')
+			return
+
+		if statusline[1] != '200':
+			log.error('HTTP Error: %s %s' % (statusline[1], statusline[2]))
+			self.disconnect()
+			return
+		self.expected_length = int(headers['Content-Length'])
+		if 'Connection' in headers and headers['Connection'].strip()=='close':
+			self.close_current_connection = True
+			
+		if self.expected_length > len(httpbody):
 			# If we haven't received the whole HTTP mess yet, let's end the thread.
 			# It will be finnished from one of following recvs on plugged socket.
 			log.info('not enough bytes in HTTP response - %d expected, %d got' %
 				(self.expected_length, len(self.recvbuff)))
-			return
+		else:
+			# everything was received
+			self.expected_length = 0
 
-		# everything was received
-		httpbody = self.recvbuff
-
-		self.recvbuff = ''
-		self.expected_length = 0
-
-		if not self.http_persistent or self.close_current_connection:
-			# not-persistent connections disconnect after response
-			self.disconnect(do_callback=False)
-		self.close_current_connection = False
-		self.last_recv_time = time.time()
-		self.on_receive(data=httpbody, socket=self)
-		self.on_http_request_possible()
+			if not self.http_persistent or self.close_current_connection:
+				# not-persistent connections disconnect after response
+				self.disconnect(do_callback=False)
+			self.close_current_connection = False
+			self.last_recv_time = time.time()
+			self.on_receive(data=httpbody, socket=self)
+			self.on_http_request_possible()
 
 	def build_http_message(self, httpbody, method='POST'):
 		'''
@@ -718,18 +713,24 @@ class NonBlockingHTTP(NonBlockingTCP):
 			httpbody - string with http body)
 		'''
 		message = message.replace('\r','')
-		# Remove latest \n
-		if message.endswith('\n'):
-			message = message[:-1]
-		(header, httpbody) = message.split('\n\n', 1)
-		header = header.split('\n')
-		statusline = header[0].split(' ', 2)
-		header = header[1:]
-		headers = {}
-		for dummy in header:
-			row = dummy.split(' ', 1)
-			headers[row[0][:-1]] = row[1]
-		return (statusline, headers, httpbody)
+		splitted = message.split('\n\n')
+		if len(splitted) < 2:
+			# no complete http message. Keep filling the buffer until we find one
+			buffer_rest = message
+			return ('', '', '', buffer_rest)
+		else:
+			(header, httpbody)  = splitted[:2]
+			if httpbody.endswith('\n'):
+				httpbody = httpbody[:-1]
+			buffer_rest = "\n\n".join(splitted[2:])
+			header = header.split('\n')
+			statusline = header[0].split(' ', 2)
+			header = header[1:]
+			headers = {}
+			for dummy in header:
+				row = dummy.split(' ', 1)
+				headers[row[0][:-1]] = row[1]
+			return (statusline, headers, httpbody, buffer_rest)
 
 
 class NonBlockingHTTPBOSH(NonBlockingHTTP):
