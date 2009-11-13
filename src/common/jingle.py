@@ -47,6 +47,8 @@
 
 # * handle different kinds of sink and src elements
 
+import gobject
+
 import gajim
 import xmpp
 import helpers
@@ -831,6 +833,7 @@ class JingleRTPContent(JingleContent):
 	def __init__(self, session, media, node=None):
 		JingleContent.__init__(self, session, node)
 		self.media = media
+		self._dtmf_running = False
 		self.farsight_media = {'audio': farsight.MEDIA_TYPE_AUDIO,
 								'video': farsight.MEDIA_TYPE_VIDEO}[media]
 		self.got_codecs = False
@@ -872,6 +875,33 @@ class JingleRTPContent(JingleContent):
 
 		self.p2pstream = self.p2psession.new_stream(participant,
 			farsight.DIRECTION_RECV, 'nice', params)
+
+	def batch_dtmf(self, events):
+		if self._dtmf_running:
+			raise Exception #TODO: Proper exception
+		self._dtmf_running = True
+		self._start_dtmf(events.pop(0))
+		gobject.timeout_add(500, self._next_dtmf, events)
+
+	def _next_dtmf(self, events):
+		self._stop_dtmf()
+		if events:
+			self._start_dtmf(events.pop(0))
+			gobject.timeout_add(500, self._next_dtmf, events)
+		else:
+			self._dtmf_running = False
+
+	def _start_dtmf(self, event):
+		if event in ('*', '#'):
+			event = {'*': farsight.DTMF_EVENT_STAR,
+				'#': farsight.DTMF_EVENT_POUND}[event]
+		else:
+			event = int(event)
+		self.p2psession.start_telephony_event(event, 2,
+			farsight.DTMF_METHOD_RTP_RFC4733)
+
+	def _stop_dtmf(self):
+		self.p2psession.stop_telephony_event(farsight.DTMF_METHOD_RTP_RFC4733)
 
 	def _fillContent(self, content):
 		content.addChild(xmpp.NS_JINGLE_RTP + ' description',
