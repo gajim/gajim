@@ -494,7 +494,7 @@ class P2PConnection(IdleObject, PlugIn):
 			self.disconnect()
 		return True
 
-	def disconnect(self):
+	def disconnect(self, message=''):
 		''' Closes the socket. '''
 		gajim.idlequeue.remove_timeout(self.fd)
 		gajim.idlequeue.unplug_idle(self.fd)

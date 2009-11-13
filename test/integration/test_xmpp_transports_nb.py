@@ -262,9 +262,10 @@ class TestNonBlockingHTTP(AbstractTransportTest):
 			% payload
 		message = "%s%s" % (header, body)
 
-		chunk1, chunk2, chunk3  = message[:20], message[20:73], message[73:]
+		chunk1, chunk2, chunk3, chunk4  = message[:20], message[20:73], \
+			message[73:85], message[85:]
 		nextmessage_chunk = "\r\n\r\nHTTP/1.1 200 OK\r\nContent-Type: text/x"
-		chunks = (chunk1, chunk2, chunk3, nextmessage_chunk)
+		chunks = (chunk1, chunk2, chunk3, chunk4, nextmessage_chunk)
 
 		transport.onreceive(self.expect_receive(body, msg='Failed: In chunks'))
 		for chunk in chunks:
