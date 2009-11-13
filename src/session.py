@@ -382,7 +382,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 		family = gajim.contacts.get_metacontacts_family(self.conn.name, jid)
 		if family:
 			nearby_family, bb_jid, bb_account = \
-				gajim.interface.roster._get_nearby_family_and_big_brother(family,
+				gajim.contacts.get_nearby_family_and_big_brother(family,
 				self.conn.name)
 		else:
 			bb_jid, bb_account = jid, self.conn.name

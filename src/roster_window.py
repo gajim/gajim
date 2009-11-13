@@ -604,29 +604,7 @@ class RosterWindow:
 					big_brother_account=big_brother_account)
 
 	def _get_nearby_family_and_big_brother(self, family, account):
-		'''Return the nearby family and its Big Brother
-
-		Nearby family is the part of the family that is grouped with the metacontact.
-		A metacontact may be over different accounts. If regroup is s False the
-		given family is split account wise.
-
-		(nearby_family, big_brother_jid, big_brother_account)
-		'''
-		if self.regroup:
-			# group all together
-			nearby_family = family
-		else:
-			# we want one nearby_family per account
-			nearby_family = [data for data in family
-				if account == data['account']]
-
-		big_brother_data = gajim.contacts.get_metacontacts_big_brother(
-			nearby_family)
-		big_brother_jid = big_brother_data['jid']
-		big_brother_account = big_brother_data['account']
-
-		return (nearby_family, big_brother_jid, big_brother_account)
-
+		return gajim.contacts.get_nearby_family_and_big_brother(family, account)
 
 	def _add_self_contact(self, account):
 		'''Add account's SelfContact to roster and draw it and the account.
@@ -649,10 +627,8 @@ class RosterWindow:
 
 		return contact
 
-
 	def redraw_metacontacts(self, account):
-		for tag in gajim.contacts.get_metacontacts_tags(account):
-			family = gajim.contacts.get_metacontacts_family_from_tag(account, tag)
+		for family in gajim.contacts.iter_metacontacts_families(account):
 			self._recalibrate_metacontact_family(family, account)
 
 	def add_contact(self, jid, account):

@@ -2145,7 +2145,7 @@ class Interface:
 		family = gajim.contacts.get_metacontacts_family(account, jid)
 		if family:
 			nearby_family, bb_jid, bb_account = \
-				self.roster._get_nearby_family_and_big_brother(family, account)
+				gajim.contacts.get_nearby_family_and_big_brother(family, account)
 		else:
 			bb_jid, bb_account = jid, account
 		self.roster.select_contact(bb_jid, bb_account)

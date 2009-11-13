@@ -227,9 +227,10 @@ class TestNonBlockingHTTP(AbstractTransportTest):
 
 		data = "<test>Please don't fail!</test>"
 		http_message = transport.build_http_message(data)
-		statusline, headers, http_body = transport.parse_http_message(
+		statusline, headers, http_body, buffer_rest = transport.parse_http_message(
 			http_message)
 
+		self.assertFalse(bool(buffer_rest))
 		self.assertTrue(statusline and isinstance(statusline, list))
 		self.assertTrue(headers and isinstance(headers, dict))
 		self.assertEqual(data, http_body, msg='Input and output are different')
@@ -250,26 +251,26 @@ class TestNonBlockingHTTP(AbstractTransportTest):
 		transport._on_receive(message)
 		self.assertTrue(self.have_received_expected(), msg='Failed: In one go')
 
-# FIXME: Not yet implemented.
-#	def test_receive_http_message_in_chunks(self):
-#		''' Let _on_receive handle some chunked http messages  '''
-#		transport = self._get_transport(self.bosh_http_dict)
-#		
-#		header = ("HTTP/1.1 200 OK\r\nContent-Type: text/xml; charset=utf-8\r\n" +
-#			"Content-Length: 88\r\n\r\n")
-#		payload = "<test>Please don't fail!</test>"
-#		body = "<body xmlns='http://jabber.org/protocol/httpbind'>%s</body>" \
-#			% payload
-#		message = "%s%s" % (header, body)
-#
-#		chunk1, chunk2, chunk3  = message[:20], message[20:73], message[73:]
-#		nextmessage_chunk = "\r\n\r\nHTTP/1.1 200 OK\r\nContent-Type: text/x"
-#		chunks = (chunk1, chunk2, chunk3, nextmessage_chunk)
-#
-#		transport.onreceive(self.expect_receive(body, msg='Failed: In chunks'))
-#		for chunk in chunks:
-#			transport._on_receive(chunk)
-#		self.assertTrue(self.have_received_expected(), msg='Failed: In chunks')
+	def test_receive_http_message_in_chunks(self):
+		''' Let _on_receive handle some chunked http messages  '''
+		transport = self._get_transport(self.bosh_http_dict)
+		
+		header = ("HTTP/1.1 200 OK\r\nContent-Type: text/xml; charset=utf-8\r\n" +
+			"Content-Length: 88\r\n\r\n")
+		payload = "<test>Please don't fail!</test>"
+		body = "<body xmlns='http://jabber.org/protocol/httpbind'>%s</body>" \
+			% payload
+		message = "%s%s" % (header, body)
+
+		chunk1, chunk2, chunk3, chunk4  = message[:20], message[20:73], \
+			message[73:85], message[85:]
+		nextmessage_chunk = "\r\n\r\nHTTP/1.1 200 OK\r\nContent-Type: text/x"
+		chunks = (chunk1, chunk2, chunk3, chunk4, nextmessage_chunk)
+
+		transport.onreceive(self.expect_receive(body, msg='Failed: In chunks'))
+		for chunk in chunks:
+			transport._on_receive(chunk)
+		self.assertTrue(self.have_received_expected(), msg='Failed: In chunks')
 
 if __name__ == '__main__':
 	unittest.main()
