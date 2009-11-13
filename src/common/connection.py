@@ -39,6 +39,7 @@ import operator
 
 import time
 import locale
+import hmac
 
 try:
 	randomsource = random.SystemRandom()
@@ -157,12 +158,15 @@ class Connection(ConnectionHandlers):
 		else:
 			self.pingalives = 0
 		self.privacy_rules_supported = False
+		# Used to ask privacy only once at connection
+		self.privacy_rules_requested = False
 		self.blocked_list = []
 		self.blocked_contacts = []
 		self.blocked_groups = []
 		self.blocked_all = False
 		self.music_track_info = 0
 		self.pubsub_supported = False
+		self.pubsub_publish_options_supported = False
 		self.pep_supported = False
 		self.mood = {}
 		self.tune = {}
@@ -184,19 +188,15 @@ class Connection(ConnectionHandlers):
 		self.muc_jid = {} # jid of muc server for each transport type
 		self.available_transports = {} # list of available transports on this
 		# server {'icq': ['icq.server.com', 'icq2.server.com'], }
-		self.vcard_supported = True
+		self.vcard_supported = False
 		self.private_storage_supported = True
 		self.streamError = ''
+		self.secret_hmac = str(random.random())[2:]
 	# END __init__
-
-	def put_event(self, ev):
-		if ev[0] in gajim.handlers:
-			log.debug('Sending %s event to GUI: %s' % (ev[0], ev[1:]))
-			gajim.handlers[ev[0]](self.name, ev[1])
 
 	def dispatch(self, event, data):
 		'''always passes account name as first param'''
-		self.put_event((event, data))
+		gajim.interface.dispatch(event, self.name, data)
 
 
 	def _reconnect(self):
@@ -207,7 +207,7 @@ class Connection(ConnectionHandlers):
 			self.connected = 1
 			self.dispatch('STATUS', 'connecting')
 			self.retrycount += 1
-			self.on_connect_auth = self._init_roster
+			self.on_connect_auth = self._discover_server_at_connection
 			self.connect_and_init(self.old_show, self.status, self.USE_GPG)
 		else:
 			# reconnect succeeded
@@ -216,7 +216,7 @@ class Connection(ConnectionHandlers):
 
 	# We are doing disconnect at so many places, better use one function in all
 	def disconnect(self, on_purpose=False):
-		gajim.interface.roster.music_track_changed(None, None, self.name)
+		gajim.interface.music_track_changed(None, None, self.name)
 		self.on_purpose = on_purpose
 		self.connected = 0
 		self.time_to_reconnect = None
@@ -622,7 +622,7 @@ class Connection(ConnectionHandlers):
 		if self._proxy:
 			msg = '>>>>>> '
 			if self._proxy['type']=='bosh':
-				msg = '%s over BOSH %s:%s' % (msg, self._proxy['bosh_uri'], self._proxy['bosh_port'])
+				msg = '%s over BOSH %s' % (msg, self._proxy['bosh_uri'])
 			if self._proxy['type'] in ['http','socks5'] or self._proxy['bosh_useproxy']:
 				msg = '%s over proxy %s:%s' % (msg, self._proxy['host'], self._proxy['port'])
 			log.info(msg)
@@ -669,8 +669,8 @@ class Connection(ConnectionHandlers):
 		'warn_when_plaintext_connection'):
 			self.dispatch('PLAIN_CONNECTION', (con,))
 			return True
-		if _con_type in ('tls', 'ssl') and not hasattr(con.Connection,
-		'_sslContext') and gajim.config.get_per('accounts', self.name,
+		if _con_type in ('tls', 'ssl') and con.Connection.ssl_lib != 'PYOPENSSL' \
+		and gajim.config.get_per('accounts', self.name,
 		'warn_when_insecure_ssl_connection') and \
 		not self.connection_auto_accepted:
 			# Pyopenssl is not used
@@ -697,7 +697,10 @@ class Connection(ConnectionHandlers):
 			self._current_host['host'], self._current_host['port'], con_type))
 
 		self.last_connection_type = con_type
-		name = gajim.config.get_per('accounts', self.name, 'name')
+		if gajim.config.get_per('accounts', self.name, 'anonymous_auth'):
+			name = None
+		else:
+			name = gajim.config.get_per('accounts', self.name, 'name')
 		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		self.connection = con
 		try:
@@ -772,6 +775,12 @@ class Connection(ConnectionHandlers):
 				return
 		if hasattr(con, 'Resource'):
 			self.server_resource = con.Resource
+		if gajim.config.get_per('accounts', self.name, 'anonymous_auth'):
+			# Get jid given by server
+			old_jid = gajim.get_jid_from_account(self.name)
+			gajim.config.set_per('accounts', self.name, 'name', con.User)
+			new_jid = gajim.get_jid_from_account(self.name)
+			self.dispatch('NEW_JID', (old_jid, new_jid))
 		if auth:
 			self.last_io = gajim.idlequeue.current_time()
 			self.connected = 2
@@ -1022,10 +1031,10 @@ class Connection(ConnectionHandlers):
 
 	def connect_and_init(self, show, msg, sign_msg):
 		self.continue_connect_info = [show, msg, sign_msg]
-		self.on_connect_auth = self._init_roster
+		self.on_connect_auth = self._discover_server_at_connection
 		self.connect_and_auth()
 
-	def _init_roster(self, con):
+	def _discover_server_at_connection(self, con):
 		self.connection = con
 		if not self.connection:
 			return
@@ -1035,7 +1044,11 @@ class Connection(ConnectionHandlers):
 
 		self.request_message_archiving_preferences()
 
-		# Request privacy list
+		self.discoverInfo(gajim.config.get_per('accounts', self.name, 'hostname'),
+			id_prefix='Gajim_')
+		self.privacy_rules_requested = False
+
+	def _request_privacy(self):
 		iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')
 		id_ = self.connection.getAnID()
 		iq.setID(id_)
@@ -1189,7 +1202,7 @@ class Connection(ConnectionHandlers):
 		msgenc = ''
 
 		if session:
-			fjid = str(session.jid)
+			fjid = session.get_to()
 
 		if keyID and self.USE_GPG:
 			xhtml = None
@@ -1291,15 +1304,10 @@ class Connection(ConnectionHandlers):
 		# chatstates - if peer supports xep85 or xep22, send chatstates
 		# please note that the only valid tag inside a message containing a <body>
 		# tag is the active event
-		if chatstate is not None:
-			# XXX: Once we have fallback to disco,
-			#      remove notexistant check
+		if chatstate is not None and contact:
 			if ((composing_xep == 'XEP-0085' or not composing_xep) \
 			and composing_xep != 'asked_once') or \
-			(gajim.capscache.is_supported(contact,
-			common.xmpp.NS_CHATSTATES) and \
-			not gajim.capscache.is_supported(contact,
-			'notexistant')):
+			contact.supports(common.xmpp.NS_CHATSTATES):
 				# XEP-0085
 				msg_iq.setTag(chatstate, namespace=common.xmpp.NS_CHATSTATES)
 			if composing_xep in ('XEP-0022', 'asked_once') or \
@@ -1325,7 +1333,7 @@ class Connection(ConnectionHandlers):
 
 		# XEP-0184
 		if msgtxt and gajim.config.get_per('accounts', self.name,
-		'request_receipt') and gajim.capscache.is_supported(contact,
+		'request_receipt') and contact and contact.supports(
 		common.xmpp.NS_RECEIPTS):
 			msg_iq.setTag('request', namespace=common.xmpp.NS_RECEIPTS)
 
@@ -1477,6 +1485,11 @@ class Connection(ConnectionHandlers):
 			self.connection.getRoster().setItem(jid = jid, name = name,
 				groups = groups)
 
+	def update_contacts(self, contacts):
+		'''update multiple roster items on jabber server'''
+		if self.connection:
+			self.connection.getRoster().setItemMulti(contacts)
+
 	def send_new_account_infos(self, form, is_form):
 		if is_form:
 			# Get username and password and put them in new_account_info
@@ -1570,8 +1583,8 @@ class Connection(ConnectionHandlers):
 		to_whom_jid = jid
 		if resource:
 			to_whom_jid += '/' + resource
-		iq = common.xmpp.Iq(to=to_whom_jid, typ='get', queryNS=\
-			common.xmpp.NS_TIME_REVISED)
+		iq = common.xmpp.Iq(to=to_whom_jid, typ='get')
+		iq.addChild('time', namespace=common.xmpp.NS_TIME_REVISED)
 		id_ = self.connection.getAnID()
 		iq.setID(id_)
 		if groupchat_jid:
@@ -1588,9 +1601,7 @@ class Connection(ConnectionHandlers):
 		iq2.addChild(name='gajim', namespace='gajim:prefs')
 		self.connection.send(iq)
 
-	def get_bookmarks(self):
-		'''Get Bookmarks from storage as described in XEP 0048'''
-		self.bookmarks = [] #avoid multiple bookmarks when re-connecting
+	def _request_bookmarks_xml(self):
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
@@ -1598,29 +1609,67 @@ class Connection(ConnectionHandlers):
 		iq2.addChild(name='storage', namespace='storage:bookmarks')
 		self.connection.send(iq)
 
-	def store_bookmarks(self):
-		''' Send bookmarks to the storage namespace '''
+	def _check_bookmarks_received(self):
+		if not self.bookmarks:
+			self._request_bookmarks_xml()
+
+	def get_bookmarks(self, storage_type=None):
+		'''Get Bookmarks from storage or PubSub if supported as described in
+		XEP 0048
+		storage_type can be set to xml to force request to xml storage'''
 		if not self.connection:
 			return
-		iq = common.xmpp.Iq(typ='set')
-		iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
-		iq3 = iq2.addChild(name='storage', namespace='storage:bookmarks')
+		if self.pubsub_supported and storage_type != 'xml':
+			self.send_pb_retrieve('', 'storage:bookmarks')
+			# some server (ejabberd) are so slow to answer that we request via XML
+			# if we don't get answer in the next 30 seconds
+			gajim.idlequeue.set_alarm(self._check_bookmarks_received, 30)
+		else:
+			self._request_bookmarks_xml()
+
+	def store_bookmarks(self, storage_type=None):
+		''' Send bookmarks to the storage namespace or PubSub if supported
+		storage_type can be set to 'pubsub' or 'xml' so store in only one method
+		else it will be stored on both'''
+		if not self.connection:
+			return
+		iq = common.xmpp.Node(tag='storage', attrs={'xmlns': 'storage:bookmarks'})
 		for bm in self.bookmarks:
-			iq4 = iq3.addChild(name = "conference")
-			iq4.setAttr('jid', bm['jid'])
-			iq4.setAttr('autojoin', bm['autojoin'])
-			iq4.setAttr('minimize', bm['minimize'])
-			iq4.setAttr('name', bm['name'])
+			iq2 = iq.addChild(name = "conference")
+			iq2.setAttr('jid', bm['jid'])
+			iq2.setAttr('autojoin', bm['autojoin'])
+			iq2.setAttr('minimize', bm['minimize'])
+			iq2.setAttr('name', bm['name'])
 			# Only add optional elements if not empty
 			# Note: need to handle both None and '' as empty
 			#   thus shouldn't use "is not None"
 			if bm.get('nick', None):
-				iq4.setTagData('nick', bm['nick'])
+				iq2.setTagData('nick', bm['nick'])
 			if bm.get('password', None):
-				iq4.setTagData('password', bm['password'])
+				iq2.setTagData('password', bm['password'])
 			if bm.get('print_status', None):
-				iq4.setTagData('print_status', bm['print_status'])
-		self.connection.send(iq)
+				iq2.setTagData('print_status', bm['print_status'])
+
+		if self.pubsub_supported and storage_type != 'xml':
+			if self.pubsub_publish_options_supported:
+				options = common.xmpp.Node(common.xmpp.NS_DATA + ' x',
+					attrs={'type': 'submit'})
+				f = options.addChild('field', attrs={'var': 'FORM_TYPE',
+					'type': 'hidden'})
+				f.setTagData('value', common.xmpp.NS_PUBSUB_PUBLISH_OPTIONS)
+				f = options.addChild('field', attrs={'var': 'pubsub#persist_items'})
+				f.setTagData('value', 'true')
+				f = options.addChild('field', attrs={'var': 'pubsub#access_model'})
+				f.setTagData('value', 'whitelist')
+			else:
+				options = None
+			self.send_pb_publish('', 'storage:bookmarks', iq, 'current',
+				options=options)
+		if storage_type != 'pubsub':
+			iqA = common.xmpp.Iq(typ='set')
+			iqB = iqA.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
+			iqB.addChild(node=iq)
+			self.connection.send(iqA)
 
 	def get_annotations(self):
 		'''Get Annonations from storage as described in XEP 0048, and XEP 0145'''
@@ -1705,16 +1754,6 @@ class Connection(ConnectionHandlers):
 		if show == 'invisible':
 			# Never join a room when invisible
 			return
-		p = common.xmpp.Presence(to = '%s/%s' % (room_jid, nick),
-			show = show, status = self.status)
-		if gajim.config.get('send_sha_in_gc_presence'):
-			p = self.add_sha(p)
-		self.add_lang(p)
-		if not change_nick:
-			t = p.setTag(common.xmpp.NS_MUC + ' x')
-		if password:
-			t.setTagData('password', password)
-		self.connection.send(p)
 
 		# last date/time in history to avoid duplicate
 		if room_jid not in self.last_history_time:
@@ -1727,12 +1766,37 @@ class Connection(ConnectionHandlers):
 				if last_log is None:
 					# Not in special table, get it from messages DB
 					last_log = gajim.logger.get_last_date_that_has_logs(room_jid,
-						is_room = True)
+						is_room=True)
 			# Create self.last_history_time[room_jid] even if not logging,
 			# could be used in connection_handlers
 			if last_log is None:
 				last_log = 0
-			self.last_history_time[room_jid]= last_log
+			self.last_history_time[room_jid] = last_log
+
+		p = common.xmpp.Presence(to='%s/%s' % (room_jid, nick),
+			show=show, status=self.status)
+		h = hmac.new(self.secret_hmac, room_jid).hexdigest()[:6]
+		id_ = self.connection.getAnID()
+		id_ = 'gajim_muc_' + id_ + '_' + h
+		p.setID(id_)
+		if gajim.config.get('send_sha_in_gc_presence'):
+			p = self.add_sha(p)
+		self.add_lang(p)
+		if not change_nick:
+			t = p.setTag(common.xmpp.NS_MUC + ' x')
+			last_date = self.last_history_time[room_jid]
+			if last_date == 0:
+				last_date = time.time() - gajim.config.get(
+					'muc_restore_timeout') * 60
+			else:
+				last_time = min(last_date, time.time() - gajim.config.get(
+					'muc_restore_timeout') * 60)
+			last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(last_date))
+			t.setTag('history', {'maxstanzas': gajim.config.get(
+				'muc_restore_lines'), 'since': last_date})
+			if password:
+				t.setTagData('password', password)
+		self.connection.send(p)
 
 	def send_gc_message(self, jid, msg, xhtml = None):
 		if not self.connection:
@@ -1781,6 +1845,10 @@ class Connection(ConnectionHandlers):
 		xmpp_show = helpers.get_xmpp_show(show)
 		p = common.xmpp.Presence(to = '%s/%s' % (jid, nick), typ = ptype,
 			show = xmpp_show, status = status)
+		h = hmac.new(self.secret_hmac, jid).hexdigest()[:6]
+		id_ = self.connection.getAnID()
+		id_ = 'gajim_muc_' + id_ + '_' + h
+		p.setID(id_)
 		if gajim.config.get('send_sha_in_gc_presence') and show != 'offline':
 			p = self.add_sha(p, ptype != 'unavailable')
 		self.add_lang(p)
@@ -1846,6 +1914,8 @@ class Connection(ConnectionHandlers):
 		self.connection.send(iq)
 
 	def send_gc_config(self, room_jid, form):
+		if not self.connection:
+			return
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
 			common.xmpp.NS_MUC_OWNER)
 		query = iq.getTag('query')
@@ -1906,8 +1976,15 @@ class Connection(ConnectionHandlers):
 				hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 				iq = common.xmpp.Iq(typ = 'set', to = hostname)
 				iq.setTag(common.xmpp.NS_REGISTER + ' query').setTag('remove')
-				con.send(iq)
-				on_remove_success(True)
+				def _on_answer(result):
+					if result.getType() == 'result':
+						on_remove_success(True)
+						return
+					self.dispatch('ERROR', (_('Unregister failed'),
+						_('Unregistration with server %(server)s failed: %(error)s') \
+						% {'server': hostname, 'error': result.getErrorMsg()}))
+					on_remove_success(False)
+				con.SendAndCallForResponse(iq, _on_answer)
 				return
 			on_remove_success(False)
 		if self.connected == 0:

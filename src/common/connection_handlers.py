@@ -34,6 +34,7 @@ import socket
 import sys
 import operator
 import hashlib
+import hmac
 
 from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
 	time as time_time, timezone, tzname)
@@ -52,6 +53,15 @@ from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.caps import ConnectionCaps
 from common.message_archiving import ConnectionArchive
+
+if gajim.HAVE_FARSIGHT:
+	from common.jingle import ConnectionJingle
+else:
+	class ConnectionJingle():
+		def __init__(self):
+			pass
+		def _JingleCB(self, con, stanza):
+			pass
 
 from common import dbus_support
 if dbus_support.supported:
@@ -228,12 +238,18 @@ class ConnectionBytestream:
 			ostreamhost.setAttr('host', ft_host)
 			ostreamhost.setAttr('jid', sender)
 		try:
-			thehost = self.peerhost[0]
-			streamhost = common.xmpp.Node(tag = 'streamhost') # My IP
-			query.addChild(node = streamhost)
-			streamhost.setAttr('port', unicode(port))
-			streamhost.setAttr('host', thehost)
-			streamhost.setAttr('jid', sender)
+			# The ip we're connected to server with
+			my_ips = [self.peerhost[0]]
+			# all IPs from local DNS
+			for addr in socket.getaddrinfo(socket.gethostname(), None):
+				if not addr[4][0] in my_ips and not addr[4][0].startswith('127'):
+					my_ips.append(addr[4][0])
+			for ip in my_ips:
+				streamhost = common.xmpp.Node(tag = 'streamhost')
+				query.addChild(node = streamhost)
+				streamhost.setAttr('port', unicode(port))
+				streamhost.setAttr('host', ip)
+				streamhost.setAttr('jid', sender)
 		except socket.gaierror:
 			self.dispatch('ERROR', (_('Wrong host'),
 				_('Invalid local address? :-O')))
@@ -346,7 +362,7 @@ class ConnectionBytestream:
 		file_props['hash'] = hash_id
 		return
 
-	def _connect_error(self, to, _id, sid, code = 404):
+	def _connect_error(self, to, _id, sid, code=404):
 		''' cb, when there is an error establishing BS connection, or
 		when connection is rejected'''
 		if not self.connection or self.connected < 2:
@@ -827,6 +843,11 @@ class ConnectionDisco:
 	def _DiscoverInfoErrorCB(self, con, iq_obj):
 		log.debug('DiscoverInfoErrorCB')
 		jid = helpers.get_full_jid_from_iq(iq_obj)
+		id_ = iq_obj.getID()
+		if id_[:6] == 'Gajim_':
+			if not self.privacy_rules_requested:
+				self.privacy_rules_requested = True
+				self._request_privacy()
 		self.dispatch('AGENT_ERROR_INFO', (jid))
 
 	def _DiscoverInfoCB(self, con, iq_obj):
@@ -861,7 +882,9 @@ class ConnectionDisco:
 					is_muc = True
 				identities.append(attr)
 			elif i.getName() == 'feature':
-				features.append(i.getAttr('var'))
+				var = i.getAttr('var')
+				if var:
+					features.append(var)
 			elif i.getName() == 'x' and i.getNamespace() == common.xmpp.NS_DATA:
 				data.append(common.xmpp.DataForm(node=i))
 		jid = helpers.get_full_jid_from_iq(iq_obj)
@@ -884,16 +907,13 @@ class ConnectionDisco:
 					if identity['category'] == 'pubsub' and identity.get('type') == \
 					'pep':
 						self.pep_supported = True
-						if dbus_support.supported:
-							listener = MusicTrackListener.get()
-							track = listener.get_playing_track()
-							if gajim.config.get_per('accounts', self.name,
-							'publish_tune'):
-								gajim.interface.roster.music_track_changed(listener,
-										track, self.name)
 						break
+			if features.__contains__(common.xmpp.NS_VCARD):
+				self.vcard_supported = True
 			if features.__contains__(common.xmpp.NS_PUBSUB):
 				self.pubsub_supported = True
+				if features.__contains__(common.xmpp.NS_PUBSUB_PUBLISH_OPTIONS):
+					self.pubsub_publish_options_supported = True
 			if features.__contains__(common.xmpp.NS_ARCHIVE_AUTO):
 				self.archive_auto_supported = True
 			if features.__contains__(common.xmpp.NS_ARCHIVE_MANAGE):
@@ -915,6 +935,9 @@ class ConnectionDisco:
 					self.available_transports[transport_type].append(jid)
 				else:
 					self.available_transports[transport_type] = [jid]
+			if not self.privacy_rules_requested:
+				self.privacy_rules_requested = True
+				self._request_privacy()
 
 		self.dispatch('AGENT_INFO_INFO', (jid, node, identities,
 			features, data))
@@ -1134,10 +1157,6 @@ class ConnectionVcard:
 				# We do as if it comes from the fake_jid
 				frm = groupchat_jid
 			our_jid = gajim.get_jid_from_account(self.name)
-			if iq_obj.getType() == 'error' and jid == our_jid:
-				# our server doesn't support vcard
-				log.debug('xxx error xxx')
-				self.vcard_supported = False
 			if not iq_obj.getTag('vCard') or iq_obj.getType() == 'error':
 				if frm and frm != our_jid:
 					# Write an empty file
@@ -1401,12 +1420,11 @@ sent a message to.'''
 
 		if chat_sessions:
 			# return the session that we last sent a message in
-			return sorted(chat_sessions,
-				key=operator.attrgetter("last_send"))[-1]
+			return sorted(chat_sessions, key=operator.attrgetter("last_send"))[-1]
 		else:
 			return None
 
-	def find_controlless_session(self, jid):
+	def find_controlless_session(self, jid, resource=None):
 		'''find an active session that doesn't have a control attached'''
 
 		try:
@@ -1417,6 +1435,9 @@ sent a message to.'''
 				gajim.default_session_type)]
 
 			orphaned = [s for s in chat_sessions if not s.control]
+
+			if resource:
+				orphaned = [s for s in orphaned if s.resource == resource]
 
 			return orphaned[0]
 		except (KeyError, IndexError):
@@ -1442,13 +1463,14 @@ sent a message to.'''
 
 		return sess
 
-class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionCaps, ConnectionHandlersBase):
+class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 	def __init__(self):
 		ConnectionArchive.__init__(self)
 		ConnectionVcard.__init__(self)
 		ConnectionBytestream.__init__(self)
 		ConnectionCommands.__init__(self)
 		ConnectionPubSub.__init__(self)
+		ConnectionJingle.__init__(self)
 		ConnectionHandlersBase.__init__(self)
 		self.gmail_url = None
 
@@ -1530,34 +1552,7 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 		if storage:
 			ns = storage.getNamespace()
 			if ns == 'storage:bookmarks':
-				# Bookmarked URLs and Conferences
-				# http://www.xmpp.org/extensions/xep-0048.html
-				confs = storage.getTags('conference')
-				for conf in confs:
-					autojoin_val = conf.getAttr('autojoin')
-					if autojoin_val is None: # not there (it's optional)
-						autojoin_val = False
-					minimize_val = conf.getAttr('minimize')
-					if minimize_val is None: # not there (it's optional)
-						minimize_val = False
-					print_status = conf.getTagData('print_status')
-					if not print_status:
-						print_status = conf.getTagData('show_status')
-					try:
-						bm = {'name': conf.getAttr('name'),
-							'jid': helpers.parse_jid(conf.getAttr('jid')),
-							'autojoin': autojoin_val,
-							'minimize': minimize_val,
-							'password': conf.getTagData('password'),
-							'nick': conf.getTagData('nick'),
-							'print_status': print_status}
-					except common.helpers.InvalidFormat:
-						log.warn('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
-						continue
-
-					self.bookmarks.append(bm)
-				self.dispatch('BOOKMARKS', self.bookmarks)
-
+				self._parse_bookmarks(storage, 'xml')
 			elif ns == 'gajim:prefs':
 				# Preferences data
 				# http://www.xmpp.org/extensions/xep-0049.html
@@ -1575,6 +1570,47 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 						continue
 					annotation = note.getData()
 					self.annotations[jid] = annotation
+
+	def _parse_bookmarks(self, storage, storage_type):
+		'''storage_type can be 'pubsub' or 'xml' to tell from where we got
+		bookmarks'''
+		# Bookmarked URLs and Conferences
+		# http://www.xmpp.org/extensions/xep-0048.html
+		resend_to_pubsub = False
+		confs = storage.getTags('conference')
+		for conf in confs:
+			autojoin_val = conf.getAttr('autojoin')
+			if autojoin_val is None: # not there (it's optional)
+				autojoin_val = False
+			minimize_val = conf.getAttr('minimize')
+			if minimize_val is None: # not there (it's optional)
+				minimize_val = False
+			print_status = conf.getTagData('print_status')
+			if not print_status:
+				print_status = conf.getTagData('show_status')
+			try:
+				bm = {'name': conf.getAttr('name'),
+					'jid': helpers.parse_jid(conf.getAttr('jid')),
+					'autojoin': autojoin_val,
+					'minimize': minimize_val,
+					'password': conf.getTagData('password'),
+					'nick': conf.getTagData('nick'),
+					'print_status': print_status}
+			except common.helpers.InvalidFormat:
+				log.warn('Invalid JID: %s, ignoring it' % conf.getAttr('jid'))
+				continue
+
+			if bm not in self.bookmarks:
+				self.bookmarks.append(bm)
+				if storage_type == 'xml':
+					# We got a bookmark that was not in pubsub
+					resend_to_pubsub = True
+		self.dispatch('BOOKMARKS', self.bookmarks)
+		if storage_type == 'pubsub':
+			# We gor bookmarks from pubsub, now get those from xml to merge them
+			self.get_bookmarks(storage_type='xml')
+		if self.pubsub_supported and resend_to_pubsub:
+			self.store_bookmarks('pubsub')
 
 	def _rosterSetCB(self, con, iq_obj):
 		log.debug('rosterSetCB')
@@ -1818,12 +1854,13 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 				self.dispatch('GMAIL_NOTIFY', (jid, newmsgs, gmail_messages_list))
 			raise common.xmpp.NodeProcessed
 
-		
 	def _rosterItemExchangeCB(self, con, msg):
 		''' XEP-0144 Roster Item Echange '''
 		exchange_items_list = {}
 		jid_from = helpers.get_full_jid_from_iq(msg)
 		items_list = msg.getTag('x').getChildren()
+		if not items_list:
+			return
 		action = items_list[0].getAttr('action')
 		if action == None:
 			action = 'add'
@@ -1841,8 +1878,9 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 			exchange_items_list[jid] = []
 			exchange_items_list[jid].append(name)
 			exchange_items_list[jid].append(groups)
-		self.dispatch('ROSTERX', (action, exchange_items_list, jid_from))
-
+		if exchange_items_list:
+			self.dispatch('ROSTERX', (action, exchange_items_list, jid_from))
+		raise common.xmpp.NodeProcessed
 
 	def _messageCB(self, con, msg):
 		'''Called when we receive a message'''
@@ -1856,7 +1894,7 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 			if msg.getTag('error') is None:
 				self._pubsubEventCB(con, msg)
 			return
-		
+
 		# check if the message is a roster item exchange (XEP-0144)
 		if msg.getTag('x', namespace=common.xmpp.NS_ROSTERX):
 			self._rosterItemExchangeCB(con, msg)
@@ -1984,7 +2022,7 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 		if msg.getTag('request', namespace=common.xmpp.NS_RECEIPTS) \
 		and gajim.config.get_per('accounts', self.name,
 		'answer_receipts') and ((contact and contact.sub \
-		not in (u'to', u'none')) or gc_contact):
+		not in (u'to', u'none')) or gc_contact) and mtype != 'error':
 			receipt = common.xmpp.Message(to=frm, typ='chat')
 			receipt.setID(msg.getID())
 			receipt.setTag('received',
@@ -2162,7 +2200,8 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 		ptype = prs.getType()
 		if ptype == 'available':
 			ptype = None
-		rfc_types = ('unavailable', 'error', 'subscribe', 'subscribed', 'unsubscribe', 'unsubscribed')
+		rfc_types = ('unavailable', 'error', 'subscribe', 'subscribed',
+			'unsubscribe', 'unsubscribed')
 		if ptype and not ptype in rfc_types:
 			ptype = None
 		log.debug('PresenceCB: %s' % ptype)
@@ -2182,6 +2221,7 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 			return
 		jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
 		timestamp = None
+		id_ = prs.getID()
 		is_gc = False # is it a GC presence ?
 		sigTag = None
 		ns_muc_user_x = None
@@ -2221,9 +2261,16 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 				if self.connection.getRoster().getItem(agent): # to be sure it's a transport contact
 					transport_auto_auth = True
 
+		if not is_gc and id_ and id_.startswith('gajim_muc_') and \
+		ptype == 'error':
+			# Error presences may not include sent stanza, so we don't detect it's
+			# a muc preence. So detect it by ID
+			h = hmac.new(self.secret_hmac, jid_stripped).hexdigest()[:6]
+			if id_.split('_')[-1] == h:
+				is_gc = True
 		status = prs.getStatus() or ''
 		show = prs.getShow()
-		if not show in gajim.SHOW_LIST:
+		if show not in ('chat', 'away', 'xa', 'dnd'):
 			show = '' # We ignore unknown show
 		if not ptype and not show:
 			show = 'online'
@@ -2244,32 +2291,56 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 
 		if is_gc:
 			if ptype == 'error':
-				errmsg = prs.getError()
+				errcon = prs.getError()
+				errmsg = prs.getErrorMsg()
 				errcode = prs.getErrorCode()
 				room_jid, nick = gajim.get_room_and_nick_from_fjid(who)
-				if errcode == '502': # Internal Timeout:
+
+				gc_control = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
+						self.name)
+				
+				# If gc_control is missing - it may be minimized. Try to get it from
+				# there. If it's not there - then it's missing anyway and will
+				# remain set to None.
+				if gc_control is None:
+					minimized = gajim.interface.minimized_controls[self.name]
+					gc_control = minimized.get(room_jid)
+
+				if errcode == '502':
+					# Internal Timeout:
 					self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
 						prio, keyID, timestamp, None))
-				elif errcode == '401': # password required to join
+				elif (errcode == '503'):
+					# maximum user number reached
+					self.dispatch('ERROR', (_('Unable to join group chat'),
+						_('Maximum number of users for %s has been reached') % \
+						room_jid))
+				elif (errcode == '401') or (errcon == 'not-authorized'):
+					# password required to join
 					self.dispatch('GC_PASSWORD_REQUIRED', (room_jid, nick))
-				elif errcode == '403': # we are banned
+				elif (errcode == '403') or (errcon == 'forbidden'):
+					# we are banned
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('You are banned from group chat %s.') % room_jid))
-				elif errcode == '404': # group chat does not exist
-					self.dispatch('ERROR', (_('Unable to join group chat'),
-						_('Group chat %s does not exist.') % room_jid))
-				elif errcode == '405':
+				elif (errcode == '404') or (errcon in ('item-not-found',
+				'remote-server-not-found')):
+					if gc_control is None or gc_control.autorejoin is None:
+						# group chat does not exist
+						self.dispatch('ERROR', (_('Unable to join group chat'),
+							_('Group chat %s does not exist.') % room_jid))
+				elif (errcode == '405') or (errcon == 'not-allowed'):
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('Group chat creation is restricted.')))
-				elif errcode == '406':
+				elif (errcode == '406') or (errcon == 'not-acceptable'):
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('Your registered nickname must be used in group chat %s.') \
 						% room_jid))
-				elif errcode == '407':
+				elif (errcode == '407') or (errcon == 'registration-required'):
 					self.dispatch('ERROR', (_('Unable to join group chat'),
 						_('You are not in the members list in groupchat %s.') % \
 						room_jid))
-				elif errcode == '409': # nick conflict
+				elif (errcode == '409') or (errcon == 'conflict'):
+					# nick conflict
 					room_jid = gajim.get_room_from_fjid(who)
 					self.dispatch('ASK_NEW_NICK', (room_jid,))
 				else:	# print in the window the error
@@ -2314,12 +2385,13 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 					r = destroy.getTagData('reason')
 					if r:
 						reason += ' (%s)' % r
-					try:
-						jid = helpers.parse_jid(destroy.getAttr('jid'))
-					except common.helpers.InvalidFormat:
-						pass
-					if jid:
-						reason += '\n' + _('You can join this room instead: %s') % jid
+					if destroy.getAttr('jid'):
+						try:
+							jid = helpers.parse_jid(destroy.getAttr('jid'))
+							reason += '\n' + _('You can join this room instead: %s') \
+								% jid
+						except common.helpers.InvalidFormat:
+							pass
 					statusCode = ['destroyed']
 				else:
 					reason = prs.getReason()
@@ -2332,13 +2404,14 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 
 		if ptype == 'subscribe':
 			log.debug('subscribe request from %s' % who)
-			if gajim.config.get('alwaysauth') or who.find("@") <= 0 or \
-			jid_stripped in self.jids_for_auto_auth or transport_auto_auth:
+			if gajim.config.get_per('accounts', self.name, 'autoauth') or \
+			who.find('@') <= 0 or jid_stripped in self.jids_for_auto_auth or \
+			transport_auto_auth:
 				if self.connection:
 					p = common.xmpp.Presence(who, 'subscribed')
 					p = self.add_sha(p)
 					self.connection.send(p)
-				if who.find("@") <= 0 or transport_auto_auth:
+				if who.find('@') <= 0 or transport_auto_auth:
 					self.dispatch('NOTIFY', (jid_stripped, 'offline', 'offline',
 						resource, prio, keyID, timestamp, None))
 				if transport_auto_auth:
@@ -2393,22 +2466,29 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 				# print in the window the error
 				self.dispatch('ERROR_ANSWER', ('', jid_stripped,
 					errmsg, errcode))
-			self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource, prio,
-				keyID, timestamp, None))
+			if errcode != '409': # conflict # See #5120
+				self.dispatch('NOTIFY', (jid_stripped, 'error', errmsg, resource,
+					prio, keyID, timestamp, None))
 
-		if ptype == 'unavailable' and jid_stripped in self.sessions:
-			# automatically terminate sessions that they haven't sent a thread ID
-			# in, only if other part support thread ID
-			for sess in self.sessions[jid_stripped].values():
-				if not sess.received_thread_id:
-					contact = gajim.contacts.get_contact(self.name, jid_stripped)
-
-					session_supported = gajim.capscache.is_supported(contact,
-						common.xmpp.NS_SSN) or gajim.capscache.is_supported(contact,
-						common.xmpp.NS_ESESSION)
-					if session_supported:
-						sess.terminate()
-						del self.sessions[jid_stripped][sess.thread_id]
+		if ptype == 'unavailable':
+			for jid in [jid_stripped, who]:
+				if jid not in self.sessions:
+					continue
+				# automatically terminate sessions that they haven't sent a thread
+				# ID in, only if other part support thread ID
+				for sess in self.sessions[jid].values():
+					if not sess.received_thread_id:
+						contact = gajim.contacts.get_contact(self.name, jid)
+						# FIXME: I don't know if this is the correct behavior here.
+						# Anyway, it is the old behavior when we assumed that
+						# not-existing contacts don't support anything
+						contact_exists = bool(contact)
+						session_supported = contact_exists and \
+							contact.supports(common.xmpp.NS_SSN) or \
+							contact.supports(common.xmpp.NS_ESESSION)
+						if session_supported:
+							sess.terminate()
+							del self.sessions[jid][sess.thread_id]
 
 		if avatar_sha is not None and ptype != 'error':
 			if jid_stripped not in self.vcard_shas:
@@ -2460,7 +2540,8 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 
 	def _MucAdminCB(self, con, iq_obj):
 		log.debug('MucAdminCB')
-		items = iq_obj.getTag('query', namespace = common.xmpp.NS_MUC_ADMIN).getTags('item')
+		items = iq_obj.getTag('query', namespace=common.xmpp.NS_MUC_ADMIN).\
+			getTags('item')
 		users_dict = {}
 		for item in items:
 			if item.has_attr('jid') and item.has_attr('affiliation'):
@@ -2468,7 +2549,7 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 					jid = helpers.parse_jid(item.getAttr('jid'))
 				except common.helpers.InvalidFormat:
 					log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
-					return
+					continue
 				affiliation = item.getAttr('affiliation')
 				users_dict[jid] = {'affiliation': affiliation}
 				if item.has_attr('nick'):
@@ -2480,7 +2561,7 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 					users_dict[jid]['reason'] = reason
 
 		self.dispatch('GC_AFFILIATION', (helpers.get_full_jid_from_iq(iq_obj),
-															users_dict))
+			users_dict))
 
 	def _MucErrorCB(self, con, iq_obj):
 		log.debug('MucErrorCB')
@@ -2519,8 +2600,6 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 			return
 		self.connection.getRoster(self._on_roster_set)
 		self.discoverItems(gajim.config.get_per('accounts', self.name,
-			'hostname'), id_prefix='Gajim_')
-		self.discoverInfo(gajim.config.get_per('accounts', self.name,
 			'hostname'), id_prefix='Gajim_')
 		if gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):
 			self.discover_ft_proxies()
@@ -2579,9 +2658,10 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 		gajim.logger.replace_roster(self.name, roster_version, roster)
 		if received_from_server:
 			for contact in gajim.contacts.iter_contacts(self.name):
-				if not contact.is_groupchat() and contact.jid not in roster:
-					self.dispatch('ROSTER_INFO', (self.name,
-						(contact.jid, None, None, None, ())))
+				if not contact.is_groupchat() and contact.jid not in roster and \
+				contact.jid != gajim.get_jid_from_account(self.name):
+					self.dispatch('ROSTER_INFO', (contact.jid, None, None, None,
+						()))
 			for jid in roster:
 				self.dispatch('ROSTER_INFO', (jid, roster[jid]['name'],
 					roster[jid]['subscription'], roster[jid]['ask'],
@@ -2594,9 +2674,7 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 		if sign_msg and not signed:
 			signed = self.get_signed_presence(msg)
 			if signed is None:
-				self.dispatch('ERROR', (_('OpenPGP passphrase was not given'),
-					#%s is the account name here
-					_('You will be connected to %s without OpenPGP.') % self.name))
+				self.dispatch('BAD_PASSPHRASE', ())
 				self.USE_GPG = False
 				signed = ''
 		self.connected = gajim.SHOW_LIST.index(show)
@@ -2621,8 +2699,9 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 			self.connection.send(p)
 			self.priority = priority
 		self.dispatch('STATUS', show)
-		# ask our VCard
-		self.request_vcard(None)
+		if self.vcard_supported:
+			# ask our VCard
+			self.request_vcard(None)
 
 		# Get bookmarks from private namespace
 		self.get_bookmarks()
@@ -2751,6 +2830,11 @@ class ConnectionHandlers(ConnectionArchive, ConnectionVcard, ConnectionBytestrea
 			common.xmpp.NS_PRIVACY)
 		con.RegisterHandler('iq', self._ArchiveCB, ns=common.xmpp.NS_ARCHIVE)
 		con.RegisterHandler('iq', self._PubSubCB, 'result')
+		con.RegisterHandler('iq', self._PubSubErrorCB, 'error')
+		con.RegisterHandler('iq', self._JingleCB, 'result')
+		con.RegisterHandler('iq', self._JingleCB, 'error')
+		con.RegisterHandler('iq', self._JingleCB, 'set',
+			common.xmpp.NS_JINGLE)
 		con.RegisterHandler('iq', self._ErrorCB, 'error')
 		con.RegisterHandler('iq', self._IqCB)
 		con.RegisterHandler('iq', self._StanzaArrivedCB)

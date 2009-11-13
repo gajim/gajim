@@ -24,6 +24,8 @@
 import xmpp
 import gajim
 import connection_handlers
+import logging
+log = logging.getLogger('gajim.c.pubsub')
 
 class ConnectionPubSub:
 	def __init__(self):
@@ -64,16 +66,31 @@ class ConnectionPubSub:
 
 		self.__callbacks[id_]=(cb, args, kwargs)
 
-	def send_pb_publish(self, jid, node, item, id_):
+	def send_pb_publish(self, jid, node, item, id_, options=None):
 		'''Publish item to a node.'''
 		if not self.connection or self.connected < 2:
 			return
 		query = xmpp.Iq('set', to=jid)
 		e = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB)
-		e = e.addChild('publish', {'node': node})
-		e = e.addChild('item', {'id': id_}, [item])
+		p = e.addChild('publish', {'node': node})
+		p.addChild('item', {'id': id_}, [item])
+		if options:
+			p = e.addChild('publish-options')
+			p.addChild(node=options)
 
 		self.connection.send(query)
+
+	def send_pb_retrieve(self, jid, node, cb=None, *args, **kwargs): 
+		'''Get items from a node''' 
+		if not self.connection or self.connected < 2: 
+			return 
+		query = xmpp.Iq('get', to=jid) 
+		r = query.addChild('pubsub', namespace=xmpp.NS_PUBSUB) 
+		r = r.addChild('items', {'node': node}) 
+		id_ = self.connection.send(query)
+
+		if cb:
+			self.__callbacks[id_]=(cb, args, kwargs)
 
 	def send_pb_retract(self, jid, node, id_):
 		'''Delete item from a node'''
@@ -129,11 +146,39 @@ class ConnectionPubSub:
 		self.connection.send(query)
 
 	def _PubSubCB(self, conn, stanza):
+		log.debug('_PubsubCB')
 		try:
 			cb, args, kwargs = self.__callbacks.pop(stanza.getID())
 			cb(conn, stanza, *args, **kwargs)
 		except Exception:
 			pass
+
+		pubsub = stanza.getTag('pubsub')
+		if not pubsub:
+			return
+		items = pubsub.getTag('items')
+		if not items:
+			return
+		item = items.getTag('item')
+		if not item:
+			return
+		storage = item.getTag('storage')
+		if storage:
+			ns = storage.getNamespace()
+			if ns == 'storage:bookmarks':
+				self._parse_bookmarks(storage, 'pubsub')
+
+	def _PubSubErrorCB(self, conn, stanza):
+		log.debug('_PubsubErrorCB')
+		pubsub = stanza.getTag('pubsub')
+		if not pubsub:
+			return
+		items = pubsub.getTag('items')
+		if not items:
+			return
+		if items.getAttr('node') == 'storage:bookmarks':
+			# Receiving bookmarks from pubsub failed, so take them from xml
+			self.get_bookmarks(storage_type='xml')
 
 	def request_pb_configuration(self, jid, node):
 		if not self.connection or self.connected < 2:

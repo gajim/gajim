@@ -131,9 +131,6 @@ class GajimThemesWindow:
 			theme = model[iter_][0]
 			if theme == active_theme:
 				self.themes_tree.get_selection().select_iter(iter_)
-				self.xml.get_widget('remove_button').set_sensitive(True)
-				self.theme_options_vbox.set_sensitive(True)
-				self.theme_options_table.set_sensitive(True)
 				if active_theme == 'default':
 					self.xml.get_widget('remove_button').set_sensitive(False)
 					self.theme_options_vbox.set_sensitive(False)

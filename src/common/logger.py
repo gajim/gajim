@@ -130,8 +130,8 @@ class Logger:
 		# if locked, wait up to 20 sec to unlock
 		# before raise (hopefully should be enough)
 
-		self.con = sqlite.connect(LOG_DB_FILE, timeout = 20.0,
-			isolation_level = 'IMMEDIATE')
+		self.con = sqlite.connect(LOG_DB_FILE, timeout=20.0,
+			isolation_level='IMMEDIATE')
 		os.chdir(back)
 		self.cur = self.con.cursor()
 		self.set_synchronous(False)
@@ -160,7 +160,8 @@ class Logger:
 	def get_jids_already_in_db(self):
 		try:
 			self.cur.execute('SELECT jid FROM jids')
-			rows = self.cur.fetchall() # list of tupples: [(u'aaa@bbb',), (u'cc@dd',)]
+			# list of tupples: [(u'aaa@bbb',), (u'cc@dd',)]
+			rows = self.cur.fetchall()
 		except sqlite.DatabaseError:
 			raise exceptions.DatabaseMalformed
 		self.jids_already_in = []
@@ -200,7 +201,7 @@ class Logger:
 		else:
 			return True
 
-	def get_jid_id(self, jid, typestr = None):
+	def get_jid_id(self, jid, typestr=None):
 		'''jids table has jid and jid_id
 		logs table has log_id, jid_id, contact_name, time, kind, show, message
 		so to ask logs we need jid_id that matches our jid in jids table
@@ -360,8 +361,9 @@ class Logger:
 		if sub == constants.SUBSCRIPTION_BOTH:
 			return 'both'
 
-	def commit_to_db(self, values, write_unread = False):
-		sql = 'INSERT INTO logs (jid_id, contact_name, time, kind, show, message, subject) VALUES (?, ?, ?, ?, ?, ?, ?)'
+	def commit_to_db(self, values, write_unread=False):
+		sql = '''INSERT INTO logs (jid_id, contact_name, time, kind, show,
+			message, subject) VALUES (?, ?, ?, ?, ?, ?, ?)'''
 		try:
 			self.cur.execute(sql, values)
 		except sqlite.DatabaseError:
@@ -381,7 +383,8 @@ class Logger:
 
 	def insert_unread_events(self, message_id, jid_id):
 		''' add unread message with id: message_id'''
-		sql = 'INSERT INTO unread_messages VALUES (%d, %d)' % (message_id, jid_id)
+		sql = 'INSERT INTO unread_messages VALUES (%d, %d, 0)' % (message_id,
+			jid_id)
 		self.simple_commit(sql)
 
 	def set_read_messages(self, message_ids):
@@ -390,17 +393,29 @@ class Logger:
 		sql = 'DELETE FROM unread_messages WHERE message_id IN (%s)' % ids
 		self.simple_commit(sql)
 
+	def set_shown_unread_msgs(self, msg_id):
+		''' mark unread message as shown un GUI '''
+		sql = 'UPDATE unread_messages SET shown = 1 where message_id = %s' % \
+			msg_id
+		self.simple_commit(sql)
+
+	def reset_shown_unread_messages(self):
+		''' Set shown field to False in unread_messages table '''
+		sql = 'UPDATE unread_messages SET shown = 0'
+		self.simple_commit(sql)
+
 	def get_unread_msgs(self):
 		''' get all unread messages '''
 		all_messages = []
 		try:
 			self.cur.execute(
-				'SELECT message_id from unread_messages')
+				'SELECT message_id, shown from unread_messages')
 			results = self.cur.fetchall()
 		except Exception:
 			pass
 		for message in results:
 			msg_id = message[0]
+			shown = message[1]
 			# here we get infos for that message, and related jid from jids table
 			# do NOT change order of SELECTed things, unless you change function(s)
 			# that called this function
@@ -416,11 +431,10 @@ class Logger:
 				# Log line is no more in logs table. remove it from unread_messages
 				self.set_read_messages([msg_id])
 				continue
-			all_messages.append(results[0])
+			all_messages.append(results[0] + (shown,))
 		return all_messages
 
-	def write(self, kind, jid, message = None, show = None, tim = None,
-	subject = None):
+	def write(self, kind, jid, message=None, show=None, tim=None, subject=None):
 		'''write a row (status, gcstatus, message etc) to logs database
 		kind can be status, gcstatus, gc_msg, (we only recv for those 3),
 		single_msg_recv, chat_msg_recv, chat_msg_sent, single_msg_sent
@@ -502,7 +516,7 @@ class Logger:
 		return self.commit_to_db(values, write_unread)
 
 	def get_last_conversation_lines(self, jid, restore_how_many_rows,
-		pending_how_many, timeout, account):
+	pending_how_many, timeout, account):
 		'''accepts how many rows to restore and when to time them out (in minutes)
 		(mark them as too old) and number of messages that are in queue
 		and are already logged but pending to be viewed,
@@ -547,7 +561,7 @@ class Logger:
 		return start_of_day
 
 	def get_conversation_for_date(self, jid, year, month, day, account):
-		'''returns contact_name, time, kind, show, message
+		'''returns contact_name, time, kind, show, message, subject
 		for each row in a list of tupples,
 		returns list with empty tupple if we found nothing to meet our demands'''
 		try:
@@ -562,7 +576,7 @@ class Logger:
 		last_second_of_day = start_of_day + seconds_in_a_day - 1
 
 		self.cur.execute('''
-			SELECT contact_name, time, kind, show, message FROM logs
+			SELECT contact_name, time, kind, show, message, subject FROM logs
 			WHERE (%s)
 			AND time BETWEEN %d AND %d
 			ORDER BY time
@@ -581,7 +595,7 @@ class Logger:
 			# Error trying to create a new jid_id. This means there is no log
 			return []
 
-		if False: #query.startswith('SELECT '): # it's SQL query (FIXME)
+		if False: # query.startswith('SELECT '): # it's SQL query (FIXME)
 			try:
 				self.cur.execute(query)
 			except sqlite.OperationalError, e:
@@ -635,7 +649,7 @@ class Logger:
 
 		return days_with_logs
 
-	def get_last_date_that_has_logs(self, jid, account = None, is_room = False):
+	def get_last_date_that_has_logs(self, jid, account=None, is_room=False):
 		'''returns last time (in seconds since EPOCH) for which
 		we had logs (excluding statuses)'''
 		where_sql = ''
@@ -746,10 +760,12 @@ class Logger:
 		return answer
 
 	# A longer note here:
-	# The database contains a blob field. Pysqlite seems to need special care for such fields.
+	# The database contains a blob field. Pysqlite seems to need special care for
+	# such fields.
 	# When storing, we need to convert string into buffer object (1).
-	# When retrieving, we need to convert it back to a string to decompress it. (2)
-	# GzipFile needs a file-like object, StringIO emulates file for plain strings.
+	# When retrieving, we need to convert it back to a string to decompress it.
+	# (2)
+	# GzipFile needs a file-like object, StringIO emulates file for plain strings
 	def iter_caps_data(self):
 		''' Iterate over caps cache data stored in the database.
 		The iterator values are pairs of (node, ver, ext, identities, features):
@@ -774,12 +790,13 @@ class Logger:
 			#   ..., 'FEAT', feature1, feature2, ...).join(' '))
 			# NOTE: if there's a need to do more gzip, put that to a function
 			try:
-				data = GzipFile(fileobj=StringIO(str(data))).read().decode('utf-8').split('\0')
+				data = GzipFile(fileobj=StringIO(str(data))).read().decode(
+					'utf-8').split('\0')
 			except IOError:
 				# This data is corrupted. It probably contains non-ascii chars
 				to_be_removed.append((hash_method, hash_))
 				continue
-			i=0
+			i = 0
 			identities = list()
 			features = list()
 			while i < (len(data) - 3) and data[i] != 'FEAT':
@@ -798,11 +815,12 @@ class Logger:
 			# yield the row
 			yield hash_method, hash_, identities, features
 		for hash_method, hash_ in to_be_removed:
-			sql = 'DELETE FROM caps_cache WHERE hash_method = "%s" AND hash = "%s"' % (hash_method, hash_)
+			sql = '''DELETE FROM caps_cache WHERE hash_method = "%s" AND
+				hash = "%s"''' % (hash_method, hash_)
 			self.simple_commit(sql)
 
 	def add_caps_entry(self, hash_method, hash_, identities, features):
-		data=[]
+		data = []
 		for identity in identities:
 			# there is no FEAT category
 			if identity['category'] == 'FEAT':
@@ -820,34 +838,51 @@ class Logger:
 		gzip.close()
 		data = string.getvalue()
 		self.cur.execute('''
-			INSERT INTO caps_cache ( hash_method, hash, data )
-			VALUES (?, ?, ?);
-			''', (hash_method, hash_, buffer(data))) # (1) -- note above
+			INSERT INTO caps_cache ( hash_method, hash, data, last_seen )
+			VALUES (?, ?, ?, ?);
+			''', (hash_method, hash_, buffer(data), int(time.time())))
+		# (1) -- note above
 		try:
 			self.con.commit()
 		except sqlite.OperationalError, e:
 			print >> sys.stderr, str(e)
+
+	def update_caps_time(self, method, hash_):
+		sql = '''UPDATE caps_cache SET last_seen = %d
+			WHERE hash_method = "%s" and hash = "%s"''' % \
+			(int(time.time()), method, hash_)
+		self.simple_commit(sql)
+
+	def clean_caps_table(self):
+		'''Remove caps which was not seen for 3 months'''
+		sql = '''DELETE FROM caps_cache WHERE last_seen < %d''' % \
+			int(time.time() - 3*30*24*3600)
+		self.simple_commit(sql)
 
 	def replace_roster(self, account_name, roster_version, roster):
 		''' Replace current roster in DB by a new one.
 		accout_name is the name of the account to change
 		roster_version is the version of the new roster
 		roster is the new version '''
+		# First we must reset roster_version value to ensure that the server
+		# sends back all the roster at the next connexion if the replacement
+		# didn't work properly.
 		gajim.config.set_per('accounts', account_name, 'roster_version', '')
+
 		account_jid = gajim.get_jid_from_account(account_name)
 		account_jid_id = self.get_jid_id(account_jid)
 
 		# Delete old roster
-		sql = 'DELETE FROM roster_entry WHERE account_jid_id = %d' % (
-			account_jid_id)
-		sql = 'DELETE FROM roster_group WHERE account_jid_id = %d' % (
-			account_jid_id)
+		self.remove_roster(account_jid)
 
 		# Fill roster tables with the new roster
 		for jid in roster:
 			self.add_or_update_contact(account_jid, jid, roster[jid]['name'],
 				roster[jid]['subscription'], roster[jid]['ask'],
 				roster[jid]['groups'])
+
+		# At this point, we are sure the replacement works properly so we can
+		# set the new roster_version value.
 		gajim.config.set_per('accounts', account_name, 'roster_version',
 			roster_version)
 
@@ -858,10 +893,13 @@ class Logger:
 			jid_id = self.get_jid_id(jid)
 		except exceptions.PysqliteOperationalError, e:
 			raise exceptions.PysqliteOperationalError(str(e))
-		sql = 'DELETE FROM roster_group WHERE account_jid_id=%d AND jid_id=%d' % (account_jid_id, jid_id)
-		self.cur.execute(sql)
-		sql = 'DELETE FROM roster_entry WHERE account_jid_id=%d AND jid_id=%d' % (account_jid_id, jid_id)
-		self.simple_commit(sql)
+		self.cur.execute(
+			'DELETE FROM roster_group WHERE account_jid_id=? AND jid_id=?',
+			(account_jid_id, jid_id))
+		self.cur.execute(
+			'DELETE FROM roster_entry WHERE account_jid_id=? AND jid_id=?',
+			(account_jid_id, jid_id))
+		self.con.commit()
 
 	def add_or_update_contact(self, account_jid, jid, name, sub, ask, groups):
 		''' Add or update a contact from account_jid roster. '''
@@ -877,22 +915,22 @@ class Logger:
 
 		# Update groups information
 		# First we delete all previous groups information
-		sql = 'DELETE FROM roster_group WHERE account_jid_id=%d AND jid_id=%d' % (account_jid_id, jid_id)
-		self.cur.execute(sql)
+		self.cur.execute(
+			'DELETE FROM roster_group WHERE account_jid_id=? AND jid_id=?',
+			(account_jid_id, jid_id))
 		# Then we add all new groups information
 		for group in groups:
-			sql = 'INSERT INTO roster_group VALUES("%d", "%d", "%s")' % (
-				account_jid_id, jid_id, group)
-			self.cur.execute(sql)
+			self.cur.execute('INSERT INTO roster_group VALUES(?, ?, ?)',
+				(account_jid_id, jid_id, group))
 
 		if name is None:
 			name = ''
 
-		sql = 'REPLACE INTO roster_entry VALUES("%d", "%d", "%s", "%s", "%d")'\
-			% (account_jid_id, jid_id, name,
+		self.cur.execute('REPLACE INTO roster_entry VALUES(?, ?, ?, ?, ?)',
+			(account_jid_id, jid_id, name,
 			self.convert_human_subscription_values_to_db_api_values(sub),
-			bool(ask))
-		self.simple_commit(sql)
+			bool(ask)))
+		self.con.commit()
 
 	def get_roster(self, account_jid):
 		''' Return the accound_jid roster in NonBlockingRoster format. '''
@@ -900,14 +938,19 @@ class Logger:
 		account_jid_id = self.get_jid_id(account_jid)
 
 		# First we fill data with roster_entry informations
-		self.cur.execute('SELECT j.jid, re.jid_id, re.name, re.subscription, re.ask FROM roster_entry re, jids j WHERE re.account_jid_id="%(account_jid_id)s" AND j.jid_id=re.jid_id' % {'account_jid_id': account_jid_id})
+		self.cur.execute('''
+			SELECT j.jid, re.jid_id, re.name, re.subscription, re.ask
+			FROM roster_entry re, jids j
+			WHERE re.account_jid_id=? AND j.jid_id=re.jid_id''', (account_jid_id,))
 		for jid, jid_id, name, subscription, ask in self.cur:
 			data[jid] = {}
 			if name:
 				data[jid]['name'] = name
 			else:
 				data[jid]['name'] = None
-			data[jid]['subscription'] = self.convert_db_api_values_to_human_subscription_values(subscription)
+			data[jid]['subscription'] = \
+				self.convert_db_api_values_to_human_subscription_values(
+				subscription)
 			data[jid]['groups'] = []
 			data[jid]['resources'] = {}
 			if ask:
@@ -918,7 +961,10 @@ class Logger:
 
 		# Then we add group for roster entries
 		for jid in data:
-			self.cur.execute('SELECT group_name FROM roster_group WHERE account_jid_id="%(account_jid_id)s" AND jid_id="%(jid_id)s"' % {'account_jid_id': account_jid_id, 'jid_id': data[jid]['id']})
+			self.cur.execute('''
+				SELECT group_name FROM roster_group
+				WHERE account_jid_id=? AND jid_id=?''',
+				(account_jid_id, data[jid]['id']))
 			for (group_name,) in self.cur:
 				data[jid]['groups'].append(group_name)
 			del data[jid]['id']
@@ -926,14 +972,13 @@ class Logger:
 		return data
 
 	def remove_roster(self, account_jid):
+		''' Remove all entry from account_jid roster. '''
 		account_jid_id = self.get_jid_id(account_jid)
 
-		sql = 'DELETE FROM roster_group WHERE account_jid_id=%d' % (
-			account_jid_id)
-		self.cur.execute(sql)
-
-		sql = 'DELETE FROM roster_entry WHERE account_jid_id=%d' % (
-			account_jid_id)
-		self.simple_commit(sql)
+		self.cur.execute('DELETE FROM roster_entry WHERE account_jid_id=?',
+			(account_jid_id,))
+		self.cur.execute('DELETE FROM roster_group WHERE account_jid_id=?',
+			(account_jid_id,))
+		self.con.commit()
 
 # vim: se ts=3:

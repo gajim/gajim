@@ -32,8 +32,6 @@ import logging
 import locale
 
 import config
-from contacts import Contacts
-from events import Events
 import xmpp
 
 try:
@@ -101,6 +99,9 @@ else:
 
 os_info = None # used to cache os information
 
+from contacts import Contacts
+from events import Events
+
 gmail_domains = ['gmail.com', 'googlemail.com']
 
 transport_type = {} # list the type of transport
@@ -113,6 +114,7 @@ contacts = Contacts()
 gc_connected = {} # tell if we are connected to the room or not {acct: {room_jid: True}}
 gc_passwords = {} # list of the pass required to enter a room {room_jid: password}
 automatic_rooms = {} # list of rooms that must be automaticaly configured and for which we have a list of invities {account: {room_jid: {'invities': []}}}
+new_room_nick = None # if it's != None, use this nick instead of asking for a new nickname when there is a conflict.
 
 groups = {} # list of groups
 newly_added = {} # list of contacts that has just signed in
@@ -188,6 +190,11 @@ try:
 except ImportError:
 	HAVE_INDICATOR = False
 
+HAVE_FARSIGHT = True
+try:
+	import farsight, gst
+except ImportError:
+	HAVE_FARSIGHT = False
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
 gajim_common_features = [xmpp.NS_BYTESTREAM, xmpp.NS_SI, xmpp.NS_FILE,
 	xmpp.NS_MUC, xmpp.NS_MUC_USER, xmpp.NS_MUC_ADMIN, xmpp.NS_MUC_OWNER,
@@ -203,6 +210,9 @@ gajim_optional_features = {}
 # Capabilities hash per account
 caps_hash = {}
 
+import caps
+caps.initialize(logger)
+
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
 	return jid[:pos]
@@ -211,10 +221,10 @@ def get_server_from_jid(jid):
 	pos = jid.find('@') + 1 # after @
 	return jid[pos:]
 
-def get_nick_from_fjid(jid):
-	# fake jid is the jid for a contact in a room
-	# gaim@conference.jabber.no/nick/nick-continued
-	return jid.split('/', 1)[1]
+def get_resource_from_jid(jid):
+    tokens = jid.split('/', 1)
+    if len(tokens) > 1:
+        return tokens[1]
 
 def get_name_and_server_from_jid(jid):
 	name = get_nick_from_jid(jid)

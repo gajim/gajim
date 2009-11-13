@@ -98,9 +98,27 @@ def check_for_latex_support():
 	except LatexError:
 		return False
 
+def try_run(argv):
+	try:
+		p = popen_nt_friendly(argv)
+		out = p.communicate()[0]
+		log.info(out)
+		return p.wait()
+	except Exception, e:
+		return _('Error executing "%(command)s": %(error)s') % {
+			'command': " ".join(argv),
+			'error': helpers.decode_string(str(e))}
+
+
 def latex_to_image(str_):
 	result = None
 	exitcode = 0
+
+	try:
+		bg_str, fg_str = gajim.interface.get_bg_fg_colors()
+	except:
+		# interface may not be available when we test latext at startup
+		bg_str, fg_str = 'rgb 1.0 1.0 1.0', 'rgb 0.0 0.0 0.0'
 
 	# filter latex code with bad commands
 	if check_blacklist(str_):
@@ -113,31 +131,15 @@ def latex_to_image(str_):
 	write_latex(os.path.join(tmpfile + '.tex'), str_)
 
 	# convert TeX to dvi
-	try:
-		p = popen_nt_friendly(['latex', '--interaction=nonstopmode',
-			tmpfile + '.tex'])
-		out = p.communicate()[0]
-		log.info(out)
-		exitcode = p.wait()
-	except Exception, e:
-		exitcode = _('Error executing "%(command)s": %(error)s') % {
-			'command': 'latex --interaction=nonstopmode %s.tex' % tmpfile,
-			'error': helpers.decode_string(e.message)}
+	exitcode = try_run(['latex', '--interaction=nonstopmode',
+			  tmpfile + '.tex'])
 
 	if exitcode == 0:
 		# convert dvi to png
 		latex_png_dpi = gajim.config.get('latex_png_dpi')
-		try:
-			p = popen_nt_friendly(['dvipng', '-bg', 'rgb 1.0 1.0 1.0', '-T',
+		exitcode = try_run(['dvipng', '-bg', bg_str, '-fg', fg_str, '-T',
 				'tight', '-D', latex_png_dpi, tmpfile + '.dvi', '-o',
 				tmpfile + '.png'])
-			out = p.communicate()[0]
-			log.info(out)
-			exitcode = p.wait()
-		except Exception, e:
-			exitcode = _('Error executing "%(command)s": %(error)s') % {
-				'command': 'dvipng -bg rgb 1.0 1.0 1.0 -T tight -D %s %s.dvi -o '
-				'%s.png' % (latex_png_dpi, tmpfile, tmpfile), 'error': str(e)}
 
 	# remove temp files created by us and TeX
 	extensions = ['.tex', '.log', '.aux', '.dvi']

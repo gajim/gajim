@@ -114,13 +114,26 @@ class GajimRemote:
 		'"sync with global status" option set'), False)
 					]
 				],
+			'set_priority': [
+					_('Changes the priority of account or accounts'),
+					[
+						(_('priority'), _('priority you want to give to the account'),
+							True),
+						(_('account'), _('change the priority of the given account. '
+							'If not specified, change status of all accounts that have'
+							' "sync with global status" option set'), False)
+					]
+				],
 			'open_chat': [
 					_('Shows the chat dialog so that you can send messages to a contact'),
 					[
 						('jid', _('JID of the contact that you want to chat with'),
 							True),
 						(_('account'), _('if specified, contact is taken from the '
-						'contact list of this account'), False)
+							'contact list of this account'), False),
+						(_('message'),
+							_('message content. The account must be specified or ""'),
+							False)
 					]
 				],
 			'send_chat_message':[
@@ -257,7 +270,8 @@ class GajimRemote:
 					[
 						(_('uri'), _('URI to handle'), True),
 						(_('account'), _('Account in which you want to handle it'),
-							False)
+							False),
+						(_('message'), _('Message content'), False)
 					]
 				],
 			'join_room': [
@@ -282,7 +296,7 @@ class GajimRemote:
 			}
 
 		self.sbus = None
-		if self.argv_len  < 2 or sys.argv[1] not in self.commands.keys():
+		if self.argv_len < 2 or sys.argv[1] not in self.commands.keys():
 			# no args or bad args
 			send_error(self.compose_help())
 		self.command = sys.argv[1]
@@ -405,7 +419,7 @@ class GajimRemote:
 			if len(command_props[1]) > 0:
 				str_ += '\n\n' + _('Arguments:') + '\n'
 				for argument in command_props[1]:
-					str_ += ' ' +  argument[0] + ' - ' + argument[1] + '\n'
+					str_ += ' ' + argument[0] + ' - ' + argument[1] + '\n'
 			return str_
 		send_error(_('%s not found') % command)
 
@@ -506,6 +520,25 @@ class GajimRemote:
 		if not '?' in uri:
 			self.command = sys.argv[1] = 'open_chat'
 			return
+		if 'body=' in uri:
+			# Open chat window and paste the text in the input message dialog
+			self.command = sys.argv[1] = 'open_chat'
+			message = uri.split('body=')
+			message = message[1].split(';')[0]
+			try:
+				message = urllib.unquote(message)
+			except UnicodeDecodeError:
+				pass
+			sys.argv[2] = uri.split('?')[0]
+			if len(sys.argv) == 4:
+				# jid in the sys.argv
+				sys.argv.append(message)
+			else:
+				sys.argv.append('')
+				sys.argv.append(message)
+				sys.argv[3] = ''
+				sys.argv[4] = message
+			return
 		(jid, action) = uri.split('?', 1)
 		try:
 			jid = urllib.unquote(jid)
@@ -519,7 +552,10 @@ class GajimRemote:
 			sys.argv.append(sys.argv[3])
 			sys.argv[3] = ''
 			return
-
+		if action.startswith('roster'):
+			# Add contact to roster
+			self.command = sys.argv[1] = 'add_contact'
+			return
 		sys.exit(0)
 
 	def call_remote_method(self):

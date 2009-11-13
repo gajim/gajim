@@ -21,7 +21,7 @@ Simple roster implementation. Can be used though for different tasks like
 mass-renaming of contacts.
 '''
 
-from protocol import JID, Iq, Presence, Node, NodeProcessed, NS_ROSTER
+from protocol import JID, Iq, Presence, Node, NodeProcessed, NS_MUC_USER, NS_ROSTER
 from plugin import PlugIn
 
 import logging
@@ -94,6 +94,8 @@ class NonBlockingRoster(PlugIn):
 	def PresenceHandler(self,dis,pres):
 		''' Presence tracker. Used internally for setting items' resources state in
 			internal roster representation. '''
+		if pres.getTag('x', namespace=NS_MUC_USER):
+			return
 		jid=pres.getFrom()
 		if not jid:
 			# If no from attribue, it's from server
@@ -171,6 +173,16 @@ class NonBlockingRoster(PlugIn):
 		if name: attrs['name']=name
 		item=query.setTag('item',attrs)
 		for group in groups: item.addChild(node=Node('group',payload=[group]))
+		self._owner.send(iq)
+	def setItemMulti(self,items):
+		''' Renames multiple contacts and sets their group lists.'''
+		iq=Iq('set',NS_ROSTER)
+		query=iq.getTag('query')
+		for i in items:
+			attrs={'jid':i['jid']}
+			if i['name']: attrs['name']=i['name']
+			item=query.setTag('item',attrs)
+			for group in i['groups']: item.addChild(node=Node('group',payload=[group]))
 		self._owner.send(iq)
 	def getItems(self):
 		''' Return list of all [bare] JIDs that the roster is currently tracks.'''

@@ -63,7 +63,7 @@ class SSLWrapper:
 		peer=None):
 			self.parent = IOError
 
-			errno = errno or gattr(exc, 'errno')
+			errno = errno or gattr(exc, 'errno') or exc[0]
 			strerror = strerror or gattr(exc, 'strerror') or gattr(exc, 'args')
 			if not isinstance(strerror, basestring):
 				strerror = repr(strerror)
@@ -165,6 +165,10 @@ class PyOpenSSLWrapper(SSLWrapper):
 			log.debug("Recv: Got OpenSSL.SSL.SysCallError: " + repr(e),
 				exc_info=True)
 			raise SSLWrapper.Error(self.sock or self.sslobj, e)
+		except OpenSSL.SSL.ZeroReturnError, e:
+			# end-of-connection raises ZeroReturnError instead of having the
+			# connection's .recv() method return a zero-sized result.
+			raise SSLWrapper.Error(self.sock or self.sslobj, e, -1)
 		except OpenSSL.SSL.Error, e:
 			if self.is_numtoolarge(e):
 				# warn, but ignore this exception

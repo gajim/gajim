@@ -33,6 +33,7 @@ import gtk
 import pango
 import gobject
 import gtkgui_helpers
+import gui_menu_builder
 import message_control
 import dialogs
 import history_window
@@ -50,6 +51,15 @@ from common.logger import constants
 from common.pep import MOODS, ACTIVITIES
 from common.xmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from common.xmpp.protocol import NS_RECEIPTS, NS_ESESSION
+from common.xmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO, NS_JINGLE_ICE_UDP
+
+from command_system.implementation.middleware import ChatCommandProcessor
+from command_system.implementation.middleware import CommandTools
+from command_system.implementation.hosts import ChatCommands
+
+# Here we load the module with the standard commands, so they are being detected
+# and dispatched.
+import command_system.implementation.standard
 
 try:
 	import gtkspell
@@ -64,10 +74,25 @@ except ImportError:
 #echo "{_('en'):'en'",$LANG"}"
 langs = {_('English'): 'en', _('Belarusian'): 'be', _('Bulgarian'): 'bg', _('Breton'): 'br', _('Czech'): 'cs', _('German'): 'de', _('Greek'): 'el', _('British'): 'en_GB', _('Esperanto'): 'eo', _('Spanish'): 'es', _('Basque'): 'eu', _('French'): 'fr', _('Croatian'): 'hr', _('Italian'): 'it', _('Norwegian (b)'): 'nb', _('Dutch'): 'nl', _('Norwegian'): 'no', _('Polish'): 'pl', _('Portuguese'): 'pt', _('Brazilian Portuguese'): 'pt_BR', _('Russian'): 'ru', _('Serbian'): 'sr', _('Slovak'): 'sk', _('Swedish'): 'sv', _('Chinese (Ch)'): 'zh_CN'}
 
+if gajim.config.get('use_speller') and HAS_GTK_SPELL:
+	# loop removing non-existent dictionaries
+	# iterating on a copy
+	tv = gtk.TextView()
+	spell = gtkspell.Spell(tv)
+	for lang in dict(langs):
+		try:
+			spell.set_language(langs[lang])
+		except OSError:
+			del langs[lang]
+	if spell:
+		spell.detach()
+	del tv
+
 ################################################################################
-class ChatControlBase(MessageControl):
+class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 	'''A base class containing a banner, ConversationTextview, MessageTextView
 	'''
+
 	def make_href(self, match):
 		url_color = gajim.config.get('urlmsgcolor')
 		return '<a href="%s"><span color="%s">%s</span></a>' % (match.group(),
@@ -134,7 +159,54 @@ class ChatControlBase(MessageControl):
 	event_keymod):
 		# Derived should implement this rather than connecting to the event
 		# itself.
-		pass
+
+		event = gtk.gdk.Event(gtk.gdk.KEY_PRESS)
+		event.keyval = event_keyval
+		event.state = event_keymod
+		event.time = 0
+
+		buffer = widget.get_buffer()
+		start, end = buffer.get_bounds()
+
+		if event.keyval -- gtk.keysyms.Tab:
+			position = buffer.get_insert()
+			end = buffer.get_iter_at_mark(position)
+
+			text = buffer.get_text(start, end, False)
+			text = text.decode('utf8')
+
+			splitted = text.split()
+
+			if (text.startswith(self.COMMAND_PREFIX) and not
+				text.startswith(self.COMMAND_PREFIX * 2) and len(splitted) == 1):
+
+				text = splitted[0]
+				bare = text.lstrip(self.COMMAND_PREFIX)
+
+				if len(text) == 1:
+					self.command_hits = []
+					for command in self.list_commands():
+						for name in command.names:
+							self.command_hits.append(name)
+				else:
+					if (self.last_key_tabs and self.command_hits and
+						self.command_hits[0].startswith(bare)):
+						self.command_hits.append(self.command_hits.pop(0))
+					else:
+						self.command_hits = []
+						for command in self.list_commands():
+							for name in command.names:
+								if name.startswith(bare):
+									self.command_hits.append(name)
+
+				if self.command_hits:
+					buffer.delete(start, end)
+					buffer.insert_at_cursor(self.COMMAND_PREFIX + self.command_hits[0] + ' ')
+					self.last_key_tabs = True
+
+				return True
+
+			self.last_key_tabs = False
 
 	def status_url_clicked(self, widget, url):
 		helpers.launch_browser_mailer('url', url)
@@ -291,33 +363,27 @@ class ChatControlBase(MessageControl):
 		self.smooth = True
 		self.msg_textview.grab_focus()
 
+		self.command_hits = []
+		self.last_key_tabs = False
+
 	def set_speller(self):
-		try:
+		# now set the one the user selected
+		per_type = 'contacts'
+		if self.type_id == message_control.TYPE_GC:
+			per_type = 'rooms'
+		lang = gajim.config.get_per(per_type, self.contact.jid,
+			'speller_language')
+		if not lang:
+			# use the default one
 			lang = gajim.config.get('speller_language')
 			if not lang:
 				lang = gajim.LANG
-			spell = gtkspell.Spell(self.msg_textview, lang)
-			# loop removing non-existant dictionaries
-			# iterating on a copy
-			for lang in dict(langs):
-				try:
-					spell.set_language(langs[lang])
-				except OSError:
-					del langs[lang]
-			# now set the one the user selected
-			per_type = 'contacts'
-			if self.type_id == message_control.TYPE_GC:
-				per_type = 'rooms'
-			lang = gajim.config.get_per(per_type, self.contact.jid,
-				'speller_language')
-			if not lang:
-				# use the default one
-				lang = gajim.config.get('speller_language')
-			if lang:
+		if lang:
+			try:
+				gtkspell.Spell(self.msg_textview, lang)
 				self.msg_textview.lang = lang
-				spell.set_language(lang)
-		except (gobject.GError, RuntimeError, TypeError, OSError):
-			dialogs.AspellDictError(lang)
+			except (gobject.GError, RuntimeError, TypeError, OSError):
+				dialogs.AspellDictError(lang)
 
 	def on_banner_label_populate_popup(self, label, menu):
 		'''We override the default context menu and add our own menutiems'''
@@ -426,8 +492,10 @@ class ChatControlBase(MessageControl):
 		if default_bg or default_fg:
 			self._on_style_set_event(banner_name_label, None, default_fg,
 				default_bg)
-			self._on_style_set_event(self.banner_status_label, None, default_fg,
-				default_bg)
+			if self.banner_status_label.flags() & gtk.REALIZED:
+				# Widget is realized
+				self._on_style_set_event(self.banner_status_label, None, default_fg,
+					default_bg)
 
 	def disconnect_style_event(self, widget):
 		# Try to find the event_id
@@ -599,45 +667,27 @@ class ChatControlBase(MessageControl):
 			self.drag_entered_conv = True
 			self.conv_textview.tv.set_editable(True)
 
-	def _process_command(self, message):
-		if not message or message[0] != '/':
-			return False
-
-		message = message[1:]
-		message_array = message.split(' ', 1)
-		command = message_array.pop(0).lower()
-		if message_array == ['']:
-			message_array = []
-
-		if command == 'clear' and not len(message_array):
-			self.conv_textview.clear() # clear conversation
-			self.clear(self.msg_textview) # clear message textview too
-			return True
-		elif message == 'compact' and not len(message_array):
-			self.chat_buttons_set_visible(not self.hide_chat_buttons)
-			self.clear(self.msg_textview)
-			return True
-		return False
-
 	def send_message(self, message, keyID='', type_='chat', chatstate=None,
-	msg_id=None, composing_xep=None, resource=None, process_command=True,
-	xhtml=None, callback=None, callback_args=[]):
+	msg_id=None, composing_xep=None, resource=None,
+	xhtml=None, callback=None, callback_args=[], process_commands=True):
 		'''Send the given message to the active tab. Doesn't return None if error
 		'''
 		if not message or message == '\n':
 			return None
 
-		if not process_command or not self._process_command(message):
-			MessageControl.send_message(self, message, keyID, type_=type_,
-				chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
-				resource=resource, user_nick=self.user_nick, xhtml=xhtml,
-				callback=callback, callback_args=callback_args)
+		if process_commands and self.process_as_command(message):
+			return
 
-			# Record message history
-			self.save_sent_message(message)
+		MessageControl.send_message(self, message, keyID, type_=type_,
+			chatstate=chatstate, msg_id=msg_id, composing_xep=composing_xep,
+			resource=resource, user_nick=self.user_nick, xhtml=xhtml,
+			callback=callback, callback_args=callback_args)
 
-			# Be sure to send user nickname only once according to JEP-0172
-			self.user_nick = None
+		# Record message history
+		self.save_sent_message(message)
+
+		# Be sure to send user nickname only once according to JEP-0172
+		self.user_nick = None
 
 		# Clear msg input
 		message_buffer = self.msg_textview.get_buffer()
@@ -662,7 +712,8 @@ class ChatControlBase(MessageControl):
 
 	def print_conversation_line(self, text, kind, name, tim,
 	other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
-	count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False, xep0184_id = None):
+	count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False,
+	xep0184_id=None, graphics=True):
 		'''prints 'chat' type messages'''
 		jid = self.contact.jid
 		full_jid = self.get_full_jid()
@@ -672,7 +723,7 @@ class ChatControlBase(MessageControl):
 			end = True
 		textview.print_conversation_line(text, jid, kind, name, tim,
 			other_tags_for_name, other_tags_for_time, other_tags_for_text,
-			subject, old_kind, xhtml, simple=simple)
+			subject, old_kind, xhtml, simple=simple, graphics=graphics)
 
 		if xep0184_id is not None:
 			textview.show_xep0184_warning(xep0184_id)
@@ -825,7 +876,7 @@ class ChatControlBase(MessageControl):
 
 	def on_actions_button_clicked(self, widget):
 		'''popup action menu'''
-		menu = self.prepare_context_menu(True)
+		menu = self.prepare_context_menu(hide_buttonbar_items=True)
 		menu.show_all()
 		gtkgui_helpers.popup_emoticons_under_button(menu, widget,
 			self.parent_win)
@@ -1123,9 +1174,21 @@ class ChatControlBase(MessageControl):
 ################################################################################
 class ChatControl(ChatControlBase):
 	'''A control for standard 1-1 chat'''
+	(
+		JINGLE_STATE_NOT_AVAILABLE,
+		JINGLE_STATE_AVAILABLE,
+		JINGLE_STATE_CONNECTING,
+		JINGLE_STATE_CONNECTION_RECEIVED,
+		JINGLE_STATE_CONNECTED,
+		JINGLE_STATE_ERROR
+	) = range(6)
+
 	TYPE_ID = message_control.TYPE_CHAT
 	old_msg_kind = None # last kind of the printed message
-	CHAT_CMDS = ['clear', 'compact', 'help', 'me', 'ping', 'say']
+
+	# Set a command host to bound to. Every command given through a chat will be
+	# processed with this command host.
+	COMMAND_HOST = ChatCommands
 
 	def __init__(self, parent_win, contact, acct, session, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
@@ -1146,6 +1209,26 @@ class ChatControl(ChatControlBase):
 		id_ = self._add_to_roster_button.connect('clicked',
 			self._on_add_to_roster_menuitem_activate)
 		self.handlers[id_] = self._add_to_roster_button
+
+		self._audio_button = self.xml.get_widget('audio_togglebutton')
+		id_ = self._audio_button.connect('toggled', self.on_audio_button_toggled)
+		self.handlers[id_] = self._audio_button
+		# add a special img
+		path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+			'mic_inactive.png')
+		img = gtk.Image()
+		img.set_from_file(path_to_img)
+		self._audio_button.set_image(img)
+
+		self._video_button = self.xml.get_widget('video_togglebutton')
+		id_ = self._video_button.connect('toggled', self.on_video_button_toggled)
+		self.handlers[id_] = self._video_button
+		# add a special img
+		path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+			'cam_inactive.png')
+		img = gtk.Image()
+		img.set_from_file(path_to_img)
+		self._video_button.set_image(img)
 
 		self._send_file_button = self.xml.get_widget('send_file_button')
 		# add a special img for send file button
@@ -1182,12 +1265,18 @@ class ChatControl(ChatControlBase):
 
 		# Add lock image to show chat encryption
 		self.lock_image = self.xml.get_widget('lock_image')
-		self.lock_tooltip = gtk.Tooltips()
 
 		# Convert to GC icon
 		img = self.xml.get_widget('convert_to_gc_button_image')
 		img.set_from_pixbuf(gtkgui_helpers.load_icon(
 			'muc_active').get_pixbuf())
+
+		self._audio_banner_image = self.xml.get_widget('audio_banner_image')
+		self._video_banner_image = self.xml.get_widget('video_banner_image')
+		self.audio_sid = None
+		self.audio_state = self.JINGLE_STATE_NOT_AVAILABLE
+		self.video_sid = None
+		self.video_state = self.JINGLE_STATE_NOT_AVAILABLE
 
 		self.update_toolbar()
 
@@ -1235,14 +1324,12 @@ class ChatControl(ChatControlBase):
 		self.handlers[id_] = widget
 
 		if not session:
-			session = gajim.connections[self.account]. \
-				find_controlless_session(self.contact.jid)
-			if session:
-				# Don't use previous session if we want to a specific resource
-				# and it's not the same
-				r = gajim.get_room_and_nick_from_fjid(str(session.jid))[1]
-				if resource and resource != r:
-					session = None
+			# Don't use previous session if we want to a specific resource
+			# and it's not the same
+			if not resource:
+				resource = contact.resource
+			session = gajim.connections[self.account].find_controlless_session(
+				self.contact.jid, resource)
 
 		if session:
 			session.control = self
@@ -1274,8 +1361,6 @@ class ChatControl(ChatControlBase):
 			self._show_lock_image(self.gpg_is_active, 'GPG', self.gpg_is_active,
 				self.session and self.session.is_loggable(), True)
 
-		self.status_tooltip = gtk.Tooltips()
-
 		self.update_ui()
 		# restore previous conversation
 		self.restore_conversation()
@@ -1283,9 +1368,7 @@ class ChatControl(ChatControlBase):
 
 	def update_toolbar(self):
 		# Formatting
-		if gajim.capscache.is_supported(self.contact, NS_XHTML_IM) \
-		and not gajim.capscache.is_supported(self.contact, 'notexistant') \
-		and not self.gpg_is_active:
+		if self.contact.supports(NS_XHTML_IM) and not self.gpg_is_active:
 			self._formattings_button.set_sensitive(True)
 		else:
 			self._formattings_button.set_sensitive(False)
@@ -1297,13 +1380,44 @@ class ChatControl(ChatControlBase):
 		else:
 			self._add_to_roster_button.hide()
 
+		# Jingle detection
+		if self.contact.supports(NS_JINGLE_ICE_UDP) and \
+		gajim.HAVE_FARSIGHT and self.contact.resource:
+			if self.contact.supports(NS_JINGLE_RTP_AUDIO):
+				if self.audio_state == self.JINGLE_STATE_NOT_AVAILABLE:
+					self.set_audio_state('available')
+			else:
+				self.set_audio_state('not_available')
+
+			if self.contact.supports(NS_JINGLE_RTP_VIDEO):
+				if self.video_state == self.JINGLE_STATE_NOT_AVAILABLE:
+					self.set_video_state('available')
+			else:
+				self.set_video_state('not_available')
+		else:
+			if self.audio_state != self.JINGLE_STATE_NOT_AVAILABLE:
+				self.set_audio_state('not_available')
+			if self.video_state != self.JINGLE_STATE_NOT_AVAILABLE:
+				self.set_video_state('not_available')
+
+		# Audio buttons
+		if self.audio_state == self.JINGLE_STATE_NOT_AVAILABLE:
+			self._audio_button.set_sensitive(False)
+		else:
+			self._audio_button.set_sensitive(True)
+
+		# Video buttons
+		if self.video_state == self.JINGLE_STATE_NOT_AVAILABLE:
+			self._video_button.set_sensitive(False)
+		else:
+			self._video_button.set_sensitive(True)
+
 		# Send file
-		if gajim.capscache.is_supported(self.contact, NS_FILE) and \
-		self.contact.resource:
+		if self.contact.supports(NS_FILE) and self.contact.resource:
 			self._send_file_button.set_sensitive(True)
 		else:
 			self._send_file_button.set_sensitive(False)
-			if not gajim.capscache.is_supported(self.contact, NS_FILE):
+			if not self.contact.supports(NS_FILE):
 				self._send_file_button.set_tooltip_text(_(
 					"This contact does not support file transfer."))
 			else:
@@ -1312,7 +1426,7 @@ class ChatControl(ChatControlBase):
 					"her a file."))
 
 		# Convert to GC
-		if gajim.capscache.is_supported(self.contact, NS_MUC):
+		if self.contact.supports(NS_MUC):
 			self._convert_to_gc_button.set_sensitive(True)
 		else:
 			self._convert_to_gc_button.set_sensitive(False)
@@ -1429,6 +1543,93 @@ class ChatControl(ChatControlBase):
 		else:
 			self._tune_image.hide()
 
+	def _update_jingle(self, jingle_type):
+		if jingle_type not in ('audio', 'video'):
+			return
+		if self.__dict__[jingle_type + '_state'] in (
+		self.JINGLE_STATE_NOT_AVAILABLE, self.JINGLE_STATE_AVAILABLE):
+			self.__dict__['_' + jingle_type + '_banner_image'].hide()
+		else:
+			self.__dict__['_' + jingle_type + '_banner_image'].show()
+		if self.audio_state == self.JINGLE_STATE_CONNECTING:
+			self.__dict__['_' + jingle_type + '_banner_image'].set_from_stock(
+				gtk.STOCK_CONVERT, 1)
+		elif self.audio_state == self.JINGLE_STATE_CONNECTION_RECEIVED:
+			self.__dict__['_' + jingle_type + '_banner_image'].set_from_stock(
+				gtk.STOCK_NETWORK, 1)
+		elif self.audio_state == self.JINGLE_STATE_CONNECTED:
+			self.__dict__['_' + jingle_type + '_banner_image'].set_from_stock(
+				gtk.STOCK_CONNECT, 1)
+		elif self.audio_state == self.JINGLE_STATE_ERROR:
+			self.__dict__['_' + jingle_type + '_banner_image'].set_from_stock(
+				gtk.STOCK_DIALOG_WARNING, 1)
+		self.update_toolbar()
+
+	def update_audio(self):
+		self._update_jingle('audio')
+
+	def update_video(self):
+		self._update_jingle('video')
+
+	def change_resource(self, resource):
+		old_full_jid = self.get_full_jid()
+		self.resource = resource
+		new_full_jid = self.get_full_jid()
+		# update gajim.last_message_time
+		if old_full_jid in gajim.last_message_time[self.account]:
+			gajim.last_message_time[self.account][new_full_jid] = \
+				gajim.last_message_time[self.account][old_full_jid]
+		# update events
+		gajim.events.change_jid(self.account, old_full_jid, new_full_jid)
+		# update MessageWindow._controls
+		self.parent_win.change_jid(self.account, old_full_jid, new_full_jid)
+
+	def _set_jingle_state(self, jingle_type, state, sid=None, reason=None):
+		if jingle_type not in ('audio', 'video'):
+			return
+		if state in ('connecting', 'connected', 'stop') and reason:
+			str = _('%(type)s state : %(state)s, reason: %(reason)s') % {
+				'type': jingle_type.capitalize(), 'state': state, 'reason': reason}
+			self.print_conversation(str, 'info')
+
+		states = {'not_available': self.JINGLE_STATE_NOT_AVAILABLE,
+			'available': self.JINGLE_STATE_AVAILABLE,
+			'connecting': self.JINGLE_STATE_CONNECTING,
+			'connection_received': self.JINGLE_STATE_CONNECTION_RECEIVED,
+			'connected': self.JINGLE_STATE_CONNECTED,
+			'stop': self.JINGLE_STATE_AVAILABLE,
+			'error': self.JINGLE_STATE_ERROR}
+
+		if state in states:
+			jingle_state = states[state]
+			if self.__dict__[jingle_type + '_state'] == jingle_state:
+				return
+			self.__dict__[jingle_type + '_state'] = jingle_state
+
+		# Destroy existing session with the user when he signs off
+		# We need to do that before modifying the sid
+		if state == 'not_available':
+			gajim.connections[self.account].delete_jingle_session(
+				self.contact.get_full_jid(), self.__dict__[jingle_type + '_sid'])
+
+		if state in ('not_available', 'available', 'stop'):
+			self.__dict__[jingle_type + '_sid'] = None
+		if state in ('connection_received', 'connecting'):
+			self.__dict__[jingle_type + '_sid'] = sid
+
+		if state in ('connecting', 'connected', 'connection_received'):
+			self.__dict__['_' + jingle_type + '_button'].set_active(True)
+		elif state in ('not_available', 'stop'):
+			self.__dict__['_' + jingle_type + '_button'].set_active(False)
+
+		eval('self.update_' + jingle_type)()
+
+	def set_audio_state(self, state, sid=None, reason=None):
+		self._set_jingle_state('audio', state, sid=sid, reason=reason)
+
+	def set_video_state(self, state, sid=None, reason=None):
+		self._set_jingle_state('video', state, sid=sid, reason=reason)
+
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		'''
 		we enter the eventbox area so we under conditions add a timeout
@@ -1540,7 +1741,6 @@ class ChatControl(ChatControlBase):
 		jid = contact.jid
 
 		banner_name_label = self.xml.get_widget('banner_name_label')
-		banner_name_tooltip = gtk.Tooltips()
 
 		name = contact.get_shown_name()
 		if self.resource:
@@ -1615,8 +1815,7 @@ class ChatControl(ChatControlBase):
 				status_text = '<span %s>%s</span>' % (font_attrs_small, status_text)
 			else:
 				status_text = '<span %s>%s</span>' % (font_attrs_small, status_escaped)
-			self.status_tooltip.set_tip(self.banner_status_label,
-					status)
+			self.banner_status_label.set_tooltip_text(status)
 			self.banner_status_label.show()
 			self.banner_status_label.set_no_show_all(False)
 		else:
@@ -1627,7 +1826,47 @@ class ChatControl(ChatControlBase):
 		self.banner_status_label.set_markup(status_text)
 		# setup the label that holds name and jid
 		banner_name_label.set_markup(label_text)
-		banner_name_tooltip.set_tip(banner_name_label, label_tooltip)
+		banner_name_label.set_tooltip_text(label_tooltip)
+
+	def on_audio_button_toggled(self, widget):
+		if widget.get_active():
+			path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+				'mic_active.png')
+			if self.audio_state == self.JINGLE_STATE_AVAILABLE:
+				sid = gajim.connections[self.account].startVoIP(
+					self.contact.get_full_jid())
+				self.set_audio_state('connecting', sid)
+		else:
+			path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+				'mic_inactive.png')
+			session = gajim.connections[self.account].get_jingle_session(
+				self.contact.get_full_jid(), self.audio_sid)
+			if session:
+				content = session.get_content('audio')
+				if content:
+					session.remove_content(content.creator, content.name)
+		img = self._audio_button.get_property('image')
+		img.set_from_file(path_to_img)
+
+	def on_video_button_toggled(self, widget):
+		if widget.get_active():
+			path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+				'cam_active.png')
+			if self.video_state == self.JINGLE_STATE_AVAILABLE:
+				sid = gajim.connections[self.account].startVideoIP(
+					self.contact.get_full_jid())
+				self.set_video_state('connecting', sid)
+		else:
+			path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
+				'cam_inactive.png')
+			session = gajim.connections[self.account].get_jingle_session(
+				self.contact.get_full_jid(), self.video_sid)
+			if session:
+				content = session.get_content('video')
+				if content:
+					session.remove_content(content.creator, content.name)
+		img = self._video_button.get_property('image')
+		img.set_from_file(path_to_img)
 
 	def _toggle_gpg(self):
 		if not self.gpg_is_active and not self.contact.keyID:
@@ -1704,7 +1943,7 @@ class ChatControl(ChatControlBase):
 			'status': status_string, 'authenticated': authenticated_string,
 			'logged': logged_string}
 
-		self.lock_tooltip.set_tip(self.authentication_button, tooltip)
+		self.authentication_button.set_tooltip_text(tooltip)
 		self.widget_set_visible(self.authentication_button, not visible)
 		self.lock_image.set_sensitive(enc_enabled)
 
@@ -1714,82 +1953,11 @@ class ChatControl(ChatControlBase):
 		elif self.session and self.session.enable_encryption:
 			dialogs.ESessionInfoWindow(self.session)
 
-	def _process_command(self, message):
-		if message[0] != '/':
-			return False
-
-		# Handle common commands
-		if ChatControlBase._process_command(self, message):
-			return True
-
-		message = message[1:]
-		message_array = message.split(' ', 1)
-		command = message_array.pop(0).lower()
-		if message_array == ['']:
-			message_array = []
-
-		if command == 'me':
-			if len(message_array):
-				return False # /me is not really a command
-			else:
-				self.get_command_help(command)
-				return True # do not send "/me" as message
-
-		if command == 'help':
-			if len(message_array):
-				subcommand = message_array.pop(0)
-				self.get_command_help(subcommand)
-			else:
-				self.get_command_help(command)
-			self.clear(self.msg_textview)
-			return True
-		elif command == 'ping':
-			if not len(message_array):
-				if self.account == gajim.ZEROCONF_ACC_NAME:
-					self.print_conversation(
-						_('Command not supported for zeroconf account.'), 'info')
-				else:
-					gajim.connections[self.account].sendPing(self.contact)
-			else:
-				self.get_command_help(command)
-			self.clear(self.msg_textview)
-			return True
-		return False
-
-	def get_command_help(self, command):
-		if command == 'help':
-			self.print_conversation(_('Commands: %s') % ChatControl.CHAT_CMDS,
-				'info')
-		elif command == 'clear':
-			self.print_conversation(_('Usage: /%s, clears the text window.') % \
-				command, 'info')
-		elif command == 'compact':
-			self.print_conversation(_('Usage: /%s, hide the chat buttons.') % \
-				command, 'info')
-		elif command == 'me':
-			self.print_conversation(_('Usage: /%(command)s <action>, sends action '
-				'to the current group chat. Use third person. (e.g. /%(command)s '
-				'explodes.)'
-				) % {'command': command}, 'info')
-		elif command == 'ping':
-			self.print_conversation(_('Usage: /%s, sends a ping to the contact') %\
-				command, 'info')
-		elif command == 'say':
-			self.print_conversation(_('Usage: /%s, send the message to the contact') %\
-				command, 'info')
-		else:
-			self.print_conversation(_('No help info for /%s') % command, 'info')
-
-	def send_message(self, message, keyID='', chatstate=None, xhtml=None):
+	def send_message(self, message, keyID='', chatstate=None, xhtml=None,
+			process_commands=True):
 		'''Send a message to contact'''
-		if message in ('', None, '\n') or self._process_command(message):
+		if message in ('', None, '\n'):
 			return None
-
-		# Do we need to process command for the message ?
-		process_command = True
-		if message.startswith('/say'):
-			message = message[5:]
-			process_command = False
 
 		# refresh timers
 		self.reset_kbd_mouse_timeout_vars()
@@ -1835,10 +2003,7 @@ class ChatControl(ChatControlBase):
 				self._schedule_activity_timers()
 
 		def _on_sent(id_, contact, message, encrypted, xhtml):
-			# XXX: Once we have fallback to disco, remove notexistant check
-			if gajim.capscache.is_supported(contact, NS_RECEIPTS) \
-			and not gajim.capscache.is_supported(contact,
-			'notexistant') and gajim.config.get_per('accounts',
+			if contact.supports(NS_RECEIPTS) and gajim.config.get_per('accounts',
 			self.account, 'request_receipt'):
 				xep0184_id = id_
 			else:
@@ -1849,8 +2014,9 @@ class ChatControl(ChatControlBase):
 
 		ChatControlBase.send_message(self, message, keyID, type_='chat',
 			chatstate=chatstate_to_send, composing_xep=composing_xep,
-			process_command=process_command, xhtml=xhtml, callback=_on_sent,
-			callback_args=[contact, message, encrypted, xhtml])
+			xhtml=xhtml, callback=_on_sent,
+			callback_args=[contact, message, encrypted, xhtml],
+			process_commands=process_commands)
 
 	def check_for_possible_paused_chatstate(self, arg):
 		''' did we move mouse of that window or write something in message
@@ -1987,8 +2153,8 @@ class ChatControl(ChatControlBase):
 			else:
 				kind = 'outgoing'
 				name = gajim.nicks[self.account]
-				if not xhtml and not encrypted and gajim.config.get(
-				'rst_formatting_outgoing_messages'):
+				if not xhtml and not (encrypted and self.gpg_is_active) and \
+				gajim.config.get('rst_formatting_outgoing_messages'):
 					from common.rst_xhtml_generator import create_xhtml
 					xhtml = create_xhtml(text)
 					if xhtml:
@@ -2052,13 +2218,16 @@ class ChatControl(ChatControlBase):
 			label_str = '<b>' + unread + label_str + '</b>'
 		return (label_str, color)
 
-	def get_tab_image(self):
+	def get_tab_image(self, count_unread=True):
 		if self.resource:
 			jid = self.contact.get_full_jid()
 		else:
 			jid = self.contact.jid
-		num_unread = len(gajim.events.get_events(self.account, jid,
-			['printed_' + self.type_id, self.type_id]))
+		if count_unread:
+			num_unread = len(gajim.events.get_events(self.account, jid,
+				['printed_' + self.type_id, self.type_id]))
+		else:
+			num_unread = 0
 		# Set tab image (always 16x16); unread messages show the 'event' image
 		tab_img = None
 
@@ -2073,141 +2242,23 @@ class ChatControl(ChatControlBase):
 				# For transient contacts
 				contact = self.contact
 			img_16 = gajim.interface.roster.get_appropriate_state_images(
-				self.contact.jid, icon_name = contact.show)
+				self.contact.jid, icon_name=contact.show)
 			tab_img = img_16[contact.show]
 
 		return tab_img
 
-	def prepare_context_menu(self, hide_buttonbar_entries = False):
+	def prepare_context_menu(self, hide_buttonbar_items=False):
 		'''sets compact view menuitem active state
 		sets active and sensitivity state for toggle_gpg_menuitem
 		sets sensitivity for history_menuitem (False for tranasports)
 		and file_transfer_menuitem
 		and hide()/show() for add_to_roster_menuitem
 		'''
-		xml = gtkgui_helpers.get_glade('chat_control_popup_menu.glade')
-		menu = xml.get_widget('chat_control_popup_menu')
-
-		add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
-		history_menuitem = xml.get_widget('history_menuitem')
-		toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
-		toggle_e2e_menuitem = xml.get_widget('toggle_e2e_menuitem')
-		send_file_menuitem = xml.get_widget('send_file_menuitem')
-		information_menuitem = xml.get_widget('information_menuitem')
-		convert_to_gc_menuitem = xml.get_widget('convert_to_groupchat')
-		separatormenuitem1 = xml.get_widget('separatormenuitem1')
-		separatormenuitem2 = xml.get_widget('separatormenuitem2')
-
-		# add a special img for send file menuitem
-		path_to_upload_img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'upload.png')
-		img = gtk.Image()
-		img.set_from_file(path_to_upload_img)
-		send_file_menuitem.set_image(img)
-
-		muc_icon = gtkgui_helpers.load_icon('muc_active')
-		if muc_icon:
-			convert_to_gc_menuitem.set_image(muc_icon)
-
-		if not hide_buttonbar_entries:
-			history_menuitem.show()
-			send_file_menuitem.show()
-			information_menuitem.show()
-			convert_to_gc_menuitem.show()
-			separatormenuitem1.show()
-			separatormenuitem2.show()
-
-		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
-		send_file_menuitem.add_accelerator('activate', ag, gtk.keysyms.f, gtk.gdk.CONTROL_MASK,
-			gtk.ACCEL_VISIBLE)
-		convert_to_gc_menuitem.add_accelerator('activate', ag, gtk.keysyms.g, gtk.gdk.CONTROL_MASK,
-			gtk.ACCEL_VISIBLE)
-		history_menuitem.add_accelerator('activate', ag, gtk.keysyms.h, gtk.gdk.CONTROL_MASK,
-			gtk.ACCEL_VISIBLE)
-		information_menuitem.add_accelerator('activate', ag, gtk.keysyms.i,
-			gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
-
-		contact = self.parent_win.get_active_contact()
-		jid = contact.jid
-
-		e2e_is_active = self.session is not None and self.session.enable_encryption
-
-		# check if we support and use gpg
-		if not gajim.config.get_per('accounts', self.account, 'keyid') or\
-		not gajim.connections[self.account].USE_GPG or\
-		gajim.jid_is_transport(jid):
-			toggle_gpg_menuitem.set_sensitive(False)
-		else:
-			toggle_gpg_menuitem.set_sensitive(self.gpg_is_active or not e2e_is_active)
-			toggle_gpg_menuitem.set_active(self.gpg_is_active)
-
-		# disable esessions if we or the other client don't support them
-		# XXX: Once we have fallback to disco, remove notexistant check
-		if not gajim.HAVE_PYCRYPTO or \
-		not gajim.capscache.is_supported(contact, NS_ESESSION) or \
-		gajim.capscache.is_supported(contact, 'notexistant'):
-			toggle_e2e_menuitem.set_sensitive(False)
-		else:
-			toggle_e2e_menuitem.set_active(e2e_is_active)
-			toggle_e2e_menuitem.set_sensitive(e2e_is_active or not self.gpg_is_active)
-
-		# add_to_roster_menuitem
-		if not hide_buttonbar_entries and _('Not in Roster') in contact.groups:
-			add_to_roster_menuitem.show()
-
-		# check if it's possible to send a file
-		if gajim.capscache.is_supported(contact, NS_FILE):
-			send_file_menuitem.set_sensitive(True)
-		else:
-			send_file_menuitem.set_sensitive(False)
-
-		# check if it's possible to convert to groupchat
-		if gajim.capscache.is_supported(contact, NS_MUC):
-			convert_to_gc_menuitem.set_sensitive(True)
-		else:
-			convert_to_gc_menuitem.set_sensitive(False)
-
-		# connect signals
-		id_ = history_menuitem.connect('activate',
-			self._on_history_menuitem_activate)
-		self.handlers[id_] = history_menuitem
-		id_ = send_file_menuitem.connect('activate',
-			self._on_send_file_menuitem_activate)
-		self.handlers[id_] = send_file_menuitem
-		id_ = add_to_roster_menuitem.connect('activate',
-			self._on_add_to_roster_menuitem_activate)
-		self.handlers[id_] = add_to_roster_menuitem
-		id_ = toggle_gpg_menuitem.connect('activate',
-			self._on_toggle_gpg_menuitem_activate)
-		self.handlers[id_] = toggle_gpg_menuitem
-		id_ = toggle_e2e_menuitem.connect('activate',
-			self._on_toggle_e2e_menuitem_activate)
-		self.handlers[id_] = toggle_e2e_menuitem
-		id_ = information_menuitem.connect('activate',
-			self._on_contact_information_menuitem_activate)
-		self.handlers[id_] = information_menuitem
-		id_ = convert_to_gc_menuitem.connect('activate',
-			self._on_convert_to_gc_menuitem_activate)
-		self.handlers[id_] = convert_to_gc_menuitem
-
-		menu.connect('selection-done', self.destroy_menu,
-			send_file_menuitem, convert_to_gc_menuitem,
-			information_menuitem, history_menuitem)
+		menu = gui_menu_builder.get_contact_menu(self.contact, self.account,
+			use_multiple_contacts=False, show_start_chat=False,
+			show_encryption=True, control=self,
+			show_buttonbar_items=not hide_buttonbar_items)
 		return menu
-
-	def destroy_menu(self, menu, send_file_menuitem,
-	convert_to_gc_menuitem, information_menuitem, history_menuitem):
-		# destroy accelerators
-		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
-		send_file_menuitem.remove_accelerator(ag, gtk.keysyms.f,
-			gtk.gdk.CONTROL_MASK)
-		convert_to_gc_menuitem.remove_accelerator(ag, gtk.keysyms.g,
-			gtk.gdk.CONTROL_MASK)
-		information_menuitem.remove_accelerator(ag, gtk.keysyms.i,
-			gtk.gdk.CONTROL_MASK)
-		history_menuitem.remove_accelerator(ag, gtk.keysyms.h,
-			gtk.gdk.CONTROL_MASK)
-		# destroy menu
-		menu.destroy()
 
 	def send_chatstate(self, state, contact = None):
 		''' sends OUR chatstate as STANDLONE chat state message (eg. no body)
@@ -2292,9 +2343,6 @@ class ChatControl(ChatControlBase):
 			self.reset_kbd_mouse_timeout_vars()
 
 	def shutdown(self):
-		# destroy banner tooltip - bug #pygtk for that!
-		self.status_tooltip.destroy()
-
 		# Send 'gone' chatstate
 		self.send_chatstate('gone', self.contact)
 		self.contact.chatstate = None
@@ -2329,6 +2377,10 @@ class ChatControl(ChatControlBase):
 				self.handlers[i].disconnect(i)
 			del self.handlers[i]
 		self.conv_textview.del_handlers()
+		if gajim.config.get('use_speller') and HAS_GTK_SPELL:
+			spell_obj = gtkspell.get_from_text_view(self.msg_textview)
+			if spell_obj:
+				spell_obj.detach()
 		self.msg_textview.destroy()
 
 	def minimizable(self):
@@ -2470,12 +2522,8 @@ class ChatControl(ChatControlBase):
 			want_e2e = not e2e_is_active and not self.gpg_is_active \
 				and e2e_pref
 
-			# XXX: Once we have fallback to disco, remove notexistant check
 			if want_e2e and not self.no_autonegotiation \
-			and gajim.HAVE_PYCRYPTO \
-			and gajim.capscache.is_supported(self.contact,
-			NS_ESESSION) and not gajim.capscache.is_supported(
-			self.contact, 'notexistant'):
+			and gajim.HAVE_PYCRYPTO and self.contact.supports(NS_ESESSION):
 				self.begin_e2e_negotiation()
 			elif not self.session.accepted:
 				self.begin_archiving_negotiation()
@@ -2734,7 +2782,7 @@ class ChatControl(ChatControlBase):
 		contact = gajim.contacts.get_contact_with_highest_priority(
 			self.account, self.contact.jid)
 		if isinstance(contact, GC_Contact):
-			contact = gajim.contacts.contact_from_gc_contact(contact)
+			contact = contact.as_contact()
 		if contact:
 			self.contact = contact
 		self.draw_banner()

@@ -1,3 +1,57 @@
+Gajim 0.13 (XX November 2009)
+
+  * Improve gtkspell (fix memleak)
+  * BOSH connection
+  * Roster versioning
+  * Ability to send contacts
+  * GUI to send XHTML messages
+  * Improve sessions handling
+  * pubsub storage (for bookmarks)
+  * Ability to select account when joining a groupchat
+  * Better Gnome keyring support
+  * Ability to ignore occupants in groupchats
+  * Ability to show / hide self contact row
+  * Automatically go away when screensaver is enabled under windows
+  * Ability to enable / disable accounts
+  * better URL recognition
+  * groupchat autoreconnect
+  * Store passwords in KDE wallet if available
+  * Better MUC errors handling
+  * Fix sound player launch (don't create zombies anymore)
+  * Optional shell like completion
+  * New color theme
+
+Gajim 0.12.5 (08 August 2009)
+
+  * Don't depend on GTK 2.14
+
+Gajim 0.12.4 (07 August 2009)
+
+  * Fix History manager
+  * Fix file transfer proxy discovering at connection
+  * Improve filetransfer with IPv6
+  * Fix zeroconf when receiving badly encoded info
+
+Gajim 0.12.3 (12 June 2009)
+
+  * Fix PLAIN authentication (in particular with Gtalk
+  * fix PEP discovery
+
+Gajim 0.12.2 (07 June 2009)
+
+  * Better keepalive / ping behaviour
+  * Fix custom port handling
+  * Improve error messages handling
+  * Totem support for played music
+  * Fix SSL with some servers
+  * Handle XFCE notification-daemon
+  * Restore old behaviour of click on systray: left click to open events
+  * Network manager 0.7 support
+  * Move logs file under windows to $APPDATA/gajim
+  * Improve Kerberos support
+  * Many bugfixes here and there
+  * Add -c option to history_manager
+
 Gajim 0.12.1 (21 December 2008)
 
   * Fix filetransfer

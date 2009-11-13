@@ -228,8 +228,7 @@ _('Connection with peer cannot be established.'))
 		sectext += '\n\t' + _('Recipient: %s') % jid
 		if error_msg:
 			sectext += '\n\t' + _('Error message: %s') % error_msg
-		dialogs.ErrorDialog(_('File transfer stopped by the contact at the other '
-			'end'), sectext)
+		dialogs.ErrorDialog(_('File transfer stopped'), sectext)
 		self.tree.get_selection().unselect_all()
 
 	def show_file_send_request(self, account, contact):
@@ -285,7 +284,7 @@ _('Connection with peer cannot be established.'))
 			if contact.find('/') == -1:
 				return
 			(jid, resource) = contact.split('/', 1)
-			contact = gajim.contacts.create_contact(jid=jid, resource=resource)
+			contact = gajim.contacts.create_contact(jid=jid, account=account, resource=resource)
 		file_name = os.path.split(file_path)[1]
 		file_props = self.get_send_file_props(account, contact,
 				file_path, file_name, file_desc)

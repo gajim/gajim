@@ -33,12 +33,13 @@ import string
 import time
 import base64
 import os
+from hashlib import sha256
+from hmac import HMAC
+from common import crypto
 
 if gajim.HAVE_PYCRYPTO:
 	from Crypto.Cipher import AES
-	from Crypto.Hash import HMAC, SHA256
 	from Crypto.PublicKey import RSA
-	from common import crypto
 
 	from common import dh
 	import secrets
@@ -54,6 +55,7 @@ class StanzaSession(object):
 		self.conn = conn
 		self.jid = jid
 		self.type = type_
+		self.resource = None
 
 		if thread_id:
 			self.received_thread_id = True
@@ -74,6 +76,12 @@ class StanzaSession(object):
 
 	def is_loggable(self):
 		return self.loggable and gajim.config.should_log(self.conn.name, self.jid)
+
+	def get_to(self):
+		to = str(self.jid)
+		if self.resource and not to.endswith(self.resource):
+			to += '/' + self.resource
+		return to
 
 	def remove_events(self, types):
 		'''
@@ -107,7 +115,7 @@ class StanzaSession(object):
 		if self.thread_id:
 			msg.NT.thread = self.thread_id
 
-		msg.setAttr('to', self.jid)
+		msg.setAttr('to', self.get_to())
 		self.conn.send_stanza(msg)
 
 		if isinstance(msg, xmpp.Message):
@@ -314,6 +322,18 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 		# has the remote contact's identity ever been verified?
 		self.verified_identity = False
 
+	def _get_contact(self):
+		c = gajim.contacts.get_contact(self.conn.name, self.jid, self.resource)
+		if not c:
+			c = gajim.contacts.get_contact(self.conn.name, self.jid)
+		return c
+
+	def _is_buggy_gajim(self):
+		c = self._get_contact()
+		if c and c.supports(xmpp.NS_ROSTERX):
+			return False
+		return True
+
 	def set_kc_s(self, value):
 		'''
 		keep the encrypter updated with my latest cipher key
@@ -396,7 +416,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 		msg.getTag('c', namespace=xmpp.NS_STANZA_CRYPTO)
 
 	def hmac(self, key, content):
-		return HMAC.new(key, content, self.hash_alg).digest()
+		return HMAC(key, content, self.hash_alg).digest()
 
 	def generate_initiator_keys(self, k):
 		return (self.hmac(k, 'Initiator Cipher Key'),
@@ -475,7 +495,8 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 	def c7lize_mac_id(self, form):
 		kids = form.getChildren()
 		macable = [x for x in kids if x.getVar() not in ('mac', 'identity')]
-		return ''.join(xmpp.c14n.c14n(el) for el in macable)
+		return ''.join(xmpp.c14n.c14n(el, self._is_buggy_gajim()) for el in \
+			macable)
 
 	def verify_identity(self, form, dh_i, sigmai, i_o):
 		m_o = base64.b64decode(form['mac'])
@@ -508,7 +529,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 						keyvalue.getTagData(x))) for x in ('Modulus', 'Exponent'))
 					eir_pubkey = RSA.construct((n,long(e)))
 
-					pubkey_o = xmpp.c14n.c14n(keyvalue)
+					pubkey_o = xmpp.c14n.c14n(keyvalue, self._is_buggy_gajim())
 				else:
 					# FIXME DSA, etc.
 					raise NotImplementedError()
@@ -558,7 +579,8 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 		else:
 			pubkey_s = ''
 
-		form_s2 = ''.join(xmpp.c14n.c14n(el) for el in form.getChildren())
+		form_s2 = ''.join(xmpp.c14n.c14n(el, self._is_buggy_gajim()) for el in \
+			form.getChildren())
 
 		old_c_s = self.c_s
 		content = self.n_o + self.n_s + crypto.encode_mpi(dh_i) + pubkey_s + \
@@ -659,7 +681,8 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 		x.addChild(node=self.make_dhfield(modp_options, sigmai))
 		self.sigmai = sigmai
 
-		self.form_s = ''.join(xmpp.c14n.c14n(el) for el in x.getChildren())
+		self.form_s = ''.join(xmpp.c14n.c14n(el, self._is_buggy_gajim()) for el \
+			in x.getChildren())
 
 		feature.addChild(node=x)
 
@@ -682,7 +705,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 
 		self.sas_algs = 'sas28x5'
 		self.cipher = AES
-		self.hash_alg = SHA256
+		self.hash_alg = sha256
 		self.compression = None
 
 		for name in form.asDict():
@@ -788,8 +811,10 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 			b64ed = base64.b64encode(to_add[name])
 			x.addChild(node=xmpp.DataField(name=name, value=b64ed))
 
-		self.form_o = ''.join(xmpp.c14n.c14n(el) for el in form.getChildren())
-		self.form_s = ''.join(xmpp.c14n.c14n(el) for el in x.getChildren())
+		self.form_o = ''.join(xmpp.c14n.c14n(el, self._is_buggy_gajim()) for el \
+			in form.getChildren())
+		self.form_s = ''.join(xmpp.c14n.c14n(el, self._is_buggy_gajim()) for el \
+			in x.getChildren())
 
 		self.status = 'responded-e2e'
 
@@ -842,7 +867,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 		self.encryptable_stanzas = ['message']
 		self.sas_algs = 'sas28x5'
 		self.cipher = AES
-		self.hash_alg = SHA256
+		self.hash_alg = sha256 
 		self.compression = None
 
 		self.negotiated = negotiated
@@ -883,7 +908,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 
 			if not rshashes:
 				# we've never spoken before, but we'll pretend we have
-				rshash_size = self.hash_alg.digest_size
+				rshash_size = self.hash_alg().digest_size
 				rshashes.append(crypto.random_bytes(rshash_size))
 
 			rshashes = [base64.b64encode(rshash) for rshash in rshashes]
@@ -891,7 +916,8 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 			result.addChild(node=xmpp.DataField(name='dhkeys',
 				value=base64.b64encode(crypto.encode_mpi(e))))
 
-			self.form_o = ''.join(xmpp.c14n.c14n(el) for el in form.getChildren())
+			self.form_o = ''.join(xmpp.c14n.c14n(el, self._is_buggy_gajim()) for \
+				el in form.getChildren())
 
 		# MUST securely destroy K unless it will be used later to generate the
 		# final shared secret

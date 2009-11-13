@@ -504,9 +504,14 @@ class NonBlockingBind(PlugIn):
 				jid = JID(resp.getTag('bind').getTagData('jid'))
 				self._owner.User = jid.getNode()
 				self._owner.Resource = jid.getResource()
-				self._owner.SendAndWaitForResponse(Protocol('iq', typ='set',
-					payload=[Node('session', attrs={'xmlns':NS_SESSION})]),
-					func=self._on_session)
+				if hasattr(self, 'session') and self.session == -1:
+					# Server don't want us to initialize a session
+					log.info('No session required.')
+					self.on_bound('ok')
+				else:
+					self._owner.SendAndWaitForResponse(Protocol('iq', typ='set',
+						payload=[Node('session', attrs={'xmlns':NS_SESSION})]),
+						func=self._on_session)
 				return
 		if resp:
 			log.error('Binding failed: %s.' % resp.getTag('error'))

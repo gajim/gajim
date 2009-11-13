@@ -34,7 +34,7 @@
 # - def update_actions(self)
 # - def default_action(self)
 # - def _find_item(self, jid, node)
-# - def _add_item(self, jid, node, item, force)
+# - def _add_item(self, jid, node, parent_node, item, force)
 # - def _update_item(self, iter_, jid, node, item)
 # - def _update_info(self, iter_, jid, node, identities, features, data)
 # - def _update_error(self, iter_, jid, node)
@@ -963,13 +963,13 @@ _('This service does not contain any items to browse.'))
 		# We got a list of items
 		self.window.services_treeview.set_model(None)
 		for item in items:
-			jid = item['jid']
-			node = item.get('node', '')
+			jid_ = item['jid']
+			node_ = item.get('node', '')
 			# If such an item is already here: don't add it
-			if self._find_item(jid, node):
+			if self._find_item(jid_, node_):
 				continue
 			self._total_items += 1
-			self._add_item(jid, node, item, force)
+			self._add_item(jid_, node_, node, item, force)
 		self.window.services_treeview.set_model(self.model)
 
 	def _agent_info(self, jid, node, identities, features, data):
@@ -986,7 +986,7 @@ _('This service does not contain any items to browse.'))
 			self._update_info(iter_, jid, node, identities, features, data)
 		self.update_actions()
 
-	def _add_item(self, jid, node, item, force):
+	def _add_item(self, jid, node, parent_node, item, force):
 		'''Called when an item should be added to the model. The result of a
 		disco#items query.'''
 		self.model.append((jid, node, item.get('name', ''),
@@ -1137,11 +1137,11 @@ class ToplevelAgentBrowser(AgentBrowser):
 		# Icon Renderer
 		renderer = gtk.CellRendererPixbuf()
 		renderer.set_property('xpad', 6)
-		col.pack_start(renderer, expand = False)
+		col.pack_start(renderer, expand=False)
 		col.set_cell_data_func(renderer, self._pixbuf_renderer_data_func)
 		# Text Renderer
 		renderer = gtk.CellRendererText()
-		col.pack_start(renderer, expand = True)
+		col.pack_start(renderer, expand=True)
 		col.set_cell_data_func(renderer, self._text_renderer_data_func)
 		renderer.set_property('foreground', 'dark gray')
 		# Save this so we can go along with theme changes
@@ -1462,7 +1462,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 			return iter_
 		return None
 
-	def _add_item(self, jid, node, item, force):
+	def _add_item(self, jid, node, parent_node, item, force):
 		# Row text
 		addr = get_agent_address(jid, node)
 		if 'name' in item:
@@ -1486,10 +1486,10 @@ class ToplevelAgentBrowser(AgentBrowser):
 		cat = self._find_category(*cat_args)
 		if not cat:
 			cat = self._create_category(*cat_args)
-		self.model.append(cat, (item['jid'], item.get('node', ''), pix, descr, 1))
-		self._expand_all()
+		self.model.append(cat, (jid, node, pix, descr, 1))
+		gobject.idle_add(self._expand_all)
 		# Grab info on the service
-		self.cache.get_info(jid, node, self._agent_info, force = force)
+		self.cache.get_info(jid, node, self._agent_info, force=force)
 		self._update_progressbar()
 
 	def _update_item(self, iter_, jid, node, item):
@@ -1778,7 +1778,7 @@ class MucBrowser(AgentBrowser):
 		self._fetch_source = None
 		self._query_visible()
 
-	def _add_item(self, jid, node, item, force):
+	def _add_item(self, jid, node, parent_node, item, force):
 		self.model.append((jid, node, item.get('name', ''), -1, '', '', False))
 		if not self._fetch_source:
 			self._fetch_source = gobject.idle_add(self._start_info_query)
@@ -1876,10 +1876,10 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
 	def _add_items(self, jid, node, items, force):
 		for item in items:
-			jid = item['jid']
-			node = item.get('node', '')
+			jid_ = item['jid']
+			node_ = item.get('node', '')
 			self._total_items += 1
-			self._add_item(jid, node, item, force)
+			self._add_item(jid_, node_, node, item, force)
 
 	def _in_list_foreach(self, model, path, iter_, node):
 		if model[path][1] == node:
@@ -1890,7 +1890,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		self.model.foreach(self._in_list_foreach, node)
 		return self.in_list
 
-	def _add_item(self, jid, node, item, force):
+	def _add_item(self, jid, node, parent_node, item, force):
 		''' Called when we got basic information about new node from query.
 		Show the item. '''
 		name = item.get('name', '')
@@ -1905,12 +1905,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		name = gobject.markup_escape_text(name)
 		name = '<b>%s</b>' % name
 
-		node_splitted = node.split('/')
-		parent_iter = None
-		while len(node_splitted) > 1:
-			parent_node = node_splitted.pop(0)
-			parent_iter = self._get_child_iter(parent_iter, parent_node)
-			node_splitted[0] = parent_node + '/' + node_splitted[0]
+		parent_iter = self._get_iter(parent_node)
 		if not self._in_list(node):
 			self.model.append(parent_iter, (jid, node, name, dunno, subscribed))
 			self.cache.get_items(jid, node, self._add_items, force = force,
@@ -1923,6 +1918,16 @@ class DiscussionGroupsBrowser(AgentBrowser):
 				return child_iter
 			child_iter = self.model.iter_next(child_iter)
 		return None
+
+	def _get_iter(self, node):
+		''' Look for an iter with the given node '''
+		self.found_iter = None
+		def is_node(model, path, iter, node):
+			if model[iter][1] == node:
+				self.found_iter = iter
+				return True
+		self.model.foreach(is_node, node)
+		return self.found_iter
 
 	def _add_actions(self):
 		self.post_button = gtk.Button(label=_('New post'), use_underline=True)

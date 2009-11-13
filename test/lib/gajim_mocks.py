@@ -91,6 +91,7 @@ class MockChatControl(Mock):
 	def __eq__(self, other):
 		return self is other
 
+
 class MockInterface(Mock):
 	def __init__(self, *args):
 		Mock.__init__(self, *args)
@@ -113,13 +114,16 @@ class MockInterface(Mock):
 			self.jabber_state_images = {'16': Mock(), '32': Mock(),
 				'opened': Mock(), 'closed': Mock()}
 
+
 class MockLogger(Mock):
 	def __init__(self):
 		Mock.__init__(self, {'write': None, 'get_transports_type': {}})
 
+
 class MockContact(Mock):
 	def __nonzero__(self):
 		return True
+
 
 import random
 

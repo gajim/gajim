@@ -34,6 +34,10 @@ import common.xmpp
 from common import helpers
 from common import gajim
 from common.zeroconf import zeroconf
+from common.commands import ConnectionCommands
+
+import logging
+log = logging.getLogger('gajim.c.z.connection_handlers_zeroconf')
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 	'invisible']
@@ -45,7 +49,7 @@ HAS_IDLE = True
 try:
 	import idle
 except Exception:
-	gajim.log.debug(_('Unable to load idle module'))
+	log.debug(_('Unable to load idle module'))
 	HAS_IDLE = False
 
 from common import connection_handlers
@@ -156,7 +160,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		self.connection.send(iq)
 
 	def _bytestreamSetCB(self, con, iq_obj):
-		gajim.log.debug('_bytestreamSetCB')
+		log.debug('_bytestreamSetCB')
 		target = unicode(iq_obj.getAttr('to'))
 		id_ = unicode(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
@@ -198,7 +202,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		raise common.xmpp.NodeProcessed
 
 	def _ResultCB(self, con, iq_obj):
-		gajim.log.debug('_ResultCB')
+		log.debug('_ResultCB')
 		# if we want to respect jep-0065 we have to check for proxy
 		# activation result in any result iq
 		real_id = unicode(iq_obj.getAttr('id'))
@@ -215,7 +219,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 						raise common.xmpp.NodeProcessed
 
 	def _bytestreamResultCB(self, con, iq_obj):
-		gajim.log.debug('_bytestreamResultCB')
+		log.debug('_bytestreamResultCB')
 		frm = unicode(iq_obj.getFrom())
 		real_id = unicode(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
@@ -283,7 +287,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		raise common.xmpp.NodeProcessed
 
 	def _siResultCB(self, con, iq_obj):
-		gajim.log.debug('_siResultCB')
+		log.debug('_siResultCB')
 		self.peerhost = con._owner.Connection._sock.getsockname()
 		id_ = iq_obj.getAttr('id')
 		if id_ not in self.files_props:
@@ -321,7 +325,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		raise common.xmpp.NodeProcessed
 
 	def _siSetCB(self, con, iq_obj):
-		gajim.log.debug('_siSetCB')
+		log.debug('_siSetCB')
 		jid = unicode(iq_obj.getFrom())
 		si = iq_obj.getTag('si')
 		profile = si.getAttr('profile')
@@ -353,7 +357,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		raise common.xmpp.NodeProcessed
 
 	def _siErrorCB(self, con, iq_obj):
-		gajim.log.debug('_siErrorCB')
+		log.debug('_siErrorCB')
 		si = iq_obj.getTag('si')
 		profile = si.getAttr('profile')
 		if profile != common.xmpp.NS_FILE:
@@ -371,10 +375,12 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
 		raise common.xmpp.NodeProcessed
 
-class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream, connection_handlers.ConnectionHandlersBase):
+class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream,
+ConnectionCommands, connection_handlers.ConnectionHandlersBase):
 	def __init__(self):
 		ConnectionVcard.__init__(self)
 		ConnectionBytestream.__init__(self)
+		ConnectionCommands.__init__(self)
 		connection_handlers.ConnectionHandlersBase.__init__(self)
 
 		try:
@@ -386,7 +392,7 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream, connecti
 	def _messageCB(self, ip, con, msg):
 		'''Called when we receive a message'''
 
-		gajim.log.debug('Zeroconf MessageCB')
+		log.debug('Zeroconf MessageCB')
 
 		frm = msg.getFrom()
 		mtype = msg.getType()
@@ -479,5 +485,22 @@ class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream, connecti
 
 	def remove_transfer(self, file_props, remove_from_list = True):
 		pass
+
+	def _DiscoverItemsGetCB(self, con, iq_obj):
+		log.debug('DiscoverItemsGetCB')
+
+		if not self.connection or self.connected < 2:
+			return
+
+		if self.commandItemsQuery(con, iq_obj):
+			raise common.xmpp.NodeProcessed
+		node = iq_obj.getTagAttr('query', 'node')
+		if node is None:
+			result = iq_obj.buildReply('result')
+			self.connection.send(result)
+			raise common.xmpp.NodeProcessed
+		if node==common.xmpp.NS_COMMANDS:
+			self.commandListQuery(con, iq_obj)
+			raise common.xmpp.NodeProcessed
 
 # vim: se ts=3:

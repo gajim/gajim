@@ -27,6 +27,7 @@
 ##
 
 import gobject
+import gtk
 import os
 
 from common import gajim
@@ -329,8 +330,8 @@ class SignalObject(dbus.service.Object):
 			return DBUS_BOOLEAN(True)
 		return DBUS_BOOLEAN(False)
 
-	@dbus.service.method(INTERFACE, in_signature='ss', out_signature='b')
-	def open_chat(self, jid, account):
+	@dbus.service.method(INTERFACE, in_signature='sss', out_signature='b')
+	def open_chat(self, jid, account, message):
 		'''Shows the tabbed window for new message to 'jid', using account
 		(optional) 'account' '''
 		if not jid:
@@ -372,12 +373,12 @@ class SignalObject(dbus.service.Object):
 			connected_account = first_connected_acct
 
 		if connected_account:
-			gajim.interface.new_chat_from_jid(connected_account, jid)
+			gajim.interface.new_chat_from_jid(connected_account, jid, message)
 			# preserve the 'steal focus preservation'
 			win = gajim.interface.msg_win_mgr.get_window(jid,
 				connected_account).window
 			if win.get_property('visible'):
-				win.window.focus()
+				win.window.focus(gtk.get_current_event_time())
 			return DBUS_BOOLEAN(True)
 		return DBUS_BOOLEAN(False)
 
@@ -400,6 +401,31 @@ class SignalObject(dbus.service.Object):
 				gobject.idle_add(gajim.interface.roster.send_status, acc,
 					status, message)
 		return DBUS_BOOLEAN(False)
+
+	@dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
+	def set_priority(self, prio, account):
+		''' set_priority(prio, account). account is optional -
+		if not specified priority is changed for all accounts. that are synced
+		with global status'''
+		if account:
+			gajim.config.set_per('accounts', account, 'priority', prio)
+			show = gajim.SHOW_LIST[gajim.connections[account].connected]
+			status = gajim.connections[account].status
+			gobject.idle_add(gajim.connections[account].change_status, show,
+				status)
+		else:
+			# account not specified, so change prio of all accounts
+			for acc in gajim.contacts.get_accounts():
+				if not gajim.account_is_connected(acc):
+					continue
+				if not gajim.config.get_per('accounts', acc,
+				'sync_with_global_status'):
+					continue
+				gajim.config.set_per('accounts', acc, 'priority', prio)
+				show = gajim.SHOW_LIST[gajim.connections[acc].connected]
+				status = gajim.connections[acc].status
+				gobject.idle_add(gajim.connections[acc].change_status, show,
+					status)
 
 	@dbus.service.method(INTERFACE, in_signature='', out_signature='')
 	def show_next_pending_event(self):
@@ -482,7 +508,7 @@ class SignalObject(dbus.service.Object):
 			win.present()
 			# preserve the 'steal focus preservation'
 			if self._is_first():
-				win.window.focus()
+				win.window.focus(gtk.get_current_event_time())
 			else:
 				win.window.focus(long(time()))
 

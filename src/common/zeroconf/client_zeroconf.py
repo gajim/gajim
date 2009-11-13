@@ -167,6 +167,8 @@ class P2PClient(IdleObject):
 					self.conn_holder.ids_of_awaiting_messages[self.fd] = [(id_,
 						thread_id)]
 
+		self.on_responses = {}
+
 	def add_stanza(self, stanza, is_message=False):
 		if self.Connection:
 			if self.Connection.state == -1:
@@ -176,6 +178,7 @@ class P2PClient(IdleObject):
 			self.stanzaqueue.append((stanza, is_message))
 
 		if is_message:
+			thread_id = stanza.getThread()
 			id_ = stanza.getID()
 			if not id_:
 				id_ = self.Dispatcher.getAnID()
@@ -281,6 +284,9 @@ class P2PClient(IdleObject):
 		self.onreceive(None)
 		return True
 
+	def remove_timeout(self):
+		pass
+
 	def _register_handlers(self):
 		self.RegisterHandler('message', lambda conn, data:self._caller._messageCB(
 			self.Server, conn, data))
@@ -296,6 +302,8 @@ class P2PClient(IdleObject):
 			common.xmpp.NS_BYTESTREAM)
 		self.RegisterHandler('iq', self._caller._bytestreamErrorCB, 'error',
 			common.xmpp.NS_BYTESTREAM)
+		self.RegisterHandler('iq', self._caller._DiscoverItemsGetCB, 'get',
+			common.xmpp.NS_DISCO_ITEMS)
 
 class P2PConnection(IdleObject, PlugIn):
 	def __init__(self, sock_hash, _sock, host=None, port=None, caller=None,
@@ -486,7 +494,7 @@ class P2PConnection(IdleObject, PlugIn):
 			self.disconnect()
 		return True
 
-	def disconnect(self):
+	def disconnect(self, message=''):
 		''' Closes the socket. '''
 		gajim.idlequeue.remove_timeout(self.fd)
 		gajim.idlequeue.unplug_idle(self.fd)
@@ -555,7 +563,7 @@ class P2PConnection(IdleObject, PlugIn):
 
 	def _on_send_failure(self):
 		log.error('Socket error while sending data')
-		self._owner.disconnected()
+		self._owner.on_disconnect()
 		self.sent_data = None
 
 class ClientZeroconf:
@@ -690,28 +698,57 @@ class ClientZeroconf:
 		# look for hashed connections
 		if to in self.recipient_to_hash:
 			conn = self.connections[self.recipient_to_hash[to]]
-			if not stanza.getID():
-				id_ = conn.Dispatcher.getAnID()
-				stanza.setID(id_)
+			id_ = stanza.getID() or ''
 			if conn.add_stanza(stanza, is_message):
 				if on_ok:
 					on_ok(id_)
+				return
 
 		if item['address'] in self.ip_to_hash:
 			hash_ = self.ip_to_hash[item['address']]
 			if self.hash_to_port[hash_] == item['port']:
 				conn = self.connections[hash_]
-				if not stanza.getID():
-					id_ = conn.Dispatcher.getAnID()
-					stanza.setID(id_)
+				id_ = stanza.getID() or ''
 				if conn.add_stanza(stanza, is_message):
 					if on_ok:
 						on_ok(id_)
+					return
 
 		# otherwise open new connection
 		if not stanza.getID():
 			stanza.setID('zero')
 		P2PClient(None, item['address'], item['port'], self,
 			[(stanza, is_message)], to, on_ok=on_ok, on_not_ok=on_not_ok)
+
+	def SendAndWaitForResponse(self, stanza, timeout=None, func=None, args=None):
+		'''
+		Send stanza and wait for recipient's response to it. Will call transports
+		on_timeout callback if response is not retrieved in time.
+
+		Be aware: Only timeout of latest call of SendAndWait is active.
+		'''
+#		if timeout is None:
+#			timeout = DEFAULT_TIMEOUT_SECONDS
+		def on_ok(_waitid):
+#			if timeout:
+#				self._owner.set_timeout(timeout)
+			to = stanza.getTo()
+			conn = None
+			if to in self.recipient_to_hash:
+				conn = self.connections[self.recipient_to_hash[to]]
+			elif item['address'] in self.ip_to_hash:
+				hash_ = self.ip_to_hash[item['address']]
+				if self.hash_to_port[hash_] == item['port']:
+					conn = self.connections[hash_]
+			if func:
+				conn.Dispatcher.on_responses[_waitid] = (func, args)
+			conn.onreceive(conn.Dispatcher._WaitForData)
+			conn.Dispatcher._expected[_waitid] = None
+		self.send(stanza, on_ok=on_ok)
+
+	def SendAndCallForResponse(self, stanza, func=None, args=None):
+		''' Put stanza on the wire and call back when recipient replies.
+			Additional callback arguments can be specified in args. '''
+		self.SendAndWaitForResponse(stanza, 0, func, args)
 
 # vim: se ts=3:
