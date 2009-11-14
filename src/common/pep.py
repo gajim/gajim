@@ -192,6 +192,56 @@ ACTIVITIES = {
 		'studying':								_('Studying'),
 		'writing':								_('Writing')}}
 
+import logging
+log = logging.getLogger('gajim.c.pep')
+
+import helpers
+import atom
+
+class ConnectionPEP:
+	
+	def _pubsubEventCB(self, xmpp_dispatcher, msg):
+		''' Called when we receive <message /> with pubsub event. '''
+		
+		if msg.getTag('error'):
+			log.warning('Pep Error CB')
+			return
+		
+		# TODO: Logging? (actually services where logging would be useful, should
+		# TODO: allow to access archives remotely...)
+		jid = helpers.get_full_jid_from_iq(msg)
+		event = msg.getTag('event')
+
+		# XEP-0107: User Mood
+		items = event.getTag('items', {'node': common.xmpp.NS_MOOD})
+		if items: user_mood(items, self.name, jid)
+		# XEP-0118: User Tune
+		items = event.getTag('items', {'node': common.xmpp.NS_TUNE})
+		if items: user_tune(items, self.name, jid)
+		# XEP-0080: User Geolocation
+		items = event.getTag('items', {'node': common.xmpp.NS_GEOLOC})
+		if items: user_geoloc(items, self.name, jid)
+		# XEP-0108: User Activity
+		items = event.getTag('items', {'node': common.xmpp.NS_ACTIVITY})
+		if items: user_activity(items, self.name, jid)
+		# XEP-0172: User Nickname
+		items = event.getTag('items', {'node': common.xmpp.NS_NICK})
+		if items: user_nickname(items, self.name, jid)
+
+		items = event.getTag('items')
+		if items is None: return
+
+		for item in items.getTags('item'):
+			entry = item.getTag('entry')
+			if entry is not None:
+				# for each entry in feed (there shouldn't be more than one,
+				# but to be sure...
+				self.dispatch('ATOM_ENTRY', (atom.OldEntry(node=entry),))
+				continue
+			# unknown type... probably user has another client who understands that event
+			
+		raise common.xmpp.NodeProcessed
+
 def user_mood(items, name, jid):
 	has_child = False
 	retract = False
