@@ -192,6 +192,8 @@ ACTIVITIES = {
 		'studying':								_('Studying'),
 		'writing':								_('Writing')}}
 
+TUNE_DATA = ['artist', 'title', 'source', 'track', 'length']
+
 import logging
 log = logging.getLogger('gajim.c.pep')
 
@@ -221,59 +223,36 @@ class UserMoodPEP(AbstractPEP):
 	namespace = common.xmpp.NS_MOOD
 	
 	def __init__(self, jid, account, items):
+		self._mood_dict, self._retracted = self._extract_info(items)
+		
 		self.user_mood(items, account, jid)
 		
+	def _extract_info(self, items):
+		mood_dict = {}
 		
-	def user_mood(self, items, name, jid):
-		has_child = False
-		retract = False
-		mood = None
-		text = None
 		for item in items.getTags('item'):
-			child = item.getTag('mood')
-			if child is not None:
-				has_child = True
-				for ch in child.getChildren():
-					if ch.getName() != 'text':
-						mood = ch.getName()
-					else:
-						text = ch.getData()
-		if items.getTag('retract') is not None:
-			retract = True
+			mood_tag = item.getTag('mood')
+			if mood_tag:
+				for child in mood_tag.getChildren():
+					if child.getName() == 'text':
+						mood_dict['text'] = child.getData()
+					elif child.getName() in MOODS :
+						mood_dict['mood'] = child.getName()
+						
+		retracted = items.getTag('retract') or not mood_dict		
+		return (mood_dict, retracted)
+
+	def user_mood(self, items, name, jid):
+	
+		mood_dict = {} if self._retracted else self._mood_dict 
 	
 		if jid == common.gajim.get_jid_from_account(name):
 			acc = common.gajim.connections[name]
-			if has_child:
-				if 'mood' in acc.mood:
-					del acc.mood['mood']
-				if 'text' in acc.mood:
-					del acc.mood['text']
-				if mood is not None:
-					acc.mood['mood'] = mood
-				if text is not None:
-					acc.mood['text'] = text
-			elif retract:
-				if 'mood' in acc.mood:
-					del acc.mood['mood']
-				if 'text' in acc.mood:
-					del acc.mood['text']
+			acc.mood = mood_dict
 	
-		(user, resource) = common.gajim.get_room_and_nick_from_fjid(jid)
+		user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
 		for contact in common.gajim.contacts.get_contacts(name, user):
-			if has_child:
-				if 'mood' in contact.mood:
-					del contact.mood['mood']
-				if 'text' in contact.mood:
-					del contact.mood['text']
-				if mood is not None:
-					contact.mood['mood'] = mood
-				if text is not None:
-					contact.mood['text'] = text
-			elif retract:
-				if 'mood' in contact.mood:
-					del contact.mood['mood']
-				if 'text' in contact.mood:
-					del contact.mood['text']
+			contact.mood = mood_dict
 	
 		if jid == common.gajim.get_jid_from_account(name):
 			common.gajim.interface.roster.draw_account(name)
@@ -290,18 +269,42 @@ class UserTunePEP(AbstractPEP):
 	namespace = common.xmpp.NS_TUNE
 	
 	def __init__(self, jid, account, items):
-		user_tune(items, account, jid)
-				
+		self._tune_dict, self._retracted = self._extract_info(items)
 		
-class UserGeolocationPEP(AbstractPEP):
-	'''XEP-0080: User Geolocation'''
+		self.user_tune(items, account, jid)
+				
+	def _extract_info(self, items):		
+		tune_dict = {}
 	
-	type = 'geolocation'
-	namespace = common.xmpp.NS_GEOLOC
-	
-	def __init__(self, jid, account, items):
-		user_geoloc(items, account, jid)
+		for item in items.getTags('item'):
+			tune_tag = item.getTag('tune')
+			if tune_tag:
+				for child in tune_tag.getChildren():
+					if child.getName() in TUNE_DATA:
+						tune_dict[child.getName()] = child.getData()
+						
+		retracted = items.getTag('retract') or not tune_dict
+		return (tune_dict, retracted)
+		
+					
+	def user_tune(self, items, name, jid):
+		tune_dict = {} if self._retracted else self._tune_dict 
 
+		if jid == common.gajim.get_jid_from_account(name):
+			acc = common.gajim.connections[name]
+			acc.tune = tune_dict
+	
+		user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
+		for contact in common.gajim.contacts.get_contacts(name, user):
+			contact.tune = tune_dict
+	
+		if jid == common.gajim.get_jid_from_account(name):
+			common.gajim.interface.roster.draw_account(name)
+		common.gajim.interface.roster.draw_tune(user, name)
+		ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
+		if ctrl:
+			ctrl.update_tune()
+		
 
 class UserActivityPEP(AbstractPEP):
 	'''XEP-0108: User Activity'''
@@ -310,7 +313,45 @@ class UserActivityPEP(AbstractPEP):
 	namespace = common.xmpp.NS_ACTIVITY
 	
 	def __init__(self, jid, account, items):
-		user_activity(items, account, jid)
+		self._activity_dict, self._retracted = self._extract_info(items)
+		
+		self.user_activity(items, account, jid)
+		
+	def _extract_info(self, items):
+		activity_dict = {}
+		
+		for item in items.getTags('item'):
+			activity_tag = item.getTag('activity')
+			if activity_tag:
+				for child in child.getChildren():
+					if child.getName() == 'text':
+						activity_dict['text'] = child.getData()
+					elif child.getName() in ACTIVITIES:
+						activity_dict['activity'] = child.getName()
+						for subactivity in child.getChildren():
+							if subactivity.getName() in ACTIVITIES[child.getName()]:
+								activity_dict['subactivity'] = subactivity.getName()
+		
+		retracted = items.getTag('retract') or not activity_dict
+		return (activity_dict, retracted)
+		
+	def user_activity(self, items, name, jid):
+		activity_dict = {} if self._retracted else self._activity_dict 
+
+		if jid == common.gajim.get_jid_from_account(name):
+			acc = common.gajim.connections[name]
+			acc.activity = activity_dict
+	
+		user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
+		for contact in common.gajim.contacts.get_contacts(name, user):
+			contact.activity = activity_dict
+	
+		if jid == common.gajim.get_jid_from_account(name):
+			common.gajim.interface.roster.draw_account(name)
+		common.gajim.interface.roster.draw_activity(user, name)
+		ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
+		if ctrl:
+			ctrl.update_activity()
 	
 	
 class UserNicknamePEP(AbstractPEP):
@@ -320,11 +361,44 @@ class UserNicknamePEP(AbstractPEP):
 	namespace = common.xmpp.NS_NICK
 	
 	def __init__(self, jid, account, items):
-		user_nickname(items, self.name, jid)
+		self._nick, self._retracted = self._extract_info(items)
+		self.user_nickname(items, account, jid)
+		
+	def _extract_info(self, items):	
+		nick = ''
+		for item in items.getTags('item'):
+			child = item.getTag('nick')
+			if child:
+				nick = child.getData()
+				break
+		
+		retracted = items.getTag('retract') or not nick
+		return (nick, retracted)		
+			
+	def user_nickname(self, items, name, jid):	
+		if jid == common.gajim.get_jid_from_account(name):
+			if self._retracted:
+				common.gajim.nicks[name] = common.gajim.config.get_per('accounts',
+					name, 'name')
+			else:
+				common.gajim.nicks[name] = self._nick
+	
+		nick = '' if self._retracted else self._nick
+		
+		user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
+		for contact in common.gajim.contacts.get_contacts(name, user):
+			contact.contact_name = nick
+			common.gajim.interface.roster.draw_contact(user, name)
+	
+			ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
+			if ctrl:
+				ctrl.update_ui()
+				win = ctrl.parent_win
+				win.redraw_tab(ctrl)
+				win.show_title()
 		
 		
-SUPPORTED_PERSONAL_USER_EVENTS = [UserMoodPEP, UserTunePEP, UserGeolocationPEP,
-											UserActivityPEP, UserNicknamePEP]
+SUPPORTED_PERSONAL_USER_EVENTS = [UserMoodPEP, UserTunePEP, UserActivityPEP, UserNicknamePEP]
 
 class ConnectionPEP:
 	
@@ -358,225 +432,6 @@ class ConnectionPEP:
 			
 		raise common.xmpp.NodeProcessed
 
-
-def user_tune(items, name, jid):
-	has_child = False
-	retract = False
-	artist = None
-	title = None
-	source = None
-	track = None
-	length = None
-
-	for item in items.getTags('item'):
-		child = item.getTag('tune')
-		if child is not None:
-			has_child = True
-			for ch in child.getChildren():
-				if ch.getName() == 'artist':
-					artist = ch.getData()
-				elif ch.getName() == 'title':
-					title = ch.getData()
-				elif ch.getName() == 'source':
-					source = ch.getData()
-				elif ch.getName() == 'track':
-					track = ch.getData()
-				elif ch.getName() == 'length':
-					length = ch.getData()
-	if items.getTag('retract') is not None:
-		retract = True
-
-	if jid == common.gajim.get_jid_from_account(name):
-		acc = common.gajim.connections[name]
-		if has_child:
-			if 'artist' in acc.tune:
-				del acc.tune['artist']
-			if 'title' in acc.tune:
-				del acc.tune['title']
-			if 'source' in acc.tune:
-				del acc.tune['source']
-			if 'track' in acc.tune:
-				del acc.tune['track']
-			if 'length' in acc.tune:
-				del acc.tune['length']
-			if artist is not None:
-				acc.tune['artist'] = artist
-			if title is not None:
-				acc.tune['title'] = title
-			if source is not None:
-				acc.tune['source'] = source
-			if track is not None:
-				acc.tune['track'] = track
-			if length is not None:
-				acc.tune['length'] = length
-		elif retract:
-			if 'artist' in acc.tune:
-				del acc.tune['artist']
-			if 'title' in acc.tune:
-				del acc.tune['title']
-			if 'source' in acc.tune:
-				del acc.tune['source']
-			if 'track' in acc.tune:
-				del acc.tune['track']
-			if 'length' in acc.tune:
-				del acc.tune['length']
-
-	user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
-	for contact in common.gajim.contacts.get_contacts(name, user):
-		if has_child:
-			if 'artist' in contact.tune:
-				del contact.tune['artist']
-			if 'title' in contact.tune:
-				del contact.tune['title']
-			if 'source' in contact.tune:
-				del contact.tune['source']
-			if 'track' in contact.tune:
-				del contact.tune['track']
-			if 'length' in contact.tune:
-				del contact.tune['length']
-			if artist is not None:
-				contact.tune['artist'] = artist
-			if title is not None:
-				contact.tune['title'] = title
-			if source is not None:
-				contact.tune['source'] = source
-			if track is not None:
-				contact.tune['track'] = track
-			if length is not None:
-				contact.tune['length'] = length
-		elif retract:
-			if 'artist' in contact.tune:
-				del contact.tune['artist']
-			if 'title' in contact.tune:
-				del contact.tune['title']
-			if 'source' in contact.tune:
-				del contact.tune['source']
-			if 'track' in contact.tune:
-				del contact.tune['track']
-			if 'length' in contact.tune:
-				del contact.tune['length']
-
-	if jid == common.gajim.get_jid_from_account(name):
-		common.gajim.interface.roster.draw_account(name)
-	common.gajim.interface.roster.draw_tune(user, name)
-	ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
-	if ctrl:
-		ctrl.update_tune()
-
-def user_geoloc(items, name, jid):
-	pass
-
-def user_activity(items, name, jid):
-	has_child = False
-	retract = False
-	activity = None
-	subactivity = None
-	text = None
-
-	for item in items.getTags('item'):
-		child = item.getTag('activity')
-		if child is not None:
-			has_child = True
-			for ch in child.getChildren():
-				if ch.getName() != 'text':
-					activity = ch.getName()
-					for chi in ch.getChildren():
-						subactivity = chi.getName()
-				else:
-					text = ch.getData()
-	if items.getTag('retract') is not None:
-		retract = True
-
-	if jid == common.gajim.get_jid_from_account(name):
-		acc = common.gajim.connections[name]
-		if has_child:
-			if 'activity' in acc.activity:
-				del acc.activity['activity']
-			if 'subactivity' in acc.activity:
-				del acc.activity['subactivity']
-			if 'text' in acc.activity:
-				del acc.activity['text']
-			if activity is not None:
-				acc.activity['activity'] = activity
-			if subactivity is not None and subactivity != 'other':
-				acc.activity['subactivity'] = subactivity
-			if text is not None:
-				acc.activity['text'] = text
-		elif retract:
-			if 'activity' in acc.activity:
-				del acc.activity['activity']
-			if 'subactivity' in acc.activity:
-				del acc.activity['subactivity']
-			if 'text' in acc.activity:
-				del acc.activity['text']
-
-	user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
-	for contact in common.gajim.contacts.get_contacts(name, user):
-		if has_child:
-			if 'activity' in contact.activity:
-				del contact.activity['activity']
-			if 'subactivity' in contact.activity:
-				del contact.activity['subactivity']
-			if 'text' in contact.activity:
-				del contact.activity['text']
-			if activity is not None:
-				contact.activity['activity'] = activity
-			if subactivity is not None and subactivity != 'other':
-				contact.activity['subactivity'] = subactivity
-			if text is not None:
-				contact.activity['text'] = text
-		elif retract:
-			if 'activity' in contact.activity:
-				del contact.activity['activity']
-			if 'subactivity' in contact.activity:
-				del contact.activity['subactivity']
-			if 'text' in contact.activity:
-				del contact.activity['text']
-
-	if jid == common.gajim.get_jid_from_account(name):
-		common.gajim.interface.roster.draw_account(name)
-	common.gajim.interface.roster.draw_activity(user, name)
-	ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
-	if ctrl:
-		ctrl.update_activity()
-
-def user_nickname(items, name, jid):
-	has_child = False
-	retract = False
-	nick = None
-
-	for item in items.getTags('item'):
-		child = item.getTag('nick')
-		if child is not None:
-			has_child = True
-			nick = child.getData()
-			break
-
-	if items.getTag('retract') is not None:
-		retract = True
-
-	if jid == common.gajim.get_jid_from_account(name):
-		if has_child:
-			common.gajim.nicks[name] = nick
-		if retract:
-			common.gajim.nicks[name] = common.gajim.config.get_per('accounts',
-				name, 'name')
-
-	user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
-	if has_child:
-		if nick is not None:
-			for contact in common.gajim.contacts.get_contacts(name, user):
-				contact.contact_name = nick
-			common.gajim.interface.roster.draw_contact(user, name)
-
-			ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
-			if ctrl:
-				ctrl.update_ui()
-				win = ctrl.parent_win
-				win.redraw_tab(ctrl)
-				win.show_title()
-	elif retract:
-		contact.contact_name = ''
 
 def user_send_mood(account, mood, message=''):
 	if not common.gajim.connections[account].pep_supported:
