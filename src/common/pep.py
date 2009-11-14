@@ -198,37 +198,94 @@ log = logging.getLogger('gajim.c.pep')
 import helpers
 import atom
 
+
+class AbstractPEP(object):
+	
+	type = ''
+	namespace = ''
+	
+	@classmethod
+	def get_tag_as_PEP(cls, jid, account, event_tag):
+		items = event_tag.getTag('items', {'node': cls.namespace})
+		if items:
+			log.debug("Received PEP 'user %s' from %s" % (cls.type, jid)) 
+			return cls(jid, account, items)
+		else:
+			return None 
+	
+	
+class UserMoodPEP(AbstractPEP):
+	'''XEP-0107: User Mood'''
+	
+	type = 'mood'
+	namespace = common.xmpp.NS_MOOD
+	
+	def __init__(self, jid, account, items):
+		user_mood(items, account, jid)
+		
+
+class UserTunePEP(AbstractPEP):
+	'''XEP-0118: User Tune'''
+	
+	type = 'tune'
+	namespace = common.xmpp.NS_TUNE
+	
+	def __init__(self, jid, account, items):
+		user_tune(items, account, jid)
+				
+		
+class UserGeolocationPEP(AbstractPEP):
+	'''XEP-0080: User Geolocation'''
+	
+	type = 'geolocation'
+	namespace = common.xmpp.NS_GEOLOC
+	
+	def __init__(self, jid, account, items):
+		user_geoloc(items, account, jid)
+
+
+class UserActivityPEP(AbstractPEP):
+	'''XEP-0108: User Activity'''
+	
+	type = 'activity'
+	namespace = common.xmpp.NS_ACTIVITY
+	
+	def __init__(self, jid, account, items):
+		user_activity(items, account, jid)
+	
+	
+class UserNicknamePEP(AbstractPEP):
+	'''XEP-0172: User Nickname'''
+	
+	type = 'activity'
+	namespace = common.xmpp.NS_NICK
+	
+	def __init__(self, jid, account, items):
+		user_nickname(items, self.name, jid)
+		
+		
+SUPPORTED_PERSONAL_USER_EVENTS = [UserMoodPEP, UserTunePEP, UserGeolocationPEP,
+											UserActivityPEP, UserNicknamePEP]
+
 class ConnectionPEP:
 	
 	def _pubsubEventCB(self, xmpp_dispatcher, msg):
 		''' Called when we receive <message /> with pubsub event. '''
-		
 		if msg.getTag('error'):
-			log.warning('Pep Error CB')
+			log.warning('PubsubEventCB received error stanza')
 			return
-		
+				
 		# TODO: Logging? (actually services where logging would be useful, should
 		# TODO: allow to access archives remotely...)
 		jid = helpers.get_full_jid_from_iq(msg)
-		event = msg.getTag('event')
+		event_tag = msg.getTag('event')
 
-		# XEP-0107: User Mood
-		items = event.getTag('items', {'node': common.xmpp.NS_MOOD})
-		if items: user_mood(items, self.name, jid)
-		# XEP-0118: User Tune
-		items = event.getTag('items', {'node': common.xmpp.NS_TUNE})
-		if items: user_tune(items, self.name, jid)
-		# XEP-0080: User Geolocation
-		items = event.getTag('items', {'node': common.xmpp.NS_GEOLOC})
-		if items: user_geoloc(items, self.name, jid)
-		# XEP-0108: User Activity
-		items = event.getTag('items', {'node': common.xmpp.NS_ACTIVITY})
-		if items: user_activity(items, self.name, jid)
-		# XEP-0172: User Nickname
-		items = event.getTag('items', {'node': common.xmpp.NS_NICK})
-		if items: user_nickname(items, self.name, jid)
-
-		items = event.getTag('items')
+		for pep_class in SUPPORTED_PERSONAL_USER_EVENTS:
+			pep = pep_class.get_tag_as_PEP(jid, self.name, event_tag)
+			if pep:
+				self.dispatch('PEP_RECEIVED', (pep.type, pep))
+		
+		items = event_tag.getTag('items')
 		if items is None: return
 
 		for item in items.getTags('item'):
@@ -241,6 +298,7 @@ class ConnectionPEP:
 			# unknown type... probably user has another client who understands that event
 			
 		raise common.xmpp.NodeProcessed
+
 
 def user_mood(items, name, jid):
 	has_child = False
