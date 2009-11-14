@@ -221,7 +221,66 @@ class UserMoodPEP(AbstractPEP):
 	namespace = common.xmpp.NS_MOOD
 	
 	def __init__(self, jid, account, items):
-		user_mood(items, account, jid)
+		self.user_mood(items, account, jid)
+		
+		
+	def user_mood(self, items, name, jid):
+		has_child = False
+		retract = False
+		mood = None
+		text = None
+		for item in items.getTags('item'):
+			child = item.getTag('mood')
+			if child is not None:
+				has_child = True
+				for ch in child.getChildren():
+					if ch.getName() != 'text':
+						mood = ch.getName()
+					else:
+						text = ch.getData()
+		if items.getTag('retract') is not None:
+			retract = True
+	
+		if jid == common.gajim.get_jid_from_account(name):
+			acc = common.gajim.connections[name]
+			if has_child:
+				if 'mood' in acc.mood:
+					del acc.mood['mood']
+				if 'text' in acc.mood:
+					del acc.mood['text']
+				if mood is not None:
+					acc.mood['mood'] = mood
+				if text is not None:
+					acc.mood['text'] = text
+			elif retract:
+				if 'mood' in acc.mood:
+					del acc.mood['mood']
+				if 'text' in acc.mood:
+					del acc.mood['text']
+	
+		(user, resource) = common.gajim.get_room_and_nick_from_fjid(jid)
+		for contact in common.gajim.contacts.get_contacts(name, user):
+			if has_child:
+				if 'mood' in contact.mood:
+					del contact.mood['mood']
+				if 'text' in contact.mood:
+					del contact.mood['text']
+				if mood is not None:
+					contact.mood['mood'] = mood
+				if text is not None:
+					contact.mood['text'] = text
+			elif retract:
+				if 'mood' in contact.mood:
+					del contact.mood['mood']
+				if 'text' in contact.mood:
+					del contact.mood['text']
+	
+		if jid == common.gajim.get_jid_from_account(name):
+			common.gajim.interface.roster.draw_account(name)
+		common.gajim.interface.roster.draw_mood(user, name)
+		ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
+		if ctrl:
+			ctrl.update_mood()
 		
 
 class UserTunePEP(AbstractPEP):
@@ -299,64 +358,6 @@ class ConnectionPEP:
 			
 		raise common.xmpp.NodeProcessed
 
-
-def user_mood(items, name, jid):
-	has_child = False
-	retract = False
-	mood = None
-	text = None
-	for item in items.getTags('item'):
-		child = item.getTag('mood')
-		if child is not None:
-			has_child = True
-			for ch in child.getChildren():
-				if ch.getName() != 'text':
-					mood = ch.getName()
-				else:
-					text = ch.getData()
-	if items.getTag('retract') is not None:
-		retract = True
-
-	if jid == common.gajim.get_jid_from_account(name):
-		acc = common.gajim.connections[name]
-		if has_child:
-			if 'mood' in acc.mood:
-				del acc.mood['mood']
-			if 'text' in acc.mood:
-				del acc.mood['text']
-			if mood is not None:
-				acc.mood['mood'] = mood
-			if text is not None:
-				acc.mood['text'] = text
-		elif retract:
-			if 'mood' in acc.mood:
-				del acc.mood['mood']
-			if 'text' in acc.mood:
-				del acc.mood['text']
-
-	(user, resource) = common.gajim.get_room_and_nick_from_fjid(jid)
-	for contact in common.gajim.contacts.get_contacts(name, user):
-		if has_child:
-			if 'mood' in contact.mood:
-				del contact.mood['mood']
-			if 'text' in contact.mood:
-				del contact.mood['text']
-			if mood is not None:
-				contact.mood['mood'] = mood
-			if text is not None:
-				contact.mood['text'] = text
-		elif retract:
-			if 'mood' in contact.mood:
-				del contact.mood['mood']
-			if 'text' in contact.mood:
-				del contact.mood['text']
-
-	if jid == common.gajim.get_jid_from_account(name):
-		common.gajim.interface.roster.draw_account(name)
-	common.gajim.interface.roster.draw_mood(user, name)
-	ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
-	if ctrl:
-		ctrl.update_mood()
 
 def user_tune(items, name, jid):
 	has_child = False
