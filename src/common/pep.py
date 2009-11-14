@@ -197,8 +197,10 @@ TUNE_DATA = ['artist', 'title', 'source', 'track', 'length']
 import logging
 log = logging.getLogger('gajim.c.pep')
 
-import helpers
-import atom
+import common.helpers
+import common.atom
+import gtkgui_helpers
+import gobject
 
 
 class AbstractPEP(object):
@@ -223,6 +225,9 @@ class AbstractPEP(object):
 		'''To be implemented by subclasses'''
 		raise NotImplementedError
 	
+	def was_rectacted(self):
+		return self._retracted
+	
 class UserMoodPEP(AbstractPEP):
 	'''XEP-0107: User Mood'''
 	
@@ -239,10 +244,10 @@ class UserMoodPEP(AbstractPEP):
 					name = child.getName().strip()
 					if name == 'text':
 						mood_dict['text'] = child.getData()
-					elif name in MOODS :
+					else:
 						mood_dict['mood'] = name
 						
-		retracted = items.getTag('retract') or not mood_dict		
+		retracted = items.getTag('retract') or not 'mood' in mood_dict		
 		return (mood_dict, retracted)
 
 	def do(self, jid, name):
@@ -255,6 +260,7 @@ class UserMoodPEP(AbstractPEP):
 		user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
 		for contact in common.gajim.contacts.get_contacts(name, user):
 			contact.mood = mood_dict
+			contact.pep['mood'] = self
 	
 		if jid == common.gajim.get_jid_from_account(name):
 			common.gajim.interface.roster.draw_account(name)
@@ -262,7 +268,29 @@ class UserMoodPEP(AbstractPEP):
 		ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
 		if ctrl:
 			ctrl.update_mood()
+			
+	
+	def asPixbufIcon(self):
+		if self._retracted:
+			return None
+		else:
+			received_mood = self._pep_specific_data['mood']
+			mood = received_mood if received_mood in MOODS else 'unknown'
+			pixbuf = gtkgui_helpers.load_mood_icon(mood).get_pixbuf()
+			return pixbuf
 		
+	def asMarkupText(self):
+		if self._retracted:
+			return None
+		else:
+			untranslated_mood = self._pep_specific_data['mood']
+			mood = MOODS[untranslated_mood] if untranslated_mood in MOODS else untranslated_mood
+			markuptext = '<b>%s</b>' % gobject.markup_escape_text(mood)		
+			if 'text' in self._pep_specific_data:
+				text = self._pep_specific_data['text']
+				markuptext += '(%s)' + gobject.markup_escape_text(text)
+			return markuptext
+
 
 class UserTunePEP(AbstractPEP):
 	'''XEP-0118: User Tune'''

@@ -110,6 +110,7 @@ class Contact(CommonContact):
 		self.msg_id = msg_id
 		self.last_status_time = last_status_time
 		
+		self.pep = {}
 		self.mood = mood.copy()
 		self.tune = tune.copy()
 		self.activity = activity.copy()

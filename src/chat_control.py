@@ -1432,34 +1432,13 @@ class ChatControl(ChatControlBase):
 			self._convert_to_gc_button.set_sensitive(False)
 
 	def update_mood(self):
-		mood = None
-		text = None
-
 		if isinstance(self.contact, GC_Contact):
 			return
-
-		if 'mood' in self.contact.mood:
-			mood = self.contact.mood['mood'].strip()
-		if 'text' in self.contact.mood:
-			text = self.contact.mood['text'].strip()
-
-		if mood is not None:
-			if mood in MOODS:
-				self._mood_image.set_from_pixbuf(gtkgui_helpers.load_mood_icon(
-						mood).get_pixbuf())
-				# Translate standard moods
-				mood = MOODS[mood]
-			else:
-				self._mood_image.set_from_pixbuf(gtkgui_helpers.load_mood_icon(
-					'unknown').get_pixbuf())
-
-			mood = gobject.markup_escape_text(mood)
-
-			tooltip = '<b>%s</b>' % mood
-			if text:
-				text = gobject.markup_escape_text(text)
-				tooltip += '\n' + text
-			self._mood_image.set_tooltip_markup(tooltip)
+		
+		pep = self.contact.pep
+		if 'mood' in pep and not pep['mood'].was_retracted():
+			self._mood_image.set_from_pixbuf(pep['mood'].asPixbufIcon())
+			self._mood_image.set_tooltip_markup(pep['mood'].asMarkup())
 			self._mood_image.show()
 		else:
 			self._mood_image.hide()
