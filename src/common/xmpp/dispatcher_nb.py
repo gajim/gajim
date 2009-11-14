@@ -247,25 +247,23 @@ class XMPPDispatcher(PlugIn):
 		'''
 		Register user callback as stanzas handler of declared type.
 
-		Callback must take (if chained, see later) arguments:
+		Callback arguments:
 		dispatcher instance (for replying), incoming return of previous handlers.
 		The callback must raise xmpp.NodeProcessed just before return if it wants
-		other callbacks to be called with the same stanza as argument _and_, more
-		importantly	library from returning stanza to sender with error set.
+		to prevent other callbacks to be called with the same stanza as argument
+		_and_, more	importantly	library from returning stanza to sender with error set.
 
 		:param name: name of stanza. F.e. "iq".
 		:param handler: user callback.
 		:param typ: value of stanza's "type" attribute. If not specified any
 			value will match
 		:param ns: namespace of child that stanza must contain.
-		:param chained: chain together output of several handlers.
-		:param makefirst: insert handler in the beginning of handlers list instea
+		:param makefirst: insert handler in the beginning of handlers list instead
 			of	adding it to the end. Note that more common handlers i.e. w/o "typ"
 			and " will be called first nevertheless.
 		:param system: call handler even if NodeProcessed Exception were raised
 			already.
 		'''
-		# FIXME: What does chain mean and where is it handled?
 		if not xmlns:
 			xmlns=self._owner.defaultNamespace
 		log.debug('Registering handler %s for "%s" type->%s ns->%s(%s)' %
