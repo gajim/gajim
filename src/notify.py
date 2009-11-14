@@ -50,13 +50,6 @@ try:
 except ImportError:
 	USER_HAS_PYNOTIFY = False
 
-USER_HAS_GROWL = True
-try:
-	import osx.growler
-	osx.growler.init()
-except Exception:
-	USER_HAS_GROWL = False
-
 if gajim.HAVE_INDICATOR:
 	import indicate
 
@@ -348,7 +341,7 @@ def popup(event_type, jid, account, msg_type='', path_to_image=None,
 
 	if gajim.HAVE_INDICATOR and event_type in (_('New Message'),
 	_('New Single Message'), _('New Private Message')):
-		indicator = indicate.IndicatorMessage()
+		indicator = indicate.Indicator()
 		indicator.set_property('subtype', 'im')
 		indicator.set_property('sender', jid)
 		indicator.set_property('body', text)
@@ -357,13 +350,6 @@ def popup(event_type, jid, account, msg_type='', path_to_image=None,
 		indicator.set_property_icon('icon', pixbuf)
 		indicator.connect('user-display', display, account, jid, msg_type)
 		indicator.show()
-
-	# Try Growl first, as we might have D-Bus and notification daemon running
-	# on OS X for some reason.
-	if USER_HAS_GROWL:
-		osx.growler.notify(event_type, jid, account, msg_type, path_to_image,
-			title, text)
-		return
 
 	# Try to show our popup via D-Bus and notification daemon
 	if gajim.config.get('use_notif_daemon') and dbus_support.supported:
@@ -664,12 +650,15 @@ class DesktopNotification:
 	def version_reply_handler(self, name, vendor, version, spec_version=None):
 		if spec_version:
 			version = spec_version
-		elif vendor == 'Xfce' and version == '0.1.0':
+		elif vendor == 'Xfce' and version.startswith('0.1.0'):
 			version = '0.9'
 		version_list = version.split('.')
 		self.version = []
-		while len(version_list):
-			self.version.append(int(version_list.pop(0)))
+		try:
+			while len(version_list):
+				self.version.append(int(version_list.pop(0)))
+		except ValueError:
+			self.version_error_handler_3_x_try(None)
 		self.attempt_notify()
 
 	def get_version(self):

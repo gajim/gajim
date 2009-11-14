@@ -103,7 +103,7 @@ class MessageWindow(object):
 			'<Control>l', '<Control>L', '<Control>n', '<Control>u',
 			'<Control>b', '<Control><Shift>Tab', '<Control>Tab', '<Control>F4',
 			'<Control>w', '<Control>Page_Up', '<Control>Page_Down', '<Alt>Right',
-			'<Alt>Left', '<Alt>a', '<Alt>c', '<Alt>m', '<Alt>t', 'Escape'] + \
+			'<Alt>Left', '<Alt>d', '<Alt>c', '<Alt>m', '<Alt>t', 'Escape'] + \
 			['<Alt>'+str(i) for i in xrange(10)]
 		accel_group = gtk.AccelGroup()
 		for key in keys:
@@ -146,6 +146,7 @@ class MessageWindow(object):
 		else:
 			self.notebook.set_show_tabs(False)
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
+		self.show_icon()
 
 	def change_account_name(self, old_name, new_name):
 		if old_name in self._controls:
@@ -157,6 +158,17 @@ class MessageWindow(object):
 				ctrl.account = new_name
 		if self.account == old_name:
 			self.account = new_name
+
+	def change_jid(self, account, old_jid, new_jid):
+		''' call then when the full jid of a contral change'''
+		if account not in self._controls:
+			return
+		if old_jid not in self._controls[account]:
+			return
+		if old_jid == new_jid:
+			return
+		self._controls[account][new_jid] = self._controls[account][old_jid]
+		del self._controls[account][old_jid]
 
 	def get_num_controls(self):
 		return sum(len(d) for d in self._controls.values())
@@ -393,7 +405,7 @@ class MessageWindow(object):
 				control.chat_buttons_set_visible(not control.hide_chat_buttons)
 			elif keyval == gtk.keysyms.m: # ALT + M show emoticons menu
 				control.show_emoticons_menu()
-			elif keyval == gtk.keysyms.a: # ALT + A show actions menu
+			elif keyval == gtk.keysyms.d: # ALT + D show actions menu
 				control.on_actions_button_clicked(control.actions_button)
 			elif control.type_id == message_control.TYPE_GC and \
 			keyval == gtk.keysyms.t: # ALT + t
@@ -407,6 +419,29 @@ class MessageWindow(object):
 	def _on_close_button_clicked(self, button, control):
 		'''When close button is pressed: close a tab'''
 		self.remove_tab(control, self.CLOSE_CLOSE_BUTTON)
+
+	def show_icon(self):
+		window_mode = gajim.interface.msg_win_mgr.mode
+		icon = None
+		if window_mode == MessageWindowMgr.ONE_MSG_WINDOW_NEVER:
+			ctrl = self.get_active_control()
+			if not ctrl:
+				return
+			icon = ctrl.get_tab_image(count_unread=False)
+		elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS:
+			pass # keep default icon
+		elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
+			pass # keep default icon
+		elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERACCT:
+			pass # keep default icon
+		elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE:
+			if self.type_ == 'gc':
+				icon = gtkgui_helpers.load_icon('muc_active')
+			else:
+				# chat, pm
+				icon = gtkgui_helpers.load_icon('online')
+		if icon:
+			self.window.set_icon(icon.get_pixbuf())
 
 	def show_title(self, urgent=True, control=None):
 		'''redraw the window's title'''
@@ -577,6 +612,8 @@ class MessageWindow(object):
 				status_img.set_from_animation(tab_img.get_animation())
 			else:
 				status_img.set_from_pixbuf(tab_img.get_pixbuf())
+
+		self.show_icon()
 
 	def repaint_themed_widgets(self):
 		'''Repaint controls in the window with theme color'''

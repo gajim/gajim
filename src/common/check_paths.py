@@ -64,7 +64,8 @@ def create_log_db():
 
 		CREATE TABLE unread_messages(
 			message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-			jid_id INTEGER
+			jid_id INTEGER,
+			shown BOOLEAN default 0
 		);
 
 		CREATE INDEX idx_unread_messages_jid_id ON unread_messages (jid_id);
@@ -90,11 +91,28 @@ def create_log_db():
 		CREATE TABLE caps_cache (
 			hash_method TEXT,
 			hash TEXT,
-			data BLOB);
+			data BLOB,
+			last_seen INTEGER);
 
 		CREATE TABLE rooms_last_message_time(
 			jid_id INTEGER PRIMARY KEY UNIQUE,
 			time INTEGER
+		);
+
+		CREATE TABLE IF NOT EXISTS roster_entry(
+			account_jid_id INTEGER,
+			jid_id INTEGER,
+			name TEXT,
+			subscription INTEGER,
+			ask BOOLEAN,
+			PRIMARY KEY (account_jid_id, jid_id)
+		);
+
+		CREATE TABLE IF NOT EXISTS roster_group(
+			account_jid_id INTEGER,
+			jid_id INTEGER,
+			group_name TEXT,
+			PRIMARY KEY (account_jid_id, jid_id, group_name)
 		);
 		'''
 		)

@@ -121,7 +121,35 @@
       </widget>
     </child>
     <child>
-      <widget class="GtkSeparatorMenuItem" id="separator6">
+      <widget class="GtkImageMenuItem" id="block_menuitem">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">_Block</property>
+        <property name="use_underline">True</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="menu-item-image5">
+            <property name="visible">True</property>
+            <property name="stock">gtk-stop</property>
+            <property name="icon_size">1</property>
+          </widget>
+        </child>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkImageMenuItem" id="unblock_menuitem">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">_Unblock</property>
+        <property name="use_underline">True</property>
+        <child internal-child="image">
+          <widget class="GtkImage" id="menu-item-image6">
+            <property name="visible">True</property>
+            <property name="stock">gtk-stop</property>
+            <property name="icon_size">1</property>
+          </widget>
+        </child>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkSeparatorMenuItem" id="separator1">
         <property name="visible">True</property>
       </widget>
     </child>

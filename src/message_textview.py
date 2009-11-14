@@ -119,7 +119,7 @@ class MessageTextView(gtk.TextView):
 		else:
 			start, finish = buffer.get_bounds()
 		return (start, finish)
-		
+
 	def set_tag(self, widget, tag):
 		buffer = self.get_buffer()
 		start, finish = self.get_active_iters()

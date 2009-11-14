@@ -283,8 +283,6 @@ class SingleForm(gtk.Table, object):
 		self.set_col_spacings(12)
 		self.set_row_spacings(6)
 
-		self.tooltips = gtk.Tooltips()
-
 		def decorate_with_tooltip(widget, field):
 			''' Adds a tooltip containing field's description to a widget.
 			Creates EventBox if widget doesn't have its own gdk window.
@@ -294,7 +292,7 @@ class SingleForm(gtk.Table, object):
 					evbox = gtk.EventBox()
 					evbox.add(widget)
 					widget = evbox
-				self.tooltips.set_tip(widget, field.description)
+				widget.set_tooltip_text(field.description)
 			return widget
 
 		self._data_form = dataform
@@ -370,14 +368,32 @@ class SingleForm(gtk.Table, object):
 
 			elif field.type == 'list-multi':
 				# TODO: When more than few choices, make a list
-				widget = gtk.VBox()
-				for value, label in field.iter_options():
-					check = gtk.CheckButton(label, use_underline=False)
-					check.set_active(value in field.values)
-					check.connect('toggled', self.on_list_multi_checkbutton_toggled,
-						field, value)
-					widget.set_sensitive(readwrite)
+				if len(field.options) < 6:
+					# 5 option max: show checkbutton
+					widget = gtk.VBox()
+					for value, label in field.iter_options():
+						check = gtk.CheckButton(label, use_underline=False)
+						check.set_active(value in field.values)
+						check.connect('toggled',
+							self.on_list_multi_checkbutton_toggled, field, value)
 					widget.pack_start(check, expand=False)
+				else:
+					# more than 5 options: show combobox
+					def on_list_multi_treeview_changed(selection, f):
+						def for_selected(treemodel, path, iter):
+							vals.append(treemodel[iter][1])
+						vals = []
+						selection.selected_foreach(for_selected)
+						field.values = vals[:]
+					widget = gtk.ScrolledWindow()
+					widget.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+					tv = gtkgui_helpers.create_list_multi(field.options,
+						field.values)
+					widget.add(tv)
+					widget.set_size_request(-1, 120)
+					tv.get_selection().connect('changed',
+						on_list_multi_treeview_changed, field)
+				widget.set_sensitive(readwrite)
 
 			elif field.type == 'jid-single':
 				widget = gtk.Entry()

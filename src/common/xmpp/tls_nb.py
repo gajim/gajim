@@ -1,6 +1,6 @@
 ##   tls_nb.py
 ##       based on transports_nb.py
-##  
+##
 ##   Copyright (C) 2003-2004 Alexey "Snake" Nezhdanov
 ##       modified by Dimitur Kirov <dkirov@gmail.com>
 ##       modified by Tomas Karasek <tom.to.the.k@gmail.com>
@@ -63,7 +63,7 @@ class SSLWrapper:
 		peer=None):
 			self.parent = IOError
 
-			errno = errno or gattr(exc, 'errno')
+			errno = errno or gattr(exc, 'errno') or exc[0]
 			strerror = strerror or gattr(exc, 'strerror') or gattr(exc, 'args')
 			if not isinstance(strerror, basestring):
 				strerror = repr(strerror)
@@ -165,6 +165,10 @@ class PyOpenSSLWrapper(SSLWrapper):
 			log.debug("Recv: Got OpenSSL.SSL.SysCallError: " + repr(e),
 				exc_info=True)
 			raise SSLWrapper.Error(self.sock or self.sslobj, e)
+		except OpenSSL.SSL.ZeroReturnError, e:
+			# end-of-connection raises ZeroReturnError instead of having the
+			# connection's .recv() method return a zero-sized result.
+			raise SSLWrapper.Error(self.sock or self.sslobj, e, -1)
 		except OpenSSL.SSL.Error, e:
 			if self.is_numtoolarge(e):
 				# warn, but ignore this exception
@@ -228,7 +232,7 @@ class StdlibSSLWrapper(SSLWrapper):
 class NonBlockingTLS(PlugIn):
 	'''
 	TLS connection used to encrypts already estabilished tcp connection.
-	
+
 	Can be plugged into NonBlockingTCP and will make use of StdlibSSLWrapper or
 	PyOpenSSLWrapper.
 	'''
@@ -243,10 +247,10 @@ class NonBlockingTLS(PlugIn):
 		self.mycerts = mycerts
 
 	# from ssl.h (partial extract)
-	ssl_h_bits = {	"SSL_ST_CONNECT": 0x1000, "SSL_ST_ACCEPT": 0x2000, 
-			"SSL_CB_LOOP": 0x01, "SSL_CB_EXIT": 0x02, 
-			"SSL_CB_READ": 0x04, "SSL_CB_WRITE": 0x08, 
-			"SSL_CB_ALERT": 0x4000, 
+	ssl_h_bits = {	"SSL_ST_CONNECT": 0x1000, "SSL_ST_ACCEPT": 0x2000,
+			"SSL_CB_LOOP": 0x01, "SSL_CB_EXIT": 0x02,
+			"SSL_CB_READ": 0x04, "SSL_CB_WRITE": 0x08,
+			"SSL_CB_ALERT": 0x4000,
 			"SSL_CB_HANDSHAKE_START": 0x10, "SSL_CB_HANDSHAKE_DONE": 0x20}
 
 	def plugin(self, owner):
@@ -281,7 +285,7 @@ class NonBlockingTLS(PlugIn):
 		typedict = {OpenSSL.crypto.TYPE_RSA: "RSA",
 						OpenSSL.crypto.TYPE_DSA: "DSA"}
 		print >> stream, "PKey bits:", pkey.bits()
-		print >> stream, "PKey type: %s (%d)" % (typedict.get(pkey.type(), 
+		print >> stream, "PKey type: %s (%d)" % (typedict.get(pkey.type(),
 			"Unknown"), pkey.type())
 
 	def _startSSL(self):

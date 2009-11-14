@@ -137,9 +137,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	# END __init__
 
 	def dispatch(self, event, data):
-		if event in gajim.handlers:
-			gajim.handlers[event](self.name, data)
-
+		gajim.interface.dispatch(event, self.name, data)
 
 	def _reconnect(self):
 		# Do not try to reco while we are already trying
@@ -495,6 +493,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		# send a stanza untouched
 		if not self.connection:
 			return
+		if not isinstance(stanza, common.xmpp.Node):
+			stanza = common.xmpp.Protocol(node=stanza)
 		self.connection.send(stanza)
 
 	def ack_subscribed(self, jid):
@@ -523,6 +523,11 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		if self.connection:
 			self.connection.getRoster().setItem(jid = jid, name = name,
 				groups = groups)
+
+	def update_contacts(self, contacts):
+		'''update multiple roster items'''
+		if self.connection:
+			self.connection.getRoster().setItemMulti(contacts)
 
 	def new_account(self, name, config, sync = False):
 		gajim.log.debug('This should not happen (new_account)')
@@ -587,6 +592,9 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 				self.dispatch('MSGERROR', [frm, -1,
 	            _('Connection to host could not be established: Timeout while '
 					'sending data.'), None, None, session])
+
+	def load_roster_from_db(self):
+		return
 
 # END ConnectionZeroconf
 

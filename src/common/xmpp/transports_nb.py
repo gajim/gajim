@@ -16,7 +16,7 @@
 ##   GNU General Public License for more details.
 
 '''
-Transports are objects responsible for connecting to XMPP server and putting 
+Transports are objects responsible for connecting to XMPP server and putting
 data to wrapped sockets in in desired form (SSL, TLS, TCP, for HTTP proxy,
 for SOCKS5 proxy...)
 
@@ -35,33 +35,43 @@ import errno
 import time
 import traceback
 import base64
+import urlparse
 
 import logging
 log = logging.getLogger('gajim.c.x.transports_nb')
 
 def urisplit(uri):
 	'''
-	Function for splitting URI string to tuple (protocol, host, path).
-	e.g. urisplit('http://httpcm.jabber.org/webclient') returns
-	('http', 'httpcm.jabber.org', '/webclient')
+	Function for splitting URI string to tuple (protocol, host, port, path).
+	e.g. urisplit('http://httpcm.jabber.org:123/webclient') returns
+	('http', 'httpcm.jabber.org', 123, '/webclient')
+	return 443 as default port if proto is https else 80
 	'''
-	import re
-	regex = '(([^:/]+)(://))?([^/]*)(/?.*)'
-	grouped = re.match(regex, uri).groups()
-	proto, host, path = grouped[1], grouped[3], grouped[4]
-	return proto, host, path
+	splitted =  urlparse.urlsplit(uri)
+	proto, host, path = splitted.scheme, splitted.hostname, splitted.path
+	try:
+		port = splitted.port
+	except ValueError:
+		log.warn('port cannot be extracted from BOSH URL %s, using default port' \
+			% uri)
+		port = ''
+	if not port:
+		if proto == 'https':
+			port = 443
+		else:
+			port = 80
+	return proto, host, port, path
 
 def get_proxy_data_from_dict(proxy):
 	tcp_host, tcp_port, proxy_user, proxy_pass = None, None, None, None
 	proxy_type = proxy['type']
 	if proxy_type == 'bosh' and not proxy['bosh_useproxy']:
-		# with BOSH not over proxy we have to parse the hostname from BOSH URI 
-		tcp_host, tcp_port = urisplit(proxy['bosh_uri'])[1], proxy['bosh_port'] 
-		tcp_host = tcp_host.split(':')[0]
-	else: 
-		# with proxy!=bosh or with bosh over HTTP proxy we're connecting to proxy 
-		# machine 
-		tcp_host, tcp_port = proxy['host'], proxy['port'] 
+		# with BOSH not over proxy we have to parse the hostname from BOSH URI
+		proto, tcp_host, tcp_port, path = urisplit(proxy['bosh_uri'])
+	else:
+		# with proxy!=bosh or with bosh over HTTP proxy we're connecting to proxy
+		# machine
+		tcp_host, tcp_port = proxy['host'], proxy['port']
 	if proxy['useauth']:
 		proxy_user, proxy_pass = proxy['user'], proxy['pass']
 	return tcp_host, tcp_port, proxy_user, proxy_pass
@@ -102,13 +112,13 @@ class NonBlockingTransport(PlugIn):
 		'''
 		Each trasport class can have different constructor but it has to have at
 		least all the arguments of NonBlockingTransport constructor.
- 
+
 		:param raise_event: callback for monitoring of sent and received data
 		:param on_disconnect: callback called on disconnection during runtime
 		:param idlequeue: processing idlequeue
 		:param estabilish_tls: boolean whether to estabilish TLS connection after
 			TCP connection is done
-		:param certs: tuple of (cacerts, mycerts) see constructor of 
+		:param certs: tuple of (cacerts, mycerts) see constructor of
 			tls_nb.NonBlockingTLS for more details
 		'''
 		PlugIn.__init__(self)
@@ -121,10 +131,10 @@ class NonBlockingTransport(PlugIn):
 		self.server = None
 		self.port = None
 		self.conn_5tuple = None
-		self.set_state(DISCONNECTED) 
-		self.estabilish_tls = estabilish_tls 
-		self.certs = certs 
-		# type of used ssl lib (if any) will be assigned to this member var 
+		self.set_state(DISCONNECTED)
+		self.estabilish_tls = estabilish_tls
+		self.certs = certs
+		# type of used ssl lib (if any) will be assigned to this member var
 		self.ssl_lib = None
 		self._exported_methods=[self.onreceive, self.set_send_timeout,
 			self.set_send_timeout2, self.set_timeout, self.remove_timeout,
@@ -214,13 +224,13 @@ class NonBlockingTransport(PlugIn):
 	def _tcp_connecting_started(self):
 		self.set_state(CONNECTING)
 
-	def read_timeout(self): 
+	def read_timeout(self):
 		''' called when there's no response from server in defined timeout '''
 		if self.on_timeout:
 			self.on_timeout()
 		self.renew_send_timeout()
 
-	def read_timeout2(self): 
+	def read_timeout2(self):
 		''' called when there's no response from server in defined timeout '''
 		if self.on_timeout2:
 			self.on_timeout2()
@@ -289,7 +299,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 
 		self.proxy_dict = proxy_dict
 		self.on_remote_disconnect = self.disconnect
-	
+
 	# FIXME: transport should not be aware xmpp
 	def start_disconnect(self):
 		NonBlockingTransport.start_disconnect(self)
@@ -312,16 +322,16 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 		self._send = self._sock.send
 		self._recv = self._sock.recv
 		self.fd = self._sock.fileno()
-		
+
 		# we want to be notified when send is possible to connected socket because
 		# it means the TCP connection is estabilished
 		self._plug_idle(writable=True, readable=False)
 		self.peerhost = None
 
-		# variable for errno symbol that will be found from exception raised 
+		# variable for errno symbol that will be found from exception raised
 		# from connect()
 		errnum = 0
-	
+
 		# set timeout for TCP connecting - if nonblocking connect() fails, pollend
 		# is called. If if succeeds pollout is called.
 		self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT_SECONDS)
@@ -334,12 +344,12 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 
 		if errnum in (errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK):
 			# connecting in progress
-			log.info('After NB connect() of %s. "%s" raised => CONNECTING' % 
+			log.info('After NB connect() of %s. "%s" raised => CONNECTING' %
 				(id(self), errstr))
 			self._tcp_connecting_started()
 			return
 
-		# if there was some other exception, call failure callback and unplug 
+		# if there was some other exception, call failure callback and unplug
 		# transport which will also remove read_timeouts for descriptor
 		self._on_connect_failure('Exception while connecting to %s:%s - %s %s' %
 			(self.server, self.port, errnum, errstr))
@@ -481,7 +491,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 	def _plug_idle(self, writable, readable):
 		'''
 		Plugs file descriptor of socket to Idlequeue.
-		
+
 		Plugged socket will be watched for "send possible" or/and "recv possible"
 		events. pollin() callback is invoked on "recv possible", pollout() on
 		"send_possible".
@@ -535,7 +545,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
 		except tls_nb.SSLWrapper.Error, e:
 			log.info("_do_receive, caught SSL error, got %s:" % received,
 				exc_info=True)
-			errnum, errstr = e.exc
+			errnum, errstr = e.errno, e.strerror
 
 		if received == '':
 			errstr = 'zero bytes on recv'
@@ -601,11 +611,10 @@ class NonBlockingHTTP(NonBlockingTCP):
 		NonBlockingTCP.__init__(self, raise_event, on_disconnect, idlequeue,
 			estabilish_tls, certs, proxy_dict)
 
-		self.http_protocol, self.http_host, self.http_path = urisplit(
-			http_dict['http_uri'])
+		self.http_protocol, self.http_host, self.http_port, self.http_path = \
+			urisplit(http_dict['http_uri'])
 		self.http_protocol = self.http_protocol or 'http'
 		self.http_path = self.http_path or '/'
-		self.http_port = http_dict['http_port']
 		self.http_version = http_dict['http_version']
 		self.http_persistent = http_dict['http_persistent']
 		self.add_proxy_headers =  http_dict['add_proxy_headers']
@@ -618,7 +627,7 @@ class NonBlockingHTTP(NonBlockingTCP):
 
 		# buffer for partial responses
 		self.recvbuff = ''
-		self.expected_length = 0 
+		self.expected_length = 0
 		self.pending_requests = 0
 		self.on_http_request_possible = on_http_request_possible
 		self.last_recv_time = 0
@@ -636,44 +645,44 @@ class NonBlockingHTTP(NonBlockingTCP):
 		if self.get_state() == PROXY_CONNECTING:
 			NonBlockingTCP._on_receive(self, data)
 			return
-		if not self.recvbuff:
-			# recvbuff empty - fresh HTTP message was received
-			try:
-				statusline, headers, self.recvbuff = self.parse_http_message(data)
-			except ValueError:
-				self.disconnect() 
-				return
-			if statusline[1] != '200':
-				log.error('HTTP Error: %s %s' % (statusline[1], statusline[2]))
-				self.disconnect()
-				return
-			self.expected_length = int(headers['Content-Length'])
-			if 'Connection' in headers and headers['Connection'].strip()=='close':
-				self.close_current_connection = True
-		else:
-			#sth in recvbuff - append currently received data to HTTP msg in buffer
-			self.recvbuff = '%s%s' % (self.recvbuff, data)
 
-		if self.expected_length > len(self.recvbuff):
+		# append currently received data to HTTP msg in buffer
+		self.recvbuff = '%s%s' % (self.recvbuff or '', data)
+		statusline, headers, httpbody, buffer_rest = self.parse_http_message(
+			self.recvbuff)
+		
+		if not (statusline and headers and httpbody):
+			log.debug('Received incomplete HTTP response')
+			return
+
+		if statusline[1] != '200':
+			log.error('HTTP Error: %s %s' % (statusline[1], statusline[2]))
+			self.disconnect()
+			return
+		self.expected_length = int(headers['Content-Length'])
+		if 'Connection' in headers and headers['Connection'].strip()=='close':
+			self.close_current_connection = True
+			
+		if self.expected_length > len(httpbody):
 			# If we haven't received the whole HTTP mess yet, let's end the thread.
 			# It will be finnished from one of following recvs on plugged socket.
 			log.info('not enough bytes in HTTP response - %d expected, %d got' %
 				(self.expected_length, len(self.recvbuff)))
-			return
+		else:
+			# First part of buffer has been extraced and is going to be handled,
+			# remove it from buffer
+			self.recvbuff = buffer_rest
 
-		# everything was received
-		httpbody = self.recvbuff
+			# everything was received
+			self.expected_length = 0
 
-		self.recvbuff = ''
-		self.expected_length = 0
-
-		if not self.http_persistent or self.close_current_connection:
-			# not-persistent connections disconnect after response
-			self.disconnect(do_callback=False)
-		self.close_current_connection = False
-		self.last_recv_time = time.time()
-		self.on_receive(data=httpbody, socket=self)
-		self.on_http_request_possible()
+			if not self.http_persistent or self.close_current_connection:
+				# not-persistent connections disconnect after response
+				self.disconnect(do_callback=False)
+			self.close_current_connection = False
+			self.last_recv_time = time.time()
+			self.on_receive(data=httpbody, socket=self)
+			self.on_http_request_possible()
 
 	def build_http_message(self, httpbody, method='POST'):
 		'''
@@ -698,7 +707,7 @@ class NonBlockingHTTP(NonBlockingTCP):
 			headers.append('Connection: Keep-Alive')
 		headers.append('\r\n')
 		headers = '\r\n'.join(headers)
-		return('%s%s\r\n' % (headers, httpbody))
+		return('%s%s' % (headers, httpbody))
 
 	def parse_http_message(self, message):
 		'''
@@ -707,20 +716,27 @@ class NonBlockingHTTP(NonBlockingTCP):
 			headers - dictionary of headers e.g. {'Content-Length': '604',
 				'Content-Type': 'text/xml; charset=utf-8'},
 			httpbody - string with http body)
+			http_rest - what is left in the message after a full HTTP header + body
 		'''
 		message = message.replace('\r','')
-		# Remove latest \n
-		if message.endswith('\n'):
-			message = message[:-1]
-		(header, httpbody) = message.split('\n\n', 1)
-		header = header.split('\n')
-		statusline = header[0].split(' ', 2)
-		header = header[1:]
-		headers = {}
-		for dummy in header:
-			row = dummy.split(' ', 1)
-			headers[row[0][:-1]] = row[1]
-		return (statusline, headers, httpbody)
+		splitted = message.split('\n\n')
+		if len(splitted) < 2:
+			# no complete http message. Keep filling the buffer until we find one
+			buffer_rest = message
+			return ('', '', '', buffer_rest)
+		else:
+			(header, httpbody)  = splitted[:2]
+			if httpbody.endswith('\n'):
+				httpbody = httpbody[:-1]
+			buffer_rest = "\n\n".join(splitted[2:])
+			header = header.split('\n')
+			statusline = header[0].split(' ', 2)
+			header = header[1:]
+			headers = {}
+			for dummy in header:
+				row = dummy.split(' ', 1)
+				headers[row[0][:-1]] = row[1]
+			return (statusline, headers, httpbody, buffer_rest)
 
 
 class NonBlockingHTTPBOSH(NonBlockingHTTP):

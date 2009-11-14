@@ -203,8 +203,8 @@ class Systray:
 		single_message_menuitem.set_sensitive(iskey)
 		join_gc_menuitem.set_sensitive(iskey)
 
-		accounts_list = sorted(gajim.contacts.get_accounts()) 
-		# items that get shown whether an account is zeroconf or not 
+		accounts_list = sorted(gajim.contacts.get_accounts())
+		# items that get shown whether an account is zeroconf or not
 		if connected_accounts > 1: # 2 or more connections? make submenus
 			account_menu_for_chat_with = gtk.Menu()
 			chat_with_menuitem.set_submenu(account_menu_for_chat_with)
@@ -399,7 +399,7 @@ class Systray:
 				gajim.interface.roster.send_status(acct, show, message)
 				gajim.interface.roster.send_pep(acct, pep_dict)
 		dlg = dialogs.ChangeStatusMessageDialog(on_response, status)
-		dlg.window.present()
+		dlg.dialog.present()
 
 	def show_tooltip(self, widget):
 		position = widget.window.get_origin()

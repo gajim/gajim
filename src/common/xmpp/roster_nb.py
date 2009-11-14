@@ -21,7 +21,7 @@ Simple roster implementation. Can be used though for different tasks like
 mass-renaming of contacts.
 '''
 
-from protocol import JID, Iq, Presence, Node, NodeProcessed, NS_ROSTER
+from protocol import JID, Iq, Presence, Node, NodeProcessed, NS_MUC_USER, NS_ROSTER
 from plugin import PlugIn
 
 import logging
@@ -30,26 +30,34 @@ log = logging.getLogger('gajim.c.x.roster_nb')
 
 class NonBlockingRoster(PlugIn):
 	''' Defines a plenty of methods that will allow you to manage roster.
-		Also automatically track presences from remote JIDs taking into 
+		Also automatically track presences from remote JIDs taking into
 		account that every JID can have multiple resources connected. Does not
 		currently support 'error' presences.
 		You can also use mapping interface for access to the internal representation of
 		contacts in roster.
 		'''
-	def __init__(self):
+	def __init__(self, version=''):
 		''' Init internal variables. '''
 		PlugIn.__init__(self)
+		self.version = version
 		self._data = {}
 		self.set=None
 		self._exported_methods=[self.getRoster]
+		self.received_from_server = False
 
 	def Request(self,force=0):
-		''' Request roster from server if it were not yet requested 
+		''' Request roster from server if it were not yet requested
 			(or if the 'force' argument is set). '''
 		if self.set is None: self.set=0
 		elif not force: return
-		self._owner.send(Iq('get',NS_ROSTER))
+
+		iq = Iq('get',NS_ROSTER)
+		iq.setTagAttr('query', 'ver', self.version)
+		id_ = self._owner.getAnID()
+		iq.setID(id_)
+		self._owner.send(iq)
 		log.info('Roster requested from server')
+		return id_
 
 	def RosterIqHandler(self,dis,stanza):
 		''' Subscription tracker. Used internally for setting items state in
@@ -60,6 +68,10 @@ class NonBlockingRoster(PlugIn):
 			return
 		query = stanza.getTag('query')
 		if query:
+			self.received_from_server = True
+			self.version = stanza.getTagAttr('query', 'ver')
+			if self.version is None:
+				self.version = ''
 			for item in query.getTags('item'):
 				jid=item.getAttr('jid')
 				if item.getAttr('subscription')=='remove':
@@ -82,6 +94,8 @@ class NonBlockingRoster(PlugIn):
 	def PresenceHandler(self,dis,pres):
 		''' Presence tracker. Used internally for setting items' resources state in
 			internal roster representation. '''
+		if pres.getTag('x', namespace=NS_MUC_USER):
+			return
 		jid=pres.getFrom()
 		if not jid:
 			# If no from attribue, it's from server
@@ -160,6 +174,16 @@ class NonBlockingRoster(PlugIn):
 		item=query.setTag('item',attrs)
 		for group in groups: item.addChild(node=Node('group',payload=[group]))
 		self._owner.send(iq)
+	def setItemMulti(self,items):
+		''' Renames multiple contacts and sets their group lists.'''
+		iq=Iq('set',NS_ROSTER)
+		query=iq.getTag('query')
+		for i in items:
+			attrs={'jid':i['jid']}
+			if i['name']: attrs['name']=i['name']
+			item=query.setTag('item',attrs)
+			for group in i['groups']: item.addChild(node=Node('group',payload=[group]))
+		self._owner.send(iq)
 	def getItems(self):
 		''' Return list of all [bare] JIDs that the roster is currently tracks.'''
 		return self._data.keys()
@@ -182,12 +206,17 @@ class NonBlockingRoster(PlugIn):
 		''' Authorise JID 'jid'. Works only if these JID requested auth previously. '''
 		self._owner.send(Presence(jid,'subscribed'))
 	def Unauthorize(self,jid):
-		''' Unauthorise JID 'jid'. Use for declining authorisation request 
+		''' Unauthorise JID 'jid'. Use for declining authorisation request
 			or for removing existing authorization. '''
 		self._owner.send(Presence(jid,'unsubscribed'))
 	def getRaw(self):
 		'''Returns the internal data representation of the roster.'''
 		return self._data
+	def setRaw(self, data):
+		'''Returns the internal data representation of the roster.'''
+		self._data = data
+		self._data[self._owner.User+'@'+self._owner.Server]={'resources':{},'name':None,'ask':None,'subscription':None,'groups':None,}
+		self.set=1
 	# copypasted methods for roster.py from constructor to here
 
 
@@ -199,7 +228,7 @@ class NonBlockingRoster(PlugIn):
 		self._owner.RegisterHandler('iq', self.RosterIqHandler, 'set', NS_ROSTER)
 		self._owner.RegisterHandler('presence', self.PresenceHandler)
 		if request:
-			self.Request()
+			return self.Request()
 
 	def _on_roster_set(self, data):
 		if data:
@@ -212,16 +241,18 @@ class NonBlockingRoster(PlugIn):
 			self.on_ready = None
 		return True
 
-	def getRoster(self, on_ready=None):
+	def getRoster(self, on_ready=None, force=False):
 		''' Requests roster from server if neccessary and returns self. '''
+		return_self = True
 		if not self.set:
 			self.on_ready = on_ready
 			self._owner.onreceive(self._on_roster_set)
-			return
-		if on_ready:
+			return_self = False
+		elif on_ready:
 			on_ready(self)
-			on_ready = None
-		else:
+			return_self = False
+		if return_self or force:
 			return self
+		return None
 
 # vim: se ts=3:

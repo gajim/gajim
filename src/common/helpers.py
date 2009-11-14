@@ -37,14 +37,13 @@ import urllib
 import errno
 import select
 import base64
-import sys
 import hashlib
+import caps
 
 from encodings.punycode import punycode_encode
 
 from i18n import Q_
 from i18n import ngettext
-import xmpp
 
 try:
 	import winsound # windows-only built-in module for playing wav
@@ -123,7 +122,7 @@ def parse_resource(resource):
 	'''Perform stringprep on resource and return it'''
 	if resource:
 		try:
-			from xmpp_stringprep import resourceprep
+			from xmpp.stringprepare import resourceprep
 			return resourceprep.prepare(unicode(resource))
 		except UnicodeError:
 			raise InvalidFormat, 'Invalid character in resource.'
@@ -135,7 +134,7 @@ def prep(user, server, resource):
 
 	if user:
 		try:
-			from xmpp_stringprep import nodeprep
+			from xmpp.stringprepare import nodeprep
 			user = nodeprep.prepare(unicode(user))
 		except UnicodeError:
 			raise InvalidFormat, _('Invalid character in username.')
@@ -146,14 +145,14 @@ def prep(user, server, resource):
 		raise InvalidFormat, _('Server address required.')
 	else:
 		try:
-			from xmpp_stringprep import nameprep
+			from xmpp.stringprepare import nameprep
 			server = nameprep.prepare(unicode(server))
 		except UnicodeError:
 			raise InvalidFormat, _('Invalid character in hostname.')
 
 	if resource:
 		try:
-			from xmpp_stringprep import resourceprep
+			from xmpp.stringprepare import resourceprep
 			resource = resourceprep.prepare(unicode(resource))
 		except UnicodeError:
 			raise InvalidFormat, _('Invalid character in resource.')
@@ -170,6 +169,11 @@ def prep(user, server, resource):
 			return '%s/%s' % (server, resource)
 		else:
 			return server
+
+def windowsify(s):
+	if os.name == 'nt':
+		return s.capitalize()
+	return s
 
 def temp_failure_retry(func, *args, **kwargs):
 	while True:
@@ -352,7 +356,7 @@ def is_in_path(command, return_abs_path=False):
 	return False
 
 def exec_command(command):
-	subprocess.Popen(command, shell = True)
+	subprocess.Popen('%s &' % command, shell=True).wait()
 
 def build_command(executable, parameter):
 	# we add to the parameter (can hold path with spaces)
@@ -368,11 +372,7 @@ def get_file_path_from_dnd_dropped_uri(uri):
 	if re.match('^file:///[a-zA-Z]:/', path): # windows
 		path = path[8:] # 8 is len('file:///')
 	elif path.startswith('file://'): # nautilus, rox
-		if sys.platform == 'darwin':
-			# OS/X includes hostname in file:// URI
-			path = re.sub('file://[^/]*', '', path)
-		else:
-			path = path[7:] # 7 is len('file://')
+		path = path[7:] # 7 is len('file://')
 	elif path.startswith('file:'): # xffm
 		path = path[5:] # 5 is len('file:')
 	return path
@@ -566,83 +566,10 @@ def datetime_tuple(timestamp):
 	from time import strptime
 	return strptime(timestamp, '%Y%m%dT%H:%M:%S')
 
-def sort_identities_func(i1, i2):
-	cat1 = i1['category']
-	cat2 = i2['category']
-	if cat1 < cat2:
-		return -1
-	if cat1 > cat2:
-		return 1
-	type1 = i1.get('type', '')
-	type2 = i2.get('type', '')
-	if type1 < type2:
-		return -1
-	if type1 > type2:
-		return 1
-	lang1 = i1.get('xml:lang', '')
-	lang2 = i2.get('xml:lang', '')
-	if lang1 < lang2:
-		return -1
-	if lang1 > lang2:
-		return 1
-	return 0
-
-def sort_dataforms_func(d1, d2):
-	f1 = d1.getField('FORM_TYPE')
-	f2 = d2.getField('FORM_TYPE')
-	if f1 and f2 and (f1.getValue() < f2.getValue()):
-		return -1
-	return 1
-
-def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
-	'''Compute caps hash according to XEP-0115, V1.5
-
-	dataforms are xmpp.DataForms objects as common.dataforms don't allow several
-	values without a field type list-multi'''
-	S = ''
-	identities.sort(cmp=sort_identities_func)
-	for i in identities:
-		c = i['category']
-		type_ = i.get('type', '')
-		lang = i.get('xml:lang', '')
-		name = i.get('name', '')
-		S += '%s/%s/%s/%s<' % (c, type_, lang, name)
-	features.sort()
-	for f in features:
-		S += '%s<' % f
-	dataforms.sort(cmp=sort_dataforms_func)
-	for dataform in dataforms:
-		# fields indexed by var
-		fields = {}
-		for f in dataform.getChildren():
-			fields[f.getVar()] = f
-		form_type = fields.get('FORM_TYPE')
-		if form_type:
-			S += form_type.getValue() + '<'
-			del fields['FORM_TYPE']
-		for var in sorted(fields.keys()):
-			S += '%s<' % var
-			values = sorted(fields[var].getValues())
-			for value in values:
-				S += '%s<' % value
-
-	if hash_method == 'sha-1':
-		hash_ = hashlib.sha1(S)
-	elif hash_method == 'md5':
-		hash_ = hashlib.md5(S)
-	else:
-		return ''
-	return base64.b64encode(hash_.digest())
-
 # import gajim only when needed (after decode_string is defined) see #4764
 
 import gajim
 import pep
-
-try:
-	from osx import nsapp
-except ImportError:
-	pass
 
 
 def convert_bytes(string):
@@ -724,9 +651,6 @@ def launch_browser_mailer(kind, uri):
 			command = 'kfmclient exec'
 		elif gajim.config.get('openwith') == 'exo-open':
 			command = 'exo-open'
-		elif ((sys.platform == 'darwin') and\
-		(gajim.config.get('openwith') == 'open')):
-			command = 'open'
 		elif gajim.config.get('openwith') == 'custom':
 			if kind == 'url':
 				command = gajim.config.get('custombrowser')
@@ -754,9 +678,6 @@ def launch_file_manager(path_to_open):
 			command = 'kfmclient exec'
 		elif gajim.config.get('openwith') == 'exo-open':
 			command = 'exo-open'
-		elif ((sys.platform == 'darwin') and\
-		(gajim.config.get('openwith') == 'open')):
-			command = 'open'
 		elif gajim.config.get('openwith') == 'custom':
 			command = gajim.config.get('custom_file_manager')
 		if command == '': # if no app is configured
@@ -820,11 +741,6 @@ def play_sound_file(path_to_soundfile):
 	path_to_soundfile = check_soundfile_path(path_to_soundfile)
 	if path_to_soundfile is None:
 		return
-	if sys.platform == 'darwin':
-		try:
-			nsapp.playFile(path_to_soundfile)
-		except NameError:
-			pass
 	elif os.name == 'nt':
 		try:
 			winsound.PlaySound(path_to_soundfile,
@@ -1207,7 +1123,7 @@ def get_notification_icon_tooltip_dict():
 					'%d event pending',
 					'%d events pending',
 					total_non_messages, total_non_messages, total_non_messages)
-				accounts[account]['event_lines'].append(text)
+				account['event_lines'].append(text)
 			else:
 				for jid in non_messages.keys():
 					text = ngettext(
@@ -1215,7 +1131,7 @@ def get_notification_icon_tooltip_dict():
 						'%d events pending',
 						non_messages[jid], non_messages[jid], non_messages[jid])
 					text += _(' from user %s') % (jid)
-					accounts[account]['event_lines'].append(text)
+					account[account]['event_lines'].append(text)
 
 	return accounts
 
@@ -1347,6 +1263,7 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
 	return keyID
 
 def update_optional_features(account = None):
+	import xmpp
 	if account:
 		accounts = [account]
 	else:
@@ -1372,7 +1289,13 @@ def update_optional_features(account = None):
 			gajim.gajim_optional_features[a].append(xmpp.NS_ESESSION)
 		if gajim.config.get_per('accounts', a, 'answer_receipts'):
 			gajim.gajim_optional_features[a].append(xmpp.NS_RECEIPTS)
-		gajim.caps_hash[a] = compute_caps_hash([gajim.gajim_identity],
+		if gajim.HAVE_FARSIGHT:
+			gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE)
+			gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_RTP)
+			gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_RTP_AUDIO)
+			gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_RTP_VIDEO)
+			gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_ICE_UDP)
+		gajim.caps_hash[a] = caps.compute_caps_hash([gajim.gajim_identity],
 			gajim.gajim_common_features + gajim.gajim_optional_features[a])
 		# re-send presence with new hash
 		connected = gajim.connections[a].connected

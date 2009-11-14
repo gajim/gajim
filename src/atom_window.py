@@ -27,6 +27,7 @@ import gobject
 
 import gtkgui_helpers
 from common import helpers
+from common import i18n
 
 class AtomWindow:
 	window = None
@@ -41,6 +42,10 @@ class AtomWindow:
 			cls.window = AtomWindow()
 		else:
 			cls.window.updateCounter()
+
+	@classmethod
+	def windowClosed(cls):
+		cls.window = None
 
 	def __init__(self):
 		''' Create new window... only if we have anything to show. '''
@@ -101,18 +106,19 @@ class AtomWindow:
 		''' We display number of events on the top of window, sometimes it needs to be
 		changed...'''
 		count = len(self.__class__.entries)
-		# TODO: translate
 		if count>0:
-			self.new_entry_label.set_text( \
-				'You have received new entries (and %(count)d not displayed):' % \
-				{'count': count})
+			self.new_entry_label.set_text(i18n.ngettext(
+				'You have received new entries (and %d not displayed):',
+				'You have received new entries (and %d not displayed):', count,
+				count, count))
 			self.next_button.set_sensitive(True)
 		else:
-			self.new_entry_label.set_text('You have received new entry:')
+			self.new_entry_label.set_text(_('You have received new entry:'))
 			self.next_button.set_sensitive(False)
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
+		self.windowClosed()
 
 	def on_next_button_clicked(self, widget):
 		self.displayNextEntry()

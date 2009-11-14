@@ -190,8 +190,6 @@ def autodetect_browser_mailer():
 		gajim.config.set('openwith', 'kfmclient exec')
 	elif user_runs_xfce():
 		gajim.config.set('openwith', 'exo-open')
-	elif user_runs_osx():
-		gajim.config.set('openwith', 'open')
 	else:
 		gajim.config.set('openwith', 'custom')
 
@@ -206,9 +204,6 @@ def user_runs_xfce():
 	if 'startxfce4' in procs or 'xfce4-session' in procs:
 		return True
 	return False
-
-def user_runs_osx():
-	return sys.platform == 'darwin'
 
 def get_running_processes():
 	'''returns running processes or None (if not /proc exists)'''
@@ -868,7 +863,25 @@ def create_combobox(value_list, selected_value = None):
 	combobox.show_all()
 	return combobox
 
-def load_iconset(path, pixbuf2 = None, transport = False):
+def create_list_multi(value_list, selected_values=None):
+	'''Value_list is [(label1, value1), ]'''
+	liststore = gtk.ListStore(str, str)
+	treeview = gtk.TreeView(liststore)
+	treeview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
+	treeview.set_headers_visible(False)
+	col = gtk.TreeViewColumn()
+	treeview.append_column(col)
+	cell = gtk.CellRendererText()
+	col.pack_start(cell, True)
+	col.set_attributes(cell, text=0)
+	for value in value_list:
+		iter = liststore.append(value)
+		if value[1] in selected_values:
+			treeview.get_selection().select_iter(iter)
+	treeview.show_all()
+	return treeview
+
+def load_iconset(path, pixbuf2=None, transport=False):
 	'''load full iconset from the given path, and add
 	pixbuf2 on top left of each static images'''
 	path += '/'

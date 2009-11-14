@@ -44,8 +44,10 @@ try:
 		lastInputInfo = LASTINPUTINFO()
 		lastInputInfo.cbSize = ctypes.sizeof(lastInputInfo)
 
-	elif sys.platform == 'darwin':
-		import osx.idle as idle
+		# one or more of these may not be supported before XP.
+		OpenInputDesktop = ctypes.windll.user32.OpenInputDesktop
+		CloseDesktop = ctypes.windll.user32.CloseDesktop
+		SystemParametersInfo = ctypes.windll.user32.SystemParametersInfoW
 	else: # unix
 		from common import idle
 except Exception:
@@ -67,6 +69,21 @@ class SleepyWindows:
 		'''checks to see if we should change state'''
 		if not SUPPORTED:
 			return False
+
+		# screen saver, in windows >= XP
+		saver_runing = ctypes.c_int(0)
+		# 0x72 is SPI_GETSCREENSAVERRUNNING
+		if SystemParametersInfo(0x72, 0, ctypes.byref(saver_runing), 0) and \
+		saver_runing.value:
+			self.state = STATE_XA
+			return True
+
+		desk = OpenInputDesktop(0, False, 0)
+		if not desk:
+			# Screen locked
+			self.state = STATE_XA
+			return True
+		CloseDesktop(desk)
 
 		idleTime = self.getIdleSec()
 

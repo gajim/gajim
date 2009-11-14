@@ -83,15 +83,15 @@ common.configpaths.gajimpaths.init(config_path)
 del config_path
 common.configpaths.gajimpaths.init_profile()
 from common import exceptions
-import dialogs
+from common import gajim
 import gtkgui_helpers
 from common.logger import LOG_DB_PATH, constants
 
 #FIXME: constants should implement 2 way mappings
 status = dict((constants.__dict__[i], i[5:].lower()) for i in \
 	constants.__dict__.keys() if i.startswith('SHOW_'))
-from common import gajim
 from common import helpers
+import dialogs
 
 # time, message, subject
 (

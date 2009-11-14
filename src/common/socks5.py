@@ -489,7 +489,12 @@ class Socks5:
 			return None
 		fd = None
 		if self.remaining_buff != '':
-			fd = self.get_fd()
+			try:
+				fd = self.get_fd()
+			except IOError, e:
+				self.disconnect(False)
+				self.file_props['error'] = -6 # file system error
+				return 0
 			fd.write(self.remaining_buff)
 			lenn = len(self.remaining_buff)
 			current_time = self.idlequeue.current_time()
@@ -505,7 +510,12 @@ class Socks5:
 				self.file_props['completed'] = True
 				return 0
 		else:
-			fd = self.get_fd()
+			try:
+				fd = self.get_fd()
+			except IOError, e:
+				self.disconnect(False)
+				self.file_props['error'] = -6 # file system error
+				return 0
 			try:
 				buff = self._recv(MAX_BUFF_LEN)
 			except Exception:
@@ -793,6 +803,7 @@ class Socks5Listener(IdleObject):
 		self.port = port
 		self.ais = socket.getaddrinfo(None, port, socket.AF_UNSPEC,
 			socket.SOCK_STREAM, socket.SOL_TCP, socket.AI_PASSIVE)
+		self.ais.sort(reverse=True) # Try IPv6 first
 		self.queue_idx = -1
 		self.idlequeue = idlequeue
 		self.queue = None

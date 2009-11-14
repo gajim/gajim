@@ -30,12 +30,6 @@ import systray
 from common import gajim
 from common import helpers
 
-if sys.platform == 'darwin':
-	try:
-		import osx
-	except ImportError:
-		pass
-
 class StatusIcon(systray.Systray):
 	'''Class for the notification area icon'''
 	#NOTE: gtk api does NOT allow:
@@ -73,11 +67,6 @@ class StatusIcon(systray.Systray):
 		text = helpers.get_notification_icon_tooltip_text()
 		self.status_icon.set_tooltip(text)
 		if gajim.events.get_nb_systray_events():
-			if sys.platform == 'darwin':
-				try:
-					osx.nsapp.requestUserAttention()
-				except NameError:
-					pass
 			state = 'event'
 			self.status_icon.set_blinking(True)
 		else:

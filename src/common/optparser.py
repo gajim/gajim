@@ -29,8 +29,10 @@
 import os
 import locale
 import re
+from time import time
 from common import gajim
 from common import helpers
+from common import caps
 
 import exceptions
 try:
@@ -198,11 +200,69 @@ class OptionsParser:
 			self.update_config_to_01214()
 		if old < [0, 12, 1, 5] and new >= [0, 12, 1, 5]:
 			self.update_config_to_01215()
+		if old < [0, 12, 3, 1] and new >= [0, 12, 3, 1]:
+			self.update_config_to_01231()
+		if old < [0, 12, 5, 1] and new >= [0, 12, 5, 1]:
+			self.update_config_from_0125()
+			self.update_config_to_01251()
+		if old < [0, 12, 5, 2] and new >= [0, 12, 5, 2]:
+			self.update_config_to_01252()
+		if old < [0, 12, 5, 3] and new >= [0, 12, 5, 3]:
+			self.update_config_to_01253()
+		if old < [0, 12, 5, 4] and new >= [0, 12, 5, 4]:
+			self.update_config_to_01254()
+		if old < [0, 12, 5, 5] and new >= [0, 12, 5, 5]:
+			self.update_config_to_01255()
+		if old < [0, 12, 5, 6] and new >= [0, 12, 5, 6]:
+			self.update_config_to_01256()
+		if old < [0, 12, 5, 7] and new >= [0, 12, 5, 7]:
+			self.update_config_to_01257()
+		if old < [0, 12, 5, 8] and new >= [0, 12, 5, 8]:
+			self.update_config_to_01258()
+		if old < [0, 13, 0, 1] and new >= [0, 13, 0, 1]:
+			self.update_config_to_01301()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
 
-		gajim.capscache.load_from_db()
+		caps.capscache.initialize_from_db()
+
+	def assert_unread_msgs_table_exists(self):
+		'''create table unread_messages if there is no such table'''
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE unread_messages (
+					message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+					jid_id INTEGER
+				);
+				'''
+			)
+			con.commit()
+			gajim.logger.init_vars()
+		except sqlite.OperationalError:
+			pass
+		con.close()
+
+	def update_ft_proxies(self, to_remove=[], to_add=[]):
+		for account in gajim.config.get_per('accounts'):
+			proxies_str = gajim.config.get_per('accounts', account,
+				'file_transfer_proxies')
+			proxies = [p.strip() for p in proxies_str.split(',')]
+			for wrong_proxy in to_remove:
+				if wrong_proxy in proxies:
+					proxies.remove(wrong_proxy)
+			for new_proxy in to_add:
+				if new_proxy not in proxies:
+					proxies.append(new_proxy)
+			proxies_str = ', '.join(proxies)
+			gajim.config.set_per('accounts', account, 'file_transfer_proxies',
+				proxies_str)
 
 	def update_config_x_to_09(self):
 		# Var name that changed:
@@ -244,37 +304,9 @@ class OptionsParser:
 				theme = gajim.config.get_per('themes')[0]
 			gajim.config.set('roster_theme', theme)
 		# new proxies in accounts.name.file_transfer_proxies
-		for account in gajim.config.get_per('accounts'):
-			proxies = gajim.config.get_per('accounts', account,
-				'file_transfer_proxies')
-			if proxies.find('proxy.netlab.cz') < 0:
-				proxies += ', ' + 'proxy.netlab.cz'
-			gajim.config.set_per('accounts', account, 'file_transfer_proxies',
-				proxies)
+		self.update_ft_proxies(to_add=['proxy.netlab.cz'])
 
 		gajim.config.set('version', '0.9')
-
-	def assert_unread_msgs_table_exists(self):
-		'''create table unread_messages if there is no such table'''
-		back = os.getcwd()
-		os.chdir(logger.LOG_DB_FOLDER)
-		con = sqlite.connect(logger.LOG_DB_FILE)
-		os.chdir(back)
-		cur = con.cursor()
-		try:
-			cur.executescript(
-				'''
-				CREATE TABLE unread_messages (
-					message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-					jid_id INTEGER
-				);
-				'''
-			)
-			con.commit()
-			gajim.logger.init_vars()
-		except sqlite.OperationalError:
-			pass
-		con.close()
 
 	def update_config_09_to_010(self):
 		if 'usetabbedchat' in self.old_values and not \
@@ -293,21 +325,8 @@ class OptionsParser:
 		self.old_values['always_compact_view_gc'] != 'False':
 			gajim.config.set('always_hide_groupchat_buttons', True)
 
-		for account in gajim.config.get_per('accounts'):
-			proxies_str = gajim.config.get_per('accounts', account,
-				'file_transfer_proxies')
-			proxies = proxies_str.split(',')
-			for i in range(0, len(proxies)):
-				proxies[i] = proxies[i].strip()
-			for wrong_proxy in ('proxy65.jabber.autocom.pl',
-				'proxy65.jabber.ccc.de'):
-				if wrong_proxy in proxies:
-					proxies.remove(wrong_proxy)
-			if not 'transfer.jabber.freenet.de' in proxies:
-				proxies.append('transfer.jabber.freenet.de')
-			proxies_str = ', '.join(proxies)
-			gajim.config.set_per('accounts', account, 'file_transfer_proxies',
-				proxies_str)
+		self.update_ft_proxies(to_remove=['proxy65.jabber.autocom.pl',
+			'proxy65.jabber.ccc.de'], to_add=['transfer.jabber.freenet.de'])
 		# create unread_messages table if needed
 		self.assert_unread_msgs_table_exists()
 
@@ -618,7 +637,7 @@ class OptionsParser:
 				replace(' xmpp', '')
 			gajim.config.set('uri_schemes', new_values)
 		gajim.config.set('version', '0.12.0.1')
-		
+
 	def update_config_to_01211(self):
 		if 'trayicon' in self.old_values:
 			if self.old_values['trayicon'] == 'False':
@@ -655,9 +674,10 @@ class OptionsParser:
 	def update_config_to_01214(self):
 		for status in ['online', 'chat', 'away', 'xa', 'dnd', 'invisible',
 		'offline']:
-			gajim.config.add_per('statusmsg', '_last_' + status)
-			gajim.config.set_per('statusmsg', '_last_' + status, 'message',
-				self.old_values['last_status_msg_' + status])
+			if 'last_status_msg_' + status in self.old_values:
+				gajim.config.add_per('statusmsg', '_last_' + status)
+				gajim.config.set_per('statusmsg', '_last_' + status, 'message',
+					self.old_values['last_status_msg_' + status])
 		gajim.config.set('version', '0.12.1.4')
 
 	def update_config_to_01215(self):
@@ -670,5 +690,153 @@ class OptionsParser:
 			path = helpers.strip_soundfile_path(path, dirs, abs=True)
 			gajim.config.set_per('soundevents', evt, 'path', path)
 		gajim.config.set('version', '0.12.1.5')
+
+	def update_config_to_01231(self):
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				CREATE TABLE IF NOT EXISTS roster_entry(
+					account_jid_id INTEGER,
+					jid_id INTEGER,
+					name TEXT,
+					subscription INTEGER,
+					ask BOOLEAN,
+					PRIMARY KEY (account_jid_id, jid_id)
+				);
+
+				CREATE TABLE IF NOT EXISTS roster_group(
+					account_jid_id INTEGER,
+					jid_id INTEGER,
+   					group_name TEXT,
+					PRIMARY KEY (account_jid_id, jid_id, group_name)
+				);
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError:
+			pass
+		con.close()
+		gajim.config.set('version', '0.12.3.1')
+
+	def update_config_from_0125(self):
+		# All those functions need to be called for 0.12.5 to 0.13 transition
+		self.update_config_to_01211()
+		self.update_config_to_01213()
+		self.update_config_to_01214()
+		self.update_config_to_01215()
+		self.update_config_to_01231()
+
+	def update_config_to_01251(self):
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				ALTER TABLE unread_messages
+				ADD shown BOOLEAN default 0;
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError:
+			pass
+		con.close()
+		gajim.config.set('version', '0.12.5.1')
+
+	def update_config_to_01252(self):
+		if 'alwaysauth' in self.old_values:
+			val = self.old_values['alwaysauth']
+			for account in gajim.config.get_per('accounts'):
+				gajim.config.set_per('accounts', account, 'autoauth', val)
+		gajim.config.set('version', '0.12.5.2')
+
+	def update_config_to_01253(self):
+		if 'enable_zeroconf' in self.old_values:
+			val = self.old_values['enable_zeroconf']
+			for account in gajim.config.get_per('accounts'):
+				if gajim.config.get_per('accounts', account, 'is_zeroconf'):
+					gajim.config.set_per('accounts', account, 'active', val)
+				else:
+					gajim.config.set_per('accounts', account, 'active', True)
+		gajim.config.set('version', '0.12.5.3')
+
+	def update_config_to_01254(self):
+		vals = {'inmsgcolor': ['#a34526', '#a40000'],
+			'outmsgcolor': ['#164e6f', '#3465a4'],
+			'restored_messages_color': ['grey', '#555753'],
+			'statusmsgcolor': ['#1eaa1e', '#73d216'],
+			'urlmsgcolor': ['#0000ff', '#204a87'],
+			'gc_nicknames_colors': ['#a34526:#c000ff:#0012ff:#388a99:#045723:#7c7c7c:#ff8a00:#94452d:#244b5a:#32645a', '#4e9a06:#f57900:#ce5c00:#3465a4:#204a87:#75507b:#5c3566:#c17d11:#8f5902:#ef2929:#cc0000:#a40000']}
+		for c in vals:
+			if c not in self.old_values:
+				continue
+			val = self.old_values[c]
+			if val == vals[c][0]:
+				# We didn't change default value, so update it with new default
+				gajim.config.set(c, vals[c][1])
+		gajim.config.set('version', '0.12.5.4')
+
+	def update_config_to_01255(self):
+		vals = {'statusmsgcolor': ['#73d216', '#4e9a06'],
+			'outmsgtxtcolor': ['#a2a2a2', '#555753']}
+		for c in vals:
+			if c not in self.old_values:
+				continue
+			val = self.old_values[c]
+			if val == vals[c][0]:
+				# We didn't change default value, so update it with new default
+				gajim.config.set(c, vals[c][1])
+		gajim.config.set('version', '0.12.5.5')
+
+	def update_config_to_01256(self):
+		vals = {'gc_nicknames_colors': ['#4e9a06:#f57900:#ce5c00:#3465a4:#204a87:#75507b:#5c3566:#c17d11:#8f5902:#ef2929:#cc0000:#a40000', '#f57900:#ce5c00:#204a87:#75507b:#5c3566:#c17d11:#8f5902:#ef2929:#cc0000:#a40000']}
+		for c in vals:
+			if c not in self.old_values:
+				continue
+			val = self.old_values[c]
+			if val == vals[c][0]:
+				# We didn't change default value, so update it with new default
+				gajim.config.set(c, vals[c][1])
+		gajim.config.set('version', '0.12.5.6')
+
+	def update_config_to_01257(self):
+		if 'iconset' in self.old_values:
+			if self.old_values['iconset'] in ('nuvola', 'crystal', 'gossip',
+			'simplebulb', 'stellar'):
+				gajim.config.set('iconset', gajim.config.DEFAULT_ICONSET)
+		gajim.config.set('version', '0.12.5.7')
+
+	def update_config_to_01258(self):
+		self.update_ft_proxies(to_remove=['proxy65.talkonaut.com',
+			'proxy.jabber.org', 'proxy.netlab.cz', 'transfer.jabber.freenet.de',
+			'proxy.jabber.cd.chalmers.se'], to_add=['proxy.eu.jabber.org',
+			'proxy.jabber.ru', 'proxy.jabbim.cz'])
+		gajim.config.set('version', '0.12.5.8')
+
+	def update_config_to_01301(self):
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				ALTER TABLE caps_cache
+				ADD last_seen INTEGER default %d;
+				''' % int(time())
+			)
+			con.commit()
+		except sqlite.OperationalError:
+			pass
+		con.close()
+		gajim.config.set('version', '0.13.0.1')
 
 # vim: se ts=3:

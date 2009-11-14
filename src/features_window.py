@@ -30,6 +30,7 @@ import gtkgui_helpers
 
 from common import gajim
 from common import helpers
+from common import kwalletbinding
 
 class FeaturesWindow:
 	'''Class for features window'''
@@ -66,9 +67,9 @@ class FeaturesWindow:
 				_('Gajim session is stored on logout and restored on login.'),
 				_('Requires python-gnome2.'),
 				_('Feature not available under Windows.')),
-			_('Password encryption'): (self.gnome_keyring_available,
+			_('Password encryption'): (self.some_keyring_available,
 				_('Passwords can be stored securely and not just in plaintext.'),
-				_('Requires gnome-keyring and python-gnome2-desktop.'),
+				_('Requires gnome-keyring and python-gnome2-desktop, or kwalletcli.'),
 				_('Feature not available under Windows.')),
 			_('SRV'): (self.srv_available,
 				_('Ability to connect to servers which are using SRV records.'),
@@ -106,6 +107,10 @@ class FeaturesWindow:
 				_('Ability to have clickable URLs in chat and groupchat window banners.'),
 				_('Requires python-sexy.'),
 				_('Requires python-sexy.')),
+			_('Audio / Video'): (self.farsight_available,
+				_('Ability to start audio and video chat.'),
+				_('Requires python-farsight.'),
+				_('Feature not available under Windows.')),
 		}
 
 		# name, supported
@@ -200,9 +205,11 @@ class FeaturesWindow:
 			return False
 		return True
 
-	def gnome_keyring_available(self):
+	def some_keyring_available(self):
 		if os.name == 'nt':
 			return False
+		if kwalletbinding.kwallet_available():
+			return True
 		try:
 			import gnomekeyring
 		except Exception:
@@ -224,12 +231,6 @@ class FeaturesWindow:
 	def notification_available(self):
 		if os.name == 'nt':
 			return False
-		elif sys.platform == 'darwin':
-			try:
-				import osx.growler
-			except Exception:
-				return False
-			return True
 		from common import dbus_support
 		if self.dbus_available() and dbus_support.get_notifications_interface():
 			return True
@@ -267,5 +268,8 @@ class FeaturesWindow:
 
 	def pysexy_available(self):
 		return gajim.HAVE_PYSEXY
+
+	def farsight_available(self):
+		return gajim.HAVE_FARSIGHT
 
 # vim: se ts=3:

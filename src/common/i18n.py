@@ -5,6 +5,7 @@
 ## Copyright (C) 2004 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2004-2007 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
+## Copyright (C) 2009 Benjamin Richter <br AT waldteufel-online.net>
 ##
 ## This file is part of Gajim.
 ##
@@ -25,6 +26,23 @@ import locale
 import gettext
 import os
 import defs
+import unicodedata
+
+def paragraph_direction_mark(text):
+	"""
+	Determine paragraph writing direction according to
+	http://www.unicode.org/reports/tr9/#The_Paragraph_Level
+	
+	Returns either Unicode LTR mark or RTL mark.
+	"""
+	for char in text:
+		bidi = unicodedata.bidirectional(char)
+		if bidi == 'L':
+			return u'\u200E'
+		elif bidi == 'AL' or bidi == 'R':
+			return u'\u200F'
+
+	return u'\u200E'
 
 APP = 'gajim'
 DIR = defs.localedir

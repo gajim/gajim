@@ -4,7 +4,7 @@
 '''
 Runs Gajim's Test Suite
 
-Non GUI related tests will be run on each commit.
+Unit tests tests will be run on each commit.
 '''
 
 import sys
@@ -35,18 +35,22 @@ for o, a in opts:
 			sys.exit(2)
 
 # new test modules need to be added manually
-modules = ( 'test_xmpp_dispatcher_nb',
-				'test_xmpp_client_nb',
-				'test_xmpp_transports_nb',
-				'test_resolver',
-				'test_caps',
+modules = ( 'unit.test_xmpp_dispatcher_nb',
+				'unit.test_xmpp_transports_nb',
+				'unit.test_caps',
+				'unit.test_contacts',
+				'unit.test_gui_interface',
+				'unit.test_sessions',
+				'unit.test_account',
 			 )
 #modules = ()
 
 if use_x:
-	modules += ('test_misc_interface',
-					'test_roster',
-					'test_sessions',
+	modules += ('integration.test_gui_event_integration',
+					'integration.test_roster',
+					'integration.test_resolver',
+					'integration.test_xmpp_client_nb',
+					'integration.test_xmpp_transports_nb'
 	)
 
 nb_errors = 0

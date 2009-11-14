@@ -174,7 +174,6 @@ Section "Gajim" SecGajim
 	File "bin\pywintypes25.dll"
 	File "bin\OpenSSL.rand.pyd"
 	File "bin\select.pyd"
-	File "bin\Crypto.Hash.SHA256.pyd"
 	File "bin\sqlite3.dll"
 	File "bin\ssleay32.dll"
 	File "bin\OpenSSL.SSL.pyd"
@@ -184,6 +183,7 @@ Section "Gajim" SecGajim
 	File "bin\win32file.pyd"
 	File "bin\winsound.pyd"
 	File "bin\zlib1.dll"
+	File /r "bin\docutils"
 
 	WriteRegStr HKCU "Software\Gajim" "" $INSTDIR
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayName" "Gajim"
@@ -218,6 +218,8 @@ Section "Gtk+ 2" SecGtk
 	SetOutPath "$INSTDIR\bin\gtk"
 	File /r "bin\gtk\bin"
 	File /r "bin\gtk\etc"
+	SetOutPath "$INSTDIR\bin\gtk\lib\gtk-2.0\2.10.0"
+	File /r "bin\gtk\lib\gtk-2.0\2.10.0\loaders"
 	SetOutPath "$INSTDIR\bin\gtk\lib\gtk-2.0\2.10.0\engines"
 	File "bin\gtk\lib\gtk-2.0\2.10.0\engines\libclearlooks.dll"
 	File "bin\gtk\lib\gtk-2.0\2.10.0\engines\libpixmap.dll"
@@ -252,11 +254,6 @@ SectionGroupEnd
 
 SectionGroup $(NAME_Iconsets)
 
-Section "crystal" SecIconsetsCrystal
-	SetOutPath "$INSTDIR\data\iconsets"
-	File /r "data\iconsets\crystal"
-SectionEnd
-
 Section "dcraven" SecIconsetsDcraven
 	SectionIn RO
 	SetOutPath "$INSTDIR\data\iconsets"
@@ -273,11 +270,6 @@ Section "goojim" SecIconsetsGoojim
 	File /r "data\iconsets\goojim"
 SectionEnd
 
-Section "gossip" SecIconsetsGossip
-	SetOutPath "$INSTDIR\data\iconsets"
-	File /r "data\iconsets\gossip"
-SectionEnd
-
 Section "gota" SecIconsetsGota
 	SetOutPath "$INSTDIR\data\iconsets"
 	File /r "data\iconsets\gota"
@@ -288,24 +280,14 @@ Section "jabberbulb" SecIconsetsJabberbulb
 	File /r "data\iconsets\jabberbulb"
 SectionEnd
 
-Section "nuvola" SecIconsetsNuvola
-	SetOutPath "$INSTDIR\data\iconsets"
-	File /r "data\iconsets\nuvola"
-SectionEnd
-
-Section "simplebulb" SecIconsetsSimplebulb
-	SetOutPath "$INSTDIR\data\iconsets"
-	File /r "data\iconsets\simplebulb"
-SectionEnd
-
-Section "stellar" SecIconsetsStellar
-	SetOutPath "$INSTDIR\data\iconsets"
-	File /r "data\iconsets\stellar"
-SectionEnd
-
 Section "sun" SecIconsetsSun
 	SetOutPath "$INSTDIR\data\iconsets"
 	File /r "data\iconsets\sun"
+SectionEnd
+
+Section "wroop" SecIconsetsWroop
+	SetOutPath "$INSTDIR\data\iconsets"
+	File /r "data\iconsets\wroop"
 SectionEnd
 
 Section "transports" SecIconsetsTransports
@@ -534,6 +516,7 @@ SectionEnd
 Section "Uninstall"
 	RMDir /r "$INSTDIR\bin\gtk\bin"
 	RMDir /r "$INSTDIR\bin\gtk\etc"
+	RMDir /r "$INSTDIR\bin\gtk\lib\gtk-2.0\2.10.0\loaders"
 	Delete "$INSTDIR\bin\gtk\lib\gtk-2.0\2.10.0\engines\libclearlooks.dll"
 	Delete "$INSTDIR\bin\gtk\lib\gtk-2.0\2.10.0\engines\libpixmap.dll"
 	Delete "$INSTDIR\bin\gtk\lib\gtk-2.0\2.10.0\engines\libsvg.dll"
@@ -667,7 +650,6 @@ Section "Uninstall"
 	Delete "$INSTDIR\bin\bz2.pyd"
 	Delete "$INSTDIR\bin\cairo._cairo.pyd"
 	Delete "$INSTDIR\bin\Crypto.Cipher.AES.pyd"
-	Delete "$INSTDIR\bin\Crypto.Hash.SHA256.pyd"
 	Delete "$INSTDIR\bin\gajim.exe"
 	Delete "$INSTDIR\bin\gobject._gobject.pyd"
 	Delete "$INSTDIR\bin\gtk._gtk.pyd"
@@ -695,6 +677,7 @@ Section "Uninstall"
 	Delete "$INSTDIR\bin\win32file.pyd"
 	Delete "$INSTDIR\bin\winsound.pyd"
 	Delete "$INSTDIR\bin\zlib1.dll"
+	RMDir /r "$INSTDIR\bin\docutils"
 	RMDir "$INSTDIR\bin"
 	RMDir /r "$INSTDIR\data\glade"
 	RMDir /r "$INSTDIR\data\moods"
@@ -706,17 +689,13 @@ Section "Uninstall"
 	RMDir /r "$INSTDIR\data\emoticons\static"
 	RMDir /r "$INSTDIR\data\emoticons\static-big"
 	RMDir "$INSTDIR\data\emoticons"
-	RMDir /r "$INSTDIR\data\iconsets\crystal"
 	RMDir /r "$INSTDIR\data\iconsets\dcraven"
 	RMDir /r "$INSTDIR\data\iconsets\gnome"
 	RMDir /r "$INSTDIR\data\iconsets\goojim"
-	RMDir /r "$INSTDIR\data\iconsets\gossip"
 	RMDir /r "$INSTDIR\data\iconsets\gota"
 	RMDir /r "$INSTDIR\data\iconsets\jabberbulb"
-	RMDir /r "$INSTDIR\data\iconsets\nuvola"
-	RMDir /r "$INSTDIR\data\iconsets\simplebulb"
-	RMDir /r "$INSTDIR\data\iconsets\stellar"
 	RMDir /r "$INSTDIR\data\iconsets\sun"
+	RMDir /r "$INSTDIR\data\iconsets\wroop"
 	RMDir /r "$INSTDIR\data\iconsets\transports"
 	RMDir "$INSTDIR\data\iconsets"
 	RMDir "$INSTDIR\data"

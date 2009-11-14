@@ -1,5 +1,5 @@
 AC_INIT([Gajim - A Jabber Instant Messager],
-		[0.12.1.5-svn],[http://trac.gajim.org/],[gajim])
+		[0.13.0.1-dev],[http://trac.gajim.org/],[gajim])
 AC_PREREQ([2.59])
 
 AC_CONFIG_HEADER(config.h)
@@ -39,7 +39,7 @@ AM_NLS
 dnl ****
 dnl pygtk and gtk+
 dnl ****
-PKG_CHECK_MODULES([PYGTK], [gtk+-2.0 >= 2.8.0 pygtk-2.0 >= 2.8.0])
+PKG_CHECK_MODULES([PYGTK], [gtk+-2.0 >= 2.12.0 pygtk-2.0 >= 2.12.0])
 AC_SUBST(PYGTK_CFLAGS)
 AC_SUBST(PYGTK_LIBS)
 PYGTK_DEFS=`$PKG_CONFIG --variable=defsdir pygtk-2.0`
@@ -58,72 +58,6 @@ AC_ARG_ENABLE(trayicon,
   enable_trayicon=$enableval, enable_trayicon=yes)
 test "x$enable_trayicon" = "xyes" && have_trayicon=true || have_trayicon=false
 AM_CONDITIONAL(BUILD_TRAYICON, $have_trayicon)
-
-dnl ****
-dnl Cocoa
-dnl ****
-AC_ARG_ENABLE([cocoa],
-  [  --disable-cocoa         do not build cocoa integration [default auto]],
-  enable_cocoa=$enableval, enable_cocoa=yes)
-
-if test "x$enable_cocoa" = "xyes";then 
-  dnl There is no pkgconfig for cocoa; lets do a header check
-  temp_save_cflags="$CFLAGS"
-  CFLAGS="$CFLAGS -ObjC"
-  AC_CHECK_HEADER(Cocoa/Cocoa.h, [have_cocoa=true], [have_cocoa=false])
-  AC_CHECK_HEADER(AppKit/AppKit.h, [have_appkit=true], [have_appkit=false])
-  CFLAGS="$temp_save_cflags"
-
-  if test "x$have_cocoa" = "xtrue";then
-     COCOA_LIBS="$COCOA_LIBS -Xlinker -framework -Xlinker Cocoa"
-  fi
-  if test "x$have_appkit" = "xtrue";then
-     COCOA_LIBS="$COCOA_LIBS -Xlinker -framework -Xlinker AppKit"
-  fi
-  if test "x$COCOA_LIBS" != "x";then
-	 AC_SUBST(COCOA_LIBS)
-     true
-  fi
-fi
-AM_CONDITIONAL(BUILD_COCOA, $have_cocoa)
-
-dnl ****
-dnl Carbon
-dnl ****
-AC_ARG_ENABLE([carbon],
-  [  --disable-carbon        do not build with carbon [default auto]],
-  enable_carbon=$enableval, enable_carbon=yes)
-
-if test "x$enable_carbon" = "xyes";then 
-  dnl There is no pkgconfig for carbon; lets do a header check
-  AC_CHECK_HEADER(Carbon/Carbon.h, [have_carbon=true], [have_carbon=false])
-  AC_CHECK_HEADER(IOKit/IOKitLib.h, [have_iokit=true], [have_iokit=false])
-
-  if test "x$have_carbon" = "xtrue";then
-     CARBON_LIBS="$CARBON_LIBS -Xlinker -framework -Xlinker Carbon"
-  fi
-  if test "x$have_iokit" = "xtrue";then
-     CARBON_LIBS="$CARBON_LIBS -Xlinker -framework -Xlinker IOKit"
-  fi
-  if test "x$CARBON_LIBS" != "x";then
-	 AC_SUBST(CARBON_LIBS)
-     have_idle_osx=true
-     dnl Disable custom trayicon
-     have_trayicon=gtk+
-     AM_CONDITIONAL(BUILD_TRAYICON, false)
-     dnl Hack to work around failure in gettext package detection on OS/X
-     if test "x$GMSGFMT" = "x";then
-        AC_SUBST(GMSGFMT, msgfmt)
-        AC_SUBST(MSGFMT, msgfmt)
-        AC_SUBST(XGETTEXT, xgettext)
-     fi
-  else
-	 have_carbon=false
-     have_idle_osx=false
-  fi
-fi
-AM_CONDITIONAL(BUILD_IDLE_OSX, $have_carbon)
-AM_CONDITIONAL(BUILD_CARBON, $have_carbon)
 
 ACLOCAL_AMFLAGS="\${ACLOCAL_FLAGS}"
 AC_SUBST(ACLOCAL_AMFLAGS)
@@ -151,9 +85,6 @@ AC_CONFIG_FILES([
 	data/gajim.desktop.in
 	data/defs.py
 	src/Makefile
-	src/osx/Makefile
-	src/osx/growl/Makefile
-	src/osx/syncmenu/Makefile
 	scripts/gajim
 	scripts/gajim-remote:scripts/gajim.in
 	scripts/gajim-history-manager:scripts/gajim.in
@@ -164,6 +95,4 @@ echo "
 ***************************** 
   Build features:
     trayicon ......... ${have_trayicon}
-    idle module OSX .. ${have_idle_osx}
-    cocoa (OSX)....... ${have_cocoa}
 *****************************"
