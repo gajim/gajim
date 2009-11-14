@@ -197,8 +197,8 @@ TUNE_DATA = ['artist', 'title', 'source', 'track', 'length']
 import logging
 log = logging.getLogger('gajim.c.pep')
 
-import common.helpers
-import common.atom
+import helpers
+import atom
 import gtkgui_helpers
 import gobject
 
