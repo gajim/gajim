@@ -236,10 +236,11 @@ class UserMoodPEP(AbstractPEP):
 			mood_tag = item.getTag('mood')
 			if mood_tag:
 				for child in mood_tag.getChildren():
-					if child.getName() == 'text':
+					name = child.getName().strip()
+					if name == 'text':
 						mood_dict['text'] = child.getData()
-					elif child.getName() in MOODS :
-						mood_dict['mood'] = child.getName()
+					elif name in MOODS :
+						mood_dict['mood'] = name
 						
 		retracted = items.getTag('retract') or not mood_dict		
 		return (mood_dict, retracted)
@@ -276,8 +277,10 @@ class UserTunePEP(AbstractPEP):
 			tune_tag = item.getTag('tune')
 			if tune_tag:
 				for child in tune_tag.getChildren():
+					name = child.getName().strip()
+					data = child.getData().strip()
 					if child.getName() in TUNE_DATA:
-						tune_dict[child.getName()] = child.getData()
+						tune_dict[name] = data
 						
 		retracted = items.getTag('retract') or not tune_dict
 		return (tune_dict, retracted)
@@ -315,13 +318,16 @@ class UserActivityPEP(AbstractPEP):
 			activity_tag = item.getTag('activity')
 			if activity_tag:
 				for child in activity_tag.getChildren():
-					if child.getName() == 'text':
-						activity_dict['text'] = child.getData()
-					elif child.getName() in ACTIVITIES:
-						activity_dict['activity'] = child.getName()
+					name = child.getName().strip()
+					data = child.getData().strip()
+					if name == 'text':
+						activity_dict['text'] = data
+					elif name in ACTIVITIES:
+						activity_dict['activity'] = name
 						for subactivity in child.getChildren():
-							if subactivity.getName() in ACTIVITIES[child.getName()]:
-								activity_dict['subactivity'] = subactivity.getName()
+							subactivity_name = subactivity.getName().strip()
+							if subactivity_name in ACTIVITIES[name]:
+								activity_dict['subactivity'] = subactivity_name
 		
 		retracted = items.getTag('retract') or not activity_dict
 		return (activity_dict, retracted)
