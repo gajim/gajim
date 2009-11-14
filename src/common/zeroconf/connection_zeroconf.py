@@ -137,7 +137,8 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 	# END __init__
 
 	def dispatch(self, event, data):
-		gajim.interface.dispatch(event, self.name, data)
+		#gajim.interface.dispatch(event, self.name, data)
+		gajim.ged.raise_event(event, self.name, data)
 
 	def _reconnect(self):
 		# Do not try to reco while we are already trying
