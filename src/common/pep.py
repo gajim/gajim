@@ -205,7 +205,7 @@ class AbstractPEP(object):
 	
 	type = ''
 	namespace = ''
-	
+		
 	@classmethod
 	def get_tag_as_PEP(cls, jid, account, event_tag):
 		items = event_tag.getTag('items', {'node': cls.namespace})
@@ -215,17 +215,19 @@ class AbstractPEP(object):
 		else:
 			return None 
 	
+	def __init__(self, jid, account, items):
+		self._pep_specific_data, self._retracted = self._extract_info(items)
+		self.do(jid, account)
+	
+	def _extract_info(self, items):
+		'''To be implemented by subclasses'''
+		raise NotImplementedError
 	
 class UserMoodPEP(AbstractPEP):
 	'''XEP-0107: User Mood'''
 	
 	type = 'mood'
 	namespace = common.xmpp.NS_MOOD
-	
-	def __init__(self, jid, account, items):
-		self._mood_dict, self._retracted = self._extract_info(items)
-		
-		self.user_mood(items, account, jid)
 		
 	def _extract_info(self, items):
 		mood_dict = {}
@@ -242,9 +244,8 @@ class UserMoodPEP(AbstractPEP):
 		retracted = items.getTag('retract') or not mood_dict		
 		return (mood_dict, retracted)
 
-	def user_mood(self, items, name, jid):
-	
-		mood_dict = {} if self._retracted else self._mood_dict 
+	def do(self, jid, name):
+		mood_dict = {} if self._retracted else self._pep_specific_data 
 	
 		if jid == common.gajim.get_jid_from_account(name):
 			acc = common.gajim.connections[name]
@@ -267,12 +268,7 @@ class UserTunePEP(AbstractPEP):
 	
 	type = 'tune'
 	namespace = common.xmpp.NS_TUNE
-	
-	def __init__(self, jid, account, items):
-		self._tune_dict, self._retracted = self._extract_info(items)
-		
-		self.user_tune(items, account, jid)
-				
+					
 	def _extract_info(self, items):		
 		tune_dict = {}
 	
@@ -287,8 +283,8 @@ class UserTunePEP(AbstractPEP):
 		return (tune_dict, retracted)
 		
 					
-	def user_tune(self, items, name, jid):
-		tune_dict = {} if self._retracted else self._tune_dict 
+	def do(self, jid, name):
+		tune_dict = {} if self._retracted else self._pep_specific_data 
 
 		if jid == common.gajim.get_jid_from_account(name):
 			acc = common.gajim.connections[name]
@@ -311,19 +307,14 @@ class UserActivityPEP(AbstractPEP):
 	
 	type = 'activity'
 	namespace = common.xmpp.NS_ACTIVITY
-	
-	def __init__(self, jid, account, items):
-		self._activity_dict, self._retracted = self._extract_info(items)
-		
-		self.user_activity(items, account, jid)
-		
+			
 	def _extract_info(self, items):
 		activity_dict = {}
 		
 		for item in items.getTags('item'):
 			activity_tag = item.getTag('activity')
 			if activity_tag:
-				for child in child.getChildren():
+				for child in activity_tag.getChildren():
 					if child.getName() == 'text':
 						activity_dict['text'] = child.getData()
 					elif child.getName() in ACTIVITIES:
@@ -335,8 +326,8 @@ class UserActivityPEP(AbstractPEP):
 		retracted = items.getTag('retract') or not activity_dict
 		return (activity_dict, retracted)
 		
-	def user_activity(self, items, name, jid):
-		activity_dict = {} if self._retracted else self._activity_dict 
+	def do(self, jid, name):
+		activity_dict = {} if self._retracted else self._pep_specific_data
 
 		if jid == common.gajim.get_jid_from_account(name):
 			acc = common.gajim.connections[name]
@@ -359,11 +350,7 @@ class UserNicknamePEP(AbstractPEP):
 	
 	type = 'activity'
 	namespace = common.xmpp.NS_NICK
-	
-	def __init__(self, jid, account, items):
-		self._nick, self._retracted = self._extract_info(items)
-		self.user_nickname(items, account, jid)
-		
+			
 	def _extract_info(self, items):	
 		nick = ''
 		for item in items.getTags('item'):
@@ -375,15 +362,15 @@ class UserNicknamePEP(AbstractPEP):
 		retracted = items.getTag('retract') or not nick
 		return (nick, retracted)		
 			
-	def user_nickname(self, items, name, jid):	
+	def do(self, jid, name):
 		if jid == common.gajim.get_jid_from_account(name):
 			if self._retracted:
 				common.gajim.nicks[name] = common.gajim.config.get_per('accounts',
 					name, 'name')
 			else:
-				common.gajim.nicks[name] = self._nick
+				common.gajim.nicks[name] = self._pep_specific_data
 	
-		nick = '' if self._retracted else self._nick
+		nick = '' if self._retracted else self._pep_specific_data
 		
 		user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
 		for contact in common.gajim.contacts.get_contacts(name, user):
