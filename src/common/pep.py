@@ -594,8 +594,7 @@ def delete_pep(jid, name):
 	common.gajim.interface.roster.draw_mood(user, name)
 	ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
 	if ctrl:
-		ctrl.update_activity()
-		ctrl.update_tune()
-		ctrl.update_mood()
+		ctrl.update_all_pep_types()
+
 
 # vim: se ts=3:

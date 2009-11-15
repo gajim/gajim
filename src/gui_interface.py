@@ -2001,15 +2001,15 @@ class Interface:
 		if pep_type == 'mood':
 			self.roster.draw_mood(jid, account)
 			if ctrl:
-				ctrl.update_mood()
+				ctrl.update_pep(pep_type)
 		elif pep_type == 'tune':
 			self.roster.draw_tune(jid, account)
 			if ctrl:
-				ctrl.update_tune()
+				ctrl.update_pep(pep_type)
 		elif pep_type == 'activity':
 			self.roster.draw_activity(jid, account)
 			if ctrl:
-				ctrl.update_activity()
+				ctrl.update_pep(pep_type)
 		elif pep_type == 'nickname':
 			self.roster.draw_contact(jid, account)
 			if ctrl:

@@ -1279,14 +1279,12 @@ class ChatControl(ChatControlBase):
 		self.video_state = self.JINGLE_STATE_NOT_AVAILABLE
 
 		self.update_toolbar()
-
-		self._mood_image = self.xml.get_widget('mood_image')
-		self._activity_image = self.xml.get_widget('activity_image')
-		self._tune_image = self.xml.get_widget('tune_image')
-
-		self.update_mood()
-		self.update_activity()
-		self.update_tune()
+		
+		self._pep_images = {}
+		self._pep_images['mood'] = self.xml.get_widget('mood_image')
+		self._pep_images['activity'] = self.xml.get_widget('activity_image')
+		self._pep_images['tune'] = self.xml.get_widget('tune_image')
+		self.update_all_pep_types()
 
 		# keep timeout id and window obj for possible big avatar
 		# it is on enter-notify and leave-notify so no need to be
@@ -1430,38 +1428,22 @@ class ChatControl(ChatControlBase):
 			self._convert_to_gc_button.set_sensitive(True)
 		else:
 			self._convert_to_gc_button.set_sensitive(False)
+	
+	def update_all_pep_types(self):
+		for pep_type in ('tune', 'mood', 'activity'):
+			self.update_pep(pep_type)
 
-	def update_mood(self):
+	def update_pep(self, pep_type):
 		if isinstance(self.contact, GC_Contact):
 			return
 		pep = self.contact.pep
-		if 'mood' in pep:
-			self._mood_image.set_from_pixbuf(pep['mood'].asPixbufIcon())
-			self._mood_image.set_tooltip_markup(pep['mood'].asMarkupText())
-			self._mood_image.show()
+		img = self._pep_images[pep_type]
+		if pep_type in pep:
+			img.set_from_pixbuf(pep[pep_type].asPixbufIcon())
+			img.set_tooltip_markup(pep[pep_type].asMarkupText())
+			img.show()
 		else:
-			self._mood_image.hide()
-
-	def update_activity(self):
-		if isinstance(self.contact, GC_Contact):
-			return
-		pep = self.contact.pep
-		if 'activity' in pep:			
-			self._activity_image.set_from_pixbuf(pep['activity'].asPixbufIcon())
-			self._activity_image.set_tooltip_markup(pep['activity'].asMarkupText())
-			self._activity_image.show()
-		else:
-			self._activity_image.hide()
-
-	def update_tune(self):
-		if isinstance(self.contact, GC_Contact):
-			return
-		pep = self.contact.pep
-		if 'tune' in pep:
-			self._tune_image.set_tooltip_markup(pep['tune'].asMarkupText())
-			self._tune_image.show()
-		else:
-			self._tune_image.hide()
+			img.hide()
 
 	def _update_jingle(self, jingle_type):
 		if jingle_type not in ('audio', 'video'):
