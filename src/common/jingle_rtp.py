@@ -83,6 +83,13 @@ class JingleRTPContent(JingleContent):
 		return (JingleContent.is_ready(self) and self.candidates_ready
 			and self.p2psession.get_property('codecs-ready'))
 
+	def add_remote_candidates(self, candidates):
+		JingleContent.add_remote_candidates(self, candidates)
+		#FIXME: connectivity should not be etablished yet
+		# Instead, it should be etablished after session-accept!
+		if self.sent:
+			self.p2pstream.set_remote_candidates(candidates)
+
 	def batch_dtmf(self, events):
 		if self._dtmf_running:
 			raise Exception #TODO: Proper exception

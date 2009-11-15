@@ -70,6 +70,10 @@ class JingleContent(object):
 	def is_ready(self):
 		return (self.accepted and not self.sent)
 
+	def add_remote_candidates(self, candidates):
+		''' Add a list of candidates to the list of remote candidates. '''
+		pass
+
 	def stanzaCB(self, stanza, content, error, action):
 		''' Called when something related to our content was sent by peer. '''
 		if action in self.callbacks:
@@ -78,7 +82,10 @@ class JingleContent(object):
 
 	def __transportInfoCB(self, stanza, content, error, action):
 		''' Got a new transport candidate. '''
-		self.transport.transportInfoCB(content.getTag('transport'))
+		candidates = self.transport.parse_transport_stanza(
+			content.getTag('transport'))
+		if candidates:
+			self.add_remote_candidates(candidates)
 
 	def __content(self, payload=[]):
 		''' Build a XML content-wrapper for our data. '''

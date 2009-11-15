@@ -46,12 +46,16 @@ class JingleTransport(object):
 		pass
 
 	def make_transport(self, candidates=None):
-		''' Build a transport stanza with the given candidates (or self.candidates
-		if candidates is None). '''
+		''' Build a transport stanza with the given candidates (or
+		self.candidates if candidates is None). '''
 		if not candidates:
 			candidates = self._iter_candidates()
 		transport = xmpp.Node('transport', payload=candidates)
 		return transport
+
+	def parse_transport_stanza(self, transport):
+		''' Returns the list of transport candidates from a transport stanza. '''
+		return []
 
 
 import farsight
@@ -93,7 +97,7 @@ class JingleTransportICEUDP(JingleTransport):
 				transport.setAttr('pwd', self.candidates[0].password)
 		return transport
 
-	def transportInfoCB(self, transport):
+	def parse_transport_stanza(self, transport):
 		candidates = []
 		for candidate in transport.iterTags('candidate'):
 			cand = farsight.Candidate()
@@ -124,16 +128,8 @@ class JingleTransportICEUDP(JingleTransport):
 			else:
 				print 'Unknown type %s', candidate['type']
 			candidates.append(cand)
-		#FIXME: connectivity should not be etablished yet
-		# Instead, it should be etablished after session-accept!
-		#FIXME:
-		#if len(candidates) > 0:
-		#	if self.sent:
-		#		self.p2pstream.set_remote_candidates(candidates)
-		#	else:
 		self.remote_candidates.extend(candidates)
-			#self.p2pstream.set_remote_candidates(candidates)
-			#print self.media, self.creator, self.name, candidates
+		return candidates
 
 transports[xmpp.NS_JINGLE_ICE_UDP] = JingleTransportICEUDP
 
