@@ -94,7 +94,7 @@ class Contact(CommonContact):
 	def __init__(self, jid, account, name='', groups=[], show='', status='', sub='',
 	ask='', resource='', priority=0, keyID='', client_caps=None,
 	our_chatstate=None, chatstate=None, last_status_time=None, msg_id = None,
-	composing_xep=None, mood={}, tune={}, activity={}):
+	composing_xep=None):
 		
 		CommonContact.__init__(self, jid, account, resource, show, status, name, 
 			our_chatstate, composing_xep, chatstate, client_caps=client_caps)
@@ -111,9 +111,6 @@ class Contact(CommonContact):
 		self.last_status_time = last_status_time
 		
 		self.pep = {}
-		self.mood = mood.copy()
-		self.tune = tune.copy()
-		self.activity = activity.copy()
 
 	def get_full_jid(self):
 		if self.resource:
@@ -229,23 +226,25 @@ class Contacts:
 	def create_contact(self, jid, account, name='', groups=[], show='', status='',
 		sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
 		our_chatstate=None, chatstate=None, last_status_time=None,
-		composing_xep=None, mood={}, tune={}, activity={}):
+		composing_xep=None):
 		account = self._accounts.get(account, account) # Use Account object if available
 		return Contact(jid=jid, account=account, name=name, groups=groups,
 			show=show, status=status, sub=sub, ask=ask, resource=resource, priority=priority,
 			keyID=keyID, client_caps=client_caps, our_chatstate=our_chatstate,
 			chatstate=chatstate, last_status_time=last_status_time,
-			composing_xep=composing_xep, mood=mood, tune=tune, activity=activity)
+			composing_xep=composing_xep)
 		
-	def create_self_contact(self, jid, account, resource, show, status, priority, keyID=''):
+	def create_self_contact(self, jid, account, resource, show, status, priority,
+	name='', keyID=''):
 		conn = common.gajim.connections[account]
-		nick = common.gajim.nicks[account]
+		nick = name or common.gajim.nicks[account]
 		account = self._accounts.get(account, account) # Use Account object if available
-		return self.create_contact(jid=jid, account=account,
+		self_contact = self.create_contact(jid=jid, account=account,
 			name=nick, groups=['self_contact'], show=show, status=status,
 			sub='both', ask='none',	priority=priority, keyID=keyID,
-			resource=resource, mood=conn.mood, tune=conn.tune,
-			activity=conn.activity)
+			resource=resource)
+		self_contact.pep = conn.pep
+		return self_contact
 		
 	def create_not_in_roster_contact(self, jid, account, resource='', name='', keyID=''):
 		account = self._accounts.get(account, account) # Use Account object if available

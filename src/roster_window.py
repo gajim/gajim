@@ -2432,11 +2432,10 @@ class RosterWindow:
 				account_name = account
 				if gajim.account_is_connected(account):
 					account_name += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
-				contact = gajim.contacts.create_contact(jid=jid, account=account, name=account_name,
-					show=connection.get_status(), sub='', status=connection.status,
-					resource=connection.server_resource,
-					priority=connection.priority, mood=connection.mood,
-					tune=connection.tune, activity=connection.activity)
+				contact = gajim.contacts.create_self_contact(jid=jid, account=account,
+					name=account_name, show=connection.get_status(),
+					status=connection.status, resource=connection.server_resource,
+					priority=connection.priority)
 				if gajim.connections[account].gpg:
 					contact.keyID = gajim.config.get_per('accounts', connection.name,
 						'keyid')

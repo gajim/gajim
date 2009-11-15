@@ -237,24 +237,16 @@ class AbstractPEP(object):
 		'''To be implemented by subclasses'''
 		raise NotImplementedError
 	
-	def _update_contacts(self, jid, account):
-		dict = {} if self._retracted else self._pep_specific_data 
-	
-		for contact in common.gajim.contacts.get_contacts(account, jid):
-			setattr(contact, self.type, dict)
-			
+	def _update_contacts(self, jid, account):	
+		for contact in common.gajim.contacts.get_contacts(account, jid):		
 			if self._retracted:
 				if self.type in contact.pep:
 					del contact.pep[self.type]
 			else:
 				contact.pep[self.type] = self
 				
-	def _update_account(self, account):
-		dict = {} if self._retracted else self._pep_specific_data 
-		
-		acc = common.gajim.connections[account]
-		setattr(acc, self.type, dict)
-		
+	def _update_account(self, account):		
+		acc = common.gajim.connections[account]	
 		if self._retracted:
 			if self.type in acc.pep:
 				del acc.pep[self.type]
@@ -571,15 +563,10 @@ def delete_pep(jid, name):
 
 	if jid == common.gajim.get_jid_from_account(name):
 		acc = common.gajim.connections[name]
-		acc.activity = {}
-		user_send_tune(name)
-		acc.tune = {}
-		acc.mood = {}
+		acc.pep = {}
 
 	for contact in common.gajim.contacts.get_contacts(name, user):
-		contact.activity = {}
-		contact.tune = {}
-		contact.mood = {}
+		contact.pep = {}
 
 	if jid == common.gajim.get_jid_from_account(name):
 		common.gajim.interface.roster.draw_account(name)
