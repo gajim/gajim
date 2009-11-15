@@ -1443,46 +1443,12 @@ class ChatControl(ChatControlBase):
 			self._mood_image.hide()
 
 	def update_activity(self):
-		activity = None
-		subactivity = None
-		text = None
-
 		if isinstance(self.contact, GC_Contact):
 			return
-
-		if 'activity' in self.contact.activity:
-			activity = self.contact.activity['activity'].strip()
-		if 'subactivity' in self.contact.activity:
-			subactivity = self.contact.activity['subactivity'].strip()
-		if 'text' in self.contact.activity:
-			text = self.contact.activity['text'].strip()
-
-		if activity is not None:
-			if activity in ACTIVITIES:
-				# Translate standard activities
-				if subactivity in ACTIVITIES[activity]:
-					self._activity_image.set_from_pixbuf(
-						gtkgui_helpers.load_activity_icon(activity, subactivity). \
-						get_pixbuf())
-					subactivity = ACTIVITIES[activity][subactivity]
-				else:
-					self._activity_image.set_from_pixbuf(
-						gtkgui_helpers.load_activity_icon(activity).get_pixbuf())
-				activity = ACTIVITIES[activity]['category']
-			else:
-				self._activity_image.set_from_pixbuf(
-					gtkgui_helpers.load_activity_icon('unknown').get_pixbuf())
-
-			# Translate standard subactivities
-
-			tooltip = '<b>' + gobject.markup_escape_text(activity)
-			if subactivity:
-				tooltip += ': ' + gobject.markup_escape_text(subactivity)
-			tooltip += '</b>'
-			if text:
-				tooltip += '\n' + gobject.markup_escape_text(text)
-			self._activity_image.set_tooltip_markup(tooltip)
-
+		pep = self.contact.pep
+		if 'activity' in pep:			
+			self._activity_image.set_from_pixbuf(pep['activity'].asPixbufIcon())
+			self._activity_image.set_tooltip_markup(pep['activity'].asMarkupText())
 			self._activity_image.show()
 		else:
 			self._activity_image.hide()
@@ -1490,7 +1456,6 @@ class ChatControl(ChatControlBase):
 	def update_tune(self):
 		if isinstance(self.contact, GC_Contact):
 			return
-		
 		pep = self.contact.pep
 		if 'tune' in pep:
 			self._tune_image.set_tooltip_markup(pep['tune'].asMarkupText())

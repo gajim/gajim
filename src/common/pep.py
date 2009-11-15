@@ -201,6 +201,8 @@ import helpers
 import atom
 import gtkgui_helpers
 import gobject
+import gajim
+import gtk
 
 
 def translate_mood(mood):
@@ -329,6 +331,11 @@ class UserTunePEP(AbstractPEP):
 		retracted = items.getTag('retract') or not ('artist' in tune_dict or 
 																  'title' in tune_dict)
 		return (tune_dict, retracted)
+	
+	def asPixbufIcon(self):
+		import os
+		path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static', 'music.png')
+		return gtk.gdk.pixbuf_new_from_file(path)
 				
 	def asMarkupText(self):
 		assert not self._retracted
@@ -366,16 +373,54 @@ class UserActivityPEP(AbstractPEP):
 					data = child.getData().strip()
 					if name == 'text':
 						activity_dict['text'] = data
-					elif name in ACTIVITIES:
+					else:
 						activity_dict['activity'] = name
 						for subactivity in child.getChildren():
 							subactivity_name = subactivity.getName().strip()
-							if subactivity_name in ACTIVITIES[name]:
-								activity_dict['subactivity'] = subactivity_name
+							activity_dict['subactivity'] = subactivity_name
 		
-		retracted = items.getTag('retract') or not activity_dict
+		retracted = items.getTag('retract') or not 'activity' in activity_dict
 		return (activity_dict, retracted)
+	
+	def asPixbufIcon(self):
+		assert not self._retracted
+		pep = self._pep_specific_data
+		activity = pep['activity']
 		
+		has_known_activity = activity in ACTIVITIES
+		has_known_subactivity = (has_known_activity  and ('subactivity' in pep)
+			and (pep['subactivity'] in ACTIVITIES[activity]))
+					
+		if has_known_activity:
+			if has_known_subactivity:
+				subactivity = pep['subactivity']
+				return gtkgui_helpers.load_activity_icon(activity, subactivity).get_pixbuf()
+			else:
+				return gtkgui_helpers.load_activity_icon(activity).get_pixbuf()
+		else: 
+			return gtkgui_helpers.load_activity_icon('unknown').get_pixbuf()
+		
+	def asMarkupText(self):
+		assert not self._retracted
+		pep = self._pep_specific_data
+		activity = pep['activity']
+		subactivity = pep['subactivity'] if 'subactivity' in pep else None
+		text = pep['text'] if 'text' in pep else None
+
+		if activity in ACTIVITIES:
+				# Translate standard activities
+				if subactivity in ACTIVITIES[activity]:
+					subactivity = ACTIVITIES[activity][subactivity]
+				activity = ACTIVITIES[activity]['category']
+				
+		markuptext = '<b>' + gobject.markup_escape_text(activity)
+		if subactivity:
+			markuptext += ': ' + gobject.markup_escape_text(subactivity)
+		markuptext += '</b>'
+		if text:
+			markuptext += ' (%s)' + gobject.markup_escape_text(text)
+		return markuptext				
+			
 			
 class UserNicknamePEP(AbstractPEP):
 	'''XEP-0172: User Nickname'''
@@ -404,7 +449,7 @@ class UserNicknamePEP(AbstractPEP):
 		# TODO: use dict instead
 		if self._retracted:
 			common.gajim.nicks[account] = common.gajim.config.get_per('accounts',
-					account, 'name')
+				account, 'name')
 		else:
 			common.gajim.nicks[account] = self._pep_specific_data
 

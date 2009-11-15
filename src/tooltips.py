@@ -581,32 +581,12 @@ class RosterTooltip(NotificationAreaTooltip):
 		'''
 		if 'mood' in contact.pep:
 			mood = contact.pep['mood'].asMarkupText()
-			mood_string = _('Mood:') + ' <b>%s</b>' % mood
+			mood_string = _('Mood:') + ' %s' % mood
 			properties.append((mood_string, None))
 
-		if 'activity' in contact.activity:
-			activity = act_plain = \
-				contact.activity['activity'].strip()
-			activity = gobject.markup_escape_text(activity)
-			if act_plain in ACTIVITIES:
-				activity = ACTIVITIES[activity]['category']
-			activity_string = _('Activity:') + ' <b>%s' % activity
-			if 'subactivity' in contact.activity:
-				activity_sub = \
-					contact.activity['subactivity'].strip()
-				if act_plain in ACTIVITIES and activity_sub in \
-				ACTIVITIES[act_plain]:
-					activity_sub = ACTIVITIES[act_plain][activity_sub]
-				activity_sub = \
-					gobject.markup_escape_text(activity_sub)
-				activity_string += ': %s</b>' % activity_sub
-			else:
-				activity_string += '</b>'
-			if 'text' in contact.activity:
-				activity_text = contact.activity['text'].strip()
-				activity_text = gobject.markup_escape_text(
-					activity_text)
-				activity_string += ' (%s)' % activity_text
+		if 'activity' in contact.pep:
+			activity = contact.pep['activity'].asMarkupText()
+			activity_string = _('Activity:') + ' %s' % activity 
 			properties.append((activity_string, None))
 
 		if 'tune' in contact.pep:

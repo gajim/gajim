@@ -1299,20 +1299,8 @@ class RosterWindow:
 		jid = self.model[iters[0]][C_JID]
 		jid = jid.decode('utf-8')
 		contact = gajim.contacts.get_contact(account, jid)
-		if 'activity' in contact.activity \
-		and contact.activity['activity'].strip() in ACTIVITIES:
-			if 'subactivity' in contact.activity \
-			and contact.activity['subactivity'].strip() in \
-			ACTIVITIES[contact.activity['activity'].strip()]:
-				pixbuf = gtkgui_helpers.load_activity_icon(
-					contact.activity['activity'].strip(),
-					contact.activity['subactivity'].strip()).get_pixbuf()
-			else:
-				pixbuf = gtkgui_helpers.load_activity_icon(
-					contact.activity['activity'].strip()).get_pixbuf()
-		elif 'activity' in contact.activity:
-			pixbuf = gtkgui_helpers.load_activity_icon(
-				'unknown').get_pixbuf()
+		if 'activity' in contact.pep:
+			pixbuf = contact.pep['activity'].asPixbufIcon()
 		else:
 			pixbuf = None
 		for child_iter in iters:
@@ -1327,9 +1315,8 @@ class RosterWindow:
 		jid = self.model[iters[0]][C_JID]
 		jid = jid.decode('utf-8')
 		contact = gajim.contacts.get_contact(account, jid)
-		if 'artist' in contact.tune or 'title' in contact.tune:
-			path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static', 'music.png')
-			pixbuf = gtk.gdk.pixbuf_new_from_file(path)
+		if 'tune' in contact.pep:
+			pixbuf = contact.pep['tune'].asPixbufIcon()
 		else:
 			pixbuf = None
 		for child_iter in iters:
