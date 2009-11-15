@@ -230,8 +230,6 @@ class AbstractPEP(object):
 		self._update_contacts(jid, account)
 		if jid == common.gajim.get_jid_from_account(account):
 			self._update_account(account)
-		
-		self.do(jid, account)
 	
 	def _extract_info(self, items):
 		'''To be implemented by subclasses'''
@@ -291,16 +289,6 @@ class UserMoodPEP(AbstractPEP):
 						
 		retracted = items.getTag('retract') or not 'mood' in mood_dict		
 		return (mood_dict, retracted)
-
-	def do(self, jid, name):
-
-		if jid == common.gajim.get_jid_from_account(name):
-			common.gajim.interface.roster.draw_account(name)
-		common.gajim.interface.roster.draw_mood(jid, name)
-		ctrl = common.gajim.interface.msg_win_mgr.get_control(jid, name)
-		if ctrl:
-			ctrl.update_mood()
-			
 	
 	def asPixbufIcon(self):
 		assert not self._retracted
@@ -341,16 +329,7 @@ class UserTunePEP(AbstractPEP):
 		retracted = items.getTag('retract') or not ('artist' in tune_dict or 
 																  'title' in tune_dict)
 		return (tune_dict, retracted)
-		
-					
-	def do(self, jid, name):	
-		if jid == common.gajim.get_jid_from_account(name):
-			common.gajim.interface.roster.draw_account(name)
-		common.gajim.interface.roster.draw_tune(jid, name)
-		ctrl = common.gajim.interface.msg_win_mgr.get_control(jid, name)
-		if ctrl:
-			ctrl.update_tune()
-			
+				
 	def asMarkupText(self):
 		assert not self._retracted
 		tune = self._pep_specific_data
@@ -397,20 +376,11 @@ class UserActivityPEP(AbstractPEP):
 		retracted = items.getTag('retract') or not activity_dict
 		return (activity_dict, retracted)
 		
-	def do(self, jid, name):
-	
-		if jid == common.gajim.get_jid_from_account(name):
-			common.gajim.interface.roster.draw_account(name)
-		common.gajim.interface.roster.draw_activity(jid, name)
-		ctrl = common.gajim.interface.msg_win_mgr.get_control(jid, name)
-		if ctrl:
-			ctrl.update_activity()
-	
-	
+			
 class UserNicknamePEP(AbstractPEP):
 	'''XEP-0172: User Nickname'''
 	
-	type = 'activity'
+	type = 'nickname'
 	namespace = common.xmpp.NS_NICK
 			
 	def _extract_info(self, items):	
@@ -423,29 +393,21 @@ class UserNicknamePEP(AbstractPEP):
 		
 		retracted = items.getTag('retract') or not nick
 		return (nick, retracted)		
-			
-	def do(self, jid, name):
-		if jid == common.gajim.get_jid_from_account(name):
-			if self._retracted:
-				common.gajim.nicks[name] = common.gajim.config.get_per('accounts',
-					name, 'name')
-			else:
-				common.gajim.nicks[name] = self._pep_specific_data
-	
+						
+	def _update_contacts(self, jid, account):
+		# TODO: use dict instead
 		nick = '' if self._retracted else self._pep_specific_data
-		
-		user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
-		for contact in common.gajim.contacts.get_contacts(name, user):
+		for contact in common.gajim.contacts.get_contacts(account, jid):
 			contact.contact_name = nick
-			common.gajim.interface.roster.draw_contact(user, name)
-	
-			ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
-			if ctrl:
-				ctrl.update_ui()
-				win = ctrl.parent_win
-				win.redraw_tab(ctrl)
-				win.show_title()
-		
+				
+	def _update_account(self, account):
+		# TODO: use dict instead
+		if self._retracted:
+			common.gajim.nicks[account] = common.gajim.config.get_per('accounts',
+					account, 'name')
+		else:
+			common.gajim.nicks[account] = self._pep_specific_data
+
 		
 SUPPORTED_PERSONAL_USER_EVENTS = [UserMoodPEP, UserTunePEP, UserActivityPEP, UserNicknamePEP]
 

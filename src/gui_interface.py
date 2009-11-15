@@ -1989,6 +1989,35 @@ class Interface:
 				_('PEP node %(node)s was not removed: %(message)s') % {
 				'node': data[1], 'message': data[2]})
 			
+	def handle_event_pep_received(self, account, data):
+		# ('PEP_RECEIVED', account, (jid, pep_type))
+		jid = data[0]
+		pep_type = data[1]
+		ctrl = common.gajim.interface.msg_win_mgr.get_control(jid, account)
+
+		if jid == common.gajim.get_jid_from_account(account):
+			self.roster.draw_account(account)
+		
+		if pep_type == 'mood':
+			self.roster.draw_mood(jid, account)
+			if ctrl:
+				ctrl.update_mood()
+		elif pep_type == 'tune':
+			self.roster.draw_tune(jid, account)
+			if ctrl:
+				ctrl.update_tune()
+		elif pep_type == 'activity':
+			self.roster.draw_activity(jid, account)
+			if ctrl:
+				ctrl.update_activity()
+		elif pep_type == 'nickname':
+			self.roster.draw_contact(jid, account)
+			if ctrl:
+				ctrl.update_ui()
+				win = ctrl.parent_win
+				win.redraw_tab(ctrl)
+				win.show_title()
+			
 	def register_handler(self, event, handler):																																									
 		if event not in self.handlers:
 			self.handlers[event] = []
@@ -2088,6 +2117,7 @@ class Interface:
 			'JINGLE_CONNECTED': [self.handle_event_jingle_connected],
 			'JINGLE_DISCONNECTED': [self.handle_event_jingle_disconnected],
 			'JINGLE_ERROR': [self.handle_event_jingle_error],
+			'PEP_RECEIVED': [self.handle_event_pep_received]
 		}
 	
 	def dispatch(self, event, account, data):																																									  
