@@ -1022,55 +1022,21 @@ class RosterWindow:
 
 		self.model[child_iter][C_NAME] = account_name
 
-		if gajim.config.get('show_mood_in_roster') \
-		and 'mood' in gajim.connections[account].mood \
-		and gajim.connections[account].mood['mood'].strip() in MOODS:
-
-			self.model[child_iter][C_MOOD_PIXBUF] = gtkgui_helpers.load_mood_icon(
-				gajim.connections[account].mood['mood'].strip()).get_pixbuf()
-
-		elif gajim.config.get('show_mood_in_roster') \
-		and 'mood' in gajim.connections[account].mood:
-			self.model[child_iter][C_MOOD_PIXBUF] = \
-				gtkgui_helpers.load_mood_icon('unknown'). \
-				get_pixbuf()
+		pep = gajim.connections[account].pep
+		if gajim.config.get('show_mood_in_roster') and 'mood' in pep:
+			self.model[child_iter][C_MOOD_PIXBUF] = pep['mood'].asPixbufIcon()
 		else:
 			self.model[child_iter][C_MOOD_PIXBUF] = None
 
-		if gajim.config.get('show_activity_in_roster') \
-		and 'activity' in gajim.connections[account].activity \
-		and gajim.connections[account].activity['activity'].strip() \
-		in ACTIVITIES:
-			if 'subactivity' in gajim.connections[account].activity \
-			and gajim.connections[account].activity['subactivity'].strip() \
-			in ACTIVITIES[gajim.connections[account].activity['activity'].strip()]:
-				self.model[child_iter][C_ACTIVITY_PIXBUF] = \
-					gtkgui_helpers.load_activity_icon(
-					gajim.connections[account].activity['activity'].strip(),
-					gajim.connections[account].activity['subactivity'].strip()). \
-					get_pixbuf()
-			else:
-				self.model[child_iter][C_ACTIVITY_PIXBUF] = \
-					gtkgui_helpers.load_activity_icon(
-					gajim.connections[account].activity['activity'].strip()). \
-					get_pixbuf()
-		elif gajim.config.get('show_activity_in_roster') \
-		and 'activity' in gajim.connections[account].activity:
-			self.model[child_iter][C_ACTIVITY_PIXBUF] = \
-				gtkgui_helpers.load_activity_icon('unknown'). \
-				get_pixbuf()
+		if gajim.config.get('show_activity_in_roster') and 'activity' in pep:
+			self.model[child_iter][C_ACTIVITY_PIXBUF] = pep['activity'].asPixbufIcon()
 		else:
 			self.model[child_iter][C_ACTIVITY_PIXBUF] = None
 
-		if gajim.config.get('show_tunes_in_roster') \
-		and ('artist' in gajim.connections[account].tune \
-		or 'title' in gajim.connections[account].tune):
-			path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static', 'music.png')
-			self.model[child_iter][C_TUNE_PIXBUF] = \
-				gtk.gdk.pixbuf_new_from_file(path)
+		if gajim.config.get('show_tunes_in_roster') and 'tune' in pep:
+			self.model[child_iter][C_TUNE_PIXBUF] = pep['tune'].asPixbufIcon()
 		else:
 			self.model[child_iter][C_TUNE_PIXBUF] = None
-
 		return False
 
 	def draw_group(self, group, account):
