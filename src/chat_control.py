@@ -1434,11 +1434,10 @@ class ChatControl(ChatControlBase):
 	def update_mood(self):
 		if isinstance(self.contact, GC_Contact):
 			return
-		
 		pep = self.contact.pep
-		if 'mood' in pep and not pep['mood'].was_retracted():
+		if 'mood' in pep:
 			self._mood_image.set_from_pixbuf(pep['mood'].asPixbufIcon())
-			self._mood_image.set_tooltip_markup(pep['mood'].asMarkup())
+			self._mood_image.set_tooltip_markup(pep['mood'].asMarkupText())
 			self._mood_image.show()
 		else:
 			self._mood_image.hide()
@@ -1489,35 +1488,12 @@ class ChatControl(ChatControlBase):
 			self._activity_image.hide()
 
 	def update_tune(self):
-		artist = None
-		title = None
-		source = None
-
 		if isinstance(self.contact, GC_Contact):
 			return
-
-		if 'artist' in self.contact.tune:
-			artist = self.contact.tune['artist'].strip()
-			artist = gobject.markup_escape_text(artist)
-		if 'title' in self.contact.tune:
-			title = self.contact.tune['title'].strip()
-			title = gobject.markup_escape_text(title)
-		if 'source' in self.contact.tune:
-			source = self.contact.tune['source'].strip()
-			source = gobject.markup_escape_text(source)
-
-		if artist or title:
-			if not artist:
-				artist = _('Unknown Artist')
-			if not title:
-				title = _('Unknown Title')
-			if not source:
-				source = _('Unknown Source')
-
-			self._tune_image.set_tooltip_markup(
-				_('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
-				'from <i>%(source)s</i>') % {'title': title, 'artist': artist,
-				'source': source})
+		
+		pep = self.contact.pep
+		if 'tune' in pep:
+			self._tune_image.set_tooltip_markup(pep['tune'].asMarkupText())
 			self._tune_image.show()
 		else:
 			self._tune_image.hide()

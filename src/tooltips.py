@@ -579,17 +579,9 @@ class RosterTooltip(NotificationAreaTooltip):
 		Append Tune, Mood, Activity information of the specified contact
 		to the given property list.
 		'''
-		if 'mood' in contact.mood:
-			mood = contact.mood['mood'].strip()
-			mood = MOODS.get(mood, mood)
-			mood = gobject.markup_escape_text(mood)
+		if 'mood' in contact.pep:
+			mood = contact.pep['mood'].asMarkupText()
 			mood_string = _('Mood:') + ' <b>%s</b>' % mood
-			if 'text' in contact.mood \
-			and contact.mood['text'] != '':
-				mood_text = contact.mood['text'].strip()
-				mood_text = \
-					gobject.markup_escape_text(mood_text)
-				mood_string += ' (%s)' % mood_text
 			properties.append((mood_string, None))
 
 		if 'activity' in contact.activity:
@@ -617,27 +609,9 @@ class RosterTooltip(NotificationAreaTooltip):
 				activity_string += ' (%s)' % activity_text
 			properties.append((activity_string, None))
 
-		if 'artist' in contact.tune \
-		or 'title' in contact.tune:
-			if 'artist' in contact.tune:
-				artist = contact.tune['artist'].strip()
-				artist = gobject.markup_escape_text(artist)
-			else:
-				artist = _('Unknown Artist')
-			if 'title' in contact.tune:
-				title = contact.tune['title'].strip()
-				title = gobject.markup_escape_text(title)
-			else:
-				title = _('Unknown Title')
-			if 'source' in contact.tune:
-				source = contact.tune['source'].strip()
-				source = gobject.markup_escape_text(source)
-			else:
-				source = _('Unknown Source')
-			tune_string = _('Tune:') + ' ' + \
-				_('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
-				'from <i>%(source)s</i>') % {'title': title,
-				'artist': artist, 'source': source}
+		if 'tune' in contact.pep:
+			tune = contact.pep['tune'].asMarkupText()
+			tune_string = _('Tune:') + ' %s' % tune
 			properties.append((tune_string, None))
 
 

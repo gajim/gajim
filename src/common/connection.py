@@ -171,6 +171,7 @@ class Connection(ConnectionHandlers):
 		self.mood = {}
 		self.tune = {}
 		self.activity = {}
+		self.pep = {}
 		# Do we continue connection when we get roster (send presence,get vcard..)
 		self.continue_connect_info = None
 		# Do we auto accept insecure connection

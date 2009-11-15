@@ -203,6 +203,13 @@ import gtkgui_helpers
 import gobject
 
 
+def translate_mood(mood):
+	if mood in MOODS:
+		return MOODS[mood]
+	else:
+		return mood
+
+
 class AbstractPEP(object):
 	
 	type = ''
@@ -219,14 +226,49 @@ class AbstractPEP(object):
 	
 	def __init__(self, jid, account, items):
 		self._pep_specific_data, self._retracted = self._extract_info(items)
+		
+		self._update_contacts(jid, account)
+		if jid == common.gajim.get_jid_from_account(account):
+			self._update_account(account)
+		
 		self.do(jid, account)
 	
 	def _extract_info(self, items):
 		'''To be implemented by subclasses'''
 		raise NotImplementedError
 	
-	def was_rectacted(self):
-		return self._retracted
+	def _update_contacts(self, jid, account):
+		dict = {} if self._retracted else self._pep_specific_data 
+	
+		for contact in common.gajim.contacts.get_contacts(account, jid):
+			setattr(contact, self.type, dict)
+			
+			if self._retracted:
+				if self.type in contact.pep:
+					del contact.pep[self.type]
+			else:
+				contact.pep[self.type] = self
+				
+	def _update_account(self, account):
+		dict = {} if self._retracted else self._pep_specific_data 
+		
+		acc = common.gajim.connections[account]
+		setattr(acc, self.type, dict)
+		
+		if self._retracted:
+			if self.type in acc.pep:
+				del acc.pep[self.type]
+		else:
+			acc.pep[self.type] = self
+	
+	def asPixbufIcon(self):
+		'''To be implemented by subclasses'''
+		raise NotImplementedError
+	
+	def asMarkupText(self):
+		'''To be implemented by subclasses'''
+		raise NotImplementedError
+	
 	
 class UserMoodPEP(AbstractPEP):
 	'''XEP-0107: User Mood'''
@@ -251,45 +293,31 @@ class UserMoodPEP(AbstractPEP):
 		return (mood_dict, retracted)
 
 	def do(self, jid, name):
-		mood_dict = {} if self._retracted else self._pep_specific_data 
-	
-		if jid == common.gajim.get_jid_from_account(name):
-			acc = common.gajim.connections[name]
-			acc.mood = mood_dict
-	
-		user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
-		for contact in common.gajim.contacts.get_contacts(name, user):
-			contact.mood = mood_dict
-			contact.pep['mood'] = self
-	
+
 		if jid == common.gajim.get_jid_from_account(name):
 			common.gajim.interface.roster.draw_account(name)
-		common.gajim.interface.roster.draw_mood(user, name)
-		ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
+		common.gajim.interface.roster.draw_mood(jid, name)
+		ctrl = common.gajim.interface.msg_win_mgr.get_control(jid, name)
 		if ctrl:
 			ctrl.update_mood()
 			
 	
 	def asPixbufIcon(self):
-		if self._retracted:
-			return None
-		else:
-			received_mood = self._pep_specific_data['mood']
-			mood = received_mood if received_mood in MOODS else 'unknown'
-			pixbuf = gtkgui_helpers.load_mood_icon(mood).get_pixbuf()
-			return pixbuf
+		assert not self._retracted
+		received_mood = self._pep_specific_data['mood']
+		mood = received_mood if received_mood in MOODS else 'unknown'
+		pixbuf = gtkgui_helpers.load_mood_icon(mood).get_pixbuf()
+		return pixbuf
 		
 	def asMarkupText(self):
-		if self._retracted:
-			return None
-		else:
-			untranslated_mood = self._pep_specific_data['mood']
-			mood = MOODS[untranslated_mood] if untranslated_mood in MOODS else untranslated_mood
-			markuptext = '<b>%s</b>' % gobject.markup_escape_text(mood)		
-			if 'text' in self._pep_specific_data:
-				text = self._pep_specific_data['text']
-				markuptext += '(%s)' + gobject.markup_escape_text(text)
-			return markuptext
+		assert not self._retracted
+		untranslated_mood = self._pep_specific_data['mood']
+		mood = translate_mood(untranslated_mood)
+		markuptext = '<b>%s</b>' % gobject.markup_escape_text(mood)		
+		if 'text' in self._pep_specific_data:
+			text = self._pep_specific_data['text']
+			markuptext += ' (%s)' % gobject.markup_escape_text(text)
+		return markuptext
 
 
 class UserTunePEP(AbstractPEP):
@@ -310,27 +338,36 @@ class UserTunePEP(AbstractPEP):
 					if child.getName() in TUNE_DATA:
 						tune_dict[name] = data
 						
-		retracted = items.getTag('retract') or not tune_dict
+		retracted = items.getTag('retract') or not ('artist' in tune_dict or 
+																  'title' in tune_dict)
 		return (tune_dict, retracted)
 		
 					
-	def do(self, jid, name):
-		tune_dict = {} if self._retracted else self._pep_specific_data 
-
-		if jid == common.gajim.get_jid_from_account(name):
-			acc = common.gajim.connections[name]
-			acc.tune = tune_dict
-	
-		user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
-		for contact in common.gajim.contacts.get_contacts(name, user):
-			contact.tune = tune_dict
-	
+	def do(self, jid, name):	
 		if jid == common.gajim.get_jid_from_account(name):
 			common.gajim.interface.roster.draw_account(name)
-		common.gajim.interface.roster.draw_tune(user, name)
-		ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
+		common.gajim.interface.roster.draw_tune(jid, name)
+		ctrl = common.gajim.interface.msg_win_mgr.get_control(jid, name)
 		if ctrl:
 			ctrl.update_tune()
+			
+	def asMarkupText(self):
+		assert not self._retracted
+		tune = self._pep_specific_data
+
+		artist = tune.get('artist', _('Unknown Artist'))
+		artist = gobject.markup_escape_text(artist)
+		
+		title = tune.get('title', _('Unknown Title'))
+		title = gobject.markup_escape_text(title)
+
+		source = tune.get('source', _('Unknown Source'))
+		source = gobject.markup_escape_text(source)
+
+		tune_string =  _('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
+			'from <i>%(source)s</i>') % {'title': title,
+			'artist': artist, 'source': source}
+		return tune_string
 		
 
 class UserActivityPEP(AbstractPEP):
@@ -361,20 +398,11 @@ class UserActivityPEP(AbstractPEP):
 		return (activity_dict, retracted)
 		
 	def do(self, jid, name):
-		activity_dict = {} if self._retracted else self._pep_specific_data
-
-		if jid == common.gajim.get_jid_from_account(name):
-			acc = common.gajim.connections[name]
-			acc.activity = activity_dict
-	
-		user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
-		for contact in common.gajim.contacts.get_contacts(name, user):
-			contact.activity = activity_dict
 	
 		if jid == common.gajim.get_jid_from_account(name):
 			common.gajim.interface.roster.draw_account(name)
-		common.gajim.interface.roster.draw_activity(user, name)
-		ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
+		common.gajim.interface.roster.draw_activity(jid, name)
+		ctrl = common.gajim.interface.msg_win_mgr.get_control(jid, name)
 		if ctrl:
 			ctrl.update_activity()
 	
@@ -437,7 +465,7 @@ class ConnectionPEP:
 		for pep_class in SUPPORTED_PERSONAL_USER_EVENTS:
 			pep = pep_class.get_tag_as_PEP(jid, self.name, event_tag)
 			if pep:
-				self.dispatch('PEP_RECEIVED', (pep.type, pep))
+				self.dispatch('PEP_RECEIVED', (jid, pep.type))
 		
 		items = event_tag.getTag('items')
 		if items is None: return

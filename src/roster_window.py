@@ -1281,15 +1281,10 @@ class RosterWindow:
 		iters = self._get_contact_iter(jid, account, model=self.model)
 		if not iters or not gajim.config.get('show_mood_in_roster'):
 			return
-		jid = self.model[iters[0]][C_JID]
-		jid = jid.decode('utf-8')
+		jid = self.model[iters[0]][C_JID].decode('utf-8')
 		contact = gajim.contacts.get_contact(account, jid)
-		if 'mood' in contact.mood and contact.mood['mood'].strip() in MOODS:
-			pixbuf = gtkgui_helpers.load_mood_icon(
-				contact.mood['mood'].strip()).get_pixbuf()
-		elif 'mood' in contact.mood:
-			pixbuf = gtkgui_helpers.load_mood_icon(
-				'unknown').get_pixbuf()
+		if 'mood' in contact.pep:
+			pixbuf = contact.pep['mood'].asPixbufIcon()
 		else:
 			pixbuf = None
 		for child_iter in iters:
