@@ -584,9 +584,7 @@ def delete_pep(jid, name):
 	if jid == common.gajim.get_jid_from_account(name):
 		common.gajim.interface.roster.draw_account(name)
 
-	common.gajim.interface.roster.draw_activity(user, name)
-	common.gajim.interface.roster.draw_tune(user, name)
-	common.gajim.interface.roster.draw_mood(user, name)
+	common.gajim.interface.roster.draw_all_pep_types(jid, name)
 	ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
 	if ctrl:
 		ctrl.update_all_pep_types()

@@ -1430,11 +1430,13 @@ class ChatControl(ChatControlBase):
 			self._convert_to_gc_button.set_sensitive(False)
 	
 	def update_all_pep_types(self):
-		for pep_type in ('tune', 'mood', 'activity'):
+		for pep_type in self._pep_images:
 			self.update_pep(pep_type)
 
 	def update_pep(self, pep_type):
 		if isinstance(self.contact, GC_Contact):
+			return
+		if pep_type not in self._pep_images:
 			return
 		pep = self.contact.pep
 		img = self._pep_images[pep_type]

@@ -1998,25 +1998,17 @@ class Interface:
 		if jid == common.gajim.get_jid_from_account(account):
 			self.roster.draw_account(account)
 		
-		if pep_type == 'mood':
-			self.roster.draw_mood(jid, account)
-			if ctrl:
-				ctrl.update_pep(pep_type)
-		elif pep_type == 'tune':
-			self.roster.draw_tune(jid, account)
-			if ctrl:
-				ctrl.update_pep(pep_type)
-		elif pep_type == 'activity':
-			self.roster.draw_activity(jid, account)
-			if ctrl:
-				ctrl.update_pep(pep_type)
-		elif pep_type == 'nickname':
+		if pep_type == 'nickname':
 			self.roster.draw_contact(jid, account)
 			if ctrl:
 				ctrl.update_ui()
 				win = ctrl.parent_win
 				win.redraw_tab(ctrl)
 				win.show_title()
+		else:
+			self.roster.draw_pep(jid, account, pep_type)
+			if ctrl:
+				ctrl.update_pep(pep_type)
 			
 	def register_handler(self, event, handler):																																									
 		if event not in self.handlers:

@@ -1242,19 +1242,27 @@ class RosterWindow:
 
 		return False
 
-	def draw_mood(self, jid, account):
-		if gajim.config.get('show_mood_in_roster'):
-			self._draw_pep(jid, account, 'mood', C_MOOD_PIXBUF)
-
-	def draw_activity(self, jid, account):
-		if gajim.config.get('show_activity_in_roster'):
-			self._draw_pep(jid, account, 'activity', C_ACTIVITY_PIXBUF)
-
-	def draw_tune(self, jid, account):
-		if gajim.config.get('show_tunes_in_roster'):
-			self._draw_pep(jid, account, 'tune', C_TUNE_PIXBUF)
+	def _is_pep_shown_in_roster(self, pep_type):
+		if pep_type == 'mood':
+			return gajim.config.get('show_mood_in_roster')
+		elif pep_type == 'activity':
+			return gajim.config.get('show_activity_in_roster')
+		elif pep_type == 'tune':
+			return  gajim.config.get('show_tunes_in_roster')
+		else:
+			return False
+		
+	def draw_all_pep_types(self, jid, account):
+		for pep_type in self._pep_type_to_model_column:
+			self.draw_pep(jid, account, pep_type)
 	
-	def _draw_pep(self, jid, account, pep_type, model_column):
+	def draw_pep(self, jid, account, pep_type):
+		if pep_type not in self._pep_type_to_model_column:
+			return
+		if not self._is_pep_shown_in_roster(pep_type):
+			return
+					
+		model_column = self._pep_type_to_model_column[pep_type]
 		iters = self._get_contact_iter(jid, account, model=self.model)
 		if not iters:
 			return
@@ -1285,9 +1293,7 @@ class RosterWindow:
 
 	def draw_completely(self, jid, account):
 		self.draw_contact(jid, account)
-		self.draw_mood(jid, account)
-		self.draw_activity(jid, account)
-		self.draw_tune(jid, account)
+		self.draw_all_pep_types(jid, account)
 		self.draw_avatar(jid, account)
 
 	def adjust_and_draw_contact_context(self, jid, account):
@@ -5753,6 +5759,10 @@ class RosterWindow:
 		col.add_attribute(render_pixbuf, 'pixbuf', C_TUNE_PIXBUF)
 		col.set_cell_data_func(render_pixbuf,
 			self._fill_pep_pixbuf_renderer, C_TUNE_PIXBUF)
+		
+		self._pep_type_to_model_column = {'mood': C_MOOD_PIXBUF,
+													 'activity': C_ACTIVITY_PIXBUF,
+													 'tune': C_ACTIVITY_PIXBUF}
 
 		if gajim.config.get('avatar_position_in_roster') == 'right':
 			add_avatar_renderer()
