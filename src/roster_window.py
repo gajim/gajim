@@ -1278,11 +1278,11 @@ class RosterWindow:
 
 	def draw_mood(self, jid, account):
 		if gajim.config.get('show_mood_in_roster'):
-			self._draw_pep(jid, account, 'tune', C_MOOD_PIXBUF)
+			self._draw_pep(jid, account, 'mood', C_MOOD_PIXBUF)
 
 	def draw_activity(self, jid, account):
 		if gajim.config.get('show_activity_in_roster'):
-			self._draw_pep(jid, account, 'tune', C_ACTIVITY_PIXBUF)
+			self._draw_pep(jid, account, 'activity', C_ACTIVITY_PIXBUF)
 
 	def draw_tune(self, jid, account):
 		if gajim.config.get('show_tunes_in_roster'):
@@ -4441,9 +4441,9 @@ class RosterWindow:
 				renderer.set_property('xpad', 8)
 
 
-	def _fill_mood_pixbuf_renderer(self, column, renderer, model, titer,
-	data = None):
-		'''When a row is added, set properties for avatar renderer'''
+	def _fill_pep_pixbuf_renderer(self, column, renderer, model, titer, 
+	data=None):
+		'''When a row is added, draw the respective pep icon'''
 		theme = gajim.config.get('roster_theme')
 		type_ = model[titer][C_TYPE]
 		if type_ == 'group':
@@ -4451,154 +4451,36 @@ class RosterWindow:
 			return
 
 		# allocate space for the icon only if needed
-		if model[titer][C_MOOD_PIXBUF]:
+		if model[titer][data]:
 			renderer.set_property('visible', True)
 		else:
 			renderer.set_property('visible', False)
 		if type_ == 'account':
-			color = gajim.config.get_per('themes', theme,
-				'accountbgcolor')
+			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
 			else:
-				self.set_renderer_color(renderer,
-					gtk.STATE_ACTIVE)
+				self.set_renderer_color(renderer, gtk.STATE_ACTIVE)
 			# align pixbuf to the right)
 			renderer.set_property('xalign', 1)
 		# prevent type_ = None, see http://trac.gajim.org/ticket/2534
 		elif type_:
-			if not model[titer][C_JID] \
-			or not model[titer][C_ACCOUNT]:
+			if not model[titer][C_JID] or not model[titer][C_ACCOUNT]:
 				# This can append at the moment we add the row
 				return
 			jid = model[titer][C_JID].decode('utf-8')
 			account = model[titer][C_ACCOUNT].decode('utf-8')
 			if jid in gajim.newly_added[account]:
-				renderer.set_property('cell-background',
-					gajim.config.get(
+				renderer.set_property('cell-background', gajim.config.get(
 					'just_connected_bg_color'))
 			elif jid in gajim.to_be_removed[account]:
-				renderer.set_property('cell-background',
-					gajim.config.get(
+				renderer.set_property('cell-background', gajim.config.get(
 					'just_disconnected_bg_color'))
 			else:
-				color = gajim.config.get_per('themes',
-					theme, 'contactbgcolor')
-				if color:
-					renderer.set_property(
-						'cell-background', color)
-				else:
-					renderer.set_property(
-						'cell-background', None)
+				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
+				renderer.set_property('cell-background', color if color else None)
 			# align pixbuf to the right
 			renderer.set_property('xalign', 1)
-
-
-	def _fill_activity_pixbuf_renderer(self, column, renderer, model, titer,
-	data = None):
-		'''When a row is added, set properties for avatar renderer'''
-		theme = gajim.config.get('roster_theme')
-		type_ = model[titer][C_TYPE]
-		if type_ == 'group':
-			renderer.set_property('visible', False)
-			return
-
-		# allocate space for the icon only if needed
-		if model[titer][C_ACTIVITY_PIXBUF]:
-			renderer.set_property('visible', True)
-		else:
-			renderer.set_property('visible', False)
-		if type_ == 'account':
-			color = gajim.config.get_per('themes', theme,
-				'accountbgcolor')
-			if color:
-				renderer.set_property('cell-background', color)
-			else:
-				self.set_renderer_color(renderer,
-					gtk.STATE_ACTIVE)
-			# align pixbuf to the right)
-			renderer.set_property('xalign', 1)
-		# prevent type_ = None, see http://trac.gajim.org/ticket/2534
-		elif type_:
-			if not model[titer][C_JID] \
-			or not model[titer][C_ACCOUNT]:
-				# This can append at the moment we add the row
-				return
-			jid = model[titer][C_JID].decode('utf-8')
-			account = model[titer][C_ACCOUNT].decode('utf-8')
-			if jid in gajim.newly_added[account]:
-				renderer.set_property('cell-background',
-					gajim.config.get(
-					'just_connected_bg_color'))
-			elif jid in gajim.to_be_removed[account]:
-				renderer.set_property('cell-background',
-					gajim.config.get(
-					'just_disconnected_bg_color'))
-			else:
-				color = gajim.config.get_per('themes',
-					theme, 'contactbgcolor')
-				if color:
-					renderer.set_property(
-						'cell-background', color)
-				else:
-					renderer.set_property(
-						'cell-background', None)
-			# align pixbuf to the right
-			renderer.set_property('xalign', 1)
-
-
-	def _fill_tune_pixbuf_renderer(self, column, renderer, model, titer,
-	data = None):
-		'''When a row is added, set properties for avatar renderer'''
-		theme = gajim.config.get('roster_theme')
-		type_ = model[titer][C_TYPE]
-		if type_ == 'group':
-			renderer.set_property('visible', False)
-			return
-
-		# allocate space for the icon only if needed
-		if model[titer][C_TUNE_PIXBUF]:
-			renderer.set_property('visible', True)
-		else:
-			renderer.set_property('visible', False)
-		if type_ == 'account':
-			color = gajim.config.get_per('themes', theme,
-				'accountbgcolor')
-			if color:
-				renderer.set_property('cell-background', color)
-			else:
-				self.set_renderer_color(renderer,
-					gtk.STATE_ACTIVE)
-			# align pixbuf to the right)
-			renderer.set_property('xalign', 1)
-		# prevent type_ = None, see http://trac.gajim.org/ticket/2534
-		elif type_:
-			if not model[titer][C_JID] \
-			or not model[titer][C_ACCOUNT]:
-				# This can append at the moment we add the row
-				return
-			jid = model[titer][C_JID].decode('utf-8')
-			account = model[titer][C_ACCOUNT].decode('utf-8')
-			if jid in gajim.newly_added[account]:
-				renderer.set_property('cell-background',
-					gajim.config.get(
-					'just_connected_bg_color'))
-			elif jid in gajim.to_be_removed[account]:
-				renderer.set_property('cell-background',
-					gajim.config.get(
-					'just_disconnected_bg_color'))
-			else:
-				color = gajim.config.get_per('themes',
-					theme, 'contactbgcolor')
-				if color:
-					renderer.set_property(
-						'cell-background', color)
-				else:
-					renderer.set_property(
-						'cell-background', None)
-			# align pixbuf to the right
-			renderer.set_property('xalign', 1)
-
 
 	def _fill_avatar_pixbuf_renderer(self, column, renderer, model, titer,
 	data = None):
@@ -5893,19 +5775,19 @@ class RosterWindow:
 		col.pack_start(render_pixbuf, expand=False)
 		col.add_attribute(render_pixbuf, 'pixbuf', C_MOOD_PIXBUF)
 		col.set_cell_data_func(render_pixbuf,
-			self._fill_mood_pixbuf_renderer, None)
+			self._fill_pep_pixbuf_renderer, C_MOOD_PIXBUF)
 
 		render_pixbuf = gtk.CellRendererPixbuf()
 		col.pack_start(render_pixbuf, expand=False)
 		col.add_attribute(render_pixbuf, 'pixbuf', C_ACTIVITY_PIXBUF)
 		col.set_cell_data_func(render_pixbuf,
-			self._fill_activity_pixbuf_renderer, None)
+			self._fill_pep_pixbuf_renderer, C_ACTIVITY_PIXBUF)
 
 		render_pixbuf = gtk.CellRendererPixbuf()
 		col.pack_start(render_pixbuf, expand=False)
 		col.add_attribute(render_pixbuf, 'pixbuf', C_TUNE_PIXBUF)
 		col.set_cell_data_func(render_pixbuf,
-			self._fill_tune_pixbuf_renderer, None)
+			self._fill_pep_pixbuf_renderer, C_TUNE_PIXBUF)
 
 		if gajim.config.get('avatar_position_in_roster') == 'right':
 			add_avatar_renderer()
