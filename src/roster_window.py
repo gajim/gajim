@@ -1276,53 +1276,31 @@ class RosterWindow:
 
 		return False
 
-
 	def draw_mood(self, jid, account):
-		iters = self._get_contact_iter(jid, account, model=self.model)
-		if not iters or not gajim.config.get('show_mood_in_roster'):
-			return
-		jid = self.model[iters[0]][C_JID].decode('utf-8')
-		contact = gajim.contacts.get_contact(account, jid)
-		if 'mood' in contact.pep:
-			pixbuf = contact.pep['mood'].asPixbufIcon()
-		else:
-			pixbuf = None
-		for child_iter in iters:
-			self.model[child_iter][C_MOOD_PIXBUF] = pixbuf
-		return False
-
+		if gajim.config.get('show_mood_in_roster'):
+			self._draw_pep(jid, account, 'tune', C_MOOD_PIXBUF)
 
 	def draw_activity(self, jid, account):
-		iters = self._get_contact_iter(jid, account, model=self.model)
-		if not iters or not gajim.config.get('show_activity_in_roster'):
-			return
-		jid = self.model[iters[0]][C_JID]
-		jid = jid.decode('utf-8')
-		contact = gajim.contacts.get_contact(account, jid)
-		if 'activity' in contact.pep:
-			pixbuf = contact.pep['activity'].asPixbufIcon()
-		else:
-			pixbuf = None
-		for child_iter in iters:
-			self.model[child_iter][C_ACTIVITY_PIXBUF] = pixbuf
-		return False
-
+		if gajim.config.get('show_activity_in_roster'):
+			self._draw_pep(jid, account, 'tune', C_ACTIVITY_PIXBUF)
 
 	def draw_tune(self, jid, account):
+		if gajim.config.get('show_tunes_in_roster'):
+			self._draw_pep(jid, account, 'tune', C_TUNE_PIXBUF)
+	
+	def _draw_pep(self, jid, account, pep_type, model_column):
 		iters = self._get_contact_iter(jid, account, model=self.model)
-		if not iters or not gajim.config.get('show_tunes_in_roster'):
+		if not iters:
 			return
 		jid = self.model[iters[0]][C_JID]
 		jid = jid.decode('utf-8')
 		contact = gajim.contacts.get_contact(account, jid)
-		if 'tune' in contact.pep:
-			pixbuf = contact.pep['tune'].asPixbufIcon()
+		if pep_type in contact.pep:
+			pixbuf = contact.pep[pep_type].asPixbufIcon()
 		else:
 			pixbuf = None
 		for child_iter in iters:
-			self.model[child_iter][C_TUNE_PIXBUF] = pixbuf
-		return False
-
+			self.model[child_iter][model_column] = pixbuf
 
 	def draw_avatar(self, jid, account):
 		iters = self._get_contact_iter(jid, account, model=self.model)
