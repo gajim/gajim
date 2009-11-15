@@ -475,11 +475,12 @@ class ConnectionPEP:
 				self.dispatch('PEP_RECEIVED', (jid, pep.type))
 		
 		items = event_tag.getTag('items')
-		if items is None: return
+		if items is None:
+			return
 
 		for item in items.getTags('item'):
 			entry = item.getTag('entry')
-			if entry is not None:
+			if entry:
 				# for each entry in feed (there shouldn't be more than one,
 				# but to be sure...
 				self.dispatch('ATOM_ENTRY', (atom.OldEntry(node=entry),))
@@ -493,9 +494,9 @@ def user_send_mood(account, mood, message=''):
 	if not common.gajim.connections[account].pep_supported:
 		return
 	item = xmpp.Node('mood', {'xmlns': xmpp.NS_MOOD})
-	if mood != '':
+	if mood:
 		item.addChild(mood)
-	if message != '':
+	if message:
 		i = item.addChild('text')
 		i.addData(message)
 
@@ -506,11 +507,11 @@ def user_send_activity(account, activity, subactivity='', message=''):
 	if not common.gajim.connections[account].pep_supported:
 		return
 	item = xmpp.Node('activity', {'xmlns': xmpp.NS_ACTIVITY})
-	if activity != '':
+	if activity:
 		i = item.addChild(activity)
-	if subactivity != '':
+	if subactivity:
 		i.addChild(subactivity)
-	if message != '':
+	if message:
 		i = item.addChild('text')
 		i.addData(message)
 
@@ -523,22 +524,22 @@ items=None):
 	common.gajim.connections[account].pep_supported):
 		return
 	item = xmpp.Node('tune', {'xmlns': xmpp.NS_TUNE})
-	if artist != '':
+	if artist:
 		i = item.addChild('artist')
 		i.addData(artist)
-	if title != '':
+	if title:
 		i = item.addChild('title')
 		i.addData(title)
-	if source != '':
+	if source:
 		i = item.addChild('source')
 		i.addData(source)
-	if track != 0:
+	if track:
 		i = item.addChild('track')
 		i.addData(track)
-	if length != 0:
+	if length:
 		i = item.addChild('length')
 		i.addData(length)
-	if items is not None:
+	if items:
 		item.addChild(payload=items)
 
 	common.gajim.connections[account].send_pb_publish('', xmpp.NS_TUNE, item,
@@ -570,20 +571,14 @@ def delete_pep(jid, name):
 
 	if jid == common.gajim.get_jid_from_account(name):
 		acc = common.gajim.connections[name]
-		del acc.activity
 		acc.activity = {}
 		user_send_tune(name)
-		del acc.tune
 		acc.tune = {}
-		del acc.mood
 		acc.mood = {}
 
 	for contact in common.gajim.contacts.get_contacts(name, user):
-		del contact.activity
 		contact.activity = {}
-		del contact.tune
 		contact.tune = {}
-		del contact.mood
 		contact.mood = {}
 
 	if jid == common.gajim.get_jid_from_account(name):

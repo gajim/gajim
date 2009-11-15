@@ -1934,8 +1934,7 @@ class RosterWindow:
 			gajim.connections[account].send_custom_status(status, txt, to)
 		else:
 			if status in ('invisible', 'offline'):
-				pep.delete_pep(gajim.get_jid_from_account(account), \
-					account)
+				pep.delete_pep(gajim.get_jid_from_account(account), account)
 			was_invisible = gajim.connections[account].connected == \
 				gajim.SHOW_LIST.index('invisible')
 			gajim.connections[account].change_status(status, txt, auto)
