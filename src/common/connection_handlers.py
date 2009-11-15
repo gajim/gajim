@@ -53,6 +53,9 @@ from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.caps import ConnectionCaps
 from common.message_archiving import ConnectionArchive
+from common.message_archiving import ARCHIVING_COLLECTIONS_ARRIVED
+from common.message_archiving import ARCHIVING_COLLECTION_ARRIVED
+from common.message_archiving import ARCHIVING_MODIFICATIONS_ARRIVED
 
 if gajim.HAVE_FARSIGHT:
 	from common.jingle import ConnectionJingle
@@ -1234,6 +1237,72 @@ class ConnectionVcard:
 			if form_tag:
 				form = common.dataforms.ExtendForm(node=form_tag)
 				self.dispatch('PEP_CONFIG', (node, form))
+
+		elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTIONS_ARRIVED:
+			# TODO
+			pass
+
+		elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTION_ARRIVED:
+			def save_if_not_exists(with_, direction, tim, payload):
+				assert len(payload) == 1, 'got several archiving messages in the' +\
+					' same time %s' % ''.join(payload)
+				if payload[0].getName() == 'body':
+					gajim.logger.save_if_not_exists(with_, direction, tim,
+						msg=payload[0].getData())
+				elif payload[0].getName() == 'message':
+					print 'Not implemented'
+			chat = iq_obj.getTag('chat')
+			if chat:
+				with_ = chat.getAttr('with')
+				start_ = chat.getAttr('start')
+				tim = helpers.datetime_tuple(start_)
+				tim = timegm(tim)
+				nb = 0
+				for element in chat.getChildren():
+					try:
+						secs = int(element.getAttr('secs'))
+					except TypeError:
+						secs = 0
+					if secs:
+						tim += secs
+					if element.getName() == 'from':
+						save_if_not_exists(with_, 'from', localtime(tim),
+							element.getPayload())
+						nb += 1
+					if element.getName() == 'to':
+						save_if_not_exists(with_, 'to', localtime(tim),
+							element.getPayload())
+						nb += 1
+				set_ = chat.getTag('set')
+				first = set_.getTag('first')
+				if first:
+					try:
+						index = int(first.getAttr('index'))
+					except TypeError:
+						index = 0
+				try:
+					count = int(set_.getTagData('count'))
+				except TypeError:
+					count = 0
+				if count > index + nb:
+					# Request the next page
+					try:
+						after = int(element.getTagData('last'))
+					except TypeError:
+						after = index + nb
+					self.request_collection_page(with_, start_, after=after)
+
+		elif self.awaiting_answers[id_][0] == ARCHIVING_MODIFICATIONS_ARRIVED:
+			modified = iq_obj.getTag('modified')
+			if modified:
+				for element in modified.getChildren():
+					if element.getName() == 'changed':
+						with_ = element.getAttr('with')
+						start_ = element.getAttr('start')
+						self.request_collection_page(with_, start_)
+					elif element.getName() == 'removed':
+						# do nothing
+						pass
 
 		del self.awaiting_answers[id_]
 

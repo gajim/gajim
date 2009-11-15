@@ -20,6 +20,9 @@
 
 import common.xmpp
 
+ARCHIVING_COLLECTIONS_ARRIVED = 'archiving_collections_arrived'
+ARCHIVING_COLLECTION_ARRIVED = 'archiving_collection_arrived'
+ARCHIVING_MODIFICATIONS_ARRIVED = 'archiving_modifications_arrived'
 
 class ConnectionArchive:
 	def __init__(self):
@@ -192,6 +195,9 @@ class ConnectionArchive:
 		set_.setTagData('max', max)
 		if after:
 			set_.setTagData('after', after)
+		id_ = self.connection.getAnID()
+		iq_.setID(id_)
+		self.awaiting_answers[id_] = (ARCHIVING_COLLECTIONS_ARRIVED, )
 		self.connection.send(iq_)
 
 	def request_collection_page(self, with, start, end=None, after=None,
@@ -205,6 +211,9 @@ class ConnectionArchive:
 		set_.setTagData('max', max)
 		if after:
 			set_.setTagData('after', after)
+		id_ = self.connection.getAnID()
+		iq_.setID(id_)
+		self.awaiting_answers[id_] = (ARCHIVING_COLLECTION_ARRIVED, )
 		self.connection.send(iq_)
 		
 	def remove_collection(self, with='', start=None, end=None,
@@ -223,12 +232,13 @@ class ConnectionArchive:
 			remove.setAttr('open', 'true')
 		self.connection.send(iq_)
 	
-	def request_modifications_page(self, start, version, after=None, max=30):
+	def request_modifications_page(self, start, max=30):
 		iq_ = common.xmpp.Iq('get')
 		moified = iq_.setTag('modified', namespace=common.xmpp.NS_ARCHIVE,
-			attrs={'start': start, 'version': version})
-		set_ = retrieve.setTag('set', namespace=common.xmpp.NS_RSM)
+			attrs={'start': start})
+		set_ = moified.setTag('set', namespace=common.xmpp.NS_RSM)
 		set_.setTagData('max', max)
-		if after:
-			set_.setTagData('after', after)
+		id_ = self.connection.getAnID()
+		iq_.setID(id_)
+		self.awaiting_answers[id_] = (ARCHIVING_MODIFICATIONS_ARRIVED, )
 		self.connection.send(iq_)

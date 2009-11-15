@@ -981,4 +981,34 @@ class Logger:
 			(account_jid_id,))
 		self.con.commit()
 
+	def save_if_not_exists(self, with_, direction, tim, msg=''):
+		if tim:
+			time_col = int(float(time.mktime(tim)))
+		else:
+			time_col = int(float(time.time()))
+		if msg:
+			if self.jid_is_from_pm(with_):
+				# We cannot know if it's a pm or groupchat message because we only
+				# get body of the message
+				type_ = 'gc_msg'
+			else:
+				if direction == 'from':
+					type_ = 'chat_msg_recv'
+				elif direction == 'to':
+					type_ = 'chat_msg_sent'
+		jid_id = self.get_jid_id(with_)
+		where_sql = 'jid_id = %s AND message="%s"' % (jid_id, msg)
+		start_time = time_col - 300 # 5 minutes arrount given time
+		end_time = time_col + 300 # 5 minutes arrount given time
+		self.cur.execute('''
+			SELECT log_line_id FROM logs
+			WHERE (%s)
+			AND time BETWEEN %d AND %d
+			ORDER BY time
+			''' % (where_sql, start_time, end_time))
+		results = self.cur.fetchall()
+		if results:
+			return
+		self.write(type_, with_, message=msg, tim=tim)
+
 # vim: se ts=3:
