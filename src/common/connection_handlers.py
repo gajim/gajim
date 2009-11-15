@@ -1243,12 +1243,12 @@ class ConnectionVcard:
 			pass
 
 		elif self.awaiting_answers[id_][0] == ARCHIVING_COLLECTION_ARRIVED:
-			def save_if_not_exists(with_, direction, tim, payload):
+			def save_if_not_exists(with_, nick, direction, tim, payload):
 				assert len(payload) == 1, 'got several archiving messages in the' +\
 					' same time %s' % ''.join(payload)
 				if payload[0].getName() == 'body':
 					gajim.logger.save_if_not_exists(with_, direction, tim,
-						msg=payload[0].getData())
+						msg=payload[0].getData(), nick=nick)
 				elif payload[0].getName() == 'message':
 					print 'Not implemented'
 			chat = iq_obj.getTag('chat')
@@ -1265,12 +1265,13 @@ class ConnectionVcard:
 						secs = 0
 					if secs:
 						tim += secs
+					nick = element.getAttr('name')
 					if element.getName() == 'from':
-						save_if_not_exists(with_, 'from', localtime(tim),
+						save_if_not_exists(with_, nick, 'from', localtime(tim),
 							element.getPayload())
 						nb += 1
 					if element.getName() == 'to':
-						save_if_not_exists(with_, 'to', localtime(tim),
+						save_if_not_exists(with_, nick, 'to', localtime(tim),
 							element.getPayload())
 						nb += 1
 				set_ = chat.getTag('set')

@@ -981,16 +981,21 @@ class Logger:
 			(account_jid_id,))
 		self.con.commit()
 
-	def save_if_not_exists(self, with_, direction, tim, msg=''):
+	def save_if_not_exists(self, with_, direction, tim, msg='', nick=None):
 		if tim:
 			time_col = int(float(time.mktime(tim)))
 		else:
 			time_col = int(float(time.time()))
 		if msg:
-			if self.jid_is_from_pm(with_):
-				# We cannot know if it's a pm or groupchat message because we only
-				# get body of the message
-				type_ = 'gc_msg'
+			if self.jid_is_room_jid(with_) or nick:
+				# It's a groupchat message
+				if nick:
+					# It's a message from a groupchat occupent
+					type_ = 'gc_msg'
+					with_ = with_ + '/' + nick
+				else:
+					# It's a server message message, we don't log them
+					return
 			else:
 				if direction == 'from':
 					type_ = 'chat_msg_recv'

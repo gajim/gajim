@@ -3405,7 +3405,6 @@ class Interface:
 		self.last_ftwindow_update = 0
 
 		self.music_track_changed_signal = None
-		self.create_ipython_window()
 		
 		
 class PassphraseRequest:

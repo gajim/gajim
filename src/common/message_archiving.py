@@ -179,12 +179,12 @@ class ConnectionArchive:
 				self.dispatch('ARCHIVING_CHANGED', ('itemremove',
 					item.getAttr('jid')))
 
-	def request_collections_list_page(self, with='', start=None, end=None,
+	def request_collections_list_page(self, with_='', start=None, end=None,
 	after=None, max=30, exact_match=False):
 		iq_ = common.xmpp.Iq('get')
 		list_ = iq_.setTag('list', namespace=common.xmpp.NS_ARCHIVE)
-		if with:
-			list_.setAttr('with', with)
+		if with_:
+			list_.setAttr('with', with_)
 			if exact_match:
 				list_.setAttr('exactmatch', 'true')
 		if start:
@@ -200,11 +200,11 @@ class ConnectionArchive:
 		self.awaiting_answers[id_] = (ARCHIVING_COLLECTIONS_ARRIVED, )
 		self.connection.send(iq_)
 
-	def request_collection_page(self, with, start, end=None, after=None,
+	def request_collection_page(self, with_, start, end=None, after=None,
 	max=30, exact_match=False):
 		iq_ = common.xmpp.Iq('get')
 		retrieve = iq_.setTag('retrieve', namespace=common.xmpp.NS_ARCHIVE,
-			attrs={'with': with, 'start': start})
+			attrs={'with': with_, 'start': start})
 		if exact_match:
 			retrieve.setAttr('exactmatch', 'true')
 		set_ = retrieve.setTag('set', namespace=common.xmpp.NS_RSM)
@@ -216,12 +216,12 @@ class ConnectionArchive:
 		self.awaiting_answers[id_] = (ARCHIVING_COLLECTION_ARRIVED, )
 		self.connection.send(iq_)
 		
-	def remove_collection(self, with='', start=None, end=None,
+	def remove_collection(self, with_='', start=None, end=None,
 	exact_match=False, open=False):
 		iq_ = common.xmpp.Iq('set')
 		remove = iq_.setTag('remove', namespace=common.xmpp.NS_ARCHIVE)
-		if with:
-			remove.setAttr('with', with)
+		if with_:
+			remove.setAttr('with', with_)
 			if exact_match:
 				remove.setAttr('exactmatch', 'true')
 		if start:
