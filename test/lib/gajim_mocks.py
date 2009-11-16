@@ -14,9 +14,7 @@ class MockConnection(Mock, ConnectionHandlersBase):
 
 		self.name = account
 		self.connected = 2
-		self.mood = {}
-		self.activity = {}
-		self.tune = {}
+		self.pep = {}
 		self.blocked_contacts = {}
 		self.blocked_groups = {}
 		self.sessions = {}

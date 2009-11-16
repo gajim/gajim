@@ -1279,14 +1279,12 @@ class ChatControl(ChatControlBase):
 		self.video_state = self.JINGLE_STATE_NOT_AVAILABLE
 
 		self.update_toolbar()
-
-		self._mood_image = self.xml.get_widget('mood_image')
-		self._activity_image = self.xml.get_widget('activity_image')
-		self._tune_image = self.xml.get_widget('tune_image')
-
-		self.update_mood()
-		self.update_activity()
-		self.update_tune()
+		
+		self._pep_images = {}
+		self._pep_images['mood'] = self.xml.get_widget('mood_image')
+		self._pep_images['activity'] = self.xml.get_widget('activity_image')
+		self._pep_images['tune'] = self.xml.get_widget('tune_image')
+		self.update_all_pep_types()
 
 		# keep timeout id and window obj for possible big avatar
 		# it is on enter-notify and leave-notify so no need to be
@@ -1430,118 +1428,24 @@ class ChatControl(ChatControlBase):
 			self._convert_to_gc_button.set_sensitive(True)
 		else:
 			self._convert_to_gc_button.set_sensitive(False)
+	
+	def update_all_pep_types(self):
+		for pep_type in self._pep_images:
+			self.update_pep(pep_type)
 
-	def update_mood(self):
-		mood = None
-		text = None
-
+	def update_pep(self, pep_type):
 		if isinstance(self.contact, GC_Contact):
 			return
-
-		if 'mood' in self.contact.mood:
-			mood = self.contact.mood['mood'].strip()
-		if 'text' in self.contact.mood:
-			text = self.contact.mood['text'].strip()
-
-		if mood is not None:
-			if mood in MOODS:
-				self._mood_image.set_from_pixbuf(gtkgui_helpers.load_mood_icon(
-						mood).get_pixbuf())
-				# Translate standard moods
-				mood = MOODS[mood]
-			else:
-				self._mood_image.set_from_pixbuf(gtkgui_helpers.load_mood_icon(
-					'unknown').get_pixbuf())
-
-			mood = gobject.markup_escape_text(mood)
-
-			tooltip = '<b>%s</b>' % mood
-			if text:
-				text = gobject.markup_escape_text(text)
-				tooltip += '\n' + text
-			self._mood_image.set_tooltip_markup(tooltip)
-			self._mood_image.show()
-		else:
-			self._mood_image.hide()
-
-	def update_activity(self):
-		activity = None
-		subactivity = None
-		text = None
-
-		if isinstance(self.contact, GC_Contact):
+		if pep_type not in self._pep_images:
 			return
-
-		if 'activity' in self.contact.activity:
-			activity = self.contact.activity['activity'].strip()
-		if 'subactivity' in self.contact.activity:
-			subactivity = self.contact.activity['subactivity'].strip()
-		if 'text' in self.contact.activity:
-			text = self.contact.activity['text'].strip()
-
-		if activity is not None:
-			if activity in ACTIVITIES:
-				# Translate standard activities
-				if subactivity in ACTIVITIES[activity]:
-					self._activity_image.set_from_pixbuf(
-						gtkgui_helpers.load_activity_icon(activity, subactivity). \
-						get_pixbuf())
-					subactivity = ACTIVITIES[activity][subactivity]
-				else:
-					self._activity_image.set_from_pixbuf(
-						gtkgui_helpers.load_activity_icon(activity).get_pixbuf())
-				activity = ACTIVITIES[activity]['category']
-			else:
-				self._activity_image.set_from_pixbuf(
-					gtkgui_helpers.load_activity_icon('unknown').get_pixbuf())
-
-			# Translate standard subactivities
-
-			tooltip = '<b>' + gobject.markup_escape_text(activity)
-			if subactivity:
-				tooltip += ': ' + gobject.markup_escape_text(subactivity)
-			tooltip += '</b>'
-			if text:
-				tooltip += '\n' + gobject.markup_escape_text(text)
-			self._activity_image.set_tooltip_markup(tooltip)
-
-			self._activity_image.show()
+		pep = self.contact.pep
+		img = self._pep_images[pep_type]
+		if pep_type in pep:
+			img.set_from_pixbuf(pep[pep_type].asPixbufIcon())
+			img.set_tooltip_markup(pep[pep_type].asMarkupText())
+			img.show()
 		else:
-			self._activity_image.hide()
-
-	def update_tune(self):
-		artist = None
-		title = None
-		source = None
-
-		if isinstance(self.contact, GC_Contact):
-			return
-
-		if 'artist' in self.contact.tune:
-			artist = self.contact.tune['artist'].strip()
-			artist = gobject.markup_escape_text(artist)
-		if 'title' in self.contact.tune:
-			title = self.contact.tune['title'].strip()
-			title = gobject.markup_escape_text(title)
-		if 'source' in self.contact.tune:
-			source = self.contact.tune['source'].strip()
-			source = gobject.markup_escape_text(source)
-
-		if artist or title:
-			if not artist:
-				artist = _('Unknown Artist')
-			if not title:
-				title = _('Unknown Title')
-			if not source:
-				source = _('Unknown Source')
-
-			self._tune_image.set_tooltip_markup(
-				_('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
-				'from <i>%(source)s</i>') % {'title': title, 'artist': artist,
-				'source': source})
-			self._tune_image.show()
-		else:
-			self._tune_image.hide()
+			img.hide()
 
 	def _update_jingle(self, jingle_type):
 		if jingle_type not in ('audio', 'video'):

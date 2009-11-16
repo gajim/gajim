@@ -168,9 +168,7 @@ class Connection(ConnectionHandlers):
 		self.pubsub_supported = False
 		self.pubsub_publish_options_supported = False
 		self.pep_supported = False
-		self.mood = {}
-		self.tune = {}
-		self.activity = {}
+		self.pep = {}
 		# Do we continue connection when we get roster (send presence,get vcard..)
 		self.continue_connect_info = None
 		# Do we auto accept insecure connection

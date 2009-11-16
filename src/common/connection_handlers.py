@@ -46,11 +46,10 @@ import common.xmpp
 
 from common import helpers
 from common import gajim
-from common import atom
-from common import pep
 from common import exceptions
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
+from common.pep import ConnectionPEP
 from common.caps import ConnectionCaps
 if gajim.HAVE_FARSIGHT:
 	from common.jingle import ConnectionJingle
@@ -1453,7 +1452,7 @@ sent a message to.'''
 
 		return sess
 
-class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
+class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionPEP, ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 	def __init__(self):
 		ConnectionVcard.__init__(self)
 		ConnectionBytestream.__init__(self)
@@ -1874,15 +1873,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 	def _messageCB(self, con, msg):
 		'''Called when we receive a message'''
 		log.debug('MessageCB')
-
 		mtype = msg.getType()
-		# check if the message is pubsub#event
-		if msg.getTag('event') is not None:
-			if mtype == 'groupchat':
-				return
-			if msg.getTag('error') is None:
-				self._pubsubEventCB(con, msg)
-			return
 
 		# check if the message is a roster item exchange (XEP-0144)
 		if msg.getTag('x', namespace=common.xmpp.NS_ROSTERX):
@@ -2147,42 +2138,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			is_continued = True
 		self.dispatch('GC_INVITATION',(frm, jid_from, reason, password,
 			is_continued))
-
-	def _pubsubEventCB(self, con, msg):
-		''' Called when we receive <message/> with pubsub event. '''
-		# TODO: Logging? (actually services where logging would be useful, should
-		# TODO: allow to access archives remotely...)
-		jid = helpers.get_full_jid_from_iq(msg)
-		event = msg.getTag('event')
-
-		# XEP-0107: User Mood
-		items = event.getTag('items', {'node': common.xmpp.NS_MOOD})
-		if items: pep.user_mood(items, self.name, jid)
-		# XEP-0118: User Tune
-		items = event.getTag('items', {'node': common.xmpp.NS_TUNE})
-		if items: pep.user_tune(items, self.name, jid)
-		# XEP-0080: User Geolocation
-		items = event.getTag('items', {'node': common.xmpp.NS_GEOLOC})
-		if items: pep.user_geoloc(items, self.name, jid)
-		# XEP-0108: User Activity
-		items = event.getTag('items', {'node': common.xmpp.NS_ACTIVITY})
-		if items: pep.user_activity(items, self.name, jid)
-		# XEP-0172: User Nickname
-		items = event.getTag('items', {'node': common.xmpp.NS_NICK})
-		if items: pep.user_nickname(items, self.name, jid)
-
-		items = event.getTag('items')
-		if items is None: return
-
-		for item in items.getTags('item'):
-			entry = item.getTag('entry')
-			if entry is not None:
-				# for each entry in feed (there shouldn't be more than one,
-				# but to be sure...
-				self.dispatch('ATOM_ENTRY', (atom.OldEntry(node=entry),))
-				continue
-			# unknown type... probably user has another client who understands that event
-		raise common.xmpp.NodeProcessed
 
 	def _presenceCB(self, con, prs):
 		'''Called when we receive a presence'''
@@ -2751,6 +2706,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		con.RegisterHandler('message', self._messageCB)
 		con.RegisterHandler('presence', self._presenceCB)
 		con.RegisterHandler('presence', self._capsPresenceCB)
+		con.RegisterHandler('message', self._pubsubEventCB,
+			ns=common.xmpp.NS_PUBSUB_EVENT)
 		con.RegisterHandler('iq', self._vCardCB, 'result',
 			common.xmpp.NS_VCARD)
 		con.RegisterHandler('iq', self._rosterSetCB, 'set',

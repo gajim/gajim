@@ -88,9 +88,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 		self.no_log_for = False
 
 		self.pep_supported = False
-		self.mood = {}
-		self.tune = {}
-		self.activity = {}
+		self.pep = {}
 		# Do we continue connection when we get roster (send presence,get vcard...)
 		self.continue_connect_info = None
 		if gajim.HAVE_GPG:

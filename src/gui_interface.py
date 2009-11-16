@@ -1989,6 +1989,27 @@ class Interface:
 				_('PEP node %(node)s was not removed: %(message)s') % {
 				'node': data[1], 'message': data[2]})
 			
+	def handle_event_pep_received(self, account, data):
+		# ('PEP_RECEIVED', account, (jid, pep_type))
+		jid = data[0]
+		pep_type = data[1]
+		ctrl = common.gajim.interface.msg_win_mgr.get_control(jid, account)
+
+		if jid == common.gajim.get_jid_from_account(account):
+			self.roster.draw_account(account)
+		
+		if pep_type == 'nickname':
+			self.roster.draw_contact(jid, account)
+			if ctrl:
+				ctrl.update_ui()
+				win = ctrl.parent_win
+				win.redraw_tab(ctrl)
+				win.show_title()
+		else:
+			self.roster.draw_pep(jid, account, pep_type)
+			if ctrl:
+				ctrl.update_pep(pep_type)
+			
 	def register_handler(self, event, handler):																																									
 		if event not in self.handlers:
 			self.handlers[event] = []
@@ -2088,6 +2109,7 @@ class Interface:
 			'JINGLE_CONNECTED': [self.handle_event_jingle_connected],
 			'JINGLE_DISCONNECTED': [self.handle_event_jingle_disconnected],
 			'JINGLE_ERROR': [self.handle_event_jingle_error],
+			'PEP_RECEIVED': [self.handle_event_pep_received]
 		}
 	
 	def dispatch(self, event, account, data):																																									  
@@ -2774,33 +2796,27 @@ class Interface:
 		listener.disconnect(self.music_track_changed_signal)
 		self.music_track_changed_signal = None
 
-	def music_track_changed(self, unused_listener, music_track_info, account=''):
-		if account == '':
+	def music_track_changed(self, unused_listener, music_track_info, account=None):
+		if not account:
 			accounts = gajim.connections.keys()
 		else:
 			accounts = [account]
-		if music_track_info is None:
-			artist = ''
-			title = ''
-			source = ''
-		elif hasattr(music_track_info, 'paused') and music_track_info.paused == 0:
-			artist = ''
-			title = ''
-			source = ''
+			
+		is_paused = hasattr(music_track_info, 'paused') and music_track_info.paused == 0
+		if not music_track_info or is_paused:
+			artist = title = source = ''
 		else:
 			artist = music_track_info.artist
 			title = music_track_info.title
 			source = music_track_info.album
 		for acct in accounts:
-			if acct not in gajim.connections:
-				continue
 			if not gajim.account_is_connected(acct):
 				continue
-			if not gajim.connections[acct].pep_supported:
+			if not gajim.config.get_per('accounts', acct, 'publish_tune'):
 				continue
 			if gajim.connections[acct].music_track_info == music_track_info:
 				continue
-			pep.user_send_tune(acct, artist, title, source)
+			gajim.connections[acct].send_tune(artist, title, source)
 			gajim.connections[acct].music_track_info = music_track_info
 
 	def get_bg_fg_colors(self):
