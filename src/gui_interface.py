@@ -2796,33 +2796,27 @@ class Interface:
 		listener.disconnect(self.music_track_changed_signal)
 		self.music_track_changed_signal = None
 
-	def music_track_changed(self, unused_listener, music_track_info, account=''):
-		if account == '':
+	def music_track_changed(self, unused_listener, music_track_info, account=None):
+		if not account:
 			accounts = gajim.connections.keys()
 		else:
 			accounts = [account]
-		if music_track_info is None:
-			artist = ''
-			title = ''
-			source = ''
-		elif hasattr(music_track_info, 'paused') and music_track_info.paused == 0:
-			artist = ''
-			title = ''
-			source = ''
+			
+		is_paused = hasattr(music_track_info, 'paused') and music_track_info.paused == 0
+		if not music_track_info or is_paused:
+			artist = title = source = ''
 		else:
 			artist = music_track_info.artist
 			title = music_track_info.title
 			source = music_track_info.album
 		for acct in accounts:
-			if acct not in gajim.connections:
-				continue
 			if not gajim.account_is_connected(acct):
 				continue
-			if not gajim.connections[acct].pep_supported:
+			if not gajim.config.get_per('accounts', acct, 'publish_tune'):
 				continue
 			if gajim.connections[acct].music_track_info == music_track_info:
 				continue
-			pep.user_send_tune(acct, artist, title, source)
+			gajim.connections[acct].send_tune(artist, title, source)
 			gajim.connections[acct].music_track_info = music_track_info
 
 	def get_bg_fg_colors(self):

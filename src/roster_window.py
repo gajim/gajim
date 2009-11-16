@@ -1896,36 +1896,36 @@ class RosterWindow:
 
 		self.send_status_continue(account, status, txt, auto, to)
 
-	def send_pep(self, account, pep_dict=None):
-		'''Sends pep information (activity, mood)'''
-		if not pep_dict:
-			return
-		# activity
-		if 'activity' in pep_dict and pep_dict['activity'] in pep.ACTIVITIES:
+	def send_pep(self, account, pep_dict):
+		connection = gajim.connections[account]
+		
+		if 'activity' in pep_dict:
 			activity = pep_dict['activity']
-			if 'subactivity' in pep_dict and \
-			pep_dict['subactivity'] in pep.ACTIVITIES[activity]:
-				subactivity = pep_dict['subactivity']
-			else:
-				subactivity = 'other'
-			if 'activity_text' in pep_dict:
-				activity_text = pep_dict['activity_text']
-			else:
-				activity_text = ''
-			pep.user_send_activity(account, activity, subactivity, activity_text)
+			subactivity = pep_dict.get('subactivity', None)
+			activity_text = pep_dict.get('activity_text', None)
+			connection.send_activity(activity, subactivity, activity_text)
 		else:
-			pep.user_send_activity(account, '')
+			connection.retract_activity()
 
-		# mood
-		if 'mood' in pep_dict and pep_dict['mood'] in pep.MOODS:
+		if 'mood' in pep_dict:
 			mood = pep_dict['mood']
-			if 'mood_text' in pep_dict:
-				mood_text = pep_dict['mood_text']
-			else:
-				mood_text = ''
-			pep.user_send_mood(account, mood, mood_text)
+			mood_text = pep_dict.get('mood_text', None)
+			connection.send_mood(mood, mood_text)
 		else:
-			pep.user_send_mood(account, '')
+			connection.retract_mood()
+		
+	def delete_pep(self, jid, account):
+		if jid == gajim.get_jid_from_account(account):
+			gajim.connections[account].pep = {}
+			self.draw_account(account)
+	
+		for contact in gajim.contacts.get_contacts(account, jid):
+			contact.pep = {}
+	
+		self.draw_all_pep_types(jid, account)
+		ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
+		if ctrl:
+			ctrl.update_all_pep_types()
 
 	def send_status_continue(self, account, status, txt, auto, to):
 		if gajim.account_is_connected(account) and not to:
@@ -1940,7 +1940,7 @@ class RosterWindow:
 			gajim.connections[account].send_custom_status(status, txt, to)
 		else:
 			if status in ('invisible', 'offline'):
-				pep.delete_pep(gajim.get_jid_from_account(account), account)
+				self.delete_pep(gajim.get_jid_from_account(account), account)
 			was_invisible = gajim.connections[account].connected == \
 				gajim.SHOW_LIST.index('invisible')
 			gajim.connections[account].change_status(status, txt, auto)
@@ -2018,7 +2018,7 @@ class RosterWindow:
 			contact_instances)
 		if not keep_pep and contact.jid != gajim.get_jid_from_account(account) \
 		and not contact.is_groupchat():
-			pep.delete_pep(contact.jid, account)
+			self.delete_pep(contact.jid, account)
 
 		# Redraw everything and select the sender
 		self.adjust_and_draw_contact_context(contact.jid, account)
@@ -3318,23 +3318,19 @@ class RosterWindow:
 			gajim.interface.instances['preferences'] = config.PreferencesWindow()
 
 	def on_publish_tune_toggled(self, widget, account):
-		act = widget.get_active()
-		gajim.config.set_per('accounts', account, 'publish_tune', act)
-		if act:
+		active = widget.get_active()
+		gajim.config.set_per('accounts', account, 'publish_tune', active)
+		if active:
 			gajim.interface.enable_music_listener()
 		else:
-			# disable it only if no other account use it
-			for acct in gajim.connections:
-				if gajim.config.get_per('accounts', acct, 'publish_tune'):
+			gajim.connections[account].retract_tune()
+			# disable music listener only if no other account uses it
+			for acc in gajim.connections:
+				if gajim.config.get_per('accounts', acc, 'publish_tune'):
 					break
 			else:
 				gajim.interface.disable_music_listener()
 
-			if gajim.connections[account].pep_supported:
-				# As many implementations don't support retracting items, we send a
-				# "Stopped" event first
-				pep.user_send_tune(account, '')
-				pep.user_retract_tune(account)
 		helpers.update_optional_features(account)
 
 	def on_pep_services_menuitem_activate(self, widget, account):
@@ -5761,7 +5757,7 @@ class RosterWindow:
 		
 		self._pep_type_to_model_column = {'mood': C_MOOD_PIXBUF,
 													 'activity': C_ACTIVITY_PIXBUF,
-													 'tune': C_ACTIVITY_PIXBUF}
+													 'tune': C_TUNE_PIXBUF}
 
 		if gajim.config.get('avatar_position_in_roster') == 'right':
 			add_avatar_renderer()

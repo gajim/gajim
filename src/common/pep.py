@@ -400,17 +400,17 @@ class UserActivityPEP(AbstractPEP):
 		text = pep['text'] if 'text' in pep else None
 
 		if activity in ACTIVITIES:
-				# Translate standard activities
-				if subactivity in ACTIVITIES[activity]:
-					subactivity = ACTIVITIES[activity][subactivity]
-				activity = ACTIVITIES[activity]['category']
+			# Translate standard activities
+			if subactivity in ACTIVITIES[activity]:
+				subactivity = ACTIVITIES[activity][subactivity]
+			activity = ACTIVITIES[activity]['category']
 				
 		markuptext = '<b>' + gobject.markup_escape_text(activity)
 		if subactivity:
 			markuptext += ': ' + gobject.markup_escape_text(subactivity)
 		markuptext += '</b>'
 		if text:
-			markuptext += ' (%s)' + gobject.markup_escape_text(text)
+			markuptext += ' (%s)' % gobject.markup_escape_text(text)
 		return markuptext				
 			
 			
@@ -446,18 +446,17 @@ class UserNicknamePEP(AbstractPEP):
 			common.gajim.nicks[account] = self._pep_specific_data
 
 		
-SUPPORTED_PERSONAL_USER_EVENTS = [UserMoodPEP, UserTunePEP, UserActivityPEP, UserNicknamePEP]
+SUPPORTED_PERSONAL_USER_EVENTS = [UserMoodPEP, UserTunePEP, UserActivityPEP,
+											 UserNicknamePEP]
 
-class ConnectionPEP:
-	
+class ConnectionPEP(object):
+		
 	def _pubsubEventCB(self, xmpp_dispatcher, msg):
 		''' Called when we receive <message /> with pubsub event. '''
 		if msg.getTag('error'):
 			log.warning('PubsubEventCB received error stanza')
 			return
-				
-		# TODO: Logging? (actually services where logging would be useful, should
-		# TODO: allow to access archives remotely...)
+		
 		jid = helpers.get_full_jid_from_iq(msg)
 		event_tag = msg.getTag('event')
 
@@ -467,114 +466,97 @@ class ConnectionPEP:
 				self.dispatch('PEP_RECEIVED', (jid, pep.type))
 		
 		items = event_tag.getTag('items')
-		if items is None:
-			return
-
-		for item in items.getTags('item'):
-			entry = item.getTag('entry')
-			if entry:
-				# for each entry in feed (there shouldn't be more than one,
-				# but to be sure...
-				self.dispatch('ATOM_ENTRY', (atom.OldEntry(node=entry),))
-				continue
-			# unknown type... probably user has another client who understands that event
+		if items:
+			for item in items.getTags('item'):
+				entry = item.getTag('entry')
+				if entry:
+					# for each entry in feed (there shouldn't be more than one,
+					# but to be sure...
+					self.dispatch('ATOM_ENTRY', (atom.OldEntry(node=entry),))
 			
 		raise common.xmpp.NodeProcessed
+	
+	def send_activity(self, activity, subactivity=None, message=None):
+		if not self.pep_supported:
+			return
+		item = xmpp.Node('activity', {'xmlns': xmpp.NS_ACTIVITY})
+		if activity:
+			i = item.addChild(activity)
+		if subactivity:
+			i.addChild(subactivity)
+		if message:
+			i = item.addChild('text')
+			i.addData(message)
+		self.send_pb_publish('', xmpp.NS_ACTIVITY, item, '0')
+		
+	def retract_activity(self):
+		if not self.pep_supported:
+			return
+		# not all server support retract, so send empty pep first
+		self.send_activity(None)
+		self.send_pb_retract('', xmpp.NS_ACTIVITY, '0')
 
+	def send_mood(self, mood, message=None):
+		if not self.pep_supported:
+			return
+		item = xmpp.Node('mood', {'xmlns': xmpp.NS_MOOD})
+		if mood:
+			item.addChild(mood)
+		if message:
+			i = item.addChild('text')
+			i.addData(message)
+		self.send_pb_publish('', xmpp.NS_MOOD, item, '0')
+		
+	def retract_mood(self):
+		if not self.pep_supported:
+			return
+		self.send_mood(None)
+		self.send_pb_retract('', xmpp.NS_MOOD, '0')
+		
+	def send_tune(self, artist='', title='', source='', track=0, length=0,
+	items=None):
+		if not self.pep_supported:
+			return
+		item = xmpp.Node('tune', {'xmlns': xmpp.NS_TUNE})
+		if artist:
+			i = item.addChild('artist')
+			i.addData(artist)
+		if title:
+			i = item.addChild('title')
+			i.addData(title)
+		if source:
+			i = item.addChild('source')
+			i.addData(source)
+		if track:
+			i = item.addChild('track')
+			i.addData(track)
+		if length:
+			i = item.addChild('length')
+			i.addData(length)
+		if items:
+			item.addChild(payload=items)
+		self.send_pb_publish('', xmpp.NS_TUNE, item, '0')
 
-def user_send_mood(account, mood, message=''):
-	if not common.gajim.connections[account].pep_supported:
-		return
-	item = xmpp.Node('mood', {'xmlns': xmpp.NS_MOOD})
-	if mood:
-		item.addChild(mood)
-	if message:
-		i = item.addChild('text')
-		i.addData(message)
+	def retract_tune(self):
+		if not self.pep_supported:
+			return
+		# not all server support retract, so send empty pep first
+		self.send_tune(None)
+		self.send_pb_retract('', xmpp.NS_TUNE, '0')
 
-	common.gajim.connections[account].send_pb_publish('', xmpp.NS_MOOD, item,
-		'0')
+	def send_nickname(self, nick):
+		if not self.pep_supported:
+			return
+		item = xmpp.Node('nick', {'xmlns': xmpp.NS_NICK})
+		item.addData(nick)
+		self.send_pb_publish('', xmpp.NS_NICK, item, '0')
 
-def user_send_activity(account, activity, subactivity='', message=''):
-	if not common.gajim.connections[account].pep_supported:
-		return
-	item = xmpp.Node('activity', {'xmlns': xmpp.NS_ACTIVITY})
-	if activity:
-		i = item.addChild(activity)
-	if subactivity:
-		i.addChild(subactivity)
-	if message:
-		i = item.addChild('text')
-		i.addData(message)
-
-	common.gajim.connections[account].send_pb_publish('', xmpp.NS_ACTIVITY, item,
-		'0')
-
-def user_send_tune(account, artist='', title='', source='', track=0, length=0,
-items=None):
-	if not (common.gajim.config.get_per('accounts', account, 'publish_tune') and\
-	common.gajim.connections[account].pep_supported):
-		return
-	item = xmpp.Node('tune', {'xmlns': xmpp.NS_TUNE})
-	if artist:
-		i = item.addChild('artist')
-		i.addData(artist)
-	if title:
-		i = item.addChild('title')
-		i.addData(title)
-	if source:
-		i = item.addChild('source')
-		i.addData(source)
-	if track:
-		i = item.addChild('track')
-		i.addData(track)
-	if length:
-		i = item.addChild('length')
-		i.addData(length)
-	if items:
-		item.addChild(payload=items)
-
-	common.gajim.connections[account].send_pb_publish('', xmpp.NS_TUNE, item,
-		'0')
-
-def user_send_nickname(account, nick):
-	if not common.gajim.connections[account].pep_supported:
-		return
-	item = xmpp.Node('nick', {'xmlns': xmpp.NS_NICK})
-	item.addData(nick)
-
-	common.gajim.connections[account].send_pb_publish('', xmpp.NS_NICK, item,
-		'0')
-
-def user_retract_mood(account):
-	common.gajim.connections[account].send_pb_retract('', xmpp.NS_MOOD, '0')
-
-def user_retract_activity(account):
-	common.gajim.connections[account].send_pb_retract('', xmpp.NS_ACTIVITY, '0')
-
-def user_retract_tune(account):
-	common.gajim.connections[account].send_pb_retract('', xmpp.NS_TUNE, '0')
-
-def user_retract_nickname(account):
-	common.gajim.connections[account].send_pb_retract('', xmpp.NS_NICK, '0')
-
-def delete_pep(jid, name):
-	user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
-
-	if jid == common.gajim.get_jid_from_account(name):
-		acc = common.gajim.connections[name]
-		acc.pep = {}
-
-	for contact in common.gajim.contacts.get_contacts(name, user):
-		contact.pep = {}
-
-	if jid == common.gajim.get_jid_from_account(name):
-		common.gajim.interface.roster.draw_account(name)
-
-	common.gajim.interface.roster.draw_all_pep_types(jid, name)
-	ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
-	if ctrl:
-		ctrl.update_all_pep_types()
+	def retract_nickname(self):
+		if not self.pep_supported:
+			return
+		# not all server support retract, so send empty pep first
+		self.send_tune(None)
+		self.send_pb_retract('', xmpp.NS_NICK, '0')
 
 
 # vim: se ts=3:
