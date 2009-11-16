@@ -2843,6 +2843,9 @@ class XMLConsoleWindow:
 			# it's expanded!!
 			self.input_textview.grab_focus()
 
+#Action that can be done with an incoming list of contacts
+TRANSLATED_ACTION = {'add': _('add'), 'modify': _('modify'),
+	'remove': _('remove')}
 class RosterItemExchangeWindow:
 	''' Windows used when someone send you a exchange contact suggestion '''
 	def __init__(self, account, action, exchange_list, jid_from,
@@ -2866,12 +2869,13 @@ class RosterItemExchangeWindow:
 
 		# Set labels
 		# self.action can be 'add', 'modify' or 'remove'
-		self.type_label.set_label(\
-			_('<b>%s</b> would like you to <b>%s</b> some contacts in your '
-			'roster.') % (jid_from, _(self.action)))
+		self.type_label.set_label(
+			_('<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts '
+				'in your roster.') % {'jid': jid_from,
+				'action': TRANSLATED_ACTION[self.action]})
 		if message_body:
-			buffer = self.body_textview.get_buffer()
-			buffer.set_text(self.message_body)
+			buffer_ = self.body_textview.get_buffer()
+			buffer_.set_text(self.message_body)
 		else:
 			self.body_scrolledwindow.hide()
 		# Treeview
@@ -2924,8 +2928,8 @@ class RosterItemExchangeWindow:
 						groups = groups + group + ', '
 				if not is_in_roster:
 					show_dialog = True
-					iter = model.append()
-					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
+					iter_ = model.append()
+					model.set(iter_, 0, True, 1, jid, 2, name, 3, groups)
 
 			# Change label for accept_button to action name instead of 'OK'.
 			self.accept_button_label.set_label(_('Add'))
@@ -2955,8 +2959,8 @@ class RosterItemExchangeWindow:
 						groups = groups + group + ', '
 				if not is_right and is_in_roster:
 					show_dialog = True
-					iter = model.append()
-					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
+					iter_ = model.append()
+					model.set(iter_, 0, True, 1, jid, 2, name, 3, groups)
 
 			# Change label for accept_button to action name instead of 'OK'.
 			self.accept_button_label.set_label(_('Modify'))
@@ -2979,8 +2983,8 @@ class RosterItemExchangeWindow:
 						groups = groups + group + ', '
 				if is_in_roster:
 					show_dialog = True
-					iter = model.append()
-					model.set(iter, 0, True, 1, jid, 2, name, 3, groups)
+					iter_ = model.append()
+					model.set(iter_, 0, True, 1, jid, 2, name, 3, groups)
 
 			# Change label for accept_button to action name instead of 'OK'.
 			self.accept_button_label.set_label(_('Delete'))
@@ -2991,49 +2995,49 @@ class RosterItemExchangeWindow:
 
 	def toggled_callback(self, cell, path):
 		model = self.items_list_treeview.get_model()
-		iter = model.get_iter(path)
-		model[iter][0] = not cell.get_active()
+		iter_ = model.get_iter(path)
+		model[iter_][0] = not cell.get_active()
 
 	def on_accept_button_clicked(self, widget):
 		model = self.items_list_treeview.get_model()
-		iter = model.get_iter_root()
+		iter_ = model.get_iter_root()
 		if self.action == 'add':
 			a = 0
-			while iter:
-				if model[iter][0]:
+			while iter_:
+				if model[iter_][0]:
 					a+=1
 					# it is selected
-					#remote_jid = model[iter][1].decode('utf-8')
+					#remote_jid = model[iter_][1].decode('utf-8')
 					message = _('%s suggested me to add you in my roster.'
 						% self.jid_from)
 					# keep same groups and same nickname
-					groups = model[iter][3].split(', ')
+					groups = model[iter_][3].split(', ')
 					if groups == ['']:
 						groups = []
-					jid = model[iter][1].decode('utf-8')
+					jid = model[iter_][1].decode('utf-8')
 					if gajim.jid_is_transport(self.jid_from):
 						gajim.connections[self.account].automatically_added.append(
 							jid)
 					gajim.interface.roster.req_sub(self, jid, message,
-						self.account, groups=groups, nickname=model[iter][2],
+						self.account, groups=groups, nickname=model[iter_][2],
 						auto_auth=True)
-				iter = model.iter_next(iter)
-			InformationDialog('Added  %s contacts' % str(a))
+				iter_ = model.iter_next(iter_)
+			InformationDialog(_('Added  %s contacts') % str(a))
 		elif self.action == 'modify':
 			a = 0
-			while iter:
-				if model[iter][0]:
+			while iter_:
+				if model[iter_][0]:
 					a+=1
 					# it is selected
-					jid = model[iter][1].decode('utf-8')
+					jid = model[iter_][1].decode('utf-8')
 					# keep same groups and same nickname
-					groups = model[iter][3].split(', ')
+					groups = model[iter_][3].split(', ')
 					if groups == ['']:
 						groups = []
 					for u in gajim.contacts.get_contact(self.account, jid):
-						u.name = model[iter][2]
+						u.name = model[iter_][2]
 					gajim.connections[self.account].update_contact(jid,
-						model[iter][2], groups)
+						model[iter_][2], groups)
 					self.draw_contact(jid, account)
 					# Update opened chat
 					ctrl = gajim.interface.msg_win_mgr.get_control(jid, self.account)
@@ -3043,19 +3047,19 @@ class RosterItemExchangeWindow:
 							self.account)
 						win.redraw_tab(ctrl)
 						win.show_title()
-				iter = model.iter_next(iter)
+				iter_ = model.iter_next(iter_)
 		elif self.action == 'delete':
 			a = 0
-			while iter:
-				if model[iter][0]:
+			while iter_:
+				if model[iter_][0]:
 					a+=1
 					# it is selected
-					jid = model[iter][1].decode('utf-8')
+					jid = model[iter_][1].decode('utf-8')
 					gajim.connections[self.account].unsubscribe(jid)
 					gajim.interface.roster.remove_contact(jid, self.account)
 					gajim.contacts.remove_jid(self.account, jid)
-				iter = model.iter_next(iter)
-			InformationDialog('Removed  %s contacts' % str(a))
+				iter_ = model.iter_next(iter_)
+			InformationDialog(_('Removed  %s contacts') % str(a))
 		self.window.destroy()
 
 	def on_cancel_button_clicked(self, widget):
