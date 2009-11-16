@@ -610,8 +610,8 @@ class HistoryManager:
 			liststore, list_of_paths))
 
 	def on_search_db_button_clicked(self, widget):
-		text = self.search_entry.get_text()
-		if text == '':
+		text = self.search_entry.get_text().decode('utf-8')
+		if not text:
 			return
 
 		self.welcome_vbox.hide()

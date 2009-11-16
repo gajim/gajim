@@ -98,6 +98,22 @@ class StandardChatCommands(CommandContainer):
             raise CommandError(_('Command is not supported for zeroconf accounts'))
         gajim.connections[self.account].sendPing(self.contact)
 
+    @command('dtmf')
+    @documentation(_("Sends DTMF events through an open audio session"))
+    def dtmf(self, events):
+        if not self.audio_sid:
+            raise CommandError(_("There is no open audio session with this contact"))
+        # Valid values for DTMF tones are *, # or a number
+        events = [event for event in events
+            if event in ('*', '#') or event.isdigit()]
+        if events:
+            session = gajim.connections[self.account].get_jingle_session(
+                self.contact.get_full_jid(), self.audio_sid)
+            content = session.get_content('audio')
+            content.batch_dtmf(events)
+        else:
+            raise CommandError(_("No valid DTMF event specified"))
+
     @command('audio')
     @documentation(_("Toggle audio session"))
     def audio(self):

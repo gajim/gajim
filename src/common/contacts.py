@@ -207,6 +207,7 @@ class Contacts:
 		
 	def change_account_name(self, old_name, new_name):		
 		self._accounts[new_name] = self._accounts[old_name]
+		self._accounts[new_name].name = new_name
 		del self._accounts[old_name]
 		
 		self._metacontact_manager.change_account_name(old_name, new_name)
