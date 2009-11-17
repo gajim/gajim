@@ -555,7 +555,7 @@ class ConnectionPEP(object):
 		if not self.pep_supported:
 			return
 		# not all server support retract, so send empty pep first
-		self.send_tune(None)
+		self.send_nickname(None)
 		self.send_pb_retract('', xmpp.NS_NICK, '0')
 
 
