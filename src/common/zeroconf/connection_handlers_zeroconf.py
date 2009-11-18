@@ -57,10 +57,10 @@ from session import ChatControlSession
 
 class ConnectionVcard(connection_handlers.ConnectionVcard):
 	def add_sha(self, p, send_caps = True):
-		pass
+		return p
 
 	def add_caps(self, p):
-		pass
+		return p
 
 	def request_vcard(self, jid = None, is_fake_jid = False):
 		pass
