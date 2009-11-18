@@ -66,13 +66,15 @@ def has_focus(widget):
 
 class TextViewImage(gtk.Image):
 
-	def __init__(self, anchor):
+	def __init__(self, anchor, text):
 		super(TextViewImage, self).__init__()
 		self.anchor = anchor
 		self._selected = False
 		self._disconnect_funcs = []
 		self.connect('parent-set', self.on_parent_set)
 		self.connect('expose-event', self.on_expose)
+		self.set_tooltip_text(text)
+		self.anchor.set_data('plaintext', text)
 
 	def _get_selected(self):
 		parent = self.get_parent()
@@ -1042,7 +1044,7 @@ class ConversationTextview(gobject.GObject):
 			emot_ascii = possible_emot_ascii_caps
 			end_iter = buffer_.get_end_iter()
 			anchor = buffer_.create_child_anchor(end_iter)
-			img = TextViewImage(anchor)
+			img = TextViewImage(anchor, special_text)
 			animations = gajim.interface.emoticons_animations
 			if not emot_ascii in animations:
 				animations[emot_ascii] = gtk.gdk.PixbufAnimation(
