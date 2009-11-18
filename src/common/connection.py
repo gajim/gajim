@@ -623,7 +623,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 		self.secret_hmac = str(random.random())[2:]
 	# END __init__
 
-	def get_config_values_or_default():
+	def get_config_values_or_default(self):
 		if gajim.config.get_per('accounts', self.name, 'keep_alives_enabled'):
 			self.keepalives = gajim.config.get_per('accounts', self.name,
 				'keep_alive_every_foo_secs')
