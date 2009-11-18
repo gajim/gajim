@@ -804,6 +804,10 @@ class HtmlTextView(gtk.TextView):
 		self.connect('motion-notify-event', self.__motion_notify_event)
 		self.connect('leave-notify-event', self.__leave_event)
 		self.connect('enter-notify-event', self.__motion_notify_event)
+		self.connect('realize', self.on_html_text_view_realized)
+		self.connect('unrealize', self.on_html_text_view_unrealized)
+		self.connect('copy-clipboard', self.on_html_text_view_copy_clipboard)
+		self.get_buffer().connect_after('mark-set', self.on_text_buffer_mark_set)
 		self.get_buffer().create_tag('eol', scale = pango.SCALE_XX_SMALL)
 		self.tooltip = tooltips.BaseTooltip()
 		self.config = gajim.config
@@ -873,7 +877,43 @@ class HtmlTextView(gtk.TextView):
 		#if not eob.starts_line():
 		#    buffer_.insert(eob, '\n')
 
+	def on_html_text_view_copy_clipboard(self, unused_data):
+		clipboard = self.get_clipboard(gtk.gdk.SELECTION_CLIPBOARD)
+		clipboard.set_text(self.get_selected_text())
+		self.emit_stop_by_name('copy-clipboard')
 
+	def on_html_text_view_realized(self, unused_data):
+		self.get_buffer().remove_selection_clipboard(self.get_clipboard(gtk.gdk.SELECTION_PRIMARY))
+
+	def on_html_text_view_unrealized(self, unused_data):
+		self.get_buffer().add_selection_clipboard(self.get_clipboard(gtk.gdk.SELECTION_PRIMARY))
+
+	def on_text_buffer_mark_set(self, location, mark, unused_data):
+		bounds = self.get_buffer().get_selection_bounds()
+		if bounds:
+			clipboard = self.get_clipboard(gtk.gdk.SELECTION_PRIMARY)
+			clipboard.set_text(self.get_selected_text())
+
+	def get_selected_text(self):
+		bounds = self.get_buffer().get_selection_bounds()
+		selection = ''
+		if bounds:
+			(search_iter, end) = bounds
+
+			while (search_iter.compare(end)):
+				character = search_iter.get_char()
+				if character == u'\ufffc':
+					anchor = search_iter.get_child_anchor()
+					if anchor:
+						text = anchor.get_data('plaintext')
+						if text:
+							selection+=text
+					else:
+						selection+=character
+				else:
+					selection+=character
+				search_iter.forward_char()
+		return selection
 
 change_cursor = None
 
