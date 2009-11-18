@@ -112,7 +112,7 @@ class NonBlockingClient:
 				log.debug('calling on_proxy_failure cb')
 				self.on_proxy_failure(reason=message)
 			else:
-				log.debug('ccalling on_connect_failure cb')
+				log.debug('calling on_connect_failure cb')
 				self.on_connect_failure()
 		else:
 			# we are connected to XMPP server
