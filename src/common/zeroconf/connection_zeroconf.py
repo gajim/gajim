@@ -53,7 +53,6 @@ from connection_handlers_zeroconf import *
 class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 	'''Connection class'''
 	def __init__(self, name):
-		CommonConnection.__init__(self, name)
 		ConnectionHandlersZeroconf.__init__(self)
 		# system username
 		self.username = None
@@ -64,7 +63,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 		self.password = 'zeroconf'
 		self.autoconnect = False
 
-		self.get_config_values_or_default()
+		CommonConnection.__init__(self, name)
 
 	def get_config_values_or_default(self):
 		''' get name, host, port from config, or
