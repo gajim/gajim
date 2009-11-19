@@ -1860,9 +1860,23 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
 				continue
 			name = item.getAttr('name')
-			groups=[]
+			contact = gajim.contact.get_contact(self.name, jid)
+			groups = []
+			same_groups = True
 			for group in item.getTags('group'):
 				groups.append(group.getData())
+				# check that all suggested groups are in the groups we have for this
+				# contact
+				if not contact or group not in contact.groups:
+					same_groups = False
+			if contact:
+				# check that all groups we have for this contact are in the
+				# suggested groups
+				for group in contact.groups:
+					if group not in groups:
+						same_groups = False
+				if contact.subscription in ('both', 'to') and same_groups:
+					continue
 			exchange_items_list[jid] = []
 			exchange_items_list[jid].append(name)
 			exchange_items_list[jid].append(groups)
