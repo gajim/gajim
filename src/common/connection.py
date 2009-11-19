@@ -553,6 +553,7 @@ class CommonConnection:
 			self.connect_and_init(show, msg, sign_msg)
 
 		elif show == 'offline':
+			self.connected = 0
 			if self.connection:
 				p = common.xmpp.Presence(typ = 'unavailable')
 				p = self.add_sha(p, False)
