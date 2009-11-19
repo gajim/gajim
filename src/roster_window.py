@@ -1898,9 +1898,7 @@ class RosterWindow:
 
 	def send_pep(self, account, pep_dict):
 		connection = gajim.connections[account]
-		if connection.is_zeroconf:
-			return
-		
+
 		if 'activity' in pep_dict:
 			activity = pep_dict['activity']
 			subactivity = pep_dict.get('subactivity', None)
@@ -1917,8 +1915,6 @@ class RosterWindow:
 			connection.retract_mood()
 		
 	def delete_pep(self, jid, account):
-		if gajim.connections[account].is_zeroconf:
-			return
 		if jid == gajim.get_jid_from_account(account):
 			gajim.connections[account].pep = {}
 			self.draw_account(account)

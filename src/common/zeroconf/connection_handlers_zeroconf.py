@@ -35,6 +35,7 @@ from common import helpers
 from common import gajim
 from common.zeroconf import zeroconf
 from common.commands import ConnectionCommands
+from common.pep import ConnectionPEP
 
 import logging
 log = logging.getLogger('gajim.c.z.connection_handlers_zeroconf')
@@ -376,7 +377,7 @@ class ConnectionBytestream(connection_handlers.ConnectionBytestream):
 		raise common.xmpp.NodeProcessed
 
 class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream,
-ConnectionCommands, connection_handlers.ConnectionHandlersBase):
+ConnectionCommands, ConnectionPEP, connection_handlers.ConnectionHandlersBase):
 	def __init__(self):
 		ConnectionVcard.__init__(self)
 		ConnectionBytestream.__init__(self)
