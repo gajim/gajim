@@ -17,16 +17,24 @@
 Provides an actual implementation for the standard commands.
 """
 
+from time import localtime, strftime
+from datetime import date
+
 import dialogs
 from common import gajim
 from common import helpers
 from common.exceptions import GajimGeneralException
+from common.logger import Constants
 
 from ..errors import CommandError
 from ..framework import CommandContainer, command, documentation
 from ..mapping import generate_usage
 
 from hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
+
+# This holds constants fron the logger, which we'll be using in some of our
+# commands.
+lc = Constants()
 
 class StandardCommonCommands(CommandContainer):
     """
@@ -83,6 +91,42 @@ class StandardCommonCommands(CommandContainer):
     @documentation(_("Send action (in the third person) to the current chat"))
     def me(self, action):
         self.send("/me %s" % action)
+
+    @command('lastlog', overlap=True)
+    @documentation(_("Show logged messages which mention given text"))
+    def grep(self, text, limit=None):
+        results = gajim.logger.get_search_results_for_query(self.contact.jid,
+                text, self.account)
+
+        if not results:
+            raise CommandError(_("%s: Nothing found") % text)
+
+        if limit:
+            try:
+                results = results[len(results) - int(limit):]
+            except ValueError:
+                raise CommandError(_("Limit must be an integer"))
+
+        for row in results:
+            contact, time, kind, show, message, subject = row
+
+            if not contact:
+                if kind == lc.KIND_CHAT_MSG_SENT:
+                    contact = gajim.nicks[self.account]
+                else:
+                    contact = self.contact.name
+
+            time_obj = localtime(time)
+            date_obj = date.fromtimestamp(time)
+            date_ = strftime('%Y-%m-%d', time_obj)
+            time_ = strftime('%H:%M:%S', time_obj)
+
+            if date_obj == date.today():
+                formatted = "[%s] %s: %s" % (time_, contact, message)
+            else:
+                formatted = "[%s, %s] %s: %s" % (date_, time_, contact, message)
+
+            self.echo(formatted)
 
 class StandardChatCommands(CommandContainer):
     """
