@@ -322,7 +322,7 @@ class ProfileWindow:
 		nick = ''
 		if 'NICKNAME' in vcard_:
 			nick = vcard_['NICKNAME']
-			gajim.connections[self.account].send_nickname(self.account, nick)
+			gajim.connections[self.account].send_nickname(nick)
 		if nick == '':
 			nick = gajim.config.get_per('accounts', self.account, 'name')
 		gajim.nicks[self.account] = nick
