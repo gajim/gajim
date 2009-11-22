@@ -247,12 +247,12 @@ class AbstractPEP(object):
 			acc.pep[self.type] = self
 	
 	def asPixbufIcon(self):
-		'''To be implemented by subclasses'''
-		raise NotImplementedError
+		'''SHOULD be implemented by subclasses'''
+		return None
 	
 	def asMarkupText(self):
-		'''To be implemented by subclasses'''
-		raise NotImplementedError
+		'''SHOULD be implemented by subclasses'''
+		return ''
 	
 	
 class UserMoodPEP(AbstractPEP):
@@ -287,14 +287,14 @@ class UserMoodPEP(AbstractPEP):
 	def asMarkupText(self):
 		assert not self._retracted
 		untranslated_mood = self._pep_specific_data['mood']
-		mood = _translate_mood(untranslated_mood)
+		mood = self._translate_mood(untranslated_mood)
 		markuptext = '<b>%s</b>' % gobject.markup_escape_text(mood)		
 		if 'text' in self._pep_specific_data:
 			text = self._pep_specific_data['text']
 			markuptext += ' (%s)' % gobject.markup_escape_text(text)
 		return markuptext
 
-	def _translate_mood(mood):
+	def _translate_mood(self, mood):
 		if mood in MOODS:
 			return MOODS[mood]
 		else:
@@ -446,20 +446,25 @@ SUPPORTED_PERSONAL_USER_EVENTS = [UserMoodPEP, UserTunePEP, UserActivityPEP,
 											 UserNicknamePEP]
 
 class ConnectionPEP(object):
-		
+
+	def __init__(self, account, dispatcher, pubsub_connection):
+		self._account = account
+		self._dispatcher = dispatcher
+		self._pubsub_connection = pubsub_connection
+	
 	def _pubsubEventCB(self, xmpp_dispatcher, msg):
 		''' Called when we receive <message /> with pubsub event. '''
 		if msg.getTag('error'):
 			log.debug('PubsubEventCB received error stanza. Ignoring')
-			raise NodeProcessed
+			raise xmpp.NodeProcessed
 		
 		jid = helpers.get_full_jid_from_iq(msg)
 		event_tag = msg.getTag('event')
 
 		for pep_class in SUPPORTED_PERSONAL_USER_EVENTS:
-			pep = pep_class.get_tag_as_PEP(jid, self.name, event_tag)
+			pep = pep_class.get_tag_as_PEP(jid, self._account, event_tag)
 			if pep:
-				self.dispatch('PEP_RECEIVED', (jid, pep.type))
+				self._dispatcher.dispatch('PEP_RECEIVED', (jid, pep.type))
 		
 		items = event_tag.getTag('items')
 		if items:
@@ -468,7 +473,8 @@ class ConnectionPEP(object):
 				if entry:
 					# for each entry in feed (there shouldn't be more than one,
 					# but to be sure...
-					self.dispatch('ATOM_ENTRY', (atom.OldEntry(node=entry),))
+					self._dispatcher.dispatch('ATOM_ENTRY',
+						(atom.OldEntry(node=entry),))
 			
 		raise xmpp.NodeProcessed
 	
@@ -483,14 +489,14 @@ class ConnectionPEP(object):
 		if message:
 			i = item.addChild('text')
 			i.addData(message)
-		self.send_pb_publish('', xmpp.NS_ACTIVITY, item, '0')
+		self._pubsub_connection.send_pb_publish('', xmpp.NS_ACTIVITY, item, '0')
 		
 	def retract_activity(self):
 		if not self.pep_supported:
 			return
 		# not all server support retract, so send empty pep first
 		self.send_activity(None)
-		self.send_pb_retract('', xmpp.NS_ACTIVITY, '0')
+		self._pubsub_connection.send_pb_retract('', xmpp.NS_ACTIVITY, '0')
 
 	def send_mood(self, mood, message=None):
 		if not self.pep_supported:
@@ -501,13 +507,13 @@ class ConnectionPEP(object):
 		if message:
 			i = item.addChild('text')
 			i.addData(message)
-		self.send_pb_publish('', xmpp.NS_MOOD, item, '0')
+		self._pubsub_connection.send_pb_publish('', xmpp.NS_MOOD, item, '0')
 		
 	def retract_mood(self):
 		if not self.pep_supported:
 			return
 		self.send_mood(None)
-		self.send_pb_retract('', xmpp.NS_MOOD, '0')
+		self._pubsub_connection.send_pb_retract('', xmpp.NS_MOOD, '0')
 		
 	def send_tune(self, artist='', title='', source='', track=0, length=0,
 	items=None):
@@ -531,28 +537,27 @@ class ConnectionPEP(object):
 			i.addData(length)
 		if items:
 			item.addChild(payload=items)
-		self.send_pb_publish('', xmpp.NS_TUNE, item, '0')
+		self._pubsub_connection.send_pb_publish('', xmpp.NS_TUNE, item, '0')
 
 	def retract_tune(self):
 		if not self.pep_supported:
 			return
 		# not all server support retract, so send empty pep first
 		self.send_tune(None)
-		self.send_pb_retract('', xmpp.NS_TUNE, '0')
+		self._pubsub_connection.send_pb_retract('', xmpp.NS_TUNE, '0')
 
 	def send_nickname(self, nick):
 		if not self.pep_supported:
 			return
 		item = xmpp.Node('nick', {'xmlns': xmpp.NS_NICK})
 		item.addData(nick)
-		self.send_pb_publish('', xmpp.NS_NICK, item, '0')
+		self._pubsub_connection.send_pb_publish('', xmpp.NS_NICK, item, '0')
 
 	def retract_nickname(self):
 		if not self.pep_supported:
 			return
 		# not all server support retract, so send empty pep first
 		self.send_nickname(None)
-		self.send_pb_retract('', xmpp.NS_NICK, '0')
-
+		self._pubsub_connection.send_pb_retract('', xmpp.NS_NICK, '0')
 
 # vim: se ts=3:

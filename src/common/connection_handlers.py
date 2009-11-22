@@ -1458,6 +1458,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		ConnectionBytestream.__init__(self)
 		ConnectionCommands.__init__(self)
 		ConnectionPubSub.__init__(self)
+		ConnectionPEP.__init__(self, account=self.name, dispatcher=self,
+			pubsub_connection=self)
 		ConnectionJingle.__init__(self)
 		ConnectionHandlersBase.__init__(self)
 		self.gmail_url = None
