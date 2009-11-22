@@ -23,9 +23,6 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import common.gajim
-from common import xmpp
-
 MOODS = {
 	'afraid':			_('Afraid'),
 	'amazed':			_('Amazed'),
@@ -194,16 +191,18 @@ ACTIVITIES = {
 
 TUNE_DATA = ['artist', 'title', 'source', 'track', 'length']
 
+import gobject
+import gtk
+
 import logging
 log = logging.getLogger('gajim.c.pep')
 
-import helpers
-import atom
-import gtkgui_helpers
-import gobject
-import gajim
-import gtk
+from common import helpers
+from common import atom
+from common import xmpp
+from common import gajim
 
+import gtkgui_helpers
 
 def translate_mood(mood):
 	if mood in MOODS:
@@ -230,7 +229,7 @@ class AbstractPEP(object):
 		self._pep_specific_data, self._retracted = self._extract_info(items)
 		
 		self._update_contacts(jid, account)
-		if jid == common.gajim.get_jid_from_account(account):
+		if jid == gajim.get_jid_from_account(account):
 			self._update_account(account)
 	
 	def _extract_info(self, items):
@@ -238,7 +237,7 @@ class AbstractPEP(object):
 		raise NotImplementedError
 	
 	def _update_contacts(self, jid, account):	
-		for contact in common.gajim.contacts.get_contacts(account, jid):		
+		for contact in gajim.contacts.get_contacts(account, jid):		
 			if self._retracted:
 				if self.type in contact.pep:
 					del contact.pep[self.type]
@@ -246,7 +245,7 @@ class AbstractPEP(object):
 				contact.pep[self.type] = self
 				
 	def _update_account(self, account):		
-		acc = common.gajim.connections[account]	
+		acc = gajim.connections[account]	
 		if self._retracted:
 			if self.type in acc.pep:
 				del acc.pep[self.type]
@@ -266,7 +265,7 @@ class UserMoodPEP(AbstractPEP):
 	'''XEP-0107: User Mood'''
 	
 	type = 'mood'
-	namespace = common.xmpp.NS_MOOD
+	namespace = xmpp.NS_MOOD
 		
 	def _extract_info(self, items):
 		mood_dict = {}
@@ -306,7 +305,7 @@ class UserTunePEP(AbstractPEP):
 	'''XEP-0118: User Tune'''
 	
 	type = 'tune'
-	namespace = common.xmpp.NS_TUNE
+	namespace = xmpp.NS_TUNE
 					
 	def _extract_info(self, items):		
 		tune_dict = {}
@@ -352,7 +351,7 @@ class UserActivityPEP(AbstractPEP):
 	'''XEP-0108: User Activity'''
 	
 	type = 'activity'
-	namespace = common.xmpp.NS_ACTIVITY
+	namespace = xmpp.NS_ACTIVITY
 			
 	def _extract_info(self, items):
 		activity_dict = {}
@@ -418,7 +417,7 @@ class UserNicknamePEP(AbstractPEP):
 	'''XEP-0172: User Nickname'''
 	
 	type = 'nickname'
-	namespace = common.xmpp.NS_NICK
+	namespace = xmpp.NS_NICK
 			
 	def _extract_info(self, items):	
 		nick = ''
@@ -434,16 +433,16 @@ class UserNicknamePEP(AbstractPEP):
 	def _update_contacts(self, jid, account):
 		# TODO: use dict instead
 		nick = '' if self._retracted else self._pep_specific_data
-		for contact in common.gajim.contacts.get_contacts(account, jid):
+		for contact in gajim.contacts.get_contacts(account, jid):
 			contact.contact_name = nick
 				
 	def _update_account(self, account):
 		# TODO: use dict instead
 		if self._retracted:
-			common.gajim.nicks[account] = common.gajim.config.get_per('accounts',
+			gajim.nicks[account] = gajim.config.get_per('accounts',
 				account, 'name')
 		else:
-			common.gajim.nicks[account] = self._pep_specific_data
+			gajim.nicks[account] = self._pep_specific_data
 
 		
 SUPPORTED_PERSONAL_USER_EVENTS = [UserMoodPEP, UserTunePEP, UserActivityPEP,
@@ -454,8 +453,8 @@ class ConnectionPEP(object):
 	def _pubsubEventCB(self, xmpp_dispatcher, msg):
 		''' Called when we receive <message /> with pubsub event. '''
 		if msg.getTag('error'):
-			log.warning('PubsubEventCB received error stanza')
-			return
+			log.debug('PubsubEventCB received error stanza. Ignoring')
+			raise NodeProcessed
 		
 		jid = helpers.get_full_jid_from_iq(msg)
 		event_tag = msg.getTag('event')
@@ -474,7 +473,7 @@ class ConnectionPEP(object):
 					# but to be sure...
 					self.dispatch('ATOM_ENTRY', (atom.OldEntry(node=entry),))
 			
-		raise common.xmpp.NodeProcessed
+		raise xmpp.NodeProcessed
 	
 	def send_activity(self, activity, subactivity=None, message=None):
 		if not self.pep_supported:
