@@ -204,12 +204,6 @@ from common import gajim
 
 import gtkgui_helpers
 
-def translate_mood(mood):
-	if mood in MOODS:
-		return MOODS[mood]
-	else:
-		return mood
-
 
 class AbstractPEP(object):
 	
@@ -293,12 +287,18 @@ class UserMoodPEP(AbstractPEP):
 	def asMarkupText(self):
 		assert not self._retracted
 		untranslated_mood = self._pep_specific_data['mood']
-		mood = translate_mood(untranslated_mood)
+		mood = _translate_mood(untranslated_mood)
 		markuptext = '<b>%s</b>' % gobject.markup_escape_text(mood)		
 		if 'text' in self._pep_specific_data:
 			text = self._pep_specific_data['text']
 			markuptext += ' (%s)' % gobject.markup_escape_text(text)
 		return markuptext
+
+	def _translate_mood(mood):
+		if mood in MOODS:
+			return MOODS[mood]
+		else:
+			return mood
 
 
 class UserTunePEP(AbstractPEP):
