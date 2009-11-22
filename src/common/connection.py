@@ -159,6 +159,7 @@ class CommonConnection:
 			resource = Template(resource).safe_substitute({
 				'hostname': socket.gethostname()
 			})
+		return resource
 
 	def dispatch(self, event, data):
 		'''always passes account name as first param'''
