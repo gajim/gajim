@@ -431,16 +431,13 @@ class UserNicknamePEP(AbstractPEP):
 		return (nick, retracted)		
 						
 	def _update_contacts(self, jid, account):
-		# TODO: use dict instead
 		nick = '' if self._retracted else self._pep_specific_data
 		for contact in gajim.contacts.get_contacts(account, jid):
 			contact.contact_name = nick
 				
 	def _update_account(self, account):
-		# TODO: use dict instead
 		if self._retracted:
-			gajim.nicks[account] = gajim.config.get_per('accounts',
-				account, 'name')
+			gajim.nicks[account] = gajim.config.get_per('accounts', account, 'name')
 		else:
 			gajim.nicks[account] = self._pep_specific_data
 
