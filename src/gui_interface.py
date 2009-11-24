@@ -1945,10 +1945,10 @@ class Interface:
 		# ('INSECURE_SSL_CONNECTION', account, (connection, connection_type))
 		server = gajim.config.get_per('accounts', account, 'hostname')
 		def on_ok(is_checked):
-			del self.instances[account]['online_dialog']['insecure_ssl']
 			if not is_checked[0]:
 				on_cancel()
 				return
+			del self.instances[account]['online_dialog']['insecure_ssl']
 			if is_checked[1]:
 				gajim.config.set_per('accounts', account,
 					'warn_when_insecure_ssl_connection', False)
