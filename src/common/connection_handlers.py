@@ -1860,7 +1860,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
 				continue
 			name = item.getAttr('name')
-			contact = gajim.contact.get_contact(self.name, jid)
+			contact = gajim.contacts.get_contact(self.name, jid)
 			groups = []
 			same_groups = True
 			for group in item.getTags('group'):
