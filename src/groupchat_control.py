@@ -29,6 +29,7 @@
 
 import os
 import time
+import locale
 import gtk
 import pango
 import gobject
@@ -393,9 +394,7 @@ class GroupchatControl(ChatControlBase):
 		nick1 = nick1.decode('utf-8')
 		nick2 = nick2.decode('utf-8')
 		if type1 == 'role':
-			if nick1 < nick2:
-				return -1
-			return 1
+			return locale.strcoll(nick1, nick2)
 		if type1 == 'contact':
 			gc_contact1 = gajim.contacts.get_gc_contact(self.account,
 				self.room_jid, nick1)
@@ -419,11 +418,7 @@ class GroupchatControl(ChatControlBase):
 		# We compare names
 		name1 = gc_contact1.get_shown_name()
 		name2 = gc_contact2.get_shown_name()
-		if name1.lower() < name2.lower():
-			return -1
-		if name2.lower() < name1.lower():
-			return 1
-		return 0
+		return locale.strcoll(name1.lower(), name2.lower())
 
 	def on_msg_textview_populate_popup(self, textview, menu):
 		'''we override the default context menu and we prepend Clear
