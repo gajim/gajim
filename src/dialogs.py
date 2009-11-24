@@ -3071,6 +3071,8 @@ class PrivacyListWindow:
 		self.global_rules = {}
 		self.list_of_groups = {}
 
+		self.max_order = 0
+
 		# Default Edit Values
 		self.edit_rule_type = 'jid'
 		self.allow_deny = 'allow'
@@ -3166,6 +3168,8 @@ class PrivacyListWindow:
 			else:
 				text_item = _('Order: %(order)s, action: %(action)s') % \
 					{'order': rule['order'], 'action': rule['action']}
+			if int(rule['order']) > self.max_order:
+				self.max_order = int(rule['order'])
 			self.global_rules[text_item] = rule
 			self.list_of_rules_combobox.append_text(text_item)
 		if len(rules) == 0:
@@ -3313,7 +3317,7 @@ class PrivacyListWindow:
 		self.edit_view_status_checkbutton.set_active(False)
 		self.edit_send_status_checkbutton.set_active(False)
 		self.edit_all_checkbutton.set_active(False)
-		self.edit_order_spinbutton.set_value(1)
+		self.edit_order_spinbutton.set_value(self.max_order + 1)
 		self.edit_type_group_combobox.set_active(0)
 		self.edit_type_subscription_combobox.set_active(0)
 		self.add_edit_rule_label.set_label(
@@ -3356,6 +3360,8 @@ class PrivacyListWindow:
 	def on_save_rule_button_clicked(self, widget):
 		tags=[]
 		current_tags = self.get_current_tags()
+		if int(current_tags['order']) > self.max_order:
+			self.max_order = int(current_tags['order'])
 		if self.active_rule == '':
 			tags.append(current_tags)
 
