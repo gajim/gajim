@@ -3146,6 +3146,7 @@ class AccountCreationWizardWindow:
 		self.xml = gtkgui_helpers.get_glade(
 			'account_creation_wizard_window.glade')
 		self.window = self.xml.get_widget('account_creation_wizard_window')
+		self.window.set_transient_for(gajim.interface.roster.window)
 
 		completion = gtk.EntryCompletion()
 		# Connect events from comboboxentry.child
