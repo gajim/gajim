@@ -33,5 +33,4 @@ export datadir=@DATADIR@/gajim
 PYTHON_EXEC=@PYTHON@
 
 cd ${datadir}/src
-export PYTHONPATH="$PYTHONPATH:@LIBDIR@/gajim"
 exec ${PYTHON_EXEC} -OO $APP.py "$@"
