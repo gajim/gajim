@@ -38,6 +38,7 @@ import gobject
 import os
 import sys
 import time
+import locale
 
 import common.sleepy
 import history_window
@@ -1558,9 +1559,7 @@ class RosterWindow:
 		account1 = account1.decode('utf-8')
 		account2 = account2.decode('utf-8')
 		if type1 == 'account':
-			if account1 < account2:
-				return -1
-			return 1
+			return locale.strcoll(account1, account2)
 		jid1 = model[iter1][C_JID].decode('utf-8')
 		jid2 = model[iter2][C_JID].decode('utf-8')
 		if type1 == 'contact':
@@ -1607,20 +1606,23 @@ class RosterWindow:
 			elif show1 > show2:
 				return 1
 		# We compare names
-		if name1.lower() < name2.lower():
+		cmp_result = locale.strcoll(name1.lower(), name2.lower())
+		if cmp_result < 0:
 			return -1
-		if name2.lower() < name1.lower():
+		if cmp_result > 0:
 			return 1
 		if type1 == 'contact' and type2 == 'contact':
 			# We compare account names
-			if account1.lower() < account2.lower():
+			cmp_result = locale.strcoll(account1.lower(), account2.lower())
+			if cmp_result < 0:
 				return -1
-			if account2.lower() < account1.lower():
+			if cmp_result > 0:
 				return 1
 			# We compare jids
-			if jid1.lower() < jid2.lower():
+			cmp_result = locale.strcoll(jid1.lower(), jid2.lower())
+			if cmp_result < 0:
 				return -1
-			if jid2.lower() < jid1.lower():
+			if cmp_result > 0:
 				return 1
 		return 0
 
