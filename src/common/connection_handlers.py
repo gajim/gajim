@@ -1735,7 +1735,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			# wrong answer
 			return
 		tzo = qp.getTag('tzo').getData()
-		if tzo == 'Z':
+		if tzo.lower() == 'z':
 			tzo = '0:0'
 		tzoh, tzom = tzo.split(':')
 		utc_time = qp.getTag('utc').getData()
