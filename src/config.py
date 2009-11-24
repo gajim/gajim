@@ -297,8 +297,6 @@ class PreferencesWindow:
 			systray_combobox.set_active(1)
 		else:
 			systray_combobox.set_active(2)
-		if not gajim.interface.systray_capabilities:
-			systray_combobox.set_sensitive(False)
 
 		# sounds
 		if gajim.config.get('sounds_on'):
