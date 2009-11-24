@@ -3122,7 +3122,7 @@ class Interface:
 		gajim.ipython_window = window
 
 	def run(self):
-		if self.systray_capabilities and gajim.config.get('trayicon') != 'never':
+		if gajim.config.get('trayicon') != 'never':
 			self.show_systray()
 
 		self.roster = roster_window.RosterWindow()
@@ -3357,21 +3357,9 @@ class Interface:
 		gtkgui_helpers.make_jabber_state_images()
 
 		self.systray_enabled = False
-		self.systray_capabilities = False
 
-		if (os.name == 'nt'):
-			import statusicon
-			self.systray = statusicon.StatusIcon()
-			self.systray_capabilities = True
-		else: # use ours, not GTK+ one
-			# [FIXME: remove this when we migrate to 2.10 and we can do
-			# cool tooltips somehow and (not dying to keep) animation]
-			import systray
-			self.systray_capabilities = systray.HAS_SYSTRAY_CAPABILITIES
-			if self.systray_capabilities:
-				self.systray = systray.Systray()
-			else:
-				gajim.config.set('trayicon', 'never')
+		import statusicon
+		self.systray = statusicon.StatusIcon()
 
 		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'gajim.png')
 		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)

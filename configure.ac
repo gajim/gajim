@@ -39,7 +39,7 @@ AM_NLS
 dnl ****
 dnl pygtk and gtk+
 dnl ****
-PKG_CHECK_MODULES([PYGTK], [gtk+-2.0 >= 2.12.0 pygtk-2.0 >= 2.12.0])
+PKG_CHECK_MODULES([PYGTK], [gtk+-2.0 >= 2.16.0 pygtk-2.0 >= 2.16.0])
 AC_SUBST(PYGTK_CFLAGS)
 AC_SUBST(PYGTK_LIBS)
 PYGTK_DEFS=`$PKG_CONFIG --variable=defsdir pygtk-2.0`
@@ -49,15 +49,6 @@ AM_PATH_PYTHON([2.5])
 if test "x$PYTHON" = "x:"; then
 	AC_MSG_ERROR([Python not found])
 fi
-
-dnl ****
-dnl tray icon
-dnl ****
-AC_ARG_ENABLE(trayicon,
-  [  --disable-trayicon      do not build trayicon module [default yes]],
-  enable_trayicon=$enableval, enable_trayicon=yes)
-test "x$enable_trayicon" = "xyes" && have_trayicon=true || have_trayicon=false
-AM_CONDITIONAL(BUILD_TRAYICON, $have_trayicon)
 
 ACLOCAL_AMFLAGS="\${ACLOCAL_FLAGS}"
 AC_SUBST(ACLOCAL_AMFLAGS)
@@ -91,8 +82,3 @@ AC_CONFIG_FILES([
 	po/Makefile.in
 ])
 AC_OUTPUT
-echo " 
-***************************** 
-  Build features:
-    trayicon ......... ${have_trayicon}
-*****************************"

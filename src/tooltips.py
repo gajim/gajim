@@ -269,7 +269,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 			for line in acct['event_lines']:
 				self.add_text_row('  ' + line, 1)
 
-	def populate(self, data):
+	def populate(self, data=''):
 		self.create_window()
 		self.create_table()
 
@@ -280,7 +280,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 		self.table.set_property('column-spacing', 1)
 
 		self.hbox.add(self.table)
-		self.win.add(self.hbox)
+		self.hbox.show_all()
 
 class GCTooltip(BaseTooltip):
 	''' Tooltip that is shown in the GC treeview '''
