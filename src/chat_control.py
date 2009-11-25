@@ -90,8 +90,9 @@ if gajim.config.get('use_speller') and HAS_GTK_SPELL:
 
 ################################################################################
 class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
-	'''A base class containing a banner, ConversationTextview, MessageTextView
-	'''
+	"""
+	A base class containing a banner, ConversationTextview, MessageTextView
+	"""
 
 	def make_href(self, match):
 		url_color = gajim.config.get('urlmsgcolor')
@@ -99,7 +100,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 			url_color, match.group())
 
 	def get_font_attrs(self):
-		''' get pango font attributes for banner from theme settings '''
+		"""
+		Get pango font attributes for banner from theme settings
+		"""
 		theme = gajim.config.get('roster_theme')
 		bannerfont = gajim.config.get_per('themes', theme, 'bannerfont')
 		bannerfontattrs = gajim.config.get_per('themes', theme, 'bannerfontattrs')
@@ -133,33 +136,45 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 			type_]))
 
 	def draw_banner(self):
-		'''Draw the fat line at the top of the window that
-		houses the icon, jid, ...
-		'''
+		"""
+		Draw the fat line at the top of the window that houses the icon, jid, etc
+
+		Derived types MAY implement this.
+		"""
 		self.draw_banner_text()
 		self._update_banner_state_image()
-		# Derived types MAY implement this
 
 	def draw_banner_text(self):
-		pass # Derived types SHOULD implement this
+		"""
+		Derived types SHOULD implement this
+		"""
+		pass
 
 	def update_ui(self):
+		"""
+		Derived types SHOULD implement this
+		"""
 		self.draw_banner()
-		# Derived types SHOULD implement this
 
 	def repaint_themed_widgets(self):
+		"""
+		Derived types MAY implement this
+		"""
 		self._paint_banner()
 		self.draw_banner()
-		# Derived classes MAY implement this
 
 	def _update_banner_state_image(self):
-		pass # Derived types MAY implement this
+		"""
+		Derived types MAY implement this
+		"""
+		pass
 
 	def handle_message_textview_mykey_press(self, widget, event_keyval,
-	event_keymod):
-		# Derived should implement this rather than connecting to the event
-		# itself.
-
+			event_keymod):
+		"""
+		Derives types SHOULD implement this, rather than connection to the even
+		itself
+		"""
 		event = gtk.gdk.Event(gtk.gdk.KEY_PRESS)
 		event.keyval = event_keyval
 		event.state = event_keymod
@@ -212,7 +227,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		helpers.launch_browser_mailer('url', url)
 
 	def __init__(self, type_id, parent_win, widget_name, contact, acct,
-	resource = None):
+			resource = None):
 		if resource is None:
 			# We very likely got a contact with a random resource.
 			# This is bad, we need the highest for caps etc.
@@ -386,7 +401,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 				dialogs.AspellDictError(lang)
 
 	def on_banner_label_populate_popup(self, label, menu):
-		'''We override the default context menu and add our own menutiems'''
+		"""
+		Override the default context menu and add our own menutiems
+		"""
 		item = gtk.SeparatorMenuItem()
 		menu.prepend(item)
 
@@ -400,8 +417,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		menu.show_all()
 
 	def on_msg_textview_populate_popup(self, textview, menu):
-		'''we override the default context menu and we prepend an option to switch
-		languages'''
+		"""
+		Override the default context menu and we prepend an option to switch
+		languages
+		"""
 		def _on_select_dictionary(widget, lang):
 			per_type = 'contacts'
 			if self.type_id == message_control.TYPE_GC:
@@ -445,12 +464,16 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
 	# moved from ChatControl
 	def _on_banner_eventbox_button_press_event(self, widget, event):
-		'''If right-clicked, show popup'''
+		"""
+		If right-clicked, show popup
+		"""
 		if event.button == 3: # right click
 			self.parent_win.popup_menu(event)
 
 	def _on_send_button_clicked(self, widget):
-		'''When send button is pressed: send the current message'''
+		"""
+		When send button is pressed: send the current message
+		"""
 		if gajim.connections[self.account].connected < 2: # we are not connected
 			dialogs.ErrorDialog(_('A connection is not available'),
 				_('Your message can not be sent until you are connected.'))
@@ -465,7 +488,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		self.send_message(message, xhtml=xhtml)
 
 	def _paint_banner(self):
-		'''Repaint banner with theme color'''
+		"""
+		Repaint banner with theme color
+		"""
 		theme = gajim.config.get('roster_theme')
 		bgcolor = gajim.config.get_per('themes', theme, 'bannerbgcolor')
 		textcolor = gajim.config.get_per('themes', theme, 'bannertextcolor')
@@ -512,9 +537,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		self.handlers[id_] = widget
 
 	def _on_style_set_event(self, widget, style, *opts):
-		'''set style of widget from style class *.Frame.Eventbox
+		"""
+		Set style of widget from style class *.Frame.Eventbox
 			opts[0] == True -> set fg color
-			opts[1] == True -> set bg color'''
+			opts[1] == True -> set bg color
+		"""
 		banner_eventbox = self.xml.get_widget('banner_eventbox')
 		self.disconnect_style_event(widget)
 		if opts[1]:
@@ -589,11 +616,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		return False
 
 	def _on_message_textview_mykeypress_event(self, widget, event_keyval,
-		event_keymod):
-		'''When a key is pressed:
-		if enter is pressed without the shift key, message (if not empty) is sent
-		and printed in the conversation'''
-
+			event_keymod):
+		"""
+		When a key is pressed: if enter is pressed without the shift key, message
+		(if not empty) is sent and printed in the conversation
+		"""
 		# NOTE: handles mykeypress which is custom signal connected to this
 		# CB in new_tab(). for this singal see message_textview.py
 		message_textview = widget
@@ -652,8 +679,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 				event_keymod)
 
 	def _on_drag_data_received(self, widget, context, x, y, selection,
-		target_type, timestamp):
-		pass # Derived classes SHOULD implement this method
+			target_type, timestamp):
+		"""
+		Derived types SHOULD implement this
+		"""
+		pass
 
 	def _on_drag_leave(self, widget, context, time):
 		# FIXME: DND on non editable TextView, find a better way
@@ -668,10 +698,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 			self.conv_textview.tv.set_editable(True)
 
 	def send_message(self, message, keyID='', type_='chat', chatstate=None,
-	msg_id=None, composing_xep=None, resource=None,
-	xhtml=None, callback=None, callback_args=[], process_commands=True):
-		'''Send the given message to the active tab. Doesn't return None if error
-		'''
+			msg_id=None, composing_xep=None, resource=None, xhtml=None,
+			callback=None, callback_args=[], process_commands=True):
+		"""
+		Send the given message to the active tab. Doesn't return None if error
+		"""
 		if not message or message == '\n':
 			return None
 
@@ -711,10 +742,13 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		self.orig_msg = None
 
 	def print_conversation_line(self, text, kind, name, tim,
-	other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
-	count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False,
-	xep0184_id=None, graphics=True):
-		'''prints 'chat' type messages'''
+			other_tags_for_name=[], other_tags_for_time=[],
+			other_tags_for_text=[], count_as_new=True, subject=None,
+			old_kind=None, xhtml=None, simple=False, xep0184_id=None,
+			graphics=True):
+		"""
+		Print 'chat' type messages
+		"""
 		jid = self.contact.jid
 		full_jid = self.get_full_jid()
 		textview = self.conv_textview
@@ -789,8 +823,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 				self.parent_win.show_title(False, self) # Disabled Urgent hint
 
 	def toggle_emoticons(self):
-		'''hide show emoticons_button and make sure emoticons_menu is always there
-		when needed'''
+		"""
+		Hide show emoticons_button and make sure emoticons_menu is always there
+		when needed
+		"""
 		emoticons_button = self.xml.get_widget('emoticons_button')
 		if gajim.config.get('emoticons_theme'):
 			emoticons_button.show()
@@ -808,12 +844,16 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		self.msg_textview.grab_focus()
 
 	def on_emoticons_button_clicked(self, widget):
-		'''popup emoticons menu'''
+		"""
+		Popup emoticons menu
+		"""
 		gajim.interface.emoticon_menuitem_clicked = self.append_emoticon
 		gajim.interface.popup_emoticons_under_button(widget, self.parent_win)
 
 	def on_formattings_button_clicked(self, widget):
-		'''popup formattings menu'''
+		"""
+		Popup formattings menu
+		"""
 		menu = gtk.Menu()
 
 		menuitems = ((_('Bold'), 'bold'),
@@ -875,7 +915,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
 
 	def on_actions_button_clicked(self, widget):
-		'''popup action menu'''
+		"""
+		Popup action menu
+		"""
 		menu = self.prepare_context_menu(hide_buttonbar_items=True)
 		menu.show_all()
 		gtkgui_helpers.popup_emoticons_under_button(menu, widget,
@@ -895,7 +937,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		buffer_.delete(start, end)
 
 	def _on_history_menuitem_activate(self, widget = None, jid = None):
-		'''When history menuitem is pressed: call history window'''
+		"""
+		When history menuitem is pressed: call history window
+		"""
 		if not jid:
 			jid = self.contact.jid
 
@@ -907,7 +951,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 				history_window.HistoryWindow(jid, self.account)
 
 	def _on_send_file(self, gc_contact=None):
-		'''gc_contact can be set when we are in a groupchat control'''
+		"""
+		gc_contact can be set when we are in a groupchat control
+		"""
 		def _on_ok(c):
 			gajim.interface.instances['file_transfers'].show_file_send_request(
 				self.account, c)
@@ -935,7 +981,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		_on_ok(self.contact)
 
 	def on_minimize_menuitem_toggled(self, widget):
-		'''When a grouchat is minimized, unparent the tab, put it in roster etc'''
+		"""
+		When a grouchat is minimized, unparent the tab, put it in roster etc
+		"""
 		old_value = False
 		minimized_gc = gajim.config.get_per('accounts', self.account,
 			'minimized_gc').split()
@@ -965,7 +1013,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
 
 	def bring_scroll_to_end(self, textview, diff_y = 0):
-		''' scrolls to the end of textview if end is not visible '''
+		"""
+		Scroll to the end of textview if end is not visible
+		"""
 		if self.scroll_to_end_id:
 			# a scroll is already planned
 			return
@@ -986,10 +1036,12 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		return False
 
 	def size_request(self, msg_textview , requisition):
-		''' When message_textview changes its size. If the new height
-		will enlarge the window, enable the scrollbar automatic policy
-		Also enable scrollbar automatic policy for horizontal scrollbar
-		if message we have in message_textview is too big'''
+		"""
+		When message_textview changes its size: if the new height will enlarge
+		the window, enable the scrollbar automatic policy.  Also enable scrollbar
+		automatic policy for horizontal scrollbar if message we have in
+		message_textview is too big
+		"""
 		if msg_textview.window is None:
 			return
 
@@ -1082,8 +1134,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 				self.redraw_after_event_removed(jid)
 
 	def redraw_after_event_removed(self, jid):
-		''' We just removed a 'printed_*' event, redraw contact in roster or
-		gc_roster and titles in	roster and msg_win '''
+		"""
+		We just removed a 'printed_*' event, redraw contact in roster or
+		gc_roster and titles in	roster and msg_win
+		"""
 		self.parent_win.redraw_tab(self)
 		self.parent_win.show_title()
 		# TODO : get the contact and check notify.get_show_in_roster()
@@ -1142,7 +1196,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		return color
 
 	def widget_set_visible(self, widget, state):
-		'''Show or hide a widget. state is bool'''
+		"""
+		Show or hide a widget
+		"""
 		# make the last message visible, when changing to "full view"
 		if not state:
 			gobject.idle_add(self.conv_textview.scroll_to_end_iter)
@@ -1154,7 +1210,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 			widget.show_all()
 
 	def chat_buttons_set_visible(self, state):
-		'''Toggle chat buttons. state is bool'''
+		"""
+		Toggle chat buttons
+		"""
 		MessageControl.chat_buttons_set_visible(self, state)
 		self.widget_set_visible(self.xml.get_widget('actions_hbox'), state)
 
@@ -1173,7 +1231,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
 ################################################################################
 class ChatControl(ChatControlBase):
-	'''A control for standard 1-1 chat'''
+	"""
+	A control for standard 1-1 chat
+	"""
 	(
 		JINGLE_STATE_NOT_AVAILABLE,
 		JINGLE_STATE_AVAILABLE,
@@ -1535,10 +1595,10 @@ class ChatControl(ChatControlBase):
 		self._set_jingle_state('video', state, sid=sid, reason=reason)
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
-		'''
-		we enter the eventbox area so we under conditions add a timeout
-		to show a bigger avatar after 0.5 sec
-		'''
+		"""
+		Enter the eventbox area so we under conditions add a timeout to show a
+		bigger avatar after 0.5 sec
+		"""
 		jid = self.contact.jid
 		is_fake = False
 		if self.type_id == message_control.TYPE_PM:
@@ -1561,13 +1621,17 @@ class ChatControl(ChatControlBase):
 				self.show_bigger_avatar, widget)
 
 	def on_avatar_eventbox_leave_notify_event(self, widget, event):
-		'''we left the eventbox area that holds the avatar img'''
+		"""
+		Left the eventbox area that holds the avatar img
+		"""
 		# did we add a timeout? if yes remove it
 		if self.show_bigger_avatar_timeout_id is not None:
 			gobject.source_remove(self.show_bigger_avatar_timeout_id)
 
 	def on_avatar_eventbox_button_press_event(self, widget, event):
-		'''If right-clicked, show popup'''
+		"""
+		If right-clicked, show popup
+		"""
 		if event.button == 3: # right click
 			menu = gtk.Menu()
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
@@ -1585,7 +1649,9 @@ class ChatControl(ChatControlBase):
 		return True
 
 	def _on_window_motion_notify(self, widget, event):
-		'''it gets called no matter if it is the active window or not'''
+		"""
+		It gets called no matter if it is the active window or not
+		"""
 		if self.parent_win.get_active_jid() == self.contact.jid:
 			# if window is the active one, change vars assisting chatstate
 			self.mouse_over_in_last_5_secs = True
@@ -1638,9 +1704,10 @@ class ChatControl(ChatControlBase):
 					banner_status_img.set_from_pixbuf(scaled_pix)
 
 	def draw_banner_text(self):
-		'''Draw the text in the fat line at the top of the window that
-		houses the name, jid.
-		'''
+		"""
+		Draw the text in the fat line at the top of the window that houses the
+		name, jid
+		"""
 		contact = self.contact
 		jid = contact.jid
 
@@ -1823,8 +1890,11 @@ class ChatControl(ChatControlBase):
 		self._show_lock_image(self.gpg_is_active, 'GPG',
 			self.gpg_is_active, loggable, True)
 
-	def _show_lock_image(self, visible, enc_type = '', enc_enabled = False, chat_logged = False, authenticated = False):
-		'''Set lock icon visibility and create tooltip'''
+	def _show_lock_image(self, visible, enc_type = '', enc_enabled = False,
+			chat_logged = False, authenticated = False):
+		"""
+		Set lock icon visibility and create tooltip
+		"""
 		#encryption %s active
 		status_string = enc_enabled and _('is') or _('is NOT')
 		#chat session %s be logged
@@ -1859,7 +1929,9 @@ class ChatControl(ChatControlBase):
 
 	def send_message(self, message, keyID='', chatstate=None, xhtml=None,
 			process_commands=True):
-		'''Send a message to contact'''
+		"""
+		Send a message to contact
+		"""
 		if message in ('', None, '\n'):
 			return None
 
@@ -1923,10 +1995,11 @@ class ChatControl(ChatControlBase):
 			process_commands=process_commands)
 
 	def check_for_possible_paused_chatstate(self, arg):
-		''' did we move mouse of that window or write something in message
-		textview in the last 5 seconds?
-		if yes we go active for mouse, composing for kbd
-		if no we go paused if we were previously composing '''
+		"""
+		Did we move mouse of that window or write something in message textview
+		in the last 5 seconds? If yes - we go active for mouse, composing for
+		kbd.  If not - we go paused if we were previously composing
+		"""
 		contact = self.contact
 		jid = contact.jid
 		current_state = contact.our_chatstate
@@ -1950,10 +2023,10 @@ class ChatControl(ChatControlBase):
 		return True # loop forever
 
 	def check_for_possible_inactive_chatstate(self, arg):
-		''' did we move mouse over that window or wrote something in message
-		textview in the last 30 seconds?
-		if yes we go active
-		if no we go inactive '''
+		"""
+		Did we move mouse over that window or wrote something in message textview
+		in the last 30 seconds? if yes - we go active. If no - we go inactive
+		"""
 		contact = self.contact
 
 		current_state = contact.our_chatstate
@@ -1983,7 +2056,9 @@ class ChatControl(ChatControlBase):
 		ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
 
 	def print_esession_details(self):
-		'''print esession settings to textview'''
+		"""
+		Print esession settings to textview
+		"""
 		e2e_is_active = bool(self.session) and self.session.enable_encryption
 		if e2e_is_active:
 			msg = _('This session is encrypted')
@@ -2005,16 +2080,19 @@ class ChatControl(ChatControlBase):
 				self.session.is_loggable(), self.session and self.session.verified_identity)
 
 	def print_conversation(self, text, frm='', tim=None, encrypted=False,
-	subject=None, xhtml=None, simple=False, xep0184_id=None):
-		'''Print a line in the conversation:
-		if frm is set to status: it's a status message
-		if frm is set to error: it's an error message
-			The difference between status and error is mainly that with error, msg
-			count as a new message (in systray and in control).
-		if frm is set to info: it's a information message
-		if frm is set to print_queue: it is incomming from queue
-		if frm is set to another value: it's an outgoing message
-		if frm is not set: it's an incomming message'''
+			subject=None, xhtml=None, simple=False, xep0184_id=None):
+		"""
+		Print a line in the conversation
+
+		If frm is set to status: it's a status message.
+		if frm is set to error: it's an error message. The difference between
+			status and error is mainly that with error, msg count as a new message
+			(in systray and in control).
+		If frm is set to info: it's a information message.
+		If frm is set to print_queue: it is incomming from queue.
+		If frm is set to another value: it's an outgoing message.
+		If frm is not set: it's an incomming message.
+		"""
 		contact = self.contact
 
 		if frm == 'status':
@@ -2152,12 +2230,12 @@ class ChatControl(ChatControlBase):
 		return tab_img
 
 	def prepare_context_menu(self, hide_buttonbar_items=False):
-		'''sets compact view menuitem active state
-		sets active and sensitivity state for toggle_gpg_menuitem
-		sets sensitivity for history_menuitem (False for tranasports)
-		and file_transfer_menuitem
-		and hide()/show() for add_to_roster_menuitem
-		'''
+		"""
+		Set compact view menuitem active state sets active and sensitivity state
+		for toggle_gpg_menuitem sets sensitivity for history_menuitem (False for
+		tranasports) and file_transfer_menuitem and hide()/show() for
+		add_to_roster_menuitem
+		"""
 		menu = gui_menu_builder.get_contact_menu(self.contact, self.account,
 			use_multiple_contacts=False, show_start_chat=False,
 			show_encryption=True, control=self,
@@ -2165,9 +2243,11 @@ class ChatControl(ChatControlBase):
 		return menu
 
 	def send_chatstate(self, state, contact = None):
-		''' sends OUR chatstate as STANDLONE chat state message (eg. no body)
+		"""
+		Send OUR chatstate as STANDLONE chat state message (eg. no body)
 		to contact only if new chatstate is different from the previous one
-		if jid is not specified, send to active tab'''
+		if jid is not specified, send to active tab
+		"""
 		# JEP 85 does not allow resending the same chatstate
 		# this function checks for that and just returns so it's safe to call it
 		# with same state.
@@ -2313,7 +2393,9 @@ class ChatControl(ChatControlBase):
 		on_yes(self)
 
 	def handle_incoming_chatstate(self):
-		''' handle incoming chatstate that jid SENT TO us '''
+		"""
+		Handle incoming chatstate that jid SENT TO us
+		"""
 		self.draw_banner_text()
 		# update chatstate in tab for this chat
 		self.parent_win.redraw_tab(self, self.contact.chatstate)
@@ -2495,8 +2577,9 @@ class ChatControl(ChatControlBase):
 			self.conv_textview.print_empty_line()
 
 	def read_queue(self):
-		'''read queue and print messages containted in it'''
-
+		"""
+		Read queue and print messages containted in it
+		"""
 		jid = self.contact.jid
 		jid_with_resource = jid
 		if self.resource:
@@ -2551,8 +2634,10 @@ class ChatControl(ChatControlBase):
 				control.remove_contact(nick)
 
 	def show_bigger_avatar(self, small_avatar):
-		'''resizes the avatar, if needed, so it has at max half the screen size
-		and shows it'''
+		"""
+		Resize the avatar, if needed, so it has at max half the screen size and
+		shows it
+		"""
 		if not small_avatar.window:
 			# Tab has been closed since we hovered the avatar
 			return
@@ -2619,14 +2704,18 @@ class ChatControl(ChatControlBase):
 		window.show_all()
 
 	def _on_window_avatar_leave_notify_event(self, widget, event):
-		'''we just left the popup window that holds avatar'''
+		"""
+		Just left the popup window that holds avatar
+		"""
 		self.bigger_avatar_window.destroy()
 		self.bigger_avatar_window = None
 		# Re-show the small avatar
 		self.show_avatar()
 
 	def _on_window_motion_notify_event(self, widget, event):
-		'''we just moved the mouse so show the cursor'''
+		"""
+		Just moved the mouse so show the cursor
+		"""
 		cursor = gtk.gdk.Cursor(gtk.gdk.LEFT_PTR)
 		self.bigger_avatar_window.window.set_cursor(cursor)
 
@@ -2643,7 +2732,9 @@ class ChatControl(ChatControlBase):
 		self._toggle_gpg()
 
 	def _on_convert_to_gc_menuitem_activate(self, widget):
-		'''user want to invite some friends to chat'''
+		"""
+		User wants to invite some friends to chat
+		"""
 		dialogs.TransformChatToMUC(self.account, [self.contact.jid])
 
 	def _on_toggle_e2e_menuitem_activate(self, widget):
@@ -2684,7 +2775,9 @@ class ChatControl(ChatControlBase):
 		self.draw_banner()
 
 	def update_status_display(self, name, uf_show, status):
-		'''print the contact's status and update the status/GPG image'''
+		"""
+		Print the contact's status and update the status/GPG image
+		"""
 		self.update_ui()
 		self.parent_win.redraw_tab(self)
 
