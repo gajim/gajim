@@ -1561,6 +1561,9 @@ class Interface:
 		if gajim.connections[account].pep_supported and dbus_support.supported \
 		and gajim.config.get_per('accounts', account, 'publish_tune'):
 			self.enable_music_listener()
+		# Start merging logs from server
+		gajim.connections[account].request_modifications_page(
+			'1970-01-01T00:00:00Z')
 
 	def handle_event_metacontacts(self, account, tags_list):
 		gajim.contacts.define_metacontacts(account, tags_list)
