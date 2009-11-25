@@ -1877,7 +1877,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				for group in contact.groups:
 					if group not in groups:
 						same_groups = False
-				if contact.subscription in ('both', 'to') and same_groups:
+				if contact.sub in ('both', 'to') and same_groups:
 					continue
 			exchange_items_list[jid] = []
 			exchange_items_list[jid].append(name)
