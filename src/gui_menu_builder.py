@@ -28,9 +28,11 @@ from common import helpers
 from common.xmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC, NS_ESESSION
 
 def build_resources_submenu(contacts, account, action, room_jid=None,
-room_account=None, cap=None):
-	''' Build a submenu with contact's resources.
-	room_jid and room_account are for action self.on_invite_to_room '''
+		room_account=None, cap=None):
+	"""
+	Build a submenu with contact's resources. room_jid and room_account are for
+	action self.on_invite_to_room
+	"""
 	roster = gajim.interface.roster
 	sub_menu = gtk.Menu()
 
@@ -61,7 +63,9 @@ room_account=None, cap=None):
 	return sub_menu
 
 def build_invite_submenu(invite_menuitem, list_):
-	'''list_ in a list of (contact, account)'''
+	"""
+	list_ in a list of (contact, account)
+	"""
 	roster = gajim.interface.roster
 	# used if we invite only one contact with several resources
 	contact_list = []
@@ -145,10 +149,12 @@ def build_invite_submenu(invite_menuitem, list_):
 			invite_to_submenu.append(menuitem)
 
 def get_contact_menu(contact, account, use_multiple_contacts=True,
-show_start_chat=True, show_encryption=False, show_buttonbar_items=True,
-control=None):
-	''' Build contact popup menu for roster and chat window.
-	If control is not set, we hide invite_contacts_menuitem'''
+		show_start_chat=True, show_encryption=False, show_buttonbar_items=True,
+		control=None):
+	"""
+	Build contact popup menu for roster and chat window. If control is not set,
+	we hide invite_contacts_menuitem
+	"""
 	if not contact:
 		return
 
@@ -320,7 +326,7 @@ control=None):
 		for item in (send_custom_status_menuitem, send_single_message_menuitem,
 		invite_menuitem, block_menuitem, unblock_menuitem, ignore_menuitem,
 		unignore_menuitem, set_custom_avatar_menuitem, subscription_menuitem,
-		manage_contact_menuitem, convert_to_gc_menuitems):
+		manage_contact_menuitem, convert_to_gc_menuitem):
 			item.set_no_show_all(True)
 			item.hide()
 

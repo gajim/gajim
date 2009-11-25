@@ -275,7 +275,9 @@ class GajimThemesWindow:
 			self._set_font()
 
 	def _set_color(self, state, widget, option):
-		''' set color value in prefs and update the UI '''
+		"""
+		Set color value in prefs and update the UI
+		"""
 		if state:
 			color = widget.get_color()
 			color_string = gtkgui_helpers.make_color_string(color)
@@ -297,7 +299,9 @@ class GajimThemesWindow:
 		gajim.interface.save_config()
 
 	def _set_font(self):
-		''' set font value in prefs and update the UI '''
+		"""
+		Set font value in prefs and update the UI
+		"""
 		state = self.textfont_checkbutton.get_active()
 		if state:
 			font_string = self.text_fontbutton.get_font_name()
@@ -317,13 +321,16 @@ class GajimThemesWindow:
 		gajim.interface.save_config()
 
 	def _toggle_font_widgets(self, font_props):
-		''' toggle font buttons with the bool values of font_props tuple'''
+		"""
+		Toggle font buttons with the bool values of font_props tuple
+		"""
 		self.bold_togglebutton.set_active(font_props[0])
 		self.italic_togglebutton.set_active(font_props[1])
 
 	def _get_font_description(self):
-		''' return a FontDescription from togglebuttons
-		states'''
+		"""
+		Return a FontDescription from togglebuttons states
+		"""
 		fd = pango.FontDescription()
 		if self.bold_togglebutton.get_active():
 			fd.set_weight(pango.WEIGHT_BOLD)
@@ -332,8 +339,10 @@ class GajimThemesWindow:
 		return fd
 
 	def _set_font_widgets(self, font_attrs):
-		''' set the correct toggle state of font style buttons by
-		a font string of type 'BI' '''
+		"""
+		Set the correct toggle state of font style buttons by a font string of
+		type 'BI'
+		"""
 		font_props = [False, False, False]
 		if font_attrs:
 			if font_attrs.find('B') != -1:
@@ -343,7 +352,9 @@ class GajimThemesWindow:
 		self._toggle_font_widgets(font_props)
 
 	def _get_font_attrs(self):
-		''' get a string with letters of font attribures: 'BI' '''
+		"""
+		Get a string with letters of font attribures: 'BI'
+		"""
 		attrs = ''
 		if self.bold_togglebutton.get_active():
 			attrs += 'B'
@@ -353,7 +364,9 @@ class GajimThemesWindow:
 
 
 	def _get_font_props(self, font_name):
-		''' get tuple of font properties: Weight, Style '''
+		"""
+		Get tuple of font properties: weight, style
+		"""
 		font_props = [False, False, False]
 		font_description = pango.FontDescription(font_name)
 		if font_description.get_weight() != pango.WEIGHT_NORMAL:

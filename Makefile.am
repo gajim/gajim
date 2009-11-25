@@ -50,7 +50,6 @@ MAINTAINERCLEANFILES = \
 	aclocal.m4 \
 	libtool \
 	po/POTFILES.in \
-	src/trayicon_la-eggtrayicon.loT \
 	m4/intltool.m4
 
 MAINTAINERCLEANDIRS = \

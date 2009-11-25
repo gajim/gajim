@@ -38,6 +38,7 @@ import gobject
 import os
 import sys
 import time
+import locale
 
 import common.sleepy
 import history_window
@@ -1022,55 +1023,21 @@ class RosterWindow:
 
 		self.model[child_iter][C_NAME] = account_name
 
-		if gajim.config.get('show_mood_in_roster') \
-		and 'mood' in gajim.connections[account].mood \
-		and gajim.connections[account].mood['mood'].strip() in MOODS:
-
-			self.model[child_iter][C_MOOD_PIXBUF] = gtkgui_helpers.load_mood_icon(
-				gajim.connections[account].mood['mood'].strip()).get_pixbuf()
-
-		elif gajim.config.get('show_mood_in_roster') \
-		and 'mood' in gajim.connections[account].mood:
-			self.model[child_iter][C_MOOD_PIXBUF] = \
-				gtkgui_helpers.load_mood_icon('unknown'). \
-				get_pixbuf()
+		pep = gajim.connections[account].pep
+		if gajim.config.get('show_mood_in_roster') and 'mood' in pep:
+			self.model[child_iter][C_MOOD_PIXBUF] = pep['mood'].asPixbufIcon()
 		else:
 			self.model[child_iter][C_MOOD_PIXBUF] = None
 
-		if gajim.config.get('show_activity_in_roster') \
-		and 'activity' in gajim.connections[account].activity \
-		and gajim.connections[account].activity['activity'].strip() \
-		in ACTIVITIES:
-			if 'subactivity' in gajim.connections[account].activity \
-			and gajim.connections[account].activity['subactivity'].strip() \
-			in ACTIVITIES[gajim.connections[account].activity['activity'].strip()]:
-				self.model[child_iter][C_ACTIVITY_PIXBUF] = \
-					gtkgui_helpers.load_activity_icon(
-					gajim.connections[account].activity['activity'].strip(),
-					gajim.connections[account].activity['subactivity'].strip()). \
-					get_pixbuf()
-			else:
-				self.model[child_iter][C_ACTIVITY_PIXBUF] = \
-					gtkgui_helpers.load_activity_icon(
-					gajim.connections[account].activity['activity'].strip()). \
-					get_pixbuf()
-		elif gajim.config.get('show_activity_in_roster') \
-		and 'activity' in gajim.connections[account].activity:
-			self.model[child_iter][C_ACTIVITY_PIXBUF] = \
-				gtkgui_helpers.load_activity_icon('unknown'). \
-				get_pixbuf()
+		if gajim.config.get('show_activity_in_roster') and 'activity' in pep:
+			self.model[child_iter][C_ACTIVITY_PIXBUF] = pep['activity'].asPixbufIcon()
 		else:
 			self.model[child_iter][C_ACTIVITY_PIXBUF] = None
 
-		if gajim.config.get('show_tunes_in_roster') \
-		and ('artist' in gajim.connections[account].tune \
-		or 'title' in gajim.connections[account].tune):
-			path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static', 'music.png')
-			self.model[child_iter][C_TUNE_PIXBUF] = \
-				gtk.gdk.pixbuf_new_from_file(path)
+		if gajim.config.get('show_tunes_in_roster') and 'tune' in pep:
+			self.model[child_iter][C_TUNE_PIXBUF] = pep['tune'].asPixbufIcon()
 		else:
 			self.model[child_iter][C_TUNE_PIXBUF] = None
-
 		return False
 
 	def draw_group(self, group, account):
@@ -1276,71 +1243,39 @@ class RosterWindow:
 
 		return False
 
-
-	def draw_mood(self, jid, account):
+	def _is_pep_shown_in_roster(self, pep_type):
+		if pep_type == 'mood':
+			return gajim.config.get('show_mood_in_roster')
+		elif pep_type == 'activity':
+			return gajim.config.get('show_activity_in_roster')
+		elif pep_type == 'tune':
+			return  gajim.config.get('show_tunes_in_roster')
+		else:
+			return False
+		
+	def draw_all_pep_types(self, jid, account):
+		for pep_type in self._pep_type_to_model_column:
+			self.draw_pep(jid, account, pep_type)
+	
+	def draw_pep(self, jid, account, pep_type):
+		if pep_type not in self._pep_type_to_model_column:
+			return
+		if not self._is_pep_shown_in_roster(pep_type):
+			return
+					
+		model_column = self._pep_type_to_model_column[pep_type]
 		iters = self._get_contact_iter(jid, account, model=self.model)
-		if not iters or not gajim.config.get('show_mood_in_roster'):
+		if not iters:
 			return
 		jid = self.model[iters[0]][C_JID]
 		jid = jid.decode('utf-8')
 		contact = gajim.contacts.get_contact(account, jid)
-		if 'mood' in contact.mood and contact.mood['mood'].strip() in MOODS:
-			pixbuf = gtkgui_helpers.load_mood_icon(
-				contact.mood['mood'].strip()).get_pixbuf()
-		elif 'mood' in contact.mood:
-			pixbuf = gtkgui_helpers.load_mood_icon(
-				'unknown').get_pixbuf()
+		if pep_type in contact.pep:
+			pixbuf = contact.pep[pep_type].asPixbufIcon()
 		else:
 			pixbuf = None
 		for child_iter in iters:
-			self.model[child_iter][C_MOOD_PIXBUF] = pixbuf
-		return False
-
-
-	def draw_activity(self, jid, account):
-		iters = self._get_contact_iter(jid, account, model=self.model)
-		if not iters or not gajim.config.get('show_activity_in_roster'):
-			return
-		jid = self.model[iters[0]][C_JID]
-		jid = jid.decode('utf-8')
-		contact = gajim.contacts.get_contact(account, jid)
-		if 'activity' in contact.activity \
-		and contact.activity['activity'].strip() in ACTIVITIES:
-			if 'subactivity' in contact.activity \
-			and contact.activity['subactivity'].strip() in \
-			ACTIVITIES[contact.activity['activity'].strip()]:
-				pixbuf = gtkgui_helpers.load_activity_icon(
-					contact.activity['activity'].strip(),
-					contact.activity['subactivity'].strip()).get_pixbuf()
-			else:
-				pixbuf = gtkgui_helpers.load_activity_icon(
-					contact.activity['activity'].strip()).get_pixbuf()
-		elif 'activity' in contact.activity:
-			pixbuf = gtkgui_helpers.load_activity_icon(
-				'unknown').get_pixbuf()
-		else:
-			pixbuf = None
-		for child_iter in iters:
-			self.model[child_iter][C_ACTIVITY_PIXBUF] = pixbuf
-		return False
-
-
-	def draw_tune(self, jid, account):
-		iters = self._get_contact_iter(jid, account, model=self.model)
-		if not iters or not gajim.config.get('show_tunes_in_roster'):
-			return
-		jid = self.model[iters[0]][C_JID]
-		jid = jid.decode('utf-8')
-		contact = gajim.contacts.get_contact(account, jid)
-		if 'artist' in contact.tune or 'title' in contact.tune:
-			path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static', 'music.png')
-			pixbuf = gtk.gdk.pixbuf_new_from_file(path)
-		else:
-			pixbuf = None
-		for child_iter in iters:
-			self.model[child_iter][C_TUNE_PIXBUF] = pixbuf
-		return False
-
+			self.model[child_iter][model_column] = pixbuf
 
 	def draw_avatar(self, jid, account):
 		iters = self._get_contact_iter(jid, account, model=self.model)
@@ -1359,9 +1294,7 @@ class RosterWindow:
 
 	def draw_completely(self, jid, account):
 		self.draw_contact(jid, account)
-		self.draw_mood(jid, account)
-		self.draw_activity(jid, account)
-		self.draw_tune(jid, account)
+		self.draw_all_pep_types(jid, account)
 		self.draw_avatar(jid, account)
 
 	def adjust_and_draw_contact_context(self, jid, account):
@@ -1626,9 +1559,7 @@ class RosterWindow:
 		account1 = account1.decode('utf-8')
 		account2 = account2.decode('utf-8')
 		if type1 == 'account':
-			if account1 < account2:
-				return -1
-			return 1
+			return locale.strcoll(account1, account2)
 		jid1 = model[iter1][C_JID].decode('utf-8')
 		jid2 = model[iter2][C_JID].decode('utf-8')
 		if type1 == 'contact':
@@ -1675,20 +1606,23 @@ class RosterWindow:
 			elif show1 > show2:
 				return 1
 		# We compare names
-		if name1.lower() < name2.lower():
+		cmp_result = locale.strcoll(name1.lower(), name2.lower())
+		if cmp_result < 0:
 			return -1
-		if name2.lower() < name1.lower():
+		if cmp_result > 0:
 			return 1
 		if type1 == 'contact' and type2 == 'contact':
 			# We compare account names
-			if account1.lower() < account2.lower():
+			cmp_result = locale.strcoll(account1.lower(), account2.lower())
+			if cmp_result < 0:
 				return -1
-			if account2.lower() < account1.lower():
+			if cmp_result > 0:
 				return 1
 			# We compare jids
-			if jid1.lower() < jid2.lower():
+			cmp_result = locale.strcoll(jid1.lower(), jid2.lower())
+			if cmp_result < 0:
 				return -1
-			if jid2.lower() < jid1.lower():
+			if cmp_result > 0:
 				return 1
 		return 0
 
@@ -1964,36 +1898,36 @@ class RosterWindow:
 
 		self.send_status_continue(account, status, txt, auto, to)
 
-	def send_pep(self, account, pep_dict=None):
-		'''Sends pep information (activity, mood)'''
-		if not pep_dict:
-			return
-		# activity
-		if 'activity' in pep_dict and pep_dict['activity'] in pep.ACTIVITIES:
-			activity = pep_dict['activity']
-			if 'subactivity' in pep_dict and \
-			pep_dict['subactivity'] in pep.ACTIVITIES[activity]:
-				subactivity = pep_dict['subactivity']
-			else:
-				subactivity = 'other'
-			if 'activity_text' in pep_dict:
-				activity_text = pep_dict['activity_text']
-			else:
-				activity_text = ''
-			pep.user_send_activity(account, activity, subactivity, activity_text)
-		else:
-			pep.user_send_activity(account, '')
+	def send_pep(self, account, pep_dict):
+		connection = gajim.connections[account]
 
-		# mood
-		if 'mood' in pep_dict and pep_dict['mood'] in pep.MOODS:
-			mood = pep_dict['mood']
-			if 'mood_text' in pep_dict:
-				mood_text = pep_dict['mood_text']
-			else:
-				mood_text = ''
-			pep.user_send_mood(account, mood, mood_text)
+		if 'activity' in pep_dict:
+			activity = pep_dict['activity']
+			subactivity = pep_dict.get('subactivity', None)
+			activity_text = pep_dict.get('activity_text', None)
+			connection.send_activity(activity, subactivity, activity_text)
 		else:
-			pep.user_send_mood(account, '')
+			connection.retract_activity()
+
+		if 'mood' in pep_dict:
+			mood = pep_dict['mood']
+			mood_text = pep_dict.get('mood_text', None)
+			connection.send_mood(mood, mood_text)
+		else:
+			connection.retract_mood()
+		
+	def delete_pep(self, jid, account):
+		if jid == gajim.get_jid_from_account(account):
+			gajim.connections[account].pep = {}
+			self.draw_account(account)
+	
+		for contact in gajim.contacts.get_contacts(account, jid):
+			contact.pep = {}
+	
+		self.draw_all_pep_types(jid, account)
+		ctrl = gajim.interface.msg_win_mgr.get_control(jid, account)
+		if ctrl:
+			ctrl.update_all_pep_types()
 
 	def send_status_continue(self, account, status, txt, auto, to):
 		if gajim.account_is_connected(account) and not to:
@@ -2008,8 +1942,7 @@ class RosterWindow:
 			gajim.connections[account].send_custom_status(status, txt, to)
 		else:
 			if status in ('invisible', 'offline'):
-				pep.delete_pep(gajim.get_jid_from_account(account), \
-					account)
+				self.delete_pep(gajim.get_jid_from_account(account), account)
 			was_invisible = gajim.connections[account].connected == \
 				gajim.SHOW_LIST.index('invisible')
 			gajim.connections[account].change_status(status, txt, auto)
@@ -2087,7 +2020,7 @@ class RosterWindow:
 			contact_instances)
 		if not keep_pep and contact.jid != gajim.get_jid_from_account(account) \
 		and not contact.is_groupchat():
-			pep.delete_pep(contact.jid, account)
+			self.delete_pep(contact.jid, account)
 
 		# Redraw everything and select the sender
 		self.adjust_and_draw_contact_context(contact.jid, account)
@@ -2509,11 +2442,10 @@ class RosterWindow:
 				account_name = account
 				if gajim.account_is_connected(account):
 					account_name += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
-				contact = gajim.contacts.create_contact(jid=jid, account=account, name=account_name,
-					show=connection.get_status(), sub='', status=connection.status,
-					resource=connection.server_resource,
-					priority=connection.priority, mood=connection.mood,
-					tune=connection.tune, activity=connection.activity)
+				contact = gajim.contacts.create_self_contact(jid=jid, account=account,
+					name=account_name, show=connection.get_status(),
+					status=connection.status, resource=connection.server_resource,
+					priority=connection.priority)
 				if gajim.connections[account].gpg:
 					contact.keyID = gajim.config.get_per('accounts', connection.name,
 						'keyid')
@@ -3396,23 +3328,19 @@ class RosterWindow:
 			gajim.interface.instances['preferences'] = config.PreferencesWindow()
 
 	def on_publish_tune_toggled(self, widget, account):
-		act = widget.get_active()
-		gajim.config.set_per('accounts', account, 'publish_tune', act)
-		if act:
+		active = widget.get_active()
+		gajim.config.set_per('accounts', account, 'publish_tune', active)
+		if active:
 			gajim.interface.enable_music_listener()
 		else:
-			# disable it only if no other account use it
-			for acct in gajim.connections:
-				if gajim.config.get_per('accounts', acct, 'publish_tune'):
+			gajim.connections[account].retract_tune()
+			# disable music listener only if no other account uses it
+			for acc in gajim.connections:
+				if gajim.config.get_per('accounts', acc, 'publish_tune'):
 					break
 			else:
 				gajim.interface.disable_music_listener()
 
-			if gajim.connections[account].pep_supported:
-				# As many implementations don't support retracting items, we send a
-				# "Stopped" event first
-				pep.user_send_tune(account, '')
-				pep.user_retract_tune(account)
 		helpers.update_optional_features(account)
 
 	def on_pep_services_menuitem_activate(self, widget, account):
@@ -4489,9 +4417,9 @@ class RosterWindow:
 				renderer.set_property('xpad', 8)
 
 
-	def _fill_mood_pixbuf_renderer(self, column, renderer, model, titer,
-	data = None):
-		'''When a row is added, set properties for avatar renderer'''
+	def _fill_pep_pixbuf_renderer(self, column, renderer, model, titer, 
+	data=None):
+		'''When a row is added, draw the respective pep icon'''
 		theme = gajim.config.get('roster_theme')
 		type_ = model[titer][C_TYPE]
 		if type_ == 'group':
@@ -4499,154 +4427,36 @@ class RosterWindow:
 			return
 
 		# allocate space for the icon only if needed
-		if model[titer][C_MOOD_PIXBUF]:
+		if model[titer][data]:
 			renderer.set_property('visible', True)
 		else:
 			renderer.set_property('visible', False)
 		if type_ == 'account':
-			color = gajim.config.get_per('themes', theme,
-				'accountbgcolor')
+			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
 			if color:
 				renderer.set_property('cell-background', color)
 			else:
-				self.set_renderer_color(renderer,
-					gtk.STATE_ACTIVE)
+				self.set_renderer_color(renderer, gtk.STATE_ACTIVE)
 			# align pixbuf to the right)
 			renderer.set_property('xalign', 1)
 		# prevent type_ = None, see http://trac.gajim.org/ticket/2534
 		elif type_:
-			if not model[titer][C_JID] \
-			or not model[titer][C_ACCOUNT]:
+			if not model[titer][C_JID] or not model[titer][C_ACCOUNT]:
 				# This can append at the moment we add the row
 				return
 			jid = model[titer][C_JID].decode('utf-8')
 			account = model[titer][C_ACCOUNT].decode('utf-8')
 			if jid in gajim.newly_added[account]:
-				renderer.set_property('cell-background',
-					gajim.config.get(
+				renderer.set_property('cell-background', gajim.config.get(
 					'just_connected_bg_color'))
 			elif jid in gajim.to_be_removed[account]:
-				renderer.set_property('cell-background',
-					gajim.config.get(
+				renderer.set_property('cell-background', gajim.config.get(
 					'just_disconnected_bg_color'))
 			else:
-				color = gajim.config.get_per('themes',
-					theme, 'contactbgcolor')
-				if color:
-					renderer.set_property(
-						'cell-background', color)
-				else:
-					renderer.set_property(
-						'cell-background', None)
+				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
+				renderer.set_property('cell-background', color if color else None)
 			# align pixbuf to the right
 			renderer.set_property('xalign', 1)
-
-
-	def _fill_activity_pixbuf_renderer(self, column, renderer, model, titer,
-	data = None):
-		'''When a row is added, set properties for avatar renderer'''
-		theme = gajim.config.get('roster_theme')
-		type_ = model[titer][C_TYPE]
-		if type_ == 'group':
-			renderer.set_property('visible', False)
-			return
-
-		# allocate space for the icon only if needed
-		if model[titer][C_ACTIVITY_PIXBUF]:
-			renderer.set_property('visible', True)
-		else:
-			renderer.set_property('visible', False)
-		if type_ == 'account':
-			color = gajim.config.get_per('themes', theme,
-				'accountbgcolor')
-			if color:
-				renderer.set_property('cell-background', color)
-			else:
-				self.set_renderer_color(renderer,
-					gtk.STATE_ACTIVE)
-			# align pixbuf to the right)
-			renderer.set_property('xalign', 1)
-		# prevent type_ = None, see http://trac.gajim.org/ticket/2534
-		elif type_:
-			if not model[titer][C_JID] \
-			or not model[titer][C_ACCOUNT]:
-				# This can append at the moment we add the row
-				return
-			jid = model[titer][C_JID].decode('utf-8')
-			account = model[titer][C_ACCOUNT].decode('utf-8')
-			if jid in gajim.newly_added[account]:
-				renderer.set_property('cell-background',
-					gajim.config.get(
-					'just_connected_bg_color'))
-			elif jid in gajim.to_be_removed[account]:
-				renderer.set_property('cell-background',
-					gajim.config.get(
-					'just_disconnected_bg_color'))
-			else:
-				color = gajim.config.get_per('themes',
-					theme, 'contactbgcolor')
-				if color:
-					renderer.set_property(
-						'cell-background', color)
-				else:
-					renderer.set_property(
-						'cell-background', None)
-			# align pixbuf to the right
-			renderer.set_property('xalign', 1)
-
-
-	def _fill_tune_pixbuf_renderer(self, column, renderer, model, titer,
-	data = None):
-		'''When a row is added, set properties for avatar renderer'''
-		theme = gajim.config.get('roster_theme')
-		type_ = model[titer][C_TYPE]
-		if type_ == 'group':
-			renderer.set_property('visible', False)
-			return
-
-		# allocate space for the icon only if needed
-		if model[titer][C_TUNE_PIXBUF]:
-			renderer.set_property('visible', True)
-		else:
-			renderer.set_property('visible', False)
-		if type_ == 'account':
-			color = gajim.config.get_per('themes', theme,
-				'accountbgcolor')
-			if color:
-				renderer.set_property('cell-background', color)
-			else:
-				self.set_renderer_color(renderer,
-					gtk.STATE_ACTIVE)
-			# align pixbuf to the right)
-			renderer.set_property('xalign', 1)
-		# prevent type_ = None, see http://trac.gajim.org/ticket/2534
-		elif type_:
-			if not model[titer][C_JID] \
-			or not model[titer][C_ACCOUNT]:
-				# This can append at the moment we add the row
-				return
-			jid = model[titer][C_JID].decode('utf-8')
-			account = model[titer][C_ACCOUNT].decode('utf-8')
-			if jid in gajim.newly_added[account]:
-				renderer.set_property('cell-background',
-					gajim.config.get(
-					'just_connected_bg_color'))
-			elif jid in gajim.to_be_removed[account]:
-				renderer.set_property('cell-background',
-					gajim.config.get(
-					'just_disconnected_bg_color'))
-			else:
-				color = gajim.config.get_per('themes',
-					theme, 'contactbgcolor')
-				if color:
-					renderer.set_property(
-						'cell-background', color)
-				else:
-					renderer.set_property(
-						'cell-background', None)
-			# align pixbuf to the right
-			renderer.set_property('xalign', 1)
-
 
 	def _fill_avatar_pixbuf_renderer(self, column, renderer, model, titer,
 	data = None):
@@ -5948,19 +5758,23 @@ class RosterWindow:
 		col.pack_start(render_pixbuf, expand=False)
 		col.add_attribute(render_pixbuf, 'pixbuf', C_MOOD_PIXBUF)
 		col.set_cell_data_func(render_pixbuf,
-			self._fill_mood_pixbuf_renderer, None)
+			self._fill_pep_pixbuf_renderer, C_MOOD_PIXBUF)
 
 		render_pixbuf = gtk.CellRendererPixbuf()
 		col.pack_start(render_pixbuf, expand=False)
 		col.add_attribute(render_pixbuf, 'pixbuf', C_ACTIVITY_PIXBUF)
 		col.set_cell_data_func(render_pixbuf,
-			self._fill_activity_pixbuf_renderer, None)
+			self._fill_pep_pixbuf_renderer, C_ACTIVITY_PIXBUF)
 
 		render_pixbuf = gtk.CellRendererPixbuf()
 		col.pack_start(render_pixbuf, expand=False)
 		col.add_attribute(render_pixbuf, 'pixbuf', C_TUNE_PIXBUF)
 		col.set_cell_data_func(render_pixbuf,
-			self._fill_tune_pixbuf_renderer, None)
+			self._fill_pep_pixbuf_renderer, C_TUNE_PIXBUF)
+		
+		self._pep_type_to_model_column = {'mood': C_MOOD_PIXBUF,
+													 'activity': C_ACTIVITY_PIXBUF,
+													 'tune': C_TUNE_PIXBUF}
 
 		if gajim.config.get('avatar_position_in_roster') == 'right':
 			add_avatar_renderer()
@@ -6010,10 +5824,8 @@ class RosterWindow:
 		if gajim.config.get('show_roster_on_startup'):
 			self.window.show_all()
 		else:
-			if not gajim.config.get('trayicon') or not \
-			gajim.interface.systray_capabilities:
-				# cannot happen via GUI, but I put this incase user touches
-				# config. without trayicon, he or she should see the roster!
+			if gajim.config.get('trayicon') != 'always':
+				# Without trayicon, user should see the roster!
 				self.window.show_all()
 				gajim.config.set('show_roster_on_startup', True)
 

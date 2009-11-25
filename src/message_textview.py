@@ -21,15 +21,20 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import gc
+
 import gtk
 import gobject
 import pango
+
 import gtkgui_helpers
 from common import gajim
 
 class MessageTextView(gtk.TextView):
-	'''Class for the message textview (where user writes new messages)
-	for chat/groupchat windows'''
+	"""
+	Class for the message textview (where user writes new messages) for
+	chat/groupchat windows
+	"""
 	__gsignals__ = dict(
 		mykeypress = (gobject.SIGNAL_RUN_LAST | gobject.SIGNAL_ACTION,
 				None, # return value
@@ -272,13 +277,13 @@ class MessageTextView(gtk.TextView):
 		else:
 			return None
 
-
 	def destroy(self):
-		import gc
-		gobject.idle_add(lambda:gc.collect())
+		gobject.idle_add(gc.collect)
 
 	def clear(self, widget = None):
-		'''clear text in the textview'''
+		"""
+		Clear text in the textview
+		"""
 		buffer_ = self.get_buffer()
 		start, end = buffer_.get_bounds()
 		buffer_.delete(start, end)

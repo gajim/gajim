@@ -23,7 +23,7 @@ from common.xmpp.idlequeue import IdleObject
 from common.xmpp import dispatcher_nb, simplexml
 from common.xmpp.plugin import *
 from common.xmpp.simplexml import ustr
-from common.xmpp.transports_nb import DATA_RECEIVED, DATA_SENT
+from common.xmpp.transports_nb import DATA_RECEIVED, DATA_SENT, DATA_ERROR
 from common.zeroconf import zeroconf
 
 from common.xmpp.protocol import *
@@ -288,6 +288,7 @@ class P2PClient(IdleObject):
 		pass
 
 	def _register_handlers(self):
+		self._caller.peerhost = self.Connection._sock.getsockname()
 		self.RegisterHandler('message', lambda conn, data:self._caller._messageCB(
 			self.Server, conn, data))
 		self.RegisterHandler('iq', self._caller._siSetCB, 'set',
@@ -395,6 +396,7 @@ class P2PConnection(IdleObject, PlugIn):
 		False, else send it instantly.
 		If supplied data is unicode string, encode it to utf-8.
 		'''
+		print 'ici'
 		if self.state <= 0:
 			return
 
@@ -416,8 +418,11 @@ class P2PConnection(IdleObject, PlugIn):
 		ids = self.client.conn_holder.ids_of_awaiting_messages
 		if self.fd in ids and len(ids[self.fd]) > 0:
 			for (id_, thread_id) in ids[self.fd]:
-				self._owner.Dispatcher.Event('', DATA_ERROR, (self.client.to,
-					thread_id))
+				if hasattr(self._owner, 'Dispatcher'):
+					self._owner.Dispatcher.Event('', DATA_ERROR, (self.client.to,
+						thread_id))
+				else:
+					self._owner.on_not_ok('conenction timeout')
 			ids[self.fd] = []
 		self.pollend()
 
@@ -578,6 +583,8 @@ class ClientZeroconf:
 		self.hash_to_port = {}
 		self.listener = None
 		self.ids_of_awaiting_messages = {}
+		self.disconnect_handlers = []
+		self.disconnecting = False
 
 	def connect(self, show, msg):
 		self.port = self.start_listener(self.caller.port)
@@ -632,6 +639,9 @@ class ClientZeroconf:
 		self.last_msg = msg
 
 	def disconnect(self):
+		# to avoid recursive calls
+		if self.disconnecting:
+			return
 		if self.listener:
 			self.listener.disconnect()
 			self.listener = None
@@ -642,6 +652,14 @@ class ClientZeroconf:
 			self.roster.zeroconf = None
 			self.roster._data = None
 			self.roster = None
+		self.disconnecting = True
+		for i in reversed(self.disconnect_handlers):
+			log.debug('Calling disconnect handler %s' % i)
+			i()
+		self.disconnecting = False
+
+	def start_disconnect(self):
+		self.disconnect()
 
 	def kill_all_connections(self):
 		for connection in self.connections.values():
@@ -719,6 +737,14 @@ class ClientZeroconf:
 			stanza.setID('zero')
 		P2PClient(None, item['address'], item['port'], self,
 			[(stanza, is_message)], to, on_ok=on_ok, on_not_ok=on_not_ok)
+
+	def RegisterDisconnectHandler(self, handler):
+		''' Register handler that will be called on disconnect.'''
+		self.disconnect_handlers.append(handler)
+
+	def UnregisterDisconnectHandler(self, handler):
+		''' Unregister handler that is called on disconnect.'''
+		self.disconnect_handlers.remove(handler)
 
 	def SendAndWaitForResponse(self, stanza, timeout=None, func=None, args=None):
 		'''

@@ -67,13 +67,15 @@ def has_focus(widget):
 
 class TextViewImage(gtk.Image):
 
-	def __init__(self, anchor):
+	def __init__(self, anchor, text):
 		super(TextViewImage, self).__init__()
 		self.anchor = anchor
 		self._selected = False
 		self._disconnect_funcs = []
 		self.connect('parent-set', self.on_parent_set)
 		self.connect('expose-event', self.on_expose)
+		self.set_tooltip_text(text)
+		self.anchor.set_data('plaintext', text)
 
 	def _get_selected(self):
 		parent = self.get_parent()
@@ -156,8 +158,10 @@ class TextViewImage(gtk.Image):
 
 
 class ConversationTextview(gobject.GObject):
-	'''Class for the conversation textview (where user reads already said
-	messages) for chat/groupchat windows'''
+	"""
+	Class for the conversation textview (where user reads already said messages)
+	for chat/groupchat windows
+	"""
 	__gsignals__ = dict(
 		quote = (gobject.SIGNAL_RUN_LAST | gobject.SIGNAL_ACTION,
 			None, # return value
@@ -175,8 +179,10 @@ class ConversationTextview(gobject.GObject):
 	SCROLL_DELAY = 33 # milliseconds
 
 	def __init__(self, account, used_in_history_window = False):
-		'''if used_in_history_window is True, then we do not show
-		Clear menuitem in context menu'''
+		"""
+		If used_in_history_window is True, then we do not show Clear menuitem in
+		context menu
+		"""
 		gobject.GObject.__init__(self)
 		self.used_in_history_window = used_in_history_window
 
@@ -640,8 +646,9 @@ class ConversationTextview(gobject.GObject):
 		return False
 
 	def on_textview_motion_notify_event(self, widget, event):
-		'''change the cursor to a hand when we are over a mail or an
-		url'''
+		"""
+		Change the cursor to a hand when we are over a mail or an url
+		"""
 		pointer_x, pointer_y = self.tv.window.get_pointer()[0:2]
 		x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
 			pointer_x, pointer_y)
@@ -686,7 +693,9 @@ class ConversationTextview(gobject.GObject):
 			self.change_cursor = True
 
 	def clear(self, tv = None):
-		'''clear text in the textview'''
+		"""
+		Clear text in the textview
+		"""
 		buffer_ = self.tv.get_buffer()
 		start, end = buffer_.get_bounds()
 		buffer_.delete(start, end)
@@ -696,15 +705,18 @@ class ConversationTextview(gobject.GObject):
 		self.focus_out_end_mark = None
 
 	def visit_url_from_menuitem(self, widget, link):
-		'''basically it filters out the widget instance'''
+		"""
+		Basically it filters out the widget instance
+		"""
 		helpers.launch_browser_mailer('url', link)
 
 	def on_textview_populate_popup(self, textview, menu):
-		'''we override the default context menu and we prepend Clear
-		(only if used_in_history_window is False)
-		and if we have sth selected we show a submenu with actions on
-		the phrase (see on_conversation_textview_button_press_event)'''
-
+		"""
+		Override the default context menu and we prepend Clear (only if
+		used_in_history_window is False) and if we have sth selected we show a
+		submenu with actions on the phrase (see
+		on_conversation_textview_button_press_event)
+		"""
 		separator_menuitem_was_added = False
 		if not self.used_in_history_window:
 			item = gtk.SeparatorMenuItem()
@@ -969,13 +981,13 @@ class ConversationTextview(gobject.GObject):
 
 
 	def detect_and_print_special_text(self, otext, other_tags, graphics=True):
-		'''detects special text (emots & links & formatting)
-		prints normal text before any special text it founts,
-		then print special text (that happens many times until
-		last special text is printed) and then returns the index
+		"""
+		Detect special text (emots & links & formatting), print normal text
+		before any special text it founds, then print special text (that happens
+		many times until last special text is printed) and then return the index
 		after *last* special text, so we can print it in
-		print_conversation_line()'''
-
+		print_conversation_line()
+		"""
 		buffer_ = self.tv.get_buffer()
 		
 		insert_tags_func = buffer_.insert_with_tags_by_name
@@ -1021,8 +1033,10 @@ class ConversationTextview(gobject.GObject):
 		return buffer_.get_end_iter()
 
 	def print_special_text(self, special_text, other_tags, graphics=True):
-		'''is called by detect_and_print_special_text and prints
-		special text (emots, links, formatting)'''
+		"""
+		Is called by detect_and_print_special_text and prints special text
+		(emots, links, formatting)
+		"""
 		tags = []
 		use_other_tags = True
 		text_is_valid_uri = False
@@ -1043,7 +1057,7 @@ class ConversationTextview(gobject.GObject):
 			emot_ascii = possible_emot_ascii_caps
 			end_iter = buffer_.get_end_iter()
 			anchor = buffer_.create_child_anchor(end_iter)
-			img = TextViewImage(anchor)
+			img = TextViewImage(anchor, special_text)
 			animations = gajim.interface.emoticons_animations
 			if not emot_ascii in animations:
 				animations[emot_ascii] = gtk.gdk.PixbufAnimation(
@@ -1161,9 +1175,12 @@ class ConversationTextview(gobject.GObject):
 		buffer_.insert_with_tags_by_name(end_iter, '\n', 'eol')
 
 	def print_conversation_line(self, text, jid, kind, name, tim,
-	other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
-	subject=None, old_kind=None, xhtml=None, simple=False, graphics=True):
-		'''prints 'chat' type messages'''
+			other_tags_for_name=[], other_tags_for_time=[],
+			other_tags_for_text=[], subject=None, old_kind=None, xhtml=None,
+			simple=False, graphics=True):
+		"""
+		Print 'chat' type messages
+		"""
 		buffer_ = self.tv.get_buffer()
 		buffer_.begin_user_action()
 		if self.marks_queue.full():
@@ -1261,8 +1278,10 @@ class ConversationTextview(gobject.GObject):
 		buffer_.end_user_action()
 
 	def get_time_to_show(self, tim):
-		'''Get the time, with the day before if needed and return it.
-		It DOESN'T format a fuzzy time'''
+		"""
+		Get the time, with the day before if needed and return it. It DOESN'T
+		format a fuzzy time
+		"""
 		format = ''
 		# get difference in days since epoch (86400 = 24*3600)
 		# number of days since epoch for current time (in GMT) -
@@ -1315,8 +1334,10 @@ class ConversationTextview(gobject.GObject):
 			self.print_empty_line()
 
 	def print_real_text(self, text, text_tags=[], name=None, xhtml=None,
-	graphics=True):
-		'''this adds normal and special text. call this to add text'''
+			graphics=True):
+		"""
+		Add normal and special text. call this to add text
+		"""
 		if xhtml:
 			try:
 				if name and (text.startswith('/me ') or text.startswith('/me\n')):

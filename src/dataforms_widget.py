@@ -38,7 +38,10 @@ import itertools
 
 class DataFormWidget(gtk.Alignment, object):
 # "public" interface
-	''' Data Form widget. Use like any other widget. '''
+	"""
+	Data Form widget. Use like any other widget
+	"""
+
 	def __init__(self, dataformnode=None):
 		''' Create a widget. '''
 		gtk.Alignment.__init__(self, xscale=1.0, yscale=1.0)
@@ -65,7 +68,9 @@ class DataFormWidget(gtk.Alignment, object):
 		selection.set_mode(gtk.SELECTION_MULTIPLE)
 
 	def set_data_form(self, dataform):
-		''' Set the data form (xmpp.DataForm) displayed in widget. '''
+		"""
+		Set the data form (xmpp.DataForm) displayed in widget
+		"""
 		assert isinstance(dataform, dataforms.DataForm)
 
 		self.del_data_form()
@@ -84,7 +89,9 @@ class DataFormWidget(gtk.Alignment, object):
 			gtkgui_helpers.label_set_autowrap(self.instructions_label)
 
 	def get_data_form(self):
-		''' Data form displayed in the widget or None if no form. '''
+		"""
+		Data form displayed in the widget or None if no form
+		"""
 		return self._data_form
 
 	def del_data_form(self):
@@ -95,8 +102,10 @@ class DataFormWidget(gtk.Alignment, object):
 		'Data form presented in a widget')
 
 	def get_title(self):
-		''' Get the title of data form, as a unicode object. If no
-		title or no form, returns u''. Useful for setting window title. '''
+		"""
+		Get the title of data form, as a unicode object. If no title or no form,
+		returns u''. Useful for setting window title
+		"""
 		if self._data_form is not None:
 			if self._data_form.title is not None:
 				return self._data_form.title
@@ -117,9 +126,11 @@ class DataFormWidget(gtk.Alignment, object):
 		pass
 
 	def clean_data_form(self):
-		'''Remove data about existing form. This metod is empty, because
-		it is rewritten by build_*_data_form, according to type of form
-		which is actually displayed.'''
+		"""
+		Remove data about existing form. This metod is empty, because it is
+		rewritten by build_*_data_form, according to type of form which is
+		actually displayed
+		"""
 		pass
 
 	def build_single_data_form(self):
@@ -138,14 +149,18 @@ class DataFormWidget(gtk.Alignment, object):
 		self.clean_data_form = self.clean_single_data_form
 
 	def clean_single_data_form(self):
-		'''(Called as clean_data_form, read the docs of clean_data_form()).
-		Remove form from widget.'''
+		"""
+		Called as clean_data_form, read the docs of clean_data_form(). Remove
+		form from widget
+		"""
 		self.singleform.destroy()
 		self.clean_data_form = self.empty_method	# we won't call it twice
 		del self.singleform
 
 	def build_multiple_data_form(self):
-		'''Invoked when new multiple form is to be created.'''
+		"""
+		Invoked when new multiple form is to be created
+		"""
 		assert isinstance(self._data_form, dataforms.MultipleDataForm)
 
 		self.clean_data_form()
@@ -196,13 +211,17 @@ class DataFormWidget(gtk.Alignment, object):
 			self.refresh_multiple_buttons()
 
 	def clean_multiple_data_form(self):
-		'''(Called as clean_data_form, read the docs of clean_data_form()).
-		Remove form from widget.'''
+		"""
+		Called as clean_data_form, read the docs of clean_data_form(). Remove
+		form from widget
+		"""
 		self.clean_data_form = self.empty_method	# we won't call it twice
 		del self.multiplemodel
 
 	def refresh_multiple_buttons(self):
-		''' Checks for treeview state and makes control buttons sensitive.'''
+		"""
+		Checks for treeview state and makes control buttons sensitive
+		"""
 		selection = self.records_treeview.get_selection()
 		model = self.records_treeview.get_model()
 		count = selection.count_selected_rows()
@@ -273,9 +292,12 @@ class DataFormWidget(gtk.Alignment, object):
 		self.refresh_multiple_buttons()
 
 class SingleForm(gtk.Table, object):
-	''' Widget that represent DATAFORM_SINGLE mode form. Because this is used
-	not only to display single forms, but to form input windows of multiple-type
-	forms, it is in another class.'''
+	"""
+	Widget that represent DATAFORM_SINGLE mode form. Because this is used not
+	only to display single forms, but to form input windows of multiple-type
+	forms, it is in another class
+	"""
+
 	def __init__(self, dataform):
 		assert isinstance(dataform, dataforms.SimpleDataForm)
 
@@ -284,9 +306,11 @@ class SingleForm(gtk.Table, object):
 		self.set_row_spacings(6)
 
 		def decorate_with_tooltip(widget, field):
-			''' Adds a tooltip containing field's description to a widget.
-			Creates EventBox if widget doesn't have its own gdk window.
-			Returns decorated widget. '''
+			"""
+			Adds a tooltip containing field's description to a widget.  Creates
+			EventBox if widget doesn't have its own gdk window.  Returns decorated
+			widget
+			"""
 			if field.description != '':
 				if widget.flags() & gtk.NO_WINDOW:
 					evbox = gtk.EventBox()

@@ -35,17 +35,22 @@ import dialogs
 import dataforms_widget
 
 class CommandWindow:
-	'''Class for a window for single ad-hoc commands session. Note, that
-	there might be more than one for one account/jid pair in one moment.
+	"""
+	Class for a window for single ad-hoc commands session
 
-	TODO: maybe put this window into MessageWindow? consider this when
-	TODO: it will be possible to manage more than one window of one
-	TODO: account/jid pair in MessageWindowMgr.
+	Note, that there might be more than one for one account/jid pair in one
+	moment.
 
-	TODO: gtk 2.10 has a special wizard-widget, consider using it...'''
+	TODO: Maybe put this window into MessageWindow? consider this when it will
+	be possible to manage more than one window of one.
+	TODO: Account/jid pair in MessageWindowMgr.
+	TODO: GTK 2.10 has a special wizard-widget, consider using it...
+	"""
 
 	def __init__(self, account, jid, commandnode=None):
-		'''Create new window.'''
+		"""
+		Create new window
+		"""
 
 		# an account object
 		self.account = gajim.connections[account]
@@ -89,16 +94,29 @@ class CommandWindow:
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
 
-# these functions are set up by appropriate stageX methods
-	def stage_finish(self, *anything): pass
-	def stage_back_button_clicked(self, *anything): assert False
-	def stage_forward_button_clicked(self, *anything): assert False
-	def stage_execute_button_clicked(self, *anything): assert False
-	def stage_close_button_clicked(self, *anything): assert False
-	def stage_adhoc_commands_window_delete_event(self, *anything): assert False
-	def do_nothing(self, *anything): return False
+	# These functions are set up by appropriate stageX methods.
+	def stage_finish(self, *anything):
+		pass
 
-# widget callbacks
+	def stage_back_button_clicked(self, *anything):
+		assert False
+
+	def stage_forward_button_clicked(self, *anything):
+		assert False
+
+	def stage_execute_button_clicked(self, *anything):
+		assert False
+
+	def stage_close_button_clicked(self, *anything):
+		assert False
+
+	def stage_adhoc_commands_window_delete_event(self, *anything):
+		assert False
+
+	def do_nothing(self, *anything):
+		return False
+
+	# Widget callbacks...
 	def on_back_button_clicked(self, *anything):
 		return self.stage_back_button_clicked(*anything)
 
@@ -123,8 +141,10 @@ class CommandWindow:
 
 # stage 1: waiting for command list
 	def stage1(self):
-		'''Prepare the first stage. Request command list,
-		set appropriate state of widgets.'''
+		"""
+		Prepare the first stage. Request command list, set appropriate state of
+		widgets
+		"""
 		# close old stage...
 		self.stage_finish()
 
@@ -164,9 +184,12 @@ class CommandWindow:
 
 # stage 2: choosing the command to execute
 	def stage2(self):
-		'''Populate the command list vbox with radiobuttons
-		(FIXME: if there is more commands, maybe some kind of list?),
-		set widgets' state.'''
+		"""
+		Populate the command list vbox with radiobuttons
+
+		FIXME: If there is more commands, maybe some kind of list, set widgets
+		state
+		"""
 		# close old stage
 		self.stage_finish()
 
@@ -198,7 +221,9 @@ class CommandWindow:
 		self.stage_adhoc_commands_window_delete_event = self.do_nothing
 
 	def stage2_finish(self):
-		'''Remove widgets we created. Not needed when the window is destroyed.'''
+		"""
+		Remove widgets we created. Not needed when the window is destroyed
+		"""
 		def remove_widget(widget):
 			self.command_list_vbox.remove(widget)
 		self.command_list_vbox.foreach(remove_widget)
@@ -247,8 +272,10 @@ class CommandWindow:
 		pass
 
 	def stage3_close_button_clicked(self, widget):
-		''' We are in the middle of executing command. Ask user if he really want to cancel
-		the process, then... cancel it. '''
+		"""
+		We are in the middle of executing command. Ask user if he really want to
+		cancel the process, then cancel it
+		"""
 		# this works also as a handler for window_delete_event, so we have to return appropriate
 		# values
 		if self.form_status == 'completed':
@@ -362,7 +389,9 @@ class CommandWindow:
 
 # stage 4: no commands are exposed
 	def stage4(self):
-		'''Display the message. Wait for user to close the window'''
+		"""
+		Display the message. Wait for user to close the window
+		"""
 		# close old stage
 		self.stage_finish()
 
@@ -387,7 +416,9 @@ class CommandWindow:
 
 # stage 5: an error has occured
 	def stage5(self, error=None, errorid=None, senderror=False):
-		'''Display the error message. Wait for user to close the window'''
+		"""
+		Display the error message. Wait for user to close the window
+		"""
 		# FIXME: sending error to responder
 		# close old stage
 		self.stage_finish()
@@ -430,8 +461,10 @@ class CommandWindow:
 
 # helpers to handle pulsing in progressbar
 	def setup_pulsing(self, progressbar):
-		'''Set the progressbar to pulse. Makes a custom
-		function to repeatedly call progressbar.pulse() method.'''
+		"""
+		Set the progressbar to pulse. Makes a custom function to repeatedly call
+		progressbar.pulse() method
+		"""
 		assert not self.pulse_id
 		assert isinstance(progressbar, gtk.ProgressBar)
 
@@ -443,14 +476,18 @@ class CommandWindow:
 		self.pulse_id = gobject.timeout_add(80, callback)
 
 	def remove_pulsing(self):
-		'''Stop pulsing, useful when especially when removing widget.'''
+		"""
+		Stop pulsing, useful when especially when removing widget
+		"""
 		if self.pulse_id:
 			gobject.source_remove(self.pulse_id)
 		self.pulse_id=None
 
 # handling xml stanzas
 	def request_command_list(self):
-		'''Request the command list. Change stage on delivery.'''
+		"""
+		Request the command list. Change stage on delivery
+		"""
 		query = xmpp.Iq(typ='get', to=xmpp.JID(self.jid), queryNS=xmpp.NS_DISCO_ITEMS)
 		query.setQuerynode(xmpp.NS_COMMANDS)
 
@@ -481,7 +518,9 @@ class CommandWindow:
 		self.account.connection.SendAndCallForResponse(query, callback)
 
 	def send_command(self, action='execute'):
-		'''Send the command with data form. Wait for reply.'''
+		"""
+		Send the command with data form. Wait for reply
+		"""
 		# create the stanza
 		assert isinstance(self.commandnode, unicode)
 		assert action in ('execute', 'prev', 'next', 'complete')
@@ -510,7 +549,9 @@ class CommandWindow:
 		self.account.connection.SendAndCallForResponse(stanza, callback)
 
 	def send_cancel(self):
-		'''Send the command with action='cancel'. '''
+		"""
+		Send the command with action='cancel'
+		"""
 		assert self.commandnode
 		if self.sessionid and self.account.connection:
 			# we already have sessionid, so the service sent at least one reply.

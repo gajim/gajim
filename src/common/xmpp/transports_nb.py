@@ -72,7 +72,7 @@ def get_proxy_data_from_dict(proxy):
 		# with proxy!=bosh or with bosh over HTTP proxy we're connecting to proxy
 		# machine
 		tcp_host, tcp_port = proxy['host'], proxy['port']
-	if proxy['useauth']:
+	if proxy.get('useauth', False):
 		proxy_user, proxy_pass = proxy['user'], proxy['pass']
 	return tcp_host, tcp_port, proxy_user, proxy_pass
 
@@ -92,6 +92,7 @@ RECV_BUFSIZE = 32768 # 2x maximum size of ssl packet, should be plenty
 
 DATA_RECEIVED = 'DATA RECEIVED'
 DATA_SENT = 'DATA SENT'
+DATA_ERROR = 'DATA ERROR'
 
 DISCONNECTED = 'DISCONNECTED'
 DISCONNECTING = 'DISCONNECTING'
@@ -650,7 +651,7 @@ class NonBlockingHTTP(NonBlockingTCP):
 		self.recvbuff = '%s%s' % (self.recvbuff or '', data)
 		statusline, headers, httpbody, buffer_rest = self.parse_http_message(
 			self.recvbuff)
-		
+
 		if not (statusline and headers and httpbody):
 			log.debug('Received incomplete HTTP response')
 			return
@@ -662,12 +663,12 @@ class NonBlockingHTTP(NonBlockingTCP):
 		self.expected_length = int(headers['Content-Length'])
 		if 'Connection' in headers and headers['Connection'].strip()=='close':
 			self.close_current_connection = True
-			
+
 		if self.expected_length > len(httpbody):
 			# If we haven't received the whole HTTP mess yet, let's end the thread.
 			# It will be finnished from one of following recvs on plugged socket.
-			log.info('not enough bytes in HTTP response - %d expected, %d got' %
-				(self.expected_length, len(self.recvbuff)))
+			log.info('not enough bytes in HTTP response - %d expected, got %d' %
+				(self.expected_length, len(httpbody)))
 		else:
 			# First part of buffer has been extraced and is going to be handled,
 			# remove it from buffer
@@ -719,6 +720,7 @@ class NonBlockingHTTP(NonBlockingTCP):
 			http_rest - what is left in the message after a full HTTP header + body
 		'''
 		message = message.replace('\r','')
+		message = message.lstrip('\n')
 		splitted = message.split('\n\n')
 		if len(splitted) < 2:
 			# no complete http message. Keep filling the buffer until we find one
@@ -726,9 +728,6 @@ class NonBlockingHTTP(NonBlockingTCP):
 			return ('', '', '', buffer_rest)
 		else:
 			(header, httpbody)  = splitted[:2]
-			if httpbody.endswith('\n'):
-				httpbody = httpbody[:-1]
-			buffer_rest = "\n\n".join(splitted[2:])
 			header = header.split('\n')
 			statusline = header[0].split(' ', 2)
 			header = header[1:]
@@ -736,6 +735,12 @@ class NonBlockingHTTP(NonBlockingTCP):
 			for dummy in header:
 				row = dummy.split(' ', 1)
 				headers[row[0][:-1]] = row[1]
+			body_size = headers['Content-Length']
+			rest_splitted = splitted[2:]
+			while (len(httpbody) < body_size) and rest_splitted:
+				# Complete httpbody until it has the announced size
+				httpbody = '\n\n'.join([httpbody, rest_splitted.pop(0)])
+			buffer_rest = "\n\n".join(rest_splitted)
 			return (statusline, headers, httpbody, buffer_rest)
 
 

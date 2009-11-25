@@ -60,7 +60,6 @@ INTERFACE = 'org.gajim.dbus.RemoteInterface'
 SERVICE = 'org.gajim.dbus'
 BASENAME = 'gajim-remote'
 
-
 class GajimRemote:
 
 	def __init__(self):
@@ -327,7 +326,9 @@ class GajimRemote:
 			self.print_result(res)
 
 	def print_result(self, res):
-		''' Print retrieved result to the output '''
+		"""
+		Print retrieved result to the output
+		"""
 		if res is not None:
 			if self.command in ('open_chat', 'send_chat_message', 'send_single_message', 'start_chat'):
 				if self.command in ('send_message', 'send_single_message'):
@@ -382,8 +383,9 @@ class GajimRemote:
 		return test
 
 	def init_connection(self):
-		''' create the onnection to the session dbus,
-		or exit if it is not possible '''
+		"""
+		Create the onnection to the session dbus, or exit if it is not possible
+		"""
 		try:
 			self.sbus = dbus.SessionBus()
 		except Exception:
@@ -398,8 +400,10 @@ class GajimRemote:
 		self.method = interface.__getattr__(self.command)
 
 	def make_arguments_row(self, args):
-		''' return arguments list. Mandatory arguments are enclosed with:
-		'<', '>', optional arguments - with '[', ']' '''
+		"""
+		Return arguments list. Mandatory arguments are enclosed with:
+		'<', '>', optional arguments - with '[', ']'
+		"""
 		s = ''
 		for arg in args:
 			if arg[2]:
@@ -409,7 +413,9 @@ class GajimRemote:
 		return s
 
 	def help_on_command(self, command):
-		''' return help message for a given command '''
+		"""
+		Return help message for a given command
+		"""
 		if command in self.commands:
 			command_props = self.commands[command]
 			arguments_str = self.make_arguments_row(command_props[1])
@@ -424,7 +430,9 @@ class GajimRemote:
 		send_error(_('%s not found') % command)
 
 	def compose_help(self):
-		''' print usage, and list available commands '''
+		"""
+		Print usage, and list available commands
+		"""
 		s = _('Usage: %s command [arguments]\nCommand is one of:\n' ) % BASENAME
 		for command in sorted(self.commands):
 			s += '  ' + command
@@ -437,7 +445,9 @@ class GajimRemote:
 		return s
 
 	def print_info(self, level, prop_dict, encode_return = False):
-		''' return formated string from data structure '''
+		"""
+		Return formated string from data structure
+		"""
 		if prop_dict is None or not isinstance(prop_dict, (dict, list, tuple)):
 			return ''
 		ret_str = ''
@@ -486,7 +496,9 @@ class GajimRemote:
 		return ret_str
 
 	def check_arguments(self):
-		''' Make check if all necessary arguments are given '''
+		"""
+		Make check if all necessary arguments are given
+		"""
 		argv_len = self.argv_len - 2
 		args = self.commands[self.command][1]
 		if len(args) < argv_len:
@@ -559,7 +571,9 @@ class GajimRemote:
 		sys.exit(0)
 
 	def call_remote_method(self):
-		''' calls self.method with arguments from sys.argv[2:] '''
+		"""
+		Calls self.method with arguments from sys.argv[2:]
+		"""
 		args = [i.decode(PREFERRED_ENCODING) for i in self.arguments]
 		args = [dbus.String(i) for i in args]
 		try:

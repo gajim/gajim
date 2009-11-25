@@ -119,6 +119,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			log_type = 'chat_msg_recv'
 		else:
 			log_type = 'single_msg_recv'
+
 		if self.is_loggable() and msgtxt:
 			try:
 				msg_id = gajim.logger.write(log_type, full_jid_with_resource,

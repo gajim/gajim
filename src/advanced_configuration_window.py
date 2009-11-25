@@ -43,7 +43,9 @@ C_TYPE
 GTKGUI_GLADE = 'manage_accounts_window.glade'
 
 def rate_limit(rate):
-	''' call func at most *rate* times per second '''
+	"""
+	Call func at most *rate* times per second
+	"""
 	def decorator(func):
 		timeout = [None]
 		def f(*args, **kwargs):
@@ -131,8 +133,10 @@ class AdvancedConfigurationWindow(object):
 		gajim.interface.instances['advanced_config'] = self
 
 	def cb_value_column_data(self, col, cell, model, iter_):
-		'''check if it's boolen or holds password stuff and if yes
-		make the cellrenderertext not editable else it's editable'''
+		"""
+		Check if it's boolen or holds password stuff and if yes  make the
+		cellrenderertext not editable, else - it's editable
+		"""
 		optname = model[iter_][C_PREFNAME]
 		opttype = model[iter_][C_TYPE]
 		if opttype == self.types['boolean'] or optname == 'password':

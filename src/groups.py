@@ -26,7 +26,10 @@ import gtkgui_helpers
 
 class GroupsPostWindow:
 	def __init__(self, account, servicejid, groupid):
-		'''Open new 'create post' window to create message for groupid on servicejid service.'''
+		"""
+		Open new 'create post' window to create message for groupid on servicejid
+		service
+		"""
 		assert isinstance(servicejid, basestring)
 		assert isinstance(groupid, basestring)
 
@@ -43,11 +46,15 @@ class GroupsPostWindow:
 		self.window.show_all()
 
 	def on_cancel_button_clicked(self, w):
-		'''Close window.'''
+		"""
+		Close window
+		"""
 		self.window.destroy()
 
 	def on_send_button_clicked(self, w):
-		'''Gather info from widgets and send it as a message.'''
+		"""
+		Gather info from widgets and send it as a message
+		"""
 		# constructing item to publish... that's atom:entry element
 		item = xmpp.Node('entry', {'xmlns':'http://www.w3.org/2005/Atom'})
 		author = item.addChild('author')

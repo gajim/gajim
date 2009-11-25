@@ -68,7 +68,7 @@ class ProfileWindow:
 		return True # loop forever
 
 	def remove_statusbar(self, message_id):
-		self.statusbar.remove(self.context_id, message_id)
+		self.statusbar.remove_message(self.context_id, message_id)
 		self.remove_statusbar_timeout_id = None
 
 	def on_profile_window_destroy(self, widget):
@@ -246,7 +246,7 @@ class ProfileWindow:
 					self.set_value(i + '_entry', vcard_[i])
 		if self.update_progressbar_timeout_id is not None:
 			if self.message_id:
-				self.statusbar.remove(self.context_id, self.message_id)
+				self.statusbar.remove_message(self.context_id, self.message_id)
 			self.message_id = self.statusbar.push(self.context_id,
 				_('Information received'))
 			self.remove_statusbar_timeout_id = gobject.timeout_add_seconds(3,
@@ -322,8 +322,7 @@ class ProfileWindow:
 		nick = ''
 		if 'NICKNAME' in vcard_:
 			nick = vcard_['NICKNAME']
-			from common import pep
-			pep.user_send_nickname(self.account, nick)
+			gajim.connections[self.account].send_nickname(nick)
 		if nick == '':
 			nick = gajim.config.get_per('accounts', self.account, 'name')
 		gajim.nicks[self.account] = nick
@@ -342,7 +341,7 @@ class ProfileWindow:
 
 	def vcard_not_published(self):
 		if self.message_id:
-			self.statusbar.remove(self.context_id, self.message_id)
+			self.statusbar.remove_message(self.context_id, self.message_id)
 		self.message_id = self.statusbar.push(self.context_id,
 			_('Information NOT published'))
 		self.remove_statusbar_timeout_id = gobject.timeout_add_seconds(3,

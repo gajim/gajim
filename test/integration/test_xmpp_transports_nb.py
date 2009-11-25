@@ -254,12 +254,12 @@ class TestNonBlockingHTTP(AbstractTransportTest):
 	def test_receive_http_message_in_chunks(self):
 		''' Let _on_receive handle some chunked http messages  '''
 		transport = self._get_transport(self.bosh_http_dict)
-		
-		header = ("HTTP/1.1 200 OK\r\nContent-Type: text/xml; charset=utf-8\r\n" +
-			"Content-Length: 88\r\n\r\n")
-		payload = "<test>Please don't fail!</test>"
+
+		payload = "<test>Please don't fail!\n\n</test>"
 		body = "<body xmlns='http://jabber.org/protocol/httpbind'>%s</body>" \
 			% payload
+		header = "HTTP/1.1 200 OK\r\nContent-Type: text/xml; charset=utf-8\r\n" +\
+			"Content-Length: %i\r\n\r\n" % len(body)
 		message = "%s%s" % (header, body)
 
 		chunk1, chunk2, chunk3, chunk4  = message[:20], message[20:73], \

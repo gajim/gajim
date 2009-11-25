@@ -33,7 +33,9 @@ from common import helpers
 from common import kwalletbinding
 
 class FeaturesWindow:
-	'''Class for features window'''
+	"""
+	Class for features window
+	"""
 
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('features_window.glade')
@@ -83,10 +85,6 @@ class FeaturesWindow:
 				_('Passive popups notifying for new events.'),
 				_('Requires python-notify or instead python-dbus in conjunction with notification-daemon.'),
 				_('Feature not available under Windows.')),
-			_('Trayicon'): (self.trayicon_available,
-				_('A icon in systemtray reflecting the current presence.'),
-				_('Requires python-gnome2-extras or compiled trayicon module from Gajim sources.'),
-				_('Requires PyGTK >= 2.10.')),
 			_('Automatic status'): (self.idle_available,
 				_('Ability to measure idle time, in order to set auto status.'),
 				_('Requires libxss library.'),
@@ -236,15 +234,6 @@ class FeaturesWindow:
 			return True
 		try:
 			import pynotify
-		except Exception:
-			return False
-		return True
-
-	def trayicon_available(self):
-		if os.name == 'nt':
-			return True
-		try:
-			import systray
 		except Exception:
 			return False
 		return True
