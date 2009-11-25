@@ -2733,8 +2733,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		con.RegisterHandler('message', self._messageCB)
 		con.RegisterHandler('presence', self._presenceCB)
 		con.RegisterHandler('presence', self._capsPresenceCB)
-		con.RegisterHandler('message', self._pubsubEventCB,
-			ns=common.xmpp.NS_PUBSUB_EVENT)
+		# We use makefirst so that this handler is called before _messageCB, and
+		# can prevent calling it when it's not needed.
+		# We also don't check for namespace, else it cannot stop _messageCB to be
+		# called
+		con.RegisterHandler('message', self._pubsubEventCB, makefirst=True)
 		con.RegisterHandler('iq', self._vCardCB, 'result',
 			common.xmpp.NS_VCARD)
 		con.RegisterHandler('iq', self._rosterSetCB, 'set',

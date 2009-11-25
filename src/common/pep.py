@@ -454,6 +454,8 @@ class ConnectionPEP(object):
 	
 	def _pubsubEventCB(self, xmpp_dispatcher, msg):
 		''' Called when we receive <message /> with pubsub event. '''
+		if not msg.getTag('event'):
+			return
 		if msg.getTag('error'):
 			log.debug('PubsubEventCB received error stanza. Ignoring')
 			raise xmpp.NodeProcessed
