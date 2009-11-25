@@ -72,7 +72,7 @@ def get_proxy_data_from_dict(proxy):
 		# with proxy!=bosh or with bosh over HTTP proxy we're connecting to proxy
 		# machine
 		tcp_host, tcp_port = proxy['host'], proxy['port']
-	if proxy['useauth']:
+	if proxy.get('useauth', False):
 		proxy_user, proxy_pass = proxy['user'], proxy['pass']
 	return tcp_host, tcp_port, proxy_user, proxy_pass
 
