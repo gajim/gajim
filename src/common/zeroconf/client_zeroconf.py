@@ -710,8 +710,6 @@ class ClientZeroconf:
 		try:
 			item = self.roster[to]
 		except KeyError:
-			raise KeyError
-			print 'ret', to, self.roster.keys()
 			# Contact offline
 			return -1
 
