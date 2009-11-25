@@ -317,15 +317,20 @@ class ConnectionBytestream:
 		field.setValue(common.xmpp.NS_BYTESTREAM)
 		self.connection.send(iq)
 
+	def _ft_get_our_jid(self):
+		our_jid = gajim.get_jid_from_account(self.name)
+		resource = self.server_resource
+		return our_jid + '/' + resource
+
+	def _ft_get_receiver_jid(self, file_props):
+		return file_props['receiver'].jid + '/' + file_props['receiver'].resource
+
 	def send_file_request(self, file_props):
 		''' send iq for new FT request '''
 		if not self.connection or self.connected < 2:
 			return
-		our_jid = gajim.get_jid_from_account(self.name)
-		resource = self.server_resource
-		frm = our_jid + '/' + resource
-		file_props['sender'] = frm
-		fjid = file_props['receiver'].jid + '/' + file_props['receiver'].resource
+		file_props['sender'] = self._ft_get_our_jid()
+		fjid = self._ft_get_receiver_jid(file_props)
 		iq = common.xmpp.Protocol(name = 'iq', to = fjid,
 			typ = 'set')
 		iq.setID(file_props['sid'])
@@ -418,6 +423,9 @@ class ConnectionBytestream:
 		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
 		raise common.xmpp.NodeProcessed
 
+	def _ft_get_from(self, iq_obj):
+		return helpers.get_full_jid_from_iq(iq_obj)
+
 	def _bytestreamSetCB(self, con, iq_obj):
 		log.debug('_bytestreamSetCB')
 		target = unicode(iq_obj.getAttr('to'))
@@ -434,7 +442,7 @@ class ConnectionBytestream:
 					'target': target,
 					'id': id_,
 					'sid': sid,
-					'initiator': helpers.get_full_jid_from_iq(iq_obj)
+					'initiator': self._ft_get_from(iq_obj)
 				}
 				for attr in item.getAttrs():
 					host_dict[attr] = item.getAttr(attr)
@@ -472,7 +480,7 @@ class ConnectionBytestream:
 			return
 		if not real_id.startswith('au_'):
 			return
-		frm = helpers.get_full_jid_from_iq(iq_obj)
+		frm = self._ft_get_from(iq_obj)
 		id_ = real_id[3:]
 		if id_ in self.files_props:
 			file_props = self.files_props[id_]
@@ -482,9 +490,12 @@ class ConnectionBytestream:
 						gajim.socks5queue.activate_proxy(host['idx'])
 						raise common.xmpp.NodeProcessed
 
+	def _ft_get_streamhost_jid_attr(self, streamhost):
+		return helpers.parse_jid(streamhost.getAttr('jid'))
+
 	def _bytestreamResultCB(self, con, iq_obj):
 		log.debug('_bytestreamResultCB')
-		frm = helpers.get_full_jid_from_iq(iq_obj)
+		frm = self._ft_get_from(iq_obj)
 		real_id = unicode(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
 		gajim.proxy65_manager.resolve_result(frm, query)
@@ -512,7 +523,7 @@ class ConnectionBytestream:
 						gajim.socks5queue.activate_proxy(host['idx'])
 						break
 			raise common.xmpp.NodeProcessed
-		jid = helpers.parse_jid(streamhost.getAttr('jid'))
+		jid = self._ft_get_streamhost_jid_attr(streamhost)
 		if 'streamhost-used' in file_props and \
 			file_props['streamhost-used'] is True:
 			raise common.xmpp.NodeProcessed
@@ -569,7 +580,7 @@ class ConnectionBytestream:
 		if 'request-id' in file_props:
 			# we have already sent streamhosts info
 			return
-		file_props['receiver'] = helpers.get_full_jid_from_iq(iq_obj)
+		file_props['receiver'] = self._ft_get_from(iq_obj)
 		si = iq_obj.getTag('si')
 		file_tag = si.getTag('file')
 		range_tag = None
@@ -595,9 +606,9 @@ class ConnectionBytestream:
 
 	def _siSetCB(self, con, iq_obj):
 		log.debug('_siSetCB')
-		jid = helpers.get_jid_from_iq(iq_obj)
+		jid = self._ft_get_from(iq_obj)
 		file_props = {'type': 'r'}
-		file_props['sender'] = helpers.get_full_jid_from_iq(iq_obj)
+		file_props['sender'] = jid
 		file_props['request-id'] = unicode(iq_obj.getAttr('id'))
 		si = iq_obj.getTag('si')
 		profile = si.getAttr('profile')
@@ -635,7 +646,7 @@ class ConnectionBytestream:
 			file_props['mime-type'] = mime_type
 		our_jid = gajim.get_jid_from_account(self.name)
 		resource = self.server_resource
-		file_props['receiver'] = our_jid + '/' + resource
+		file_props['receiver'] = self._ft_get_our_jid()
 		file_props['sid'] = unicode(si.getAttr('id'))
 		file_props['transfered_size'] = []
 		gajim.socks5queue.add_file_props(self.name, file_props)
@@ -656,7 +667,7 @@ class ConnectionBytestream:
 		if file_props is None:
 			# file properties for jid is none
 			return
-		jid = helpers.get_jid_from_iq(iq_obj)
+		jid = self._ft_get_from(iq_obj)
 		file_props['error'] = -3
 		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
 		raise common.xmpp.NodeProcessed

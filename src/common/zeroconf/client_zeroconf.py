@@ -288,6 +288,7 @@ class P2PClient(IdleObject):
 		pass
 
 	def _register_handlers(self):
+		self._caller.peerhost = self.Connection._sock.getsockname()
 		self.RegisterHandler('message', lambda conn, data:self._caller._messageCB(
 			self.Server, conn, data))
 		self.RegisterHandler('iq', self._caller._siSetCB, 'set',
@@ -709,6 +710,8 @@ class ClientZeroconf:
 		try:
 			item = self.roster[to]
 		except KeyError:
+			raise KeyError
+			print 'ret', to, self.roster.keys()
 			# Contact offline
 			return -1
 

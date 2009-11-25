@@ -1324,6 +1324,7 @@ class Interface:
 	def handle_event_file_request_error(self, account, array):
 		# ('FILE_REQUEST_ERROR', account, (jid, file_props, error_msg))
 		jid, file_props, errmsg = array
+		jid = gajim.get_jid_without_resource(jid)
 		ft = self.instances['file_transfers']
 		ft.set_status(file_props['type'], file_props['sid'], 'stop')
 		errno = file_props['error']
@@ -1353,6 +1354,7 @@ class Interface:
 
 	def handle_event_file_request(self, account, array):
 		jid = array[0]
+		jid = gajim.get_jid_without_resource(jid)
 		if jid not in gajim.contacts.get_jid_list(account):
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,
