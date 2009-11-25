@@ -63,17 +63,23 @@ from common.exceptions import GajimGeneralException
 
 #---------- PreferencesWindow class -------------#
 class PreferencesWindow:
-	'''Class for Preferences window'''
+	"""
+	Class for Preferences window
+	"""
 
 	def on_preferences_window_destroy(self, widget):
-		'''close window'''
+		"""
+		Close window
+		"""
 		del gajim.interface.instances['preferences']
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()
 
 	def __init__(self):
-		'''Initialize Preferences window'''
+		"""
+		Initialize Preferences window
+		"""
 		self.xml = gtkgui_helpers.get_glade('preferences_window.glade')
 		self.window = self.xml.get_widget('preferences_window')
 		self.window.set_transient_for(gajim.interface.roster.window)
@@ -495,8 +501,10 @@ class PreferencesWindow:
 			self.window.hide()
 
 	def get_per_account_option(self, opt):
-		'''Return the value of the option opt if it's the same in all accounts
-		else returns "mixed"'''
+		"""
+		Return the value of the option opt if it's the same in all accounts else
+		returns "mixed"
+		"""
 		if len(gajim.connections) == 0:
 			# a non existant key return default value
 			return gajim.config.get_per('accounts', '__default__', opt)
@@ -585,7 +593,9 @@ class PreferencesWindow:
 		self.toggle_emoticons()
 
 	def toggle_emoticons(self):
-		'''Update emoticons state in Opened Chat Windows'''
+		"""
+		Update emoticons state in Opened Chat Windows
+		"""
 		for win in gajim.interface.msg_win_mgr.windows():
 			win.toggle_emoticons()
 
@@ -779,7 +789,9 @@ class PreferencesWindow:
 			self.sounds_preferences.window.present()
 
 	def update_text_tags(self):
-		'''Update color tags in Opened Chat Windows'''
+		"""
+		Update color tags in opened chat windows
+		"""
 		for win in gajim.interface.msg_win_mgr.windows():
 			win.update_tags()
 
@@ -800,7 +812,9 @@ class PreferencesWindow:
 		gajim.interface.save_config()
 
 	def update_text_font(self):
-		'''Update text font in Opened Chat Windows'''
+		"""
+		Update text font in opened chat windows
+		"""
 		for win in gajim.interface.msg_win_mgr.windows():
 			win.update_font()
 
@@ -879,7 +893,9 @@ class PreferencesWindow:
 		gajim.interface.save_config()
 
 	def _set_color(self, state, widget_name, option):
-		''' set color value in prefs and update the UI '''
+		"""
+		Set color value in prefs and update the UI
+		"""
 		if state:
 			color = self.xml.get_widget(widget_name).get_color()
 			color_string = gtkgui_helpers.make_color_string(color)
@@ -1346,7 +1362,10 @@ class ManageProxiesWindow:
 
 #---------- AccountsWindow class -------------#
 class AccountsWindow:
-	'''Class for accounts window: list of accounts'''
+	"""
+	Class for accounts window: list of accounts
+	"""
+
 	def on_accounts_window_destroy(self, widget):
 		del gajim.interface.instances['accounts']
 
@@ -1414,7 +1433,9 @@ class AccountsWindow:
 			iter_ = model.iter_next(iter_)
 
 	def init_accounts(self):
-		'''initialize listStore with existing accounts'''
+		"""
+		Initialize listStore with existing accounts
+		"""
 		self.remove_button.set_sensitive(False)
 		self.rename_button.set_sensitive(False)
 		self.current_account = None
@@ -1440,7 +1461,9 @@ class AccountsWindow:
 		elif self.need_relogin and self.current_account and \
 		gajim.connections[self.current_account].connected > 0:
 			def login(account, show_before, status_before):
-				''' login with previous status'''
+				"""
+				Login with previous status
+				"""
 				# first make sure connection is really closed,
 				# 0.5 may not be enough
 				gajim.connections[account].disconnect(True)
@@ -1473,7 +1496,9 @@ class AccountsWindow:
 		self.resend_presence = False
 
 	def on_accounts_treeview_cursor_changed(self, widget):
-		'''Activate modify buttons when a row is selected, update accounts info'''
+		"""
+		Activate modify buttons when a row is selected, update accounts info
+		"""
 		sel = self.accounts_treeview.get_selection()
 		(model, iter_) = sel.get_selected()
 		if iter_:
@@ -1739,7 +1764,9 @@ class AccountsWindow:
 			gajim.config.get_per('accounts', account, 'use_ft_proxies'))
 
 	def on_add_button_clicked(self, widget):
-		'''When add button is clicked: open an account information window'''
+		"""
+		When add button is clicked: open an account information window
+		"""
 		if 'account_creation_wizard' in gajim.interface.instances:
 			gajim.interface.instances['account_creation_wizard'].window.present()
 		else:
@@ -1747,8 +1774,10 @@ class AccountsWindow:
 				AccountCreationWizardWindow()
 
 	def on_remove_button_clicked(self, widget):
-		'''When delete button is clicked:
-		Remove an account from the listStore and from the config file'''
+		"""
+		When delete button is clicked: Remove an account from the listStore and
+		from the config file
+		"""
 		if not self.current_account:
 			return
 		account = self.current_account
@@ -2409,8 +2438,11 @@ class AccountsWindow:
 			'zeroconf_email', email)
 
 class FakeDataForm(gtk.Table, object):
-	'''Class for forms that are in XML format <entry1>value1</entry1>
-	infos in a table {entry1: value1, }'''
+	"""
+	Class for forms that are in XML format <entry1>value1</entry1> infos in a
+	table {entry1: value1}
+	"""
+
 	def __init__(self, infos):
 		gtk.Table.__init__(self)
 		self.infos = infos
@@ -2418,7 +2450,9 @@ class FakeDataForm(gtk.Table, object):
 		self._draw_table()
 
 	def _draw_table(self):
-		'''Draw the table'''
+		"""
+		Draw the table
+		"""
 		nbrow = 0
 		if 'instructions' in self.infos:
 			nbrow = 1
@@ -2452,9 +2486,11 @@ class FakeDataForm(gtk.Table, object):
 		return self.infos
 
 class ServiceRegistrationWindow:
-	'''Class for Service registration window:
-	Window that appears when we want to subscribe to a service
-	if is_form we use dataforms_widget else we use service_registarion_window'''
+	"""
+	Class for Service registration window. Window that appears when we want to
+	subscribe to a service if is_form we use dataforms_widget else we use
+	service_registarion_window
+	"""
 	def __init__(self, service, infos, account, is_form):
 		self.service = service
 		self.account = account
@@ -2501,7 +2537,7 @@ class ServiceRegistrationWindow:
 		self.window.destroy()
 
 class GroupchatConfigWindow:
-	'''GroupchatConfigWindow class'''
+
 	def __init__(self, account, room_jid, form = None):
 		self.account = account
 		self.room_jid = room_jid
@@ -2654,7 +2690,9 @@ class GroupchatConfigWindow:
 		self.remove_button[affiliation].set_sensitive(True)
 
 	def affiliation_list_received(self, users_dict):
-		'''Fill the affiliation treeview'''
+		"""
+		Fill the affiliation treeview
+		"""
 		for jid in users_dict:
 			affiliation = users_dict[jid]['affiliation']
 			if affiliation not in self.affiliation_labels.keys():
@@ -2703,8 +2741,10 @@ class GroupchatConfigWindow:
 
 #---------- RemoveAccountWindow class -------------#
 class RemoveAccountWindow:
-	'''ask for removing from gajim only or from gajim and server too
-	and do removing of the account given'''
+	"""
+	Ask for removing from gajim only or from gajim and server too and do
+	removing of the account given
+	"""
 
 	def on_remove_account_window_destroy(self, widget):
 		if self.account in gajim.interface.instances:
@@ -2904,7 +2944,9 @@ class ManageBookmarksWindow:
 		del gajim.interface.instances['manage_bookmarks']
 
 	def on_add_bookmark_button_clicked(self, widget):
-		'''Add a new bookmark.'''
+		"""
+		Add a new bookmark
+		"""
 		# Get the account that is currently used
 		# (the parent of the currently selected item)
 		(model, iter_) = self.selection.get_selected()
@@ -2929,9 +2971,9 @@ class ManageBookmarksWindow:
 		self.view.set_cursor(model.get_path(iter_))
 
 	def on_remove_bookmark_button_clicked(self, widget):
-		'''
-		Remove selected bookmark.
-		'''
+		"""
+		Remove selected bookmark
+		"""
 		(model, iter_) = self.selection.get_selected()
 		if not iter_: # Nothing selected
 			return
@@ -2944,9 +2986,9 @@ class ManageBookmarksWindow:
 		self.clear_fields()
 
 	def check_valid_bookmark(self):
-		'''
-		Check if all neccessary fields are entered correctly.
-		'''
+		"""
+		Check if all neccessary fields are entered correctly
+		"""
 		(model, iter_) = self.selection.get_selected()
 
 		if not model.iter_parent(iter_):
@@ -2963,10 +3005,10 @@ class ManageBookmarksWindow:
 		return True
 
 	def on_ok_button_clicked(self, widget):
-		'''
-		Parse the treestore data into our new bookmarks array,
-		then send the new bookmarks to the server.
-		'''
+		"""
+		Parse the treestore data into our new bookmarks array, then send the new
+		bookmarks to the server.
+		"""
 		(model, iter_) = self.selection.get_selected()
 		if iter_ and model.iter_parent(iter_):
 			#bookmark selected, check it
@@ -2997,9 +3039,9 @@ class ManageBookmarksWindow:
 		self.window.destroy()
 
 	def bookmark_selected(self, selection):
-		'''
+		"""
 		Fill in the bookmark's data into the fields.
-		'''
+		"""
 		(model, iter_) = selection.get_selected()
 
 		if not iter_:
@@ -3444,8 +3486,10 @@ class AccountCreationWizardWindow:
 		return True # loop forever
 
 	def new_acc_connected(self, form, is_form, ssl_msg, ssl_err, ssl_cert,
-	ssl_fingerprint):
-		'''connection to server succeded, present the form to the user.'''
+			ssl_fingerprint):
+		"""
+		Connection to server succeded, present the form to the user
+		"""
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 		self.back_button.show()
@@ -3479,7 +3523,9 @@ class AccountCreationWizardWindow:
 			self.notebook.set_current_page(4) # show form page
 
 	def new_acc_not_connected(self, reason):
-		'''Account creation failed: connection to server failed'''
+		"""
+		Account creation failed: connection to server failed
+		"""
 		if self.account not in gajim.connections:
 			return
 		if self.update_progressbar_timeout_id is not None:
@@ -3499,7 +3545,9 @@ class AccountCreationWizardWindow:
 		self.notebook.set_current_page(6) # show finish page
 
 	def acc_is_ok(self, config):
-		'''Account creation succeeded'''
+		"""
+		Account creation succeeded
+		"""
 		self.create_vars(config)
 		self.show_finish_page()
 
@@ -3507,7 +3555,9 @@ class AccountCreationWizardWindow:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 
 	def acc_is_not_ok(self, reason):
-		'''Account creation failed'''
+		"""
+		Account creation failed
+		"""
 		self.back_button.show()
 		self.cancel_button.show()
 		self.go_online_checkbutton.hide()

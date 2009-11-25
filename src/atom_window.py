@@ -35,7 +35,9 @@ class AtomWindow:
 
 	@classmethod
 	def newAtomEntry(cls, entry):
-		''' Queue new entry, open window if there's no one opened. '''
+		"""
+		Queue new entry, open window if there's no one opened
+		"""
 		cls.entries.append(entry)
 
 		if cls.window is None:
@@ -48,7 +50,9 @@ class AtomWindow:
 		cls.window = None
 
 	def __init__(self):
-		''' Create new window... only if we have anything to show. '''
+		"""
+		Create new window... only if we have anything to show
+		"""
 		assert len(self.__class__.entries)>0
 
 		self.entry = None	# the entry actually displayed
@@ -69,7 +73,9 @@ class AtomWindow:
 		self.feed_title_eventbox.add_events(gtk.gdk.BUTTON_PRESS_MASK)
 
 	def displayNextEntry(self):
-		''' Get next entry from the queue and display it in the window. '''
+		"""
+		Get next entry from the queue and display it in the window
+		"""
 		assert len(self.__class__.entries)>0
 
 		newentry = self.__class__.entries.pop(0)
@@ -103,8 +109,10 @@ class AtomWindow:
 		self.entry = newentry
 
 	def updateCounter(self):
-		''' We display number of events on the top of window, sometimes it needs to be
-		changed...'''
+		"""
+		Display number of events on the top of window, sometimes it needs to be
+		changed
+		"""
 		count = len(self.__class__.entries)
 		if count>0:
 			self.new_entry_label.set_text(i18n.ngettext(
