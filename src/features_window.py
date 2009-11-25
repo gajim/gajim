@@ -33,7 +33,9 @@ from common import helpers
 from common import kwalletbinding
 
 class FeaturesWindow:
-	'''Class for features window'''
+	"""
+	Class for features window
+	"""
 
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('features_window.glade')

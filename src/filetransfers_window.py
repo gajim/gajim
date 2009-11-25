@@ -134,7 +134,9 @@ class FileTransfersWindow:
 		self.xml.signal_autoconnect(self)
 
 	def find_transfer_by_jid(self, account, jid):
-		''' find all transfers with peer 'jid' that belong to 'account' '''
+		"""
+		Find all transfers with peer 'jid' that belong to 'account'
+		"""
 		active_transfers = [[],[]] # ['senders', 'receivers']
 
 		# 'account' is the sender
@@ -155,7 +157,9 @@ class FileTransfersWindow:
 		return active_transfers
 
 	def show_completed(self, jid, file_props):
-		''' show a dialog saying that file (file_props) has been transferred'''
+		"""
+		Show a dialog saying that file (file_props) has been transferred
+		"""
 		def on_open(widget, file_props):
 			dialog.destroy()
 			if 'file-name' not in file_props:
@@ -207,14 +211,16 @@ class FileTransfersWindow:
 		dialog.show_all()
 
 	def show_request_error(self, file_props):
-		''' show error dialog to the recipient saying that transfer
-		has been canceled'''
+		"""
+		Show error dialog to the recipient saying that transfer has been canceled
+		"""
 		dialogs.InformationDialog(_('File transfer cancelled'), _('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
 
 	def show_send_error(self, file_props):
-		''' show error dialog to the sender saying that transfer
-		has been canceled'''
+		"""
+		Show error dialog to the sender saying that transfer has been canceled
+		"""
 		dialogs.InformationDialog(_('File transfer cancelled'),
 _('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
@@ -273,7 +279,9 @@ _('Connection with peer cannot be established.'))
 		desc_hbox.show_all()
 
 	def send_file(self, account, contact, file_path, file_desc=''):
-		''' start the real transfer(upload) of the file '''
+		"""
+		Start the real transfer(upload) of the file
+		"""
 		if gtkgui_helpers.file_is_locked(file_path):
 			pritext = _('Gajim cannot access this file')
 			sextext = _('This file is being used by another process.')
@@ -303,8 +311,10 @@ _('Connection with peer cannot be established.'))
 		gajim.connections[account].send_file_approval(file_props)
 
 	def show_file_request(self, account, contact, file_props):
-		''' show dialog asking for comfirmation and store location of new
-		file requested by a contact'''
+		"""
+		Show dialog asking for comfirmation and store location of new file
+		requested by a contact
+		"""
 		if file_props is None or 'name' not in file_props:
 			return
 		sec_text = '\t' + _('File: %s') % gobject.markup_escape_text(
@@ -394,7 +404,9 @@ _('Connection with peer cannot be established.'))
 			self.window.render_icon(self.icons[ident], gtk.ICON_SIZE_MENU))
 
 	def set_status(self, typ, sid, status):
-		''' change the status of a transfer to state 'status' '''
+		"""
+		Change the status of a transfer to state 'status'
+		"""
 		iter_ = self.get_iter_by_sid(typ, sid)
 		if iter_ is None:
 			return
@@ -409,8 +421,10 @@ _('Connection with peer cannot be established.'))
 		self.select_func(path)
 
 	def _format_percent(self, percent):
-		''' add extra spaces from both sides of the percent, so that
-		progress string has always a fixed size'''
+		"""
+		Add extra spaces from both sides of the percent, so that progress string
+		has always a fixed size
+		"""
 		_str = '          '
 		if percent != 100.:
 			_str += ' '
@@ -481,7 +495,9 @@ _('Connection with peer cannot be established.'))
 		del(file_props)
 
 	def set_progress(self, typ, sid, transfered_size, iter_ = None):
-		''' change the progress of a transfer with new transfered size'''
+		"""
+		Change the progress of a transfer with new transfered size
+		"""
 		if sid not in self.files_props[typ]:
 			return
 		file_props = self.files_props[typ][sid]
@@ -546,8 +562,10 @@ _('Connection with peer cannot be established.'))
 				self.select_func(path)
 
 	def get_iter_by_sid(self, typ, sid):
-		'''returns iter to the row, which holds file transfer, identified by the
-		session id'''
+		"""
+		Return iter to the row, which holds file transfer, identified by the
+		session id
+		"""
 		iter_ = self.model.get_iter_root()
 		while iter_:
 			if typ + sid == self.model[iter_][C_SID].decode('utf-8'):
@@ -555,9 +573,10 @@ _('Connection with peer cannot be established.'))
 			iter_ = self.model.iter_next(iter_)
 
 	def get_send_file_props(self, account, contact, file_path, file_name,
-	file_desc=''):
-		''' create new file_props dict and set initial file transfer
-		properties in it'''
+			file_desc=''):
+		"""
+		Create new file_props dict and set initial file transfer properties in it
+		"""
 		file_props = {'file-name' : file_path, 'name' : file_name,
 			'type' : 's', 'desc' : file_desc}
 		if os.path.isfile(file_path):
@@ -582,7 +601,9 @@ _('Connection with peer cannot be established.'))
 		return file_props
 
 	def add_transfer(self, account, contact, file_props):
-		''' add new transfer to FT window and show the FT window '''
+		"""
+		Add new transfer to FT window and show the FT window
+		"""
 		self.on_transfers_list_leave_notify_event(None)
 		if file_props is None:
 			return
@@ -686,15 +707,19 @@ _('Connection with peer cannot be established.'))
 		return True
 
 	def set_cleanup_sensitivity(self):
-		''' check if there are transfer rows and set cleanup_button
-		sensitive, or insensitive if model is empty'''
+		"""
+		Check if there are transfer rows and set cleanup_button sensitive, or
+		insensitive if model is empty
+		"""
 		if len(self.model) == 0:
 			self.cleanup_button.set_sensitive(False)
 		else:
 			self.cleanup_button.set_sensitive(True)
 
 	def set_all_insensitive(self):
-		''' make all buttons/menuitems insensitive '''
+		"""
+		Make all buttons/menuitems insensitive
+		"""
 		self.pause_button.set_sensitive(False)
 		self.pause_menuitem.set_sensitive(False)
 		self.continue_menuitem.set_sensitive(False)
@@ -705,8 +730,10 @@ _('Connection with peer cannot be established.'))
 		self.set_cleanup_sensitivity()
 
 	def set_buttons_sensitive(self, path, is_row_selected):
-		''' make buttons/menuitems sensitive as appropriate to
-		the state of file transfer located at path 'path' '''
+		"""
+		Make buttons/menuitems sensitive as appropriate to the state of file
+		transfer located at path 'path'
+		"""
 		if path is None:
 			self.set_all_insensitive()
 			return
@@ -743,8 +770,9 @@ _('Connection with peer cannot be established.'))
 		return True
 
 	def selection_changed(self, args):
-		''' selection has changed - change the sensitivity of the
-		buttons/menuitems'''
+		"""
+		Selection has changed - change the sensitivity of the buttons/menuitems
+		"""
 		selection = args
 		selected = selection.get_selected_rows()
 		if selected[1] != []:
@@ -881,7 +909,9 @@ _('Connection with peer cannot be established.'))
 			event_button, event.time)
 
 	def on_transfers_list_key_press_event(self, widget, event):
-		'''when a key is pressed in the treeviews'''
+		"""
+		When a key is pressed in the treeviews
+		"""
 		self.tooltip.hide_tooltip()
 		iter_ = None
 		try:
@@ -962,6 +992,5 @@ _('Connection with peer cannot be established.'))
 	def on_file_transfers_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
 			self.window.hide()
-
 
 # vim: se ts=3:

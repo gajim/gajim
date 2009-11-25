@@ -67,8 +67,10 @@ def get_glade(file_name, root = None):
 	return gtk.glade.XML(file_path, root=root, domain=i18n.APP)
 
 def get_completion_liststore(entry):
-	''' create a completion model for entry widget
-	completion list consists of (Pixbuf, Text) rows'''
+	"""
+	Create a completion model for entry widget completion list consists of
+	(Pixbuf, Text) rows
+	"""
 	completion = gtk.EntryCompletion()
 	liststore = gtk.ListStore(gtk.gdk.Pixbuf, str)
 
@@ -86,7 +88,9 @@ def get_completion_liststore(entry):
 
 
 def popup_emoticons_under_button(menu, button, parent_win):
-	''' pops emoticons menu under button, which is in parent_win'''
+	"""
+	Popup the emoticons menu under button, which is in parent_win
+	"""
 	window_x1, window_y1 = parent_win.get_origin()
 	def position_menu_under_button(menu):
 		# inline function, which will not keep refs, when used as CB
@@ -115,8 +119,9 @@ def popup_emoticons_under_button(menu, button, parent_win):
 	menu.popup(None, None, position_menu_under_button, 1, 0)
 
 def get_theme_font_for_option(theme, option):
-	'''return string description of the font, stored in
-	theme preferences'''
+	"""
+	Return string description of the font, stored in theme preferences
+	"""
 	font_name = gajim.config.get_per('themes', theme, option)
 	font_desc = pango.FontDescription()
 	font_prop_str =  gajim.config.get_per('themes', theme, option + 'attrs')
@@ -130,10 +135,10 @@ def get_theme_font_for_option(theme, option):
 	return fd.to_string()
 
 def get_default_font():
-	'''Get the desktop setting for application font
-	first check for GNOME, then Xfce and last KDE
-	it returns None on failure or else a string 'Font Size' '''
-
+	"""
+	Get the desktop setting for application font first check for GNOME, then
+	Xfce and last KDE it returns None on failure or else a string 'Font Size'
+	"""
 	try:
 		import gconf
 		# in try because daemon may not be there
@@ -206,7 +211,9 @@ def user_runs_xfce():
 	return False
 
 def get_running_processes():
-	'''returns running processes or None (if not /proc exists)'''
+	"""
+	Return running processes or None (if /proc does not exist)
+	"""
 	if os.path.isdir('/proc'):
 		# under Linux: checking if 'gnome-session' or
 		# 'startkde' programs were run before gajim, by
@@ -241,7 +248,9 @@ def get_running_processes():
 	return []
 
 def move_window(window, x, y):
-	'''moves the window but also checks if out of screen'''
+	"""
+	Move the window, but also check if out of screen
+	"""
 	if x < 0:
 		x = 0
 	if y < 0:
@@ -254,7 +263,9 @@ def move_window(window, x, y):
 	window.move(x, y)
 
 def resize_window(window, w, h):
-	'''resizes window but also checks if huge window or negative values'''
+	"""
+	Resize window, but also checks if huge window or negative values
+	"""
 	if not w or not h:
 		return
 	if w > screen_w:
@@ -354,8 +365,10 @@ def parse_server_xml(path_to_file):
 		print >> sys.stderr, _('Error parsing file:'), message
 
 def set_unset_urgency_hint(window, unread_messages_no):
-	'''sets/unsets urgency hint in window argument
-	depending if we have unread messages or not'''
+	"""
+	Sets/unset urgency hint in window argument depending if we have unread
+	messages or not
+	"""
 	if gajim.config.get('use_urgency_hint'):
 		if unread_messages_no > 0:
 			window.props.urgency_hint = True
@@ -363,8 +376,10 @@ def set_unset_urgency_hint(window, unread_messages_no):
 			window.props.urgency_hint = False
 
 def get_abspath_for_script(scriptname, want_type = False):
-	'''checks if we are svn or normal user and returns abspath to asked script
-	if want_type is True we return 'svn' or 'install' '''
+	"""
+	Check if we are svn or normal user and return abspath to asked script if
+	want_type is True we return 'svn' or 'install'
+	"""
 	if os.path.isdir('.svn'): # we are svn user
 		type_ = 'svn'
 		cwd = os.getcwd() # it's always ending with src
@@ -403,8 +418,10 @@ def get_abspath_for_script(scriptname, want_type = False):
 		return path_to_script
 
 def get_pixbuf_from_data(file_data, want_type = False):
-	'''Gets image data and returns gtk.gdk.Pixbuf
-	if want_type is True it also returns 'jpeg', 'png' etc'''
+	"""
+	Get image data and returns gtk.gdk.Pixbuf if want_type is True it also
+	returns 'jpeg', 'png' etc
+	"""
 	pixbufloader = gtk.gdk.PixbufLoader()
 	try:
 		pixbufloader.write(file_data)
@@ -431,8 +448,11 @@ def get_invisible_cursor():
 	return cursor
 
 def get_current_desktop(window):
-	'''returns the current virtual desktop for given window
-	NOTE: window is GDK window'''
+	"""
+	Return the current virtual desktop for given window
+
+	NOTE: Window is a GDK window.
+	"""
 	prop = window.property_get('_NET_CURRENT_DESKTOP')
 	if prop is None: # it means it's normal window (not root window)
 		# so we look for it's current virtual desktop in another property
@@ -444,9 +464,12 @@ def get_current_desktop(window):
 		return current_virtual_desktop_no
 
 def possibly_move_window_in_current_desktop(window):
-	'''moves GTK window to current virtual desktop if it is not in the
-	current virtual desktop
-	window is GTK window'''
+	"""
+	Moves GTK window to current virtual desktop if it is not in the current
+	virtual desktop
+
+	NOTE: Window is a GDK window.
+	"""
 	if os.name == 'nt':
 		return False
 
@@ -468,7 +491,11 @@ def possibly_move_window_in_current_desktop(window):
 	return False
 
 def file_is_locked(path_to_file):
-	'''returns True if file is locked (WINDOWS ONLY)'''
+	"""
+	Return True if file is locked
+
+	NOTE: Windows only.
+	"""
 	if os.name != 'nt': # just in case
 		return
 
@@ -496,8 +523,10 @@ def file_is_locked(path_to_file):
 		return False
 
 def _get_fade_color(treeview, selected, focused):
-	'''get a gdk color that is between foreground and background in 0.3
-	0.7 respectively colors of the cell for the given treeview'''
+	"""
+	Get a gdk color that is between foreground and background in 0.3
+	0.7 respectively colors of the cell for the given treeview
+	"""
 	style = treeview.style
 	if selected:
 		if focused: # is the window focused?
@@ -516,9 +545,10 @@ def _get_fade_color(treeview, selected, focused):
 					int(bg.blue*p + fg.blue*q))
 
 def get_scaled_pixbuf(pixbuf, kind):
-	'''returns scaled pixbuf, keeping ratio etc or None
-	kind is either "chat", "roster", "notification", "tooltip", "vcard"'''
-
+	"""
+	Return scaled pixbuf, keeping ratio etc or None kind is either "chat",
+	"roster", "notification", "tooltip", "vcard"
+	"""
 	# resize to a width / height for the avatar not to have distortion
 	# (keep aspect ratio)
 	width = gajim.config.get(kind + '_avatar_width')
@@ -544,12 +574,14 @@ def get_scaled_pixbuf(pixbuf, kind):
 	return scaled_buf
 
 def get_avatar_pixbuf_from_cache(fjid, is_fake_jid = False, use_local = True):
-	'''checks if jid has cached avatar and if that avatar is valid image
-	(can be shown)
-	returns None if there is no image in vcard
-	returns 'ask' if cached vcard should not be used (user changed his vcard,
-	so we have new sha) or if we don't have the vcard'''
+	"""
+	Check if jid has cached avatar and if that avatar is valid image (can be
+	shown)
 
+	Returns None if there is no image in vcard/
+	Returns 'ask' if cached vcard should not be used (user changed his vcard, so
+	we have new sha) or if we don't have the vcard
+	"""
 	jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
 	if gajim.config.get('hide_avatar_of_transport') and\
 		gajim.jid_is_transport(jid):
@@ -588,16 +620,21 @@ def get_avatar_pixbuf_from_cache(fjid, is_fake_jid = False, use_local = True):
 	return pixbuf
 
 def make_gtk_month_python_month(month):
-	'''gtk start counting months from 0, so January is 0
-	but python's time start from 1, so align to python
-	month MUST be integer'''
+	"""
+	GTK starts counting months from 0, so January is 0 but Python's time start
+	from 1, so align to Python
+
+	NOTE: Month MUST be an integer.
+	"""
 	return month + 1
 
 def make_python_month_gtk_month(month):
 	return month - 1
 
 def make_color_string(color):
-	'''create #aabbcc color string from gtk color'''
+	"""
+	Create #aabbcc color string from gtk color
+	"""
 	col = '#'
 	for i in ('red', 'green', 'blue'):
 		h = hex(getattr(color, i) / (16*16)).split('x')[1]
@@ -612,10 +649,12 @@ def make_pixbuf_grayscale(pixbuf):
 	return pixbuf2
 
 def get_path_to_generic_or_avatar(generic, jid = None, suffix = None):
-	'''Chooses between avatar image and default image.
-	Returns full path to the avatar image if it exists,
-	otherwise returns full path to the image.
-	generic must be with extension and suffix without'''
+	"""
+	Choose between avatar image and default image
+
+	Returns full path to the avatar image if it exists, otherwise returns full
+	path to the image.  generic must be with extension and suffix without
+	"""
 	if jid:
 		# we want an avatar
 		puny_jid = helpers.sanitize_filename(jid)
@@ -632,9 +671,10 @@ def get_path_to_generic_or_avatar(generic, jid = None, suffix = None):
 	return os.path.abspath(generic)
 
 def decode_filechooser_file_paths(file_paths):
-	'''decode as UTF-8 under Windows and
-	ask sys.getfilesystemencoding() in POSIX
-	file_paths MUST be LIST'''
+	"""
+	Decode as UTF-8 under Windows and ask sys.getfilesystemencoding() in POSIX
+	file_paths MUST be LIST
+	"""
 	file_paths_list = list()
 
 	if os.name == 'nt': # decode as UTF-8 under Windows
@@ -655,7 +695,9 @@ def decode_filechooser_file_paths(file_paths):
 	return file_paths_list
 
 def possibly_set_gajim_as_xmpp_handler():
-	'''registers (by default only the first time) xmmp: to Gajim.'''
+	"""
+	Register (by default only the first time) 'xmmp:' to Gajim
+	"""
 	path_to_dot_kde = os.path.expanduser('~/.kde')
 	if os.path.exists(path_to_dot_kde):
 		path_to_kde_file = os.path.join(path_to_dot_kde,
@@ -737,8 +779,10 @@ Description=xmpp
 			dlg.checkbutton.set_active(True)
 
 def escape_underscore(s):
-	'''Escape underlines to prevent them from being interpreted
-	as keyboard accelerators'''
+	"""
+	Escape underlines to prevent them from being interpreted as keyboard
+	accelerators
+	"""
 	return s.replace('_', '__')
 
 def get_state_image_from_file_path_show(file_path, show):
@@ -756,7 +800,9 @@ def get_state_image_from_file_path_show(file_path, show):
 	return image
 
 def get_possible_button_event(event):
-	'''mouse or keyboard caused the event?'''
+	"""
+	Mouse or keyboard caused the event?
+	"""
 	if event.type == gtk.gdk.KEY_PRESS:
 		return 0 # no event.button so pass 0
 	# BUTTON_PRESS event, so pass event.button
@@ -847,7 +893,9 @@ def on_bm_header_changed_state(widget, event):
 	widget.set_state(gtk.STATE_NORMAL) #do not allow selected_state
 
 def create_combobox(value_list, selected_value = None):
-	'''Value_list is [(label1, value1), ]'''
+	"""
+	Value_list is [(label1, value1)]
+	"""
 	liststore = gtk.ListStore(str, str)
 	combobox = gtk.ComboBox(liststore)
 	cell = gtk.CellRendererText()
@@ -864,7 +912,9 @@ def create_combobox(value_list, selected_value = None):
 	return combobox
 
 def create_list_multi(value_list, selected_values=None):
-	'''Value_list is [(label1, value1), ]'''
+	"""
+	Value_list is [(label1, value1)]
+	"""
 	liststore = gtk.ListStore(str, str)
 	treeview = gtk.TreeView(liststore)
 	treeview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
@@ -882,8 +932,10 @@ def create_list_multi(value_list, selected_values=None):
 	return treeview
 
 def load_iconset(path, pixbuf2=None, transport=False):
-	'''load full iconset from the given path, and add
-	pixbuf2 on top left of each static images'''
+	"""
+	Load full iconset from the given path, and add pixbuf2 on top left of each
+	static images
+	"""
 	path += '/'
 	if transport:
 		list_ = ('online', 'chat', 'away', 'xa', 'dnd', 'offline',
@@ -898,21 +950,27 @@ def load_iconset(path, pixbuf2=None, transport=False):
 	return _load_icon_list(list_, path, pixbuf2)
 
 def load_icon(icon_name):
-	'''load an icon from the iconset in 16x16'''
+	"""
+	Load an icon from the iconset in 16x16
+	"""
 	iconset = gajim.config.get('iconset')
 	path = os.path.join(helpers.get_iconset_path(iconset), '16x16', '')
 	icon_list = _load_icon_list([icon_name], path)
 	return icon_list[icon_name]
 
 def load_mood_icon(icon_name):
-	'''load an icon from the mood iconset in 16x16'''
+	"""
+	Load an icon from the mood iconset in 16x16
+	"""
 	iconset = gajim.config.get('mood_iconset')
 	path = os.path.join(helpers.get_mood_iconset_path(iconset), '')
 	icon_list = _load_icon_list([icon_name], path)
 	return icon_list[icon_name]
 
 def load_activity_icon(category, activity = None):
-	'''load an icon from the activity iconset in 16x16'''
+	"""
+	Load an icon from the activity iconset in 16x16
+	"""
 	iconset = gajim.config.get('activity_iconset')
 	path = os.path.join(helpers.get_activity_iconset_path(iconset),
 		category, '')
@@ -922,8 +980,10 @@ def load_activity_icon(category, activity = None):
 	return icon_list[activity]
 
 def load_icons_meta():
-	'''load and return  - AND + small icons to put on top left of an icon
-	for meta contacts.'''
+	"""
+	Load and return  - AND + small icons to put on top left of an icon for meta
+	contacts
+	"""
 	iconset = gajim.config.get('iconset')
 	path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 	# try to find opened_meta.png file, else opened.png else nopixbuf merge
@@ -945,8 +1005,10 @@ def load_icons_meta():
 	return pixo, pixc
 
 def _load_icon_list(icons_list, path, pixbuf2 = None):
-	'''load icons in icons_list from the given path,
-	and add pixbuf2 on top left of each static images'''
+	"""
+	Load icons in icons_list from the given path, and add pixbuf2 on top left of
+	each static images
+	"""
 	imgs = {}
 	for icon in icons_list:
 		# try to open a pixfile with the correct method
@@ -972,7 +1034,9 @@ def _load_icon_list(icons_list, path, pixbuf2 = None):
 	return imgs
 
 def make_jabber_state_images():
-	'''initialise jabber_state_images dict'''
+	"""
+	Initialize jabber_state_images dictionary
+	"""
 	iconset = gajim.config.get('iconset')
 	if iconset:
 		if helpers.get_iconset_path(iconset):
@@ -1002,8 +1066,10 @@ def reload_jabber_state_images():
 	gajim.interface.roster.update_jabber_state_images()
 
 def label_set_autowrap(widget):
-	'''Make labels automatically re-wrap if their containers are resized.
-	Accepts label or container widgets.'''
+	"""
+	Make labels automatically re-wrap if their containers are resized.
+	Accepts label or container widgets
+	"""
 	if isinstance (widget, gtk.Container):
 		children = widget.get_children()
 		for i in xrange (len (children)):
@@ -1013,7 +1079,9 @@ def label_set_autowrap(widget):
 		widget.connect_after('size-allocate', __label_size_allocate)
 
 def __label_size_allocate(widget, allocation):
-	'''Callback which re-allocates the size of a label.'''
+	"""
+	Callback which re-allocates the size of a label
+	"""
 	layout = widget.get_layout()
 
 	lw_old, lh_old = layout.get_size()

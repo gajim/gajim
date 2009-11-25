@@ -290,11 +290,13 @@ class HistoryManager:
 			self._fill_logs_listview(jid)
 
 	def _get_jid_id(self, jid):
-		'''jids table has jid and jid_id
+		"""
+		jids table has jid and jid_id
 		logs table has log_id, jid_id, contact_name, time, kind, show, message
-		so to ask logs we need jid_id that matches our jid in jids table
-		this method wants jid and returns the jid_id for later sql-ing on logs
-		'''
+
+		So to ask logs we need jid_id that matches our jid in jids table this
+		method wants jid and returns the jid_id for later sql-ing on logs
+		"""
 		if jid.find('/') != -1: # if it has a /
 			jid_is_from_pm = self._jid_is_from_pm(jid)
 			if not jid_is_from_pm: # it's normal jid with resource
@@ -304,22 +306,24 @@ class HistoryManager:
 		return str(jid_id)
 
 	def _get_jid_from_jid_id(self, jid_id):
-		'''jids table has jid and jid_id
-		this method accepts jid_id and returns the jid for later sql-ing on logs
-		'''
+		"""
+		jids table has jid and jid_id
+
+		This method accepts jid_id and returns the jid for later sql-ing on logs
+		"""
 		self.cur.execute('SELECT jid FROM jids WHERE jid_id = ?', (jid_id,))
 		jid = self.cur.fetchone()[0]
 		return jid
 
 	def _jid_is_from_pm(self, jid):
-		'''if jid is gajim@conf/nkour it's likely a pm one, how we know
-		gajim@conf is not a normal guy and nkour is not his resource?
-		we ask if gajim@conf is already in jids (with type room jid)
-		this fails if user disables logging for room and only enables for
-		pm (so higly unlikely) and if we fail we do not go chaos
-		(user will see the first pm as if it was message in room's public chat)
-		and after that all okay'''
-
+		"""
+		If jid is gajim@conf/nkour it's likely a pm one, how we know gajim@conf
+		is not a normal guy and nkour is not his resource? We ask if gajim@conf
+		is already in jids (with type room jid). This fails if user disables
+		logging for room and only enables for pm (so higly unlikely) and if we
+		fail we do not go chaos (user will see the first pm as if it was message
+		in room's public chat) and after that everything is ok
+		"""
 		possible_room_jid = jid.split('/', 1)[0]
 
 		self.cur.execute('SELECT jid_id FROM jids WHERE jid = ? AND type = ?',
@@ -331,8 +335,9 @@ class HistoryManager:
 			return True
 
 	def _jid_is_room_type(self, jid):
-		'''returns True/False if given id is room type or not
-		eg. if it is room'''
+		"""
+		Return True/False if given id is room type or not eg. if it is room
+		"""
 		self.cur.execute('SELECT type FROM jids WHERE jid = ?', (jid,))
 		row = self.cur.fetchone()
 		if row is None:
@@ -343,8 +348,10 @@ class HistoryManager:
 			return False
 
 	def _fill_logs_listview(self, jid):
-		'''fill the listview with all messages that user sent to or
-		received from JID'''
+		"""
+		Fill the listview with all messages that user sent to or received from
+		JID
+		"""
 		# no need to lower jid in this context as jid is already lowered
 		# as we use those jids from db
 		jid_id = self._get_jid_id(jid)
@@ -403,7 +410,9 @@ class HistoryManager:
 					subject, nickname))
 
 	def _fill_search_results_listview(self, text):
-		'''ask db and fill listview with results that match text'''
+		"""
+		Ask db and fill listview with results that match text
+		"""
 		self.search_results_liststore.clear()
 		like_sql = '%' + text + '%'
 		self.cur.execute('''

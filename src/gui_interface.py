@@ -54,7 +54,6 @@ if dbus_support.supported:
 
 import gtkgui_helpers
 
-
 import dialogs
 import notify
 import message_control
@@ -91,7 +90,6 @@ config_filename = gajimpaths['CONFIG_FILE']
 
 from common import optparser
 parser = optparser.OptionsParser(config_filename)
-
 
 import logging
 log = logging.getLogger('gajim.interface')
@@ -265,10 +263,10 @@ class Interface:
 
 	def handle_event_new_jid(self, account, data):
 		#('NEW_JID', account, (old_jid, new_jid))
-		'''
+		"""
 		This event is raised when our JID changed (most probably because we use
-		anonymous account. We update contact and roster entry in this case.
-		'''
+		anonymous account. We update contact and roster entry in this case
+		"""
 		self.roster.rename_self_contact(data[0], data[1], account)
 
 	def edit_own_details(self, account):
@@ -1521,7 +1519,9 @@ class Interface:
 				contact.resource)
 
 	def handle_event_signed_in(self, account, empty):
-		'''SIGNED_IN event is emitted when we sign in, so handle it'''
+		"""
+		SIGNED_IN event is emitted when we sign in, so handle it
+		"""
 		# ('SIGNED_IN', account, ())
 		# block signed in notifications for 30 seconds
 		gajim.block_signed_in_notifications[account] = True
@@ -1828,7 +1828,9 @@ class Interface:
 		dialogs.RosterItemExchangeWindow(account, data[0], data[1], data[2])
 
 	def handle_event_unique_room_id_supported(self, account, data):
-		'''Receive confirmation that unique_room_id are supported'''
+		"""
+		Receive confirmation that unique_room_id are supported
+		"""
 		# ('UNIQUE_ROOM_ID_SUPPORTED', server, instance, room_id)
 		instance = data[1]
 		instance.unique_room_id_supported(data[0], data[2])
@@ -2114,12 +2116,11 @@ class Interface:
 			'PEP_RECEIVED': [self.handle_event_pep_received]
 		}
 	
-	def dispatch(self, event, account, data):																																									  
-		'''
-		Dispatches an network event to the event handlers of this class.
-		 
-		Return true if it could be dispatched to alteast one handler.
-		'''
+	def dispatch(self, event, account, data):
+		"""
+		Dispatch an network event to the event handlers of this class. Return
+		true if it could be dispatched to alteast one handler
+		"""
 		if event not in self.handlers:
 			log.warning('Unknown event %s dispatched to GUI: %s' % (event, data))
 			return False
@@ -2135,7 +2136,9 @@ class Interface:
 ################################################################################
 
 	def add_event(self, account, jid, type_, event_args):
-		'''add an event to the gajim.events var'''
+		"""
+		Add an event to the gajim.events var
+		"""
 		# We add it to the gajim.events queue
 		# Do we have a queue?
 		jid = gajim.get_jid_without_resource(jid)
@@ -2464,7 +2467,9 @@ class Interface:
 		self.invalid_XML_chars = u'[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x19]|[\ud800-\udfff]|[\ufffe-\uffff]'
 
 	def popup_emoticons_under_button(self, button, parent_win):
-		''' pops emoticons menu under button, located in parent_win'''
+		"""
+		Popup the emoticons menu under button, located in parent_win
+		"""
 		gtkgui_helpers.popup_emoticons_under_button(self.emoticons_menu,
 			button, parent_win)
 
@@ -2572,8 +2577,10 @@ class Interface:
 ################################################################################
 
 	def join_gc_room(self, account, room_jid, nick, password, minimize=False,
-	is_continued=False):
-		'''joins the room immediately'''
+			is_continued=False):
+		"""
+		Join the room immediately
+		"""
 		if not nick:
 			nick = gajim.nicks[account]
 
@@ -2841,7 +2848,9 @@ class Interface:
 		return (bg_str, fg_str)
 
 	def read_sleepy(self):
-		'''Check idle status and change that status if needed'''
+		"""
+		Check idle status and change that status if needed
+		"""
 		if not self.sleeper.poll():
 			# idle detection is not supported in that OS
 			return False # stop looping in vain
@@ -2895,7 +2904,9 @@ class Interface:
 		return True # renew timeout (loop for ever)
 
 	def autoconnect(self):
-		'''auto connect at startup'''
+		"""
+		Auto connect at startup
+		"""
 		# dict of account that want to connect sorted by status
 		shows = {}
 		for a in gajim.connections:
@@ -2934,7 +2945,9 @@ class Interface:
 		helpers.launch_browser_mailer(kind, url)
 
 	def process_connections(self):
-		''' Called each foo (200) miliseconds. Check for idlequeue timeouts.	'''
+		"""
+		Called each foo (200) miliseconds. Check for idlequeue timeouts
+		"""
 		try:
 			gajim.idlequeue.process()
 		except Exception:
@@ -2958,7 +2971,11 @@ class Interface:
 			sys.exit()
 
 	def save_avatar_files(self, jid, photo, puny_nick = None, local = False):
-		'''Saves an avatar to a separate file, and generate files for dbus notifications. An avatar can be given as a pixmap directly or as an decoded image.'''
+		"""
+		Save an avatar to a separate file, and generate files for dbus
+		notifications. An avatar can be given as a pixmap directly or as an
+		decoded image
+		"""
 		puny_jid = helpers.sanitize_filename(jid)
 		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid)
 		if puny_nick:
@@ -3011,7 +3028,9 @@ class Interface:
 						(path_to_original_file, str(e)))
 
 	def remove_avatar_files(self, jid, puny_nick = None, local = False):
-		'''remove avatar files of a jid'''
+		"""
+		Remove avatar files of a jid
+		"""
 		puny_jid = helpers.sanitize_filename(jid)
 		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid)
 		if puny_nick:
@@ -3028,7 +3047,9 @@ class Interface:
 				os.remove(path_to_file + '_notif_size_bw' + ext)
 
 	def auto_join_bookmarks(self, account):
-		'''autojoin bookmarked GCs that have 'auto join' on for this account'''
+		"""
+		Autojoin bookmarked GCs that have 'auto join' on for this account
+		"""
 		for bm in gajim.connections[account].bookmarks:
 			if bm['autojoin'] in ('1', 'true'):
 				jid = bm['jid']
@@ -3046,8 +3067,10 @@ class Interface:
 					self.roster.add_groupchat(jid, account)
 
 	def add_gc_bookmark(self, account, name, jid, autojoin, minimize, password,
-		nick):
-		'''add a bookmark for this account, sorted in bookmark list'''
+			nick):
+		"""
+		Add a bookmark for this account, sorted in bookmark list
+		"""
 		bm = {
 			'name': name,
 			'jid': jid,
@@ -3475,13 +3498,9 @@ class PassphraseRequest:
 
 class ThreadInterface:
 	def __init__(self, func, func_args, callback, callback_args):
-		'''Call a function in a thread
-
-			:param func: the function to call in the thread
-			:param func_args: list or arguments for this function
-			:param callback: callback to call once function is finished
-			:param callback_args: list of arguments for this callback
-		'''
+		"""
+		Call a function in a thread
+		"""
 		def thread_function(func, func_args, callback, callback_args):
 			output = func(*func_args)
 			gobject.idle_add(callback, output, *callback_args)
