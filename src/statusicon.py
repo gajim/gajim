@@ -106,18 +106,16 @@ class StatusIcon:
 		if not gajim.interface.systray_enabled:
 			return
 		if gajim.events.get_nb_systray_events():
-			state = 'event'
 			self.status_icon.set_blinking(True)
 		else:
-			state = self.status
 			self.status_icon.set_blinking(False)
 
-		#FIXME: do not always use 16x16 (ask actually used size and use that)
-		image = gajim.interface.jabber_state_images['16'][state]
+		# FIXME: do not always use 16x16 (ask actually used size and use that)
+		image = gajim.interface.jabber_state_images['16'][self.status]
 		if image.get_storage_type() == gtk.IMAGE_PIXBUF:
 			self.status_icon.set_from_pixbuf(image.get_pixbuf())
-		#FIXME: oops they forgot to support GIF animation?
-		#or they were lazy to get it to work under Windows! WTF!
+		# FIXME: oops they forgot to support GIF animation?
+		# or they were lazy to get it to work under Windows! WTF!
 		elif image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			self.status_icon.set_from_pixbuf(
 				image.get_animation().get_static_image())
