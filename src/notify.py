@@ -69,7 +69,9 @@ def server_display(server):
 	win.present()
 
 def get_show_in_roster(event, account, contact, session=None):
-	'''Return True if this event must be shown in roster, else False'''
+	"""
+	Return True if this event must be shown in roster, else False
+	"""
 	if event == 'gc_message_received':
 		return True
 	num = get_advanced_notification(event, account, contact)
@@ -84,7 +86,9 @@ def get_show_in_roster(event, account, contact, session=None):
 	return True
 
 def get_show_in_systray(event, account, contact, type_=None):
-	'''Return True if this event must be shown in systray, else False'''
+	"""
+	Return True if this event must be shown in systray, else False
+	"""
 	num = get_advanced_notification(event, account, contact)
 	if num is not None:
 		if gajim.config.get_per('notifications', str(num), 'systray') == 'yes':
@@ -98,8 +102,9 @@ def get_show_in_systray(event, account, contact, type_=None):
 	return gajim.config.get('trayicon_notification_on_events')
 
 def get_advanced_notification(event, account, contact):
-	'''Returns the number of the first (top most)
-	advanced notification else None'''
+	"""
+	Returns the number of the first (top most) advanced notification else None
+	"""
 	num = 0
 	notif = gajim.config.get_per('notifications', str(num))
 	while notif:
@@ -146,10 +151,11 @@ def get_advanced_notification(event, account, contact):
 		notif = gajim.config.get_per('notifications', str(num))
 
 def notify(event, jid, account, parameters, advanced_notif_num=None):
-	'''Check what type of notifications we want, depending on basic
-	and the advanced configuration of notifications and do these notifications;
-	advanced_notif_num holds the number of the first (top most) advanced
-	notification'''
+	"""
+	Check what type of notifications we want, depending on basic and the advanced
+	configuration of notifications and do these notifications; advanced_notif_num
+	holds the number of the first (top most) advanced notification
+	"""
 	# First, find what notifications we want
 	do_popup = False
 	do_sound = False
@@ -327,12 +333,13 @@ def notify(event, jid, account, parameters, advanced_notif_num=None):
 		except Exception:
 			pass
 
-def popup(event_type, jid, account, msg_type='', path_to_image=None,
-	title=None, text=None):
-	'''Notifies a user of an event. It first tries to a valid implementation of
+def popup(event_type, jid, account, msg_type='', path_to_image=None, title=None,
+		text=None):
+	"""
+	Notify a user of an event. It first tries to a valid implementation of
 	the Desktop Notification Specification. If that fails, then we fall back to
-	the older style PopupNotificationWindow method.'''
-
+	the older style PopupNotificationWindow method
+	"""
 	# default image
 	if not path_to_image:
 		path_to_image = os.path.abspath(
@@ -414,9 +421,12 @@ def on_pynotify_notification_clicked(notification, action):
 	gajim.interface.handle_event(account, jid, msg_type)
 
 class NotificationResponseManager:
-	'''Collects references to pending DesktopNotifications and manages there
-	signalling. This is necessary due to a bug in DBus where you can't remove
-	a signal from an interface once it's connected.'''
+	"""
+	Collect references to pending DesktopNotifications and manages there
+	signalling. This is necessary due to a bug in DBus where you can't remove a
+	signal from an interface once it's connected
+	"""
+
 	def __init__(self):
 		self.pending = {}
 		self.received = []
@@ -464,8 +474,11 @@ class NotificationResponseManager:
 notification_response_manager = NotificationResponseManager()
 
 class DesktopNotification:
-	'''A DesktopNotification that interfaces with D-Bus via the Desktop
-	Notification specification'''
+	"""
+	A DesktopNotification that interfaces with D-Bus via the Desktop Notification
+	specification
+	"""
+
 	def __init__(self, event_type, jid, account, msg_type='',
 		path_to_image=None, title=None, text=None):
 		self.path_to_image = path_to_image

@@ -39,7 +39,10 @@ from common import helpers
 from common import pep
 
 class StatusIcon:
-	'''Class for the notification area icon'''
+	"""
+	Class for the notification area icon
+	"""
+
 	def __init__(self):
 		self.single_message_handler_id = None
 		self.new_chat_handler_id = None
@@ -54,22 +57,30 @@ class StatusIcon:
 		self.tooltip = tooltips.NotificationAreaTooltip()
 
 	def subscribe_events(self):
-		'''Register listeners to the events class'''
+		"""
+		Register listeners to the events class
+		"""
 		gajim.events.event_added_subscribe(self.on_event_added)
 		gajim.events.event_removed_subscribe(self.on_event_removed)
 
 	def unsubscribe_events(self):
-		'''Unregister listeners to the events class'''
+		"""
+		Unregister listeners to the events class
+		"""
 		gajim.events.event_added_unsubscribe(self.on_event_added)
 		gajim.events.event_removed_unsubscribe(self.on_event_removed)
 
 	def on_event_added(self, event):
-		'''Called when an event is added to the event list'''
+		"""
+		Called when an event is added to the event list
+		"""
 		if event.show_in_systray:
 			self.set_img()
 
 	def on_event_removed(self, event_list):
-		'''Called when one or more events are removed from the event list'''
+		"""
+		Called when one or more events are removed from the event list
+		"""
 		self.set_img()
 
 	def show_icon(self):
@@ -102,7 +113,9 @@ class StatusIcon:
 		self.on_left_click()
 
 	def set_img(self):
-		'''apart from image, we also update tooltip text here'''
+		"""
+		Apart from image, we also update tooltip text here
+		"""
 		if not gajim.interface.systray_enabled:
 			return
 		if gajim.events.get_nb_systray_events():
@@ -122,7 +135,9 @@ class StatusIcon:
 		#	self.img_tray.set_from_animation(image.get_animation())
 
 	def change_status(self, global_status):
-		''' set tray image to 'global_status' '''
+		"""
+		Set tray image to 'global_status'
+		"""
 		# change image and status, only if it is different
 		if global_status is not None and self.status != global_status:
 			self.status = global_status
@@ -145,7 +160,9 @@ class StatusIcon:
 		dialogs.NewChatDialog(account)
 
 	def make_menu(self, event_button, event_time):
-		'''create chat with and new message (sub) menus/menuitems'''
+		"""
+		Create chat with and new message (sub) menus/menuitems
+		"""
 		for m in self.popup_menus:
 			m.destroy()
 
@@ -366,8 +383,10 @@ class StatusIcon:
 		gajim.interface.handle_event(account, jid, event.type_)
 
 	def on_middle_click(self):
-		'''middle click raises window to have complete focus (fe. get kbd events)
-		but if already raised, it hides it'''
+		"""
+		Middle click raises window to have complete focus (fe. get kbd events)
+		but if already raised, it hides it
+		"""
 		win = gajim.interface.roster.window
 		if win.is_active(): # is it fully raised? (eg does it receive kbd events?)
 			win.hide()

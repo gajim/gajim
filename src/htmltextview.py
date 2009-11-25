@@ -25,7 +25,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-'''
+"""
 A gtk.TextView-based renderer for XHTML-IM, as described in:
   http://www.jabber.org/jeps/jep-0071.html
 
@@ -33,8 +33,7 @@ Starting with the version posted by Gustavo Carneiro,
 I (Santiago Gala) am trying to make it more compatible
 with the markup that docutils generate, and also more
 modular.
-
-'''
+"""
 
 import gobject
 import pango
@@ -187,7 +186,6 @@ for name in BLOCK_HEAD:
 											  )
 
 def _parse_css_color(color):
-	'''_parse_css_color(css_color) -> gtk.gdk.Color'''
 	if color.startswith('rgb(') and color.endswith(')'):
 		r, g, b = [int(c)*257 for c in color[4:-1].split(',')]
 		return gtk.gdk.Color(r, g, b)
@@ -200,10 +198,11 @@ def style_iter(style):
 
 
 class HtmlHandler(xml.sax.handler.ContentHandler):
-	"""A handler to display html to a gtk textview.
+	"""
+	A handler to display html to a gtk textview
 
-	It keeps a stack of "style spans" (start/end element pairs)
-	and a stack of list counters, for nested lists.
+	It keeps a stack of "style spans" (start/end element pairs) and a stack of
+	list counters, for nested lists.
 	"""
 	def __init__(self, conv_textview, startiter):
 		xml.sax.handler.ContentHandler.__init__(self)
@@ -240,8 +239,10 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		callback(allocation.width*frac, *args)
 
 	def _parse_length(self, value, font_relative, block_relative, minl, maxl, callback, *args):
-		'''Parse/calc length, converting to pixels, calls callback(length, *args)
-		when the length is first computed or changes'''
+		"""
+		Parse/calc length, converting to pixels, calls callback(length, *args)
+		when the length is first computed or changes
+		"""
 		if value.endswith('%'):
 			val = float(value[:-1])
 			sign = cmp(val,0)
@@ -556,11 +557,11 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				if h:
 					self._parse_length(h, False, False, 1, 1000, height_cb)
 				def set_size(pixbuf, w, h, dims):
-					'''FIXME: floats should be relative to the whole
-					textview, and resize with it. This needs new
-					pifbufs for every resize, gtk.gdk.Pixbuf.scale_simple
-					or similar.
-					'''
+					"""
+					FIXME: Floats should be relative to the whole textview, and
+					resize with it. This needs new pifbufs for every resize,
+					gtk.gdk.Pixbuf.scale_simple or similar.
+					"""
 					if isinstance(dims[0], float):
 						dims[0] = int(dims[0]*w)
 					elif not dims[0]:
@@ -945,7 +946,9 @@ if __name__ == '__main__':
 
 	tooltip = tooltips.BaseTooltip()
 	def on_textview_motion_notify_event(widget, event):
-		'''change the cursor to a hand when we are over a mail or an url'''
+		"""
+		Change the cursor to a hand when we are over a mail or an url
+		"""
 		global change_cursor
 		pointer_x, pointer_y = htmlview.tv.window.get_pointer()[0:2]
 		x, y = htmlview.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer_x,

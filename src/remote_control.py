@@ -64,9 +64,10 @@ DBUS_DICT_SS = lambda : dbus.Dictionary({}, signature="ss")
 DBUS_NONE = lambda : dbus.Int32(0)
 
 def get_dbus_struct(obj):
-	''' recursively go through all the items and replace
-	them with their casted dbus equivalents
-	'''
+	"""
+	Recursively go through all the items and replace them with their casted dbus
+	equivalents
+	"""
 	if obj is None:
 		return DBUS_NONE()
 	if isinstance(obj, (unicode, str)):
@@ -110,8 +111,12 @@ class Remote:
 
 
 class SignalObject(dbus.service.Object):
-	''' Local object definition for /org/gajim/dbus/RemoteObject.
-	(This docstring is not be visible, because the clients can access only the remote object.)'''
+	"""
+	Local object definition for /org/gajim/dbus/RemoteObject
+
+	This docstring is not be visible, because the clients can access only the
+	remote object.
+	"""
 
 	def __init__(self, bus_name):
 		self.first_show = True
@@ -193,14 +198,18 @@ class SignalObject(dbus.service.Object):
 		pass
 
 	def raise_signal(self, signal, arg):
-		'''raise a signal, with a single argument of unspecified type
-		Instead of obj.raise_signal("Foo", bar), use obj.Foo(bar).'''
+		"""
+		Raise a signal, with a single argument of unspecified type Instead of
+		obj.raise_signal("Foo", bar), use obj.Foo(bar)
+		"""
 		getattr(self, signal)(arg)
 
 	@dbus.service.method(INTERFACE, in_signature='s', out_signature='s')
 	def get_status(self, account):
-		'''Returns status (show to be exact) which is the global one
-		unless account is given'''
+		"""
+		Return status (show to be exact) which is the global one unless account is
+		given
+		"""
 		if not account:
 			# If user did not ask for account, returns the global status
 			return DBUS_STRING(helpers.get_global_show())
@@ -210,8 +219,9 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.method(INTERFACE, in_signature='s', out_signature='s')
 	def get_status_message(self, account):
-		'''Returns status which is the global one
-		unless account is given'''
+		"""
+		Return status which is the global one unless account is given
+		"""
 		if not account:
 			# If user did not ask for account, returns the global status
 			return DBUS_STRING(str(helpers.get_global_status()))
@@ -220,7 +230,9 @@ class SignalObject(dbus.service.Object):
 		return DBUS_STRING(status)
 
 	def _get_account_and_contact(self, account, jid):
-		'''get the account (if not given) and contact instance from jid'''
+		"""
+		Get the account (if not given) and contact instance from jid
+		"""
 		connected_account = None
 		contact = None
 		accounts = gajim.contacts.get_accounts()
@@ -247,8 +259,10 @@ class SignalObject(dbus.service.Object):
 		return connected_account, contact
 
 	def _get_account_for_groupchat(self, account, room_jid):
-		'''get the account which is connected to groupchat (if not given)
-		or check if the given account is connected to the groupchat'''
+		"""
+		Get the account which is connected to groupchat (if not given)
+		or check if the given account is connected to the groupchat
+		"""
 		connected_account = None
 		accounts = gajim.contacts.get_accounts()
 		# if there is only one account in roster, take it as default
@@ -273,8 +287,10 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.method(INTERFACE, in_signature='sss', out_signature='b')
 	def send_file(self, file_path, jid, account):
-		'''send file, located at 'file_path' to 'jid', using account
-		(optional) 'account' '''
+		"""
+		Send file, located at 'file_path' to 'jid', using account (optional)
+		'account'
+		"""
 		jid = self._get_real_jid(jid, account)
 		connected_account, contact = self._get_account_and_contact(account, jid)
 
@@ -289,8 +305,10 @@ class SignalObject(dbus.service.Object):
 
 	def _send_message(self, jid, message, keyID, account, type_ = 'chat',
 	subject = None):
-		'''can be called from send_chat_message (default when send_message)
-		or send_single_message'''
+		"""
+		Can be called from send_chat_message (default when send_message) or
+		send_single_message
+		"""
 		if not jid or not message:
 			return DBUS_BOOLEAN(False)
 		if not keyID:
@@ -305,22 +323,27 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.method(INTERFACE, in_signature='ssss', out_signature='b')
 	def send_chat_message(self, jid, message, keyID, account):
-		'''Send chat 'message' to 'jid', using account (optional) 'account'.
-		if keyID is specified, encrypt the message with the pgp key '''
+		"""
+		Send chat 'message' to 'jid', using account (optional) 'account'. If keyID
+		is specified, encrypt the message with the pgp key
+		"""
 		jid = self._get_real_jid(jid, account)
 		return self._send_message(jid, message, keyID, account)
 
 	@dbus.service.method(INTERFACE, in_signature='sssss', out_signature='b')
 	def send_single_message(self, jid, subject, message, keyID, account):
-		'''Send single 'message' to 'jid', using account (optional) 'account'.
-		if keyID is specified, encrypt the message with the pgp key '''
+		"""
+		Send single 'message' to 'jid', using account (optional) 'account'. If
+		keyID is specified, encrypt the message with the pgp key
+		"""
 		jid = self._get_real_jid(jid, account)
 		return self._send_message(jid, message, keyID, account, type, subject)
 
 	@dbus.service.method(INTERFACE, in_signature='sss', out_signature='b')
 	def send_groupchat_message(self, room_jid, message, account):
-		'''Send 'message' to groupchat 'room_jid',
-		using account (optional) 'account'.'''
+		"""
+		Send 'message' to groupchat 'room_jid', using account (optional) 'account'
+		"""
 		if not room_jid or not message:
 			return DBUS_BOOLEAN(False)
 		connected_account = self._get_account_for_groupchat(account, room_jid)
@@ -332,8 +355,10 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.method(INTERFACE, in_signature='sss', out_signature='b')
 	def open_chat(self, jid, account, message):
-		'''Shows the tabbed window for new message to 'jid', using account
-		(optional) 'account' '''
+		"""
+		Shows the tabbed window for new message to 'jid', using account (optional)
+		'account'
+		"""
 		if not jid:
 			raise dbus_support.MissingArgument()
 		jid = self._get_real_jid(jid, account)
@@ -384,8 +409,10 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.method(INTERFACE, in_signature='sss', out_signature='b')
 	def change_status(self, status, message, account):
-		''' change_status(status, message, account). account is optional -
-		if not specified status is changed for all accounts. '''
+		"""
+		change_status(status, message, account). Account is optional - if not
+		specified status is changed for all accounts
+		"""
 		if status not in ('offline', 'online', 'chat',
 			'away', 'xa', 'dnd', 'invisible'):
 			return DBUS_BOOLEAN(False)
@@ -404,9 +431,10 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
 	def set_priority(self, prio, account):
-		''' set_priority(prio, account). account is optional -
-		if not specified priority is changed for all accounts. that are synced
-		with global status'''
+		"""
+		set_priority(prio, account). Account is optional - if not specified
+		priority is changed for all accounts. That are synced with global status
+		"""
 		if account:
 			gajim.config.set_per('accounts', account, 'priority', prio)
 			show = gajim.SHOW_LIST[gajim.connections[account].connected]
@@ -429,14 +457,17 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.method(INTERFACE, in_signature='', out_signature='')
 	def show_next_pending_event(self):
-		'''Show the window(s) with next pending event in tabbed/group chats.'''
+		"""
+		Show the window(s) with next pending event in tabbed/group chats
+		"""
 		if gajim.events.get_nb_events():
 			gajim.interface.systray.handle_first_event()
 
 	@dbus.service.method(INTERFACE, in_signature='s', out_signature='a{sv}')
 	def contact_info(self, jid):
-		'''get vcard info for a contact. Return cached value of the vcard.
-		'''
+		"""
+		Get vcard info for a contact. Return cached value of the vcard
+		"""
 		if not isinstance(jid, unicode):
 			jid = unicode(jid)
 		if not jid:
@@ -452,7 +483,9 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.method(INTERFACE, in_signature='', out_signature='as')
 	def list_accounts(self):
-		'''list register accounts'''
+		"""
+		List register accounts
+		"""
 		result = gajim.contacts.get_accounts()
 		result_array = dbus.Array([], signature='s')
 		if result and len(result) > 0:
@@ -462,7 +495,9 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.method(INTERFACE, in_signature='s', out_signature='a{ss}')
 	def account_info(self, account):
-		'''show info on account: resource, jid, nick, prio, message'''
+		"""
+		Show info on account: resource, jid, nick, prio, message
+		"""
 		result = DBUS_DICT_SS()
 		if account in gajim.connections:
 			# account is valid
@@ -479,8 +514,10 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.method(INTERFACE, in_signature='s', out_signature='aa{sv}')
 	def list_contacts(self, account):
-		'''list all contacts in the roster. If the first argument is specified,
-		then return the contacts for the specified account'''
+		"""
+		List all contacts in the roster. If the first argument is specified, then
+		return the contacts for the specified account
+		"""
 		result = dbus.Array([], signature='aa{sv}')
 		accounts = gajim.contacts.get_accounts()
 		if len(accounts) == 0:
@@ -500,7 +537,9 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.method(INTERFACE, in_signature='', out_signature='')
 	def toggle_roster_appearance(self):
-		''' shows/hides the roster window '''
+		"""
+		Show/hide the roster window
+		"""
 		win = gajim.interface.roster.window
 		if win.get_property('visible'):
 			gobject.idle_add(win.hide)
@@ -514,7 +553,9 @@ class SignalObject(dbus.service.Object):
 
 	@dbus.service.method(INTERFACE, in_signature='', out_signature='')
 	def toggle_ipython(self):
-		''' shows/hides the ipython window '''
+		"""
+		Show/hide the ipython window
+		"""
 		win = gajim.ipython_window
 		if win:
 			if win.window.is_visible():
@@ -615,9 +656,10 @@ class SignalObject(dbus.service.Object):
 		return False
 
 	def _get_real_jid(self, jid, account = None):
-		'''get the real jid from the given one: removes xmpp: or get jid from nick
-		if account is specified, search only in this account
-		'''
+		"""
+		Get the real jid from the given one: removes xmpp: or get jid from nick if
+		account is specified, search only in this account
+		"""
 		if account:
 			accounts = [account]
 		else:
@@ -643,7 +685,9 @@ class SignalObject(dbus.service.Object):
 		return jid
 
 	def _contacts_as_dbus_structure(self, contacts):
-		''' get info from list of Contact objects and create dbus dict '''
+		"""
+		Get info from list of Contact objects and create dbus dict
+		"""
 		if not contacts:
 			return None
 		prim_contact = None # primary contact

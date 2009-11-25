@@ -42,8 +42,9 @@ from common import gajim
 ####################
 
 class MessageWindow(object):
-	'''Class for windows which contain message like things; chats,
-	groupchats, etc.'''
+	"""
+	Class for windows which contain message like things; chats, groupchats, etc
+	"""
 
 	# DND_TARGETS is the targets needed by drag_source_set and drag_dest_set
 	DND_TARGETS = [('GAJIM_TAB', 0, 81)]
@@ -160,7 +161,9 @@ class MessageWindow(object):
 			self.account = new_name
 
 	def change_jid(self, account, old_jid, new_jid):
-		''' call then when the full jid of a contral change'''
+		"""
+		Called when the full jid of the control is changed
+		"""
 		if account not in self._controls:
 			return
 		if old_jid not in self._controls[account]:
@@ -417,7 +420,9 @@ class MessageWindow(object):
 		return True
 
 	def _on_close_button_clicked(self, button, control):
-		'''When close button is pressed: close a tab'''
+		"""
+		When close button is pressed: close a tab
+		"""
 		self.remove_tab(control, self.CLOSE_CLOSE_BUTTON)
 
 	def show_icon(self):
@@ -444,7 +449,9 @@ class MessageWindow(object):
 			self.window.set_icon(icon.get_pixbuf())
 
 	def show_title(self, urgent=True, control=None):
-		'''redraw the window's title'''
+		"""
+		Redraw the window's title
+		"""
 		if not control:
 			control = self.get_active_control()
 		if not control:
@@ -512,8 +519,10 @@ class MessageWindow(object):
 		self.window.present()
 
 	def remove_tab(self, ctrl, method, reason = None, force = False):
-		'''reason is only for gc (offline status message)
-		if force is True, do not ask any confirmation'''
+		"""
+		Reason is only for gc (offline status message) if force is True, do not
+		ask any confirmation
+		"""
 		def close(ctrl):
 			if reason is not None: # We are leaving gc with a status message
 				ctrl.shutdown(reason)
@@ -616,7 +625,9 @@ class MessageWindow(object):
 		self.show_icon()
 
 	def repaint_themed_widgets(self):
-		'''Repaint controls in the window with theme color'''
+		"""
+		Repaint controls in the window with theme color
+		"""
 		# iterate through controls and repaint
 		for ctrl in self.controls():
 			ctrl.repaint_themed_widgets()
@@ -663,8 +674,10 @@ class MessageWindow(object):
 			ctrl.update_tags()
 
 	def get_control(self, key, acct):
-		'''Return the MessageControl for jid or n, where n is a notebook page index.
-		When key is an int index acct may be None'''
+		"""
+		Return the MessageControl for jid or n, where n is a notebook page index.
+		When key is an int index acct may be None
+		"""
 		if isinstance(key, str):
 			key = unicode(key, 'utf-8')
 
@@ -686,7 +699,9 @@ class MessageWindow(object):
 		return (acct in self._controls and jid in self._controls[acct])
 
 	def change_key(self, old_jid, new_jid, acct):
-		'''Change the JID key of a control'''
+		"""
+		Change the JID key of a control
+		"""
 		try:
 			# Check if controls exists
 			ctrl = self._controls[acct][old_jid]
@@ -814,10 +829,10 @@ class MessageWindow(object):
 			control.msg_textview.grab_focus()
 
 	def get_tab_at_xy(self, x, y):
-		'''Thanks to Gaim
-		Return the tab under xy and
-		if its nearer from left or right side of the tab
-		'''
+		"""
+		Return the tab under xy and if its nearer from left or right side of the
+		tab
+		"""
 		page_num = -1
 		to_right = False
 		horiz = self.notebook.get_tab_pos() == gtk.POS_TOP or \
@@ -844,7 +859,9 @@ class MessageWindow(object):
 		return (page_num, to_right)
 
 	def find_page_num_according_to_tab_label(self, tab_label):
-		'''Find the page num of the tab label'''
+		"""
+		Find the page num of the tab label
+		"""
 		page_num = -1
 		for i in xrange(self.notebook.get_n_pages()):
 			page = self.notebook.get_nth_page(i)
@@ -856,18 +873,21 @@ class MessageWindow(object):
 
 ################################################################################
 class MessageWindowMgr(gobject.GObject):
-	'''A manager and factory for MessageWindow objects'''
+	"""
+	A manager and factory for MessageWindow objects
+	"""
+
 	__gsignals__ = {
 		'window-delete': (gobject.SIGNAL_RUN_LAST, None, (object,)),
 	}
 
 	# These constants map to common.config.opt_one_window_types indices
 	(
-	ONE_MSG_WINDOW_NEVER,
-	ONE_MSG_WINDOW_ALWAYS,
-	ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER,
-	ONE_MSG_WINDOW_PERACCT,
-	ONE_MSG_WINDOW_PERTYPE,
+		ONE_MSG_WINDOW_NEVER,
+		ONE_MSG_WINDOW_ALWAYS,
+		ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER,
+		ONE_MSG_WINDOW_PERACCT,
+		ONE_MSG_WINDOW_PERTYPE,
 	) = range(5)
 	# A key constant for the main window in ONE_MSG_WINDOW_ALWAYS mode
 	MAIN_WIN = 'main'
@@ -875,12 +895,14 @@ class MessageWindowMgr(gobject.GObject):
 	ROSTER_MAIN_WIN = 'roster'
 
 	def __init__(self, parent_window, parent_paned):
-		''' A dictionary of windows; the key depends on the config:
-		ONE_MSG_WINDOW_NEVER: The key is the contact JID
-		ONE_MSG_WINDOW_ALWAYS: The key is MessageWindowMgr.MAIN_WIN
-		ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER: The key is MessageWindowMgr.MAIN_WIN
-		ONE_MSG_WINDOW_PERACCT: The key is the account name
-		ONE_MSG_WINDOW_PERTYPE: The key is a message type constant'''
+		"""
+		A dictionary of windows; the key depends on the config:
+			ONE_MSG_WINDOW_NEVER: The key is the contact JID
+			ONE_MSG_WINDOW_ALWAYS: The key is MessageWindowMgr.MAIN_WIN
+			ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER: The key is MessageWindowMgr.MAIN_WIN
+			ONE_MSG_WINDOW_PERACCT: The key is the account name
+			ONE_MSG_WINDOW_PERTYPE: The key is a message type constant
+		"""
 		gobject.GObject.__init__(self)
 		self._windows = {}
 
@@ -931,7 +953,9 @@ class MessageWindowMgr(gobject.GObject):
 			return False
 
 	def _resize_window(self, win, acct, type_):
-		'''Resizes window according to config settings'''
+		"""
+		Resizes window according to config settings
+		"""
 		if self.mode in (self.ONE_MSG_WINDOW_ALWAYS,
 				self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER):
 			size = (gajim.config.get('msgwin-width'),
@@ -958,7 +982,9 @@ class MessageWindowMgr(gobject.GObject):
 			win.parent_paned.set_position(parent_size[0])
 
 	def _position_window(self, win, acct, type_):
-		'''Moves window according to config settings'''
+		"""
+		Moves window according to config settings
+		"""
 		if (self.mode in [self.ONE_MSG_WINDOW_NEVER,
 		self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER]):
 			return
@@ -1054,15 +1080,19 @@ class MessageWindowMgr(gobject.GObject):
 				return
 
 	def get_control(self, jid, acct):
-		'''Amongst all windows, return the MessageControl for jid'''
+		"""
+		Amongst all windows, return the MessageControl for jid
+		"""
 		win = self.get_window(jid, acct)
 		if win:
 			return win.get_control(jid, acct)
 		return None
 
 	def get_gc_control(self, jid, acct):
-		'''Same as get_control. Was briefly required, is not any more.
-May be useful some day in the future?'''
+		"""
+		Same as get_control. Was briefly required, is not any more. May be useful
+		some day in the future?
+		"""
 		ctrl = self.get_control(jid, acct)
 		if ctrl and ctrl.type_id == message_control.TYPE_GC:
 			return ctrl

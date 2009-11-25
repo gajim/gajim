@@ -39,7 +39,10 @@ TYPE_PM = 'pm'
 ####################
 
 class MessageControl:
-	'''An abstract base widget that can embed in the gtk.Notebook of a MessageWindow'''
+	"""
+	An abstract base widget that can embed in the gtk.Notebook of a
+	MessageWindow
+	"""
 
 	def __init__(self, type_id, parent_win, widget_name, contact, account, resource = None):
 		# dict { cb id : widget}
@@ -67,57 +70,87 @@ class MessageControl:
 		return fjid
 
 	def set_control_active(self, state):
-		'''Called when the control becomes active (state is True)
-		or inactive (state is False)'''
+		"""
+		Called when the control becomes active (state is True) or inactive (state
+		is False)
+		"""
 		pass  # Derived classes MUST implement this method
 
 	def minimizable(self):
-		'''Called to check if control can be minimized'''
-		# NOTE: Derived classes MAY implement this
+		"""
+		Called to check if control can be minimized
+
+		Derived classes MAY implement this.
+		"""
 		return False
 
 	def safe_shutdown(self):
-		'''Called to check if control can be closed without loosing data.
-		returns True if control can be closed safely else False'''
-		# NOTE: Derived classes MAY implement this
+		"""
+		Called to check if control can be closed without loosing data.
+		returns True if control can be closed safely else False
+
+		Derived classes MAY implement this.
+		"""
 		return True
 
 	def allow_shutdown(self, method, on_response_yes, on_response_no,
-	on_response_minimize):
-		'''Called to check is a control is allowed to shutdown.
+			on_response_minimize):
+		"""
+		Called to check is a control is allowed to shutdown.
 		If a control is not in a suitable shutdown state this method
 		should call on_response_no, else on_response_yes or
-		on_response_minimize '''
-		# NOTE: Derived classes MAY implement this
+		on_response_minimize
+
+		Derived classes MAY implement this.
+		"""
 		on_response_yes(self)
 
 	def shutdown(self):
-		# NOTE: Derived classes MUST implement this
+		"""
+		Derived classes MUST implement this
+		"""
 		pass
 
 	def repaint_themed_widgets(self):
-		pass # NOTE: Derived classes SHOULD implement this
+		"""
+		Derived classes SHOULD implement this
+		"""
+		pass
 
 	def update_ui(self):
-		pass # NOTE: Derived classes SHOULD implement this
+		"""
+		Derived classes SHOULD implement this
+		"""
+		pass
 
 	def toggle_emoticons(self):
-		pass # NOTE: Derived classes MAY implement this
+		"""
+		Derived classes MAY implement this
+		"""
+		pass
 
 	def update_font(self):
-		pass # NOTE: Derived classes SHOULD implement this
+		"""
+		Derived classes SHOULD implement this
+		"""
+		pass
 
 	def update_tags(self):
-		pass # NOTE: Derived classes SHOULD implement this
+		"""
+		Derived classes SHOULD implement this
+		"""
+		pass
 
 	def get_tab_label(self, chatstate):
-		'''Return a suitable tab label string.  Returns a tuple such as:
-		(label_str, color) either of which can be None
-		if chatstate is given that means we have HE SENT US a chatstate and
-		we want it displayed'''
-		# NOTE: Derived classes MUST implement this
+		"""
+		Return a suitable tab label string. Returns a tuple such as: (label_str,
+		color) either of which can be None if chatstate is given that means we
+		have HE SENT US a chatstate and we want it displayed
+
+		Derivded classes MUST implement this.
+		"""
 		# Return a markup'd label and optional gtk.Color in a tupple like:
-		#return (label_str, None)
+		# return (label_str, None)
 		pass
 
 	def get_tab_image(self, count_unread=True):
@@ -126,11 +159,15 @@ class MessageControl:
 		return None
 
 	def prepare_context_menu(self):
-		# NOTE: Derived classes SHOULD implement this
+		"""
+		Derived classes SHOULD implement this
+		"""
 		return None
 
 	def chat_buttons_set_visible(self, state):
-		# NOTE: Derived classes MAY implement this
+		"""
+		Derived classes MAY implement this
+		"""
 		self.hide_chat_buttons = state
 
 	def got_connected(self):
@@ -170,8 +207,8 @@ class MessageControl:
 			self.print_esession_details()
 
 	def send_message(self, message, keyID='', type_='chat', chatstate=None,
-	msg_id=None, composing_xep=None, resource=None, user_nick=None, xhtml=None,
-	callback=None, callback_args=[]):
+			msg_id=None, composing_xep=None, resource=None, user_nick=None,
+			xhtml=None, callback=None, callback_args=[]):
 		# Send the given message to the active tab.
 		# Doesn't return None if error
 		jid = self.contact.jid

@@ -36,7 +36,9 @@ from common import gajim
 
 
 class ProfileWindow:
-	'''Class for our information window'''
+	"""
+	Class for our information window
+	"""
 
 	def __init__(self, account):
 		self.xml = gtkgui_helpers.get_glade('profile_window.glade')
@@ -173,7 +175,9 @@ class ProfileWindow:
 				on_response_cancel = on_cancel, on_response_clear = on_clear)
 
 	def on_PHOTO_button_press_event(self, widget, event):
-		'''If right-clicked, show popup'''
+		"""
+		If right-clicked, show popup
+		"""
 		if event.button == 3 and self.avatar_encoded: # right click
 			menu = gtk.Menu()
 
@@ -257,7 +261,9 @@ class ProfileWindow:
 			self.update_progressbar_timeout_id = None
 
 	def add_to_vcard(self, vcard_, entry, txt):
-		'''Add an information to the vCard dictionary'''
+		"""
+		Add an information to the vCard dictionary
+		"""
 		entries = entry.split('_')
 		loc = vcard_
 		if len(entries) == 3: # We need to use lists
@@ -280,7 +286,9 @@ class ProfileWindow:
 		return vcard_
 
 	def make_vcard(self):
-		'''make the vCard dictionary'''
+		"""
+		Make the vCard dictionary
+		"""
 		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_HOME_USERID', 'URL',
 			'TEL_HOME_NUMBER', 'N_FAMILY', 'N_GIVEN', 'N_MIDDLE', 'N_PREFIX',
 			'N_SUFFIX', 'ADR_HOME_STREET', 'ADR_HOME_EXTADR', 'ADR_HOME_LOCALITY',

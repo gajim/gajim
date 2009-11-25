@@ -27,14 +27,15 @@ from common import gajim
 from common import xmpp
 
 def describe_features(features):
-	'''a human-readable description of the features that have been negotiated'''
+	"""
+	A human-readable description of the features that have been negotiated
+	"""
 	if features['logging'] == 'may':
 		return _('- messages will be logged')
 	elif features['logging'] == 'mustnot':
 		return _('- messages will not be logged')
 
 class FeatureNegotiationWindow:
-	'''FeatureNegotiotionWindow class'''
 	def __init__(self, account, jid, session, form):
 		self.account = account
 		self.jid = jid

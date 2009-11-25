@@ -45,8 +45,11 @@ from common import gajim
 from common.i18n import Q_
 
 def get_avatar_pixbuf_encoded_mime(photo):
-	'''return the pixbuf of the image
-	photo is a dictionary containing PHOTO information'''
+	"""
+	Return the pixbuf of the image
+
+	Photo is a dictionary containing PHOTO information.
+	"""
 	if not isinstance(photo, dict):
 		return None, None, None
 	img_decoded = None
@@ -71,7 +74,9 @@ def get_avatar_pixbuf_encoded_mime(photo):
 	return pixbuf, avatar_encoded, avatar_mime_type
 
 class VcardWindow:
-	'''Class for contact's information window'''
+	"""
+	Class for contact's information window
+	"""
 
 	def __init__(self, contact, account, gc_contact = None):
 		# the contact variable is the jid if vcard is true
@@ -151,7 +156,9 @@ class VcardWindow:
 			self.window.destroy()
 
 	def on_PHOTO_eventbox_button_press_event(self, widget, event):
-		'''If right-clicked, show popup'''
+		"""
+		If right-clicked, show popup
+		"""
 		if event.button == 3: # right click
 			menu = gtk.Menu()
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
@@ -465,7 +472,9 @@ class ZeroconfVcardWindow:
 			self.window.destroy()
 
 	def on_PHOTO_eventbox_button_press_event(self, widget, event):
-		'''If right-clicked, show popup'''
+		"""
+		If right-clicked, show popup
+		"""
 		if event.button == 3: # right click
 			menu = gtk.Menu()
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)

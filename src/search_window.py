@@ -32,8 +32,9 @@ import dataforms_widget
 
 class SearchWindow:
 	def __init__(self, account, jid):
-		'''Create new window.'''
-
+		"""
+		Create new window
+		"""
 		# an account object
 		self.account = account
 		self.jid = jid
@@ -230,6 +231,5 @@ class SearchWindow:
 		if self.data_form_widget.title:
 			self.window.set_title('%s - Search - Gajim' % \
 				self.data_form_widget.title)
-
 
 # vim: se ts=3:
