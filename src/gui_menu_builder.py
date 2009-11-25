@@ -323,7 +323,7 @@ control=None):
 		for item in (send_custom_status_menuitem, send_single_message_menuitem,
 		invite_menuitem, block_menuitem, unblock_menuitem, ignore_menuitem,
 		unignore_menuitem, set_custom_avatar_menuitem, subscription_menuitem,
-		manage_contact_menuitem, convert_to_gc_menuitems):
+		manage_contact_menuitem, convert_to_gc_menuitem):
 			item.set_no_show_all(True)
 			item.hide()
 
