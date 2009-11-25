@@ -122,6 +122,8 @@ class GnomePasswordStorage(PasswordStorage):
 		user = gajim.config.get_per('accounts', account_name, 'name')
 		display_name = _('XMPP account %s@%s') % (user, server)
 		attributes1 = dict(server=str(server), user=str(user), protocol='xmpp')
+		if password is None:
+			password = str()
 		try:
 			auth_token = gnomekeyring.item_create_sync(
 				self.keyring, gnomekeyring.ITEM_NETWORK_PASSWORD,
