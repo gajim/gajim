@@ -48,6 +48,9 @@ import configpaths
 LOG_DB_PATH = configpaths.gajimpaths['LOG_DB']
 LOG_DB_FOLDER, LOG_DB_FILE = os.path.split(LOG_DB_PATH)
 
+import logging
+log = logging.getLogger('gajim.c.logger')
+
 class Constants:
 	def __init__(self):
 		(
@@ -143,7 +146,7 @@ class Logger:
 			else:
 				self.cur.execute("PRAGMA synchronous = OFF")
 		except sqlite.Error, e:
-			gajim.log.debug("Failed to set_synchronous(%s): %s" % (sync, str(e)))
+			log.debug("Failed to set_synchronous(%s): %s" % (sync, str(e)))
 
 	def init_vars(self):
 		self.open_db()
@@ -1003,6 +1006,14 @@ class Logger:
 					type_ = 'chat_msg_sent'
 		jid_id = self.get_jid_id(with_)
 		where_sql = 'jid_id = %s AND message="%s"' % (jid_id, msg)
+		if type_ == 'gc_msg':
+			# We cannot differentiate gc message and pm messages, so look in both
+			# logs
+			with_2 = gajim.get_jid_without_resource(with_)
+			if with_ != with_2:
+				jid_id2 = self.get_jid_id(with_2)
+				where_sql = 'jid_id in (%s, %s) AND message="%s"' % (jid_id,
+					jid_id2, msg)
 		start_time = time_col - 300 # 5 minutes arrount given time
 		end_time = time_col + 300 # 5 minutes arrount given time
 		self.cur.execute('''
@@ -1013,7 +1024,9 @@ class Logger:
 			''' % (where_sql, start_time, end_time))
 		results = self.cur.fetchall()
 		if results:
+			log.debug('Log already in DB, ignoring it')
 			return
+		log.debug('New log received from server archives, storing it')
 		self.write(type_, with_, message=msg, tim=tim)
 
 # vim: se ts=3:
