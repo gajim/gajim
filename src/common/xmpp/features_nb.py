@@ -15,10 +15,10 @@
 
 # $Id: features.py,v 1.22 2005/09/30 20:13:04 mikealbon Exp $
 
-'''
+"""
 Different stuff that wasn't worth separating it into modules
 (Registration, Privacy Lists, ...)
-'''
+"""
 
 from protocol import NS_REGISTER, NS_PRIVACY, NS_DATA, Iq, isResultNode, Node
 
@@ -38,13 +38,13 @@ def _on_default_response(disp, iq, cb):
 REGISTER_DATA_RECEIVED = 'REGISTER DATA RECEIVED'
 
 def getRegInfo(disp, host, info={}, sync=True):
-	'''
-	Gets registration form from remote host. Info dict can be prefilled
+	"""
+	Get registration form from remote host. Info dict can be prefilled
 	:param disp: plugged dispatcher instance
 	:param info: dict, like {'username':'joey'}.
 
 	See JEP-0077 for details.
-	'''
+	"""
 	iq=Iq('get',NS_REGISTER,to=host)
 	for i in info.keys():
 		iq.setTagData(i,info[i])
@@ -77,12 +77,12 @@ def _ReceivedRegInfo(con, resp, agent):
 	con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent,df,False,''))
 
 def register(disp, host, info, cb):
-	'''
-	Perform registration on remote server with provided info.
+	"""
+	Perform registration on remote server with provided info
 
 	If registration fails you can get additional info from the dispatcher's
 	owner	attributes lastErrNode, lastErr and lastErrCode.
-	'''
+	"""
 	iq=Iq('set', NS_REGISTER, to=host)
 	if not isinstance(info, dict):
 		info=info.asDict()
@@ -91,17 +91,17 @@ def register(disp, host, info, cb):
 	disp.SendAndCallForResponse(iq, cb)
 
 def unregister(disp, host, cb):
-	'''
+	"""
 	Unregisters with host (permanently removes account). Returns true on success
-	'''
+	"""
 	iq = Iq('set', NS_REGISTER, to=host, payload=[Node('remove')])
 	_on_default_response(disp, iq, cb)
 
 def changePasswordTo(disp, newpassword, host=None, cb = None):
-	'''
-	Changes password on specified or current (if not specified) server.
-	Returns true on success.
-	'''
+	"""
+	Changes password on specified or current (if not specified) server. Returns
+	true on success.
+	"""
 	if not host:
 		host = disp._owner.Server
 	iq = Iq('set',NS_REGISTER,to=host, payload=[Node('username',
@@ -123,10 +123,10 @@ PRIVACY_LIST_RECEIVED = 'PRIVACY LIST RECEIVED'
 PRIVACY_LISTS_ACTIVE_DEFAULT = 'PRIVACY LISTS ACTIVE DEFAULT'
 
 def getPrivacyLists(disp):
-	'''
-	Requests privacy lists from connected server.
-	Returns dictionary of existing lists on success.
-	'''
+	"""
+	Request privacy lists from connected server. Returns dictionary of existing
+	lists on success.
+	"""
 	iq = Iq('get', NS_PRIVACY)
 	def _on_response(resp):
 		dict_ = {'lists': []}
@@ -157,10 +157,10 @@ def getActiveAndDefaultPrivacyLists(disp):
 	disp.SendAndCallForResponse(iq, _on_response)
 
 def getPrivacyList(disp, listname):
-	'''
-	Requests specific privacy list listname. Returns list of XML nodes (rules)
+	"""
+	Request specific privacy list listname. Returns list of XML nodes (rules)
 	taken from the server responce.
-	'''
+	"""
 	def _on_response(resp):
 		if not isResultNode(resp):
 			disp.Event(NS_PRIVACY, PRIVACY_LIST_RECEIVED, (False))
@@ -170,10 +170,10 @@ def getPrivacyList(disp, listname):
 	disp.SendAndCallForResponse(iq, _on_response)
 
 def setActivePrivacyList(disp, listname=None, typ='active', cb=None):
-	'''
-	Switches privacy list 'listname' to specified type.
-	By default the type is 'active'. Returns true on success.
-	'''
+	"""
+	Switch privacy list 'listname' to specified type. By default the type is
+	'active'. Returns true on success.
+	"""
 	if listname:
 		attrs={'name':listname}
 	else:
@@ -182,15 +182,20 @@ def setActivePrivacyList(disp, listname=None, typ='active', cb=None):
 	_on_default_response(disp, iq, cb)
 
 def setDefaultPrivacyList(disp, listname=None):
-	''' Sets the default privacy list as 'listname'. Returns true on success. '''
+	"""
+	Set the default privacy list as 'listname'. Returns true on success
+	"""
 	return setActivePrivacyList(disp, listname,'default')
 
 def setPrivacyList(disp, listname, tags):
-	'''
-	Set the ruleset.
+	"""
+	Set the ruleset
 
-	'list' should be the simpleXML node formatted according to RFC 3921 (XMPP-IM) 	I.e. Node('list',{'name':listname},payload=[...]).	Returns true on success.
-	'''
+	'list' should be the simpleXML node formatted according to RFC 3921
+	(XMPP-IM) I.e. Node('list',{'name':listname},payload=[...]).
+
+	Returns true on success.
+	"""
 	iq = Iq('set', NS_PRIVACY, xmlns = '')
 	list_query = iq.getTag('query').setTag('list', {'name': listname})
 	for item in tags:

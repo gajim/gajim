@@ -14,33 +14,34 @@
 
 # $Id: client.py,v 1.52 2006/01/02 19:40:55 normanr Exp $
 
-'''
-Provides PlugIn class functionality to develop extentions for xmpppy.
-'''
+"""
+Provides PlugIn class functionality to develop extentions for xmpppy
+"""
 
 import logging
 log = logging.getLogger('gajim.c.x.plugin')
 
 class PlugIn:
-	'''
+	"""
 	Abstract xmpppy plugin infrastructure code, providing plugging in/out and
-	debugging functionality.
+	debugging functionality
 
 	Inherit to develop pluggable objects. No code change on the owner class
 	required (the object where we plug into)
 
 	For every instance of PlugIn class the 'owner' is the class in what the plug
 	was plugged.
-	'''
+	"""
+
 	def __init__(self):
 		self._exported_methods=[]
 
 	def PlugIn(self, owner):
-		'''
+		"""
 		Attach to owner and register ourself and our _exported_methods in it.
 		If defined by a subclass, call self.plugin(owner) to execute hook
-		code after plugging.
-		'''
+		code after plugging
+		"""
 		self._owner=owner
 		log.info('Plugging %s __INTO__ %s' % (self, self._owner))
 		if self.__class__.__name__ in owner.__dict__:
@@ -63,11 +64,11 @@ class PlugIn:
 			return self.plugin(owner)
 
 	def PlugOut(self):
-		'''
+		"""
 		Unregister our _exported_methods from owner and detach from it.
 		If defined by a subclass, call self.plugout() after unplugging to execute
-		hook code.
-		'''
+		hook code
+		"""
 		log.info('Plugging %s __OUT__ of %s.' % (self, self._owner))
 		for method in self._exported_methods:
 			del self._owner.__dict__[method.__name__]
@@ -85,13 +86,13 @@ class PlugIn:
 
 	@classmethod
 	def get_instance(cls, *args, **kwargs):
-		'''
-		Factory Method for object creation.
+		"""
+		Factory Method for object creation
 
 		Use this instead of directly initializing the class in order to make
 		unit testing easier. For testing, this method can be patched to inject
 		mock objects.
-		'''
+		"""
 		return cls(*args, **kwargs)
 
 # vim: se ts=3:
