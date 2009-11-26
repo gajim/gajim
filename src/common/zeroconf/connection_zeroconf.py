@@ -51,7 +51,6 @@ from common.zeroconf import zeroconf
 from connection_handlers_zeroconf import *
 
 class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
-	'''Connection class'''
 	def __init__(self, name):
 		ConnectionHandlersZeroconf.__init__(self)
 		# system username
@@ -66,9 +65,10 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 		CommonConnection.__init__(self, name)
 
 	def get_config_values_or_default(self):
-		''' get name, host, port from config, or
-		create zeroconf account with default values'''
-
+		"""
+		Get name, host, port from config, or create zeroconf account with default
+		values
+		"""
 		if not gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'name'):
 			gajim.log.debug('Creating zeroconf account')
 			gajim.config.add_per('accounts', gajim.ZEROCONF_ACC_NAME)
@@ -157,8 +157,10 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 		self.dispatch('NOTIFY', (jid, 'offline', '', 'local', 0, None, 0, None))
 
 	def _disconnectedReconnCB(self):
-		'''Called when we are disconnected. Comes from network manager for example
-		we don't try to reconnect, network manager will tell us when we can'''
+		"""
+		Called when we are disconnected. Comes from network manager for example
+		we don't try to reconnect, network manager will tell us when we can
+		"""
 		if gajim.account_is_connected(self.name):
 			# we cannot change our status to offline or connecting
 			# after we auth to server

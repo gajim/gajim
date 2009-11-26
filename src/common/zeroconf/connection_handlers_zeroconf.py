@@ -98,8 +98,9 @@ ConnectionCommands, ConnectionPEP, connection_handlers.ConnectionHandlersBase):
 			HAS_IDLE = False
 
 	def _messageCB(self, ip, con, msg):
-		'''Called when we receive a message'''
-
+		"""
+		Called when we receive a message
+		"""
 		log.debug('Zeroconf MessageCB')
 
 		frm = msg.getFrom()
@@ -178,17 +179,23 @@ ConnectionCommands, ConnectionPEP, connection_handlers.ConnectionHandlersBase):
 	# END messageCB
 
 	def store_metacontacts(self, tags):
-		''' fake empty method '''
+		"""
+		Fake empty method
+		"""
 		# serverside metacontacts are not supported with zeroconf
 		# (there is no server)
 		pass
 
 	def remove_transfers_for_contact(self, contact):
-		''' stop all active transfer for contact '''
+		"""
+		Stop all active transfer for contact
+		"""
 		pass
 
 	def remove_all_transfers(self):
-		''' stops and removes all active connections from the socks5 pool '''
+		"""
+		Stops and removes all active connections from the socks5 pool
+		"""
 		pass
 
 	def remove_transfer(self, file_props, remove_from_list = True):

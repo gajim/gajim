@@ -37,9 +37,10 @@ class Roster:
 		return self
 
 	def getDiffs(self):
-		'''	update the roster with new data and return dict with
-		jid -> new status pairs to do notifications and stuff '''
-
+		"""
+		Update the roster with new data and return dict with jid -> new status
+		pairs to do notifications and stuff
+		"""
 		diffs = {}
 		old_data = self._data.copy()
 		self.update_roster()

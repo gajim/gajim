@@ -47,7 +47,9 @@ ACTIVITY_TIMEOUT_SECONDS = 30
 
 class ZeroconfListener(IdleObject):
 	def __init__(self, port, conn_holder):
-		''' handle all incomming connections on ('0.0.0.0', port)'''
+		"""
+		Handle all incomming connections on ('0.0.0.0', port)
+		"""
 		self.port = port
 		self.queue_idx = -1
 		#~ self.queue = None
@@ -80,11 +82,15 @@ class ZeroconfListener(IdleObject):
 		self.started = True
 
 	def pollend(self):
-		''' called when we stop listening on (host, port) '''
+		"""
+		Called when we stop listening on (host, port)
+		"""
 		self.disconnect()
 
 	def pollin(self):
-		''' accept a new incomming connection and notify queue'''
+		"""
+		Accept a new incomming connection and notify queue
+		"""
 		sock = self.accept_conn()
 		# loop through roster to find who has connected to us
 		from_jid = None
@@ -97,7 +103,9 @@ class ZeroconfListener(IdleObject):
 		P2PClient(sock[0], ipaddr, sock[1][1], self.conn_holder, [], from_jid)
 
 	def disconnect(self, message=''):
-		''' free all resources, we are not listening anymore '''
+		"""
+		Free all resources, we are not listening anymore
+		"""
 		log.info('Disconnecting ZeroconfListener: %s' % message)
 		gajim.idlequeue.remove_timeout(self.fd)
 		gajim.idlequeue.unplug_idle(self.fd)
@@ -110,14 +118,16 @@ class ZeroconfListener(IdleObject):
 		self.conn_holder.kill_all_connections()
 
 	def accept_conn(self):
-		''' accepts a new incoming connection '''
+		"""
+		Accept a new incoming connection
+		"""
 		_sock = self._serv.accept()
 		_sock[0].setblocking(False)
 		return _sock
 
 class P2PClient(IdleObject):
 	def __init__(self, _sock, host, port, conn_holder, stanzaqueue=[], to=None,
-	on_ok=None, on_not_ok=None):
+			on_ok=None, on_not_ok=None):
 		self._owner = self
 		self.Namespace = 'jabber:client'
 		self.protocol_type = 'XMPP'
@@ -207,7 +217,9 @@ class P2PClient(IdleObject):
 		self._register_handlers()
 
 	def StreamInit(self):
-		''' Send an initial stream header. '''
+		"""
+		Send an initial stream header
+		"""
 		self.Dispatcher.Stream = simplexml.NodeBuilder()
 		self.Dispatcher.Stream._dispatch_depth = 2
 		self.Dispatcher.Stream.dispatch = self.Dispatcher.dispatch
@@ -374,8 +386,10 @@ class P2PConnection(IdleObject, PlugIn):
 		return True
 
 	def plugout(self):
-		'''Disconnect from the remote server and unregister self.disconnected method from
-			the owner's dispatcher.'''
+		"""
+		Disconnect from the remote server and unregister self.disconnected method
+		from the owner's dispatcher
+		"""
 		self.disconnect()
 		self._owner = None
 
@@ -392,10 +406,12 @@ class P2PConnection(IdleObject, PlugIn):
 			self.on_receive = recv_handler
 
 	def send(self, packet, is_message=False, now=False):
-		'''Append stanza to the queue of messages to be send if now is
-		False, else send it instantly.
-		If supplied data is unicode string, encode it to utf-8.
-		'''
+		"""
+		Append stanza to the queue of messages to be send if now is False, else
+		send it instantly
+
+		If supplied data is unicode string, encode it to UTF-8.
+		"""
 		print 'ici'
 		if self.state <= 0:
 			return
@@ -459,7 +475,10 @@ class P2PConnection(IdleObject, PlugIn):
 		self.disconnect()
 
 	def pollin(self):
-		''' Reads all pending incoming data. Calls owner's disconnected() method if appropriate.'''
+		"""
+		Reads all pending incoming data. Call owner's disconnected() method if
+		appropriate
+		"""
 		received = ''
 		errnum = 0
 		try:
@@ -500,7 +519,9 @@ class P2PConnection(IdleObject, PlugIn):
 		return True
 
 	def disconnect(self, message=''):
-		''' Closes the socket. '''
+		"""
+		Close the socket
+		"""
 		gajim.idlequeue.remove_timeout(self.fd)
 		gajim.idlequeue.unplug_idle(self.fd)
 		try:
@@ -739,20 +760,24 @@ class ClientZeroconf:
 			[(stanza, is_message)], to, on_ok=on_ok, on_not_ok=on_not_ok)
 
 	def RegisterDisconnectHandler(self, handler):
-		''' Register handler that will be called on disconnect.'''
+		"""
+		Register handler that will be called on disconnect
+		"""
 		self.disconnect_handlers.append(handler)
 
 	def UnregisterDisconnectHandler(self, handler):
-		''' Unregister handler that is called on disconnect.'''
+		"""
+		Unregister handler that is called on disconnect
+		"""
 		self.disconnect_handlers.remove(handler)
 
 	def SendAndWaitForResponse(self, stanza, timeout=None, func=None, args=None):
-		'''
+		"""
 		Send stanza and wait for recipient's response to it. Will call transports
-		on_timeout callback if response is not retrieved in time.
+		on_timeout callback if response is not retrieved in time
 
 		Be aware: Only timeout of latest call of SendAndWait is active.
-		'''
+		"""
 #		if timeout is None:
 #			timeout = DEFAULT_TIMEOUT_SECONDS
 		def on_ok(_waitid):
@@ -773,8 +798,10 @@ class ClientZeroconf:
 		self.send(stanza, on_ok=on_ok)
 
 	def SendAndCallForResponse(self, stanza, func=None, args=None):
-		''' Put stanza on the wire and call back when recipient replies.
-			Additional callback arguments can be specified in args. '''
+		"""
+		Put stanza on the wire and call back when recipient replies. Additional
+		callback arguments can be specified in args.
+		"""
 		self.SendAndWaitForResponse(stanza, 0, func, args)
 
 # vim: se ts=3:
