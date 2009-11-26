@@ -48,18 +48,18 @@ class JingleContent(object):
 
 		self.callbacks = {
 			# these are called when *we* get stanzas
-			'content-accept': [self.__transportInfoCB],
-			'content-add': [self.__transportInfoCB],
+			'content-accept': [self.__on_transport_info],
+			'content-add': [self.__on_transport_info],
 			'content-modify': [],
 			'content-reject': [],
 			'content-remove': [],
 			'description-info': [],
 			'security-info': [],
-			'session-accept': [self.__transportInfoCB],
+			'session-accept': [self.__on_transport_info],
 			'session-info': [],
-			'session-initiate': [self.__transportInfoCB],
+			'session-initiate': [self.__on_transport_info],
 			'session-terminate': [],
-			'transport-info': [self.__transportInfoCB],
+			'transport-info': [self.__on_transport_info],
 			'transport-replace': [],
 			'transport-accept': [],
 			'transport-reject': [],
@@ -82,7 +82,7 @@ class JingleContent(object):
 		"""
 		pass
 
-	def stanzaCB(self, stanza, content, error, action):
+	def on_stanza(self, stanza, content, error, action):
 		"""
 		Called when something related to our content was sent by peer
 		"""
@@ -90,7 +90,7 @@ class JingleContent(object):
 			for callback in self.callbacks[action]:
 				callback(stanza, content, error, action)
 
-	def __transportInfoCB(self, stanza, content, error, action):
+	def __on_transport_info(self, stanza, content, error, action):
 		"""
 		Got a new transport candidate
 		"""

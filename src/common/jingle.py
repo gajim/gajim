@@ -86,7 +86,7 @@ class ConnectionJingle(object):
 		id = stanza.getID()
 
 		if (jid, id) in self.__iq_responses.keys():
-			self.__iq_responses[(jid, id)].stanzaCB(stanza)
+			self.__iq_responses[(jid, id)].on_stanza(stanza)
 			del self.__iq_responses[(jid, id)]
 			raise xmpp.NodeProcessed
 
@@ -101,7 +101,7 @@ class ConnectionJingle(object):
 			self.add_jingle(newjingle)
 
 		# we already have such session in dispatcher...
-		self.__sessions[(jid, sid)].stanzaCB(stanza)
+		self.__sessions[(jid, sid)].on_stanza(stanza)
 
 		raise xmpp.NodeProcessed
 
