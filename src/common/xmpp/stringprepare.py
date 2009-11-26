@@ -26,16 +26,26 @@ import unicodedata
 from encodings import idna
 
 class ILookupTable:
-	""" Interface for character lookup classes. """
+	"""
+	Interface for character lookup classes
+	"""
 
 	def lookup(self, c):
-		""" Return whether character is in this table. """
+		"""
+		Return whether character is in this table
+		"""
+		pass
 
 class IMappingTable:
-	""" Interface for character mapping classes. """
+	"""
+	Interface for character mapping classes
+	"""
 
 	def map(self, c):
-		""" Return mapping for character. """
+		"""
+		Return mapping for character
+		"""
+		pass
 
 class LookupTableFromFunction:
 
@@ -75,8 +85,8 @@ class EmptyMappingTable:
 			return c
 
 class Profile:
-	def __init__(self, mappings=[],  normalize=True, prohibiteds=[],
-						check_unassigneds=True, check_bidi=True):
+	def __init__(self, mappings=[], normalize=True, prohibiteds=[],
+			check_unassigneds=True, check_bidi=True):
 		self.mappings = mappings
 		self.normalize = normalize
 		self.prohibiteds = prohibiteds
@@ -140,24 +150,25 @@ class Profile:
 
 
 class NamePrep:
-	""" Implements preparation of internationalized domain names.
+	"""
+	Implements preparation of internationalized domain names
 
-		This class implements preparing internationalized domain names using the
-		rules defined in RFC 3491, section 4 (Conversion operations).
+	This class implements preparing internationalized domain names using the
+	rules defined in RFC 3491, section 4 (Conversion operations).
 
-		We do not perform step 4 since we deal with unicode representations of
-		domain names and do not convert from or to ASCII representations using
-		punycode encoding. When such a conversion is needed, the L{idna} standard
-		library provides the C{ToUnicode()} and C{ToASCII()} functions. Note that
-		L{idna} itself assumes UseSTD3ASCIIRules to be false.
+	We do not perform step 4 since we deal with unicode representations of
+	domain names and do not convert from or to ASCII representations using
+	punycode encoding. When such a conversion is needed, the L{idna} standard
+	library provides the C{ToUnicode()} and C{ToASCII()} functions. Note that
+	L{idna} itself assumes UseSTD3ASCIIRules to be false.
 
-		The following steps are performed by C{prepare()}:
+	The following steps are performed by C{prepare()}:
 
-			* Split the domain name in labels at the dots (RFC 3490, 3.1)
-			* Apply nameprep proper on each label (RFC 3491)
-			* Enforce the restrictions on ASCII characters in host names by
-				assuming STD3ASCIIRules to be true. (STD 3)
-			* Rejoin the labels using the label separator U+002E (full stop).
+		* Split the domain name in labels at the dots (RFC 3490, 3.1)
+		* Apply nameprep proper on each label (RFC 3491)
+		* Enforce the restrictions on ASCII characters in host names by
+			assuming STD3ASCIIRules to be true. (STD 3)
+		* Rejoin the labels using the label separator U+002E (full stop).
 	"""
 
 	# Prohibited characters.
