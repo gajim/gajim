@@ -352,6 +352,7 @@ class Config:
 			'send_os_info': [ opt_bool, True ],
 			'log_encrypted_sessions': [opt_bool, True, _('When negotiating an encrypted session, should Gajim assume you want your messages to be logged?')],
 			'roster_version': [opt_str, ''],
+			'last_archiving_time': [opt_str, '1970-01-01T00:00:00Z', _('Last time we syncronized with logs from server.')],
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],

@@ -1563,7 +1563,9 @@ class Interface:
 			self.enable_music_listener()
 		# Start merging logs from server
 		gajim.connections[account].request_modifications_page(
-			'1970-01-01T00:00:00Z')
+			gajim.config.get_per('accounts', account, 'last_archiving_time'))
+		gajim.config.set_per('accounts', account, 'last_archiving_time',
+			time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))
 
 	def handle_event_metacontacts(self, account, tags_list):
 		gajim.contacts.define_metacontacts(account, tags_list)
