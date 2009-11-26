@@ -5952,8 +5952,12 @@ class RosterWindow:
 				gajim.config.set('show_roster_on_startup', True)
 
 		if len(gajim.connections) == 0: # if we have no account
-			gajim.interface.instances['account_creation_wizard'] = \
-				config.AccountCreationWizardWindow()
+			def _open_wizard():
+				gajim.interface.instances['account_creation_wizard'] = \
+					config.AccountCreationWizardWindow()
+			# Open wizard only after roster is created, so we can make it transient
+			# for the roster window
+			gobject.idle_add(_open_wizard)
 		if not gajim.ZEROCONF_ACC_NAME in gajim.config.get_per('accounts'):
 			# Create zeroconf in config file
 			from common.zeroconf import connection_zeroconf
