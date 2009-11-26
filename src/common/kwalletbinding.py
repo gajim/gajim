@@ -25,7 +25,9 @@ import subprocess
 
 
 def kwallet_available():
-	"""Return True if kwalletcli can be run, False otherwise."""
+	"""
+	Return True if kwalletcli can be run, False otherwise
+	"""
 	try:
 		p = subprocess.Popen(["kwalletcli", "-qV"])
 	except Exception:
@@ -37,7 +39,8 @@ def kwallet_available():
 
 
 def kwallet_get(folder, entry):
-	"""Retrieve a passphrase from the KDE Wallet via kwalletcli.
+	"""
+	Retrieve a passphrase from the KDE Wallet via kwalletcli
 
 	Arguments:
 	• folder: The top-level category to use (normally the programme name)
@@ -45,7 +48,6 @@ def kwallet_get(folder, entry):
 
 	Returns the passphrase as unicode, False if it cannot be found,
 	or None if an error occured.
-
 	"""
 	p = subprocess.Popen(["kwalletcli", "-q", "-f", folder.encode('utf-8'),
 	 "-e", entry.encode('utf-8')], stdout=subprocess.PIPE)
@@ -60,7 +62,8 @@ def kwallet_get(folder, entry):
 
 
 def kwallet_put(folder, entry, passphrase):
-	"""Store a passphrase into the KDE Wallet via kwalletcli.
+	"""
+	Store a passphrase into the KDE Wallet via kwalletcli
 
 	Arguments:
 	• folder: The top-level category to use (normally the programme name)
@@ -68,7 +71,6 @@ def kwallet_put(folder, entry, passphrase):
 	• passphrase: The value to store
 
 	Returns True on success, False otherwise.
-
 	"""
 	p = subprocess.Popen(["kwalletcli", "-q", "-f", folder.encode('utf-8'),
 	 "-e", entry.encode('utf-8'), "-P"], stdin=subprocess.PIPE)

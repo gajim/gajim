@@ -73,7 +73,9 @@ except OSError, e:
 	xss_available = False
 
 def getIdleSec():
-	"""Returns the idle time in seconds"""
+	"""
+	Return the idle time in seconds
+	"""
 	if not xss_available:
 		return 0
 	if libXss.XScreenSaverQueryInfo(dpy_p, rootwindow, xss_info_p) == 0:

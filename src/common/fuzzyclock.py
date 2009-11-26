@@ -21,7 +21,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-'''
+"""
 Python class to show a "fuzzy clock".
 Homepage of the original: http://home.gna.org/fuzzyclock/
 Project Page of the original: http://gna.org/projects/fuzzyclock
@@ -30,7 +30,7 @@ The class is based on a port from PHP code by
 Henrique Recidive <henrique at recidive.com> which was
 in turn based on the Fuzzy Clock Applet of Frerich Raabe (KDE).
 So most of the credit goes to this guys, thanks :-)
-'''
+"""
 
 import time
 
@@ -46,7 +46,7 @@ class FuzzyClock:
 		_('half past %(0)s'), _('twenty five to %(1)s'), _('twenty to %(1)s'),
 		_('quarter to %(1)s'), _('ten to %(1)s'), _('five to %(1)s'), _("%(1)s o'clock") ]
 
-	FUZZY_DAYTIME = [ _('Night'), _('Early morning'), _('Morning'), 
+	FUZZY_DAYTIME = [ _('Night'), _('Early morning'), _('Morning'),
 		_('Almost noon'), _('Noon'), _('Afternoon'), _('Evening'),
 		_('Late evening'), _('Night') ]
 

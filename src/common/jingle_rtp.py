@@ -10,8 +10,10 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 ##
-''' Handles Jingle RTP sessions (XEP 0167). '''
 
+"""
+Handles Jingle RTP sessions (XEP 0167)
+"""
 
 import gobject
 
@@ -23,7 +25,9 @@ from jingle_content import contents, JingleContent
 
 # TODO: Will that be even used?
 def get_first_gst_element(elements):
-	''' Returns, if it exists, the first available element of the list. '''
+	"""
+	Return, if it exists, the first available element of the list
+	"""
 	for name in elements:
 		factory = gst.element_factory_find(name)
 		if factory:
@@ -70,7 +74,7 @@ class JingleRTPContent(JingleContent):
 		self.p2psession = self.conference.new_session(self.farsight_media)
 
 		participant = self.conference.new_participant(self.session.peerjid)
-		#FIXME: Consider a workaround, here... 
+		# FIXME: Consider a workaround, here...
 		# pidgin and telepathy-gabble don't follow the XEP, and it won't work
 		# due to bad controlling-mode
 		params = {'controlling-mode': self.session.weinitiate,# 'debug': False}
@@ -85,14 +89,14 @@ class JingleRTPContent(JingleContent):
 
 	def add_remote_candidates(self, candidates):
 		JingleContent.add_remote_candidates(self, candidates)
-		#FIXME: connectivity should not be etablished yet
+		# FIXME: connectivity should not be etablished yet
 		# Instead, it should be etablished after session-accept!
 		if self.sent:
 			self.p2pstream.set_remote_candidates(candidates)
 
 	def batch_dtmf(self, events):
 		if self._dtmf_running:
-			raise Exception #TODO: Proper exception
+			raise Exception # TODO: Proper exception
 		self._dtmf_running = True
 		self._start_dtmf(events.pop(0))
 		gobject.timeout_add(500, self._next_dtmf, events)
@@ -143,7 +147,7 @@ class JingleRTPContent(JingleContent):
 			elif name == 'farsight-codecs-changed':
 				if self.is_ready():
 					self.session.on_session_state_changed(self)
-				#TODO: description-info
+				# TODO: description-info
 			elif name == 'farsight-local-candidates-prepared':
 				self.candidates_ready = True
 				if self.is_ready():
@@ -152,7 +156,7 @@ class JingleRTPContent(JingleContent):
 				candidate = message.structure['candidate']
 				self.transport.candidates.append(candidate)
 				if self.candidates_ready:
-					#FIXME: Is this case even possible?
+					# FIXME: Is this case even possible?
 					self.send_candidate(candidate)
 			elif name == 'farsight-component-state-changed':
 				state = message.structure['state']
@@ -173,7 +177,7 @@ class JingleRTPContent(JingleContent):
 			if self.transport.remote_candidates:
 				self.p2pstream.set_remote_candidates(self.transport.remote_candidates)
 				self.transport.remote_candidates = []
-			#TODO: farsight.DIRECTION_BOTH only if senders='both'
+			# TODO: farsight.DIRECTION_BOTH only if senders='both'
 			self.p2pstream.set_property('direction', farsight.DIRECTION_BOTH)
 			self.session.content_negociated(self.media)
 
@@ -195,7 +199,7 @@ class JingleRTPContent(JingleContent):
 			codecs.append(c)
 
 		if len(codecs) > 0:
-			#FIXME: Handle this case:
+			# FIXME: Handle this case:
 			# glib.GError: There was no intersection between the remote codecs and
 			# the local ones
 			self.p2pstream.set_remote_codecs(codecs)
@@ -228,14 +232,15 @@ class JingleRTPContent(JingleContent):
 
 
 class JingleAudio(JingleRTPContent):
-	''' Jingle VoIP sessions consist of audio content transported
-	over an ICE UDP protocol. '''
+	"""
+	Jingle VoIP sessions consist of audio content transported over an ICE UDP
+	protocol
+	"""
+
 	def __init__(self, session, transport=None):
 		JingleRTPContent.__init__(self, session, 'audio', transport)
 		self.setup_stream()
 
-
-	''' Things to control the gstreamer's pipeline '''
 	def setup_stream(self):
 		JingleRTPContent.setup_stream(self)
 
@@ -283,9 +288,8 @@ class JingleVideo(JingleRTPContent):
 		JingleRTPContent.__init__(self, session, 'video', transport)
 		self.setup_stream()
 
-	''' Things to control the gstreamer's pipeline '''
 	def setup_stream(self):
-		#TODO: Everything is not working properly:
+		# TODO: Everything is not working properly:
 		# sometimes, one window won't show up,
 		# sometimes it'll freeze...
 		JingleRTPContent.setup_stream(self)

@@ -66,7 +66,9 @@ class SleepyWindows:
 		return idleDelta
 
 	def poll(self):
-		'''checks to see if we should change state'''
+		"""
+		Check to see if we should change state
+		"""
 		if not SUPPORTED:
 			return False
 
@@ -113,7 +115,9 @@ class SleepyUnix:
 		return idle.getIdleSec()
 
 	def poll(self):
-		'''checks to see if we should change state'''
+		"""
+		Check to see if we should change state
+		"""
 		if not SUPPORTED:
 			return False
 

@@ -10,7 +10,9 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 ##
-''' Handles the jingle signalling protocol. '''
+"""
+Handles the jingle signalling protocol
+"""
 
 #TODO:
 # * things in XEP 0176, including:
@@ -37,7 +39,10 @@ from jingle_rtp import JingleAudio, JingleVideo
 
 
 class ConnectionJingle(object):
-	''' This object depends on that it is a part of Connection class. '''
+	"""
+	This object depends on that it is a part of Connection class.
+	"""
+
 	def __init__(self):
 		# dictionary: (jid, sessionid) => JingleSession object
 		self.__sessions = {}
@@ -47,13 +52,17 @@ class ConnectionJingle(object):
 		self.__iq_responses = {}
 
 	def add_jingle(self, jingle):
-		''' Add a jingle session to a jingle stanza dispatcher
+		"""
+		Add a jingle session to a jingle stanza dispatcher
+
 		jingle - a JingleSession object.
-		'''
+		"""
 		self.__sessions[(jingle.peerjid, jingle.sid)] = jingle
 
 	def delete_jingle_session(self, peerjid, sid):
-		''' Remove a jingle session from a jingle stanza dispatcher '''
+		"""
+		Remove a jingle session from a jingle stanza dispatcher
+		"""
 		key = (peerjid, sid)
 		if key in self.__sessions:
 			#FIXME: Move this elsewhere?
@@ -63,12 +72,15 @@ class ConnectionJingle(object):
 			del self.__sessions[key]
 
 	def _JingleCB(self, con, stanza):
-		''' The jingle stanza dispatcher.
-		Route jingle stanza to proper JingleSession object,
-		or create one if it is a new session.
-		TODO: Also check if the stanza isn't an error stanza, if so
-		route it adequatelly.'''
+		"""
+		The jingle stanza dispatcher
 
+		Route jingle stanza to proper JingleSession object, or create one if it
+		is a new session.
+
+		TODO: Also check if the stanza isn't an error stanza, if so route it
+		adequatelly.
+		"""
 		# get data
 		jid = helpers.get_full_jid_from_iq(stanza)
 		id = stanza.getID()

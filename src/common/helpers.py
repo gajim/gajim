@@ -92,15 +92,19 @@ def decompose_jid(jidstring):
 	return user, server, resource
 
 def parse_jid(jidstring):
-	'''Perform stringprep on all JID fragments from a string
-	and return the full jid'''
+	"""
+	Perform stringprep on all JID fragments from a string and return the full
+	jid
+	"""
 	# This function comes from http://svn.twistedmatrix.com/cvs/trunk/twisted/words/protocols/jabber/jid.py
 
 	return prep(*decompose_jid(jidstring))
 
 def idn_to_ascii(host):
-	'''convert IDN (Internationalized Domain Names) to ACE
-	(ASCII-compatible encoding)'''
+	"""
+	Convert IDN (Internationalized Domain Names) to ACE (ASCII-compatible
+	encoding)
+	"""
 	from encodings import idna
 	labels = idna.dots.split(host)
 	converted_labels = []
@@ -109,8 +113,10 @@ def idn_to_ascii(host):
 	return ".".join(converted_labels)
 
 def ascii_to_idn(host):
-	'''convert ACE (ASCII-compatible encoding) to IDN
-	(Internationalized Domain Names)'''
+	"""
+	Convert ACE (ASCII-compatible encoding) to IDN (Internationalized Domain
+	Names)
+	"""
 	from encodings import idna
 	labels = idna.dots.split(host)
 	converted_labels = []
@@ -119,7 +125,9 @@ def ascii_to_idn(host):
 	return ".".join(converted_labels)
 
 def parse_resource(resource):
-	'''Perform stringprep on resource and return it'''
+	"""
+	Perform stringprep on resource and return it
+	"""
 	if resource:
 		try:
 			from xmpp.stringprepare import resourceprep
@@ -128,10 +136,11 @@ def parse_resource(resource):
 			raise InvalidFormat, 'Invalid character in resource.'
 
 def prep(user, server, resource):
-	'''Perform stringprep on all JID fragments and return the full jid'''
+	"""
+	Perform stringprep on all JID fragments and return the full jid
+	"""
 	# This function comes from
 	#http://svn.twistedmatrix.com/cvs/trunk/twisted/words/protocols/jabber/jid.py
-
 	if user:
 		try:
 			from xmpp.stringprepare import nodeprep
@@ -186,10 +195,13 @@ def temp_failure_retry(func, *args, **kwargs):
 				raise
 
 def get_uf_show(show, use_mnemonic = False):
-	'''returns a userfriendly string for dnd/xa/chat
-	and makes all strings translatable
-	if use_mnemonic is True, it adds _ so GUI should call with True
-	for accessibility issues'''
+	"""
+	Return a userfriendly string for dnd/xa/chat and make all strings
+	translatable
+
+	If use_mnemonic is True, it adds _ so GUI should call with True for
+	accessibility issues
+	"""
 	if show == 'dnd':
 		if use_mnemonic:
 			uf_show = _('_Busy')
@@ -324,7 +336,9 @@ def from_one_line(msg):
 	return msg
 
 def get_uf_chatstate(chatstate):
-	'''removes chatstate jargon and returns user friendly messages'''
+	"""
+	Remove chatstate jargon and returns user friendly messages
+	"""
 	if chatstate == 'active':
 		return _('is paying attention to the conversation')
 	elif chatstate == 'inactive':
@@ -339,10 +353,11 @@ def get_uf_chatstate(chatstate):
 	return ''
 
 def is_in_path(command, return_abs_path=False):
-	'''Returns True if 'command' is found in one of the directories in the
-		user's path. If 'return_abs_path' is True, returns the absolute path of
-		the first found command instead. Returns False otherwise and on errors.'''
-
+	"""
+	Return True if 'command' is found in one of the directories in the user's
+	path. If 'return_abs_path' is True, return the absolute path of the first
+	found command instead. Return False otherwise and on errors
+	"""
 	for directory in os.getenv('PATH').split(os.pathsep):
 		try:
 			if command in os.listdir(directory):
@@ -405,7 +420,9 @@ def get_output_of_command(command):
 	return output
 
 def decode_string(string):
-	'''try to decode (to make it Unicode instance) given string'''
+	"""
+	Try to decode (to make it Unicode instance) given string
+	"""
 	if isinstance(string, unicode):
 		return string
 	# by the time we go to iso15 it better be the one else we show bad characters
@@ -420,7 +437,9 @@ def decode_string(string):
 	return string
 
 def ensure_utf8_string(string):
-	'''make sure string is in UTF-8'''
+	"""
+	Make sure string is in UTF-8
+	"""
 	try:
 		string = decode_string(string).encode('utf-8')
 	except Exception:
@@ -428,28 +447,28 @@ def ensure_utf8_string(string):
 	return string
 
 def get_windows_reg_env(varname, default=''):
-	'''asks for paths commonly used but not exposed as ENVs
-	in english Windows 2003 those are:
-	'AppData' = %USERPROFILE%\Application Data (also an ENV)
-	'Desktop' = %USERPROFILE%\Desktop
-	'Favorites' = %USERPROFILE%\Favorites
-	'NetHood' = %USERPROFILE%\NetHood
-	'Personal' = D:\My Documents (PATH TO MY DOCUMENTS)
-	'PrintHood' = %USERPROFILE%\PrintHood
-	'Programs' = %USERPROFILE%\Start Menu\Programs
-	'Recent' = %USERPROFILE%\Recent
-	'SendTo' = %USERPROFILE%\SendTo
-	'Start Menu' = %USERPROFILE%\Start Menu
-	'Startup' = %USERPROFILE%\Start Menu\Programs\Startup
-	'Templates' = %USERPROFILE%\Templates
-	'My Pictures' = D:\My Documents\My Pictures
-	'Local Settings' = %USERPROFILE%\Local Settings
-	'Local AppData' = %USERPROFILE%\Local Settings\Application Data
-	'Cache' = %USERPROFILE%\Local Settings\Temporary Internet Files
-	'Cookies' = %USERPROFILE%\Cookies
-	'History' = %USERPROFILE%\Local Settings\History
-	'''
-
+	"""
+	Ask for paths commonly used but not exposed as ENVs in english Windows 2003
+	those are:
+		'AppData' = %USERPROFILE%\Application Data (also an ENV)
+		'Desktop' = %USERPROFILE%\Desktop
+		'Favorites' = %USERPROFILE%\Favorites
+		'NetHood' = %USERPROFILE%\NetHood
+		'Personal' = D:\My Documents (PATH TO MY DOCUMENTS)
+		'PrintHood' = %USERPROFILE%\PrintHood
+		'Programs' = %USERPROFILE%\Start Menu\Programs
+		'Recent' = %USERPROFILE%\Recent
+		'SendTo' = %USERPROFILE%\SendTo
+		'Start Menu' = %USERPROFILE%\Start Menu
+		'Startup' = %USERPROFILE%\Start Menu\Programs\Startup
+		'Templates' = %USERPROFILE%\Templates
+		'My Pictures' = D:\My Documents\My Pictures
+		'Local Settings' = %USERPROFILE%\Local Settings
+		'Local AppData' = %USERPROFILE%\Local Settings\Application Data
+		'Cache' = %USERPROFILE%\Local Settings\Temporary Internet Files
+		'Cookies' = %USERPROFILE%\Cookies
+		'History' = %USERPROFILE%\Local Settings\History
+	"""
 	if os.name != 'nt':
 		return ''
 
@@ -467,7 +486,9 @@ r'Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders')
 	return val
 
 def get_my_pictures_path():
-	'''windows-only atm. [Unix lives in the past]'''
+	"""
+	Windows-only atm
+	"""
 	return get_windows_reg_env('My Pictures')
 
 def get_desktop_path():
@@ -485,8 +506,10 @@ def get_documents_path():
 	return path
 
 def sanitize_filename(filename):
-	'''makes sure the filename we will write does contain only acceptable and
-	latin characters, and is not too long (in that case hash it)'''
+	"""
+	Make sure the filename we will write does contain only acceptable and latin
+	characters, and is not too long (in that case hash it)
+	"""
 	# 48 is the limit
 	if len(filename) > 48:
 		hash = hashlib.md5(filename)
@@ -502,11 +525,13 @@ def sanitize_filename(filename):
 	return filename
 
 def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
-	'''Cut the chars after 'max_chars' on each line
-	and show only the first 'max_lines'.
-	If any of the params is not present (None or 0) the action
-	on it is not performed'''
+	"""
+	Cut the chars after 'max_chars' on each line and show only the first
+	'max_lines'
 
+	If any of the params is not present (None or 0) the action on it is not
+	performed
+	"""
 	def _cut_if_long(string):
 		if len(string) > max_chars:
 			string = string[:max_chars - 3] + '...'
@@ -535,10 +560,11 @@ def get_account_status(account):
 	return status
 
 def get_avatar_path(prefix):
-	'''Returns the filename of the avatar, distinguishes between user- and
-	contact-provided one.  Returns None if no avatar was found at all.
-	prefix is the path to the requested avatar just before the ".png" or
-	".jpeg".'''
+	"""
+	Return the filename of the avatar, distinguishes between user- and contact-
+	provided one. Return None if no avatar was found at all.  prefix is the path
+	to the requested avatar just before the ".png" or ".jpeg"
+	"""
 	# First, scan for a local, user-set avatar
 	for type_ in ('jpeg', 'png'):
 		file_ = prefix + '_local.' + type_
@@ -552,13 +578,16 @@ def get_avatar_path(prefix):
 	return None
 
 def datetime_tuple(timestamp):
-	'''Converts timestamp using strptime and the format: %Y%m%dT%H:%M:%S
+	"""
+	Convert timestamp using strptime and the format: %Y%m%dT%H:%M:%S
+
 	Because of various datetime formats are used the following exceptions
 	are handled:
 		- Optional milliseconds appened to the string are removed
 		- Optional Z (that means UTC) appened to the string are removed
 		- XEP-082 datetime strings have all '-' cahrs removed to meet
-		  the above format.'''
+		  the above format.
+	"""
 	timestamp = timestamp.split('.')[0]
 	timestamp = timestamp.replace('-', '')
 	timestamp = timestamp.replace('z', '')
@@ -609,8 +638,11 @@ def convert_bytes(string):
 	return suffix % unicode(bytes)
 
 def get_contact_dict_for_account(account):
-	''' create a dict of jid, nick -> contact with all contacts of account.
-	Can be used for completion lists'''
+	"""
+	Create a dict of jid, nick -> contact with all contacts of account.
+
+	Can be used for completion lists
+	"""
 	contacts_dict = {}
 	for jid in gajim.contacts.get_jid_list(account):
 		contact = gajim.contacts.get_contact_with_highest_priority(account,
@@ -692,13 +724,15 @@ def play_sound(event):
 	path_to_soundfile = gajim.config.get_per('soundevents', event, 'path')
 	play_sound_file(path_to_soundfile)
 
-def check_soundfile_path(file,
-								 dirs=(gajim.gajimpaths.root, gajim.DATA_DIR)):
-	'''Check if the sound file exists.
+def check_soundfile_path(file, dirs=(gajim.gajimpaths.root, gajim.DATA_DIR)):
+	"""
+	Check if the sound file exists
+
 	:param file: the file to check, absolute or relative to 'dirs' path
 	:param dirs: list of knows paths to fallback if the file doesn't exists
 					 (eg: ~/.gajim/sounds/, DATADIR/sounds...).
-	:return      the path to file or None if it doesn't exists.'''
+	:return      the path to file or None if it doesn't exists.
+	"""
 	if not file:
 		return None
 	elif os.path.exists(file):
@@ -710,16 +744,17 @@ def check_soundfile_path(file,
 			return d
 	return None
 
-def strip_soundfile_path(file,
-								 dirs=(gajim.gajimpaths.root, gajim.DATA_DIR),
-								 abs=True):
-	'''Remove knowns paths from a sound file:
+def strip_soundfile_path(file, dirs=(gajim.gajimpaths.root, gajim.DATA_DIR),
+		abs=True):
+	"""
+	Remove knowns paths from a sound file
+
 	Filechooser returns absolute path. If path is a known fallback path, we remove it.
 	So config have no hardcoded path	to DATA_DIR and text in textfield is shorther.
 	param: file: the filename to strip.
 	param: dirs: list of knowns paths from which the filename should be stripped.
 	param:  abs: force absolute path on dirs
-	'''
+	"""
 	if not file:
 		return None
 
@@ -777,7 +812,9 @@ def get_global_status():
 
 
 def statuses_unified():
-	'''testing if all statuses are the same.'''
+	"""
+	Test if all statuses are the same
+	"""
 	reference = None
 	for account in gajim.connections:
 		if not gajim.config.get_per('accounts', account,
@@ -790,7 +827,9 @@ def statuses_unified():
 	return True
 
 def get_icon_name_to_show(contact, account = None):
-	'''Get the icon name to show in online, away, requested, ...'''
+	"""
+	Get the icon name to show in online, away, requested, etc
+	"""
 	if account and gajim.events.get_nb_roster_events(account, contact.jid):
 		return 'event'
 	if account and gajim.events.get_nb_roster_events(account,
@@ -819,16 +858,22 @@ def get_icon_name_to_show(contact, account = None):
 	return 'not in roster'
 
 def get_full_jid_from_iq(iq_obj):
-	'''return the full jid (with resource) from an iq as unicode'''
+	"""
+	Return the full jid (with resource) from an iq as unicode
+	"""
 	return parse_jid(str(iq_obj.getFrom()))
 
 def get_jid_from_iq(iq_obj):
-	'''return the jid (without resource) from an iq as unicode'''
+	"""
+	Return the jid (without resource) from an iq as unicode
+	"""
 	jid = get_full_jid_from_iq(iq_obj)
 	return gajim.get_jid_without_resource(jid)
 
 def get_auth_sha(sid, initiator, target):
-	''' return sha of sid + initiator + target used for proxy auth'''
+	"""
+	Return sha of sid + initiator + target used for proxy auth
+	"""
 	return hashlib.sha1("%s%s%s" % (sid, initiator, target)).hexdigest()
 
 def remove_invalid_xml_chars(string):
@@ -861,7 +906,9 @@ distro_info = {
 }
 
 def get_random_string_16():
-	''' create random string of length 16'''
+	"""
+	Create random string of length 16
+	"""
 	rng = range(65, 90)
 	rng.extend(range(48, 57))
 	char_sequence = [chr(e) for e in rng]
@@ -946,11 +993,14 @@ def get_os_info():
 
 
 def allow_showing_notification(account, type_ = 'notify_on_new_message',
-advanced_notif_num = None, is_first_message = True):
-	'''is it allowed to show nofication?
-	check OUR status and if we allow notifications for that status
-	type is the option that need to be True e.g.: notify_on_signing
-	is_first_message: set it to false when it's not the first message'''
+		advanced_notif_num = None, is_first_message = True):
+	"""
+	Is it allowed to show nofication?
+
+	Check OUR status and if we allow notifications for that status type is the
+	option that need to be True e.g.: notify_on_signing is_first_message: set it
+	to false when it's not the first message
+	"""
 	if advanced_notif_num is not None:
 		popup = gajim.config.get_per('notifications', str(advanced_notif_num),
 			'popup')
@@ -967,7 +1017,9 @@ advanced_notif_num = None, is_first_message = True):
 	return False
 
 def allow_popup_window(account, advanced_notif_num = None):
-	'''is it allowed to popup windows?'''
+	"""
+	Is it allowed to popup windows?
+	"""
 	if advanced_notif_num is not None:
 		popup = gajim.config.get_per('notifications', str(advanced_notif_num),
 			'auto_open')
@@ -1018,8 +1070,10 @@ def get_chat_control(account, contact):
 		return gajim.interface.msg_win_mgr.get_control(contact.jid, account)
 
 def get_notification_icon_tooltip_dict():
-	'''returns a dict of the form {acct: {'show': show, 'message': message,
-	'event_lines': [list of text lines to show in tooltip]}'''
+	"""
+	Return a dict of the form {acct: {'show': show, 'message': message,
+	'event_lines': [list of text lines to show in tooltip]}
+	"""
 	# How many events must there be before they're shown summarized, not per-user
 	max_ungrouped_events = 10
 
@@ -1131,7 +1185,9 @@ def get_notification_icon_tooltip_text():
 	return text
 
 def get_accounts_info():
-	'''helper for notification icon tooltip'''
+	"""
+	Helper for notification icon tooltip
+	"""
 	accounts = []
 	accounts_list = sorted(gajim.contacts.get_accounts())
 	for account in accounts_list:
@@ -1182,9 +1238,14 @@ def get_transport_path(transport):
 	return get_iconset_path(gajim.config.get('iconset'))
 
 def prepare_and_validate_gpg_keyID(account, jid, keyID):
-	'''Returns an eight char long keyID that can be used with for GPG encryption with this contact.
-	If the given keyID is None, return UNKNOWN; if the key does not match the assigned key
-	XXXXXXXXMISMATCH is returned. If the key is trusted and not yet assigned, assign it'''
+	"""
+	Return an eight char long keyID that can be used with for GPG encryption
+	with this contact
+
+	If the given keyID is None, return UNKNOWN; if the key does not match the
+	assigned key XXXXXXXXMISMATCH is returned. If the key is trusted and not yet
+	assigned, assign it.
+	"""
 	if gajim.connections[account].USE_GPG:
 		if keyID and len(keyID) == 16:
 			keyID = keyID[8:]

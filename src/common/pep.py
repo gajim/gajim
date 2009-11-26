@@ -206,64 +206,64 @@ import gtkgui_helpers
 
 
 class AbstractPEP(object):
-	
+
 	type = ''
 	namespace = ''
-		
+
 	@classmethod
 	def get_tag_as_PEP(cls, jid, account, event_tag):
 		items = event_tag.getTag('items', {'node': cls.namespace})
 		if items:
-			log.debug("Received PEP 'user %s' from %s" % (cls.type, jid)) 
+			log.debug("Received PEP 'user %s' from %s" % (cls.type, jid))
 			return cls(jid, account, items)
 		else:
-			return None 
-	
+			return None
+
 	def __init__(self, jid, account, items):
 		self._pep_specific_data, self._retracted = self._extract_info(items)
-		
+
 		self._update_contacts(jid, account)
 		if jid == gajim.get_jid_from_account(account):
 			self._update_account(account)
-	
+
 	def _extract_info(self, items):
 		'''To be implemented by subclasses'''
 		raise NotImplementedError
-	
-	def _update_contacts(self, jid, account):	
-		for contact in gajim.contacts.get_contacts(account, jid):		
+
+	def _update_contacts(self, jid, account):
+		for contact in gajim.contacts.get_contacts(account, jid):
 			if self._retracted:
 				if self.type in contact.pep:
 					del contact.pep[self.type]
 			else:
 				contact.pep[self.type] = self
-				
-	def _update_account(self, account):		
-		acc = gajim.connections[account]	
+
+	def _update_account(self, account):
+		acc = gajim.connections[account]
 		if self._retracted:
 			if self.type in acc.pep:
 				del acc.pep[self.type]
 		else:
 			acc.pep[self.type] = self
-	
+
 	def asPixbufIcon(self):
 		'''SHOULD be implemented by subclasses'''
 		return None
-	
+
 	def asMarkupText(self):
 		'''SHOULD be implemented by subclasses'''
 		return ''
-	
-	
+
+
 class UserMoodPEP(AbstractPEP):
 	'''XEP-0107: User Mood'''
-	
+
 	type = 'mood'
 	namespace = xmpp.NS_MOOD
-		
+
 	def _extract_info(self, items):
 		mood_dict = {}
-		
+
 		for item in items.getTags('item'):
 			mood_tag = item.getTag('mood')
 			if mood_tag:
@@ -273,22 +273,22 @@ class UserMoodPEP(AbstractPEP):
 						mood_dict['text'] = child.getData()
 					else:
 						mood_dict['mood'] = name
-						
-		retracted = items.getTag('retract') or not 'mood' in mood_dict		
+
+		retracted = items.getTag('retract') or not 'mood' in mood_dict
 		return (mood_dict, retracted)
-	
+
 	def asPixbufIcon(self):
 		assert not self._retracted
 		received_mood = self._pep_specific_data['mood']
 		mood = received_mood if received_mood in MOODS else 'unknown'
 		pixbuf = gtkgui_helpers.load_mood_icon(mood).get_pixbuf()
 		return pixbuf
-		
+
 	def asMarkupText(self):
 		assert not self._retracted
 		untranslated_mood = self._pep_specific_data['mood']
 		mood = self._translate_mood(untranslated_mood)
-		markuptext = '<b>%s</b>' % gobject.markup_escape_text(mood)		
+		markuptext = '<b>%s</b>' % gobject.markup_escape_text(mood)
 		if 'text' in self._pep_specific_data:
 			text = self._pep_specific_data['text']
 			markuptext += ' (%s)' % gobject.markup_escape_text(text)
@@ -303,13 +303,13 @@ class UserMoodPEP(AbstractPEP):
 
 class UserTunePEP(AbstractPEP):
 	'''XEP-0118: User Tune'''
-	
+
 	type = 'tune'
 	namespace = xmpp.NS_TUNE
-					
-	def _extract_info(self, items):		
+
+	def _extract_info(self, items):
 		tune_dict = {}
-	
+
 		for item in items.getTags('item'):
 			tune_tag = item.getTag('tune')
 			if tune_tag:
@@ -318,23 +318,23 @@ class UserTunePEP(AbstractPEP):
 					data = child.getData().strip()
 					if child.getName() in TUNE_DATA:
 						tune_dict[name] = data
-						
-		retracted = items.getTag('retract') or not ('artist' in tune_dict or 
+
+		retracted = items.getTag('retract') or not ('artist' in tune_dict or
 																  'title' in tune_dict)
 		return (tune_dict, retracted)
-	
+
 	def asPixbufIcon(self):
 		import os
 		path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static', 'music.png')
 		return gtk.gdk.pixbuf_new_from_file(path)
-				
+
 	def asMarkupText(self):
 		assert not self._retracted
 		tune = self._pep_specific_data
 
 		artist = tune.get('artist', _('Unknown Artist'))
 		artist = gobject.markup_escape_text(artist)
-		
+
 		title = tune.get('title', _('Unknown Title'))
 		title = gobject.markup_escape_text(title)
 
@@ -345,17 +345,17 @@ class UserTunePEP(AbstractPEP):
 			'from <i>%(source)s</i>') % {'title': title,
 			'artist': artist, 'source': source}
 		return tune_string
-		
+
 
 class UserActivityPEP(AbstractPEP):
 	'''XEP-0108: User Activity'''
-	
+
 	type = 'activity'
 	namespace = xmpp.NS_ACTIVITY
-			
+
 	def _extract_info(self, items):
 		activity_dict = {}
-		
+
 		for item in items.getTags('item'):
 			activity_tag = item.getTag('activity')
 			if activity_tag:
@@ -369,28 +369,28 @@ class UserActivityPEP(AbstractPEP):
 						for subactivity in child.getChildren():
 							subactivity_name = subactivity.getName().strip()
 							activity_dict['subactivity'] = subactivity_name
-		
+
 		retracted = items.getTag('retract') or not 'activity' in activity_dict
 		return (activity_dict, retracted)
-	
+
 	def asPixbufIcon(self):
 		assert not self._retracted
 		pep = self._pep_specific_data
 		activity = pep['activity']
-		
+
 		has_known_activity = activity in ACTIVITIES
 		has_known_subactivity = (has_known_activity  and ('subactivity' in pep)
 			and (pep['subactivity'] in ACTIVITIES[activity]))
-					
+
 		if has_known_activity:
 			if has_known_subactivity:
 				subactivity = pep['subactivity']
 				return gtkgui_helpers.load_activity_icon(activity, subactivity).get_pixbuf()
 			else:
 				return gtkgui_helpers.load_activity_icon(activity).get_pixbuf()
-		else: 
+		else:
 			return gtkgui_helpers.load_activity_icon('unknown').get_pixbuf()
-		
+
 	def asMarkupText(self):
 		assert not self._retracted
 		pep = self._pep_specific_data
@@ -403,45 +403,45 @@ class UserActivityPEP(AbstractPEP):
 			if subactivity in ACTIVITIES[activity]:
 				subactivity = ACTIVITIES[activity][subactivity]
 			activity = ACTIVITIES[activity]['category']
-				
+
 		markuptext = '<b>' + gobject.markup_escape_text(activity)
 		if subactivity:
 			markuptext += ': ' + gobject.markup_escape_text(subactivity)
 		markuptext += '</b>'
 		if text:
 			markuptext += ' (%s)' % gobject.markup_escape_text(text)
-		return markuptext				
-			
-			
+		return markuptext
+
+
 class UserNicknamePEP(AbstractPEP):
 	'''XEP-0172: User Nickname'''
-	
+
 	type = 'nickname'
 	namespace = xmpp.NS_NICK
-			
-	def _extract_info(self, items):	
+
+	def _extract_info(self, items):
 		nick = ''
 		for item in items.getTags('item'):
 			child = item.getTag('nick')
 			if child:
 				nick = child.getData()
 				break
-		
+
 		retracted = items.getTag('retract') or not nick
-		return (nick, retracted)		
-						
+		return (nick, retracted)
+
 	def _update_contacts(self, jid, account):
 		nick = '' if self._retracted else self._pep_specific_data
 		for contact in gajim.contacts.get_contacts(account, jid):
 			contact.contact_name = nick
-				
+
 	def _update_account(self, account):
 		if self._retracted:
 			gajim.nicks[account] = gajim.config.get_per('accounts', account, 'name')
 		else:
 			gajim.nicks[account] = self._pep_specific_data
 
-		
+
 SUPPORTED_PERSONAL_USER_EVENTS = [UserMoodPEP, UserTunePEP, UserActivityPEP,
 											 UserNicknamePEP]
 
@@ -451,7 +451,7 @@ class ConnectionPEP(object):
 		self._account = account
 		self._dispatcher = dispatcher
 		self._pubsub_connection = pubsub_connection
-	
+
 	def _pubsubEventCB(self, xmpp_dispatcher, msg):
 		''' Called when we receive <message /> with pubsub event. '''
 		if not msg.getTag('event'):
@@ -459,7 +459,7 @@ class ConnectionPEP(object):
 		if msg.getTag('error'):
 			log.debug('PubsubEventCB received error stanza. Ignoring')
 			raise xmpp.NodeProcessed
-		
+
 		jid = helpers.get_full_jid_from_iq(msg)
 		event_tag = msg.getTag('event')
 
@@ -467,7 +467,7 @@ class ConnectionPEP(object):
 			pep = pep_class.get_tag_as_PEP(jid, self._account, event_tag)
 			if pep:
 				self._dispatcher.dispatch('PEP_RECEIVED', (jid, pep.type))
-		
+
 		items = event_tag.getTag('items')
 		if items:
 			for item in items.getTags('item'):
@@ -477,9 +477,9 @@ class ConnectionPEP(object):
 					# but to be sure...
 					self._dispatcher.dispatch('ATOM_ENTRY',
 						(atom.OldEntry(node=entry),))
-			
+
 		raise xmpp.NodeProcessed
-	
+
 	def send_activity(self, activity, subactivity=None, message=None):
 		if not self.pep_supported:
 			return
@@ -492,7 +492,7 @@ class ConnectionPEP(object):
 			i = item.addChild('text')
 			i.addData(message)
 		self._pubsub_connection.send_pb_publish('', xmpp.NS_ACTIVITY, item, '0')
-		
+
 	def retract_activity(self):
 		if not self.pep_supported:
 			return
@@ -510,13 +510,13 @@ class ConnectionPEP(object):
 			i = item.addChild('text')
 			i.addData(message)
 		self._pubsub_connection.send_pb_publish('', xmpp.NS_MOOD, item, '0')
-		
+
 	def retract_mood(self):
 		if not self.pep_supported:
 			return
 		self.send_mood(None)
 		self._pubsub_connection.send_pb_retract('', xmpp.NS_MOOD, '0')
-		
+
 	def send_tune(self, artist='', title='', source='', track=0, length=0,
 	items=None):
 		if not self.pep_supported:

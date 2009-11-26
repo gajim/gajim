@@ -10,7 +10,10 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 ##
-''' Handles Jingle Transports (currently only ICE-UDP). '''
+
+"""
+Handles Jingle Transports (currently only ICE-UDP)
+"""
 
 import xmpp
 
@@ -25,13 +28,18 @@ def get_jingle_transport(node):
 
 
 class TransportType(object):
-	''' Possible types of a JingleTransport '''
+	"""
+	Possible types of a JingleTransport
+	"""
 	datagram = 1
 	streaming = 2
 
 
 class JingleTransport(object):
-	''' An abstraction of a transport in Jingle sessions. '''
+	"""
+	An abstraction of a transport in Jingle sessions
+	"""
+
 	def __init__(self, type_):
 		self.type = type_
 		self.candidates = []
@@ -42,19 +50,25 @@ class JingleTransport(object):
 			yield self.make_candidate(candidate)
 
 	def make_candidate(self, candidate):
-		''' Build a candidate stanza for the given candidate. '''
+		"""
+		Build a candidate stanza for the given candidate
+		"""
 		pass
 
 	def make_transport(self, candidates=None):
-		''' Build a transport stanza with the given candidates (or
-		self.candidates if candidates is None). '''
+		"""
+		Build a transport stanza with the given candidates (or self.candidates if
+		candidates is None)
+		"""
 		if not candidates:
 			candidates = self._iter_candidates()
 		transport = xmpp.Node('transport', payload=candidates)
 		return transport
 
 	def parse_transport_stanza(self, transport):
-		''' Returns the list of transport candidates from a transport stanza. '''
+		"""
+		Return the list of transport candidates from a transport stanza
+		"""
 		return []
 
 
@@ -132,4 +146,3 @@ class JingleTransportICEUDP(JingleTransport):
 		return candidates
 
 transports[xmpp.NS_JINGLE_ICE_UDP] = JingleTransportICEUDP
-

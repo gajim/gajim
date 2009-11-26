@@ -88,11 +88,12 @@ class CommonResolver():
 
 # FIXME: API usage is not consistent! This one requires that process is called
 class LibAsyncNSResolver(CommonResolver):
-	'''
+	"""
 	Asynchronous resolver using libasyncns-python. process() method has to be
-	called in order to proceed the pending requests.
-	Based on patch submitted by Damien Thebault.
-	'''
+	called in order to proceed the pending requests. Based on patch submitted by
+	Damien Thebault.
+	"""
+
 	def __init__(self):
 		self.asyncns = libasyncns.Asyncns()
 		CommonResolver.__init__(self)
@@ -146,20 +147,22 @@ class LibAsyncNSResolver(CommonResolver):
 
 
 class NSLookupResolver(CommonResolver):
-	'''
+	"""
 	Asynchronous DNS resolver calling nslookup. Processing of pending requests
-	is invoked from idlequeue which is watching file descriptor of pipe of stdout
-	of nslookup process.
-	'''
+	is invoked from idlequeue which is watching file descriptor of pipe of
+	stdout of nslookup process.
+	"""
+
 	def __init__(self, idlequeue):
 		self.idlequeue = idlequeue
 		self.process = False
 		CommonResolver.__init__(self)
 
 	def parse_srv_result(self, fqdn, result):
-		''' parse the output of nslookup command and return list of
-		properties: 'host', 'port','weight', 'priority'	corresponding to the found
-		srv hosts '''
+		"""
+		Parse the output of nslookup command and return list of properties:
+		'host', 'port','weight', 'priority'	corresponding to the found srv hosts
+		"""
 		if os.name == 'nt':
 			return self._parse_srv_result_nt(fqdn, result)
 		elif os.name == 'posix':
@@ -260,7 +263,9 @@ class NSLookupResolver(CommonResolver):
 		CommonResolver._on_ready(self, host, type, result_list)
 
 	def start_resolve(self, host, type):
-		''' spawn new nslookup process and start waiting for results '''
+		"""
+		Spawn new nslookup process and start waiting for results
+		"""
 		ns = NsLookup(self._on_ready, host, type)
 		ns.set_idlequeue(self.idlequeue)
 		ns.commandtimeout = 10

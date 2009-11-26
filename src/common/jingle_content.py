@@ -10,7 +10,10 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 ##
-''' Handles Jingle contents (XEP 0166). '''
+
+"""
+Handles Jingle contents (XEP 0166)
+"""
 
 contents = {}
 
@@ -23,7 +26,10 @@ def get_jingle_content(node):
 
 
 class JingleContent(object):
-	''' An abstraction of content in Jingle sessions. '''
+	"""
+	An abstraction of content in Jingle sessions
+	"""
+
 	def __init__(self, session, transport):
 		self.session = session
 		self.transport = transport
@@ -71,24 +77,32 @@ class JingleContent(object):
 		return (self.accepted and not self.sent)
 
 	def add_remote_candidates(self, candidates):
-		''' Add a list of candidates to the list of remote candidates. '''
+		"""
+		Add a list of candidates to the list of remote candidates
+		"""
 		pass
 
 	def stanzaCB(self, stanza, content, error, action):
-		''' Called when something related to our content was sent by peer. '''
+		"""
+		Called when something related to our content was sent by peer
+		"""
 		if action in self.callbacks:
 			for callback in self.callbacks[action]:
 				callback(stanza, content, error, action)
 
 	def __transportInfoCB(self, stanza, content, error, action):
-		''' Got a new transport candidate. '''
+		"""
+		Got a new transport candidate
+		"""
 		candidates = self.transport.parse_transport_stanza(
 			content.getTag('transport'))
 		if candidates:
 			self.add_remote_candidates(candidates)
 
 	def __content(self, payload=[]):
-		''' Build a XML content-wrapper for our data. '''
+		"""
+		Build a XML content-wrapper for our data
+		"""
 		return xmpp.Node('content',
 			attrs={'name': self.name, 'creator': self.creator},
 			payload=payload)
@@ -99,7 +113,9 @@ class JingleContent(object):
 		self.session.send_transport_info(content)
 
 	def __fillJingleStanza(self, stanza, content, error, action):
-		''' Add our things to session-initiate stanza. '''
+		"""
+		Add our things to session-initiate stanza
+		"""
 		self._fillContent(content)
 		self.sent = True
 		content.addChild(node=self.transport.make_transport())

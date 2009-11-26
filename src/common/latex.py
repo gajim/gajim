@@ -86,8 +86,9 @@ def popen_nt_friendly(command):
 		return Popen(command, cwd=gettempdir(), stdout=PIPE)
 
 def check_for_latex_support():
-	'''check is latex is available and if it can create a picture.'''
-
+	"""
+	Check if latex is available and if it can create a picture
+	"""
 	try:
 		filename = latex_to_image("test")
 		if filename:
