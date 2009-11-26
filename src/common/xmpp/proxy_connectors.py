@@ -14,27 +14,30 @@
 ##   but WITHOUT ANY WARRANTY; without even the implied warranty of
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
-'''
-Module containing classes for proxy connecting. So far its HTTP CONNECT
-and SOCKS5 proxy.
+
+"""
+Module containing classes for proxy connecting. So far its HTTP CONNECT and
+SOCKS5 proxy
+
 Authentication to NTLM (Microsoft implementation) proxies can be next.
-'''
+"""
 
 import struct, socket, base64
 import logging
 log = logging.getLogger('gajim.c.x.proxy_connectors')
 
 class ProxyConnector:
-	'''
+	"""
 	Interface for proxy-connecting object - when tunnneling XMPP over proxies,
-	some connecting process usually has to be done before opening stream.
-	Proxy connectors are used right after TCP connection is estabilished.
-	'''
+	some connecting process usually has to be done before opening stream. Proxy
+	connectors are used right after TCP connection is estabilished
+	"""
+
 	def __init__(self, send_method, onreceive, old_on_receive, on_success,
-		on_failure, xmpp_server, proxy_creds=(None,None)):
-		'''
+			on_failure, xmpp_server, proxy_creds=(None,None)):
+		"""
 		Creates proxy connector, starts connecting immediately and gives control
-		back to transport afterwards.
+		back to transport afterwards
 
 		:param send_method: transport send method
 		:param onreceive: method to set on_receive callbacks
@@ -44,7 +47,7 @@ class ProxyConnector:
 		:param on_failure: called when errors occured while connecting
 		:param xmpp_server: tuple of (hostname, port)
 		:param proxy_creds: tuple of (proxy_user, proxy_credentials)
-		'''
+		"""
 		self.send = send_method
 		self.onreceive = onreceive
 		self.old_on_receive = old_on_receive
@@ -58,12 +61,12 @@ class ProxyConnector:
 
 	@classmethod
 	def get_instance(cls, *args, **kwargs):
-		'''
-		Factory Method for object creation.
+		"""
+		Factory Method for object creation
 
-		Use this instead of directly initializing the class in order to make
-		unit testing much easier.
-		'''
+		Use this instead of directly initializing the class in order to make unit
+		testing much easier.
+		"""
 		return cls(*args, **kwargs)
 
 	def start_connecting(self):
@@ -75,11 +78,11 @@ class ProxyConnector:
 
 class HTTPCONNECTConnector(ProxyConnector):
 	def start_connecting(self):
-		'''
-		Connects to proxy, supplies login and password to it
-		(if were specified while creating instance). Instructs proxy to make
-		connection to the target server.
-		'''
+		"""
+		Connect to a proxy, supply login and password to it (if were specified
+		while creating instance). Instruct proxy to make connection to the target
+		server.
+		"""
 		log.info('Proxy server contacted, performing authentification')
 		connector = ['CONNECT %s:%s HTTP/1.1' % self.xmpp_server,
 			'Proxy-Connection: Keep-Alive',
@@ -115,10 +118,11 @@ class HTTPCONNECTConnector(ProxyConnector):
 
 
 class SOCKS5Connector(ProxyConnector):
-	'''
+	"""
 	SOCKS5 proxy connection class. Allows to use SOCKS5 proxies with
-	(optionally) simple authentication (only USERNAME/PASSWORD auth).
-	'''
+	(optionally) simple authentication (only USERNAME/PASSWORD auth)
+	"""
+
 	def start_connecting(self):
 		log.info('Proxy server contacted, performing authentification')
 		if self.proxy_user and self.proxy_pass:

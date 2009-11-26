@@ -476,7 +476,7 @@ class Protocol(Node):
 			self.setTo(self['to'])
 		if self['from']:
 			self.setFrom(self['from'])
-		if node and type(self )== type(node) and self.__class__ == node.__class__ and self.attrs.has_key('id'):
+		if node and type(self) == type(node) and self.__class__ == node.__class__ and self.attrs.has_key('id'):
 			del self.attrs['id']
 		self.timestamp = None
 		for d in self.getTags('delay', namespace=NS_DELAY2):
