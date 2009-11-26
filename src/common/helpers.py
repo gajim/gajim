@@ -919,7 +919,8 @@ def get_os_info():
 	if gajim.os_info:
 		return gajim.os_info
 	if os.name == 'nt':
-		ver = os.sys.getwindowsversion()
+		# platform.release() seems to return the name of the windows
+		ver = sys.getwindowsversion()
 		ver_format = ver[3], ver[0], ver[1]
 		win_version = {
 			(1, 4, 0): '95',
@@ -930,6 +931,7 @@ def get_os_info():
 			(2, 5, 1): 'XP',
 			(2, 5, 2): '2003',
 			(2, 6, 0): 'Vista',
+			(2, 6, 1): '7',
 		}
 		if ver_format in win_version:
 			os_info = 'Windows' + ' ' + win_version[ver_format]
