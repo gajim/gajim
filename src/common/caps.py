@@ -23,13 +23,13 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-'''
-Module containing all XEP-115 (Entity Capabilities) related classes 
+"""
+Module containing all XEP-115 (Entity Capabilities) related classes
 
 Basic Idea:
 CapsCache caches features to hash relationships. The cache is queried
-through ClientCaps objects which are hold by contact instances. 
-''' 
+through ClientCaps objects which are hold by contact instances.
+"""
 
 import gajim
 import helpers
@@ -54,7 +54,9 @@ CACHED = 2 # got the answer
 
 capscache = None
 def initialize(logger):
-	''' Initializes this module '''
+	"""
+	Initialize this module
+	"""
 	global capscache
 	capscache = CapsCache(logger)
 
@@ -73,11 +75,12 @@ def client_supports(client_caps, requested_feature):
 		return False
 
 def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
-	'''Compute caps hash according to XEP-0115, V1.5
+	"""
+	Compute caps hash according to XEP-0115, V1.5
 
 	dataforms are xmpp.DataForms objects as common.dataforms don't allow several
-	values without a field type list-multi'''
-	
+	values without a field type list-multi
+	"""
 	def sort_identities_func(i1, i2):
 		cat1 = i1['category']
 		cat2 = i2['category']
@@ -98,14 +101,14 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 		if lang1 > lang2:
 			return 1
 		return 0
-	
+
 	def sort_dataforms_func(d1, d2):
 		f1 = d1.getField('FORM_TYPE')
 		f2 = d2.getField('FORM_TYPE')
 		if f1 and f2 and (f1.getValue() < f2.getValue()):
 			return -1
 		return 1
-	
+
 	S = ''
 	identities.sort(cmp=sort_identities_func)
 	for i in identities:
@@ -140,108 +143,119 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 	else:
 		return ''
 	return base64.b64encode(hash_.digest())
-	
+
 
 ################################################################################
 ### Internal classes of this module
 ################################################################################
 
 class AbstractClientCaps(object):
-	'''
-	Base class representing a client and its capabilities as advertised by
-	a caps tag in a presence. 
-	'''
+	"""
+	Base class representing a client and its capabilities as advertised by a
+	caps tag in a presence
+	"""
 	def __init__(self, caps_hash, node):
 		self._hash = caps_hash
 		self._node = node
-		
+
 	def get_discover_strategy(self):
 		return self._discover
-							
+
 	def _discover(self, connection, jid):
-		''' To be implemented by subclassess '''
-		raise NotImplementedError()
-	
+		"""
+		To be implemented by subclassess
+		"""
+		raise NotImplementedError
+
 	def get_cache_lookup_strategy(self):
 		return self._lookup_in_cache
-	
+
 	def _lookup_in_cache(self, caps_cache):
-		''' To be implemented by subclassess '''
-		raise NotImplementedError()
-	
+		"""
+		To be implemented by subclassess
+		"""
+		raise NotImplementedError
+
 	def get_hash_validation_strategy(self):
 		return self._is_hash_valid
-					
+
 	def _is_hash_valid(self, identities, features, dataforms):
-		''' To be implemented by subclassess '''
-		raise NotImplementedError()		
+		"""
+		To be implemented by subclassess
+		"""
+		raise NotImplementedError
 
 
 class ClientCaps(AbstractClientCaps):
-	''' The current XEP-115 implementation '''
-	
+	"""
+	The current XEP-115 implementation
+	"""
+
 	def __init__(self, caps_hash, node, hash_method):
 		AbstractClientCaps.__init__(self, caps_hash, node)
 		assert hash_method != 'old'
 		self._hash_method = hash_method
-	
+
 	def _lookup_in_cache(self, caps_cache):
 		return caps_cache[(self._hash_method, self._hash)]
-	
+
 	def _discover(self, connection, jid):
 		connection.discoverInfo(jid, '%s#%s' % (self._node, self._hash))
-				
+
 	def _is_hash_valid(self, identities, features, dataforms):
 		computed_hash = compute_caps_hash(identities, features,
 				dataforms=dataforms, hash_method=self._hash_method)
-		return computed_hash == self._hash	
+		return computed_hash == self._hash
 
-	
+
 class OldClientCaps(AbstractClientCaps):
-	''' Old XEP-115 implemtation. Kept around for background competability.  '''
-	
+	"""
+	Old XEP-115 implemtation. Kept around for background competability
+	"""
+
 	def __init__(self, caps_hash, node):
 		AbstractClientCaps.__init__(self, caps_hash, node)
 
 	def _lookup_in_cache(self, caps_cache):
 		return caps_cache[('old', self._node + '#' + self._hash)]
-	
+
 	def _discover(self, connection, jid):
 		connection.discoverInfo(jid)
-		
-	def _is_hash_valid(self, identities, features, dataforms):
-		return True	
 
-		
+	def _is_hash_valid(self, identities, features, dataforms):
+		return True
+
+
 class NullClientCaps(AbstractClientCaps):
-	'''
+	"""
 	This is a NULL-Object to streamline caps handling if a client has not
-	advertised any caps or has advertised them in an improper way. 
-	
+	advertised any caps or has advertised them in an improper way
+
 	Assumes (almost) everything is supported.
-	''' 
-	
+	"""
+
 	def __init__(self):
 		AbstractClientCaps.__init__(self, None, None)
-	
+
 	def _lookup_in_cache(self, caps_cache):
 		# lookup something which does not exist to get a new CacheItem created
 		cache_item = caps_cache[('dummy', '')]
 		assert cache_item.status != CACHED
 		return cache_item
-	
+
 	def _discover(self, connection, jid):
 		pass
 
 	def _is_hash_valid(self, identities, features, dataforms):
-		return False	
+		return False
 
 
 class CapsCache(object):
-	''' 
-	This object keeps the mapping between caps data and real disco
-	features they represent, and provides simple way to query that info.
-	'''
+	"""
+	This object keeps the mapping between caps data and real disco features they
+	represent, and provides simple way to query that info
+	"""
+
 	def __init__(self, logger=None):
 		# our containers:
 		# __cache is a dictionary mapping: pair of hash method and hash maps
@@ -255,7 +269,7 @@ class CapsCache(object):
 			#   another object, and we will have plenty of identical long
 			#   strings. therefore we can cache them
 			__names = {}
-			
+
 			def __init__(self, hash_method, hash_, logger):
 				# cached into db
 				self.hash_method = hash_method
@@ -274,7 +288,7 @@ class CapsCache(object):
 				self._features = []
 				for feature in value:
 					self._features.append(self.__names.setdefault(feature, feature))
-					
+
 			features = property(_get_features, _set_features)
 
 			def _get_identities(self):
@@ -291,7 +305,7 @@ class CapsCache(object):
 						d['name'] = i[3]
 					list_.append(d)
 				return list_
-			
+
 			def _set_identities(self, value):
 				self._identities = []
 				for identity in value:
@@ -299,7 +313,7 @@ class CapsCache(object):
 					t = (identity['category'], identity.get('type'),
 						identity.get('xml:lang'), identity.get('name'))
 					self._identities.append(self.__names.setdefault(t, t))
-					
+
 			identities = property(_get_identities, _set_identities)
 
 			def set_and_store(self, identities, features):
@@ -308,7 +322,7 @@ class CapsCache(object):
 				self._logger.add_caps_entry(self.hash_method, self.hash,
 					identities, features)
 				self.status = CACHED
-				
+
 			def update_last_seen(self):
 				if not self._recently_seen:
 					self._recently_seen = True
@@ -325,9 +339,11 @@ class CapsCache(object):
 			x.identities = identities
 			x.features = features
 			x.status = CACHED
-	
+
 	def _remove_outdated_caps(self):
-		'''Removes outdated values from the db'''
+		"""
+		Remove outdated values from the db
+		"""
 		self.logger.clean_caps_table()
 
 	def __getitem__(self, caps):
@@ -341,20 +357,20 @@ class CapsCache(object):
 		return x
 
 	def query_client_of_jid_if_unknown(self, connection, jid, client_caps):
-		'''
-		Start a disco query to determine caps (node, ver, exts).
-		Won't query if the data is already in cache.
-		'''
+		"""
+		Start a disco query to determine caps (node, ver, exts). Won't query if
+		the data is already in cache
+		"""
 		lookup_cache_item = client_caps.get_cache_lookup_strategy()
-		q = lookup_cache_item(self)	
-		
+		q = lookup_cache_item(self)
+
 		if q.status == NEW:
 			# do query for bare node+hash pair
 			# this will create proper object
 			q.status = QUERIED
 			discover = client_caps.get_discover_strategy()
 			discover(connection, jid)
-		else: 
+		else:
 			q.update_last_seen()
 
 ################################################################################
@@ -362,14 +378,15 @@ class CapsCache(object):
 ################################################################################
 
 class ConnectionCaps(object):
-	'''
-	This class highly depends on that it is a part of Connection class.
-	'''
+	"""
+	This class highly depends on that it is a part of Connection class
+	"""
+
 	def _capsPresenceCB(self, con, presence):
-		'''
+		"""
 		Handle incoming presence stanzas... This is a callback for xmpp
 		registered in connection_handlers.py
-		'''
+		"""
 		# we will put these into proper Contact object and ask
 		# for disco... so that disco will learn how to interpret
 		# these caps
@@ -411,7 +428,7 @@ class ConnectionCaps(object):
 		if pm_ctrl:
 			pm_ctrl.update_contact()
 
-	def _capsDiscoCB(self, jid, node, identities, features, dataforms):		
+	def _capsDiscoCB(self, jid, node, identities, features, dataforms):
 		contact = gajim.contacts.get_contact_from_full_jid(self.name, jid)
 		if not contact:
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
@@ -420,14 +437,14 @@ class ConnectionCaps(object):
 				return
 
 		lookup = contact.client_caps.get_cache_lookup_strategy()
-		cache_item = lookup(capscache)	
-					
+		cache_item = lookup(capscache)
+
 		if cache_item.status == CACHED:
 			return
 		else:
 			validate = contact.client_caps.get_hash_validation_strategy()
 			hash_is_valid = validate(identities, features, dataforms)
-			
+
 			if hash_is_valid:
 				cache_item.set_and_store(identities, features)
 			else:

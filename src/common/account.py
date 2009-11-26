@@ -19,14 +19,14 @@
 ##
 
 class Account(object):
-	
+
 	def __init__(self, name, contacts, gc_contacts):
 		self.name = name
 		self.contacts = contacts
 		self.gc_contacts = gc_contacts
-		
+
 	def __repr__(self):
 		return self.name
-	
+
 	def __hash__(self):
-		return self.name.__hash__()
+		return hash(self.name)

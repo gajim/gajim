@@ -512,7 +512,9 @@ class Config:
 					cb(data, opt3, [opt, opt2], dict_[opt2][opt3])
 
 	def get_children(self, node=None):
-		''' Tree-like interface '''
+		"""
+		Tree-like interface
+		"""
 		if node is None:
 			for child, option in self.__options.iteritems():
 				yield (child, ), option
@@ -698,8 +700,9 @@ class Config:
 		return False
 
 	def should_log(self, account, jid):
-		'''should conversations between a local account and a remote jid be
-		logged?'''
+		"""
+		Should conversations between a local account and a remote jid be logged?
+		"""
 		no_log_for = self.get_per('accounts', account, 'no_log_for')
 
 		if not no_log_for:

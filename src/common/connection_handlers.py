@@ -100,9 +100,9 @@ class ConnectionBytestream:
 		return True
 
 	def send_success_connect_reply(self, streamhost):
-		''' send reply to the initiator of FT that we
-		made a connection
-		'''
+		"""
+		Send reply to the initiator of FT that we made a connection
+		"""
 		if not self.connection or self.connected < 2:
 			return
 		if streamhost is None:
@@ -117,7 +117,9 @@ class ConnectionBytestream:
 		self.connection.send(iq)
 
 	def remove_transfers_for_contact(self, contact):
-		''' stop all active transfer for contact '''
+		"""
+		Stop all active transfer for contact
+		"""
 		for file_props in self.files_props.values():
 			if self.is_transfer_stopped(file_props):
 				continue
@@ -132,7 +134,9 @@ class ConnectionBytestream:
 				self.remove_transfer(file_props)
 
 	def remove_all_transfers(self):
-		''' stops and removes all active connections from the socks5 pool '''
+		"""
+		Stop and remove all active connections from the socks5 pool
+		"""
 		for file_props in self.files_props.values():
 			self.remove_transfer(file_props, remove_from_list = False)
 		del(self.files_props)
@@ -161,9 +165,11 @@ class ConnectionBytestream:
 					gajim.socks5queue.remove_receiver(host['idx'])
 					gajim.socks5queue.remove_sender(host['idx'])
 
-	def send_socks5_info(self, file_props, fast = True, receiver = None,
-		sender = None):
-		''' send iq for the present streamhosts and proxies '''
+	def send_socks5_info(self, file_props, fast = True, receiver = None, sender
+			= None):
+		"""
+		Send iq for the present streamhosts and proxies
+		"""
 		if not self.connection or self.connected < 2:
 			return
 		if not isinstance(self.peerhost, tuple):
@@ -269,9 +275,12 @@ class ConnectionBytestream:
 		self.connection.send(iq)
 
 	def send_file_rejection(self, file_props, code='403', typ=None):
-		''' informs sender that we refuse to download the file
+		"""
+		Inform sender that we refuse to download the file
+
 		typ is used when code = '400', in this case typ can be 'strean' for
-		invalid stream or 'profile' for invalid profile'''
+		invalid stream or 'profile' for invalid profile
+		"""
 		# user response to ConfirmationDialog may come after we've disconneted
 		if not self.connection or self.connected < 2:
 			return
@@ -294,7 +303,9 @@ class ConnectionBytestream:
 		self.connection.send(iq)
 
 	def send_file_approval(self, file_props):
-		''' send iq, confirming that we want to download the file '''
+		"""
+		Send iq, confirming that we want to download the file
+		"""
 		# user response to ConfirmationDialog may come after we've disconneted
 		if not self.connection or self.connected < 2:
 			return
@@ -326,7 +337,9 @@ class ConnectionBytestream:
 		return file_props['receiver'].jid + '/' + file_props['receiver'].resource
 
 	def send_file_request(self, file_props):
-		''' send iq for new FT request '''
+		"""
+		Send iq for new FT request
+		"""
 		if not self.connection or self.connected < 2:
 			return
 		file_props['sender'] = self._ft_get_our_jid()
@@ -357,7 +370,9 @@ class ConnectionBytestream:
 		self.connection.send(iq)
 
 	def _result_socks5_sid(self, sid, hash_id):
-		''' store the result of sha message from auth. '''
+		"""
+		Store the result of SHA message from auth
+		"""
 		if sid not in self.files_props:
 			return
 		file_props = self.files_props[sid]
@@ -365,8 +380,10 @@ class ConnectionBytestream:
 		return
 
 	def _connect_error(self, to, _id, sid, code=404):
-		''' cb, when there is an error establishing BS connection, or
-		when connection is rejected'''
+		"""
+		Called when there is an error establishing BS connection, or when
+		connection is rejected
+		"""
 		if not self.connection or self.connected < 2:
 			return
 		msg_dict = {
@@ -391,7 +408,9 @@ class ConnectionBytestream:
 				self.dispatch('FILE_REQUEST_ERROR', (to, file_props, msg))
 
 	def _proxy_auth_ok(self, proxy):
-		'''cb, called after authentication to proxy server '''
+		"""
+		Called after authentication to proxy server
+		"""
 		if not self.connection or self.connected < 2:
 			return
 		file_props = self.files_props[proxy['sid']]
@@ -673,16 +692,24 @@ class ConnectionBytestream:
 		raise common.xmpp.NodeProcessed
 
 class ConnectionDisco:
-	''' hold xmpppy handlers and public methods for discover services'''
+	"""
+	Holds xmpppy handlers and public methods for discover services
+	"""
+
 	def discoverItems(self, jid, node = None, id_prefix = None):
-		'''According to XEP-0030: jid is mandatory,
-		name, node, action is optional.'''
+		"""
+		According to XEP-0030:
+			jid is mandatory;
+			name, node, action is optional.
+		"""
 		self._discover(common.xmpp.NS_DISCO_ITEMS, jid, node, id_prefix)
 
 	def discoverInfo(self, jid, node = None, id_prefix = None):
-		'''According to XEP-0030:
+		"""
+		According to XEP-0030:
 			For identity: category, type is mandatory, name is optional.
-			For feature: var is mandatory'''
+			For feature: var is mandatory.
+		"""
 		self._discover(common.xmpp.NS_DISCO_INFO, jid, node, id_prefix)
 
 	def request_register_agent_info(self, agent):
@@ -738,7 +765,9 @@ class ConnectionDisco:
 		self._IqCB(con, resp)
 
 	def _discoGetCB(self, con, iq_obj):
-		''' get disco info '''
+		"""
+		Get disco info
+		"""
 		if not self.connection or self.connected < 2:
 			return
 		frm = helpers.get_full_jid_from_iq(iq_obj)
@@ -1008,9 +1037,11 @@ class ConnectionVcard:
 			self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 
 	def get_cached_vcard(self, fjid, is_fake_jid = False):
-		'''return the vcard as a dict
-		return {} if vcard was too old
-		return None if we don't have cached vcard'''
+		"""
+		Return the vcard as a dict.
+		Return {} if vcard was too old.
+		Return None if we don't have cached vcard.
+		"""
 		jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
 		puny_jid = helpers.sanitize_filename(jid)
 		if is_fake_jid:
@@ -1045,9 +1076,13 @@ class ConnectionVcard:
 		return vcard
 
 	def request_vcard(self, jid = None, groupchat_jid = None):
-		'''request the VCARD. If groupchat_jid is not nul, it means we request a vcard
-		to a fake jid, like in private messages in groupchat. jid can be the
-		real jid of the contact, but we want to consider it comes from a fake jid'''
+		"""
+		Request the VCARD
+
+		If groupchat_jid is not nul, it means we request a vcard to a fake jid,
+		like in private messages in groupchat. jid can be the real jid of the
+		contact, but we want to consider it comes from a fake jid
+		"""
 		if not self.connection or self.connected < 2:
 			return
 		iq = common.xmpp.Iq(typ = 'get')
@@ -1238,8 +1273,9 @@ class ConnectionVcard:
 		del self.awaiting_answers[id_]
 
 	def _vCardCB(self, con, vc):
-		'''Called when we receive a vCard
-		Parse the vCard and send it to plugins'''
+		"""
+		Called when we receive a vCard Parse the vCard and send it to plugins
+		"""
 		if not vc.getTag('vCard'):
 			return
 		if not vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
@@ -1345,8 +1381,9 @@ class ConnectionHandlersBase:
 		self.sessions = {}
 
 	def get_sessions(self, jid):
-		'''get all sessions for the given full jid'''
-
+		"""
+		Get all sessions for the given full jid
+		"""
 		if not gajim.interface.is_pm_contact(jid, self.name):
 			jid = gajim.get_jid_without_resource(jid)
 
@@ -1356,9 +1393,10 @@ class ConnectionHandlersBase:
 			return []
 
 	def get_or_create_session(self, fjid, thread_id):
-		'''returns an existing session between this connection and 'jid', returns a
-		new one if none exist.'''
-
+		"""
+		Return an existing session between this connection and 'jid', returns a
+		new one if none exist
+		"""
 		pm = True
 		jid = fjid
 
@@ -1386,7 +1424,9 @@ class ConnectionHandlersBase:
 			return None
 
 	def terminate_sessions(self, send_termination=False):
-		'''send termination messages and delete all active sessions'''
+		"""
+		Send termination messages and delete all active sessions
+		"""
 		for jid in self.sessions:
 			for thread_id in self.sessions[jid]:
 				self.sessions[jid][thread_id].terminate(send_termination)
@@ -1405,10 +1445,11 @@ class ConnectionHandlersBase:
 			del self.sessions[jid]
 
 	def find_null_session(self, jid):
-		'''finds all of the sessions between us and a remote jid in which we
-haven't received a thread_id yet and returns the session that we last
-sent a message to.'''
-
+		"""
+		Find all of the sessions between us and a remote jid in which we haven't
+		received a thread_id yet and returns the session that we last sent a
+		message to
+		"""
 		sessions = self.sessions[jid].values()
 
 		# sessions that we haven't received a thread ID in
@@ -1425,8 +1466,9 @@ sent a message to.'''
 			return None
 
 	def find_controlless_session(self, jid, resource=None):
-		'''find an active session that doesn't have a control attached'''
-
+		"""
+		Find an active session that doesn't have a control attached
+		"""
 		try:
 			sessions = self.sessions[jid].values()
 
@@ -1444,8 +1486,12 @@ sent a message to.'''
 			return None
 
 	def make_new_session(self, jid, thread_id=None, type_='chat', cls=None):
-		'''create and register a new session. thread_id=None to generate one.
-		type_ should be 'chat' or 'pm'.'''
+		"""
+		Create and register a new session
+
+		thread_id=None to generate one.
+		type_ should be 'chat' or 'pm'.
+		"""
 		if not cls:
 			cls = gajim.default_session_type
 
@@ -1463,7 +1509,9 @@ sent a message to.'''
 
 		return sess
 
-class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionPEP, ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
+class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
+		ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionPEP,
+		ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 	def __init__(self):
 		ConnectionVcard.__init__(self)
 		ConnectionBytestream.__init__(self)
@@ -1544,9 +1592,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.dispatch('ERROR_ANSWER', (id_, jid_from, errmsg, errcode))
 
 	def _PrivateCB(self, con, iq_obj):
-		'''
+		"""
 		Private Data (XEP 048 and 049)
-		'''
+		"""
 		log.debug('PrivateCB')
 		query = iq_obj.getTag('query')
 		storage = query.getTag('storage')
@@ -1573,8 +1621,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					self.annotations[jid] = annotation
 
 	def _parse_bookmarks(self, storage, storage_type):
-		'''storage_type can be 'pubsub' or 'xml' to tell from where we got
-		bookmarks'''
+		"""
+		storage_type can be 'pubsub' or 'xml' to tell from where we got bookmarks
+		"""
 		# Bookmarked URLs and Conferences
 		# http://www.xmpp.org/extensions/xep-0048.html
 		resend_to_pubsub = False
@@ -1788,7 +1837,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.dispatch('ENTITY_TIME', (jid_stripped, resource, time_info))
 
 	def _gMailNewMailCB(self, con, gm):
-		'''Called when we get notified of new mail messages in gmail account'''
+		"""
+		Called when we get notified of new mail messages in gmail account
+		"""
 		if not self.connection or self.connected < 2:
 			return
 		if not gm.getTag('new-mail'):
@@ -1810,7 +1861,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			raise common.xmpp.NodeProcessed
 
 	def _gMailQueryCB(self, con, gm):
-		'''Called when we receive results from Querying the server for mail messages in gmail account'''
+		"""
+		Called when we receive results from Querying the server for mail messages
+		in gmail account
+		"""
 		if not gm.getTag('mailbox'):
 			return
 		self.gmail_url = gm.getTag('mailbox').getAttr('url')
@@ -1856,7 +1910,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			raise common.xmpp.NodeProcessed
 
 	def _rosterItemExchangeCB(self, con, msg):
-		''' XEP-0144 Roster Item Echange '''
+		"""
+		XEP-0144 Roster Item Echange
+		"""
 		exchange_items_list = {}
 		jid_from = helpers.get_full_jid_from_iq(msg)
 		items_list = msg.getTag('x').getChildren()
@@ -1898,7 +1954,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		raise common.xmpp.NodeProcessed
 
 	def _messageCB(self, con, msg):
-		'''Called when we receive a message'''
+		"""
+		Called when we receive a message
+		"""
 		log.debug('MessageCB')
 		mtype = msg.getType()
 
@@ -2167,7 +2225,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			is_continued))
 
 	def _presenceCB(self, con, prs):
-		'''Called when we receive a presence'''
+		"""
+		Called when we receive a presence
+		"""
 		ptype = prs.getType()
 		if ptype == 'available':
 			ptype = None
@@ -2269,7 +2329,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 				gc_control = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
 						self.name)
-				
+
 				# If gc_control is missing - it may be minimized. Try to get it from
 				# there. If it's not there - then it's missing anyway and will
 				# remain set to None.
@@ -2550,11 +2610,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		raise common.xmpp.NodeProcessed
 
 	def _PrivacySetCB(self, con, iq_obj):
-		'''
+		"""
 		Privacy lists (XEP 016)
 
-		A list has been set
-		'''
+		A list has been set.
+		"""
 		log.debug('PrivacySetCB')
 		if not self.connection or self.connected < 2:
 			return

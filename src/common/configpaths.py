@@ -46,7 +46,9 @@ import tempfile
 # not displayed to the user, Unicode is not really necessary here.
 
 def fse(s):
-	'''Convert from filesystem encoding if not already Unicode'''
+	"""
+	Convert from filesystem encoding if not already Unicode
+	"""
 	return unicode(s, sys.getfilesystemencoding())
 
 def windowsify(s):

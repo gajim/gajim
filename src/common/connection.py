@@ -100,10 +100,11 @@ ssl_error = {
 }
 
 class CommonConnection:
-	'''
+	"""
 	Common connection class, can be derivated for normal connection or zeroconf
 	connection
-	'''
+	"""
+
 	def __init__(self, name):
 		self.name = name
 		# self.connected:
@@ -162,11 +163,15 @@ class CommonConnection:
 		return resource
 
 	def dispatch(self, event, data):
-		'''always passes account name as first param'''
+		"""
+		Always passes account name as first param
+		"""
 		gajim.interface.dispatch(event, self.name, data)
 
 	def _reconnect(self):
-		'''To be implemented by derivated classes'''
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def quit(self, kill_core):
@@ -174,7 +179,9 @@ class CommonConnection:
 			self.disconnect(on_purpose=True)
 
 	def test_gpg_passphrase(self, password):
-		'''Returns 'ok', 'bad_pass' or 'expired' '''
+		"""
+		Returns 'ok', 'bad_pass' or 'expired'
+		"""
 		if not self.gpg:
 			return False
 		self.gpg.passphrase = password
@@ -188,10 +195,12 @@ class CommonConnection:
 		return 'ok'
 
 	def get_signed_msg(self, msg, callback = None):
-		'''returns the signed message if possible
-		or an empty string if gpg is not used
-		or None if waiting for passphrase.
-		callback is the function to call when user give the passphrase'''
+		"""
+		Returns the signed message if possible or an empty string if gpg is not
+		used or None if waiting for passphrase
+
+		callback is the function to call when user give the passphrase
+		"""
 		signed = ''
 		keyID = gajim.config.get_per('accounts', self.name, 'keyid')
 		if keyID and self.USE_GPG:
@@ -208,7 +217,9 @@ class CommonConnection:
 		return signed
 
 	def _on_disconnected(self):
-		''' called when a disconnect request has completed successfully'''
+		"""
+		Called when a disconnect request has completed successfully
+		"""
 		self.disconnect(on_purpose=True)
 		self.dispatch('STATUS', 'offline')
 
@@ -216,9 +227,10 @@ class CommonConnection:
 		return gajim.SHOW_LIST[self.connected]
 
 	def check_jid(self, jid):
-		'''this function must be implemented by derivated classes.
-		It has to return the valid jid, or raise a helpers.InvalidFormat exception
-		'''
+		"""
+		This function must be implemented by derivated classes. It has to return
+		the valid jid, or raise a helpers.InvalidFormat exception
+		"""
 		raise NotImplementedError
 
 	def _prepare_message(self, jid, msg, keyID, type_='chat', subject='',
@@ -424,32 +436,46 @@ class CommonConnection:
 							common.logger.LOG_DB_PATH
 
 	def ack_subscribed(self, jid):
-		'''To be implemented by derivated classes'''
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def ack_unsubscribed(self, jid):
-		'''To be implemented by derivated classes'''
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def request_subscription(self, jid, msg='', name='', groups=[],
-	auto_auth=False):
-		'''To be implemented by derivated classes'''
+			auto_auth=False):
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def send_authorization(self, jid):
-		'''To be implemented by derivated classes'''
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def refuse_authorization(self, jid):
-		'''To be implemented by derivated classes'''
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def unsubscribe(self, jid, remove_auth = True):
-		'''To be implemented by derivated classes'''
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def unsubscribe_agent(self, agent):
-		'''To be implemented by derivated classes'''
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def update_contact(self, jid, name, groups):
@@ -457,47 +483,67 @@ class CommonConnection:
 			self.connection.getRoster().setItem(jid=jid, name=name, groups=groups)
 
 	def update_contacts(self, contacts):
-		'''update multiple roster items'''
+		"""
+		Update multiple roster items
+		"""
 		if self.connection:
 			self.connection.getRoster().setItemMulti(contacts)
 
 	def new_account(self, name, config, sync=False):
-		'''To be implemented by derivated classes'''
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def _on_new_account(self, con=None, con_type=None):
-		'''To be implemented by derivated classes'''
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def account_changed(self, new_name):
 		self.name = new_name
 
 	def request_last_status_time(self, jid, resource):
-		'''To be implemented by derivated classes'''
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def request_os_info(self, jid, resource):
-		'''To be implemented by derivated classes'''
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def get_settings(self):
-		'''To be implemented by derivated classes'''
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def get_bookmarks(self):
-		'''To be implemented by derivated classes'''
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def store_bookmarks(self):
-		'''To be implemented by derivated classes'''
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def get_metacontacts(self):
-		'''To be implemented by derivated classes'''
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def send_agent_status(self, agent, ptype):
-		'''To be implemented by derivated classes'''
+		"""
+		To be implemented by derivated classes
+		"""
 		raise NotImplementedError
 
 	def gpg_passphrase(self, passphrase):
@@ -581,7 +627,6 @@ class CommonConnection:
 			self._update_status(show, msg)
 
 class Connection(CommonConnection, ConnectionHandlers):
-	'''Connection class'''
 	def __init__(self, name):
 		CommonConnection.__init__(self, name)
 		ConnectionHandlers.__init__(self)
@@ -672,7 +717,9 @@ class Connection(CommonConnection, ConnectionHandlers):
 			self.connection = None
 
 	def _disconnectedReconnCB(self):
-		'''Called when we are disconnected'''
+		"""
+		Called when we are disconnected
+		"""
 		log.info('disconnectedReconnCB called')
 		if gajim.account_is_connected(self.name):
 			# we cannot change our status to offline or connecting
@@ -830,11 +877,11 @@ class Connection(CommonConnection, ConnectionHandlers):
 				self.dispatch('PRIVACY_LISTS_ACTIVE_DEFAULT', (data))
 
 	def _select_next_host(self, hosts):
-		'''Selects the next host according to RFC2782 p.3 based on it's
-		priority. Chooses between hosts with the same priority randomly,
-		where the probability of being selected is proportional to the weight
-		of the host.'''
-
+		"""
+		Selects the next host according to RFC2782 p.3 based on it's priority.
+		Chooses between hosts with the same priority randomly, where the
+		probability of being selected is proportional to the weight of the host
+		"""
 		hosts_by_prio = sorted(hosts, key=operator.itemgetter('prio'))
 
 		try:
@@ -856,10 +903,13 @@ class Connection(CommonConnection, ConnectionHandlers):
 					return host
 
 	def connect(self, data = None):
-		''' Start a connection to the Jabber server.
-		Returns connection, and connection type ('tls', 'ssl', 'plain', '')
-		data MUST contain hostname, usessl, proxy, use_custom_host,
-		custom_host (if use_custom_host), custom_port (if use_custom_host)'''
+		"""
+		Start a connection to the Jabber server
+
+		Returns connection, and connection type ('tls', 'ssl', 'plain', '') data
+		MUST contain hostname, usessl, proxy, use_custom_host, custom_host (if
+		use_custom_host), custom_port (if use_custom_host)
+		"""
 		if self.connection:
 			return self.connection, ''
 
@@ -1256,8 +1306,10 @@ class Connection(CommonConnection, ConnectionHandlers):
 			self.connection.send(' ')
 
 	def sendPing(self, pingTo=None):
-		'''Send XMPP Ping (XEP-0199) request. If pingTo is not set, ping is sent
-		to server to detect connection failure at application level.'''
+		"""
+		Send XMPP Ping (XEP-0199) request. If pingTo is not set, ping is sent to
+		server to detect connection failure at application level
+		"""
 		if not self.connection:
 			return
 		id_ = self.connection.getAnID()
@@ -1325,7 +1377,9 @@ class Connection(CommonConnection, ConnectionHandlers):
 		common.xmpp.features_nb.setDefaultPrivacyList(self.connection, listname)
 
 	def build_privacy_rule(self, name, action, order=1):
-		'''Build a Privacy rule stanza for invisibility'''
+		"""
+		Build a Privacy rule stanza for invisibility
+		"""
 		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
 		l = iq.getTag('query').setTag('list', {'name': name})
 		i = l.setTag('item', {'action': action, 'order': str(order)})
@@ -1358,7 +1412,9 @@ class Connection(CommonConnection, ConnectionHandlers):
 		self.connection.send(iq)
 
 	def activate_privacy_rule(self, name):
-		'''activate a privacy rule'''
+		"""
+		Activate a privacy rule
+		"""
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
@@ -1534,7 +1590,9 @@ class Connection(CommonConnection, ConnectionHandlers):
 			original_message=original_message, delayed=delayed, callback=cb)
 
 	def send_contacts(self, contacts, jid):
-		'''Send contacts with RosterX (Xep-0144)'''
+		"""
+		Send contacts with RosterX (Xep-0144)
+		"""
 		if not self.connection:
 			return
 		if len(contacts) == 1:
@@ -1553,7 +1611,9 @@ class Connection(CommonConnection, ConnectionHandlers):
 		self.connection.send(msg_iq)
 
 	def send_stanza(self, stanza):
-		''' send a stanza untouched '''
+		"""
+		Send a stanza untouched
+		"""
 		if not self.connection:
 			return
 		self.connection.send(stanza)
@@ -1573,7 +1633,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 		self.connection.send(p)
 
 	def request_subscription(self, jid, msg = '', name = '', groups = [],
-	auto_auth = False, user_nick = ''):
+			auto_auth = False, user_nick = ''):
 		if not self.connection:
 			return
 		log.debug('subscription request for %s' % jid)
@@ -1677,8 +1737,10 @@ class Connection(CommonConnection, ConnectionHandlers):
 		common.xmpp.features_nb.getRegInfo(con, self._hostname)
 
 	def request_last_status_time(self, jid, resource, groupchat_jid=None):
-		'''groupchat_jid is used when we want to send a request to a real jid
-		and act as if the answer comes from the groupchat_jid'''
+		"""
+		groupchat_jid is used when we want to send a request to a real jid and
+		act as if the answer comes from the groupchat_jid
+		"""
 		if not self.connection:
 			return
 		to_whom_jid = jid
@@ -1694,8 +1756,10 @@ class Connection(CommonConnection, ConnectionHandlers):
 		self.connection.send(iq)
 
 	def request_os_info(self, jid, resource, groupchat_jid=None):
-		'''groupchat_jid is used when we want to send a request to a real jid
-		and act as if the answer comes from the groupchat_jid'''
+		"""
+		groupchat_jid is used when we want to send a request to a real jid and
+		act as if the answer comes from the groupchat_jid
+		"""
 		if not self.connection:
 			return
 		# If we are invisible, do not request
@@ -1715,8 +1779,10 @@ class Connection(CommonConnection, ConnectionHandlers):
 		self.connection.send(iq)
 
 	def request_entity_time(self, jid, resource, groupchat_jid=None):
-		'''groupchat_jid is used when we want to send a request to a real jid
-		and act as if the answer comes from the groupchat_jid'''
+		"""
+		groupchat_jid is used when we want to send a request to a real jid and
+		act as if the answer comes from the groupchat_jid
+		"""
 		if not self.connection:
 			return
 		# If we are invisible, do not request
@@ -1736,7 +1802,9 @@ class Connection(CommonConnection, ConnectionHandlers):
 		self.connection.send(iq)
 
 	def get_settings(self):
-		''' Get Gajim settings as described in XEP 0049 '''
+		"""
+		Get Gajim settings as described in XEP 0049
+		"""
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
@@ -1757,9 +1825,12 @@ class Connection(CommonConnection, ConnectionHandlers):
 			self._request_bookmarks_xml()
 
 	def get_bookmarks(self, storage_type=None):
-		'''Get Bookmarks from storage or PubSub if supported as described in
-		XEP 0048
-		storage_type can be set to xml to force request to xml storage'''
+		"""
+		Get Bookmarks from storage or PubSub if supported as described in XEP
+		0048
+
+		storage_type can be set to xml to force request to xml storage
+		"""
 		if not self.connection:
 			return
 		if self.pubsub_supported and storage_type != 'xml':
@@ -1771,9 +1842,12 @@ class Connection(CommonConnection, ConnectionHandlers):
 			self._request_bookmarks_xml()
 
 	def store_bookmarks(self, storage_type=None):
-		''' Send bookmarks to the storage namespace or PubSub if supported
+		"""
+		Send bookmarks to the storage namespace or PubSub if supported
+
 		storage_type can be set to 'pubsub' or 'xml' so store in only one method
-		else it will be stored on both'''
+		else it will be stored on both
+		"""
 		if not self.connection:
 			return
 		iq = common.xmpp.Node(tag='storage', attrs={'xmlns': 'storage:bookmarks'})
@@ -1815,7 +1889,9 @@ class Connection(CommonConnection, ConnectionHandlers):
 			self.connection.send(iqA)
 
 	def get_annotations(self):
-		'''Get Annonations from storage as described in XEP 0048, and XEP 0145'''
+		"""
+		Get Annonations from storage as described in XEP 0048, and XEP 0145
+		"""
 		self.annotations = {}
 		if not self.connection:
 			return
@@ -1825,7 +1901,9 @@ class Connection(CommonConnection, ConnectionHandlers):
 		self.connection.send(iq)
 
 	def store_annotations(self):
-		'''Set Annonations in private storage as described in XEP 0048, and XEP 0145'''
+		"""
+		Set Annonations in private storage as described in XEP 0048, and XEP 0145
+		"""
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='set')
@@ -1840,7 +1918,9 @@ class Connection(CommonConnection, ConnectionHandlers):
 
 
 	def get_metacontacts(self):
-		'''Get metacontacts list from storage as described in XEP 0049'''
+		"""
+		Get metacontacts list from storage as described in XEP 0049
+		"""
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='get')
@@ -1852,7 +1932,9 @@ class Connection(CommonConnection, ConnectionHandlers):
 		self.connection.send(iq)
 
 	def store_metacontacts(self, tags_list):
-		''' Send meta contacts to the storage namespace '''
+		"""
+		Send meta contacts to the storage namespace
+		"""
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ='set')
@@ -2000,16 +2082,20 @@ class Connection(CommonConnection, ConnectionHandlers):
 		self.connection.send(p)
 
 	def gc_got_disconnected(self, room_jid):
-		''' A groupchat got disconnected. This can be or purpose or not.
+		"""
+		A groupchat got disconnected. This can be or purpose or not
+
 		Save the time we quit to avoid duplicate logs AND be faster than get that
 		date from DB. Save it in mem AND in a small table (with fast access)
-		'''
+		"""
 		log_time = time_time()
 		self.last_history_time[room_jid] = log_time
 		gajim.logger.set_room_last_message_time(room_jid, log_time)
 
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
-		'''role is for all the life of the room so it's based on nick'''
+		"""
+		Role is for all the life of the room so it's based on nick
+		"""
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
@@ -2022,7 +2108,9 @@ class Connection(CommonConnection, ConnectionHandlers):
 		self.connection.send(iq)
 
 	def gc_set_affiliation(self, room_jid, jid, affiliation, reason = ''):
-		'''affiliation is for all the life of the room so it's based on jid'''
+		"""
+		Affiliation is for all the life of the room so it's based on jid
+		"""
 		if not self.connection:
 			return
 		iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
@@ -2117,7 +2205,9 @@ class Connection(CommonConnection, ConnectionHandlers):
 			_on_unregister_account_connect(self.connection)
 
 	def send_invite(self, room, to, reason='', continue_tag=False):
-		'''sends invitation'''
+		"""
+		Send invitation
+		"""
 		message=common.xmpp.Message(to = room)
 		c = message.addChild(name = 'x', namespace = common.xmpp.NS_MUC_USER)
 		c = c.addChild(name = 'invite', attrs={'to' : to})
