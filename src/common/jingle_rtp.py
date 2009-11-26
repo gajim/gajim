@@ -121,7 +121,7 @@ class JingleRTPContent(JingleContent):
 	def _stop_dtmf(self):
 		self.p2psession.stop_telephony_event(farsight.DTMF_METHOD_RTP_RFC4733)
 
-	def _fillContent(self, content):
+	def _fill_content(self, content):
 		content.addChild(xmpp.NS_JINGLE_RTP + ' description',
 			attrs={'media': self.media}, payload=self.iter_codecs())
 

@@ -105,7 +105,7 @@ class ConnectionJingle(object):
 
 		raise xmpp.NodeProcessed
 
-	def startVoIP(self, jid):
+	def start_audio(self, jid):
 		if self.get_jingle_session(jid, media='audio'):
 			return self.get_jingle_session(jid, media='audio').sid
 		jingle = self.get_jingle_session(jid, media='video')
@@ -118,7 +118,7 @@ class ConnectionJingle(object):
 			jingle.start_session()
 		return jingle.sid
 
-	def startVideoIP(self, jid):
+	def start_video(self, jid):
 		if self.get_jingle_session(jid, media='video'):
 			return self.get_jingle_session(jid, media='video').sid
 		jingle = self.get_jingle_session(jid, media='audio')

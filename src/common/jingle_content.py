@@ -66,10 +66,10 @@ class JingleContent(object):
 			'iq-result': [],
 			'iq-error': [],
 			# these are called when *we* sent these stanzas
-			'content-accept-sent': [self.__fillJingleStanza],
-			'content-add-sent': [self.__fillJingleStanza],
-			'session-initiate-sent': [self.__fillJingleStanza],
-			'session-accept-sent': [self.__fillJingleStanza],
+			'content-accept-sent': [self.__fill_jingle_stanza],
+			'content-add-sent': [self.__fill_jingle_stanza],
+			'session-initiate-sent': [self.__fill_jingle_stanza],
+			'session-accept-sent': [self.__fill_jingle_stanza],
 			'session-terminate-sent': [],
 		}
 
@@ -112,11 +112,11 @@ class JingleContent(object):
 		content.addChild(self.transport.make_transport([candidate]))
 		self.session.send_transport_info(content)
 
-	def __fillJingleStanza(self, stanza, content, error, action):
+	def __fill_jingle_stanza(self, stanza, content, error, action):
 		"""
 		Add our things to session-initiate stanza
 		"""
-		self._fillContent(content)
+		self._fill_content(content)
 		self.sent = True
 		content.addChild(node=self.transport.make_transport())
 

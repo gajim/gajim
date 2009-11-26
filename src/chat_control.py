@@ -1510,22 +1510,23 @@ class ChatControl(ChatControlBase):
 	def _update_jingle(self, jingle_type):
 		if jingle_type not in ('audio', 'video'):
 			return
-		if self.__dict__[jingle_type + '_state'] in (
+		banner_image = getattr(self, '_' + jingle_type + '_banner_image')
+		if getattr(self, jingle_type + '_state') in (
 		self.JINGLE_STATE_NOT_AVAILABLE, self.JINGLE_STATE_AVAILABLE):
-			self.__dict__['_' + jingle_type + '_banner_image'].hide()
+			banner_image.hide()
 		else:
-			self.__dict__['_' + jingle_type + '_banner_image'].show()
+			banner_image.show()
 		if self.audio_state == self.JINGLE_STATE_CONNECTING:
-			self.__dict__['_' + jingle_type + '_banner_image'].set_from_stock(
+			banner_image.set_from_stock(
 				gtk.STOCK_CONVERT, 1)
 		elif self.audio_state == self.JINGLE_STATE_CONNECTION_RECEIVED:
-			self.__dict__['_' + jingle_type + '_banner_image'].set_from_stock(
+			banner_image.set_from_stock(
 				gtk.STOCK_NETWORK, 1)
 		elif self.audio_state == self.JINGLE_STATE_CONNECTED:
-			self.__dict__['_' + jingle_type + '_banner_image'].set_from_stock(
+			banner_image.set_from_stock(
 				gtk.STOCK_CONNECT, 1)
 		elif self.audio_state == self.JINGLE_STATE_ERROR:
-			self.__dict__['_' + jingle_type + '_banner_image'].set_from_stock(
+			banner_image.set_from_stock(
 				gtk.STOCK_DIALOG_WARNING, 1)
 		self.update_toolbar()
 
@@ -1566,27 +1567,27 @@ class ChatControl(ChatControlBase):
 
 		if state in states:
 			jingle_state = states[state]
-			if self.__dict__[jingle_type + '_state'] == jingle_state:
+			if getattr(self, jingle_type + '_state') == jingle_state:
 				return
-			self.__dict__[jingle_type + '_state'] = jingle_state
+			setattr(self, jingle_type + '_state', jingle_state)
 
 		# Destroy existing session with the user when he signs off
 		# We need to do that before modifying the sid
 		if state == 'not_available':
 			gajim.connections[self.account].delete_jingle_session(
-				self.contact.get_full_jid(), self.__dict__[jingle_type + '_sid'])
+				self.contact.get_full_jid(), getattr(self, jingle_type + '_sid'))
 
 		if state in ('not_available', 'available', 'stop'):
-			self.__dict__[jingle_type + '_sid'] = None
+			setattr(self, jingle_type + '_sid', None)
 		if state in ('connection_received', 'connecting'):
-			self.__dict__[jingle_type + '_sid'] = sid
+			setattr(self, jingle_type + '_sid', sid)
 
 		if state in ('connecting', 'connected', 'connection_received'):
-			self.__dict__['_' + jingle_type + '_button'].set_active(True)
+			getattr(self, '_' + jingle_type + '_button').set_active(True)
 		elif state in ('not_available', 'stop'):
-			self.__dict__['_' + jingle_type + '_button'].set_active(False)
+			getattr(self, '_' + jingle_type + '_button').set_active(False)
 
-		eval('self.update_' + jingle_type)()
+		getattr(self, 'update_' + jingle_type)()
 
 	def set_audio_state(self, state, sid=None, reason=None):
 		self._set_jingle_state('audio', state, sid=sid, reason=reason)
@@ -1799,45 +1800,32 @@ class ChatControl(ChatControlBase):
 		banner_name_label.set_markup(label_text)
 		banner_name_label.set_tooltip_text(label_tooltip)
 
-	def on_audio_button_toggled(self, widget):
+	def on_jingle_button_toggled(self, widget, jingle_type):
+		path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps', '%s_%s.png'
+			% ({'audio': 'mic', 'video': 'cam'}[jingle_type],
+				{True: 'active', False: 'inactive'}[widget.get_active()]))
+
 		if widget.get_active():
-			path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
-				'mic_active.png')
-			if self.audio_state == self.JINGLE_STATE_AVAILABLE:
-				sid = gajim.connections[self.account].startVoIP(
-					self.contact.get_full_jid())
-				self.set_audio_state('connecting', sid)
+			if getattr(self, jingle_type + '_state') == self.JINGLE_STATE_AVAILABLE:
+				sid = getattr(gajim.connections[self.account],
+					'start_' + jingle_type)(self.contact.get_full_jid())
+				getattr(self, 'set_' + jingle_type + '_state')('connecting', sid)
 		else:
-			path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
-				'mic_inactive.png')
 			session = gajim.connections[self.account].get_jingle_session(
-				self.contact.get_full_jid(), self.audio_sid)
+				self.contact.get_full_jid(), getattr(self, jingle_type + '_sid'))
 			if session:
-				content = session.get_content('audio')
+				content = session.get_content(jingle_type)
 				if content:
 					session.remove_content(content.creator, content.name)
-		img = self._audio_button.get_property('image')
+
+		img = getattr(self, '_' + jingle_type + '_button').get_property('image')
 		img.set_from_file(path_to_img)
 
+	def on_audio_button_toggled(self, widget):
+		self.on_jingle_button_toggled(widget, 'audio')
+
 	def on_video_button_toggled(self, widget):
-		if widget.get_active():
-			path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
-				'cam_active.png')
-			if self.video_state == self.JINGLE_STATE_AVAILABLE:
-				sid = gajim.connections[self.account].startVideoIP(
-					self.contact.get_full_jid())
-				self.set_video_state('connecting', sid)
-		else:
-			path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
-				'cam_inactive.png')
-			session = gajim.connections[self.account].get_jingle_session(
-				self.contact.get_full_jid(), self.video_sid)
-			if session:
-				content = session.get_content('video')
-				if content:
-					session.remove_content(content.creator, content.name)
-		img = self._video_button.get_property('image')
-		img.set_from_file(path_to_img)
+		self.on_jingle_button_toggled(widget, 'video')
 
 	def _toggle_gpg(self):
 		if not self.gpg_is_active and not self.contact.keyID:
