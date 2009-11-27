@@ -305,7 +305,6 @@ class IdleQueue:
 		Execute and remove alarm callbacks and execute func() or read_timeout()
 		for plugged objects if specified time has ellapsed
 		"""
-		log.info('check time evs')
 		current_time = self.current_time()
 
 		for fd, timeouts in self.read_timeouts.items():
