@@ -73,6 +73,7 @@ AC_CONFIG_FILES([
 	data/iconsets/Makefile
 	data/moods/Makefile
 	data/activities/Makefile
+	data/icons/Makefile
 	data/gajim.desktop.in
 	data/defs.py
 	src/Makefile

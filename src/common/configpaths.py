@@ -122,6 +122,7 @@ class ConfigPaths:
 		if not datadir:
 			datadir = u'..'
 		self.add('DATA', os.path.join(datadir, windowsify(u'data')))
+		self.add('ICONS', os.path.join(datadir, windowsify(u'icons')))
 		self.add('HOME', fse(os.path.expanduser('~')))
 		try:
 			self.add('TMP', fse(tempfile.gettempdir()))

@@ -85,6 +85,7 @@ MY_ACTIVITY_ICONSETS_PATH = gajimpaths['MY_ACTIVITY_ICONSETS']
 MY_CACERTS =  gajimpaths['MY_CACERTS']
 TMP = gajimpaths['TMP']
 DATA_DIR = gajimpaths['DATA']
+ICONS_DIR = gajimpaths['ICONS']
 HOME_DIR = gajimpaths['HOME']
 
 try:

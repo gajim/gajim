@@ -1292,7 +1292,7 @@ class ChatControl(ChatControlBase):
 
 		self._send_file_button = self.xml.get_widget('send_file_button')
 		# add a special img for send file button
-		path_to_upload_img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'upload.png')
+		path_to_upload_img = gtkgui_helpers.get_icon_path('gajim-upload')
 		img = gtk.Image()
 		img.set_from_file(path_to_upload_img)
 		self._send_file_button.set_image(img)

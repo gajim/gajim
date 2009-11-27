@@ -61,6 +61,26 @@ gtk.glade.textdomain(i18n.APP)
 screen_w = gtk.gdk.screen_width()
 screen_h = gtk.gdk.screen_height()
 
+gtk_icon_theme = gtk.icon_theme_get_default()
+gtk_icon_theme.append_search_path(gajim.ICONS_DIR)
+
+def get_icon_pixmap(icon_name, size=16):
+	try:
+		return gtk_icon_theme.load_icon(icon_name, size, 0)
+	except gobject.GError, e:
+		log.error('Unable to load icon %s: %s' % (icon_name, str(e)))
+
+def get_icon_path(icon_name, size=16):
+	try:
+		icon_info = gtk_icon_theme.lookup_icon(icon_name, size, 0)
+		if icon_info == None:
+			log.error('Icon not found: %s' % icon_name)
+			return ""
+		else:
+			return icon_info.get_filename()
+	except gobject.GError, e:
+		log.error("Unable to find icon %s: %s" % (icon_name, str(e)))
+
 GLADE_DIR = os.path.join(gajim.DATA_DIR, 'glade')
 def get_glade(file_name, root = None):
 	file_path = os.path.join(GLADE_DIR, file_name)

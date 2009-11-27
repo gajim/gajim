@@ -1,4 +1,4 @@
-SUBDIRS = glade emoticons pixmaps iconsets moods activities
+SUBDIRS = glade emoticons pixmaps iconsets moods activities icons
 @INTLTOOL_DESKTOP_RULE@
 
 desktopdir = $(datadir)/applications
