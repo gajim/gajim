@@ -414,6 +414,26 @@ class PreferencesWindow:
 		buf = self.xml.get_widget('msg_textview').get_buffer()
 		buf.connect('changed', self.on_msg_textview_changed)
 
+		### Style tab ###
+		# Audio
+		def create_av_combobox(opt_name, device_dict):
+			combobox = self.xml.get_widget(opt_name + '_combobox')
+			cell = gtk.CellRendererText()
+			combobox.pack_start(cell, True)
+			combobox.add_attribute(cell, 'text', 0)
+			model = gtk.ListStore(str, str)
+			combobox.set_model(model)
+			i = 0
+			for name in device_dict:
+				model.append([name, device_dict[name]])
+				if gajim.config.get(opt_name + '_device') == name:
+					combobox.set_active(i)
+				i += 1
+
+		create_av_combobox('audio_input', {'test': 'test'})
+		create_av_combobox('audio_output', {'test': 'test'})
+		create_av_combobox('video_input', {'test': 'test'})
+		create_av_combobox('video_output', {'test': 'test'})
 		### Advanced tab ###
 		# open links with
 		if os.name == 'nt':
