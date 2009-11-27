@@ -426,7 +426,7 @@ class PreferencesWindow:
 
 			for index, (name, value) in enumerate(sorted(device_dict.iteritems())):
 				model.append((name, value))
-				if gajim.config.get(opt_name + '_device') == name:
+				if gajim.config.get(opt_name + '_device') == value:
 					combobox.set_active(index)
 
 		create_av_combobox('audio_input', {'test': 'test'})
