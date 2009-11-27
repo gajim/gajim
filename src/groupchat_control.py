@@ -1577,9 +1577,9 @@ class GroupchatControl(ChatControlBase):
 
 		if message != '' or message != '\n':
 			self.save_sent_message(message)
-         
+
 			# Send the message
-			gajim.connections[self.account].send_gc_message(self.room_jid, 
+			gajim.connections[self.account].send_gc_message(self.room_jid,
 				message, xhtml=xhtml)
 			self.msg_textview.get_buffer().set_text('')
 			self.msg_textview.grab_focus()
@@ -2333,7 +2333,9 @@ class GroupchatControl(ChatControlBase):
 			'admin')
 
 	def on_info(self, widget, nick):
-		'''Call vcard_information_window class to display user's information'''
+		"""
+		 Call vcard_information_window class to display user's information
+		"""
 		gc_contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
 		contact = gc_contact.as_contact()
 		if contact.jid in gajim.interface.instances[self.account]['infos']:
