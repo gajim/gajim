@@ -47,14 +47,14 @@ class JingleRTPContent(JingleContent):
 
 		self.candidates_ready = False # True when local candidates are prepared
 
-		self.callbacks['session-initiate'] += [self.__getRemoteCodecsCB]
-		self.callbacks['content-add'] += [self.__getRemoteCodecsCB]
-		self.callbacks['content-accept'] += [self.__getRemoteCodecsCB,
-			self.__contentAcceptCB]
-		self.callbacks['session-accept'] += [self.__getRemoteCodecsCB,
-			self.__contentAcceptCB]
-		self.callbacks['session-accept-sent'] += [self.__contentAcceptCB]
-		self.callbacks['content-accept-sent'] += [self.__contentAcceptCB]
+		self.callbacks['session-initiate'] += [self.__on_remote_codecs]
+		self.callbacks['content-add'] += [self.__on_remote_codecs]
+		self.callbacks['content-accept'] += [self.__on_remote_codecs,
+			self.__on_content_accept]
+		self.callbacks['session-accept'] += [self.__on_remote_codecs,
+			self.__on_content_accept]
+		self.callbacks['session-accept-sent'] += [self.__on_content_accept]
+		self.callbacks['content-accept-sent'] += [self.__on_content_accept]
 		self.callbacks['session-terminate'] += [self.__stop]
 		self.callbacks['session-terminate-sent'] += [self.__stop]
 
@@ -121,7 +121,7 @@ class JingleRTPContent(JingleContent):
 	def _stop_dtmf(self):
 		self.p2psession.stop_telephony_event(farsight.DTMF_METHOD_RTP_RFC4733)
 
-	def _fillContent(self, content):
+	def _fill_content(self, content):
 		content.addChild(xmpp.NS_JINGLE_RTP + ' description',
 			attrs={'media': self.media}, payload=self.iter_codecs())
 
@@ -172,7 +172,7 @@ class JingleRTPContent(JingleContent):
 			else:
 				print name
 
-	def __contentAcceptCB(self, stanza, content, error, action):
+	def __on_content_accept(self, stanza, content, error, action):
 		if self.accepted:
 			if self.transport.remote_candidates:
 				self.p2pstream.set_remote_candidates(self.transport.remote_candidates)
@@ -181,7 +181,7 @@ class JingleRTPContent(JingleContent):
 			self.p2pstream.set_property('direction', farsight.DIRECTION_BOTH)
 			self.session.content_negociated(self.media)
 
-	def __getRemoteCodecsCB(self, stanza, content, error, action):
+	def __on_remote_codecs(self, stanza, content, error, action):
 		''' Get peer codecs from what we get from peer. '''
 		if self.got_codecs:
 			return

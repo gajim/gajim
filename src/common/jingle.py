@@ -86,7 +86,7 @@ class ConnectionJingle(object):
 		id = stanza.getID()
 
 		if (jid, id) in self.__iq_responses.keys():
-			self.__iq_responses[(jid, id)].stanzaCB(stanza)
+			self.__iq_responses[(jid, id)].on_stanza(stanza)
 			del self.__iq_responses[(jid, id)]
 			raise xmpp.NodeProcessed
 
@@ -101,11 +101,11 @@ class ConnectionJingle(object):
 			self.add_jingle(newjingle)
 
 		# we already have such session in dispatcher...
-		self.__sessions[(jid, sid)].stanzaCB(stanza)
+		self.__sessions[(jid, sid)].on_stanza(stanza)
 
 		raise xmpp.NodeProcessed
 
-	def startVoIP(self, jid):
+	def start_audio(self, jid):
 		if self.get_jingle_session(jid, media='audio'):
 			return self.get_jingle_session(jid, media='audio').sid
 		jingle = self.get_jingle_session(jid, media='video')
@@ -118,7 +118,7 @@ class ConnectionJingle(object):
 			jingle.start_session()
 		return jingle.sid
 
-	def startVideoIP(self, jid):
+	def start_video(self, jid):
 		if self.get_jingle_session(jid, media='video'):
 			return self.get_jingle_session(jid, media='video').sid
 		jingle = self.get_jingle_session(jid, media='audio')
