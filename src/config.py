@@ -424,8 +424,8 @@ class PreferencesWindow:
 			model = gtk.ListStore(str, str)
 			combobox.set_model(model)
 
-			for index, (name, value) in enumerate(device_dict.iteritems()):
-				model.append([name, value])
+			for index, (name, value) in enumerate(sorted(device_dict.iteritems())):
+				model.append((name, value))
 				if gajim.config.get(opt_name + '_device') == name:
 					combobox.set_active(index)
 
