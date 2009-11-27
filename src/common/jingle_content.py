@@ -21,8 +21,6 @@ def get_jingle_content(node):
 	namespace = node.getNamespace()
 	if namespace in contents:
 		return contents[namespace](node)
-	else:
-		return None
 
 
 class JingleContent(object):
@@ -74,7 +72,7 @@ class JingleContent(object):
 		}
 
 	def is_ready(self):
-		return (self.accepted and not self.sent)
+		return self.accepted and not self.sent
 
 	def add_remote_candidates(self, candidates):
 		"""

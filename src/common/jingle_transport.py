@@ -23,8 +23,6 @@ def get_jingle_transport(node):
 	namespace = node.getNamespace()
 	if namespace in transports:
 		return transports[namespace]()
-	else:
-		return None
 
 
 class TransportType(object):

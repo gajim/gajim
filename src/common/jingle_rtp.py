@@ -182,7 +182,9 @@ class JingleRTPContent(JingleContent):
 			self.session.content_negociated(self.media)
 
 	def __on_remote_codecs(self, stanza, content, error, action):
-		''' Get peer codecs from what we get from peer. '''
+		"""
+		Get peer codecs from what we get from peer
+		"""
 		if self.got_codecs:
 			return
 
@@ -198,7 +200,7 @@ class JingleRTPContent(JingleContent):
 				codec.iterTags('parameter')]
 			codecs.append(c)
 
-		if len(codecs) > 0:
+		if codecs:
 			# FIXME: Handle this case:
 			# glib.GError: There was no intersection between the remote codecs and
 			# the local ones
@@ -216,7 +218,8 @@ class JingleRTPContent(JingleContent):
 			if codec.optional_params:
 				payload = (xmpp.Node('parameter', {'name': name, 'value': value})
 					for name, value in codec.optional_params)
-			else:	payload = ()
+			else:
+				payload = ()
 			yield xmpp.Node('payload-type', attrs, payload)
 
 	def __stop(self, *things):
@@ -319,7 +322,5 @@ def get_content(desc):
 		return JingleAudio
 	elif desc['media'] == 'video':
 		return JingleVideo
-	else:
-		return None
 
 contents[xmpp.NS_JINGLE_RTP] = get_content

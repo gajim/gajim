@@ -154,7 +154,7 @@ class JingleSession(object):
 
 	def get_content(self, media=None):
 		if media is None:
-			return None
+			return
 
 		for content in self.contents.values():
 			if content.media == media:
@@ -353,7 +353,7 @@ class JingleSession(object):
 	def __on_session_info(self, stanza, jingle, error, action):
 		# TODO: ringing, active, (un)hold, (un)mute
 		payload = jingle.getPayload()
-		if len(payload) > 0:
+		if payload:
 			self.__send_error(stanza, 'feature-not-implemented', 'unsupported-info')
 			raise xmpp.NodeProcessed
 
@@ -367,7 +367,7 @@ class JingleSession(object):
 				self.connection.dispatch('JINGLE_DISCONNECTED',
 					(self.peerjid, self.sid, content.media, 'removed'))
 				content.destroy()
-		if len(self.contents) == 0:
+		if not self.contents:
 			reason = xmpp.Node('reason')
 			reason.setTag('success')
 			self._session_terminate(reason)
@@ -469,7 +469,8 @@ class JingleSession(object):
 		if text:
 			text = '%s (%s)' % (reason, text)
 		else:
-			text = reason#TODO
+			# TODO
+			text = reason
 		self.connection.dispatch('JINGLE_DISCONNECTED',
 			(self.peerjid, self.sid, None, text))
 
@@ -481,7 +482,7 @@ class JingleSession(object):
 			content.on_stanza(stanza, None, error, action)
 
 	def __parse_contents(self, jingle):
-		#TODO: Needs some reworking
+		# TODO: Needs some reworking
 		contents = []
 		contents_rejected = []
 		contents_ok = False
