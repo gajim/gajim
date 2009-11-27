@@ -1336,7 +1336,9 @@ class GroupchatControl(ChatControlBase):
 						'nick': nick,
 						'reason': _('system shutdown') }
 					self.print_conversation(s, 'info', tim=tim, graphics=False)
-				elif 'destroyed' in statusCode: # Room has been destroyed
+				# Room has been destroyed.
+				elif 'destroyed' in statusCode:
+					self.autorejoin = False
 					self.print_conversation(reason, 'info', tim, graphics=False)
 
 			if len(gajim.events.get_events(self.account, jid=fake_jid,
