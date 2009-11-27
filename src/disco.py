@@ -1973,7 +1973,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		self.subscribe_button = None
 		self.unsubscribe_button = None
 
-		gajim.connections[account].send_pb_subscription_query(jid, self._on_xmpp_subscriptions)
+		gajim.connections[account].send_pb_subscription_query(jid, self._on_pep_subscriptions)
 
 	def _create_treemodel(self):
 		"""
@@ -2141,7 +2141,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
 		groupnode = model.get_value(iter_, 1)	# 1 = groupnode
 
-		gajim.connections[self.account].send_pb_subscribe(self.jid, groupnode, self._on_xmpp_subscribe, groupnode)
+		gajim.connections[self.account].send_pb_subscribe(self.jid, groupnode, self._on_pep_subscribe, groupnode)
 
 	def on_unsubscribe_button_clicked(self, widget):
 		"""
@@ -2152,9 +2152,9 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
 		groupnode = model.get_value(iter_, 1) # 1 = groupnode
 
-		gajim.connections[self.account].send_pb_unsubscribe(self.jid, groupnode, self._on_xmpp_unsubscribe, groupnode)
+		gajim.connections[self.account].send_pb_unsubscribe(self.jid, groupnode, self._on_pep_unsubscribe, groupnode)
 
-	def _on_xmpp_subscriptions(self, conn, request):
+	def _on_pep_subscriptions(self, conn, request):
 		"""
 		We got the subscribed groups list stanza. Now, if we already have items
 		on the list, we should actualize them
@@ -2185,7 +2185,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
 		raise xmpp.NodeProcessed
 
-	def _on_xmpp_subscribe(self, conn, request, groupnode):
+	def _on_pep_subscribe(self, conn, request, groupnode):
 		"""
 		We have just subscribed to a node. Update UI
 		"""
@@ -2201,7 +2201,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
 		raise xmpp.NodeProcessed
 
-	def _on_xmpp_unsubscribe(self, conn, request, groupnode):
+	def _on_pep_unsubscribe(self, conn, request, groupnode):
 		"""
 		We have just unsubscribed from a node. Update UI
 		"""
