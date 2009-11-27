@@ -1026,6 +1026,24 @@ class PreferencesWindow:
 	def on_msg_treemodel_row_deleted(self, model, path):
 		self.save_status_messages(model)
 
+	def on_av_combobox_changed(self, combobox, opt_name):
+		model = combobox.get_model()
+		active = combobox.get_active()
+		device = model[active][1].decode('utf-8')
+		gajim.config.set(opt_name + '_device', device)
+
+	def on_audio_input_combobox_changed(self, widget):
+		self.on_av_combobox_changed(widget, 'audio_input')
+
+	def on_audio_output_combobox_changed(self, widget):
+		self.on_av_combobox_changed(widget, 'audio_output')
+
+	def on_video_input_combobox_changed(self, widget):
+		self.on_av_combobox_changed(widget, 'video_input')
+
+	def on_video_output_combobox_changed(self, widget):
+		self.on_av_combobox_changed(widget, 'video_output')
+
 	def on_applications_combobox_changed(self, widget):
 		gajim.config.set('autodetect_browser_mailer', False)
 		if widget.get_active() == 4:

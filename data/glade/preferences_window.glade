@@ -1957,6 +1957,7 @@ $T will be replaced by auto-not-available timeout</property>
                             <child>
                               <widget class="GtkComboBox" id="audio_input_combobox">
                                 <property name="visible">True</property>
+                                <signal name="changed" handler="on_audio_input_combobox_changed"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -1967,6 +1968,7 @@ $T will be replaced by auto-not-available timeout</property>
                             <child>
                               <widget class="GtkComboBox" id="audio_output_combobox">
                                 <property name="visible">True</property>
+                                <signal name="changed" handler="on_audio_output_combobox_changed"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -2059,6 +2061,7 @@ $T will be replaced by auto-not-available timeout</property>
                             <child>
                               <widget class="GtkComboBox" id="video_input_combobox">
                                 <property name="visible">True</property>
+                                <signal name="changed" handler="on_video_input_combobox_changed"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -2069,6 +2072,7 @@ $T will be replaced by auto-not-available timeout</property>
                             <child>
                               <widget class="GtkComboBox" id="video_output_combobox">
                                 <property name="visible">True</property>
+                                <signal name="changed" handler="on_video_output_combobox_changed"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
