@@ -423,12 +423,11 @@ class PreferencesWindow:
 			combobox.add_attribute(cell, 'text', 0)
 			model = gtk.ListStore(str, str)
 			combobox.set_model(model)
-			i = 0
-			for name in device_dict:
-				model.append([name, device_dict[name]])
+
+			for index, (name, value) in enumerate(device_dict.iteritems()):
+				model.append([name, value])
 				if gajim.config.get(opt_name + '_device') == name:
-					combobox.set_active(i)
-				i += 1
+					combobox.set_active(index)
 
 		create_av_combobox('audio_input', {'test': 'test'})
 		create_av_combobox('audio_output', {'test': 'test'})
@@ -867,7 +866,7 @@ class PreferencesWindow:
 		else:
 			font_widget.set_sensitive(True)
 		self.on_preference_widget_font_set(font_widget, 'conversation_font')
-	
+
 	def draw_color_widgets(self):
 		col_to_widget = {'inmsgcolor': 'incoming_nick_colorbutton',
 				'outmsgcolor': 'outgoing_nick_colorbutton',
