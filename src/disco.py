@@ -1973,7 +1973,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		self.subscribe_button = None
 		self.unsubscribe_button = None
 
-		gajim.connections[account].send_pb_subscription_query(jid, self._subscriptionsCB)
+		gajim.connections[account].send_pb_subscription_query(jid, self._on_xmpp_subscriptions)
 
 	def _create_treemodel(self):
 		"""
@@ -2141,7 +2141,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
 		groupnode = model.get_value(iter_, 1)	# 1 = groupnode
 
-		gajim.connections[self.account].send_pb_subscribe(self.jid, groupnode, self._subscribeCB, groupnode)
+		gajim.connections[self.account].send_pb_subscribe(self.jid, groupnode, self._on_xmpp_subscribe, groupnode)
 
 	def on_unsubscribe_button_clicked(self, widget):
 		"""
@@ -2152,9 +2152,9 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
 		groupnode = model.get_value(iter_, 1) # 1 = groupnode
 
-		gajim.connections[self.account].send_pb_unsubscribe(self.jid, groupnode, self._unsubscribeCB, groupnode)
+		gajim.connections[self.account].send_pb_unsubscribe(self.jid, groupnode, self._on_xmpp_unsubscribe, groupnode)
 
-	def _subscriptionsCB(self, conn, request):
+	def _on_xmpp_subscriptions(self, conn, request):
 		"""
 		We got the subscribed groups list stanza. Now, if we already have items
 		on the list, we should actualize them
@@ -2177,15 +2177,15 @@ class DiscussionGroupsBrowser(AgentBrowser):
 			# 3 = insensitive checkbox for subscribed
 			# 4 = subscribed?
 			groupnode = row[1]
-			row[3]=False
-			row[4]=groupnode in groups
+			row[3] = False
+			row[4] = groupnode in groups
 
 		# we now know subscriptions, update button states
 		self.update_actions()
 
 		raise xmpp.NodeProcessed
 
-	def _subscribeCB(self, conn, request, groupnode):
+	def _on_xmpp_subscribe(self, conn, request, groupnode):
 		"""
 		We have just subscribed to a node. Update UI
 		"""
@@ -2194,14 +2194,14 @@ class DiscussionGroupsBrowser(AgentBrowser):
 		model = self.window.services_treeview.get_model()
 		for row in model:
 			if row[1] == groupnode: # 1 = groupnode
-				row[4]=True
+				row[4] = True
 				break
 
 		self.update_actions()
 
 		raise xmpp.NodeProcessed
 
-	def _unsubscribeCB(self, conn, request, groupnode):
+	def _on_xmpp_unsubscribe(self, conn, request, groupnode):
 		"""
 		We have just unsubscribed from a node. Update UI
 		"""
