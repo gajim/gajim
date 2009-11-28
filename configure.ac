@@ -1,5 +1,5 @@
 AC_INIT([Gajim - A Jabber Instant Messager],
-		[0.13],[http://trac.gajim.org/],[gajim])
+		[0.13.1],[http://trac.gajim.org/],[gajim])
 AC_PREREQ([2.59])
 
 AC_CONFIG_HEADER(config.h)

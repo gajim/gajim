@@ -1,3 +1,9 @@
+Gajim 0.13.1 ((28 November 2009)
+
+  * Fix a bug when no account exists and bonjour is not available
+  * Fix a bug when opening advanced option in MUC
+  * Fix a bug when using non-BOSH proxies
+
 Gajim 0.13 (24 November 2009)
 
   * Improve gtkspell (fix memleak)
