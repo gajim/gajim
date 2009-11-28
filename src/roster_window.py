@@ -2351,7 +2351,9 @@ class RosterWindow:
 		self.make_menu()
 
 	def on_edit_menuitem_activate(self, widget):
-		'''need to call make_menu to build profile, avatar item'''
+		"""
+		Need to call make_menu to build profile, avatar item
+		"""
 		self.make_menu()
 
 	def on_bookmark_menuitem_activate(self, widget, account, bookmark):
@@ -3444,7 +3446,6 @@ class RosterWindow:
 		if 'join_gc' in gajim.interface.instances[account]:
 			gajim.interface.instances[account]['join_gc'].window.present()
 		else:
-			# c http://nkour.blogspot.com/2005/05/pythons-init-return-none-doesnt-return.html
 			try:
 				gajim.interface.instances[account]['join_gc'] = \
 					dialogs.JoinGroupchatWindow(account)
@@ -3498,9 +3499,10 @@ class RosterWindow:
 		gajim.interface.edit_own_details(account)
 
 	def on_execute_command(self, widget, contact, account, resource=None):
-		'''Execute command. Full JID needed; if it is other contact,
-		resource is necessary. Widget is unnecessary, only to be
-		able to make this a callback.'''
+		"""
+		Execute command. Full JID needed; if it is other contact, resource is
+		necessary. Widget is unnecessary, only to be able to make this a callback
+		"""
 		jid = contact.jid
 		if resource is not None:
 			jid = jid + u'/' + resource
@@ -5654,15 +5656,22 @@ class RosterWindow:
 		icon = gtk.image_new_from_stock(gtk.STOCK_NEW, gtk.ICON_SIZE_MENU)
 		item.set_image(icon)
 		item.connect('activate', self.on_join_gc_activate, account)
+
+		# Setting CTRL+J to be the shortcut for the fast joining to a conference.
+		ag = gtk.accel_groups_from_object(self.window)[0]
+		item.add_accelerator('activate', ag, gtk.keysyms.j, gtk.gdk.CONTROL_MASK,
+				gtk.ACCEL_VISIBLE)
+
 		gc_sub_menu.append(item)
 
-		# user has at least one bookmark
-		if len(gajim.connections[account].bookmarks) > 0:
-			item = gtk.SeparatorMenuItem() # separator
+		# User has at least one bookmark.
+		if gajim.connections[account].bookmarks:
+			item = gtk.SeparatorMenuItem()
 			gc_sub_menu.append(item)
 
 		for bookmark in gajim.connections[account].bookmarks:
-			item = gtk.MenuItem(bookmark['name'], False) # Do not use underline
+			# Do not use underline.
+			item = gtk.MenuItem(bookmark['name'], False)
 			item.connect('activate', self.on_bookmark_menuitem_activate,
 				account, bookmark)
 			gc_sub_menu.append(item)

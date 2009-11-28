@@ -2112,6 +2112,7 @@ class JoinGroupchatWindow:
 		if self.account and 'join_gc' in gajim.interface.instances[self.account]:
 			# remove us from open windows
 			del gajim.interface.instances[self.account]['join_gc']
+			gajim.interface.roster.window.present()
 
 	def on_join_groupchat_window_key_press_event(self, widget, event):
 		if event.keyval == gtk.keysyms.Escape: # ESCAPE
