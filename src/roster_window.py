@@ -5657,11 +5657,6 @@ class RosterWindow:
 		item.set_image(icon)
 		item.connect('activate', self.on_join_gc_activate, account)
 
-		# Setting CTRL+J to be the shortcut for the fast joining to a conference.
-		ag = gtk.accel_groups_from_object(self.window)[0]
-		item.add_accelerator('activate', ag, gtk.keysyms.j, gtk.gdk.CONTROL_MASK,
-				gtk.ACCEL_VISIBLE)
-
 		gc_sub_menu.append(item)
 
 		# User has at least one bookmark.
@@ -5717,6 +5712,15 @@ class RosterWindow:
 			iters = [model.get_iter(path)]
 		self.show_appropriate_context_menu(event, iters)
 
+		return True
+
+	def on_ctrl_j(self, accel_group, acceleratable, keyval, modifier):
+		"""
+		Bring up the conference join dialog, when CTRL+J accelerator is being
+		activated
+		"""
+		account = gajim.connections.keys()[0]
+		self.on_join_gc_activate(None, account)
 		return True
 
 ################################################################################
@@ -5971,5 +5975,11 @@ class RosterWindow:
 			# Create zeroconf in config file
 			from common.zeroconf import connection_zeroconf
 			connection_zeroconf.ConnectionZeroconf(gajim.ZEROCONF_ACC_NAME)
+
+		# Setting CTRL+J to be the shortcut for bringing up the dialog to join a
+		# conference.
+		accel_group = gtk.accel_groups_from_object(self.window)[0]
+		accel_group.connect_group(gtk.keysyms.j, gtk.gdk.CONTROL_MASK,
+			gtk.ACCEL_VISIBLE, self.on_ctrl_j)
 
 # vim: se ts=3:
