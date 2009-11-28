@@ -59,8 +59,7 @@ AC_SUBST([PYTHON_INCLUDES])
 AC_SUBST([gajim_srcdir], [\${datadir}/\${PACKAGE}/src])
 
 AS_AC_EXPAND(GAJIM_SRCDIR, "${gajim_srcdir}")
-AS_AC_EXPAND(DATADIR, "${datadir}")
-AS_AC_EXPAND(LIBDIR, "${libdir}")
+AS_AC_EXPAND(PKGDATADIR, "${datadir}/${PACKAGE}")
 AS_AC_EXPAND(DOCDIR, "${docdir}")
 AS_AC_EXPAND(LOCALEDIR, "${localedir}")
 
@@ -92,5 +91,6 @@ echo "
     Prefix ........... ${prefix}
     Python modules ... ${GAJIM_SRCDIR}
     Documentation .... ${DOCDIR}
+    Others ........... ${PKGDATADIR}
 *****************************"
 

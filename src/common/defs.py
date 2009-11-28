@@ -24,7 +24,7 @@
 ##
 
 docdir = '../'
-datadir = '../'
+basedir   = '../'
 localedir = '../po'
 
 version = '0.13.0.1-dev'

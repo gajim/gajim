@@ -2,7 +2,7 @@
 # do not edit it!
 docdir = "@DOCDIR@"
 
-datadir = "@DATADIR@"
+basedir = "@PKGDATADIR@"
 
 version = "@VERSION@"
 

@@ -25,6 +25,7 @@
 import os
 import sys
 import tempfile
+import defs
 
 # Note on path and filename encodings:
 #
@@ -116,13 +117,9 @@ class ConfigPaths:
 		for n, p in zip(k, v):
 			self.add_from_root(n, p)
 
-		datadir = ''
-		if u'datadir' in os.environ:
-			datadir = fse(os.environ[u'datadir'])
-		if not datadir:
-			datadir = u'..'
-		self.add('DATA', os.path.join(datadir, windowsify(u'data')))
-		self.add('ICONS', os.path.join(datadir, windowsify(u'icons')))
+		basedir = fse(os.environ.get(u'GAJIM_BASEDIR', defs.basedir))
+		self.add('DATA', os.path.join(basedir, windowsify(u'data')))
+		self.add('ICONS', os.path.join(basedir, windowsify(u'icons')))
 		self.add('HOME', fse(os.path.expanduser('~')))
 		try:
 			self.add('TMP', fse(tempfile.gettempdir()))
