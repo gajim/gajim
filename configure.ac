@@ -56,7 +56,18 @@ AC_SUBST(ACLOCAL_AMFLAGS)
 AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
 AC_SUBST([PYTHON_INCLUDES])
 
+dnl ****
+dnl enable installation in python-2.x/site-packages/gajim
+dnl ****
+AC_ARG_ENABLE(site-packages,
+  [AS_HELP_STRING([--enable-site-packages],
+	[install gajim sources in PYTHONDIR/site-packages/gajim
+instead of DATADIR/gajim/src.])]
+,
+AC_SUBST([gajim_srcdir], [\${pkgpythondir}])
+,
 AC_SUBST([gajim_srcdir], [\${datadir}/\${PACKAGE}/src])
+)
 
 AS_AC_EXPAND(GAJIM_SRCDIR, "${gajim_srcdir}")
 AS_AC_EXPAND(PKGDATADIR, "${datadir}/${PACKAGE}")
