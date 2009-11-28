@@ -32,5 +32,5 @@ fi
 export datadir=@DATADIR@/gajim
 PYTHON_EXEC=@PYTHON@
 
-cd ${datadir}/src
+cd "@GAJIM_SRCDIR@"
 exec ${PYTHON_EXEC} -OO $APP.py "$@"

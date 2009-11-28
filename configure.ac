@@ -56,6 +56,9 @@ AC_SUBST(ACLOCAL_AMFLAGS)
 AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
 AC_SUBST([PYTHON_INCLUDES])
 
+AC_SUBST([gajim_srcdir], [\${datadir}/\${PACKAGE}/src])
+
+AS_AC_EXPAND(GAJIM_SRCDIR, "${gajim_srcdir}")
 AS_AC_EXPAND(DATADIR, "${datadir}")
 AS_AC_EXPAND(LIBDIR, "${libdir}")
 AS_AC_EXPAND(DOCDIR, "${docdir}")
@@ -83,3 +86,11 @@ AC_CONFIG_FILES([
 	po/Makefile.in
 ])
 AC_OUTPUT
+echo "
+*****************************
+  Installation:
+    Prefix ........... ${prefix}
+    Python modules ... ${GAJIM_SRCDIR}
+    Documentation .... ${DOCDIR}
+*****************************"
+
