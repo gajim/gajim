@@ -5980,6 +5980,6 @@ class RosterWindow:
 		# conference.
 		accel_group = gtk.accel_groups_from_object(self.window)[0]
 		accel_group.connect_group(gtk.keysyms.j, gtk.gdk.CONTROL_MASK,
-			gtk.ACCEL_VISIBLE, self.on_ctrl_j)
+			gtk.ACCEL_MASK, self.on_ctrl_j)
 
 # vim: se ts=3:
