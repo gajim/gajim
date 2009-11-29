@@ -272,7 +272,7 @@ class Config:
 		'ask_offline_status_on_connection': [ opt_bool, False, _('Ask offline status message to all offline contacts when connection to an accoutn is established. WARNING: This causes a lot of requests to be sent!') ],
 		'shell_like_completion': [ opt_bool, False, _('If True, completion in groupchats will be like a shell auto-completion')],
 		'show_self_contact': [opt_str, 'when_other_resource', _('When is self contact row displayed. Can be "always", "when_other_resource" or "never"'), True],
-		'audio_input_device': [opt_str, 'autoaudiosrc volume name=gajim_vol'],
+		'audio_input_device': [opt_str, 'autoaudiosrc ! volume name=gajim_vol'],
 		'audio_output_device': [opt_str, 'autoaudiosink'],
 		'video_input_device': [opt_str, 'autovideosrc ! videoscale ! ffmpegcolorspace'],
 		'video_output_device': [opt_str, 'autovideosink'],
