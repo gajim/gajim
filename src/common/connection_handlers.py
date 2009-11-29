@@ -1097,9 +1097,6 @@ class ConnectionVcard:
 			j = gajim.get_jid_from_account(self.name)
 		self.awaiting_answers[id_] = (VCARD_ARRIVED, j, groupchat_jid)
 		if groupchat_jid:
-			room_jid = gajim.get_room_and_nick_from_fjid(groupchat_jid)[0]
-			if not room_jid in self.room_jids:
-				self.room_jids.append(room_jid)
 			self.groupchat_jids[id_] = groupchat_jid
 		self.connection.send(iq)
 
