@@ -19,6 +19,7 @@ import gobject
 
 import xmpp
 import farsight, gst
+from glib import GError
 
 import gajim
 
@@ -35,12 +36,12 @@ class JingleRTPContent(JingleContent):
 		self._dtmf_running = False
 		self.farsight_media = {'audio': farsight.MEDIA_TYPE_AUDIO,
 								'video': farsight.MEDIA_TYPE_VIDEO}[media]
-		self.got_codecs = False
 
 		self.candidates_ready = False # True when local candidates are prepared
 
 		self.callbacks['session-initiate'] += [self.__on_remote_codecs]
 		self.callbacks['content-add'] += [self.__on_remote_codecs]
+		self.callbacks['description-info'] += [self.__on_remote_codecs]
 		self.callbacks['content-accept'] += [self.__on_remote_codecs,
 			self.__on_content_accept]
 		self.callbacks['session-accept'] += [self.__on_remote_codecs,
@@ -177,8 +178,6 @@ class JingleRTPContent(JingleContent):
 		"""
 		Get peer codecs from what we get from peer
 		"""
-		if self.got_codecs:
-			return
 
 		codecs = []
 		for codec in content.getTag('description').iterTags('payload-type'):
@@ -197,7 +196,6 @@ class JingleRTPContent(JingleContent):
 			# glib.GError: There was no intersection between the remote codecs and
 			# the local ones
 			self.p2pstream.set_remote_codecs(codecs)
-			self.got_codecs = True
 
 	def iter_codecs(self):
 		codecs = self.p2psession.get_property('codecs')
@@ -256,14 +254,14 @@ class JingleAudio(JingleRTPContent):
 		try:
 			src_bin = gst.parse_bin_from_description('%s ! audioconvert'
 				% gajim.config.get('audio_input_device'), True)
-		except:
+		except GError:
 			self.session.connection.dispatch('ERROR', (_("Audio configuration error"),
 				_("Couldn't setup audio input. Check your audio configuration.")))
 
 		try:
 			self.sink = gst.parse_bin_from_description('audioconvert ! %s'
 				% gajim.config.get('audio_output_device'), True)
-		except:
+		except GError:
 			self.session.connection.dispatch('ERROR', (_("Audio configuration error"),
 				_("Couldn't setup audio output. Check your audio configuration.")))
 
@@ -296,7 +294,7 @@ class JingleVideo(JingleRTPContent):
 		try:
 			src_bin = gst.parse_bin_from_description('%s ! videoscale ! ffmpegcolorspace'
 				% gajim.config.get('video_input_device'), True)
-		except:
+		except GError:
 			self.session.connection.dispatch('ERROR', (_("Video configuration error"),
 				_("Couldn't setup video input. Check your video configuration.")))
 		#caps = gst.element_factory_make('capsfilter')
@@ -308,7 +306,7 @@ class JingleVideo(JingleRTPContent):
 		try:
 			self.sink = gst.parse_bin_from_description('videoscale ! ffmpegcolorspace ! %s'
 				% gajim.config.get('video_output_device'), True)
-		except:
+		except GError:
 			self.session.connection.dispatch('ERROR', (_("Video configuration error"),
 				_("Couldn't setup video output. Check your video configuration.")))
 		self.pipeline.add(self.sink)

@@ -21,7 +21,7 @@ Handles Jingle sessions (XEP 0166)
 # * security preconditions
 # * actions:
 #   - content-modify
-#   - description-info, session-info
+#   - session-info
 #   - security-info
 #   - transport-accept, transport-reject
 #   - Tie-breaking
