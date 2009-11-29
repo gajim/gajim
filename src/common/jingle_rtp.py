@@ -20,18 +20,10 @@ import gobject
 import xmpp
 import farsight, gst
 
+import gajim
+
 from jingle_transport import JingleTransportICEUDP
 from jingle_content import contents, JingleContent
-
-# TODO: Will that be even used?
-def get_first_gst_element(elements):
-	"""
-	Return, if it exists, the first available element of the list
-	"""
-	for name in elements:
-		factory = gst.element_factory_find(name)
-		if factory:
-			return factory.create()
 
 
 class JingleRTPContent(JingleContent):
@@ -260,25 +252,25 @@ class JingleAudio(JingleRTPContent):
 		self.p2psession.set_codec_preferences(codecs)
 
 		# the local parts
-		# TODO: use gconfaudiosink?
-		# sink = get_first_gst_element(['alsasink', 'osssink', 'autoaudiosink'])
-		self.sink = gst.element_factory_make('alsasink')
-		self.sink.set_property('sync', False)
-		#sink.set_property('latency-time', 20000)
-		#sink.set_property('buffer-time', 80000)
+		try:
+			self.sink = gst.parse_bin_from_description(gajim.config.get('audio_output_device'), True)
+		except:
+			self.session.connection.dispatch('ERROR', (_("Audio configuration error"),
+				_("Couldn't setup audio output. Check your audio configuration.")))
 
-		# TODO: use gconfaudiosrc?
-		src_mic = gst.element_factory_make('alsasrc')
-		src_mic.set_property('blocksize', 320)
+		try:
+			src_bin = gst.parse_bin_from_description(gajim.config.get('audio_input_device'), True)
+		except:
+			self.session.connection.dispatch('ERROR', (_("Audio configuration error"),
+				_("Couldn't setup audio input. Check your audio configuration.")))
 
-		self.mic_volume = gst.element_factory_make('volume')
+		self.mic_volume = src_bin.get_by_name('gajim_vol')
 		self.mic_volume.set_property('volume', 1)
 
 		# link gst elements
-		self.pipeline.add(self.sink, src_mic, self.mic_volume)
-		src_mic.link(self.mic_volume)
+		self.pipeline.add(self.sink, src_bin)
 
-		self.mic_volume.get_pad('src').link(self.p2psession.get_property(
+		src_bin.get_pad('src').link(self.p2psession.get_property(
 			'sink-pad'))
 		self.p2pstream.connect('src-pad-added', self._on_src_pad_added)
 
@@ -296,21 +288,27 @@ class JingleVideo(JingleRTPContent):
 		# sometimes, one window won't show up,
 		# sometimes it'll freeze...
 		JingleRTPContent.setup_stream(self)
+
 		# the local parts
-		src_vid = gst.element_factory_make('videotestsrc')
-		src_vid.set_property('is-live', True)
-		videoscale = gst.element_factory_make('videoscale')
+		try:
+			src_bin = gst.parse_bin_from_description(gajim.config.get('video_input_device'), True)
+		except:
+			self.session.connection.dispatch('ERROR', (_("Video configuration error"),
+				_("Couldn't setup video input. Check your video configuration.")))
 		caps = gst.element_factory_make('capsfilter')
 		caps.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
-		colorspace = gst.element_factory_make('ffmpegcolorspace')
 
-		self.pipeline.add(src_vid, videoscale, caps, colorspace)
-		gst.element_link_many(src_vid, videoscale, caps, colorspace)
+		self.pipeline.add(src_bin, caps)
+		src_bin.link(caps)
 
-		self.sink = gst.element_factory_make('xvimagesink')
+		try:
+			self.sink = gst.parse_bin_from_description(gajim.config.get('video_output_device'), True)
+		except:
+			self.session.connection.dispatch('ERROR', (_("Video configuration error"),
+				_("Couldn't setup video output. Check your video configuration.")))
 		self.pipeline.add(self.sink)
 
-		colorspace.get_pad('src').link(self.p2psession.get_property('sink-pad'))
+		caps.get_pad('src').link(self.p2psession.get_property('sink-pad'))
 		self.p2pstream.connect('src-pad-added', self._on_src_pad_added)
 
 		# The following is needed for farsight to process ICE requests:

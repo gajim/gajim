@@ -59,6 +59,8 @@ from common.zeroconf import connection_zeroconf
 from common import dataforms
 from common import GnuPG
 
+from common.multimedia_helpers import AudioInputManager, AudioOutputManager, VideoInputManager, VideoOutputManager
+
 from common.exceptions import GajimGeneralException
 
 #---------- PreferencesWindow class -------------#
@@ -429,10 +431,10 @@ class PreferencesWindow:
 				if gajim.config.get(opt_name + '_device') == value:
 					combobox.set_active(index)
 
-		create_av_combobox('audio_input', {'test': 'test'})
-		create_av_combobox('audio_output', {'test': 'test'})
-		create_av_combobox('video_input', {'test': 'test'})
-		create_av_combobox('video_output', {'test': 'test'})
+		create_av_combobox('audio_input', AudioInputManager().get_devices())
+		create_av_combobox('audio_output', AudioOutputManager().get_devices())
+		create_av_combobox('video_input', VideoInputManager().get_devices())
+		create_av_combobox('video_output', VideoOutputManager().get_devices())
 		### Advanced tab ###
 		# open links with
 		if os.name == 'nt':
