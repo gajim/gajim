@@ -146,11 +146,7 @@ class PrivateChatControl(ChatControl):
 		"""
 		Call this method to send the message
 		"""
-		if not message:
-			return
-
 		message = helpers.remove_invalid_xml_chars(message)
-
 		if not message:
 			return
 
@@ -158,7 +154,7 @@ class PrivateChatControl(ChatControl):
 		# the recipient did not go away
 		contact = gajim.contacts.get_first_contact_from_jid(self.account,
 			self.contact.jid)
-		if contact is None:
+		if not contact:
 			# contact was from pm in MUC
 			room, nick = gajim.get_room_and_nick_from_fjid(self.contact.jid)
 			gc_contact = gajim.contacts.get_gc_contact(self.account, room, nick)
