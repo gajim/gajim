@@ -252,17 +252,20 @@ class JingleAudio(JingleRTPContent):
 		self.p2psession.set_codec_preferences(codecs)
 
 		# the local parts
+		# TODO: Add queues?
 		try:
-			self.sink = gst.parse_bin_from_description(gajim.config.get('audio_output_device'), True)
-		except:
-			self.session.connection.dispatch('ERROR', (_("Audio configuration error"),
-				_("Couldn't setup audio output. Check your audio configuration.")))
-
-		try:
-			src_bin = gst.parse_bin_from_description(gajim.config.get('audio_input_device'), True)
+			src_bin = gst.parse_bin_from_description('%s ! audioconvert'
+				% gajim.config.get('audio_input_device'), True)
 		except:
 			self.session.connection.dispatch('ERROR', (_("Audio configuration error"),
 				_("Couldn't setup audio input. Check your audio configuration.")))
+
+		try:
+			self.sink = gst.parse_bin_from_description('audioconvert ! %s'
+				% gajim.config.get('audio_output_device'), True)
+		except:
+			self.session.connection.dispatch('ERROR', (_("Audio configuration error"),
+				_("Couldn't setup audio output. Check your audio configuration.")))
 
 		self.mic_volume = src_bin.get_by_name('gajim_vol')
 		self.mic_volume.set_property('volume', 1)
@@ -291,24 +294,26 @@ class JingleVideo(JingleRTPContent):
 
 		# the local parts
 		try:
-			src_bin = gst.parse_bin_from_description(gajim.config.get('video_input_device'), True)
+			src_bin = gst.parse_bin_from_description('%s ! videoscale ! ffmpegcolorspace'
+				% gajim.config.get('video_input_device'), True)
 		except:
 			self.session.connection.dispatch('ERROR', (_("Video configuration error"),
 				_("Couldn't setup video input. Check your video configuration.")))
-		caps = gst.element_factory_make('capsfilter')
-		caps.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
+		#caps = gst.element_factory_make('capsfilter')
+		#caps.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
 
-		self.pipeline.add(src_bin, caps)
-		src_bin.link(caps)
+		self.pipeline.add(src_bin)#, caps)
+		#src_bin.link(caps)
 
 		try:
-			self.sink = gst.parse_bin_from_description(gajim.config.get('video_output_device'), True)
+			self.sink = gst.parse_bin_from_description('videoscale ! ffmpegcolorspace ! %s'
+				% gajim.config.get('video_output_device'), True)
 		except:
 			self.session.connection.dispatch('ERROR', (_("Video configuration error"),
 				_("Couldn't setup video output. Check your video configuration.")))
 		self.pipeline.add(self.sink)
 
-		caps.get_pad('src').link(self.p2psession.get_property('sink-pad'))
+		src_bin.get_pad('src').link(self.p2psession.get_property('sink-pad'))
 		self.p2pstream.connect('src-pad-added', self._on_src_pad_added)
 
 		# The following is needed for farsight to process ICE requests:
