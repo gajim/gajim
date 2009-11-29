@@ -909,16 +909,7 @@ class ConversationTextview(gobject.GObject):
 				self.on_join_group_chat_menuitem_activate, text)
 			self.handlers[id_] = childs[6]
 
-			allow_add = False
 			if self.account:
-				c = gajim.contacts.get_first_contact_from_jid(self.account, text)
-				if c and not gajim.contacts.is_pm_from_contact(self.account, c):
-					if _('Not in Roster') in c.groups:
-						allow_add = True
-				else: # he or she's not at all in the account contacts
-					allow_add = True
-
-			if allow_add:
 				id_ = childs[7].connect('activate', self.on_add_to_roster_activate,
 					text)
 				self.handlers[id_] = childs[7]

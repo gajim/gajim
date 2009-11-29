@@ -28,9 +28,10 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import common.gajim
-import caps
-from account import Account
+
+from common import caps
+from common.account import Account
+import common.gajim 
 
 class XMPPEntity(object):
 	"""
@@ -98,7 +99,7 @@ class Contact(CommonContact):
 
 	def __init__(self, jid, account, name='', groups=[], show='', status='',
 			sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
-			our_chatstate=None, chatstate=None, last_status_time=None, msg_id =
+			our_chatstate=None, chatstate=None, last_status_time=None, msg_id=
 			None, composing_xep=None):
 
 		CommonContact.__init__(self, jid, account, resource, show, status, name,
@@ -256,7 +257,7 @@ class Contacts:
 		account = self._accounts.get(account, account) # Use Account object if available
 		self_contact = self.create_contact(jid=jid, account=account,
 			name=nick, groups=['self_contact'], show=show, status=status,
-			sub='both', ask='none',	priority=priority, keyID=keyID,
+			sub='both', ask='none', 	priority=priority, keyID=keyID,
 			resource=resource)
 		self_contact.pep = conn.pep
 		return self_contact
@@ -377,14 +378,6 @@ class Contacts:
 		Return True if the given jid is a private message jid
 		"""
 		if jid in self._contacts[account]:
-			return False
-		return True
-
-	def is_pm_from_contact(self, account, contact):
-		"""
-		Return True if the given contact is a private message contact
-		"""
-		if isinstance(contact, Contact):
 			return False
 		return True
 
