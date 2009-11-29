@@ -1351,7 +1351,7 @@ class ChatControl(ChatControlBase):
 		# per jid
 		self.show_bigger_avatar_timeout_id = None
 		self.bigger_avatar_window = None
-		self.show_avatar(self.contact.resource)
+		self.show_avatar()
 
 		# chatstate timers and state
 		self.reset_kbd_mouse_timeout_vars()
@@ -1601,11 +1601,7 @@ class ChatControl(ChatControlBase):
 		bigger avatar after 0.5 sec
 		"""
 		jid = self.contact.jid
-		is_fake = False
-		if self.type_id == message_control.TYPE_PM:
-			is_fake = True
-		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid,
-			is_fake)
+		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid)
 		if avatar_pixbuf in ('ask', None):
 			return
 		avatar_w = avatar_pixbuf.get_width()
@@ -1638,8 +1634,7 @@ class ChatControl(ChatControlBase):
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
 			id_ = menuitem.connect('activate',
 				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-				self.contact.jid, self.account, self.contact.get_shown_name() + \
-					'.jpeg')
+				self.contact.jid, self.account, self.contact.get_shown_name())
 			self.handlers[id_] = menuitem
 			menu.append(menuitem)
 			menu.show_all()
@@ -2403,24 +2398,12 @@ class ChatControl(ChatControlBase):
 			# Re-show the small avatar
 			self.show_avatar()
 
-	def show_avatar(self, resource = None):
+	def show_avatar(self):
 		if not gajim.config.get('show_avatar_in_chat'):
 			return
-
-		is_fake = False
-		if self.TYPE_ID == message_control.TYPE_PM:
-			is_fake = True
-			jid_with_resource = self.contact.jid # fake jid
-		else:
-			jid_with_resource = self.contact.jid
-			if resource:
-				jid_with_resource += '/' + resource
-
-		# we assume contact has no avatar
-		scaled_pixbuf = None
-
-		pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid_with_resource,
-			is_fake)
+		
+		jid_with_resource = self.contact.get_full_jid()
+		pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid_with_resource)
 		if pixbuf == 'ask':
 			# we don't have the vcard
 			if self.TYPE_ID == message_control.TYPE_PM:
@@ -2436,8 +2419,10 @@ class ChatControl(ChatControlBase):
 			else:
 				gajim.connections[self.account].request_vcard(jid_with_resource)
 			return
-		if pixbuf is not None:
+		elif pixbuf:
 			scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'chat')
+		else:
+			scaled_pixbuf = None
 
 		image = self.xml.get_widget('avatar_image')
 		image.set_from_pixbuf(scaled_pixbuf)
@@ -2629,11 +2614,8 @@ class ChatControl(ChatControlBase):
 		if not small_avatar.window:
 			# Tab has been closed since we hovered the avatar
 			return
-		is_fake = False
-		if self.type_id == message_control.TYPE_PM:
-			is_fake = True
 		avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(
-			self.contact.jid, is_fake)
+			self.contact.jid)
 		if avatar_pixbuf in ('ask', None):
 			return
 		# Hide the small avatar

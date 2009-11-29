@@ -373,14 +373,6 @@ class Contacts:
 					nbr_total += 1
 		return nbr_online, nbr_total
 
-	def is_pm_from_jid(self, account, jid):
-		"""
-		Return True if the given jid is a private message jid
-		"""
-		if jid in self._contacts[account]:
-			return False
-		return True
-
 	def __getattr__(self, attr_name):
 		# Only called if self has no attr_name
 		if hasattr(self._metacontact_manager, attr_name):

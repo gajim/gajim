@@ -30,6 +30,7 @@
 import xml.sax.saxutils
 import gtk
 import gtk.glade
+import glib
 import gobject
 import pango
 import os
@@ -593,7 +594,7 @@ def get_scaled_pixbuf(pixbuf, kind):
 	scaled_buf = pixbuf.scale_simple(w, h, gtk.gdk.INTERP_HYPER)
 	return scaled_buf
 
-def get_avatar_pixbuf_from_cache(fjid, is_fake_jid = False, use_local = True):
+def get_avatar_pixbuf_from_cache(fjid, use_local=True):
 	"""
 	Check if jid has cached avatar and if that avatar is valid image (can be
 	shown)
@@ -607,9 +608,15 @@ def get_avatar_pixbuf_from_cache(fjid, is_fake_jid = False, use_local = True):
 		gajim.jid_is_transport(jid):
 		# don't show avatar for the transport itself
 		return None
+	
+	room, nick = gajim.get_room_and_nick_from_fjid(jid)
+	if any(room in gajim.contacts.get_gc_list(acc) for acc in gajim.connections):
+		is_groupchat_contact = True
+	else:
+		is_groupchat_contact = False
 
 	puny_jid = helpers.sanitize_filename(jid)
-	if is_fake_jid:
+	if is_groupchat_contact:
 		puny_nick = helpers.sanitize_filename(nick)
 		path = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
 		local_avatar_basepath = os.path.join(gajim.AVATAR_PATH, puny_jid,
@@ -631,7 +638,7 @@ def get_avatar_pixbuf_from_cache(fjid, is_fake_jid = False, use_local = True):
 		return 'ask'
 
 	vcard_dict = gajim.connections.values()[0].get_cached_vcard(fjid,
-		is_fake_jid)
+		is_groupchat_contact)
 	if not vcard_dict: # This can happen if cached vcard is too old
 		return 'ask'
 	if 'PHOTO' not in vcard_dict:
@@ -831,39 +838,33 @@ def get_possible_button_event(event):
 def destroy_widget(widget):
 	widget.destroy()
 
-def on_avatar_save_as_menuitem_activate(widget, jid, account,
-default_name = ''):
+def on_avatar_save_as_menuitem_activate(widget, jid, account, default_name=''):
 	def on_continue(response, file_path):
 		if response < 0:
 			return
-		# Get pixbuf
-		pixbuf = None
-		is_fake = False
-		if account and gajim.contacts.is_pm_from_jid(account, jid):
-			is_fake = True
-		pixbuf = get_avatar_pixbuf_from_cache(jid, is_fake, False)
-		ext = file_path.split('.')[-1]
-		type_ = ''
-		if not ext:
+		pixbuf = get_avatar_pixbuf_from_cache(jid)
+		path, extension = os.path.splitext(file_path)
+		if not extension:
 			# Silently save as Jpeg image
+			image_format = 'jpeg'
 			file_path += '.jpeg'
-			type_ = 'jpeg'
-		elif ext == 'jpg':
-			type_ = 'jpeg'
+		elif extension == 'jpg':
+			image_format = 'jpeg'
 		else:
-			type_ = ext
+			image_format = extension[1:] # remove leading dot
 
 		# Save image
 		try:
-			pixbuf.save(file_path, type_)
-		except Exception:
+			pixbuf.save(file_path, image_format)
+		except glib.GError:
 			if os.path.exists(file_path):
 				os.remove(file_path)
 			new_file_path = '.'.join(file_path.split('.')[:-1]) + '.jpeg'
 			def on_ok(file_path, pixbuf):
 				pixbuf.save(file_path, 'jpeg')
 			dialogs.ConfirmationDialog(_('Extension not supported'),
-				_('Image cannot be saved in %(type)s format. Save as %(new_filename)s?') % {'type': type_, 'new_filename': new_file_path},
+				_('Image cannot be saved in %(type)s format. Save as %(new_filename)s?'
+				) % {'type': image_format, 'new_filename': new_file_path},
 				on_response_ok = (on_ok, new_file_path, pixbuf))
 		else:
 			dialog.destroy()
@@ -905,7 +906,7 @@ default_name = ''):
 		current_folder=gajim.config.get('last_save_dir'), on_response_ok=on_ok,
 		on_response_cancel=on_cancel)
 
-	dialog.set_current_name(default_name)
+	dialog.set_current_name(default_name + '.jpeg')
 	dialog.connect('delete-event', lambda widget, event:
 		on_cancel(widget))
 

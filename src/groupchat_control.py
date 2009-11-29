@@ -1171,8 +1171,8 @@ class GroupchatControl(ChatControlBase):
 		iter_ = self.get_contact_iter(nick)
 		if not iter_:
 			return
-		pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.room_jid + \
-			'/' + nick, True)
+		fake_jid = self.room_jid + '/' + nick
+		pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fake_jid)
 		if pixbuf in ('ask', None):
 			scaled_pixbuf = None
 		else:
@@ -1514,7 +1514,7 @@ class GroupchatControl(ChatControlBase):
 		if gajim.config.get('ask_avatars_on_startup') and \
 		not server.startswith('irc'):
 			fake_jid = self.room_jid + '/' + nick
-			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fake_jid, True)
+			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fake_jid)
 			if pixbuf == 'ask':
 				if j:
 					fjid = j

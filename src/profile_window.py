@@ -183,14 +183,14 @@ class ProfileWindow:
 
 			# Try to get pixbuf
 			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.jid,
-				use_local = False)
+				use_local=False)
 
-			if pixbuf:
+			if pixbuf not in (None, 'ask'):
 				nick = gajim.config.get_per('accounts', self.account, 'name')
 				menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
 				menuitem.connect('activate',
 					gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-					self.jid, None, nick + '.jpeg')
+					self.jid, self.account, nick)
 				menu.append(menuitem)
 			# show clear
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_CLEAR)

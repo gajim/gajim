@@ -1295,10 +1295,9 @@ class RosterWindow:
 		iters = self._get_contact_iter(jid, account, model=self.model)
 		if not iters or not gajim.config.get('show_avatars_in_roster'):
 			return
-		jid = self.model[iters[0]][C_JID]
-		jid = jid.decode('utf-8')
+		jid = self.model[iters[0]][C_JID].decode('utf-8')
 		pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid)
-		if pixbuf is None or pixbuf == 'ask':
+		if pixbuf in (None, 'ask'):
 			scaled_pixbuf = None
 		else:
 			scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
