@@ -541,18 +541,12 @@ class ZeroconfVcardWindow:
 		if not self.contact.status:
 			self.contact.status = ''
 
-		# Request list time status
-	#	gajim.connections[self.account].request_last_status_time(self.contact.jid,
-	#		self.contact.resource)
-
 		self.xml.get_widget('resource_prio_label').set_text(resources)
 		resource_prio_label_eventbox = self.xml.get_widget(
 			'resource_prio_label_eventbox')
 		resource_prio_label_eventbox.set_tooltip_text(uf_resources)
 
 		self.fill_status_label()
-
-	#	gajim.connections[self.account].request_vcard(self.contact.jid, self.is_fake)
 
 	def fill_personal_page(self):
 		contact = gajim.connections[gajim.ZEROCONF_ACC_NAME].roster.getItem(self.contact.jid)
