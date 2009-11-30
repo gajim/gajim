@@ -59,7 +59,12 @@ from common.zeroconf import connection_zeroconf
 from common import dataforms
 from common import GnuPG
 
-from common.multimedia_helpers import AudioInputManager, AudioOutputManager, VideoInputManager, VideoOutputManager
+try:
+	from common.multimedia_helpers import AudioInputManager, AudioOutputManager
+	from common.multimedia_helpers import VideoInputManager, VideoOutputManager
+	HAS_GST = True
+except ImportError:
+	HAS_GST = False
 
 from common.exceptions import GajimGeneralException
 
@@ -431,10 +436,16 @@ class PreferencesWindow:
 				if gajim.config.get(opt_name + '_device') == value:
 					combobox.set_active(index)
 
-		create_av_combobox('audio_input', AudioInputManager().get_devices())
-		create_av_combobox('audio_output', AudioOutputManager().get_devices())
-		create_av_combobox('video_input', VideoInputManager().get_devices())
-		create_av_combobox('video_output', VideoOutputManager().get_devices())
+		if HAS_GST:
+			create_av_combobox('audio_input', AudioInputManager().get_devices())
+			create_av_combobox('audio_output', AudioOutputManager().get_devices())
+			create_av_combobox('video_input', VideoInputManager().get_devices())
+			create_av_combobox('video_output', VideoOutputManager().get_devices())
+		else:
+			for opt_name in ('audio_input', 'audio_output', 'video_input',
+			'video_output'):
+				combobox = self.xml.get_widget(opt_name + '_combobox')
+				combobox.set_sensitive(False)
 		### Advanced tab ###
 		# open links with
 		if os.name == 'nt':
