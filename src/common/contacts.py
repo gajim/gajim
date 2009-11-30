@@ -31,7 +31,7 @@
 
 from common import caps
 from common.account import Account
-import common.gajim 
+import common.gajim
 
 class XMPPEntity(object):
 	"""
@@ -175,9 +175,7 @@ class Contact(CommonContact):
 
 	def is_transport(self):
 		# if not '@' or '@' starts the jid then contact is transport
-		if self.jid.find('@') <= 0:
-			return True
-		return False
+		return self.jid.find('@') <= 0
 
 
 class GC_Contact(CommonContact):
@@ -443,18 +441,14 @@ class Contacts_New():
 		"""
 		Remove all contacts for a given jid
 		"""
-		if jid not in self._contacts:
-			return
-		del self._contacts[jid]
+		if jid in self._contacts:
+			del self._contacts[jid]
 
 	def get_contacts(self, jid):
 		"""
 		Return the list of contact instances for this jid
 		"""
-		if jid in self._contacts:
-			return self._contacts[jid]
-		else:
-			return []
+		return self._contacts.get(jid, [])
 
 	def get_contact(self, jid, resource=None):
 		### WARNING ###
@@ -472,7 +466,6 @@ class Contacts_New():
 			for c in self._contacts[jid]:
 				if c.resource == resource:
 					return c
-		return None
 
 	def iter_contacts(self):
 		for jid in self._contacts.keys():
@@ -492,7 +485,6 @@ class Contacts_New():
 	def get_first_contact_from_jid(self, jid):
 		if jid in self._contacts:
 			return self._contacts[jid][0]
-		return None
 
 	def get_contacts_from_group(self, group):
 		"""
@@ -538,9 +530,8 @@ class GC_Contacts():
 			del self._rooms[gc_contact.room_jid]
 
 	def remove_room(self, room_jid):
-		if room_jid not in self._rooms:
-			return
-		del self._rooms[room_jid]
+		if room_jid in self._rooms:
+			del self._rooms[room_jid]
 
 	def get_gc_list(self):
 		return self._rooms.keys()
@@ -643,7 +634,7 @@ class MetacontactManager():
 
 	def remove_metacontact(self, account, jid):
 		if not account in self._metacontacts_tags:
-			return None
+			return
 
 		found = None
 		for tag in self._metacontacts_tags[account]:
