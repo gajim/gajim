@@ -421,8 +421,7 @@ class PreferencesWindow:
 		buf = self.xml.get_widget('msg_textview').get_buffer()
 		buf.connect('changed', self.on_msg_textview_changed)
 
-		### Style tab ###
-		# Audio
+		### Audio / Video tab ###
 		def create_av_combobox(opt_name, device_dict):
 			combobox = self.xml.get_widget(opt_name + '_combobox')
 			cell = gtk.CellRendererText()
@@ -446,6 +445,11 @@ class PreferencesWindow:
 			'video_output'):
 				combobox = self.xml.get_widget(opt_name + '_combobox')
 				combobox.set_sensitive(False)
+
+		# Connection
+		entry = self.xml.get_widget('stun_server_entry')
+		entry.set_text(gajim.config.get('stun_server'))
+
 		### Advanced tab ###
 		# open links with
 		if os.name == 'nt':
@@ -1056,6 +1060,9 @@ class PreferencesWindow:
 
 	def on_video_output_combobox_changed(self, widget):
 		self.on_av_combobox_changed(widget, 'video_output')
+
+	def stun_server_entry_changed(self, widget):
+		gajim.config.set('stun_server', widget.get_text().decode('utf-8'))
 
 	def on_applications_combobox_changed(self, widget):
 		gajim.config.set('autodetect_browser_mailer', False)

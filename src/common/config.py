@@ -276,6 +276,7 @@ class Config:
 		'audio_output_device': [opt_str, 'autoaudiosink'],
 		'video_input_device': [opt_str, 'autovideosrc ! videoscale ! ffmpegcolorspace'],
 		'video_output_device': [opt_str, 'autovideosink'],
+		'stun_server': [opt_str, '', _('STUN server to use when using jingle')],
 	}
 
 	__options_per_key = {

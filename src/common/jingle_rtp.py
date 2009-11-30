@@ -70,8 +70,16 @@ class JingleRTPContent(JingleContent):
 		# FIXME: Consider a workaround, here...
 		# pidgin and telepathy-gabble don't follow the XEP, and it won't work
 		# due to bad controlling-mode
-		params = {'controlling-mode': self.session.weinitiate,# 'debug': False}
-			'stun-ip': '69.0.208.27', 'debug': False}
+		params = {'controlling-mode': self.session.weinitiate, 'debug': False}
+		stun_server = gajim.config.get('stun-server')
+		if stun_server:
+			try:
+				ip = socket.getaddrinfo(stun_server, 0, socket.AF_UNSPEC,
+					socket.SOCK_STREAM)[0][4][0]
+			except socket.gaierror, (errnum, errstr):
+				log.warn('Lookup of stun ip failed: %s' % errstr)
+			else:
+				params['stun-ip'] =  ip
 
 		self.p2pstream = self.p2psession.new_stream(participant,
 			farsight.DIRECTION_RECV, 'nice', params)
