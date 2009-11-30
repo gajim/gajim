@@ -20,13 +20,15 @@ class BaseError(Exception):
     """
 
     def __init__(self, message, command=None, name=None):
+        self.message = message
+
         self.command = command
         self.name = name
 
         if command and not name:
             self.name = command.first_name
 
-        super(BaseError, self).__init__(message)
+        super(BaseError, self).__init__()
 
 class DefinitionError(BaseError):
     """
