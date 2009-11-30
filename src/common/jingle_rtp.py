@@ -60,7 +60,7 @@ class JingleRTPContent(JingleContent):
 
 		# conference
 		self.conference = gst.element_factory_make('fsrtpconference')
-		self.conference.set_property("sdes-cname", self.session.ourjid)
+		self.conference.set_property('sdes-cname', self.session.ourjid)
 		self.pipeline.add(self.conference)
 		self.funnel = None
 
@@ -88,6 +88,16 @@ class JingleRTPContent(JingleContent):
 		return (JingleContent.is_ready(self) and self.candidates_ready
 			and self.p2psession.get_property('codecs-ready'))
 
+	def make_bin_from_config(self, config_key, pipeline, text):
+		try:
+			bin = gst.parse_bin_from_description(pipeline
+				% gajim.config.get(config_key), True)
+		except GError, error_str:
+			self.session.connection.dispatch('ERROR',
+				(_("%s configuration error") % text.capitalize(),
+				_("Couldn't setup %s. Check your configuration.\n\nError was:\n%s")
+					% (text, error_str)))
+
 	def add_remote_candidates(self, candidates):
 		JingleContent.add_remote_candidates(self, candidates)
 		# FIXME: connectivity should not be etablished yet
@@ -96,6 +106,7 @@ class JingleRTPContent(JingleContent):
 			self.p2pstream.set_remote_candidates(candidates)
 
 	def batch_dtmf(self, events):
+		""" Send several DTMF tones. """
 		if self._dtmf_running:
 			raise Exception # TODO: Proper exception
 		self._dtmf_running = True
@@ -259,19 +270,11 @@ class JingleAudio(JingleRTPContent):
 
 		# the local parts
 		# TODO: Add queues?
-		try:
-			src_bin = gst.parse_bin_from_description('%s ! audioconvert'
-				% gajim.config.get('audio_input_device'), True)
-		except GError:
-			self.session.connection.dispatch('ERROR', (_("Audio configuration error"),
-				_("Couldn't setup audio input. Check your audio configuration.")))
+		src_bin = self.make_bin_from_config('audio_input_device',
+			'%s ! audioconvert', _("audio input"))
 
-		try:
-			self.sink = gst.parse_bin_from_description('audioconvert ! %s'
-				% gajim.config.get('audio_output_device'), True)
-		except GError:
-			self.session.connection.dispatch('ERROR', (_("Audio configuration error"),
-				_("Couldn't setup audio output. Check your audio configuration.")))
+		self.sink = self.make_bin_from_config('audio_output_device',
+			'audioconvert ! %s', _("audio output"))
 
 		self.mic_volume = src_bin.get_by_name('gajim_vol')
 		self.mic_volume.set_property('volume', 1)
@@ -299,24 +302,16 @@ class JingleVideo(JingleRTPContent):
 		JingleRTPContent.setup_stream(self)
 
 		# the local parts
-		try:
-			src_bin = gst.parse_bin_from_description('%s ! videoscale ! ffmpegcolorspace'
-				% gajim.config.get('video_input_device'), True)
-		except GError:
-			self.session.connection.dispatch('ERROR', (_("Video configuration error"),
-				_("Couldn't setup video input. Check your video configuration.")))
+		src_bin = self.make_bin_from_config('video_input_device',
+			'%s ! videoscale ! ffmpegcolorspace', _("video input"))
 		#caps = gst.element_factory_make('capsfilter')
 		#caps.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
 
 		self.pipeline.add(src_bin)#, caps)
 		#src_bin.link(caps)
 
-		try:
-			self.sink = gst.parse_bin_from_description('videoscale ! ffmpegcolorspace ! %s'
-				% gajim.config.get('video_output_device'), True)
-		except GError:
-			self.session.connection.dispatch('ERROR', (_("Video configuration error"),
-				_("Couldn't setup video output. Check your video configuration.")))
+		self.sink = self.make_bin_from_config('video_output_device',
+			'%s ! videoscale ! ffmpegcolorspace', _("video output"))
 		self.pipeline.add(self.sink)
 
 		src_bin.get_pad('src').link(self.p2psession.get_property('sink-pad'))

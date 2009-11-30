@@ -16,7 +16,6 @@ Handles Jingle sessions (XEP 0166)
 """
 
 #TODO:
-# * Have JingleContent here
 # * 'senders' attribute of 'content' element
 # * security preconditions
 # * actions:
@@ -55,7 +54,8 @@ class TieBreak(Exception):
 
 class JingleSession(object):
 	"""
-	This represents one jingle session
+	This represents one jingle session, that is, one or more content types
+	negotiated between an initiator and a responder.
 	"""
 
 	def __init__(self, con, weinitiate, jid, sid=None):
