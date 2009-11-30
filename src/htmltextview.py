@@ -893,8 +893,10 @@ class HtmlTextView(gtk.TextView):
 	def on_text_buffer_mark_set(self, location, mark, unused_data):
 		bounds = self.get_buffer().get_selection_bounds()
 		if bounds:
-			clipboard = self.get_clipboard(gtk.gdk.SELECTION_PRIMARY)
-			clipboard.set_text(self.get_selected_text())
+			# textview can be hidden while we add a new line in it.
+			if self.has_screen():
+				clipboard = self.get_clipboard(gtk.gdk.SELECTION_PRIMARY)
+				clipboard.set_text(self.get_selected_text())
 
 	def get_selected_text(self):
 		bounds = self.get_buffer().get_selection_bounds()
