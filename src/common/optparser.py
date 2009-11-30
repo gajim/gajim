@@ -34,14 +34,7 @@ from common import gajim
 from common import helpers
 from common import caps
 
-import exceptions
-try:
-	import sqlite3 as sqlite # python 2.5
-except ImportError:
-	try:
-		from pysqlite2 import dbapi2 as sqlite
-	except ImportError:
-		raise exceptions.PysqliteNotAvailable
+import sqlite3 as sqlite
 import logger
 
 class OptionsParser:

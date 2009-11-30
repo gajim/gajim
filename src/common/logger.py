@@ -38,13 +38,7 @@ from cStringIO import StringIO
 import exceptions
 import gajim
 
-try:
-	import sqlite3 as sqlite # python 2.5
-except ImportError:
-	try:
-		from pysqlite2 import dbapi2 as sqlite
-	except ImportError:
-		raise exceptions.PysqliteNotAvailable
+import sqlite3 as sqlite
 
 import configpaths
 LOG_DB_PATH = configpaths.gajimpaths['LOG_DB']
