@@ -106,7 +106,9 @@ class JingleRTPContent(JingleContent):
 			self.p2pstream.set_remote_candidates(candidates)
 
 	def batch_dtmf(self, events):
-		""" Send several DTMF tones. """
+		"""
+		Send several DTMF tones
+		"""
 		if self._dtmf_running:
 			raise Exception # TODO: Proper exception
 		self._dtmf_running = True
