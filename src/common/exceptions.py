@@ -68,7 +68,20 @@ class SessionBusNotPresent(Exception):
 		Exception.__init__(self)
 
 	def __str__(self):
-		return _('Session bus is not available.\nTry reading http://trac.gajim.org/wiki/GajimDBus')
+		return _('Session bus is not available.\nTry reading %(url)s') % \
+			{'url': 'http://trac.gajim.org/wiki/GajimDBus'}
+
+class SystemBusNotPresent(Exception):
+	"""
+	This exception indicates that there is no session daemon
+	"""
+
+	def __init__(self):
+		Exception.__init__(self)
+
+	def __str__(self):
+		return _('System bus is not available.\nTry reading %(url)s') % \
+			{'url': 'http://trac.gajim.org/wiki/GajimDBus'}
 
 class NegotiationError(Exception):
 	'''A session negotiation failed'''
