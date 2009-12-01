@@ -144,3 +144,5 @@ class ConnectionJingle(object):
 					return session
 
 		return None
+
+# vim: se ts=3:
