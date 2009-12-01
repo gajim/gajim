@@ -322,8 +322,7 @@ def pid_alive():
 	return True
 
 if pid_alive():
-	path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
-	pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
+	pix = gtkgui_helpers.get_icon_pixmap('gajim', 48)
 	gtk.window_set_default_icon(pix) # set the icon to all newly opened wind
 	pritext = _('Gajim is already running')
 	sectext = _('Another instance of Gajim seems to be running\nRun anyway?')

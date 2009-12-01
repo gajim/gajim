@@ -102,19 +102,12 @@ C_NICKNAME
 ) = range(2, 6)
 
 
-try:
-	import sqlite3 as sqlite # python 2.5
-except ImportError:
-	try:
-		from pysqlite2 import dbapi2 as sqlite
-	except ImportError:
-		raise exceptions.PysqliteNotAvailable
+import sqlite3 as sqlite
 
 
 class HistoryManager:
 	def __init__(self):
-		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
-		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
+		pix = gtkgui_helpers.get_icon_pixmap('gajim')
 		gtk.window_set_default_icon(pix) # set the icon to all newly opened windows
 
 		if not os.path.exists(LOG_DB_PATH):

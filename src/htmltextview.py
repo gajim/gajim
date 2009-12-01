@@ -892,8 +892,10 @@ class HtmlTextView(gtk.TextView):
 	def on_text_buffer_mark_set(self, location, mark, unused_data):
 		bounds = self.get_buffer().get_selection_bounds()
 		if bounds:
-			clipboard = self.get_clipboard(gtk.gdk.SELECTION_PRIMARY)
-			clipboard.set_text(self.get_selected_text())
+			# textview can be hidden while we add a new line in it.
+			if self.has_screen():
+				clipboard = self.get_clipboard(gtk.gdk.SELECTION_PRIMARY)
+				clipboard.set_text(self.get_selected_text())
 
 	def get_selected_text(self):
 		bounds = self.get_buffer().get_selection_bounds()
@@ -939,12 +941,12 @@ if __name__ == '__main__':
 
 	htmlview = ConversationTextview(None)
 
-	path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
+	path = gtkgui_helpers.get_icon_path('gajim-muc_separator')
 	# use this for hr
-	htmlview.tv.focus_out_line_pixbuf =  gtk.gdk.pixbuf_new_from_file(path_to_file)
-
+	htmlview.tv.focus_out_line_pixbuf =  gtk.gdk.pixbuf_new_from_file(path)
 
 	tooltip = tooltips.BaseTooltip()
+
 	def on_textview_motion_notify_event(widget, event):
 		"""
 		Change the cursor to a hand when we are over a mail or an url

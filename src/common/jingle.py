@@ -25,7 +25,6 @@ Handles the jingle signalling protocol
 #   - video integration
 #   * config:
 #     - codecs
-#     - STUN
 
 # * figure out why it doesn't work with pidgin:
 #     That's maybe a bug in pidgin:

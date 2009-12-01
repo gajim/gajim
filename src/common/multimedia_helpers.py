@@ -78,11 +78,9 @@ class VideoInputManager(DeviceManager):
 		self.detect_element('videotestsrc', _('Video test'),
 			'%s is-live=true')
 		# Auto src
-		self.detect_element('autovideosrc', _('Autodetect'),
-			'%s ! videoscale ! ffmpegcolorspace')
+		self.detect_element('autovideosrc', _('Autodetect'))
 		# V4L2 src ; TODO: Figure out why it doesn't work
-		self.detect_element('v4l2src', _('V4L2: %s'),
-			'%s ! videoscale ! ffmpegcolorspace')
+		self.detect_element('v4l2src', _('V4L2: %s'))
 		# Funny things, just to test...
 		# self.devices['GOOM'] = 'audiotestsrc ! goom'
 		# self.devices['screen'] = 'ximagesrc'

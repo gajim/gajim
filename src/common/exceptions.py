@@ -21,17 +21,6 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-class PysqliteNotAvailable(Exception):
-	"""
-	Sqlite2 is not installed or python bindings are missing
-	"""
-
-	def __init__(self):
-		Exception.__init__(self)
-
-	def __str__(self):
-		return _('pysqlite2 (aka python-pysqlite2) dependency is missing. Exiting...')
-
 class PysqliteOperationalError(Exception):
 	"""
 	Sqlite2 raised pysqlite2.dbapi2.OperationalError
@@ -86,7 +75,20 @@ class SessionBusNotPresent(Exception):
 		Exception.__init__(self)
 
 	def __str__(self):
-		return _('Session bus is not available.\nTry reading http://trac.gajim.org/wiki/GajimDBus')
+		return _('Session bus is not available.\nTry reading %(url)s') % \
+			{'url': 'http://trac.gajim.org/wiki/GajimDBus'}
+
+class SystemBusNotPresent(Exception):
+	"""
+	This exception indicates that there is no session daemon
+	"""
+
+	def __init__(self):
+		Exception.__init__(self)
+
+	def __str__(self):
+		return _('System bus is not available.\nTry reading %(url)s') % \
+			{'url': 'http://trac.gajim.org/wiki/GajimDBus'}
 
 class NegotiationError(Exception):
 	"""

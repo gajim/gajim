@@ -1274,21 +1274,15 @@ class ChatControl(ChatControlBase):
 		id_ = self._audio_button.connect('toggled', self.on_audio_button_toggled)
 		self.handlers[id_] = self._audio_button
 		# add a special img
-		path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
-			'mic_inactive.png')
-		img = gtk.Image()
-		img.set_from_file(path_to_img)
-		self._audio_button.set_image(img)
+		gtkgui_helpers.add_image_to_button(self._audio_button,
+			'gajim-mic_inactive')
 
 		self._video_button = self.xml.get_widget('video_togglebutton')
 		id_ = self._video_button.connect('toggled', self.on_video_button_toggled)
 		self.handlers[id_] = self._video_button
 		# add a special img
-		path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
-			'cam_inactive.png')
-		img = gtk.Image()
-		img.set_from_file(path_to_img)
-		self._video_button.set_image(img)
+		gtkgui_helpers.add_image_to_button(self._video_button,
+			'gajim-cam_inactive')
 
 		self._send_file_button = self.xml.get_widget('send_file_button')
 		# add a special img for send file button
@@ -1796,12 +1790,13 @@ class ChatControl(ChatControlBase):
 		banner_name_label.set_tooltip_text(label_tooltip)
 
 	def on_jingle_button_toggled(self, widget, jingle_type):
-		path_to_img = os.path.join(gajim.DATA_DIR, 'pixmaps', '%s_%s.png'
-			% ({'audio': 'mic', 'video': 'cam'}[jingle_type],
-				{True: 'active', False: 'inactive'}[widget.get_active()]))
+		img_name = '%s_%s' % ({'audio': 'mic', 'video': 'cam'}[jingle_type],
+				{True: 'active', False: 'inactive'}[widget.get_active()])
+		path_to_img = gtkgui_helpers.get_icon_path(img_name)
 
 		if widget.get_active():
-			if getattr(self, jingle_type + '_state') == self.JINGLE_STATE_AVAILABLE:
+			if getattr(self, jingle_type + '_state') == \
+			self.JINGLE_STATE_AVAILABLE:
 				sid = getattr(gajim.connections[self.account],
 					'start_' + jingle_type)(self.contact.get_full_jid())
 				getattr(self, 'set_' + jingle_type + '_state')('connecting', sid)
@@ -1886,11 +1881,12 @@ class ChatControl(ChatControlBase):
 		if authenticated:
 			#About encrypted chat session
 			authenticated_string = _('and authenticated')
-			self.lock_image.set_from_file(os.path.join(gajim.DATA_DIR, 'pixmaps', 'security-high.png'))
+			img_path = gtkgui_helpers.get_icon_path('gajim-security_high')
 		else:
 			#About encrypted chat session
 			authenticated_string = _('and NOT authenticated')
-			self.lock_image.set_from_file(os.path.join(gajim.DATA_DIR, 'pixmaps', 'security-low.png'))
+			img_path = gtkgui_helpers.get_icon_path('gajim-security_low')
+		self.lock_image.set_from_file(img_path)
 
 		#status will become 'is' or 'is not', authentificaed will become
 		#'and authentificated' or 'and not authentificated', logged will become

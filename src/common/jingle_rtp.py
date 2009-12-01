@@ -19,11 +19,12 @@ import gobject
 
 import xmpp
 import farsight, gst
+from glib import GError
 
 import gajim
 
 from jingle_transport import JingleTransportICEUDP
-from jingle_content import contents, JingleContent
+from jingle_content import contents, JingleContent, FailedApplication
 
 
 class JingleRTPContent(JingleContent):
@@ -35,12 +36,12 @@ class JingleRTPContent(JingleContent):
 		self._dtmf_running = False
 		self.farsight_media = {'audio': farsight.MEDIA_TYPE_AUDIO,
 								'video': farsight.MEDIA_TYPE_VIDEO}[media]
-		self.got_codecs = False
 
 		self.candidates_ready = False # True when local candidates are prepared
 
 		self.callbacks['session-initiate'] += [self.__on_remote_codecs]
 		self.callbacks['content-add'] += [self.__on_remote_codecs]
+		self.callbacks['description-info'] += [self.__on_remote_codecs]
 		self.callbacks['content-accept'] += [self.__on_remote_codecs,
 			self.__on_content_accept]
 		self.callbacks['session-accept'] += [self.__on_remote_codecs,
@@ -59,7 +60,7 @@ class JingleRTPContent(JingleContent):
 
 		# conference
 		self.conference = gst.element_factory_make('fsrtpconference')
-		self.conference.set_property("sdes-cname", self.session.ourjid)
+		self.conference.set_property('sdes-cname', self.session.ourjid)
 		self.pipeline.add(self.conference)
 		self.funnel = None
 
@@ -69,8 +70,16 @@ class JingleRTPContent(JingleContent):
 		# FIXME: Consider a workaround, here...
 		# pidgin and telepathy-gabble don't follow the XEP, and it won't work
 		# due to bad controlling-mode
-		params = {'controlling-mode': self.session.weinitiate,# 'debug': False}
-			'stun-ip': '69.0.208.27', 'debug': False}
+		params = {'controlling-mode': self.session.weinitiate, 'debug': False}
+		stun_server = gajim.config.get('stun-server')
+		if stun_server:
+			try:
+				ip = socket.getaddrinfo(stun_server, 0, socket.AF_UNSPEC,
+					socket.SOCK_STREAM)[0][4][0]
+			except socket.gaierror, (errnum, errstr):
+				log.warn('Lookup of stun ip failed: %s' % errstr)
+			else:
+				params['stun-ip'] =  ip
 
 		self.p2pstream = self.p2psession.new_stream(participant,
 			farsight.DIRECTION_RECV, 'nice', params)
@@ -78,6 +87,18 @@ class JingleRTPContent(JingleContent):
 	def is_ready(self):
 		return (JingleContent.is_ready(self) and self.candidates_ready
 			and self.p2psession.get_property('codecs-ready'))
+
+	def make_bin_from_config(self, config_key, pipeline, text):
+		try:
+			bin = gst.parse_bin_from_description(pipeline
+				% gajim.config.get(config_key), True)
+			return bin
+		except GError, error_str:
+			self.session.connection.dispatch('ERROR',
+				(_("%s configuration error") % text.capitalize(),
+				_("Couldn't setup %s. Check your configuration.\n\nError was:\n%s")
+					% (text, error_str)))
+			raise FailedApplication
 
 	def add_remote_candidates(self, candidates):
 		JingleContent.add_remote_candidates(self, candidates)
@@ -87,6 +108,9 @@ class JingleRTPContent(JingleContent):
 			self.p2pstream.set_remote_candidates(candidates)
 
 	def batch_dtmf(self, events):
+		"""
+		Send several DTMF tones
+		"""
 		if self._dtmf_running:
 			raise Exception # TODO: Proper exception
 		self._dtmf_running = True
@@ -177,8 +201,6 @@ class JingleRTPContent(JingleContent):
 		"""
 		Get peer codecs from what we get from peer
 		"""
-		if self.got_codecs:
-			return
 
 		codecs = []
 		for codec in content.getTag('description').iterTags('payload-type'):
@@ -197,7 +219,6 @@ class JingleRTPContent(JingleContent):
 			# glib.GError: There was no intersection between the remote codecs and
 			# the local ones
 			self.p2pstream.set_remote_codecs(codecs)
-			self.got_codecs = True
 
 	def iter_codecs(self):
 		codecs = self.p2psession.get_property('codecs')
@@ -252,17 +273,12 @@ class JingleAudio(JingleRTPContent):
 		self.p2psession.set_codec_preferences(codecs)
 
 		# the local parts
-		try:
-			self.sink = gst.parse_bin_from_description(gajim.config.get('audio_output_device'), True)
-		except:
-			self.session.connection.dispatch('ERROR', (_("Audio configuration error"),
-				_("Couldn't setup audio output. Check your audio configuration.")))
+		# TODO: Add queues?
+		src_bin = self.make_bin_from_config('audio_input_device',
+			'%s ! audioconvert', _("audio input"))
 
-		try:
-			src_bin = gst.parse_bin_from_description(gajim.config.get('audio_input_device'), True)
-		except:
-			self.session.connection.dispatch('ERROR', (_("Audio configuration error"),
-				_("Couldn't setup audio input. Check your audio configuration.")))
+		self.sink = self.make_bin_from_config('audio_output_device',
+			'audioconvert ! %s', _("audio output"))
 
 		self.mic_volume = src_bin.get_by_name('gajim_vol')
 		self.mic_volume.set_property('volume', 1)
@@ -290,25 +306,19 @@ class JingleVideo(JingleRTPContent):
 		JingleRTPContent.setup_stream(self)
 
 		# the local parts
-		try:
-			src_bin = gst.parse_bin_from_description(gajim.config.get('video_input_device'), True)
-		except:
-			self.session.connection.dispatch('ERROR', (_("Video configuration error"),
-				_("Couldn't setup video input. Check your video configuration.")))
-		caps = gst.element_factory_make('capsfilter')
-		caps.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
+		src_bin = self.make_bin_from_config('video_input_device',
+			'%s ! videoscale ! ffmpegcolorspace', _("video input"))
+		#caps = gst.element_factory_make('capsfilter')
+		#caps.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
 
-		self.pipeline.add(src_bin, caps)
-		src_bin.link(caps)
+		self.pipeline.add(src_bin)#, caps)
+		#src_bin.link(caps)
 
-		try:
-			self.sink = gst.parse_bin_from_description(gajim.config.get('video_output_device'), True)
-		except:
-			self.session.connection.dispatch('ERROR', (_("Video configuration error"),
-				_("Couldn't setup video output. Check your video configuration.")))
+		self.sink = self.make_bin_from_config('video_output_device',
+			'%s ! videoscale ! ffmpegcolorspace', _("video output"))
 		self.pipeline.add(self.sink)
 
-		caps.get_pad('src').link(self.p2psession.get_property('sink-pad'))
+		src_bin.get_pad('src').link(self.p2psession.get_property('sink-pad'))
 		self.p2pstream.connect('src-pad-added', self._on_src_pad_added)
 
 		# The following is needed for farsight to process ICE requests:

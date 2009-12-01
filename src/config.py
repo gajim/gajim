@@ -59,7 +59,12 @@ from common.zeroconf import connection_zeroconf
 from common import dataforms
 from common import GnuPG
 
-from common.multimedia_helpers import AudioInputManager, AudioOutputManager, VideoInputManager, VideoOutputManager
+try:
+	from common.multimedia_helpers import AudioInputManager, AudioOutputManager
+	from common.multimedia_helpers import VideoInputManager, VideoOutputManager
+	HAS_GST = True
+except ImportError:
+	HAS_GST = False
 
 from common.exceptions import GajimGeneralException
 
@@ -416,8 +421,7 @@ class PreferencesWindow:
 		buf = self.xml.get_widget('msg_textview').get_buffer()
 		buf.connect('changed', self.on_msg_textview_changed)
 
-		### Style tab ###
-		# Audio
+		### Audio / Video tab ###
 		def create_av_combobox(opt_name, device_dict):
 			combobox = self.xml.get_widget(opt_name + '_combobox')
 			cell = gtk.CellRendererText()
@@ -431,10 +435,21 @@ class PreferencesWindow:
 				if gajim.config.get(opt_name + '_device') == value:
 					combobox.set_active(index)
 
-		create_av_combobox('audio_input', AudioInputManager().get_devices())
-		create_av_combobox('audio_output', AudioOutputManager().get_devices())
-		create_av_combobox('video_input', VideoInputManager().get_devices())
-		create_av_combobox('video_output', VideoOutputManager().get_devices())
+		if HAS_GST:
+			create_av_combobox('audio_input', AudioInputManager().get_devices())
+			create_av_combobox('audio_output', AudioOutputManager().get_devices())
+			create_av_combobox('video_input', VideoInputManager().get_devices())
+			create_av_combobox('video_output', VideoOutputManager().get_devices())
+		else:
+			for opt_name in ('audio_input', 'audio_output', 'video_input',
+			'video_output'):
+				combobox = self.xml.get_widget(opt_name + '_combobox')
+				combobox.set_sensitive(False)
+
+		# Connection
+		entry = self.xml.get_widget('stun_server_entry')
+		entry.set_text(gajim.config.get('stun_server'))
+
 		### Advanced tab ###
 		# open links with
 		if os.name == 'nt':
@@ -1046,6 +1061,9 @@ class PreferencesWindow:
 	def on_video_output_combobox_changed(self, widget):
 		self.on_av_combobox_changed(widget, 'video_output')
 
+	def stun_server_entry_changed(self, widget):
+		gajim.config.set('stun_server', widget.get_text().decode('utf-8'))
+
 	def on_applications_combobox_changed(self, widget):
 		gajim.config.set('autodetect_browser_mailer', False)
 		if widget.get_active() == 4:
@@ -1419,8 +1437,7 @@ class AccountsWindow:
 		self.accounts_treeview = self.xml.get_widget('accounts_treeview')
 		self.remove_button = self.xml.get_widget('remove_button')
 		self.rename_button = self.xml.get_widget('rename_button')
-		path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
-			'kbd_input.png')
+		path_to_kbd_input_img = gtkgui_helpers.get_icon_path('gajim-kbd_input')
 		img = self.xml.get_widget('rename_image')
 		img.set_from_file(path_to_kbd_input_img)
 		self.notebook = self.xml.get_widget('notebook')
@@ -3354,7 +3371,7 @@ class AccountCreationWizardWindow:
 		if self.modify:
 			img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
 		else:
-			path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'gajim.png')
+			path_to_file = gtkgui_helpers.get_icon_path('gajim', 48)
 			img.set_from_file(path_to_file)
 		self.show_vcard_checkbutton.set_active(not self.modify)
 		self.notebook.set_current_page(6) # show finish page

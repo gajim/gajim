@@ -23,6 +23,12 @@ def get_jingle_content(node):
 		return contents[namespace](node)
 
 
+class FailedApplication(Exception):
+	"""
+	Exception that should be raised when a content fails to setup.
+	"""
+
+
 class JingleContent(object):
 	"""
 	An abstraction of content in Jingle sessions
@@ -106,6 +112,9 @@ class JingleContent(object):
 			payload=payload)
 
 	def send_candidate(self, candidate):
+		"""
+		Send a transport candidate for a previously defined transport.
+		"""
 		content = self.__content()
 		content.addChild(self.transport.make_transport([candidate]))
 		self.session.send_transport_info(content)
