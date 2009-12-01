@@ -24,7 +24,7 @@ from glib import GError
 import gajim
 
 from jingle_transport import JingleTransportICEUDP
-from jingle_content import contents, JingleContent, FailedApplication
+from jingle_content import contents, JingleContent, JingleContentSetupException
 
 
 class JingleRTPContent(JingleContent):
@@ -98,7 +98,7 @@ class JingleRTPContent(JingleContent):
 				(_("%s configuration error") % text.capitalize(),
 				_("Couldn't setup %s. Check your configuration.\n\nError was:\n%s")
 					% (text, error_str)))
-			raise FailedApplication
+			raise JingleContentSetupException
 
 	def add_remote_candidates(self, candidates):
 		JingleContent.add_remote_candidates(self, candidates)
