@@ -100,7 +100,7 @@ else:
 
 os_info = None # used to cache os information
 
-from contacts import Contacts
+from contacts import LegacyContactsAPI
 from events import Events
 
 gmail_domains = ['gmail.com', 'googlemail.com']
@@ -111,7 +111,7 @@ last_message_time = {} # list of time of the latest incomming message
 							# {acct1: {jid1: time1, jid2: time2}, }
 encrypted_chats = {} # list of encrypted chats {acct1: [jid1, jid2], ..}
 
-contacts = Contacts()
+contacts = LegacyContactsAPI()
 gc_connected = {} # tell if we are connected to the room or not {acct: {room_jid: True}}
 gc_passwords = {} # list of the pass required to enter a room {room_jid: password}
 automatic_rooms = {} # list of rooms that must be automaticaly configured and for which we have a list of invities {account: {room_jid: {'invities': []}}}

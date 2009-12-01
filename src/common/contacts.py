@@ -94,9 +94,8 @@ class CommonContact(XMPPEntity):
 
 class Contact(CommonContact):
 	"""
-	Information concerning each contact
+	Information concerning a contact
 	"""
-
 	def __init__(self, jid, account, name='', groups=[], show='', status='',
 			sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
 			our_chatstate=None, chatstate=None, last_status_time=None, msg_id=
@@ -209,11 +208,20 @@ class GC_Contact(CommonContact):
 			status=self.status, sub='none', client_caps=self.client_caps)
 
 
-class Contacts:
+class LegacyContactsAPI:
 	"""
-	Information concerning all contacts and groupchat contacts
+	This is a GOD class for accessing contact and groupchat information.
+	The API has several flaws:
+		
+		* it mixes concerns because it deals with contacts, groupchats,
+		  groupchat contacts and metacontacts
+		* some methods like get_contact() may return None. This leads to 
+		  a lot of duplication all over Gajim because it is not sure
+		  if we receive a proper contact or just None.
+		  
+	It is a long way to cleanup this API. Therefore just stick with it
+	and use it as before. We will try to figure out a migration path.
 	"""
-
 	def __init__(self):
 		self._metacontact_manager = MetacontactManager(self)
 		self._accounts = {}
@@ -226,8 +234,8 @@ class Contacts:
 		self._metacontact_manager.change_account_name(old_name, new_name)
 
 	def add_account(self, account_name):
-		self._accounts[account_name] = Account(account_name,
-				Contacts_New(), GC_Contacts())
+		self._accounts[account_name] = Account(account_name, Contacts(),
+			GC_Contacts())
 		self._metacontact_manager.add_account(account_name)
 
 	def get_accounts(self):
@@ -406,8 +414,11 @@ class Contacts:
 		return self._accounts[account].gc_contacts.get_nb_role_total_gc_contacts(room_jid, role)
 
 
-class Contacts_New():
-
+class Contacts():
+	"""
+	This is a breakout of the contact related behavior of the old 
+	Contacts class (which is not called LegacyContactsAPI)
+	"""
 	def __init__(self):
 		# list of contacts  {jid1: [C1, C2]}, } one Contact per resource
 		self._contacts = {}
