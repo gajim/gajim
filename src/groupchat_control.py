@@ -130,7 +130,7 @@ class PrivateChatControl(ChatControl):
 	COMMAND_HOST = PrivateChatCommands
 
 	def __init__(self, parent_win, gc_contact, contact, account, session):
-		room_jid = contact.jid.split('/')[0]
+		room_jid = gc_contact.room_jid
 		room_ctrl = gajim.interface.msg_win_mgr.get_gc_control(room_jid, account)
 		if room_jid in gajim.interface.minimized_controls[account]:
 			room_ctrl = gajim.interface.minimized_controls[account][room_jid]

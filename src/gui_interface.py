@@ -2640,40 +2640,36 @@ class Interface:
 		mw.new_tab(gc_control)
 
 	def new_private_chat(self, gc_contact, account, session=None):
-		contact = gc_contact.as_contact()
-		type_ = message_control.TYPE_PM
-		fjid = gc_contact.room_jid + '/' + gc_contact.name
-
 		conn = gajim.connections[account]
-
-		if not session and fjid in conn.sessions:
-			sessions = [s for s in conn.sessions[fjid].values() if isinstance(s, ChatControlSession)]
+		if not session and gc_contact.get_full_jid() in conn.sessions:
+			sessions = [s for s in conn.sessions[gc_contact.get_full_jid()].values()
+				if isinstance(s, ChatControlSession)]
 
 			# look for an existing session with a chat control
 			for s in sessions:
 				if s.control:
 					session = s
 					break
-
 			if not session and not len(sessions) == 0:
 				# there are no sessions with chat controls, just take the first one
 				session = sessions[0]
-
 		if not session:
 			# couldn't find an existing ChatControlSession, just make a new one
+			session = conn.make_new_session(gc_contact.get_full_jid(), None, 'pm')
 
-			session = conn.make_new_session(fjid, None, 'pm')
-
+		contact = gc_contact.as_contact()
 		if not session.control:
-			mw = self.msg_win_mgr.get_window(fjid, account)
-			if not mw:
-				mw = self.msg_win_mgr.create_window(contact, account, type_)
+			message_window = self.msg_win_mgr.get_window(gc_contact.get_full_jid(),
+				account)
+			if not message_window:
+				message_window = self.msg_win_mgr.create_window(contact, account,
+					message_control.TYPE_PM)
 
-			session.control = PrivateChatControl(mw, gc_contact, contact, account,
-				session)
-			mw.new_tab(session.control)
+			session.control = PrivateChatControl(message_window, gc_contact,
+				contact, account, session)
+			message_window.new_tab(session.control)
 
-		if len(gajim.events.get_events(account, fjid)):
+		if gajim.events.get_events(account, gc_contact.get_full_jid()):
 			# We call this here to avoid race conditions with widget validation
 			session.control.read_queue()
 
