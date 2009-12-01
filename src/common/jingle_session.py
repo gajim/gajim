@@ -29,7 +29,7 @@ Handles Jingle sessions (XEP 0166)
 import gajim #Get rid of that?
 import xmpp
 from jingle_transport import get_jingle_transport
-from jingle_content import get_jingle_content
+from jingle_content import get_jingle_content, FailedApplication
 
 # FIXME: Move it to JingleSession.States?
 class JingleStates(object):
@@ -394,8 +394,8 @@ class JingleSession(object):
 			raise OutOfOrder
 
 		parse_result = self.__parse_contents(jingle)
-		contents = parse_result[2]
-		rejected_contents = parse_result[3]
+		contents = parse_result[0]
+		rejected_contents = parse_result[1]
 
 		for name, creator in rejected_contents:
 			# TODO
@@ -426,21 +426,13 @@ class JingleSession(object):
 		# error.
 
 		# Lets check what kind of jingle session does the peer want
-		contents_ok, transports_ok, contents, pouet = self.__parse_contents(jingle)
+		contents, contents_rejected, reason = self.__parse_contents(jingle)
 
 		# If there's no content we understand...
-		if not contents_ok:
+		if not contents:
 			# TODO: http://xmpp.org/extensions/xep-0166.html#session-terminate
 			reason = xmpp.Node('reason')
-			reason.setTag('unsupported-applications')
-			self.__ack(stanza, jingle, error, action)
-			self._session_terminate(reason)
-			raise xmpp.NodeProcessed
-
-		if not transports_ok:
-			# TODO: http://xmpp.org/extensions/xep-0166.html#session-terminate
-			reason = xmpp.Node('reason')
-			reason.setTag('unsupported-transports')
+			reason.setTag(reason)
 			self.__ack(stanza, jingle, error, action)
 			self._session_terminate(reason)
 			raise xmpp.NodeProcessed
@@ -485,26 +477,37 @@ class JingleSession(object):
 		# TODO: Needs some reworking
 		contents = []
 		contents_rejected = []
-		contents_ok = False
-		transports_ok = False
+		reasons = set()
 
 		for element in jingle.iterTags('content'):
 			transport = get_jingle_transport(element.getTag('transport'))
 			content_type = get_jingle_content(element.getTag('description'))
 			if content_type:
-				contents_ok = True
-				if transport:
-					content = content_type(self, transport)
-					self.add_content(element['name'],
-						content, 'peer')
-					contents.append((content.media,))
-					transports_ok = True
-				else:
-					contents_rejected.append((element['name'], 'peer'))
+				try:
+					if transport:
+						content = content_type(self, transport)
+						self.add_content(element['name'],
+							content, 'peer')
+						contents.append((content.media,))
+					else:
+						reasons.add('unsupported-transports')
+						contents_rejected.append((element['name'], 'peer'))
+				except FailedApplication:
+					reasons.add('failed-application')
 			else:
 				contents_rejected.append((element['name'], 'peer'))
+				failed.add('unsupported-applications')
 
-		return (contents_ok, transports_ok, contents, contents_rejected)
+		failure_reason = None
+
+		# Store the first reason of failure
+		for reason in ('failed-application', 'unsupported-transports',
+			'unsupported-applications'):
+			if reason in reasons:
+				failure_reason = reason
+				break
+
+		return (contents, contents_rejected, failure_reason)
 
 	def __dispatch_error(self, error, jingle_error=None, text=None):
 		if jingle_error:

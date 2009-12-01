@@ -23,6 +23,12 @@ def get_jingle_content(node):
 		return contents[namespace](node)
 
 
+class FailedApplication(Exception):
+	"""
+	Exception that should be raised when a content fails to setup.
+	"""
+
+
 class JingleContent(object):
 	"""
 	An abstraction of content in Jingle sessions
