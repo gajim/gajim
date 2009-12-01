@@ -1050,6 +1050,7 @@ class Interface:
 
 		if helpers.allow_popup_window(account) or not self.systray_enabled:
 			self.show_unsubscribed_dialog(account, contact)
+			return
 
 		self.add_event(account, jid, 'unsubscribed', contact)
 
