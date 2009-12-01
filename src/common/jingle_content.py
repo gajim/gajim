@@ -130,3 +130,5 @@ class JingleContent(object):
 	def destroy(self):
 		self.callbacks = None
 		del self.session.contents[(self.creator, self.name)]
+
+# vim: se ts=3:

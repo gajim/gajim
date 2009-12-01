@@ -144,3 +144,5 @@ class JingleTransportICEUDP(JingleTransport):
 		return candidates
 
 transports[xmpp.NS_JINGLE_ICE_UDP] = JingleTransportICEUDP
+
+# vim: se ts=3:

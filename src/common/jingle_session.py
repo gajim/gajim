@@ -654,3 +654,4 @@ class JingleSession(object):
 		self.connection.dispatch('JINGLE_CONNECTED', (self.peerjid, self.sid,
 			media))
 
+# vim: se ts=3:

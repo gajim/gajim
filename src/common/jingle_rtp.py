@@ -332,3 +332,5 @@ def get_content(desc):
 		return JingleVideo
 
 contents[xmpp.NS_JINGLE_RTP] = get_content
+
+# vim: se ts=3:
