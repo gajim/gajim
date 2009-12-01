@@ -63,7 +63,7 @@ class SystemBus:
 			raise exceptions.DbusNotSupported
 
 		if not self.present():
-				raise exceptions.SystemBusNotPresent
+			raise exceptions.SystemBusNotPresent
 		return self.system_bus
 
 	def bus(self):
