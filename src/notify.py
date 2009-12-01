@@ -234,16 +234,16 @@ def notify(event, jid, account, parameters, advanced_notif_num=None):
 				show_image = 'online.png'
 				suffix = '_notif_size_colored'
 			transport_name = gajim.get_transport_name_from_jid(jid)
-			img = None
+			img_path = None
 			if transport_name:
-				img = os.path.join(helpers.get_transport_path(transport_name),
+				img_path = os.path.join(helpers.get_transport_path(transport_name),
 					'48x48', show_image)
-			if not img or not os.path.isfile(img):
+			if not img_path or not os.path.isfile(img_path):
 				iconset = gajim.config.get('iconset')
-				img = os.path.join(helpers.get_iconset_path(iconset), '48x48',
+				img_path = os.path.join(helpers.get_iconset_path(iconset), '48x48',
 					show_image)
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(img,
-				jid = jid, suffix = suffix)
+			path = gtkgui_helpers.get_path_to_generic_or_avatar(img_path, jid=jid,
+				suffix=suffix)
 			if event == 'status_change':
 				title = _('%(nick)s Changed Status') % \
 					{'nick': gajim.get_name_from_jid(account, jid)}
@@ -273,16 +273,14 @@ def notify(event, jid, account, parameters, advanced_notif_num=None):
 		elif event == 'new_message':
 			if message_type == 'normal': # single message
 				event_type = _('New Single Message')
-				img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-					'single_msg_recv.png')
+				img_name = 'gajim-single_msg_recv'
 				title = _('New Single Message from %(nickname)s') % \
 					{'nickname': nickname}
 				text = message
 			elif message_type == 'pm': # private message
 				event_type = _('New Private Message')
 				room_name = gajim.get_nick_from_jid(jid)
-				img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-					'priv_msg_recv.png')
+				img_name = 'gajim-priv_msg_recv'
 				title = _('New Private Message from group chat %s') % room_name
 				if message:
 					text = _('%(nickname)s: %(message)s') % {'nickname': nickname,
@@ -292,14 +290,13 @@ def notify(event, jid, account, parameters, advanced_notif_num=None):
 
 			else: # chat message
 				event_type = _('New Message')
-				img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-					'chat_msg_recv.png')
+				img_name = 'gajim-chat_msg_recv'
 				title = _('New Message from %(nickname)s') % \
 					{'nickname': nickname}
 				text = message
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+			img_path = gtkgui_helpers.get_icon_path(img_name, 48)
 			popup(event_type, jid, account, message_type,
-				path_to_image=path, title=title, text=text)
+				path_to_image=img_path, title=title, text=text)
 
 	if do_sound:
 		snd_file = None
@@ -342,9 +339,7 @@ def popup(event_type, jid, account, msg_type='', path_to_image=None, title=None,
 	"""
 	# default image
 	if not path_to_image:
-		path_to_image = os.path.abspath(
-			os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-				'chat_msg_recv.png')) # img to display
+		path_to_image = gtkgui_helpers.get_icon_path('gajim-chat_msg_recv', 48)
 
 	if gajim.HAVE_INDICATOR and event_type in (_('New Message'),
 	_('New Single Message'), _('New Private Message')):
@@ -529,9 +524,8 @@ class DesktopNotification:
 			ntype = 'unsubscribed'
 		else:
 			# default failsafe values
-			self.path_to_image = os.path.abspath(
-				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-					'chat_msg_recv.png')) # img to display
+			self.path_to_image = gtkgui_helpers.get_icon_path(
+				'gajim-chat_msg_recv', 48)
 			ntype = 'im' # Notification Type
 
 		self.notif = dbus_support.get_notifications_interface(self)
@@ -554,8 +548,7 @@ class DesktopNotification:
 			notification_text = ('<html><img src="%(image)s" align=left />' \
 				'%(title)s<br/>%(text)s</html>') % {'title': self.title,
 				'text': self.text, 'image': self.path_to_image}
-			gajim_icon = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps',
-				'gajim.png'))
+			gajim_icon = gtkgui_helpers.get_icon_path('gajim', 48)
 			self.notif.Notify(
 				dbus.String(_('Gajim')),			# app_name (string)
 				dbus.UInt32(0),						# replaces_id (uint)

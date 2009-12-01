@@ -4962,10 +4962,7 @@ class RosterWindow:
 			sub_menu.append(item)
 
 			item = gtk.ImageMenuItem(_('_Change Status Message'))
-			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'kbd_input.png')
-			img = gtk.Image()
-			img.set_from_file(path)
-			item.set_image(img)
+			gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
 			sub_menu.append(item)
 			item.connect('activate', self.on_change_status_message_activate,
 				account)
@@ -5063,10 +5060,7 @@ class RosterWindow:
 			sub_menu.append(item)
 
 			item = gtk.ImageMenuItem(_('_Change Status Message'))
-			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'kbd_input.png')
-			img = gtk.Image()
-			img.set_from_file(path)
-			item.set_image(img)
+			gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
 			sub_menu.append(item)
 			item.connect('activate', self.on_change_status_message_activate,
 				account)
@@ -5219,11 +5213,7 @@ class RosterWindow:
 			# Rename
 			rename_item = gtk.ImageMenuItem(_('Re_name'))
 			# add a special img for rename menuitem
-			path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
-				'kbd_input.png')
-			img = gtk.Image()
-			img.set_from_file(path_to_kbd_input_img)
-			rename_item.set_image(img)
+			gtkgui_helpers.add_image_to_menuitem(rename_item, 'gajim-kbd_input')
 			menu.append(rename_item)
 			rename_item.connect('activate', self.on_rename, 'group', group,
 				account)
@@ -5481,11 +5471,7 @@ class RosterWindow:
 		# Rename
 		item = gtk.ImageMenuItem(_('_Rename'))
 		# add a special img for rename menuitem
-		path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
-			'kbd_input.png')
-		img = gtk.Image()
-		img.set_from_file(path_to_kbd_input_img)
-		item.set_image(img)
+		gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
 		manage_transport_submenu.append(item)
 		item.connect('activate', self.on_rename, 'agent', jid, account)
 		if gajim.account_is_disconnected(account):
@@ -5813,7 +5799,7 @@ class RosterWindow:
 		# Add a Separator (self._iter_is_separator() checks on string SEPARATOR)
 		liststore.append(['SEPARATOR', None, '', True])
 
-		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'kbd_input.png')
+		path = gtkgui_helpers.get_icon_path('gajim-kbd_input')
 		img = gtk.Image()
 		img.set_from_file(path)
 		# sensitivity to False because by default we're offline

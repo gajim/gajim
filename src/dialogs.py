@@ -1190,8 +1190,7 @@ class AboutDialog:
 
 		dlg.props.wrap_license = True
 
-		pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(
-			gajim.DATA_DIR, 'pixmaps', 'gajim_about.png'))
+		pixbuf = gtkgui_helpers.get_icon_pixmap('gajim-about', 64)
 
 		dlg.set_logo(pixbuf)
 		#here you write your name in the form Name FamilyName <someone@somewhere>
@@ -2463,9 +2462,7 @@ class PopupNotificationWindow:
 
 		# default image
 		if not path_to_image:
-			path_to_image = os.path.abspath(
-				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-							 'chat_msg_recv.png')) # img to display
+			path_to_image = gtkgui_helpers.get_icon_path('gajim-chat_msg_recv', 48)
 
 		if event_type == _('Contact Signed In'):
 			bg_color = 'limegreen'
@@ -4540,43 +4537,37 @@ class ESessionInfoWindow:
 
 	def update_info(self):
 		labeltext = _('''Your chat session with <b>%(jid)s</b> is encrypted.\n\nThis session's Short Authentication String is <b>%(sas)s</b>.''') % {'jid': self.session.jid, 'sas': self.session.sas}
-		dir_ = os.path.join(gajim.DATA_DIR, 'pixmaps')
 
 		if self.session.verified_identity:
 			labeltext += '\n\n' + _('''You have already verified this contact's identity.''')
-			security_image = 'security-high-big.png'
+			security_image = 'gajim-security_high'
 			if self.session.control:
 				self.session.control._show_lock_image(True, 'E2E', True,
-													  self.session.is_loggable(), True)
+					self.session.is_loggable(), True)
 
 			verification_status = _('''Contact's identity verified''')
 			self.window.set_title(verification_status)
 			self.xml.get_widget('verification_status_label').set_markup(
-				'<b><span size="x-large">' +
-				verification_status +
-				'</span></b>')
+				'<b><span size="x-large">%s</span></b>' % verification_status)
 
 			self.xml.get_widget('dialog-action_area1').set_no_show_all(True)
 			self.button_label.set_text(_('Verify again...'))
 		else:
 			if self.session.control:
 				self.session.control._show_lock_image(True, 'E2E', True,
-													  self.session.is_loggable(), False)
+					self.session.is_loggable(), False)
 			labeltext += '\n\n' + _('''To be certain that <b>only</b> the expected person can read your messages or send you messages, you need to verify their identity by clicking the button below.''')
-			security_image = 'security-low-big.png'
+			security_image = 'gajim-security_low'
 
 			verification_status = _('''Contact's identity NOT verified''')
 			self.window.set_title(verification_status)
 			self.xml.get_widget('verification_status_label').set_markup(
-				'<b><span size="x-large">' +
-				verification_status +
-				'</span></b>')
+				'<b><span size="x-large">%s</span></b>' % verification_status)
 
 			self.button_label.set_text(_('Verify...'))
 
-		path = os.path.join(dir_, security_image)
-		filename = os.path.abspath(path)
-		self.security_image.set_from_file(filename)
+		path = gtkgui_helpers.get_icon_path(security_image, 32)
+		self.security_image.set_from_file(path)
 
 		self.xml.get_widget('info_display').set_markup(labeltext)
 
@@ -4622,13 +4613,13 @@ class GPGInfoWindow:
 			verification_status = _('''Contact's identity NOT verified''')
 			info = _('The contact\'s key (%s) <b>does not match</b> the key '
 					 'assigned in Gajim.') % keyID[:8]
-			image = 'security-low-big.png'
+			image = 'gajim-security_low'
 		elif not keyID:
 			# No key assigned nor a key is used by remote contact
 			verification_status = _('No GPG key assigned')
 			info = _('No GPG key is assigned to this contact. So you cannot '
 					 'encrypt messages.')
-			image = 'security-low-big.png'
+			image = 'gajim-security_low'
 		else:
 			error = gajim.connections[account].gpg.encrypt('test', [keyID])[1]
 			if error:
@@ -4636,21 +4627,19 @@ class GPGInfoWindow:
 				info = _('GPG key is assigned to this contact, but <b>you do not '
 						 'trust his key</b>, so message <b>cannot</b> be encrypted. Use '
 						 'your GPG client to trust this key.')
-				image = 'security-low-big.png'
+				image = 'gajim-security_low'
 			else:
 				verification_status = _('''Contact's identity verified''')
 				info = _('GPG Key is assigned to this contact, and you trust his '
 						 'key, so messages will be encrypted.')
-				image = 'security-high-big.png'
+				image = 'gajim-security_high'
 
 		status_label.set_markup('<b><span size="x-large">%s</span></b>' % \
 								verification_status)
 		info_label.set_markup(info)
 
-		dir_ = os.path.join(gajim.DATA_DIR, 'pixmaps')
-		path = os.path.join(dir_, image)
-		filename = os.path.abspath(path)
-		security_image.set_from_file(filename)
+		path = gtkgui_helpers.get_icon_path(image, 32)
+		security_image.set_from_file(path)
 
 		xml.signal_autoconnect(self)
 		self.window.show_all()

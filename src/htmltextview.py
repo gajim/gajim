@@ -941,12 +941,12 @@ if __name__ == '__main__':
 
 	htmlview = ConversationTextview(None)
 
-	path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
+	path = gtkgui_helpers.get_icon_path('gajim-muc_separator')
 	# use this for hr
-	htmlview.tv.focus_out_line_pixbuf =  gtk.gdk.pixbuf_new_from_file(path_to_file)
-
+	htmlview.tv.focus_out_line_pixbuf =  gtk.gdk.pixbuf_new_from_file(path)
 
 	tooltip = tooltips.BaseTooltip()
+
 	def on_textview_motion_notify_event(widget, event):
 		"""
 		Change the cursor to a hand when we are over a mail or an url

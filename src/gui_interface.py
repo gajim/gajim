@@ -199,9 +199,7 @@ class Interface:
 
 	def handle_event_connection_lost(self, account, array):
 		# ('CONNECTION_LOST', account, [title, text])
-		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-			'connection_lost.png')
-		path = gtkgui_helpers.get_path_to_generic_or_avatar(path)
+		path = gtkgui_helpers.get_icon_path('gajim-connection_lost', 48)
 		notify.popup(_('Connection Failed'), account, account,
 			'connection_failed', path, array[0], array[1])
 
@@ -593,9 +591,7 @@ class Interface:
 		self.add_event(account, jid, 'subscription_request', (text, nick))
 
 		if helpers.allow_showing_notification(account):
-			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-				'subscription_request.png')
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(path)
+			path = gtkgui_helpers.get_icon_path('gajim-subscription_request', 48)
 			event_type = _('Subscription request')
 			notify.popup(event_type, jid, account, 'subscription_request', path,
 				event_type, jid)
@@ -657,9 +653,7 @@ class Interface:
 		self.add_event(account, jid, 'unsubscribed', contact)
 
 		if helpers.allow_showing_notification(account):
-			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-				'unsubscribed.png')
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(path)
+			path = gtkgui_helpers.get_icon_path('gajim-unsubscribed', 48)
 			event_type = _('Unsubscribed')
 			notify.popup(event_type, jid, account, 'unsubscribed', path,
 				event_type, jid)
@@ -1117,9 +1111,7 @@ class Interface:
 			array[3], array[4]))
 
 		if helpers.allow_showing_notification(account):
-			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-				'gc_invitation.png')
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(path)
+			path = gtkgui_helpers.get_icon_path('gajim-gc_invitation', 48)
 			event_type = _('Groupchat Invitation')
 			notify.popup(event_type, jid, account, 'gc-invitation', path,
 				event_type, room_jid)
@@ -1139,7 +1131,7 @@ class Interface:
 			sectext += _('You are currently connected without your OpenPGP key.')
 			dialogs.WarningDialog(_('Your passphrase is incorrect'), sectext)
 		else:
-			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'warning.png')
+			path = gtkgui_helpers.get_icon_path('gajim-warning', 48)
 			notify.popup('warning', account, account, 'warning', path,
 				_('OpenGPG Passphrase Incorrect'),
 				_('You are currently connected without your OpenPGP key.'))
@@ -1276,8 +1268,7 @@ class Interface:
 		self.add_event(account, jid, 'file-send-error', file_props)
 
 		if helpers.allow_showing_notification(account):
-			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', 'ft_error.png')
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+			path = gtkgui_helpers.get_icon_path('gajim-ft_error', 48)
 			event_type = _('File Transfer Error')
 			notify.popup(event_type, jid, account, 'file-send-error', path,
 				event_type, file_props['name'])
@@ -1287,8 +1278,7 @@ class Interface:
 		gmail_new_messages = int(array[1])
 		gmail_messages_list = array[2]
 		if gajim.config.get('notify_on_new_gmail_email'):
-			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-				'new_email_recv.png')
+			path = gtkgui_helpers.get_icon_path('gajim-new_email_recv', 48)
 			title = _('New mail on %(gmail_mail_address)s') % \
 				{'gmail_mail_address': jid}
 			text = i18n.ngettext('You have %d new mail conversation',
@@ -1311,7 +1301,6 @@ class Interface:
 
 			if gajim.config.get_per('soundevents', 'gmail_received', 'enabled'):
 				helpers.play_sound('gmail_received')
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			notify.popup(_('New E-mail'), jid, account, 'gmail',
 				path_to_image=path, title=title,
 				text=text)
@@ -1343,9 +1332,7 @@ class Interface:
 
 		if helpers.allow_showing_notification(account):
 			# check if we should be notified
-			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', 'ft_error.png')
-
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+			path = gtkgui_helpers.get_icon_path('gajim-ft_error', 48)
 			event_type = _('File Transfer Error')
 			notify.popup(event_type, jid, account, msg_type, path,
 				title = event_type, text = file_props['name'])
@@ -1374,11 +1361,9 @@ class Interface:
 		self.add_event(account, jid, 'file-request', file_props)
 
 		if helpers.allow_showing_notification(account):
-			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-				'ft_request.png')
+			path = gtkgui_helpers.get_icon_path('gajim-ft_request', 48)
 			txt = _('%s wants to send you a file.') % gajim.get_name_from_jid(
 				account, jid)
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			event_type = _('File Transfer Request')
 			notify.popup(event_type, jid, account, 'file-request',
 				path_to_image = path, title = event_type, text = txt)
@@ -1449,11 +1434,11 @@ class Interface:
 				if event_type == _('File Transfer Completed'):
 					txt = _('You successfully received %(filename)s from %(name)s.')\
 						% {'filename': filename, 'name': name}
-					img = 'ft_done.png'
+					img_name = 'gajim-ft_done'
 				else: # ft stopped
 					txt = _('File transfer of %(filename)s from %(name)s stopped.')\
 						% {'filename': filename, 'name': name}
-					img = 'ft_stopped.png'
+					img_name = 'gajim-ft_stopped'
 			else:
 				receiver = file_props['receiver']
 				if hasattr(receiver, 'jid'):
@@ -1466,23 +1451,23 @@ class Interface:
 				if event_type == _('File Transfer Completed'):
 					txt = _('You successfully sent %(filename)s to %(name)s.')\
 						% {'filename': filename, 'name': name}
-					img = 'ft_done.png'
+					img_name = 'gajim-ft_done'
 				else: # ft stopped
 					txt = _('File transfer of %(filename)s to %(name)s stopped.')\
 						% {'filename': filename, 'name': name}
-					img = 'ft_stopped.png'
-			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img)
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+					img_name = 'gajim-ft_stopped'
+			path = gtkgui_helpers.get_icon_path(img_name, 48)
 		else:
 			txt = ''
+			path = ''
 
 		if gajim.config.get('notify_on_file_complete') and \
 			(gajim.config.get('autopopupaway') or \
 			gajim.connections[account].connected in (2, 3)):
 			# we want to be notified and we are online/chat or we don't mind
 			# bugged when away/na/busy
-			notify.popup(event_type, jid, account, msg_type, path_to_image = path,
-				title = event_type, text = txt)
+			notify.popup(event_type, jid, account, msg_type, path_to_image=path,
+				title=event_type, text=txt)
 
 	def handle_event_stanza_arrived(self, account, stanza):
 		if account not in self.instances:
@@ -1766,11 +1751,9 @@ class Interface:
 
 		if helpers.allow_showing_notification(account):
 			# TODO: we should use another pixmap ;-)
-			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-				'ft_request.png')
 			txt = _('%s wants to start a voice chat.') % gajim.get_name_from_jid(
 				account, peerjid)
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+			path = gtkgui_helpers.get_icon_path('gajim-mic_active', 48)
 			event_type = _('Voice Chat Request')
 			notify.popup(event_type, peerjid, account, 'jingle-incoming',
 				path_to_image = path, title = event_type, text = txt)
@@ -2782,8 +2765,8 @@ class Interface:
 		if status in ('chat', 'away', 'xa', 'dnd', 'invisible', 'offline'):
 			status = status + '.png'
 		elif status == 'online':
-			prefix = os.path.join(gajim.DATA_DIR, 'pixmaps')
-			status = 'gajim.png'
+			prefix = ''
+			status = gtkgui_helpers.get_icon_path('gajim', 32)
 		path = os.path.join(prefix, status)
 		try:
 			obj = bus.get_object('com.google.code.Awn', '/com/google/code/Awn')
@@ -3386,8 +3369,7 @@ class Interface:
 		import statusicon
 		self.systray = statusicon.StatusIcon()
 
-		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'gajim.png')
-		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
+		pix = gtkgui_helpers.get_icon_pixmap('gajim', 32)
 		# set the icon to all windows
 		gtk.window_set_default_icon(pix)
 

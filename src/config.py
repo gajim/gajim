@@ -1437,8 +1437,7 @@ class AccountsWindow:
 		self.accounts_treeview = self.xml.get_widget('accounts_treeview')
 		self.remove_button = self.xml.get_widget('remove_button')
 		self.rename_button = self.xml.get_widget('rename_button')
-		path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
-			'kbd_input.png')
+		path_to_kbd_input_img = gtkgui_helpers.get_icon_path('gajim-kbd_input')
 		img = self.xml.get_widget('rename_image')
 		img.set_from_file(path_to_kbd_input_img)
 		self.notebook = self.xml.get_widget('notebook')
@@ -3372,7 +3371,7 @@ class AccountCreationWizardWindow:
 		if self.modify:
 			img.set_from_stock(gtk.STOCK_APPLY, gtk.ICON_SIZE_DIALOG)
 		else:
-			path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'gajim.png')
+			path_to_file = gtkgui_helpers.get_icon_path('gajim', 48)
 			img.set_from_file(path_to_file)
 		self.show_vcard_checkbutton.set_active(not self.modify)
 		self.notebook.set_current_page(6) # show finish page

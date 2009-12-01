@@ -207,10 +207,7 @@ class StatusIcon:
 		sub_menu.append(item)
 
 		item = gtk.ImageMenuItem(_('_Change Status Message...'))
-		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'kbd_input.png')
-		img = gtk.Image()
-		img.set_from_file(path)
-		item.set_image(img)
+		gtkgui_helpers.add_image_to_menuitem(item, 'gajim-kbd_input')
 		sub_menu.append(item)
 		item.connect('activate', self.on_change_status_message_activate)
 

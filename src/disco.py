@@ -73,44 +73,44 @@ def _gen_agent_type_info():
 		(0, 0):							(None, None),
 
 		# Jabber server
-		('server', 'im'):				(ToplevelAgentBrowser, 'jabber.png'),
-		('services', 'jabber'):		(ToplevelAgentBrowser, 'jabber.png'),
-		('hierarchy', 'branch'):	(AgentBrowser, 'jabber.png'),
+		('server', 'im'):				(ToplevelAgentBrowser, 'jabber'),
+		('services', 'jabber'):		(ToplevelAgentBrowser, 'jabber'),
+		('hierarchy', 'branch'):	(AgentBrowser, 'jabber'),
 
 		# Services
-		('conference', 'text'):		(MucBrowser, 'conference.png'),
-		('headline', 'rss'):			(AgentBrowser, 'rss.png'),
-		('headline', 'weather'):	(False, 'weather.png'),
-		('gateway', 'weather'):		(False, 'weather.png'),
-		('_jid', 'weather'):			(False, 'weather.png'),
-		('gateway', 'sip'):			(False, 'sip.png'),
-		('directory', 'user'):		(None, 'jud.png'),
-		('pubsub', 'generic'):		(PubSubBrowser, 'pubsub.png'),
-		('pubsub', 'service'):		(PubSubBrowser, 'pubsub.png'),
-		('proxy', 'bytestreams'):	(None, 'bytestreams.png'), # Socks5 FT proxy
-		('headline', 'newmail'):	(ToplevelAgentBrowser, 'mail.png'),
+		('conference', 'text'):		(MucBrowser, 'conference'),
+		('headline', 'rss'):			(AgentBrowser, 'rss'),
+		('headline', 'weather'):	(False, 'weather'),
+		('gateway', 'weather'):		(False, 'weather'),
+		('_jid', 'weather'):			(False, 'weather'),
+		('gateway', 'sip'):			(False, 'sip'),
+		('directory', 'user'):		(None, 'jud'),
+		('pubsub', 'generic'):		(PubSubBrowser, 'pubsub'),
+		('pubsub', 'service'):		(PubSubBrowser, 'pubsub'),
+		('proxy', 'bytestreams'):	(None, 'bytestreams'), # Socks5 FT proxy
+		('headline', 'newmail'):	(ToplevelAgentBrowser, 'mail'),
 
 		# Transports
-		('conference', 'irc'):		(ToplevelAgentBrowser, 'irc.png'),
-		('_jid', 'irc'):				(False, 'irc.png'),
-		('gateway', 'aim'):			(False, 'aim.png'),
-		('_jid', 'aim'):				(False, 'aim.png'),
-		('gateway', 'gadu-gadu'):	(False, 'gadu-gadu.png'),
-		('_jid', 'gadugadu'):		(False, 'gadu-gadu.png'),
-		('gateway', 'http-ws'):		(False, 'http-ws.png'),
-		('gateway', 'icq'):			(False, 'icq.png'),
-		('_jid', 'icq'):				(False, 'icq.png'),
-		('gateway', 'msn'):			(False, 'msn.png'),
-		('_jid', 'msn'):				(False, 'msn.png'),
-		('gateway', 'sms'):			(False, 'sms.png'),
-		('_jid', 'sms'):				(False, 'sms.png'),
-		('gateway', 'smtp'):			(False, 'mail.png'),
-		('gateway', 'yahoo'):		(False, 'yahoo.png'),
-		('_jid', 'yahoo'):			(False, 'yahoo.png'),
-		('gateway', 'mrim'):			(False, 'mrim.png'),
-		('_jid', 'mrim'):				(False, 'mrim.png'),
-		('gateway', 'facebook'):	(False, 'facebook.png'),
-		('_jid', 'facebook'):		(False, 'facebook.png'),
+		('conference', 'irc'):		(ToplevelAgentBrowser, 'irc'),
+		('_jid', 'irc'):				(False, 'irc'),
+		('gateway', 'aim'):			(False, 'aim'),
+		('_jid', 'aim'):				(False, 'aim'),
+		('gateway', 'gadu-gadu'):	(False, 'gadu_gadu'),
+		('_jid', 'gadugadu'):		(False, 'gadu_gadu'),
+		('gateway', 'http-ws'):		(False, 'http_ws'),
+		('gateway', 'icq'):			(False, 'icq'),
+		('_jid', 'icq'):				(False, 'icq'),
+		('gateway', 'msn'):			(False, 'msn'),
+		('_jid', 'msn'):				(False, 'msn'),
+		('gateway', 'sms'):			(False, 'sms'),
+		('_jid', 'sms'):				(False, 'sms'),
+		('gateway', 'smtp'):			(False, 'mail'),
+		('gateway', 'yahoo'):		(False, 'yahoo'),
+		('_jid', 'yahoo'):			(False, 'yahoo'),
+		('gateway', 'mrim'):			(False, 'mrim'),
+		('_jid', 'mrim'):				(False, 'mrim'),
+		('gateway', 'facebook'):	(False, 'facebook'),
+		('_jid', 'facebook'):		(False, 'facebook'),
 	}
 
 # Category type to "human-readable" description string, and sort priority
@@ -291,13 +291,12 @@ class ServicesCache:
 			info = _agent_type_info[(0, 0)]
 			filename = info[1]
 		if not filename: # we don't have an image to show for this type
-			filename = 'jabber.png'
+			filename = 'jabber'
 		# Use the cache if possible
 		if filename in _icon_cache:
 			return _icon_cache[filename]
 		# Or load it
-		filepath = os.path.join(gajim.DATA_DIR, 'pixmaps', 'agents', filename)
-		pix = gtk.gdk.pixbuf_new_from_file(filepath)
+		pix = gtkgui_helpers.get_icon_pixmap('gajim-agent-' + filename, size=32)
 		# Store in cache
 		_icon_cache[filename] = pix
 		return pix

@@ -207,11 +207,7 @@ def get_contact_menu(contact, account, use_multiple_contacts=True,
 
 	if not our_jid:
 		# add a special img for rename menuitem
-		path_to_kbd_input_img = os.path.join(gajim.DATA_DIR, 'pixmaps',
-			'kbd_input.png')
-		img = gtk.Image()
-		img.set_from_file(path_to_kbd_input_img)
-		rename_menuitem.set_image(img)
+		gtkgui_helpers.add_image_to_menuitem(rename_menuitem, 'gajim-kbd_input')
 
 	muc_icon = gtkgui_helpers.load_icon('muc_active')
 	if muc_icon:

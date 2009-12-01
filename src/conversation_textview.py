@@ -169,10 +169,9 @@ class ConversationTextview(gobject.GObject):
 		)
 	)
 
-	FOCUS_OUT_LINE_PIXBUF = gtk.gdk.pixbuf_new_from_file(os.path.join(
-		gajim.DATA_DIR, 'pixmaps', 'muc_separator.png'))
-	XEP0184_WARNING_PIXBUF = gtk.gdk.pixbuf_new_from_file(os.path.join(
-		gajim.DATA_DIR, 'pixmaps', 'receipt_missing.png'))
+	FOCUS_OUT_LINE_PIXBUF = gtkgui_helpers.get_icon_pixmap('gajim-muc_separator')
+	XEP0184_WARNING_PIXBUF = gtkgui_helpers.get_icon_pixmap(
+		'gajim-receipt_missing')
 
 	# smooth scroll constants
 	MAX_SCROLL_TIME = 0.4 # seconds

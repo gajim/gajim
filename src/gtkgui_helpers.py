@@ -82,6 +82,15 @@ def get_icon_path(icon_name, size=16):
 	except gobject.GError, e:
 		log.error("Unable to find icon %s: %s" % (icon_name, str(e)))
 
+def add_image_to_menuitem(menuitem, icon_name):
+	img = gtk.Image()
+	path_img = get_icon_path(icon_name)
+	img.set_from_file(path_img)
+	menuitem.set_image(img)
+
+def add_image_to_button(button, icon_name):
+	add_image_to_menuitem(button, icon_name)
+
 GLADE_DIR = os.path.join(gajim.DATA_DIR, 'glade')
 def get_glade(file_name, root = None):
 	file_path = os.path.join(GLADE_DIR, file_name)

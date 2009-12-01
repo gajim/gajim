@@ -107,8 +107,7 @@ import sqlite3 as sqlite
 
 class HistoryManager:
 	def __init__(self):
-		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
-		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
+		pix = gtkgui_helpers.get_icon_pixmap('gajim')
 		gtk.window_set_default_icon(pix) # set the icon to all newly opened windows
 
 		if not os.path.exists(LOG_DB_PATH):
