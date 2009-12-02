@@ -1505,27 +1505,35 @@ class ChatControl(ChatControlBase):
 		if jingle_type not in ('audio', 'video'):
 			return
 		banner_image = getattr(self, '_' + jingle_type + '_banner_image')
-		if getattr(self, jingle_type + '_state') in (
-		self.JINGLE_STATE_NOT_AVAILABLE, self.JINGLE_STATE_AVAILABLE):
+		state = getattr(self, jingle_type + '_state')
+		if state in (self.JINGLE_STATE_NOT_AVAILABLE,
+		self.JINGLE_STATE_AVAILABLE):
 			banner_image.hide()
 		else:
 			banner_image.show()
-		if self.audio_state == self.JINGLE_STATE_CONNECTING:
+		if state == self.JINGLE_STATE_CONNECTING:
 			banner_image.set_from_stock(
 				gtk.STOCK_CONVERT, 1)
-		elif self.audio_state == self.JINGLE_STATE_CONNECTION_RECEIVED:
+		elif state == self.JINGLE_STATE_CONNECTION_RECEIVED:
 			banner_image.set_from_stock(
 				gtk.STOCK_NETWORK, 1)
-		elif self.audio_state == self.JINGLE_STATE_CONNECTED:
+		elif state == self.JINGLE_STATE_CONNECTED:
 			banner_image.set_from_stock(
 				gtk.STOCK_CONNECT, 1)
-		elif self.audio_state == self.JINGLE_STATE_ERROR:
+		elif state == self.JINGLE_STATE_ERROR:
 			banner_image.set_from_stock(
 				gtk.STOCK_DIALOG_WARNING, 1)
 		self.update_toolbar()
 
 	def update_audio(self):
 		self._update_jingle('audio')
+		vbox = self.xml.get_widget('audio_vbox')
+		if self.audio_state == self.JINGLE_STATE_CONNECTED:
+			vbox.set_no_show_all(False)
+			vbox.show_all()
+		else:
+			vbox.set_no_show_all(True)
+			vbox.hide()
 
 	def update_video(self):
 		self._update_jingle('video')
@@ -1588,6 +1596,96 @@ class ChatControl(ChatControlBase):
 
 	def set_video_state(self, state, sid=None, reason=None):
 		self._set_jingle_state('video', state, sid=sid, reason=reason)
+
+	def _on_num_button_pressed(self, num):
+		session = gajim.connections[self.account].get_jingle_session(
+			self.contact.get_full_jid(), self.audio_sid)
+		content = session.get_content('audio')
+		content._start_dtmf(num)
+
+	def _on_num_button_released(self):
+		session = gajim.connections[self.account].get_jingle_session(
+			self.contact.get_full_jid(), self.audio_sid)
+		content = session.get_content('audio')
+		content._stop_dtmf()
+
+	def on_1_button_pressed(self, widget):
+		self._on_num_button_pressed('1')
+
+	def on_1_button_released(self, widget):
+		self._on_num_button_released()
+
+	def on_2_button_pressed(self, widget):
+		self._on_num_button_pressed('2')
+
+	def on_2_button_released(self, widget):
+		self._on_num_button_released()
+
+	def on_3_button_pressed(self, widget):
+		self._on_num_button_pressed('3')
+
+	def on_3_button_released(self, widget):
+		self._on_num_button_released()
+
+	def on_4_button_pressed(self, widget):
+		self._on_num_button_pressed('4')
+
+	def on_4_button_released(self, widget):
+		self._on_num_button_released()
+
+	def on_5_button_pressed(self, widget):
+		self._on_num_button_pressed('5')
+
+	def on_5_button_released(self, widget):
+		self._on_num_button_released()
+
+	def on_6_button_pressed(self, widget):
+		self._on_num_button_pressed('6')
+
+	def on_6_button_released(self, widget):
+		self._on_num_button_released()
+
+	def on_7_button_pressed(self, widget):
+		self._on_num_button_pressed('7')
+
+	def on_7_button_released(self, widget):
+		self._on_num_button_released()
+
+	def on_8_button_pressed(self, widget):
+		self._on_num_button_pressed('8')
+
+	def on_8_button_released(self, widget):
+		self._on_num_button_released()
+
+	def on_9_button_pressed(self, widget):
+		self._on_num_button_pressed('9')
+
+	def on_9_button_released(self, widget):
+		self._on_num_button_released()
+
+	def on_0_button_pressed(self, widget):
+		self._on_num_button_pressed('0')
+
+	def on_0_button_released(self, widget):
+		self._on_num_button_released()
+
+	def on_star_button_pressed(self, widget):
+		self._on_num_button_pressed('*')
+
+	def on_star_button_released(self, widget):
+		self._on_num_button_released()
+
+	def on_sharp_button_pressed(self, widget):
+		self._on_num_button_pressed('#')
+
+	def on_sharp_button_released(self, widget):
+		self._on_num_button_released()
+
+	def on_mic_hscale_value_changed(self, widget, scroll_type):
+		pass
+
+	def on_sound_hscale_value_changed(self, widget, scroll_type):
+		pass
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		"""
@@ -1790,7 +1888,7 @@ class ChatControl(ChatControlBase):
 		banner_name_label.set_tooltip_text(label_tooltip)
 
 	def on_jingle_button_toggled(self, widget, jingle_type):
-		img_name = '%s_%s' % ({'audio': 'mic', 'video': 'cam'}[jingle_type],
+		img_name = 'gajim-%s_%s' % ({'audio': 'mic', 'video': 'cam'}[jingle_type],
 				{True: 'active', False: 'inactive'}[widget.get_active()])
 		path_to_img = gtkgui_helpers.get_icon_path(img_name)
 
