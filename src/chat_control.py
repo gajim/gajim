@@ -1382,6 +1382,14 @@ class ChatControl(ChatControlBase):
 			id_ = widget.connect('released', self.on_num_button_released)
 			self.handlers[id_] = widget
 
+		widget = self.xml.get_widget('mic_hscale')
+		id_ = widget.connect('value_changed', self.on_mic_hscale_value_changed)
+		self.handlers[id_] = widget
+
+		widget = self.xml.get_widget('sound_hscale')
+		id_ = widget.connect('value_changed', self.on_sound_hscale_value_changed)
+		self.handlers[id_] = widget
+
 		if not session:
 			# Don't use previous session if we want to a specific resource
 			# and it's not the same
@@ -1604,22 +1612,22 @@ class ChatControl(ChatControlBase):
 	def set_video_state(self, state, sid=None, reason=None):
 		self._set_jingle_state('video', state, sid=sid, reason=reason)
 
-	def on_num_button_pressed(self, widget, num):
+	def _get_audio_content(self):
 		session = gajim.connections[self.account].get_jingle_session(
 			self.contact.get_full_jid(), self.audio_sid)
-		content = session.get_content('audio')
-		content._start_dtmf(num)
+		return session.get_content('audio')
+
+	def on_num_button_pressed(self, widget, num):
+		self._get_audio_content()._start_dtmf(num)
 
 	def on_num_button_released(self, released):
-		session = gajim.connections[self.account].get_jingle_session(
-			self.contact.get_full_jid(), self.audio_sid)
-		content = session.get_content('audio')
-		content._stop_dtmf()
+		self._get_audio_content()._stop_dtmf()
 
-	def on_mic_hscale_value_changed(self, widget, scroll_type):
-		pass
+	def on_mic_hscale_value_changed(self, widget):
+		value = widget.get_value()
+		self._get_audio_content().set_mic_volume(value / 100)
 
-	def on_sound_hscale_value_changed(self, widget, scroll_type):
+	def on_sound_hscale_value_changed(self, widget):
 		pass
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):

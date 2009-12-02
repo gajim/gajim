@@ -771,7 +771,6 @@
                             <property name="adjustment">0 0 110 1 10 10</property>
                             <property name="digits">0</property>
                             <property name="value_pos">bottom</property>
-                            <signal name="value_changed" handler="on_sound_hscale_value_changed"/>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -796,7 +795,6 @@
                             <property name="adjustment">0 0 110 1 10 10</property>
                             <property name="digits">0</property>
                             <property name="value_pos">bottom</property>
-                            <signal name="value_changed" handler="on_mic_hscale_value_changed"/>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
