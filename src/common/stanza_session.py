@@ -249,7 +249,7 @@ class ArchivingStanzaSession(StanzaSession):
 	def accept_archiving_bob(self, form):
 		if self.negotiated['logging'] == 'mustnot':
 			self.loggable = False
-		print 'SESSION ACCEPTED', self.loggable
+		log.debug('archiving session accepted: %s' % self.loggable)
 		self.status = 'active'
 		self.archiving = True
 		if self.control:
@@ -280,7 +280,7 @@ class ArchivingStanzaSession(StanzaSession):
 		self.send(accept)
 		if self.negotiated['logging'] == 'mustnot':
 			self.loggable = False
-		print 'SESSION ACCEPTED', self.loggable
+		log.debug('archiving session accepted: %s' % self.loggable)
 		self.status = 'active'
 		self.archiving = True
 		if self.control:

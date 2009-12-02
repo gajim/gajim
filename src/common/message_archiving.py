@@ -20,6 +20,9 @@
 
 import common.xmpp
 
+import logging
+log = logging.getLogger('gajim.c.message_archiving')
+
 ARCHIVING_COLLECTIONS_ARRIVED = 'archiving_collections_arrived'
 ARCHIVING_COLLECTION_ARRIVED = 'archiving_collection_arrived'
 ARCHIVING_MODIFICATIONS_ARRIVED = 'archiving_modifications_arrived'
@@ -40,7 +43,6 @@ class ConnectionArchive:
 	def request_message_archiving_preferences(self):
 		iq_ = common.xmpp.Iq('get')
 		iq_.setTag('pref', namespace=common.xmpp.NS_ARCHIVE)
-		print iq_
 		self.connection.send(iq_)
 
 	def set_pref(self, name, **data):
@@ -53,7 +55,6 @@ class ConnectionArchive:
 		for key, value in data.items():
 			if value is not None:
 				tag.setAttr(key, value)
-		print iq_
 		self.connection.send(iq_)
 
 	def set_auto(self, save):
@@ -73,7 +74,6 @@ class ConnectionArchive:
 		itemremove = iq_.setTag('itemremove', namespace=common.xmpp.NS_ARCHIVE)
 		item = itemremove.setTag('item')
 		item.setAttr('jid', jid)
-		print iq_
 		self.connection.send(iq_)
 
 	def get_item_pref(self, jid):
@@ -118,12 +118,11 @@ class ConnectionArchive:
 		return ['may']
 
 	def _ArchiveCB(self, con, iq_obj):
-		print '_ArchiveCB', iq_obj.getType()
+		log.debug('_ArchiveCB %s' % iq_obj.getType())
 		if iq_obj.getType() == 'error':
 			self.dispatch('ARCHIVING_ERROR', iq_obj.getErrorMsg())
 			return
 		elif iq_obj.getType() not in ('result', 'set'):
-			print iq_obj
 			return
 		
 		if iq_obj.getTag('pref'):
@@ -131,7 +130,7 @@ class ConnectionArchive:
 
 			if pref.getTag('auto'):
 				self.auto = pref.getTagAttr('auto', 'save')
-				print 'auto:', self.auto
+				log.debug('archiving preference: auto: %s' % self.auto)
 				self.dispatch('ARCHIVING_CHANGED', ('auto',
 					self.auto))
 
@@ -153,11 +152,16 @@ class ConnectionArchive:
 				self.dispatch('ARCHIVING_CHANGED', ('method_manual',
 					self.method_manual))
 
-			print 'method alm:', self.method_auto, self.method_local, self.method_manual
+			log.debug('archiving preferences: method auto: %s, local: %s, '
+				'manual: %s' % (self.method_auto, self.method_local,
+				self.method_manual))
 
 			if pref.getTag('default'):
 				default = pref.getTag('default')
-				print 'default oseu:', default.getAttr('otr'), default.getAttr('save'), default.getAttr('expire'), default.getAttr('unset')
+				log.debug('archiving preferences: default otr: %s, save: %s, '
+					'expire: %s, unset: %s' % (default.getAttr('otr'),
+					default.getAttr('save'), default.getAttr('expire'),
+					default.getAttr('unset')))
 				self.default = {
 					'expire': default.getAttr('expire'),
 					'otr': default.getAttr('otr'),
@@ -166,7 +170,9 @@ class ConnectionArchive:
 				self.dispatch('ARCHIVING_CHANGED', ('default',
 					self.default))
 			for item in pref.getTags('item'):
-				print item.getAttr('jid'), item.getAttr('otr'), item.getAttr('save'), item.getAttr('expire')
+				log.debug('archiving preferences for jid %s: otr: %s, save: %s, '
+					'expire: %s' % (item.getAttr('jid'), item.getAttr('otr'),
+					item.getAttr('save'), item.getAttr('expire')))
 				self.items[item.getAttr('jid')] = {
 					'expire': item.getAttr('expire'),
 					'otr': item.getAttr('otr'), 'save': item.getAttr('save')}
@@ -174,7 +180,6 @@ class ConnectionArchive:
 					item.getAttr('jid'), self.items[item.getAttr('jid')]))
 		elif iq_obj.getTag('itemremove'):
 			for item in pref.getTags('item'):
-				print 'del', item.getAttr('jid')
 				del self.items[item.getAttr('jid')]
 				self.dispatch('ARCHIVING_CHANGED', ('itemremove',
 					item.getAttr('jid')))
