@@ -1297,10 +1297,7 @@ class ConnectionVcard:
 					count = 0
 				if count > index + nb:
 					# Request the next page
-					try:
-						after = int(element.getTagData('last'))
-					except TypeError:
-						after = index + nb
+					after = element.getTagData('last')
 					self.request_collection_page(with_, start_, after=after)
 
 		elif self.awaiting_answers[id_][0] == ARCHIVING_MODIFICATIONS_ARRIVED:

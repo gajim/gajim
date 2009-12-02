@@ -177,7 +177,7 @@ class StanzaSession(object):
 class ArchivingStanzaSession(StanzaSession):
 	def __init__(self, conn, jid, thread_id, type_='chat'):
 		StanzaSession.__init__(self, conn, jid, thread_id, type_='chat')
-		self.accepted = False
+		self.archiving = False
 
 	def archiving_logging_preference(self, initiator_options=None):
 		return self.conn.logging_preference(self.jid, initiator_options)
@@ -206,7 +206,7 @@ class ArchivingStanzaSession(StanzaSession):
 
 		feature.addChild(node=x)
 
-		self.status = 'requested'
+		self.status = 'requested-archiving'
 
 		self.send(request)
 
@@ -229,7 +229,7 @@ class ArchivingStanzaSession(StanzaSession):
 
 		x.addChild(node=xmpp.DataField(name='logging', value=logging))
 
-		self.status = 'responded'
+		self.status = 'responded-archiving'
 
 		feature.addChild(node=x)
 
@@ -250,7 +250,10 @@ class ArchivingStanzaSession(StanzaSession):
 		if self.negotiated['logging'] == 'mustnot':
 			self.loggable = False
 		print 'SESSION ACCEPTED', self.loggable
-		self.accepted = True
+		self.status = 'active'
+		self.archiving = True
+		if self.control:
+			self.control.print_archiving_session_details()
 
 	def accept_archiving_alice(self, form):
 		negotiated = {}
@@ -278,7 +281,10 @@ class ArchivingStanzaSession(StanzaSession):
 		if self.negotiated['logging'] == 'mustnot':
 			self.loggable = False
 		print 'SESSION ACCEPTED', self.loggable
-		self.accepted = True
+		self.status = 'active'
+		self.archiving = True
+		if self.control:
+			self.control.print_archiving_session_details()
 
 
 class EncryptedStanzaSession(ArchivingStanzaSession):
@@ -307,7 +313,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 	handle_session_negotiation method.
 	'''
 	def __init__(self, conn, jid, thread_id, type_='chat'):
-		StanzaSession.__init__(self, conn, jid, thread_id, type_='chat')
+		ArchivingStanzaSession.__init__(self, conn, jid, thread_id, type_='chat')
 
 		self.xes = {}
 		self.es = {}

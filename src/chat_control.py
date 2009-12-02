@@ -46,6 +46,7 @@ from common import exceptions
 from message_control import MessageControl
 from conversation_textview import ConversationTextview
 from message_textview import MessageTextView
+from common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
 from common.contacts import GC_Contact
 from common.logger import constants
 from common.pep import MOODS, ACTIVITIES
@@ -1394,7 +1395,7 @@ class ChatControl(ChatControlBase):
 			self.session = session
 
 			if session.enable_encryption:
-				self.print_esession_details()
+				self.print_session_details()
 
 		# Enable encryption if needed
 		self.no_autonegotiation = False
@@ -2055,6 +2056,17 @@ class ChatControl(ChatControlBase):
 		msg = _('Session negotiation cancelled')
 		ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
 
+	def print_archiving_session_details(self):
+		"""
+		Print esession settings to textview
+		"""
+		archiving = bool(self.session) and self.session.archiving
+		if archiving:
+			msg = _('This session WILL be archived on server')
+		else:
+			msg = _('This session WILL NOT be archived on server')
+		ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
+
 	def print_esession_details(self):
 		"""
 		Print esession settings to textview
@@ -2078,6 +2090,12 @@ class ChatControl(ChatControlBase):
 
 		self._show_lock_image(e2e_is_active, 'E2E', e2e_is_active, self.session and \
 				self.session.is_loggable(), self.session and self.session.verified_identity)
+
+	def print_session_details(self):
+		if isinstance(self.session, EncryptedStanzaSession):
+			self.print_esession_details()
+		elif isinstance(self.session, ArchivingStanzaSession):
+			self.print_archiving_session_details()
 
 	def print_conversation(self, text, frm='', tim=None, encrypted=False,
 			subject=None, xhtml=None, simple=False, xep0184_id=None):
@@ -2511,7 +2529,7 @@ class ChatControl(ChatControlBase):
 			if want_e2e and not self.no_autonegotiation \
 			and gajim.HAVE_PYCRYPTO and self.contact.supports(NS_ESESSION):
 				self.begin_e2e_negotiation()
-			elif not self.session.accepted:
+			elif not self.session or not self.session.status:
 				self.begin_archiving_negotiation()
 		else:
 			self.send_chatstate('active', self.contact)

@@ -30,6 +30,7 @@ import gtkgui_helpers
 
 from common import gajim
 from common import helpers
+from common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
 
 # Derived types MUST register their type IDs here if custom behavor is required
 TYPE_CHAT = 'chat'
@@ -163,11 +164,16 @@ class MessageControl:
 			if self.resource:
 				jid += '/' + self.resource
 
-		crypto_changed = bool(session and session.enable_encryption) != \
+		crypto_changed = bool(session and isinstance(session,
+			EncryptedStanzaSession) and session.enable_encryption) != \
 			bool(oldsession and oldsession.enable_encryption)
 
-		if crypto_changed:
-			self.print_esession_details()
+		archiving_changed = bool(session and isinstance(session,
+			ArchivingStanzaSession) and session.archiving) != \
+			bool(oldsession and oldsession.archiving)
+
+		if crypto_changed or archiving_changed:
+			self.print_session_details()
 
 	def send_message(self, message, keyID='', type_='chat', chatstate=None,
 	msg_id=None, composing_xep=None, resource=None, user_nick=None, xhtml=None,

@@ -440,7 +440,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
 				return
 
-			elif self.status == 'requested' and form.getType() == 'submit':
+			elif self.status == 'requested-archiving' and form.getType() == \
+			'submit':
 				try:
 					self.accept_archiving_alice(form)
 				except exceptions.NegotiationError, details:
@@ -481,7 +482,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 						self.fail_bad_negotiation(details)
 
 				return
-			elif self.status == 'responded' and form.getType() == 'result':
+			elif self.status == 'responded-archiving' and form.getType() == \
+			'result':
 				try:
 					self.accept_archiving_bob(form)
 				except exceptions.NegotiationError, details:
