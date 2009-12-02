@@ -36,31 +36,11 @@ import pango
 import os
 import sys
 
-import vcard
-import dialogs
-
 import logging
 log = logging.getLogger('gajim.gtkgui_helpers')
 
-
-HAS_PYWIN32 = True
-if os.name == 'nt':
-	try:
-		import win32file
-		import win32con
-		import pywintypes
-	except ImportError:
-		HAS_PYWIN32 = False
-
 from common import i18n
 from common import gajim
-from common import helpers
-
-gtk.glade.bindtextdomain(i18n.APP, i18n.DIR)
-gtk.glade.textdomain(i18n.APP)
-
-screen_w = gtk.gdk.screen_width()
-screen_h = gtk.gdk.screen_height()
 
 gtk_icon_theme = gtk.icon_theme_get_default()
 gtk_icon_theme.append_search_path(gajim.ICONS_DIR)
@@ -81,6 +61,27 @@ def get_icon_path(icon_name, size=16):
 			return icon_info.get_filename()
 	except gobject.GError, e:
 		log.error("Unable to find icon %s: %s" % (icon_name, str(e)))
+
+import vcard
+import dialogs
+
+
+HAS_PYWIN32 = True
+if os.name == 'nt':
+	try:
+		import win32file
+		import win32con
+		import pywintypes
+	except ImportError:
+		HAS_PYWIN32 = False
+
+from common import helpers
+
+gtk.glade.bindtextdomain(i18n.APP, i18n.DIR)
+gtk.glade.textdomain(i18n.APP)
+
+screen_w = gtk.gdk.screen_width()
+screen_h = gtk.gdk.screen_height()
 
 def add_image_to_menuitem(menuitem, icon_name):
 	img = gtk.Image()
