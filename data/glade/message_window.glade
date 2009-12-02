@@ -600,8 +600,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="pressed" handler="on_1_button_pressed"/>
-                                <signal name="released" handler="on_1_button_released"/>
                               </widget>
                             </child>
                             <child>
@@ -610,8 +608,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="pressed" handler="on_2_button_pressed"/>
-                                <signal name="released" handler="on_2_button_released"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -624,8 +620,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="pressed" handler="on_3_button_pressed"/>
-                                <signal name="released" handler="on_3_button_released"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -638,8 +632,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="pressed" handler="on_4_button_pressed"/>
-                                <signal name="released" handler="on_4_button_released"/>
                               </widget>
                               <packing>
                                 <property name="top_attach">1</property>
@@ -652,8 +644,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="pressed" handler="on_5_button_pressed"/>
-                                <signal name="released" handler="on_5_button_released"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -668,8 +658,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="pressed" handler="on_6_button_pressed"/>
-                                <signal name="released" handler="on_6_button_released"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -684,8 +672,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="pressed" handler="on_7_button_pressed"/>
-                                <signal name="released" handler="on_7_button_released"/>
                               </widget>
                               <packing>
                                 <property name="top_attach">2</property>
@@ -698,8 +684,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="pressed" handler="on_8_button_pressed"/>
-                                <signal name="released" handler="on_8_button_released"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -714,8 +698,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="pressed" handler="on_9_button_pressed"/>
-                                <signal name="released" handler="on_9_button_released"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -730,8 +712,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="pressed" handler="on_star_button_pressed"/>
-                                <signal name="released" handler="on_star_button_released"/>
                               </widget>
                               <packing>
                                 <property name="top_attach">3</property>
@@ -744,8 +724,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="pressed" handler="on_0_button_pressed"/>
-                                <signal name="released" handler="on_0_button_released"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -760,8 +738,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="pressed" handler="on_sharp_button_pressed"/>
-                                <signal name="released" handler="on_sharp_button_released"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">2</property>

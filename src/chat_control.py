@@ -1375,6 +1375,13 @@ class ChatControl(ChatControlBase):
 			self.on_avatar_eventbox_button_press_event)
 		self.handlers[id_] = widget
 
+		for key in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'):
+			widget = self.xml.get_widget(key + '_button')
+			id_ = widget.connect('pressed', self.on_num_button_pressed, key)
+			self.handlers[id_] = widget
+			id_ = widget.connect('released', self.on_num_button_released)
+			self.handlers[id_] = widget
+
 		if not session:
 			# Don't use previous session if we want to a specific resource
 			# and it's not the same
@@ -1597,89 +1604,17 @@ class ChatControl(ChatControlBase):
 	def set_video_state(self, state, sid=None, reason=None):
 		self._set_jingle_state('video', state, sid=sid, reason=reason)
 
-	def _on_num_button_pressed(self, num):
+	def on_num_button_pressed(self, widget, num):
 		session = gajim.connections[self.account].get_jingle_session(
 			self.contact.get_full_jid(), self.audio_sid)
 		content = session.get_content('audio')
 		content._start_dtmf(num)
 
-	def _on_num_button_released(self):
+	def on_num_button_released(self, released):
 		session = gajim.connections[self.account].get_jingle_session(
 			self.contact.get_full_jid(), self.audio_sid)
 		content = session.get_content('audio')
 		content._stop_dtmf()
-
-	def on_1_button_pressed(self, widget):
-		self._on_num_button_pressed('1')
-
-	def on_1_button_released(self, widget):
-		self._on_num_button_released()
-
-	def on_2_button_pressed(self, widget):
-		self._on_num_button_pressed('2')
-
-	def on_2_button_released(self, widget):
-		self._on_num_button_released()
-
-	def on_3_button_pressed(self, widget):
-		self._on_num_button_pressed('3')
-
-	def on_3_button_released(self, widget):
-		self._on_num_button_released()
-
-	def on_4_button_pressed(self, widget):
-		self._on_num_button_pressed('4')
-
-	def on_4_button_released(self, widget):
-		self._on_num_button_released()
-
-	def on_5_button_pressed(self, widget):
-		self._on_num_button_pressed('5')
-
-	def on_5_button_released(self, widget):
-		self._on_num_button_released()
-
-	def on_6_button_pressed(self, widget):
-		self._on_num_button_pressed('6')
-
-	def on_6_button_released(self, widget):
-		self._on_num_button_released()
-
-	def on_7_button_pressed(self, widget):
-		self._on_num_button_pressed('7')
-
-	def on_7_button_released(self, widget):
-		self._on_num_button_released()
-
-	def on_8_button_pressed(self, widget):
-		self._on_num_button_pressed('8')
-
-	def on_8_button_released(self, widget):
-		self._on_num_button_released()
-
-	def on_9_button_pressed(self, widget):
-		self._on_num_button_pressed('9')
-
-	def on_9_button_released(self, widget):
-		self._on_num_button_released()
-
-	def on_0_button_pressed(self, widget):
-		self._on_num_button_pressed('0')
-
-	def on_0_button_released(self, widget):
-		self._on_num_button_released()
-
-	def on_star_button_pressed(self, widget):
-		self._on_num_button_pressed('*')
-
-	def on_star_button_released(self, widget):
-		self._on_num_button_released()
-
-	def on_sharp_button_pressed(self, widget):
-		self._on_num_button_pressed('#')
-
-	def on_sharp_button_released(self, widget):
-		self._on_num_button_released()
 
 	def on_mic_hscale_value_changed(self, widget, scroll_type):
 		pass
