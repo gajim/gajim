@@ -2711,6 +2711,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
 		if show == 'invisible':
 			self.send_invisible_presence(msg, signed, True)
 			return
+		if show not in ['offline', 'online', 'chat', 'away', 'xa', 'dnd']:
+			return
 		priority = gajim.get_priority(self.name, sshow)
 		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
 		vcard = self.get_cached_vcard(our_jid)
