@@ -89,15 +89,16 @@ class JingleRTPContent(JingleContent):
 			and self.p2psession.get_property('codecs-ready'))
 
 	def make_bin_from_config(self, config_key, pipeline, text):
+		pipeline = pipeline % gajim.config.get(config_key)
 		try:
-			bin = gst.parse_bin_from_description(pipeline
-				% gajim.config.get(config_key), True)
+			bin = gst.parse_bin_from_description(pipeline, True)
 			return bin
 		except GError, error_str:
 			self.session.connection.dispatch('ERROR',
 				(_("%s configuration error") % text.capitalize(),
-				_("Couldn't setup %s. Check your configuration.\n\nError was:\n%s")
-					% (text, error_str)))
+					_("Couldn't setup %s. Check your configuration.\n\n"
+						"Pipeline was:\n%s\n\n"
+						"Error was:\n%s") % (text, pipeline, error_str)))
 			raise JingleContentSetupException
 
 	def add_remote_candidates(self, candidates):
@@ -321,7 +322,7 @@ class JingleVideo(JingleRTPContent):
 		#src_bin.link(caps)
 
 		self.sink = self.make_bin_from_config('video_output_device',
-			'%s ! videoscale ! ffmpegcolorspace', _("video output"))
+			'videoscale ! ffmpegcolorspace ! %s', _("video output"))
 		self.pipeline.add(self.sink)
 
 		src_bin.get_pad('src').link(self.p2psession.get_property('sink-pad'))
