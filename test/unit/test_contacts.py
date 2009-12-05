@@ -6,7 +6,7 @@ import unittest
 import lib
 lib.setup_env()
 
-from common.contacts import CommonContact, Contact, GC_Contact, Contacts
+from common.contacts import CommonContact, Contact, GC_Contact, LegacyContactsAPI
 from common.xmpp import NS_MUC
 
 from common import caps
@@ -68,7 +68,7 @@ class TestGC_Contact(TestCommonContact):
 class TestContacts(unittest.TestCase):
 	
 	def setUp(self):
-		self.contacts = Contacts()
+		self.contacts = LegacyContactsAPI()
 		
 	def test_create_add_get_contact(self):
 		jid = 'test@gajim.org'

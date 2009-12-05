@@ -39,9 +39,9 @@ modules = ( 'unit.test_xmpp_dispatcher_nb',
 				'unit.test_xmpp_transports_nb',
 				'unit.test_caps',
 				'unit.test_contacts',
-				'unit.test_gui_interface',
 				'unit.test_sessions',
 				'unit.test_account',
+				'unit.test_gui_interface',
 			 )
 #modules = ()
 
