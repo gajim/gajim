@@ -204,8 +204,8 @@ class GC_Contact(CommonContact):
 		Create a Contact instance from this GC_Contact instance
 		"""
 		return Contact(jid=self.get_full_jid(), account=self.account,
-			resource=self.resource, name=self.name, groups=[], show=self.show,
-			status=self.status, sub='none', client_caps=self.client_caps)
+			name=self.name, groups=[], show=self.show, status=self.status,
+			sub='none', client_caps=self.client_caps)
 
 
 class LegacyContactsAPI:
