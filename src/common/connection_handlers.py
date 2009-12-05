@@ -983,10 +983,10 @@ class ConnectionVcard:
 		if self.vcard_sha is not None:
 			c.setTagData('photo', self.vcard_sha)
 		if send_caps:
-			return self.add_caps(p)
+			return self._add_caps(p)
 		return p
 
-	def add_caps(self, p):
+	def _add_caps(self, p):
 		''' advertise our capabilities in presence stanza (xep-0115)'''
 		c = p.setTag('c', namespace = common.xmpp.NS_CAPS)
 		c.setAttr('hash', 'sha-1')
@@ -994,7 +994,7 @@ class ConnectionVcard:
 		c.setAttr('ver', gajim.caps_hash[self.name])
 		return p
 
-	def node_to_dict(self, node):
+	def _node_to_dict(self, node):
 		dict_ = {}
 		for info in node.getChildren():
 			name = info.getName()
@@ -1012,7 +1012,7 @@ class ConnectionVcard:
 					dict_[name][c.getName()] = c.getData()
 		return dict_
 
-	def save_vcard_to_hd(self, full_jid, card):
+	def _save_vcard_to_hd(self, full_jid, card):
 		jid, nick = gajim.get_room_and_nick_from_fjid(full_jid)
 		puny_jid = helpers.sanitize_filename(jid)
 		path = os.path.join(gajim.VCARD_PATH, puny_jid)
@@ -1061,7 +1061,7 @@ class ConnectionVcard:
 			# We are unable to parse it. Remove it
 			os.remove(path_to_file)
 			return None
-		vcard = self.node_to_dict(card)
+		vcard = self._node_to_dict(card)
 		if 'PHOTO' in vcard:
 			if not isinstance(vcard['PHOTO'], dict):
 				del vcard['PHOTO']
@@ -1075,11 +1075,11 @@ class ConnectionVcard:
 		vcard['resource'] = gajim.get_resource_from_jid(fjid)
 		return vcard
 
-	def request_vcard(self, jid = None, groupchat_jid = None):
+	def request_vcard(self, jid=None, groupchat_jid=None):
 		"""
 		Request the VCARD
 
-		If groupchat_jid is not nul, it means we request a vcard to a fake jid,
+		If groupchat_jid is not null, it means we request a vcard to a fake jid,
 		like in private messages in groupchat. jid can be the real jid of the
 		contact, but we want to consider it comes from a fake jid
 		"""
@@ -1163,7 +1163,7 @@ class ConnectionVcard:
 
 				# Save it to file
 				our_jid = gajim.get_jid_from_account(self.name)
-				self.save_vcard_to_hd(our_jid, vcard_iq)
+				self._save_vcard_to_hd(our_jid, vcard_iq)
 
 				# Send new presence if sha changed and we are not invisible
 				if self.vcard_sha != new_sha and gajim.SHOW_LIST[self.connected] !=\
@@ -1192,7 +1192,7 @@ class ConnectionVcard:
 			if not iq_obj.getTag('vCard') or iq_obj.getType() == 'error':
 				if frm and frm != our_jid:
 					# Write an empty file
-					self.save_vcard_to_hd(frm, '')
+					self._save_vcard_to_hd(frm, '')
 					jid, resource = gajim.get_room_and_nick_from_fjid(frm)
 					self.dispatch('VCARD', {'jid': jid, 'resource': resource})
 				elif frm == our_jid:
@@ -1291,7 +1291,7 @@ class ConnectionVcard:
 		else:
 			who = frm = our_jid
 		card = vc.getChildren()[0]
-		vcard = self.node_to_dict(card)
+		vcard = self._node_to_dict(card)
 		photo_decoded = None
 		if 'PHOTO' in vcard and isinstance(vcard['PHOTO'], dict) and \
 		'BINVAL' in vcard['PHOTO']:
@@ -1308,7 +1308,7 @@ class ConnectionVcard:
 			card.getTag('PHOTO').setTagData('SHA', avatar_sha)
 
 		# Save it to file
-		self.save_vcard_to_hd(who, card)
+		self._save_vcard_to_hd(who, card)
 		# Save the decoded avatar to a separate file too, and generate files for dbus notifications
 		puny_jid = helpers.sanitize_filename(frm)
 		puny_nick = None
