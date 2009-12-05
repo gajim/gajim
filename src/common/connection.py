@@ -578,8 +578,6 @@ class CommonConnection:
 				self.dispatch('STANZA_SENT', unicode(data))
 
 	def change_status(self, show, msg, auto=False):
-		if not show in ['offline', 'online', 'chat', 'away', 'xa', 'dnd']:
-			return -1
 		if not msg:
 			msg = ''
 		sign_msg = False
@@ -598,8 +596,9 @@ class CommonConnection:
 				self.USE_GPG = True
 				self.gpg = GnuPG.GnuPG(gajim.config.get('use_gpg_agent'))
 			self.connect_and_init(show, msg, sign_msg)
+			return
 
-		elif show == 'offline':
+		if show == 'offline':
 			self.connected = 0
 			if self.connection:
 				p = common.xmpp.Presence(typ = 'unavailable')
@@ -612,14 +611,17 @@ class CommonConnection:
 				self.connection.start_disconnect()
 			else:
 				self._on_disconnected()
+			return
 
-		elif show != 'offline' and self.connected > 0:
+		if show != 'offline' and self.connected > 0:
 			# dont'try to connect, when we are in state 'connecting'
 			if self.connected == 1:
 				return
 			if show == 'invisible':
 				self._change_to_invisible(msg)
 				return
+			if show not in ['offline', 'online', 'chat', 'away', 'xa', 'dnd']:
+				return -1
 			was_invisible = self.connected == gajim.SHOW_LIST.index('invisible')
 			self.connected = gajim.SHOW_LIST.index(show)
 			if was_invisible:

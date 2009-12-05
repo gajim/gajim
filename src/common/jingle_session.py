@@ -29,7 +29,7 @@ Handles Jingle sessions (XEP 0166)
 import gajim #Get rid of that?
 import xmpp
 from jingle_transport import get_jingle_transport
-from jingle_content import get_jingle_content, FailedApplication
+from jingle_content import get_jingle_content, JingleContentSetupException
 
 # FIXME: Move it to JingleSession.States?
 class JingleStates(object):
@@ -492,7 +492,7 @@ class JingleSession(object):
 					else:
 						reasons.add('unsupported-transports')
 						contents_rejected.append((element['name'], 'peer'))
-				except FailedApplication:
+				except JingleContentSetupException:
 					reasons.add('failed-application')
 			else:
 				contents_rejected.append((element['name'], 'peer'))

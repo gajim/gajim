@@ -23,7 +23,7 @@ def get_jingle_content(node):
 		return contents[namespace](node)
 
 
-class FailedApplication(Exception):
+class JingleContentSetupException(Exception):
 	"""
 	Exception that should be raised when a content fails to setup.
 	"""

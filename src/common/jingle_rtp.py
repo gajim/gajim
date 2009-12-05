@@ -24,7 +24,7 @@ from glib import GError
 import gajim
 
 from jingle_transport import JingleTransportICEUDP
-from jingle_content import contents, JingleContent, FailedApplication
+from jingle_content import contents, JingleContent, JingleContentSetupException
 
 
 class JingleRTPContent(JingleContent):
@@ -89,16 +89,17 @@ class JingleRTPContent(JingleContent):
 			and self.p2psession.get_property('codecs-ready'))
 
 	def make_bin_from_config(self, config_key, pipeline, text):
+		pipeline = pipeline % gajim.config.get(config_key)
 		try:
-			bin = gst.parse_bin_from_description(pipeline
-				% gajim.config.get(config_key), True)
+			bin = gst.parse_bin_from_description(pipeline, True)
 			return bin
 		except GError, error_str:
 			self.session.connection.dispatch('ERROR',
 				(_("%s configuration error") % text.capitalize(),
-				_("Couldn't setup %s. Check your configuration.\n\nError was:\n%s")
-					% (text, error_str)))
-			raise FailedApplication
+					_("Couldn't setup %s. Check your configuration.\n\n"
+						"Pipeline was:\n%s\n\n"
+						"Error was:\n%s") % (text, pipeline, error_str)))
+			raise JingleContentSetupException
 
 	def add_remote_candidates(self, candidates):
 		JingleContent.add_remote_candidates(self, candidates)
@@ -257,6 +258,12 @@ class JingleAudio(JingleRTPContent):
 		JingleRTPContent.__init__(self, session, 'audio', transport)
 		self.setup_stream()
 
+	def set_mic_volume(self, vol):
+		"""
+		vol must be between 0 ans 1
+		"""
+		self.mic_volume.set_property('volume', vol)
+
 	def setup_stream(self):
 		JingleRTPContent.setup_stream(self)
 
@@ -281,7 +288,7 @@ class JingleAudio(JingleRTPContent):
 			'audioconvert ! %s', _("audio output"))
 
 		self.mic_volume = src_bin.get_by_name('gajim_vol')
-		self.mic_volume.set_property('volume', 1)
+		self.set_mic_volume(0)
 
 		# link gst elements
 		self.pipeline.add(self.sink, src_bin)
@@ -315,7 +322,7 @@ class JingleVideo(JingleRTPContent):
 		#src_bin.link(caps)
 
 		self.sink = self.make_bin_from_config('video_output_device',
-			'%s ! videoscale ! ffmpegcolorspace', _("video output"))
+			'videoscale ! ffmpegcolorspace ! %s', _("video output"))
 		self.pipeline.add(self.sink)
 
 		src_bin.get_pad('src').link(self.p2psession.get_property('sink-pad'))

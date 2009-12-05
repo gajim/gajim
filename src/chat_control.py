@@ -1375,6 +1375,21 @@ class ChatControl(ChatControlBase):
 			self.on_avatar_eventbox_button_press_event)
 		self.handlers[id_] = widget
 
+		for key in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'):
+			widget = self.xml.get_widget(key + '_button')
+			id_ = widget.connect('pressed', self.on_num_button_pressed, key)
+			self.handlers[id_] = widget
+			id_ = widget.connect('released', self.on_num_button_released)
+			self.handlers[id_] = widget
+
+		widget = self.xml.get_widget('mic_hscale')
+		id_ = widget.connect('value_changed', self.on_mic_hscale_value_changed)
+		self.handlers[id_] = widget
+
+		widget = self.xml.get_widget('sound_hscale')
+		id_ = widget.connect('value_changed', self.on_sound_hscale_value_changed)
+		self.handlers[id_] = widget
+
 		if not session:
 			# Don't use previous session if we want to a specific resource
 			# and it's not the same
@@ -1505,27 +1520,35 @@ class ChatControl(ChatControlBase):
 		if jingle_type not in ('audio', 'video'):
 			return
 		banner_image = getattr(self, '_' + jingle_type + '_banner_image')
-		if getattr(self, jingle_type + '_state') in (
-		self.JINGLE_STATE_NOT_AVAILABLE, self.JINGLE_STATE_AVAILABLE):
+		state = getattr(self, jingle_type + '_state')
+		if state in (self.JINGLE_STATE_NOT_AVAILABLE,
+		self.JINGLE_STATE_AVAILABLE):
 			banner_image.hide()
 		else:
 			banner_image.show()
-		if self.audio_state == self.JINGLE_STATE_CONNECTING:
+		if state == self.JINGLE_STATE_CONNECTING:
 			banner_image.set_from_stock(
 				gtk.STOCK_CONVERT, 1)
-		elif self.audio_state == self.JINGLE_STATE_CONNECTION_RECEIVED:
+		elif state == self.JINGLE_STATE_CONNECTION_RECEIVED:
 			banner_image.set_from_stock(
 				gtk.STOCK_NETWORK, 1)
-		elif self.audio_state == self.JINGLE_STATE_CONNECTED:
+		elif state == self.JINGLE_STATE_CONNECTED:
 			banner_image.set_from_stock(
 				gtk.STOCK_CONNECT, 1)
-		elif self.audio_state == self.JINGLE_STATE_ERROR:
+		elif state == self.JINGLE_STATE_ERROR:
 			banner_image.set_from_stock(
 				gtk.STOCK_DIALOG_WARNING, 1)
 		self.update_toolbar()
 
 	def update_audio(self):
 		self._update_jingle('audio')
+		vbox = self.xml.get_widget('audio_vbox')
+		if self.audio_state == self.JINGLE_STATE_CONNECTED:
+			vbox.set_no_show_all(False)
+			vbox.show_all()
+		else:
+			vbox.set_no_show_all(True)
+			vbox.hide()
 
 	def update_video(self):
 		self._update_jingle('video')
@@ -1588,6 +1611,24 @@ class ChatControl(ChatControlBase):
 
 	def set_video_state(self, state, sid=None, reason=None):
 		self._set_jingle_state('video', state, sid=sid, reason=reason)
+
+	def _get_audio_content(self):
+		session = gajim.connections[self.account].get_jingle_session(
+			self.contact.get_full_jid(), self.audio_sid)
+		return session.get_content('audio')
+
+	def on_num_button_pressed(self, widget, num):
+		self._get_audio_content()._start_dtmf(num)
+
+	def on_num_button_released(self, released):
+		self._get_audio_content()._stop_dtmf()
+
+	def on_mic_hscale_value_changed(self, widget):
+		value = widget.get_value()
+		self._get_audio_content().set_mic_volume(value / 100)
+
+	def on_sound_hscale_value_changed(self, widget):
+		pass
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		"""
@@ -1790,7 +1831,7 @@ class ChatControl(ChatControlBase):
 		banner_name_label.set_tooltip_text(label_tooltip)
 
 	def on_jingle_button_toggled(self, widget, jingle_type):
-		img_name = '%s_%s' % ({'audio': 'mic', 'video': 'cam'}[jingle_type],
+		img_name = 'gajim-%s_%s' % ({'audio': 'mic', 'video': 'cam'}[jingle_type],
 				{True: 'active', False: 'inactive'}[widget.get_active()])
 		path_to_img = gtkgui_helpers.get_icon_path(img_name)
 
