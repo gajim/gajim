@@ -8824,7 +8824,7 @@ msgstr "apagado del sistema"
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s by %(actor)s"
 msgstr ""
-"** La afiliación de %(nick)s ha sido definida en &(affiliation)s por %(actor)"
+"** La afiliación de %(nick)s ha sido definida en %(affiliation)s por %(actor)"
 "s"
 
 #: ../src/groupchat_control.py:1380

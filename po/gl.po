@@ -7923,7 +7923,7 @@ msgstr "Gardar o ficheiro como..."
 #: ../src/filetransfers_window.py:435
 #, python-format
 msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
-msgstr "%(horas)02.d:%(minutos)02.d:%(segundos)02.d"
+msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
 #. This should make the string Kb/s,
 #. where 'Kb' part is taken from %s.
@@ -8285,13 +8285,13 @@ msgstr "Erro ao ler o ficheiro:"
 #: ../src/gajim.py:1838
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
-msgstr "Recibiu con éxito o ficheiro %(ficheiro)s de %(nome)s."
+msgstr "Recibiu con éxito o ficheiro %(filename)s de %(name)s."
 
 #. ft stopped
 #: ../src/gajim.py:1842
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
-msgstr "Detívose a transferencia do ficheiro %(ficheiro)s de %(nome)s."
+msgstr "Detívose a transferencia do ficheiro %(filename)s de %(name)s."
 
 #: ../src/gajim.py:1855
 #, python-format
