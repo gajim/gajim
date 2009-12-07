@@ -5007,28 +5007,22 @@ class RosterWindow:
 
 			pep_menuitem = xml.get_widget('pep_menuitem')
 			if gajim.connections[account].pep_supported:
-				have_tune = gajim.config.get_per('accounts', account,
-					'publish_tune')
-				have_location = gajim.config.get_per('accounts', account,
-					'publish_location')
 				pep_submenu = gtk.Menu()
 				pep_menuitem.set_submenu(pep_submenu)
-				item = gtk.CheckMenuItem(_('Publish Tune'))
-				pep_submenu.append(item)
-				if not dbus_support.supported:
-					item.set_sensitive(False)
-				else:
-					item.set_active(have_tune)
-					item.connect('toggled', self.on_publish_tune_toggled, account)
+				def add_item(label, opt_name, func):
+					item = gtk.CheckMenuItem(label)
+					pep_submenu.append(item)
+					if not dbus_support.supported:
+						item.set_sensitive(False)
+					else:
+						activ = gajim.config.get_per('accounts', account, opt_name)
+						item.set_active(activ)
+						item.connect('toggled', func, account)
 
-				item = gtk.CheckMenuItem(_('Publish Location'))
-				pep_submenu.append(item)
-				if not dbus_support.supported:
-					item.set_sensitive(False)
-				else:
-					item.set_active(have_location)
-					item.connect('toggled', self.on_publish_location_toggled,
-						account)
+				add_item(_('Publish Tune'), 'publish_tune',
+					self.on_publish_tune_toggled)
+				add_item(_('Publish Location'), 'publish_location',
+					self.on_publish_location_toggled)
 
 				pep_config = gtk.ImageMenuItem(_('Configure Services...'))
 				item = gtk.SeparatorMenuItem()
