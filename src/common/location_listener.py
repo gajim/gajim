@@ -73,8 +73,8 @@ class LocationListener:
 		# Check that there is a provider
 		name, description, service, path = cli.GetPositionProvider()
 		if path:
-			fields, timestamp, lat, lon, accuray = cli.GetPosition()
-			self._on_geoclue_position_changed(fields, timestamp, lat, lon,
+			fields, timestamp, lat, lon, alt, accuray = cli.GetPosition()
+			self._on_geoclue_position_changed(fields, timestamp, lat, lon, alt,
 				accuracy)
 
 	def start(self):
@@ -91,17 +91,23 @@ class LocationListener:
 
 	def _on_geoclue_address_changed(self, timestamp, address, accuracy):
 		# update data with info we just received
-		for field in pep.LOCATION_DATA:
-			self._data[field] = address.get(field, self._data.get(field, None))
+		for field in ['country', 'countrycode', 'locality', 'postalcode',
+		'region', 'street']:
+			self._data[field] = address.get(field, None)
+		self._data['timestamp'] = timestamp
+		# in PEP it's horizontal accuracy
+		self._data['accuracy'] = accuracy[1]
 		self._send_location()
 
-	def _on_geoclue_position_changed(self, fields, timestamp, lat, lon,
+	def _on_geoclue_position_changed(self, fields, timestamp, lat, lon, alt,
 	accuracy):
 		# update data with info we just received
-		if lat:
-			self._data['lat'] = lat
-		if lon:
-			self._data['lon'] = lon
+		_dict = {'lat': lat, 'lon': lon, 'alt': alt}
+		for field in _dict:
+			self._data[field] = _dict[field]
+		self._data['timestamp'] = timestamp
+		# in PEP it's horizontal accuracy
+		self._data['accuracy'] = accuracy[1]
 		self._send_location()
 
 	def _send_location(self):
