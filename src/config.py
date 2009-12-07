@@ -137,6 +137,11 @@ class PreferencesWindow:
 		self.xml.get_widget('show_tunes_in_roster_checkbutton'). \
 			set_active(st)
 
+		# Display location in roster
+		st = gajim.config.get('show_location_in_roster')
+		self.xml.get_widget('show_location_in_roster_checkbutton'). \
+			set_active(st)
+
 		# Sort contacts by show
 		st = gajim.config.get('sort_by_show_in_roster')
 		self.xml.get_widget('sort_by_show_in_roster_checkbutton').set_active(st)
@@ -613,6 +618,10 @@ class PreferencesWindow:
 
 	def on_show_tunes_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_tunes_in_roster')
+		gajim.interface.roster.setup_and_draw_roster()
+
+	def on_show_location_in_roster_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'show_location_in_roster')
 		gajim.interface.roster.setup_and_draw_roster()
 
 	def on_emoticons_combobox_changed(self, widget):

@@ -600,7 +600,7 @@ class RosterTooltip(NotificationAreaTooltip):
 
 	def _append_pep_info(self, contact, properties):
 		"""
-		Append Tune, Mood, Activity information of the specified contact
+		Append Tune, Mood, Activity, Location information of the specified contact
 		to the given property list.
 		"""
 		if 'mood' in contact.pep:
@@ -617,6 +617,11 @@ class RosterTooltip(NotificationAreaTooltip):
 			tune = contact.pep['tune'].asMarkupText()
 			tune_string = _('Tune:') + ' %s' % tune
 			properties.append((tune_string, None))
+
+		if 'location' in contact.pep:
+			location = contact.pep['location'].asMarkupText()
+			location_string = _('Location:') + ' %s' % location
+			properties.append((location_string, None))
 
 
 class FileTransfersTooltip(BaseTooltip):

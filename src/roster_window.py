@@ -79,9 +79,10 @@ from common.pep import MOODS, ACTIVITIES
 	C_MOOD_PIXBUF,
 	C_ACTIVITY_PIXBUF,
 	C_TUNE_PIXBUF,
+	C_LOCATION_PIXBUF,
 	C_AVATAR_PIXBUF, # avatar_pixbuf
 	C_PADLOCK_PIXBUF, # use for account row only
-) = range(10)
+) = range(11)
 
 class RosterWindow:
 	"""
@@ -293,7 +294,7 @@ class RosterWindow:
 			self.model.append(None, [
 				gajim.interface.jabber_state_images['16'][show],
 				gobject.markup_escape_text(account), 'account',
-				our_jid, account, None, None, None, None,
+				our_jid, account, None, None, None, None, None,
 				tls_pixbuf])
 
 		self.draw_account(account)
@@ -370,7 +371,7 @@ class RosterWindow:
 					child_iterG = self.model.append(child_iterA,
 						[gajim.interface.jabber_state_images['16']['closed'],
 						gobject.markup_escape_text(group),
-						'group', group, account, None, None, None, None, None])
+						'group', group, account, None, None, None, None, None, None])
 					self.draw_group(group, account)
 
 				if contact.is_transport():
@@ -385,7 +386,7 @@ class RosterWindow:
 				i_ = self.model.append(child_iterG, (None,
 					contact.get_shown_name(), typestr,
 					contact.jid, account, None, None, None,
-					None, None))
+					None, None, None))
 				added_iters.append(i_)
 
 				# Restore the group expand state
@@ -627,7 +628,7 @@ class RosterWindow:
 		child_iterA = self._get_account_iter(account, self.model)
 		self.model.append(child_iterA, (None, gajim.nicks[account],
 			'self_contact', jid, account, None, None, None, None,
-			None))
+			None, None))
 
 		self.draw_completely(jid, account)
 		self.draw_account(account)
@@ -1050,6 +1051,11 @@ class RosterWindow:
 			self.model[child_iter][C_TUNE_PIXBUF] = pep['tune'].asPixbufIcon()
 		else:
 			self.model[child_iter][C_TUNE_PIXBUF] = None
+
+		if gajim.config.get('show_location_in_roster') and 'location' in pep:
+			self.model[child_iter][C_LOCATION_PIXBUF] = pep['location'].asPixbufIcon()
+		else:
+			self.model[child_iter][C_LOCATION_PIXBUF] = None
 		return False
 
 	def draw_group(self, group, account):
@@ -1264,6 +1270,8 @@ class RosterWindow:
 			return gajim.config.get('show_activity_in_roster')
 		elif pep_type == 'tune':
 			return  gajim.config.get('show_tunes_in_roster')
+		elif pep_type == 'location':
+			return  gajim.config.get('show_location_in_roster')
 		else:
 			return False
 
@@ -1362,10 +1370,11 @@ class RosterWindow:
 		"""
 		self.modelfilter = None
 		# (icon, name, type, jid, account, editable, mood_pixbuf,
-		# activity_pixbuf, tune_pixbuf avatar_pixbuf, padlock_pixbuf)
+		# activity_pixbuf, tune_pixbuf, location_pixbuf, avatar_pixbuf,
+		# padlock_pixbuf)
 		self.model = gtk.TreeStore(gtk.Image, str, str, str, str,
 			gtk.gdk.Pixbuf, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf,
-			gtk.gdk.Pixbuf, gtk.gdk.Pixbuf)
+			gtk.gdk.Pixbuf, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf)
 
 		self.model.set_sort_func(1, self._compareIters)
 		self.model.set_sort_column_id(1, gtk.SORT_ASCENDING)
@@ -5892,9 +5901,16 @@ class RosterWindow:
 		col.set_cell_data_func(render_pixbuf,
 			self._fill_pep_pixbuf_renderer, C_TUNE_PIXBUF)
 
+		render_pixbuf = gtk.CellRendererPixbuf()
+		col.pack_start(render_pixbuf, expand=False)
+		col.add_attribute(render_pixbuf, 'pixbuf', C_LOCATION_PIXBUF)
+		col.set_cell_data_func(render_pixbuf,
+			self._fill_pep_pixbuf_renderer, C_LOCATION_PIXBUF)
+
 		self._pep_type_to_model_column = {'mood': C_MOOD_PIXBUF,
 													 'activity': C_ACTIVITY_PIXBUF,
-													 'tune': C_TUNE_PIXBUF}
+													 'tune': C_TUNE_PIXBUF,
+													 'location': C_LOCATION_PIXBUF}
 
 		if gajim.config.get('avatar_position_in_roster') == 'right':
 			add_avatar_renderer()
