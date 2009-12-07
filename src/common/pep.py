@@ -469,7 +469,7 @@ class UserLocationPEP(AbstractPEP):
 		return (location_dict, retracted)
 
 	def asPixbufIcon(self):
-		gtkgui_helpers.get_icon_path('gajim-earth')
+		path = gtkgui_helpers.get_icon_path('gajim-earth')
 		return gtk.gdk.pixbuf_new_from_file(path)
 
 	def asMarkupText(self):
