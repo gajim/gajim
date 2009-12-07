@@ -50,7 +50,7 @@ from common import gajim
 from common import dbus_support
 if dbus_support.supported:
 	from music_track_listener import MusicTrackListener
-	from common.location_listener import LocationListener
+	from common import location_listener
 	import dbus
 
 import gtkgui_helpers
@@ -1551,7 +1551,7 @@ class Interface:
 		# enable location listener
 		if gajim.connections[account].pep_supported and dbus_support.supported \
 		and gajim.config.get_per('accounts', account, 'publish_location'):
-			self.enable_location_listener()
+			location_listener.enable()
 
 	def handle_event_metacontacts(self, account, tags_list):
 		gajim.contacts.define_metacontacts(account, tags_list)
@@ -2789,15 +2789,6 @@ class Interface:
 		listener = MusicTrackListener.get()
 		listener.disconnect(self.music_track_changed_signal)
 		self.music_track_changed_signal = None
-
-	def enable_location_listener(self):
-		listener = LocationListener.get()
-		listener.get_data()
-		listener.start()
-
-	def disable_location_listener(self):
-		listener = LocationListener.get()
-		listener.shut_down()
 
 	def music_track_changed(self, unused_listener, music_track_info, account=None):
 		if not account:

@@ -59,6 +59,7 @@ from common import helpers
 from common.exceptions import GajimGeneralException
 from common import i18n
 from common import pep
+from common import location_listener
 
 from message_window import MessageWindowMgr
 
@@ -3437,7 +3438,7 @@ class RosterWindow:
 		active = widget.get_active()
 		gajim.config.set_per('accounts', account, 'publish_location', active)
 		if active:
-			gajim.interface.enable_location_listener()
+			location_listener.enable()
 		else:
 			gajim.connections[account].retract_location()
 			# disable music listener only if no other account uses it
@@ -3445,7 +3446,7 @@ class RosterWindow:
 				if gajim.config.get_per('accounts', acc, 'publish_location'):
 					break
 			else:
-				gajim.interface.disable_location_listener()
+				location_listener.disable()
 
 		helpers.update_optional_features(account)
 

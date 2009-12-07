@@ -78,6 +78,7 @@ class LocationListener:
 				accuracy)
 
 	def start(self):
+		self.get_data()
 		bus = dbus.SessionBus()
 		# Geoclue
 		bus.add_signal_receiver(self._on_geoclue_address_changed,
@@ -114,3 +115,11 @@ class LocationListener:
 				continue
 			gajim.connections[acct].send_location(self._data)
 			gajim.connections[acct].location_info = self._data
+
+def enable():
+	listener = LocationListener.get()
+	listener.start()
+
+def disable():
+	listener = LocationListener.get()
+	listener.shut_down()
