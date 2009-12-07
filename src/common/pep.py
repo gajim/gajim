@@ -545,8 +545,8 @@ class ConnectionPEP(object):
 	def retract_activity(self):
 		if not self.pep_supported:
 			return
-		# not all server support retract, so send empty pep first
 		self.send_activity(None)
+		# not all server support new XEP, so we still retract
 		self._pubsub_connection.send_pb_retract('', xmpp.NS_ACTIVITY, '0')
 
 	def send_mood(self, mood, message=None):
@@ -564,6 +564,7 @@ class ConnectionPEP(object):
 		if not self.pep_supported:
 			return
 		self.send_mood(None)
+		# not all server support new XEP, so we still retract
 		self._pubsub_connection.send_pb_retract('', xmpp.NS_MOOD, '0')
 
 	def send_tune(self, artist='', title='', source='', track=0, length=0,
@@ -593,8 +594,8 @@ class ConnectionPEP(object):
 	def retract_tune(self):
 		if not self.pep_supported:
 			return
-		# not all server support retract, so send empty pep first
 		self.send_tune(None)
+		# not all server support new XEP, so we still retract
 		self._pubsub_connection.send_pb_retract('', xmpp.NS_TUNE, '0')
 
 	def send_nickname(self, nick):
@@ -607,8 +608,8 @@ class ConnectionPEP(object):
 	def retract_nickname(self):
 		if not self.pep_supported:
 			return
-		# not all server support retract, so send empty pep first
 		self.send_nickname(None)
+		# not all server support new XEP, so we still retract
 		self._pubsub_connection.send_pb_retract('', xmpp.NS_NICK, '0')
 
 	def send_location(self, info):
@@ -624,6 +625,8 @@ class ConnectionPEP(object):
 	def retract_location(self):
 		if not self.pep_supported:
 			return
+		self.send_location({})
+		# not all server support new XEP, so we still retract
 		self._pubsub_connection.send_pb_retract('', xmpp.NS_LOCATION, '0')
 
 # vim: se ts=3:

@@ -83,7 +83,7 @@ class LocationListener:
 		# Geoclue
 		bus.add_signal_receiver(self._on_geoclue_address_changed,
 			'AddressChanged', 'org.freedesktop.Geoclue.Address')
-		bus.add_signal_receiver(self._on_geoclue_address_changed,
+		bus.add_signal_receiver(self._on_geoclue_position_changed,
 			'PositionChanged', 'org.freedesktop.Geoclue.Position')
 
 	def shut_down(self):
