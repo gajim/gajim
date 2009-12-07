@@ -653,8 +653,8 @@ class Connection(CommonConnection, ConnectionHandlers):
 		self.last_history_time = {}
 		self.password = passwords.get_password(name)
 
-		# Used to ask privacy only once at connection
 		self.music_track_info = 0
+		self.location_info = {}
 		self.pubsub_supported = False
 		self.pubsub_publish_options_supported = False
 		# Do we auto accept insecure connection

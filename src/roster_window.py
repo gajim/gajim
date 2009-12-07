@@ -3433,6 +3433,22 @@ class RosterWindow:
 
 		helpers.update_optional_features(account)
 
+	def on_publish_location_toggled(self, widget, account):
+		active = widget.get_active()
+		gajim.config.set_per('accounts', account, 'publish_location', active)
+		if active:
+			gajim.interface.enable_location_listener()
+		else:
+			gajim.connections[account].retract_location()
+			# disable music listener only if no other account uses it
+			for acc in gajim.connections:
+				if gajim.config.get_per('accounts', acc, 'publish_location'):
+					break
+			else:
+				gajim.interface.disable_location_listener()
+
+		helpers.update_optional_features(account)
+
 	def on_pep_services_menuitem_activate(self, widget, account):
 		if 'pep_services' in gajim.interface.instances[account]:
 			gajim.interface.instances[account]['pep_services'].window.present()
@@ -4993,6 +5009,8 @@ class RosterWindow:
 			if gajim.connections[account].pep_supported:
 				have_tune = gajim.config.get_per('accounts', account,
 					'publish_tune')
+				have_location = gajim.config.get_per('accounts', account,
+					'publish_location')
 				pep_submenu = gtk.Menu()
 				pep_menuitem.set_submenu(pep_submenu)
 				item = gtk.CheckMenuItem(_('Publish Tune'))
@@ -5002,6 +5020,15 @@ class RosterWindow:
 				else:
 					item.set_active(have_tune)
 					item.connect('toggled', self.on_publish_tune_toggled, account)
+
+				item = gtk.CheckMenuItem(_('Publish Location'))
+				pep_submenu.append(item)
+				if not dbus_support.supported:
+					item.set_sensitive(False)
+				else:
+					item.set_active(have_location)
+					item.connect('toggled', self.on_publish_location_toggled,
+						account)
 
 				pep_config = gtk.ImageMenuItem(_('Configure Services...'))
 				item = gtk.SeparatorMenuItem()

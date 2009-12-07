@@ -468,6 +468,11 @@ class UserLocationPEP(AbstractPEP):
 		retracted = items.getTag('retract') or not location_dict
 		return (location_dict, retracted)
 
+	def _update_account(self, account):
+		AbstractPEP._update_account(self, account)
+		con = gajim.connections[account].location_info = \
+			self._pep_specific_data
+
 	def asPixbufIcon(self):
 		path = gtkgui_helpers.get_icon_path('gajim-earth')
 		return gtk.gdk.pixbuf_new_from_file(path)
@@ -605,5 +610,20 @@ class ConnectionPEP(object):
 		# not all server support retract, so send empty pep first
 		self.send_nickname(None)
 		self._pubsub_connection.send_pb_retract('', xmpp.NS_NICK, '0')
+
+	def send_location(self, info):
+		if not self.pep_supported:
+			return
+		item = xmpp.Node('geoloc', {'xmlns': xmpp.NS_LOCATION})
+		for field in LOCATION_DATA:
+			if info.get(field, None):
+				i = item.addChild(field)
+				i.addData(info[field])
+		self._pubsub_connection.send_pb_publish('', xmpp.NS_LOCATION, item, '0')
+
+	def retract_location(self):
+		if not self.pep_supported:
+			return
+		self._pubsub_connection.send_pb_retract('', xmpp.NS_LOCATION, '0')
 
 # vim: se ts=3:

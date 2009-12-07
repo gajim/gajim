@@ -350,6 +350,7 @@ class Config:
 			'answer_receipts' : [opt_bool, True, _('Answer to receipt requests')],
 			'request_receipt' : [opt_bool, True, _('Sent receipt requests')],
 			'publish_tune': [opt_bool, False],
+			'publish_location': [opt_bool, False],
 			'subscribe_mood': [opt_bool, True],
 			'subscribe_activity': [opt_bool, True],
 			'subscribe_tune': [opt_bool, True],
