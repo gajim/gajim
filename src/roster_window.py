@@ -279,7 +279,7 @@ class RosterWindow:
 			self.model.append(None, [
 				gajim.interface.jabber_state_images['16'][show],
 				_('Merged accounts'), 'account', '', 'all',
-				None, None, None, None, None])
+				None, None, None, None, None, None])
 		else:
 			show = gajim.SHOW_LIST[gajim.connections[account].connected]
 			our_jid = gajim.get_jid_from_account(account)
@@ -356,7 +356,8 @@ class RosterWindow:
 
 			for child_iter in parent_iters:
 				it = self.model.append(child_iter, (None,	contact.get_shown_name(),
-				'contact', contact.jid, account, None, None, None, None, None))
+				'contact', contact.jid, account, None, None, None, None, None,
+				None))
 				added_iters.append(it)
 		else:
 			# We are a normal contact. Add us to our groups.
