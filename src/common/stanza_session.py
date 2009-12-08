@@ -210,7 +210,7 @@ class ArchivingStanzaSession(StanzaSession):
 
 		self.send(request)
 
-	def respond_archiving_bob(self, form):
+	def respond_archiving(self, form):
 		field = form.getField('logging')
 		options = [x[1] for x in field.getOptions()]
 		values = field.getValues()
@@ -246,7 +246,7 @@ class ArchivingStanzaSession(StanzaSession):
 
 		self.send(response)
 
-	def accept_archiving_bob(self, form):
+	def we_accept_archiving(self, form):
 		if self.negotiated['logging'] == 'mustnot':
 			self.loggable = False
 		log.debug('archiving session accepted: %s' % self.loggable)
@@ -255,7 +255,7 @@ class ArchivingStanzaSession(StanzaSession):
 		if self.control:
 			self.control.print_archiving_session_details()
 
-	def accept_archiving_alice(self, form):
+	def archiving_accepted(self, form):
 		negotiated = {}
 		ask_user = {}
 		not_acceptable = []

@@ -401,7 +401,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			if form.getType() == 'form' and 'security' in form.asDict():
 				security_options = [x[1] for x in form.getField('security').getOptions()]
 				if security_options == ['none']:
-					self.respond_archiving_bob(form)
+					self.respond_archiving(form)
 				else:
 					# bob responds
 
@@ -443,7 +443,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			elif self.status == 'requested-archiving' and form.getType() == \
 			'submit':
 				try:
-					self.accept_archiving_alice(form)
+					self.archiving_accepted(form)
 				except exceptions.NegotiationError, details:
 					self.fail_bad_negotiation(details)
 
@@ -485,7 +485,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 			elif self.status == 'responded-archiving' and form.getType() == \
 			'result':
 				try:
-					self.accept_archiving_bob(form)
+					self.we_accept_archiving(form)
 				except exceptions.NegotiationError, details:
 					self.fail_bad_negotiation(details)
 
