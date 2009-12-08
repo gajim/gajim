@@ -3071,6 +3071,9 @@ class RosterWindow:
 				return
 			type_ = model[list_of_paths[0]][C_TYPE]
 			account = model[list_of_paths[0]][C_ACCOUNT].decode('utf-8')
+			if type_ in ('account', 'group', 'self_contact') or \
+			account == gajim.ZEROCONF_ACC_NAME:
+				return
 			list_ = []
 			for path in list_of_paths:
 				if model[path][C_TYPE] != type_:
@@ -3080,9 +3083,6 @@ class RosterWindow:
 				contact = gajim.contacts.get_contact_with_highest_priority(account,
 					jid)
 				list_.append((contact, account))
-			if type_ in ('account', 'group', 'self_contact') or \
-			account == gajim.ZEROCONF_ACC_NAME:
-				return
 			if type_ == 'contact':
 				self.on_req_usub(widget, list_)
 			elif type_ == 'agent':
