@@ -2198,6 +2198,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
 			# so don't store it in logs
 			try:
 				gajim.logger.write('gc_msg', frm, msgtxt, tim=tim)
+				# store in memory time of last message logged.
+				# this will also be saved in rooms_last_message_time table 
+				# when we quit this muc
+				self.last_history_time[jid] = mktime(tim)
+
 			except exceptions.PysqliteOperationalError, e:
 				self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 			except exceptions.DatabaseMalformed:
