@@ -173,21 +173,6 @@ ConnectionCommands, ConnectionPEP, connection_handlers.ConnectionHandlersBase):
 		# (there is no server)
 		pass
 
-	def remove_transfers_for_contact(self, contact):
-		"""
-		Stop all active transfer for contact
-		"""
-		pass
-
-	def remove_all_transfers(self):
-		"""
-		Stops and removes all active connections from the socks5 pool
-		"""
-		pass
-
-	def remove_transfer(self, file_props, remove_from_list = True):
-		pass
-
 	def _DiscoverItemsGetCB(self, con, iq_obj):
 		log.debug('DiscoverItemsGetCB')
 
