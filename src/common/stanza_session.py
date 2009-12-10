@@ -287,7 +287,7 @@ class ArchivingStanzaSession(StanzaSession):
 			self.control.print_archiving_session_details()
 
 
-class EncryptedStanzaSession(ArchivingStanzaSession):
+class EncryptedStanzaSession(StanzaSession):
 	'''
 	An encrypted stanza negotiation has several states. They arerepresented	as
 	the following values in the 'status' attribute of the session object:
@@ -313,7 +313,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 	handle_session_negotiation method.
 	'''
 	def __init__(self, conn, jid, thread_id, type_='chat'):
-		ArchivingStanzaSession.__init__(self, conn, jid, thread_id, type_='chat')
+		StanzaSession.__init__(self, conn, jid, thread_id, type_='chat')
 
 		self.xes = {}
 		self.es = {}

@@ -166,11 +166,13 @@ class MessageControl:
 
 		crypto_changed = bool(session and isinstance(session,
 			EncryptedStanzaSession) and session.enable_encryption) != \
-			bool(oldsession and oldsession.enable_encryption)
+			bool(oldsession and isinstance(oldsession, EncryptedStanzaSession) and\
+			oldsession.enable_encryption)
 
 		archiving_changed = bool(session and isinstance(session,
 			ArchivingStanzaSession) and session.archiving) != \
-			bool(oldsession and oldsession.archiving)
+			bool(oldsession and isinstance(oldsession, ArchivingStanzaSession) and\
+			oldsession.archiving)
 
 		if crypto_changed or archiving_changed:
 			self.print_session_details()

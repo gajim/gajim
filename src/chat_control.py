@@ -2060,7 +2060,8 @@ class ChatControl(ChatControlBase):
 		"""
 		Print esession settings to textview
 		"""
-		archiving = bool(self.session) and self.session.archiving
+		archiving = bool(self.session) and isinstance(self.session,
+			ArchivingStanzaSession) and self.session.archiving
 		if archiving:
 			msg = _('This session WILL be archived on server')
 		else:
