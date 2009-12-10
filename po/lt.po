@@ -2864,11 +2864,11 @@ msgid "Hidden"
 msgstr "Hidden"
 
 #: ../src/atom_window.py:119
-#, fuzzy, python-format
+#, python-format
 msgid "You have received new entries (and %d not displayed):"
 msgid_plural "You have received new entries (and %d not displayed):"
-msgstr[0] "Jūs gavote naujų įrašų (ir %(count) nerodomi):"
-msgstr[1] "Jūs gavote naujų įrašų (ir %(count) nerodomi):"
+msgstr[0] "Jūs gavote naujų įrašų (ir %d nerodomi):"
+msgstr[1] "Jūs gavote naujų įrašų (ir %d nerodomi):"
 
 #. the next script, executed in the "po" directory,
 #. generates the following list.
@@ -3174,7 +3174,7 @@ msgstr ""
 #: ../src/chat_control.py:2784
 #, python-format
 msgid "%(name)s is now %(status)s"
-msgstr "%(name) dabar %(status)"
+msgstr "%(name)s dabar %(status)s"
 
 #: ../src/common/check_paths.py:44
 msgid "creating logs database"

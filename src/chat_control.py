@@ -1338,6 +1338,7 @@ class ChatControl(ChatControlBase):
 		self._pep_images['mood'] = self.xml.get_widget('mood_image')
 		self._pep_images['activity'] = self.xml.get_widget('activity_image')
 		self._pep_images['tune'] = self.xml.get_widget('tune_image')
+		self._pep_images['location'] = self.xml.get_widget('location_image')
 		self.update_all_pep_types()
 
 		# keep timeout id and window obj for possible big avatar
@@ -1373,6 +1374,11 @@ class ChatControl(ChatControlBase):
 
 		id_ = widget.connect('button-press-event',
 			self.on_avatar_eventbox_button_press_event)
+		self.handlers[id_] = widget
+
+		widget = self.xml.get_widget('location_eventbox')
+		id_ = widget.connect('button-release-event',
+			self.on_location_eventbox_button_release_event)
 		self.handlers[id_] = widget
 
 		for key in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'):
@@ -1678,6 +1684,15 @@ class ChatControl(ChatControlBase):
 			menu.show_all()
 			menu.popup(None, None, None, event.button, event.time)
 		return True
+		
+	def on_location_eventbox_button_release_event(self, widget, event):
+		if 'location' in self.contact.pep:
+			location = self.contact.pep['location']._pep_specific_data
+			if ('lat' in location) and ('lon' in location):
+				uri = 'http://www.openstreetmap.org/?' + \
+					'mlat=%(lat)s&mlon=%(lon)s&zoom=16' % {'lat': location['lat'],
+					'lon': location['lon']}
+				helpers.launch_browser_mailer('url', uri)
 
 	def _on_window_motion_notify(self, widget, event):
 		"""

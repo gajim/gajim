@@ -59,6 +59,7 @@ from common import helpers
 from common.exceptions import GajimGeneralException
 from common import i18n
 from common import pep
+from common import location_listener
 
 from message_window import MessageWindowMgr
 
@@ -79,9 +80,10 @@ from common.pep import MOODS, ACTIVITIES
 	C_MOOD_PIXBUF,
 	C_ACTIVITY_PIXBUF,
 	C_TUNE_PIXBUF,
+	C_LOCATION_PIXBUF,
 	C_AVATAR_PIXBUF, # avatar_pixbuf
 	C_PADLOCK_PIXBUF, # use for account row only
-) = range(10)
+) = range(11)
 
 class RosterWindow:
 	"""
@@ -278,7 +280,7 @@ class RosterWindow:
 			self.model.append(None, [
 				gajim.interface.jabber_state_images['16'][show],
 				_('Merged accounts'), 'account', '', 'all',
-				None, None, None, None, None])
+				None, None, None, None, None, None])
 		else:
 			show = gajim.SHOW_LIST[gajim.connections[account].connected]
 			our_jid = gajim.get_jid_from_account(account)
@@ -293,7 +295,7 @@ class RosterWindow:
 			self.model.append(None, [
 				gajim.interface.jabber_state_images['16'][show],
 				gobject.markup_escape_text(account), 'account',
-				our_jid, account, None, None, None, None,
+				our_jid, account, None, None, None, None, None,
 				tls_pixbuf])
 
 		self.draw_account(account)
@@ -355,7 +357,8 @@ class RosterWindow:
 
 			for child_iter in parent_iters:
 				it = self.model.append(child_iter, (None,	contact.get_shown_name(),
-				'contact', contact.jid, account, None, None, None, None, None))
+				'contact', contact.jid, account, None, None, None, None, None,
+				None))
 				added_iters.append(it)
 		else:
 			# We are a normal contact. Add us to our groups.
@@ -370,7 +373,7 @@ class RosterWindow:
 					child_iterG = self.model.append(child_iterA,
 						[gajim.interface.jabber_state_images['16']['closed'],
 						gobject.markup_escape_text(group),
-						'group', group, account, None, None, None, None, None])
+						'group', group, account, None, None, None, None, None, None])
 					self.draw_group(group, account)
 
 				if contact.is_transport():
@@ -385,7 +388,7 @@ class RosterWindow:
 				i_ = self.model.append(child_iterG, (None,
 					contact.get_shown_name(), typestr,
 					contact.jid, account, None, None, None,
-					None, None))
+					None, None, None))
 				added_iters.append(i_)
 
 				# Restore the group expand state
@@ -627,7 +630,7 @@ class RosterWindow:
 		child_iterA = self._get_account_iter(account, self.model)
 		self.model.append(child_iterA, (None, gajim.nicks[account],
 			'self_contact', jid, account, None, None, None, None,
-			None))
+			None, None))
 
 		self.draw_completely(jid, account)
 		self.draw_account(account)
@@ -1050,6 +1053,11 @@ class RosterWindow:
 			self.model[child_iter][C_TUNE_PIXBUF] = pep['tune'].asPixbufIcon()
 		else:
 			self.model[child_iter][C_TUNE_PIXBUF] = None
+
+		if gajim.config.get('show_location_in_roster') and 'location' in pep:
+			self.model[child_iter][C_LOCATION_PIXBUF] = pep['location'].asPixbufIcon()
+		else:
+			self.model[child_iter][C_LOCATION_PIXBUF] = None
 		return False
 
 	def draw_group(self, group, account):
@@ -1264,6 +1272,8 @@ class RosterWindow:
 			return gajim.config.get('show_activity_in_roster')
 		elif pep_type == 'tune':
 			return  gajim.config.get('show_tunes_in_roster')
+		elif pep_type == 'location':
+			return  gajim.config.get('show_location_in_roster')
 		else:
 			return False
 
@@ -1362,10 +1372,11 @@ class RosterWindow:
 		"""
 		self.modelfilter = None
 		# (icon, name, type, jid, account, editable, mood_pixbuf,
-		# activity_pixbuf, tune_pixbuf avatar_pixbuf, padlock_pixbuf)
+		# activity_pixbuf, tune_pixbuf, location_pixbuf, avatar_pixbuf,
+		# padlock_pixbuf)
 		self.model = gtk.TreeStore(gtk.Image, str, str, str, str,
 			gtk.gdk.Pixbuf, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf,
-			gtk.gdk.Pixbuf, gtk.gdk.Pixbuf)
+			gtk.gdk.Pixbuf, gtk.gdk.Pixbuf, gtk.gdk.Pixbuf)
 
 		self.model.set_sort_func(1, self._compareIters)
 		self.model.set_sort_column_id(1, gtk.SORT_ASCENDING)
@@ -3058,6 +3069,9 @@ class RosterWindow:
 				return
 			type_ = model[list_of_paths[0]][C_TYPE]
 			account = model[list_of_paths[0]][C_ACCOUNT].decode('utf-8')
+			if type_ in ('account', 'group', 'self_contact') or \
+			account == gajim.ZEROCONF_ACC_NAME:
+				return
 			list_ = []
 			for path in list_of_paths:
 				if model[path][C_TYPE] != type_:
@@ -3067,9 +3081,6 @@ class RosterWindow:
 				contact = gajim.contacts.get_contact_with_highest_priority(account,
 					jid)
 				list_.append((contact, account))
-			if type_ in ('account', 'group', 'self_contact') or \
-			account == gajim.ZEROCONF_ACC_NAME:
-				return
 			if type_ == 'contact':
 				self.on_req_usub(widget, list_)
 			elif type_ == 'agent':
@@ -3420,6 +3431,22 @@ class RosterWindow:
 					break
 			else:
 				gajim.interface.disable_music_listener()
+
+		helpers.update_optional_features(account)
+
+	def on_publish_location_toggled(self, widget, account):
+		active = widget.get_active()
+		gajim.config.set_per('accounts', account, 'publish_location', active)
+		if active:
+			location_listener.enable()
+		else:
+			gajim.connections[account].retract_location()
+			# disable music listener only if no other account uses it
+			for acc in gajim.connections:
+				if gajim.config.get_per('accounts', acc, 'publish_location'):
+					break
+			else:
+				location_listener.disable()
 
 		helpers.update_optional_features(account)
 
@@ -4981,17 +5008,22 @@ class RosterWindow:
 
 			pep_menuitem = xml.get_widget('pep_menuitem')
 			if gajim.connections[account].pep_supported:
-				have_tune = gajim.config.get_per('accounts', account,
-					'publish_tune')
 				pep_submenu = gtk.Menu()
 				pep_menuitem.set_submenu(pep_submenu)
-				item = gtk.CheckMenuItem(_('Publish Tune'))
-				pep_submenu.append(item)
-				if not dbus_support.supported:
-					item.set_sensitive(False)
-				else:
-					item.set_active(have_tune)
-					item.connect('toggled', self.on_publish_tune_toggled, account)
+				def add_item(label, opt_name, func):
+					item = gtk.CheckMenuItem(label)
+					pep_submenu.append(item)
+					if not dbus_support.supported:
+						item.set_sensitive(False)
+					else:
+						activ = gajim.config.get_per('accounts', account, opt_name)
+						item.set_active(activ)
+						item.connect('toggled', func, account)
+
+				add_item(_('Publish Tune'), 'publish_tune',
+					self.on_publish_tune_toggled)
+				add_item(_('Publish Location'), 'publish_location',
+					self.on_publish_location_toggled)
 
 				pep_config = gtk.ImageMenuItem(_('Configure Services...'))
 				item = gtk.SeparatorMenuItem()
@@ -5892,9 +5924,16 @@ class RosterWindow:
 		col.set_cell_data_func(render_pixbuf,
 			self._fill_pep_pixbuf_renderer, C_TUNE_PIXBUF)
 
+		render_pixbuf = gtk.CellRendererPixbuf()
+		col.pack_start(render_pixbuf, expand=False)
+		col.add_attribute(render_pixbuf, 'pixbuf', C_LOCATION_PIXBUF)
+		col.set_cell_data_func(render_pixbuf,
+			self._fill_pep_pixbuf_renderer, C_LOCATION_PIXBUF)
+
 		self._pep_type_to_model_column = {'mood': C_MOOD_PIXBUF,
 													 'activity': C_ACTIVITY_PIXBUF,
-													 'tune': C_TUNE_PIXBUF}
+													 'tune': C_TUNE_PIXBUF,
+													 'location': C_LOCATION_PIXBUF}
 
 		if gajim.config.get('avatar_position_in_roster') == 'right':
 			add_avatar_renderer()

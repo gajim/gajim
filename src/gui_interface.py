@@ -50,6 +50,7 @@ from common import gajim
 from common import dbus_support
 if dbus_support.supported:
 	from music_track_listener import MusicTrackListener
+	from common import location_listener
 	import dbus
 
 import gtkgui_helpers
@@ -1547,6 +1548,10 @@ class Interface:
 		if gajim.connections[account].pep_supported and dbus_support.supported \
 		and gajim.config.get_per('accounts', account, 'publish_tune'):
 			self.enable_music_listener()
+		# enable location listener
+		if gajim.connections[account].pep_supported and dbus_support.supported \
+		and gajim.config.get_per('accounts', account, 'publish_location'):
+			location_listener.enable()
 
 	def handle_event_metacontacts(self, account, tags_list):
 		gajim.contacts.define_metacontacts(account, tags_list)

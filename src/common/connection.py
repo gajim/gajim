@@ -653,8 +653,8 @@ class Connection(CommonConnection, ConnectionHandlers):
 		self.last_history_time = {}
 		self.password = passwords.get_password(name)
 
-		# Used to ask privacy only once at connection
 		self.music_track_info = 0
+		self.location_info = {}
 		self.pubsub_supported = False
 		self.pubsub_publish_options_supported = False
 		# Do we auto accept insecure connection
@@ -2087,12 +2087,11 @@ class Connection(CommonConnection, ConnectionHandlers):
 		"""
 		A groupchat got disconnected. This can be or purpose or not
 
-		Save the time we quit to avoid duplicate logs AND be faster than get that
-		date from DB. Save it in mem AND in a small table (with fast access)
+		Save the time we had last message to avoid duplicate logs AND be faster 
+		than get that date from DB. Save time that we have in mem in a small 
+		table (with fast access)
 		"""
-		log_time = time_time()
-		self.last_history_time[room_jid] = log_time
-		gajim.logger.set_room_last_message_time(room_jid, log_time)
+		gajim.logger.set_room_last_message_time(room_jid, self.last_history_time[room_jid])
 
 	def gc_set_role(self, room_jid, nick, role, reason = ''):
 		"""
