@@ -182,13 +182,7 @@ class ConnectionBytestream:
 		query = iq.setTag('query', namespace=xmpp.NS_BYTESTREAM)
 		query.setAttr('mode', 'plain')
 		query.setAttr('sid', file_props['sid'])
-		for ft_host in ft_add_hosts:
-			# The streamhost, if set
-			ostreamhost = xmpp.Node(tag='streamhost')
-			query.addChild(node=ostreamhost)
-			ostreamhost.setAttr('port', unicode(port))
-			ostreamhost.setAttr('host', ft_host)
-			ostreamhost.setAttr('jid', sender)
+		self._add_streamhosts_to_query(query, sender, port, fd_add_hosts)
 		try:
 			# The ip we're connected to server with
 			my_ips = [self.peerhost[0]]
@@ -196,12 +190,7 @@ class ConnectionBytestream:
 			for addr in socket.getaddrinfo(socket.gethostname(), None):
 				if not addr[4][0] in my_ips and not addr[4][0].startswith('127'):
 					my_ips.append(addr[4][0])
-			for ip in my_ips:
-				streamhost = xmpp.Node(tag='streamhost')
-				query.addChild(node=streamhost)
-				streamhost.setAttr('port', unicode(port))
-				streamhost.setAttr('host', ip)
-				streamhost.setAttr('jid', sender)
+			self._add_streamhosts_to_query(query, sender, port, my_ips)
 		except socket.gaierror:
 			self.dispatch('ERROR', (_('Wrong host'),
 				_('Invalid local address? :-O')))
@@ -211,17 +200,20 @@ class ConnectionBytestream:
 			file_props['proxy_receiver'] = unicode(receiver)
 			file_props['proxy_sender'] = unicode(sender)
 			file_props['proxyhosts'] = proxyhosts
-			for proxyhost in proxyhosts:
-				streamhost = xmpp.Node(tag='streamhost')
-				query.addChild(node=streamhost)
-				streamhost.setAttr('port', proxyhost['port'])
-				streamhost.setAttr('host', proxyhost['host'])
-				streamhost.setAttr('jid', proxyhost['jid'])
 
-				# don't add the proxy child tag for streamhosts, which are proxies
-				# proxy = streamhost.setTag('proxy')
-				# proxy.setNamespace(common.xmpp.NS_STREAM)
+			for proxyhost in proxyhosts:
+				self._add_streamhosts_to_query(query, proxyhost['jid'],
+				proxyhost['port'], [proxyhost['host']])
+
 		self.connection.send(iq)
+
+	def _add_streamhosts_to_query(self, query, sender, port, hosts):
+		for host in hosts:
+			streamhost = xmpp.Node(tag='streamhost')
+			query.addChild(node=streamhost)
+			streamhost.setAttr('port', unicode(port))
+			streamhost.setAttr('host', host)
+			streamhost.setAttr('jid', sender)
 
 	def send_file_rejection(self, file_props, code='403', typ=None):
 		"""
@@ -517,13 +509,8 @@ class ConnectionBytestream:
 		raise xmpp.NodeProcessed
 
 	def _siResultCB(self, con, iq_obj):
-		id_ = iq_obj.getAttr('id')
-		if id_ not in self.files_props:
-			# no such jid
-			return
-		file_props = self.files_props[id_]
-		if file_props is None:
-			# file properties for jid is none
+		file_props = self.files_props.get(iq_obj.getAttr('id'))
+		if not file_props:
 			return
 		if 'request-id' in file_props:
 			# we have already sent streamhosts info
@@ -603,19 +590,14 @@ class ConnectionBytestream:
 		profile = si.getAttr('profile')
 		if profile != xmpp.NS_FILE:
 			return
-		id_ = iq_obj.getAttr('id')
-		if id_ not in self.files_props:
-			# no such jid
-			return
-		file_props = self.files_props[id_]
-		if file_props is None:
-			# file properties for jid is none
+		file_props = self.files_props.get(iq_obj.getAttr('id'))
+		if not file_props:
 			return
 		jid = self._ft_get_from(iq_obj)
 		file_props['error'] = -3
 		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
 		raise xmpp.NodeProcessed
-
+	
 
 class ConnectionBytestreamZeroconf(ConnectionBytestream):
 
