@@ -364,7 +364,6 @@ class ConnectionBytestream:
 
 	# register xmpppy handlers for bytestream and FT stanzas
 	def _bytestreamErrorCB(self, con, iq_obj):
-		log.debug('_bytestreamErrorCB')
 		id_ = unicode(iq_obj.getAttr('id'))
 		frm = helpers.get_full_jid_from_iq(iq_obj)
 		query = iq_obj.getTag('query')
@@ -382,7 +381,6 @@ class ConnectionBytestream:
 		return helpers.get_full_jid_from_iq(iq_obj)
 
 	def _bytestreamSetCB(self, con, iq_obj):
-		log.debug('_bytestreamSetCB')
 		target = unicode(iq_obj.getAttr('to'))
 		id_ = unicode(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
@@ -424,7 +422,6 @@ class ConnectionBytestream:
 		raise xmpp.NodeProcessed
 
 	def _ResultCB(self, con, iq_obj):
-		log.debug('_ResultCB')
 		# if we want to respect xep-0065 we have to check for proxy
 		# activation result in any result iq
 		real_id = unicode(iq_obj.getAttr('id'))
@@ -447,7 +444,6 @@ class ConnectionBytestream:
 		return helpers.parse_jid(streamhost.getAttr('jid'))
 
 	def _bytestreamResultCB(self, con, iq_obj):
-		log.debug('_bytestreamResultCB')
 		frm = self._ft_get_from(iq_obj)
 		real_id = unicode(iq_obj.getAttr('id'))
 		query = iq_obj.getTag('query')
@@ -521,7 +517,6 @@ class ConnectionBytestream:
 		raise xmpp.NodeProcessed
 
 	def _siResultCB(self, con, iq_obj):
-		log.debug('_siResultCB')
 		id_ = iq_obj.getAttr('id')
 		if id_ not in self.files_props:
 			# no such jid
@@ -558,7 +553,6 @@ class ConnectionBytestream:
 		raise xmpp.NodeProcessed
 
 	def _siSetCB(self, con, iq_obj):
-		log.debug('_siSetCB')
 		jid = self._ft_get_from(iq_obj)
 		file_props = {'type': 'r'}
 		file_props['sender'] = jid
@@ -597,8 +591,6 @@ class ConnectionBytestream:
 
 		if mime_type is not None:
 			file_props['mime-type'] = mime_type
-		our_jid = gajim.get_jid_from_account(self.name)
-		resource = self.server_resource
 		file_props['receiver'] = self._ft_get_our_jid()
 		file_props['sid'] = unicode(si.getAttr('id'))
 		file_props['transfered_size'] = []
@@ -607,7 +599,6 @@ class ConnectionBytestream:
 		raise xmpp.NodeProcessed
 
 	def _siErrorCB(self, con, iq_obj):
-		log.debug('_siErrorCB')
 		si = iq_obj.getTag('si')
 		profile = si.getAttr('profile')
 		if profile != xmpp.NS_FILE:
