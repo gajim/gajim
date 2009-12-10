@@ -50,7 +50,8 @@ from common import exceptions
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.pep import ConnectionPEP
-from common.caps import ConnectionCaps
+from common.protocol.caps import ConnectionCaps
+import common.caps_cache as capscache
 if gajim.HAVE_FARSIGHT:
 	from common.jingle import ConnectionJingle
 else:
@@ -1520,7 +1521,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
 		ConnectionPEP.__init__(self, account=self.name, dispatcher=self,
 			pubsub_connection=self)
 		ConnectionCaps.__init__(self, account=self.name,
-			dispatch_event=self.dispatch)
+			dispatch_event=self.dispatch, capscache=capscache.capscache,
+			client_caps_factory=capscache.create_suitable_client_caps)
 		ConnectionJingle.__init__(self)
 		ConnectionHandlersBase.__init__(self)
 		self.gmail_url = None

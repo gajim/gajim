@@ -9,7 +9,7 @@ lib.setup_env()
 from common.contacts import CommonContact, Contact, GC_Contact, LegacyContactsAPI
 from common.xmpp import NS_MUC
 
-from common import caps
+from common import caps_cache
 
 class TestCommonContact(unittest.TestCase):
 	
@@ -23,11 +23,11 @@ class TestCommonContact(unittest.TestCase):
 		Test the caps support method of contacts.
 		See test_caps for more enhanced tests.
 		'''
-		caps.capscache = caps.CapsCache()
+		caps_cache.capscache = caps_cache.CapsCache()
 		self.assertTrue(self.contact.supports(NS_MUC),
 			msg="Must not backtrace on simple check for supported feature")
 		
-		self.contact.client_caps = caps.NullClientCaps()
+		self.contact.client_caps = caps_cache.NullClientCaps()
 					
 		self.assertTrue(self.contact.supports(NS_MUC),
 			msg="Must not backtrace on simple check for supported feature")

@@ -29,7 +29,7 @@
 ##
 
 
-from common import caps
+from common import caps_cache
 from common.account import Account
 import common.gajim
 
@@ -54,7 +54,7 @@ class CommonContact(XMPPEntity):
 		self.status = status
 		self.name = name
 
-		self.client_caps = client_caps or caps.NullClientCaps()
+		self.client_caps = client_caps or caps_cache.NullClientCaps()
 
 		# please read xep-85 http://www.xmpp.org/extensions/xep-0085.html
 		# we keep track of xep85 support with the peer by three extra states:
@@ -89,7 +89,7 @@ class CommonContact(XMPPEntity):
 			# return caps for a contact that has no resources left.
 			return False
 		else:
-			return caps.client_supports(self.client_caps, requested_feature)
+			return caps_cache.client_supports(self.client_caps, requested_feature)
 
 
 class Contact(CommonContact):

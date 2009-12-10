@@ -71,7 +71,7 @@ import common.sleepy
 from common.xmpp import idlequeue
 from common.zeroconf import connection_zeroconf
 from common import resolver
-from common import caps
+from common import caps_cache
 from common import proxy65_manager
 from common import socks5
 from common import helpers
@@ -3307,7 +3307,7 @@ class Interface:
 		helpers.update_optional_features()
 		# prepopulate data which we are sure of; note: we do not log these info
 		for account in gajim.connections:
-			gajimcaps = caps.capscache[('sha-1', gajim.caps_hash[account])]
+			gajimcaps = caps_cache.capscache[('sha-1', gajim.caps_hash[account])]
 			gajimcaps.identities = [gajim.gajim_identity]
 			gajimcaps.features = gajim.gajim_common_features + \
 				gajim.gajim_optional_features[account]

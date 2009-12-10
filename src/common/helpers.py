@@ -38,7 +38,7 @@ import errno
 import select
 import base64
 import hashlib
-import caps
+import caps_cache
 
 from encodings.punycode import punycode_encode
 
@@ -1309,7 +1309,7 @@ def update_optional_features(account = None):
 			gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_RTP_AUDIO)
 			gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_RTP_VIDEO)
 			gajim.gajim_optional_features[a].append(xmpp.NS_JINGLE_ICE_UDP)
-		gajim.caps_hash[a] = caps.compute_caps_hash([gajim.gajim_identity],
+		gajim.caps_hash[a] = caps_cache.compute_caps_hash([gajim.gajim_identity],
 			gajim.gajim_common_features + gajim.gajim_optional_features[a])
 		# re-send presence with new hash
 		connected = gajim.connections[a].connected

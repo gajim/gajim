@@ -32,7 +32,7 @@ import re
 from time import time
 from common import gajim
 from common import helpers
-from common import caps
+from common import caps_cache
 
 import sqlite3 as sqlite
 import logger
@@ -218,7 +218,7 @@ class OptionsParser:
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
 
-		caps.capscache.initialize_from_db()
+		caps_cache.capscache.initialize_from_db()
 
 	def assert_unread_msgs_table_exists(self):
 		"""

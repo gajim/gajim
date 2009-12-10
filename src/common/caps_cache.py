@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-## src/common/caps.py
+## src/common/caps_cache.py
 ##
 ## Copyright (C) 2007 Tomasz Melcer <liori AT exroot.org>
 ##                    Travis Shirk <travis AT pobox.com>
@@ -31,13 +31,11 @@ CapsCache caches features to hash relationships. The cache is queried
 through ClientCaps objects which are hold by contact instances.
 """
 
-import gajim
-import helpers
 import base64
 import hashlib
 
 import logging
-log = logging.getLogger('gajim.c.caps')
+log = logging.getLogger('gajim.c.caps_cache')
 
 from common.xmpp import (NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION, NS_CHATSTATES,
 	NS_JINGLE_ICE_UDP, NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO, NS_CAPS)
@@ -75,6 +73,20 @@ def client_supports(client_caps, requested_feature):
 		return requested_feature not in FEATURE_BLACKLIST
 	else:
 		return False
+	
+def create_suitable_client_caps(node, caps_hash, hash_method):
+	"""
+	Create and return a suitable ClientCaps object for the given node,
+	caps_hash, hash_method combination.
+	"""
+	if not node or not caps_hash:
+		# improper caps, ignore client capabilities.
+		client_caps = NullClientCaps()
+	elif not hash_method:
+		client_caps = OldClientCaps(caps_hash, node)
+	else:
+		client_caps = ClientCaps(caps_hash, node, hash_method)
+	return client_caps
 
 def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 	"""
@@ -151,22 +163,6 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 ### Internal classes of this module
 ################################################################################
 
-
-def create_suitable_client_caps(node, caps_hash, hash_method):
-	"""
-	Create and return a suitable ClientCaps object for the given node,
-	caps_hash, hash_method combination. 
-	"""
-	if not node or not caps_hash:
-		# improper caps, ignore client capabilities.
-		client_caps = NullClientCaps()
-	elif not hash_method:
-		client_caps = OldClientCaps(caps_hash, node)
-	else:
-		client_caps = ClientCaps(caps_hash, node, hash_method)
-	return client_caps
-
-
 class AbstractClientCaps(object):
 	"""
 	Base class representing a client and its capabilities as advertised by a
@@ -208,7 +204,6 @@ class ClientCaps(AbstractClientCaps):
 	"""
 	The current XEP-115 implementation
 	"""
-
 	def __init__(self, caps_hash, node, hash_method):
 		AbstractClientCaps.__init__(self, caps_hash, node)
 		assert hash_method != 'old'
@@ -230,7 +225,6 @@ class OldClientCaps(AbstractClientCaps):
 	"""
 	Old XEP-115 implemtation. Kept around for background competability
 	"""
-
 	def __init__(self, caps_hash, node):
 		AbstractClientCaps.__init__(self, caps_hash, node)
 
@@ -251,7 +245,6 @@ class NullClientCaps(AbstractClientCaps):
 
 	Assumes (almost) everything is supported.
 	"""
-
 	def __init__(self):
 		AbstractClientCaps.__init__(self, None, None)
 
@@ -273,7 +266,6 @@ class CapsCache(object):
 	This object keeps the mapping between caps data and real disco features they
 	represent, and provides simple way to query that info
 	"""
-
 	def __init__(self, logger=None):
 		# our containers:
 		# __cache is a dictionary mapping: pair of hash method and hash maps
@@ -345,6 +337,13 @@ class CapsCache(object):
 				if not self._recently_seen:
 					self._recently_seen = True
 					self._logger.update_caps_time(self.hash_method, self.hash)
+			
+			def is_valid(self):
+				"""
+				Returns True if identities and features for this cache item
+				are known.
+				""" 
+				return self.status == CACHED
 
 		self.__CacheItem = CacheItem
 		self.logger = logger
@@ -390,81 +389,5 @@ class CapsCache(object):
 			discover(connection, jid)
 		else:
 			q.update_last_seen()
-
-################################################################################
-### Caps network coding
-################################################################################
-
-class ConnectionCaps(object):
-
-	def __init__(self, account, dispatch_event):
-		self._account = account
-		self._dispatch_event = dispatch_event
-
-	def _capsPresenceCB(self, con, presence):
-		"""
-		XMMPPY callback method to handle retrieved caps info
-		"""
-		try:
-			jid = helpers.get_full_jid_from_iq(presence)
-		except:
-			log.info("Ignoring invalid JID in caps presenceCB")
-			return
-
-		client_caps = self._extract_client_caps_from_presence(presence)
-		capscache.query_client_of_jid_if_unknown(self, jid, client_caps)
-		self._update_client_caps_of_contact(jid, client_caps)
-
-		self._dispatch_event('CAPS_RECEIVED', (jid,))
-
-	def _extract_client_caps_from_presence(self, presence):
-		caps_tag = presence.getTag('c', namespace=NS_CAPS)
-		if caps_tag:
-			hash_method, node, caps_hash = caps_tag['hash'], caps_tag['node'], caps_tag['ver']
-		else:
-			hash_method = node = caps_hash = None
-		return create_suitable_client_caps(node, caps_hash, hash_method)
-
-	def _update_client_caps_of_contact(self, jid, client_caps):
-		contact = self._get_contact_or_gc_contact_for_jid(jid)
-		if contact:
-			contact.client_caps = client_caps
-		else:
-			log.info("Received Caps from unknown contact %s" % jid)
-
-	def _get_contact_or_gc_contact_for_jid(self, jid):
-		contact = gajim.contacts.get_contact_from_full_jid(self._account, jid)
-		if contact is None:
-			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-			contact = gajim.contacts.get_gc_contact(self._account, room_jid, nick)
-		return contact
-
-	def _capsDiscoCB(self, jid, node, identities, features, dataforms):
-		"""
-		XMMPPY callback to update our caps cache with queried information after
-		we have retrieved an unknown caps hash and issued a disco
-		"""
-		contact = self._get_contact_or_gc_contact_for_jid(jid)
-		if not contact:
-			log.info("Received Disco from unknown contact %s" % jid)
-			return
-
-		lookup = contact.client_caps.get_cache_lookup_strategy()
-		cache_item = lookup(capscache)
-
-		if cache_item.status == CACHED:
-			return
-		else:
-			validate = contact.client_caps.get_hash_validation_strategy()
-			hash_is_valid = validate(identities, features, dataforms)
-
-			if hash_is_valid:
-				cache_item.set_and_store(identities, features)
-			else:
-				contact.client_caps = NullClientCaps()
-				log.warn("Computed and retrieved caps hash differ." +
-					"Ignoring caps of contact %s" % contact.get_full_jid())
-
-			self._dispatch_event('CAPS_RECEIVED', (jid,))
 
 # vim: se ts=3:
