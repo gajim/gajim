@@ -36,22 +36,45 @@ from common import helpers
 from common import dataforms
 
 
+def is_transfer_paused(file_props):
+	if 'stopped' in file_props and file_props['stopped']:
+		return False
+	if 'completed' in file_props and file_props['completed']:
+		return False
+	if 'disconnect_cb' not in file_props:
+		return False
+	return file_props['paused']
+
+def is_transfer_active(file_props):
+	if 'stopped' in file_props and file_props['stopped']:
+		return False
+	if 'completed' in file_props and file_props['completed']:
+		return False
+	if 'started' not in file_props or not file_props['started']:
+		return False
+	if 'paused' not in file_props:
+		return True
+	return not file_props['paused']
+
+def is_transfer_stopped(file_props):
+	if 'error' in file_props and file_props['error'] != 0:
+		return True
+	if 'completed' in file_props and file_props['completed']:
+		return True
+	if 'connected' in file_props and file_props['connected'] == False:
+		return True
+	if 'stopped' not in file_props or not file_props['stopped']:
+		return False
+	return True
+
+
 class ConnectionBytestream:
 
 	def __init__(self):
 		self.files_props = {}
 		self.awaiting_xmpp_ping_id = None
 
-	def is_transfer_stopped(self, file_props):
-		if 'error' in file_props and file_props['error'] != 0:
-			return True
-		if 'completed' in file_props and file_props['completed']:
-			return True
-		if 'connected' in file_props and file_props['connected'] == False:
-			return True
-		if 'stopped' not in file_props or not file_props['stopped']:
-			return False
-		return True
+
 
 	def send_success_connect_reply(self, streamhost):
 		"""
@@ -74,7 +97,7 @@ class ConnectionBytestream:
 		Stop all active transfer for contact
 		"""
 		for file_props in self.files_props.values():
-			if self.is_transfer_stopped(file_props):
+			if is_transfer_stopped(file_props):
 				continue
 			receiver_jid = unicode(file_props['receiver'])
 			if contact.get_full_jid() == receiver_jid:
@@ -176,13 +199,13 @@ class ConnectionBytestream:
 				file_props['sid'], code=406)
 			return
 
-		iq = xmpp.Iq(name='iq', to=unicode(receiver), typ='set')
+		iq = xmpp.Iq(to=unicode(receiver), typ='set')
 		file_props['request-id'] = 'id_' + file_props['sid']
 		iq.setID(file_props['request-id'])
 		query = iq.setTag('query', namespace=xmpp.NS_BYTESTREAM)
 		query.setAttr('mode', 'plain')
 		query.setAttr('sid', file_props['sid'])
-		self._add_streamhosts_to_query(query, sender, port, fd_add_hosts)
+		self._add_streamhosts_to_query(query, sender, port, ft_add_hosts)
 		try:
 			# The ip we're connected to server with
 			my_ips = [self.peerhost[0]]

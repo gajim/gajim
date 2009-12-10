@@ -33,6 +33,8 @@ import dialogs
 
 from common import gajim
 from common import helpers
+from common.protocol.bytestream import (is_transfer_active, is_transfer_paused,
+	is_transfer_stopped)
 
 C_IMAGE = 0
 C_LABELS = 1
@@ -55,18 +57,17 @@ class FileTransfersWindow:
 		self.cleanup_button = self.xml.get_widget('cleanup_button')
 		self.notify_ft_checkbox = self.xml.get_widget(
 			'notify_ft_complete_checkbox')
-		notify = gajim.config.get('notify_on_file_complete')
-		if notify:
-			self.notify_ft_checkbox.set_active(True)
-		else:
-			self.notify_ft_checkbox.set_active(False)
+
+		shall_notify = gajim.config.get('notify_on_file_complete')
+		self.notify_ft_checkbox.set_active(shall_notify
+													)
 		self.model = gtk.ListStore(gtk.gdk.Pixbuf, str, str, str, str, int, str)
 		self.tree.set_model(self.model)
 		col = gtk.TreeViewColumn()
 
 		render_pixbuf = gtk.CellRendererPixbuf()
 
-		col.pack_start(render_pixbuf, expand = True)
+		col.pack_start(render_pixbuf, expand=True)
 		render_pixbuf.set_property('xpad', 3)
 		render_pixbuf.set_property('ypad', 3)
 		render_pixbuf.set_property('yalign', .0)
@@ -104,7 +105,7 @@ class FileTransfersWindow:
 		renderer = gtk.CellRendererProgress()
 		renderer.set_property('yalign', 0.5)
 		renderer.set_property('xalign', 0.5)
-		col.pack_start(renderer, expand = False)
+		col.pack_start(renderer, expand=False)
 		col.add_attribute(renderer, 'text' , C_PROGRESS)
 		col.add_attribute(renderer, 'value' , C_PERCENT)
 		col.set_resizable(True)
@@ -137,14 +138,14 @@ class FileTransfersWindow:
 		"""
 		Find all transfers with peer 'jid' that belong to 'account'
 		"""
-		active_transfers = [[],[]] # ['senders', 'receivers']
+		active_transfers = [[], []] # ['senders', 'receivers']
 
 		# 'account' is the sender
 		for file_props in self.files_props['s'].values():
 			if file_props['tt_account'] == account:
 				receiver_jid = unicode(file_props['receiver']).split('/')[0]
 				if jid == receiver_jid:
-					if not self.is_transfer_stopped(file_props):
+					if not is_transfer_stopped(file_props):
 						active_transfers[0].append(file_props)
 
 		# 'account' is the recipient
@@ -152,7 +153,7 @@ class FileTransfersWindow:
 			if file_props['tt_account'] == account:
 				sender_jid = unicode(file_props['sender']).split('/')[0]
 				if jid == sender_jid:
-					if not self.is_transfer_stopped(file_props):
+					if not is_transfer_stopped(file_props):
 						active_transfers[1].append(file_props)
 		return active_transfers
 
@@ -185,8 +186,8 @@ class FileTransfersWindow:
 		else:
 			#You is a reply of who sent a file
 			sender = _('You')
-		sectext += '\n\t' +_('Sender: %s') % sender
-		sectext += '\n\t' +_('Recipient: ')
+		sectext += '\n\t' + _('Sender: %s') % sender
+		sectext += '\n\t' + _('Recipient: ')
 		if file_props['type'] == 's':
 			jid = unicode(file_props['receiver']).split('/')[0]
 			receiver_name = gajim.contacts.get_first_contact_from_jid(
@@ -197,7 +198,7 @@ class FileTransfersWindow:
 			recipient = _('You')
 		sectext += recipient
 		if file_props['type'] == 'r':
-			sectext += '\n\t' +_('Saved in: %s') % file_path
+			sectext += '\n\t' + _('Saved in: %s') % file_path
 		dialog = dialogs.HigDialog(None, gtk.MESSAGE_INFO, gtk.BUTTONS_NONE,
 				_('File transfer completed'), sectext)
 		if file_props['type'] == 'r':
@@ -222,10 +223,10 @@ class FileTransfersWindow:
 		Show error dialog to the sender saying that transfer has been canceled
 		"""
 		dialogs.InformationDialog(_('File transfer cancelled'),
-_('Connection with peer cannot be established.'))
+			_('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
 
-	def show_stopped(self, jid, file_props, error_msg = ''):
+	def show_stopped(self, jid, file_props, error_msg=''):
 		if file_props['type'] == 'r':
 			file_name = os.path.basename(file_props['file-name'])
 		else:
@@ -238,7 +239,6 @@ _('Connection with peer cannot be established.'))
 		self.tree.get_selection().unselect_all()
 
 	def show_file_send_request(self, account, contact):
-
 		desc_entry = gtk.Entry()
 
 		def on_ok(widget):
@@ -259,8 +259,8 @@ _('Connection with peer cannot be established.'))
 			gtk.RESPONSE_OK,
 			True, # select multiple true as we can select many files to send
 			gajim.config.get('last_send_dir'),
-			on_response_ok = on_ok,
-			on_response_cancel = lambda e:dialog.destroy()
+			on_response_ok=on_ok,
+			on_response_cancel=lambda e:dialog.destroy()
 			)
 
 		btn = gtk.Button(_('_Send'))
@@ -270,8 +270,8 @@ _('Connection with peer cannot be established.'))
 		dialog.set_default_response(gtk.RESPONSE_OK)
 
 		desc_hbox = gtk.HBox(False, 5)
-		desc_hbox.pack_start(gtk.Label(_('Description: ')),False,False,0)
-		desc_hbox.pack_start(desc_entry,True,True,0)
+		desc_hbox.pack_start(gtk.Label(_('Description: ')), False, False, 0)
+		desc_hbox.pack_start(desc_entry, True, True, 0)
 
 		dialog.vbox.pack_start(desc_hbox, False, False, 0)
 
@@ -376,14 +376,14 @@ _('Connection with peer cannot be established.'))
 				gajim.connections[account].send_file_rejection(file_props)
 
 			dialog2 = dialogs.FileChooserDialog(
-				title_text = _('Save File as...'),
-				action = gtk.FILE_CHOOSER_ACTION_SAVE,
-				buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+				title_text=_('Save File as...'),
+				action=gtk.FILE_CHOOSER_ACTION_SAVE,
+				buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
 				gtk.STOCK_SAVE, gtk.RESPONSE_OK),
-				default_response = gtk.RESPONSE_OK,
-				current_folder = gajim.config.get('last_save_dir'),
-				on_response_ok = (on_ok, account, contact, file_props),
-				on_response_cancel = (on_cancel, account, contact, file_props))
+				default_response=gtk.RESPONSE_OK,
+				current_folder=gajim.config.get('last_save_dir'),
+				on_response_ok=(on_ok, account, contact, file_props),
+				on_response_cancel=(on_cancel, account, contact, file_props))
 
 			dialog2.set_current_name(file_props['name'])
 			dialog2.connect('delete-event', lambda widget, event:
@@ -393,8 +393,8 @@ _('Connection with peer cannot be established.'))
 			gajim.connections[account].send_file_rejection(file_props)
 
 		dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,
-			on_response_ok = (on_response_ok, account, contact, file_props),
-			on_response_cancel = (on_response_cancel, account, file_props))
+			on_response_ok=(on_response_ok, account, contact, file_props),
+			on_response_cancel=(on_response_cancel, account, file_props))
 		dialog.connect('delete-event', lambda widget, event:
 			on_response_cancel(widget, account, file_props))
 		dialog.popup()
@@ -446,7 +446,7 @@ _('Connection with peer cannot be established.'))
 		#Print remaining time in format 00:00:00
 		#You can change the places of (hours), (minutes), (seconds) -
 		#they are not translatable.
-		return _('%(hours)02.d:%(minutes)02.d:%(seconds)02.d')  % times
+		return _('%(hours)02.d:%(minutes)02.d:%(seconds)02.d') % times
 
 	def _get_eta_and_speed(self, full_size, transfered_size, file_props):
 		if len(file_props['transfered_size']) == 0:
@@ -494,7 +494,7 @@ _('Connection with peer cannot be established.'))
 		del(self.files_props[sid[0]][sid[1:]])
 		del(file_props)
 
-	def set_progress(self, typ, sid, transfered_size, iter_ = None):
+	def set_progress(self, typ, sid, transfered_size, iter_=None):
 		"""
 		Change the progress of a transfer with new transfered size
 		"""
@@ -582,7 +582,7 @@ _('Connection with peer cannot be established.'))
 		if os.path.isfile(file_path):
 			stat = os.stat(file_path)
 		else:
-			dialogs.ErrorDialog(_('Invalid File'), _('File: ')  + file_path)
+			dialogs.ErrorDialog(_('Invalid File'), _('File: ') + file_path)
 			return None
 		if stat[6] == 0:
 			dialogs.ErrorDialog(_('Invalid File'),
@@ -659,14 +659,13 @@ _('Connection with peer cannot be established.'))
 					self.tooltip.timeout = gobject.timeout_add(500,
 						self.show_tooltip, widget)
 
-	def on_transfers_list_leave_notify_event(self, widget = None, event = None):
+	def on_transfers_list_leave_notify_event(self, widget=None, event=None):
 		if event is not None:
 			self.height_diff = int(event.y)
 		elif self.height_diff is 0:
 			return
 		pointer = self.tree.get_pointer()
-		props = self.tree.get_path_at_pos(pointer[0],
-			pointer[1] - self.height_diff)
+		props = self.tree.get_path_at_pos(pointer[0], pointer[1] - self.height_diff)
 		if self.tooltip.timeout > 0:
 			if not props or self.tooltip.id == props[0]:
 				self.tooltip.hide_tooltip()
@@ -674,37 +673,6 @@ _('Connection with peer cannot be established.'))
 	def on_transfers_list_row_activated(self, widget, path, col):
 		# try to open the containing folder
 		self.on_open_folder_menuitem_activate(widget)
-
-	def is_transfer_paused(self, file_props):
-		if 'stopped' in file_props and file_props['stopped']:
-			return False
-		if 'completed' in file_props and file_props['completed']:
-			return False
-		if 'disconnect_cb' not in file_props:
-			return False
-		return file_props['paused']
-
-	def is_transfer_active(self, file_props):
-		if 'stopped' in file_props and file_props['stopped']:
-			return False
-		if 'completed' in file_props and file_props['completed']:
-			return False
-		if 'started' not in file_props or not file_props['started']:
-			return False
-		if 'paused' not in file_props:
-			return True
-		return not file_props['paused']
-
-	def is_transfer_stopped(self, file_props):
-		if 'error' in file_props and file_props['error'] != 0:
-			return True
-		if 'completed' in file_props and file_props['completed']:
-			return True
-		if 'connected' in file_props and file_props['connected'] == False:
-			return True
-		if 'stopped' not in file_props or not file_props['stopped']:
-			return False
-		return True
 
 	def set_cleanup_sensitivity(self):
 		"""
@@ -743,7 +711,7 @@ _('Connection with peer cannot be established.'))
 		self.remove_menuitem.set_sensitive(is_row_selected)
 		self.open_folder_menuitem.set_sensitive(is_row_selected)
 		is_stopped = False
-		if self.is_transfer_stopped(file_props):
+		if is_transfer_stopped(file_props):
 			is_stopped = True
 		self.cancel_button.set_sensitive(not is_stopped)
 		self.cancel_menuitem.set_sensitive(not is_stopped)
@@ -751,11 +719,11 @@ _('Connection with peer cannot be established.'))
 			# no selection, disable the buttons
 			self.set_all_insensitive()
 		elif not is_stopped:
-			if self.is_transfer_active(file_props):
+			if is_transfer_active(file_props):
 				# file transfer is active
 				self.toggle_pause_continue(True)
 				self.pause_button.set_sensitive(True)
-			elif self.is_transfer_paused(file_props):
+			elif is_transfer_paused(file_props):
 				# file transfer is paused
 				self.toggle_pause_continue(False)
 				self.pause_button.set_sensitive(True)
@@ -798,7 +766,7 @@ _('Connection with peer cannot be established.'))
 			iter_ = self.model.get_iter((i))
 			sid = self.model[iter_][C_SID].decode('utf-8')
 			file_props = self.files_props[sid[0]][sid[1:]]
-			if self.is_transfer_stopped(file_props):
+			if is_transfer_stopped(file_props):
 				self._remove_transfer(iter_, sid, file_props)
 			i -= 1
 		self.tree.get_selection().unselect_all()
@@ -840,7 +808,7 @@ _('Connection with peer cannot be established.'))
 			self.set_status(file_props['type'], file_props['sid'], types[sid[0]])
 			self.toggle_pause_continue(True)
 			file_props['continue_cb']()
-		elif self.is_transfer_active(file_props):
+		elif is_transfer_active(file_props):
 			file_props['paused'] = True
 			self.set_status(file_props['type'], file_props['sid'], 'pause')
 			# reset that to compute speed only when we resume
@@ -876,7 +844,7 @@ _('Connection with peer cannot be established.'))
 			sid = self.model[iter_][C_SID].decode('utf-8')
 			file_props = self.files_props[sid[0]][sid[1:]]
 			# bounding rectangle of coordinates for the cell within the treeview
-			rect =  self.tree.get_cell_area(props[0],props[1])
+			rect = self.tree.get_cell_area(props[0], props[1])
 			# position of the treeview on the screen
 			position = widget.window.get_origin()
 			self.tooltip.show_tooltip(file_props , rect.height,
@@ -898,10 +866,9 @@ _('Connection with peer cannot be established.'))
 
 	def show_context_menu(self, event, iter_):
 		# change the sensitive propery of the buttons and menuitems
-		path = None
-		if iter_ is not None:
+		if iter_:
 			path = self.model.get_path(iter_)
-		self.set_buttons_sensitive(path, True)
+			self.set_buttons_sensitive(path, True)
 
 		event_button = gtkgui_helpers.get_possible_button_event(event)
 		self.file_transfers_menu.show_all()
@@ -950,16 +917,16 @@ _('Connection with peer cannot be established.'))
 		except TypeError:
 			self.tree.get_selection().unselect_all()
 		if event.button == 3: # Right click
-			if path is not None:
+			if path:
 				self.tree.get_selection().select_path(path)
 				iter_ = self.model.get_iter(path)
 			self.show_context_menu(event, iter_)
-			if path is not None:
+			if path:
 				return True
 
 	def on_open_folder_menuitem_activate(self, widget):
 		selected = self.tree.get_selection().get_selected()
-		if selected is None or selected[1] is None:
+		if not selected or not selected[1]:
 			return
 		s_iter = selected[1]
 		sid = self.model[s_iter][C_SID].decode('utf-8')
@@ -981,7 +948,7 @@ _('Connection with peer cannot be established.'))
 
 	def on_remove_menuitem_activate(self, widget):
 		selected = self.tree.get_selection().get_selected()
-		if selected is None or selected[1] is None:
+		if not selected or not selected[1]:
 			return
 		s_iter = selected[1]
 		sid = self.model[s_iter][C_SID].decode('utf-8')
