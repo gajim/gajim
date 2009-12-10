@@ -1997,6 +1997,14 @@ class Interface:
 			self.roster.draw_pep(jid, account, pep_type)
 			if ctrl:
 				ctrl.update_pep(pep_type)
+				
+	def handle_event_caps_received(self, account, data):
+		# ('CAPS_RECEIVED', account, (full_jid))
+		full_jid = data[0]
+		pm_ctrl = gajim.interface.msg_win_mgr.get_control(full_jid, account)
+		if pm_ctrl:
+			print "pm updated"
+			pm_ctrl.update_contact()
 			
 	def register_handler(self, event, handler):																																									
 		if event not in self.handlers:
@@ -2097,7 +2105,8 @@ class Interface:
 			'JINGLE_CONNECTED': [self.handle_event_jingle_connected],
 			'JINGLE_DISCONNECTED': [self.handle_event_jingle_disconnected],
 			'JINGLE_ERROR': [self.handle_event_jingle_error],
-			'PEP_RECEIVED': [self.handle_event_pep_received]
+			'PEP_RECEIVED': [self.handle_event_pep_received],
+			'CAPS_RECEIVED': [self.handle_event_caps_received]
 		}
 	
 	def dispatch(self, event, account, data):

@@ -36,9 +36,11 @@ import helpers
 import base64
 import hashlib
 
-from common.xmpp import NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION, NS_CHATSTATES
-from common.xmpp import NS_JINGLE_ICE_UDP, NS_JINGLE_RTP_AUDIO
-from common.xmpp import NS_JINGLE_RTP_VIDEO
+import logging
+log = logging.getLogger('gajim.c.caps')
+
+from common.xmpp import (NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION, NS_CHATSTATES,
+	NS_JINGLE_ICE_UDP, NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO, NS_CAPS)
 # Features where we cannot safely assume that the other side supports them
 FEATURE_BLACKLIST = [NS_CHATSTATES, NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION,
 	NS_JINGLE_ICE_UDP, NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO]
@@ -148,6 +150,22 @@ def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
 ################################################################################
 ### Internal classes of this module
 ################################################################################
+
+
+def create_suitable_client_caps(node, caps_hash, hash_method):
+	"""
+	Create and return a suitable ClientCaps object for the given node,
+	caps_hash, hash_method combination. 
+	"""
+	if not node or not caps_hash:
+		# improper caps, ignore client capabilities.
+		client_caps = NullClientCaps()
+	elif not hash_method:
+		client_caps = OldClientCaps(caps_hash, node)
+	else:
+		client_caps = ClientCaps(caps_hash, node, hash_method)
+	return client_caps
+
 
 class AbstractClientCaps(object):
 	"""
@@ -378,63 +396,58 @@ class CapsCache(object):
 ################################################################################
 
 class ConnectionCaps(object):
-	"""
-	This class highly depends on that it is a part of Connection class
-	"""
+
+	def __init__(self, account, dispatch_event):
+		self._account = account
+		self._dispatch_event = dispatch_event
 
 	def _capsPresenceCB(self, con, presence):
 		"""
-		Handle incoming presence stanzas... This is a callback for xmpp
-		registered in connection_handlers.py
+		XMMPPY callback method to handle retrieved caps info
 		"""
-		# we will put these into proper Contact object and ask
-		# for disco... so that disco will learn how to interpret
-		# these caps
-		pm_ctrl = None
 		try:
 			jid = helpers.get_full_jid_from_iq(presence)
 		except:
-			# Bad jid
+			log.info("Ignoring invalid JID in caps presenceCB")
 			return
-		contact = gajim.contacts.get_contact_from_full_jid(self.name, jid)
+
+		client_caps = self._extract_client_caps_from_presence(presence)
+		capscache.query_client_of_jid_if_unknown(self, jid, client_caps)
+		self._update_client_caps_of_contact(jid, client_caps)
+
+		self._dispatch_event('CAPS_RECEIVED', (jid,))
+
+	def _extract_client_caps_from_presence(self, presence):
+		caps_tag = presence.getTag('c', namespace=NS_CAPS)
+		if caps_tag:
+			hash_method, node, caps_hash = caps_tag['hash'], caps_tag['node'], caps_tag['ver']
+		else:
+			hash_method = node = caps_hash = None
+		return create_suitable_client_caps(node, caps_hash, hash_method)
+
+	def _update_client_caps_of_contact(self, jid, client_caps):
+		contact = self._get_contact_or_gc_contact_for_jid(jid)
+		if contact:
+			contact.client_caps = client_caps
+		else:
+			log.info("Received Caps from unknown contact %s" % jid)
+
+	def _get_contact_or_gc_contact_for_jid(self, jid):
+		contact = gajim.contacts.get_contact_from_full_jid(self._account, jid)
 		if contact is None:
 			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-			contact = gajim.contacts.get_gc_contact(
-				self.name, room_jid, nick)
-			pm_ctrl = gajim.interface.msg_win_mgr.get_control(jid, self.name)
-			if contact is None:
-				# TODO: a way to put contact not-in-roster
-				# into Contacts
-				return
-
-		caps_tag = presence.getTag('c')
-		if not caps_tag:
-			# presence did not contain caps_tag
-			client_caps = NullClientCaps()
-		else:
-			hash_method, node, caps_hash = caps_tag['hash'], caps_tag['node'], caps_tag['ver']
-
-			if not node or not caps_hash:
-				# improper caps in stanza, ignore client capabilities.
-				client_caps = NullClientCaps()
-			elif not hash_method:
-				client_caps = OldClientCaps(caps_hash, node)
-			else:
-				client_caps = ClientCaps(caps_hash, node, hash_method)
-
-		capscache.query_client_of_jid_if_unknown(self, jid, client_caps)
-		contact.client_caps = client_caps
-
-		if pm_ctrl:
-			pm_ctrl.update_contact()
+			contact = gajim.contacts.get_gc_contact(self._account, room_jid, nick)
+		return contact
 
 	def _capsDiscoCB(self, jid, node, identities, features, dataforms):
-		contact = gajim.contacts.get_contact_from_full_jid(self.name, jid)
+		"""
+		XMMPPY callback to update our caps cache with queried information after
+		we have retrieved an unknown caps hash and issued a disco
+		"""
+		contact = self._get_contact_or_gc_contact_for_jid(jid)
 		if not contact:
-			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-			contact = gajim.contacts.get_gc_contact(self.name, room_jid, nick)
-			if contact is None:
-				return
+			log.info("Received Disco from unknown contact %s" % jid)
+			return
 
 		lookup = contact.client_caps.get_cache_lookup_strategy()
 		cache_item = lookup(capscache)
@@ -449,5 +462,9 @@ class ConnectionCaps(object):
 				cache_item.set_and_store(identities, features)
 			else:
 				contact.client_caps = NullClientCaps()
+				log.warn("Computed and retrieved caps hash differ." +
+					"Ignoring caps of contact %s" % contact.get_full_jid())
+
+			self._dispatch_event('CAPS_RECEIVED', (jid,))
 
 # vim: se ts=3:
