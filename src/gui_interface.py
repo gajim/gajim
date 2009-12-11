@@ -440,7 +440,7 @@ class Interface:
 
 				# TODO: This causes problems when another
 				#	resource signs off!
-				conn.remove_transfers_for_contact(contact1)
+				conn.stop_all_active_file_transfers(contact1)
 
 				# disable encryption, since if any messages are
 				# lost they'll be not decryptable (note that

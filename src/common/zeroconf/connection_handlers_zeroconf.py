@@ -28,7 +28,6 @@ import socket
 
 from calendar import timegm
 
-from common import socks5
 import common.xmpp
 
 from common import helpers
@@ -36,6 +35,7 @@ from common import gajim
 from common.zeroconf import zeroconf
 from common.commands import ConnectionCommands
 from common.pep import ConnectionPEP
+from common.protocol.bytestream import ConnectionBytestreamZeroconf
 
 import logging
 log = logging.getLogger('gajim.c.z.connection_handlers_zeroconf')
@@ -69,25 +69,12 @@ class ConnectionVcard(connection_handlers.ConnectionVcard):
 	def send_vcard(self, vcard):
 		pass
 
-class ConnectionBytestream(connection_handlers.ConnectionBytestream):
-	def _ft_get_from(self, iq_obj):
-		return unicode(iq_obj.getFrom())
 
-	def _ft_get_our_jid(self):
-		return gajim.get_jid_from_account(self.name)
-
-	def _ft_get_receiver_jid(self, file_props):
-		return file_props['receiver'].jid
-
-	def _ft_get_streamhost_jid_attr(self, streamhost):
-		return streamhost.getAttr('jid')
-
-
-class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestream,
+class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestreamZeroconf,
 ConnectionCommands, ConnectionPEP, connection_handlers.ConnectionHandlersBase):
 	def __init__(self):
 		ConnectionVcard.__init__(self)
-		ConnectionBytestream.__init__(self)
+		ConnectionBytestreamZeroconf.__init__(self)
 		ConnectionCommands.__init__(self)
 		connection_handlers.ConnectionHandlersBase.__init__(self)
 
@@ -184,21 +171,6 @@ ConnectionCommands, ConnectionPEP, connection_handlers.ConnectionHandlersBase):
 		"""
 		# serverside metacontacts are not supported with zeroconf
 		# (there is no server)
-		pass
-
-	def remove_transfers_for_contact(self, contact):
-		"""
-		Stop all active transfer for contact
-		"""
-		pass
-
-	def remove_all_transfers(self):
-		"""
-		Stops and removes all active connections from the socks5 pool
-		"""
-		pass
-
-	def remove_transfer(self, file_props, remove_from_list = True):
 		pass
 
 	def _DiscoverItemsGetCB(self, con, iq_obj):
