@@ -72,9 +72,6 @@ class ConnectionBytestream:
 
 	def __init__(self):
 		self.files_props = {}
-		self.awaiting_xmpp_ping_id = None
-
-
 
 	def send_success_connect_reply(self, streamhost):
 		"""
@@ -92,9 +89,9 @@ class ConnectionBytestream:
 		stream_tag.setAttr('jid', streamhost['jid'])
 		self.connection.send(iq)
 
-	def remove_transfers_for_contact(self, contact):
+	def stop_all_active_file_transfers(self, contact):
 		"""
-		Stop all active transfer for contact
+		Stop all active transfer to or from the given contact
 		"""
 		for file_props in self.files_props.values():
 			if is_transfer_stopped(file_props):
@@ -115,7 +112,6 @@ class ConnectionBytestream:
 		"""
 		for file_props in self.files_props.values():
 			self.remove_transfer(file_props, remove_from_list=False)
-		del(self.files_props)
 		self.files_props = {}
 
 	def remove_transfer(self, file_props, remove_from_list=True):
@@ -140,95 +136,40 @@ class ConnectionBytestream:
 				if 'idx' in host and host['idx'] > 0:
 					gajim.socks5queue.remove_receiver(host['idx'])
 					gajim.socks5queue.remove_sender(host['idx'])
-
-	def send_socks5_info(self, file_props, fast=True, receiver=None, sender
-			=None):
+					
+	def _send_socks5_info(self, file_props):
 		"""
 		Send iq for the present streamhosts and proxies
 		"""
 		if not self.connection or self.connected < 2:
 			return
-		if not isinstance(self.peerhost, tuple):
-			return
-		port = gajim.config.get('file_transfers_port')
-		ft_add_hosts_to_send = gajim.config.get('ft_add_hosts_to_send')
-		cfg_proxies = gajim.config.get_per('accounts', self.name,
-			'file_transfer_proxies')
-		if receiver is None:
-			receiver = file_props['receiver']
-		if sender is None:
-			sender = file_props['sender']
-		proxyhosts = []
-		if fast and cfg_proxies:
-			proxies = [e.strip() for e in cfg_proxies.split(',')]
-			default = gajim.proxy65_manager.get_default_for_name(self.name)
-			if default:
-				# add/move default proxy at top of the others
-				if proxies.__contains__(default):
-					proxies.remove(default)
-				proxies.insert(0, default)
+		receiver = file_props['receiver']
+		sender = file_props['sender']
 
-			for proxy in proxies:
-				(host, _port, jid) = gajim.proxy65_manager.get_proxy(proxy, self.name)
-				if host is None:
-					continue
-				host_dict = {
-					'state': 0,
-					'target': unicode(receiver),
-					'id': file_props['sid'],
-					'sid': file_props['sid'],
-					'initiator': proxy,
-					'host': host,
-					'port': unicode(_port),
-					'jid': jid
-				}
-				proxyhosts.append(host_dict)
 		sha_str = helpers.get_auth_sha(file_props['sid'], sender, receiver)
 		file_props['sha_str'] = sha_str
-		ft_add_hosts = []
-		if ft_add_hosts_to_send:
-			ft_add_hosts_to_send = [e.strip() for e in ft_add_hosts_to_send.split(',')]
-			for ft_host in ft_add_hosts_to_send:
-				ft_add_hosts.append(ft_host)
-		listener = gajim.socks5queue.start_listener(port,
-			sha_str, self._result_socks5_sid, file_props['sid'])
-		if listener is None:
+		
+		port = gajim.config.get('file_transfers_port')
+		listener = gajim.socks5queue.start_listener(port, sha_str,
+			self._result_socks5_sid, file_props['sid'])
+		if not listener:
 			file_props['error'] = -5
 			self.dispatch('FILE_REQUEST_ERROR', (unicode(receiver), file_props, ''))
 			self._connect_error(unicode(receiver), file_props['sid'],
 				file_props['sid'], code=406)
-			return
-
-		iq = xmpp.Iq(to=unicode(receiver), typ='set')
-		file_props['request-id'] = 'id_' + file_props['sid']
-		iq.setID(file_props['request-id'])
-		query = iq.setTag('query', namespace=xmpp.NS_BYTESTREAM)
-		query.setAttr('mode', 'plain')
-		query.setAttr('sid', file_props['sid'])
-		self._add_streamhosts_to_query(query, sender, port, ft_add_hosts)
-		try:
-			# The ip we're connected to server with
-			my_ips = [self.peerhost[0]]
-			# all IPs from local DNS
-			for addr in socket.getaddrinfo(socket.gethostname(), None):
-				if not addr[4][0] in my_ips and not addr[4][0].startswith('127'):
-					my_ips.append(addr[4][0])
-			self._add_streamhosts_to_query(query, sender, port, my_ips)
-		except socket.gaierror:
-			self.dispatch('ERROR', (_('Wrong host'),
-				_('Invalid local address? :-O')))
-
-		if fast and proxyhosts != [] and gajim.config.get_per('accounts',
-		self.name, 'use_ft_proxies'):
-			file_props['proxy_receiver'] = unicode(receiver)
-			file_props['proxy_sender'] = unicode(sender)
-			file_props['proxyhosts'] = proxyhosts
-
-			for proxyhost in proxyhosts:
-				self._add_streamhosts_to_query(query, proxyhost['jid'],
-				proxyhost['port'], [proxyhost['host']])
-
-		self.connection.send(iq)
+		else:
+			iq = xmpp.Iq(to=unicode(receiver), typ='set')
+			file_props['request-id'] = 'id_' + file_props['sid']
+			iq.setID(file_props['request-id'])
+			query = iq.setTag('query', namespace=xmpp.NS_BYTESTREAM)
+			query.setAttr('mode', 'plain')
+			query.setAttr('sid', file_props['sid'])
+			
+			self._add_addiditional_streamhosts_to_query(query, file_props)
+			self._add_local_ips_as_streamhosts_to_query(query, file_props)
+			self._add_proxy_streamhosts_to_query(query, file_props)
+	
+			self.connection.send(iq)
 
 	def _add_streamhosts_to_query(self, query, sender, port, hosts):
 		for host in hosts:
@@ -237,6 +178,77 @@ class ConnectionBytestream:
 			streamhost.setAttr('port', unicode(port))
 			streamhost.setAttr('host', host)
 			streamhost.setAttr('jid', sender)
+
+	def _add_local_ips_as_streamhosts_to_query(self, query, file_props):
+		try:
+			my_ips = [self.peerhost[0]] # The ip we're connected to server with
+			# all IPs from local DNS
+			for addr in socket.getaddrinfo(socket.gethostname(), None):
+				if not addr[4][0] in my_ips and not addr[4][0].startswith('127'):
+					my_ips.append(addr[4][0])
+			
+			sender = file_props['sender']
+			port = gajim.config.get('file_transfers_port')
+			self._add_streamhosts_to_query(query, sender, port, my_ips)
+		except socket.gaierror:
+			self.dispatch('ERROR', (_('Wrong host'),
+				_('Invalid local address? :-O')))
+
+	def _add_addiditional_streamhosts_to_query(self, query, file_props):
+		sender = file_props['sender']
+		port = gajim.config.get('file_transfers_port')
+		ft_add_hosts_to_send = gajim.config.get('ft_add_hosts_to_send')
+		additional_hosts = []
+		if ft_add_hosts_to_send:
+			additional_hosts = [e.strip() for e in ft_add_hosts_to_send.split(',')]
+		else:
+			additional_hosts = []
+		self._add_streamhosts_to_query(query, sender, port, additional_hosts)
+
+	def _add_proxy_streamhosts_to_query(self, query, file_props):
+		proxyhosts = self._get_file_transfer_proxies_from_config(file_props)
+		if proxyhosts:
+			file_props['proxy_receiver'] = unicode(file_props['receiver'])
+			file_props['proxy_sender'] = unicode(file_props['sender'])
+			file_props['proxyhosts'] = proxyhosts
+
+			for proxyhost in proxyhosts:
+				self._add_streamhosts_to_query(query, proxyhost['jid'],
+				proxyhost['port'], [proxyhost['host']])
+
+	def _get_file_transfer_proxies_from_config(self, file_props):
+		configured_proxies = gajim.config.get_per('accounts', self.name, 
+			'file_transfer_proxies')
+		shall_use_proxies = gajim.config.get_per('accounts', self.name, 
+			'use_ft_proxies')
+		if shall_use_proxies and configured_proxies:
+			proxyhost_dicts = []
+			proxies = [item.strip() for item in configured_proxies.split(',')]
+			default_proxy = gajim.proxy65_manager.get_default_for_name(self.name)
+			if default_proxy:
+				# add/move default proxy at top of the others
+				if default_proxy in proxies:
+					proxies.remove(default_proxy)
+				proxies.insert(0, default_proxy)
+			
+			for proxy in proxies:
+				(host, _port, jid) = gajim.proxy65_manager.get_proxy(proxy, self.name)
+				if not host:
+					continue
+				host_dict = {
+					'state': 0,
+					'target': unicode(file_props['receiver']),
+					'id': file_props['sid'],
+					'sid': file_props['sid'],
+					'initiator': proxy,
+					'host': host,
+					'port': unicode(_port),
+					'jid': jid
+				}
+				proxyhost_dicts.append(host_dict)
+			return proxyhost_dicts
+		else:
+			return []
 
 	def send_file_rejection(self, file_props, code='403', typ=None):
 		"""
@@ -440,9 +452,6 @@ class ConnectionBytestream:
 		# if we want to respect xep-0065 we have to check for proxy
 		# activation result in any result iq
 		real_id = unicode(iq_obj.getAttr('id'))
-		if real_id == self.awaiting_xmpp_ping_id:
-			self.awaiting_xmpp_ping_id = None
-			return
 		if not real_id.startswith('au_'):
 			return
 		frm = self._ft_get_from(iq_obj)
@@ -559,7 +568,7 @@ class ConnectionBytestream:
 		field = form.getField('stream-method')
 		if field.getValue() != xmpp.NS_BYTESTREAM:
 			return
-		self.send_socks5_info(file_props, fast=True)
+		self._send_socks5_info(file_props)
 		raise xmpp.NodeProcessed
 
 	def _siSetCB(self, con, iq_obj):
