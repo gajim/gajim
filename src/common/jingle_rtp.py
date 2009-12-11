@@ -16,6 +16,7 @@ Handles Jingle RTP sessions (XEP 0167)
 """
 
 import gobject
+import socket
 
 import xmpp
 import farsight, gst
@@ -71,7 +72,7 @@ class JingleRTPContent(JingleContent):
 		# pidgin and telepathy-gabble don't follow the XEP, and it won't work
 		# due to bad controlling-mode
 		params = {'controlling-mode': self.session.weinitiate, 'debug': False}
-		stun_server = gajim.config.get('stun-server')
+		stun_server = gajim.config.get('stun_server')
 		if stun_server:
 			try:
 				ip = socket.getaddrinfo(stun_server, 0, socket.AF_UNSPEC,

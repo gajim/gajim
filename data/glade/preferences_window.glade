@@ -2158,6 +2158,7 @@ $T will be replaced by auto-not-available timeout</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">&#x25CF;</property>
+                                <signal name="changed" handler="stun_server_entry_changed"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
