@@ -2007,8 +2007,7 @@ class Interface:
 		# ('CAPS_RECEIVED', account, (full_jid))
 		full_jid = data[0]
 		pm_ctrl = gajim.interface.msg_win_mgr.get_control(full_jid, account)
-		if pm_ctrl:
-			print "pm updated"
+		if pm_ctrl and hasattr(pm_ctrl, "update_contact"):
 			pm_ctrl.update_contact()
 			
 	def register_handler(self, event, handler):																																									
