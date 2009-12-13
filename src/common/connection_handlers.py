@@ -1915,9 +1915,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
 						# Anyway, it is the old behavior when we assumed that
 						# not-existing contacts don't support anything
 						contact_exists = bool(contact)
-						session_supported = contact_exists and \
-							contact.supports(common.xmpp.NS_SSN) or \
-							contact.supports(common.xmpp.NS_ESESSION)
+						session_supported = contact_exists and (
+							contact.supports(common.xmpp.NS_SSN) or
+							contact.supports(common.xmpp.NS_ESESSION))
 						if session_supported:
 							sess.terminate()
 							del self.sessions[jid][sess.thread_id]
