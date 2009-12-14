@@ -489,7 +489,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			# Wait maximum 1s for connection
 			socket.setdefaulttimeout(1)
 			try:
-				f = urllib2.urlopen(attrs['src'])
+				req = urllib2.Request(attrs['src'])
+				req.add_header('User-Agent', 'Gajim ' + gajim.version)
+				f = urllib2.urlopen(req)
 			except Exception, ex:
 				gajim.log.debug('Error loading image %s ' % attrs['src']  + str(ex))
 				pixbuf = None
