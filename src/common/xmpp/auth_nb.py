@@ -207,6 +207,14 @@ class SASL(PlugIn):
 			self.startsasl = SASL_IN_PROCESS
 			self._owner.send(str(node))
 			raise NodeProcessed
+		if "EXTERNAL" in self.mecs:
+			self.mecs.remove('EXTERNAL')
+			node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'EXTERNAL'},
+				payload=[base64.encodestring('%s@%s' % (self.username,
+				self._owner.Server)).replace('\n', '')])
+			self.startsasl = SASL_IN_PROCESS
+			self._owner.send(str(node))
+			raise NodeProcessed
 		if 'GSSAPI' in self.mecs and have_kerberos:
 			self.mecs.remove('GSSAPI')
 			try:
@@ -237,7 +245,8 @@ class SASL(PlugIn):
 			self.startsasl = SASL_IN_PROCESS
 			raise NodeProcessed
 		self.startsasl = SASL_FAILURE
-		log.error('I can only use DIGEST-MD5, GSSAPI and PLAIN mecanisms.')
+		log.error('I can only use EXTERNAL, DIGEST-MD5, GSSAPI and PLAIN '
+			'mecanisms.')
 		if self.on_sasl:
 			self.on_sasl()
 		return
