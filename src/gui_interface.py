@@ -1981,7 +1981,7 @@ class Interface:
 			dialogs.WarningDialog(_('PEP node was not removed'),
 				_('PEP node %(node)s was not removed: %(message)s') % {
 				'node': data[1], 'message': data[2]})
-			
+
 	def handle_event_pep_received(self, account, data):
 		# ('PEP_RECEIVED', account, (jid, pep_type))
 		jid = data[0]
@@ -1990,7 +1990,7 @@ class Interface:
 
 		if jid == common.gajim.get_jid_from_account(account):
 			self.roster.draw_account(account)
-		
+
 		if pep_type == 'nickname':
 			self.roster.draw_contact(jid, account)
 			if ctrl:
@@ -2002,15 +2002,15 @@ class Interface:
 			self.roster.draw_pep(jid, account, pep_type)
 			if ctrl:
 				ctrl.update_pep(pep_type)
-				
+
 	def handle_event_caps_received(self, account, data):
 		# ('CAPS_RECEIVED', account, (full_jid))
 		full_jid = data[0]
 		pm_ctrl = gajim.interface.msg_win_mgr.get_control(full_jid, account)
 		if pm_ctrl and hasattr(pm_ctrl, "update_contact"):
 			pm_ctrl.update_contact()
-			
-	def register_handler(self, event, handler):																																									
+
+	def register_handler(self, event, handler):
 		if event not in self.handlers:
 			self.handlers[event] = []
 
