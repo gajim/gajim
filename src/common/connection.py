@@ -1307,6 +1307,11 @@ class Connection(CommonConnection, ConnectionHandlers):
 		if self.connection:
 			self.connection.send(' ')
 
+	def _on_xmpp_ping_answer(self, iq_obj):
+		id_ = unicode(iq_obj.getAttr('id'))
+		if id_ == self.awaiting_xmpp_ping_id: 
+			self.awaiting_xmpp_ping_id = None
+
 	def sendPing(self, pingTo=None):
 		"""
 		Send XMPP Ping (XEP-0199) request. If pingTo is not set, ping is sent to
@@ -1335,7 +1340,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 			timePing = time_time()
 			self.connection.SendAndCallForResponse(iq, _on_response)
 		else:
-			self.connection.send(iq)
+			self.connection.SendAndCallForResponse(iq, self._on_xmpp_ping_answer)
 			gajim.idlequeue.set_alarm(self.check_pingalive, gajim.config.get_per(
 				'accounts', self.name, 'time_for_ping_alive_answer'))
 
