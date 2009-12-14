@@ -332,8 +332,17 @@ class SASL(PlugIn):
 		else:
 			self.password = password
 		if self.mechanism == 'DIGEST-MD5':
-			A1 = C([H(C([self.resp['username'], self.resp['realm'],
-				self.password])), self.resp['nonce'], self.resp['cnonce']])
+			def convert_to_iso88591(string):
+				try:
+					string = string.decode('utf-8').encode('iso-8859-1')
+				except UnicodeEncodeError:
+					pass
+				return string
+			hash_username = convert_to_iso88591(self.resp['username'])
+			hash_realm = convert_to_iso88591(self.resp['realm'])
+			hash_password = convert_to_iso88591(self.password)
+			A1 = C([H(C([hash_username, hash_realm, hash_password])),
+				self.resp['nonce'], self.resp['cnonce']])
 			A2 = C(['AUTHENTICATE', self.resp['digest-uri']])
 			response= HH(C([HH(A1), self.resp['nonce'], self.resp['nc'],
 				self.resp['cnonce'], self.resp['qop'], HH(A2)]))
