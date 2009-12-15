@@ -85,7 +85,9 @@ class NonBlockingRoster(PlugIn):
 				self._data[jid]['subscription']=item.getAttr('subscription')
 				self._data[jid]['groups']=[]
 				if not self._data[jid].has_key('resources'): self._data[jid]['resources']={}
-				for group in item.getTags('group'): self._data[jid]['groups'].append(group.getData())
+				for group in item.getTags('group'):
+					if group.getData() not in self._data[jid]['groups']:
+						self._data[jid]['groups'].append(group.getData())
 		self._data[self._owner.User+'@'+self._owner.Server]={'resources':{},'name':None,'ask':None,'subscription':None,'groups':None,}
 		self.set=1
 		# Looks like we have a workaround
