@@ -23,8 +23,14 @@ import re
 import logging
 log = logging.getLogger('gajim.c.resolver')
 
+if __name__ == '__main__':
+	sys.path.append('..')
+	from common import i18n
+	import common.configpaths
+	common.configpaths.gajimpaths.init(None)
+
 from common import helpers
-from xmpp.idlequeue import IdleCommand
+from common.xmpp.idlequeue import IdleCommand
 
 # it is good to check validity of arguments, when calling system commands
 ns_type_pattern = re.compile('^[a-z]+$')
@@ -125,18 +131,23 @@ class LibAsyncNSResolver(CommonResolver):
 			while resq is not None:
 				try:
 					rl = resq.get_done()
-				except:
+				except Exception:
 					rl = []
+				hosts = []
+				requested_type = resq.userdata['type']
+				requested_host = resq.userdata['host']
 				if rl:
 					for r in rl:
+						if r['type'] != requested_type:
+							# Answer doesn't contain valid SRV data
+							continue
 						r['prio'] = r['pref']
-				self._on_ready(
-					host = resq.userdata['host'],
-					type = resq.userdata['type'],
-					result_list = rl)
+						hosts.append(r)
+				self._on_ready(host=requested_host, type=requested_type,
+					result_list=hosts)
 				try:
 					resq = self.asyncns.get_next()
-				except:
+				except Exception:
 					resq = None
 		elif type(resq) == libasyncns.AddrInfoQuery:
 			# getaddrinfo result (A or AAAA)
@@ -319,6 +330,8 @@ if __name__ == '__main__':
 	win.add(hbox)
 	win.show_all()
 	gobject.timeout_add(200, idlequeue.process)
+	if USE_LIBASYNCNS:
+		gobject.timeout_add(200, resolver.process)
 	gtk.main()
 
 # vim: se ts=3:
