@@ -1844,6 +1844,11 @@ class RosterWindow:
 			gajim.interface.show_unsubscribed_dialog(account, data)
 			gajim.events.remove_events(account, jid, event)
 			return True
+		elif event.type_ == 'jingle-incoming':
+			peerjid, sid, content_types = data
+			dialogs.VoIPCallReceivedDialog(account, peerjid, sid, content_types)
+			gajim.events.remove_events(account, jid, event)
+			return True
 		return False
 
 ################################################################################
