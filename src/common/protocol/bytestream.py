@@ -35,6 +35,8 @@ from common import gajim
 from common import helpers
 from common import dataforms
 
+from common.socks5 import Socks5Receiver
+
 
 def is_transfer_paused(file_props):
 	if 'stopped' in file_props and file_props['stopped']:
@@ -520,7 +522,7 @@ class ConnectionBytestream:
 				file_props['streamhosts'] = []
 			file_props['streamhosts'].append(proxy)
 			file_props['is_a_proxy'] = True
-			receiver = socks5.Socks5Receiver(gajim.idlequeue, proxy,
+			receiver = Socks5Receiver(gajim.idlequeue, proxy,
 				file_props['sid'], file_props)
 			gajim.socks5queue.add_receiver(self.name, receiver)
 			proxy['idx'] = receiver.queue_idx
