@@ -2265,7 +2265,8 @@ class Interface:
 
 			w = ctrl.parent_win
 		elif type_ in ('normal', 'file-request', 'file-request-error',
-		'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
+		'file-send-error', 'file-error', 'file-stopped', 'file-completed',
+		'jingle-incoming'):
 			# Get the first single message event
 			event = gajim.events.get_first_event(account, fjid, type_)
 			if not event:
@@ -2301,11 +2302,6 @@ class Interface:
 			self.show_unsubscribed_dialog(account, contact)
 			gajim.events.remove_events(account, jid, event)
 			self.roster.draw_contact(jid, account)
-		elif type_ == 'jingle-incoming':
-			event = gajim.events.get_first_event(account, jid, type_)
-			peerjid, sid, content_types = event.parameters
-			dialogs.VoIPCallReceivedDialog(account, peerjid, sid, content_types)
-			gajim.events.remove_events(account, jid, event)
 		if w:
 			w.set_active_tab(ctrl)
 			w.window.window.focus(gtk.get_current_event_time())
