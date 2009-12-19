@@ -138,7 +138,7 @@ class ConnectionBytestream:
 				if 'idx' in host and host['idx'] > 0:
 					gajim.socks5queue.remove_receiver(host['idx'])
 					gajim.socks5queue.remove_sender(host['idx'])
-					
+
 	def _send_socks5_info(self, file_props):
 		"""
 		Send iq for the present streamhosts and proxies
@@ -150,7 +150,7 @@ class ConnectionBytestream:
 
 		sha_str = helpers.get_auth_sha(file_props['sid'], sender, receiver)
 		file_props['sha_str'] = sha_str
-		
+
 		port = gajim.config.get('file_transfers_port')
 		listener = gajim.socks5queue.start_listener(port, sha_str,
 			self._result_socks5_sid, file_props['sid'])
@@ -166,11 +166,11 @@ class ConnectionBytestream:
 			query = iq.setTag('query', namespace=xmpp.NS_BYTESTREAM)
 			query.setAttr('mode', 'plain')
 			query.setAttr('sid', file_props['sid'])
-			
+
 			self._add_addiditional_streamhosts_to_query(query, file_props)
 			self._add_local_ips_as_streamhosts_to_query(query, file_props)
 			self._add_proxy_streamhosts_to_query(query, file_props)
-	
+
 			self.connection.send(iq)
 
 	def _add_streamhosts_to_query(self, query, sender, port, hosts):
@@ -188,7 +188,7 @@ class ConnectionBytestream:
 			for addr in socket.getaddrinfo(socket.gethostname(), None):
 				if not addr[4][0] in my_ips and not addr[4][0].startswith('127'):
 					my_ips.append(addr[4][0])
-			
+
 			sender = file_props['sender']
 			port = gajim.config.get('file_transfers_port')
 			self._add_streamhosts_to_query(query, sender, port, my_ips)
@@ -219,9 +219,9 @@ class ConnectionBytestream:
 				proxyhost['port'], [proxyhost['host']])
 
 	def _get_file_transfer_proxies_from_config(self, file_props):
-		configured_proxies = gajim.config.get_per('accounts', self.name, 
+		configured_proxies = gajim.config.get_per('accounts', self.name,
 			'file_transfer_proxies')
-		shall_use_proxies = gajim.config.get_per('accounts', self.name, 
+		shall_use_proxies = gajim.config.get_per('accounts', self.name,
 			'use_ft_proxies')
 		if shall_use_proxies and configured_proxies:
 			proxyhost_dicts = []
@@ -232,7 +232,7 @@ class ConnectionBytestream:
 				if default_proxy in proxies:
 					proxies.remove(default_proxy)
 				proxies.insert(0, default_proxy)
-			
+
 			for proxy in proxies:
 				(host, _port, jid) = gajim.proxy65_manager.get_proxy(proxy, self.name)
 				if not host:
@@ -631,7 +631,7 @@ class ConnectionBytestream:
 		file_props['error'] = -3
 		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
 		raise xmpp.NodeProcessed
-	
+
 
 class ConnectionBytestreamZeroconf(ConnectionBytestream):
 
