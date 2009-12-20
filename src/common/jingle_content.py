@@ -15,6 +15,8 @@
 Handles Jingle contents (XEP 0166)
 """
 
+import xmpp
+
 contents = {}
 
 def get_jingle_content(node):
