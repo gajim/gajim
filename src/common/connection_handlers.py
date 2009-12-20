@@ -981,8 +981,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
 			self.dispatch('ENTITY_TIME', (jid_stripped, resource, ''))
 			self.entity_time_ids.remove(id_)
 			return
-		if id_ == self.awaiting_xmpp_ping_id:
-			self.awaiting_xmpp_ping_id = None
 		errmsg = iq_obj.getErrorMsg()
 		errcode = iq_obj.getErrorCode()
 		self.dispatch('ERROR_ANSWER', (id_, jid_from, errmsg, errcode))

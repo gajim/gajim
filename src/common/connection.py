@@ -1309,8 +1309,8 @@ class Connection(CommonConnection, ConnectionHandlers):
 
 	def _on_xmpp_ping_answer(self, iq_obj):
 		id_ = unicode(iq_obj.getAttr('id'))
-		if id_ == self.awaiting_xmpp_ping_id: 
-			self.awaiting_xmpp_ping_id = None
+		assert id_ == self.awaiting_xmpp_ping_id
+		self.awaiting_xmpp_ping_id = None
 
 	def sendPing(self, pingTo=None):
 		"""
@@ -2226,6 +2226,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 	def check_pingalive(self):
 		if self.awaiting_xmpp_ping_id:
 			# We haven't got the pong in time, disco and reconnect
+			log.warn("No reply received for keepalive ping. Reconnecting.")
 			self._disconnectedReconnCB()
 
 	def _reconnect_alarm(self):
