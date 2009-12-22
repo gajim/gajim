@@ -128,6 +128,35 @@ class StandardCommonCommands(CommandContainer):
 
             self.echo(formatted)
 
+    @command(raw=True, empty=True)
+    @documentation(_("""
+    Set current the status
+
+    Status can be given as one of the following values: online, away,
+    chat, xa, dnd.
+    """))
+    def status(self, status, message):
+        if status not in ('online', 'away', 'chat', 'xa', 'dnd'):
+            raise CommandError("Invalid status given")
+        for connection in gajim.connections.itervalues():
+            connection.change_status(status, message)
+
+    @command(raw=True, empty=True)
+    @documentation(_("Set the current status to away"))
+    def away(self, message):
+        if not message:
+            message = _("Away")
+        for connection in gajim.connections.itervalues():
+            connection.change_status('away', message)
+
+    @command('back', raw=True, empty=True)
+    @documentation(_("Set the current status to online"))
+    def online(self, message):
+        if not message:
+            message = _("Available")
+        for connection in gajim.connections.itervalues():
+            connection.change_status('online', message)
+
 class StandardChatCommands(CommandContainer):
     """
     This command container contains standard command which are unique to a chat.

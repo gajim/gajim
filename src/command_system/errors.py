@@ -30,6 +30,9 @@ class BaseError(Exception):
 
         super(BaseError, self).__init__()
 
+    def __str__(self):
+        return self.message
+
 class DefinitionError(BaseError):
     """
     Used to indicate errors occured on command definition.
