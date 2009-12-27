@@ -251,7 +251,8 @@ class NullClientCaps(AbstractClientCaps):
 	def _lookup_in_cache(self, caps_cache):
 		# lookup something which does not exist to get a new CacheItem created
 		cache_item = caps_cache[('dummy', '')]
-		assert cache_item.status != CACHED
+		# Mark the item as cached so that protocol/caps.py does not update it
+		cache_item.status = CACHED
 		return cache_item
 
 	def _discover(self, connection, jid):

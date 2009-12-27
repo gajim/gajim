@@ -90,6 +90,8 @@ class ConnectionCaps(object):
 		cache_item = lookup(self._capscache)
 
 		if cache_item.is_valid():
+			# we already know that the hash is fine and have already cached
+			# the identities and features
 			return
 		else:
 			validate = contact.client_caps.get_hash_validation_strategy()
@@ -101,8 +103,9 @@ class ConnectionCaps(object):
 				node = caps_hash = hash_method = None
 				contact.client_caps = self._create_suitable_client_caps(node,
 					caps_hash, hash_method)
+				log.warn("Computed and retrieved caps hash differ." +
+					"Ignoring caps of contact %s" % contact.get_full_jid())
 
 			self._dispatch_event('CAPS_RECEIVED', (jid,))
-
 		
 # vim: se ts=3:
