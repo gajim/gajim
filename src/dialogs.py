@@ -32,7 +32,6 @@
 import gtk
 import gobject
 import os
-from weakref import WeakValueDictionary
 
 import gtkgui_helpers
 import vcard
