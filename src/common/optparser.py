@@ -214,6 +214,8 @@ class OptionsParser:
 			self.update_config_to_01258()
 		if old < [0, 13, 10, 0] and new >= [0, 13, 10, 0]:
 			self.update_config_to_013100()
+		if old < [0, 13, 10, 1] and new >= [0, 13, 10, 1]:
+			self.update_config_to_013101()
 
 		gajim.logger.init_vars()
 		gajim.config.set('version', new_version)
@@ -856,5 +858,26 @@ class OptionsParser:
 			pass
 		con.close()
 		gajim.config.set('version', '0.13.10.0')
+
+	def update_config_to_013101(self):
+		back = os.getcwd()
+		os.chdir(logger.LOG_DB_FOLDER)
+		con = sqlite.connect(logger.LOG_DB_FILE)
+		os.chdir(back)
+		cur = con.cursor()
+		try:
+			cur.executescript(
+				'''
+				DROP INDEX IF EXISTS idx_logs_jid_id_kind;
+
+				CREATE INDEX IF NOT EXISTS
+				idx_logs_jid_id_time ON logs (jid_id, time DESC);
+				'''
+			)
+			con.commit()
+		except sqlite.OperationalError:
+			pass
+		con.close()
+		gajim.config.set('version', '0.13.10.1')
 
 # vim: se ts=3:

@@ -79,7 +79,7 @@ def create_log_db():
 			subject TEXT
 		);
 
-		CREATE INDEX idx_logs_jid_id_kind ON logs (jid_id, kind);
+		CREATE INDEX idx_logs_jid_id_time ON logs (jid_id, time DESC);
 
 		CREATE TABLE caps_cache (
 			hash_method TEXT,
