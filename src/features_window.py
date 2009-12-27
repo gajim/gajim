@@ -243,7 +243,8 @@ class FeaturesWindow:
 		return sleepy.SUPPORTED
 
 	def latex_available(self):
-		return gajim.HAVE_LATEX
+		from common import latex
+		return latex.check_for_latex_support()
 
 	def pycrypto_available(self):
 		return gajim.HAVE_PYCRYPTO
