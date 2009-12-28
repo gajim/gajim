@@ -3495,3 +3495,5 @@ class ThreadInterface:
 			
 		Thread(target=thread_function, args=(func, func_args, callback,
 			callback_args)).start()
+
+# vim: se ts=3:
