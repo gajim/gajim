@@ -661,18 +661,6 @@ class MessageWindow(object):
 	def get_origin(self):
 		return self.window.window.get_origin()
 
-	def toggle_emoticons(self):
-		for ctrl in self.controls():
-			ctrl.toggle_emoticons()
-
-	def update_font(self):
-		for ctrl in self.controls():
-			ctrl.update_font()
-
-	def update_tags(self):
-		for ctrl in self.controls():
-			ctrl.update_tags()
-
 	def get_control(self, key, acct):
 		"""
 		Return the MessageControl for jid or n, where n is a notebook page index.
