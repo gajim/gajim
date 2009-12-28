@@ -245,6 +245,16 @@ class NullClientCaps(AbstractClientCaps):
 
 	Assumes (almost) everything is supported.
 	"""
+	_instance = None
+	def __new__(cls, *args, **kwargs):
+		"""
+		Make it a singleton.
+		"""
+		if not cls._instance:
+			cls._instance = super(NullClientCaps, cls).__new__(
+				cls, *args, **kwargs)
+		return cls._instance
+
 	def __init__(self):
 		AbstractClientCaps.__init__(self, None, None)
 
