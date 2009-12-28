@@ -47,6 +47,7 @@ FEATURE_BLACKLIST = [NS_CHATSTATES, NS_XHTML_IM, NS_RECEIPTS, NS_ESESSION,
 NEW = 0
 QUERIED = 1
 CACHED = 2 # got the answer
+FAKED = 3 # allow NullClientCaps to behave as it has a cached item
 
 ################################################################################
 ### Public API of this module
@@ -67,7 +68,7 @@ def client_supports(client_caps, requested_feature):
 	supported_features = cache_item.features
 	if requested_feature in supported_features:
 		return True
-	elif supported_features == [] and cache_item.status in (NEW, QUERIED):
+	elif not supported_features and cache_item.status in (NEW, QUERIED, FAKED):
 		# assume feature is supported, if we don't know yet, what the client
 		# is capable of
 		return requested_feature not in FEATURE_BLACKLIST
@@ -262,7 +263,7 @@ class NullClientCaps(AbstractClientCaps):
 		# lookup something which does not exist to get a new CacheItem created
 		cache_item = caps_cache[('dummy', '')]
 		# Mark the item as cached so that protocol/caps.py does not update it
-		cache_item.status = CACHED
+		cache_item.status = FAKED
 		return cache_item
 
 	def _discover(self, connection, jid):
@@ -354,7 +355,7 @@ class CapsCache(object):
 				Returns True if identities and features for this cache item
 				are known.
 				""" 
-				return self.status == CACHED
+				return self.status in (CACHED, FAKED)
 
 		self.__CacheItem = CacheItem
 		self.logger = logger
