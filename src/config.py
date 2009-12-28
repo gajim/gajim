@@ -2412,7 +2412,7 @@ class AccountsWindow:
 		# normal account
 		if self.ignore_events:
 			return
-		if gajim.account_is_connected(self.current_account):
+		if gajim.connections[self.current_account].connected > 0:
 			self.ignore_events = True
 			self.xml.get_widget('enable_zeroconf_checkbutton2').set_active(True)
 			self.ignore_events = False
@@ -2446,7 +2446,8 @@ class AccountsWindow:
 	def on_enable_checkbutton1_toggled(self, widget):
 		if self.ignore_events:
 			return
-		if gajim.account_is_connected(self.current_account):
+		if gajim.connections[self.current_account].connected > 0:
+			# connecting or connected
 			self.ignore_events = True
 			self.xml.get_widget('enable_checkbutton1').set_active(True)
 			self.ignore_events = False
