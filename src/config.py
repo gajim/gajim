@@ -383,7 +383,8 @@ class PreferencesWindow:
 
 		# Default Status messages
 		self.default_msg_tree = self.xml.get_widget('default_msg_treeview')
-		col2 = self.default_msg_tree.rc_get_style().bg[gtk.STATE_ACTIVE].to_string()
+		col2 = self.default_msg_tree.rc_get_style().bg[gtk.STATE_ACTIVE].\
+			to_string()
 		# (status, translated_status, message, enabled)
 		model = gtk.ListStore(str, str, str, bool)
 		self.default_msg_tree.set_model(model)
@@ -546,37 +547,43 @@ class PreferencesWindow:
 				w.set_sensitive(widget.get_active())
 		gajim.interface.save_config()
 
+	def _get_all_controls(self):
+		for ctrl in gajim.interface.msg_win_mgr.get_controls():
+			yield ctrl
+		for account in gajim.connections:
+			for ctrl in gajim.interface.minimized_controls[account].values():
+				yield ctrl
+
+	def _get_all_muc_controls(self):
+		for ctrl in gajim.interface.msg_win_mgr.get_controls(
+		message_control.TYPE_GC):
+			yield ctrl
+		for account in gajim.connections:
+			for ctrl in gajim.interface.minimized_controls[account].values():
+				yield ctrl
+
 	def on_sort_by_show_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sort_by_show_in_roster')
 		gajim.interface.roster.setup_and_draw_roster()
 
 	def on_sort_by_show_in_muc_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'sort_by_show_in_muc')
-		# Redraw connected groupchats
-		for account in gajim.connections:
-			if gajim.connections[account].connected:
-				for gc_control in gajim.interface.msg_win_mgr.get_controls(
-				message_control.TYPE_GC) + \
-				gajim.interface.minimized_controls[account].values():
-					gc_control.draw_roster()
+		# Redraw groupchats
+		for ctrl in self._get_all_muc_controls():
+			ctrl.draw_roster()
 
 	def on_show_avatars_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_avatars_in_roster')
 		gajim.interface.roster.setup_and_draw_roster()
-		# Redraw connected groupchats (in an ugly way)
-		for account in gajim.connections:
-			if gajim.connections[account].connected:
-				for gc_control in gajim.interface.msg_win_mgr.get_controls(
-				message_control.TYPE_GC) + \
-				gajim.interface.minimized_controls[account].values():
-					gc_control.draw_roster()
+		# Redraw groupchats (in an ugly way)
+		for ctrl in self._get_all_muc_controls():
+			ctrl.draw_roster()
 
 	def on_show_status_msgs_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_status_msgs_in_roster')
 		gajim.interface.roster.setup_and_draw_roster()
-		for ctl in gajim.interface.msg_win_mgr.controls():
-			if ctl.type_id == message_control.TYPE_GC:
-				ctl.update_ui()
+		for ctrl in self._get_all_muc_controls():
+			ctrl.update_ui()
 
 	def on_show_mood_in_roster_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'show_mood_in_roster')
@@ -605,8 +612,8 @@ class PreferencesWindow:
 
 	def toggle_emoticons(self):
 		'''Update emoticons state in Opened Chat Windows'''
-		for win in gajim.interface.msg_win_mgr.windows():
-			win.toggle_emoticons()
+		for ctrl in self._get_all_controls():
+			ctrl.toggle_emoticons()
 
 	def on_one_window_type_combo_changed(self, widget):
 		active = widget.get_active()
@@ -617,8 +624,8 @@ class PreferencesWindow:
 
 	def on_compact_view_checkbutton_toggled(self, widget):
 		active = widget.get_active()
-		for ctl in gajim.interface.msg_win_mgr.controls():
-			ctl.chat_buttons_set_visible(active)
+		for ctrl in self._get_all_controls():
+			ctrl.chat_buttons_set_visible(active)
 		gajim.config.set('compact_view', active)
 		gajim.interface.save_config()
 
@@ -627,7 +634,7 @@ class PreferencesWindow:
 		helpers.update_optional_features()
 
 	def apply_speller(self):
-		for ctrl in gajim.interface.msg_win_mgr.controls():
+		for ctrl in self._get_all_controls():
 			if isinstance(ctrl, chat_control.ChatControlBase):
 				try:
 					spell_obj = gtkspell.get_from_text_view(ctrl.msg_textview)
@@ -638,7 +645,7 @@ class PreferencesWindow:
 					ctrl.set_speller()
 
 	def remove_speller(self):
-		for ctrl in gajim.interface.msg_win_mgr.controls():
+		for ctrl in self._get_all_controls():
 			if isinstance(ctrl, chat_control.ChatControlBase):
 				try:
 					spell_obj = gtkspell.get_from_text_view(ctrl.msg_textview)
@@ -799,8 +806,8 @@ class PreferencesWindow:
 
 	def update_text_tags(self):
 		'''Update color tags in Opened Chat Windows'''
-		for win in gajim.interface.msg_win_mgr.windows():
-			win.update_tags()
+		for ctrl in self._get_all_controls():
+			ctrl.update_tags()
 
 	def on_preference_widget_color_set(self, widget, text):
 		color = widget.get_color()
@@ -820,8 +827,8 @@ class PreferencesWindow:
 
 	def update_text_font(self):
 		'''Update text font in Opened Chat Windows'''
-		for win in gajim.interface.msg_win_mgr.windows():
-			win.update_font()
+		for ctrl in self._get_all_controls():
+			ctrl.update_font()
 
 	def on_incoming_msg_colorbutton_color_set(self, widget):
 		self.on_preference_widget_color_set(widget, 'inmsgcolor')
