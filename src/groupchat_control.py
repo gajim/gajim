@@ -122,6 +122,7 @@ def tree_cell_data_func(column, renderer, model, iter_, tv=None):
 			renderer.set_property('font',
 				gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
 
+
 class PrivateChatControl(ChatControl):
 	TYPE_ID = message_control.TYPE_PM
 
@@ -829,24 +830,15 @@ class GroupchatControl(ChatControlBase):
 
 	def get_contact_iter(self, nick):
 		model = self.list_treeview.get_model()
-		fin = False
 		role_iter = model.get_iter_root()
-		if not role_iter:
-			return None
-		while not fin:
-			fin2 = False
+		while role_iter:
 			user_iter = model.iter_children(role_iter)
-			if not user_iter:
-				fin2 = True
-			while not fin2:
+			while user_iter:
 				if nick == model[user_iter][C_NICK].decode('utf-8'):
 					return user_iter
-				user_iter = model.iter_next(user_iter)
-				if not user_iter:
-					fin2 = True
+				else:
+					user_iter = model.iter_next(user_iter)
 			role_iter = model.iter_next(role_iter)
-			if not role_iter:
-				fin = True
 		return None
 
 	def print_old_conversation(self, text, contact='', tim=None, xhtml = None):
@@ -1528,17 +1520,12 @@ class GroupchatControl(ChatControlBase):
 
 	def get_role_iter(self, role):
 		model = self.list_treeview.get_model()
-		fin = False
-		iter_ = model.get_iter_root()
-		if not iter_:
-			return None
-		while not fin:
-			role_name = model[iter_][C_NICK].decode('utf-8')
+		role_iter = model.get_iter_root()
+		while role_iter:
+			role_name = model[role_iter][C_NICK].decode('utf-8')
 			if role == role_name:
-				return iter_
-			iter_ = model.iter_next(iter_)
-			if not iter_:
-				fin = True
+				return role_iter
+			role_iter = model.iter_next(role_iter)
 		return None
 
 	def remove_contact(self, nick):

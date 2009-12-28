@@ -312,7 +312,6 @@ class RosterWindow:
 		self.tree.freeze_child_notify()
 		for jid in jids:
 			self.add_contact(jid, account)
-		self.tree.thaw_child_notify()
 
 		# Do not freeze the GUI when drawing the contacts
 		if jids:
@@ -323,6 +322,8 @@ class RosterWindow:
 		for group in gajim.groups[account]:
 			self.draw_group(group, account)
 		self.draw_account(account)
+
+		self.tree.thaw_child_notify()
 		self.starting = False
 
 
@@ -1291,8 +1292,7 @@ class RosterWindow:
 		iters = self._get_contact_iter(jid, account, model=self.model)
 		if not iters:
 			return
-		jid = self.model[iters[0]][C_JID]
-		jid = jid.decode('utf-8')
+		jid = self.model[iters[0]][C_JID].decode('utf-8')
 		contact = gajim.contacts.get_contact(account, jid)
 		if pep_type in contact.pep:
 			pixbuf = contact.pep[pep_type].asPixbufIcon()
