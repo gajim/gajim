@@ -225,7 +225,7 @@ def get_server_from_jid(jid):
 def get_resource_from_jid(jid):
 	tokens = jid.split('/', 1)
 	if len(tokens) > 1:
-	return tokens[1]
+		return tokens[1]
 
 def get_name_and_server_from_jid(jid):
 	name = get_nick_from_jid(jid)
