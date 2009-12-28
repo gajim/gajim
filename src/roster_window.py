@@ -4440,21 +4440,12 @@ class RosterWindow:
 		"""
 		When a row is added, set properties for icon renderer
 		"""
-		theme = gajim.config.get('roster_theme')
 		type_ = model[titer][C_TYPE]
 		if type_ == 'account':
-			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
-			if color:
-				renderer.set_property('cell-background', color)
-			else:
-				self.set_renderer_color(renderer, gtk.STATE_ACTIVE)
+			self._set_account_row_background_color(renderer)
 			renderer.set_property('xalign', 0)
 		elif type_ == 'group':
-			color = gajim.config.get_per('themes', theme, 'groupbgcolor')
-			if color:
-				renderer.set_property('cell-background', color)
-			else:
-				self.set_renderer_color(renderer, gtk.STATE_PRELIGHT)
+			self._set_group_row_background_color(renderer)	
 			renderer.set_property('xalign', 0.2)
 		elif type_: # prevent type_ = None, see http://trac.gajim.org/ticket/2534
 			if not model[titer][C_JID] or not model[titer][C_ACCOUNT]:
@@ -4462,18 +4453,7 @@ class RosterWindow:
 				return
 			jid = model[titer][C_JID].decode('utf-8')
 			account = model[titer][C_ACCOUNT].decode('utf-8')
-			if jid in gajim.newly_added[account]:
-				renderer.set_property('cell-background', gajim.config.get(
-					'just_connected_bg_color'))
-			elif jid in gajim.to_be_removed[account]:
-				renderer.set_property('cell-background', gajim.config.get(
-					'just_disconnected_bg_color'))
-			else:
-				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
-				if color:
-					renderer.set_property('cell-background', color)
-				else:
-					renderer.set_property('cell-background', None)
+			self._set_contact_row_background_color(renderer, jid, account)
 			parent_iter = model.iter_parent(titer)
 			if model[parent_iter][C_TYPE] == 'contact':
 				renderer.set_property('xalign', 1)
@@ -4493,29 +4473,21 @@ class RosterWindow:
 				renderer.set_property('foreground', color)
 			else:
 				self.set_renderer_color(renderer, gtk.STATE_ACTIVE, False)
-			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
-			if color:
-				renderer.set_property('cell-background', color)
-			else:
-				self.set_renderer_color(renderer, gtk.STATE_ACTIVE)
 			renderer.set_property('font',
 				gtkgui_helpers.get_theme_font_for_option(theme, 'accountfont'))
 			renderer.set_property('xpad', 0)
 			renderer.set_property('width', 3)
+			self._set_account_row_background_color(renderer)
 		elif type_ == 'group':
 			color = gajim.config.get_per('themes', theme, 'grouptextcolor')
 			if color:
 				renderer.set_property('foreground', color)
 			else:
 				self.set_renderer_color(renderer, gtk.STATE_PRELIGHT, False)
-			color = gajim.config.get_per('themes', theme, 'groupbgcolor')
-			if color:
-				renderer.set_property('cell-background', color)
-			else:
-				self.set_renderer_color(renderer, gtk.STATE_PRELIGHT)
 			renderer.set_property('font',
 				gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
 			renderer.set_property('xpad', 4)
+			self._set_group_row_background_color(renderer)
 		elif type_: # prevent type_ = None, see http://trac.gajim.org/ticket/2534
 			if not model[titer][C_JID] or not model[titer][C_ACCOUNT]:
 				# This can append when at the moment we add the row
@@ -4535,18 +4507,7 @@ class RosterWindow:
 				renderer.set_property('foreground', color)
 			else:
 				renderer.set_property('foreground', None)
-			if jid in gajim.newly_added[account]:
-				renderer.set_property('cell-background', gajim.config.get(
-					'just_connected_bg_color'))
-			elif jid in gajim.to_be_removed[account]:
-				renderer.set_property('cell-background', gajim.config.get(
-					'just_disconnected_bg_color'))
-			else:
-				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
-				if color:
-					renderer.set_property('cell-background', color)
-				else:
-					renderer.set_property('cell-background', None)
+			self._set_contact_row_background_color(renderer, jid, account)
 			renderer.set_property('font',
 				gtkgui_helpers.get_theme_font_for_option(theme, 'contactfont'))
 			parent_iter = model.iter_parent(titer)
@@ -4555,7 +4516,6 @@ class RosterWindow:
 			else:
 				renderer.set_property('xpad', 8)
 
-
 	def _fill_pep_pixbuf_renderer(self, column, renderer, model, titer,
 			data=None):
 		"""
@@ -4563,48 +4523,29 @@ class RosterWindow:
 		"""
 		theme = gajim.config.get('roster_theme')
 		type_ = model[titer][C_TYPE]
-		if type_ == 'group':
-			renderer.set_property('visible', False)
-			return
 
 		# allocate space for the icon only if needed
-		if model[titer][data]:
-			renderer.set_property('visible', True)
-		else:
+		if not model[titer][data]:
 			renderer.set_property('visible', False)
-		if type_ == 'account':
-			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
-			if color:
-				renderer.set_property('cell-background', color)
-			else:
+		else:
+			renderer.set_property('visible', True)
+
+			if type_ == 'account':
 				self.set_renderer_color(renderer, gtk.STATE_ACTIVE)
-			# align pixbuf to the right)
-			renderer.set_property('xalign', 1)
-		# prevent type_ = None, see http://trac.gajim.org/ticket/2534
-		elif type_:
-			if not model[titer][C_JID] or not model[titer][C_ACCOUNT]:
-				# This can append at the moment we add the row
-				return
-			jid = model[titer][C_JID].decode('utf-8')
-			account = model[titer][C_ACCOUNT].decode('utf-8')
-			if jid in gajim.newly_added[account]:
-				renderer.set_property('cell-background', gajim.config.get(
-					'just_connected_bg_color'))
-			elif jid in gajim.to_be_removed[account]:
-				renderer.set_property('cell-background', gajim.config.get(
-					'just_disconnected_bg_color'))
-			else:
-				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
-				renderer.set_property('cell-background', color if color else None)
-			# align pixbuf to the right
-			renderer.set_property('xalign', 1)
+				renderer.set_property('xalign', 1)
+			elif type_:
+				if not model[titer][C_JID] or not model[titer][C_ACCOUNT]:
+					# This can append at the moment we add the row
+					return
+				jid = model[titer][C_JID].decode('utf-8')
+				account = model[titer][C_ACCOUNT].decode('utf-8')
+				self._set_contact_row_background_color(renderer, jid, account)
 
 	def _fill_avatar_pixbuf_renderer(self, column, renderer, model, titer, data
 			= None):
 		"""
 		When a row is added, set properties for avatar renderer
 		"""
-		theme = gajim.config.get('roster_theme')
 		type_ = model[titer][C_TYPE]
 		if type_ in ('group', 'account'):
 			renderer.set_property('visible', False)
@@ -4614,50 +4555,62 @@ class RosterWindow:
 		if model[titer][C_AVATAR_PIXBUF] or \
 		gajim.config.get('avatar_position_in_roster') == 'left':
 			renderer.set_property('visible', True)
+			if type_: # prevent type_ = None, see http://trac.gajim.org/ticket/2534
+				if not model[titer][C_JID] or not model[titer][C_ACCOUNT]:
+					# This can append at the moment we add the row
+					return
+				jid = model[titer][C_JID].decode('utf-8')
+				account = model[titer][C_ACCOUNT].decode('utf-8')
+				self._set_contact_row_background_color(renderer, jid, account)
 		else:
 			renderer.set_property('visible', False)
-		if type_: # prevent type_ = None, see http://trac.gajim.org/ticket/2534
-			if not model[titer][C_JID] or not model[titer][C_ACCOUNT]:
-				# This can append at the moment we add the row
-				return
-			jid = model[titer][C_JID].decode('utf-8')
-			account = model[titer][C_ACCOUNT].decode('utf-8')
-			if jid in gajim.newly_added[account]:
-				renderer.set_property('cell-background', gajim.config.get(
-					'just_connected_bg_color'))
-			elif jid in gajim.to_be_removed[account]:
-				renderer.set_property('cell-background', gajim.config.get(
-					'just_disconnected_bg_color'))
-			else:
-				color = gajim.config.get_per('themes', theme, 'contactbgcolor')
-				if color:
-					renderer.set_property('cell-background', color)
-				else:
-					renderer.set_property('cell-background', None)
+
 		if gajim.config.get('avatar_position_in_roster') == 'left':
 			renderer.set_property('width', gajim.config.get('roster_avatar_width'))
 			renderer.set_property('xalign', 0.5)
 		else:
 			renderer.set_property('xalign', 1) # align pixbuf to the right
 
-	def _fill_padlock_pixbuf_renderer(self, column, renderer, model, titer, data
-			= None):
+	def _fill_padlock_pixbuf_renderer(self, column, renderer, model, titer, data=None):
 		"""
 		When a row is added, set properties for padlock renderer
 		"""
-		theme = gajim.config.get('roster_theme')
 		type_ = model[titer][C_TYPE]
 		# allocate space for the icon only if needed
 		if type_ == 'account' and model[titer][C_PADLOCK_PIXBUF]:
 			renderer.set_property('visible', True)
-			color = gajim.config.get_per('themes', theme, 'accountbgcolor')
-			if color:
-				renderer.set_property('cell-background', color)
-			else:
-				self.set_renderer_color(renderer, gtk.STATE_ACTIVE)
+			self._set_account_row_background_color(renderer)
 			renderer.set_property('xalign', 1) # align pixbuf to the right
 		else:
 			renderer.set_property('visible', False)
+
+	def _set_account_row_background_color(self, renderer):
+		theme = gajim.config.get('roster_theme')
+		color = gajim.config.get_per('themes', theme, 'accountbgcolor')
+		if color:
+			renderer.set_property('cell-background', color)
+		else:
+			self.set_renderer_color(renderer, gtk.STATE_ACTIVE)
+
+	def _set_contact_row_background_color(self, renderer, jid, account):
+		theme = gajim.config.get('roster_theme')
+		if jid in gajim.newly_added[account]:
+			renderer.set_property('cell-background', gajim.config.get(
+				'just_connected_bg_color'))
+		elif jid in gajim.to_be_removed[account]:
+			renderer.set_property('cell-background', gajim.config.get(
+				'just_disconnected_bg_color'))
+		else:
+			color = gajim.config.get_per('themes', theme, 'contactbgcolor')
+			renderer.set_property('cell-background', color if color else None)
+
+	def _set_group_row_background_color(self, renderer):
+		theme = gajim.config.get('roster_theme')
+		color = gajim.config.get_per('themes', theme, 'groupbgcolor')
+		if color:
+			renderer.set_property('cell-background', color)
+		else:
+			self.set_renderer_color(renderer, gtk.STATE_PRELIGHT)
 
 ################################################################################
 ### Everything about building menus
@@ -5891,8 +5844,7 @@ class RosterWindow:
 		def add_avatar_renderer():
 			render_pixbuf = gtk.CellRendererPixbuf() # avatar img
 			col.pack_start(render_pixbuf, expand=False)
-			col.add_attribute(render_pixbuf, 'pixbuf',
-				C_AVATAR_PIXBUF)
+			col.add_attribute(render_pixbuf, 'pixbuf', C_AVATAR_PIXBUF)
 			col.set_cell_data_func(render_pixbuf,
 				self._fill_avatar_pixbuf_renderer, None)
 
