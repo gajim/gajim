@@ -3198,6 +3198,11 @@ class Interface:
 		}
 
 		cfg_was_read = parser.read()
+
+		from common import latex
+		gajim.HAVE_LATEX = gajim.config.get('use_latex') and \
+			latex.check_for_latex_support()
+
 		gajim.logger.reset_shown_unread_messages()
 		# override logging settings from config (don't take care of '-q' option)
 		if gajim.config.get('verbose'):

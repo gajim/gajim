@@ -182,8 +182,9 @@ else:
 	if system('gpg -h >/dev/null 2>&1'):
 		HAVE_GPG = False
 
-import latex
-HAVE_LATEX = config.get('use_latex') and latex.check_for_latex_support()
+# Depends on use_latex option. Will be correctly set after we config options are
+# read.
+HAVE_LATEX = False
 
 HAVE_INDICATOR = True
 try:
