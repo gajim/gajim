@@ -82,7 +82,7 @@ MY_EMOTS_PATH = gajimpaths['MY_EMOTS']
 MY_ICONSETS_PATH = gajimpaths['MY_ICONSETS']
 MY_MOOD_ICONSETS_PATH = gajimpaths['MY_MOOD_ICONSETS']
 MY_ACTIVITY_ICONSETS_PATH = gajimpaths['MY_ACTIVITY_ICONSETS']
-MY_CACERTS =  gajimpaths['MY_CACERTS']
+MY_CACERTS = gajimpaths['MY_CACERTS']
 TMP = gajimpaths['TMP']
 DATA_DIR = gajimpaths['DATA']
 ICONS_DIR = gajimpaths['ICONS']
@@ -223,9 +223,9 @@ def get_server_from_jid(jid):
 	return jid[pos:]
 
 def get_resource_from_jid(jid):
-    tokens = jid.split('/', 1)
-    if len(tokens) > 1:
-        return tokens[1]
+	tokens = jid.split('/', 1)
+	if len(tokens) > 1:
+	return tokens[1]
 
 def get_name_and_server_from_jid(jid):
 	name = get_nick_from_jid(jid)

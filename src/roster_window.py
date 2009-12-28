@@ -1778,7 +1778,7 @@ class RosterWindow:
 		"""
 		Remove contacts on last events removed
 
-		Only performed if removal was requested before 	but the contact still had
+		Only performed if removal was requested before but the contact still had
 		pending events
 		"""
 		contact_list = ((event.jid.split('/')[0], event.account) for event in \
@@ -5748,7 +5748,7 @@ class RosterWindow:
 		self.popups_notification_height = 0
 		self.popup_notification_windows = []
 
- 		# Remove contact from roster when last event opened
+		# Remove contact from roster when last event opened
 		# { (contact, account): { backend: boolean }
 		self.contacts_to_be_removed = {}
 		gajim.events.event_removed_subscribe(self.on_event_removed)

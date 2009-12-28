@@ -57,23 +57,23 @@ import getopt
 from common import i18n
 
 def parseOpts():
-   config_path = None
+	config_path = None
 
-   try:
-      shortargs = 'hc:'
-      longargs = 'help config_path='
-      opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
-   except getopt.error, msg:
-      print str(msg)
-      print 'for help use --help'
-      sys.exit(2)
-   for o, a in opts:
-      if o in ('-h', '--help'):
-         print 'history_manager [--help] [--config-path]'
-         sys.exit()
-      elif o in ('-c', '--config-path'):
-         config_path = a
-   return config_path
+	try:
+		shortargs = 'hc:'
+		longargs = 'help config_path='
+		opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
+	except getopt.error, msg:
+		print str(msg)
+		print 'for help use --help'
+		sys.exit(2)
+	for o, a in opts:
+		if o in ('-h', '--help'):
+			print 'history_manager [--help] [--config-path]'
+			sys.exit()
+		elif o in ('-c', '--config-path'):
+			config_path = a
+	return config_path
 
 config_path = parseOpts()
 del parseOpts

@@ -126,8 +126,8 @@ def tree_cell_data_func(column, renderer, model, iter_, tv=None):
 class PrivateChatControl(ChatControl):
 	TYPE_ID = message_control.TYPE_PM
 
-   # Set a command host to bound to. Every command given through a private chat
-   # will be processed with this command host.
+	# Set a command host to bound to. Every command given through a private chat
+	# will be processed with this command host.
 	COMMAND_HOST = PrivateChatCommands
 
 	def __init__(self, parent_win, gc_contact, contact, account, session):
@@ -193,8 +193,8 @@ class PrivateChatControl(ChatControl):
 class GroupchatControl(ChatControlBase):
 	TYPE_ID = message_control.TYPE_GC
 
-   # Set a command host to bound to. Every command given through a group chat
-   # will be processed with this command host.
+	# Set a command host to bound to. Every command given through a group chat
+	# will be processed with this command host.
 	COMMAND_HOST = GroupChatCommands
 
 	def __init__(self, parent_win, contact, acct, is_continued=False):

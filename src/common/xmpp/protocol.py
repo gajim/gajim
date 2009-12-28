@@ -523,12 +523,12 @@ class Protocol(Node):
 		return time.strftime('%Y%m%dT%H:%M:%S', time.gmtime())
 
 	def getTimestamp2(self):
-		  """
-		  Return the timestamp in the 'yyyymmddThhmmss' format
-		  """
-		  if self.timestamp:
-			  return self.timestamp
-		  return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+		"""
+		Return the timestamp in the 'yyyymmddThhmmss' format
+		"""
+		if self.timestamp:
+			return self.timestamp
+		return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
 
 	def getID(self):
 		"""
