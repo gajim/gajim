@@ -3988,6 +3988,9 @@ class RosterWindow:
 				_account = data['account']
 				_jid = data['jid']
 				_contact = gajim.contacts.get_first_contact_from_jid(_account, _jid)
+				if not _contact:
+					# One of the metacontacts may be not connected.
+					continue
 
 				_contact.groups = c_dest.groups[:]
 				gajim.contacts.add_metacontact(account_dest, c_dest.jid,
