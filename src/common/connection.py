@@ -1791,7 +1791,7 @@ class Connection(ConnectionHandlers):
 				last_date = time.time() - gajim.config.get(
 					'muc_restore_timeout') * 60
 			else:
-				last_time = min(last_date, time.time() - gajim.config.get(
+				last_date = min(last_date, time.time() - gajim.config.get(
 					'muc_restore_timeout') * 60)
 			last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(last_date))
 			t.setTag('history', {'maxstanzas': gajim.config.get(
