@@ -1,3 +1,11 @@
+Gajim 0.13.2 ((01 January 2010)
+
+  * Fix some translations
+  * Fix string comparison according to locales
+  * Fix resizing of groupchat occupant treeview
+  * Fix some gnomekeyring glitches
+  * better SRV usage with libasyncns
+
 Gajim 0.13.1 ((28 November 2009)
 
   * Fix a bug when no account exists and bonjour is not available

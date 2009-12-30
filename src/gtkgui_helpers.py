@@ -790,7 +790,8 @@ default_name = ''):
 		# Save image
 		try:
 			pixbuf.save(file_path, type_)
-		except Exception:
+		except Exception, e:
+			log.debug('Error saving avatar: %s' % str(e))
 			if os.path.exists(file_path):
 				os.remove(file_path)
 			new_file_path = '.'.join(file_path.split('.')[:-1]) + '.jpeg'
