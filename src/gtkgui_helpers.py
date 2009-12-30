@@ -865,7 +865,8 @@ def on_avatar_save_as_menuitem_activate(widget, jid, account, default_name=''):
 		# Save image
 		try:
 			pixbuf.save(file_path, image_format)
-		except glib.GError:
+		except glib.GError, e:
+			log.debug('Error saving avatar: %s' % str(e))
 			if os.path.exists(file_path):
 				os.remove(file_path)
 			new_file_path = '.'.join(file_path.split('.')[:-1]) + '.jpeg'
