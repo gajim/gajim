@@ -2446,7 +2446,8 @@ class AccountsWindow:
 	def on_enable_checkbutton1_toggled(self, widget):
 		if self.ignore_events:
 			return
-		if gajim.connections[self.current_account].connected > 0:
+		if self.current_account in gajim.connections and \
+		gajim.connections[self.current_account].connected > 0:
 			# connecting or connected
 			self.ignore_events = True
 			self.xml.get_widget('enable_checkbutton1').set_active(True)
