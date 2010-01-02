@@ -56,13 +56,13 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 		# system username
 		self.username = None
 		self.server_resource = '' # zeroconf has no resource, fake an empty one
-		self.is_zeroconf = True
 		self.call_resolve_timeout = False
 		# we don't need a password, but must be non-empty
 		self.password = 'zeroconf'
 		self.autoconnect = False
 
 		CommonConnection.__init__(self, name)
+		self.is_zeroconf = True
 
 	def get_config_values_or_default(self):
 		"""
