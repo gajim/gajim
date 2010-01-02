@@ -1370,6 +1370,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
 		except helpers.InvalidFormat:
 			self.dispatch('ERROR', (_('Invalid Jabber ID'),
 				_('A message from a non-valid JID arrived, it has been ignored.')))
+			return
 
 		addressTag = msg.getTag('addresses', namespace = common.xmpp.NS_ADDRESS)
 
