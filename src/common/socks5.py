@@ -860,8 +860,14 @@ class Socks5Listener(IdleObject):
 
 	def bind(self):
 		for ai in self.ais:
-			#try the different possibilities (ipv6, ipv4, etc.)
-			self._serv = socket.socket(*ai[:3])
+			# try the different possibilities (ipv6, ipv4, etc.)
+			try:
+				self._serv = socket.socket(*ai[:3])
+			except socket.error, e:
+				if e.errno == EAFNOSUPPORT:
+					self.ai = None
+					continue
+				raise
 			self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 			self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
 			self._serv.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
