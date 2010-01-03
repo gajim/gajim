@@ -2016,8 +2016,13 @@ class Connection(CommonConnection, ConnectionHandlers):
 		self.add_lang(p)
 		if not change_nick:
 			t = p.setTag(common.xmpp.NS_MUC + ' x')
-			last_date = max(self.last_history_time[room_jid],
-				time.time() - gajim.config.get('muc_restore_timeout') * 60)
+			last_date = self.last_history_time[room_jid]
+			if last_date == 0:
+				last_date = time.time() - gajim.config.get(
+					'muc_restore_timeout') * 60
+			else:
+				last_date = min(last_date, time.time() - gajim.config.get(
+					'muc_restore_timeout') * 60)
 			last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(last_date))
 			t.setTag('history', {'maxstanzas': gajim.config.get(
 				'muc_restore_lines'), 'since': last_date})
