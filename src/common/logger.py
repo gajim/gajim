@@ -974,8 +974,13 @@ class Logger:
 			(account_jid_id, jid_id))
 		# Then we add all new groups information
 		for group in groups:
-			self.cur.execute('INSERT INTO roster_group VALUES(?, ?, ?)',
-				(account_jid_id, jid_id, group))
+			try:
+				self.cur.execute('INSERT INTO roster_group VALUES(?, ?, ?)',
+					(account_jid_id, jid_id, group))
+			except IntegrityError:
+				# Some servers (like jabberd) seems to put contact twice in the
+				# roster. So we do nothing if it appears. (see #5206)
+				pass
 
 		if name is None:
 			name = ''
