@@ -33,6 +33,7 @@ from errno import ENOBUFS
 from errno import EINTR
 from errno import EISCONN
 from errno import EINPROGRESS
+from errno import EAFNOSUPPORT
 from xmpp.idlequeue import IdleObject
 MAX_BUFF_LEN = 65536
 
