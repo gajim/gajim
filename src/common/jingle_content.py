@@ -118,7 +118,7 @@ class JingleContent(object):
 		Send a transport candidate for a previously defined transport.
 		"""
 		content = self.__content()
-		content.addChild(self.transport.make_transport([candidate]))
+		content.addChild(node=self.transport.make_transport([candidate]))
 		self.session.send_transport_info(content)
 
 	def __fill_jingle_stanza(self, stanza, content, error, action):

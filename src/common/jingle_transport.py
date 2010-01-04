@@ -60,6 +60,8 @@ class JingleTransport(object):
 		"""
 		if not candidates:
 			candidates = self._iter_candidates()
+		else:
+			candidates = (self.make_candidate(candidate) for candidate in candidates)
 		transport = xmpp.Node('transport', payload=candidates)
 		return transport
 
