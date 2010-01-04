@@ -57,31 +57,31 @@ class MessageTextView(gtk.TextView):
 		self.set_pixels_below_lines(2)
 
 		self.lang = None # Lang used for spell checking
-		buffer = self.get_buffer()
+		_buffer = self.get_buffer()
 		self.begin_tags = {}
 		self.end_tags = {}
 		self.color_tags = []
 		self.fonts_tags = []
 		self.other_tags = {}
-		self.other_tags['bold'] = buffer.create_tag('bold')
+		self.other_tags['bold'] = _buffer.create_tag('bold')
 		self.other_tags['bold'].set_property('weight', pango.WEIGHT_BOLD)
 		self.begin_tags['bold'] = '<strong>'
 		self.end_tags['bold'] = '</strong>'
-		self.other_tags['italic'] = buffer.create_tag('italic')
+		self.other_tags['italic'] = _buffer.create_tag('italic')
 		self.other_tags['italic'].set_property('style', pango.STYLE_ITALIC)
 		self.begin_tags['italic'] = '<em>'
 		self.end_tags['italic'] = '</em>'
-		self.other_tags['underline'] = buffer.create_tag('underline')
+		self.other_tags['underline'] = _buffer.create_tag('underline')
 		self.other_tags['underline'].set_property('underline', pango.UNDERLINE_SINGLE)
 		self.begin_tags['underline'] = '<span style="text-decoration: underline;">'
 		self.end_tags['underline'] = '</span>'
-		self.other_tags['strike'] = buffer.create_tag('strike')
+		self.other_tags['strike'] = _buffer.create_tag('strike')
 		self.other_tags['strike'].set_property('strikethrough', True)
 		self.begin_tags['strike'] = '<span style="text-decoration: line-through;">'
 		self.end_tags['strike'] = '</span>'
 
 	def make_clickable_urls(self, text):
-		buffer = self.get_buffer()
+		_buffer = self.get_buffer()
 
 		start = 0
 		end = 0
@@ -96,7 +96,7 @@ class MessageTextView(gtk.TextView):
 				text_before_special_text = text[index:start]
 			else:
 				text_before_special_text = ''
-			end_iter = buffer.get_end_iter()
+			end_iter = _buffer.get_end_iter()
 			# we insert normal text
 			new_text += text_before_special_text + \
 			'<a href="'+ url +'">' + url + '</a>'
@@ -109,50 +109,49 @@ class MessageTextView(gtk.TextView):
 		return new_text # the position after *last* special text
 
 	def get_active_tags(self):
-		buffer = self.get_buffer()
 		start, finish = self.get_active_iters()
 		active_tags = []
 		for tag in start.get_tags():
 			active_tags.append(tag.get_property('name'))
-		return 	active_tags
+		return active_tags
 
 	def get_active_iters(self):
-		buffer = self.get_buffer()
-		return_val = buffer.get_selection_bounds()
+		_buffer = self.get_buffer()
+		return_val = _buffer.get_selection_bounds()
 		if return_val: # if sth was selected
 			start, finish = return_val[0], return_val[1]
 		else:
-			start, finish = buffer.get_bounds()
+			start, finish = _buffer.get_bounds()
 		return (start, finish)
 
 	def set_tag(self, widget, tag):
-		buffer = self.get_buffer()
+		_buffer = self.get_buffer()
 		start, finish = self.get_active_iters()
 		if start.has_tag(self.other_tags[tag]):
-			buffer.remove_tag_by_name(tag, start, finish)
+			_buffer.remove_tag_by_name(tag, start, finish)
 		else:
 			if tag == 'underline':
-				buffer.remove_tag_by_name('strike', start, finish)
+				_buffer.remove_tag_by_name('strike', start, finish)
 			elif tag == 'strike':
-				buffer.remove_tag_by_name('underline', start, finish)
-			buffer.apply_tag_by_name(tag, start, finish)
+				_buffer.remove_tag_by_name('underline', start, finish)
+			_buffer.apply_tag_by_name(tag, start, finish)
 
 	def clear_tags(self, widget):
-		buffer = self.get_buffer()
+		_buffer = self.get_buffer()
 		start, finish = self.get_active_iters()
-		buffer.remove_all_tags(start, finish)
+		_buffer.remove_all_tags(start, finish)
 
 	def color_set(self, widget, response, color):
 		if response == -6:
 			widget.destroy()
 			return
-		buffer = self.get_buffer()
+		_buffer = self.get_buffer()
 		color = color.get_current_color()
 		widget.destroy()
 		color_string = gtkgui_helpers.make_color_string(color)
 		tag_name = 'color' + color_string
 		if not tag_name in self.color_tags:
-			tagColor = buffer.create_tag(tag_name)
+			tagColor = _buffer.create_tag(tag_name)
 			tagColor.set_property('foreground', color_string)
 			self.begin_tags[tag_name] = '<span style="color: ' + color_string + ';">'
 			self.end_tags[tag_name] = '</span>'
@@ -161,16 +160,16 @@ class MessageTextView(gtk.TextView):
 		start, finish = self.get_active_iters()
 
 		for tag in self.color_tags:
-			buffer.remove_tag_by_name(tag, start, finish)
+			_buffer.remove_tag_by_name(tag, start, finish)
 
-		buffer.apply_tag_by_name(tag_name, start, finish)
+		_buffer.apply_tag_by_name(tag_name, start, finish)
 
 	def font_set(self, widget, response, font):
 		if response == -6:
 			widget.destroy()
 			return
 
-		buffer = self.get_buffer()
+		_buffer = self.get_buffer()
 
 		font = font.get_font_name()
 		font_desc = pango.FontDescription(font)
@@ -184,7 +183,7 @@ class MessageTextView(gtk.TextView):
 
 		tag_name = 'font' + font
 		if not tag_name in self.fonts_tags:
-			tagFont = buffer.create_tag(tag_name)
+			tagFont = _buffer.create_tag(tag_name)
 			tagFont.set_property('font', family + ' ' + str(size))
 			self.begin_tags[tag_name] = \
 				'<span style="font-family: ' + family + '; ' + \
@@ -195,27 +194,27 @@ class MessageTextView(gtk.TextView):
 		start, finish = self.get_active_iters()
 
 		for tag in self.fonts_tags:
-			buffer.remove_tag_by_name(tag, start, finish)
+			_buffer.remove_tag_by_name(tag, start, finish)
 
-		buffer.apply_tag_by_name(tag_name, start, finish)
+		_buffer.apply_tag_by_name(tag_name, start, finish)
 
 		if weight == pango.WEIGHT_BOLD:
-			buffer.apply_tag_by_name('bold', start, finish)
+			_buffer.apply_tag_by_name('bold', start, finish)
 		else:
-			buffer.remove_tag_by_name('bold', start, finish)
+			_buffer.remove_tag_by_name('bold', start, finish)
 
 		if style == pango.STYLE_ITALIC:
-			buffer.apply_tag_by_name('italic', start, finish)
+			_buffer.apply_tag_by_name('italic', start, finish)
 		else:
-			buffer.remove_tag_by_name('italic', start, finish)
+			_buffer.remove_tag_by_name('italic', start, finish)
 
 	def get_xhtml(self):
-		buffer = self.get_buffer()
-		old = buffer.get_start_iter()
+		_buffer = self.get_buffer()
+		old = _buffer.get_start_iter()
 		tags = {}
 		tags['bold'] = False
-		iter = buffer.get_start_iter()
-		old = buffer.get_start_iter()
+		iter = _buffer.get_start_iter()
+		old = _buffer.get_start_iter()
 		text = ''
 		modified = False
 
@@ -233,7 +232,7 @@ class MessageTextView(gtk.TextView):
 			text += self.begin_tags[tag_name]
 			modified = True
 		while (iter.forward_to_tag_toggle(None) and not iter.is_end()):
-			text += xhtml_special(buffer.get_text(old, iter))
+			text += xhtml_special(_buffer.get_text(old, iter))
 			old.forward_to_tag_toggle(None)
 			new_tags, old_tags, end_tags = [], [], []
 			for tag in iter.get_toggled_tags(True):
@@ -265,7 +264,7 @@ class MessageTextView(gtk.TextView):
 			for tag in old_tags:
 				text += self.begin_tags[tag]
 
-		text += xhtml_special(buffer.get_text(old, buffer.get_end_iter()))
+		text += xhtml_special(_buffer.get_text(old, _buffer.get_end_iter()))
 		for tag in iter.get_toggled_tags(False):
 			tag_name = tag.get_property('name')
 			if tag_name not in self.end_tags:
@@ -284,9 +283,9 @@ class MessageTextView(gtk.TextView):
 		"""
 		Clear text in the textview
 		"""
-		buffer_ = self.get_buffer()
-		start, end = buffer_.get_bounds()
-		buffer_.delete(start, end)
+		_buffer = self.get_buffer()
+		start, end = _buffer.get_bounds()
+		_buffer.delete(start, end)
 
 
 # We register depending on keysym and modifier some bindings
