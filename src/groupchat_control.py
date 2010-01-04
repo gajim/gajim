@@ -1812,12 +1812,14 @@ class GroupchatControl(ChatControlBase):
 
 			gc_refer_to_nick_char = gajim.config.get('gc_refer_to_nick_char')
 			with_refer_to_nick_char = False
+			after_nick_len = 1 # the space that is printed after we type [Tab]
 
 			# first part of this if : works fine even if refer_to_nick_char
 			if gc_refer_to_nick_char and begin.endswith(gc_refer_to_nick_char):
 				with_refer_to_nick_char = True
+				after_nick_len = len(gc_refer_to_nick_char + ' ')
 			if len(self.nick_hits) and self.last_key_tabs and \
-			text[:-len(gc_refer_to_nick_char + ' ')].endswith(self.nick_hits[0]):
+			text[:-after_nick_len].endswith(self.nick_hits[0]):
 				# we should cycle
 				# Previous nick in list may had a space inside, so we check text and
 				# not splitted_text and store it into 'begin' var
