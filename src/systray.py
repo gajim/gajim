@@ -326,7 +326,7 @@ class Systray:
 		win = gajim.interface.roster.window
 		if len(gajim.events.get_systray_events()) == 0:
 			# No pending events, so toggle visible/hidden for roster window
-			if win..get_property('visible') and (win.get_property(
+			if win.get_property('visible') and (win.get_property(
 			'has-toplevel-focus') or os.name == 'nt'):
 				# visible in ANY virtual desktop?
 
