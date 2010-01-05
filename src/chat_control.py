@@ -1845,6 +1845,14 @@ class ChatControl(ChatControlBase):
 		banner_name_label.set_markup(label_text)
 		banner_name_label.set_tooltip_text(label_tooltip)
 
+	def close_jingle_content(self, jingle_type):
+		session = gajim.connections[self.account].get_jingle_session(
+			self.contact.get_full_jid(), getattr(self, jingle_type + '_sid'))
+		if session:
+			content = session.get_content(jingle_type)
+			if content:
+				session.remove_content(content.creator, content.name)
+
 	def on_jingle_button_toggled(self, widget, jingle_type):
 		img_name = 'gajim-%s_%s' % ({'audio': 'mic', 'video': 'cam'}[jingle_type],
 				{True: 'active', False: 'inactive'}[widget.get_active()])
@@ -1857,12 +1865,7 @@ class ChatControl(ChatControlBase):
 					'start_' + jingle_type)(self.contact.get_full_jid())
 				getattr(self, 'set_' + jingle_type + '_state')('connecting', sid)
 		else:
-			session = gajim.connections[self.account].get_jingle_session(
-				self.contact.get_full_jid(), getattr(self, jingle_type + '_sid'))
-			if session:
-				content = session.get_content(jingle_type)
-				if content:
-					session.remove_content(content.creator, content.name)
+			self.close_jingle_content(jingle_type)
 
 		img = getattr(self, '_' + jingle_type + '_button').get_property('image')
 		img.set_from_file(path_to_img)
@@ -2366,6 +2369,9 @@ class ChatControl(ChatControlBase):
 		self.send_chatstate('gone', self.contact)
 		self.contact.chatstate = None
 		self.contact.our_chatstate = None
+
+		for jingle_type in ('audio', 'video'):
+			self.close_jingle_content(jingle_type)
 
 		# disconnect self from session
 		if self.session:
