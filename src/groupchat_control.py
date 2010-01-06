@@ -1815,7 +1815,8 @@ class GroupchatControl(ChatControlBase):
 			after_nick_len = 1 # the space that is printed after we type [Tab]
 
 			# first part of this if : works fine even if refer_to_nick_char
-			if gc_refer_to_nick_char and begin.endswith(gc_refer_to_nick_char):
+			if gc_refer_to_nick_char and text.endswith(
+			gc_refer_to_nick_char + ' '):
 				with_refer_to_nick_char = True
 				after_nick_len = len(gc_refer_to_nick_char + ' ')
 			if len(self.nick_hits) and self.last_key_tabs and \
