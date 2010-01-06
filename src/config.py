@@ -509,6 +509,14 @@ class PreferencesWindow:
 		else:
 			w.set_active(st)
 
+		# send idle time
+		w = self.xml.get_widget('send_idle_time_checkbutton')
+		st = self.get_per_account_option('send_idle_time')
+		if st == 'mixed':
+			w.set_inconsistent(True)
+		else:
+			w.set_active(st)
+
 		# check if gajm is default
 		st = gajim.config.get('check_if_gajim_is_default')
 		self.xml.get_widget('check_default_client_checkbutton').set_active(st)
@@ -1119,6 +1127,10 @@ class PreferencesWindow:
 	def on_send_os_info_checkbutton_toggled(self, widget):
 		widget.set_inconsistent(False)
 		self.on_per_account_checkbutton_toggled(widget, 'send_os_info')
+
+	def on_send_idle_time_checkbutton_toggled(self, widget):
+		widget.set_inconsistent(False)
+		self.on_per_account_checkbutton_toggled(widget, 'send_idle_time')
 
 	def on_check_default_client_checkbutton_toggled(self, widget):
 		self.on_checkbutton_toggled(widget, 'check_if_gajim_is_default')

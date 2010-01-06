@@ -78,7 +78,8 @@ PRIVACY_ARRIVED = 'privacy_arrived'
 PEP_CONFIG = 'pep_config'
 HAS_IDLE = True
 try:
-	import idle
+#	import idle
+	import common.sleepy
 except Exception:
 	log.debug(_('Unable to load idle module'))
 	HAS_IDLE = False
@@ -906,6 +907,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
 		ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionPEP,
 		ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 	def __init__(self):
+		global HAS_IDLE
 		ConnectionVcard.__init__(self)
 		ConnectionBytestream.__init__(self)
 		ConnectionCommands.__init__(self)
@@ -933,9 +935,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
 		self.continue_connect_info = None
 
 		try:
-			idle.init()
+			self.sleeper = common.sleepy.Sleepy()
+#			idle.init()
+			HAS_IDLE = True
 		except Exception:
-			global HAS_IDLE
 			HAS_IDLE = False
 
 		self.gmail_last_tid = None
@@ -1100,15 +1103,19 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
 		raise common.xmpp.NodeProcessed
 
 	def _LastCB(self, con, iq_obj):
+		global HAS_IDLE
 		log.debug('LastCB')
 		if not self.connection or self.connected < 2:
 			return
-		iq_obj = iq_obj.buildReply('result')
-		qp = iq_obj.getTag('query')
-		if not HAS_IDLE:
-			qp.attrs['seconds'] = '0'
+		if HAS_IDLE and gajim.config.get_per('accounts', self.name,
+		'send_idle_time'):
+			iq_obj = iq_obj.buildReply('result')
+			qp = iq_obj.getTag('query')
+			qp.attrs['seconds'] = int(self.sleeper.getIdleSec())
 		else:
-			qp.attrs['seconds'] = idle.getIdleSec()
+			iq_obj = iq_obj.buildReply('error')
+			err = common.xmpp.ErrorNode(name=common.xmpp.NS_STANZAS+' service-unavailable')
+			iq_obj.addChild(node=err)
 
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed

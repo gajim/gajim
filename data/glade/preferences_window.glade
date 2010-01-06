@@ -1714,7 +1714,7 @@ $T will be replaced by auto-not-available timeout</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox7">
+                              <widget class="GtkHBox" id="hbox8">
                                 <property name="visible">True</property>
                                 <child>
                                   <widget class="GtkCheckButton" id="incoming_msg_checkbutton">
@@ -1754,7 +1754,7 @@ $T will be replaced by auto-not-available timeout</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox8">
+                              <widget class="GtkHBox" id="hbox9">
                                 <property name="visible">True</property>
                                 <child>
                                   <widget class="GtkCheckButton" id="outgoing_msg_checkbutton">
@@ -1794,7 +1794,7 @@ $T will be replaced by auto-not-available timeout</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox9">
+                              <widget class="GtkHBox" id="hbox10">
                                 <property name="visible">True</property>
                                 <child>
                                   <placeholder/>
@@ -1823,7 +1823,7 @@ $T will be replaced by auto-not-available timeout</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox10">
+                              <widget class="GtkHBox" id="hbox11">
                                 <property name="visible">True</property>
                                 <child>
                                   <placeholder/>
@@ -1854,7 +1854,7 @@ $T will be replaced by auto-not-available timeout</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox11">
+                              <widget class="GtkHBox" id="hbox12">
                                 <property name="visible">True</property>
                                 <child>
                                   <placeholder/>
@@ -1883,7 +1883,7 @@ $T will be replaced by auto-not-available timeout</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox12">
+                              <widget class="GtkHBox" id="hbox13">
                                 <property name="visible">True</property>
                                 <child>
                                   <placeholder/>
@@ -2391,7 +2391,7 @@ Custom</property>
                           <widget class="GtkTable" id="table3">
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="n_rows">3</property>
+                            <property name="n_rows">4</property>
                             <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
                             <child>
@@ -2439,6 +2439,21 @@ Custom</property>
                               <packing>
                                 <property name="top_attach">2</property>
                                 <property name="bottom_attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkCheckButton" id="send_idle_time_checkbutton">
+                                <property name="label" translatable="yes">Allow my _idle time to be sent</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="use_underline">True</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="on_allow_idle_time_checkbutton_toggled"/>
+                              </widget>
+                              <packing>
+                                <property name="top_attach">3</property>
+                                <property name="bottom_attach">4</property>
                               </packing>
                             </child>
                           </widget>

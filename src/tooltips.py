@@ -66,6 +66,8 @@ class BaseTooltip:
 		self.preferred_position = [0, 0]
 		self.win = None
 		self.id = None
+		self.cur_data = None
+		self.check_last_time = None
 
 	def populate(self, data):
 		"""
@@ -115,9 +117,8 @@ class BaseTooltip:
 			self.screen.get_width() + half_width:
 			self.preferred_position[0] = self.screen.get_width() - \
 				requisition.width
-		else:
+		elif not self.check_last_time:
 			self.preferred_position[0] -= half_width
-			self.screen.get_height()
 		if self.preferred_position[1] + requisition.height > \
 			self.screen.get_height():
 			# flip tooltip up
@@ -148,6 +149,7 @@ class BaseTooltip:
 		widget_height is the height of the widget on which we show the tooltip.
 		widget_y_position is vertical position of the widget on the screen.
 		"""
+		self.cur_data = data
 		# set tooltip contents
 		self.populate(data)
 
@@ -171,6 +173,8 @@ class BaseTooltip:
 			self.win.destroy()
 			self.win = None
 		self.id = None
+		self.cur_data = None
+		self.check_last_time = None
 
 class StatusTable:
 	"""
@@ -498,6 +502,20 @@ class RosterTooltip(NotificationAreaTooltip):
 		else: # only one resource
 			if contact.show:
 				show = helpers.get_uf_show(contact.show)
+				if not self.check_last_time and self.account:
+					if contact.show == 'offline':
+						if not contact.last_status_time:
+							gajim.connections[self.account].request_last_status_time(
+								contact.jid, '')
+						else:
+							self.check_last_time = contact.last_status_time
+					elif contact.resource:
+						gajim.connections[self.account].request_last_status_time(
+							contact.jid, contact.resource)
+						if contact.last_activity_time:
+							self.check_last_time = contact.last_activity_time
+				else:
+					self.check_last_time = None
 				if contact.last_status_time:
 					vcard_current_row += 1
 					if contact.show == 'offline':
@@ -565,6 +583,23 @@ class RosterTooltip(NotificationAreaTooltip):
 				properties.append((_('OpenPGP: '),
 					gobject.markup_escape_text(keyID)))
 
+		if contact.last_activity_time:
+			text = _(' since %s')
+
+			if time.strftime('%j', time.localtime())== \
+					time.strftime('%j', contact.last_activity_time):
+			# it's today, show only the locale hour representation
+				local_time = time.strftime('%I:%M %p',
+					contact.last_activity_time)
+			else:
+				# time.strftime returns locale encoded string
+				local_time = time.strftime('%c',
+					contact.last_activity_time)
+			local_time = local_time.decode(
+				locale.getpreferredencoding())
+			text = text % local_time
+			properties.append(('Idle' + text,None))
+
 		while properties:
 			property_ = properties.pop(0)
 			vcard_current_row += 1
@@ -597,6 +632,15 @@ class RosterTooltip(NotificationAreaTooltip):
 			vcard_table.attach(self.avatar_image, 3, 4, 2,
 				vcard_current_row + 1, gtk.FILL, gtk.FILL | gtk.EXPAND, 3, 3)
 		self.win.add(vcard_table)
+
+	def update_last_time(self, last_time):
+		if not self.check_last_time or time.strftime('%x %I:%M %p', last_time) !=\
+		time.strftime('%x %I:%M %p', self.check_last_time):
+			self.win.destroy()
+			self.win = None
+			self.populate(self.cur_data)
+			self.win.ensure_style()
+			self.win.show_all()
 
 	def _append_pep_info(self, contact, properties):
 		"""

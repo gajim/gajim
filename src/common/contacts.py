@@ -99,7 +99,7 @@ class Contact(CommonContact):
 	def __init__(self, jid, account, name='', groups=[], show='', status='',
 			sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
 			our_chatstate=None, chatstate=None, last_status_time=None, msg_id=
-			None, composing_xep=None):
+			None, composing_xep=None, last_activity_time=None):
 
 		CommonContact.__init__(self, jid, account, resource, show, status, name,
 			our_chatstate, composing_xep, chatstate, client_caps=client_caps)
@@ -114,6 +114,7 @@ class Contact(CommonContact):
 		self.keyID = keyID
 		self.msg_id = msg_id
 		self.last_status_time = last_status_time
+		self.last_activity_time = last_activity_time
 
 		self.pep = {}
 
@@ -245,16 +246,18 @@ class LegacyContactsAPI:
 		del self._accounts[account]
 		self._metacontact_manager.remove_account(account)
 
-	def create_contact(self, jid, account, name='', groups=[], show='', status='',
-		sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
-		our_chatstate=None, chatstate=None, last_status_time=None,
-		composing_xep=None):
-		account = self._accounts.get(account, account) # Use Account object if available
+	def create_contact(self, jid, account, name='', groups=[], show='',
+	status='', sub='', ask='', resource='', priority=0, keyID='',
+	client_caps=None, our_chatstate=None, chatstate=None, last_status_time=None,
+	composing_xep=None, last_activity_time=None):
+		# Use Account object if available
+		account = self._accounts.get(account, account)
 		return Contact(jid=jid, account=account, name=name, groups=groups,
-			show=show, status=status, sub=sub, ask=ask, resource=resource, priority=priority,
-			keyID=keyID, client_caps=client_caps, our_chatstate=our_chatstate,
-			chatstate=chatstate, last_status_time=last_status_time,
-			composing_xep=composing_xep)
+			show=show, status=status, sub=sub, ask=ask, resource=resource,
+			priority=priority, keyID=keyID, client_caps=client_caps,
+			our_chatstate=our_chatstate, chatstate=chatstate,
+			last_status_time=last_status_time, composing_xep=composing_xep,
+			last_activity_time=last_activity_time)
 
 	def create_self_contact(self, jid, account, resource, show, status, priority,
 	name='', keyID=''):
@@ -275,12 +278,15 @@ class LegacyContactsAPI:
 				status='', sub='none', keyID=keyID)
 
 	def copy_contact(self, contact):
-		return self.create_contact(jid=contact.jid, account=contact.account,
-			name=contact.name, groups=contact.groups, show=contact.show, status=contact.status,
-			sub=contact.sub, ask=contact.ask, resource=contact.resource,
-			priority=contact.priority, keyID=contact.keyID,
-			client_caps=contact.client_caps, our_chatstate=contact.our_chatstate,
-			chatstate=contact.chatstate, last_status_time=contact.last_status_time)
+		return self.create_contact(contact.jid, contact.account,
+			name=contact.name, groups=contact.groups, show=contact.show,
+			status=contact.status, sub=contact.sub, ask=contact.ask,
+			resource=contact.resource, priority=contact.priority,
+			keyID=contact.keyID, client_caps=contact.client_caps,
+			our_chatstate=contact.our_chatstate, chatstate=contact.chatstate,
+			last_status_time=contact.last_status_time,
+			composing_xep=contact.composing_xep,
+			last_activity_time=contact.last_activity_time)
 
 	def add_contact(self, account, contact):
 		if account not in self._accounts:

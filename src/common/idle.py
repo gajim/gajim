@@ -73,6 +73,7 @@ except OSError, e:
 	xss_available = False
 
 def getIdleSec():
+	global xss_available
 	"""
 	Return the idle time in seconds
 	"""
