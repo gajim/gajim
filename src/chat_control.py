@@ -1846,8 +1846,11 @@ class ChatControl(ChatControlBase):
 		banner_name_label.set_tooltip_text(label_tooltip)
 
 	def close_jingle_content(self, jingle_type):
+		sid = getattr(self, jingle_type + '_sid')
+		if not sid:
+			return
 		session = gajim.connections[self.account].get_jingle_session(
-			self.contact.get_full_jid(), getattr(self, jingle_type + '_sid'))
+			self.contact.get_full_jid(), sid)
 		if session:
 			content = session.get_content(jingle_type)
 			if content:
