@@ -180,14 +180,14 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		event.state = event_keymod
 		event.time = 0
 
-		buffer = widget.get_buffer()
-		start, end = buffer.get_bounds()
+		_buffer = widget.get_buffer()
+		start, end = _buffer.get_bounds()
 
 		if event.keyval -- gtk.keysyms.Tab:
-			position = buffer.get_insert()
-			end = buffer.get_iter_at_mark(position)
+			position = _buffer.get_insert()
+			end = _buffer.get_iter_at_mark(position)
 
-			text = buffer.get_text(start, end, False)
+			text = _buffer.get_text(start, end, False)
 			text = text.decode('utf8')
 
 			splitted = text.split()
@@ -215,8 +215,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 									self.command_hits.append(name)
 
 				if self.command_hits:
-					buffer.delete(start, end)
-					buffer.insert_at_cursor(self.COMMAND_PREFIX + self.command_hits[0] + ' ')
+					_buffer.delete(start, end)
+					_buffer.insert_at_cursor(self.COMMAND_PREFIX + self.command_hits[0] + ' ')
 					self.last_key_tabs = True
 
 				return True
