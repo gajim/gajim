@@ -546,8 +546,7 @@ class JingleSession(object):
 		return stanza, jingle
 
 	def __send_error(self, stanza, error, jingle_error=None, text=None):
-		err = xmpp.Error(stanza, error)
-		err.setNamespace(xmpp.NS_STANZAS)
+		err = xmpp.Error(stanza, '%s %s' % (xmpp.NS_STANZAS, error))
 		if jingle_error:
 			err.setTag(jingle_error, namespace=xmpp.NS_JINGLE_ERRORS)
 		if text:
