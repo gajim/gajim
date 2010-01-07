@@ -150,6 +150,7 @@ class CommonConnection:
 		self.private_storage_supported = False
 
 		self.muc_jid = {} # jid of muc server for each transport type
+		self._stun_servers = [] # STUN servers of our jabber server
 
 		self.get_config_values_or_default()
 
@@ -1508,6 +1509,13 @@ class Connection(CommonConnection, ConnectionHandlers):
 		self.discoverInfo(gajim.config.get_per('accounts', self.name, 'hostname'),
 			id_prefix='Gajim_')
 		self.privacy_rules_requested = False
+		# Discover Stun server(s)
+		gajim.resolver.resolve('_stun._udp.' + helpers.idn_to_ascii(
+			self.connected_hostname), self._on_stun_resolved)
+
+	def _on_stun_resolved(self, host, result_array):
+		if len(result_array) != 0:
+			self._stun_servers = self._hosts = [i for i in result_array]
 
 	def _request_privacy(self):
 		iq = common.xmpp.Iq('get', common.xmpp.NS_PRIVACY, xmlns = '')

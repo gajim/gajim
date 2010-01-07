@@ -213,8 +213,7 @@ class ConnectionDisco:
 				continue
 			items.append(attr)
 		jid = helpers.get_full_jid_from_iq(iq_obj)
-		hostname = gajim.config.get_per('accounts', self.name,
-													'hostname')
+		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		id_ = iq_obj.getID()
 		if jid == hostname and id_[:6] == 'Gajim_':
 			for item in items:

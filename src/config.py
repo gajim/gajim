@@ -452,9 +452,15 @@ class PreferencesWindow:
 				combobox = self.xml.get_widget(opt_name + '_combobox')
 				combobox.set_sensitive(False)
 
-		# Connection
+		# STUN
+		cb = self.xml.get_widget('stun_checkbutton')
+		st = gajim.config.get('use_stun_server')
+		cb.set_active(st)
+
 		entry = self.xml.get_widget('stun_server_entry')
 		entry.set_text(gajim.config.get('stun_server'))
+		if not st:
+			entry.set_sensitive(False)
 
 		### Advanced tab ###
 		# open links with
@@ -1084,6 +1090,10 @@ class PreferencesWindow:
 
 	def on_video_output_combobox_changed(self, widget):
 		self.on_av_combobox_changed(widget, 'video_output')
+
+	def on_stun_checkbutton_toggled(self, widget):
+		self.on_checkbutton_toggled(widget, 'use_stun_server',
+			[self.xml.get_widget('stun_server_entry')])
 
 	def stun_server_entry_changed(self, widget):
 		gajim.config.set('stun_server', widget.get_text().decode('utf-8'))

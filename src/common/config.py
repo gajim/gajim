@@ -277,6 +277,7 @@ class Config:
 		'audio_output_device': [opt_str, 'autoaudiosink'],
 		'video_input_device': [opt_str, 'autovideosrc ! videoscale ! ffmpegcolorspace'],
 		'video_output_device': [opt_str, 'autovideosink'],
+		'use_stun_server': [opt_bool, True, _('If True, Gajim will try to use a STUN server when using jingle. The one in "stun_server" option, or the one given by the jabber server.')],
 		'stun_server': [opt_str, '', _('STUN server to use when using jingle')],
 	}
 
