@@ -1136,7 +1136,8 @@ class GroupchatControl(ChatControlBase):
 				         '%s</span>') % (colorstring, gobject.markup_escape_text(status))
 
 		if image.get_storage_type() == gtk.IMAGE_PIXBUF and \
-		gc_contact.affiliation != 'none':
+		gc_contact.affiliation != 'none' and gajim.config.get(
+		'show_affiliation_in_groupchat'):
 			pixbuf1 = image.get_pixbuf().copy()
 			pixbuf2 = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, True, 8, 4, 4)
 			if gc_contact.affiliation == 'owner':
