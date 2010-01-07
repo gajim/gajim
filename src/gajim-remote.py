@@ -264,6 +264,15 @@ class GajimRemote:
 							False)
 					]
 				],
+			'change_avatar': [
+					_('Change the avatar'),
+					[
+						('picture', _('Picture to use'), True),
+						('account', _('Account in which the avatar will be set; '
+						'if not specified, the avatar will be set for all accounts'),
+							False)
+					]
+				],
 			'handle_uri': [
 					_('Handle a xmpp:/ uri'),
 					[

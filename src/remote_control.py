@@ -29,6 +29,8 @@
 import gobject
 import gtk
 import os
+import base64
+import mimetypes
 
 from common import gajim
 from common import helpers
@@ -735,6 +737,31 @@ class SignalObject(dbus.service.Object):
 		else:
 			for acc in gajim.contacts.get_accounts():
 				gajim.connections[acc].send_stanza(str(xml))
+
+	@dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
+	def change_avatar(self, picture, account):
+		filesize = os.path.getsize(picture)
+		invalid_file = False
+		if os.path.isfile(picture):
+			stat = os.stat(picture)
+			if stat[6] == 0:
+				invalid_file = True
+		else:
+			invalid_file = True
+		if not invalid_file and filesize < 16384:
+			fd = open(picture, 'rb')
+			data = fd.read()
+			avatar = base64.encodestring(data)
+			avatar_mime_type = mimetypes.guess_type(picture)[0]
+			vcard={}
+			vcard['PHOTO'] = {'BINVAL': avatar}
+			if avatar_mime_type:
+				vcard['PHOTO']['TYPE'] = avatar_mime_type
+			if account:
+				gajim.connections[account].send_vcard(vcard)
+			else:
+				for acc in gajim.connections:
+					gajim.connections[acc].send_vcard(vcard)
 
 	@dbus.service.method(INTERFACE, in_signature='ssss', out_signature='')
 	def join_room(self, room_jid, nick, password, account):
