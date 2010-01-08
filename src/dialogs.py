@@ -2894,7 +2894,6 @@ class XMLConsoleWindow:
 	def on_in_stanza_checkbutton_toggled(self, widget):
 		active = widget.get_active()
 		self.tagIn.set_property('invisible', active)
-		self.tagInComment.set_property('invisible', active)
 		self.tagInPresence.set_property('invisible', active)
 		self.tagInMessage.set_property('invisible', active)
 		self.tagInIq.set_property('invisible', active)
@@ -2907,7 +2906,6 @@ class XMLConsoleWindow:
 	def on_out_stanza_checkbutton_toggled(self, widget):
 		active = widget.get_active()
 		self.tagOut.set_property('invisible', active)
-		self.tagOutComment.set_property('invisible', active)
 		self.tagOutPresence.set_property('invisible', active)
 		self.tagOutMessage.set_property('invisible', active)
 		self.tagOutIq.set_property('invisible', active)
