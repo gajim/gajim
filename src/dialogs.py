@@ -2847,14 +2847,23 @@ class XMLConsoleWindow:
 		self.tagIn = buffer_.create_tag('incoming')
 		color = gajim.config.get('inmsgcolor')
 		self.tagIn.set_property('foreground', color)
-		self.tagInComment = buffer_.create_tag('in_comment')
-		self.tagInComment.set_property('foreground', color)
+		self.tagInPresence = buffer_.create_tag('incoming_presence')
+		self.tagInPresence.set_property('foreground', color)
+		self.tagInMessage = buffer_.create_tag('incoming_message')
+		self.tagInMessage.set_property('foreground', color)
+		self.tagInIq = buffer_.create_tag('incoming_iq')
+		self.tagInIq.set_property('foreground', color)
 
 		self.tagOut = buffer_.create_tag('outgoing')
 		color = gajim.config.get('outmsgcolor')
 		self.tagOut.set_property('foreground', color)
-		self.tagOutComment = buffer_.create_tag('out_comment')
-		self.tagOutComment.set_property('foreground', color)
+		self.tagOutPresence = buffer_.create_tag('outgoing_presence')
+		self.tagOutPresence.set_property('foreground', color)
+		self.tagOutMessage = buffer_.create_tag('outgoing_message')
+		self.tagOutMessage.set_property('foreground', color)
+		self.tagOutIq = buffer_.create_tag('outgoing_iq')
+		self.tagOutIq.set_property('foreground', color)
+		buffer_.create_tag('') # Default tag
 
 		self.enabled = False
 
@@ -2882,6 +2891,37 @@ class XMLConsoleWindow:
 	def on_enable_checkbutton_toggled(self, widget):
 		self.enabled = widget.get_active()
 
+	def on_in_stanza_checkbutton_toggled(self, widget):
+		active = widget.get_active()
+		self.tagIn.set_property('invisible', active)
+		self.tagInComment.set_property('invisible', active)
+		self.tagInPresence.set_property('invisible', active)
+		self.tagInMessage.set_property('invisible', active)
+		self.tagInIq.set_property('invisible', active)
+
+	def on_presence_stanza_checkbutton_toggled(self, widget):
+		active = widget.get_active()
+		self.tagInPresence.set_property('invisible', active)
+		self.tagOutPresence.set_property('invisible', active)
+
+	def on_out_stanza_checkbutton_toggled(self, widget):
+		active = widget.get_active()
+		self.tagOut.set_property('invisible', active)
+		self.tagOutComment.set_property('invisible', active)
+		self.tagOutPresence.set_property('invisible', active)
+		self.tagOutMessage.set_property('invisible', active)
+		self.tagOutIq.set_property('invisible', active)
+
+	def on_message_stanza_checkbutton_toggled(self, widget):
+		active = widget.get_active()
+		self.tagInMessage.set_property('invisible', active)
+		self.tagOutMessage.set_property('invisible', active)
+
+	def on_iq_stanza_checkbutton_toggled(self, widget):
+		active = widget.get_active()
+		self.tagInIq.set_property('invisible', active)
+		self.tagOutIq.set_property('invisible', active)
+
 	def scroll_to_end(self, ):
 		parent = self.stanzas_log_textview.get_parent()
 		buffer_ = self.stanzas_log_textview.get_buffer()
@@ -2908,15 +2948,29 @@ class XMLConsoleWindow:
 		if end_rect.y <= (visible_rect.y + visible_rect.height):
 			at_the_end = True
 		end_iter = buffer.get_end_iter()
+
+		type_ = ''
+		if stanza[1:9] == 'presence':
+			type_ = 'presence'
+		elif stanza[1:8] == 'message':
+			type_ = 'message'
+		elif stanza[1:3] == 'iq':
+			type_ = 'iq'
+
+		if type_:
+			type_ = kind + '_'  + type_
+		else:
+			type_ = kind # 'incoming' or 'outgoing'
+
 		if kind == 'incoming':
 			buffer.insert_with_tags_by_name(end_iter, '<!-- In -->\n',
-											'in_comment')
+				type_)
 		elif kind == 'outgoing':
 			buffer.insert_with_tags_by_name(end_iter, '<!-- Out -->\n',
-											'out_comment')
+				type_)
 		end_iter = buffer.get_end_iter()
-		buffer.insert_with_tags_by_name(end_iter, stanza.replace('><', '>\n<') + \
-										'\n\n', kind)
+		buffer.insert_with_tags_by_name(end_iter, stanza.replace('><', '>\n<') +\
+			'\n\n', type_)
 		if at_the_end:
 			gobject.idle_add(self.scroll_to_end)
 
