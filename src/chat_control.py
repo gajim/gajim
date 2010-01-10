@@ -1550,9 +1550,17 @@ class ChatControl(ChatControlBase):
 		self._update_jingle('audio')
 		vbox = self.xml.get_widget('audio_vbox')
 		if self.audio_state == self.JINGLE_STATE_CONNECTED:
+			# Set volume from config
+			input_vol = gajim.config.get('audio_input_volume')
+			output_vol = gajim.config.get('audio_output_volume')
+			input_vol = max(min(input_vol, 100), 0)
+			output_vol = max(min(output_vol, 100), 0)
+			self.xml.get_widget('mic_hscale').set_value(input_vol)
+			self.xml.get_widget('sound_hscale').set_value(output_vol)
+			# Show vbox
 			vbox.set_no_show_all(False)
 			vbox.show_all()
-		else:
+		elif not self.audio_sid:
 			vbox.set_no_show_all(True)
 			vbox.hide()
 
@@ -1632,9 +1640,17 @@ class ChatControl(ChatControlBase):
 	def on_mic_hscale_value_changed(self, widget):
 		value = widget.get_value()
 		self._get_audio_content().set_mic_volume(value / 100)
+		# Save volume to config
+		# FIXME: Putting it here is maybe not the right thing to do?
+		gajim.config.set('audio_input_volume', value)
+
 
 	def on_sound_hscale_value_changed(self, widget):
-		pass
+		value = widget.get_value()
+		self._get_audio_content().set_out_volume(value / 100)
+		# Save volume to config
+		# FIXME: Putting it here is maybe not the right thing to do?
+		gajim.config.set('audio_output_volume', value)
 
 	def on_avatar_eventbox_enter_notify_event(self, widget, event):
 		"""

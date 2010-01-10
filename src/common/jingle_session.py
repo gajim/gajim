@@ -100,7 +100,7 @@ class JingleSession(object):
 			'security-info':	[self.__ack], #TODO
 			'session-accept':	[self.__on_session_accept, self.__on_content_accept,
 				self.__broadcast, self.__ack],
-			'session-info':		[self.__on_session_info, self.__broadcast, self.__ack],
+			'session-info':		[self.__broadcast, self.__on_session_info, self.__ack],
 			'session-initiate':	[self.__on_session_initiate, self.__broadcast,
 				self.__ack],
 			'session-terminate':	[self.__on_session_terminate, self.__broadcast_all,

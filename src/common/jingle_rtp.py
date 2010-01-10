@@ -268,6 +268,12 @@ class JingleAudio(JingleRTPContent):
 		"""
 		self.mic_volume.set_property('volume', vol)
 
+	def set_out_volume(self, vol):
+		"""
+		vol must be between 0 ans 1
+		"""
+		self.out_volume.set_property('volume', vol)
+
 	def setup_stream(self):
 		JingleRTPContent.setup_stream(self)
 
@@ -289,10 +295,10 @@ class JingleAudio(JingleRTPContent):
 			'%s ! audioconvert', _("audio input"))
 
 		self.sink = self.make_bin_from_config('audio_output_device',
-			'audioconvert ! %s', _("audio output"))
+			'audioconvert ! volume name=gajim_out_vol ! %s', _("audio output"))
 
 		self.mic_volume = src_bin.get_by_name('gajim_vol')
-		self.set_mic_volume(0)
+		self.out_volume = self.sink.get_by_name('gajim_out_vol')
 
 		# link gst elements
 		self.pipeline.add(self.sink, src_bin)
