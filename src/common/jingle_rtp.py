@@ -74,7 +74,7 @@ class JingleRTPContent(JingleContent):
 		params = {'controlling-mode': self.session.weinitiate, 'debug': False}
 		if gajim.config.get('use_stun_server'):
 			stun_server = gajim.config.get('stun_server')
-			if not stun_server and self._stun_servers:
+			if not stun_server and self.session.connection._stun_servers:
 				stun_server = self._stun_servers[0]['host']
 			if stun_server:
 				try:
