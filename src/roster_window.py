@@ -2305,7 +2305,7 @@ class RosterWindow:
 				get_msg = True
 				break
 
-		def on_continue2(message, pep_dict):
+		def on_continue3(message, pep_dict):
 			self.quit_on_next_offline = 0
 			accounts_to_disconnect = []
 			for acct in accounts:
@@ -2319,6 +2319,24 @@ class RosterWindow:
 
 			if not self.quit_on_next_offline:
 				self.quit_gtkgui_interface()
+
+		def on_continue2(message, pep_dict):
+			# check if there is an active file transfer
+			files_props = gajim.interface.instances['file_transfers'].files_props
+			transfer_active = False
+			for x in files_props:
+				for y in files_props[x]:
+					if is_transfer_active(files_props[x][y]):
+						transfer_active = True
+						break
+
+			if transfer_active:
+				dialogs.ConfirmationDialog(_('You have running file transfers'),
+					_('If you quit now, the file(s) being transfered will be '
+					'stopped. Do you still want to quit?'),
+					on_response_ok=(on_continue3, message, pep_dict))
+				return
+			on_continue3(message, pep_dict)
 
 		def on_continue(message, pep_dict):
 			if message is None:
