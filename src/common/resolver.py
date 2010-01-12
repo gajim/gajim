@@ -62,6 +62,7 @@ class CommonResolver():
 		self.handlers = {}
 
 	def resolve(self, host, on_ready, type='srv'):
+		log.debug('resolve %s type=%s' % (host, type))
 		assert(type in ['srv', 'txt'])
 		if not host:
 			# empty host, return empty list of srv records
@@ -69,19 +70,23 @@ class CommonResolver():
 			return
 		if self.resolved_hosts.has_key(host+type):
 			# host is already resolved, return cached values
+			log.debug('%s already resolved: %s')
 			on_ready(host, self.resolved_hosts[host+type])
 			return
 		if self.handlers.has_key(host+type):
 			# host is about to be resolved by another connection,
 			# attach our callback
+			log.debug('already resolving %s' % host)
 			self.handlers[host+type].append(on_ready)
 		else:
 			# host has never been resolved, start now
+			log.debug('Starting to resolve %s using %s' % (host, self))
 			self.handlers[host+type] = [on_ready]
 			self.start_resolve(host, type)
 
 	def _on_ready(self, host, type, result_list):
 		# practically it is impossible to be the opposite, but who knows :)
+		log.debug('Resolving result for %s: %s' % (host, result_list))
 		if not self.resolved_hosts.has_key(host+type):
 			self.resolved_hosts[host+type] = result_list
 		if self.handlers.has_key(host+type):
