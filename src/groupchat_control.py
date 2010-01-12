@@ -634,17 +634,13 @@ class GroupchatControl(ChatControlBase):
 		if self.subject:
 			subject = helpers.reduce_chars_newlines(self.subject, max_lines=2)
 			subject = gobject.markup_escape_text(subject)
-			if gajim.HAVE_PYSEXY:
-				subject_text = self.urlfinder.sub(self.make_href, subject)
-				subject_text = '<span %s>%s</span>' % (font_attrs_small,
-					subject_text)
-			else:
-				subject_text = '<span %s>%s</span>' % (font_attrs_small, subject)
+			subject_text = self.urlfinder.sub(self.make_href, subject)
+			subject_text = '<span %s>%s</span>' % (font_attrs_small, subject_text)
 
 			# tooltip must always hold ALL the subject
 			self.event_box.set_tooltip_text(self.subject)
-			self.banner_status_label.show()
 			self.banner_status_label.set_no_show_all(False)
+			self.banner_status_label.show()
 		else:
 			subject_text = ''
 			self.event_box.set_has_tooltip(False)

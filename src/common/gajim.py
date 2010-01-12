@@ -166,12 +166,6 @@ try:
 except ImportError:
 	HAVE_PYCRYPTO = False
 
-HAVE_PYSEXY = True
-try:
-	import sexy
-except ImportError:
-	HAVE_PYSEXY = False
-
 HAVE_GPG = True
 try:
 	import GnuPGInterface

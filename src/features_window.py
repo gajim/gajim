@@ -101,10 +101,6 @@ class FeaturesWindow:
 				_('Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html).'),
 				_('Requires python-docutils.'),
 				_('Requires python-docutils.')),
-			_('Banners and clickable links'): (self.pysexy_available,
-				_('Ability to have clickable URLs in chat and groupchat window banners.'),
-				_('Requires python-sexy.'),
-				_('Requires python-sexy.')),
 			_('Audio / Video'): (self.farsight_available,
 				_('Ability to start audio and video chat.'),
 				_('Requires python-farsight.'),
@@ -255,9 +251,6 @@ class FeaturesWindow:
 		except Exception:
 			return False
 		return True
-
-	def pysexy_available(self):
-		return gajim.HAVE_PYSEXY
 
 	def farsight_available(self):
 		return gajim.HAVE_FARSIGHT

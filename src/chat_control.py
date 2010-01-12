@@ -96,7 +96,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
 	def make_href(self, match):
 		url_color = gajim.config.get('urlmsgcolor')
-		return '<a href="%s"><span color="%s">%s</span></a>' % (match.group(),
+		url = match.group()
+		if not '://' in url:
+			url = 'http://' + url
+		return '<a href="%s"><span color="%s">%s</span></a>' % (url,
 			url_color, match.group())
 
 	def get_font_attrs(self):
@@ -257,21 +260,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		self.urlfinder = re.compile(
 			r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
 
-		if gajim.HAVE_PYSEXY:
-			import sexy
-			self.banner_status_label = sexy.UrlLabel()
-			self.banner_status_label.connect('url_activated',
-				self.status_url_clicked)
-		else:
-			self.banner_status_label = gtk.Label()
-		self.banner_status_label.set_selectable(True)
-		self.banner_status_label.set_alignment(0,0.5)
-		self.banner_status_label.connect('populate_popup',
+		self.banner_status_label = self.xml.get_widget('banner_label')
+		id_ = self.banner_status_label.connect('populate_popup',
 			self.on_banner_label_populate_popup)
-
-		banner_vbox = self.xml.get_widget('banner_vbox')
-		banner_vbox.pack_start(self.banner_status_label)
-		self.banner_status_label.show()
+		self.handlers[id_] = self.banner_status_label
 
 		# Init DND
 		self.TARGET_TYPE_URI_LIST = 80
@@ -1843,14 +1835,11 @@ class ChatControl(ChatControlBase):
 			label_tooltip = '%s%s' % (name, acct_info)
 
 		if status_escaped:
-			if gajim.HAVE_PYSEXY:
-				status_text = self.urlfinder.sub(self.make_href, status_escaped)
-				status_text = '<span %s>%s</span>' % (font_attrs_small, status_text)
-			else:
-				status_text = '<span %s>%s</span>' % (font_attrs_small, status_escaped)
+			status_text = self.urlfinder.sub(self.make_href, status_escaped)
+			status_text = '<span %s>%s</span>' % (font_attrs_small, status_escaped)
 			self.banner_status_label.set_tooltip_text(status)
-			self.banner_status_label.show()
 			self.banner_status_label.set_no_show_all(False)
+			self.banner_status_label.show()
 		else:
 			status_text = ''
 			self.banner_status_label.hide()
