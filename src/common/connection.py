@@ -1647,8 +1647,8 @@ class Connection(CommonConnection, ConnectionHandlers):
 		p = common.xmpp.Presence(jid, 'unsubscribe')
 		self.connection.send(p)
 
-	def request_subscription(self, jid, msg = '', name = '', groups = [],
-			auto_auth = False, user_nick = ''):
+	def request_subscription(self, jid, msg='', name='', groups=[],
+	auto_auth=False, user_nick=''):
 		if not self.connection:
 			return
 		log.debug('subscription request for %s' % jid)
@@ -1660,7 +1660,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 			infos['name'] = name
 		iq = common.xmpp.Iq('set', common.xmpp.NS_ROSTER)
 		q = iq.getTag('query')
-		item = q.addChild('item', attrs = infos)
+		item = q.addChild('item', attrs=infos)
 		for g in groups:
 			item.addChild('group').setData(g)
 		self.connection.send(iq)

@@ -133,20 +133,20 @@ class ConnectionDisco:
 		if not self.connection or self.connected < 2:
 			return
 		if is_form:
-			iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to = agent)
+			iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to=agent)
 			query = iq.getTag('query')
 			info.setAttr('type', 'submit')
-			query.addChild(node = info)
+			query.addChild(node=info)
 			self.connection.SendAndCallForResponse(iq, self._agent_registered_cb,
 				{'agent': agent})
 		else:
 			# fixed: blocking
 			common.xmpp.features_nb.register(self.connection, agent, info, None)
 
-	def _discover(self, ns, jid, node = None, id_prefix = None):
+	def _discover(self, ns, jid, node=None, id_prefix=None):
 		if not self.connection or self.connected < 2:
 			return
-		iq = common.xmpp.Iq(typ = 'get', to = jid, queryNS = ns)
+		iq = common.xmpp.Iq(typ='get', to=jid, queryNS=ns)
 		if id_prefix:
 			id_ = self.connection.getAnID()
 			iq.setID('%s%s' % (id_prefix, id_))
@@ -167,12 +167,11 @@ class ConnectionDisco:
 		frm = helpers.get_full_jid_from_iq(iq_obj)
 		to = unicode(iq_obj.getAttr('to'))
 		id_ = unicode(iq_obj.getAttr('id'))
-		iq = common.xmpp.Iq(to = frm, typ = 'result', queryNS =\
-			common.xmpp.NS_DISCO, frm = to)
+		iq = common.xmpp.Iq(to=frm, typ='result', queryNS=common.xmpp.NS_DISCO,
+			frm=to)
 		iq.setAttr('id', id_)
 		query = iq.setTag('query')
-		query.setAttr('node','http://gajim.org#' + gajim.version.split('-',
-			1)[0])
+		query.setAttr('node','http://gajim.org#' + gajim.version.split('-', 1)[0])
 		for f in (common.xmpp.NS_BYTESTREAM, common.xmpp.NS_SI,
 		common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS):
 			feature = common.xmpp.Node('feature')
