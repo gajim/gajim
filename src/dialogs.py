@@ -4791,7 +4791,7 @@ class VoIPCallReceivedDialog(object):
 					contact = gajim.contacts.get_contact(self.account, jid)
 				if not contact:
 					return
-				ctrl = gajim.interface.new_chat(contact, self.account)
+				ctrl = gajim.interface.new_chat(contact, self.account, resource)
 			# Chat control opened, update content's status
 			if session.get_content('audio'):
 				ctrl.set_audio_state('connecting', self.sid)
