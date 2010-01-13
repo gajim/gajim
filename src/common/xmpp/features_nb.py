@@ -76,7 +76,7 @@ def _ReceivedRegInfo(con, resp, agent):
 		df[i.getName()] = i.getData()
 	con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent,df,False,''))
 
-def register(disp, host, info, cb):
+def register(disp, host, info, cb, args=None):
 	"""
 	Perform registration on remote server with provided info
 
@@ -88,7 +88,7 @@ def register(disp, host, info, cb):
 		info=info.asDict()
 	for i in info.keys():
 		iq.setTag('query').setTagData(i,info[i])
-	disp.SendAndCallForResponse(iq, cb)
+	disp.SendAndCallForResponse(iq, cb, args)
 
 def unregister(disp, host, cb):
 	"""
