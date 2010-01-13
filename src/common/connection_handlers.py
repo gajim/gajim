@@ -123,6 +123,12 @@ class ConnectionDisco:
 		if resp.getType() == 'result':
 			self.dispatch('INFORMATION', (_('Registration succeeded'),
 				_('Registration with agent %s succeeded') % agent))
+			self.request_subscription(agent, auto_auth=True)
+			self.agent_registrations[agent]['roster_push'] = True
+			if self.agent_registrations[agent]['sub_received']:
+				p = common.xmpp.Presence(agent, 'subscribed')
+				p = self.add_sha(p)
+				self.connection.send(p)
 		if resp.getType() == 'error':
 			self.dispatch('ERROR', (_('Registration failed'), _('Registration with'
 				' agent %(agent)s failed with error %(error)s: %(error_msg)s') % {
@@ -141,7 +147,10 @@ class ConnectionDisco:
 				{'agent': agent})
 		else:
 			# fixed: blocking
-			common.xmpp.features_nb.register(self.connection, agent, info, None)
+			common.xmpp.features_nb.register(self.connection, agent, info,
+				self._agent_registered_cb, {'agent': agent})
+		self.agent_registrations[agent] = {'roster_push': False,
+			'sub_received': False}
 
 	def _discover(self, ns, jid, node=None, id_prefix=None):
 		if not self.connection or self.connected < 2:
@@ -1840,6 +1849,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
 
 		if ptype == 'subscribe':
 			log.debug('subscribe request from %s' % who)
+			if who.find('@') <= 0 and who in self.agent_registrations:
+				self.agent_registrations[who]['sub_received'] = True
+				if not self.agent_registrations[who]['roster_push']:
+					# We'll reply after roster push result
+					return
 			if gajim.config.get_per('accounts', self.name, 'autoauth') or \
 			who.find('@') <= 0 or jid_stripped in self.jids_for_auto_auth or \
 			transport_auto_auth:

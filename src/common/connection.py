@@ -140,6 +140,8 @@ class CommonConnection:
 		# Do we continue connection when we get roster (send presence,get vcard..)
 		self.continue_connect_info = None
 
+		# Remember where we are in the register agent process
+		self.agent_registrations = {}
 		# To know the groupchat jid associated with a sranza ID. Useful to
 		# request vcard or os info... to a real JID but act as if it comes from
 		# the fake jid
