@@ -200,7 +200,7 @@ class JingleRTPContent(JingleContent):
 				self.transport.remote_candidates = []
 			# TODO: farsight.DIRECTION_BOTH only if senders='both'
 			self.p2pstream.set_property('direction', farsight.DIRECTION_BOTH)
-			self.session.content_negociated(self.media)
+		self.on_negotiated()
 
 	def __on_remote_codecs(self, stanza, content, error, action):
 		"""

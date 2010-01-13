@@ -46,6 +46,7 @@ class JingleContent(object):
 		#self.name = None
 		self.accepted = False
 		self.sent = False
+		self.negotiated = False
 
 		self.media = None
 
@@ -81,6 +82,11 @@ class JingleContent(object):
 
 	def is_ready(self):
 		return self.accepted and not self.sent
+
+	def on_negotiated(self):
+		if self.accepted:
+			self.negotiated = True
+			self.session.content_negotiated(self.media)
 
 	def add_remote_candidates(self, candidates):
 		"""

@@ -649,7 +649,7 @@ class JingleSession(object):
 		self.connection.dispatch('JINGLE_DISCONNECTED',
 			(self.peerjid, self.sid, content.media, 'removed'))
 
-	def content_negociated(self, media):
+	def content_negotiated(self, media):
 		self.connection.dispatch('JINGLE_CONNECTED', (self.peerjid, self.sid,
 			media))
 

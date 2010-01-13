@@ -4793,9 +4793,11 @@ class VoIPCallReceivedDialog(object):
 					return
 				ctrl = gajim.interface.new_chat(contact, self.account, resource)
 			# Chat control opened, update content's status
-			if session.get_content('audio'):
+			audio = session.get_content('audio')
+			video = session.get_content('video')
+			if audio and not audio.negotiated:
 				ctrl.set_audio_state('connecting', self.sid)
-			if session.get_content('video'):
+			if video and not video.negotiated:
 				ctrl.set_video_state('connecting', self.sid)
 			# Now, accept the content/sessions.
 			# This should be done after the chat control is running
