@@ -416,9 +416,13 @@ class SignalObject(dbus.service.Object):
 		specified status is changed for all accounts
 		"""
 		if status not in ('offline', 'online', 'chat',
-			'away', 'xa', 'dnd', 'invisible'):
-			return DBUS_BOOLEAN(False)
+		'away', 'xa', 'dnd', 'invisible'):
+			status = ''
 		if account:
+			if not status:
+				if account not in gajim.connections:
+					return DBUS_BOOLEAN(False)
+				status = gajim.SHOW_LIST[gajim.connections[account].connected]
 			gobject.idle_add(gajim.interface.roster.send_status, account,
 				status, message)
 		else:
@@ -427,8 +431,14 @@ class SignalObject(dbus.service.Object):
 				if not gajim.config.get_per('accounts', acc,
 				'sync_with_global_status'):
 					continue
+				if status:
+					status_ = status
+				else:
+					if acc not in gajim.connections:
+						continue
+					status_ = gajim.SHOW_LIST[gajim.connections[acc].connected]
 				gobject.idle_add(gajim.interface.roster.send_status, acc,
-					status, message)
+					status_, message)
 		return DBUS_BOOLEAN(False)
 
 	@dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
