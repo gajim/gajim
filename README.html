@@ -4,14 +4,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
  <title>Gajim - Read Me</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
 
 <h1>Gajim Read Me</h1>
 
-<p>
-Welcome to Gajim and thank you for trying out our client.
-</p>
+<p>Welcome to Gajim and thank you for trying out our client.</p>
 
 <h2>Runtime Requirements</h2>
 <ul>
@@ -21,10 +20,7 @@ Welcome to Gajim and thank you for trying out our client.
 <li>pysqlite2 (if you have python 2.5, you already have this)</li>
 </ul>
 
-<p>
-<strong>Note to packagers</strong>
-Gajim is a GTK+ app that loves GNOME. You can do 'make' so you don't require gnomepythonextras (aka gnome-python-desktop) which is gnome dep, but you will miss gnomekeyring integration.
-</p>
+<p><strong>Note to packagers</strong> Gajim is a GTK+ app that loves GNOME. You can do 'make' so you don't require gnomepythonextras (aka gnome-python-desktop) which is gnome dep, but you will miss gnomekeyring integration.</p>
 
 <h2>Optional Runtime Requirements</h2>
 <ul>
@@ -41,11 +37,7 @@ Gajim is a GTK+ app that loves GNOME. You can do 'make' so you don't require gno
 <li>python-kerberos to use GSSAPI authentification. Note: version1.1 or higher is required</li>
 </ul>
 
-<p>
-Some distributions also split too much python standard library.
-I know SUSE does. In such distros you also need python-xml
-the xml lib that *comes* with python and not pyxml or whatever.
-</p>
+<p>Some distributions also split too much python standard library. I know SUSE does. In such distros you also need python-xml the xml lib that *comes* with python and not pyxml or whatever.</p>
 
 <h2>Compile-time Requirements</h2>
 <ul>
@@ -54,10 +46,7 @@ the xml lib that *comes* with python and not pyxml or whatever.
 <li>intltool (>= 0.40.1)</li>
 </ul>
 
-<p>
-<strong>NOTE:</strong>
-If you still have problems compiling, you may want to try removing the gtk1 series of the above dependencies.
-</p>
+<p><strong>NOTE:</strong> If you still have problems compiling, you may want to try removing the gtk1 series of the above dependencies.</p>
 
 <h2>Installation Procedure</h2>
 <ol>
@@ -68,25 +57,22 @@ If you still have problems compiling, you may want to try removing the gtk1 seri
 <li>su -c make install</li>
 </ol>
 
-<p>
-To specify what modules to build do:
-make help
-</p>
+<p>To specify what modules to build do:</p>
+<pre>
+    make help
+</pre>
 
-<p>
-To specify where to install do:
-su -c make PREFIX=custom_path install
-</p>
+<p>To specify where to install do:</p>
+<pre>
+    su -c make PREFIX=custom_path install
+</pre>
 
 <h2>Running Gajim</h2>
-<p>
-Just do <em>gajim</em> or you can run Gajim from your GNOME/XFCE/KDE/whatever menus.<br/><br/>
-
-or if you didn't 'make install' you can also run from gajim folder with
-<em>./launch.sh</em></p>
+<p>Just do <em>gajim</em> or you can run Gajim from your GNOME/XFCE/KDE/whatever menus.<br/><br/>
+or if you didn't 'make install' you can also run from gajim folder with<em>./launch.sh</em></p>
 <hr />
-<h3>Note for svn users</h3>
-You will need GNU autotools in order to install Gajim from svn. This includes: 
+<h3>Note for hg users</h3>
+<p>You will need GNU autotools in order to install Gajim from svn. This includes:</p>
 <ul>
 <li>automake &gt;= 1.8 </li>
 <li>autoconf &gt;= 2.59 </li>
@@ -94,45 +80,41 @@ You will need GNU autotools in order to install Gajim from svn. This includes:
 <li>intltool-0.40.1 </li>
 <li>pkgconfig &gt;= 0.19</li>
 </ul>
-</p>
-steps to compile gajim:
+<p>steps to compile gajim:</p>
 <pre>
     $ sh autogen.sh
     $ ./configure
     $ make
 </pre>
-Alternatively, if you don't want to install all these packages, you can get a nightly snapshot from <a href="http://www.gajim.org/downloads/snap/">here</a> and procede as usual:
+<p>Alternatively, if you don't want to install all these packages, you can get a nightly snapshot from <a href="http://www.gajim.org/downloads/snap/">here</a> and procede as usual:</p>
 <pre>
     $ ./configure
     $ make
 </pre>
 <h2>Uninstallation Procedure</h2>
-<p>
-su -c make uninstall<br/>
-this will try to remove Gajim from the default directories.
-If you want to remove it from custom directory provide it as:<br/>
-make PREFIX=custom_path uninstall
+<pre>
+    su -c make uninstall
+</pre>
+<p>this will try to remove Gajim from the default directories.
+If you want to remove it from custom directory provide it as:
 </p>
+<pre>
+    make PREFIX=custom_path uninstall
+</pre>
 
 <h2>Miscellaneous</h2>
 <h3>XML &amp; Debugging</h3>
-<p>
-If you want to see the xml stanzas and/or help us debugging 
+<p>If you want to see the xml stanzas and/or help us debugging 
 you're advised to enable verbose via advanced configuration window.
 If you don't want to make this permanent, execute gajim with --verbose
-everytime you want to have verbose output.
-</p>
+everytime you want to have verbose output.</p>
 
 <h3>FAQ/Wiki</h3>
-<p>
-FAQ can be found at <a href="http://trac.gajim.org/wiki/GajimFaq">http://trac.gajim.org/wiki/GajimFaq</a><br/>
-Wiki can be found at <a href="http://trac.gajim.org/wiki">http://trac.gajim.org/wiki</a>
-</p>
+<p>FAQ can be found at <a href="http://trac.gajim.org/wiki/GajimFaq">http://trac.gajim.org/wiki/GajimFaq</a><br/>
+Wiki can be found at <a href="http://trac.gajim.org/wiki">http://trac.gajim.org/wiki</a></p>
 
 
-<p>
-That is all, <strong>enjoy!</strong>
-</p>
+<p>That is all, <strong>enjoy!</strong></p>
 
 <p>
 <br/>
@@ -148,6 +130,5 @@ PS.
 We use original art and parts of sounds and other art from Psi, Gossip,
 Gnomebaker, Gaim and some icons from various gnome-icons
 (mostly Dropline Etiquette) we found at art.gnome.org
-If you think we're violating a license please inform us. Thank you.
-</p>
+If you think we're violating a license please inform us. Thank you.</p>
 </body></html>
