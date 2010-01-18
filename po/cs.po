@@ -1813,7 +1813,7 @@ msgstr ""
 "Automaticky zjistit při každém startu aplikace\n"
 "Vždy použít výchozí aplikace z GNOME\n"
 "Vždy použít výchozí aplikace z KDE\n"
-"Vždy použít výchozí aplikace z XFCE4\n"
+"Vždy použít výchozí aplikace z Xfce\n"
 "Vlastní"
 
 #: ../data/glade/preferences_window.glade.h:33

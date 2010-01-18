@@ -1876,7 +1876,7 @@ msgstr ""
 "Aŭtodetekti dum ĉiu Gajim lanĉo\n"
 "Ĉiam uzi defaŭlton de GNOME\n"
 "Ĉiam uzi defaŭlton de KDE\n"
-"Ĉiam uzi defaŭlton de XFCE\n"
+"Ĉiam uzi defaŭlton de Xfce\n"
 "Propraj"
 
 #: ../data/glade/preferences_window.glade.h:33

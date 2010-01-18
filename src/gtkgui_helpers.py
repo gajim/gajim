@@ -180,8 +180,8 @@ def get_default_font():
 	except Exception:
 		pass
 
-	# try to get xfce default font
-	# Xfce 4.2 adopts freedesktop.org's Base Directory Specification
+	# try to get Xfce default font
+	# Xfce 4.2 and higher follow freedesktop.org's Base Directory Specification
 	# see http://www.xfce.org/~benny/xfce/file-locations.html
 	# and http://freedesktop.org/Standards/basedir-spec
 	xdg_config_home = os.environ.get('XDG_CONFIG_HOME', '')

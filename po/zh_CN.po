@@ -1875,7 +1875,7 @@ msgstr ""
 "每次 Gajim 启动时自动探测\n"
 "总是使用 GNOME 默认应用\n"
 "总是使用 KDE 默认应用\n"
-"总是使用 XFCE4 默认应用\n"
+"总是使用 Xfce 默认应用\n"
 "自定义"
 
 #: ../data/glade/preferences_window.glade.h:33

@@ -1890,7 +1890,7 @@ msgstr ""
 "Autodetektatu Gajim abiarazten den bakoitzean\n"
 "Beti GNOME-ren berezko aplikazioak erabili\n"
 "Beti KDE-ren berezko aplikazioak erabili\n"
-"Beti XFCE4-ren berezko aplikazioak erabili\n"
+"Beti Xfce-ren berezko aplikazioak erabili\n"
 "Bezeroa"
 
 #: ../data/glade/preferences_window.glade.h:33

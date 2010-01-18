@@ -1816,7 +1816,7 @@ msgstr ""
 "Détection automatique à chaque démarrage\n"
 "Toujours utiliser les applications par défaut de GNOME\n"
 "Toujours utiliser les applications par défaut de KDE\n"
-"Toujours utiliser les applications par défaut de XFCE4\n"
+"Toujours utiliser les applications par défaut de Xfce\n"
 "Personnalisé"
 
 #: ../data/glade/preferences_window.glade.h:33

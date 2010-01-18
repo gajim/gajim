@@ -1799,7 +1799,7 @@ msgstr ""
 "Automatisk genkend hvergang Gajim starter\n"
 "Altid brug GNOME standard programmer\n"
 "Altid brug KDE standard programmer\n"
-"Altid brug XFCE4 standard programmer\n"
+"Altid brug Xfce standard programmer\n"
 "Tilpasset"
 
 #: ../data/glade/preferences_window.glade.h:33

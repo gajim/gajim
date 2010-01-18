@@ -44,7 +44,7 @@ Gajim 0.12.2 (07 June 2009)
   * Improve error messages handling
   * Totem support for played music
   * Fix SSL with some servers
-  * Handle XFCE notification-daemon
+  * Handle Xfce notification-daemon
   * Restore old behaviour of click on systray: left click to open events
   * Network manager 0.7 support
   * Move logs file under windows to $APPDATA/gajim

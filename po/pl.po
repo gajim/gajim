@@ -1774,7 +1774,7 @@ msgstr ""
 "Automatyczne wykrywanie przy każdym uruchomieniu Gajima\n"
 "Zawsze używaj domyślnych aplikacji GNOME\n"
 "Zawsze używaj domyślnych aplikacji KDE\n"
-"Zawsze używaj domyślnych aplikacji XFCE\n"
+"Zawsze używaj domyślnych aplikacji Xfce\n"
 "Własne"
 
 #: ../data/glade/preferences_window.glade.h:33

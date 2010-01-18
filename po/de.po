@@ -1781,7 +1781,7 @@ msgstr ""
 "Bei jedem Programmstart automatisch erkennen\n"
 "Immer die GNOME-Standard-Anwendungen verwenden\n"
 "Immer die KDE-Standard-Anwendungen verwenden\n"
-"Immer die XFCE4-Standard-Anwendungen verwenden\n"
+"Immer die Xfce-Standard-Anwendungen verwenden\n"
 "Benutzerdefiniert"
 
 #: ../data/glade/preferences_window.glade.h:33

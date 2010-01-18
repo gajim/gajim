@@ -1895,7 +1895,7 @@ msgstr ""
 "Autodetectar en cada inicio de Gajim\n"
 "Siempre usar las aplicaciones por defecto de GNOME\n"
 "Siempre usar las apliacciones por defecto de KDE\n"
-"Siempre usar las aplicaciones por defecto de XFCE\n"
+"Siempre usar las aplicaciones por defecto de Xfce\n"
 "Personalizado"
 
 #: ../data/glade/preferences_window.glade.h:40

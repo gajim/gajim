@@ -1845,7 +1845,7 @@ msgstr ""
 "Rilevamento automatico ad ogni avvio di Gajim\n"
 "Usa sempre le applicazioni predefinite di GNOME\n"
 "Usa sempre le applicazioni predefinite di KDE\n"
-"Usa sempre le applicazioni predefinite XFCE4\n"
+"Usa sempre le applicazioni predefinite Xfce\n"
 "Personalizzate"
 
 #: ../data/glade/preferences_window.glade.h:33

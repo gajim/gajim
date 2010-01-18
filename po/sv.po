@@ -1806,7 +1806,7 @@ msgstr ""
 "Detektera vid varje Gajimstart\n"
 "Använd alltid GNOMEs standardprogram\n"
 "Använd alltid KDEs standardprogram\n"
-"Använd alltid XFCE4s standardprogram\n"
+"Använd alltid Xfces standardprogram\n"
 "Anpassa"
 
 #: ../data/glade/preferences_window.glade.h:33
