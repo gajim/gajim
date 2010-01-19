@@ -85,6 +85,7 @@ import roster_window
 import profile_window
 import config
 from threading import Thread
+from common import ged
 
 gajimpaths = common.configpaths.gajimpaths
 config_filename = gajimpaths['CONFIG_FILE']
@@ -1817,7 +1818,7 @@ class Interface:
 		# ('PEP_CONFIG', account, (node, form))
 		if 'pep_services' in self.instances[account]:
 			self.instances[account]['pep_services'].config(data[0], data[1])
-			
+
 	def handle_event_roster_item_exchange(self, account, data):
 		# data = (action in [add, delete, modify], exchange_list, jid_from)
 		dialogs.RosterItemExchangeWindow(account, data[0], data[1], data[2])
@@ -2016,17 +2017,7 @@ class Interface:
 		if pm_ctrl and hasattr(pm_ctrl, "update_contact"):
 			pm_ctrl.update_contact()
 
-	def register_handler(self, event, handler):
-		if event not in self.handlers:
-			self.handlers[event] = []
-
-		if handler not in self.handlers[event]:
-			self.handlers[event].append(handler)
-
-	def unregister_handler(self, event, handler):
-		self.handlers[event].remove(handler)
-
-	def register_handlers(self):
+	def create_core_handlers_list(self):
 		self.handlers = {
 			'ROSTER': [self.handle_event_roster],
 			'WARNING': [self.handle_event_warning],
@@ -2118,21 +2109,17 @@ class Interface:
 			'PEP_RECEIVED': [self.handle_event_pep_received],
 			'CAPS_RECEIVED': [self.handle_event_caps_received]
 		}
-	
-	def dispatch(self, event, account, data):
+
+	def register_core_handlers(self):
 		"""
-		Dispatch an network event to the event handlers of this class. Return
-		true if it could be dispatched to alteast one handler
+		Register core handlers in Global Events Dispatcher (GED).
+
+		This is part of rewriting whole events handling system to use GED.
 		"""
-		if event not in self.handlers:
-			log.warning('Unknown event %s dispatched to GUI: %s' % (event, data))
-			return False
-		else:
-			log.debug('Event %s distpached to GUI: %s' % (event, data))
-			for handler in self.handlers[event]:
-				handler(account, data)
-			return len(self.handlers[event])
-			
+		for event_name, event_handlers in self.handlers.iteritems():
+			for event_handler in event_handlers:
+				gajim.ged.register_event_handler(event_name, ged.CORE,
+					event_handler)
 
 ################################################################################
 ### Methods dealing with gajim.events
@@ -2800,13 +2787,15 @@ class Interface:
 		listener.disconnect(self.music_track_changed_signal)
 		self.music_track_changed_signal = None
 
-	def music_track_changed(self, unused_listener, music_track_info, account=None):
+	def music_track_changed(self, unused_listener, music_track_info,
+	account=None):
 		if not account:
 			accounts = gajim.connections.keys()
 		else:
 			accounts = [account]
-			
-		is_paused = hasattr(music_track_info, 'paused') and music_track_info.paused == 0
+
+		is_paused = hasattr(music_track_info, 'paused') and \
+			music_track_info.paused == 0
 		if not music_track_info or is_paused:
 			artist = title = source = ''
 		else:
@@ -2833,7 +2822,7 @@ class Interface:
 
 		def format_gdkcolor (gdkcolor):
 			return format_rgb (*gdkcolor_to_rgb (gdkcolor))
-		
+
 		# get style colors and create string for dvipng
 		dummy = gtk.Invisible()
 		dummy.ensure_style()
@@ -3177,8 +3166,8 @@ class Interface:
 				except Exception:
 					pass
 		gobject.timeout_add_seconds(5, remote_init)
-		
-		
+
+
 	def __init__(self):
 		gajim.interface = self
 		gajim.thread_interface = ThreadInterface
@@ -3276,7 +3265,13 @@ class Interface:
 			self.handle_event_file_error)
 		gajim.proxy65_manager = proxy65_manager.Proxy65Manager(gajim.idlequeue)
 		gajim.default_session_type = ChatControlSession
-		self.register_handlers()
+
+		# Creating Global Events Dispatcher
+		from common import ged
+		gajim.ged = ged.GlobalEventsDispatcher()
+		self.create_core_handlers_list()
+		self.register_core_handlers()
+
 		if gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'active') \
 		and gajim.HAVE_ZEROCONF:
 			gajim.connections[gajim.ZEROCONF_ACC_NAME] = \
@@ -3421,8 +3416,8 @@ class Interface:
 		self.last_ftwindow_update = 0
 
 		self.music_track_changed_signal = None
-		
-		
+
+
 class PassphraseRequest:
 	def __init__(self, keyid):
 		self.keyid = keyid
@@ -3503,7 +3498,7 @@ class ThreadInterface:
 		def thread_function(func, func_args, callback, callback_args):
 			output = func(*func_args)
 			gobject.idle_add(callback, output, *callback_args)
-			
+
 		Thread(target=thread_function, args=(func, func_args, callback,
 			callback_args)).start()
 

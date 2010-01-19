@@ -169,7 +169,7 @@ class CommonConnection:
 		"""
 		Always passes account name as first param
 		"""
-		gajim.interface.dispatch(event, self.name, data)
+		gajim.ged.raise_event(event, self.name, data)
 
 	def _reconnect(self):
 		"""

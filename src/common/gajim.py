@@ -67,6 +67,8 @@ version = config.get('version')
 connections = {} # 'account name': 'account (connection.Connection) instance'
 ipython_window = None
 
+ged = None # Global Events Dispatcher
+
 log = logging.getLogger('gajim')
 
 import logger
