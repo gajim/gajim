@@ -389,7 +389,8 @@ def on_exit():
 	if os.path.exists(pid_filename):
 		os.remove(pid_filename)
 	# Shutdown GUI and save config
-	gajim.interface.roster.prepare_quit()
+	if hasattr(gajim.interface, 'roster'):
+		gajim.interface.roster.prepare_quit()
 
 import atexit
 atexit.register(on_exit)
