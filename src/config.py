@@ -3339,6 +3339,13 @@ class AccountCreationWizardWindow:
 		self.notebook.set_current_page(0)
 		self.xml.signal_autoconnect(self)
 		self.window.show_all()
+		gajim.ged.register_event_handler('NEW_ACC_CONNECTED', ged.CORE,
+			self.new_acc_connected)
+		gajim.ged.register_event_handler('NEW_ACC_NOT_CONNECTED', ged.CORE,
+			self.new_acc_not_connected)
+		gajim.ged.register_event_handler('ACC_OK', ged.CORE, self.acc_is_ok)
+		gajim.ged.register_event_handler('ACC_NOT_OK', ged.CORE,
+			self.acc_is_not_ok)
 
 	def on_wizard_window_destroy(self, widget):
 		page = self.notebook.get_current_page()
@@ -3348,6 +3355,13 @@ class AccountCreationWizardWindow:
 			del gajim.connections[self.account]
 			if self.account in gajim.config.get_per('accounts'):
 				gajim.config.del_per('accounts', self.account)
+		gajim.ged.remove_event_handler('NEW_ACC_CONNECTED', ged.CORE,
+			self.new_acc_connected)
+		gajim.ged.remove_event_handler('NEW_ACC_NOT_CONNECTED', ged.CORE,
+			self.new_acc_not_connected)
+		gajim.ged.remove_event_handler('ACC_OK', ged.CORE, self.acc_is_ok)
+		gajim.ged.remove_event_handler('ACC_NOT_OK', ged.CORE,
+			self.acc_is_not_ok)
 		del gajim.interface.instances['account_creation_wizard']
 
 	def on_register_server_features_button_clicked(self, widget):
@@ -3581,11 +3595,14 @@ class AccountCreationWizardWindow:
 		self.progressbar.pulse()
 		return True # loop forever
 
-	def new_acc_connected(self, form, is_form, ssl_msg, ssl_err, ssl_cert,
-			ssl_fingerprint):
+	def new_acc_connected(self, account, array):
 		"""
 		Connection to server succeded, present the form to the user
 		"""
+		# We receive events from all accounts from GED
+		if account != self.account:
+			return
+		form, is_form, ssl_msg, ssl_err, ssl_cert, ssl_fingerprint = array
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 		self.back_button.show()
@@ -3618,10 +3635,13 @@ class AccountCreationWizardWindow:
 		else:
 			self.notebook.set_current_page(4) # show form page
 
-	def new_acc_not_connected(self, reason):
+	def new_acc_not_connected(self, account, reason):
 		"""
 		Account creation failed: connection to server failed
 		"""
+		# We receive events from all accounts from GED
+		if account != self.account:
+			return
 		if self.account not in gajim.connections:
 			return
 		if self.update_progressbar_timeout_id is not None:
@@ -3640,20 +3660,26 @@ class AccountCreationWizardWindow:
 		self.finish_label.set_markup(finish_text)
 		self.notebook.set_current_page(6) # show finish page
 
-	def acc_is_ok(self, config):
+	def acc_is_ok(self, account, config):
 		"""
 		Account creation succeeded
 		"""
+		# We receive events from all accounts from GED
+		if account != self.account:
+			return
 		self.create_vars(config)
 		self.show_finish_page()
 
 		if self.update_progressbar_timeout_id is not None:
 			gobject.source_remove(self.update_progressbar_timeout_id)
 
-	def acc_is_not_ok(self, reason):
+	def acc_is_not_ok(self, account, reason):
 		"""
 		Account creation failed
 		"""
+		# We receive events from all accounts from GED
+		if account != self.account:
+			return
 		self.back_button.show()
 		self.cancel_button.show()
 		self.go_online_checkbutton.hide()

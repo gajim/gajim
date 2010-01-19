@@ -695,30 +695,10 @@ class Interface:
 			gajim.interface.instances[account]['pep_services'].items_received(
 				array[2])
 
-	def handle_event_new_acc_connected(self, account, array):
-		#('NEW_ACC_CONNECTED', account, (infos, is_form, ssl_msg, ssl_err,
-		# ssl_cert, ssl_fingerprint))
-		if 'account_creation_wizard' in self.instances:
-			self.instances['account_creation_wizard'].new_acc_connected(array[0],
-				array[1], array[2], array[3], array[4], array[5])
-
-	def handle_event_new_acc_not_connected(self, account, array):
-		#('NEW_ACC_NOT_CONNECTED', account, (reason))
-		if 'account_creation_wizard' in self.instances:
-			self.instances['account_creation_wizard'].new_acc_not_connected(array)
-
 	def handle_event_acc_ok(self, account, array):
 		#('ACC_OK', account, (config))
-		if 'account_creation_wizard' in self.instances:
-			self.instances['account_creation_wizard'].acc_is_ok(array)
-
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewAccount', (account, array))
-
-	def handle_event_acc_not_ok(self, account, array):
-		#('ACC_NOT_OK', account, (reason))
-		if 'account_creation_wizard' in self.instances:
-			self.instances['account_creation_wizard'].acc_is_not_ok(array)
 
 	def handle_event_quit(self, p1, p2):
 		self.roster.quit_gtkgui_interface()
@@ -2010,10 +1990,7 @@ class Interface:
 			'REGISTER_AGENT_INFO': [self.handle_event_register_agent_info],
 			'AGENT_INFO_ITEMS': [self.handle_event_agent_info_items],
 			'QUIT': [self.handle_event_quit],
-			'NEW_ACC_CONNECTED': [self.handle_event_new_acc_connected],
-			'NEW_ACC_NOT_CONNECTED': [self.handle_event_new_acc_not_connected],
 			'ACC_OK': [self.handle_event_acc_ok],
-			'ACC_NOT_OK': [self.handle_event_acc_not_ok],
 			'MYVCARD': [self.handle_event_myvcard],
 			'VCARD': [self.handle_event_vcard],
 			'LAST_STATUS_TIME': [self.handle_event_last_status_time],
