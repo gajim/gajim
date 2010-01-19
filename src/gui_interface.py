@@ -661,20 +661,6 @@ class Interface:
 			notify.popup(event_type, jid, account, 'unsubscribed', path,
 				event_type, jid)
 
-	def handle_event_agent_info_error(self, account, agent):
-		#('AGENT_ERROR_INFO', account, (agent))
-		try:
-			gajim.connections[account].services_cache.agent_info_error(agent)
-		except AttributeError:
-			return
-
-	def handle_event_agent_items_error(self, account, agent):
-		#('AGENT_ERROR_INFO', account, (agent))
-		try:
-			gajim.connections[account].services_cache.agent_items_error(agent)
-		except AttributeError:
-			return
-
 	def handle_event_agent_removed(self, account, agent):
 		# remove transport's contacts from treeview
 		jid_list = gajim.contacts.get_jid_list(account)
@@ -708,19 +694,6 @@ class Interface:
 		array[0] == our_jid:
 			gajim.interface.instances[account]['pep_services'].items_received(
 				array[2])
-		try:
-			gajim.connections[account].services_cache.agent_items(array[0],
-				array[1], array[2])
-		except AttributeError:
-			return
-
-	def handle_event_agent_info_info(self, account, array):
-		#('AGENT_INFO_INFO', account, (agent, node, identities, features, data))
-		try:
-			gajim.connections[account].services_cache.agent_info(array[0],
-				array[1], array[2], array[3], array[4])
-		except AttributeError:
-			return
 
 	def handle_event_new_acc_connected(self, account, array):
 		#('NEW_ACC_CONNECTED', account, (infos, is_form, ssl_msg, ssl_err,
@@ -2033,12 +2006,9 @@ class Interface:
 			'SUBSCRIBED': [self.handle_event_subscribed],
 			'UNSUBSCRIBED': [self.handle_event_unsubscribed],
 			'SUBSCRIBE': [self.handle_event_subscribe],
-			'AGENT_ERROR_INFO': [self.handle_event_agent_info_error],
-			'AGENT_ERROR_ITEMS': [self.handle_event_agent_items_error],
 			'AGENT_REMOVED': [self.handle_event_agent_removed],
 			'REGISTER_AGENT_INFO': [self.handle_event_register_agent_info],
 			'AGENT_INFO_ITEMS': [self.handle_event_agent_info_items],
-			'AGENT_INFO_INFO': [self.handle_event_agent_info_info],
 			'QUIT': [self.handle_event_quit],
 			'NEW_ACC_CONNECTED': [self.handle_event_new_acc_connected],
 			'NEW_ACC_NOT_CONNECTED': [self.handle_event_new_acc_not_connected],

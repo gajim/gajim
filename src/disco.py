@@ -62,6 +62,7 @@ from common import gajim
 from common import xmpp
 from common.exceptions import GajimGeneralException
 from common import helpers
+from common import ged
 
 # Dictionary mapping category, type pairs to browser class, image pairs.
 # This is a function, so we can call it after the classes are declared.
@@ -254,6 +255,24 @@ class ServicesCache:
 		self._info = CacheDictionary(0, getrefresh = False)
 		self._subscriptions = CacheDictionary(5, getrefresh=False)
 		self._cbs = {}
+		gajim.ged.register_event_handler('AGENT_ERROR_INFO', ged.CORE,
+			self.agent_info_error)
+		gajim.ged.register_event_handler('AGENT_ERROR_ITEMS', ged.CORE,
+			self.agent_items_error)
+		gajim.ged.register_event_handler('AGENT_INFO_ITEMS', ged.CORE,
+			self.agent_items)
+		gajim.ged.register_event_handler('AGENT_INFO_INFO', ged.CORE,
+			self.agent_info)
+	
+	def __del__(self):
+		gajim.ged.remove_event_handler('AGENT_ERROR_INFO', ged.CORE,
+			self.agent_info_error)
+		gajim.ged.remove_event_handler('AGENT_ERROR_ITEMS', ged.CORE,
+			self.agent_items_error)
+		gajim.ged.remove_event_handler('AGENT_INFO_ITEMS', ged.CORE,
+			self.agent_items)
+		gajim.ged.remove_event_handler('AGENT_INFO_INFO', ged.CORE,
+			self.agent_info)
 
 	def cleanup(self):
 		self._items.cleanup()
@@ -383,10 +402,15 @@ class ServicesCache:
 			self._cbs[cbkey] = [cb]
 			gajim.connections[self.account].discoverItems(jid, node)
 
-	def agent_info(self, jid, node, identities, features, data):
+	def agent_info(self, account, array):
 		"""
 		Callback for when we receive an agent's info
+		array is (agent, node, identities, features, data)
 		"""
+		# We receive events from all accounts from GED
+		if account != self.account:
+			return
+		jid, node, identities, features, data = array
 		addr = get_agent_address(jid, node)
 
 		# Store in cache
@@ -401,10 +425,15 @@ class ServicesCache:
 			if cbkey in self._cbs:
 				del self._cbs[cbkey]
 
-	def agent_items(self, jid, node, items):
+	def agent_items(self, account, array):
 		"""
 		Callback for when we receive an agent's items
+		array is (agent, node, items)
 		"""
+		# We receive events from all accounts from GED
+		if account != self.account:
+			return
+		jid, node, items = array
 		addr = get_agent_address(jid, node)
 
 		# Store in cache
@@ -419,11 +448,14 @@ class ServicesCache:
 			if cbkey in self._cbs:
 				del self._cbs[cbkey]
 
-	def agent_info_error(self, jid):
+	def agent_info_error(self, account, jid):
 		"""
 		Callback for when a query fails. Even after the browse and agents
 		namespaces
 		"""
+		# We receive events from all accounts from GED
+		if account != self.account:
+			return
 		addr = get_agent_address(jid)
 
 		# Call callbacks
@@ -435,11 +467,14 @@ class ServicesCache:
 			if cbkey in self._cbs:
 				del self._cbs[cbkey]
 
-	def agent_items_error(self, jid):
+	def agent_items_error(self, account, jid):
 		"""
 		Callback for when a query fails. Even after the browse and agents
 		namespaces
 		"""
+		# We receive events from all accounts from GED
+		if account != self.account:
+			return
 		addr = get_agent_address(jid)
 
 		# Call callbacks
@@ -1003,7 +1038,7 @@ class AgentBrowser:
 		self.window.progressbar.show()
 		self._pulse_timeout = gobject.timeout_add(250, self._pulse_timeout_cb)
 		self.cache.get_items(self.jid, self.node, self._agent_items,
-			force = force, args = (force,))
+			force=force, args=(force,))
 
 	def _pulse_timeout_cb(self, *args):
 		"""
