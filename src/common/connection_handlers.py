@@ -30,7 +30,6 @@
 
 import os
 import base64
-import socket
 import sys
 import operator
 import hashlib
@@ -41,17 +40,17 @@ from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
 from calendar import timegm
 import datetime
 
-import socks5
 import common.xmpp
 
 from common import helpers
 from common import gajim
-from common import atom
-from common import pep
 from common import exceptions
 from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
-from common.caps import ConnectionCaps
+from common.pep import ConnectionPEP
+from common.protocol.caps import ConnectionCaps
+from common.protocol.bytestream import ConnectionBytestream
+import common.caps_cache as capscache
 from common.nec import NetworkEvent
 if gajim.HAVE_FARSIGHT:
 	from common.jingle import ConnectionJingle
@@ -80,600 +79,32 @@ PRIVACY_ARRIVED = 'privacy_arrived'
 PEP_CONFIG = 'pep_config'
 HAS_IDLE = True
 try:
-	import idle
+#	import idle
+	import common.sleepy
 except Exception:
 	log.debug(_('Unable to load idle module'))
 	HAS_IDLE = False
 
-class ConnectionBytestream:
-	def __init__(self):
-		self.files_props = {}
-		self.awaiting_xmpp_ping_id = None
-
-	def is_transfer_stopped(self, file_props):
-		if 'error' in file_props and file_props['error'] != 0:
-			return True
-		if 'completed' in file_props and file_props['completed']:
-			return True
-		if 'connected' in file_props and file_props['connected'] == False:
-			return True
-		if 'stopped' not in file_props or not file_props['stopped']:
-			return False
-		return True
-
-	def send_success_connect_reply(self, streamhost):
-		''' send reply to the initiator of FT that we
-		made a connection
-		'''
-		if not self.connection or self.connected < 2:
-			return
-		if streamhost is None:
-			return None
-		iq = common.xmpp.Iq(to = streamhost['initiator'], typ = 'result',
-			frm = streamhost['target'])
-		iq.setAttr('id', streamhost['id'])
-		query = iq.setTag('query')
-		query.setNamespace(common.xmpp.NS_BYTESTREAM)
-		stream_tag = query.setTag('streamhost-used')
-		stream_tag.setAttr('jid', streamhost['jid'])
-		self.connection.send(iq)
-
-	def remove_transfers_for_contact(self, contact):
-		''' stop all active transfer for contact '''
-		for file_props in self.files_props.values():
-			if self.is_transfer_stopped(file_props):
-				continue
-			receiver_jid = unicode(file_props['receiver'])
-			if contact.get_full_jid() == receiver_jid:
-				file_props['error'] = -5
-				self.remove_transfer(file_props)
-				self.dispatch('FILE_REQUEST_ERROR', (contact.jid, file_props, ''))
-			sender_jid = unicode(file_props['sender'])
-			if contact.get_full_jid() == sender_jid:
-				file_props['error'] = -3
-				self.remove_transfer(file_props)
-
-	def remove_all_transfers(self):
-		''' stops and removes all active connections from the socks5 pool '''
-		for file_props in self.files_props.values():
-			self.remove_transfer(file_props, remove_from_list = False)
-		del(self.files_props)
-		self.files_props = {}
-
-	def remove_transfer(self, file_props, remove_from_list = True):
-		if file_props is None:
-			return
-		self.disconnect_transfer(file_props)
-		sid = file_props['sid']
-		gajim.socks5queue.remove_file_props(self.name, sid)
-
-		if remove_from_list:
-			if 'sid' in self.files_props:
-				del(self.files_props['sid'])
-
-	def disconnect_transfer(self, file_props):
-		if file_props is None:
-			return
-		if 'hash' in file_props:
-			gajim.socks5queue.remove_sender(file_props['hash'])
-
-		if 'streamhosts' in file_props:
-			for host in file_props['streamhosts']:
-				if 'idx' in host and host['idx'] > 0:
-					gajim.socks5queue.remove_receiver(host['idx'])
-					gajim.socks5queue.remove_sender(host['idx'])
-
-	def send_socks5_info(self, file_props, fast = True, receiver = None,
-		sender = None):
-		''' send iq for the present streamhosts and proxies '''
-		if not self.connection or self.connected < 2:
-			return
-		if not isinstance(self.peerhost, tuple):
-			return
-		port = gajim.config.get('file_transfers_port')
-		ft_add_hosts_to_send = gajim.config.get('ft_add_hosts_to_send')
-		cfg_proxies = gajim.config.get_per('accounts', self.name,
-			'file_transfer_proxies')
-		if receiver is None:
-			receiver = file_props['receiver']
-		if sender is None:
-			sender = file_props['sender']
-		proxyhosts = []
-		if fast and cfg_proxies:
-			proxies = [e.strip() for e in cfg_proxies.split(',')]
-			default = gajim.proxy65_manager.get_default_for_name(self.name)
-			if default:
-				# add/move default proxy at top of the others
-				if proxies.__contains__(default):
-					proxies.remove(default)
-				proxies.insert(0, default)
-
-			for proxy in proxies:
-				(host, _port, jid) = gajim.proxy65_manager.get_proxy(proxy, self.name)
-				if host is None:
-					continue
-				host_dict={
-					'state': 0,
-					'target': unicode(receiver),
-					'id': file_props['sid'],
-					'sid': file_props['sid'],
-					'initiator': proxy,
-					'host': host,
-					'port': unicode(_port),
-					'jid': jid
-				}
-				proxyhosts.append(host_dict)
-		sha_str = helpers.get_auth_sha(file_props['sid'], sender,
-			receiver)
-		file_props['sha_str'] = sha_str
-		ft_add_hosts = []
-		if ft_add_hosts_to_send:
-			ft_add_hosts_to_send = [e.strip() for e in ft_add_hosts_to_send.split(',')]
-			for ft_host in ft_add_hosts_to_send:
-				ft_add_hosts.append(ft_host)
-		listener = gajim.socks5queue.start_listener(port,
-			sha_str, self._result_socks5_sid, file_props['sid'])
-		if listener is None:
-			file_props['error'] = -5
-			self.dispatch('FILE_REQUEST_ERROR', (unicode(receiver), file_props,
-				''))
-			self._connect_error(unicode(receiver), file_props['sid'],
-				file_props['sid'], code = 406)
-			return
-
-		iq = common.xmpp.Protocol(name = 'iq', to = unicode(receiver),
-			typ = 'set')
-		file_props['request-id'] = 'id_' + file_props['sid']
-		iq.setID(file_props['request-id'])
-		query = iq.setTag('query')
-		query.setNamespace(common.xmpp.NS_BYTESTREAM)
-		query.setAttr('mode', 'plain')
-		query.setAttr('sid', file_props['sid'])
-		for ft_host in ft_add_hosts:
-			# The streamhost, if set
-			ostreamhost = common.xmpp.Node(tag = 'streamhost')
-			query.addChild(node = ostreamhost)
-			ostreamhost.setAttr('port', unicode(port))
-			ostreamhost.setAttr('host', ft_host)
-			ostreamhost.setAttr('jid', sender)
-		try:
-			# The ip we're connected to server with
-			my_ips = [self.peerhost[0]]
-			# all IPs from local DNS
-			for addr in socket.getaddrinfo(socket.gethostname(), None):
-				if not addr[4][0] in my_ips and not addr[4][0].startswith('127'):
-					my_ips.append(addr[4][0])
-			for ip in my_ips:
-				streamhost = common.xmpp.Node(tag = 'streamhost')
-				query.addChild(node = streamhost)
-				streamhost.setAttr('port', unicode(port))
-				streamhost.setAttr('host', ip)
-				streamhost.setAttr('jid', sender)
-		except socket.gaierror:
-			self.dispatch('ERROR', (_('Wrong host'),
-				_('Invalid local address? :-O')))
-
-		if fast and proxyhosts != [] and gajim.config.get_per('accounts',
-		self.name, 'use_ft_proxies'):
-			file_props['proxy_receiver'] = unicode(receiver)
-			file_props['proxy_sender'] = unicode(sender)
-			file_props['proxyhosts'] = proxyhosts
-			for proxyhost in proxyhosts:
-				streamhost = common.xmpp.Node(tag = 'streamhost')
-				query.addChild(node=streamhost)
-				streamhost.setAttr('port', proxyhost['port'])
-				streamhost.setAttr('host', proxyhost['host'])
-				streamhost.setAttr('jid', proxyhost['jid'])
-
-				# don't add the proxy child tag for streamhosts, which are proxies
-				# proxy = streamhost.setTag('proxy')
-				# proxy.setNamespace(common.xmpp.NS_STREAM)
-		self.connection.send(iq)
-
-	def send_file_rejection(self, file_props, code='403', typ=None):
-		''' informs sender that we refuse to download the file
-		typ is used when code = '400', in this case typ can be 'strean' for
-		invalid stream or 'profile' for invalid profile'''
-		# user response to ConfirmationDialog may come after we've disconneted
-		if not self.connection or self.connected < 2:
-			return
-		iq = common.xmpp.Protocol(name = 'iq',
-			to = unicode(file_props['sender']), typ = 'error')
-		iq.setAttr('id', file_props['request-id'])
-		if code == '400' and typ in ('stream', 'profile'):
-			name = 'bad-request'
-			text = ''
-		else:
-			name = 'forbidden'
-			text = 'Offer Declined'
-		err = common.xmpp.ErrorNode(code=code, typ='cancel', name=name, text=text)
-		if code == '400' and typ in ('stream', 'profile'):
-			if typ == 'stream':
-				err.setTag('no-valid-streams', namespace=common.xmpp.NS_SI)
-			else:
-				err.setTag('bad-profile', namespace=common.xmpp.NS_SI)
-		iq.addChild(node=err)
-		self.connection.send(iq)
-
-	def send_file_approval(self, file_props):
-		''' send iq, confirming that we want to download the file '''
-		# user response to ConfirmationDialog may come after we've disconneted
-		if not self.connection or self.connected < 2:
-			return
-		iq = common.xmpp.Protocol(name = 'iq',
-			to = unicode(file_props['sender']), typ = 'result')
-		iq.setAttr('id', file_props['request-id'])
-		si = iq.setTag('si')
-		si.setNamespace(common.xmpp.NS_SI)
-		if 'offset' in file_props and file_props['offset']:
-			file_tag = si.setTag('file')
-			file_tag.setNamespace(common.xmpp.NS_FILE)
-			range_tag = file_tag.setTag('range')
-			range_tag.setAttr('offset', file_props['offset'])
-		feature = si.setTag('feature')
-		feature.setNamespace(common.xmpp.NS_FEATURE)
-		_feature = common.xmpp.DataForm(typ='submit')
-		feature.addChild(node=_feature)
-		field = _feature.setField('stream-method')
-		field.delAttr('type')
-		field.setValue(common.xmpp.NS_BYTESTREAM)
-		self.connection.send(iq)
-
-	def send_file_request(self, file_props):
-		''' send iq for new FT request '''
-		if not self.connection or self.connected < 2:
-			return
-		our_jid = gajim.get_jid_from_account(self.name)
-		resource = self.server_resource
-		frm = our_jid + '/' + resource
-		file_props['sender'] = frm
-		fjid = file_props['receiver'].jid + '/' + file_props['receiver'].resource
-		iq = common.xmpp.Protocol(name = 'iq', to = fjid,
-			typ = 'set')
-		iq.setID(file_props['sid'])
-		self.files_props[file_props['sid']] = file_props
-		si = iq.setTag('si')
-		si.setNamespace(common.xmpp.NS_SI)
-		si.setAttr('profile', common.xmpp.NS_FILE)
-		si.setAttr('id', file_props['sid'])
-		file_tag = si.setTag('file')
-		file_tag.setNamespace(common.xmpp.NS_FILE)
-		file_tag.setAttr('name', file_props['name'])
-		file_tag.setAttr('size', file_props['size'])
-		desc = file_tag.setTag('desc')
-		if 'desc' in file_props:
-			desc.setData(file_props['desc'])
-		file_tag.setTag('range')
-		feature = si.setTag('feature')
-		feature.setNamespace(common.xmpp.NS_FEATURE)
-		_feature = common.xmpp.DataForm(typ='form')
-		feature.addChild(node=_feature)
-		field = _feature.setField('stream-method')
-		field.setAttr('type', 'list-single')
-		field.addOption(common.xmpp.NS_BYTESTREAM)
-		self.connection.send(iq)
-
-	def _result_socks5_sid(self, sid, hash_id):
-		''' store the result of sha message from auth. '''
-		if sid not in self.files_props:
-			return
-		file_props = self.files_props[sid]
-		file_props['hash'] = hash_id
-		return
-
-	def _connect_error(self, to, _id, sid, code=404):
-		''' cb, when there is an error establishing BS connection, or
-		when connection is rejected'''
-		if not self.connection or self.connected < 2:
-			return
-		msg_dict = {
-			404: 'Could not connect to given hosts',
-			405: 'Cancel',
-			406: 'Not acceptable',
-		}
-		msg = msg_dict[code]
-		iq = None
-		iq = common.xmpp.Protocol(name = 'iq', to = to,
-			typ = 'error')
-		iq.setAttr('id', _id)
-		err = iq.setTag('error')
-		err.setAttr('code', unicode(code))
-		err.setData(msg)
-		self.connection.send(iq)
-		if code == 404:
-			file_props = gajim.socks5queue.get_file_props(self.name, sid)
-			if file_props is not None:
-				self.disconnect_transfer(file_props)
-				file_props['error'] = -3
-				self.dispatch('FILE_REQUEST_ERROR', (to, file_props, msg))
-
-	def _proxy_auth_ok(self, proxy):
-		'''cb, called after authentication to proxy server '''
-		if not self.connection or self.connected < 2:
-			return
-		file_props = self.files_props[proxy['sid']]
-		iq = common.xmpp.Protocol(name = 'iq', to = proxy['initiator'],
-		typ = 'set')
-		auth_id = "au_" + proxy['sid']
-		iq.setID(auth_id)
-		query = iq.setTag('query')
-		query.setNamespace(common.xmpp.NS_BYTESTREAM)
-		query.setAttr('sid', proxy['sid'])
-		activate = query.setTag('activate')
-		activate.setData(file_props['proxy_receiver'])
-		iq.setID(auth_id)
-		self.connection.send(iq)
-
-	# register xmpppy handlers for bytestream and FT stanzas
-	def _bytestreamErrorCB(self, con, iq_obj):
-		log.debug('_bytestreamErrorCB')
-		id_ = unicode(iq_obj.getAttr('id'))
-		frm = helpers.get_full_jid_from_iq(iq_obj)
-		query = iq_obj.getTag('query')
-		gajim.proxy65_manager.error_cb(frm, query)
-		jid = helpers.get_jid_from_iq(iq_obj)
-		id_ = id_[3:]
-		if id_ not in self.files_props:
-			return
-		file_props = self.files_props[id_]
-		file_props['error'] = -4
-		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
-		raise common.xmpp.NodeProcessed
-
-	def _bytestreamSetCB(self, con, iq_obj):
-		log.debug('_bytestreamSetCB')
-		target = unicode(iq_obj.getAttr('to'))
-		id_ = unicode(iq_obj.getAttr('id'))
-		query = iq_obj.getTag('query')
-		sid = unicode(query.getAttr('sid'))
-		file_props = gajim.socks5queue.get_file_props(
-			self.name, sid)
-		streamhosts=[]
-		for item in query.getChildren():
-			if item.getName() == 'streamhost':
-				host_dict={
-					'state': 0,
-					'target': target,
-					'id': id_,
-					'sid': sid,
-					'initiator': helpers.get_full_jid_from_iq(iq_obj)
-				}
-				for attr in item.getAttrs():
-					host_dict[attr] = item.getAttr(attr)
-				streamhosts.append(host_dict)
-		if file_props is None:
-			if sid in self.files_props:
-				file_props = self.files_props[sid]
-				file_props['fast'] = streamhosts
-				if file_props['type'] == 's': # FIXME: remove fast xmlns
-					# only psi do this
-
-					if 'streamhosts' in file_props:
-						file_props['streamhosts'].extend(streamhosts)
-					else:
-						file_props['streamhosts'] = streamhosts
-					if not gajim.socks5queue.get_file_props(self.name, sid):
-						gajim.socks5queue.add_file_props(self.name, file_props)
-					gajim.socks5queue.connect_to_hosts(self.name, sid,
-						self.send_success_connect_reply, None)
-				raise common.xmpp.NodeProcessed
-
-		file_props['streamhosts'] = streamhosts
-		if file_props['type'] == 'r':
-			gajim.socks5queue.connect_to_hosts(self.name, sid,
-				self.send_success_connect_reply, self._connect_error)
-		raise common.xmpp.NodeProcessed
-
-	def _ResultCB(self, con, iq_obj):
-		log.debug('_ResultCB')
-		# if we want to respect xep-0065 we have to check for proxy
-		# activation result in any result iq
-		real_id = unicode(iq_obj.getAttr('id'))
-		if real_id == self.awaiting_xmpp_ping_id:
-			self.awaiting_xmpp_ping_id = None
-			return
-		if not real_id.startswith('au_'):
-			return
-		frm = helpers.get_full_jid_from_iq(iq_obj)
-		id_ = real_id[3:]
-		if id_ in self.files_props:
-			file_props = self.files_props[id_]
-			if file_props['streamhost-used']:
-				for host in file_props['proxyhosts']:
-					if host['initiator'] == frm and 'idx' in host:
-						gajim.socks5queue.activate_proxy(host['idx'])
-						raise common.xmpp.NodeProcessed
-
-	def _bytestreamResultCB(self, con, iq_obj):
-		log.debug('_bytestreamResultCB')
-		frm = helpers.get_full_jid_from_iq(iq_obj)
-		real_id = unicode(iq_obj.getAttr('id'))
-		query = iq_obj.getTag('query')
-		gajim.proxy65_manager.resolve_result(frm, query)
-
-		try:
-			streamhost = query.getTag('streamhost-used')
-		except Exception: # this bytestream result is not what we need
-			pass
-		id_ = real_id[3:]
-		if id_ in self.files_props:
-			file_props = self.files_props[id_]
-		else:
-			raise common.xmpp.NodeProcessed
-		if streamhost is None:
-			# proxy approves the activate query
-			if real_id.startswith('au_'):
-				if 'streamhost-used' not in file_props or \
-				file_props['streamhost-used'] is False:
-					raise common.xmpp.NodeProcessed
-				if 'proxyhosts' not in file_props:
-					raise common.xmpp.NodeProcessed
-				for host in file_props['proxyhosts']:
-					if host['initiator'] == frm and \
-					unicode(query.getAttr('sid')) == file_props['sid']:
-						gajim.socks5queue.activate_proxy(host['idx'])
-						break
-			raise common.xmpp.NodeProcessed
-		jid = helpers.parse_jid(streamhost.getAttr('jid'))
-		if 'streamhost-used' in file_props and \
-			file_props['streamhost-used'] is True:
-			raise common.xmpp.NodeProcessed
-
-		if real_id.startswith('au_'):
-			if 'stopped' in file and file_props['stopped']:
-				self.remove_transfer(file_props)
-			else:
-				gajim.socks5queue.send_file(file_props, self.name)
-			raise common.xmpp.NodeProcessed
-
-		proxy = None
-		if 'proxyhosts' in file_props:
-			for proxyhost in file_props['proxyhosts']:
-				if proxyhost['jid'] == jid:
-					proxy = proxyhost
-
-		if proxy is not None:
-			file_props['streamhost-used'] = True
-			if 'streamhosts' not in file_props:
-				file_props['streamhosts'] = []
-			file_props['streamhosts'].append(proxy)
-			file_props['is_a_proxy'] = True
-			receiver = socks5.Socks5Receiver(gajim.idlequeue, proxy,
-				file_props['sid'], file_props)
-			gajim.socks5queue.add_receiver(self.name, receiver)
-			proxy['idx'] = receiver.queue_idx
-			gajim.socks5queue.on_success = self._proxy_auth_ok
-			raise common.xmpp.NodeProcessed
-
-		else:
-			if 'stopped' in file_props and file_props['stopped']:
-				self.remove_transfer(file_props)
-			else:
-				gajim.socks5queue.send_file(file_props, self.name)
-			if 'fast' in file_props:
-				fasts = file_props['fast']
-				if len(fasts) > 0:
-					self._connect_error(frm, fasts[0]['id'], file_props['sid'],
-						code = 406)
-
-		raise common.xmpp.NodeProcessed
-
-	def _siResultCB(self, con, iq_obj):
-		log.debug('_siResultCB')
-		id_ = iq_obj.getAttr('id')
-		if id_ not in self.files_props:
-			# no such jid
-			return
-		file_props = self.files_props[id_]
-		if file_props is None:
-			# file properties for jid is none
-			return
-		if 'request-id' in file_props:
-			# we have already sent streamhosts info
-			return
-		file_props['receiver'] = helpers.get_full_jid_from_iq(iq_obj)
-		si = iq_obj.getTag('si')
-		file_tag = si.getTag('file')
-		range_tag = None
-		if file_tag:
-			range_tag = file_tag.getTag('range')
-		if range_tag:
-			offset = range_tag.getAttr('offset')
-			if offset:
-				file_props['offset'] = int(offset)
-			length = range_tag.getAttr('length')
-			if length:
-				file_props['length'] = int(length)
-		feature = si.setTag('feature')
-		if feature.getNamespace() != common.xmpp.NS_FEATURE:
-			return
-		form_tag = feature.getTag('x')
-		form = common.xmpp.DataForm(node=form_tag)
-		field = form.getField('stream-method')
-		if field.getValue() != common.xmpp.NS_BYTESTREAM:
-			return
-		self.send_socks5_info(file_props, fast = True)
-		raise common.xmpp.NodeProcessed
-
-	def _siSetCB(self, con, iq_obj):
-		log.debug('_siSetCB')
-		jid = helpers.get_jid_from_iq(iq_obj)
-		file_props = {'type': 'r'}
-		file_props['sender'] = helpers.get_full_jid_from_iq(iq_obj)
-		file_props['request-id'] = unicode(iq_obj.getAttr('id'))
-		si = iq_obj.getTag('si')
-		profile = si.getAttr('profile')
-		mime_type = si.getAttr('mime-type')
-		if profile != common.xmpp.NS_FILE:
-			self.send_file_rejection(file_props, code='400', typ='profile')
-			raise common.xmpp.NodeProcessed
-		feature_tag = si.getTag('feature', namespace=common.xmpp.NS_FEATURE)
-		if not feature_tag:
-			return
-		form_tag = feature_tag.getTag('x', namespace=common.xmpp.NS_DATA)
-		if not form_tag:
-			return
-		form = common.dataforms.ExtendForm(node=form_tag)
-		for f in form.iter_fields():
-			if f.var == 'stream-method' and f.type == 'list-single':
-				values = [o[1] for o in f.options]
-				if common.xmpp.NS_BYTESTREAM in values:
-					break
-		else:
-			self.send_file_rejection(file_props, code='400', typ='stream')
-			raise common.xmpp.NodeProcessed
-		file_tag = si.getTag('file')
-		for attribute in file_tag.getAttrs():
-			if attribute in ('name', 'size', 'hash', 'date'):
-				val = file_tag.getAttr(attribute)
-				if val is None:
-					continue
-				file_props[attribute] = val
-		file_desc_tag = file_tag.getTag('desc')
-		if file_desc_tag is not None:
-			file_props['desc'] = file_desc_tag.getData()
-
-		if mime_type is not None:
-			file_props['mime-type'] = mime_type
-		our_jid = gajim.get_jid_from_account(self.name)
-		resource = self.server_resource
-		file_props['receiver'] = our_jid + '/' + resource
-		file_props['sid'] = unicode(si.getAttr('id'))
-		file_props['transfered_size'] = []
-		gajim.socks5queue.add_file_props(self.name, file_props)
-		self.dispatch('FILE_REQUEST', (jid, file_props))
-		raise common.xmpp.NodeProcessed
-
-	def _siErrorCB(self, con, iq_obj):
-		log.debug('_siErrorCB')
-		si = iq_obj.getTag('si')
-		profile = si.getAttr('profile')
-		if profile != common.xmpp.NS_FILE:
-			return
-		id_ = iq_obj.getAttr('id')
-		if id_ not in self.files_props:
-			# no such jid
-			return
-		file_props = self.files_props[id_]
-		if file_props is None:
-			# file properties for jid is none
-			return
-		jid = helpers.get_jid_from_iq(iq_obj)
-		file_props['error'] = -3
-		self.dispatch('FILE_REQUEST_ERROR', (jid, file_props, ''))
-		raise common.xmpp.NodeProcessed
 
 class ConnectionDisco:
-	''' hold xmpppy handlers and public methods for discover services'''
+	"""
+	Holds xmpppy handlers and public methods for discover services
+	"""
+
 	def discoverItems(self, jid, node = None, id_prefix = None):
-		'''According to XEP-0030: jid is mandatory,
-		name, node, action is optional.'''
+		"""
+		According to XEP-0030:
+			jid is mandatory;
+			name, node, action is optional.
+		"""
 		self._discover(common.xmpp.NS_DISCO_ITEMS, jid, node, id_prefix)
 
 	def discoverInfo(self, jid, node = None, id_prefix = None):
-		'''According to XEP-0030:
+		"""
+		According to XEP-0030:
 			For identity: category, type is mandatory, name is optional.
-			For feature: var is mandatory'''
+			For feature: var is mandatory.
+		"""
 		self._discover(common.xmpp.NS_DISCO_INFO, jid, node, id_prefix)
 
 	def request_register_agent_info(self, agent):
@@ -693,6 +124,12 @@ class ConnectionDisco:
 		if resp.getType() == 'result':
 			self.dispatch('INFORMATION', (_('Registration succeeded'),
 				_('Registration with agent %s succeeded') % agent))
+			self.request_subscription(agent, auto_auth=True)
+			self.agent_registrations[agent]['roster_push'] = True
+			if self.agent_registrations[agent]['sub_received']:
+				p = common.xmpp.Presence(agent, 'subscribed')
+				p = self.add_sha(p)
+				self.connection.send(p)
 		if resp.getType() == 'error':
 			self.dispatch('ERROR', (_('Registration failed'), _('Registration with'
 				' agent %(agent)s failed with error %(error)s: %(error_msg)s') % {
@@ -703,20 +140,23 @@ class ConnectionDisco:
 		if not self.connection or self.connected < 2:
 			return
 		if is_form:
-			iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to = agent)
+			iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to=agent)
 			query = iq.getTag('query')
 			info.setAttr('type', 'submit')
-			query.addChild(node = info)
+			query.addChild(node=info)
 			self.connection.SendAndCallForResponse(iq, self._agent_registered_cb,
 				{'agent': agent})
 		else:
 			# fixed: blocking
-			common.xmpp.features_nb.register(self.connection, agent, info, None)
+			common.xmpp.features_nb.register(self.connection, agent, info,
+				self._agent_registered_cb, {'agent': agent})
+		self.agent_registrations[agent] = {'roster_push': False,
+			'sub_received': False}
 
-	def _discover(self, ns, jid, node = None, id_prefix = None):
+	def _discover(self, ns, jid, node=None, id_prefix=None):
 		if not self.connection or self.connected < 2:
 			return
-		iq = common.xmpp.Iq(typ = 'get', to = jid, queryNS = ns)
+		iq = common.xmpp.Iq(typ='get', to=jid, queryNS=ns)
 		if id_prefix:
 			id_ = self.connection.getAnID()
 			iq.setID('%s%s' % (id_prefix, id_))
@@ -729,18 +169,19 @@ class ConnectionDisco:
 		self._IqCB(con, resp)
 
 	def _discoGetCB(self, con, iq_obj):
-		''' get disco info '''
+		"""
+		Get disco info
+		"""
 		if not self.connection or self.connected < 2:
 			return
 		frm = helpers.get_full_jid_from_iq(iq_obj)
 		to = unicode(iq_obj.getAttr('to'))
 		id_ = unicode(iq_obj.getAttr('id'))
-		iq = common.xmpp.Iq(to = frm, typ = 'result', queryNS =\
-			common.xmpp.NS_DISCO, frm = to)
+		iq = common.xmpp.Iq(to=frm, typ='result', queryNS=common.xmpp.NS_DISCO,
+			frm=to)
 		iq.setAttr('id', id_)
 		query = iq.setTag('query')
-		query.setAttr('node','http://gajim.org#' + gajim.version.split('-',
-			1)[0])
+		query.setAttr('node','http://gajim.org#' + gajim.version.split('-', 1)[0])
 		for f in (common.xmpp.NS_BYTESTREAM, common.xmpp.NS_SI,
 		common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS):
 			feature = common.xmpp.Node('feature')
@@ -781,8 +222,7 @@ class ConnectionDisco:
 				continue
 			items.append(attr)
 		jid = helpers.get_full_jid_from_iq(iq_obj)
-		hostname = gajim.config.get_per('accounts', self.name,
-													'hostname')
+		hostname = gajim.config.get_per('accounts', self.name, 'hostname')
 		id_ = iq_obj.getID()
 		if jid == hostname and id_[:6] == 'Gajim_':
 			for item in items:
@@ -945,10 +385,10 @@ class ConnectionVcard:
 		if self.vcard_sha is not None:
 			c.setTagData('photo', self.vcard_sha)
 		if send_caps:
-			return self.add_caps(p)
+			return self._add_caps(p)
 		return p
 
-	def add_caps(self, p):
+	def _add_caps(self, p):
 		''' advertise our capabilities in presence stanza (xep-0115)'''
 		c = p.setTag('c', namespace = common.xmpp.NS_CAPS)
 		c.setAttr('hash', 'sha-1')
@@ -956,7 +396,7 @@ class ConnectionVcard:
 		c.setAttr('ver', gajim.caps_hash[self.name])
 		return p
 
-	def node_to_dict(self, node):
+	def _node_to_dict(self, node):
 		dict_ = {}
 		for info in node.getChildren():
 			name = info.getName()
@@ -974,7 +414,7 @@ class ConnectionVcard:
 					dict_[name][c.getName()] = c.getData()
 		return dict_
 
-	def save_vcard_to_hd(self, full_jid, card):
+	def _save_vcard_to_hd(self, full_jid, card):
 		jid, nick = gajim.get_room_and_nick_from_fjid(full_jid)
 		puny_jid = helpers.sanitize_filename(jid)
 		path = os.path.join(gajim.VCARD_PATH, puny_jid)
@@ -999,9 +439,11 @@ class ConnectionVcard:
 			self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 
 	def get_cached_vcard(self, fjid, is_fake_jid = False):
-		'''return the vcard as a dict
-		return {} if vcard was too old
-		return None if we don't have cached vcard'''
+		"""
+		Return the vcard as a dict.
+		Return {} if vcard was too old.
+		Return None if we don't have cached vcard.
+		"""
 		jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
 		puny_jid = helpers.sanitize_filename(jid)
 		if is_fake_jid:
@@ -1021,7 +463,7 @@ class ConnectionVcard:
 			# We are unable to parse it. Remove it
 			os.remove(path_to_file)
 			return None
-		vcard = self.node_to_dict(card)
+		vcard = self._node_to_dict(card)
 		if 'PHOTO' in vcard:
 			if not isinstance(vcard['PHOTO'], dict):
 				del vcard['PHOTO']
@@ -1035,10 +477,14 @@ class ConnectionVcard:
 		vcard['resource'] = gajim.get_resource_from_jid(fjid)
 		return vcard
 
-	def request_vcard(self, jid = None, groupchat_jid = None):
-		'''request the VCARD. If groupchat_jid is not nul, it means we request a vcard
-		to a fake jid, like in private messages in groupchat. jid can be the
-		real jid of the contact, but we want to consider it comes from a fake jid'''
+	def request_vcard(self, jid=None, groupchat_jid=None):
+		"""
+		Request the VCARD
+
+		If groupchat_jid is not null, it means we request a vcard to a fake jid,
+		like in private messages in groupchat. jid can be the real jid of the
+		contact, but we want to consider it comes from a fake jid
+		"""
 		if not self.connection or self.connected < 2:
 			return
 		iq = common.xmpp.Iq(typ = 'get')
@@ -1126,7 +572,7 @@ class ConnectionVcard:
 
 				# Save it to file
 				our_jid = gajim.get_jid_from_account(self.name)
-				self.save_vcard_to_hd(our_jid, vcard_iq)
+				self._save_vcard_to_hd(our_jid, vcard_iq)
 
 				# Send new presence if sha changed and we are not invisible
 				if self.vcard_sha != new_sha and gajim.SHOW_LIST[self.connected] !=\
@@ -1155,7 +601,7 @@ class ConnectionVcard:
 			if not iq_obj.getTag('vCard') or iq_obj.getType() == 'error':
 				if frm and frm != our_jid:
 					# Write an empty file
-					self.save_vcard_to_hd(frm, '')
+					self._save_vcard_to_hd(frm, '')
 					jid, resource = gajim.get_room_and_nick_from_fjid(frm)
 					self.dispatch('VCARD', {'jid': jid, 'resource': resource})
 				elif frm == our_jid:
@@ -1233,8 +679,9 @@ class ConnectionVcard:
 		del self.awaiting_answers[id_]
 
 	def _vCardCB(self, con, vc):
-		'''Called when we receive a vCard
-		Parse the vCard and send it to plugins'''
+		"""
+		Called when we receive a vCard Parse the vCard and send it to plugins
+		"""
 		if not vc.getTag('vCard'):
 			return
 		if not vc.getTag('vCard').getNamespace() == common.xmpp.NS_VCARD:
@@ -1253,7 +700,7 @@ class ConnectionVcard:
 		else:
 			who = frm = our_jid
 		card = vc.getChildren()[0]
-		vcard = self.node_to_dict(card)
+		vcard = self._node_to_dict(card)
 		photo_decoded = None
 		if 'PHOTO' in vcard and isinstance(vcard['PHOTO'], dict) and \
 		'BINVAL' in vcard['PHOTO']:
@@ -1270,7 +717,7 @@ class ConnectionVcard:
 			card.getTag('PHOTO').setTagData('SHA', avatar_sha)
 
 		# Save it to file
-		self.save_vcard_to_hd(who, card)
+		self._save_vcard_to_hd(who, card)
 		# Save the decoded avatar to a separate file too, and generate files for dbus notifications
 		puny_jid = helpers.sanitize_filename(frm)
 		puny_nick = None
@@ -1340,8 +787,9 @@ class ConnectionHandlersBase:
 		self.sessions = {}
 
 	def get_sessions(self, jid):
-		'''get all sessions for the given full jid'''
-
+		"""
+		Get all sessions for the given full jid
+		"""
 		if not gajim.interface.is_pm_contact(jid, self.name):
 			jid = gajim.get_jid_without_resource(jid)
 
@@ -1351,9 +799,10 @@ class ConnectionHandlersBase:
 			return []
 
 	def get_or_create_session(self, fjid, thread_id):
-		'''returns an existing session between this connection and 'jid', returns a
-		new one if none exist.'''
-
+		"""
+		Return an existing session between this connection and 'jid', returns a
+		new one if none exist
+		"""
 		pm = True
 		jid = fjid
 
@@ -1381,7 +830,9 @@ class ConnectionHandlersBase:
 			return None
 
 	def terminate_sessions(self, send_termination=False):
-		'''send termination messages and delete all active sessions'''
+		"""
+		Send termination messages and delete all active sessions
+		"""
 		for jid in self.sessions:
 			for thread_id in self.sessions[jid]:
 				self.sessions[jid][thread_id].terminate(send_termination)
@@ -1400,10 +851,11 @@ class ConnectionHandlersBase:
 			del self.sessions[jid]
 
 	def find_null_session(self, jid):
-		'''finds all of the sessions between us and a remote jid in which we
-haven't received a thread_id yet and returns the session that we last
-sent a message to.'''
-
+		"""
+		Find all of the sessions between us and a remote jid in which we haven't
+		received a thread_id yet and returns the session that we last sent a
+		message to
+		"""
 		sessions = self.sessions[jid].values()
 
 		# sessions that we haven't received a thread ID in
@@ -1420,8 +872,9 @@ sent a message to.'''
 			return None
 
 	def find_controlless_session(self, jid, resource=None):
-		'''find an active session that doesn't have a control attached'''
-
+		"""
+		Find an active session that doesn't have a control attached
+		"""
 		try:
 			sessions = self.sessions[jid].values()
 
@@ -1439,8 +892,12 @@ sent a message to.'''
 			return None
 
 	def make_new_session(self, jid, thread_id=None, type_='chat', cls=None):
-		'''create and register a new session. thread_id=None to generate one.
-		type_ should be 'chat' or 'pm'.'''
+		"""
+		Create and register a new session
+
+		thread_id=None to generate one.
+		type_ should be 'chat' or 'pm'.
+		"""
 		if not cls:
 			cls = gajim.default_session_type
 
@@ -1458,12 +915,20 @@ sent a message to.'''
 
 		return sess
 
-class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
+class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
+		ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionPEP,
+		ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 	def __init__(self):
+		global HAS_IDLE
 		ConnectionVcard.__init__(self)
 		ConnectionBytestream.__init__(self)
 		ConnectionCommands.__init__(self)
 		ConnectionPubSub.__init__(self)
+		ConnectionPEP.__init__(self, account=self.name, dispatcher=self,
+			pubsub_connection=self)
+		ConnectionCaps.__init__(self, account=self.name,
+			dispatch_event=self.dispatch, capscache=capscache.capscache,
+			client_caps_factory=capscache.create_suitable_client_caps)
 		ConnectionJingle.__init__(self)
 		ConnectionHandlersBase.__init__(self)
 		self.gmail_url = None
@@ -1482,9 +947,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.continue_connect_info = None
 
 		try:
-			idle.init()
+			self.sleeper = common.sleepy.Sleepy()
+#			idle.init()
+			HAS_IDLE = True
 		except Exception:
-			global HAS_IDLE
 			HAS_IDLE = False
 
 		self.gmail_last_tid = None
@@ -1530,16 +996,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			self.dispatch('ENTITY_TIME', (jid_stripped, resource, ''))
 			self.entity_time_ids.remove(id_)
 			return
-		if id_ == self.awaiting_xmpp_ping_id:
-			self.awaiting_xmpp_ping_id = None
 		errmsg = iq_obj.getErrorMsg()
 		errcode = iq_obj.getErrorCode()
 		self.dispatch('ERROR_ANSWER', (id_, jid_from, errmsg, errcode))
 
 	def _PrivateCB(self, con, iq_obj):
-		'''
+		"""
 		Private Data (XEP 048 and 049)
-		'''
+		"""
 		log.debug('PrivateCB')
 		query = iq_obj.getTag('query')
 		storage = query.getTag('storage')
@@ -1566,8 +1030,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 					self.annotations[jid] = annotation
 
 	def _parse_bookmarks(self, storage, storage_type):
-		'''storage_type can be 'pubsub' or 'xml' to tell from where we got
-		bookmarks'''
+		"""
+		storage_type can be 'pubsub' or 'xml' to tell from where we got bookmarks
+		"""
 		# Bookmarked URLs and Conferences
 		# http://www.xmpp.org/extensions/xep-0048.html
 		resend_to_pubsub = False
@@ -1650,15 +1115,19 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		raise common.xmpp.NodeProcessed
 
 	def _LastCB(self, con, iq_obj):
+		global HAS_IDLE
 		log.debug('LastCB')
 		if not self.connection or self.connected < 2:
 			return
-		iq_obj = iq_obj.buildReply('result')
-		qp = iq_obj.getTag('query')
-		if not HAS_IDLE:
-			qp.attrs['seconds'] = '0'
+		if HAS_IDLE and gajim.config.get_per('accounts', self.name,
+		'send_idle_time'):
+			iq_obj = iq_obj.buildReply('result')
+			qp = iq_obj.getTag('query')
+			qp.attrs['seconds'] = int(self.sleeper.getIdleSec())
 		else:
-			qp.attrs['seconds'] = idle.getIdleSec()
+			iq_obj = iq_obj.buildReply('error')
+			err = common.xmpp.ErrorNode(name=common.xmpp.NS_STANZAS+' service-unavailable')
+			iq_obj.addChild(node=err)
 
 		self.connection.send(iq_obj)
 		raise common.xmpp.NodeProcessed
@@ -1741,7 +1210,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			# wrong answer
 			return
 		tzo = qp.getTag('tzo').getData()
-		if tzo == 'Z':
+		if tzo.lower() == 'z':
 			tzo = '0:0'
 		tzoh, tzom = tzo.split(':')
 		utc_time = qp.getTag('utc').getData()
@@ -1781,7 +1250,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.dispatch('ENTITY_TIME', (jid_stripped, resource, time_info))
 
 	def _gMailNewMailCB(self, con, gm):
-		'''Called when we get notified of new mail messages in gmail account'''
+		"""
+		Called when we get notified of new mail messages in gmail account
+		"""
 		if not self.connection or self.connected < 2:
 			return
 		if not gm.getTag('new-mail'):
@@ -1803,7 +1274,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			raise common.xmpp.NodeProcessed
 
 	def _gMailQueryCB(self, con, gm):
-		'''Called when we receive results from Querying the server for mail messages in gmail account'''
+		"""
+		Called when we receive results from Querying the server for mail messages
+		in gmail account
+		"""
 		if not gm.getTag('mailbox'):
 			return
 		self.gmail_url = gm.getTag('mailbox').getAttr('url')
@@ -1849,7 +1323,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			raise common.xmpp.NodeProcessed
 
 	def _rosterItemExchangeCB(self, con, msg):
-		''' XEP-0144 Roster Item Echange '''
+		"""
+		XEP-0144 Roster Item Echange
+		"""
 		exchange_items_list = {}
 		jid_from = helpers.get_full_jid_from_iq(msg)
 		items_list = msg.getTag('x').getChildren()
@@ -1866,9 +1342,23 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 				log.warn('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
 				continue
 			name = item.getAttr('name')
-			groups=[]
+			contact = gajim.contacts.get_contact(self.name, jid)
+			groups = []
+			same_groups = True
 			for group in item.getTags('group'):
 				groups.append(group.getData())
+				# check that all suggested groups are in the groups we have for this
+				# contact
+				if not contact or group not in contact.groups:
+					same_groups = False
+			if contact:
+				# check that all groups we have for this contact are in the
+				# suggested groups
+				for group in contact.groups:
+					if group not in groups:
+						same_groups = False
+				if contact.sub in ('both', 'to') and same_groups:
+					continue
 			exchange_items_list[jid] = []
 			exchange_items_list[jid].append(name)
 			exchange_items_list[jid].append(groups)
@@ -1877,7 +1367,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		raise common.xmpp.NodeProcessed
 
 	def _messageCB(self, con, msg):
-		'''Called when we receive a message'''
+		"""
+		Called when we receive a message
+		"""
 		log.debug('MessageCB')
 		
 		gajim.nec.push_incoming_event(NetworkEvent('raw-message-received',
@@ -1887,13 +1379,6 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		
 		mtype = msg.getType()												   
 												   
-		# check if the message is pubsub#event
-		if msg.getTag('event') is not None:
-			if mtype == 'groupchat':
-				return
-			if msg.getTag('error') is None:
-				self._pubsubEventCB(con, msg)
-			return
 
 		# check if the message is a roster item exchange (XEP-0144)
 		if msg.getTag('x', namespace=common.xmpp.NS_ROSTERX):
@@ -1911,6 +1396,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		except helpers.InvalidFormat:
 			self.dispatch('ERROR', (_('Invalid Jabber ID'),
 				_('A message from a non-valid JID arrived, it has been ignored.')))
+			return
 
 		addressTag = msg.getTag('addresses', namespace = common.xmpp.NS_ADDRESS)
 
@@ -2133,6 +1619,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 			# so don't store it in logs
 			try:
 				gajim.logger.write('gc_msg', frm, msgtxt, tim=tim)
+				# store in memory time of last message logged.
+				# this will also be saved in rooms_last_message_time table 
+				# when we quit this muc
+				self.last_history_time[jid] = mktime(tim)
+
 			except exceptions.PysqliteOperationalError, e:
 				self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 			except exceptions.DatabaseMalformed:
@@ -2159,47 +1650,12 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.dispatch('GC_INVITATION',(frm, jid_from, reason, password,
 			is_continued))
 
-	def _pubsubEventCB(self, con, msg):
-		''' Called when we receive <message/> with pubsub event. '''
-		# TODO: Logging? (actually services where logging would be useful, should
-		# TODO: allow to access archives remotely...)
-		jid = helpers.get_full_jid_from_iq(msg)
-		event = msg.getTag('event')
-
-		# XEP-0107: User Mood
-		items = event.getTag('items', {'node': common.xmpp.NS_MOOD})
-		if items: pep.user_mood(items, self.name, jid)
-		# XEP-0118: User Tune
-		items = event.getTag('items', {'node': common.xmpp.NS_TUNE})
-		if items: pep.user_tune(items, self.name, jid)
-		# XEP-0080: User Geolocation
-		items = event.getTag('items', {'node': common.xmpp.NS_GEOLOC})
-		if items: pep.user_geoloc(items, self.name, jid)
-		# XEP-0108: User Activity
-		items = event.getTag('items', {'node': common.xmpp.NS_ACTIVITY})
-		if items: pep.user_activity(items, self.name, jid)
-		# XEP-0172: User Nickname
-		items = event.getTag('items', {'node': common.xmpp.NS_NICK})
-		if items: pep.user_nickname(items, self.name, jid)
-
-		items = event.getTag('items')
-		if items is None: return
-
-		for item in items.getTags('item'):
-			entry = item.getTag('entry')
-			if entry is not None:
-				# for each entry in feed (there shouldn't be more than one,
-				# but to be sure...
-				self.dispatch('ATOM_ENTRY', (atom.OldEntry(node=entry),))
-				continue
-			# unknown type... probably user has another client who understands that event
-		raise common.xmpp.NodeProcessed
-
 	def _presenceCB(self, con, prs):
-		'''Called when we receive a presence'''
+		"""
+		Called when we receive a presence
+		"""
 		gajim.nec.push_incoming_event(NetworkEvent('raw-pres-received',
-												   conn = con,
-												   xmpp_pres = prs))
+			conn=con, xmpp_pres=prs))
 		ptype = prs.getType()
 		if ptype == 'available':
 			ptype = None
@@ -2301,7 +1757,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 				gc_control = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
 						self.name)
-				
+
 				# If gc_control is missing - it may be minimized. Try to get it from
 				# there. If it's not there - then it's missing anyway and will
 				# remain set to None.
@@ -2407,6 +1863,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		if ptype == 'subscribe':
 			log.debug('subscribe request from %s' % who)
+			if who.find('@') <= 0 and who in self.agent_registrations:
+				self.agent_registrations[who]['sub_received'] = True
+				if not self.agent_registrations[who]['roster_push']:
+					# We'll reply after roster push result
+					return
 			if gajim.config.get_per('accounts', self.name, 'autoauth') or \
 			who.find('@') <= 0 or jid_stripped in self.jids_for_auto_auth or \
 			transport_auto_auth:
@@ -2486,9 +1947,9 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 						# Anyway, it is the old behavior when we assumed that
 						# not-existing contacts don't support anything
 						contact_exists = bool(contact)
-						session_supported = contact_exists and \
-							contact.supports(common.xmpp.NS_SSN) or \
-							contact.supports(common.xmpp.NS_ESESSION)
+						session_supported = contact_exists and (
+							contact.supports(common.xmpp.NS_SSN) or
+							contact.supports(common.xmpp.NS_ESESSION))
 						if session_supported:
 							sess.terminate()
 							del self.sessions[jid][sess.thread_id]
@@ -2582,11 +2043,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		raise common.xmpp.NodeProcessed
 
 	def _PrivacySetCB(self, con, iq_obj):
-		'''
+		"""
 		Privacy lists (XEP 016)
 
-		A list has been set
-		'''
+		A list has been set.
+		"""
 		log.debug('PrivacySetCB')
 		if not self.connection or self.connected < 2:
 			return
@@ -2686,6 +2147,8 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		if show == 'invisible':
 			self.send_invisible_presence(msg, signed, True)
 			return
+		if show not in ['offline', 'online', 'chat', 'away', 'xa', 'dnd']:
+			return
 		priority = gajim.get_priority(self.name, sshow)
 		our_jid = helpers.parse_jid(gajim.get_jid_from_account(self.name))
 		vcard = self.get_cached_vcard(our_jid)
@@ -2765,6 +2228,11 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		con.RegisterHandler('message', self._messageCB)
 		con.RegisterHandler('presence', self._presenceCB)
 		con.RegisterHandler('presence', self._capsPresenceCB)
+		# We use makefirst so that this handler is called before _messageCB, and
+		# can prevent calling it when it's not needed.
+		# We also don't check for namespace, else it cannot stop _messageCB to be
+		# called
+		con.RegisterHandler('message', self._pubsubEventCB, makefirst=True)
 		con.RegisterHandler('iq', self._vCardCB, 'result',
 			common.xmpp.NS_VCARD)
 		con.RegisterHandler('iq', self._rosterSetCB, 'set',

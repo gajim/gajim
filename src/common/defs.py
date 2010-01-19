@@ -24,10 +24,10 @@
 ##
 
 docdir = '../'
-datadir = '../'
+basedir   = '../'
 localedir = '../po'
 
-version = '0.13.0.1-dev'
+version = '0.13.10.1-dev'
 
 import sys, os.path
 for base in ('.', 'common'):

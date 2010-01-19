@@ -18,7 +18,10 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-''' XML canonicalisation methods (for XEP-0116) '''
+"""
+XML canonicalisation methods (for XEP-0116)
+"""
+
 from simplexml import ustr
 
 def c14n(node, is_buggy):

@@ -11,6 +11,7 @@
     <child>
       <widget class="GtkVBox" id="vbox13">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <widget class="GtkNotebook" id="preferences_notebook">
@@ -21,6 +22,7 @@
               <widget class="GtkVBox" id="vbox41">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <widget class="GtkFrame" id="frame1">
@@ -38,6 +40,7 @@
                           <widget class="GtkVBox" id="vbox1">
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <widget class="GtkCheckButton" id="show_avatars_in_roster_checkbutton">
@@ -125,6 +128,24 @@
                               </packing>
                             </child>
                             <child>
+                              <widget class="GtkCheckButton" id="show_location_in_roster_checkbutton">
+                                <property name="label" translatable="yes">Display _location of contacts in roster</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="has_tooltip">True</property>
+                                <property name="tooltip" translatable="yes">If checked, Gajim will display the location of contacts in the roster window</property>
+                                <property name="use_underline">True</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="on_show_location_in_roster_checkbutton_toggled"/>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">5</property>
+                              </packing>
+                            </child>
+                            <child>
                               <widget class="GtkHBox" id="hbox3">
                                 <property name="visible">True</property>
                                 <property name="spacing">6</property>
@@ -169,7 +190,7 @@
                                 </child>
                               </widget>
                               <packing>
-                                <property name="position">5</property>
+                                <property name="position">6</property>
                               </packing>
                             </child>
                           </widget>
@@ -363,6 +384,7 @@ Detached roster with chat grouped by type</property>
               <widget class="GtkVBox" id="vbox42">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
                   <widget class="GtkFrame" id="frame29">
@@ -377,6 +399,7 @@ Detached roster with chat grouped by type</property>
                         <child>
                           <widget class="GtkVBox" id="vbox67">
                             <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <widget class="GtkHBox" id="hbox1">
@@ -475,6 +498,7 @@ Show only in roster</property>
                                     <child>
                                       <widget class="GtkVBox" id="vbox_gmail">
                                         <property name="visible">True</property>
+                                        <property name="orientation">vertical</property>
                                         <property name="spacing">6</property>
                                         <child>
                                           <widget class="GtkCheckButton" id="notify_gmail_checkbutton">
@@ -626,6 +650,7 @@ Always</property>
                         <child>
                           <widget class="GtkVBox" id="vbox3">
                             <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <widget class="GtkHBox" id="hbox4">
@@ -721,6 +746,7 @@ Always</property>
               <widget class="GtkVBox" id="vbox11">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <widget class="GtkFrame" id="frame13">
@@ -848,6 +874,7 @@ Disabled</property>
               <widget class="GtkVBox" id="status_vbox">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <widget class="GtkFrame" id="frame81">
@@ -1044,6 +1071,7 @@ $T will be replaced by auto-not-available timeout</property>
                           <widget class="GtkVBox" id="vbox2">
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <widget class="GtkHBox" id="hbox2934">
@@ -1293,6 +1321,7 @@ $T will be replaced by auto-not-available timeout</property>
               <widget class="GtkVBox" id="vbox58">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <widget class="GtkFrame" id="frame9">
@@ -1685,7 +1714,7 @@ $T will be replaced by auto-not-available timeout</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox7">
+                              <widget class="GtkHBox" id="hbox8">
                                 <property name="visible">True</property>
                                 <child>
                                   <widget class="GtkCheckButton" id="incoming_msg_checkbutton">
@@ -1725,7 +1754,7 @@ $T will be replaced by auto-not-available timeout</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox8">
+                              <widget class="GtkHBox" id="hbox9">
                                 <property name="visible">True</property>
                                 <child>
                                   <widget class="GtkCheckButton" id="outgoing_msg_checkbutton">
@@ -1765,7 +1794,7 @@ $T will be replaced by auto-not-available timeout</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox9">
+                              <widget class="GtkHBox" id="hbox10">
                                 <property name="visible">True</property>
                                 <child>
                                   <placeholder/>
@@ -1794,7 +1823,7 @@ $T will be replaced by auto-not-available timeout</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox10">
+                              <widget class="GtkHBox" id="hbox11">
                                 <property name="visible">True</property>
                                 <child>
                                   <placeholder/>
@@ -1825,7 +1854,7 @@ $T will be replaced by auto-not-available timeout</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox11">
+                              <widget class="GtkHBox" id="hbox12">
                                 <property name="visible">True</property>
                                 <child>
                                   <placeholder/>
@@ -1854,7 +1883,7 @@ $T will be replaced by auto-not-available timeout</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox12">
+                              <widget class="GtkHBox" id="hbox13">
                                 <property name="visible">True</property>
                                 <child>
                                   <placeholder/>
@@ -1922,9 +1951,277 @@ $T will be replaced by auto-not-available timeout</property>
               </packing>
             </child>
             <child>
+              <widget class="GtkVBox" id="vbox4">
+                <property name="visible">True</property>
+                <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+                <child>
+                  <widget class="GtkFrame" id="audio_frame">
+                    <property name="visible">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="shadow_type">none</property>
+                    <child>
+                      <widget class="GtkAlignment" id="alignment6">
+                        <property name="visible">True</property>
+                        <property name="left_padding">12</property>
+                        <child>
+                          <widget class="GtkTable" id="table6">
+                            <property name="visible">True</property>
+                            <property name="n_rows">2</property>
+                            <property name="n_columns">2</property>
+                            <property name="column_spacing">6</property>
+                            <property name="row_spacing">6</property>
+                            <child>
+                              <widget class="GtkComboBox" id="audio_input_combobox">
+                                <property name="visible">True</property>
+                                <signal name="changed" handler="on_audio_input_combobox_changed"/>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkComboBox" id="audio_output_combobox">
+                                <property name="visible">True</property>
+                                <signal name="changed" handler="on_audio_output_combobox_changed"/>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label18">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Audio input device</property>
+                              </widget>
+                              <packing>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label19">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Audio output device</property>
+                              </widget>
+                              <packing>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label16">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Audio&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                      </widget>
+                      <packing>
+                        <property name="type">label_item</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkFrame" id="frame6">
+                    <property name="visible">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="shadow_type">none</property>
+                    <child>
+                      <widget class="GtkAlignment" id="alignment7">
+                        <property name="visible">True</property>
+                        <property name="left_padding">12</property>
+                        <child>
+                          <widget class="GtkTable" id="table8">
+                            <property name="visible">True</property>
+                            <property name="n_rows">2</property>
+                            <property name="n_columns">2</property>
+                            <property name="column_spacing">6</property>
+                            <property name="row_spacing">6</property>
+                            <child>
+                              <widget class="GtkLabel" id="label20">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Video input device</property>
+                              </widget>
+                              <packing>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label21">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Video output device</property>
+                              </widget>
+                              <packing>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkComboBox" id="video_input_combobox">
+                                <property name="visible">True</property>
+                                <signal name="changed" handler="on_video_input_combobox_changed"/>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkComboBox" id="video_output_combobox">
+                                <property name="visible">True</property>
+                                <signal name="changed" handler="on_video_output_combobox_changed"/>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                              </packing>
+                            </child>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label17">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Video&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                      </widget>
+                      <packing>
+                        <property name="type">label_item</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkFrame" id="frame7">
+                    <property name="visible">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="shadow_type">none</property>
+                    <child>
+                      <widget class="GtkAlignment" id="alignment9">
+                        <property name="visible">True</property>
+                        <property name="left_padding">12</property>
+                        <child>
+                          <widget class="GtkTable" id="table9">
+                            <property name="visible">True</property>
+                            <property name="n_columns">4</property>
+                            <property name="column_spacing">6</property>
+                            <property name="row_spacing">6</property>
+                            <child>
+                              <widget class="GtkLabel" id="label24">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">STUN server:</property>
+                              </widget>
+                              <packing>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label25">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">&lt;i&gt;(example: stunserver.org)&lt;/i&gt;</property>
+                                <property name="use_markup">True</property>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">3</property>
+                                <property name="right_attach">4</property>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkEntry" id="stun_server_entry">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip" translatable="yes">STUN server hostname. If none given, Gajim will try
+to discover one from server.</property>
+                                <property name="invisible_char">&#x25CF;</property>
+                                <signal name="changed" handler="stun_server_entry_changed"/>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="right_attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkCheckButton" id="stun_checkbutton">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="on_stun_checkbutton_toggled"/>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label22">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Connection&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                      </widget>
+                      <packing>
+                        <property name="type">label_item</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="position">5</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label15">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Audio / Video</property>
+              </widget>
+              <packing>
+                <property name="position">5</property>
+                <property name="tab_fill">False</property>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+            <child>
               <widget class="GtkVBox" id="vbox45">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <widget class="GtkFrame" id="applications_frame">
@@ -1939,6 +2236,7 @@ $T will be replaced by auto-not-available timeout</property>
                         <child>
                           <widget class="GtkVBox" id="vbox50">
                             <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <widget class="GtkComboBox" id="applications_combobox">
@@ -2109,7 +2407,7 @@ Custom</property>
                           <widget class="GtkTable" id="table3">
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="n_rows">3</property>
+                            <property name="n_rows">4</property>
                             <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
                             <child>
@@ -2159,6 +2457,21 @@ Custom</property>
                                 <property name="bottom_attach">3</property>
                               </packing>
                             </child>
+                            <child>
+                              <widget class="GtkCheckButton" id="send_idle_time_checkbutton">
+                                <property name="label" translatable="yes">Allow my _idle time to be sent</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="use_underline">True</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="on_allow_idle_time_checkbutton_toggled"/>
+                              </widget>
+                              <packing>
+                                <property name="top_attach">3</property>
+                                <property name="bottom_attach">4</property>
+                              </packing>
+                            </child>
                           </widget>
                         </child>
                       </widget>
@@ -2193,6 +2506,7 @@ Custom</property>
                         <child>
                           <widget class="GtkVBox" id="vbox66">
                             <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <widget class="GtkCheckButton" id="log_show_changes_checkbutton">
@@ -2324,7 +2638,7 @@ Custom</property>
                 </child>
               </widget>
               <packing>
-                <property name="position">5</property>
+                <property name="position">6</property>
               </packing>
             </child>
             <child>
@@ -2333,7 +2647,7 @@ Custom</property>
                 <property name="label" translatable="yes">Advanced</property>
               </widget>
               <packing>
-                <property name="position">5</property>
+                <property name="position">6</property>
                 <property name="tab_fill">False</property>
                 <property name="type">tab</property>
               </packing>

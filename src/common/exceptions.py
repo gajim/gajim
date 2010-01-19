@@ -21,16 +21,11 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-class PysqliteNotAvailable(Exception):
-	'''sqlite2 is not installed or python bindings are missing'''
-	def __init__(self):
-		Exception.__init__(self)
-
-	def __str__(self):
-		return _('pysqlite2 (aka python-pysqlite2) dependency is missing. Exiting...')
-
 class PysqliteOperationalError(Exception):
-	'''sqlite2 raised pysqlite2.dbapi2.OperationalError'''
+	"""
+	Sqlite2 raised pysqlite2.dbapi2.OperationalError
+	"""
+
 	def __init__(self, text=''):
 		Exception.__init__(self)
 		self.text = text
@@ -39,7 +34,10 @@ class PysqliteOperationalError(Exception):
 		return self.text
 
 class DatabaseMalformed(Exception):
-	'''The databas can't be read'''
+	"""
+	The databas can't be read
+	"""
+
 	def __init__(self):
 		Exception.__init__(self)
 
@@ -47,7 +45,10 @@ class DatabaseMalformed(Exception):
 		return _('Database cannot be read.')
 
 class ServiceNotAvailable(Exception):
-	'''This exception is raised when we cannot use Gajim remotely'''
+	"""
+	This exception is raised when we cannot use Gajim remotely'
+	"""
+
 	def __init__(self):
 		Exception.__init__(self)
 
@@ -55,7 +56,10 @@ class ServiceNotAvailable(Exception):
 		return _('Service not available: Gajim is not running, or remote_control is False')
 
 class DbusNotSupported(Exception):
-	'''D-Bus is not installed or python bindings are missing'''
+	"""
+	D-Bus is not installed or python bindings are missing
+	"""
+
 	def __init__(self):
 		Exception.__init__(self)
 
@@ -63,27 +67,52 @@ class DbusNotSupported(Exception):
 		return _('D-Bus is not present on this machine or python module is missing')
 
 class SessionBusNotPresent(Exception):
-	'''This exception indicates that there is no session daemon'''
+	"""
+	This exception indicates that there is no session daemon
+	"""
+
 	def __init__(self):
 		Exception.__init__(self)
 
 	def __str__(self):
-		return _('Session bus is not available.\nTry reading http://trac.gajim.org/wiki/GajimDBus')
+		return _('Session bus is not available.\nTry reading %(url)s') % \
+			{'url': 'http://trac.gajim.org/wiki/GajimDBus'}
+
+class SystemBusNotPresent(Exception):
+	"""
+	This exception indicates that there is no session daemon
+	"""
+
+	def __init__(self):
+		Exception.__init__(self)
+
+	def __str__(self):
+		return _('System bus is not available.\nTry reading %(url)s') % \
+			{'url': 'http://trac.gajim.org/wiki/GajimDBus'}
 
 class NegotiationError(Exception):
-	'''A session negotiation failed'''
+	"""
+	A session negotiation failed
+	"""
 	pass
 
 class DecryptionError(Exception):
-	'''A message couldn't be decrypted into usable XML'''
+	"""
+	A message couldn't be decrypted into usable XML
+	"""
 	pass
 
 class Cancelled(Exception):
-	'''The user cancelled an operation'''
+	"""
+	The user cancelled an operation
+	"""
 	pass
 
 class LatexError(Exception):
-	'''LaTeX processing failed for some reason'''
+	"""
+	LaTeX processing failed for some reason
+	"""
+
 	def __init__(self, text=''):
 		Exception.__init__(self)
 		self.text = text
@@ -92,7 +121,10 @@ class LatexError(Exception):
 		return self.text
 
 class GajimGeneralException(Exception):
-	'''This exception is our general exception'''
+	"""
+	This exception is our general exception
+	"""
+
 	def __init__(self, text=''):
 		Exception.__init__(self)
 		self.text = text

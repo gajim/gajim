@@ -77,7 +77,7 @@ class Zeroconf:
 		log.debug('Found service %s in domain %s on %i.%i.' % (name, domain,
 			interface, protocol))
 		if not self.connected:
-		 	return
+			return
 
 		# synchronous resolving
 		self.server.ResolveService( int(interface), int(protocol), name, stype,
@@ -90,7 +90,7 @@ class Zeroconf:
 		log.debug('Service %s in domain %s on %i.%i disappeared.' % (name,
 			domain, interface, protocol))
 		if not self.connected:
-		 	return
+			return
 		if name != self.name:
 			for key in self.contacts.keys():
 				if self.contacts[key][C_BARE_NAME] == name:

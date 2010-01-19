@@ -51,7 +51,10 @@ else:
 			print _('D-Bus capabilities of Gajim cannot be used')
 
 class SystemBus:
-	'''A Singleton for the DBus SystemBus'''
+	"""
+	A Singleton for the DBus SystemBus
+	"""
+
 	def __init__(self):
 		self.system_bus = None
 
@@ -60,7 +63,7 @@ class SystemBus:
 			raise exceptions.DbusNotSupported
 
 		if not self.present():
-				raise exceptions.SystemBusNotPresent
+			raise exceptions.SystemBusNotPresent
 		return self.system_bus
 
 	def bus(self):
@@ -84,7 +87,10 @@ class SystemBus:
 system_bus = SystemBus()
 
 class SessionBus:
-	'''A Singleton for the D-Bus SessionBus'''
+	"""
+	A Singleton for the D-Bus SessionBus
+	"""
+
 	def __init__(self):
 		self.session_bus = None
 
@@ -115,8 +121,10 @@ class SessionBus:
 session_bus = SessionBus()
 
 def get_interface(interface, path, start_service=True):
-	'''Returns an interface on the current SessionBus. If the interface isn\'t
-	running, it tries to start it first.'''
+	"""
+	Get an interface on the current SessionBus. If the interface isn't running,
+	try to start it first
+	"""
 	if not supported:
 		return None
 	if session_bus.present():
@@ -144,9 +152,11 @@ def get_interface(interface, path, start_service=True):
 
 
 def get_notifications_interface(notif=None):
-	'''Returns the notifications interface.
+	"""
+	Get the notifications interface
 
-	:param notif: DesktopNotification instance'''
+	:param notif: DesktopNotification instance
+	"""
 	# try to see if KDE notifications are available
 	iface = get_interface('org.kde.VisualNotifications', '/VisualNotifications',
 		start_service=False)

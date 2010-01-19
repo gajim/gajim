@@ -34,10 +34,13 @@ class AdHocCommand:
 
 	@staticmethod
 	def isVisibleFor(samejid):
-		''' This returns True if that command should be visible and invokable
-		for others.
+		"""
+		This returns True if that command should be visible and invokable for
+		others
+
 		samejid - True when command is invoked by an entity with the same bare
-		jid.'''
+		jid.
+		"""
 		return True
 
 	def __init__(self, conn, jid, sessionid):
@@ -80,7 +83,9 @@ class ChangeStatusCommand(AdHocCommand):
 
 	@staticmethod
 	def isVisibleFor(samejid):
-		''' Change status is visible only if the entity has the same bare jid. '''
+		"""
+		Change status is visible only if the entity has the same bare jid
+		"""
 		return samejid
 
 	def execute(self, request):
@@ -177,7 +182,9 @@ class LeaveGroupchatsCommand(AdHocCommand):
 
 	@staticmethod
 	def isVisibleFor(samejid):
-		''' Change status is visible only if the entity has the same bare jid. '''
+		"""
+		Change status is visible only if the entity has the same bare jid
+		"""
 		return samejid
 
 	def execute(self, request):
@@ -259,7 +266,9 @@ class ForwardMessagesCommand(AdHocCommand):
 
 	@staticmethod
 	def isVisibleFor(samejid):
-		''' Change status is visible only if the entity has the same bare jid. '''
+		"""
+		Change status is visible only if the entity has the same bare jid
+		"""
 		return samejid
 
 	def execute(self, request):
@@ -282,7 +291,10 @@ class ForwardMessagesCommand(AdHocCommand):
 		return False	# finish the session
 
 class ConnectionCommands:
-	''' This class depends on that it is a part of Connection() class. '''
+	"""
+	This class depends on that it is a part of Connection() class
+	"""
+
 	def __init__(self):
 		# a list of all commands exposed: node -> command class
 		self.__commands = {}
@@ -297,7 +309,9 @@ class ConnectionCommands:
 		return gajim.get_jid_from_account(self.name)
 
 	def isSameJID(self, jid):
-		''' Tests if the bare jid given is the same as our bare jid. '''
+		"""
+		Test if the bare jid given is the same as our bare jid
+		"""
 		return xmpp.JID(jid).getStripped() == self.getOurBareJID()
 
 	def commandListQuery(self, con, iq_obj):
@@ -318,8 +332,10 @@ class ConnectionCommands:
 		self.connection.send(iq)
 
 	def commandInfoQuery(self, con, iq_obj):
-		''' Send disco#info result for query for command (JEP-0050, example 6.).
-		Return True if the result was sent, False if not. '''
+		"""
+		Send disco#info result for query for command (JEP-0050, example 6.).
+		Return True if the result was sent, False if not
+		"""
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		node = iq_obj.getTagAttr('query', 'node')
 
@@ -342,8 +358,10 @@ class ConnectionCommands:
 		return False
 
 	def commandItemsQuery(self, con, iq_obj):
-		''' Send disco#items result for query for command.
-		Return True if the result was sent, False if not. '''
+		"""
+		Send disco#items result for query for command. Return True if the result
+		was sent, False if not.
+		"""
 		jid = helpers.get_full_jid_from_iq(iq_obj)
 		node = iq_obj.getTagAttr('query', 'node')
 

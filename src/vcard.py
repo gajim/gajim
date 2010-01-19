@@ -45,8 +45,11 @@ from common import gajim
 from common.i18n import Q_
 
 def get_avatar_pixbuf_encoded_mime(photo):
-	'''return the pixbuf of the image
-	photo is a dictionary containing PHOTO information'''
+	"""
+	Return the pixbuf of the image
+
+	Photo is a dictionary containing PHOTO information.
+	"""
 	if not isinstance(photo, dict):
 		return None, None, None
 	img_decoded = None
@@ -71,7 +74,9 @@ def get_avatar_pixbuf_encoded_mime(photo):
 	return pixbuf, avatar_encoded, avatar_mime_type
 
 class VcardWindow:
-	'''Class for contact's information window'''
+	"""
+	Class for contact's information window
+	"""
 
 	def __init__(self, contact, account, gc_contact = None):
 		# the contact variable is the jid if vcard is true
@@ -151,14 +156,15 @@ class VcardWindow:
 			self.window.destroy()
 
 	def on_PHOTO_eventbox_button_press_event(self, widget, event):
-		'''If right-clicked, show popup'''
+		"""
+		If right-clicked, show popup
+		"""
 		if event.button == 3: # right click
 			menu = gtk.Menu()
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
 			menuitem.connect('activate',
 				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-				self.contact.jid, self.account, self.contact.get_shown_name() +
-				'.jpeg')
+				self.contact.jid, self.account, self.contact.get_shown_name())
 			menu.append(menuitem)
 			menu.connect('selection-done', lambda w:w.destroy())
 			# show the menu
@@ -465,14 +471,15 @@ class ZeroconfVcardWindow:
 			self.window.destroy()
 
 	def on_PHOTO_eventbox_button_press_event(self, widget, event):
-		'''If right-clicked, show popup'''
+		"""
+		If right-clicked, show popup
+		"""
 		if event.button == 3: # right click
 			menu = gtk.Menu()
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
 			menuitem.connect('activate',
 				gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-				self.contact.jid, self.account, self.contact.get_shown_name() +
-				'.jpeg')
+				self.contact.jid, self.account, self.contact.get_shown_name())
 			menu.append(menuitem)
 			menu.connect('selection-done', lambda w:w.destroy())
 			# show the menu
@@ -534,18 +541,12 @@ class ZeroconfVcardWindow:
 		if not self.contact.status:
 			self.contact.status = ''
 
-		# Request list time status
-	#	gajim.connections[self.account].request_last_status_time(self.contact.jid,
-	#		self.contact.resource)
-
 		self.xml.get_widget('resource_prio_label').set_text(resources)
 		resource_prio_label_eventbox = self.xml.get_widget(
 			'resource_prio_label_eventbox')
 		resource_prio_label_eventbox.set_tooltip_text(uf_resources)
 
 		self.fill_status_label()
-
-	#	gajim.connections[self.account].request_vcard(self.contact.jid, self.is_fake)
 
 	def fill_personal_page(self):
 		contact = gajim.connections[gajim.ZEROCONF_ACC_NAME].roster.getItem(self.contact.jid)

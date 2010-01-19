@@ -19,12 +19,13 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-'''
+"""
 This module defines a number of constants; specifically, large primes suitable
-for use with the Diffie-Hellman key exchange.
+for use with the Diffie-Hellman key exchange
 
 These constants have been obtained from RFC2409 and RFC3526.
-'''
+"""
+
 import string
 
 generators = [	None, # one to get the right offset

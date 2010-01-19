@@ -27,13 +27,18 @@
 import time
 
 class Event:
-	'''Information concerning each event'''
+	"""
+	Information concerning each event
+	"""
+
 	def __init__(self, type_, time_, parameters, show_in_roster=False,
-	show_in_systray=True):
-		''' type_ in chat, normal, file-request, file-error, file-completed,
+			show_in_systray=True):
+		"""
+		type_ in chat, normal, file-request, file-error, file-completed,
 		file-request-error, file-send-error, file-stopped, gc_msg, pm,
 		printed_chat, printed_gc_msg, printed_marked_gc_msg, printed_pm,
 		gc-invitation, subscription_request, unsubscribedm jingle-incoming
+
 		parameters is (per type_):
 			chat, normal, pm: [message, subject, kind, time, encrypted, resource,
 			msg_id]
@@ -47,7 +52,7 @@ class Event:
 			subscription_request: [text, nick]
 			unsubscribed: contact
 			jingle-incoming: (fulljid, sessionid, content_types)
-		'''
+		"""
 		self.type_ = type_
 		self.time_ = time_
 		self.parameters = parameters
@@ -58,29 +63,40 @@ class Event:
 		self.account = None
 
 class Events:
-	'''Information concerning all events'''
+	"""
+	Information concerning all events
+	"""
+
 	def __init__(self):
 		self._events = {} # list of events {acct: {jid1: [E1, E2]}, }
 		self._event_added_listeners = []
 		self._event_removed_listeners = []
 
 	def event_added_subscribe(self, listener):
-		'''Add a listener when an event is added to the queue'''
+		"""
+		Add a listener when an event is added to the queue
+		"""
 		if not listener in self._event_added_listeners:
 			self._event_added_listeners.append(listener)
 
 	def event_added_unsubscribe(self, listener):
-		'''Remove a listener when an event is added to the queue'''
+		"""
+		Remove a listener when an event is added to the queue
+		"""
 		if listener in self._event_added_listeners:
 			self._event_added_listeners.remove(listener)
 
 	def event_removed_subscribe(self, listener):
-		'''Add a listener when an event is removed from the queue'''
+		"""
+		Add a listener when an event is removed from the queue
+		"""
 		if not listener in self._event_removed_listeners:
 			self._event_removed_listeners.append(listener)
 
 	def event_removed_unsubscribe(self, listener):
-		'''Remove a listener when an event is removed from the queue'''
+		"""
+		Remove a listener when an event is removed from the queue
+		"""
 		if listener in self._event_removed_listeners:
 			self._event_removed_listeners.remove(listener)
 
@@ -125,9 +141,10 @@ class Events:
 		self.fire_event_added(event)
 
 	def remove_events(self, account, jid, event = None, types = []):
-		'''if event is not specified, remove all events from this jid,
-		optionally only from given type
-		return True if no such event found'''
+		"""
+		If event is not specified, remove all events from this jid, optionally
+		only from given type return True if no such event found
+		"""
 		if account not in self._events:
 			return True
 		if jid not in self._events[account]:
@@ -177,10 +194,11 @@ class Events:
 		return self._get_nb_events(types = types, account = account)
 
 	def get_events(self, account, jid = None, types = []):
-		'''returns all events from the given account of the form
-		{jid1: [], jid2: []}
-		if jid is given, returns all events from the given jid in a list: []
-		optionally only from given type'''
+		"""
+		Return all events from the given account of the form {jid1: [], jid2:
+		[]}. If jid is given, returns all events from the given jid in a list: []
+		optionally only from given type
+		"""
 		if account not in self._events:
 			return []
 		if not jid:
@@ -202,7 +220,9 @@ class Events:
 		return events_list
 
 	def get_first_event(self, account, jid = None, type_ = None):
-		'''Return the first event of type type_ if given'''
+		"""
+		Return the first event of type type_ if given
+		"""
 		events_list = self.get_events(account, jid, type_)
 		# be sure it's bigger than latest event
 		first_event_time = time.time() + 1
@@ -213,9 +233,11 @@ class Events:
 				first_event = event
 		return first_event
 
-	def _get_nb_events(self, account = None, jid = None, attribute = None,
-		types = []):
-		'''return the number of pending events'''
+	def _get_nb_events(self, account = None, jid = None, attribute = None, types
+			= []):
+		"""
+		Return the number of pending events
+		"""
 		nb = 0
 		if account:
 			accounts = [account]
@@ -241,7 +263,9 @@ class Events:
 		return nb
 
 	def _get_some_events(self, attribute):
-		'''attribute in systray, roster'''
+		"""
+		Attribute in systray, roster
+		"""
 		events = {}
 		for account in self._events:
 			events[account] = {}
@@ -258,8 +282,11 @@ class Events:
 		return events
 
 	def _get_first_event_with_attribute(self, events):
-		'''get the first event
-		events is in the form {account1: {jid1: [ev1, ev2], },. }'''
+		"""
+		Get the first event
+
+		events is in the form {account1: {jid1: [ev1, ev2], },. }
+		"""
 		# be sure it's bigger than latest event
 		first_event_time = time.time() + 1
 		first_account = None
@@ -276,12 +303,16 @@ class Events:
 		return first_account, first_jid, first_event
 
 	def get_nb_systray_events(self, types = []):
-		'''returns the number of events displayed in roster'''
+		"""
+		Return the number of events displayed in roster
+		"""
 		return self._get_nb_events(attribute = 'systray', types = types)
 
 	def get_systray_events(self):
-		'''return all events that must be displayed in systray:
-		{account1: {jid1: [ev1, ev2], },. }'''
+		"""
+		Return all events that must be displayed in systray:
+			{account1: {jid1: [ev1, ev2], },. }
+		"""
 		return self._get_some_events('systray')
 
 	def get_first_systray_event(self):
@@ -289,13 +320,17 @@ class Events:
 		return self._get_first_event_with_attribute(events)
 
 	def get_nb_roster_events(self, account = None, jid = None, types = []):
-		'''returns the number of events displayed in roster'''
+		"""
+		Return the number of events displayed in roster
+		"""
 		return self._get_nb_events(attribute = 'roster', account = account,
 			jid = jid, types = types)
 
 	def get_roster_events(self):
-		'''return all events that must be displayed in roster:
-		{account1: {jid1: [ev1, ev2], },. }'''
+		"""
+		Return all events that must be displayed in roster:
+			{account1: {jid1: [ev1, ev2], },. }
+		"""
 		return self._get_some_events('roster')
 
 # vim: se ts=3:

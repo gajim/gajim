@@ -176,12 +176,12 @@ else:
 		elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
 			libc.setproctitle('gajim')
 
-	if gtk.pygtk_version < (2, 12, 0):
-		pritext = _('Gajim needs PyGTK 2.12 or above')
-		sectext = _('Gajim needs PyGTK 2.12 or above to run. Quiting...')
-	elif gtk.gtk_version < (2, 12, 0):
-		pritext = _('Gajim needs GTK 2.12 or above')
-		sectext = _('Gajim needs GTK 2.12 or above to run. Quiting...')
+	if gtk.pygtk_version < (2, 16, 0):
+		pritext = _('Gajim needs PyGTK 2.16 or above')
+		sectext = _('Gajim needs PyGTK 2.16 or above to run. Quiting...')
+	elif gtk.gtk_version < (2, 16, 0):
+		pritext = _('Gajim needs GTK 2.16 or above')
+		sectext = _('Gajim needs GTK 2.16 or above to run. Quiting...')
 
 	try:
 		import gtk.glade # check if user has libglade (in pygtk and in gtk)
@@ -322,8 +322,7 @@ def pid_alive():
 	return True
 
 if pid_alive():
-	path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps/gajim.png')
-	pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
+	pix = gtkgui_helpers.get_icon_pixmap('gajim', 48)
 	gtk.window_set_default_icon(pix) # set the icon to all newly opened wind
 	pritext = _('Gajim is already running')
 	sectext = _('Another instance of Gajim seems to be running\nRun anyway?')
@@ -383,6 +382,7 @@ if __name__ == '__main__':
 		# Session Management support
 		try:
 			import gnome.ui
+			raise ImportError
 		except ImportError:
 			pass
 		else:

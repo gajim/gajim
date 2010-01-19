@@ -69,7 +69,9 @@ def server_display(server):
 	win.present()
 
 def get_show_in_roster(event, account, contact, session=None):
-	'''Return True if this event must be shown in roster, else False'''
+	"""
+	Return True if this event must be shown in roster, else False
+	"""
 	if event == 'gc_message_received':
 		return True
 	num = get_advanced_notification(event, account, contact)
@@ -84,7 +86,9 @@ def get_show_in_roster(event, account, contact, session=None):
 	return True
 
 def get_show_in_systray(event, account, contact, type_=None):
-	'''Return True if this event must be shown in systray, else False'''
+	"""
+	Return True if this event must be shown in systray, else False
+	"""
 	num = get_advanced_notification(event, account, contact)
 	if num is not None:
 		if gajim.config.get_per('notifications', str(num), 'systray') == 'yes':
@@ -98,8 +102,9 @@ def get_show_in_systray(event, account, contact, type_=None):
 	return gajim.config.get('trayicon_notification_on_events')
 
 def get_advanced_notification(event, account, contact):
-	'''Returns the number of the first (top most)
-	advanced notification else None'''
+	"""
+	Returns the number of the first (top most) advanced notification else None
+	"""
 	num = 0
 	notif = gajim.config.get_per('notifications', str(num))
 	while notif:
@@ -146,10 +151,11 @@ def get_advanced_notification(event, account, contact):
 		notif = gajim.config.get_per('notifications', str(num))
 
 def notify(event, jid, account, parameters, advanced_notif_num=None):
-	'''Check what type of notifications we want, depending on basic
-	and the advanced configuration of notifications and do these notifications;
-	advanced_notif_num holds the number of the first (top most) advanced
-	notification'''
+	"""
+	Check what type of notifications we want, depending on basic and the advanced
+	configuration of notifications and do these notifications; advanced_notif_num
+	holds the number of the first (top most) advanced notification
+	"""
 	# First, find what notifications we want
 	do_popup = False
 	do_sound = False
@@ -228,16 +234,16 @@ def notify(event, jid, account, parameters, advanced_notif_num=None):
 				show_image = 'online.png'
 				suffix = '_notif_size_colored'
 			transport_name = gajim.get_transport_name_from_jid(jid)
-			img = None
+			img_path = None
 			if transport_name:
-				img = os.path.join(helpers.get_transport_path(transport_name),
+				img_path = os.path.join(helpers.get_transport_path(transport_name),
 					'48x48', show_image)
-			if not img or not os.path.isfile(img):
+			if not img_path or not os.path.isfile(img_path):
 				iconset = gajim.config.get('iconset')
-				img = os.path.join(helpers.get_iconset_path(iconset), '48x48',
+				img_path = os.path.join(helpers.get_iconset_path(iconset), '48x48',
 					show_image)
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(img,
-				jid = jid, suffix = suffix)
+			path = gtkgui_helpers.get_path_to_generic_or_avatar(img_path, jid=jid,
+				suffix=suffix)
 			if event == 'status_change':
 				title = _('%(nick)s Changed Status') % \
 					{'nick': gajim.get_name_from_jid(account, jid)}
@@ -267,16 +273,14 @@ def notify(event, jid, account, parameters, advanced_notif_num=None):
 		elif event == 'new_message':
 			if message_type == 'normal': # single message
 				event_type = _('New Single Message')
-				img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-					'single_msg_recv.png')
+				img_name = 'gajim-single_msg_recv'
 				title = _('New Single Message from %(nickname)s') % \
 					{'nickname': nickname}
 				text = message
 			elif message_type == 'pm': # private message
 				event_type = _('New Private Message')
 				room_name = gajim.get_nick_from_jid(jid)
-				img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-					'priv_msg_recv.png')
+				img_name = 'gajim-priv_msg_recv'
 				title = _('New Private Message from group chat %s') % room_name
 				if message:
 					text = _('%(nickname)s: %(message)s') % {'nickname': nickname,
@@ -286,14 +290,13 @@ def notify(event, jid, account, parameters, advanced_notif_num=None):
 
 			else: # chat message
 				event_type = _('New Message')
-				img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-					'chat_msg_recv.png')
+				img_name = 'gajim-chat_msg_recv'
 				title = _('New Message from %(nickname)s') % \
 					{'nickname': nickname}
 				text = message
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+			img_path = gtkgui_helpers.get_icon_path(img_name, 48)
 			popup(event_type, jid, account, message_type,
-				path_to_image=path, title=title, text=text)
+				path_to_image=img_path, title=title, text=text)
 
 	if do_sound:
 		snd_file = None
@@ -327,17 +330,16 @@ def notify(event, jid, account, parameters, advanced_notif_num=None):
 		except Exception:
 			pass
 
-def popup(event_type, jid, account, msg_type='', path_to_image=None,
-	title=None, text=None):
-	'''Notifies a user of an event. It first tries to a valid implementation of
+def popup(event_type, jid, account, msg_type='', path_to_image=None, title=None,
+		text=None):
+	"""
+	Notify a user of an event. It first tries to a valid implementation of
 	the Desktop Notification Specification. If that fails, then we fall back to
-	the older style PopupNotificationWindow method.'''
-
+	the older style PopupNotificationWindow method
+	"""
 	# default image
 	if not path_to_image:
-		path_to_image = os.path.abspath(
-			os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-				'chat_msg_recv.png')) # img to display
+		path_to_image = gtkgui_helpers.get_icon_path('gajim-chat_msg_recv', 48)
 
 	if gajim.HAVE_INDICATOR and event_type in (_('New Message'),
 	_('New Single Message'), _('New Private Message')):
@@ -414,9 +416,12 @@ def on_pynotify_notification_clicked(notification, action):
 	gajim.interface.handle_event(account, jid, msg_type)
 
 class NotificationResponseManager:
-	'''Collects references to pending DesktopNotifications and manages there
-	signalling. This is necessary due to a bug in DBus where you can't remove
-	a signal from an interface once it's connected.'''
+	"""
+	Collect references to pending DesktopNotifications and manages there
+	signalling. This is necessary due to a bug in DBus where you can't remove a
+	signal from an interface once it's connected
+	"""
+
 	def __init__(self):
 		self.pending = {}
 		self.received = []
@@ -464,8 +469,11 @@ class NotificationResponseManager:
 notification_response_manager = NotificationResponseManager()
 
 class DesktopNotification:
-	'''A DesktopNotification that interfaces with D-Bus via the Desktop
-	Notification specification'''
+	"""
+	A DesktopNotification that interfaces with D-Bus via the Desktop Notification
+	specification
+	"""
+
 	def __init__(self, event_type, jid, account, msg_type='',
 		path_to_image=None, title=None, text=None):
 		self.path_to_image = path_to_image
@@ -516,9 +524,8 @@ class DesktopNotification:
 			ntype = 'unsubscribed'
 		else:
 			# default failsafe values
-			self.path_to_image = os.path.abspath(
-				os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-					'chat_msg_recv.png')) # img to display
+			self.path_to_image = gtkgui_helpers.get_icon_path(
+				'gajim-chat_msg_recv', 48)
 			ntype = 'im' # Notification Type
 
 		self.notif = dbus_support.get_notifications_interface(self)
@@ -541,8 +548,7 @@ class DesktopNotification:
 			notification_text = ('<html><img src="%(image)s" align=left />' \
 				'%(title)s<br/>%(text)s</html>') % {'title': self.title,
 				'text': self.text, 'image': self.path_to_image}
-			gajim_icon = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps',
-				'gajim.png'))
+			gajim_icon = gtkgui_helpers.get_icon_path('gajim', 48)
 			self.notif.Notify(
 				dbus.String(_('Gajim')),			# app_name (string)
 				dbus.UInt32(0),						# replaces_id (uint)
@@ -584,9 +590,8 @@ class DesktopNotification:
 		if version > [0, 3]:
 			if gajim.interface.systray_enabled and \
 			gajim.config.get('attach_notifications_to_systray'):
-				x, y = gajim.interface.systray.img_tray.window.get_origin()
-				width, height, = \
-					gajim.interface.systray.img_tray.window.get_geometry()[2:4]
+				status_icon = gajim.interface.systray.status_icon
+				x, y, width, height = status_icon.get_geometry()[1]
 				pos_x = x + (width / 2)
 				pos_y = y + (height / 2)
 				hints = {'x': pos_x, 'y': pos_y}

@@ -10,11 +10,11 @@
 ##
 ## Gajim is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
 from common import gajim
@@ -28,14 +28,14 @@ except ImportError, e:
 	pass
 
 
-resolve_timeout  = 1
+resolve_timeout = 1
 
 class Zeroconf:
 	def __init__(self, new_serviceCB, remove_serviceCB, name_conflictCB,
 		disconnected_CB, error_CB, name, host, port):
-		self.domain = None   # specific domain to browse
+		self.domain = None # specific domain to browse
 		self.stype = '_presence._tcp'
-		self.port = port  # listening port that gets announced
+		self.port = port # listening port that gets announced
 		self.username = name
 		self.host = host
 		self.txt = pybonjour.TXTRecord()		# service data
@@ -48,7 +48,7 @@ class Zeroconf:
 		self.disconnected_CB = disconnected_CB
 		self.error_CB = error_CB
 
-		self.contacts = {}    # all current local contacts with data
+		self.contacts = {} # all current local contacts with data
 		self.connected = False
 		self.announced = False
 		self.invalid_self_contact = {}
@@ -58,7 +58,7 @@ class Zeroconf:
 	def browse_callback(self, sdRef, flags, interfaceIndex, errorCode, serviceName, regtype, replyDomain):
 		gajim.log.debug('Found service %s in domain %s on %i(type: %s).' % (serviceName, replyDomain, interfaceIndex, regtype))
 		if not self.connected:
-		 	return
+			return
 		if errorCode != pybonjour.kDNSServiceErr_NoError:
 			return
 		if not (flags & pybonjour.kDNSServiceFlagsAdd):
@@ -83,7 +83,7 @@ class Zeroconf:
 	def remove_service_callback(self, name):
 		gajim.log.debug('Service %s disappeared.' % name)
 		if not self.connected:
-		 	return
+			return
 		if name != self.name:
 			for key in self.contacts.keys():
 				if self.contacts[key][C_BARE_NAME] == name:
@@ -103,7 +103,7 @@ class Zeroconf:
 	def service_resolved_callback(self, sdRef, flags, interfaceIndex, errorCode, fullname,
 			hosttarget, port, txtRecord):
 
-        # TODO: do proper decoding...
+		# TODO: do proper decoding...
 		escaping= {
 		r'\.': '.',
 		r'\032': ' ',
@@ -211,7 +211,7 @@ class Zeroconf:
 		txt['version'] = 1
 		txt['txtvers'] = 1
 
-      # replace gajim's show messages with compatible ones
+		# replace gajim's show messages with compatible ones
 		if 'status' in self.txt:
 			txt['status'] = self.replace_show(self.txt['status'])
 		else:
@@ -221,7 +221,7 @@ class Zeroconf:
 
 		try:
 			sdRef = pybonjour.DNSServiceRegister(name = self.name,
-		   	   	regtype = self.stype, port = self.port, txtRecord = self.txt,
+				regtype = self.stype, port = self.port, txtRecord = self.txt,
 				callBack = self.service_added_callback)
 			self.service_sdRef = sdRef
 		except pybonjour.BonjourError, e:

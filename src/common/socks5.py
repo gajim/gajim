@@ -33,6 +33,7 @@ from errno import ENOBUFS
 from errno import EINTR
 from errno import EISCONN
 from errno import EINPROGRESS
+from errno import EAFNOSUPPORT
 from xmpp.idlequeue import IdleObject
 MAX_BUFF_LEN = 65536
 
@@ -52,9 +53,12 @@ READ_TIMEOUT = 180
 SEND_TIMEOUT = 180
 
 class SocksQueue:
-	''' queue for all file requests objects '''
+	"""
+	Queue for all file requests objects
+	"""
+
 	def __init__(self, idlequeue, complete_transfer_cb=None,
-	progress_transfer_cb=None, error_cb=None):
+			progress_transfer_cb=None, error_cb=None):
 		self.connected = 0
 		self.readers = {}
 		self.files_props = {}
@@ -72,9 +76,10 @@ class SocksQueue:
 		self.on_failure = None
 
 	def start_listener(self, port, sha_str, sha_handler, sid):
-		''' start waiting for incomming connections on (host, port)
-		and do a socks5 authentication using sid for generated sha
-		'''
+		"""
+		Start waiting for incomming connections on (host, port) and do a socks5
+		authentication using sid for generated SHA
+		"""
 		self.sha_handlers[sha_str] = (sha_handler, sid)
 		if self.listener is None:
 			self.listener = Socks5Listener(self.idlequeue, port)
@@ -121,8 +126,10 @@ class SocksQueue:
 			streamhost['idx'] = receiver.queue_idx
 
 	def _socket_connected(self, streamhost, file_props):
-		''' called when there is a host connected to one of the
-		senders's streamhosts. Stop othere attempts for connections '''
+		"""
+		Called when there is a host connected to one of the senders's
+		streamhosts. Stop othere attempts for connections
+		"""
 		for host in file_props['streamhosts']:
 			if host != streamhost and 'idx' in host:
 				if host['state'] == 1:
@@ -137,10 +144,11 @@ class SocksQueue:
 					host['state'] = -2
 
 	def reconnect_receiver(self, receiver, streamhost):
-		''' Check the state of all streamhosts and if all has failed, then
-		emit connection failure cb. If there are some which are still
-		not connected try to establish connection to one of them.
-		'''
+		"""
+		Check the state of all streamhosts and if all has failed, then emit
+		connection failure cb. If there are some which are still not connected
+		try to establish connection to one of them
+		"""
 		self.idlequeue.remove_timeout(receiver.fd)
 		self.idlequeue.unplug_idle(receiver.fd)
 		file_props = receiver.file_props
@@ -173,7 +181,9 @@ class SocksQueue:
 			self.process_result(-1, receiver)
 
 	def _connection_refused(self, streamhost, file_props, idx):
-		''' cb, called when we loose connection during transfer'''
+		"""
+		Called when we loose connection during transfer
+		"""
 		if file_props is None:
 			return
 		streamhost['state'] = -1
@@ -189,7 +199,9 @@ class SocksQueue:
 			del(file_props['failure_cb'])
 
 	def add_receiver(self, account, sock5_receiver):
-		''' add new file request '''
+		"""
+		Add new file request
+		"""
 		self.readers[self.idx] = sock5_receiver
 		sock5_receiver.queue_idx = self.idx
 		sock5_receiver.queue = self
@@ -259,9 +271,10 @@ class SocksQueue:
 				sender.file_props = file_props
 
 	def add_file_props(self, account, file_props):
-		''' file_prop to the dict of current file_props.
-		It is identified by account name and sid
-		'''
+		"""
+		File_prop to the dict of current file_props. It is identified by account
+		name and sid
+		"""
 		if file_props is None or ('sid' in file_props) is False:
 			return
 		_id = file_props['sid']
@@ -279,7 +292,9 @@ class SocksQueue:
 			self.connected = 0
 
 	def get_file_props(self, account, sid):
-		''' get fil_prop by account name and session id '''
+		"""
+		Get fil_prop by account name and session id
+		"""
 		if account in self.files_props:
 			fl_props = self.files_props[account]
 			if sid in fl_props:
@@ -294,11 +309,12 @@ class SocksQueue:
 			self.connected += 1
 
 	def process_result(self, result, actor):
-		''' Take appropriate actions upon the result:
-		[ 0, - 1 ] complete/end transfer
-		[ > 0 ] send progress message
-		[ None ] do nothing
-		'''
+		"""
+		Take appropriate actions upon the result:
+			[ 0, - 1 ] complete/end transfer
+			[ > 0 ] send progress message
+			[ None ] do nothing
+		"""
 		if result is None:
 			return
 		if result in (0, -1) and self.complete_transfer_cb is not None:
@@ -310,8 +326,10 @@ class SocksQueue:
 			self.progress_transfer_cb(actor.account, actor.file_props)
 
 	def remove_receiver(self, idx, do_disconnect=True):
-		''' Remove reciver from the list and decrease
-		the number of active connections with 1'''
+		"""
+		Remove reciver from the list and decrease the number of active
+		connections with 1
+		"""
 		if idx != -1:
 			if idx in self.readers:
 				reader = self.readers[idx]
@@ -325,8 +343,10 @@ class SocksQueue:
 					del(self.readers[idx])
 
 	def remove_sender(self, idx, do_disconnect=True):
-		''' Remove sender from the list of senders and decrease the
-		number of active connections with 1'''
+		"""
+		Remove sender from the list of senders and decrease the number of active
+		connections with 1
+		"""
 		if idx != -1:
 			if idx in self.senders:
 				if do_disconnect:
@@ -386,9 +406,10 @@ class Socks5:
 			self.file = None
 
 	def get_fd(self):
-		''' Test if file is already open and return its fd,
-		or just open the file and return the fd.
-		'''
+		"""
+		Test if file is already open and return its fd, or just open the file and
+		return the fd
+		"""
 		if 'fd' in self.file_props:
 			fd = self.file_props['fd']
 		else:
@@ -413,8 +434,10 @@ class Socks5:
 			pass
 
 	def receive(self):
-		''' Reads small chunks of data.
-			Calls owner's disconnected() method if appropriate.'''
+		"""
+		Read small chunks of data. Call owner's disconnected() method if
+		appropriate
+		"""
 		received = ''
 		try:
 			add = self._recv(64)
@@ -426,7 +449,9 @@ class Socks5:
 		return add
 
 	def send_raw(self,raw_data):
-		''' Writes raw outgoing data. '''
+		"""
+		Write raw outgoing data
+		"""
 		try:
 			self._send(raw_data)
 		except Exception:
@@ -483,7 +508,9 @@ class Socks5:
 			return -1
 
 	def get_file_contents(self, timeout):
-		''' read file contents from socket and write them to file '''
+		"""
+		Read file contents from socket and write them to file
+		"""
 		if self.file_props is None or ('file-name' in self.file_props) is False:
 			self.file_props['error'] = -2
 			return None
@@ -557,7 +584,9 @@ class Socks5:
 		return None
 
 	def disconnect(self):
-		''' Closes open descriptors and remover socket descr. from idleque '''
+		"""
+		Close open descriptors and remover socket descr. from idleque
+		"""
 		# be sure that we don't leave open file
 		self.close_file()
 		self.idlequeue.remove_timeout(self.fd)
@@ -573,13 +602,15 @@ class Socks5:
 		self.state = -1
 
 	def _get_auth_buff(self):
-		''' Message, that we support 1 one auth mechanism:
-		the 'no auth' mechanism. '''
+		"""
+		Message, that we support 1 one auth mechanism: the 'no auth' mechanism
+		"""
 		return struct.pack('!BBB', 0x05, 0x01, 0x00)
 
 	def _parse_auth_buff(self, buff):
-		''' Parse the initial message and create a list of auth
-		mechanisms '''
+		"""
+		Parse the initial message and create a list of auth mechanisms
+		"""
 		auth_mechanisms = []
 		try:
 			num_auth = struct.unpack('!xB', buff[:2])[0]
@@ -591,9 +622,9 @@ class Socks5:
 		return auth_mechanisms
 
 	def _get_auth_response(self):
-		''' socks version(5), number of extra auth methods (we send
-		0x00 - no auth
-		) '''
+		"""
+		Socks version(5), number of extra auth methods (we send 0x00 - no auth)
+		"""
 		return struct.pack('!BB', 0x05, 0x00)
 
 	def _get_connect_buff(self):
@@ -604,8 +635,10 @@ class Socks5:
 		return buff
 
 	def _get_request_buff(self, msg, command = 0x01):
-		''' Connect request by domain name,
-		sid sha, instead of domain name (jep 0096) '''
+		"""
+		Connect request by domain name, sid sha, instead of domain name (jep
+		0096)
+		"""
 		buff = struct.pack('!BBBBB%dsBB' % len(msg),
 			0x05, command, 0x00, 0x03, len(msg), msg, 0, 0)
 		return buff
@@ -634,7 +667,9 @@ class Socks5:
 		return (req_type, host, port)
 
 	def read_connect(self):
-		''' connect responce: version, auth method '''
+		"""
+		Connect response: version, auth method
+		"""
 		buff = self._recv()
 		try:
 			version, method = struct.unpack('!BB', buff)
@@ -652,7 +687,9 @@ class Socks5:
 			self.idlequeue.plug_idle(self, True, False)
 
 	def _get_sha1_auth(self):
-		''' get sha of sid + Initiator jid + Target jid '''
+		"""
+		Get sha of sid + Initiator jid + Target jid
+		"""
 		if 'is_a_proxy' in self.file_props:
 			del(self.file_props['is_a_proxy'])
 			return hashlib.sha1('%s%s%s' % (self.sid,
@@ -662,9 +699,12 @@ class Socks5:
 			hexdigest()
 
 class Socks5Sender(Socks5, IdleObject):
-	''' class for sending file to socket over socks5 '''
+	"""
+	Class for sending file to socket over socks5
+	"""
+
 	def __init__(self, idlequeue, sock_hash, parent, _sock, host=None,
-	port=None):
+			port=None):
 		self.queue_idx = sock_hash
 		self.queue = parent
 		Socks5.__init__(self, idlequeue, host, port, None, None, None)
@@ -745,7 +785,9 @@ class Socks5Sender(Socks5, IdleObject):
 			self.disconnect()
 
 	def send_file(self):
-		''' start sending the file over verified connection '''
+		"""
+		Start sending the file over verified connection
+		"""
 		if self.file_props['started']:
 			return
 		self.file_props['error'] = 0
@@ -766,7 +808,9 @@ class Socks5Sender(Socks5, IdleObject):
 		return self.write_next() # initial for nl byte
 
 	def main(self):
-		''' initial requests for verifying the connection '''
+		"""
+		Initial requests for verifying the connection
+		"""
 		if self.state == 1: # initial read
 			buff = self.receive()
 			if not self.connected:
@@ -785,7 +829,9 @@ class Socks5Sender(Socks5, IdleObject):
 		return None
 
 	def disconnect(self, cb=True):
-		''' Closes the socket. '''
+		"""
+		Close the socket
+		"""
 		# close connection and remove us from the queue
 		Socks5.disconnect(self)
 		if self.file_props is not None:
@@ -796,10 +842,12 @@ class Socks5Sender(Socks5, IdleObject):
 
 class Socks5Listener(IdleObject):
 	def __init__(self, idlequeue, port):
-		''' handle all incomming connections on (0.0.0.0, port)
+		"""
+		Handle all incomming connections on (0.0.0.0, port)
+
 		This class implements IdleObject, but we will expect
 		only pollin events though
-		'''
+		"""
 		self.port = port
 		self.ais = socket.getaddrinfo(None, port, socket.AF_UNSPEC,
 			socket.SOCK_STREAM, socket.SOL_TCP, socket.AI_PASSIVE)
@@ -813,8 +861,14 @@ class Socks5Listener(IdleObject):
 
 	def bind(self):
 		for ai in self.ais:
-			#try the different possibilities (ipv6, ipv4, etc.)
-			self._serv = socket.socket(*ai[:3])
+			# try the different possibilities (ipv6, ipv4, etc.)
+			try:
+				self._serv = socket.socket(*ai[:3])
+			except socket.error, e:
+				if e.errno == EAFNOSUPPORT:
+					self.ai = None
+					continue
+				raise
 			self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 			self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
 			self._serv.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
@@ -843,16 +897,22 @@ class Socks5Listener(IdleObject):
 		self.started = True
 
 	def pollend(self):
-		''' called when we stop listening on (host, port) '''
+		"""
+		Called when we stop listening on (host, port)
+		"""
 		self.disconnect()
 
 	def pollin(self):
-		''' accept a new incomming connection and notify queue'''
+		"""
+		Accept a new incomming connection and notify queue
+		"""
 		sock = self.accept_conn()
 		self.queue.on_connection_accepted(sock)
 
 	def disconnect(self):
-		''' free all resources, we are not listening anymore '''
+		"""
+		Free all resources, we are not listening anymore
+		"""
 		self.idlequeue.remove_timeout(self.fd)
 		self.idlequeue.unplug_idle(self.fd)
 		self.fd = -1
@@ -864,7 +924,9 @@ class Socks5Listener(IdleObject):
 			pass
 
 	def accept_conn(self):
-		''' accepts a new incomming connection '''
+		"""
+		Accept a new incomming connection
+		"""
 		_sock  = self._serv.accept()
 		_sock[0].setblocking(False)
 		return _sock
@@ -909,7 +971,9 @@ class Socks5Receiver(Socks5, IdleObject):
 			self.queue.reconnect_receiver(self, self.streamhost)
 
 	def connect(self):
-		''' create the socket and plug it to the idlequeue '''
+		"""
+		Create the socket and plug it to the idlequeue
+		"""
 		if self.ais is None:
 			return None
 
@@ -1018,7 +1082,9 @@ class Socks5Receiver(Socks5, IdleObject):
 		return 1 # we are connected
 
 	def main(self, timeout=0):
-		''' begin negotiation. on success 'address' != 0 '''
+		"""
+		Begin negotiation. on success 'address' != 0
+		"""
 		result = 1
 		buff = self.receive()
 		if buff == '':
@@ -1087,7 +1153,9 @@ class Socks5Receiver(Socks5, IdleObject):
 			return None
 
 	def disconnect(self, cb=True):
-		''' Closes the socket. Remove self from queue if cb is True'''
+		"""
+		Close the socket. Remove self from queue if cb is True
+		"""
 		# close connection
 		Socks5.disconnect(self)
 		if cb is True:

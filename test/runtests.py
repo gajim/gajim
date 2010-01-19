@@ -37,11 +37,12 @@ for o, a in opts:
 # new test modules need to be added manually
 modules = ( 'unit.test_xmpp_dispatcher_nb',
 				'unit.test_xmpp_transports_nb',
-				'unit.test_caps',
+				'unit.test_protocol_caps',
+				'unit.test_caps_cache',
 				'unit.test_contacts',
-				'unit.test_gui_interface',
 				'unit.test_sessions',
 				'unit.test_account',
+				'unit.test_gui_interface',
 			 )
 #modules = ()
 

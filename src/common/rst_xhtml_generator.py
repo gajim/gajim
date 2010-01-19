@@ -33,17 +33,19 @@ except ImportError:
 		return None
 else:
 	def pos_int_validator(text):
-		"""Validates that text can be evaluated as a positive integer."""
+		"""
+		Validates that text can be evaluated as a positive integer
+		"""
 		result = int(text)
 		if result < 0:
 			raise ValueError("Error: value '%(text)s' "
 							"must be a positive integer")
 		return result
 
-	def generate_uri_role( role_name, aliases,
-					anchor_text, base_url,
-					interpret_url, validator):
-		'''Creates and register a uri based "interpreted role".
+	def generate_uri_role( role_name, aliases, anchor_text, base_url,
+			interpret_url, validator):
+		"""
+		Create and register a uri based "interpreted role"
 
 		Those are similar to the RFC, and PEP ones, and take
 		role_name:
@@ -58,7 +60,7 @@ else:
 			this, modulo the validated text, will be added to it
 		validator:
 			should return the validated text, or raise ValueError
-		'''
+		"""
 		def uri_reference_role(role, rawtext, text, lineno, inliner,
 			options={}, content=[]):
 			try:
@@ -94,15 +96,15 @@ else:
 				pos_int_validator)
 
 	class HTMLGenerator:
-		'''Really simple HTMLGenerator starting from publish_parts.
+		"""
+		Really simple HTMLGenerator starting from publish_parts
 
 		It reuses the docutils.core.Publisher class, which means it is *not*
 		threadsafe.
-		'''
-		def __init__(self,
-			settings_spec=None,
-			settings_overrides=dict(report_level=5, halt_level=5),
-			config_section='general'):
+		"""
+		def __init__(self, settings_spec=None,
+				settings_overrides=dict(report_level=5, halt_level=5),
+				config_section='general'):
 			self.pub = Publisher(reader=None, parser=None, writer=None,
 				settings=None,
 				source_class=io.StringInput,
@@ -124,13 +126,12 @@ else:
 				config_section)
 
 
-		def create_xhtml(self, text,
-			destination=None,
-			destination_path=None,
-			enable_exit_status=None):
-			''' Create xhtml for a fragment of IM dialog.
-			We can use the source_name to store info about
-			the message.'''
+		def create_xhtml(self, text, destination=None, destination_path=None,
+				enable_exit_status=None):
+			"""
+			Create xhtml for a fragment of IM dialog. We can use the source_name
+			to store info about the message
+			"""
 			self.pub.set_source(text, None)
 			self.pub.set_destination(destination, destination_path)
 			output = self.pub.publish(enable_exit_status=enable_exit_status)

@@ -54,13 +54,17 @@ def gattr(obj, attr, default=None):
 
 
 class SSLWrapper:
-	'''
+	"""
 	Abstract SSLWrapper base class
-	'''
+	"""
+
 	class Error(IOError):
-		''' Generic SSL Error Wrapper '''
+		"""
+		Generic SSL Error Wrapper
+		"""
+
 		def __init__(self, sock=None, exc=None, errno=None, strerror=None,
-		peer=None):
+				peer=None):
 			self.parent = IOError
 
 			errno = errno or gattr(exc, 'errno') or exc[0]
@@ -122,7 +126,7 @@ class SSLWrapper:
 		log.debug("%s.__init__ called with %s", self.__class__, sslobj)
 
 	def recv(self, data, flags=None):
-		'''
+		"""
 		Receive wrapper for SSL object
 
 		We can return None out of this function to signal that no data is
@@ -130,16 +134,20 @@ class SSLWrapper:
 		depending on which SSL lib we're using. Unfortunately returning ''
 		can indicate that the socket has been closed, so to be sure, we avoid
 		this by returning None.
-		'''
+		"""
 		raise NotImplementedError
 
 	def send(self, data, flags=None, now=False):
-		''' Send wrapper for SSL object '''
+		"""
+		Send wrapper for SSL object
+		"""
 		raise NotImplementedError
 
 
 class PyOpenSSLWrapper(SSLWrapper):
-	'''Wrapper class for PyOpenSSL's recv() and send() methods'''
+	"""
+	Wrapper class for PyOpenSSL's recv() and send() methods
+	"""
 
 	def __init__(self, *args):
 		self.parent = SSLWrapper
@@ -202,7 +210,9 @@ class PyOpenSSLWrapper(SSLWrapper):
 
 
 class StdlibSSLWrapper(SSLWrapper):
-	'''Wrapper class for Python socket.ssl read() and write() methods'''
+	"""
+	Wrapper class for Python socket.ssl read() and write() methods
+	"""
 
 	def __init__(self, *args):
 		self.parent = SSLWrapper
@@ -230,18 +240,18 @@ class StdlibSSLWrapper(SSLWrapper):
 
 
 class NonBlockingTLS(PlugIn):
-	'''
-	TLS connection used to encrypts already estabilished tcp connection.
+	"""
+	TLS connection used to encrypts already estabilished tcp connection
 
 	Can be plugged into NonBlockingTCP and will make use of StdlibSSLWrapper or
 	PyOpenSSLWrapper.
-	'''
+	"""
 
 	def __init__(self, cacerts, mycerts):
-		'''
+		"""
 		:param cacerts: path to pem file with certificates of known XMPP servers
 		:param mycerts: path to pem file with certificates of user trusted servers
-		'''
+		"""
 		PlugIn.__init__(self)
 		self.cacerts = cacerts
 		self.mycerts = mycerts
@@ -254,10 +264,10 @@ class NonBlockingTLS(PlugIn):
 			"SSL_CB_HANDSHAKE_START": 0x10, "SSL_CB_HANDSHAKE_DONE": 0x20}
 
 	def plugin(self, owner):
-		'''
-		Use to PlugIn TLS into transport and start establishing immediately
-		Returns True if TLS/SSL was established correctly, otherwise False.
-		'''
+		"""
+		Use to PlugIn TLS into transport and start establishing immediately.
+		Returns True if TLS/SSL was established correctly, otherwise False
+		"""
 		log.info('Starting TLS estabilishing')
 		try:
 			res = self._startSSL()
@@ -289,7 +299,9 @@ class NonBlockingTLS(PlugIn):
 			"Unknown"), pkey.type())
 
 	def _startSSL(self):
-		''' Immediatedly switch socket to TLS mode. Used internally.'''
+		"""
+		Immediatedly switch socket to TLS mode. Used internally
+		"""
 		log.debug("_startSSL called")
 
 		if USE_PYOPENSSL:

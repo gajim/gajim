@@ -1,3 +1,6 @@
+'''
+Some diverse tests covering functionality in the GUI Interface class.
+'''
 import unittest
 
 import lib
@@ -13,7 +16,7 @@ gajim.logger = MockLogger()
 
 from gui_interface import Interface
 
-class Test(unittest.TestCase):
+class TestInterface(unittest.TestCase):
 
 	def test_instantiation(self):
 		''' Test that we can proper initialize and do not fail on globals '''

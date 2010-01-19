@@ -21,7 +21,8 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-"""Interface to GNU Privacy Guard (GnuPG)
+"""
+Interface to GNU Privacy Guard (GnuPG)
 
 GnuPGInterface is a Python module to interface with GnuPG.
 It concentrates on interacting with GnuPG via filehandles,
@@ -249,7 +250,8 @@ _fd_options = { 'passphrase': '--passphrase-fd',
                 'command':    '--command-fd' }
 
 class GnuPG:
-    """Class instances represent GnuPG.
+    """
+    Class instances represent GnuPG
 
     Instance attributes of a GnuPG object are:
 
@@ -275,8 +277,10 @@ class GnuPG:
         self.options = Options()
 
     def run(self, gnupg_commands, args=None, create_fhs=None, attach_fhs=None):
-        """Calls GnuPG with the list of string commands gnupg_commands,
-        complete with prefixing dashes.
+        """
+        Calls GnuPG with the list of string commands gnupg_commands, complete
+        with prefixing dashes
+
         For example, gnupg_commands could be
         '["--sign", "--encrypt"]'
         Returns a GnuPGInterface.Process object.
@@ -336,7 +340,6 @@ class GnuPG:
         is a FileObject connected to GnuPG's standard input,
         and can be written to.
         """
-
         if args is None: args = []
         if create_fhs is None: create_fhs = []
         if attach_fhs is None: attach_fhs = {}
@@ -367,9 +370,10 @@ class GnuPG:
 
 
     def _attach_fork_exec(self, gnupg_commands, args, create_fhs, attach_fhs):
-        """This is like run(), but without the passphrase-helping
-        (note that run() calls this)."""
-
+        """
+        This is like run(), but without the passphrase-helping (note that run()
+        calls this)
+        """
         process = Process()
 
         for fh_name in create_fhs + attach_fhs.keys():
@@ -404,7 +408,9 @@ class GnuPG:
 
 
     def _as_parent(self, process):
-        """Stuff run after forking in parent"""
+        """
+        Stuff run after forking in parent
+        """
         for k, p in process._pipes.items():
             if not p.direct:
                 os.close(p.child)
@@ -417,7 +423,9 @@ class GnuPG:
 
 
     def _as_child(self, process, gnupg_commands, args):
-        """Stuff run after forking in child"""
+        """
+        Stuff run after forking in child
+        """
         # child
         for std in _stds:
             p = process._pipes[std]
@@ -444,7 +452,10 @@ class GnuPG:
 
 
 class Pipe:
-    """simple struct holding stuff about pipes we use"""
+    """
+    Simple struct holding stuff about pipes we use
+    """
+
     def __init__(self, parent, child, direct):
         self.parent = parent
         self.child = child
@@ -452,7 +463,8 @@ class Pipe:
 
 
 class Options:
-    """Objects of this class encompass options passed to GnuPG.
+    """
+    Objects of this class encompass options passed to GnuPG.
     This class is responsible for determining command-line arguments
     which are based on options.  It can be said that a GnuPG
     object has-a Options object in its options attribute.
@@ -522,7 +534,6 @@ class Options:
     >>> gnupg.options.get_args()
     ['--armor', '--recipient', 'Alice', '--recipient', 'Bob', '--no-secmem-warning']
     """
-
     def __init__(self):
         # booleans
         self.armor = 0
@@ -558,12 +569,15 @@ class Options:
         self.extra_args = []
 
     def get_args( self ):
-        """Generate a list of GnuPG arguments based upon attributes."""
-
+        """
+        Generate a list of GnuPG arguments based upon attributes
+        """
         return self.get_meta_args() + self.get_standard_args() + self.extra_args
 
     def get_standard_args( self ):
-        """Generate a list of standard, non-meta or extra arguments"""
+        """
+        Generate a list of standard, non-meta or extra arguments
+        """
         args = []
         if self.homedir is not None:
             args.extend( [ '--homedir', self.homedir ] )
@@ -595,7 +609,9 @@ class Options:
         return args
 
     def get_meta_args( self ):
-        """Get a list of generated meta-arguments"""
+        """
+        Get a list of generated meta-arguments
+        """
         args = []
 
         if self.meta_pgp_5_compatible: args.extend( [ '--compress-algo', '1',
@@ -608,8 +624,9 @@ class Options:
 
 
 class Process:
-    """Objects of this class encompass properties of a GnuPG
-    process spawned by GnuPG.run().
+    """
+    Objects of this class encompass properties of a GnuPG process spawned by
+    GnuPG.run()
 
     # gnupg is a GnuPG object
     process = gnupg.run( [ '--decrypt' ], stdout = 1 )
@@ -637,9 +654,10 @@ class Process:
         self._waited = None
 
     def wait(self):
-        """Wait on the process to exit, allowing for child cleanup.
-        Will raise an IOError if the process exits non-zero."""
-
+        """
+        Wait on the process to exit, allowing for child cleanup.  Will raise an
+        IOError if the process exits non-zero
+        """
         e = os.waitpid(self.pid, 0)[1]
         if e != 0:
             raise IOError, "GnuPG exited non-zero, with code %d" % (e << 8)

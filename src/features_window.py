@@ -33,7 +33,9 @@ from common import helpers
 from common import kwalletbinding
 
 class FeaturesWindow:
-	'''Class for features window'''
+	"""
+	Class for features window
+	"""
 
 	def __init__(self):
 		self.xml = gtkgui_helpers.get_glade('features_window.glade')
@@ -83,10 +85,6 @@ class FeaturesWindow:
 				_('Passive popups notifying for new events.'),
 				_('Requires python-notify or instead python-dbus in conjunction with notification-daemon.'),
 				_('Feature not available under Windows.')),
-			_('Trayicon'): (self.trayicon_available,
-				_('A icon in systemtray reflecting the current presence.'),
-				_('Requires python-gnome2-extras or compiled trayicon module from Gajim sources.'),
-				_('Requires PyGTK >= 2.10.')),
 			_('Automatic status'): (self.idle_available,
 				_('Ability to measure idle time, in order to set auto status.'),
 				_('Requires libxss library.'),
@@ -103,10 +101,6 @@ class FeaturesWindow:
 				_('Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html).'),
 				_('Requires python-docutils.'),
 				_('Requires python-docutils.')),
-			_('Banners and clickable links'): (self.pysexy_available,
-				_('Ability to have clickable URLs in chat and groupchat window banners.'),
-				_('Requires python-sexy.'),
-				_('Requires python-sexy.')),
 			_('Audio / Video'): (self.farsight_available,
 				_('Ability to start audio and video chat.'),
 				_('Requires python-farsight.'),
@@ -240,21 +234,13 @@ class FeaturesWindow:
 			return False
 		return True
 
-	def trayicon_available(self):
-		if os.name == 'nt':
-			return True
-		try:
-			import systray
-		except Exception:
-			return False
-		return True
-
 	def idle_available(self):
 		from common import sleepy
 		return sleepy.SUPPORTED
 
 	def latex_available(self):
-		return gajim.HAVE_LATEX
+		from common import latex
+		return latex.check_for_latex_support()
 
 	def pycrypto_available(self):
 		return gajim.HAVE_PYCRYPTO
@@ -265,9 +251,6 @@ class FeaturesWindow:
 		except Exception:
 			return False
 		return True
-
-	def pysexy_available(self):
-		return gajim.HAVE_PYSEXY
 
 	def farsight_available(self):
 		return gajim.HAVE_FARSIGHT

@@ -12,10 +12,12 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
 
-'''
-Idlequeues are Gajim's network heartbeat. Transports can be plugged as
-idle objects and be informed about possible IO.
-'''
+
+"""
+Idlequeues are Gajim's network heartbeat. Transports can be plugged as idle
+objects and be informed about possible IO
+"""
+
 import os
 import select
 import logging
@@ -45,7 +47,9 @@ IS_CLOSED			= 16 # channel closed
 
 
 def get_idlequeue():
-	''' Get an appropriate idlequeue '''
+	"""
+	Get an appropriate idlequeue
+	"""
 	if os.name == 'nt':
 		# gobject.io_add_watch does not work on windows
 		return SelectIdleQueue()
@@ -59,34 +63,44 @@ def get_idlequeue():
 
 
 class IdleObject:
-	'''
-		Idle listener interface. Listed methods are called by IdleQueue.
-	'''
+	"""
+	Idle listener interface. Listed methods are called by IdleQueue.
+	"""
+
 	def __init__(self):
 		self.fd = -1 #: filedescriptor, must be unique for each IdleObject
 
 	def pollend(self):
-		''' called on stream failure '''
+		"""
+		Called on stream failure
+		"""
 		pass
 
 	def pollin(self):
-		''' called on new read event '''
+		"""
+		Called on new read event
+		"""
 		pass
 
 	def pollout(self):
-		''' called on new write event (connect in sockets is a pollout) '''
+		"""
+		Called on new write event (connect in sockets is a pollout)
+		"""
 		pass
 
 	def read_timeout(self):
-		''' called when timeout happened '''
+		"""
+		Called when timeout happened
+		"""
 		pass
 
 
 class IdleCommand(IdleObject):
-	'''
+	"""
 	Can be subclassed to execute commands asynchronously by the idlequeue.
 	Result will be optained via file descriptor of created pipe
-	'''
+	"""
+
 	def __init__(self, on_result):
 		IdleObject.__init__(self)
 		# how long (sec.) to wait for result ( 0 - forever )
@@ -111,7 +125,9 @@ class IdleCommand(IdleObject):
 		return ['echo', 'da']
 
 	def _compose_command_line(self):
-		''' return one line representation of command and its arguments '''
+		"""
+		Return one line representation of command and its arguments
+		"""
 		return  reduce(lambda left, right: left + ' ' + right,
 			self._compose_command_args())
 
@@ -187,7 +203,7 @@ class IdleCommand(IdleObject):
 
 
 class IdleQueue:
-	'''
+	"""
 	IdleQueue provide three distinct time based features. Uses select.poll()
 
 		1. Alarm timeout: Execute a callback after foo seconds
@@ -195,7 +211,8 @@ class IdleQueue:
 		has been set, but not removed in time.
 		3. Check file descriptor of plugged objects for read, write and error
 		events
-	'''
+	"""
+
 	# (timeout, boolean)
 	# Boolean is True if timeout is specified in seconds, False means miliseconds
 	PROCESS_TIMEOUT = (200, False)
@@ -215,13 +232,15 @@ class IdleQueue:
 		self._init_idle()
 
 	def _init_idle(self):
-		''' Hook method for subclassed. Will be called by __init__. '''
+		"""
+		Hook method for subclassed. Will be called by __init__
+		"""
 		self.selector = select.poll()
 
 	def set_alarm(self, alarm_cb, seconds):
-		'''
-		Sets up a new alarm. alarm_cb will be called after specified seconds.
-		'''
+		"""
+		Set up a new alarm. alarm_cb will be called after specified seconds.
+		"""
 		alarm_time = self.current_time() + seconds
 		# almost impossible, but in case we have another alarm_cb at this time
 		if alarm_time in self.alarms:
@@ -231,10 +250,10 @@ class IdleQueue:
 		return alarm_time
 
 	def remove_alarm(self, alarm_cb, alarm_time):
-		'''
-		Removes alarm callback alarm_cb scheduled on alarm_time.
-		Returns True if it was removed sucessfully, otherwise False
-		'''
+		"""
+		Remove alarm callback alarm_cb scheduled on alarm_time. Returns True if
+		it was removed sucessfully, otherwise False
+		"""
 		if not alarm_time in self.alarms:
 			return False
 		i = -1
@@ -251,7 +270,9 @@ class IdleQueue:
 			return False
 
 	def remove_timeout(self, fd, timeout=None):
-		''' Removes the read timeout '''
+		"""
+		Remove the read timeout
+		"""
 		log.info('read timeout removed for fd %s' % fd)
 		if fd in self.read_timeouts:
 			if timeout:
@@ -263,12 +284,12 @@ class IdleQueue:
 				del(self.read_timeouts[fd])
 
 	def set_read_timeout(self, fd, seconds, func=None):
-		'''
-		Sets a new timeout. If it is not removed after specified seconds,
-		func or obj.read_timeout() will be called.
+		"""
+		Seta a new timeout. If it is not removed after specified seconds,
+		func or obj.read_timeout() will be called
 
 		A filedescriptor fd can have several timeouts.
-		'''
+		"""
 		log_txt = 'read timeout set for fd %s on %s seconds' % (fd, seconds)
 		if func:
 			log_txt += ' with function ' + str(func)
@@ -280,11 +301,10 @@ class IdleQueue:
 			self.read_timeouts[fd] = {timeout: func}
 
 	def _check_time_events(self):
-		'''
+		"""
 		Execute and remove alarm callbacks and execute func() or read_timeout()
-		for plugged objects if specified time has ellapsed.
-		'''
-		log.info('check time evs')
+		for plugged objects if specified time has ellapsed
+		"""
 		current_time = self.current_time()
 
 		for fd, timeouts in self.read_timeouts.items():
@@ -313,13 +333,13 @@ class IdleQueue:
 					del(self.alarms[alarm_time])
 
 	def plug_idle(self, obj, writable=True, readable=True):
-		'''
-		Plug an IdleObject into idlequeue. Filedescriptor fd must be set.
+		"""
+		Plug an IdleObject into idlequeue. Filedescriptor fd must be set
 
 		:param obj: the IdleObject
 		:param writable: True if obj has data to sent
 		:param readable: True if obj expects data to be reiceived
-		'''
+		"""
 		if obj.fd == -1:
 			return
 		if obj.fd in self.queue:
@@ -339,11 +359,15 @@ class IdleQueue:
 		self._add_idle(obj.fd, flags)
 
 	def _add_idle(self, fd, flags):
-		''' Hook method for subclasses, called by plug_idle '''
+		"""
+		Hook method for subclasses, called by plug_idle
+		"""
 		self.selector.register(fd, flags)
 
 	def unplug_idle(self, fd):
-		''' Removed plugged IdleObject, specified by filedescriptor fd.  '''
+		"""
+		Remove plugged IdleObject, specified by filedescriptor fd
+		"""
 		if fd in self.queue:
 			del(self.queue[fd])
 			self._remove_idle(fd)
@@ -353,7 +377,9 @@ class IdleQueue:
 		return time()
 
 	def _remove_idle(self, fd):
-		''' Hook method for subclassed, called by unplug_idle '''
+		"""
+		Hook method for subclassed, called by unplug_idle
+		"""
 		self.selector.unregister(fd)
 
 	def _process_events(self, fd, flags):
@@ -379,13 +405,13 @@ class IdleQueue:
 		return False
 
 	def process(self):
-		'''
-		Process idlequeue. Check for any pending timeout or alarm events.
-		Call IdleObjects on possible and requested read, write and error events
-		on their file descriptors.
+		"""
+		Process idlequeue. Check for any pending timeout or alarm events.  Call
+		IdleObjects on possible and requested read, write and error events on
+		their file descriptors
 
 		Call this in regular intervals.
-		'''
+		"""
 		if not self.queue:
 			# check for timeouts/alert also when there are no active fds
 			self._check_time_events()
@@ -403,24 +429,26 @@ class IdleQueue:
 
 
 class SelectIdleQueue(IdleQueue):
-	'''
+	"""
 	Extends IdleQueue to use select.select() for polling
 
-	This class exisists for the sake of gtk2.8 on windows, which
-	doesn't seem to support io_add_watch properly (yet)
-	'''
+	This class exisists for the sake of gtk2.8 on windows, which doesn't seem to
+	support io_add_watch properly (yet)
+	"""
+
 	def _init_idle(self):
-		'''
-		Creates a dict, which maps file/pipe/sock descriptor to glib event id
-		'''
+		"""
+		Create a dict, which maps file/pipe/sock descriptor to glib event id
+		"""
 		self.read_fds = {}
 		self.write_fds = {}
 		self.error_fds = {}
 
 	def _add_idle(self, fd, flags):
-		''' this method is called when we plug a new idle object.
-		Remove descriptor to read/write/error lists, according flags
-		'''
+		"""
+		This method is called when we plug a new idle object. Remove descriptor
+		to read/write/error lists, according flags
+		"""
 		if flags & 3:
 			self.read_fds[fd] = fd
 		if flags & 4:
@@ -428,9 +456,10 @@ class SelectIdleQueue(IdleQueue):
 		self.error_fds[fd] = fd
 
 	def _remove_idle(self, fd):
-		''' this method is called when we unplug a new idle object.
-		Remove descriptor from read/write/error lists
-		'''
+		"""
+		This method is called when we unplug a new idle object. Remove descriptor
+		from read/write/error lists
+		"""
 		if fd in self.read_fds:
 			del(self.read_fds[fd])
 		if fd in self.write_fds:
@@ -466,27 +495,29 @@ class SelectIdleQueue(IdleQueue):
 
 
 class GlibIdleQueue(IdleQueue):
-	'''
-	Extends IdleQueue to use glib io_add_wath, instead of select/poll
-	In another 'non gui' implementation of Gajim IdleQueue can be used safetly.
-	'''
+	"""
+	Extends IdleQueue to use glib io_add_wath, instead of select/poll In another
+	'non gui' implementation of Gajim IdleQueue can be used safetly
+	"""
+
 	# (timeout, boolean)
 	# Boolean is True if timeout is specified in seconds, False means miliseconds
 	PROCESS_TIMEOUT = (2, True)
 
 	def _init_idle(self):
-		'''
+		"""
 		Creates a dict, which maps file/pipe/sock descriptor to glib event id
-		'''
+		"""
 		self.events = {}
 		# time() is already called in glib, we just get the last value
 		# overrides IdleQueue.current_time()
 		self.current_time = gobject.get_current_time
 
 	def _add_idle(self, fd, flags):
-		''' this method is called when we plug a new idle object.
-		Start listening for events from fd
-		'''
+		"""
+		This method is called when we plug a new idle object. Start listening for
+		events from fd
+		"""
 		res = gobject.io_add_watch(fd, flags, self._process_events,
 			priority=gobject.PRIORITY_LOW)
 		# store the id of the watch, so that we can remove it on unplug
@@ -501,9 +532,10 @@ class GlibIdleQueue(IdleQueue):
 			raise
 
 	def _remove_idle(self, fd):
-		''' this method is called when we unplug a new idle object.
-		Stop listening for events from fd
-		'''
+		"""
+		This method is called when we unplug a new idle object. Stop listening
+		for events from fd
+		"""
 		if not fd in self.events:
 			return
 		gobject.source_remove(self.events[fd])

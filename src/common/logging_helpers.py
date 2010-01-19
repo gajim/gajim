@@ -23,7 +23,7 @@ import i18n
 
 def parseLogLevel(arg):
 	"""
-	eiter numeric value or level name from logging module
+	Eiter numeric value or level name from logging module
 	"""
 	if arg.isdigit():
 		return int(arg)
@@ -98,7 +98,7 @@ def colorize(text, color):
 
 class FancyFormatter(logging.Formatter):
 	"""
-	A Eye-candy formatter with colors
+	An eye-candy formatter with colors
 	"""
 	colors_mapping = {
 		'DEBUG':		colors.BLUE,
@@ -134,7 +134,7 @@ class FancyFormatter(logging.Formatter):
 
 def init(use_color=False):
 	"""
-	initialize the logging system
+	Iinitialize the logging system
 	"""
 	consoleloghandler = logging.StreamHandler()
 	consoleloghandler.setFormatter(

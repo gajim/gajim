@@ -213,7 +213,9 @@ if gajim.HAVE_GPG:
 			return self.get_keys(True)
 
 		def _stripHeaderFooter(self, data):
-			"""Remove header and footer from data"""
+			"""
+			Remove header and footer from data
+			"""
 			if not data: return ''
 			lines = data.split('\n')
 			while lines[0] != '':
@@ -229,7 +231,9 @@ if gajim.HAVE_GPG:
 			return line
 
 		def _addHeaderFooter(self, data, type_):
-			"""Add header and footer from data"""
+			"""
+			Add header and footer from data
+			"""
 			out = "-----BEGIN PGP %s-----\n" % type_
 			out = out + "Version: PGP\n"
 			out = out + "\n"

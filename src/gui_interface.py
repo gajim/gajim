@@ -50,10 +50,10 @@ from common import gajim
 from common import dbus_support
 if dbus_support.supported:
 	from music_track_listener import MusicTrackListener
+	from common import location_listener
 	import dbus
 
 import gtkgui_helpers
-
 
 import dialogs
 import notify
@@ -72,7 +72,7 @@ import common.sleepy
 from common.xmpp import idlequeue
 from common.zeroconf import connection_zeroconf
 from common import resolver
-from common import caps
+from common import caps_cache
 from common import proxy65_manager
 from common import socks5
 from common import helpers
@@ -92,7 +92,6 @@ config_filename = gajimpaths['CONFIG_FILE']
 
 from common import optparser
 parser = optparser.OptionsParser(config_filename)
-
 
 import logging
 log = logging.getLogger('gajim.interface')
@@ -202,9 +201,7 @@ class Interface:
 
 	def handle_event_connection_lost(self, account, array):
 		# ('CONNECTION_LOST', account, [title, text])
-		path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-			'connection_lost.png')
-		path = gtkgui_helpers.get_path_to_generic_or_avatar(path)
+		path = gtkgui_helpers.get_icon_path('gajim-connection_lost', 48)
 		notify.popup(_('Connection Failed'), account, account,
 			'connection_failed', path, array[0], array[1])
 
@@ -266,10 +263,10 @@ class Interface:
 
 	def handle_event_new_jid(self, account, data):
 		#('NEW_JID', account, (old_jid, new_jid))
-		'''
+		"""
 		This event is raised when our JID changed (most probably because we use
-		anonymous account. We update contact and roster entry in this case.
-		'''
+		anonymous account. We update contact and roster entry in this case
+		"""
 		self.roster.rename_self_contact(data[0], data[1], account)
 
 	def edit_own_details(self, account):
@@ -444,7 +441,7 @@ class Interface:
 
 				# TODO: This causes problems when another
 				#	resource signs off!
-				conn.remove_transfers_for_contact(contact1)
+				conn.stop_all_active_file_transfers(contact1)
 
 				# disable encryption, since if any messages are
 				# lost they'll be not decryptable (note that
@@ -596,9 +593,7 @@ class Interface:
 		self.add_event(account, jid, 'subscription_request', (text, nick))
 
 		if helpers.allow_showing_notification(account):
-			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-				'subscription_request.png')
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(path)
+			path = gtkgui_helpers.get_icon_path('gajim-subscription_request', 48)
 			event_type = _('Subscription request')
 			notify.popup(event_type, jid, account, 'subscription_request', path,
 				event_type, jid)
@@ -656,13 +651,12 @@ class Interface:
 
 		if helpers.allow_popup_window(account) or not self.systray_enabled:
 			self.show_unsubscribed_dialog(account, contact)
+			return
 
 		self.add_event(account, jid, 'unsubscribed', contact)
 
 		if helpers.allow_showing_notification(account):
-			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-				'unsubscribed.png')
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(path)
+			path = gtkgui_helpers.get_icon_path('gajim-unsubscribed', 48)
 			event_type = _('Unsubscribed')
 			notify.popup(event_type, jid, account, 'unsubscribed', path,
 				event_type, jid)
@@ -824,12 +818,18 @@ class Interface:
 			win = self.instances[account]['infos'][array[0] + '/' + array[1]]
 		c = gajim.contacts.get_contact(account, array[0], array[1])
 		if c: # c can be none if it's a gc contact
-			c.last_status_time = time.localtime(time.time() - tim)
 			if array[3]:
 				c.status = array[3]
 				self.roster.draw_contact(c.jid, account) # draw offline status
+			last_time = time.localtime(time.time() - tim)
+			if c.show == 'offline':
+				c.last_status_time = last_time
+			else:
+				c.last_activity_time = last_time
 		if win:
 			win.set_last_status_time()
+		if self.roster.tooltip.id and self.roster.tooltip.win:
+			self.roster.tooltip.update_last_time(last_time)
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('LastStatusTime', (account, array))
 
@@ -1120,9 +1120,7 @@ class Interface:
 			array[3], array[4]))
 
 		if helpers.allow_showing_notification(account):
-			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-				'gc_invitation.png')
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(path)
+			path = gtkgui_helpers.get_icon_path('gajim-gc_invitation', 48)
 			event_type = _('Groupchat Invitation')
 			notify.popup(event_type, jid, account, 'gc-invitation', path,
 				event_type, room_jid)
@@ -1142,7 +1140,7 @@ class Interface:
 			sectext += _('You are currently connected without your OpenPGP key.')
 			dialogs.WarningDialog(_('Your passphrase is incorrect'), sectext)
 		else:
-			path = os.path.join(gajim.DATA_DIR, 'pixmaps', 'warning.png')
+			path = gtkgui_helpers.get_icon_path('gajim-warning', 48)
 			notify.popup('warning', account, account, 'warning', path,
 				_('OpenGPG Passphrase Incorrect'),
 				_('You are currently connected without your OpenPGP key.'))
@@ -1279,8 +1277,7 @@ class Interface:
 		self.add_event(account, jid, 'file-send-error', file_props)
 
 		if helpers.allow_showing_notification(account):
-			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', 'ft_error.png')
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+			path = gtkgui_helpers.get_icon_path('gajim-ft_error', 48)
 			event_type = _('File Transfer Error')
 			notify.popup(event_type, jid, account, 'file-send-error', path,
 				event_type, file_props['name'])
@@ -1290,8 +1287,7 @@ class Interface:
 		gmail_new_messages = int(array[1])
 		gmail_messages_list = array[2]
 		if gajim.config.get('notify_on_new_gmail_email'):
-			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-				'new_email_recv.png')
+			path = gtkgui_helpers.get_icon_path('gajim-new_email_recv', 48)
 			title = _('New mail on %(gmail_mail_address)s') % \
 				{'gmail_mail_address': jid}
 			text = i18n.ngettext('You have %d new mail conversation',
@@ -1314,7 +1310,6 @@ class Interface:
 
 			if gajim.config.get_per('soundevents', 'gmail_received', 'enabled'):
 				helpers.play_sound('gmail_received')
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			notify.popup(_('New E-mail'), jid, account, 'gmail',
 				path_to_image=path, title=title,
 				text=text)
@@ -1325,6 +1320,7 @@ class Interface:
 	def handle_event_file_request_error(self, account, array):
 		# ('FILE_REQUEST_ERROR', account, (jid, file_props, error_msg))
 		jid, file_props, errmsg = array
+		jid = gajim.get_jid_without_resource(jid)
 		ft = self.instances['file_transfers']
 		ft.set_status(file_props['type'], file_props['sid'], 'stop')
 		errno = file_props['error']
@@ -1345,15 +1341,14 @@ class Interface:
 
 		if helpers.allow_showing_notification(account):
 			# check if we should be notified
-			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', 'ft_error.png')
-
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+			path = gtkgui_helpers.get_icon_path('gajim-ft_error', 48)
 			event_type = _('File Transfer Error')
 			notify.popup(event_type, jid, account, msg_type, path,
 				title = event_type, text = file_props['name'])
 
 	def handle_event_file_request(self, account, array):
 		jid = array[0]
+		jid = gajim.get_jid_without_resource(jid)
 		if jid not in gajim.contacts.get_jid_list(account):
 			keyID = ''
 			attached_keys = gajim.config.get_per('accounts', account,
@@ -1375,11 +1370,9 @@ class Interface:
 		self.add_event(account, jid, 'file-request', file_props)
 
 		if helpers.allow_showing_notification(account):
-			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-				'ft_request.png')
+			path = gtkgui_helpers.get_icon_path('gajim-ft_request', 48)
 			txt = _('%s wants to send you a file.') % gajim.get_name_from_jid(
 				account, jid)
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
 			event_type = _('File Transfer Request')
 			notify.popup(event_type, jid, account, 'file-request',
 				path_to_image = path, title = event_type, text = txt)
@@ -1450,11 +1443,11 @@ class Interface:
 				if event_type == _('File Transfer Completed'):
 					txt = _('You successfully received %(filename)s from %(name)s.')\
 						% {'filename': filename, 'name': name}
-					img = 'ft_done.png'
+					img_name = 'gajim-ft_done'
 				else: # ft stopped
 					txt = _('File transfer of %(filename)s from %(name)s stopped.')\
 						% {'filename': filename, 'name': name}
-					img = 'ft_stopped.png'
+					img_name = 'gajim-ft_stopped'
 			else:
 				receiver = file_props['receiver']
 				if hasattr(receiver, 'jid'):
@@ -1467,23 +1460,23 @@ class Interface:
 				if event_type == _('File Transfer Completed'):
 					txt = _('You successfully sent %(filename)s to %(name)s.')\
 						% {'filename': filename, 'name': name}
-					img = 'ft_done.png'
+					img_name = 'gajim-ft_done'
 				else: # ft stopped
 					txt = _('File transfer of %(filename)s to %(name)s stopped.')\
 						% {'filename': filename, 'name': name}
-					img = 'ft_stopped.png'
-			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events', img)
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+					img_name = 'gajim-ft_stopped'
+			path = gtkgui_helpers.get_icon_path(img_name, 48)
 		else:
 			txt = ''
+			path = ''
 
 		if gajim.config.get('notify_on_file_complete') and \
 			(gajim.config.get('autopopupaway') or \
 			gajim.connections[account].connected in (2, 3)):
 			# we want to be notified and we are online/chat or we don't mind
 			# bugged when away/na/busy
-			notify.popup(event_type, jid, account, msg_type, path_to_image = path,
-				title = event_type, text = txt)
+			notify.popup(event_type, jid, account, msg_type, path_to_image=path,
+				title=event_type, text=txt)
 
 	def handle_event_stanza_arrived(self, account, stanza):
 		if account not in self.instances:
@@ -1520,7 +1513,9 @@ class Interface:
 				contact.resource)
 
 	def handle_event_signed_in(self, account, empty):
-		'''SIGNED_IN event is emitted when we sign in, so handle it'''
+		"""
+		SIGNED_IN event is emitted when we sign in, so handle it
+		"""
 		# ('SIGNED_IN', account, ())
 		# block signed in notifications for 30 seconds
 		gajim.block_signed_in_notifications[account] = True
@@ -1560,6 +1555,10 @@ class Interface:
 		if gajim.connections[account].pep_supported and dbus_support.supported \
 		and gajim.config.get_per('accounts', account, 'publish_tune'):
 			self.enable_music_listener()
+		# enable location listener
+		if gajim.connections[account].pep_supported and dbus_support.supported \
+		and gajim.config.get_per('accounts', account, 'publish_location'):
+			location_listener.enable()
 
 	def handle_event_metacontacts(self, account, tags_list):
 		gajim.contacts.define_metacontacts(account, tags_list)
@@ -1765,11 +1764,9 @@ class Interface:
 
 		if helpers.allow_showing_notification(account):
 			# TODO: we should use another pixmap ;-)
-			img = os.path.join(gajim.DATA_DIR, 'pixmaps', 'events',
-				'ft_request.png')
 			txt = _('%s wants to start a voice chat.') % gajim.get_name_from_jid(
 				account, peerjid)
-			path = gtkgui_helpers.get_path_to_generic_or_avatar(img)
+			path = gtkgui_helpers.get_icon_path('gajim-mic_active', 48)
 			event_type = _('Voice Chat Request')
 			notify.popup(event_type, peerjid, account, 'jingle-incoming',
 				path_to_image = path, title = event_type, text = txt)
@@ -1827,7 +1824,9 @@ class Interface:
 		dialogs.RosterItemExchangeWindow(account, data[0], data[1], data[2])
 
 	def handle_event_unique_room_id_supported(self, account, data):
-		'''Receive confirmation that unique_room_id are supported'''
+		"""
+		Receive confirmation that unique_room_id are supported
+		"""
 		# ('UNIQUE_ROOM_ID_SUPPORTED', server, instance, room_id)
 		instance = data[1]
 		instance.unique_room_id_supported(data[0], data[2])
@@ -1946,10 +1945,10 @@ class Interface:
 		# ('INSECURE_SSL_CONNECTION', account, (connection, connection_type))
 		server = gajim.config.get_per('accounts', account, 'hostname')
 		def on_ok(is_checked):
-			del self.instances[account]['online_dialog']['insecure_ssl']
 			if not is_checked[0]:
 				on_cancel()
 				return
+			del self.instances[account]['online_dialog']['insecure_ssl']
 			if is_checked[1]:
 				gajim.config.set_per('accounts', account,
 					'warn_when_insecure_ssl_connection', False)
@@ -1989,6 +1988,34 @@ class Interface:
 			dialogs.WarningDialog(_('PEP node was not removed'),
 				_('PEP node %(node)s was not removed: %(message)s') % {
 				'node': data[1], 'message': data[2]})
+
+	def handle_event_pep_received(self, account, data):
+		# ('PEP_RECEIVED', account, (jid, pep_type))
+		jid = data[0]
+		pep_type = data[1]
+		ctrl = common.gajim.interface.msg_win_mgr.get_control(jid, account)
+
+		if jid == common.gajim.get_jid_from_account(account):
+			self.roster.draw_account(account)
+
+		if pep_type == 'nickname':
+			self.roster.draw_contact(jid, account)
+			if ctrl:
+				ctrl.update_ui()
+				win = ctrl.parent_win
+				win.redraw_tab(ctrl)
+				win.show_title()
+		else:
+			self.roster.draw_pep(jid, account, pep_type)
+			if ctrl:
+				ctrl.update_pep(pep_type)
+
+	def handle_event_caps_received(self, account, data):
+		# ('CAPS_RECEIVED', account, (full_jid))
+		full_jid = data[0]
+		pm_ctrl = gajim.interface.msg_win_mgr.get_control(full_jid, account)
+		if pm_ctrl and hasattr(pm_ctrl, "update_contact"):
+			pm_ctrl.update_contact()
 
 	def create_core_handlers_list(self):
 		self.handlers = {
@@ -2079,14 +2106,30 @@ class Interface:
 			'JINGLE_CONNECTED': [self.handle_event_jingle_connected],
 			'JINGLE_DISCONNECTED': [self.handle_event_jingle_disconnected],
 			'JINGLE_ERROR': [self.handle_event_jingle_error],
+			'PEP_RECEIVED': [self.handle_event_pep_received],
+			'CAPS_RECEIVED': [self.handle_event_caps_received]
 		}
 
+	def dispatch(self, event, account, data):
+		"""
+		Dispatch an network event to the event handlers of this class. Return
+		true if it could be dispatched to alteast one handler
+		"""
+		if event not in self.handlers:
+			log.warning('Unknown event %s dispatched to GUI: %s' % (event, data))
+			return False
+		else:
+			log.debug('Event %s distpached to GUI: %s' % (event, data))
+			for handler in self.handlers[event]:
+				handler(account, data)
+			return len(self.handlers[event])
+
 	def register_core_handlers(self):
-		'''
+		"""
 		Register core handlers in Global Events Dispatcher (GED).
 		
 		This is part of rewriting whole events handling system to use GED.
-		'''
+		"""
 		for event_name, event_handlers in self.handlers.iteritems():
 			for event_handler in event_handlers:
 				gajim.ged.register_event_handler(event_name,
@@ -2098,7 +2141,9 @@ class Interface:
 ################################################################################
 
 	def add_event(self, account, jid, type_, event_args):
-		'''add an event to the gajim.events var'''
+		"""
+		Add an event to the gajim.events var
+		"""
 		# We add it to the gajim.events queue
 		# Do we have a queue?
 		jid = gajim.get_jid_without_resource(jid)
@@ -2228,7 +2273,8 @@ class Interface:
 
 			w = ctrl.parent_win
 		elif type_ in ('normal', 'file-request', 'file-request-error',
-		'file-send-error', 'file-error', 'file-stopped', 'file-completed'):
+		'file-send-error', 'file-error', 'file-stopped', 'file-completed',
+		'jingle-incoming'):
 			# Get the first single message event
 			event = gajim.events.get_first_event(account, fjid, type_)
 			if not event:
@@ -2264,11 +2310,6 @@ class Interface:
 			self.show_unsubscribed_dialog(account, contact)
 			gajim.events.remove_events(account, jid, event)
 			self.roster.draw_contact(jid, account)
-		elif type_ == 'jingle-incoming':
-			event = gajim.events.get_first_event(account, jid, type_)
-			peerjid, sid, content_types = event.parameters
-			dialogs.VoIPCallReceivedDialog(account, peerjid, sid, content_types)
-			gajim.events.remove_events(account, jid, event)
 		if w:
 			w.set_active_tab(ctrl)
 			w.window.window.focus(gtk.get_current_event_time())
@@ -2427,7 +2468,9 @@ class Interface:
 		self.invalid_XML_chars = u'[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x19]|[\ud800-\udfff]|[\ufffe-\uffff]'
 
 	def popup_emoticons_under_button(self, button, parent_win):
-		''' pops emoticons menu under button, located in parent_win'''
+		"""
+		Popup the emoticons menu under button, located in parent_win
+		"""
 		gtkgui_helpers.popup_emoticons_under_button(self.emoticons_menu,
 			button, parent_win)
 
@@ -2535,8 +2578,10 @@ class Interface:
 ################################################################################
 
 	def join_gc_room(self, account, room_jid, nick, password, minimize=False,
-	is_continued=False):
-		'''joins the room immediately'''
+			is_continued=False):
+		"""
+		Join the room immediately
+		"""
 		if not nick:
 			nick = gajim.nicks[account]
 
@@ -2596,40 +2641,36 @@ class Interface:
 		mw.new_tab(gc_control)
 
 	def new_private_chat(self, gc_contact, account, session=None):
-		contact = gc_contact.as_contact()
-		type_ = message_control.TYPE_PM
-		fjid = gc_contact.room_jid + '/' + gc_contact.name
-
 		conn = gajim.connections[account]
-
-		if not session and fjid in conn.sessions:
-			sessions = [s for s in conn.sessions[fjid].values() if isinstance(s, ChatControlSession)]
+		if not session and gc_contact.get_full_jid() in conn.sessions:
+			sessions = [s for s in conn.sessions[gc_contact.get_full_jid()].values()
+				if isinstance(s, ChatControlSession)]
 
 			# look for an existing session with a chat control
 			for s in sessions:
 				if s.control:
 					session = s
 					break
-
 			if not session and not len(sessions) == 0:
 				# there are no sessions with chat controls, just take the first one
 				session = sessions[0]
-
 		if not session:
 			# couldn't find an existing ChatControlSession, just make a new one
+			session = conn.make_new_session(gc_contact.get_full_jid(), None, 'pm')
 
-			session = conn.make_new_session(fjid, None, 'pm')
-
+		contact = gc_contact.as_contact()
 		if not session.control:
-			mw = self.msg_win_mgr.get_window(fjid, account)
-			if not mw:
-				mw = self.msg_win_mgr.create_window(contact, account, type_)
+			message_window = self.msg_win_mgr.get_window(gc_contact.get_full_jid(),
+				account)
+			if not message_window:
+				message_window = self.msg_win_mgr.create_window(contact, account,
+					message_control.TYPE_PM)
 
-			session.control = PrivateChatControl(mw, gc_contact, contact, account,
-				session)
-			mw.new_tab(session.control)
+			session.control = PrivateChatControl(message_window, gc_contact,
+				contact, account, session)
+			message_window.new_tab(session.control)
 
-		if len(gajim.events.get_events(account, fjid)):
+		if gajim.events.get_events(account, gc_contact.get_full_jid()):
 			# We call this here to avoid race conditions with widget validation
 			session.control.read_queue()
 
@@ -2738,8 +2779,8 @@ class Interface:
 		if status in ('chat', 'away', 'xa', 'dnd', 'invisible', 'offline'):
 			status = status + '.png'
 		elif status == 'online':
-			prefix = os.path.join(gajim.DATA_DIR, 'pixmaps')
-			status = 'gajim.png'
+			prefix = ''
+			status = gtkgui_helpers.get_icon_path('gajim', 32)
 		path = os.path.join(prefix, status)
 		try:
 			obj = bus.get_object('com.google.code.Awn', '/com/google/code/Awn')
@@ -2761,33 +2802,27 @@ class Interface:
 		listener.disconnect(self.music_track_changed_signal)
 		self.music_track_changed_signal = None
 
-	def music_track_changed(self, unused_listener, music_track_info, account=''):
-		if account == '':
+	def music_track_changed(self, unused_listener, music_track_info, account=None):
+		if not account:
 			accounts = gajim.connections.keys()
 		else:
 			accounts = [account]
-		if music_track_info is None:
-			artist = ''
-			title = ''
-			source = ''
-		elif hasattr(music_track_info, 'paused') and music_track_info.paused == 0:
-			artist = ''
-			title = ''
-			source = ''
+			
+		is_paused = hasattr(music_track_info, 'paused') and music_track_info.paused == 0
+		if not music_track_info or is_paused:
+			artist = title = source = ''
 		else:
 			artist = music_track_info.artist
 			title = music_track_info.title
 			source = music_track_info.album
 		for acct in accounts:
-			if acct not in gajim.connections:
-				continue
 			if not gajim.account_is_connected(acct):
 				continue
-			if not gajim.connections[acct].pep_supported:
+			if not gajim.config.get_per('accounts', acct, 'publish_tune'):
 				continue
 			if gajim.connections[acct].music_track_info == music_track_info:
 				continue
-			pep.user_send_tune(acct, artist, title, source)
+			gajim.connections[acct].send_tune(artist, title, source)
 			gajim.connections[acct].music_track_info = music_track_info
 
 	def get_bg_fg_colors(self):
@@ -2810,7 +2845,9 @@ class Interface:
 		return (bg_str, fg_str)
 
 	def read_sleepy(self):
-		'''Check idle status and change that status if needed'''
+		"""
+		Check idle status and change that status if needed
+		"""
 		if not self.sleeper.poll():
 			# idle detection is not supported in that OS
 			return False # stop looping in vain
@@ -2864,7 +2901,9 @@ class Interface:
 		return True # renew timeout (loop for ever)
 
 	def autoconnect(self):
-		'''auto connect at startup'''
+		"""
+		Auto connect at startup
+		"""
 		# dict of account that want to connect sorted by status
 		shows = {}
 		for a in gajim.connections:
@@ -2903,7 +2942,9 @@ class Interface:
 		helpers.launch_browser_mailer(kind, url)
 
 	def process_connections(self):
-		''' Called each foo (200) miliseconds. Check for idlequeue timeouts.	'''
+		"""
+		Called each foo (200) miliseconds. Check for idlequeue timeouts
+		"""
 		try:
 			gajim.idlequeue.process()
 		except Exception:
@@ -2927,7 +2968,11 @@ class Interface:
 			sys.exit()
 
 	def save_avatar_files(self, jid, photo, puny_nick = None, local = False):
-		'''Saves an avatar to a separate file, and generate files for dbus notifications. An avatar can be given as a pixmap directly or as an decoded image.'''
+		"""
+		Save an avatar to a separate file, and generate files for dbus
+		notifications. An avatar can be given as a pixmap directly or as an
+		decoded image
+		"""
 		puny_jid = helpers.sanitize_filename(jid)
 		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid)
 		if puny_nick:
@@ -2980,7 +3025,9 @@ class Interface:
 						(path_to_original_file, str(e)))
 
 	def remove_avatar_files(self, jid, puny_nick = None, local = False):
-		'''remove avatar files of a jid'''
+		"""
+		Remove avatar files of a jid
+		"""
 		puny_jid = helpers.sanitize_filename(jid)
 		path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid)
 		if puny_nick:
@@ -2997,7 +3044,9 @@ class Interface:
 				os.remove(path_to_file + '_notif_size_bw' + ext)
 
 	def auto_join_bookmarks(self, account):
-		'''autojoin bookmarked GCs that have 'auto join' on for this account'''
+		"""
+		Autojoin bookmarked GCs that have 'auto join' on for this account
+		"""
 		for bm in gajim.connections[account].bookmarks:
 			if bm['autojoin'] in ('1', 'true'):
 				jid = bm['jid']
@@ -3015,8 +3064,10 @@ class Interface:
 					self.roster.add_groupchat(jid, account)
 
 	def add_gc_bookmark(self, account, name, jid, autojoin, minimize, password,
-		nick):
-		'''add a bookmark for this account, sorted in bookmark list'''
+			nick):
+		"""
+		Add a bookmark for this account, sorted in bookmark list
+		"""
 		bm = {
 			'name': name,
 			'jid': jid,
@@ -3093,7 +3144,7 @@ class Interface:
 		gajim.ipython_window = window
 
 	def run(self):
-		if self.systray_capabilities and gajim.config.get('trayicon') != 'never':
+		if gajim.config.get('trayicon') != 'never':
 			self.show_systray()
 
 		self.roster = roster_window.RosterWindow()
@@ -3159,6 +3210,11 @@ class Interface:
 		}
 
 		cfg_was_read = parser.read()
+
+		from common import latex
+		gajim.HAVE_LATEX = gajim.config.get('use_latex') and \
+			latex.check_for_latex_support()
+
 		gajim.logger.reset_shown_unread_messages()
 		# override logging settings from config (don't take care of '-q' option)
 		if gajim.config.get('verbose'):
@@ -3277,7 +3333,7 @@ class Interface:
 		helpers.update_optional_features()
 		# prepopulate data which we are sure of; note: we do not log these info
 		for account in gajim.connections:
-			gajimcaps = caps.capscache[('sha-1', gajim.caps_hash[account])]
+			gajimcaps = caps_cache.capscache[('sha-1', gajim.caps_hash[account])]
 			gajimcaps.identities = [gajim.gajim_identity]
 			gajimcaps.features = gajim.gajim_common_features + \
 				gajim.gajim_optional_features[account]
@@ -3341,24 +3397,11 @@ class Interface:
 		gtkgui_helpers.make_jabber_state_images()
 
 		self.systray_enabled = False
-		self.systray_capabilities = False
 
-		if (os.name == 'nt'):
-			import statusicon
-			self.systray = statusicon.StatusIcon()
-			self.systray_capabilities = True
-		else: # use ours, not GTK+ one
-			# [FIXME: remove this when we migrate to 2.10 and we can do
-			# cool tooltips somehow and (not dying to keep) animation]
-			import systray
-			self.systray_capabilities = systray.HAS_SYSTRAY_CAPABILITIES
-			if self.systray_capabilities:
-				self.systray = systray.Systray()
-			else:
-				gajim.config.set('trayicon', 'never')
+		import statusicon
+		self.systray = statusicon.StatusIcon()
 
-		path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'gajim.png')
-		pix = gtk.gdk.pixbuf_new_from_file(path_to_file)
+		pix = gtkgui_helpers.get_icon_pixmap('gajim', 32)
 		# set the icon to all windows
 		gtk.window_set_default_icon(pix)
 
@@ -3469,16 +3512,14 @@ class PassphraseRequest:
 
 class ThreadInterface:
 	def __init__(self, func, func_args, callback, callback_args):
-		'''Call a function in a thread
-
-			:param func: the function to call in the thread
-			:param func_args: list or arguments for this function
-			:param callback: callback to call once function is finished
-			:param callback_args: list of arguments for this callback
-		'''
+		"""
+		Call a function in a thread
+		"""
 		def thread_function(func, func_args, callback, callback_args):
 			output = func(*func_args)
 			gobject.idle_add(callback, output, *callback_args)
 			
 		Thread(target=thread_function, args=(func, func_args, callback,
 			callback_args)).start()
+
+# vim: se ts=3:

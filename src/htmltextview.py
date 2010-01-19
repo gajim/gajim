@@ -25,7 +25,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-'''
+"""
 A gtk.TextView-based renderer for XHTML-IM, as described in:
   http://www.jabber.org/jeps/jep-0071.html
 
@@ -33,8 +33,7 @@ Starting with the version posted by Gustavo Carneiro,
 I (Santiago Gala) am trying to make it more compatible
 with the markup that docutils generate, and also more
 modular.
-
-'''
+"""
 
 import gobject
 import pango
@@ -187,7 +186,6 @@ for name in BLOCK_HEAD:
 											  )
 
 def _parse_css_color(color):
-	'''_parse_css_color(css_color) -> gtk.gdk.Color'''
 	if color.startswith('rgb(') and color.endswith(')'):
 		r, g, b = [int(c)*257 for c in color[4:-1].split(',')]
 		return gtk.gdk.Color(r, g, b)
@@ -200,10 +198,11 @@ def style_iter(style):
 
 
 class HtmlHandler(xml.sax.handler.ContentHandler):
-	"""A handler to display html to a gtk textview.
+	"""
+	A handler to display html to a gtk textview
 
-	It keeps a stack of "style spans" (start/end element pairs)
-	and a stack of list counters, for nested lists.
+	It keeps a stack of "style spans" (start/end element pairs) and a stack of
+	list counters, for nested lists.
 	"""
 	def __init__(self, conv_textview, startiter):
 		xml.sax.handler.ContentHandler.__init__(self)
@@ -240,8 +239,10 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 		callback(allocation.width*frac, *args)
 
 	def _parse_length(self, value, font_relative, block_relative, minl, maxl, callback, *args):
-		'''Parse/calc length, converting to pixels, calls callback(length, *args)
-		when the length is first computed or changes'''
+		"""
+		Parse/calc length, converting to pixels, calls callback(length, *args)
+		when the length is first computed or changes
+		"""
 		if value.endswith('%'):
 			val = float(value[:-1])
 			sign = cmp(val,0)
@@ -488,7 +489,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 			# Wait maximum 1s for connection
 			socket.setdefaulttimeout(1)
 			try:
-				f = urllib2.urlopen(attrs['src'])
+				req = urllib2.Request(attrs['src'])
+				req.add_header('User-Agent', 'Gajim ' + gajim.version)
+				f = urllib2.urlopen(req)
 			except Exception, ex:
 				gajim.log.debug('Error loading image %s ' % attrs['src']  + str(ex))
 				pixbuf = None
@@ -556,11 +559,11 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 				if h:
 					self._parse_length(h, False, False, 1, 1000, height_cb)
 				def set_size(pixbuf, w, h, dims):
-					'''FIXME: floats should be relative to the whole
-					textview, and resize with it. This needs new
-					pifbufs for every resize, gtk.gdk.Pixbuf.scale_simple
-					or similar.
-					'''
+					"""
+					FIXME: Floats should be relative to the whole textview, and
+					resize with it. This needs new pifbufs for every resize,
+					gtk.gdk.Pixbuf.scale_simple or similar.
+					"""
 					if isinstance(dims[0], float):
 						dims[0] = int(dims[0]*w)
 					elif not dims[0]:
@@ -804,6 +807,10 @@ class HtmlTextView(gtk.TextView):
 		self.connect('motion-notify-event', self.__motion_notify_event)
 		self.connect('leave-notify-event', self.__leave_event)
 		self.connect('enter-notify-event', self.__motion_notify_event)
+		self.connect('realize', self.on_html_text_view_realized)
+		self.connect('unrealize', self.on_html_text_view_unrealized)
+		self.connect('copy-clipboard', self.on_html_text_view_copy_clipboard)
+		self.get_buffer().connect_after('mark-set', self.on_text_buffer_mark_set)
 		self.get_buffer().create_tag('eol', scale = pango.SCALE_XX_SMALL)
 		self.tooltip = tooltips.BaseTooltip()
 		self.config = gajim.config
@@ -873,7 +880,45 @@ class HtmlTextView(gtk.TextView):
 		#if not eob.starts_line():
 		#    buffer_.insert(eob, '\n')
 
+	def on_html_text_view_copy_clipboard(self, unused_data):
+		clipboard = self.get_clipboard(gtk.gdk.SELECTION_CLIPBOARD)
+		clipboard.set_text(self.get_selected_text())
+		self.emit_stop_by_name('copy-clipboard')
 
+	def on_html_text_view_realized(self, unused_data):
+		self.get_buffer().remove_selection_clipboard(self.get_clipboard(gtk.gdk.SELECTION_PRIMARY))
+
+	def on_html_text_view_unrealized(self, unused_data):
+		self.get_buffer().add_selection_clipboard(self.get_clipboard(gtk.gdk.SELECTION_PRIMARY))
+
+	def on_text_buffer_mark_set(self, location, mark, unused_data):
+		bounds = self.get_buffer().get_selection_bounds()
+		if bounds:
+			# textview can be hidden while we add a new line in it.
+			if self.has_screen():
+				clipboard = self.get_clipboard(gtk.gdk.SELECTION_PRIMARY)
+				clipboard.set_text(self.get_selected_text())
+
+	def get_selected_text(self):
+		bounds = self.get_buffer().get_selection_bounds()
+		selection = ''
+		if bounds:
+			(search_iter, end) = bounds
+
+			while (search_iter.compare(end)):
+				character = search_iter.get_char()
+				if character == u'\ufffc':
+					anchor = search_iter.get_child_anchor()
+					if anchor:
+						text = anchor.get_data('plaintext')
+						if text:
+							selection+=text
+					else:
+						selection+=character
+				else:
+					selection+=character
+				search_iter.forward_char()
+		return selection
 
 change_cursor = None
 
@@ -898,14 +943,16 @@ if __name__ == '__main__':
 
 	htmlview = ConversationTextview(None)
 
-	path_to_file = os.path.join(gajim.DATA_DIR, 'pixmaps', 'muc_separator.png')
+	path = gtkgui_helpers.get_icon_path('gajim-muc_separator')
 	# use this for hr
-	htmlview.tv.focus_out_line_pixbuf =  gtk.gdk.pixbuf_new_from_file(path_to_file)
-
+	htmlview.tv.focus_out_line_pixbuf =  gtk.gdk.pixbuf_new_from_file(path)
 
 	tooltip = tooltips.BaseTooltip()
+
 	def on_textview_motion_notify_event(widget, event):
-		'''change the cursor to a hand when we are over a mail or an url'''
+		"""
+		Change the cursor to a hand when we are over a mail or an url
+		"""
 		global change_cursor
 		pointer_x, pointer_y = htmlview.tv.window.get_pointer()[0:2]
 		x, y = htmlview.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT, pointer_x,

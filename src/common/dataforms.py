@@ -21,8 +21,10 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-""" This module contains wrappers for different parts of data forms (JEP 0004).
-For information how to use them, read documentation. """
+"""
+This module contains wrappers for different parts of data forms (JEP 0004). For
+information how to use them, read documentation
+"""
 
 import xmpp
 
@@ -72,7 +74,9 @@ def Field(typ, **attrs):
 	return f
 
 def ExtendField(node):
-	''' Helper function to extend a node to field of appropriate type. '''
+	"""
+	Helper function to extend a node to field of appropriate type
+	"""
 	# when validation (XEP-122) will go in, we could have another classes
 	# like DateTimeField - so that dicts in Field() and ExtendField() will
 	# be different...
@@ -94,19 +98,23 @@ def ExtendField(node):
 	return f[typ](extend=node)
 
 def ExtendForm(node):
-	''' Helper function to extend a node to form of appropriate type. '''
+	"""
+	Helper function to extend a node to form of appropriate type
+	"""
 	if node.getTag('reported') is not None:
 		return MultipleDataForm(extend=node)
 	else:
 		return SimpleDataForm(extend=node)
 
 class DataField(ExtendedNode):
-	""" Keeps data about one field - var, field type, labels, instructions...
-	Base class for different kinds of fields. Use Field() function to
-	construct one of these. """
+	"""
+	Keeps data about one field - var, field type, labels, instructions... Base
+	class for different kinds of fields. Use Field() function to construct one
+	of these
+	"""
 
 	def __init__(self, typ=None, var=None, value=None, label=None, desc=None,
-	required=False, options=None, extend=None):
+			required=False, options=None, extend=None):
 
 		if extend is None:
 			ExtendedNode.__init__(self, 'field')
@@ -124,10 +132,12 @@ class DataField(ExtendedNode):
 
 	@nested_property
 	def type():
-		'''Type of field. Recognized values are: 'boolean', 'fixed', 'hidden',
+		"""
+		Type of field. Recognized values are: 'boolean', 'fixed', 'hidden',
 		'jid-multi', 'jid-single', 'list-multi', 'list-single', 'text-multi',
 		'text-private', 'text-single'. If you set this to something different,
-		DataField will store given name, but treat all data as text-single.'''
+		DataField will store given name, but treat all data as text-single
+		"""
 		def fget(self):
 			t = self.getAttr('type')
 			if t is None:
@@ -142,7 +152,9 @@ class DataField(ExtendedNode):
 
 	@nested_property
 	def var():
-		'''Field identifier.'''
+		"""
+		Field identifier
+		"""
 		def fget(self):
 			return self.getAttr('var')
 
@@ -157,7 +169,9 @@ class DataField(ExtendedNode):
 
 	@nested_property
 	def label():
-		'''Human-readable field name.'''
+		"""
+		Human-readable field name
+		"""
 		def fget(self):
 			l = self.getAttr('label')
 			if not l:
@@ -176,7 +190,9 @@ class DataField(ExtendedNode):
 
 	@nested_property
 	def description():
-		'''Human-readable description of field meaning.'''
+		"""
+		Human-readable description of field meaning
+		"""
 		def fget(self):
 			return self.getTagData('desc') or u''
 
@@ -196,7 +212,9 @@ class DataField(ExtendedNode):
 
 	@nested_property
 	def required():
-		'''Controls whether this field required to fill. Boolean.'''
+		"""
+		Controls whether this field required to fill. Boolean
+		"""
 		def fget(self):
 			return bool(self.getTag('required'))
 
@@ -212,7 +230,9 @@ class DataField(ExtendedNode):
 class BooleanField(DataField):
 	@nested_property
 	def value():
-		'''Value of field. May contain True, False or None.'''
+		"""
+		Value of field. May contain True, False or None
+		"""
 		def fget(self):
 			v = self.getTagData('value')
 			if v in ('0', 'false'):
@@ -234,10 +254,15 @@ class BooleanField(DataField):
 		return locals()
 
 class StringField(DataField):
-	''' Covers fields of types: fixed, hidden, text-private, text-single. '''
+	"""
+	Covers fields of types: fixed, hidden, text-private, text-single
+	"""
+
 	@nested_property
 	def value():
-		'''Value of field. May be any unicode string.'''
+		"""
+		Value of field. May be any unicode string
+		"""
 		def fget(self):
 			return self.getTagData('value') or u''
 
@@ -256,10 +281,15 @@ class StringField(DataField):
 		return locals()
 
 class ListField(DataField):
-	'''Covers fields of types: jid-multi, jid-single, list-multi, list-single.'''
+	"""
+	Covers fields of types: jid-multi, jid-single, list-multi, list-single
+	"""
+
 	@nested_property
 	def options():
-		'''Options.'''
+		"""
+		Options
+		"""
 		def fget(self):
 			options = []
 			for element in self.getTags('option'):
@@ -294,14 +324,21 @@ class ListField(DataField):
 			yield (v, l)
 
 class ListSingleField(ListField, StringField):
-	'''Covers list-single and jid-single fields.'''
+	"""
+	Covers list-single and jid-single fields
+	"""
 	pass
 
 class ListMultiField(ListField):
-	'''Covers list-multi and jid-multi fields.'''
+	"""
+	Covers list-multi and jid-multi fields
+	"""
+
 	@nested_property
 	def values():
-		'''Values held in field.'''
+		"""
+		Values held in field
+		"""
 		def fget(self):
 			values = []
 			for element in self.getTags('value'):
@@ -326,7 +363,9 @@ class ListMultiField(ListField):
 class TextMultiField(DataField):
 	@nested_property
 	def value():
-		'''Value held in field.'''
+		"""
+		Value held in field
+		"""
 		def fget(self):
 			value = u''
 			for element in self.iterTags('value'):
@@ -347,8 +386,10 @@ class TextMultiField(DataField):
 		return locals()
 
 class DataRecord(ExtendedNode):
-	'''The container for data fields - an xml element which has DataField
-	elements as children.'''
+	"""
+	The container for data fields - an xml element which has DataField elements
+	as children
+	"""
 	def __init__(self, fields=None, associated=None, extend=None):
 		self.associated = associated
 		self.vars = {}
@@ -373,7 +414,9 @@ class DataRecord(ExtendedNode):
 
 	@nested_property
 	def fields():
-		'''List of fields in this record.'''
+		"""
+		List of fields in this record
+		"""
 		def fget(self):
 			return self.getTags('field')
 
@@ -391,14 +434,17 @@ class DataRecord(ExtendedNode):
 		return locals()
 
 	def iter_fields(self):
-		''' Iterate over fields in this record. Do not take associated
-		into account. '''
+		"""
+		Iterate over fields in this record. Do not take associated into account
+		"""
 		for field in self.iterTags('field'):
 			yield field
 
 	def iter_with_associated(self):
-		''' Iterate over associated, yielding both our field and
-		associated one together. '''
+		"""
+		Iterate over associated, yielding both our field and associated one
+		together
+		"""
 		for field in self.associated.iter_fields():
 			yield self[field.var], field
 
@@ -420,9 +466,11 @@ class DataForm(ExtendedNode):
 
 	@nested_property
 	def type():
-		''' Type of the form. Must be one of: 'form', 'submit', 'cancel', 'result'.
+		"""
+		Type of the form. Must be one of: 'form', 'submit', 'cancel', 'result'.
 		'form' - this form is to be filled in; you will be able soon to do:
-			filledform = DataForm(replyto=thisform)...'''
+		filledform = DataForm(replyto=thisform)
+		"""
 		def fget(self):
 			return self.getAttr('type')
 
@@ -434,7 +482,11 @@ class DataForm(ExtendedNode):
 
 	@nested_property
 	def title():
-		''' Title of the form. Human-readable, should not contain any \\r\\n.'''
+		"""
+		Title of the form
+
+		Human-readable, should not contain any \\r\\n.
+		"""
 		def fget(self):
 			return self.getTagData('title')
 
@@ -451,7 +503,11 @@ class DataForm(ExtendedNode):
 
 	@nested_property
 	def instructions():
-		''' Instructions for this form. Human-readable, may contain \\r\\n. '''
+		"""
+		Instructions for this form
+
+		Human-readable, may contain \\r\\n.
+		"""
 		# TODO: the same code is in TextMultiField. join them
 		def fget(self):
 			value = u''
@@ -520,7 +576,9 @@ class MultipleDataForm(DataForm):
 
 	@nested_property
 	def items():
-		''' A list of all records. '''
+		"""
+		A list of all records
+		"""
 		def fget(self):
 			return list(self.iter_records())
 
@@ -543,7 +601,9 @@ class MultipleDataForm(DataForm):
 
 #	@nested_property
 #	def reported():
-#		''' DataRecord that contains descriptions of fields in records.'''
+#		"""
+#		DataRecord that contains descriptions of fields in records
+#		"""
 #		def fget(self):
 #			return self.getTag('reported')
 #		def fset(self, record):

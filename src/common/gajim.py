@@ -86,9 +86,10 @@ MY_EMOTS_PATH = gajimpaths['MY_EMOTS']
 MY_ICONSETS_PATH = gajimpaths['MY_ICONSETS']
 MY_MOOD_ICONSETS_PATH = gajimpaths['MY_MOOD_ICONSETS']
 MY_ACTIVITY_ICONSETS_PATH = gajimpaths['MY_ACTIVITY_ICONSETS']
-MY_CACERTS =  gajimpaths['MY_CACERTS']
+MY_CACERTS = gajimpaths['MY_CACERTS']
 TMP = gajimpaths['TMP']
 DATA_DIR = gajimpaths['DATA']
+ICONS_DIR = gajimpaths['ICONS']
 HOME_DIR = gajimpaths['HOME']
 PLUGINS_DIRS = [gajimpaths['PLUGINS_BASE'],
 				gajimpaths['PLUGINS_USER']]
@@ -106,7 +107,7 @@ else:
 
 os_info = None # used to cache os information
 
-from contacts import Contacts
+from contacts import LegacyContactsAPI
 from events import Events
 
 gmail_domains = ['gmail.com', 'googlemail.com']
@@ -117,7 +118,7 @@ last_message_time = {} # list of time of the latest incomming message
 							# {acct1: {jid1: time1, jid2: time2}, }
 encrypted_chats = {} # list of encrypted chats {acct1: [jid1, jid2], ..}
 
-contacts = Contacts()
+contacts = LegacyContactsAPI()
 gc_connected = {} # tell if we are connected to the room or not {acct: {room_jid: True}}
 gc_passwords = {} # list of the pass required to enter a room {room_jid: password}
 automatic_rooms = {} # list of rooms that must be automaticaly configured and for which we have a list of invities {account: {room_jid: {'invities': []}}}
@@ -172,12 +173,6 @@ try:
 except ImportError:
 	HAVE_PYCRYPTO = False
 
-HAVE_PYSEXY = True
-try:
-	import sexy
-except ImportError:
-	HAVE_PYSEXY = False
-
 HAVE_GPG = True
 try:
 	import GnuPGInterface
@@ -188,8 +183,9 @@ else:
 	if system('gpg -h >/dev/null 2>&1'):
 		HAVE_GPG = False
 
-import latex
-HAVE_LATEX = latex.check_for_latex_support()
+# Depends on use_latex option. Will be correctly set after we config options are
+# read.
+HAVE_LATEX = False
 
 HAVE_INDICATOR = True
 try:
@@ -217,8 +213,8 @@ gajim_optional_features = {}
 # Capabilities hash per account
 caps_hash = {}
 
-import caps
-caps.initialize(logger)
+import caps_cache
+caps_cache.initialize(logger)
 
 def get_nick_from_jid(jid):
 	pos = jid.find('@')
@@ -227,11 +223,6 @@ def get_nick_from_jid(jid):
 def get_server_from_jid(jid):
 	pos = jid.find('@') + 1 # after @
 	return jid[pos:]
-
-def get_resource_from_jid(jid):
-    tokens = jid.split('/', 1)
-    if len(tokens) > 1:
-        return tokens[1]
 
 def get_name_and_server_from_jid(jid):
 	name = get_nick_from_jid(jid)
@@ -248,8 +239,9 @@ def get_room_and_nick_from_fjid(jid):
 	return l
 
 def get_real_jid_from_fjid(account, fjid):
-	'''returns real jid or returns None
-	if we don't know the real jid'''
+	"""
+	Return real jid or returns None, if we don't know the real jid
+	"""
 	room_jid, nick = get_room_and_nick_from_fjid(fjid)
 	if not nick: # It's not a fake_jid, it is a real jid
 		return fjid # we return the real jid
@@ -274,7 +266,9 @@ def get_jid_without_resource(jid):
 	return jid.split('/')[0]
 
 def construct_fjid(room_jid, nick):
-	''' nick is in utf8 (taken from treeview); room_jid is in unicode'''
+	"""
+	Nick is in UTF-8 (taken from treeview); room_jid is in unicode
+	"""
 	# fake jid is the jid for a contact in a room
 	# gaim@conference.jabber.org/nick
 	if isinstance(nick, str):
@@ -288,19 +282,17 @@ def get_resource_from_jid(jid):
 	else:
 		return ''
 
-# [15:34:28] <asterix> we should add contact.fake_jid I think
-# [15:34:46] <asterix> so if we know real jid, it wil be in contact.jid, or we look in contact.fake_jid
-# [15:32:54] <asterix> they can have resource if we know the real jid
-# [15:33:07] <asterix> and that resource is in contact.resource
-
 def get_number_of_accounts():
-	'''returns the number of ALL accounts'''
+	"""
+	Return the number of ALL accounts
+	"""
 	return len(connections.keys())
 
 def get_number_of_connected_accounts(accounts_list = None):
-	'''returns the number of CONNECTED accounts
-	you can optionally pass an accounts_list
-	and if you do those will be checked, else all will be checked'''
+	"""
+	Returns the number of CONNECTED accounts. Uou can optionally pass an
+	accounts_list and if you do those will be checked, else all will be checked
+	"""
 	connected_accounts = 0
 	if accounts_list is None:
 		accounts = connections.keys()
@@ -327,7 +319,9 @@ def zeroconf_is_connected():
 		config.get_per('accounts', ZEROCONF_ACC_NAME, 'is_zeroconf')
 
 def get_number_of_securely_connected_accounts():
-	'''returns the number of the accounts that are SSL/TLS connected'''
+	"""
+	Return the number of the accounts that are SSL/TLS connected
+	"""
 	num_of_secured = 0
 	for account in connections.keys():
 		if account_is_securely_connected(account):
@@ -342,8 +336,11 @@ def account_is_securely_connected(account):
 		return False
 
 def get_transport_name_from_jid(jid, use_config_setting = True):
-	'''returns 'aim', 'gg', 'irc' etc
-	if JID is not from transport returns None'''
+	"""
+	Returns 'aim', 'gg', 'irc' etc
+
+	If JID is not from transport returns None.
+	"""
 	#FIXME: jid can be None! one TB I saw had this problem:
 	# in the code block # it is a groupchat presence in handle_event_notify
 	# jid was None. Yann why?
@@ -379,21 +376,27 @@ def jid_is_transport(jid):
 	return False
 
 def get_jid_from_account(account_name):
-	'''return the jid we use in the given account'''
+	"""
+	Return the jid we use in the given account
+	"""
 	name = config.get_per('accounts', account_name, 'name')
 	hostname = config.get_per('accounts', account_name, 'hostname')
 	jid = name + '@' + hostname
 	return jid
 
 def get_our_jids():
-	'''returns a list of the jids we use in our accounts'''
+	"""
+	Returns a list of the jids we use in our accounts
+	"""
 	our_jids = list()
 	for account in contacts.get_accounts():
 		our_jids.append(get_jid_from_account(account))
 	return our_jids
 
 def get_hostname_from_account(account_name, use_srv = False):
-	'''returns hostname (if custom hostname is used, that is returned)'''
+	"""
+	Returns hostname (if custom hostname is used, that is returned)
+	"""
 	if use_srv and connections[account_name].connected_hostname:
 		return connections[account_name].connected_hostname
 	if config.get_per('accounts', account_name, 'use_custom_host'):
@@ -401,7 +404,9 @@ def get_hostname_from_account(account_name, use_srv = False):
 	return config.get_per('accounts', account_name, 'hostname')
 
 def get_notification_image_prefix(jid):
-	'''returns the prefix for the notification images'''
+	"""
+	Returns the prefix for the notification images
+	"""
 	transport_name = get_transport_name_from_jid(jid)
 	if transport_name in ('aim', 'icq', 'msn', 'yahoo', 'facebook'):
 		prefix = transport_name
@@ -410,7 +415,9 @@ def get_notification_image_prefix(jid):
 	return prefix
 
 def get_name_from_jid(account, jid):
-	'''returns from JID's shown name and if no contact returns jids'''
+	"""
+	Return from JID's shown name and if no contact returns jids
+	"""
 	contact = contacts.get_first_contact_from_jid(account, jid)
 	if contact:
 		actor = contact.get_shown_name()
@@ -419,7 +426,9 @@ def get_name_from_jid(account, jid):
 	return actor
 
 def get_priority(account, show):
-	'''return the priority an account must have'''
+	"""
+	Return the priority an account must have
+	"""
 	if not show:
 		show = 'online'
 

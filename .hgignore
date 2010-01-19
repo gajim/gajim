@@ -2,13 +2,9 @@ syntax: glob
 *.orig
 *.gmo
 *.in
-*.la
-*.lo
 *.m4
 *.pyc
 *.pyo
-*.o
-*.Plo
 *~
 autom4te.cache
 data/defs.py
@@ -23,6 +19,4 @@ Makefile
 syntax: regexp
 ^config\.*
 ^config\/
-^src\/\.libs
-^src\/trayicon.c
 ^scripts\/gajim.*

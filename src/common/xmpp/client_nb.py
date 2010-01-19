@@ -16,9 +16,10 @@
 
 # $Id: client.py,v 1.52 2006/01/02 19:40:55 normanr Exp $
 
-'''
+"""
 Client class establishs connection to XMPP Server and handles authentication
-'''
+"""
+
 import socket
 import transports_nb, dispatcher_nb, auth_nb, roster_nb, protocol, bosh
 from protocol import NS_TLS
@@ -28,21 +29,22 @@ log = logging.getLogger('gajim.c.x.client_nb')
 
 
 class NonBlockingClient:
-	'''
+	"""
 	Client class is XMPP connection mountpoint. Objects for authentication,
 	network communication, roster, xml parsing ... are plugged to client object.
 	Client implements the abstract behavior - mostly negotioation and callbacks
-	handling, whereas underlying modules take care of feature-specific logic.
-	'''
+	handling, whereas underlying modules take care of feature-specific logic
+	"""
+
 	def __init__(self, domain, idlequeue, caller=None):
-		'''
-		Caches connection data:
+		"""
+		Caches connection data
 
 		:param domain: domain - for to: attribute (from account info)
 		:param idlequeue: processing idlequeue
 		:param caller: calling object - it has to implement methods
 			_event_dispatcher which is called from dispatcher instance
-		'''
+		"""
 		self.Namespace = protocol.NS_CLIENT
 		self.defaultNamespace = self.Namespace
 
@@ -69,10 +71,10 @@ class NonBlockingClient:
 		self.protocol_type = 'XMPP'
 
 	def disconnect(self, message=''):
-		'''
-		Called on disconnection - disconnect callback is picked based on state
-		of the client.
-		'''
+		"""
+		Called on disconnection - disconnect callback is picked based on state of
+		the client.
+		"""
 		# to avoid recursive calls
 		if self.disconnecting: return
 
@@ -112,7 +114,7 @@ class NonBlockingClient:
 				log.debug('calling on_proxy_failure cb')
 				self.on_proxy_failure(reason=message)
 			else:
-				log.debug('ccalling on_connect_failure cb')
+				log.debug('calling on_connect_failure cb')
 				self.on_connect_failure()
 		else:
 			# we are connected to XMPP server
@@ -132,9 +134,10 @@ class NonBlockingClient:
 		self.disconnecting = False
 
 	def connect(self, on_connect, on_connect_failure, hostname=None, port=5222,
-	on_proxy_failure=None, proxy=None, secure_tuple=('plain', None, None)):
-		'''
-		Open XMPP connection (open XML streams in both directions).
+			on_proxy_failure=None, proxy=None, secure_tuple=('plain', None,
+				None)):
+		"""
+		Open XMPP connection (open XML streams in both directions)
 
 		:param on_connect: called after stream is successfully opened
 		:param on_connect_failure: called when error occures during connection
@@ -150,7 +153,7 @@ class NonBlockingClient:
 			'tls' - TLS established after negotiation with starttls, or 'plain'.
 			cacerts, mycerts - see tls_nb.NonBlockingTLS constructor for more
 			details
-		'''
+		"""
 		self.on_connect = on_connect
 		self.on_connect_failure=on_connect_failure
 		self.on_proxy_failure = on_proxy_failure
@@ -223,7 +226,11 @@ class NonBlockingClient:
 			on_success=self._try_next_ip)
 
 	def _resolve_hostname(self, hostname, port, on_success):
-		''' wrapper for getaddinfo call. FIXME: getaddinfo blocks'''
+		"""
+		Wrapper for getaddinfo call
+
+		FIXME: getaddinfo blocks
+		"""
 		try:
 			self.ip_addresses = socket.getaddrinfo(hostname, port,
 				socket.AF_UNSPEC, socket.SOCK_STREAM)
@@ -234,7 +241,9 @@ class NonBlockingClient:
 			on_success()
 
 	def _try_next_ip(self, err_message=None):
-		'''Iterates over IP addresses tries to connect to it'''
+		"""
+		Iterate over IP addresses tries to connect to it
+		"""
 		if err_message:
 			log.debug('While looping over DNS A records: %s' % err_message)
 		if self.ip_addresses == []:
@@ -249,18 +258,20 @@ class NonBlockingClient:
 				on_connect_failure=self._try_next_ip)
 
 	def incoming_stream_version(self):
-		''' gets version of xml stream'''
+		"""
+		Get version of xml stream
+		"""
 		if 'version' in self.Dispatcher.Stream._document_attrs:
 			return self.Dispatcher.Stream._document_attrs['version']
 		else:
 			return None
 
 	def _xmpp_connect(self, socket_type=None):
-		'''
-		Starts XMPP connecting process - opens the XML stream. Is called after TCP
+		"""
+		Start XMPP connecting process - open the XML stream. Is called after TCP
 		connection is established or after switch to TLS when successfully
 		negotiated with <starttls>.
-		'''
+		"""
 		# socket_type contains info which transport connection was established
 		if not socket_type:
 			if self.Connection.ssl_lib:
@@ -273,19 +284,19 @@ class NonBlockingClient:
 		self._xmpp_connect_machine()
 
 	def _xmpp_connect_machine(self, mode=None, data=None):
-		'''
-		Finite automaton taking care of stream opening and features tag
-		handling. Calls _on_stream_start when stream is started, and disconnect()
-		on failure.
-		'''
+		"""
+		Finite automaton taking care of stream opening and features tag handling.
+		Calls _on_stream_start when stream is started, and disconnect() on
+		failure.
+		"""
 		log.info('-------------xmpp_connect_machine() >> mode: %s, data: %s...' %
 			(mode, str(data)[:20]))
 
 		def on_next_receive(mode):
-			'''
-			Sets desired on_receive callback on transport based on the state of
+			"""
+			Set desired on_receive callback on transport based on the state of
 			connect_machine.
-			'''
+			"""
 			log.info('setting %s on next receive' % mode)
 			if mode is None:
 				self.onreceive(None) # switch to Dispatcher.ProcessNonBlocking
@@ -346,10 +357,10 @@ class NonBlockingClient:
 			self._on_stream_start()
 
 	def _on_stream_start(self):
-		'''
+		"""
 		Called after XMPP stream is opened.	TLS negotiation may follow if
 		supported and desired.
-		'''
+		"""
 		self.stream_started = True
 		self.onreceive(None)
 
@@ -381,7 +392,9 @@ class NonBlockingClient:
 			assert False, 'Stream opened for unsupported connection'
 
 	def _tls_negotiation_handler(self, con=None, tag=None):
-		''' takes care of TLS negotioation with <starttls> '''
+		"""
+		Take care of TLS negotioation with <starttls>
+		"""
 		log.info('-------------tls_negotiaton_handler() >> tag: %s' % tag)
 		if not con and not tag:
 			# starting state when we send the <starttls>
@@ -407,15 +420,17 @@ class NonBlockingClient:
 				on_fail = lambda: self.disconnect('error while etabilishing TLS'))
 
 	def _on_connect(self):
-		''' preceeds call of on_connect callback '''
+		"""
+		Preceed call of on_connect callback
+		"""
 		self.onreceive(None)
 		self.on_connect(self, self.connected)
 
 	def raise_event(self, event_type, data):
-		'''
-		Raises event to connection instance. DATA_SENT and DATA_RECIVED events
+		"""
+		Raise event to connection instance. DATA_SENT and DATA_RECIVED events
 		are used in XML console to show XMPP traffic
-		'''
+		"""
 		log.info('raising event from transport: :::::%s::::\n_____________\n%s\n_____________\n' % (event_type,data))
 		if hasattr(self, 'Dispatcher'):
 			self.Dispatcher.Event('', event_type, data)
@@ -425,9 +440,9 @@ class NonBlockingClient:
 ###############################################################################
 
 	def auth(self, user, password, resource='', sasl=True, on_auth=None):
-		'''
+		"""
 		Authenticate connnection and bind resource. If resource is not provided
-		random one or library name used.
+		random one or library name used
 
 		:param user: XMPP username
 		:param password: XMPP password
@@ -435,7 +450,7 @@ class NonBlockingClient:
 		:param sasl: Boolean indicating if SASL shall be used. (default: True)
 		:param on_auth: Callback, called after auth. On auth failure, argument
 			is None.
-		'''
+		"""
 		self._User, self._Password = user, password
 		self._Resource, self._sasl = resource, sasl
 		self.on_auth = on_auth
@@ -443,7 +458,9 @@ class NonBlockingClient:
 		return
 
 	def _on_old_auth(self, res):
-		''' Callback used by NON-SASL auth. On auth failure, res is None. '''
+		"""
+		Callback used by NON-SASL auth. On auth failure, res is None
+		"""
 		if res:
 			self.connected += '+old_auth'
 			self.on_auth(self, 'old_auth')
@@ -451,7 +468,9 @@ class NonBlockingClient:
 			self.on_auth(self, None)
 
 	def _on_sasl_auth(self, res):
-		''' Used internally. On auth failure, res is None. '''
+		"""
+		Used internally. On auth failure, res is None
+		"""
 		self.onreceive(None)
 		if res:
 			self.connected += '+sasl'
@@ -460,7 +479,9 @@ class NonBlockingClient:
 			self.on_auth(self, None)
 
 	def _on_doc_attrs(self):
-		''' Plug authentication objects and start auth. '''
+		"""
+		Plug authentication objects and start auth
+		"""
 		if self._sasl:
 			auth_nb.SASL.get_instance(self._User, self._Password,
 				self._on_start_sasl).PlugIn(self)
@@ -474,7 +495,9 @@ class NonBlockingClient:
 		return True
 
 	def _on_start_sasl(self, data=None):
-		''' Callback used by SASL, called on each auth step.'''
+		"""
+		Callback used by SASL, called on each auth step
+		"""
 		if data:
 			self.Dispatcher.ProcessNonBlocking(data)
 		if not 'SASL' in self.__dict__:
@@ -504,20 +527,26 @@ class NonBlockingClient:
 		return True
 
 	def initRoster(self, version=''):
-		''' Plug in the roster. '''
+		"""
+		Plug in the roster
+		"""
 		if not self.__dict__.has_key('NonBlockingRoster'):
 			return roster_nb.NonBlockingRoster.get_instance(version=version).PlugIn(self)
 
 	def getRoster(self, on_ready=None, force=False):
-		''' Return the Roster instance, previously plugging it in and
-			requesting roster from server if needed. '''
+		"""
+		Return the Roster instance, previously plugging it in and requesting
+		roster from server if needed
+		"""
 		if self.__dict__.has_key('NonBlockingRoster'):
 			return self.NonBlockingRoster.getRoster(on_ready, force)
 		return None
 
 	def sendPresence(self, jid=None, typ=None, requestRoster=0):
-		''' Send some specific presence state.
-			Can also request roster from server if according agrument is set.'''
+		"""
+		Send some specific presence state. Can also request roster from server if
+		according agrument is set
+		"""
 		if requestRoster:
 			# FIXME: used somewhere?
 			roster_nb.NonBlockingRoster.get_instance().PlugIn(self)
@@ -528,31 +557,38 @@ class NonBlockingClient:
 ###############################################################################
 
 	def RegisterDisconnectHandler(self,handler):
-		''' Register handler that will be called on disconnect.'''
+		"""
+		Register handler that will be called on disconnect
+		"""
 		self.disconnect_handlers.append(handler)
 
 	def UnregisterDisconnectHandler(self,handler):
-		''' Unregister handler that is called on disconnect.'''
+		"""
+		Unregister handler that is called on disconnect
+		"""
 		self.disconnect_handlers.remove(handler)
 
 	def DisconnectHandler(self):
-		'''
+		"""
 		Default disconnect handler. Just raises an IOError. If you choosed to use
 		this class in your production client, override this method or at least
 		unregister it.
-		'''
+		"""
 		raise IOError('Disconnected from server.')
 
 	def get_connect_type(self):
-		''' Returns connection state. F.e.: None / 'tls' / 'plain+non_sasl'. '''
+		"""
+		Return connection state. F.e.: None / 'tls' / 'plain+non_sasl'
+		"""
 		return self.connected
 
 	def get_peerhost(self):
-		'''
+		"""
 		Gets the ip address of the account, from which is made connection to the
-		server (e.g. IP and port of gajim's socket).
+		server (e.g. IP and port of gajim's socket)
+
 		We will create listening socket on the same ip
-		'''
+		"""
 		# FIXME: tuple (ip, port) is expected (and checked for) but port num is
 		# useless
 		return self.socket.peerhost

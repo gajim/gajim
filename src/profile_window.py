@@ -36,7 +36,9 @@ from common import gajim
 
 
 class ProfileWindow:
-	'''Class for our information window'''
+	"""
+	Class for our information window
+	"""
 
 	def __init__(self, account):
 		self.xml = gtkgui_helpers.get_glade('profile_window.glade')
@@ -68,7 +70,7 @@ class ProfileWindow:
 		return True # loop forever
 
 	def remove_statusbar(self, message_id):
-		self.statusbar.remove(self.context_id, message_id)
+		self.statusbar.remove_message(self.context_id, message_id)
 		self.remove_statusbar_timeout_id = None
 
 	def on_profile_window_destroy(self, widget):
@@ -173,20 +175,22 @@ class ProfileWindow:
 				on_response_cancel = on_cancel, on_response_clear = on_clear)
 
 	def on_PHOTO_button_press_event(self, widget, event):
-		'''If right-clicked, show popup'''
+		"""
+		If right-clicked, show popup
+		"""
 		if event.button == 3 and self.avatar_encoded: # right click
 			menu = gtk.Menu()
 
 			# Try to get pixbuf
 			pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.jid,
-				use_local = False)
+				use_local=False)
 
-			if pixbuf:
+			if pixbuf not in (None, 'ask'):
 				nick = gajim.config.get_per('accounts', self.account, 'name')
 				menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
 				menuitem.connect('activate',
 					gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-					self.jid, None, nick + '.jpeg')
+					self.jid, self.account, nick)
 				menu.append(menuitem)
 			# show clear
 			menuitem = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
@@ -246,7 +250,7 @@ class ProfileWindow:
 					self.set_value(i + '_entry', vcard_[i])
 		if self.update_progressbar_timeout_id is not None:
 			if self.message_id:
-				self.statusbar.remove(self.context_id, self.message_id)
+				self.statusbar.remove_message(self.context_id, self.message_id)
 			self.message_id = self.statusbar.push(self.context_id,
 				_('Information received'))
 			self.remove_statusbar_timeout_id = gobject.timeout_add_seconds(3,
@@ -257,7 +261,9 @@ class ProfileWindow:
 			self.update_progressbar_timeout_id = None
 
 	def add_to_vcard(self, vcard_, entry, txt):
-		'''Add an information to the vCard dictionary'''
+		"""
+		Add an information to the vCard dictionary
+		"""
 		entries = entry.split('_')
 		loc = vcard_
 		if len(entries) == 3: # We need to use lists
@@ -280,7 +286,9 @@ class ProfileWindow:
 		return vcard_
 
 	def make_vcard(self):
-		'''make the vCard dictionary'''
+		"""
+		Make the vCard dictionary
+		"""
 		entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_HOME_USERID', 'URL',
 			'TEL_HOME_NUMBER', 'N_FAMILY', 'N_GIVEN', 'N_MIDDLE', 'N_PREFIX',
 			'N_SUFFIX', 'ADR_HOME_STREET', 'ADR_HOME_EXTADR', 'ADR_HOME_LOCALITY',
@@ -322,8 +330,7 @@ class ProfileWindow:
 		nick = ''
 		if 'NICKNAME' in vcard_:
 			nick = vcard_['NICKNAME']
-			from common import pep
-			pep.user_send_nickname(self.account, nick)
+			gajim.connections[self.account].send_nickname(nick)
 		if nick == '':
 			nick = gajim.config.get_per('accounts', self.account, 'name')
 		gajim.nicks[self.account] = nick
@@ -342,7 +349,7 @@ class ProfileWindow:
 
 	def vcard_not_published(self):
 		if self.message_id:
-			self.statusbar.remove(self.context_id, self.message_id)
+			self.statusbar.remove_message(self.context_id, self.message_id)
 		self.message_id = self.statusbar.push(self.context_id,
 			_('Information NOT published'))
 		self.remove_statusbar_timeout_id = gobject.timeout_add_seconds(3,

@@ -13,12 +13,14 @@
 ##   but WITHOUT ANY WARRANTY; without even the implied warranty of
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ##   GNU General Public License for more details.
-'''
+
+"""
 Provides plugs for SASL and NON-SASL authentication mechanisms.
-Can be used both for client and transport authentication.
+Can be used both for client and transport authentication
 
 See client_nb.py
-'''
+"""
+
 from protocol import NS_SASL, NS_SESSION, NS_STREAMS, NS_BIND, NS_AUTH
 from protocol import Node, NodeProcessed, isResultNode, Iq, Protocol, JID
 from plugin import PlugIn
@@ -49,7 +51,8 @@ SASL_UNSUPPORTED = 'not-supported'
 SASL_IN_PROCESS = 'in-process'
 
 def challenge_splitter(data):
-	''' Helper function that creates a dict from challenge string.
+	"""
+	Helper function that creates a dict from challenge string
 
 	Sample challenge string:
 		username="example.org",realm="somerealm",\
@@ -59,7 +62,7 @@ def challenge_splitter(data):
 	Expected result for challan:
 		dict['qop'] = ('auth','auth-int','auth-conf')
 		dict['realm'] = 'somerealm'
-	'''
+	"""
 	X_KEYWORD, X_VALUE, X_END = 0, 1, 2
 	quotes_open = False
 	keyword, value = '', ''
@@ -112,16 +115,17 @@ def challenge_splitter(data):
 
 
 class SASL(PlugIn):
-	'''
+	"""
 	Implements SASL authentication. Can be plugged into NonBlockingClient
-	to start authentication.
-	'''
+	to start authentication
+	"""
+
 	def __init__(self, username, password, on_sasl):
-		'''
+		"""
 		:param user: XMPP username
 		:param password: XMPP password
 		:param on_sasl: Callback, will be called after each SASL auth-step.
-		'''
+		"""
 		PlugIn.__init__(self)
 		self.username = username
 		self.password = password
@@ -141,7 +145,9 @@ class SASL(PlugIn):
 			self.startsasl = None
 
 	def plugout(self):
-		''' Remove SASL handlers from owner's dispatcher. Used internally. '''
+		"""
+		Remove SASL handlers from owner's dispatcher. Used internally
+		"""
 		if 'features' in  self._owner.__dict__:
 			self._owner.UnregisterHandler('features', self.FeaturesHandler,
 				xmlns=NS_STREAMS)
@@ -156,13 +162,13 @@ class SASL(PlugIn):
 				xmlns=NS_SASL)
 
 	def auth(self):
-		'''
+		"""
 		Start authentication. Result can be obtained via "SASL.startsasl"
-		attribute and will be either SASL_SUCCESS or SASL_FAILURE.
+		attribute and will be either SASL_SUCCESS or SASL_FAILURE
 
 		Note that successfull auth will take at least two Dispatcher.Process()
 		calls.
-		'''
+		"""
 		if self.startsasl:
 			pass
 		elif self._owner.Dispatcher.Stream.features:
@@ -176,7 +182,9 @@ class SASL(PlugIn):
 				self.FeaturesHandler, xmlns=NS_STREAMS)
 
 	def FeaturesHandler(self, conn, feats):
-		''' Used to determine if server supports SASL auth. Used internally. '''
+		"""
+		Used to determine if server supports SASL auth. Used internally
+		"""
 		if not feats.getTag('mechanisms', namespace=NS_SASL):
 			self.startsasl='not-supported'
 			log.error('SASL not supported by server')
@@ -196,6 +204,14 @@ class SASL(PlugIn):
 			self.mecs.remove('ANONYMOUS')
 			node = Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'ANONYMOUS'})
 			self.mechanism = 'ANONYMOUS'
+			self.startsasl = SASL_IN_PROCESS
+			self._owner.send(str(node))
+			raise NodeProcessed
+		if "EXTERNAL" in self.mecs:
+			self.mecs.remove('EXTERNAL')
+			node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'EXTERNAL'},
+				payload=[base64.encodestring('%s@%s' % (self.username,
+				self._owner.Server)).replace('\n', '')])
 			self.startsasl = SASL_IN_PROCESS
 			self._owner.send(str(node))
 			raise NodeProcessed
@@ -229,13 +245,16 @@ class SASL(PlugIn):
 			self.startsasl = SASL_IN_PROCESS
 			raise NodeProcessed
 		self.startsasl = SASL_FAILURE
-		log.error('I can only use DIGEST-MD5, GSSAPI and PLAIN mecanisms.')
+		log.error('I can only use EXTERNAL, DIGEST-MD5, GSSAPI and PLAIN '
+			'mecanisms.')
 		if self.on_sasl:
 			self.on_sasl()
 		return
 
 	def SASLHandler(self, conn, challenge):
-		''' Perform next SASL auth step. Used internally. '''
+		"""
+		Perform next SASL auth step. Used internally
+		"""
 		if challenge.getNamespace() != NS_SASL:
 			return
 		### Handle Auth result
@@ -332,8 +351,17 @@ class SASL(PlugIn):
 		else:
 			self.password = password
 		if self.mechanism == 'DIGEST-MD5':
-			A1 = C([H(C([self.resp['username'], self.resp['realm'],
-				self.password])), self.resp['nonce'], self.resp['cnonce']])
+			def convert_to_iso88591(string):
+				try:
+					string = string.decode('utf-8').encode('iso-8859-1')
+				except UnicodeEncodeError:
+					pass
+				return string
+			hash_username = convert_to_iso88591(self.resp['username'])
+			hash_realm = convert_to_iso88591(self.resp['realm'])
+			hash_password = convert_to_iso88591(self.password)
+			A1 = C([H(C([hash_username, hash_realm, hash_password])),
+				self.resp['nonce'], self.resp['cnonce']])
 			A2 = C(['AUTHENTICATE', self.resp['digest-uri']])
 			response= HH(C([HH(A1), self.resp['nonce'], self.resp['nc'],
 				self.resp['cnonce'], self.resp['qop'], HH(A2)]))
@@ -359,12 +387,15 @@ class SASL(PlugIn):
 
 
 class NonBlockingNonSASL(PlugIn):
-	'''
+	"""
 	Implements old Non-SASL (JEP-0078) authentication used in jabberd1.4 and
-	transport authentication.
-	'''
+	transport authentication
+	"""
+
 	def __init__(self, user, password, resource, on_auth):
-		''' Caches username, password and resource for auth. '''
+		"""
+		Caches username, password and resource for auth
+		"""
 		PlugIn.__init__(self)
 		self.user = user
 		if password is None:
@@ -375,10 +406,10 @@ class NonBlockingNonSASL(PlugIn):
 		self.on_auth = on_auth
 
 	def plugin(self, owner):
-		'''
+		"""
 		Determine the best auth method (digest/0k/plain) and use it for auth.
-		Returns used method name on success. Used internally.
-		'''
+		Returns used method name on success. Used internally
+		"""
 		log.info('Querying server about possible auth methods')
 		self.owner = owner
 
@@ -438,10 +469,11 @@ class NonBlockingNonSASL(PlugIn):
 
 
 class NonBlockingBind(PlugIn):
-	'''
+	"""
 	Bind some JID to the current connection to allow router know of our
-	location. Must be plugged after successful SASL auth.
-	'''
+	location. Must be plugged after successful SASL auth
+	"""
+
 	def __init__(self):
 		PlugIn.__init__(self)
 		self.bound = None
@@ -459,10 +491,10 @@ class NonBlockingBind(PlugIn):
 				xmlns=NS_STREAMS)
 
 	def FeaturesHandler(self, conn, feats):
-		'''
+		"""
 		Determine if server supports resource binding and set some internal
-		attributes accordingly.
-		'''
+		attributes accordingly
+		"""
 		if not feats.getTag('bind', namespace=NS_BIND):
 			log.error('Server does not requested binding.')
 			# we try to bind resource anyway
@@ -476,14 +508,16 @@ class NonBlockingBind(PlugIn):
 		self.bound = []
 
 	def plugout(self):
-		''' Remove Bind handler from owner's dispatcher. Used internally. '''
+		"""
+		Remove Bind handler from owner's dispatcher. Used internally
+		"""
 		self._owner.UnregisterHandler('features', self.FeaturesHandler,
 			xmlns=NS_STREAMS)
 
 	def NonBlockingBind(self, resource=None, on_bound=None):
-		''' Perform binding.
-		Use provided resource name or random (if not provided).
-		'''
+		"""
+		Perform binding. Use provided resource name or random (if not provided).
+		"""
 		self.on_bound = on_bound
 		self._resource = resource
 		if self._resource:

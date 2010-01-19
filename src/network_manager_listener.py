@@ -26,21 +26,27 @@ from common import gajim
 
 
 def device_now_active(self, *args):
-	'''For Network Manager 0.6'''
+	"""
+	For Network Manager 0.6
+	"""
 	for connection in gajim.connections.itervalues():
 		if gajim.config.get_per('accounts', connection.name,
 		'listen_to_network_manager') and connection.time_to_reconnect:
 			connection._reconnect()
 
 def device_no_longer_active(self, *args):
-	'''For Network Manager 0.6'''
+	"""
+	For Network Manager 0.6
+	"""
 	for connection in gajim.connections.itervalues():
 		if gajim.config.get_per('accounts', connection.name,
 		'listen_to_network_manager') and connection.connected > 1:
 			connection._disconnectedReconnCB()
 
 def state_changed(state):
-	'''For Network Manager 0.7'''
+	"""
+	For Network Manager 0.7
+	"""
 	if props.Get("org.freedesktop.NetworkManager", "State") == 3:
 		for connection in gajim.connections.itervalues():
 			if gajim.config.get_per('accounts', connection.name,

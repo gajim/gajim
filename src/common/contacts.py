@@ -28,31 +28,34 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+
+from common import caps_cache
+from common.account import Account
 import common.gajim
-import caps
-from account import Account
 
 class XMPPEntity(object):
-	'''Base representation of entities in XMPP'''
-	
+	"""
+	Base representation of entities in XMPP
+	"""
+
 	def __init__(self, jid, account, resource):
 		self.jid = jid
 		self.resource = resource
 		self.account = account
 
 class CommonContact(XMPPEntity):
-	
-	def __init__(self, jid, account, resource, show, status, name, our_chatstate,
-	composing_xep, chatstate, client_caps=None):
-		
+
+	def __init__(self, jid, account, resource, show, status, name,
+			our_chatstate, composing_xep, chatstate, client_caps=None):
+
 		XMPPEntity.__init__(self, jid, account, resource)
-		
+
 		self.show = show
 		self.status = status
 		self.name = name
-		
-		self.client_caps = client_caps or caps.NullClientCaps()
-		
+
+		self.client_caps = client_caps or caps_cache.NullClientCaps()
+
 		# please read xep-85 http://www.xmpp.org/extensions/xep-0085.html
 		# we keep track of xep85 support with the peer by three extra states:
 		# None, False and 'ask'
@@ -67,18 +70,18 @@ class CommonContact(XMPPEntity):
 		self.composing_xep = composing_xep
 		# this is contact's chatstate
 		self.chatstate = chatstate
-	
+
 	def get_full_jid(self):
 		raise NotImplementedError
-	
+
 	def get_shown_name(self):
 		raise NotImplementedError
 
 	def supports(self, requested_feature):
-		'''
-		Returns True if the contact has advertised to support the feature
+		"""
+		Return True if the contact has advertised to support the feature
 		identified by the given namespace. False otherwise.
-		'''
+		"""
 		if self.show == 'offline':
 			# Unfortunately, if all resources are offline, the contact
 			# includes the last resource that was online. Check for its
@@ -86,33 +89,34 @@ class CommonContact(XMPPEntity):
 			# return caps for a contact that has no resources left.
 			return False
 		else:
-			return caps.client_supports(self.client_caps, requested_feature)
+			return caps_cache.client_supports(self.client_caps, requested_feature)
 
 
 class Contact(CommonContact):
-	'''Information concerning each contact'''
-	def __init__(self, jid, account, name='', groups=[], show='', status='', sub='',
-	ask='', resource='', priority=0, keyID='', client_caps=None,
-	our_chatstate=None, chatstate=None, last_status_time=None, msg_id = None,
-	composing_xep=None, mood={}, tune={}, activity={}):
-		
-		CommonContact.__init__(self, jid, account, resource, show, status, name, 
+	"""
+	Information concerning a contact
+	"""
+	def __init__(self, jid, account, name='', groups=[], show='', status='',
+			sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
+			our_chatstate=None, chatstate=None, last_status_time=None, msg_id=
+			None, composing_xep=None, last_activity_time=None):
+
+		CommonContact.__init__(self, jid, account, resource, show, status, name,
 			our_chatstate, composing_xep, chatstate, client_caps=client_caps)
-		
+
 		self.contact_name = '' # nick choosen by contact
 		self.groups = [i for i in set(groups)] # filter duplicate values
 
 		self.sub = sub
 		self.ask = ask
-		
+
 		self.priority = priority
 		self.keyID = keyID
 		self.msg_id = msg_id
 		self.last_status_time = last_status_time
-		
-		self.mood = mood.copy()
-		self.tune = tune.copy()
-		self.activity = activity.copy()
+		self.last_activity_time = last_activity_time
+
+		self.pep = {}
 
 	def get_full_jid(self):
 		if self.resource:
@@ -139,7 +143,9 @@ class Contact(CommonContact):
 			return self.groups
 
 	def is_hidden_from_roster(self):
-		'''if contact should not be visible in roster'''
+		"""
+		If contact should not be visible in roster
+		"""
 		# XEP-0162: http://www.xmpp.org/extensions/xep-0162.html
 		if self.is_transport():
 			return False
@@ -169,54 +175,68 @@ class Contact(CommonContact):
 
 	def is_transport(self):
 		# if not '@' or '@' starts the jid then contact is transport
-		if self.jid.find('@') <= 0:
-			return True
-		return False
+		return self.jid.find('@') <= 0
 
 
 class GC_Contact(CommonContact):
-	'''Information concerning each groupchat contact'''
+	"""
+	Information concerning each groupchat contact
+	"""
+
 	def __init__(self, room_jid, account, name='', show='', status='', role='',
-	affiliation='', jid='', resource='', our_chatstate=None,
-	composing_xep=None, chatstate=None):
-		
+			affiliation='', jid='', resource='', our_chatstate=None,
+			composing_xep=None, chatstate=None):
+
 		CommonContact.__init__(self, jid, account, resource, show, status, name,
 				our_chatstate, composing_xep, chatstate)
-		
+
 		self.room_jid = room_jid
 		self.role = role
 		self.affiliation = affiliation
-		
+
 	def get_full_jid(self):
 		return self.room_jid + '/' + self.name
 
 	def get_shown_name(self):
 		return self.name
-	
-	def as_contact(self):
-		'''Create a Contact instance from this GC_Contact instance'''
-		return Contact(jid=self.get_full_jid(), account=self.account,
-			resource=self.resource, name=self.name, groups=[], show=self.show,
-			status=self.status, sub='none', client_caps=self.client_caps)
-	
 
-class Contacts:
-	'''Information concerning all contacts and groupchat contacts'''
-	def __init__(self):
+	def as_contact(self):
+		"""
+		Create a Contact instance from this GC_Contact instance
+		"""
+		return Contact(jid=self.get_full_jid(), account=self.account,
+			name=self.name, groups=[], show=self.show, status=self.status,
+			sub='none', client_caps=self.client_caps)
+
+
+class LegacyContactsAPI:
+	"""
+	This is a GOD class for accessing contact and groupchat information.
+	The API has several flaws:
 		
+		* it mixes concerns because it deals with contacts, groupchats,
+		  groupchat contacts and metacontacts
+		* some methods like get_contact() may return None. This leads to 
+		  a lot of duplication all over Gajim because it is not sure
+		  if we receive a proper contact or just None.
+		  
+	It is a long way to cleanup this API. Therefore just stick with it
+	and use it as before. We will try to figure out a migration path.
+	"""
+	def __init__(self):
 		self._metacontact_manager = MetacontactManager(self)
 		self._accounts = {}
-		
-	def change_account_name(self, old_name, new_name):		
+
+	def change_account_name(self, old_name, new_name):
 		self._accounts[new_name] = self._accounts[old_name]
 		self._accounts[new_name].name = new_name
 		del self._accounts[old_name]
-		
+
 		self._metacontact_manager.change_account_name(old_name, new_name)
 
 	def add_account(self, account_name):
-		self._accounts[account_name] = Account(account_name,
-				Contacts_New(), GC_Contacts())
+		self._accounts[account_name] = Account(account_name, Contacts(),
+			GC_Contacts())
 		self._metacontact_manager.add_account(account_name)
 
 	def get_accounts(self):
@@ -226,27 +246,31 @@ class Contacts:
 		del self._accounts[account]
 		self._metacontact_manager.remove_account(account)
 
-	def create_contact(self, jid, account, name='', groups=[], show='', status='',
-		sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
-		our_chatstate=None, chatstate=None, last_status_time=None,
-		composing_xep=None, mood={}, tune={}, activity={}):
-		account = self._accounts.get(account, account) # Use Account object if available
+	def create_contact(self, jid, account, name='', groups=[], show='',
+	status='', sub='', ask='', resource='', priority=0, keyID='',
+	client_caps=None, our_chatstate=None, chatstate=None, last_status_time=None,
+	composing_xep=None, last_activity_time=None):
+		# Use Account object if available
+		account = self._accounts.get(account, account)
 		return Contact(jid=jid, account=account, name=name, groups=groups,
-			show=show, status=status, sub=sub, ask=ask, resource=resource, priority=priority,
-			keyID=keyID, client_caps=client_caps, our_chatstate=our_chatstate,
-			chatstate=chatstate, last_status_time=last_status_time,
-			composing_xep=composing_xep, mood=mood, tune=tune, activity=activity)
-		
-	def create_self_contact(self, jid, account, resource, show, status, priority, keyID=''):
+			show=show, status=status, sub=sub, ask=ask, resource=resource,
+			priority=priority, keyID=keyID, client_caps=client_caps,
+			our_chatstate=our_chatstate, chatstate=chatstate,
+			last_status_time=last_status_time, composing_xep=composing_xep,
+			last_activity_time=last_activity_time)
+
+	def create_self_contact(self, jid, account, resource, show, status, priority,
+	name='', keyID=''):
 		conn = common.gajim.connections[account]
-		nick = common.gajim.nicks[account]
+		nick = name or common.gajim.nicks[account]
 		account = self._accounts.get(account, account) # Use Account object if available
-		return self.create_contact(jid=jid, account=account,
+		self_contact = self.create_contact(jid=jid, account=account,
 			name=nick, groups=['self_contact'], show=show, status=status,
-			sub='both', ask='none',	priority=priority, keyID=keyID,
-			resource=resource, mood=conn.mood, tune=conn.tune,
-			activity=conn.activity)
-		
+			sub='both', ask='none', 	priority=priority, keyID=keyID,
+			resource=resource)
+		self_contact.pep = conn.pep
+		return self_contact
+
 	def create_not_in_roster_contact(self, jid, account, resource='', name='', keyID=''):
 		account = self._accounts.get(account, account) # Use Account object if available
 		return self.create_contact(jid=jid, account=account, resource=resource,
@@ -254,12 +278,15 @@ class Contacts:
 				status='', sub='none', keyID=keyID)
 
 	def copy_contact(self, contact):
-		return self.create_contact(jid=contact.jid, account=contact.account,
-			name=contact.name, groups=contact.groups, show=contact.show, status=contact.status,
-			sub=contact.sub, ask=contact.ask, resource=contact.resource,
-			priority=contact.priority, keyID=contact.keyID,
-			client_caps=contact.client_caps, our_chatstate=contact.our_chatstate,
-			chatstate=contact.chatstate, last_status_time=contact.last_status_time)
+		return self.create_contact(contact.jid, contact.account,
+			name=contact.name, groups=contact.groups, show=contact.show,
+			status=contact.status, sub=contact.sub, ask=contact.ask,
+			resource=contact.resource, priority=contact.priority,
+			keyID=contact.keyID, client_caps=contact.client_caps,
+			our_chatstate=contact.our_chatstate, chatstate=contact.chatstate,
+			last_status_time=contact.last_status_time,
+			composing_xep=contact.composing_xep,
+			last_activity_time=contact.last_activity_time)
 
 	def add_contact(self, account, contact):
 		if account not in self._accounts:
@@ -275,7 +302,7 @@ class Contacts:
 		self._accounts[account].contacts.remove_jid(jid)
 		if remove_meta:
 			self._metacontact_manager.remove_metacontact(account, jid)
-		
+
 	def get_contacts(self, account, jid):
 		return self._accounts[account].contacts.get_contacts(jid)
 
@@ -288,13 +315,13 @@ class Contacts:
 
 	def get_contact_from_full_jid(self, account, fjid):
 		return self._accounts[account].contacts.get_contact_from_full_jid(fjid)
-	
+
 	def get_first_contact_from_jid(self, account, jid):
 		return self._accounts[account].contacts.get_first_contact_from_jid(jid)
 
 	def get_contacts_from_group(self, account, group):
 		return self._accounts[account].contacts.get_contacts_from_group(group)
-	
+
 	def get_jid_list(self, account):
 		return self._accounts[account].contacts.get_jid_list()
 
@@ -318,10 +345,11 @@ class Contacts:
 			contact = self.get_gc_contact(account, room, nick)
 			return contact
 		return self.get_highest_prio_contact_from_contacts(contacts)
-	
+
 	def get_nb_online_total_contacts(self, accounts=[], groups=[]):
-		'''Returns the number of online contacts and the total number of
-		contacts'''
+		"""
+		Return the number of online contacts and the total number of contacts
+		"""
 		if accounts == []:
 			accounts = self.get_accounts()
 		nbr_online = 0
@@ -357,25 +385,13 @@ class Contacts:
 					nbr_total += 1
 		return nbr_online, nbr_total
 
-	def is_pm_from_jid(self, account, jid):
-		'''Returns True if the given jid is a private message jid'''
-		if jid in self._contacts[account]:
-			return False
-		return True
-
-	def is_pm_from_contact(self, account, contact):
-		'''Returns True if the given contact is a private message contact'''
-		if isinstance(contact, Contact):
-			return False
-		return True
-	
 	def __getattr__(self, attr_name):
 		# Only called if self has no attr_name
 		if hasattr(self._metacontact_manager, attr_name):
 			return getattr(self._metacontact_manager, attr_name)
 		else:
 			raise AttributeError(attr_name)
-	
+
 	def create_gc_contact(self, room_jid, account, name='', show='', status='',
 		role='', affiliation='', jid='', resource=''):
 		account = self._accounts.get(account, account) # Use Account object if available
@@ -402,15 +418,18 @@ class Contacts:
 
 	def get_nb_role_total_gc_contacts(self, account, room_jid, role):
 		return self._accounts[account].gc_contacts.get_nb_role_total_gc_contacts(room_jid, role)
-		
-		
-class Contacts_New():
-	
+
+
+class Contacts():
+	"""
+	This is a breakout of the contact related behavior of the old 
+	Contacts class (which is not called LegacyContactsAPI)
+	"""
 	def __init__(self):
 		# list of contacts  {jid1: [C1, C2]}, } one Contact per resource
 		self._contacts = {}
-		
-	def add_contact(self, contact):		
+
+	def add_contact(self, contact):
 		if contact.jid not in self._contacts:
 			self._contacts[contact.jid] = [contact]
 			return
@@ -426,7 +445,7 @@ class Contacts_New():
 				self.remove_contact(c)
 				break
 		contacts.append(contact)
-		
+
 	def remove_contact(self, contact):
 		if contact.jid not in self._contacts:
 			return
@@ -434,56 +453,60 @@ class Contacts_New():
 			self._contacts[contact.jid].remove(contact)
 		if len(self._contacts[contact.jid]) == 0:
 			del self._contacts[contact.jid]
-			
+
 	def remove_jid(self, jid):
-		'''Removes all contacts for a given jid'''
-		if jid not in self._contacts:
-			return
-		del self._contacts[jid]
-			
-	def get_contacts(self, jid):
-		'''Returns the list of contact instances for this jid.'''
+		"""
+		Remove all contacts for a given jid
+		"""
 		if jid in self._contacts:
-			return self._contacts[jid]
-		else:
-			return []
-		
+			del self._contacts[jid]
+
+	def get_contacts(self, jid):
+		"""
+		Return the list of contact instances for this jid
+		"""
+		return self._contacts.get(jid, [])
+
 	def get_contact(self, jid, resource=None):
 		### WARNING ###
 		# This function returns a *RANDOM* resource if resource = None!
 		# Do *NOT* use if you need to get the contact to which you
 		# send a message for example, as a bare JID in Jabber means
 		# highest available resource, which this function ignores!
-		'''Returns the contact instance for the given resource if it's given else
-		the first contact is no resource is given or None if there is not'''
+		"""
+		Return the contact instance for the given resource if it's given else the
+		first contact is no resource is given or None if there is not
+		"""
 		if jid in self._contacts:
 			if not resource:
 				return self._contacts[jid][0]
 			for c in self._contacts[jid]:
 				if c.resource == resource:
 					return c
-		return None
 
 	def iter_contacts(self):
 		for jid in self._contacts.keys():
 			for contact in self._contacts[jid][:]:
 				yield contact
-				
+
 	def get_jid_list(self):
 		return self._contacts.keys()
-				
+
 	def get_contact_from_full_jid(self, fjid):
-		''' Get Contact object for specific resource of given jid'''
+		"""
+		Get Contact object for specific resource of given jid
+		"""
 		barejid, resource = common.gajim.get_room_and_nick_from_fjid(fjid)
 		return self.get_contact(barejid, resource)
-	
+
 	def get_first_contact_from_jid(self, jid):
 		if jid in self._contacts:
 			return self._contacts[jid][0]
-		return None
 
 	def get_contacts_from_group(self, group):
-		'''Returns all contacts in the given group'''
+		"""
+		Return all contacts in the given group
+		"""
 		group_contacts = []
 		for jid in self._contacts:
 			contacts = self.get_contacts(jid)
@@ -502,11 +525,11 @@ class Contacts_New():
 
 
 class GC_Contacts():
-	
+
 	def __init__(self):
 		# list of contacts that are in gc {room_jid: {nick: C}}}
 		self._rooms = {}
-	
+
 	def add_gc_contact(self, gc_contact):
 		if gc_contact.room_jid not in self._rooms:
 			self._rooms[gc_contact.room_jid] = {gc_contact.name: gc_contact}
@@ -524,9 +547,8 @@ class GC_Contacts():
 			del self._rooms[gc_contact.room_jid]
 
 	def remove_room(self, room_jid):
-		if room_jid not in self._rooms:
-			return
-		del self._rooms[room_jid]
+		if room_jid in self._rooms:
+			del self._rooms[room_jid]
 
 	def get_gc_list(self):
 		return self._rooms.keys()
@@ -544,8 +566,10 @@ class GC_Contacts():
 		return self._rooms[room_jid][nick]
 
 	def get_nb_role_total_gc_contacts(self, room_jid, role):
-		'''Returns the number of group chat contacts for the given role and the
-		total number of group chat contacts'''
+		"""
+		Return the number of group chat contacts for the given role and the total
+		number of group chat contacts
+		"""
 		if room_jid not in self._rooms:
 			return 0, 0
 		nb_role = nb_total = 0
@@ -554,25 +578,25 @@ class GC_Contacts():
 				nb_role += 1
 			nb_total += 1
 		return nb_role, nb_total
-		
+
 
 class MetacontactManager():
-	
+
 	def __init__(self, contacts):
 		self._metacontacts_tags = {}
 		self._contacts = contacts
-	
+
 	def change_account_name(self, old_name, new_name):
 		self._metacontacts_tags[new_name] = self._metacontacts_tags[old_name]
 		del self._metacontacts_tags[old_name]
-		
+
 	def add_account(self, account):
 		if account not in self._metacontacts_tags:
 			self._metacontacts_tags[account] = {}
-	
+
 	def remove_account(self, account):
 		del self._metacontacts_tags[account]
-		
+
 	def define_metacontacts(self, account, tags_list):
 		self._metacontacts_tags[account] = tags_list
 
@@ -582,13 +606,15 @@ class MetacontactManager():
 		#FIXME: can this append ?
 		assert False
 
-	def iter_metacontacts_families(self, account):		
+	def iter_metacontacts_families(self, account):
 		for tag in self._metacontacts_tags[account]:
 			family = self._get_metacontacts_family_from_tag(account, tag)
 			yield family
 
 	def _get_metacontacts_tag(self, account, jid):
-		'''Returns the tag of a jid'''
+		"""
+		Return the tag of a jid
+		"""
 		if not account in self._metacontacts_tags:
 			return None
 		for tag in self._metacontacts_tags[account]:
@@ -625,8 +651,8 @@ class MetacontactManager():
 
 	def remove_metacontact(self, account, jid):
 		if not account in self._metacontacts_tags:
-			return None
-		
+			return
+
 		found = None
 		for tag in self._metacontacts_tags[account]:
 			for data in self._metacontacts_tags[account][tag]:
@@ -657,7 +683,9 @@ class MetacontactManager():
 		return False
 
 	def _get_metacontacts_jids(self, tag, accounts):
-		'''Returns all jid for the given tag in the form {acct: [jid1, jid2],.}'''
+		"""
+		Return all jid for the given tag in the form {acct: [jid1, jid2],.}
+		"""
 		answers = {}
 		for account in self._metacontacts_tags:
 			if tag in self._metacontacts_tags[account]:
@@ -669,9 +697,10 @@ class MetacontactManager():
 		return answers
 
 	def get_metacontacts_family(self, account, jid):
-		'''return the family of the given jid, including jid in the form:
-		[{'account': acct, 'jid': jid, 'order': order}, ]
-		'order' is optional'''
+		"""
+		Return the family of the given jid, including jid in the form:
+		[{'account': acct, 'jid': jid, 'order': order}, ] 'order' is optional
+		"""
 		tag = self._get_metacontacts_tag(account, jid)
 		return self._get_metacontacts_family_from_tag(account, tag)
 
@@ -687,9 +716,12 @@ class MetacontactManager():
 		return answers
 
 	def _compare_metacontacts(self, data1, data2):
-		'''compare 2 metacontacts.
-		Data is {'jid': jid, 'account': account, 'order': order}
-		order is optional'''
+		"""
+		Compare 2 metacontacts
+
+		Data is {'jid': jid, 'account': account, 'order': order} order is
+		optional
+		"""
 		jid1 = data1['jid']
 		jid2 = data2['jid']
 		account1 = data1['account']
@@ -765,16 +797,17 @@ class MetacontactManager():
 		if account2 > account1:
 			return -1
 		return 0
-	
-	def get_nearby_family_and_big_brother(self, family, account):
-		'''Return the nearby family and its Big Brother
 
-		Nearby family is the part of the family that is grouped with the metacontact.
-		A metacontact may be over different accounts. If accounts are not merged
-		then the given family is split account wise.
+	def get_nearby_family_and_big_brother(self, family, account):
+		"""
+		Return the nearby family and its Big Brother
+
+		Nearby family is the part of the family that is grouped with the
+		metacontact.  A metacontact may be over different accounts. If accounts
+		are not merged then the given family is split account wise.
 
 		(nearby_family, big_brother_jid, big_brother_account)
-		'''
+		"""
 		if common.gajim.config.get('mergeaccounts'):
 			# group all together
 			nearby_family = family
@@ -789,9 +822,11 @@ class MetacontactManager():
 		return (nearby_family, big_brother_jid, big_brother_account)
 
 	def _get_metacontacts_big_brother(self, family):
-		'''which of the family will be the big brother under wich all
-		others will be ?'''
+		"""
+		Which of the family will be the big brother under wich all others will be
+		?
+		"""
 		family.sort(cmp=self._compare_metacontacts)
 		return family[-1]
-	
+
 # vim: se ts=3:

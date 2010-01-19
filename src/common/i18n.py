@@ -32,7 +32,7 @@ def paragraph_direction_mark(text):
 	"""
 	Determine paragraph writing direction according to
 	http://www.unicode.org/reports/tr9/#The_Paragraph_Level
-	
+
 	Returns either Unicode LTR mark or RTL mark.
 	"""
 	for char in text:
@@ -84,11 +84,12 @@ def Q_(s):
 	return s
 
 def ngettext(s_sing, s_plural, n, replace_sing = None, replace_plural = None):
-	'''use as:
-	i18n.ngettext('leave room %s', 'leave rooms %s', len(rooms), 'a', 'a, b, c')
+	"""
+	Use as:
+		i18n.ngettext('leave room %s', 'leave rooms %s', len(rooms), 'a', 'a, b, c')
 
-	in other words this is a hack to ngettext() to support %s %d etc..
-	'''
+	In other words this is a hack to ngettext() to support %s %d etc..
+	"""
 	text = _translation.ungettext(s_sing, s_plural, n)
 	if n == 1 and replace_sing is not None:
 		text = text % replace_sing

@@ -1,4 +1,4 @@
-# Copyright (C) 2009  red-agent <hell.director@gmail.com>
+# Copyright (C) 2009  Alexander Cherniuk <ts33kr@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,13 +20,18 @@ class BaseError(Exception):
     """
 
     def __init__(self, message, command=None, name=None):
+        self.message = message
+
         self.command = command
         self.name = name
 
         if command and not name:
             self.name = command.first_name
 
-        super(BaseError, self).__init__(message)
+        super(BaseError, self).__init__()
+
+    def __str__(self):
+        return self.message
 
 class DefinitionError(BaseError):
     """
