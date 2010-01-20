@@ -1480,6 +1480,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		self.gmail_last_tid = None
 		self.gmail_last_time = None
+		self.reset_awaiting_pep()
 
 	def build_http_auth_answer(self, iq_obj, answer):
 		if not self.connection or self.connected < 2:
@@ -2145,6 +2146,29 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		self.dispatch('GC_INVITATION',(frm, jid_from, reason, password,
 			is_continued))
 
+	def reset_awaiting_pep(self):
+		self.to_be_sent_activity = None
+		self.to_be_sent_mood = None
+		self.to_be_sent_tune = None
+		self.to_be_sent_nick = None
+		self.to_be_sent_location = None
+
+	def send_awaiting_pep(self):
+		"""
+		Send pep info that were waiting for connection
+		"""
+		if self.to_be_sent_activity:
+			self.send_activity(*self.to_be_sent_activity)
+		if self.to_be_sent_mood:
+			self.send_mood(*self.to_be_sent_mood)
+		if self.to_be_sent_tune:
+			self.send_tune(*self.to_be_sent_tune)
+		if self.to_be_sent_nick:
+			self.send_nick(self.to_be_sent_nick)
+		if self.to_be_sent_location:
+			self.send_location(self.to_be_sent_location)
+		self.reset_awaiting_pep()
+
 	def _pubsubEventCB(self, con, msg):
 		''' Called when we receive <message/> with pubsub event. '''
 		# TODO: Logging? (actually services where logging would be useful, should
@@ -2694,6 +2718,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 
 		# Inform GUI we just signed in
 		self.dispatch('SIGNED_IN', ())
+		self.send_awaiting_pep()
 		self.continue_connect_info = None
 
 	def request_gmail_notifications(self):

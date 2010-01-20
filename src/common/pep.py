@@ -470,6 +470,11 @@ def user_nickname(items, name, jid):
 		contact.contact_name = ''
 
 def user_send_mood(account, mood, message=''):
+	if common.gajim.connections[account].connected == 1:
+		# We are connecting, keep mood in mem and send it when we'll be
+		# conencted
+		common.gajim.connections[account].to_be_sent_mood = (mood, message)
+		return
 	if not common.gajim.connections[account].pep_supported:
 		return
 	item = xmpp.Node('mood', {'xmlns': xmpp.NS_MOOD})
@@ -483,6 +488,12 @@ def user_send_mood(account, mood, message=''):
 		'0')
 
 def user_send_activity(account, activity, subactivity='', message=''):
+	if common.gajim.connections[account].connected == 1:
+		# We are connecting, keep activity in mem and send it when we'll be
+		# conencted
+		common.gajim.connections[account].to_be_sent_activity = (activity,
+			subactivity, message)
+		return
 	if not common.gajim.connections[account].pep_supported:
 		return
 	item = xmpp.Node('activity', {'xmlns': xmpp.NS_ACTIVITY})
@@ -499,6 +510,12 @@ def user_send_activity(account, activity, subactivity='', message=''):
 
 def user_send_tune(account, artist='', title='', source='', track=0, length=0,
 items=None):
+	if common.gajim.connections[account].connected == 1:
+		# We are connecting, keep tune in mem and send it when we'll be
+		# conencted
+		common.gajim.connections[account].to_be_sent_tune = tune = (artist,
+			title, source, track, length, items)
+		return
 	if not (common.gajim.config.get_per('accounts', account, 'publish_tune') and\
 	common.gajim.connections[account].pep_supported):
 		return
@@ -525,6 +542,11 @@ items=None):
 		'0')
 
 def user_send_nickname(account, nick):
+	if common.gajim.connections[account].connected == 1:
+		# We are connecting, keep nickname in mem and send it when we'll be
+		# conencted
+		common.gajim.connections[account].to_be_sent_nick = nick
+		return
 	if not common.gajim.connections[account].pep_supported:
 		return
 	item = xmpp.Node('nick', {'xmlns': xmpp.NS_NICK})

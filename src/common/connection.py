@@ -217,6 +217,7 @@ class Connection(ConnectionHandlers):
 	# We are doing disconnect at so many places, better use one function in all
 	def disconnect(self, on_purpose=False):
 		gajim.interface.music_track_changed(None, None, self.name)
+		self.reset_awaiting_pep()
 		self.on_purpose = on_purpose
 		self.connected = 0
 		self.time_to_reconnect = None
@@ -973,16 +974,16 @@ class Connection(ConnectionHandlers):
 		self.priority = priority
 		self.dispatch('STATUS', 'invisible')
 		if initial:
-			#ask our VCard
+			# ask our VCard
 			self.request_vcard(None)
 
-			#Get bookmarks from private namespace
+			# Get bookmarks from private namespace
 			self.get_bookmarks()
 
-			#Get annotations
+			# Get annotations
 			self.get_annotations()
 
-			#Inform GUI we just signed in
+			# Inform GUI we just signed in
 			self.dispatch('SIGNED_IN', ())
 
 	def test_gpg_passphrase(self, password):
