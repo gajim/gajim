@@ -58,6 +58,7 @@ from common import passwords
 from common.zeroconf import connection_zeroconf
 from common import dataforms
 from common import GnuPG
+from common import ged
 
 try:
 	from common.multimedia_helpers import AudioInputManager, AudioOutputManager
