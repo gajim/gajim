@@ -2163,6 +2163,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
 
 		# Inform GUI we just signed in
 		self.dispatch('SIGNED_IN', ())
+		self.send_awaiting_pep()
 		self.continue_connect_info = None
 
 	def request_gmail_notifications(self):

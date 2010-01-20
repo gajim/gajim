@@ -500,6 +500,30 @@ class ConnectionPEP(object):
 		self._account = account
 		self._dispatcher = dispatcher
 		self._pubsub_connection = pubsub_connection
+		self.reset_awaiting_pep()
+
+	def reset_awaiting_pep(self):
+		self.to_be_sent_activity = None
+		self.to_be_sent_mood = None
+		self.to_be_sent_tune = None
+		self.to_be_sent_nick = None
+		self.to_be_sent_location = None
+
+	def send_awaiting_pep(self):
+		"""
+		Send pep info that were waiting for connection
+		"""
+		if self.to_be_sent_activity:
+			self.send_activity(*self.to_be_sent_activity)
+		if self.to_be_sent_mood:
+			self.send_mood(*self.to_be_sent_mood)
+		if self.to_be_sent_tune:
+			self.send_tune(*self.to_be_sent_tune)
+		if self.to_be_sent_nick:
+			self.send_nick(self.to_be_sent_nick)
+		if self.to_be_sent_location:
+			self.send_location(self.to_be_sent_location)
+		self.reset_awaiting_pep()
 
 	def _pubsubEventCB(self, xmpp_dispatcher, msg):
 		''' Called when we receive <message /> with pubsub event. '''
@@ -530,6 +554,11 @@ class ConnectionPEP(object):
 		raise xmpp.NodeProcessed
 
 	def send_activity(self, activity, subactivity=None, message=None):
+		if self.connected == 1:
+			# We are connecting, keep activity in mem and send it when we'll be
+			# conencted
+			self.to_be_sent_activity = (activity, subactivity, message)
+			return
 		if not self.pep_supported:
 			return
 		item = xmpp.Node('activity', {'xmlns': xmpp.NS_ACTIVITY})
@@ -550,6 +579,11 @@ class ConnectionPEP(object):
 		self._pubsub_connection.send_pb_retract('', xmpp.NS_ACTIVITY, '0')
 
 	def send_mood(self, mood, message=None):
+		if self.connected == 1:
+			# We are connecting, keep mood in mem and send it when we'll be
+			# conencted
+			self.to_be_sent_mood = (mood, message)
+			return
 		if not self.pep_supported:
 			return
 		item = xmpp.Node('mood', {'xmlns': xmpp.NS_MOOD})
@@ -569,6 +603,11 @@ class ConnectionPEP(object):
 
 	def send_tune(self, artist='', title='', source='', track=0, length=0,
 	items=None):
+		if self.connected == 1:
+			# We are connecting, keep tune in mem and send it when we'll be
+			# conencted
+			self.to_be_sent_tune = (artist, title, source, track, length, items)
+			return
 		if not self.pep_supported:
 			return
 		item = xmpp.Node('tune', {'xmlns': xmpp.NS_TUNE})
@@ -599,6 +638,11 @@ class ConnectionPEP(object):
 		self._pubsub_connection.send_pb_retract('', xmpp.NS_TUNE, '0')
 
 	def send_nickname(self, nick):
+		if self.connected == 1:
+			# We are connecting, keep nick in mem and send it when we'll be
+			# conencted
+			self.to_be_sent_nick = nick
+			return
 		if not self.pep_supported:
 			return
 		item = xmpp.Node('nick', {'xmlns': xmpp.NS_NICK})
@@ -613,6 +657,11 @@ class ConnectionPEP(object):
 		self._pubsub_connection.send_pb_retract('', xmpp.NS_NICK, '0')
 
 	def send_location(self, info):
+		if self.connected == 1:
+			# We are connecting, keep location in mem and send it when we'll be
+			# conencted
+			self.to_be_sent_location = info
+			return
 		if not self.pep_supported:
 			return
 		item = xmpp.Node('geoloc', {'xmlns': xmpp.NS_LOCATION})
