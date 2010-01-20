@@ -3331,8 +3331,8 @@ class RosterWindow:
 		pritext = _('You are about to send a custom status. Are you sure you want'
 			' to continue?')
 		sectext = _('This contact will temporarily see you as %(status)s, '
-			'but only until you change your status. Then he will see your global '
-			'status.') % {'status': show}
+			'but only until you change your status. Then he or she will see your '
+			'global status.') % {'status': show}
 		dlg = dialogs.ConfirmationDialogCheck(pritext, sectext,
 			_('Do _not ask me again'), on_response_ok=send_it)
 
