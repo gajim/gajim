@@ -60,8 +60,8 @@ class MessageControl:
 
 		gajim.last_message_time[self.account][self.get_full_jid()] = 0
 
-		self.xml = gtkgui_helpers.get_glade('message_window.glade', widget_name)
-		self.widget = self.xml.get_widget(widget_name)
+		self.xml = gtkgui_helpers.get_gtk_builder('message_window.ui', widget_name)
+		self.widget = self.xml.get_object(widget_name)
 
 	def get_full_jid(self):
 		fjid = self.contact.jid

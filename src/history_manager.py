@@ -115,16 +115,16 @@ class HistoryManager:
 				'%s does not exist.' % LOG_DB_PATH)
 			sys.exit()
 
-		xml = gtkgui_helpers.get_glade('history_manager.glade')
-		self.window = xml.get_widget('history_manager_window')
-		self.jids_listview = xml.get_widget('jids_listview')
-		self.logs_listview = xml.get_widget('logs_listview')
-		self.search_results_listview = xml.get_widget('search_results_listview')
-		self.search_entry = xml.get_widget('search_entry')
-		self.logs_scrolledwindow = xml.get_widget('logs_scrolledwindow')
-		self.search_results_scrolledwindow = xml.get_widget(
+		xml = gtkgui_helpers.get_gtk_builder('history_manager.ui')
+		self.window = xml.get_object('history_manager_window')
+		self.jids_listview = xml.get_object('jids_listview')
+		self.logs_listview = xml.get_object('logs_listview')
+		self.search_results_listview = xml.get_object('search_results_listview')
+		self.search_entry = xml.get_object('search_entry')
+		self.logs_scrolledwindow = xml.get_object('logs_scrolledwindow')
+		self.search_results_scrolledwindow = xml.get_object(
 			'search_results_scrolledwindow')
-		self.welcome_vbox = xml.get_widget('welcome_vbox')
+		self.welcome_vbox = xml.get_object('welcome_vbox')
 
 		self.jids_already_in = [] # holds jids that we already have in DB
 		self.AT_LEAST_ONE_DELETION_DONE = False
@@ -143,7 +143,7 @@ class HistoryManager:
 
 		self.window.show_all()
 
-		xml.signal_autoconnect(self)
+		xml.connect_signals(self)
 
 	def _init_jids_listview(self):
 		self.jids_liststore = gtk.ListStore(str, str) # jid, jid_id
@@ -441,22 +441,22 @@ class HistoryManager:
 
 	def on_listview_button_press_event(self, widget, event):
 		if event.button == 3: # right click
-			xml = gtkgui_helpers.get_glade('history_manager.glade', 'context_menu')
+			xml = gtkgui_helpers.get_gtk_builder('history_manager.ui', 'context_menu')
 			if widget.name != 'jids_listview':
-				xml.get_widget('export_menuitem').hide()
-			xml.get_widget('delete_menuitem').connect('activate',
+				xml.get_object('export_menuitem').hide()
+			xml.get_object('delete_menuitem').connect('activate',
 				self.on_delete_menuitem_activate, widget)
 
-			xml.signal_autoconnect(self)
-			xml.get_widget('context_menu').popup(None, None, None,
+			xml.connect_signals(self)
+			xml.get_object('context_menu').popup(None, None, None,
 				event.button, event.time)
 			return True
 
 	def on_export_menuitem_activate(self, widget):
-		xml = gtkgui_helpers.get_glade('history_manager.glade', 'filechooserdialog')
-		xml.signal_autoconnect(self)
+		xml = gtkgui_helpers.get_gtk_builder('history_manager.ui', 'filechooserdialog')
+		xml.connect_signals(self)
 
-		dlg = xml.get_widget('filechooserdialog')
+		dlg = xml.get_object('filechooserdialog')
 		dlg.set_title(_('Exporting History Logs...'))
 		dlg.set_current_folder(gajim.HOME_DIR)
 		dlg.props.do_overwrite_confirmation = True

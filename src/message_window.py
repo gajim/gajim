@@ -73,9 +73,9 @@ class MessageWindow(object):
 		self.dont_warn_on_delete = False
 
 		self.widget_name = 'message_window'
-		self.xml = gtkgui_helpers.get_glade('%s.glade' % self.widget_name)
-		self.window = self.xml.get_widget(self.widget_name)
-		self.notebook = self.xml.get_widget('notebook')
+		self.xml = gtkgui_helpers.get_gtk_builder('%s.ui' % self.widget_name)
+		self.window = self.xml.get_object(self.widget_name)
+		self.notebook = self.xml.get_object('notebook')
 		self.parent_paned = None
 
 		if parent_window:
@@ -116,7 +116,7 @@ class MessageWindow(object):
 		# gtk+ doesn't make use of the motion notify on gtkwindow by default
 		# so this line adds that
 		self.window.add_events(gtk.gdk.POINTER_MOTION_MASK)
-		self.alignment = self.xml.get_widget('alignment')
+		self.alignment = self.xml.get_object('alignment')
 
 		id_ = self.notebook.connect('switch-page',
 			self._on_notebook_switch_page)
@@ -125,7 +125,7 @@ class MessageWindow(object):
 			self._on_notebook_key_press)
 		self.handlers[id_] = self.notebook
 
-		# Remove the glade pages
+		# Remove the pages from xml file
 		while self.notebook.get_n_pages():
 			self.notebook.remove_page(0)
 		# Tab customizations
@@ -284,9 +284,9 @@ class MessageWindow(object):
 			self.alignment.set_property('top-padding', 2)
 
 		# Add notebook page and connect up to the tab's close button
-		xml = gtkgui_helpers.get_glade('message_window.glade', 'chat_tab_ebox')
-		tab_label_box = xml.get_widget('chat_tab_ebox')
-		widget = xml.get_widget('tab_close_button')
+		xml = gtkgui_helpers.get_gtk_builder('message_window.ui', 'chat_tab_ebox')
+		tab_label_box = xml.get_object('chat_tab_ebox')
+		widget = xml.get_object('tab_close_button')
 		id_ = widget.connect('clicked', self._on_close_button_clicked, control)
 		control.handlers[id_] = widget
 

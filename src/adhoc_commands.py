@@ -66,8 +66,8 @@ class CommandWindow:
 		self.allow_stage3_close = False
 
 		# retrieving widgets from xml
-		self.xml = gtkgui_helpers.get_glade('adhoc_commands_window.glade')
-		self.window = self.xml.get_widget('adhoc_commands_window')
+		self.xml = gtkgui_helpers.get_gtk_builder('adhoc_commands_window.ui')
+		self.window = self.xml.get_object('adhoc_commands_window')
 		self.window.connect('delete-event', self.on_adhoc_commands_window_delete_event)
 		for name in ('back_button', 'forward_button',
 			'execute_button','close_button','stages_notebook',
@@ -76,7 +76,7 @@ class CommandWindow:
 			'sending_form_stage_vbox','sending_form_progressbar',
 			'notes_label','no_commands_stage_vbox','error_stage_vbox',
 			'error_description_label'):
-			self.__dict__[name] = self.xml.get_widget(name)
+			self.__dict__[name] = self.xml.get_object(name)
 
 		# creating data forms widget
 		self.data_form_widget = dataforms_widget.DataFormWidget()
@@ -91,7 +91,7 @@ class CommandWindow:
 			self.stage1()
 
 		# displaying the window
-		self.xml.signal_autoconnect(self)
+		self.xml.connect_signals(self)
 		self.window.show_all()
 
 	# These functions are set up by appropriate stageX methods.
@@ -162,7 +162,7 @@ class CommandWindow:
 		# request command list
 		self.request_command_list()
 		self.setup_pulsing(
-			self.xml.get_widget('retrieving_commands_progressbar'))
+			self.xml.get_object('retrieving_commands_progressbar'))
 
 		# setup the callbacks
 		self.stage_finish = self.stage1_finish

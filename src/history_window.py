@@ -64,24 +64,24 @@ class HistoryWindow:
 	"""
 
 	def __init__(self, jid = None, account = None):
-		xml = gtkgui_helpers.get_glade('history_window.glade')
-		self.window = xml.get_widget('history_window')
-		self.jid_entry = xml.get_widget('jid_entry')
-		self.calendar = xml.get_widget('calendar')
-		scrolledwindow = xml.get_widget('scrolledwindow')
+		xml = gtkgui_helpers.get_gtk_builder('history_window.ui')
+		self.window = xml.get_object('history_window')
+		self.jid_entry = xml.get_object('jid_entry')
+		self.calendar = xml.get_object('calendar')
+		scrolledwindow = xml.get_object('scrolledwindow')
 		self.history_textview = conversation_textview.ConversationTextview(
 			account, used_in_history_window = True)
 		scrolledwindow.add(self.history_textview.tv)
 		self.history_buffer = self.history_textview.tv.get_buffer()
 		self.history_buffer.create_tag('highlight', background = 'yellow')
-		self.checkbutton = xml.get_widget('log_history_checkbutton')
+		self.checkbutton = xml.get_object('log_history_checkbutton')
 		self.checkbutton.connect('toggled',
 			self.on_log_history_checkbutton_toggled)
-		self.query_entry = xml.get_widget('query_entry')
-		self.query_combobox = xml.get_widget('query_combobox')
+		self.query_entry = xml.get_object('query_entry')
+		self.query_combobox = xml.get_object('query_combobox')
 		self.query_combobox.set_active(0)
-		self.results_treeview = xml.get_widget('results_treeview')
-		self.results_window = xml.get_widget('results_scrolledwindow')
+		self.results_treeview = xml.get_object('results_treeview')
+		self.results_window = xml.get_object('results_scrolledwindow')
 
 		# contact_name, date, message, time
 		model = gtk.ListStore(str, str, str, str, str)
@@ -130,7 +130,7 @@ class HistoryWindow:
 			gajim.config.get('history_window_x-position'),
 			gajim.config.get('history_window_y-position'))
 
-		xml.signal_autoconnect(self)
+		xml.connect_signals(self)
 		self.window.show_all()
 
 	def _fill_completion_dict(self):

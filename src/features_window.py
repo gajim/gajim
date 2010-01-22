@@ -38,10 +38,10 @@ class FeaturesWindow:
 	"""
 
 	def __init__(self):
-		self.xml = gtkgui_helpers.get_glade('features_window.glade')
-		self.window = self.xml.get_widget('features_window')
-		treeview = self.xml.get_widget('features_treeview')
-		self.desc_label = self.xml.get_widget('feature_desc_label')
+		self.xml = gtkgui_helpers.get_gtk_builder('features_window.ui')
+		self.window = self.xml.get_object('features_window')
+		treeview = self.xml.get_object('features_treeview')
+		self.desc_label = self.xml.get_object('feature_desc_label')
 
 		# {name: (available_function, unix_text, windows_text)}
 		self.features = {
@@ -132,9 +132,9 @@ class FeaturesWindow:
 
 		self.model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
-		self.xml.signal_autoconnect(self)
+		self.xml.connect_signals(self)
 		self.window.show_all()
-		self.xml.get_widget('close_button').grab_focus()
+		self.xml.get_object('close_button').grab_focus()
 
 	def on_close_button_clicked(self, widget):
 		self.window.destroy()

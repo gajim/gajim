@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkMenu" id="chat_context_menu">
+    <child>
+      <object class="GtkImageMenuItem" id="copy_link_location_menuitem">
+        <property name="label">_Copy Link Location</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <property name="accel_group">accelgroup1</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="open_link_in_browser_menuitem">
+        <property name="label">_Open Link in Browser</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <property name="accel_group">accelgroup1</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="copy_email_address_menuitem">
+        <property name="label">_Copy JID/Email Address</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <property name="accel_group">accelgroup1</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="open_email_composer_menuitem">
+        <property name="label">_Open Email Composer</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <property name="accel_group">accelgroup1</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="jid_section_separator">
+        <property name="visible">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="start_chat_menuitem">
+        <property name="label">_Start Chat</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <property name="accel_group">accelgroup1</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="join_group_chat_menuitem">
+        <property name="label">Join _Group Chat</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <property name="accel_group">accelgroup1</property>
+        <signal name="activate" handler="on_join_group_chat_menuitem_activate"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="add_to_roster_menuitem">
+        <property name="label">_Add to Roster...</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <property name="accel_group">accelgroup1</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkAccelGroup" id="accelgroup1"/>
+</interface>

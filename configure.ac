@@ -80,7 +80,7 @@ AC_SUBST(PACKAGE)
 AC_CONFIG_FILES([ 
 	Makefile
 	data/Makefile
-	data/glade/Makefile
+	data/gui/Makefile
 	data/emoticons/Makefile
 	data/pixmaps/Makefile
 	data/iconsets/Makefile

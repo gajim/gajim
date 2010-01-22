@@ -40,14 +40,14 @@ class SearchWindow:
 		self.jid = jid
 
 		# retrieving widgets from xml
-		self.xml = gtkgui_helpers.get_glade('search_window.glade')
-		self.window = self.xml.get_widget('search_window')
+		self.xml = gtkgui_helpers.get_gtk_builder('search_window.ui')
+		self.window = self.xml.get_object('search_window')
 		for name in ('label', 'progressbar', 'search_vbox', 'search_button',
 		'add_contact_button', 'information_button'):
-			self.__dict__[name] = self.xml.get_widget(name)
+			self.__dict__[name] = self.xml.get_object(name)
 
 		# displaying the window
-		self.xml.signal_autoconnect(self)
+		self.xml.connect_signals(self)
 		self.window.show_all()
 		self.request_form()
 		self.pulse_id = gobject.timeout_add(80, self.pulse_callback)

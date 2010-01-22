@@ -242,17 +242,17 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		MessageControl.__init__(self, type_id, parent_win, widget_name,
 			contact, acct, resource = resource)
 
-		widget = self.xml.get_widget('history_button')
+		widget = self.xml.get_object('history_button')
 		id_ = widget.connect('clicked', self._on_history_menuitem_activate)
 		self.handlers[id_] = widget
 
 		# when/if we do XHTML we will put formatting buttons back
-		widget = self.xml.get_widget('emoticons_button')
+		widget = self.xml.get_object('emoticons_button')
 		id_ = widget.connect('clicked', self.on_emoticons_button_clicked)
 		self.handlers[id_] = widget
 
 		# Create banner and connect signals
-		widget = self.xml.get_widget('banner_eventbox')
+		widget = self.xml.get_object('banner_eventbox')
 		id_ = widget.connect('button-press-event',
 			self._on_banner_eventbox_button_press_event)
 		self.handlers[id_] = widget
@@ -260,7 +260,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		self.urlfinder = re.compile(
 			r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
 
-		self.banner_status_label = self.xml.get_widget('banner_label')
+		self.banner_status_label = self.xml.get_object('banner_label')
 		id_ = self.banner_status_label.connect('populate_popup',
 			self.on_banner_label_populate_popup)
 		self.handlers[id_] = self.banner_status_label
@@ -298,7 +298,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 			gtk.DEST_DEFAULT_DROP,
 			self.dnd_list, gtk.gdk.ACTION_COPY)
 
-		self.conv_scrolledwindow = self.xml.get_widget(
+		self.conv_scrolledwindow = self.xml.get_object(
 			'conversation_scrolledwindow')
 		self.conv_scrolledwindow.add(self.conv_textview.tv)
 		widget = self.conv_scrolledwindow.get_vadjustment()
@@ -312,7 +312,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		self.was_at_the_end = True
 
 		# add MessageTextView to UI and connect signals
-		self.msg_scrolledwindow = self.xml.get_widget('message_scrolledwindow')
+		self.msg_scrolledwindow = self.xml.get_object('message_scrolledwindow')
 		self.msg_textview = MessageTextView()
 		id_ = self.msg_textview.connect('mykeypress',
 			self._on_message_textview_mykeypress_event)
@@ -337,11 +337,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		self.update_font()
 
 		# Hook up send button
-		widget = self.xml.get_widget('send_button')
+		widget = self.xml.get_object('send_button')
 		id_ = widget.connect('clicked', self._on_send_button_clicked)
 		self.handlers[id_] = widget
 
-		widget = self.xml.get_widget('formattings_button')
+		widget = self.xml.get_object('formattings_button')
 		id_ = widget.connect('clicked', self.on_formattings_button_clicked)
 		self.handlers[id_] = widget
 
@@ -353,7 +353,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		# Emoticons menu
 		# set image no matter if user wants at this time emoticons or not
 		# (so toggle works ok)
-		img = self.xml.get_widget('emoticons_button_image')
+		img = self.xml.get_object('emoticons_button_image')
 		img.set_from_file(os.path.join(gajim.DATA_DIR, 'emoticons', 'static',
 			'smile.png'))
 		self.toggle_emoticons()
@@ -488,8 +488,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		textcolor = gajim.config.get_per('themes', theme, 'bannertextcolor')
 		# the backgrounds are colored by using an eventbox by
 		# setting the bg color of the eventbox and the fg of the name_label
-		banner_eventbox = self.xml.get_widget('banner_eventbox')
-		banner_name_label = self.xml.get_widget('banner_name_label')
+		banner_eventbox = self.xml.get_object('banner_eventbox')
+		banner_name_label = self.xml.get_object('banner_name_label')
 		self.disconnect_style_event(banner_name_label)
 		self.disconnect_style_event(self.banner_status_label)
 		if bgcolor:
@@ -534,7 +534,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 			opts[0] == True -> set fg color
 			opts[1] == True -> set bg color
 		"""
-		banner_eventbox = self.xml.get_widget('banner_eventbox')
+		banner_eventbox = self.xml.get_object('banner_eventbox')
 		self.disconnect_style_event(widget)
 		if opts[1]:
 			bg_color = widget.style.bg[gtk.STATE_SELECTED]
@@ -819,7 +819,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		Hide show emoticons_button and make sure emoticons_menu is always there
 		when needed
 		"""
-		emoticons_button = self.xml.get_widget('emoticons_button')
+		emoticons_button = self.xml.get_object('emoticons_button')
 		if gajim.config.get('emoticons_theme'):
 			emoticons_button.show()
 			emoticons_button.set_no_show_all(False)
@@ -1206,7 +1206,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		Toggle chat buttons
 		"""
 		MessageControl.chat_buttons_set_visible(self, state)
-		self.widget_set_visible(self.xml.get_widget('actions_hbox'), state)
+		self.widget_set_visible(self.xml.get_object('actions_hbox'), state)
 
 	def got_connected(self):
 		self.msg_textview.set_sensitive(True)
@@ -1248,35 +1248,35 @@ class ChatControl(ChatControlBase):
 
 		self.gpg_is_active = False
 		# for muc use:
-		# widget = self.xml.get_widget('muc_window_actions_button')
-		self.actions_button = self.xml.get_widget('message_window_actions_button')
+		# widget = self.xml.get_object('muc_window_actions_button')
+		self.actions_button = self.xml.get_object('message_window_actions_button')
 		id_ = self.actions_button.connect('clicked',
 			self.on_actions_button_clicked)
 		self.handlers[id_] = self.actions_button
 
-		self._formattings_button = self.xml.get_widget('formattings_button')
+		self._formattings_button = self.xml.get_object('formattings_button')
 
-		self._add_to_roster_button = self.xml.get_widget(
+		self._add_to_roster_button = self.xml.get_object(
 			'add_to_roster_button')
 		id_ = self._add_to_roster_button.connect('clicked',
 			self._on_add_to_roster_menuitem_activate)
 		self.handlers[id_] = self._add_to_roster_button
 
-		self._audio_button = self.xml.get_widget('audio_togglebutton')
+		self._audio_button = self.xml.get_object('audio_togglebutton')
 		id_ = self._audio_button.connect('toggled', self.on_audio_button_toggled)
 		self.handlers[id_] = self._audio_button
 		# add a special img
 		gtkgui_helpers.add_image_to_button(self._audio_button,
 			'gajim-mic_inactive')
 
-		self._video_button = self.xml.get_widget('video_togglebutton')
+		self._video_button = self.xml.get_object('video_togglebutton')
 		id_ = self._video_button.connect('toggled', self.on_video_button_toggled)
 		self.handlers[id_] = self._video_button
 		# add a special img
 		gtkgui_helpers.add_image_to_button(self._video_button,
 			'gajim-cam_inactive')
 
-		self._send_file_button = self.xml.get_widget('send_file_button')
+		self._send_file_button = self.xml.get_object('send_file_button')
 		# add a special img for send file button
 		path_to_upload_img = gtkgui_helpers.get_icon_path('gajim-upload')
 		img = gtk.Image()
@@ -1286,13 +1286,13 @@ class ChatControl(ChatControlBase):
 			self._on_send_file_menuitem_activate)
 		self.handlers[id_] = self._send_file_button
 
-		self._convert_to_gc_button = self.xml.get_widget(
+		self._convert_to_gc_button = self.xml.get_object(
 			'convert_to_gc_button')
 		id_ = self._convert_to_gc_button.connect('clicked',
 			self._on_convert_to_gc_menuitem_activate)
 		self.handlers[id_] = self._convert_to_gc_button
 
-		contact_information_button = self.xml.get_widget(
+		contact_information_button = self.xml.get_object(
 			'contact_information_button')
 		id_ = contact_information_button.connect('clicked',
 			self._on_contact_information_menuitem_activate)
@@ -1300,25 +1300,25 @@ class ChatControl(ChatControlBase):
 
 		compact_view = gajim.config.get('compact_view')
 		self.chat_buttons_set_visible(compact_view)
-		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
+		self.widget_set_visible(self.xml.get_object('banner_eventbox'),
 			gajim.config.get('hide_chat_banner'))
 
-		self.authentication_button = self.xml.get_widget(
+		self.authentication_button = self.xml.get_object(
 			'authentication_button')
 		id_ = self.authentication_button.connect('clicked',
 			self._on_authentication_button_clicked)
 		self.handlers[id_] = self.authentication_button
 
 		# Add lock image to show chat encryption
-		self.lock_image = self.xml.get_widget('lock_image')
+		self.lock_image = self.xml.get_object('lock_image')
 
 		# Convert to GC icon
-		img = self.xml.get_widget('convert_to_gc_button_image')
+		img = self.xml.get_object('convert_to_gc_button_image')
 		img.set_from_pixbuf(gtkgui_helpers.load_icon(
 			'muc_active').get_pixbuf())
 
-		self._audio_banner_image = self.xml.get_widget('audio_banner_image')
-		self._video_banner_image = self.xml.get_widget('video_banner_image')
+		self._audio_banner_image = self.xml.get_object('audio_banner_image')
+		self._video_banner_image = self.xml.get_object('video_banner_image')
 		self.audio_sid = None
 		self.audio_state = self.JINGLE_STATE_NOT_AVAILABLE
 		self.video_sid = None
@@ -1327,10 +1327,10 @@ class ChatControl(ChatControlBase):
 		self.update_toolbar()
 		
 		self._pep_images = {}
-		self._pep_images['mood'] = self.xml.get_widget('mood_image')
-		self._pep_images['activity'] = self.xml.get_widget('activity_image')
-		self._pep_images['tune'] = self.xml.get_widget('tune_image')
-		self._pep_images['location'] = self.xml.get_widget('location_image')
+		self._pep_images['mood'] = self.xml.get_object('mood_image')
+		self._pep_images['activity'] = self.xml.get_object('activity_image')
+		self._pep_images['tune'] = self.xml.get_object('tune_image')
+		self._pep_images['location'] = self.xml.get_object('location_image')
 		self.update_all_pep_types()
 
 		# keep timeout id and window obj for possible big avatar
@@ -1353,7 +1353,7 @@ class ChatControl(ChatControlBase):
 			self._on_message_tv_buffer_changed)
 		self.handlers[id_] = message_tv_buffer
 
-		widget = self.xml.get_widget('avatar_eventbox')
+		widget = self.xml.get_object('avatar_eventbox')
 		widget.set_property('height-request', gajim.config.get(
 			'chat_avatar_height'))
 		id_ = widget.connect('enter-notify-event',
@@ -1368,23 +1368,23 @@ class ChatControl(ChatControlBase):
 			self.on_avatar_eventbox_button_press_event)
 		self.handlers[id_] = widget
 
-		widget = self.xml.get_widget('location_eventbox')
+		widget = self.xml.get_object('location_eventbox')
 		id_ = widget.connect('button-release-event',
 			self.on_location_eventbox_button_release_event)
 		self.handlers[id_] = widget
 
 		for key in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'):
-			widget = self.xml.get_widget(key + '_button')
+			widget = self.xml.get_object(key + '_button')
 			id_ = widget.connect('pressed', self.on_num_button_pressed, key)
 			self.handlers[id_] = widget
 			id_ = widget.connect('released', self.on_num_button_released)
 			self.handlers[id_] = widget
 
-		widget = self.xml.get_widget('mic_hscale')
+		widget = self.xml.get_object('mic_hscale')
 		id_ = widget.connect('value_changed', self.on_mic_hscale_value_changed)
 		self.handlers[id_] = widget
 
-		widget = self.xml.get_widget('sound_hscale')
+		widget = self.xml.get_object('sound_hscale')
 		id_ = widget.connect('value_changed', self.on_sound_hscale_value_changed)
 		self.handlers[id_] = widget
 
@@ -1540,15 +1540,15 @@ class ChatControl(ChatControlBase):
 
 	def update_audio(self):
 		self._update_jingle('audio')
-		vbox = self.xml.get_widget('audio_vbox')
+		vbox = self.xml.get_object('audio_vbox')
 		if self.audio_state == self.JINGLE_STATE_CONNECTED:
 			# Set volume from config
 			input_vol = gajim.config.get('audio_input_volume')
 			output_vol = gajim.config.get('audio_output_volume')
 			input_vol = max(min(input_vol, 100), 0)
 			output_vol = max(min(output_vol, 100), 0)
-			self.xml.get_widget('mic_hscale').set_value(input_vol)
-			self.xml.get_widget('sound_hscale').set_value(output_vol)
+			self.xml.get_object('mic_hscale').set_value(input_vol)
+			self.xml.get_object('sound_hscale').set_value(output_vol)
 			# Show vbox
 			vbox.set_no_show_all(False)
 			vbox.show_all()
@@ -1656,7 +1656,7 @@ class ChatControl(ChatControlBase):
 		avatar_w = avatar_pixbuf.get_width()
 		avatar_h = avatar_pixbuf.get_height()
 
-		scaled_buf = self.xml.get_widget('avatar_image').get_pixbuf()
+		scaled_buf = self.xml.get_object('avatar_image').get_pixbuf()
 		scaled_buf_w = scaled_buf.get_width()
 		scaled_buf_h = scaled_buf.get_height()
 
@@ -1744,7 +1744,7 @@ class ChatControl(ChatControlBase):
 			banner_image = img_16[show]
 			use_size_32 = False
 
-		banner_status_img = self.xml.get_widget('banner_status_image')
+		banner_status_img = self.xml.get_object('banner_status_image')
 		if banner_image.get_storage_type() == gtk.IMAGE_ANIMATION:
 			banner_status_img.set_from_animation(banner_image.get_animation())
 		else:
@@ -1765,7 +1765,7 @@ class ChatControl(ChatControlBase):
 		contact = self.contact
 		jid = contact.jid
 
-		banner_name_label = self.xml.get_widget('banner_name_label')
+		banner_name_label = self.xml.get_object('banner_name_label')
 
 		name = contact.get_shown_name()
 		if self.resource:
@@ -2490,7 +2490,7 @@ class ChatControl(ChatControlBase):
 		else:
 			scaled_pixbuf = None
 
-		image = self.xml.get_widget('avatar_image')
+		image = self.xml.get_object('avatar_image')
 		image.set_from_pixbuf(scaled_pixbuf)
 		image.show_all()
 
@@ -2689,7 +2689,7 @@ class ChatControl(ChatControlBase):
 		# the avatar has a transparency hole in the middle
 		# so when we show the big one we avoid seeing the small one behind.
 		# It's why I set it transparent.
-		image = self.xml.get_widget('avatar_image')
+		image = self.xml.get_object('avatar_image')
 		pixbuf = image.get_pixbuf()
 		pixbuf.fill(0xffffff00L) # RGBA
 		image.queue_draw()

@@ -42,16 +42,16 @@ class FeatureNegotiationWindow:
 		self.form = form
 		self.session = session
 
-		self.xml = gtkgui_helpers.get_glade('data_form_window.glade', 'data_form_window')
-		self.window = self.xml.get_widget('data_form_window')
+		self.xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui', 'data_form_window')
+		self.window = self.xml.get_object('data_form_window')
 
-		config_vbox = self.xml.get_widget('config_vbox')
+		config_vbox = self.xml.get_object('config_vbox')
 		dataform = dataforms.ExtendForm(node = self.form)
 		self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
 		self.data_form_widget.show()
 		config_vbox.pack_start(self.data_form_widget)
 
-		self.xml.signal_autoconnect(self)
+		self.xml.connect_signals(self)
 		self.window.show_all()
 
 	def on_ok_button_clicked(self, widget):

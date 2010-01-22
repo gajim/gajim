@@ -49,9 +49,9 @@ class StatusIcon:
 		# click somewhere else does not popdown menu. workaround this.
 		self.added_hide_menuitem = False
 		self.status = 'offline'
-		self.xml = gtkgui_helpers.get_glade('systray_context_menu.glade')
-		self.systray_context_menu = self.xml.get_widget('systray_context_menu')
-		self.xml.signal_autoconnect(self)
+		self.xml = gtkgui_helpers.get_gtk_builder('systray_context_menu.ui')
+		self.systray_context_menu = self.xml.get_object('systray_context_menu')
+		self.xml.connect_signals(self)
 		self.popup_menus = []
 		self.status_icon = None
 		self.tooltip = tooltips.NotificationAreaTooltip()
@@ -166,12 +166,12 @@ class StatusIcon:
 		for m in self.popup_menus:
 			m.destroy()
 
-		chat_with_menuitem = self.xml.get_widget('chat_with_menuitem')
-		single_message_menuitem = self.xml.get_widget(
+		chat_with_menuitem = self.xml.get_object('chat_with_menuitem')
+		single_message_menuitem = self.xml.get_object(
 			'single_message_menuitem')
-		status_menuitem = self.xml.get_widget('status_menu')
-		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
-		sounds_mute_menuitem = self.xml.get_widget('sounds_mute_menuitem')
+		status_menuitem = self.xml.get_object('status_menu')
+		join_gc_menuitem = self.xml.get_object('join_gc_menuitem')
+		sounds_mute_menuitem = self.xml.get_object('sounds_mute_menuitem')
 
 		if self.single_message_handler_id:
 			single_message_menuitem.handler_disconnect(

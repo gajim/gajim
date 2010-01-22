@@ -184,15 +184,6 @@ else:
 		sectext = _('Gajim needs GTK 2.16 or above to run. Quiting...')
 
 	try:
-		import gtk.glade # check if user has libglade (in pygtk and in gtk)
-	except ImportError:
-		pritext = _('GTK+ runtime is missing libglade support')
-		if os.name == 'nt':
-			sectext = _('Please remove your current GTK+ runtime and install the latest stable version from %s') % 'http://gladewin32.sourceforge.net'
-		else:
-			sectext = _('Please make sure that GTK+ and PyGTK have libglade support in your system.')
-
-	try:
 		from common import check_paths
 	except exceptions.PysqliteNotAvailable, e:
 		pritext = _('Gajim needs PySQLite2 to run')

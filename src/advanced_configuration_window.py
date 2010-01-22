@@ -40,7 +40,7 @@ C_VALUE,
 C_TYPE
 ) = range(3)
 
-GTKGUI_GLADE = 'manage_accounts_window.glade'
+GTKGUI_GLADE = 'manage_accounts_window.ui'
 
 def rate_limit(rate):
 	"""
@@ -74,13 +74,13 @@ def tree_model_pre_order(model, treeiter):
 
 class AdvancedConfigurationWindow(object):
 	def __init__(self):
-		self.xml = gtkgui_helpers.get_glade('advanced_configuration_window.glade')
-		self.window = self.xml.get_widget('advanced_configuration_window')
+		self.xml = gtkgui_helpers.get_gtk_builder('advanced_configuration_window.ui')
+		self.window = self.xml.get_object('advanced_configuration_window')
 		self.window.set_transient_for(
 			gajim.interface.instances['preferences'].window)
-		self.entry = self.xml.get_widget('advanced_entry')
-		self.desc_label = self.xml.get_widget('advanced_desc_label')
-		self.restart_label = self.xml.get_widget('restart_label')
+		self.entry = self.xml.get_object('advanced_entry')
+		self.desc_label = self.xml.get_object('advanced_desc_label')
+		self.restart_label = self.xml.get_object('restart_label')
 
 		# Format:
 		# key = option name (root/subopt/opt separated by \n then)
@@ -95,7 +95,7 @@ class AdvancedConfigurationWindow(object):
 			'string': _('Text'),
 			'color': _('Color')}
 
-		treeview = self.xml.get_widget('advanced_treeview')
+		treeview = self.xml.get_object('advanced_treeview')
 		self.treeview = treeview
 		self.model = gtk.TreeStore(str, str, str)
 		self.fill_model()
@@ -127,7 +127,7 @@ class AdvancedConfigurationWindow(object):
 		treeview.get_selection().connect('changed',
 			self.on_advanced_treeview_selection_changed)
 
-		self.xml.signal_autoconnect(self)
+		self.xml.connect_signals(self)
 		self.window.show_all()
 		self.restart_label.hide()
 		gajim.interface.instances['advanced_config'] = self

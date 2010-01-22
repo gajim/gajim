@@ -860,7 +860,7 @@ class ConversationTextview(gobject.GObject):
 	def on_join_group_chat_menuitem_activate(self, widget, room_jid):
 		if 'join_gc' in gajim.interface.instances[self.account]:
 			instance = gajim.interface.instances[self.account]['join_gc']
-			instance.xml.get_widget('room_jid_entry').set_text(room_jid)
+			instance.xml.get_object('room_jid_entry').set_text(room_jid)
 			gajim.interface.instances[self.account]['join_gc'].window.present()
 		else:
 			try:
@@ -872,8 +872,8 @@ class ConversationTextview(gobject.GObject):
 		dialogs.AddNewContactWindow(self.account, jid)
 
 	def make_link_menu(self, event, kind, text):
-		xml = gtkgui_helpers.get_glade('chat_context_menu.glade')
-		menu = xml.get_widget('chat_context_menu')
+		xml = gtkgui_helpers.get_gtk_builder('chat_context_menu.ui')
+		menu = xml.get_object('chat_context_menu')
 		childs = menu.get_children()
 		if kind == 'url':
 			id_ = childs[0].connect('activate', self.on_copy_link_activate, text)
@@ -889,7 +889,7 @@ class ConversationTextview(gobject.GObject):
 			childs[7].hide() # add to roster
 		else: # It's a mail or a JID
 			# load muc icon
-			join_group_chat_menuitem = xml.get_widget('join_group_chat_menuitem')
+			join_group_chat_menuitem = xml.get_object('join_group_chat_menuitem')
 			muc_icon = gtkgui_helpers.load_icon('muc_active')
 			if muc_icon:
 				join_group_chat_menuitem.set_image(muc_icon)
