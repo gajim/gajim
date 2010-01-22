@@ -240,7 +240,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 				contact = c
 
 		MessageControl.__init__(self, type_id, parent_win, widget_name,
-			contact, acct, resource = resource)
+			contact, acct, resource=resource)
 
 		widget = self.xml.get_object('history_button')
 		id_ = widget.connect('clicked', self._on_history_menuitem_activate)
@@ -587,7 +587,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
 	def _on_message_textview_key_press_event(self, widget, event):
 		# Ctrl [+ Shift] + Tab are not forwarded to notebook. We handle it here
-		if self.widget_name == 'muc_child_vbox':
+		if self.widget_name == 'groupchat_control':
 			if event.keyval not in (gtk.keysyms.ISO_Left_Tab, gtk.keysyms.Tab):
 				self.last_key_tabs = False
 		if event.state & gtk.gdk.SHIFT_MASK:
@@ -1244,7 +1244,7 @@ class ChatControl(ChatControlBase):
 
 	def __init__(self, parent_win, contact, acct, session, resource = None):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
-			'chat_child_vbox', contact, acct, resource)
+			'chat_control', contact, acct, resource)
 
 		self.gpg_is_active = False
 		# for muc use:

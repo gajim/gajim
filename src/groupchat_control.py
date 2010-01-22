@@ -199,7 +199,7 @@ class GroupchatControl(ChatControlBase):
 
 	def __init__(self, parent_win, contact, acct, is_continued=False):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
-					'muc_child_vbox', contact, acct)
+			'groupchat_control', contact, acct)
 
 		self.is_continued=is_continued
 		self.is_anonymous = True

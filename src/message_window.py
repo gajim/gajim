@@ -125,9 +125,6 @@ class MessageWindow(object):
 			self._on_notebook_key_press)
 		self.handlers[id_] = self.notebook
 
-		# Remove the pages from xml file
-		while self.notebook.get_n_pages():
-			self.notebook.remove_page(0)
 		# Tab customizations
 		pref_pos = gajim.config.get('tabs_position')
 		if pref_pos == 'bottom':
