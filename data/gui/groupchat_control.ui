@@ -7,7 +7,7 @@
     <property name="border_width">3</property>
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkAlignment" id="alignment103">
+      <object class="GtkAlignment" id="alignment">
         <property name="visible">True</property>
         <property name="bottom_padding">1</property>
         <property name="left_padding">3</property>
