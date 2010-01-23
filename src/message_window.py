@@ -116,7 +116,6 @@ class MessageWindow(object):
 		# gtk+ doesn't make use of the motion notify on gtkwindow by default
 		# so this line adds that
 		self.window.add_events(gtk.gdk.POINTER_MOTION_MASK)
-		self.alignment = self.xml.get_object('alignment')
 
 		id_ = self.notebook.connect('switch-page',
 			self._on_notebook_switch_page)
@@ -140,7 +139,6 @@ class MessageWindow(object):
 		if gajim.config.get('tabs_always_visible') or \
 		window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
 			self.notebook.set_show_tabs(True)
-			self.alignment.set_property('top-padding', 2)
 		else:
 			self.notebook.set_show_tabs(False)
 		self.notebook.set_show_border(gajim.config.get('tabs_border'))
@@ -278,7 +276,6 @@ class MessageWindow(object):
 			self.notebook.set_show_tabs(True)
 			if scrolled:
 				gobject.idle_add(conv_textview.scroll_to_end_iter)
-			self.alignment.set_property('top-padding', 2)
 
 		# Add notebook page and connect up to the tab's close button
 		xml = gtkgui_helpers.get_gtk_builder('message_window.ui', 'chat_tab_ebox')
@@ -588,9 +585,6 @@ class MessageWindow(object):
 			show_tabs_if_one_tab = gajim.config.get('tabs_always_visible') or \
 				window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER
 			self.notebook.set_show_tabs(show_tabs_if_one_tab)
-			if not show_tabs_if_one_tab:
-				self.alignment.set_property('top-padding', 0)
-
 
 	def redraw_tab(self, ctrl, chatstate = None):
 		hbox = self.notebook.get_tab_label(ctrl.widget).get_children()[0]
