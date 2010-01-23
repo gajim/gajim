@@ -6,7 +6,6 @@
     <property name="border_width">6</property>
     <property name="default_width">270</property>
     <property name="type_hint">dialog</property>
-    <signal name="key_press_event" handler="on_change_status_message_dialog_key_press_event"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox5">
         <property name="visible">True</property>
