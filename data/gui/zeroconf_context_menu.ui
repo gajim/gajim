@@ -8,8 +8,8 @@
         <property name="label">_Status</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
+        <property name="image">image1</property>
+        <property name="use_stock">False</property>
       </object>
     </child>
     <child>
@@ -23,10 +23,19 @@
         <property name="label">_Modify Account...</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-        <property name="accel_group">accelgroup1</property>
+        <property name="image">image2</property>
+        <property name="use_stock">False</property>
       </object>
     </child>
   </object>
-  <object class="GtkAccelGroup" id="accelgroup1"/>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="stock">gtk-network</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="stock">gtk-preferences</property>
+    <property name="icon-size">1</property>
+  </object>
 </interface>

@@ -8,7 +8,8 @@
         <property name="label">_Start Chat</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
+        <property name="image">image1</property>
+        <property name="use_stock">False</property>
         <property name="accel_group">accelgroup1</property>
         <signal name="activate" handler="on_start_chat_activate"/>
       </object>
@@ -25,4 +26,9 @@
     </child>
   </object>
   <object class="GtkAccelGroup" id="accelgroup1"/>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="stock">gtk-jump-to</property>
+    <property name="icon-size">1</property>
+  </object>
 </interface>

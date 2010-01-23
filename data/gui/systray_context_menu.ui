@@ -8,7 +8,8 @@
         <property name="label">Sta_tus</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
+        <property name="image">image1</property>
+        <property name="use_stock">False</property>
         <property name="accel_group">accelgroup1</property>
       </object>
     </child>
@@ -17,7 +18,8 @@
         <property name="label">_Start Chat</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
+        <property name="image">image2</property>
+        <property name="use_stock">False</property>
         <property name="accel_group">accelgroup1</property>
       </object>
     </child>
@@ -26,7 +28,8 @@
         <property name="label">_Group Chat</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
+        <property name="image">image3</property>
+        <property name="use_stock">False</property>
         <property name="accel_group">accelgroup1</property>
       </object>
     </child>
@@ -35,7 +38,8 @@
         <property name="label">Send Single _Message</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
+        <property name="image">image4</property>
+        <property name="use_stock">False</property>
         <property name="accel_group">accelgroup1</property>
       </object>
     </child>
@@ -65,7 +69,8 @@
         <property name="label">Show _Roster</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
+        <property name="image">image5</property>
+        <property name="use_stock">False</property>
         <property name="accel_group">accelgroup1</property>
         <signal name="activate" handler="on_show_roster_menuitem_activate"/>
       </object>
@@ -97,4 +102,29 @@
     </child>
   </object>
   <object class="GtkAccelGroup" id="accelgroup1"/>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="stock">gtk-network</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="stock">gtk-jump-to</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="stock">gtk-connect</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image4">
+    <property name="visible">True</property>
+    <property name="stock">gtk-new</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image5">
+    <property name="visible">True</property>
+    <property name="stock">gtk-home</property>
+    <property name="icon-size">1</property>
+  </object>
 </interface>

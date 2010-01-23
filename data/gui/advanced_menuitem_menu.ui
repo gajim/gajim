@@ -29,8 +29,8 @@
                 <property name="label">_Send Server Message...</property>
                 <property name="tooltip_text" translatable="yes">Sends a message to users currently connected to this server</property>
                 <property name="use_underline">True</property>
-                <property name="use_stock">True</property>
-                <property name="accel_group">accelgroup1</property>
+                <property name="image">image1</property>
+                <property name="use_stock">False</property>
               </object>
             </child>
             <child>
@@ -56,9 +56,8 @@
               <object class="GtkImageMenuItem" id="delete_motd_menuitem">
                 <property name="label">Delete MOTD</property>
                 <property name="tooltip_text" translatable="yes">Deletes Message of the Day</property>
-                <property name="use_underline">True</property>
-                <property name="use_stock">True</property>
-                <property name="accel_group">accelgroup1</property>
+                <property name="image">image2</property>
+                <property name="use_stock">False</property>
               </object>
             </child>
           </object>
@@ -66,5 +65,14 @@
       </object>
     </child>
   </object>
-  <object class="GtkAccelGroup" id="accelgroup1"/>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="stock">gtk-new</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="stock">gtk-clear</property>
+    <property name="icon-size">1</property>
+  </object>
 </interface>
