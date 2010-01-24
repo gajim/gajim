@@ -230,7 +230,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		helpers.launch_browser_mailer('url', url)
 
 	def __init__(self, type_id, parent_win, widget_name, contact, acct,
-			resource = None):
+	resource=None):
+		# Undo needs this variable to know if space has been pressed.
+		# Initialize it to True so empty textview is saved in undo list
+		self.space_pressed = True
+
 		if resource is None:
 			# We very likely got a contact with a random resource.
 			# This is bad, we need the highest for caps etc.
@@ -426,6 +430,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 			spell.set_language(lang)
 			widget.set_active(True)
 
+		item = gtk.ImageMenuItem(gtk.STOCK_UNDO)
+		menu.prepend(item)
+		id_ = item.connect('activate', self.msg_textview.undo)
+		self.handlers[id_] = item
+
 		item = gtk.SeparatorMenuItem()
 		menu.prepend(item)
 
@@ -586,6 +595,20 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 			set_emoticons_menu_position, 1, 0)
 
 	def _on_message_textview_key_press_event(self, widget, event):
+		if event.keyval == gtk.keysyms.space:
+			self.space_pressed = True
+		
+		elif (self.space_pressed or self.msg_textview.undo_pressed) and \
+		event.keyval not in (gtk.keysyms.Control_L, gtk.keysyms.Control_R) and \
+		not (event.keyval == gtk.keysyms.z and event.state & gtk.gdk.CONTROL_MASK):
+			# If the space key has been pressed and now it hasnt,
+			# we save the buffer into the undo list. But be carefull we're not
+			# pressiong Control again (as in ctrl+z)
+			_buffer = widget.get_buffer()
+			start_iter, end_iter = _buffer.get_bounds()
+			self.msg_textview.save_undo(_buffer.get_text(start_iter, end_iter))
+			self.space_pressed = False
+
 		# Ctrl [+ Shift] + Tab are not forwarded to notebook. We handle it here
 		if self.widget_name == 'groupchat_control':
 			if event.keyval not in (gtk.keysyms.ISO_Left_Tab, gtk.keysyms.Tab):
@@ -608,7 +631,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		return False
 
 	def _on_message_textview_mykeypress_event(self, widget, event_keyval,
-			event_keymod):
+	event_keymod):
 		"""
 		When a key is pressed: if enter is pressed without the shift key, message
 		(if not empty) is sent and printed in the conversation
@@ -665,6 +688,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
 			if send_message:
 				self.send_message(message, xhtml=xhtml) # send the message
+		elif event.keyval == gtk.keysyms.z: # CTRL+z
+			if event.state & gtk.gdk.CONTROL_MASK:
+				self.msg_textview.undo()
 		else:
 			# Give the control itself a chance to process
 			self.handle_message_textview_mykey_press(widget, event_keyval,
