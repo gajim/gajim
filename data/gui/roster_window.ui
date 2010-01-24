@@ -54,6 +54,7 @@
                     <child>
                       <object class="GtkImageMenuItem" id="join_gc_menuitem">
                         <property name="label">Join _Group Chat...</property>
+                        <property name="use_underline">True</property>
                         <property name="visible">True</property>
                         <property name="image">image3</property>
                         <property name="use_stock">False</property>
@@ -68,6 +69,7 @@
                     <child>
                       <object class="GtkImageMenuItem" id="add_new_contact_menuitem">
                         <property name="label">Add _Contact...</property>
+                        <property name="use_underline">True</property>
                         <property name="visible">True</property>
                         <property name="image">image4</property>
                         <property name="use_stock">False</property>
