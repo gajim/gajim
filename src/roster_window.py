@@ -4553,7 +4553,7 @@ class RosterWindow:
 			renderer.set_property('visible', True)
 
 			if type_ == 'account':
-				self.set_renderer_color(renderer, gtk.STATE_ACTIVE)
+				self._set_account_row_background_color(renderer)
 				renderer.set_property('xalign', 1)
 			elif type_:
 				if not model[titer][C_JID] or not model[titer][C_ACCOUNT]:
