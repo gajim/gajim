@@ -2317,9 +2317,10 @@ class SynchroniseSelectContactsDialog:
 		model.clear()
 
 		# recover local contacts
-		local_jid_list = gajim.contacts.get_jid_list(self.local_account)
+		local_jid_list = gajim.contacts.get_contacts_jid_list(self.local_account)
 
-		remote_jid_list = gajim.contacts.get_jid_list(self.remote_account)
+		remote_jid_list = gajim.contacts.get_contacts_jid_list(
+			self.remote_account)
 		for remote_jid in remote_jid_list:
 			if remote_jid not in local_jid_list:
 				iter_ = model.append()

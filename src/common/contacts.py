@@ -322,6 +322,9 @@ class LegacyContactsAPI:
 	def get_contacts_from_group(self, account, group):
 		return self._accounts[account].contacts.get_contacts_from_group(group)
 
+	def get_contacts_jid_list(self, account):
+		return self._accounts[account].contacts.get_contacts_jid_list()
+
 	def get_jid_list(self, account):
 		return self._accounts[account].contacts.get_jid_list()
 
@@ -491,6 +494,13 @@ class Contacts():
 
 	def get_jid_list(self):
 		return self._contacts.keys()
+
+	def get_contacts_jid_list(self):
+		contacts = self._contacts.keys()
+		for jid in self._contacts.keys():
+			if self._contacts[jid][0].is_groupchat():
+				contacts.remove(jid)
+		return contacts
 
 	def get_contact_from_full_jid(self, fjid):
 		"""
