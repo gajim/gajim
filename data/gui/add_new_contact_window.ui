@@ -142,7 +142,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
-                <signal name="changed" handler="on_uid_entry_changed"/>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -364,19 +363,19 @@ to add a contact from this protocol.</property>
   </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkListStore" id="liststore2">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkListStore" id="liststore3">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
   </object>
