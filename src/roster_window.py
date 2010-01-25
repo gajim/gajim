@@ -5716,7 +5716,10 @@ class RosterWindow:
 		Bring up the conference join dialog, when CTRL+J accelerator is being
 		activated
 		"""
-		account = gajim.connections.keys()[0]
+		# find a conencted account:
+		for account in gajim.connections:
+			if gajim.account_is_connected(account):
+				break
 		self.on_join_gc_activate(None, account)
 		return True
 
