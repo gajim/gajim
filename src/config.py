@@ -1342,8 +1342,8 @@ class AccountsWindow:
 		self.accounts_treeview.set_model(model)
 		# column
 		renderer = gtk.CellRendererText()
-		self.accounts_treeview.insert_column_with_attributes(-1,
-					_('Name'), renderer, text = 0)
+		self.accounts_treeview.insert_column_with_attributes(-1, _('Name'),
+			renderer, text=0)
 
 		self.current_account = None
 		# When we fill info, we don't want to handle the changed signals
@@ -1360,7 +1360,8 @@ class AccountsWindow:
 		st = gajim.config.get('mergeaccounts')
 		checkbutton = self.xml.get_widget('merge_checkbutton')
 		checkbutton.set_active(st)
-		# prevent roster redraws by connecting the signal after button state is set
+		# prevent roster redraws by connecting the signal after button state is
+		# set
 		checkbutton.connect('toggled', self.on_merge_checkbutton_toggled)
 
 		self.avahi_available = True
@@ -1476,8 +1477,12 @@ class AccountsWindow:
 
 		self.check_resend_relog()
 
-		self.remove_button.set_sensitive(True)
-		self.rename_button.set_sensitive(True)
+		if account:
+			self.remove_button.set_sensitive(True)
+			self.rename_button.set_sensitive(True)
+		else:
+			self.remove_button.set_sensitive(False)
+			self.rename_button.set_sensitive(False)
 		if iter_:
 			self.current_account = account
 			if account == gajim.ZEROCONF_ACC_NAME:
