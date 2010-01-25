@@ -2440,7 +2440,8 @@ class AccountsWindow:
 		# normal account
 		if self.ignore_events:
 			return
-		if gajim.connections[self.current_account].connected > 0:
+		if self.current_account in gajim.connections and \
+		gajim.connections[self.current_account].connected > 0:
 			self.ignore_events = True
 			self.xml.get_object('enable_zeroconf_checkbutton2').set_active(True)
 			self.ignore_events = False
