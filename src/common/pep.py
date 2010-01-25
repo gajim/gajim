@@ -556,7 +556,7 @@ class ConnectionPEP(object):
 	def send_activity(self, activity, subactivity=None, message=None):
 		if self.connected == 1:
 			# We are connecting, keep activity in mem and send it when we'll be
-			# conencted
+			# connected
 			self.to_be_sent_activity = (activity, subactivity, message)
 			return
 		if not self.pep_supported:
@@ -581,7 +581,7 @@ class ConnectionPEP(object):
 	def send_mood(self, mood, message=None):
 		if self.connected == 1:
 			# We are connecting, keep mood in mem and send it when we'll be
-			# conencted
+			# connected
 			self.to_be_sent_mood = (mood, message)
 			return
 		if not self.pep_supported:
@@ -605,7 +605,7 @@ class ConnectionPEP(object):
 	items=None):
 		if self.connected == 1:
 			# We are connecting, keep tune in mem and send it when we'll be
-			# conencted
+			# connected
 			self.to_be_sent_tune = (artist, title, source, track, length, items)
 			return
 		if not self.pep_supported:
@@ -640,7 +640,7 @@ class ConnectionPEP(object):
 	def send_nickname(self, nick):
 		if self.connected == 1:
 			# We are connecting, keep nick in mem and send it when we'll be
-			# conencted
+			# connected
 			self.to_be_sent_nick = nick
 			return
 		if not self.pep_supported:
@@ -659,7 +659,7 @@ class ConnectionPEP(object):
 	def send_location(self, info):
 		if self.connected == 1:
 			# We are connecting, keep location in mem and send it when we'll be
-			# conencted
+			# connected
 			self.to_be_sent_location = info
 			return
 		if not self.pep_supported:

@@ -764,7 +764,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 		else:
 			self.disconnect()
 		self.on_purpose = False
-	# END disconenctedReconnCB
+	# END disconnectedReconnCB
 
 	def _connection_lost(self):
 		log.debug('_connection_lost')
