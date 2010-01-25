@@ -590,8 +590,18 @@ class Contacts:
 			return False
 		return True
 
+	def get_contacts_jid_list(self, account):
+		return self._accounts[account].contacts.get_contacts_jid_list()
+
 	def get_jid_list(self, account):
 		return self._contacts[account].keys()
+
+    def get_contacts_jid_list(self):
+        contacts = self._contacts.keys()
+        for jid in self._contacts.keys():
+            if self._contacts[jid][0].is_groupchat():
+                contacts.remove(jid)
+        return contacts
 
 	def contact_from_gc_contact(self, gc_contact):
 		'''Create a Contact instance from a GC_Contact instance'''
