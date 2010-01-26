@@ -677,7 +677,7 @@ class GroupchatControl(ChatControlBase):
 
 		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
 		change_nick_menuitem.add_accelerator('activate', ag, gtk.keysyms.n,
-			gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+			gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK, gtk.ACCEL_VISIBLE)
 		change_subject_menuitem.add_accelerator('activate', ag,
 			gtk.keysyms.t, gtk.gdk.MOD1_MASK, gtk.ACCEL_VISIBLE)
 		bookmark_room_menuitem.add_accelerator('activate', ag, gtk.keysyms.b,
@@ -749,7 +749,7 @@ class GroupchatControl(ChatControlBase):
 		# destroy accelerators
 		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
 		change_nick_menuitem.remove_accelerator(ag, gtk.keysyms.n,
-			gtk.gdk.CONTROL_MASK)
+			gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		change_subject_menuitem.remove_accelerator(ag, gtk.keysyms.t,
 			gtk.gdk.MOD1_MASK)
 		bookmark_room_menuitem.remove_accelerator(ag, gtk.keysyms.b,
