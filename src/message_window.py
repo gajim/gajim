@@ -101,8 +101,8 @@ class MessageWindow(object):
 		self.handlers[id_] = self.window
 
 		keys=['<Control>f', '<Control>g', '<Control>h', '<Control>i',
-			'<Control>l', '<Control>L', '<Control>n', '<Control>u',
-			'<Control>b', '<Control><Shift>Tab', '<Control>Tab', '<Control>F4',
+			'<Control>l', '<Control>L', '<Control><Shift>n', '<Control>u',
+			'<Control>b', '<Control>F4',
 			'<Control>w', '<Control>Page_Up', '<Control>Page_Down', '<Alt>Right',
 			'<Alt>Left', '<Alt>d', '<Alt>c', '<Alt>m', '<Alt>t', 'Escape'] + \
 			['<Alt>'+str(i) for i in xrange(10)]
@@ -352,19 +352,12 @@ class MessageWindow(object):
 				control._on_contact_information_menuitem_activate(None)
 			elif keyval == gtk.keysyms.l or keyval == gtk.keysyms.L: # CTRL + l|L
 				control.conv_textview.clear()
-			elif control.type_id == message_control.TYPE_GC and \
-			keyval == gtk.keysyms.n: # CTRL + n
-				control._on_change_nick_menuitem_activate(None)
 			elif keyval == gtk.keysyms.u: # CTRL + u: emacs style clear line
 				control.clear(control.msg_textview)
 			elif control.type_id == message_control.TYPE_GC and \
 			keyval == gtk.keysyms.b: # CTRL + b
 				control._on_bookmark_room_menuitem_activate(None)
 			# Tab switch bindings
-			elif keyval == gtk.keysyms.ISO_Left_Tab: # CTRL + SHIFT + TAB
-				self.move_to_next_unread_tab(False)
-			elif keyval == gtk.keysyms.Tab: # CTRL + TAB
-				self.move_to_next_unread_tab(True)
 			elif keyval == gtk.keysyms.F4: # CTRL + F4
 				self.remove_tab(control, self.CLOSE_CTRL_KEY)
 			elif keyval == gtk.keysyms.w: # CTRL + w
@@ -383,6 +376,11 @@ class MessageWindow(object):
 				event.keyval = int(keyval)
 				self.notebook.emit('key_press_event', event)
 
+			if modifier & gtk.gdk.SHIFT_MASK:
+				# CTRL + SHIFT
+				if control.type_id == message_control.TYPE_GC and \
+				keyval == gtk.keysyms.n: # CTRL + SHIFT + n
+					control._on_change_nick_menuitem_activate(None)
 		# MOD1 (ALT) mask
 		elif modifier & gtk.gdk.MOD1_MASK:
 			# Tab switch bindings
