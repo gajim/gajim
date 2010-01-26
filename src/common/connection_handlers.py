@@ -1507,11 +1507,10 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
 			con.send(receipt)
 
 		# We got our message's receipt
-		if msg.getTag('received', namespace=common.xmpp.NS_RECEIPTS) \
-		and session.control and gajim.config.get_per('accounts',
-		self.name, 'request_receipt'):
-			session.control.conv_textview.hide_xep0184_warning(
-				msg.getID())
+		if msg.getTag('received', namespace=common.xmpp.NS_RECEIPTS) and \
+		session.control and gajim.config.get_per('accounts', self.name,
+		'request_receipt'):
+			session.control.conv_textview.hide_xep0184_warning(msg.getID())
 
 		if encTag and self.USE_GPG:
 			encmsg = encTag.getData()
