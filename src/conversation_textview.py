@@ -474,13 +474,14 @@ class ConversationTextview(gobject.GObject):
 			self.xep0184_shown[id_] == ALREADY_RECEIVED:
 				return False
 
-			end_iter = buffer_.get_iter_at_mark(
-				self.xep0184_marks[id_])
+			end_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
 			buffer_.insert(end_iter, ' ')
-			buffer_.insert_pixbuf(end_iter,
-				ConversationTextview.XEP0184_WARNING_PIXBUF)
-			before_img_iter = buffer_.get_iter_at_mark(
-				self.xep0184_marks[id_])
+			anchor = buffer_.create_child_anchor(end_iter)
+			img = TextViewImage(anchor, '')
+			img.set_from_pixbuf(ConversationTextview.XEP0184_WARNING_PIXBUF)
+			img.show()
+			self.tv.add_child_at_anchor(img, anchor)
+			before_img_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
 			before_img_iter.forward_char()
 			post_img_iter = before_img_iter.copy()
 			post_img_iter.forward_char()
