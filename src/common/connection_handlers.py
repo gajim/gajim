@@ -437,7 +437,7 @@ class ConnectionVcard:
 		except IOError, e:
 			self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
 
-	def get_cached_vcard(self, fjid, is_fake_jid = False):
+	def get_cached_vcard(self, fjid, is_fake_jid=False):
 		"""
 		Return the vcard as a dict.
 		Return {} if vcard was too old.
@@ -457,7 +457,7 @@ class ConnectionVcard:
 		c = f.read()
 		f.close()
 		try:
-			card = common.xmpp.Node(node = c)
+			card = common.xmpp.Node(node=c)
 		except Exception:
 			# We are unable to parse it. Remove it
 			os.remove(path_to_file)
@@ -469,7 +469,7 @@ class ConnectionVcard:
 			elif 'SHA' in vcard['PHOTO']:
 				cached_sha = vcard['PHOTO']['SHA']
 				if jid in self.vcard_shas and self.vcard_shas[jid] != \
-					cached_sha:
+				cached_sha:
 					# user change his vcard so don't use the cached one
 					return {}
 		vcard['jid'] = jid

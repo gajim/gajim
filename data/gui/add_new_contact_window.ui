@@ -44,6 +44,7 @@
               <object class="GtkComboBox" id="account_combobox">
                 <property name="visible">True</property>
                 <property name="model">liststore3</property>
+                <signal name="changed" handler="on_account_combobox_changed"/>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext3"/>
                   <attributes>
@@ -257,6 +258,19 @@
           </packing>
         </child>
         <child>
+          <object class="GtkCheckButton" id="save_message_checkbutton">
+            <property name="label" translatable="yes">_Save subscription message</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="position">6</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkHBox" id="register_hbox">
             <property name="visible">True</property>
             <property name="no_show_all">True</property>
@@ -293,7 +307,7 @@ proceed.</property>
             </child>
           </object>
           <packing>
-            <property name="position">6</property>
+            <property name="position">7</property>
           </packing>
         </child>
         <child>
@@ -306,7 +320,7 @@ to add a contact from this protocol.</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">7</property>
+            <property name="position">8</property>
           </packing>
         </child>
         <child>
@@ -352,7 +366,7 @@ to add a contact from this protocol.</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">8</property>
+            <property name="position">9</property>
           </packing>
         </child>
       </object>

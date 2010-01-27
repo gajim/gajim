@@ -41,6 +41,7 @@ import hashlib
 import caps_cache
 
 from encodings.punycode import punycode_encode
+from string import Template
 
 from i18n import Q_
 from i18n import ngettext
@@ -1329,4 +1330,27 @@ def group_is_blocked(account, group):
 	return ((group in gajim.connections[account].blocked_groups) or \
 		gajim.connections[account].blocked_all)
 
+def get_subscription_request_msg(account=None):
+	s = gajim.config.get_per('accounts', account, 'subscription_request_msg')
+	if s:
+		return s
+	s = _('I would like to add you to my contact list.')
+	if account:
+		s = _('Hello, I am $name.') + ' ' + s
+		our_jid = gajim.get_jid_from_account(account)
+		vcard = gajim.connections[account].get_cached_vcard(our_jid)
+		name = ''
+		if 'N' in vcard:
+			if 'GIVEN' in vcard['N'] and 'FAMILY' in vcard['N']:
+				name = vcard['N']['GIVEN'] + ' ' + vcard['N']['FAMILY']
+		if not name:
+			if 'FN' in vcard:
+				name = vcard['FN']
+		nick = gajim.nicks[account]
+		if name and nick:
+			name += ' (%s)' % nick
+		elif nick:
+			name = nick
+		s = Template(s).safe_substitute({'name': name})
+	return s
 # vim: se ts=3:
