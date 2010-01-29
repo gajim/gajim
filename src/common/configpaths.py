@@ -105,11 +105,11 @@ class ConfigPaths:
 			self.root = root
 
 		# LOG is deprecated
-		k = ( 'LOG',   'LOG_DB',   'VCARD',   'AVATAR',   'MY_EMOTS',
-			'MY_ICONSETS', 'MY_MOOD_ICONSETS',
-			'MY_ACTIVITY_ICONSETS', 'MY_CACERTS')
-		v = (u'logs', u'logs.db', u'vcards', u'avatars', u'emoticons',
-			u'iconsets',  u'moods', u'activities', u'cacerts.pem')
+		k = ( 'LOG', 'LOG_DB', 'CACHE_DB', 'VCARD', 'AVATAR', 'MY_EMOTS',
+			'MY_ICONSETS', 'MY_MOOD_ICONSETS', 'MY_ACTIVITY_ICONSETS',
+			'MY_CACERTS')
+		v = (u'logs', u'logs.db', u'cache.db', u'vcards', u'avatars',
+			u'emoticons', u'iconsets',  u'moods', u'activities', u'cacerts.pem')
 
 		if os.name == 'nt':
 			v = [x.capitalize() for x in v]

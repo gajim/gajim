@@ -63,11 +63,6 @@ def create_log_db():
 
 		CREATE INDEX idx_unread_messages_jid_id ON unread_messages (jid_id);
 
-		CREATE TABLE transports_cache (
-			transport TEXT UNIQUE,
-			type INTEGER
-		);
-
 		CREATE TABLE logs(
 			log_line_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 			jid_id INTEGER,
@@ -80,6 +75,23 @@ def create_log_db():
 		);
 
 		CREATE INDEX idx_logs_jid_id_time ON logs (jid_id, time DESC);
+		'''
+		)
+
+	con.commit()
+	con.close()
+
+def create_cache_db():
+	print _('creating cache database')
+	con = sqlite.connect(logger.CACHE_DB_PATH)
+	os.chmod(logger.CACHE_DB_PATH, 0600) # rw only for us
+	cur = con.cursor()
+	cur.executescript(
+		'''
+		CREATE TABLE transports_cache (
+			transport TEXT UNIQUE,
+			type INTEGER
+		);
 
 		CREATE TABLE caps_cache (
 			hash_method TEXT,
@@ -115,6 +127,7 @@ def create_log_db():
 
 def check_and_possibly_create_paths():
 	LOG_DB_PATH = logger.LOG_DB_PATH
+	CACHE_DB_PATH = logger.CACHE_DB_PATH
 	VCARD_PATH = gajim.VCARD_PATH
 	AVATAR_PATH = gajim.AVATAR_PATH
 	dot_gajim = os.path.dirname(VCARD_PATH)
@@ -149,6 +162,13 @@ def check_and_possibly_create_paths():
 			print _('Gajim will now exit')
 			sys.exit()
 
+		if not os.path.exists(CACHE_DB_PATH):
+			create_cache_db()
+		elif os.path.isdir(CACHE_DB_PATH):
+			print _('%s is a directory but should be a file') % CACHE_DB_PATH
+			print _('Gajim will now exit')
+			sys.exit()
+
 	else: # dot_gajim doesn't exist
 		if dot_gajim: # is '' on win9x so avoid that
 			create_path(dot_gajim)
@@ -159,6 +179,9 @@ def check_and_possibly_create_paths():
 		if not os.path.isfile(LOG_DB_PATH):
 			create_log_db()
 			gajim.logger.init_vars()
+		if not os.path.isfile(CACHE_DB_PATH):
+			create_cache_db()
+			gajim.logger.attach_cache_database()
 
 def create_path(directory):
 	print _('creating %s directory') % directory

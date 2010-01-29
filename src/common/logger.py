@@ -43,6 +43,7 @@ import sqlite3 as sqlite
 import configpaths
 LOG_DB_PATH = configpaths.gajimpaths['LOG_DB']
 LOG_DB_FOLDER, LOG_DB_FILE = os.path.split(LOG_DB_PATH)
+CACHE_DB_PATH = configpaths.gajimpaths['CACHE_DB']
 
 class Constants:
 	def __init__(self):
@@ -107,6 +108,11 @@ class Logger:
 			# db is not created here but in src/common/checks_paths.py
 			return
 		self.init_vars()
+		if not os.path.exists(CACHE_DB_PATH):
+			# this can happen cache database is not present when gajim is launched
+			# db will be created in src/common/checks_paths.py
+			return
+		self.attach_cache_database()
 
 	def close_db(self):
 		if self.con:
@@ -131,6 +137,12 @@ class Logger:
 		os.chdir(back)
 		self.cur = self.con.cursor()
 		self.set_synchronous(False)
+
+	def attach_cache_database(self):
+		try:
+			self.cur.execute("ATTACH DATABASE '%s' AS cache" % CACHE_DB_PATH)
+		except sqlite.Error, e:
+			gajim.log.debug("Failed to attach cache database: %s" % str(e))
 
 	def set_synchronous(self, sync):
 		try:
