@@ -896,8 +896,6 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
 					if not jid_ in self.agents[type_]:
 						self.agents[type_].append(jid_)
 				self.available_types.append(type_)
-		liststore = gtk.ListStore(str)
-		self.group_comboboxentry.set_model(liststore)
 		# Combobox with transport/jabber icons
 		liststore = gtk.ListStore(str, gtk.gdk.Pixbuf, str)
 		cell = gtk.CellRendererPixbuf()

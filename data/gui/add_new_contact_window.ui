@@ -196,13 +196,8 @@
             <child>
               <object class="GtkComboBoxEntry" id="group_comboboxentry">
                 <property name="visible">True</property>
-                <property name="model">liststore1</property>
-                <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
-                </child>
+                <property name="model">groups_liststore</property>
+                <property name="text_column">0</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -375,7 +370,7 @@ to add a contact from this protocol.</property>
   <object class="GtkTextBuffer" id="textbuffer1">
     <property name="text" translatable="yes">I would like to add you to my contact list.</property>
   </object>
-  <object class="GtkListStore" id="liststore1">
+  <object class="GtkListStore" id="groups_liststore">
     <columns>
       <!-- column-name item -->
       <column type="gchararray"/>
