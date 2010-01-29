@@ -1155,7 +1155,10 @@ class ConversationTextview(gobject.GObject):
 			all_tags = tags[:]
 			if use_other_tags:
 				all_tags += other_tags
-			buffer_.insert_with_tags_by_name(end_iter, special_text, *all_tags)
+			# convert all names to TextTag
+			ttt = buffer_.get_tag_table()
+			all_tags = [(ttt.lookup(t) if isinstance(t, str) else t) for t in all_tags]
+			buffer_.insert_with_tags(end_iter, special_text, *all_tags)
 
 	def print_empty_line(self):
 		buffer_ = self.tv.get_buffer()
