@@ -27,6 +27,7 @@
 ##
 
 import os
+import sys
 import locale
 import re
 from time import time
@@ -898,8 +899,9 @@ class OptionsParser:
 				con.commit()
 				cur.executescript('DROP TABLE %s;' % table)
 				con.commit()
-			except sqlite.OperationalError:
-				print >> sys.stderr, 'error moving table %s to cache.db'
+			except sqlite.OperationalError, e:
+				print >> sys.stderr, 'error moving table %s to cache.db: %s' % \
+					(table, str(e))
 		con.close()
 		gajim.config.set('version', '0.13.10.2')
 
