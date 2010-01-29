@@ -914,6 +914,7 @@ class PreferencesWindow:
 		status.sort()
 		for status_ in status:
 			msg = gajim.config.get_per('defaultstatusmsg', status_, 'message')
+			msg = helpers.from_one_line(msg)
 			enabled = gajim.config.get_per('defaultstatusmsg', status_, 'enabled')
 			iter_ = model.append()
 			uf_show = helpers.get_uf_show(status_)
@@ -931,6 +932,7 @@ class PreferencesWindow:
 	def on_default_msg_treemodel_row_changed(self, model, path, iter_):
 		status = model[iter_][0]
 		message = model[iter_][2].decode('utf-8')
+		message = helpers.to_one_line(message)
 		gajim.config.set_per('defaultstatusmsg', status, 'enabled',
 			model[iter_][3])
 		gajim.config.set_per('defaultstatusmsg', status, 'message', message)
