@@ -145,14 +145,13 @@ class HistoryWindow:
 
 		# Add all jids in logs.db:
 		db_jids = gajim.logger.get_jids_in_db()
-		self.completion_dict = dict.fromkeys(db_jids)
+		completion_dict = dict.fromkeys(db_jids)
 
 		self.accounts_seen_online = gajim.contacts.get_accounts()[:]
 
 		# Enhance contacts of online accounts with contact. Needed for mapping below
 		for account in self.accounts_seen_online:
-			self.completion_dict.update(
-				helpers.get_contact_dict_for_account(account))
+			completion_dict.update(helpers.get_contact_dict_for_account(account))
 
 		muc_active_img = gtkgui_helpers.load_icon('muc_active')
 		contact_img = gajim.interface.jabber_state_images['16']['online']
@@ -171,7 +170,7 @@ class HistoryWindow:
 		# Warning : This for is time critical with big DB
 		for key in keys:
 			completed = key
-			contact = self.completion_dict[completed]
+			contact = completion_dict[completed]
 			if contact:
 				info_name = contact.get_shown_name()
 				info_completion = info_name
