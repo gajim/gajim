@@ -865,7 +865,7 @@ class Socks5Listener(IdleObject):
 			try:
 				self._serv = socket.socket(*ai[:3])
 			except socket.error, e:
-				if e.errno == EAFNOSUPPORT:
+				if e.args[0] == EAFNOSUPPORT:
 					self.ai = None
 					continue
 				raise
