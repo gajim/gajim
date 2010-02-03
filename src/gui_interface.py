@@ -220,8 +220,7 @@ class Interface:
 			for request in self.gpg_passphrase.values():
 				if request:
 					request.interrupt()
-			# .keys() is needed because dict changes during loop
-			for account in self.pass_dialog.keys():
+			if account in self.pass_dialog:
 				self.pass_dialog[account].window.destroy()
 		if show == 'offline':
 			# sensitivity for this menuitem
