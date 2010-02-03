@@ -274,7 +274,7 @@ class NSLookupResolver(CommonResolver):
 		''' spawn new nslookup process and start waiting for results '''
 		ns = NsLookup(self._on_ready, host, type)
 		ns.set_idlequeue(self.idlequeue)
-		ns.commandtimeout = 10
+		ns.commandtimeout = 20
 		ns.start()
 
 
