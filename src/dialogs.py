@@ -1764,7 +1764,7 @@ class CommonInputDialog:
 		self.xml.connect_signals(self)
 		self.dialog.show_all()
 
-	def on_input_dialog_delete_event(self, widget, event):
+	def on_input_dialog_destroy(self, widget):
 		if self.cancel_handler:
 			self.cancel_handler()
 
@@ -1788,7 +1788,7 @@ class InputDialog(CommonInputDialog):
 	"""
 
 	def __init__(self, title, label_str, input_str=None, is_modal=True,
-			ok_handler=None, cancel_handler=None):
+	ok_handler=None, cancel_handler=None):
 		self.xml = gtkgui_helpers.get_gtk_builder('input_dialog.ui')
 		CommonInputDialog.__init__(self, title, label_str, is_modal, ok_handler,
 			cancel_handler)
