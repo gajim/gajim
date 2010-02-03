@@ -1299,22 +1299,33 @@ class HigDialog(gtk.MessageDialog):
 		self.format_secondary_markup(sectext)
 
 		buttons = self.action_area.get_children()
-		possible_responses = {gtk.STOCK_OK: on_response_ok,
-							  gtk.STOCK_CANCEL: on_response_cancel, gtk.STOCK_YES: on_response_yes,
-							  gtk.STOCK_NO: on_response_no}
+		self.possible_responses = {gtk.STOCK_OK: on_response_ok,
+			gtk.STOCK_CANCEL: on_response_cancel, gtk.STOCK_YES: on_response_yes,
+			gtk.STOCK_NO: on_response_no}
 		for b in buttons:
-			for response in possible_responses:
+			for response in self.possible_responses:
 				if b.get_label() == response:
-					if not possible_responses[response]:
+					if not self.possible_responses[response]:
 						b.connect('clicked', self.just_destroy)
-					elif isinstance(possible_responses[response], tuple):
-						if len(possible_responses[response]) == 1:
-							b.connect('clicked', possible_responses[response][0])
+					elif isinstance(self.possible_responses[response], tuple):
+						if len(self.possible_responses[response]) == 1:
+							b.connect('clicked', self.possible_responses[response][0])
 						else:
-							b.connect('clicked', *possible_responses[response])
+							b.connect('clicked', *self.possible_responses[response])
 					else:
-						b.connect('clicked', possible_responses[response])
+						b.connect('clicked', self.possible_responses[response])
 					break
+
+		self.connect('destroy', self.on_dialog_destroy)
+
+	def on_dialog_destroy(self, widget):
+		cancel_handler = self.possible_responses[gtk.STOCK_CANCEL]
+		if not cancel_handler:
+			return False
+		if isinstance(cancel_handler, tuple):
+			cancel_handler[0](None, *cancel_handler[1:])
+		else:
+			cancel_handler(None)
 
 	def just_destroy(self, widget):
 		self.destroy()
@@ -1548,8 +1559,6 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 		self.set_modal(is_modal)
 		self.popup()
 
-	# XXX should cancel if somebody closes the dialog
-
 	def on_response_ok(self, widget):
 		if self.user_response_ok:
 			if isinstance(self.user_response_ok, tuple):
@@ -1607,8 +1616,6 @@ class ConfirmationDialogDubbleCheck(ConfirmationDialog):
 		self.set_modal(is_modal)
 		self.popup()
 
-	# XXX should cancel if somebody closes the dialog
-
 	def on_response_ok(self, widget):
 		if self.user_response_ok:
 			if isinstance(self.user_response_ok, tuple):
@@ -1634,6 +1641,64 @@ class ConfirmationDialogDubbleCheck(ConfirmationDialog):
 			is_checked_1 = False
 		if self.checkbutton2:
 			is_checked_2 = self.checkbutton2.get_active()
+		else:
+			is_checked_2 = False
+		return [is_checked_1, is_checked_2]
+
+class ConfirmationDialogDoubleRadio(ConfirmationDialog):
+	"""
+	HIG compliant confirmation dialog with 2 radios
+	"""
+
+	def __init__(self, pritext, sectext='', radiotext1='', radiotext2='',
+	on_response_ok=None, on_response_cancel=None, is_modal=True):
+		self.user_response_ok = on_response_ok
+		self.user_response_cancel = on_response_cancel
+
+		HigDialog.__init__(self, None, gtk.MESSAGE_QUESTION,
+			gtk.BUTTONS_OK_CANCEL, pritext, sectext, self.on_response_ok,
+			self.on_response_cancel)
+
+		self.set_default_response(gtk.RESPONSE_OK)
+
+		ok_button = self.action_area.get_children()[0] # right to left
+		ok_button.grab_focus()
+
+		self.radiobutton1 = gtk.RadioButton(label=radiotext1)
+		self.vbox.pack_start(self.radiobutton1, expand=False, fill=True)
+
+		self.radiobutton2 = gtk.RadioButton(group=self.radiobutton1,
+			label=radiotext2)
+		self.vbox.pack_start(self.radiobutton2, expand=False, fill=True)
+
+		self.set_modal(is_modal)
+		self.popup()
+
+	def on_response_ok(self, widget):
+		if self.user_response_ok:
+			if isinstance(self.user_response_ok, tuple):
+				self.user_response_ok[0](self.is_checked(),
+					*self.user_response_ok[1:])
+			else:
+				self.user_response_ok(self.is_checked())
+		self.destroy()
+
+	def on_response_cancel(self, widget):
+		if self.user_response_cancel:
+			if isinstance(self.user_response_cancel, tuple):
+				self.user_response_cancel[0](*self.user_response_cancel[1:])
+			else:
+				self.user_response_cancel()
+		self.destroy()
+
+	def is_checked(self):
+		''' Get active state of the checkbutton '''
+		if self.radiobutton1:
+			is_checked_1 = self.radiobutton1.get_active()
+		else:
+			is_checked_1 = False
+		if self.radiobutton2:
+			is_checked_2 = self.radiobutton2.get_active()
 		else:
 			is_checked_2 = False
 		return [is_checked_1, is_checked_2]

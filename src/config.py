@@ -2904,10 +2904,20 @@ class RemoveAccountWindow:
 		else:
 			remove()
 
+	def on_remove_responce_ok(self, is_checked):
+		if is_checked[0]:
+			self._on_remove_success(True)
+
 	def _on_remove_success(self, res):
 		# action of unregistration has failed, we don't remove the account
 		# Error message is send by connect_and_auth()
 		if not res:
+			confirmation_check = dialogs.ConfirmationDialogDoubleRadio(
+				_('Connection to server %s failed') % self.account,
+				_('What would you like to do?'),
+				_('Remove only from Gajim'),
+				_('Don\'t remove anything. I\'ll try again later'),
+				on_response_ok=self.on_remove_responce_ok, is_modal=False)
 			return
 		# Close all opened windows
 		gajim.interface.roster.close_all(self.account, force = True)
