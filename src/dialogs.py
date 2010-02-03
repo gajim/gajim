@@ -1613,7 +1613,7 @@ class CommonInputDialog:
 		self.xml.signal_autoconnect(self)
 		self.dialog.show_all()
 
-	def on_input_dialog_delete_event(self, widget, event):
+	def on_input_dialog_destroy(self, widget):
 		if self.cancel_handler:
 			self.cancel_handler()
 
@@ -1791,7 +1791,7 @@ class InputTextDialog(CommonInputDialog):
 class DubbleInputDialog:
 	'''Class for Dubble Input dialog'''
 	def __init__(self, title, label_str1, label_str2, input_str1=None,
-				 input_str2=None, is_modal=True, ok_handler=None, cancel_handler=None):
+	input_str2=None, is_modal=True, ok_handler=None, cancel_handler=None):
 		self.xml = gtkgui_helpers.get_glade('dubbleinput_dialog.glade')
 		self.dialog = self.xml.get_widget('dubbleinput_dialog')
 		label1 = self.xml.get_widget('label1')
