@@ -35,6 +35,7 @@ import sqlite3 as sqlite
 
 def create_log_db():
 	print _('creating logs database')
+	print logger.LOG_DB_PATH
 	con = sqlite.connect(logger.LOG_DB_PATH)
 	os.chmod(logger.LOG_DB_PATH, 0600) # rw only for us
 	cur = con.cursor()
@@ -127,61 +128,80 @@ def create_cache_db():
 
 def check_and_possibly_create_paths():
 	LOG_DB_PATH = logger.LOG_DB_PATH
+	LOG_DB_FOLDER, LOG_DB_FILE = os.path.split(LOG_DB_PATH)
 	CACHE_DB_PATH = logger.CACHE_DB_PATH
+	CACHE_DB_FOLDER, CACHE_DB_FILE = os.path.split(CACHE_DB_PATH)
 	VCARD_PATH = gajim.VCARD_PATH
 	AVATAR_PATH = gajim.AVATAR_PATH
-	dot_gajim = os.path.dirname(VCARD_PATH)
-	if os.path.isfile(dot_gajim):
-		print _('%s is a file but it should be a directory') % dot_gajim
+	import configpaths
+	MY_DATA = configpaths.gajimpaths['MY_DATA']
+	MY_CONFIG = configpaths.gajimpaths['MY_CONFIG']
+	MY_CACHE = configpaths.gajimpaths['MY_CACHE']
+
+	if not os.path.exists(MY_DATA):
+		create_path(MY_DATA)
+	elif os.path.isfile(MY_DATA):
+		print _('%s is a file but it should be a directory') % MY_DATA
 		print _('Gajim will now exit')
 		sys.exit()
-	elif os.path.isdir(dot_gajim):
-		s = os.stat(dot_gajim)
-		if s.st_mode & stat.S_IROTH: # others have read permission!
-			os.chmod(dot_gajim, 0700) # rwx------
 
-		if not os.path.exists(VCARD_PATH):
-			create_path(VCARD_PATH)
-		elif os.path.isfile(VCARD_PATH):
-			print _('%s is a file but it should be a directory') % VCARD_PATH
-			print _('Gajim will now exit')
-			sys.exit()
+	if not os.path.exists(MY_CONFIG):
+		create_path(MY_CONFIG)
+	elif os.path.isfile(MY_CONFIG):
+		print _('%s is a file but it should be a directory') % MY_CONFIG
+		print _('Gajim will now exit')
+		sys.exit()
 
-		if not os.path.exists(AVATAR_PATH):
-			create_path(AVATAR_PATH)
-		elif os.path.isfile(AVATAR_PATH):
-			print _('%s is a file but it should be a directory') % AVATAR_PATH
-			print _('Gajim will now exit')
-			sys.exit()
+	if not os.path.exists(MY_CACHE):
+		create_path(MY_CACHE)
+	elif os.path.isfile(MY_CACHE):
+		print _('%s is a file but it should be a directory') % MY_CACHE
+		print _('Gajim will now exit')
+		sys.exit()
 
-		if not os.path.exists(LOG_DB_PATH):
-			create_log_db()
-			gajim.logger.init_vars()
-		elif os.path.isdir(LOG_DB_PATH):
-			print _('%s is a directory but should be a file') % LOG_DB_PATH
-			print _('Gajim will now exit')
-			sys.exit()
+	if not os.path.exists(VCARD_PATH):
+		create_path(VCARD_PATH)
+	elif os.path.isfile(VCARD_PATH):
+		print _('%s is a file but it should be a directory') % VCARD_PATH
+		print _('Gajim will now exit')
+		sys.exit()
 
-		if not os.path.exists(CACHE_DB_PATH):
-			create_cache_db()
-		elif os.path.isdir(CACHE_DB_PATH):
-			print _('%s is a directory but should be a file') % CACHE_DB_PATH
-			print _('Gajim will now exit')
-			sys.exit()
+	if not os.path.exists(AVATAR_PATH):
+		create_path(AVATAR_PATH)
+	elif os.path.isfile(AVATAR_PATH):
+		print _('%s is a file but it should be a directory') % AVATAR_PATH
+		print _('Gajim will now exit')
+		sys.exit()
 
-	else: # dot_gajim doesn't exist
-		if dot_gajim: # is '' on win9x so avoid that
-			create_path(dot_gajim)
-		if not os.path.isdir(VCARD_PATH):
-			create_path(VCARD_PATH)
-		if not os.path.exists(AVATAR_PATH):
-			create_path(AVATAR_PATH)
-		if not os.path.isfile(LOG_DB_PATH):
-			create_log_db()
-			gajim.logger.init_vars()
-		if not os.path.isfile(CACHE_DB_PATH):
-			create_cache_db()
-			gajim.logger.attach_cache_database()
+	if not os.path.exists(LOG_DB_FOLDER):
+		create_path(LOG_DB_FOLDER)
+	elif os.path.isfile(LOG_DB_FOLDER):
+		print _('%s is a file but it should be a directory') % LOG_DB_FOLDER
+		print _('Gajim will now exit')
+		sys.exit()
+
+	if not os.path.exists(LOG_DB_PATH):
+		create_log_db()
+		gajim.logger.init_vars()
+	elif os.path.isdir(LOG_DB_PATH):
+		print _('%s is a directory but should be a file') % LOG_DB_PATH
+		print _('Gajim will now exit')
+		sys.exit()
+
+	if not os.path.exists(CACHE_DB_FOLDER):
+		create_path(CACHE_DB_FOLDER)
+	elif os.path.isfile(CACHE_DB_FOLDER):
+		print _('%s is a file but it should be a directory') % CACHE_DB_FOLDER
+		print _('Gajim will now exit')
+		sys.exit()
+
+	if not os.path.exists(CACHE_DB_PATH):
+		create_cache_db()
+		gajim.logger.attach_cache_database()
+	elif os.path.isdir(CACHE_DB_PATH):
+		print _('%s is a directory but should be a file') % CACHE_DB_PATH
+		print _('Gajim will now exit')
+		sys.exit()
 
 def create_path(directory):
 	print _('creating %s directory') % directory

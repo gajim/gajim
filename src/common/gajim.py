@@ -77,7 +77,6 @@ logger = logger.Logger() # init the logger
 import configpaths
 gajimpaths = configpaths.gajimpaths
 
-LOGPATH = gajimpaths['LOG'] # deprecated
 VCARD_PATH = gajimpaths['VCARD']
 AVATAR_PATH = gajimpaths['AVATAR']
 MY_EMOTS_PATH = gajimpaths['MY_EMOTS']

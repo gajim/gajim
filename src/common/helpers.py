@@ -725,7 +725,8 @@ def play_sound(event):
 	path_to_soundfile = gajim.config.get_per('soundevents', event, 'path')
 	play_sound_file(path_to_soundfile)
 
-def check_soundfile_path(file, dirs=(gajim.gajimpaths.root, gajim.DATA_DIR)):
+def check_soundfile_path(file, dirs=(gajim.gajimpaths.data_root,
+gajim.DATA_DIR)):
 	"""
 	Check if the sound file exists
 
@@ -745,8 +746,8 @@ def check_soundfile_path(file, dirs=(gajim.gajimpaths.root, gajim.DATA_DIR)):
 			return d
 	return None
 
-def strip_soundfile_path(file, dirs=(gajim.gajimpaths.root, gajim.DATA_DIR),
-		abs=True):
+def strip_soundfile_path(file, dirs=(gajim.gajimpaths.data_root,
+gajim.DATA_DIR), abs=True):
 	"""
 	Remove knowns paths from a sound file
 
