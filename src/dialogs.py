@@ -1290,8 +1290,9 @@ class Dialog(gtk.Dialog):
 
 class HigDialog(gtk.MessageDialog):
 	def __init__(self, parent, type_, buttons, pritext, sectext,
-				 on_response_ok = None, on_response_cancel = None, on_response_yes = None,
-				 on_response_no = None):
+	on_response_ok=None, on_response_cancel=None, on_response_yes=None,
+	on_response_no=None):
+		self.call_cancel_on_destroy = True
 		gtk.MessageDialog.__init__(self, parent,
 								   gtk.DIALOG_DESTROY_WITH_PARENT | gtk.DIALOG_MODAL,
 								   type_, buttons, message_format = pritext)
@@ -1319,6 +1320,8 @@ class HigDialog(gtk.MessageDialog):
 		self.connect('destroy', self.on_dialog_destroy)
 
 	def on_dialog_destroy(self, widget):
+		if not self.call_cancel_on_destroy:
+			return
 		cancel_handler = self.possible_responses[gtk.STOCK_CANCEL]
 		if not cancel_handler:
 			return False
@@ -1631,6 +1634,7 @@ class ConfirmationDialogDubbleCheck(ConfirmationDialog):
 				self.user_response_cancel[0](*self.user_response_cancel[1:])
 			else:
 				self.user_response_cancel()
+		self.call_cancel_on_destroy = False
 		self.destroy()
 
 	def is_checked(self):
