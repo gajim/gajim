@@ -114,7 +114,7 @@ if os.name == 'nt':
 		_file = None
 		_error = None
 		def write(self, text):
-			fname=os.path.join(common.configpaths.gajimpaths.root,
+			fname=os.path.join(common.configpaths.gajimpaths.cache_root,
 				os.path.split(sys.executable)[1]+'.log')
 			if self._file is None and self._error is None:
 				try:
