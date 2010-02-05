@@ -217,8 +217,6 @@ class OptionsParser:
 			self.update_config_to_013100()
 		if old < [0, 13, 10, 1] and new >= [0, 13, 10, 1]:
 			self.update_config_to_013101()
-		if old < [0, 13, 10, 2] and new >= [0, 13, 10, 2]:
-			self.update_config_to_013102()
 
 		gajim.logger.init_vars()
 		gajim.logger.attach_cache_database()
@@ -883,31 +881,5 @@ class OptionsParser:
 			pass
 		con.close()
 		gajim.config.set('version', '0.13.10.1')
-
-	def update_config_to_013102(self):
-		back = os.getcwd()
-		os.chdir(logger.LOG_DB_FOLDER)
-		con = sqlite.connect(logger.LOG_DB_FILE)
-		os.chdir(back)
-		cur = con.cursor()
-		cur.execute('''SELECT name FROM sqlite_master WHERE type = 'table';''')
-		tables = cur.fetchall() # we get [(u'jids',), (u'unread_messages',), ...
-		tables = [t[0] for t in tables]
-		cur.execute("ATTACH DATABASE '%s' AS cache" % logger.CACHE_DB_PATH)
-		for table in ('caps_cache', 'rooms_last_message_time', 'roster_entry',
-		'roster_group', 'transports_cache'):
-			if table not in tables:
-				continue
-			try:
-				cur.executescript(
-					'INSERT INTO cache.%s SELECT * FROM %s;' % (table, table))
-				con.commit()
-				cur.executescript('DROP TABLE %s;' % table)
-				con.commit()
-			except sqlite.OperationalError, e:
-				print >> sys.stderr, 'error moving table %s to cache.db: %s' % \
-					(table, str(e))
-		con.close()
-		gajim.config.set('version', '0.13.10.2')
 
 # vim: se ts=3:
