@@ -1626,6 +1626,7 @@ class ConfirmationDialogDubbleCheck(ConfirmationDialog):
 										 *self.user_response_ok[1:])
 			else:
 				self.user_response_ok(self.is_checked())
+		self.call_cancel_on_destroy = False
 		self.destroy()
 
 	def on_response_cancel(self, widget):
