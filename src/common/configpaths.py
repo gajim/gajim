@@ -179,7 +179,7 @@ class ConfigPaths:
 			secretsfile += u'.' + profile
 		pidfile += u'.pid'
 		self.add('CONFIG_FILE', TYPE_CONFIG, conffile)
-		self.add('PID_FILE', TYPE_CONFIG, pidfile)
+		self.add('PID_FILE', TYPE_CACHE, pidfile)
 		self.add('SECRETS_FILE', TYPE_DATA, secretsfile)
 
 gajimpaths = ConfigPaths()
