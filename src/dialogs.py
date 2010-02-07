@@ -1416,6 +1416,7 @@ class ConfirmationDialog(HigDialog):
 				self.user_response_ok[0](*self.user_response_ok[1:])
 			else:
 				self.user_response_ok()
+		self.call_cancel_on_destroy = False
 		self.destroy()
 
 	def on_response_cancel(self, widget):
@@ -1424,6 +1425,7 @@ class ConfirmationDialog(HigDialog):
 				self.user_response_cancel[0](*self.user_response_ok[1:])
 			else:
 				self.user_response_cancel()
+		self.call_cancel_on_destroy = False
 		self.destroy()
 
 class NonModalConfirmationDialog(HigDialog):
@@ -1446,6 +1448,7 @@ class NonModalConfirmationDialog(HigDialog):
 				self.user_response_ok[0](*self.user_response_ok[1:])
 			else:
 				self.user_response_ok()
+		self.call_cancel_on_destroy = False
 		self.destroy()
 
 	def on_response_cancel(self, widget):
@@ -1454,6 +1457,7 @@ class NonModalConfirmationDialog(HigDialog):
 				self.user_response_cancel[0](*self.user_response_cancel[1:])
 			else:
 				self.user_response_cancel()
+		self.call_cancel_on_destroy = False
 		self.destroy()
 
 class WarningDialog(HigDialog):
@@ -1520,6 +1524,7 @@ class YesNoDialog(HigDialog):
 										  *self.user_response_yes[1:])
 			else:
 				self.user_response_yes(self.is_checked())
+		self.call_cancel_on_destroy = False
 		self.destroy()
 
 	def on_response_no(self, widget):
@@ -1528,6 +1533,7 @@ class YesNoDialog(HigDialog):
 				self.user_response_no[0](*self.user_response_no[1:])
 			else:
 				self.user_response_no()
+		self.call_cancel_on_destroy = False
 		self.destroy()
 
 	def is_checked(self):
@@ -1569,6 +1575,7 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 										 *self.user_response_ok[1:])
 			else:
 				self.user_response_ok(self.is_checked())
+		self.call_cancel_on_destroy = False
 		self.destroy()
 
 	def on_response_cancel(self, widget):
@@ -1578,6 +1585,7 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 											 *self.user_response_cancel[1:])
 			else:
 				self.user_response_cancel(self.is_checked())
+		self.call_cancel_on_destroy = False
 		self.destroy()
 
 	def is_checked(self):
@@ -1686,6 +1694,7 @@ class ConfirmationDialogDoubleRadio(ConfirmationDialog):
 					*self.user_response_ok[1:])
 			else:
 				self.user_response_ok(self.is_checked())
+		self.call_cancel_on_destroy = False
 		self.destroy()
 
 	def on_response_cancel(self, widget):
@@ -1694,6 +1703,7 @@ class ConfirmationDialogDoubleRadio(ConfirmationDialog):
 				self.user_response_cancel[0](*self.user_response_cancel[1:])
 			else:
 				self.user_response_cancel()
+		self.call_cancel_on_destroy = False
 		self.destroy()
 
 	def is_checked(self):
@@ -1746,6 +1756,7 @@ class FTOverwriteConfirmationDialog(ConfirmationDialog):
 				self.on_response[0](response, *self.on_response[1:])
 			else:
 				self.on_response(response)
+		self.call_cancel_on_destroy = False
 		self.destroy()
 
 class CommonInputDialog:
