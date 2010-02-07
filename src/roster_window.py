@@ -1565,6 +1565,15 @@ class RosterWindow:
 		if type_ == 'group':
 			group = jid
 			if group == _('Transports'):
+				if self.regroup:
+					accounts = gajim.contacts.get_accounts()
+				else:
+					accounts = [account]
+				for _acc in accounts:
+					for contact in gajim.contacts.iter_contacts(_acc):
+						if group in contact.get_shown_groups() and \
+						self.contact_has_pending_roster_events(contact, _acc):
+							return True
 				return gajim.config.get('show_transports_group') and \
 					(gajim.account_is_connected(account) or \
 					gajim.config.get('showoffline'))
@@ -1611,9 +1620,12 @@ class RosterWindow:
 					jid)
 				return self.contact_is_visible(contact, account)
 		if type_ == 'agent':
-			return gajim.config.get('show_transports_group') and \
+			contact = gajim.contacts.get_contact_with_highest_priority(account,
+				jid)
+			return self.contact_has_pending_roster_events(contact, account) or \
+				(gajim.config.get('show_transports_group') and \
 				(gajim.account_is_connected(account) or \
-				gajim.config.get('showoffline'))
+				gajim.config.get('showoffline')))
 		return True
 
 	def _compareIters(self, model, iter1, iter2, data=None):
