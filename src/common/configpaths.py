@@ -103,9 +103,13 @@ class ConfigPaths:
 					self.data_root = os.path.join(xdg.BaseDirectory.\
 						xdg_data_dirs[0], u'gajim')
 			else:
-				self.config_root = os.path.expanduser(u'~/.config/gajim')
-				self.cache_root = os.path.expanduser(u'~/.cache/gajim')
-				self.data_root = os.path.expanduser(u'~/.local/share/gajim')
+				expand = os.path.expanduser
+				base = os.getenv('XDG_CONFIG_HOME') or expand(u'~/.config')
+				self.config_root = os.path.join(base, u'gajim')
+				base = os.getenv('XDG_CACHE_HOME') or expand(u'~/.cache')
+				self.cache_root = os.path.join(base, u'gajim')
+				base = os.getenv('XDG_DATA_HOME') or expand(u'~/.local/share')
+				self.data_root = os.path.join(base, u'gajim')
 
 	def add(self, name, type_, path):
 		self.paths[name] = (type_, path)
