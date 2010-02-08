@@ -1834,7 +1834,7 @@ class Interface:
         if 'ssl_error' in self.instances[account]['online_dialog']:
             self.instances[account]['online_dialog']['ssl_error'].destroy()
         self.instances[account]['online_dialog']['ssl_error'] = \
-                dialogs.ConfirmationDialogDoubbleCheck(pritext, sectext, checktext1,
+                dialogs.ConfirmationDialogDoubleCheck(pritext, sectext, checktext1,
                 checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel)
 
     def handle_event_fingerprint_error(self, account, data):
@@ -1889,7 +1889,7 @@ class Interface:
         if 'plain_connection' in self.instances[account]['online_dialog']:
             self.instances[account]['online_dialog']['plain_connection'].destroy()
         self.instances[account]['online_dialog']['plain_connection'] = \
-                dialogs.ConfirmationDialogDoubbleCheck(pritext, sectext,
+                dialogs.ConfirmationDialogDoubleCheck(pritext, sectext,
                 checktext1, checktext2, on_response_ok=on_ok,
                 on_response_cancel=on_cancel, is_modal=False)
 
@@ -1924,7 +1924,7 @@ class Interface:
         if 'insecure_ssl' in self.instances[account]['online_dialog']:
             self.instances[account]['online_dialog']['insecure_ssl'].destroy()
         self.instances[account]['online_dialog']['insecure_ssl'] = \
-                dialogs.ConfirmationDialogDoubbleCheck(pritext, sectext,
+                dialogs.ConfirmationDialogDoubleCheck(pritext, sectext,
                 checktext1, checktext2, on_response_ok=on_ok,
                 on_response_cancel=on_cancel, is_modal=False)
 

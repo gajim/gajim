@@ -1594,7 +1594,7 @@ class ConfirmationDialogCheck(ConfirmationDialog):
         """
         return self.checkbutton.get_active()
 
-class ConfirmationDialogDoubbleCheck(ConfirmationDialog):
+class ConfirmationDialogDoubleCheck(ConfirmationDialog):
     """
     HIG compliant confirmation dialog with 2 checkbuttons
     """
@@ -1969,9 +1969,9 @@ class InputTextDialog(CommonInputDialog):
         start_iter, end_iter = self.input_buffer.get_bounds()
         return self.input_buffer.get_text(start_iter, end_iter).decode('utf-8')
 
-class DoubbleInputDialog:
+class DoubleInputDialog:
     """
-    Class for Doubble Input dialog
+    Class for Double Input dialog
     """
 
     def __init__(self, title, label_str1, label_str2, input_str1=None,
