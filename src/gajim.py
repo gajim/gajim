@@ -83,7 +83,9 @@ def parseOpts():
         sys.exit(2)
     for o, a in opts:
         if o in ('-h', '--help'):
-            print 'gajim [--help] [--quiet] [--verbose] [--loglevel subsystem=level[,subsystem=level[...]]] [--profile name] [--config-path]'
+            print 'gajim [--help] [--quiet] [--verbose] ' + \
+                '[--loglevel subsystem=level[,subsystem=level[...]]] ' + \
+                '[--profile name] [--config-path]'
             sys.exit()
         elif o in ('-q', '--quiet'):
             logging_helpers.set_quiet()
@@ -114,8 +116,8 @@ if os.name == 'nt':
         _file = None
         _error = None
         def write(self, text):
-            fname=os.path.join(common.configpaths.gajimpaths.cache_root,
-                    os.path.split(sys.executable)[1]+'.log')
+            fname = os.path.join(common.configpaths.gajimpaths.cache_root,
+                os.path.split(sys.executable)[1]+'.log')
             if self._file is None and self._error is None:
                 try:
                     self._file = open(fname, 'a')
@@ -152,12 +154,13 @@ try:
     from common import gajim
 except exceptions.DatabaseMalformed:
     pritext = _('Database Error')
-    sectext = _('The database file (%s) cannot be read. Try to repair it (see http://trac.gajim.org/wiki/DatabaseBackup) or remove it (all history will be lost).') % common.logger.LOG_DB_PATH
+    sectext = _('The database file (%s) cannot be read. Try to repair it (see '
+        'http://trac.gajim.org/wiki/DatabaseBackup) or remove it (all history '
+        'will be lost).') % common.logger.LOG_DB_PATH
 else:
     from common import dbus_support
     if dbus_support.supported:
         from music_track_listener import MusicTrackListener
-        import dbus
 
     from ctypes import CDLL
     from ctypes.util import find_library
@@ -167,8 +170,8 @@ else:
     if sysname in ('Linux', 'FreeBSD', 'OpenBSD', 'NetBSD'):
         libc = CDLL(find_library('c'))
 
-        # The constant defined in <linux/prctl.h> which is used to set the name of
-        # the process.
+        # The constant defined in <linux/prctl.h> which is used to set the name
+        # of the process.
         PR_SET_NAME = 15
 
         if sysname == 'Linux':
@@ -183,11 +186,7 @@ else:
         pritext = _('Gajim needs GTK 2.16 or above')
         sectext = _('Gajim needs GTK 2.16 or above to run. Quiting...')
 
-    try:
-        from common import check_paths
-    except exceptions.PysqliteNotAvailable, e:
-        pritext = _('Gajim needs PySQLite2 to run')
-        sectext = str(e)
+    from common import check_paths
 
     if os.name == 'nt':
         try:
@@ -195,7 +194,9 @@ else:
             import win32api # do NOT remove. we req this module
         except Exception:
             pritext = _('Gajim needs pywin32 to run')
-            sectext = _('Please make sure that Pywin32 is installed on your system. You can get it at %s') % 'http://sourceforge.net/project/showfiles.php?group_id=78018'
+            sectext = _('Please make sure that Pywin32 is installed on your '
+                'system. You can get it at %s') % \
+                'http://sourceforge.net/project/showfiles.php?group_id=78018'
 
 if pritext:
     dlg = gtk.MessageDialog(None,
@@ -248,7 +249,8 @@ def pid_alive():
 
     if os.name == 'nt':
         try:
-            from ctypes import (windll, c_ulong, c_int, Structure, c_char, POINTER, pointer, )
+            from ctypes import (windll, c_ulong, c_int, Structure, c_char)
+            from ctypes import (POINTER, pointer, )
         except Exception:
             return True
 
@@ -325,7 +327,6 @@ if pid_alive():
     # run anyway, delete pid and useless global vars
     if os.path.exists(pid_filename):
         os.remove(pid_filename)
-    del path_to_file
     del pix
     del pritext
     del sectext
@@ -389,9 +390,9 @@ if __name__ == '__main__':
 
             if path_to_gajim_script:
                 argv = [path_to_gajim_script]
-                # FIXME: remove this typeerror catch when gnome python is old and
-                # not bad patched by distro men [2.12.0 + should not need all that
-                # NORMALLY]
+                # FIXME: remove this typeerror catch when gnome python is old
+                # and not bad patched by distro men [2.12.0 + should not need
+                # all that NORMALLY]
                 try:
                     cli.set_restart_command(argv)
                 except AttributeError:
