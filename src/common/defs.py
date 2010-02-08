@@ -31,6 +31,4 @@ version = '0.13.10.2-dev'
 
 import sys, os.path
 for base in ('.', 'common'):
-	sys.path.append(os.path.join(base, '.libs'))
-
-# vim: se ts=3:
+    sys.path.append(os.path.join(base, '.libs'))

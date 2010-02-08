@@ -20,16 +20,16 @@
 
 class Account(object):
 
-	def __init__(self, name, contacts, gc_contacts):
-		self.name = name
-		self.contacts = contacts
-		self.gc_contacts = gc_contacts
+    def __init__(self, name, contacts, gc_contacts):
+        self.name = name
+        self.contacts = contacts
+        self.gc_contacts = gc_contacts
 
-	def change_contact_jid(self, old_jid, new_jid):
-		self.contacts.change_contact_jid(old_jid, new_jid)
+    def change_contact_jid(self, old_jid, new_jid):
+        self.contacts.change_contact_jid(old_jid, new_jid)
 
-	def __repr__(self):
-		return self.name
+    def __repr__(self):
+        return self.name
 
-	def __hash__(self):
-		return hash(self.name)
+    def __hash__(self):
+        return hash(self.name)

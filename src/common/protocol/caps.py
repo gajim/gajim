@@ -32,80 +32,78 @@ from common import helpers
 
 class ConnectionCaps(object):
 
-	def __init__(self, account, dispatch_event, capscache, client_caps_factory):
-		self._account = account
-		self._dispatch_event = dispatch_event
-		self._capscache = capscache
-		self._create_suitable_client_caps = client_caps_factory
+    def __init__(self, account, dispatch_event, capscache, client_caps_factory):
+        self._account = account
+        self._dispatch_event = dispatch_event
+        self._capscache = capscache
+        self._create_suitable_client_caps = client_caps_factory
 
-	def _capsPresenceCB(self, con, presence):
-		"""
-		XMMPPY callback method to handle retrieved caps info
-		"""
-		try:
-			jid = helpers.get_full_jid_from_iq(presence)
-		except:
-			log.info("Ignoring invalid JID in caps presenceCB")
-			return
+    def _capsPresenceCB(self, con, presence):
+        """
+        XMMPPY callback method to handle retrieved caps info
+        """
+        try:
+            jid = helpers.get_full_jid_from_iq(presence)
+        except:
+            log.info("Ignoring invalid JID in caps presenceCB")
+            return
 
-		client_caps = self._extract_client_caps_from_presence(presence)
-		self._capscache.query_client_of_jid_if_unknown(self, jid, client_caps)
-		self._update_client_caps_of_contact(jid, client_caps)
+        client_caps = self._extract_client_caps_from_presence(presence)
+        self._capscache.query_client_of_jid_if_unknown(self, jid, client_caps)
+        self._update_client_caps_of_contact(jid, client_caps)
 
-		self._dispatch_event('CAPS_RECEIVED', (jid,))
+        self._dispatch_event('CAPS_RECEIVED', (jid,))
 
-	def _extract_client_caps_from_presence(self, presence):
-		caps_tag = presence.getTag('c', namespace=NS_CAPS)
-		if caps_tag:
-			hash_method, node, caps_hash = caps_tag['hash'], caps_tag['node'], caps_tag['ver']
-		else:
-			hash_method = node = caps_hash = None
-		return self._create_suitable_client_caps(node, caps_hash, hash_method)
+    def _extract_client_caps_from_presence(self, presence):
+        caps_tag = presence.getTag('c', namespace=NS_CAPS)
+        if caps_tag:
+            hash_method, node, caps_hash = caps_tag['hash'], caps_tag['node'], caps_tag['ver']
+        else:
+            hash_method = node = caps_hash = None
+        return self._create_suitable_client_caps(node, caps_hash, hash_method)
 
-	def _update_client_caps_of_contact(self, jid, client_caps):
-		contact = self._get_contact_or_gc_contact_for_jid(jid)
-		if contact:
-			contact.client_caps = client_caps
-		else:
-			log.info("Received Caps from unknown contact %s" % jid)
+    def _update_client_caps_of_contact(self, jid, client_caps):
+        contact = self._get_contact_or_gc_contact_for_jid(jid)
+        if contact:
+            contact.client_caps = client_caps
+        else:
+            log.info("Received Caps from unknown contact %s" % jid)
 
-	def _get_contact_or_gc_contact_for_jid(self, jid):
-		contact = gajim.contacts.get_contact_from_full_jid(self._account, jid)
-		if contact is None:
-			room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-			contact = gajim.contacts.get_gc_contact(self._account, room_jid, nick)
-		return contact
+    def _get_contact_or_gc_contact_for_jid(self, jid):
+        contact = gajim.contacts.get_contact_from_full_jid(self._account, jid)
+        if contact is None:
+            room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
+            contact = gajim.contacts.get_gc_contact(self._account, room_jid, nick)
+        return contact
 
-	def _capsDiscoCB(self, jid, node, identities, features, dataforms):
-		"""
-		XMMPPY callback to update our caps cache with queried information after
-		we have retrieved an unknown caps hash and issued a disco
-		"""
-		contact = self._get_contact_or_gc_contact_for_jid(jid)
-		if not contact:
-			log.info("Received Disco from unknown contact %s" % jid)
-			return
+    def _capsDiscoCB(self, jid, node, identities, features, dataforms):
+        """
+        XMMPPY callback to update our caps cache with queried information after
+        we have retrieved an unknown caps hash and issued a disco
+        """
+        contact = self._get_contact_or_gc_contact_for_jid(jid)
+        if not contact:
+            log.info("Received Disco from unknown contact %s" % jid)
+            return
 
-		lookup = contact.client_caps.get_cache_lookup_strategy()
-		cache_item = lookup(self._capscache)
+        lookup = contact.client_caps.get_cache_lookup_strategy()
+        cache_item = lookup(self._capscache)
 
-		if cache_item.is_valid():
-			# we already know that the hash is fine and have already cached
-			# the identities and features
-			return
-		else:
-			validate = contact.client_caps.get_hash_validation_strategy()
-			hash_is_valid = validate(identities, features, dataforms)
+        if cache_item.is_valid():
+            # we already know that the hash is fine and have already cached
+            # the identities and features
+            return
+        else:
+            validate = contact.client_caps.get_hash_validation_strategy()
+            hash_is_valid = validate(identities, features, dataforms)
 
-			if hash_is_valid:
-				cache_item.set_and_store(identities, features)
-			else:
-				node = caps_hash = hash_method = None
-				contact.client_caps = self._create_suitable_client_caps(node,
-					caps_hash, hash_method)
-				log.warn("Computed and retrieved caps hash differ." +
-					"Ignoring caps of contact %s" % contact.get_full_jid())
+            if hash_is_valid:
+                cache_item.set_and_store(identities, features)
+            else:
+                node = caps_hash = hash_method = None
+                contact.client_caps = self._create_suitable_client_caps(node,
+                        caps_hash, hash_method)
+                log.warn("Computed and retrieved caps hash differ." +
+                        "Ignoring caps of contact %s" % contact.get_full_jid())
 
-			self._dispatch_event('CAPS_RECEIVED', (jid,))
-		
-# vim: se ts=3:
+            self._dispatch_event('CAPS_RECEIVED', (jid,))
