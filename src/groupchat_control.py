@@ -1762,7 +1762,7 @@ class GroupchatControl(ChatControlBase):
                     jid)
 
         # Ask for a reason
-        dialogs.DubbleInputDialog(_('Destroying %s') % self.room_jid,
+        dialogs.DoubbleInputDialog(_('Destroying %s') % self.room_jid,
                 _('You are going to definitively destroy this room.\n'
                 'You may specify a reason below:'),
                 _('You may also enter an alternate venue:'), ok_handler=on_ok)
