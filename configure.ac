@@ -1,5 +1,5 @@
 AC_INIT([Gajim - A Jabber Instant Messager],
-		[0.13.10.1-dev],[http://trac.gajim.org/],[gajim])
+		[0.13.10.2-dev],[http://trac.gajim.org/],[gajim])
 AC_PREREQ([2.59])
 
 AC_CONFIG_HEADER(config.h)
@@ -80,7 +80,7 @@ AC_SUBST(PACKAGE)
 AC_CONFIG_FILES([ 
 	Makefile
 	data/Makefile
-	data/glade/Makefile
+	data/gui/Makefile
 	data/emoticons/Makefile
 	data/pixmaps/Makefile
 	data/iconsets/Makefile

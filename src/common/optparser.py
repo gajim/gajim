@@ -27,6 +27,7 @@
 ##
 
 import os
+import sys
 import locale
 import re
 from time import time
@@ -218,6 +219,7 @@ class OptionsParser:
 			self.update_config_to_013101()
 
 		gajim.logger.init_vars()
+		gajim.logger.attach_cache_database()
 		gajim.config.set('version', new_version)
 
 		caps_cache.capscache.initialize_from_db()

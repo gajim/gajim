@@ -365,6 +365,7 @@ class Config:
 			'log_encrypted_sessions': [opt_bool, True, _('When negotiating an encrypted session, should Gajim assume you want your messages to be logged?')],
 			'send_idle_time': [ opt_bool, True ],
 			'roster_version': [opt_str, ''],
+			'subscription_request_msg': [opt_str, '', _('Message that is sent to contacts you want to add')],
 		}, {}),
 		'statusmsg': ({
 			'message': [ opt_str, '' ],

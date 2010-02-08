@@ -57,16 +57,16 @@ class AtomWindow:
 
 		self.entry = None	# the entry actually displayed
 
-		self.xml = gtkgui_helpers.get_glade('atom_entry_window.glade')
-		self.window = self.xml.get_widget('atom_entry_window')
+		self.xml = gtkgui_helpers.get_gtk_builder('atom_entry_window.ui')
+		self.window = self.xml.get_object('atom_entry_window')
 		for name in ('new_entry_label', 'feed_title_label', 'feed_title_eventbox',
 			'feed_tagline_label', 'entry_title_label', 'entry_title_eventbox',
 			'last_modified_label', 'close_button', 'next_button'):
-			self.__dict__[name] = self.xml.get_widget(name)
+			self.__dict__[name] = self.xml.get_object(name)
 
 		self.displayNextEntry()
 
-		self.xml.signal_autoconnect(self)
+		self.xml.connect_signals(self)
 		self.window.show_all()
 
 		self.entry_title_eventbox.add_events(gtk.gdk.BUTTON_PRESS_MASK)

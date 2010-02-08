@@ -29,7 +29,6 @@
 
 import xml.sax.saxutils
 import gtk
-import gtk.glade
 import glib
 import gobject
 import pango
@@ -77,9 +76,6 @@ if os.name == 'nt':
 
 from common import helpers
 
-gtk.glade.bindtextdomain(i18n.APP, i18n.DIR)
-gtk.glade.textdomain(i18n.APP)
-
 screen_w = gtk.gdk.screen_width()
 screen_h = gtk.gdk.screen_height()
 
@@ -92,10 +88,16 @@ def add_image_to_menuitem(menuitem, icon_name):
 def add_image_to_button(button, icon_name):
 	add_image_to_menuitem(button, icon_name)
 
-GLADE_DIR = os.path.join(gajim.DATA_DIR, 'glade')
-def get_glade(file_name, root = None):
-	file_path = os.path.join(GLADE_DIR, file_name)
-	return gtk.glade.XML(file_path, root=root, domain=i18n.APP)
+GUI_DIR = os.path.join(gajim.DATA_DIR, 'gui')
+def get_gtk_builder(file_name, widget=None):
+	file_path = os.path.join(GUI_DIR, file_name)
+	builder = gtk.Builder()
+	builder.set_translation_domain(i18n.APP)
+	if widget:
+		builder.add_objects_from_file(file_path, [widget])
+	else:
+		builder.add_from_file(file_path)
+	return builder
 
 def get_completion_liststore(entry):
 	"""

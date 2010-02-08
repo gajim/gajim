@@ -199,7 +199,7 @@ class GroupchatControl(ChatControlBase):
 
 	def __init__(self, parent_win, contact, acct, is_continued=False):
 		ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
-					'muc_child_vbox', contact, acct)
+			'groupchat_control', contact, acct)
 
 		self.is_continued=is_continued
 		self.is_anonymous = True
@@ -212,20 +212,20 @@ class GroupchatControl(ChatControlBase):
 		#       state in got_connected()).
 		self.autorejoin = None
 
-		self.actions_button = self.xml.get_widget('muc_window_actions_button')
+		self.actions_button = self.xml.get_object('muc_window_actions_button')
 		id_ = self.actions_button.connect('clicked',
 			self.on_actions_button_clicked)
 		self.handlers[id_] = self.actions_button
 
-		widget = self.xml.get_widget('change_nick_button')
+		widget = self.xml.get_object('change_nick_button')
 		id_ = widget.connect('clicked', self._on_change_nick_menuitem_activate)
 		self.handlers[id_] = widget
 
-		widget = self.xml.get_widget('change_subject_button')
+		widget = self.xml.get_object('change_subject_button')
 		id_ = widget.connect('clicked', self._on_change_subject_menuitem_activate)
 		self.handlers[id_] = widget
 
-		widget = self.xml.get_widget('bookmark_button')
+		widget = self.xml.get_object('bookmark_button')
 		for bm in gajim.connections[self.account].bookmarks:
 			if bm['jid'] == self.contact.jid:
 				widget.hide()
@@ -236,7 +236,7 @@ class GroupchatControl(ChatControlBase):
 			self.handlers[id_] = widget
 			widget.show()
 
-		widget = self.xml.get_widget('list_treeview')
+		widget = self.xml.get_object('list_treeview')
 		id_ = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
 		self.handlers[id_] = widget
 
@@ -276,9 +276,9 @@ class GroupchatControl(ChatControlBase):
 
 		compact_view = gajim.config.get('compact_view')
 		self.chat_buttons_set_visible(compact_view)
-		self.widget_set_visible(self.xml.get_widget('banner_eventbox'),
+		self.widget_set_visible(self.xml.get_object('banner_eventbox'),
 			gajim.config.get('hide_groupchat_banner'))
-		self.widget_set_visible(self.xml.get_widget('list_scrolledwindow'),
+		self.widget_set_visible(self.xml.get_object('list_scrolledwindow'),
 			gajim.config.get('hide_groupchat_occupants_list'))
 
 		self._last_selected_contact = None # None or holds jid, account tuple
@@ -303,15 +303,15 @@ class GroupchatControl(ChatControlBase):
 		self.number_of_colors = len(gajim.config.get('gc_nicknames_colors').\
 			split(':'))
 
-		self.name_label = self.xml.get_widget('banner_name_label')
-		self.event_box = self.xml.get_widget('banner_eventbox')
+		self.name_label = self.xml.get_object('banner_name_label')
+		self.event_box = self.xml.get_object('banner_eventbox')
 
 		# set the position of the current hpaned
 		hpaned_position = gajim.config.get('gc-hpaned-position')
-		self.hpaned = self.xml.get_widget('hpaned')
+		self.hpaned = self.xml.get_object('hpaned')
 		self.hpaned.set_position(hpaned_position)
 
-		self.list_treeview = self.xml.get_widget('list_treeview')
+		self.list_treeview = self.xml.get_object('list_treeview')
 		selection = self.list_treeview.get_selection()
 		id_ = selection.connect('changed',
 				self.on_list_treeview_selection_changed)
@@ -580,7 +580,7 @@ class GroupchatControl(ChatControlBase):
 		self.change_roster_style()
 
 	def _update_banner_state_image(self):
-		banner_status_img = self.xml.get_widget('gc_banner_status_image')
+		banner_status_img = self.xml.get_object('gc_banner_status_image')
 		images = gajim.interface.jabber_state_images
 		if self.room_jid in gajim.gc_connected[self.account] and \
 		gajim.gc_connected[self.account][self.room_jid]:
@@ -653,18 +653,18 @@ class GroupchatControl(ChatControlBase):
 		"""
 		Set sensitivity state for configure_room
 		"""
-		xml = gtkgui_helpers.get_glade('gc_control_popup_menu.glade')
-		menu = xml.get_widget('gc_control_popup_menu')
+		xml = gtkgui_helpers.get_gtk_builder('gc_control_popup_menu.ui')
+		menu = xml.get_object('gc_control_popup_menu')
 
-		bookmark_room_menuitem = xml.get_widget('bookmark_room_menuitem')
-		change_nick_menuitem = xml.get_widget('change_nick_menuitem')
-		configure_room_menuitem = xml.get_widget('configure_room_menuitem')
-		destroy_room_menuitem = xml.get_widget('destroy_room_menuitem')
-		change_subject_menuitem = xml.get_widget('change_subject_menuitem')
-		history_menuitem = xml.get_widget('history_menuitem')
-		minimize_menuitem = xml.get_widget('minimize_menuitem')
-		bookmark_separator = xml.get_widget('bookmark_separator')
-		separatormenuitem2 = xml.get_widget('separatormenuitem2')
+		bookmark_room_menuitem = xml.get_object('bookmark_room_menuitem')
+		change_nick_menuitem = xml.get_object('change_nick_menuitem')
+		configure_room_menuitem = xml.get_object('configure_room_menuitem')
+		destroy_room_menuitem = xml.get_object('destroy_room_menuitem')
+		change_subject_menuitem = xml.get_object('change_subject_menuitem')
+		history_menuitem = xml.get_object('history_menuitem')
+		minimize_menuitem = xml.get_object('minimize_menuitem')
+		bookmark_separator = xml.get_object('bookmark_separator')
+		separatormenuitem2 = xml.get_object('separatormenuitem2')
 
 		if hide_buttonbar_items:
 			change_nick_menuitem.hide()
@@ -688,7 +688,7 @@ class GroupchatControl(ChatControlBase):
 
 		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
 		change_nick_menuitem.add_accelerator('activate', ag, gtk.keysyms.n,
-			gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE)
+			gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK, gtk.ACCEL_VISIBLE)
 		change_subject_menuitem.add_accelerator('activate', ag,
 			gtk.keysyms.t, gtk.gdk.MOD1_MASK, gtk.ACCEL_VISIBLE)
 		bookmark_room_menuitem.add_accelerator('activate', ag, gtk.keysyms.b,
@@ -760,7 +760,7 @@ class GroupchatControl(ChatControlBase):
 		# destroy accelerators
 		ag = gtk.accel_groups_from_object(self.parent_win.window)[0]
 		change_nick_menuitem.remove_accelerator(ag, gtk.keysyms.n,
-			gtk.gdk.CONTROL_MASK)
+			gtk.gdk.CONTROL_MASK | gtk.gdk.SHIFT_MASK)
 		change_subject_menuitem.remove_accelerator(ag, gtk.keysyms.t,
 			gtk.gdk.MOD1_MASK)
 		bookmark_room_menuitem.remove_accelerator(ag, gtk.keysyms.b,
@@ -1604,8 +1604,8 @@ class GroupchatControl(ChatControlBase):
 		super(GroupchatControl, self).shutdown()
 		
 		# Preventing autorejoin from being activated
-		self.autorejoin = False		
-		
+		self.autorejoin = False
+
 		if self.room_jid in gajim.gc_connected[self.account] and \
 		gajim.gc_connected[self.account][self.room_jid]:
 			# Tell connection to note the date we disconnect to avoid duplicate
@@ -1974,11 +1974,11 @@ class GroupchatControl(ChatControlBase):
 			self.room_jid, user_nick).affiliation
 		user_role = self.get_role(user_nick)
 
-		# making menu from glade
-		xml = gtkgui_helpers.get_glade('gc_occupants_menu.glade')
+		# making menu from gtk builder
+		xml = gtkgui_helpers.get_gtk_builder('gc_occupants_menu.ui')
 
 		# these conditions were taken from JEP 0045
-		item = xml.get_widget('kick_menuitem')
+		item = xml.get_object('kick_menuitem')
 		if user_role != 'moderator' or \
 		(user_affiliation == 'admin' and target_affiliation == 'owner') or \
 		(user_affiliation == 'member' and target_affiliation in ('admin',
@@ -1988,7 +1988,7 @@ class GroupchatControl(ChatControlBase):
 		id_ = item.connect('activate', self.kick, nick)
 		self.handlers[id_] = item
 
-		item = xml.get_widget('voice_checkmenuitem')
+		item = xml.get_object('voice_checkmenuitem')
 		item.set_active(target_role != 'visitor')
 		if user_role != 'moderator' or \
 		user_affiliation == 'none' or \
@@ -1999,7 +1999,7 @@ class GroupchatControl(ChatControlBase):
 			nick)
 		self.handlers[id_] = item
 
-		item = xml.get_widget('moderator_checkmenuitem')
+		item = xml.get_object('moderator_checkmenuitem')
 		item.set_active(target_role == 'moderator')
 		if not user_affiliation in ('admin', 'owner') or \
 		target_affiliation in ('admin', 'owner'):
@@ -2008,7 +2008,7 @@ class GroupchatControl(ChatControlBase):
 					nick)
 		self.handlers[id_] = item
 
-		item = xml.get_widget('ban_menuitem')
+		item = xml.get_object('ban_menuitem')
 		if not user_affiliation in ('admin', 'owner') or \
 		(target_affiliation in ('admin', 'owner') and\
 		user_affiliation != 'owner'):
@@ -2016,7 +2016,7 @@ class GroupchatControl(ChatControlBase):
 		id_ = item.connect('activate', self.ban, jid)
 		self.handlers[id_] = item
 
-		item = xml.get_widget('member_checkmenuitem')
+		item = xml.get_object('member_checkmenuitem')
 		item.set_active(target_affiliation != 'none')
 		if not user_affiliation in ('admin', 'owner') or \
 		(user_affiliation != 'owner' and target_affiliation in ('admin','owner')):
@@ -2024,29 +2024,29 @@ class GroupchatControl(ChatControlBase):
 		id_ = item.connect('activate', self.on_member_checkmenuitem_activate, jid)
 		self.handlers[id_] = item
 
-		item = xml.get_widget('admin_checkmenuitem')
+		item = xml.get_object('admin_checkmenuitem')
 		item.set_active(target_affiliation in ('admin', 'owner'))
 		if not user_affiliation == 'owner':
 			item.set_sensitive(False)
 		id_ = item.connect('activate', self.on_admin_checkmenuitem_activate, jid)
 		self.handlers[id_] = item
 
-		item = xml.get_widget('owner_checkmenuitem')
+		item = xml.get_object('owner_checkmenuitem')
 		item.set_active(target_affiliation == 'owner')
 		if not user_affiliation == 'owner':
 			item.set_sensitive(False)
 		id_ = item.connect('activate', self.on_owner_checkmenuitem_activate, jid)
 		self.handlers[id_] = item
 
-		item = xml.get_widget('information_menuitem')
+		item = xml.get_object('information_menuitem')
 		id_ = item.connect('activate', self.on_info, nick)
 		self.handlers[id_] = item
 
-		item = xml.get_widget('history_menuitem')
+		item = xml.get_object('history_menuitem')
 		id_ = item.connect('activate', self.on_history, nick)
 		self.handlers[id_] = item
 
-		item = xml.get_widget('add_to_roster_menuitem')
+		item = xml.get_object('add_to_roster_menuitem')
 		our_jid = gajim.get_jid_from_account(self.account)
 		if not jid or jid == our_jid:
 			item.set_sensitive(False)
@@ -2054,8 +2054,8 @@ class GroupchatControl(ChatControlBase):
 			id_ = item.connect('activate', self.on_add_to_roster, jid)
 			self.handlers[id_] = item
 
-		item = xml.get_widget('block_menuitem')
-		item2 = xml.get_widget('unblock_menuitem')
+		item = xml.get_object('block_menuitem')
+		item2 = xml.get_object('unblock_menuitem')
 		if helpers.jid_is_blocked(self.account, fjid):
 			item.set_no_show_all(True)
 			item.hide()
@@ -2067,11 +2067,11 @@ class GroupchatControl(ChatControlBase):
 			item2.set_no_show_all(True)
 			item2.hide()
 
-		item = xml.get_widget('send_private_message_menuitem')
+		item = xml.get_object('send_private_message_menuitem')
 		id_ = item.connect('activate', self.on_send_pm, model, iter_)
 		self.handlers[id_] = item
 
-		item = xml.get_widget('send_file_menuitem')
+		item = xml.get_object('send_file_menuitem')
 		# add a special img for send file menuitem
 		path_to_upload_img = gtkgui_helpers.get_icon_path('gajim-upload')
 		img = gtk.Image()
@@ -2085,7 +2085,7 @@ class GroupchatControl(ChatControlBase):
 			self.handlers[id_] = item
 
 		# show the popup now!
-		menu = xml.get_widget('gc_occupants_menu')
+		menu = xml.get_object('gc_occupants_menu')
 		menu.show_all()
 		menu.popup(None, None, None, event.button, event.time)
 

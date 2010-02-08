@@ -43,21 +43,23 @@ class RosterButtonsPlugin(GajimPlugin):
 
 	@log_calls('RosterButtonsPlugin')	
 	def init(self):
-		self.GLADE_FILE_PATH = self.local_file_path('roster_buttons.glade')
-		
-		self.roster_vbox = gajim.interface.roster.xml.get_widget('roster_vbox2')
-		self.show_offline_contacts_menuitem = gajim.interface.roster.xml.get_widget('show_offline_contacts_menuitem')
+		self.GTK_BUILDER_FILE_PATH = self.local_file_path('roster_buttons.ui')
+		self.roster_vbox = gajim.interface.roster.xml.get_object('roster_vbox2')
+		self.show_offline_contacts_menuitem = gajim.interface.roster.xml.get_object('show_offline_contacts_menuitem')
 		
 		self.config_dialog = None
 	
 	@log_calls('RosterButtonsPlugin')
 	def activate(self):
-		self.xml = gtk.glade.XML(self.GLADE_FILE_PATH, root='roster_buttons_buttonbox', domain=i18n.APP)
-		self.buttonbox = self.xml.get_widget('roster_buttons_buttonbox')
+		self.xml = gtk.Builder()
+		self.xml.set_translation_domain(i18n.APP)
+		self.xml.add_objects_from_file(self.GTK_BUILDER_FILE_PATH,
+			['roster_buttons_buttonbox'])
+		self.buttonbox = self.xml.get_object('roster_buttons_buttonbox')
 		
 		self.roster_vbox.pack_start(self.buttonbox, expand=False)
 		self.roster_vbox.reorder_child(self.buttonbox, 0)
-		self.xml.signal_autoconnect(self)
+		self.xml.connect_signals(self)
 		
 	@log_calls('RosterButtonsPlugin')
 	def deactivate(self):

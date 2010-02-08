@@ -220,8 +220,7 @@ class Interface:
 			for request in self.gpg_passphrase.values():
 				if request:
 					request.interrupt()
-			# .keys() is needed because dict changes during loop
-			for account in self.pass_dialog.keys():
+			if account in self.pass_dialog:
 				self.pass_dialog[account].window.destroy()
 		if show == 'offline':
 			# sensitivity for this menuitem
@@ -661,20 +660,6 @@ class Interface:
 			notify.popup(event_type, jid, account, 'unsubscribed', path,
 				event_type, jid)
 
-	def handle_event_agent_info_error(self, account, agent):
-		#('AGENT_ERROR_INFO', account, (agent))
-		try:
-			gajim.connections[account].services_cache.agent_info_error(agent)
-		except AttributeError:
-			return
-
-	def handle_event_agent_items_error(self, account, agent):
-		#('AGENT_ERROR_INFO', account, (agent))
-		try:
-			gajim.connections[account].services_cache.agent_items_error(agent)
-		except AttributeError:
-			return
-
 	def handle_event_agent_removed(self, account, agent):
 		# remove transport's contacts from treeview
 		jid_list = gajim.contacts.get_jid_list(account)
@@ -708,44 +693,11 @@ class Interface:
 		array[0] == our_jid:
 			gajim.interface.instances[account]['pep_services'].items_received(
 				array[2])
-		try:
-			gajim.connections[account].services_cache.agent_items(array[0],
-				array[1], array[2])
-		except AttributeError:
-			return
-
-	def handle_event_agent_info_info(self, account, array):
-		#('AGENT_INFO_INFO', account, (agent, node, identities, features, data))
-		try:
-			gajim.connections[account].services_cache.agent_info(array[0],
-				array[1], array[2], array[3], array[4])
-		except AttributeError:
-			return
-
-	def handle_event_new_acc_connected(self, account, array):
-		#('NEW_ACC_CONNECTED', account, (infos, is_form, ssl_msg, ssl_err,
-		# ssl_cert, ssl_fingerprint))
-		if 'account_creation_wizard' in self.instances:
-			self.instances['account_creation_wizard'].new_acc_connected(array[0],
-				array[1], array[2], array[3], array[4], array[5])
-
-	def handle_event_new_acc_not_connected(self, account, array):
-		#('NEW_ACC_NOT_CONNECTED', account, (reason))
-		if 'account_creation_wizard' in self.instances:
-			self.instances['account_creation_wizard'].new_acc_not_connected(array)
 
 	def handle_event_acc_ok(self, account, array):
 		#('ACC_OK', account, (config))
-		if 'account_creation_wizard' in self.instances:
-			self.instances['account_creation_wizard'].acc_is_ok(array)
-
 		if self.remote_ctrl:
 			self.remote_ctrl.raise_signal('NewAccount', (account, array))
-
-	def handle_event_acc_not_ok(self, account, array):
-		#('ACC_NOT_OK', account, (reason))
-		if 'account_creation_wizard' in self.instances:
-			self.instances['account_creation_wizard'].acc_is_not_ok(array)
 
 	def handle_event_quit(self, p1, p2):
 		self.roster.quit_gtkgui_interface()
@@ -1818,7 +1770,7 @@ class Interface:
 		# ('PEP_CONFIG', account, (node, form))
 		if 'pep_services' in self.instances[account]:
 			self.instances[account]['pep_services'].config(data[0], data[1])
-			
+
 	def handle_event_roster_item_exchange(self, account, data):
 		# data = (action in [add, delete, modify], exchange_list, jid_from)
 		dialogs.RosterItemExchangeWindow(account, data[0], data[1], data[2])
@@ -2033,17 +1985,11 @@ class Interface:
 			'SUBSCRIBED': [self.handle_event_subscribed],
 			'UNSUBSCRIBED': [self.handle_event_unsubscribed],
 			'SUBSCRIBE': [self.handle_event_subscribe],
-			'AGENT_ERROR_INFO': [self.handle_event_agent_info_error],
-			'AGENT_ERROR_ITEMS': [self.handle_event_agent_items_error],
 			'AGENT_REMOVED': [self.handle_event_agent_removed],
 			'REGISTER_AGENT_INFO': [self.handle_event_register_agent_info],
 			'AGENT_INFO_ITEMS': [self.handle_event_agent_info_items],
-			'AGENT_INFO_INFO': [self.handle_event_agent_info_info],
 			'QUIT': [self.handle_event_quit],
-			'NEW_ACC_CONNECTED': [self.handle_event_new_acc_connected],
-			'NEW_ACC_NOT_CONNECTED': [self.handle_event_new_acc_not_connected],
 			'ACC_OK': [self.handle_event_acc_ok],
-			'ACC_NOT_OK': [self.handle_event_acc_not_ok],
 			'MYVCARD': [self.handle_event_myvcard],
 			'VCARD': [self.handle_event_vcard],
 			'LAST_STATUS_TIME': [self.handle_event_last_status_time],
@@ -2110,31 +2056,16 @@ class Interface:
 			'CAPS_RECEIVED': [self.handle_event_caps_received]
 		}
 
-	def dispatch(self, event, account, data):
-		"""
-		Dispatch an network event to the event handlers of this class. Return
-		true if it could be dispatched to alteast one handler
-		"""
-		if event not in self.handlers:
-			log.warning('Unknown event %s dispatched to GUI: %s' % (event, data))
-			return False
-		else:
-			log.debug('Event %s distpached to GUI: %s' % (event, data))
-			for handler in self.handlers[event]:
-				handler(account, data)
-			return len(self.handlers[event])
-
 	def register_core_handlers(self):
 		"""
 		Register core handlers in Global Events Dispatcher (GED).
-		
+
 		This is part of rewriting whole events handling system to use GED.
 		"""
 		for event_name, event_handlers in self.handlers.iteritems():
 			for event_handler in event_handlers:
-				gajim.ged.register_event_handler(event_name,
-				                                 ged.CORE,
-				                                 event_handler)			
+				gajim.ged.register_event_handler(event_name, ged.CORE,
+					event_handler)
 
 ################################################################################
 ### Methods dealing with gajim.events
@@ -2802,13 +2733,15 @@ class Interface:
 		listener.disconnect(self.music_track_changed_signal)
 		self.music_track_changed_signal = None
 
-	def music_track_changed(self, unused_listener, music_track_info, account=None):
+	def music_track_changed(self, unused_listener, music_track_info,
+	account=None):
 		if not account:
 			accounts = gajim.connections.keys()
 		else:
 			accounts = [account]
-			
-		is_paused = hasattr(music_track_info, 'paused') and music_track_info.paused == 0
+
+		is_paused = hasattr(music_track_info, 'paused') and \
+			music_track_info.paused == 0
 		if not music_track_info or is_paused:
 			artist = title = source = ''
 		else:
@@ -2835,7 +2768,7 @@ class Interface:
 
 		def format_gdkcolor (gdkcolor):
 			return format_rgb (*gdkcolor_to_rgb (gdkcolor))
-		
+
 		# get style colors and create string for dvipng
 		dummy = gtk.Invisible()
 		dummy.ensure_style()
@@ -3179,12 +3112,11 @@ class Interface:
 				except Exception:
 					pass
 		gobject.timeout_add_seconds(5, remote_init)
-		
+
 		# Creating plugin manager
 		import plugins
 		gajim.plugin_manager = plugins.PluginManager()
-		
-		
+
 	def __init__(self):
 		gajim.interface = self
 		gajim.thread_interface = ThreadInterface
@@ -3282,7 +3214,7 @@ class Interface:
 			self.handle_event_file_error)
 		gajim.proxy65_manager = proxy65_manager.Proxy65Manager(gajim.idlequeue)
 		gajim.default_session_type = ChatControlSession
-		
+
 		# Creating Global Events Dispatcher
 		from common import ged
 		gajim.ged = ged.GlobalEventsDispatcher()
@@ -3290,8 +3222,8 @@ class Interface:
 		from common import nec
 		gajim.nec = nec.NetworkEventsController()
 		self.create_core_handlers_list()
-		self.register_core_handlers()		
-		
+		self.register_core_handlers()
+
 		if gajim.config.get_per('accounts', gajim.ZEROCONF_ACC_NAME, 'active') \
 		and gajim.HAVE_ZEROCONF:
 			gajim.connections[gajim.ZEROCONF_ACC_NAME] = \
@@ -3436,8 +3368,8 @@ class Interface:
 		self.last_ftwindow_update = 0
 
 		self.music_track_changed_signal = None
-		
-		
+
+
 class PassphraseRequest:
 	def __init__(self, keyid):
 		self.keyid = keyid
@@ -3518,7 +3450,7 @@ class ThreadInterface:
 		def thread_function(func, func_args, callback, callback_args):
 			output = func(*func_args)
 			gobject.idle_add(callback, output, *callback_args)
-			
+
 		Thread(target=thread_function, args=(func, func_args, callback,
 			callback_args)).start()
 

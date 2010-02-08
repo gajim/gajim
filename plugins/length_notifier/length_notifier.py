@@ -115,16 +115,22 @@ class LengthNotifierPlugin(GajimPlugin):
 	
 class LengthNotifierPluginConfigDialog(GajimPluginConfigDialog):
 	def init(self):
-		self.GLADE_FILE_PATH = self.plugin.local_file_path('config_dialog.glade')
-		self.xml = gtk.glade.XML(self.GLADE_FILE_PATH, root='length_notifier_config_table', domain=i18n.APP)
-		self.config_table = self.xml.get_widget('length_notifier_config_table')
+		self.GTK_BUILDER_FILE_PATH = self.plugin.local_file_path(
+			'config_dialog.ui')
+		self.xml = gtk.Builder()
+		self.xml.set_translation_domain(i18n.APP)
+		self.xml.add_objects_from_file(self.GTK_BUILDER_FILE_PATH,
+			['length_notifier_config_table'])
+		self.config_table = self.xml.get_object('length_notifier_config_table')
 		self.child.pack_start(self.config_table)
 		
-		self.message_length_spinbutton = self.xml.get_widget('message_length_spinbutton')
-		self.notification_colorbutton = self.xml.get_widget('notification_colorbutton')
-		self.jids_entry = self.xml.get_widget('jids_entry')
+		self.message_length_spinbutton = self.xml.get_object(
+			'message_length_spinbutton')
+		self.notification_colorbutton = self.xml.get_object(
+			'notification_colorbutton')
+		self.jids_entry = self.xml.get_object('jids_entry')
 		
-		self.xml.signal_autoconnect(self)
+		self.xml.connect_signals(self)
 	
 	def on_run(self):
 		self.message_length_spinbutton.set_value(self.plugin.config['MESSAGE_WARNING_LENGTH'])

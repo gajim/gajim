@@ -63,11 +63,6 @@ def create_log_db():
 
 		CREATE INDEX idx_unread_messages_jid_id ON unread_messages (jid_id);
 
-		CREATE TABLE transports_cache (
-			transport TEXT UNIQUE,
-			type INTEGER
-		);
-
 		CREATE TABLE logs(
 			log_line_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 			jid_id INTEGER,
@@ -80,6 +75,23 @@ def create_log_db():
 		);
 
 		CREATE INDEX idx_logs_jid_id_time ON logs (jid_id, time DESC);
+		'''
+		)
+
+	con.commit()
+	con.close()
+
+def create_cache_db():
+	print _('creating cache database')
+	con = sqlite.connect(logger.CACHE_DB_PATH)
+	os.chmod(logger.CACHE_DB_PATH, 0600) # rw only for us
+	cur = con.cursor()
+	cur.executescript(
+		'''
+		CREATE TABLE transports_cache (
+			transport TEXT UNIQUE,
+			type INTEGER
+		);
 
 		CREATE TABLE caps_cache (
 			hash_method TEXT,
@@ -113,62 +125,219 @@ def create_log_db():
 	con.commit()
 	con.close()
 
-def check_and_possibly_create_paths():
+def split_db():
+	print 'spliting database'
+	if os.name == 'nt':
+		try:
+			OLD_LOG_DB_FOLDER = os.path.join(fse(os.environ[u'appdata']), u'Gajim')
+		except KeyError:
+			OLD_LOG_DB_FOLDER = u'.'
+	else:
+		OLD_LOG_DB_FOLDER = os.path.expanduser(u'~/.gajim')
+
+	tmp = logger.CACHE_DB_PATH
+	logger.CACHE_DB_PATH = os.path.join(OLD_LOG_DB_FOLDER, 'cache.db')
+	create_cache_db()
+	back = os.getcwd()
+	os.chdir(OLD_LOG_DB_FOLDER)
+	con = sqlite.connect('logs.db')
+	os.chdir(back)
+	cur = con.cursor()
+	cur.execute('''SELECT name FROM sqlite_master WHERE type = 'table';''')
+	tables = cur.fetchall() # we get [(u'jids',), (u'unread_messages',), ...
+	tables = [t[0] for t in tables]
+	cur.execute("ATTACH DATABASE '%s' AS cache" % logger.CACHE_DB_PATH)
+	for table in ('caps_cache', 'rooms_last_message_time', 'roster_entry',
+	'roster_group', 'transports_cache'):
+		if table not in tables:
+			continue
+		try:
+			cur.executescript(
+				'INSERT INTO cache.%s SELECT * FROM %s;' % (table, table))
+			con.commit()
+			cur.executescript('DROP TABLE %s;' % table)
+			con.commit()
+		except sqlite.OperationalError, e:
+			print >> sys.stderr, 'error moving table %s to cache.db: %s' % \
+				(table, str(e))
+	con.close()
+	logger.CACHE_DB_PATH = tmp
+
+def check_and_possibly_move_config():
 	LOG_DB_PATH = logger.LOG_DB_PATH
+	CACHE_DB_PATH = logger.CACHE_DB_PATH
+	vars = {}
+	vars['VCARD_PATH'] = gajim.VCARD_PATH
+	vars['AVATAR_PATH'] = gajim.AVATAR_PATH
+	vars['MY_EMOTS_PATH'] = gajim.MY_EMOTS_PATH
+	vars['MY_ICONSETS_PATH'] = gajim.MY_ICONSETS_PATH
+	vars['MY_MOOD_ICONSETS_PATH'] = gajim.MY_MOOD_ICONSETS_PATH
+	vars['MY_ACTIVITY_ICONSETS_PATH'] = gajim.MY_ACTIVITY_ICONSETS_PATH
+	import configpaths
+	MY_DATA = configpaths.gajimpaths['MY_DATA']
+	MY_CONFIG = configpaths.gajimpaths['MY_CONFIG']
+	MY_CACHE = configpaths.gajimpaths['MY_CACHE']
+
+	if os.path.exists(LOG_DB_PATH):
+		# File already exists
+		return
+
+	if os.name == 'nt':
+		try:
+			OLD_LOG_DB_FOLDER = os.path.join(fse(os.environ[u'appdata']), u'Gajim')
+		except KeyError:
+			OLD_LOG_DB_FOLDER = u'.'
+	else:
+		OLD_LOG_DB_FOLDER = os.path.expanduser(u'~/.gajim')
+	if not os.path.exists(OLD_LOG_DB_FOLDER):
+		return
+	OLD_LOG_DB_PATH = os.path.join(OLD_LOG_DB_FOLDER, u'logs.db')
+	OLD_CACHE_DB_PATH = os.path.join(OLD_LOG_DB_FOLDER, u'cache.db')
+	vars['OLD_VCARD_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, u'vcards')
+	vars['OLD_AVATAR_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, u'avatars')
+	vars['OLD_MY_EMOTS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, u'emoticons')
+	vars['OLD_MY_ICONSETS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, u'iconsets')
+	vars['OLD_MY_MOOD_ICONSETS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, u'moods')
+	vars['OLD_MY_ACTIVITY_ICONSETS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER,
+		u'activities')
+	OLD_CONFIG_FILES = []
+	OLD_DATA_FILES = []
+	for f in os.listdir(OLD_LOG_DB_FOLDER):
+		if f == 'config' or f.startswith('config.'):
+			OLD_CONFIG_FILES.append(f)
+		if f == 'secrets' or f.startswith('secrets.'):
+			OLD_DATA_FILES.append(f)
+		if f == 'cacerts.pem':
+			OLD_DATA_FILES.append(f)
+
+	if not os.path.exists(OLD_LOG_DB_PATH):
+		return
+
+	if not os.path.exists(OLD_CACHE_DB_PATH):
+		# split database
+		split_db()
+
+	to_move = {}
+	to_move[OLD_LOG_DB_PATH] = LOG_DB_PATH
+	to_move[OLD_CACHE_DB_PATH] = CACHE_DB_PATH
+
+	for folder in ('VCARD_PATH', 'AVATAR_PATH', 'MY_EMOTS_PATH',
+	'MY_ICONSETS_PATH', 'MY_MOOD_ICONSETS_PATH', 'MY_ACTIVITY_ICONSETS_PATH'):
+		src = vars['OLD_' + folder]
+		dst = vars[folder]
+		to_move[src] = dst
+
+	# move config files
+	for f in OLD_CONFIG_FILES:
+		src = os.path.join(OLD_LOG_DB_FOLDER, f)
+		dst = os.path.join(MY_CONFIG, f)
+		to_move[src] = dst
+
+	# Move data files (secrets, cacert.pem)
+	for f in OLD_DATA_FILES:
+		src = os.path.join(OLD_LOG_DB_FOLDER, f)
+		dst = os.path.join(MY_DATA, f)
+		to_move[src] = dst
+
+	for src, dst in to_move.items():
+		if os.path.exists(dst):
+			continue
+		if not os.path.exists(src):
+			continue
+		print 'moving %s to %s' % (src, dst)
+		os.renames(src, dst)
+	gajim.logger.init_vars()
+	gajim.logger.attach_cache_database()
+
+def check_and_possibly_create_paths():
+	check_and_possibly_move_config()
+
+	LOG_DB_PATH = logger.LOG_DB_PATH
+	LOG_DB_FOLDER, LOG_DB_FILE = os.path.split(LOG_DB_PATH)
+
+	CACHE_DB_PATH = logger.CACHE_DB_PATH
+	CACHE_DB_FOLDER, CACHE_DB_FILE = os.path.split(CACHE_DB_PATH)
+
 	VCARD_PATH = gajim.VCARD_PATH
 	AVATAR_PATH = gajim.AVATAR_PATH
-	dot_gajim = os.path.dirname(VCARD_PATH)
+	import configpaths
+	MY_DATA = configpaths.gajimpaths['MY_DATA']
+	MY_CONFIG = configpaths.gajimpaths['MY_CONFIG']
+	MY_CACHE = configpaths.gajimpaths['MY_CACHE']
+
 	PLUGINS_CONFIG_PATH = gajim.PLUGINS_CONFIG_DIR
-	
-	if os.path.isfile(dot_gajim):
-		print _('%s is a file but it should be a directory') % dot_gajim
+
+	if not os.path.exists(MY_DATA):
+		create_path(MY_DATA)
+	elif os.path.isfile(MY_DATA):
+		print _('%s is a file but it should be a directory') % MY_DATA
 		print _('Gajim will now exit')
 		sys.exit()
-	elif os.path.isdir(dot_gajim):
-		s = os.stat(dot_gajim)
-		if s.st_mode & stat.S_IROTH: # others have read permission!
-			os.chmod(dot_gajim, 0700) # rwx------
 
-		if not os.path.exists(VCARD_PATH):
-			create_path(VCARD_PATH)
-		elif os.path.isfile(VCARD_PATH):
-			print _('%s is a file but it should be a directory') % VCARD_PATH
-			print _('Gajim will now exit')
-			sys.exit()
+	if not os.path.exists(MY_CONFIG):
+		create_path(MY_CONFIG)
+	elif os.path.isfile(MY_CONFIG):
+		print _('%s is a file but it should be a directory') % MY_CONFIG
+		print _('Gajim will now exit')
+		sys.exit()
 
-		if not os.path.exists(AVATAR_PATH):
-			create_path(AVATAR_PATH)
-		elif os.path.isfile(AVATAR_PATH):
-			print _('%s is a file but it should be a directory') % AVATAR_PATH
-			print _('Gajim will now exit')
-			sys.exit()
-			
-		if not os.path.exists(LOG_DB_PATH):
-			create_log_db()
-			gajim.logger.init_vars()
-		elif os.path.isdir(LOG_DB_PATH):
-			print _('%s is a directory but should be a file') % LOG_DB_PATH
-			print _('Gajim will now exit')
-			sys.exit()
-		
-		if not os.path.exists(PLUGINS_CONFIG_PATH):
-			create_path(PLUGINS_CONFIG_PATH)
-		elif os.path.isfile(PLUGINS_CONFIG_PATH):
-			print _('%s is a file but it should be a directory') % PLUGINS_CONFIG_PATH
-			print _('Gajim will now exit')
-			sys.exit()
+	if not os.path.exists(MY_CACHE):
+		create_path(MY_CACHE)
+	elif os.path.isfile(MY_CACHE):
+		print _('%s is a file but it should be a directory') % MY_CACHE
+		print _('Gajim will now exit')
+		sys.exit()
 
+	if not os.path.exists(VCARD_PATH):
+		create_path(VCARD_PATH)
+	elif os.path.isfile(VCARD_PATH):
+		print _('%s is a file but it should be a directory') % VCARD_PATH
+		print _('Gajim will now exit')
+		sys.exit()
 
-	else: # dot_gajim doesn't exist
-		if dot_gajim: # is '' on win9x so avoid that
-			create_path(dot_gajim)
-		if not os.path.isdir(VCARD_PATH):
-			create_path(VCARD_PATH)
-		if not os.path.exists(AVATAR_PATH):
-			create_path(AVATAR_PATH)
-		if not os.path.isfile(LOG_DB_PATH):
-			create_log_db()
-			gajim.logger.init_vars()
+	if not os.path.exists(AVATAR_PATH):
+		create_path(AVATAR_PATH)
+	elif os.path.isfile(AVATAR_PATH):
+		print _('%s is a file but it should be a directory') % AVATAR_PATH
+		print _('Gajim will now exit')
+		sys.exit()
+
+	if not os.path.exists(LOG_DB_FOLDER):
+		create_path(LOG_DB_FOLDER)
+	elif os.path.isfile(LOG_DB_FOLDER):
+		print _('%s is a file but it should be a directory') % LOG_DB_FOLDER
+		print _('Gajim will now exit')
+		sys.exit()
+
+	if not os.path.exists(LOG_DB_PATH):
+		create_log_db()
+		gajim.logger.init_vars()
+	elif os.path.isdir(LOG_DB_PATH):
+		print _('%s is a directory but should be a file') % LOG_DB_PATH
+		print _('Gajim will now exit')
+		sys.exit()
+
+	if not os.path.exists(CACHE_DB_FOLDER):
+		create_path(CACHE_DB_FOLDER)
+	elif os.path.isfile(CACHE_DB_FOLDER):
+		print _('%s is a file but it should be a directory') % CACHE_DB_FOLDER
+		print _('Gajim will now exit')
+		sys.exit()
+
+	if not os.path.exists(CACHE_DB_PATH):
+		create_cache_db()
+		gajim.logger.attach_cache_database()
+	elif os.path.isdir(CACHE_DB_PATH):
+		print _('%s is a directory but should be a file') % CACHE_DB_PATH
+		print _('Gajim will now exit')
+		sys.exit()
+
+	if not os.path.exists(PLUGINS_CONFIG_PATH):
+		create_path(PLUGINS_CONFIG_PATH)
+	elif os.path.isfile(PLUGINS_CONFIG_PATH):
+		print _('%s is a file but it should be a directory') % PLUGINS_CONFIG_PATH
+		print _('Gajim will now exit')
+		sys.exit()
 
 def create_path(directory):
 	print _('creating %s directory') % directory

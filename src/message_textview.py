@@ -35,6 +35,7 @@ class MessageTextView(gtk.TextView):
 	Class for the message textview (where user writes new messages) for
 	chat/groupchat windows
 	"""
+	UNDO_LIMIT = 20
 	__gsignals__ = dict(
 		mykeypress = (gobject.SIGNAL_RUN_LAST | gobject.SIGNAL_ACTION,
 				None, # return value
@@ -56,6 +57,10 @@ class MessageTextView(gtk.TextView):
 		self.set_pixels_above_lines(2)
 		self.set_pixels_below_lines(2)
 
+		# set undo list
+		self.undo_list = []
+		# needed to know if we undid something
+		self.undo_pressed = False
 		self.lang = None # Lang used for spell checking
 		_buffer = self.get_buffer()
 		self.begin_tags = {}
@@ -287,6 +292,20 @@ class MessageTextView(gtk.TextView):
 		start, end = _buffer.get_bounds()
 		_buffer.delete(start, end)
 
+	def save_undo(self, text):
+		self.undo_list.append(text)
+		if len(self.undo_list) > self.UNDO_LIMIT:
+			del self.undo_list[0]
+		self.undo_pressed = False
+
+	def undo(self, widget=None):
+		"""
+		Undo text in the textview
+		"""
+		_buffer = self.get_buffer()
+		if self.undo_list:
+			_buffer.set_text(self.undo_list.pop())
+		self.undo_pressed = True
 
 # We register depending on keysym and modifier some bindings
 # but we also pass those as param so we can construct fake Event
@@ -340,4 +359,8 @@ gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.KP_Enter,
 	gtk.gdk.CONTROL_MASK, 'mykeypress', int, gtk.keysyms.KP_Enter,
 	gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK)
 
+# Ctrl + z
+gtk.binding_entry_add_signal(MessageTextView, gtk.keysyms.z,
+	gtk.gdk.CONTROL_MASK, 'mykeypress', int, gtk.keysyms.z,
+	gtk.gdk.ModifierType, gtk.gdk.CONTROL_MASK)
 # vim: se ts=3:

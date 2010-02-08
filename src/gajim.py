@@ -114,7 +114,7 @@ if os.name == 'nt':
 		_file = None
 		_error = None
 		def write(self, text):
-			fname=os.path.join(common.configpaths.gajimpaths.root,
+			fname=os.path.join(common.configpaths.gajimpaths.cache_root,
 				os.path.split(sys.executable)[1]+'.log')
 			if self._file is None and self._error is None:
 				try:
@@ -182,15 +182,6 @@ else:
 	elif gtk.gtk_version < (2, 16, 0):
 		pritext = _('Gajim needs GTK 2.16 or above')
 		sectext = _('Gajim needs GTK 2.16 or above to run. Quiting...')
-
-	try:
-		import gtk.glade # check if user has libglade (in pygtk and in gtk)
-	except ImportError:
-		pritext = _('GTK+ runtime is missing libglade support')
-		if os.name == 'nt':
-			sectext = _('Please remove your current GTK+ runtime and install the latest stable version from %s') % 'http://gladewin32.sourceforge.net'
-		else:
-			sectext = _('Please make sure that GTK+ and PyGTK have libglade support in your system.')
 
 	try:
 		from common import check_paths
@@ -362,7 +353,8 @@ def on_exit():
 	if os.path.exists(pid_filename):
 		os.remove(pid_filename)
 	# Shutdown GUI and save config
-	gajim.interface.roster.prepare_quit()
+	if hasattr(gajim.interface, 'roster'):
+		gajim.interface.roster.prepare_quit()
 
 import atexit
 atexit.register(on_exit)

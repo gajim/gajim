@@ -474,13 +474,14 @@ class ConversationTextview(gobject.GObject):
 			self.xep0184_shown[id_] == ALREADY_RECEIVED:
 				return False
 
-			end_iter = buffer_.get_iter_at_mark(
-				self.xep0184_marks[id_])
+			end_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
 			buffer_.insert(end_iter, ' ')
-			buffer_.insert_pixbuf(end_iter,
-				ConversationTextview.XEP0184_WARNING_PIXBUF)
-			before_img_iter = buffer_.get_iter_at_mark(
-				self.xep0184_marks[id_])
+			anchor = buffer_.create_child_anchor(end_iter)
+			img = TextViewImage(anchor, '')
+			img.set_from_pixbuf(ConversationTextview.XEP0184_WARNING_PIXBUF)
+			img.show()
+			self.tv.add_child_at_anchor(img, anchor)
+			before_img_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
 			before_img_iter.forward_char()
 			post_img_iter = before_img_iter.copy()
 			post_img_iter.forward_char()
@@ -860,7 +861,7 @@ class ConversationTextview(gobject.GObject):
 	def on_join_group_chat_menuitem_activate(self, widget, room_jid):
 		if 'join_gc' in gajim.interface.instances[self.account]:
 			instance = gajim.interface.instances[self.account]['join_gc']
-			instance.xml.get_widget('room_jid_entry').set_text(room_jid)
+			instance.xml.get_object('room_jid_entry').set_text(room_jid)
 			gajim.interface.instances[self.account]['join_gc'].window.present()
 		else:
 			try:
@@ -872,8 +873,8 @@ class ConversationTextview(gobject.GObject):
 		dialogs.AddNewContactWindow(self.account, jid)
 
 	def make_link_menu(self, event, kind, text):
-		xml = gtkgui_helpers.get_glade('chat_context_menu.glade')
-		menu = xml.get_widget('chat_context_menu')
+		xml = gtkgui_helpers.get_gtk_builder('chat_context_menu.ui')
+		menu = xml.get_object('chat_context_menu')
 		childs = menu.get_children()
 		if kind == 'url':
 			id_ = childs[0].connect('activate', self.on_copy_link_activate, text)
@@ -889,7 +890,7 @@ class ConversationTextview(gobject.GObject):
 			childs[7].hide() # add to roster
 		else: # It's a mail or a JID
 			# load muc icon
-			join_group_chat_menuitem = xml.get_widget('join_group_chat_menuitem')
+			join_group_chat_menuitem = xml.get_object('join_group_chat_menuitem')
 			muc_icon = gtkgui_helpers.load_icon('muc_active')
 			if muc_icon:
 				join_group_chat_menuitem.set_image(muc_icon)
@@ -1157,7 +1158,10 @@ class ConversationTextview(gobject.GObject):
 			all_tags = tags[:]
 			if use_other_tags:
 				all_tags += other_tags
-			buffer_.insert_with_tags_by_name(end_iter, special_text, *all_tags)
+			# convert all names to TextTag
+			ttt = buffer_.get_tag_table()
+			all_tags = [(ttt.lookup(t) if isinstance(t, str) else t) for t in all_tags]
+			buffer_.insert_with_tags(end_iter, special_text, *all_tags)
 
 	def print_empty_line(self):
 		buffer_ = self.tv.get_buffer()

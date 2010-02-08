@@ -400,8 +400,6 @@ class GajimRemote:
 		except Exception:
 			raise exceptions.SessionBusNotPresent
 
-		from pprint import pprint
-		pprint(list(self.sbus.list_names()))
 		if not self.check_gajim_running():
 			send_error(_('It seems Gajim is not running. So you can\'t use gajim-remote.'))
 		obj = self.sbus.get_object(SERVICE, OBJ_PATH)

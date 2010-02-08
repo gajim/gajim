@@ -87,7 +87,7 @@ http://trac.gajim.org/attachment/ticket/4133'''
 			chat_control.banner_status_label.set_markup(status_text)
 			
 		if not self.config['show_banner_image']:
-			banner_status_img = chat_control.xml.get_widget('banner_status_image')
+			banner_status_img = chat_control.xml.get_object('banner_status_image')
 			banner_status_img.clear()
 		
 		# TODO: part below repeats a lot of code from ChatControl.draw_banner_text()
@@ -95,7 +95,7 @@ http://trac.gajim.org/attachment/ticket/4133'''
 		# banner_name_label and replacing some elements based on plugin config.
 		# Would it be faster?
 		if self.config['show_banner_resource'] or self.config['banner_small_fonts']:
-			banner_name_label = chat_control.xml.get_widget('banner_name_label')
+			banner_name_label = chat_control.xml.get_object('banner_name_label')
 			label_text = banner_name_label.get_label()
 						
 			contact = chat_control.contact
@@ -169,17 +169,21 @@ http://trac.gajim.org/attachment/ticket/4133'''
 	
 class BannerTweaksPluginConfigDialog(GajimPluginConfigDialog):
 	def init(self):
-		self.GLADE_FILE_PATH = self.plugin.local_file_path('config_dialog.glade')
-		self.xml = gtk.glade.XML(self.GLADE_FILE_PATH, root='banner_tweaks_config_vbox', domain=i18n.APP)
-		self.config_vbox = self.xml.get_widget('banner_tweaks_config_vbox')
+		self.GTK_BUILDER_FILE_PATH = self.plugin.local_file_path(
+			'config_dialog.ui')
+		self.xml = gtk.Builder()
+		self.xml.set_translation_domain(i18n.APP)
+		self.xml.add_objects_from_file(self.GTK_BUILDER_FILE_PATH,
+			['banner_tweaks_config_vbox'])
+		self.config_vbox = self.xml.get_object('banner_tweaks_config_vbox')
 		self.child.pack_start(self.config_vbox)
 		
-		self.show_banner_image_checkbutton = self.xml.get_widget('show_banner_image_checkbutton')
-		self.show_banner_online_msg_checkbutton = self.xml.get_widget('show_banner_online_msg_checkbutton')
-		self.show_banner_resource_checkbutton = self.xml.get_widget('show_banner_resource_checkbutton')
-		self.banner_small_fonts_checkbutton = self.xml.get_widget('banner_small_fonts_checkbutton')
+		self.show_banner_image_checkbutton = self.xml.get_object('show_banner_image_checkbutton')
+		self.show_banner_online_msg_checkbutton = self.xml.get_object('show_banner_online_msg_checkbutton')
+		self.show_banner_resource_checkbutton = self.xml.get_object('show_banner_resource_checkbutton')
+		self.banner_small_fonts_checkbutton = self.xml.get_object('banner_small_fonts_checkbutton')
 		
-		self.xml.signal_autoconnect(self)
+		self.xml.connect_signals(self)
 	
 	def on_run(self):
 		self.show_banner_image_checkbutton.set_active(self.plugin.config['show_banner_image'])

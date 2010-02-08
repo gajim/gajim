@@ -49,13 +49,13 @@ class FileTransfersWindow:
 	def __init__(self):
 		self.files_props = {'r' : {}, 's': {}}
 		self.height_diff = 0
-		self.xml = gtkgui_helpers.get_glade('filetransfers.glade')
-		self.window = self.xml.get_widget('file_transfers_window')
-		self.tree = self.xml.get_widget('transfers_list')
-		self.cancel_button = self.xml.get_widget('cancel_button')
-		self.pause_button = self.xml.get_widget('pause_restore_button')
-		self.cleanup_button = self.xml.get_widget('cleanup_button')
-		self.notify_ft_checkbox = self.xml.get_widget(
+		self.xml = gtkgui_helpers.get_gtk_builder('filetransfers.ui')
+		self.window = self.xml.get_object('file_transfers_window')
+		self.tree = self.xml.get_object('transfers_list')
+		self.cancel_button = self.xml.get_object('cancel_button')
+		self.pause_button = self.xml.get_object('pause_restore_button')
+		self.cleanup_button = self.xml.get_object('cleanup_button')
+		self.notify_ft_checkbox = self.xml.get_object(
 			'notify_ft_complete_checkbox')
 
 		shall_notify = gajim.config.get('notify_on_file_complete')
@@ -126,13 +126,13 @@ class FileTransfersWindow:
 		self.tree.get_selection().set_mode(gtk.SELECTION_SINGLE)
 		self.tree.get_selection().connect('changed', self.selection_changed)
 		self.tooltip = tooltips.FileTransfersTooltip()
-		self.file_transfers_menu = self.xml.get_widget('file_transfers_menu')
-		self.open_folder_menuitem = self.xml.get_widget('open_folder_menuitem')
-		self.cancel_menuitem = self.xml.get_widget('cancel_menuitem')
-		self.pause_menuitem = self.xml.get_widget('pause_menuitem')
-		self.continue_menuitem = self.xml.get_widget('continue_menuitem')
-		self.remove_menuitem = self.xml.get_widget('remove_menuitem')
-		self.xml.signal_autoconnect(self)
+		self.file_transfers_menu = self.xml.get_object('file_transfers_menu')
+		self.open_folder_menuitem = self.xml.get_object('open_folder_menuitem')
+		self.cancel_menuitem = self.xml.get_object('cancel_menuitem')
+		self.pause_menuitem = self.xml.get_object('pause_menuitem')
+		self.continue_menuitem = self.xml.get_object('continue_menuitem')
+		self.remove_menuitem = self.xml.get_object('remove_menuitem')
+		self.xml.connect_signals(self)
 
 	def find_transfer_by_jid(self, account, jid):
 		"""

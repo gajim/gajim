@@ -1511,6 +1511,15 @@ class RosterWindow:
 		if type_ == 'group':
 			group = jid
 			if group == _('Transports'):
+				if self.regroup:
+					accounts = gajim.contacts.get_accounts()
+				else:
+					accounts = [account]
+				for _acc in accounts:
+					for contact in gajim.contacts.iter_contacts(_acc):
+						if group in contact.get_shown_groups() and \
+						self.contact_has_pending_roster_events(contact, _acc):
+							return True
 				return gajim.config.get('show_transports_group') and \
 					(gajim.account_is_connected(account) or \
 					gajim.config.get('showoffline'))
@@ -1557,9 +1566,12 @@ class RosterWindow:
 					jid)
 				return self.contact_is_visible(contact, account)
 		if type_ == 'agent':
-			return gajim.config.get('show_transports_group') and \
+			contact = gajim.contacts.get_contact_with_highest_priority(account,
+				jid)
+			return self.contact_has_pending_roster_events(contact, account) or \
+				(gajim.config.get('show_transports_group') and \
 				(gajim.account_is_connected(account) or \
-				gajim.config.get('showoffline'))
+				gajim.config.get('showoffline')))
 		return True
 
 	def _compareIters(self, model, iter1, iter2, data=None):
@@ -1859,9 +1871,9 @@ class RosterWindow:
 
 	def show_roster_vbox(self, active):
 		if active:
-			self.xml.get_widget('roster_vbox2').show()
+			self.xml.get_object('roster_vbox2').show()
 		else:
-			self.xml.get_widget('roster_vbox2').hide()
+			self.xml.get_object('roster_vbox2').hide()
 
 
 	def show_tooltip(self, contact):
@@ -2138,8 +2150,9 @@ class RosterWindow:
 			'mood': '', 'mood_text': ''}
 		if show in gajim.config.get_per('defaultstatusmsg'):
 			if gajim.config.get_per('defaultstatusmsg', show, 'enabled'):
-				on_response(gajim.config.get_per('defaultstatusmsg', show,
-					'message'), empty_pep)
+				msg = gajim.config.get_per('defaultstatusmsg', show, 'message')
+				msg = helpers.from_one_line(msg)
+				on_response(msg, empty_pep)
 				return
 		if not always_ask and ((show == 'online' and not gajim.config.get(
 		'ask_online_status')) or (show in ('offline', 'invisible') and not \
@@ -2267,10 +2280,10 @@ class RosterWindow:
 			width, height = self.window.get_size()
 			# For the width use the size of the vbox containing the tree and
 			# status combo, this will cancel out any hpaned width
-			width = self.xml.get_widget('roster_vbox2').allocation.width
+			width = self.xml.get_object('roster_vbox2').allocation.width
 			gajim.config.set('roster_width', width)
 			gajim.config.set('roster_height', height)
-			if not self.xml.get_widget('roster_vbox2').get_property('visible'):
+			if not self.xml.get_object('roster_vbox2').get_property('visible'):
 				# The roster vbox is hidden, so the message window is larger
 				# then we want to save (i.e. the window will grow every startup)
 				# so adjust.
@@ -3333,8 +3346,8 @@ class RosterWindow:
 		pritext = _('You are about to send a custom status. Are you sure you want'
 			' to continue?')
 		sectext = _('This contact will temporarily see you as %(status)s, '
-			'but only until you change your status. Then he will see your global '
-			'status.') % {'status': show}
+			'but only until you change your status. Then he or she will see your '
+			'global status.') % {'status': show}
 		dlg = dialogs.ConfirmationDialogCheck(pritext, sectext,
 			_('Do _not ask me again'), on_response_ok=send_it)
 
@@ -3887,7 +3900,7 @@ class RosterWindow:
 		"""
 		gajim.config.set('showoffline', not gajim.config.get('showoffline'))
 		self.refilter_shown_roster_items()
-		w = self.xml.get_widget('show_only_active_contacts_menuitem')
+		w = self.xml.get_object('show_only_active_contacts_menuitem')
 		if gajim.config.get('showoffline'):
 			# We need to filter twice to show groups with no contacts inside
 			# in the correct expand state
@@ -3903,7 +3916,7 @@ class RosterWindow:
 		gajim.config.set('show_only_chat_and_online', not gajim.config.get(
 			'show_only_chat_and_online'))
 		self.refilter_shown_roster_items()
-		w = self.xml.get_widget('show_offline_contacts_menuitem')
+		w = self.xml.get_object('show_offline_contacts_menuitem')
 		if gajim.config.get('show_only_chat_and_online'):
 			# We need to filter twice to show groups with no contacts inside
 			# in the correct expand state
@@ -3915,9 +3928,9 @@ class RosterWindow:
 	def on_view_menu_activate(self, widget):
 		# Hide the show roster menu if we are not in the right windowing mode.
 		if self.hpaned.get_child2() is not None:
-			self.xml.get_widget('show_roster_menuitem').show()
+			self.xml.get_object('show_roster_menuitem').show()
 		else:
-			self.xml.get_widget('show_roster_menuitem').hide()
+			self.xml.get_object('show_roster_menuitem').hide()
 
 	def on_show_roster_menuitem_toggled(self, widget):
 		# when num controls is 0 this menuitem is hidden, but still need to
@@ -4561,7 +4574,7 @@ class RosterWindow:
 			renderer.set_property('visible', True)
 
 			if type_ == 'account':
-				self.set_renderer_color(renderer, gtk.STATE_ACTIVE)
+				self._set_account_row_background_color(renderer)
 				renderer.set_property('xalign', 1)
 			elif type_:
 				if not model[titer][C_JID] or not model[titer][C_ACCOUNT]:
@@ -4653,17 +4666,17 @@ class RosterWindow:
 		"""
 		if not force and not self.actions_menu_needs_rebuild:
 			return
-		new_chat_menuitem = self.xml.get_widget('new_chat_menuitem')
-		single_message_menuitem = self.xml.get_widget(
+		new_chat_menuitem = self.xml.get_object('new_chat_menuitem')
+		single_message_menuitem = self.xml.get_object(
 			'send_single_message_menuitem')
-		join_gc_menuitem = self.xml.get_widget('join_gc_menuitem')
+		join_gc_menuitem = self.xml.get_object('join_gc_menuitem')
 		muc_icon = gtkgui_helpers.load_icon('muc_active')
 		if muc_icon:
 			join_gc_menuitem.set_image(muc_icon)
-		add_new_contact_menuitem = self.xml.get_widget('add_new_contact_menuitem')
-		service_disco_menuitem = self.xml.get_widget('service_disco_menuitem')
-		advanced_menuitem = self.xml.get_widget('advanced_menuitem')
-		profile_avatar_menuitem = self.xml.get_widget('profile_avatar_menuitem')
+		add_new_contact_menuitem = self.xml.get_object('add_new_contact_menuitem')
+		service_disco_menuitem = self.xml.get_object('service_disco_menuitem')
+		advanced_menuitem = self.xml.get_object('advanced_menuitem')
+		profile_avatar_menuitem = self.xml.get_object('profile_avatar_menuitem')
 
 		# destroy old advanced menus
 		for m in self.advanced_menus:
@@ -4942,21 +4955,21 @@ class RosterWindow:
 		state_images = gtkgui_helpers.load_iconset(path)
 
 		if not gajim.config.get_per('accounts', account, 'is_zeroconf'):
-			xml = gtkgui_helpers.get_glade('account_context_menu.glade')
-			account_context_menu = xml.get_widget('account_context_menu')
+			xml = gtkgui_helpers.get_gtk_builder('account_context_menu.ui')
+			account_context_menu = xml.get_object('account_context_menu')
 
-			status_menuitem = xml.get_widget('status_menuitem')
-			start_chat_menuitem = xml.get_widget('start_chat_menuitem')
-			join_group_chat_menuitem = xml.get_widget('join_group_chat_menuitem')
+			status_menuitem = xml.get_object('status_menuitem')
+			start_chat_menuitem = xml.get_object('start_chat_menuitem')
+			join_group_chat_menuitem = xml.get_object('join_group_chat_menuitem')
 			muc_icon = gtkgui_helpers.load_icon('muc_active')
 			if muc_icon:
 				join_group_chat_menuitem.set_image(muc_icon)
-			open_gmail_inbox_menuitem = xml.get_widget('open_gmail_inbox_menuitem')
-			add_contact_menuitem = xml.get_widget('add_contact_menuitem')
-			service_discovery_menuitem = xml.get_widget(
+			open_gmail_inbox_menuitem = xml.get_object('open_gmail_inbox_menuitem')
+			add_contact_menuitem = xml.get_object('add_contact_menuitem')
+			service_discovery_menuitem = xml.get_object(
 				'service_discovery_menuitem')
-			execute_command_menuitem = xml.get_widget('execute_command_menuitem')
-			edit_account_menuitem = xml.get_widget('edit_account_menuitem')
+			execute_command_menuitem = xml.get_object('execute_command_menuitem')
+			edit_account_menuitem = xml.get_object('edit_account_menuitem')
 			sub_menu = gtk.Menu()
 			status_menuitem.set_submenu(sub_menu)
 
@@ -4994,7 +5007,7 @@ class RosterWindow:
 			sub_menu.append(item)
 			item.connect('activate', self.change_status, account, 'offline')
 
-			pep_menuitem = xml.get_widget('pep_menuitem')
+			pep_menuitem = xml.get_object('pep_menuitem')
 			if gajim.connections[account].pep_supported:
 				pep_submenu = gtk.Menu()
 				pep_menuitem.set_submenu(pep_submenu)
@@ -5059,11 +5072,11 @@ class RosterWindow:
 				start_chat_menuitem):
 					widget.set_sensitive(False)
 		else:
-			xml = gtkgui_helpers.get_glade('zeroconf_context_menu.glade')
-			account_context_menu = xml.get_widget('zeroconf_context_menu')
+			xml = gtkgui_helpers.get_gtk_builder('zeroconf_context_menu.ui')
+			account_context_menu = xml.get_object('zeroconf_context_menu')
 
-			status_menuitem = xml.get_widget('status_menuitem')
-			zeroconf_properties_menuitem = xml.get_widget(
+			status_menuitem = xml.get_object('status_menuitem')
+			zeroconf_properties_menuitem = xml.get_object(
 				'zeroconf_properties_menuitem')
 			sub_menu = gtk.Menu()
 			status_menuitem.set_submenu(sub_menu)
@@ -5593,17 +5606,17 @@ class RosterWindow:
 		"""
 		Add FOR ACCOUNT options
 		"""
-		xml = gtkgui_helpers.get_glade('advanced_menuitem_menu.glade')
-		advanced_menuitem_menu = xml.get_widget('advanced_menuitem_menu')
+		xml = gtkgui_helpers.get_gtk_builder('advanced_menuitem_menu.ui')
+		advanced_menuitem_menu = xml.get_object('advanced_menuitem_menu')
 
-		xml_console_menuitem = xml.get_widget('xml_console_menuitem')
-		privacy_lists_menuitem = xml.get_widget('privacy_lists_menuitem')
-		administrator_menuitem = xml.get_widget('administrator_menuitem')
-		send_server_message_menuitem = xml.get_widget(
+		xml_console_menuitem = xml.get_object('xml_console_menuitem')
+		privacy_lists_menuitem = xml.get_object('privacy_lists_menuitem')
+		administrator_menuitem = xml.get_object('administrator_menuitem')
+		send_server_message_menuitem = xml.get_object(
 			'send_server_message_menuitem')
-		set_motd_menuitem = xml.get_widget('set_motd_menuitem')
-		update_motd_menuitem = xml.get_widget('update_motd_menuitem')
-		delete_motd_menuitem = xml.get_widget('delete_motd_menuitem')
+		set_motd_menuitem = xml.get_object('set_motd_menuitem')
+		update_motd_menuitem = xml.get_object('update_motd_menuitem')
+		delete_motd_menuitem = xml.get_object('delete_motd_menuitem')
 
 		xml_console_menuitem.connect('activate',
 			self.on_xml_console_menuitem_activate, account)
@@ -5724,7 +5737,10 @@ class RosterWindow:
 		Bring up the conference join dialog, when CTRL+J accelerator is being
 		activated
 		"""
-		account = gajim.connections.keys()[0]
+		# find a connected account:
+		for account in gajim.connections:
+			if gajim.account_is_connected(account):
+				break
 		self.on_join_gc_activate(None, account)
 		return True
 
@@ -5734,16 +5750,16 @@ class RosterWindow:
 
 	def __init__(self):
 		self.filtering = False
-		self.xml = gtkgui_helpers.get_glade('roster_window.glade')
-		self.window = self.xml.get_widget('roster_window')
-		self.hpaned = self.xml.get_widget('roster_hpaned')
+		self.xml = gtkgui_helpers.get_gtk_builder('roster_window.ui')
+		self.window = self.xml.get_object('roster_window')
+		self.hpaned = self.xml.get_object('roster_hpaned')
 		gajim.interface.msg_win_mgr = MessageWindowMgr(self.window, self.hpaned)
 		gajim.interface.msg_win_mgr.connect('window-delete',
 			self.on_message_window_delete)
 		self.advanced_menus = [] # We keep them to destroy them
 		if gajim.config.get('roster_window_skip_taskbar'):
 			self.window.set_property('skip-taskbar-hint', True)
-		self.tree = self.xml.get_widget('roster_treeview')
+		self.tree = self.xml.get_object('roster_treeview')
 		sel = self.tree.get_selection()
 		sel.set_mode(gtk.SELECTION_MULTIPLE)
 		#sel.connect('changed',
@@ -5790,7 +5806,7 @@ class RosterWindow:
 
 		# uf_show, img, show, sensitive
 		liststore = gtk.ListStore(str, gtk.Image, str, bool)
-		self.status_combobox = self.xml.get_widget('status_combobox')
+		self.status_combobox = self.xml.get_object('status_combobox')
 
 		cell = cell_renderer_image.CellRendererImage(0, 1)
 		self.status_combobox.pack_start(cell, False)
@@ -5849,21 +5865,21 @@ class RosterWindow:
 		showOffline = gajim.config.get('showoffline')
 		showOnlyChatAndOnline = gajim.config.get('show_only_chat_and_online')
 
-		w = self.xml.get_widget('show_offline_contacts_menuitem')
+		w = self.xml.get_object('show_offline_contacts_menuitem')
 		w.set_active(showOffline)
 		if showOnlyChatAndOnline:
 			w.set_sensitive(False)
 
-		w = self.xml.get_widget('show_only_active_contacts_menuitem')
+		w = self.xml.get_object('show_only_active_contacts_menuitem')
 		w.set_active(showOnlyChatAndOnline)
 		if showOffline:
 			w.set_sensitive(False)
 
 		show_transports_group = gajim.config.get('show_transports_group')
-		self.xml.get_widget('show_transports_menuitem').set_active(
+		self.xml.get_object('show_transports_menuitem').set_active(
 			show_transports_group)
 
-		self.xml.get_widget('show_roster_menuitem').set_active(True)
+		self.xml.get_object('show_roster_menuitem').set_active(True)
 
 		# columns
 
@@ -5958,7 +5974,7 @@ class RosterWindow:
 		self.tree.connect('drag_data_get', self.drag_data_get_data)
 		self.tree.connect('drag_data_received', self.drag_data_received_data)
 		self.dragging = False
-		self.xml.signal_autoconnect(self)
+		self.xml.connect_signals(self)
 		self.combobox_callback_active = True
 
 		self.collapsed_rows = gajim.config.get('collapsed_rows').split('\t')

@@ -40,8 +40,8 @@ class PluginsWindow(object):
 	@log_calls('PluginsWindow')
 	def __init__(self):
 		'''Initialize Plugins window'''
-		self.xml = gtkgui_helpers.get_glade('plugins_window.glade')
-		self.window = self.xml.get_widget('plugins_window')
+		self.xml = gtkgui_helpers.get_gtk_builder('plugins_window.ui')
+		self.window = self.xml.get_object('plugins_window')
 		self.window.set_transient_for(gajim.interface.roster.window)
 		
 		widgets_to_extract = ('plugins_notebook',
@@ -55,7 +55,7 @@ class PluginsWindow(object):
 							 'installed_plugins_treeview')
 		
 		for widget_name in widgets_to_extract:
-			setattr(self, widget_name, self.xml.get_widget(widget_name))
+			setattr(self, widget_name, self.xml.get_object(widget_name))
 
 		attr_list = pango.AttrList()
 		attr_list.insert(pango.AttrWeight(pango.WEIGHT_BOLD, 0, -1))
@@ -86,7 +86,7 @@ class PluginsWindow(object):
 		
 		self.fill_installed_plugins_model()
 		
-		self.xml.signal_autoconnect(self)
+		self.xml.connect_signals(self)
 
 		self.plugins_notebook.set_current_page(0)
 		

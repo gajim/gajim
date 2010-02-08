@@ -41,10 +41,10 @@ class ProfileWindow:
 	"""
 
 	def __init__(self, account):
-		self.xml = gtkgui_helpers.get_glade('profile_window.glade')
-		self.window = self.xml.get_widget('profile_window')
-		self.progressbar = self.xml.get_widget('progressbar')
-		self.statusbar = self.xml.get_widget('statusbar')
+		self.xml = gtkgui_helpers.get_gtk_builder('profile_window.ui')
+		self.window = self.xml.get_object('profile_window')
+		self.progressbar = self.xml.get_object('progressbar')
+		self.statusbar = self.xml.get_object('statusbar')
 		self.context_id = self.statusbar.get_context_id('profile')
 
 		self.account = account
@@ -61,8 +61,8 @@ class ProfileWindow:
 
 		# Create Image for avatar button
 		image = gtk.Image()
-		self.xml.get_widget('PHOTO_button').set_image(image)
-		self.xml.signal_autoconnect(self)
+		self.xml.get_object('PHOTO_button').set_image(image)
+		self.xml.connect_signals(self)
 		self.window.show_all()
 
 	def update_progressbar(self):
@@ -88,11 +88,11 @@ class ProfileWindow:
 
 	def on_clear_button_clicked(self, widget):
 		# empty the image
-		button = self.xml.get_widget('PHOTO_button')
+		button = self.xml.get_object('PHOTO_button')
 		image = button.get_image()
 		image.set_from_pixbuf(None)
 		button.hide()
-		text_button = self.xml.get_widget('NOPHOTO_button')
+		text_button = self.xml.get_object('NOPHOTO_button')
 		text_button.show()
 		self.avatar_encoded = None
 		self.avatar_mime_type = None
@@ -144,11 +144,11 @@ class ProfileWindow:
 				return
 			self.dialog.destroy()
 			self.dialog = None
-			button = self.xml.get_widget('PHOTO_button')
+			button = self.xml.get_object('PHOTO_button')
 			image = button.get_image()
 			image.set_from_pixbuf(pixbuf)
 			button.show()
-			text_button = self.xml.get_widget('NOPHOTO_button')
+			text_button = self.xml.get_object('NOPHOTO_button')
 			text_button.hide()
 			self.avatar_encoded = base64.encodestring(data)
 			# returns None if unknown type
@@ -205,14 +205,14 @@ class ProfileWindow:
 
 	def set_value(self, entry_name, value):
 		try:
-			self.xml.get_widget(entry_name).set_text(value)
+			self.xml.get_object(entry_name).set_text(value)
 		except AttributeError:
 			pass
 
 	def set_values(self, vcard_):
-		button = self.xml.get_widget('PHOTO_button')
+		button = self.xml.get_object('PHOTO_button')
 		image = button.get_image()
-		text_button = self.xml.get_widget('NOPHOTO_button')
+		text_button = self.xml.get_object('NOPHOTO_button')
 		if not 'PHOTO' in vcard_:
 			# set default image
 			image.set_from_pixbuf(None)
@@ -244,7 +244,7 @@ class ProfileWindow:
 					self.set_value(i + '_' + j + '_entry', vcard_[i][j])
 			else:
 				if i == 'DESC':
-					self.xml.get_widget('DESC_textview').get_buffer().set_text(
+					self.xml.get_object('DESC_textview').get_buffer().set_text(
 						vcard_[i], 0)
 				else:
 					self.set_value(i + '_entry', vcard_[i])
@@ -298,12 +298,12 @@ class ProfileWindow:
 			'ADR_WORK_REGION', 'ADR_WORK_PCODE', 'ADR_WORK_CTRY']
 		vcard_ = {}
 		for e in entries:
-			txt = self.xml.get_widget(e + '_entry').get_text().decode('utf-8')
+			txt = self.xml.get_object(e + '_entry').get_text().decode('utf-8')
 			if txt != '':
 				vcard_ = self.add_to_vcard(vcard_, e, txt)
 
 		# DESC textview
-		buff = self.xml.get_widget('DESC_textview').get_buffer()
+		buff = self.xml.get_object('DESC_textview').get_buffer()
 		start_iter = buff.get_start_iter()
 		end_iter = buff.get_end_iter()
 		txt = buff.get_text(start_iter, end_iter, 0)

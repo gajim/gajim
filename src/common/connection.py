@@ -169,9 +169,7 @@ class CommonConnection:
 		"""
 		Always passes account name as first param
 		"""
-		#gajim.interface.dispatch(event, self.name, data)
 		gajim.ged.raise_event(event, self.name, data)
-
 
 	def _reconnect(self):
 		"""
@@ -710,6 +708,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 	# We are doing disconnect at so many places, better use one function in all
 	def disconnect(self, on_purpose=False):
 		gajim.interface.music_track_changed(None, None, self.name)
+		self.reset_awaiting_pep()
 		self.on_purpose = on_purpose
 		self.connected = 0
 		self.time_to_reconnect = None
@@ -765,7 +764,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 		else:
 			self.disconnect()
 		self.on_purpose = False
-	# END disconenctedReconnCB
+	# END disconnectedReconnCB
 
 	def _connection_lost(self):
 		log.debug('_connection_lost')
@@ -1476,16 +1475,16 @@ class Connection(CommonConnection, ConnectionHandlers):
 		self.priority = priority
 		self.dispatch('STATUS', 'invisible')
 		if initial:
-			#ask our VCard
+			# ask our VCard
 			self.request_vcard(None)
 
-			#Get bookmarks from private namespace
+			# Get bookmarks from private namespace
 			self.get_bookmarks()
 
-			#Get annotations
+			# Get annotations
 			self.get_annotations()
 
-			#Inform GUI we just signed in
+			# Inform GUI we just signed in
 			self.dispatch('SIGNED_IN', ())
 
 	def get_signed_presence(self, msg, callback = None):

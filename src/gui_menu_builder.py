@@ -162,40 +162,40 @@ def get_contact_menu(contact, account, use_multiple_contacts=True,
 	our_jid = jid == gajim.get_jid_from_account(account)
 	roster = gajim.interface.roster
 
-	xml = gtkgui_helpers.get_glade('contact_context_menu.glade')
-	contact_context_menu = xml.get_widget('contact_context_menu')
+	xml = gtkgui_helpers.get_gtk_builder('contact_context_menu.ui')
+	contact_context_menu = xml.get_object('contact_context_menu')
 
-	start_chat_menuitem = xml.get_widget('start_chat_menuitem')
-	execute_command_menuitem = xml.get_widget('execute_command_menuitem')
-	rename_menuitem = xml.get_widget('rename_menuitem')
-	edit_groups_menuitem = xml.get_widget('edit_groups_menuitem')
-	send_file_menuitem = xml.get_widget('send_file_menuitem')
-	assign_openpgp_key_menuitem = xml.get_widget('assign_openpgp_key_menuitem')
-	add_special_notification_menuitem = xml.get_widget(
+	start_chat_menuitem = xml.get_object('start_chat_menuitem')
+	execute_command_menuitem = xml.get_object('execute_command_menuitem')
+	rename_menuitem = xml.get_object('rename_menuitem')
+	edit_groups_menuitem = xml.get_object('edit_groups_menuitem')
+	send_file_menuitem = xml.get_object('send_file_menuitem')
+	assign_openpgp_key_menuitem = xml.get_object('assign_openpgp_key_menuitem')
+	add_special_notification_menuitem = xml.get_object(
 		'add_special_notification_menuitem')
-	information_menuitem = xml.get_widget('information_menuitem')
-	history_menuitem = xml.get_widget('history_menuitem')
-	send_custom_status_menuitem = xml.get_widget('send_custom_status_menuitem')
-	send_single_message_menuitem = xml.get_widget('send_single_message_menuitem')
-	invite_menuitem = xml.get_widget('invite_menuitem')
-	block_menuitem = xml.get_widget('block_menuitem')
-	unblock_menuitem = xml.get_widget('unblock_menuitem')
-	ignore_menuitem = xml.get_widget('ignore_menuitem')
-	unignore_menuitem = xml.get_widget('unignore_menuitem')
-	set_custom_avatar_menuitem = xml.get_widget('set_custom_avatar_menuitem')
+	information_menuitem = xml.get_object('information_menuitem')
+	history_menuitem = xml.get_object('history_menuitem')
+	send_custom_status_menuitem = xml.get_object('send_custom_status_menuitem')
+	send_single_message_menuitem = xml.get_object('send_single_message_menuitem')
+	invite_menuitem = xml.get_object('invite_menuitem')
+	block_menuitem = xml.get_object('block_menuitem')
+	unblock_menuitem = xml.get_object('unblock_menuitem')
+	ignore_menuitem = xml.get_object('ignore_menuitem')
+	unignore_menuitem = xml.get_object('unignore_menuitem')
+	set_custom_avatar_menuitem = xml.get_object('set_custom_avatar_menuitem')
 	# Subscription submenu
-	subscription_menuitem = xml.get_widget('subscription_menuitem')
+	subscription_menuitem = xml.get_object('subscription_menuitem')
 	send_auth_menuitem, ask_auth_menuitem, revoke_auth_menuitem = \
 		subscription_menuitem.get_submenu().get_children()
-	add_to_roster_menuitem = xml.get_widget('add_to_roster_menuitem')
-	remove_from_roster_menuitem = xml.get_widget(
+	add_to_roster_menuitem = xml.get_object('add_to_roster_menuitem')
+	remove_from_roster_menuitem = xml.get_object(
 		'remove_from_roster_menuitem')
-	manage_contact_menuitem = xml.get_widget('manage_contact')
-	convert_to_gc_menuitem = xml.get_widget('convert_to_groupchat_menuitem')
-	encryption_separator = xml.get_widget('encryption_separator')
-	toggle_gpg_menuitem = xml.get_widget('toggle_gpg_menuitem')
-	toggle_e2e_menuitem = xml.get_widget('toggle_e2e_menuitem')
-	last_separator = xml.get_widget('last_separator')
+	manage_contact_menuitem = xml.get_object('manage_contact')
+	convert_to_gc_menuitem = xml.get_object('convert_to_groupchat_menuitem')
+	encryption_separator = xml.get_object('encryption_separator')
+	toggle_gpg_menuitem = xml.get_object('toggle_gpg_menuitem')
+	toggle_e2e_menuitem = xml.get_object('toggle_e2e_menuitem')
+	last_separator = xml.get_object('last_separator')
 
 	items_to_hide = []
 

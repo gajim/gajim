@@ -64,24 +64,25 @@ class HistoryWindow:
 	"""
 
 	def __init__(self, jid = None, account = None):
-		xml = gtkgui_helpers.get_glade('history_window.glade')
-		self.window = xml.get_widget('history_window')
-		self.jid_entry = xml.get_widget('jid_entry')
-		self.calendar = xml.get_widget('calendar')
-		scrolledwindow = xml.get_widget('scrolledwindow')
+		xml = gtkgui_helpers.get_gtk_builder('history_window.ui')
+		self.window = xml.get_object('history_window')
+		self.calendar = xml.get_object('calendar')
+		scrolledwindow = xml.get_object('scrolledwindow')
 		self.history_textview = conversation_textview.ConversationTextview(
 			account, used_in_history_window = True)
 		scrolledwindow.add(self.history_textview.tv)
 		self.history_buffer = self.history_textview.tv.get_buffer()
 		self.history_buffer.create_tag('highlight', background = 'yellow')
-		self.checkbutton = xml.get_widget('log_history_checkbutton')
+		self.checkbutton = xml.get_object('log_history_checkbutton')
 		self.checkbutton.connect('toggled',
 			self.on_log_history_checkbutton_toggled)
-		self.query_entry = xml.get_widget('query_entry')
-		self.query_combobox = xml.get_widget('query_combobox')
+		self.query_entry = xml.get_object('query_entry')
+		self.query_combobox = xml.get_object('query_combobox')
+		self.jid_entry = self.query_combobox.child
+		self.jid_entry.connect('activate', self.on_jid_entry_activate)
 		self.query_combobox.set_active(0)
-		self.results_treeview = xml.get_widget('results_treeview')
-		self.results_window = xml.get_widget('results_scrolledwindow')
+		self.results_treeview = xml.get_object('results_treeview')
+		self.results_window = xml.get_object('results_scrolledwindow')
 
 		# contact_name, date, message, time
 		model = gtk.ListStore(str, str, str, str, str)
@@ -130,7 +131,7 @@ class HistoryWindow:
 			gajim.config.get('history_window_x-position'),
 			gajim.config.get('history_window_y-position'))
 
-		xml.signal_autoconnect(self)
+		xml.connect_signals(self)
 		self.window.show_all()
 
 	def _fill_completion_dict(self):
@@ -148,21 +149,20 @@ class HistoryWindow:
 
 		# Add all jids in logs.db:
 		db_jids = gajim.logger.get_jids_in_db()
-		self.completion_dict = dict.fromkeys(db_jids)
+		completion_dict = dict.fromkeys(db_jids)
 
 		self.accounts_seen_online = gajim.contacts.get_accounts()[:]
 
 		# Enhance contacts of online accounts with contact. Needed for mapping below
 		for account in self.accounts_seen_online:
-			self.completion_dict.update(
-				helpers.get_contact_dict_for_account(account))
+			completion_dict.update(helpers.get_contact_dict_for_account(account))
 
 		muc_active_img = gtkgui_helpers.load_icon('muc_active')
 		contact_img = gajim.interface.jabber_state_images['16']['online']
 		muc_active_pix = muc_active_img.get_pixbuf()
 		contact_pix = contact_img.get_pixbuf()
 
-		keys = self.completion_dict.keys()
+		keys = completion_dict.keys()
 		# Move the actual jid at first so we load history faster
 		actual_jid = self.jid_entry.get_text().decode('utf-8')
 		if actual_jid in keys:
@@ -174,7 +174,7 @@ class HistoryWindow:
 		# Warning : This for is time critical with big DB
 		for key in keys:
 			completed = key
-			contact = self.completion_dict[completed]
+			contact = completion_dict[completed]
 			if contact:
 				info_name = contact.get_shown_name()
 				info_completion = info_name
@@ -251,7 +251,7 @@ class HistoryWindow:
 	def on_jid_entry_focus(self, widget, event):
 			widget.select_region(0, -1) # select text
 
-	def _load_history(self, jid_or_name, account = None):
+	def _load_history(self, jid_or_name, account=None):
 		"""
 		Load history for the given jid/name and show it
 		"""

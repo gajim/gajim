@@ -62,6 +62,7 @@ from common import gajim
 from common import xmpp
 from common.exceptions import GajimGeneralException
 from common import helpers
+from common import ged
 
 # Dictionary mapping category, type pairs to browser class, image pairs.
 # This is a function, so we can call it after the classes are declared.
@@ -254,6 +255,24 @@ class ServicesCache:
 		self._info = CacheDictionary(0, getrefresh = False)
 		self._subscriptions = CacheDictionary(5, getrefresh=False)
 		self._cbs = {}
+		gajim.ged.register_event_handler('AGENT_ERROR_INFO', ged.CORE,
+			self.agent_info_error)
+		gajim.ged.register_event_handler('AGENT_ERROR_ITEMS', ged.CORE,
+			self.agent_items_error)
+		gajim.ged.register_event_handler('AGENT_INFO_ITEMS', ged.CORE,
+			self.agent_items)
+		gajim.ged.register_event_handler('AGENT_INFO_INFO', ged.CORE,
+			self.agent_info)
+	
+	def __del__(self):
+		gajim.ged.remove_event_handler('AGENT_ERROR_INFO', ged.CORE,
+			self.agent_info_error)
+		gajim.ged.remove_event_handler('AGENT_ERROR_ITEMS', ged.CORE,
+			self.agent_items_error)
+		gajim.ged.remove_event_handler('AGENT_INFO_ITEMS', ged.CORE,
+			self.agent_items)
+		gajim.ged.remove_event_handler('AGENT_INFO_INFO', ged.CORE,
+			self.agent_info)
 
 	def cleanup(self):
 		self._items.cleanup()
@@ -383,10 +402,15 @@ class ServicesCache:
 			self._cbs[cbkey] = [cb]
 			gajim.connections[self.account].discoverItems(jid, node)
 
-	def agent_info(self, jid, node, identities, features, data):
+	def agent_info(self, account, array):
 		"""
 		Callback for when we receive an agent's info
+		array is (agent, node, identities, features, data)
 		"""
+		# We receive events from all accounts from GED
+		if account != self.account:
+			return
+		jid, node, identities, features, data = array
 		addr = get_agent_address(jid, node)
 
 		# Store in cache
@@ -401,10 +425,15 @@ class ServicesCache:
 			if cbkey in self._cbs:
 				del self._cbs[cbkey]
 
-	def agent_items(self, jid, node, items):
+	def agent_items(self, account, array):
 		"""
 		Callback for when we receive an agent's items
+		array is (agent, node, items)
 		"""
+		# We receive events from all accounts from GED
+		if account != self.account:
+			return
+		jid, node, items = array
 		addr = get_agent_address(jid, node)
 
 		# Store in cache
@@ -419,11 +448,14 @@ class ServicesCache:
 			if cbkey in self._cbs:
 				del self._cbs[cbkey]
 
-	def agent_info_error(self, jid):
+	def agent_info_error(self, account, jid):
 		"""
 		Callback for when a query fails. Even after the browse and agents
 		namespaces
 		"""
+		# We receive events from all accounts from GED
+		if account != self.account:
+			return
 		addr = get_agent_address(jid)
 
 		# Call callbacks
@@ -435,11 +467,14 @@ class ServicesCache:
 			if cbkey in self._cbs:
 				del self._cbs[cbkey]
 
-	def agent_items_error(self, jid):
+	def agent_items_error(self, account, jid):
 		"""
 		Callback for when a query fails. Even after the browse and agents
 		namespaces
 		"""
+		# We receive events from all accounts from GED
+		if account != self.account:
+			return
 		addr = get_agent_address(jid)
 
 		# Call callbacks
@@ -484,29 +519,29 @@ _('Without a connection, you can not browse available services'))
 			self.cache = ServicesCache(account)
 			gajim.connections[account].services_cache = self.cache
 
-		self.xml = gtkgui_helpers.get_glade('service_discovery_window.glade')
-		self.window = self.xml.get_widget('service_discovery_window')
-		self.services_treeview = self.xml.get_widget('services_treeview')
+		self.xml = gtkgui_helpers.get_gtk_builder('service_discovery_window.ui')
+		self.window = self.xml.get_object('service_discovery_window')
+		self.services_treeview = self.xml.get_object('services_treeview')
 		self.model = None
 		# This is more reliable than the cursor-changed signal.
 		selection = self.services_treeview.get_selection()
 		selection.connect_after('changed',
 			self.on_services_treeview_selection_changed)
-		self.services_scrollwin = self.xml.get_widget('services_scrollwin')
-		self.progressbar = self.xml.get_widget('services_progressbar')
-		self.banner = self.xml.get_widget('banner_agent_label')
-		self.banner_icon = self.xml.get_widget('banner_agent_icon')
-		self.banner_eventbox = self.xml.get_widget('banner_agent_eventbox')
+		self.services_scrollwin = self.xml.get_object('services_scrollwin')
+		self.progressbar = self.xml.get_object('services_progressbar')
+		self.banner = self.xml.get_object('banner_agent_label')
+		self.banner_icon = self.xml.get_object('banner_agent_icon')
+		self.banner_eventbox = self.xml.get_object('banner_agent_eventbox')
 		self.style_event_id = 0
 		self.banner.realize()
 		self.paint_banner()
-		self.action_buttonbox = self.xml.get_widget('action_buttonbox')
+		self.action_buttonbox = self.xml.get_object('action_buttonbox')
 
 		# Address combobox
 		self.address_comboboxentry = None
-		address_table = self.xml.get_widget('address_table')
+		address_table = self.xml.get_object('address_table')
 		if address_entry:
-			self.address_comboboxentry = self.xml.get_widget(
+			self.address_comboboxentry = self.xml.get_object(
 				'address_comboboxentry')
 			self.address_comboboxentry_entry = self.address_comboboxentry.child
 			self.address_comboboxentry_entry.set_activates_default(True)
@@ -529,7 +564,7 @@ _('Without a connection, you can not browse available services'))
 			address_table.hide()
 
 		self._initial_state()
-		self.xml.signal_autoconnect(self)
+		self.xml.connect_signals(self)
 		self.travel(jid, node)
 		self.window.show_all()
 
@@ -906,7 +941,7 @@ class AgentBrowser:
 
 		# This is a hack. The buttonbox apparently doesn't care about pack_start
 		# or pack_end, so we repack the close button here to make sure it's last
-		close_button = self.window.xml.get_widget('close_button')
+		close_button = self.window.xml.get_object('close_button')
 		self.window.action_buttonbox.remove(close_button)
 		self.window.action_buttonbox.pack_end(close_button)
 		close_button.show_all()
@@ -1003,7 +1038,7 @@ class AgentBrowser:
 		self.window.progressbar.show()
 		self._pulse_timeout = gobject.timeout_add(250, self._pulse_timeout_cb)
 		self.cache.get_items(self.jid, self.node, self._agent_items,
-			force = force, args = (force,))
+			force=force, args=(force,))
 
 	def _pulse_timeout_cb(self, *args):
 		"""
