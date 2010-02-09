@@ -172,6 +172,7 @@ class StatusIcon:
         status_menuitem = self.xml.get_object('status_menu')
         join_gc_menuitem = self.xml.get_object('join_gc_menuitem')
         sounds_mute_menuitem = self.xml.get_object('sounds_mute_menuitem')
+        show_roster_menuitem = self.xml.get_object('show_roster_menuitem')
 
         if self.single_message_handler_id:
             single_message_menuitem.handler_disconnect(
@@ -316,6 +317,16 @@ class StatusIcon:
 
         sounds_mute_menuitem.set_active(not gajim.config.get('sounds_on'))
 
+        win = gajim.interface.roster.window
+        if win.get_property('has-toplevel-focus'):
+            show_roster_menuitem.get_children()[0].set_label(_('Hide _Roster'))
+            show_roster_menuitem.connect('activate',
+                self.on_hide_roster_menuitem_activate)
+        else:
+            show_roster_menuitem.get_children()[0].set_label(_('Show _Roster'))
+            show_roster_menuitem.connect('activate',
+                self.on_show_roster_menuitem_activate)
+
         if os.name == 'nt':
             if self.added_hide_menuitem is False:
                 self.systray_context_menu.prepend(gtk.SeparatorMenuItem())
@@ -341,6 +352,10 @@ class StatusIcon:
     def on_show_roster_menuitem_activate(self, widget):
         win = gajim.interface.roster.window
         win.present()
+
+    def on_hide_roster_menuitem_activate(self, widget):
+        win = gajim.interface.roster.window
+        win.hide()
 
     def on_preferences_menuitem_activate(self, widget):
         if 'preferences' in gajim.interface.instances:

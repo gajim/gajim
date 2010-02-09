@@ -66,13 +66,11 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="show_roster_menuitem">
-        <property name="label">Show _Roster</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="image">image5</property>
         <property name="use_stock">False</property>
         <property name="accel_group">accelgroup1</property>
-        <signal name="activate" handler="on_show_roster_menuitem_activate"/>
       </object>
     </child>
     <child>
