@@ -4,7 +4,7 @@
   <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -13,7 +13,6 @@
     <property name="title" translatable="yes">Manage Bookmarks</property>
     <property name="default_width">550</property>
     <property name="default_height">300</property>
-    <signal name="button_press_event" handler="on_manage_bookmarks_window_button_press_event"/>
     <child>
       <object class="GtkVBox" id="vbox86">
         <property name="visible">True</property>
