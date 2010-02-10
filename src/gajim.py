@@ -70,15 +70,15 @@ import getopt
 from common import i18n
 
 def parseOpts():
-    profile = ''
-    config_path = None
+    profile_ = ''
+    config_path_ = None
 
     try:
         shortargs = 'hqvl:p:c:'
         longargs = 'help quiet verbose loglevel= profile= config_path='
         opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
-    except getopt.error, msg:
-        print msg
+    except getopt.error, msg1:
+        print msg1
         print 'for help use --help'
         sys.exit(2)
     for o, a in opts:
@@ -92,12 +92,12 @@ def parseOpts():
         elif o in ('-v', '--verbose'):
             logging_helpers.set_verbose()
         elif o in ('-p', '--profile'): # gajim --profile name
-            profile = a
+            profile_ = a
         elif o in ('-l', '--loglevel'):
             logging_helpers.set_loglevels(a)
         elif o in ('-c', '--config-path'):
-            config_path = a
-    return profile, config_path
+            config_path_ = a
+    return profile_, config_path_
 
 profile, config_path = parseOpts()
 del parseOpts
@@ -136,11 +136,11 @@ if os.name == 'nt':
 warnings.filterwarnings('error', module='gtk')
 try:
     import gtk
-except Warning, msg:
-    if str(msg) == 'could not open display':
+except Warning, msg2:
+    if str(msg2) == 'could not open display':
         print >> sys.stderr, _('Gajim needs X server to run. Quiting...')
     else:
-        print >> sys.stderr, _('importing PyGTK failed: %s') % str(msg)
+        print >> sys.stderr, _('importing PyGTK failed: %s') % str(msg2)
     sys.exit()
 warnings.resetwarnings()
 
@@ -268,7 +268,7 @@ def pid_alive():
                     ('szExeFile', c_char*512, ),
                     ]
             def __init__(self):
-                Structure.__init__(self, 512+9*4)
+                super(PROCESSENTRY32, self).__init__(self, 512+9*4)
 
         k = windll.kernel32
         k.CreateToolhelp32Snapshot.argtypes = c_ulong, c_ulong,
@@ -278,15 +278,15 @@ def pid_alive():
         k.Process32Next.argtypes = c_int, POINTER(PROCESSENTRY32),
         k.Process32Next.restype = c_int
 
-        def get_p(p):
+        def get_p(pid_):
             h = k.CreateToolhelp32Snapshot(2, 0) # TH32CS_SNAPPROCESS
             assert h > 0, 'CreateToolhelp32Snapshot failed'
             b = pointer(PROCESSENTRY32())
-            f = k.Process32First(h, b)
-            while f:
-                if b.contents.th32ProcessID == p:
+            f3 = k.Process32First(h, b)
+            while f3:
+                if b.contents.th32ProcessID == pid_:
                     return b.contents.szExeFile
-                f = k.Process32Next(h, b)
+                f3 = k.Process32Next(h, b)
 
         if get_p(pid) in ('python.exe', 'gajim.exe'):
             return True
@@ -296,14 +296,14 @@ def pid_alive():
             return True # no /proc, assume Gajim is running
 
         try:
-            f = open('/proc/%d/cmdline'% pid)
-        except IOError, e:
-            if e.errno == errno.ENOENT:
+            f1 = open('/proc/%d/cmdline'% pid)
+        except IOError, e1:
+            if e1.errno == errno.ENOENT:
                 return False # file/pid does not exist
             raise
 
-        n = f.read().lower()
-        f.close()
+        n = f1.read().lower()
+        f1.close()
         if n.find('gajim') < 0:
             return False
         return True # Running Gajim found at pid
@@ -338,16 +338,15 @@ if not os.path.exists(pid_dir):
     check_paths.create_path(pid_dir)
 # Create pid file
 try:
-    f = open(pid_filename, 'w')
-    f.write(str(os.getpid()))
-    f.close()
-except IOError, e:
-    dlg = dialogs.ErrorDialog(_('Disk Write Error'), str(e))
+    f2 = open(pid_filename, 'w')
+    f2.write(str(os.getpid()))
+    f2.close()
+except IOError, e2:
+    dlg = dialogs.ErrorDialog(_('Disk Write Error'), str(e2))
     dlg.run()
     dlg.destroy()
     sys.exit()
 del pid_dir
-del f
 
 def on_exit():
     # delete pid file on normal exit
@@ -379,7 +378,7 @@ if __name__ == '__main__':
         except ImportError:
             pass
         else:
-            def die_cb(cli):
+            def die_cb(dummy):
                 gajim.interface.roster.quit_gtkgui_interface()
             gnome.program_init('gajim', gajim.version)
             cli = gnome.ui.master_client()
@@ -390,13 +389,7 @@ if __name__ == '__main__':
 
             if path_to_gajim_script:
                 argv = [path_to_gajim_script]
-                # FIXME: remove this typeerror catch when gnome python is old
-                # and not bad patched by distro men [2.12.0 + should not need
-                # all that NORMALLY]
-                try:
-                    cli.set_restart_command(argv)
-                except AttributeError:
-                    cli.set_restart_command(len(argv), argv)
+                cli.set_restart_command(len(argv), argv)
 
     check_paths.check_and_possibly_create_paths()
 
