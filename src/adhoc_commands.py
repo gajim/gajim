@@ -56,8 +56,8 @@ class CommandWindow:
         self.account = gajim.connections[account]
         self.jid = jid
 
-        self.pulse_id=None      # to satisfy self.setup_pulsing()
-        self.commandlist=None   # a list of (commandname, commanddescription)
+        self.pulse_id = None      # to satisfy self.setup_pulsing()
+        self.commandlist = None   # a list of (commandname, commanddescription)
 
         # command's data
         self.commandnode = commandnode
@@ -68,7 +68,8 @@ class CommandWindow:
         # retrieving widgets from xml
         self.xml = gtkgui_helpers.get_gtk_builder('adhoc_commands_window.ui')
         self.window = self.xml.get_object('adhoc_commands_window')
-        self.window.connect('delete-event', self.on_adhoc_commands_window_delete_event)
+        self.window.connect('delete-event',
+            self.on_adhoc_commands_window_delete_event)
         for name in ('back_button', 'forward_button',
                 'execute_button','close_button','stages_notebook',
                 'retrieving_commands_stage_vbox',
@@ -130,7 +131,7 @@ class CommandWindow:
         return self.stage_close_button_clicked(*anything)
 
     def on_adhoc_commands_window_destroy(self, *anything):
-        # TODO: do all actions that are needed to remove this object from memory...
+        # TODO: do all actions that are needed to remove this object from memory
         self.remove_pulsing()
 
     def on_adhoc_commands_window_delete_event(self, *anything):
@@ -167,7 +168,8 @@ class CommandWindow:
         # setup the callbacks
         self.stage_finish = self.stage1_finish
         self.stage_close_button_clicked = self.stage1_close_button_clicked
-        self.stage_adhoc_commands_window_delete_event = self.stage1_adhoc_commands_window_delete_event
+        self.stage_adhoc_commands_window_delete_event = \
+            self.stage1_adhoc_commands_window_delete_event
 
     def stage1_finish(self):
         self.remove_pulsing()
@@ -196,8 +198,7 @@ class CommandWindow:
         assert len(self.commandlist)>0
 
         self.stages_notebook.set_current_page(
-                self.stages_notebook.page_num(
-                        self.command_list_stage_vbox))
+            self.stages_notebook.page_num(self.command_list_stage_vbox))
 
         self.close_button.set_sensitive(True)
         self.back_button.set_sensitive(False)
@@ -208,7 +209,8 @@ class CommandWindow:
         first_radio = None
         for (commandnode, commandname) in self.commandlist:
             radio = gtk.RadioButton(first_radio, label=commandname)
-            radio.connect("toggled", self.on_command_radiobutton_toggled, commandnode)
+            radio.connect("toggled", self.on_command_radiobutton_toggled,
+                commandnode)
             if not first_radio:
                 first_radio = radio
                 self.commandnode = commandnode
@@ -266,7 +268,8 @@ class CommandWindow:
         self.stage_forward_button_clicked = self.stage3_forward_button_clicked
         self.stage_execute_button_clicked = self.stage3_execute_button_clicked
         self.stage_close_button_clicked = self.stage3_close_button_clicked
-        self.stage_adhoc_commands_window_delete_event = self.stage3_close_button_clicked
+        self.stage_adhoc_commands_window_delete_event = \
+            self.stage3_close_button_clicked
 
     def stage3_finish(self):
         pass
@@ -276,10 +279,10 @@ class CommandWindow:
         We are in the middle of executing command. Ask user if he really want to
         cancel the process, then cancel it
         """
-        # this works also as a handler for window_delete_event, so we have to return appropriate
-        # values
+        # this works also as a handler for window_delete_event, so we have to
+        # return appropriate values
         if self.form_status == 'completed':
-            if widget!=self.window:
+            if widget != self.window:
                 self.window.destroy()
             return False
 
@@ -291,10 +294,10 @@ class CommandWindow:
             self.allow_stage3_close = True
             self.window.destroy()
 
-        dialog = dialogs.HigDialog(self.window, gtk.DIALOG_DESTROY_WITH_PARENT | \
-                gtk.DIALOG_MODAL, gtk.BUTTONS_YES_NO, _('Cancel confirmation'),
-                _('You are in process of executing command. Do you really want to '
-                'cancel it?'), on_response_yes=on_yes)
+        dialog = dialogs.HigDialog(self.window, gtk.DIALOG_DESTROY_WITH_PARENT \
+            | gtk.DIALOG_MODAL, gtk.BUTTONS_YES_NO, _('Cancel confirmation'),
+            _('You are in process of executing command. Do you really want to '
+            'cancel it?'), on_response_yes=on_yes)
         dialog.popup()
         return True # Block event, don't close window
 
@@ -310,7 +313,7 @@ class CommandWindow:
     def stage3_submit_form(self, action='execute'):
         self.data_form_widget.set_sensitive(False)
         if self.data_form_widget.get_data_form():
-            self.data_form_widget.data_form.type='submit'
+            self.data_form_widget.data_form.type = 'submit'
         else:
             self.data_form_widget.hide()
 
@@ -346,9 +349,10 @@ class CommandWindow:
 
             self.data_form_widget.set_sensitive(True)
             try:
-                self.data_form_widget.data_form=self.dataform
+                self.data_form_widget.data_form = self.dataform
             except dataforms.Error:
-                self.stage5(error=_('Service sent malformed data'), senderror=True)
+                self.stage5(error=_('Service sent malformed data'),
+                    senderror=True)
                 return
             self.data_form_widget.show()
             if self.data_form_widget.title:
@@ -362,7 +366,8 @@ class CommandWindow:
             # actions, actions, actions...
             self.close_button.set_sensitive(True)
             self.back_button.set_sensitive(actions.getTag('prev') is not None)
-            self.forward_button.set_sensitive(actions.getTag('next') is not None)
+            self.forward_button.set_sensitive(
+                actions.getTag('next') is not None)
             self.execute_button.set_sensitive(True)
         else:
             self.close_button.set_sensitive(True)
@@ -376,7 +381,8 @@ class CommandWindow:
             self.forward_button.hide()
             self.execute_button.hide()
             self.close_button.show()
-            self.stage_adhoc_commands_window_delete_event = self.stage3_close_button_clicked
+            self.stage_adhoc_commands_window_delete_event = \
+                self.stage3_close_button_clicked
 
         note = command.getTag('note')
         if note:
@@ -396,8 +402,7 @@ class CommandWindow:
         self.stage_finish()
 
         self.stages_notebook.set_current_page(
-                self.stages_notebook.page_num(
-                        self.no_commands_stage_vbox))
+            self.stages_notebook.page_num(self.no_commands_stage_vbox))
 
         self.close_button.set_sensitive(True)
         self.back_button.set_sensitive(False)
@@ -442,8 +447,7 @@ class CommandWindow:
             assert False
 
         self.stages_notebook.set_current_page(
-                self.stages_notebook.page_num(
-                        self.error_stage_vbox))
+            self.stages_notebook.page_num(self.error_stage_vbox))
 
         self.close_button.set_sensitive(True)
         self.back_button.hide()
@@ -481,14 +485,15 @@ class CommandWindow:
         """
         if self.pulse_id:
             gobject.source_remove(self.pulse_id)
-        self.pulse_id=None
+        self.pulse_id = None
 
 # handling xml stanzas
     def request_command_list(self):
         """
         Request the command list. Change stage on delivery
         """
-        query = xmpp.Iq(typ='get', to=xmpp.JID(self.jid), queryNS=xmpp.NS_DISCO_ITEMS)
+        query = xmpp.Iq(typ='get', to=xmpp.JID(self.jid),
+            queryNS=xmpp.NS_DISCO_ITEMS)
         query.setQuerynode(xmpp.NS_COMMANDS)
 
         def callback(response):
@@ -512,7 +517,8 @@ class CommandWindow:
                 self.commandlist = []
                 self.stage4()
             else:
-                self.commandlist = [(t.getAttr('node'), t.getAttr('name')) for t in items]
+                self.commandlist = [(t.getAttr('node'), t.getAttr('name')) \
+                    for t in items]
                 self.stage2()
 
         self.account.connection.SendAndCallForResponse(query, callback)
@@ -533,9 +539,6 @@ class CommandWindow:
             cmdnode.setAttr('sessionid', self.sessionid)
 
         if self.data_form_widget.data_form:
-#                       cmdnode.addChild(node=dataforms.DataForm(tofill=self.data_form_widget.data_form))
-            # FIXME: simplified form to send
-
             cmdnode.addChild(node=self.data_form_widget.data_form)
 
         def callback(response):
@@ -564,6 +567,6 @@ class CommandWindow:
 
             self.account.connection.send(stanza)
         else:
-            # we did not received any reply from service; FIXME: we should wait and
-            # then send cancel; for now we do nothing
+            # we did not received any reply from service;
+            # FIXME: we should wait and then send cancel; for now we do nothing
             pass
