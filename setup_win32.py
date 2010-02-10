@@ -54,39 +54,34 @@ opts = {
         # ConfigParser,UserString,roman are needed for docutils
         'includes': 'pango,atk,gobject,cairo,pangocairo,gtk.keysyms,encodings,encodings.*,ConfigParser,UserString',
         'dll_excludes': [
-            'iconv.dll','intl.dll','libatk-1.0-0.dll',
-            'libgdk_pixbuf-2.0-0.dll','libgdk-win32-2.0-0.dll',
-            'libglib-2.0-0.dll','libgmodule-2.0-0.dll',
-            'libgobject-2.0-0.dll','libgthread-2.0-0.dll',
-            'libgtk-win32-2.0-0.dll','libpango-1.0-0.dll',
-            'libpangowin32-1.0-0.dll','libcairo-2.dll',
-            'libpangocairo-1.0-0.dll','libpangoft2-1.0-0.dll',
+            'iconv.dll', 'intl.dll', 'libatk-1.0-0.dll',
+            'libgdk_pixbuf-2.0-0.dll', 'libgdk-win32-2.0-0.dll',
+            'libglib-2.0-0.dll', 'libgmodule-2.0-0.dll',
+            'libgobject-2.0-0.dll', 'libgthread-2.0-0.dll',
+            'libgtk-win32-2.0-0.dll', 'libpango-1.0-0.dll',
+            'libpangowin32-1.0-0.dll', 'libcairo-2.dll',
+            'libpangocairo-1.0-0.dll', 'libpangoft2-1.0-0.dll',
         ],
         'excludes': [
             'docutils'
         ],
-		  'optimize': 2,
+        'optimize': 2,
     }
 }
 
 
 setup(
-    name = 'Gajim',
-    version = '0.12.1',
-    description = 'A full featured Jabber client',
-    author = 'Gajim Development Team',
-    url = 'http://www.gajim.org/',
-    download_url = 'http://www.gajim.org/downloads.php',
-    license = 'GPL',
-
-    windows = [{'script': 'src/gajim.py',
-                'icon_resources': [(1, 'data/pixmaps/gajim.ico')]},
-               {'script': 'src/history_manager.py',
-                'icon_resources': [(1, 'data/pixmaps/gajim.ico')]}],
+    name='Gajim',
+    version='0.12.1',
+    description='A full featured Jabber client',
+    author='Gajim Development Team',
+    url='http://www.gajim.org/',
+    download_url='http://www.gajim.org/downloads.php',
+    license='GPL',
+    windows=[{'script': 'src/gajim.py',
+              'icon_resources': [(1, 'data/pixmaps/gajim.ico')]},
+             {'script': 'src/history_manager.py',
+              'icon_resources': [(1, 'data/pixmaps/gajim.ico')]}],
     options=opts,
-
     data_files=docutils_files,
-
 )
-
-# vim: se ts=3:

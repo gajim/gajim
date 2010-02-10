@@ -27,28 +27,28 @@ These constants have been obtained from RFC2409 and RFC3526.
 '''
 import string
 
-generators = [	None, # one to get the right offset
-								2,
-								2,
-								None,
-								None,
-								2,
-								None,
-								None,
-								None,
-								None,
-								None,
-								None,
-								None,
-								None,
-								2,			# group 14
-								2,
-								2,
-								2,
-								2,
-											]
+generators = [  None, # one to get the right offset
+                                                                2,
+                                                                2,
+                                                                None,
+                                                                None,
+                                                                2,
+                                                                None,
+                                                                None,
+                                                                None,
+                                                                None,
+                                                                None,
+                                                                None,
+                                                                None,
+                                                                None,
+                                                                2,                      # group 14
+                                                                2,
+                                                                2,
+                                                                2,
+                                                                2,
+                                                                                        ]
 
-hex_primes = [	None,
+hex_primes = [  None,
 
 # group 1
 '''FFFFFFFF FFFFFFFF C90FDAA2 2168C234 C4C6628B 80DC1CD1
@@ -221,11 +221,9 @@ B1D510BD 7EE74D73 FAF36BC3 1ECFA268 359046F4 EB879F92
 all_ascii = ''.join(map(chr, range(256)))
 
 def hex_to_decimal(stripee):
-	if not stripee:
-		return None
+    if not stripee:
+        return None
 
-	return int(stripee.translate(all_ascii, string.whitespace), 16)
+    return int(stripee.translate(all_ascii, string.whitespace), 16)
 
 primes = map(hex_to_decimal, hex_primes)
-
-# vim: se ts=3:
