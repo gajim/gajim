@@ -189,8 +189,8 @@ class ProfileWindow:
                 nick = gajim.config.get_per('accounts', self.account, 'name')
                 menuitem = gtk.ImageMenuItem(gtk.STOCK_SAVE_AS)
                 menuitem.connect('activate',
-                        gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-                        self.jid, self.account, nick)
+                    gtkgui_helpers.on_avatar_save_as_menuitem_activate,
+                    self.jid, nick)
                 menu.append(menuitem)
             # show clear
             menuitem = gtk.ImageMenuItem(gtk.STOCK_CLEAR)
