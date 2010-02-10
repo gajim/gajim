@@ -25,7 +25,7 @@ try:
     from docutils import io
     from docutils.core import Publisher
     from docutils.parsers.rst import roles
-    from docutils import nodes,utils
+    from docutils import nodes, utils
     from docutils.parsers.rst.roles import set_classes
 except ImportError:
     print "Requires docutils 0.4 for set_classes to be available"
@@ -91,7 +91,7 @@ else:
     generate_uri_role('xep-reference', ('jep', 'xep'),
                             'XEP #', 'http://www.xmpp.org/extensions/', 'xep-%04d.html',
                             pos_int_validator)
-    generate_uri_role('gajim-ticket-reference', ('ticket','gtrack'),
+    generate_uri_role('gajim-ticket-reference', ('ticket', 'gtrack'),
                             'Gajim Ticket #', 'http://trac.gajim.org/ticket/', '%d',
                             pos_int_validator)
 

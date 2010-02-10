@@ -74,7 +74,7 @@ if dbus_support.supported:
         if 'org.freedesktop.NetworkManager' in bus.list_names():
             nm_object = bus.get_object('org.freedesktop.NetworkManager',
                     '/org/freedesktop/NetworkManager')
-            props = dbus.Interface(nm_object,"org.freedesktop.DBus.Properties")
+            props = dbus.Interface(nm_object, "org.freedesktop.DBus.Properties")
             bus.add_signal_receiver(state_changed,
                     'StateChanged',
                     'org.freedesktop.NetworkManager',

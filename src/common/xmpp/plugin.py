@@ -60,7 +60,7 @@ class PlugIn:
             owner.__dict__[self.__class__.__name__]=self
 
         # Execute hook
-        if hasattr(self,'plugin'):
+        if hasattr(self, 'plugin'):
             return self.plugin(owner)
 
     def PlugOut(self):
@@ -80,7 +80,7 @@ class PlugIn:
         else:
             del self._owner.__dict__[self.__class__.__name__]
         # Execute hook
-        if hasattr(self,'plugout'):
+        if hasattr(self, 'plugout'):
             return self.plugout()
         del self._owner
 

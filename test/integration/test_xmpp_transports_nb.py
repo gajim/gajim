@@ -70,7 +70,7 @@ class TestNonBlockingTCP(AbstractTransportTest):
         def do_connect(self, establish_tls=False, proxy_dict=None):
             try:
                 ips = socket.getaddrinfo('gajim.org', 5222,
-                        socket.AF_UNSPEC,socket.SOCK_STREAM)
+                        socket.AF_UNSPEC, socket.SOCK_STREAM)
                 ip = ips[0]
             except socket.error, e:
                 self.testcase.fail(msg=str(e))

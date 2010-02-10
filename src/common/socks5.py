@@ -387,7 +387,7 @@ class Socks5:
     def open_file_for_reading(self):
         if self.file is None:
             try:
-                self.file = open(self.file_props['file-name'],'rb')
+                self.file = open(self.file_props['file-name'], 'rb')
                 if 'offset' in self.file_props and self.file_props['offset']:
                     self.size = self.file_props['offset']
                     self.file.seek(self.size)
@@ -448,7 +448,7 @@ class Socks5:
             self.disconnect()
         return add
 
-    def send_raw(self,raw_data):
+    def send_raw(self, raw_data):
         """
         Write raw outgoing data
         """
@@ -651,7 +651,7 @@ class Socks5:
                 host, = '.'.join(str(s) for s in host_arr)
                 host_len = len(host)
             elif host_type == 0x03:
-                host_len,  = struct.unpack('!B' , buff[4])
+                host_len,  = struct.unpack('!B', buff[4])
                 host, = struct.unpack('!%ds' % host_len, buff[5:5 + host_len])
             portlen = len(buff[host_len + 5:])
             if portlen == 1:

@@ -373,7 +373,7 @@ class NonBlockingBOSH(NonBlockingTransport):
     def get_current_state(self):
         t = '------ SOCKET_ID\tSOCKET_STATE\tPENDING_REQS\n'
         for s in self.http_socks:
-            t = '%s------ %s\t%s\t%s\n' % (t,id(s), s.get_state(), s.pending_requests)
+            t = '%s------ %s\t%s\t%s\n' % (t, id(s), s.get_state(), s.pending_requests)
         t = '%s------ prio stanzas: %s, queued XMPP stanzas: %s, not_acked stanzas: %s' \
                 % (t, self.prio_bosh_stanzas, self.stanza_buffer,
                 self.ack_checker.get_not_acked_rids())
@@ -417,7 +417,7 @@ class NonBlockingBOSH(NonBlockingTransport):
                             'xmpp:version': '1.0',
                             'ver': '1.6',
                             'xmlns:xmpp': 'urn:xmpp:xbosh'})
-        self.send_BOSH((t,True))
+        self.send_BOSH((t, True))
 
     def start_disconnect(self):
         NonBlockingTransport.start_disconnect(self)

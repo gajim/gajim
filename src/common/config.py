@@ -73,7 +73,7 @@ class Config:
             'notify_on_new_message': [ opt_bool, True ],
             'autopopupaway': [ opt_bool, False ],
             'sounddnd': [ opt_bool, False, _('Play sound when user is busy')],
-            'use_notif_daemon': [ opt_bool, True , _('Use D-Bus and Notification-Daemon to show notifications') ],
+            'use_notif_daemon': [ opt_bool, True, _('Use D-Bus and Notification-Daemon to show notifications') ],
             'showoffline': [ opt_bool, False ],
             'show_only_chat_and_online': [ opt_bool, False, _('Show only online and free for chat contacts in roster.')],
             'show_transports_group': [ opt_bool, True ],
@@ -115,7 +115,7 @@ class Config:
             'emoticons_theme': [opt_str, 'static', '', True ],
             'ascii_formatting': [ opt_bool, True,
                     _('Treat * / _ pairs as possible formatting characters.'), True],
-            'show_ascii_formatting_chars': [ opt_bool, True , _('If True, do not '
+            'show_ascii_formatting_chars': [ opt_bool, True, _('If True, do not '
                     'remove */_ . So *abc* will be bold but with * * not removed.')],
             'rst_formatting_outgoing_messages': [ opt_bool, False,
                     _('Uses ReStructured text markup to send HTML, plus ascii formatting if selected. For syntax, see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html (If you want to use this, install docutils)')],
@@ -268,7 +268,7 @@ class Config:
             'max_conversation_lines': [opt_int, 500, _('Maximum number of lines that are printed in conversations. Oldest lines are cleared.')],
             'attach_notifications_to_systray': [opt_bool, False, _('If True, notification windows from notification-daemon will be attached to systray icon.')],
             'check_idle_every_foo_seconds': [opt_int, 2, _('Choose interval between 2 checks of idleness.')],
-            'latex_png_dpi': [opt_str, '108',_('Change the value to change the size of latex formulas displayed. The higher is larger.') ],
+            'latex_png_dpi': [opt_str, '108', _('Change the value to change the size of latex formulas displayed. The higher is larger.') ],
             'uri_schemes': [opt_str, 'aaa aaas acap cap cid crid data dav dict dns fax file ftp go gopher h323 http https icap im imap info ipp iris iris.beep iris.xpc iris.xpcs iris.lwz ldap mid modem msrp msrps mtqp mupdate news nfs nntp opaquelocktoken pop pres rtsp service shttp sip sips snmp soap.beep soap.beeps tag tel telnet tftp thismessage tip tv urn vemmi xmlrpc.beep xmlrpc.beeps z39.50r z39.50s about cvs daap ed2k feed fish git iax2 irc ircs ldaps magnet mms rsync ssh svn sftp smb webcal', _('Valid uri schemes. Only schemes in this list will be accepted as "real" uri. (mailto and xmpp are handled separately)'), True],
             'ask_offline_status_on_connection': [ opt_bool, False, _('Ask offline status message to all offline contacts when connection to an accoutn is established. WARNING: This causes a lot of requests to be sent!') ],
             'shell_like_completion': [ opt_bool, False, _('If True, completion in groupchats will be like a shell auto-completion')],
@@ -342,7 +342,7 @@ class Config:
                     'msgwin-y-position': [opt_int, -1], # Default is to let the wm decide
                     'msgwin-width': [opt_int, 480],
                     'msgwin-height': [opt_int, 440],
-                    'listen_to_network_manager' : [opt_bool, True],
+                    'listen_to_network_manager': [opt_bool, True],
                     'is_zeroconf': [opt_bool, False],
                     'last_status': [opt_str, 'online'],
                     'last_status_msg': [opt_str, ''],
@@ -350,9 +350,9 @@ class Config:
                     'zeroconf_last_name': [ opt_str, '', '', True ],
                     'zeroconf_jabber_id': [ opt_str, '', '', True ],
                     'zeroconf_email': [ opt_str, '', '', True ],
-                    'use_env_http_proxy' : [opt_bool, False],
-                    'answer_receipts' : [opt_bool, True, _('Answer to receipt requests')],
-                    'request_receipt' : [opt_bool, True, _('Sent receipt requests')],
+                    'use_env_http_proxy': [opt_bool, False],
+                    'answer_receipts': [opt_bool, True, _('Answer to receipt requests')],
+                    'request_receipt': [opt_bool, True, _('Sent receipt requests')],
                     'publish_tune': [opt_bool, False],
                     'publish_location': [opt_bool, False],
                     'subscribe_mood': [opt_bool, True],
@@ -493,7 +493,7 @@ class Config:
 
     themes_default = {
             # sorted alphanum
-            _('default'): [ '', '', '', 'B', '', '','', 'I', '', '', '', '', '','',
+            _('default'): [ '', '', '', 'B', '', '', '', 'I', '', '', '', '', '', '',
                     '', 'B' ],
 
             _('green'): [ '', '#94aa8c', '', 'B', '#0000ff', '#eff3e7',

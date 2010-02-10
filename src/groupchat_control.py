@@ -2015,7 +2015,7 @@ class GroupchatControl(ChatControlBase):
         item = xml.get_object('member_checkmenuitem')
         item.set_active(target_affiliation != 'none')
         if not user_affiliation in ('admin', 'owner') or \
-        (user_affiliation != 'owner' and target_affiliation in ('admin','owner')):
+        (user_affiliation != 'owner' and target_affiliation in ('admin', 'owner')):
             item.set_sensitive(False)
         id_ = item.connect('activate', self.on_member_checkmenuitem_activate, jid)
         self.handlers[id_] = item
@@ -2226,7 +2226,7 @@ class GroupchatControl(ChatControlBase):
         # check if the current pointer is at the same path
         # as it was before setting the timeout
         if props and self.tooltip.id == props[0]:
-            rect = self.list_treeview.get_cell_area(props[0],props[1])
+            rect = self.list_treeview.get_cell_area(props[0], props[1])
             position = self.list_treeview.window.get_origin()
             self.tooltip.show_tooltip(contact, rect.height,
                                                                             position[1] + rect.y)

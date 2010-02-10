@@ -424,7 +424,7 @@ class EncryptedStanzaSession(StanzaSession):
 
                     n, e = (crypto.decode_mpi(base64.b64decode(
                             keyvalue.getTagData(x))) for x in ('Modulus', 'Exponent'))
-                    eir_pubkey = RSA.construct((n,long(e)))
+                    eir_pubkey = RSA.construct((n, long(e)))
 
                     pubkey_o = xmpp.c14n.c14n(keyvalue, self._is_buggy_gajim())
                 else:
@@ -750,7 +750,7 @@ class EncryptedStanzaSession(StanzaSession):
         else:
             negotiated['logging'] = self.logging_preference()[0]
 
-        for r,a in (('recv_pubkey', 'resp_pubkey'), ('send_pubkey',
+        for r, a in (('recv_pubkey', 'resp_pubkey'), ('send_pubkey',
         'init_pubkey')):
             negotiated[r] = None
 

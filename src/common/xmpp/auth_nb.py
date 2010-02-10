@@ -202,7 +202,7 @@ class SASL(PlugIn):
     def MechanismHandler(self):
         if 'ANONYMOUS' in self.mecs and self.username is None:
             self.mecs.remove('ANONYMOUS')
-            node = Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'ANONYMOUS'})
+            node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'ANONYMOUS'})
             self.mechanism = 'ANONYMOUS'
             self.startsasl = SASL_IN_PROCESS
             self._owner.send(str(node))
@@ -222,7 +222,7 @@ class SASL(PlugIn):
                         self._owner.xmpp_hostname)[1]
                 kerberos.authGSSClientStep(self.gss_vc, '')
                 response = kerberos.authGSSClientResponse(self.gss_vc)
-                node=Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'GSSAPI'},
+                node=Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'GSSAPI'},
                         payload=(response or ''))
                 self.mechanism = 'GSSAPI'
                 self.gss_step = GSS_STATE_STEP
@@ -233,7 +233,7 @@ class SASL(PlugIn):
                 log.info('GSSAPI authentication failed: %s' % str(e))
         if 'DIGEST-MD5' in self.mecs:
             self.mecs.remove('DIGEST-MD5')
-            node = Node('auth',attrs={'xmlns': NS_SASL, 'mechanism': 'DIGEST-MD5'})
+            node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'DIGEST-MD5'})
             self.mechanism = 'DIGEST-MD5'
             self.startsasl = SASL_IN_PROCESS
             self._owner.send(str(node))
@@ -369,7 +369,7 @@ class SASL(PlugIn):
             sasl_data = u''
             for key in ('charset', 'username', 'realm', 'nonce', 'nc', 'cnonce',
             'digest-uri', 'response', 'qop'):
-                if key in ('nc','qop','response','charset'):
+                if key in ('nc', 'qop', 'response', 'charset'):
                     sasl_data += u"%s=%s," % (key, self.resp[key])
                 else:
                     sasl_data += u'%s="%s",' % (key, self.resp[key])
@@ -422,10 +422,10 @@ class NonBlockingNonSASL(PlugIn):
             log.error('No result node arrived! Aborting...')
             return self.on_auth(None)
 
-        iq=Iq(typ='set',node=resp)
+        iq=Iq(typ='set', node=resp)
         query = iq.getTag('query')
-        query.setTagData('username',self.user)
-        query.setTagData('resource',self.resource)
+        query.setTagData('username', self.user)
+        query.setTagData('resource', self.resource)
 
         if query.getTag('digest'):
             log.info("Performing digest authentication")
@@ -454,7 +454,7 @@ class NonBlockingNonSASL(PlugIn):
                     authentication")
             query.setTagData('password', self.password)
             self._method = 'plain'
-        resp = self.owner.Dispatcher.SendAndWaitForResponse(iq,func=self._on_auth)
+        resp = self.owner.Dispatcher.SendAndWaitForResponse(iq, func=self._on_auth)
 
     def _on_auth(self, resp):
         if isResultNode(resp):
@@ -527,7 +527,7 @@ class NonBlockingBind(PlugIn):
 
         self._owner.onreceive(None)
         self._owner.Dispatcher.SendAndWaitForResponse(
-                Protocol('iq',typ='set', payload=[Node('bind', attrs={'xmlns':NS_BIND},
+                Protocol('iq', typ='set', payload=[Node('bind', attrs={'xmlns':NS_BIND},
                 payload=self._resource)]), func=self._on_bound)
 
     def _on_bound(self, resp):

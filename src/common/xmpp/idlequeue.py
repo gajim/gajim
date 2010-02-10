@@ -475,7 +475,7 @@ class SelectIdleQueue(IdleQueue):
             waiting_descriptors = select.select(self.read_fds.keys(),
                     self.write_fds.keys(), self.error_fds.keys(), 0)
         except select.error, e:
-            waiting_descriptors = ((),(),())
+            waiting_descriptors = ((), (), ())
             if e[0] != 4: # interrupt
                 raise
         for fd in waiting_descriptors[0]:

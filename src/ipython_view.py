@@ -106,7 +106,7 @@ class IterableIPShell:
         os.environ['TERM'] = 'dumb'
         excepthook = sys.excepthook
         self.IP = IPython.Shell.make_IPython(
-          argv,user_ns=user_ns,
+          argv, user_ns=user_ns,
           user_global_ns=user_global_ns,
           embedded=True,
           shell_class=IPython.Shell.InteractiveShell)
@@ -397,7 +397,7 @@ class ConsoleView(gtk.TextView):
         if text:
             self._write('\n')
         self._showPrompt(self.prompt)
-        self.text_buffer.move_mark(self.line_start,self.text_buffer.get_end_iter())
+        self.text_buffer.move_mark(self.line_start, self.text_buffer.get_end_iter())
         self.text_buffer.place_cursor(self.text_buffer.get_end_iter())
 
     def onKeyPress(self, widget, event):
@@ -462,7 +462,7 @@ class IPythonView(ConsoleView, IterableIPShell):
         """
         ConsoleView.__init__(self)
         self.cout = StringIO()
-        IterableIPShell.__init__(self, cout=self.cout,cerr=self.cout,
+        IterableIPShell.__init__(self, cout=self.cout, cerr=self.cout,
                                  input_func=self.raw_input)
 #    self.connect('key_press_event', self.keyPress)
         self.execute()

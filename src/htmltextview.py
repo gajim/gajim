@@ -68,7 +68,7 @@ display_resolution = 0.3514598*(gtk.gdk.screen_height() /
 # embryo of CSS classes
 classes = {
         #'system-message':';display: none',
-        'problematic':';color: red',
+        'problematic': ';color: red',
 }
 
 # styles for elements
@@ -245,9 +245,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         """
         if value.endswith('%'):
             val = float(value[:-1])
-            sign = cmp(val,0)
+            sign = cmp(val, 0)
             # limits: 1% to 500%
-            val = sign*max(1,min(abs(val),500))
+            val = sign*max(1, min(abs(val), 500))
             frac = val/100
             if font_relative:
                 attrs = self._get_current_attributes()
@@ -270,9 +270,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 
         def get_val():
             val = float(value[:-2])
-            sign = cmp(val,0)
+            sign = cmp(val, 0)
             # validate length
-            return sign*max(minl,min(abs(val*display_resolution),maxl))
+            return sign*max(minl, min(abs(val*display_resolution), maxl))
         if value.endswith('pt'): # points
             callback(get_val()*display_resolution, *args)
 
@@ -295,9 +295,9 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             try:
                 # TODO: isn't "no units" interpreted as pixels?
                 val = int(value)
-                sign = cmp(val,0)
+                sign = cmp(val, 0)
                 # validate length
-                val = sign*max(minl,min(abs(val),maxl))
+                val = sign*max(minl, min(abs(val), maxl))
                 callback(val, *args)
             except Exception:
                 warnings.warn('Unable to parse length value "%s"' % value)
@@ -308,7 +308,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 
     def _parse_style_display(self, tag, value):
         if value == 'none':
-            tag.set_property('invisible','true')
+            tag.set_property('invisible', 'true')
         # FIXME: display: block, inline
 
     def _parse_style_font_size(self, tag, value):
@@ -349,7 +349,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         else:
             tag.set_property('style', style)
 
-    def __frac_length_tag_cb(self,length, tag, propname):
+    def __frac_length_tag_cb(self, length, tag, propname):
         styles = self._get_style_tags()
         if styles:
             length += styles[-1].get_property(propname)
@@ -540,7 +540,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 # images from network... this program is now potentially
                 # hackable ;)
                 loader = gtk.gdk.PixbufLoader()
-                dims = [0,0]
+                dims = [0, 0]
                 def height_cb(length):
                     dims[1] = length
                 def width_cb(length):
@@ -673,7 +673,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 
     def startElement(self, name, attrs):
         self._flush_text()
-        klass = [i for i in attrs.get('class',' ').split(' ') if i]
+        klass = [i for i in attrs.get('class', ' ').split(' ') if i]
         style = ''
         #Add styles defined for classes
         for k in klass:
@@ -692,7 +692,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             if not href:
                 href = attrs.get('HREF', None)
             # Gaim sends HREF instead of href
-            title = attrs.get('title', attrs.get('rel',href))
+            title = attrs.get('title', attrs.get('rel', href))
             type_ = attrs.get('type', None)
             tag = self._create_url(href, title, type_, id_)
         elif name == 'blockquote':
@@ -709,7 +709,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             style += element_styles[name]
         # so that explicit styles override implicit ones,
         # we add the attribute last
-        style += ";"+attrs.get('style','')
+        style += ";"+attrs.get('style', '')
         if style == '':
             style = None
         self._begin_span(style, tag, id_)
@@ -934,7 +934,7 @@ if __name__ == '__main__':
             print "debug:", text
         def warn(self, text):
             print "warn;", text
-        def error(self,text):
+        def error(self, text):
             print "error;", text
 
     gajim.log=log()

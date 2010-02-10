@@ -180,7 +180,7 @@ class ConnectionDisco:
                 frm=to)
         iq.setAttr('id', id_)
         query = iq.setTag('query')
-        query.setAttr('node','http://gajim.org#' + gajim.version.split('-', 1)[0])
+        query.setAttr('node', 'http://gajim.org#' + gajim.version.split('-', 1)[0])
         for f in (common.xmpp.NS_BYTESTREAM, common.xmpp.NS_SI,
         common.xmpp.NS_FILE, common.xmpp.NS_COMMANDS):
             feature = common.xmpp.Node('feature')
@@ -1634,7 +1634,7 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
         is_continued = False
         if invite.getTag('invite').getTag('continue'):
             is_continued = True
-        self.dispatch('GC_INVITATION',(frm, jid_from, reason, password,
+        self.dispatch('GC_INVITATION', (frm, jid_from, reason, password,
                 is_continued))
 
     def _presenceCB(self, con, prs):

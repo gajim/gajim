@@ -91,7 +91,7 @@ class Zeroconf:
                     self.remove_serviceCB(key)
                     return
 
-    def new_domain_callback(self,interface, protocol, domain, flags):
+    def new_domain_callback(self, interface, protocol, domain, flags):
         if domain != "local":
             self.browse_domain(interface, protocol, domain)
 
@@ -203,7 +203,7 @@ class Zeroconf:
         txt = {}
 
         #remove empty keys
-        for key,val in self.txt:
+        for key, val in self.txt:
             if val:
                 txt[key] = val
 

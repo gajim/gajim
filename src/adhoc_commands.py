@@ -71,11 +71,11 @@ class CommandWindow:
         self.window.connect('delete-event',
             self.on_adhoc_commands_window_delete_event)
         for name in ('back_button', 'forward_button',
-                'execute_button','close_button','stages_notebook',
+                'execute_button', 'close_button', 'stages_notebook',
                 'retrieving_commands_stage_vbox',
-                'command_list_stage_vbox','command_list_vbox',
-                'sending_form_stage_vbox','sending_form_progressbar',
-                'notes_label','no_commands_stage_vbox','error_stage_vbox',
+                'command_list_stage_vbox', 'command_list_vbox',
+                'sending_form_stage_vbox', 'sending_form_progressbar',
+                'notes_label', 'no_commands_stage_vbox', 'error_stage_vbox',
                 'error_description_label'):
             self.__dict__[name] = self.xml.get_object(name)
 

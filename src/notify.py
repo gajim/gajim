@@ -637,7 +637,7 @@ class DesktopNotification:
         notification_response_manager.attach_to_interface()
         notification_response_manager.add_pending(self.id, self)
 
-    def notify_another_way(self,e):
+    def notify_another_way(self, e):
         gajim.log.debug(str(e))
         gajim.log.debug('Need to implement a new way of falling back')
 

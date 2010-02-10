@@ -94,7 +94,7 @@ class Mock(object):
         self._setupSubclassMethodInterceptors()
 
     def _setupSubclassMethodInterceptors(self):
-        methods = inspect.getmembers(self.realClass,inspect.isroutine)
+        methods = inspect.getmembers(self.realClass, inspect.isroutine)
         baseMethods = dict(inspect.getmembers(Mock, inspect.ismethod))
         for m in methods:
             name = m[0]
@@ -109,7 +109,7 @@ class Mock(object):
         self.mockReturnValues.update(methodReturnValues)
 
     def mockSetExpectation(self, name, testFn, after=0, until=0):
-        self.mockExpectations.setdefault(name, []).append((testFn,after,until))
+        self.mockExpectations.setdefault(name, []).append((testFn, after, until))
 
     def _checkInterfaceCall(self, name, callParams, callKwParams):
         """
@@ -231,7 +231,7 @@ class MockCall:
             s = s + sep + repr(p)
             sep = ', '
         items = sorted(self.kwparams.items())
-        for k,v in items:
+        for k, v in items:
             s = s + sep + k + '=' + repr(v)
             sep = ', '
         s = s + ')'
@@ -252,7 +252,7 @@ class MockCallable:
 
     def __call__(self,  *params, **kwparams):
         self.mock._checkInterfaceCall(self.name, params, kwparams)
-        thisCall = self.recordCall(params,kwparams)
+        thisCall = self.recordCall(params, kwparams)
         self.checkExpectations(thisCall, params, kwparams)
         return self.makeCall(params, kwparams)
 

@@ -1053,7 +1053,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.scroll_to_end_id = None
         return False
 
-    def size_request(self, msg_textview , requisition):
+    def size_request(self, msg_textview, requisition):
         """
         When message_textview changes its size: if the new height will enlarge
         the window, enable the scrollbar automatic policy.  Also enable scrollbar

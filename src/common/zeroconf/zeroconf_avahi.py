@@ -115,7 +115,7 @@ class Zeroconf:
                 self.remove_service_callback)
         self.service_browser.connect_to_signal('Failure', self.error_callback)
 
-    def new_domain_callback(self,interface, protocol, domain, flags):
+    def new_domain_callback(self, interface, protocol, domain, flags):
         if domain != 'local':
             self.browse_domain(interface, protocol, domain)
 
@@ -246,7 +246,7 @@ class Zeroconf:
             txt = {}
 
             # remove empty keys
-            for key,val in self.txt.iteritems():
+            for key, val in self.txt.iteritems():
                 if val:
                     txt[key] = val
 

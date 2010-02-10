@@ -598,7 +598,7 @@ class RosterTooltip(NotificationAreaTooltip):
             local_time = local_time.decode(
                     locale.getpreferredencoding())
             text = text % local_time
-            properties.append(('Idle' + text,None))
+            properties.append(('Idle' + text, None))
 
         while properties:
             property_ = properties.pop(0)

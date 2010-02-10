@@ -59,7 +59,7 @@ class NonBlockingRoster(PlugIn):
         elif not force:
             return
 
-        iq = Iq('get',NS_ROSTER)
+        iq = Iq('get', NS_ROSTER)
         iq.setTagAttr('query', 'ver', self.version)
         id_ = self._owner.getAnID()
         iq.setID(id_)
@@ -98,7 +98,7 @@ class NonBlockingRoster(PlugIn):
                 for group in item.getTags('group'):
                     if group.getData() not in self._data[jid]['groups']:
                         self._data[jid]['groups'].append(group.getData())
-        self._data[self._owner.User+'@'+self._owner.Server]={'resources':{},'name':None,'ask':None,'subscription':None,'groups':None,}
+        self._data[self._owner.User+'@'+self._owner.Server]={'resources': {}, 'name': None, 'ask': None, 'subscription': None, 'groups': None,}
         self.set=1
         # Looks like we have a workaround
         # raise NodeProcessed # a MUST. Otherwise you'll get back an <iq type='error'/>
@@ -122,7 +122,7 @@ class NonBlockingRoster(PlugIn):
         typ=pres.getType()
 
         if not typ:
-            log.info('Setting roster item %s for resource %s...'%(jid.getStripped(),jid.getResource()))
+            log.info('Setting roster item %s for resource %s...'%(jid.getStripped(), jid.getResource()))
             item['resources'][jid.getResource()]=res={'show':None,'status':None,'priority':'0','timestamp':None}
             if pres.getTag('show'): res['show']=pres.getShow()
             if pres.getTag('status'): res['status']=pres.getStatus()
@@ -152,7 +152,7 @@ class NonBlockingRoster(PlugIn):
             lastpri = -129
             for r in self._data[jid]['resources'].keys():
                 if int(self._data[jid]['resources'][r]['priority']) > lastpri:
-                    resource,lastpri=r,int(self._data[jid]['resources'][r]['priority'])
+                    resource, lastpri=r, int(self._data[jid]['resources'][r]['priority'])
             return self._data[jid]['resources'][resource][dataname]
 
     def delItem(self, jid):
@@ -227,12 +227,12 @@ class NonBlockingRoster(PlugIn):
         """
         Rename contact 'jid' and sets the groups list that it now belongs to
         """
-        iq = Iq('set',NS_ROSTER)
+        iq = Iq('set', NS_ROSTER)
         query = iq.getTag('query')
         attrs = {'jid': jid}
         if name:
             attrs['name'] = name
-        item = query.setTag('item' ,attrs)
+        item = query.setTag('item', attrs)
         for group in groups:
             item.addChild(node=Node('group', payload=[group]))
         self._owner.send(iq)
@@ -271,7 +271,7 @@ class NonBlockingRoster(PlugIn):
         """
         return self._data[item]
 
-    def getItem(self,item):
+    def getItem(self, item):
         """
         Get the contact in the internal format (or None if JID 'item' is not in
         roster)
@@ -285,7 +285,7 @@ class NonBlockingRoster(PlugIn):
         """
         self._owner.send(Presence(jid, 'subscribe'))
 
-    def Unsubscribe(self,jid):
+    def Unsubscribe(self, jid):
         """
         Ask for removing our subscription for JID 'jid'
         """

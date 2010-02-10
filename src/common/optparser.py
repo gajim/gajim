@@ -706,7 +706,7 @@ class OptionsParser:
         """
         dirs = ('../data', gajim.gajimpaths.root, gajim.DATA_DIR)
         for evt in gajim.config.get_per('soundevents'):
-            path = gajim.config.get_per('soundevents', evt ,'path')
+            path = gajim.config.get_per('soundevents', evt, 'path')
             # absolute and relative passes are necessary
             path = helpers.strip_soundfile_path(path, dirs, abs=False)
             path = helpers.strip_soundfile_path(path, dirs, abs=True)

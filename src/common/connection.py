@@ -1118,7 +1118,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             msg = '>>>>>> '
             if self._proxy['type']=='bosh':
                 msg = '%s over BOSH %s' % (msg, self._proxy['bosh_uri'])
-            if self._proxy['type'] in ['http','socks5'] or self._proxy['bosh_useproxy']:
+            if self._proxy['type'] in ['http', 'socks5'] or self._proxy['bosh_useproxy']:
                 msg = '%s over proxy %s:%s' % (msg, self._proxy['host'], self._proxy['port'])
             log.info(msg)
 
@@ -1338,7 +1338,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             if not common.xmpp.isResultNode(resp):
                 self.dispatch('PING_ERROR', (pingTo))
                 return
-            timeDiff = round(timePong - timePing,2)
+            timeDiff = round(timePong - timePing, 2)
             self.dispatch('PING_REPLY', (pingTo, timeDiff))
         if pingTo:
             timePing = time_time()
@@ -2054,7 +2054,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def send_gc_subject(self, jid, subject):
         if not self.connection:
             return
-        msg_iq = common.xmpp.Message(jid,typ = 'groupchat', subject = subject)
+        msg_iq = common.xmpp.Message(jid, typ = 'groupchat', subject = subject)
         self.connection.send(msg_iq)
 
     def request_gc_config(self, room_jid):
@@ -2178,8 +2178,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         username = gajim.config.get_per('accounts', self.name, 'name')
         iq = common.xmpp.Iq(typ = 'set', to = hostname)
         q = iq.setTag(common.xmpp.NS_REGISTER + ' query')
-        q.setTagData('username',username)
-        q.setTagData('password',password)
+        q.setTagData('username', username)
+        q.setTagData('password', password)
         self.connection.send(iq)
 
     def get_password(self, callback):
@@ -2260,7 +2260,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             item.addChild(node = form)
         else:
             for i in form.keys():
-                item.setTagData(i,form[i])
+                item.setTagData(i, form[i])
         def _on_response(resp):
             jid = jid = helpers.get_jid_from_iq(resp)
             tag = resp.getTag('query', namespace = common.xmpp.NS_SEARCH)

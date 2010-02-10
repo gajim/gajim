@@ -40,7 +40,7 @@ class GlobalEventsDispatcher(object):
         if event_name in self.handlers:
             handlers_list = self.handlers[event_name]
             i = 0
-            for i,h in enumerate(handlers_list):
+            for i, h in enumerate(handlers_list):
                 if priority < h[0]:
                     break
 

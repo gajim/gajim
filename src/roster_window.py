@@ -2832,7 +2832,7 @@ class RosterWindow:
         def on_ok(checked):
             for contact in gajim.contacts.get_contacts_from_group(account, group):
                 if not checked:
-                    self.remove_contact_from_groups(contact.jid,account, [group])
+                    self.remove_contact_from_groups(contact.jid, account, [group])
                 else:
                     gajim.connections[account].unsubscribe(contact.jid)
                     self.remove_contact(contact.jid, account, backend=True)

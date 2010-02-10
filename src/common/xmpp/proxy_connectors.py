@@ -34,7 +34,7 @@ class ProxyConnector:
     """
 
     def __init__(self, send_method, onreceive, old_on_receive, on_success,
-                    on_failure, xmpp_server, proxy_creds=(None,None)):
+                    on_failure, xmpp_server, proxy_creds=(None, None)):
         """
         Creates proxy connector, starts connecting immediately and gives control
         back to transport afterwards

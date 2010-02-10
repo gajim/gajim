@@ -102,7 +102,7 @@ class FancyFormatter(logging.Formatter):
     """
     colors_mapping = {
             'DEBUG':                colors.BLUE,
-            'INFO' :                colors.GREEN,
+            'INFO':                colors.GREEN,
             'WARNING':      colors.BROWN,
             'ERROR':                colors.RED,
             'CRITICAL':     colors.BRIGHT_RED,

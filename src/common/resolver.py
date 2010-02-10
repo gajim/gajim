@@ -189,7 +189,7 @@ class NSLookupResolver(CommonResolver):
         if not result:
             return []
         hosts = []
-        lines = result.replace('\r','').split('\n')
+        lines = result.replace('\r', '').split('\n')
         current_host = None
         for line in lines:
             line = line.lstrip()
@@ -305,7 +305,7 @@ class NsLookup(IdleCommand):
             return
 
     def _compose_command_args(self):
-        return ['nslookup', '-type=' + self.type , self.host]
+        return ['nslookup', '-type=' + self.type, self.host]
 
     def _return_result(self):
         if self.result_handler:

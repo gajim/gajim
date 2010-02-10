@@ -1625,7 +1625,7 @@ class Interface:
             gajim.connections[account].username = new_name
             gajim.connections[account].change_status(status, '')
         def on_cancel():
-            gajim.connections[account].change_status('offline','')
+            gajim.connections[account].change_status('offline', '')
 
         dlg = dialogs.InputDialog(_('Username Conflict'),
             _('Please type a new username for your local account'),
@@ -2877,8 +2877,8 @@ class Interface:
                 if not auto_message:
                     auto_message = gajim.connections[account].status
                 else:
-                    auto_message = auto_message.replace('$S','%(status)s')
-                    auto_message = auto_message.replace('$T','%(time)s')
+                    auto_message = auto_message.replace('$S', '%(status)s')
+                    auto_message = auto_message.replace('$T', '%(time)s')
                     auto_message = auto_message % {
                             'status': gajim.status_before_autoaway[account],
                             'time': gajim.config.get('autoawaytime')
@@ -2894,8 +2894,8 @@ class Interface:
                 if not auto_message:
                     auto_message = gajim.connections[account].status
                 else:
-                    auto_message = auto_message.replace('$S','%(status)s')
-                    auto_message = auto_message.replace('$T','%(time)s')
+                    auto_message = auto_message.replace('$S', '%(status)s')
+                    auto_message = auto_message.replace('$T', '%(time)s')
                     auto_message = auto_message % {
                             'status': gajim.status_before_autoaway[account],
                             'time': gajim.config.get('autoxatime')

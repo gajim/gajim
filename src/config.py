@@ -2775,7 +2775,7 @@ class GroupchatConfigWindow:
             if not jid:
                 return
             model = self.affiliation_treeview[affiliation].get_model()
-            model.append((jid,'', '', ''))
+            model.append((jid, '', '', ''))
         dialogs.InputDialog(title, prompt, ok_handler=on_ok)
 
     def on_remove_button_clicked(self, widget, affiliation):
@@ -3675,7 +3675,7 @@ class AccountCreationWizardWindow:
         img = self.xml.get_object('finish_image')
         img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
         finish_text = '<big><b>%s</b></big>\n\n%s' % (
-                _('An error occurred during account creation') , reason)
+                _('An error occurred during account creation'), reason)
         self.finish_label.set_markup(finish_text)
         self.notebook.set_current_page(6) # show finish page
 
@@ -3709,7 +3709,7 @@ class AccountCreationWizardWindow:
         img = self.xml.get_object('finish_image')
         img.set_from_stock(gtk.STOCK_DIALOG_ERROR, gtk.ICON_SIZE_DIALOG)
         finish_text = '<big><b>%s</b></big>\n\n%s' % (_('An error occurred during '
-                'account creation') , reason)
+                'account creation'), reason)
         self.finish_label.set_markup(finish_text)
         self.notebook.set_current_page(6) # show finish page
 

@@ -77,11 +77,11 @@ class FileTransfersWindow:
         col = gtk.TreeViewColumn(_('File'))
         renderer = gtk.CellRendererText()
         col.pack_start(renderer, expand=False)
-        col.add_attribute(renderer, 'markup' , C_LABELS)
+        col.add_attribute(renderer, 'markup', C_LABELS)
         renderer.set_property('yalign', 0.)
         renderer = gtk.CellRendererText()
         col.pack_start(renderer, expand=True)
-        col.add_attribute(renderer, 'markup' , C_FILE)
+        col.add_attribute(renderer, 'markup', C_FILE)
         renderer.set_property('xalign', 0.)
         renderer.set_property('yalign', 0.)
         renderer.set_property('ellipsize', pango.ELLIPSIZE_END)
@@ -92,7 +92,7 @@ class FileTransfersWindow:
         col = gtk.TreeViewColumn(_('Time'))
         renderer = gtk.CellRendererText()
         col.pack_start(renderer, expand=False)
-        col.add_attribute(renderer, 'markup' , C_TIME)
+        col.add_attribute(renderer, 'markup', C_TIME)
         renderer.set_property('yalign', 0.5)
         renderer.set_property('xalign', 0.5)
         renderer = gtk.CellRendererText()
@@ -106,8 +106,8 @@ class FileTransfersWindow:
         renderer.set_property('yalign', 0.5)
         renderer.set_property('xalign', 0.5)
         col.pack_start(renderer, expand=False)
-        col.add_attribute(renderer, 'text' , C_PROGRESS)
-        col.add_attribute(renderer, 'value' , C_PERCENT)
+        col.add_attribute(renderer, 'text', C_PROGRESS)
+        col.add_attribute(renderer, 'value', C_PERCENT)
         col.set_resizable(True)
         col.set_expand(False)
         self.tree.append_column(col)
@@ -847,7 +847,7 @@ class FileTransfersWindow:
             rect = self.tree.get_cell_area(props[0], props[1])
             # position of the treeview on the screen
             position = widget.window.get_origin()
-            self.tooltip.show_tooltip(file_props , rect.height,
+            self.tooltip.show_tooltip(file_props, rect.height,
                                                     position[1] + rect.y + self.height_diff)
         else:
             self.tooltip.hide_tooltip()

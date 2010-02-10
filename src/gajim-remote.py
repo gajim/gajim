@@ -73,7 +73,7 @@ class GajimRemote:
         #    (argument name, help on argument, is mandatory)
         #
         self.commands = {
-                'help':[
+                'help': [
                                 _('Shows a help on specific command'),
                                 [
                                         #User gets help for the command, specified by this parameter
@@ -81,7 +81,7 @@ class GajimRemote:
                                         _('show help on command'), False)
                                 ]
                         ],
-                'toggle_roster_appearance' : [
+                'toggle_roster_appearance': [
                                 _('Shows or hides the roster window'),
                                 []
                         ],
@@ -135,7 +135,7 @@ class GajimRemote:
                                                 False)
                                 ]
                         ],
-                'send_chat_message':[
+                'send_chat_message': [
                                 _('Sends new chat message to a contact in the roster. Both OpenPGP key '
                                 'and account are optional. If you want to set only \'account\', '
                                 'without \'OpenPGP key\', just set \'OpenPGP key\' to \'\'.'),
@@ -148,7 +148,7 @@ class GajimRemote:
                                                 'using this account'), False),
                                 ]
                         ],
-                'send_single_message':[
+                'send_single_message': [
                                 _('Sends new single message to a contact in the roster. Both OpenPGP key '
                                 'and account are optional. If you want to set only \'account\', '
                                 'without \'OpenPGP key\', just set \'OpenPGP key\' to \'\'.'),
@@ -162,7 +162,7 @@ class GajimRemote:
                                                 'using this account'), False),
                                 ]
                         ],
-                'send_groupchat_message':[
+                'send_groupchat_message': [
                                 _('Sends new message to a groupchat you\'ve joined.'),
                                 [
                                         ('room_jid', _('JID of the room that will receive the message'), True),
@@ -292,11 +292,11 @@ class GajimRemote:
                                                 'room'), False)
                                 ]
                         ],
-                'check_gajim_running':[
+                'check_gajim_running': [
                                 _('Check if Gajim is running'),
                                 []
                         ],
-                'toggle_ipython' : [
+                'toggle_ipython': [
                                 _('Shows or hides the ipython window'),
                                 []
                         ],

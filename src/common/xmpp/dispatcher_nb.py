@@ -277,13 +277,13 @@ class XMPPDispatcher(PlugIn):
         if not typ and not ns:
             typ='default'
         if xmlns not in self.handlers:
-            self.RegisterNamespace(xmlns,'warn')
+            self.RegisterNamespace(xmlns, 'warn')
         if name not in self.handlers[xmlns]:
-            self.RegisterProtocol(name,Protocol,xmlns,'warn')
+            self.RegisterProtocol(name, Protocol, xmlns, 'warn')
         if typ+ns not in self.handlers[xmlns][name]:
             self.handlers[xmlns][name][typ+ns]=[]
         if makefirst:
-            self.handlers[xmlns][name][typ+ns].insert(0,{'func':handler,
+            self.handlers[xmlns][name][typ+ns].insert(0, {'func':handler,
                     'system':system})
         else:
             self.handlers[xmlns][name][typ+ns].append({'func':handler,
@@ -340,7 +340,7 @@ class XMPPDispatcher(PlugIn):
         Return stanza back to the sender with <feature-not-implemented/> error
         set
         """
-        if stanza.getType() in ('get','set'):
+        if stanza.getType() in ('get', 'set'):
             conn._owner.send(Error(stanza, ERR_FEATURE_NOT_IMPLEMENTED))
 
     def RegisterCycleHandler(self, handler):
@@ -572,7 +572,7 @@ class BOSHDispatcher(XMPPDispatcher):
             fromstream = self._metastream
             fromstream.setAttr('from', fromstream.getAttr('to'))
             fromstream.delAttr('to')
-            data = '%s%s>%s' % (XML_DECLARATION,str(fromstream)[:-2] ,data)
+            data = '%s%s>%s' % (XML_DECLARATION, str(fromstream)[:-2], data)
             self.restart = False
         return XMPPDispatcher.ProcessNonBlocking(self, data)
 

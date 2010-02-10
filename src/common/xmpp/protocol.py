@@ -189,8 +189,8 @@ temporary-auth-failure --  --  -- The authentication failed because of a tempora
 
 ERRORS, _errorcodes = {}, {}
 for ns, errname, errpool in ((NS_XMPP_STREAMS, 'STREAM', xmpp_stream_error_conditions),
-                                                   (NS_STANZAS   ,'ERR'   ,xmpp_stanza_error_conditions),
-                                                   (NS_SASL             ,'SASL'  ,sasl_error_conditions)):
+                                                   (NS_STANZAS, 'ERR', xmpp_stanza_error_conditions),
+                                                   (NS_SASL, 'SASL', sasl_error_conditions)):
     for err in errpool.split('\n')[1:]:
         cond, code, typ, text = err.split(' -- ')
         name = errname + '_' + cond.upper().replace('-', '_')
@@ -343,11 +343,11 @@ class JID:
             self.node, self.domain, self.resource = node, domain, resource
         else:
             if jid.find('@') + 1:
-                self.node,jid = jid.split('@', 1)
+                self.node, jid = jid.split('@', 1)
             else:
                 self.node = ''
             if jid.find('/')+1:
-                self.domain, self.resource = jid.split('/',1)
+                self.domain, self.resource = jid.split('/', 1)
             else:
                 self.domain, self.resource = jid, ''
 
@@ -593,7 +593,7 @@ class Protocol(Node):
         """
         Return the error code. Obsolete.
         """
-        return self.getTagAttr('error','code')
+        return self.getTagAttr('error', 'code')
 
     def setError(self,error,code=None):
         """
@@ -604,7 +604,7 @@ class Protocol(Node):
                 error = ErrorNode(_errorcodes[str(code)], text=error)
             else:
                 error = ErrorNode(ERR_UNDEFINED_CONDITION, code=code, typ='cancel', text=error)
-        elif type(error) in [type(''),type(u'')]:
+        elif type(error) in [type(''), type(u'')]:
             error=ErrorNode(error)
         self.setType('error')
         self.addChild(node=error)
@@ -633,7 +633,7 @@ class Protocol(Node):
         """
         Set the item 'item' to the value 'val'
         """
-        if item in ['to','from']:
+        if item in ['to', 'from']:
             val = JID(val)
         return self.setAttr(item, val)
 
@@ -974,7 +974,7 @@ class ErrorNode(Node):
             cod = code
         if text:
             txt = text
-        Node.__init__(self,'error', {}, [Node(name)])
+        Node.__init__(self, 'error', {}, [Node(name)])
         if type_:
             self.setAttr('type', type_)
         if not cod:
@@ -1160,7 +1160,7 @@ class DataField(Node):
         """
         Set 'var' attribute value of this field
         """
-        return self.setAttr('var',val)
+        return self.setAttr('var', val)
 
 class DataForm(Node):
     """

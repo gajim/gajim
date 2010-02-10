@@ -560,7 +560,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
             # get as many bites, as possible, but not more than RECV_BUFSIZE
             received = self._recv(RECV_BUFSIZE)
         except socket.error, (errnum, errstr):
-            log.info("_do_receive: got %s:" % received , exc_info=True)
+            log.info("_do_receive: got %s:" % received, exc_info=True)
         except tls_nb.SSLWrapper.Error, e:
             log.info("_do_receive, caught SSL error, got %s:" % received,
                     exc_info=True)
@@ -739,7 +739,7 @@ class NonBlockingHTTP(NonBlockingTCP):
                 httpbody - string with http body)
                 http_rest - what is left in the message after a full HTTP header + body
         """
-        message = message.replace('\r','')
+        message = message.replace('\r', '')
         message = message.lstrip('\n')
         splitted = message.split('\n\n')
         if len(splitted) < 2:

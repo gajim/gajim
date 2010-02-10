@@ -117,7 +117,7 @@ class OldEntry(xmpp.Node, object):
         Get source link
         """
         try:
-            return self.getTag('feed').getTags('link',{'rel':'alternate'})[1].getData()
+            return self.getTag('feed').getTags('link', {'rel':'alternate'})[1].getData()
         except Exception:
             return None
 

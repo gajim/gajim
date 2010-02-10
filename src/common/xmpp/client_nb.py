@@ -431,7 +431,7 @@ class NonBlockingClient:
         Raise event to connection instance. DATA_SENT and DATA_RECIVED events
         are used in XML console to show XMPP traffic
         """
-        log.info('raising event from transport: :::::%s::::\n_____________\n%s\n_____________\n' % (event_type,data))
+        log.info('raising event from transport: :::::%s::::\n_____________\n%s\n_____________\n' % (event_type, data))
         if hasattr(self, 'Dispatcher'):
             self.Dispatcher.Event('', event_type, data)
 
@@ -556,13 +556,13 @@ class NonBlockingClient:
 ### following methods are moved from blocking client class of xmpppy
 ###############################################################################
 
-    def RegisterDisconnectHandler(self,handler):
+    def RegisterDisconnectHandler(self, handler):
         """
         Register handler that will be called on disconnect
         """
         self.disconnect_handlers.append(handler)
 
-    def UnregisterDisconnectHandler(self,handler):
+    def UnregisterDisconnectHandler(self, handler):
         """
         Unregister handler that is called on disconnect
         """

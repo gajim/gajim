@@ -90,7 +90,7 @@ class Node(object):
             if self.FORCE_NODE_RECREATION and isinstance(node, Node):
                 node = str(node)
             if not isinstance(node, Node):
-                node = NodeBuilder(node,self)
+                node = NodeBuilder(node, self)
                 node_built = True
             else:
                 self.name, self.namespace, self.attrs, self.data, self.kids, self.parent, self.nsd = node.name, node.namespace, {}, [], [], node.parent, {}
@@ -100,7 +100,7 @@ class Node(object):
                     self.data.append(data)
                 for kid in node.kids:
                     self.kids.append(kid)
-                for k,v in node.nsd.items():
+                for k, v in node.nsd.items():
                     self.nsd[k] = v
         else:
             self.name, self.namespace, self.attrs, self.data, self.kids, self.parent, self.nsd = 'tag', '', {}, [], [], None, {}
@@ -108,8 +108,8 @@ class Node(object):
             self.parent = parent
         self.nsp_cache = {}
         if nsp:
-            for k,v in nsp.items(): self.nsp_cache[k] = v
-        for attr,val in attrs.items():
+            for k, v in nsp.items(): self.nsp_cache[k] = v
+        for attr, val in attrs.items():
             if attr == 'xmlns':
                 self.nsd[u''] = val
             elif attr.startswith('xmlns:'):
@@ -117,11 +117,11 @@ class Node(object):
             self.attrs[attr]=attrs[attr]
         if tag:
             if node_built:
-                pfx,self.name = (['']+tag.split(':'))[-2:]
+                pfx, self.name = (['']+tag.split(':'))[-2:]
                 self.namespace = self.lookup_nsp(pfx)
             else:
                 if ' ' in tag:
-                    self.namespace,self.name = tag.split()
+                    self.namespace, self.name = tag.split()
                 else:
                     self.name = tag
         if isinstance(payload, basestring): payload=[payload]
@@ -132,9 +132,9 @@ class Node(object):
                 self.data.append(ustr(i))
 
     def lookup_nsp(self, pfx=''):
-        ns = self.nsd.get(pfx,None)
+        ns = self.nsd.get(pfx, None)
         if ns is None:
-            ns = self.nsp_cache.get(pfx,None)
+            ns = self.nsp_cache.get(pfx, None)
         if ns is None:
             if self.parent:
                 ns = self.parent.lookup_nsp(pfx)
@@ -220,7 +220,7 @@ class Node(object):
         attributes
         """
         if not isinstance(node, Node):
-            node = self.getTag(node,attrs)
+            node = self.getTag(node, attrs)
         self.kids.remove(node)
         return node
 
@@ -302,7 +302,7 @@ class Node(object):
         except:
             return None
 
-    def getTagData(self,tag):
+    def getTagData(self, tag):
         """
         Return cocatenated CDATA of the child with specified name
         """
@@ -418,9 +418,9 @@ class Node(object):
         (optionally) attributes "attrs" and sets it's CDATA to string "val"
         """
         try:
-            self.getTag(tag,attrs).setData(ustr(val))
+            self.getTag(tag, attrs).setData(ustr(val))
         except Exception:
-            self.addChild(tag,attrs,payload = [ustr(val)])
+            self.addChild(tag, attrs, payload = [ustr(val)])
 
     def has_attr(self, key):
         """
@@ -476,7 +476,7 @@ class T:
         return self.node.setTag(attr)
 
     def __setattr__(self, attr, val):
-        if isinstance(val,Node):
+        if isinstance(val, Node):
             Node.__init__(self.node.setTag(attr), node=val)
         else:
             return self.node.setTagData(attr, val)
@@ -493,8 +493,8 @@ class NT(T):
         return self.node.addChild(attr)
 
     def __setattr__(self, attr, val):
-        if isinstance(val,Node):
-            self.node.addChild(attr,node=val)
+        if isinstance(val, Node):
+            self.node.addChild(attr, node=val)
         else:
             return self.node.addChild(attr, payload=[val])
 
@@ -541,7 +541,7 @@ class NodeBuilder:
         self.data_buffer = None
         self.streamError = ''
         if data:
-            self._parser.Parse(data,1)
+            self._parser.Parse(data, 1)
 
     def check_data_buffer(self):
         if self.data_buffer:
@@ -570,16 +570,16 @@ class NodeBuilder:
             if not self._mini_dom :
                 self._mini_dom = Node(tag=tag, attrs=attrs, nsp = self._document_nsp, node_built=True)
             else:
-                Node.__init__(self._mini_dom,tag=tag, attrs=attrs, nsp = self._document_nsp, node_built=True)
+                Node.__init__(self._mini_dom, tag=tag, attrs=attrs, nsp = self._document_nsp, node_built=True)
             self._ptr = self._mini_dom
         elif self.__depth > self._dispatch_depth:
-            self._ptr.kids.append(Node(tag=tag,parent=self._ptr,attrs=attrs, node_built=True))
+            self._ptr.kids.append(Node(tag=tag, parent=self._ptr, attrs=attrs, node_built=True))
             self._ptr = self._ptr.kids[-1]
         if self.__depth == 1:
             self._document_attrs = {}
             self._document_nsp = {}
             nsp, name = (['']+tag.split(':'))[-2:]
-            for attr,val in attrs.items():
+            for attr, val in attrs.items():
                 if attr == 'xmlns':
                     self._document_nsp[u''] = val
                 elif attr.startswith('xmlns:'):

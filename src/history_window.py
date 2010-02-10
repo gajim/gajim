@@ -631,7 +631,7 @@ class HistoryWindow:
         self.results_window.set_property('visible', False)
 
     def save_state(self):
-        x,y = self.window.window.get_root_origin()
+        x, y = self.window.window.get_root_origin()
         width, height = self.window.get_size()
 
         gajim.config.set('history_window_x-position', x)

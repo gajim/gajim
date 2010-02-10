@@ -45,9 +45,9 @@ def getRegInfo(disp, host, info={}, sync=True):
 
     See JEP-0077 for details.
     """
-    iq=Iq('get',NS_REGISTER,to=host)
+    iq=Iq('get', NS_REGISTER, to=host)
     for i in info.keys():
-        iq.setTagData(i,info[i])
+        iq.setTagData(i, info[i])
     if sync:
         disp.SendAndCallForResponse(iq, lambda resp:
                 _ReceivedRegInfo(disp.Dispatcher, resp, host))
@@ -55,26 +55,26 @@ def getRegInfo(disp, host, info={}, sync=True):
         disp.SendAndCallForResponse(iq, _ReceivedRegInfo, {'agent': host })
 
 def _ReceivedRegInfo(con, resp, agent):
-    Iq('get',NS_REGISTER,to=agent)
+    Iq('get', NS_REGISTER, to=agent)
     if not isResultNode(resp):
         error_msg = resp.getErrorMsg()
-        con.Event(NS_REGISTER,REGISTER_DATA_RECEIVED,(agent,None,False,error_msg))
+        con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent, None, False, error_msg))
         return
-    tag=resp.getTag('query',namespace=NS_REGISTER)
+    tag=resp.getTag('query', namespace=NS_REGISTER)
     if not tag:
         error_msg = resp.getErrorMsg()
-        con.Event(NS_REGISTER,REGISTER_DATA_RECEIVED,(agent,None,False,error_msg))
+        con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent, None, False, error_msg))
         return
-    df=tag.getTag('x',namespace=NS_DATA)
+    df=tag.getTag('x', namespace=NS_DATA)
     if df:
-        con.Event(NS_REGISTER,REGISTER_DATA_RECEIVED,(agent,df,True,''))
+        con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent, df, True, ''))
         return
     df={}
     for i in resp.getQueryPayload():
         if not isinstance(i, Node):
             continue
         df[i.getName()] = i.getData()
-    con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent,df,False,''))
+    con.Event(NS_REGISTER, REGISTER_DATA_RECEIVED, (agent, df, False, ''))
 
 def register(disp, host, info, cb, args=None):
     """
@@ -87,7 +87,7 @@ def register(disp, host, info, cb, args=None):
     if not isinstance(info, dict):
         info=info.asDict()
     for i in info.keys():
-        iq.setTag('query').setTagData(i,info[i])
+        iq.setTag('query').setTagData(i, info[i])
     disp.SendAndCallForResponse(iq, cb, args)
 
 def unregister(disp, host, cb):
@@ -104,8 +104,8 @@ def changePasswordTo(disp, newpassword, host=None, cb = None):
     """
     if not host:
         host = disp._owner.Server
-    iq = Iq('set',NS_REGISTER,to=host, payload=[Node('username',
-                    payload=[disp._owner.Server]),Node('password',payload=[newpassword])])
+    iq = Iq('set', NS_REGISTER, to=host, payload=[Node('username',
+                    payload=[disp._owner.Server]), Node('password', payload=[newpassword])])
     _on_default_response(disp, iq, cb)
 
 ###############################################################################
@@ -178,14 +178,14 @@ def setActivePrivacyList(disp, listname=None, typ='active', cb=None):
         attrs={'name':listname}
     else:
         attrs={}
-    iq = Iq('set',NS_PRIVACY,payload=[Node(typ,attrs)])
+    iq = Iq('set', NS_PRIVACY, payload=[Node(typ, attrs)])
     _on_default_response(disp, iq, cb)
 
 def setDefaultPrivacyList(disp, listname=None):
     """
     Set the default privacy list as 'listname'. Returns true on success
     """
-    return setActivePrivacyList(disp, listname,'default')
+    return setActivePrivacyList(disp, listname, 'default')
 
 def setPrivacyList(disp, listname, tags):
     """
@@ -213,5 +213,5 @@ def setPrivacyList(disp, listname, tags):
 
 def delPrivacyList(disp, listname, cb=None):
     ''' Deletes privacy list 'listname'. Returns true on success. '''
-    iq = Iq('set',NS_PRIVACY,payload=[Node('list',{'name':listname})])
+    iq = Iq('set', NS_PRIVACY, payload=[Node('list', {'name':listname})])
     _on_default_response(disp, iq, cb)
