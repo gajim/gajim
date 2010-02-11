@@ -1353,3 +1353,4 @@ def get_subscription_request_msg(account=None):
         elif nick:
             name = nick
         s = Template(s).safe_substitute({'name': name})
+        return s

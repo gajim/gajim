@@ -992,7 +992,7 @@ _('Please fill in the data of the contact you want to add in account %s') % acco
         if self.account:
             message_buffer = self.message_textview.get_buffer()
             message_buffer.set_text(helpers.get_subscription_request_msg(
-                    self.account))
+                self.account))
 
     def on_add_new_contact_window_destroy(self, widget):
         if self.account:
