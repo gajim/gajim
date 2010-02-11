@@ -2311,37 +2311,29 @@ class Interface:
 
     @property
     def basic_pattern_re(self):
-        try:
-            return self._basic_pattern_re
-        except AttributeError:
+        if not self._basic_pattern_re:
             self._basic_pattern_re = re.compile(self.basic_pattern,
                 re.IGNORECASE)
-            return self._basic_pattern_re
+        return self._basic_pattern_re
 
     @property
     def emot_and_basic_re(self):
-        try:
-            return self._emot_and_basic_re
-        except AttributeError:
+        if not self._emot_and_basic_re:
             self._emot_and_basic_re = re.compile(self.emot_and_basic,
                     re.IGNORECASE + re.UNICODE)
-            return self._emot_and_basic_re
+        return self._emot_and_basic_re
 
     @property
     def sth_at_sth_dot_sth_re(self):
-        try:
-            return self._sth_at_sth_dot_sth_re
-        except AttributeError:
+        if not self._sth_at_sth_dot_sth_re:
             self._sth_at_sth_dot_sth_re = re.compile(self.sth_at_sth_dot_sth)
-            return self._sth_at_sth_dot_sth_re
+        return self._sth_at_sth_dot_sth_re
 
     @property
     def invalid_XML_chars_re(self):
-        try:
-            return self._invalid_XML_chars_re
-        except AttributeError:
+        if not self._invalid_XML_chars_re:
             self._invalid_XML_chars_re = re.compile(self.invalid_XML_chars)
-            return self._invalid_XML_chars_re
+        return self._invalid_XML_chars_re
 
     def make_regexps(self):
         # regexp meta characters are:  . ^ $ * + ? { } [ ] \ | ( )
