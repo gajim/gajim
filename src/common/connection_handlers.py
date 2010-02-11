@@ -636,9 +636,14 @@ class ConnectionVcard:
             else:
                 if iq_obj.getErrorCode() not in ('403', '406', '404'):
                     self.private_storage_supported = False
+
             # We can now continue connection by requesting the roster
-            version = gajim.config.get_per('accounts', self.name,
+            version = None
+            if con.Stream.features.getTag('ver',
+            namespace=common.xmpp.NS_ROSTER_VER):
+                version = gajim.config.get_per('accounts', self.name,
                     'roster_version')
+
             iq_id = self.connection.initRoster(version=version)
             self.awaiting_answers[iq_id] = (ROSTER_ARRIVED, )
         elif self.awaiting_answers[id_][0] == ROSTER_ARRIVED:

@@ -38,7 +38,7 @@ class NonBlockingRoster(PlugIn):
     internal representation of contacts in roster
     """
 
-    def __init__(self, version=''):
+    def __init__(self, version=None):
         """
         Init internal variables
         """
@@ -60,7 +60,8 @@ class NonBlockingRoster(PlugIn):
             return
 
         iq = Iq('get', NS_ROSTER)
-        iq.setTagAttr('query', 'ver', self.version)
+        if self.version is not None:
+            iq.setTagAttr('query', 'ver', self.version)
         id_ = self._owner.getAnID()
         iq.setID(id_)
         self._owner.send(iq)
