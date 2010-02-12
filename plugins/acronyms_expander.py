@@ -27,6 +27,7 @@ Acronyms expander plugin.
 import sys
 
 import gtk
+import gobject
 
 from plugins import GajimPlugin
 from plugins.helpers import log, log_calls
@@ -70,19 +71,15 @@ class AcronymsExpanderPlugin(GajimPlugin):
 		t = tb.get_text(tb.get_start_iter(), tb.get_end_iter())
 		#log.debug('%s %d'%(t, len(t)))
 		if t and t[-1] == INVOKER:
-			#log.debug("changing msg text")
+			#log.debug('changing msg text')
 			base,sep,head=t[:-1].rpartition(INVOKER)
-			#log.debug('%s | %s | %s'%(base, sep, head))
+			log.debug('%s | %s | %s'%(base, sep, head))
 			if head in ACRONYMS:
 				head = ACRONYMS[head]
-				log.debug("head: %s"%(head))
-				t = "".join((base, sep, head, INVOKER))
-				#log.debug("turning off notify")
-				tb.freeze_notify()
+				#log.debug('head: %s'%(head))
+				t = ''.join((base, sep, head, INVOKER))
 				#log.debug("setting text: '%s'"%(t))
-				tb.set_text(t)
-				#log.debug("turning on notify")
-				tb.thaw_notify()
+				gobject.idle_add(tb.set_text, t)
 		
 	@log_calls('AcronymsExpanderPlugin')
 	def connect_with_chat_control_base(self, chat_control):
