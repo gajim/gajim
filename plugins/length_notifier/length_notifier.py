@@ -123,15 +123,17 @@ class LengthNotifierPluginConfigDialog(GajimPluginConfigDialog):
 			['length_notifier_config_table'])
 		self.config_table = self.xml.get_object('length_notifier_config_table')
 		self.child.pack_start(self.config_table)
-		
+
 		self.message_length_spinbutton = self.xml.get_object(
 			'message_length_spinbutton')
+		self.message_length_spinbutton.get_adjustment().set_all(140, 0, 500, 1,
+            10, 0)
 		self.notification_colorbutton = self.xml.get_object(
 			'notification_colorbutton')
 		self.jids_entry = self.xml.get_object('jids_entry')
-		
+
 		self.xml.connect_signals(self)
-	
+
 	def on_run(self):
 		self.message_length_spinbutton.set_value(self.plugin.config['MESSAGE_WARNING_LENGTH'])
 		self.notification_colorbutton.set_color(gtk.gdk.color_parse(self.plugin.config['WARNING_COLOR']))
