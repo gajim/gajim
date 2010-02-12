@@ -580,7 +580,7 @@ class GroupchatControl(ChatControlBase):
 		self.change_roster_style()
 
 	def _update_banner_state_image(self):
-		banner_status_img = self.xml.get_object('gc_banner_status_image')
+		banner_status_img = self.xml.get_object('banner_status_image')
 		images = gajim.interface.jabber_state_images
 		if self.room_jid in gajim.gc_connected[self.account] and \
 		gajim.gc_connected[self.account][self.room_jid]:
