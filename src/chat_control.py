@@ -1689,6 +1689,8 @@ class ChatControl(ChatControlBase):
         # do we have something bigger to show?
         if avatar_w > scaled_buf_w or avatar_h > scaled_buf_h:
             # wait for 0.5 sec in case we leave earlier
+            if self.show_bigger_avatar_timeout_id is not None:
+                gobject.source_remove(self.show_bigger_avatar_timeout_id)
             self.show_bigger_avatar_timeout_id = gobject.timeout_add(500,
                     self.show_bigger_avatar, widget)
 
@@ -1699,6 +1701,7 @@ class ChatControl(ChatControlBase):
         # did we add a timeout? if yes remove it
         if self.show_bigger_avatar_timeout_id is not None:
             gobject.source_remove(self.show_bigger_avatar_timeout_id)
+            self.show_bigger_avatar_timeout_id = None
 
     def on_avatar_eventbox_button_press_event(self, widget, event):
         """
