@@ -2157,13 +2157,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream, ConnectionDisco,
 		Send pep info that were waiting for connection
 		"""
 		if self.to_be_sent_activity:
-			pep.user_send_activity(*self.to_be_sent_activity)
+			pep.user_send_activity(self.name, *self.to_be_sent_activity)
 		if self.to_be_sent_mood:
-			pep.user_send_mood(*self.to_be_sent_mood)
+			pep.user_send_mood(self.name, *self.to_be_sent_mood)
 		if self.to_be_sent_tune:
-			pep.user_send_tune(*self.to_be_sent_tune)
+			pep.user_send_tune(self.name, *self.to_be_sent_tune)
 		if self.to_be_sent_nick:
-			pep.user_send_nick(self.to_be_sent_nick)
+			pep.user_send_nick(self.name, self.to_be_sent_nick)
 		self.reset_awaiting_pep()
 
 	def _pubsubEventCB(self, con, msg):
