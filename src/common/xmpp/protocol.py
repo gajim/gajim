@@ -86,6 +86,7 @@ NS_PUBSUB_OWNER ='http://jabber.org/protocol/pubsub#owner'			  # JEP-0060
 NS_REGISTER	 ='jabber:iq:register'
 NS_ROSTER	   ='jabber:iq:roster'
 NS_ROSTERX	  ='http://jabber.org/protocol/rosterx'				   # XEP-0144
+NS_ROSTER_VER ='urn:xmpp:features:rosterver'                        # XEP-0273
 NS_RPC		  ='jabber:iq:rpc'										# XEP-0009
 NS_SASL		 ='urn:ietf:params:xml:ns:xmpp-sasl'
 NS_SEARCH	   ='jabber:iq:search'
