@@ -198,7 +198,7 @@ class IdleQueue:
 	'''
 	# (timeout, boolean)
 	# Boolean is True if timeout is specified in seconds, False means miliseconds
-	PROCESS_TIMEOUT = (200, False)
+	PROCESS_TIMEOUT = (100, False)
 
 	def __init__(self):
 		self.queue = {}
