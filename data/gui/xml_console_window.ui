@@ -50,7 +50,7 @@
             <property name="visible">True</property>
             <child>
               <object class="GtkCheckButton" id="enable_checkbutton">
-                <property name="label" translatable="yes" comments="XML Console enable checkbutton">Enable</property>
+                <property name="label" translatable="yes" comments="XML Console enable checkbutton">_Enable</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
