@@ -223,7 +223,7 @@ class NonBlockingTransport(PlugIn):
             if hasattr(self, '_owner') and hasattr(self._owner, 'Dispatcher'):
                 self.on_receive = self._owner.Dispatcher.ProcessNonBlocking
             else:
-                log.warning('No Dispatcher plugged. Received data will not be processed')
+                log.warn('No Dispatcher plugged. Received data will not be processed')
                 self.on_receive = None
             return
         self.on_receive = recv_handler
@@ -453,7 +453,7 @@ class NonBlockingTCP(NonBlockingTransport, IdleObject):
             self._sock.shutdown(socket.SHUT_RDWR)
             self._sock.close()
         except socket.error, (errnum, errstr):
-            log.error('Error while disconnecting socket: %s' % errstr)
+            log.info('Error while disconnecting socket: %s' % errstr)
         self.fd = -1
         NonBlockingTransport.disconnect(self, do_callback)
 
