@@ -179,7 +179,7 @@ class SASL(PlugIn):
 		''' Used to determine if server supports SASL auth. Used internally. '''
 		if not feats.getTag('mechanisms', namespace=NS_SASL):
 			self.startsasl='not-supported'
-			log.error('SASL not supported by server')
+			log.info('SASL not supported by server')
 			return
 		self.mecs = []
 		for mec in feats.getTag('mechanisms', namespace=NS_SASL).getTags(
@@ -229,7 +229,7 @@ class SASL(PlugIn):
 			self.startsasl = SASL_IN_PROCESS
 			raise NodeProcessed
 		self.startsasl = SASL_FAILURE
-		log.error('I can only use DIGEST-MD5, GSSAPI and PLAIN mecanisms.')
+		log.info('I can only use DIGEST-MD5, GSSAPI and PLAIN mecanisms.')
 		if self.on_sasl:
 			self.on_sasl()
 		return
@@ -245,7 +245,7 @@ class SASL(PlugIn):
 				reason = challenge.getChildren()[0]
 			except Exception:
 				reason = challenge
-			log.error('Failed SASL authentification: %s' % reason)
+			log.info('Failed SASL authentification: %s' % reason)
 			if len(self.mecs) > 0:
 				# There are other mechanisms to test
 				self.MechanismHandler()
@@ -321,7 +321,7 @@ class SASL(PlugIn):
 			self._owner.send(str(Node('response', attrs={'xmlns':NS_SASL})))
 		else:
 			self.startsasl = SASL_FAILURE
-			log.error('Failed SASL authentification: unknown challenge')
+			log.info('Failed SASL authentification: unknown challenge')
 		if self.on_sasl:
 			self.on_sasl()
 		raise NodeProcessed
@@ -397,7 +397,7 @@ class NonBlockingNonSASL(PlugIn):
 
 	def _on_username(self, resp):
 		if not isResultNode(resp):
-			log.error('No result node arrived! Aborting...')
+			log.info('No result node arrived! Aborting...')
 			return self.on_auth(None)
 
 		iq=Iq(typ='set',node=resp)
@@ -428,7 +428,7 @@ class NonBlockingNonSASL(PlugIn):
 			query.setTagData('hash', hash_)
 			self._method='0k'
 		else:
-			log.warn("Sequre methods unsupported, performing plain text \
+			log.info("Sequre methods unsupported, performing plain text \
 				authentication")
 			query.setTagData('password', self.password)
 			self._method = 'plain'
@@ -442,7 +442,7 @@ class NonBlockingNonSASL(PlugIn):
 			self.owner._registered_name = self.owner.User+'@'+self.owner.Server+\
 				'/'+self.owner.Resource
 			return self.on_auth(self._method)
-		log.error('Authentication failed!')
+		log.info('Authentication failed!')
 		return self.on_auth(None)
 
 
@@ -473,7 +473,7 @@ class NonBlockingBind(PlugIn):
 		attributes accordingly.
 		'''
 		if not feats.getTag('bind', namespace=NS_BIND):
-			log.error('Server does not requested binding.')
+			log.info('Server does not requested binding.')
 			# we try to bind resource anyway
 			#self.bound='failure'
 			self.bound = []
@@ -523,10 +523,10 @@ class NonBlockingBind(PlugIn):
 						func=self._on_session)
 				return
 		if resp:
-			log.error('Binding failed: %s.' % resp.getTag('error'))
+			log.info('Binding failed: %s.' % resp.getTag('info'))
 			self.on_bound(None)
 		else:
-			log.error('Binding failed: timeout expired.')
+			log.info('Binding failed: timeout expired.')
 			self.on_bound(None)
 
 	def _on_session(self, resp):
