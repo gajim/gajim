@@ -612,7 +612,9 @@ class Interface:
 				# .keys() is needed to not have a dictionary length changed during
 				# iteration error
 				self.instances[account]['online_dialog'][name].destroy()
-				del self.instances[account]['online_dialog'][name]
+				if name in self.instances[account]['online_dialog']:
+					# destroy handler may have already removed it
+					del self.instances[account]['online_dialog'][name]
 			for request in self.gpg_passphrase.values():
 				if request:
 					request.interrupt()
