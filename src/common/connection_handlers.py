@@ -1185,7 +1185,7 @@ class ConnectionVcard:
 
 			# We can now continue connection by requesting the roster
 			version = None
-			if con.Stream.features.getTag('ver',
+			if con.Stream.features and con.Stream.features.getTag('ver',
 			namespace=common.xmpp.NS_ROSTER_VER):
 				version = gajim.config.get_per('accounts', self.name,
 					'roster_version')
