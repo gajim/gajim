@@ -561,7 +561,7 @@ def file_is_locked(path_to_file):
         hfile.Close()
         return False
 
-def _get_fade_color(treeview, selected, focused):
+def get_fade_color(treeview, selected, focused):
     """
     Get a gdk color that is between foreground and background in 0.3
     0.7 respectively colors of the cell for the given treeview

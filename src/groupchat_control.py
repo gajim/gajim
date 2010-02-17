@@ -1125,7 +1125,7 @@ class GroupchatControl(ChatControlBase):
             if status != '':
                 status = helpers.reduce_chars_newlines(status, max_lines=1)
                 # escape markup entities and make them small italic and fg color
-                color = gtkgui_helpers._get_fade_color(self.list_treeview,
+                color = gtkgui_helpers.get_fade_color(self.list_treeview,
                         selected, focus)
                 colorstring = "#%04x%04x%04x" % (color.red, color.green, color.blue)
                 name += ('\n<span size="small" style="italic" foreground="%s">'

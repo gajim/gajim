@@ -2758,7 +2758,7 @@ class Interface:
 ### Other Methods
 ################################################################################
 
-    def _change_awn_icon_status(self, status):
+    def change_awn_icon_status(self, status):
         if not dbus_support.supported:
             # do nothing if user doesn't have D-Bus bindings
             return
