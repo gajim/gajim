@@ -2182,17 +2182,29 @@ class Connection(CommonConnection, ConnectionHandlers):
         q.setTagData('password', password)
         self.connection.send(iq)
 
-    def get_password(self, callback):
+    def get_password(self, callback, type_):
+        self.pasword_callback = (callback, type_)
         if self.password:
-            callback(self.password)
+            self.set_password(self.password)
             return
-        self.pasword_callback = callback
         self.dispatch('PASSWORD_REQUIRED', None)
 
     def set_password(self, password):
         self.password = password
         if self.pasword_callback:
-            self.pasword_callback(password)
+            callback, type_ = self.pasword_callback
+            if self._current_type == 'plain' and type_ == 'PLAIN' and \
+            gajim.config.get_per('accounts', self.name,
+            'warn_when_insecure_password'):
+                self.dispatch('INSECURE_PASSWORD', None)
+                return
+            callback(password)
+            self.pasword_callback = None
+
+    def accept_insecure_password(self):
+        if self.pasword_callback:
+            callback, type_ = self.pasword_callback
+            callback(self.password)
             self.pasword_callback = None
 
     def unregister_account(self, on_remove_success):

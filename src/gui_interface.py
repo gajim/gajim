@@ -1898,7 +1898,6 @@ class Interface:
 
     def handle_event_plain_connection(self, account, data):
         # ('PLAIN_CONNECTION', account, (connection))
-        server = gajim.config.get_per('accounts', account, 'hostname')
         def on_ok(is_checked):
             if not is_checked[0]:
                 on_cancel()
@@ -1915,8 +1914,9 @@ class Interface:
             gajim.connections[account].disconnect(on_purpose=True)
             self.handle_event_status(account, 'offline')
         pritext = _('Insecure connection')
-        sectext = _('You are about to send your password on an unencrypted '
-                'connection. Are you sure you want to do that?')
+        sectext = _('You are about to connect to the server with an insecure '
+                'connection. This means all your conversations will be '
+                'exchanged unencrypted. Are you sure you want to do that?')
         checktext1 = _('Yes, I really want to connect insecurely')
         checktext2 = _('Do _not ask me again')
         if 'plain_connection' in self.instances[account]['online_dialog']:
@@ -1929,7 +1929,6 @@ class Interface:
 
     def handle_event_insecure_ssl_connection(self, account, data):
         # ('INSECURE_SSL_CONNECTION', account, (connection, connection_type))
-        server = gajim.config.get_per('accounts', account, 'hostname')
         def on_ok(is_checked):
             if not is_checked[0]:
                 on_cancel()
@@ -1937,7 +1936,7 @@ class Interface:
             del self.instances[account]['online_dialog']['insecure_ssl']
             if is_checked[1]:
                 gajim.config.set_per('accounts', account,
-                        'warn_when_insecure_ssl_connection', False)
+                    'warn_when_insecure_ssl_connection', False)
             if gajim.connections[account].connected == 0:
                 # We have been disconnecting (too long time since window is
                 # opened)
@@ -1960,6 +1959,42 @@ class Interface:
         if 'insecure_ssl' in self.instances[account]['online_dialog']:
             self.instances[account]['online_dialog']['insecure_ssl'].destroy()
         self.instances[account]['online_dialog']['insecure_ssl'] = \
+            dialogs.ConfirmationDialogDoubleCheck(pritext, sectext, checktext1,
+            checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel,
+            is_modal=False)
+
+    def handle_event_insecure_password(self, account, data):
+        # ('INSECURE_PASSWORD', account, ())
+        def on_ok(is_checked):
+            if not is_checked[0]:
+                on_cancel()
+                return
+            del self.instances[account]['online_dialog']['insecure_password']
+            if is_checked[1]:
+                gajim.config.set_per('accounts', account,
+                    'warn_when_insecure_password', False)
+            if gajim.connections[account].connected == 0:
+                # We have been disconnecting (too long time since window is
+                # opened)
+                # re-connect with auto-accept
+                gajim.connections[account].connection_auto_accepted = True
+                show, msg = gajim.connections[account].continue_connect_info[:2]
+                self.roster.send_status(account, show, msg)
+                return
+            gajim.connections[account].accept_insecure_password()
+        def on_cancel():
+            del self.instances[account]['online_dialog']['insecure_password']
+            gajim.connections[account].disconnect(on_purpose=True)
+            self.handle_event_status(account, 'offline')
+        pritext = _('Insecure connection')
+        sectext = _('You are about to send your password unencrypted on an '
+            'insecure connection. Are you sure you want to do that?')
+        checktext1 = _('Yes, I really want to connect insecurely')
+        checktext2 = _('Do _not ask me again')
+        if 'insecure_password' in self.instances[account]['online_dialog']:
+            self.instances[account]['online_dialog']['insecure_password'].\
+                destroy()
+        self.instances[account]['online_dialog']['insecure_password'] = \
             dialogs.ConfirmationDialogDoubleCheck(pritext, sectext, checktext1,
             checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel,
             is_modal=False)
@@ -2085,6 +2120,7 @@ class Interface:
             'PLAIN_CONNECTION': [self.handle_event_plain_connection],
             'INSECURE_SSL_CONNECTION': \
                 [self.handle_event_insecure_ssl_connection],
+            'INSECURE_PASSWORD': [self.handle_event_insecure_password],
             'PUBSUB_NODE_REMOVED': [self.handle_event_pubsub_node_removed],
             'PUBSUB_NODE_NOT_REMOVED': \
                 [self.handle_event_pubsub_node_not_removed],

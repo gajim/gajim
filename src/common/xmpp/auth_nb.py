@@ -241,7 +241,7 @@ class SASL(PlugIn):
         if 'PLAIN' in self.mecs:
             self.mecs.remove('PLAIN')
             self.mechanism = 'PLAIN'
-            self._owner._caller.get_password(self.set_password)
+            self._owner._caller.get_password(self.set_password, 'PLAIN')
             self.startsasl = SASL_IN_PROCESS
             raise NodeProcessed
         self.startsasl = SASL_FAILURE
@@ -335,7 +335,7 @@ class SASL(PlugIn):
             self.resp['digest-uri'] = 'xmpp/' + self._owner.Server
             self.resp['charset'] = 'utf-8'
             # Password is now required
-            self._owner._caller.get_password(self.set_password)
+            self._owner._caller.get_password(self.set_password, self.mechanism)
         elif 'rspauth' in chal:
             self._owner.send(str(Node('response', attrs={'xmlns':NS_SASL})))
         else:
