@@ -285,7 +285,7 @@ class Interface:
         # FIXME: Drop and rewrite...
 
         statuss = ['offline', 'error', 'online', 'chat', 'away', 'xa', 'dnd',
-                'invisible']
+            'invisible']
         # Ignore invalid show
         if array[1] not in statuss:
             return
@@ -295,6 +295,7 @@ class Interface:
         jid = array[0].split('/')[0]
         keyID = array[5]
         contact_nickname = array[7]
+        lcontact = []
 
         # Get the proper keyID
         keyID = helpers.prepare_and_validate_gpg_keyID(account, jid, keyID)
@@ -309,8 +310,7 @@ class Interface:
         else:
             ji = jid
 
-        highest = gajim.contacts. \
-                get_contact_with_highest_priority(account, jid)
+        highest = gajim.contacts.get_contact_with_highest_priority(account, jid)
         was_highest = (highest and highest.resource == resource)
 
         conn = gajim.connections[account]
@@ -422,7 +422,7 @@ class Interface:
                 account_ji = account + '/' + ji
                 gajim.block_signed_in_notifications[account_ji] = True
                 gobject.timeout_add_seconds(30,
-                        self.unblock_signed_in_notifications, account_ji)
+                    self.unblock_signed_in_notifications, account_ji)
             locations = (self.instances, self.instances[account])
             for location in locations:
                 if 'add_contact' in location:
@@ -438,7 +438,7 @@ class Interface:
             # (when contact signs out or has errors)
             if array[1] in ('offline', 'error'):
                 contact1.our_chatstate = contact1.chatstate = \
-                        contact1.composing_xep = None
+                    contact1.composing_xep = None
 
                 # TODO: This causes problems when another
                 #       resource signs off!
@@ -452,7 +452,7 @@ class Interface:
                 # there won't be any sessions here if the contact terminated
                 # their sessions before going offline (which we do)
                 for sess in conn.get_sessions(ji):
-                    if (ji+'/'+resource) != str(sess.jid):
+                    if (ji + '/' + resource) != str(sess.jid):
                         continue
                     if sess.control:
                         sess.control.no_autonegotiation = False
@@ -461,17 +461,58 @@ class Interface:
                         conn.delete_session(jid, sess.thread_id)
 
             self.roster.chg_contact_status(contact1, array[1], status_message,
-                    account)
+                account)
             # Notifications
             if old_show < 2 and new_show > 1:
-                notify.notify('contact_connected', jid, account, status_message)
+                show_notif = True
+                for c in lcontact:
+                    if c.resource == resource:
+                        # we look for other connected resources
+                        continue
+                    if c.show not in ('offline', 'error'):
+                        show_notif = False
+                        break
+                if show_notif:
+                    # no other resource is connected, let's look in metacontacts
+                    family = gajim.contacts.get_metacontacts_family(account, ji)
+                    for info in family:
+                        acct_ = info['account']
+                        jid_ = info['jid']
+                        c_ = gajim.contacts.get_contact_with_highest_priority(
+                            acct_, jid_)
+                        if c_.show not in ('offline', 'error'):
+                            show_notif = False
+                            break
+                if show_notif:
+                    notify.notify('contact_connected', jid, account,
+                        status_message)
                 if self.remote_ctrl:
                     self.remote_ctrl.raise_signal('ContactPresence', (account,
-                            array))
+                        array))
 
             elif old_show > 1 and new_show < 2:
-                notify.notify('contact_disconnected', jid, account,
-                    status_message)
+                show_notif = True
+                for c in lcontact:
+                    if c.resource == resource:
+                        # we look for other connected resources
+                        continue
+                    if c.show not in ('offline', 'error'):
+                        show_notif = False
+                        break
+                if show_notif:
+                    # no other resource is connected, let's look in metacontacts
+                    family = gajim.contacts.get_metacontacts_family(account, ji)
+                    for info in family:
+                        acct_ = info['account']
+                        jid_ = info['jid']
+                        c_ = gajim.contacts.get_contact_with_highest_priority(
+                            acct_, jid_)
+                        if c_.show not in ('offline', 'error'):
+                            show_notif = False
+                            break
+                if show_notif:
+                    notify.notify('contact_disconnected', jid, account,
+                        status_message)
                 if self.remote_ctrl:
                     self.remote_ctrl.raise_signal('ContactAbsence', (account,
                         array))
@@ -480,7 +521,7 @@ class Interface:
             # error (<1))
             elif new_show > 1:
                 notify.notify('status_change', jid, account, [new_show,
-                        status_message])
+                    status_message])
                 if self.remote_ctrl:
                     self.remote_ctrl.raise_signal('ContactStatus', (account,
                         array))
