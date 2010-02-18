@@ -525,7 +525,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 		self.connect_style_event(widget, opts[0], opts[1])
 
 	def _conv_textview_key_press_event(self, widget, event):
-		if (event.state & gtk.gdk.CONTROL_MASK and event.keyval in (gtk.keysyms.c,
+		# translate any layout to latin_layout
+		keymap = gtk.gdk.keymap_get_default()
+		keycode, group, level = keymap.get_entries_for_keyval(event.keyval)[0]
+		keycodec, group, level = keymap.get_entries_for_keyval(gtk.keysyms.c)[0]
+		if (event.state & gtk.gdk.CONTROL_MASK and event.keyval in (keycodec,
 		gtk.keysyms.Insert)) or (event.state & gtk.gdk.SHIFT_MASK and \
 		event.keyval in (gtk.keysyms.Page_Down, gtk.keysyms.Page_Up)):
 			return False
