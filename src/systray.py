@@ -333,9 +333,15 @@ class Systray:
 				# we could be in another VD right now. eg vd2
 				# and we want to show it in vd2
 				if not gtkgui_helpers.possibly_move_window_in_current_desktop(win):
+					x, y = win.get_position()
+					gajim.config.set('roster_x-position', x)
+					gajim.config.set('roster_y-position', y)
 					win.hide() # else we hide it from VD that was visible in
 			else:
-				win.show_all()
+				if not win.get_property('visible'):
+					win.show_all()
+					win.move(gajim.config.get('roster_x-position'),
+						gajim.config.get('roster_y-position'))
 				if not gajim.config.get('roster_window_skip_taskbar'):
 					win.set_property('skip-taskbar-hint', False)
 				win.present_with_time(gtk.get_current_event_time())
