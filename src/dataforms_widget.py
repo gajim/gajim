@@ -428,9 +428,9 @@ class SingleForm(gtk.Table, object):
                 commonwidget = False
 
                 xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui',
-                        'item_list_table')
-                widget = xml.get_object('item_list_table')
-                treeview = xml.get_object('item_treeview')
+                    'multiple_form_hbox')
+                widget = xml.get_object('multiple_form_hbox')
+                treeview = xml.get_object('records_treeview')
 
                 listmodel = gtk.ListStore(str)
                 for value in field.iter_values():
