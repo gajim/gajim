@@ -492,8 +492,8 @@ class ServiceDiscoveryWindow(object):
     Class that represents the Services Discovery window
     """
 
-    def __init__(self, account, jid = '', node = '',
-                    address_entry = False, parent = None):
+    def __init__(self, account, jid='', node='', address_entry=False,
+    parent=None, initial_identities=None):
         self.account = account
         self.parent = parent
         if not jid:
@@ -519,6 +519,9 @@ _('Without a connection, you can not browse available services'))
             self.cache = ServicesCache(account)
             gajim.connections[account].services_cache = self.cache
 
+        if initial_identities:
+            self.cache.agent_info(account, (jid, node, initial_identities, [],
+                None))
         self.xml = gtkgui_helpers.get_gtk_builder('service_discovery_window.ui')
         self.window = self.xml.get_object('service_discovery_window')
         self.services_treeview = self.xml.get_object('services_treeview')
