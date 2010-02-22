@@ -35,7 +35,7 @@ from common import gajim
 from common.zeroconf import zeroconf
 from common.commands import ConnectionCommands
 from common.pep import ConnectionPEP
-from common.protocol.bytestream import ConnectionBytestreamZeroconf
+from common.protocol.bytestream import ConnectionSocks5BytestreamZeroconf
 
 import logging
 log = logging.getLogger('gajim.c.z.connection_handlers_zeroconf')
@@ -70,8 +70,9 @@ class ConnectionVcard(connection_handlers.ConnectionVcard):
         pass
 
 
-class ConnectionHandlersZeroconf(ConnectionVcard, ConnectionBytestreamZeroconf,
-ConnectionCommands, ConnectionPEP, connection_handlers.ConnectionHandlersBase):
+class ConnectionHandlersZeroconf(ConnectionVcard,
+ConnectionSocks5BytestreamZeroconf, ConnectionCommands, ConnectionPEP,
+connection_handlers.ConnectionHandlersBase):
     def __init__(self):
         ConnectionVcard.__init__(self)
         ConnectionBytestreamZeroconf.__init__(self)

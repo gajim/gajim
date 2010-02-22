@@ -49,7 +49,7 @@ from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.pep import ConnectionPEP
 from common.protocol.caps import ConnectionCaps
-from common.protocol.bytestream import ConnectionBytestream
+from common.protocol.bytestream import ConnectionSocks5Bytestream
 import common.caps_cache as capscache
 if gajim.HAVE_FARSIGHT:
     from common.jingle import ConnectionJingle
@@ -915,13 +915,13 @@ class ConnectionHandlersBase:
 
         return sess
 
-class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
-                ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionPEP,
-                ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
+class ConnectionHandlers(ConnectionVcard, ConnectionSocks5Bytestream,
+ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionPEP,
+ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
     def __init__(self):
         global HAS_IDLE
         ConnectionVcard.__init__(self)
-        ConnectionBytestream.__init__(self)
+        ConnectionSocks5Bytestream.__init__(self)
         ConnectionCommands.__init__(self)
         ConnectionPubSub.__init__(self)
         ConnectionPEP.__init__(self, account=self.name, dispatcher=self,
