@@ -158,7 +158,7 @@ class HistoryWindow:
 		muc_active_pix = muc_active_img.get_pixbuf()
 		contact_pix = contact_img.get_pixbuf()
 
-		keys = self.completion_dict.keys()
+		keys = completion_dict.keys()
 		# Move the actual jid at first so we load history faster
 		actual_jid = self.jid_entry.get_text().decode('utf-8')
 		if actual_jid in keys:
@@ -243,7 +243,7 @@ class HistoryWindow:
 		self.results_window.set_property('visible', False)
 
 	def on_jid_entry_focus(self, widget, event):
-			widget.select_region(0, -1) # select text
+		widget.select_region(0, -1) # select text
 
 	def _load_history(self, jid_or_name, account = None):
 		'''Load history for the given jid/name and show it'''
