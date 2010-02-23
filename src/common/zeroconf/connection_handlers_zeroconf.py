@@ -75,7 +75,7 @@ ConnectionSocks5BytestreamZeroconf, ConnectionCommands, ConnectionPEP,
 connection_handlers.ConnectionHandlersBase):
     def __init__(self):
         ConnectionVcard.__init__(self)
-        ConnectionBytestreamZeroconf.__init__(self)
+        ConnectionSocks5BytestreamZeroconf.__init__(self)
         ConnectionCommands.__init__(self)
         connection_handlers.ConnectionHandlersBase.__init__(self)
 
