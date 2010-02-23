@@ -1,4 +1,11 @@
-Gajim 0.13.2 ((14 January 2010)
+Gajim 0.13.3 (23 February 2010)
+
+  * Fix facebook xmpp server connection
+  * Fix copy / paste with Ctrl+C on non-latin keyboard
+  * Fix sending PEP information when connecting
+  * Fix parsing HTML messages that have ascii markup
+
+Gajim 0.13.2 (14 January 2010)
 
   * Fix some translations
   * Fix string comparison according to locales
@@ -7,7 +14,7 @@ Gajim 0.13.2 ((14 January 2010)
   * better SRV usage with libasyncns
   * copy emoticons when we copy / paste in conversations
 
-Gajim 0.13.1 ((28 November 2009)
+Gajim 0.13.1 (28 November 2009)
 
   * Fix a bug when no account exists and bonjour is not available
   * Fix a bug when opening advanced option in MUC
