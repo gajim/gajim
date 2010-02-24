@@ -2266,8 +2266,7 @@ class JoinGroupchatWindow:
         self._set_room_jid(room_jid)
 
     def on_browse_rooms_button_clicked(self, widget):
-        server = self.server_model[self.server_comboboxentry.get_active()][0].\
-            decode('utf-8')
+        server = self.server_comboboxentry.child.get_text().decode('utf-8')
         if server in gajim.interface.instances[self.account]['disco']:
             gajim.interface.instances[self.account]['disco'][server].window.\
                 present()
@@ -2303,8 +2302,7 @@ class JoinGroupchatWindow:
                     'groupchat.'))
             return
         nickname = self._nickname_entry.get_text().decode('utf-8')
-        server = self.server_model[self.server_comboboxentry.get_active()][0].\
-            decode('utf-8')
+        server = self.server_comboboxentry.child.get_text().decode('utf-8')
         room = self._room_jid_entry.get_text().decode('utf-8')
         room_jid = room + '@' + server
         password = self._password_entry.get_text().decode('utf-8')
