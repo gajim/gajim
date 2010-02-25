@@ -116,8 +116,7 @@ def challenge_splitter(data):
     return dict_
 
 def scram_parse(chatter):
-    stuff = dict(s.split('=', 1) for s in chatter.split(','))
-    return stuff
+    return dict(s.split('=', 1) for s in chatter.split(','))
 
 class SASL(PlugIn):
     """
@@ -334,7 +333,7 @@ class SASL(PlugIn):
                 return hmac.HMAC(key=k, msg=s, digestmod=hashfn).digest()
 
             def XOR(x, y):
-                r = [chr(ord(px) ^ ord(py)) for px, py in zip(x, y)]
+                r = (chr(ord(px) ^ ord(py)) for px, py in zip(x, y))
                 return ''.join(r)
 
             def Hi(s, salt, iters):
