@@ -116,9 +116,7 @@ def challenge_splitter(data):
     return dict_
 
 def scram_parse(chatter):
-    stuff = {}
-    for k, v in [s.split('=', 1) for s in chatter.split(',')]:
-        stuff[k] = v
+    stuff = dict(s.split('=', 1) for s in chatter.split(','))
     return stuff
 
 class SASL(PlugIn):
@@ -255,7 +253,7 @@ class SASL(PlugIn):
         if 'PLAIN' in self.mecs:
             self.mecs.remove('PLAIN')
             self.mechanism = 'PLAIN'
-            self._owner._caller.get_password(self.set_password, 'PLAIN')
+            self._owner._caller.get_password(self.set_password, self.mechanism)
             self.startsasl = SASL_IN_PROCESS
             raise NodeProcessed
         self.startsasl = SASL_FAILURE
@@ -331,31 +329,34 @@ class SASL(PlugIn):
             raise NodeProcessed
         if self.mechanism == 'SCRAM-SHA-1':
             hashfn = hashlib.sha1
+
             def HMAC(k, s):
                 return hmac.HMAC(key=k, msg=s, digestmod=hashfn).digest()
+
             def XOR(x, y):
-                r = []
-                for i in range(len(x)):
-                    r.append(chr(ord(x[i]) ^ ord(y[i])))
+                r = [chr(ord(px) ^ ord(py)) for px, py in zip(x, y)]
                 return ''.join(r)
+
             def Hi(s, salt, iters):
                 ii = 1
-                p = s
                 try:
-                    p = s.encode('utf-8')
+                    s = s.encode('utf-8')
                 except:
                     pass
-                ui_1 = HMAC(p, salt + '\0\0\0\01')
+                ui_1 = HMAC(s, salt + '\0\0\0\01')
                 ui = ui_1
                 for i in range(iters - 1):
                     ii += 1
-                    ui_1 = HMAC(p, ui_1)
+                    ui_1 = HMAC(s, ui_1)
                     ui = XOR(ui, ui_1)
                 return ui
+
             def H(s):
                 return hashfn(s).digest()
+
             def scram_base64(s):
                 return ''.join(s.encode('base64').split('\n'))
+
             if self.scram_step == 0:
                 self.scram_step = 1
                 self.scram_soup += ',' + data + ','
@@ -381,11 +382,12 @@ class SASL(PlugIn):
                     payload=[sasl_data])
                 self._owner.send(str(node))
                 raise NodeProcessed
+
             if self.scram_step == 1:
                 data = scram_parse(data)
                 if data['v'].decode('base64') != self.scram_ServerSignature:
                     # TODO: Not clear what to do here - need to abort.
-                    raise 'Hell'
+                    raise Exception
                 node = Node('response', attrs={'xmlns': NS_SASL});
                 self._owner.send(str(node))
                 raise NodeProcessed
