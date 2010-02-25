@@ -462,10 +462,6 @@ class XMPPDispatcher(PlugIn):
 		# we have released dispatcher, so self._owner has no methods
 		if not res:
 			return
-		if 'remove_timeout' in self._owner.__dict__:
-			# When we receive data after we started disconnecting, Transport may
-			# already be plugged out
-			self._owner.remove_timeout()
 		for (_id, _iq) in self._expected.items():
 			if _iq is None:
 				# If the expected Stanza would have arrived, ProcessNonBlocking
