@@ -241,7 +241,7 @@ class SASL(PlugIn):
         if 'SCRAM-SHA-1' in self.mecs:
             self.mecs.remove('SCRAM-SHA-1')
             self.mechanism = 'SCRAM-SHA-1'
-            self._owner._caller.get_password(self.set_password)
+            self._owner._caller.get_password(self.set_password, self.mechanism)
             self.scram_step = 0
             self.startsasl = SASL_IN_PROCESS
             raise NodeProcessed
