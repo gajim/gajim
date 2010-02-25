@@ -42,6 +42,7 @@ except ImportError:
 else:
 	try:
 		# test if dbus-x11 is installed
+		bus = dbus.SystemBus()
 		bus = dbus.SessionBus()
 		supported = True # does user have D-Bus bindings?
 	except dbus.DBusException:
@@ -49,6 +50,12 @@ else:
 		if not os.name == 'nt': # only say that to non Windows users
 			print _('D-Bus does not run correctly on this machine')
 			print _('D-Bus capabilities of Gajim cannot be used')
+	except exceptions.SystemBusNotPresent:
+		print _('D-Bus does not run correctly on this machine: system bus not '
+			'present')
+	except exceptions.SessionBusNotPresent:
+		print _('D-Bus does not run correctly on this machine: session bus not '
+			'present')
 
 class SystemBus:
 	'''A Singleton for the DBus SystemBus'''
