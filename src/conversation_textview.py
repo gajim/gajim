@@ -696,6 +696,8 @@ class ConversationTextview(gobject.GObject):
 		size = 2 * size - 1
 		self.marks_queue = Queue.Queue(size)
 		self.focus_out_end_mark = None
+		self.just_cleared = True
+
 
 	def visit_url_from_menuitem(self, widget, link):
 		'''basically it filters out the widget instance'''
@@ -1164,6 +1166,7 @@ class ConversationTextview(gobject.GObject):
 		buffer_ = self.tv.get_buffer()
 		end_iter = buffer_.get_end_iter()
 		buffer_.insert_with_tags_by_name(end_iter, '\n', 'eol')
+		self.just_cleared = False
 
 	def print_conversation_line(self, text, jid, kind, name, tim,
 	other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
@@ -1240,7 +1243,7 @@ class ConversationTextview(gobject.GObject):
 			text_tags.append(other_text_tag)
 		else: # not status nor /me
 			if gajim.config.get('chat_merge_consecutive_nickname'):
-				if kind != old_kind:
+				if kind != old_kind or self.just_cleared:
 					self.print_name(name, kind, other_tags_for_name)
 				else:
 					self.print_real_text(gajim.config.get(
@@ -1263,6 +1266,7 @@ class ConversationTextview(gobject.GObject):
 			else:
 				gobject.idle_add(self.scroll_to_end)
 
+		self.just_cleared = False
 		buffer_.end_user_action()
 
 	def get_time_to_show(self, tim):
