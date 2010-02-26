@@ -263,7 +263,7 @@ class ConnectionCaps(object):
 			# improper caps in stanza, ignoring
 			contact.caps_node = None
 			contact.caps_hash = None
-			contact.hash_method = None
+			contact.caps_hash_method = None
 			return
 
 		# start disco query...
