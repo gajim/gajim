@@ -24,7 +24,6 @@ according to the command properties.
 
 import re
 from types import BooleanType, UnicodeType
-from types import TupleType, ListType
 from operator import itemgetter
 
 from errors import DefinitionError, CommandError
@@ -125,10 +124,6 @@ def adapt_arguments(command, arguments, args, opts):
     an option which does not take an argument. If a switch is followed
     by an argument - then this argument will be treated just like a
     normal positional argument.
-
-    If the initial value of a keyword argument is a sequence, that is a
-    tuple or list - then a value of this option will be considered
-    correct only if it is present in the sequence.
     """
     spec_args, spec_kwargs, var_args, var_kwargs = command.extract_specification()
     norm_kwargs = dict(spec_kwargs)
@@ -274,25 +269,6 @@ def adapt_arguments(command, arguments, args, opts):
             if not isinstance(value, BooleanType):
                 raise CommandError("%s: Switch can not take an argument" % key, command)
 
-    # Detect every sequence constraint and ensure that if corresponding
-    # options are given - they contain proper values, within the
-    # constraint range.
-    for key, value in opts:
-        initial = norm_kwargs.get(key)
-        if isinstance(initial, (TupleType, ListType)):
-            if value not in initial:
-                raise CommandError("%s: Invalid argument" % key, command)
-
-    # If argument to an option constrained by a sequence was not given -
-    # then it's value should be set to None.
-    for spec_key, spec_value in spec_kwargs:
-        if isinstance(spec_value, (TupleType, ListType)):
-            for key, value in opts:
-                if spec_key == key:
-                    break
-            else:
-                opts.append((spec_key, None))
-
     # We need to encode every keyword argument to a simple string, not
     # the unicode one, because ** expansion does not support it.
     for index, (key, value) in enumerate(opts):
@@ -331,8 +307,6 @@ def generate_usage(command, complete=True):
 
         if isinstance(value, BooleanType):
             value = str()
-        elif isinstance(value, (TupleType, ListType)):
-            value = '={%s}' % ', '.join(value)
         else:
             value = '=%s' % value
 
