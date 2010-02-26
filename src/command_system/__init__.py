@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-The command system providing scalable, clean and convenient architecture in
-combination with declarative way of defining commands and a fair amount of
-automatization for routine processes.
+The command system providing scalable, clean and convenient architecture
+in combination with declarative way of defining commands and a fair
+amount of automatization for routine processes.
 """

@@ -38,8 +38,8 @@ lc = Constants()
 
 class StandardCommonCommands(CommandContainer):
     """
-    This command container contains standard commands which are common to all -
-    chat, private chat, group chat.
+    This command container contains standard commands which are common
+    to all - chat, private chat, group chat.
     """
 
     HOSTS = (ChatCommands, PrivateChatCommands, GroupChatCommands)
@@ -159,7 +159,8 @@ class StandardCommonCommands(CommandContainer):
 
 class StandardChatCommands(CommandContainer):
     """
-    This command container contains standard command which are unique to a chat.
+    This command container contains standard command which are unique to
+    a chat.
     """
 
     HOSTS = (ChatCommands,)
@@ -211,16 +212,16 @@ class StandardChatCommands(CommandContainer):
 
 class StandardPrivateChatCommands(CommandContainer):
     """
-    This command container contains standard command which are unique to a
-    private chat.
+    This command container contains standard command which are unique to
+    a private chat.
     """
 
     HOSTS = (PrivateChatCommands,)
 
 class StandardGroupchatCommands(CommandContainer):
     """
-    This command container contains standard command which are unique to a group
-    chat.
+    This command container contains standard command which are unique to
+    a group chat.
     """
 
     HOSTS = (GroupChatCommands,)

@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-The implementation and auxilary systems which implement the standard Gajim
-commands and also provide an infrastructure for adding custom commands.
+The implementation and auxilary systems which implement the standard
+Gajim commands and also provide an infrastructure for adding custom
+commands.
 """

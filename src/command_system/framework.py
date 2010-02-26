@@ -14,8 +14,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Provides a tiny framework with simple, yet powerful and extensible architecture
-to implement commands in a streight and flexible, declarative way.
+Provides a tiny framework with simple, yet powerful and extensible
+architecture to implement commands in a streight and flexible,
+declarative way.
 """
 
 import re
@@ -28,42 +29,43 @@ from errors import DefinitionError, CommandError
 
 class CommandHost(object):
     """
-    Command host is a hub between numerous command processors and command
-    containers. Aimed to participate in a dispatching process in order to
-    provide clean and transparent architecture.
+    Command host is a hub between numerous command processors and
+    command containers. Aimed to participate in a dispatching process in
+    order to provide clean and transparent architecture.
     """
     __metaclass__ = HostDispatcher
 
 class CommandContainer(object):
     """
-    Command container is an entity which holds defined commands, allowing them
-    to be dispatched and proccessed correctly. Each command container may be
-    bound to a one or more command hosts.
+    Command container is an entity which holds defined commands,
+    allowing them to be dispatched and proccessed correctly. Each
+    command container may be bound to a one or more command hosts.
 
-    Bounding is controlled by the HOSTS variable, which must be defined in the
-    body of the command container. This variable should contain a list of hosts
-    to bound to, as a tuple or list.
+    Bounding is controlled by the HOSTS variable, which must be defined
+    in the body of the command container. This variable should contain a
+    list of hosts to bound to, as a tuple or list.
     """
     __metaclass__ = ContainerDispatcher
 
 class CommandProcessor(object):
     """
-    Command processor is an immediate command emitter. It does not participate
-    in the dispatching process directly, but must define a host to bound to.
+    Command processor is an immediate command emitter. It does not
+    participate in the dispatching process directly, but must define a
+    host to bound to.
 
-    Bounding is controlled by the COMMAND_HOST variable, which must be defined
-    in the body of the command processor. This variable should be set to a
-    specific command host.
+    Bounding is controlled by the COMMAND_HOST variable, which must be
+    defined in the body of the command processor. This variable should
+    be set to a specific command host.
     """
 
-    # This defines a command prefix (or an initializer), which should preceede a
-    # a text in order it to be processed as a command.
+    # This defines a command prefix (or an initializer), which should
+    # preceede a a text in order it to be processed as a command.
     COMMAND_PREFIX = '/'
 
     def process_as_command(self, text):
         """
-        Try to process text as a command. Returns True if it has been processed
-        as a command and False otherwise.
+        Try to process text as a command. Returns True if it has been
+        processed as a command and False otherwise.
         """
         prefix = text.startswith(self.COMMAND_PREFIX)
         length = len(text) > len(self.COMMAND_PREFIX)
@@ -97,28 +99,28 @@ class CommandProcessor(object):
 
     def command_preprocessor(self, command, name, arguments, args, kwargs):
         """
-        Redefine this method in the subclass to execute custom code before
-        command gets executed.
+        Redefine this method in the subclass to execute custom code
+        before command gets executed.
 
-        If returns True then command execution will be interrupted and command
-        will not be executed.
+        If returns True then command execution will be interrupted and
+        command will not be executed.
         """
         pass
 
     def command_postprocessor(self, command, name, arguments, args, kwargs, value):
         """
-        Redefine this method in the subclass to execute custom code after
-        command gets executed.
+        Redefine this method in the subclass to execute custom code
+        after command gets executed.
         """
         pass
 
     def looks_like_command(self, text, body, name, arguments):
         """
-        This hook is being called before any processing, but after it was
-        determined that text looks like a command.
+        This hook is being called before any processing, but after it
+        was determined that text looks like a command.
 
-        If returns value other then None - then further processing will be
-        interrupted and that value will be used to return from
+        If returns value other then None - then further processing will
+        be interrupted and that value will be used to return from
         process_as_command.
         """
         pass
@@ -136,8 +138,9 @@ class CommandProcessor(object):
 
 class Command(object):
 
-    # These two regular expression patterns control how command documentation
-    # will be formatted to be transformed to a normal, readable state.
+    # These two regular expression patterns control how command
+    # documentation will be formatted to be transformed to a normal,
+    # readable state.
     DOC_STRIP_PATTERN = re.compile(r'(?:^[ \t]+|\A\n)', re.MULTILINE)
     DOC_FORMAT_PATTERN = re.compile(r'(?<!\n)\n(?!\n)', re.MULTILINE)
 
@@ -145,8 +148,8 @@ class Command(object):
         self.handler = handler
         self.names = names
 
-        # Automatically set all the properties passed to a constructor by the
-        # command decorator.
+        # Automatically set all the properties passed to a constructor
+        # by the command decorator.
         for key, value in properties.iteritems():
             setattr(self, key, value)
 
@@ -154,18 +157,20 @@ class Command(object):
         try:
             return self.handler(*args, **kwargs)
 
-        # This allows to use a shortcuted way of raising an exception inside a
-        # handler. That is to raise a CommandError without command or name
-        # attributes set. They will be set to a corresponding values right here
-        # in case if they was not set by the one who raised an exception.
+        # This allows to use a shortcuted way of raising an exception
+        # inside a handler. That is to raise a CommandError without
+        # command or name attributes set. They will be set to a
+        # corresponding values right here in case if they was not set by
+        # the one who raised an exception.
         except CommandError, error:
             if not error.command and not error.name:
                 raise CommandError(error.message, self)
             raise
 
         # This one is a little bit too wide, but as Python does not have
-        # anything more constrained - there is no other choice. Take a look here
-        # if command complains about invalid arguments while they are ok.
+        # anything more constrained - there is no other choice. Take a
+        # look here if command complains about invalid arguments while
+        # they are ok.
         except TypeError:
             raise CommandError("Command received invalid arguments", self)
 
@@ -185,8 +190,8 @@ class Command(object):
 
     def extract_documentation(self):
         """
-        Extract handler's documentation which is a doc-string and transform it
-        to a usable format.
+        Extract handler's documentation which is a doc-string and
+        transform it to a usable format.
 
         Transformation is done based on the DOC_STRIP_PATTERN and
         DOC_FORMAT_PATTERN regular expression patterns.
@@ -211,19 +216,19 @@ class Command(object):
 
     def extract_specification(self):
         """
-        Extract handler's arguments specification, as it was defined preserving
-        their order.
+        Extract handler's arguments specification, as it was defined
+        preserving their order.
         """
         names, var_args, var_kwargs, defaults = getargspec(self.handler)
 
-        # Behavior of this code need to be checked. Might yield incorrect
-        # results on some rare occasions.
+        # Behavior of this code need to be checked. Might yield
+        # incorrect results on some rare occasions.
         spec_args = names[:-len(defaults) if defaults else len(names)]
         spec_kwargs = list(zip(names[-len(defaults):], defaults)) if defaults else {}
 
-        # Removing self from arguments specification. Command handler should
-        # receive the processors as a first argument, which should be self by
-        # the canonical means.
+        # Removing self from arguments specification. Command handler
+        # should receive the processors as a first argument, which
+        # should be self by the canonical means.
         if spec_args.pop(0) != 'self':
             raise DefinitionError("First argument must be self", self)
 
@@ -231,44 +236,47 @@ class Command(object):
 
 def command(*names, **properties):
     """
-    A decorator for defining commands in a declarative way. Provides facilities
-    for setting command's names and properties.
+    A decorator for defining commands in a declarative way. Provides
+    facilities for setting command's names and properties.
 
-    Names should contain a set of names (aliases) by which the command can be
-    reached. If no names are given - the the native name (the one extracted from
-    the command handler) will be used.
+    Names should contain a set of names (aliases) by which the command
+    can be reached. If no names are given - the the native name (the one
+    extracted from the command handler) will be used.
 
-    If include_native=True is given (default) and names is non-empty - then the
-    native name of the command will be prepended in addition to the given names.
+    If include_native=True is given (default) and names is non-empty -
+    then the native name of the command will be prepended in addition to
+    the given names.
 
-    If usage=True is given (default) - then command help will be appended with
-    autogenerated usage info, based of the command handler arguments
-    introspection.
+    If usage=True is given (default) - then command help will be
+    appended with autogenerated usage info, based of the command handler
+    arguments introspection.
 
-    If source=True is given - then the first argument of the command will
-    receive the source arguments, as a raw, unprocessed string. The further
-    mapping of arguments and options will not be affected.
+    If source=True is given - then the first argument of the command
+    will receive the source arguments, as a raw, unprocessed string. The
+    further mapping of arguments and options will not be affected.
 
-    If raw=True is given - then command considered to be raw and should define
-    positional arguments only. If it defines only one positional argument - this
-    argument will receive all the raw and unprocessed arguments. If the command
-    defines more then one positional argument - then all the arguments except
-    the last one will be processed normally; the last argument will get what is
-    left after the processing as raw and unprocessed string.
+    If raw=True is given - then command considered to be raw and should
+    define positional arguments only. If it defines only one positional
+    argument - this argument will receive all the raw and unprocessed
+    arguments. If the command defines more then one positional argument
+    - then all the arguments except the last one will be processed
+    normally; the last argument will get what is left after the
+    processing as raw and unprocessed string.
 
-    If empty=True is given - this will allow to call a raw command without
-    arguments.
+    If empty=True is given - this will allow to call a raw command
+    without arguments.
 
-    If extra=True is given - then all the extra arguments passed to a command
-    will be collected into a sequence and given to the last positional argument.
+    If extra=True is given - then all the extra arguments passed to a
+    command will be collected into a sequence and given to the last
+    positional argument.
 
-    If overlap=True is given - then all the extra arguments will be mapped as if
-    they were values for the keyword arguments.
+    If overlap=True is given - then all the extra arguments will be
+    mapped as if they were values for the keyword arguments.
 
-    If expand_short=True is given (default) - then short, one-letter options
-    will be expanded to a verbose ones, based of the comparison of the first
-    letter. If more then one option with the same first letter is given - then
-    only first one will be used in the expansion.
+    If expand_short=True is given (default) - then short, one-letter
+    options will be expanded to a verbose ones, based of the comparison
+    of the first letter. If more then one option with the same first
+    letter is given - then only first one will be used in the expansion.
     """
     names = list(names)
 
@@ -300,22 +308,23 @@ def command(*names, **properties):
 
     def decorator(handler):
         """
-        Decorator which receives handler as a first argument and then wraps it
-        in the command which then returns back.
+        Decorator which receives handler as a first argument and then
+        wraps it in the command which then returns back.
         """
         command = Command(handler, *names, **properties)
 
         # Extract and inject a native name if either no other names are
-        # specified or include_native property is enabled, while making sure it
-        # is going to be the first one in the list.
+        # specified or include_native property is enabled, while making
+        # sure it is going to be the first one in the list.
         if not names or include_native:
             names.insert(0, command.native_name)
             command.names = tuple(names)
 
         return command
 
-    # Workaround if we are getting called without parameters. Keep in mind that
-    # in that case - first item in the names will be the handler.
+    # Workaround if we are getting called without parameters. Keep in
+    # mind that in that case - first item in the names will be the
+    # handler.
     if names and isinstance(names[0], FunctionType):
         return decorator(names.pop(0))
 
@@ -323,11 +332,8 @@ def command(*names, **properties):
 
 def documentation(text):
     """
-    This decorator is used to bind a documentation (a help) to a command.
-
-    Though this can be done easily by using doc-strings in a declarative and
-    Pythonic way - some of Gajim's developers are against it because of the
-    scaffolding needed to support the tranlation of such documentation.
+    This decorator is used to bind a documentation (a help) to a
+    command.
     """
     def decorator(target):
         if isinstance(target, Command):
