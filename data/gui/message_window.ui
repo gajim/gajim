@@ -14,6 +14,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="scrollable">True</property>
+            <property name="tab_border">0</property>
           </object>
         </child>
       </object>
@@ -59,7 +60,6 @@
             <child>
               <object class="GtkImage" id="image1329">
                 <property name="visible">True</property>
-                <property name="ypad">6</property>
                 <property name="stock">gtk-close</property>
                 <property name="icon-size">1</property>
               </object>
