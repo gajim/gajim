@@ -509,6 +509,8 @@ class Interface:
                         jid_ = info['jid']
                         c_ = gajim.contacts.get_contact_with_highest_priority(
                             acct_, jid_)
+                        if not c_:
+                            continue
                         if c_.show not in ('offline', 'error'):
                             show_notif = False
                             break
