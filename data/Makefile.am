@@ -1,11 +1,11 @@
-SUBDIRS = glade emoticons pixmaps iconsets moods activities
+SUBDIRS = gui emoticons pixmaps iconsets moods activities
 @INTLTOOL_DESKTOP_RULE@
 
 desktopdir = $(datadir)/applications
 desktop_in_files = gajim.desktop.in.in 
 desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 
-installdefsdir = $(pkgdatadir)/src/common
+installdefsdir = $(gajim_srcdir)/common
 installdefs_DATA = defs.py
 
 soundsdir = $(pkgdatadir)/data/sounds

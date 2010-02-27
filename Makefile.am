@@ -1,4 +1,4 @@
-SUBDIRS = src data po
+SUBDIRS = src data po icons
 
 ACLOCAL_AMFLAGS = -I m4
 
@@ -50,7 +50,6 @@ MAINTAINERCLEANFILES = \
 	aclocal.m4 \
 	libtool \
 	po/POTFILES.in \
-	src/trayicon_la-eggtrayicon.loT \
 	m4/intltool.m4
 
 MAINTAINERCLEANDIRS = \

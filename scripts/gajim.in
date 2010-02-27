@@ -29,9 +29,5 @@ fi
 
 [ "$APP" = "gajim-history-manager" ] && APP="history_manager"
 
-export datadir=@DATADIR@/gajim
-PYTHON_EXEC=@PYTHON@
-
-cd ${datadir}/src
-export PYTHONPATH="$PYTHONPATH:@LIBDIR@/gajim"
-exec ${PYTHON_EXEC} -OO $APP.py "$@"
+cd "@GAJIM_SRCDIR@"
+exec "@PYTHON@" -OO $APP.py "$@"

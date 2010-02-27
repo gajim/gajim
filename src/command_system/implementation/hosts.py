@@ -1,4 +1,4 @@
-# Copyright (C) 2009  red-agent <hell.director@gmail.com>
+# Copyright (C) 2009  Alexander Cherniuk <ts33kr@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,29 +14,29 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-The module defines a set of command hosts, which are bound to a different
-command processors, which are the source of commands.
+The module defines a set of command hosts, which are bound to a
+different command processors, which are the source of commands.
 """
 
 from ..framework import CommandHost
 
 class ChatCommands(CommandHost):
     """
-    This command host is bound to the command processor which processes commands
-    from a chat.
+    This command host is bound to the command processor which processes
+    commands from a chat.
     """
     pass
 
 class PrivateChatCommands(CommandHost):
     """
-    This command host is bound to the command processor which processes commands
-    from a private chat.
+    This command host is bound to the command processor which processes
+    commands from a private chat.
     """
     pass
 
 class GroupChatCommands(CommandHost):
     """
-    This command host is bound to the command processor which processes commands
-    from a group chat.
+    This command host is bound to the command processor which processes
+    commands from a group chat.
     """
     pass

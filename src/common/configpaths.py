@@ -25,6 +25,18 @@
 import os
 import sys
 import tempfile
+import defs
+HAVE_XDG = True
+try:
+    import xdg.BaseDirectory
+except:
+    HAVE_XDG = False
+
+(
+TYPE_CONFIG,
+TYPE_CACHE,
+TYPE_DATA
+) = range(3)
 
 # Note on path and filename encodings:
 #
@@ -46,114 +58,128 @@ import tempfile
 # not displayed to the user, Unicode is not really necessary here.
 
 def fse(s):
-	'''Convert from filesystem encoding if not already Unicode'''
-	return unicode(s, sys.getfilesystemencoding())
+    """
+    Convert from filesystem encoding if not already Unicode
+    """
+    return unicode(s, sys.getfilesystemencoding())
 
 def windowsify(s):
-	if os.name == 'nt':
-		return s.capitalize()
-	return s
+    if os.name == 'nt':
+        return s.capitalize()
+    return s
 
 class ConfigPaths:
-	def __init__(self, root=None):
-		self.root = root
-		self.paths = {}
+    def __init__(self):
+        # {'name': (type, path), } type can be TYPE_CONFIG, TYPE_CACHE, TYPE_DATA
+        # or None
+        self.paths = {}
 
-		if self.root is None:
-			if os.name == 'nt':
-				try:
-					# Documents and Settings\[User Name]\Application Data\Gajim
+        if os.name == 'nt':
+            try:
+                # Documents and Settings\[User Name]\Application Data\Gajim
 
-					# How are we supposed to know what encoding the environment
-					# variable 'appdata' is in? Assuming it to be in filesystem
-					# encoding.
-					self.root = os.path.join(fse(os.environ[u'appdata']), u'Gajim')
-				except KeyError:
-					# win9x, in cwd
-					self.root = u'.'
-			else: # Unices
-				# Pass in an Unicode string, and hopefully get one back.
-				self.root = os.path.expanduser(u'~/.gajim')
+                # How are we supposed to know what encoding the environment
+                # variable 'appdata' is in? Assuming it to be in filesystem
+                # encoding.
+                self.config_root = self.cache_root = self.data_root = \
+                        os.path.join(fse(os.environ[u'appdata']), u'Gajim')
+            except KeyError:
+                # win9x, in cwd
+                self.config_root = self.cache_root = self.data_root = u'.'
+        else: # Unices
+            # Pass in an Unicode string, and hopefully get one back.
+            if HAVE_XDG:
+                self.config_root = xdg.BaseDirectory.load_first_config('gajim')
+                if not self.config_root:
+                    # Folder doesn't exist yet.
+                    self.config_root = os.path.join(xdg.BaseDirectory.\
+                            xdg_config_dirs[0], u'gajim')
 
-	def add_from_root(self, name, path):
-		self.paths[name] = (True, path)
+                self.cache_root = os.path.join(xdg.BaseDirectory.xdg_cache_home,
+                        u'gajim')
 
-	def add(self, name, path):
-		self.paths[name] = (False, path)
+                self.data_root = xdg.BaseDirectory.save_data_path('gajim')
+                if not self.data_root:
+                    self.data_root = os.path.join(xdg.BaseDirectory.\
+                            xdg_data_dirs[0], u'gajim')
+            else:
+                expand = os.path.expanduser
+                base = os.getenv('XDG_CONFIG_HOME') or expand(u'~/.config')
+                self.config_root = os.path.join(base, u'gajim')
+                base = os.getenv('XDG_CACHE_HOME') or expand(u'~/.cache')
+                self.cache_root = os.path.join(base, u'gajim')
+                base = os.getenv('XDG_DATA_HOME') or expand(u'~/.local/share')
+                self.data_root = os.path.join(base, u'gajim')
 
-	def __getitem__(self, key):
-		relative, path = self.paths[key]
-		if not relative:
-			return path
-		return os.path.join(self.root, path)
+    def add(self, name, type_, path):
+        self.paths[name] = (type_, path)
 
-	def get(self, key, default=None):
-		try:
-			return self[key]
-		except KeyError:
-			return default
+    def __getitem__(self, key):
+        type_, path = self.paths[key]
+        if type_ == TYPE_CONFIG:
+            return os.path.join(self.config_root, path)
+        elif type_ == TYPE_CACHE:
+            return os.path.join(self.cache_root, path)
+        elif type_ == TYPE_DATA:
+            return os.path.join(self.data_root, path)
+        return path
 
-	def iteritems(self):
-		for key in self.paths.iterkeys():
-			yield (key, self[key])
+    def get(self, key, default=None):
+        try:
+            return self[key]
+        except KeyError:
+            return default
 
-	def init(self, root = None):
-		if root is not None:
-			self.root = root
+    def iteritems(self):
+        for key in self.paths.iterkeys():
+            yield (key, self[key])
 
-		# LOG is deprecated
-		k = ( 'LOG',   'LOG_DB',   'VCARD',   'AVATAR',   'MY_EMOTS',
-			'MY_ICONSETS', 'MY_MOOD_ICONSETS',
-			'MY_ACTIVITY_ICONSETS', 'MY_CACERTS')
-		v = (u'logs', u'logs.db', u'vcards', u'avatars', u'emoticons',
-			u'iconsets',  u'moods', u'activities', u'cacerts.pem')
+    def init(self, root=None):
+        if root is not None:
+            self.config_root = self.cache_root = self.data_root = root
 
-		if os.name == 'nt':
-			v = [x.capitalize() for x in v]
+        d = {'MY_DATA': '', 'LOG_DB': u'logs.db', 'MY_CACERTS': u'cacerts.pem',
+                'MY_EMOTS': u'emoticons', 'MY_ICONSETS': u'iconsets',
+                'MY_MOOD_ICONSETS': u'moods', 'MY_ACTIVITY_ICONSETS': u'activities'}
+        for name in d:
+            self.add(name, TYPE_DATA, windowsify(d[name]))
 
-		for n, p in zip(k, v):
-			self.add_from_root(n, p)
+        d = {'MY_CACHE': '', 'CACHE_DB': u'cache.db', 'VCARD': u'vcards',
+                'AVATAR': u'avatars'}
+        for name in d:
+            self.add(name, TYPE_CACHE, windowsify(d[name]))
 
-		datadir = ''
-		if u'datadir' in os.environ:
-			datadir = fse(os.environ[u'datadir'])
-		if not datadir:
-			datadir = u'..'
-		self.add('DATA', os.path.join(datadir, windowsify(u'data')))
-		self.add('HOME', fse(os.path.expanduser('~')))
-		try:
-			self.add('TMP', fse(tempfile.gettempdir()))
-		except IOError, e:
-			print >> sys.stderr, 'Error opening tmp folder: %s\nUsing %s' % (
-				str(e), os.path.expanduser('~'))
-			self.add('TMP', fse(os.path.expanduser('~')))
+        self.add('MY_CONFIG', TYPE_CONFIG, '')
 
-		try:
-			import svn_config
-			svn_config.configure(self)
-		except (ImportError, AttributeError):
-			pass
+        basedir = fse(os.environ.get(u'GAJIM_BASEDIR', defs.basedir))
+        self.add('DATA', None, os.path.join(basedir, windowsify(u'data')))
+        self.add('ICONS', None, os.path.join(basedir, windowsify(u'icons')))
+        self.add('HOME', None, fse(os.path.expanduser('~')))
+        try:
+            self.add('TMP', None, fse(tempfile.gettempdir()))
+        except IOError, e:
+            print >> sys.stderr, 'Error opening tmp folder: %s\nUsing %s' % (
+                    str(e), os.path.expanduser('~'))
+            self.add('TMP', None, fse(os.path.expanduser('~')))
 
-		# for k, v in paths.iteritems():
-		# 	print "%s: %s" % (repr(k), repr(v))
+        try:
+            import svn_config
+            svn_config.configure(self)
+        except (ImportError, AttributeError):
+            pass
 
-	def init_profile(self, profile = ''):
-		conffile = windowsify(u'config')
-		pidfile = windowsify(u'gajim')
-		secretsfile = windowsify(u'secrets')
+    def init_profile(self, profile=''):
+        conffile = windowsify(u'config')
+        pidfile = windowsify(u'gajim')
+        secretsfile = windowsify(u'secrets')
 
-		if len(profile) > 0:
-			conffile += u'.' + profile
-			pidfile += u'.' + profile
-			secretsfile += u'.' + profile
-		pidfile += u'.pid'
-		self.add_from_root('CONFIG_FILE', conffile)
-		self.add_from_root('PID_FILE', pidfile)
-		self.add_from_root('SECRETS_FILE', secretsfile)
-
-		# for k, v in paths.iteritems():
-		# 	print "%s: %s" % (repr(k), repr(v))
+        if len(profile) > 0:
+            conffile += u'.' + profile
+            pidfile += u'.' + profile
+            secretsfile += u'.' + profile
+        pidfile += u'.pid'
+        self.add('CONFIG_FILE', TYPE_CONFIG, conffile)
+        self.add('PID_FILE', TYPE_CACHE, pidfile)
+        self.add('SECRETS_FILE', TYPE_DATA, secretsfile)
 
 gajimpaths = ConfigPaths()
-
-# vim: se ts=3:

@@ -29,20 +29,20 @@ import defs
 import unicodedata
 
 def paragraph_direction_mark(text):
-	"""
-	Determine paragraph writing direction according to
-	http://www.unicode.org/reports/tr9/#The_Paragraph_Level
-	
-	Returns either Unicode LTR mark or RTL mark.
-	"""
-	for char in text:
-		bidi = unicodedata.bidirectional(char)
-		if bidi == 'L':
-			return u'\u200E'
-		elif bidi == 'AL' or bidi == 'R':
-			return u'\u200F'
+    """
+    Determine paragraph writing direction according to
+    http://www.unicode.org/reports/tr9/#The_Paragraph_Level
 
-	return u'\u200E'
+    Returns either Unicode LTR mark or RTL mark.
+    """
+    for char in text:
+        bidi = unicodedata.bidirectional(char)
+        if bidi == 'L':
+            return u'\u200E'
+        elif bidi == 'AL' or bidi == 'R':
+            return u'\u200F'
+
+    return u'\u200E'
 
 APP = 'gajim'
 DIR = defs.localedir
@@ -53,47 +53,46 @@ locale.setlocale(locale.LC_ALL, '')
 
 ## For windows: set, if needed, a value in LANG environmental variable ##
 if os.name == 'nt':
-	lang = os.getenv('LANG')
-	if lang is None:
-		default_lang = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..
-		if default_lang:
-			lang = default_lang
+    lang = os.getenv('LANG')
+    if lang is None:
+        default_lang = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..
+        if default_lang:
+            lang = default_lang
 
-	if lang:
-		os.environ['LANG'] = lang
+    if lang:
+        os.environ['LANG'] = lang
 
 gettext.install(APP, DIR, unicode = True)
 if gettext._translations:
-	_translation = gettext._translations.values()[0]
+    _translation = gettext._translations.values()[0]
 else:
-	_translation = gettext.NullTranslations()
+    _translation = gettext.NullTranslations()
 
 def Q_(s):
-	# Qualified translatable strings
-	# Some strings are too ambiguous to be easily translated.
-	# so we must use as:
-	# s = Q_('?vcard:Unknown')
-	# widget.set_text(s)
-	# Q_() removes the ?vcard:
-	# but gettext while parsing the file detects ?vcard:Unknown as a whole string.
-	# translator can either put the ?vcard: part or no (easier for him or her to no)
-	# nothing fails
-	s = _(s)
-	if s[0] == '?':
-		s = s[s.find(':')+1:] # remove ?abc: part
-	return s
+    # Qualified translatable strings
+    # Some strings are too ambiguous to be easily translated.
+    # so we must use as:
+    # s = Q_('?vcard:Unknown')
+    # widget.set_text(s)
+    # Q_() removes the ?vcard:
+    # but gettext while parsing the file detects ?vcard:Unknown as a whole string.
+    # translator can either put the ?vcard: part or no (easier for him or her to no)
+    # nothing fails
+    s = _(s)
+    if s[0] == '?':
+        s = s[s.find(':')+1:] # remove ?abc: part
+    return s
 
 def ngettext(s_sing, s_plural, n, replace_sing = None, replace_plural = None):
-	'''use as:
-	i18n.ngettext('leave room %s', 'leave rooms %s', len(rooms), 'a', 'a, b, c')
+    """
+    Use as:
+            i18n.ngettext('leave room %s', 'leave rooms %s', len(rooms), 'a', 'a, b, c')
 
-	in other words this is a hack to ngettext() to support %s %d etc..
-	'''
-	text = _translation.ungettext(s_sing, s_plural, n)
-	if n == 1 and replace_sing is not None:
-		text = text % replace_sing
-	elif n > 1 and replace_plural is not None:
-		text = text % replace_plural
-	return text
-
-# vim: se ts=3:
+    In other words this is a hack to ngettext() to support %s %d etc..
+    """
+    text = _translation.ungettext(s_sing, s_plural, n)
+    if n == 1 and replace_sing is not None:
+        text = text % replace_sing
+    elif n > 1 and replace_plural is not None:
+        text = text % replace_plural
+    return text

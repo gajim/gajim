@@ -1,4 +1,4 @@
-# Copyright (C) 2009  red-agent <hell.director@gmail.com>
+# Copyright (C) 2009  Alexander Cherniuk <ts33kr@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,10 +14,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Provides a glue to tie command system framework and the actual code where it
-would be dropped in. Defines a little bit of scaffolding to support interaction
-between the two and a few utility methods so you don't need to dig up the code
-itself code to write basic commands.
+Provides a glue to tie command system framework and the actual code
+where it would be dropped in. Defines a little bit of scaffolding to
+support interaction between the two and a few utility methods so you
+don't need to dig up the code itself code to write basic commands.
 """
 
 from types import StringTypes
@@ -30,8 +30,8 @@ from ..errors import CommandError
 
 class ChatCommandProcessor(CommandProcessor):
     """
-    A basic scaffolding to provide convenient interaction between the command
-    system and chat controls.
+    A basic scaffolding to provide convenient interaction between the
+    command system and chat controls.
     """
 
     def process_as_command(self, text):
@@ -76,8 +76,8 @@ class ChatCommandProcessor(CommandProcessor):
 
 class CommandTools:
     """
-    Contains a set of basic tools and shortcuts you can use in your commands to
-    performe some simple operations.
+    Contains a set of basic tools and shortcuts you can use in your
+    commands to performe some simple operations.
     """
 
     def echo(self, text, kind='info'):
@@ -107,8 +107,8 @@ class CommandTools:
 
     def add_history(self, text):
         """
-        Add given text to the input history, so user can scroll through it using
-        ctrl + up/down arrow keys.
+        Add given text to the input history, so user can scroll through
+        it using ctrl + up/down arrow keys.
         """
         self.save_sent_message(text)
 

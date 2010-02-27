@@ -97,4 +97,3 @@ class Spell(object):
 
 def get_from_text_view(textview):
     return Spell(textview, create=False)
-

@@ -15,7 +15,7 @@ Gajim 0.13 (XX November 2009)
   * Ability to enable / disable accounts
   * better URL recognition
   * groupchat autoreconnect
-  * Store passwords in KDE wallet is available
+  * Store passwords in KDE wallet if available
   * Better MUC errors handling
   * Fix sound player launch (don't create zombies anymore)
   * Optional shell like completion
@@ -44,7 +44,7 @@ Gajim 0.12.2 (07 June 2009)
   * Improve error messages handling
   * Totem support for played music
   * Fix SSL with some servers
-  * Handle XFCE notification-daemon
+  * Handle Xfce notification-daemon
   * Restore old behaviour of click on systray: left click to open events
   * Network manager 0.7 support
   * Move logs file under windows to $APPDATA/gajim

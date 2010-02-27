@@ -23,559 +23,657 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import common.gajim
-from common import xmpp
-
 MOODS = {
-	'afraid':			_('Afraid'),
-	'amazed':			_('Amazed'),
-	'amorous':			_('Amorous'),
-	'angry':				_('Angry'),
-	'annoyed':			_('Annoyed'),
-	'anxious':			_('Anxious'),
-	'aroused':			_('Aroused'),
-	'ashamed':			_('Ashamed'),
-	'bored':				_('Bored'),
-	'brave':				_('Brave'),
-	'calm':				_('Calm'),
-	'cautious':			_('Cautious'),
-	'cold':				_('Cold'),
-	'confident':		_('Confident'),
-	'confused':			_('Confused'),
-	'contemplative':	_('Contemplative'),
-	'contented':		_('Contented'),
-	'cranky':			_('Cranky'),
-	'crazy':				_('Crazy'),
-	'creative':			_('Creative'),
-	'curious':			_('Curious'),
-	'dejected':			_('Dejected'),
-	'depressed':		_('Depressed'),
-	'disappointed':	_('Disappointed'),
-	'disgusted':		_('Disgusted'),
-	'dismayed':			_('Dismayed'),
-	'distracted':		_('Distracted'),
-	'embarrassed':		_('Embarrassed'),
-	'envious':			_('Envious'),
-	'excited':			_('Excited'),
-	'flirtatious':		_('Flirtatious'),
-	'frustrated':		_('Frustrated'),
-	'grateful':			_('Grateful'),
-	'grieving':			_('Grieving'),
-	'grumpy':			_('Grumpy'),
-	'guilty':			_('Guilty'),
-	'happy':				_('Happy'),
-	'hopeful':			_('Hopeful'),
-	'hot':				_('Hot'),
-	'humbled':			_('Humbled'),
-	'humiliated':		_('Humiliated'),
-	'hungry':			_('Hungry'),
-	'hurt':				_('Hurt'),
-	'impressed':		_('Impressed'),
-	'in_awe':			_('In Awe'),
-	'in_love':			_('In Love'),
-	'indignant':		_('Indignant'),
-	'interested':		_('Interested'),
-	'intoxicated':		_('Intoxicated'),
-	'invincible':		_('Invincible'),
-	'jealous':			_('Jealous'),
-	'lonely':			_('Lonely'),
-	'lost':				_('Lost'),
-	'lucky':				_('Lucky'),
-	'mean':				_('Mean'),
-	'moody':				_('Moody'),
-	'nervous':			_('Nervous'),
-	'neutral':			_('Neutral'),
-	'offended':			_('Offended'),
-	'outraged':			_('Outraged'),
-	'playful':			_('Playful'),
-	'proud':				_('Proud'),
-	'relaxed':			_('Relaxed'),
-	'relieved':			_('Relieved'),
-	'remorseful':		_('Remorseful'),
-	'restless':			_('Restless'),
-	'sad':				_('Sad'),
-	'sarcastic':		_('Sarcastic'),
-	'satisfied':		_('Satisfied'),
-	'serious':			_('Serious'),
-	'shocked':			_('Shocked'),
-	'shy':				_('Shy'),
-	'sick':				_('Sick'),
-	'sleepy':			_('Sleepy'),
-	'spontaneous':		_('Spontaneous'),
-	'stressed':			_('Stressed'),
-	'strong':			_('Strong'),
-	'surprised':		_('Surprised'),
-	'thankful':			_('Thankful'),
-	'thirsty':			_('Thirsty'),
-	'tired':				_('Tired'),
-	'undefined':		_('Undefined'),
-	'weak':				_('Weak'),
-	'worried':			_('Worried')}
+        'afraid':                       _('Afraid'),
+        'amazed':                       _('Amazed'),
+        'amorous':                      _('Amorous'),
+        'angry':                                _('Angry'),
+        'annoyed':                      _('Annoyed'),
+        'anxious':                      _('Anxious'),
+        'aroused':                      _('Aroused'),
+        'ashamed':                      _('Ashamed'),
+        'bored':                                _('Bored'),
+        'brave':                                _('Brave'),
+        'calm':                         _('Calm'),
+        'cautious':                     _('Cautious'),
+        'cold':                         _('Cold'),
+        'confident':            _('Confident'),
+        'confused':                     _('Confused'),
+        'contemplative':        _('Contemplative'),
+        'contented':            _('Contented'),
+        'cranky':                       _('Cranky'),
+        'crazy':                                _('Crazy'),
+        'creative':                     _('Creative'),
+        'curious':                      _('Curious'),
+        'dejected':                     _('Dejected'),
+        'depressed':            _('Depressed'),
+        'disappointed': _('Disappointed'),
+        'disgusted':            _('Disgusted'),
+        'dismayed':                     _('Dismayed'),
+        'distracted':           _('Distracted'),
+        'embarrassed':          _('Embarrassed'),
+        'envious':                      _('Envious'),
+        'excited':                      _('Excited'),
+        'flirtatious':          _('Flirtatious'),
+        'frustrated':           _('Frustrated'),
+        'grateful':                     _('Grateful'),
+        'grieving':                     _('Grieving'),
+        'grumpy':                       _('Grumpy'),
+        'guilty':                       _('Guilty'),
+        'happy':                                _('Happy'),
+        'hopeful':                      _('Hopeful'),
+        'hot':                          _('Hot'),
+        'humbled':                      _('Humbled'),
+        'humiliated':           _('Humiliated'),
+        'hungry':                       _('Hungry'),
+        'hurt':                         _('Hurt'),
+        'impressed':            _('Impressed'),
+        'in_awe':                       _('In Awe'),
+        'in_love':                      _('In Love'),
+        'indignant':            _('Indignant'),
+        'interested':           _('Interested'),
+        'intoxicated':          _('Intoxicated'),
+        'invincible':           _('Invincible'),
+        'jealous':                      _('Jealous'),
+        'lonely':                       _('Lonely'),
+        'lost':                         _('Lost'),
+        'lucky':                                _('Lucky'),
+        'mean':                         _('Mean'),
+        'moody':                                _('Moody'),
+        'nervous':                      _('Nervous'),
+        'neutral':                      _('Neutral'),
+        'offended':                     _('Offended'),
+        'outraged':                     _('Outraged'),
+        'playful':                      _('Playful'),
+        'proud':                                _('Proud'),
+        'relaxed':                      _('Relaxed'),
+        'relieved':                     _('Relieved'),
+        'remorseful':           _('Remorseful'),
+        'restless':                     _('Restless'),
+        'sad':                          _('Sad'),
+        'sarcastic':            _('Sarcastic'),
+        'satisfied':            _('Satisfied'),
+        'serious':                      _('Serious'),
+        'shocked':                      _('Shocked'),
+        'shy':                          _('Shy'),
+        'sick':                         _('Sick'),
+        'sleepy':                       _('Sleepy'),
+        'spontaneous':          _('Spontaneous'),
+        'stressed':                     _('Stressed'),
+        'strong':                       _('Strong'),
+        'surprised':            _('Surprised'),
+        'thankful':                     _('Thankful'),
+        'thirsty':                      _('Thirsty'),
+        'tired':                                _('Tired'),
+        'undefined':            _('Undefined'),
+        'weak':                         _('Weak'),
+        'worried':                      _('Worried')}
 
 ACTIVITIES = {
-	'doing_chores': {'category':			_('Doing Chores'),
-		'buying_groceries':					_('Buying Groceries'),
-		'cleaning':								_('Cleaning'),
-		'cooking':								_('Cooking'),
-		'doing_maintenance':					_('Doing Maintenance'),
-		'doing_the_dishes':					_('Doing the Dishes'),
-		'doing_the_laundry':					_('Doing the Laundry'),
-		'gardening':							_('Gardening'),
-		'running_an_errand':					_('Running an Errand'),
-		'walking_the_dog':					_('Walking the Dog')},
-	'drinking': {'category':				_('Drinking'),
-		'having_a_beer':						_('Having a Beer'),
-		'having_coffee':						_('Having Coffee'),
-		'having_tea':							_('Having Tea')},
-	'eating': {'category':					_('Eating'),
-		'having_a_snack':						_('Having a Snack'),
-		'having_breakfast':					_('Having Breakfast'),
-		'having_dinner':						_('Having Dinner'),
-		'having_lunch':						_('Having Lunch')},
-	'exercising': {'category':				_('Exercising'),
-		'cycling':								_('Cycling'),
-		'dancing':								_('Dancing'),
-		'hiking':								_('Hiking'),
-		'jogging':								_('Jogging'),
-		'playing_sports':						_('Playing Sports'),
-		'running':								_('Running'),
-		'skiing':								_('Skiing'),
-		'swimming':								_('Swimming'),
-		'working_out':							_('Working out')},
-	'grooming': {'category':				_('Grooming'),
-		'at_the_spa':							_('At the Spa'),
-		'brushing_teeth':						_('Brushing Teeth'),
-		'getting_a_haircut':					_('Getting a Haircut'),
-		'shaving':								_('Shaving'),
-		'taking_a_bath':						_('Taking a Bath'),
-		'taking_a_shower':					_('Taking a Shower')},
-	'having_appointment': {'category':	_('Having an Appointment')},
-	'inactive': {'category':				_('Inactive'),
-		'day_off':								_('Day Off'),
-		'hanging_out':							_('Hanging out'),
-		'hiding':								_('Hiding'),
-		'on_vacation':							_('On Vacation'),
-		'praying':								_('Praying'),
-		'scheduled_holiday':					_('Scheduled Holiday'),
-		'sleeping':								_('Sleeping'),
-		'thinking':								_('Thinking')},
-	'relaxing': {'category':				_('Relaxing'),
-		'fishing':								_('Fishing'),
-		'gaming':								_('Gaming'),
-		'going_out':							_('Going out'),
-		'partying':								_('Partying'),
-		'reading':								_('Reading'),
-		'rehearsing':							_('Rehearsing'),
-		'shopping':								_('Shopping'),
-		'smoking':								_('Smoking'),
-		'socializing':							_('Socializing'),
-		'sunbathing':							_('Sunbathing'),
-		'watching_tv':							_('Watching TV'),
-		'watching_a_movie':					_('Watching a Movie')},
-	'talking': {'category':					_('Talking'),
-		'in_real_life':						_('In Real Life'),
-		'on_the_phone':						_('On the Phone'),
-		'on_video_phone':						_('On Video Phone')},
-	'traveling': {'category':				_('Traveling'),
-		'commuting':							_('Commuting'),
-		'cycling':								_('Cycling'),
-		'driving':								_('Driving'),
-		'in_a_car':								_('In a Car'),
-		'on_a_bus':								_('On a Bus'),
-		'on_a_plane':							_('On a Plane'),
-		'on_a_train':							_('On a Train'),
-		'on_a_trip':							_('On a Trip'),
-		'walking':								_('Walking')},
-	'working': {'category':					_('Working'),
-		'coding':								_('Coding'),
-		'in_a_meeting':						_('In a Meeting'),
-		'studying':								_('Studying'),
-		'writing':								_('Writing')}}
+        'doing_chores': {'category':                    _('Doing Chores'),
+                'buying_groceries':                                     _('Buying Groceries'),
+                'cleaning':                                                             _('Cleaning'),
+                'cooking':                                                              _('Cooking'),
+                'doing_maintenance':                                    _('Doing Maintenance'),
+                'doing_the_dishes':                                     _('Doing the Dishes'),
+                'doing_the_laundry':                                    _('Doing the Laundry'),
+                'gardening':                                                    _('Gardening'),
+                'running_an_errand':                                    _('Running an Errand'),
+                'walking_the_dog':                                      _('Walking the Dog')},
+        'drinking': {'category':                                _('Drinking'),
+                'having_a_beer':                                                _('Having a Beer'),
+                'having_coffee':                                                _('Having Coffee'),
+                'having_tea':                                                   _('Having Tea')},
+        'eating': {'category':                                  _('Eating'),
+                'having_a_snack':                                               _('Having a Snack'),
+                'having_breakfast':                                     _('Having Breakfast'),
+                'having_dinner':                                                _('Having Dinner'),
+                'having_lunch':                                         _('Having Lunch')},
+        'exercising': {'category':                              _('Exercising'),
+                'cycling':                                                              _('Cycling'),
+                'dancing':                                                              _('Dancing'),
+                'hiking':                                                               _('Hiking'),
+                'jogging':                                                              _('Jogging'),
+                'playing_sports':                                               _('Playing Sports'),
+                'running':                                                              _('Running'),
+                'skiing':                                                               _('Skiing'),
+                'swimming':                                                             _('Swimming'),
+                'working_out':                                                  _('Working out')},
+        'grooming': {'category':                                _('Grooming'),
+                'at_the_spa':                                                   _('At the Spa'),
+                'brushing_teeth':                                               _('Brushing Teeth'),
+                'getting_a_haircut':                                    _('Getting a Haircut'),
+                'shaving':                                                              _('Shaving'),
+                'taking_a_bath':                                                _('Taking a Bath'),
+                'taking_a_shower':                                      _('Taking a Shower')},
+        'having_appointment': {'category':      _('Having an Appointment')},
+        'inactive': {'category':                                _('Inactive'),
+                'day_off':                                                              _('Day Off'),
+                'hanging_out':                                                  _('Hanging out'),
+                'hiding':                                                               _('Hiding'),
+                'on_vacation':                                                  _('On Vacation'),
+                'praying':                                                              _('Praying'),
+                'scheduled_holiday':                                    _('Scheduled Holiday'),
+                'sleeping':                                                             _('Sleeping'),
+                'thinking':                                                             _('Thinking')},
+        'relaxing': {'category':                                _('Relaxing'),
+                'fishing':                                                              _('Fishing'),
+                'gaming':                                                               _('Gaming'),
+                'going_out':                                                    _('Going out'),
+                'partying':                                                             _('Partying'),
+                'reading':                                                              _('Reading'),
+                'rehearsing':                                                   _('Rehearsing'),
+                'shopping':                                                             _('Shopping'),
+                'smoking':                                                              _('Smoking'),
+                'socializing':                                                  _('Socializing'),
+                'sunbathing':                                                   _('Sunbathing'),
+                'watching_tv':                                                  _('Watching TV'),
+                'watching_a_movie':                                     _('Watching a Movie')},
+        'talking': {'category':                                 _('Talking'),
+                'in_real_life':                                         _('In Real Life'),
+                'on_the_phone':                                         _('On the Phone'),
+                'on_video_phone':                                               _('On Video Phone')},
+        'traveling': {'category':                               _('Traveling'),
+                'commuting':                                                    _('Commuting'),
+                'cycling':                                                              _('Cycling'),
+                'driving':                                                              _('Driving'),
+                'in_a_car':                                                             _('In a Car'),
+                'on_a_bus':                                                             _('On a Bus'),
+                'on_a_plane':                                                   _('On a Plane'),
+                'on_a_train':                                                   _('On a Train'),
+                'on_a_trip':                                                    _('On a Trip'),
+                'walking':                                                              _('Walking')},
+        'working': {'category':                                 _('Working'),
+                'coding':                                                               _('Coding'),
+                'in_a_meeting':                                         _('In a Meeting'),
+                'studying':                                                             _('Studying'),
+                'writing':                                                              _('Writing')}}
 
-def user_mood(items, name, jid):
-	has_child = False
-	retract = False
-	mood = None
-	text = None
-	for item in items.getTags('item'):
-		child = item.getTag('mood')
-		if child is not None:
-			has_child = True
-			for ch in child.getChildren():
-				if ch.getName() != 'text':
-					mood = ch.getName()
-				else:
-					text = ch.getData()
-	if items.getTag('retract') is not None:
-		retract = True
+TUNE_DATA = ['artist', 'title', 'source', 'track', 'length']
 
-	if jid == common.gajim.get_jid_from_account(name):
-		acc = common.gajim.connections[name]
-		if has_child:
-			if 'mood' in acc.mood:
-				del acc.mood['mood']
-			if 'text' in acc.mood:
-				del acc.mood['text']
-			if mood is not None:
-				acc.mood['mood'] = mood
-			if text is not None:
-				acc.mood['text'] = text
-		elif retract:
-			if 'mood' in acc.mood:
-				del acc.mood['mood']
-			if 'text' in acc.mood:
-				del acc.mood['text']
+LOCATION_DATA = ['accuracy', 'alt', 'area', 'bearing', 'building', 'country',
+                'countrycode', 'datum', 'description', 'error', 'floor', 'lat',
+                'locality', 'lon', 'postalcode', 'region', 'room', 'speed', 'street',
+                'text', 'timestamp', 'uri']
 
-	(user, resource) = common.gajim.get_room_and_nick_from_fjid(jid)
-	for contact in common.gajim.contacts.get_contacts(name, user):
-		if has_child:
-			if 'mood' in contact.mood:
-				del contact.mood['mood']
-			if 'text' in contact.mood:
-				del contact.mood['text']
-			if mood is not None:
-				contact.mood['mood'] = mood
-			if text is not None:
-				contact.mood['text'] = text
-		elif retract:
-			if 'mood' in contact.mood:
-				del contact.mood['mood']
-			if 'text' in contact.mood:
-				del contact.mood['text']
+import gobject
+import gtk
 
-	if jid == common.gajim.get_jid_from_account(name):
-		common.gajim.interface.roster.draw_account(name)
-	common.gajim.interface.roster.draw_mood(user, name)
-	ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
-	if ctrl:
-		ctrl.update_mood()
+import logging
+log = logging.getLogger('gajim.c.pep')
 
-def user_tune(items, name, jid):
-	has_child = False
-	retract = False
-	artist = None
-	title = None
-	source = None
-	track = None
-	length = None
+from common import helpers
+from common import atom
+from common import xmpp
+from common import gajim
 
-	for item in items.getTags('item'):
-		child = item.getTag('tune')
-		if child is not None:
-			has_child = True
-			for ch in child.getChildren():
-				if ch.getName() == 'artist':
-					artist = ch.getData()
-				elif ch.getName() == 'title':
-					title = ch.getData()
-				elif ch.getName() == 'source':
-					source = ch.getData()
-				elif ch.getName() == 'track':
-					track = ch.getData()
-				elif ch.getName() == 'length':
-					length = ch.getData()
-	if items.getTag('retract') is not None:
-		retract = True
+import gtkgui_helpers
 
-	if jid == common.gajim.get_jid_from_account(name):
-		acc = common.gajim.connections[name]
-		if has_child:
-			if 'artist' in acc.tune:
-				del acc.tune['artist']
-			if 'title' in acc.tune:
-				del acc.tune['title']
-			if 'source' in acc.tune:
-				del acc.tune['source']
-			if 'track' in acc.tune:
-				del acc.tune['track']
-			if 'length' in acc.tune:
-				del acc.tune['length']
-			if artist is not None:
-				acc.tune['artist'] = artist
-			if title is not None:
-				acc.tune['title'] = title
-			if source is not None:
-				acc.tune['source'] = source
-			if track is not None:
-				acc.tune['track'] = track
-			if length is not None:
-				acc.tune['length'] = length
-		elif retract:
-			if 'artist' in acc.tune:
-				del acc.tune['artist']
-			if 'title' in acc.tune:
-				del acc.tune['title']
-			if 'source' in acc.tune:
-				del acc.tune['source']
-			if 'track' in acc.tune:
-				del acc.tune['track']
-			if 'length' in acc.tune:
-				del acc.tune['length']
 
-	user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
-	for contact in common.gajim.contacts.get_contacts(name, user):
-		if has_child:
-			if 'artist' in contact.tune:
-				del contact.tune['artist']
-			if 'title' in contact.tune:
-				del contact.tune['title']
-			if 'source' in contact.tune:
-				del contact.tune['source']
-			if 'track' in contact.tune:
-				del contact.tune['track']
-			if 'length' in contact.tune:
-				del contact.tune['length']
-			if artist is not None:
-				contact.tune['artist'] = artist
-			if title is not None:
-				contact.tune['title'] = title
-			if source is not None:
-				contact.tune['source'] = source
-			if track is not None:
-				contact.tune['track'] = track
-			if length is not None:
-				contact.tune['length'] = length
-		elif retract:
-			if 'artist' in contact.tune:
-				del contact.tune['artist']
-			if 'title' in contact.tune:
-				del contact.tune['title']
-			if 'source' in contact.tune:
-				del contact.tune['source']
-			if 'track' in contact.tune:
-				del contact.tune['track']
-			if 'length' in contact.tune:
-				del contact.tune['length']
+class AbstractPEP(object):
 
-	if jid == common.gajim.get_jid_from_account(name):
-		common.gajim.interface.roster.draw_account(name)
-	common.gajim.interface.roster.draw_tune(user, name)
-	ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
-	if ctrl:
-		ctrl.update_tune()
+    type = ''
+    namespace = ''
 
-def user_geoloc(items, name, jid):
-	pass
+    @classmethod
+    def get_tag_as_PEP(cls, jid, account, event_tag):
+        items = event_tag.getTag('items', {'node': cls.namespace})
+        if items:
+            log.debug("Received PEP 'user %s' from %s" % (cls.type, jid))
+            return cls(jid, account, items)
+        else:
+            return None
 
-def user_activity(items, name, jid):
-	has_child = False
-	retract = False
-	activity = None
-	subactivity = None
-	text = None
+    def __init__(self, jid, account, items):
+        self._pep_specific_data, self._retracted = self._extract_info(items)
 
-	for item in items.getTags('item'):
-		child = item.getTag('activity')
-		if child is not None:
-			has_child = True
-			for ch in child.getChildren():
-				if ch.getName() != 'text':
-					activity = ch.getName()
-					for chi in ch.getChildren():
-						subactivity = chi.getName()
-				else:
-					text = ch.getData()
-	if items.getTag('retract') is not None:
-		retract = True
+        self._update_contacts(jid, account)
+        if jid == gajim.get_jid_from_account(account):
+            self._update_account(account)
 
-	if jid == common.gajim.get_jid_from_account(name):
-		acc = common.gajim.connections[name]
-		if has_child:
-			if 'activity' in acc.activity:
-				del acc.activity['activity']
-			if 'subactivity' in acc.activity:
-				del acc.activity['subactivity']
-			if 'text' in acc.activity:
-				del acc.activity['text']
-			if activity is not None:
-				acc.activity['activity'] = activity
-			if subactivity is not None and subactivity != 'other':
-				acc.activity['subactivity'] = subactivity
-			if text is not None:
-				acc.activity['text'] = text
-		elif retract:
-			if 'activity' in acc.activity:
-				del acc.activity['activity']
-			if 'subactivity' in acc.activity:
-				del acc.activity['subactivity']
-			if 'text' in acc.activity:
-				del acc.activity['text']
+    def _extract_info(self, items):
+        '''To be implemented by subclasses'''
+        raise NotImplementedError
 
-	user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
-	for contact in common.gajim.contacts.get_contacts(name, user):
-		if has_child:
-			if 'activity' in contact.activity:
-				del contact.activity['activity']
-			if 'subactivity' in contact.activity:
-				del contact.activity['subactivity']
-			if 'text' in contact.activity:
-				del contact.activity['text']
-			if activity is not None:
-				contact.activity['activity'] = activity
-			if subactivity is not None and subactivity != 'other':
-				contact.activity['subactivity'] = subactivity
-			if text is not None:
-				contact.activity['text'] = text
-		elif retract:
-			if 'activity' in contact.activity:
-				del contact.activity['activity']
-			if 'subactivity' in contact.activity:
-				del contact.activity['subactivity']
-			if 'text' in contact.activity:
-				del contact.activity['text']
+    def _update_contacts(self, jid, account):
+        for contact in gajim.contacts.get_contacts(account, jid):
+            if self._retracted:
+                if self.type in contact.pep:
+                    del contact.pep[self.type]
+            else:
+                contact.pep[self.type] = self
 
-	if jid == common.gajim.get_jid_from_account(name):
-		common.gajim.interface.roster.draw_account(name)
-	common.gajim.interface.roster.draw_activity(user, name)
-	ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
-	if ctrl:
-		ctrl.update_activity()
+    def _update_account(self, account):
+        acc = gajim.connections[account]
+        if self._retracted:
+            if self.type in acc.pep:
+                del acc.pep[self.type]
+        else:
+            acc.pep[self.type] = self
 
-def user_nickname(items, name, jid):
-	has_child = False
-	retract = False
-	nick = None
+    def asPixbufIcon(self):
+        '''SHOULD be implemented by subclasses'''
+        return None
 
-	for item in items.getTags('item'):
-		child = item.getTag('nick')
-		if child is not None:
-			has_child = True
-			nick = child.getData()
-			break
+    def asMarkupText(self):
+        '''SHOULD be implemented by subclasses'''
+        return ''
 
-	if items.getTag('retract') is not None:
-		retract = True
 
-	if jid == common.gajim.get_jid_from_account(name):
-		if has_child:
-			common.gajim.nicks[name] = nick
-		if retract:
-			common.gajim.nicks[name] = common.gajim.config.get_per('accounts',
-				name, 'name')
+class UserMoodPEP(AbstractPEP):
+    '''XEP-0107: User Mood'''
 
-	user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
-	if has_child:
-		if nick is not None:
-			for contact in common.gajim.contacts.get_contacts(name, user):
-				contact.contact_name = nick
-			common.gajim.interface.roster.draw_contact(user, name)
+    type = 'mood'
+    namespace = xmpp.NS_MOOD
 
-			ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
-			if ctrl:
-				ctrl.update_ui()
-				win = ctrl.parent_win
-				win.redraw_tab(ctrl)
-				win.show_title()
-	elif retract:
-		contact.contact_name = ''
+    def _extract_info(self, items):
+        mood_dict = {}
 
-def user_send_mood(account, mood, message=''):
-	if not common.gajim.connections[account].pep_supported:
-		return
-	item = xmpp.Node('mood', {'xmlns': xmpp.NS_MOOD})
-	if mood != '':
-		item.addChild(mood)
-	if message != '':
-		i = item.addChild('text')
-		i.addData(message)
+        for item in items.getTags('item'):
+            mood_tag = item.getTag('mood')
+            if mood_tag:
+                for child in mood_tag.getChildren():
+                    name = child.getName().strip()
+                    if name == 'text':
+                        mood_dict['text'] = child.getData()
+                    else:
+                        mood_dict['mood'] = name
 
-	common.gajim.connections[account].send_pb_publish('', xmpp.NS_MOOD, item,
-		'0')
+        retracted = items.getTag('retract') or not 'mood' in mood_dict
+        return (mood_dict, retracted)
 
-def user_send_activity(account, activity, subactivity='', message=''):
-	if not common.gajim.connections[account].pep_supported:
-		return
-	item = xmpp.Node('activity', {'xmlns': xmpp.NS_ACTIVITY})
-	if activity != '':
-		i = item.addChild(activity)
-	if subactivity != '':
-		i.addChild(subactivity)
-	if message != '':
-		i = item.addChild('text')
-		i.addData(message)
+    def asPixbufIcon(self):
+        assert not self._retracted
+        received_mood = self._pep_specific_data['mood']
+        mood = received_mood if received_mood in MOODS else 'unknown'
+        pixbuf = gtkgui_helpers.load_mood_icon(mood).get_pixbuf()
+        return pixbuf
 
-	common.gajim.connections[account].send_pb_publish('', xmpp.NS_ACTIVITY, item,
-		'0')
+    def asMarkupText(self):
+        assert not self._retracted
+        untranslated_mood = self._pep_specific_data['mood']
+        mood = self._translate_mood(untranslated_mood)
+        markuptext = '<b>%s</b>' % gobject.markup_escape_text(mood)
+        if 'text' in self._pep_specific_data:
+            text = self._pep_specific_data['text']
+            markuptext += ' (%s)' % gobject.markup_escape_text(text)
+        return markuptext
 
-def user_send_tune(account, artist='', title='', source='', track=0, length=0,
-items=None):
-	if not (common.gajim.config.get_per('accounts', account, 'publish_tune') and\
-	common.gajim.connections[account].pep_supported):
-		return
-	item = xmpp.Node('tune', {'xmlns': xmpp.NS_TUNE})
-	if artist != '':
-		i = item.addChild('artist')
-		i.addData(artist)
-	if title != '':
-		i = item.addChild('title')
-		i.addData(title)
-	if source != '':
-		i = item.addChild('source')
-		i.addData(source)
-	if track != 0:
-		i = item.addChild('track')
-		i.addData(track)
-	if length != 0:
-		i = item.addChild('length')
-		i.addData(length)
-	if items is not None:
-		item.addChild(payload=items)
+    def _translate_mood(self, mood):
+        if mood in MOODS:
+            return MOODS[mood]
+        else:
+            return mood
 
-	common.gajim.connections[account].send_pb_publish('', xmpp.NS_TUNE, item,
-		'0')
 
-def user_send_nickname(account, nick):
-	if not common.gajim.connections[account].pep_supported:
-		return
-	item = xmpp.Node('nick', {'xmlns': xmpp.NS_NICK})
-	item.addData(nick)
+class UserTunePEP(AbstractPEP):
+    '''XEP-0118: User Tune'''
 
-	common.gajim.connections[account].send_pb_publish('', xmpp.NS_NICK, item,
-		'0')
+    type = 'tune'
+    namespace = xmpp.NS_TUNE
 
-def user_retract_mood(account):
-	common.gajim.connections[account].send_pb_retract('', xmpp.NS_MOOD, '0')
+    def _extract_info(self, items):
+        tune_dict = {}
 
-def user_retract_activity(account):
-	common.gajim.connections[account].send_pb_retract('', xmpp.NS_ACTIVITY, '0')
+        for item in items.getTags('item'):
+            tune_tag = item.getTag('tune')
+            if tune_tag:
+                for child in tune_tag.getChildren():
+                    name = child.getName().strip()
+                    data = child.getData().strip()
+                    if child.getName() in TUNE_DATA:
+                        tune_dict[name] = data
 
-def user_retract_tune(account):
-	common.gajim.connections[account].send_pb_retract('', xmpp.NS_TUNE, '0')
+        retracted = items.getTag('retract') or not ('artist' in tune_dict or
+                                                                                                                          'title' in tune_dict)
+        return (tune_dict, retracted)
 
-def user_retract_nickname(account):
-	common.gajim.connections[account].send_pb_retract('', xmpp.NS_NICK, '0')
+    def asPixbufIcon(self):
+        import os
+        path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static', 'music.png')
+        return gtk.gdk.pixbuf_new_from_file(path)
 
-def delete_pep(jid, name):
-	user = common.gajim.get_room_and_nick_from_fjid(jid)[0]
+    def asMarkupText(self):
+        assert not self._retracted
+        tune = self._pep_specific_data
 
-	if jid == common.gajim.get_jid_from_account(name):
-		acc = common.gajim.connections[name]
-		del acc.activity
-		acc.activity = {}
-		user_send_tune(name)
-		del acc.tune
-		acc.tune = {}
-		del acc.mood
-		acc.mood = {}
+        artist = tune.get('artist', _('Unknown Artist'))
+        artist = gobject.markup_escape_text(artist)
 
-	for contact in common.gajim.contacts.get_contacts(name, user):
-		del contact.activity
-		contact.activity = {}
-		del contact.tune
-		contact.tune = {}
-		del contact.mood
-		contact.mood = {}
+        title = tune.get('title', _('Unknown Title'))
+        title = gobject.markup_escape_text(title)
 
-	if jid == common.gajim.get_jid_from_account(name):
-		common.gajim.interface.roster.draw_account(name)
+        source = tune.get('source', _('Unknown Source'))
+        source = gobject.markup_escape_text(source)
 
-	common.gajim.interface.roster.draw_activity(user, name)
-	common.gajim.interface.roster.draw_tune(user, name)
-	common.gajim.interface.roster.draw_mood(user, name)
-	ctrl = common.gajim.interface.msg_win_mgr.get_control(user, name)
-	if ctrl:
-		ctrl.update_activity()
-		ctrl.update_tune()
-		ctrl.update_mood()
+        tune_string =  _('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
+                'from <i>%(source)s</i>') % {'title': title,
+                'artist': artist, 'source': source}
+        return tune_string
 
-# vim: se ts=3:
+
+class UserActivityPEP(AbstractPEP):
+    '''XEP-0108: User Activity'''
+
+    type = 'activity'
+    namespace = xmpp.NS_ACTIVITY
+
+    def _extract_info(self, items):
+        activity_dict = {}
+
+        for item in items.getTags('item'):
+            activity_tag = item.getTag('activity')
+            if activity_tag:
+                for child in activity_tag.getChildren():
+                    name = child.getName().strip()
+                    data = child.getData().strip()
+                    if name == 'text':
+                        activity_dict['text'] = data
+                    else:
+                        activity_dict['activity'] = name
+                        for subactivity in child.getChildren():
+                            subactivity_name = subactivity.getName().strip()
+                            activity_dict['subactivity'] = subactivity_name
+
+        retracted = items.getTag('retract') or not 'activity' in activity_dict
+        return (activity_dict, retracted)
+
+    def asPixbufIcon(self):
+        assert not self._retracted
+        pep = self._pep_specific_data
+        activity = pep['activity']
+
+        has_known_activity = activity in ACTIVITIES
+        has_known_subactivity = (has_known_activity  and ('subactivity' in pep)
+                and (pep['subactivity'] in ACTIVITIES[activity]))
+
+        if has_known_activity:
+            if has_known_subactivity:
+                subactivity = pep['subactivity']
+                return gtkgui_helpers.load_activity_icon(activity, subactivity).get_pixbuf()
+            else:
+                return gtkgui_helpers.load_activity_icon(activity).get_pixbuf()
+        else:
+            return gtkgui_helpers.load_activity_icon('unknown').get_pixbuf()
+
+    def asMarkupText(self):
+        assert not self._retracted
+        pep = self._pep_specific_data
+        activity = pep['activity']
+        subactivity = pep['subactivity'] if 'subactivity' in pep else None
+        text = pep['text'] if 'text' in pep else None
+
+        if activity in ACTIVITIES:
+            # Translate standard activities
+            if subactivity in ACTIVITIES[activity]:
+                subactivity = ACTIVITIES[activity][subactivity]
+            activity = ACTIVITIES[activity]['category']
+
+        markuptext = '<b>' + gobject.markup_escape_text(activity)
+        if subactivity:
+            markuptext += ': ' + gobject.markup_escape_text(subactivity)
+        markuptext += '</b>'
+        if text:
+            markuptext += ' (%s)' % gobject.markup_escape_text(text)
+        return markuptext
+
+
+class UserNicknamePEP(AbstractPEP):
+    '''XEP-0172: User Nickname'''
+
+    type = 'nickname'
+    namespace = xmpp.NS_NICK
+
+    def _extract_info(self, items):
+        nick = ''
+        for item in items.getTags('item'):
+            child = item.getTag('nick')
+            if child:
+                nick = child.getData()
+                break
+
+        retracted = items.getTag('retract') or not nick
+        return (nick, retracted)
+
+    def _update_contacts(self, jid, account):
+        nick = '' if self._retracted else self._pep_specific_data
+        for contact in gajim.contacts.get_contacts(account, jid):
+            contact.contact_name = nick
+
+    def _update_account(self, account):
+        if self._retracted:
+            gajim.nicks[account] = gajim.config.get_per('accounts', account, 'name')
+        else:
+            gajim.nicks[account] = self._pep_specific_data
+
+
+class UserLocationPEP(AbstractPEP):
+    '''XEP-0080: User Location'''
+
+    type = 'location'
+    namespace = xmpp.NS_LOCATION
+
+    def _extract_info(self, items):
+        location_dict = {}
+
+        for item in items.getTags('item'):
+            location_tag = item.getTag('geoloc')
+            if location_tag:
+                for child in location_tag.getChildren():
+                    name = child.getName().strip()
+                    data = child.getData().strip()
+                    if child.getName() in LOCATION_DATA:
+                        location_dict[name] = data
+
+        retracted = items.getTag('retract') or not location_dict
+        return (location_dict, retracted)
+
+    def _update_account(self, account):
+        AbstractPEP._update_account(self, account)
+        con = gajim.connections[account].location_info = \
+                self._pep_specific_data
+
+    def asPixbufIcon(self):
+        path = gtkgui_helpers.get_icon_path('gajim-earth')
+        return gtk.gdk.pixbuf_new_from_file(path)
+
+    def asMarkupText(self):
+        assert not self._retracted
+        location = self._pep_specific_data
+        location_string = ''
+
+        for entry in location.keys():
+            text = location[entry]
+            text = gobject.markup_escape_text(text)
+            location_string += '\n<b>%(tag)s</b>: %(text)s' % \
+                    {'tag': entry.capitalize(), 'text': text}
+
+        return location_string.strip()
+
+
+SUPPORTED_PERSONAL_USER_EVENTS = [UserMoodPEP, UserTunePEP, UserActivityPEP,
+                                                                                         UserNicknamePEP, UserLocationPEP]
+
+class ConnectionPEP(object):
+
+    def __init__(self, account, dispatcher, pubsub_connection):
+        self._account = account
+        self._dispatcher = dispatcher
+        self._pubsub_connection = pubsub_connection
+        self.reset_awaiting_pep()
+
+    def reset_awaiting_pep(self):
+        self.to_be_sent_activity = None
+        self.to_be_sent_mood = None
+        self.to_be_sent_tune = None
+        self.to_be_sent_nick = None
+        self.to_be_sent_location = None
+
+    def send_awaiting_pep(self):
+        """
+        Send pep info that were waiting for connection
+        """
+        if self.to_be_sent_activity:
+            self.send_activity(*self.to_be_sent_activity)
+        if self.to_be_sent_mood:
+            self.send_mood(*self.to_be_sent_mood)
+        if self.to_be_sent_tune:
+            self.send_tune(*self.to_be_sent_tune)
+        if self.to_be_sent_nick:
+            self.send_nick(self.to_be_sent_nick)
+        if self.to_be_sent_location:
+            self.send_location(self.to_be_sent_location)
+        self.reset_awaiting_pep()
+
+    def _pubsubEventCB(self, xmpp_dispatcher, msg):
+        ''' Called when we receive <message /> with pubsub event. '''
+        if not msg.getTag('event'):
+            return
+        if msg.getTag('error'):
+            log.debug('PubsubEventCB received error stanza. Ignoring')
+            raise xmpp.NodeProcessed
+
+        jid = helpers.get_full_jid_from_iq(msg)
+        event_tag = msg.getTag('event')
+
+        for pep_class in SUPPORTED_PERSONAL_USER_EVENTS:
+            pep = pep_class.get_tag_as_PEP(jid, self._account, event_tag)
+            if pep:
+                self._dispatcher.dispatch('PEP_RECEIVED', (jid, pep.type))
+
+        items = event_tag.getTag('items')
+        if items:
+            for item in items.getTags('item'):
+                entry = item.getTag('entry')
+                if entry:
+                    # for each entry in feed (there shouldn't be more than one,
+                    # but to be sure...
+                    self._dispatcher.dispatch('ATOM_ENTRY',
+                            (atom.OldEntry(node=entry),))
+
+        raise xmpp.NodeProcessed
+
+    def send_activity(self, activity, subactivity=None, message=None):
+        if self.connected == 1:
+            # We are connecting, keep activity in mem and send it when we'll be
+            # connected
+            self.to_be_sent_activity = (activity, subactivity, message)
+            return
+        if not self.pep_supported:
+            return
+        item = xmpp.Node('activity', {'xmlns': xmpp.NS_ACTIVITY})
+        if activity:
+            i = item.addChild(activity)
+        if subactivity:
+            i.addChild(subactivity)
+        if message:
+            i = item.addChild('text')
+            i.addData(message)
+        self._pubsub_connection.send_pb_publish('', xmpp.NS_ACTIVITY, item, '0')
+
+    def retract_activity(self):
+        if not self.pep_supported:
+            return
+        self.send_activity(None)
+        # not all client support new XEP, so we still retract
+        self._pubsub_connection.send_pb_retract('', xmpp.NS_ACTIVITY, '0')
+
+    def send_mood(self, mood, message=None):
+        if self.connected == 1:
+            # We are connecting, keep mood in mem and send it when we'll be
+            # connected
+            self.to_be_sent_mood = (mood, message)
+            return
+        if not self.pep_supported:
+            return
+        item = xmpp.Node('mood', {'xmlns': xmpp.NS_MOOD})
+        if mood:
+            item.addChild(mood)
+        if message:
+            i = item.addChild('text')
+            i.addData(message)
+        self._pubsub_connection.send_pb_publish('', xmpp.NS_MOOD, item, '0')
+
+    def retract_mood(self):
+        if not self.pep_supported:
+            return
+        self.send_mood(None)
+        # not all client support new XEP, so we still retract
+        self._pubsub_connection.send_pb_retract('', xmpp.NS_MOOD, '0')
+
+    def send_tune(self, artist='', title='', source='', track=0, length=0,
+    items=None):
+        if self.connected == 1:
+            # We are connecting, keep tune in mem and send it when we'll be
+            # connected
+            self.to_be_sent_tune = (artist, title, source, track, length, items)
+            return
+        if not self.pep_supported:
+            return
+        item = xmpp.Node('tune', {'xmlns': xmpp.NS_TUNE})
+        if artist:
+            i = item.addChild('artist')
+            i.addData(artist)
+        if title:
+            i = item.addChild('title')
+            i.addData(title)
+        if source:
+            i = item.addChild('source')
+            i.addData(source)
+        if track:
+            i = item.addChild('track')
+            i.addData(track)
+        if length:
+            i = item.addChild('length')
+            i.addData(length)
+        if items:
+            item.addChild(payload=items)
+        self._pubsub_connection.send_pb_publish('', xmpp.NS_TUNE, item, '0')
+
+    def retract_tune(self):
+        if not self.pep_supported:
+            return
+        self.send_tune(None)
+        # not all client support new XEP, so we still retract
+        self._pubsub_connection.send_pb_retract('', xmpp.NS_TUNE, '0')
+
+    def send_nickname(self, nick):
+        if self.connected == 1:
+            # We are connecting, keep nick in mem and send it when we'll be
+            # connected
+            self.to_be_sent_nick = nick
+            return
+        if not self.pep_supported:
+            return
+        item = xmpp.Node('nick', {'xmlns': xmpp.NS_NICK})
+        item.addData(nick)
+        self._pubsub_connection.send_pb_publish('', xmpp.NS_NICK, item, '0')
+
+    def retract_nickname(self):
+        if not self.pep_supported:
+            return
+        self.send_nickname(None)
+        # not all client support new XEP, so we still retract
+        self._pubsub_connection.send_pb_retract('', xmpp.NS_NICK, '0')
+
+    def send_location(self, info):
+        if self.connected == 1:
+            # We are connecting, keep location in mem and send it when we'll be
+            # connected
+            self.to_be_sent_location = info
+            return
+        if not self.pep_supported:
+            return
+        item = xmpp.Node('geoloc', {'xmlns': xmpp.NS_LOCATION})
+        for field in LOCATION_DATA:
+            if info.get(field, None):
+                i = item.addChild(field)
+                i.addData(info[field])
+        self._pubsub_connection.send_pb_publish('', xmpp.NS_LOCATION, item, '0')
+
+    def retract_location(self):
+        if not self.pep_supported:
+            return
+        self.send_location({})
+        # not all client support new XEP, so we still retract
+        self._pubsub_connection.send_pb_retract('', xmpp.NS_LOCATION, '0')

@@ -7,8 +7,8 @@ shortargs = 'hnv:'
 longargs = 'help no-x verbose='
 opts, args = getopt.getopt(sys.argv[1:], shortargs, longargs.split())
 for o, a in opts:
-	if o in ('-n', '--no-x'):
-		use_x = False
+    if o in ('-n', '--no-x'):
+        use_x = False
 
 gajim_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../..')
 
@@ -25,28 +25,26 @@ import __builtin__
 __builtin__._ = lambda x: x
 
 def setup_env():
-	# wipe config directory
-	if os.path.isdir(configdir):
-		import shutil
-		shutil.rmtree(configdir)
+    # wipe config directory
+    if os.path.isdir(configdir):
+        import shutil
+        shutil.rmtree(configdir)
 
-	os.mkdir(configdir)
+    os.mkdir(configdir)
 
-	import common.configpaths
-	common.configpaths.gajimpaths.init(configdir)
-	common.configpaths.gajimpaths.init_profile()
+    import common.configpaths
+    common.configpaths.gajimpaths.init(configdir)
+    common.configpaths.gajimpaths.init_profile()
 
-	# for some reason common.gajim needs to be imported before xmpppy?
-	from common import gajim
+    # for some reason common.gajim needs to be imported before xmpppy?
+    from common import gajim
 
-	import logging
-	logging.basicConfig()
+    import logging
+    logging.basicConfig()
 
-	gajim.DATA_DIR = gajim_root + '/data'
-	gajim.use_x = use_x
+    gajim.DATA_DIR = gajim_root + '/data'
+    gajim.use_x = use_x
 
-	if use_x:
-		import gtkgui_helpers
-		gtkgui_helpers.GLADE_DIR = gajim_root + '/data/glade'
-
-# vim: se ts=3:
+    if use_x:
+        import gtkgui_helpers
+        gtkgui_helpers.GUI_DIR = gajim_root + '/data/gui'

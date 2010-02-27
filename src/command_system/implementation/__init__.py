@@ -1,4 +1,4 @@
-# Copyright (C) 2009  red-agent <hell.director@gmail.com>
+# Copyright (C) 2009  Alexander Cherniuk <ts33kr@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-The implementation and auxilary systems which implement the standard Gajim
-commands and also provide an infrastructure for adding custom commands.
+The implementation and auxilary systems which implement the standard
+Gajim commands and also provide an infrastructure for adding custom
+commands.
 """
