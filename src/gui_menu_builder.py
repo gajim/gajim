@@ -477,7 +477,7 @@ def get_contact_otr_menu(contact, account, control, xml=None):
     if xml is None:
         xml = gtkgui_helpers.get_gtk_builder('contact_context_menu.ui')
 
-    otr_submenu = xml.get_widget('otr_submenu')
+    otr_submenu = xml.get_object('otr_submenu')
     otr_settings_menuitem, smp_otr_menuitem, start_otr_menuitem, \
             end_otr_menuitem = otr_submenu.get_submenu().get_children()
 

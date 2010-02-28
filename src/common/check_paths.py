@@ -212,6 +212,8 @@ def check_and_possibly_move_config():
             OLD_DATA_FILES.append(f)
         if f == 'cacerts.pem':
             OLD_DATA_FILES.append(f)
+        if f.endswith('.fpr') or f.endswith('.key'):
+            OLD_DATA_FILES.append(f)
 
     if not os.path.exists(OLD_LOG_DB_PATH):
         return

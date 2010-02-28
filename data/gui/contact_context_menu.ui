@@ -73,7 +73,7 @@
         <property name="sensitive">False</property>
         <property name="label" translatable="yes">Off-the-Record Encryption</property>
         <property name="use_underline">True</property>
-        <child>
+        <child type="submenu">
           <object class="GtkMenu" id="otr_submenu_menu">
             <child>
               <object class="GtkMenuItem" id="otr_settings_menuitem">

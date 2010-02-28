@@ -41,8 +41,7 @@ choose_q = _('You can choose a question as a hint for your buddy below.')
 
 class ContactOtrSMPWindow:
     def gw(self, n):
-        # shorthand for self.xml.get_widget(n)
-        return self.xml.get_widget(n)
+        return self.xml.get_object(n)
 
     question = None
     
@@ -50,8 +49,8 @@ class ContactOtrSMPWindow:
         self.fjid = fjid
         self.account = account
 
-        self.xml = gtkgui_helpers.get_glade('contact_otr_window.glade')
-        self.window = self.xml.get_widget('otr_smp_window')
+        self.xml = gtkgui_helpers.get_gtk_builder('contact_otr_window.ui')
+        self.window = self.xml.get_object('otr_smp_window')
 
         # the contact may be unknown to gajim if ContactOtrSMPWindow
         # is created very early
@@ -315,8 +314,7 @@ class ContactOtrSMPWindow:
 
 class ContactOtrWindow:
     def gw(self, n):
-        # shorthand for self.xml.get_widget(n)
-        return self.xml.get_widget(n)
+        return self.xml.get_object(n)
 
     def __init__(self, fjid, account, ctrl=None, fpr=None):
         self.fjid = fjid
@@ -333,8 +331,8 @@ class ContactOtrWindow:
         if self.fpr is None:
             self.fpr = self.ctx.active_fingerprint
 
-        self.xml = gtkgui_helpers.get_glade('contact_otr_window.glade')
-        self.window = self.xml.get_widget('otr_settings_window')
+        self.xml = gtkgui_helpers.get_gtk_builder('contact_otr_window.ui')
+        self.window = self.xml.get_object('otr_settings_window')
 
         self.gw('settings_cancel_button').connect('clicked', self._on_destroy)
         self.gw('settings_ok_button').connect('clicked', self._apply)

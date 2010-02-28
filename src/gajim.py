@@ -229,6 +229,8 @@ try:
     gajim.otr_module = otr
     gajim.otr_windows = otr_windows
     gajim.otr_v320 = hasattr(gajim.otr_module, "OTRL_TLV_SMP1Q")
+    import time
+    from message_control import TYPE_CHAT
 except ImportError:
     gajim.otr_module = None
     gajim.otr_windows = None
@@ -303,7 +305,7 @@ class OtrlMessageAppOps:
         ctrl = gajim.interface.msg_win_mgr.get_control(
             gajim.get_jid_without_resource(fjid), account)
         # but only use it when it is not a GC window
-        if ctrl and ctrl.TYPE_ID == message_control.TYPE_CHAT:
+        if ctrl and ctrl.TYPE_ID == TYPE_CHAT:
             return ctrl
 
     def policy(self, opdata=None, context=None):
@@ -343,7 +345,7 @@ class OtrlMessageAppOps:
 
         otr.otrl_privkey_generate(
             gajim.connections[opdata['account']].otr_userstates,
-            os.path.join(gajimpaths.root,
+            os.path.join(gajimpaths.data_root,
             '%s.key' % opdata['account']).encode(),
             accountname, gajim.OTR_PROTO)
         permlabel.set_text(_('Generating a private key for %s...\n' \
@@ -461,7 +463,7 @@ class OtrlMessageAppOps:
     def write_fingerprints(self, opdata=''):
         otr.otrl_privkey_write_fingerprints(
             gajim.connections[opdata['account']].otr_userstates,
-            os.path.join(gajimpaths.root, '%s.fpr' % \
+            os.path.join(gajimpaths.data_root, '%s.fpr' % \
             opdata['account']).encode())
 
     def gone_secure(self, opdata='', context=None):

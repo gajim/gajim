@@ -836,16 +836,6 @@ class ConnectionHandlersBase:
         """
         Send termination messages and delete all active sessions
         """
-        if gajim.otr_module:
-            # disconnect from ENCRYPTED OTR contexts
-            ctx = self.otr_userstates.context_root
-            while ctx is not None:
-                if ctx.msgstate == gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED:
-                    gajim.otr_module.otrl_message_disconnect(self.otr_userstates,
-                            (gajim.otr_ui_ops, {'account': self.name,'urgent': True}),
-                            ctx.accountname, ctx.protocol, ctx.username)
-                ctx = ctx.next
-
         for jid in self.sessions:
             for thread_id in self.sessions[jid]:
                 self.sessions[jid][thread_id].terminate(send_termination)
@@ -1379,6 +1369,35 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
             self.dispatch('ROSTERX', (action, exchange_items_list, jid_from))
         raise common.xmpp.NodeProcessed
 
+
+    def disconnect_all_otr_contexts(self):
+        if gajim.otr_module:
+            # disconnect from ENCRYPTED OTR contexts
+            ctx = self.otr_userstates.context_root
+            while ctx is not None:
+                self.disconnect_otr_context(ctx)
+                ctx = ctx.next
+
+    def disconnect_otr_context(self, ctx, kwargs={}):
+        if not gajim.otr_module:
+            return
+
+        if ctx and ctx.msgstate == gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED:
+            kwargs = kwargs.copy()
+            kwargs['account'] = self.name
+            kwargs['urgent'] = True
+
+            gajim.otr_module.otrl_message_disconnect(self.otr_userstates,
+                    (gajim.otr_ui_ops, kwargs), ctx.accountname,
+                    ctx.protocol, ctx.username)
+
+            gajim.otr_ui_ops.gajim_log(_('Private conversation with %s ' \
+                    'lost.') % ctx.username.decode(), self.name, ctx.username)
+
+            ctrl = gajim.otr_ui_ops.get_control(ctx.username, self.name)
+            if ctrl:
+                ctrl.update_otr()
+
     def disconnect_otr_helper(self, frm, thread_id):
         """ disconnect OTR context - it's safe to call this helper
         function any time a OTR context might exist and should be
@@ -1393,22 +1412,7 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                 gajim.OTR_PROTO, 0, (gajim.otr_add_appdata,
                     self.name))[0]
 
-        if not ctx or ctx.msgstate != \
-        gajim.otr_module.OTRL_MSGSTATE_ENCRYPTED:
-            return
-
-        gajim.otr_module.otrl_message_disconnect(self.otr_userstates,
-                (gajim.otr_ui_ops, {'account': self.name,
-                    'urgent':False, 'thread_id':thread_id}),
-                ctx.accountname, gajim.OTR_PROTO, ctx.username)
-
-        gajim.otr_ui_ops.gajim_log(_('Private conversation with %s ' \
-                'lost.') % frm, self.name, frm.encode())
-
-        ctrl = gajim.otr_ui_ops.get_control(frm.encode(), self.name)
-        if ctrl:
-            ctrl.update_otr()
-
+        self.disconnect_otr_context(ctx, kwargs={'thread_id':thread_id})
 
     def _messageCB(self, con, msg):
         """

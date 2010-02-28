@@ -609,6 +609,8 @@ class CommonConnection:
                 if msg:
                     p.setStatus(msg)
 
+                self.disconnect_all_otr_contexts()
+
                 self.connection.RegisterDisconnectHandler(self._on_disconnected)
                 self.connection.send(p, now=True)
                 self.connection.start_disconnect()
@@ -1505,11 +1507,11 @@ class Connection(CommonConnection, ConnectionHandlers):
         if gajim.otr_module:
             try:
                 gajim.otr_module.otrl_privkey_read(self.otr_userstates,
-                    os.path.join(gajim.gajimpaths.root,
+                    os.path.join(gajim.gajimpaths.data_root,
                     '%s.key' % self.name).encode())
                 gajim.otr_module.otrl_privkey_read_fingerprints(
                     self.otr_userstates, os.path.join(
-                    gajim.gajimpaths.root, '%s.fpr' %
+                    gajim.gajimpaths.data_root, '%s.fpr' %
                     self.name).encode(),
                     (gajim.otr_add_appdata, self.name))
             except Exception, e:

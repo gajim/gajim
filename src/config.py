@@ -551,11 +551,7 @@ class PreferencesWindow:
         self.notebook.set_current_page(0)
 
         if gajim.otr_module:
-            B = self.otr_gtk_builder = gtk.Builder()
-            file_path = os.path.join(gtkgui_helpers.GLADE_DIR,
-                    'otr_options_page.glade')
-            self.otr_gtk_builder.add_from_file(file_path)
-
+            B = gtkgui_helpers.get_gtk_builder('otr_options_page.ui')
 
             self.otr_account_store = B.get_object('account_store')
             for account in sorted(gajim.config.get_per('accounts')):
