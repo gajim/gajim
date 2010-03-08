@@ -597,7 +597,7 @@ class Contacts:
 		return self._contacts[account].keys()
 
 	def _get_contacts_jid_list(self):
-		[jid for jid, contact in self._contacts.iteritems() if not
+		return [jid for jid, contact in self._contacts.iteritems() if not
 				contact[0].is_groupchat()]
 
 	def contact_from_gc_contact(self, gc_contact):
