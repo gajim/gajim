@@ -597,11 +597,8 @@ class Contacts:
 		return self._contacts[account].keys()
 
 	def _get_contacts_jid_list(self):
-		contacts = self._contacts.keys()
-		for jid, contact in self._contacts.iteritems():
-			if contact[0].is_groupchat():
-				contacts.remove(jid)
-		return contacts
+		[jid for jid, contact in self._contacts.iteritems() if not
+				contact[0].is_groupchat()]
 
 	def contact_from_gc_contact(self, gc_contact):
 		'''Create a Contact instance from a GC_Contact instance'''
