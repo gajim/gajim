@@ -627,7 +627,8 @@ def get_avatar_pixbuf_from_cache(fjid, use_local=True):
         # don't show avatar for the transport itself
         return None
 
-    if any(jid in gajim.contacts.get_gc_list(acc) for acc in gajim.connections):
+    if any(jid in gajim.contacts.get_gc_list(acc) for acc in \
+    gajim.contacts.get_accounts()):
         is_groupchat_contact = True
     else:
         is_groupchat_contact = False

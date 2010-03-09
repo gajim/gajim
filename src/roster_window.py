@@ -1398,7 +1398,7 @@ class RosterWindow:
                 self.on_modelfilter_row_has_child_toggled)
         self.tree.set_model(self.modelfilter)
 
-        for acct in gajim.connections:
+        for acct in gajim.contacts.get_accounts():
             self.add_account(acct)
             self.add_account_contacts(acct)
         # Recalculate column width for ellipsizing
