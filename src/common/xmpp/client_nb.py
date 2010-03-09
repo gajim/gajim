@@ -362,6 +362,9 @@ class NonBlockingClient:
         supported and desired.
         """
         self.stream_started = True
+        if not hasattr(self, 'onreceive'):
+            # we may already have been disconnected
+            return
         self.onreceive(None)
 
         if self.connected == 'plain':
