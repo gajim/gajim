@@ -514,6 +514,15 @@ class Interface:
 		#('ERROR', account, (title_text, section_text))
 		dialogs.ErrorDialog(data[0], data[1])
 
+	def handle_event_db_error(self, unused, data):
+		#('DB_ERROR', account, (title_text, section_text))
+		if self.db_error_dialog:
+			return
+		self.db_error_dialog = dialogs.ErrorDialog(data[0], data[1])
+		def destroyed(win):
+			self.db_error_dialog = None
+		self.db_error_dialog.connect('destroy', destroyed)
+
 	def handle_event_information(self, unused, data):
 		#('INFORMATION', account, (title_text, section_text))
 		dialogs.InformationDialog(data[0], data[1])
@@ -2296,6 +2305,7 @@ class Interface:
 			'ROSTER': self.handle_event_roster,
 			'WARNING': self.handle_event_warning,
 			'ERROR': self.handle_event_error,
+			'DB_ERROR': self.handle_event_db_error,
 			'INFORMATION': self.handle_event_information,
 			'ERROR_ANSWER': self.handle_event_error_answer,
 			'STATUS': self.handle_event_status,
@@ -3433,6 +3443,7 @@ class Interface:
 		self.status_sent_to_groups = {}
 		self.gpg_passphrase = {}
 		self.pass_dialog = {}
+		self.db_error_dialog = None
 		self.default_colors = {
 			'inmsgcolor': gajim.config.get('inmsgcolor'),
 			'outmsgcolor': gajim.config.get('outmsgcolor'),
