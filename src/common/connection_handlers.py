@@ -1566,13 +1566,13 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                 gajim.logger.write('error', frm, error_msg, tim=tim,
                         subject=subject)
             except exceptions.PysqliteOperationalError, e:
-                self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
                 sectext = _('The database file (%s) cannot be read. Try to repair '
                         'it (see http://trac.gajim.org/wiki/DatabaseBackup) or remove '
                         'it (all history will be lost).') % common.logger.LOG_DB_PATH
-                self.dispatch('ERROR', (pritext, sectext))
+                self.dispatch('DB_ERROR', (pritext, sectext))
         self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt,
                 tim, session))
 
@@ -1617,13 +1617,13 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                 self.last_history_time[jid] = mktime(tim)
 
             except exceptions.PysqliteOperationalError, e:
-                self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
                 sectext = _('The database file (%s) cannot be read. Try to repair '
                         'it (see http://trac.gajim.org/wiki/DatabaseBackup) or remove '
                         'it (all history will be lost).') % common.logger.LOG_DB_PATH
-                self.dispatch('ERROR', (pritext, sectext))
+                self.dispatch('DB_ERROR', (pritext, sectext))
 
     def dispatch_invite_message(self, invite, frm):
         item = invite.getTag('invite')
@@ -1811,14 +1811,15 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                     try:
                         gajim.logger.write('gcstatus', who, st, show)
                     except exceptions.PysqliteOperationalError, e:
-                        self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                        self.dispatch('DB_ERROR', (_('Disk Write Error'),
+                            str(e)))
                     except exceptions.DatabaseMalformed:
                         pritext = _('Database Error')
                         sectext = _('The database file (%s) cannot be read. Try to '
                                 'repair it (see http://trac.gajim.org/wiki/DatabaseBackup)'
                                 ' or remove it (all history will be lost).') % \
                                 common.logger.LOG_DB_PATH
-                        self.dispatch('ERROR', (pritext, sectext))
+                        self.dispatch('DB_ERROR', (pritext, sectext))
                 if avatar_sha or avatar_sha == '':
                     if avatar_sha == '':
                         # contact has no avatar
@@ -1961,14 +1962,14 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
                 try:
                     gajim.logger.write('status', jid_stripped, status, show)
                 except exceptions.PysqliteOperationalError, e:
-                    self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                    self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
                 except exceptions.DatabaseMalformed:
                     pritext = _('Database Error')
                     sectext = _('The database file (%s) cannot be read. Try to '
                             'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
                             'or remove it (all history will be lost).') % \
                             common.logger.LOG_DB_PATH
-                    self.dispatch('ERROR', (pritext, sectext))
+                    self.dispatch('DB_ERROR', (pritext, sectext))
             our_jid = gajim.get_jid_from_account(self.name)
             if jid_stripped == our_jid and resource == self.server_resource:
                 # We got our own presence
