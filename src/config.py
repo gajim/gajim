@@ -1893,9 +1893,9 @@ class AccountsWindow:
             return
 
         win_opened = False
-        if gajim.interface.msg_win_mgr.get_controls(acct = account):
+        if gajim.interface.msg_win_mgr.get_controls(acct=account):
             win_opened = True
-        else:
+        elif account in gajim.interface.instances:
             for key in gajim.interface.instances[account]:
                 if gajim.interface.instances[account][key] and key != \
                 'remove_account':
@@ -1903,10 +1903,13 @@ class AccountsWindow:
                     break
         # Detect if we have opened windows for this account
         def remove(account):
-            if 'remove_account' in gajim.interface.instances[account]:
+            if account in gajim.interface.instances and \
+            'remove_account' in gajim.interface.instances[account]:
                 gajim.interface.instances[account]['remove_account'].window.\
-                        present()
+                    present()
             else:
+                if not account in gajim.interface.instances:
+                    gajim.interface.instances[account] = {}
                 gajim.interface.instances[account]['remove_account'] = \
                         RemoveAccountWindow(account)
         if win_opened:
@@ -2871,12 +2874,19 @@ class RemoveAccountWindow:
 
     def on_remove_button_clicked(self, widget):
         def remove():
-            if gajim.connections[self.account].connected and \
+            if self.account in gajim.connections and \
+            gajim.connections[self.account].connected and \
             not self.remove_and_unregister_radiobutton.get_active():
                 # change status to offline only if we will not remove this JID from
                 # server
                 gajim.connections[self.account].change_status('offline', 'offline')
             if self.remove_and_unregister_radiobutton.get_active():
+                if not self.account in gajim.connections:
+                    dialogs.ErrorDialog(
+                        _('Account is disabled'),
+                        _('To unregister from a server, account must be '
+                        'enabled.'))
+                    return
                 if not gajim.connections[self.account].password:
                     def on_ok(passphrase, checked):
                         if passphrase == -1:
@@ -2896,11 +2906,12 @@ class RemoveAccountWindow:
             else:
                 self._on_remove_success(True)
 
-        if gajim.connections[self.account].connected:
+        if self.account in gajim.connections and \
+        gajim.connections[self.account].connected:
             dialogs.ConfirmationDialog(
-                    _('Account "%s" is connected to the server') % self.account,
-                    _('If you remove it, the connection will be lost.'),
-                    on_response_ok=remove)
+                _('Account "%s" is connected to the server') % self.account,
+                _('If you remove it, the connection will be lost.'),
+                on_response_ok=remove)
         else:
             remove()
 
@@ -2920,29 +2931,31 @@ class RemoveAccountWindow:
                     on_response_ok=self.on_remove_responce_ok, is_modal=False)
             return
         # Close all opened windows
-        gajim.interface.roster.close_all(self.account, force = True)
-        gajim.connections[self.account].disconnect(on_purpose = True)
-        del gajim.connections[self.account]
+        gajim.interface.roster.close_all(self.account, force=True)
+        if self.account in gajim.connections:
+            gajim.connections[self.account].disconnect(on_purpose=True)
+            del gajim.connections[self.account]
         gajim.logger.remove_roster(gajim.get_jid_from_account(self.account))
         gajim.config.del_per('accounts', self.account)
         gajim.interface.save_config()
         del gajim.interface.instances[self.account]
-        del gajim.interface.minimized_controls[self.account]
-        del gajim.nicks[self.account]
-        del gajim.block_signed_in_notifications[self.account]
-        del gajim.groups[self.account]
-        gajim.contacts.remove_account(self.account)
-        del gajim.gc_connected[self.account]
-        del gajim.automatic_rooms[self.account]
-        del gajim.to_be_removed[self.account]
-        del gajim.newly_added[self.account]
-        del gajim.sleeper_state[self.account]
-        del gajim.encrypted_chats[self.account]
-        del gajim.last_message_time[self.account]
-        del gajim.status_before_autoaway[self.account]
-        del gajim.transport_avatar[self.account]
-        del gajim.gajim_optional_features[self.account]
-        del gajim.caps_hash[self.account]
+        if self.account in gajim.nicks:
+            del gajim.interface.minimized_controls[self.account]
+            del gajim.nicks[self.account]
+            del gajim.block_signed_in_notifications[self.account]
+            del gajim.groups[self.account]
+            gajim.contacts.remove_account(self.account)
+            del gajim.gc_connected[self.account]
+            del gajim.automatic_rooms[self.account]
+            del gajim.to_be_removed[self.account]
+            del gajim.newly_added[self.account]
+            del gajim.sleeper_state[self.account]
+            del gajim.encrypted_chats[self.account]
+            del gajim.last_message_time[self.account]
+            del gajim.status_before_autoaway[self.account]
+            del gajim.transport_avatar[self.account]
+            del gajim.gajim_optional_features[self.account]
+            del gajim.caps_hash[self.account]
         if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
             gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
         else:
