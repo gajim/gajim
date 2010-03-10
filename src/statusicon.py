@@ -384,7 +384,8 @@ class StatusIcon:
             else:
                 if not win.get_property('visible'):
                     win.show_all()
-                    win.move(gajim.config.get('roster_x-position'),
+                    gtkgui_helpers.move_window(win,
+                        gajim.config.get('roster_x-position'),
                         gajim.config.get('roster_y-position'))
                 if not gajim.config.get('roster_window_skip_taskbar'):
                     win.set_property('skip-taskbar-hint', False)
