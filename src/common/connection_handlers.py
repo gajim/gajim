@@ -782,9 +782,41 @@ class ConnectionHandlersBase:
         # keep the jids we auto added (transports contacts) to not send the
         # SUBSCRIBED event to gui
         self.automatically_added = []
+        # IDs of jabber:iq:last requests
+        self.last_ids = []
 
         # keep track of sessions this connection has with other JIDs
         self.sessions = {}
+
+    def _ErrorCB(self, con, iq_obj):
+        log.debug('ErrorCB')
+        jid_from = helpers.get_full_jid_from_iq(iq_obj)
+        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(jid_from)
+        id_ = unicode(iq_obj.getID())
+        if id_ in self.last_ids:
+            self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, -1, ''))
+            self.last_ids.remove(id_)
+            return
+
+    def _LastResultCB(self, con, iq_obj):
+        log.debug('LastResultCB')
+        qp = iq_obj.getTag('query')
+        seconds = qp.getAttr('seconds')
+        status = qp.getData()
+        try:
+            seconds = int(seconds)
+        except Exception:
+            return
+        id_ = iq_obj.getID()
+        if id_ in self.groupchat_jids:
+            who = self.groupchat_jids[id_]
+            del self.groupchat_jids[id_]
+        else:
+            who = helpers.get_full_jid_from_iq(iq_obj)
+        if id_ in self.last_ids:
+            self.last_ids.remove(id_)
+        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
+        self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, seconds, status))
 
     def get_sessions(self, jid):
         """
@@ -936,8 +968,6 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
         # keep the latest subscribed event for each jid to prevent loop when we
         # acknowledge presences
         self.subscribed_events = {}
-        # IDs of jabber:iq:last requests
-        self.last_ids = []
         # IDs of jabber:iq:version requests
         self.version_ids = []
         # IDs of urn:xmpp:time requests
@@ -981,16 +1011,13 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 
     def _ErrorCB(self, con, iq_obj):
         log.debug('ErrorCB')
+        ConnectionHandlersBase._ErrorCB(self, con, iq_obj)
         jid_from = helpers.get_full_jid_from_iq(iq_obj)
         jid_stripped, resource = gajim.get_room_and_nick_from_fjid(jid_from)
         id_ = unicode(iq_obj.getID())
         if id_ in self.version_ids:
             self.dispatch('OS_INFO', (jid_stripped, resource, '', ''))
             self.version_ids.remove(id_)
-            return
-        if id_ in self.last_ids:
-            self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, -1, ''))
-            self.last_ids.remove(id_)
             return
         if id_ in self.entity_time_ids:
             self.dispatch('ENTITY_TIME', (jid_stripped, resource, ''))
@@ -1131,26 +1158,6 @@ ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
 
         self.connection.send(iq_obj)
         raise common.xmpp.NodeProcessed
-
-    def _LastResultCB(self, con, iq_obj):
-        log.debug('LastResultCB')
-        qp = iq_obj.getTag('query')
-        seconds = qp.getAttr('seconds')
-        status = qp.getData()
-        try:
-            seconds = int(seconds)
-        except Exception:
-            return
-        id_ = iq_obj.getID()
-        if id_ in self.groupchat_jids:
-            who = self.groupchat_jids[id_]
-            del self.groupchat_jids[id_]
-        else:
-            who = helpers.get_full_jid_from_iq(iq_obj)
-        if id_ in self.last_ids:
-            self.last_ids.remove(id_)
-        jid_stripped, resource = gajim.get_room_and_nick_from_fjid(who)
-        self.dispatch('LAST_STATUS_TIME', (jid_stripped, resource, seconds, status))
 
     def _VersionResultCB(self, con, iq_obj):
         log.debug('VersionResultCB')
