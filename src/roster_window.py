@@ -2343,7 +2343,7 @@ class RosterWindow:
             self.quit_on_next_offline = 0
             accounts_to_disconnect = []
             for acct in accounts:
-                if gajim.connections[acct].connected:
+                if gajim.connections[acct].connected > 1:
                     self.quit_on_next_offline += 1
                     accounts_to_disconnect.append(acct)
 
