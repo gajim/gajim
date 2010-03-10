@@ -704,7 +704,9 @@ class OptionsParser:
         """
         Remove hardcoded ../data/sounds from config
         """
-        dirs = ('../data', gajim.gajimpaths.root, gajim.DATA_DIR)
+        dirs = ['../data', gajim.gajimpaths.data_root, gajim.DATA_DIR]
+        if os.name != 'nt':
+            dirs.append(os.path.expanduser(u'~/.gajim'))
         for evt in gajim.config.get_per('soundevents'):
             path = gajim.config.get_per('soundevents', evt, 'path')
             # absolute and relative passes are necessary

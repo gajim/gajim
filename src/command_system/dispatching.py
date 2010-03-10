@@ -14,9 +14,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-The backbone of the command system. Provides automatic dispatching which does
-not require explicit registering commands or containers and remains active even
-after everything is done, so new commands can be added during the runtime.
+The backbone of the command system. Provides automatic dispatching which
+does not require explicit registering commands or containers and remains
+active even after everything is done, so new commands can be added
+during the runtime.
 """
 
 from types import NoneType

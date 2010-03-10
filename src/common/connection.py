@@ -430,13 +430,15 @@ class CommonConnection:
                     try:
                         gajim.logger.write(kind, jid, log_msg)
                     except exceptions.PysqliteOperationalError, e:
-                        self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                        self.dispatch('DB_ERROR', (_('Disk Write Error'),
+                            str(e)))
                     except exceptions.DatabaseMalformed:
                         pritext = _('Database Error')
                         sectext = _('The database file (%s) cannot be read. Try to '
                                 'repair it (see http://trac.gajim.org/wiki/DatabaseBackup)'
                                 ' or remove it (all history will be lost).') % \
                                 common.logger.LOG_DB_PATH
+                        self.dispatch('DB_ERROR', (pritext, sectext))
 
     def ack_subscribed(self, jid):
         """

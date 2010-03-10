@@ -38,6 +38,7 @@ import vcard
 import conversation_textview
 import message_control
 import dataforms_widget
+import disco
 
 from random import randrange
 from common import pep
@@ -2156,7 +2157,6 @@ class JoinGroupchatWindow:
         self._nickname_entry = self.xml.get_object('nickname_entry')
         self._password_entry = self.xml.get_object('password_entry')
 
-        self._room_jid_entry.set_text(room_jid)
         self._nickname_entry.set_text(nick)
         if password:
             self._password_entry.set_text(password)
@@ -2171,6 +2171,13 @@ class JoinGroupchatWindow:
             title = _('Join Group Chat')
         self.window.set_title(title)
 
+        self.server_comboboxentry = self.xml.get_object('server_comboboxentry')
+        self.server_model = self.server_comboboxentry.get_model()
+        server_list = []
+        # get the muc server of our server
+        if 'jabber' in gajim.connections[account].muc_jid:
+            server_list.append(gajim.connections[account].muc_jid['jabber'])
+
         self.recently_combobox = self.xml.get_object('recently_combobox')
         liststore = gtk.ListStore(str)
         self.recently_combobox.set_model(liststore)
@@ -2180,6 +2187,16 @@ class JoinGroupchatWindow:
         self.recently_groupchat = gajim.config.get('recently_groupchat').split()
         for g in self.recently_groupchat:
             self.recently_combobox.append_text(g)
+            server = gajim.get_server_from_jid(g)
+            if server not in server_list and not server.startswith('irc'):
+                server_list.append(server)
+
+        for s in server_list:
+            self.server_model.append([s])
+        self.server_comboboxentry.set_active(0)
+
+        self._set_room_jid(room_jid)
+
         if len(self.recently_groupchat) == 0:
             self.recently_combobox.set_sensitive(False)
         elif room_jid == '':
@@ -2229,11 +2246,38 @@ class JoinGroupchatWindow:
         self.account = model[iter_][0].decode('utf-8')
         self.on_required_entry_changed(self._nickname_entry)
 
+    def _select_server(self, server):
+        i = 0
+        for s in self.server_model:
+            if s[0] == server:
+                self.server_comboboxentry.set_active(i)
+                break
+            i += 1
+
+    def _set_room_jid(self, room_jid):
+        room, server = gajim.get_name_and_server_from_jid(room_jid)
+        self._select_server(server)
+        self._room_jid_entry.set_text(room)
+
     def on_recently_combobox_changed(self, widget):
         model = widget.get_model()
         iter_ = widget.get_active_iter()
         room_jid = model[iter_][0].decode('utf-8')
-        self._room_jid_entry.set_text(room_jid)
+        self._set_room_jid(room_jid)
+
+    def on_browse_rooms_button_clicked(self, widget):
+        server = self.server_comboboxentry.child.get_text().decode('utf-8')
+        if server in gajim.interface.instances[self.account]['disco']:
+            gajim.interface.instances[self.account]['disco'][server].window.\
+                present()
+        else:
+            try:
+                # Object will add itself to the window dict
+                disco.ServiceDiscoveryWindow(self.account, server,
+                    initial_identities=[{'category': 'conference',
+                    'type': 'text'}])
+            except GajimGeneralException:
+                pass
 
     def on_cancel_button_clicked(self, widget):
         """
@@ -2258,7 +2302,9 @@ class JoinGroupchatWindow:
                     'groupchat.'))
             return
         nickname = self._nickname_entry.get_text().decode('utf-8')
-        room_jid = self._room_jid_entry.get_text().decode('utf-8')
+        server = self.server_comboboxentry.child.get_text().decode('utf-8')
+        room = self._room_jid_entry.get_text().decode('utf-8')
+        room_jid = room + '@' + server
         password = self._password_entry.get_text().decode('utf-8')
         try:
             nickname = helpers.parse_resource(nickname)

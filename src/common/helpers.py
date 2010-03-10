@@ -29,6 +29,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import sys
 import re
 import locale
 import os

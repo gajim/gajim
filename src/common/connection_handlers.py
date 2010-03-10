@@ -49,7 +49,7 @@ from common.commands import ConnectionCommands
 from common.pubsub import ConnectionPubSub
 from common.pep import ConnectionPEP
 from common.protocol.caps import ConnectionCaps
-from common.protocol.bytestream import ConnectionBytestream
+from common.protocol.bytestream import ConnectionSocks5Bytestream
 import common.caps_cache as capscache
 if gajim.HAVE_FARSIGHT:
     from common.jingle import ConnectionJingle
@@ -915,13 +915,13 @@ class ConnectionHandlersBase:
 
         return sess
 
-class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
-                ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionPEP,
-                ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
+class ConnectionHandlers(ConnectionVcard, ConnectionSocks5Bytestream,
+ConnectionDisco, ConnectionCommands, ConnectionPubSub, ConnectionPEP,
+ConnectionCaps, ConnectionHandlersBase, ConnectionJingle):
     def __init__(self):
         global HAS_IDLE
         ConnectionVcard.__init__(self)
-        ConnectionBytestream.__init__(self)
+        ConnectionSocks5Bytestream.__init__(self)
         ConnectionCommands.__init__(self)
         ConnectionPubSub.__init__(self)
         ConnectionPEP.__init__(self, account=self.name, dispatcher=self,
@@ -1566,13 +1566,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
                 gajim.logger.write('error', frm, error_msg, tim=tim,
                         subject=subject)
             except exceptions.PysqliteOperationalError, e:
-                self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
                 sectext = _('The database file (%s) cannot be read. Try to repair '
                         'it (see http://trac.gajim.org/wiki/DatabaseBackup) or remove '
                         'it (all history will be lost).') % common.logger.LOG_DB_PATH
-                self.dispatch('ERROR', (pritext, sectext))
+                self.dispatch('DB_ERROR', (pritext, sectext))
         self.dispatch('MSGERROR', (frm, msg.getErrorCode(), error_msg, msgtxt,
                 tim, session))
 
@@ -1617,13 +1617,13 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
                 self.last_history_time[jid] = mktime(tim)
 
             except exceptions.PysqliteOperationalError, e:
-                self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
                 sectext = _('The database file (%s) cannot be read. Try to repair '
                         'it (see http://trac.gajim.org/wiki/DatabaseBackup) or remove '
                         'it (all history will be lost).') % common.logger.LOG_DB_PATH
-                self.dispatch('ERROR', (pritext, sectext))
+                self.dispatch('DB_ERROR', (pritext, sectext))
 
     def dispatch_invite_message(self, invite, frm):
         item = invite.getTag('invite')
@@ -1811,14 +1811,15 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
                     try:
                         gajim.logger.write('gcstatus', who, st, show)
                     except exceptions.PysqliteOperationalError, e:
-                        self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                        self.dispatch('DB_ERROR', (_('Disk Write Error'),
+                            str(e)))
                     except exceptions.DatabaseMalformed:
                         pritext = _('Database Error')
                         sectext = _('The database file (%s) cannot be read. Try to '
                                 'repair it (see http://trac.gajim.org/wiki/DatabaseBackup)'
                                 ' or remove it (all history will be lost).') % \
                                 common.logger.LOG_DB_PATH
-                        self.dispatch('ERROR', (pritext, sectext))
+                        self.dispatch('DB_ERROR', (pritext, sectext))
                 if avatar_sha or avatar_sha == '':
                     if avatar_sha == '':
                         # contact has no avatar
@@ -1961,14 +1962,14 @@ class ConnectionHandlers(ConnectionVcard, ConnectionBytestream,
                 try:
                     gajim.logger.write('status', jid_stripped, status, show)
                 except exceptions.PysqliteOperationalError, e:
-                    self.dispatch('ERROR', (_('Disk Write Error'), str(e)))
+                    self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
                 except exceptions.DatabaseMalformed:
                     pritext = _('Database Error')
                     sectext = _('The database file (%s) cannot be read. Try to '
                             'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
                             'or remove it (all history will be lost).') % \
                             common.logger.LOG_DB_PATH
-                    self.dispatch('ERROR', (pritext, sectext))
+                    self.dispatch('DB_ERROR', (pritext, sectext))
             our_jid = gajim.get_jid_from_account(self.name)
             if jid_stripped == our_jid and resource == self.server_resource:
                 # We got our own presence

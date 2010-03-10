@@ -15,8 +15,9 @@
 
 class BaseError(Exception):
     """
-    Common base for errors which relate to a specific command. Encapsulates
-    everything needed to identify a command, by either its object or name.
+    Common base for errors which relate to a specific command.
+    Encapsulates everything needed to identify a command, by either its
+    object or name.
     """
 
     def __init__(self, message, command=None, name=None):
