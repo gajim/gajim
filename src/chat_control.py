@@ -2,8 +2,8 @@
 ## src/chat_control.py
 ##
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
-## Copyright (C) 2006-2008 Yann Leboulanger <asterix AT lagaule.org>
-##                         Jean-Marie Traissard <jim AT lapin.org>
+## Copyright (C) 2006-2010 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
 ##                         Travis Shirk <travis AT pobox.com>
 ## Copyright (C) 2007 Lukas Petrovicky <lukas AT petrovicky.net>
