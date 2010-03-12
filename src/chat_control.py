@@ -94,6 +94,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     A base class containing a banner, ConversationTextview, MessageTextView
     """
 
+    keymap = gtk.gdk.keymap_get_default()
+    keycode_c = keymap.get_entries_for_keyval(gtk.keysyms.c)[0][0]
+    keycode_ins = keymap.get_entries_for_keyval(gtk.keysyms.Insert)[0][0]
     def make_href(self, match):
         url_color = gajim.config.get('urlmsgcolor')
         url = match.group()
@@ -557,10 +560,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # translate any layout to latin_layout
         keymap = gtk.gdk.keymap_get_default()
         keycode = keymap.get_entries_for_keyval(event.keyval)[0][0]
-        keycode_c = keymap.get_entries_for_keyval(gtk.keysyms.c)[0][0]
-        keycode_ins = keymap.get_entries_for_keyval(gtk.keysyms.Insert)[0][0]
-        if (event.state & gtk.gdk.CONTROL_MASK and keycode in (keycode_c,
-        keycode_ins)) or (event.state & gtk.gdk.SHIFT_MASK and \
+        if (event.state & gtk.gdk.CONTROL_MASK and keycode in (self.keycode_c,
+        self.keycode_ins)) or (event.state & gtk.gdk.SHIFT_MASK and \
         event.keyval in (gtk.keysyms.Page_Down, gtk.keysyms.Page_Up)):
             return False
         self.parent_win.notebook.emit('key_press_event', event)
