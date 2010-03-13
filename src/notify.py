@@ -543,21 +543,24 @@ class DesktopNotification:
 				'text': self.text, 'image': self.path_to_image}
 			gajim_icon = os.path.abspath(os.path.join(gajim.DATA_DIR, 'pixmaps',
 				'gajim.png'))
-			self.notif.Notify(
-				dbus.String(_('Gajim')),			# app_name (string)
-				dbus.UInt32(0),						# replaces_id (uint)
-				ntype,									# event_id (string)
-				dbus.String(gajim_icon),			# app_icon (string)
-				dbus.String(''),						# summary (string)
-				dbus.String(notification_text),	# body (string)
-				# actions (stringlist)
-				(dbus.String('default'), dbus.String(self.event_type),
-					dbus.String('ignore'), dbus.String(_('Ignore'))),
-				[],										# hints (not used in KDE yet)
-				dbus.UInt32(timeout*1000),			# timeout (int), in ms
-				reply_handler=self.attach_by_id,
-				error_handler=self.notify_another_way)
-			return
+			try:
+				self.notif.Notify(
+					dbus.String(_('Gajim')),			# app_name (string)
+					dbus.UInt32(0),						# replaces_id (uint)
+					ntype,									# event_id (string)
+					dbus.String(gajim_icon),			# app_icon (string)
+					dbus.String(''),						# summary (string)
+					dbus.String(notification_text),	# body (string)
+					# actions (stringlist)
+					(dbus.String('default'), dbus.String(self.event_type),
+						dbus.String('ignore'), dbus.String(_('Ignore'))),
+					[],										# hints (not used in KDE yet)
+					dbus.UInt32(timeout*1000),			# timeout (int), in ms
+					reply_handler=self.attach_by_id,
+					error_handler=self.notify_another_way)
+				return
+			except Exception:
+				pass
 		version = self.version
 		if version[:2] == [0, 2]:
 			actions = {}
@@ -603,29 +606,35 @@ class DesktopNotification:
 				actions = ()
 				if 'actions' in self.capabilities:
 					actions = (dbus.String('default'), dbus.String(self.event_type))
-				self.notif.Notify(
-					dbus.String(_('Gajim')),
-					dbus.UInt32(0), # this notification does not replace other
-					dbus.String(self.path_to_image),
-					dbus.String(self.title),
-					dbus.String(text),
-					actions,
-					hints,
-					dbus.UInt32(timeout*1000),
-					reply_handler=self.attach_by_id,
-					error_handler=self.notify_another_way)
+				try:
+					self.notif.Notify(
+						dbus.String(_('Gajim')),
+						dbus.UInt32(0), # this notification does not replace other
+						dbus.String(self.path_to_image),
+						dbus.String(self.title),
+						dbus.String(text),
+						actions,
+						hints,
+						dbus.UInt32(timeout*1000),
+						reply_handler=self.attach_by_id,
+						error_handler=self.notify_another_way)
+				except Exception, e:
+					self.notify_another_way(e)
 			else:
-				self.notif.Notify(
-					dbus.String(_('Gajim')),
-					dbus.String(self.path_to_image),
-					dbus.UInt32(0),
-					dbus.String(self.title),
-					dbus.String(self.text),
-					dbus.String(''),
-					hints,
-					dbus.UInt32(timeout*1000),
-					reply_handler=self.attach_by_id,
-					error_handler=self.notify_another_way)
+				try:
+					self.notif.Notify(
+						dbus.String(_('Gajim')),
+						dbus.String(self.path_to_image),
+						dbus.UInt32(0),
+						dbus.String(self.title),
+						dbus.String(self.text),
+						dbus.String(''),
+						hints,
+						dbus.UInt32(timeout*1000),
+						reply_handler=self.attach_by_id,
+						error_handler=self.notify_another_way)
+				except Exception, e:
+					self.notify_another_way(e)
 
 	def attach_by_id(self, id_):
 		self.id = id_
@@ -633,8 +642,11 @@ class DesktopNotification:
 		notification_response_manager.add_pending(self.id, self)
 
 	def notify_another_way(self,e):
-		gajim.log.debug(str(e))
-		gajim.log.debug('Need to implement a new way of falling back')
+		gajim.log.debug('Error when trying to use notification daemon: %s' % \
+			str(e))
+		instance = dialogs.PopupNotificationWindow(self.event_type, self.jid,
+			self.account, self.msg_type, self.path_to_image, self.title, self.text)
+		gajim.interface.roster.popup_notification_windows.append(instance)
 
 	def on_action_invoked(self, id_, reason):
 		if self.notif is None:
