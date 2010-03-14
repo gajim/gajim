@@ -496,7 +496,7 @@ class JingleSession(object):
                     reasons.add('failed-application')
             else:
                 contents_rejected.append((element['name'], 'peer'))
-                failed.add('unsupported-applications')
+                reasons.add('unsupported-applications')
 
         failure_reason = None
 
