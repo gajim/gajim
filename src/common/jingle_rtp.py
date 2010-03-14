@@ -28,6 +28,10 @@ from jingle_transport import JingleTransportICEUDP
 from jingle_content import contents, JingleContent, JingleContentSetupException
 
 
+import logging
+log = logging.getLogger('gajim.c.jingle_rtp')
+
+
 class JingleRTPContent(JingleContent):
     def __init__(self, session, media, transport=None):
         if transport is None:
