@@ -1630,7 +1630,7 @@ class ChatControl(ChatControlBase):
         # We need to do that before modifying the sid
         if state == 'not_available':
             gajim.connections[self.account].delete_jingle_session(
-                    self.contact.get_full_jid(), getattr(self, jingle_type + '_sid'))
+                    getattr(self, jingle_type + '_sid'))
 
         if state in ('not_available', 'available', 'stop'):
             setattr(self, jingle_type + '_sid', None)
