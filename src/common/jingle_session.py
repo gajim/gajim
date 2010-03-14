@@ -68,8 +68,9 @@ class JingleSession(object):
         self.connection = con # connection to use
         # our full jid
         #FIXME: Get rid of gajim here?
-        self.ourjid = gajim.get_jid_from_account(self.connection.name) + '/' + \
-                con.server_resource
+        self.ourjid = gajim.get_jid_from_account(self.connection.name)
+        if con.server_resource:
+            self.ourjid = self.ourjid + '/' + con.server_resource
         self.peerjid = jid # jid we connect to
         # jid we use as the initiator
         self.initiator = weinitiate and self.ourjid or self.peerjid

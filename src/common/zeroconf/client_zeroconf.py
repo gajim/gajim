@@ -319,6 +319,9 @@ class P2PClient(IdleObject):
                 common.xmpp.NS_BYTESTREAM)
         self.RegisterHandler('iq', self._caller._DiscoverItemsGetCB, 'get',
                 common.xmpp.NS_DISCO_ITEMS)
+        self.RegisterHandler('iq', self._caller._JingleCB, 'result')
+        self.RegisterHandler('iq', self._caller._JingleCB, 'error')
+        self.RegisterHandler('iq', self._caller._JingleCB, 'set', common.xmpp.NS_JINGLE)
 
 class P2PConnection(IdleObject, PlugIn):
     def __init__(self, sock_hash, _sock, host=None, port=None, caller=None,
@@ -765,7 +768,7 @@ class ClientZeroconf:
         """
         Generate a random id
         """
-        ''.join(Random().sample(string.letters + string.digits, 6))
+        return ''.join(Random().sample(string.letters + string.digits, 6))
 
     def RegisterDisconnectHandler(self, handler):
         """
