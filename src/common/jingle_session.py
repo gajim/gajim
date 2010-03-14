@@ -320,7 +320,7 @@ class JingleSession(object):
         self.__dispatch_error(xmpp_error, jingle_error, text)
         # FIXME: Not sure when we would want to do that...
         if xmpp_error == 'item-not-found':
-            self.connection.delete_jingle_session(self.peerjid, self.sid)
+            self.connection.delete_jingle_session(self.sid)
 
     def __on_transport_replace(self, stanza, jingle, error, action):
         for content in jingle.iterTags('content'):
@@ -454,7 +454,7 @@ class JingleSession(object):
             cn.on_stanza(stanza, content, error, action)
 
     def __on_session_terminate(self, stanza, jingle, error, action):
-        self.connection.delete_jingle_session(self.peerjid, self.sid)
+        self.connection.delete_jingle_session(self.sid)
         reason, text = self.__reason_from_stanza(jingle)
         if reason not in ('success', 'cancel', 'decline'):
             self.__dispatch_error(reason, reason, text)
@@ -608,7 +608,7 @@ class JingleSession(object):
             text = '%s (%s)' % (reason, text)
         else:
             text = reason
-        self.connection.delete_jingle_session(self.peerjid, self.sid)
+        self.connection.delete_jingle_session(self.sid)
         self.connection.dispatch('JINGLE_DISCONNECTED',
                 (self.peerjid, self.sid, None, text))
 
