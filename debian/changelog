@@ -1,3 +1,19 @@
+gajim (0.13.3-1) unstable; urgency=low
+
+  * New upstream release.
+  * Fix connection to facebook. Closes: #569767
+
+ -- Yann Leboulanger <asterix@lagaule.org>  Tue, 23 Feb 2010 21:00:41 +0100
+
+gajim (0.13.2-1) unstable; urgency=low
+
+  * New upstream release.
+  * Fix gnomekeyring usage. Closes: #562913
+  * Fix completion. Closes: #563930
+  * Fix typo in suggests list. Closes: #564754
+
+ -- Yann Leboulanger <asterix@lagaule.org>  Thu, 14 Jan 2010 21:23:36 +0100
+
 gajim (0.13.1-1) unstable; urgency=low
 
   * New upstream release. Closes: #559905
