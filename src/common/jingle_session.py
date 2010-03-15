@@ -426,6 +426,16 @@ class JingleSession(object):
         # Jingle with unknown entities, it SHOULD return a <service-unavailable/>
         # error.
 
+        # Check if there's already a session with this user:
+        for session in self.connection.iter_jingle_sessions(self.peerjid):
+            if not session is self:
+                reason = xmpp.Node('reason')
+                alternative_session = reason.setTag('alternative-session')
+                alternative_session.setTagData('sid', session.sid)
+                self.__ack(stanza, jingle, error, action)
+                self._session_terminate(reason)
+                raise xmpp.NodeProcessed
+
         # Lets check what kind of jingle session does the peer want
         contents, contents_rejected, reason_txt = self.__parse_contents(jingle)
 
@@ -520,6 +530,7 @@ class JingleSession(object):
         self.connection.dispatch('JINGLE_ERROR', (self.peerjid, self.sid, text))
 
     def __reason_from_stanza(self, stanza):
+        # TODO: Move to GUI?
         reason = 'success'
         reasons = ['success', 'busy', 'cancel', 'connectivity-error',
                 'decline', 'expired', 'failed-application', 'failed-transport',
@@ -602,6 +613,7 @@ class JingleSession(object):
             jingle.addChild(node=reason)
         self.__broadcast_all(stanza, jingle, None, 'session-terminate-sent')
         self.connection.connection.send(stanza)
+        # TODO: Move to GUI?
         reason, text = self.__reason_from_stanza(jingle)
         if reason not in ('success', 'cancel', 'decline'):
             self.__dispatch_error(reason, reason, text)

@@ -1620,11 +1620,14 @@ class ChatControl(ChatControlBase):
                 'stop': self.JINGLE_STATE_AVAILABLE,
                 'error': self.JINGLE_STATE_ERROR}
 
-        if state in states:
-            jingle_state = states[state]
-            if getattr(self, jingle_type + '_state') == jingle_state:
-                return
-            setattr(self, jingle_type + '_state', jingle_state)
+        jingle_state = states[state]
+        if getattr(self, jingle_type + '_state') == jingle_state:
+            return
+
+        if state == 'stop' and getattr(self, jingle_type + '_sid') not in (None, sid):
+            return
+
+        setattr(self, jingle_type + '_state', jingle_state)
 
         # Destroy existing session with the user when he signs off
         # We need to do that before modifying the sid

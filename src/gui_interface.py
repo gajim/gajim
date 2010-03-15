@@ -1775,9 +1775,8 @@ class Interface:
 
         jid = gajim.get_jid_without_resource(peerjid)
         resource = gajim.get_resource_from_jid(peerjid)
-        ctrl = self.msg_win_mgr.get_control(peerjid, account)
-        if not ctrl:
-            ctrl = self.msg_win_mgr.get_control(jid, account)
+        ctrl = (self.msg_win_mgr.get_control(peerjid, account)
+                or self.msg_win_mgr.get_control(jid, account))
         if ctrl:
             if 'audio' in content_types:
                 ctrl.set_audio_state('connection_received', sid)
@@ -2810,6 +2809,8 @@ class Interface:
         if added_to_roster:
             ctrl.user_nick = gajim.nicks[account]
         gobject.idle_add(mw.window.grab_focus)
+
+        return ctrl
 
     def on_open_chat_window(self, widget, contact, account, resource=None,
     session=None):

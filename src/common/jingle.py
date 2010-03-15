@@ -121,6 +121,20 @@ class ConnectionJingle(object):
             jingle.start_session()
         return jingle.sid
 
+
+    def iter_jingle_sessions(self, jid, sid=None, media=None):
+        if sid:
+            return (session for session in self.__sessions.values() if session.sid == sid)
+        sessions = (session for session in self.__sessions.values() if session.peerjid == jid)
+        if media:
+            if media not in ('audio', 'video'):
+                return tuple()
+            else:
+                return (session for session in sessions if session.get_content(media))
+        else:
+            return sessions
+
+
     def get_jingle_session(self, jid, sid=None, media=None):
         if sid:
             if sid in self.__sessions:

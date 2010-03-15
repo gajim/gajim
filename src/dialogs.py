@@ -4925,17 +4925,10 @@ class VoIPCallReceivedDialog(object):
             #TODO: Ensure that ctrl.contact.resource == resource
             jid = gajim.get_jid_without_resource(self.fjid)
             resource = gajim.get_resource_from_jid(self.fjid)
-            ctrl = gajim.interface.msg_win_mgr.get_control(self.fjid, self.account)
-            if not ctrl:
-                ctrl = gajim.interface.msg_win_mgr.get_control(jid, self.account)
-            if not ctrl:
-                # open chat control
-                contact = gajim.contacts.get_contact(self.account, jid, resource)
-                if not contact:
-                    contact = gajim.contacts.get_contact(self.account, jid)
-                if not contact:
-                    return
-                ctrl = gajim.interface.new_chat(contact, self.account, resource)
+            ctrl = (gajim.interface.msg_win_mgr.get_control(self.fjid, self.account)
+                    or gajim.interface.msg_win_mgr.get_control(jid, self.account)
+                    or gajim.interface.new_chat_from_jid(self.account, jid))
+
             # Chat control opened, update content's status
             audio = session.get_content('audio')
             video = session.get_content('video')
