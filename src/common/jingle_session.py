@@ -427,13 +427,13 @@ class JingleSession(object):
         # error.
 
         # Lets check what kind of jingle session does the peer want
-        contents, contents_rejected, reason = self.__parse_contents(jingle)
+        contents, contents_rejected, reason_txt = self.__parse_contents(jingle)
 
         # If there's no content we understand...
         if not contents:
             # TODO: http://xmpp.org/extensions/xep-0166.html#session-terminate
             reason = xmpp.Node('reason')
-            reason.setTag(reason)
+            reason.setTag(reason_txt)
             self.__ack(stanza, jingle, error, action)
             self._session_terminate(reason)
             raise xmpp.NodeProcessed
