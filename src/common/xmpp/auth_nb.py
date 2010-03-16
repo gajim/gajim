@@ -463,8 +463,7 @@ class SASL(PlugIn):
                     '\r', '').replace('\n', '')
             node = Node('response', attrs={'xmlns':NS_SASL}, payload=[sasl_data])
         elif self.mechanism == 'PLAIN':
-            sasl_data = u'%s\x00%s\x00%s' % (self.username + '@' + \
-                    self._owner.Server, self.username, self.password)
+            sasl_data = u'\x00%s\x00%s' % (self.username, self.password)
             sasl_data = sasl_data.encode('utf-8').encode('base64').replace(
                     '\n', '')
             node = Node('auth', attrs={'xmlns': NS_SASL, 'mechanism': 'PLAIN'},
