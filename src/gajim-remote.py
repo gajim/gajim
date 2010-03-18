@@ -513,6 +513,8 @@ class GajimRemote:
 		self.arguments += ['']*(len(args)-i)
 
 	def handle_uri(self):
+		if len(sys.argv) < 3:
+			send_error(_('No uri given'))
 		if not sys.argv[2].startswith('xmpp:'):
 			send_error(_('Wrong uri'))
 		sys.argv[2] = sys.argv[2][5:]

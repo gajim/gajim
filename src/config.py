@@ -2764,23 +2764,23 @@ class RemoveAccountWindow:
 		gajim.config.del_per('accounts', self.account)
 		gajim.interface.save_config()
 		del gajim.interface.instances[self.account]
-      if self.account in gajim.nicks:
+		if self.account in gajim.nicks:
 			del gajim.interface.minimized_controls[self.account]
-            del gajim.nicks[self.account]
-            del gajim.block_signed_in_notifications[self.account]
-            del gajim.groups[self.account]
-            gajim.contacts.remove_account(self.account)
-            del gajim.gc_connected[self.account]
-            del gajim.automatic_rooms[self.account]
-            del gajim.to_be_removed[self.account]
-            del gajim.newly_added[self.account]
-            del gajim.sleeper_state[self.account]
-            del gajim.encrypted_chats[self.account]
-            del gajim.last_message_time[self.account]
-            del gajim.status_before_autoaway[self.account]
-            del gajim.transport_avatar[self.account]
-            del gajim.gajim_optional_features[self.account]
-            del gajim.caps_hash[self.account]
+			del gajim.nicks[self.account]
+			del gajim.block_signed_in_notifications[self.account]
+			del gajim.groups[self.account]
+			gajim.contacts.remove_account(self.account)
+			del gajim.gc_connected[self.account]
+			del gajim.automatic_rooms[self.account]
+			del gajim.to_be_removed[self.account]
+			del gajim.newly_added[self.account]
+			del gajim.sleeper_state[self.account]
+			del gajim.encrypted_chats[self.account]
+			del gajim.last_message_time[self.account]
+			del gajim.status_before_autoaway[self.account]
+			del gajim.transport_avatar[self.account]
+			del gajim.gajim_optional_features[self.account]
+			del gajim.caps_hash[self.account]
 		if len(gajim.connections) >= 2: # Do not merge accounts if only one exists
 			gajim.interface.roster.regroup = gajim.config.get('mergeaccounts')
 		else:
