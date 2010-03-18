@@ -173,13 +173,12 @@ class StandardChatCommands(CommandContainer):
         gajim.connections[self.account].sendPing(self.contact)
 
     @command
-    @documentation(_("Sends DTMF events through an open audio session"))
+    @documentation(_("Send DTMF events through an open audio session"))
     def dtmf(self, events):
         if not self.audio_sid:
             raise CommandError(_("There is no open audio session with this contact"))
         # Valid values for DTMF tones are *, # or a number
-        events = [event for event in events
-            if event in ('*', '#') or event.isdigit()]
+        events = filter(lambda e: e in ('*', '#') or e.isdigit (), events)
         if events:
             session = gajim.connections[self.account].get_jingle_session(
                 self.contact.get_full_jid(), self.audio_sid)
