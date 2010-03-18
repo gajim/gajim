@@ -157,13 +157,18 @@ class StandardCommonCommands(CommandContainer):
         for connection in gajim.connections.itervalues():
             connection.change_status('online', message)
 
-class StandardChatCommands(CommandContainer):
+class StandardCommonChatCommands(CommandContainer):
     """
-    This command container contains standard command which are unique to
-    a chat.
+    This command container contans standard commands, which are common
+    to a chat and a private chat only.
     """
 
-    HOSTS = (ChatCommands,)
+    HOSTS = (ChatCommands, PrivateChatCommands)
+
+    @command
+    @documentation(_("Toggle the GPG encryption"))
+    def gpg(self):
+        self._toggle_gpg()
 
     @command
     @documentation(_("Send a ping to the contact"))
@@ -209,18 +214,26 @@ class StandardChatCommands(CommandContainer):
             state = self._video_button.get_active()
             self._video_button.set_active(not state)
 
+class StandardChatCommands(CommandContainer):
+    """
+    This command container contains standard commands which are unique
+    to a chat.
+    """
+
+    HOSTS = (ChatCommands,)
+
 class StandardPrivateChatCommands(CommandContainer):
     """
-    This command container contains standard command which are unique to
-    a private chat.
+    This command container contains standard commands which are unique
+    to a private chat.
     """
 
     HOSTS = (PrivateChatCommands,)
 
-class StandardGroupchatCommands(CommandContainer):
+class StandardGroupChatCommands(CommandContainer):
     """
-    This command container contains standard command which are unique to
-    a group chat.
+    This command container contains standard commands which are unique
+    to a group chat.
     """
 
     HOSTS = (GroupChatCommands,)
