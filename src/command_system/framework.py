@@ -25,7 +25,7 @@ from inspect import getargspec
 
 from dispatching import Dispatcher, HostDispatcher, ContainerDispatcher
 from mapping import parse_arguments, adapt_arguments
-from errors import DefinitionError, CommandError
+from errors import DefinitionError, CommandError, NoCommandError
 
 class CommandHost(object):
     """
@@ -128,7 +128,7 @@ class CommandProcessor(object):
     def get_command(self, name):
         command = Dispatcher.get_command(self.COMMAND_HOST, name)
         if not command:
-            raise CommandError("Command does not exist", name=name)
+            raise NoCommandError("Command does not exist", name=name)
         return command
 
     def list_commands(self):

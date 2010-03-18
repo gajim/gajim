@@ -45,3 +45,9 @@ class CommandError(BaseError):
     Used to indicate errors occured during command execution.
     """
     pass
+
+class NoCommandError(BaseError):
+    """
+    Used to indicate an inability to find the specified command.
+    """
+    pass

@@ -26,7 +26,7 @@ from traceback import print_exc
 from common import gajim
 
 from ..framework import CommandProcessor
-from ..errors import CommandError
+from ..errors import CommandError, NoCommandError
 
 class ChatCommandProcessor(CommandProcessor):
     """
@@ -44,33 +44,40 @@ class ChatCommandProcessor(CommandProcessor):
     def execute_command(self, name, arguments):
         try:
             super(ChatCommandProcessor, self).execute_command(name, arguments)
+        except NoCommandError, error:
+            details = dict(name=error.name, message=error.message)
+            message = "%(name)s: %(message)s\n" % details
+            message += "Try using the //%(name)s or /say /%(name)s " % details
+            message += "construct if you intended to send it as a text."
+            self.echo(message, 'error')
         except CommandError, error:
-            self.echo("%s: %s" %(error.name, error.message), 'error')
+            self.echo("%s: %s" % (error.name, error.message), 'error')
         except Exception:
             self.echo("An error occured while trying to execute the command", 'error')
             print_exc()
 
     def looks_like_command(self, text, body, name, arguments):
-        # Command escape stuff ggoes here. If text was prepended by the command
-        # prefix twice, like //not_a_command (if prefix is set to /) then it
-        # will be escaped, that is sent just as a regular message with one (only
-        # one) prefix removed, so message will be /not_a_command.
+        # Command escape stuff ggoes here. If text was prepended by the
+        # command prefix twice, like //not_a_command (if prefix is set
+        # to /) then it will be escaped, that is sent just as a regular
+        # message with one (only one) prefix removed, so message will be
+        # /not_a_command.
         if body.startswith(self.COMMAND_PREFIX):
             self.send(body)
             return True
 
     def command_preprocessor(self, command, name, arguments, args, kwargs):
-        # If command argument contain h or help option - forward it to the /help
-        # command. Dont forget to pass self, as all commands are unbound. And
-        # also don't forget to print output.
+        # If command argument contain h or help option - forward it to
+        # the /help command. Dont forget to pass self, as all commands
+        # are unbound. And also don't forget to print output.
         if 'h' in kwargs or 'help' in kwargs:
             help = self.get_command('help')
             self.echo(help(self, name))
             return True
 
     def command_postprocessor(self, command, name, arguments, args, kwargs, value):
-        # If command returns a string - print it to a user. A convenient and
-        # sufficient in most simple cases shortcut to a using echo.
+        # If command returns a string - print it to a user. A convenient
+        # and sufficient in most simple cases shortcut to a using echo.
         if value and isinstance(value, StringTypes):
             self.echo(value)
 
