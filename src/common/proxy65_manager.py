@@ -83,6 +83,8 @@ class Proxy65Manager:
                 host = item.getAttr('host')
                 port = item.getAttr('port')
                 jid = item.getAttr('jid')
+                if not host or not port or not jid:
+                    self.proxies[proxy]._on_connect_failure()
                 self.proxies[proxy].resolve_result(host, port, jid)
                 # we can have only one streamhost
                 raise common.xmpp.NodeProcessed
@@ -113,8 +115,7 @@ class ProxyResolver:
         self.host = str(host)
         self.port = int(port)
         self.jid = unicode(jid)
-        self.state = S_RESOLVED
-        #FIXME: re-enable proxy testing
+        self.state = S_INITIAL
         log.info('start resolving %s:%s' % (self.host, self.port))
         self.receiver_tester = ReceiverTester(self.host, self.port, self.jid,
                 self.sid, self.sender_jid, self._on_receiver_success,
