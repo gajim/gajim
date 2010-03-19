@@ -514,7 +514,6 @@ class CommonConnection:
         groupchat_jid is used when we want to send a request to a real jid and
         act as if the answer comes from the groupchat_jid
         """
-        print 'request_last_status_time', self.connection
         if not self.connection:
             return
         to_whom_jid = jid
