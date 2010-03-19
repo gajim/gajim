@@ -630,8 +630,8 @@ class DesktopNotification:
                         dbus.UInt32(timeout*1000),
                         reply_handler=self.attach_by_id,
                         error_handler=self.notify_another_way)
-                except Exception:
-                    self.notify_another_way()
+                except Exception, e:
+                    self.notify_another_way(e)
             else:
                 try:
                     self.notif.Notify(
@@ -645,8 +645,8 @@ class DesktopNotification:
                         dbus.UInt32(timeout*1000),
                         reply_handler=self.attach_by_id,
                         error_handler=self.notify_another_way)
-                except Exception:
-                    self.notify_another_way()
+                except Exception, e:
+                    self.notify_another_way(e)
 
     def attach_by_id(self, id_):
         self.id = id_
