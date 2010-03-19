@@ -644,7 +644,6 @@ msgid "Contact Change Status "
 msgstr "Le contact a changé d'état"
 
 #: ../data/gui/advanced_notifications_window.ui.h:11
-#, fuzzy
 msgid "Contact Disconnected "
 msgstr "Contact déconnecté"
 
