@@ -422,13 +422,18 @@ class SASL(PlugIn):
             self.on_sasl()
         raise NodeProcessed
 
+    @staticmethod
+    def _convert_to_iso88591(string):
+        try:
+            string = string.decode('utf-8').encode('iso-8859-1')
+        except UnicodeEncodeError:
+            pass
+        return string
+
     def set_password(self, password):
-        if password is None:
-            self.password = ''
-        else:
-            self.password = password
+        self.password = '' if password is None else password
         if self.mechanism == 'SCRAM-SHA-1':
-            nonce = ''.join('%x' % randint(0, 2**28) for randint in \
+            nonce = ''.join('%x' % randint(0, 2 ** 28) for randint in \
                 itertools.repeat(random.randint, 7))
             self.scram_soup = 'n=' + self.username + ',r=' + nonce
             self.scram_gs2 = 'n,,' # No CB yet.
@@ -437,15 +442,9 @@ class SASL(PlugIn):
             node = Node('auth', attrs={'xmlns': NS_SASL,
                 'mechanism': self.mechanism}, payload=[sasl_data])
         elif self.mechanism == 'DIGEST-MD5':
-            def convert_to_iso88591(string):
-                try:
-                    string = string.decode('utf-8').encode('iso-8859-1')
-                except UnicodeEncodeError:
-                    pass
-                return string
-            hash_username = convert_to_iso88591(self.resp['username'])
-            hash_realm = convert_to_iso88591(self.resp['realm'])
-            hash_password = convert_to_iso88591(self.password)
+            hash_username = self._convert_to_iso88591(self.resp['username'])
+            hash_realm = self._convert_to_iso88591(self.resp['realm'])
+            hash_password = self._convert_to_iso88591(self.password)
             A1 = C([H(C([hash_username, hash_realm, hash_password])),
                     self.resp['nonce'], self.resp['cnonce']])
             A2 = C(['AUTHENTICATE', self.resp['digest-uri']])

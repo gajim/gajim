@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Alexander Cherniuk <ts33kr@gmail.com>
+# Copyright (C) 2009-2010  Alexander Cherniuk <ts33kr@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ from inspect import getargspec
 
 from dispatching import Dispatcher, HostDispatcher, ContainerDispatcher
 from mapping import parse_arguments, adapt_arguments
-from errors import DefinitionError, CommandError
+from errors import DefinitionError, CommandError, NoCommandError
 
 class CommandHost(object):
     """
@@ -128,7 +128,7 @@ class CommandProcessor(object):
     def get_command(self, name):
         command = Dispatcher.get_command(self.COMMAND_HOST, name)
         if not command:
-            raise CommandError("Command does not exist", name=name)
+            raise NoCommandError("Command does not exist", name=name)
         return command
 
     def list_commands(self):
@@ -330,7 +330,7 @@ def command(*names, **properties):
 
     return decorator
 
-def documentation(text):
+def doc(text):
     """
     This decorator is used to bind a documentation (a help) to a
     command.

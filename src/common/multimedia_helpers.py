@@ -31,6 +31,7 @@ class DeviceManager(object):
             element = gst.element_factory_make(name, '%spresencetest' % name)
             if isinstance(element, gst.interfaces.PropertyProbe):
                 element.set_state(gst.STATE_READY)
+                element.probe_property_name('device')
                 devices = element.probe_get_values_name('device')
                 if devices:
                     self.devices[text % _(' Default device')] = pipe % name
@@ -79,7 +80,7 @@ class VideoInputManager(DeviceManager):
                 '%s is-live=true')
         # Auto src
         self.detect_element('autovideosrc', _('Autodetect'))
-        # V4L2 src ; TODO: Figure out why it doesn't work
+        # V4L2 src
         self.detect_element('v4l2src', _('V4L2: %s'))
         # Funny things, just to test...
         # self.devices['GOOM'] = 'audiotestsrc ! goom'
@@ -96,3 +97,4 @@ class VideoOutputManager(DeviceManager):
         # ximagesink
         self.detect_element('ximagesink', _('X Window System (without Xv)'))
         self.detect_element('autovideosink', _('Autodetect'))
+

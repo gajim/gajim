@@ -400,7 +400,7 @@ class SingleForm(gtk.Table, object):
                         check.set_active(value in field.values)
                         check.connect('toggled',
                                 self.on_list_multi_checkbutton_toggled, field, value)
-                    widget.pack_start(check, expand=False)
+                        widget.pack_start(check, expand=False)
                 else:
                     # more than 5 options: show combobox
                     def on_list_multi_treeview_changed(selection, f):
