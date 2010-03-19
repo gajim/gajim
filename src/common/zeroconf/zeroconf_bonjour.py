@@ -274,9 +274,9 @@ class Zeroconf:
     def disconnect(self):
         if self.connected:
             self.connected = False
-            self.browse_sdRef.close()
-            self.remove_announce()
-
+            if hasattr(self, 'browse_sdRef'):
+                self.browse_sdRef.close()
+                self.remove_announce()
 
     def browse_domain(self, domain=None):
         gajim.log.debug('starting to browse')
