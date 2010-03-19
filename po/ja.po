@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.13.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-10 22:07+0100\n"
+"POT-Creation-Date: 2010-03-19 11:27+0100\n"
 "PO-Revision-Date: 2010-03-10 17:59+0900\n"
 "Last-Translator: Mako N. <mako@pasero.net>\n"
 "Language-Team: Japanese\n"
@@ -14,6 +14,2742 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../data/gui/account_context_menu.ui.h:1
+msgid "_Open Gmail Inbox"
+msgstr "Gmail の受信箱を開く (_O)"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:1
+msgid ""
+"<b>Connecting to server</b>\n"
+"\n"
+"Please wait..."
+msgstr ""
+"<b>サーバに接続しています</b>\n"
+"\n"
+"しばらくお待ちください..."
+
+#: ../data/gui/account_creation_wizard_window.ui.h:4
+msgid "<b>Please choose one of the options below:</b>"
+msgstr "<b>下の選択肢から一つ選んでください:</b>"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:5
+msgid "<b>Please fill in the data for your existing account</b>"
+msgstr "<b>既にお持ちのアカウントの情報を入力してください</b>"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:6
+msgid "<b>Please select a server</b>"
+msgstr "<b>サーバーを選択してください</b>"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:7
+msgid "@"
+msgstr "@"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:8
+msgid ""
+"Add this certificate to the list of trusted certificates.\n"
+"SHA1 fingerprint of the certificate:\n"
+msgstr ""
+"この証明書を、信頼できる証明書一覧に加えます。\n"
+"この証明書の SHA1 指紋:\n"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:11
+msgid "Anon_ymous authentication"
+msgstr "匿名の認証 (_y)"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:12
+msgid "Connect when I press Finish"
+msgstr "「完了」を押したらすぐに接続する"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:13
+msgid "Gajim: Account Creation Wizard"
+msgstr "Gajim: アカウント作成ウィザード"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:14
+msgid "I already have an account I want to _use"
+msgstr "既にアカウントを持っているのでそれを使う (_u)"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:15
+msgid "I want to _register for a new account"
+msgstr "新しいアカウントを作成する (_r)"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:16
+#: ../data/gui/accounts_window.ui.h:25
+msgid "If checked, Gajim will remember the password for this account"
+msgstr "チェックをつけると、Gajim はこのアカウントのパスワードを記憶します"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:17
+msgid "Manage..."
+msgstr "管理..."
+
+#: ../data/gui/account_creation_wizard_window.ui.h:18
+#: ../data/gui/accounts_window.ui.h:36 ../data/gui/change_mood_dialog.ui.h:3
+#: ../src/config.py:1256 ../src/config.py:1359 ../src/config.py:1652
+#: ../src/config.py:1657 ../src/config.py:2208 ../src/config.py:2287
+#: ../src/config.py:2300 ../src/config.py:3538 ../src/config.py:3611
+#: ../src/dialogs.py:308 ../src/dialogs.py:310 ../src/dialogs.py:513
+#: ../src/dialogs.py:526 ../src/roster_window.py:2887
+#: ../src/roster_window.py:2893 ../src/roster_window.py:2898
+msgid "None"
+msgstr "なし"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:19
+msgid "Prox_y:"
+msgstr "プロキシ (_y)"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:20
+#: ../data/gui/accounts_window.ui.h:45
+msgid "Save pass_word"
+msgstr "パスワードを保存する"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:21
+msgid "Set my profile when I connect"
+msgstr "接続時に自分のプロフィールを設定する"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:22
+msgid "Use custom hostname/port"
+msgstr "別のホスト名/ポート番号を使う"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:23
+msgid ""
+"You need to have an account in order to connect\n"
+"to the Jabber network."
+msgstr "Jabber ネットワークに接続するには、アカウントが必要です。"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:25
+#: ../data/gui/roster_window.ui.h:9
+msgid "_Advanced"
+msgstr "拡張 (_A)"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:26
+msgid "_Finish"
+msgstr "完了 (_F)"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:27
+msgid "_Hostname:"
+msgstr "ホスト名 (_H):"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:28
+#: ../data/gui/accounts_window.ui.h:57
+msgid "_Jabber ID:"
+msgstr "Jabber ID (_J):"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:29
+#: ../data/gui/accounts_window.ui.h:59
+msgid "_Password:"
+msgstr "パスワード (_P):"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:30
+msgid "_Port:"
+msgstr "ポート番号 (_P):"
+
+#: ../data/gui/account_creation_wizard_window.ui.h:31
+msgid "_Server:"
+msgstr "サーバー (_S):"
+
+#: ../data/gui/accounts_window.ui.h:1 ../data/gui/preferences_window.ui.h:13
+msgid "<b>Miscellaneous</b>"
+msgstr "<b>その他の設定</b>"
+
+#: ../data/gui/accounts_window.ui.h:2
+msgid "<b>OpenPGP</b>"
+msgstr "<b>OpenPGP</b>"
+
+#: ../data/gui/accounts_window.ui.h:3
+msgid "<b>Personal Information</b>"
+msgstr "<b>個人情報</b>"
+
+#: ../data/gui/accounts_window.ui.h:4
+msgid "<b>Proxy</b>"
+msgstr "<b>プロキシ</b>"
+
+#: ../data/gui/accounts_window.ui.h:5
+msgid "A_djust to status"
+msgstr "在席状況に合わせる (_d)"
+
+#: ../data/gui/accounts_window.ui.h:6 ../data/gui/join_groupchat_window.ui.h:1
+msgid "Account"
+msgstr "アカウント"
+
+#: ../data/gui/accounts_window.ui.h:7
+msgid "Accounts"
+msgstr "アカウント"
+
+#: ../data/gui/accounts_window.ui.h:8
+msgid "Administration operations"
+msgstr "管理の操作"
+
+#: ../data/gui/accounts_window.ui.h:9
+msgid "Anonymous authentication"
+msgstr "匿名の認証"
+
+#: ../data/gui/accounts_window.ui.h:10
+msgid "Auto-reconnect when connection is lost"
+msgstr "切断したら自動で再接続する"
+
+#: ../data/gui/accounts_window.ui.h:11
+msgid "C_onnect on Gajim startup"
+msgstr "Gajim 起動時に接続する (_o)"
+
+#: ../data/gui/accounts_window.ui.h:12
+msgid "Chan_ge Password"
+msgstr "パスワードを変更する (_g)"
+
+#: ../data/gui/accounts_window.ui.h:13
+msgid ""
+"Check this so Gajim will ask you before sending your password over an "
+"insecure connection."
+msgstr ""
+"チェックをつけると、安全でない接続の前にパスワードを聞いてくるようになりま"
+"す。"
+
+#: ../data/gui/accounts_window.ui.h:14
+msgid "Choose _Key..."
+msgstr "鍵の選択 (_K)..."
+
+#: ../data/gui/accounts_window.ui.h:15
+msgid "Click to change account's password"
+msgstr "アカウントのパスワードを変更するにはクリック"
+
+#: ../data/gui/accounts_window.ui.h:16
+msgid "Click to request authorization to all contacts of another account"
+msgstr "別アカウントのすべての相手先に承認を求めるにはクリック"
+
+#: ../data/gui/accounts_window.ui.h:17
+msgid "Co_nnect on Gajim startup"
+msgstr "Gajim 起動時に接続する (_n)"
+
+#: ../data/gui/accounts_window.ui.h:18
+msgid "Connection"
+msgstr "接続"
+
+#: ../data/gui/accounts_window.ui.h:19
+#: ../data/gui/zeroconf_information_window.ui.h:2
+msgid "E-Mail:"
+msgstr "E-メール:"
+
+#: ../data/gui/accounts_window.ui.h:20
+#: ../data/gui/zeroconf_information_window.ui.h:3
+msgid "First Name:"
+msgstr "名:"
+
+#. No configured account
+#: ../data/gui/accounts_window.ui.h:21 ../data/gui/roster_window.ui.h:2
+#: ../src/common/helpers.py:1159 ../src/common/helpers.py:1171
+#: ../src/notify.py:558 ../src/notify.py:581 ../src/notify.py:622
+#: ../src/notify.py:638
+msgid "Gajim"
+msgstr "Gajim"
+
+#. FIXME: Ugly workaround.
+#. FIXME: Ugly workaround. Maybe we haven't been in any group (defaults to General)
+#. General group cannot be changed
+#: ../data/gui/accounts_window.ui.h:22 ../data/gui/preferences_window.ui.h:61
+#: ../src/common/contacts.py:141 ../src/dialogs.py:111 ../src/dialogs.py:121
+#: ../src/roster_window.py:2829 ../src/roster_window.py:5376
+msgid "General"
+msgstr "全般"
+
+# (Mako)broadcast 困った。ここは「同報」で
+#: ../data/gui/accounts_window.ui.h:23
+msgid ""
+"If checked, Gajim will also broadcast some more IPs except from just your "
+"IP, so file transfer has higher chances of working."
+msgstr ""
+"チェックをつけると、Gajim はあなたの IP を除くいくつかの IP に同報します。そ"
+"れによってファイル転送はうまくいく可能性が高くなります。"
+
+#: ../data/gui/accounts_window.ui.h:24
+msgid "If checked, Gajim will get the password from a GPG agent like seahorse"
+msgstr ""
+"チェックをつけると、Gajim は seahorse など GPG エージェントからパスワードを受"
+"け取ります"
+
+#: ../data/gui/accounts_window.ui.h:26
+msgid ""
+"If checked, Gajim will send keep-alive packets to prevent connection timeout "
+"which results in disconnection"
+msgstr ""
+"チェックをつけると、Gajim はタイムアウトで接続が切れてしまうのを防ぐために生"
+"存パケットを流すようになります"
+
+#: ../data/gui/accounts_window.ui.h:27
+msgid ""
+"If checked, Gajim, when launched, will automatically connect to jabber using "
+"this account"
+msgstr ""
+"チェックをつけると、Gajim は起動時に、このアカウントを使って jabber に自動的"
+"に接続します"
+
+#: ../data/gui/accounts_window.ui.h:28
+msgid ""
+"If checked, any change to the global status (handled by the combobox at the "
+"bottom of the roster window) will change the status of this account "
+"accordingly"
+msgstr ""
+"チェックをつけると、(名簿ウィンドウの最下段の選択肢による)全体の在席状況の変"
+"更がこのアカウントの在席状況の変更に反映されます。"
+
+#: ../data/gui/accounts_window.ui.h:29
+msgid ""
+"If the default port that is used for incoming messages is unfitting for your "
+"setup you can select another one here.\n"
+"You might consider to change possible firewall settings."
+msgstr ""
+"受信メッセージに使われるデフォルトのポートが設定に合わない場合、ここで別の"
+"ポートを指定できます。\n"
+"ファイアーウォールの設定を考慮しましょう。"
+
+#: ../data/gui/accounts_window.ui.h:31
+msgid "Information about you, as stored in the server"
+msgstr "サーバに格納する、あなたに関する情報です"
+
+#: ../data/gui/accounts_window.ui.h:32
+#: ../data/gui/zeroconf_information_window.ui.h:4 ../src/config.py:1775
+#: ../src/dialogs.py:830
+msgid "Jabber ID:"
+msgstr "Jabber ID:"
+
+#: ../data/gui/accounts_window.ui.h:33
+#: ../data/gui/zeroconf_information_window.ui.h:5
+msgid "Last Name:"
+msgstr "姓:"
+
+#: ../data/gui/accounts_window.ui.h:34
+msgid "Mer_ge accounts"
+msgstr "アカウントの統合 (_g)"
+
+#: ../data/gui/accounts_window.ui.h:35 ../src/config.py:1748
+#: ../src/config.py:2301
+msgid "No key selected"
+msgstr "鍵が選択されていません"
+
+#: ../data/gui/accounts_window.ui.h:37 ../data/gui/profile_window.ui.h:35
+msgid "Personal Information"
+msgstr "個人情報"
+
+#: ../data/gui/accounts_window.ui.h:38
+msgid "Priori_ty:"
+msgstr "優先順位 (_t):"
+
+#: ../data/gui/accounts_window.ui.h:39
+msgid ""
+"Priority is used in Jabber to determine who gets the events from the jabber "
+"server when two or more clients are connected using the same account; The "
+"client with the highest priority gets the events"
+msgstr ""
+"優先順位は、同じアカウントで二つ以上のクライアントから接続しているときに "
+"jabber サーバーからのイベントの受け取り先を決定するのに使われます。最も高い優"
+"先順位のクライアントがイベントを受け取ります"
+
+#: ../data/gui/accounts_window.ui.h:40
+msgid "Priority will change automatically according to your status."
+msgstr "優先順位は、在席状況に応じて自動的に変わります。"
+
+#. Rename
+#: ../data/gui/accounts_window.ui.h:41 ../src/roster_window.py:5326
+msgid "Re_name"
+msgstr "名前の変更 (_n)"
+
+#: ../data/gui/accounts_window.ui.h:42
+msgid "Resour_ce:"
+msgstr "リソース (_c):"
+
+#: ../data/gui/accounts_window.ui.h:43
+msgid ""
+"Resource is sent to the Jabber server in order to separate the same JID in "
+"two or more parts depending on the number of the clients connected in the "
+"same server with the same account. So you might be connected in the same "
+"account with resource 'Home' and 'Work' at the same time. The resource which "
+"has the highest priority will get the events. (see below)"
+msgstr ""
+"リソースとは、同じサーバーに同じアカウントで複数のクライアントからの接続があ"
+"る場合に、同じ JID を区別するために送信されます。たとえば、同じアカウントでリ"
+"ソースを 'Home' と 'Work' として同時に接続しているかもしれません。最も優先順"
+"位の高いリソースがイベントを受け取ります(下記参照)。"
+
+#: ../data/gui/accounts_window.ui.h:44
+msgid "Save conversation _logs for all contacts"
+msgstr "すべての相手先の会話記録を保存する (_l)"
+
+#: ../data/gui/accounts_window.ui.h:46
+msgid "Send _keep-alive packets"
+msgstr "生存パケットを送信する (_k)"
+
+#: ../data/gui/accounts_window.ui.h:47
+msgid "Synch_ronize account status with global status"
+msgstr "アカウントの在席状況を全体の在席状況に合わせる (_r)"
+
+#: ../data/gui/accounts_window.ui.h:48
+msgid "Synchroni_ze account status with global status"
+msgstr "アカウントの在席状況を全体の在席状況に合わせる (_z)"
+
+#: ../data/gui/accounts_window.ui.h:49
+#: ../data/gui/synchronise_select_account_dialog.ui.h:2
+msgid "Synchronise contacts"
+msgstr "相手先の同期"
+
+#: ../data/gui/accounts_window.ui.h:50
+msgid "Use G_PG Agent"
+msgstr "GPG エージェントを使う (_P)"
+
+#: ../data/gui/accounts_window.ui.h:51
+msgid "Use cust_om hostname/port"
+msgstr "別のホスト名/ポート番号を使う (_o)"
+
+#: ../data/gui/accounts_window.ui.h:52
+msgid "Use cust_om port:"
+msgstr "別のポート番号を使う (_o):"
+
+#: ../data/gui/accounts_window.ui.h:53
+msgid "Use file transfer proxies"
+msgstr "ファイル転送のプロキシを使う"
+
+#: ../data/gui/accounts_window.ui.h:54
+msgid "_Edit Personal Information..."
+msgstr "個人情報を編集する (_E)..."
+
+#. XML Console enable checkbutton
+#: ../data/gui/accounts_window.ui.h:55 ../data/gui/xml_console_window.ui.h:11
+msgid "_Enable"
+msgstr "有効 (_E)"
+
+#: ../data/gui/accounts_window.ui.h:56
+msgid "_Hostname: "
+msgstr "ホスト名 (_H):"
+
+#: ../data/gui/accounts_window.ui.h:58
+msgid "_Manage..."
+msgstr "管理 (_M)..."
+
+#: ../data/gui/accounts_window.ui.h:60
+msgid "_Port: "
+msgstr "ポート番号 (_P):"
+
+#: ../data/gui/accounts_window.ui.h:61
+msgid "_Warn before using an insecure connection"
+msgstr "安全でない接続の前には警告する (_W)"
+
+#: ../data/gui/accounts_window.ui.h:62
+msgid "_use HTTP__PROXY environment variable"
+msgstr "環境変数 HTTP__PROXY を使う (_u)"
+
+#: ../data/gui/add_new_contact_window.ui.h:1
+msgid "A_ccount:"
+msgstr "アカウント (_c):"
+
+#: ../data/gui/add_new_contact_window.ui.h:2
+msgid "A_llow this contact to view my status"
+msgstr "この相手先に自分の在席状況を見ることを許可する (_l)"
+
+#: ../data/gui/add_new_contact_window.ui.h:3
+msgid "Add New Contact"
+msgstr "新しい相手先を追加する"
+
+#: ../data/gui/add_new_contact_window.ui.h:4 ../src/common/helpers.py:1339
+msgid "I would like to add you to my contact list."
+msgstr "あなたを私の相手先リストに追加したいと思います。"
+
+#: ../data/gui/add_new_contact_window.ui.h:5
+msgid ""
+"You have to register with this transport\n"
+"to be able to add a contact from this\n"
+"protocol. Click on register button to\n"
+"proceed."
+msgstr ""
+"このプロトコルの相手先を追加するためには、\n"
+"この中継先に登録しなければなりません。\n"
+"登録ボタンを押して次に進んでください。"
+
+#: ../data/gui/add_new_contact_window.ui.h:9
+msgid ""
+"You must be connected to the transport to be able\n"
+"to add a contact from this protocol."
+msgstr ""
+"このプロトコルの相手先を追加するためには、\n"
+"この中継先に接続していなければなりません。"
+
+#: ../data/gui/add_new_contact_window.ui.h:11
+msgid "_Group:"
+msgstr "グループ (_G):"
+
+#: ../data/gui/add_new_contact_window.ui.h:12
+msgid "_Nickname:"
+msgstr "ニックネーム (_N):"
+
+#: ../data/gui/add_new_contact_window.ui.h:13
+msgid "_Protocol:"
+msgstr "プロトコル (_P):"
+
+#: ../data/gui/add_new_contact_window.ui.h:14
+msgid "_Register"
+msgstr "登録 (_R)"
+
+#: ../data/gui/add_new_contact_window.ui.h:15
+#, fuzzy
+msgid "_Save subscription message"
+msgstr "在席通知の申し込み (_S)"
+
+#: ../data/gui/add_new_contact_window.ui.h:16
+msgid "_User ID:"
+msgstr "ユーザー ID (_U):"
+
+#: ../data/gui/adhoc_commands_window.ui.h:1
+msgid "<b>An error has occurred:</b>"
+msgstr "<b>エラーが発生しました:</b>"
+
+#: ../data/gui/adhoc_commands_window.ui.h:2
+msgid "<b>Choose command to execute:</b>"
+msgstr "<b>実行するコマンドを選択してください:</b>"
+
+#: ../data/gui/adhoc_commands_window.ui.h:3
+msgid "Ad-hoc Commands - Gajim"
+msgstr "Ad-hoc コマンド - Gajim"
+
+#: ../data/gui/adhoc_commands_window.ui.h:4
+msgid "Check once more"
+msgstr "やり直す"
+
+#: ../data/gui/adhoc_commands_window.ui.h:5
+msgid "Error description..."
+msgstr "エラーの説明..."
+
+#: ../data/gui/adhoc_commands_window.ui.h:6
+msgid "Please wait while retrieving command list..."
+msgstr "コマンド一覧を取得しています。しばらくお待ちください..."
+
+#: ../data/gui/adhoc_commands_window.ui.h:7
+msgid "Please wait while the command is sending..."
+msgstr "コマンドを送信しています。しばらくお待ちください..."
+
+#: ../data/gui/adhoc_commands_window.ui.h:8
+msgid "Please wait..."
+msgstr "しばらくお待ちください..."
+
+# (Mako)entity はしかたなくカタカナで
+#: ../data/gui/adhoc_commands_window.ui.h:9
+msgid "This jabber entity does not expose any commands."
+msgstr "このエンティティはコマンドを受け付けません。"
+
+#: ../data/gui/advanced_configuration_window.ui.h:1
+#: ../data/gui/features_window.ui.h:1
+msgid "<b>Description</b>"
+msgstr "<b>説明</b>"
+
+#: ../data/gui/advanced_configuration_window.ui.h:2
+msgid "<b>NOTE:</b> You should restart Gajim for some settings to take effect"
+msgstr "<b>注意:</b> 設定を有効にするには Gajim を再起動してください"
+
+#: ../data/gui/advanced_configuration_window.ui.h:3
+msgid "Advanced Configuration Editor"
+msgstr "詳細設定エディタ"
+
+#: ../data/gui/advanced_configuration_window.ui.h:4
+msgid "Filter:"
+msgstr "フィルタ:"
+
+#: ../data/gui/advanced_menuitem_menu.ui.h:1
+msgid "Deletes Message of the Day"
+msgstr "今日のメッセージを削除します"
+
+#: ../data/gui/advanced_menuitem_menu.ui.h:2
+msgid "Edit _Privacy Lists..."
+msgstr "プライバシーリストを編集..."
+
+#: ../data/gui/advanced_menuitem_menu.ui.h:3
+msgid "Sends a message to users currently connected to this server"
+msgstr "現在このサーバーに接続しているユーザーにメッセージを送信する"
+
+#: ../data/gui/advanced_menuitem_menu.ui.h:4
+msgid "Set MOTD..."
+msgstr "MOTD を設定..."
+
+#: ../data/gui/advanced_menuitem_menu.ui.h:5
+msgid "Sets Message of the Day"
+msgstr "今日のメッセージを設定します"
+
+#: ../data/gui/advanced_menuitem_menu.ui.h:6
+msgid "Show _XML Console"
+msgstr "XML コンソールを表示 (_X)"
+
+#: ../data/gui/advanced_menuitem_menu.ui.h:7
+msgid "Update MOTD..."
+msgstr "MOTD を更新..."
+
+#: ../data/gui/advanced_menuitem_menu.ui.h:8
+msgid "Updates Message of the Day"
+msgstr "今日のメッセージを更新します"
+
+#: ../data/gui/advanced_menuitem_menu.ui.h:9
+msgid "_Administrator"
+msgstr "管理人 (_A)"
+
+#: ../data/gui/advanced_notifications_window.ui.h:1
+msgid " a window/tab opened with that contact "
+msgstr "ウィンドウ/タブで開く "
+
+#: ../data/gui/advanced_notifications_window.ui.h:2
+msgid "<b>Actions</b>"
+msgstr "<b>操作</b>"
+
+#: ../data/gui/advanced_notifications_window.ui.h:3
+#, fuzzy
+msgid "<b>Conditions</b>"
+msgstr "<b>状況</b>"
+
+#: ../data/gui/advanced_notifications_window.ui.h:4
+#: ../data/gui/preferences_window.ui.h:17
+msgid "<b>Sounds</b>"
+msgstr "<b>耳への通知</b>"
+
+#: ../data/gui/advanced_notifications_window.ui.h:5
+msgid "Advanced Actions"
+msgstr "詳細な操作"
+
+#: ../data/gui/advanced_notifications_window.ui.h:6
+msgid "Advanced Notifications Control"
+msgstr "通知の制御の詳細"
+
+#: ../data/gui/advanced_notifications_window.ui.h:7
+#, fuzzy
+msgid "All statuses"
+msgstr "すべての状況"
+
+#: ../data/gui/advanced_notifications_window.ui.h:8
+#: ../src/common/commands.py:106 ../src/common/helpers.py:233
+msgid "Away"
+msgstr "離席中です"
+
+#: ../data/gui/advanced_notifications_window.ui.h:9
+msgid "Busy "
+msgstr "取り込み中です"
+
+#: ../data/gui/advanced_notifications_window.ui.h:10
+#, fuzzy
+msgid "Contact Change Status "
+msgstr "相手先が在席状況を変更"
+
+#: ../data/gui/advanced_notifications_window.ui.h:11
+#, fuzzy
+msgid "Contact Disconnected "
+msgstr "相手先が切断した"
+
+#: ../data/gui/advanced_notifications_window.ui.h:12
+#, fuzzy
+msgid "Don't have "
+msgstr "持っていません "
+
+#: ../data/gui/advanced_notifications_window.ui.h:13
+#, fuzzy
+msgid "File Transfer Finished"
+msgstr "ファイルの転送"
+
+#: ../data/gui/advanced_notifications_window.ui.h:14
+#, fuzzy
+msgid "File Transfer Request "
+msgstr "ファイル転送の要求"
+
+#: ../data/gui/advanced_notifications_window.ui.h:15
+#, fuzzy
+msgid "File Transfer Started "
+msgstr "ファイルの転送の中断"
+
+#: ../data/gui/advanced_notifications_window.ui.h:16
+#, fuzzy
+msgid "Group Chat Message Highlight "
+msgstr "グループチャットのメッセージの強調"
+
+#: ../data/gui/advanced_notifications_window.ui.h:17
+#, fuzzy
+msgid "Group Chat Message Received "
+msgstr "グループチャットのメッセージを受信した"
+
+#: ../data/gui/advanced_notifications_window.ui.h:18
+#, fuzzy
+msgid "Have "
+msgstr "持っています "
+
+#: ../data/gui/advanced_notifications_window.ui.h:19
+#: ../src/common/helpers.py:243
+msgid "Invisible"
+msgstr "隠れています"
+
+#: ../data/gui/advanced_notifications_window.ui.h:20
+#, fuzzy
+msgid "Launch a command"
+msgstr "コマンドを実行する"
+
+#: ../data/gui/advanced_notifications_window.ui.h:21
+#: ../src/common/helpers.py:216
+msgid "Not Available"
+msgstr "不在です"
+
+#: ../data/gui/advanced_notifications_window.ui.h:22
+#, fuzzy
+msgid "One or more special statuses..."
+msgstr "特別な状況..."
+
+#: ../data/gui/advanced_notifications_window.ui.h:23
+msgid "Online / Free For Chat"
+msgstr "オンライン / チャットできます"
+
+#: ../data/gui/advanced_notifications_window.ui.h:24
+msgid "Play a sound"
+msgstr "サウンドを演奏する"
+
+#: ../data/gui/advanced_notifications_window.ui.h:25
+#, fuzzy
+msgid "Receive a Message"
+msgstr "新着の私信"
+
+#: ../data/gui/advanced_notifications_window.ui.h:26
+msgid "When "
+msgstr "次の場合: "
+
+#: ../data/gui/advanced_notifications_window.ui.h:27
+#, fuzzy
+msgid ""
+"_Activate window manager's UrgencyHint to make chat window in taskbar flash"
+msgstr ""
+"タスクバーのフラッシュでチャットウィンドウを作るために、ウィンドウマネージャ"
+"の UrgencyHint を有効にする (_A)"
+
+#: ../data/gui/advanced_notifications_window.ui.h:28
+msgid "_Disable auto opening chat window"
+msgstr "自動でチャットウィンドウが開くのを禁止する (_D)"
+
+#: ../data/gui/advanced_notifications_window.ui.h:29
+msgid "_Disable existing popup window"
+msgstr "既存のポップアップウィンドウを禁止する (_D)"
+
+#: ../data/gui/advanced_notifications_window.ui.h:30
+msgid "_Disable existing sound for this event"
+msgstr "このイベントのサウンドを禁止する (_D)"
+
+#: ../data/gui/advanced_notifications_window.ui.h:31
+msgid "_Disable showing event in roster"
+msgstr "名簿へのイベントの表示をやめる (_D)"
+
+#: ../data/gui/advanced_notifications_window.ui.h:32
+msgid "_Disable showing event in systray"
+msgstr "システムトレイへのイベントの表示をやめる (_D)"
+
+#: ../data/gui/advanced_notifications_window.ui.h:33
+msgid "_Inform me with a popup window"
+msgstr "ポップアップウィンドウで知らせる (_I)"
+
+#: ../data/gui/advanced_notifications_window.ui.h:34
+msgid "_Open chat window with user"
+msgstr "ユーザーのチャットウィンドウを開く (_O)"
+
+#: ../data/gui/advanced_notifications_window.ui.h:35
+msgid "_Show event in roster"
+msgstr "イベントを名簿に表示する (_S)"
+
+#: ../data/gui/advanced_notifications_window.ui.h:36
+msgid "_Show event in systray"
+msgstr "イベントをシステムトレイに表示する (_S)"
+
+#: ../data/gui/advanced_notifications_window.ui.h:37
+msgid "and I "
+msgstr "と私 "
+
+#: ../data/gui/advanced_notifications_window.ui.h:38
+#, fuzzy
+msgid "contact(s)"
+msgstr "相手先"
+
+#: ../data/gui/advanced_notifications_window.ui.h:39
+msgid "everybody"
+msgstr ""
+
+#: ../data/gui/advanced_notifications_window.ui.h:40
+#, fuzzy
+msgid "for "
+msgstr "4"
+
+#: ../data/gui/advanced_notifications_window.ui.h:41
+#, fuzzy
+msgid "group(s)"
+msgstr "グループ"
+
+#: ../data/gui/advanced_notifications_window.ui.h:42
+msgid "when I'm in"
+msgstr ""
+
+#: ../data/gui/atom_entry_window.ui.h:1
+msgid "Entry:"
+msgstr "エントリー:"
+
+#: ../data/gui/atom_entry_window.ui.h:2
+msgid "Feed name:"
+msgstr "フィード名:"
+
+#: ../data/gui/atom_entry_window.ui.h:3
+msgid "Last modified:"
+msgstr "最終更新:"
+
+#: ../data/gui/atom_entry_window.ui.h:4
+msgid "New entry received"
+msgstr "新しいエントリーを受け取りました"
+
+#: ../data/gui/atom_entry_window.ui.h:5 ../src/atom_window.py:124
+msgid "You have received new entry:"
+msgstr "新しいエントリーを受け取りました:"
+
+#: ../data/gui/blocked_contacts_window.ui.h:1
+msgid "Blocked Contacts"
+msgstr "拒否されている相手先"
+
+#: ../data/gui/change_activity_dialog.ui.h:1
+msgid "<b>Message:</b> "
+msgstr "<b>メッセージ:</b> "
+
+#: ../data/gui/change_activity_dialog.ui.h:2
+msgid "Set Activity"
+msgstr "動向の設定"
+
+#: ../data/gui/change_activity_dialog.ui.h:3
+msgid "Set an activity"
+msgstr "動向の設定"
+
+#: ../data/gui/change_mood_dialog.ui.h:1
+msgid "<b>Message:</b>"
+msgstr "<b>メッセージ:</b>"
+
+#: ../data/gui/change_mood_dialog.ui.h:2
+msgid "<b>Mood:</b>"
+msgstr "<b>気分:</b>"
+
+#: ../data/gui/change_password_dialog.ui.h:1
+msgid "Change Password"
+msgstr "パスワードの変更"
+
+#: ../data/gui/change_password_dialog.ui.h:2
+msgid "Enter it again for confirmation:"
+msgstr "確認のためもう一度入力してください:"
+
+#: ../data/gui/change_password_dialog.ui.h:3
+msgid "Enter new password:"
+msgstr "新しいパスワードを入力してください:"
+
+#: ../data/gui/change_status_message_dialog.ui.h:1
+msgid "<b>Type your new status message</b>"
+msgstr "<b>新しい状況メッセージを入力してください</b>"
+
+#: ../data/gui/change_status_message_dialog.ui.h:2 ../src/tooltips.py:657
+msgid "Activity:"
+msgstr "動向:"
+
+#: ../data/gui/change_status_message_dialog.ui.h:3 ../src/tooltips.py:652
+msgid "Mood:"
+msgstr "気分:"
+
+#: ../data/gui/change_status_message_dialog.ui.h:4
+msgid "Preset messages:"
+msgstr "用意されたメッセージ:"
+
+#: ../data/gui/change_status_message_dialog.ui.h:5
+msgid "Save as Preset..."
+msgstr "用意しておくメッセージとして保存..."
+
+#. # means number
+#: ../data/gui/chat_control.ui.h:1 ../src/dialogs.py:4132
+msgid "#"
+msgstr "#"
+
+#: ../data/gui/chat_control.ui.h:2
+msgid "*"
+msgstr ""
+
+#: ../data/gui/chat_control.ui.h:3 ../data/gui/single_message_window.ui.h:1
+msgid "0"
+msgstr "0"
+
+#: ../data/gui/chat_control.ui.h:4
+msgid "1"
+msgstr ""
+
+#: ../data/gui/chat_control.ui.h:5
+msgid "2"
+msgstr ""
+
+#: ../data/gui/chat_control.ui.h:6
+msgid "3"
+msgstr ""
+
+#: ../data/gui/chat_control.ui.h:7
+msgid "4"
+msgstr ""
+
+#: ../data/gui/chat_control.ui.h:8
+msgid "5"
+msgstr ""
+
+#: ../data/gui/chat_control.ui.h:9
+msgid "6"
+msgstr ""
+
+#: ../data/gui/chat_control.ui.h:10
+msgid "7"
+msgstr ""
+
+#: ../data/gui/chat_control.ui.h:11
+msgid "8"
+msgstr ""
+
+#: ../data/gui/chat_control.ui.h:12
+msgid "9"
+msgstr ""
+
+#: ../data/gui/chat_control.ui.h:13
+msgid "Mic volume:"
+msgstr ""
+
+#: ../data/gui/chat_control.ui.h:14
+msgid "Sound volume:"
+msgstr ""
+
+#. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
+#: ../data/gui/chat_control.ui.h:16 ../data/gui/groupchat_control.ui.h:2
+#: ../data/gui/xml_console_window.ui.h:16 ../src/filetransfers_window.py:266
+msgid "_Send"
+msgstr "送信 (_S)"
+
+#: ../data/gui/chat_control.ui.h:17 ../data/gui/groupchat_control.ui.h:3
+msgid "label"
+msgstr ""
+
+#: ../data/gui/chat_to_muc_window.ui.h:1
+msgid "In_vite"
+msgstr "招待 (_v)"
+
+#: ../data/gui/chat_to_muc_window.ui.h:2
+msgid "Invite Friends!"
+msgstr "友だちを招待 !"
+
+#: ../data/gui/chat_to_muc_window.ui.h:3
+msgid "MUC server"
+msgstr "グループチャットのサーバー"
+
+#: ../data/gui/chat_to_muc_window.ui.h:4
+msgid "Please select a MUC server."
+msgstr "グループチャットのサーバーを選択してください。"
+
+#: ../data/gui/chat_to_muc_window.ui.h:5
+msgid ""
+"You are going to begin a Multi-User Chat.\n"
+"Select the contacts you want to invite"
+msgstr ""
+"グループチャットを始めようとしています。\n"
+"招待したい相手先を選択してください"
+
+#: ../data/gui/contact_context_menu.ui.h:1
+msgid "A_sk to see his/her status"
+msgstr "相手の在席状況を見ることを申し込む (_s)"
+
+#: ../data/gui/contact_context_menu.ui.h:2
+msgid "Add Special _Notification..."
+msgstr "特別な状態通知を追加する (_N)..."
+
+#: ../data/gui/contact_context_menu.ui.h:3
+msgid "Assign Open_PGP Key..."
+msgstr "Open_PGP 鍵の割り当て..."
+
+#: ../data/gui/contact_context_menu.ui.h:4
+msgid "E_xecute Command..."
+msgstr "コマンドの実行 (_x)..."
+
+#: ../data/gui/contact_context_menu.ui.h:5
+msgid "Edit _Groups..."
+msgstr "グループの変更 (_G)..."
+
+#. Invite to
+#. Invite to Groupchat
+#: ../data/gui/contact_context_menu.ui.h:6 ../src/roster_window.py:5281
+#: ../src/roster_window.py:5441
+msgid "In_vite to"
+msgstr "招待 (_v)"
+
+#: ../data/gui/contact_context_menu.ui.h:7
+msgid "Invite _Contacts"
+msgstr "相手先を招待 (_C)"
+
+#: ../data/gui/contact_context_menu.ui.h:8
+#, fuzzy
+msgid "Remo_ve"
+msgstr "削除 (_R)"
+
+#: ../data/gui/contact_context_menu.ui.h:9 ../src/roster_window.py:5291
+#: ../src/roster_window.py:5530
+msgid "Send Cus_tom Status"
+msgstr "個別の在席状況の送信 (_t)"
+
+#: ../data/gui/contact_context_menu.ui.h:10
+msgid "Send Single _Message..."
+msgstr "単発メッセージの送信 (_M)..."
+
+#: ../data/gui/contact_context_menu.ui.h:11
+msgid "Send _File..."
+msgstr "ファイルの送信 (_S)..."
+
+#: ../data/gui/contact_context_menu.ui.h:12
+msgid "Set Custom _Avatar..."
+msgstr "独自アバターの設定 (_A)..."
+
+#: ../data/gui/contact_context_menu.ui.h:13
+msgid "Start _Chat"
+msgstr "チャットの開始 (_C)"
+
+#: ../data/gui/contact_context_menu.ui.h:14
+msgid "Toggle End to End Encryption"
+msgstr "全線暗号化(E2EE) (トグル)"
+
+#: ../data/gui/contact_context_menu.ui.h:15
+msgid "Toggle Open_PGP Encryption"
+msgstr "Open_PGP 暗号化 (トグル)"
+
+#: ../data/gui/contact_context_menu.ui.h:16
+msgid "_Add to Roster..."
+msgstr "名簿に追加する (_A)..."
+
+#: ../data/gui/contact_context_menu.ui.h:17
+msgid "_Allow him/her to see my status"
+msgstr "自分の在席状況を見られることを許可する (_A)"
+
+#: ../data/gui/contact_context_menu.ui.h:18 ../src/roster_window.py:5353
+#: ../src/roster_window.py:5479 ../src/roster_window.py:5609
+msgid "_Block"
+msgstr "拒否 (_B)"
+
+#: ../data/gui/contact_context_menu.ui.h:19
+msgid "_Forbid him/her to see my status"
+msgstr "自分の在席状況を見られることを禁止する (_F)"
+
+#: ../data/gui/contact_context_menu.ui.h:20 ../src/roster_window.py:5680
+msgid "_History"
+msgstr "履歴 (_H)"
+
+#: ../data/gui/contact_context_menu.ui.h:21
+msgid "_Ignore"
+msgstr "無視 (_I)"
+
+#: ../data/gui/contact_context_menu.ui.h:22
+msgid "_Manage Contact"
+msgstr "相手先の管理 (_M)"
+
+#: ../data/gui/contact_context_menu.ui.h:23
+msgid "_Rename..."
+msgstr "名前の変更 (_R)..."
+
+#: ../data/gui/contact_context_menu.ui.h:24
+msgid "_Subscription"
+msgstr "在席通知の申し込み (_S)"
+
+#: ../data/gui/contact_context_menu.ui.h:25 ../src/roster_window.py:5345
+#: ../src/roster_window.py:5473 ../src/roster_window.py:5606
+msgid "_Unblock"
+msgstr "拒否の解除 (_U)"
+
+#: ../data/gui/contact_context_menu.ui.h:26
+msgid "_Unignore"
+msgstr "無視しない (_U)"
+
+#: ../data/gui/data_form_window.ui.h:1
+msgid "Fill in the form."
+msgstr "次の欄を埋めてください。"
+
+# (Mako)Personal Eventing via Pubsub
+#: ../data/gui/data_form_window.ui.h:2
+#, fuzzy
+msgid "Room Configuration"
+msgstr "PEP サービスの調整"
+
+#: ../data/gui/edit_groups_dialog.ui.h:1
+msgid "Edit Groups"
+msgstr "グループの編集"
+
+#: ../data/gui/esession_info_window.ui.h:1
+#, fuzzy
+msgid "(<b>ESession</b> info)"
+msgstr "<b>説明</b>"
+
+#: ../data/gui/esession_info_window.ui.h:2
+msgid "_Verify"
+msgstr "検査 (_V)"
+
+#: ../data/gui/features_window.ui.h:2
+msgid "<b>List of possible features in Gajim:</b>"
+msgstr "<b>Gajim の現在有効な機能の一覧:</b>"
+
+#: ../data/gui/features_window.ui.h:3
+msgid "Features"
+msgstr "機能"
+
+#: ../data/gui/filetransfers.ui.h:1
+msgid "A list of active, completed and stopped file transfers"
+msgstr "ファイル転送の転送中、完了、中止の一覧"
+
+#: ../data/gui/filetransfers.ui.h:2
+#, fuzzy
+msgid "Cancel file transfer"
+msgstr "選択されたファイルの転送を中止します"
+
+#: ../data/gui/filetransfers.ui.h:3
+msgid "Cancels the selected file transfer"
+msgstr "選択されたファイルの転送を中止します"
+
+#: ../data/gui/filetransfers.ui.h:4
+msgid "Cancels the selected file transfer and removes incomplete file"
+msgstr "選択されたファイルの転送を中止し、不完全なファイルは削除します"
+
+#: ../data/gui/filetransfers.ui.h:5
+msgid "Clean _up"
+msgstr "消去 (_u)"
+
+#: ../data/gui/filetransfers.ui.h:6
+msgid "File Transfers"
+msgstr "ファイルの転送"
+
+# (Mako)この場合は「閉じる」
+#: ../data/gui/filetransfers.ui.h:7
+msgid "Hides the window"
+msgstr "ウィンドウを閉じる"
+
+#: ../data/gui/filetransfers.ui.h:8
+msgid "Remove file transfer from the list."
+msgstr "ファイル転送を一覧から削除します。"
+
+#: ../data/gui/filetransfers.ui.h:9
+msgid "Removes completed, cancelled and failed file transfers from the list"
+msgstr "一覧から完了、中止、失敗したファイル転送を削除します"
+
+#: ../data/gui/filetransfers.ui.h:10
+msgid "Shows a list of file transfers between you and others"
+msgstr "ファイル転送の一覧を表示します"
+
+#: ../data/gui/filetransfers.ui.h:11
+msgid ""
+"This action removes single file transfer from the list. If the transfer is "
+"active, it is first stopped and then removed"
+msgstr ""
+"一覧からひとつのファイル転送を削除します。転送中の場合、まず転送を中止し、そ"
+"れから削除してください"
+
+#: ../data/gui/filetransfers.ui.h:12
+msgid "When a file transfer is complete show a popup notification"
+msgstr "ファイル転送が完了したら、ポップアップで知らせる"
+
+#: ../data/gui/filetransfers.ui.h:13
+msgid "_Notify me when a file transfer is complete"
+msgstr "ファイル転送が完了したら知らせる (_N)"
+
+#: ../data/gui/filetransfers.ui.h:14
+msgid "_Pause"
+msgstr "一時停止 (_P)"
+
+#: ../data/gui/filetransfers.ui.h:15
+msgid "file transfers list"
+msgstr "ファイル転送の一覧"
+
+#: ../data/gui/gajim_themes_window.ui.h:1
+msgid "<b>Chatstate Tab Colors</b>"
+msgstr "<b>チャット状態のタブの色</b>"
+
+#: ../data/gui/gajim_themes_window.ui.h:2
+#, fuzzy
+msgid "Account row"
+msgstr "アカウント"
+
+#: ../data/gui/gajim_themes_window.ui.h:3 ../src/chat_control.py:883
+msgid "Bold"
+msgstr "太字にする"
+
+#: ../data/gui/gajim_themes_window.ui.h:4
+msgid "Chat Banner"
+msgstr ""
+
+#: ../data/gui/gajim_themes_window.ui.h:5
+msgid "Composing"
+msgstr "入力中"
+
+#: ../data/gui/gajim_themes_window.ui.h:6
+#, fuzzy
+msgid "Contact row"
+msgstr "相手先"
+
+#: ../data/gui/gajim_themes_window.ui.h:7
+msgid "Font style:"
+msgstr "フォントのスタイル:"
+
+#: ../data/gui/gajim_themes_window.ui.h:8
+msgid "Gajim Themes Customization"
+msgstr "Gajim テーマのカスタマイズ"
+
+#: ../data/gui/gajim_themes_window.ui.h:9
+msgid "Gone"
+msgstr "不在"
+
+#: ../data/gui/gajim_themes_window.ui.h:10
+#, fuzzy
+msgid "Group row"
+msgstr "グループ"
+
+#: ../data/gui/gajim_themes_window.ui.h:11 ../src/common/pep.py:150
+msgid "Inactive"
+msgstr "活動停止中"
+
+#: ../data/gui/gajim_themes_window.ui.h:12 ../src/chat_control.py:884
+msgid "Italic"
+msgstr "イタリック"
+
+#: ../data/gui/gajim_themes_window.ui.h:13
+msgid ""
+"MUC\n"
+"Messages"
+msgstr ""
+"グループチャット\n"
+"メッセージ"
+
+#: ../data/gui/gajim_themes_window.ui.h:15
+msgid ""
+"MUC Directed\n"
+"Messages"
+msgstr ""
+"グループチャットでの\n"
+"指示メッセージ"
+
+#: ../data/gui/gajim_themes_window.ui.h:17
+msgid "Paused"
+msgstr "一時停止中"
+
+#: ../data/gui/gajim_themes_window.ui.h:18
+msgid "Text _color:"
+msgstr "文字の色 (_c):"
+
+#: ../data/gui/gajim_themes_window.ui.h:19
+msgid "Text _font:"
+msgstr "フォント (_f):"
+
+#: ../data/gui/gajim_themes_window.ui.h:20
+msgid "_Background:"
+msgstr "背景色 (_B):"
+
+#: ../data/gui/gc_control_popup_menu.ui.h:1
+msgid "_Minimize on close"
+msgstr "閉じるボタンで最小化 (_M)"
+
+#: ../data/gui/gc_occupants_menu.ui.h:1
+msgid "Mo_derator"
+msgstr "司会者 (_d)"
+
+#: ../data/gui/gc_occupants_menu.ui.h:2
+msgid "Occupant Actions"
+msgstr "在室者の操作"
+
+#: ../data/gui/gc_occupants_menu.ui.h:3
+msgid "_Admin"
+msgstr "管理人 (_A)"
+
+#: ../data/gui/gc_occupants_menu.ui.h:4
+msgid "_Ban"
+msgstr "締め出し (_B)"
+
+#: ../data/gui/gc_occupants_menu.ui.h:5
+msgid "_Kick"
+msgstr "蹴り出し (_K)"
+
+#: ../data/gui/gc_occupants_menu.ui.h:6
+msgid "_Member"
+msgstr "メンバー (_M)"
+
+#: ../data/gui/gc_occupants_menu.ui.h:7
+msgid "_Owner"
+msgstr "主宰者 (_O)"
+
+# (Mako)moderated room での発言する権利
+#: ../data/gui/gc_occupants_menu.ui.h:8
+msgid "_Voice"
+msgstr "発言権 (_V)"
+
+#: ../data/gui/groups_post_window.ui.h:1
+#, fuzzy
+msgid "Create new post"
+msgstr "新しいポストの作成"
+
+# #(Mako)helpers.pyは、
+# 相手先の情報で、subscriptionの有無なので、「こちらが承認」としたい
+#: ../data/gui/groups_post_window.ui.h:2 ../src/common/helpers.py:258
+#, fuzzy
+msgid "From"
+msgstr "こちらが承認"
+
+#. holds subject
+#: ../data/gui/groups_post_window.ui.h:3 ../src/history_manager.py:188
+#: ../src/history_manager.py:219
+msgid "Subject"
+msgstr "題"
+
+#: ../data/gui/history_manager.ui.h:1
+msgid ""
+"<b>WARNING:</b>\n"
+"If you plan to do massive deletions, please make sure Gajim is not running. "
+"Generally avoid deletions with contacts you currently chat with."
+msgstr ""
+"<b>警告:</b>\n"
+"大幅な削除を考えているなら、Gajim が起動していないときに実行してください。一"
+"般に、チャットしている最中の相手先の削除は避けてください。"
+
+#: ../data/gui/history_manager.ui.h:3
+msgid "<big><b>Welcome to Gajim History Logs Manager</b></big>"
+msgstr "<big><b>Gajim 履歴記録マネージャ</b></big>"
+
+#: ../data/gui/history_manager.ui.h:4
+msgid "Export"
+msgstr "書き出し"
+
+#: ../data/gui/history_manager.ui.h:5
+msgid "Gajim History Logs Manager"
+msgstr "Gajim 履歴記録マネージャ"
+
+#: ../data/gui/history_manager.ui.h:6
+msgid ""
+"This log manager is not intended for log viewing. If you are looking for "
+"such functionality, use the history window instead.\n"
+"\n"
+"Use this program to delete or export logs. You can select logs from the left "
+"and/or search database from below."
+msgstr ""
+"この記録マネージャは記録を見るためのものではありません。そのような機能をお求"
+"めなら、かわりに履歴ウィンドウをお使いください。\n"
+"\n"
+"このプログラムは記録の削除や書き出しのためにお使いください。左の一覧から記録"
+"を選択し、また下の欄でデータベースを検索することができます。"
+
+#: ../data/gui/history_manager.ui.h:9
+msgid "_Search Database"
+msgstr "データベースの検索 (_S)"
+
+#: ../data/gui/history_window.ui.h:1
+#, fuzzy
+msgid "All Chat Histories"
+msgstr "すべての状況"
+
+#: ../data/gui/history_window.ui.h:2 ../src/history_window.py:323
+msgid "Conversation History"
+msgstr "会話の履歴"
+
+#: ../data/gui/history_window.ui.h:3
+#, fuzzy
+msgid "Enter JID or Contact name"
+msgstr "名前"
+
+#: ../data/gui/history_window.ui.h:4
+#, fuzzy
+msgid "Groupchat Histories"
+msgstr "グループチャット"
+
+#: ../data/gui/history_window.ui.h:5
+msgid "Search:"
+msgstr "検索:"
+
+#: ../data/gui/history_window.ui.h:6
+#: ../data/gui/zeroconf_information_window.ui.h:10
+msgid "_Log conversation history"
+msgstr "会話の履歴を記録 (_L)"
+
+#: ../data/gui/join_groupchat_window.ui.h:2
+#, fuzzy
+msgid "Bro_wse Rooms"
+msgstr "一覧 (_B)"
+
+#: ../data/gui/join_groupchat_window.ui.h:3 ../src/dialogs.py:2171
+msgid "Join Group Chat"
+msgstr "グループチャットに参加"
+
+#: ../data/gui/join_groupchat_window.ui.h:4
+#, fuzzy
+msgid "Join this room _automatically when I connect"
+msgstr "接続時に自動的にこの談話室に参加する"
+
+#: ../data/gui/join_groupchat_window.ui.h:5
+#: ../data/gui/manage_bookmarks_window.ui.h:5
+msgid "Nickname:"
+msgstr "ニックネーム:"
+
+#: ../data/gui/join_groupchat_window.ui.h:6
+#: ../data/gui/manage_bookmarks_window.ui.h:6
+msgid "Password:"
+msgstr "パスワード:"
+
+#: ../data/gui/join_groupchat_window.ui.h:7
+msgid "Recently:"
+msgstr "最近使った:"
+
+#: ../data/gui/join_groupchat_window.ui.h:8
+#: ../data/gui/manage_bookmarks_window.ui.h:8
+msgid "Room:"
+msgstr "談話室:"
+
+#: ../data/gui/join_groupchat_window.ui.h:9
+#: ../data/gui/manage_bookmarks_window.ui.h:9 ../src/config.py:1765
+msgid "Server:"
+msgstr "サーバー:"
+
+#: ../data/gui/join_groupchat_window.ui.h:10
+#, fuzzy
+msgid "_Bookmark this room"
+msgstr "この談話室をブックマーク"
+
+#: ../data/gui/join_groupchat_window.ui.h:11 ../src/disco.py:1343
+#: ../src/disco.py:1787
+msgid "_Join"
+msgstr "参加 (_J)"
+
+#: ../data/gui/manage_bookmarks_window.ui.h:1
+msgid "Auto join"
+msgstr "自動参加"
+
+#: ../data/gui/manage_bookmarks_window.ui.h:2
+msgid "If checked, Gajim will join this group chat on startup"
+msgstr "チェックをつけると、スタート時にこのグループチャットに参加します"
+
+#: ../data/gui/manage_bookmarks_window.ui.h:3
+msgid "Manage Bookmarks"
+msgstr "ブックマークの管理"
+
+#: ../data/gui/manage_bookmarks_window.ui.h:4
+msgid "Minimize on Auto Join"
+msgstr "自動参加して最小化"
+
+#: ../data/gui/manage_bookmarks_window.ui.h:7
+msgid "Print status:"
+msgstr "状況の表示:"
+
+#: ../data/gui/manage_bookmarks_window.ui.h:10
+msgid "Title:"
+msgstr "タイトル:"
+
+# (Mako)Personal Eventing via Pubsub
+#: ../data/gui/manage_pep_services_window.ui.h:1
+#, fuzzy
+msgid "PEP Service Configuration"
+msgstr "PEP サービスの調整"
+
+#: ../data/gui/manage_pep_services_window.ui.h:2
+msgid "_Configure"
+msgstr "調整 (_C)"
+
+#: ../data/gui/manage_proxies_window.ui.h:1
+msgid "<b>Properties</b>"
+msgstr "<b>プロパティ</b>"
+
+#: ../data/gui/manage_proxies_window.ui.h:2
+msgid "<b>Settings</b>"
+msgstr "<b>設定</b>"
+
+#: ../data/gui/manage_proxies_window.ui.h:3
+msgid "BOSH"
+msgstr ""
+
+#: ../data/gui/manage_proxies_window.ui.h:4
+#, fuzzy
+msgid "HTTP Connect"
+msgstr "接続中"
+
+#: ../data/gui/manage_proxies_window.ui.h:5
+msgid "Manage Proxy Profiles"
+msgstr "プロクシの設定"
+
+#: ../data/gui/manage_proxies_window.ui.h:6
+msgid "Pass_word:"
+msgstr "パスワード (_w):"
+
+#: ../data/gui/manage_proxies_window.ui.h:7
+msgid "Proxy _Host:"
+msgstr "プロキシのホスト (_H):"
+
+#: ../data/gui/manage_proxies_window.ui.h:8
+msgid "Proxy _Port:"
+msgstr "プロキシのポート (_P):"
+
+#: ../data/gui/manage_proxies_window.ui.h:9
+msgid "SOCKS5"
+msgstr ""
+
+#: ../data/gui/manage_proxies_window.ui.h:10
+msgid "Use HTTP prox_y"
+msgstr "HTTP プロキシを利用する (_y)"
+
+#: ../data/gui/manage_proxies_window.ui.h:11
+msgid "Use proxy auth_entication"
+msgstr "プロクシの認証を使用する (_e)"
+
+#: ../data/gui/manage_proxies_window.ui.h:12
+msgid "_BOSH URL:"
+msgstr "BOSH URL (_B):"
+
+#: ../data/gui/manage_proxies_window.ui.h:13
+msgid "_Name:"
+msgstr "名前 (_N):"
+
+#: ../data/gui/manage_proxies_window.ui.h:14
+msgid "_Type:"
+msgstr "種類 (_T):"
+
+#: ../data/gui/manage_proxies_window.ui.h:15
+msgid "_Username:"
+msgstr "ユーザー名 (_U):"
+
+#: ../data/gui/passphrase_dialog.ui.h:1
+msgid "Passphrase"
+msgstr "パスフレーズ"
+
+#: ../data/gui/preferences_window.ui.h:1
+msgid "<b>Advanced Configuration Editor</b>"
+msgstr "<b>詳細設定エディタ</b>"
+
+#: ../data/gui/preferences_window.ui.h:2
+msgid "<b>Applications</b>"
+msgstr "<b>アプリケーション</b>"
+
+#: ../data/gui/preferences_window.ui.h:3
+#, fuzzy
+msgid "<b>Audio</b>"
+msgstr "<b>操作</b>"
+
+#: ../data/gui/preferences_window.ui.h:4
+msgid "<b>Auto Status</b>"
+msgstr "<b>在席状況の自動変更</b>"
+
+#: ../data/gui/preferences_window.ui.h:5
+msgid "<b>Chat Appearance</b>"
+msgstr "<b>チャットの外観</b>"
+
+#: ../data/gui/preferences_window.ui.h:6
+msgid "<b>Chat Line Colors</b>"
+msgstr "<b>チャット行の色</b> "
+
+#: ../data/gui/preferences_window.ui.h:7
+msgid "<b>Chat state notifications</b>"
+msgstr "チャット状態の通知"
+
+#: ../data/gui/preferences_window.ui.h:8
+#, fuzzy
+msgid "<b>Connection</b>"
+msgstr "<b>状況</b>"
+
+#. a header for custom browser/client/file manager. so translate sth like: Custom Settings
+#: ../data/gui/preferences_window.ui.h:10
+#, fuzzy
+msgid "<b>Custom</b>"
+msgstr "<b>カスタム</b>"
+
+#: ../data/gui/preferences_window.ui.h:11
+msgid "<b>Font</b>"
+msgstr "<b>フォント</b>"
+
+#: ../data/gui/preferences_window.ui.h:12
+msgid "<b>GMail Options</b>"
+msgstr "<b>GMail オプション</b>"
+
+#: ../data/gui/preferences_window.ui.h:14
+msgid "<b>Preset Status Messages</b>"
+msgstr "<b>用意された状況メッセージ</b>"
+
+#: ../data/gui/preferences_window.ui.h:15
+msgid "<b>Privacy</b>"
+msgstr "<b>プライバシー</b>"
+
+#: ../data/gui/preferences_window.ui.h:16
+msgid "<b>Roster Appearance</b>"
+msgstr "<b>名簿の外観</b>"
+
+#: ../data/gui/preferences_window.ui.h:18
+msgid "<b>Status Messages</b>"
+msgstr "<b>在席状況のメッセージ</b>"
+
+#: ../data/gui/preferences_window.ui.h:19
+msgid "<b>Themes</b>"
+msgstr "<b>テーマ</b>"
+
+#: ../data/gui/preferences_window.ui.h:20
+#, fuzzy
+msgid "<b>Video</b>"
+msgstr "<b>Middle:</b>"
+
+#: ../data/gui/preferences_window.ui.h:21
+msgid "<b>Visual Notifications</b>"
+msgstr "<b>目への通知</b>"
+
+#: ../data/gui/preferences_window.ui.h:22
+msgid "<i>(example: stunserver.org)</i>"
+msgstr ""
+
+#: ../data/gui/preferences_window.ui.h:23
+msgid "Advanced"
+msgstr "拡張"
+
+#: ../data/gui/preferences_window.ui.h:24
+msgid "Advanced..."
+msgstr "拡張..."
+
+#: ../data/gui/preferences_window.ui.h:25
+#, fuzzy
+msgid "All chat states"
+msgstr "すべての状況"
+
+#: ../data/gui/preferences_window.ui.h:26
+msgid "Allow _OS information to be sent"
+msgstr "OS 情報の送信を許可する (_O)"
+
+#: ../data/gui/preferences_window.ui.h:27
+#, fuzzy
+msgid "Allow my _idle time to be sent"
+msgstr "OS 情報の送信を許可する (_O)"
+
+#: ../data/gui/preferences_window.ui.h:28
+msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
+msgstr "離席/不在/取り込み中/隠れ中のポップアップ/通知を許可する (_a)"
+
+#: ../data/gui/preferences_window.ui.h:29
+msgid "Allow sound when I'm _busy"
+msgstr "取り込み中でもサウンドを鳴らす (_b)"
+
+#: ../data/gui/preferences_window.ui.h:30
+#, fuzzy
+msgid "Always"
+msgstr "離席中です"
+
+#: ../data/gui/preferences_window.ui.h:31
+msgid "Always use GNOME default applications"
+msgstr ""
+
+#: ../data/gui/preferences_window.ui.h:32
+msgid "Always use KDE default applications"
+msgstr ""
+
+#: ../data/gui/preferences_window.ui.h:33
+msgid "Always use Xfce default applications"
+msgstr ""
+
+# (Mako)語順が難しい
+#: ../data/gui/preferences_window.ui.h:34
+msgid "Ask status message when I:"
+msgstr "状況メッセージを求めるのは、私が "
+
+#: ../data/gui/preferences_window.ui.h:35 ../src/features_window.py:104
+msgid "Audio / Video"
+msgstr ""
+
+#: ../data/gui/preferences_window.ui.h:36
+#, fuzzy
+msgid "Audio input device"
+msgstr "デフォルトのメッセージ"
+
+#: ../data/gui/preferences_window.ui.h:37
+msgid "Audio output device"
+msgstr ""
+
+#: ../data/gui/preferences_window.ui.h:38
+#, fuzzy
+msgid "Autodetect on every Gajim startup"
+msgstr "Gajim 起動時に接続する (_o)"
+
+#: ../data/gui/preferences_window.ui.h:39
+msgid "Chat message:"
+msgstr "チャットメッセージ:"
+
+#: ../data/gui/preferences_window.ui.h:40
+msgid "Check on startup if Gajim is the _default Jabber client"
+msgstr "起動時に、Gajim がデフォルトの Jabber クライアントかを調べる (_d)"
+
+#: ../data/gui/preferences_window.ui.h:41
+#, fuzzy
+msgid "Composing only"
+msgstr "入力中"
+
+#: ../data/gui/preferences_window.ui.h:42
+msgid "Configure color and font of the interface"
+msgstr "色とフォントの調整"
+
+#: ../data/gui/preferences_window.ui.h:43
+#, fuzzy
+msgid "Contact's message:"
+msgstr "チャットメッセージ:"
+
+#: ../data/gui/preferences_window.ui.h:44
+#, fuzzy
+msgid "Contact's nickname:"
+msgstr "名前"
+
+#: ../data/gui/preferences_window.ui.h:45
+#, fuzzy
+msgid "Custom"
+msgstr "<b>カスタム</b>"
+
+#: ../data/gui/preferences_window.ui.h:46
+msgid "Detached roster with chat grouped by account"
+msgstr ""
+
+#: ../data/gui/preferences_window.ui.h:47
+msgid "Detached roster with chat grouped by type"
+msgstr ""
+
+#: ../data/gui/preferences_window.ui.h:48
+msgid "Detached roster with detached chats"
+msgstr ""
+
+#: ../data/gui/preferences_window.ui.h:49
+msgid "Detached roster with single chat"
+msgstr ""
+
+#: ../data/gui/preferences_window.ui.h:50 ../src/config.py:170
+#: ../src/config.py:653
+msgid "Disabled"
+msgstr "無効"
+
+#: ../data/gui/preferences_window.ui.h:51
+msgid "Display _activity of contacts in roster"
+msgstr "名簿に相手先の動向を表示する (_a)"
+
+#: ../data/gui/preferences_window.ui.h:52
+msgid "Display _extra email details"
+msgstr "メールの詳細を表示する (_e)"
+
+#: ../data/gui/preferences_window.ui.h:53
+#, fuzzy
+msgid "Display _location of contacts in roster"
+msgstr "名簿に相手先の気分を表示する (_o)"
+
+#: ../data/gui/preferences_window.ui.h:54
+msgid "Display _tunes of contacts in roster"
+msgstr "名簿に相手先の聴いている楽曲を表示する (_t)"
+
+#: ../data/gui/preferences_window.ui.h:55
+msgid "Display a_vatars of contacts in roster"
+msgstr "名簿に相手先のアバターを表示する"
+
+#: ../data/gui/preferences_window.ui.h:56
+msgid "Display m_ood of contacts in roster"
+msgstr "名簿に相手先の気分を表示する (_o)"
+
+#: ../data/gui/preferences_window.ui.h:57
+msgid "Display status _messages of contacts in roster"
+msgstr "名簿に相手先の状況メッセージを表示する"
+
+#: ../data/gui/preferences_window.ui.h:58
+msgid ""
+"Gajim can send and receive meta-information related to a conversation you "
+"may have with a contact. Here you can specify which chatstates you want to "
+"display in chat windows."
+msgstr ""
+"Gajim は、相手先との会話に関連するメタ情報の送受信ができます。ここでは、"
+"チャットウィンドウへのチャット状態の表示について指定します。"
+
+#: ../data/gui/preferences_window.ui.h:59
+msgid ""
+"Gajim can send and receive meta-information related to a conversation you "
+"may have with a contact. Here you can specify which chatstates you want to "
+"send to the other party."
+msgstr ""
+"Gajim は、相手先との会話に関連するメタ情報の送受信ができます。ここでは、"
+"チャット状態の他人への送信について指定します。"
+
+#: ../data/gui/preferences_window.ui.h:60
+msgid ""
+"Gajim will notify you via a popup window in the bottom right of the screen "
+"about contacts that just signed out"
+msgstr ""
+"画面の右下のポップアップウィンドウで、相手先がサインアウトしたときに通知しま"
+"す"
+
+#: ../data/gui/preferences_window.ui.h:62
+msgid "Hide all buttons in chat windows"
+msgstr "チャットウィンドウのすべてのボタンを隠します"
+
+#: ../data/gui/preferences_window.ui.h:63
+msgid ""
+"If checked, Gajim will allow others to detect the operation system you are "
+"using"
+msgstr "チェックをつけると、Gajim は使用中の OS を知られることを許可します"
+
+#: ../data/gui/preferences_window.ui.h:64
+msgid ""
+"If checked, Gajim will also include information about the sender of the new "
+"emails"
+msgstr "チェックをつけると、Gajim は電子メールの送信者の情報を含めます"
+
+#: ../data/gui/preferences_window.ui.h:65
+msgid ""
+"If checked, Gajim will change status to Away when the computer is unused."
+msgstr ""
+"チェックをつけると、Gajim はコンピュータが使われていないとき、在席状況を「離"
+"席中」に変更します"
+
+#: ../data/gui/preferences_window.ui.h:66
+msgid ""
+"If checked, Gajim will change status to Not Available when the computer has "
+"not been used even longer"
+msgstr ""
+"チェックをつけると、Gajim はコンピュータが長い間使われていないとき、在席状況"
+"を「不在」に変更します"
+
+#: ../data/gui/preferences_window.ui.h:67
+msgid ""
+"If checked, Gajim will display avatars of contacts in roster window and in "
+"group chats"
+msgstr ""
+"チェックをつけると、Gajim は名簿ウィンドウとグループチャットに相手先のアバ"
+"ターを表示します"
+
+#: ../data/gui/preferences_window.ui.h:68
+msgid ""
+"If checked, Gajim will display status messages of contacts under the contact "
+"name in roster window and in group chats"
+msgstr ""
+"チェックをつけると、Gajim は名簿ウィンドウとグループチャットの相手先名の下に"
+"状況メッセージを表示します"
+
+#: ../data/gui/preferences_window.ui.h:69
+msgid ""
+"If checked, Gajim will display the activity of contacts in the roster window"
+msgstr "チェックをつけると、Gajim は名簿ウィンドウに相手先の動向を表示します"
+
+#: ../data/gui/preferences_window.ui.h:70
+#, fuzzy
+msgid ""
+"If checked, Gajim will display the location of contacts in the roster window"
+msgstr "チェックをつけると、Gajim は名簿ウィンドウに相手先の気分を表示します"
+
+#: ../data/gui/preferences_window.ui.h:71
+msgid ""
+"If checked, Gajim will display the mood of contacts in the roster window"
+msgstr "チェックをつけると、Gajim は名簿ウィンドウに相手先の気分を表示します"
+
+#: ../data/gui/preferences_window.ui.h:72
+msgid ""
+"If checked, Gajim will display the tunes of contacts in the roster window"
+msgstr ""
+"チェックをつけると、Gajim は名簿ウィンドウに相手先の聴いている楽曲を表示しま"
+"す"
+
+#: ../data/gui/preferences_window.ui.h:73
+msgid ""
+"If checked, Gajim will highlight spelling errors in input fields of chat "
+"windows. If no language is explicitly set via right click on the input "
+"field, the default language will be used for this contact or group chat."
+msgstr ""
+"チェックをつけると、Gajim はチャットウィンドウの入力欄でスペルの間違いを強調"
+"して表示します。入力欄での右クリックで言語を明示的に指定できますが、そうされ"
+"ていない場合は、この相手先やグループチャットにはデフォルトの言語が適用されま"
+"す。"
+
+#: ../data/gui/preferences_window.ui.h:74
+msgid ""
+"If checked, Gajim will ignore incoming events from unauthorized contacts. "
+"Use with caution, because it blocks all messages from any contact that is "
+"not in the roster"
+msgstr ""
+"チェックをつけると、Gajim は承認していない相手先からのイベントを無視します。"
+"名簿にない相手先からのすべてのメッセージを拒否しますので、注意してください。"
+
+#: ../data/gui/preferences_window.ui.h:75
+msgid ""
+"If checked, Gajim will keep logs for encrypted messages. Please note that "
+"when using E2E encryption the remote party has to agree on logging, else the "
+"messages will not be logged."
+msgstr ""
+"チェックをつけると、Gajim は暗号化されたメッセージを記録に残します。終端間暗"
+"号化 (E2EE) の場合は相手先が記録に同意していなければなりません。そうでなけれ"
+"ば記録しないでください。"
+
+#: ../data/gui/preferences_window.ui.h:76
+msgid ""
+"If checked, Gajim will show a notification when a new e-mail is received via "
+"GMail"
+msgstr ""
+"チェックをつけると、Gajim は GMail 経由で新しいメールを受け取ったとき、通知し"
+"ます"
+
+#: ../data/gui/preferences_window.ui.h:77
+msgid ""
+"If checked, Gajim will use protocol-specific status icons. (eg. A contact "
+"from MSN will have the equivalent msn icon for status online, away, busy, "
+"etc...)"
+msgstr ""
+"チェックをつけると、Gajim はプロトコル特有の在席状況アイコンを使用します "
+"(例: MSN からの相手先にはオンライン、離席、取り込み中...などの対応する MSN の"
+"アイコンがあります)"
+
+#: ../data/gui/preferences_window.ui.h:78
+msgid ""
+"If enabled, Gajim will not ask for a status message. The specified default "
+"message will be used instead."
+msgstr ""
+"チェックをつけると、Gajim は状況メッセージを要求しません。かわりに対応するデ"
+"フォルトのメッセージが使われます。"
+
+#: ../data/gui/preferences_window.ui.h:79
+msgid ""
+"If not disabled, Gajim will replace ascii smilies like ':)' with equivalent "
+"animated or static graphical emoticons"
+msgstr ""
+"「無効」でなければ、Gajim は ':)' のようなスマイリーを対応する画像に置き換え"
+"ます"
+
+#: ../data/gui/preferences_window.ui.h:80
+msgid "Log _encrypted chat session"
+msgstr "暗号化チャットを記録する (_e)"
+
+#: ../data/gui/preferences_window.ui.h:81
+msgid "Ma_ke message windows compact"
+msgstr "メッセージウィンドウを簡潔にする (_k)"
+
+#: ../data/gui/preferences_window.ui.h:82
+msgid "Ma_nage..."
+msgstr "設定 (_n)..."
+
+#: ../data/gui/preferences_window.ui.h:83
+#, fuzzy
+msgid "Never"
+msgstr "サーバー"
+
+#: ../data/gui/preferences_window.ui.h:84
+msgid "Notifications"
+msgstr "通知"
+
+#: ../data/gui/preferences_window.ui.h:85
+msgid "Notify me about contacts that sign _in"
+msgstr "相手先のログインを通知する (_i)"
+
+#: ../data/gui/preferences_window.ui.h:86
+msgid "Notify me about contacts that sign _out"
+msgstr "相手先のログアウトを通知する (_o)"
+
+#: ../data/gui/preferences_window.ui.h:87
+#, fuzzy
+msgid "Notify me about it"
+msgstr "相手先のログアウトを通知する (_o)"
+
+#: ../data/gui/preferences_window.ui.h:88
+msgid "Notify on new _GMail email"
+msgstr "新しい GMail メールを通知する (_G)"
+
+#: ../data/gui/preferences_window.ui.h:89
+#, fuzzy
+msgid "Only when pending events"
+msgstr ""
+"表示しない\n"
+"保留イベントがあるときだけ\n"
+"常に"
+
+#: ../data/gui/preferences_window.ui.h:90
+msgid "Personal Events"
+msgstr "個人イベント"
+
+#: ../data/gui/preferences_window.ui.h:91
+msgid "Play _sounds"
+msgstr "サウンドを鳴らす (_s)"
+
+#: ../data/gui/preferences_window.ui.h:92
+msgid "Pop it up"
+msgstr ""
+
+#: ../data/gui/preferences_window.ui.h:93
+msgid "Preferences"
+msgstr "設定"
+
+#: ../data/gui/preferences_window.ui.h:94
+msgid ""
+"STUN server hostname. If none given, Gajim will try\n"
+"to discover one from server."
+msgstr ""
+
+#: ../data/gui/preferences_window.ui.h:96
+#, fuzzy
+msgid "STUN server:"
+msgstr "サーバー:"
+
+#: ../data/gui/preferences_window.ui.h:97
+#, fuzzy
+msgid "Show only in roster"
+msgstr "イベントを名簿に表示する (_S)"
+
+#: ../data/gui/preferences_window.ui.h:98
+msgid "Show systray:"
+msgstr "システムトレイに表示:"
+
+# (Mako)"Ask status message when I:" に続く語
+#: ../data/gui/preferences_window.ui.h:99
+msgid "Sign _in"
+msgstr "サインインしたとき (_i)"
+
+# (Mako)"Ask status message when I:" に続く語
+#: ../data/gui/preferences_window.ui.h:100
+msgid "Sign _out"
+msgstr "サインアウトしたとき (_o)"
+
+#: ../data/gui/preferences_window.ui.h:101
+msgid "Single window for everything"
+msgstr ""
+
+#: ../data/gui/preferences_window.ui.h:102
+msgid ""
+"Some messages may include rich content (formatting, colors etc). If checked, "
+"Gajim will just display the raw message text."
+msgstr ""
+"メッセージが装飾(書式や色など)を含んでいる場合があります。チェックをつける"
+"と、Gajim はそのままのメッセージ文を表示します。"
+
+#: ../data/gui/preferences_window.ui.h:103
+msgid "Sort contacts by status"
+msgstr "相手先を在席状況順に並べる"
+
+#: ../data/gui/preferences_window.ui.h:104 ../src/config.py:391
+msgid "Status"
+msgstr "在席状況"
+
+#: ../data/gui/preferences_window.ui.h:105
+msgid "Status _iconset:"
+msgstr "状況アイコン (_i):"
+
+#: ../data/gui/preferences_window.ui.h:106
+msgid "Style"
+msgstr "スタイル"
+
+#: ../data/gui/preferences_window.ui.h:107
+msgid "T_heme:"
+msgstr "テーマ (_h):"
+
+#: ../data/gui/preferences_window.ui.h:108
+msgid ""
+"The auto away status message. If empty, Gajim will not change the current "
+"status message\n"
+"$S will be replaced by previous status message\n"
+"$T will be replaced by auto-away timeout"
+msgstr ""
+"自動「離席」メッセージ。空にすると、Gajim は現在の状況メッセージを変更しませ"
+"ん。\n"
+"$S は前の状況メッセージに置き換えられます\n"
+"$T は自動離席の設定時間に置き換えられます"
+
+#: ../data/gui/preferences_window.ui.h:111
+msgid ""
+"The auto not available status message. If empty, Gajim will not change the "
+"current status message\n"
+"$S will be replaced by previous status message\n"
+"$T will be replaced by auto-not-available timeout"
+msgstr ""
+"自動「不在」メッセージ。空にすると、Gajim は現在の状況メッセージを変更しませ"
+"ん\n"
+"$S は前の状況メッセージに置き換えられます\n"
+"$T は自動不在の設定時間に置き換えられます"
+
+#: ../data/gui/preferences_window.ui.h:114
+msgid "Use _transports icons"
+msgstr "中継先のアイコンを使う (_t)"
+
+#: ../data/gui/preferences_window.ui.h:115
+msgid "Use system _default"
+msgstr "システムのデフォルトを使う (_d)"
+
+#: ../data/gui/preferences_window.ui.h:116
+#, fuzzy
+msgid "Video input device"
+msgstr "デフォルトのメッセージ"
+
+#: ../data/gui/preferences_window.ui.h:117
+msgid "Video output device"
+msgstr ""
+
+#: ../data/gui/preferences_window.ui.h:118
+msgid "When new event is received:"
+msgstr "新しいイベントを受信したとき:"
+
+#: ../data/gui/preferences_window.ui.h:119
+#, fuzzy
+msgid "Your message:"
+msgstr "エラーメッセージ: %s"
+
+#: ../data/gui/preferences_window.ui.h:120
+#, fuzzy
+msgid "Your nickname:"
+msgstr "ニックネーム:"
+
+#: ../data/gui/preferences_window.ui.h:121
+msgid "_Away after:"
+msgstr "「離席中」にする (_A):"
+
+#: ../data/gui/preferences_window.ui.h:122
+msgid "_Browser:"
+msgstr "ブラウザ (_B):"
+
+#: ../data/gui/preferences_window.ui.h:123
+msgid "_Display chat state notifications:"
+msgstr "チャット状態通知を表示する (_D):"
+
+#: ../data/gui/preferences_window.ui.h:124
+msgid "_Emoticons:"
+msgstr "感情アイコン (_E):"
+
+#: ../data/gui/preferences_window.ui.h:125
+msgid "_File manager:"
+msgstr "ファイルマネージャ (_F):"
+
+#: ../data/gui/preferences_window.ui.h:126
+msgid "_Highlight misspelled words"
+msgstr "スペル間違いを強調表示する (_H)"
+
+#: ../data/gui/preferences_window.ui.h:127
+msgid "_Ignore events from contacts not in the roster"
+msgstr "名簿にない相手先からのイベントを無視する (_I)"
+
+#: ../data/gui/preferences_window.ui.h:128
+msgid "_Ignore rich content in incoming messages"
+msgstr "受信したメッセージの書式を無視する (_I)"
+
+#: ../data/gui/preferences_window.ui.h:129
+msgid "_Log status changes of contacts"
+msgstr "相手先の状況変更を記録する (_L)"
+
+#: ../data/gui/preferences_window.ui.h:130
+msgid "_Mail client:"
+msgstr "メールクライアント (_M):"
+
+#: ../data/gui/preferences_window.ui.h:131
+msgid "_Not available after:"
+msgstr "「不在」にする (_N):"
+
+#: ../data/gui/preferences_window.ui.h:132
+msgid "_Open..."
+msgstr "開く (_O)..."
+
+#: ../data/gui/preferences_window.ui.h:133
+msgid "_Reset to Default Colors"
+msgstr "デフォルトの色に戻す (_R)"
+
+#: ../data/gui/preferences_window.ui.h:134
+msgid "_Send chat state notifications:"
+msgstr "チャット状態通知を送信する (_S):"
+
+#: ../data/gui/preferences_window.ui.h:135
+msgid "_Status message:"
+msgstr "状況メッセージ (_S):"
+
+# (Mako)あえてカッコ書き
+#: ../data/gui/preferences_window.ui.h:136
+msgid "_URL highlight:"
+msgstr "URL 強調表示 (_U):"
+
+#: ../data/gui/preferences_window.ui.h:137
+msgid "_Window behavior:"
+msgstr "ウィンドウの配置 (_W):"
+
+#: ../data/gui/preferences_window.ui.h:138
+msgid "in _group chats"
+msgstr "グループチャットで (_g)"
+
+#: ../data/gui/preferences_window.ui.h:139
+#, fuzzy
+msgid "in _roster"
+msgstr "名簿にありません"
+
+#: ../data/gui/preferences_window.ui.h:140
+msgid "minutes"
+msgstr "分後"
+
+#: ../data/gui/privacy_lists_window.ui.h:1
+msgid "Privacy Lists:"
+msgstr "個人リスト:"
+
+#: ../data/gui/privacy_list_window.ui.h:1
+msgid "<b>Add / Edit a rule</b>"
+msgstr "<b>規則の追加/編集</b>"
+
+#: ../data/gui/privacy_list_window.ui.h:2
+msgid "<b>List of rules</b>"
+msgstr "<b>規則の一覧</b>"
+
+#: ../data/gui/privacy_list_window.ui.h:3
+msgid "<i>Privacy List</i>"
+msgstr "<i>プライバシーリスト</i>"
+
+#: ../data/gui/privacy_list_window.ui.h:4
+msgid "Active for this session"
+msgstr ""
+
+#: ../data/gui/privacy_list_window.ui.h:5
+#, fuzzy
+msgid "Active on each startup"
+msgstr "Gajim 起動時に接続する (_o)"
+
+#: ../data/gui/privacy_list_window.ui.h:6
+msgid "All"
+msgstr "すべて"
+
+#: ../data/gui/privacy_list_window.ui.h:7
+msgid "All (including subscription)"
+msgstr "すべて (在席通知を含む)"
+
+#: ../data/gui/privacy_list_window.ui.h:8
+msgid "Allow"
+msgstr "許可する"
+
+#: ../data/gui/privacy_list_window.ui.h:9
+msgid "Deny"
+msgstr "拒否する"
+
+#: ../data/gui/privacy_list_window.ui.h:10
+msgid "JabberID"
+msgstr "JabberID"
+
+#: ../data/gui/privacy_list_window.ui.h:11
+#, fuzzy
+msgid "Order:"
+msgstr "順位:"
+
+#: ../data/gui/privacy_list_window.ui.h:12 ../src/dialogs.py:3428
+msgid "Privacy List"
+msgstr "プライバシーリスト"
+
+#: ../data/gui/privacy_list_window.ui.h:13
+#, fuzzy
+msgid "all by subscription"
+msgstr "在席通知のすべて"
+
+#: ../data/gui/privacy_list_window.ui.h:14
+#, fuzzy
+msgid "all in the group"
+msgstr "グループのすべて"
+
+#: ../data/gui/privacy_list_window.ui.h:15
+#, fuzzy
+msgid "both"
+msgstr "相互に承認"
+
+# #(Mako)helpers.pyは、
+# 相手先の情報で、subscriptionの有無なので、「こちらが承認」としたい
+#: ../data/gui/privacy_list_window.ui.h:16
+#, fuzzy
+msgid "from"
+msgstr "こちらが承認"
+
+#: ../data/gui/privacy_list_window.ui.h:17
+#, fuzzy
+msgid "none"
+msgstr "1"
+
+#: ../data/gui/privacy_list_window.ui.h:18
+#, fuzzy
+msgid "to"
+msgstr "2"
+
+#: ../data/gui/privacy_list_window.ui.h:19
+#, fuzzy
+msgid "to send me messages"
+msgstr "メッセージを私に送信する"
+
+#: ../data/gui/privacy_list_window.ui.h:20
+#, fuzzy
+msgid "to send me queries"
+msgstr "クエリーを私に送信する"
+
+#: ../data/gui/privacy_list_window.ui.h:21
+#, fuzzy
+msgid "to send me status"
+msgstr "状況を私に送信する"
+
+#: ../data/gui/privacy_list_window.ui.h:22
+#, fuzzy
+msgid "to view my status"
+msgstr "私の状況を見せる"
+
+#: ../data/gui/profile_window.ui.h:1
+#: ../data/gui/vcard_information_window.ui.h:1
+msgid "<b>Address</b>"
+msgstr "<b>住所</b>"
+
+#: ../data/gui/profile_window.ui.h:2
+msgid "<b>Avatar:</b>"
+msgstr "<b>アバター:</b>"
+
+#: ../data/gui/profile_window.ui.h:3
+#: ../data/gui/vcard_information_window.ui.h:4
+msgid "<b>Birthday:</b>"
+msgstr "<b>誕生日:</b>"
+
+#: ../data/gui/profile_window.ui.h:4
+#: ../data/gui/vcard_information_window.ui.h:5
+msgid "<b>City:</b>"
+msgstr "<b>市(町村):</b>"
+
+#: ../data/gui/profile_window.ui.h:5
+#: ../data/gui/vcard_information_window.ui.h:7
+msgid "<b>Company:</b>"
+msgstr "<b>会社:</b>"
+
+#: ../data/gui/profile_window.ui.h:6
+#: ../data/gui/vcard_information_window.ui.h:9
+msgid "<b>Country:</b>"
+msgstr "<b>国:</b>"
+
+#: ../data/gui/profile_window.ui.h:7
+#: ../data/gui/vcard_information_window.ui.h:10
+msgid "<b>Department:</b>"
+msgstr "<b>部署:</b>"
+
+#: ../data/gui/profile_window.ui.h:8
+#: ../data/gui/vcard_information_window.ui.h:11
+msgid "<b>E-Mail:</b>"
+msgstr "<b>メールアドレス:</b>"
+
+#: ../data/gui/profile_window.ui.h:9
+#: ../data/gui/vcard_information_window.ui.h:12
+msgid "<b>Extra Address:</b>"
+msgstr "<b>建物名など:</b>"
+
+#. Family Name
+#: ../data/gui/profile_window.ui.h:11
+#: ../data/gui/vcard_information_window.ui.h:14
+msgid "<b>Family:</b>"
+msgstr "<b>姓:</b>"
+
+#: ../data/gui/profile_window.ui.h:12
+#: ../data/gui/vcard_information_window.ui.h:15
+msgid "<b>Full Name</b>"
+msgstr "<b>名前(フルネーム)</b>"
+
+#. Given Name
+#: ../data/gui/profile_window.ui.h:14
+#: ../data/gui/vcard_information_window.ui.h:17
+msgid "<b>Given:</b>"
+msgstr "<b>名:</b>"
+
+#: ../data/gui/profile_window.ui.h:15
+#: ../data/gui/vcard_information_window.ui.h:18
+msgid "<b>Homepage:</b>"
+msgstr "<b>ホームページ:</b>"
+
+#. Middle Name
+#: ../data/gui/profile_window.ui.h:17
+#: ../data/gui/vcard_information_window.ui.h:21
+msgid "<b>Middle:</b>"
+msgstr "<b>Middle:</b>"
+
+#: ../data/gui/profile_window.ui.h:18
+#: ../data/gui/vcard_information_window.ui.h:22
+msgid "<b>Name:</b>"
+msgstr "<b>名前:</b>"
+
+#: ../data/gui/profile_window.ui.h:19
+#: ../data/gui/vcard_information_window.ui.h:23
+msgid "<b>Nickname:</b>"
+msgstr "<b>ニックネーム:</b>"
+
+#: ../data/gui/profile_window.ui.h:20
+#: ../data/gui/vcard_information_window.ui.h:24
+msgid "<b>Phone No.:</b>"
+msgstr "<b>電話番号:</b>"
+
+#: ../data/gui/profile_window.ui.h:21
+#: ../data/gui/vcard_information_window.ui.h:25
+msgid "<b>Position:</b>"
+msgstr "<b>役職:</b>"
+
+#: ../data/gui/profile_window.ui.h:22
+#: ../data/gui/vcard_information_window.ui.h:26
+msgid "<b>Postal Code:</b>"
+msgstr "<b>郵便番号:</b>"
+
+#. Prefix in Name
+#: ../data/gui/profile_window.ui.h:24
+#: ../data/gui/vcard_information_window.ui.h:28
+msgid "<b>Prefix:</b>"
+msgstr "<b>Prefix:</b>"
+
+# (Mako)個人情報では「役」(劇の役のような意味で)、
+#       vcard では「職種」が適切と思われる。
+#: ../data/gui/profile_window.ui.h:25
+#: ../data/gui/vcard_information_window.ui.h:30 ../src/vcard.py:331
+msgid "<b>Role:</b>"
+msgstr "<b>役/職種:</b>"
+
+#: ../data/gui/profile_window.ui.h:26
+#: ../data/gui/vcard_information_window.ui.h:31
+msgid "<b>State:</b>"
+msgstr "<b>州(県):</b>"
+
+#: ../data/gui/profile_window.ui.h:27
+#: ../data/gui/vcard_information_window.ui.h:33
+msgid "<b>Street:</b>"
+msgstr "<b>町丁名・番地:</b>"
+
+#. Suffix in Name
+#: ../data/gui/profile_window.ui.h:29
+#: ../data/gui/vcard_information_window.ui.h:37
+msgid "<b>Suffix:</b>"
+msgstr "<b>Suffix:</b>"
+
+#. "About" is the text of a tab of vcard window
+#: ../data/gui/profile_window.ui.h:31
+#: ../data/gui/vcard_information_window.ui.h:40
+msgid "About"
+msgstr "概略"
+
+#: ../data/gui/profile_window.ui.h:32
+msgid "Click to set your avatar"
+msgstr "アバターの設定"
+
+#: ../data/gui/profile_window.ui.h:33
+#: ../data/gui/vcard_information_window.ui.h:45
+msgid "Format: YYYY-MM-DD"
+msgstr "書式: YYYY-MM-DD"
+
+#: ../data/gui/profile_window.ui.h:34
+#: ../data/gui/vcard_information_window.ui.h:47
+msgid "Personal Info"
+msgstr "個人情報"
+
+#: ../data/gui/profile_window.ui.h:36
+#: ../data/gui/vcard_information_window.ui.h:49
+msgid "Work"
+msgstr "職業"
+
+#: ../data/gui/remove_account_window.ui.h:1
+msgid "<b>What do you want to do?</b>"
+msgstr "<b>あなたがやりたいことは ?</b>"
+
+#: ../data/gui/remove_account_window.ui.h:2
+#, fuzzy
+msgid "Remove account _only from Gajim"
+msgstr "アカウントを Gajim からのみ削除 (_o)"
+
+#: ../data/gui/remove_account_window.ui.h:3
+msgid "Remove account from Gajim and from _server"
+msgstr "アカウントを Gajim とサーバーからも削除 (_s)"
+
+#. Remove group
+#. Remove
+#: ../data/gui/remove_account_window.ui.h:4 ../src/roster_window.py:5363
+#: ../src/roster_window.py:5489 ../src/roster_window.py:5619
+msgid "_Remove"
+msgstr "削除 (_R)"
+
+#: ../data/gui/roster_item_exchange_window.ui.h:1
+#, fuzzy
+msgid ""
+"<b>someone@somewhere.com</b> would like you to <b>add</b> some contacts in "
+"your roster."
+msgstr ""
+"<b>someone@somewhere.com</b> さんは、相手先をあなたの名簿に<b>追加</b>してほ"
+"しいと思っています。"
+
+#: ../data/gui/roster_item_exchange_window.ui.h:2
+msgid "Message Body <currently unused, so it's hidden by default>"
+msgstr ""
+
+#: ../data/gui/roster_item_exchange_window.ui.h:3
+#, fuzzy
+msgid "Roster Item Exchange"
+msgstr "名簿の項目の交換"
+
+# (Mako)ほかの項目との並びで、バランスを考えてあえてカッコでつけ加えている
+#: ../data/gui/roster_item_exchange_window.ui.h:4
+#: ../data/gui/service_registration_window.ui.h:3
+msgid "_OK"
+msgstr "OK (_O)"
+
+#: ../data/gui/roster_window.ui.h:1
+msgid "Frequently Asked Questions (online)"
+msgstr "よくある質問(オンライン)"
+
+#: ../data/gui/roster_window.ui.h:3
+msgid "Help online"
+msgstr "ヘルプ(オンライン)"
+
+#: ../data/gui/roster_window.ui.h:4
+msgid "Show Only _Active Contacts"
+msgstr "アクティブな相手先のみ表示 (_A)"
+
+#: ../data/gui/roster_window.ui.h:5
+msgid "Show Trans_ports"
+msgstr "中継先を表示 (_p)"
+
+#: ../data/gui/roster_window.ui.h:6
+msgid "Show _Offline Contacts"
+msgstr "オフラインの相手先を表示 (_O)"
+
+#: ../data/gui/roster_window.ui.h:7 ../src/statusicon.py:326
+msgid "Show _Roster"
+msgstr "名簿の表示 (_R)"
+
+#. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
+#: ../data/gui/roster_window.ui.h:8
+#: ../data/gui/subscription_request_window.ui.h:6
+msgid "_Actions"
+msgstr "操作 (_A)"
+
+#: ../data/gui/roster_window.ui.h:10 ../src/disco.py:1504
+msgid "_Edit"
+msgstr "編集 (_E)"
+
+#: ../data/gui/roster_window.ui.h:11
+msgid "_Help"
+msgstr "ヘルプ (_H)"
+
+#: ../data/gui/roster_window.ui.h:12
+msgid "_View"
+msgstr "表示 (_V)"
+
+#: ../data/gui/search_window.ui.h:1
+msgid "Please wait while retrieving search form..."
+msgstr "しばらくお待ちください…"
+
+#: ../data/gui/search_window.ui.h:2
+msgid "Search"
+msgstr "検索"
+
+#: ../data/gui/search_window.ui.h:3
+#, fuzzy
+msgid "_Add contact"
+msgstr "相手先リストに追加する (_A)..."
+
+#. Information
+#: ../data/gui/search_window.ui.h:4 ../src/roster_window.py:5631
+msgid "_Information"
+msgstr "情報 (_I)"
+
+#: ../data/gui/search_window.ui.h:5 ../src/disco.py:1355
+msgid "_Search"
+msgstr "検索 (_S)"
+
+#: ../data/gui/service_discovery_window.ui.h:1
+msgid "G_o"
+msgstr "実行 (_o)"
+
+#: ../data/gui/service_discovery_window.ui.h:2
+msgid "_Address:"
+msgstr "アドレス (_A):"
+
+#: ../data/gui/service_registration_window.ui.h:1
+#, fuzzy
+msgid "Register to"
+msgstr "登録"
+
+#: ../data/gui/service_registration_window.ui.h:2
+msgid "_Cancel"
+msgstr "中止 (_C)"
+
+#: ../data/gui/single_message_window.ui.h:2
+msgid "From:"
+msgstr "差出人:"
+
+#: ../data/gui/single_message_window.ui.h:3
+msgid "Reply to this message"
+msgstr "このメッセージへの返信"
+
+#: ../data/gui/single_message_window.ui.h:4
+msgid "Sen_d"
+msgstr "送信 (_d)"
+
+#: ../data/gui/single_message_window.ui.h:5
+msgid "Send message"
+msgstr "メッセージを送信する"
+
+#: ../data/gui/single_message_window.ui.h:6
+msgid "Send message and close window"
+msgstr "メッセージを送信してウィンドウを閉じる"
+
+#: ../data/gui/single_message_window.ui.h:7
+msgid "Subject:"
+msgstr "件名:"
+
+#: ../data/gui/single_message_window.ui.h:8
+msgid "To:"
+msgstr "宛先:"
+
+#: ../data/gui/single_message_window.ui.h:9
+msgid "_Reply"
+msgstr "返信 (_R)"
+
+#: ../data/gui/single_message_window.ui.h:10
+msgid "_Send & Close"
+msgstr "送信 & 閉じる (_S)"
+
+#: ../data/gui/subscription_request_window.ui.h:1
+msgid "Au_thorize"
+msgstr "承認する (_t)"
+
+#: ../data/gui/subscription_request_window.ui.h:2
+msgid "Authorize contact so he or she can know when you're connected"
+msgstr "承認すると、あなたが接続したときに相手先はそのことを知ることができます"
+
+#: ../data/gui/subscription_request_window.ui.h:3
+msgid ""
+"Deny authorization from contact so he or she cannot know when you're "
+"connected"
+msgstr ""
+"承認しないと、あなたが接続したときに相手先はそのことを知ることができません"
+
+#: ../data/gui/subscription_request_window.ui.h:4
+msgid "Subscription Request"
+msgstr "在席通知の申し込み"
+
+#: ../data/gui/subscription_request_window.ui.h:7
+msgid "_Deny"
+msgstr "拒否する (_D)"
+
+#: ../data/gui/synchronise_select_account_dialog.ui.h:1
+msgid "Select the account with which you want to synchronise"
+msgstr "合わせたいアカウントを選択してください"
+
+#: ../data/gui/synchronise_select_contacts_dialog.ui.h:1
+msgid "Select the contacts you want to synchronise"
+msgstr "合わせたい相手先を選択してください"
+
+#: ../data/gui/synchronise_select_contacts_dialog.ui.h:2
+#, fuzzy
+msgid "Synchronise : select contacts"
+msgstr "同期: 相手先の選択"
+
+#: ../data/gui/systray_context_menu.ui.h:1
+msgid "Mute Sounds"
+msgstr "サウンドのミュート"
+
+#: ../data/gui/systray_context_menu.ui.h:2
+msgid "Show All Pending _Events"
+msgstr "すべての保留イベントの表示 (_E)"
+
+# (Mako)pending の意味か
+#. Given Name
+#: ../data/gui/vcard_information_window.ui.h:3
+msgid "<b>Ask:</b>"
+msgstr "<b>保留中の申し込み:</b>"
+
+#: ../data/gui/vcard_information_window.ui.h:6
+msgid "<b>Client:</b>"
+msgstr "<b>クライアント:</b>"
+
+#: ../data/gui/vcard_information_window.ui.h:8
+msgid "<b>Contact time:</b>"
+msgstr "<b>通話時間:</b>"
+
+#: ../data/gui/vcard_information_window.ui.h:19
+msgid "<b>Jabber ID:</b>"
+msgstr "<b>Jabber ID:</b>"
+
+#: ../data/gui/vcard_information_window.ui.h:29
+msgid "<b>Resource:</b>"
+msgstr "<b>リソース:</b>"
+
+#: ../data/gui/vcard_information_window.ui.h:32
+msgid "<b>Status:</b>"
+msgstr "<b>在席状況:</b>"
+
+#. Family Name
+#: ../data/gui/vcard_information_window.ui.h:35
+msgid "<b>Subscription:</b>"
+msgstr "<b>在席通知:</b>"
+
+#: ../data/gui/vcard_information_window.ui.h:38
+msgid "<b>System:</b>"
+msgstr "<b>システム:</b>"
+
+#: ../data/gui/vcard_information_window.ui.h:41
+msgid "Comments"
+msgstr "備考"
+
+#: ../data/gui/vcard_information_window.ui.h:42
+#, fuzzy
+msgid "Configured avatar:"
+msgstr "設定したアバター:"
+
+#: ../data/gui/vcard_information_window.ui.h:43
+#: ../data/gui/zeroconf_information_window.ui.h:1
+msgid "Contact"
+msgstr "相手先"
+
+#: ../data/gui/vcard_information_window.ui.h:44
+msgid "Contact Information"
+msgstr "相手先の情報"
+
+#: ../data/gui/vcard_information_window.ui.h:46
+msgid "More"
+msgstr "その他の情報"
+
+#: ../data/gui/vcard_information_window.ui.h:48
+msgid "User avatar:"
+msgstr "ユーザーのアバター:"
+
+#: ../data/gui/xml_console_window.ui.h:1
+#, fuzzy
+msgid "<b>Filter</b>"
+msgstr "<b>フォント</b>"
+
+#: ../data/gui/xml_console_window.ui.h:2
+#, fuzzy
+msgid "<b>Jabber Traffic</b>"
+msgstr "<b>Jabber 通信</b>"
+
+#: ../data/gui/xml_console_window.ui.h:3
+msgid "<b>XML Input</b>"
+msgstr "<b>XML 入力</b>"
+
+#: ../data/gui/xml_console_window.ui.h:4
+msgid "Hide IN stanzas"
+msgstr ""
+
+#: ../data/gui/xml_console_window.ui.h:5
+msgid "Hide IQ stanzas"
+msgstr ""
+
+#: ../data/gui/xml_console_window.ui.h:6
+msgid "Hide Message stanzas"
+msgstr ""
+
+#: ../data/gui/xml_console_window.ui.h:7
+msgid "Hide OUT stanzas"
+msgstr ""
+
+#: ../data/gui/xml_console_window.ui.h:8
+msgid "Hide Presence stanzas"
+msgstr ""
+
+#: ../data/gui/xml_console_window.ui.h:9
+msgid "Info/Query"
+msgstr "情報/クエリー (Info/Query)"
+
+#. Info/Query: all(?) jabber xml start with <iq Leaving it _IQ is not a bad idea unless you are sure your lang has this somehow else translated (NOTE: xml still will still say <iq in your language (of course))
+#: ../data/gui/xml_console_window.ui.h:13
+msgid "_IQ"
+msgstr "_IQ"
+
+# (Mako)あえて訳さない
+#: ../data/gui/xml_console_window.ui.h:14
+msgid "_Message"
+msgstr "_Message"
+
+# (Mako)あえて訳さない
+#: ../data/gui/xml_console_window.ui.h:15
+msgid "_Presence"
+msgstr "_Presence"
+
+#: ../data/gui/zeroconf_information_window.ui.h:6
+msgid "Local jid:"
+msgstr "ローカル jid:"
+
+#: ../data/gui/zeroconf_information_window.ui.h:7
+msgid "Personal"
+msgstr "個人"
+
+#: ../data/gui/zeroconf_information_window.ui.h:8
+msgid "Resource:"
+msgstr "リソース:"
+
+#: ../data/gui/zeroconf_information_window.ui.h:9
+msgid "Status:"
+msgstr "在席状況:"
 
 #: ../data/gajim.desktop.in.in.h:1
 msgid "A GTK+ Jabber client"
@@ -71,7 +2807,7 @@ msgstr "整数型"
 msgid "Text"
 msgstr "文字列型"
 
-#: ../src/advanced_configuration_window.py:96 ../src/chat_control.py:902
+#: ../src/advanced_configuration_window.py:96 ../src/chat_control.py:903
 msgid "Color"
 msgstr "色"
 
@@ -103,10 +2839,6 @@ msgid "You have received new entries (and %d not displayed):"
 msgid_plural "You have received new entries (and %d not displayed):"
 msgstr[0] "新しいエントリーを受け取りました (%(count)d が表示されません):"
 msgstr[1] "新しいエントリーを受け取りました (%(count)d が表示されません):"
-
-#: ../src/atom_window.py:124
-msgid "You have received new entry:"
-msgstr "新しいエントリーを受け取りました:"
 
 #. the next script, executed in the "po" directory,
 #. generates the following list.
@@ -213,61 +2945,53 @@ msgstr "スウェーデン語"
 msgid "Chinese (Ch)"
 msgstr "中国語 (Ch)"
 
-#: ../src/chat_control.py:447
+#: ../src/chat_control.py:450
 msgid "Spelling language"
 msgstr "スペルチェックの言語"
 
 #. we are not connected
-#: ../src/chat_control.py:479 ../src/chat_control.py:690
+#: ../src/chat_control.py:482 ../src/chat_control.py:691
 msgid "A connection is not available"
 msgstr "接続は有効ではありません"
 
-#: ../src/chat_control.py:480 ../src/chat_control.py:691
+#: ../src/chat_control.py:483 ../src/chat_control.py:692
 msgid "Your message can not be sent until you are connected."
 msgstr "接続するまでメッセージは送信されません。"
 
-#: ../src/chat_control.py:882
-msgid "Bold"
-msgstr "太字にする"
-
-#: ../src/chat_control.py:883
-msgid "Italic"
-msgstr "イタリック"
-
-#: ../src/chat_control.py:884
+#: ../src/chat_control.py:885
 msgid "Underline"
 msgstr "下線"
 
-#: ../src/chat_control.py:885
+#: ../src/chat_control.py:886
 msgid "Strike"
 msgstr "抹消線"
 
-#: ../src/chat_control.py:908
+#: ../src/chat_control.py:909
 msgid "Font"
 msgstr "フォント"
 
-#: ../src/chat_control.py:917
+#: ../src/chat_control.py:918
 msgid "Clear formating"
 msgstr "書式のクリア"
 
-#: ../src/chat_control.py:995
+#: ../src/chat_control.py:996
 msgid "Really send file?"
 msgstr "ファイルを送信しますか ?"
 
-#: ../src/chat_control.py:996
+#: ../src/chat_control.py:997
 #, python-format
 msgid "If you send a file to %s, he/she will know your real Jabber ID."
 msgstr ""
 "ファイルを %s に送信すると、その相手はあなたの本当の Jabber ID を知ることにな"
 "ります。"
 
-#: ../src/chat_control.py:1449 ../src/chat_control.py:1943
+#: ../src/chat_control.py:1450 ../src/chat_control.py:1947
 #, fuzzy
 msgid "GPG encryption enabled"
 msgstr "GPG 暗号化は有効"
 
 #. Add to roster
-#: ../src/chat_control.py:1474 ../src/common/contacts.py:158
+#: ../src/chat_control.py:1475 ../src/common/contacts.py:158
 #: ../src/common/contacts.py:277 ../src/common/helpers.py:57
 #: ../src/common/helpers.py:245 ../src/dialogs.py:1064 ../src/dialogs.py:2069
 #: ../src/dialogs.py:2098 ../src/gui_interface.py:673
@@ -278,30 +3002,30 @@ msgstr "GPG 暗号化は有効"
 msgid "Not in Roster"
 msgstr "名簿にありません"
 
-#: ../src/chat_control.py:1518
+#: ../src/chat_control.py:1519
 msgid "This contact does not support file transfer."
 msgstr "この相手先はファイル転送をサポートしていません。"
 
-#: ../src/chat_control.py:1521
+#: ../src/chat_control.py:1522
 msgid "You need to know the real JID of the contact to send him or her a file."
 msgstr "ファイル転送を行なうには、本当の JID を知っている必要があります。"
 
-#: ../src/chat_control.py:1610
+#: ../src/chat_control.py:1611
 #, python-format
 msgid "%(type)s state : %(state)s, reason: %(reason)s"
 msgstr ""
 
-#: ../src/chat_control.py:1808
+#: ../src/chat_control.py:1812
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s さん (グループチャット %(room_name)s より)"
 
 #. No key assigned nor a key is used by remote contact
-#: ../src/chat_control.py:1923 ../src/dialogs.py:4814
+#: ../src/chat_control.py:1927 ../src/dialogs.py:4814
 msgid "No GPG key assigned"
 msgstr "GPG 鍵が割り当てられていません"
 
-#: ../src/chat_control.py:1924
+#: ../src/chat_control.py:1928
 msgid ""
 "No GPG key is assigned to this contact. So you cannot encrypt messages with "
 "GPG."
@@ -309,52 +3033,52 @@ msgstr ""
 "この相手先に GPG 鍵が割り当てられていないため、メッセージを GPG で暗号化する"
 "ことができません。"
 
-#: ../src/chat_control.py:1933
+#: ../src/chat_control.py:1937
 msgid "GPG encryption disabled"
 msgstr "GPG 暗号化は無効"
 
-#: ../src/chat_control.py:1959
+#: ../src/chat_control.py:1963
 msgid "Session WILL be logged"
 msgstr "セッションは記録されます"
 
-#: ../src/chat_control.py:1961
+#: ../src/chat_control.py:1965
 msgid "Session WILL NOT be logged"
 msgstr "セッションは記録されません"
 
 # (Mako)暗号化は有効 %s、
 #. encryption %s active
-#: ../src/chat_control.py:1978
+#: ../src/chat_control.py:1982
 msgid "is"
 msgstr "で"
 
-#: ../src/chat_control.py:1978
+#: ../src/chat_control.py:1982
 msgid "is NOT"
 msgstr "でなく"
 
 # #. チャットは記録 %s。
 #. chat session %s be logged
-#: ../src/chat_control.py:1980
+#: ../src/chat_control.py:1984
 msgid "will"
 msgstr "記録されます"
 
-#: ../src/chat_control.py:1980
+#: ../src/chat_control.py:1984
 msgid "will NOT"
 msgstr "記録されません"
 
 #. About encrypted chat session
-#: ../src/chat_control.py:1984
+#: ../src/chat_control.py:1988
 msgid "and authenticated"
 msgstr "認証されています"
 
 #. About encrypted chat session
-#: ../src/chat_control.py:1988
+#: ../src/chat_control.py:1992
 msgid "and NOT authenticated"
 msgstr "認証されていません"
 
 #. status will become 'is' or 'is not', authentificaed will become
 #. 'and authentificated' or 'and not authentificated', logged will become
 #. 'will' or 'will not'
-#: ../src/chat_control.py:1995
+#: ../src/chat_control.py:1999
 #, python-format
 msgid ""
 "%(type)s encryption %(status)s active %(authenticated)s.\n"
@@ -363,23 +3087,23 @@ msgstr ""
 "%(type)s の暗号化は有効%(status)s、%(authenticated)s。\n"
 "チャットは%(logged)s。"
 
-#: ../src/chat_control.py:2135
+#: ../src/chat_control.py:2139
 msgid "Session negotiation cancelled"
 msgstr ""
 
-#: ../src/chat_control.py:2144
+#: ../src/chat_control.py:2148
 msgid "This session is encrypted"
 msgstr "このセッションは暗号化されています"
 
-#: ../src/chat_control.py:2147
+#: ../src/chat_control.py:2151
 msgid " and WILL be logged"
 msgstr " かつ、記録されます"
 
-#: ../src/chat_control.py:2149
+#: ../src/chat_control.py:2153
 msgid " and WILL NOT be logged"
 msgstr " かつ、記録されません"
 
-#: ../src/chat_control.py:2154
+#: ../src/chat_control.py:2158
 msgid ""
 "Remote contact's identity not verified. Click the shield button for more "
 "details."
@@ -387,32 +3111,32 @@ msgstr ""
 "遠くの相手先の同一性は検証されませんでした。詳しくは盾ボタンをクリックしてく"
 "ださい。"
 
-#: ../src/chat_control.py:2156
+#: ../src/chat_control.py:2160
 msgid "E2E encryption disabled"
 msgstr "終端間暗号化 (E2EE) は無効"
 
-#: ../src/chat_control.py:2193 ../src/chat_control.py:2206
+#: ../src/chat_control.py:2197 ../src/chat_control.py:2210
 msgid "The following message was NOT encrypted"
 msgstr "次のメッセージは暗号化されませんでした:"
 
-#: ../src/chat_control.py:2199
+#: ../src/chat_control.py:2203
 msgid "The following message was encrypted"
 msgstr "次のメッセージは暗号化されました:"
 
 #. %s is being replaced in the code with JID
-#: ../src/chat_control.py:2471
+#: ../src/chat_control.py:2475
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "\"%s\" さんから新しいメッセージを受信しました"
 
-#: ../src/chat_control.py:2472
+#: ../src/chat_control.py:2476
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
 msgstr ""
 "このタブを閉じると、記録を残さない設定の場合、このメッセージは失われます。"
 
-#: ../src/chat_control.py:2615 ../src/common/connection_handlers.py:1578
+#: ../src/chat_control.py:2619 ../src/common/connection_handlers.py:1578
 #: ../src/common/connection_handlers.py:1629
 #: ../src/common/connection_handlers.py:1824
 #: ../src/common/connection_handlers.py:1974 ../src/common/connection.py:436
@@ -420,7 +3144,7 @@ msgstr ""
 msgid "Database Error"
 msgstr "データベースのエラー"
 
-#: ../src/chat_control.py:2616
+#: ../src/chat_control.py:2620
 #, python-format
 msgid ""
 "The database file (%s) cannot be read. Try to repair it or remove it (all "
@@ -429,7 +3153,7 @@ msgstr ""
 "データベースファイル (%s) を読むことができません。修復するか、または削除(すべ"
 "ての履歴は失われます)してください。"
 
-#: ../src/chat_control.py:2854
+#: ../src/chat_control.py:2858
 #, python-format
 msgid "%(name)s is now %(status)s"
 msgstr "%(name)s さんは現在、%(status)s"
@@ -488,10 +3212,6 @@ msgstr "チャットできます"
 #: ../src/common/commands.py:105
 msgid "Online"
 msgstr "オンライン"
-
-#: ../src/common/commands.py:106 ../src/common/helpers.py:233
-msgid "Away"
-msgstr "離席中です"
 
 #: ../src/common/commands.py:107
 msgid "Extended away"
@@ -640,7 +3360,7 @@ msgstr "折り畳む(アカウントやグループチャットの)行の一覧(
 #. sorted alphanum
 #: ../src/common/config.py:106 ../src/common/config.py:497
 #: ../src/common/optparser.py:287 ../src/common/optparser.py:483
-#: ../src/common/optparser.py:517 ../src/gui_interface.py:3369
+#: ../src/common/optparser.py:517 ../src/gui_interface.py:3370
 msgid "default"
 msgstr "デフォルト"
 
@@ -1524,12 +4244,12 @@ msgstr "%(agent)s の登録は失敗しました。%(error)s: %(error_msg)s"
 msgid "Disk Write Error"
 msgstr "ディスクの書き込みエラー"
 
-#: ../src/common/connection_handlers.py:666 ../src/common/connection.py:1456
+#: ../src/common/connection_handlers.py:666 ../src/common/connection.py:1455
 #, fuzzy
 msgid "Invisibility not supported"
 msgstr "「隠れています」はサポートされていません"
 
-#: ../src/common/connection_handlers.py:667 ../src/common/connection.py:1457
+#: ../src/common/connection_handlers.py:667 ../src/common/connection.py:1456
 #, fuzzy, python-format
 msgid "Account %s doesn't support invisibility."
 msgstr "アカウント %s は「隠れています」をサポートしていません。"
@@ -1803,77 +4523,77 @@ msgstr ""
 "件名: %(subject)s\n"
 "%(message)s"
 
-#: ../src/common/connection.py:790
+#: ../src/common/connection.py:789
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "アカウント \"%s\" での接続が切れました"
 
-#: ../src/common/connection.py:791
+#: ../src/common/connection.py:790
 msgid "Reconnect manually."
 msgstr "手動で再接続してください。"
 
-#: ../src/common/connection.py:803
+#: ../src/common/connection.py:802
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
 
-#: ../src/common/connection.py:837
+#: ../src/common/connection.py:836
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr ""
 
-#: ../src/common/connection.py:850
+#: ../src/common/connection.py:849
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "未知の SSL エラー: %d"
 
 #. wrong answer
-#: ../src/common/connection.py:865
+#: ../src/common/connection.py:864
 #, fuzzy
 msgid "Invalid answer"
 msgstr "回答が間違っています"
 
-#: ../src/common/connection.py:866
+#: ../src/common/connection.py:865
 #, python-format
 msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
 
-#: ../src/common/connection.py:1147 ../src/common/connection.py:1276
-#: ../src/common/connection.py:1767
-#: ../src/common/zeroconf/connection_zeroconf.py:191
+#: ../src/common/connection.py:1146 ../src/common/connection.py:1275
+#: ../src/common/connection.py:1766
+#: ../src/common/zeroconf/connection_zeroconf.py:189
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "%s に接続できませんでした"
 
-#: ../src/common/connection.py:1148 ../src/gui_interface.py:754
+#: ../src/common/connection.py:1147 ../src/gui_interface.py:754
 msgid "Check your connection or try again later."
 msgstr "設定を確認するか、時間をおいて試してください。"
 
-#: ../src/common/connection.py:1153
+#: ../src/common/connection.py:1152
 #, python-format
 msgid "Server replied: %s"
 msgstr "サーバの応答: %s"
 
-#: ../src/common/connection.py:1166
+#: ../src/common/connection.py:1165
 msgid "Connection to proxy failed"
 msgstr "プロキシへの接続に失敗"
 
-#: ../src/common/connection.py:1197 ../src/common/connection.py:1256
+#: ../src/common/connection.py:1196 ../src/common/connection.py:1255
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "アカウント %s に接続できません"
 
-#: ../src/common/connection.py:1198 ../src/common/connection.py:1257
+#: ../src/common/connection.py:1197 ../src/common/connection.py:1256
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "アカウント %s での接続が切れました。再接続を試みます。"
 
-#: ../src/common/connection.py:1223
+#: ../src/common/connection.py:1222
 #, python-format
 msgid "The authenticity of the %s certificate could be invalid."
 msgstr "%s の証明書の真正性は検証できませんでした。"
 
-#: ../src/common/connection.py:1226
+#: ../src/common/connection.py:1225
 #, python-format
 msgid ""
 "\n"
@@ -1882,7 +4602,7 @@ msgstr ""
 "\n"
 "SSL エラー: <b>%s</b>"
 
-#: ../src/common/connection.py:1228
+#: ../src/common/connection.py:1227
 #, python-format
 msgid ""
 "\n"
@@ -1891,25 +4611,25 @@ msgstr ""
 "\n"
 "未知の SSL エラー: %d"
 
-#: ../src/common/connection.py:1277
+#: ../src/common/connection.py:1276
 msgid "Check your connection or try again later"
 msgstr "接続を確認するか、または後で再度試してください"
 
 # (Mako) %s はアカウントか
-#: ../src/common/connection.py:1308
+#: ../src/common/connection.py:1307
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "\"%s\" の認証に失敗しました"
 
-#: ../src/common/connection.py:1310
+#: ../src/common/connection.py:1309
 msgid "Please check your login and password for correctness."
 msgstr "整合性のために、ログインとパスワードを確認してください。"
 
-#: ../src/common/connection.py:1379
+#: ../src/common/connection.py:1378
 msgid "Error while removing privacy list"
 msgstr "プライバシーリストを削除する際のエラー"
 
-#: ../src/common/connection.py:1380
+#: ../src/common/connection.py:1379
 #, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
@@ -1918,25 +4638,25 @@ msgstr ""
 "プライバシーリスト %s は削除されませんでした。現在の接続に使用されているよう"
 "です。使用をやめてから再び試してください。"
 
-#: ../src/common/connection.py:1633
+#: ../src/common/connection.py:1632
 #, fuzzy, python-format
 msgid "Sent contact: \"%s\" (%s)"
 msgstr "送った相手先: %s (%s)"
 
-#: ../src/common/connection.py:1636
+#: ../src/common/connection.py:1635
 #, fuzzy
 msgid "Sent contacts:"
 msgstr "送った相手先:"
 
-#: ../src/common/connection.py:1782 ../src/common/connection.py:1805
+#: ../src/common/connection.py:1781 ../src/common/connection.py:1804
 msgid "Not fetched because of invisible status"
 msgstr ""
 
-#: ../src/common/connection.py:2220
+#: ../src/common/connection.py:2219
 msgid "Unregister failed"
 msgstr "登録解除に失敗"
 
-#: ../src/common/connection.py:2221
+#: ../src/common/connection.py:2220
 #, python-format
 msgid "Unregistration with server %(server)s failed: %(error)s"
 msgstr "サーバー %(server)s での登録解除に失敗しました: %(error)s"
@@ -1955,14 +4675,6 @@ msgstr "オブザーバ"
 #: ../src/roster_window.py:1766
 msgid "Transports"
 msgstr "中継先"
-
-#. FIXME: Ugly workaround.
-#. FIXME: Ugly workaround. Maybe we haven't been in any group (defaults to General)
-#. General group cannot be changed
-#: ../src/common/contacts.py:141 ../src/dialogs.py:111 ../src/dialogs.py:121
-#: ../src/roster_window.py:2829 ../src/roster_window.py:5376
-msgid "General"
-msgstr "全般"
 
 #: ../src/common/contacts.py:374
 msgid "Not in roster"
@@ -2216,10 +4928,6 @@ msgstr "取り込み中です"
 msgid "_Not Available"
 msgstr "不在 (_N)"
 
-#: ../src/common/helpers.py:216
-msgid "Not Available"
-msgstr "不在です"
-
 #: ../src/common/helpers.py:219
 msgid "_Free for Chat"
 msgstr "チャット可 (_F)"
@@ -2259,10 +4967,6 @@ msgstr "オフラインです"
 msgid "_Invisible"
 msgstr "隠れ中 (_I)"
 
-#: ../src/common/helpers.py:243
-msgid "Invisible"
-msgstr "隠れています"
-
 #: ../src/common/helpers.py:247
 msgid "?contact has status:Unknown"
 msgstr "不明"
@@ -2279,13 +4983,6 @@ msgstr "なし"
 #: ../src/common/helpers.py:256
 msgid "To"
 msgstr "相手先が承認"
-
-# #(Mako)helpers.pyは、
-# 相手先の情報で、subscriptionの有無なので、「こちらが承認」としたい
-#: ../src/common/helpers.py:258
-#, fuzzy
-msgid "From"
-msgstr "こちらが承認"
 
 #: ../src/common/helpers.py:260
 msgid "Both"
@@ -2438,32 +5135,21 @@ msgid_plural "%d events pending"
 msgstr[0] "保留イベント %d 件"
 msgstr[1] "保留イベント %d 件"
 
-#. No configured account
-#: ../src/common/helpers.py:1159 ../src/common/helpers.py:1171
-#: ../src/notify.py:553 ../src/notify.py:574 ../src/notify.py:612
-#: ../src/notify.py:624
-msgid "Gajim"
-msgstr "Gajim"
-
 #: ../src/common/helpers.py:1173
 #, python-format
 msgid "Gajim - %s"
 msgstr "Gajim - %s"
 
-#: ../src/common/helpers.py:1339
-msgid "I would like to add you to my contact list."
-msgstr "あなたを私の相手先リストに追加したいと思います。"
-
 #: ../src/common/helpers.py:1341
 msgid "Hello, I am $name."
 msgstr ""
 
-#: ../src/common/jingle_rtp.py:102
+#: ../src/common/jingle_rtp.py:106
 #, fuzzy, python-format
 msgid "%s configuration error"
 msgstr "談話室の構成"
 
-#: ../src/common/jingle_rtp.py:103
+#: ../src/common/jingle_rtp.py:107
 #, python-format
 msgid ""
 "Couldn't setup %s. Check your configuration.\n"
@@ -2475,19 +5161,19 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../src/common/jingle_rtp.py:295
+#: ../src/common/jingle_rtp.py:299
 msgid "audio input"
 msgstr ""
 
-#: ../src/common/jingle_rtp.py:298
+#: ../src/common/jingle_rtp.py:302
 msgid "audio output"
 msgstr ""
 
-#: ../src/common/jingle_rtp.py:327
+#: ../src/common/jingle_rtp.py:331
 msgid "video input"
 msgstr ""
 
-#: ../src/common/jingle_rtp.py:335
+#: ../src/common/jingle_rtp.py:339
 msgid "video output"
 msgstr ""
 
@@ -2501,60 +5187,60 @@ msgstr "\"%(command)s\" の実行中にエラー: %(error)s"
 msgid "%s is not a valid loglevel"
 msgstr "%s は正しいログレベルではありません"
 
-#: ../src/common/multimedia_helpers.py:36
+#: ../src/common/multimedia_helpers.py:37
 #, fuzzy
 msgid " Default device"
 msgstr "デフォルトのメッセージ"
 
 #. Test src
-#: ../src/common/multimedia_helpers.py:52
+#: ../src/common/multimedia_helpers.py:53
 msgid "Audio test"
 msgstr ""
 
 #. Auto src
 #. Auto sink
 #. Auto src
-#: ../src/common/multimedia_helpers.py:55
-#: ../src/common/multimedia_helpers.py:68
-#: ../src/common/multimedia_helpers.py:81
-#: ../src/common/multimedia_helpers.py:98
+#: ../src/common/multimedia_helpers.py:56
+#: ../src/common/multimedia_helpers.py:69
+#: ../src/common/multimedia_helpers.py:82
+#: ../src/common/multimedia_helpers.py:99
 msgid "Autodetect"
 msgstr ""
 
 #. Alsa src
 #. Alsa sink
-#: ../src/common/multimedia_helpers.py:58
-#: ../src/common/multimedia_helpers.py:70
+#: ../src/common/multimedia_helpers.py:59
+#: ../src/common/multimedia_helpers.py:71
 #, fuzzy, python-format
 msgid "ALSA: %s"
 msgstr "サイズ: %s"
 
 #. Fake sink
 #. Fake video output
-#: ../src/common/multimedia_helpers.py:66
-#: ../src/common/multimedia_helpers.py:93
+#: ../src/common/multimedia_helpers.py:67
+#: ../src/common/multimedia_helpers.py:94
 msgid "Fake audio output"
 msgstr ""
 
 #. Test src
-#: ../src/common/multimedia_helpers.py:78
+#: ../src/common/multimedia_helpers.py:79
 msgid "Video test"
 msgstr ""
 
-#. V4L2 src ; TODO: Figure out why it doesn't work
-#: ../src/common/multimedia_helpers.py:83
+#. V4L2 src
+#: ../src/common/multimedia_helpers.py:84
 #, python-format
 msgid "V4L2: %s"
 msgstr ""
 
 #. Auto sink
-#: ../src/common/multimedia_helpers.py:95
+#: ../src/common/multimedia_helpers.py:96
 #, python-format
 msgid "X Window System (X11/XShm/Xv): %s"
 msgstr ""
 
 #. ximagesink
-#: ../src/common/multimedia_helpers.py:97
+#: ../src/common/multimedia_helpers.py:98
 msgid "X Window System (without Xv)"
 msgstr ""
 
@@ -3057,10 +5743,6 @@ msgstr "シャワー"
 msgid "Having an Appointment"
 msgstr "約束あり"
 
-#: ../src/common/pep.py:150
-msgid "Inactive"
-msgstr "活動停止中"
-
 #: ../src/common/pep.py:151
 msgid "Day Off"
 msgstr "休み"
@@ -3251,11 +5933,11 @@ msgstr ""
 "[暗号化セッションの途中です。このメッセージを見ているということは、何か失敗し"
 "ています。]"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:180
+#: ../src/common/zeroconf/connection_zeroconf.py:178
 msgid "Avahi error"
 msgstr "Avahi エラー"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:181
+#: ../src/common/zeroconf/connection_zeroconf.py:179
 #, python-format
 msgid ""
 "%s\n"
@@ -3264,44 +5946,44 @@ msgstr ""
 "%s\n"
 "ローカルの伝送がうまく働いていないようです。"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:192
+#: ../src/common/zeroconf/connection_zeroconf.py:190
 msgid "Please check if Avahi or Bonjour is installed."
 msgstr "Avahi か Bonjour がインストールされているか確認してください。"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:201
-#: ../src/common/zeroconf/connection_zeroconf.py:205
+#: ../src/common/zeroconf/connection_zeroconf.py:199
+#: ../src/common/zeroconf/connection_zeroconf.py:203
 msgid "Could not start local service"
 msgstr "ローカルのサービスを起動できません"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:202
+#: ../src/common/zeroconf/connection_zeroconf.py:200
 #, python-format
 msgid "Unable to bind to port %d."
 msgstr "ポート %d を開けません。"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:206
-#: ../src/common/zeroconf/connection_zeroconf.py:285
-#: ../src/common/zeroconf/connection_zeroconf.py:296
-#: ../src/common/zeroconf/connection_zeroconf.py:310
+#: ../src/common/zeroconf/connection_zeroconf.py:204
+#: ../src/common/zeroconf/connection_zeroconf.py:283
+#: ../src/common/zeroconf/connection_zeroconf.py:294
+#: ../src/common/zeroconf/connection_zeroconf.py:308
 msgid "Please check if avahi-daemon is running."
 msgstr "avahi-daemon が起動しているか確認してください。"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:284
-#: ../src/common/zeroconf/connection_zeroconf.py:295
-#: ../src/common/zeroconf/connection_zeroconf.py:309
+#: ../src/common/zeroconf/connection_zeroconf.py:282
+#: ../src/common/zeroconf/connection_zeroconf.py:293
+#: ../src/common/zeroconf/connection_zeroconf.py:307
 #, python-format
 msgid "Could not change status of account \"%s\""
 msgstr "アカウント \"%s\" の在席状況を変更できませんでした"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:326
+#: ../src/common/zeroconf/connection_zeroconf.py:324
 msgid "Your message could not be sent."
 msgstr "メッセージを送信できませんでした。"
 
 #. Contact Offline
-#: ../src/common/zeroconf/connection_zeroconf.py:336
+#: ../src/common/zeroconf/connection_zeroconf.py:334
 msgid "Contact is offline. Your message could not be sent."
 msgstr "相手先はオフラインです。メッセージを送信できませんでした。"
 
-#: ../src/common/zeroconf/connection_zeroconf.py:361
+#: ../src/common/zeroconf/connection_zeroconf.py:359
 msgid ""
 "Connection to host could not be established: Timeout while sending data."
 msgstr "ホストへの接続を確立できませんでした: データ送信中の時間切れです。"
@@ -3311,14 +5993,6 @@ msgstr "ホストへの接続を確立できませんでした: データ送信�
 #, python-format
 msgid "Error while adding service. %s"
 msgstr "サービスの追加中のエラーです。%s"
-
-#: ../src/config.py:170 ../src/config.py:653
-msgid "Disabled"
-msgstr "無効"
-
-#: ../src/config.py:391
-msgid "Status"
-msgstr "在席状況"
 
 #: ../src/config.py:397
 msgid "Default Message"
@@ -3350,15 +6024,6 @@ msgstr "状況メッセージのタイトル"
 msgid "status message text"
 msgstr "状況メッセージの文"
 
-#: ../src/config.py:1256 ../src/config.py:1359 ../src/config.py:1652
-#: ../src/config.py:1657 ../src/config.py:2208 ../src/config.py:2287
-#: ../src/config.py:2300 ../src/config.py:3538 ../src/config.py:3611
-#: ../src/dialogs.py:308 ../src/dialogs.py:310 ../src/dialogs.py:513
-#: ../src/dialogs.py:526 ../src/roster_window.py:2887
-#: ../src/roster_window.py:2893 ../src/roster_window.py:2898
-msgid "None"
-msgstr "なし"
-
 #. Name column
 #: ../src/config.py:1490 ../src/dialogs.py:2374 ../src/dialogs.py:2440
 #: ../src/dialogs.py:3207 ../src/disco.py:868 ../src/disco.py:1727
@@ -3377,18 +6042,6 @@ msgstr "すべての変更を直ちに有効にするには、再ログインし
 #: ../src/config.py:1722 ../src/config.py:1847
 msgid "OpenPGP is not usable on this computer"
 msgstr "OpenPGP はこのコンピュータでは使えません。"
-
-#: ../src/config.py:1748 ../src/config.py:2301
-msgid "No key selected"
-msgstr "鍵が選択されていません"
-
-#: ../src/config.py:1765
-msgid "Server:"
-msgstr "サーバー:"
-
-#: ../src/config.py:1775 ../src/dialogs.py:830
-msgid "Jabber ID:"
-msgstr "Jabber ID:"
 
 #: ../src/config.py:1887 ../src/config.py:1934
 msgid "Unread events"
@@ -3762,11 +6415,11 @@ msgstr "このアカウントを編集するには、ユーザー名を指定し
 msgid "Please provide a server on which you want to register."
 msgstr "登録したいサーバーを指定してください。"
 
-#: ../src/config.py:3581 ../src/gui_interface.py:1887
+#: ../src/config.py:3581 ../src/gui_interface.py:1886
 msgid "Certificate Already in File"
 msgstr "証明書はファイルにあります"
 
-#: ../src/config.py:3582 ../src/gui_interface.py:1888
+#: ../src/config.py:3582 ../src/gui_interface.py:1887
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr "この証明書は既にファイル %s にあります。再び追加することはできません。"
@@ -3786,7 +6439,7 @@ msgstr ""
 "SSL エラー: %(error)s\n"
 "それでもこのサーバーに接続しますか ?"
 
-#: ../src/config.py:3661 ../src/gui_interface.py:1915
+#: ../src/config.py:3661 ../src/gui_interface.py:1914
 #, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -4115,7 +6768,7 @@ msgstr "アカウント %(account)s に対して、%(jid)s さんからの在席
 msgid "Subscription request from %s"
 msgstr "%s さんから在席通知の申し込み"
 
-#: ../src/dialogs.py:2122 ../src/gui_interface.py:2671
+#: ../src/dialogs.py:2122 ../src/gui_interface.py:2670
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "既にグループチャット %s に参加しています。"
@@ -4128,10 +6781,6 @@ msgstr "接続しないと、グループチャットに参加できません。
 #, python-format
 msgid "Join Group Chat with account %s"
 msgstr "アカウント %s でグループチャットに参加"
-
-#: ../src/dialogs.py:2171
-msgid "Join Group Chat"
-msgstr "グループチャットに参加"
 
 #: ../src/dialogs.py:2300
 msgid "Invalid Account"
@@ -4247,60 +6896,60 @@ msgid "The passwords typed in both fields must be identical."
 msgstr "ふたつの欄のパスワードは同一でなければなりません。"
 
 #. default value
-#: ../src/dialogs.py:2610 ../src/notify.py:263 ../src/notify.py:499
+#: ../src/dialogs.py:2610 ../src/notify.py:265 ../src/notify.py:503
 msgid "Contact Signed In"
 msgstr "相手先がサインインしました"
 
-#: ../src/dialogs.py:2612 ../src/notify.py:271 ../src/notify.py:501
+#: ../src/dialogs.py:2612 ../src/notify.py:273 ../src/notify.py:505
 msgid "Contact Signed Out"
 msgstr "相手先がサインアウトしました"
 
 #. chat message
-#: ../src/dialogs.py:2614 ../src/notify.py:292 ../src/notify.py:344
-#: ../src/notify.py:503
+#: ../src/dialogs.py:2614 ../src/notify.py:295 ../src/notify.py:347
+#: ../src/notify.py:507
 msgid "New Message"
 msgstr "新着メッセージ"
 
 #. single message
-#: ../src/dialogs.py:2614 ../src/notify.py:275 ../src/notify.py:345
-#: ../src/notify.py:503
+#: ../src/dialogs.py:2614 ../src/notify.py:277 ../src/notify.py:348
+#: ../src/notify.py:507
 msgid "New Single Message"
 msgstr "新着の単発メッセージ"
 
 #. private message
-#: ../src/dialogs.py:2615 ../src/notify.py:281 ../src/notify.py:345
-#: ../src/notify.py:504
+#: ../src/dialogs.py:2615 ../src/notify.py:283 ../src/notify.py:348
+#: ../src/notify.py:508
 msgid "New Private Message"
 msgstr "新着の私信"
 
-#: ../src/dialogs.py:2615 ../src/gui_interface.py:1343 ../src/notify.py:513
+#: ../src/dialogs.py:2615 ../src/gui_interface.py:1343 ../src/notify.py:517
 msgid "New E-mail"
 msgstr "新着メール"
 
-#: ../src/dialogs.py:2617 ../src/gui_interface.py:1405 ../src/notify.py:506
+#: ../src/dialogs.py:2617 ../src/gui_interface.py:1405 ../src/notify.py:510
 msgid "File Transfer Request"
 msgstr "ファイル転送の要求"
 
 #: ../src/dialogs.py:2619 ../src/gui_interface.py:1309
-#: ../src/gui_interface.py:1374 ../src/notify.py:508
+#: ../src/gui_interface.py:1374 ../src/notify.py:512
 msgid "File Transfer Error"
 msgstr "ファイル転送のエラー"
 
 #: ../src/dialogs.py:2621 ../src/gui_interface.py:1451
 #: ../src/gui_interface.py:1474 ../src/gui_interface.py:1491
-#: ../src/notify.py:510
+#: ../src/notify.py:514
 msgid "File Transfer Completed"
 msgstr "ファイルの転送の完了"
 
-#: ../src/dialogs.py:2622 ../src/gui_interface.py:1454 ../src/notify.py:511
+#: ../src/dialogs.py:2622 ../src/gui_interface.py:1454 ../src/notify.py:515
 msgid "File Transfer Stopped"
 msgstr "ファイルの転送の中断"
 
-#: ../src/dialogs.py:2624 ../src/gui_interface.py:1150 ../src/notify.py:515
+#: ../src/dialogs.py:2624 ../src/gui_interface.py:1150 ../src/notify.py:519
 msgid "Groupchat Invitation"
 msgstr "グループチャットへの招待"
 
-#: ../src/dialogs.py:2626 ../src/notify.py:255 ../src/notify.py:517
+#: ../src/dialogs.py:2626 ../src/notify.py:257 ../src/notify.py:521
 msgid "Contact Changed Status"
 msgstr "相手先が在席状況を変更"
 
@@ -4429,10 +7078,6 @@ msgstr "プライバシーリスト <b><i>%s</i></b>"
 msgid "Privacy List for %s"
 msgstr "%s のプライバシーリスト"
 
-#: ../src/dialogs.py:3428
-msgid "Privacy List"
-msgstr "プライバシーリスト"
-
 #: ../src/dialogs.py:3482
 #, python-format
 msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
@@ -4520,11 +7165,6 @@ msgstr "%s が次のようになったとき:"
 #, fuzzy, python-format
 msgid "Adding Special Notification for %s"
 msgstr "%s の特別通知の追加"
-
-#. # means number
-#: ../src/dialogs.py:4132
-msgid "#"
-msgstr "#"
 
 #: ../src/dialogs.py:4138
 msgid "Condition"
@@ -4712,18 +7352,6 @@ msgstr "コマンド実行 (_E)"
 msgid "Re_gister"
 msgstr "登録 (_g)"
 
-#: ../src/disco.py:1343 ../src/disco.py:1787
-msgid "_Join"
-msgstr "参加 (_J)"
-
-#: ../src/disco.py:1355
-msgid "_Search"
-msgstr "検索 (_S)"
-
-#: ../src/disco.py:1504
-msgid "_Edit"
-msgstr "編集 (_E)"
-
 #: ../src/disco.py:1547
 #, python-format
 msgid "Scanning %(current)d / %(total)d.."
@@ -4748,20 +7376,20 @@ msgstr "Id"
 msgid "_Bookmark"
 msgstr "ブックマーク (_B)"
 
-#: ../src/disco.py:1818 ../src/gui_interface.py:3179
+#: ../src/disco.py:1818 ../src/gui_interface.py:3180
 msgid "Bookmark already set"
 msgstr "既にブックマーク"
 
-#: ../src/disco.py:1819 ../src/gui_interface.py:3180
+#: ../src/disco.py:1819 ../src/gui_interface.py:3181
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "グループチャット \"%s\" は既にブックマークにあります。"
 
-#: ../src/disco.py:1828 ../src/gui_interface.py:3194
+#: ../src/disco.py:1828 ../src/gui_interface.py:3195
 msgid "Bookmark has been added successfully"
 msgstr "ブックマークが追加されました"
 
-#: ../src/disco.py:1829 ../src/gui_interface.py:3195
+#: ../src/disco.py:1829 ../src/gui_interface.py:3196
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr "ブックマークは、名簿の「アクション」メニューから管理できます。"
 
@@ -4999,10 +7627,6 @@ msgstr ""
 msgid "Requires python-docutils."
 msgstr "python-docutils が必要です。"
 
-#: ../src/features_window.py:104
-msgid "Audio / Video"
-msgstr ""
-
 #: ../src/features_window.py:105
 msgid "Ability to start audio and video chat."
 msgstr ""
@@ -5096,10 +7720,6 @@ msgstr "ファイルの転送が中断しました"
 #: ../src/filetransfers_window.py:257
 msgid "Choose File to Send..."
 msgstr "転送するファイルを選択..."
-
-#: ../src/filetransfers_window.py:266
-msgid "_Send"
-msgstr "送信 (_S)"
 
 #: ../src/filetransfers_window.py:273 ../src/tooltips.py:738
 msgid "Description: "
@@ -5714,6 +8334,10 @@ msgstr ""
 "詳しくは \"%(basename)s help %(command)s\" と入力してください"
 
 #: ../src/gajim-remote.py:538
+msgid "No uri given"
+msgstr ""
+
+#: ../src/gajim-remote.py:540
 msgid "Wrong uri"
 msgstr "uri が間違っています"
 
@@ -5872,7 +8496,7 @@ msgid "%s has joined the group chat"
 msgstr "%s さんが参加しました"
 
 #: ../src/groupchat_control.py:1460 ../src/gui_interface.py:945
-#: ../src/history_window.py:442 ../src/notify.py:250
+#: ../src/history_window.py:442 ../src/notify.py:252
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s さんは現在 %(status)s"
@@ -5888,8 +8512,8 @@ msgid ""
 msgstr "このウィンドウを閉じると、このグループチャットから切断されます。"
 
 #: ../src/groupchat_control.py:1694 ../src/gui_interface.py:1200
-#: ../src/gui_interface.py:1975 ../src/gui_interface.py:2012
-#: ../src/gui_interface.py:2047 ../src/message_window.py:222
+#: ../src/gui_interface.py:1974 ../src/gui_interface.py:2011
+#: ../src/gui_interface.py:2046 ../src/message_window.py:222
 #: ../src/roster_window.py:2736 ../src/roster_window.py:3396
 #: ../src/roster_window.py:4120
 msgid "Do _not ask me again"
@@ -6043,7 +8667,7 @@ msgstr "アカウント %s への申し込みを承認しますか ?"
 msgid "HTTP (%(method)s) Authorization for %(url)s (id: %(id)s)"
 msgstr "%(url)s に対する HTTP (%(method)s) の承認 (id: %(id)s)"
 
-#: ../src/gui_interface.py:212 ../src/notify.py:519
+#: ../src/gui_interface.py:212 ../src/notify.py:523
 msgid "Connection Failed"
 msgstr "接続に失敗しました"
 
@@ -6058,7 +8682,7 @@ msgstr "エラー %(code)s: %(msg)s"
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "%(message)s を送信する際にエラー ( %(error)s )"
 
-#: ../src/gui_interface.py:662 ../src/notify.py:521
+#: ../src/gui_interface.py:662 ../src/notify.py:525
 msgid "Subscription request"
 msgstr "在席通知申込"
 
@@ -6084,7 +8708,7 @@ msgstr ""
 "この相手先を常にオフラインとして見ることになります。\n"
 "相手先一覧から削除しますか ?"
 
-#: ../src/gui_interface.py:726 ../src/notify.py:523
+#: ../src/gui_interface.py:726 ../src/notify.py:527
 msgid "Unsubscribed"
 msgstr "在席通知の取り消し"
 
@@ -6287,21 +8911,21 @@ msgstr ""
 "てください"
 
 #. TODO: we should use another pixmap ;-)
-#: ../src/gui_interface.py:1801
+#: ../src/gui_interface.py:1800
 #, fuzzy, python-format
 msgid "%s wants to start a voice chat."
 msgstr "%s さんがファイルを転送したがっています。"
 
-#: ../src/gui_interface.py:1804
+#: ../src/gui_interface.py:1803
 #, fuzzy
 msgid "Voice Chat Request"
 msgstr "ファイル転送の要求"
 
-#: ../src/gui_interface.py:1910
+#: ../src/gui_interface.py:1909
 msgid "Error verifying SSL certificate"
 msgstr "SSL 証明書の検証エラー"
 
-#: ../src/gui_interface.py:1911
+#: ../src/gui_interface.py:1910
 #, python-format
 msgid ""
 "There was an error verifying the SSL certificate of your jabber server: %"
@@ -6311,15 +8935,15 @@ msgstr ""
 "jabber サーバーの SSL 証明書の検証にエラーがあります: %(error)s\n"
 "それでもこのサーバーに接続しますか ?"
 
-#: ../src/gui_interface.py:1919
+#: ../src/gui_interface.py:1918
 msgid "Ignore this error for this certificate."
 msgstr "この証明書のこのエラーを無視します。"
 
-#: ../src/gui_interface.py:1939
+#: ../src/gui_interface.py:1938
 msgid "SSL certificate error"
 msgstr "SSL 証明書エラー"
 
-#: ../src/gui_interface.py:1940
+#: ../src/gui_interface.py:1939
 #, python-format
 msgid ""
 "It seems the SSL certificate of account %(account)s has changed or your "
@@ -6336,12 +8960,12 @@ msgstr ""
 "\n"
 "それでも接続して、証明書の指紋を更新しますか ?"
 
-#: ../src/gui_interface.py:1970 ../src/gui_interface.py:2007
-#: ../src/gui_interface.py:2043
+#: ../src/gui_interface.py:1969 ../src/gui_interface.py:2006
+#: ../src/gui_interface.py:2042
 msgid "Insecure connection"
 msgstr "安全でない接続"
 
-#: ../src/gui_interface.py:1971
+#: ../src/gui_interface.py:1970
 #, fuzzy
 msgid ""
 "You are about to connect to the server with an insecure connection. This "
@@ -6351,12 +8975,12 @@ msgstr ""
 "安全でない接続でパスワードを送ろうとしています。それを避けるには PyOpenSSL を"
 "インストールすべきです。あなたがやりたいことですか ?"
 
-#: ../src/gui_interface.py:1974 ../src/gui_interface.py:2011
-#: ../src/gui_interface.py:2046
+#: ../src/gui_interface.py:1973 ../src/gui_interface.py:2010
+#: ../src/gui_interface.py:2045
 msgid "Yes, I really want to connect insecurely"
 msgstr "はい。安全でないまま接続したいです"
 
-#: ../src/gui_interface.py:2008
+#: ../src/gui_interface.py:2007
 msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
@@ -6364,7 +8988,7 @@ msgstr ""
 "安全でない接続でパスワードを送ろうとしています。それを避けるには PyOpenSSL を"
 "インストールすべきです。あなたがやりたいことですか ?"
 
-#: ../src/gui_interface.py:2044
+#: ../src/gui_interface.py:2043
 #, fuzzy
 msgid ""
 "You are about to send your password unencrypted on an insecure connection. "
@@ -6373,22 +8997,22 @@ msgstr ""
 "暗号化されていない接続でパスワードを送ろうとしています。あなたがやりたいこと"
 "ですか ?"
 
-#: ../src/gui_interface.py:2065
+#: ../src/gui_interface.py:2064
 #, fuzzy
 msgid "PEP node was not removed"
 msgstr "PEP node was not removed"
 
-#: ../src/gui_interface.py:2066
+#: ../src/gui_interface.py:2065
 #, fuzzy, python-format
 msgid "PEP node %(node)s was not removed: %(message)s"
 msgstr "PEP node %(node)s was not removed: %(message)s"
 
 #. theme doesn't exist, disable emoticons
-#: ../src/gui_interface.py:2623 ../src/gui_interface.py:2646
+#: ../src/gui_interface.py:2622 ../src/gui_interface.py:2645
 msgid "Emoticons disabled"
 msgstr "感情アイコンは無効"
 
-#: ../src/gui_interface.py:2624
+#: ../src/gui_interface.py:2623
 msgid ""
 "Your configured emoticons theme has not been found, so emoticons have been "
 "disabled."
@@ -6396,7 +9020,7 @@ msgstr ""
 "指定された感情アイコンのテーマは見つかりません。そのため、感情アイコンは無効"
 "です。"
 
-#: ../src/gui_interface.py:2647
+#: ../src/gui_interface.py:2646
 msgid ""
 "Your configured emoticons theme cannot been loaded. You maybe need to update "
 "the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons "
@@ -6406,42 +9030,42 @@ msgstr ""
 "ルの書式を更新する必要があるかも知れません。詳しくは http://trac.gajim.org/"
 "wiki/Emoticons をご覧ください。"
 
-#: ../src/gui_interface.py:2678 ../src/roster_window.py:3557
+#: ../src/gui_interface.py:2677 ../src/roster_window.py:3557
 msgid "You cannot join a group chat while you are invisible"
 msgstr "隠れているあいだはグループチャットに参加できません"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gui_interface.py:3055
+#: ../src/gui_interface.py:3056
 msgid "Could not save your settings and preferences"
 msgstr "設定を保存できませんでした"
 
-#: ../src/gui_interface.py:3591
+#: ../src/gui_interface.py:3592
 msgid "Passphrase Required"
 msgstr "パスフレーズが必要です"
 
-#: ../src/gui_interface.py:3592
+#: ../src/gui_interface.py:3593
 #, python-format
 msgid "Enter GPG key passphrase for key %(keyid)s (account %(account)s)."
 msgstr ""
 "鍵ID %(keyid)s (アカウント %(account)s) の GPG 鍵のパスフレーズを入力してくだ"
 "さい。"
 
-#: ../src/gui_interface.py:3606
+#: ../src/gui_interface.py:3607
 msgid "GPG key expired"
 msgstr "GPG 鍵は失効しています"
 
-#: ../src/gui_interface.py:3607
+#: ../src/gui_interface.py:3608
 #, fuzzy, python-format
 msgid "Your GPG key has expired, you will be connected to %s without OpenPGP."
 msgstr "GPG 鍵は失効しています。OpenPGP なしに %s さんに接続します。"
 
 #. ask again
-#: ../src/gui_interface.py:3616
+#: ../src/gui_interface.py:3617
 msgid "Wrong Passphrase"
 msgstr "パスフレーズが間違っています"
 
-#: ../src/gui_interface.py:3617
+#: ../src/gui_interface.py:3618
 msgid "Please retype your GPG passphrase or press Cancel."
 msgstr ""
 "GPG のパスフレーズをもういちど入力するか、または「中止」を押してください。"
@@ -6479,11 +9103,6 @@ msgstr "ニックネーム"
 #: ../src/history_window.py:106
 msgid "Message"
 msgstr "メッセージ"
-
-#. holds subject
-#: ../src/history_manager.py:188 ../src/history_manager.py:219
-msgid "Subject"
-msgstr "題"
 
 #: ../src/history_manager.py:241
 msgid ""
@@ -6531,10 +9150,6 @@ msgstr[1] "本当に、選択したメッセージを削除してもいいです
 #, python-format
 msgid "Conversation History with %s"
 msgstr "%s さんとの会話の履歴"
-
-#: ../src/history_window.py:323
-msgid "Conversation History"
-msgstr "会話の履歴"
 
 #: ../src/history_window.py:350
 msgid "Disk Error"
@@ -6604,47 +9219,47 @@ msgstr "- メッセージは記録されます"
 msgid "- messages will not be logged"
 msgstr "- メッセージは記録されません"
 
-#: ../src/notify.py:248
+#: ../src/notify.py:250
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s さんの在席状況が変わりました"
 
-#: ../src/notify.py:258
+#: ../src/notify.py:260
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s さんがサインインしました"
 
-#: ../src/notify.py:266
+#: ../src/notify.py:268
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s さんがサインアウトしました"
 
-#: ../src/notify.py:277
+#: ../src/notify.py:279
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr "%(nickname)s からの新しい単発メッセージ"
 
-#: ../src/notify.py:284
+#: ../src/notify.py:286
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "グループチャット %s からの新着の私信"
 
-#: ../src/notify.py:286
+#: ../src/notify.py:288
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s さん: %(message)s"
 
-#: ../src/notify.py:289
+#: ../src/notify.py:291
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "%(nickname)s さんからのメッセージ"
 
-#: ../src/notify.py:294
+#: ../src/notify.py:297
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "%(nickname)s さんからの新着メッセージ"
 
-#: ../src/notify.py:561
+#: ../src/notify.py:566
 msgid "Ignore"
 msgstr "無視する"
 
@@ -7057,38 +9672,6 @@ msgstr "すべてのユーザーに"
 msgid "To all online users"
 msgstr "オンラインのすべてのユーザーに"
 
-#. Invite to
-#. Invite to Groupchat
-#: ../src/roster_window.py:5281 ../src/roster_window.py:5441
-msgid "In_vite to"
-msgstr "招待 (_v)"
-
-#: ../src/roster_window.py:5291 ../src/roster_window.py:5530
-msgid "Send Cus_tom Status"
-msgstr "個別の在席状況の送信 (_t)"
-
-#. Rename
-#: ../src/roster_window.py:5326
-msgid "Re_name"
-msgstr "名前の変更 (_n)"
-
-#: ../src/roster_window.py:5345 ../src/roster_window.py:5473
-#: ../src/roster_window.py:5606
-msgid "_Unblock"
-msgstr "拒否の解除 (_U)"
-
-#: ../src/roster_window.py:5353 ../src/roster_window.py:5479
-#: ../src/roster_window.py:5609
-msgid "_Block"
-msgstr "拒否 (_B)"
-
-#. Remove group
-#. Remove
-#: ../src/roster_window.py:5363 ../src/roster_window.py:5489
-#: ../src/roster_window.py:5619
-msgid "_Remove"
-msgstr "削除 (_R)"
-
 #. Manage Transport submenu
 #: ../src/roster_window.py:5453
 msgid "_Manage Contacts"
@@ -7124,11 +9707,6 @@ msgstr "中継先の変更 (_M)"
 msgid "_Rename"
 msgstr "名前の変更(_R)"
 
-#. Information
-#: ../src/roster_window.py:5631
-msgid "_Information"
-msgstr "情報 (_I)"
-
 # (Mako)ここでは「復元」の意味か
 #: ../src/roster_window.py:5653
 msgid "_Maximize"
@@ -7141,10 +9719,6 @@ msgstr "再接続 (_R)"
 #: ../src/roster_window.py:5669
 msgid "_Disconnect"
 msgstr "切断 (_D)"
-
-#: ../src/roster_window.py:5680
-msgid "_History"
-msgstr "履歴 (_H)"
 
 #. History manager
 #: ../src/roster_window.py:5751
@@ -7224,10 +9798,6 @@ msgstr "状況メッセージを変更する (_C)..."
 msgid "Hide _Roster"
 msgstr "名簿で (_r)"
 
-#: ../src/statusicon.py:326
-msgid "Show _Roster"
-msgstr "名簿の表示 (_R)"
-
 #: ../src/statusicon.py:333
 msgid "Hide this menu"
 msgstr "このメニューを表示しない"
@@ -7283,14 +9853,6 @@ msgstr "在席通知の承認: "
 #: ../src/tooltips.py:583
 msgid "OpenPGP: "
 msgstr "OpenPGP: "
-
-#: ../src/tooltips.py:652
-msgid "Mood:"
-msgstr "気分:"
-
-#: ../src/tooltips.py:657
-msgid "Activity:"
-msgstr "動向:"
 
 #: ../src/tooltips.py:662
 msgid "Tune:"
@@ -7372,12 +9934,6 @@ msgstr "不明"
 msgid "since %s"
 msgstr "%s から"
 
-# (Mako)個人情報では「役」(劇の役のような意味で)、
-#       vcard では「職種」が適切と思われる。
-#: ../src/vcard.py:331
-msgid "<b>Role:</b>"
-msgstr "<b>役/職種:</b>"
-
 #: ../src/vcard.py:335
 msgid "<b>Affiliation:</b>"
 msgstr "<b>分掌:</b>"
@@ -7424,9 +9980,6 @@ msgstr " リソース。優先順位は "
 #~ msgid "Join _Group Chat..."
 #~ msgstr "グループチャットに参加する (_G)..."
 
-#~ msgid "_Add Contact..."
-#~ msgstr "相手先リストに追加する (_A)..."
-
 #~ msgid "_Discover Services"
 #~ msgstr "サービスを探索する (_D)"
 
@@ -7435,9 +9988,6 @@ msgstr " リソース。優先順位は "
 
 #~ msgid "_Modify Account"
 #~ msgstr "アカウントを修正する (_M)"
-
-#~ msgid "_Open Gmail Inbox"
-#~ msgstr "Gmail の受信箱を開く (_O)"
 
 #~ msgid "_Personal Events"
 #~ msgstr "個人イベント (_P)"
@@ -7448,119 +9998,8 @@ msgstr " リソース。優先順位は "
 #~ msgid "_Status"
 #~ msgstr "在席状況 (_S)"
 
-#~ msgid ""
-#~ "<b>Connecting to server</b>\n"
-#~ "\n"
-#~ "Please wait..."
-#~ msgstr ""
-#~ "<b>サーバに接続しています</b>\n"
-#~ "\n"
-#~ "しばらくお待ちください..."
-
-#~ msgid "<b>Please choose one of the options below:</b>"
-#~ msgstr "<b>下の選択肢から一つ選んでください:</b>"
-
-#~ msgid "<b>Please fill in the data for your existing account</b>"
-#~ msgstr "<b>既にお持ちのアカウントの情報を入力してください</b>"
-
-#~ msgid "<b>Please select a server</b>"
-#~ msgstr "<b>サーバーを選択してください</b>"
-
-#~ msgid "@"
-#~ msgstr "@"
-
-#~ msgid ""
-#~ "Add this certificate to the list of trusted certificates.\n"
-#~ "SHA1 fingerprint of the certificate:\n"
-#~ msgstr ""
-#~ "この証明書を、信頼できる証明書一覧に加えます。\n"
-#~ "この証明書の SHA1 指紋:\n"
-
-#~ msgid "Anon_ymous authentication"
-#~ msgstr "匿名の認証 (_y)"
-
-#~ msgid "Connect when I press Finish"
-#~ msgstr "「完了」を押したらすぐに接続する"
-
-#~ msgid "Gajim: Account Creation Wizard"
-#~ msgstr "Gajim: アカウント作成ウィザード"
-
-#~ msgid "I already have an account I want to _use"
-#~ msgstr "既にアカウントを持っているのでそれを使う (_u)"
-
-#~ msgid "I want to _register for a new account"
-#~ msgstr "新しいアカウントを作成する (_r)"
-
-#~ msgid "If checked, Gajim will remember the password for this account"
-#~ msgstr "チェックをつけると、Gajim はこのアカウントのパスワードを記憶します"
-
-#~ msgid "Manage..."
-#~ msgstr "管理..."
-
-#~ msgid "Prox_y:"
-#~ msgstr "プロキシ (_y)"
-
-#~ msgid "Save pass_word"
-#~ msgstr "パスワードを保存する"
-
-#~ msgid "Set my profile when I connect"
-#~ msgstr "接続時に自分のプロフィールを設定する"
-
-#~ msgid "Use custom hostname/port"
-#~ msgstr "別のホスト名/ポート番号を使う"
-
-#~ msgid ""
-#~ "You need to have an account in order to connect\n"
-#~ "to the Jabber network."
-#~ msgstr "Jabber ネットワークに接続するには、アカウントが必要です。"
-
-#~ msgid "_Advanced"
-#~ msgstr "拡張 (_A)"
-
-#~ msgid "_Finish"
-#~ msgstr "完了 (_F)"
-
-#~ msgid "_Hostname:"
-#~ msgstr "ホスト名 (_H):"
-
-#~ msgid "_Jabber ID:"
-#~ msgstr "Jabber ID (_J):"
-
-#~ msgid "_Password:"
-#~ msgstr "パスワード (_P):"
-
-#~ msgid "_Port:"
-#~ msgstr "ポート番号 (_P):"
-
-#~ msgid "_Server:"
-#~ msgstr "サーバー (_S):"
-
-#~ msgid "<b>Miscellaneous</b>"
-#~ msgstr "<b>その他の設定</b>"
-
-#~ msgid "<b>OpenPGP</b>"
-#~ msgstr "<b>OpenPGP</b>"
-
-#~ msgid "<b>Personal Information</b>"
-#~ msgstr "<b>個人情報</b>"
-
-#~ msgid "Account"
-#~ msgstr "アカウント"
-
 #~ msgid "Account Modification"
 #~ msgstr "アカウントの変更"
-
-#~ msgid "Administration operations"
-#~ msgstr "管理の操作"
-
-#~ msgid "Auto-reconnect when connection is lost"
-#~ msgstr "切断したら自動で再接続する"
-
-#~ msgid "C_onnect on Gajim startup"
-#~ msgstr "Gajim 起動時に接続する (_o)"
-
-#~ msgid "Chan_ge Password"
-#~ msgstr "パスワードを変更する (_g)"
 
 # (Mako)broadcast 困った。しかたなくカタカナで
 #~ msgid ""
@@ -7575,38 +10014,11 @@ msgstr " リソース。優先順位は "
 #~ "ください。またこのオプションを有効にすると TLS は無効とされることに注意し"
 #~ "てください。"
 
-#~ msgid "Choose _Key..."
-#~ msgstr "鍵の選択 (_K)..."
-
-#~ msgid "Click to change account's password"
-#~ msgstr "アカウントのパスワードを変更するにはクリック"
-
-#~ msgid "Click to request authorization to all contacts of another account"
-#~ msgstr "別アカウントのすべての相手先に承認を求めるにはクリック"
-
-#~ msgid "Connection"
-#~ msgstr "接続"
-
 #~ msgid "Edit Personal Information..."
 #~ msgstr "個人情報を編集する..."
 
 #~ msgid "Hostname: "
 #~ msgstr "ホスト名: "
-
-# (Mako)broadcast 困った。ここは「同報」で
-#~ msgid ""
-#~ "If checked, Gajim will also broadcast some more IPs except from just your "
-#~ "IP, so file transfer has higher chances of working."
-#~ msgstr ""
-#~ "チェックをつけると、Gajim はあなたの IP を除くいくつかの IP に同報します。"
-#~ "それによってファイル転送はうまくいく可能性が高くなります。"
-
-#~ msgid ""
-#~ "If checked, Gajim will send keep-alive packets to prevent connection "
-#~ "timeout which results in disconnection"
-#~ msgstr ""
-#~ "チェックをつけると、Gajim はタイムアウトで接続が切れてしまうのを防ぐために"
-#~ "生存パケットを流すようになります"
 
 #~ msgid ""
 #~ "If checked, Gajim will store the password in ~/.gajim/config with 'read' "
@@ -7615,337 +10027,29 @@ msgstr " リソース。優先順位は "
 #~ "チェックをつけると、Gajim はパスワードを ~/.gajim/config に保存し、ユー"
 #~ "ザーのみに「読み出し」を許可します"
 
-#~ msgid ""
-#~ "If checked, Gajim, when launched, will automatically connect to jabber "
-#~ "using this account"
-#~ msgstr ""
-#~ "チェックをつけると、Gajim は起動時に、このアカウントを使って jabber に自動"
-#~ "的に接続します"
-
-#~ msgid ""
-#~ "If checked, any change to the global status (handled by the combobox at "
-#~ "the bottom of the roster window) will change the status of this account "
-#~ "accordingly"
-#~ msgstr ""
-#~ "チェックをつけると、(名簿ウィンドウの最下段の選択肢による)全体の在席状況の"
-#~ "変更がこのアカウントの在席状況の変更に反映されます。"
-
-#~ msgid "Information about you, as stored in the server"
-#~ msgstr "サーバに格納する、あなたに関する情報です"
-
-#~ msgid "Personal Information"
-#~ msgstr "個人情報"
-
 #~ msgid "Port: "
 #~ msgstr "ポート番号: "
-
-#~ msgid "Priori_ty:"
-#~ msgstr "優先順位 (_t):"
-
-#~ msgid ""
-#~ "Priority is used in Jabber to determine who gets the events from the "
-#~ "jabber server when two or more clients are connected using the same "
-#~ "account; The client with the highest priority gets the events"
-#~ msgstr ""
-#~ "優先順位は、同じアカウントで二つ以上のクライアントから接続しているときに "
-#~ "jabber サーバーからのイベントの受け取り先を決定するのに使われます。最も高"
-#~ "い優先順位のクライアントがイベントを受け取ります"
-
-#~ msgid "Priority will change automatically according to your status."
-#~ msgstr "優先順位は、在席状況に応じて自動的に変わります。"
 
 #~ msgid "Proxy:"
 #~ msgstr "プロキシ:"
 
-#~ msgid "Resour_ce:"
-#~ msgstr "リソース (_c):"
-
-#~ msgid ""
-#~ "Resource is sent to the Jabber server in order to separate the same JID "
-#~ "in two or more parts depending on the number of the clients connected in "
-#~ "the same server with the same account. So you might be connected in the "
-#~ "same account with resource 'Home' and 'Work' at the same time. The "
-#~ "resource which has the highest priority will get the events. (see below)"
-#~ msgstr ""
-#~ "リソースとは、同じサーバーに同じアカウントで複数のクライアントからの接続が"
-#~ "ある場合に、同じ JID を区別するために送信されます。たとえば、同じアカウン"
-#~ "トでリソースを 'Home' と 'Work' として同時に接続しているかもしれません。最"
-#~ "も優先順位の高いリソースがイベントを受け取ります(下記参照)。"
-
 #~ msgid "Save _passphrase (insecure)"
 #~ msgstr "パスフレーズの保存 (安全ではない) (_p)"
-
-#~ msgid "Save conversation _logs for all contacts"
-#~ msgstr "すべての相手先の会話記録を保存する (_l)"
 
 #~ msgid "Send keep-alive packets"
 #~ msgstr "生存パケットを送信する"
 
-#~ msgid "Synch_ronize account status with global status"
-#~ msgstr "アカウントの在席状況を全体の在席状況に合わせる (_r)"
-
-#~ msgid "Synchronise contacts"
-#~ msgstr "相手先の同期"
-
 #~ msgid "Use _SSL (legacy)"
 #~ msgstr "SSL を使う (旧式) (_S) "
-
-#~ msgid "Use file transfer proxies"
-#~ msgstr "ファイル転送のプロキシを使う"
 
 #~ msgid "_Adjust to status"
 #~ msgstr "在席状況に合わせる (_A)"
 
-#~ msgid "_Name:"
-#~ msgstr "名前 (_N):"
-
-#~ msgid "<b>Proxy</b>"
-#~ msgstr "<b>プロキシ</b>"
-
-#~ msgid "A_djust to status"
-#~ msgstr "在席状況に合わせる (_d)"
-
-#~ msgid "Accounts"
-#~ msgstr "アカウント"
-
-#~ msgid "Anonymous authentication"
-#~ msgstr "匿名の認証"
-
-#~ msgid ""
-#~ "Check this so Gajim will ask you before sending your password over an "
-#~ "insecure connection."
-#~ msgstr ""
-#~ "チェックをつけると、安全でない接続の前にパスワードを聞いてくるようになりま"
-#~ "す。"
-
-#~ msgid "Co_nnect on Gajim startup"
-#~ msgstr "Gajim 起動時に接続する (_n)"
-
-#~ msgid "E-Mail:"
-#~ msgstr "E-メール:"
-
-#~ msgid "First Name:"
-#~ msgstr "名:"
-
-#~ msgid ""
-#~ "If checked, Gajim will get the password from a GPG agent like seahorse"
-#~ msgstr ""
-#~ "チェックをつけると、Gajim は seahorse など GPG エージェントからパスワード"
-#~ "を受け取ります"
-
-#~ msgid ""
-#~ "If the default port that is used for incoming messages is unfitting for "
-#~ "your setup you can select another one here.\n"
-#~ "You might consider to change possible firewall settings."
-#~ msgstr ""
-#~ "受信メッセージに使われるデフォルトのポートが設定に合わない場合、ここで別の"
-#~ "ポートを指定できます。\n"
-#~ "ファイアーウォールの設定を考慮しましょう。"
-
-#~ msgid "Last Name:"
-#~ msgstr "姓:"
-
-#~ msgid "Mer_ge accounts"
-#~ msgstr "アカウントの統合 (_g)"
-
-#~ msgid "Send _keep-alive packets"
-#~ msgstr "生存パケットを送信する (_k)"
-
-#~ msgid "Synchroni_ze account status with global status"
-#~ msgstr "アカウントの在席状況を全体の在席状況に合わせる (_z)"
-
-#~ msgid "Use G_PG Agent"
-#~ msgstr "GPG エージェントを使う (_P)"
-
-#~ msgid "Use cust_om hostname/port"
-#~ msgstr "別のホスト名/ポート番号を使う (_o)"
-
-#~ msgid "Use cust_om port:"
-#~ msgstr "別のポート番号を使う (_o):"
-
-#~ msgid "_Edit Personal Information..."
-#~ msgstr "個人情報を編集する (_E)..."
-
-#~ msgid "_Enable"
-#~ msgstr "有効 (_E)"
-
-#~ msgid "_Hostname: "
-#~ msgstr "ホスト名 (_H):"
-
-#~ msgid "_Manage..."
-#~ msgstr "管理 (_M)..."
-
-#~ msgid "_Port: "
-#~ msgstr "ポート番号 (_P):"
-
-#~ msgid "_Warn before using an insecure connection"
-#~ msgstr "安全でない接続の前には警告する (_W)"
-
-#~ msgid "_use HTTP__PROXY environment variable"
-#~ msgstr "環境変数 HTTP__PROXY を使う (_u)"
-
-#~ msgid "A_ccount:"
-#~ msgstr "アカウント (_c):"
-
-#~ msgid "A_llow this contact to view my status"
-#~ msgstr "この相手先に自分の在席状況を見ることを許可する (_l)"
-
-#~ msgid "Add New Contact"
-#~ msgstr "新しい相手先を追加する"
-
-#~ msgid ""
-#~ "You have to register with this transport\n"
-#~ "to be able to add a contact from this\n"
-#~ "protocol. Click on register button to\n"
-#~ "proceed."
-#~ msgstr ""
-#~ "このプロトコルの相手先を追加するためには、\n"
-#~ "この中継先に登録しなければなりません。\n"
-#~ "登録ボタンを押して次に進んでください。"
-
-#~ msgid ""
-#~ "You must be connected to the transport to be able\n"
-#~ "to add a contact from this protocol."
-#~ msgstr ""
-#~ "このプロトコルの相手先を追加するためには、\n"
-#~ "この中継先に接続していなければなりません。"
-
-#~ msgid "_Group:"
-#~ msgstr "グループ (_G):"
-
-#~ msgid "_Nickname:"
-#~ msgstr "ニックネーム (_N):"
-
-#~ msgid "_Protocol:"
-#~ msgstr "プロトコル (_P):"
-
-#~ msgid "_Register"
-#~ msgstr "登録 (_R)"
-
-#~ msgid "_User ID:"
-#~ msgstr "ユーザー ID (_U):"
-
-#~ msgid "<b>An error has occurred:</b>"
-#~ msgstr "<b>エラーが発生しました:</b>"
-
-#~ msgid "<b>Choose command to execute:</b>"
-#~ msgstr "<b>実行するコマンドを選択してください:</b>"
-
-#~ msgid "Ad-hoc Commands - Gajim"
-#~ msgstr "Ad-hoc コマンド - Gajim"
-
-#~ msgid "Check once more"
-#~ msgstr "やり直す"
-
-#~ msgid "Error description..."
-#~ msgstr "エラーの説明..."
-
-#~ msgid "Please wait while retrieving command list..."
-#~ msgstr "コマンド一覧を取得しています。しばらくお待ちください..."
-
-#~ msgid "Please wait while the command is sending..."
-#~ msgstr "コマンドを送信しています。しばらくお待ちください..."
-
-#~ msgid "Please wait..."
-#~ msgstr "しばらくお待ちください..."
-
-# (Mako)entity はしかたなくカタカナで
-#~ msgid "This jabber entity does not expose any commands."
-#~ msgstr "このエンティティはコマンドを受け付けません。"
-
-#~ msgid "<b>Description</b>"
-#~ msgstr "<b>説明</b>"
-
-#~ msgid ""
-#~ "<b>NOTE:</b> You should restart Gajim for some settings to take effect"
-#~ msgstr "<b>注意:</b> 設定を有効にするには Gajim を再起動してください"
-
-#~ msgid "Advanced Configuration Editor"
-#~ msgstr "詳細設定エディタ"
-
-#~ msgid "Filter:"
-#~ msgstr "フィルタ:"
-
 #~ msgid "Delete MOTD"
 #~ msgstr "MOTD を削除"
 
-#~ msgid "Deletes Message of the Day"
-#~ msgstr "今日のメッセージを削除します"
-
-#~ msgid "Edit _Privacy Lists..."
-#~ msgstr "プライバシーリストを編集..."
-
-#~ msgid "Sends a message to users currently connected to this server"
-#~ msgstr "現在このサーバーに接続しているユーザーにメッセージを送信する"
-
-#~ msgid "Set MOTD..."
-#~ msgstr "MOTD を設定..."
-
-#~ msgid "Sets Message of the Day"
-#~ msgstr "今日のメッセージを設定します"
-
-#~ msgid "Show _XML Console"
-#~ msgstr "XML コンソールを表示 (_X)"
-
-#~ msgid "Update MOTD..."
-#~ msgstr "MOTD を更新..."
-
-#~ msgid "Updates Message of the Day"
-#~ msgstr "今日のメッセージを更新します"
-
-#~ msgid "_Administrator"
-#~ msgstr "管理人 (_A)"
-
 #~ msgid "_Send Server Message..."
 #~ msgstr "サーバーメッセージを送信 (_S)..."
-
-#~ msgid " a window/tab opened with that contact "
-#~ msgstr "ウィンドウ/タブで開く "
-
-#~ msgid "<b>Actions</b>"
-#~ msgstr "<b>操作</b>"
-
-#, fuzzy
-#~ msgid "<b>Conditions</b>"
-#~ msgstr "<b>状況</b>"
-
-#~ msgid "<b>Sounds</b>"
-#~ msgstr "<b>耳への通知</b>"
-
-#~ msgid "Advanced Actions"
-#~ msgstr "詳細な操作"
-
-#~ msgid "Advanced Notifications Control"
-#~ msgstr "通知の制御の詳細"
-
-#, fuzzy
-#~ msgid "All statuses"
-#~ msgstr "すべての状況"
-
-#~ msgid "Busy "
-#~ msgstr "取り込み中です"
-
-#, fuzzy
-#~ msgid "Don't have "
-#~ msgstr "持っていません "
-
-#, fuzzy
-#~ msgid "Have "
-#~ msgstr "持っています "
-
-#, fuzzy
-#~ msgid "Launch a command"
-#~ msgstr "コマンドを実行する"
-
-#, fuzzy
-#~ msgid "One or more special statuses..."
-#~ msgstr "特別な状況..."
-
-#~ msgid "Online / Free For Chat"
-#~ msgstr "オンライン / チャットできます"
-
-#~ msgid "Play a sound"
-#~ msgstr "サウンドを演奏する"
 
 #~ msgid ""
 #~ "Receive a Message\n"
@@ -7966,47 +10070,6 @@ msgstr " リソース。優先順位は "
 #~ "ファイル転送の開始した\n"
 #~ "ファイル転送の完了した"
 
-#~ msgid "When "
-#~ msgstr "次の場合: "
-
-#, fuzzy
-#~ msgid ""
-#~ "_Activate window manager's UrgencyHint to make chat window in taskbar "
-#~ "flash"
-#~ msgstr ""
-#~ "タスクバーのフラッシュでチャットウィンドウを作るために、ウィンドウマネー"
-#~ "ジャの UrgencyHint を有効にする (_A)"
-
-#~ msgid "_Disable auto opening chat window"
-#~ msgstr "自動でチャットウィンドウが開くのを禁止する (_D)"
-
-#~ msgid "_Disable existing popup window"
-#~ msgstr "既存のポップアップウィンドウを禁止する (_D)"
-
-#~ msgid "_Disable existing sound for this event"
-#~ msgstr "このイベントのサウンドを禁止する (_D)"
-
-#~ msgid "_Disable showing event in roster"
-#~ msgstr "名簿へのイベントの表示をやめる (_D)"
-
-#~ msgid "_Disable showing event in systray"
-#~ msgstr "システムトレイへのイベントの表示をやめる (_D)"
-
-#~ msgid "_Inform me with a popup window"
-#~ msgstr "ポップアップウィンドウで知らせる (_I)"
-
-#~ msgid "_Open chat window with user"
-#~ msgstr "ユーザーのチャットウィンドウを開く (_O)"
-
-#~ msgid "_Show event in roster"
-#~ msgstr "イベントを名簿に表示する (_S)"
-
-#~ msgid "_Show event in systray"
-#~ msgstr "イベントをシステムトレイに表示する (_S)"
-
-#~ msgid "and I "
-#~ msgstr "と私 "
-
 #~ msgid ""
 #~ "contact(s)\n"
 #~ "group(s)\n"
@@ -8016,59 +10079,8 @@ msgstr " リソース。優先順位は "
 #~ "グループ\n"
 #~ "すべて"
 
-#~ msgid "Entry:"
-#~ msgstr "エントリー:"
-
-#~ msgid "Feed name:"
-#~ msgstr "フィード名:"
-
-#~ msgid "Last modified:"
-#~ msgstr "最終更新:"
-
-#~ msgid "New entry received"
-#~ msgstr "新しいエントリーを受け取りました"
-
-#~ msgid "Blocked Contacts"
-#~ msgstr "拒否されている相手先"
-
-#~ msgid "<b>Message:</b> "
-#~ msgstr "<b>メッセージ:</b> "
-
-#~ msgid "Set Activity"
-#~ msgstr "動向の設定"
-
-#~ msgid "Set an activity"
-#~ msgstr "動向の設定"
-
-#~ msgid "<b>Message:</b>"
-#~ msgstr "<b>メッセージ:</b>"
-
-#~ msgid "<b>Mood:</b>"
-#~ msgstr "<b>気分:</b>"
-
-#~ msgid "Change Password"
-#~ msgstr "パスワードの変更"
-
-#~ msgid "Enter it again for confirmation:"
-#~ msgstr "確認のためもう一度入力してください:"
-
-#~ msgid "Enter new password:"
-#~ msgstr "新しいパスワードを入力してください:"
-
-#~ msgid "<b>Type your new status message</b>"
-#~ msgstr "<b>新しい状況メッセージを入力してください</b>"
-
-#~ msgid "Preset messages:"
-#~ msgstr "用意されたメッセージ:"
-
-#~ msgid "Save as Preset..."
-#~ msgstr "用意しておくメッセージとして保存..."
-
 #~ msgid "Join _Group Chat"
 #~ msgstr "グループチャットに参加する (_G)"
-
-#~ msgid "_Add to Roster..."
-#~ msgstr "名簿に追加する (_A)..."
 
 #~ msgid "_Copy JID/Email Address"
 #~ msgstr "JID/Eメールアドレスのコピー (_C)"
@@ -8085,147 +10097,6 @@ msgstr " リソース。優先順位は "
 #~ msgid "_Start Chat"
 #~ msgstr "チャットの開始 (_S)"
 
-#~ msgid "In_vite"
-#~ msgstr "招待 (_v)"
-
-#~ msgid "Invite Friends!"
-#~ msgstr "友だちを招待 !"
-
-#~ msgid "MUC server"
-#~ msgstr "グループチャットのサーバー"
-
-#~ msgid "Please select a MUC server."
-#~ msgstr "グループチャットのサーバーを選択してください。"
-
-#~ msgid ""
-#~ "You are going to begin a Multi-User Chat.\n"
-#~ "Select the contacts you want to invite"
-#~ msgstr ""
-#~ "グループチャットを始めようとしています。\n"
-#~ "招待したい相手先を選択してください"
-
-#~ msgid "A_sk to see his/her status"
-#~ msgstr "相手の在席状況を見ることを申し込む (_s)"
-
-#~ msgid "Add Special _Notification..."
-#~ msgstr "特別な状態通知を追加する (_N)..."
-
-#~ msgid "Assign Open_PGP Key..."
-#~ msgstr "Open_PGP 鍵の割り当て..."
-
-#~ msgid "E_xecute Command..."
-#~ msgstr "コマンドの実行 (_x)..."
-
-#~ msgid "Edit _Groups..."
-#~ msgstr "グループの変更 (_G)..."
-
-#~ msgid "Invite _Contacts"
-#~ msgstr "相手先を招待 (_C)"
-
-#~ msgid "Send Single _Message..."
-#~ msgstr "単発メッセージの送信 (_M)..."
-
-#~ msgid "Send _File..."
-#~ msgstr "ファイルの送信 (_S)..."
-
-#~ msgid "Set Custom _Avatar..."
-#~ msgstr "独自アバターの設定 (_A)..."
-
-#~ msgid "Start _Chat"
-#~ msgstr "チャットの開始 (_C)"
-
-#~ msgid "Toggle End to End Encryption"
-#~ msgstr "全線暗号化(E2EE) (トグル)"
-
-#~ msgid "Toggle Open_PGP Encryption"
-#~ msgstr "Open_PGP 暗号化 (トグル)"
-
-#~ msgid "_Allow him/her to see my status"
-#~ msgstr "自分の在席状況を見られることを許可する (_A)"
-
-#~ msgid "_Forbid him/her to see my status"
-#~ msgstr "自分の在席状況を見られることを禁止する (_F)"
-
-#~ msgid "_Ignore"
-#~ msgstr "無視 (_I)"
-
-#~ msgid "_Manage Contact"
-#~ msgstr "相手先の管理 (_M)"
-
-#~ msgid "_Rename..."
-#~ msgstr "名前の変更 (_R)..."
-
-#~ msgid "_Subscription"
-#~ msgstr "在席通知の申し込み (_S)"
-
-#~ msgid "_Unignore"
-#~ msgstr "無視しない (_U)"
-
-#~ msgid "Fill in the form."
-#~ msgstr "次の欄を埋めてください。"
-
-#~ msgid "Edit Groups"
-#~ msgstr "グループの編集"
-
-#~ msgid "_Verify"
-#~ msgstr "検査 (_V)"
-
-#~ msgid "<b>List of possible features in Gajim:</b>"
-#~ msgstr "<b>Gajim の現在有効な機能の一覧:</b>"
-
-#~ msgid "Features"
-#~ msgstr "機能"
-
-#~ msgid "A list of active, completed and stopped file transfers"
-#~ msgstr "ファイル転送の転送中、完了、中止の一覧"
-
-#~ msgid "Cancels the selected file transfer"
-#~ msgstr "選択されたファイルの転送を中止します"
-
-#~ msgid "Cancels the selected file transfer and removes incomplete file"
-#~ msgstr "選択されたファイルの転送を中止し、不完全なファイルは削除します"
-
-#~ msgid "Clean _up"
-#~ msgstr "消去 (_u)"
-
-#~ msgid "File Transfers"
-#~ msgstr "ファイルの転送"
-
-# (Mako)この場合は「閉じる」
-#~ msgid "Hides the window"
-#~ msgstr "ウィンドウを閉じる"
-
-#~ msgid "Remove file transfer from the list."
-#~ msgstr "ファイル転送を一覧から削除します。"
-
-#~ msgid "Removes completed, cancelled and failed file transfers from the list"
-#~ msgstr "一覧から完了、中止、失敗したファイル転送を削除します"
-
-#~ msgid "Shows a list of file transfers between you and others"
-#~ msgstr "ファイル転送の一覧を表示します"
-
-#~ msgid ""
-#~ "This action removes single file transfer from the list. If the transfer "
-#~ "is active, it is first stopped and then removed"
-#~ msgstr ""
-#~ "一覧からひとつのファイル転送を削除します。転送中の場合、まず転送を中止し、"
-#~ "それから削除してください"
-
-#~ msgid "When a file transfer is complete show a popup notification"
-#~ msgstr "ファイル転送が完了したら、ポップアップで知らせる"
-
-#~ msgid "_Notify me when a file transfer is complete"
-#~ msgstr "ファイル転送が完了したら知らせる (_N)"
-
-#~ msgid "_Pause"
-#~ msgstr "一時停止 (_P)"
-
-#~ msgid "file transfers list"
-#~ msgstr "ファイル転送の一覧"
-
-#~ msgid "<b>Chatstate Tab Colors</b>"
-#~ msgstr "<b>チャット状態のタブの色</b>"
-
 #~ msgid ""
 #~ "Account row\n"
 #~ "Group row\n"
@@ -8236,44 +10107,6 @@ msgstr " リソース。優先順位は "
 #~ "グループ行\n"
 #~ "相手先\n"
 #~ "チャットバナー"
-
-#~ msgid "Composing"
-#~ msgstr "入力中"
-
-#~ msgid "Font style:"
-#~ msgstr "フォントのスタイル:"
-
-#~ msgid "Gajim Themes Customization"
-#~ msgstr "Gajim テーマのカスタマイズ"
-
-#~ msgid "Gone"
-#~ msgstr "不在"
-
-#~ msgid ""
-#~ "MUC\n"
-#~ "Messages"
-#~ msgstr ""
-#~ "グループチャット\n"
-#~ "メッセージ"
-
-#~ msgid ""
-#~ "MUC Directed\n"
-#~ "Messages"
-#~ msgstr ""
-#~ "グループチャットでの\n"
-#~ "指示メッセージ"
-
-#~ msgid "Paused"
-#~ msgstr "一時停止中"
-
-#~ msgid "Text _color:"
-#~ msgstr "文字の色 (_c):"
-
-#~ msgid "Text _font:"
-#~ msgstr "フォント (_f):"
-
-#~ msgid "_Background:"
-#~ msgstr "背景色 (_B):"
 
 #~ msgid "Change _Nickname..."
 #~ msgstr "ニックネームの変更 (_N)..."
@@ -8290,80 +10123,14 @@ msgstr " リソース。優先順位は "
 #~ msgid "_Manage Room"
 #~ msgstr "談話室の管理 (_M)"
 
-#~ msgid "_Minimize on close"
-#~ msgstr "閉じるボタンで最小化 (_M)"
-
-#~ msgid "Mo_derator"
-#~ msgstr "司会者 (_d)"
-
-#~ msgid "Occupant Actions"
-#~ msgstr "在室者の操作"
-
 #~ msgid "Send _File"
 #~ msgstr "ファイルの送信 (_F)"
 
 #~ msgid "_Add to Roster"
 #~ msgstr "名簿に追加 (A)"
 
-#~ msgid "_Admin"
-#~ msgstr "管理人 (_A)"
-
-#~ msgid "_Ban"
-#~ msgstr "締め出し (_B)"
-
-#~ msgid "_Kick"
-#~ msgstr "蹴り出し (_K)"
-
-#~ msgid "_Member"
-#~ msgstr "メンバー (_M)"
-
-#~ msgid "_Owner"
-#~ msgstr "主宰者 (_O)"
-
 #~ msgid "_Send Private Message"
 #~ msgstr "私信を送る (_S)"
-
-# (Mako)moderated room での発言する権利
-#~ msgid "_Voice"
-#~ msgstr "発言権 (_V)"
-
-#, fuzzy
-#~ msgid "Create new post"
-#~ msgstr "新しいポストの作成"
-
-#~ msgid ""
-#~ "<b>WARNING:</b>\n"
-#~ "If you plan to do massive deletions, please make sure Gajim is not "
-#~ "running. Generally avoid deletions with contacts you currently chat with."
-#~ msgstr ""
-#~ "<b>警告:</b>\n"
-#~ "大幅な削除を考えているなら、Gajim が起動していないときに実行してください。"
-#~ "一般に、チャットしている最中の相手先の削除は避けてください。"
-
-#~ msgid "<big><b>Welcome to Gajim History Logs Manager</b></big>"
-#~ msgstr "<big><b>Gajim 履歴記録マネージャ</b></big>"
-
-#~ msgid "Export"
-#~ msgstr "書き出し"
-
-#~ msgid "Gajim History Logs Manager"
-#~ msgstr "Gajim 履歴記録マネージャ"
-
-#~ msgid ""
-#~ "This log manager is not intended for log viewing. If you are looking for "
-#~ "such functionality, use the history window instead.\n"
-#~ "\n"
-#~ "Use this program to delete or export logs. You can select logs from the "
-#~ "left and/or search database from below."
-#~ msgstr ""
-#~ "この記録マネージャは記録を見るためのものではありません。そのような機能をお"
-#~ "求めなら、かわりに履歴ウィンドウをお使いください。\n"
-#~ "\n"
-#~ "このプログラムは記録の削除や書き出しのためにお使いください。左の一覧から記"
-#~ "録を選択し、また下の欄でデータベースを検索することができます。"
-
-#~ msgid "_Search Database"
-#~ msgstr "データベースの検索 (_S)"
 
 #~ msgid ""
 #~ "Enter JID or Contact name\n"
@@ -8374,64 +10141,8 @@ msgstr " リソース。優先順位は "
 #~ "グループチャットの履歴\n"
 #~ "すべてのチャットの履歴"
 
-#~ msgid "Search:"
-#~ msgstr "検索:"
-
-#~ msgid "_Log conversation history"
-#~ msgstr "会話の履歴を記録 (_L)"
-
-#~ msgid "Bookmark this room"
-#~ msgstr "この談話室をブックマーク"
-
-#~ msgid "Join this room automatically when I connect"
-#~ msgstr "接続時に自動的にこの談話室に参加する"
-
-#~ msgid "Nickname:"
-#~ msgstr "ニックネーム:"
-
-#~ msgid "Password:"
-#~ msgstr "パスワード:"
-
-#~ msgid "Recently:"
-#~ msgstr "最近使った:"
-
-#~ msgid "Room:"
-#~ msgstr "談話室:"
-
 #~ msgid "Manage Accounts"
 #~ msgstr "アカウントの管理"
-
-#~ msgid "Auto join"
-#~ msgstr "自動参加"
-
-#~ msgid "If checked, Gajim will join this group chat on startup"
-#~ msgstr "チェックをつけると、スタート時にこのグループチャットに参加します"
-
-#~ msgid "Manage Bookmarks"
-#~ msgstr "ブックマークの管理"
-
-#~ msgid "Minimize on Auto Join"
-#~ msgstr "自動参加して最小化"
-
-#~ msgid "Print status:"
-#~ msgstr "状況の表示:"
-
-#~ msgid "Title:"
-#~ msgstr "タイトル:"
-
-# (Mako)Personal Eventing via Pubsub
-#, fuzzy
-#~ msgid "PEP Service Configuration"
-#~ msgstr "PEP サービスの調整"
-
-#~ msgid "_Configure"
-#~ msgstr "調整 (_C)"
-
-#~ msgid "<b>Properties</b>"
-#~ msgstr "<b>プロパティ</b>"
-
-#~ msgid "<b>Settings</b>"
-#~ msgstr "<b>設定</b>"
 
 #~ msgid ""
 #~ "HTTP Connect\n"
@@ -8441,33 +10152,6 @@ msgstr " リソース。優先順位は "
 #~ "HTTP 接続\n"
 #~ "SOCKS5\n"
 #~ "BOSH"
-
-#~ msgid "Manage Proxy Profiles"
-#~ msgstr "プロクシの設定"
-
-#~ msgid "Pass_word:"
-#~ msgstr "パスワード (_w):"
-
-#~ msgid "Proxy _Host:"
-#~ msgstr "プロキシのホスト (_H):"
-
-#~ msgid "Proxy _Port:"
-#~ msgstr "プロキシのポート (_P):"
-
-#~ msgid "Use HTTP prox_y"
-#~ msgstr "HTTP プロキシを利用する (_y)"
-
-#~ msgid "Use proxy auth_entication"
-#~ msgstr "プロクシの認証を使用する (_e)"
-
-#~ msgid "_BOSH URL:"
-#~ msgstr "BOSH URL (_B):"
-
-#~ msgid "_Type:"
-#~ msgstr "種類 (_T):"
-
-#~ msgid "_Username:"
-#~ msgstr "ユーザー名 (_U):"
 
 #~ msgid "Add this contact to roster (Ctrl+D)"
 #~ msgstr "この相手先を名簿に追加する (Ctrl+D)"
@@ -8502,61 +10186,6 @@ msgstr " リソース。優先順位は "
 #~ msgid "Show the contact's profile (Ctrl+I)"
 #~ msgstr "相手先のプロフィールの表示 (Ctrl+I)"
 
-#~ msgid "Passphrase"
-#~ msgstr "パスフレーズ"
-
-#~ msgid "<b>Advanced Configuration Editor</b>"
-#~ msgstr "<b>詳細設定エディタ</b>"
-
-#~ msgid "<b>Applications</b>"
-#~ msgstr "<b>アプリケーション</b>"
-
-#~ msgid "<b>Auto Status</b>"
-#~ msgstr "<b>在席状況の自動変更</b>"
-
-#~ msgid "<b>Chat Appearance</b>"
-#~ msgstr "<b>チャットの外観</b>"
-
-#~ msgid "<b>Chat Line Colors</b>"
-#~ msgstr "<b>チャット行の色</b> "
-
-#~ msgid "<b>Chat state notifications</b>"
-#~ msgstr "チャット状態の通知"
-
-#, fuzzy
-#~ msgid "<b>Custom</b>"
-#~ msgstr "<b>カスタム</b>"
-
-#~ msgid "<b>Font</b>"
-#~ msgstr "<b>フォント</b>"
-
-#~ msgid "<b>GMail Options</b>"
-#~ msgstr "<b>GMail オプション</b>"
-
-#~ msgid "<b>Preset Status Messages</b>"
-#~ msgstr "<b>用意された状況メッセージ</b>"
-
-#~ msgid "<b>Privacy</b>"
-#~ msgstr "<b>プライバシー</b>"
-
-#~ msgid "<b>Roster Appearance</b>"
-#~ msgstr "<b>名簿の外観</b>"
-
-#~ msgid "<b>Status Messages</b>"
-#~ msgstr "<b>在席状況のメッセージ</b>"
-
-#~ msgid "<b>Themes</b>"
-#~ msgstr "<b>テーマ</b>"
-
-#~ msgid "<b>Visual Notifications</b>"
-#~ msgstr "<b>目への通知</b>"
-
-#~ msgid "Advanced"
-#~ msgstr "拡張"
-
-#~ msgid "Advanced..."
-#~ msgstr "拡張..."
-
 #~ msgid ""
 #~ "All chat states\n"
 #~ "Composing only\n"
@@ -8565,19 +10194,6 @@ msgstr " リソース。優先順位は "
 #~ "すべての状態\n"
 #~ "入力中のみ\n"
 #~ "通知しない"
-
-#~ msgid "Allow _OS information to be sent"
-#~ msgstr "OS 情報の送信を許可する (_O)"
-
-#~ msgid "Allow popup/notifications when I'm _away/na/busy/invisible"
-#~ msgstr "離席/不在/取り込み中/隠れ中のポップアップ/通知を許可する (_a)"
-
-#~ msgid "Allow sound when I'm _busy"
-#~ msgstr "取り込み中でもサウンドを鳴らす (_b)"
-
-# (Mako)語順が難しい
-#~ msgid "Ask status message when I:"
-#~ msgstr "状況メッセージを求めるのは、私が "
 
 #~ msgid ""
 #~ "Autodetect on every Gajim startup\n"
@@ -8592,15 +10208,6 @@ msgstr " リソース。優先順位は "
 #~ "常に Xfce のデフォルトのアプリケーション\n"
 #~ "ここで設定"
 
-#~ msgid "Chat message:"
-#~ msgstr "チャットメッセージ:"
-
-#~ msgid "Check on startup if Gajim is the _default Jabber client"
-#~ msgstr "起動時に、Gajim がデフォルトの Jabber クライアントかを調べる (_d)"
-
-#~ msgid "Configure color and font of the interface"
-#~ msgstr "色とフォントの調整"
-
 #~ msgid ""
 #~ "Detached roster with detached chats\n"
 #~ "Detached roster with single chat\n"
@@ -8614,198 +10221,6 @@ msgstr " リソース。優先順位は "
 #~ "名簿は別ウィンドウ、チャットはアカウントでまとめたウィンドウ\n"
 #~ "名簿は別ウィンドウ、チャットは種類でまとめたウィンドウ"
 
-#~ msgid "Display _activity of contacts in roster"
-#~ msgstr "名簿に相手先の動向を表示する (_a)"
-
-#~ msgid "Display _extra email details"
-#~ msgstr "メールの詳細を表示する (_e)"
-
-#~ msgid "Display _tunes of contacts in roster"
-#~ msgstr "名簿に相手先の聴いている楽曲を表示する (_t)"
-
-#~ msgid "Display a_vatars of contacts in roster"
-#~ msgstr "名簿に相手先のアバターを表示する"
-
-#~ msgid "Display m_ood of contacts in roster"
-#~ msgstr "名簿に相手先の気分を表示する (_o)"
-
-#~ msgid "Display status _messages of contacts in roster"
-#~ msgstr "名簿に相手先の状況メッセージを表示する"
-
-#~ msgid ""
-#~ "Gajim can send and receive meta-information related to a conversation you "
-#~ "may have with a contact. Here you can specify which chatstates you want "
-#~ "to display in chat windows."
-#~ msgstr ""
-#~ "Gajim は、相手先との会話に関連するメタ情報の送受信ができます。ここでは、"
-#~ "チャットウィンドウへのチャット状態の表示について指定します。"
-
-#~ msgid ""
-#~ "Gajim can send and receive meta-information related to a conversation you "
-#~ "may have with a contact. Here you can specify which chatstates you want "
-#~ "to send to the other party."
-#~ msgstr ""
-#~ "Gajim は、相手先との会話に関連するメタ情報の送受信ができます。ここでは、"
-#~ "チャット状態の他人への送信について指定します。"
-
-#~ msgid ""
-#~ "Gajim will notify you via a popup window in the bottom right of the "
-#~ "screen about contacts that just signed out"
-#~ msgstr ""
-#~ "画面の右下のポップアップウィンドウで、相手先がサインアウトしたときに通知し"
-#~ "ます"
-
-#~ msgid "Hide all buttons in chat windows"
-#~ msgstr "チャットウィンドウのすべてのボタンを隠します"
-
-#~ msgid ""
-#~ "If checked, Gajim will allow others to detect the operation system you "
-#~ "are using"
-#~ msgstr "チェックをつけると、Gajim は使用中の OS を知られることを許可します"
-
-#~ msgid ""
-#~ "If checked, Gajim will also include information about the sender of the "
-#~ "new emails"
-#~ msgstr "チェックをつけると、Gajim は電子メールの送信者の情報を含めます"
-
-#~ msgid ""
-#~ "If checked, Gajim will change status to Away when the computer is unused."
-#~ msgstr ""
-#~ "チェックをつけると、Gajim はコンピュータが使われていないとき、在席状況を"
-#~ "「離席中」に変更します"
-
-#~ msgid ""
-#~ "If checked, Gajim will change status to Not Available when the computer "
-#~ "has not been used even longer"
-#~ msgstr ""
-#~ "チェックをつけると、Gajim はコンピュータが長い間使われていないとき、在席状"
-#~ "況を「不在」に変更します"
-
-#~ msgid ""
-#~ "If checked, Gajim will display avatars of contacts in roster window and "
-#~ "in group chats"
-#~ msgstr ""
-#~ "チェックをつけると、Gajim は名簿ウィンドウとグループチャットに相手先のアバ"
-#~ "ターを表示します"
-
-#~ msgid ""
-#~ "If checked, Gajim will display status messages of contacts under the "
-#~ "contact name in roster window and in group chats"
-#~ msgstr ""
-#~ "チェックをつけると、Gajim は名簿ウィンドウとグループチャットの相手先名の下"
-#~ "に状況メッセージを表示します"
-
-#~ msgid ""
-#~ "If checked, Gajim will display the activity of contacts in the roster "
-#~ "window"
-#~ msgstr ""
-#~ "チェックをつけると、Gajim は名簿ウィンドウに相手先の動向を表示します"
-
-#~ msgid ""
-#~ "If checked, Gajim will display the mood of contacts in the roster window"
-#~ msgstr ""
-#~ "チェックをつけると、Gajim は名簿ウィンドウに相手先の気分を表示します"
-
-#~ msgid ""
-#~ "If checked, Gajim will display the tunes of contacts in the roster window"
-#~ msgstr ""
-#~ "チェックをつけると、Gajim は名簿ウィンドウに相手先の聴いている楽曲を表示し"
-#~ "ます"
-
-#~ msgid ""
-#~ "If checked, Gajim will highlight spelling errors in input fields of chat "
-#~ "windows. If no language is explicitly set via right click on the input "
-#~ "field, the default language will be used for this contact or group chat."
-#~ msgstr ""
-#~ "チェックをつけると、Gajim はチャットウィンドウの入力欄でスペルの間違いを強"
-#~ "調して表示します。入力欄での右クリックで言語を明示的に指定できますが、そう"
-#~ "されていない場合は、この相手先やグループチャットにはデフォルトの言語が適用"
-#~ "されます。"
-
-#~ msgid ""
-#~ "If checked, Gajim will ignore incoming events from unauthorized contacts. "
-#~ "Use with caution, because it blocks all messages from any contact that is "
-#~ "not in the roster"
-#~ msgstr ""
-#~ "チェックをつけると、Gajim は承認していない相手先からのイベントを無視しま"
-#~ "す。名簿にない相手先からのすべてのメッセージを拒否しますので、注意してくだ"
-#~ "さい。"
-
-#~ msgid ""
-#~ "If checked, Gajim will keep logs for encrypted messages. Please note that "
-#~ "when using E2E encryption the remote party has to agree on logging, else "
-#~ "the messages will not be logged."
-#~ msgstr ""
-#~ "チェックをつけると、Gajim は暗号化されたメッセージを記録に残します。終端間"
-#~ "暗号化 (E2EE) の場合は相手先が記録に同意していなければなりません。そうでな"
-#~ "ければ記録しないでください。"
-
-#~ msgid ""
-#~ "If checked, Gajim will show a notification when a new e-mail is received "
-#~ "via GMail"
-#~ msgstr ""
-#~ "チェックをつけると、Gajim は GMail 経由で新しいメールを受け取ったとき、通"
-#~ "知します"
-
-#~ msgid ""
-#~ "If checked, Gajim will use protocol-specific status icons. (eg. A contact "
-#~ "from MSN will have the equivalent msn icon for status online, away, busy, "
-#~ "etc...)"
-#~ msgstr ""
-#~ "チェックをつけると、Gajim はプロトコル特有の在席状況アイコンを使用します "
-#~ "(例: MSN からの相手先にはオンライン、離席、取り込み中...などの対応する "
-#~ "MSN のアイコンがあります)"
-
-#~ msgid ""
-#~ "If enabled, Gajim will not ask for a status message. The specified "
-#~ "default message will be used instead."
-#~ msgstr ""
-#~ "チェックをつけると、Gajim は状況メッセージを要求しません。かわりに対応する"
-#~ "デフォルトのメッセージが使われます。"
-
-#~ msgid ""
-#~ "If not disabled, Gajim will replace ascii smilies like ':)' with "
-#~ "equivalent animated or static graphical emoticons"
-#~ msgstr ""
-#~ "「無効」でなければ、Gajim は ':)' のようなスマイリーを対応する画像に置き換"
-#~ "えます"
-
-#~ msgid "Log _encrypted chat session"
-#~ msgstr "暗号化チャットを記録する (_e)"
-
-#~ msgid "Ma_ke message windows compact"
-#~ msgstr "メッセージウィンドウを簡潔にする (_k)"
-
-#~ msgid "Ma_nage..."
-#~ msgstr "設定 (_n)..."
-
-#~ msgid ""
-#~ "Never\n"
-#~ "Only when pending events\n"
-#~ "Always"
-#~ msgstr ""
-#~ "表示しない\n"
-#~ "保留イベントがあるときだけ\n"
-#~ "常に"
-
-#~ msgid "Notifications"
-#~ msgstr "通知"
-
-#~ msgid "Notify me about contacts that sign _in"
-#~ msgstr "相手先のログインを通知する (_i)"
-
-#~ msgid "Notify me about contacts that sign _out"
-#~ msgstr "相手先のログアウトを通知する (_o)"
-
-#~ msgid "Notify on new _GMail email"
-#~ msgstr "新しい GMail メールを通知する (_G)"
-
-#~ msgid "Personal Events"
-#~ msgstr "個人イベント"
-
-#~ msgid "Play _sounds"
-#~ msgstr "サウンドを鳴らす (_s)"
-
 #~ msgid ""
 #~ "Pop it up\n"
 #~ "Notify me about it\n"
@@ -8815,172 +10230,11 @@ msgstr " リソース。優先順位は "
 #~ "それについて通知する\n"
 #~ "名簿に表示するだけ"
 
-#~ msgid "Preferences"
-#~ msgstr "設定"
-
-#~ msgid "Show systray:"
-#~ msgstr "システムトレイに表示:"
-
-# (Mako)"Ask status message when I:" に続く語
-#~ msgid "Sign _in"
-#~ msgstr "サインインしたとき (_i)"
-
-# (Mako)"Ask status message when I:" に続く語
-#~ msgid "Sign _out"
-#~ msgstr "サインアウトしたとき (_o)"
-
-#~ msgid ""
-#~ "Some messages may include rich content (formatting, colors etc). If "
-#~ "checked, Gajim will just display the raw message text."
-#~ msgstr ""
-#~ "メッセージが装飾(書式や色など)を含んでいる場合があります。チェックをつける"
-#~ "と、Gajim はそのままのメッセージ文を表示します。"
-
-#~ msgid "Sort contacts by status"
-#~ msgstr "相手先を在席状況順に並べる"
-
-#~ msgid "Status _iconset:"
-#~ msgstr "状況アイコン (_i):"
-
-#~ msgid "Style"
-#~ msgstr "スタイル"
-
-#~ msgid "T_heme:"
-#~ msgstr "テーマ (_h):"
-
-#~ msgid ""
-#~ "The auto away status message. If empty, Gajim will not change the current "
-#~ "status message\n"
-#~ "$S will be replaced by previous status message\n"
-#~ "$T will be replaced by auto-away timeout"
-#~ msgstr ""
-#~ "自動「離席」メッセージ。空にすると、Gajim は現在の状況メッセージを変更しま"
-#~ "せん。\n"
-#~ "$S は前の状況メッセージに置き換えられます\n"
-#~ "$T は自動離席の設定時間に置き換えられます"
-
-#~ msgid ""
-#~ "The auto not available status message. If empty, Gajim will not change "
-#~ "the current status message\n"
-#~ "$S will be replaced by previous status message\n"
-#~ "$T will be replaced by auto-not-available timeout"
-#~ msgstr ""
-#~ "自動「不在」メッセージ。空にすると、Gajim は現在の状況メッセージを変更しま"
-#~ "せん\n"
-#~ "$S は前の状況メッセージに置き換えられます\n"
-#~ "$T は自動不在の設定時間に置き換えられます"
-
-#~ msgid "Use _transports icons"
-#~ msgstr "中継先のアイコンを使う (_t)"
-
-#~ msgid "Use system _default"
-#~ msgstr "システムのデフォルトを使う (_d)"
-
-#~ msgid "When new event is received:"
-#~ msgstr "新しいイベントを受信したとき:"
-
-#~ msgid "_Away after:"
-#~ msgstr "「離席中」にする (_A):"
-
-#~ msgid "_Browser:"
-#~ msgstr "ブラウザ (_B):"
-
-#~ msgid "_Display chat state notifications:"
-#~ msgstr "チャット状態通知を表示する (_D):"
-
-#~ msgid "_Emoticons:"
-#~ msgstr "感情アイコン (_E):"
-
-#~ msgid "_File manager:"
-#~ msgstr "ファイルマネージャ (_F):"
-
-#~ msgid "_Highlight misspelled words"
-#~ msgstr "スペル間違いを強調表示する (_H)"
-
-#~ msgid "_Ignore events from contacts not in the roster"
-#~ msgstr "名簿にない相手先からのイベントを無視する (_I)"
-
-#~ msgid "_Ignore rich content in incoming messages"
-#~ msgstr "受信したメッセージの書式を無視する (_I)"
-
 #~ msgid "_Incoming message:"
 #~ msgstr "受信メッセージ (_I):"
 
-#~ msgid "_Log status changes of contacts"
-#~ msgstr "相手先の状況変更を記録する (_L)"
-
-#~ msgid "_Mail client:"
-#~ msgstr "メールクライアント (_M):"
-
-#~ msgid "_Not available after:"
-#~ msgstr "「不在」にする (_N):"
-
-#~ msgid "_Open..."
-#~ msgstr "開く (_O)..."
-
 #~ msgid "_Outgoing message:"
 #~ msgstr "送信メッセージ (_O):"
-
-#~ msgid "_Reset to Default Colors"
-#~ msgstr "デフォルトの色に戻す (_R)"
-
-#~ msgid "_Send chat state notifications:"
-#~ msgstr "チャット状態通知を送信する (_S):"
-
-#~ msgid "_Status message:"
-#~ msgstr "状況メッセージ (_S):"
-
-# (Mako)あえてカッコ書き
-#~ msgid "_URL highlight:"
-#~ msgstr "URL 強調表示 (_U):"
-
-#~ msgid "_Window behavior:"
-#~ msgstr "ウィンドウの配置 (_W):"
-
-#~ msgid "in _group chats"
-#~ msgstr "グループチャットで (_g)"
-
-#~ msgid "minutes"
-#~ msgstr "分後"
-
-#~ msgid "Privacy Lists:"
-#~ msgstr "個人リスト:"
-
-#~ msgid "<b>Add / Edit a rule</b>"
-#~ msgstr "<b>規則の追加/編集</b>"
-
-#~ msgid "<b>List of rules</b>"
-#~ msgstr "<b>規則の一覧</b>"
-
-#~ msgid "<i>Privacy List</i>"
-#~ msgstr "<i>プライバシーリスト</i>"
-
-#~ msgid "All"
-#~ msgstr "すべて"
-
-#~ msgid "All (including subscription)"
-#~ msgstr "すべて (在席通知を含む)"
-
-#~ msgid "Allow"
-#~ msgstr "許可する"
-
-#~ msgid "Deny"
-#~ msgstr "拒否する"
-
-#~ msgid "JabberID"
-#~ msgstr "JabberID"
-
-#, fuzzy
-#~ msgid "Order:"
-#~ msgstr "順位:"
-
-#, fuzzy
-#~ msgid "all by subscription"
-#~ msgstr "在席通知のすべて"
-
-#, fuzzy
-#~ msgid "all in the group"
-#~ msgstr "グループのすべて"
 
 #, fuzzy
 #~ msgid ""
@@ -8994,128 +10248,6 @@ msgstr " リソース。優先順位は "
 #~ "from\n"
 #~ "to"
 
-#, fuzzy
-#~ msgid "to send me messages"
-#~ msgstr "メッセージを私に送信する"
-
-#, fuzzy
-#~ msgid "to send me queries"
-#~ msgstr "クエリーを私に送信する"
-
-#, fuzzy
-#~ msgid "to send me status"
-#~ msgstr "状況を私に送信する"
-
-#, fuzzy
-#~ msgid "to view my status"
-#~ msgstr "私の状況を見せる"
-
-#~ msgid "<b>Address</b>"
-#~ msgstr "<b>住所</b>"
-
-#~ msgid "<b>Avatar:</b>"
-#~ msgstr "<b>アバター:</b>"
-
-#~ msgid "<b>Birthday:</b>"
-#~ msgstr "<b>誕生日:</b>"
-
-#~ msgid "<b>City:</b>"
-#~ msgstr "<b>市(町村):</b>"
-
-#~ msgid "<b>Company:</b>"
-#~ msgstr "<b>会社:</b>"
-
-#~ msgid "<b>Country:</b>"
-#~ msgstr "<b>国:</b>"
-
-#~ msgid "<b>Department:</b>"
-#~ msgstr "<b>部署:</b>"
-
-#~ msgid "<b>E-Mail:</b>"
-#~ msgstr "<b>メールアドレス:</b>"
-
-#~ msgid "<b>Extra Address:</b>"
-#~ msgstr "<b>建物名など:</b>"
-
-#~ msgid "<b>Family:</b>"
-#~ msgstr "<b>姓:</b>"
-
-#~ msgid "<b>Full Name</b>"
-#~ msgstr "<b>名前(フルネーム)</b>"
-
-#~ msgid "<b>Given:</b>"
-#~ msgstr "<b>名:</b>"
-
-#~ msgid "<b>Homepage:</b>"
-#~ msgstr "<b>ホームページ:</b>"
-
-#~ msgid "<b>Middle:</b>"
-#~ msgstr "<b>Middle:</b>"
-
-#~ msgid "<b>Name:</b>"
-#~ msgstr "<b>名前:</b>"
-
-#~ msgid "<b>Nickname:</b>"
-#~ msgstr "<b>ニックネーム:</b>"
-
-#~ msgid "<b>Phone No.:</b>"
-#~ msgstr "<b>電話番号:</b>"
-
-#~ msgid "<b>Position:</b>"
-#~ msgstr "<b>役職:</b>"
-
-#~ msgid "<b>Postal Code:</b>"
-#~ msgstr "<b>郵便番号:</b>"
-
-#~ msgid "<b>Prefix:</b>"
-#~ msgstr "<b>Prefix:</b>"
-
-#~ msgid "<b>State:</b>"
-#~ msgstr "<b>州(県):</b>"
-
-#~ msgid "<b>Street:</b>"
-#~ msgstr "<b>町丁名・番地:</b>"
-
-#~ msgid "<b>Suffix:</b>"
-#~ msgstr "<b>Suffix:</b>"
-
-#~ msgid "About"
-#~ msgstr "概略"
-
-#~ msgid "Click to set your avatar"
-#~ msgstr "アバターの設定"
-
-#~ msgid "Format: YYYY-MM-DD"
-#~ msgstr "書式: YYYY-MM-DD"
-
-#~ msgid "Personal Info"
-#~ msgstr "個人情報"
-
-#~ msgid "Work"
-#~ msgstr "職業"
-
-#~ msgid "<b>What do you want to do?</b>"
-#~ msgstr "<b>あなたがやりたいことは ?</b>"
-
-#~ msgid "Remove account from Gajim and from _server"
-#~ msgstr "アカウントを Gajim とサーバーからも削除 (_s)"
-
-#, fuzzy
-#~ msgid ""
-#~ "<b>someone@somewhere.com</b> would like you to <b>add</b> some contacts "
-#~ "in your roster."
-#~ msgstr ""
-#~ "<b>someone@somewhere.com</b> さんは、相手先をあなたの名簿に<b>追加</b>して"
-#~ "ほしいと思っています。"
-
-#, fuzzy
-#~ msgid "Roster Item Exchange"
-#~ msgstr "名簿の項目の交換"
-
-# (Mako)ほかの項目との並びで、バランスを考えてあえてカッコでつけ加えている
-#~ msgid "_OK"
-#~ msgstr "OK (_O)"
-
 #~ msgid "Add _Contact..."
 #~ msgstr "相手先リストに追加する (_C)..."
 
@@ -9125,38 +10257,17 @@ msgstr " リソース。優先順位は "
 #~ msgid "File _Transfers"
 #~ msgstr "ファイルの転送 (_T)"
 
-#~ msgid "Frequently Asked Questions (online)"
-#~ msgstr "よくある質問(オンライン)"
-
-#~ msgid "Help online"
-#~ msgstr "ヘルプ(オンライン)"
-
 #~ msgid "Profile, A_vatar"
 #~ msgstr "プロフィールとアバター"
 
-#~ msgid "Show Only _Active Contacts"
-#~ msgstr "アクティブな相手先のみ表示 (_A)"
-
-#~ msgid "Show Trans_ports"
-#~ msgstr "中継先を表示 (_p)"
-
-#~ msgid "Show _Offline Contacts"
-#~ msgstr "オフラインの相手先を表示 (_O)"
-
 #~ msgid "_Accounts"
 #~ msgstr "アカウント (_A)"
-
-#~ msgid "_Actions"
-#~ msgstr "操作 (_A)"
 
 #~ msgid "_Contents"
 #~ msgstr "目次 (_C)"
 
 #~ msgid "_FAQ"
 #~ msgstr "_FAQ"
-
-#~ msgid "_Help"
-#~ msgstr "ヘルプ (_H)"
 
 #~ msgid "_Preferences"
 #~ msgstr "設定 (_P)"
@@ -9167,95 +10278,8 @@ msgstr " リソース。優先順位は "
 #~ msgid "_Send Single Message..."
 #~ msgstr "単発メッセージを送信する (_S)..."
 
-#~ msgid "_View"
-#~ msgstr "表示 (_V)"
-
-#~ msgid "Please wait while retrieving search form..."
-#~ msgstr "しばらくお待ちください…"
-
-#~ msgid "Search"
-#~ msgstr "検索"
-
-#~ msgid "G_o"
-#~ msgstr "実行 (_o)"
-
-#~ msgid "_Address:"
-#~ msgstr "アドレス (_A):"
-
-#, fuzzy
-#~ msgid "Register to"
-#~ msgstr "登録"
-
-#~ msgid "_Cancel"
-#~ msgstr "中止 (_C)"
-
-#~ msgid "0"
-#~ msgstr "0"
-
-#~ msgid "From:"
-#~ msgstr "差出人:"
-
-#~ msgid "Reply to this message"
-#~ msgstr "このメッセージへの返信"
-
-#~ msgid "Sen_d"
-#~ msgstr "送信 (_d)"
-
-#~ msgid "Send message"
-#~ msgstr "メッセージを送信する"
-
-#~ msgid "Send message and close window"
-#~ msgstr "メッセージを送信してウィンドウを閉じる"
-
-#~ msgid "Subject:"
-#~ msgstr "件名:"
-
-#~ msgid "To:"
-#~ msgstr "宛先:"
-
-#~ msgid "_Reply"
-#~ msgstr "返信 (_R)"
-
-#~ msgid "_Send & Close"
-#~ msgstr "送信 & 閉じる (_S)"
-
-#~ msgid "Au_thorize"
-#~ msgstr "承認する (_t)"
-
-#~ msgid "Authorize contact so he or she can know when you're connected"
-#~ msgstr ""
-#~ "承認すると、あなたが接続したときに相手先はそのことを知ることができます"
-
-#~ msgid ""
-#~ "Deny authorization from contact so he or she cannot know when you're "
-#~ "connected"
-#~ msgstr ""
-#~ "承認しないと、あなたが接続したときに相手先はそのことを知ることができません"
-
-#~ msgid "Subscription Request"
-#~ msgstr "在席通知の申し込み"
-
-#~ msgid "_Deny"
-#~ msgstr "拒否する (_D)"
-
-#~ msgid "Select the account with which you want to synchronise"
-#~ msgstr "合わせたいアカウントを選択してください"
-
-#~ msgid "Select the contacts you want to synchronise"
-#~ msgstr "合わせたい相手先を選択してください"
-
-#, fuzzy
-#~ msgid "Synchronise : select contacts"
-#~ msgstr "同期: 相手先の選択"
-
-#~ msgid "Mute Sounds"
-#~ msgstr "サウンドのミュート"
-
 #~ msgid "Send Single _Message"
 #~ msgstr "単発メッセージの送信 (_M)"
-
-#~ msgid "Show All Pending _Events"
-#~ msgstr "すべての保留イベントの表示 (_E)"
 
 #~ msgid "Sta_tus"
 #~ msgstr "状態 (_t)"
@@ -9263,88 +10287,11 @@ msgstr " リソース。優先順位は "
 #~ msgid "_Group Chat"
 #~ msgstr "グループチャット (_G)"
 
-# (Mako)pending の意味か
-#~ msgid "<b>Ask:</b>"
-#~ msgstr "<b>保留中の申し込み:</b>"
-
-#~ msgid "<b>Client:</b>"
-#~ msgstr "<b>クライアント:</b>"
-
-#~ msgid "<b>Contact time:</b>"
-#~ msgstr "<b>通話時間:</b>"
-
-#~ msgid "<b>Jabber ID:</b>"
-#~ msgstr "<b>Jabber ID:</b>"
-
-#~ msgid "<b>Resource:</b>"
-#~ msgstr "<b>リソース:</b>"
-
-#~ msgid "<b>Status:</b>"
-#~ msgstr "<b>在席状況:</b>"
-
-#~ msgid "<b>Subscription:</b>"
-#~ msgstr "<b>在席通知:</b>"
-
-#~ msgid "<b>System:</b>"
-#~ msgstr "<b>システム:</b>"
-
-#~ msgid "Comments"
-#~ msgstr "備考"
-
-#, fuzzy
-#~ msgid "Configured avatar:"
-#~ msgstr "設定したアバター:"
-
-#~ msgid "Contact"
-#~ msgstr "相手先"
-
-#~ msgid "Contact Information"
-#~ msgstr "相手先の情報"
-
-#~ msgid "More"
-#~ msgstr "その他の情報"
-
-#~ msgid "User avatar:"
-#~ msgstr "ユーザーのアバター:"
-
-#, fuzzy
-#~ msgid "<b>Jabber Traffic</b>"
-#~ msgstr "<b>Jabber 通信</b>"
-
-#~ msgid "<b>XML Input</b>"
-#~ msgstr "<b>XML 入力</b>"
-
 #~ msgid "Enable"
 #~ msgstr "有効"
 
-#~ msgid "Info/Query"
-#~ msgstr "情報/クエリー (Info/Query)"
-
-#~ msgid "_IQ"
-#~ msgstr "_IQ"
-
-# (Mako)あえて訳さない
-#~ msgid "_Message"
-#~ msgstr "_Message"
-
-# (Mako)あえて訳さない
-#~ msgid "_Presence"
-#~ msgstr "_Presence"
-
 #~ msgid "_Modify Account..."
 #~ msgstr "アカウントの編集 (_M)"
-
-#~ msgid "Local jid:"
-#~ msgstr "ローカル jid:"
-
-#~ msgid "Personal"
-#~ msgstr "個人"
-
-#~ msgid "Resource:"
-#~ msgstr "リソース:"
-
-#~ msgid "Status:"
-#~ msgstr "在席状況:"
 
 #~ msgid "Invalid local address? :-O"
 #~ msgstr "ローカルアドレスが正しくありません。"
