@@ -330,7 +330,7 @@ def command(*names, **properties):
 
     return decorator
 
-def documentation(text):
+def doc(text):
     """
     This decorator is used to bind a documentation (a help) to a
     command.
