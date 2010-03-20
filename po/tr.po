@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Gajim - A Jabber Instant Messager 0.13.10.2-dev\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-19 15:01+0100\n"
-"PO-Revision-Date: 2010-03-19 21:13+0100\n"
+"PO-Revision-Date: 2010-03-20 20:10+0100\n"
 "Last-Translator: Ferdi Kunzmann <shegman@tablatures.de>\n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -238,12 +238,12 @@ msgstr ""
 #: ../data/gui/accounts_window.ui.h:19
 #: ../data/gui/zeroconf_information_window.ui.h:2
 msgid "E-Mail:"
-msgstr ""
+msgstr "E-Mail:"
 
 #: ../data/gui/accounts_window.ui.h:20
 #: ../data/gui/zeroconf_information_window.ui.h:3
 msgid "First Name:"
-msgstr ""
+msgstr "İlk Ad:"
 
 #. No configured account
 #: ../data/gui/accounts_window.ui.h:21
@@ -255,7 +255,7 @@ msgstr ""
 #: ../src/notify.py:622
 #: ../src/notify.py:638
 msgid "Gajim"
-msgstr ""
+msgstr "Gajim"
 
 #. FIXME: Ugly workaround.
 #. FIXME: Ugly workaround. Maybe we haven't been in any group (defaults to General)
@@ -305,12 +305,12 @@ msgstr ""
 #: ../src/config.py:1775
 #: ../src/dialogs.py:830
 msgid "Jabber ID:"
-msgstr ""
+msgstr "Jabber kimliği:"
 
 #: ../data/gui/accounts_window.ui.h:33
 #: ../data/gui/zeroconf_information_window.ui.h:5
 msgid "Last Name:"
-msgstr ""
+msgstr "Soy Ad:"
 
 #: ../data/gui/accounts_window.ui.h:34
 msgid "Mer_ge accounts"
@@ -325,7 +325,7 @@ msgstr ""
 #: ../data/gui/accounts_window.ui.h:37
 #: ../data/gui/profile_window.ui.h:35
 msgid "Personal Information"
-msgstr ""
+msgstr "Kişisel ilanlar sayfası"
 
 #: ../data/gui/accounts_window.ui.h:38
 msgid "Priori_ty:"
@@ -343,7 +343,7 @@ msgstr ""
 #: ../data/gui/accounts_window.ui.h:41
 #: ../src/roster_window.py:5326
 msgid "Re_name"
-msgstr ""
+msgstr "Adı _değiştir"
 
 #: ../data/gui/accounts_window.ui.h:42
 msgid "Resour_ce:"
@@ -392,7 +392,7 @@ msgstr ""
 
 #: ../data/gui/accounts_window.ui.h:54
 msgid "_Edit Personal Information..."
-msgstr ""
+msgstr "Kişisel ilanlar sayfayı yazımla"
 
 #. XML Console enable checkbutton
 #: ../data/gui/accounts_window.ui.h:55
@@ -402,7 +402,7 @@ msgstr ""
 
 #: ../data/gui/accounts_window.ui.h:56
 msgid "_Hostname: "
-msgstr ""
+msgstr "_Makine Adı:"
 
 #: ../data/gui/accounts_window.ui.h:58
 msgid "_Manage..."
@@ -410,7 +410,7 @@ msgstr ""
 
 #: ../data/gui/accounts_window.ui.h:60
 msgid "_Port: "
-msgstr ""
+msgstr "_Porta:"
 
 #: ../data/gui/accounts_window.ui.h:61
 msgid "_Warn before using an insecure connection"
@@ -457,7 +457,7 @@ msgstr ""
 
 #: ../data/gui/add_new_contact_window.ui.h:12
 msgid "_Nickname:"
-msgstr ""
+msgstr "_Takma Ad:"
 
 #: ../data/gui/add_new_contact_window.ui.h:13
 msgid "_Protocol:"
@@ -1010,7 +1010,7 @@ msgstr ""
 
 #: ../data/gui/contact_context_menu.ui.h:23
 msgid "_Rename..."
-msgstr ""
+msgstr "Adı _değiştir..."
 
 #: ../data/gui/contact_context_menu.ui.h:24
 msgid "_Subscription"
@@ -1317,12 +1317,12 @@ msgstr ""
 #: ../data/gui/join_groupchat_window.ui.h:5
 #: ../data/gui/manage_bookmarks_window.ui.h:5
 msgid "Nickname:"
-msgstr ""
+msgstr "Takma Ad:"
 
 #: ../data/gui/join_groupchat_window.ui.h:6
 #: ../data/gui/manage_bookmarks_window.ui.h:6
 msgid "Password:"
-msgstr ""
+msgstr "Şifre:"
 
 #: ../data/gui/join_groupchat_window.ui.h:7
 msgid "Recently:"
@@ -1337,7 +1337,7 @@ msgstr ""
 #: ../data/gui/manage_bookmarks_window.ui.h:9
 #: ../src/config.py:1765
 msgid "Server:"
-msgstr ""
+msgstr "Sunuc:"
 
 #: ../data/gui/join_groupchat_window.ui.h:10
 msgid "_Bookmark this room"
@@ -1391,7 +1391,7 @@ msgstr ""
 
 #: ../data/gui/manage_proxies_window.ui.h:3
 msgid "BOSH"
-msgstr ""
+msgstr "BOSH"
 
 #: ../data/gui/manage_proxies_window.ui.h:4
 msgid "HTTP Connect"
@@ -1403,7 +1403,7 @@ msgstr ""
 
 #: ../data/gui/manage_proxies_window.ui.h:6
 msgid "Pass_word:"
-msgstr ""
+msgstr "Şif_re:"
 
 #: ../data/gui/manage_proxies_window.ui.h:7
 msgid "Proxy _Host:"
@@ -1415,7 +1415,7 @@ msgstr ""
 
 #: ../data/gui/manage_proxies_window.ui.h:9
 msgid "SOCKS5"
-msgstr ""
+msgstr "SOCKS5"
 
 #: ../data/gui/manage_proxies_window.ui.h:10
 msgid "Use HTTP prox_y"
@@ -1431,7 +1431,7 @@ msgstr ""
 
 #: ../data/gui/manage_proxies_window.ui.h:13
 msgid "_Name:"
-msgstr ""
+msgstr "_Ad:"
 
 #: ../data/gui/manage_proxies_window.ui.h:14
 msgid "_Type:"
@@ -1439,11 +1439,11 @@ msgstr ""
 
 #: ../data/gui/manage_proxies_window.ui.h:15
 msgid "_Username:"
-msgstr ""
+msgstr "_Kullanıcı ismi"
 
 #: ../data/gui/passphrase_dialog.ui.h:1
 msgid "Passphrase"
-msgstr ""
+msgstr "Şifre"
 
 #: ../data/gui/preferences_window.ui.h:1
 msgid "<b>Advanced Configuration Editor</b>"
@@ -1552,7 +1552,7 @@ msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:30
 msgid "Always"
-msgstr ""
+msgstr "Herzaman"
 
 #: ../data/gui/preferences_window.ui.h:31
 msgid "Always use GNOME default applications"
@@ -1763,7 +1763,7 @@ msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:83
 msgid "Never"
-msgstr ""
+msgstr "Asla"
 
 #: ../data/gui/preferences_window.ui.h:84
 msgid "Notifications"
@@ -1846,7 +1846,7 @@ msgstr ""
 #: ../data/gui/preferences_window.ui.h:104
 #: ../src/config.py:391
 msgid "Status"
-msgstr ""
+msgstr "Durum"
 
 #: ../data/gui/preferences_window.ui.h:105
 msgid "Status _iconset:"
@@ -1896,11 +1896,11 @@ msgstr ""
 
 #: ../data/gui/preferences_window.ui.h:119
 msgid "Your message:"
-msgstr ""
+msgstr "Senin mesajın:"
 
 #: ../data/gui/preferences_window.ui.h:120
 msgid "Your nickname:"
-msgstr ""
+msgstr "Senin takma adın:"
 
 #: ../data/gui/preferences_window.ui.h:121
 msgid "_Away after:"
@@ -2041,11 +2041,11 @@ msgstr ""
 
 #: ../data/gui/privacy_list_window.ui.h:14
 msgid "all in the group"
-msgstr ""
+msgstr "grupdaki herkez"
 
 #: ../data/gui/privacy_list_window.ui.h:15
 msgid "both"
-msgstr ""
+msgstr "ikiside"
 
 #: ../data/gui/privacy_list_window.ui.h:16
 msgid "from"
@@ -2061,7 +2061,7 @@ msgstr ""
 
 #: ../data/gui/privacy_list_window.ui.h:19
 msgid "to send me messages"
-msgstr ""
+msgstr "bana mesaj göndermek için"
 
 #: ../data/gui/privacy_list_window.ui.h:20
 msgid "to send me queries"
@@ -2078,57 +2078,57 @@ msgstr ""
 #: ../data/gui/profile_window.ui.h:1
 #: ../data/gui/vcard_information_window.ui.h:1
 msgid "<b>Address</b>"
-msgstr ""
+msgstr "<b>Adres</b>"
 
 #: ../data/gui/profile_window.ui.h:2
 msgid "<b>Avatar:</b>"
-msgstr ""
+msgstr "<b>Resim:</b>"
 
 #: ../data/gui/profile_window.ui.h:3
 #: ../data/gui/vcard_information_window.ui.h:4
 msgid "<b>Birthday:</b>"
-msgstr ""
+msgstr "<b>Doğumgünü:</b>"
 
 #: ../data/gui/profile_window.ui.h:4
 #: ../data/gui/vcard_information_window.ui.h:5
 msgid "<b>City:</b>"
-msgstr ""
+msgstr "<b>Şehir:</b>"
 
 #: ../data/gui/profile_window.ui.h:5
 #: ../data/gui/vcard_information_window.ui.h:7
 msgid "<b>Company:</b>"
-msgstr ""
+msgstr "<b>Firma:</b>"
 
 #: ../data/gui/profile_window.ui.h:6
 #: ../data/gui/vcard_information_window.ui.h:9
 msgid "<b>Country:</b>"
-msgstr ""
+msgstr "<b>Yurt:</b>"
 
 #: ../data/gui/profile_window.ui.h:7
 #: ../data/gui/vcard_information_window.ui.h:10
 msgid "<b>Department:</b>"
-msgstr ""
+msgstr "<b>Departman:</b>"
 
 #: ../data/gui/profile_window.ui.h:8
 #: ../data/gui/vcard_information_window.ui.h:11
 msgid "<b>E-Mail:</b>"
-msgstr ""
+msgstr "<b>E-Mail:</b>"
 
 #: ../data/gui/profile_window.ui.h:9
 #: ../data/gui/vcard_information_window.ui.h:12
 msgid "<b>Extra Address:</b>"
-msgstr ""
+msgstr "<b>Ekstra Adres:</b>"
 
 #. Family Name
 #: ../data/gui/profile_window.ui.h:11
 #: ../data/gui/vcard_information_window.ui.h:14
 msgid "<b>Family:</b>"
-msgstr ""
+msgstr "<b>Ayle:</b>"
 
 #: ../data/gui/profile_window.ui.h:12
 #: ../data/gui/vcard_information_window.ui.h:15
 msgid "<b>Full Name</b>"
-msgstr ""
+msgstr "<b>Bütün isim</b>"
 
 #. Given Name
 #: ../data/gui/profile_window.ui.h:14
@@ -2150,17 +2150,17 @@ msgstr ""
 #: ../data/gui/profile_window.ui.h:18
 #: ../data/gui/vcard_information_window.ui.h:22
 msgid "<b>Name:</b>"
-msgstr ""
+msgstr "<b>İsim:</b>"
 
 #: ../data/gui/profile_window.ui.h:19
 #: ../data/gui/vcard_information_window.ui.h:23
 msgid "<b>Nickname:</b>"
-msgstr ""
+msgstr "<b>Takma ad:</b>"
 
 #: ../data/gui/profile_window.ui.h:20
 #: ../data/gui/vcard_information_window.ui.h:24
 msgid "<b>Phone No.:</b>"
-msgstr ""
+msgstr "<b>Telefon numara:</b>"
 
 #: ../data/gui/profile_window.ui.h:21
 #: ../data/gui/vcard_information_window.ui.h:25
@@ -2187,7 +2187,7 @@ msgstr ""
 #: ../data/gui/profile_window.ui.h:26
 #: ../data/gui/vcard_information_window.ui.h:31
 msgid "<b>State:</b>"
-msgstr ""
+msgstr "<b>Kent:</b>"
 
 #: ../data/gui/profile_window.ui.h:27
 #: ../data/gui/vcard_information_window.ui.h:33
@@ -2328,7 +2328,7 @@ msgstr ""
 #: ../data/gui/search_window.ui.h:5
 #: ../src/disco.py:1355
 msgid "_Search"
-msgstr ""
+msgstr "_Ara"
 
 #: ../data/gui/service_discovery_window.ui.h:1
 msgid "G_o"
@@ -2336,7 +2336,7 @@ msgstr ""
 
 #: ../data/gui/service_discovery_window.ui.h:2
 msgid "_Address:"
-msgstr ""
+msgstr "_Adres:"
 
 #: ../data/gui/service_registration_window.ui.h:1
 msgid "Register to"
@@ -2356,11 +2356,11 @@ msgstr ""
 
 #: ../data/gui/single_message_window.ui.h:4
 msgid "Sen_d"
-msgstr ""
+msgstr "Gön_der"
 
 #: ../data/gui/single_message_window.ui.h:5
 msgid "Send message"
-msgstr ""
+msgstr "Mesajı gönder"
 
 #: ../data/gui/single_message_window.ui.h:6
 msgid "Send message and close window"
@@ -2437,7 +2437,7 @@ msgstr ""
 
 #: ../data/gui/vcard_information_window.ui.h:19
 msgid "<b>Jabber ID:</b>"
-msgstr ""
+msgstr "<b>Jabber kimliği:</b>"
 
 #: ../data/gui/vcard_information_window.ui.h:29
 msgid "<b>Resource:</b>"
@@ -2445,7 +2445,7 @@ msgstr ""
 
 #: ../data/gui/vcard_information_window.ui.h:32
 msgid "<b>Status:</b>"
-msgstr ""
+msgstr "<b>Durum:</b>"
 
 #. Family Name
 #: ../data/gui/vcard_information_window.ui.h:35
@@ -2846,11 +2846,11 @@ msgstr ""
 #. encryption %s active
 #: ../src/chat_control.py:1982
 msgid "is"
-msgstr ""
+msgstr "ol"
 
 #: ../src/chat_control.py:1982
 msgid "is NOT"
-msgstr ""
+msgstr "olma"
 
 #. chat session %s be logged
 #: ../src/chat_control.py:1984
@@ -3804,7 +3804,7 @@ msgstr ""
 #: ../src/dataforms_widget.py:577
 #: ../src/dialogs.py:2922
 msgid "Invalid Jabber ID"
-msgstr ""
+msgstr "Geçersiz Jabber kimliği"
 
 #: ../src/common/connection_handlers.py:1398
 msgid "A message from a non-valid JID arrived, it has been ignored."
@@ -5660,7 +5660,7 @@ msgstr ""
 
 #: ../src/config.py:2329
 msgid "You must create your account before editing your personal information."
-msgstr ""
+msgstr "Önce bir Hesap yapman lazım kişisel ilanlar sayfayı yazımlamak için."
 
 #: ../src/config.py:2336
 #: ../src/dialogs.py:2127
@@ -5673,7 +5673,7 @@ msgstr ""
 
 #: ../src/config.py:2337
 msgid "Without a connection, you can not edit your personal information."
-msgstr ""
+msgstr "Bağlantızıs kişisel ilanlar sayfayı yazımlayanmiyor"
 
 #: ../src/config.py:2341
 msgid "Your server doesn't support Vcard"
@@ -5681,7 +5681,7 @@ msgstr ""
 
 #: ../src/config.py:2342
 msgid "Your server can't save your personal information."
-msgstr ""
+msgstr "Sunuc kişisel ilanlar sayfayı kaydet edemedi"
 
 #: ../src/config.py:2455
 #: ../src/config.py:2491
@@ -6076,7 +6076,7 @@ msgstr ""
 
 #: ../src/dataforms_widget.py:581
 msgid "Jabber ID already in list"
-msgstr ""
+msgstr "Jabber kimliği zaten listede"
 
 #: ../src/dataforms_widget.py:582
 msgid "The Jabber ID you entered is already in the list. Choose another one."
@@ -6085,13 +6085,13 @@ msgstr ""
 #. Default jid
 #: ../src/dataforms_widget.py:593
 msgid "new@jabber.id"
-msgstr ""
+msgstr "yeni@jabber.kimliği"
 
 #: ../src/dataforms_widget.py:596
 #: ../src/dataforms_widget.py:598
 #, python-format
 msgid "new%d@jabber.id"
-msgstr ""
+msgstr "yeni%d@jabber.kimliği"
 
 #: ../src/dialogs.py:81
 #, python-format
@@ -6101,15 +6101,15 @@ msgstr ""
 #: ../src/dialogs.py:83
 #, python-format
 msgid "Jabber ID: <i>%s</i>"
-msgstr ""
+msgstr "Jabber kimliği: <i>%s</i>"
 
 #: ../src/dialogs.py:194
 msgid "Group"
-msgstr ""
+msgstr "Grup"
 
 #: ../src/dialogs.py:201
 msgid "In the group"
-msgstr ""
+msgstr "Grupda"
 
 #: ../src/dialogs.py:292
 msgid "KeyID"
@@ -6150,23 +6150,23 @@ msgstr ""
 
 #: ../src/dialogs.py:831
 msgid "AIM Address:"
-msgstr ""
+msgstr "AIM Adres:"
 
 #: ../src/dialogs.py:832
 msgid "GG Number:"
-msgstr ""
+msgstr "GG Numara:"
 
 #: ../src/dialogs.py:833
 msgid "ICQ Number:"
-msgstr ""
+msgstr "ICQ Numara:"
 
 #: ../src/dialogs.py:834
 msgid "MSN Address:"
-msgstr ""
+msgstr "MSN Adres:"
 
 #: ../src/dialogs.py:835
 msgid "Yahoo! Address:"
-msgstr ""
+msgstr "Yahoo! Adres:"
 
 #: ../src/dialogs.py:872
 #, python-format
@@ -6292,7 +6292,7 @@ msgstr ""
 #: ../src/dialogs.py:2323
 #: ../src/groupchat_control.py:1758
 msgid "Invalid group chat Jabber ID"
-msgstr ""
+msgstr "Geçersiz grup sohbet Jabber kimliği"
 
 #: ../src/dialogs.py:2318
 msgid "Please enter the group chat Jabber ID as room@server."
@@ -6410,7 +6410,7 @@ msgstr ""
 #: ../src/notify.py:347
 #: ../src/notify.py:507
 msgid "New Message"
-msgstr ""
+msgstr "Yeni Mesaj"
 
 #. single message
 #: ../src/dialogs.py:2614
@@ -6426,13 +6426,13 @@ msgstr ""
 #: ../src/notify.py:348
 #: ../src/notify.py:508
 msgid "New Private Message"
-msgstr ""
+msgstr "Yeni kişisel Mesaj"
 
 #: ../src/dialogs.py:2615
 #: ../src/gui_interface.py:1343
 #: ../src/notify.py:517
 msgid "New E-mail"
-msgstr ""
+msgstr "Yeni E-mail"
 
 #: ../src/dialogs.py:2617
 #: ../src/gui_interface.py:1405
@@ -6563,7 +6563,7 @@ msgstr ""
 
 #: ../src/dialogs.py:3204
 msgid "Jabber ID"
-msgstr ""
+msgstr "Jabber kimliği"
 
 #: ../src/dialogs.py:3210
 msgid "Groups"
@@ -8656,7 +8656,7 @@ msgstr ""
 #: ../src/roster_window.py:2937
 #: ../src/roster_window.py:2948
 msgid "Could not load image"
-msgstr ""
+msgstr "Resim acılamadı"
 
 #: ../src/profile_window.py:255
 msgid "Information received"
@@ -8680,7 +8680,7 @@ msgstr ""
 
 #: ../src/profile_window.py:362
 msgid "There was an error while publishing your personal information, try again later."
-msgstr ""
+msgstr "Kişisel ilanlar sayfayı yayınlarken bir hata çıktı, sonra bir daha prova et."
 
 #: ../src/roster_window.py:283
 #: ../src/roster_window.py:1028
@@ -9124,12 +9124,12 @@ msgstr ""
 
 #: ../src/statusicon.py:333
 msgid "Hide this menu"
-msgstr ""
+msgstr "Menüyi gizle"
 
 #: ../src/tooltips.py:351
 #: ../src/tooltips.py:562
 msgid "Jabber ID: "
-msgstr ""
+msgstr "Jabber kimliği:"
 
 #: ../src/tooltips.py:354
 #: ../src/tooltips.py:566
@@ -9167,11 +9167,11 @@ msgstr ""
 
 #: ../src/tooltips.py:542
 msgid "Connected"
-msgstr ""
+msgstr "Bağlantılı"
 
 #: ../src/tooltips.py:544
 msgid "Disconnected"
-msgstr ""
+msgstr "Bağlantızıs"
 
 #. ('both' is the normal sub so we don't show it)
 #: ../src/tooltips.py:573
@@ -9192,7 +9192,7 @@ msgstr ""
 
 #: ../src/tooltips.py:693
 msgid "Download"
-msgstr ""
+msgstr "Yükleme"
 
 #: ../src/tooltips.py:699
 msgid "Upload"
@@ -9245,15 +9245,15 @@ msgstr ""
 
 #: ../src/vcard.py:251
 msgid "?Client:Unknown"
-msgstr ""
+msgstr "?Client:Bilinmez"
 
 #: ../src/vcard.py:253
 msgid "?OS:Unknown"
-msgstr ""
+msgstr "?OS:Unknown?OS:Bilinmez"
 
 #: ../src/vcard.py:274
 msgid "?Time:Unknown"
-msgstr ""
+msgstr "?Time:Bilinmez"
 
 #: ../src/vcard.py:298
 #: ../src/vcard.py:308
