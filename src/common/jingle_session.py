@@ -320,8 +320,6 @@ class JingleSession(object):
                 xmpp_error = child.getName()
         self.__dispatch_error(xmpp_error, jingle_error, text)
         # FIXME: Not sure when we would want to do that...
-        if xmpp_error == 'item-not-found':
-            self.connection.delete_jingle_session(self.sid)
 
     def __on_transport_replace(self, stanza, jingle, error, action):
         for content in jingle.iterTags('content'):

@@ -1810,9 +1810,8 @@ class Interface:
         if media in ('audio', 'video'):
             jid = gajim.get_jid_without_resource(peerjid)
             resource = gajim.get_resource_from_jid(peerjid)
-            ctrl = self.msg_win_mgr.get_control(peerjid, account)
-            if not ctrl:
-                ctrl = self.msg_win_mgr.get_control(jid, account)
+            ctrl = (self.msg_win_mgr.get_control(peerjid, account)
+                or self.msg_win_mgr.get_control(jid, account))
             if ctrl:
                 if media == 'audio':
                     ctrl.set_audio_state('connected', sid)
@@ -1824,26 +1823,29 @@ class Interface:
         peerjid, sid, media, reason = data
         jid = gajim.get_jid_without_resource(peerjid)
         resource = gajim.get_resource_from_jid(peerjid)
-        ctrl = self.msg_win_mgr.get_control(peerjid, account)
-        if not ctrl:
-            ctrl = self.msg_win_mgr.get_control(jid, account)
+        ctrl = (self.msg_win_mgr.get_control(peerjid, account)
+            or self.msg_win_mgr.get_control(jid, account))
         if ctrl:
-            if media in ('audio', None):
+            if media is None:
+                ctrl.stop_jingle(sid=sid, reason=reason)
+            elif media == 'audio':
                 ctrl.set_audio_state('stop', sid=sid, reason=reason)
-            if media in ('video', None):
+            elif media == 'video':
                 ctrl.set_video_state('stop', sid=sid, reason=reason)
         dialog = dialogs.VoIPCallReceivedDialog.get_dialog(peerjid, sid)
         if dialog:
-            dialog.dialog.destroy()
+            if media is None:
+                dialog.dialog.destroy()
+            else:
+                dialog.remove_contents((media, ))
 
     def handle_event_jingle_error(self, account, data):
         # ('JINGLE_ERROR', account, (peerjid, sid, reason))
         peerjid, sid, reason = data
         jid = gajim.get_jid_without_resource(peerjid)
         resource = gajim.get_resource_from_jid(peerjid)
-        ctrl = self.msg_win_mgr.get_control(peerjid, account)
-        if not ctrl:
-            ctrl = self.msg_win_mgr.get_control(jid, account)
+        ctrl = (self.msg_win_mgr.get_control(peerjid, account)
+            or self.msg_win_mgr.get_control(jid, account))
         if ctrl:
             ctrl.set_audio_state('error', reason=reason)
 

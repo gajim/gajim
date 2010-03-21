@@ -195,8 +195,8 @@ class StandardCommonChatCommands(CommandContainer):
     @command
     @doc(_("Toggle audio session"))
     def audio(self):
-        if self.audio_state == self.JINGLE_STATE_NOT_AVAILABLE:
-            raise CommandError(_("Video sessions are not available"))
+        if not self.audio_available:
+            raise CommandError(_("Audio sessions are not available"))
         else:
             # A state of an audio session is toggled by inverting a state of the
             # appropriate button.
@@ -206,7 +206,7 @@ class StandardCommonChatCommands(CommandContainer):
     @command
     @doc(_("Toggle video session"))
     def video(self):
-        if self.video_state == self.JINGLE_STATE_NOT_AVAILABLE:
+        if not self.video_available:
             raise CommandError(_("Video sessions are not available"))
         else:
             # A state of a video session is toggled by inverting a state of the

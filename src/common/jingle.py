@@ -33,7 +33,7 @@ Handles the jingle signalling protocol
 import xmpp
 import helpers
 
-from jingle_session import JingleSession
+from jingle_session import JingleSession, JingleStates
 from jingle_rtp import JingleAudio, JingleVideo
 
 
@@ -92,6 +92,9 @@ class ConnectionJingle(object):
 
         # we already have such session in dispatcher...
         self.__sessions[sid].on_stanza(stanza)
+        # Delete invalid/unneeded sessions
+        if sid in self.__sessions and self.__sessions[sid].state == JingleStates.ended:
+            self.delete_jingle_session(sid)
 
         raise xmpp.NodeProcessed
 

@@ -1259,13 +1259,12 @@ class ChatControl(ChatControlBase):
     A control for standard 1-1 chat
     """
     (
-            JINGLE_STATE_NOT_AVAILABLE,
-            JINGLE_STATE_AVAILABLE,
+            JINGLE_STATE_NULL,
             JINGLE_STATE_CONNECTING,
             JINGLE_STATE_CONNECTION_RECEIVED,
             JINGLE_STATE_CONNECTED,
             JINGLE_STATE_ERROR
-    ) = range(6)
+    ) = range(5)
 
     TYPE_ID = message_control.TYPE_CHAT
     old_msg_kind = None # last kind of the printed message
@@ -1352,9 +1351,11 @@ class ChatControl(ChatControlBase):
         self._audio_banner_image = self.xml.get_object('audio_banner_image')
         self._video_banner_image = self.xml.get_object('video_banner_image')
         self.audio_sid = None
-        self.audio_state = self.JINGLE_STATE_NOT_AVAILABLE
+        self.audio_state = self.JINGLE_STATE_NULL
+        self.audio_available = False
         self.video_sid = None
-        self.video_state = self.JINGLE_STATE_NOT_AVAILABLE
+        self.video_state = self.JINGLE_STATE_NULL
+        self.video_available = False
 
         self.update_toolbar()
 
@@ -1480,34 +1481,19 @@ class ChatControl(ChatControlBase):
         # Jingle detection
         if self.contact.supports(NS_JINGLE_ICE_UDP) and \
         gajim.HAVE_FARSIGHT and self.contact.resource:
-            if self.contact.supports(NS_JINGLE_RTP_AUDIO):
-                if self.audio_state == self.JINGLE_STATE_NOT_AVAILABLE:
-                    self.set_audio_state('available')
-            else:
-                self.set_audio_state('not_available')
-
-            if self.contact.supports(NS_JINGLE_RTP_VIDEO):
-                if self.video_state == self.JINGLE_STATE_NOT_AVAILABLE:
-                    self.set_video_state('available')
-            else:
-                self.set_video_state('not_available')
+            self.audio_available = self.contact.supports(NS_JINGLE_RTP_AUDIO)
+            self.video_available = self.contact.supports(NS_JINGLE_RTP_VIDEO)
         else:
-            if self.audio_state != self.JINGLE_STATE_NOT_AVAILABLE:
-                self.set_audio_state('not_available')
-            if self.video_state != self.JINGLE_STATE_NOT_AVAILABLE:
-                self.set_video_state('not_available')
+            if self.video_available or self.audio_available:
+                self.stop_jingle()
+            self.video_available = False
+            self.audio_available = False
 
         # Audio buttons
-        if self.audio_state == self.JINGLE_STATE_NOT_AVAILABLE:
-            self._audio_button.set_sensitive(False)
-        else:
-            self._audio_button.set_sensitive(True)
+        self._audio_button.set_sensitive(self.audio_available)
 
         # Video buttons
-        if self.video_state == self.JINGLE_STATE_NOT_AVAILABLE:
-            self._video_button.set_sensitive(False)
-        else:
-            self._video_button.set_sensitive(True)
+        self._video_button.set_sensitive(self.video_available)
 
         # Send file
         if self.contact.supports(NS_FILE) and self.contact.resource:
@@ -1551,8 +1537,7 @@ class ChatControl(ChatControlBase):
             return
         banner_image = getattr(self, '_' + jingle_type + '_banner_image')
         state = getattr(self, jingle_type + '_state')
-        if state in (self.JINGLE_STATE_NOT_AVAILABLE,
-        self.JINGLE_STATE_AVAILABLE):
+        if state == self.JINGLE_STATE_NULL:
             banner_image.hide()
         else:
             banner_image.show()
@@ -1604,24 +1589,29 @@ class ChatControl(ChatControlBase):
         # update MessageWindow._controls
         self.parent_win.change_jid(self.account, old_full_jid, new_full_jid)
 
+    def stop_jingle(self, sid=None, reason=None):
+        if self.audio_sid and sid in (self.audio_sid, None):
+            self.close_jingle_content('audio')
+        if self.video_sid and sid in (self.video_sid, None):
+            self.close_jingle_content('video')
+
+
     def _set_jingle_state(self, jingle_type, state, sid=None, reason=None):
         if jingle_type not in ('audio', 'video'):
             return
-        if state in ('connecting', 'connected', 'stop') and reason:
+        if state in ('connecting', 'connected', 'stop', 'error') and reason:
             str = _('%(type)s state : %(state)s, reason: %(reason)s') % {
                     'type': jingle_type.capitalize(), 'state': state, 'reason': reason}
             self.print_conversation(str, 'info')
 
-        states = {'not_available': self.JINGLE_STATE_NOT_AVAILABLE,
-                'available': self.JINGLE_STATE_AVAILABLE,
-                'connecting': self.JINGLE_STATE_CONNECTING,
+        states = {'connecting': self.JINGLE_STATE_CONNECTING,
                 'connection_received': self.JINGLE_STATE_CONNECTION_RECEIVED,
                 'connected': self.JINGLE_STATE_CONNECTED,
-                'stop': self.JINGLE_STATE_AVAILABLE,
+                'stop': self.JINGLE_STATE_NULL,
                 'error': self.JINGLE_STATE_ERROR}
 
         jingle_state = states[state]
-        if getattr(self, jingle_type + '_state') == jingle_state:
+        if getattr(self, jingle_type + '_state') == jingle_state or state == 'error':
             return
 
         if state == 'stop' and getattr(self, jingle_type + '_sid') not in (None, sid):
@@ -1629,21 +1619,12 @@ class ChatControl(ChatControlBase):
 
         setattr(self, jingle_type + '_state', jingle_state)
 
-        # Destroy existing session with the user when he signs off
-        # We need to do that before modifying the sid
-        if state == 'not_available':
-            gajim.connections[self.account].delete_jingle_session(
-                    getattr(self, jingle_type + '_sid'))
-
-        if state in ('not_available', 'available', 'stop'):
+        if jingle_state == self.JINGLE_STATE_NULL:
             setattr(self, jingle_type + '_sid', None)
         if state in ('connection_received', 'connecting'):
             setattr(self, jingle_type + '_sid', sid)
 
-        if state in ('connecting', 'connected', 'connection_received'):
-            getattr(self, '_' + jingle_type + '_button').set_active(True)
-        elif state in ('not_available', 'stop'):
-            getattr(self, '_' + jingle_type + '_button').set_active(False)
+        getattr(self, '_' + jingle_type + '_button').set_active(jingle_state != self.JINGLE_STATE_NULL)
 
         getattr(self, 'update_' + jingle_type)()
 
@@ -1892,12 +1873,16 @@ class ChatControl(ChatControlBase):
         sid = getattr(self, jingle_type + '_sid')
         if not sid:
             return
+        setattr(self, jingle_type + '_sid', None)
+        setattr(self, jingle_type + '_state', self.JINGLE_STATE_NULL)
         session = gajim.connections[self.account].get_jingle_session(
                 self.contact.get_full_jid(), sid)
         if session:
             content = session.get_content(jingle_type)
             if content:
                 session.remove_content(content.creator, content.name)
+        getattr(self, '_' + jingle_type + '_button').set_active(False)
+        getattr(self, 'update_' + jingle_type)()
 
     def on_jingle_button_toggled(self, widget, jingle_type):
         img_name = 'gajim-%s_%s' % ({'audio': 'mic', 'video': 'cam'}[jingle_type],
@@ -1906,7 +1891,7 @@ class ChatControl(ChatControlBase):
 
         if widget.get_active():
             if getattr(self, jingle_type + '_state') == \
-            self.JINGLE_STATE_AVAILABLE:
+            self.JINGLE_STATE_NULL:
                 sid = getattr(gajim.connections[self.account],
                         'start_' + jingle_type)(self.contact.get_full_jid())
                 getattr(self, 'set_' + jingle_type + '_state')('connecting', sid)

@@ -4907,6 +4907,15 @@ class VoIPCallReceivedDialog(object):
                 self.content_types.add(type_)
         self.set_secondary_text()
 
+    def remove_contents(self, content_types):
+        for type_ in content_types:
+            if type_ in self.content_types:
+                self.content_types.remove(type_)
+        if not self.content_types:
+            self.dialog.destroy()
+        else:
+            self.set_secondary_text()
+
     def on_voip_call_received_messagedialog_destroy(self, dialog):
         if (self.fjid, self.sid) in self.instances:
             del self.instances[(self.fjid, self.sid)]
