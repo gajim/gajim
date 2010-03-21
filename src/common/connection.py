@@ -514,7 +514,7 @@ class CommonConnection:
         groupchat_jid is used when we want to send a request to a real jid and
         act as if the answer comes from the groupchat_jid
         """
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         to_whom_jid = jid
         if resource:
@@ -1317,7 +1317,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             stanza.setAttr('xml:lang', self.lang)
 
     def get_privacy_lists(self):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         common.xmpp.features_nb.getPrivacyLists(self.connection)
 
@@ -1336,7 +1336,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         Send XMPP Ping (XEP-0199) request. If pingTo is not set, ping is sent to
         server to detect connection failure at application level
         """
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         id_ = self.connection.getAnID()
         if pingTo:
@@ -1364,12 +1364,12 @@ class Connection(CommonConnection, ConnectionHandlers):
                     'accounts', self.name, 'time_for_ping_alive_answer'))
 
     def get_active_default_lists(self):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         common.xmpp.features_nb.getActiveAndDefaultPrivacyLists(self.connection)
 
     def del_privacy_list(self, privacy_list):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         def _on_del_privacy_list_result(result):
             if result:
@@ -1383,22 +1383,22 @@ class Connection(CommonConnection, ConnectionHandlers):
                 _on_del_privacy_list_result)
 
     def get_privacy_list(self, title):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         common.xmpp.features_nb.getPrivacyList(self.connection, title)
 
     def set_privacy_list(self, listname, tags):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         common.xmpp.features_nb.setPrivacyList(self.connection, listname, tags)
 
     def set_active_list(self, listname):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         common.xmpp.features_nb.setActivePrivacyList(self.connection, listname, 'active')
 
     def set_default_list(self, listname):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         common.xmpp.features_nb.setDefaultPrivacyList(self.connection, listname)
 
@@ -1441,14 +1441,14 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         Activate a privacy rule
         """
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq('set', common.xmpp.NS_PRIVACY, xmlns = '')
         iq.getTag('query').setTag('active', {'name': name})
         self.connection.send(iq)
 
     def send_invisible_presence(self, msg, signed, initial = False):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         if not self.privacy_rules_supported:
             self.dispatch('STATUS', gajim.SHOW_LIST[self.connected])
@@ -1519,7 +1519,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def _discover_server_at_connection(self, con):
         self.connection = con
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         self.connection.set_send_timeout(self.keepalives, self.send_keepalive)
         self.connection.set_send_timeout2(self.pingalives, self.sendPing)
@@ -1545,7 +1545,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def send_custom_status(self, show, msg, jid):
         if not show in gajim.SHOW_LIST:
             return -1
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         sshow = helpers.get_xmpp_show(show)
         if not msg:
@@ -1593,7 +1593,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.dispatch('STATUS', show)
 
     def send_motd(self, jid, subject = '', msg = '', xhtml = None):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         msg_iq = common.xmpp.Message(to = jid, body = msg, subject = subject,
                 xhtml = xhtml)
@@ -1626,7 +1626,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         Send contacts with RosterX (Xep-0144)
         """
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         if len(contacts) == 1:
             msg = _('Sent contact: "%s" (%s)') % (contacts[0].get_full_jid(),
@@ -1652,14 +1652,14 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(stanza)
 
     def ack_subscribed(self, jid):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         log.debug('ack\'ing subscription complete for %s' % jid)
         p = common.xmpp.Presence(jid, 'subscribe')
         self.connection.send(p)
 
     def ack_unsubscribed(self, jid):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         log.debug('ack\'ing unsubscription complete for %s' % jid)
         p = common.xmpp.Presence(jid, 'unsubscribe')
@@ -1667,7 +1667,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def request_subscription(self, jid, msg='', name='', groups=[],
     auto_auth=False, user_nick=''):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         log.debug('subscription request for %s' % jid)
         if auto_auth:
@@ -1692,21 +1692,21 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(p)
 
     def send_authorization(self, jid):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         p = common.xmpp.Presence(jid, 'subscribed')
         p = self.add_sha(p)
         self.connection.send(p)
 
     def refuse_authorization(self, jid):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         p = common.xmpp.Presence(jid, 'unsubscribed')
         p = self.add_sha(p)
         self.connection.send(p)
 
     def unsubscribe(self, jid, remove_auth = True):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         if remove_auth:
             self.connection.getRoster().delItem(jid)
@@ -1719,7 +1719,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.update_contact(jid, '', [])
 
     def unsubscribe_agent(self, agent):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq('set', common.xmpp.NS_REGISTER, to = agent)
         iq.getTag('query').setTag('remove')
@@ -1774,7 +1774,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         groupchat_jid is used when we want to send a request to a real jid and
         act as if the answer comes from the groupchat_jid
         """
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         # If we are invisible, do not request
         if self.connected == gajim.SHOW_LIST.index('invisible'):
@@ -1797,7 +1797,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         groupchat_jid is used when we want to send a request to a real jid and
         act as if the answer comes from the groupchat_jid
         """
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         # If we are invisible, do not request
         if self.connected == gajim.SHOW_LIST.index('invisible'):
@@ -1819,7 +1819,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         Get Gajim settings as described in XEP 0049
         """
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq(typ='get')
         iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
@@ -1827,7 +1827,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(iq)
 
     def _request_bookmarks_xml(self):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq(typ='get')
         iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
@@ -1845,7 +1845,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         storage_type can be set to xml to force request to xml storage
         """
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         if self.pubsub_supported and storage_type != 'xml':
             self.send_pb_retrieve('', 'storage:bookmarks')
@@ -1862,7 +1862,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         storage_type can be set to 'pubsub' or 'xml' so store in only one method
         else it will be stored on both
         """
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Node(tag='storage', attrs={'xmlns': 'storage:bookmarks'})
         for bm in self.bookmarks:
@@ -1907,7 +1907,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         Get Annonations from storage as described in XEP 0048, and XEP 0145
         """
         self.annotations = {}
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq(typ='get')
         iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
@@ -1918,7 +1918,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         Set Annonations in private storage as described in XEP 0048, and XEP 0145
         """
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq(typ='set')
         iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
@@ -1935,7 +1935,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         Get metacontacts list from storage as described in XEP 0049
         """
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq(typ='get')
         iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
@@ -1949,7 +1949,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         Send meta contacts to the storage namespace
         """
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq(typ='set')
         iq2 = iq.addChild(name='query', namespace=common.xmpp.NS_PRIVATE)
@@ -1964,7 +1964,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(iq)
 
     def send_agent_status(self, agent, ptype):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         show = helpers.get_xmpp_show(gajim.SHOW_LIST[self.connected])
         p = common.xmpp.Presence(to = agent, typ = ptype, show = show)
@@ -1972,7 +1972,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(p)
 
     def check_unique_room_id_support(self, server, instance):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq(typ = 'get', to = server)
         iq.setAttr('id', 'unique1')
@@ -1987,7 +1987,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def join_gc(self, nick, room_jid, password, change_nick=False):
         # FIXME: This room JID needs to be normalized; see #1364
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         show = helpers.get_xmpp_show(gajim.SHOW_LIST[self.connected])
         if show == 'invisible':
@@ -2038,7 +2038,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(p)
 
     def send_gc_message(self, jid, msg, xhtml = None):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         if not xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
             from common.rst_xhtml_generator import create_xhtml
@@ -2048,13 +2048,13 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.dispatch('MSGSENT', (jid, msg))
 
     def send_gc_subject(self, jid, subject):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         msg_iq = common.xmpp.Message(jid, typ = 'groupchat', subject = subject)
         self.connection.send(msg_iq)
 
     def request_gc_config(self, room_jid):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq(typ = 'get', queryNS = common.xmpp.NS_MUC_OWNER,
                 to = room_jid)
@@ -2062,7 +2062,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(iq)
 
     def destroy_gc_room(self, room_jid, reason = '', jid = ''):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq(typ = 'set', queryNS = common.xmpp.NS_MUC_OWNER,
                 to = room_jid)
@@ -2109,7 +2109,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         Role is for all the life of the room so it's based on nick
         """
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
                 common.xmpp.NS_MUC_ADMIN)
@@ -2124,7 +2124,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         Affiliation is for all the life of the room so it's based on jid
         """
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
                 common.xmpp.NS_MUC_ADMIN)
@@ -2136,7 +2136,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(iq)
 
     def send_gc_affiliation_list(self, room_jid, users_dict):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS = \
                 common.xmpp.NS_MUC_ADMIN)
@@ -2149,7 +2149,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(iq)
 
     def get_affiliation_list(self, room_jid, affiliation):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq(typ = 'get', to = room_jid, queryNS = \
                 common.xmpp.NS_MUC_ADMIN)
@@ -2158,7 +2158,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(iq)
 
     def send_gc_config(self, room_jid, form):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         iq = common.xmpp.Iq(typ = 'set', to = room_jid, queryNS =\
                 common.xmpp.NS_MUC_OWNER)
@@ -2168,7 +2168,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(iq)
 
     def change_password(self, password):
-        if not self.connection:
+        if not gajim.account_is_connected(self.name):
             return
         hostname = gajim.config.get_per('accounts', self.name, 'hostname')
         username = gajim.config.get_per('accounts', self.name, 'name')

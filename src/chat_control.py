@@ -1498,6 +1498,7 @@ class ChatControl(ChatControlBase):
         # Send file
         if self.contact.supports(NS_FILE) and self.contact.resource:
             self._send_file_button.set_sensitive(True)
+            self._send_file_button.set_tooltip_text('')
         else:
             self._send_file_button.set_sensitive(False)
             if not self.contact.supports(NS_FILE):
