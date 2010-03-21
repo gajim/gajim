@@ -549,10 +549,8 @@ _('Without a connection, you can not browse available services'))
             self.address_comboboxentry_entry = self.address_comboboxentry.child
             self.address_comboboxentry_entry.set_activates_default(True)
 
-            liststore = gtk.ListStore(str)
-            self.address_comboboxentry.set_model(liststore)
             self.latest_addresses = gajim.config.get(
-                    'latest_disco_addresses').split()
+                'latest_disco_addresses').split()
             if jid in self.latest_addresses:
                 self.latest_addresses.remove(jid)
             self.latest_addresses.insert(0, jid)

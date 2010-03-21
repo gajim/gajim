@@ -70,13 +70,8 @@ Agent JID - node</property>
               <object class="GtkComboBoxEntry" id="address_comboboxentry">
                 <property name="visible">True</property>
                 <property name="model">liststore1</property>
+                <property name="text_column">0</property>
                 <signal name="changed" handler="on_address_comboboxentry_changed"/>
-                <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
-                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
