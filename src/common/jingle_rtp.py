@@ -121,16 +121,17 @@ class JingleRTPContent(JingleContent):
         Send several DTMF tones
         """
         if self._dtmf_running:
-            raise Exception # TODO: Proper exception
+            raise Exception("There is a DTMF batch already running")
+        events = list(events)
         self._dtmf_running = True
-        self._start_dtmf(events[-1])
-        gobject.timeout_add(500, self._next_dtmf, events[:-1])
+        self._start_dtmf(events.pop(0))
+        gobject.timeout_add(500, self._next_dtmf, events)
 
     def _next_dtmf(self, events):
         self._stop_dtmf()
         if events:
-            self._start_dtmf(events[-1])
-            gobject.timeout_add(500, self._next_dtmf, events[:-1])
+            self._start_dtmf(events.pop(0))
+            gobject.timeout_add(500, self._next_dtmf, events)
         else:
             self._dtmf_running = False
 
