@@ -2246,18 +2246,10 @@ class JoinGroupchatWindow:
         self.account = model[iter_][0].decode('utf-8')
         self.on_required_entry_changed(self._nickname_entry)
 
-    def _select_server(self, server):
-        i = 0
-        for s in self.server_model:
-            if s[0] == server:
-                self.server_comboboxentry.set_active(i)
-                break
-            i += 1
-
     def _set_room_jid(self, room_jid):
         room, server = gajim.get_name_and_server_from_jid(room_jid)
-        self._select_server(server)
         self._room_jid_entry.set_text(room)
+        self.server_comboboxentry.child.set_text(server)
 
     def on_recently_combobox_changed(self, widget):
         model = widget.get_model()
