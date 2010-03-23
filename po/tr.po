@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Gajim - A Jabber Instant Messager 0.13.10.2-dev\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-19 15:01+0100\n"
-"PO-Revision-Date: 2010-03-22 16:24+0100\n"
+"PO-Revision-Date: 2010-03-23 14:26+0100\n"
 "Last-Translator: Ferdi Kunzmann <shegman@tablatures.de>\n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -77,7 +77,7 @@ msgstr "Yeni bir hesap _kaydetmek istiyorum"
 #: ../data/gui/account_creation_wizard_window.ui.h:16
 #: ../data/gui/accounts_window.ui.h:25
 msgid "If checked, Gajim will remember the password for this account"
-msgstr "Kontrol işareti koyunca Gajim bu hesapının parolayı hatırlar"
+msgstr "İşaretliyse, Gajim bu hesapının parolayı hatırlar"
 
 #: ../data/gui/account_creation_wizard_window.ui.h:17
 msgid "Manage..."
@@ -192,9 +192,8 @@ msgid "Accounts"
 msgstr "Hesaplar"
 
 #: ../data/gui/accounts_window.ui.h:8
-#, fuzzy
 msgid "Administration operations"
-msgstr "Sistem Yönetimi"
+msgstr "Yönetim işlemleri"
 
 #: ../data/gui/accounts_window.ui.h:9
 msgid "Anonymous authentication"
@@ -210,11 +209,11 @@ msgstr "Gajim açılırken bağlan"
 
 #: ../data/gui/accounts_window.ui.h:12
 msgid "Chan_ge Password"
-msgstr "Şifre_yi değiştir"
+msgstr "Parolayı de_ğiştir"
 
 #: ../data/gui/accounts_window.ui.h:13
 msgid "Check this so Gajim will ask you before sending your password over an insecure connection."
-msgstr "Bunu işaretleyince Gajim seni sorar senin şifreni tehlikeli bir bağlantı üzerinden göndermeden."
+msgstr "Bunu işaretleyince Gajim göndermeden sorar parolayı tehlikeli bir bağlantı üzerinden göndersin mi diye."
 
 #: ../data/gui/accounts_window.ui.h:14
 msgid "Choose _Key..."
@@ -222,7 +221,7 @@ msgstr "Bir anahtar dosyası seçin"
 
 #: ../data/gui/accounts_window.ui.h:15
 msgid "Click to change account's password"
-msgstr "Bu hesabın şifresini değiştirmek için tikla"
+msgstr "Bu hesabın parolyı değiştirmek için tikla"
 
 #: ../data/gui/accounts_window.ui.h:16
 msgid "Click to request authorization to all contacts of another account"
@@ -277,25 +276,27 @@ msgstr "İşaretliyse, Gajim senin IPden ayrı daha fazla IPleri yayınlaştır�
 
 #: ../data/gui/accounts_window.ui.h:24
 msgid "If checked, Gajim will get the password from a GPG agent like seahorse"
-msgstr "İşaretliyse, Gajim bir GPG acentadan seahorse gibi şifreyi alır."
+msgstr "İşaretliyse, Gajim bir GPG acentadan seahorse gibi parolyı alır."
 
 #: ../data/gui/accounts_window.ui.h:26
 msgid "If checked, Gajim will send keep-alive packets to prevent connection timeout which results in disconnection"
-msgstr ""
+msgstr "İşaretliyse, Gajim bağlantıyı zaman aşımı yüzünden kaybetmemek için ayakta tutma packetleri gönderir"
 
 #: ../data/gui/accounts_window.ui.h:27
 msgid "If checked, Gajim, when launched, will automatically connect to jabber using this account"
-msgstr ""
+msgstr "İşaretliyse, Gajim başlarken kendilinden jabbere bu hesapı kullanıp bağlanır"
 
 #: ../data/gui/accounts_window.ui.h:28
 msgid "If checked, any change to the global status (handled by the combobox at the bottom of the roster window) will change the status of this account accordingly"
-msgstr ""
+msgstr "İşaretliyse, her global duruma yapılan geğişiklik (kişi listesinin altındaki giriş kutusundan yürütüldü) bu hesapın duruma da yapılır"
 
 #: ../data/gui/accounts_window.ui.h:29
 msgid ""
 "If the default port that is used for incoming messages is unfitting for your setup you can select another one here.\n"
 "You might consider to change possible firewall settings."
 msgstr ""
+"Giren iletler için öntanımlı porta senin kurmada uygun değilse burada değişterebilirsin.\n"
+"Belki halka ayarları değiştirmeye üzerinde düşünürsün."
 
 #: ../data/gui/accounts_window.ui.h:31
 msgid "Information about you, as stored in the server"
@@ -314,9 +315,8 @@ msgid "Last Name:"
 msgstr "Soy Ad:"
 
 #: ../data/gui/accounts_window.ui.h:34
-#, fuzzy
 msgid "Mer_ge accounts"
-msgstr "accounts: Hesaplar penceresini gösterir"
+msgstr "Hesapları bir_leştir"
 
 #: ../data/gui/accounts_window.ui.h:35
 #: ../src/config.py:1748
@@ -330,13 +330,12 @@ msgid "Personal Information"
 msgstr "Kişisel ilanlar sayfası"
 
 #: ../data/gui/accounts_window.ui.h:38
-#, fuzzy
 msgid "Priori_ty:"
-msgstr "bilinmeyen TY kodu"
+msgstr "Ön_celik:"
 
 #: ../data/gui/accounts_window.ui.h:39
 msgid "Priority is used in Jabber to determine who gets the events from the jabber server when two or more clients are connected using the same account; The client with the highest priority gets the events"
-msgstr ""
+msgstr "Jabberde öncelik kullanıliyorki, iki veya daha fazla istemci ayni hesapı kullanmak istiyorsa, hangi istemci jabber sunucdan olayları alsın diye bilinsin; En yüksek öncelikli istemci olayları alır"
 
 #: ../data/gui/accounts_window.ui.h:40
 msgid "Priority will change automatically according to your status."
@@ -361,9 +360,8 @@ msgid "Save conversation _logs for all contacts"
 msgstr "Her kişinin sohbet _kaydını kaydet"
 
 #: ../data/gui/accounts_window.ui.h:46
-#, fuzzy
 msgid "Send _keep-alive packets"
-msgstr "gönderilecek ICMP paketlerinin sayısı"
+msgstr "_Yaşamda kal paketleri gönder"
 
 #: ../data/gui/accounts_window.ui.h:47
 msgid "Synch_ronize account status with global status"
@@ -375,28 +373,24 @@ msgstr "Hesap durumu global durumuyla eş_zamanla"
 
 #: ../data/gui/accounts_window.ui.h:49
 #: ../data/gui/synchronise_select_account_dialog.ui.h:2
-#, fuzzy
 msgid "Synchronise contacts"
-msgstr "Kişiler/Adresler Rehberi"
+msgstr "Kişileri eşzamana getir"
 
 #: ../data/gui/accounts_window.ui.h:50
-#, fuzzy
 msgid "Use G_PG Agent"
-msgstr "vekil ile problem - vekil kullanımı iptal ediliyor\n"
+msgstr "G_PG acenta kullan"
 
 #: ../data/gui/accounts_window.ui.h:51
 msgid "Use cust_om hostname/port"
 msgstr "Özel makine adı/porta kullan"
 
 #: ../data/gui/accounts_window.ui.h:52
-#, fuzzy
 msgid "Use cust_om port:"
-msgstr "Kendi bir makine adı/portu kullan"
+msgstr "Kendi bir porta kullan"
 
 #: ../data/gui/accounts_window.ui.h:53
-#, fuzzy
 msgid "Use file transfer proxies"
-msgstr "Dosya aktarımı sırasında hata"
+msgstr "Dosya aktarım vekil sunucları kullan"
 
 #: ../data/gui/accounts_window.ui.h:54
 msgid "_Edit Personal Information..."
@@ -468,9 +462,8 @@ msgid "_Nickname:"
 msgstr "_Takma Ad:"
 
 #: ../data/gui/add_new_contact_window.ui.h:13
-#, fuzzy
 msgid "_Protocol:"
-msgstr "İletişim kuralı"
+msgstr "_Protokol:"
 
 #: ../data/gui/add_new_contact_window.ui.h:14
 msgid "_Register"
@@ -489,32 +482,28 @@ msgid "<b>An error has occurred:</b>"
 msgstr "<b>Bir hata oluştu:</b>"
 
 #: ../data/gui/adhoc_commands_window.ui.h:2
-#, fuzzy
 msgid "<b>Choose command to execute:</b>"
-msgstr "Çalıştırılacak başlangıç komutu"
+msgstr "<b>Yürütecek komutayı seç</b>"
 
 #: ../data/gui/adhoc_commands_window.ui.h:3
 msgid "Ad-hoc Commands - Gajim"
 msgstr "Ad-Hoc Komutlar - Gajim"
 
 #: ../data/gui/adhoc_commands_window.ui.h:4
-#, fuzzy
 msgid "Check once more"
-msgstr "%s paketi birden fazla açıldı"
+msgstr "Bir daha dene"
 
 #: ../data/gui/adhoc_commands_window.ui.h:5
-#, fuzzy
 msgid "Error description..."
-msgstr "bir tanımlama hatası"
+msgstr "Hata açıklaması…"
 
 #: ../data/gui/adhoc_commands_window.ui.h:6
 msgid "Please wait while retrieving command list..."
-msgstr ""
+msgstr "Lütfen bekle komuta listesini alırken…"
 
 #: ../data/gui/adhoc_commands_window.ui.h:7
-#, fuzzy
 msgid "Please wait while the command is sending..."
-msgstr "anahtar üretilene kadar lütfen bekleyiniz ....\n"
+msgstr "Komuta gönderirken lütfen bekleyiniz…"
 
 #: ../data/gui/adhoc_commands_window.ui.h:8
 msgid "Please wait..."
@@ -534,23 +523,20 @@ msgid "<b>NOTE:</b> You should restart Gajim for some settings to take effect"
 msgstr ""
 
 #: ../data/gui/advanced_configuration_window.ui.h:3
-#, fuzzy
 msgid "Advanced Configuration Editor"
-msgstr "nano metin editörü"
+msgstr "İlerlemiş ayarlama editörü"
 
 #: ../data/gui/advanced_configuration_window.ui.h:4
 msgid "Filter:"
 msgstr "Filtre:"
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:1
-#, fuzzy
 msgid "Deletes Message of the Day"
-msgstr "Günün İletisini Göster"
+msgstr "Günün İletisini Sil"
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:2
-#, fuzzy
 msgid "Edit _Privacy Lists..."
-msgstr "Kelime Listelerini Düzenle"
+msgstr "Kişisel Gizlilik Listesini biçimle"
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:3
 msgid "Sends a message to users currently connected to this server"
@@ -565,9 +551,8 @@ msgid "Sets Message of the Day"
 msgstr "Günün İletisini yazar"
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:6
-#, fuzzy
 msgid "Show _XML Console"
-msgstr "Script-Fu Uçbirimi"
+msgstr "_XML Konsolu Göster"
 
 #: ../data/gui/advanced_menuitem_menu.ui.h:7
 msgid "Update MOTD..."
@@ -816,7 +801,7 @@ msgstr "<b>Ruh Hali:</b>"
 
 #: ../data/gui/change_password_dialog.ui.h:1
 msgid "Change Password"
-msgstr "Şifreyi Değiştir"
+msgstr "Parolayı Değiştir"
 
 #: ../data/gui/change_password_dialog.ui.h:2
 msgid "Enter it again for confirmation:"
@@ -824,7 +809,7 @@ msgstr "Olaylamak için bir daha tuşla:"
 
 #: ../data/gui/change_password_dialog.ui.h:3
 msgid "Enter new password:"
-msgstr "Yeni şifre girin: "
+msgstr "Yeni parola girin: "
 
 #: ../data/gui/change_status_message_dialog.ui.h:1
 msgid "<b>Type your new status message</b>"
@@ -1037,7 +1022,7 @@ msgstr "_Engelle"
 
 #: ../data/gui/contact_context_menu.ui.h:19
 msgid "_Forbid him/her to see my status"
-msgstr ""
+msgstr "Ona benim durumu görmeye _yasak et"
 
 #: ../data/gui/contact_context_menu.ui.h:20
 #: ../src/roster_window.py:5680
@@ -1070,7 +1055,7 @@ msgstr "Engellemeyi _Kaldır"
 
 #: ../data/gui/contact_context_menu.ui.h:26
 msgid "_Unignore"
-msgstr ""
+msgstr "_Yoksaymaktan kadır"
 
 #: ../data/gui/data_form_window.ui.h:1
 #, fuzzy
@@ -1234,6 +1219,8 @@ msgid ""
 "MUC\n"
 "Messages"
 msgstr ""
+"MUC\n"
+"İletler"
 
 #: ../data/gui/gajim_themes_window.ui.h:15
 msgid ""
@@ -1363,7 +1350,7 @@ msgstr "<b>Geçmiş Dosyaları</b>"
 
 #: ../data/gui/history_window.ui.h:3
 msgid "Enter JID or Contact name"
-msgstr ""
+msgstr "JID veya Kişi adı girdir"
 
 #: ../data/gui/history_window.ui.h:4
 msgid "Groupchat Histories"
@@ -1402,7 +1389,7 @@ msgstr "Takma Ad:"
 #: ../data/gui/join_groupchat_window.ui.h:6
 #: ../data/gui/manage_bookmarks_window.ui.h:6
 msgid "Password:"
-msgstr "Şifre:"
+msgstr "Parola:"
 
 #: ../data/gui/join_groupchat_window.ui.h:7
 msgid "Recently:"
@@ -7752,9 +7739,8 @@ msgstr "çıktıyı DOSYA'ya gönderir"
 
 #: ../src/filetransfers_window.py:273
 #: ../src/tooltips.py:738
-#, fuzzy
 msgid "Description: "
-msgstr "Tanım: "
+msgstr "Açıklama: "
 
 #: ../src/filetransfers_window.py:286
 #, fuzzy
@@ -8254,11 +8240,11 @@ msgstr "Kullanıcak takma ad"
 
 #: ../src/gajim-remote.py:290
 msgid "password"
-msgstr "şifre"
+msgstr "parola"
 
 #: ../src/gajim-remote.py:290
 msgid "Password to enter the room"
-msgstr "Odaya girmek için gerekli şifre"
+msgstr "Odaya girmek için gerekli parola"
 
 #: ../src/gajim-remote.py:291
 msgid "Account from which you want to enter the room"
