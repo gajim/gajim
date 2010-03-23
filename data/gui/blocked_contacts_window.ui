@@ -65,7 +65,7 @@
                     <child>
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
-                        <property name="label">_Unblock</property>
+                        <property name="label" translatable="yes">_Unblock</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>

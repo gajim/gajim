@@ -251,7 +251,7 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="continue_menuitem">
-        <property name="label">_Continue</property>
+        <property name="label" translatable="yes">_Continue</property>
         <property name="no_show_all">True</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
@@ -261,7 +261,7 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="pause_menuitem">
-        <property name="label">_Pause</property>
+        <property name="label" translatable="yes">_Pause</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
         <property name="accel_group">accelgroup1</property>
@@ -284,7 +284,7 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="open_folder_menuitem">
-        <property name="label">_Open Containing Folder</property>
+        <property name="label" translatable="yes">_Open Containing Folder</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
         <property name="accel_group">accelgroup1</property>
